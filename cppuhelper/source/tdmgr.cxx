@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdmgr.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 10:54:46 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 13:28:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,9 +81,11 @@
 #include <com/sun/star/reflection/XInterfaceAttributeTypeDescription.hpp>
 #include <com/sun/star/reflection/XMethodParameter.hpp>
 #include <com/sun/star/reflection/XInterfaceMethodTypeDescription.hpp>
-#include <com/sun/star/reflection/XInterfaceTypeDescription.hpp>
+#include <com/sun/star/reflection/XInterfaceTypeDescription2.hpp>
 #include <com/sun/star/reflection/XCompoundTypeDescription.hpp>
 #include <com/sun/star/reflection/XUnionTypeDescription.hpp>
+
+#include "boost/scoped_array.hpp"
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -344,15 +346,28 @@ static typelib_TypeDescription * createCTD(
 }
 //==================================================================================================
 inline static typelib_TypeDescription * createCTD(
-    const Reference< XInterfaceTypeDescription > & xType )
+    const Reference< XInterfaceTypeDescription2 > & xType )
 {
     typelib_TypeDescription * pRet = 0;
     if (xType.is())
     {
-        typelib_TypeDescription * pBaseType = createCTD(
-            Reference< XInterfaceTypeDescription >::query( xType->getBaseType() ) );
-        if (pBaseType)
-            typelib_typedescription_register( &pBaseType );
+        Sequence< Reference< XInterfaceTypeDescription2 > > aBases(
+            xType->getBaseTypes());
+        sal_Int32 nBases = aBases.getLength();
+        // Exploit the fact that a typelib_TypeDescription for an interface type
+        // is also the typelib_TypeDescriptionReference for that type:
+        boost::scoped_array< typelib_TypeDescription * > aBaseTypes(
+            new typelib_TypeDescription *[nBases]);
+        {for (sal_Int32 i = 0; i < nBases; ++i) {
+            typelib_TypeDescription * p = createCTD(aBases[i]);
+            OSL_ASSERT(
+                !TYPELIB_TYPEDESCRIPTIONREFERENCE_ISREALLYWEAK(p->eTypeClass));
+            typelib_typedescription_register(&p);
+            aBaseTypes[i] = p;
+        }}
+        typelib_TypeDescriptionReference ** pBaseTypeRefs
+            = reinterpret_cast< typelib_TypeDescriptionReference ** >(
+                aBaseTypes.get());
 
         // construct all member refs
         const Sequence<Reference< XInterfaceMemberTypeDescription > > & rMembers = xType->getMembers();
@@ -378,16 +393,17 @@ inline static typelib_TypeDescription * createCTD(
 
         Uik uik = xType->getUik();
 
-        typelib_typedescription_newInterface(
+        typelib_typedescription_newMIInterface(
             (typelib_InterfaceTypeDescription **)&pRet,
             aTypeName.pData,
             uik.m_Data1, uik.m_Data2, uik.m_Data3, uik.m_Data4, uik.m_Data5,
-            (pBaseType ? pBaseType->pWeakRef : 0),
+            nBases, pBaseTypeRefs,
             nMembers, ppMemberRefs );
 
         // cleanup refs and base type
-        if (pBaseType)
-            typelib_typedescription_release( pBaseType );
+        {for (int i = 0; i < nBases; ++i) {
+            typelib_typedescription_release(aBaseTypes[i]);
+        }}
 
         for ( nPos = nMembers; nPos--; )
         {
@@ -591,7 +607,7 @@ static typelib_TypeDescription * createCTD( const Reference< XTypeDescription > 
             pRet = createCTD( Reference< XIndirectTypeDescription >::query( xType ) );
             break;
         case TypeClass_INTERFACE:
-            pRet = createCTD( Reference< XInterfaceTypeDescription >::query( xType ) );
+            pRet = createCTD( Reference< XInterfaceTypeDescription2 >::query( xType ) );
             break;
         case TypeClass_INTERFACE_METHOD:
             pRet = createCTD( Reference< XInterfaceMethodTypeDescription >::query( xType ) );
