@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathtype.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: cmc $ $Date: 2000-12-12 12:00:49 $
+ *  last change: $Author: cmc $ $Date: 2000-12-12 17:11:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -511,10 +511,17 @@ int MathType::Parse(SvStorage *pStor)
     //starmaths internals.
     APPEND(rRet,"{}");
 
+#ifdef DEBUG
+#   ifdef CAOLAN
     //sanity check
+
+    //sigh, theres no point! MathType (in some bizarre subvarient) pads
+    //the end of the formula with ENDs (0)'s
     ULONG nEnd = pS->Tell();
-    if (nEnd != pS->Seek(STREAM_SEEK_TO_END))
-        return 0;
+    DBG_ASSERT(nEnd == pS->Seek(STREAM_SEEK_TO_END),
+        "Possibly unfully parsed formula")
+#   endif
+#endif
     return nRet;
 }
 
