@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: mba $ $Date: 2002-01-10 10:31:59 $
+#   last change: $Author: kz $ $Date: 2002-01-10 11:51:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -67,18 +67,11 @@ PRJPCH=
 PRJNAME=sot
 TARGET=sot
 
-# so2.hid generieren
-#GEN_HID=TRUE
-
 # --- Settings -----------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
 # --- Files --------------------------------------------------------
-
-.IF "$(header)" == ""
 
 LIB1TARGET= $(SLB)$/$(TARGET).lib
 LIB1ARCHIV= $(LB)$/lib$(TARGET)$(UPD)$(DLLPOSTFIX).a
@@ -90,10 +83,6 @@ SHL1IMPLIB= $(TARGET)
 SHL1LIBS=	$(SLB)$/$(TARGET).lib
 
 SHL1STDLIBS=$(TOOLSLIB) $(RTLLIB) $(SALLIB) $(UNOTOOLSLIB) $(CPPUHELPERLIB) $(COMPHELPERLIB) $(UCBHELPERLIB) $(UNOLIB) $(CPPULIB)
-
-.IF "$(COM)"=="ICC" || "$(COM)"=="WTC"
-SHL1OBJS= $(SLO)$/object.obj
-.ENDIF
 
 SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
 
@@ -117,9 +106,6 @@ DEF1DEPN	=$(MISC)$/$(SHL1TARGET).flt \
 DEFLIB1NAME =$(TARGET)
 DEF1DES 	=StarObjectsTools
 
-.ENDIF
-
-
 # --- Targets -------------------------------------------------------
 
 .INCLUDE :  target.mk
@@ -135,11 +121,5 @@ $(MISC)$/$(SHL1TARGET).flt: makefile.mk
     @+echo CTA2?AV>>$@
         @+echo CTA3?AV>>$@
 .ENDIF
-.IF "$(GUI)"=="OS2"
-    @+echo __alloc>>$@
-    @+echo __malloc>>$@
-.ENDIF
-#	@+echo AVbad>>$@
-#	@+echo AVexception>>$@
 
 .INCLUDE :  target.pmk
