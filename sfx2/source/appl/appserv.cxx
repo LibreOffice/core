@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appserv.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 13:34:41 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 12:34:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1124,6 +1124,7 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
 
         case FN_LABEL :
         case FN_BUSINESS_CARD :
+        case FN_XFORMS_INIT :
         {
             Reference< com::sun::star::lang::XMultiServiceFactory > xORB = ::comphelper::getProcessServiceFactory();
             Reference< com::sun::star::frame::XDispatchProvider > xProv(
@@ -1209,6 +1210,7 @@ void SfxApplication::OfaState_Impl(SfxItemSet &rSet)
     {
         rSet.DisableItem( FN_LABEL );
         rSet.DisableItem( FN_BUSINESS_CARD );
+        rSet.DisableItem( FN_XFORMS_INIT );
     }
 
     if ( !aModuleOpt.IsImpress() )
