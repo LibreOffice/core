@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svlbitm.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2002-05-17 08:31:59 $
+ *  last change: $Author: fs $ $Date: 2002-05-17 11:52:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -475,7 +475,7 @@ void SvLBoxContextBmp::InitViewData( SvLBox* pView,SvLBoxEntry* pEntry,
 }
 
 void SvLBoxContextBmp::Paint( const Point& _rPos, SvLBox& _rDev,
-    USHORT _nViewDataEntryFlags, SvLBoxEntry* /* pEntry */ )
+    USHORT _nViewDataEntryFlags, SvLBoxEntry* _pEntry )
 {
     DBG_CHKTHIS(SvLBoxContextBmp,0);
 
@@ -491,8 +491,9 @@ void SvLBoxContextBmp::Paint( const Point& _rPos, SvLBox& _rDev,
     // get the image
     const Image& rImage = implGetImageStore( 0 == ( _nViewDataEntryFlags & m_pImpl->m_nB2IndicatorFlags ), eMode );
 
+    sal_Bool _bSemiTransparent = _pEntry && ( 0 != ( SV_ENTRYFLAG_SEMITRANSPARENT  & _pEntry->GetFlags( ) ) );
     // draw
-    _rDev.DrawImage( _rPos, rImage );
+    _rDev.DrawImage( _rPos, rImage, _bSemiTransparent ? IMAGE_DRAW_SEMITRANSPARENT : 0 );
 }
 
 SvLBoxItem* SvLBoxContextBmp::Create() const
@@ -508,5 +509,4 @@ void SvLBoxContextBmp::Clone( SvLBoxItem* pSource )
     m_pImpl->m_aImage2 = static_cast< SvLBoxContextBmp* >( pSource )->m_pImpl->m_aImage2;
     m_pImpl->m_nB2IndicatorFlags = static_cast< SvLBoxContextBmp* >( pSource )->m_pImpl->m_nB2IndicatorFlags;
 }
-
 
