@@ -101,6 +101,14 @@ mkdir: %_DEST%\inc%_EXT%\drafts\com\sun\star\form
 mkdir: %_DEST%\inc%_EXT%\drafts\com\sun\star\script
 mkdir: %_DEST%\inc%_EXT%\drafts\com\sun\star\script\browse
 mkdir: %_DEST%\inc%_EXT%\drafts\com\sun\star\script\provider
+#i20156 - add xmlsecurity module related
+mkdir: %_DEST%\inc%_EXT%\com\sun\star\security
+mkdir: %_DEST%\inc%_EXT%\com\sun\star\xml
+mkdir: %_DEST%\inc%_EXT%\com\sun\star\xml\crypto
+mkdir: %_DEST%\inc%_EXT%\com\sun\star\xml\crypto\sax
+mkdir: %_DEST%\inc%_EXT%\com\sun\star\xml\csax
+mkdir: %_DEST%\inc%_EXT%\com\sun\star\xml\wrapper
+#i20156 - end
 
 ..\%__SRC%\inc\com\sun\star\auth\*.hdl %_DEST%\inc%_EXT%\com\sun\star\auth\*.hdl
 ..\%__SRC%\inc\com\sun\star\auth\*.hpp %_DEST%\inc%_EXT%\com\sun\star\auth\*.hpp
@@ -291,4 +299,16 @@ mkdir: %_DEST%\inc%_EXT%\drafts\com\sun\star\script\provider
 ..\%__SRC%\inc\drafts\com\sun\star\form\*.hpp %_DEST%\inc%_EXT%\drafts\com\sun\star\form\*.hpp
 ..\%__SRC%\inc\drafts\com\sun\star\form\*.hdl %_DEST%\inc%_EXT%\drafts\com\sun\star\form\*.hdl
 
+#i20156 - add xmlsecurity module related
+..\%__SRC%\inc\com\sun\star\security\*.hpp %_DEST%\inc%_EXT%\com\sun\star\security\*.hpp
+..\%__SRC%\inc\com\sun\star\security\*.hdl %_DEST%\inc%_EXT%\com\sun\star\security\*.hdl
+..\%__SRC%\inc\com\sun\star\xml\crypto\*.hpp %_DEST%\inc%_EXT%\com\sun\star\xml\crypto\*.hpp
+..\%__SRC%\inc\com\sun\star\xml\crypto\*.hdl %_DEST%\inc%_EXT%\com\sun\star\xml\crypto\*.hdl
+..\%__SRC%\inc\com\sun\star\xml\crypto\sax\*.hpp %_DEST%\inc%_EXT%\com\sun\star\xml\crypto\sax\*.hpp
+..\%__SRC%\inc\com\sun\star\xml\crypto\sax\*.hdl %_DEST%\inc%_EXT%\com\sun\star\xml\crypto\sax\*.hdl
+..\%__SRC%\inc\com\sun\star\xml\csax\*.hpp %_DEST%\inc%_EXT%\com\sun\star\xml\csax\*.hpp
+..\%__SRC%\inc\com\sun\star\xml\csax\*.hdl %_DEST%\inc%_EXT%\com\sun\star\xml\csax\*.hdl
+..\%__SRC%\inc\com\sun\star\xml\wrapper\*.hpp %_DEST%\inc%_EXT%\com\sun\star\xml\wrapper\*.hpp
+..\%__SRC%\inc\com\sun\star\xml\wrapper\*.hdl %_DEST%\inc%_EXT%\com\sun\star\xml\wrapper\*.hdl
+#i20156 - end
 dos: sh -c "if test %OS% = MACOSX; then create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
