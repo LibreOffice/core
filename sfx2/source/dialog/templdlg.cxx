@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templdlg.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 18:22:43 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 15:32:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2659,12 +2659,12 @@ IMPL_LINK( SfxTemplateDialog_Impl, ToolBoxRClick, ToolBox *, pBox )
             sLabel = lcl_GetLabel( aCommand );
 
             pMenu->InsertItem( SID_STYLE_UPDATE_BY_EXAMPLE, sLabel );
-            pMenu->SetHelpId(SID_STYLE_NEW_BY_EXAMPLE, HID_TEMPLDLG_NEWBYEXAMPLE);
+            pMenu->SetHelpId(SID_STYLE_UPDATE_BY_EXAMPLE, HID_TEMPLDLG_UPDATEBYEXAMPLE);
 
             aCommand = xUICommands->getByName(::rtl::OUString::createFromAscii(".uno:LoadStyles"));
             sLabel = lcl_GetLabel( aCommand );
             pMenu->InsertItem( SID_TEMPLATE_LOAD, sLabel );
-            pMenu->SetHelpId(SID_STYLE_NEW_BY_EXAMPLE, SID_TEMPLATE_LOAD);
+            pMenu->SetHelpId(SID_TEMPLATE_LOAD, SID_TEMPLATE_LOAD);
 
             pMenu->SetSelectHdl(LINK(this, SfxTemplateDialog_Impl, MenuSelectHdl));
             pMenu->Execute( pBox,
