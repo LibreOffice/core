@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 09:50:33 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 09:30:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1658,6 +1658,7 @@ void SmDocShell::Execute(SfxRequest& rReq)
                 SvStorageRef xStore( new SvStorage( *xStrm ));
                 switch( xStore->GetFormat() )
                 {
+                case SOT_FORMATSTR_ID_STARMATH_8:
                 case SOT_FORMATSTR_ID_STARMATH_60:
                 case SOT_FORMATSTR_ID_STARMATH_50:
                 case SOT_FORMATSTR_ID_STARMATH_40:
@@ -2156,6 +2157,13 @@ void SmDocShell::FillClass(SvGlobalName* pClassName,
     {
         *pClassName     = SvGlobalName(SO3_SM_CLASSID_60);
         *pFormat        = SOT_FORMATSTR_ID_STARMATH_60;
+        *pFullTypeName  = String(SmResId(STR_MATH_DOCUMENT_FULLTYPE_60));
+        *pShortTypeName = String(SmResId(RID_DOCUMENTSTR));
+    }
+    else if (nFileFormat == SOFFICE_FILEFORMAT_8 )
+    {
+        *pClassName     = SvGlobalName(SO3_SM_CLASSID_60);
+        *pFormat        = SOT_FORMATSTR_ID_STARMATH_8;
         *pFullTypeName  = String(SmResId(STR_MATH_DOCUMENT_FULLTYPE_60));
         *pShortTypeName = String(SmResId(RID_DOCUMENTSTR));
     }
