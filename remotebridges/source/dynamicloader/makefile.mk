@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: rt $ $Date: 2003-04-23 16:42:50 $
+#   last change: $Author: kz $ $Date: 2003-04-25 12:41:14 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -100,7 +100,6 @@ SHL1IMPLIB=	i$(TARGET)
 SHL1LIBS=$(SLB)$/$(TARGET).lib
 
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
-SHL1VERSIONMAP=$(SHL1TARGET).map
 
 DEF1NAME=	$(SHL1TARGET)
 
