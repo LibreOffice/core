@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sddll2.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 13:47:32 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 10:27:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,6 +140,9 @@
 #endif
 #ifndef _SVX_EXTRUSION_CONTROLS_HXX
 #include <svx/extrusioncontrols.hxx>
+#endif
+#ifndef _SVX_TBXCOLOR_HXX
+#include <svx/tbxcolor.hxx>
 #endif
 #ifndef _AVMEDIA_MEDIACHILD_HXX
 #include <avmedia/mediaplayer.hxx>
@@ -314,6 +317,7 @@ void SdDLL::RegisterControllers()
     svx::ExtrusionLightingControl::RegisterControl( SID_EXTRUSION_LIGHTING_FLOATER, pMod );
     svx::ExtrusionSurfaceControl::RegisterControl( SID_EXTRUSION_SURFACE_FLOATER, pMod );
     svx::ExtrusionColorControl::RegisterControl( SID_EXTRUSION_3D_COLOR, pMod );
+
     ::avmedia::MediaToolBoxControl::RegisterControl( SID_AVMEDIA_TOOLBOX, pMod );
     XmlSecStatusBarControl::RegisterControl( SID_SIGNATURE, pMod );
 }
