@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrols.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: mt $ $Date: 2001-12-06 16:00:55 $
+ *  last change: $Author: fs $ $Date: 2001-12-10 07:33:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3351,7 +3351,7 @@ void UnoTimeFieldControl::textChanged( const awt::TextEvent& e ) throw(uno::Runt
     uno::Reference < awt::XTimeField >  xField( mxPeer, uno::UNO_QUERY );
     uno::Any aValue;
     if ( !xField->isEmpty() )
-        xField->getTime();
+        aValue <<= xField->getTime();
     ImplSetPropertyValue( GetPropertyName( BASEPROPERTY_TIME ), aValue, sal_False );
 
     if ( GetTextListeners().getLength() )
