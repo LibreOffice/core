@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calc.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-20 09:16:31 $
+ *  last change: $Author: jp $ $Date: 2000-11-21 14:22:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -256,6 +256,8 @@ public:
     static FASTBOOL     Str2Double( const String& rStr, xub_StrLen& rPos,
                                     double& rVal,
                                     const LocaleDataWrapper* pData = 0 );
+    static FASTBOOL     Str2Double( const String& rStr, xub_StrLen& rPos,
+                                    double& rVal, SwDoc* pDoc );
 };
 
 #endif

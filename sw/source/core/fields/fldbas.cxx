@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldbas.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-20 09:14:45 $
+ *  last change: $Author: jp $ $Date: 2000-11-21 14:23:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,27 +65,20 @@
 
 #pragma hdrstop
 
-
 #include <math.h>
 #ifdef MAC
 #include <stdlib.h>
 #endif
 #include <float.h>
 
-#ifndef _SV_SVAPP_HXX //autogen
-#include <vcl/svapp.hxx>
-#endif
-#ifndef _SV_SYSTEM_HXX //autogen
-#include <vcl/system.hxx>
+#ifndef _TOOLS_SOLMATH_HXX
+#include <tools/solmath.hxx>
 #endif
 #ifndef _ZFORLIST_HXX //autogen
 #include <svtools/zforlist.hxx>
 #endif
 #ifndef _ZFORMAT_HXX //autogen
 #include <svtools/zformat.hxx>
-#endif
-#ifndef _TOOLS_SOLMATH_HXX //autogen wg. SolarMath
-#include <tools/solmath.hxx>
 #endif
 #ifndef _UNOTOOLS_LOCALEDATAWRAPPER_HXX
 #include <unotools/localedatawrapper.hxx>
@@ -139,6 +132,11 @@
 #ifndef _SHELLRES_HXX
 #include <shellres.hxx>
 #endif
+#ifndef _CALC_HXX
+#include <calc.hxx>
+#endif
+
+
 using namespace ::com::sun::star;
 
 USHORT lcl_GetLanguageOfFormat( USHORT nLng, ULONG nFmt,
@@ -953,18 +951,9 @@ void SwFormulaField::SetFormula(const String& rStr)
 
     if( nFmt && ULONG_MAX != nFmt )
     {
-        // String muss im Systemformat vorliegen!
-        // Geht bei Import/Export mit unterschiedlichen Systemformaten
-        // voll in die Hose. Ist aber nicht anders moeglich, da der Kalkulator
-        // nur im Systemformat rechnen kann und es keine Konvertierungsroutine
-        // gibt.
-        const LocaleDataWrapper& rLclD = GetAppLocaleData();
-        int nErrno;
-        double fValue = SolarMath::StringToDouble( rStr.GetBuffer(),
-                                        rLclD.getNumThousandSep().GetChar(0),
-                                        rLclD.getNumDecimalSep().GetChar(0),
-                                        nErrno );
-        if( !nErrno )
+        xub_StrLen nPos = 0;
+        double fValue;
+        if( SwCalc::Str2Double( rStr, nPos, fValue, GetDoc() ) )
             SwValueField::SetValue( fValue );
     }
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calc.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-21 13:22:35 $
+ *  last change: $Author: jp $ $Date: 2000-11-21 14:24:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,6 @@
 #ifndef _UNOTOOLS_CHARCLASS_HXX
 #include <unotools/charclass.hxx>
 #endif
-
 #ifndef _UNO_LINGU_HXX
 #include <svx/unolingu.hxx>
 #endif
@@ -1563,6 +1562,35 @@ FASTBOOL SwCalc::Str2Double( const String& rCommand, xub_StrLen& rCommandPos,
 
     return 0 == nErrno && nCurrCmdPos != rCommandPos;
 }
+
+FASTBOOL SwCalc::Str2Double( const String& rCommand, xub_StrLen& rCommandPos,
+                            double& rVal, SwDoc* pDoc )
+{
+    const LocaleDataWrapper* pLclD = &GetAppLocaleData();
+    if( pDoc )
+    {
+        LanguageType eLang = ((SvxLanguageItem&)pDoc->GetDefault(
+                                        RES_CHRATR_LANGUAGE )).GetLanguage();
+        if( eLang != SvxLocaleToLanguage( pLclD->getLocale() ) )
+            pLclD = new LocaleDataWrapper(
+                            ::comphelper::getProcessServiceFactory(),
+                            SvxCreateLocale( eLang ) );
+    }
+
+    const xub_Unicode *pEnd, nCurrCmdPos = rCommandPos;
+    int nErrno;
+    rVal = SolarMath::StringToDouble( rCommand.GetBuffer() + rCommandPos,
+                                        pLclD->getNumThousandSep().GetChar(0),
+                                        pLclD->getNumDecimalSep().GetChar(0),
+                                        nErrno, &pEnd );
+    rCommandPos = pEnd - rCommand.GetBuffer();
+
+    if( pLclD != &GetAppLocaleData() )
+        delete (LocaleDataWrapper*)pLclD;
+
+    return 0 == nErrno && nCurrCmdPos != rCommandPos;
+}
+
 
 //------------------------------------------------------------------------------
 
