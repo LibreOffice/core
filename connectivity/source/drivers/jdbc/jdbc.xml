@@ -2,15 +2,19 @@
 <!DOCTYPE COMPONENTDESCRIPTION PUBLIC "-//W3C//DTD HTML 3.2//EN" "componentdependencies.dtd">
 <COMPONENTDESCRIPTION>
 
+<Author>Ocke Janssen</Author>
 <Name>  com.sun.star.sdbc.JDBCDriver    </Name>
 
 <Description>
-    This component provides ...
+    This is the implementation of the sdbc-jdbc bridge.
 </Description>
 
 <ModuleName>    jdbc    </ModuleName>
 
 <LoaderName>    com.sun.star.loader.SharedLibrary   </LoaderName>
+<Language>  c++ </Language>
+
+<Status StatusValue="final"/>
 
 <SupportedService>  com.sun.star.sdbc.Driver    </SupportedService>
 
@@ -26,9 +30,6 @@
 <RuntimeModuleDependency>   sal1        </RuntimeModuleDependency>
 <RuntimeModuleDependency>   vos         </RuntimeModuleDependency>
 
-<Language>  c++ </Language>
-
-<Status StatusValue="final"/>
 
 <Type>  com.sun.star.util.XCancellable              </Type>
 <Type>  com.sun.star.util.XNumberFormatter          </Type>
