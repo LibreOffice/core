@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XclImpChangeTrack.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-09 15:05:12 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:37:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,23 +66,18 @@
 #include <tools/datetime.hxx>
 #endif
 
-#ifndef SC_XLTOOLS_HXX
-#include "xltools.hxx"
+#ifndef SC_XIROOT_HXX
+#include "xiroot.hxx"
 #endif
 #ifndef SC_XISTREAM_HXX
 #include "xistream.hxx"
 #endif
+
 #ifndef _EXCFORM_HXX
 #include "excform.hxx"
 #endif
-#ifndef _FLTTOOLS_HXX
-#include "flttools.hxx"
-#endif
 #ifndef _IMP_OP_HXX
 #include "imp_op.hxx"
-#endif
-#ifndef _ROOT_HXX
-#include "root.hxx"
 #endif
 
 
@@ -111,7 +106,7 @@ inline XclImpStream& operator>>( XclImpStream& rStrm, XclImpChTrRecHeader& rRecH
 
 //___________________________________________________________________
 
-class XclImpChangeTrack : protected ExcRoot
+class XclImpChangeTrack : protected XclImpRoot
 {
 private:
     XclImpChTrRecHeader         aRecHeader;
@@ -169,7 +164,7 @@ private:
     void                        ReadRecords();
 
 public:
-                                XclImpChangeTrack( RootData* pRootData, const XclImpStream& rBookStrm );
+                                XclImpChangeTrack( const XclImpRoot& rRoot, const XclImpStream& rBookStrm );
                                 ~XclImpChangeTrack();
 
                                 // reads extended 3D ref info following the formulas, returns sc tab nums
