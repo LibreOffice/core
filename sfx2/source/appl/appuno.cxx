@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.105 $
+ *  $Revision: 1.106 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 14:56:02 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 16:03:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1871,26 +1871,28 @@ Reference < XDispatch > SAL_CALL SfxAppDispatchProvider::queryDispatch( const ::
     USHORT                  nId( 0 );
     sal_Bool                bMasterCommand( sal_False );
     Reference < XDispatch > xDisp;
+    const SfxSlot* pSlot = 0;
+    SfxDispatcher* pAppDisp = SFX_APP()->GetAppDispatcher_Impl();
     if ( aURL.Protocol.compareToAscii( "slot:" ) == COMPARE_EQUAL ||
          aURL.Protocol.compareToAscii( "commandId:" ) == COMPARE_EQUAL )
     {
         nId = (USHORT) aURL.Path.toInt32();
+        SfxShell* pShell;
+        pAppDisp->GetShellAndSlot_Impl( nId, &pShell, &pSlot, TRUE, TRUE );
     }
-
-    if ( aURL.Protocol.compareToAscii( ".uno:" ) == COMPARE_EQUAL )
+    else if ( aURL.Protocol.compareToAscii( ".uno:" ) == COMPARE_EQUAL )
     {
         // Support ".uno" commands. Map commands to slotid
         bMasterCommand = SfxOfficeDispatch::IsMasterUnoCommand( aURL );
         if ( bMasterCommand )
-            nId = SFX_APP()->GetAppDispatcher_Impl()->GetSlotId(
-                    SfxOfficeDispatch::GetMasterUnoCommand( aURL ) );
+            pSlot = pAppDisp->GetSlot( SfxOfficeDispatch::GetMasterUnoCommand( aURL ) );
         else
-            nId = SFX_APP()->GetAppDispatcher_Impl()->GetSlotId( aURL.Main );
+            pSlot = pAppDisp->GetSlot( aURL.Main );
     }
 
-    if ( nId && SFX_APP()->GetAppDispatcher_Impl()->HasSlot_Impl( nId ) )
+    if ( pSlot )
     {
-        SfxOfficeDispatch* pDispatch = new SfxOfficeDispatch( SFX_APP()->GetAppDispatcher_Impl(), nId, aURL ) ;
+        SfxOfficeDispatch* pDispatch = new SfxOfficeDispatch( pAppDisp, pSlot, aURL ) ;
         pDispatch->SetMasterUnoCommand( bMasterCommand );
         xDisp = pDispatch;
     }
