@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfatr.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: jp $ $Date: 2002-03-18 14:50:38 $
+ *  last change: $Author: cmc $ $Date: 2002-05-15 11:55:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -721,9 +721,12 @@ void OutRTF_SwFlyFrmFmt( SwRTFWriter& rRTFWrt )
  */
 
 SV_DECL_PTRARR( SfxPoolItems, SfxPoolItem*, 4, 4 )
+class RTFEndPosLst;
 
 class SttEndPos
 {
+    friend RTFEndPosLst;
+    void SetStart(xub_StrLen nInStart) { nStart = nInStart; }
     // falls mehrere Attribute den gleichen Bereich umspannen, sammeln
     SfxPoolItems aArr;
     xub_StrLen nStart, nEnd;
@@ -1050,6 +1053,8 @@ void RTFEndPosLst::OutFontAttrs( USHORT nScript )
 
 void RTFEndPosLst::EndAttrs( xub_StrLen nStrPos )
 {
+    xub_StrLen nClipStart=STRING_MAXLEN;
+    bool bClosed=false;
     SttEndPos* pSEPos;
     while( 0 != Count() && 0 != (pSEPos = GetObject( 0 )) &&
         ( STRING_MAXLEN == nStrPos || nStrPos == pSEPos->GetEnd() ))
@@ -1071,7 +1076,38 @@ void RTFEndPosLst::EndAttrs( xub_StrLen nStrPos )
             }
 
         rWrt.Strm() << '}';     // end of all attributes from this position
+        if (pSEPos->GetStart() < nClipStart)
+            nClipStart = pSEPos->GetStart();
+        bClosed=true;
         DeleteAndDestroy( 0, 1 );
+    }
+
+    if (bClosed)
+    {
+        SttEndPos* pAdjustMe=0;
+        for (USHORT nSize = Count(); nSize > 0;)
+        {
+            pSEPos = GetObject(--nSize);
+            if (pSEPos->GetStart() < nStrPos && pSEPos->GetStart() >= nClipStart)
+            {
+                if (!pAdjustMe || pSEPos->GetStart() > pAdjustMe->GetStart())
+                    pAdjustMe = pSEPos;
+            }
+        }
+        if (pAdjustMe)
+        {
+            pAdjustMe->SetStart(nStrPos);
+            rWrt.Strm() << '}';
+            rWrt.Strm() << '{';
+            for( USHORT i = 0; i < pAdjustMe->GetAttrs().Count(); ++i )
+            {
+                const SfxPoolItem* pItem = pAdjustMe->GetAttrs()[i];
+                if( RES_FLTR_SCRIPTTYPE == pItem->Which() )
+                    OutFontAttrs( ((SfxUInt16Item*)pItem)->GetValue() );
+                else
+                    Out( aRTFAttrFnTab, *pItem, rWrt );
+            }
+        }
     }
 }
 
