@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.157 $
+ *  $Revision: 1.158 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:35:09 $
+ *  last change: $Author: rt $ $Date: 2004-09-09 09:42:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -411,14 +411,12 @@ SbaTableQueryBrowser::SbaTableQueryBrowser(const Reference< XMultiServiceFactory
     ,m_bQueryEscapeProcessing( sal_False )
     ,m_bHiContrast(sal_False)
     ,m_bShowMenu(sal_False)
-    ,m_bShowToolbox(sal_True)
     ,m_bPreview(sal_False)
+    ,m_bInSuspend(sal_False)
+    ,m_bEnableBrowser(sal_True)
     ,m_nBorder(1)
 {
     DBG_CTOR(SbaTableQueryBrowser,NULL);
-
-    m_aRefreshMenu.SetTimeoutHdl( LINK( this, SbaTableQueryBrowser, OnShowRefreshDropDown ) );
-    m_aRefreshMenu.SetTimeout( 300 );
 }
 
 //------------------------------------------------------------------------------
@@ -1002,13 +1000,18 @@ void SbaTableQueryBrowser::propertyChange(const PropertyChangeEvent& evt) throw(
 // -----------------------------------------------------------------------
 sal_Bool SbaTableQueryBrowser::suspend(sal_Bool bSuspend) throw( RuntimeException )
 {
-    if ( rBHelper.bDisposed )
-        throw DisposedException( ::rtl::OUString(), *this );
+    if ( !m_bInSuspend )
+    {
+        m_bInSuspend = sal_True;
+        if ( rBHelper.bDisposed )
+            throw DisposedException( ::rtl::OUString(), *this );
 
-    if (!SbaXDataBrowserController::suspend(bSuspend))
-        return sal_False;
+        if (!SbaXDataBrowserController::suspend(bSuspend))
+            return sal_False;
+        m_bInSuspend = sal_False;
+    }
 
-    return sal_True;
+    return !m_bInSuspend;
 }
 
 // -------------------------------------------------------------------------
@@ -1241,6 +1244,8 @@ void SbaTableQueryBrowser::connectExternalDispatches()
 void SbaTableQueryBrowser::implCheckExternalSlot(sal_Int32 _nId)
 {
     // check if we have to hide this item from the toolbox
+    // TODO: toolbox
+    /*
     if ( getBrowserView() )
     {
         ToolBox* pTB = getBrowserView()->getToolBox();
@@ -1251,7 +1256,7 @@ void SbaTableQueryBrowser::implCheckExternalSlot(sal_Int32 _nId)
                 bHaveDispatcher ? pTB->ShowItem((sal_uInt16)_nId) : pTB->HideItem((sal_uInt16)_nId);
         }
     }
-
+    */
     // and invalidate this feature in general
     InvalidateFeature((sal_uInt16)_nId);
 }
@@ -1575,13 +1580,13 @@ FeatureState SbaTableQueryBrowser::GetState(sal_uInt16 nId) const
     {
         case ID_BROWSER_CLOSE:
             // the close button should always be enabled
-            aReturn.bEnabled = sal_True;
+            aReturn.bEnabled = !m_bEnableBrowser;
             return aReturn;
             break;
     // "toggle explorer" is always enabled (if we have a explorer)
         case ID_BROWSER_EXPLORER:
         {       // this slot is available even if no form is loaded
-            aReturn.bEnabled = sal_True;
+            aReturn.bEnabled = m_bEnableBrowser;
             aReturn.aState = ::cppu::bool2any(haveExplorer());
             return aReturn;
         }
@@ -1719,7 +1724,7 @@ FeatureState SbaTableQueryBrowser::GetState(sal_uInt16 nId) const
 }
 
 //------------------------------------------------------------------------------
-void SbaTableQueryBrowser::Execute(sal_uInt16 nId)
+void SbaTableQueryBrowser::Execute(sal_uInt16 nId, const Sequence< PropertyValue >& aArgs)
 {
     switch (nId)
     {
@@ -1747,7 +1752,7 @@ void SbaTableQueryBrowser::Execute(sal_uInt16 nId)
             if ( !bFullReinit )
             {
                 // let the base class do a simple reload
-                SbaXDataBrowserController::Execute(nId);
+                SbaXDataBrowserController::Execute(nId,aArgs);
                 break;
             }
             // NO break here!
@@ -1881,10 +1886,10 @@ void SbaTableQueryBrowser::Execute(sal_uInt16 nId)
                 pControl->copyCellText(pControl->GetCurRow(), pControl->GetCurColumnId());
             }
             else
-                SbaXDataBrowserController::Execute(nId);
+                SbaXDataBrowserController::Execute(nId,aArgs);
             break;
         default:
-            SbaXDataBrowserController::Execute(nId);
+            SbaXDataBrowserController::Execute(nId,aArgs);
             break;
     }
 }
@@ -2246,11 +2251,6 @@ sal_Bool SbaTableQueryBrowser::implSelect(const ::rtl::OUString& _rDataSourceNam
 {
     if (_rDataSourceName.getLength() && _rCommand.getLength() && (-1 != _nCommandType))
     {
-        ::rtl::OUString sName = _rDataSourceName;
-        INetURLObject aURL(sName);
-        if ( aURL.GetProtocol() != INET_PROT_NOT_VALID )
-            sName = aURL.getBase(INetURLObject::LAST_SEGMENT,true,INetURLObject::DECODE_WITH_CHARSET);
-        setTitle(sName,_rCommand);
         SvLBoxEntry* pDataSource = NULL;
         SvLBoxEntry* pCommandType = NULL;
         SvLBoxEntry* pCommand = getObjectEntry(_rDataSourceName, _rCommand, _nCommandType, &pDataSource, &pCommandType, sal_True);
@@ -2440,7 +2440,7 @@ IMPL_LINK(SbaTableQueryBrowser, OnSelectEntry, SvLBoxEntry*, _pEntry)
             String sDataSourceName( GetEntryText( pConnection ) );
             if ( implLoadAnything( sDataSourceName, aName, nCommandType, sal_True, xConnection ) )
                 // set the title of the beamer
-                setTitle( sDataSourceName, aName );
+                updateTitle();
             else
             {   // clean up
                 criticalFail();
@@ -2954,7 +2954,6 @@ void SbaTableQueryBrowser::impl_initialize( const Sequence< Any >& aArguments )
             {
                 bShow = sal_False;
                 m_bPreview = sal_True;
-                getView()->setToolBox(NULL);
             }
         }
         else if (0 == aValue.Name.compareToAscii(PROPERTY_SHOWTREEVIEW))
@@ -2975,12 +2974,14 @@ void SbaTableQueryBrowser::impl_initialize( const Sequence< Any >& aArguments )
         {
             try
             {
-                if ( !::cppu::any2bool(aValue.Value) && getView() && getView()->getToolBox() )
+                // TODO: toolbox
+                if ( !::cppu::any2bool(aValue.Value) && getView() )
                 {
                     // hide the explorer and the separator
-                    getView()->getToolBox()->HideItem(ID_BROWSER_EXPLORER);
-                    getView()->getToolBox()->HideItem(getView()->getToolBox()->GetItemId(getView()->getToolBox()->GetItemPos(ID_BROWSER_EXPLORER)+1));
-                    getView()->getToolBox()->ShowItem(ID_BROWSER_CLOSE);
+                    m_bEnableBrowser = sal_False;
+//                  getView()->getToolBox()->HideItem(ID_BROWSER_EXPLORER);
+//                  getView()->getToolBox()->HideItem(getView()->getToolBox()->GetItemId(getView()->getToolBox()->GetItemPos(ID_BROWSER_EXPLORER)+1));
+//                  getView()->getToolBox()->ShowItem(ID_BROWSER_CLOSE);
                 }
             }
             catch(Exception&)
@@ -3143,63 +3144,6 @@ sal_Bool SbaTableQueryBrowser::ensureConnection(SvLBoxEntry* _pDSEntry, void* pD
     }
 
     return _xConnection.is();
-}
-
-// -----------------------------------------------------------------------------
-void SbaTableQueryBrowser::onToolBoxSelected( sal_uInt16 _nSelectedItem )
-{
-    if ( ID_BROWSER_REFRESH == _nSelectedItem )
-    {
-        if ( m_aRefreshMenu.IsActive() )
-            m_aRefreshMenu.Stop();
-    }
-    SbaXDataBrowserController::onToolBoxSelected( _nSelectedItem );
-}
-
-// -----------------------------------------------------------------------------
-void SbaTableQueryBrowser::onToolBoxClicked( sal_uInt16 _nClickedItem )
-{
-    if ( ID_BROWSER_REFRESH == _nClickedItem )
-        m_aRefreshMenu.Start();
-    else
-        SbaXDataBrowserController::onToolBoxClicked( _nClickedItem );
-}
-
-// -----------------------------------------------------------------------------
-IMPL_LINK( SbaTableQueryBrowser, OnShowRefreshDropDown, void*, NOTINTERESTEDIN )
-{
-    ToolBox* pToolBox = NULL;
-    if ( getView() )
-        pToolBox = getView()->getToolBox();
-    OSL_ENSURE( pToolBox, "SbaTableQueryBrowser::OnShowRefreshDropDown: no toolbox (anymore)!" );
-
-    if ( !pToolBox )
-        return 0L;
-
-    pToolBox->EndSelection();
-
-    // tell the toolbox that the item is pressed down
-    pToolBox->SetItemDown( ID_BROWSER_REFRESH, sal_True );
-
-    // simulate a mouse move (so the "down" state is really painted)
-    Point aPoint = pToolBox->GetItemRect( ID_BROWSER_REFRESH ).TopLeft();
-    MouseEvent aMove( aPoint, 0, MOUSE_SIMPLEMOVE | MOUSE_SYNTHETIC );
-    pToolBox->MouseMove( aMove );
-
-    pToolBox->Update();
-
-    // execute the menu
-    PopupMenu aNewForm( ModuleRes( RID_MENU_REFRESH_DATA ) );
-    sal_uInt16 nSelectedRefreshAction = aNewForm.Execute(pToolBox, pToolBox->GetItemRect( ID_BROWSER_REFRESH ));
-
-    // "cleanup" the toolbox state
-    MouseEvent aLeave( aPoint, 0, MOUSE_LEAVEWINDOW | MOUSE_SYNTHETIC );
-    pToolBox->MouseMove( aLeave );
-    pToolBox->SetItemDown( ID_BROWSER_REFRESH, sal_False);
-
-    Execute( nSelectedRefreshAction );
-
-    return 1L;
 }
 
 // -----------------------------------------------------------------------------
@@ -3483,26 +3427,11 @@ sal_Bool SbaTableQueryBrowser::requestContextMenu( const CommandEvent& _rEvent )
     return sal_True;    // handled
 }
 // -----------------------------------------------------------------------------
-void SbaTableQueryBrowser::setDefaultTitle() const
+void SbaTableQueryBrowser::setDefaultTitle()
 {
     ::rtl::OUString sTitle = String(ModuleRes(STR_DSBROWSER_TITLE));
-    setTitle(sTitle, ::rtl::OUString());
+    setTitle(sTitle);
 }
-
-// -----------------------------------------------------------------------------
-void SbaTableQueryBrowser::setTitle(const ::rtl::OUString& _rsDataSourceName,const ::rtl::OUString& _rsName)  const
-{
-    ::rtl::OUString sTitle = _rsDataSourceName;
-    if(_rsName.getLength())
-    {
-        sTitle += ::rtl::OUString::createFromAscii(": ");
-        sTitle += _rsName;
-    }
-    Reference<XPropertySet> xProp(m_xCurrentFrame,UNO_QUERY);
-    if(xProp.is() && xProp->getPropertySetInfo()->hasPropertyByName(PROPERTY_TITLE))
-        xProp->setPropertyValue(PROPERTY_TITLE,makeAny(sTitle));
-}
-
 // -----------------------------------------------------------------------------
 sal_Bool SbaTableQueryBrowser::implGetQuerySignature( ::rtl::OUString& _rCommand, sal_Bool& _bEscapeProcessing )
 {
@@ -3638,10 +3567,45 @@ sal_Bool SbaTableQueryBrowser::isHiContrast() const
 // -----------------------------------------------------------------------------
 void SbaTableQueryBrowser::loadMenu(const Reference< XFrame >& _xFrame)
 {
-    if ( m_bShowMenu && getView() && getView()->getToolBox() )
+    if ( m_bShowMenu )
     {
-        getView()->getToolBox()->HideItem(ID_BROWSER_CLOSE);
+        // TODO: toolbox
+        //getView()->getToolBox()->HideItem(ID_BROWSER_CLOSE);
         OGenericUnoController::loadMenu(_xFrame);
+    }
+    else if ( !m_bPreview )
+    {
+        Reference< drafts::com::sun::star::frame::XLayoutManager > xLayoutManager = getLayoutManager(_xFrame);
+
+        if ( xLayoutManager.is() )
+        {
+            xLayoutManager->lock();
+            xLayoutManager->createElement( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "private:resource/toolbar/toolbar" )));
+            loadSubToolbar(xLayoutManager);
+            xLayoutManager->unlock();
+            xLayoutManager->doLayout();
+        }
+    }
+}
+// -----------------------------------------------------------------------------
+void SbaTableQueryBrowser::updateTitle()
+{
+    if ( m_pCurrentlyDisplayed )
+    {
+        SvLBoxEntry* pContainer = m_pTreeModel->GetParent(m_pCurrentlyDisplayed);
+        // get the entry for the datasource
+        SvLBoxEntry* pConnection = m_pTreeModel->GetParent(pContainer);
+        ::rtl::OUString sName = m_pTreeView->getListBox()->GetEntryText(m_pCurrentlyDisplayed);
+        ::rtl::OUString sTitle = GetEntryText( pConnection );
+        INetURLObject aURL(sTitle);
+        if ( aURL.GetProtocol() != INET_PROT_NOT_VALID )
+            sTitle = aURL.getBase(INetURLObject::LAST_SEGMENT,true,INetURLObject::DECODE_WITH_CHARSET);
+        if(sName.getLength())
+        {
+            sTitle += ::rtl::OUString::createFromAscii(": ");
+            sTitle += sName;
+        }
+        setTitle(sTitle);
     }
 }
 // .........................................................................
