@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optlingu.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-09-27 19:18:35 $
+ *  last change: $Author: obo $ $Date: 2000-10-27 17:34:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,7 @@ TabPage RID_SFXPAGE_LINGU
         Text [ danish ] = "Ord med store bogstaver" ;
         Text[ chinese_simplified ] = "´óĞ´µÄµ¥´Ê(~P)";
         Text[ russian ] = "Ñëîâà èç ïğîïèñíûõ áóêâ";
-        Text[ polish ] = "S³owa pisane du¿ymi literami";
+        Text[ polish ] = "S³owa pisane wielkimi literami";
         Text[ japanese ] = "‚·‚×‚Ä‘å•¶š‚Ì’PŒê(~A)";
         Text[ chinese_traditional ] = "¤j¼g³æ¦r(~P)";
         Text[ arabic ] = "ÇáßáãÇÊ ÇáãßÊæÈÉ ÈÃÍÑİ ßÈíÑÉ";
@@ -169,7 +169,7 @@ TabPage RID_SFXPAGE_LINGU
         Text [ danish ] = "Store og små bogstaver" ;
         Text[ chinese_simplified ] = "×ÖÄ¸´óĞ¡Ğ´(~C)";
         Text[ russian ] = "Ó÷èòûâàòü ğåãèñòğ";
-        Text[ polish ] = "Ma³e i du¿e litery";
+        Text[ polish ] = "Wielkie i ma³e litery";
         Text[ japanese ] = "‘å•¶š/¬•¶š‚ğ‹æ•Ê(~C)";
         Text[ chinese_traditional ] = "¦r¥À¤j¤p¼g(~C)";
         Text[ arabic ] = "ÇáßÊÇÈÉ ÈÃÍÑİ ßÈíÑÉ Ãæ ÕÛíÑÉ";
@@ -586,7 +586,7 @@ TabPage RID_SFXPAGE_LINGU
         Text [ ENGLISH ] = "Characters be~fore hyphenation" ;
         Text [ portuguese_brazilian ] = "Caracteres por sílaba an~tes da hifenização" ;
         Text [ portuguese ] = "Caracteres an~tes da divisão silábica" ;
-        Text [ english_us ] = "Characters per syllable ~before hyphen" ;
+        Text [ english_us ] = "Characters ~before line break" ;
         Text [ dutch ] = "Tekens ~voor afbreking" ;
         Text [ italian ] = "Caratteri prima della sillabazione" ;
         Text [ spanish ] = "~Carácter antes de salto" ;
@@ -623,7 +623,7 @@ TabPage RID_SFXPAGE_LINGU
         Text [ ENGLISH ] = "~Characters behind hyphenation" ;
         Text [ portuguese_brazilian ] = "~Caracteres por sílaba antes da hifenização" ;
         Text [ portuguese ] = "~Caracteres depois da separação silábica" ;
-        Text [ english_us ] = "Characters per syllable af~ter hyphen" ;
+        Text [ english_us ] = "Characters af~ter line break" ;
         Text [ dutch ] = "Tekens ~na afbreking" ;
         Text [ italian ] = "Caratteri dopo la sillabazione" ;
         Text [ spanish ] = "Carácter ~después de salto" ;
