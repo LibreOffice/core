@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menubarwrapper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:22:48 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 13:16:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -323,7 +323,7 @@ Reference< XInterface > SAL_CALL MenuBarWrapper::getRealInterface() throw ( Runt
     if ( m_bDisposed )
         throw DisposedException();
 
-    return Reference< com::sun::star::awt::XSystemDependentMenuPeer >( m_xMenuBarManager, UNO_QUERY );
+    return Reference< XInterface >( m_xMenuBarManager, UNO_QUERY );
 }
 
 } // namespace framework
