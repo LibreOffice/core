@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-03 09:23:12 $
+ *  last change: $Author: fs $ $Date: 2001-05-16 14:25:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,14 +157,10 @@ namespace dbaui
     // SbaXGridPeer
     //==================================================================
 
-    //  Reflection* ::getCppuType((const SbaXGridPeer*)0);
-
     class SbaXGridPeer
                 :public FmXGridPeer
                 ,public ::com::sun::star::frame::XDispatch
     {
-        //  friend Reflection* ::getCppuType((const SbaXGridPeer*)0);
-
         ::cppu::OMultiTypeInterfaceContainerHelperVar< ::com::sun::star::util::URL,SbaURLHash , SbaURLCompare>  m_aStatusListeners;
 
     public:
