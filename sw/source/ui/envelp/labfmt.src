@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labfmt.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:53:54 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 18:59:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,8 @@ TabPage TP_LAB_FMT
         Text[ hebrew ] = "‮מרווח אופקי‬";
         Text[ hindi ] = "स~मतल पिच";
         Text[ slovak ] = "Vodo~rovný posun";
+        Text[ hungarian ] = "~Vízsz. osztóköz";
+        Text[ slovenian ] = "Vodo~ravni korak";
     };
     MetricField FLD_HDIST
     {
@@ -145,7 +147,7 @@ TabPage TP_LAB_FMT
         Text [ portuguese_brazilian ] = "Passo ~vertical" ;
         Text [ portuguese ] = "Espa�amento vertical" ;
         Text [ finnish ] = "~Pystyet�isyys" ;
-        Text [ danish ] = "Lodret afstand" ;
+        Text [ danish ] = "~Lodret afstand" ;
         Text [ french ] = "�cart ~vertical" ;
         Text [ swedish ] = "~Vert. avst�nd" ;
         Text [ dutch ] = "V~ert. afstand" ;
@@ -168,6 +170,8 @@ TabPage TP_LAB_FMT
         Text[ hebrew ] = "‮מרווח אנכי‬";
         Text[ hindi ] = "~लंबरूप पिच";
         Text[ slovak ] = "Z~vislý posun";
+        Text[ hungarian ] = "~Függ. osztóköz";
+        Text[ slovenian ] = "~Navpični korak";
     };
     MetricField FLD_VDIST
     {
@@ -193,7 +197,7 @@ TabPage TP_LAB_FMT
         Text [ portuguese_brazilian ] = "~Largura" ;
         Text [ portuguese ] = "~Largura" ;
         Text [ finnish ] = "~Leveys" ;
-        Text [ danish ] = "Bredde" ;
+        Text [ danish ] = "~Bredde" ;
         Text [ french ] = "Largeur" ;
         Text [ swedish ] = "~Bredd" ;
         Text [ dutch ] = "B~reedte" ;
@@ -216,6 +220,8 @@ TabPage TP_LAB_FMT
         Text[ hebrew ] = "‮רוחב‬";
         Text[ hindi ] = "~चौड़ाई";
         Text[ slovak ] = "~Šírka";
+        Text[ hungarian ] = "~Szélesség";
+        Text[ slovenian ] = "~Širina";
     };
     MetricField FLD_WIDTH
     {
@@ -241,7 +247,7 @@ TabPage TP_LAB_FMT
         Text [ portuguese_brazilian ] = "~Altura" ;
         Text [ portuguese ] = "Altura" ;
         Text [ finnish ] = "~Korkeus" ;
-        Text [ danish ] = "H�jde" ;
+        Text [ danish ] = "~H�jde" ;
         Text [ french ] = "Hauteur" ;
         Text [ swedish ] = "H�j~d" ;
         Text [ dutch ] = "H~oogte" ;
@@ -264,6 +270,8 @@ TabPage TP_LAB_FMT
         Text[ hebrew ] = "‮גובה‬";
         Text[ hindi ] = "~ऊँचाई";
         Text[ slovak ] = "~Výška";
+        Text[ hungarian ] = "~Magasság";
+        Text[ slovenian ] = "~Višina";
     };
     MetricField FLD_HEIGHT
     {
@@ -289,7 +297,7 @@ TabPage TP_LAB_FMT
         Text [ portuguese_brazilian ] = "Margem ~esquerda" ;
         Text [ portuguese ] = "Margem esquerda" ;
         Text [ finnish ] = "~Vasen reunus" ;
-        Text [ danish ] = "Margen venstre" ;
+        Text [ danish ] = "~Venstre margen" ;
         Text [ french ] = "Marge gauche" ;
         Text [ swedish ] = "V�nster margina~l" ;
         Text [ dutch ] = "Linker~marge" ;
@@ -312,6 +320,8 @@ TabPage TP_LAB_FMT
         Text[ hebrew ] = "‮שוליים אנכיים‬";
         Text[ hindi ] = "~बायाँ पृष्ठ-प्रान्त";
         Text[ slovak ] = "Ľa~vý okraj";
+        Text[ hungarian ] = "~Bal margó";
+        Text[ slovenian ] = "~Levi rob";
     };
     MetricField FLD_LEFT
     {
@@ -339,7 +349,7 @@ TabPage TP_LAB_FMT
         Text [ portuguese_brazilian ] = "Margem ~superior" ;
         Text [ portuguese ] = "Margem superior" ;
         Text [ finnish ] = "~Yl�marginaali" ;
-        Text [ danish ] = "Margen foroven" ;
+        Text [ danish ] = "~Topmargen" ;
         Text [ french ] = "Marge ~sup�rieure" ;
         Text [ swedish ] = "~�vre marginal" ;
         Text [ dutch ] = "~Bovenmarge" ;
@@ -362,6 +372,8 @@ TabPage TP_LAB_FMT
         Text[ hebrew ] = "‮שוליים אופקיים‬";
         Text[ hindi ] = "~ऊपरी पृष्ठ-प्रान्त";
         Text[ slovak ] = "~Horný okraj";
+        Text[ hungarian ] = "F~első margó";
+        Text[ slovenian ] = "~Zgornji rob";
     };
     MetricField FLD_UPPER
     {
@@ -389,7 +401,7 @@ TabPage TP_LAB_FMT
         Text [ portuguese_brazilian ] = "~Colunas" ;
         Text [ portuguese ] = "~Colunas" ;
         Text [ finnish ] = "Pal~stat" ;
-        Text [ danish ] = "Kolonner" ;
+        Text [ danish ] = "~Kolonner" ;
         Text [ french ] = "~Colonnes" ;
         Text [ swedish ] = "Kolumner" ;
         Text [ dutch ] = "~Kolommen" ;
@@ -412,6 +424,8 @@ TabPage TP_LAB_FMT
         Text[ hebrew ] = "‮טורים‬";
         Text[ hindi ] = "~स्तंभें";
         Text[ slovak ] = "~Stĺpce";
+        Text[ hungarian ] = "~Oszlopok";
+        Text[ slovenian ] = "~Stolpci";
     };
     NumericField FLD_COLUMNS
     {
@@ -436,7 +450,7 @@ TabPage TP_LAB_FMT
         Text [ portuguese_brazilian ] = "~Linhas" ;
         Text [ portuguese ] = "Linhas" ;
         Text [ finnish ] = "~Rivit" ;
-        Text [ danish ] = "R�kker" ;
+        Text [ danish ] = "~R�kker" ;
         Text [ french ] = "Lignes" ;
         Text [ swedish ] = "~Rader" ;
         Text [ dutch ] = "~Rijen" ;
@@ -459,6 +473,8 @@ TabPage TP_LAB_FMT
         Text[ hebrew ] = "‮שורות‬";
         Text[ hindi ] = "पंक्ति~याँ";
         Text[ slovak ] = "Ria~dky";
+        Text[ hungarian ] = "~Sorok";
+        Text[ slovenian ] = "Vrst~ice";
     };
     NumericField FLD_ROWS
     {
@@ -503,6 +519,8 @@ TabPage TP_LAB_FMT
         Text[ hebrew ] = "‮שמירה‬";
         Text[ hindi ] = "~संचित करो...";
         Text[ slovak ] = "~Uložiť...";
+        Text[ hungarian ] = "~Mentés...";
+        Text[ slovenian ] = "~Shrani...";
     };
 };
  // String *******************************************************************
@@ -537,6 +555,8 @@ String STR_HDIST
     Text[ hebrew ] = "H. Abstand";
     Text[ hindi ] = "H. पिच";
     Text[ slovak ] = "Vodorovný rozstup";
+    Text[ hungarian ] = "Vízsz. dőlés";
+    Text[ slovenian ] = "V. korak";
 };
 String STR_VDIST
 {
@@ -569,6 +589,8 @@ String STR_VDIST
     Text[ hebrew ] = "V. Abstand";
     Text[ hindi ] = "V. पिच";
     Text[ slovak ] = "Zvislý rozstup";
+    Text[ hungarian ] = "Függ. dőlés";
+    Text[ slovenian ] = "N. korak";
 };
 String STR_WIDTH
 {
@@ -601,6 +623,8 @@ String STR_WIDTH
     Text[ hebrew ] = "‮רוחב‬";
     Text[ hindi ] = "चौड़ाई";
     Text[ slovak ] = "Šírka";
+    Text[ hungarian ] = "Szélesség";
+    Text[ slovenian ] = "Širina";
 };
 String STR_HEIGHT
 {
@@ -611,7 +635,7 @@ String STR_HEIGHT
     Text [ portuguese_brazilian ] = "Altura" ;
     Text [ portuguese ] = "Altura" ;
     Text [ finnish ] = "Korkeus" ;
-    Text [ danish ] = "H�~jde" ;
+    Text [ danish ] = "H�jde" ;
     Text [ french ] = "Hauteur" ;
     Text [ swedish ] = "H�jd" ;
     Text [ dutch ] = "Hoogte" ;
@@ -633,6 +657,8 @@ String STR_HEIGHT
     Text[ hebrew ] = "‮גובה‬";
     Text[ hindi ] = "ऊँचाई";
     Text[ slovak ] = "Výška";
+    Text[ hungarian ] = "Magasság";
+    Text[ slovenian ] = "Višina";
 };
 String STR_LEFT
 {
@@ -643,7 +669,7 @@ String STR_LEFT
     Text [ portuguese_brazilian ] = "Margem esquerda" ;
     Text [ portuguese ] = "Margem esquerda" ;
     Text [ finnish ] = "Vasen reunus" ;
-    Text [ danish ] = "Margen venstre" ;
+    Text [ danish ] = "Venstre margen" ;
     Text [ french ] = "Marge gauche" ;
     Text [ swedish ] = "V�nster marginal" ;
     Text [ dutch ] = "Linkermarge" ;
@@ -665,6 +691,8 @@ String STR_LEFT
     Text[ hebrew ] = "Rand links";
     Text[ hindi ] = "बायाँ पृष्ठ-प्रान्त";
     Text[ slovak ] = "Ľavý okraj";
+    Text[ hungarian ] = "Bal margó";
+    Text[ slovenian ] = "Levi rob";
 };
 String STR_UPPER
 {
@@ -675,7 +703,7 @@ String STR_UPPER
     Text [ portuguese_brazilian ] = "Margem superior" ;
     Text [ portuguese ] = "Margem superior" ;
     Text [ finnish ] = "Yl�reunus" ;
-    Text [ danish ] = "Margen foroven" ;
+    Text [ danish ] = "Topmargen" ;
     Text [ french ] = "Marge sup�rieure" ;
     Text [ swedish ] = "�vre marginal" ;
     Text [ dutch ] = "Bovenmarge" ;
@@ -697,6 +725,8 @@ String STR_UPPER
     Text[ hebrew ] = "Rand oben";
     Text[ hindi ] = "ऊपरी पृष्ठ-प्रान्त";
     Text[ slovak ] = "Horný okraj";
+    Text[ hungarian ] = "Felső margó";
+    Text[ slovenian ] = "Zgornji rob";
 };
 String STR_COLS
 {
@@ -729,6 +759,8 @@ String STR_COLS
     Text[ hebrew ] = "‮טורים‬";
     Text[ hindi ] = "स्तंभें";
     Text[ slovak ] = "Stĺpce";
+    Text[ hungarian ] = "Oszlopok";
+    Text[ slovenian ] = "Stolpci";
 };
 String STR_ROWS
 {
@@ -761,6 +793,8 @@ String STR_ROWS
     Text[ hebrew ] = "Zeilen";
     Text[ hindi ] = "पंक्तियाँ";
     Text[ slovak ] = "Riadky";
+    Text[ hungarian ] = "Sorok";
+    Text[ slovenian ] = "Vrstice";
 };
 ModalDialog DLG_SAVE_LABEL
 {
@@ -780,7 +814,7 @@ ModalDialog DLG_SAVE_LABEL
         Text [ portuguese_brazilian ] = "Fabricante" ;
         Text [ portuguese ] = "~Marca" ;
         Text [ finnish ] = "Tuotemerkki" ;
-        Text [ danish ] = "~M�rke" ;
+        Text [ danish ] = "M�rke" ;
         Text [ french ] = "~Marque" ;
         Text [ swedish ] = "~M�rke" ;
         Text [ dutch ] = "~Merk" ;
@@ -803,6 +837,8 @@ ModalDialog DLG_SAVE_LABEL
         Text[ hebrew ] = "~Marke";
         Text[ hindi ] = "व्यापारिक चिन्ह";
         Text[ slovak ] = "Značka";
+        Text[ hungarian ] = "Márka";
+        Text[ slovenian ] = "Znamka";
     };
     ComboBox CB_MAKE
     {
@@ -845,6 +881,8 @@ ModalDialog DLG_SAVE_LABEL
         Text[ hebrew ] = "~Typ";
         Text[ hindi ] = "~वर्ग";
         Text[ slovak ] = "T~yp";
+        Text[ hungarian ] = "~Típus";
+        Text[ slovenian ] = "V~rsta";
     };
     Edit ED_TYPE
     {
@@ -883,6 +921,8 @@ ModalDialog DLG_SAVE_LABEL
         Text[ hebrew ] = "‮אפשרויות‬";
         Text[ hindi ] = "विकल्प";
         Text[ slovak ] = "Nastavenia";
+        Text[ hungarian ] = "Beállítások";
+        Text[ slovenian ] = "Možnosti";
     };
     OKButton PB_OK
     {
@@ -937,6 +977,8 @@ ModalDialog DLG_SAVE_LABEL
         Message[ hebrew ] = "Das Etikett \"%1 / %2\" ist bereits vorhanden.\nMöchten Sie die Daten überschreiben?";
         Message[ hindi ] = "लेबिल \"%1 / %2\" पहिले से ही अस्तित्व में है ।\nआप ओवररइट् करना चाहते है?";
         Message[ slovak ] = "Popisok \"%1 / %2\" už existuje.\nChcete ho prepísať?";
+        Message[ hungarian ] = "A címke már létezik: \"%1 / %2\"\nFelülírja?";
+        Message[ slovenian ] = "Nalepka \"%1 / %2\" že obstaja.\nAli jo želite prepisati?";
     };
     Text[ english_us ] = "Save Label Format";
     Text[ portuguese ] = "Guardar formato de etiqueta";
@@ -963,7 +1005,10 @@ ModalDialog DLG_SAVE_LABEL
     Text[ hebrew ] = "Etikettenformat speichern";
     Text[ hindi ] = "लेबिल रचना संचित करो";
     Text[ slovak ] = "Uložiť formát popisku";
+    Text[ hungarian ] = "Címke formátumának mentése";
+    Text[ slovenian ] = "Shrani obliko nalepke";
 };
+
 
 
 
