@@ -2,9 +2,9 @@
  *
  *  $RCSfile: securityenvironment_nssimpl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mmi $ $Date: 2004-07-19 11:35:46 $
+ *  last change: $Author: mmi $ $Date: 2004-07-25 07:29:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -820,7 +820,7 @@ sal_Int32 SecurityEnvironment_NssImpl :: getCertificateCharacters( const ::com::
         SECKEYPrivateKey* priKey ;
 
         priKey = PK11_FindPrivateKeyFromCert( cert->slot, ( CERTCertificate* )cert, NULL ) ;
-        if( priKey == NULL || m_pSlot != NULL )
+        if( priKey == NULL && m_pSlot != NULL )
             priKey = PK11_FindPrivateKeyFromCert( m_pSlot, ( CERTCertificate* )cert, NULL ) ;
 
         if( priKey != NULL ) {
@@ -833,6 +833,7 @@ sal_Int32 SecurityEnvironment_NssImpl :: getCertificateCharacters( const ::com::
     }
 
     //Thirdly, make sentence whether or not the cert is trusted.
+    /*
     {
         CERTCertificate* tempCert ;
         CERTIssuerAndSN issuerAndSN ;
@@ -846,16 +847,33 @@ sal_Int32 SecurityEnvironment_NssImpl :: getCertificateCharacters( const ::com::
         issuerAndSN.serialNumber.len = cert->serialNumber.len;
 
         if( m_pSlot != NULL )
-            tempCert = PK11_FindCertByIssuerAndSN( &m_pSlot, &issuerAndSN, NULL ) ;
+            tempCert = PK11_FindCertByIssuerAndSN( NULL, &issuerAndSN, NULL ) ;
         else
             tempCert = NULL ;
 
         if( tempCert != NULL ) {
-                characters |=  ::com::sun::star::security::CertificateCharacters::CERT_CHARACTER_TRUSTED ;
-                CERT_DestroyCertificate( tempCert ) ;
-            } else {
-                characters &= ~ ::com::sun::star::security::CertificateCharacters::CERT_CHARACTER_TRUSTED ;
-            }
+            characters |=  ::com::sun::star::security::CertificateCharacters::CERT_CHARACTER_TRUSTED ;
+            CERT_DestroyCertificate( tempCert ) ;
+        } else {
+            characters &= ~ ::com::sun::star::security::CertificateCharacters::CERT_CHARACTER_TRUSTED ;
+        }
+    }
+    */
+
+    {
+        CERTCertificate* tempCert ;
+
+        if( m_pSlot != NULL )
+            tempCert = PK11_FindCertFromDERCert( m_pSlot, (  CERTCertificate* )cert, NULL ) ;
+        else
+            tempCert = NULL ;
+
+        if( tempCert != NULL ) {
+            characters |=  ::com::sun::star::security::CertificateCharacters::CERT_CHARACTER_TRUSTED ;
+            CERT_DestroyCertificate( tempCert ) ;
+        } else {
+            characters &= ~ ::com::sun::star::security::CertificateCharacters::CERT_CHARACTER_TRUSTED ;
+        }
     }
 
     return characters ;
