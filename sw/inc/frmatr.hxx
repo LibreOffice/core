@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmatr.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2002-08-23 14:17:13 $
+ *  last change: $Author: hr $ $Date: 2003-07-16 18:07:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@
  *  Implementierung der FrameAttribut Methoden vom SwAttrSet
  ******************************************************************************/
 
-#ifndef MACOSX
+#if ! (defined(MACOSX) && ( __GNUC__ < 3 ))
 // GrP moved to gcc_outl.cxx; revisit with gcc3
 inline const SvxPaperBinItem &SwAttrSet::GetPaperBin(BOOL bInP) const
     { return (const SvxPaperBinItem&)Get( RES_PAPER_BIN,bInP); }
