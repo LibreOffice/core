@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.152 $
+ *  $Revision: 1.153 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 11:55:55 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:10:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3606,6 +3606,11 @@ void wwSectionManager::InsertSegments()
             }
             if (bHasOwnHdFt)
             {
+                // #i40766# Need to cache the page descriptor in case there is
+                // no page break in the section
+                SwPageDesc *pOrig = aIter->mpPage;
+                SwPageDesc *pOrigTitle = aIter->mpTitlePage;
+                bool bFailed = true;
                 SwFmtPageDesc aDesc(SetSwFmtPageDesc(aIter, aStart, true));
                 if (aDesc.GetPageDesc())
                 {
@@ -3620,9 +3625,15 @@ void wwSectionManager::InsertSegments()
                         {
                             SwNodeIndex aIdx(*pNode);
                             GiveNodePageDesc(aIdx, aDesc, mrReader.rDoc);
+                            bFailed = false;
                             break;
                         }
                     }
+                }
+                if(bFailed)
+                {
+                    aIter->mpPage = pOrig;
+                    aIter->mpTitlePage = pOrigTitle;
                 }
             }
         }
