@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doclay.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-08 11:14:10 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 13:43:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1123,11 +1123,17 @@ SwDrawFrmFmt* SwDoc::Insert( const SwPaM &rRg,
                                         SwFmtFlyCnt( pFmt ), nStt, nStt );
     }
 
-    new SwDrawContact( pFmt, &rDrawObj );
+    SwDrawContact* pContact = new SwDrawContact( pFmt, &rDrawObj );
 
     // ggfs. Frames anlegen
     if( GetRootFrm() )
+    {
         pFmt->MakeFrms();
+        // --> OD 2005-02-09 #i42319# - follow-up of #i35635#
+        // move object to visible layer
+        pContact->MoveObjToVisibleLayer( &rDrawObj );
+        // <--
+    }
 
     if( DoesUndo() )
     {
