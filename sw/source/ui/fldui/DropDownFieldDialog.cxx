@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DropDownFieldDialog.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:55:10 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:52:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,10 @@
  *
  ************************************************************************/
 
+#ifdef SW_DLLIMPLEMENTATION
+#undef SW_DLLIMPLEMENTATION
+#endif
+
 
 #pragma hdrstop
 
@@ -86,6 +90,8 @@
 #ifndef _SW_DROPDOWNFIELDDIALOG_HRC
 #include <DropDownFieldDialog.hrc>
 #endif
+
+using com::sun::star::uno::Sequence;
 
 /*--------------------------------------------------------------------
     Beschreibung: Feldeinfuegen bearbeiten
@@ -126,8 +132,8 @@ sw::DropDownFieldDialog::DropDownFieldDialog( Window *pParent, SwWrtShell &rS,
         String sTitle = GetText();
         sTitle += pDropField->GetPar2();
         SetText(sTitle);
-        Sequence<OUString> aItems = pDropField->GetItemSequence();
-        const OUString* pArray = aItems.getConstArray();
+        Sequence<rtl::OUString> aItems = pDropField->GetItemSequence();
+        const rtl::OUString* pArray = aItems.getConstArray();
         for(sal_Int32 i = 0; i < aItems.getLength(); i++)
             aListItemsLB.InsertEntry(pArray[i]);
         aListItemsLB.SelectEntry(pDropField->GetSelectedItem());
