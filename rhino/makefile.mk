@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: toconnor $ $Date: 2003-11-28 15:11:49 $
+#   last change: $Author: hr $ $Date: 2004-11-09 11:50:38 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,7 +64,15 @@ PRJ=.
 PRJNAME=so_rhino
 TARGET=so_rhino
 
+.IF "$(SOLAR_JAVA)"!=""
+
 .INCLUDE : ant.mk
 
 ALLTAR : ANTBUILD
 
+.ELSE
+
+all:
+        @echo java disabled
+
+.ENDIF
