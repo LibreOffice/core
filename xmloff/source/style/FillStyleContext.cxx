@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FillStyleContext.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dvo $ $Date: 2001-10-19 18:43:58 $
+ *  last change: $Author: cl $ $Date: 2002-05-23 14:15:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,6 +153,11 @@ void XMLGradientStyleContext::EndElement()
     {}
 }
 
+BOOL XMLGradientStyleContext::IsTransient() const
+{
+    return sal_True;
+}
+
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
 
@@ -192,6 +197,11 @@ void XMLHatchStyleContext::EndElement()
     }
     catch( container::ElementExistException& )
     {}
+}
+
+BOOL XMLHatchStyleContext::IsTransient() const
+{
+    return sal_True;
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -269,6 +279,12 @@ void XMLBitmapStyleContext::EndElement()
     {}
 }
 
+BOOL XMLBitmapStyleContext::IsTransient() const
+{
+    return sal_True;
+}
+
+
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
 
@@ -308,6 +324,11 @@ void XMLTransGradientStyleContext::EndElement()
     }
     catch( container::ElementExistException& )
     {}
+}
+
+BOOL XMLTransGradientStyleContext::IsTransient() const
+{
+    return sal_True;
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -351,6 +372,11 @@ void XMLMarkerStyleContext::EndElement()
     {}
 }
 
+BOOL XMLMarkerStyleContext::IsTransient() const
+{
+    return sal_True;
+}
+
 //////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////
 
@@ -390,4 +416,9 @@ void XMLDashStyleContext::EndElement()
     }
     catch( container::ElementExistException& )
     {}
+}
+
+BOOL XMLDashStyleContext::IsTransient() const
+{
+    return sal_True;
 }

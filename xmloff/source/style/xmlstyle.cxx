@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyle.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: sab $ $Date: 2001-12-11 14:10:09 $
+ *  last change: $Author: cl $ $Date: 2002-05-23 14:15:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -310,6 +310,11 @@ void SvXMLStyleContext::Finish( sal_Bool bOverwrite )
 {
 }
 
+BOOL SvXMLStyleContext::IsTransient() const
+{
+    return sal_False;
+}
+
 // ---------------------------------------------------------------------
 
 class SvXMLStyleIndex_Impl
@@ -467,7 +472,7 @@ const SvXMLStyleContext *SvXMLStylesContext_Impl::FindStyleChildContext(
             SvXMLStyleIndex_Impl* pStyleIndex = new SvXMLStyleIndex_Impl( aStyles.GetObject(i));
             if (!pIndices->Insert( pStyleIndex ))
             {
-//              DBG_ERROR("Here is a double Style");
+                DBG_ERROR("Here is a double Style");
                 delete pStyleIndex;
             }
         }
@@ -982,7 +987,8 @@ SvXMLImportContext *SvXMLStylesContext::CreateChildContext( sal_uInt16 nPrefix,
 //      DBG_ASSERT( pStyle->GetFamily(), "Style without a family" );
         if( pStyle )
         {
-            pImpl->AddStyle( pStyle );
+            if( !pStyle->IsTransient() )
+                pImpl->AddStyle( pStyle );
             pContext = pStyle;
         }
         else

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FillStyleContext.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2001-08-09 14:03:06 $
+ *  last change: $Author: cl $ $Date: 2002-05-23 14:15:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,8 @@ public:
     virtual ~XMLGradientStyleContext();
 
     virtual void EndElement();
+
+    virtual BOOL IsTransient() const;
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -110,6 +112,8 @@ public:
     virtual ~XMLHatchStyleContext();
 
     virtual void EndElement();
+
+    virtual BOOL IsTransient() const;
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -135,6 +139,8 @@ public:
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 
     virtual void EndElement();
+
+    virtual BOOL IsTransient() const;
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -154,6 +160,8 @@ public:
     virtual ~XMLTransGradientStyleContext();
 
     virtual void EndElement();
+
+    virtual BOOL IsTransient() const;
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -173,6 +181,8 @@ public:
     virtual ~XMLMarkerStyleContext();
 
     virtual void EndElement();
+
+    virtual BOOL IsTransient() const;
 };
 
 //////////////////////////////////////////////////////////////////////////////
@@ -192,6 +202,8 @@ public:
     virtual ~XMLDashStyleContext();
 
     virtual void EndElement();
+
+    virtual BOOL IsTransient() const;
 };
 
 #endif  // _XMLOFF_FILLSTYLECONTEXTS_HXX_
