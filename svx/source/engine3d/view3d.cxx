@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view3d.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2003-10-27 13:26:38 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:38:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -341,7 +341,7 @@ void E3dView::DrawMarkedObj(OutputDevice& rOut, const Point& rOfs) const
                 pXOut->SetOffset(aOfs);
 
             pScene->SetDrawOnlySelected(TRUE);
-            pScene->Paint(*pXOut,aInfoRec);
+            pScene->SingleObjectPainter(*pXOut,aInfoRec); // #110094#-17
             pScene->SetDrawOnlySelected(FALSE);
 
             pXOut->SetOffset(Point(0,0));
@@ -602,7 +602,7 @@ BOOL E3dView::ImpCloneAll3DObjectsToDestScene(E3dScene* pSrcScene, E3dScene* pDs
                 {
                     // Neues Objekt in Szene einfuegen
                     pNew->NbcSetLayer(pObj->GetLayer());
-                    pNew->NbcSetStyleSheet(pObj->GetStyleSheet(), TRUE);
+                    pNew->NbcSetStyleSheet(pObj->GetStyleSheet(), sal_True);
                     pDstScene->Insert3DObj(pNew);
                     bRetval = TRUE;
 
@@ -820,7 +820,7 @@ void E3dView::ImpChangeSomeAttributesFor3DConversion(SdrObject* pObj)
 {
     if(pObj->ISA(SdrTextObj))
     {
-        const SfxItemSet& rSet = pObj->GetItemSet();
+        const SfxItemSet& rSet = pObj->GetMergedItemSet();
         const SvxColorItem& rTextColorItem = (const SvxColorItem&)rSet.Get(EE_CHAR_COLOR);
         if(rTextColorItem.GetValue() == RGB_Color(COL_BLACK))
         {
@@ -829,12 +829,13 @@ void E3dView::ImpChangeSomeAttributesFor3DConversion(SdrObject* pObj)
             {
                 // #84864# if black is only default attribute from
                 // pattern set it hard so that it is used in undo.
-                pObj->SetItem(SvxColorItem(RGB_Color(COL_BLACK), EE_CHAR_COLOR));
+                pObj->SetMergedItem(SvxColorItem(RGB_Color(COL_BLACK), EE_CHAR_COLOR));
 
                 // add undo now
                 AddUndo(new SdrUndoAttrObj(*pObj, FALSE, FALSE));
             }
-            pObj->SetItem(SvxColorItem(RGB_Color(COL_GRAY), EE_CHAR_COLOR));
+
+            pObj->SetMergedItem(SvxColorItem(RGB_Color(COL_GRAY), EE_CHAR_COLOR));
         }
     }
 }
@@ -843,7 +844,7 @@ void E3dView::ImpChangeSomeAttributesFor3DConversion2(SdrObject* pObj)
 {
     if(pObj->ISA(SdrPathObj))
     {
-        const SfxItemSet& rSet = pObj->GetItemSet();
+        const SfxItemSet& rSet = pObj->GetMergedItemSet();
         sal_Int32 nLineWidth = ((const XLineWidthItem&)(rSet.Get(XATTR_LINEWIDTH))).GetValue();
         XLineStyle eLineStyle = (XLineStyle)((const XLineStyleItem&)rSet.Get(XATTR_LINESTYLE)).GetValue();
         XFillStyle eFillStyle = ITEMVALUE(rSet, XATTR_FILLSTYLE, XFillStyleItem);
@@ -855,8 +856,8 @@ void E3dView::ImpChangeSomeAttributesFor3DConversion2(SdrObject* pObj)
         {
             if(pObj->GetPage())
                 AddUndo(new SdrUndoAttrObj(*pObj, FALSE, FALSE));
-            pObj->SetItem(XLineStyleItem(XLINE_NONE));
-            pObj->SetItem(XLineWidthItem(0L));
+            pObj->SetMergedItem(XLineStyleItem(XLINE_NONE));
+            pObj->SetMergedItem(XLineWidthItem(0L));
         }
     }
 }
@@ -875,7 +876,7 @@ void E3dView::ImpCreateSingle3DObjectFlat(E3dScene* pScene, SdrObject* pObj, BOO
             aDefault.SetDefaultLatheCharacterMode(TRUE);
 
         // ItemSet des Ursprungsobjektes holen
-        SfxItemSet aSet(pObj->GetItemSet());
+        SfxItemSet aSet(pObj->GetMergedItemSet());
 
         XFillStyle eFillStyle = ITEMVALUE(aSet, XATTR_FILLSTYLE, XFillStyleItem);
 
@@ -920,9 +921,9 @@ void E3dView::ImpCreateSingle3DObjectFlat(E3dScene* pScene, SdrObject* pObj, BOO
         {
             p3DObj->NbcSetLayer(pObj->GetLayer());
 
-            p3DObj->SetItemSet(aSet);
+            p3DObj->SetMergedItemSet(aSet);
 
-            p3DObj->NbcSetStyleSheet(pObj->GetStyleSheet(), TRUE);
+            p3DObj->NbcSetStyleSheet(pObj->GetStyleSheet(), sal_True);
 
             // Neues 3D-Objekt einfuegen
             pScene->Insert3DObj(p3DObj);
@@ -1218,7 +1219,7 @@ void E3dView::DoDepthArrange(E3dScene* pScene, double fDepth)
                 E3dExtrudeObj* pExtrudeObj = (E3dExtrudeObj*)pSubObj;
                 const PolyPolygon3D& rExtrudePoly = pExtrudeObj->GetExtrudePolygon();
 
-                const SfxItemSet& rLocalSet = pExtrudeObj->GetItemSet();
+                const SfxItemSet& rLocalSet = pExtrudeObj->GetMergedItemSet();
                 XFillStyle eLocalFillStyle = ITEMVALUE(rLocalSet, XATTR_FILLSTYLE, XFillStyleItem);
                 Color aLocalColor = ((const XFillColorItem&)(rLocalSet.Get(XATTR_FILLCOLOR))).GetValue();
 
@@ -1239,7 +1240,7 @@ void E3dView::DoDepthArrange(E3dScene* pScene, double fDepth)
                         if(bOverlap)
                         {
                             // second ciriteria: is another fillstyle or color used?
-                            const SfxItemSet& rCompareSet = pAct->pObj->GetItemSet();
+                            const SfxItemSet& rCompareSet = pAct->pObj->GetMergedItemSet();
 
                             XFillStyle eCompareFillStyle = ITEMVALUE(rCompareSet, XATTR_FILLSTYLE, XFillStyleItem);
 
@@ -1310,7 +1311,7 @@ void E3dView::DoDepthArrange(E3dScene* pScene, double fDepth)
                 while(pAct)
                 {
                     // Anpassen
-                    pAct->pObj->SetItem(SfxUInt32Item(SDRATTR_3DOBJ_DEPTH, sal_uInt32(fMinDepth + 0.5)));
+                    pAct->pObj->SetMergedItem(SfxUInt32Item(SDRATTR_3DOBJ_DEPTH, sal_uInt32(fMinDepth + 0.5)));
 
                     // Naechster Eintrag
                     pAct = pAct->pNext;
@@ -2124,7 +2125,8 @@ void E3dView::BreakSingle3DObj(E3dObject* pObj)
         if(pNewObj)
         {
             InsertObject(pNewObj, *GetPageViewPvNum(0), SDRINSERT_DONTMARK);
-            pNewObj->SendRepaintBroadcast();
+            pNewObj->SetChanged();
+            pNewObj->BroadcastObjectChange();
         }
     }
 }
@@ -2219,7 +2221,7 @@ void E3dView::MergeScenes ()
                                 break;
                         }
 
-                        Rectangle aBoundRect = pSubObj->GetBoundRect ();
+                        Rectangle aBoundRect = pSubObj->GetCurrentBoundRect();
 
                         Matrix4D aMatrix;
                         aMatrix.Translate(Vector3D(aBoundRect.Left () - aCenter.X (), aCenter.Y(), 0));
