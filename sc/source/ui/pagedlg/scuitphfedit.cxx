@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scuitphfedit.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 09:40:25 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 11:49:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,16 +229,13 @@ void __EXPORT ScHFEditPage::Reset( const SfxItemSet& rCoreSet )
     {
         const ScPageHFItem& rItem = (const ScPageHFItem&)(rCoreSet.Get( nWhich ));
 
-        const EditTextObject* pLeft   = rItem.GetLeftArea();
-        const EditTextObject* pCenter = rItem.GetCenterArea();
-        const EditTextObject* pRight  = rItem.GetRightArea();
+        if( const EditTextObject* pLeft = rItem.GetLeftArea() )
+            aWndLeft.SetText( *pLeft );
+        if( const EditTextObject* pCenter = rItem.GetCenterArea() )
+            aWndCenter.SetText( *pCenter );
+        if( const EditTextObject* pRight = rItem.GetRightArea() )
+            aWndRight.SetText( *pRight );
 
-        if ( pLeft && pCenter && pRight )
-        {
-            aWndLeft    .SetText( *pLeft );
-            aWndCenter  .SetText( *pCenter );
-            aWndRight   .SetText( *pRight );
-        }
         SetSelectDefinedList();
     }
 }
