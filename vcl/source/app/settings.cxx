@@ -2,9 +2,9 @@
  *
  *  $RCSfile: settings.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-10 17:17:57 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 15:15:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -590,7 +590,7 @@ void ImplStyleData::SetStandardStyles()
     Font aStdFont( FAMILY_SWISS, Size( 0, 8 ) );
     aStdFont.SetCharSet( gsl_getSystemTextEncoding() );
     aStdFont.SetWeight( WEIGHT_NORMAL );
-    aStdFont.SetName( vcl::DefaultFontConfigItem::get()->getUserInterfaceFont(LANGUAGE_ENGLISH) );
+    aStdFont.SetName( vcl::DefaultFontConfigItem::get()->getUserInterfaceFont(com::sun::star::lang::Locale( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("en") ), rtl::OUString(), rtl::OUString() ) ) );
     maAppFont                   = aStdFont;
     maHelpFont                  = aStdFont;
     maMenuFont                  = aStdFont;
@@ -604,7 +604,6 @@ void ImplStyleData::SetStandardStyles()
     maIconFont                  = aStdFont;
     maFloatTitleFont            = aStdFont;
     aStdFont.SetWeight( WEIGHT_BOLD );
-    aStdFont.SetName( vcl::DefaultFontConfigItem::get()->getUserInterfaceFont(LANGUAGE_ENGLISH) );
     maTitleFont                 = aStdFont;
 
     maFaceColor                 = Color( COL_LIGHTGRAY );
