@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: ssa $ $Date: 2002-11-25 09:24:36 $
+ *  last change: $Author: ssa $ $Date: 2002-11-25 11:16:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,7 +144,6 @@
 
 // misssing prototypes and constants for LayeredWindows
 extern "C" {
-WINUSERAPI BOOL WINAPI UpdateLayeredWindow(HWND,HDC,POINT *,SIZE *,HDC,POINT *,COLORREF,BLENDFUNCTION *,DWORD);
 WINUSERAPI BOOL WINAPI SetLayeredWindowAttributes(HWND,COLORREF,BYTE,DWORD);
 };
 #define LWA_COLORKEY            0x00000001
@@ -487,9 +486,11 @@ SalFrame* ImplSalCreateFrame( SalInstance* pInst,
         hWnd = CreateWindowExW( nExSysStyle, pClassName, L"", nSysStyle,
                                 CW_USEDEFAULT, 0, CW_USEDEFAULT, 0,
                                 hWndParent, 0, pInst->maInstData.mhInst, (void*)pFrame );
+#ifdef DEBUG
         // set transparency value
         if( bLayeredAPI == 1 && GetWindowExStyle( hWnd ) & WS_EX_LAYERED )
             SetLayeredWindowAttributes( hWnd, 0, 230, LWA_ALPHA );
+#endif
     }
     else
     {
