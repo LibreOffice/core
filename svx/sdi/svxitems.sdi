@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxitems.sdi,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mba $ $Date: 2002-05-27 14:26:11 $
+ *  last change: $Author: mba $ $Date: 2002-06-04 08:23:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -524,27 +524,6 @@ struct SvxPagePosSize
 };
 item SvxPagePosSize SvxPagePosSizeItem;
 
-//-------------------------------------------------------------------------
-// Bug for PB!
-
-struct SvxSearch
-{
-    BOOL        Backward        MID_SEARCH_BACKWARD;        // ???
-    BOOL        InSelection     MID_SEARCH_INSELECTION;     // ???
-    BOOL        CaseSensitive   MID_SEARCH_CASESENSITIVE;   // ???
-    BOOL        RegExp          MID_SEARCH_REGEXPR;         // ???
-    BOOL        WordOnly        MID_SEARCH_WORDONLY;        // ???
-    UINT16      Mode            MID_SEARCH_MODE;            // ???
-    UINT16      Order           MID_SEARCH_ORDER;           // ???
-    BOOL        AllTables       MID_SEARCH_ALLTABLES;       // ???
-    BOOL        Similarity      MID_SEARCH_LEV_ON;          // ???
-    BOOL        Relaxed         MID_SEARCH_LEV_RELAXED;     // ???
-    UINT16      Other           MID_SEARCH_LEV_OTHER;       // ???
-    UINT16      Shorter         MID_SEARCH_LEV_SHORTER;     // ???
-    UINT16      Longer          MID_SEARCH_LEV_LONGER;      // ???
-    BOOL        Pattern         MID_SEARCH_PATTERN;         // ???
-};
-item SvxSearch SvxSearchItem;
 
 //-------------------------------------------------------------------------
 struct SvxShadow

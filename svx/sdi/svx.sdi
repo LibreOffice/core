@@ -8635,7 +8635,7 @@ SfxVoidItem SdGraphicOptions SID_SD_GRAPHIC_OPTIONS
 
 //--------------------------------------------------------------------------
 SfxVoidItem SearchOff FID_SEARCH_OFF
-()
+(SvxSearchItem SearchItem SID_SEARCH_ITEM)
 [
     /* flags: */
     AutoUpdate = FALSE,
@@ -8660,7 +8660,7 @@ SfxVoidItem SearchOff FID_SEARCH_OFF
 
 //--------------------------------------------------------------------------
 SfxVoidItem SearchOn FID_SEARCH_ON
-()
+(SvxSearchItem SearchItem SID_SEARCH_ITEM)
 [
     /* flags: */
     AutoUpdate = FALSE,
