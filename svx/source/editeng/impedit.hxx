@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mt $ $Date: 2000-11-20 11:53:50 $
+ *  last change: $Author: mt $ $Date: 2000-11-20 14:49:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,11 +102,11 @@
 #endif
 
 #ifndef _COM_SUN_STAR_TEXT_XBREAKITERATOR_HPP_
-#include <com/sun/star/text/XBreakIterator.hpp>
+#include <com/sun/star/i18n/XBreakIterator.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_TEXT_WORDTYPE_HPP_
-#include <com/sun/star/text/WordType.hpp>
+#include <com/sun/star/i18n/WordType.hpp>
 #endif
 
 DBG_NAMEEX( EditView );
@@ -397,7 +397,7 @@ private:
                                             // zusammen mit dem Wort fuer die neuen
                                             // Lingu Interfaces benoetigt.
     ::com::sun::star::lang::Locale aDefaultLocale;
-    ::com::sun::star::uno::Reference < ::com::sun::star::text::XBreakIterator > xBI;
+    ::com::sun::star::uno::Reference < ::com::sun::star::i18n::XBreakIterator > xBI;
 
     XubString           aAutoCompleteText;
 
@@ -511,11 +511,11 @@ private:
     EditPaM             CursorEndOfParagraph( const EditPaM& rPaM );
     EditPaM             CursorStartOfDoc();
     EditPaM             CursorEndOfDoc();
-    EditPaM             WordLeft( const EditPaM& rPaM, sal_Int16 nWordType = ::com::sun::star::text::WordType::ANYWORD_IGNOREWHITESPACES );
-    EditPaM             WordRight( const EditPaM& rPaM, sal_Int16 nWordType = ::com::sun::star::text::WordType::ANYWORD_IGNOREWHITESPACES );
-    EditPaM             StartOfWord( const EditPaM& rPaM, sal_Int16 nWordType = ::com::sun::star::text::WordType::ANYWORD_IGNOREWHITESPACES );
-    EditPaM             EndOfWord( const EditPaM& rPaM, sal_Int16 nWordType = ::com::sun::star::text::WordType::ANYWORD_IGNOREWHITESPACES );
-    EditSelection       SelectWord( const EditSelection& rCurSelection, sal_Int16 nWordType = ::com::sun::star::text::WordType::ANYWORD_IGNOREWHITESPACES );
+    EditPaM             WordLeft( const EditPaM& rPaM, sal_Int16 nWordType = ::com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES );
+    EditPaM             WordRight( const EditPaM& rPaM, sal_Int16 nWordType = ::com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES );
+    EditPaM             StartOfWord( const EditPaM& rPaM, sal_Int16 nWordType = ::com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES );
+    EditPaM             EndOfWord( const EditPaM& rPaM, sal_Int16 nWordType = ::com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES );
+    EditSelection       SelectWord( const EditSelection& rCurSelection, sal_Int16 nWordType = ::com::sun::star::i18n::WordType::ANYWORD_IGNOREWHITESPACES );
 
     void                InitScriptTypes( USHORT nPara );
     short               GetScriptType( const EditPaM& rPaM ) const;
@@ -566,7 +566,7 @@ private:
 
     void                SetValidPaperSize( const Size& rSz );
 
-    ::com::sun::star::uno::Reference < ::com::sun::star::text::XBreakIterator > ImplGetBreakIterator();
+    ::com::sun::star::uno::Reference < ::com::sun::star::i18n::XBreakIterator > ImplGetBreakIterator();
 
 
 

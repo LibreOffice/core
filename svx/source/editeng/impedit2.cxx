@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit2.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mt $ $Date: 2000-11-20 11:53:50 $
+ *  last change: $Author: mt $ $Date: 2000-11-20 14:49:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,15 +119,15 @@
 #endif
 
 #ifndef _COM_SUN_STAR_TEXT_CHARACTERITERATORMODE_HPP_
-#include <com/sun/star/text/CharacterIteratorMode.hpp>
+#include <com/sun/star/i18n/CharacterIteratorMode.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_TEXT_WORDTYPE_HPP_
-#include <com/sun/star/text/WordType.hpp>
+#include <com/sun/star/i18n/WordType.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_TEXT_SCRIPTTYPE_HPP_
-#include <com/sun/star/text/ScriptType.hpp>
+#include <com/sun/star/i18n/ScriptType.hpp>
 #endif
 
 #define LINE_SEP    0x0A
@@ -1048,9 +1048,9 @@ EditPaM ImpEditEngine::CursorLeft( const EditPaM& rPaM )
 
     if ( rPaM.GetIndex() )
     {
-        uno::Reference < text::XBreakIterator > xBI = ImplGetBreakIterator();
+        uno::Reference < i18n::XBreakIterator > xBI = ImplGetBreakIterator();
         sal_Int32 nCount = 1;
-        aNewPaM.SetIndex( xBI->previousCharacters( *aNewPaM.GetNode(), aNewPaM.GetIndex(), GetLocale(), text::CharacterIteratorMode::SKIPCHARACTER, nCount, nCount ) );
+        aNewPaM.SetIndex( xBI->previousCharacters( *aNewPaM.GetNode(), aNewPaM.GetIndex(), GetLocale(), i18n::CharacterIteratorMode::SKIPCHARACTER, nCount, nCount ) );
     }
     else
     {
@@ -1071,9 +1071,9 @@ EditPaM ImpEditEngine::CursorRight( const EditPaM& rPaM )
     EditPaM aNewPaM( rPaM );
     if ( rPaM.GetIndex() < rPaM.GetNode()->Len() )
     {
-        uno::Reference < text::XBreakIterator > xBI = ImplGetBreakIterator();
+        uno::Reference < i18n::XBreakIterator > xBI = ImplGetBreakIterator();
         sal_Int32 nCount = 1;
-        aNewPaM.SetIndex( xBI->nextCharacters( *aNewPaM.GetNode(), aNewPaM.GetIndex(), GetLocale(), text::CharacterIteratorMode::SKIPCHARACTER, nCount, nCount ) );
+        aNewPaM.SetIndex( xBI->nextCharacters( *aNewPaM.GetNode(), aNewPaM.GetIndex(), GetLocale(), i18n::CharacterIteratorMode::SKIPCHARACTER, nCount, nCount ) );
     }
     else
     {
@@ -1303,8 +1303,8 @@ EditPaM ImpEditEngine::WordLeft( const EditPaM& rPaM, sal_Int16 nWordType )
     }
     else
     {
-        uno::Reference < text::XBreakIterator > xBI = ImplGetBreakIterator();
-        text::Boundary aBoundary = xBI->getWordBoundary( *aNewPaM.GetNode(), nCurrentPos, GetLocale(), nWordType, sal_True );
+        uno::Reference < i18n::XBreakIterator > xBI = ImplGetBreakIterator();
+        i18n::Boundary aBoundary = xBI->getWordBoundary( *aNewPaM.GetNode(), nCurrentPos, GetLocale(), nWordType, sal_True );
         if ( aBoundary.startPos == nCurrentPos )
             aBoundary = xBI->previousWord( *aNewPaM.GetNode(), nCurrentPos, GetLocale(), nWordType );
         aNewPaM.SetIndex( aBoundary.startPos );
@@ -1319,8 +1319,8 @@ EditPaM ImpEditEngine::WordRight( const EditPaM& rPaM, sal_Int16 nWordType )
     EditPaM aNewPaM( rPaM );
     if ( aNewPaM.GetIndex() < nMax )
     {
-        uno::Reference < text::XBreakIterator > xBI = ImplGetBreakIterator();
-        text::Boundary aBoundary = xBI->nextWord( *aNewPaM.GetNode(), aNewPaM.GetIndex(), GetLocale(), nWordType );
+        uno::Reference < i18n::XBreakIterator > xBI = ImplGetBreakIterator();
+        i18n::Boundary aBoundary = xBI->nextWord( *aNewPaM.GetNode(), aNewPaM.GetIndex(), GetLocale(), nWordType );
         aNewPaM.SetIndex( aBoundary.startPos );
     }
     // not 'else', maybe the index reached nMax now...
@@ -1341,8 +1341,8 @@ EditPaM ImpEditEngine::WordRight( const EditPaM& rPaM, sal_Int16 nWordType )
 EditPaM ImpEditEngine::StartOfWord( const EditPaM& rPaM, sal_Int16 nWordType )
 {
     EditPaM aNewPaM( rPaM );
-    uno::Reference < text::XBreakIterator > xBI = ImplGetBreakIterator();
-    text::Boundary aBoundary = xBI->getWordBoundary( *rPaM.GetNode(), rPaM.GetIndex(), GetLocale(), nWordType, sal_True );
+    uno::Reference < i18n::XBreakIterator > xBI = ImplGetBreakIterator();
+    i18n::Boundary aBoundary = xBI->getWordBoundary( *rPaM.GetNode(), rPaM.GetIndex(), GetLocale(), nWordType, sal_True );
     aNewPaM.SetIndex( aBoundary.startPos );
     return aNewPaM;
 }
@@ -1350,8 +1350,8 @@ EditPaM ImpEditEngine::StartOfWord( const EditPaM& rPaM, sal_Int16 nWordType )
 EditPaM ImpEditEngine::EndOfWord( const EditPaM& rPaM, sal_Int16 nWordType )
 {
     EditPaM aNewPaM( rPaM );
-    uno::Reference < text::XBreakIterator > xBI = ImplGetBreakIterator();
-    text::Boundary aBoundary = xBI->getWordBoundary( *rPaM.GetNode(), rPaM.GetIndex(), GetLocale(), nWordType, sal_True );
+    uno::Reference < i18n::XBreakIterator > xBI = ImplGetBreakIterator();
+    i18n::Boundary aBoundary = xBI->getWordBoundary( *rPaM.GetNode(), rPaM.GetIndex(), GetLocale(), nWordType, sal_True );
     aNewPaM.SetIndex( aBoundary.endPos );
     return aNewPaM;
 }
@@ -1360,11 +1360,11 @@ EditSelection ImpEditEngine::SelectWord( const EditSelection& rCurSel, sal_Int16
 {
     EditSelection aNewSel( rCurSel );
     EditPaM aPaM( rCurSel.Max() );
-    uno::Reference < text::XBreakIterator > xBI = ImplGetBreakIterator();
+    uno::Reference < i18n::XBreakIterator > xBI = ImplGetBreakIterator();
     sal_Int16 nType = xBI->getWordType( *aPaM.GetNode(), aPaM.GetIndex(), GetLocale() );
-    if ( nType == text::WordType::ANY_WORD )
+    if ( nType == i18n::WordType::ANY_WORD )
     {
-        text::Boundary aBoundary = xBI->getWordBoundary( *aPaM.GetNode(), aPaM.GetIndex(), GetLocale(), nWordType, sal_True );
+        i18n::Boundary aBoundary = xBI->getWordBoundary( *aPaM.GetNode(), aPaM.GetIndex(), GetLocale(), nWordType, sal_True );
         aNewSel.Min().SetIndex( aBoundary.startPos );
         aNewSel.Max().SetIndex( aBoundary.endPos );
     }
@@ -1381,7 +1381,7 @@ void ImpEditEngine::InitScriptTypes( USHORT nPara )
     ContentNode* pNode = pParaPortion->GetNode();
     if ( pNode->Len() )
     {
-        uno::Reference < text::XBreakIterator > xBI = ImplGetBreakIterator();
+        uno::Reference < i18n::XBreakIterator > xBI = ImplGetBreakIterator();
         ::rtl::OUString aText( *pNode );
         USHORT nTextLen = aText.getLength();
 
@@ -1395,21 +1395,21 @@ void ImpEditEngine::InitScriptTypes( USHORT nPara )
             rTypes[rTypes.Count()-1].nEndPos = nPos;
 
             nScriptType = xBI->getScriptType( aText, nPos );
-            if ( nScriptType == text::ScriptType::WEAK )
+            if ( nScriptType == i18n::ScriptType::WEAK )
                 nScriptType = rTypes[rTypes.Count()-1].nScriptType;
 
             rTypes.Insert( ScriptTypePosInfo( nScriptType, nPos, nTextLen ), rTypes.Count() );
             nPos = xBI->endOfScript( aText, nPos, nScriptType );
         }
 
-        if ( rTypes[0].nScriptType == text::ScriptType::WEAK )
-            rTypes[0].nScriptType = ( rTypes.Count() > 1 ) ? rTypes[1].nScriptType : text::ScriptType::LATIN;
+        if ( rTypes[0].nScriptType == i18n::ScriptType::WEAK )
+            rTypes[0].nScriptType = ( rTypes.Count() > 1 ) ? rTypes[1].nScriptType : i18n::ScriptType::LATIN;
     }
 }
 
 short ImpEditEngine::GetScriptType( const EditPaM& rPaM ) const
 {
-    short nScriptType = text::ScriptType::LATIN;
+    short nScriptType = i18n::ScriptType::LATIN;
 
     if ( rPaM.GetNode()->Len() )
     {

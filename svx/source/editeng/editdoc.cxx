@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editdoc.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mt $ $Date: 2000-11-20 11:53:50 $
+ *  last change: $Author: mt $ $Date: 2000-11-20 14:49:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@
 #include <vcl/svapp.hxx>
 
 #ifndef _COM_SUN_STAR_TEXT_SCRIPTTYPE_HPP_
-#include <com/sun/star/text/ScriptType.hpp>
+#include <com/sun/star/i18n/ScriptType.hpp>
 #endif
 
 #include <stdlib.h> // qsort
@@ -109,25 +109,25 @@ USHORT GetScriptItemId( USHORT nItemId, short nScriptType )
 {
     USHORT nId = nItemId;
 
-    if ( ( nScriptType == text::ScriptType::ASIAN ) ||
-         ( nScriptType == text::ScriptType::COMPLEX ) )
+    if ( ( nScriptType == i18n::ScriptType::ASIAN ) ||
+         ( nScriptType == i18n::ScriptType::COMPLEX ) )
     {
         switch ( nItemId )
         {
             case EE_CHAR_LANGUAGE:
-                nId = ( nScriptType == text::ScriptType::ASIAN ) ? EE_CHAR_LANGUAGE_CJK : EE_CHAR_LANGUAGE_CTL;
+                nId = ( nScriptType == i18n::ScriptType::ASIAN ) ? EE_CHAR_LANGUAGE_CJK : EE_CHAR_LANGUAGE_CTL;
             break;
             case EE_CHAR_FONTINFO:
-                nId = ( nScriptType == text::ScriptType::ASIAN ) ? EE_CHAR_FONTINFO_CJK : EE_CHAR_FONTINFO_CTL;
+                nId = ( nScriptType == i18n::ScriptType::ASIAN ) ? EE_CHAR_FONTINFO_CJK : EE_CHAR_FONTINFO_CTL;
             break;
             case EE_CHAR_FONTHEIGHT:
-                nId = ( nScriptType == text::ScriptType::ASIAN ) ? EE_CHAR_FONTHEIGHT_CJK : EE_CHAR_FONTHEIGHT_CTL;
+                nId = ( nScriptType == i18n::ScriptType::ASIAN ) ? EE_CHAR_FONTHEIGHT_CJK : EE_CHAR_FONTHEIGHT_CTL;
             break;
             case EE_CHAR_WEIGHT:
-                nId = ( nScriptType == text::ScriptType::ASIAN ) ? EE_CHAR_WEIGHT_CJK : EE_CHAR_WEIGHT_CTL;
+                nId = ( nScriptType == i18n::ScriptType::ASIAN ) ? EE_CHAR_WEIGHT_CJK : EE_CHAR_WEIGHT_CTL;
             break;
             case EE_CHAR_ITALIC:
-                nId = ( nScriptType == text::ScriptType::ASIAN ) ? EE_CHAR_ITALIC_CJK : EE_CHAR_ITALIC_CTL;
+                nId = ( nScriptType == i18n::ScriptType::ASIAN ) ? EE_CHAR_ITALIC_CJK : EE_CHAR_ITALIC_CTL;
             break;
         }
     }
@@ -142,49 +142,49 @@ BOOL IsScriptItemValid( USHORT nItemId, short nScriptType )
     switch ( nItemId )
     {
         case EE_CHAR_LANGUAGE:
-            bValid = nScriptType == text::ScriptType::LATIN;
+            bValid = nScriptType == i18n::ScriptType::LATIN;
         break;
         case EE_CHAR_LANGUAGE_CJK:
-            bValid = nScriptType == text::ScriptType::ASIAN;
+            bValid = nScriptType == i18n::ScriptType::ASIAN;
         break;
         case EE_CHAR_LANGUAGE_CTL:
-            bValid = nScriptType == text::ScriptType::COMPLEX;
+            bValid = nScriptType == i18n::ScriptType::COMPLEX;
         break;
         case EE_CHAR_FONTINFO:
-            bValid = nScriptType == text::ScriptType::LATIN;
+            bValid = nScriptType == i18n::ScriptType::LATIN;
         break;
         case EE_CHAR_FONTINFO_CJK:
-            bValid = nScriptType == text::ScriptType::ASIAN;
+            bValid = nScriptType == i18n::ScriptType::ASIAN;
         break;
         case EE_CHAR_FONTINFO_CTL:
-            bValid = nScriptType == text::ScriptType::COMPLEX;
+            bValid = nScriptType == i18n::ScriptType::COMPLEX;
         break;
         case EE_CHAR_FONTHEIGHT:
-            bValid = nScriptType == text::ScriptType::LATIN;
+            bValid = nScriptType == i18n::ScriptType::LATIN;
         break;
         case EE_CHAR_FONTHEIGHT_CJK:
-            bValid = nScriptType == text::ScriptType::ASIAN;
+            bValid = nScriptType == i18n::ScriptType::ASIAN;
         break;
         case EE_CHAR_FONTHEIGHT_CTL:
-            bValid = nScriptType == text::ScriptType::COMPLEX;
+            bValid = nScriptType == i18n::ScriptType::COMPLEX;
         break;
         case EE_CHAR_WEIGHT:
-            bValid = nScriptType == text::ScriptType::LATIN;
+            bValid = nScriptType == i18n::ScriptType::LATIN;
         break;
         case EE_CHAR_WEIGHT_CJK:
-            bValid = nScriptType == text::ScriptType::ASIAN;
+            bValid = nScriptType == i18n::ScriptType::ASIAN;
         break;
         case EE_CHAR_WEIGHT_CTL:
-            bValid = nScriptType == text::ScriptType::COMPLEX;
+            bValid = nScriptType == i18n::ScriptType::COMPLEX;
         break;
         case EE_CHAR_ITALIC:
-            bValid = nScriptType == text::ScriptType::LATIN;
+            bValid = nScriptType == i18n::ScriptType::LATIN;
         break;
         case EE_CHAR_ITALIC_CJK:
-            bValid = nScriptType == text::ScriptType::ASIAN;
+            bValid = nScriptType == i18n::ScriptType::ASIAN;
         break;
         case EE_CHAR_ITALIC_CTL:
-            bValid = nScriptType == text::ScriptType::COMPLEX;
+            bValid = nScriptType == i18n::ScriptType::COMPLEX;
         break;
     }
 

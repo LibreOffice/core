@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit4.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tl $ $Date: 2000-11-19 11:29:36 $
+ *  last change: $Author: mt $ $Date: 2000-11-20 14:49:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,7 +119,7 @@
 #endif
 
 #ifndef _TXTCMP_HXX //autogen
-#include <svtools/txtcmp.hxx>
+#include <unotools/textsearch.hxx>
 #endif
 
 #ifndef _SV_HELP_HXX //autogen
@@ -1500,9 +1500,9 @@ EESpellState ImpEditEngine::Spell( EditView* pEditView, sal_Bool bMultipleDoc )
     pSpellInfo = new SpellInfo;
     pSpellInfo->bMultipleDoc = bMultipleDoc;
     if ( bForward )
-        pSpellInfo->aSpellStart = CreateEPaM( SelectWord( aCurSel, ::com::sun::star::text::WordType::DICTIONARY_WORD ).Min() );
+        pSpellInfo->aSpellStart = CreateEPaM( SelectWord( aCurSel, ::com::sun::star::i18n::WordType::DICTIONARY_WORD ).Min() );
     else
-        pSpellInfo->aSpellStart = CreateEPaM( SelectWord( aCurSel, ::com::sun::star::text::WordType::DICTIONARY_WORD ).Max() );
+        pSpellInfo->aSpellStart = CreateEPaM( SelectWord( aCurSel, ::com::sun::star::i18n::WordType::DICTIONARY_WORD ).Max() );
 
     sal_Bool bIsStart = sal_False;
     if ( bMultipleDoc )
@@ -1579,9 +1579,9 @@ Reference< XSpellAlternatives > ImpEditEngine::ImpSpell( EditView* pEditView )
 
         // Bei Rueckwaerts-Suche erst zurueck, sonst wird das gleiche Wort wieder gespellt.
         if ( !bForward )
-            aCurSel = WordLeft( aCurSel.Min(), ::com::sun::star::text::WordType::DICTIONARY_WORD );
+            aCurSel = WordLeft( aCurSel.Min(), ::com::sun::star::i18n::WordType::DICTIONARY_WORD );
 
-        aCurSel = SelectWord( aCurSel, ::com::sun::star::text::WordType::DICTIONARY_WORD );
+        aCurSel = SelectWord( aCurSel, ::com::sun::star::i18n::WordType::DICTIONARY_WORD );
         aWord = GetSelected( aCurSel );
 
         // Wenn Punkt dahinter, muss dieser mit uebergeben werden !
@@ -1601,7 +1601,7 @@ Reference< XSpellAlternatives > ImpEditEngine::ImpSpell( EditView* pEditView )
                                          Sequence< PropertyValue >() );
 
         if ( bForward && !xSpellAlt.is() )
-            aCurSel = WordRight( aCurSel.Min(), ::com::sun::star::text::WordType::DICTIONARY_WORD );
+            aCurSel = WordRight( aCurSel.Min(), ::com::sun::star::i18n::WordType::DICTIONARY_WORD );
         else
             pSpellInfo->eState = EE_SPELL_ERRORFOUND;
     }
@@ -1678,7 +1678,7 @@ void ImpEditEngine::DoOnlineSpelling( ContentNode* pThisNodeOnly, sal_Bool bSpel
                         || ( ( aSel.Max().GetNode() == pLastNode ) && ( aSel.Max().GetIndex() >= pLastNode->Len() ) ) )
                     break;  // Dokument- oder Ungueltigkeitsbereich-Ende
 
-                aSel = SelectWord( aSel, ::com::sun::star::text::WordType::DICTIONARY_WORD );
+                aSel = SelectWord( aSel, ::com::sun::star::i18n::WordType::DICTIONARY_WORD );
                 String aWord( GetSelected( aSel ) );
                 // Wenn Punkt dahinter, muss dieser mit uebergeben werden !
                 // Falls Abkuerzung...
@@ -1757,7 +1757,7 @@ void ImpEditEngine::DoOnlineSpelling( ContentNode* pThisNodeOnly, sal_Bool bSpel
                 }
 
                 EditPaM aLastEnd( aSel.Max() );
-                aSel = WordRight( aSel.Max(), ::com::sun::star::text::WordType::DICTIONARY_WORD );
+                aSel = WordRight( aSel.Max(), ::com::sun::star::i18n::WordType::DICTIONARY_WORD );
                 if ( bChanged && ( aSel.Min().GetNode() == pNode ) &&
                         ( ( aSel.Min().GetIndex()-aLastEnd.GetIndex() > 1 ) ) )
                 {
@@ -1852,12 +1852,12 @@ EESpellState ImpEditEngine::HasSpellErrors()
             return EE_SPELL_OK;
         }
 
-        aCurSel = SelectWord( aCurSel, ::com::sun::star::text::WordType::DICTIONARY_WORD );
+        aCurSel = SelectWord( aCurSel, ::com::sun::star::i18n::WordType::DICTIONARY_WORD );
         aWord = GetSelected( aCurSel );
         if ( aWord.Len() > 1 )
             xSpellAlt = xSpeller->spell( aWord, eDefaultLanguage,
                                          Sequence< PropertyValue >() );
-        aCurSel = WordRight( aCurSel.Max(), ::com::sun::star::text::WordType::DICTIONARY_WORD );
+        aCurSel = WordRight( aCurSel.Max(), ::com::sun::star::i18n::WordType::DICTIONARY_WORD );
     }
 #endif
 
@@ -1872,7 +1872,7 @@ EESpellState ImpEditEngine::StartThesaurus( EditView* pEditView )
 
     EditSelection aCurSel( pEditView->pImpEditView->GetEditSelection() );
     if ( !aCurSel.HasRange() )
-        aCurSel = SelectWord( aCurSel, ::com::sun::star::text::WordType::DICTIONARY_WORD );
+        aCurSel = SelectWord( aCurSel, ::com::sun::star::i18n::WordType::DICTIONARY_WORD );
     String aWord( GetSelected( aCurSel ) );
 
     Reference< XThesaurus > xThes( SvxGetThesaurus() );
@@ -1966,15 +1966,15 @@ sal_Bool ImpEditEngine::ImpSearch( const SvxSearchItem& rSearchItem,
     sal_uInt16 nStartNode, nEndNode;
 
     EditSelection   aTmpSel;
-    SearchParam     aSearchParam( rSearchItem.GetSearchString(),
-                        SearchParam::SRCH_NORMAL, rSearchItem.GetExact(),
+    utl::SearchParam    aSearchParam( rSearchItem.GetSearchString(),
+                        utl::SearchParam::SRCH_NORMAL, rSearchItem.GetExact(),
                         rSearchItem.GetWordOnly(), rSearchItem.GetSelection() );
 
     if ( rSearchItem.GetRegExp() )
-        aSearchParam.SetSrchType( SearchParam::SRCH_REGEXP );
+        aSearchParam.SetSrchType( utl::SearchParam::SRCH_REGEXP );
     else if ( rSearchItem.IsLevenshtein() )
     {
-        aSearchParam.SetSrchType( SearchParam::SRCH_LEVDIST );
+        aSearchParam.SetSrchType( utl::SearchParam::SRCH_LEVDIST );
         aSearchParam.SetSrchRelaxed( rSearchItem.IsLEVRelaxed() ? sal_True : sal_False );
         aSearchParam.SetLEVOther( rSearchItem.GetLEVOther() );
         aSearchParam.SetLEVShorter( rSearchItem.GetLEVShorter() );
@@ -1995,7 +1995,7 @@ sal_Bool ImpEditEngine::ImpSearch( const SvxSearchItem& rSearchItem,
     }
 
     nStartNode = aEditDoc.GetPos( rStartPos.GetNode() );
-    SearchText aSearcher( aSearchParam, Application::GetAppInternational() );
+    utl::TextSearch aSearcher( aSearchParam, Application::GetAppInternational().GetLanguage() );
 
     // ueber die Absaetze iterieren...
     for ( sal_uInt16 nNode = nStartNode;

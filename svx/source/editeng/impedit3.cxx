@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mt $ $Date: 2000-11-20 11:53:50 $
+ *  last change: $Author: mt $ $Date: 2000-11-20 14:49:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,7 +112,7 @@
 #endif
 
 #ifndef _COM_SUN_STAR_TEXT_SCRIPTTYPE_HPP_
-#include <com/sun/star/text/ScriptType.hpp>
+#include <com/sun/star/i18n/ScriptType.hpp>
 #endif
 
 #include <comphelper/processfactory.hxx>
@@ -1523,14 +1523,14 @@ void ImpEditEngine::ImpBreakLine( ParaPortion* pParaPortion, EditLine* pLine, Te
 
     sal_uInt16 nBreakPos = nMaxBreakPos;
 
-    Reference < text::XBreakIterator > xBI = ImplGetBreakIterator();
+    Reference < i18n::XBreakIterator > xBI = ImplGetBreakIterator();
     OUString aText( *pNode );
     Reference< XHyphenator > xHyph;
     if ( bCanHyphenate )
         xHyph = GetHyphenator();
-    text::LineBreakHyphenationOptions aHyphOptions( xHyph, 1 );
-    text::LineBreakUserOptions aUserOptions;
-    text::LineBreakResults aLBR = xBI->getLineBreak( *pNode, nBreakPos, GetLocale(), nMinBreakPos, aHyphOptions, aUserOptions );
+    i18n::LineBreakHyphenationOptions aHyphOptions( xHyph, 1 );
+    i18n::LineBreakUserOptions aUserOptions;
+    i18n::LineBreakResults aLBR = xBI->getLineBreak( *pNode, nBreakPos, GetLocale(), nMinBreakPos, aHyphOptions, aUserOptions );
     nBreakPos = aLBR.breakIndex;
 
     sal_Bool bBlankSeparator = ( ( nBreakPos >= pLine->GetStart() ) &&
@@ -1996,7 +1996,7 @@ void ImpEditEngine::SeekCursor( ContentNode* pNode, sal_uInt16 nPos, SvxFont& rF
     rFont = pNode->GetCharAttribs().GetDefFont();
 
     short nScriptType = GetScriptType( EditPaM( pNode, nPos ) );
-    if ( ( nScriptType == text::ScriptType::ASIAN ) || ( nScriptType == text::ScriptType::COMPLEX ) )
+    if ( ( nScriptType == i18n::ScriptType::ASIAN ) || ( nScriptType == i18n::ScriptType::COMPLEX ) )
     {
         const SvxFontItem& rFontItem = (const SvxFontItem&)pNode->GetContentAttribs().GetItem( GetScriptItemId( EE_CHAR_FONTINFO, nScriptType ) );
         rFont.SetName( rFontItem.GetFamilyName() );
@@ -3496,7 +3496,7 @@ const SvxLRSpaceItem& ImpEditEngine::GetLRSpaceItem( ContentNode* pNode )
 }
 
 
-Reference < text::XBreakIterator > ImpEditEngine::ImplGetBreakIterator()
+Reference < i18n::XBreakIterator > ImpEditEngine::ImplGetBreakIterator()
 {
     if ( !xBI.is() )
     {
@@ -3504,7 +3504,7 @@ Reference < text::XBreakIterator > ImpEditEngine::ImplGetBreakIterator()
         Reference < XInterface > xI = xMSF->createInstance( OUString::createFromAscii( "com.sun.star.text.BreakIterator" ) );
         if ( xI.is() )
         {
-            Any x = xI->queryInterface( ::getCppuType((const Reference< text::XBreakIterator >*)0) );
+            Any x = xI->queryInterface( ::getCppuType((const Reference< i18n::XBreakIterator >*)0) );
             x >>= xBI;
         }
     }
