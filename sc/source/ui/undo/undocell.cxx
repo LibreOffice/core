@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undocell.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 12:47:48 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:51:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,7 @@ TYPEINIT1(ScUndoRangeNames, ScSimpleUndo);
 //
 
 ScUndoCursorAttr::ScUndoCursorAttr( ScDocShell* pNewDocShell,
-            USHORT nNewCol, USHORT nNewRow, USHORT nNewTab,
+            SCCOL nNewCol, SCROW nNewRow, SCTAB nNewTab,
             const ScPatternAttr* pOldPat, const ScPatternAttr* pNewPat,
             const ScPatternAttr* pApplyPat, BOOL bAutomatic ) :
     ScSimpleUndo( pNewDocShell ),
@@ -213,8 +213,8 @@ BOOL __EXPORT ScUndoCursorAttr::CanRepeat(SfxRepeatTarget& rTarget) const
 //
 
 ScUndoEnterData::ScUndoEnterData( ScDocShell* pNewDocShell,
-            USHORT nNewCol, USHORT nNewRow, USHORT nNewTab,
-            USHORT nNewCount, USHORT* pNewTabs, ScBaseCell** ppOldData,
+            SCCOL nNewCol, SCROW nNewRow, SCTAB nNewTab,
+            SCTAB nNewCount, SCTAB* pNewTabs, ScBaseCell** ppOldData,
             BOOL* pHasForm, ULONG* pOldForm,
             const String& rNewStr, EditTextObject* pObj ) :
     ScSimpleUndo( pNewDocShell ),
@@ -586,7 +586,7 @@ BOOL __EXPORT ScUndoPutCell::CanRepeat(SfxRepeatTarget& rTarget) const
 //
 
 ScUndoPageBreak::ScUndoPageBreak( ScDocShell* pNewDocShell,
-            USHORT nNewCol, USHORT nNewRow, USHORT nNewTab,
+            SCCOL nNewCol, SCROW nNewRow, SCTAB nNewTab,
             BOOL bNewColumn, BOOL bNewInsert ) :
     ScSimpleUndo( pNewDocShell ),
     nCol( nNewCol ),
@@ -669,7 +669,7 @@ BOOL __EXPORT ScUndoPageBreak::CanRepeat(SfxRepeatTarget& rTarget) const
 //
 
 ScUndoPrintZoom::ScUndoPrintZoom( ScDocShell* pNewDocShell,
-            USHORT nT, USHORT nOS, USHORT nOP, USHORT nNS, USHORT nNP ) :
+            SCTAB nT, USHORT nOS, USHORT nOP, USHORT nNS, USHORT nNP ) :
     ScSimpleUndo( pNewDocShell ),
     nTab( nT ),
     nOldScale( nOS ),
@@ -745,7 +745,7 @@ BOOL __EXPORT ScUndoPrintZoom::CanRepeat(SfxRepeatTarget& rTarget) const
 //
 
 ScUndoThesaurus::ScUndoThesaurus( ScDocShell* pNewDocShell,
-                                  USHORT nNewCol, USHORT nNewRow, USHORT nNewTab,
+                                  SCCOL nNewCol, SCROW nNewRow, SCTAB nNewTab,
                                   const String& rNewUndoStr, const EditTextObject* pUndoTObj,
                                   const String& rNewRedoStr, const EditTextObject* pRedoTObj) :
     ScSimpleUndo( pNewDocShell ),
