@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabfrm.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 13:00:57 $
+ *  last change: $Author: rt $ $Date: 2005-04-01 16:36:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -991,7 +991,10 @@ bool SwTabFrm::Split( const SwTwips nCutPos, bool bTryToSplit )
     // --> OD 2004-10-14 #i26745# - format row and cell frames of table
     {
         this->Lower()->_InvalidatePos();
-        lcl_InnerCalcLayout( this, LONG_MAX, true );
+        // --> OD 2005-03-30 #i43913# - correction:
+        // call method <lcl_InnerCalcLayout> with first lower.
+        lcl_InnerCalcLayout( this->Lower(), LONG_MAX, true );
+        // <--
     }
     // <--
 
@@ -1442,6 +1445,11 @@ BOOL MA_FASTCALL lcl_InnerCalcLayout( SwFrm *pFrm,
                                       long nBottom,
                                       bool _bOnlyRowsAndCells )
 {
+    // --> OD 2005-03-30 #i43913#
+    ASSERT( !pFrm->IsTabFrm(),
+            "<lcl_InnerCalcLayout(..)> - called for table frame" );
+    // <--
+
     // LONG_MAX == nBottom means we have to calculate all
     BOOL bAll = LONG_MAX == nBottom;
     BOOL bRet = FALSE;
@@ -1451,9 +1459,8 @@ BOOL MA_FASTCALL lcl_InnerCalcLayout( SwFrm *pFrm,
     {
         // --> OD 2004-10-15 #i26945# - parameter <_bOnlyRowsAndCells> controls,
         // if only row and cell frames are formatted.
-        // --> OD 2004-11-25 #115759# - always format table frames
         if ( pFrm->IsLayoutFrm() &&
-             ( !_bOnlyRowsAndCells || pFrm->IsTabFrm() ||
+             ( !_bOnlyRowsAndCells ||
                pFrm->IsRowFrm() || pFrm->IsCellFrm() ) )
         // <--
         {
@@ -2225,8 +2232,16 @@ void SwTabFrm::MakeAll()
                             pAttrs = pAccess->Get();
 
                             ((SwTabFrm*)GetFollow())->SetLowersFormatted(FALSE);
+                            // --> OD 2005-03-30 #i43913# - lock follow table
+                            // to avoid its formatting during the format of
+                            // its content.
+                            GetFollow()->LockJoin();
+                            // <--
                             ::lcl_CalcLayout((SwLayoutFrm*)GetFollow()->Lower(),
                                 (GetFollow()->GetUpper()->Frm().*fnRect->fnGetBottom)() );
+                            // --> OD 2005-03-30 #i43913#
+                            GetFollow()->UnlockJoin();
+                            // <--
 
                             if ( !GetFollow()->GetFollow() )
                             {
@@ -4664,6 +4679,10 @@ void SwCellFrm::Format( const SwBorderAttrs *pAttrs )
             return;
         }
         BOOL bVertDir = TRUE;
+        // --> OD 2005-03-30 #i43913# - no vertical alignment, if wrapping
+        // style influence is considered on object positioning
+        const bool bConsiderWrapOnObjPos( GetFmt()->GetDoc()->ConsiderWrapOnObjPos() );
+        // <--
         //Keine Ausrichtung wenn Rahmen mit Umlauf in die Zelle ragen.
         if ( pPg->GetSortedObjs() )
         {
@@ -4686,7 +4705,9 @@ void SwCellFrm::Format( const SwBorderAttrs *pAttrs )
                         }
 
                         const SwFrm* pAnch = pAnchoredObj->GetAnchorFrm();
-                        if ( !IsAnLower( pAnch ) )
+                        // --> OD 2005-03-30 #i43913#
+                        if ( bConsiderWrapOnObjPos || !IsAnLower( pAnch ) )
+                        // <--
                         {
                             bVertDir = FALSE;
                             break;
