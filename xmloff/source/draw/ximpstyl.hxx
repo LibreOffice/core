@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpstyl.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 19:32:12 $
+ *  last change: $Author: rt $ $Date: 2004-11-03 16:41:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -322,6 +322,27 @@ public:
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList );
 
     const ImpMasterPageList& GetMasterPageList() const { return maMasterPageList; }
+};
+
+//////////////////////////////////////////////////////////////////////////////
+// <pres:header-decl>, <pres:footer-decl> and <pres:date-time-decl>
+
+class SdXMLHeaderFooterDeclContext : public SvXMLStyleContext
+{
+public:
+    SdXMLHeaderFooterDeclContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
+        const ::rtl::OUString& rLName,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& xAttrList );
+
+    virtual BOOL IsTransient() const;
+    virtual void EndElement();
+    virtual void Characters( const ::rtl::OUString& rChars );
+
+private:
+    ::rtl::OUString maStrName;
+    ::rtl::OUString maStrText;
+    ::rtl::OUString maStrDateTimeFormat;
+    sal_Bool        mbFixed;
 };
 
 
