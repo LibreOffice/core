@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndcopy.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:17 $
+ *  last change: $Author: os $ $Date: 2001-01-10 13:41:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -572,7 +572,7 @@ void lcl_CopyBookmarks( const SwPaM& rPam, SwPaM& rCpyPam )
             USHRT_MAX != pDestDoc->FindBookmark( sNewNm ) )
             pDestDoc->MakeUniqueBookmarkName( sNewNm );
         pDestDoc->MakeBookmark( aTmpPam, pBkmk->GetKeyCode(), sNewNm,
-                                pBkmk->GetShortName() );
+                                pBkmk->GetShortName(), pBkmk->GetType() );
     }
     pDestDoc->DoUndo( bDoesUndo );
 }

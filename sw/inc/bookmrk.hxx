@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bookmrk.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:24 $
+ *  last change: $Author: os $ $Date: 2001-01-10 13:40:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,6 +138,7 @@ public:
     BOOL IsDDEMark() const      { return DDE_BOOKMARK == eMarkType; }
     BOOL IsUNOMark() const      { return UNO_BOOKMARK == eMarkType; }
     void SetType( BOOKMARK_TYPE eNewType )  { eMarkType = eNewType; }
+    BOOKMARK_TYPE GetType() const   { return eMarkType; }
 
     void SetStartMacro(const SvxMacro& rSt)     { aStartMacro = rSt; }
     const SvxMacro& GetStartMacro()             { return aStartMacro; }

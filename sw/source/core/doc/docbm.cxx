@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docbm.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:15 $
+ *  last change: $Author: os $ $Date: 2001-01-10 13:41:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -280,7 +280,8 @@ SaveBookmark::SaveBookmark( int eType, const SwBookmark& rBkmk,
                             const SwNodeIndex & rMvPos,
                             const SwIndex* pIdx )
     : aName( rBkmk.GetName() ), aShortName( rBkmk.GetShortName() ),
-    aCode( rBkmk.GetKeyCode() ), eBkmkType( (SaveBookmarkType)eType )
+    aCode( rBkmk.GetKeyCode() ), eBkmkType( (SaveBookmarkType)eType ),
+    eOrigBkmType(rBkmk.GetType())
 {
     nNode1 = rBkmk.GetPos().nNode.GetIndex();
     nCntnt1 = rBkmk.GetPos().nContent.GetIndex();
@@ -353,7 +354,7 @@ void SaveBookmark::SetInDoc( SwDoc* pDoc, const SwNodeIndex& rNewPos,
 
     if( !aPam.HasMark() ||
         CheckNodesRange( aPam.GetPoint()->nNode, aPam.GetMark()->nNode, TRUE ))
-        pDoc->MakeBookmark( aPam, aCode, aName, aShortName );
+        pDoc->MakeBookmark( aPam, aCode, aName, aShortName, eOrigBkmType );
 }
 
 
@@ -396,6 +397,9 @@ void _DelBookmarks( const SwNodeIndex& rStt, const SwNodeIndex& rEnd,
         // liegt auf der Position ??
         int eType = BKMK_POS_NONE;
         SwBookmark* pBkmk = rBkmks[ nCnt ];
+        //simple marks should not be moved
+        if(pBkmk->IsMark())
+            continue;
         if( GreaterThan( pBkmk->GetPos(), rStt, pSttIdx ) &&
             Lower( pBkmk->GetPos(), rEnd, pEndIdx ))
             eType = BKMK_POS;
