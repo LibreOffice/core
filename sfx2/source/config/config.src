@@ -2,9 +2,9 @@
  *
  *  $RCSfile: config.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-16 15:00:15 $
+ *  last change: $Author: kz $ $Date: 2001-06-08 21:50:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -200,7 +200,7 @@ ModalDialog DLG_MACROQUERY
         Text[ dutch ] = "Voor dit document niet meer waarschuwen";
         Text[ chinese_simplified ] = "²»ÒªΤΩ΄ΞΞªΥβΈφΞΔµµΜα³φΎ―Έζ";
         Text[ greek ] = "Όχι άλλη προειδοποίηση για αυτό το έγγραφο";
-        Text[ korean ] = "ΐΜ Ή®Ό­Ώ΅΄λΗΨΌ­΄Β ΄υ ΐΜ»σ °ζ°ν ΎΘΗΤ";
+        Text[ korean ] = "ΐΜ Ή®Ό­Ώ΅ ΄λΗΨΌ­΄Β ΄υ ΐΜ»σ °ζ°ν ΎΘΗΤ";
         Text[ turkish ] = "Bu belge iηin bir daha uyarύ gφrόntόleme";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Desactivar las advertencias para este documento";
@@ -275,5 +275,6 @@ ModalDialog DLG_MACROQUERY
     TEXT[ catalan ] = "Ejecutar macro";
     TEXT[ finnish ] = "Suorita makro";
 };
+
 
 
