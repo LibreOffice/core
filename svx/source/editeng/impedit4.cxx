@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit4.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mt $ $Date: 2000-12-05 11:05:15 $
+ *  last change: $Author: mt $ $Date: 2000-12-05 14:21:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1946,7 +1946,10 @@ sal_uInt16 ImpEditEngine::StartSearchAndReplace( EditView* pEditView, const SvxS
         }
         if ( nFound )
         {
-            pEditView->pImpEditView->SetEditSelection( aFoundSel.Max() );
+            EditPaM aNewPaM( aFoundSel.Max() );
+            if ( aNewPaM.GetIndex() > aNewPaM.GetNode()->Len() )
+                aNewPaM.GetIndex() =  aNewPaM.GetNode()->Len();
+            pEditView->pImpEditView->SetEditSelection( aNewPaM );
             FormatAndUpdate( pEditView );
             UndoActionEnd( EDITUNDO_REPLACEALL );
         }
@@ -2044,9 +2047,6 @@ sal_Bool ImpEditEngine::ImpSearch( const SvxSearchItem& rSearchItem,
             rFoundSel.Min().SetIndex( nStartPos );
             rFoundSel.Max().SetNode( pNode );
             rFoundSel.Max().SetIndex( nEndPos );
-            if ( rFoundSel.Max().GetIndex() < pNode->Len() )
-                rFoundSel.Max().GetIndex()++;
-
             return sal_True;
         }
     }
