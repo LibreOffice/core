@@ -2,9 +2,9 @@
  *
  *  $RCSfile: controlwizard.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-05 14:53:13 $
+ *  last change: $Author: fs $ $Date: 2001-04-03 12:42:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,9 @@
 #ifndef _COM_SUN_STAR_FORM_FORMCOMPONENTTYPE_HPP_
 #include <com/sun/star/form/FormComponentType.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
+#include <com/sun/star/sdbc/XConnection.hpp>
+#endif
 #ifndef _SV_FIXED_HXX
 #include <vcl/fixed.hxx>
 #endif
@@ -121,10 +124,14 @@ namespace dbp
     {
     protected:
         OControlWizard*                 getDialog();
+        const OControlWizard*           getDialog() const;
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
                                         getServiceFactory();
         const OControlWizardContext&    getContext();
         sal_Bool                        updateContext();
+        void                            setFormConnection(const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConn);
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >
+                                        getFormConnection() const;
 
     public:
         OControlWizardPage( OControlWizard* _pParent, const ResId& _rResId );
@@ -172,6 +179,9 @@ namespace dbp
 
         const OControlWizardContext&    getContext() const { return m_aContext; }
         sal_Bool                        updateContext(const OAccessRegulator&);
+        void                            setFormConnection(const OAccessRegulator&, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConn);
+        ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >
+                                        getFormConnection(const OAccessRegulator&) const;
 
     protected:
         // initialize the derivees settings (which have to be derived from OControlWizardSettings)
@@ -208,6 +218,9 @@ namespace dbp
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2001/03/05 14:53:13  fs
+ *  finished the grid control wizard
+ *
  *  Revision 1.3  2001/02/28 09:18:30  fs
  *  finalized the list/combo wizard
  *

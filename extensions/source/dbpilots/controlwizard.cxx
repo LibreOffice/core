@@ -2,9 +2,9 @@
  *
  *  $RCSfile: controlwizard.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-05 14:53:13 $
+ *  last change: $Author: fs $ $Date: 2001-04-03 12:42:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,9 +171,27 @@ namespace dbp
     }
 
     //---------------------------------------------------------------------
+    const OControlWizard* OControlWizardPage::getDialog() const
+    {
+        return static_cast< OControlWizard* >(GetParent());
+    }
+
+    //---------------------------------------------------------------------
     sal_Bool OControlWizardPage::updateContext()
     {
         return getDialog()->updateContext(OAccessRegulator());
+    }
+
+    //---------------------------------------------------------------------
+    Reference< XConnection > OControlWizardPage::getFormConnection() const
+    {
+        return getDialog()->getFormConnection(OAccessRegulator());
+    }
+
+    //---------------------------------------------------------------------
+    void OControlWizardPage::setFormConnection(const Reference< XConnection >& _rxConn)
+    {
+        getDialog()->setFormConnection(OAccessRegulator(), _rxConn);
     }
 
     //---------------------------------------------------------------------
@@ -400,6 +418,40 @@ namespace dbp
         catch(Exception&)
         {
             DBG_ERROR("OControlWizard::implGetDSContext: invalid database context!");
+        }
+    }
+
+    //---------------------------------------------------------------------
+    Reference< XConnection > OControlWizard::getFormConnection(const OAccessRegulator&) const
+    {
+        Reference< XConnection > xConn;
+        try
+        {
+            m_aContext.xForm->getPropertyValue(::rtl::OUString::createFromAscii("ActiveConnection")) >>= xConn;
+        }
+        catch(const Exception&)
+        {
+            DBG_ERROR("OControlWizard::getFormConnection: caught an exception!");
+        }
+        return xConn;
+    }
+
+    //---------------------------------------------------------------------
+    void OControlWizard::setFormConnection(const OAccessRegulator& _rAccess, const Reference< XConnection >& _rxConn)
+    {
+        try
+        {
+            Reference< XConnection > xOldConn = getFormConnection(_rAccess);
+            if (xOldConn.get() == _rxConn.get())
+                return;
+
+            disposeComponent(xOldConn);
+
+            m_aContext.xForm->setPropertyValue(::rtl::OUString::createFromAscii("ActiveConnection"), makeAny(_rxConn));
+        }
+        catch(const Exception&)
+        {
+            DBG_ERROR("OControlWizard::setFormConnection: caught an exception!");
         }
     }
 
@@ -647,6 +699,9 @@ namespace dbp
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2001/03/05 14:53:13  fs
+ *  finished the grid control wizard
+ *
  *  Revision 1.3  2001/02/28 09:18:30  fs
  *  finalized the list/combo wizard
  *
