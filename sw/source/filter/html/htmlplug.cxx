@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlplug.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 16:28:01 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:27:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -482,7 +482,10 @@ void SwHTMLParser::InsertEmbed()
     // die URL aufbereiten
     INetURLObject aURLObj;
     bool bHasURL = aURL.Len() &&
-                   aURLObj.SetURL( INetURLObject::RelToAbs(aURL) );
+                   aURLObj.SetURL(
+                       URIHelper::SmartRel2Abs(
+                           INetURLObject(sBaseURL), aURL,
+                           URIHelper::GetMaybeFileHdl()) );
 
     // #109761# do not insert plugin if it has neither URL nor type
     bool bHasType = aType.Len() != 0;
@@ -709,7 +712,7 @@ void SwHTMLParser::EndObject()
 #ifdef SOLAR_JAVA
     if( !pAppletImpl )
         return;
-    if( pAppletImpl->CreateApplet() )
+    if( pAppletImpl->CreateApplet( sBaseURL ) )
     {
         pAppletImpl->FinishApplet();
 
@@ -809,7 +812,7 @@ void SwHTMLParser::InsertApplet()
         return;
     }
 
-    pAppletImpl->CreateApplet( aCode, aName, bMayScript, aCodeBase);//, aAlt );
+    pAppletImpl->CreateApplet( aCode, aName, bMayScript, aCodeBase, sBaseURL );//, aAlt );
     pAppletImpl->SetAltText( aAlt );
 
     SfxItemSet aItemSet( pDoc->GetAttrPool(), pCSS1Parser->GetWhichMap() );
@@ -943,9 +946,9 @@ void SwHTMLParser::InsertFloatingFrame()
     }
 
     // und jetzt die fuer den SfxFrame
-    SfxFrameDescriptor aFrameDesc(0);
+    SfxFrameDescriptor aFrameDesc;
 
-    SfxFrameHTMLParser::ParseFrameOptions( &aFrameDesc, pOptions );
+    SfxFrameHTMLParser::ParseFrameOptions( &aFrameDesc, pOptions, sBaseURL );
 
     // den Floating-Frame anlegen
     comphelper::EmbeddedObjectContainer aCnt;
@@ -1188,10 +1191,8 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
         aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("PluginURL" ) );
         if( (aAny >>= aStr) && aStr.getLength() )
         {
-            aURL = INetURLObject::AbsToRel(
-                      aStr,
-                      INetURLObject::WAS_ENCODED,
-                      INetURLObject::DECODE_UNAMBIGUOUS);
+            aURL = URIHelper::simpleNormalizedMakeRelative( rWrt.GetBaseURL(),
+                      aStr);
         }
 
         if( aURL.Len() )
@@ -1237,12 +1238,7 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
         aAny = xSet->getPropertyValue( ::rtl::OUString::createFromAscii("AppletCodeBase" ) );
         if( (aAny >>= aCd) && aCd.getLength() )
         {
-#if OSL_DEBUG_LEVEL > 1
-            String sTmp( INetURLObject::GetBaseURL() );
-#endif
-            String sCodeBase( INetURLObject::AbsToRel(aCd,
-                                    INetURLObject::WAS_ENCODED,
-                                    INetURLObject::DECODE_UNAMBIGUOUS) );
+            String sCodeBase( URIHelper::simpleNormalizedMakeRelative(rWrt.GetBaseURL(), aCd) );
             if( sCodeBase.Len() )
             {
                 ((sOut += ' ') += sHTML_O_codebase) += "=\"";
@@ -1289,7 +1285,7 @@ Writer& OutHTML_FrmFmtOLENode( Writer& rWrt, const SwFrmFmt& rFrmFmt,
         sOut += sHTML_iframe;
         rWrt.Strm() << sOut.GetBuffer();
 
-        SfxFrameHTMLWriter::Out_FrameDescriptor( rWrt.Strm(),
+        SfxFrameHTMLWriter::Out_FrameDescriptor( rWrt.Strm(), rWrt.GetBaseURL(),
                                         xSet,
                                         rHTMLWrt.eDestEnc,
                                         &rHTMLWrt.aNonConvertableCharacters );
@@ -1442,7 +1438,9 @@ Writer& OutHTML_FrmFmtOLENodeGrf( Writer& rWrt, const SwFrmFmt& rFrmFmt,
             rHTMLWrt.nWarn = WARN_SWG_POOR_LOAD | WARN_SW_WRITE_BASE;
             return rWrt;
         }
-        aGrfNm = URIHelper::SmartRelToAbs( aGrfNm );
+        aGrfNm = URIHelper::SmartRel2Abs(
+            INetURLObject(rWrt.GetBaseURL()), aGrfNm,
+            URIHelper::GetMaybeFileHdl() );
         ULONG nFlags = bInCntnr ? HTML_FRMOPTS_GENIMG_CNTNR
                                   : HTML_FRMOPTS_GENIMG;
         OutHTML_Image( rWrt, rFrmFmt, aGrfNm,
