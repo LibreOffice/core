@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.23 $
+#   $Revision: 1.24 $
 #
-#   last change: $Author: obo $ $Date: 2004-09-09 16:13:32 $
+#   last change: $Author: kz $ $Date: 2004-10-04 17:40:47 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,6 +73,7 @@ PACKAGE=com$/sun$/star$/frame
 # ------------------------------------------------------------------------
 
 IDLFILES=\
+    BorderWidths.idl\
     Components.idl\
     ContentHandler.idl\
     ContentHandlerFactory.idl\
@@ -112,11 +113,13 @@ IDLFILES=\
     ToolbarController.idl\
     TransientDocumentsDocumentContentFactory.idl \
     WindowArrange.idl\
+    XBorderResizeListener.idl\
     XBrowseHistoryRegistry.idl\
     XComponentLoader.idl\
     XComponentRegistry.idl\
     XConfigManager.idl\
     XController.idl\
+    XControllerBorder.idl\
     XDesktop.idl\
     XDesktopTask.idl\
     XDispatch.idl\
