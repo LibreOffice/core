@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prevwsh2.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-29 19:46:58 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 17:28:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -378,7 +378,8 @@ void __EXPORT ScPreviewShell::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId& rBC
     }
     else if (rHint.ISA(SdrHint))
     {
-        if (((const SdrHint&)rHint).IsNeedRepaint())
+        // SdrHints are no longer used for invalidating, thus react on objectchange instead
+        if(HINT_OBJCHG == ((const SdrHint&)rHint).GetKind())
             bDataChanged = TRUE;
     }
 
