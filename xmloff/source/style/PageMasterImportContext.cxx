@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PageMasterImportContext.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-16 16:36:55 $
+ *  last change: $Author: th $ $Date: 2001-05-11 10:50:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,7 +214,7 @@ void PageStyleContext::FillPropertySet(
             const uno::Reference<beans::XPropertySet > & rPropSet )
 {
     XMLPropStyleContext::FillPropertySet(rPropSet);
-    if (sPageUsage.len())
+    if (sPageUsage.getLength())
     {
         uno::Any aPageUsage;
         XMLPMPropHdl_PageStyleLayout aPageUsageHdl;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlmetai.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-16 18:19:02 $
+ *  last change: $Author: th $ $Date: 2001-05-11 10:48:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -269,35 +269,52 @@ sal_Bool SfxXMLMetaElementContext::ParseISODateTimeString(
     sal_Int32 nMin   = 0;
     sal_Int32 nSec   = 0;
 
-    sal_Int32 nDateTokens = aDateStr.getTokenCount('-');
+    const sal_Uniocde* pStr;
+    pStr = aDateStr.getStr();
+    sal_Int32 nDateTokens = 1;
+    while ( *pStr )
+    {
+        if ( *pStr == '-' )
+            nDateTokens++;
+        pStr++;
+    }
     if ( nDateTokens > 3 || aDateStr.getLength() == 0 )
         bSuccess = sal_False;
     else
     {
-        if ( !lcl_GetNumber( aDateStr.getToken( 0, '-' ), nYear, 9999 ) )
+        sal_int32 n = 0;
+        if ( !lcl_GetNumber( aDateStr.getToken( 0, '-', n ), nYear, 9999 ) )
             bSuccess = sal_False;
         if ( nDateTokens >= 2 )
-            if ( !lcl_GetNumber( aDateStr.getToken( 1, '-' ), nMonth, 12 ) )
+            if ( !lcl_GetNumber( aDateStr.getToken( 0, '-', n ), nMonth, 12 ) )
                 bSuccess = sal_False;
         if ( nDateTokens >= 3 )
-            if ( !lcl_GetNumber( aDateStr.getToken( 2, '-' ), nDay, 31 ) )
+            if ( !lcl_GetNumber( aDateStr.getToken( 0, '-', n ), nDay, 31 ) )
                 bSuccess = sal_False;
     }
 
     if ( aTimeStr.getLength() > 0 )         // time is optional
     {
-        sal_Int32 nTimeTokens = aTimeStr.getTokenCount(':');
+        pStr = aTimeStr.getStr();
+        sal_Int32 nTimeTokens = 1;
+        while ( *pStr )
+        {
+            if ( *pStr == ':' )
+                nTimeTokens++;
+            pStr++;
+        }
         if ( nTimeTokens > 3 )
             bSuccess = sal_False;
         else
         {
-            if ( !lcl_GetNumber( aTimeStr.getToken( 0, ':' ), nHour, 23 ) )
+            sal_int32 n = 0;
+            if ( !lcl_GetNumber( aTimeStr.getToken( 0, ':', n ), nHour, 23 ) )
                 bSuccess = sal_False;
             if ( nTimeTokens >= 2 )
-                if ( !lcl_GetNumber( aTimeStr.getToken( 1, ':' ), nMin, 59 ) )
+                if ( !lcl_GetNumber( aTimeStr.getToken( 0, ':', n ), nMin, 59 ) )
                     bSuccess = sal_False;
             if ( nTimeTokens >= 3 )
-                if ( !lcl_GetNumber( aTimeStr.getToken( 2, ':' ), nSec, 59 ) )
+                if ( !lcl_GetNumber( aTimeStr.getToken( 0, ':', n ), nSec, 59 ) )
                     bSuccess = sal_False;
         }
     }
@@ -311,7 +328,7 @@ sal_Bool SfxXMLMetaElementContext::ParseISODateTimeString(
 sal_Bool SfxXMLMetaElementContext::ParseISODurationString(
                             const rtl::OUString& rString, Time& rTime )
 {
-    rtl::OUString aTrimmed = rString.trim().toUpperCase();
+    rtl::OUString aTrimmed = rString.trim().toAsciiUpperCase();
     const sal_Unicode* pStr = aTrimmed.getStr();
 
     if ( *(pStr++) != sal_Unicode('P') )            // duration must start with "P"
@@ -786,7 +803,7 @@ void SfxXMLMetaContext::AddUserField( const rtl::OUString& rName, const rtl::OUS
     if ( xDocInfo.is() && nUserKeys < xDocInfo->getUserFieldCount() )
     {
         //  keep default name if none is there
-        if ( rName.len() )
+        if ( rName.getLength() )
             xDocInfo->setUserFieldName( nUserKeys, rName );
         xDocInfo->setUserFieldValue( nUserKeys, rContent );
         ++nUserKeys;

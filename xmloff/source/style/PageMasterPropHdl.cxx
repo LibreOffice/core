@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PageMasterPropHdl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-19 09:40:43 $
+ *  last change: $Author: th $ $Date: 2001-05-11 10:52:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -364,11 +364,14 @@ sal_Bool XMLPMPropHdl_Print::importXML(
         const SvXMLUnitConverter& rUnitConverter ) const
 {
     sal_Unicode cToken  = ' ';
-    sal_Int32   nCount  = rStrImpValue.getTokenCount( cToken );
+    sal_Int32   nTokenIndex = 0;
     sal_Bool    bFound  = sal_False;
 
-    for( sal_Int32 nIndex = 0; (nIndex < nCount) && !bFound; nIndex++ )
-        bFound = (sAttrValue == rStrImpValue.getToken( nIndex, cToken ));
+    do
+    {
+        bFound = (sAttrValue == rStrImpValue.getToken( 0, cToken, nTokenIndex ));
+    }
+    while ( (nTokenIndex >= 0) && !bFound );
 
     setBOOL( rValue, bFound );
     return sal_True;
