@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfmt.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-18 12:39:02 $
+ *  last change: $Author: mib $ $Date: 2001-01-19 10:00:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -709,14 +709,13 @@ SwXMLItemSetStyleContext_Impl::SwXMLItemSetStyleContext_Impl( SwXMLImport& rImpo
         sal_uInt16 nPrfx, const OUString& rLName,
         const Reference< xml::sax::XAttributeList > & xAttrList,
         sal_uInt16 nFamily ) :
-    SvXMLStyleContext( rImport, nPrfx, rLName, xAttrList ),
+    SvXMLStyleContext( rImport, nPrfx, rLName, xAttrList, nFamily ),
     pItemSet( 0 ),
     bHasMasterPageName( sal_False ),
     bPageDescConnected( sal_False ),
     sDataStyleName(),
     bDataStyleIsResolved( sal_True )
 {
-    SetFamily( nFamily );
 }
 
 SwXMLItemSetStyleContext_Impl::~SwXMLItemSetStyleContext_Impl()
