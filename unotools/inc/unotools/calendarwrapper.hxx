@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calendarwrapper.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: er $ $Date: 2002-09-24 14:05:22 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 11:00:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,17 +85,17 @@ namespace com { namespace sun { namespace star {
     }
 }}}
 
-namespace drafts { namespace com { namespace sun { namespace star {
+namespace com { namespace sun { namespace star {
     namespace i18n {
         class XExtendedCalendar;
     }
-}}}}
+}}}
 
 
 class CalendarWrapper
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xSMgr;
-    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::i18n::XExtendedCalendar >   xC;
+    ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XExtendedCalendar >   xC;
 
             DateTime            aEpochStart;        // 1Jan1970
 
