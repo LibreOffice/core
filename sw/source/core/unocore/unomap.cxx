@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.127 $
+ *  $Revision: 1.128 $
  *
- *  last change: $Author: dvo $ $Date: 2002-04-05 09:22:10 $
+ *  last change: $Author: dvo $ $Date: 2002-04-26 13:08:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1038,6 +1038,8 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     { SW_PROP_NMID(UNO_NAME_DONT_BALANCE_TEXT_COLUMNS), RES_COLUMNBALANCE, CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE, 0 },
                     COMMON_TEXT_CONTENT_PROPERTIES
                     _REDLINE_NODE_PROPERTIES
+                    { SW_PROP_NMID(UNO_NAME_IS_CURRENTLY_VISIBLE), WID_SECT_CURRENTLY_VISIBLE, CPPU_E2T(CPPUTYPE_BOOLEAN),          PROPERTY_NONE,     0},
+
                     {0,0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aSectionPropertyMap_Impl;
