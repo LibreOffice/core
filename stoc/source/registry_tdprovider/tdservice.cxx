@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdservice.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-23 15:04:58 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:18:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -483,9 +483,9 @@ void ServiceTypeDescriptionImpl::getReferences()
         sal_uInt32 nMI = 0;
         sal_uInt32 nOI = 0;
 
-        while ( nRefs-- )
+        for ( sal_uInt16 nPos = 0; nPos < nRefs; ++nPos )
         {
-            RTReferenceType eType = aReader.getReferenceSort( nRefs );
+            RTReferenceType eType = aReader.getReferenceSort( nPos );
             switch ( eType )
             {
             case RT_REF_EXPORTS: // service
@@ -494,7 +494,7 @@ void ServiceTypeDescriptionImpl::getReferences()
                     try
                     {
                         aTypeDesc = _xTDMgr->getByHierarchicalName(
-                            aReader.getReferenceTypeName( nRefs ).replace(
+                            aReader.getReferenceTypeName( nPos ).replace(
                                 '/', '.' ) );
                     }
                     catch ( NoSuchElementException const & e )
@@ -508,7 +508,7 @@ void ServiceTypeDescriptionImpl::getReferences()
                             static_cast< OWeakObject * >( this ) );
                     }
 
-                    RTFieldAccess nAccess = aReader.getReferenceFlags( nRefs );
+                    RTFieldAccess nAccess = aReader.getReferenceFlags( nPos );
                     if ( nAccess & RT_ACCESS_OPTIONAL )
                     {
                         // optional service
@@ -539,7 +539,7 @@ void ServiceTypeDescriptionImpl::getReferences()
                     try
                     {
                         aTypeDesc = _xTDMgr->getByHierarchicalName(
-                            aReader.getReferenceTypeName( nRefs ).replace(
+                            aReader.getReferenceTypeName( nPos ).replace(
                                 '/', '.' ) );
                     }
                     catch ( NoSuchElementException const & e )
@@ -553,7 +553,7 @@ void ServiceTypeDescriptionImpl::getReferences()
                             static_cast< OWeakObject * >( this ) );
                     }
 
-                    RTFieldAccess nAccess = aReader.getReferenceFlags( nRefs );
+                    RTFieldAccess nAccess = aReader.getReferenceFlags( nPos );
                     if ( nAccess & RT_ACCESS_OPTIONAL )
                     {
                         // optional interface
@@ -580,9 +580,9 @@ void ServiceTypeDescriptionImpl::getReferences()
                     }
                     break;
                 }
-            case RT_REF_INVALID:
             case RT_REF_OBSERVES:
             case RT_REF_NEEDS:
+                break;
             default:
                 OSL_ENSURE( sal_False, "### unsupported reference type!" );
                 break;
