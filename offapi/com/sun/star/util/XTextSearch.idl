@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTextSearch.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mi $ $Date: 2001-11-15 17:18:28 $
+ *  last change: $Author: er $ $Date: 2002-01-18 16:21:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,8 +178,9 @@ struct SearchResult  {
     For example:
     if you search "X" in the text "-X-" the offset are:
         for forward:    start = 1, end = 2
-        for backward:   start = 1, end = 0
-    The startOffset is always inclusive, the endOffset allways exclusive
+        for backward:   start = 2, end = 1
+    Forward, the startOffset is inclusive, the endOffset exclusive.
+    Backward, the startOffset is exclusive, the endOffset inclusive.
 
     For regular expressions it can be greater than 1.
     If the value is 1, startoffset[0] and endoffset[0] points to the matching sub string
