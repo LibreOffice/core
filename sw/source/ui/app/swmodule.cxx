@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swmodule.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:46:34 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 11:30:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -376,11 +376,11 @@ TYPEINIT1( SwModule, SfxModule );
 
 //************************************************************************
 
-SwModule::SwModule( SfxObjectFactory* pFact,
-                    SfxObjectFactory* pWebFact,
+SwModule::SwModule( SfxObjectFactory* pWebFact,
+                    SfxObjectFactory* pFact,
                     SfxObjectFactory* pGlobalFact )
-    : SfxModule( SFX_APP()->CreateResManager( "sw" ), sal_False, pFact,
-                     pWebFact, pGlobalFact, NULL ),
+    : SfxModule( SFX_APP()->CreateResManager( "sw" ), sal_False, pWebFact,
+                     pFact, pGlobalFact, NULL ),
     pModuleConfig(0),
     pView(0),
     pChapterNumRules(0),
