@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfld.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 14:59:11 $
+ *  last change: $Author: rt $ $Date: 2003-11-25 10:46:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -418,9 +418,31 @@ SwNumberPortion *SwTxtFormatter::NewNumberPortion( SwTxtFormatInfo &rInf ) const
             if( SVX_NUM_CHAR_SPECIAL == rNumFmt.GetNumberingType() )
             {
                 const Font *pFmtFnt = rNumFmt.GetBulletFont();
+
+                //
+                // Build a new bullet font basing on the current paragraph font:
+                //
                 pNumFnt = new SwFont( &rInf.GetCharAttr(), rInf.GetDoc() );
+
+                // i18463:
+                // Underline style of paragraph font should not be considered
+                // Weight style of paragraph font should not be considered
+                // Posture style of paragraph font should not be considered
+                pNumFnt->SetUnderline( UNDERLINE_NONE );
+                pNumFnt->SetItalic( ITALIC_NONE, SW_LATIN );
+                pNumFnt->SetItalic( ITALIC_NONE, SW_CJK );
+                pNumFnt->SetItalic( ITALIC_NONE, SW_CTL );
+                pNumFnt->SetWeight( WEIGHT_NORMAL, SW_LATIN );
+                pNumFnt->SetWeight( WEIGHT_NORMAL, SW_CJK );
+                pNumFnt->SetWeight( WEIGHT_NORMAL, SW_CTL );
+
+                //
+                // Apply the explicit attributes from the character style
+                // associated with the numering to the new bullet font.
+                //
                 if( pFmt )
                     pNumFnt->SetDiffFnt( pFmt, rInf.GetDoc() );
+
                 if ( pFmtFnt )
                 {
                     const BYTE nAct = pNumFnt->GetActual();
@@ -430,13 +452,10 @@ SwNumberPortion *SwTxtFormatter::NewNumberPortion( SwTxtFormatInfo &rInf ) const
                     pNumFnt->SetCharSet( pFmtFnt->GetCharSet(), nAct );
                     pNumFnt->SetPitch( pFmtFnt->GetPitch(), nAct );
                 }
+
                 // we do not allow a vertical font
-#ifdef VERTICAL_LAYOUT
                 pNumFnt->SetVertical( pNumFnt->GetOrientation(),
                                       pFrm->IsVertical() );
-#else
-                pNumFnt->SetVertical( 0 );
-#endif
 
                 pRet = new SwBulletPortion( rNumFmt.GetBulletChar(), pNumFnt, bLeft,
                             bCenter, nMinDist );
@@ -452,18 +471,24 @@ SwNumberPortion *SwTxtFormatter::NewNumberPortion( SwTxtFormatInfo &rInf ) const
                 // vorliegt!
                 if( aTxt.Len() )
                 {
+                    //
+                    // Build a new numbering font basing on the current paragraph font:
+                    //
                     pNumFnt = new SwFont( &rInf.GetCharAttr(), rInf.GetDoc() );
+
+                    // i18463:
+                    // Underline style of paragraph font should not be considered
+                    pNumFnt->SetUnderline( UNDERLINE_NONE );
+
+                    //
+                    // Apply the explicit attributes from the character style
+                    // associated with the numering to the new bullet font.
+                    //
                     if( pFmt )
                         pNumFnt->SetDiffFnt( pFmt, rInf.GetDoc() );
-                    // Die SSize muss erhalten bleiben
-                    // pNumFnt->ChangeSize( rInf.GetFont()->GetSize() );
 
                     // we do not allow a vertical font
-#ifdef VERTICAL_LAYOUT
                     pNumFnt->SetVertical( pNumFnt->GetOrientation(), pFrm->IsVertical() );
-#else
-                    pNumFnt->SetVertical( 0 );
-#endif
 
                     pRet = new SwNumberPortion( aTxt, pNumFnt, bLeft, bCenter,
                                                 nMinDist );
