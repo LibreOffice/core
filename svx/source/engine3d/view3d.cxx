@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view3d.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: aw $ $Date: 2001-03-14 13:02:43 $
+ *  last change: $Author: aw $ $Date: 2001-04-09 10:46:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -703,7 +703,7 @@ BOOL E3dView::IsConvertTo3DObjPossible() const
     BOOL bGroupSelected(FALSE);
     BOOL bRetval(TRUE);
 
-    for(INT32 a=0;!bAny3D && a<aMark.GetMarkCount();a++)
+    for(INT32 a=0;!bAny3D && a<(sal_Int32)aMark.GetMarkCount();a++)
     {
         SdrObject *pObj = aMark.GetMark(a)->GetObj();
         if(pObj)
@@ -751,18 +751,29 @@ void E3dView::ImpIsConvertTo3DPossible(SdrObject* pObj, BOOL& rAny3D,
 |*
 \************************************************************************/
 
+#ifndef _EEITEM_HXX
+#include "eeitem.hxx"
+#endif
+
 void E3dView::ImpChangeSomeAttributesFor3DConversion(SdrObject* pObj)
 {
     if(pObj->ISA(SdrTextObj))
     {
         const SfxItemSet& rSet = pObj->GetItemSet();
-        const SvxColorItem& rTextColorItem = (const SvxColorItem&)rSet.Get(rSet.GetPool()->GetWhich(SID_ATTR_CHAR_COLOR));
+        const SvxColorItem& rTextColorItem = (const SvxColorItem&)rSet.Get(EE_CHAR_COLOR);
         if(rTextColorItem.GetValue() == RGB_Color(COL_BLACK))
         {
             // Bei schwarzen Textobjekten wird die Farbe auf grau gesetzt
             if(pObj->GetPage())
+            {
+                // #84864# if black is only default attribute from
+                // pattern set it hard so that it is used in undo.
+                pObj->SetItem(SvxColorItem(RGB_Color(COL_BLACK), EE_CHAR_COLOR));
+
+                // add undo now
                 AddUndo(new SdrUndoAttrObj(*pObj, FALSE, FALSE));
-            pObj->SetItem(SvxColorItem(RGB_Color(COL_GRAY), rSet.GetPool()->GetWhich(SID_ATTR_CHAR_COLOR)));
+            }
+            pObj->SetItem(SvxColorItem(RGB_Color(COL_GRAY), EE_CHAR_COLOR));
         }
     }
 }
