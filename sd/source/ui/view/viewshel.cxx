@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshel.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: af $ $Date: 2002-07-25 10:07:40 $
+ *  last change: $Author: ka $ $Date: 2002-08-20 13:03:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -704,17 +704,20 @@ void SdViewShell::Command(const CommandEvent& rCEvt, SdWindow* pWin)
 
             if( pData && pData->IsMod1() )
             {
-                const long  nOldZoom = pWindow->GetZoom();
-                long        nNewZoom;
+                if( !pDocSh->IsUIActive() )
+                {
+                    const long  nOldZoom = pWindow->GetZoom();
+                    long        nNewZoom;
 
-                if( pData->GetDelta() < 0L )
-                    nNewZoom = Max( (long) pWin->GetMinZoom(), (long)(nOldZoom - DELTA_ZOOM) );
-                else
-                    nNewZoom = Min( (long) pWin->GetMaxZoom(), (long)(nOldZoom + DELTA_ZOOM) );
+                    if( pData->GetDelta() < 0L )
+                        nNewZoom = Max( (long) pWin->GetMinZoom(), (long)(nOldZoom - DELTA_ZOOM) );
+                    else
+                        nNewZoom = Min( (long) pWin->GetMaxZoom(), (long)(nOldZoom + DELTA_ZOOM) );
 
-                SetZoom( nNewZoom );
-                GetViewFrame()->GetBindings().Invalidate( SID_ATTR_ZOOM );
-                bDone = TRUE;
+                    SetZoom( nNewZoom );
+                    GetViewFrame()->GetBindings().Invalidate( SID_ATTR_ZOOM );
+                    bDone = TRUE;
+                }
             }
             else
             {
