@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basidesh.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ab $ $Date: 2001-04-25 11:46:35 $
+ *  last change: $Author: ab $ $Date: 2001-05-03 16:00:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -457,6 +457,12 @@ void __EXPORT BasicIDEShell::SFX_NOTIFY( SfxBroadcaster& rBC, const TypeId&,
                  ( ((SfxEventHint&)rHint).GetEventId() == SFX_EVENT_OPENDOC ) )
             {
                 UpdateWindows();
+            }
+
+            if ( ( ((SfxEventHint&)rHint).GetEventId() == SFX_EVENT_SAVEDOC ) ||
+                 ( ((SfxEventHint&)rHint).GetEventId() == SFX_EVENT_SAVEASDOC ) )
+            {
+                StoreAllWindowData();
             }
         }
         if ( rHint.IsA( TYPE( SfxSimpleHint ) ) )
