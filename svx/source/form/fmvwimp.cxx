@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmvwimp.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-06 07:07:42 $
+ *  last change: $Author: fs $ $Date: 2000-12-07 16:02:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -716,6 +716,16 @@ IMPL_LINK(FmXFormView, OnAutoFocus, void*, EMPTYTAG)
             Reference< XWindow > xControlWindow(xFirstControl, UNO_QUERY);
             if (xControlWindow.is())
                 xControlWindow->setFocus();
+
+            // ensure that the control is visible
+            // 80210 - 12/07/00 - FS
+            if (xControlWindow.is() && m_pView->GetActualOutDev() && (OUTDEV_WINDOW == m_pView->GetActualOutDev()->GetOutDevType()))
+            {
+                const Window* pWindow = static_cast<const Window*>(m_pView->GetActualOutDev());
+                ::com::sun::star::awt::Rectangle aRect = xControlWindow->getPosSize();
+                ::Rectangle aNonUnoRect(aRect.X, aRect.Y, aRect.X + aRect.Width, aRect.Y + aRect.Height);
+                m_pView->MakeVisible(pWindow->PixelToLogic(aNonUnoRect), *const_cast<Window*>(pWindow));
+            }
         }
         catch(Exception&)
         {
