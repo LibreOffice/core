@@ -5,9 +5,9 @@ eval 'exec perl -S $0 ${1+"$@"}'
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.86 $
+#   $Revision: 1.87 $
 #
-#   last change: $Author: vg $ $Date: 2003-06-24 11:31:50 $
+#   last change: $Author: vg $ $Date: 2003-09-05 13:20:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,7 +84,7 @@ if (defined $ENV{CWS_WORK_STAMP}) {
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.86 $ ';
+$id_str = ' $Revision: 1.87 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -1469,16 +1469,16 @@ sub get_incomp_projects {
     while ($option = shift @ARGV) {
         if ($option =~ /^-+/) {
             unshift(@ARGV, $option);
-            last;
+            return;
         } else {
             if ($option =~ /(:)/) {
                 $option = $`;
                 &print_error("-from switch collision") if ($build_from_opt);
                 $build_from_opt = $';
-            };
-            $incompartibles{$option}++;
+            } else {last;};
         };
     };
+    $incompartibles{$option}++;
 };
 
 sub get_platforms {
