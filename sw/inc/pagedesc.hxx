@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagedesc.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mib $ $Date: 2002-06-28 12:25:53 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 12:57:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -274,6 +274,9 @@ public:
     const SwFrmFmt* GetPageFmtOfNode( const SwNode& rNd,
                                     BOOL bCheckForThisPgDc = TRUE ) const;
     BOOL IsFollowNextPageOfNode( const SwNode& rNd ) const;
+
+    //Given a SwNode return the pagedesc in use at that location.
+    static const SwPageDesc* GetPageDescOfNode(const SwNode& rNd);
 
     SwPageDesc( const SwPageDesc& );
     ~SwPageDesc();
