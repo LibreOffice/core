@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textattr.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2000-10-24 12:20:14 $
+ *  last change: $Author: dl $ $Date: 2001-01-26 14:11:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -645,10 +645,18 @@ IMPL_LINK( SvxTextAttrPage, ClickHdl_Impl, void *, p )
     aTsbFitToSize.Enable( !( ( bAutoGrowWidth || bAutoGrowHeight ) && bAutoGrowSizeEnabled ) &&
                           !( bContour && bContourEnabled ) );
 
-    aMtrFldLeft.Enable( !(bContour && bContourEnabled) );
-    aMtrFldRight.Enable( !(bContour && bContourEnabled) );
-    aMtrFldTop.Enable( !(bContour && bContourEnabled) );
-    aMtrFldBottom.Enable( !(bContour && bContourEnabled) );
+    if( bContour && bContourEnabled )
+    {
+        aMtrFldLeft.Enable( FALSE );
+        aMtrFldRight.Enable( FALSE );
+        aMtrFldTop.Enable( FALSE );
+        aMtrFldBottom.Enable( FALSE );
+
+        aMtrFldLeft.SetValue( 0 );
+        aMtrFldRight.SetValue( 0 );
+        aMtrFldTop.SetValue( 0 );
+        aMtrFldBottom.SetValue( 0 );
+    }
 
 /*
     // Am Rahmen anpassen
