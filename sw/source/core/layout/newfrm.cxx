@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newfrm.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:14:10 $
+ *  last change: $Author: rt $ $Date: 2004-05-25 15:01:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -579,7 +579,8 @@ SwRootFrm::SwRootFrm( SwFrmFmt *pFmt, ViewShell * pSh ) :
     else
         bIsVirtPageNum = FALSE;
     if ( !pDesc )
-        pDesc = (SwPageDesc*)&pDoc->GetPageDesc( 0 );
+        pDesc = (SwPageDesc*)
+            &const_cast<const SwDoc *>(pDoc)->GetPageDesc( 0 );
     const BOOL bOdd = !nPgNum || 0 != ( nPgNum % 2 );
 
     //Eine Seite erzeugen und in das Layout stellen
