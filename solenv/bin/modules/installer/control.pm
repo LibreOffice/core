@@ -379,11 +379,14 @@ sub determine_ship_directory
     my $shipdrive = $ENV{'SHIPDRIVE'};
 
     my $languagestring = $$languagesref;
-    if ( $installer::globals::is_unix_multi ) { $languagestring = $installer::globals::unixmultipath; } # AAA
+    if ( $installer::globals::is_unix_multi ) { $languagestring = $installer::globals::unixmultipath; }
+
+    my $productstring = $installer::globals::product;
+    if (( $installer::globals::languagepack ) && ( ! $installer::globals::is_unix_multi )) { $productstring = $productstring . "_languagepack"; }
 
     my $destdir = $shipdrive . $installer::globals::separator . $installer::globals::compiler .
                 $installer::globals::productextension . $installer::globals::separator .
-                $installer::globals::product . $installer::globals::separator .
+                $productstring . $installer::globals::separator .
                 $installer::globals::build . "_" . $installer::globals::lastminor . "_" .
                 "native_inprogress-number_" . $languagestring . "\." . $installer::globals::buildid;
 
