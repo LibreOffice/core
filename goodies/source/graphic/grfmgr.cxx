@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfmgr.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: thb $ $Date: 2002-10-29 16:59:54 $
+ *  last change: $Author: thb $ $Date: 2002-10-31 09:01:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -730,7 +730,7 @@ BOOL GraphicObject::Draw( OutputDevice* pOut, const Point& rPt, const Size& rSz,
 BOOL GraphicObject::DrawTiled( OutputDevice* pOut, const Rectangle& rArea, const Size& rSize,
                                const Size& rOffset, const GraphicAttr* pAttr, ULONG nFlags )
 {
-    enum { MaxTileCacheSize1D=100 };
+    enum { MaxTileCacheSize1D=10 };
 
     if( pOut == NULL || rSize.Width() == 0 || rSize.Height() == 0 )
         return FALSE;
