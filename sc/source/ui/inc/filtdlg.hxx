@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtdlg.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2001-09-24 17:29:58 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:33:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,10 @@
 
 #ifndef SC_SCGLOB_HXX
 #include "global.hxx" // -> ScQueryParam
+#endif
+
+#ifndef SC_ADDRESS_HXX
+#include "address.hxx"
 #endif
 
 #ifndef SC_ANYREFDG_HXX
@@ -191,7 +195,7 @@ private:
     ScQueryItem*        pOutItem;
     ScViewData*         pViewData;
     ScDocument*         pDoc;
-    USHORT              nSrcTab;
+    SCTAB               nSrcTab;
 
     ComboBox*           aValueEdArr[3];
     ListBox*            aFieldLbArr[3];
@@ -199,8 +203,8 @@ private:
     USHORT              nFieldCount;
     BOOL                bRefInputMode;
 
-    TypedStrCollection* pEntryLists[MAXCOL+1];
-    USHORT              nHeaderPos[MAXCOL+1];
+    TypedStrCollection* pEntryLists[MAXCOLCOUNT];
+    USHORT              nHeaderPos[MAXCOLCOUNT];
 
     // Hack: RefInput-Kontrolle
     Timer*  pTimer;
@@ -213,7 +217,7 @@ private:
     void            UpdateValueList ( USHORT nList );
     void            UpdateHdrInValueList( USHORT nList );
     void            ClearValueList  ( USHORT nList );
-    USHORT          GetFieldSelPos  ( USHORT nField );
+    USHORT          GetFieldSelPos  ( SCCOL nField );
     ScQueryItem*    GetOutputItem   ();
 
     // Handler:
