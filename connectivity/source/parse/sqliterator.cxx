@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqliterator.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-15 12:49:26 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 18:34:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,9 @@
 #ifndef _CONNECTIVITY_PARSE_SQLITERATOR_HXX_
 #include "connectivity/sqliterator.hxx"
 #endif
+#ifndef _CONNECTIVITY_SDBCX_TABLE_HXX_
+#include "connectivity/sdbcx/VTable.hxx"
+#endif
 
 #ifndef _CONNECTIVITY_SQLPARSE_HXX
 #include <connectivity/sqlparse.hxx>
@@ -99,6 +102,7 @@
 
 using namespace ::comphelper;
 using namespace ::connectivity;
+using namespace ::connectivity::sdbcx;
 using namespace ::dbtools;
 using namespace ::connectivity::parse;
 using namespace ::com::sun::star::uno;
@@ -161,6 +165,7 @@ void OSQLParseTreeIterator::dispose()
     m_xTables           = NULL;
     m_xDatabaseMetaData = NULL;
     m_pParser           = NULL;
+    m_aCreateColumns    = NULL;
     m_aTables.clear();
 }
 //-----------------------------------------------------------------------------
@@ -172,6 +177,7 @@ void OSQLParseTreeIterator::setParseTree(const OSQLParseNode * pNewParseTree)
     m_aGroupColumns = new OSQLColumns();
     m_aOrderColumns = new OSQLColumns();
     m_aParameters    = new OSQLColumns();
+    m_aCreateColumns = new OSQLColumns();
 
     m_pParseTree = pNewParseTree;
     if (!m_pParseTree)
@@ -211,6 +217,11 @@ void OSQLParseTreeIterator::setParseTree(const OSQLParseNode * pNewParseTree)
     {
         m_eStatementType = SQL_STATEMENT_ODBC_CALL;
     }
+    else if (SQL_ISRULE(m_pParseTree->getChild(0),base_table_def))
+    {
+        m_eStatementType = SQL_STATEMENT_CREATE_TABLE;
+        m_pParseTree = m_pParseTree->getChild(0);
+    }
     else
     {
         m_eStatementType = SQL_STATEMENT_UNKNOWN;
@@ -220,7 +231,7 @@ void OSQLParseTreeIterator::setParseTree(const OSQLParseNode * pNewParseTree)
 }
 
 //-----------------------------------------------------------------------------
-void OSQLParseTreeIterator::traverseOneTableName(const OSQLParseNode * pTableName, const ::rtl::OUString & rTableRange)
+void OSQLParseTreeIterator::traverseOneTableName(const OSQLParseNode * pTableName, const ::rtl::OUString & rTableRange, const sal_Bool bIsCreateTable)
 {
 
 
@@ -292,13 +303,32 @@ void OSQLParseTreeIterator::traverseOneTableName(const OSQLParseNode * pTableNam
                     }
                 }
             }
-            if(m_xTables->hasByName(aComposedName)) // the name can be changed before
-                m_xTables->getByName(aComposedName) >>= m_aTables[aTableRange];
-            else if(m_pParser)
+
+            sal_Bool bHasByName=m_xTables->hasByName(aComposedName);
+            if(!bIsCreateTable) //for select statement etc.
             {
-                ::rtl::OUString sErrMsg = m_pParser->getContext().getErrorMessage(IParseContext::ERROR_INVALID_TABLE);
-                sErrMsg = sErrMsg.replaceAt(sErrMsg.indexOf('#'),1,aTableName);
-                appendWarning(sErrMsg);
+                if (bHasByName)
+                    m_xTables->getByName(aComposedName) >>= m_aTables[aTableRange];
+                else if(m_pParser)
+                {
+                    ::rtl::OUString sErrMsg = m_pParser->getContext().getErrorMessage(IParseContext::ERROR_INVALID_TABLE);
+                    sErrMsg = sErrMsg.replaceAt(sErrMsg.indexOf('#'),1,aTableName);
+                    appendWarning(sErrMsg);
+                }
+            }
+            else    //for create table or view, can't have the same name
+            {
+                if (!bHasByName)
+                    setTableName(aTableName
+                                ,aCatalog.hasValue() ? ::comphelper::getString(aCatalog) : ::rtl::OUString()
+                                ,aSchema
+                                ,aTableRange);
+                else if(m_pParser)
+                {
+                    ::rtl::OUString sErrMsg = m_pParser->getContext().getErrorMessage(IParseContext::ERROR_INVALID_TABLE_EXIST);
+                    sErrMsg = sErrMsg.replaceAt(sErrMsg.indexOf('#'),1,aTableName);
+                    appendWarning(sErrMsg);
+                }
             }
 
         }
@@ -322,7 +352,7 @@ OSQLParseNode * OSQLParseTreeIterator::getQualified_join(OSQLParseNode *pTableRe
 
     OSQLParseNode *pNode = getTableRef(pTableRef->getChild(0),aTableRange);
     if(isTableNode(pNode))
-        traverseOneTableName(pNode,aTableRange);
+        traverseOneTableName(pNode,aTableRange,sal_False);
 
     sal_uInt32 nPos = 4;
     if(SQL_ISRULE(pTableRef,cross_union) || pTableRef->getChild(1)->getTokenID() != SQL_TOKEN_NATURAL)
@@ -330,7 +360,7 @@ OSQLParseNode * OSQLParseTreeIterator::getQualified_join(OSQLParseNode *pTableRe
 
     pNode = getTableRef(pTableRef->getChild(nPos),aTableRange);
     if(isTableNode(pNode))
-        traverseOneTableName(pNode,aTableRange);
+        traverseOneTableName(pNode,aTableRange,sal_False);
 
     return pNode;
 }
@@ -412,7 +442,7 @@ void OSQLParseTreeIterator::getSelect_statement(OSQLParseNode *pSelect)
         if (isTableNode(pTableRefCommalist->getChild(i)))
         {
             pTableName = pTableRefCommalist->getChild(i);
-            traverseOneTableName(pTableName,aTableRange);// aTableRange will be set inside to the tablename
+            traverseOneTableName(pTableName,aTableRange,sal_False);// aTableRange will be set inside to the tablename
         }
         else if (SQL_ISRULE(pTableRefCommalist->getChild(i),table_ref))
         {
@@ -422,7 +452,7 @@ void OSQLParseTreeIterator::getSelect_statement(OSQLParseNode *pSelect)
             {   // Tabellennamen gefunden
                 if(pTableRefCommalist->getChild(i)->count() == 4)   // Tabellenrange an Pos 2
                     aTableRange = pTableRefCommalist->getChild(i)->getChild(2)->getTokenValue();
-                traverseOneTableName(pTableName,aTableRange);
+                traverseOneTableName(pTableName,aTableRange,sal_False);
             }
             else if(SQL_ISPUNCTUATION(pTableName,"{"))
                 getQualified_join(pTableRefCommalist->getChild(i)->getChild(2),aTableRange);
@@ -470,17 +500,22 @@ void OSQLParseTreeIterator::traverseTableNames()
     else if (m_eStatementType == SQL_STATEMENT_INSERT)
     {
         pTableName = m_pParseTree->getChild(2);
-        traverseOneTableName(pTableName,aTableRange);
+        traverseOneTableName(pTableName,aTableRange,sal_False);
     }
     else if (m_eStatementType == SQL_STATEMENT_UPDATE)
     {
         pTableName = m_pParseTree->getChild(1);
-        traverseOneTableName(pTableName,aTableRange);
+        traverseOneTableName(pTableName,aTableRange,sal_False);
     }
     else if (m_eStatementType == SQL_STATEMENT_DELETE)
     {
         pTableName = m_pParseTree->getChild(2);
-        traverseOneTableName(pTableName,aTableRange);
+        traverseOneTableName(pTableName,aTableRange,sal_False);
+    }
+    else if (m_eStatementType == SQL_STATEMENT_CREATE_TABLE)
+    {
+        pTableName = m_pParseTree->getChild(2);
+        traverseOneTableName(pTableName,aTableRange,sal_True);
     }
 }
 //-----------------------------------------------------------------------------
@@ -586,6 +621,67 @@ sal_Bool OSQLParseTreeIterator::getColumnTableRange(const OSQLParseNode* pNode, 
     return sal_True;
 }
 
+//-----------------------------------------------------------------------------
+void OSQLParseTreeIterator::traverseCreateColumns(const OSQLParseNode* pSelectNode)
+{
+    //  aIteratorStatus.Clear();
+
+    if (!pSelectNode || m_eStatementType != SQL_STATEMENT_CREATE_TABLE || m_aTables.empty())
+    {
+        if(m_pParser)
+            appendWarning(m_pParser->getContext().getErrorMessage(IParseContext::ERROR_GENERAL));
+        return;
+    }
+    if (!SQL_ISRULE(pSelectNode,base_table_element_commalist))
+        return ;
+
+    for (sal_uInt32 i = 0; i < pSelectNode->count(); i++)
+    {
+        OSQLParseNode *pColumnRef = pSelectNode->getChild(i);
+
+        if (SQL_ISRULE(pColumnRef,column_def))
+        {
+            ::rtl::OUString aColumnName;
+            ::rtl::OUString aTypeName;
+            ::rtl::OUString aTableRange;
+            sal_Int32 nType = DataType::VARCHAR;
+            sal_Int32 nLen  = 0;
+            aColumnName = pColumnRef->getChild(0)->getTokenValue();
+
+            OSQLParseNode *pDatatype = pColumnRef->getChild(1);
+            if (pDatatype && SQL_ISRULE(pDatatype,data_type))
+            {
+                //data type
+                //  0 | 1| 2  |3
+                //char  (  20  )
+                aTypeName = pDatatype->getChild(0)->getTokenValue();
+                if (pDatatype->count() == 4
+                    && SQL_ISPUNCTUATION(pDatatype->getChild(1), "(")
+                    && SQL_ISPUNCTUATION(pDatatype->getChild(3) , ")") )
+                {
+                    nLen = pDatatype->getChild(2)->getTokenValue().toInt32();
+                }
+            }
+            else if(pDatatype && pDatatype->getNodeType() == SQL_NODE_KEYWORD)
+            {
+                aTypeName = ::rtl::OUString::createFromAscii("VARCHAR");
+            }
+
+            if (aTypeName.getLength())
+            {
+                //TO DO:Create a new class for create statement to handle field length
+                OParseColumn* pColumn = new OParseColumn(aColumnName,aTypeName,::rtl::OUString(),
+                    ColumnValue::NULLABLE_UNKNOWN,0,0,nType,sal_False,sal_False,m_aCaseEqual.isCaseSensitive());
+                pColumn->setFunction(sal_False);
+                pColumn->setRealName(aColumnName);
+
+                Reference< XPropertySet> xCol = pColumn;
+                m_aCreateColumns->push_back(xCol);
+            }
+        }
+
+    }
+}
 //-----------------------------------------------------------------------------
 void OSQLParseTreeIterator::traverseSelectColumnNames(const OSQLParseNode* pSelectNode)
 {
@@ -1244,21 +1340,32 @@ void OSQLParseTreeIterator::traverseAll()
             //  return;
     } else if (m_eStatementType == SQL_STATEMENT_INSERT) {
         // schon alles erledigt
+    } else if (m_eStatementType == SQL_STATEMENT_CREATE_TABLE) {
+        //0     |  1  |  2   |3|        4         |5
+        //create table sc.foo ( a char(20), b char )
+        const OSQLParseNode* pCreateNode = m_pParseTree->getChild(4);
+        traverseCreateColumns(pCreateNode);
     }
 }
 
 // Dummy-Implementationen:
 
 //-----------------------------------------------------------------------------
-void OSQLParseTreeIterator::setTableName(const ::rtl::OUString & rTableName, const ::rtl::OUString & rDBName, const ::rtl::OUString& rOwner,
+void OSQLParseTreeIterator::setTableName(const ::rtl::OUString & rTableName, const ::rtl::OUString & rCatalogName, const ::rtl::OUString& rSchemaName,
                               const ::rtl::OUString & rTableRange)
 {
 
     // nichts zu tun ...
+    OTable * xTab=new OTable(NULL,sal_False,rTableName
+                    ,::rtl::OUString::createFromAscii("Table")
+                    ,::rtl::OUString::createFromAscii("New Created Table")
+                    ,rSchemaName,rCatalogName);
 
+    m_aTables[rTableRange] = xTab;
 #ifdef SQL_TEST_PARSETREEITERATOR
     cout << "OSQLParseTreeIterator::setTableName"
          << (const char *) rTableName << ", "
+         << (const char *) rCatalogName << ", "
          << (const char *) rSchemaName << ", "
          << (const char *) rTableRange
          << "\n";
