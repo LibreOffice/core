@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-02 21:15:34 $
+ *  last change: $Author: kz $ $Date: 2001-11-13 23:14:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,7 @@ TabPage TP_CONTENT_OPT
         Text[ chinese_traditional ] = "è¼”åŠ©ç·š";
         Text[ turkish ] = "Visual aids";
         Text[ arabic ] = "ÎØæØ ãÓÇÚÏÉ";
-        Text[ finnish ] = "Hilfslinien";
+        Text[ finnish ] = "Ohjaimet";
         Text[ catalan ] = "Visual aids";
     };
     CheckBox CB_TXTBEG
@@ -221,7 +221,7 @@ TabPage TP_CONTENT_OPT
         Text[ chinese_traditional ] = "ç§»å‹•æ™‚é¡¯ç¤ºè¼”åŠ©ç·š(~W)";
         Text[ turkish ] = "Guides while moving";
         Text[ arabic ] = "ÎØæØ ãÓÇÚÏÉ ÃËäÇÁ ÇáÅÒÇÍÉ";
-        Text[ finnish ] = "H~ilfslinien beim ~Verschieben";
+        Text[ finnish ] = "Ohjaimet ~siirrettäessä";
         Text[ catalan ] = "Guides while moving";
     };
     CheckBox CB_HANDLE
@@ -248,7 +248,7 @@ TabPage TP_CONTENT_OPT
         Text[ chinese_traditional ] = "æ¨™æº–æ§é»(~P)";
         Text[ turkish ] = "Simple control points";
         Text[ arabic ] = "ãŞÇÈÖ ÈÓíØÉ";
-        Text[ finnish ] = "~Yksinkertaiset ohjauspisteet";
+        Text[ finnish ] = "~Peruskahvat";
         Text[ catalan ] = "Simple control points";
     };
     CheckBox CB_BIGHANDLE
@@ -275,7 +275,7 @@ TabPage TP_CONTENT_OPT
         Text[ chinese_traditional ] = "å¤§æ§é»";
         Text[ turkish ] = "Large control points";
         Text[ arabic ] = "ãŞÇÈÖ ßÈíÑÉ";
-        Text[ finnish ] = "Isot oh~jainpisteet";
+        Text[ finnish ] = "Isot kahvat";
         Text[ catalan ] = "Large control points";
     };
     FixedLine FL_WINDOW
@@ -331,7 +331,7 @@ TabPage TP_CONTENT_OPT
         Text[ korean ] = "ìˆ˜í‰ ìŠ¤í¬ë¡¤(~O)";
         Text[ turkish ] = "Yatay kaydırma ~çubuğu";
         Text[ language_user1 ] = " ";
-        Text[ finnish ] = "~Vaakavieritys";
+        Text[ finnish ] = "~Vaakavierityspalkki";
         Text[ catalan ] = "Barra de desplazamiento ~horizontal";
     };
     CheckBox CB_VSCROLL
@@ -359,7 +359,7 @@ TabPage TP_CONTENT_OPT
         Text[ korean ] = "ìˆ˜ì§ ìŠ¤í¬ë¡¤(~V)";
         Text[ turkish ] = "Di~key kaydırma çubuğu";
         Text[ language_user1 ] = " ";
-        Text[ finnish ] = "~Pystyvieritys";
+        Text[ finnish ] = "~Pystyvierityspalkki";
         Text[ catalan ] = "Barra de desplazamiento ~vertical";
     };
     CheckBox CB_HRULER
@@ -407,7 +407,7 @@ TabPage TP_CONTENT_OPT
         Text [ italian ] = "Ri~ghello verticale" ;
         Text [ portuguese_brazilian ] = "~R?gua vertical" ;
         Text [ portuguese ] = "~Régua vertical" ;
-        Text [ finnish ] = "~Pystyviivain" ;
+        Text [ finnish ] = "~Viivain pystytasossa" ;
         Text [ danish ] = "Lodret lineal" ;
         Text [ french ] = "Règle verticale" ;
         Text [ swedish ] = "Vertik~al linjal" ;
@@ -604,7 +604,7 @@ TabPage TP_CONTENT_OPT
         Text[ korean ] = "í•„ë“œ ì½”ë“œ(~F)";
         Text[ turkish ] = "Alan adları";
         Text[ language_user1 ] = " ";
-        Text[ finnish ] = "~Kentt?koodit";
+        Text[ finnish ] = "~Kenttäkoodit";
         Text[ catalan ] = "~Nombres del campo";
     };
     CheckBox CB_POSTIT
@@ -645,7 +645,7 @@ TabPage TP_CONTENT_OPT
         Text [ italian ] = "Sfondo" ;
         Text [ portuguese_brazilian ] = "Fundo" ;
         Text [ portuguese ] = "Destacar" ;
-        Text [ finnish ] = "Korostetaan" ;
+        Text [ finnish ] = "Korostus" ;
         Text [ danish ] = "Underlægning" ;
         Text [ french ] = "Trame de fond" ;
         Text [ swedish ] = "Bakgrund" ;
@@ -675,7 +675,7 @@ TabPage TP_CONTENT_OPT
         Text [ italian ] = "~Voci di indice" ;
         Text [ portuguese_brazilian ] = "Entradas do ?ndice" ;
         Text [ portuguese ] = "~Entradas de índice" ;
-        Text [ finnish ] = "~Hakemistomerkinn?t" ;
+        Text [ finnish ] = "~Hakemistomerkinnät" ;
         Text [ danish ] = "Indekselementer" ;
         Text [ french ] = "E~ntrées d'index" ;
         Text [ swedish ] = "Förte~ckningsposter" ;
@@ -775,7 +775,7 @@ TabPage TP_CONTENT_OPT
         Text[ korean ] = "í•„ë“œ(~L)";
         Text[ turkish ] = "Alanlar";
         Text[ language_user1 ] = " ";
-        Text[ finnish ] = "~Kent?t";
+        Text[ finnish ] = "~Kentät";
         Text[ catalan ] = "~Campos";
     };
     FixedLine FL_SETTINGS
@@ -826,7 +826,7 @@ TabPage TP_CONTENT_OPT
         Text[ polish ] = "Jednostka miary";
         Text[ japanese ] = "ä½¿ã†å˜ä½";
         Text [ norwegian ] = "Metriske Enheter" ;
-        Text [ finnish ] = "Mittayksiköt" ;
+        Text [ finnish ] = "Mittayksikkö" ;
         Text[ chinese_traditional ] = "å®šé‡å–®ä½";
         Text[ arabic ] = "æÍÏÉ ÇáŞíÇÓ";
         Text[ greek ] = "~ÌïíÜäá ìİôñçóçò";
@@ -1165,7 +1165,7 @@ TabPage TP_OPTPRINT_PAGE
         Text [ italian ] = "I~nvertito" ;
         Text [ portuguese_brazilian ] = "Re~vertido" ;
         Text [ portuguese ] = "~Inversão" ;
-        Text [ finnish ] = "~K??nnetty" ;
+        Text [ finnish ] = "~Käännetty" ;
         Text [ danish ] = "Omvendt" ;
         Text [ french ] = "Ordre in~versé" ;
         Text [ swedish ] = "~Omvänt" ;
@@ -1222,7 +1222,7 @@ TabPage TP_OPTPRINT_PAGE
         Text [ italian ] = "~Senza" ;
         Text [ portuguese_brazilian ] = "~Nenhum" ;
         Text [ portuguese ] = "~Nenhum" ;
-        Text [ finnish ] = "~Ei mit??n" ;
+        Text [ finnish ] = "~Ei mitään" ;
         Text [ danish ] = "Ingen" ;
         Text [ french ] = "~Aucun(e)" ;
         Text [ swedish ] = "~Inga" ;
@@ -1448,7 +1448,7 @@ TabPage TP_OPTPRINT_PAGE
         Text[ chinese_traditional ] = "æ¡ç”¨å°è¡¨æ©Ÿè¨­å®šçš„ç´™å¼µä¾†æº(~P)";
         Text[ turkish ] = "Yazıcı ayarlarını kullan";
         Text[ arabic ] = "ÏÑÌ ÇáæÑŞ ãä ÅÚÏÇÏÇÊ ÇáØÇÈÚÉ";
-        Text[ finnish ] = "From printer ~settings";
+        Text[ finnish ] = "~Paperilokero tulostimen asetuksista";
         Text[ catalan ] = "Bandeja según c~onfiguración de impresora";
         Text[ language_user1 ] = "EM19.3.01: appears to be the continuation of \"Paper tray...\" so NO cap at start.";
     };
@@ -1477,7 +1477,7 @@ TabPage TP_OPTPRINT_PAGE
         Text[ chinese_traditional ] = "å‚³çœŸ(~F)";
         Text[ arabic ] = "ÇáİÇßÓ";
         Text[ turkish ] = "Faks";
-        Text[ finnish ] = "Fak~si";
+        Text[ finnish ] = "~Faksi";
         Text[ catalan ] = "~Fax";
     };
     ListBox LB_FAX
@@ -1511,7 +1511,7 @@ TabPage TP_OPTPRINT_PAGE
         Text[ chinese_traditional ] = "<ç„¡>";
         Text[ turkish ] = "<None>";
         Text[ arabic ] = "<None>";
-        Text[ finnish ] = "<Keiner>";
+        Text[ finnish ] = "<Ei mitään>";
         Text[ catalan ] = "<None>";
     };
 };
@@ -1538,7 +1538,7 @@ TabPage TP_STD_FONT
         Text[ dutch ] = "Standaardlettertypen (%1)";
         Text[ french ] = "Polices standard (%1)";
         Text[ spanish ] = "Fuentes predeterminadas (%1)";
-        Text[ finnish ] = "Oletusfontit";
+        Text[ finnish ] = "Perusfontit (%1)";
         Text[ italian ] = "Caratteri standard (%1)";
         Text[ danish ] = "Standardskrifttyper";
         Text[ swedish ] = "Standardteckensnitt (%1)";
@@ -1808,7 +1808,7 @@ TabPage TP_STD_FONT
         Text[ dutch ] = "Asiatisch";
         Text[ french ] = "Asiatique";
         Text[ spanish ] = "Asiático";
-        Text[ finnish ] = "Asian";
+        Text[ finnish ] = "Aasialainen";
         Text[ italian ] = "Asiatica";
         Text[ danish ] = "Asian";
         Text[ swedish ] = "Asiatiskt";
@@ -1833,7 +1833,7 @@ TabPage TP_STD_FONT
         Text[ dutch ] = "Westelijk";
         Text[ french ] = "Occidental";
         Text[ spanish ] = "Occidental";
-        Text[ finnish ] = "Western";
+        Text[ finnish ] = "Länsimainen";
         Text[ italian ] = "Occidentale";
         Text[ danish ] = "Western";
         Text[ swedish ] = "Västligt";
@@ -1882,7 +1882,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ chinese_traditional ] = "æ¨™æº–";
         Text[ turkish ] = "Defaults";
         Text[ arabic ] = "ÇİÊÑÇÖí";
-        Text[ finnish ] = "Säännöllinen";
+        Text[ finnish ] = "Oletusarvo";
         Text[ catalan ] = "Defaults";
     };
     CheckBox CB_HEADER
@@ -1911,7 +1911,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ korean ] = "í‘œì œ(~E)";
         Text[ language_user1 ] = " ";
         Text[ turkish ] = "Başlık";
-        Text[ finnish ] = "Yläotsikko";
+        Text[ finnish ] = "O~tsikko";
         Text[ catalan ] = "~Encabezado";
     };
     CheckBox CB_REPEAT_HEADER
@@ -1940,7 +1940,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ korean ] = "ëª¨ë“  í˜ì´ì§€ì—ì„œ ë°˜ë³µ(~P)";
         Text[ language_user1 ] = " ";
         Text[ turkish ] = "Başlığı her sayfada yinele";
-        Text[ finnish ] = "~Toista yläotsikko";
+        Text[ finnish ] = "To~ista joka sivulla";
         Text[ catalan ] = "~Repetir en cada página";
     };
     CheckBox CB_DONT_SPLIT
@@ -1998,7 +1998,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ korean ] = "í…Œë‘ë¦¬(~O)";
         Text[ language_user1 ] = " ";
         Text[ turkish ] = "Kenarlık";
-        Text[ finnish ] = "~Reunat";
+        Text[ finnish ] = "~Reunus";
         Text[ catalan ] = "~Borde";
     };
     FixedLine FL_TABLE_SEPARATOR
@@ -2032,7 +2032,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ korean ] = "í‘œì— ì…ë ¥";
         Text[ language_user1 ] = " ";
         Text[ turkish ] = "Tablolara giriş";
-        Text[ finnish ] = "Taulukoiden syöte";
+        Text[ finnish ] = "Taulukkojen syötöt";
         Text[ catalan ] = "Entrada en tablas";
     };
     CheckBox CB_NUMFORMATTING
@@ -2146,7 +2146,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ chinese_traditional ] = "ä½¿ç”¨éµç›¤";
         Text[ turkish ] = "Keyboard handling";
         Text[ arabic ] = "ÇÓÊÎÏÇã áæÍÉ ÇáãİÇÊíÍ";
-        Text[ finnish ] = "Tastaturbedienung";
+        Text[ finnish ] = "Näppäimistön käsittely";
         Text[ catalan ] = "Keyboard handling";
     };
     FixedText FT_MOVE
@@ -2162,7 +2162,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ dutch ] = "Cellen verplaatsen";
         Text[ french ] = "Déplacement des cellules";
         Text[ spanish ] = "Desplazar celdas";
-        Text[ finnish ] = "Umschalt- und Pfeiltaste gedrückt";
+        Text[ finnish ] = "Siirrä soluja";
         Text[ italian ] = "Sposta celle";
         Text[ danish ] = "Shift and arrow key pressed";
         Text[ swedish ] = "Flytta celler";
@@ -2277,7 +2277,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ dutch ] = "Cel invoegen";
         Text[ french ] = "Insertion de cellules";
         Text[ spanish ] = "Insertar celda";
-        Text[ finnish ] = "Lisää";
+        Text[ finnish ] = "Lisää solu";
         Text[ italian ] = "Inserisci celle";
         Text[ danish ] = "Insert";
         Text[ swedish ] = "Infoga cell";
@@ -2316,7 +2316,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ korean ] = "ì¤„(~W)";
         Text[ turkish ] = "S~atır";
         Text[ language_user1 ] = " ";
-        Text[ finnish ] = "~Rivi";
+        Text[ finnish ] = "Ri~vi";
         Text[ catalan ] = "F~ila";
     };
     MetricField MF_ROWINSERT
@@ -2403,7 +2403,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ chinese_traditional ] = "ç§»å‹•æ™‚åŸ·è¡Œçš„å‹•ä½œ";
         Text[ turkish ] = "Behaviour while moving";
         Text[ arabic ] = "ÇáÊÕÑİ ÃËäÇÁ ÇáÅÒÇÍÉ";
-        Text[ finnish ] = "Verhalten während des Verschiebens";
+        Text[ finnish ] = "Rivien ja sarakkeiden toiminta";
         Text[ catalan ] = "Behaviour while moving";
     };
     RadioButton RB_FIX
@@ -2431,7 +2431,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ korean ] = "ê³ ì •(~F)";
         Text[ turkish ] = "Sab~it";
         Text[ language_user1 ] = " ";
-        Text[ finnish ] = "~Kiinte?";
+        Text[ finnish ] = "~Kiinteä";
         Text[ catalan ] = "Fi~jo";
     };
     FixedText FT_FIX
@@ -2449,7 +2449,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ dutch ] = "Veranderingen hebben alleen uitwerkingen op het aangrenzende bereik";
         Text[ french ] = "Modifications n'affectent que la plage adjacente";
         Text[ spanish ] = "Las modificaciones afectan solo a la fila o columna contigua";
-        Text[ finnish ] = "Muutokset vaikuttavat vain vierekk?iseen alueeseen";
+        Text[ finnish ] = "Muutokset vaikuttavat vain vierekkäiseen alueeseen";
         Text[ italian ] = "Le modifiche di una riga si ripercuotono solo sulle aree adiacenti";
         Text[ danish ] = "Række- eller kolonneændringer påvirker kun den direkte nabo";
         Text[ swedish ] = "Ändringar påverkar bara den omedelbara omgivningen";
@@ -2488,7 +2488,7 @@ TabPage TP_OPTTABLE_PAGE
         Text[ korean ] = "ê³ ì •ë¨,ë¹„ë¡€(~X)";
         Text[ turkish ] = "Sabi~t orantılı";
         Text[ language_user1 ] = " ";
-        Text[ finnish ] = "~Kiinte?, suhteellinen";
+        Text[ finnish ] = "~Kiinteä, suhteellinen";
         Text[ catalan ] = "Fijo, ~proporcional";
     };
     FixedText FT_FIXPROP
@@ -2614,7 +2614,7 @@ TabPage TP_OPTSRCVIEW
         Text[ korean ] = "êµ¬ë¬¸ ê°•ì¡°ë¥¼ ìœ„í•œ ìƒ‰ìƒ ì§€ì •";
         Text[ turkish ] = "Söz dizimi vurgusu için renk düzeni";
         Text[ language_user1 ] = " ";
-        Text[ finnish ] = "Syntaksin korostamiseen käytettävät värit";
+        Text[ finnish ] = "Syntaksin korostuksen värit";
         Text[ catalan ] = "Colores para sintaxis-destacado";
     };
     FixedText FT_SGML
@@ -2784,7 +2784,7 @@ TabPage TP_OPTSHDWCRSR
         Text[ dutch ] = "Weergeven van";
         Text[ french ] = "Affichage";
         Text[ spanish ] = "Mostrar";
-        Text[ finnish ] = "Nicht druckbare Zeichen";
+        Text[ finnish ] = "Näkymä kohteesta";
         Text[ italian ] = "Caratteri non stampabili";
         Text[ danish ] = "Tegn som ikke kan udskrives";
         Text[ swedish ] = "Visa";
@@ -2984,7 +2984,7 @@ TabPage TP_OPTSHDWCRSR
         Text [ italian ] = "Testo nascosto" ;
         Text [ portuguese_brazilian ] = "~Texto oculto" ;
         Text [ portuguese ] = "~Texto oculto" ;
-        Text [ finnish ] = "Piiloteksti" ;
+        Text [ finnish ] = "~Piilotettu teksti" ;
         Text [ danish ] = "Skjult tekst" ;
         Text [ french ] = "Texte ~masqué" ;
         Text [ swedish ] = "Dold te~xt" ;
@@ -3121,7 +3121,7 @@ TabPage TP_OPTSHDWCRSR
         Text[ korean ] = "ì‚½ì…";
         Text[ turkish ] = "Ekle";
         Text[ language_user1 ] = " ";
-        Text[ finnish ] = "Lis??";
+        Text[ finnish ] = "Lisää";
         Text[ catalan ] = "Insertar";
     };
     RadioButton RB_SHDWCRSFILLMARGIN
@@ -3179,7 +3179,7 @@ TabPage TP_OPTSHDWCRSR
         Text[ korean ] = "ì¢Œì¸¡ ë‹¨ë½ì—¬ë°±(~L)";
         Text[ turkish ] = "Sol ~paragraf kenarı";
         Text[ language_user1 ] = " ";
-        Text[ finnish ] = "~Vasemman kappaleen marginaali";
+        Text[ finnish ] = "~Vasen kappalemarginaali";
         Text[ catalan ] = "~Margen izquierdo del párrafo";
     };
     RadioButton RB_SHDWCRSFILLTAB
@@ -3235,7 +3235,7 @@ TabPage TP_OPTSHDWCRSR
         Text[ korean ] = "íƒ­ê³¼ ê°„ê²©(~N)";
         Text[ turkish ] = "Sekmeler ve ~boşluklar";
         Text[ language_user1 ] = " ";
-        Text[ finnish ] = "~Sarkaimet ja v?lit";
+        Text[ finnish ] = "~Sarkaimet ja välit";
         Text[ catalan ] = "Tabulación y ~espacios";
     };
     FixedText FT_SHDWCRSCOLOR
@@ -3263,7 +3263,7 @@ TabPage TP_OPTSHDWCRSR
         Text[ korean ] = "ìƒ‰ìƒ(~R)";
         Text[ turkish ] = "~Renk";
         Text[ language_user1 ] = " ";
-        Text[ finnish ] = "~V?ri";
+        Text[ finnish ] = "~Väri";
         Text[ catalan ] = "~Color";
     };
     ListBox LB_SHDWCRSCOLOR
@@ -3297,7 +3297,7 @@ TabPage TP_OPTSHDWCRSR
         Text[ chinese_traditional ] = "å…‰æ¨™åœ¨ä¿è­·å€åŸŸä¹‹ä¸­";
         Text[ turkish ] = "Cursor in protected areas";
         Text[ arabic ] = "ÇáãÄÔÑ İí ãäÇØŞ ãÍãíÉ";
-        Text[ finnish ] = "~Cursor in geschützten Zonen";
+        Text[ finnish ] = "Kohdistin suojatuilla alueilla";
         Text[ catalan ] = "Cursor in protected areas";
     };
     CheckBox CB_ALLOW_IN_PROT
@@ -3326,11 +3326,12 @@ TabPage TP_OPTSHDWCRSR
         Text[ chinese_traditional ] = "å…è¨±";
         Text[ turkish ] = "İmlecin korumalı bölümlere girmesine izin ver";
         Text[ arabic ] = "ÇáÓãÇÍ ÈÇÓÊÎÏÇã";
-        Text[ finnish ] = "~Allow cursor in protected areas";
+        Text[ finnish ] = "Ota käyttöön";
         Text[ catalan ] = "~Permitir cursor en zonas protegidas";
         Text[ language_user1 ] = " ";
     };
 };
+
 
 
 
