@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.119 $
+ *  $Revision: 1.120 $
  *
- *  last change: $Author: pl $ $Date: 2002-09-19 07:54:51 $
+ *  last change: $Author: hdu $ $Date: 2002-09-19 13:09:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5700,51 +5700,63 @@ xub_StrLen OutputDevice::GetTextBreak( const String& rOrigStr, long nTextWidth,
     DBG_TRACE( "OutputDevice::GetTextBreak()" );
     DBG_CHKTHIS( OutputDevice, ImplDbgCheckOutputDevice );
 
-    String aExtraStr( &nExtraChar, 1 );
-    SalLayout* pSalLayout = ImplLayout( aExtraStr, 0, 1, Point(0,0) );
-    long nExtraWidth = 0;
-    if( pSalLayout )
-    {
-        nExtraWidth = pSalLayout->GetTextWidth();
-        pSalLayout->Release();
-    }
-
-    pSalLayout = ImplLayout( rOrigStr, nIndex, nLen, Point(0,0) );
     xub_StrLen nRetVal = STRING_LEN;
     rExtraCharPos = nRetVal;
-    if( pSalLayout )
+
+    SalLayout* pSalLayout = ImplLayout( rOrigStr, nIndex, nLen, Point(0,0) );
+    if( !pSalLayout )
+        return STRING_LEN;
+
+    // return early if it fits completely
+    long nWidthFactor = pSalLayout->GetUnitsPerPixel();
+    long nSubPixelFactor = (nWidthFactor < 64 ) ? 64 : 1;
+
+    nTextWidth *= nWidthFactor * nSubPixelFactor;
+    long nTextWidth2 = ImplLogicWidthToDevicePixel( nTextWidth );
+    long nTextWidth3 = nTextWidth2;
+    long nCharExtra2 = 0;
+    if( nCharExtra != 0 )
     {
-        // convert logical widths into layout units
-        // NOTE: be very careful to avoid rounding errors for nCharExtra case
-        // problem with rounding errors especially for small nCharExtras
-        // TODO: remove when layout units have subpixel granularity
-        long nWidthFactor = pSalLayout->GetUnitsPerPixel();
-        long nSubPixelFactor = (nWidthFactor < 64 ) ? 64 : 1;
-        nTextWidth *= nWidthFactor * nSubPixelFactor;
-        nExtraWidth *= nSubPixelFactor;
-        long nTextWidth2 = ImplLogicWidthToDevicePixel( nTextWidth );
-        long nCharExtra2 = 0;
-        if( nCharExtra != 0 )
-        {
-            nCharExtra *= nWidthFactor * nSubPixelFactor;
-            nCharExtra2 = ImplLogicWidthToDevicePixel( nCharExtra );
-        }
+        nCharExtra *= nWidthFactor * nSubPixelFactor;
+        nCharExtra2 = ImplLogicWidthToDevicePixel( nCharExtra );
 
-        nRetVal = pSalLayout->GetTextBreak( nTextWidth2 - nExtraWidth, nCharExtra2, nSubPixelFactor );
-        if( (nCharExtra2 != 0) && (nRetVal != STRING_LEN) )
-        {
-            nTextWidth -= (nRetVal - nIndex - 1) * nCharExtra;
-            nTextWidth2 = ImplLogicWidthToDevicePixel( nTextWidth );
-        }
-
-        // calculate rExtraCharPos
-        if( nCharExtra2 != 0 )
-            rExtraCharPos = pSalLayout->GetTextBreak( nTextWidth2 + nCharExtra2, 0, nSubPixelFactor );
-        if( rExtraCharPos == STRING_LEN )
-            rExtraCharPos = nRetVal;
-
-        pSalLayout->Release();
+        xub_StrLen nEndIndex = rOrigStr.Len();
+        if( (ULONG)nIndex + nLen < nEndIndex )
+            nEndIndex = nIndex + nLen;
+        nTextWidth3 -= (nEndIndex - nIndex) * nCharExtra2;
     }
+
+    if( (pSalLayout->GetTextWidth() * nSubPixelFactor) <= nTextWidth3 )
+        return STRING_LEN;
+
+    // get width of extrachar
+    String aExtraStr( &nExtraChar, 1 );
+    SalLayout* pExtraLayout = ImplLayout( aExtraStr, 0, 1, Point(0,0) );
+    long nExtraWidth = 0;
+    if( pExtraLayout )
+    {
+        nExtraWidth = pExtraLayout->GetTextWidth() * nSubPixelFactor;
+        pExtraLayout->Release();
+    }
+
+    // convert logical widths into layout units
+    // NOTE: be very careful to avoid rounding errors for nCharExtra case
+    // problem with rounding errors especially for small nCharExtras
+    // TODO: remove when layout units have subpixel granularity
+    nRetVal = pSalLayout->GetTextBreak( nTextWidth2 - nExtraWidth, nCharExtra2, nSubPixelFactor );
+    if( (nCharExtra2 != 0) && (nRetVal != STRING_LEN) )
+    {
+        nTextWidth -= (nRetVal - nIndex - 1) * nCharExtra;
+        nTextWidth2 = ImplLogicWidthToDevicePixel( nTextWidth );
+    }
+
+    // calculate rExtraCharPos
+    if( nCharExtra2 != 0 )
+        rExtraCharPos = pSalLayout->GetTextBreak( nTextWidth2 + nCharExtra2, 0, nSubPixelFactor );
+    if( rExtraCharPos == STRING_LEN )
+        rExtraCharPos = nRetVal;
+
+    pSalLayout->Release();
 
     return nRetVal;
 }
