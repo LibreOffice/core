@@ -2,9 +2,9 @@
  *
  *  $RCSfile: read.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 09:36:01 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 14:00:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,9 @@
 #ifndef SC_FPROGRESSBAR_HXX
 #include "fprogressbar.hxx"
 #endif
+#ifndef SC_XLTRACER_HXX
+#include "xltracer.hxx"
+#endif
 #ifndef SC_XIPAGE_HXX
 #include "xipage.hxx"
 #endif
@@ -94,15 +97,15 @@
 #ifndef SC_XIESCHER_HXX
 #include "xiescher.hxx"
 #endif
+#ifndef SC_XIPIVOT_HXX
+#include "xipivot.hxx"
+#endif
 
 #ifndef SC_XCLIMPCHARTS_HXX
 #include "XclImpCharts.hxx"
 #endif
 #ifndef SC_XCLIMPCHANGETRACK_HXX
 #include "XclImpChangeTrack.hxx"
-#endif
-#ifndef SC_XLTRACER_HXX
-#include "xltracer.hxx"
 #endif
 
 #include "root.hxx"
@@ -1134,30 +1137,32 @@ FltError ImportExcel8::Read( void )
                     case 0x25:  Defrowheight2(); break; // DEFAULTROWHEI[ 2      ]
                     case 0x31:  GetFontBuffer().ReadFont( maStrm );             break;
                     case 0x42:  Codepage(); break;      // CODEPAGE     [ 2345   ]
-                    case 0x51:  Dconref(); break;       // DCONREF                ##++##
                     case 0x55:  DefColWidth(); break;
                     case 0x56:  Builtinfmtcnt(); break; // BUILTINFMTCNT[  34    ]
                     case 0x8D:  Hideobj(); break;       // HIDEOBJ      [  345   ]
                     case 0x99:  Standardwidth(); break; // STANDARDWIDTH[   45   ]
                     case 0xD3:  bHasBasic = TRUE; break;
-                    case 0xD5:  SXIdStm(); break;       // SXIDSTM                ##++##
                     case 0xDE:  Olesize(); break;
                     case 0xE0:  GetXFBuffer().ReadXF( maStrm );                 break;
-                    case 0xE3:  SXVs(); break;          // SXVS                   ##++##
                     case 0xEB:  Msodrawinggroup(); break;
                     case 0x01BA: Codename( TRUE ); break;
                     case 0x0225: Defrowheight345();break;//DEFAULTROWHEI[  345   ]
                     case 0x0293: GetXFBuffer().ReadStyle( maStrm );             break;
                     case 0x041E: GetNumFmtBuffer().ReadFormat( maStrm );        break;
 
-                    case EXC_ID_SST:            GetSst().ReadSst( maStrm );                 break;
-                    case EXC_ID_TABID:          GetTabInfo().ReadTabid( maStrm );           break;
-                    case EXC_ID_NAME:           GetNameBuffer().ReadName( maStrm );         break;
-                    case EXC_ID_EXTERNSHEET:    GetLinkManager().ReadExternsheet( maStrm ); break;
-                    case EXC_ID_SUPBOOK:        GetLinkManager().ReadSupbook( maStrm );     break;
-                    case EXC_ID_XCT:            GetLinkManager().ReadXct( maStrm );         break;
-                    case EXC_ID_CRN:            GetLinkManager().ReadCrn( maStrm );         break;
-                    case EXC_ID_EXTERNNAME:     GetLinkManager().ReadExternname( maStrm );  break;
+                    case EXC_ID_SST:            GetSst().ReadSst( maStrm );                     break;
+                    case EXC_ID_TABID:          GetTabInfo().ReadTabid( maStrm );               break;
+                    case EXC_ID_NAME:           GetNameBuffer().ReadName( maStrm );             break;
+
+                    case EXC_ID_EXTERNSHEET:    GetLinkManager().ReadExternsheet( maStrm );     break;
+                    case EXC_ID_SUPBOOK:        GetLinkManager().ReadSupbook( maStrm );         break;
+                    case EXC_ID_XCT:            GetLinkManager().ReadXct( maStrm );             break;
+                    case EXC_ID_CRN:            GetLinkManager().ReadCrn( maStrm );             break;
+                    case EXC_ID_EXTERNNAME:     GetLinkManager().ReadExternname( maStrm );      break;
+
+                    case EXC_ID_DCONREF:        GetPivotTableManager().ReadDconref( maStrm );   break;
+                    case EXC_ID_SXIDSTM:        GetPivotTableManager().ReadSxidstm( maStrm );   break;       // SXIDSTM                ##++##
+                    case EXC_ID_SXVS:           GetPivotTableManager().ReadSxvs( maStrm );      break;          // SXVS                   ##++##
                 }
 
             }
@@ -1267,7 +1272,7 @@ FltError ImportExcel8::Read( void )
                         case EXC_ID_DV:             XclImpValidation::ReadDV( maStrm );             break;
 
                         case EXC_ID_QSI:            GetWebQueryBuffer().ReadQsi( maStrm );          break;
-                        case EXC_ID_SXSTRING:       GetWebQueryBuffer().ReadSxstring( maStrm );     break;
+                        case EXC_ID_WQSTRING:       GetWebQueryBuffer().ReadWqstring( maStrm );     break;
                         case EXC_ID_PQRY:           GetWebQueryBuffer().ReadParamqry( maStrm );     break;
                         case EXC_ID_WQSETT:         GetWebQueryBuffer().ReadWqsettings( maStrm );   break;
                         case EXC_ID_WQTABLES:       GetWebQueryBuffer().ReadWqtables( maStrm );     break;
@@ -1288,19 +1293,16 @@ FltError ImportExcel8::Read( void )
                         case 0x0007:    RecString();            break;  // STRING       [ 2345   ]
                         case 0x003C:    Cont();                 break;  // CONTINUE
                         case 0x00A0:    Scl();                  break;  // SCL          [   45   ]
-                        case 0x00B0:    SXView();               break;  // SXVIEW
-                        case 0x00B1:    SXVd();                 break;  // SXVD
-                        case 0x00B2:    SXVi();                 break;  // SXVI
-                        case 0x00B4:    SXIvd();                break;  // SXIVD
-                        case 0x00B5:    SXLi();                 break;  // SXLI
-                        case 0x00B6:    SXPi();                 break;  // SXPI
-                        case 0x00C5:    SXDi();                 break;  // SXDI
-                        case 0x00F0:    SXRule();               break;  // SXRULE
-                        case 0x00F1:    SXEx();                 break;  // SXEX
-                        case 0x00F2:    SXFilt();               break;  // SXFILT
-                        case 0x00F7:    SXSelect();             break;  // SXSELECT
-                        case 0x0100:    SXVdex();               break;  // SXVDEX
                         case 0x0207:    RecString();            break;  // STRING       [ 2345   ]
+
+                        case EXC_ID_SXVIEW:         GetPivotTableManager().ReadSxview( maStrm );    break;
+                        case EXC_ID_SXVD:           GetPivotTableManager().ReadSxvd( maStrm );      break;
+                        case EXC_ID_SXVI:           GetPivotTableManager().ReadSxvi( maStrm );      break;
+                        case EXC_ID_SXIVD:          GetPivotTableManager().ReadSxivd( maStrm );     break;
+                        case EXC_ID_SXPI:           GetPivotTableManager().ReadSxpi( maStrm );      break;
+                        case EXC_ID_SXDI:           GetPivotTableManager().ReadSxdi( maStrm );      break;
+                        case EXC_ID_SXVDEX:         GetPivotTableManager().ReadSxvdex( maStrm );    break;
+
                         case 0x0809:                                    // BOF          [    5   ]
                         {
                             Bof5();
