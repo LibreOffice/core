@@ -2,9 +2,9 @@
  *
  *  $RCSfile: border.src,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:15:10 $
+ *  last change: $Author: hjs $ $Date: 2003-08-18 15:08:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,12 @@ TabPage RID_SVXPAGE_BORDER
     Text[ korean ] = "테두리";
     Text[ turkish ] = "Kenarl�k";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Borders";
+    Text[ thai ] = "เส้นขอบ";
+    Text[ czech ] = "Okraje";
+    Text[ hebrew ] = "‮צסגרות‬";
+    Text[ hindi ] = "किनारें";
+    Text[ slovak ] = "Okraje";
     FixedLine FL_BORDER
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
@@ -802,12 +808,6 @@ TabPage RID_SVXPAGE_BORDER
         MaskColor = STD_MASKCOLOR ;
         _SHADOW_IDLIST_
     };
-    Text[ catalan ] = "Borders";
-    Text[ thai ] = "เส้นขอบ";
-    Text[ czech ] = "Okraje";
-    Text[ hebrew ] = "‮צסגרות‬";
-    Text[ hindi ] = "किनारें";
-    Text[ slovak ] = "Okraje";
 };
 
 String RID_SVXSTR_TABLE_PRESET_NONE
