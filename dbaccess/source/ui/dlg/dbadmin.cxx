@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-25 08:27:18 $
+ *  last change: $Author: fs $ $Date: 2001-06-25 16:04:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,474 +176,6 @@ using namespace com::sun::star::lang;
 using namespace com::sun::star::util;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::container;
-
-//=========================================================================
-//= ODatasourceMap
-//=========================================================================
-//-------------------------------------------------------------------------
-ODatasourceMap::ODatasourceMap(const Reference< XMultiServiceFactory > _rxORB)
-    :m_xORB(_rxORB)
-{
-    // create the DatabaseContext service
-    DBG_ASSERT(m_xORB.is(), "ODatasourceMap::ODatasourceMap: need a service factory !");
-    try
-    {
-        m_xDatabaseContext = Reference< XNameAccess >(m_xORB->createInstance(SERVICE_SDB_DATABASECONTEXT), UNO_QUERY);
-    }
-    catch(Exception&)
-    {
-    }
-
-    // initialize our map
-    if (m_xDatabaseContext.is())
-    {
-        Sequence< ::rtl::OUString > aDatasources = m_xDatabaseContext->getElementNames();
-        const ::rtl::OUString* pDatasources = aDatasources.getConstArray();
-        for (sal_Int32 i=0; i<aDatasources.getLength(); ++i, ++pDatasources)
-            m_aDatasources[*pDatasources] = DatasourceInfo();
-    }
-}
-
-//-------------------------------------------------------------------------
-ODatasourceMap::Iterator ODatasourceMap::begin()
-{
-    return Iterator(this, m_aDatasources.begin());
-}
-
-//-------------------------------------------------------------------------
-ODatasourceMap::Iterator ODatasourceMap::end()
-{
-    return Iterator(this, m_aDatasources.end());
-}
-
-//-------------------------------------------------------------------------
-ODatasourceMap::Iterator ODatasourceMap::beginDeleted()
-{
-    return Iterator(this, m_aDeletedDatasources.begin());
-}
-
-//-------------------------------------------------------------------------
-ODatasourceMap::Iterator ODatasourceMap::endDeleted()
-{
-    return Iterator(this, m_aDeletedDatasources.end());
-}
-
-//-------------------------------------------------------------------------
-void ODatasourceMap::update(const ::rtl::OUString& _rName, SfxItemSet& _rSet)
-{
-    DatasourceInfosIterator aPos = m_aDatasources.find(_rName);
-    DBG_ASSERT(aPos != m_aDatasources.end(), "ODatasourceMap::update: invalid name!!");
-    if (aPos == m_aDatasources.end())
-        return;
-
-    if (aPos->second.pModifications)
-        // already had modifications for this datasource
-        // -> simply update them
-        aPos->second.pModifications->Put(_rSet);
-    else
-    {
-        // this is the first time this data source is modified -> create a new set and initialize it
-        aPos->second.pModifications = new SfxItemSet(_rSet);
-        aPos->second.pModifications->Put(SfxStringItem(DSID_ORIGINALNAME, _rName));
-        aPos->second.pModifications->Put(SfxBoolItem(DSID_NEWDATASOURCE, sal_False));
-        aPos->second.pModifications->Put(SfxBoolItem(DSID_DELETEDDATASOURCE, sal_False));
-
-        // and reset the original name in the source set, it may contain an old one
-        _rSet.Put(SfxStringItem(DSID_ORIGINALNAME, _rName));
-    }
-}
-
-//-------------------------------------------------------------------------
-void ODatasourceMap::deleted(const ::rtl::OUString& _rName)
-{
-    DatasourceInfosIterator aPos = m_aDatasources.find(_rName);
-    DBG_ASSERT(aPos != m_aDeletedDatasources.end(), "ODatasourceMap::deleted: invalid access key!");
-    if (aPos == m_aDeletedDatasources.end())
-        return;
-
-    delete aPos->second.pModifications;
-    m_aDatasources.erase(aPos);
-}
-
-//-------------------------------------------------------------------------
-sal_Bool ODatasourceMap::restoreDeleted(sal_Int32 _nAccessId, ::rtl::OUString& _rName)
-{
-    MapInt2InfoIterator aPos = m_aDeletedDatasources.find(_nAccessId);
-    if (m_aDeletedDatasources.end() == aPos)
-    {
-        DBG_ERROR("ODatasourceSelector::restoreDeleted: invalid access id!");
-        return sal_False;
-    }
-
-    // the name (not the original name) of the data source
-    Iterator aEasyNameAccess(this, aPos);
-    ::rtl::OUString sName = aEasyNameAccess->getName();
-
-    // check if we have a not-deleted data source with that name
-    ConstDatasourceInfosIterator aExistentPos = m_aDatasources.find(sName);
-    if (m_aDatasources.end() != aExistentPos)
-        // yes -> too bad ...
-        return sal_False;
-
-    m_aDatasources[sName] = aPos->second;
-    m_aDeletedDatasources.erase(aPos);
-    _rName = sName;
-    return sal_True;
-}
-
-//-------------------------------------------------------------------------
-sal_Int32 ODatasourceMap::markDeleted(const ::rtl::OUString& _rName)
-{
-    DatasourceInfosIterator aPos = m_aDatasources.find(_rName);
-    DBG_ASSERT(aPos != m_aDatasources.end(), "ODatasourceMap::markDeleted: invalid name!!");
-    if (aPos == m_aDatasources.end())
-        return -1;
-
-    // after the DatasourceInfo moved from m_aDatasources to m_aDeletedDatasources, we loose the info
-    // of the name of the ds (which in m_aDatasources is the key). So later we need an modifications item set
-    // or the real object itself to obtain that name.
-    if (NULL == aPos->second.pModifications)
-        ensureObject(_rName);
-
-    // search a free access key
-    const sal_uInt32 nPrime = 65521;
-    sal_uInt32 nAccessKey = rand() % nPrime;    // the engendering
-
-    for (sal_uInt32 nLoop=0; nLoop<nPrime; ++nLoop, nAccessKey = (nAccessKey * nAccessKey) % nPrime)
-    {
-        ::std::pair< MapInt2InfoIterator, bool > aInsertPos
-            = m_aDeletedDatasources.insert(MapInt2Info::value_type(nAccessKey, aPos->second));
-        if (aInsertPos.second)
-            // a new entry was inserted into m_aDeletedDatasources, which means the key wasn't used yet
-            break;
-    }
-    if (nAccessKey<nPrime)
-    {   // we found a free key ...
-        // delete the DatasourceInfo from the other map
-        m_aDatasources.erase(aPos);
-        return nAccessKey;
-    }
-
-    DBG_ERROR("ODatasourceMap::markDeleted: could not find a free key (tried 65521 different ones ...)!");
-    return -1;
-}
-
-//-------------------------------------------------------------------------
-void ODatasourceMap::clearModifiedFlag(const ::rtl::OUString& _rName)
-{
-    DatasourceInfosIterator aPos = m_aDatasources.find(_rName);
-    DBG_ASSERT(aPos != m_aDatasources.end(), "ODatasourceMap::clearModifiedFlag: invalid name!!");
-    if (aPos == m_aDatasources.end())
-        return;
-
-    if (aPos->second.pModifications)
-    {
-        delete aPos->second.pModifications;
-        aPos->second.pModifications = NULL;
-    }
-}
-
-//-------------------------------------------------------------------------
-void ODatasourceMap::clearDeleted()
-{
-    for (   ConstMapInt2InfoIterator aLoopDeleted = m_aDeletedDatasources.begin();
-            aLoopDeleted != m_aDeletedDatasources.end();
-            ++aLoopDeleted
-        )
-    {
-        if (aLoopDeleted->second.pModifications)
-            delete aLoopDeleted->second.pModifications;
-    }
-    m_aDeletedDatasources.clear();
-}
-
-//-------------------------------------------------------------------------
-void ODatasourceMap::clear()
-{
-    // the "ordinary" data sources
-    for (   ConstDatasourceInfosIterator aLoop = m_aDatasources.begin();
-            aLoop != m_aDatasources.end();
-            ++aLoop
-        )
-    {
-        if (aLoop->second.pModifications)
-            delete aLoop->second.pModifications;
-    }
-    m_aDatasources.clear();
-
-    // the deleted ones
-    clearDeleted();
-}
-
-//-------------------------------------------------------------------------
-void ODatasourceMap::ensureObject(const ::rtl::OUString& _rName)
-{
-    DatasourceInfosIterator aPos = m_aDatasources.find(_rName);
-    DBG_ASSERT(aPos != m_aDatasources.end(), "ODatasourceMap::ensureObject: invalid name!!");
-    if (aPos == m_aDatasources.end())
-        return;
-
-    if (aPos->second.xDatasource.is())
-        // nothing to do, the object already exists
-        return;
-
-    try
-    {
-        if (m_xDatabaseContext.is() && _rName.getLength())
-            ::cppu::extractInterface(aPos->second.xDatasource, m_xDatabaseContext->getByName(_rName));
-        DBG_ASSERT(aPos->second.xDatasource.is(), "ODatasourceMap::ensureObject: could not retrieve the object!");
-    }
-    catch(NoSuchElementException&)
-    {
-        DBG_ERROR("ODatasourceMap::ensureObject: did not find the element with the given name!");
-    }
-    catch(WrappedTargetException&)
-    {
-        DBG_ERROR("ODatasourceMap::ensureObject: caught a WrappedTargetException!");
-    }
-}
-
-//-------------------------------------------------------------------------
-::rtl::OUString ODatasourceMap::adjustRealName(const ::rtl::OUString& _rName)
-{
-    DatasourceInfosIterator aPos = m_aDatasources.find(_rName);
-    DBG_ASSERT(aPos != m_aDatasources.end(), "ODatasourceMap::adjustRealName: invalid name!!");
-    if (aPos == m_aDatasources.end())
-        return _rName;
-
-    if (!aPos->second.pModifications)
-        return _rName;
-
-    SFX_ITEMSET_GET(*aPos->second.pModifications, pRealName, SfxStringItem, DSID_NAME, sal_True);
-    if (!pRealName)
-        return _rName;
-
-    ::rtl::OUString sRealName = pRealName->GetValue().GetBuffer();
-    if (sRealName.equals(_rName))
-        // all fine
-        return _rName;
-
-    DBG_ASSERT(m_aDatasources.end() == m_aDatasources.find(sRealName), "ODatasourceMap::adjustRealName: have an invalid real name!");
-
-    renamed(_rName, sRealName);
-    return sRealName;
-}
-
-//-------------------------------------------------------------------------
-void ODatasourceMap::renamed(const ::rtl::OUString& _rOldName, const ::rtl::OUString& _rNewName)
-{
-    DatasourceInfosIterator aPos = m_aDatasources.find(_rOldName);
-    DBG_ASSERT(aPos != m_aDatasources.end(), "ODatasourceMap::renamed: invalid name!!");
-    if (aPos == m_aDatasources.end())
-        return;
-
-    // insert the DatasourceInfo under the new name
-    DatasourceInfo aInfo = aPos->second;
-    m_aDatasources.erase(aPos);
-    m_aDatasources[_rNewName] = aInfo;
-}
-
-//-------------------------------------------------------------------------
-sal_Bool ODatasourceMap::exists(const ::rtl::OUString& _rName) const
-{
-    return isValid() && (m_aDatasources.end() != m_aDatasources.find(_rName));
-}
-
-//-------------------------------------------------------------------------
-Reference< XPropertySet > ODatasourceMap::createNew(const ::rtl::OUString& _rName, SfxItemPool* _pPool, const USHORT* _pRanges)
-{
-    Reference< XPropertySet > xReturn;
-    try
-    {
-        xReturn = Reference< XPropertySet >(m_xORB->createInstance(SERVICE_SDB_DATASOURCE), UNO_QUERY);
-    }
-    catch(Exception&)
-    {
-    }
-
-    if (xReturn.is())
-    {
-        // create a new item set
-        SfxItemSet* pItems = new SfxItemSet(*_pPool, _pRanges);
-        pItems->Put(SfxBoolItem(DSID_NEWDATASOURCE, sal_True));
-        pItems->Put(SfxStringItem(DSID_NAME, _rName));
-        pItems->Put(OPropertySetItem(DSID_DATASOURCE_UNO, xReturn));
-        m_aDatasources[_rName] = DatasourceInfo(xReturn, pItems);
-    }
-    return xReturn;
-}
-
-//-------------------------------------------------------------------------
-ODatasourceMap::ODatasourceInfo ODatasourceMap::operator[](const ::rtl::OUString _rName)
-{
-    ConstDatasourceInfosIterator aPos = m_aDatasources.find(_rName);
-    DBG_ASSERT(aPos != m_aDatasources.end(), "ODatasourceMap::operator[]: invalid name!!");
-    if (aPos == m_aDatasources.end())
-    {
-        // just prevent crashes, the result here is completely nonsense
-        static ODatasourceMap::DatasourceInfo aFallback;
-        return ODatasourceInfo(NULL, ::rtl::OUString(), aFallback, -1);
-    }
-
-    return ODatasourceInfo(this, aPos->first, aPos->second, -1);
-}
-
-//-------------------------------------------------------------------------
-//- ODatasourceMap::ODatasourceInfo
-//-------------------------------------------------------------------------
-Reference< XPropertySet > ODatasourceMap::ODatasourceInfo::getDatasource() const
-{
-    if (!m_rInfoImpl.xDatasource.is())
-    {   // the object has not been accessed yet -> create it
-        DBG_ASSERT(m_pOwner, "ODatasourceInfo::getDatasource: no owner which could provide the object!");
-        DBG_ASSERT(!isNew(), "ODatasourceInfo::getDatasource: new object without property set!");
-
-        if (m_pOwner)
-            m_pOwner->ensureObject(getName());
-    }
-    return m_rInfoImpl.xDatasource;
-}
-
-//-------------------------------------------------------------------------
-::rtl::OUString ODatasourceMap::ODatasourceInfo::getRealName() const
-{
-    if (!isModified())
-        return getName();
-
-    ::rtl::OUString sReturn;
-    if (m_rInfoImpl.pModifications)
-    {
-        SFX_ITEMSET_GET(*m_rInfoImpl.pModifications, pRealName, SfxStringItem, DSID_NAME, sal_True);
-        if (pRealName)
-            sReturn = pRealName->GetValue().GetBuffer();
-    }
-    return sReturn;
-}
-
-//-------------------------------------------------------------------------
-::rtl::OUString ODatasourceMap::ODatasourceInfo::getOriginalName() const
-{
-    if (!isModified())
-        return getName();
-
-    ::rtl::OUString sReturn;
-    if (m_rInfoImpl.pModifications)
-    {
-        SFX_ITEMSET_GET(*m_rInfoImpl.pModifications, pOriginalName, SfxStringItem, DSID_ORIGINALNAME, sal_True);
-        if (pOriginalName)
-            sReturn = pOriginalName->GetValue().GetBuffer();
-    }
-    return sReturn;
-}
-
-//-------------------------------------------------------------------------
-sal_Bool ODatasourceMap::ODatasourceInfo::isModified() const
-{
-    return NULL != m_rInfoImpl.pModifications;
-}
-
-//-------------------------------------------------------------------------
-sal_Bool ODatasourceMap::ODatasourceInfo::isNew() const
-{
-    if (!m_rInfoImpl.pModifications)
-        return sal_False;
-    SFX_ITEMSET_GET(*m_rInfoImpl.pModifications, pIsNew, SfxBoolItem, DSID_NEWDATASOURCE, sal_True);
-    return pIsNew && pIsNew->GetValue();
-}
-
-//-------------------------------------------------------------------------
-//- ODatasourceMap::Iterator
-//-------------------------------------------------------------------------
-ODatasourceMap::Iterator::Iterator(ODatasourceMap* _pOwner, ODatasourceMap::ConstDatasourceInfosIterator _rPos)
-    :m_pOwner(_pOwner)
-    ,m_aPos(_rPos)
-    ,m_aPosDeleted(_pOwner->m_aDeletedDatasources.end())
-    ,m_bLoopingDeleted(sal_False)
-{
-}
-
-//-------------------------------------------------------------------------
-ODatasourceMap::Iterator::Iterator(ODatasourceMap* _pOwner, ODatasourceMap::ConstMapInt2InfoIterator _rPos)
-    :m_pOwner(_pOwner)
-    ,m_aPos(_pOwner->m_aDatasources.end())
-    ,m_aPosDeleted(_rPos)
-    ,m_bLoopingDeleted(sal_True)
-{
-}
-
-//-------------------------------------------------------------------------
-ODatasourceMap::Iterator::Iterator(const ODatasourceMap::Iterator& _rSource)
-    :m_pOwner(_rSource.m_pOwner)
-    ,m_aPos(_rSource.m_aPos)
-    ,m_aPosDeleted(_rSource.m_aPosDeleted)
-    ,m_bLoopingDeleted(_rSource.m_bLoopingDeleted)
-{
-}
-
-//-------------------------------------------------------------------------
-const ODatasourceMap::Iterator& ODatasourceMap::Iterator::operator++()
-{
-    if (m_bLoopingDeleted)
-        ++m_aPosDeleted;
-    else
-        ++m_aPos;
-    return *this;
-}
-
-//-------------------------------------------------------------------------
-const ODatasourceMap::Iterator& ODatasourceMap::Iterator::operator--()
-{
-    if (m_bLoopingDeleted)
-        --m_aPosDeleted;
-    else
-        --m_aPos;
-    return *this;
-}
-
-//-------------------------------------------------------------------------
-::rtl::OUString ODatasourceMap::Iterator::implGetName(const ODatasourceMap::DatasourceInfo& _rInfo) const
-{
-    ::rtl::OUString sName;
-    if (_rInfo.pModifications)
-    {
-        SFX_ITEMSET_GET(*_rInfo.pModifications, pName, SfxStringItem, DSID_NAME, sal_True);
-        sName = pName->GetValue();
-    }
-    else
-    {
-        DBG_ASSERT(_rInfo.xDatasource.is(), "ODatasourceMap::Iterator::implGetName: no modifications, no object ... How am I supposed to get the name?");
-        if (_rInfo.xDatasource.is())
-        {
-            try
-            {
-                _rInfo.xDatasource->getPropertyValue(PROPERTY_NAME) >>= sName;
-            }
-            catch(Exception&)
-            {
-                DBG_ERROR("ODatasourceMap::operator->: could not obtain the data source name!");
-            }
-        }
-    }
-    return sName;
-}
-
-//-------------------------------------------------------------------------
-ODatasourceMap::ODatasourceInfo ODatasourceMap::Iterator::operator->() const
-{
-    if (!m_bLoopingDeleted)
-        return ODatasourceInfo(m_pOwner, m_aPos->first, m_aPos->second, -1);
-    else
-        return ODatasourceInfo(m_pOwner, implGetName(m_aPosDeleted->second), m_aPosDeleted->second, m_aPosDeleted->first);
-}
-
-//-------------------------------------------------------------------------
-ODatasourceMap::ODatasourceInfo ODatasourceMap::Iterator::operator*() const
-{
-    if (!m_bLoopingDeleted)
-        return ODatasourceInfo(m_pOwner, m_aPos->first, m_aPos->second, -1);
-    else
-        return ODatasourceInfo(m_pOwner, implGetName(m_aPosDeleted->second), m_aPosDeleted->second, m_aPosDeleted->first);
-}
 
 //=========================================================================
 //= ODbAdminDialog
@@ -1800,6 +1332,9 @@ void ODbAdminDialog::fillDatasourceInfo(const SfxItemSet& _rSource, ::com::sun::
         ++pRelevantItems;
     }
 
+    // settings to preserve
+    MapInt2String   aPreservedSettings;
+
     // now aRelevantSettings contains all the property values relevant for the current data source type,
     // check the original sequence if it already contains any of these values (which have to be overwritten, then)
     PropertyValue* pInfo = _rInfo.getArray();
@@ -1814,14 +1349,65 @@ void ODbAdminDialog::fillDatasourceInfo(const SfxItemSet& _rSource, ::com::sun::
             *pInfo = *aOverwrittenSetting;
             aRelevantSettings.erase(aOverwrittenSetting);
         }
-
-        if (0 == pInfo->Name.compareToAscii("JDBCDRV"))
+        else if (0 == pInfo->Name.compareToAscii("JDBCDRV"))
         {   // this is a compatibility setting, remove it from the sequence (it's replaced by JavaDriverClass)
             nObsoleteSetting = i;
         }
+        else
+            aPreservedSettings[i] = pInfo->Name;
     }
     if (-1 != nObsoleteSetting)
         ::comphelper::removeElementAt(_rInfo, nObsoleteSetting);
+
+    if (aPreservedSettings.size())
+    {   // check if there are settings which
+        // * are known as indirect properties
+        // * but not relevant for the current data source type
+        // These settings have to be removed: If they're not relevant, we have no UI for changing them.
+        // 25.06.2001 - 88004/87182 - frank.schoenheit@sun.com
+
+        // for this, we need a string-controlled quick access to m_aIndirectPropTranslator
+        StringSet aIndirectProps;
+        for (   ConstMapInt2StringIterator aIPLoop = m_aIndirectPropTranslator.begin();
+                aIPLoop != m_aIndirectPropTranslator.end();
+                ++aIPLoop
+            )
+        {
+            aIndirectProps.insert(aIPLoop->second);
+        }
+
+        // now check the to-be-preserved props
+        ::std::vector< sal_Int32 > aRemoveIndexes;
+        sal_Int32 nPositionCorrector = 0;
+        for (   ConstMapInt2StringIterator aPreserved = aPreservedSettings.begin();
+                aPreserved != aPreservedSettings.end();
+                ++aPreserved
+            )
+        {
+            if (aIndirectProps.end() != aIndirectProps.find(aPreserved->second))
+            {
+#ifdef DBG_UTIL
+                const ::rtl::OUString sName = aPreserved->second;
+#endif
+                aRemoveIndexes.push_back(aPreserved->first - nPositionCorrector);
+                ++nPositionCorrector;
+            }
+        }
+        // now finally remove all such props
+        for (   ::std::vector< sal_Int32 >::const_iterator aRemoveIndex = aRemoveIndexes.begin();
+                aRemoveIndex != aRemoveIndexes.end();
+                ++aRemoveIndex
+            )
+            ::comphelper::removeElementAt(_rInfo, *aRemoveIndex);
+#ifdef DBG_UTIL
+        const PropertyValue* pWhatsLeft = _rInfo.getConstArray();
+        const PropertyValue* pWhatsLeftEnd = pWhatsLeft + _rInfo.getLength();
+        for (; pWhatsLeft != pWhatsLeftEnd; ++pWhatsLeft)
+        {
+            ::rtl::OUString sLookAtIt = pWhatsLeft->Name;
+        }
+#endif
+    }
 
     // check which values are still left ('cause they were not present in the original sequence, but are to be set)
     sal_Int32 nOldLength = _rInfo.getLength();
@@ -2296,360 +1882,6 @@ IMPL_LINK(ODbAdminDialog, OnApplyChanges, PushButton*, EMPTYARG)
     return 0L;
 }
 
-//=========================================================================
-//= ODatasourceSelector
-//=========================================================================
-//-------------------------------------------------------------------------
-ODatasourceSelector::ODatasourceSelector(Window* _pParent, const ResId& _rResId)
-    :Window(_pParent, _rResId)
-    ,m_aDatasourceList  (this, ResId(LB_DATASOURCES))
-    ,m_aNewDatasource   (this, ResId(PB_NEW_DATASOURCE))
-{
-    FreeResource();
-
-    m_aDatasourceList.EnableClipSiblings(sal_True);
-    m_aNewDatasource.SetClickHdl(LINK(this, ODatasourceSelector, OnButtonPressed));
-
-    SetStyle((GetStyle() | WB_TABSTOP | WB_DIALOGCONTROL) & ~WB_NODIALOGCONTROL);
-}
-
-//-------------------------------------------------------------------------
-ODatasourceSelector::~ODatasourceSelector()
-{
-    for (sal_Int32 i=0; i<m_aDatasourceList.GetEntryCount(); ++i)
-        delete reinterpret_cast<EntryData*>(m_aDatasourceList.GetEntryData((USHORT)i));
-}
-
-//-------------------------------------------------------------------------
-sal_Int32 ODatasourceSelector::getImageId(DatasourceState _eState)
-{
-    switch (_eState)
-    {
-        case CLEAN:     return IMG_DATABASE;
-        case MODIFIED:  return IMG_DATABASE_MODIFIED;
-        case NEW:       return IMG_DATABASE_NEW;
-        case DELETED:   return IMG_DATABASE_DELETED;
-    }
-    DBG_ERROR("ODatasourceSelector::getImage: invalid state");
-    return 0;
-}
-
-//-------------------------------------------------------------------------
-DatasourceState ODatasourceSelector::getEntryState(sal_Int32 _nPos) const
-{
-    EntryData* pData = static_cast<EntryData*>(m_aDatasourceList.GetEntryData((USHORT)_nPos));
-    if (!pData)
-        return CLEAN;
-    return pData->eState;
-}
-
-//-------------------------------------------------------------------------
-void ODatasourceSelector::setEntryState(sal_Int32 _nPos, DatasourceState _eState)
-{
-    EntryData* pData = static_cast<EntryData*>(m_aDatasourceList.GetEntryData((USHORT)_nPos));
-    if (pData ? _eState == pData->eState : CLEAN == _eState)
-        // nothing changed
-        return;
-
-    // to restore the selection afterwards ...
-    sal_Bool bWasSelected = m_aDatasourceList.GetSelectEntryPos() == _nPos;
-
-    String sName = m_aDatasourceList.GetEntry((USHORT)_nPos);
-    m_aDatasourceList.RemoveEntry((USHORT)_nPos);
-    _nPos = m_aDatasourceList.InsertEntry(sName, Image(ModuleRes((USHORT)getImageId(_eState))), (USHORT)_nPos);
-
-    if (!pData)
-        pData = new EntryData;
-    pData->eState = _eState;
-    m_aDatasourceList.SetEntryData((USHORT)_nPos, static_cast<void*>(pData));
-
-    if (bWasSelected)
-        m_aDatasourceList.SelectEntryPos((USHORT)_nPos, sal_True);
-}
-
-//-------------------------------------------------------------------------
-sal_Int32 ODatasourceSelector::getAccessKey(sal_Int32 _nPos) const
-{
-    EntryData* pData = static_cast<EntryData*>(m_aDatasourceList.GetEntryData((USHORT)_nPos));
-    if (!pData)
-        return 0;   // entry is in default state
-    return pData->nAccessKey;
-}
-
-//-------------------------------------------------------------------------
-void ODatasourceSelector::setAccessKey(sal_Int32 _nPos, sal_Int32 _nAccessKey)
-{
-    EntryData* pData = static_cast<EntryData*>(m_aDatasourceList.GetEntryData((USHORT)_nPos));
-    DBG_ASSERT(pData, "ODatasourceSelector::setAccessKey: to be called for entry in DELETED state only!");
-    if (!pData)
-    {
-        pData = new EntryData(DELETED);
-        m_aDatasourceList.SetEntryData((USHORT)_nPos, static_cast<void*>(pData));
-    }
-    pData->nAccessKey = _nAccessKey;
-}
-
-//-------------------------------------------------------------------------
-void ODatasourceSelector::implDeleted(sal_Int32 _nPos)
-{
-    // remove the entry
-    m_aDatasourceList.RemoveEntry((USHORT)_nPos);
-
-    // select the one below (or above, if it was the last one)
-    if (_nPos >= m_aDatasourceList.GetEntryCount())
-        _nPos = m_aDatasourceList.GetEntryCount() - 1;
-    m_aDatasourceList.SelectEntryPos((USHORT)_nPos);
-    // call the select handler to propagate the new selection
-    m_aDatasourceList.GetSelectHdl().Call(&m_aDatasourceList);
-}
-
-//-------------------------------------------------------------------------
-void ODatasourceSelector::deleted(sal_Int32 _nAccessKey)
-{
-    sal_Int32 nPos = getDeletedEntryPos(_nAccessKey);
-    if (-1 != nPos)
-        implDeleted(nPos);
-    else
-        DBG_ERROR("ODatasourceSelector::deleted: no deleted entry wiht that name!");
-}
-
-//-------------------------------------------------------------------------
-void ODatasourceSelector::deleted(const String& _rName)
-{
-    sal_Int32 nPos = getValidEntryPos(_rName);
-    if (-1 != nPos)
-        implDeleted(nPos);
-    else
-        DBG_ERROR("ODatasourceSelector::deleted: no non-deleted entry wiht that name!");
-}
-
-//-------------------------------------------------------------------------
-void ODatasourceSelector::restoreDeleted(sal_Int32 _nAccessKey, DatasourceState _eState)
-{
-    DBG_ASSERT(DELETED != _eState, "ODatasourceSelector::restoreDeleted: invalid datasource state!");
-    sal_Int32 nPos = getDeletedEntryPos(_nAccessKey);
-    if (-1 == nPos)
-    {
-        DBG_ERROR("ODatasourceSelector::restoreDeleted: invalid access key!");
-        return;
-    }
-    DBG_ASSERT(-1 == getValidEntryPos(m_aDatasourceList.GetEntry((USHORT)nPos)),
-        "ODatasourceSelector::restoreDeleted: already have a not-deleted entry with that name!");
-
-    setEntryState(nPos, _eState);
-    setAccessKey(nPos, 0);
-}
-
-//-------------------------------------------------------------------------
-void ODatasourceSelector::markDeleted(const String& _rName, sal_Int32 _nAccessKey)
-{
-    sal_Int32 nPos = getValidEntryPos(_rName);
-    DBG_ASSERT(-1 != nPos, "ODatasourceSelector::markDeleted: no non-deleted entry wiht that name!");
-    setEntryState(nPos, DELETED);
-    DBG_ASSERT(_nAccessKey, "ODatasourceSelector::markDeleted: invalid access key!");
-    DBG_ASSERT(-1 == getDeletedEntryPos(_nAccessKey), "ODatasourceSelector::modified: already have a deleted entry with this access key!");
-    setAccessKey(nPos, _nAccessKey);
-}
-
-//-------------------------------------------------------------------------
-void ODatasourceSelector::modified(const String& _sName)
-{
-    sal_Int32 nPos = getValidEntryPos(_sName);
-    DBG_ASSERT(-1 != nPos, "ODatasourceSelector::modified: invalid name!");
-    setEntryState(nPos, MODIFIED);
-}
-
-//-------------------------------------------------------------------------
-sal_Int32 ODatasourceSelector::getDeletedEntryPos(sal_Int32 _nAccessKey)
-{
-    for (sal_Int32 i=0; i<m_aDatasourceList.GetEntryCount(); ++i)
-        if ((DELETED == getEntryState(i)) && (_nAccessKey == getAccessKey(i)))
-            return i;
-
-    return -1;
-}
-
-//-------------------------------------------------------------------------
-sal_Int32 ODatasourceSelector::getValidEntryPos(const String& _rName)
-{
-    // first guess
-    sal_Int32 nPos = m_aDatasourceList.GetEntryPos(_rName);
-    while (DELETED == getEntryState(nPos))
-    {
-        // unfortunally we no such thing as "GetEntryPos(<name>, <startindex>) ... -> search manually
-        while ((++nPos<m_aDatasourceList.GetEntryCount()))
-            if (m_aDatasourceList.GetEntry((USHORT)nPos).Equals(_rName))
-                // have a candidate
-                break;
-        if (nPos>=m_aDatasourceList.GetEntryCount())
-            // did not find another candidate
-            return -1;
-    }
-    return nPos;
-}
-
-//-------------------------------------------------------------------------
-void ODatasourceSelector::renamed(const String& _rOldName, const String& _rNewName)
-{
-    sal_Int32 nPos = getValidEntryPos(_rOldName);
-    DBG_ASSERT(-1 != nPos, "ODatasourceSelector::renamed: invalid old name!");
-
-    // save the info about the entry
-    DatasourceState eState = getEntryState(nPos);
-    EntryData* pData = static_cast<EntryData*>(m_aDatasourceList.GetEntryData((USHORT)nPos));
-
-    m_aDatasourceList.RemoveEntry((USHORT)nPos);
-    nPos = m_aDatasourceList.InsertEntry(_rNewName, Image(ModuleRes((USHORT)getImageId(eState))), (USHORT)nPos);
-
-    // restore the info about the entry
-    m_aDatasourceList.SetEntryData((USHORT)nPos, static_cast<void*>(pData));
-}
-
-//-------------------------------------------------------------------------
-sal_Int32 ODatasourceSelector::insert(const String& _rName)
-{
-    sal_Int16 nPos = m_aDatasourceList.InsertEntry(_rName, Image(ModuleRes((USHORT)getImageId(CLEAN))));
-    m_aDatasourceList.SetEntryData(nPos, static_cast<void*>(NULL));
-    return nPos;
-}
-
-//-------------------------------------------------------------------------
-void ODatasourceSelector::flushed(const String& _rName)
-{
-    sal_Int32 nPos = getValidEntryPos(_rName);
-    DBG_ASSERT(-1 != nPos, "ODatasourceSelector::flushed: invalid data source name!");
-
-    setEntryState(nPos, CLEAN);
-}
-
-//-------------------------------------------------------------------------
-void ODatasourceSelector::insertNew(const String& _rName)
-{
-    // insert the new entry with the appropriate image
-    sal_Int16 nPos = m_aDatasourceList.InsertEntry(_rName, Image(ModuleRes((USHORT)getImageId(NEW))));
-    m_aDatasourceList.SetEntryData(nPos, static_cast<void*>(new EntryData(NEW)));
-}
-
-//-------------------------------------------------------------------------
-void ODatasourceSelector::select(const String& _rName)
-{
-    sal_Int32 nPos = getValidEntryPos(_rName);
-    DBG_ASSERT(-1 != nPos, "ODatasourceSelector::select: invalid data source name (maybe deleted or not existent)!");
-
-    m_aDatasourceList.SelectEntryPos((USHORT)nPos);
-}
-
-//-------------------------------------------------------------------------
-void ODatasourceSelector::select(sal_Int32 _nAccessKey)
-{
-    sal_Int32 nPos = getDeletedEntryPos(_nAccessKey);
-    DBG_ASSERT(-1 != nPos, "ODatasourceSelector::select: invalid access key (have no such entry)!");
-
-    m_aDatasourceList.SelectEntryPos((USHORT)nPos);
-}
-
-//-------------------------------------------------------------------------
-long ODatasourceSelector::Notify(NotifyEvent& _rNEvt)
-{
-    sal_Bool bHandled = sal_False;
-
-    switch (_rNEvt.GetType())
-    {
-        case EVENT_COMMAND:
-        {
-            const CommandEvent* pCommand = _rNEvt.GetCommandEvent();
-            if (COMMAND_CONTEXTMENU == pCommand->GetCommand())
-            {
-                // check if the context menu request occured in the listbox
-                if  (m_aDatasourceList.IsChild(_rNEvt.GetWindow()))
-                {
-                    // calc the pos where to open the menu
-                    Point aWhere;
-                    if (pCommand->IsMouseEvent())
-                    {
-                        aWhere = pCommand->GetMousePosPixel();
-                    }
-                    else
-                    {   // context menu via keyboard -> assume the center of the currently selected data source
-                        // TODO: use another class instead of the listbox (e.g. a SvTreeListBox). We have no change
-                        // to get an item rect or the item height or something like that from a listbox ...
-                        aWhere = Point(0, 0);
-                    }
-                    PopupMenu aMenu(ModuleRes(MENU_DATASOURCELIST_POPUP));
-                    aMenu.SetMenuFlags(aMenu.GetMenuFlags() | MENU_FLAG_HIDEDISABLEDENTRIES);
-
-                    // we don't really know if adding datasources is allowed currently. But an other instance does
-                    // (the dialog), and this instance en- or disables our "new datasource" button
-                    aMenu.EnableItem(MID_NEW_DATASOURCE, m_aNewDatasource.IsEnabled());
-
-                    USHORT nSelectionPos = m_aDatasourceList.GetSelectEntryPos();
-                    DatasourceState eState = getEntryState(nSelectionPos);
-                    aMenu.EnableItem(MID_DELETE_DATASOURCE, (DELETED != eState && nSelectionPos != LISTBOX_ENTRY_NOTFOUND));
-                    aMenu.EnableItem(MID_RESTORE_DATASOURCE, DELETED == eState);
-
-                    switch (aMenu.Execute(_rNEvt.GetWindow(), aWhere))
-                    {
-                        case MID_NEW_DATASOURCE:
-                            m_aNewHandler.Call(this);
-                            break;
-                        case MID_DELETE_DATASOURCE:
-                            m_aDeleteHandler.Call(this);
-                            break;
-                        case MID_RESTORE_DATASOURCE:
-                            m_aRestoreHandler.Call(this);
-                            break;
-                    }
-                    bHandled = sal_True;
-                }
-            }
-        }
-        break;
-        case EVENT_KEYINPUT:
-        {
-            const KeyEvent* pKeyEvent = _rNEvt.GetKeyEvent();
-            const KeyCode& rKeyCode = pKeyEvent->GetKeyCode();
-            if ((0 == rKeyCode.GetAllModifier()) && ((sal_Int32)-1 != m_aDatasourceList.GetSelectEntryPos()))
-                switch (rKeyCode.GetCode())
-                {
-                    case KEY_DELETE:
-                        if (getAccessKey(m_aDatasourceList.GetSelectEntryPos()) <= 0)
-                            // for a non-deleted data source, call the delete handler
-                            m_aDeleteHandler.Call(this);
-                        bHandled = sal_True;
-                        break;
-                    case KEY_INSERT:
-                        m_aNewHandler.Call(this);
-                        bHandled = sal_True;
-                        break;
-                }
-        }
-        break;
-    }
-
-    return bHandled ? 1 : Window::Notify(_rNEvt);
-}
-
-//-------------------------------------------------------------------------
-void ODatasourceSelector::Resize()
-{
-    Window::Resize();
-    Size aSize = GetSizePixel();
-
-    // adjust the width of the button
-    sal_Int32 nButtonHeight = m_aNewDatasource.GetSizePixel().Height();
-    m_aNewDatasource.SetSizePixel(Size(aSize.Width(), nButtonHeight));
-
-    // adjust width/height of the listbox
-    m_aDatasourceList.SetPosPixel(Point(0, nButtonHeight));
-    m_aDatasourceList.SetSizePixel(Size(aSize.Width(), aSize.Height() - nButtonHeight));
-}
-
-//-------------------------------------------------------------------------
-IMPL_LINK(ODatasourceSelector, OnButtonPressed, Button*, EMPTYARG)
-{
-    return m_aNewHandler.Call(this);
-}
-
 //.........................................................................
 }   // namespace dbaui
 //.........................................................................
@@ -2657,6 +1889,9 @@ IMPL_LINK(ODatasourceSelector, OnButtonPressed, Button*, EMPTYARG)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.61  2001/06/25 08:27:18  oj
+ *  #88699# new control for ldap rowcount
+ *
  *  Revision 1.60  2001/06/20 13:43:42  fs
  *  #88447# corrected order of detail pages
  *
