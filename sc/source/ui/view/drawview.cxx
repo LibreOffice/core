@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawview.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: nn $ $Date: 2002-09-12 18:04:45 $
+ *  last change: $Author: nn $ $Date: 2002-10-11 12:35:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -546,7 +546,15 @@ void __EXPORT ScDrawView::MarkListHasChanged()
             if ( pObj->ISA( SdrObjGroup ) )
             {
                 const SdrObjList *pLst = ((SdrObjGroup*)pObj)->GetSubList();
-                for ( USHORT j = 0; j < pLst->GetObjCount(); ++j )
+                ULONG nListCount = pLst->GetObjCount();
+                if ( nListCount == 0 )
+                {
+                    //  #104156# An empty group (may occur during Undo) is no control or graphics object.
+                    //  Creating the form shell during undo would lead to problems with the undo manager.
+                    bOnlyControls = FALSE;
+                    bOnlyGraf = FALSE;
+                }
+                for ( USHORT j = 0; j < nListCount; ++j )
                 {
                     SdrObject *pSubObj = pLst->GetObj( j );
 
