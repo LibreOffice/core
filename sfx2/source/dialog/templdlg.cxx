@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templdlg.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 15:41:37 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 15:15:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,6 +152,9 @@ using namespace ::com::sun::star;
 #define SFX_TEMPLDLG_FILTERHEIGHT   100
 
 static USHORT nLastItemId = USHRT_MAX;
+
+// filter box has maximum 7 entries visible
+#define MAX_FILTER_ENTRIES          7
 
 //=========================================================================
 
@@ -1303,10 +1306,12 @@ void SfxCommonTemplateDialog_Impl::UpdateStyles_Impl(USHORT nFlags)     // Flags
                 pStyleSheetPool->SetSearchMask(eFam, nFilter);
             }
 
+            //Falls in Treedarstellung wieder Family Hierarchie selektieren
             if(pTreeBox)
                 aFilterLb.SelectEntry(String(SfxResId(STR_STYLE_FILTER_HIERARCHICAL)));
-            //Falls in Treedarstellung wieder Family Hierarchie selektieren
 
+            // show maximum seven entries
+            aFilterLb.SetDropDownLineCount( MAX_FILTER_ENTRIES );
             aFilterLb.SetUpdateMode(TRUE);
         }
         else
