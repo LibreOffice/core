@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formres.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 06:06:03 $
+ *  last change: $Author: kz $ $Date: 2001-04-03 19:24:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3976,7 +3976,7 @@ TabDialog RID_TABDLG_FONTDIALOG
     Text [ portuguese ] = "Caracteres" ;
     Text [ finnish ] = "Merkki" ;
     Text [ danish ] = "Tegn" ;
-    Text [ french ] = "Caractère" ;
+    Text [ french ] = "Caractères" ;
     Text [ swedish ] = "Tecken" ;
     Text [ dutch ] = "Teken" ;
     Text [ spanish ] = "Caracteres" ;
@@ -4035,7 +4035,7 @@ TabDialog RID_TABDLG_FONTDIALOG
                 Text [ spanish ] = "Efectos de fuente" ;
                 Text [ chinese_simplified ] = "×ÖÌåÐ§¹û";
                 Text [ russian ] = "Ýôôåêòû øðèôòà";
-                Text [ polish ] = "Efekty czcionek";
+                Text [ polish ] = "Efekt czcionki";
                 Text [ japanese ] = "Ì«ÝÄŒø‰Ê";
                 Text [ chinese_traditional ] = "¦r«¬®ÄªG";
                 Text [ arabic ] = "ÊÃËíÑÇÊ ÇáÎØæØ";
@@ -4047,19 +4047,22 @@ TabDialog RID_TABDLG_FONTDIALOG
             };
         };
     };
-    Text[ russian ] = "Character";
+    Text[ russian ] = "Çíàê";
     Text[ greek ] = "Character";
-    Text[ polish ] = "Character";
+    Text[ polish ] = "Znak";
     Text[ japanese ] = "•¶Žš";
     Text[ korean ] = "Character";
-    Text[ chinese_simplified ] = "Character";
+    Text[ chinese_simplified ] = "×Ö·û";
     Text[ chinese_traditional ] = "¦r¤¸";
     Text[ turkish ] = "Character";
-    Text[ arabic ] = "Character";
+    Text[ arabic ] = "ÇáÎØ";
 };
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.10  2001/03/31 06:06:03  kz
+ *  Merge SRC627: 31.03.01 - 08:05:26 (NoBranch)
+ *
  *  Revision 1.9  2001/03/21 15:38:09  fs
  *  #82696# new font dialog
  *
