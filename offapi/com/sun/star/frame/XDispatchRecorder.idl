@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDispatchRecorder.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mba $ $Date: 2002-03-27 13:17:48 $
+ *  last change: $Author: as $ $Date: 2002-04-22 12:49:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,47 +80,98 @@ module com {  module sun {  module star {  module frame {
 interface XFrame;
 
 //=============================================================================
-/**
-        @deprecated draft
+/** provides recording functionality of dispatches
+
+    <p>
+    With such recorder it will be possible to record requests of type
+    <type>XDispatch</type> by using additional interface
+    <type>XRecordableDispatch</type>. The result of that will be a
+    a script which can be used to start the dispatch at later time again.
+    Such recorder objects are available on a <type>XDispatchRecorderSupplier</type>
+    which is provided by the <type>Frame</type> service.
+    </p>
+
+    @see Frame
+    @see XDispatchRecorderSupplier
+
+    @deprecated draft
  */
 interface XDispatchRecorder: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
-        /**
-                initializes the recorder by passing the frame for which all
-                macro statements shall be recorded
-        */
-        void startRecording( [in] com::sun::star::frame::XFrame aFrame );
+    /** initializes the recorder by passing the frame for which all
+        macro statements shall be recorded
+
+        <p>
+        It starts the recording only if the recording state was set to <TRUE/>
+        on <member>XDispatchRecorderSupplier::setRecordingState()</member>.
+        Otherwhise it should be ignored.
+        </p>
+
+        @param Frame
+            it includes the document on which such requests shall be recorded
+    */
+    void startRecording( [in] com::sun::star::frame::XFrame Frame );
 
     //-------------------------------------------------------------------------
-        /**
-                records a single dispatch call identified by its command URL
-        */
-        void recordDispatch( [in] com::sun::star::util::URL aURL,
-             [in] sequence<com::sun::star::beans::PropertyValue> aArgs );
+    /** records a single dispatch call identified by its command URL
+
+        @param URL
+            the full parsed command URL
+
+        @param Arguments
+            optional arguments for the command URL
+            <br>
+            (see <type scope="com::sun::star::document">MediaDescriptor</type>
+             for further informations)
+    */
+    void recordDispatch(
+        [in] com::sun::star::util::URL URL,
+        [in] sequence<com::sun::star::beans::PropertyValue> Arguments);
 
     //-------------------------------------------------------------------------
-        /**
-                records a single dispatch call identified by its command URL, but
-                comments it out; this way calls that failed on execution can be
-                documented
-        */
-        void recordDispatchAsComment( [in] com::sun::star::util::URL aURL,
-             [in] sequence<com::sun::star::beans::PropertyValue> aArgs );
+    /** records a single dispatch call identified by its command URL, but
+        comments it out
+
+        <p>
+        This way calls that failed on execution can be documented.
+        </p>
+
+        @param URL
+            the full parsed command URL
+
+        @param Arguments
+            optional arguments for the command URL
+            <br>
+            (see <type scope="com::sun::star::document">MediaDescriptor</type>
+             for further informations)
+    */
+    void recordDispatchAsComment(
+        [in] com::sun::star::util::URL URL,
+        [in] sequence<com::sun::star::beans::PropertyValue> Arguments);
 
     //-------------------------------------------------------------------------
-        /**
-                stops the recording process
-        */
-        void endRecording();
+    /** stops the recording process
+
+        <p>
+        Must be called in pairs with <member>XDispatchRecorder::startRecording()</member>.
+        It's not allowed for the recorder to clear recorded data here - because
+        the must be provided later at method <member>XDispatchRecorder::getRecordedMacro()</member>.
+        </p>
+    */
+    void endRecording();
 
     //-------------------------------------------------------------------------
+    /** returns the recorded source code
 
-        /**
-                returns the recorded source code
-                the result of calling this method before calling endRecording is undefined
-        */
-        string getRecordedMacro();
+        <p>
+        The result of calling this method before calling endRecording is undefined.
+        </p>
+
+        @returns
+            the recorded data as a string which can be interpreted as a script
+    */
+    string getRecordedMacro();
 };
 
 //=============================================================================

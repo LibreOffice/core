@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: mav $ $Date: 2002-04-03 11:47:22 $
+#   last change: $Author: as $ $Date: 2002-04-22 12:49:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,6 +79,8 @@ IDLFILES=\
     DesktopTask.idl\
     DesktopTasks.idl\
     DispatchDescriptor.idl\
+    DispatchRecorder.idl\
+    DispatchRecorderSupplier.idl\
         DocumentTemplates.idl\
     FeatureStateEvent.idl\
     Frame.idl\
@@ -109,6 +111,8 @@ IDLFILES=\
     XDispatchProviderInterception.idl\
     XDispatchProviderInterceptor.idl\
         XDispatchRecorder.idl\
+        XDispatchRecorderSupplier.idl\
+        XRecordableDispatch.idl\
     XDocumentTemplates.idl\
     XExtendedFilterDetection.idl\
     XFilterDetect.idl\
