@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layermerge.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:18:47 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 13:30:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,36 +194,35 @@ namespace
 {
     struct CheckRestrictedAccessVisitor : NodeAction
     {
-        bool m_bFinalizeOnly;
+        node::Access m_access;
 
-        CheckRestrictedAccessVisitor(bool _bFinalizeOnly) : m_bFinalizeOnly(_bFinalizeOnly) {}
+        CheckRestrictedAccessVisitor(node::Access _access) : m_access(_access) {}
 
         void handle(ValueNode const & _aNode) { check(_aNode); }
 
         void handle(ISubtree const & _aNode)
         {
-            bool bNext = check(_aNode);
-            CheckRestrictedAccessVisitor(bNext).applyToChildren(_aNode);
+            node::Access aNext = check(_aNode);
+            CheckRestrictedAccessVisitor(aNext).applyToChildren(_aNode);
         }
 
-        bool check(INode const & _aNode)
+        node::Access check(INode const & _aNode)
         {
             node::Attributes const aFoundAttr = _aNode.getAttributes();
+            node::Access const aFoundAccess = aFoundAttr.getAccess();
+            OSL_ENSURE(m_access <= aFoundAccess, "Subnode has more access than its parent");
 
-            if (!aFoundAttr.bWritable) return false; // already read only
-
-            OSL_ENSURE(m_bFinalizeOnly, "Subnode of read-only node is writable");
-            OSL_ENSURE(!m_bFinalizeOnly || aFoundAttr.bFinalized, "Subnode of finalized node is not finalized");
-
-            return m_bFinalizeOnly;
+            return aFoundAccess;
         }
     };
 // --------------------
     struct RestrictAccessVisitor : NodeModification
     {
-        bool m_bFinalize;
+        node::Access m_access;
 
-        RestrictAccessVisitor(bool _bFinalize) : m_bFinalize(_bFinalize) {}
+        RestrictAccessVisitor(bool _bFinalize)
+        : m_access(_bFinalize ? node::accessFinal : node::accessReadonly)
+        {}
 
         void handle(ValueNode & _aNode) { restrict(_aNode); }
 
@@ -232,17 +231,16 @@ namespace
             if (restrict(_aNode))
                 this->applyToChildren(_aNode);
             else
-                OSL_DEBUG_ONLY(CheckRestrictedAccessVisitor(m_bFinalize).applyToNode(_aNode));
+                OSL_DEBUG_ONLY(CheckRestrictedAccessVisitor(m_access).applyToNode(_aNode));
         }
 
         bool restrict(INode & _aNode)
         {
             node::Attributes const aFoundAttr = _aNode.getAttributes();
 
-            if (!aFoundAttr.bWritable) return false; // already read only
-            if (m_bFinalize && aFoundAttr.bFinalized) return false; // already finalized
+            if (aFoundAttr.getAccess() >= m_access) return false; // already restricted enough
 
-            _aNode.modifyAccess(m_bFinalize,m_bFinalize);
+            _aNode.modifyAccess(m_access);
             return true;
         }
     };
@@ -252,8 +250,8 @@ void LayerMergeHandler::propagateAttributes(ISubtree & _rParent)
 {
     node::Attributes aAttributes = _rParent.getAttributes();
 
-    if (!aAttributes.bWritable || aAttributes.bFinalized)
-        RestrictAccessVisitor(aAttributes.bWritable).applyToChildren(_rParent);
+    if (aAttributes.isReadonly() || aAttributes.isFinalized())
+        RestrictAccessVisitor(aAttributes.isWritable()).applyToChildren(_rParent);
 }
 // -----------------------------------------------------------------------------
 
@@ -277,7 +275,11 @@ node::Attributes LayerMergeHandler::makePropertyAttributes(sal_Int16 aSchemaAttr
     node::Attributes aAttributes = m_aContext.getCurrentAttributes();
 
     if (aSchemaAttributes & SchemaAttribute::REQUIRED)
-        aAttributes.bNullable = false;
+        aAttributes.setNullable (false);
+
+    //Set removable and mandatory attribute flags
+    aAttributes.setRemovability(true,true);
+
 
     return aAttributes;
 
@@ -378,7 +380,7 @@ void LayerMergeHandler::setLocalizedValue(ISubtree * pProperty, uno::Any const &
             uno::Type valueType = parseTemplateName(
                                     pLocalizedCont->getElementTemplateName()) ;
 
-            attributes.bLocalized = false ;
+            attributes.setLocalized(false) ;
             OSL_ENSURE(valueType != uno::Type(),
                                 "Cannot determine type for localised value") ;
             std::auto_ptr<ValueNode> localisedValue =
@@ -470,19 +472,18 @@ void LayerMergeHandler::applyAttributes(INode * pNode, sal_Int16 aNodeAttributes
         OSL_ENSURE(!(aNodeAttributes & NodeAttribute::FINALIZED),
                     "Layer merging: Warning: Node is both read-only and finalized");
 
-        pNode->modifyAccess(false,false);
+        pNode->modifyAccess(node::accessReadonly);
     }
     else if (aNodeAttributes & NodeAttribute::FINALIZED)
     {
-        pNode->modifyAccess(true,true);
+        pNode->modifyAccess(node::accessFinal);
     }
 
     if ( m_aContext.isNode(pNode) )
     {
         if (aNodeAttributes & NodeAttribute::MANDATORY)
         {
-            // TODO: support mandatory
-            OSL_ENSURE(false,"Layer merging: Unsupported feature: 'Mandatory' set item");
+            pNode->markMandatory();
         }
     }
     else if (aNodeAttributes) // do this only if there actually was something to do
@@ -660,6 +661,10 @@ void LayerMergeHandler::implAddOrReplaceNode( const OUString& aName, const Templ
         m_aContext.raiseNoSuchElementException("Layer merging: Cannot instantiate template.", aTemplate.Name);
 
     applyAttributes(apNewInstance.get(), aAttributes);
+    //Set removable flag
+    apNewInstance->markRemovable();
+
+
 
     if (pReplacedNode) m_aContext.getCurrentParent().removeChild( aName );
 
@@ -908,18 +913,15 @@ namespace
 // -----------------------------------------------------------------------------
     static inline bool isFinal(node::Attributes const& _aAttributes)
     {
-        return _aAttributes.bFinalized || !_aAttributes.bWritable;
+        return _aAttributes.isFinalized() || _aAttributes.isReadonly();
     }
     // --------------------------------- AttributeSetter ---------------------------------
 
     class DefaultPromoter : NodeModification
     {
-        node::State m_state;
-        bool        m_bPromoteFinalized;
     public:
         explicit
-        DefaultPromoter(bool _bPromoteFinalized = true)
-        : m_bPromoteFinalized(_bPromoteFinalized)
+        DefaultPromoter()
         {}
 
         void adjustAccess(INode& _rNode);
@@ -933,10 +935,7 @@ namespace
 
     void DefaultPromoter::adjustAccess(INode& _rNode)
     {
-        node::Attributes const aOldAttributes = _rNode.getAttributes();
-
-        if (m_bPromoteFinalized)
-            _rNode.modifyAccess(!isFinal(aOldAttributes),false);
+        _rNode.promoteAccessToDefault();
     }
 // -----------------------------------------------------------------------------
 
