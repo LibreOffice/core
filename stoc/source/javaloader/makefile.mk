@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 15:29:34 $
+#   last change: $Author: kr $ $Date: 2000-09-28 17:32:25 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -87,43 +87,29 @@ UNOUCROUT=$(OUT)$/inc
 INCPRE+=$(UNOUCROUT)
 
 UNOTYPES= \
-    com.sun.star.corba.giop.MessageHeader_1_1	\
-    com.sun.star.uno.TypeClass					\
-    com.sun.star.lang.XSingleServiceFactory		\
-    com.sun.star.lang.XMultiServiceFactory		\
-    com.sun.star.registry.XRegistryKey			\
-    com.sun.star.bridge.XBridgeFactory			\
-    com.sun.star.bridge.XBridge					\
-    com.sun.star.bridge.XInstanceProvider		\
-    com.sun.star.connection.XConnection			\
-    com.sun.star.java.XJavaVM					\
     com.sun.star.java.XJavaThreadRegister_11	\
-    com.sun.star.uno.XWeak						\
-    com.sun.star.uno.XAggregation				\
+    com.sun.star.java.XJavaVM					\
+    com.sun.star.lang.IllegalArgumentException	\
+    com.sun.star.lang.XInitialization			\
+    com.sun.star.lang.XMultiServiceFactory		\
+    com.sun.star.lang.XServiceInfo				\
+    com.sun.star.lang.XSingleServiceFactory		\
     com.sun.star.lang.XTypeProvider				\
     com.sun.star.loader.XImplementationLoader	\
-    com.sun.star.lang.XServiceInfo				\
-    com.sun.star.lang.XInitialization
+    com.sun.star.registry.XRegistryKey			\
+    com.sun.star.uno.TypeClass					\
+    com.sun.star.uno.XAggregation				\
+    com.sun.star.uno.XWeak
 
-SLOFILES= 	$(SLO)$/javaloader.obj \
-        $(SLO)$/jthreadpool.obj
+SLOFILES= 	$(SLO)$/javaloader.obj
 
 SHL1TARGET= $(TARGET)
 
-.IF "$(COM)" == "GCC"
-REMOTE_CONTEXTLIB = -lrmcxt1
-.ELIF "$(COM)" == "C50" 
-REMOTE_CONTEXTLIB = -lrmcxt1
-.ELSE
-REMOTE_CONTEXTLIB = irmcxt.lib
-.ENDIF
-
 SHL1STDLIBS=\
-        $(SALLIB)\
-        $(VOSLIB)\
-        $(CPPULIB)\
-        $(CPPUHELPERLIB) \
-        $(REMOTE_CONTEXTLIB)
+        $(CPPUHELPERLIB) 	\
+        $(CPPULIB)			\
+        $(VOSLIB)			\
+        $(SALLIB)
 
 
 SHL1LIBS=\
@@ -138,17 +124,9 @@ SHL1LIBS=\
 $(MISC)$/$(SHL1TARGET).def: makefile.mk
     @echo ------------------------------
     @echo Making: $@
-    @echo LIBRARY     $(SHL1TARGET)                                  >$@
-    @echo EXPORTS                                                   >>$@
+    @echo LIBRARY     $(SHL1TARGET)                 >$@
+    @echo EXPORTS                                   >>$@
     @echo component_getImplementationEnvironment    >>$@
     @echo component_writeInfo                       >>$@
     @echo component_getFactory					    >>$@
-    @echo Java_com_sun_star_lib_uno_environments_remote_NativeThreadPool_add   >>$@
-    @echo Java_com_sun_star_lib_uno_environments_remote_NativeThreadPool_createTicket   >>$@
-    @echo Java_com_sun_star_lib_uno_environments_remote_NativeThreadPool_dispose   >>$@
-    @echo Java_com_sun_star_lib_uno_environments_remote_NativeThreadPool_reply   >>$@
-    @echo Java_com_sun_star_lib_uno_environments_remote_NativeThreadPool_request   >>$@
-    @echo Java_com_sun_star_lib_uno_environments_remote_NativeThreadPool_retrieve   >>$@
-    @echo Java_com_sun_star_lib_uno_environments_remote_NativeThreadPool_revoke   >>$@
-    @echo Java_com_sun_star_lib_uno_environments_remote_NativeThreadPool_stopDispose   >>$@
-    @echo Java_com_sun_star_lib_uno_environments_remote_NativeThreadPool_waitOnTicket  >>$@
+
