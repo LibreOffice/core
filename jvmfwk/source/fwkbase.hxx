@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fwkbase.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 14:00:47 $
+ *  last change: $Author: kz $ $Date: 2004-12-16 11:48:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,10 +84,6 @@ public:
 
     /* returns the file URL to the plugin.
 
-       If the param is empty, then the library is returned provided
-       by the bootstrap variable UNO_JAVA_JFW_PLUGIN. If the variable is
-       not set then an exception is thrown.
-
      */
     rtl::OUString getPluginLibrary(const rtl::OUString& sVendor);
 
@@ -100,23 +96,6 @@ public:
  */
 namespace  BootParams
 {
-/* Gets the bootstrap variable UNO_JAVA_JFW_PLUGIN and verifies
-   if the file exist.
-   If it does not exist or it it no valid URL or the URL point not
-   to a file then an exception is thrown. The URL can also point to
-   a link to a file.
-
-   Setting this bootstrap parameter one does not need to specify a
-   javavendors.xml (UNO_JAVA_JFW_VENDOR_SETTINGS). If it is also set
-   then an exception is thrown.
-*/
-rtl::OUString getPlugin();
-
-/* Gets the bootstrap variable UNO_JAVA_JFW_DISABLE.
-   If false is returned, then UNO_JAVA_JFW_DISABLE was not set.
-   That is Java can be used.
- */
-bool getDisable();
 
 /* Gets the file URL to the JRE which has been determined by the
    bootstrap parameter UNO_JAVA_JFW_JREHOME or UNO_JAVA_JFW_ENV_JREHOME.
@@ -133,9 +112,6 @@ rtl::OUString getSharedData();
 
 
 /* returns the file URL to the vendor settings xml file.
-
-   This file is not needed when UNO_JAVA_JFW_PLUGIN is set.
-   If it is also set then an exception is thrown.
  */
 rtl::OUString getVendorSettings();
 
