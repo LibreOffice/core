@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: mib $ $Date: 2001-05-10 10:07:18 $
+#   last change: $Author: dvo $ $Date: 2001-05-14 13:04:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -133,6 +133,7 @@ CXXFILES = \
         HatchStyle.cxx					\
         ImageStyle.cxx					\
         MarkerStyle.cxx					\
+        MultiPropertySetHelper.cxx		\
         DashStyle.cxx					\
         AttributeContainerHandler.cxx	\
         NamedBoolPropertyHdl.cxx		\
@@ -222,6 +223,7 @@ SLOFILES =	\
         $(SLO)$/HatchStyle.obj					\
         $(SLO)$/ImageStyle.obj					\
         $(SLO)$/MarkerStyle.obj					\
+        $(SLO)$/MultiPropertySetHelper.obj		\
         $(SLO)$/NamedBoolPropertyHdl.obj		\
         $(SLO)$/TransGradientStyle.obj			\
         $(SLO)$/XMLBackgroundImageContext.obj	\
