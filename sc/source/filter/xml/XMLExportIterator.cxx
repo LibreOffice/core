@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportIterator.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sab $ $Date: 2000-12-19 09:46:11 $
+ *  last change: $Author: sab $ $Date: 2001-01-05 10:30:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -352,6 +352,21 @@ void ScMyAreaLinksContainer::Sort()
 
 //==============================================================================
 
+ScMyCellRangeAddress::ScMyCellRangeAddress(const table::CellRangeAddress& rRange)
+    : table::CellRangeAddress(rRange)
+{
+}
+
+sal_Bool ScMyCellRangeAddress::operator<(const ScMyCellRangeAddress& rRange )
+{
+    if( Sheet != rRange.Sheet )
+        return (Sheet < rRange.Sheet);
+    else if( StartRow != rRange.StartRow )
+        return (StartRow < rRange.StartRow);
+    else
+        return (StartColumn < rRange.StartColumn);
+}
+
 ScMyEmptyDatabaseRangesContainer::ScMyEmptyDatabaseRangesContainer()
     : aDatabaseList()
 {
@@ -365,7 +380,7 @@ void ScMyEmptyDatabaseRangesContainer::AddNewEmptyDatabaseRange(const table::Cel
 {
     sal_Int32 nStartRow = aCellRange.StartRow;
     sal_Int32 nEndRow = aCellRange.EndRow;
-    table::CellRangeAddress aRange( aCellRange );
+    ScMyCellRangeAddress aRange( aCellRange );
     for( sal_Int32 nRow = nStartRow; nRow <= nEndRow; nRow++ )
     {
         aRange.StartRow = aRange.EndRow = nRow;
@@ -404,22 +419,22 @@ void ScMyEmptyDatabaseRangesContainer::SetCellData( ScMyCell& rMyCell )
     }
 }
 
-sal_Bool LessMyEmptyDatabaseRange(const table::CellRangeAddress& aRange1, const table::CellRangeAddress& aRange2)
-{
-    if( aRange1.Sheet != aRange2.Sheet )
-        return (aRange1.Sheet < aRange2.Sheet);
-    else if( aRange1.StartRow != aRange2.StartRow )
-        return (aRange1.StartRow < aRange2.StartRow);
-    else
-        return (aRange1.StartColumn < aRange2.StartColumn);
-}
-
 void ScMyEmptyDatabaseRangesContainer::Sort()
 {
-    aDatabaseList.sort(LessMyEmptyDatabaseRange);
+    aDatabaseList.sort();
 }
 
 //==============================================================================
+
+sal_Bool ScMyDetectiveObj::operator<( const ScMyDetectiveObj& rDetObj)
+{
+    if( aPosition.Sheet != rDetObj.aPosition.Sheet )
+        return (aPosition.Sheet < rDetObj.aPosition.Sheet);
+    else if( aPosition.Row != rDetObj.aPosition.Row )
+        return (aPosition.Row < rDetObj.aPosition.Row);
+    else
+        return (aPosition.Column != rDetObj.aPosition.Column);
+}
 
 ScMyDetectiveObjContainer::ScMyDetectiveObjContainer() :
     aDetectiveObjList()
@@ -472,22 +487,22 @@ void ScMyDetectiveObjContainer::SetCellData( ScMyCell& rMyCell )
     rMyCell.bHasDetectiveObj = (rMyCell.aDetectiveObjVec.size() != 0);
 }
 
-sal_Bool LessMyDetectiveObj( const ScMyDetectiveObj& rDetObj1, const ScMyDetectiveObj& rDetObj2 )
-{
-    if( rDetObj1.aPosition.Sheet != rDetObj2.aPosition.Sheet )
-        return (rDetObj1.aPosition.Sheet < rDetObj2.aPosition.Sheet);
-    else if( rDetObj1.aPosition.Row != rDetObj2.aPosition.Row )
-        return (rDetObj1.aPosition.Row < rDetObj2.aPosition.Row);
-    else
-        return (rDetObj1.aPosition.Column != rDetObj2.aPosition.Column);
-}
-
 void ScMyDetectiveObjContainer::Sort()
 {
-    aDetectiveObjList.sort( LessMyDetectiveObj );
+    aDetectiveObjList.sort();
 }
 
 //==============================================================================
+
+sal_Bool ScMyDetectiveOp::operator<( const ScMyDetectiveOp& rDetOp)
+{
+    if( aPosition.Sheet != rDetOp.aPosition.Sheet )
+        return (aPosition.Sheet < rDetOp.aPosition.Sheet);
+    else if( aPosition.Row != rDetOp.aPosition.Row )
+        return (aPosition.Row < rDetOp.aPosition.Row);
+    else
+        return (aPosition.Column != rDetOp.aPosition.Column);
+}
 
 ScMyDetectiveOpContainer::ScMyDetectiveOpContainer() :
     aDetectiveOpList()
@@ -530,19 +545,9 @@ void ScMyDetectiveOpContainer::SetCellData( ScMyCell& rMyCell )
     rMyCell.bHasDetectiveOp = (rMyCell.aDetectiveOpVec.size() != 0);
 }
 
-sal_Bool LessMyDetectiveOp( const ScMyDetectiveOp& rDetOp1, const ScMyDetectiveOp& rDetOp2 )
-{
-    if( rDetOp1.aPosition.Sheet != rDetOp2.aPosition.Sheet )
-        return (rDetOp1.aPosition.Sheet < rDetOp2.aPosition.Sheet);
-    else if( rDetOp1.aPosition.Row != rDetOp2.aPosition.Row )
-        return (rDetOp1.aPosition.Row < rDetOp2.aPosition.Row);
-    else
-        return (rDetOp1.aPosition.Column != rDetOp2.aPosition.Column);
-}
-
 void ScMyDetectiveOpContainer::Sort()
 {
-    aDetectiveOpList.sort( LessMyDetectiveOp );
+    aDetectiveOpList.sort();
 }
 
 //==============================================================================

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLStylesExportHelper.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sab $ $Date: 2000-12-18 14:14:24 $
+ *  last change: $Author: sab $ $Date: 2001-01-05 10:30:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,6 +149,7 @@ struct ScMyRowFormatRange
     sal_Bool    bIsAutoStyle;
 
     ScMyRowFormatRange();
+    sal_Bool operator<(const ScMyRowFormatRange& rRange);
 };
 
 typedef std::list<ScMyRowFormatRange> ScMyRowFormatRangesList;

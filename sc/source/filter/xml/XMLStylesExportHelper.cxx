@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLStylesExportHelper.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sab $ $Date: 2000-12-21 09:38:17 $
+ *  last change: $Author: sab $ $Date: 2001-01-05 10:30:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -458,6 +458,11 @@ ScMyRowFormatRange::ScMyRowFormatRange()
 {
 }
 
+sal_Bool ScMyRowFormatRange::operator< (const ScMyRowFormatRange& rRange)
+{
+    return (nStartColumn < rRange.nStartColumn);
+}
+
 ScRowFormatRanges::ScRowFormatRanges()
     : aRowFormatRanges(),
     nSize(0)
@@ -514,14 +519,9 @@ sal_Int32 ScRowFormatRanges::GetSize()
     return nSize;
 }
 
-sal_Bool LessRowFormatRange (const ScMyRowFormatRange& aRange1, const ScMyRowFormatRange& aRange2)
-{
-    return (aRange1.nStartColumn < aRange2.nStartColumn);
-}
-
 void ScRowFormatRanges::Sort()
 {
-    aRowFormatRanges.sort(LessRowFormatRange);
+    aRowFormatRanges.sort();
 }
 
 // ============================================================================

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportIterator.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sab $ $Date: 2000-12-18 14:14:24 $
+ *  last change: $Author: sab $ $Date: 2001-01-05 10:30:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -211,7 +211,13 @@ public:
 
 //==============================================================================
 
-typedef std::list<com::sun::star::table::CellRangeAddress> ScMyEmptyDatabaseRangeList;
+struct ScMyCellRangeAddress : com::sun::star::table::CellRangeAddress
+{
+    ScMyCellRangeAddress(const com::sun::star::table::CellRangeAddress& rRange);
+    sal_Bool                    operator<(const ScMyCellRangeAddress& rCellRangeAddress );
+};
+
+typedef std::list<ScMyCellRangeAddress> ScMyEmptyDatabaseRangeList;
 
 class ScMyEmptyDatabaseRangesContainer : ScMyIteratorBase
 {
@@ -237,6 +243,7 @@ struct ScMyDetectiveObj
     ::com::sun::star::table::CellRangeAddress   aSourceRange;
     ScDetectiveObjType                          eObjType;
     sal_Bool                                    bHasError;
+    sal_Bool operator<(const ScMyDetectiveObj& rDetObj);
 };
 
 typedef ::std::list< ScMyDetectiveObj > ScMyDetectiveObjList;
@@ -270,6 +277,7 @@ struct ScMyDetectiveOp
     ::com::sun::star::table::CellAddress    aPosition;
     ScDetOpType                             eOpType;
     sal_Int32                               nIndex;
+    sal_Bool operator<(const ScMyDetectiveOp& rDetOp);
 };
 
 typedef ::std::list< ScMyDetectiveOp > ScMyDetectiveOpList;
