@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduleimagemanager.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-12-13 12:26:47 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 16:31:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -310,11 +310,8 @@ void CmdImageList::impl_fillCommandToImageNameMap()
 
 ImageList* CmdImageList::impl_getImageList( sal_Int16 nImageType )
 {
-    RTL_LOGFILE_CONTEXT( aLog, "framework: CmdImageList::impl_getImageList" );
-
     if ( !m_pImageList[nImageType] )
     {
-        impl_fillCommandToImageNameMap();
         m_pImageList[nImageType] = new ImageList( m_aImageNameVector,
                                                   OUString::createFromAscii( ImageType_Prefixes[nImageType] ),
                                                   NULL );
@@ -335,12 +332,12 @@ std::vector< rtl::OUString >& CmdImageList::impl_getImageCommandNameVector()
 
 Image CmdImageList::getImageFromCommandURL( sal_Int16 nImageType, const rtl::OUString& rCommandURL )
 {
-    ImageList* pImageList = impl_getImageList( nImageType );
-    if ( pImageList )
+    impl_fillCommandToImageNameMap();
+    CommandToImageNameMap::const_iterator pIter = m_aCommandToImageNameMap.find( rCommandURL );
+    if ( pIter != m_aCommandToImageNameMap.end() )
     {
-        CommandToImageNameMap::const_iterator pIter = m_aCommandToImageNameMap.find( rCommandURL );
-        if ( pIter != m_aCommandToImageNameMap.end() )
-            return pImageList->GetImage( pIter->second );
+        ImageList* pImageList = impl_getImageList( nImageType );
+        return pImageList->GetImage( pIter->second );
     }
 
     return Image();
@@ -348,15 +345,12 @@ Image CmdImageList::getImageFromCommandURL( sal_Int16 nImageType, const rtl::OUS
 
 bool CmdImageList::hasImage( sal_Int16 nImageType, const rtl::OUString& rCommandURL )
 {
-    ImageList* pImageList = impl_getImageList( nImageType );
-    if ( pImageList )
-    {
-        CommandToImageNameMap::const_iterator pIter = m_aCommandToImageNameMap.find( rCommandURL );
-        if ( pIter != m_aCommandToImageNameMap.end() )
-            return ( pImageList->GetImagePos( pIter->second ) != IMAGELIST_IMAGE_NOTFOUND );
-    }
-
-    return false;
+    impl_fillCommandToImageNameMap();
+    CommandToImageNameMap::const_iterator pIter = m_aCommandToImageNameMap.find( rCommandURL );
+    if ( pIter != m_aCommandToImageNameMap.end() )
+        return true;
+    else
+        return false;
 }
 
 ::std::vector< rtl::OUString >& CmdImageList::getImageNames()
