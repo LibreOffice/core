@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unfmco.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 14:08:21 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 15:15:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,11 @@ SwUndoFmtColl::SwUndoFmtColl( const SwPaM& rRange, SwFmtColl* pColl )
     : SwUndo( UNDO_SETFMTCOLL ), SwUndRng( rRange ), pFmtColl( pColl ),
     pHistory( new SwHistory )
 {
+    // --> FME 2004-08-06 #i31191#
+    if ( pColl )
+        aFmtName = pColl->GetName();
+    // <--
+
 #ifdef COMPACT
     ((SwDoc*)rRange.GetDoc())->DelUndoGroups();
 #endif
@@ -137,7 +142,11 @@ SwRewriter SwUndoFmtColl::GetRewriter() const
 {
     SwRewriter aResult;
 
-    aResult.AddRule(UNDO_ARG1, pFmtColl->GetName());
+    // --> FME 2004-08-06 #i31191# Use stored format name instead of
+    // pFmtColl->GetName(), because pFmtColl does not have to be available
+    // anymore.
+    aResult.AddRule(UNDO_ARG1, aFmtName );
+    // <--
 
     return aResult;
 }
