@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scstring.src,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 09:30:05 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 15:36:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,7 +221,6 @@ String SCSTR_PIVOTSHELL
 
 String SCSTR_AUDITSHELL
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Detektiv-Füll-Modus : Detektiv-F³ll-Modus */
     Text [ de ] = "Detektiv-Füll-Modus" ;
     Text [ en-US ] = "Detective Fill Mode" ;
     Text [ x-comment ] = " ";
@@ -231,7 +230,6 @@ String SCSTR_AUDITSHELL
 
 String STR_ROWHEIGHT
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Höhe : H÷he */
     Text [ de ] = "Höhe" ;
     Text [ en-US ] = "Height" ;
     Text [ x-comment ] = " ";
@@ -244,14 +242,12 @@ String STR_OPT_ROWHEIGHT
 };
 String STR_ROWHEIGHT_TITLE
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Zeilenhöhe : Zeilenh÷he */
     Text [ de ] = "Zeilenhöhe" ;
     Text [ en-US ] = "Row Height" ;
     Text [ x-comment ] = " ";
 };
 String STR_OPT_ROWHEIGHT_TITLE
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Optimale Zeilenhöhe : Optimale Zeilenh÷he */
     Text [ de ] = "Optimale Zeilenhöhe" ;
     Text [ en-US ] = "Optimal Row Height" ;
     Text [ x-comment ] = " ";
@@ -354,14 +350,12 @@ String SCSTR_NEW
 };
 String SCSTR_ADD
 {
-    /* ### ACHTUNG: Neuer Text in Resource? ~Hinzufügen : ~Hinzuf³gen */
     Text [ de ] = "~Hinzufügen" ;
     Text [ en-US ] = "~Add" ;
     Text [ x-comment ] = " ";
 };
 String SCSTR_REMOVE
 {
-    /* ### ACHTUNG: Neuer Text in Resource? ~Löschen : ~L÷schen */
     Text [ de ] = "~Löschen" ;
     Text [ en-US ] = "~Delete" ;
     Text [ x-comment ] = " ";
@@ -374,7 +368,6 @@ String SCSTR_CANCEL
 };
 String SCSTR_MODIFY
 {
-    /* ### ACHTUNG: Neuer Text in Resource? ~Ändern : ~Žndern */
     Text [ de ] = "~Ändern" ;
     Text [ en-US ] = "Modif~y" ;
     Text [ x-comment ] = " ";
@@ -395,7 +388,6 @@ String SCSTR_HIDDENTABLES
 };
 String SCSTR_SELECTDB
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Datenbankbereich wählen : Datenbankbereich wõhlen */
     Text [ de ] = "Datenbankbereich wählen" ;
     Text [ en-US ] = "Select Database Range" ;
     Text [ x-comment ] = " ";
@@ -420,14 +412,12 @@ String SCSTR_NAME
 };
 String SCSTR_INSTABLE
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Tabelle einfügen : Tabelle einf³gen */
     Text [ de ] = "Tabelle einfügen" ;
     Text [ en-US ] = "Insert Sheet" ;
     Text [ x-comment ] = " ";
 };
 String SCSTR_APDTABLE
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Tabelle anhängen : Tabelle anhõngen */
     Text [ de ] = "Tabelle anhängen" ;
     Text [ en-US ] = "Append Sheet" ;
     Text [ x-comment ] = " ";
@@ -445,10 +435,8 @@ String SCSTR_RENAMEOBJECT
 };
 String STR_INSERTGRAPHIC
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Grafik einfügen : Grafik einf³gen */
-    Text [ de ] = "Grafik einfügen" ;
-    Text [ en-US ] = "Insert Graphics" ;
-    Text [ x-comment ] = " ";
+    Text [ de ] = "Bild einfügen" ;
+    Text [ en-US ] = "Insert Picture" ;
 };
 
  //      Attribute
@@ -534,7 +522,6 @@ String SCSTR_ORIENTATION_STANDARD
 
 String SCSTR_PROTECTDOC
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Dokument schützen : Dokument sch³tzen */
     Text [ de ] = "Dokument schützen" ;
     Text [ en-US ] = "Protect Document" ;
     Text [ x-comment ] = " ";
@@ -547,7 +534,6 @@ String SCSTR_UNPROTECTDOC
 };
 String SCSTR_PROTECTTAB
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Tabelle schützen : Tabelle sch³tzen */
     Text [ de ] = "Tabelle schützen" ;
     Text [ en-US ] = "Protect Sheet" ;
     Text [ x-comment ] = " ";
@@ -621,7 +607,6 @@ String SCSTR_CHAR_ATTRS
 
 String SCSTR_CLPBRD_CLEAR
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Sie haben größere Datenmengen in die Zwischenablage gestellt.\nSoll der Inhalt der Zwischenablage anderen Applikationen zur Verfügung gestellt werden? : Sie haben gr÷˜ere Datenmengen in die Zwischenablage gestellt.\nSoll der Inhalt der Zwischenablage anderen Applikationen zur Verf³gung gestellt werden? */
     Text [ de ] = "Sie haben größere Datenmengen in die Zwischenablage gestellt.\nSoll der Inhalt der Zwischenablage anderen Applikationen zur Verfügung gestellt werden?" ;
     Text [ en-US ] = "You have a large amount of data saved in the clipboard.\nDo you want the clipboard contents to be available in other applications?" ;
     Text [ x-comment ] = " ";
@@ -713,7 +698,6 @@ String SCSTR_CHARSET_USER
 
 String SCSTR_COLUMN_USER
 {
-    /* ### ACHTUNG: Neuer Text in Resource? Standard;Text;Datum (TMJ);Datum (MTJ);Datum (JMT);US-Englisch;ausblenden : Standard;Text;Datum (TMJ);Datum (MTJ);Datum (JMT);ausblenden */
     Text [ de ] = "Standard;Text;Datum (TMJ);Datum (MTJ);Datum (JMT);US-Englisch;ausblenden" ;
     Text [ en-US ] = "Standard;Text;Date (DMY);Date (MDY);Date (YMD);US English;Hide" ;
     Text [ x-comment ] = " ";
