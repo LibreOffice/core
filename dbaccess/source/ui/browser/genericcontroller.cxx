@@ -2,9 +2,9 @@
  *
  *  $RCSfile: genericcontroller.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-22 12:57:58 $
+ *  last change: $Author: oj $ $Date: 2002-08-19 07:32:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -374,6 +374,8 @@ sal_Bool OGenericUnoController::ImplInvalidateTBItem(sal_uInt16 nId, const Featu
         case TypeClass_STRING:
             if (pTB->GetItemWindow(nId))
                 pTB->GetItemWindow(nId)->SetText(::comphelper::getString(rState.aState));
+            else
+                pTB->SetQuickHelpText(nId,::comphelper::getString(rState.aState));
             break;
 
         case TypeClass_VOID:

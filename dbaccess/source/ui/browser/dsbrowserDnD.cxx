@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsbrowserDnD.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-11 06:53:41 $
+ *  last change: $Author: oj $ $Date: 2002-08-19 07:32:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,8 +117,8 @@
 #ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
 #include "dbustrings.hrc"
 #endif
-#ifndef _DBU_RESOURCE_HRC_
-#include "dbu_resource.hrc"
+#ifndef _DBU_BRW_HRC_
+#include "dbu_brw.hrc"
 #endif
 #ifndef _DBAUI_MODULE_DBU_HXX_
 #include "moduledbu.hxx"
@@ -1388,6 +1388,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.52  2002/07/11 06:53:41  oj
+ *  #95978# check if name for table is valid
+ *
  *  Revision 1.51  2002/07/09 12:46:11  oj
  *  #99921# check if datasource allows to check names
  *

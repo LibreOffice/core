@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unodatbr.cxx,v $
  *
- *  $Revision: 1.138 $
+ *  $Revision: 1.139 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-25 07:04:55 $
+ *  last change: $Author: oj $ $Date: 2002-08-19 07:32:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,8 +219,8 @@
 #ifndef DBACCESS_SHARED_DBUSTRINGS_HRC
 #include "dbustrings.hrc"
 #endif
-#ifndef _DBU_RESOURCE_HRC_
-#include "dbu_resource.hrc"
+#ifndef _DBU_BRW_HRC_
+#include "dbu_brw.hrc"
 #endif
 #ifndef _DBAUI_MODULE_DBU_HXX_
 #include "moduledbu.hxx"

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinExchange.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2002-06-21 06:57:25 $
+ *  last change: $Author: oj $ $Date: 2002-08-19 07:28:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,9 +97,10 @@ namespace dbaui
         OJoinExchangeData           m_jxdSourceDescription;
         IDragTransferableListener*  m_pDragListener;
 
+        virtual ~OJoinExchObj();
     public:
         OJoinExchObj(const OJoinExchangeData& jxdSource,sal_Bool _bFirstEntry=sal_False);
-        ~OJoinExchObj();
+
 
         // XInterface
         virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw(::com::sun::star::uno::RuntimeException);

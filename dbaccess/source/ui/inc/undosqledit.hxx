@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undosqledit.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-11 07:11:22 $
+ *  last change: $Author: oj $ $Date: 2002-08-19 07:28:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,8 +64,8 @@
 #ifndef DBAUI_GENERALUNDO_HXX
 #include "GeneralUndo.hxx"
 #endif
-#ifndef _DBU_RESOURCE_HRC_
-#include "dbu_resource.hrc"
+#ifndef _DBU_CONTROL_HRC_
+#include "dbu_control.hrc"
 #endif
 
 namespace dbaui

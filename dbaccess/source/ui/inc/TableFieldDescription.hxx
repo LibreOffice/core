@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableFieldDescription.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-05 06:49:45 $
+ *  last change: $Author: oj $ $Date: 2002-08-19 07:28:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,7 @@ namespace dbaui
         EOrderDir                   m_eOrderDir;
         sal_Int32                   m_nIndex;
         sal_Int32                   m_nColWidth;
+        sal_uInt16                  m_nColumnId;
         sal_Bool                    m_bGroupBy;
         sal_Bool                    m_bVisible;
 
@@ -139,6 +140,8 @@ namespace dbaui
         void                    SetColWidth( sal_Int32 nWidth ) { m_nColWidth = nWidth; }
         void                    SetFieldIndex( sal_Int32 nFieldIndex ) { m_nIndex = nFieldIndex; }
         void                    SetFunctionType( EFunctionType eTyp )   { m_eFunctionType = eTyp; }
+        void                    SetColumnId(sal_uInt16 _nColumnId) { m_nColumnId = _nColumnId; }
+
 
         ::rtl::OUString         GetField()          const { return m_aFieldName;}
         ::rtl::OUString         GetFieldAlias()     const { return m_aFieldAlias;}
@@ -154,6 +157,7 @@ namespace dbaui
         sal_Int32               GetFieldIndex()     const { return m_nIndex; }
         Window*                 GetTabWindow()      const { return m_pTabWindow;}
         EFunctionType           GetFunctionType()   const { return m_eFunctionType; }
+        sal_uInt16              GetColumnId()       const { return m_nColumnId;}
 
         sal_Bool                HasCriteria()       const
         {

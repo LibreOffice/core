@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsEntriesNoExp.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-22 07:37:58 $
+ *  last change: $Author: oj $ $Date: 2002-08-19 07:32:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,8 +77,8 @@
 #ifndef DBAUI_DBTREELISTBOX_HXX
 #include "dbtreelistbox.hxx"
 #endif
-#ifndef _DBU_RESOURCE_HRC_
-#include "dbu_resource.hrc"
+#ifndef _DBU_BRW_HRC_
+#include "dbu_brw.hrc"
 #endif
 #ifndef DBAUI_DBTREEMODEL_HXX
 #include "dbtreemodel.hxx"

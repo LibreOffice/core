@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: oj $ $Date: 2002-04-23 07:27:36 $
+ *  last change: $Author: oj $ $Date: 2002-08-19 07:32:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -227,8 +227,8 @@
 #ifndef _SVX_DBEXCH_HRC
 #include <svx/dbexch.hrc>
 #endif
-#ifndef _DBU_RESOURCE_HRC_
-#include "dbu_resource.hrc"
+#ifndef _DBU_BRW_HRC_
+#include "dbu_brw.hrc"
 #endif
 #ifndef _DBAUI_MODULE_DBU_HXX_
 #include "moduledbu.hxx"

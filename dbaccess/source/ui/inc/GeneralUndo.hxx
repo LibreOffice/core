@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GeneralUndo.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-09 16:01:33 $
+ *  last change: $Author: oj $ $Date: 2002-08-19 07:28:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@ namespace dbaui
     public:
         OCommentUndoAction(USHORT nCommentID) { m_strComment = String(ModuleRes(nCommentID)); }
 
-        String  getComment() const { return m_strComment; }
+        virtual UniString   GetComment() const { return m_strComment; }
     };
 }
 #endif // DBAUI_GENERALUNDO_HXX
