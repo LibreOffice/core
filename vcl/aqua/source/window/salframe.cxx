@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: pluby $ $Date: 2001-03-19 16:31:42 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 12:49:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,8 +60,6 @@
  ************************************************************************/
 
 #include <string.h>
-
-#define _SV_SALFRAME_CXX
 
 #ifndef _SV_SALDATA_HXX
 #include <saldata.hxx>
