@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-30 10:16:19 $
+ *  last change: $Author: oj $ $Date: 2001-05-04 10:02:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -673,9 +673,26 @@ void ODBTable::refreshIndexes()
     return aVal;
 }
 // -----------------------------------------------------------------------------
-sal_Int64 SAL_CALL ODBTable::getSomething( const Sequence< sal_Int8 >& aIdentifier ) throw(RuntimeException)
+sal_Int64 SAL_CALL ODBTable::getSomething( const Sequence< sal_Int8 >& rId ) throw(RuntimeException)
 {
-    return OTable_Base::getSomething(aIdentifier);
+    if (rId.getLength() == 16 && 0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
+        return (sal_Int64)this;
+    return OTable_Base::getSomething(rId);
+}
+// -----------------------------------------------------------------------------
+Sequence< sal_Int8 > ODBTable::getUnoTunnelImplementationId()
+{
+    static ::cppu::OImplementationId * pId = 0;
+    if (! pId)
+    {
+        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+        if (! pId)
+        {
+            static ::cppu::OImplementationId aId;
+            pId = &aId;
+        }
+    }
+    return pId->getImplementationId();
 }
 // -----------------------------------------------------------------------------
 Reference< XPropertySet > ODBTable::createEmptyObject()

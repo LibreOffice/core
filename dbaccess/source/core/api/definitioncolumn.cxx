@@ -2,9 +2,9 @@
  *
  *  $RCSfile: definitioncolumn.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-06 08:58:55 $
+ *  last change: $Author: oj $ $Date: 2001-05-04 10:02:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -383,6 +383,12 @@ Sequence< ::rtl::OUString > OTableColumn::getSupportedServiceNames(  ) throw (Ru
     return aSNS;
 }
 
+//------------------------------------------------------------------------------
+::cppu::IPropertyArrayHelper& OTableColumn::getInfoHelper()
+{
+    return *static_cast< ::comphelper::OPropertyArrayUsageHelper< OTableColumn >* >(this)->getArrayHelper();
+}
+
 // comphelper::OPropertyArrayUsageHelper
 //------------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper* OTableColumn::createArrayHelper( ) const
@@ -694,6 +700,12 @@ Sequence< ::rtl::OUString > OTableColumnWrapper::getSupportedServiceNames(  ) th
     return aSNS;
 }
 
+//------------------------------------------------------------------------------
+::cppu::IPropertyArrayHelper& OTableColumnWrapper::getInfoHelper()
+{
+    return *static_cast< OIdPropertyArrayUsageHelper< OTableColumnWrapper >* >(this)->getArrayHelper(m_nColTypeID);
+}
+
 // comphelper::OPropertyArrayUsageHelper
 //------------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper* OTableColumnWrapper::createArrayHelper( sal_Int32 nId ) const
@@ -783,6 +795,12 @@ Sequence< ::rtl::OUString > OIndexColumnWrapper::getSupportedServiceNames(  ) th
     return aSNS;
 }
 
+//------------------------------------------------------------------------------
+::cppu::IPropertyArrayHelper& OIndexColumnWrapper::getInfoHelper()
+{
+    return *static_cast< OIdPropertyArrayUsageHelper< OIndexColumnWrapper >* >(this)->getArrayHelper(m_nColTypeID);
+}
+
 // comphelper::OPropertyArrayUsageHelper
 //------------------------------------------------------------------------------
 ::cppu::IPropertyArrayHelper* OIndexColumnWrapper::createArrayHelper( sal_Int32 nId ) const
@@ -848,6 +866,12 @@ Sequence< ::rtl::OUString > OKeyColumnWrapper::getSupportedServiceNames(  ) thro
     aSNS[0] = SERVICE_SDBCX_COLUMN;
     aSNS[1] = SERVICE_SDBCX_KEYCOLUMN;
     return aSNS;
+}
+
+//------------------------------------------------------------------------------
+::cppu::IPropertyArrayHelper& OKeyColumnWrapper::getInfoHelper()
+{
+    return *static_cast< OIdPropertyArrayUsageHelper< OKeyColumnWrapper >* >(this)->getArrayHelper(m_nColTypeID);
 }
 
 // comphelper::OPropertyArrayUsageHelper

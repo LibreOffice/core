@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableDeco.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-30 10:16:19 $
+ *  last change: $Author: oj $ $Date: 2001-05-04 10:02:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -517,13 +517,31 @@ Reference< XNameAccess> ODBTableDecorator::getColumns() throw (RuntimeException)
     return xName->getName();
 }
 // -----------------------------------------------------------------------------
-sal_Int64 SAL_CALL ODBTableDecorator::getSomething( const Sequence< sal_Int8 >& aIdentifier ) throw(RuntimeException)
+sal_Int64 SAL_CALL ODBTableDecorator::getSomething( const Sequence< sal_Int8 >& rId ) throw(RuntimeException)
 {
+    if (rId.getLength() == 16 && 0 == rtl_compareMemory(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
+        return (sal_Int64)this;
+
     sal_Int64 nRet = 0;
     Reference<XUnoTunnel> xTunnel(m_xTable,UNO_QUERY);
     if(xTunnel.is())
-        nRet = xTunnel->getSomething(aIdentifier);
+        nRet = xTunnel->getSomething(rId);
     return nRet;
+}
+// -----------------------------------------------------------------------------
+Sequence< sal_Int8 > ODBTableDecorator::getUnoTunnelImplementationId()
+{
+    static ::cppu::OImplementationId * pId = 0;
+    if (! pId)
+    {
+        ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
+        if (! pId)
+        {
+            static ::cppu::OImplementationId aId;
+            pId = &aId;
+        }
+    }
+    return pId->getImplementationId();
 }
 // -----------------------------------------------------------------------------
 void ODBTableDecorator::fillPrivileges() const
@@ -649,7 +667,7 @@ Reference< XPropertySet > ODBTableDecorator::createEmptyObject()
         xNames = Reference<XDataDescriptorFactory>(m_xTable->getColumns(),UNO_QUERY);
     Reference< XPropertySet > xRet;
     if(xNames.is())
-        xRet = xNames->createDataDescriptor();
+        xRet = new OTableColumnDescriptorWrapper(xNames->createDataDescriptor());
     return xRet;
 }
 // -----------------------------------------------------------------------------

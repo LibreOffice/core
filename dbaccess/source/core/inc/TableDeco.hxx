@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableDeco.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-02 10:07:56 $
+ *  last change: $Author: oj $ $Date: 2001-05-04 10:02:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -222,6 +222,7 @@ namespace dbaccess
         virtual void SAL_CALL setName( const ::rtl::OUString& aName ) throw (::com::sun::star::uno::RuntimeException);
         // com::sun::star::lang::XUnoTunnel
         virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
+        static ::com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
 
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData> getMetaData() const { return m_xMetaData; }
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection> getConnection() const { return m_xMetaData->getConnection(); }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablecontainer.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-30 10:16:19 $
+ *  last change: $Author: oj $ $Date: 2001-05-04 10:02:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -747,13 +747,23 @@ void SAL_CALL OTableContainer::appendByDescriptor( const Reference< XPropertySet
             aTableConfig = m_aTablesConfig.createNode(sComposedName);
             m_aCommitLocation.commit();
         }
-        // here I know that the table is saved
-        // to get a table with a valid config node we have to recreate the table
-        Reference<XPropertySet> xNewTable(createObject(sComposedName),UNO_QUERY);
-        OCollection::appendByDescriptor(xNewTable);
+        Reference<XUnoTunnel> xTunnel(descriptor,UNO_QUERY);
+        if(xTunnel.is())
+        {
+            ODBTableDecorator* pDecoTable = (ODBTableDecorator*)xTunnel->getSomething(ODBTableDecorator::getUnoTunnelImplementationId());
+            if(pDecoTable)
+            {
+                pDecoTable->setConfigurationNode(aTableConfig.cloneAsRoot());
+            }
+            else
+            {
+                ODBTable* pTable = (ODBTable*)xTunnel->getSomething(ODBTable::getUnoTunnelImplementationId());
+                if(pTable)
+                    pTable->setConfigurationNode(aTableConfig.cloneAsRoot());
+            }
+        }
     }
-    else
-        OCollection::appendByDescriptor(descriptor);
+    OCollection::appendByDescriptor(descriptor);
 }
 // -------------------------------------------------------------------------
 // XDrop

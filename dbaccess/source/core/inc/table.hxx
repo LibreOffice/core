@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-30 10:15:36 $
+ *  last change: $Author: oj $ $Date: 2001-05-04 10:02:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,9 +175,8 @@ namespace dbaccess
         virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
         //XTypeProvider
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException);
-    // com::sun::star::lang::XTypeProvider
-        //  virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes() throw (::com::sun::star::uno::RuntimeException);
         virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (::com::sun::star::uno::RuntimeException);
+        static ::com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
 
     // com::sun::star::uno::XInterface
         virtual void SAL_CALL acquire() throw(::com::sun::star::uno::RuntimeException);
