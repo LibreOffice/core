@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_ooo.scp,v $
 *
-*  $Revision: 1.22 $
+*  $Revision: 1.23 $
 *
-*  last change: $Author: hjs $ $Date: 2004-06-28 16:34:02 $
+*  last change: $Author: obo $ $Date: 2004-07-05 13:17:25 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -227,6 +227,17 @@ File gid_File_Script_Unopkg
 End
 
 #endif
+
+File gid_File_Bin_Configimport
+    BIN_FILE_BODY;
+    Dir = gid_Dir_Program;
+    Styles = (PACKED);
+  #ifdef UNX
+    Name = "configimport.bin";
+  #else
+    Name = "configimport.exe";
+  #endif
+End
 
 #ifdef UNX
 
@@ -990,7 +1001,7 @@ End
 
 File gid_File_Oo_Office_Common_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED, SCPZIP_REPLACE);
     Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office;
     Name = "/registry/data/org/openoffice/Office/Common.xcu";
 End
@@ -1312,7 +1323,7 @@ End
 
 File gid_File_Oo_Setup_Xcu
     TXT_FILE_BODY;
-    Styles = (PACKED);
+    Styles = (PACKED, SCPZIP_REPLACE);
     Dir = gid_Dir_Share_Registry_Data_Org_Openoffice;
     Name = "/registry/data/org/openoffice/Setup.xcu";
 End
@@ -1448,6 +1459,61 @@ File gid_File_Registry_Lang
     Dir = gid_Dir_Share_Registry_Res_Lang;
     ARCHIVE_TXT_FILE_BODY;
     EXTRA_ALL_LANG(registry);
+End
+
+File gid_File_Registry_Spool_Langpack_Lang
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Spool;
+    FILE_ALL_LANG_LETTER(/registry/spool/Langpack-,xcu);
+End
+
+File gid_File_Registry_Spool_Oo_Common_System_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Spool;
+#ifdef WNT
+    Name = "/registry/spool/org.openoffice.Office.Common-wnt.xcu";
+#else
+    Name = "/registry/spool/org.openoffice.Office.Common-unx.xcu";
+#endif
+End
+
+File gid_File_Registry_Spool_Oo_Common_Cjk_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Spool;
+    Name (81) = "/registry/spool/org.openoffice.Office.Common-cjk.xcu";
+    Name (82) = "/registry/spool/org.openoffice.Office.Common-cjk.xcu";
+    Name (86) = "/registry/spool/org.openoffice.Office.Common-cjk.xcu";
+    Name (88) = "/registry/spool/org.openoffice.Office.Common-cjk.xcu";
+End
+
+File gid_File_Registry_Spool_Oo_Common_Ctl_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Spool;
+    Name (66) = "/registry/spool/org.openoffice.Office.Common-ctl.xcu";
+    Name (91) = "/registry/spool/org.openoffice.Office.Common-ctl.xcu";
+    Name (96) = "/registry/spool/org.openoffice.Office.Common-ctl.xcu";
+    Name (97) = "/registry/spool/org.openoffice.Office.Common-ctl.xcu";
+End
+
+File gid_File_Registry_Spool_Oo_Writer_Cjk_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Spool;
+    Name (81) = "/registry/spool/org.openoffice.Office.Writer-cjk.xcu";
+    Name (82) = "/registry/spool/org.openoffice.Office.Writer-cjk.xcu";
+    Name (86) = "/registry/spool/org.openoffice.Office.Writer-cjk.xcu";
+    Name (88) = "/registry/spool/org.openoffice.Office.Writer-cjk.xcu";
+End
+
+File gid_File_Registry_Spool_Oo_Common_Korean_Xcu
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Spool;
+    Name (82) = "/registry/spool/org.openoffice.Office.Common-korea.xcu";
 End
 
 #ifdef UNX
