@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlDataSource.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:19:19 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 16:39:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,7 @@ OXMLDataSource::OXMLDataSource( ODBFilter& rImport,
     const SvXMLNamespaceMap& rMap = rImport.GetNamespaceMap();
     const SvXMLTokenMap& rTokenMap = rImport.GetDataSourceElemTokenMap();
 
-    Reference<XPropertySet> xDataSource(rImport.GetModel(),UNO_QUERY);
+    Reference<XPropertySet> xDataSource = rImport.getDataSource();
 
     PropertyValue aProperty;
 
@@ -271,7 +271,7 @@ ODBFilter& OXMLDataSource::GetOwnImport()
 // -----------------------------------------------------------------------------
 void OXMLDataSource::EndElement()
 {
-    Reference<XPropertySet> xDataSource(GetImport().GetModel(),UNO_QUERY);
+    Reference<XPropertySet> xDataSource(GetOwnImport().getDataSource());
     if ( !m_aInfoSequence.empty() && xDataSource.is() )
     {
         try
