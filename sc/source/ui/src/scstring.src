@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scstring.src,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-08 13:14:46 $
+ *  last change: $Author: kz $ $Date: 2002-08-12 20:10:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1269,7 +1269,7 @@ String SCSTR_COLUMN
     Text[ korean ] = "단";
     Text[ turkish ] = "S�tun";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "COLUMN";
+    Text[ catalan ] = "Columna";
     Text[ thai ] = "คอลัมน์";
 };
 String SCSTR_ROW
@@ -1555,7 +1555,7 @@ String SCSTR_AREAS
     Text[ korean ] = "영역";
     Text[ turkish ] = "Aral�klar";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "�rees";
+    Text[ catalan ] = "�rees";
     Text[ thai ] = "ช่วง";
 };
 String SCSTR_TABLE
@@ -1722,7 +1722,7 @@ String SCSTR_RENAMEOBJECT
     Text[ chinese_traditional ] = "命名物件";
     Text[ turkish ] = "Name Object";
     Text[ arabic ] = "Name Object";
-    Text[ catalan ] = "Anomena l'objecte";
+    Text[ catalan ] = "Name Object";
     Text[ thai ] = "วัตถุชื่อ";
 };
 String STR_INSERTGRAPHIC
@@ -1859,7 +1859,7 @@ String SCSTR_HOR_JUSTIFY_BLOCK
     Text[ chinese_simplified ] = "左右对齐";
     Text[ russian ] = "������������ �� ������";
     Text[ polish ] = "Wyjustowany";
-    Text[ japanese ] = "均等割付";
+    Text[ japanese ] = "両端揃え";
     Text[ chinese_traditional ] = "左右對齊";
     Text[ arabic ] = "���";
     Text[ greek ] = "������ ��������";
@@ -1922,7 +1922,7 @@ String SCSTR_HOR_JUSTIFY_STANDARD
     Text[ greek ] = "����������: ��������� ��������";
     Text[ korean ] = "기본 수평 맞춤";
     Text[ turkish ] = "Standart yatay hizalama";
-    Text[ catalan ] = "Alineaci� horitzontal per defecte";
+    Text[ catalan ] = "Alineament horitzontal per defecte";
     Text[ thai ] = "ค่าเริ่มต้นการจัดตำแหน่งแนวนอน";
 };
 String SCSTR_VER_JUSTIFY_TOP
@@ -2034,7 +2034,7 @@ String SCSTR_VER_JUSTIFY_STANDARD
     Text[ korean ] = "기본 수직 맞춤";
     Text[ turkish ] = "Standart dikey hizalama";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Alineaci� vertical per defecte";
+    Text[ catalan ] = "Alineament vertical per defecte";
     Text[ thai ] = "ค่าเริ่มต้นการจัดตำแหน่งแนวตั้ง";
 };
 String SCSTR_ORIENTATION_TOPBOTTOM
@@ -2257,7 +2257,7 @@ String SCSTR_CHG_PROTECT
     Text[ korean ] = "기록 보호";
     Text[ turkish ] = "Protect trace";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Protegeix el rastreig";
+    Text[ catalan ] = "Protegeix el rastre";
     Text[ finnish ] = "~Suojaa tietueet";
     Text[ thai ] = "ป้องกันการติดตาม";
 };
@@ -2284,7 +2284,7 @@ String SCSTR_CHG_UNPROTECT
     Text[ korean ] = "기록 보호 취소";
     Text[ turkish ] = "Unprotect trace";
     Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Desprotegeix el rastreig";
+    Text[ catalan ] = "Desprotegeix el rastre";
     Text[ finnish ] = "Poista tietueiden suojaus";
     Text[ thai ] = "ไม่ป้องกันการติดตาม";
 };
