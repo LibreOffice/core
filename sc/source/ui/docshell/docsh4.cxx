@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh4.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:23:15 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:23:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -805,7 +805,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 }
                 else
                 {
-                    pMed = pApp->InsertDocumentDialog( 0, ScDocShell::Factory() );
+                    pMed = pApp->InsertDocumentDialog( 0, String::CreateFromAscii(ScDocShell::Factory().GetShortName()) );
                     if ( pMed )
                     {
                         //  kompletten Request zum Aufzeichnen zusammenbasteln
