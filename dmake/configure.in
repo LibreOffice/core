@@ -56,6 +56,10 @@ if test ${OS_UNAME} = Irix; then
 	echo "Irix found"
 	OS_VERSION=sysvr4
 fi
+if test ${OS_UNAME} = FreeBSD; then
+	echo "FreeBSD found"
+	OS_VERSION=386ix
+fi
 AC_SUBST(OS_VERSION)
 
 AC_OUTPUT(Makefile unix/Makefile startup/Makefile startup/unix/Makefile \
