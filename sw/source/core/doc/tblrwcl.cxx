@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tblrwcl.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 14:49:19 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 13:44:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -942,7 +942,7 @@ void _DeleteBox( SwTable& rTbl, SwTableBox* pBox, SwUndo* pUndo,
         if( pSttNd )
         {
             // ist das UndoObject zum speichern der Section vorbereitet?
-            if( pUndo && UNDO_TABLE_DELBOX == pUndo->GetId() )
+            if( pUndo && pUndo->IsDelBox() )
                 ((SwUndoTblNdsChg*)pUndo)->SaveSection( pSttNd );
             else
                 pSttNd->GetDoc()->DeleteSection( pSttNd );
@@ -3534,7 +3534,7 @@ BOOL SwTable::SetColWidth( SwTableBox& rAktBox, USHORT eType,
 
                     if( ppUndo )
                         *ppUndo = aParam.CreateUndo(
-                                        aParam.bBigger ? UNDO_TABLE_DELBOX
+                                        aParam.bBigger ? UNDO_COL_DELETE
                                                        : UNDO_TABLE_INSCOL );
                 }
                 else if( ppUndo )
@@ -4244,7 +4244,7 @@ BOOL SwTable::SetRowHeight( SwTableBox& rAktBox, USHORT eType,
                         if( ppUndo )
                             *ppUndo = aParam.CreateUndo(
                                         bBigger ? UNDO_TABLE_INSROW
-                                                : UNDO_TABLE_DELBOX );
+                                                : UNDO_ROW_DELETE );
                     }
                     else if( ppUndo )
                         *ppUndo = new SwUndoAttrTbl( *aParam.pTblNd, TRUE );
@@ -4319,7 +4319,7 @@ BOOL SwTable::SetRowHeight( SwTableBox& rAktBox, USHORT eType,
                         if( ppUndo )
                             *ppUndo = aParam.CreateUndo(
                                         bBigger ? UNDO_TABLE_INSROW
-                                                : UNDO_TABLE_DELBOX );
+                                                : UNDO_ROW_DELETE );
                     }
                     else if( ppUndo )
                         *ppUndo = new SwUndoAttrTbl( *aParam.pTblNd, TRUE );
