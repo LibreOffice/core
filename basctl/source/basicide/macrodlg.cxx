@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrodlg.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: ab $ $Date: 2002-07-30 13:10:21 $
+ *  last change: $Author: ab $ $Date: 2002-08-06 09:12:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,6 +129,8 @@ MacroChooser::MacroChooser( Window* pParnt, BOOL bScanBasics ) :
     // => Speichern anschmeissen, wenn Aenderung, aber kein Sprung in
     // die BasicIDE.
     bForceStoreBasic = FALSE;
+
+    aMacrosInTxtBaseStr = aMacrosInTxt.GetText();
 
     aMacroBox.SetSelectionMode( SINGLE_SELECTION );
     aMacroBox.SetHighlightRange(); // ueber ganze Breite selektieren
@@ -576,6 +578,8 @@ IMPL_LINK( MacroChooser, MacroSelectHdl, SvTreeListBox *, pBox )
 
 IMPL_LINK( MacroChooser, BasicSelectHdl, SvTreeListBox *, pBox )
 {
+    static String aSpaceStr = String::CreateFromAscii(" ");
+
     // Wird auch gerufen, wenn Deselektiert!
     // 2 Funktionsaufrufe in jedem SelectHdl, nur weil Olli
     // keinen separatren DeselctHdl einfuehren wollte:
@@ -588,6 +592,12 @@ IMPL_LINK( MacroChooser, BasicSelectHdl, SvTreeListBox *, pBox )
     aMacroBox.Clear();
     if ( pModule )
     {
+        String aStr = aMacrosInTxtBaseStr;
+        aStr += aSpaceStr;
+        aStr += pModule->GetName();
+
+        aMacrosInTxt.SetText( aStr );
+
         // Die Macros sollen in der Reihenfolge angezeigt werden,
         // wie sie im Modul stehen.
         MacroList aMacros;

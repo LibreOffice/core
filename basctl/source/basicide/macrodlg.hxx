@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrodlg.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ab $ $Date: 2002-07-30 13:10:22 $
+ *  last change: $Author: ab $ $Date: 2002-08-06 09:12:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,7 @@ private:
     FixedText               aMacroNameTxt;
     Edit                    aMacroNameEdit;
     FixedText               aMacrosInTxt;
+    String                  aMacrosInTxtBaseStr;
     SvTreeListBox           aMacroBox;
     FixedText               aMacroFromTxT;
     FixedText               aMacrosSaveInTxt;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldlg.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ab $ $Date: 2002-07-30 13:10:27 $
+ *  last change: $Author: ab $ $Date: 2002-08-06 09:12:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1065,8 +1065,8 @@ SbModule* createModImpl( Window* pWin, SfxObjectShell* pShell, StarBASIC* pLib,
 
     if (xNewDlg->Execute() != 0)
     {
-        if ( aModName.Len() == 0 )
-            aModName = BasicIDE::CreateModuleName( pShell, aLibName );
+        if ( xNewDlg->GetObjectName().Len() )
+            aModName = xNewDlg->GetObjectName();
 
         try
         {

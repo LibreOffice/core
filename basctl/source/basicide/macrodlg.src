@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrodlg.src,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: kz $ $Date: 2002-08-05 20:31:43 $
+ *  last change: $Author: ab $ $Date: 2002-08-06 09:12:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,8 +89,8 @@ ModalDialog RID_MACROCHOOSER
     {
         Pos = MAP_APPFONT ( 122 , 30 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
-        Text = "Makros ~in " ;
-        Text [ ENGLISH ] = "Macros ~in " ;
+        Text = "Vorhandene Makros ~in:" ;
+        Text [ ENGLISH ] = "Existing macros ~in:" ;
         Text[ english_us ] = "Existing macros ~in:";
         Text[ portuguese ] = "Macros ~in ";
         Text[ russian ] = "Macros ~in ";
