@@ -497,7 +497,19 @@ xmlns:office="http://openoffice.org/2000/office" xmlns:style="http://openoffice.
 	</xsl:element>
 </xsl:template>
 
+
+
+
+
 <xsl:template match="para">
+<xsl:choose>
+<xsl:when test="ancestor::varlistentry">
+		<xsl:element name="text:p">
+			<xsl:attribute name="text:style-name">VarList Term</xsl:attribute>
+			<xsl:apply-templates />
+		</xsl:element>
+</xsl:when>
+<xsl:otherwise>
 	<xsl:element name="text:p">
 <xsl:choose>
 	<xsl:when test="ancestor-or-self::footnote">
@@ -528,6 +540,9 @@ xmlns:office="http://openoffice.org/2000/office" xmlns:style="http://openoffice.
 </xsl:choose>
 		<xsl:apply-templates/>	
 </xsl:element>
+
+</xsl:otherwise>
+</xsl:choose>
 </xsl:template>
 
 <xsl:template match="section">
