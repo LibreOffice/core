@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh1.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-23 16:10:12 $
+ *  last change: $Author: rt $ $Date: 2005-04-04 08:19:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,9 @@
 
 #pragma hdrstop
 
+#ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
+#include <com/sun/star/container/XChild.hpp>
+#endif
 #ifndef _COM_SUN_STAR_EMBED_XVISUALOBJECT_HPP_
 #include <com/sun/star/embed/XVisualObject.hpp>
 #endif
@@ -627,12 +630,6 @@ void SwWrtShell::InsertObject( const svt::EmbeddedObjectRef& xRef, SvGlobalName 
 
         if ( xObj.is() )
         {
-            //TODO/LATER: RESIZEONPRINTERCHANGE
-            /*
-            if( SVOBJ_MISCSTATUS_RESIZEONPRINTERCHANGE &
-                xIPObj->GetMiscStatus() && GetPrt() )
-                xIPObj->OnDocumentPrinterChanged( GetPrt() );*/
-
             if( InsertOleObject( xObj ) && bActivate && bDoVerb )
             {
                 SfxInPlaceClient* pClient = GetView().FindIPClient( xObj.GetObject(), &GetView().GetEditWin() );
@@ -685,12 +682,13 @@ BOOL SwWrtShell::InsertOleObject( const svt::EmbeddedObjectRef&  xRef )
         BOOL bStarMath,
              bActivate = TRUE;
 
-        // determine source CLSID
+        // set parent to get correct VisArea(in case of object needing parent printer)
+        uno::Reference < container::XChild > xChild( xRef.GetObject(), uno::UNO_QUERY );
+        if ( xChild.is() )
+            xChild->setParent( pDoc->GetDocShell()->GetModel() );
+
         SvGlobalName aCLSID( xRef->getClassID() );
-
-        // TODO/MBA: testing
         bStarMath = ( SotExchange::IsMath( aCLSID ) != 0 );
-
         if( IsSelection() )
         {
             if( bStarMath )
@@ -705,14 +703,8 @@ BOOL SwWrtShell::InsertOleObject( const svt::EmbeddedObjectRef&  xRef )
                     {
                         try
                         {
-                            // TODO/MBA: testing
                             xSet->setPropertyValue( ::rtl::OUString::createFromAscii("Formula"), uno::makeAny( ::rtl::OUString( aMathData ) ) );
                             bActivate = FALSE;
-                            //StarMath size depends on the Printer, which is
-                            //passed here direct for avoiding time consuming
-                            //connections between StarWriter and StarMath
-                            // TODO/LATER: OnDocumentPrinterChanged
-                            //aRef->OnDocumentPrinterChanged( GetPrt() );
                         }
                         catch ( uno::Exception& )
                         {
