@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propsetaccessimpl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hjs $ $Date: 2000-12-15 21:45:33 $
+ *  last change: $Author: jb $ $Date: 2000-12-19 08:39:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,7 +160,7 @@ public:
     Sequence<Property> forChildren(Tree& _rTree,const NodeRef& _rNode)
     {
         reset();
-        _rTree.dispatchToChildren(_rTree.getRootNode(), *this);
+        _rTree.dispatchToChildren(_rNode, *this);
         return makeSequence(m_aProperties);
     }
 
