@@ -169,5 +169,4 @@
     <type> com.sun.star.uno.XWeak                              </type>
     <type> com.sun.star.util.DateTime                          </type>
     <type> com.sun.star.util.XChangesBatch                     </type>
-    <type> com.sun.star.util.XStringEscape                     </type>
 </module-description>
