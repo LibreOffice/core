@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: nn $ $Date: 2000-10-19 18:37:37 $
+#   last change: $Author: mh $ $Date: 2000-12-07 10:03:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,37 +81,6 @@ AUTOSEG=true
 
 # --- Files --------------------------------------------------------
 
-CXXFILES = \
-        fupoor.cxx \
-        fumark.cxx \
-        fudraw.cxx \
-        fusel.cxx \
-        fusel2.cxx \
-        fuconstr.cxx \
-        fuconrec.cxx \
-        fuconarc.cxx \
-        fuconuno.cxx \
-        fuconpol.cxx \
-        fuins1.cxx \
-        fuins2.cxx \
-        futext.cxx \
-        futext2.cxx \
-        futext3.cxx \
-        drawsh.cxx \
-        drawsh1.cxx \
-        drawsh2.cxx \
-        drawsh3.cxx \
-        drawsh4.cxx \
-        drawsh5.cxx \
-        drtxtob.cxx \
-        drtxtob1.cxx \
-        drtxtob2.cxx \
-        drformsh.cxx \
-        oleobjsh.cxx \
-        chartsh.cxx  \
-        graphsh.cxx  \
-
-
 SRCFILES =  \
         objdraw.src\
         drformsh.src
@@ -133,9 +102,7 @@ SLOFILES =  \
         $(SLO)$/futext2.obj \
         $(SLO)$/futext3.obj \
         $(SLO)$/drawsh.obj \
-        $(SLO)$/drawsh1.obj \
         $(SLO)$/drawsh2.obj \
-        $(SLO)$/drawsh3.obj \
         $(SLO)$/drawsh4.obj \
         $(SLO)$/drawsh5.obj \
         $(SLO)$/drtxtob.obj \
