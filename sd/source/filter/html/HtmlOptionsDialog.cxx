@@ -60,8 +60,10 @@ using namespace com::sun::star::frame;
 using namespace com::sun::star::ui::dialogs;
 
 #include "pres.hxx"
-#include "pubdlg.hxx"
-
+//CHINA001 #include "pubdlg.hxx"
+#include "sdabstdlg.hxx" //CHINA001
+#include "pubdlg.hrc" //CHINA001
+#include "tools/debug.hxx" //CHINA001
 class SdHtmlOptionsDialog : public cppu::WeakImplHelper5
 <
     XExporter,
@@ -245,16 +247,21 @@ void SdHtmlOptionsDialog::setTitle( const OUString& aTitle )
 sal_Int16 SdHtmlOptionsDialog::execute()
     throw ( RuntimeException )
 {
-    SdPublishingDlg aDlg( Application::GetDefDialogParent(), meDocType );
-    if( aDlg.Execute() )
+    //CHINA001 SdPublishingDlg aDlg( Application::GetDefDialogParent(), meDocType );
+    SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();//CHINA001
+    DBG_ASSERT(pFact, "SdAbstractDialogFactory fail!");//CHINA001
+    AbstractSdPublishingDlg* pDlg = pFact->CreateSdPublishingDlg(ResId( DLG_PUBLISHING ), Application::GetDefDialogParent(), meDocType );
+    DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+    if( pDlg->Execute() ) //CHINA001 if( aDlg.Execute() )
     {
-        aDlg.GetParameterSequence( maFilterDataSequence );
+        pDlg->GetParameterSequence( maFilterDataSequence ); //CHINA001 aDlg.GetParameterSequence( maFilterDataSequence );
         return ExecutableDialogResults::OK;
     }
     else
     {
         return ExecutableDialogResults::CANCEL;
     }
+    delete pDlg; //add by CHINA001
 
 }
 
