@@ -2,9 +2,9 @@
  *
  *  $RCSfile: setnodeimpl.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:19:47 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 13:41:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,7 +179,7 @@ namespace
     private:
         Result handle(TreeAccessor const& _aElement);
 
-        Result handle(NodeAccess const& _aNonValue);
+        Result handle(NodeAccessRef const& _aNonValue);
         Result handle(ValueNodeAccess const& _aValue);
 
         void add(TreeAccessor const& _aNode);
@@ -242,7 +242,7 @@ namespace
         return CONTINUE;
     }
     //-------------------------------------------------------------------------
-    CollectElementTrees::Result CollectElementTrees::handle(NodeAccess const& _aNonValue)
+    CollectElementTrees::Result CollectElementTrees::handle(NodeAccessRef const& _aNonValue)
     {
         OSL_ENSURE(!ValueNodeAccess::isInstance(_aNonValue),"Unexpected: Value-node dispatched to wrong handler");
         if (m_aTemplate.is())
@@ -271,10 +271,10 @@ namespace
     {
         node::Attributes const aAttributes = _aTree.getAttributes();
 
-        bool bWritable  = aAttributes.bWritable;
+        bool bReadonly  = aAttributes.isReadonly();
         bool bInDefault = !aAttributes.isReplacedForUser();
 
-        view::ViewStrategyRef xStrategy = bWritable ? m_xStrategy : view::createReadOnlyStrategy(m_pParentTree ? m_pParentTree->getDataSegment() : NULL);
+        view::ViewStrategyRef xStrategy = !bReadonly ? m_xStrategy : view::createReadOnlyStrategy(m_pParentTree ? m_pParentTree->getDataSegment() : NULL);
 
         ElementTreeImpl * pNewTree;
         if (m_pParentTree)
@@ -470,7 +470,7 @@ data::SetNodeAccess SetNodeImpl::getDataAccess(data::Accessor const& _aAccessor)
 {
     using namespace data;
 
-    NodeAccess aNodeAccess = getOriginalNodeAccess(_aAccessor);
+    NodeAccessRef aNodeAccess = getOriginalNodeAccessRef(&_aAccessor);
     OSL_ASSERT(SetNodeAccess::isInstance(aNodeAccess));
 
     SetNodeAccess aSetAccess(aNodeAccess);
