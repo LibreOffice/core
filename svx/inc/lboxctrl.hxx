@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lboxctrl.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 14:53:59 $
+ *  last change: $Author: vg $ $Date: 2005-02-24 16:55:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,6 +106,7 @@ public:
 class SVX_DLLPUBLIC SvxUndoRedoControl : public SvxListBoxControl
 {
     std::vector< ::rtl::OUString > aUndoRedoList;
+    ::rtl::OUString                aDefaultText;
 
 public:
     SFX_DECL_TOOLBOX_CONTROL();
