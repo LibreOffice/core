@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ssa $ $Date: 2002-03-14 10:06:53 $
+ *  last change: $Author: ssa $ $Date: 2002-03-15 13:54:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4542,22 +4542,143 @@ void ToolBox::LoseFocus()
 }
 
 // -----------------------------------------------------------------------
+// calls the button's action handler
+// returns TRUE if action was called
+BOOL ToolBox::ImplActivateItem( KeyCode aKeyCode )
+{
+    BOOL bRet = TRUE;
+    if( mnHighItemId )
+    {
+        ImplToolItem *pItem = ImplGetItem( mnHighItemId );
+        if( pItem && pItem->mpWindow && HasFocus() )
+        {
+            ImplHideFocus();
+            mbDummy3_ChangingHighlight = TRUE;  // avoid focus change due to loose focus
+            pItem->mpWindow->ImplControlFocus( 0 );
+            mbDummy3_ChangingHighlight = FALSE;
+        }
+        else
+        {
+            mnDownItemId = mnCurItemId = mnHighItemId;
+            ImplToolItem* pItem = ImplGetItem( mnHighItemId );
+            mnMouseModifier = aKeyCode.GetModifier();
+            mbDummy2_KeyEvt = TRUE;
+            Activate();
+            Click();
+            Select();
+            Deactivate();
+            mbDummy2_KeyEvt = FALSE;
+            mnMouseModifier = 0;
+        }
+    }
+    else
+        bRet = FALSE;
+    return bRet;
+}
+
+// -----------------------------------------------------------------------
+
+// opens a drop down toolbox item
+// returns TRUE if item was opened
+BOOL ToolBox::ImplOpenItem( KeyCode aKeyCode )
+{
+    USHORT nCode = aKeyCode.GetCode();
+    BOOL bRet = TRUE;
+
+    // arrow keys should work as the direction of the green arrow suggests
+    if ( ( nCode == KEY_LEFT && meAlign != WINDOWALIGN_RIGHT )
+        || ( nCode == KEY_RIGHT && meAlign != WINDOWALIGN_LEFT )
+        || ( nCode == KEY_UP && meAlign != WINDOWALIGN_BOTTOM )
+        || ( nCode == KEY_DOWN && meAlign != WINDOWALIGN_TOP ) )
+        return FALSE;
+
+    if( mnHighItemId &&  ImplGetItem( mnHighItemId ) &&
+        (ImplGetItem( mnHighItemId )->mnBits & TIB_DROPDOWN) )
+    {
+        // close last popup toolbox (see also:
+        // ImplHandleMouseFloatMode(...) in winproc.cxx )
+
+        if( ImplGetSVData()->maWinData.mpFirstFloat )
+        {
+            FloatingWindow* pLastLevelFloat = ImplGetSVData()->maWinData.mpFirstFloat->ImplFindLastLevelFloat();
+            if( pLastLevelFloat )
+            {
+                pLastLevelFloat->EndPopupMode( FLOATWIN_POPUPMODEEND_CANCEL | FLOATWIN_POPUPMODEEND_CLOSEALL );
+                return bRet;
+            }
+        }
+
+        mnDownItemId = mnCurItemId = mnHighItemId;
+        mnLastFocusItemId = mnCurItemId; // save item id for possible later focus restore
+        ImplToolItem* pItem = ImplGetItem( mnHighItemId );
+
+        mnMouseModifier = aKeyCode.GetModifier();
+        mbDummy1_Shift = TRUE;
+        mbDummy2_KeyEvt = TRUE;
+        Activate();
+        Click();
+        if (pItem->mnBits & TIB_REPEAT)
+            Select();
+        mbDummy2_KeyEvt = FALSE;
+        mbDummy1_Shift = FALSE;
+        mnMouseModifier = 0;
+    }
+    else
+        bRet = FALSE;
+
+    return bRet;
+}
+
+// -----------------------------------------------------------------------
 
 void ToolBox::KeyInput( const KeyEvent& rKEvt )
 {
     KeyCode aKeyCode = rKEvt.GetKeyCode();
     USHORT nCode = aKeyCode.GetCode();
     BOOL bParentIsDialog = ( ( ImplGetParent()->GetStyle() & (WB_DIALOGCONTROL | WB_NODIALOGCONTROL) ) == WB_DIALOGCONTROL );
+    BOOL bForwardKey = FALSE;
     switch ( nCode )
     {
         case KEY_UP:
         {
-            ImplChangeHighlightUpDn( TRUE );
+            if( !IsHorizontal() )
+                ImplChangeHighlightUpDn( TRUE );
+            else
+                bForwardKey = ImplOpenItem( aKeyCode );
+        }
+        break;
+        case KEY_LEFT:
+        {
+            // Ctrl-Left activates next toolbox, indicated by a blue arrow pointing to the left
+            if( aKeyCode.IsMod1() && !maNextToolRect.IsEmpty() )
+            {
+                ImplDrawNext( TRUE );
+                ImplDrawNext( FALSE );
+                NextToolBox();
+            }
+            else
+            {
+                if( IsHorizontal() )
+                    ImplChangeHighlightUpDn( TRUE );
+                else
+                    bForwardKey = ImplOpenItem( aKeyCode );
+            }
         }
         break;
         case KEY_DOWN:
         {
-            ImplChangeHighlightUpDn( FALSE );
+            if( !IsHorizontal() )
+                ImplChangeHighlightUpDn( FALSE );
+            else
+                bForwardKey = !ImplOpenItem( aKeyCode );
+        }
+        break;
+        case KEY_RIGHT:
+        {
+            if( IsHorizontal() )
+                ImplChangeHighlightUpDn( FALSE );
+            else
+                bForwardKey = !ImplOpenItem( aKeyCode );
         }
         break;
         case KEY_PAGEUP:
@@ -4619,80 +4740,9 @@ void ToolBox::KeyInput( const KeyEvent& rKEvt )
             }
         }
         break;
-        case KEY_LEFT:
-        {
-            // Ctrl-Left activates next toolbox, indicated by a blue arrow pointing to the left
-            if( aKeyCode.IsMod1() && !maNextToolRect.IsEmpty() )
-            {
-                ImplDrawNext( TRUE );
-                ImplDrawNext( FALSE );
-                NextToolBox();
-            }
-            else
-                ImplChangeHighlightUpDn( TRUE );
-        }
-        break;
-        case KEY_RIGHT:
-        {
-            ImplChangeHighlightUpDn( FALSE );
-        }
-        break;
         case KEY_RETURN:
         {
-            if( mnHighItemId )
-            {
-                ImplToolItem *pItem = ImplGetItem( mnHighItemId );
-                if( pItem && pItem->mpWindow && HasFocus() )
-                {
-                    ImplHideFocus();
-                    mbDummy3_ChangingHighlight = TRUE;  // avoid focus change due to loose focus
-                    pItem->mpWindow->ImplControlFocus( 0 );
-                    mbDummy3_ChangingHighlight = FALSE;
-                }
-                else
-                {
-                    mnDownItemId = mnCurItemId = mnHighItemId;
-                    ImplToolItem* pItem = ImplGetItem( mnHighItemId );
-                    mbDummy2_KeyEvt = TRUE;
-                    Activate();
-                    Click();
-                    Select();
-                    Deactivate();
-                    mbDummy2_KeyEvt = FALSE;
-                }
-            }
-        }
-        break;
-        case KEY_SPACE:
-        {
-            if( mnHighItemId &&  ImplGetItem( mnHighItemId ) && (ImplGetItem( mnHighItemId )->mnBits & TIB_DROPDOWN) )
-            {
-                // close last popup toolbox (see also:
-                // ImplHandleMouseFloatMode(...) in winproc.cxx )
-
-                if( ImplGetSVData()->maWinData.mpFirstFloat )
-                {
-                    FloatingWindow* pLastLevelFloat = ImplGetSVData()->maWinData.mpFirstFloat->ImplFindLastLevelFloat();
-                    if( pLastLevelFloat )
-                    {
-                        pLastLevelFloat->EndPopupMode( FLOATWIN_POPUPMODEEND_CANCEL | FLOATWIN_POPUPMODEEND_CLOSEALL );
-                        return;
-                    }
-                }
-
-                mnDownItemId = mnCurItemId = mnHighItemId;
-                mnLastFocusItemId = mnCurItemId; // save item id for possible later focus restore
-                ImplToolItem* pItem = ImplGetItem( mnHighItemId );
-
-                mbDummy1_Shift = TRUE;
-                mbDummy2_KeyEvt = TRUE;
-                Activate();
-                Click();
-                if (pItem->mnBits & TIB_REPEAT)
-                   Select();
-                mbDummy2_KeyEvt = FALSE;
-                mbDummy1_Shift = FALSE;
-            }
+            bForwardKey = !ImplActivateItem( aKeyCode );
         }
         break;
         default:
@@ -4701,6 +4751,8 @@ void ToolBox::KeyInput( const KeyEvent& rKEvt )
         }
     }
 
+    if( bForwardKey )
+        DockingWindow::KeyInput( rKEvt );
 }
 
 // -----------------------------------------------------------------------
