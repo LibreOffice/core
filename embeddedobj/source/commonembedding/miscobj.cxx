@@ -2,9 +2,9 @@
  *
  *  $RCSfile: miscobj.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-25 09:21:15 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 14:55:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,7 +165,7 @@ void OCommonEmbeddedObject::CommonInit_Impl( const uno::Sequence< beans::NamedVa
             aObjectProps[nInd].Value >>= m_aObjectVerbs;
     }
 
-    if ( m_aClassID.getLength() != 16 || !m_aDocServiceName.getLength() )
+    if ( m_aClassID.getLength() != 16 /*|| !m_aDocServiceName.getLength()*/ )
         throw uno::RuntimeException(); // something goes really wrong
 
     // accepted states
