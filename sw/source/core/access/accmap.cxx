@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accmap.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mib $ $Date: 2002-04-17 14:07:39 $
+ *  last change: $Author: vg $ $Date: 2002-04-19 12:59:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,7 +216,7 @@ public:
     inline ::vos::ORef < SwAccessibleContext > GetContext() const;
 
     inline const SwRect& GetOldBox() const { return maOldBox; }
-    inline SetOldBox( const SwRect& rOldBox ) { maOldBox = rOldBox; }
+    inline void SetOldBox( const SwRect& rOldBox ) { maOldBox = rOldBox; }
 
     inline const SwFrm *GetFrm() const { return maFrmOrObj.GetSwFrm(); }
 

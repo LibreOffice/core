@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acctable.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2002-04-17 14:07:39 $
+ *  last change: $Author: vg $ $Date: 2002-04-19 12:59:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -299,7 +299,7 @@ sal_Bool SwAccessibleTableData_Impl::FindCell(
                             "find frame moved to far!" );
                     bFound = sal_True;
                     if( !bExact ||
-                        (rFrm.Top == rPos.Y() && rFrm.Left() == rPos.Y() ) )
+                        (rFrm.Top() == rPos.Y() && rFrm.Left() == rPos.Y() ) )
                     {
                         rRet = pLower;
                     }
