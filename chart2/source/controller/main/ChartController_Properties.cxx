@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartController_Properties.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: iha $ $Date: 2003-11-13 15:18:48 $
+ *  last change: $Author: bm $ $Date: 2003-11-25 13:07:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,7 @@
  *
  ************************************************************************/
 #include "ChartController.hxx"
+#include "ChartWindow.hxx"
 
 #include "DrawModelWrapper.hxx"
 #include "chartview/ChartView.hxx"
@@ -118,12 +119,31 @@ using namespace ::drafts::com::sun::star::chart2;
 namespace
 {
 
+class ReferenceSizeProvider
+{
+public:
+    ReferenceSizeProvider( awt::Size aPageSize,
+                           awt::Size aDiagramSize ) :
+            m_aPageSize( aPageSize ),
+            m_aDiagramSize( aDiagramSize )
+    {}
+
+    awt::Size getPageSize() const         { return m_aPageSize; }
+    awt::Size getDiagramSize() const      { return m_aDiagramSize; }
+
+private:
+    awt::Size m_aPageSize;
+    awt::Size m_aDiagramSize;
+};
+
 ::comphelper::ItemConverter* createItemConverter(
     const ::rtl::OUString & aObjectCID
     , const uno::Reference< frame::XModel > & xChartModel
     , SdrModel & rDrawModel
     , NumberFormatterWrapper * pNumberFormatterWrapper = NULL
     , ExplicitValueProvider * pExplicitValueProvider = NULL
+    , ::std::auto_ptr< ReferenceSizeProvider > pRefSizeProvider =
+          ::std::auto_ptr< ReferenceSizeProvider >()
     )
 {
     ::comphelper::ItemConverter* pItemConverter=NULL;
@@ -156,15 +176,28 @@ namespace
                                         wrapper::GraphicPropertyItemConverter::FILL_PROPERTIES );
                     break;
             case OBJECTTYPE_TITLE:
+            {
+                ::std::auto_ptr< awt::Size > pRefSize;
+                if( pRefSizeProvider.get() )
+                    pRefSize.reset( new awt::Size( pRefSizeProvider->getPageSize()));
+
                 pItemConverter = new wrapper::TitleItemConverter( xObjectProperties,
                                                                   rDrawModel.GetItemPool(),
-                                                                  rDrawModel );
-                    break;
+                                                                  rDrawModel, pRefSize );
+            }
+            break;
             case OBJECTTYPE_LEGEND:
+            {
+                ::std::auto_ptr< awt::Size > pRefSize;
+                if( pRefSizeProvider.get() )
+                    pRefSize.reset( new awt::Size( pRefSizeProvider->getPageSize()));
+
                 pItemConverter = new wrapper::LegendItemConverter( xObjectProperties,
                                                                    rDrawModel.GetItemPool(),
-                                                                   rDrawModel );
-                    break;
+                                                                   rDrawModel,
+                                                                   pRefSize );
+            }
+            break;
             case OBJECTTYPE_LEGEND_ENTRY:
                     break;
             case OBJECTTYPE_DIAGRAM:
@@ -178,6 +211,10 @@ namespace
                     break;
             case OBJECTTYPE_AXIS:
             {
+                ::std::auto_ptr< awt::Size > pRefSize;
+                if( pRefSizeProvider.get() )
+                    pRefSize.reset( new awt::Size( pRefSizeProvider->getDiagramSize()));
+
                 uno::Reference< beans::XPropertySet > xDiaProp;
                 xDiaProp.set( ChartModelHelper::findDiagram( xChartModel ), uno::UNO_QUERY );
 
@@ -197,7 +234,8 @@ namespace
                     xObjectProperties, rDrawModel.GetItemPool(),
                     rDrawModel,
                     pNumberFormatterWrapper,
-                    &aExplicitScale, &aExplicitIncrement, &fExplicitOrigin );
+                    &aExplicitScale, &aExplicitIncrement, &fExplicitOrigin,
+                    pRefSize );
             }
             break;
             case OBJECTTYPE_AXIS_UNITLABEL:
@@ -261,9 +299,15 @@ namespace
             case OBJECTTYPE_TITLE:
                 break;
             case OBJECTTYPE_AXIS:
+            {
+                ::std::auto_ptr< awt::Size > pRefSize;
+                if( pRefSizeProvider.get() )
+                    pRefSize.reset( new awt::Size( pRefSizeProvider->getDiagramSize()));
+
                 pItemConverter =  new wrapper::AllAxisItemConverter( xChartModel, rDrawModel.GetItemPool(),
-                                                                     rDrawModel );
-                break;
+                                                                     rDrawModel, pRefSize );
+            }
+            break;
             case OBJECTTYPE_GRID:
                 pItemConverter =  new wrapper::AllGridItemConverter( xChartModel, rDrawModel.GetItemPool(),
                                                                      rDrawModel );
@@ -479,11 +523,20 @@ void SAL_CALL ChartController::executeDlg_ObjectProperties( const ::rtl::OUStrin
         }
         //-------------------------------------------------------------
         //convert properties to ItemSet
+        ::std::auto_ptr< ReferenceSizeProvider > pRefSizeProv;
+        if( m_pChartWindow )
+        {
+            awt::Size aPageSize( m_pChartWindow->GetOutputSize().getWidth(),
+                                 m_pChartWindow->GetOutputSize().getHeight() );
+            // todo: give diagram as second parameter
+            pRefSizeProv.reset( new ReferenceSizeProvider( aPageSize, aPageSize ));
+        }
         ::std::auto_ptr< ::comphelper::ItemConverter > apItemConverter(
             createItemConverter( aObjectCID, m_aModel->getModel(),
                                  m_pDrawModelWrapper->getSdrModel(),
                                  m_pNumberFormatterWrapper,
-                                 m_pChartView ));
+                                 m_pChartView,
+                                 pRefSizeProv ));
         if(!apItemConverter.get())
             return;
         SfxItemSet aItemSet = apItemConverter->CreateEmptyItemSet();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CharacterPropertyItemConverter.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-04 12:37:13 $
+ *  last change: $Author: bm $ $Date: 2003-11-25 13:07:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,11 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYSTATE_HPP_
 #include <com/sun/star/beans/PropertyState.hpp>
 #endif
+#ifndef _COM_SUN_STAR_AWT_SIZE_HPP_
+#include <com/sun/star/awt/Size.hpp>
+#endif
+
+#include <memory>
 
 namespace chart
 {
@@ -82,7 +87,11 @@ public:
     CharacterPropertyItemConverter(
         const ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet > & rPropertySet,
-        SfxItemPool& rItemPool );
+        SfxItemPool& rItemPool,
+        ::std::auto_ptr< ::com::sun::star::awt::Size > pRefSize =
+            ::std::auto_ptr< ::com::sun::star::awt::Size >(),
+        const ::rtl::OUString & rRefSizePropertyName =
+            ::rtl::OUString() );
     virtual ~CharacterPropertyItemConverter();
 
 protected:
@@ -93,6 +102,10 @@ protected:
         throw( ::com::sun::star::uno::Exception );
     virtual bool ApplySpecialItem( USHORT nWhichId, const SfxItemSet & rItemSet )
         throw( ::com::sun::star::uno::Exception );
+
+private:
+    ::std::auto_ptr< ::com::sun::star::awt::Size > m_pRefSize;
+    ::rtl::OUString                                m_aRefSizePropertyName;
 };
 
 } //  namespace wrapper

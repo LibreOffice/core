@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VTitle.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-14 15:25:55 $
+ *  last change: $Author: bm $ $Date: 2003-11-25 13:08:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -289,7 +289,7 @@ void VTitle::createShapes(
 
                 // adapt font size according to page size
                 awt::Size aOldRefSize;
-                if( xTitleProperties->getPropertyValue( C2U("ReferencePageSize")) >>= aOldRefSize )
+                if( xSourceProps->getPropertyValue( C2U("ReferencePageSize")) >>= aOldRefSize )
                 {
                     RelativeSizeHelper::adaptFontSizes(
                         xTargetProps
@@ -316,7 +316,7 @@ void VTitle::createShapes(
 
                 // adapt font size according to page size
                 awt::Size aOldRefSize;
-                if( xTitleProperties->getPropertyValue( C2U("ReferencePageSize")) >>= aOldRefSize )
+                if( xSourceProps->getPropertyValue( C2U("ReferencePageSize")) >>= aOldRefSize )
                 {
                     RelativeSizeHelper::adaptFontSizes(
                         xTargetProps

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataPointItemConverter.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-04 12:37:17 $
+ *  last change: $Author: bm $ $Date: 2003-11-25 13:07:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,18 +102,19 @@ namespace wrapper
 {
 
 DataPointItemConverter::DataPointItemConverter(
-    const ::com::sun::star::uno::Reference<
-    ::com::sun::star::beans::XPropertySet > & rPropertySet,
+    const uno::Reference<
+    beans::XPropertySet > & rPropertySet,
     SfxItemPool& rItemPool,
     SdrModel& rDrawModel,
     NumberFormatterWrapper * pNumFormatter,
-    GraphicPropertyItemConverter::eGraphicObjectType eMapTo /* = FILL_PROPERTIES */
-    ) :
+    GraphicPropertyItemConverter::eGraphicObjectType eMapTo /* = FILL_PROPERTIES */,
+    ::std::auto_ptr< awt::Size > pRefSize /* = NULL */ ) :
         ItemConverter( rPropertySet, rItemPool ),
         m_pNumberFormatterWrapper( pNumFormatter )
 {
     m_aConverters.push_back( new GraphicPropertyItemConverter( rPropertySet, rItemPool, rDrawModel, eMapTo ));
-    m_aConverters.push_back( new CharacterPropertyItemConverter( rPropertySet, rItemPool ));
+    m_aConverters.push_back( new CharacterPropertyItemConverter( rPropertySet, rItemPool, pRefSize,
+                                                                 C2U( "ReferenceDiagramSize" )));
 }
 
 DataPointItemConverter::~DataPointItemConverter()

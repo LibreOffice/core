@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AxisItemConverter.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-04 12:37:16 $
+ *  last change: $Author: bm $ $Date: 2003-11-25 13:07:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,8 @@ AxisItemConverter::AxisItemConverter(
     NumberFormatterWrapper * pNumFormatter,
     chart2::ExplicitScaleData * pScale /* = NULL */,
     chart2::ExplicitIncrementData * pIncrement /* = NULL */,
-    double * pExplicitOrigin /* = NULL */ ) :
+    double * pExplicitOrigin /* = NULL */,
+    ::std::auto_ptr< awt::Size > pRefSize /* = NULL */ ) :
         ItemConverter( rPropertySet, rItemPool ),
         m_pNumberFormatterWrapper( pNumFormatter ),
         m_pExplicitScale( NULL ),
@@ -150,7 +151,8 @@ AxisItemConverter::AxisItemConverter(
     m_aConverters.push_back( new GraphicPropertyItemConverter(
                                  rPropertySet, rItemPool, rDrawModel,
                                  GraphicPropertyItemConverter::LINE_PROPERTIES ));
-    m_aConverters.push_back( new CharacterPropertyItemConverter( rPropertySet, rItemPool ));
+    m_aConverters.push_back( new CharacterPropertyItemConverter( rPropertySet, rItemPool, pRefSize,
+                                                                 C2U( "ReferenceDiagramSize" ) ));
 
     uno::Reference< chart2::XAxis > xAxis( rPropertySet, uno::UNO_QUERY );
     OSL_ASSERT( xAxis.is());

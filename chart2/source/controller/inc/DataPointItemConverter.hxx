@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataPointItemConverter.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-04 12:37:13 $
+ *  last change: $Author: bm $ $Date: 2003-11-25 13:07:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,11 @@
 #include "GraphicPropertyItemConverter.hxx"
 #include "chartview/NumberFormatterWrapper.hxx"
 
+#ifndef _COM_SUN_STAR_AWT_SIZE_HPP_
+#include <com/sun/star/awt/Size.hpp>
+#endif
+
+#include <memory>
 #include <vector>
 
 class SdrModel;
@@ -85,7 +90,9 @@ public:
         SdrModel& rDrawModel,
         NumberFormatterWrapper * pNumFormatter,
         GraphicPropertyItemConverter::eGraphicObjectType eMapTo =
-            GraphicPropertyItemConverter::FILLED_DATA_POINT );
+            GraphicPropertyItemConverter::FILLED_DATA_POINT,
+        ::std::auto_ptr< ::com::sun::star::awt::Size > pRefSize =
+            ::std::auto_ptr< ::com::sun::star::awt::Size >() );
     virtual ~DataPointItemConverter();
 
     virtual void FillItemSet( SfxItemSet & rOutItemSet ) const;

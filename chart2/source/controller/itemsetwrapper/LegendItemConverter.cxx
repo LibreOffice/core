@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LegendItemConverter.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-04 12:37:17 $
+ *  last change: $Author: bm $ $Date: 2003-11-25 13:07:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,14 +108,16 @@ LegendItemConverter::LegendItemConverter(
     const ::com::sun::star::uno::Reference<
     ::com::sun::star::beans::XPropertySet > & rPropertySet,
     SfxItemPool& rItemPool,
-    SdrModel& rDrawModel  ) :
+    SdrModel& rDrawModel,
+    ::std::auto_ptr< ::com::sun::star::awt::Size > pRefSize ) :
         ItemConverter( rPropertySet, rItemPool )
 {
     m_aConverters.push_back( new GraphicPropertyItemConverter(
                                  rPropertySet, rItemPool, rDrawModel,
                                  GraphicPropertyItemConverter::LINE_AND_FILL_PROPERTIES ));
     m_aConverters.push_back( new CharacterPropertyItemConverter(
-                                 rPropertySet, rItemPool ));
+                                 rPropertySet, rItemPool, pRefSize,
+                                 C2U( "ReferencePageSize" ) ));
 }
 
 LegendItemConverter::~LegendItemConverter()

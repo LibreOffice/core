@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CharacterPropertyItemConverter.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-14 10:48:14 $
+ *  last change: $Author: bm $ $Date: 2003-11-25 13:07:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 #include "SchWhichPairs.hxx"
 #include "macros.hxx"
 #include "ItemPropertyMap.hxx"
+#include "RelativeSizeHelper.hxx"
 
 #ifndef _EEITEM_HXX
 #include <svx/eeitem.hxx>
@@ -86,7 +87,10 @@
 #define ITEMID_WEIGHT EE_CHAR_WEIGHT
 #include <svx/wghtitem.hxx>
 #endif
-
+#ifndef _SVX_FHGTITEM_HXX
+#define ITEMID_FONTHEIGHT EE_CHAR_FONTHEIGHT
+#include <svx/fhgtitem.hxx>
+#endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSTATE_HPP_
 #include <com/sun/star/beans/XPropertyState.hpp>
 #endif
@@ -101,7 +105,7 @@ namespace
         ::comphelper::MakeItemPropertyMap
         ( EE_CHAR_COLOR,                  C2U( "CharColor" ))
         ( EE_CHAR_LANGUAGE,               C2U( "CharLocale" ))
-        ( EE_CHAR_FONTHEIGHT,             C2U( "CharHeight" ))
+//         ( EE_CHAR_FONTHEIGHT,             C2U( "CharHeight" ))
 //         ( EE_CHAR_ITALIC,                 C2U( "CharPosture" ))
 //         ( EE_CHAR_WEIGHT,                 C2U( "CharWeight" ))
 //         ( EE_CHAR_STRIKEOUT,              C2U( "CharStrikeout" ))
@@ -113,8 +117,8 @@ namespace
 
         ( EE_CHAR_LANGUAGE_CJK,           C2U( "CharLocaleAsian" ))
         ( EE_CHAR_LANGUAGE_CTL,           C2U( "CharLocaleComplex" ))
-        ( EE_CHAR_FONTHEIGHT_CJK,         C2U( "CharHeightAsian" ))
-        ( EE_CHAR_FONTHEIGHT_CTL,         C2U( "CharHeightComplex" ))
+//         ( EE_CHAR_FONTHEIGHT_CJK,         C2U( "CharHeightAsian" ))
+//         ( EE_CHAR_FONTHEIGHT_CTL,         C2U( "CharHeightComplex" ))
 //         ( EE_CHAR_WEIGHT_CJK,             C2U( "CharWeightAsian" ))
 //         ( EE_CHAR_WEIGHT_CTL,             C2U( "CharWeightComplex" ))
 //         ( EE_CHAR_ITALIC_CJK,             C2U( "CharPostureAsian" ))
@@ -136,8 +140,12 @@ namespace wrapper
 CharacterPropertyItemConverter::CharacterPropertyItemConverter(
     const ::com::sun::star::uno::Reference<
     ::com::sun::star::beans::XPropertySet > & rPropertySet,
-    SfxItemPool& rItemPool ) :
-        ItemConverter( rPropertySet, rItemPool )
+    SfxItemPool& rItemPool,
+    ::std::auto_ptr< awt::Size > pRefSize,
+    const ::rtl::OUString & rRefSizePropertyName ) :
+        ItemConverter( rPropertySet, rItemPool ),
+        m_pRefSize( pRefSize ),
+        m_aRefSizePropertyName( rRefSizePropertyName )
 {}
 
 CharacterPropertyItemConverter::~CharacterPropertyItemConverter()
@@ -277,6 +285,47 @@ void CharacterPropertyItemConverter::FillSpecialItem(
             {
                 aItem.PutValue( aValue, MID_WEIGHT );
                 rOutItemSet.Put( aItem );
+            }
+        }
+        break;
+
+        case EE_CHAR_FONTHEIGHT:
+        case EE_CHAR_FONTHEIGHT_CJK:
+        case EE_CHAR_FONTHEIGHT_CTL:
+        {
+            ::rtl::OUString aPostfix;
+            if( nWhichId == EE_CHAR_FONTHEIGHT_CJK )
+                aPostfix = C2U( "Asian" );
+            else if( nWhichId == EE_CHAR_FONTHEIGHT_CTL )
+                aPostfix = C2U( "Complex" );
+
+            SvxFontHeightItem aItem( 240, 100, nWhichId );
+
+            try
+            {
+                uno::Any aValue( GetPropertySet()->getPropertyValue( C2U( "CharHeight" ) + aPostfix ));
+                float fHeight;
+                if( aValue >>= fHeight )
+                {
+                    if( m_pRefSize.get())
+                    {
+                        awt::Size aOldRefSize;
+                        if( GetPropertySet()->getPropertyValue( m_aRefSizePropertyName ) >>= aOldRefSize )
+                        {
+                            // calculate font height in view
+                            fHeight = RelativeSizeHelper::calculate(
+                                fHeight, aOldRefSize, *m_pRefSize );
+                            aValue <<= fHeight;
+                        }
+                    }
+
+                    aItem.PutValue( aValue );
+                    rOutItemSet.Put( aItem );
+                }
+            }
+            catch( uno::Exception & ex )
+            {
+                ASSERT_EXCEPTION( ex );
             }
         }
         break;
@@ -447,6 +496,42 @@ bool CharacterPropertyItemConverter::ApplySpecialItem(
                     GetPropertySet()->setPropertyValue( C2U( "CharWeight" ) + aPostfix, aValue );
                     bChanged = true;
                 }
+            }
+        }
+        break;
+
+        case EE_CHAR_FONTHEIGHT:
+        case EE_CHAR_FONTHEIGHT_CJK:
+        case EE_CHAR_FONTHEIGHT_CTL:
+        {
+            ::rtl::OUString aPostfix;
+            if( nWhichId == EE_CHAR_FONTHEIGHT_CJK )
+                aPostfix = C2U( "Asian" );
+            else if( nWhichId == EE_CHAR_FONTHEIGHT_CTL )
+                aPostfix = C2U( "Complex" );
+
+            const SvxFontHeightItem & rItem =
+                reinterpret_cast< const SvxFontHeightItem & >(
+                    rItemSet.Get( nWhichId ));
+
+            try
+            {
+                if( rItem.QueryValue( aValue ) &&
+                    aValue != GetPropertySet()->getPropertyValue( C2U( "CharHeight" ) + aPostfix ))
+                {
+                    if( m_pRefSize.get())
+                    {
+                        GetPropertySet()->setPropertyValue( m_aRefSizePropertyName,
+                                                            uno::makeAny( *m_pRefSize ));
+                    }
+
+                    GetPropertySet()->setPropertyValue( C2U( "CharHeight" ) + aPostfix, aValue );
+                    bChanged = true;
+                }
+            }
+            catch( uno::Exception & ex )
+            {
+                ASSERT_EXCEPTION( ex );
             }
         }
         break;

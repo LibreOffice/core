@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FormattedString.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:31 $
+ *  last change: $Author: bm $ $Date: 2003-11-25 13:07:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,9 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
+#ifndef _COM_SUN_STAR_AWT_SIZE_HPP_
+#include <com/sun/star/awt/Size.hpp>
+#endif
 
 using namespace ::com::sun::star;
 using namespace ::drafts::com::sun::star;
@@ -82,6 +85,22 @@ using ::osl::MutexGuard;
 namespace
 {
 
+enum
+{
+    PROP_FORMATTED_STRING_REF_PAGE_SIZE
+};
+
+void lcl_AddPropertiesToVector(
+    ::std::vector< Property > & rOutProperties )
+{
+    rOutProperties.push_back(
+        Property( C2U( "ReferencePageSize" ),
+                  PROP_FORMATTED_STRING_REF_PAGE_SIZE,
+                  ::getCppuType( reinterpret_cast< const awt::Size * >(0)),
+                  beans::PropertyAttribute::BOUND
+                  | beans::PropertyAttribute::MAYBEVOID ));
+}
+
 const Sequence< Property > & lcl_GetPropertySequence()
 {
     static Sequence< Property > aPropSeq;
@@ -92,6 +111,7 @@ const Sequence< Property > & lcl_GetPropertySequence()
     {
         // get properties
         ::std::vector< ::com::sun::star::beans::Property > aProperties;
+        lcl_AddPropertiesToVector( aProperties );
         ::chart::CharacterProperties::AddPropertiesToVector(
             aProperties, /* bIncludeStyleProperties = */ true );
 
@@ -104,6 +124,15 @@ const Sequence< Property > & lcl_GetPropertySequence()
     }
 
     return aPropSeq;
+}
+
+::cppu::IPropertyArrayHelper & lcl_getInfoHelper()
+{
+    static ::cppu::OPropertyArrayHelper aArrayHelper(
+        lcl_GetPropertySequence(),
+        /* bSorted = */ sal_True );
+
+    return aArrayHelper;
 }
 
 } // anonymous namespace
@@ -159,6 +188,13 @@ Sequence< OUString > FormattedString::getSupportedServiceNames_Static()
 uno::Any FormattedString::GetDefaultValue( sal_Int32 nHandle ) const
     throw(beans::UnknownPropertyException)
 {
+    // todo: default is just for testing. should be void
+    if( nHandle == PROP_FORMATTED_STRING_REF_PAGE_SIZE )
+    {
+        return uno::makeAny( awt::Size( 10000, 7500 ) );
+    }
+    // remove till here
+
     static helper::tPropertyValueMap aStaticDefaults;
 
     // /--
@@ -184,11 +220,7 @@ uno::Any FormattedString::GetDefaultValue( sal_Int32 nHandle ) const
 // ____ OPropertySet ____
 ::cppu::IPropertyArrayHelper & SAL_CALL FormattedString::getInfoHelper()
 {
-    static ::cppu::OPropertyArrayHelper aArrayHelper(
-        lcl_GetPropertySequence(),
-        /* bSorted = */ sal_True );
-
-    return aArrayHelper;
+    return lcl_getInfoHelper();
 }
 
 

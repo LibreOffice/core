@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AxisItemConverter.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-04 12:37:13 $
+ *  last change: $Author: bm $ $Date: 2003-11-25 13:07:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,11 +70,15 @@
 #ifndef _DRAFTS_COM_SUN_STAR_CHART2_EXPLICITINCREMENTDATA_HPP_
 #include <drafts/com/sun/star/chart2/ExplicitIncrementData.hpp>
 #endif
+#ifndef _COM_SUN_STAR_AWT_SIZE_HPP_
+#include <com/sun/star/awt/Size.hpp>
+#endif
 
 #include "ItemConverter.hxx"
 #include "chartview/NumberFormatterWrapper.hxx"
 
 #include <vector>
+#include <memory>
 
 class SdrModel;
 
@@ -94,7 +98,9 @@ public:
         NumberFormatterWrapper * pNumFormatter,
         ::drafts::com::sun::star::chart2::ExplicitScaleData * pScale = NULL,
         ::drafts::com::sun::star::chart2::ExplicitIncrementData * pIncrement = NULL,
-        double * pExplicitOrigin = NULL );
+        double * pExplicitOrigin = NULL,
+        ::std::auto_ptr< ::com::sun::star::awt::Size > pRefSize =
+            ::std::auto_ptr< ::com::sun::star::awt::Size >() );
     virtual ~AxisItemConverter();
 
     virtual void FillItemSet( SfxItemSet & rOutItemSet ) const;

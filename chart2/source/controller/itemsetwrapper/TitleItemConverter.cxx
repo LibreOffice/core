@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TitleItemConverter.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-04 12:37:18 $
+ *  last change: $Author: bm $ $Date: 2003-11-25 13:07:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,8 @@ class FormattedStringsConverter : public ::comphelper::MultipleItemConverter
 public:
     FormattedStringsConverter(
         const uno::Sequence< uno::Reference< chart2::XFormattedString > > & aStrings,
-        SfxItemPool & rItemPool );
+        SfxItemPool & rItemPool,
+        ::std::auto_ptr< awt::Size > pRefSize = ::std::auto_ptr< awt::Size >() );
     virtual ~FormattedStringsConverter();
 
 protected:
@@ -117,14 +118,23 @@ protected:
 
 FormattedStringsConverter::FormattedStringsConverter(
     const uno::Sequence< uno::Reference< chart2::XFormattedString > > & aStrings,
-    SfxItemPool & rItemPool )
-        : MultipleItemConverter( rItemPool )
+    SfxItemPool & rItemPool,
+    ::std::auto_ptr< ::com::sun::star::awt::Size > pRefSize ) :
+        MultipleItemConverter( rItemPool )
 {
     for( sal_Int32 i = 0; i < aStrings.getLength(); ++i )
     {
         uno::Reference< beans::XPropertySet > xProp( aStrings[ i ], uno::UNO_QUERY );
         if( xProp.is())
-            m_aConverters.push_back( new CharacterPropertyItemConverter( xProp, rItemPool ));
+        {
+            if( pRefSize.get())
+                m_aConverters.push_back( new CharacterPropertyItemConverter(
+                                             xProp, rItemPool,
+                                             ::std::auto_ptr< awt::Size >( new awt::Size( *pRefSize )),
+                                             C2U( "ReferencePageSize" )));
+            else
+                m_aConverters.push_back( new CharacterPropertyItemConverter( xProp, rItemPool ));
+        }
     }
 }
 
@@ -143,7 +153,8 @@ TitleItemConverter::TitleItemConverter(
     const ::com::sun::star::uno::Reference<
     ::com::sun::star::beans::XPropertySet > & rPropertySet,
     SfxItemPool& rItemPool,
-    SdrModel& rDrawModel  ) :
+    SdrModel& rDrawModel,
+    ::std::auto_ptr< ::com::sun::star::awt::Size > pRefSize ) :
         ItemConverter( rPropertySet, rItemPool )
 {
     m_aConverters.push_back( new GraphicPropertyItemConverter(
@@ -158,7 +169,7 @@ TitleItemConverter::TitleItemConverter(
         uno::Sequence< uno::Reference< chart2::XFormattedString > > aStringSeq( xTitle->getText());
         if( aStringSeq.getLength() > 0 )
         {
-            m_aConverters.push_back( new FormattedStringsConverter( aStringSeq, rItemPool ));
+            m_aConverters.push_back( new FormattedStringsConverter( aStringSeq, rItemPool, pRefSize ));
         }
     }
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LegendItemConverter.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: bm $ $Date: 2003-11-04 12:37:14 $
+ *  last change: $Author: bm $ $Date: 2003-11-25 13:07:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,12 @@
 
 #include "ItemConverter.hxx"
 
+#ifndef _COM_SUN_STAR_AWT_SIZE_HPP_
+#include <com/sun/star/awt/Size.hpp>
+#endif
+
 #include <vector>
+#include <memory>
 
 class SdrModel;
 
@@ -80,7 +85,9 @@ public:
         const ::com::sun::star::uno::Reference<
         ::com::sun::star::beans::XPropertySet > & rPropertySet,
         SfxItemPool& rItemPool,
-        SdrModel& rDrawModel );
+        SdrModel& rDrawModel,
+        ::std::auto_ptr< ::com::sun::star::awt::Size > pRefSize =
+            ::std::auto_ptr< ::com::sun::star::awt::Size >() );
     virtual ~LegendItemConverter();
 
     virtual void FillItemSet( SfxItemSet & rOutItemSet ) const;

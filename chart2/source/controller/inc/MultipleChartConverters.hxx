@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MultipleChartConverters.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-07 17:18:18 $
+ *  last change: $Author: bm $ $Date: 2003-11-25 13:07:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,12 @@
 
 #include "MultipleItemConverter.hxx"
 
+#ifndef _COM_SUN_STAR_AWT_SIZE_HPP_
+#include <com/sun/star/awt/Size.hpp>
+#endif
+
+#include <memory>
+
 class SdrModel;
 
 namespace chart
@@ -77,7 +83,9 @@ public:
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::frame::XModel > & xChartModel,
         SfxItemPool& rItemPool,
-        SdrModel& rDrawModel );
+        SdrModel& rDrawModel,
+        ::std::auto_ptr< ::com::sun::star::awt::Size > pRefSize =
+            ::std::auto_ptr< ::com::sun::star::awt::Size >() );
     virtual ~AllAxisItemConverter();
 
 protected:
@@ -105,7 +113,9 @@ public:
         const ::com::sun::star::uno::Reference<
             ::com::sun::star::frame::XModel > & xChartModel,
         SfxItemPool& rItemPool,
-        SdrModel& rDrawModel  );
+        SdrModel& rDrawModel,
+        ::std::auto_ptr< ::com::sun::star::awt::Size > pRefSize =
+            ::std::auto_ptr< ::com::sun::star::awt::Size >() );
     virtual ~AllDataLabelItemConverter();
 
 protected:
