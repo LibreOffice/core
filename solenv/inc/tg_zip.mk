@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_zip.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: hjs $ $Date: 2002-06-21 13:13:59 $
+#   last change: $Author: hjs $ $Date: 2002-06-25 13:19:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -101,15 +101,14 @@ avoid_cvs_dir=-x "*CVS*"
 .ENDIF
 
 .IF "$(ZIP$(TNR)TARGET)"!=""
-
 ZIP$(TNR)DIR*=$(ZIPDIR)
 ZIP$(TNR)FLAGS*=$(ZIPFLAGS)
 .IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
-zip1langdirs:=$(shell +find {$(subst,$/$(LANGDIR), $(ZIP$(TNR)DIR))}/ -type d ! -name CVS ! -name "." | sed "s/\.\///" )
+zip$(TNR)langdirs:=$(shell +find {$(subst,$/$(LANGDIR), $(null,$(ZIP$(TNR)DIR) . $(ZIP$(TNR)DIR)))}/ -type d ! -name CVS ! -name "." | sed "s/\.\///" )
 .ELSE			# "$(GUI)"=="UNX"
-zip1langdirs:=$(subst,CVS, $(shell +-dir {$(subst,$/$(LANGDIR), $(ZIP$(TNR)DIR))} /ba:d ))
+zip$(TNR)langdirs:=$(subst,CVS, $(shell +-dir {$(subst,$/$(LANGDIR), $(ZIP$(TNR)DIR))} /ba:d ))
 .ENDIF			# "$(GUI)"=="UNX"
-zip$(TNR)alllangext:=$(foreach,i,$(alllangext) $(foreach,j,$(zip1langdirs) $(eq,$(longlang_$i),$j  $i $(NULL))))
+zip$(TNR)alllangext:=$(foreach,i,$(alllangext) $(foreach,j,$(zip$(TNR)langdirs) $(eq,$(longlang_$i),$j  $i $(NULL))))
 .ENDIF			# "$(ZIP$(TNR)TARGET)"!=""
 
 .IF "$(ZIP$(TNR)TARGETN)"!=""
