@@ -284,14 +284,32 @@ public class ColourConverter {
     public short convertFromRGB (Color colour) {
         int matchedRGB = 0;
         short indexColour = 0;
+        int reducedMap[] =  new int[] { 0, 0, 128 };
 
-        /*
+          int red = colour.getRed();
+          int green = colour.getGreen();
+          int blue = colour.getBlue();
+
+        // We need to convert the pale colors to their base color rather than
+        // white so we modify the rgb values if the colour is sufficently
+        // white
+           if(red>0xC0 && green>0xC0 && blue>0xC0) {
+
+            if(red!=0xFF)
+                red = getClosest(red, reducedMap);
+            if(green!=0xFF)
+                green = getClosest(green, reducedMap);
+            if(blue!=0xFF)
+                blue = getClosest(blue, reducedMap);
+        }
+
+           /*
          * Need to derive an RGB value that has been rounded to match the ones
          * Pocket Word knows about.
-         */
-        matchedRGB += getClosest(colour.getRed())   << 16;
-        matchedRGB += getClosest(colour.getGreen()) << 8;
-        matchedRGB += getClosest(colour.getBlue());
+            */
+        matchedRGB += getClosest(red)   << 16;
+        matchedRGB += getClosest(green) << 8;
+           matchedRGB += getClosest(blue);
 
         /*
          * The colour map used by Pocket Word doesn't have any combinations of
@@ -432,7 +450,7 @@ public class ColourConverter {
         }
         else {
             int x = value - points[1];
-            return (Math.round((float)x / (points[2] - points[1])) == 1 ? points[2] : points[1]);
+            return (Math.round((float)x / (points[2] - points[1])) >= 1 ? points[2] : points[1]);
         }
     }
 
