@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoredline.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mtg $ $Date: 2001-11-15 18:44:49 $
+ *  last change: $Author: obo $ $Date: 2001-11-20 12:04:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -372,7 +372,7 @@ Any SwXRedlinePortion::getPropertyValue( const OUString& rPropertyName )
                 aRet <<= xRet;
             }
             else
-                DBG_ASSERT(0, "Empty section in redline portion! (end node immediately follows start node)")
+                DBG_ASSERT(0, "Empty section in redline portion! (end node immediately follows start node)");
         }
     }
     else
@@ -647,7 +647,7 @@ Any SwXRedline::getPropertyValue( const OUString& rPropertyName )
                 aRet <<= xRet;
             }
             else
-                DBG_ASSERT(0, "Empty section in redline portion! (end node immediately follows start node)")
+                DBG_ASSERT(0, "Empty section in redline portion! (end node immediately follows start node)");
         }
     }
     else
