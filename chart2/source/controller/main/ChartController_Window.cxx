@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartController_Window.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: bm $ $Date: 2004-01-26 09:12:08 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:36:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -379,7 +379,7 @@ void ChartController::execute_Paint( const Rectangle& rRect )
     Window* pWindow = m_pChartWindow;
     DrawViewWrapper* pDrawViewWrapper = m_pDrawViewWrapper;
     if(pDrawViewWrapper)
-        pDrawViewWrapper->InitRedraw(pWindow, Region(rRect) );
+        pDrawViewWrapper->CompleteRedraw(pWindow, Region(rRect) );
 
 #ifdef CHART2_DEBUG_VIEW_PERFORMANCE
     nAfterPaint=clock();
@@ -429,7 +429,7 @@ class RotateDiagramDragMethod : public SdrDragMethod
 public:
     RotateDiagramDragMethod( DrawViewWrapper& rDrawViewWrapper );
     virtual ~RotateDiagramDragMethod();
-    //,pDrawViewWrapper->GetMarkList(),E3DDETAIL_ONEBOX,E3DDRAG_CONSTR_XZ
+    //,pDrawViewWrapper->GetMarkedObjectList(),E3DDETAIL_ONEBOX,E3DDRAG_CONSTR_XZ
 
     //TYPEINFO();
     virtual void TakeComment(String& rStr) const;
