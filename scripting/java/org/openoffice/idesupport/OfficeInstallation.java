@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OfficeInstallation.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: toconnor $ $Date: 2003-02-20 12:04:17 $
+ *  last change: $Author: rt $ $Date: 2004-02-10 16:11:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,12 +99,6 @@ public class OfficeInstallation implements java.io.Serializable {
 
             this.url = FILE_URL_PREFIX + path;
         }
-
-        File f = new File(this.path + File.separator + "program" +
-                                      File.separator + SVersionRCFile.PKGCHK);
-
-        if (f.exists())
-            supportsFW = true;
     }
 
     public String getName() {
@@ -141,7 +135,7 @@ public class OfficeInstallation implements java.io.Serializable {
     }
 
     public boolean supportsFramework() {
-        return supportsFW;
+        return true;
     }
 
     public String toString() {
