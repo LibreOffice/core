@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdograf.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: ka $ $Date: 2002-07-19 13:10:17 $
+ *  last change: $Author: ka $ $Date: 2002-08-14 11:10:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -949,7 +949,7 @@ FASTBOOL SdrGrafObj::Paint( ExtOutputDevice& rOut, const SdrPaintInfoRec& rInfoR
     if( !bEmptyPresObj && !bDraft )
     {
         Point       aLogPos( aRect.TopLeft() );
-        Size        aLogSize( aRect.GetSize() );
+        Size        aLogSize( pOutDev->PixelToLogic( pOutDev->LogicToPixel( aRect ).GetSize() ) );
         GraphicAttr aAttr( aGrafInfo );
 
         aAttr.SetMirrorFlags( ( bHMirr ? BMP_MIRROR_HORZ : 0 ) | ( bVMirr ? BMP_MIRROR_VERT : 0 ) );
