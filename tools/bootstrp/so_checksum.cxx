@@ -2,9 +2,9 @@
  *
  *  $RCSfile: so_checksum.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-12-10 18:05:28 $
+ *  last change: $Author: rt $ $Date: 2004-12-14 08:38:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,7 @@
 
 #include <stdio.h>
 
-#include <tools/string.hxx>
+#include <string.hxx>
 
 int main( int argc, char * argv[] )
 {
