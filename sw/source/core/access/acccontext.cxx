@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acccontext.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: mib $ $Date: 2002-08-13 15:13:17 $
+ *  last change: $Author: mib $ $Date: 2002-08-15 11:57:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1188,6 +1188,8 @@ void SwAccessibleContext::InvalidatePosOrSize( const SwRect& rOldPos )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
+    ASSERT( GetFrm() && !GetFrm()->Frm().IsEmpty(), "context should have a size" );
+
     sal_Bool bIsOldShowingState;
     sal_Bool bIsNewShowingState = IsShowing();
     {
@@ -1225,8 +1227,13 @@ void SwAccessibleContext::InvalidateChildPosOrSize(
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
+    ASSERT( !rChildFrmOrObj.GetSwFrm() ||
+            !rChildFrmOrObj.GetSwFrm()->Frm().IsEmpty(),
+            "child context should have a size" );
+
     SwFrmOrObj aFrm( GetFrm() );
-    sal_Bool bNew = rOldFrm.IsEmpty() || (rOldFrm.Left() == 0 && rOldFrm.Top());
+    sal_Bool bNew = rOldFrm.IsEmpty() ||
+                    (rOldFrm.Left() == 0 && rOldFrm.Top() == 0);
     if( IsShowing( rChildFrmOrObj ) )
     {
         // If the object could have existed before, than there is nothing to do,

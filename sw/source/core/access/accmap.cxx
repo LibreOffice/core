@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accmap.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: mib $ $Date: 2002-08-09 12:50:05 $
+ *  last change: $Author: mib $ $Date: 2002-08-15 11:57:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -705,9 +705,6 @@ void SwAccessibleMap::AppendEvent( const SwAccessibleEvent_Impl& rEvent )
                 // but executed immediatly to avoid broadcasting of
                 // defunctional objects. So what needs to be done here is to
                 // remove all events for the frame in question.
-                ASSERT( aEvent.GetType() !=
-                            SwAccessibleEvent_Impl::CHILD_POS_CHANGED,
-                        "invalid event combination" );
                 bAppendEvent = sal_False;
                 break;
             }
@@ -988,7 +985,28 @@ SwAccessibleMap::~SwAccessibleMap()
 
     {
         vos::OGuard aGuard( maEventMutex );
+#ifndef PRODUCT
         ASSERT( !(mpEvents || mpEventMap), "pending events" );
+        if( mpEvents )
+        {
+            SwAccessibleEventList_Impl::iterator aIter = mpEvents->begin();
+            while( aIter != mpEvents->end() )
+            {
+                const SwAccessibleEvent_Impl& rEvent = *aIter;
+                ++aIter;
+            }
+        }
+        if( mpEventMap )
+        {
+            SwAccessibleEventMap_Impl::iterator aIter = mpEventMap->begin();
+            while( aIter != mpEventMap->end() )
+            {
+                const SwFrmOrObj& rFrmOrObj = (*aIter).first;
+                const SwAccessibleEvent_Impl& rEvent = *(*aIter).second;
+                ++aIter;
+            }
+        }
+#endif
         delete mpEventMap;
         mpEventMap = 0;
         delete mpEvents;
@@ -1549,7 +1567,6 @@ void SwAccessibleMap::InvalidatePosOrSize( const SwFrm *pFrm,
 
         if( xAccImpl.isValid() )
         {
-            ASSERT( !rOldBox.IsEmpty(), "context should have a size" );
             if( GetShell()->ActionPend() )
             {
                 SwAccessibleEvent_Impl aEvent(
