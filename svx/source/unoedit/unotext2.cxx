@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotext2.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cl $ $Date: 2001-07-04 10:11:16 $
+ *  last change: $Author: cl $ $Date: 2001-07-10 07:41:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@ using namespace ::com::sun::star;
 // SvxUnoTextContentEnumeration
 // ====================================================================
 
-SvxUnoTextContentEnumeration::SvxUnoTextContentEnumeration( const SvxUnoText& _rText ) throw()
+SvxUnoTextContentEnumeration::SvxUnoTextContentEnumeration( const SvxUnoTextBase& _rText ) throw()
 : rText( _rText )
 {
     xParentText =  (text::XText*)&_rText;
@@ -150,7 +150,7 @@ SvxUnoTextContent::SvxUnoTextContent() throw()
 {
 }
 
-SvxUnoTextContent::SvxUnoTextContent( const SvxUnoText& rText, sal_uInt16 nPara ) throw()
+SvxUnoTextContent::SvxUnoTextContent( const SvxUnoTextBase& rText, sal_uInt16 nPara ) throw()
 :   SvxUnoTextRangeBase(rText),rParentText(rText),
     aDisposeListeners(aDisposeContainerMutex),
     nParagraph(nPara)
@@ -344,6 +344,17 @@ uno::Any SAL_CALL SvxUnoTextContent::getPropertyValue( const OUString& PropertyN
     return _getPropertyValue( PropertyName, nParagraph );
 }
 
+// XMultiPropertySet
+void SAL_CALL SvxUnoTextContent::setPropertyValues( const uno::Sequence< ::rtl::OUString >& aPropertyNames, const uno::Sequence< uno::Any >& aValues ) throw (beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
+{
+    _setPropertyValues( aPropertyNames, aValues, nParagraph );
+}
+
+uno::Sequence< uno::Any > SAL_CALL SvxUnoTextContent::getPropertyValues( const uno::Sequence< ::rtl::OUString >& aPropertyNames ) throw (uno::RuntimeException)
+{
+    return _getPropertyValues( aPropertyNames, nParagraph );
+}
+
 // beans::XPropertyState
 beans::PropertyState SAL_CALL SvxUnoTextContent::getPropertyState( const OUString& PropertyName )
     throw(beans::UnknownPropertyException, uno::RuntimeException)
@@ -385,7 +396,7 @@ uno::Sequence< OUString > SAL_CALL SvxUnoTextContent::getSupportedServiceNames()
 //  class SvxUnoTextRangeEnumeration
 // ====================================================================
 
-SvxUnoTextRangeEnumeration::SvxUnoTextRangeEnumeration( const SvxUnoText& rText, sal_uInt16 nPara ) throw()
+SvxUnoTextRangeEnumeration::SvxUnoTextRangeEnumeration( const SvxUnoTextBase& rText, sal_uInt16 nPara ) throw()
 :   xParentText(  (text::XText*)&rText ),
     rParentText( rText ),
     nParagraph( nPara ),
@@ -462,7 +473,7 @@ uno::Reference< uno::XInterface > SvxUnoTextCursor_NewInstance()
     return xInt;
 }
 
-SvxUnoTextCursor::SvxUnoTextCursor( const SvxUnoText& rText ) throw()
+SvxUnoTextCursor::SvxUnoTextCursor( const SvxUnoTextBase& rText ) throw()
 :   SvxUnoTextRangeBase(rText),
     xParentText( (text::XText*)&rText)
 {
