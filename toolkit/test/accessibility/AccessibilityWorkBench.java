@@ -44,6 +44,7 @@ public class AccessibilityWorkBench
         XPropertyChangeListener,
         XTerminateListener
 {
+    public static final String msVersion = "v1.1";
     public String msFileName;
     /*WinFilename
         //        = "file:///d|/tmp/impress-test-document.sxi";
@@ -221,7 +222,7 @@ public class AccessibilityWorkBench
         getContentPane().add ("Center", maMainPanel);
         maMainPanel.setVisible (true);
         setVisible (true);
-        setTitle("Accessibility Workbench");
+        setTitle("Accessibility Workbench " + msVersion);
     }
 
 
