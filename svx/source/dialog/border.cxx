@@ -2,9 +2,9 @@
  *
  *  $RCSfile: border.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-03 14:16:36 $
+ *  last change: $Author: os $ $Date: 2001-09-14 14:09:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1477,19 +1477,24 @@ IMPL_LINK( SvxBorderTabPage, LinesChanged_Impl, void*, EMPTYARG )
         //fuer Rahmen und  Absatz wird das Edit disabled, wenn keine Border gesetzt ist
         if(nSWMode & (SW_BORDER_MODE_FRAME|SW_BORDER_MODE_PARA))
         {
-            nValid = pFrameSel->GetTop().GetState() == SVX_FRMLINESTATE_SHOW ? VALID_TOP : 0;
-            nValid |= pFrameSel->GetBottom().GetState() == SVX_FRMLINESTATE_SHOW ? VALID_BOTTOM : 0;
-            nValid |= pFrameSel->GetLeft().GetState() == SVX_FRMLINESTATE_SHOW ? VALID_LEFT : 0;
-            nValid |= pFrameSel->GetRight().GetState() == SVX_FRMLINESTATE_SHOW ? VALID_RIGHT : 0;
+            if(bLineSet)
+            {
+                nValid = pFrameSel->GetTop().GetState() == SVX_FRMLINESTATE_SHOW ? VALID_TOP : 0;
+                nValid |= pFrameSel->GetBottom().GetState() == SVX_FRMLINESTATE_SHOW ? VALID_BOTTOM : 0;
+                nValid |= pFrameSel->GetLeft().GetState() == SVX_FRMLINESTATE_SHOW ? VALID_LEFT : 0;
+                nValid |= pFrameSel->GetRight().GetState() == SVX_FRMLINESTATE_SHOW ? VALID_RIGHT : 0;
+            }
+            else
+                nValid = 0;
         }
-        aLeftFT.Enable(bLineSet && 0 != (nValid&VALID_LEFT));
-        aRightFT.Enable(bLineSet && 0 != (nValid&VALID_RIGHT));
-        aTopFT.Enable(bLineSet && 0 != (nValid&VALID_TOP));
-        aBottomFT.Enable(bLineSet && 0 != (nValid&VALID_BOTTOM));
-        aLeftMF.Enable(bLineSet && 0 != (nValid&VALID_LEFT));
-        aRightMF.Enable(bLineSet && 0 != (nValid&VALID_RIGHT));
-        aTopMF.Enable(bLineSet && 0 != (nValid&VALID_TOP));
-        aBottomMF.Enable(bLineSet && 0 != (nValid&VALID_BOTTOM));
+        aLeftFT.Enable(0 != (nValid&VALID_LEFT));
+        aRightFT.Enable(0 != (nValid&VALID_RIGHT));
+        aTopFT.Enable(0 != (nValid&VALID_TOP));
+        aBottomFT.Enable(0 != (nValid&VALID_BOTTOM));
+        aLeftMF.Enable(0 != (nValid&VALID_LEFT));
+        aRightMF.Enable(0 != (nValid&VALID_RIGHT));
+        aTopMF.Enable(0 != (nValid&VALID_TOP));
+        aBottomMF.Enable(0 != (nValid&VALID_BOTTOM));
         aSynchronizeCB.Enable( aRightMF.IsEnabled() || aTopMF.IsEnabled() ||
                                aBottomMF.IsEnabled() || aLeftMF.IsEnabled() );
     }
@@ -1503,10 +1508,14 @@ IMPL_LINK( SvxBorderTabPage, ModifyDistanceHdl_Impl, MetricField*, pField)
     if ( bSync )
     {
         long nVal = pField->GetValue();
-        aLeftMF.SetValue(nVal);
-        aRightMF.SetValue(nVal);
-        aTopMF.SetValue(nVal);
-        aBottomMF.SetValue(nVal);
+        if(pField != &aLeftMF)
+            aLeftMF.SetValue(nVal);
+        if(pField != &aRightMF)
+            aRightMF.SetValue(nVal);
+        if(pField != &aTopMF)
+            aTopMF.SetValue(nVal);
+        if(pField != &aBottomMF)
+            aBottomMF.SetValue(nVal);
     }
     return 0;
 }
