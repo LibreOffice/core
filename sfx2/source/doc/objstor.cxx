@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.102 $
+ *  $Revision: 1.103 $
  *
- *  last change: $Author: mav $ $Date: 2002-07-24 14:16:03 $
+ *  last change: $Author: mav $ $Date: 2002-08-27 10:43:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -850,7 +850,8 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
          && !( pHiddenItem && pHiddenItem->GetValue() ) )
         {
             INetURLObject aUrl( pMedium->GetOrigURL() );
-            SystemShell::AddToRecentDocumentList( aUrl.GetURLNoPass( INetURLObject::NO_DECODE ) );
+            if ( aUrl.GetProtocol() == INET_PROT_FILE )
+                SystemShell::AddToRecentDocumentList( aUrl.GetURLNoPass( INetURLObject::NO_DECODE ) );
         }
     }
 
