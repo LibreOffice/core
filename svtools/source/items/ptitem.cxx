@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ptitem.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2002-05-22 12:17:34 $
+ *  last change: $Author: vg $ $Date: 2002-05-28 11:03:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -211,8 +211,8 @@ BOOL SfxPointItem::PutValue( const com::sun::star::uno::Any& rVal,
         switch ( nMemberId )
         {
             case 0: aVal.setX( aValue.X ); aVal.setY( aValue.Y ); break;
-            case MID_X: aVal.SetX( nVal ); break;
-            case MID_Y: aVal.SetY( nVal ); break;
+            case MID_X: aVal.setX( nVal ); break;
+            case MID_Y: aVal.setY( nVal ); break;
             default: DBG_ERROR("Wrong MemberId!"); return FALSE;
         }
     }
