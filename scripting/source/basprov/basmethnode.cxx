@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basmethnode.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tbe $ $Date: 2003-11-07 13:51:16 $
+ *  last change: $Author: svesik $ $Date: 2004-04-19 23:13:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,7 +136,7 @@ namespace basprov
                 StarBASIC* pBasic = static_cast< StarBASIC* >( pModule->GetParent() );
                 if ( pBasic )
                 {
-                    m_sURI = ::rtl::OUString::createFromAscii( "vnd.sun.star.script://" );
+                    m_sURI = ::rtl::OUString::createFromAscii( "vnd.sun.star.script:" );
                     m_sURI += pBasic->GetName();
                     m_sURI += ::rtl::OUString::createFromAscii( "." );
                     m_sURI += pModule->GetName();
