@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: mi $ $Date: 2001-01-23 16:39:30 $
+#   last change: $Author: mi $ $Date: 2001-01-24 13:21:26 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,6 +75,12 @@ PACKAGE=com$/sun$/star$/document
 IDLFILES=\
     XEmbeddedObjectResolver.idl\
     XGraphicObjectResolver.idl\
+    XEventBroadcaster.idl\
+    XEventListener.idl\
+    XEventSupploer.idl\
+    EventDescriptor.idl\
+    Events.idl\
+    EventObject.idl\
     DocumentInfo.idl\
     ExportFilter.idl\
     FilterFactory.idl\
