@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlcontent.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 09:06:39 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:48:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,6 @@
  *
  ************************************************************************/
 
-// ============================================================================
-
 #ifndef SC_XLCONTENT_HXX
 #define SC_XLCONTENT_HXX
 
@@ -68,8 +66,11 @@
 #include <sal/types.h>
 #endif
 
-
 // Constants ==================================================================
+
+// (0x00E5) MERGEDCELLS -------------------------------------------------------
+
+const sal_uInt16 EXC_ID_MERGEDCELLS         = 0x00E5;
 
 // (0x002F) FILEPASS ----------------------------------------------------------
 
@@ -85,11 +86,9 @@ const sal_uInt16 EXC_FILEPASS_BIFF8_STRONG  = 0x0002;
 const sal_uInt16 EXC_ID_SST                 = 0x00FC;
 const sal_uInt16 EXC_ID_EXTSST              = 0x00FF;
 
-
 // (0x015F) LABELRANGES -------------------------------------------------------
 
 const sal_uInt16 EXC_ID_LABELRANGES         = 0x015F;
-
 
 // (0x01B0) CONDFMT, (0x01B1) CF ----------------------------------------------
 
@@ -131,13 +130,14 @@ const sal_uInt32 EXC_CF_FONT_ALLDEFAULT     = 0x0000009A;   /// Default flags.
 const sal_uInt32 EXC_CF_FONT_UNDERL         = 0x00000001;   /// Font underline type modified?
 const sal_uInt32 EXC_CF_FONT_ESCAPEM        = 0x00000001;   /// Font escapement type modified?
 
-
-// (0x01B2) DVAL, (0x01BE) DV -------------------------------------------------
+// (0x01B2) DVAL --------------------------------------------------------------
 
 const sal_uInt16 EXC_ID_DVAL                = 0x01B2;
-const sal_uInt16 EXC_ID_DV                  = 0x01BE;
-
 const sal_uInt32 EXC_DVAL_NOOBJ             = 0xFFFFFFFF;
+
+// (0x01BE) DV ----------------------------------------------------------------
+
+const sal_uInt16 EXC_ID_DV                  = 0x01BE;
 
 // data validation flags
 const sal_uInt32 EXC_DV_STRINGLIST          = 0x00000080;
@@ -174,7 +174,6 @@ const sal_uInt32 EXC_DV_ERROR_STOP          = 0x00000000;
 const sal_uInt32 EXC_DV_ERROR_WARNING       = 0x00000010;
 const sal_uInt32 EXC_DV_ERROR_INFO          = 0x00000020;
 
-
 // (0x01B8) HLINK -------------------------------------------------------------
 
 const sal_uInt16 EXC_ID_HLINK               = 0x01B8;
@@ -185,7 +184,6 @@ const sal_uInt32 EXC_HLINK_DESCR            = 0x00000014;   /// Description.
 const sal_uInt32 EXC_HLINK_MARK             = 0x00000008;   /// Text mark.
 const sal_uInt32 EXC_HLINK_FRAME            = 0x00000080;   /// Target frame.
 const sal_uInt32 EXC_HLINK_UNC              = 0x00000100;   /// UNC path.
-
 
 // web queries ================================================================
 
@@ -218,7 +216,6 @@ const sal_uInt16 EXC_WQSETT_FORMATFULL      = 0x0003;
 
 // (0x0804) WEBQRYTABLES
 const sal_uInt16 EXC_ID_WQTABLES            = 0x0804;
-
 
 // ============================================================================
 
