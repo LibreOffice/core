@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputwin.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:39:29 $
+ *  last change: $Author: obo $ $Date: 2004-11-19 15:29:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,7 +127,7 @@ SwInputWindow::SwInputWindow( Window* pParent, SfxBindings* pBind )
 
     FreeResource();
 
-    SfxImageManager* pManager = pBindings->GetImageManager();
+    SfxImageManager* pManager = SfxImageManager::GetImageManager( SW_MOD() );
     pManager->RegisterToolBox(this);
 
     pView = ::GetActiveView();
@@ -139,9 +139,9 @@ SwInputWindow::SwInputWindow( Window* pParent, SfxBindings* pBind )
     InsertWindow( ED_FORMULA, &aEdit);
     SetHelpId(ED_FORMULA, HID_EDIT_FORMULA);
 
-    SetItemImage( FN_FORMULA_CALC, pManager->GetImage(FN_FORMULA_CALC ));
-    SetItemImage( FN_FORMULA_CANCEL, pManager->GetImage(FN_FORMULA_CANCEL ));
-    SetItemImage( FN_FORMULA_APPLY, pManager->GetImage(FN_FORMULA_APPLY ));
+    SetItemImage( FN_FORMULA_CALC, pManager->GetImage(FN_FORMULA_CALC, sal_False ));
+    SetItemImage( FN_FORMULA_CANCEL, pManager->GetImage(FN_FORMULA_CANCEL, sal_False  ));
+    SetItemImage( FN_FORMULA_APPLY, pManager->GetImage(FN_FORMULA_APPLY, sal_False  ));
 
     Size    aSizeTbx = CalcWindowSizePixel();
     Size aSize = GetSizePixel();
@@ -164,7 +164,7 @@ SwInputWindow::SwInputWindow( Window* pParent, SfxBindings* pBind )
 
 __EXPORT SwInputWindow::~SwInputWindow()
 {
-    pBindings->GetImageManager()->ReleaseToolBox(this);
+    SfxImageManager::GetImageManager( SW_MOD() )->ReleaseToolBox(this);
 
     //Lineale aufwecken
     if(pView)
