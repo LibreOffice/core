@@ -2,9 +2,9 @@
  *
  *  $RCSfile: waitsymbol.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 15:35:18 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 13:46:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,14 +62,18 @@
 #if ! defined(WAITSYMBOL_HXX_INCLUDED)
 #define WAITSYMBOL_HXX_INCLUDED
 
+#include <com/sun/star/rendering/XBitmap.hpp>
+
 #include "cppcanvas/customsprite.hxx"
 #include "disposable.hxx"
+#include "eventmultiplexer.hxx"
 #include "unoview.hxx"
-#include "drafts/com/sun/star/rendering/XBitmap.hpp"
+
+#include <boost/shared_ptr.hpp>
+#include <boost/bind.hpp>
+#include <boost/utility.hpp> // for noncopyable
+
 #include <vector>
-#include "boost/shared_ptr.hpp"
-#include "boost/bind.hpp"
-#include "boost/utility.hpp" // for noncopyable
 
 
 namespace presentation {
@@ -78,9 +82,9 @@ namespace internal {
 class WaitSymbol : public Disposable, private boost::noncopyable
 {
 public:
-    WaitSymbol(
-        com::sun::star::uno::Reference<
-        drafts::com::sun::star::rendering::XBitmap> const & xBitmap );
+    WaitSymbol( const com::sun::star::uno::Reference<
+                    com::sun::star::rendering::XBitmap>&    xBitmap,
+                EventMultiplexer&                           rEventMultiplexer );
 
     /** Shows the wait symbol.
      */
@@ -103,7 +107,7 @@ public:
 
 private:
     com::sun::star::uno::Reference<
-        drafts::com::sun::star::rendering::XBitmap> m_xBitmap;
+        com::sun::star::rendering::XBitmap> m_xBitmap;
 
     basegfx::B2DPoint calcSpritePos( UnoViewSharedPtr const & rView ) const;
 
@@ -111,6 +115,8 @@ private:
         std::pair<UnoViewSharedPtr,
                   cppcanvas::CustomSpriteSharedPtr> > ViewsVecT;
     ViewsVecT m_views;
+
+    EventMultiplexer& mrEventMultiplexer;
 
     template <typename FuncT>
     FuncT for_each_sprite( FuncT func ) const {
