@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltbli.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-27 13:44:40 $
+ *  last change: $Author: mib $ $Date: 2000-12-07 08:36:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1186,6 +1186,10 @@ void SwXMLTableContext::InsertRow( const OUString& rStyleName,
     if( nCurRow >= USHRT_MAX )
         return;
 
+    // Make sure there is at least one column.
+    if( 0==nCurRow && 0UL == GetColumnCount()  )
+        InsertColumn( USHRT_MAX, sal_True );
+
     if( nCurRow < pRows->Count() )
     {
         // The current row has already been inserted because of a row span
@@ -1684,12 +1688,6 @@ void SwXMLTableContext::_MakeTable( SwTableBox *pBox )
             pRows->DeleteAndDestroy( (sal_uInt16)i );
     }
 
-    // Make sure there is at least one column.
-    if( 0UL == nCols )
-    {
-        InsertColumn( USHRT_MAX, sal_True );
-        nCols = 1UL;
-    }
     if( 0UL == pRows->Count() )
     {
         OUString aStyleName;
