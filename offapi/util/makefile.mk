@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.26 $
+#   $Revision: 1.27 $
 #
-#   last change: $Author: cd $ $Date: 2001-11-29 08:11:47 $
+#   last change: $Author: jsc $ $Date: 2001-11-29 12:06:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -124,15 +124,14 @@ UNOIDLDBFILES= \
     $(UCR)$/cssview.db \
     $(UCR)$/csssvg.db \
     $(UCR)$/csssync.db \
-    $(UCR)$/dcsssync.db \
-    $(UCR)$/dcssframe.db \
     $(UCR)$/csssync2.db \
     $(UCR)$/cssxml.db \
     $(UCR)$/csssetup.db \
     $(UCR)$/cssimage.db\
     $(UCR)$/cssuidialogs.db \
     $(UCR)$/cssui.db \
-    $(UCR)$/csssync.db\
+    $(UCR)$/dcsssync.db \
+    $(UCR)$/dcssframe.db \
     $(UCR)$/dcssaccessibility.db\
 
 # --- Targets ------------------------------------------------------
