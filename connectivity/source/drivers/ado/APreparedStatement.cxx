@@ -2,9 +2,9 @@
  *
  *  $RCSfile: APreparedStatement.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-09-28 07:00:09 $
+ *  last change: $Author: oj $ $Date: 2001-12-11 09:10:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -246,15 +246,13 @@ void OPreparedStatement::setParameter(sal_Int32 parameterIndex, const DataTypeEn
 
     sal_Int32 nCount = 0;
     m_pParameters->get_Count(&nCount);
-    if(!nCount)
+    if(nCount < (parameterIndex-1))
     {
-
-        ADOParameter* pParam = m_Command.CreateParameter(::rtl::OUString(),_eType,adParamInput,_nSize,_Val);
+        ::rtl::OUString sDefaultName = ::rtl::OUString::createFromAscii("parame");
+        sDefaultName += ::rtl::OUString::valueOf(parameterIndex);
+        ADOParameter* pParam = m_Command.CreateParameter(sDefaultName,_eType,adParamInput,_nSize,_Val);
         if(pParam)
-        {
-            pParam->AddRef();
             m_pParameters->Append(pParam);
-        }
     }
     else
     {
@@ -263,7 +261,9 @@ void OPreparedStatement::setParameter(sal_Int32 parameterIndex, const DataTypeEn
         WpADOParameter aParam(pParam);
         if(pParam)
         {
+#ifdef _DEBUG
             ::rtl::OUString sParam = aParam.GetName();
+#endif // _DEBUG
             CHECK_RETURN(aParam.PutValue(_Val));
         }
     }
@@ -463,8 +463,20 @@ void SAL_CALL OPreparedStatement::clearParameters(  ) throw(SQLException, Runtim
     {
         sal_Int32 nCount = 0;
         m_pParameters->get_Count(&nCount);
-        for(sal_Int32 i=nCount-1;i>=0;--i)
-            m_pParameters->Delete(OLEVariant(i));
+        OLEVariant aVal;
+        aVal.setEmpty();
+        for(sal_Int32 i=0;i<nCount;++i)
+        {
+            ADOParameter* pParam = NULL;
+            m_pParameters->get_Item(OLEVariant(i),&pParam);
+            WpADOParameter aParam(pParam);
+            if(pParam)
+            {
+                ::rtl::OUString sParam = aParam.GetName();
+                CHECK_RETURN(aParam.PutValue(aVal));
+            }
+        }
+            //  m_pParameters->Delete(OLEVariant(i));
 
     }
 }
