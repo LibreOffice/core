@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salogl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:43 $
+ *  last change: $Author: pl $ $Date: 2000-12-20 14:37:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,6 +167,27 @@ BOOL SalOpenGL::Create()
             if( ! bHasGLX )
                 fprintf( stderr, "XServer does not support GLX extension\n" );
 #endif
+            if( bHasGLX )
+            {
+                /*
+                 *  #82406# the XFree4.0 GLX module does not seem
+                 *  to work that great, at least not the one that comes
+                 *  with the default installation and Matrox cards.
+                 *  Since these are common we disable usage of
+                 *  OpenGL per default.
+                 */
+                static const char* pOverrideGLX = getenv( "SAL_ENABLE_GLX_XFREE4" );
+                if( ! strncmp( ServerVendor( mpDisplay ), "The XFree86 Project, Inc", 24 ) &&
+                    VendorRelease( mpDisplay ) >= 4000 &&
+                    ! pOverrideGLX
+                    )
+                {
+#ifdef DEBUG
+                    fprintf( stderr, "disabling GLX usage on XFree >= 4.0\n" );
+#endif
+                    bHasGLX = FALSE;
+                }
+            }
         }
         if( bHasGLX && mpVisualInfo->c_class == TrueColor && ImplInit() )
         {
