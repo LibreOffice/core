@@ -75,7 +75,7 @@ public class ColInfo implements BIFFRecord {
     private byte[] colDX    = new byte[2];  // column width
     private byte[] ixfe     = new byte[2];  // index for formatting
     private byte   grbit;                   // options flags
-    private float  scale = (float) 1.798;
+    private float  scale = (float) 2.5;     // 1.798;
 
     /**
       * Constructs a pocket Excel Document from the
@@ -102,15 +102,21 @@ public class ColInfo implements BIFFRecord {
      */
     public ColInfo(InputStream is) throws IOException {
         read(is);
-        short scaledDX = (short) (EndianConverter.readShort(colDX) / scale);
-        colDX = EndianConverter.writeShort((short)scaledDX);;
     }
 
+    /**
+     * Reads ColInfo record from the InputStream
+     *
+     * @param input the InputStream to read from
+     * @return the number of bytes read
+     */
     public int read(InputStream input) throws IOException {
 
         int numOfBytesRead  = input.read(colFirst);
         numOfBytesRead      += input.read(colLast);
         numOfBytesRead      += input.read(colDX);
+        short scaledDX = (short) (EndianConverter.readShort(colDX) / scale);
+        colDX = EndianConverter.writeShort(scaledDX);
         numOfBytesRead      += input.read(ixfe);
         grbit               = (byte) input.read();
         numOfBytesRead      ++;
