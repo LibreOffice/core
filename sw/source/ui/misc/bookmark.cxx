@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bookmark.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-08-16 16:50:54 $
+ *  last change: $Author: mba $ $Date: 2002-07-01 08:59:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,17 +156,26 @@ void SwInsertBookmarkDlg::Apply()
     USHORT      nLen = aBookmarkBox.GetText().Len();
     SwBoxEntry  aTmpEntry(aBookmarkBox.GetText(), 0 );
 
-    if (nLen && (aBookmarkBox.GetEntryPos(aTmpEntry) == COMBOBOX_ENTRY_NOTFOUND))
+    if ( nLen && (aBookmarkBox.GetEntryPos(aTmpEntry) == COMBOBOX_ENTRY_NOTFOUND) )
     {
         String sEntry(aBookmarkBox.GetText());
         sEntry.EraseAllChars(aBookmarkBox.GetMultiSelectionSeparator());
 
         rSh.SetBookmark( KeyCode(), sEntry, aEmptyStr );
+        rReq.AppendItem( SfxStringItem( FN_INSERT_BOOKMARK, sEntry ) );
+        rReq.Done();
     }
+
+    if ( !rReq.IsDone() )
+        rReq.Ignore();
 
     for (USHORT nCount = aBookmarkBox.GetRemovedCount(); nCount > 0; nCount--)
     {
-        rSh.DelBookmark( aBookmarkBox.GetRemovedEntry( nCount -1 ).aName );
+        String sRemoved = aBookmarkBox.GetRemovedEntry( nCount -1 ).aName;
+        rSh.DelBookmark( sRemoved );
+        SfxRequest aReq( rSh.GetView().GetViewFrame(), FN_DELETE_BOOKMARK );
+        aReq.AppendItem( SfxStringItem( FN_DELETE_BOOKMARK, sRemoved ) );
+        aReq.Done();
     }
 }
 
@@ -175,7 +184,7 @@ void SwInsertBookmarkDlg::Apply()
  -----------------------------------------------------------------------*/
 
 
-SwInsertBookmarkDlg::SwInsertBookmarkDlg( Window *pParent, SwWrtShell &rS ) :
+SwInsertBookmarkDlg::SwInsertBookmarkDlg( Window *pParent, SwWrtShell &rS, SfxRequest& rRequest ) :
 
     SvxStandardDialog(pParent,SW_RES(DLG_INSERT_BOOKMARK)),
 
@@ -184,7 +193,8 @@ SwInsertBookmarkDlg::SwInsertBookmarkDlg( Window *pParent, SwWrtShell &rS ) :
     aOkBtn(this,SW_RES(BT_OK)),
     aCancelBtn(this,SW_RES(BT_CANCEL)),
     aDeleteBtn(this,SW_RES(BT_DELETE)),
-    rSh( rS )
+    rSh( rS ),
+    rReq( rRequest )
 {
     aBookmarkBox.SetModifyHdl(LINK(this, SwInsertBookmarkDlg, ModifyHdl));
     aBookmarkBox.EnableMultiSelection(TRUE);
@@ -355,6 +365,9 @@ long BookmarkCombo::PreNotify( NotifyEvent& rNEvt )
 /*------------------------------------------------------------------------
 
       $Log: not supported by cvs2svn $
+      Revision 1.3  2001/08/16 16:50:54  jp
+      Bug #85153#: prenotify disable asserts
+
       Revision 1.2  2001/05/29 13:46:19  fme
       Fix #86988#: Redesign of dialogs
 

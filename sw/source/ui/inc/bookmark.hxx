@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bookmark.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-29 13:39:32 $
+ *  last change: $Author: mba $ $Date: 2002-07-01 08:57:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,7 @@ class SwInsertBookmarkDlg: public SvxStandardDialog
 
     String          sRemoveWarning;
     SwWrtShell      &rSh;
+    SfxRequest&     rReq;
 
     DECL_LINK( ModifyHdl, BookmarkCombo * );
     DECL_LINK( DeleteHdl, Button * );
@@ -119,9 +120,8 @@ class SwInsertBookmarkDlg: public SvxStandardDialog
     virtual void Apply();
 
 public:
-    SwInsertBookmarkDlg( Window *pParent, SwWrtShell &rSh );
+    SwInsertBookmarkDlg( Window *pParent, SwWrtShell &rSh, SfxRequest& rReq );
     ~SwInsertBookmarkDlg();
-
 };
 
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: insfnote.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fme $ $Date: 2001-06-01 10:20:44 $
+ *  last change: $Author: mba $ $Date: 2002-07-01 08:57:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,18 @@ class SwInsFootNoteDlg: public SvxStandardDialog
 public:
     SwInsFootNoteDlg(Window * pParent, SwWrtShell &rSh, BOOL bEd = FALSE);
     ~SwInsFootNoteDlg();
+
+    CharSet         GetCharSet() { return eCharSet; }
+    BOOL            IsExtCharAvailable() { return bExtCharAvailable; }
+    String          GetFontName() { return aFontName; }
+    BOOL            IsEndNote() { return aEndNoteBtn.IsChecked(); }
+    String          GetStr()
+                    {
+                        if ( aNumberCharBtn.IsChecked() )
+                            return aNumberCharEdit.GetText();
+                        else
+                            return String();
+                    }
 };
 
 #endif
