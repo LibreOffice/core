@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLLineNumberingImportContext.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:22 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:34:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,8 +174,8 @@ static SvXMLTokenMapEntry aLineNumberingTokenMap[] =
           XML_TOK_LINENUMBERING_NUMBER_LINES },
     { XML_NAMESPACE_TEXT, XML_COUNT_EMPTY_LINES,
           XML_TOK_LINENUMBERING_COUNT_EMPTY_LINES },
-    { XML_NAMESPACE_TEXT, XML_COUNT_IN_FLOATING_FRAMES,
-          XML_TOK_LINENUMBERING_COUNT_IN_FLOATING_FRAMES },
+    { XML_NAMESPACE_TEXT, XML_COUNT_IN_TEXT_BOXES,
+          XML_TOK_LINENUMBERING_COUNT_IN_TEXT_BOXES },
     { XML_NAMESPACE_TEXT, XML_RESTART_ON_PAGE,
           XML_TOK_LINENUMBERING_RESTART_NUMBERING },
     { XML_NAMESPACE_TEXT, XML_OFFSET, XML_TOK_LINENUMBERING_OFFSET },
@@ -240,7 +240,7 @@ void XMLLineNumberingImportContext::ProcessAttribute(
             }
             break;
 
-        case XML_TOK_LINENUMBERING_COUNT_IN_FLOATING_FRAMES:
+        case XML_TOK_LINENUMBERING_COUNT_IN_TEXT_BOXES:
             if (SvXMLUnitConverter::convertBool(bTmp, sValue))
             {
                 bCountInFloatingFrames = bTmp;
@@ -311,7 +311,8 @@ void XMLLineNumberingImportContext::CreateAndInsert(
             if ( GetImport().GetStyles()->FindStyleChildContext(
                             XML_STYLE_FAMILY_TEXT_TEXT, sStyleName ) != NULL )
             {
-                aAny <<= sStyleName;
+                aAny <<= GetImport().GetStyleDisplayName(
+                            XML_STYLE_FAMILY_TEXT_TEXT, sStyleName );
                 xLineNumbering->setPropertyValue(sCharStyleName, aAny);
             }
 
