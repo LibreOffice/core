@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inetstrm.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:03:08 $
+ *  last change: $Author: th $ $Date: 2001-05-10 13:41:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,9 +63,6 @@
 #include <sal/types.h>
 #endif
 
-#ifndef _RTL_CHAR_H_
-#include <rtl/char.h>
-#endif
 #ifndef _RTL_MEMORY_H_
 #include <rtl/memory.h>
 #endif
@@ -87,6 +84,11 @@
 #endif
 
 #include <ctype.h> // toupper
+
+sal_Bool SAL_CALL ascii_isWhitespace( sal_Unicode ch )
+{
+    return ((ch <= 0x20) && c);
+}
 
 #define CONSTASCII_STRINGPARAM(a) (a), RTL_TEXTENCODING_ASCII_US
 
@@ -558,11 +560,11 @@ int INetMessageOStream::PutData (
             if (*pData == '\r') pData++;
             eOState = INETMSG_EOL_FCR;
         }
-        else if (rtl_char_isWhitespace (*pData & 0x7f))
+        else if (ascii_isWhitespace (*pData & 0x7f))
         {
             // Any <LWS> is folded into a single <SP> character.
             sal_Char c = *((const sal_Char *) pMsgBuffer->GetData() + pMsgBuffer->Tell() - 1);
-            if (!rtl_char_isWhitespace (c & 0x7f)) *pMsgBuffer << ' ';
+            if (!ascii_isWhitespace (c & 0x7f)) *pMsgBuffer << ' ';
 
             // Skip over this <LWS> character.
             pData++;
