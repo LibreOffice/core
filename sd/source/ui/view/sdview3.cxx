@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview3.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 17:19:55 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 12:54:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,8 +58,10 @@
  *
  *
  ************************************************************************/
-
 #pragma hdrstop
+
+#include "View.hxx"
+
 #ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
 #include <com/sun/star/lang/XComponent.hpp>
 #endif
@@ -153,18 +155,25 @@
 #include <unotools/streamwrap.hxx>
 #endif
 
-#include "docshell.hxx"
+#include "DrawDocShell.hxx"
+#ifndef SD_FU_POOR_HXX
 #include "fupoor.hxx"
-#include "sdwindow.hxx"
-#include "sdview.hxx"
+#endif
+#ifndef SD_WINDOW_HXX
+#include "Window.hxx"
+#endif
 #include "sdxfer.hxx"
 #include "sdpage.hxx"
-#include "drviewsh.hxx"
+#ifndef SD_DRAW_VIEW_SHELL_HXX
+#include "DrawViewShell.hxx"
+#endif
 #include "drawdoc.hxx"
 #include "sdresid.hxx"
 #include "strings.hrc"
 #include "imapinfo.hxx"
-#include "slidvish.hxx"
+#ifndef SD_SLIDE_VIEW_SHELL_HXX
+#include "SlideViewShell.hxx"
+#endif
 #include "strmname.h"
 #include "unomodel.hxx"
 
@@ -177,6 +186,8 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::datatransfer;
 using namespace ::com::sun::star::datatransfer::clipboard;
+
+namespace sd {
 
 #define CHECK_FORMAT_TRANS( _def_Type ) ( ( nFormat == (_def_Type) || !nFormat ) && aDataHelper.HasFormat( _def_Type ) )
 
@@ -235,7 +246,7 @@ void ImpCheckInsertPos(Point& rPos, const Size& rSize, const Rectangle& rWorkAre
     }
 }
 
-BOOL SdView::InsertData( const TransferableDataHelper& rDataHelper,
+BOOL View::InsertData( const TransferableDataHelper& rDataHelper,
                          const Point& rPos, sal_Int8& rDnDAction, BOOL bDrag,
                          ULONG nFormat, USHORT nPage, USHORT nLayer )
 {
@@ -246,7 +257,7 @@ BOOL SdView::InsertData( const TransferableDataHelper& rDataHelper,
     TransferableDataHelper  aDataHelper( rDataHelper );
     SdrObject*              pPickObj = NULL;
     SdPage*                 pPage = NULL;
-    SdWindow*               pWin = pViewSh->GetActiveWindow();
+    ::sd::Window* pWin = pViewSh->GetActiveWindow();
     ImageMap*               pImageMap = NULL;
     BOOL                    bMtf = FALSE;
     BOOL                    bReturn = FALSE;
@@ -254,8 +265,14 @@ BOOL SdView::InsertData( const TransferableDataHelper& rDataHelper,
     BOOL                    bCopy = ( ( ( nAction & DND_ACTION_COPY ) != 0 ) || bLink );
     ULONG                   nPasteOptions = SDRINSERT_SETDEFLAYER;
 
-    if( pViewSh->ISA( SdSlideViewShell ) || ( pViewSh && pViewSh->GetIPClient() && pViewSh->GetIPClient()->IsInPlaceActive() ) )
+    if (pViewSh != NULL)
+    {
+        OSL_ASSERT (pViewSh->GetViewShell()!=NULL);
+        SfxInPlaceClient* pIpClient = pViewSh->GetViewShell()->GetIPClient();
+        if( pViewSh->ISA(SlideViewShell)
+            || (pIpClient!=NULL && pIpClient->IsInPlaceActive()))
         nPasteOptions |= SDRINSERT_DONTMARK;
+    }
 
     if( bDrag )
     {
@@ -294,10 +311,10 @@ BOOL SdView::InsertData( const TransferableDataHelper& rDataHelper,
 
     if( pOwnData && !nFormat )
     {
-        const SdView* pSourceView = pOwnData->GetView();
+        const View* pSourceView = pOwnData->GetView();
 
 
-        if( pOwnData->GetDocShell() && pOwnData->IsPageTransferable() && ISA( SdView ) )
+        if( pOwnData->GetDocShell() && pOwnData->IsPageTransferable() && ISA( View ) )
         {
             USHORT  nInsertPgCnt, nInsertPos = pDoc->GetSdPageCount( PK_STANDARD ) * 2 + 1;
             USHORT  nPgCnt = pDoc->GetSdPageCount( PK_STANDARD );
@@ -331,7 +348,7 @@ BOOL SdView::InsertData( const TransferableDataHelper& rDataHelper,
             else
             {
                 SvEmbeddedObject*   pObj = pOwnData->GetDocShell();
-                SdDrawDocShell*     pDataDocSh = (SdDrawDocShell*) pObj;
+                DrawDocShell*       pDataDocSh = (DrawDocShell*) pObj;
                 SdDrawDocument*     pDataDoc = pDataDocSh->GetDoc();
 
                 if( pDataDoc && pDataDoc->GetSdPageCount( PK_STANDARD ) )
@@ -817,7 +834,7 @@ BOOL SdView::InsertData( const TransferableDataHelper& rDataHelper,
 
             if( pDoc->GetDocSh() && ( pDoc->GetDocSh()->GetClassName() == aObjDesc.maClassName ) )
             {
-                SdDrawDocShellRef xDocShRef( new SdDrawDocShell( SFX_CREATE_MODE_EMBEDDED, TRUE, pDoc->GetDocumentType() ) );
+                ::sd::DrawDocShellRef xDocShRef( new ::sd::DrawDocShell( SFX_CREATE_MODE_EMBEDDED, TRUE, pDoc->GetDocumentType() ) );
 
                 if( xDocShRef->DoLoad( xStore ) )
                 {
@@ -890,8 +907,14 @@ BOOL SdView::InsertData( const TransferableDataHelper& rDataHelper,
                     SdrPageView*    pPV = GetPageViewPvNum( 0 );
                     ULONG           nOptions = SDRINSERT_SETDEFLAYER;
 
-                    if( pViewSh && pViewSh->GetIPClient() && pViewSh->GetIPClient()->IsInPlaceActive() )
-                        nOptions |= SDRINSERT_DONTMARK;
+                    if (pViewSh!=NULL)
+                    {
+                        OSL_ASSERT (pViewSh->GetViewShell()!=NULL);
+                        SfxInPlaceClient* pIpClient
+                            = pViewSh->GetViewShell()->GetIPClient();
+                        if (pIpClient!=NULL && pIpClient->IsInPlaceActive())
+                            nOptions |= SDRINSERT_DONTMARK;
+                    }
 
                     InsertObject( pObj, *pPV, nOptions );
 
@@ -947,8 +970,14 @@ BOOL SdView::InsertData( const TransferableDataHelper& rDataHelper,
                 SdrPageView*    pPV = GetPageViewPvNum( 0 );
                 ULONG           nOptions = SDRINSERT_SETDEFLAYER;
 
-                if( pViewSh && pViewSh->GetIPClient() && pViewSh->GetIPClient()->IsInPlaceActive() )
-                    nOptions |= SDRINSERT_DONTMARK;
+                if (pViewSh != NULL)
+                {
+                    OSL_ASSERT (pViewSh->GetViewShell()!=NULL);
+                    SfxInPlaceClient* pIpClient =
+                        pViewSh->GetViewShell()->GetIPClient();
+                    if (pIpClient!=NULL && pIpClient->IsInPlaceActive())
+                        nOptions |= SDRINSERT_DONTMARK;
+                }
 
                 InsertObject( pObj, *pPV, nOptions );
 
@@ -1087,8 +1116,9 @@ BOOL SdView::InsertData( const TransferableDataHelper& rDataHelper,
                 String                  aName( rColItem.GetName() );
                 SfxItemSet              aSet( pDoc->GetPool() );
                 BOOL                    bClosed = pPickObj->IsClosedObj();
-                SdWindow*               pWin = pViewSh->GetActiveWindow();
-                USHORT                  nHitLog = (USHORT) pWin->PixelToLogic( Size( HITPIX, 0 ) ).Width();
+                ::sd::Window* pWin = pViewSh->GetActiveWindow();
+                USHORT nHitLog = (USHORT) pWin->PixelToLogic(
+                    Size(FuPoor::HITPIX, 0 ) ).Width();
                 const long              n2HitLog = nHitLog << 1;
                 Point                   aHitPosR( rPos );
                 Point                   aHitPosL( rPos );
@@ -1244,3 +1274,5 @@ BOOL SdView::InsertData( const TransferableDataHelper& rDataHelper,
 
     return bReturn;
 }
+
+} // end of namespace sd
