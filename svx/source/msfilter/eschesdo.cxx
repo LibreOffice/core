@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eschesdo.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:21 $
+ *  last change: $Author: er $ $Date: 2000-10-11 12:17:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -48,7 +48,7 @@
  *  See the License for the specific provisions governing your rights and
  *  obligations concerning the Software.
  *
- *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc..
  *
  *  Copyright: 2000 by Sun Microsystems, Inc.
  *
@@ -1585,7 +1585,7 @@ UINT32 ImplEESdrWriter::ImplWriteShape( ImplEESdrObject& rObj,
                                     *((INT32*)rObj.GetUsrAny().getValue()) * 360 );
                     if( rObj.ImplGetPropertyValue( ::rtl::OUString::createFromAscii("ShadowTransparence") ) )
                         mpEscherEx->AddOpt( ESCHER_Prop_shadowOpacity,
-                            ( ( 100 - (*((UINT16*)rObj.GetUsrAny().getValue()) )
+                            ( ( (100 - (*((UINT16*)rObj.GetUsrAny().getValue())))
                                         << 16 ) / 100 ) );
                 }
             }
@@ -2542,10 +2542,12 @@ void ImplEESdrObject::Init( ImplEESdrWriter& rEx )
     mXPropSet = Reference< XPropertySet >::query( mXShape );
     if( mXPropSet.is() )
     {
+        static const sal_Char aPrefix[] = "com.sun.star.";
+        static const xub_StrLen nPrefix = sizeof(aPrefix)-1;
         SetRect( rEx.ImplMapPoint( Point( mXShape->getPosition().X, mXShape->getPosition().Y ) ),
                  rEx.ImplMapSize( Size( mXShape->getSize().Width, mXShape->getSize().Height ) ) );
         mType = String( mXShape->getShapeType() );
-        mType.Erase( 0, 13 );   // strip "com.sun.star."
+        mType.Erase( 0, nPrefix );  // strip "com.sun.star."
         xub_StrLen nPos = mType.SearchAscii( "Shape" );
         mType.Erase( nPos, 5 );
 
