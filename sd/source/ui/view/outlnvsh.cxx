@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlnvsh.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2000-09-20 15:42:41 $
+ *  last change: $Author: dl $ $Date: 2000-09-20 15:54:01 $
  *
  *  Copyright according the GNU Public License.
  *
@@ -575,7 +575,7 @@ void __EXPORT SdOutlineViewShell::GetCtrlState(SfxItemSet &rSet)
         SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_PREVIEW_QUALITY_BLACKWHITE ) )
     {
         USHORT nId = SdPreviewChildWindow::GetChildWindowId();
-        if( SFX_APP()->GetChildWindow( nId ) )
+        if( GetViewFrame()->GetChildWindow( nId ) )
         {
             ULONG nMode = pFrameView->GetPreviewDrawMode();
             rSet.Put( SfxBoolItem( SID_PREVIEW_QUALITY_COLOR, (BOOL)(nMode == PREVIEW_DRAWMODE_COLOR) ) );
@@ -833,7 +833,7 @@ void SdOutlineViewShell::GetMenuState( SfxItemSet &rSet )
 
     if ( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_PRESENTATION ) )
     {
-        SfxChildWindow* pPreviewChildWindow = SFX_APP()->GetChildWindow(SdPreviewChildWindow::GetChildWindowId());
+        SfxChildWindow* pPreviewChildWindow = GetViewFrame()->GetChildWindow(SdPreviewChildWindow::GetChildWindowId());
         SdPreviewWin*   pPreviewWin = (SdPreviewWin*) ( pPreviewChildWindow ? pPreviewChildWindow->GetWindow() : NULL );
         FuSlideShow*    pShow = pPreviewWin ? pPreviewWin->GetSlideShow() : NULL;
 
@@ -1063,7 +1063,7 @@ void SdOutlineViewShell::GetMenuState( SfxItemSet &rSet )
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_PREVIEW_WIN ) )
     {
         USHORT nId = SdPreviewChildWindow::GetChildWindowId();
-        rSet.Put( SfxBoolItem( SID_PREVIEW_WIN, SFX_APP()->HasChildWindow( nId ) ) );
+        rSet.Put( SfxBoolItem( SID_PREVIEW_WIN, GetViewFrame()->HasChildWindow( nId ) ) );
     }
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_PREVIEW_STATE ) )
     {
@@ -1971,7 +1971,7 @@ void SdOutlineViewShell::UpdatePreview()
     // vom ShowWindow der DiaShow?
     // ggfs. Preview den neuen Kontext mitteilen
     SfxChildWindow* pPreviewChildWindow =
-        SFX_APP()->GetChildWindow(SdPreviewChildWindow::GetChildWindowId());
+        GetViewFrame()->GetChildWindow(SdPreviewChildWindow::GetChildWindowId());
     if (pPreviewChildWindow)
     {
         SdPreviewWin* pPreviewWin =
