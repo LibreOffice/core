@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layfrm.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ama $ $Date: 2001-08-23 13:54:44 $
+ *  last change: $Author: ama $ $Date: 2001-10-19 10:13:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,6 @@
 
 class SwCntntFrm;
 class SwFlowFrm;
-class Sw3FrameIo;
 class SwFmtCol;
 struct SwCrsrMoveState;
 class SwFrmFmt;
@@ -93,16 +92,13 @@ protected:
 
     SwFrm           *pLower;
 
-    virtual SwTwips ShrinkFrm( SwTwips, const SzPtr,
+    virtual SwTwips ShrinkFrm( SwTwips, SZPTR
                                BOOL bTst = FALSE, BOOL bInfo = FALSE );
-    virtual SwTwips GrowFrm  ( SwTwips, const SzPtr,
+    virtual SwTwips GrowFrm  ( SwTwips, SZPTR
                                BOOL bTst = FALSE, BOOL bInfo = FALSE );
 
     long CalcRel( const SwFmtFrmSize &rSz, BOOL bWidth ) const;
 
-    SwLayoutFrm( Sw3FrameIo&, SwLayoutFrm* );
-    void LoadLower( Sw3FrameIo& );
-    void StoreLower( Sw3FrameIo& ) const;
 public:
     void PaintSubsidiaryLines( const SwPageFrm*, const SwRect& ) const;
     void RefreshLaySubsidiary( const SwPageFrm*, const SwRect& ) const;
@@ -119,8 +115,6 @@ public:
         //Painted die Column-Trennlinien fuer die innenliegenden Columns.
     void PaintColLines( const SwRect &, const SwFmtCol &,
                         const SwPageFrm * ) const;
-
-    virtual void Store( Sw3FrameIo& ) const;
 
     virtual BOOL  GetCrsrOfst( SwPosition *, Point&,
                                 const SwCrsrMoveState* = 0 ) const;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftnfrm.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-15 12:50:20 $
+ *  last change: $Author: ama $ $Date: 2001-10-19 10:12:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,9 +82,9 @@ public:
     const SwFtnFrm* FindFootNote() const;
     const SwFtnFrm* FindEndNote() const;
 
-    virtual SwTwips ShrinkFrm( SwTwips, const SzPtr,
+    virtual SwTwips ShrinkFrm( SwTwips, SZPTR
                                BOOL bTst = FALSE, BOOL bInfo = FALSE );
-    virtual SwTwips GrowFrm( SwTwips, const SzPtr,
+    virtual SwTwips GrowFrm( SwTwips, SZPTR
                              BOOL bTst = FALSE, BOOL bInfo = FALSE );
     virtual void    Format( const SwBorderAttrs *pAttrs = 0 );
     virtual void    PaintBorder( const SwRect &, const SwPageFrm *pPage,
@@ -107,9 +107,9 @@ class SwFtnFrm: public SwLayoutFrm
                                 //nicht rueckwaerts fliessen.
 #ifndef PRODUCT
 protected:
-    virtual SwTwips ShrinkFrm( SwTwips, const SzPtr,
+    virtual SwTwips ShrinkFrm( SwTwips, SZPTR
                                BOOL bTst = FALSE, BOOL bInfo = FALSE );
-    virtual SwTwips GrowFrm  ( SwTwips, const SzPtr,
+    virtual SwTwips GrowFrm  ( SwTwips, SZPTR
                                BOOL bTst = FALSE, BOOL bInfo = FALSE );
 #endif
 

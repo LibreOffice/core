@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paintfrm.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ama $ $Date: 2001-09-19 08:45:57 $
+ *  last change: $Author: ama $ $Date: 2001-10-19 10:23:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -848,7 +848,8 @@ void SwLineRects::PaintLines( OutputDevice *pOut )
                     pLast = rLRect.GetColor();
                     pOut->SetFillColor( *pLast );
                 }
-                pOut->DrawRect( rLRect.SVRect() );
+                if( !rLRect.IsEmpty() )
+                    pOut->DrawRect( rLRect.SVRect() );
                 rLRect.SetPainted();
             }
             else
@@ -872,7 +873,8 @@ void SwLineRects::PaintLines( OutputDevice *pOut )
                     pLast = rLRect.GetColor();
                     pOut->SetFillColor( *pLast );
                 }
-                pOut->DrawRect( rLRect.SVRect() );
+                if( !rLRect.IsEmpty() )
+                    pOut->DrawRect( rLRect.SVRect() );
                 rLRect.SetPainted();
             }
         nLastCount = nMinCount;
@@ -1120,9 +1122,9 @@ void MA_FASTCALL lcl_CalcBorderRect( SwRect &rRect, const SwFrm *pFrm,
                 (rRect.*fnRect->fnSubLeft)(rBox.GetDistance( BOX_LINE_LEFT )+1);
 
             if ( rBox.GetRight() )
-                (rRect.*fnRect->fnAddBottom)(rBox.CalcLineSpace(BOX_LINE_RIGHT));
+                (rRect.*fnRect->fnAddRight)(rBox.CalcLineSpace(BOX_LINE_RIGHT));
             else if ( rAttrs.IsBorderDist() )
-                (rRect.*fnRect->fnAddBottom)(rBox.GetDistance(BOX_LINE_RIGHT)+1);
+                (rRect.*fnRect->fnAddRight)(rBox.GetDistance(BOX_LINE_RIGHT)+1);
 
             if ( bShadow && rAttrs.GetShadow().GetLocation() != SVX_SHADOW_NONE )
             {
@@ -3133,6 +3135,12 @@ void SwLayoutFrm::RefreshLaySubsidiary( const SwPageFrm *pPage,
 |*************************************************************************/
 
 //Malt die angegebene Linie, achtet darauf, dass keine Flys uebermalt werden.
+#ifdef VERTICAL_LAYOUT
+    PointPtr pX = &Point::nA;
+    PointPtr pY = &Point::nB;
+    SizePtr pWidth = &Size::nA;
+    SizePtr pHeight = &Size::nB;
+#endif
 
 void MA_FASTCALL lcl_RefreshLine( const SwLayoutFrm *pLay, const SwPageFrm *pPage,
                          const Point &rP1, const Point &rP2, const BYTE nSubColor )
@@ -3140,10 +3148,10 @@ void MA_FASTCALL lcl_RefreshLine( const SwLayoutFrm *pLay, const SwPageFrm *pPag
     //In welche Richtung gehts? Kann nur Horizontal oder Vertikal sein.
     ASSERT( ((rP1.X() == rP2.X()) || (rP1.Y() == rP2.Y())),
             "Schraege Hilfslinien sind nicht erlaubt." );
-    const PtPtr pDirPt = rP1.X() == rP2.X() ? pY : pX;
-    const PtPtr pOthPt = pDirPt == pX ? pY : pX;
-    const SzPtr pDirSz = pDirPt == pX ? pWidth : pHeight;
-    const SzPtr pOthSz = pDirSz == pWidth ? pHeight : pWidth;
+    const PTPTR pDirPt = rP1.X() == rP2.X() ? pY : pX;
+    const PTPTR pOthPt = pDirPt == pX ? pY : pX;
+    const SIZEPTR pDirSz = pDirPt == pX ? pWidth : pHeight;
+    const SIZEPTR pOthSz = pDirSz == pWidth ? pHeight : pWidth;
     Point aP1( rP1 ),
           aP2( rP2 );
 

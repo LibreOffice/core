@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sectfrm.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ama $ $Date: 2001-08-23 14:36:02 $
+ *  last change: $Author: ama $ $Date: 2001-10-19 10:24:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -411,7 +411,7 @@ void SwSectionFrm::_Cut( BOOL bRemove )
                 Frm().Height( 0 );
                 Prt().Height( 0 );
             }
-            pUp->Shrink( nFrmHeight, pHeight );
+            pUp->Shrink( nFrmHeight PHEIGHT );
         }
     }
 }
@@ -505,7 +505,7 @@ void SwSectionFrm::Paste( SwFrm* pParent, SwFrm* pSibling )
     }
 
     if ( Frm().Height() )
-        pParent->Grow( Frm().Height(), pHeight );
+        pParent->Grow( Frm().Height() PHEIGHT );
 
     if ( GetPrev() )
     {
@@ -813,7 +813,11 @@ void SwSectionFrm::MakeAll()
         {
             if( GetPrev() )
             {   aFrm.Pos( GetPrev()->Frm().Pos() );
+#ifdef VERTICAL_LAYOUT
+                aFrm.Pos().X() += GetPrev()->Frm().Height();
+#else
                 aFrm.Pos().*pVARPOS += GetPrev()->Frm().SSize().*pVARSIZE;
+#endif
             }
             else if( GetUpper() )
             {
@@ -1070,7 +1074,7 @@ void SwSectionFrm::_CheckClipping( BOOL bGrow, BOOL bMaximize )
     {
         long nBottom = Frm().Top() + Frm().Height() + ( bMaximize ? 0 : Undersize() );
         if( nBottom > nDeadLine )
-            nDeadLine += GetUpper()->Grow( nBottom - nDeadLine, pHeight );
+            nDeadLine += GetUpper()->Grow( nBottom - nDeadLine PHEIGHT );
     }
     // Bei maximierten SectionFrms ist das Undersized-Flag ueberfluessig,
     // aber sonst muss es auch gesetzt werden, wenn die DeadLine genau
@@ -1135,7 +1139,11 @@ void SwSectionFrm::SimpleFormat()
     if( GetPrev() )
     {
         aFrm.Pos( GetPrev()->Frm().Pos() );
+#ifdef VERTICAL_LAYOUT
+        aFrm.Pos().X() += GetPrev()->Frm().Height();
+#else
         aFrm.Pos().*pVARPOS += GetPrev()->Frm().SSize().*pVARSIZE;
+#endif
         bValidPos = TRUE;
     }
     else if( GetUpper() )
@@ -1282,7 +1290,7 @@ void SwSectionFrm::Format( const SwBorderAttrs *pAttr )
                     long nBottom = Frm().Bottom() - nDiff;
                     if( nBottom > nDeadLine )
                     {
-                        nDeadLine += GetUpper()->Grow( nBottom - nDeadLine, pHeight, TRUE );
+                        nDeadLine += GetUpper()->Grow( nBottom - nDeadLine PHEIGHT, TRUE );
                         if( nBottom > nDeadLine )
                             nDiff += nBottom - nDeadLine;
                         if( nDiff > 0 )
@@ -1343,7 +1351,7 @@ void SwSectionFrm::Format( const SwBorderAttrs *pAttr )
             if( !GetNext() )
                 SetRetouche(); // Dann muessen wir die Retusche selbst uebernehmen
             if( GetUpper() )
-                GetUpper()->Shrink( nOldHeight - Frm().Height(), pHeight );
+                GetUpper()->Shrink( nOldHeight - Frm().Height() PHEIGHT );
         }
         if( IsUndersized() )
             bValidPrtArea = TRUE;
@@ -1776,7 +1784,7 @@ BOOL SwSectionFrm::Growable() const
 {
     if( Frm().Top() + Frm().Height() < lcl_DeadLine( this ) )
         return TRUE;
-    return ( GetUpper() && ((SwFrm*)GetUpper())->Grow( LONG_MAX, pHeight, TRUE ) );
+    return ( GetUpper() && ((SwFrm*)GetUpper())->Grow( LONG_MAX PHEIGHT, TRUE ) );
 }
 
 /*************************************************************************
@@ -1788,6 +1796,15 @@ BOOL SwSectionFrm::Growable() const
 |*
 |*************************************************************************/
 
+#ifdef VERTICAL_LAYOUT
+SwTwips SwSectionFrm::_Grow( SwTwips nDist, BOOL bTst )
+{
+    if ( !IsColLocked() && !HasFixSize() )
+    {
+        if ( Frm().Height() > 0 &&
+             nDist > (LONG_MAX - Frm().Height()) )
+            nDist = LONG_MAX - Frm().Height();
+#else
 SwTwips SwSectionFrm::_Grow( SwTwips nDist, const SzPtr pDirection, BOOL bTst )
 {
     if ( !IsColLocked() && !HasFixSize( pDirection ) )
@@ -1795,6 +1812,7 @@ SwTwips SwSectionFrm::_Grow( SwTwips nDist, const SzPtr pDirection, BOOL bTst )
         if ( Frm().SSize().*pDirection > 0 &&
              nDist > (LONG_MAX - Frm().SSize().*pDirection) )
             nDist = LONG_MAX - Frm().SSize().*pDirection;
+#endif
 
         if ( nDist <= 0L )
             return 0L;
@@ -1807,7 +1825,7 @@ SwTwips SwSectionFrm::_Grow( SwTwips nDist, const SzPtr pDirection, BOOL bTst )
                 lcl_DeadLine( this ) - Frm().Top() - Frm().Height();
             SwTwips nSpace = nGrow;
             if( !bInCalcCntnt && nGrow < nDist )
-                nGrow += GetUpper()->Grow( LONG_MAX, pHeight, TRUE );
+                nGrow += GetUpper()->Grow( LONG_MAX PHEIGHT, TRUE );
 
             if( nGrow > nDist )
                 nGrow = nDist;
@@ -1827,7 +1845,11 @@ SwTwips SwSectionFrm::_Grow( SwTwips nDist, const SzPtr pDirection, BOOL bTst )
                 if( bInCalcCntnt )
                     _InvalidateSize();
                 else if( nSpace < nGrow &&  nDist != nSpace + GetUpper()->
+#ifdef VERTICAL_LAYOUT
+                         Grow( nGrow - nSpace, FALSE ) )
+#else
                          Grow( nGrow - nSpace, pDirection, FALSE ) )
+#endif
                     InvalidateSize();
                 else
                 {
@@ -1841,8 +1863,13 @@ SwTwips SwSectionFrm::_Grow( SwTwips nDist, const SzPtr pDirection, BOOL bTst )
                     if( GetUpper()->IsHeaderFrm() || GetUpper()->IsFooterFrm() )
                         GetUpper()->InvalidateSize();
                 }
+#ifdef VERTICAL_LAYOUT
+                Frm().SSize().Height() += nGrow;
+                Prt().SSize().Height() += nGrow;
+#else
                 Frm().SSize().*pDirection += nGrow;
                 Prt().SSize().*pDirection += nGrow;
+#endif
                 if( Lower() && Lower()->IsColumnFrm() && Lower()->GetNext() )
                 {
                     SwFrm* pTmp = Lower();
@@ -1880,9 +1907,15 @@ SwTwips SwSectionFrm::_Grow( SwTwips nDist, const SzPtr pDirection, BOOL bTst )
     return 0L;
 }
 
+#ifdef VERTICAL_LAYOUT
+SwTwips SwSectionFrm::_Shrink( SwTwips nDist, BOOL bTst )
+{
+    if ( Lower() && !IsColLocked() && !HasFixSize() )
+#else
 SwTwips SwSectionFrm::_Shrink( SwTwips nDist, const SzPtr pDirection, BOOL bTst )
 {
     if ( Lower() && !IsColLocked() && !HasFixSize( pDirection ) )
+#endif
     {
         if( ToMaximize( FALSE ) )
         {
@@ -1891,26 +1924,19 @@ SwTwips SwSectionFrm::_Shrink( SwTwips nDist, const SzPtr pDirection, BOOL bTst 
         }
         else
         {
+#ifdef VERTICAL_LAYOUT
+            if ( nDist > Frm().Height() )
+                nDist = Frm().Height();
+#else
             if ( nDist > Frm().SSize().*pDirection )
                 nDist = Frm().SSize().*pDirection;
-
+#endif
             if ( Lower()->IsColumnFrm() && Lower()->GetNext() && // FtnAtEnd
                  !GetSection()->GetFmt()->GetBalancedColumns().GetValue() )
             {   //Bei Spaltigkeit ubernimmt das Format die Kontrolle ueber
                 //das Wachstum (wg. des Ausgleichs).
                 if ( !bTst )
-                {
-#ifdef USED
-                    Frm().SSize().*pDirection -= nDist;
-                    Prt().SSize().*pDirection -= nDist;
-#endif
                     InvalidateSize();
-#ifdef USED
-                    if( !GetNext() )
-                        SetRetouche();
-                    GetUpper()->Shrink( nDist, pDirection, FALSE );
-#endif
-                }
                 return nDist;
             }
             else if( !bTst )
@@ -1922,9 +1948,15 @@ SwTwips SwSectionFrm::_Shrink( SwTwips nDist, const SzPtr pDirection, BOOL bTst 
                     SetCompletePaint();
                     InvalidatePage();
                 }
+#ifdef VERTICAL_LAYOUT
+                Frm().SSize().Height() -= nDist;
+                Prt().SSize().Height() -= nDist;
+                const SwTwips nReal = GetUpper()->Shrink( nDist, bTst );
+#else
                 Frm().SSize().*pDirection -= nDist;
                 Prt().SSize().*pDirection -= nDist;
                 const SwTwips nReal = GetUpper()->Shrink( nDist, pDirection, bTst );
+#endif
                 if( Lower() && Lower()->IsColumnFrm() && Lower()->GetNext() )
                 {
                     SwFrm* pTmp = Lower();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rowfrm.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2001-10-12 13:26:44 $
+ *  last change: $Author: ama $ $Date: 2001-10-19 10:15:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,9 +74,9 @@ class SwRowFrm: public SwLayoutFrm
 {
     virtual void Format( const SwBorderAttrs *pAttrs = 0 );
         //Aendern nur die Framesize, nicht die PrtArea-SSize
-    virtual SwTwips ShrinkFrm( SwTwips, const SzPtr,
+    virtual SwTwips ShrinkFrm( SwTwips, SZPTR
                                BOOL bTst = FALSE, BOOL bInfo = FALSE );
-    virtual SwTwips GrowFrm  ( SwTwips, const SzPtr,
+    virtual SwTwips GrowFrm  ( SwTwips, SZPTR
                                BOOL bTst = FALSE, BOOL bInfo = FALSE );
 
     const SwTableLine *pTabLine;

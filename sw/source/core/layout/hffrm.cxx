@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hffrm.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ama $ $Date: 2001-08-29 10:39:15 $
+ *  last change: $Author: ama $ $Date: 2001-10-19 10:21:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,23 @@ SwHeaderFrm::SwHeaderFrm( SwFrmFmt *pFmt ):
     bObjsDirect = bOld;
 }
 
+#ifdef VERTICAL_LAYOUT
+SwTwips SwHeaderFrm::GrowFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
+{
+    SwTwips nRet = SwLayoutFrm::GrowFrm( nDist, bTst, bInfo );
+    if ( nRet && !bTst )
+        SetCompletePaint();
+    return nRet;
+}
+
+SwTwips SwHeaderFrm::ShrinkFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
+{
+    SwTwips nRet = SwLayoutFrm::ShrinkFrm( nDist, bTst, bInfo );
+    if ( nRet && !bTst )
+        SetCompletePaint();
+    return nRet;
+}
+#else
 SwTwips SwHeaderFrm::GrowFrm( SwTwips nDist, const SzPtr pPtr,
                               BOOL bTst, BOOL bInfo )
 {
@@ -138,7 +155,7 @@ SwTwips SwHeaderFrm::ShrinkFrm( SwTwips nDist, const SzPtr pPtr,
         SetCompletePaint();
     return nRet;
 }
-
+#endif
 
 /*************************************************************************
 |*
@@ -177,7 +194,7 @@ void SwFooterFrm::Format( const SwBorderAttrs *pAttrs )
     if ( bValidPrtArea && bValidSize )
         return;
 
-    const USHORT nLR = pAttrs->CalcLeft( this ) + pAttrs->CalcRight();
+    const long nLR = pAttrs->CalcLeft( this ) + pAttrs->CalcRight();
     const USHORT nUL = pAttrs->CalcTop()  + pAttrs->CalcBottom();
 
     if ( !bValidPrtArea )
@@ -196,6 +213,14 @@ void SwFooterFrm::Format( const SwBorderAttrs *pAttrs )
 
     if ( !bValidSize )
     {
+#ifdef VERTICAL_LAYOUT
+        if ( !HasFixSize() )
+        {
+            if( !IsColLocked() )
+            {
+                bValidSize = bValidPrtArea = TRUE;
+                const SwTwips nBorder = nUL;
+#else
         const SzPtr pVarSz = pVARSIZE;
         if ( !HasFixSize( pVarSz ) )
         {
@@ -204,6 +229,7 @@ void SwFooterFrm::Format( const SwBorderAttrs *pAttrs )
                 bValidSize = bValidPrtArea = TRUE;
                 const SwTwips nBorder = bVarHeight ? nUL : nLR;
                 const PtPtr pVarPs = pVARPOS;
+#endif
                 const SwFmtFrmSize &rSz = GetFmt()->GetFrmSize();
                 SwTwips nMinHeight = rSz.GetSizeType() == ATT_MIN_SIZE ? rSz.GetHeight() : 0;
                 ColLock();
@@ -212,7 +238,7 @@ void SwFooterFrm::Format( const SwBorderAttrs *pAttrs )
                 Point aOldPos;
                 do
                 {
-                    nOldHeight = Frm().SSize().*pVarSz;
+                    nOldHeight = Frm().Height();
                     SwFrm* pFrm = Lower();
                     if( Frm().Pos() != aOldPos && pFrm )
                     {
@@ -227,7 +253,7 @@ void SwFooterFrm::Format( const SwBorderAttrs *pAttrs )
                     nRemaining = nBorder;
                     pFrm = Lower();
                     while ( pFrm )
-                    {   nRemaining += pFrm->Frm().SSize().*pVarSz;
+                    {   nRemaining += pFrm->Frm().Height();
                         if( pFrm->IsTxtFrm() && ((SwTxtFrm*)pFrm)->IsUndersized() )
                         // Dieser TxtFrm waere gern ein bisschen groesser
                             nRemaining += ((SwTxtFrm*)pFrm)->GetParHeight()
@@ -256,9 +282,9 @@ void SwFooterFrm::Format( const SwBorderAttrs *pAttrs )
                     {
                         ColUnlock();
                         if ( nDiff > 0 )
-                            Grow( nDiff, pVarSz );
+                            Grow( nDiff PHEIGHT );
                         else
-                            Shrink( -nDiff, pVarSz );
+                            Shrink( -nDiff PHEIGHT );
                         //Schnell auf dem kurzen Dienstweg die Position updaten.
                         MakePos();
                         ColLock();
@@ -266,22 +292,19 @@ void SwFooterFrm::Format( const SwBorderAttrs *pAttrs )
                     else
                         break;
                     //Unterkante des Uppers nicht ueberschreiten.
-                    if ( GetUpper() && Frm().SSize().*pVarSz )
+                    if ( GetUpper() && Frm().Height() )
                     {
-                        const SwTwips nDeadLine =
-                            GetUpper()->Frm().Pos().*pVarPs +
-                                    (bVarHeight ? GetUpper()->Prt().Bottom() :
-                                                GetUpper()->Prt().Right());
-                        const SwTwips nBot = bVarHeight ?
-                                                    Frm().Bottom():Frm().Right();
+                        const SwTwips nDeadLine = GetUpper()->Frm().Top() +
+                                                  GetUpper()->Prt().Bottom();
+                        const SwTwips nBot = Frm().Bottom();
                         if ( nBot > nDeadLine )
                         {
                             Frm().Bottom( nDeadLine );
-                            Prt().SSize().Height() = Frm().SSize().Height() - nBorder;
+                            Prt().SSize().Height() = Frm().Height() - nBorder;
                         }
                     }
                     bValidSize = bValidPrtArea = TRUE;
-                } while( nRemaining < nMaxHeight && nOldHeight != Frm().SSize().*pVarSz );
+                } while( nRemaining<nMaxHeight && nOldHeight!=Frm().Height() );
                 ColUnlock();
             }
             bValidSize = bValidPrtArea = TRUE;
@@ -300,6 +323,21 @@ void SwFooterFrm::Format( const SwBorderAttrs *pAttrs )
     }
 }
 
+#ifdef VERTICAL_LAYOUT
+SwTwips SwFooterFrm::GrowFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
+{
+    if( IsColLocked() )
+        return 0;
+    return SwLayoutFrm::GrowFrm( nDist, bTst, bInfo );
+}
+
+SwTwips SwFooterFrm::ShrinkFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
+{
+    if( IsColLocked() )
+        return 0;
+    return SwLayoutFrm::ShrinkFrm( nDist, bTst, bInfo );
+}
+#else
 SwTwips SwFooterFrm::GrowFrm( SwTwips nDist, const SzPtr pPtr,
                               BOOL bTst, BOOL bInfo )
 {
@@ -315,7 +353,7 @@ SwTwips SwFooterFrm::ShrinkFrm( SwTwips nDist, const SzPtr pPtr,
         return 0;
     return SwLayoutFrm::ShrinkFrm( nDist, pPtr, bTst, bInfo );
 }
-
+#endif
 
 /*************************************************************************
 |*

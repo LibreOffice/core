@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagechg.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ama $ $Date: 2001-10-05 12:32:37 $
+ *  last change: $Author: ama $ $Date: 2001-10-19 10:22:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -589,8 +589,7 @@ void SwPageFrm::_UpdateAttr( SfxPoolItem *pOld, SfxPoolItem *pNew,
             if ( 0 != (pSh = GetShell()) && pSh->GetWin() && aOldRect.HasArea() )
                 pSh->InvalidateWindows( aOldRect );
             rInvFlags |= 0x03;
-            SzPtr pVar = pVARSIZE;
-            if ( aOldRect.SSize().*pVar != Frm().SSize().*pVar)
+            if ( aOldRect.Height() != Frm().Height() )
                 rInvFlags |= 0x04;
         }
         break;
@@ -782,6 +781,122 @@ void AdjustSizeChgNotify( SwRootFrm *pRoot )
     pRoot->bCheckSuperfluous = bOld;
 }
 
+#ifdef VERTICAL_LAYOUT
+void MA_FASTCALL lcl_AdjustRoot( SwFrm *pPage, long nOld )
+{
+    //Groesse der groessten Seite ermitteln.
+    //nOld enthaelt den alten Wert wenn die Seite geschrumpft ist und
+    //den aktuellen Wert wenn sie etwa ausgeschnitten wurde. Dadurch
+    //kann abgebrochen werden, wenn eine Seite gefunden wird, deren Wert
+    //dem alten entspricht.
+    long nMax = pPage->Frm().Width();
+    if ( nMax == nOld )
+        nMax = 0;
+    const SwFrm *pFrm = pPage->GetUpper()->Lower();
+    while ( pFrm )
+    {
+        if ( pFrm != pPage )
+        {
+            const SwTwips nTmp = pFrm->Frm().Width();
+            if ( nTmp == nOld )
+            {
+                nMax = 0;
+                break;
+            }
+            else if ( nTmp > nMax )
+                nMax = nTmp;
+        }
+        pFrm = pFrm->GetNext();
+    }
+    if ( nMax )
+        pPage->GetUpper()->ChgSize( Size( nMax,
+                                          pPage->GetUpper()->Frm().Height() ) );
+}
+
+void SwPageFrm::AdjustRootSize( const SwPageChg eChgType, const SwRect *pOld )
+{
+    if ( !GetUpper() )
+        return;
+
+    const SwRect aOld( GetUpper()->Frm() );
+
+    const SwTwips nVar = Frm().Height();
+    SwTwips nFix = Frm().Width();
+    SwTwips nDiff = 0;
+
+    switch ( eChgType )
+    {
+        case CHG_NEWPAGE:
+            {
+                if( nFix > GetUpper()->Prt().Width() )
+                    GetUpper()->ChgSize( Size(nFix,GetUpper()->Frm().Height()));
+                nDiff = nVar;
+                if ( GetPrev() && !((SwPageFrm*)GetPrev())->IsEmptyPage() )
+                    nDiff += DOCUMENTBORDER/2;
+                else if ( !IsEmptyPage() && GetNext() )
+                    nDiff += DOCUMENTBORDER/2;
+            }
+            break;
+        case CHG_CUTPAGE:
+            {
+                if ( nFix == GetUpper()->Prt().Width() )
+                    ::lcl_AdjustRoot( this, nFix );
+                nDiff = -nVar;
+                if ( GetPrev() && !((SwPageFrm*)GetPrev())->IsEmptyPage() )
+                    nDiff -= DOCUMENTBORDER/2;
+                else if ( !IsEmptyPage() && GetNext() )
+                    nDiff -= DOCUMENTBORDER/2;
+                if ( IsEmptyPage() && GetNext() && GetPrev() )
+                    nDiff = -nVar;
+            }
+            break;
+        case CHG_CHGPAGE:
+            {
+                ASSERT( pOld, "ChgPage ohne OldValue nicht moeglich." );
+                if ( pOld->Width() < nFix )
+                {
+                    if ( nFix > GetUpper()->Prt().Width() )
+                        GetUpper()->ChgSize( Size( nFix,
+                                                GetUpper()->Frm().Height() ) );
+                }
+                else if ( pOld->Width() > nFix )
+                    ::lcl_AdjustRoot( this, pOld->Width() );
+                nDiff = nVar - pOld->Height();
+            }
+            break;
+
+        default:
+            ASSERT( FALSE, "Neuer Typ fuer PageChg." );
+    }
+
+    if ( nDiff > 0 )
+        GetUpper()->Grow( nDiff );
+    else if ( nDiff < 0 )
+        GetUpper()->Shrink( -nDiff );
+
+    //Fix(8522): Calc auf die Root damit sich dir PrtArea sofort einstellt.
+    //Anderfalls gibt es Probleme wenn mehrere Aenderungen innerhalb einer
+    //Action laufen.
+    GetUpper()->Calc();
+
+    if ( aOld != GetUpper()->Frm() )
+    {
+        SwLayoutFrm *pUp = GetUpper();
+        if ( eChgType == CHG_CUTPAGE )
+        {
+            //Seiten vorher kurz aushaengen, weil sonst falsch formatiert wuerde.
+            SwFrm *pSibling = GetNext();
+            if ( ((SwRootFrm*)pUp)->GetLastPage() == this )
+                ::SetLastPage( (SwPageFrm*)GetPrev() );
+            Remove();
+            ::AdjustSizeChgNotify( (SwRootFrm*)pUp );
+            InsertBefore( pUp, pSibling );
+        }
+        else
+            ::AdjustSizeChgNotify( (SwRootFrm*)pUp );
+    }
+}
+#else
 void MA_FASTCALL lcl_ChgRootSize( SwFrm *pP, SwTwips nVal )
 {
     if ( pP->bVarHeight )
@@ -904,6 +1019,7 @@ void SwPageFrm::AdjustRootSize( const SwPageChg eChgType, const SwRect *pOld )
             ::AdjustSizeChgNotify( (SwRootFrm*)pUp );
     }
 }
+#endif
 
 /*************************************************************************
 |*
@@ -1017,6 +1133,9 @@ void SwPageFrm::Paste( SwFrm* pParent, SwFrm* pSibling )
     else
         ::SetLastPage( this );
 
+#ifdef VERTICAL_LAYOUT
+    if( Frm().Width() != pParent->Prt().Width() )
+#else
     //ggf. die Memberpointer korrigieren.
     const SwFmtFillOrder &rFill =((SwLayoutFrm*)pParent)->GetFmt()->GetFillOrder();
     if ( rFill.GetFillOrder() == ATT_BOTTOM_UP ||
@@ -1027,6 +1146,7 @@ void SwPageFrm::Paste( SwFrm* pParent, SwFrm* pSibling )
 
     const SzPtr pFix = pFIXSIZE;
     if( Frm().SSize().*pFix != pParent->Prt().SSize().*pFix )
+#endif
         _InvalidateSize();
     InvalidatePos();
 
@@ -1438,6 +1558,35 @@ SwPageFrm *SwFrm::InsertPage( SwPageFrm *pPrevPage, BOOL bFtn )
 |*  Letzte Aenderung    MA 05. May. 94
 |*
 |*************************************************************************/
+
+#ifdef VERTICAL_LAYOUT
+
+SwTwips SwRootFrm::GrowFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
+{
+    if ( !bTst )
+        Frm().SSize().Height() += nDist;
+    return nDist;
+}
+/*************************************************************************
+|*
+|*  SwRootFrm::ShrinkFrm()
+|*
+|*  Ersterstellung      MA 30. Jul. 92
+|*  Letzte Aenderung    MA 05. May. 94
+|*
+|*************************************************************************/
+SwTwips SwRootFrm::ShrinkFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
+{
+    ASSERT( nDist >= 0, "nDist < 0." );
+    ASSERT( nDist <= Frm().Height(), "nDist > als aktuelle Groesse." );
+
+    if ( !bTst )
+        Frm().SSize().Height() -= nDist;
+    return nDist;
+}
+
+#else
+
 SwTwips SwRootFrm::GrowFrm( SwTwips nDist, const SzPtr pDirection,
                             BOOL bTst, BOOL bInfo )
 {
@@ -1463,6 +1612,8 @@ SwTwips SwRootFrm::ShrinkFrm( SwTwips nDist, const SzPtr pDirection,
         Frm().SSize().*pDirection -= nDist;
     return nDist;
 }
+
+#endif
 
 /*************************************************************************
 |*
@@ -1679,8 +1830,8 @@ void SwRootFrm::AssertPageFlys( SwPageFrm *pPage )
                     //Das er auf der falschen Seite steht muss noch nichts
                     //heissen, wenn er eigentlich auf der Vorseite
                     //stehen will und diese eine EmptyPage ist.
-                    if ( !(pPage->GetPhyPageNum()-1 == nPg &&
-                            ((SwPageFrm*)pPage->GetPrev())->IsEmptyPage()) )
+                    if( nPg && !(pPage->GetPhyPageNum()-1 == nPg &&
+                        ((SwPageFrm*)pPage->GetPrev())->IsEmptyPage()) )
                     {
                         //Umhaengen kann er sich selbst, indem wir ihm
                         //einfach ein Modify mit seinem AnkerAttr schicken.
@@ -1714,8 +1865,12 @@ void SwRootFrm::ChgSize( const Size& aNewSize )
 {
     Frm().SSize() = aNewSize;
     _InvalidatePrt();
+#ifdef VERTICAL_LAYOUT
+    bFixSize = FALSE;
+#else
     bFixHeight =  bVarHeight;
     bFixWidth  = !bVarHeight;
+#endif
 }
 
 /*************************************************************************

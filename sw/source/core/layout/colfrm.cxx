@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colfrm.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ama $ $Date: 2001-09-17 11:20:34 $
+ *  last change: $Author: ama $ $Date: 2001-10-19 10:18:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,7 +228,9 @@ BOOL MA_FASTCALL lcl_AddColumns( SwLayoutFrm *pCont, USHORT nCount )
             SwColumnFrm *pTmp = new SwColumnFrm( pNeighbourCol->GetFmt() );
             pTmp->SetMaxFtnHeight( nMax );
             pTmp->InsertBefore( pCont, NULL );
+#ifndef VERTICAL_LAYOUT
             pTmp->bVarHeight = FALSE;
+#endif
             pNeighbourCol = (SwLayoutFrm*)pNeighbourCol->GetNext();
         }
     }
@@ -424,30 +426,35 @@ void SwLayoutFrm::AdjustColumns( const SwFmtCol *pAttr, BOOL bAdjustAttributes )
     if ( bLine )
         nMin = USHORT(20 + (pAttr->GetLineWidth() / 2));
     SwFrm *pCol = Lower();
+    long nGutter = 0;
+    BOOL bOrtho = pAttr->IsOrtho() && bAdjustAttributes &&
+                  pAttr->GetNumCols() > 0;
     for ( USHORT i = 0; i < pAttr->GetNumCols(); pCol = pCol->GetNext(), ++i )
     {
+        if( !bOrtho )
+        {
 #ifdef VERTICAL_LAYOUT
-        const SwTwips nWidth = i == (pAttr->GetNumCols() - 1) ? nAvail :
-        pAttr->CalcColWidth( i, USHORT( (Prt().*fnRect->fnGetWidth)() ) );
-        Size aColSz = bVert ? Size( Prt().Width(), nWidth ) :
-                              Size( nWidth, Prt().Height() );
+            const SwTwips nWidth = i == (pAttr->GetNumCols() - 1) ? nAvail :
+            pAttr->CalcColWidth( i, USHORT( (Prt().*fnRect->fnGetWidth)() ) );
+            Size aColSz = bVert ? Size( Prt().Width(), nWidth ) :
+                                  Size( nWidth, Prt().Height() );
 #else
-        const SwTwips nWidth = i == (pAttr->GetNumCols() - 1) ?
-                                nAvail :
-                          pAttr->CalcColWidth( i, USHORT(Prt().SSize().*pDir) );
-        const Size aColSz( nWidth, Prt().Height() );
+            const SwTwips nWidth = i == (pAttr->GetNumCols() - 1) ?
+                                    nAvail :
+                              pAttr->CalcColWidth( i, USHORT(Prt().SSize().*pDir) );
+            const Size aColSz( nWidth, Prt().Height() );
 #endif
-        pCol->ChgSize( aColSz );
+            pCol->ChgSize( aColSz );
 
         // Hierdurch werden die ColumnBodyFrms von Seitenspalten angepasst und
         // ihr bFixHeight-Flag wird gesetzt, damit sie nicht schrumpfen/wachsen.
         // Bei Rahmenspalten hingegen soll das Flag _nicht_ gesetzt werden,
         // da BodyFrms in Rahmenspalten durchaus wachsen/schrumpfen duerfen.
-        if( IsBodyFrm() )
-            ((SwLayoutFrm*)pCol)->Lower()->ChgSize( aColSz );
+            if( IsBodyFrm() )
+                ((SwLayoutFrm*)pCol)->Lower()->ChgSize( aColSz );
 
-        nAvail -= nWidth;
-
+            nAvail -= nWidth;
+        }
         if ( bAdjustAttributes )
         {
             SwColumn *pC = pAttr->GetColumns()[i];
@@ -485,6 +492,36 @@ void SwLayoutFrm::AdjustColumns( const SwFmtCol *pAttr, BOOL bAdjustAttributes )
             }
             ((SwLayoutFrm*)pCol)->GetFmt()->SetAttr( aLR );
             ((SwLayoutFrm*)pCol)->GetFmt()->SetAttr( aUL );
+            nGutter += aLR.GetLeft() + aLR.GetRight();
+        }
+    }
+    if( bOrtho )
+    {
+        nAvail = (Prt().*fnRect->fnGetWidth)();
+        long nInnerWidth = ( nAvail - nGutter )/ pAttr->GetNumCols();
+        pCol = Lower();
+        for( USHORT i = 0; i < pAttr->GetNumCols(); pCol = pCol->GetNext(), ++i)
+        {
+            SwTwips nWidth;
+            if( i == (pAttr->GetNumCols() - 1) )
+                nWidth = nAvail;
+            else
+            {
+                SvxLRSpaceItem aLR( pCol->GetAttrSet()->GetLRSpace() );
+                nWidth = nInnerWidth + aLR.GetLeft() + aLR.GetRight();
+            }
+            if( nWidth < 0 )
+                nWidth = 0;
+#ifdef VERTICAL_LAYOUT
+            Size aColSz = bVert ? Size( Prt().Width(), nWidth ) :
+                                  Size( nWidth, Prt().Height() );
+#else
+            const Size aColSz( nWidth, Prt().Height() );
+#endif
+            pCol->ChgSize( aColSz );
+            if( IsBodyFrm() )
+                ((SwLayoutFrm*)pCol)->Lower()->ChgSize( aColSz );
+            nAvail -= nWidth;
         }
     }
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagefrm.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ama $ $Date: 2001-08-23 13:58:01 $
+ *  last change: $Author: ama $ $Date: 2001-10-19 10:14:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,6 @@ class SwFlyFrm;
 class SwFrmFmt;
 class SwPageDesc;
 class SwCntntFrm;
-class Sw3FrameIo;
 struct SwPosition;
 struct SwCrsrMoveState;
 class SwFmtAnchor;
@@ -137,7 +136,6 @@ public:
     DECL_FIXEDMEMPOOL_NEWDEL(SwPageFrm)
 
     SwPageFrm( SwFrmFmt*, SwPageDesc* );
-    SwPageFrm( Sw3FrameIo&, SwLayoutFrm* );
     ~SwPageFrm();
 
     //public, damit die ViewShell beim Umschalten vom BrowseMode darauf
@@ -182,8 +180,6 @@ public:
     //Haengt einen Fly an den geeigneten LayoutFrm unterhalb der Seite,
     //fuer SwFEShell und Modify der Flys.
     SwFrm *PlaceFly( SwFlyFrm *, SwFrmFmt *, const SwFmtAnchor * );
-
-    virtual void Store( Sw3FrameIo& ) const;
 
     virtual BOOL GetCrsrOfst( SwPosition *, Point&,
                               const SwCrsrMoveState* = 0 ) const;

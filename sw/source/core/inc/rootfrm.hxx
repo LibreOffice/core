@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rootfrm.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mib $ $Date: 2001-10-12 13:55:54 $
+ *  last change: $Author: ama $ $Date: 2001-10-19 10:14:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,17 +216,19 @@ public:
     virtual BOOL  GetCrsrOfst( SwPosition *, Point&,
                                const SwCrsrMoveState* = 0 ) const;
     virtual void  Paint( const SwRect& ) const;
-    virtual SwTwips ShrinkFrm( SwTwips, const SzPtr,
+    virtual SwTwips ShrinkFrm( SwTwips, SZPTR
                                BOOL bTst = FALSE, BOOL bInfo = FALSE );
-    virtual SwTwips GrowFrm  ( SwTwips, const SzPtr,
+    virtual SwTwips GrowFrm  ( SwTwips, SZPTR
                                BOOL bTst = FALSE, BOOL bInfo = FALSE );
 #ifndef PRODUCT
     virtual void Cut();
     virtual void Paste( SwFrm* pParent, SwFrm* pSibling = 0 );
 #endif
 
-    Point  GetNextPrevCntntPos( const Point &rPoint, BOOL bNext ) const;
+#ifndef VERTICAL_LAYOUT
     void   SetFixSize( SzPtr );
+#endif
+    Point  GetNextPrevCntntPos( const Point &rPoint, BOOL bNext ) const;
     virtual void ChgSize( const Size& aNewSize );
 
     inline void SetIdleFlags();

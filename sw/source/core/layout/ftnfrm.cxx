@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftnfrm.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-15 12:47:19 $
+ *  last change: $Author: ama $ $Date: 2001-10-19 10:21:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -373,12 +373,7 @@ void SwFtnContFrm::Format( const SwBorderAttrs * )
     if ( !bValidSize )
     {
         if ( pPage->IsFtnPage() && !GetFmt()->GetDoc()->IsBrowseMode() )
-        {
-            //Das Teil ist immer so gross wie moeglich
-//MA 17. Nov. 98 Wozu soll das Probegrow sinnvoll sein?
-//          if ( Grow( LONG_MAX, pHeight, TRUE ) )
-                Grow( LONG_MAX, pHeight, FALSE );
-        }
+                Grow( LONG_MAX PHEIGHT, FALSE );
         else
         {
             //Die Groesse in der VarSize wird durch den Inhalt plus den
@@ -419,10 +414,10 @@ void SwFtnContFrm::Format( const SwBorderAttrs * )
             nDiff = Frm().SSize().Height() - nRemaining;
 #endif
             if ( nDiff > 0 )
-                Shrink( nDiff, pHeight );
+                Shrink( nDiff PHEIGHT );
             else if ( nDiff < 0 )
             {
-                Grow( -nDiff, pHeight );
+                Grow( -nDiff PHEIGHT );
                 //Es kann passieren, dass weniger Platz zur Verfuegung steht,
                 //als der bereits der Border benoetigt - die Groesse der
                 //PrtArea wird dann negativ.
@@ -459,9 +454,12 @@ void SwFtnContFrm::Format( const SwBorderAttrs * )
 |*
 |*************************************************************************/
 
-
+#ifdef VERTICAL_LAYOUT
+SwTwips SwFtnContFrm::GrowFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
+#else
 SwTwips SwFtnContFrm::GrowFrm( SwTwips nDist, const SzPtr pDirection,
                                BOOL bTst, BOOL bInfo )
+#endif
 {
     //Keine Pruefung ob FixSize oder nicht, die FtnContainer sind immer bis
     //zur Maximalhoehe variabel.
@@ -477,11 +475,10 @@ SwTwips SwFtnContFrm::GrowFrm( SwTwips nDist, const SzPtr pDirection,
 #endif
 
 #ifdef VERTICAL_LAYOUT
-    const SzPtr pDir = IsVertical() ? ( pDirection==pHeight ? pWidth : pHeight )
-                                    : pDirection;
-    if( Frm().SSize().*pDir > 0 &&
-         nDist > (LONG_MAX - Frm().SSize().*pDir) )
-        nDist = LONG_MAX - Frm().SSize().*pDir;
+    SWRECTFN( this )
+    if( (Frm().*fnRect->fnGetHeight)() > 0 &&
+         nDist > ( LONG_MAX - (Frm().*fnRect->fnGetHeight)() ) )
+        nDist = LONG_MAX - (Frm().*fnRect->fnGetHeight)();
 #else
     if ( Frm().SSize().*pDirection > 0 &&
          nDist > (LONG_MAX - Frm().SSize().*pDirection) )
@@ -509,7 +506,7 @@ SwTwips SwFtnContFrm::GrowFrm( SwTwips nDist, const SzPtr pDirection,
         {
             nDist = Min( nDist, pBoss->GetMaxFtnHeight()
 #ifdef VERTICAL_LAYOUT
-                         - Frm().SSize().*pDir );
+                         - (Frm().*fnRect->fnGetHeight)() );
 #else
                          - Frm().SSize().*pDirection );
 #endif
@@ -527,18 +524,18 @@ SwTwips SwFtnContFrm::GrowFrm( SwTwips nDist, const SzPtr pDirection,
         }
     }
 #ifdef VERTICAL_LAYOUT
-    else if( nDist > GetPrev()->Frm().SSize().*pDir )
+    else if( nDist > (GetPrev()->Frm().*fnRect->fnGetHeight)() )
         //aber mehr als der Body kann koennen und wollen wir nun auch wieder
         //nicht herausruecken.
-        nDist = GetPrev()->Frm().SSize().*pDir;
+        nDist = (GetPrev()->Frm().*fnRect->fnGetHeight)();
 
     long nAvail = 0;
     if ( GetFmt()->GetDoc()->IsBrowseMode() )
     {
-        nAvail = GetUpper()->Prt().SSize().*pDir;
+        nAvail = GetUpper()->Prt().Height();
         const SwFrm *pAvail = GetUpper()->Lower();
         do
-        {   nAvail -= pAvail->Frm().SSize().*pDir;
+        {   nAvail -= pAvail->Frm().Height();
             pAvail = pAvail->GetNext();
         } while ( pAvail );
         if ( nAvail > nDist )
@@ -547,7 +544,7 @@ SwTwips SwFtnContFrm::GrowFrm( SwTwips nDist, const SzPtr pDirection,
 
     if ( !bTst )
     {
-        Frm().SSize().*pDir += nDist;
+        (Frm().*fnRect->fnSetHeight)( (Frm().*fnRect->fnGetHeight)() + nDist );
         if( IsVertical() && !IsReverse() )
             Frm().Pos().X() -= nDist;
     }
@@ -597,7 +594,11 @@ SwTwips SwFtnContFrm::GrowFrm( SwTwips nDist, const SzPtr pDirection,
                     }
                 }
             }
+#ifdef VERTICAL_LAYOUT
+            nReal += pBoss->Grow( nGrow - nReal, bTst );
+#else
             nReal += pBoss->Grow( nGrow - nReal, pDirection, bTst );
+#endif
             if( ( NA_GROW_ADJUST == nAdjust || NA_ADJUST_GROW == nAdjust )
                   && nReal < nGrow )
                 nReal += AdjustNeighbourhood( nGrow - nReal, bTst );
@@ -613,7 +614,7 @@ SwTwips SwFtnContFrm::GrowFrm( SwTwips nDist, const SzPtr pDirection,
             nDist -= nReal;
             //Den masslosen Wunsch koennen wir leider nur in Grenzen erfuellen.
 #ifdef VERTICAL_LAYOUT
-            Frm().SSize().*pDir -= nDist;
+            Frm().SSize().Height() -= nDist;
             if( IsVertical() && !IsReverse() )
                 Frm().Pos().X() += nDist;
 #else
@@ -634,6 +635,14 @@ SwTwips SwFtnContFrm::GrowFrm( SwTwips nDist, const SzPtr pDirection,
 }
 
 
+#ifdef VERTICAL_LAYOUT
+SwTwips SwFtnContFrm::ShrinkFrm( SwTwips nDiff, BOOL bTst, BOOL bInfo )
+{
+    SwPageFrm *pPage = FindPageFrm();
+    if ( pPage && (!pPage->IsFtnPage() || GetFmt()->GetDoc()->IsBrowseMode()) )
+    {
+        SwTwips nRet = SwLayoutFrm::ShrinkFrm( nDiff, bTst, bInfo );
+#else
 SwTwips SwFtnContFrm::ShrinkFrm( SwTwips nDiff, const SzPtr pDirection,
                                  BOOL bTst, BOOL bInfo )
 {
@@ -641,6 +650,7 @@ SwTwips SwFtnContFrm::ShrinkFrm( SwTwips nDiff, const SzPtr pDirection,
     if ( pPage && (!pPage->IsFtnPage() || GetFmt()->GetDoc()->IsBrowseMode()) )
     {
         SwTwips nRet = SwLayoutFrm::ShrinkFrm( nDiff, pDirection, bTst, bInfo );
+#endif
         if ( !bTst && nRet )
         {
             _InvalidatePos();
@@ -709,7 +719,37 @@ void SwFtnFrm::InvalidateNxtFtnCnts( SwPageFrm *pPage )
 
 #ifndef PRODUCT
 
+#ifdef VERTICAL_LAYOUT
+SwTwips SwFtnFrm::GrowFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
+{
+#ifdef DEBUG
+    static USHORT nNum = USHRT_MAX;
+    SwTxtFtn* pTxtFtn = GetAttr();
+    if ( pTxtFtn->GetFtn().GetNumber() == nNum )
+    {
+        int bla = 5;
+    }
+#endif
+    return SwLayoutFrm::GrowFrm( nDist, bTst, bInfo );
+}
 
+
+SwTwips SwFtnFrm::ShrinkFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
+{
+#ifdef DEBUG
+    static USHORT nNum = USHRT_MAX;
+    if( nNum != USHRT_MAX )
+    {
+        SwTxtFtn* pTxtFtn = GetAttr();
+        if( &pTxtFtn->GetAttr() && pTxtFtn->GetFtn().GetNumber() == nNum )
+        {
+            int bla = 5;
+        }
+    }
+#endif
+    return SwLayoutFrm::ShrinkFrm( nDist, bTst, bInfo );
+}
+#else
 SwTwips SwFtnFrm::GrowFrm( SwTwips nDist, const SzPtr pDirection,
                            BOOL bTst, BOOL bInfo )
 {
@@ -723,7 +763,6 @@ SwTwips SwFtnFrm::GrowFrm( SwTwips nDist, const SzPtr pDirection,
 #endif
     return SwLayoutFrm::GrowFrm( nDist, pDirection, bTst, bInfo );
 }
-
 
 
 SwTwips SwFtnFrm::ShrinkFrm( SwTwips nDist, const SzPtr pDirection,
@@ -742,6 +781,7 @@ SwTwips SwFtnFrm::ShrinkFrm( SwTwips nDist, const SzPtr pDirection,
 #endif
     return SwLayoutFrm::ShrinkFrm( nDist, pDirection, bTst, bInfo );
 }
+#endif
 #endif
 
 /*************************************************************************
@@ -798,7 +838,7 @@ void SwFtnFrm::Cut()
         }
         else
         {   if ( Frm().Height() )
-                pUp->Shrink( Frm().Height(), pHeight );
+                pUp->Shrink( Frm().Height() PHEIGHT );
             pUp->SetCompletePaint();
             pUp->InvalidatePage();
         }
@@ -841,7 +881,7 @@ void SwFtnFrm::Paste(  SwFrm* pParent, SwFrm* pSibling )
         GetNext()->_InvalidatePos();
 #ifdef VERTICAL_LAYOUT
     if( (Frm().*fnRect->fnGetHeight)() )
-        pParent->Grow( (Frm().*fnRect->fnGetHeight)(), pHeight );
+        pParent->Grow( (Frm().*fnRect->fnGetHeight)() );
 #else
     if ( Frm().Height() )
         pParent->Grow( Frm().Height(), pHeight );
@@ -2691,9 +2731,9 @@ void SwFtnBossFrm::SetFtnDeadLine( const SwTwips nDeadLine )
 #endif
 
     if ( GetFmt()->GetDoc()->IsBrowseMode() )
-        nMaxFtnHeight += pBody->Grow( LONG_MAX, pHeight, TRUE );
+        nMaxFtnHeight += pBody->Grow( LONG_MAX PHEIGHT, TRUE );
     if ( IsInSct() )
-        nMaxFtnHeight += FindSctFrm()->Grow( LONG_MAX, pHeight, TRUE );
+        nMaxFtnHeight += FindSctFrm()->Grow( LONG_MAX PHEIGHT, TRUE );
 
     if ( nMaxFtnHeight < 0 )
         nMaxFtnHeight = 0;

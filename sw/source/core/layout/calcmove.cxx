@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calcmove.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ama $ $Date: 2001-10-05 12:34:22 $
+ *  last change: $Author: ama $ $Date: 2001-10-19 10:17:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,7 +205,7 @@ BOOL SwCntntFrm::ShouldBwdMoved( SwLayoutFrm *pNewUpper, BOOL, BOOL & )
                        ( pNewUpper->IsColBodyFrm() &&
                          !pNewUpper->GetUpper()->GetPrev() &&
                          !pNewUpper->GetUpper()->GetNext() ) ) ) )
-                    nSpace += pNewUpper->Grow( LONG_MAX, pHeight, TRUE );
+                    nSpace += pNewUpper->Grow( LONG_MAX PHEIGHT, TRUE );
                 if ( nSpace )
                 {
                     //Keine Beruecksichtigung der Fussnoten die an dem Absatz
@@ -784,7 +784,11 @@ void SwPageFrm::MakeAll()
     //Der Upper (Root) muss mindestens so breit
     //sein, dass er die breiteste Seite aufnehmen kann.
     if ( GetUpper() )
-    {   if ( bVarHeight )
+    {
+#ifdef VERTICAL_LAYOUT
+        ASSERT( GetUpper()->Prt().Width() >= aFrm.Width(), "Rootsize" );
+#else
+        if ( bVarHeight )
         {   ASSERT( GetUpper()->Prt().Width() >= aFrm.Width(),
                     "Rootsize" );
         }
@@ -792,6 +796,7 @@ void SwPageFrm::MakeAll()
         {   ASSERT( GetUpper()->Prt().Height() >= aFrm.Height(),
                     "Rootsize" );
         }
+#endif
     }
 #endif
 }
@@ -813,7 +818,8 @@ void SwLayoutFrm::MakeAll()
         //uebernimmt im DTor die Benachrichtigung
     const SwLayNotify aNotify( this );
 #ifdef VERTICAL_LAYOUT
-    SwRectFn fnRect = ( bVarHeight == IsVertical() )? fnRectVert : fnRectHori;
+    SwRectFn fnRect = ( IsNeighbourFrm() == IsVertical() )? fnRectHori
+                                                          : fnRectVert;
 #else
     const SzPtr pFix = pFIXSIZE;
 #endif
@@ -986,9 +992,9 @@ BOOL SwCntntFrm::MakePrtArea( const SwBorderAttrs &rAttrs )
         if ( nUpper )
         {
             if ( nUpper > 0 )
-                GrowFrm( nUpper, bVert ? pWidth : pHeight );
+                GrowFrm( nUpper );
             else
-                ShrinkFrm( -nUpper, bVert ? pWidth : pHeight );
+                ShrinkFrm( -nUpper );
             bSizeChgd = TRUE;
         }
 #else
@@ -1517,7 +1523,7 @@ void SwCntntFrm::MakeAll()
                 long nDiff = Frm().Top()+Frm().Height() -GetUpper()->Prt().Top()
                         -GetUpper()->Prt().Height()-GetUpper()->Frm().Top();
 #endif
-                long nReal = Grow( nDiff, pHeight );
+                long nReal = Grow( nDiff PHEIGHT );
                 if( nReal )
                     continue;
             }

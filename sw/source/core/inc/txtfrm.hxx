@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fme $ $Date: 2001-08-31 06:21:21 $
+ *  last change: $Author: ama $ $Date: 2001-10-19 10:16:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,6 @@ class SwTxtFormatter;
 class SwTxtFormatInfo;
 class SwParaPortion;
 class WidowsAndOrphans;
-class Sw3FrameIo;
 class SwBodyFrm;
 class SwFooterFrm;
 class SwTxtFtn;
@@ -315,10 +314,7 @@ public:
         { return (SwTxtNode*)SwCntntFrm::GetNode(); }
 
     SwTxtFrm(SwTxtNode * const);
-    SwTxtFrm( Sw3FrameIo&, SwLayoutFrm* );
     inline ~SwTxtFrm() { if( HasAnimation() ) ClearPara(); }
-
-    virtual void Store( Sw3FrameIo& ) const;
 
     // SwCntntFrm: der "kurze Dienstweg" fuer die Frames.
     // Wer den void* falsch casted ist selbst Schuld!
@@ -559,9 +555,12 @@ inline SwTwips SwTxtFrm::GetRightMargin() const
 }
 inline SwTwips SwTxtFrm::GrowTst( const SwTwips nGrow )
 {
+#ifdef VERTICAL_LAYOUT
+    return Grow( nGrow, sal_True );
+#else
     return Grow( nGrow, pHeight, sal_True );
+#endif
 }
-
 
 #ifdef DEBUG
 // fragt auf WYSIWYG DBG ab

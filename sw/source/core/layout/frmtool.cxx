@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmtool.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ama $ $Date: 2001-10-05 12:35:13 $
+ *  last change: $Author: ama $ $Date: 2001-10-19 10:20:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2297,7 +2297,7 @@ void RestoreCntnt( SwFrm *pSav, SwLayoutFrm *pParent, SwFrm *pSibling )
         pLast->pNext = pNxt;
         pNxt->pPrev = pLast;
     }
-    pParent->Grow( nGrowVal, pHeight );
+    pParent->Grow( nGrowVal PHEIGHT );
 }
 
 /*************************************************************************

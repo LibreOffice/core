@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flowfrm.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ama $ $Date: 2001-10-05 12:36:10 $
+ *  last change: $Author: ama $ $Date: 2001-10-19 10:19:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -526,8 +526,8 @@ BOOL SwFlowFrm::PasteTree( SwFrm *pStart, SwLayoutFrm *pParent, SwFrm *pSibling,
     if ( nGrowVal )
     {
         if ( pOldParent && pOldParent->IsBodyFrm() ) //Fuer variable Seitenhoehe beim Browsen
-            pOldParent->Shrink( nGrowVal, pHeight );
-        pParent->Grow( nGrowVal, pHeight );
+            pOldParent->Shrink( nGrowVal PHEIGHT );
+        pParent->Grow( nGrowVal PHEIGHT );
     }
 
     if ( pParent->IsFtnFrm() )

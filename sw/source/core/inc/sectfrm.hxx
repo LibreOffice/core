@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sectfrm.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2001-10-12 13:26:44 $
+ *  last change: $Author: ama $ $Date: 2001-10-19 10:15:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,8 +135,8 @@ public:
     SwSectionFrm *FindFirstSectionMaster();
     SwFtnContFrm* ContainsFtnCont( const SwFtnContFrm* pCont = NULL ) const;
     BOOL Growable() const;
-    SwTwips _Shrink( SwTwips, const SzPtr, BOOL bTst );
-    SwTwips _Grow  ( SwTwips, const SzPtr, BOOL bTst );
+    SwTwips _Shrink( SwTwips, SZPTR BOOL bTst );
+    SwTwips _Grow  ( SwTwips, SZPTR BOOL bTst );
 
     // A sectionfrm has to maximize, if he has a follow or a ftncontainer at
     // the end of the page. A superfluous follow will be ignored,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtftn.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fme $ $Date: 2001-10-11 10:54:19 $
+ *  last change: $Author: ama $ $Date: 2001-10-19 10:07:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -304,10 +304,10 @@ SwTwips SwTxtFrm::_GetFtnFrmHeight() const
             if ( !pRef->IsInFtnConnect() )
             {
                 SwSaveFtnHeight aSave( (SwFtnBossFrm*)pBoss, nHeight  );
-                nHeight = ((SwFtnContFrm*)pCont)->Grow( LONG_MAX, pHeight, sal_True );
+                nHeight = ((SwFtnContFrm*)pCont)->Grow( LONG_MAX PHEIGHT, sal_True );
             }
             else
-                nHeight = ((SwFtnContFrm*)pCont)->Grow( LONG_MAX, pHeight, sal_True );
+                nHeight = ((SwFtnContFrm*)pCont)->Grow( LONG_MAX PHEIGHT, sal_True );
 
             nHeight += nTmp;
             if( nHeight < 0 )

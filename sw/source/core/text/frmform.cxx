@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmform.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: fme $ $Date: 2001-10-10 15:19:15 $
+ *  last change: $Author: ama $ $Date: 2001-10-19 10:07:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -310,11 +310,12 @@ sal_Bool SwTxtFrm::_GetDropRect( SwRect &rRect ) const
 
 #ifdef VERTICAL_LAYOUT
         if ( IsVertical() )
-            pFrm->SwitchHorizontalToVertical( rOrig );
+            SwitchHorizontalToVertical( rRect );
 #endif
-
+        UNDO_SWAP
         return sal_True;
     }
+    UNDO_SWAP
     return sal_False;
 }
 
@@ -530,7 +531,7 @@ void SwTxtFrm::AdjustFrm( const SwTwips nChgHght, sal_Bool bHasToFit )
         {
             if( IsInFtn() && !IsInSct() )
             {
-                SwTwips nReal = Grow( nChgHght, pHeight, sal_True );
+                SwTwips nReal = Grow( nChgHght PHEIGHT, sal_True );
                 if( nReal < nChgHght )
                 {
                     SwTwips nBot = Frm().Top() + Frm().Height() + nChgHght
@@ -549,7 +550,7 @@ void SwTxtFrm::AdjustFrm( const SwTwips nChgHght, sal_Bool bHasToFit )
                 }
             }
 
-            Grow( nChgHght, pHeight );
+            Grow( nChgHght PHEIGHT );
 
             if ( IsInFly() )
             {
@@ -625,7 +626,7 @@ void SwTxtFrm::AdjustFrm( const SwTwips nChgHght, sal_Bool bHasToFit )
             //Kann sein, dass ich die richtige Grosse habe, der Upper aber zu
             //klein ist und der Upper noch Platz schaffen kann.
             if( ( nRstHeight >= 0 || ( IsInFtn() && IsInSct() ) ) && !bHasToFit )
-                nRstHeight += GetUpper()->Grow( Frm().Height()-nRstHeight, pHeight );
+                nRstHeight += GetUpper()->Grow( Frm().Height()-nRstHeight PHEIGHT );
             // In spaltigen Bereichen wollen wir moeglichst nicht zu gross werden, damit
             // nicht ueber GetNextSctLeaf weitere Bereiche angelegt werden. Stattdessen
             // schrumpfen wir und notieren bUndersized, damit FormatWidthCols die richtige
@@ -636,8 +637,8 @@ void SwTxtFrm::AdjustFrm( const SwTwips nChgHght, sal_Bool bHasToFit )
                     ( IsInSct() && !FindSctFrm()->MoveAllowed(this) ) )
                 {
                     SetUndersized( sal_True );
-                    Shrink( Min( ( nFrmHeight - nRstHeight), nPrtHeight ),
-                                  pHeight );
+                    Shrink( Min( ( nFrmHeight - nRstHeight), nPrtHeight )
+                                  PHEIGHT );
                 }
                 else
                     SetUndersized( sal_False );
@@ -648,7 +649,7 @@ void SwTxtFrm::AdjustFrm( const SwTwips nChgHght, sal_Bool bHasToFit )
             if( nRstHeight - nFrmHeight < nChgHeight )
                 nChgHeight = nRstHeight - nFrmHeight;
             if( nChgHeight )
-                Grow( nChgHeight, pHeight );
+                Grow( nChgHeight );
         }
 #else
         if( nRstHeight < Frm().Height() )
@@ -685,7 +686,7 @@ void SwTxtFrm::AdjustFrm( const SwTwips nChgHght, sal_Bool bHasToFit )
 #endif
     }
     else if ( nChgHght )
-        Shrink( -nChgHght, pHeight );
+        Shrink( -nChgHght PHEIGHT );
 
 #ifdef VERTICAL_LAYOUT
     UNDO_SWAP
@@ -1022,7 +1023,7 @@ sal_Bool SwTxtFrm::CalcPreps()
 
                 GetFollow()->SetJustWidow( sal_True );
                 GetFollow()->Prepare( PREP_CLEAR );
-                Shrink( nChgHeight, pHeight );
+                Shrink( nChgHeight PHEIGHT );
                 SwRect &rRepaint = *(pPara->GetRepaint());
 
 #ifdef VERTICAL_LAYOUT
@@ -1135,14 +1136,14 @@ sal_Bool SwTxtFrm::CalcPreps()
 #ifdef VERTICAL_LAYOUT
                 if( bVert && nIs < nMust )
                 {
-                    Shrink( nMust - nIs, pHeight );
+                    Shrink( nMust - nIs );
                     if( Prt().Width() < 0 )
                         Prt().Width( 0 );
                     SetUndersized( sal_True );
                 }
                 else if ( ! bVert && nIs > nMust )
                 {
-                    Shrink( nIs - nMust, pHeight );
+                    Shrink( nIs - nMust );
                     if( Prt().Height() < 0 )
                         Prt().Height( 0 );
                     SetUndersized( sal_True );
@@ -1966,12 +1967,12 @@ void SwTxtFrm::Format( const SwBorderAttrs * )
                                     + GetUpper()->Frm().Height();
                 const SwTwips nIs   = Frm().Top() + Frm().Height();
                 if( nIs > nMust )
-                    Shrink( nIs - nMust, pHeight );
+                    Shrink( nIs - nMust PHEIGHT );
             }
             else if( 240 < Frm().Height() )
-                Shrink( Frm().Height() - 240, pHeight );
+                Shrink( Frm().Height() - 240 PHEIGHT );
             else if( 240 > Frm().Height() )
-                Grow( 240 - Frm().Height(), pHeight );
+                Grow( 240 - Frm().Height() PHEIGHT );
             if( Prt().Top() > Frm().Height() )
                 Prt().Top( Frm().Height() );
             if( Prt().Height() < 0 )
@@ -2017,7 +2018,7 @@ void SwTxtFrm::Format( const SwBorderAttrs * )
                 if( Prt().Height() )
                 {
                     HideHidden();
-                    Shrink( Prt().Height(), pHeight );
+                    Shrink( Prt().Height() PHEIGHT );
                 }
                 ChgThisLines();
                 return;

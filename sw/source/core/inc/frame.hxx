@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ama $ $Date: 2001-10-05 12:30:53 $
+ *  last change: $Author: ama $ $Date: 2001-10-19 10:10:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,18 +68,39 @@
 #include "swrect.hxx"
 #include "calbck.hxx"   // fuer SwClient
 
+#ifdef VERTICAL_LAYOUT
+
+#define SZPTR
+#define PHEIGHT
+#define PWIDTH
+#define BFIXHEIGHT bFixSize
+#define PTPTR PointPtr
+#define SIZEPTR SizePtr
+typedef long Size::* SizePtr;
+typedef long Point::* PointPtr;
+
+#else
+
 typedef long Size::* SzPtr;
 extern SzPtr pHeight;
 extern SzPtr pWidth;
 typedef long Point::* PtPtr;
 extern PtPtr pX;
 extern PtPtr pY;
+#define PTPTR PtPtr
+#define SIZEPTR SzPtr
 
 //Liefern Memberpointer auf die jeweiligen Groessen.
 #define pFIXPOS  ( bVarHeight ? pX : pY )
 #define pFIXSIZE ( bVarHeight ? pWidth : pHeight )
 #define pVARPOS  ( bVarHeight ? pY : pX )
 #define pVARSIZE ( bVarHeight ? pHeight : pWidth )
+
+#define SZPTR const SzPtr,
+#define PHEIGHT ,pHeight
+#define PWIDTH ,pWidth
+#define BFIXHEIGHT bFixHeight
+#endif
 
 class SwLayoutFrm;
 class SwRootFrm;
@@ -99,7 +120,6 @@ class ViewShell;
 class Brush;
 class Color;
 class SwBorderAttrs;
-class Sw3FrameIo;
 class SwCache;
 class SvxBrushItem;
 class SwTxtFtn;
@@ -177,11 +197,6 @@ struct SwCrsrMoveState;
 #define FRM_NEIGHBOUR   0x2004
 #define FRM_NOTE_VERT   0x5a60
 
-#define V_WIDTH SSize().*pDir1Sz
-#define V_HEIGHT SSize().*pDir2Sz
-#define V_X Pos().*pDir1Pt
-#define V_Y Pos().*pDir2Pt
-
 class SwFrm;
 typedef long (SwFrm:: *SwFrmGet)() const;
 typedef BOOL (SwFrm:: *SwFrmMax)( long );
@@ -232,6 +247,10 @@ extern SwRectFn fnRectHori, fnRectVert, fnRectB2T, fnRectVL2R;
                             SwRectFn fnRect = bVert ? \
                                 ( bRev ? fnRectVL2R : fnRectVert ): \
                                 ( bRev ? fnRectB2T : fnRectHori );
+#define SWRECTFN2( pFrm )   sal_Bool bVert = pFrm->IsVertical(); \
+                            sal_Bool bNeighb = pFrm->IsNeighbourFrm(); \
+                            SwRectFn fnRect = bVert == bNeighb ? \
+                                fnRectHori : fnRectVert;
 #define POS_DIFF( aFrm1, aFrm2 ) \
             ( (aFrm1.*fnRect->fnGetTop)() != (aFrm2.*fnRect->fnGetTop)() || \
             (aFrm1.*fnRect->fnGetLeft)() != (aFrm2.*fnRect->fnGetLeft)() )
@@ -417,8 +436,13 @@ protected:
     BOOL bValidPrtArea:     1;
     BOOL bValidSize:        1;
     BOOL bValidLineNum:     1;
+#ifdef VERTICAL_LAYOUT
+    BOOL bFixSize:          1;
+    BOOL bUnUsed1:          1;
+#else
     BOOL bFixHeight:        1;
     BOOL bFixWidth:         1;
+#endif
     BOOL bCompletePaint:    1;  //Frame wird ganz gepaintet wenn TRUE, auch
                                 //wenn der Inhalt nur teilw. veraendert ist;
                                 //Bei CntntFrms wird ausschliesslich wenn TRUE
@@ -426,7 +450,11 @@ protected:
     BOOL bRetouche:         1;  //Der Frame ist fuer Retusche verantwortlich
                                 //wenn TRUE.
 public:
+#ifdef VERTICAL_LAYOUT
+    BOOL bUnUsed2:          1;
+#else
     BOOL bVarHeight:        1;  //Variable groesse ist die Hoehe wenn TRUE.
+#endif
 protected:
     BOOL bInfInvalid:       1;  //InfoFlags sind Invalid.
     BOOL bInfBody:          1;  //Frm steht im DokumentBody.
@@ -450,9 +478,9 @@ protected:
 
 
         //Aendern nur die Framesize, nicht die PrtArea-SSize
-    virtual SwTwips ShrinkFrm( SwTwips, const SzPtr,
+    virtual SwTwips ShrinkFrm( SwTwips, SZPTR
                                BOOL bTst = FALSE, BOOL bInfo = FALSE ) = 0;
-    virtual SwTwips GrowFrm  ( SwTwips, const SzPtr,
+    virtual SwTwips GrowFrm  ( SwTwips, SZPTR
                                BOOL bTst = FALSE, BOOL bInfo = FALSE ) = 0;
 
     SwModify        *GetDep()       { return pRegisteredIn; }
@@ -460,7 +488,6 @@ protected:
 
     SwFrm( SwModify* );
 
-    SwFrm( Sw3FrameIo&, SwLayoutFrm* );
 public:
     TYPEINFO(); //Bereits in Basisklasse Client drin.
 
@@ -474,14 +501,11 @@ public:
     static SwCache *GetCachePtr()             { return pCache;  }
     static void     SetCache( SwCache *pNew ) { pCache = pNew;  }
 
-    virtual void Store( Sw3FrameIo& ) const;
-
         //Aendern die PrtArea-SSize und die FrmSize.
-    SwTwips Shrink( SwTwips, const SzPtr,
+    SwTwips Shrink( SwTwips, SZPTR
                     BOOL bTst = FALSE, BOOL bInfo = FALSE );
-    SwTwips Grow  ( SwTwips, const SzPtr,
+    SwTwips Grow  ( SwTwips, SZPTR
                     BOOL bTst = FALSE, BOOL bInfo = FALSE );
-
 
     //Wir brauchen unterschiedliche Methoden (wg. Performance) fuer das
     //Einfuegenin den Layout Baum:
@@ -587,7 +611,11 @@ public:
           SwAttrSet *GetAttrSet();
     void             GetAttrSet( SwAttrSet* );
 
+#ifdef VERTICAL_LAYOUT
+    inline BOOL HasFixSize() const { return bFixSize; }
+#else
     BOOL HasFixSize( const SzPtr ) const;
+#endif
 
     //Kann 0 liefern, pruefen auch ob die Shell zum richtigen Dokument
     //gehoert. Impl in frmsh.hxx

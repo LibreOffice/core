@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newfrm.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ama $ $Date: 2001-10-05 12:31:39 $
+ *  last change: $Author: ama $ $Date: 2001-10-19 10:22:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,11 +127,12 @@
 #include <pagedesc.hxx>
 #endif
 
-
+#ifndef VERTICAL_LAYOUT
 PtPtr pX = &Point::nA;
 PtPtr pY = &Point::nB;
 SzPtr pWidth = &Size::nA;
 SzPtr pHeight = &Size::nB;
+#endif
 
 SwLayVout     *SwRootFrm::pVout = 0;
 BOOL           SwRootFrm::bInPaint = FALSE;
@@ -454,11 +455,13 @@ SwRootFrm::SwRootFrm( SwFrmFmt *pFmt, ViewShell * pSh ) :
     pDoc->SetRootFrm( this );       //Fuer das Erzeugen der Flys durch MakeFrms()
     bCallbackActionEnabled = FALSE; //vor Verlassen auf TRUE setzen!
 
+#ifndef VERTICAL_LAYOUT
 #ifdef QUER
     //StarWriter /QUER ? bitteschoen:
     SetFixSize( pHeight );
 #else
     SetFixSize( pWidth );
+#endif
 #endif
 
     SdrModel *pMd = pDoc->GetDrawModel();
@@ -557,7 +560,7 @@ SwRootFrm::~SwRootFrm()
 |*
 |*************************************************************************/
 
-
+#ifndef VERTICAL_LAYOUT
 
 void SwRootFrm::SetFixSize( SzPtr pNew )
 {
@@ -574,6 +577,8 @@ void SwRootFrm::SetFixSize( SzPtr pNew )
         bFixHeight = FALSE;
     }
 }
+
+#endif
 
 /*************************************************************************
 |*

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: findfrm.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ama $ $Date: 2001-10-05 12:35:46 $
+ *  last change: $Author: ama $ $Date: 2001-10-19 10:18:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1136,7 +1136,7 @@ void SwFrm::SetDirFlags( BOOL bVert )
     }
 }
 
-#endif
+#else
 
 /*************************************************************************
 |*
@@ -1156,4 +1156,5 @@ BOOL SwFrm::HasFixSize( const SzPtr pSize ) const
            ((pSize == pWidth) && bFixWidth && pVar == pWidth);
 }
 
+#endif
 

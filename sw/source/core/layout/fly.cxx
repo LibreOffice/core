@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fly.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ama $ $Date: 2001-08-24 12:46:29 $
+ *  last change: $Author: ama $ $Date: 2001-10-19 10:19:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,8 +186,10 @@ SwFlyFrm::SwFlyFrm( SwFlyFrmFmt *pFmt, SwFrm *pAnch ) :
 
     //Grosseneinstellung, Fixe groesse ist immer die Breite
     const SwFmtFrmSize &rFrmSize = pFmt->GetFrmSize();
+#ifndef VERTICAL_LAYOUT
     bVarHeight = TRUE;
     bFixWidth = TRUE;
+#endif
     Frm().Width( rFrmSize.GetWidth() );
     Frm().Height( rFrmSize.GetHeight() );
 
@@ -195,7 +197,11 @@ SwFlyFrm::SwFlyFrm( SwFlyFrmFmt *pFmt, SwFrm *pAnch ) :
     if ( rFrmSize.GetSizeType() == ATT_MIN_SIZE )
         bMinHeight = TRUE;
     else if ( rFrmSize.GetSizeType() == ATT_FIX_SIZE )
+#ifdef VERTICAL_LAYOUT
+        bFixSize = TRUE;
+#else
         bFixHeight = TRUE;
+#endif
 
     //Spalten?
     const SwFmtCol &rCol = pFmt->GetCol();
@@ -255,7 +261,11 @@ SwFlyFrm::SwFlyFrm( SwFlyFrmFmt *pFmt, SwFrm *pAnch ) :
         //NoTxt haben immer eine FixHeight.
         if ( Lower() && Lower()->IsNoTxtFrm() )
         {
+#ifdef VERTICAL_LAYOUT
+            bFixSize = TRUE;
+#else
             bFixHeight = TRUE;
+#endif
             bMinHeight = FALSE;
         }
     }
@@ -588,15 +598,15 @@ BOOL SwFlyFrm::FrmSizeChg( const SwFmtFrmSize &rFrmSize )
     BOOL bRet = FALSE;
     SwTwips nDiffHeight = Frm().Height();
     if ( rFrmSize.GetSizeType() == ATT_VAR_SIZE )
-        bFixHeight = bMinHeight = FALSE;
+        BFIXHEIGHT = bMinHeight = FALSE;
     else
     {
         if ( rFrmSize.GetSizeType() == ATT_FIX_SIZE )
-        {   bFixHeight = TRUE;
+        {   BFIXHEIGHT = TRUE;
             bMinHeight = FALSE;
         }
         else if ( rFrmSize.GetSizeType() == ATT_MIN_SIZE )
-        {   bFixHeight = FALSE;
+        {   BFIXHEIGHT = FALSE;
             bMinHeight = TRUE;
         }
         nDiffHeight -= rFrmSize.GetHeight();
@@ -622,7 +632,7 @@ BOOL SwFlyFrm::FrmSizeChg( const SwFmtFrmSize &rFrmSize )
         }
         else if ( Lower()->IsNoTxtFrm() )
         {
-            bFixHeight = TRUE;
+            BFIXHEIGHT = TRUE;
             bMinHeight = FALSE;
         }
     }
@@ -1122,7 +1132,11 @@ void SwFlyFrm::Format( const SwBorderAttrs *pAttrs )
         ASSERT( rSz.Height() != 0 || rFrmSz.GetHeightPercent(), "Hoehe des RahmenAttr ist 0." );
         ASSERT( rSz.Width()  != 0 || rFrmSz.GetWidthPercent(), "Breite des RahmenAttr ist 0." );
 
+#ifdef VERTICAL_LAYOUT
+        if( !HasFixSize() )
+#else
         if ( !HasFixSize( pHeight ) )
+#endif
         {
             //Die Groesse in der VarSize wird durch den Inhalt plus den
             //Raendern bestimmt.
@@ -1493,7 +1507,11 @@ void SwFlyFrm::MakeFlyPos()
             // Hoehe besitzt.
             if( bFlyAtFly && VERT_TOP != aVert.GetVertOrient() &&
                 SURROUND_THROUGHT != pFmt->GetSurround().GetSurround() &&
+#ifdef VERTICAL_LAYOUT
+                !GetAnchor()->HasFixSize() )
+#else
                 !GetAnchor()->HasFixSize( pHeight ) )
+#endif
                 aRelPos.Y() = rUL.GetUpper();
             else if ( aVert.GetVertOrient() == VERT_CENTER )
                 aRelPos.Y() = (nRel / 2) - (aFrm.Height() / 2);
@@ -1520,7 +1538,7 @@ void SwFlyFrm::MakeFlyPos()
             if ( nAnchorBottom < nBottom )
             {
                 ((SwPageFrm*)GetAnchor())->FindBodyCont()->
-                                    Grow( nBottom - nAnchorBottom, pHeight );
+                                    Grow( nBottom - nAnchorBottom PHEIGHT );
             }
         }
 
@@ -1648,6 +1666,116 @@ void SwFlyFrm::MakePrtArea( const SwBorderAttrs &rAttrs )
 |*
 |*************************************************************************/
 
+#ifdef VERTICAL_LAYOUT
+SwTwips SwFlyFrm::_Grow( SwTwips nDist, BOOL bTst )
+{
+    SWRECTFN( this )
+    if ( Lower() && !IsColLocked() && !HasFixSize() )
+    {
+        SwTwips nSize = (Frm().*fnRect->fnGetHeight)();
+        if( nSize > 0 && nDist > ( LONG_MAX - nSize ) )
+            nDist = LONG_MAX - nSize;
+
+        if ( nDist <= 0L )
+            return 0L;
+
+        if ( Lower()->IsColumnFrm() )
+        {   //Bei Spaltigkeit ubernimmt das Format die Kontrolle ueber
+            //das Wachstum (wg. des Ausgleichs).
+            if ( !bTst )
+            {   _InvalidatePos();
+                InvalidateSize();
+            }
+            return 0L;
+        }
+
+        if ( !bTst )
+        {
+            const SwRect aOld( AddSpacesToFrm() );
+            _InvalidateSize();
+            const BOOL bOldLock = bLocked;
+            Unlock();
+            if ( IsFlyFreeFrm() )
+                ((SwFlyFreeFrm*)this)->SwFlyFreeFrm::MakeAll();
+            else
+                MakeAll();
+            _InvalidateSize();
+            InvalidatePos();
+            if ( bOldLock )
+                Lock();
+            const SwRect aNew( AddSpacesToFrm() );
+            if ( aOld != aNew )
+                ::Notify( this, FindPageFrm(), aOld );
+            return (aNew.*fnRect->fnGetHeight)()-(aOld.*fnRect->fnGetHeight)();
+        }
+        return nDist;
+    }
+    return 0L;
+}
+
+SwTwips SwFlyFrm::_Shrink( SwTwips nDist, BOOL bTst )
+{
+    SWRECTFN( this )
+    if( Lower() && !IsColLocked() && !HasFixSize() )
+    {
+        SwTwips nHeight = (Frm().*fnRect->fnGetHeight)();
+        if ( nDist > nHeight )
+            nDist = nHeight;
+
+        SwTwips nVal = IsMinHeight() ?
+            Min( nDist, nHeight - GetFmt()->GetFrmSize().GetHeight() ) :
+            nDist;
+        if ( nVal <= 0L )
+            return 0L;
+
+        if ( Lower()->IsColumnFrm() )
+        {   //Bei Spaltigkeit ubernimmt das Format die Kontrolle ueber
+            //das Wachstum (wg. des Ausgleichs).
+            if ( !bTst )
+            {
+                SwRect aOld( AddSpacesToFrm() );
+                (Frm().*fnRect->fnSetHeight)( nHeight - nVal );
+                nHeight = (Prt().*fnRect->fnGetHeight)();
+                (Prt().*fnRect->fnSetHeight)( nHeight - nVal );
+                _InvalidatePos();
+                InvalidateSize();
+                ::Notify( this, FindPageFrm(), aOld );
+                NotifyDrawObj();
+                if ( GetAnchor()->IsInFly() )
+                    GetAnchor()->FindFlyFrm()->Shrink( nDist, bTst );
+            }
+            return 0L;
+        }
+
+        if ( !bTst )
+        {
+            const SwRect aOld( AddSpacesToFrm() );
+            _InvalidateSize();
+            const BOOL bOldLocked = bLocked;
+            Unlock();
+            if ( IsFlyFreeFrm() )
+                ((SwFlyFreeFrm*)this)->SwFlyFreeFrm::MakeAll();
+            else
+                MakeAll();
+            _InvalidateSize();
+            InvalidatePos();
+            if ( bOldLocked )
+                Lock();
+            const SwRect aNew( AddSpacesToFrm() );
+            if ( aOld != aNew )
+            {
+                ::Notify( this, FindPageFrm(), aOld );
+                if ( GetAnchor()->IsInFly() )
+                    GetAnchor()->FindFlyFrm()->Shrink( nDist, bTst );
+            }
+            return (aOld.*fnRect->fnGetHeight)() -
+                   (aNew.*fnRect->fnGetHeight)();
+        }
+        return nVal;
+    }
+    return 0L;
+}
+#else
 SwTwips SwFlyFrm::_Grow( SwTwips nDist, const SzPtr pDirection, BOOL bTst )
 {
     if ( Lower() && !IsColLocked() && !HasFixSize( pDirection ) )
@@ -1751,6 +1879,7 @@ SwTwips SwFlyFrm::_Shrink( SwTwips nDist, const SzPtr pDirection, BOOL bTst )
     }
     return 0L;
 }
+#endif
 
 /*************************************************************************
 |*

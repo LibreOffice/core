@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flycnt.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ama $ $Date: 2001-07-03 10:39:03 $
+ *  last change: $Author: ama $ $Date: 2001-10-19 10:20:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1549,9 +1549,9 @@ void SwFlyAtCntFrm::MakeFlyPos()
                 while ( nRel )
                 {   if ( nRel <= nAvail ||
                             (bBrowse &&
-                            ((SwFrm*)pOrient)->Grow( nRel-nAvail, pHeight, TRUE)) ||
+                            ((SwFrm*)pOrient)->Grow( nRel-nAvail PHEIGHT, TRUE)) ||
                             (pOrient->IsInTab() && bGrow && //MA_FLY_HEIGHT
-                            ((SwFrm*)pOrient)->Grow( nRel-nAvail, pHeight, TRUE)))
+                            ((SwFrm*)pOrient)->Grow( nRel-nAvail PHEIGHT, TRUE)))
                     {   aRelPos.Y() = (pOrient->Frm().Top() +
                                         pOrient->Prt().Top() +
                                         (pOrient->Prt().Height() -
@@ -1560,7 +1560,7 @@ void SwFlyAtCntFrm::MakeFlyPos()
                         if ( ( bBrowse || ( pOrient->IsInTab() && bGrow ) )
                              && nRel - nAvail > 0 )
                         {
-                            nRel = ((SwFrm*)pOrient)->Grow( nRel-nAvail, pHeight );
+                            nRel = ((SwFrm*)pOrient)->Grow( nRel-nAvail PHEIGHT );
                             SwFrm *pTmp = (SwFrm*) pOrient->FindPageFrm();
                             ::ValidateSz( pTmp );
                             bInvalidatePage = TRUE;
@@ -1649,7 +1649,7 @@ void SwFlyAtCntFrm::MakeFlyPos()
                  ( GetAnchor()->IsInTab() && bGrow ) )
             {
                 ((SwFrm*)pOrient)->Grow(
-                        aFrm.Bottom() - (pOrient->Frm().Top() + pOrient->Prt().Bottom()), pHeight );
+                        aFrm.Bottom() - (pOrient->Frm().Top() + pOrient->Prt().Bottom()) PHEIGHT );
                 SwFrm *pTmp = (SwFrm*) pOrient->FindPageFrm();
                 ::ValidateSz( pTmp );
                 bInvalidatePage = TRUE;
