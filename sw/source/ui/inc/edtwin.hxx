@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2002-05-28 14:34:03 $
+ *  last change: $Author: os $ $Date: 2002-06-12 08:53:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -186,7 +186,7 @@ friend void     PageNumNotify(  ViewShell* pVwSh,
     void            ChangeDrawing( BYTE nDir );
 
     BOOL            EnterDrawMode(const MouseEvent& rMEvt, const Point& aDocPos);
-    BOOL            RulerClook( SwView& , const MouseEvent& rMEvt);
+    BOOL            RulerColumnDrag( SwView& , const MouseEvent& rMEvt, BOOL bVerticalMode);
 
     //Hilfsfunktionen fuer D&D
     void            DropCleanup();
