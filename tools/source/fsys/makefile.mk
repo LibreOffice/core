@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: vg $ $Date: 2001-10-11 11:17:18 $
+#   last change: $Author: sb $ $Date: 2002-03-13 09:03:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,9 +70,6 @@ TARGET=fsys
 .INCLUDE :  settings.mk
 
 # --- Files --------------------------------------------------------
-
-UNOUCROUT = $(OUT)$/inc
-UNOTYPES = com.sun.star.util.XStringWidth
 
 SLOFILES= \
             $(SLO)$/tempfile.obj   \

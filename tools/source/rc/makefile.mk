@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: sb $ $Date: 2002-02-19 14:15:03 $
+#   last change: $Author: sb $ $Date: 2002-03-13 09:03:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,11 +70,6 @@ TARGET=rc
 .INCLUDE :	settings.mk
 
 # --- Files --------------------------------------------------------
-
-# This is here because resmgr.cxx includes urlobj.hxx, which in turn includes
-# Reference.hxx, which in turn includes the missing XInterface.hpp:
-UNOUCROUT = $(OUT)$/inc
-UNOTYPES = com.sun.star.uno.XInterface
 
 SLOFILES=	$(SLO)$/rc.obj		\
             $(SLO)$/resmgr.obj	\
