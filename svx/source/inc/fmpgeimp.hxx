@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmpgeimp.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-17 10:58:06 $
+ *  last change: $Author: obo $ $Date: 2005-03-18 10:01:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,10 @@
 #include <comphelper/uno3.hxx>
 #endif
 
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/dllapi.h"
+#endif
+
 class SvStream;
 //BFS01class SdrIOHeader;
 class FmFormObj;
@@ -112,7 +116,7 @@ DECLARE_LIST(FmObjectList, FmFormObj*);
 // eingefuegt worden sind und wann diese entfernt wurden
 //==================================================================
 
-class FmFormPageImpl
+class SVX_DLLPRIVATE FmFormPageImpl
 {
     friend class FmFormPage;
     friend class FmFormObj;
@@ -137,13 +141,21 @@ public:
     void setCurForm(::com::sun::star::uno::Reference< ::com::sun::star::form::XForm> xForm);
     ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm> getDefaultForm();
 
-    // Defaults fuer ein Object setzen
-    // Eindeutigen Namen, Zuordnen zu einer Form falls noch nicht erfolgt
-    ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm> SetDefaults(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent>& rContent,
-                         const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource>& rDatabase = ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource>(),
-                         const ::rtl::OUString& rDBTitle = ::rtl::OUString(),
-                         const ::rtl::OUString& rCursorSource = ::rtl::OUString(),
-                         sal_Int32 nCommandType = 0);
+    /** inserts a form component into the form component hierarchy
+
+        If the given component does not yet belong into the form hierarchy, a suitable place for
+        it is found, using <member>findFormForDataSource</member>, if possible.
+
+        If no sutiable form is found, a new one is created, and also inserted into the
+        hierarchy.
+    */
+    ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm> placeInFormComponentHierarchy(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent>& rContent,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource>& rDatabase = ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource>(),
+        const ::rtl::OUString& rDBTitle = ::rtl::OUString(),
+        const ::rtl::OUString& rCursorSource = ::rtl::OUString(),
+        sal_Int32 nCommandType = 0
+    );
 
     // activation handling
     inline  sal_Bool    hasEverBeenActivated( ) const { return !m_bFirstActivation; }
@@ -161,10 +173,23 @@ protected:
 
     void fillList(FmObjectList& rList, const SdrObjList& rObjList, sal_Bool bConnected) const;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm> FindForm(const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm>& rForm,
-                      const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource>& rDatabase,
-                      const ::rtl::OUString& rCursorSource,
-                      sal_Int32 nCommandType);
+    /** finds a form with a given data source signature
+        @param rForm
+            the form to start the search with. This form, including all possible sub forms,
+            will be examined
+        @param rDatabase
+            the data source which to which the found form must be bound
+        @param rCommand
+            the desired Command property value of the sought-after form
+        @param nCommandType
+            the desired CommandType property value of the sought-after form
+    */
+    ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm> findFormForDataSource(
+        const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm>& rForm,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDataSource>& rDatabase,
+        const ::rtl::OUString& rCommand,
+        sal_Int32 nCommandType
+    );
 
     ::rtl::OUString getDefaultName(
                         sal_Int16 _nClassId,
