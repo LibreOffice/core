@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagemgr.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: pb $ $Date: 2001-08-23 10:52:59 $
+ *  last change: $Author: pb $ $Date: 2001-08-29 11:02:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,9 +196,10 @@ static SvtExtensionResIdMapping_Impl __READONLY_DATA ExtensionMap_Impl[] =
     "src",   TRUE,  STR_DESCRIPTION_SOURCEFILE,            IMG_TEXTFILE,
     "svh",   FALSE, STR_DESCRIPTION_HELP_DOC,              IMG_SVHELP,
     "svm",   TRUE,  STR_DESCRIPTION_GRAPHIC_DOC,           IMG_SVM,
-    "stc",   FALSE, STR_DESCRIPTION_SOFFICE_TEMPLATE_DOC,  IMG_CALCTEMPLATE,
-    "sti",   FALSE, STR_DESCRIPTION_SOFFICE_TEMPLATE_DOC,  IMG_IMPRESSTEMPLATE,
-    "stw",   FALSE, STR_DESCRIPTION_SOFFICE_TEMPLATE_DOC,  IMG_WRITERTEMPLATE,
+    "stc",   FALSE, STR_DESCRIPTION_CALC_TEMPLATE,         IMG_CALCTEMPLATE,
+    "std",   FALSE, STR_DESCRIPTION_DRAW_TEMPLATE,         IMG_DRAWTEMPLATE,
+    "sti",   FALSE, STR_DESCRIPTION_IMPRESS_TEMPLATE,      IMG_IMPRESSTEMPLATE,
+    "stw",   FALSE, STR_DESCRIPTION_WRITER_TEMPLATE,       IMG_WRITERTEMPLATE,
     "sxc",   FALSE, STR_DESCRIPTION_SCALC_DOC,             IMG_CALC,
     "sxd",   FALSE, STR_DESCRIPTION_SDRAW_DOC,             IMG_DRAW,
     "sxg",   FALSE, STR_DESCRIPTION_GLOBALDOC,             IMG_GLOBAL_DOC,
