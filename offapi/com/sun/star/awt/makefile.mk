@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.21 $
+#   $Revision: 1.22 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-26 13:52:54 $
+#   last change: $Author: vg $ $Date: 2003-04-24 17:42:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,6 +73,39 @@ PACKAGE=com$/sun$/star$/awt
 # ------------------------------------------------------------------------
 
 IDLFILES=\
+    AccessibleButton.idl\
+    AccessibleCheckBox.idl\
+    AccessibleComboBox.idl\
+    AccessibleDropDownComboBox.idl\
+    AccessibleDropDownListBox.idl\
+    AccessibleEdit.idl\
+    AccessibleFixedText.idl\
+    AccessibleIconChoiceControl.idl\
+    AccessibleIconChoiceControlEntry.idl\
+    AccessibleList.idl\
+    AccessibleListBox.idl\
+    AccessibleListBoxList.idl\
+    AccessibleListItem.idl\
+    AccessibleMenu.idl\
+    AccessibleMenuBar.idl\
+    AccessibleMenuItem.idl\
+    AccessibleMenuSeparator.idl\
+    AccessiblePopupMenu.idl\
+    AccessibleRadioButton.idl\
+    AccessibleScrollBar.idl\
+    AccessibleStatusBar.idl\
+    AccessibleStatusBarItem.idl\
+    AccessibleTabBar.idl\
+    AccessibleTabBarPage.idl\
+    AccessibleTabBarPageList.idl\
+    AccessibleTabControl.idl\
+    AccessibleTabPage.idl\
+    AccessibleTextField.idl\
+    AccessibleToolBox.idl\
+    AccessibleToolBoxItem.idl\
+    AccessibleTreeListBox.idl\
+    AccessibleTreeListBoxEntry.idl\
+    AccessibleWindow.idl\
     ActionEvent.idl\
     AdjustmentEvent.idl\
     AdjustmentType.idl\
@@ -104,6 +137,7 @@ IDLFILES=\
     KeyFunction.idl\
     KeyGroup.idl\
     KeyModifier.idl\
+    KeyStroke.idl\
     MenuEvent.idl\
     MenuItemStyle.idl\
     MessageBoxCommand.idl\
@@ -198,6 +232,7 @@ IDLFILES=\
     XDisplayBitmap.idl\
     XDisplayConnection.idl\
     XEventHandler.idl\
+    XExtendedToolkit.idl\
     XFileDialog.idl\
     XFixedText.idl\
     XFocusListener.idl\
@@ -208,6 +243,7 @@ IDLFILES=\
     XImageProducer.idl\
     XInfoPrinter.idl\
     XItemListener.idl\
+    XKeyHandler.idl\
     XKeyListener.idl\
     XLayoutConstrains.idl\
     XListBox.idl\
@@ -215,6 +251,7 @@ IDLFILES=\
     XMenuBar.idl\
     XMenuListener.idl\
     XMessageBox.idl\
+    XMouseClickHandler.idl\
     XMouseListener.idl\
     XMouseMotionListener.idl\
     XNumericField.idl\
@@ -247,6 +284,7 @@ IDLFILES=\
     XTopWindow.idl\
     XTopWindowListener.idl\
     XUnoControlContainer.idl\
+    XUserInputInterception.idl\
     XVclContainer.idl\
     XVclContainerListener.idl\
     XVclContainerPeer.idl\
