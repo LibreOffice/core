@@ -2,9 +2,9 @@
  *
  *  $RCSfile: StorageFileAccess.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 16:36:57 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 15:48:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,6 @@ public class StorageFileAccess implements org.hsqldb.lib.FileAccess{
     // load shared library for JNI code
         NativeLibraryLoader.loadLibrary(StorageNativeOutputStream.class.getClassLoader(), "hsqldb2");
     }
-    XStorage storage;
     String ds_name;
     String key;
     /** Creates a new instance of StorageFileAccess */
@@ -104,7 +103,7 @@ public class StorageFileAccess implements org.hsqldb.lib.FileAccess{
     }
 
     public java.io.OutputStream openOutputStreamElement(java.lang.String streamName) throws java.io.IOException {
-        return new NativeOutputStreamHelper(key,streamName,storage);
+        return new NativeOutputStreamHelper(key,streamName);
     }
 
     public void removeElement(java.lang.String filename) throws java.util.NoSuchElementException, java.io.IOException {
@@ -117,6 +116,23 @@ public class StorageFileAccess implements org.hsqldb.lib.FileAccess{
             removeElement(key,newName);
             renameElement(key,oldName, newName);
         }
+    }
+
+    public class FileSync implements FileAccess.FileSync
+    {
+        NativeOutputStreamHelper os;
+        FileSync(NativeOutputStreamHelper _os) throws java.io.IOException
+        {
+            os = _os;
+        }
+        public void sync() throws java.io.IOException
+        {
+        }
+    }
+
+    public FileAccess.FileSync getFileSync(java.io.OutputStream os) throws java.io.IOException
+    {
+        return new FileSync((NativeOutputStreamHelper)os);
     }
 
     static native boolean isStreamElement(java.lang.String key,java.lang.String elementName) throws java.util.NoSuchElementException, java.io.IOException;
