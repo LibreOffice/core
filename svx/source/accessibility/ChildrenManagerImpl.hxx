@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChildrenManagerImpl.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: af $ $Date: 2002-04-11 12:59:54 $
+ *  last change: $Author: af $ $Date: 2002-04-15 15:12:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -392,6 +392,8 @@ public:
         ::drafts::com::sun::star::accessibility::XAccessible> mxAccessibleShape;
 
     AccessibleShape* mpAccessibleShape;
+
+    bool mbCreateEventPending;
 
     /** Create a new descriptor for the specified shape with empty reference
         to accessible object.
