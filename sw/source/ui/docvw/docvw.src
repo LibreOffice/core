@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvw.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:15:51 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 11:52:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,7 @@ Menu MN_READONLY_POPUP
             Text[ czech ] = "Otevřít";
             Text[ hebrew ] = "‮פתיחה‬";
             Text[ hindi ] = "~खोलो";
+            Text[ slovak ] = "~Otvoriť";
         };
         MenuItem
         {
@@ -134,6 +135,7 @@ Menu MN_READONLY_POPUP
             Text[ czech ] = "Otevřít v novém okně";
             Text[ hebrew ] = "Öffnen in neuem ~Fenster";
             Text[ hindi ] = "नया विन्डो में खोलो";
+            Text[ slovak ] = "Otvoriť v novom okne";
         };
         MenuItem
         {
@@ -168,6 +170,7 @@ Menu MN_READONLY_POPUP
             Text[ czech ] = "Upravit";
             Text[ hebrew ] = "‮עריכה‬";
             Text[ hindi ] = "~संपादन";
+            Text[ slovak ] = "~Upraviť";
         };
         MenuItem
         {
@@ -199,6 +202,7 @@ Menu MN_READONLY_POPUP
             Text[ czech ] = "Vybrat text";
             Text[ hebrew ] = "‮בחירת טקסט‬";
             Text[ hindi ] = "Select Text";
+            Text[ slovak ] = "Vybrať text";
         };
         MenuItem
         {
@@ -233,6 +237,7 @@ Menu MN_READONLY_POPUP
             Text[ czech ] = "Znovu načíst";
             Text[ hebrew ] = "‮טעינה מחודשת‬";
             Text[ hindi ] = "पुनः ~लोड़ करो";
+            Text[ slovak ] = "Z~novu načítať";
         };
         MenuItem
         {
@@ -267,6 +272,7 @@ Menu MN_READONLY_POPUP
             Text[ czech ] = "Znovu načíst rámec";
             Text[ hebrew ] = "~Frame neu laden";
             Text[ hindi ] = "पुनः लोड़ करने का फ्रेम ";
+            Text[ slovak ] = "Znovu načítať ohraničenie";
         };
         MenuItem
         {
@@ -301,6 +307,7 @@ Menu MN_READONLY_POPUP
             Text[ czech ] = "HTML zdroj";
             Text[ hebrew ] = "HTM~L - Quelltext";
             Text[ hindi ] = "HT~ML मूल";
+            Text[ slovak ] = "HT~ML zdroj";
         };
         SEPARATOR
         MenuItem
@@ -336,6 +343,7 @@ Menu MN_READONLY_POPUP
             Text[ czech ] = "Zastavit";
             Text[ hebrew ] = "~Stopp";
             Text[ hindi ] = "~रोको";
+            Text[ slovak ] = "~Zastaviť";
         };
         MenuItem
         {
@@ -370,6 +378,7 @@ Menu MN_READONLY_POPUP
             Text[ czech ] = "Zpět";
             Text[ hebrew ] = "‮אחורנית‬";
             Text[ hindi ] = "पिछली ओर ";
+            Text[ slovak ] = "Späť";
         };
         MenuItem
         {
@@ -404,6 +413,7 @@ Menu MN_READONLY_POPUP
             Text[ czech ] = "Vpřed";
             Text[ hebrew ] = "~Vorwärts";
             Text[ hindi ] = "~आगे की ओर";
+            Text[ slovak ] = "~Dopredu";
         };
         SEPARATOR
         MenuItem
@@ -439,6 +449,7 @@ Menu MN_READONLY_POPUP
             Text[ czech ] = "Uložit obrázek";
             Text[ hebrew ] = "~Grafik speichern...";
             Text[ hindi ] = "सुचित्रों को संचित करो...";
+            Text[ slovak ] = "Uložiť obrázok";
         };
         MenuItem
         {
@@ -483,6 +494,7 @@ Menu MN_READONLY_POPUP
                         Text[ czech ] = "Jako odkaz";
                         Text[ hebrew ] = "Als Link";
                         Text[ hindi ] = "लिंक जैसे";
+                        Text[ slovak ] = "Ako odkaz";
                     };
                     MenuItem
                     {
@@ -517,6 +529,7 @@ Menu MN_READONLY_POPUP
                         Text[ czech ] = "Kopie";
                         Text[ hebrew ] = "‮העתקה‬";
                         Text[ hindi ] = "प्रतिलिपि";
+                        Text[ slovak ] = "Kópia";
                     };
                     SEPARATOR
                 };
@@ -548,6 +561,7 @@ Menu MN_READONLY_POPUP
             Text[ czech ] = "Přidat obrázek";
             Text[ hebrew ] = "Grafik hinzuf~ügen";
             Text[ hindi ] = "सुचित्र जोड़ो";
+            Text[ slovak ] = "Pridať obrázok";
         };
         MenuItem
         {
@@ -582,6 +596,7 @@ Menu MN_READONLY_POPUP
             Text[ czech ] = "Uložit pozadí";
             Text[ hebrew ] = "H~intergrund speichern...";
             Text[ hindi ] = "पृष्ठभाग संचित करो...";
+            Text[ slovak ] = "Uložiť pozadie";
         };
         MenuItem
         {
@@ -626,6 +641,7 @@ Menu MN_READONLY_POPUP
                         Text[ czech ] = "Jako odkaz";
                         Text[ hebrew ] = "Als Link";
                         Text[ hindi ] = "लिंक जैसे";
+                        Text[ slovak ] = "Ako odkaz";
                     };
                     MenuItem
                     {
@@ -660,6 +676,7 @@ Menu MN_READONLY_POPUP
                         Text[ czech ] = "Kopie";
                         Text[ hebrew ] = "‮העתקה‬";
                         Text[ hindi ] = "प्रतिलिपि";
+                        Text[ slovak ] = "Kópia";
                     };
                     SEPARATOR
                 };
@@ -691,6 +708,7 @@ Menu MN_READONLY_POPUP
             Text[ czech ] = "Přidat pozadí";
             Text[ hebrew ] = "H~intergrund hinzufügen";
             Text[ hindi ] = "पृष्ठभाग जोड़ो";
+            Text[ slovak ] = "Pridať pozadie";
         };
         SEPARATOR
         MenuItem
@@ -726,6 +744,7 @@ Menu MN_READONLY_POPUP
             Text[ czech ] = "Kopírovat odkaz";
             Text[ hebrew ] = "~Link kopieren";
             Text[ hindi ] = "~लिंक का प्रतिलिपि";
+            Text[ slovak ] = "Kopírovať o~dkaz";
         };
         MenuItem
         {
@@ -763,6 +782,7 @@ Menu MN_READONLY_POPUP
             Text[ czech ] = "Kopírovat grafiku";
             Text[ hebrew ] = "Grafik ~kopieren";
             Text[ hindi ] = "~सुचित्र का प्रतिलिपि";
+            Text[ slovak ] = "Kopírovať ~grafiku";
         };
         SEPARATOR
         MenuItem
@@ -798,6 +818,7 @@ Menu MN_READONLY_POPUP
             Text[ czech ] = "Načíst obrázek";
             Text[ hebrew ] = "G~rafiken laden";
             Text[ hindi ] = "सुचित्र लोड़ करो";
+            Text[ slovak ] = "Načítať obrázok";
         };
         MenuItem
         {
@@ -832,6 +853,7 @@ Menu MN_READONLY_POPUP
             Text[ czech ] = "Vypnout obrázky";
             Text[ hebrew ] = "Grafiken ~ausschalten";
             Text[ hindi ] = "सुचित्र बंद";
+            Text[ slovak ] = "Vypnúť obrázky";
         };
 #ifdef WNT
         MenuItem
@@ -867,6 +889,7 @@ Menu MN_READONLY_POPUP
             Text[ czech ] = "Zásuvné moduly vypnuty";
             Text[ hebrew ] = "~PlugIns ausschalten";
             Text[ hindi ] = "प्लग-इन्स बंद";
+            Text[ slovak ] = "Zásuvné moduly vypnuté";
         };
 #endif
         SEPARATOR
@@ -899,6 +922,7 @@ Menu MN_READONLY_POPUP
             Text[ czech ] = "Ukončit zobrazení na celou obrazovku";
             Text[ hebrew ] = "‮עזיבת מצב חלון מלא‬";
             Text[ hindi ] = "Leave Full-Screen Mode";
+            Text[ slovak ] = "Opustiť Full-Screen mód";
         };
     };
 };
@@ -933,6 +957,7 @@ String STR_EXPORT_GRAFIK_TITLE
     Text[ czech ] = "Export obrázku";
     Text[ hebrew ] = "Grafik-Export";
     Text[ hindi ] = "सुचित्र का निर्यात";
+    Text[ slovak ] = "Export obrázku";
 };
 String STR_CHAIN_OK
 {
@@ -965,6 +990,7 @@ String STR_CHAIN_OK
     Text[ czech ] = "Klikněte levým tlačítkem myši k propojení rámců.";
     Text[ hebrew ] = "Betätigen Sie die linke Maustaste um die Rahmen zu verketten.";
     Text[ hindi ] = "फ्रेमों को लिंक करने केलिए बायाँ मौस बटन को क्लिक करो ।";
+    Text[ slovak ] = "Pre prepojenie rámcov kliknite ľavým tlačítkom myši.";
 };
 String STR_CHAIN_NOT_EMPTY
 {
@@ -997,6 +1023,7 @@ String STR_CHAIN_NOT_EMPTY
     Text[ czech ] = "Cílový rámec není prázdný.";
     Text[ hebrew ] = "Der Zielrahmen ist nicht leer.";
     Text[ hindi ] = "लक्ष्य का फ्रेम खाली नहीं है ।";
+    Text[ slovak ] = "Cieľový rámec nie je prázdny.";
 };
 String STR_CHAIN_IS_IN_CHAIN
 {
@@ -1029,6 +1056,7 @@ String STR_CHAIN_IS_IN_CHAIN
     Text[ czech ] = "Cílový rámec je již propojen.";
     Text[ hebrew ] = "Der Zielrahmen ist bereits verkettet.";
     Text[ hindi ] = "लक्ष्य का फ्रेम को पहिले से ही लिंक किया है ।";
+    Text[ slovak ] = "Cieľový rámec je už prepojený.";
 };
 String STR_CHAIN_WRONG_AREA
 {
@@ -1061,6 +1089,7 @@ String STR_CHAIN_WRONG_AREA
     Text[ czech ] = "Cílový rámec odkazu je neplatná oblast.";
     Text[ hebrew ] = "Der Zielrahmen steht in einem Bereich in dem keine Verkettung möglich ist.";
     Text[ hindi ] = "लिंक केलिए लक्ष्य का फ्रेम का विस्तीर्ण अमान्य है ।";
+    Text[ slovak ] = "Cieľový rámec odkazu je neplatná oblasť.";
 };
 String STR_CHAIN_NOT_FOUND
 {
@@ -1071,7 +1100,7 @@ String STR_CHAIN_NOT_FOUND
     Text [ portuguese_brazilian ] = "A moldura de destino n�o foi encontrada na posi��o atual." ;
     Text [ swedish ] = "Vid den aktuella positionen kan ingen m�lram hittas." ;
     Text [ danish ] = "Der blev ikke fundet en m�lramme p� den aktuelle position." ;
-    Text [ italian ] = "Impossibile trovare una cornice di destinazione nella posizione corrente." ;
+    Text [ italian ] = "Impossibile trovare una cornice di destinazione nella posizione attuale." ;
     Text [ spanish ] = "En la posici�n actual no se puede encontrar ning�n marco destino." ;
     Text [ french ] = "Aucun cadre cible ne peut �tre trouv� � la position courante." ;
     Text [ dutch ] = "Op de huidige positie kan geen doelkader worden gevonden." ;
@@ -1093,6 +1122,7 @@ String STR_CHAIN_NOT_FOUND
     Text[ czech ] = "Cílový rámec nebyl na aktuální pozici nalezen.";
     Text[ hebrew ] = "An der aktuellen Position kann kein Zielrahmen gefunden werden.";
     Text[ hindi ] = "वर्तमान स्थान में लक्ष्य का फ्रेम नहीं मिला ।";
+    Text[ slovak ] = "Cieľový rámec nebol na aktuálnej pozícii nájdený.";
 };
 String STR_CHAIN_SOURCE_CHAINED
 {
@@ -1125,6 +1155,7 @@ String STR_CHAIN_SOURCE_CHAINED
     Text[ czech ] = "Cílový rámec již je zdrojem odkazu.";
     Text[ hebrew ] = "Der Quellrahmen ist bereits Quelle einer Verkettung.";
     Text[ hindi ] = "मूल फ्रेम पहिले से ही मूल का लिंक है । ";
+    Text[ slovak ] = "Cieľový rámec je už zdrojom odkazu.";
 };
 String STR_CHAIN_SELF
 {
@@ -1157,6 +1188,7 @@ String STR_CHAIN_SELF
     Text[ czech ] = "Uzavřený odkaz není možný.";
     Text[ hebrew ] = "Eine geschlossene Kette ist nicht möglich.";
     Text[ hindi ] = "बन्द की हुयी लिंक संभव नहीं है ।";
+    Text[ slovak ] = "Uzavretý odkaz nie je možný.";
 };
 String STR_REDLINE_INSERT
 {
@@ -1189,6 +1221,7 @@ String STR_REDLINE_INSERT
     Text[ czech ] = "Vloženo";
     Text[ hebrew ] = "Eingefügt";
     Text[ hindi ] = "जोड़ा";
+    Text[ slovak ] = "Vložené";
 };
 String STR_REDLINE_DELETE
 {
@@ -1221,6 +1254,7 @@ String STR_REDLINE_DELETE
     Text[ czech ] = "Odstraněno";
     Text[ hebrew ] = "Gelöscht";
     Text[ hindi ] = "मिटाया";
+    Text[ slovak ] = "Odstránené";
 };
 String STR_REDLINE_FORMAT
 {
@@ -1253,6 +1287,7 @@ String STR_REDLINE_FORMAT
     Text[ czech ] = "Formátováno";
     Text[ hebrew ] = "Attributiert";
     Text[ hindi ] = "रचना किया";
+    Text[ slovak ] = "Formátované";
 };
 String STR_REDLINE_TABLE
 {
@@ -1285,6 +1320,7 @@ String STR_REDLINE_TABLE
     Text[ czech ] = "Tabulka byla změněna";
     Text[ hebrew ] = "Tabelle verändert";
     Text[ hindi ] = "सारणी बदला";
+    Text[ slovak ] = "Tabuľka bola zmenená";
 };
 String STR_REDLINE_FMTCOLL
 {
@@ -1317,6 +1353,7 @@ String STR_REDLINE_FMTCOLL
     Text[ czech ] = "Použity styly odstavce";
     Text[ hebrew ] = "Absatzvorlage gesetzt";
     Text[ hindi ] = "परिच्छेद शैलियों को लागू किया";
+    Text[ slovak ] = "Použité štýly odstavca";
 };
 String STR_ENDNOTE
 {
@@ -1349,6 +1386,7 @@ String STR_ENDNOTE
     Text[ czech ] = "Vysvětlivka:";
     Text[ hebrew ] = "Endnote: ";
     Text[ hindi ] = "अंतिम टीका: ";
+    Text[ slovak ] = "Vysvetlivka:";
 };
 String STR_FTNNOTE
 {
@@ -1381,6 +1419,7 @@ String STR_FTNNOTE
     Text[ czech ] = "Poznámka pod čarou:";
     Text[ hebrew ] = ":‮הערת שוליים‬";
     Text[ hindi ] = "पृष्ठ के नीचे की टीका: ";
+    Text[ slovak ] = "Poznámka pod čiarou:";
 };
 
 InfoBox MSG_READONLY_CONTENT
@@ -1414,7 +1453,10 @@ InfoBox MSG_READONLY_CONTENT
     MESSAGE[ czech ] = "Obsah je jen pro čtení,\ntudíž se neprovedou žádné změny.";
     MESSAGE[ hebrew ] = "Die Schreibmarke oder Selektion befindet sich an einer geschützten Position.\nEine Änderung kann deshalb nicht akzeptiert werden.";
     MESSAGE[ hindi ] = "केवल पढ़ने वाले विषय को नहीं बदल सकते है ।\nकोई सुधारों को स्वीकार नहीं किया जायेगा ";
+    MESSAGE[ slovak ] = "Obsah je len na čítanie.\nŽiadne zmeny sa nevykonajú.";
 };
+
+
 
 
 
