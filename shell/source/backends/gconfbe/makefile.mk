@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: rt $ $Date: 2005-01-31 13:15:41 $
+#   last change: $Author: vg $ $Date: 2005-02-21 12:06:04 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -59,7 +59,6 @@
 #
 #
 #*************************************************************************
-
 PRJ=..$/..$/..
 
 PRJNAME=shell
@@ -84,7 +83,7 @@ DLLPRE =
 
 .IF "$(ENABLE_GNOMEVFS)"!=""
 COMPILER_WARN_ALL=TRUE
-PKGCONFIG_MODULES=gconf-2.0
+PKGCONFIG_MODULES=gconf-2.0 gobject-2.0
 .INCLUDE: pkg_config.mk
 
 .IF "$(OS)" == "SOLARIS"
