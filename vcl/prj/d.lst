@@ -7,7 +7,7 @@ mkdir: %_DEST%\inc%_EXT%\vcl
 mkdir: %_DEST%\inc%_EXT%\vcl\unx
 
 ..\%COMMON_OUTDIR%\misc\*.hid %COMMON_DEST%\bin%_EXT%\hid\*.hid
-..\%__SRC%\bin\vcl?????.res %_DEST%\bin%_EXT%\vcl?????.res
+..\%__SRC%\bin\vcl*.res %_DEST%\bin%_EXT%\vcl*.res
 ..\%__SRC%\bin\vcl?????.dll %_DEST%\bin%_EXT%\vcl?????.dll
 ..\%__SRC%\bin\vcl?????.sym %_DEST%\bin%_EXT%\vcl?????.sym
 ..\%__SRC%\lib\libvcl*.so %_DEST%\lib%_EXT%\libvcl*.so
