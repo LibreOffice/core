@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svtreebx.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: gt $ $Date: 2002-08-13 07:31:28 $
+ *  last change: $Author: fs $ $Date: 2002-09-06 09:07:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,12 +68,7 @@
 
 class TabBar;
 
-#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
-#include <comphelper/processfactory.hxx>
-#endif
-#ifndef _UNOTOOLS_INTLWRAPPER_HXX
-#include <unotools/intlwrapper.hxx>
-#endif
+// #102891# -----------------------
 
 #include <svlbox.hxx>
 #include <svlbitm.hxx>
@@ -2235,8 +2230,9 @@ IMPL_LINK( SvTreeListBox, DefaultCompare, SvSortData*, pData )
     SvLBoxEntry* pRight = (SvLBoxEntry*)(pData->pRight );
     String aLeft( ((SvLBoxString*)(pLeft->GetFirstItem(SV_ITEM_ID_LBOXSTRING)))->GetText());
     String aRight( ((SvLBoxString*)(pRight->GetFirstItem(SV_ITEM_ID_LBOXSTRING)))->GetText());
-    IntlWrapper aIntlWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() );
-    return aIntlWrapper.getCaseCollator()->compareString( aLeft, aRight );
+    // #102891# ----------------
+    pImp->UpdateIntlWrapper();
+    return pImp->pIntlWrapper->getCaseCollator()->compareString( aLeft, aRight );
 }
 
 void SvTreeListBox::ModelNotification( USHORT nActionId, SvListEntry* pEntry1,
