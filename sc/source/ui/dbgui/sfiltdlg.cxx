@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfiltdlg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-21 10:10:32 $
+ *  last change: $Author: nn $ $Date: 2001-07-05 14:13:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -257,7 +257,7 @@ void __EXPORT ScSpecialFilterDlg::Init( const SfxItemSet& rArgSet )
     aBtnHeader.Disable();
 
     // Modal-Modus einschalten
-//  SFX_APP()->LockDispatcher( TRUE );
+//  SetDispatcherLock( TRUE );
     //@BugID 54702 Enablen/Disablen nur noch in Basisklasse
     //SFX_APPWINDOW->Disable(FALSE);        //! allgemeine Methode im ScAnyRefDlg
 }
@@ -450,7 +450,7 @@ IMPL_LINK( ScSpecialFilterDlg, EndDlgHdl, Button*, pBtn )
 
         if ( bQueryOk )
         {
-            SFX_APP()->LockDispatcher( FALSE );
+            SetDispatcherLock( FALSE );
             SwitchToDocument();
             GetBindings().GetDispatcher()->Execute( FID_FILTER_OK,
                                       SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: simpref.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2000-11-14 16:35:36 $
+ *  last change: $Author: nn $ $Date: 2001-07-05 14:12:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,7 +128,7 @@ ScSimpleRefDlg::ScSimpleRefDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pP
     //  damit die Strings in der Resource bei den FixedTexten bleiben koennen:
     Init();
     FreeResource();
-    SFX_APP()->LockDispatcher( TRUE ); // Modal-Modus einschalten
+    SetDispatcherLock( TRUE ); // Modal-Modus einschalten
 
     aPrivLastRefString=String();
 }
@@ -138,7 +138,7 @@ __EXPORT ScSimpleRefDlg::~ScSimpleRefDlg()
 {
     aPrivLastRefString=aEdAssign.GetText();
 
-    SFX_APP()->LockDispatcher( FALSE ); // Modal-Modus einschalten
+    SetDispatcherLock( FALSE ); // Modal-Modus einschalten
 }
 
 //----------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: anyrefdg.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-22 18:25:05 $
+ *  last change: $Author: nn $ $Date: 2001-07-05 14:11:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,6 +170,7 @@ protected:
     BOOL            DoClose( USHORT nId );
 
     void            EnableSpreadsheets(BOOL bFlag=TRUE, BOOL bChilds=TRUE);
+    void            SetDispatcherLock( BOOL bLock );
 
     virtual long    PreNotify( NotifyEvent& rNEvt );
 

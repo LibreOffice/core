@@ -2,9 +2,9 @@
  *
  *  $RCSfile: highred.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-11 13:33:56 $
+ *  last change: $Author: nn $ $Date: 2001-07-05 14:12:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,7 +149,7 @@ ScHighlightChgDlg::ScHighlightChgDlg( SfxBindings* pB, SfxChildWindow* pCW, Wind
     aFilterCtr.SetRefHdl(LINK( this, ScHighlightChgDlg, RefHandle ));
     aFilterCtr.HideRange(FALSE);
     aFilterCtr.Show();
-    SFX_APP()->LockDispatcher( TRUE);
+    SetDispatcherLock( TRUE );
     //SFX_APPWINDOW->Disable(FALSE);
 
     Init();
@@ -157,7 +157,7 @@ ScHighlightChgDlg::ScHighlightChgDlg( SfxBindings* pB, SfxChildWindow* pCW, Wind
 }
 ScHighlightChgDlg::~ScHighlightChgDlg()
 {
-    SFX_APP()->LockDispatcher( FALSE);
+    SetDispatcherLock( FALSE );
     //SFX_APPWINDOW->Enable();
 }
 
@@ -265,7 +265,7 @@ void ScHighlightChgDlg::SetActive()
         aEdAssign.Hide();
         aRbAssign.Hide();
         SFX_APPWINDOW->Enable();
-        SFX_APP()->LockDispatcher( FALSE);
+        SetDispatcherLock( FALSE );
     }
     //RefInputDone();
     */
@@ -300,7 +300,7 @@ IMPL_LINK( ScHighlightChgDlg, RefHandle, SvxTPFilter*, pRef )
 {
     if(pRef!=NULL)
     {
-        SFX_APP()->LockDispatcher( TRUE );
+        SetDispatcherLock( TRUE );
         //SFX_APPWINDOW->Disable(FALSE);
         aEdAssign.Show();
         aRbAssign.Show();

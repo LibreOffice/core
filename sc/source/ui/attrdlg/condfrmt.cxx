@@ -2,9 +2,9 @@
  *
  *  $RCSfile: condfrmt.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-23 15:06:52 $
+ *  last change: $Author: nn $ $Date: 2001-07-05 14:14:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -752,7 +752,7 @@ IMPL_LINK( ScConditionalFormatDlg, BtnHdl, PushButton*, pBtn )
         GetConditionalFormat( aCondFrmt );
         ScCondFrmtItem aOutItem( FID_CONDITIONAL_FORMAT, aCondFrmt );
 
-        SFX_APP()->LockDispatcher( FALSE );
+        SetDispatcherLock( FALSE );
         SwitchToDocument();
         GetBindings().GetDispatcher()->Execute( FID_CONDITIONAL_FORMAT,
                                   SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD,

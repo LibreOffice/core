@@ -2,9 +2,9 @@
  *
  *  $RCSfile: anyrefdg.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: er $ $Date: 2001-02-21 18:39:37 $
+ *  last change: $Author: nn $ $Date: 2001-07-05 14:12:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -434,7 +434,7 @@ ScAnyRefDlg::ScAnyRefDlg( SfxBindings* pB, SfxChildWindow* pCW,
     }
 
 
-    SFX_APP()->LockDispatcher( TRUE );
+    SetDispatcherLock( TRUE );
     //@Test
     //SFX_APPWINDOW->Disable(TRUE);   //@BugID 54702
 }
@@ -448,7 +448,7 @@ ScAnyRefDlg::~ScAnyRefDlg()
 
     lcl_EnableInput( TRUE );
     SetModalInputMode(FALSE);
-    SFX_APP()->LockDispatcher( FALSE );         //! hier und in DoClose ?
+    SetDispatcherLock( FALSE );         //! here and in DoClose ?
 
     delete pRefComp;
     delete pRefCell;
@@ -537,7 +537,7 @@ BOOL __EXPORT ScAnyRefDlg::DoClose( USHORT nId )
 {
     SfxApplication* pSfxApp = SFX_APP();
 
-    pSfxApp->LockDispatcher( FALSE );           //! hier und im dtor ?
+    SetDispatcherLock( FALSE );         //! here and in dtor ?
 
     SfxViewFrame* pViewFrm = SfxViewFrame::Current();
     if ( pViewFrm && pViewFrm->HasChildWindow(FID_INPUTLINE_STATUS) )
@@ -608,6 +608,32 @@ void ScAnyRefDlg::EnableSpreadsheets(BOOL bFlag, BOOL bChilds)
         pDocShell = (ScDocShell*)SfxObjectShell::GetNext(*pDocShell, &aType);
     }
 }
+
+void ScAnyRefDlg::SetDispatcherLock( BOOL bLock )
+{
+    //  lock / unlock only the dispatchers of Calc documents
+
+    TypeId aType(TYPE(ScDocShell));
+    ScDocShell* pDocShell = (ScDocShell*)SfxObjectShell::GetFirst(&aType);
+    while( pDocShell )
+    {
+        SfxViewFrame* pFrame = SfxViewFrame::GetFirst( pDocShell );
+        while( pFrame )
+        {
+            SfxDispatcher* pDisp = pFrame->GetDispatcher();
+            if (pDisp)
+                pDisp->Lock( bLock );
+
+            pFrame = SfxViewFrame::GetNext( *pFrame, pDocShell );
+        }
+        pDocShell = (ScDocShell*)SfxObjectShell::GetNext(*pDocShell, &aType);
+    }
+
+    //  if a new view is created while the dialog is open,
+    //  that view's dispatcher is locked when trying to create the dialog
+    //  for that view (ScTabViewShell::CreateRefDialog)
+}
+
 //----------------------------------------------------------------------------
 
 void ScAnyRefDlg::ViewShellChanged(ScTabViewShell* pScViewShell)
@@ -920,13 +946,13 @@ void ScAnyRefDlg::StateChanged( StateChangedType nStateChange )
         {
             lcl_EnableInput( FALSE );
             EnableSpreadsheets();
-            SFX_APP()->LockDispatcher( TRUE );
+            SetDispatcherLock( TRUE );
             aTimer.Start();
         }
         else
         {
             lcl_EnableInput( TRUE );
-            SFX_APP()->LockDispatcher( FALSE );         //! hier und in DoClose ?
+            SetDispatcherLock( FALSE );         //! here and in DoClose ?
         }
     }
 }

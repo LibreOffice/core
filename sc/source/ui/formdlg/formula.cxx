@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formula.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-22 18:54:44 $
+ *  last change: $Author: nn $ $Date: 2001-07-05 14:14:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -519,7 +519,7 @@ void ScFormulaDlg::FillListboxes()
 
     //pScFuncPage->GetFunctionPtr()->GrabFocus();
 
-    SFX_APP()->LockDispatcher( TRUE ); // Modal-Modus einschalten
+    SetDispatcherLock( TRUE ); // Modal-Modus einschalten
 
     /*
     aBtnBackward.Enable(FALSE);
@@ -723,7 +723,7 @@ void ScFormulaDlg::DoEnter(BOOL bOk)
     if ( !aStrItem.GetValue().Len() )
         aRetItem.SetValue( FALSE );     // FALSE = Cancel
 
-    SFX_APP()->LockDispatcher( FALSE ); // Modal-Modus ausschalten
+    SetDispatcherLock( FALSE ); // Modal-Modus ausschalten
 
     pDoc = NULL;
 

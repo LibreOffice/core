@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pvlaydlg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-14 09:21:43 $
+ *  last change: $Author: nn $ $Date: 2001-07-05 14:13:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -337,7 +337,7 @@ void __EXPORT ScPivotLayoutDlg::Init()
     aBtnTotalCol    .Check( thePivotData.bMakeTotalCol );
     aBtnTotalRow    .Check( thePivotData.bMakeTotalRow );
 
-//  SFX_APP()->LockDispatcher( TRUE ); // Modal-Modus einschalten
+//  SetDispatcherLock( TRUE ); // Modal-Modus einschalten
 
     //@BugID 54702 Enablen/Disablen nur noch in Basisklasse
     //SFX_APPWINDOW->Disable(FALSE);        //! allgemeine Methode im ScAnyRefDlg
@@ -1220,7 +1220,7 @@ IMPL_LINK( ScPivotLayoutDlg, OkHdl, OKButton *, EMPTYARG )
 
             bRefInputMode = FALSE;      // to allow deselecting when switching sheets
 
-            SFX_APP()->LockDispatcher( FALSE );
+            SetDispatcherLock( FALSE );
             SwitchToDocument();
 
             Hide();     // in case the Execute call shows a QueryBox

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabopdlg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-23 17:00:22 $
+ *  last change: $Author: nn $ $Date: 2001-07-05 14:12:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -350,7 +350,7 @@ IMPL_LINK( ScTabOpDlg, BtnHdl, PushButton*, pBtn )
                                     nMode );
             ScTabOpItem  aOutItem( SID_TABOP, &aOutParam );
 
-            SFX_APP()->LockDispatcher( FALSE );
+            SetDispatcherLock( FALSE );
             SwitchToDocument();
             GetBindings().GetDispatcher()->Execute( SID_TABOP,
                                       SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD,
