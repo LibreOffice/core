@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winproc.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: ssa $ $Date: 2002-05-13 10:49:42 $
+ *  last change: $Author: ssa $ $Date: 2002-07-03 09:08:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -930,6 +930,11 @@ static Window* ImplGetKeyInputWindow( Window* pWindow )
     Window* pChild = pSVData->maWinData.mpFirstFloat;
     if( !pChild || ( pChild->mbFloatWin && !((FloatingWindow *)pChild)->GrabsFocus() ) )
         pChild = pWindow->mpFrameData->mpFocusWin;
+    else
+    {
+        // allow floaters to forward keyinput to some member
+        pChild = pChild->GetPreferredKeyInputWindow();
+    }
 
     // no child - than no input
     if ( !pChild )
@@ -1451,8 +1456,11 @@ static void ImplHandlePaint( Window* pWindow, const Rectangle& rBoundRect )
 static void KillOwnPopups( Window* pWindow )
 {
     ImplSVData* pSVData = ImplGetSVData();
-    Window *pParent = pWindow->ImplIsFloatingWindow() ? pWindow->ImplGetWindow() : pWindow;
-    if ( pSVData->maWinData.mpFirstFloat && pParent->ImplIsRealParentPath( pSVData->maWinData.mpFirstFloat ) )
+    Window *pParent = pWindow->mpFrameWindow;
+    if( pParent->GetParent() )
+        pParent = pParent->GetParent();
+    Window *pChild = pSVData->maWinData.mpFirstFloat;
+    if ( pChild && pParent->ImplIsWindowOrChild( pChild, TRUE ) )
     {
         if ( !(pSVData->maWinData.mpFirstFloat->GetPopupModeFlags() & FLOATWIN_POPUPMODE_NOAPPFOCUSCLOSE) )
             pSVData->maWinData.mpFirstFloat->EndPopupMode( FLOATWIN_POPUPMODEEND_CANCEL | FLOATWIN_POPUPMODEEND_CLOSEALL );
@@ -1463,7 +1471,8 @@ static void KillOwnPopups( Window* pWindow )
 
 void ImplHandleResize( Window* pWindow, long nNewWidth, long nNewHeight )
 {
-    KillOwnPopups( pWindow );
+    if( pWindow->GetStyle() & (WB_MOVEABLE|WB_SIZEABLE) )
+        KillOwnPopups( pWindow );
 
     if ( (nNewWidth > 0) && (nNewHeight > 0) ||
          pWindow->ImplGetWindow()->mbAllResize )
@@ -1498,7 +1507,8 @@ void ImplHandleMove( Window* pWindow, long nNewX, long nNewY )
         pWindow->Move();
     }
 
-    KillOwnPopups( pWindow );
+    if( pWindow->GetStyle() & (WB_MOVEABLE|WB_SIZEABLE) )
+        KillOwnPopups( pWindow );
 
     if ( pWindow->mbFrame && pWindow->mpClientWindow )
         pWindow->mpClientWindow->Move();    // notify client to update geometry
