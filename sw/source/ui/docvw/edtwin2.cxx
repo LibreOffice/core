@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin2.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-14 09:55:22 $
+ *  last change: $Author: os $ $Date: 2001-09-20 12:46:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,7 +185,9 @@
 #ifndef _UITOOL_HXX //autogen
 #include <uitool.hxx>
 #endif
-
+#ifndef _VIEWOPT_HXX
+#include <viewopt.hxx>
+#endif
 #ifndef _DOCVW_HRC
 #include <docvw.hrc>
 #endif
@@ -223,8 +225,10 @@ void lcl_GetRedlineHelp( const SwRedline& rRedl, String& rTxt, BOOL bBalloon )
 
 void SwEditWin::RequestHelp(const HelpEvent &rEvt)
 {
-    BOOL bWeiter = TRUE;
     SwWrtShell &rSh = rView.GetWrtShell();
+    if(rSh.GetViewOptions()->IsPreventTips())
+        return;
+    BOOL bWeiter = TRUE;
     SET_CURR_SHELL(&rSh);
     String sTxt;
     Point aPos( PixelToLogic( ScreenToOutputPixel( rEvt.GetMousePosPixel() ) ));

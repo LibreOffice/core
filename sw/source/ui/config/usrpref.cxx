@@ -2,9 +2,9 @@
  *
  *  $RCSfile: usrpref.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: os $ $Date: 2001-06-25 14:46:03 $
+ *  last change: $Author: os $ $Date: 2001-09-20 12:45:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,25 +153,26 @@ Sequence<OUString> SwContentViewConfig::GetPropertyNames()
         "Display/DrawingControl",                   //  2
         "Display/FieldCode",                        //  3
         "Display/Note",                             //  4
-        "Highlighting/Field",                       //  5
-        "NonprintingCharacter/ParagraphEnd",        //  6
-        "NonprintingCharacter/OptionalHyphen",      //  7
-        "NonprintingCharacter/Space",               //  8
-        "NonprintingCharacter/ProtectedSpace",      //  9
-        "NonprintingCharacter/Break",               // 10
-             "Highlighting/IndexEntry",             // 11 //not in Writer/Web
-            "Highlighting/Index",                   // 12
-            "Highlighting/Footnote",                // 13
-            "NonprintingCharacter/Tab",             // 14
-            "NonprintingCharacter/HiddenText",      // 15
-            "NonprintingCharacter/HiddenParagraph", // 16
-            "Update/Link",                          // 17
-            "Update/Field",                         // 18
-            "Update/Chart"                         // 19
+        "Display/PreventTips",                      //  5
+        "Highlighting/Field",                       //  6
+        "NonprintingCharacter/ParagraphEnd",        //  7
+        "NonprintingCharacter/OptionalHyphen",      //  8
+        "NonprintingCharacter/Space",               //  9
+        "NonprintingCharacter/ProtectedSpace",      // 10
+        "NonprintingCharacter/Break",               // 11 //not in Writer/Web
+            "Highlighting/IndexEntry",              // 12
+            "Highlighting/Index",                   // 13
+            "Highlighting/Footnote",                // 14
+            "NonprintingCharacter/Tab",             // 15
+            "NonprintingCharacter/HiddenText",      // 16
+            "NonprintingCharacter/HiddenParagraph", // 17
+            "Update/Link",                          // 18
+            "Update/Field",                         // 19
+            "Update/Chart"                          //20
 
 
     };
-    const int nCount = bWeb ? 11 : 20;
+    const int nCount = bWeb ? 12 : 21;
     Sequence<OUString> aNames(nCount);
     OUString* pNames = aNames.getArray();
     for(int i = 0; i < nCount; i++)
@@ -217,23 +218,24 @@ void SwContentViewConfig::Commit()
             case  2: bVal = rParent.IsDraw();       break;// "Display/DrawingControl",
             case  3: bVal = rParent.IsFldName();    break;// "Display/FieldCode",
             case  4: bVal = rParent.IsPostIts();    break;// "Display/Note",
-            case  5: bVal = rParent.IsField();  break;// "Highlighting/Field",
-            case  6: bVal = rParent.IsParagraph(); break;// "NonprintingCharacter/ParagraphEnd",
-            case  7: bVal = rParent.IsSoftHyph(); break;// "NonprintingCharacter/OptionalHyphen",
-            case  8: bVal = rParent.IsBlank();  break;// "NonprintingCharacter/Space",
-            case  9: bVal = rParent.IsHardBlank(); break;// "NonprintingCharacter/ProtectedSpace",
-            case 10: bVal = rParent.IsLineBreak();break;// "NonprintingCharacter/Break",
-            case 11: bVal = rParent.IsTox();        break;// "Highlighting/IndexEntry",
-            case 12: bVal = rParent.IsIndexBackground(); break;// "Highlighting/Index",
-            case 13: bVal = rParent.IsFootNote(); break;// "Highlighting/Footnote",
-            case 14: bVal = rParent.IsTab();        break;// "NonprintingCharacter/Tab",
-            case 15: bVal = rParent.IsHidden(); break;// "NonprintingCharacter/HiddenText",
-            case 16: bVal = rParent.IsShowHiddenPara(); break;// "NonprintingCharacter/HiddenParagraph",
-            case 17: pValues[nProp] <<= rParent.GetUpdateLinkMode();    break;// "Update/Link",
-            case 18: bVal = rParent.IsUpdateFields(); break;// "Update/Field",
-            case 19: bVal = rParent.IsUpdateCharts(); break;// "Update/Chart"
+            case  5: bVal = rParent.IsPreventTips(); break; // "Display/PreventTips"
+            case  6: bVal = rParent.IsField();  break;// "Highlighting/Field",
+            case  7: bVal = rParent.IsParagraph(); break;// "NonprintingCharacter/ParagraphEnd",
+            case  8: bVal = rParent.IsSoftHyph(); break;// "NonprintingCharacter/OptionalHyphen",
+            case  9: bVal = rParent.IsBlank();  break;// "NonprintingCharacter/Space",
+            case 10: bVal = rParent.IsHardBlank(); break;// "NonprintingCharacter/ProtectedSpace",
+            case 11: bVal = rParent.IsLineBreak();break;// "NonprintingCharacter/Break",
+            case 12: bVal = rParent.IsTox();        break;// "Highlighting/IndexEntry",
+            case 13: bVal = rParent.IsIndexBackground(); break;// "Highlighting/Index",
+            case 14: bVal = rParent.IsFootNote(); break;// "Highlighting/Footnote",
+            case 15: bVal = rParent.IsTab();        break;// "NonprintingCharacter/Tab",
+            case 16: bVal = rParent.IsHidden(); break;// "NonprintingCharacter/HiddenText",
+            case 17: bVal = rParent.IsShowHiddenPara(); break;// "NonprintingCharacter/HiddenParagraph",
+            case 18: pValues[nProp] <<= rParent.GetUpdateLinkMode();    break;// "Update/Link",
+            case 19: bVal = rParent.IsUpdateFields(); break;// "Update/Field",
+            case 20: bVal = rParent.IsUpdateCharts(); break;// "Update/Chart"
         }
-        if(nProp != 17)
+        if(nProp != 18)
             pValues[nProp].setValue(&bVal, ::getBooleanCppuType());
     }
     PutProperties(aNames, aValues);
@@ -253,7 +255,7 @@ void SwContentViewConfig::Load()
         {
             if(pValues[nProp].hasValue())
             {
-                sal_Bool bSet = nProp != 17 ? *(sal_Bool*)pValues[nProp].getValue() : sal_False;
+                sal_Bool bSet = nProp != 18 ? *(sal_Bool*)pValues[nProp].getValue() : sal_False;
                 switch(nProp)
                 {
                     case  0: rParent.SetGraphic(bSet);  break;// "Display/GraphicObject",
@@ -261,26 +263,27 @@ void SwContentViewConfig::Load()
                     case  2: rParent.SetDraw(bSet);     break;// "Display/DrawingControl",
                     case  3: rParent.SetFldName(bSet);  break;// "Display/FieldCode",
                     case  4: rParent.SetPostIts(bSet);  break;// "Display/Note",
-                    case  5: rParent.SetField(bSet);    break;// "Highlighting/Field",
-                    case  6: rParent.SetParagraph(bSet); break;// "NonprintingCharacter/ParagraphEnd",
-                    case  7: rParent.SetSoftHyph(bSet); break;// "NonprintingCharacter/OptionalHyphen",
-                    case  8: rParent.SetBlank(bSet);    break;// "NonprintingCharacter/Space",
-                    case  9: rParent.SetHardBlank(bSet); break;// "NonprintingCharacter/ProtectedSpace",
-                    case 10: rParent.SetLineBreak(bSet);break;// "NonprintingCharacter/Break",
-                    case 11: rParent.SetTox(bSet);      break;// "Highlighting/IndexEntry",
-                    case 12: rParent.SetIndexBackground(bSet); break;// "Highlighting/Index",
-                    case 13: rParent.SetFootNote(bSet); break;// "Highlighting/Footnote",
-                    case 14: rParent.SetTab(bSet);      break;// "NonprintingCharacter/Tab",
-                    case 15: rParent.SetHidden(bSet);   break;// "NonprintingCharacter/HiddenText",
-                    case 16: rParent.SetShowHiddenPara(bSet); break;// "NonprintingCharacter/HiddenParagraph",
-                    case 17:
+                    case  5: rParent.SetPreventTips(bSet);  break;// "Display/PreventTips",
+                    case  6: rParent.SetField(bSet);    break;// "Highlighting/Field",
+                    case  7: rParent.SetParagraph(bSet); break;// "NonprintingCharacter/ParagraphEnd",
+                    case  8: rParent.SetSoftHyph(bSet); break;// "NonprintingCharacter/OptionalHyphen",
+                    case  9: rParent.SetBlank(bSet);    break;// "NonprintingCharacter/Space",
+                    case 10: rParent.SetHardBlank(bSet); break;// "NonprintingCharacter/ProtectedSpace",
+                    case 11: rParent.SetLineBreak(bSet);break;// "NonprintingCharacter/Break",
+                    case 12: rParent.SetTox(bSet);      break;// "Highlighting/IndexEntry",
+                    case 13: rParent.SetIndexBackground(bSet); break;// "Highlighting/Index",
+                    case 14: rParent.SetFootNote(bSet); break;// "Highlighting/Footnote",
+                    case 15: rParent.SetTab(bSet);      break;// "NonprintingCharacter/Tab",
+                    case 16: rParent.SetHidden(bSet);   break;// "NonprintingCharacter/HiddenText",
+                    case 17: rParent.SetShowHiddenPara(bSet); break;// "NonprintingCharacter/HiddenParagraph",
+                    case 18:
                     {
                         sal_Int32 nSet; pValues[nProp] >>= nSet;
                         rParent.SetUpdateLinkMode(nSet, TRUE);
                     }
                     break;// "Update/Link",
-                    case 18: rParent.SetUpdateFields(bSet, TRUE); break;// "Update/Field",
-                    case 19: rParent.SetUpdateCharts(bSet, TRUE); break;// "Update/Chart"
+                    case 19: rParent.SetUpdateFields(bSet, TRUE); break;// "Update/Field",
+                    case 20: rParent.SetUpdateCharts(bSet, TRUE); break;// "Update/Chart"
                 }
             }
         }

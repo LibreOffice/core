@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewopt.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-09-28 15:21:23 $
+ *  last change: $Author: os $ $Date: 2001-09-20 12:43:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,7 +139,7 @@ class SwDocShell;
 #define VIEWOPT_2_KEEPASPECTRATIO   0x00020000L
 #define VIEWOPT_2_GRFKEEPZOOM       0x00040000L
 #define VIEWOPT_2_EXECHYPERLINKS    0x00080000L
-#define VIEWOPT_2_RESERVED2         0x00100000L
+#define VIEWOPT_2_PREVENT_TIPS      0x00100000L
 #define VIEWOPT_2_RESERVED3         0x00200000L
 #define VIEWOPT_2_RESERVED4         0x00400000L
 #define VIEWOPT_2_PRTFORMAT         0x00800000L
@@ -499,6 +499,8 @@ public:
         { return nUIOptions & VIEWOPT_2_GRFKEEPZOOM ? TRUE : FALSE;   }
     BOOL    IsExecHyperlinks() const
         { return nUIOptions & VIEWOPT_2_EXECHYPERLINKS ? TRUE : FALSE; }
+    BOOL    IsPreventTips() const
+        { return nUIOptions & VIEWOPT_2_PREVENT_TIPS ? TRUE : FALSE; }
     BOOL    IsPrtFormat() const
         { return nUIOptions & VIEWOPT_2_PRTFORMAT ? TRUE : FALSE; }
 
@@ -520,6 +522,8 @@ public:
         { b ? (nUIOptions |= VIEWOPT_2_GRFKEEPZOOM ) : ( nUIOptions &= ~VIEWOPT_2_GRFKEEPZOOM); }
     void SetExecHyperlinks( BOOL b)
         { b ? (nUIOptions |= VIEWOPT_2_EXECHYPERLINKS) : (nUIOptions &= ~VIEWOPT_2_EXECHYPERLINKS); }
+    void SetPreventTips( BOOL b)
+        { b ? (nUIOptions |= VIEWOPT_2_PREVENT_TIPS) : (nUIOptions &= ~VIEWOPT_2_PREVENT_TIPS); }
     void SetPrtFormat( BOOL b)
         { b ? (nUIOptions |= VIEWOPT_2_PRTFORMAT) : (nUIOptions &= ~VIEWOPT_2_PRTFORMAT); }
 

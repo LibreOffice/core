@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomod.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mtg $ $Date: 2001-09-13 11:46:25 $
+ *  last change: $Author: os $ $Date: 2001-09-20 12:49:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,7 +165,8 @@ enum SwViewSettingsPropertyHandles
     HANDLE_VIEWSET_SMOOTH_SCROLLING,
     HANDLE_VIEWSET_SOLID_MARK_HANDLES,
     HANDLE_VIEWSET_ZOOM_TYPE,
-    HANDLE_VIEWSET_ZOOM
+    HANDLE_VIEWSET_ZOOM,
+    HANDLE_VIEWSET_PREVENT_TIPS
 };
 enum SwPrintSettingsPropertyHandles
 {
@@ -189,7 +190,8 @@ static ChainablePropertySetInfo * lcl_createViewSettingsInfo()
 {
     static PropertyInfo aViewSettingsMap_Impl[] =
     {
-        { RTL_CONSTASCII_STRINGPARAM ( "ShowAnnotations" ),     HANDLE_VIEWSET_ANNOTATIONS          , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
+        { RTL_CONSTASCII_STRINGPARAM ( "PreventHelpTips" ),     HANDLE_VIEWSET_PREVENT_TIPS         , CPPUTYPE_BOOLEAN, PROPERTY_NONE, 0},
+        { RTL_CONSTASCII_STRINGPARAM ( "ShowAnnotations" ),     HANDLE_VIEWSET_ANNOTATIONS          , CPPUTYPE_BOOLEAN, PROPERTY_NONE, 0},
         { RTL_CONSTASCII_STRINGPARAM ( "ShowBreaks"),           HANDLE_VIEWSET_BREAKS               , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
         { RTL_CONSTASCII_STRINGPARAM ( "ShowDrawings"),         HANDLE_VIEWSET_DRAWINGS             , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
         { RTL_CONSTASCII_STRINGPARAM ( "ShowFieldCommands"),    HANDLE_VIEWSET_FIELD_COMMANDS       , CPPUTYPE_BOOLEAN, PROPERTY_NONE,  0},
@@ -743,6 +745,8 @@ void SwXViewSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, c
         case  HANDLE_VIEWSET_TEXT_BOUNDARIES       :   mpViewOption->SetSubsLines(bVal);    break;
         case  HANDLE_VIEWSET_SMOOTH_SCROLLING      :   mpViewOption->SetSmoothScroll(bVal); break;
         case  HANDLE_VIEWSET_SOLID_MARK_HANDLES    :   mpViewOption->SetSolidMarkHdl(bVal); break;
+        case  HANDLE_VIEWSET_PREVENT_TIPS :            mpViewOption->SetPreventTips(bVal); break;
+        break;
         case  HANDLE_VIEWSET_ZOOM                   :
         {
             sal_Int16 nZoom = *(sal_Int16*)rValue.getValue();
@@ -770,15 +774,9 @@ void SwXViewSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, c
                 case /*DocumentZoomType_BY_VALUE    */  3:
                     eZoom = SVX_ZOOM_PERCENT;
                 break;
-#if SUPD<631
-                case 4:
-                    eZoom = (SvxZoomType)4;
-                break;
-#else
                 case /*DocumentZoomType_PAGE_WIDTH_EXACT */ 4:
                     eZoom = SVX_ZOOM_PAGEWIDTH_NOBORDER;
                 break;
-#endif
             }
             if(eZoom < USHRT_MAX)
             {
@@ -855,6 +853,7 @@ void SwXViewSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, :
         case  HANDLE_VIEWSET_TEXT_BOUNDARIES       :   bBoolVal = mpConstViewOption->IsSubsLines(); break;
         case  HANDLE_VIEWSET_SMOOTH_SCROLLING      :   bBoolVal = mpConstViewOption->IsSmoothScroll();  break;
         case  HANDLE_VIEWSET_SOLID_MARK_HANDLES    :   bBoolVal = mpConstViewOption->IsSolidMarkHdl();  break;
+        case  HANDLE_VIEWSET_PREVENT_TIPS :            bBoolVal = mpConstViewOption->IsPreventTips(); break;
         case  HANDLE_VIEWSET_ZOOM                   :
                 bBool = FALSE;
                 rValue <<= (sal_Int16)mpConstViewOption->GetZoom();
