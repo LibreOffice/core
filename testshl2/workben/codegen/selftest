@@ -35,6 +35,8 @@ echo
 
 if ( -e ../../${INPATH}/bin/testshl2 ) then
     ../../${INPATH}/bin/testshl2 -jobonly test.job    
+
+    echo 
     ../../${INPATH}/bin/testshl2 ../../${INPATH}/lib/libtest.so
 else
     echo "testshl2 doesn't exist, test canceled."
