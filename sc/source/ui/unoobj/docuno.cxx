@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docuno.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-23 11:39:50 $
+ *  last change: $Author: nn $ $Date: 2001-12-19 11:39:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,7 @@
 #include "docoptio.hxx"
 #include "unoguard.hxx"
 #include "unonames.hxx"
+#include "shapeuno.hxx"
 
 using namespace com::sun::star;
 
@@ -1033,6 +1034,17 @@ uno::Reference<uno::XInterface> SAL_CALL ScModelObj::createInstance(
         //  da wird dann 'ne Exception geworfen, wenn's nicht passt...
 
         xRet = SvxFmMSFactory::createInstance(aServiceSpecifier);
+
+        //  #96117# if the drawing factory created a shape, a ScShapeObj has to be used
+        //  to support own properties like ImageMap:
+
+        uno::Reference<drawing::XShape> xShape( xRet, uno::UNO_QUERY );
+        if ( xShape.is() )
+        {
+            xRet.clear();               // for aggregation, xShape must be the object's only ref
+            new ScShapeObj( xShape );   // aggregates object and modifies xShape
+            xRet = xShape;
+        }
     }
     return xRet;
 }
