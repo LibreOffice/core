@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docst.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:18:06 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:02:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,12 @@
 #include <svx/htmlcfg.hxx>
 #ifndef _SWSTYLENAMEMAPPER_HXX
 #include <SwStyleNameMapper.hxx>
+#endif
+#ifndef _UNDOBJ_HXX
+#include <undobj.hxx>
+#endif
+#ifndef _SWUNDO_HXX
+#include <swundo.hxx>
 #endif
 
 #include "view.hxx"
@@ -731,7 +737,13 @@ USHORT SwDocShell::Edit( const String &rName, const String &rParent, USHORT nFam
         else
         {
             if( bNew )
-                pBasePool->Erase( &aTmp );
+            {
+                // #116530#
+                //pBasePool->Erase( &aTmp );
+                GetWrtShell()->Undo(0, 1);
+                pDoc->ClearRedo();
+            }
+
             if( !bModified )
                 pDoc->ResetModified();
             delete pDlg;
@@ -949,10 +961,16 @@ USHORT SwDocShell::UpdateStyle(const String &rName, USHORT nFamily, SwWrtShell* 
             if(pColl && !pColl->IsDefault())
             {
                 GetWrtShell()->StartAllAction();
+
+                SwRewriter aRewriter;
+                aRewriter.AddRule(UNDO_ARG1, pColl->GetName());
+
+                GetWrtShell()->StartUndo(UNDO_INSFMTATTR, &aRewriter);
                 GetWrtShell()->FillByEx(pColl);
                     // Vorlage auch anwenden, um harte Attributierung
                     // zu entfernen
                 GetWrtShell()->SetTxtFmtColl( pColl );
+                GetWrtShell()->EndUndo(UNDO_INSFMTATTR);
                 GetWrtShell()->EndAllAction();
             }
             break;
