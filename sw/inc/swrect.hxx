@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swrect.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ama $ $Date: 2001-12-13 12:56:37 $
+ *  last change: $Author: kz $ $Date: 2004-03-23 11:23:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,7 +155,6 @@ public:
     friend SvStream &operator<<( SvStream &rStream, const SwRect &rRect );
 
 
-#ifdef VERTICAL_LAYOUT
     void _Top(      const long nTop );
     void _Bottom(   const long nBottom );
     void _Left(     const long nLeft );
@@ -200,13 +199,11 @@ public:
     BOOL OverStepBottom( long ) const;
     BOOL OverStepTop( long ) const;
     BOOL OverStepRight( long ) const;
-#endif
 };
 
 // Implementation in in swrect.cxx
 extern SvStream &operator<<( SvStream &rStream, const SwRect &rRect );
 
-#ifdef VERTICAL_LAYOUT
 typedef void (SwRect:: *SwRectSet)( const long nNew );
 typedef long (SwRect:: *SwRectGet)() const;
 typedef const Point (SwRect:: *SwRectPoint)() const;
@@ -215,7 +212,6 @@ typedef BOOL (SwRect:: *SwRectMax)( long ) const;
 typedef long (SwRect:: *SwRectDist)( long ) const;
 typedef void (SwRect:: *SwRectSetTwice)( long, long );
 typedef void (SwRect:: *SwRectSetPos)( const Point& );
-#endif
 
 //---------------------------------- Set-Methoden
 inline void SwRect::Chg( const Point& rNP, const Size &rNS )
