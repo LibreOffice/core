@@ -2,9 +2,9 @@
  *
  *  $RCSfile: java_remote_bridge.java,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:27:52 $
+ *  last change: $Author: kr $ $Date: 2000-09-28 11:44:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,7 +123,7 @@ import com.sun.star.uno.IQueryInterface;
  * The protocol to used is passed by name, the bridge
  * then looks for it under <code>com.sun.star.lib.uno.protocols</code>.
  * <p>
- * @version     $Revision: 1.1.1.1 $ $ $Date: 2000-09-18 15:27:52 $
+ * @version     $Revision: 1.2 $ $ $Date: 2000-09-28 11:44:34 $
  * @author      Kay Ramme
  * @see         com.sun.star.lib.uno.environments.remote.IProtocol
  * @since       UDK1.0
@@ -435,7 +435,7 @@ public class java_remote_bridge implements IBridge, IReceiver, IRequester, XBrid
     private void notifyStableListeners() {
         EventObject eventObject = new EventObject(this);
 
-        Enumeration elements = _listeners.elements();
+        Enumeration elements = _stableListeners.elements();
         while(elements.hasMoreElements()) {
             IStableListener iStableListener = (IStableListener)elements.nextElement();
 
