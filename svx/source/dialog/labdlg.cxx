@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labdlg.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: iha $ $Date: 2002-09-25 16:25:52 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 14:04:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,10 @@
 #include <sfx2/module.hxx>
 #endif
 #pragma hdrstop
+
+#ifndef _SVX_SWPOSSIZETABPAGE_HXX
+#include <swpossizetabpage.hxx>
+#endif
 
 #define _SVX_LABDLG_CXX
 
@@ -624,8 +628,19 @@ SvxCaptionTabDialog::SvxCaptionTabDialog(Window* pParent, const SdrView* pSdrVie
 
     DBG_ASSERT( pView, "Keine gueltige View Uebergeben!" );
 
-    AddTabPage( RID_SVXPAGE_POSITION_SIZE, SvxPositionSizeTabPage::Create,
-                            SvxPositionSizeTabPage::GetRanges );
+    //different positioning page in Writer
+    if(nAnchorCtrls & 0x00ff )
+    {
+        AddTabPage( RID_SVXPAGE_SWPOSSIZE, SvxSwPosSizeTabPage::Create,
+                                SvxSwPosSizeTabPage::GetRanges );
+        RemoveTabPage( RID_SVXPAGE_POSITION_SIZE);
+    }
+    else
+    {
+        AddTabPage( RID_SVXPAGE_POSITION_SIZE, SvxPositionSizeTabPage::Create,
+                                SvxPositionSizeTabPage::GetRanges );
+        RemoveTabPage( RID_SVXPAGE_SWPOSSIZE );
+    }
     AddTabPage( RID_SVXPAGE_CAPTION, SvxCaptionTabPage::Create,
                             SvxCaptionTabPage::GetRanges );
 }
@@ -650,9 +665,13 @@ void SvxCaptionTabDialog::PageCreated( USHORT nId, SfxTabPage &rPage )
 
             if( nAnchorCtrls & SVX_OBJ_NOPROTECT )
                 ( (SvxPositionSizeTabPage&) rPage ).DisableProtect();
-
-            if(nAnchorCtrls & 0x00ff )
-                ( (SvxPositionSizeTabPage&) rPage ).ShowAnchorCtrls(nAnchorCtrls);
+        break;
+        case RID_SVXPAGE_SWPOSSIZE :
+        {
+            SvxSwPosSizeTabPage& rSwPage = static_cast<SvxSwPosSizeTabPage&>(rPage);
+            rSwPage.EnableAnchorTypes(nAnchorCtrls);
+            rSwPage.SetValidateFramePosLink( aValidateLink );
+        }
         break;
 
         case RID_SVXPAGE_CAPTION:
@@ -660,6 +679,13 @@ void SvxCaptionTabDialog::PageCreated( USHORT nId, SfxTabPage &rPage )
             ( (SvxCaptionTabPage&) rPage ).Construct();
         break;
     }
+}
+/*-- 05.03.2004 13:54:26---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SvxCaptionTabDialog::SetValidateFramePosLink( const Link& rLink )
+{
+    aValidateLink = rLink;
 }
 
 
