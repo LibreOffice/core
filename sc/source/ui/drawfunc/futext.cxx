@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futext.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 13:54:39 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 18:00:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -239,12 +239,7 @@ BOOL __EXPORT FuText::MouseButtonDown(const MouseEvent& rMEvt)
                 BOOL bVertical = ( nSlotID == SID_DRAW_TEXT_VERTICAL );
                 OutlinerParaObject* pOPO = pObj->GetOutlinerParaObject();
                 if ( pOPO )
-                {
-                    if ( nSlotID == SID_DRAW_NOTEEDIT )
-                        pOPO->SetVertical( FALSE );         // notes are always horizontal
-                    else
-                        bVertical = pOPO->IsVertical();     // content wins
-                }
+                    bVertical = pOPO->IsVertical();     // content wins
                 pO->SetVertical( bVertical );
 
                 //!??   ohne uebergebenen Outliner stimmen die Defaults nicht ???!?
@@ -360,6 +355,7 @@ BOOL __EXPORT FuText::MouseButtonDown(const MouseEvent& rMEvt)
             }
         }
     }
+
 
     if (!bIsInDragMode)
     {
@@ -835,12 +831,7 @@ void FuText::SetInEditMode(SdrObject* pObj, const Point* pMousePixel,
                 BOOL bVertical = ( nSlotID == SID_DRAW_TEXT_VERTICAL );
                 OutlinerParaObject* pOPO = pObj->GetOutlinerParaObject();
                 if ( pOPO )
-                {
-                    if ( nSlotID == SID_DRAW_NOTEEDIT )
-                        pOPO->SetVertical( FALSE );         // notes are always horizontal
-                    else
-                        bVertical = pOPO->IsVertical();     // content wins
-                }
+                    bVertical = pOPO->IsVertical();     // content wins
                 pO->SetVertical( bVertical );
 
                 //!??   ohne uebergebenen Outliner stimmen die Defaults nicht ???!?
