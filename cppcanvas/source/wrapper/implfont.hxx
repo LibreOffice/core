@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implfont.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 17:00:16 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 13:30:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,8 +70,8 @@
 #include <boost/shared_ptr.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_RENDERING_XCANVAS_HPP__
-#include <drafts/com/sun/star/rendering/XCanvas.hpp>
+#ifndef _COM_SUN_STAR_RENDERING_XCANVAS_HPP__
+#include <com/sun/star/rendering/XCanvas.hpp>
 #endif
 
 #ifndef _CPPCANVAS_FONT_HXX
@@ -83,10 +83,10 @@ namespace rtl
     class OUString;
 }
 
-namespace drafts { namespace com { namespace sun { namespace star { namespace rendering
+namespace com { namespace sun { namespace star { namespace rendering
 {
     class  XCanvasFont;
-} } } } }
+} } } }
 
 /* Definition of Font class */
 
@@ -100,7 +100,7 @@ namespace cppcanvas
         {
         public:
             ImplFont( const ::com::sun::star::uno::Reference<
-                          ::drafts::com::sun::star::rendering::XCanvas >& rCanvas,
+                          ::com::sun::star::rendering::XCanvas >& rCanvas,
                       const ::rtl::OUString& rFontName,
                       const double& rCellSize );
 
@@ -110,11 +110,11 @@ namespace cppcanvas
             virtual double          getCellSize() const;
 
             virtual ::com::sun::star::uno::Reference<
-                ::drafts::com::sun::star::rendering::XCanvasFont > getUNOFont() const;
+                ::com::sun::star::rendering::XCanvasFont > getUNOFont() const;
 
         private:
-            ::com::sun::star::uno::Reference< ::drafts::com::sun::star::rendering::XCanvas >        mxCanvas;
-            ::com::sun::star::uno::Reference< ::drafts::com::sun::star::rendering::XCanvasFont >    mxFont;
+            ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCanvas >        mxCanvas;
+            ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XCanvasFont >    mxFont;
         };
     }
 }
