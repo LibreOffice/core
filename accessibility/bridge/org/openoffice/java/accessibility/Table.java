@@ -85,16 +85,6 @@ public class Table extends DescendantManager implements javax.accessibility.Acce
                 if (unoAccessible != null) {
                     // FIXME: have to handle non transient objects here ..
                     descendant = new TableCell(unoAccessible);
-                    if (Build.DEBUG) {
-                        try {
-                            if (Build.DEBUG) {
-                                System.err.println("[Table] retrieved active descendant event: new descendant is " +
-                                    unoAccessible.getAccessibleContext().getAccessibleName());
-                            }
-                        } catch (java.lang.NullPointerException e) {
-                            System.err.println("*** ERROR *** new active descendant not accessible");
-                        }
-                    }
                 }
             }
             setActiveDescendant(descendant);
@@ -169,35 +159,12 @@ public class Table extends DescendantManager implements javax.accessibility.Acce
         return new AccessibleTableListener();
     }
 
-    /** Returns the AccessibleContext associated with this object */
-    public javax.accessibility.AccessibleContext getAccessibleContext() {
-        if (accessibleContext == null) {
-            try {
-                unoAccessibleContext = unoAccessible.getAccessibleContext();
-                unoAccessibleSelection = (XAccessibleSelection) UnoRuntime.queryInterface(
-                    XAccessibleSelection.class, unoAccessibleContext);
-                accessibleContext = new AccessibleTable();
-            } catch (java.lang.NullPointerException e) {
-                if (Build.DEBUG) {
-                    System.err.println("NullPointerException caught: " + e.getMessage());
-                }
-            } catch (com.sun.star.uno.RuntimeException e) {
-                if (Build.DEBUG) {
-                    System.err.println("RuntimeException caught: " + e.getMessage());
-                }
-            }
-        }
-        return accessibleContext;
+    /** Creates the AccessibleContext associated with this object */
+    public javax.accessibility.AccessibleContext createAccessibleContext() {
+        return new AccessibleTable();
     }
 
     protected class AccessibleTable extends AccessibleDescendantManager {
-
-        /**
-        * Though the class is abstract, this should be called by all sub-classes
-        */
-        protected AccessibleTable() {
-            super();
-        }
 
         /** Gets the role of this object */
         public javax.accessibility.AccessibleRole getAccessibleRole() {
@@ -282,7 +249,11 @@ public class Table extends DescendantManager implements javax.accessibility.Acce
                 try {
                     XAccessibleContext xAccessibleContext = unoAccessible.getAccessibleContext();
                     if (xAccessibleContext != null) {
-                        accessibleContext = new AccessibleTableCell(xAccessibleContext);
+                                            javax.accessibility.AccessibleContext ac = new AccessibleTableCell(xAccessibleContext);
+                                            if (ac != null) {
+                                                ac.setAccessibleParent(Table.this);
+                                                accessibleContext = ac;
+                                            }
                     }
                 } catch (com.sun.star.uno.RuntimeException e) {
                 }
