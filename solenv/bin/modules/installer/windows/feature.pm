@@ -2,9 +2,6 @@
 #
 #   $RCSfile: feature.pm,v $
 #
-#   $Revision: 1.4 $
-#
-#   last change: $Author: obo $ $Date: 2004-10-18 13:54:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -252,7 +249,8 @@ sub add_language_pack_feature
         $feature{'feature_parent'} = "";
         $feature{'Title'} = get_localized_string($gid, $onelanguage, $translationfile, "Name");
         $feature{'Description'} = get_localized_string($gid, $onelanguage, $translationfile, "Description");
-        $feature{'Display'} = "1";
+        if ( $installer::globals::ismultilingual ) { $feature{'Display'} = "1"; }
+        else { $feature{'Display'} = "1"; }
         $feature{'Level'} =  "20";
         $feature{'Directory_'} =  "INSTALLLOCATION";
         $feature{'Attributes'} =  "8";
@@ -263,6 +261,40 @@ sub add_language_pack_feature
 
         push(@{$featuretableref}, $oneline);
 
+        # $onelanguage = "de"
+        # $gid = "gm_Langpack_de"
+        # -> only include if this is the language specific language name
+        if ( $gid =~ /\_$onelanguage\s*$/) { push(@{$installer::globals::languagenames}, $feature{'Title'}); }  # saving all titles in the global variable!
+    }
+
+}
+
+#################################################################################
+# Replacing one variable in one files
+#################################################################################
+
+sub replace_one_variable
+{
+    my ($translationfile, $variable, $searchstring) = @_;
+
+    for ( my $i = 0; $i <= $#{$translationfile}; $i++ )
+    {
+        ${$translationfile}[$i] =~ s/\%$searchstring/$variable/g;
+    }
+}
+
+#################################################################################
+# Replacing the variables in the feature names and descriptions
+#################################################################################
+
+sub replace_variables
+{
+    my ($translationfile, $variableshashref) = @_;
+
+    foreach $key (keys %{$variableshashref})
+    {
+        my $value = $variableshashref->{$key};
+        replace_one_variable($translationfile, $value, $key);
     }
 }
 
@@ -274,10 +306,14 @@ sub add_language_pack_feature
 
 sub create_feature_table
 {
-    my ($modulesref, $basedir, $languagesarrayref) = @_;
+    my ($modulesref, $basedir, $languagesarrayref, $allvariableshashref) = @_;
 
     my $translationfile = "";
-    if ( $installer::globals::languagepack ) { $translationfile = installer::files::read_file($installer::globals::idtlanguagepath . $installer::globals::separator . $installer::globals::langpackfilename); }
+    if ( $installer::globals::languagepack )
+    {
+        $translationfile = installer::files::read_file($installer::globals::idtlanguagepath . $installer::globals::separator . $installer::globals::langpackfilename);
+        replace_variables($translationfile, $allvariableshashref);
+    }
 
     for ( my $m = 0; $m <= $#{$languagesarrayref}; $m++ )
     {
@@ -327,6 +363,7 @@ sub create_feature_table
         $infoline = "Created idt file: $featuretablename\n";
         push(@installer::globals::logfileinfo, $infoline);
     }
+
 }
 
 1;
