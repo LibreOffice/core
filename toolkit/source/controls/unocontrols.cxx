@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrols.cxx,v $
  *
- *  $Revision: 1.69 $
+ *  $Revision: 1.70 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 16:47:38 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 14:11:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -808,7 +808,7 @@ UnoControlButtonModel::UnoControlButtonModel()
 
     osl_incrementInterlockedCount( &m_refCount );
     {
-        setFastPropertyValue_NoBroadcast( BASEPROPERTY_IMAGEALIGN, ImplGetDefaultValue( BASEPROPERTY_IMAGEALIGN ) );
+        setFastPropertyValue_NoBroadcast( BASEPROPERTY_IMAGEPOSITION, ImplGetDefaultValue( BASEPROPERTY_IMAGEPOSITION ) );
         // this ensures that our ImagePosition is consistent with our ImageAlign property (since both
         // defaults are not per se consistent), since both are coupled in setFastPropertyValue_NoBroadcast
     }
