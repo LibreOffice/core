@@ -20213,3 +20213,9 @@ writeInfo
 ?supportsService@SvxUnoDrawPagesAccess@@UAAEABVOUString@rtl@@@Z
 ?supportsService@SvxUnoDrawingModel@@UAAEABVOUString@rtl@@@Z
 ?unlockControllers@SvxUnoDrawingModel@@UAAXXZ
+??0SvxCharBasePage@@QAE@PAVWindow@@ABVResId@@ABVSfxItemSet@@GG@Z
+??1SvxCharBasePage@@UAE@XZ
+?SetFontWidthScale@SvxCharBasePage@@QAEXABVSfxItemSet@@@Z
+?GetFont@SvxFontPrevWindow@@QAEAAVSvxFont@@XZ
+?GetFont@SvxFontPrevWindow@@QBEABVSvxFont@@XZ
+?SetFontWidthScale@SvxFontPrevWindow@@QAEXG@Z
