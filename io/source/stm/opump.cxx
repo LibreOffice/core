@@ -2,9 +2,9 @@
  *
  *  $RCSfile: opump.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jbu $ $Date: 2000-12-04 12:42:47 $
+ *  last change: $Author: jbu $ $Date: 2001-01-25 14:04:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,7 +134,8 @@ namespace io_stm {
 
     };
 
-Pump::Pump() : m_aThread( NULL )
+Pump::Pump()
+    : m_aThread( NULL )
 {
 }
 
@@ -170,12 +171,26 @@ void Pump::close()
 
     if( m_xInput.is() )
     {
-        m_xInput->closeInput();
+        try
+        {
+            m_xInput->closeInput();
+        }
+        catch( Exception &e )
+        {
+            // go down calm
+        }
         m_xInput = Reference< XInputStream >();
     }
     if( m_xOutput.is() )
     {
-        m_xOutput->closeOutput();
+        try
+        {
+            m_xOutput->closeOutput();
+        }
+        catch( Exception &e )
+        {
+            // go down calm
+        }
         m_xOutput = Reference< XOutputStream >();
     }
     m_aListeners = list< Reference< XStreamListener > >();
@@ -349,18 +364,27 @@ void Pump::start() throw()
 
 void Pump::terminate() throw()
 {
+    // abort !
+    close();
+
+    // wait for the worker to die
     osl_joinWithThread( m_aThread );
 
     Guard< Mutex > aGuard( m_aMutex );
 
-    // listeners may remove themselves when called this way
+    // notify listeners
     list< Reference< XStreamListener > > aLocalListeners = m_aListeners;
-    close();
-
     for( list< Reference< XStreamListener > >::iterator it = aLocalListeners.begin();
          it != aLocalListeners.end(); ++it )
     {
-        (*it)->terminated();
+        try
+        {
+            (*it)->terminated();
+        }
+        catch( RuntimeException & e )
+        {
+            // simply ignore, maybe a bridge has crashed, notfiy other listeners as well
+        }
     }
 }
 
