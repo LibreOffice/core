@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AppDetailView.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-22 12:00:28 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 12:32:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,8 +88,14 @@
 #ifndef _DRAFTS_COM_SUN_STAR_UI_IMAGETYPE_HPP_
 #include <drafts/com/sun/star/ui/ImageType.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDBCX_XVIEWSSUPPLIER_HPP_
+#include <com/sun/star/sdbcx/XViewsSupplier.hpp>
+#endif
 #ifndef _COM_SUN_STAR_GRAPHIC_XGRAPHIC_HPP_
 #include <com/sun/star/graphic/XGraphic.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_URL_HPP_
+#include <com/sun/star/util/URL.hpp>
 #endif
 #ifndef _DBAUI_LISTVIEWITEMS_HXX_
 #include "listviewitems.hxx"
@@ -123,6 +129,7 @@
 using namespace ::dbaui;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sdbc;
+using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::graphic;
@@ -131,7 +138,7 @@ using namespace ::com::sun::star::container;
 
 #define SPACEBETWEENENTRIES     4
 
-OCreationList::OCreationList(OTasksWindow* _pParent) : SvTreeListBox(_pParent,WB_TABSTOP)
+OCreationList::OCreationList(OTasksWindow* _pParent) : SvTreeListBox(_pParent,WB_TABSTOP|WB_HASBUTTONSATROOT|WB_HASBUTTONS)
 ,m_pTaskWindow(_pParent)
 {
     USHORT nSize = SPACEBETWEENENTRIES;
@@ -291,6 +298,7 @@ void OTasksWindow::fillCreationNew( const TResourceStruct& _rList )
     }
 
     m_aCreation.Show();
+    m_aCreation.SelectAll(FALSE);
     m_aHelpText.Show();
     m_aDescription.Show();
     m_aFL.Show();
@@ -386,7 +394,11 @@ void OApplicationDetailView::createTablesPage(const Reference< XConnection>& _xC
     aList.reserve(4);
     aList.push_back( TResourceStruct::value_type(ModuleRes(RID_STR_NEW_TABLE),TResourcePair(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBNewTable")),RID_STR_TABLES_HELP_TEXT_DESIGN)));
     aList.push_back( TResourceStruct::value_type(ModuleRes(RID_STR_NEW_TABLE_AUTO),TResourcePair(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBNewTableAutoPilot")),RID_STR_TABLES_HELP_TEXT_WIZARD)));
-    aList.push_back( TResourceStruct::value_type(ModuleRes(RID_STR_NEW_VIEW),TResourcePair(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBNewView")),RID_STR_VIEWS_HELP_TEXT_DESIGN)));
+
+    ::com::sun::star::util::URL aUrl;
+    aUrl.Complete = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".uno:DBNewView"));
+    if ( getBorderWin()->getView()->getCommandController()->isCommandEnabled(aUrl) )
+        aList.push_back( TResourceStruct::value_type(ModuleRes(RID_STR_NEW_VIEW),TResourcePair(aUrl.Complete,RID_STR_VIEWS_HELP_TEXT_DESIGN)));
     //  aList.push_back( TResourceStruct::value_type(ModuleRes(RID_STR_NEW_VIEW_AUTO),TResourcePair(ID_NEW_VIEW_DESIGN_AUTO_PILOT,RID_STR_VIEWS_HELP_TEXT_WIZARD)));
 
     static_cast<OTasksWindow*>(m_aTasks.getChildWindow())->fillCreationNew( aList );
