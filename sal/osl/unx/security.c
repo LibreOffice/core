@@ -2,9 +2,9 @@
  *
  *  $RCSfile: security.c,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mfe $ $Date: 2000-10-31 15:29:54 $
+ *  last change: $Author: mfe $ $Date: 2001-02-26 16:17:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -759,10 +759,12 @@ osl_psz_loginUser(const sal_Char* pszUserName, const sal_Char* pszPasswd,
     {
         /* only root is able to read the /etc/shadow passwd,
          * a normal user even can't read his own encrypted passwd */
-        sal_Char     buffer[ 1024 ] = "";
+        sal_Char     buffer[ 1024 ];
         struct spwd  result_buf;
         struct spwd *pShadowPasswd=0;
         int nRet=0;
+
+        buffer[0] = '\0';
 
         /* mfe: here we try to get the shadowpassword though it's used later */
         nRet=getspnam_r ( pszUserName, &result_buf, buffer, sizeof(buffer), &pShadowPasswd);
@@ -852,9 +854,11 @@ osl_psz_loginUser(const sal_Char* pszUserName, const sal_Char* pszPasswd,
 
     struct passwd* pPasswd;
     struct spwd    spwdStruct;
-    sal_Char           buffer[PASSWD_BUFFER_SIZE] = "";
+    sal_Char           buffer[PASSWD_BUFFER_SIZE];
 
     oslSecurityImpl* pSecImpl = NULL;
+
+    buffer[0] = '\0';
 
     if ((pszUserName == NULL) || (pszPasswd == NULL) || (pSecurity == NULL))
         return osl_Security_E_Unknown;
@@ -945,7 +949,9 @@ oslSecurityError SAL_CALL osl_psz_loginUserOnFileServer( const sal_Char*  pszUse
 sal_Bool SAL_CALL osl_getUserIdent(oslSecurity Security, rtl_uString **ustrIdent)
 {
     sal_Bool bRet=sal_False;
-    sal_Char pszIdent[1024] = "";
+    sal_Char pszIdent[1024];
+
+    pszIdent[0] = '\0';
 
     bRet = osl_psz_getUserIdent(Security,pszIdent,sizeof(pszIdent));
 
@@ -957,9 +963,12 @@ sal_Bool SAL_CALL osl_getUserIdent(oslSecurity Security, rtl_uString **ustrIdent
 
 sal_Bool SAL_CALL osl_psz_getUserIdent(oslSecurity Security, sal_Char *pszIdent, sal_uInt32 nMax)
 {
-    sal_Char buffer[32] = "";
+    sal_Char buffer[32];
 
     oslSecurityImpl *pSecImpl = (oslSecurityImpl *)Security;
+
+    buffer[0] = '\0';
+
 
     if (pSecImpl == NULL)
         return sal_False;
@@ -974,7 +983,9 @@ sal_Bool SAL_CALL osl_psz_getUserIdent(oslSecurity Security, sal_Char *pszIdent,
 sal_Bool SAL_CALL osl_getUserName(oslSecurity Security, rtl_uString **ustrName)
 {
     sal_Bool bRet=sal_False;
-    sal_Char pszName[1024] = "";
+    sal_Char pszName[1024];
+
+    pszName[0] = '\0';
 
     bRet = osl_psz_getUserName(Security,pszName,sizeof(pszName));
 
@@ -1000,8 +1011,11 @@ sal_Bool SAL_CALL osl_psz_getUserName(oslSecurity Security, sal_Char* pszName, s
 sal_Bool SAL_CALL osl_getHomeDir(oslSecurity Security, rtl_uString **ustrDirectory)
 {
     sal_Bool bRet=sal_False;
-    sal_Char pszDirectory[PATH_MAX] = "";
-    sal_Char pszUncPath[PATH_MAX+4] = "";
+    sal_Char pszDirectory[PATH_MAX];
+    sal_Char pszUncPath[PATH_MAX+4];
+
+    pszDirectory[0] = '\0';
+    pszUncPath[0] = '\0';
 
     bRet = osl_psz_getHomeDir(Security,pszDirectory,sizeof(pszDirectory));
 
@@ -1046,8 +1060,11 @@ sal_Bool SAL_CALL osl_psz_getHomeDir(oslSecurity Security, sal_Char* pszDirector
 sal_Bool SAL_CALL osl_getConfigDir(oslSecurity Security, rtl_uString **ustrDirectory)
 {
     sal_Bool bRet = sal_False;
-    sal_Char pszDirectory[PATH_MAX] = "";
-    sal_Char pszUncPath[PATH_MAX+4] = "";
+    sal_Char pszDirectory[PATH_MAX];
+    sal_Char pszUncPath[PATH_MAX+4];
+
+    pszDirectory[0] = '\0';
+    pszUncPath[0] = '\0';
 
     bRet = osl_psz_getConfigDir(Security,pszDirectory,sizeof(pszDirectory));
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: process.c,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mfe $ $Date: 2001-02-20 13:20:28 $
+ *  last change: $Author: mfe $ $Date: 2001-02-26 16:17:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -283,7 +283,9 @@ static sal_Char *getCmdLine()
 static sal_Char *getCmdLine()
 {
     FILE *fp;
-    sal_Char  name[PATH_MAX + 1] = "";
+    sal_Char  name[PATH_MAX + 1];
+
+    name[0] = '\0';
 
     sprintf(name, CMD_ARG_PROC_NAME, getpid());
 
@@ -321,8 +323,10 @@ static sal_Char *getCmdLine()
 static sal_Char *getCmdLine()
 {
     int   fd;
-    sal_Char  name[PATH_MAX + 1] = "";
+    sal_Char  name[PATH_MAX + 1];
     sal_Char *pchr=0;
+
+    name[0] = '\0';
 
     sprintf(name, CMD_ARG_PROC_NAME, getpid());
 
@@ -372,8 +376,10 @@ static sal_Char *getCmdLine()
 static sal_Char *getCmdLine()
 {
     FILE    *fp;
-    sal_Char    cmd[CMD_ARG_MAX + 1] = "";
+    sal_Char    cmd[CMD_ARG_MAX + 1];
     int             i;
+
+    cmd[0] = '\0';
 
     sprintf(cmd, CMD_ARG_PS, getpid());
 
@@ -416,9 +422,12 @@ static sal_Char *getCmdLine()
 
 oslProcessError SAL_CALL osl_getExecutableFile(rtl_uString **ustrFile)
 {
-    sal_Char pszExecutable[PATH_MAX] = "";
-    sal_Char pszUncPath[PATH_MAX+5] = "";
+    sal_Char pszExecutable[PATH_MAX];
+    sal_Char pszUncPath[PATH_MAX+5];
     oslProcessError Error;
+
+    pszExecutable[0] = '\0';
+    pszUncPath[0] = '\0';
 
     Error=osl_psz_getExecutableFile(pszExecutable,sizeof(pszExecutable));
 
@@ -481,9 +490,11 @@ oslProcessError SAL_CALL osl_psz_getExecutableFile(sal_Char* pszBuffer, sal_uInt
 
 sal_uInt32  SAL_CALL osl_getCommandArgCount()
 {
-    sal_Char pszBuffer[CMD_ARG_MAX+1] = "";
+    sal_Char pszBuffer[CMD_ARG_MAX+1];
 
     oslProcessError tErr = osl_Process_E_Unknown;
+
+    pszBuffer[0] = '\0';
 
     if ( nArgCount == -1 )
     {
@@ -507,7 +518,9 @@ oslProcessError SAL_CALL osl_getCommandArg( sal_uInt32 nArg, rtl_uString **strCo
 
     if ( nArgCount == -1 )
     {
-        sal_Char pBuffer[CMD_ARG_MAX+1] = "";
+        sal_Char pBuffer[CMD_ARG_MAX+1];
+        pBuffer[0] = '\0';
+
         tErr = osl_getCommandArgs(pBuffer, CMD_ARG_MAX+1);
         if ( tErr == osl_Process_E_None )
         {
@@ -616,7 +629,7 @@ static Pipe* openPipe(pid_t pid)
 
 #if defined(IORESOURCE_TRANSFER_SYSV) || defined(IORESOURCE_TRANSFER_BSD)
       int fd;
-      sal_Char name[PATH_MAX + 1] = "";
+    sal_Char name[PATH_MAX + 1];
 
       if (access(PIPEDEFAULTPATH, O_RDWR) == 0)
           strcpy(name, PIPEDEFAULTPATH);
@@ -1623,9 +1636,11 @@ oslProcessError SAL_CALL osl_psz_executeProcess(sal_Char *pszImageName,
                                                 oslProcess *pProcess)
 {
     int     i;
-    sal_Char    path[PATH_MAX + 1] = "";
+    sal_Char    path[PATH_MAX + 1];
     ProcessData Data;
     oslThread hThread;
+
+    path[0] = '\0';
 
     memset(&Data,0,sizeof(ProcessData));
 
@@ -2090,7 +2105,7 @@ oslProcessError SAL_CALL osl_getProcessInfo(oslProcess Process, oslProcessData F
 #if defined(SOLARIS)
 
         int  fd;
-        sal_Char name[PATH_MAX + 1] = "";
+        sal_Char name[PATH_MAX + 1];
 
         sprintf(name, "/proc/%u", pid);
 
@@ -2154,7 +2169,7 @@ oslProcessError SAL_CALL osl_getProcessInfo(oslProcess Process, oslProcessData F
 #elif defined(IRIX)
 
         int  fd;
-        sal_Char name[PATH_MAX + 1] = "";
+        sal_Char name[PATH_MAX + 1];
 
         sprintf(name, "/proc/%u", pid);
 
@@ -2301,9 +2316,11 @@ oslProcessError SAL_CALL osl_joinProcess(oslProcess Process)
 oslProcessError SAL_CALL osl_getEnvironment(rtl_uString *ustrVar, rtl_uString **ustrValue)
 {
     oslProcessError Error;
-    sal_Char pszValue[PATH_MAX] = "";
+    sal_Char pszValue[PATH_MAX];
     rtl_String* strVar=0;
     sal_Char* pszVar=0;
+
+    pszValue[0] = '\0';
 
     if ( ustrVar != 0 )
     {
@@ -2360,8 +2377,10 @@ oslProcessError SAL_CALL osl_psz_getEnvironment(const sal_Char* pszName, sal_Cha
 oslProcessError SAL_CALL osl_searchPath(const sal_Char* pszName, const sal_Char* pszPath,
                    sal_Char Separator, sal_Char *pszBuffer, sal_uInt32 Max)
 {
-    sal_Char path[PATH_MAX + 1] = "";
+    sal_Char path[PATH_MAX + 1];
     sal_Char *pchr;
+
+    path[0] = '\0';
 
     OSL_ASSERT(pszName != NULL);
 
@@ -2423,7 +2442,9 @@ sal_Bool osl_getFullPath(const sal_Char* pszFilename, sal_Char* pszPath, sal_uIn
     struct stat status;
     struct stat root;
     struct stat parent;
-    sal_Char  Path[PATH_MAX + 1] = "";
+    sal_Char  Path[PATH_MAX + 1];
+
+    Path[0] = '\0';
 
     pDir = strdup(pszFilename);
 
