@@ -1,0 +1,35 @@
+application/x-vnd.oasis.openoffice.text:
+	ext: oot
+
+application/x-vnd.oasis.openoffice.text-template:
+	ext: ott
+
+application/x-vnd.oasis.openoffice.text-web:
+	ext: oth
+
+application/x-vnd.oasis.openoffice.text-master:
+	ext: oom
+
+application/x-vnd.oasis.openoffice.drawing:
+	ext: ood
+
+application/x-vnd.oasis.openoffice.drawing-template:
+	ext: otd
+
+application/x-vnd.oasis.openoffice.presentation:
+	ext: oop
+
+application/x-vnd.oasis.openoffice.presentation-template:
+	ext: otp
+
+application/x-vnd.oasis.openoffice.spreadsheet:
+	ext: oos
+
+application/x-vnd.oasis.openoffice.spreadsheet-template:
+	ext: ots
+
+application/x-vnd.oasis.openoffice.formula:
+	ext: oof
+
+application/x-vnd.oasis.openoffice.database:
+	ext: odb
