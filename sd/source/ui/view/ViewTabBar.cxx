@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ViewTabBar.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:53:50 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 16:16:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,9 +221,15 @@ void ViewTabBar::Paint (const Rectangle& rRect)
     Color aOriginalFillColor (GetFillColor());
     Color aOriginalLineColor (GetLineColor());
 
+    // Because the actual window background is transparent--to avoid
+    // flickering due to multiple background paintings by this and by child
+    // windows--we have to paint the background for this control
+    // explicitly: the actual control is not painted over its whole bounding
+    // box.
     SetFillColor (GetSettings().GetStyleSettings().GetDialogColor());
     SetLineColor ();
-    DrawRect (rRect);
+    DrawRect (rRect)
+;
     TabControl::Paint (rRect);
 
     SetFillColor (aOriginalFillColor);
@@ -235,17 +241,20 @@ void ViewTabBar::Paint (const Rectangle& rRect)
 
 int ViewTabBar::GetHeight (void)
 {
-    int nHeight = 0;
+    int nHeight (0);
 
     TabPage* pActivePage (GetTabPage(GetCurPageId()));
-    if (pActivePage != NULL)
+    if (pActivePage!=NULL && IsReallyVisible())
     {
         nHeight = pActivePage->GetPosPixel().Y();
         nHeight -= 2;
     }
 
     if (nHeight <= 0)
-        nHeight = GetOutputSizePixel().Height();
+        // Using a default when the real height can not be determined.  To
+        // get correct height this method should be called when the control
+        // is visible.
+        nHeight = 21;
 
     return nHeight;
 }
