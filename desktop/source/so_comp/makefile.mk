@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-25 13:52:48 $
+#   last change: $Author: vg $ $Date: 2003-04-15 13:30:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,10 +62,10 @@
 
 PRJ=..$/..
 
-PRJNAME=evaluation
+PRJNAME=desktop
 TARGET=eval
 LIBTARGET=NO
-AUTOSEG=true
+
 ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
@@ -82,25 +82,23 @@ CDEFS+=-DTIMEBOMB=20030930
 
 SLOFILES =	$(SLO)$/evaluation.obj
 
-SHL1OBJS=   $(SLOFILES)
-SHL1TARGET=     $(TARGET)
+SHL1DEPN=	makefile.mk
+SHL1OBJS=	$(SLOFILES)
 
-SHL1IMPLIB= ievl
-SHL1STDLIBS=    \
-                $(SALLIB)			\
-                $(UNOLIB)			\
-                $(CPPULIB)			\
-                $(CPPUHELPERLIB)	\
-                $(UNOTOOLSLIB)		\
-                $(COMPHELPERLIB)	\
-                $(TOOLSLIB)			\
-                $(VCLLIB)
+SHL1TARGET=	$(TARGET)
+SHL1IMPLIB= i$(TARGET)
 
-SHL1DEPN=       makefile.mk
-SHL1DEF=        $(MISC)$/$(SHL1TARGET).def
+SHL1VERSIONMAP=exports.map
+SHL1DEF=$(MISC)$/$(SHL1TARGET).def
+DEF1NAME=$(SHL1TARGET)
 
-DEF1NAME=       $(SHL1TARGET)
-DEF1EXPORTFILE= exports.dxp
+SHL1STDLIBS= \
+    $(VCLLIB)			\
+    $(UNOTOOLSLIB)		\
+    $(TOOLSLIB)			\
+    $(CPPUHELPERLIB)	\
+    $(CPPULIB)			\
+    $(SALLIB)
 
 # --- Targets ------------------------------------------------------
 
