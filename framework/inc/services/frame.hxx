@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:29:23 $
+ *  last change: $Author: as $ $Date: 2000-10-12 10:50:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,8 +150,8 @@
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #endif
 
-#ifndef _COM_SUN_STAR_TASK_XSTATUSINDICATORSUPPLIER_HPP_
-#include <com/sun/star/task/XStatusIndicatorSupplier.hpp>
+#ifndef _COM_SUN_STAR_TASK_XSTATUSINDICATORFACTORY_HPP_
+#include <com/sun/star/task/XStatusIndicatorFactory.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_AWT_XTOPWINDOWLISTENER_HPP_
@@ -232,7 +232,7 @@ namespace framework{
 #define XMULTISERVICEFACTORY                        ::com::sun::star::lang::XMultiServiceFactory
 #define XSERVICEINFO                                ::com::sun::star::lang::XServiceInfo
 #define XSTATUSINDICATOR                            ::com::sun::star::task::XStatusIndicator
-#define XSTATUSINDICATORSUPPLIER                    ::com::sun::star::task::XStatusIndicatorSupplier
+#define XSTATUSINDICATORFACTORY                     ::com::sun::star::task::XStatusIndicatorFactory
 #define XTOPWINDOWLISTENER                          ::com::sun::star::awt::XTopWindowListener
 #define XTYPEPROVIDER                               ::com::sun::star::lang::XTypeProvider
 #define XWINDOW                                     ::com::sun::star::awt::XWindow
@@ -259,7 +259,7 @@ namespace framework{
                 XFramesSupplier
                 XFrame
                 XComponent
-                XStatusIndicatorSupplier
+                XStatusIndicatorFactory
                 XDispatchProvider
                 XDispatchProviderInterception
                 XBrowseHistoryRegistry
@@ -274,11 +274,10 @@ namespace framework{
     @devstatus  deprecated
 *//*-*************************************************************************************************************/
 
-//class Frame   :   DERIVE_FROM_XSPECIALDEBUGINTERFACE          // => These macro will expand to nothing, if no testmode is set in debug.h!
 class Frame :   public XTYPEPROVIDER                    ,
                 public XSERVICEINFO                     ,
                 public XFRAMESSUPPLIER                  ,   // => XFrame      , XComponent
-                public XSTATUSINDICATORSUPPLIER         ,
+                public XSTATUSINDICATORFACTORY          ,
                 public XDISPATCHPROVIDER                ,
                 public XDISPATCHPROVIDERINTERCEPTION    ,
                 public XBROWSEHISTORYREGISTRY           ,
@@ -335,7 +334,6 @@ class Frame :   public XTYPEPROVIDER                    ,
         DECLARE_XINTERFACE
         DECLARE_XTYPEPROVIDER
         DECLARE_XSERVICEINFO
-//      DECLARE_XSPECIALDEBUGINTERFACE  // => These macro will expand to nothing, if no testmode is set in debug.h!
 
         //---------------------------------------------------------------------------------------------------------
         //   XFramesSupplier
@@ -393,7 +391,7 @@ class Frame :   public XTYPEPROVIDER                    ,
         virtual void SAL_CALL setActiveFrame( const REFERENCE< XFRAME >& xFrame ) throw( RUNTIMEEXCEPTION );
 
         //---------------------------------------------------------------------------------------------------------
-        //   XStatusIndicatorSupplier
+        //   XStatusIndicatorFactory
         //---------------------------------------------------------------------------------------------------------
 
         /*-****************************************************************************************************//**
@@ -408,7 +406,7 @@ class Frame :   public XTYPEPROVIDER                    ,
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual REFERENCE< XSTATUSINDICATOR > SAL_CALL getStatusIndicator() throw( RUNTIMEEXCEPTION );
+        virtual REFERENCE< XSTATUSINDICATOR > SAL_CALL createStatusIndicator() throw( RUNTIMEEXCEPTION );
 
         //---------------------------------------------------------------------------------------------------------
         //   XDispatchProvider
@@ -1394,7 +1392,7 @@ class Frame :   public XTYPEPROVIDER                    ,
 
     private:
 
-        REFERENCE< XSTATUSINDICATOR >                   m_xIndicator                        ;   /// reference to current statusindicator
+        REFERENCE< XSTATUSINDICATORFACTORY >            m_xIndicatorFactoryHelper           ;   /// reference to factory helper to create status indicator objects
         REFERENCE< XWINDOW >                            m_xComponentWindow                  ;   /// window of the actual component
         REFERENCE< XCONTROLLER >                        m_xController                       ;   /// controller of the actual frame
         eACTIVESTATE                                    m_eActiveState                      ;   /// state, if i'am a member of active path in tree or i have the focus or ...

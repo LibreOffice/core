@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-11 15:03:56 $
+ *  last change: $Author: as $ $Date: 2000-10-12 10:49:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,10 @@
 
 #ifndef __FRAMEWORK_HELPER_OFRAMES_HXX_
 #include <helper/oframes.hxx>
+#endif
+
+#ifndef __FRAMEWORK_HELPER_OSTATUSINDICATORFACTORY_HXX_
+#include <helper/ostatusindicatorfactory.hxx>
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -229,7 +233,7 @@ DEFINE_XINTERFACE_13                (   Frame                                   
                                         DIRECT_INTERFACE(XFramesSupplier                    ),
                                         DIRECT_INTERFACE(XFrame                             ),
                                         DIRECT_INTERFACE(XComponent                         ),
-                                        DIRECT_INTERFACE(XStatusIndicatorSupplier           ),
+                                        DIRECT_INTERFACE(XStatusIndicatorFactory            ),
                                         DIRECT_INTERFACE(XDispatchProvider                  ),
                                         DIRECT_INTERFACE(XDispatchProviderInterception      ),
                                         DIRECT_INTERFACE(XBrowseHistoryRegistry             ),
@@ -245,7 +249,7 @@ DEFINE_XTYPEPROVIDER_13             (   Frame                               ,
                                         XFramesSupplier                     ,
                                         XFrame                              ,
                                         XComponent                          ,
-                                        XStatusIndicatorSupplier            ,
+                                        XStatusIndicatorFactory             ,
                                         XDispatchProvider                   ,
                                         XDispatchProviderInterception       ,
                                         XBrowseHistoryRegistry              ,
@@ -260,58 +264,6 @@ DEFINE_XSERVICEINFO_MULTISERVICE    (   Frame                               ,
                                         IMPLEMENTATIONNAME_FRAME
                                     )
 
-// Attention: If you have enabled any testmode different from TEST_NOTHING => you have declared XDebugging-interface automaticly!
-// Bhere is no macro to define and implement the right methods. You are the only one, who know - how you will use this mechanism.
-// It exist a macro to switch on or off your implementation only.
-// ENABLE_SERVICEDEBUG must be defined, to activate your code!
-/*
-#ifdef ENABLE_SERVICEDEBUG
-
-    // In these implementation we use "dumpVariable()" to activate some special debug-operations.
-    OUString SAL_CALL Frame::dumpVariable(  const   OUString&   sVariableName   ,
-                                                       sal_Int16    nCallStackPos   ) throw( RuntimeException )
-    {
-        // Set default return value.
-        OUString sReturn;
-
-        // We have a private impldbg-method to print out the current content of ouer frame hierarchy - the tree.
-        // This mechanism is started on desktop. We collect the names of all ouer own and sub-frames and return the informations to caller.
-        if  (
-                ( sVariableName.equals( DUMPVARIABLE_TREEINFO ) ==  sal_True    )   &&
-                ( nCallStackPos                                 >   0           )
-            )
-        {
-            sReturn = impldbg_getTreeNames( nCallStackPos );
-        }
-        else
-        // Safe impossible cases
-        // This method and his interface is used in a special context.
-        // If somebody don't know this and these implementation is invalid (zB. interface exported in release version!?)
-        // => we have problems!
-        {
-            LOG_ASSERT( sal_True, "Desktop::dumpVariable()\nERROR\nSpecial debug mode of service is used in another context!Please contact programmer.\n\n" )
-        }
-
-        // Return result of DEBUG.
-        return sReturn;
-    }
-
-    // Follow methods are unused in these implementation!
-    sal_Int32 SAL_CALL Frame::setBreakPoint( const OUString& aModuleName, sal_Int32 nSourceCodeLine, sal_Bool bOn ) throw( RuntimeException ) { return 0; }
-    void SAL_CALL Frame::clearAllBreakPoints( const OUString& aModuleName ) throw( RuntimeException ) {}
-    OUString SAL_CALL Frame::eval( const OUString& aSourceCode, sal_Int16 nCallStackPos ) throw( RuntimeException ) { return OUString(); }
-    Sequence< OUString > SAL_CALL Frame::getStackTrace() throw( RuntimeException ) { return Sequence< OUString >(); }
-    CONTEXTINFORMATION SAL_CALL Frame::getContextInformation( sal_Int16 nCallStackPos) throw( RuntimeException ) { return CONTEXTINFORMATION(); }
-    void SAL_CALL Frame::setVariable( const OUString& aVariableName, const OUSTRING& aValue, sal_Int16 nCallStackPos ) throw( RuntimeException ) {}
-    sal_Bool SAL_CALL Frame::isVariable( const OUString& aVariableName, sal_Int16 nCallStackPos ) throw( RuntimeException ) { return sal_False; }
-    void SAL_CALL Frame::stop() throw( RuntimeException ) {}
-    void SAL_CALL Frame::stepOver() throw( RuntimeException ) {}
-    void SAL_CALL Frame::stepIn() throw( RuntimeException ) {}
-    void SAL_CALL Frame::stepOut() throw( RuntimeException ) {}
-    void SAL_CALL Frame::doContinue() throw( RuntimeException ) {}
-
-#endif // #ifdef ENABLE_SERVICEDEBUG
-*/
 //*****************************************************************************************************************
 //   XFramesSupplier
 //*****************************************************************************************************************
@@ -364,22 +316,15 @@ void SAL_CALL Frame::setActiveFrame( const Reference< XFrame >& xFrame ) throw( 
 }
 
 //*****************************************************************************************************************
-//   XStatusIndicatorSupplier
+//   XStatusIndicatorFactory
 //*****************************************************************************************************************
-Reference< XStatusIndicator > SAL_CALL Frame::getStatusIndicator() throw( RuntimeException )
+Reference< XStatusIndicator > SAL_CALL Frame::createStatusIndicator() throw( RuntimeException )
 {
     // Ready for multithreading
-    LOCK_MUTEX( aGuard, m_aMutex, "Frame::getStatusIndicator()" )
+    LOCK_MUTEX( aGuard, m_aMutex, "Frame::createStatusIndicator()" )
 
-    // If no indicator exist ...
-    if ( m_xIndicator.is() == sal_False )
-    {
-        // ... create a new one.
-        /*ASMUSS*/
-    }
-
-    // Return indicator reference.
-    return m_xIndicator;
+    // Forward operation to our helper.
+    return m_xIndicatorFactoryHelper->createStatusIndicator();
 }
 
 //*****************************************************************************************************************
@@ -656,6 +601,11 @@ void SAL_CALL Frame::initialize( const Reference< XWindow >& xWindow ) throw( Ru
     {
         // ... and set the new window.
         impl_setContainerWindow( xWindow );
+        // Now we can use our indicator factory helper to support XStatusIndicatorFactory interface.
+        // We have a valid parent window for it!
+        // Initialize helper.
+        OStatusIndicatorFactory* pIndicatorFactoryHelper = new OStatusIndicatorFactory( m_xFactory, m_xContainerWindow );
+        m_xIndicatorFactoryHelper = Reference< XStatusIndicatorFactory >( static_cast< OWeakObject* >( pIndicatorFactoryHelper ), UNO_QUERY );
     }
 }
 
@@ -1759,8 +1709,8 @@ void SAL_CALL Frame::dispose() throw( RuntimeException )
             releaseDispatchProviderInterceptor( m_xInterceptor );
         }
 
-        // Release current indicator.
-        m_xIndicator = Reference< XStatusIndicator >();
+        // Release current indicator factory helper.
+        m_xIndicatorFactoryHelper = Reference< XStatusIndicatorFactory >();
 
         // If we have our own window ... release it!
         if ( m_xContainerWindow.is() == sal_True )
