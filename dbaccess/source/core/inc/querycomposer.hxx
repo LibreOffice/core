@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycomposer.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-30 10:15:36 $
+ *  last change: $Author: oj $ $Date: 2001-07-16 07:38:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,8 +136,8 @@ namespace dbaccess
         OPrivateTables*                         m_pTables;
 
         ::rtl::OUString                         m_aQuery;
-        ::rtl::OUString                         m_aFilter;  // curently used where clause
-        ::rtl::OUString                         m_aOrder;   // curently used order by clause
+        ::rtl::OUString                         m_aFilter;  // currently used where clause
+        ::rtl::OUString                         m_aOrder;   // currently used order by clause
 
         ::rtl::OUString                         m_aWorkSql;
         ::rtl::OUString                         m_aOrgFilter;

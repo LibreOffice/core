@@ -2,9 +2,9 @@
  *
  *  $RCSfile: query.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-22 10:48:40 $
+ *  last change: $Author: oj $ $Date: 2001-07-16 07:38:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,7 +173,7 @@ Any SAL_CALL OQuery_LINUX::queryInterface( const Type& _rType ) throw(RuntimeExc
 
 // XColumnsSupplier
 //--------------------------------------------------------------------------
-Reference< XNameAccess > SAL_CALL OQuery_LINUX::getColumns(  ) throw(RuntimeException)
+Reference< XNameAccess > SAL_CALL OQuery_LINUX::getColumns() throw(RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
     if (m_bColumnsOutOfDate)
@@ -390,8 +390,11 @@ void OQuery_LINUX::readColumnSettings(const OConfigurationNode& _rConfigLocation
     }
     OQueryDescriptor::readColumnSettings(_rConfigLocation);
     m_aColumnMap = ::std::map< ::rtl::OUString,OColumn*,::comphelper::UStringMixLess>();
+    // check if columns were set from configuration when not we are ouOfDate
+    if(!m_pColumns->getCount())
+        m_bColumnsOutOfDate = sal_True;
 }
-
+// -----------------------------------------------------------------------------
 //........................................................................
 }   // namespace dbaccess
 //........................................................................

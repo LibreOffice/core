@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontainer.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-18 11:43:14 $
+ *  last change: $Author: oj $ $Date: 2001-07-16 07:38:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -290,7 +290,17 @@ void SAL_CALL OQueryContainer::appendByDescriptor( const Reference< XPropertySet
         }
 #endif
         // TODO : the columns part of the descriptor has to be copied
-        OQuery* pNewObject = m_aContainerListeners.getLength() ? implCreateWrapper(xCommandDefinitionPart) : NULL;
+        OQuery* pNewObject = implCreateWrapper(xCommandDefinitionPart);
+        if(pNewObject)
+        {
+            // object is new so no columns are set so we have to set some
+            // we are not interessted in the result
+            pNewObject->getColumns();
+            OConfigurationNode aQueryNode = implGetObjectKey(sNewObjectName, sal_True);
+            OConfigurationTreeRoot aQueryRootNode = aQueryNode.cloneAsRoot();
+            pNewObject->storeTo(aQueryRootNode);
+            aQueryRootNode.commit();
+        }
             // need this new object only if we have listeners, else it will be created on request
         m_aQueriesIndexed.push_back(m_aQueries.insert(Queries::value_type(sNewObjectName, pNewObject)).first);
         xNewObject = m_aQueriesIndexed[m_aQueriesIndexed.size() - 1]->second;
