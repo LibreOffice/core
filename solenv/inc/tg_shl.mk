@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_shl.mk,v $
 #
-#   $Revision: 1.72 $
+#   $Revision: 1.73 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-27 11:48:13 $
+#   last change: $Author: hr $ $Date: 2003-04-28 16:45:42 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -331,10 +331,10 @@ $(SHL$(TNR)TARGETN) : \
 .ENDIF
 .IF "$(use_shl_versions)" != ""
 .IF "$(USE_SHELL)"!="4nt"
-    @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
-    @-+echo #define ORG_NAME	$(SHL$(TNR)TARGET)$(DLLPOST) >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
-    @-+echo #define INTERNAL_NAME $(SHL$(TNR)TARGET:b) >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
-     @-+echo #include \"shlinfo.rc\" >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
+    @-+echo \#define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
+    @-+echo \#define ORG_NAME	$(SHL$(TNR)TARGET)$(DLLPOST) >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
+    @-+echo \#define INTERNAL_NAME $(SHL$(TNR)TARGET:b) >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
+     @-+echo \#include \"shlinfo.rc\" >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
 .ELSE			# "$(USE_SHELL)"!="4nt"
     @-+echo #define VERVARIANT	$(BUILD) >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
     @-+echo #define ORG_NAME	$(SHL$(TNR)TARGET)$(DLLPOST) >> $(MISC)$/$(SHL$(TNR)DEFAULTRES:b).rc
@@ -599,7 +599,7 @@ $(SHL$(TNR)IMPLIBN):	\
     $(IMPLIB) $(IMPLIBFLAGS) $@ $(SHL$(TNR)TARGETN)
 .ENDIF
 .ELSE
-    @echo keine ImportLibs auf Mac und *ix
+    @echo no ImportLibs on Mac and *ix
     @+-$(RM) $@
     @$(TOUCH) $@
 .ENDIF
