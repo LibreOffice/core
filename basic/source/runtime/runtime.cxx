@@ -2,9 +2,9 @@
  *
  *  $RCSfile: runtime.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 13:29:32 $
+ *  last change: $Author: rt $ $Date: 2004-11-15 16:37:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,11 +96,6 @@ void StarBASIC::StaticEnableReschedule( BOOL bReschedule )
     bStaticGlobalEnableReschedule = bReschedule;
 }
 
-
-struct SbiGosubStack {                  // GOSUB-Stack:
-    SbiGosubStack* pNext;               // Chain
-    const BYTE* pCode;                  // Return-Pointer
-};
 
 struct SbiArgvStack {                   // Argv stack:
     SbiArgvStack*  pNext;               // Stack Chain
@@ -541,6 +536,7 @@ SbiRuntime::SbiRuntime( SbModule* pm, SbMethod* pe, USHORT nStart )
     nArgc     =
     nError    =
     nGosubLvl =
+    nForLvl   =
     nOps      = 0;
     refExprStk = new SbxArray;
 #if defined GCC
@@ -875,6 +871,7 @@ void SbiRuntime::PushGosub( const BYTE* pc )
     SbiGosubStack* p = new SbiGosubStack;
     p->pCode  = pc;
     p->pNext  = pGosubStk;
+    p->nStartForLvl = nForLvl;
     pGosubStk = p;
 }
 
@@ -949,6 +946,7 @@ void SbiRuntime::PushFor()
     SbxVariableRef xBgn = PopVar();
     p->refVar = PopVar();
     *(p->refVar) = *xBgn;
+    nForLvl++;
 }
 
 // Poppen des FOR-Stacks
@@ -960,6 +958,7 @@ void SbiRuntime::PopFor()
         SbiForStack* p = pForStk;
         pForStk = p->pNext;
         delete p;
+        nForLvl--;
     }
 }
 
