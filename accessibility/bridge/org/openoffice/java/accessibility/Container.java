@@ -66,9 +66,6 @@ import drafts.com.sun.star.accessibility.*;
 
 public class Container extends java.awt.Container implements javax.accessibility.Accessible {
 
-    // This type is needed for conversions from/to uno Any
-    public static final Type XAccessibleType = new Type(XAccessible.class);
-
     protected XAccessible unoAccessible;
     protected XAccessibleContext unoAccessibleContext;
     protected XAccessibleComponent unoAccessibleComponent = null;
@@ -132,6 +129,23 @@ public class Container extends java.awt.Container implements javax.accessibility
     * @since JDK1.0
     */
     public void removeNotify() {
+    }
+
+    public Object[] getAccessibleComponents(Object[] targetSet) {
+        try {
+            java.util.ArrayList list = new java.util.ArrayList(targetSet.length);
+            for (int i=0; i < targetSet.length; i++) {
+                java.awt.Component c = AccessibleObjectFactory.getAccessibleComponent(
+                    (XAccessible) UnoRuntime.queryInterface(XAccessible.class, targetSet[i]));
+                if (c != null) {
+                    list.add(c);
+                }
+            }
+            list.trimToSize();
+            return list.toArray();
+        } catch (com.sun.star.uno.RuntimeException e) {
+            return null;
+        }
     }
 
     protected java.awt.EventQueue getEventQueue() {
@@ -264,56 +278,6 @@ public class Container extends java.awt.Container implements javax.accessibility
             }
         }
 
-        /** Updates the internal child list and fires the appropriate PropertyChangeEvent */
-        protected void handleChildRemovedEvent(Object any) {
-            try {
-                java.awt.Component c = AccessibleObjectFactory.getAccessibleComponent(
-                    (XAccessible) AnyConverter.toObject(XAccessibleType, any));
-                if (c != null) {
-                    if (c instanceof java.awt.Container) {
-                        AccessibleObjectFactory.clearContainer((java.awt.Container) c);
-                    }
-                    remove(c);
-                }
-            } catch (com.sun.star.uno.Exception e) {
-                // FIXME: output
-            }
-        }
-
-        /** Updates the internal child list and fires the appropriate PropertyChangeEvent */
-        protected void handleChildAddedEvent(Object any) {
-            try {
-                XAccessible xAccessible = (XAccessible) AnyConverter.toObject(XAccessibleType, any);
-                java.awt.Component c = AccessibleObjectFactory.getAccessibleComponent(xAccessible);
-                if (c != null) {
-                    // Seems to be already in child list
-                    if (this.equals(c.getParent()))
-                        return;
-                } else {
-                    c = AccessibleObjectFactory.createAccessibleComponent(xAccessible);
-                }
-                if (c != null) {
-
-                    XAccessibleContext xChild = xAccessible.getAccessibleContext();
-                    int i = xChild.getAccessibleIndexInParent();
-                    if (Build.DEBUG && (i < 0)) {
-                        System.err.println("*** ERROR *** Invalid index in parent " + i);
-                        System.err.println("              Child is: [" + c.getAccessibleContext().getAccessibleRole() + "] " + xChild.getAccessibleName());
-                        System.err.println("              Parent is: [" + Container.this.getAccessibleContext().getAccessibleRole() + "] " + Container.this.getAccessibleContext().getAccessibleName());
-                    }
-                    if ((i >= 0) && (i <= getComponentCount())) {
-                        add(c, i);
-                    } else {
-                        add(c);
-                    }
-                }
-            } catch (java.lang.IllegalArgumentException e) {
-                System.err.println(e.getClass().getName() + " caught: " + e.getMessage());
-            } catch (com.sun.star.uno.Exception e) {
-                // FIXME: output
-            }
-        }
-
         /* This event is only necessary because some objects in the office don't know their parent
          *  and are therefor unable to revoke and re-insert themselves.
          */
@@ -358,9 +322,9 @@ public class Container extends java.awt.Container implements javax.accessibility
                     break;
                 case AccessibleEventId.ACCESSIBLE_CHILD_EVENT:
                     if (AnyConverter.isObject(event.OldValue)) {
-                        handleChildRemovedEvent(event.OldValue);
+                        AccessibleObjectFactory.removeChild(Container.this, event.OldValue);
                     } else if (AnyConverter.isObject(event.NewValue)) {
-                        handleChildAddedEvent(event.NewValue);
+                        AccessibleObjectFactory.addChild(Container.this, event.NewValue);
                     }
                     break;
                 case AccessibleEventId.ACCESSIBLE_VISIBLE_DATA_EVENT:
@@ -537,11 +501,17 @@ public class Container extends java.awt.Container implements javax.accessibility
                 AccessibleContainer.this.firePropertyChange(
                     AccessibleContext.ACCESSIBLE_STATE_PROPERTY,
                     null, AccessibleState.FOCUSED);
+                if (Build.DEBUG) {
+                    System.err.println("[" + getAccessibleRole() + "] " + getAccessibleName() + " is now focused");
+                }
             }
             public void focusLost(java.awt.event.FocusEvent event) {
                 AccessibleContainer.this.firePropertyChange(
                     AccessibleContext.ACCESSIBLE_STATE_PROPERTY,
                     AccessibleState.FOCUSED, null);
+                if (Build.DEBUG) {
+                    System.err.println("[" + getAccessibleRole() + "] " + getAccessibleName() + " is no longer focused");
+                }
             }
         } // inner class AccessibleFocusHandler
 
