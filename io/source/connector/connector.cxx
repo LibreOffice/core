@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connector.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:24:18 $
+ *  last change: $Author: obr $ $Date: 2000-11-07 15:11:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -249,30 +249,6 @@ namespace stoc_connector
                 delete pConn;
                 throw NoConnectException( sMessage, Reference < XInterface > () );
             }
-            r = Reference< XConnection > ( (XConnection * ) pConn );
-        }
-        else if( OUString( RTL_CONSTASCII_USTRINGPARAM( "channel" )) == aTokens[0] )
-        {
-            OUString sResource;
-            for( i = 1 ; i < 10 ; i ++ )
-            {
-                sal_Int32 nIndex = aTokens[i].indexOf( '=' );
-                if( -1 != nIndex )
-                {
-                    OUString aName = aTokens[i].copy( 0 , nIndex ).trim().toLowerCase();
-                    if( nIndex < aTokens[i].getLength() )
-                    {
-                        OUString oValue = aTokens[i].copy( nIndex+1 , aTokens[i].getLength() - nIndex -1 ).trim();
-                        if( OUString( RTL_CONSTASCII_USTRINGPARAM("resource")) == aName )
-                        {
-                            sResource = oValue;
-                        }
-                    }
-                }
-            }
-
-            ChannelConnection *pConn = new ChannelConnection( sResource );
-
             r = Reference< XConnection > ( (XConnection * ) pConn );
         }
         else

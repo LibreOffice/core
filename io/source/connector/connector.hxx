@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connector.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obr $ $Date: 2000-11-06 11:56:38 $
+ *  last change: $Author: obr $ $Date: 2000-11-07 15:11:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,34 +172,6 @@ namespace stoc_connector
         sal_Bool     _error;
 
           XStreamListener_hash_set _listeners;
-    };
-
-    class ChannelConnection :
-        public ::cppu::WeakImplHelper1< ::com::sun::star::connection::XConnection >
-    {
-    public:
-        ChannelConnection( const ::rtl::OUString & sParameter  );
-
-    public:
-        virtual sal_Int32 SAL_CALL read( ::com::sun::star::uno::Sequence< sal_Int8 >& aReadBytes,
-                                         sal_Int32 nBytesToRead )
-            throw(::com::sun::star::io::IOException,
-                  ::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL write( const ::com::sun::star::uno::Sequence< sal_Int8 >& aData )
-            throw(::com::sun::star::io::IOException,
-                  ::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL flush(  ) throw(
-            ::com::sun::star::io::IOException,
-            ::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL close(  )
-            throw(::com::sun::star::io::IOException,
-                  ::com::sun::star::uno::RuntimeException);
-        virtual ::rtl::OUString SAL_CALL getDescription(  )
-            throw(::com::sun::star::uno::RuntimeException);
-    private:
-        ::vos::IStream *m_pStream;
-        oslInterlockedCount m_nStatus;
-        ::rtl::OUString m_sDescription;
     };
 };
 
