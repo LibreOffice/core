@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tk_xml.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: np $ $Date: 2002-05-14 09:02:21 $
+ *  last change: $Author: rt $ $Date: 2005-04-04 07:51:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,11 +94,11 @@ Tok_XmlFormat_Tag::EV_TokenId   ev_atom(Tok_XmlFormat_Tag::atom,"code");
 namespace lux
 {
 
-EnumValueMap &
+template<> EnumValueMap &
 Tok_XmlConst::EV_TokenId::Values_()         { return G_aTok_XmlConst_EV_TokenId_Values; }
-EnumValueMap &
+template<> EnumValueMap &
 Tok_XmlLink_Tag::EV_TokenId::Values_()      { return G_aTok_XmlLink_Tag_EV_TokenId_Values; }
-EnumValueMap &
+template<> EnumValueMap &
 Tok_XmlFormat_Tag::EV_TokenId::Values_()    { return G_aTok_XmlFormat_Tag_EV_TokenId_Values; }
 
 }   // namespace lux
