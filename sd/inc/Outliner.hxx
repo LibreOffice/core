@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Outliner.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 10:13:55 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 16:00:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,11 +190,28 @@ public:
         or spell check.
     */
     void EndSpelling (void);
+
+    /** callback for hangul hanja textconversion */
+    sal_Bool ConvertNextDocument (void);
+
+    /** Starts the hangul hanja text conversion for the current viewshell */
+    void StartTextConversion ( INT16 nLanguage );
+
+    /** This is called internaly when text conversion is started.
+        The position of current view mode/page/object/caret position
+        is remembered and will be restored after conversion.
+    */
+    void BeginConversion (void);
+
+    /** Release all resources that have been created during the conversion */
+    void EndConversion (void);
+
     DECL_LINK( SpellError, void * );
 
 private:
-    /// Specifies whether to search and replace or to spell check.
-    enum {SEARCH, SPELL} meMode;
+    /// Specifies whether to search and replace, to spell check or to do a
+    /// hangul hanja conversion.
+    enum {SEARCH, SPELL, HANGUL_HANJA_CONVERSION} meMode;
 
     /// The view which displays the searched objects.
     ::sd::View* mpView;
@@ -204,6 +221,11 @@ private:
     ::sd::Window* mpWindow;
     /// The document on whose objects and pages this class operates.
     SdDrawDocument* mpDrawDocument;
+
+    /** this is the language that is used for current text conversion.
+        Only valid if meMode is HANGUL_HANJA_CONVERSION.
+    */
+    INT16 mnConversionLanguage;
 
     /** Flag that specifies whether we own the outline view pointed to by
         <member>mpOutlineView</member> and thus have to
@@ -282,6 +304,12 @@ private:
         objects.
     */
     SdrObject* mpObj;
+
+    /** this stores the first object that is used for hangul/hanja conversion.
+        Conversion automaticly wraps around the document and stops when it
+        finds this object again.
+    */
+    SdrObject* mpFirstObj;
 
     /// Candidate for being searched/spell checked.
     SdrTextObj* mpTextObj;
@@ -442,6 +470,11 @@ private:
         includes putting it into edit mode.
     */
     void PrepareSearchAndReplace (void);
+
+    /** Prepare to do a hangul hanja conversion on the current text
+        object. This includes putting it into edit mode.
+    */
+    void PrepareHangulHanjaConversion (void);
 
     /** Switch to a new view mode.  Try to restore the original edit mode
         before doing so.
