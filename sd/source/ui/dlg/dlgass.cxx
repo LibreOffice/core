@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgass.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: af $ $Date: 2001-04-06 12:15:01 $
+ *  last change: $Author: af $ $Date: 2001-05-17 13:42:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -343,7 +343,7 @@ public:
 
     // Seite 1
     FixedBitmap*        m_pPage1FB;
-    GroupBox*           m_pPage1ArtGRB;
+    FixedLine*          m_pPage1ArtFL;
     RadioButton*        m_pPage1EmptyRB;
     RadioButton*        m_pPage1TemplateRB;
     ListBox*            m_pPage1RegionLB;
@@ -353,10 +353,10 @@ public:
 
     // Seite 2
     FixedBitmap*        m_pPage2FB;
-    GroupBox*           m_pPage2LayoutGRP;
+    FixedLine*          m_pPage2LayoutFL;
     ListBox*            m_pPage2RegionLB;
     ListBox*            m_pPage2LayoutLB;
-    GroupBox*           m_pPage2OutTypesGRP;
+    FixedLine*          m_pPage2OutTypesFL;
     RadioButton*        m_pPage2Medium1RB;
     RadioButton*        m_pPage2Medium2RB;
     RadioButton*        m_pPage2Medium3RB;
@@ -365,12 +365,12 @@ public:
 
     // Seite 3
     FixedBitmap*        m_pPage3FB;
-    GroupBox*           m_pPage3EffectGRP;
+    FixedLine*          m_pPage3EffectFL;
     FixedText*          m_pPage3EffectFT;
     FadeEffectLB*       m_pPage3EffectLB;
     FixedText*          m_pPage3SpeedFT;
     ListBox*            m_pPage3SpeedLB;
-    GroupBox*           m_pPage3PresTypeGRP;
+    FixedLine*          m_pPage3PresTypeFL;
     RadioButton*        m_pPage3PresTypeLiveRB;
     RadioButton*        m_pPage3PresTypeKioskRB;
     FixedText*          m_pPage3PresTimeFT;
@@ -381,7 +381,7 @@ public:
 
     // Seite 4
     FixedBitmap*        m_pPage4FB;
-    GroupBox*           m_pPage4PersonalGRP;
+    FixedLine*          m_pPage4PersonalFL;
     FixedText*          m_pPage4AskNameFT;
     Edit*               m_pPage4AskNameEDT;
     FixedText*          m_pPage4AskTopicFT;
@@ -437,7 +437,7 @@ AssistentDlgImpl::AssistentDlgImpl( Window* pWindow, const Link& rFinishLink, BO
     m_aAssistentFunc.InsertControl(1,
         m_pPage1FB = new FixedBitmap(pWindow,SdResId(FB_PAGE1)));
     m_aAssistentFunc.InsertControl(1,
-        m_pPage1ArtGRB = new GroupBox(pWindow,SdResId(RB_PAGE1_ARTGROUP)));
+        m_pPage1ArtFL = new FixedLine(pWindow,SdResId(FL_PAGE1_ARTGROUP)));
     m_aAssistentFunc.InsertControl(1,
         m_pPage1EmptyRB=new RadioButton(pWindow,SdResId(RB_PAGE1_EMPTY)));
     m_aAssistentFunc.InsertControl(1,
@@ -470,14 +470,14 @@ AssistentDlgImpl::AssistentDlgImpl( Window* pWindow, const Link& rFinishLink, BO
     m_aAssistentFunc.InsertControl(2,
         m_pPage2FB = new FixedBitmap(pWindow,SdResId(FB_PAGE2)));
     m_aAssistentFunc.InsertControl(2,
-        m_pPage2LayoutGRP = new GroupBox( pWindow, SdResId(GRP_PAGE2_LAYOUT) ));
+        m_pPage2LayoutFL = new FixedLine( pWindow, SdResId(FL_PAGE2_LAYOUT) ));
     m_aAssistentFunc.InsertControl(2,
         m_pPage2RegionLB = new ListBox(pWindow,SdResId(LB_PAGE2_REGION) ));
     m_aAssistentFunc.InsertControl(2,
         m_pPage2LayoutLB = new ListBox(pWindow,SdResId(LB_PAGE2_LAYOUT) ));
 
     m_aAssistentFunc.InsertControl(2,
-        m_pPage2OutTypesGRP = new GroupBox( pWindow, SdResId(GRP_PAGE2_OUTPUTTYPES) ));
+        m_pPage2OutTypesFL = new FixedLine( pWindow, SdResId(FL_PAGE2_OUTPUTTYPES) ));
     m_aAssistentFunc.InsertControl(2,
         m_pPage2Medium5RB = new RadioButton( pWindow, SdResId(RB_PAGE2_MEDIUM5) ));
     m_aAssistentFunc.InsertControl(2,
@@ -501,7 +501,7 @@ AssistentDlgImpl::AssistentDlgImpl( Window* pWindow, const Link& rFinishLink, BO
     m_aAssistentFunc.InsertControl(3,
         m_pPage3FB = new FixedBitmap(pWindow,SdResId(FB_PAGE3)));
     m_aAssistentFunc.InsertControl(3,
-        m_pPage3EffectGRP = new GroupBox( pWindow, SdResId(GRP_PAGE3_EFFECT) ));
+        m_pPage3EffectFL = new FixedLine( pWindow, SdResId(FL_PAGE3_EFFECT) ));
     m_aAssistentFunc.InsertControl(3,
         m_pPage3EffectFT = new FixedText( pWindow, SdResId(FT_PAGE3_EFFECT) ));
     m_aAssistentFunc.InsertControl(3,
@@ -511,7 +511,7 @@ AssistentDlgImpl::AssistentDlgImpl( Window* pWindow, const Link& rFinishLink, BO
     m_aAssistentFunc.InsertControl(3,
         m_pPage3SpeedLB = new FadeEffectLB( pWindow, SdResId(LB_PAGE3_SPEED) ));
     m_aAssistentFunc.InsertControl(3,
-        m_pPage3PresTypeGRP = new GroupBox( pWindow, SdResId(GRP_PAGE3_PRESTYPE) ));
+        m_pPage3PresTypeFL = new FixedLine( pWindow, SdResId(FL_PAGE3_PRESTYPE) ));
     m_aAssistentFunc.InsertControl(3,
         m_pPage3PresTypeLiveRB = new RadioButton( pWindow, SdResId(RB_PAGE3_LIVE) ));
     m_aAssistentFunc.InsertControl(3,
@@ -560,7 +560,7 @@ AssistentDlgImpl::AssistentDlgImpl( Window* pWindow, const Link& rFinishLink, BO
     m_aAssistentFunc.InsertControl(4,
         m_pPage4FB = new FixedBitmap(pWindow,SdResId(FB_PAGE4)));
     m_aAssistentFunc.InsertControl(4,
-        m_pPage4PersonalGRP = new GroupBox( pWindow, SdResId(GRP_PAGE4_PERSONAL) ));
+        m_pPage4PersonalFL = new FixedLine( pWindow, SdResId(FL_PAGE4_PERSONAL) ));
     m_aAssistentFunc.InsertControl(4,
         m_pPage4AskNameFT   = new FixedText( pWindow, SdResId(FT_PAGE4_ASKNAME) ));
     m_aAssistentFunc.InsertControl(4,
@@ -654,12 +654,14 @@ AssistentDlgImpl::~AssistentDlgImpl()
             m_aThread->terminate ();
         else
             m_aThread->join ();
-        delete m_aThread;
+        //  Tell the thread that is now on its own and may delete itself
+        //  at will.
+        m_aThread->detach ();
     }
 
     // Seite 1
     delete m_pPage1FB;
-    delete m_pPage1ArtGRB;
+    delete m_pPage1ArtFL;
     delete m_pPage1EmptyRB;
     delete m_pPage1TemplateRB;
     delete m_pPage1TemplateLB;
@@ -669,10 +671,10 @@ AssistentDlgImpl::~AssistentDlgImpl()
 
     // Seite 2
     delete m_pPage2FB;
-    delete m_pPage2LayoutGRP;
+    delete m_pPage2LayoutFL;
     delete m_pPage2RegionLB;
     delete m_pPage2LayoutLB;
-    delete m_pPage2OutTypesGRP;
+    delete m_pPage2OutTypesFL;
     delete m_pPage2Medium1RB;
     delete m_pPage2Medium2RB;
     delete m_pPage2Medium3RB;
@@ -681,12 +683,12 @@ AssistentDlgImpl::~AssistentDlgImpl()
 
     // Seite 3
     delete m_pPage3FB;
-    delete m_pPage3EffectGRP;
+    delete m_pPage3EffectFL;
     delete m_pPage3EffectFT;
     delete m_pPage3EffectLB;
     delete m_pPage3SpeedFT;
     delete m_pPage3SpeedLB;
-    delete m_pPage3PresTypeGRP;
+    delete m_pPage3PresTypeFL;
     delete m_pPage3PresTypeLiveRB;
     delete m_pPage3PresTypeKioskRB;
     delete m_pPage3PresTimeFT;
@@ -697,7 +699,7 @@ AssistentDlgImpl::~AssistentDlgImpl()
 
     // Seite 4
     delete m_pPage4FB;
-    delete m_pPage4PersonalGRP;
+    delete m_pPage4PersonalFL;
     delete m_pPage4AskNameFT;
     delete m_pPage4AskNameEDT;
     delete m_pPage4AskTopicFT;
