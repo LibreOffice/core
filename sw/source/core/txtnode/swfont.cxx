@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfont.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:35:46 $
+ *  last change: $Author: kz $ $Date: 2003-10-15 09:58:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -717,7 +717,7 @@ BOOL SwSubFont::IsSymbol( ViewShell *pSh )
  *                      SwSubFont::ChgFnt()
  *************************************************************************/
 
-BOOL SwSubFont::ChgFnt( ViewShell *pSh, OutputDevice *pOut )
+BOOL SwSubFont::ChgFnt( ViewShell *pSh, OutputDevice& rOut )
 {
     if ( pLastFont )
         pLastFont->Unlock();
@@ -726,7 +726,7 @@ BOOL SwSubFont::ChgFnt( ViewShell *pSh, OutputDevice *pOut )
 
     pLastFont = aFntAccess.Get();
 
-    pLastFont->SetDevFont( pSh, pOut );
+    pLastFont->SetDevFont( pSh, rOut );
 
     pLastFont->Lock();
     return UNDERLINE_NONE != GetUnderline() || STRIKEOUT_NONE != GetStrikeout();
@@ -736,30 +736,28 @@ BOOL SwSubFont::ChgFnt( ViewShell *pSh, OutputDevice *pOut )
  *                    SwFont::ChgPhysFnt()
  *************************************************************************/
 
-void SwFont::ChgPhysFnt( ViewShell *pSh, OutputDevice *pOut )
+void SwFont::ChgPhysFnt( ViewShell *pSh, OutputDevice& rOut )
 {
-    ASSERT( pOut, "SwFont:;ChgPhysFnt, not OutDev." );
-
     if( bOrgChg && aSub[nActual].IsEsc() )
     {
         const BYTE nOldProp = aSub[nActual].GetPropr();
         SetProportion( 100 );
-        ChgFnt( pSh, pOut );
+        ChgFnt( pSh, rOut );
         SwFntAccess aFntAccess( aSub[nActual].pMagic, aSub[nActual].nFntIndex,
                                 &aSub[nActual], pSh );
-        aSub[nActual].nOrgHeight = aFntAccess.Get()->GetHeight( pSh, pOut );
-        aSub[nActual].nOrgAscent = aFntAccess.Get()->GetAscent( pSh, pOut );
+        aSub[nActual].nOrgHeight = aFntAccess.Get()->GetFontHeight( pSh, rOut );
+        aSub[nActual].nOrgAscent = aFntAccess.Get()->GetFontAscent( pSh, rOut );
         SetProportion( nOldProp );
         bOrgChg = FALSE;
     }
 
     if( bFntChg )
     {
-        ChgFnt( pSh, pOut );
+        ChgFnt( pSh, rOut );
         bFntChg = bOrgChg;
     }
-    if( pOut->GetTextLineColor() != aUnderColor )
-        pOut->SetTextLineColor( aUnderColor );
+    if( rOut.GetTextLineColor() != aUnderColor )
+        rOut.SetTextLineColor( aUnderColor );
 }
 
 /*************************************************************************
@@ -799,10 +797,10 @@ short SwSubFont::_CheckKerning( )
 }
 
 /*************************************************************************
- *                    SwFont::GetLeading()
+ *                    SwFont::GetGuessedLeading()
  *************************************************************************/
 
-USHORT SwFont::GetLeading( ViewShell *pSh, const OutputDevice *pOut )
+USHORT SwFont::GetGuessedLeading( ViewShell *pSh, const OutputDevice& rOut )
 {
     if( pSh && pSh->GetWin() )
         return 0;
@@ -810,7 +808,7 @@ USHORT SwFont::GetLeading( ViewShell *pSh, const OutputDevice *pOut )
     {
         SwFntAccess aFntAccess( aSub[nActual].pMagic, aSub[nActual].nFntIndex,
                                 &aSub[nActual], pSh );
-        return aFntAccess.Get()->GetLeading();
+        return aFntAccess.Get()->GetGuessedLeading();
     }
 }
 
@@ -818,11 +816,11 @@ USHORT SwFont::GetLeading( ViewShell *pSh, const OutputDevice *pOut )
  *                    SwSubFont::GetAscent()
  *************************************************************************/
 
-USHORT SwSubFont::GetAscent( ViewShell *pSh, const OutputDevice *pOut )
+USHORT SwSubFont::GetAscent( ViewShell *pSh, const OutputDevice& rOut )
 {
     register USHORT nAscent;
     SwFntAccess aFntAccess( pMagic, nFntIndex, this, pSh );
-    nAscent = aFntAccess.Get()->GetAscent( pSh, pOut );
+    nAscent = aFntAccess.Get()->GetFontAscent( pSh, rOut );
     if( GetEscapement() )
         nAscent = CalcEscAscent( nAscent );
     return nAscent;
@@ -832,14 +830,14 @@ USHORT SwSubFont::GetAscent( ViewShell *pSh, const OutputDevice *pOut )
  *                    SwSubFont::GetHeight()
  *************************************************************************/
 
-USHORT SwSubFont::GetHeight( ViewShell *pSh, const OutputDevice *pOut )
+USHORT SwSubFont::GetHeight( ViewShell *pSh, const OutputDevice& rOut )
 {
     SV_STAT( nGetTextSize );
     SwFntAccess aFntAccess( pMagic, nFntIndex, this, pSh );
-    const USHORT nHeight = aFntAccess.Get()->GetHeight( pSh, pOut );
+    const USHORT nHeight = aFntAccess.Get()->GetFontHeight( pSh, rOut );
     if ( GetEscapement() )
     {
-        const USHORT nAscent = aFntAccess.Get()->GetAscent( pSh, pOut );
+        const USHORT nAscent = aFntAccess.Get()->GetFontAscent( pSh, rOut );
         return CalcEscHeight( nHeight, nAscent ); // + nLeading;
     }
     return nHeight; // + nLeading;
@@ -854,7 +852,7 @@ Size SwSubFont::_GetTxtSize( SwDrawTextInfo& rInf )
     // sicher ist sicher ...
     if ( !pLastFont || pLastFont->GetOwner()!=pMagic ||
          !IsSameInstance( rInf.GetpOut()->GetFont() ) )
-        ChgFnt( rInf.GetShell(), rInf.GetpOut() );
+        ChgFnt( rInf.GetShell(), rInf.GetOut() );
 
     Size aTxtSize;
     xub_StrLen nLn = ( rInf.GetLen() == STRING_LEN ? rInf.GetText().Len()
@@ -910,8 +908,8 @@ Size SwSubFont::_GetTxtSize( SwDrawTextInfo& rInf )
         //        hochgestellt, muss seine effektive Hoehe melden.
         if( GetEscapement() )
         {
-            const USHORT nAscent = pLastFont->GetAscent( rInf.GetShell(),
-                                                         rInf.GetpOut() );
+            const USHORT nAscent = pLastFont->GetFontAscent( rInf.GetShell(),
+                                                             rInf.GetOut() );
             aTxtSize.Height() =
                 (long)CalcEscHeight( (USHORT)aTxtSize.Height(), nAscent);
         }
@@ -928,7 +926,7 @@ xub_StrLen SwFont::GetTxtBreak( ViewShell *pSh, const OutputDevice *pOut,
     const SwScriptInfo* pScript, const XubString &rTxt, long nTextWidth,
     const xub_StrLen nIdx, const xub_StrLen nLen )
 {
-     ChgFnt( pSh, (OutputDevice *)pOut );
+    ChgFnt( pSh, (OutputDevice&)*pOut );
 
     USHORT nTxtBreak = 0;
 
@@ -958,7 +956,7 @@ xub_StrLen SwFont::GetTxtBreak( ViewShell *pSh, const OutputDevice *pOut,
 {
     // Robust ...
     if ( !pLastFont || pLastFont->GetOwner()!= aSub[nActual].pMagic )
-        ChgFnt( pSh, (OutputDevice *)pOut );
+        ChgFnt( pSh, (OutputDevice&)*pOut );
 
     xub_StrLen nTxtBreak = 0;
 
@@ -1002,7 +1000,7 @@ void SwSubFont::_DrawText( SwDrawTextInfo &rInf, const BOOL bGrey )
     }
 
     if( !pLastFont || pLastFont->GetOwner()!=pMagic )
-        ChgFnt( rInf.GetShell(), rInf.GetpOut() );
+        ChgFnt( rInf.GetShell(), rInf.GetOut() );
 
     Point aPos( rInf.GetPos() );
     const Point &rOld = rInf.GetPos();
@@ -1127,7 +1125,7 @@ void SwSubFont::_DrawStretchText( SwDrawTextInfo &rInf )
     }
 
     if ( !pLastFont || pLastFont->GetOwner() != pMagic )
-        ChgFnt( rInf.GetShell(), rInf.GetpOut() );
+        ChgFnt( rInf.GetShell(), rInf.GetOut() );
 
     rInf.ApplyAutoColor();
 
@@ -1199,7 +1197,7 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
 xub_StrLen SwSubFont::_GetCrsrOfst( SwDrawTextInfo& rInf )
 {
     if ( !pLastFont || pLastFont->GetOwner()!=pMagic )
-        ChgFnt( rInf.GetShell(), rInf.GetpOut() );
+        ChgFnt( rInf.GetShell(), rInf.GetOut() );
 
     xub_StrLen nLn = rInf.GetLen() == STRING_LEN ? rInf.GetText().Len()
                                                  : rInf.GetLen();
@@ -1242,8 +1240,8 @@ void SwSubFont::CalcEsc( SwDrawTextInfo& rInf, Point& rPos )
     {
     case DFLT_ESC_AUTO_SUB :
         nOfst = nOrgHeight - nOrgAscent -
-            pLastFont->GetHeight( rInf.GetShell(), rInf.GetpOut() ) +
-            pLastFont->GetAscent( rInf.GetShell(), rInf.GetpOut() );
+            pLastFont->GetFontHeight( rInf.GetShell(), rInf.GetOut() ) +
+            pLastFont->GetFontAscent( rInf.GetShell(), rInf.GetOut() );
 
         switch ( nDir )
         {
@@ -1260,7 +1258,7 @@ void SwSubFont::CalcEsc( SwDrawTextInfo& rInf, Point& rPos )
 
         break;
     case DFLT_ESC_AUTO_SUPER :
-        nOfst = pLastFont->GetAscent( rInf.GetShell(), rInf.GetpOut() ) -
+        nOfst = pLastFont->GetFontAscent( rInf.GetShell(), rInf.GetOut() ) -
                 nOrgAscent;
 
 
