@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OOoBean.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mi $ $Date: 2004-09-06 15:11:34 $
+ *  last change: $Author: mi $ $Date: 2004-09-14 15:07:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,9 +78,7 @@ public class OOoBean
 
     implements
         // @requirement FUNC.PER/0.2
-        java.io.Externalizable,
-
-        com.sun.star.comp.beans.OOoBeanInterface
+        java.io.Externalizable
 {
     // timeout values (milli secs)
     int nOOoStartTimeOut = 60000;
@@ -222,7 +220,7 @@ public class OOoBean
         // get notified when connection dies
         if ( xConnectionListener != null )
             xConnectionListener.stop();
-        xConnectionListener = this.new EventListener();
+        xConnectionListener = this.new EventListener("setOOoConnection");
         dbgPrint( "new EventListener()" );
     }
 
@@ -383,7 +381,7 @@ public class OOoBean
         throws java.lang.InterruptedException
     {
         CallWatchThread aCallWatchThread =
-            new CallWatchThread( nOOoCallTimeOut );
+            new CallWatchThread( nOOoCallTimeOut, "clear" );
         aDocument = null;
         xDispatcher = null;
         aFrame = null;
@@ -526,7 +524,7 @@ public class OOoBean
         {
             // watch loading in a thread with a timeout (if OOo hangs)
             CallWatchThread aCallWatchThread =
-                new CallWatchThread( nOOoStartTimeOut );
+                new CallWatchThread( nOOoStartTimeOut, "loadFromURL" );
 
             try
             {
@@ -736,7 +734,7 @@ public class OOoBean
     {
         // start runtime timeout
         CallWatchThread aCallWatchThread =
-            new CallWatchThread( nOOoCallTimeOut );
+            new CallWatchThread( nOOoCallTimeOut, "storeToURL" );
 
         // store the document
         try { aDocument.storeToURL( aURL, aArguments ); }
@@ -765,8 +763,8 @@ public class OOoBean
 
     {
         // wrap byte arrray into UNO stream
-        com.sun.star.beans.XOutputStreamToByteArrayAdapter aStream =
-                new com.sun.star.beans.XOutputStreamToByteArrayAdapter(
+        com.sun.star.comp.beans.XOutputStreamToByteArrayAdapter aStream =
+                new com.sun.star.comp.beans.XOutputStreamToByteArrayAdapter(
                     aOutBuffer );
 
         // add stream to arguments
@@ -934,7 +932,7 @@ public class OOoBean
     {
         // start runtime timeout
         CallWatchThread aCallWatchThread =
-            new CallWatchThread( nOOoCallTimeOut );
+            new CallWatchThread( nOOoCallTimeOut, "setToolVisible" );
 
         // Does a frame exist?
         if ( aFrame != null )
@@ -954,7 +952,7 @@ public class OOoBean
                         xLayoutManager.showElement( aResourceURL );
                     else
                         xLayoutManager.hideElement( aResourceURL );
-
+/*
         System.err.println( "ResourceURLs:" );
         for ( int n = 0; n < xLayoutManager.getElements().length; ++n )
         {
@@ -965,6 +963,7 @@ public class OOoBean
             System.err.println( xElementPropSet.getPropertyValue("ResourceURL") );
         }
         System.err.println( "" );
+*/
                 }
                 catch (  com.sun.star.beans.UnknownPropertyException aExc )
                 {
@@ -1202,9 +1201,14 @@ public class OOoBean
             com.sun.star.lang.XEventListener,
             com.sun.star.frame.XTerminateListener
     {
-        EventListener()
+        String aTag;
+
+        EventListener( String aTag )
             throws NoConnectionException
         {
+            // init members
+            this.aTag = aTag;
+
             // listen on a dying connection
             iConnection.addEventListener( this );
 
@@ -1241,46 +1245,41 @@ public class OOoBean
         /// watching the connection
         public void run()
         {
-            dbgPrint( "EventListener.run()" );
+            dbgPrint( "EventListener(" + aTag + ").run()" );
 
             // remote call might hang => watch try
             CallWatchThread aCallWatchThread =
-                new CallWatchThread( nOOoCallTimeOut );
+                new CallWatchThread( nOOoCallTimeOut, "EventListener(" + aTag + ")" );
 
             // continue to trying to connect the OOo instance
+            long n = 0;
             while ( iConnection != null && iConnection.getComponentContext() != null )
             {
-                dbgPrint( "EventListener.running()" );
+                dbgPrint( "EventListener(" + aTag + ").running() #" + ++n );
 
                 // still alive?
+                com.sun.star.lang.XMultiComponentFactory xServiceManager = null;
                 try
                 {
+                    // an arbitrary (but cheap) call into OOo
+                    xServiceManager = iConnection.getComponentContext().getServiceManager();
+
+                    // call successfully performed, restart watch for next loop
                     try
                     {
-                        iConnection.getComponentContext().getServiceManager();
-                        aCallWatchThread.cancel();
-                    }
-                    catch ( com.sun.star.lang.DisposedException aExc )
-                    {
-                        // dead
-                        OfficeConnection iDeadConn = iConnection;
-                        iConnection = null;
-                        iDeadConn.dispose();
+                        aCallWatchThread.restart();
                     }
                     catch ( java.lang.InterruptedException aExc )
                     {
-                        // hung
-                        OfficeConnection iDeadConn = iConnection;
-                        iConnection = null;
-                        iDeadConn.dispose();
+                        // ignore late interrupt
                     }
                 }
-                catch ( java.lang.NullPointerException aExc )
-                {} // ignore
-                catch ( com.sun.star.lang.DisposedException aExc )
+                catch ( java.lang.RuntimeException aExc )
                 {
-                    // not alive => dispose the dead connection
-                    iConnection.dispose();
+                    // hung
+                    OfficeConnection iDeadConn = iConnection;
+                    iConnection = null;
+                    iDeadConn.dispose();
                 }
 
                 // sleep
@@ -1292,9 +1291,6 @@ public class OOoBean
                     // empty the OOoBean and cut the connection
                     stopOOoConnection();
                 }
-
-                // this loop successvully performed, restart watch for next loop
-                aCallWatchThread.restart();
             }
         }
     }
@@ -1305,20 +1301,24 @@ public class OOoBean
     protected class CallWatchThread extends Thread
     {
         Thread aWatchedThread;
+        String aTag;
         boolean bAlive;
         long nTimeout;
 
-        CallWatchThread( long nTimeout )
+        CallWatchThread( long nTimeout, String aTag )
         {
             this.aWatchedThread = Thread.currentThread();
             this.nTimeout = nTimeout;
-            dbgPrint( "CallWatchThread.start()" );
+            this.aTag = aTag;
+            setDaemon( true );
+            dbgPrint( "CallWatchThread(" + this + ").start(" + aTag + ")" );
             start();
         }
 
         void cancel()
             throws java.lang.InterruptedException
         {
+            dbgPrint( "CallWatchThread(" + this + ".cancel(" + aTag + ")" );
             if ( aWatchedThread != null && aWatchedThread != Thread.currentThread() )
                 throw new RuntimeException( "wrong thread" );
             aWatchedThread = null;
@@ -1327,34 +1327,46 @@ public class OOoBean
         }
 
         synchronized void restart()
+            throws java.lang.InterruptedException
         {
-            dbgPrint( "CallWatchThread.restart()" );
+            dbgPrint( "CallWatchThread(" + this + ".restart(" + aTag + ")" );
+            if ( aWatchedThread != null && aWatchedThread != Thread.currentThread() )
+                throw new RuntimeException( "wrong thread" );
             bAlive = true;
+            if ( interrupted() )
+                throw new InterruptedException();
             notify();
         }
 
         public void run()
         {
+            dbgPrint( "CallWatchThread(" + this + ".run(" + aTag + ") ***** STARTED *****" );
+            long n = 0;
             while ( aWatchedThread != null )
             {
-                dbgPrint( "CallWatchThread.run() running" );
-                bAlive = false;
-
-                try { wait( 10*nTimeout ); }
-                catch ( java.lang.InterruptedException aExc )
-                {}
-
-                // synchronized
+                dbgPrint( "CallWatchThread(" + this + ").run(" + aTag + ") running #" + ++n );
+                synchronized(this)
                 {
+                    bAlive = false;
+
+                    // wait a while
+                    try { wait( nTimeout ); }
+                    catch ( java.lang.InterruptedException aExc )
+                    {
+                        bAlive = false;
+                    }
+
+                    // watched thread seems to be dead (not answering)?
                     if ( !bAlive && aWatchedThread != null )
                     {
+                        dbgPrint( "CallWatchThread(" + this + ").run(" + aTag + ") interrupting" );
                         aWatchedThread.interrupt();
                         aWatchedThread = null;
                     }
                 }
             }
 
-            dbgPrint( "CallWatchThread.run() terminated" );
+            dbgPrint( "CallWatchThread(" + this + ").run(" + aTag + ") terminated" );
         }
     };
 

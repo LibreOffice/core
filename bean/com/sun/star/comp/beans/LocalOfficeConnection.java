@@ -2,9 +2,9 @@
  *
  *  $RCSfile: LocalOfficeConnection.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mi $ $Date: 2004-09-06 15:11:32 $
+ *  last change: $Author: mi $ $Date: 2004-09-14 15:07:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,13 @@ public class LocalOfficeConnection
 
     private List                mComponents     = new Vector();
 
+    //-------------------------------------------------------------------------
+    // debugging method
+    private void dbgPrint( String aMessage )
+    {
+        System.err.println( aMessage );
+    }
+
     /**
      * Constructor.
      * Sets up paths to the office application and native libraries if
@@ -139,6 +146,7 @@ public class LocalOfficeConnection
         // load libofficebean.so/officebean.dll
         String aSharedLibName = getProgramPath() + java.io.File.separator +
             System.mapLibraryName(OFFICE_LIB_NAME);
+dbgPrint( "System.load( libofficebean.so )" );
         System.load( aSharedLibName );
     }
 
@@ -270,13 +278,16 @@ public class LocalOfficeConnection
         try
         {
             // create default local component context
+dbgPrint( "create initial component context" );
             XComponentContext xLocalContext =
                 com.sun.star.comp.helper.Bootstrap.createInitialComponentContext(null);
 
             // initial serviceManager
+dbgPrint( "get local service manager" );
             XMultiComponentFactory xLocalServiceManager = xLocalContext.getServiceManager();
 
             // create a urlresolver
+dbgPrint( "get local service manager" );
             Object urlResolver  = xLocalServiceManager.createInstanceWithContext(
                 "com.sun.star.bridge.UnoUrlResolver", xLocalContext );
 
@@ -288,7 +299,9 @@ public class LocalOfficeConnection
             Object aInitialObject = null;
             try
             {
+dbgPrint( "xUrlResolver.resolve( " + mURL + " )" );
                 aInitialObject = xUrlResolver.resolve( mURL );
+dbgPrint( "xUrlResolver.resolve() - done" );
             }
             catch( com.sun.star.connection.NoConnectException e )
             {
@@ -631,7 +644,7 @@ public class LocalOfficeConnection
                 throw new java.io.IOException( "not connection specified" );
 
             // start process
-System.err.println( "exec" + cmdArray[0] + " " + cmdArray[1] + " " + cmdArray[2] + " " + cmdArray[3] );
+dbgPrint( "exec" + cmdArray[0] + " " + cmdArray[1] + " " + cmdArray[2] + " " + cmdArray[3] );
             mProcess = Runtime.getRuntime().exec(cmdArray);
             if ( mProcess == null )
                 throw new RuntimeException( "cannot start soffice: " + cmdArray );

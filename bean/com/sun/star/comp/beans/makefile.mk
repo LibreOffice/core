@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: mi $ $Date: 2004-09-06 15:11:38 $
+#   last change: $Author: mi $ $Date: 2004-09-14 15:07:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -63,7 +63,7 @@
 PRJ	= ..$/..$/..$/..$/..
 PRJNAME = beans
 TARGET  = officebean
-PACKAGE = com$/sun$/star$/comc$/beans
+PACKAGE = com$/sun$/star$/comp$/beans
 
 # --- Settings -----------------------------------------------------
 .INCLUDE: settings.mk
@@ -106,7 +106,6 @@ JAVACLASSFILES=\
     $(CLASSDIR)$/$(PACKAGE)$/Controller.class \
     $(CLASSDIR)$/$(PACKAGE)$/Frame.class \
     $(CLASSDIR)$/$(PACKAGE)$/Wrapper.class \
-    $(CLASSDIR)$/$(PACKAGE)$/OOoBeanInterface.class \
     $(CLASSDIR)$/$(PACKAGE)$/OOoBean.class 
 
 .ENDIF
