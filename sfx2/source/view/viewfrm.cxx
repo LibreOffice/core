@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 16:30:08 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 13:14:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,12 @@
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
+#ifndef _COM_SUN_STAR_URI_XURIREFERENCEFACTORY_HPP_
+#include <com/sun/star/uri/XUriReferenceFactory.hpp>
+#endif
+#ifndef _COM_SUN_STAR_URI_XVNDSUNSTARSCRIPTURL_HPP_
+#include <com/sun/star/uri/XVndSunStarScriptUrl.hpp>
+#endif
 
 #ifndef _RTL_USTRBUF_HXX_
 #include <rtl/ustrbuf.hxx>
@@ -150,6 +156,7 @@
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::frame;
+using namespace ::com::sun::star::lang;
 
 #pragma hdrstop
 
@@ -3251,36 +3258,35 @@ void SfxViewFrame::AddDispatchMacroToBasic_Impl( const ::rtl::OUString& sMacro )
         aScriptURL = ((SfxStringItem*)pRet)->GetValue();
     if ( aScriptURL.Len() )
     {
-        // parse script URL
-        BOOL bFound;
-        String aValue;
-        INetURLObject aINetScriptURL( aScriptURL );
-
-        // get language
-        String aLanguage;
-        bFound = aINetScriptURL.getParameter( String( RTL_CONSTASCII_USTRINGPARAM("language") ), &aValue );
-        if ( bFound )
-            aLanguage = aValue;
-
-        // get macro
-        String aMacro;
+        // parse scriptURL
         String aLibName;
         String aModuleName;
         String aMacroName;
-        bFound = aINetScriptURL.getParameter( String( RTL_CONSTASCII_USTRINGPARAM("macro") ), &aValue );
-        if ( bFound )
-        {
-            aMacro = aValue;
-            aLibName    = aMacro.GetToken(0, sal_Unicode('.'));
-            aModuleName = aMacro.GetToken(1, sal_Unicode('.'));
-            aMacroName  = aMacro.GetToken(2, sal_Unicode('.'));
-        }
-
-        // get location
         String aLocation;
-        bFound = aINetScriptURL.getParameter( String( RTL_CONSTASCII_USTRINGPARAM("location") ), &aValue );
-        if ( bFound )
-            aLocation = aValue;
+        Reference< XMultiServiceFactory > xSMgr = ::comphelper::getProcessServiceFactory();
+        Reference< com::sun::star::uri::XUriReferenceFactory > xFactory( xSMgr->createInstance(
+            ::rtl::OUString::createFromAscii( "com.sun.star.uri.UriReferenceFactory" ) ), UNO_QUERY );
+        if ( xFactory.is() )
+        {
+            Reference< com::sun::star::uri::XVndSunStarScriptUrl > xUrl( xFactory->parse( aScriptURL ), UNO_QUERY );
+            if ( xUrl.is() )
+            {
+                // get name
+                ::rtl::OUString aName = xUrl->getName();
+                sal_Unicode cTok = '.';
+                sal_Int32 nIndex = 0;
+                aLibName = aName.getToken( 0, cTok, nIndex );
+                if ( nIndex != -1 )
+                    aModuleName = aName.getToken( 0, cTok, nIndex );
+                if ( nIndex != -1 )
+                    aMacroName = aName.getToken( 0, cTok, nIndex );
+
+                // get location
+                ::rtl::OUString aLocKey = ::rtl::OUString::createFromAscii( "location" );
+                if ( xUrl->hasParameter( aLocKey ) )
+                    aLocation = xUrl->getParameter( aLocKey );
+            }
+        }
 
         pSfxApp->EnterBasicCall();
 
