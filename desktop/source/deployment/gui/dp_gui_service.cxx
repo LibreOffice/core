@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_gui_service.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:04:51 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 14:05:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,6 @@
 #include "unotools/configmgr.hxx"
 #include "tools/isolang.hxx"
 #include "vcl/svapp.hxx"
-#include "vcl/help.hxx"
 #include "com/sun/star/lang/XServiceInfo.hpp"
 #include "com/sun/star/task/XJobExecutor.hpp"
 
@@ -76,11 +75,10 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using ::rtl::OUString;
 
-namespace dp_gui
-{
+namespace {
 
 //==============================================================================
-class MyApp : public Application, public Help
+class MyApp : public Application
 {
 public:
     MyApp();
@@ -88,11 +86,6 @@ public:
 
     // Application
     virtual void Main();
-
-    // Help
-    virtual BOOL Start( ULONG nHelpId, Window const * pWindow  );
-    virtual BOOL Start( XubString const & rKeyWord, Window const * pWindow );
-    virtual XubString GetHelpText( ULONG nHelpId, Window const * pWindow );
 };
 
 //______________________________________________________________________________
@@ -103,34 +96,11 @@ MyApp::~MyApp()
 //______________________________________________________________________________
 MyApp::MyApp()
 {
-    EnableAutoHelpId();
-    SetHelp( this );
 }
 
 //______________________________________________________________________________
 void MyApp::Main()
 {
-}
-
-//______________________________________________________________________________
-BOOL MyApp::Start( ULONG nHelpId, Window const * pWindow  )
-{
-    // xxx todo:
-    return false;
-}
-
-//______________________________________________________________________________
-BOOL MyApp::Start( XubString const & rKeyWord, Window const * pWindow )
-{
-    // xxx todo:
-    return false;
-}
-
-//______________________________________________________________________________
-XubString MyApp::GetHelpText( ULONG nHelpId, Window const * pWindow )
-{
-    // xxx todo:
-    return XubString();
 }
 
 //##############################################################################
@@ -173,8 +143,7 @@ ServiceImpl::ServiceImpl(
     Reference<XComponentContext> const & xComponentContext )
     : m_xComponentContext( xComponentContext )
 {
-    if (args.getLength() > 0)
-    {
+    if (args.getLength() > 0) {
         extract_throw( &m_xParent, args[ 0 ] );
         if (args.getLength() > 1)
             extract_throw( &m_view, args[ 1 ] );
@@ -182,7 +151,7 @@ ServiceImpl::ServiceImpl(
 }
 
 //==============================================================================
-static Reference<XInterface> SAL_CALL create(
+Reference<XInterface> SAL_CALL create(
     Sequence<Any> const & args,
     Reference<XComponentContext> const & xComponentContext )
 {
@@ -191,13 +160,13 @@ static Reference<XInterface> SAL_CALL create(
 }
 
 //==============================================================================
-static OUString SAL_CALL getImplementationName()
+OUString SAL_CALL getImplementationName_()
 {
     return OUSTR("com.sun.star.comp.deployment.ui.PackageManagerDialog");
 }
 
 //==============================================================================
-static Sequence<OUString> SAL_CALL getSupportedServiceNames()
+Sequence<OUString> SAL_CALL getSupportedServiceNames_()
 {
     OUString strName = OUSTR("com.sun.star.deployment.ui.PackageManagerDialog");
     return Sequence<OUString>( &strName, 1 );
@@ -208,31 +177,30 @@ static Sequence<OUString> SAL_CALL getSupportedServiceNames()
 OUString ServiceImpl::getImplementationName()
     throw (RuntimeException)
 {
-    return ::dp_gui::getImplementationName();
+    return getImplementationName_();
 }
 
 //______________________________________________________________________________
 sal_Bool ServiceImpl::supportsService( OUString const & serviceName )
     throw (RuntimeException)
 {
-    return ::dp_gui::getSupportedServiceNames()[ 0 ].equals( serviceName );
+    return getSupportedServiceNames_()[ 0 ].equals( serviceName );
 }
 
 //______________________________________________________________________________
 Sequence<OUString> ServiceImpl::getSupportedServiceNames()
     throw (RuntimeException)
 {
-    return ::dp_gui::getSupportedServiceNames();
+    return getSupportedServiceNames_();
 }
 
 // XExecutableDialog
 //______________________________________________________________________________
 void ServiceImpl::setTitle( OUString const & title ) throw (RuntimeException)
 {
-    if (DialogImpl::s_dialog.is())
-    {
-        ::vos::OGuard guard( Application::GetSolarMutex() );
-        DialogImpl::get(
+    if (::dp_gui::DialogImpl::s_dialog.is()) {
+        const ::vos::OGuard guard( Application::GetSolarMutex() );
+        ::dp_gui::DialogImpl::get(
             m_xComponentContext, m_xParent, m_view )->SetText( title );
     }
     else
@@ -243,7 +211,7 @@ void ServiceImpl::setTitle( OUString const & title ) throw (RuntimeException)
 sal_Int16 ServiceImpl::execute() throw (RuntimeException)
 {
     ::std::auto_ptr<Application> app;
-    if (!DialogImpl::s_dialog.is() && !::dp_misc::office_is_running())
+    if (!::dp_gui::DialogImpl::s_dialog.is() && !::dp_misc::office_is_running())
     {
         app.reset( new MyApp );
         if (! InitVCL( Reference<lang::XMultiServiceFactory>(
@@ -262,11 +230,11 @@ sal_Int16 ServiceImpl::execute() throw (RuntimeException)
     }
 
     {
-        ::vos::OGuard guard( Application::GetSolarMutex() );
-        ::rtl::Reference<DialogImpl> dialog(
-            DialogImpl::get( m_xComponentContext, m_xParent, m_view ) );
-        if (m_initialTitle.getLength() > 0)
-        {
+        const ::vos::OGuard guard( Application::GetSolarMutex() );
+        ::rtl::Reference< ::dp_gui::DialogImpl > dialog(
+            ::dp_gui::DialogImpl::get(
+                m_xComponentContext, m_xParent, m_view ) );
+        if (m_initialTitle.getLength() > 0) {
             dialog->SetText( m_initialTitle );
             m_initialTitle = OUString();
         }
@@ -274,8 +242,7 @@ sal_Int16 ServiceImpl::execute() throw (RuntimeException)
         dialog->ToTop( TOTOP_RESTOREWHENMIN );
     }
 
-    if (app.get() != 0)
-    {
+    if (app.get() != 0) {
         Application::Execute();
         DeInitVCL();
     }
@@ -290,22 +257,21 @@ void ServiceImpl::trigger( OUString const & event ) throw (RuntimeException)
     execute();
 }
 
-static const ::cppu::ImplementationEntry s_entries [] =
+const ::cppu::ImplementationEntry s_entries [] =
 {
     {
         (::cppu::ComponentFactoryFunc) create,
-        getImplementationName,
-        getSupportedServiceNames,
+        getImplementationName_,
+        getSupportedServiceNames_,
         createFactory,
         0, 0
     },
     { 0, 0, 0, 0, 0, 0 }
 };
 
-}
+} // anon namespace
 
-extern "C"
-{
+extern "C" {
 
 void SAL_CALL component_getImplementationEnvironment(
     const sal_Char ** ppEnvTypeName, uno_Environment ** ppEnv )
@@ -318,7 +284,7 @@ sal_Bool SAL_CALL component_writeInfo(
     registry::XRegistryKey * pRegistryKey )
 {
     return ::cppu::component_writeInfoHelper(
-        pServiceManager, pRegistryKey, ::dp_gui::s_entries );
+        pServiceManager, pRegistryKey, s_entries );
 }
 
 void * SAL_CALL component_getFactory(
@@ -327,7 +293,7 @@ void * SAL_CALL component_getFactory(
     registry::XRegistryKey * pRegistryKey )
 {
     return ::cppu::component_getFactoryHelper(
-        pImplName, pServiceManager, pRegistryKey, ::dp_gui::s_entries );
+        pImplName, pServiceManager, pRegistryKey, s_entries );
 }
 
-}
+} // extern "C"
