@@ -16720,3 +16720,17 @@ _real@4@40088dc0000000000000
 ?getImplementationId@?$WeakComponentImplHelper1@VXGraphicObjectResolver@document@star@sun@com@@@cppu@@UAA?AV?$Sequence@C@uno@star@sun@com@@XZ
 ?resolveGraphicObjectURL@SvXMLGraphicHelper@@UAA?AVOUString@rtl@@ABV23@@Z
 ?s_pType_com_sun_star_document_XGraphicObjectResolver@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXGraphicObjectResolver@document@star@sun@com@@@3456@@Z@4PAU_typelib_TypeDescriptionReference@@A
+??0SvxRubyChildWindow@@QAE@PAVWindow@@GPAVSfxBindings@@PAUSfxChildWinInfo@@@Z
+??0SvxRubyDialog@@QAE@PAVSfxBindings@@PAVSfxChildWindow@@PAVWindow@@ABVResId@@@Z
+??1SvxRubyDialog@@UAE@XZ
+?Close@SvxRubyDialog@@EAEEXZ
+?GetChildWindowId@SvxRubyChildWindow@@SAGXZ
+?GetInfo@SvxRubyChildWindow@@UBE?AUSfxChildWinInfo@@XZ
+?RegisterChildWindow@SvxRubyChildWindow@@SAXEPAVSfxModule@@G@Z
+?Resize@SvxRubyDialog@@EAEXXZ
+??0SvxAsianLayoutPage@@AAE@PAVWindow@@ABVSfxItemSet@@@Z
+??1SvxAsianLayoutPage@@EAE@XZ
+?Create@SvxAsianLayoutPage@@SAPAVSfxTabPage@@PAVWindow@@ABVSfxItemSet@@@Z
+?FillItemSet@SvxAsianLayoutPage@@UAEEAAVSfxItemSet@@@Z
+?Reset@SvxAsianLayoutPage@@UAEXABVSfxItemSet@@@Z
+?getToken@OUString@rtl@@QBE?AV12@JG@Z
