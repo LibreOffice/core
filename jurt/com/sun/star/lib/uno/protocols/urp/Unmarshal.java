@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Unmarshal.java,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 13:04:15 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 14:35:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,601 +60,465 @@
  ************************************************************************/
 package com.sun.star.lib.uno.protocols.urp;
 
-
-import java.io.ByteArrayInputStream;
-import java.io.DataInput;
-import java.io.DataInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
-
-import java.lang.reflect.Array;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-
-
-import com.sun.star.bridge.XInstanceProvider;
-
+import com.sun.star.lib.uno.environments.remote.ThreadId;
+import com.sun.star.lib.uno.typedesc.FieldDescription;
+import com.sun.star.lib.uno.typedesc.TypeDescription;
 import com.sun.star.uno.Any;
 import com.sun.star.uno.Enum;
 import com.sun.star.uno.IBridge;
+import com.sun.star.uno.IFieldDescription;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.TypeClass;
-import com.sun.star.uno.Union;
 import com.sun.star.uno.XInterface;
+import java.io.ByteArrayInputStream;
+import java.io.DataInputStream;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Array;
+import java.lang.reflect.InvocationTargetException;
 
-import com.sun.star.lib.uno.environments.remote.IUnmarshal;
-import com.sun.star.lib.uno.environments.remote.Protocol;
-import com.sun.star.lib.uno.environments.remote.ThreadId;
-
-import com.sun.star.uno.ITypeDescription;
-import com.sun.star.uno.IFieldDescription;
-
-import com.sun.star.lib.uno.typedesc.TypeDescription;
-
-class Unmarshal implements IUnmarshal {
-    /**
-     * When set to true, enables various debugging output.
-     */
-    static private final boolean DEBUG = false;
-
-    private InputStream _inputStream;
-    private DataInput   _dataInput;
-    private IBridge     _iBridge;
-    private Object      _objectCache[];
-    private ITypeDescription        _iTypeDescriptionCache[];
-    private ThreadId    _threadIdCache[];
-
-    Unmarshal(IBridge iBridge, short cacheSize) {
-        _iBridge         = iBridge;
-
-        _objectCache          = new Object[cacheSize];
-        _iTypeDescriptionCache = new ITypeDescription[cacheSize];
-        _threadIdCache        = new ThreadId[cacheSize];
-        _inputStream          = new ByteArrayInputStream(new byte[0]);
-        _dataInput            = new DataInputStream(_inputStream);
+final class Unmarshal {
+    public Unmarshal(IBridge bridge, int cacheSize) {
+        this.bridge = bridge;
+        objectIdCache = new String[cacheSize];
+        threadIdCache = new ThreadId[cacheSize];
+        typeCache = new TypeDescription[cacheSize];
+        reset(new byte[0]);
     }
 
-    Object readAny() {
-        ITypeDescription t = readTypeDescription();
-        switch (t.getTypeClass().getValue()) {
+    public int read8Bit() {
+        try {
+            return input.readUnsignedByte();
+        } catch (IOException e) {
+            throw new RuntimeException(e.toString());
+        }
+    }
+
+    public int read16Bit() {
+        try {
+            return input.readUnsignedShort();
+        } catch (IOException e) {
+            throw new RuntimeException(e.toString());
+        }
+    }
+
+    public String readObjectId() {
+        String id = readStringValue();
+        int index = read16Bit();
+        if (index == 0xFFFF) {
+            if (id.length() == 0) {
+                id = null;
+            }
+        } else {
+            if (id.length() == 0) {
+                id = objectIdCache[index];
+            } else {
+                objectIdCache[index] = id;
+            }
+        }
+        return id;
+    }
+
+    public ThreadId readThreadId() {
+        int len = readCompressedNumber();
+        byte[] data = null;
+        ThreadId id = null;
+        if (len != 0) {
+            data = new byte[len];
+            readBytes(data);
+            id = new ThreadId(data);
+        }
+        int index = read16Bit();
+        if (index != 0xFFFF) {
+            if (len == 0) {
+                id = threadIdCache[index];
+            } else {
+                threadIdCache[index] = id;
+            }
+        }
+        return id;
+    }
+
+    public TypeDescription readType() {
+        int b = read8Bit();
+        TypeClass typeClass = TypeClass.fromInt(b & 0x7F);
+        if (TypeDescription.isTypeClassSimple(typeClass)) {
+            return TypeDescription.getTypeDescription(typeClass);
+        } else {
+            int index = read16Bit();
+            TypeDescription type = null;
+            if ((b & 0x80) != 0) {
+                try {
+                    type = TypeDescription.getTypeDescription(
+                        readStringValue());
+                } catch (ClassNotFoundException e) {
+                    throw new RuntimeException(e.toString());
+                }
+            }
+            if (index != 0xFFFF) {
+                if ((b & 0x80) == 0) {
+                    type = typeCache[index];
+                } else {
+                    typeCache[index] = type;
+                }
+            }
+            return type;
+        }
+    }
+
+    public Object readValue(TypeDescription type) {
+        switch (type.getTypeClass().getValue()) {
+        case TypeClass.VOID_value:
+            return null;
+
+        case TypeClass.BOOLEAN_value:
+            return readBooleanValue();
+
+        case TypeClass.BYTE_value:
+            return readByteValue();
+
+        case TypeClass.SHORT_value:
+        case TypeClass.UNSIGNED_SHORT_value:
+            return readShortValue();
+
+        case TypeClass.LONG_value:
+        case TypeClass.UNSIGNED_LONG_value:
+            return readLongValue();
+
+        case TypeClass.HYPER_value:
+        case TypeClass.UNSIGNED_HYPER_value:
+            return readHyperValue();
+
+        case TypeClass.FLOAT_value:
+            return readFloatValue();
+
+        case TypeClass.DOUBLE_value:
+            return readDoubleValue();
+
+        case TypeClass.CHAR_value:
+            return readCharValue();
+
+        case TypeClass.STRING_value:
+            return readStringValue();
+
+        case TypeClass.TYPE_value:
+            return readTypeValue();
+
+        case TypeClass.ANY_value:
+            return readAnyValue();
+
+        case TypeClass.SEQUENCE_value:
+            return readSequenceValue(type);
+
+        case TypeClass.ENUM_value:
+            return readEnumValue(type);
+
+        case TypeClass.STRUCT_value:
+            return readStructValue(type);
+
+        case TypeClass.EXCEPTION_value:
+            return readExceptionValue(type);
+
+        case TypeClass.INTERFACE_value:
+            return readInterfaceValue(type);
+
+        default:
+            throw new IllegalArgumentException("Bad type descriptor " + type);
+        }
+    }
+
+    public boolean hasMore() {
+        try {
+            return input.available() > 0;
+        } catch (IOException e) {
+            throw new RuntimeException(e.toString());
+        }
+    }
+
+    public void reset(byte[] data) {
+        input = new DataInputStream(new ByteArrayInputStream(data));
+    }
+
+    private Boolean readBooleanValue() {
+        try {
+            return input.readBoolean() ? Boolean.TRUE : Boolean.FALSE;
+        } catch (IOException e) {
+            throw new RuntimeException(e.toString());
+        }
+    }
+
+    private Byte readByteValue() {
+        try {
+            return new Byte(input.readByte());
+        } catch (IOException e) {
+            throw new RuntimeException(e.toString());
+        }
+    }
+
+    private Short readShortValue() {
+        try {
+            return new Short(input.readShort());
+        } catch (IOException e) {
+            throw new RuntimeException(e.toString());
+        }
+    }
+
+    private Integer readLongValue() {
+        try {
+            return new Integer(input.readInt());
+        } catch (IOException e) {
+            throw new RuntimeException(e.toString());
+        }
+    }
+
+    private Long readHyperValue() {
+        try {
+            return new Long(input.readLong());
+        } catch (IOException e) {
+            throw new RuntimeException(e.toString());
+        }
+    }
+
+    private Float readFloatValue() {
+        try {
+            return new Float(input.readFloat());
+        } catch (IOException e) {
+            throw new RuntimeException(e.toString());
+        }
+    }
+
+    private Double readDoubleValue() {
+        try {
+            return new Double(input.readDouble());
+        } catch (IOException e) {
+            throw new RuntimeException(e.toString());
+        }
+    }
+
+    private Character readCharValue() {
+        try {
+            return new Character(input.readChar());
+        } catch (IOException e) {
+            throw new RuntimeException(e.toString());
+        }
+    }
+
+    private String readStringValue() {
+        int len = readCompressedNumber();
+        byte[] data = new byte[len];
+        readBytes(data);
+        try {
+            return new String(data, "UTF8");
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e.toString());
+        }
+    }
+
+    private Type readTypeValue() {
+        return new Type(readType());
+    }
+
+    private Object readAnyValue() {
+        TypeDescription type = readType();
+        switch (type.getTypeClass().getValue()) {
         case TypeClass.VOID_value:
             return Any.VOID;
-        case TypeClass.CHAR_value:
-            return readCharacter();
+
         case TypeClass.BOOLEAN_value:
-            return readBoolean();
+            return readBooleanValue();
+
         case TypeClass.BYTE_value:
-            return readByte();
+            return readByteValue();
+
         case TypeClass.SHORT_value:
-            return readShort();
+            return readShortValue();
+
         case TypeClass.UNSIGNED_SHORT_value:
-            return new Any(Type.UNSIGNED_SHORT, readShort());
+            return new Any(Type.UNSIGNED_SHORT, readShortValue());
+
         case TypeClass.LONG_value:
-            return readInteger();
+            return readLongValue();
+
         case TypeClass.UNSIGNED_LONG_value:
-            return new Any(Type.UNSIGNED_LONG, readInteger());
+            return new Any(Type.UNSIGNED_LONG, readLongValue());
+
         case TypeClass.HYPER_value:
-            return readLong();
+            return readHyperValue();
+
         case TypeClass.UNSIGNED_HYPER_value:
-            return new Any(Type.UNSIGNED_HYPER, readLong());
+            return new Any(Type.UNSIGNED_HYPER, readHyperValue());
+
         case TypeClass.FLOAT_value:
-            return readFloat();
+            return readFloatValue();
+
         case TypeClass.DOUBLE_value:
-            return readDouble();
+            return readDoubleValue();
+
+        case TypeClass.CHAR_value:
+            return readCharValue();
+
         case TypeClass.STRING_value:
-            return readString();
+            return readStringValue();
+
         case TypeClass.TYPE_value:
-            return new Type(readTypeDescription());
-        case TypeClass.ENUM_value:
-            return readEnum(t);
-        case TypeClass.STRUCT_value:
-            return readStruct(t);
-        case TypeClass.EXCEPTION_value:
-            return readThrowable(t);
+            return readTypeValue();
+
         case TypeClass.SEQUENCE_value:
-            Object os = readSequence(t);
-            ITypeDescription tc = t.getComponentType();
-            while (tc.getTypeClass() == TypeClass.SEQUENCE) {
-                tc = tc.getComponentType();
-            }
-            switch (tc.getTypeClass().getValue()) {
-            case TypeClass.UNSIGNED_SHORT_value:
-            case TypeClass.UNSIGNED_LONG_value:
-            case TypeClass.UNSIGNED_HYPER_value:
-                return new Any(new Type(t), os);
-            default:
-                return os;
-            }
-        case TypeClass.INTERFACE_value:
-            Object oi = readReference(t);
-            return t.getZClass() == XInterface.class ? oi
-                : new Any(new Type(t), oi);
-        default:
-            throw new com.sun.star.uno.RuntimeException(
-                "Reading Any with bad type " + t.getTypeClass());
-        }
-    }
-
-    boolean readboolean() {
-        boolean bool;
-
-        try {
-            bool = _dataInput.readBoolean();
-        }
-        catch(IOException iOException) {
-            throw new com.sun.star.uno.RuntimeException(getClass().getName() + ".readboolean - unexpected:" + iOException);
-        }
-
-        return bool;
-    }
-
-    Boolean readBoolean() {
-        Boolean result =  new Boolean(readboolean());
-
-        if(DEBUG) System.err.println("##### " + getClass().getName() + ".readBoolean:" + result);
-
-        return result;
-    }
-
-    Byte readByte() {
-        Byte result = new Byte(readbyte());
-
-        if(DEBUG) System.err.println("##### " + getClass().getName() + ".readByte:" + result);
-
-        return result;
-    }
-
-    byte readbyte() {
-        try {
-            byte result = (byte)(_dataInput.readByte() & 0xff);
-
-            if(DEBUG) System.err.println("##### " + getClass().getName() + ".readbyte:" + (result & 0xff));
-
-            return result;
-        }
-        catch(IOException iOException) {
-            throw new com.sun.star.uno.RuntimeException(getClass().getName() + ".readByte - unexpected:" + iOException);
-        }
-    }
-
-    void read(byte bytes[]) {
-        try {
-            _inputStream.read(bytes);
-
-            if(DEBUG) System.err.println("##### " + getClass().getName() + ".read:" + bytes);
-        }
-        catch(IOException iOException) {
-            throw new com.sun.star.uno.RuntimeException(getClass().getName() + ".read - unexpected:" + iOException);
-        }
-    }
-
-    byte []readbyteSequence() {
-        int size = readCompressedInt();
-        byte bytes[] = new byte[size];
-
-        read(bytes);
-
-        if(DEBUG) System.err.println("##### " + getClass().getName() + ".readbyteSequence:" + bytes);
-
-        return bytes;
-    }
-
-    char readchar() {
-        try {
-            char zchar = _dataInput.readChar();
-
-            if(DEBUG) System.err.println("##### " + getClass().getName() + ".readChar:" + zchar);
-
-            return zchar;
-        }
-        catch(IOException iOException) {
-            throw new com.sun.star.uno.RuntimeException(getClass().getName() + ".readChar - unexpected:" + iOException);
-        }
-    }
-
-    Character readCharacter() {
-        Character result = new Character(readchar());
-
-        if(DEBUG) System.err.println("##### " + getClass().getName() + ".readChar:" + result);
-
-        return result;
-    }
-
-    double readdouble() {
-        try {
-            double zdouble = _dataInput.readDouble();
-
-            if(DEBUG) System.err.println("##### " + getClass().getName() + ".readDouble:" + zdouble);
-
-            return zdouble;
-        }
-        catch(IOException iOException) {
-            throw new com.sun.star.uno.RuntimeException(getClass().getName() + ".readDouble - unexpected:" + iOException);
-        }
-    }
-
-    Double readDouble() {
-        Double result = new Double(readdouble());
-
-        if(DEBUG) System.err.println("##### " + getClass().getName() + ".readDouble:" + result);
-
-        return result;
-    }
-
-    Enum readEnum(ITypeDescription iTypeDescription) {
-        try {
-            Integer index = readInteger();
-
-            Method fromInt = iTypeDescription.getZClass().getMethod("fromInt", new Class[] {int.class});
-            Enum result = (Enum)fromInt.invoke(null, new Object[]{index});
-
-            if(DEBUG) System.err.println("##### " + getClass().getName() + ".readEnum:" + result);
-
-            return result;
-        }
-        catch(NoSuchMethodException noSuchMethodException) {
-            throw new com.sun.star.uno.RuntimeException(getClass().getName() + ".readEnum - unexpected:" + noSuchMethodException);
-        }
-        catch(InvocationTargetException invocationTargetException) {
-            throw new com.sun.star.uno.RuntimeException(getClass().getName() + ".readEnum - unexpected:" + invocationTargetException);
-        }
-        catch(IllegalAccessException illegalAccessException) {
-            throw new com.sun.star.uno.RuntimeException(getClass().getName() + ".readEnum - unexpected:" + illegalAccessException);
-        }
-    }
-
-    Throwable readThrowable(ITypeDescription iTypeDescription) {
-        try {
-            String message = readString();
-
-            Constructor constructor = iTypeDescription.getZClass().getConstructor(new Class[]{String.class});
-            Throwable throwable = (Throwable)constructor.newInstance(new Object[]{message});
-            throwable.fillInStackTrace();
-            readStruct(iTypeDescription, throwable);
-
-            if(DEBUG) System.err.println("##### " + getClass().getName() + ".readThrowable:" + throwable);
-
-            return throwable;
-        }
-        catch(NoSuchMethodException noSuchMethodException) {
-            throw new com.sun.star.uno.RuntimeException(getClass().getName() + ".readThrowable - unexpected:" + noSuchMethodException);
-        }
-        catch(InvocationTargetException invocationTargetException) {
-            throw new com.sun.star.uno.RuntimeException(getClass().getName() + ".readThrowable - unexpected:" + invocationTargetException);
-        }
-        catch(IllegalAccessException illegalAccessException) {
-            throw new com.sun.star.uno.RuntimeException(getClass().getName() + ".readThrowable - unexpected:" + illegalAccessException);
-        }
-        catch(InstantiationException instantiationException) {
-            throw new com.sun.star.uno.RuntimeException(getClass().getName() + ".readThrowable - unexpected:" + instantiationException);
-        }
-    }
-
-    float readfloat() {
-        try {
-            float zfloat = _dataInput.readFloat();
-
-            if(DEBUG) System.err.println("##### " + getClass().getName() + ".readFloat:" + zfloat);
-
-            return zfloat;
-        }
-        catch(IOException iOException) {
-            throw new com.sun.star.uno.RuntimeException(getClass().getName() + ".readfloat - unexpected:" + iOException);
-        }
-    }
-
-    Float readFloat() {
-        Float result = new Float(readfloat());
-
-        if(DEBUG) System.err.println("##### " + getClass().getName() + ".readFloat:" + result);
-
-        return result;
-    }
-
-    int readint() {
-        try {
-            int zint = _dataInput.readInt();
-
-            if(DEBUG) System.err.println("##### " + getClass().getName() + ".readint:" + zint);
-
-            return zint;
-        }
-        catch(IOException iOException) {
-            throw new com.sun.star.uno.RuntimeException(getClass().getName() + ".readint - unexpected:" + iOException);
-        }
-    }
-
-    Integer readInteger() {
-        Integer result = new Integer(readint());
-
-        if(DEBUG) System.err.println("##### " + getClass().getName() + ".readInteger:" + result);
-
-        return result;
-    }
-
-    long readlong() {
-        try {
-            long zlong = _dataInput.readLong();
-
-            if(DEBUG) System.err.println("##### " + getClass().getName() + ".readlong:" + zlong);
-
-            return zlong;
-        }
-        catch(IOException iOException) {
-            throw new com.sun.star.uno.RuntimeException(getClass().getName() + ".readlong - unexpected:" + iOException);
-        }
-    }
-
-    Long readLong() {
-        Long result = new Long(readlong());
-
-        if(DEBUG) System.err.println("##### " + getClass().getName() + ".readLong:" + result);
-
-        return result;
-    }
-
-    public Object readObject(ITypeDescription iTypeDescription) {
-        Object result = null;
-
-        switch(iTypeDescription.getTypeClass().getValue()) {
-        case TypeClass.ANY_value:       result = readAny();           break; // read an any?
-        case TypeClass.SEQUENCE_value:
-        case TypeClass.ARRAY_value:     result = readSequence(iTypeDescription);  break;  // read a sequence ?
-        case TypeClass.VOID_value:                                    break; // nop  // read nothing ?
-        case TypeClass.ENUM_value:      result = readEnum(iTypeDescription);      break;  // read an enum ?
-        case TypeClass.UNION_value:     result = readUnion(iTypeDescription);     break;  // read a union ?
-        case TypeClass.TYPE_value:      result = new Type(readTypeDescription());          break;  // read a type ?
-        case TypeClass.INTERFACE_value: result = readReference(iTypeDescription); break;  // read an interface ?
-        case TypeClass.BOOLEAN_value:   result = readBoolean();       break;  // is it a boolean
-        case TypeClass.CHAR_value:      result = readCharacter();     break;  // is it a character ?)
-        case TypeClass.BYTE_value:      result = readByte();          break; // is it a byte ?
-        case TypeClass.SHORT_value:
-        case TypeClass.UNSIGNED_SHORT_value: result = readShort();         break;  // is it a short ?
-        case TypeClass.LONG_value:
-        case TypeClass.UNSIGNED_LONG_value: result = readInteger();       break;  // is it an integer ?
-        case TypeClass.HYPER_value:
-        case TypeClass.UNSIGNED_HYPER_value: result = readLong();          break;  // is it a long ?
-        case TypeClass.FLOAT_value:     result = readFloat();         break;  // is it a float ?
-        case TypeClass.DOUBLE_value:    result = readDouble();        break;  // is it a double ?
-        case TypeClass.STRING_value:    result = readString();        break;  // is it a String ?
-        case TypeClass.EXCEPTION_value: result = readThrowable(iTypeDescription); break;  // is it an exception?
-        case TypeClass.STRUCT_value:
-            if(iTypeDescription.getZClass() == ThreadId.class) // read a thread id ?
-                result = readThreadId();
-
-            else   // otherwise read a struct
-                result = readStruct(iTypeDescription);
-
-            break;
-
-        default:
-            throw new com.sun.star.uno.RuntimeException("unknown typeClass:" + iTypeDescription.getTypeClass());
-        }
-
-        if(DEBUG) System.err.println("##### " + getClass().getName() + ".readObject:" + iTypeDescription + " >" + result + "<");
-
-        return result;
-    }
-
-    String readOid() {
-        Marshal.M_InterfaceReference m_InterfaceReference = (Marshal.M_InterfaceReference)readObject(Marshal.__M_InterfaceReferenceTypeDescription);
-
-        String oid = null;
-
-        if(m_InterfaceReference.cache != (short)0xffff) { // is the cache entry valid ?
-            if(m_InterfaceReference.full.length() > 0)  // update the cache?
-                _objectCache[m_InterfaceReference.cache] = m_InterfaceReference.full;
-
-            oid = (String)_objectCache[m_InterfaceReference.cache];
-        }
-        else if(m_InterfaceReference.full.length() > 0) // is the oid entry valid ?
-            oid = m_InterfaceReference.full;
-
-        if(DEBUG) System.err.println("##### " + getClass().getName() + ".readOid:" + oid);
-
-        return oid;
-    }
-
-    Object readReference(ITypeDescription iTypeDescription) {
-        Object oid = readOid();;
-
-        // the result is a null ref, in case cache and oid are invalid
-        Object result = null;
-
-        // map the object from universe
-        if(oid != null)
-            result = _iBridge.mapInterfaceFrom(oid, new Type(iTypeDescription));
-
-        if(DEBUG) System.err.println("##### " + getClass().getName() + ".readReference:" + iTypeDescription + " " + result);
-
-        return result;
-    }
-
-    Object readSequence(ITypeDescription iTypeDescription) {
-        Object result = null;
-        if(iTypeDescription.getTypeClass() == TypeClass.BYTE) // read a byte sequence ?
-              result = readbyteSequence();
-
-        else {
-            int size = readCompressedInt();
-
-            iTypeDescription = iTypeDescription.getComponentType();
-
-            if(iTypeDescription.getTypeClass() == TypeClass.ANY) // take special care of any array (cause anys are mapped to objects)
-                result = Array.newInstance(Object.class, size);
-            else
-                result = Array.newInstance(iTypeDescription.getZClass(), size);
-
-            for(int i = 0; i < size; ++ i)
-                Array.set(result, i, readObject(iTypeDescription));
-        }
-
-        if(DEBUG) System.err.println("##### " + getClass().getName() + ".readSequence:" + result);
-
-        return result;
-    }
-
-    Short readShort() {
-        Short result = new Short(readshort());
-
-        if(DEBUG) System.err.println("##### " + getClass().getName() + ".readShort:" + result);
-
-        return result;
-    }
-
-    short readshort() {
-        try {
-            short result = _dataInput.readShort();
-
-            if(DEBUG) System.err.println("##### " + getClass().getName() + ".readshort:" + result);
-
-            return result;
-        }
-        catch(IOException iOException) {
-            throw new com.sun.star.uno.RuntimeException(getClass().getName() + ".readshort - unexpected:" + iOException);
-        }
-    }
-
-    int readCompressedInt() {
-        int result = readbyte() & 0xff;
-
-        if(result == 255) // if 255 then there follows a complete int
-            result = readint();
-
-        if(DEBUG) System.err.println("##### " + getClass().getName() + ".readCompressedInt:" + result);
-
-        return result;
-    }
-
-    String readString() {
-        try {
-            int utflen = readCompressedInt(); // the size of the string
-
-            byte bytes[] = new byte[utflen];
-            read(bytes);
-
-            return new String(bytes, "UTF8");
-        }
-        catch(UnsupportedEncodingException unsupportedEncodingException) {
-            throw new com.sun.star.uno.RuntimeException(getClass().getName() + ".readString - unexpected:" + unsupportedEncodingException);
-        }
-    }
-
-    void readStruct(ITypeDescription iTypeDescription, Object object) {
-        IFieldDescription iFieldDescriptions[] = iTypeDescription.getFieldDescriptions();
-
-          for(int i = 0; i < iFieldDescriptions.length; ++ i) {
-            try {
-                iFieldDescriptions[i].getField().set(object, readObject(iFieldDescriptions[i].getTypeDescription()));
-            }
-            catch(IllegalAccessException illegalAccessException) {
-                throw new com.sun.star.uno.RuntimeException(getClass().getName() + ".readStruct - unexpected:" + illegalAccessException);
-            }
-        }
-
-        if(DEBUG) System.err.println("##### " + getClass().getName() + ".readStruct:" + object);
-    }
-
-    Object readStruct(ITypeDescription iTypeDescription) {
-        try {
-            Object object = iTypeDescription.getZClass().newInstance();
-
-            readStruct(iTypeDescription, object);
-
-            return object;
-        }
-        catch(IllegalAccessException illegalAccessException) {
-            throw new com.sun.star.uno.RuntimeException(getClass().getName() + ".readStruct - unexpected:" + illegalAccessException);
-        }
-        catch(InstantiationException instantiationException) {
-            throw new com.sun.star.uno.RuntimeException(getClass().getName() + ".readStruct - unexpected:" + instantiationException);
-        }
-    }
-
-    ThreadId readThreadId() {
-        Marshal.M_ThreadId m_threadId = (Marshal.M_ThreadId)readObject(Marshal.__M_ThreadIdTypeDescription);
-
-        ThreadId threadId = null;
-
-        if(m_threadId.cache != (short)0xffff) { // is the cache entry valid?
-            if(m_threadId.full.length != 0)
-                _threadIdCache[m_threadId.cache] = new ThreadId(m_threadId.full);
-
-            threadId = _threadIdCache[m_threadId.cache];
-        }
-        else if(m_threadId.full.length != 0)
-            threadId = new ThreadId(m_threadId.full);
-
-        if(DEBUG) System.err.println("##### " + getClass().getName() + ".readThreadID:" + _threadIdCache[m_threadId.cache]);
-
-        return threadId;
-    }
-
-
-    int readunsignedbyte() {
-        try {
-            int result = (byte)(_dataInput.readUnsignedByte() & 0xff);
-
-            if(DEBUG) System.err.println("##### " + getClass().getName() + ".readunsignedbyte:" + result);
-
-            return result;
-        }
-        catch(IOException iOException) {
-            throw new com.sun.star.uno.RuntimeException(getClass().getName() + ".readunsignedbyte - unexpected:" + iOException);
-        }
-    }
-
-    ITypeDescription readTypeDescription() {
-        int typeClassValue = readunsignedbyte() & 0xff;
-
-        TypeClass typeClass = TypeClass.fromInt(typeClassValue & 0x7f);
-        ITypeDescription iTypeDescription = null;
-
-        if(TypeDescription.isTypeClassSimple(typeClass)) // is it a simple type?
-            iTypeDescription = TypeDescription.getTypeDescription(typeClass);
-
-        else {
-            try {
-                short index = readshort(); // the cache index
-
-                if(index != (short)0xffff) { // shall we update the cache?
-                    if((typeClassValue & 0x80) != 0) {// update the cache?
-                        _iTypeDescriptionCache[index] = TypeDescription.getTypeDescription(readString());
-                    }
-                    iTypeDescription = _iTypeDescriptionCache[index];
+            {
+                Object value = readSequenceValue(type);
+                TypeDescription ctype = (TypeDescription)
+                    type.getComponentType();
+                while (ctype.getTypeClass() == TypeClass.SEQUENCE) {
+                    ctype = (TypeDescription) ctype.getComponentType();
                 }
-                else
-                    iTypeDescription = TypeDescription.getTypeDescription(readString());
+                switch (ctype.getTypeClass().getValue()) {
+                case TypeClass.UNSIGNED_SHORT_value:
+                case TypeClass.UNSIGNED_LONG_value:
+                case TypeClass.UNSIGNED_HYPER_value:
+                    return new Any(new Type(type), value);
+
+                case TypeClass.STRUCT_value:
+                    if (ctype.hasTypeArguments()) {
+                        return new Any(new Type(type), value);
+                    }
+                default:
+                    return value;
+                }
             }
-            catch(ClassNotFoundException classNotFoundException) {
-                throw new com.sun.star.uno.RuntimeException(getClass().getName() + ".readTypeDescription - unexpected:" + classNotFoundException);
+
+        case TypeClass.ENUM_value:
+            return readEnumValue(type);
+
+        case TypeClass.STRUCT_value:
+            {
+                Object value = readStructValue(type);
+                return type.hasTypeArguments()
+                    ? new Any(new Type(type), value) : value;
             }
+
+        case TypeClass.EXCEPTION_value:
+            return readExceptionValue(type);
+
+        case TypeClass.INTERFACE_value:
+            {
+                Object value = readInterfaceValue(type);
+                return type.getZClass() == XInterface.class
+                    ? value : new Any(new Type(type), value);
+            }
+
+        default:
+            throw new RuntimeException(
+                "Reading ANY with bad type " + type.getTypeClass());
         }
-
-        if(DEBUG) System.err.println("##### " + getClass().getName() + ".readTypeDescription:" + iTypeDescription);
-
-        return iTypeDescription;
     }
 
-    Union readUnion(ITypeDescription iTypeDescription) {
-        throw new com.sun.star.uno.RuntimeException(getClass().getName() + ".readUnion - not implemented!!!");
+    private Object readSequenceValue(TypeDescription type) {
+        int len = readCompressedNumber();
+        if (type.getTypeClass() == TypeClass.BYTE) {
+            byte[] data = new byte[len];
+            readBytes(data);
+            return data;
+        } else {
+            TypeDescription ctype = (TypeDescription) type.getComponentType();
+            Object value = Array.newInstance(
+                ctype.getTypeClass() == TypeClass.ANY
+                ? Object.class : ctype.getZClass(), len);
+            for (int i = 0; i < len; ++i) {
+                Array.set(value, i, readValue(ctype));
+            }
+            return value;
+        }
     }
 
-    void reset(byte bytes[]) {
-        _inputStream = new ByteArrayInputStream(bytes);
-        _dataInput = new DataInputStream(_inputStream);
-    }
-
-    int bytesLeft() {
+    private Enum readEnumValue(TypeDescription type) {
         try {
-            return _inputStream.available();
-        }
-        catch(IOException iOException) {
-            throw new com.sun.star.uno.RuntimeException(getClass().getName() + ".bytesLeft - unexpected:" + iOException);
+            return (Enum)
+                type.getZClass().getMethod(
+                    "fromInt", new Class[] { int.class }).
+                invoke(null, new Object[] { readLongValue() });
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e.toString());
+        } catch (InvocationTargetException e) {
+            throw new RuntimeException(e.toString());
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException(e.toString());
         }
     }
+
+    private Object readStructValue(TypeDescription type) {
+        Object value;
+        try {
+            value = type.getZClass().newInstance();
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e.toString());
+        } catch (InstantiationException e) {
+            throw new RuntimeException(e.toString());
+        }
+        readFields(type, value);
+        return value;
+    }
+
+    private Exception readExceptionValue(TypeDescription type) {
+        Exception value;
+        try {
+            value = (Exception)
+                type.getZClass().getConstructor(new Class[] { String.class }).
+                newInstance(new Object[] { readStringValue() });
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e.toString());
+        } catch (InstantiationException e) {
+            throw new RuntimeException(e.toString());
+        } catch (InvocationTargetException e) {
+            throw new RuntimeException(e.toString());
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException(e.toString());
+        }
+        readFields(type, value);
+        return value;
+    }
+
+    private Object readInterfaceValue(TypeDescription type) {
+        String id = readObjectId();
+        return id == null ? null : bridge.mapInterfaceFrom(id, new Type(type));
+    }
+
+    private int readCompressedNumber() {
+        int number = read8Bit();
+        try {
+            return number < 0xFF ? number : input.readInt();
+        } catch (IOException e) {
+            throw new RuntimeException(e.toString());
+        }
+    }
+
+    private void readBytes(byte[] data) {
+        try {
+            input.readFully(data);
+        } catch (IOException e) {
+            throw new RuntimeException(e.toString());
+        }
+    }
+
+    private void readFields(TypeDescription type, Object value) {
+        IFieldDescription[] fields = type.getFieldDescriptions();
+        for (int i = 0; i < fields.length; ++i) {
+            int index = ((FieldDescription) fields[i]).getTypeParameterIndex();
+            try {
+                fields[i].getField().set(
+                    value,
+                    readValue(
+                        index < 0
+                        ? (TypeDescription) fields[i].getTypeDescription()
+                        : type.getTypeArgument(index)));
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e.toString());
+            }
+        }
+    }
+
+    private final IBridge bridge;
+    private final String[] objectIdCache;
+    private final ThreadId[] threadIdCache;
+    private final TypeDescription[] typeCache;
+    private DataInputStream input;
 }
