@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:22:06 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:32:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -316,6 +316,23 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
     // from here, we use core interfaces -> lock Solar-Mutex (#91949#)
     vos::OGuard aGuard(Application::GetSolarMutex());
 
+    {
+        Reference<XPropertySet> rInfoSet = getExportInfo();
+        if( rInfoSet.is() )
+        {
+            OUString sAutoTextMode(
+                RTL_CONSTASCII_USTRINGPARAM("AutoTextMode"));
+            if( rInfoSet->getPropertySetInfo()->hasPropertyByName(
+                        sAutoTextMode ) )
+            {
+                Any aAny = rInfoSet->getPropertyValue(sAutoTextMode);
+                if( aAny.getValueType() == ::getBooleanCppuType() &&
+                    *static_cast<const sal_Bool*>(aAny.getValue()) )
+                    setBlockMode();
+            }
+        }
+    }
+
     SwXText *pText = (SwXText *)xTextTunnel->getSomething(
                                         SwXText::getUnoTunnelId() );
     ASSERT( pText, "SwXText missing" );
@@ -394,7 +411,7 @@ sal_uInt32 SwXMLExport::exportDoc( enum XMLTokenEnum eClass )
     if( bShowProgress )
     {
         ProgressBarHelper *pProgress = GetProgressBarHelper();
-        if( XML_PROGRESS_REF_NOT_SET == pProgress->GetReference() )
+        if( -1 == pProgress->GetReference() )
         {
             // progress isn't initialized:
             // We assume that the whole doc is exported, and the following
