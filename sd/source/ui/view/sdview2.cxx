@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview2.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2001-01-19 19:11:24 $
+ *  last change: $Author: obo $ $Date: 2001-01-23 10:13:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,7 +182,7 @@ SvDataObjectRef SdView::CreateDataObject( SdView* pWorkView, const Point& rDragP
 
     delete pObjDesc;
 
-    return xDataObject;
+    return (SvDataObjectRef) xDataObject;
 }
 
 
@@ -455,7 +455,7 @@ BOOL SdView::BeginDrag(Window* pWindow, Point aStartPos)
 
         BOOL bPresObjSelected = IsPresObjSelected();
 
-        SdDataObjectRef pDataObject = CreateDataObject(this, aStartPos);
+        SdDataObjectRef pDataObject = (SdDataObjectRef) CreateDataObject(this, aStartPos);
 
         pDragSrcMarkList = new SdrMarkList(aMark);
         nDragSrcPgNum = GetPageViewPvNum(0)->GetPage()->GetPageNum();
