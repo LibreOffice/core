@@ -2,9 +2,9 @@
  *
  *  $RCSfile: standardcontrol.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 16:03:59 $
+ *  last change: $Author: rt $ $Date: 2003-08-07 11:38:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,11 +196,7 @@ namespace pcr
 
         autoSizeWindow();
 
-#if SUPD < 650
-        SetExtFormat(XTDATEF_SYSTEM_SHORT_YYYY);
-#else
         SetExtDateFormat(XTDATEF_SYSTEM_SHORT_YYYY);
-#endif
         EnableEmptyFieldValue(sal_True);
     }
 
