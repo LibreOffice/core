@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctrltool.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:37:53 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 13:08:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,7 @@ String STR_SVT_STYLE_LIGHT
     Text[ czech ] = "Lehké";
     Text[ hebrew ] = "‮קל‬";
     Text[ hindi ] = "हल्का";
+    Text[ slovak ] = "Svetlé";
 };
 
 String STR_SVT_STYLE_LIGHT_ITALIC
@@ -120,6 +121,7 @@ String STR_SVT_STYLE_LIGHT_ITALIC
     Text[ czech ] = "Lehce skloněné";
     Text[ hebrew ] = "‮איטלקי קל‬";
     Text[ hindi ] = "Light Italic";
+    Text[ slovak ] = "Mierna kurzíva";
 };
 
 String STR_SVT_STYLE_NORMAL
@@ -151,6 +153,7 @@ String STR_SVT_STYLE_NORMAL
     Text[ czech ] = "Běžné";
     Text[ hebrew ] = "‮עובי רגיל‬";
     Text[ hindi ] = "सामान्य";
+    Text[ slovak ] = "Bežné";
 };
 
 String STR_SVT_STYLE_NORMAL_ITALIC
@@ -182,6 +185,7 @@ String STR_SVT_STYLE_NORMAL_ITALIC
     Text[ czech ] = "Kurzíva";
     Text[ hebrew ] = "‮איטלקי‬";
     Text[ hindi ] = "टेढ़ा";
+    Text[ slovak ] = "Kurzíva";
 };
 
 String STR_SVT_STYLE_BOLD
@@ -213,6 +217,7 @@ String STR_SVT_STYLE_BOLD
     Text[ czech ] = "Tučné";
     Text[ hebrew ] = "‮עבה‬";
     Text[ hindi ] = "मोटा";
+    Text[ slovak ] = "Tučné";
 };
 
 String STR_SVT_STYLE_BOLD_ITALIC
@@ -244,6 +249,7 @@ String STR_SVT_STYLE_BOLD_ITALIC
     Text[ czech ] = "Tučná kurzíva";
     Text[ hebrew ] = "‮איטלקי עבה‬";
     Text[ hindi ] = "Bold Italic";
+    Text[ slovak ] = "Tučná kurzíva";
 };
 
 String STR_SVT_STYLE_BLACK
@@ -275,6 +281,7 @@ String STR_SVT_STYLE_BLACK
     Text[ czech ] = "Černé";
     Text[ hebrew ] = "‮שחור‬";
     Text[ hindi ] = "काला";
+    Text[ slovak ] = "Čierna";
 };
 
 String STR_SVT_STYLE_BLACK_ITALIC
@@ -306,6 +313,7 @@ String STR_SVT_STYLE_BLACK_ITALIC
     Text[ czech ] = "Černá kurzíva";
     Text[ hebrew ] = "‮איטלקי שחור‬";
     Text[ hindi ] = "काला टेढ़ा";
+    Text[ slovak ] = "Čierna kurzíva";
 };
 
 /*
@@ -350,6 +358,7 @@ String STR_SVT_FONTMAP_BOTH
     TEXT[ czech ] = "Stejné písmo bude použito jak na tiskárně, tak na vaší obrazovce.";
     TEXT[ hebrew ] = "‮התוכנית תשתמש באותו גופן למסך ולמדפסת‬";
     TEXT[ hindi ] = "The same font will be used on both your printer and your screen.";
+    TEXT[ slovak ] = "Také isté písmo bude použité na vašej tlačiarni aj obrazovke.";
 };
 
 String STR_SVT_FONTMAP_PRINTERONLY
@@ -381,6 +390,7 @@ String STR_SVT_FONTMAP_PRINTERONLY
     TEXT[ czech ] = "Toto je písmo pro tiskárnu; na obrazovce se může lišit.";
     TEXT[ hebrew ] = "‮גופן זה מיועד להדפסה, מראהו במסך שונה.‬";
     TEXT[ hindi ] = "यह मद्रक का अक्षर है । परदे में चित्र भिन्न प्रकार का हो सकता है ।";
+    TEXT[ slovak ] = "Toto je písmo tlačiarne, na obrazovke môže byť iné.";
 };
 
 String STR_SVT_FONTMAP_SCREENONLY
@@ -412,6 +422,7 @@ String STR_SVT_FONTMAP_SCREENONLY
     TEXT[ czech ] = "Toto je písmo pro obrazovku; na tiskárně se může lišit.";
     TEXT[ hebrew ] = "‮גופן זה מיועד למסך, מראהו בדפוס שונה.‬";
     TEXT[ hindi ] = "यह परदे का अक्षर है । मुद्रक में चित्र भिन्न प्रकार का हो सकता है ।";
+    TEXT[ slovak ] = "Toto je písmo obrazovky, vzhľad na tlačiarni môže byť iný.";
 };
 
 String STR_SVT_FONTMAP_SIZENOTAVAILABLE
@@ -425,7 +436,7 @@ String STR_SVT_FONTMAP_SIZENOTAVAILABLE
     TEXT[ dutch ] = "Deze schriftgrootte is niet ge�nstalleerd. De meest overeenkomende beschikbare grootte wordt toegepast.";
     TEXT[ french ] = "Cette taille de police n'a pas �t� install�e. La taille disponible la plus appropri�e va �tre utilis�e.";
     TEXT[ spanish ] = "Este tama�o de fuente no est� instalado. Se utilizar� el tama�o disponible m�s adecuado.";
-    TEXT[ italian ] = "Il font delle dimensioni indicate non � installato. Il programma utilizzer� le dimensioni disponibili.";
+    TEXT[ italian ] = "Il tipo di carattere delle dimensioni indicate non � installato. Il programma utilizzer� le dimensioni disponibili.";
     TEXT[ danish ] = "Denne skriftst�rrelse er ikke installeret. Den tilg�ngelige st�rrelse, som passer bedst, vil blive brugt i stedet.";
     TEXT[ swedish ] = "Den h�r teckenstorleken �r inte installerad. Den tillg�ngliga storlek som passar b�st anv�nds.";
     TEXT[ polish ] = "Ten rozmiar czcionki nie jest zainstalowany. Zostanie u�yty dost�pny, najbardziej zbli�ony rozmiar.";
@@ -442,6 +453,7 @@ String STR_SVT_FONTMAP_SIZENOTAVAILABLE
     TEXT[ czech ] = "Tato velikost písma nebyla nainstalována. Bude použita nejbližší možná velikost.";
     TEXT[ hebrew ] = "‮הגופן לא מותקן בגודל הזה. התוכנית תבחר גופן דומה.‬";
     TEXT[ hindi ] = "इस अक्षर परिमाण को स्थापित नहीं किया है । इसके अति समीप अक्षर परिमाण को उपयोग किया जाएगा । ";
+    TEXT[ slovak ] = "Táto veľkosť písma nebola nainštalovaná. Bude použitá najbližšia veľkosť.";
 };
 
 String STR_SVT_FONTMAP_STYLENOTAVAILABLE
@@ -455,7 +467,7 @@ String STR_SVT_FONTMAP_STYLENOTAVAILABLE
     TEXT[ dutch ] = "Dit lettertype wordt nagebootst of het meest overeenkomende beschikbare type wordt gebruikt.";
     TEXT[ french ] = "Ce style de police sera imit� ou le style le plus appropri� sera utilis�.";
     TEXT[ spanish ] = "Se imitar� este estilo de fuente o se usar� el m�s adecuado.";
-    TEXT[ italian ] = "Verr� riprodotto lo stile di questo font oppure verr� utilizzato quello che gli � pi� simile.";
+    TEXT[ italian ] = "Verr� riprodotto lo stile di questo tipo di carattere oppure verr� utilizzato quello che gli � pi� simile.";
     TEXT[ danish ] = "Denne skrifttype bliver reproduceret eller den type, som passer bedst, vil blive brugt istedet.";
     TEXT[ swedish ] = "Det h�r teckensnittet efterbildas eller n�rmast motsvarande teckensnitt anv�nds.";
     TEXT[ polish ] = "Ten styl czcionki b�dzie symulowany lub zostanie u�yty styl najbardziej podobny.";
@@ -473,6 +485,7 @@ String STR_SVT_FONTMAP_STYLENOTAVAILABLE
     TEXT[ czech ] = "Tento styl písma bude simulován nebo bude použit nejbližší odpovídající styl.";
     TEXT[ hebrew ] = "‮התוכנית תסמלץ את הסגנון הנבחר או תבחר סגנון דומה.‬";
     TEXT[ hindi ] = "This font style will be simulated or the closest matching style will be used.";
+    TEXT[ slovak ] = "Tento štýl písma bude simulovaný alebo bude použitý najbližší zodpovedajúci štýl.";
 };
 
 String STR_SVT_FONTMAP_NOTAVAILABLE
@@ -486,7 +499,7 @@ String STR_SVT_FONTMAP_NOTAVAILABLE
     TEXT[ dutch ] = "Dit lettertype is niet ge�nstalleerd. Het meest overeenkomende beschikbare type wordt gebruikt.";
     TEXT[ french ] = "Ce type de police n'a pas �t� install�. Le type de police le plus appropri� va �tre utilis�.";
     TEXT[ spanish ] = "Esta fuente no est� instalada. Se usar� la fuente existente m�s adecuada.";
-    TEXT[ italian ] = "Questo font non � installato. Il programma utilizzer� il font che gli � pi� simile.";
+    TEXT[ italian ] = "Questo tipo di carattere non � installato. Il programma utilizzer� il tipo di carattere che gli � pi� simile.";
     TEXT[ danish ] = "Denne skrifttype er ikke installeret. Den tilg�ngelige skrifttype, som passer bedst, vil blive brugt i stedet.";
     TEXT[ swedish ] = "Det h�r teckensnittet �r inte installerat. Det tillg�ngliga teckensnitt som passar b�st anv�nds.";
     TEXT[ polish ] = "Ta czcionka nie jest zainstalowana. Zostanie u�yta dost�pna, najbardziej podobna czcionka.";
@@ -503,7 +516,10 @@ String STR_SVT_FONTMAP_NOTAVAILABLE
     TEXT[ czech ] = "Toto písmo nebylo nainstalováno. Bude použito nejblíže odpovídající písmo.";
     TEXT[ hebrew ] = "‮גופן זה לא מותקן. התוכנית תבחר בגופן הדומה לו מהגופנים המותקנים.‬";
     TEXT[ hindi ] = "This font has not been installed. The closest available font will be used.";
+    TEXT[ slovak ] = "Toto písmo nebolo nainštalované. Bude použité najbližšie dostupné písmo.";
 };
+
+
 
 
 
