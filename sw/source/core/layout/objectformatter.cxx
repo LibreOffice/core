@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objectformatter.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2004-12-23 10:08:35 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 10:36:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -334,7 +334,9 @@ bool SwObjectFormatter::FormatObj( SwAnchoredObject& _rAnchoredObj,
     if ( pObjFormatter )
     {
         // format given floating screen object
-        bSuccess = pObjFormatter->DoFormatObj( _rAnchoredObj );
+        // --> OD 2005-01-10 #i40147# - check for moved forward anchor frame
+        bSuccess = pObjFormatter->DoFormatObj( _rAnchoredObj, true );
+        // <--
     }
     delete pObjFormatter;
 
