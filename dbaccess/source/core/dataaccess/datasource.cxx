@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasource.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-21 14:09:35 $
+ *  last change: $Author: fs $ $Date: 2000-12-07 08:12:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,6 +127,9 @@
 
 #ifndef _DBA_CORE_CONNECTION_HXX_
 #include "connection.hxx"
+#endif
+#ifndef _COMPHELPER_SEQUENCE_HXX_
+#include <comphelper/sequence.hxx>
 #endif
 
 using namespace ::com::sun::star::sdbc;
@@ -512,9 +515,9 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const ::rtl::O
             aUserPwd[1].Value <<= _rPwd;
         }
         if (nAdditionalArgs)
-            xReturn = xManager->getConnectionWithInfo(m_sConnectURL, aUserPwd);
+            xReturn = xManager->getConnectionWithInfo(m_sConnectURL, ::comphelper::concatSequences(aUserPwd,m_aInfo));
         else
-            xReturn = xManager->getConnection(m_sConnectURL);
+            xReturn = xManager->getConnectionWithInfo(m_sConnectURL,m_aInfo);
     }
 
     return xReturn;
