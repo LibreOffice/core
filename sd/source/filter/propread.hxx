@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propread.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sj $ $Date: 2002-11-18 12:58:25 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:17:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,9 +65,7 @@
 #ifndef _SOLAR_H
 #include <tools/solar.h>
 #endif
-#ifndef _SVSTOR_HXX
-#include <so3/svstor.hxx>
-#endif
+#include <sot/storage.hxx>
 #ifndef _SV_GEN_HXX
 #include <tools/gen.hxx>
 #endif
