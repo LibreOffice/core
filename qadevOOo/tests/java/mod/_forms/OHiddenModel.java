@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OHiddenModel.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-05-27 12:43:41 $
+ *  last change:$Date: 2003-09-08 11:49:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,16 +58,10 @@
  *
  *
  ************************************************************************/
-
 package mod._forms;
 
-import com.sun.star.container.XNameContainer;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.drawing.XDrawPage;
-import com.sun.star.lang.XComponent;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
 import java.io.PrintWriter;
+
 import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
@@ -76,8 +70,16 @@ import util.DrawTools;
 import util.FormTools;
 import util.SOfficeFactory;
 
+import com.sun.star.container.XNameContainer;
+import com.sun.star.drawing.XDrawPage;
+import com.sun.star.lang.XComponent;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Type;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XInterface;
+import com.sun.star.util.XCloseable;
+
 
 /**
 * Test for object which is represented by service
@@ -122,32 +124,39 @@ import com.sun.star.uno.Type;
 * @see ifc.lang._XComponent
 */
 public class OHiddenModel extends TestCase {
-
     XComponent xDrawDoc;
 
     /**
     * Creates Drawing document.
     */
-    protected void initialize( TestParameters tParam, PrintWriter log ) {
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF() );
+    protected void initialize(TestParameters tParam, PrintWriter log) {
+        SOfficeFactory SOF = SOfficeFactory.getFactory(((XMultiServiceFactory) tParam.getMSF()));
 
         try {
-            log.println( "creating a draw document" );
-            xDrawDoc = SOF.createDrawDoc(null);;
-        } catch ( com.sun.star.uno.Exception e ) {
+            log.println("creating a draw document");
+            xDrawDoc = SOF.createDrawDoc(null);
+        } catch (com.sun.star.uno.Exception e) {
             // Some exception occures.FAILED
-            e.printStackTrace( log );
-            throw new StatusException( "Couldn't create document", e );
+            e.printStackTrace(log);
+            throw new StatusException("Couldn't create document", e);
         }
-
     }
 
     /**
     * Disposes drawing document.
     */
-    protected void cleanup( TestParameters tParam, PrintWriter log ) {
-        log.println( "    disposing xDrawDoc " );
-        xDrawDoc.dispose();
+    protected void cleanup(TestParameters tParam, PrintWriter log) {
+        log.println("    disposing xDrawDoc ");
+
+        try {
+            XCloseable closer = (XCloseable) UnoRuntime.queryInterface(
+                                        XCloseable.class, xDrawDoc);
+            closer.close(true);
+        } catch (com.sun.star.util.CloseVetoException e) {
+            log.println("couldn't close document");
+        } catch (com.sun.star.lang.DisposedException e) {
+            log.println("couldn't close document");
+        }
     }
 
     /**
@@ -160,58 +169,58 @@ public class OHiddenModel extends TestCase {
     *    represented by this object. </li>
     * </ul>
     */
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
-
-
+    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param,
+                                                                 PrintWriter log) {
         XInterface oObj = null;
+
 
         // creation of testobject here
         // first we write what we are intend to do to log file
-        log.println( "creating a test environment" );
+        log.println("creating a test environment");
 
         // get a soffice factory object
-        SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)Param.getMSF());
+        SOfficeFactory SOF = SOfficeFactory.getFactory(((XMultiServiceFactory) Param.getMSF()));
         String objName = "HiddenControl";
-        XInterface ctrl = SOF.createControl(xDrawDoc, objName) ;
+        XInterface ctrl = SOF.createControl(xDrawDoc, objName);
 
         try {
-            XDrawPage oDP = DrawTools.getDrawPage(xDrawDoc,0);
+            XDrawPage oDP = DrawTools.getDrawPage(xDrawDoc, 0);
 
             XNameContainer nc = FormTools.getForms(oDP);
             FormTools.insertForm(xDrawDoc, nc, "OHiddenModelForm");
 
-            Object frm = nc.getByName("OHiddenModelForm") ;
+            Object frm = nc.getByName("OHiddenModelForm");
 
-            XNameContainer frmNC = (XNameContainer) UnoRuntime.queryInterface
-                (XNameContainer.class, frm) ;
+            XNameContainer frmNC = (XNameContainer) UnoRuntime.queryInterface(
+                                           XNameContainer.class, frm);
 
-            frmNC.insertByName("OHiddenModel", ctrl) ;
+            frmNC.insertByName("OHiddenModel", ctrl);
             oObj = (XInterface) AnyConverter.toObject(
-                new Type(XInterface.class),frmNC.getByName("OHiddenModel"));
+                           new Type(XInterface.class),
+                           frmNC.getByName("OHiddenModel"));
         } catch (com.sun.star.lang.WrappedTargetException e) {
-            e.printStackTrace(log) ;
-            throw new StatusException("Can't create and add control", e) ;
+            e.printStackTrace(log);
+            throw new StatusException("Can't create and add control", e);
         } catch (com.sun.star.lang.IllegalArgumentException e) {
-            e.printStackTrace(log) ;
-            throw new StatusException("Can't create and add control", e) ;
+            e.printStackTrace(log);
+            throw new StatusException("Can't create and add control", e);
         } catch (com.sun.star.container.NoSuchElementException e) {
-            e.printStackTrace(log) ;
-            throw new StatusException("Can't create and add control", e) ;
+            e.printStackTrace(log);
+            throw new StatusException("Can't create and add control", e);
         } catch (com.sun.star.container.ElementExistException e) {
-            e.printStackTrace(log) ;
-            throw new StatusException("Can't create and add control", e) ;
+            e.printStackTrace(log);
+            throw new StatusException("Can't create and add control", e);
         }
 
-        log.println( "creating a new environment for drawpage object" );
-        TestEnvironment tEnv = new TestEnvironment( oObj );
+        log.println("creating a new environment for drawpage object");
+
+        TestEnvironment tEnv = new TestEnvironment(oObj);
 
         util.dbg.getSuppServices(oObj);
 
-        log.println( "adding DrawDocument as obj relation to environment" );
+        log.println("adding DrawDocument as obj relation to environment");
         tEnv.addObjRelation("OBJNAME", "stardiv.one.form.component.Hidden");
 
         return tEnv;
     } // finish method getTestEnvironment
-
-}    // finish class OHiddenModel
-
+} // finish class OHiddenModel
