@@ -103,6 +103,7 @@ hedabu: ..\inc\rcid.h %_DEST%\inc%_EXT%\tools\rcid.h
 hedabu: ..\inc\ref.hxx %_DEST%\inc%_EXT%\tools\ref.hxx
 hedabu: ..\inc\resid.hxx %_DEST%\inc%_EXT%\tools\resid.hxx
 hedabu: ..\inc\resmgr.hxx %_DEST%\inc%_EXT%\tools\resmgr.hxx
+hedabu: ..\inc\isofallback.hxx %_DEST%\inc%_EXT%\tools\isofallback.hxx
 hedabu: ..\inc\rtti.hxx %_DEST%\inc%_EXT%\tools\rtti.hxx
 hedabu: ..\inc\shl.hxx %_DEST%\inc%_EXT%\tools\shl.hxx
 hedabu: ..\inc\simplecm.hxx %_DEST%\inc%_EXT%\tools\simplecm.hxx
