@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basic.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-21 20:10:23 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 05:16:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -264,7 +264,7 @@ ModalDialog IDD_FIND_DIALOG {
     Size = MAP_APPFONT( 185, 70 );
     SVLook = TRUE;
     TEXT = "Testtool: Text suchen";
-    TEXT [ english_us ] = "StarBasic: Find Text";
+    TEXT [ english_us ] = "Testtool: Find Text";
     MOVEABLE = TRUE;
     // CLOSEABLE = TRUE;    // Hat cancelbutton
 
@@ -315,7 +315,7 @@ ModalDialog IDD_FIND_DIALOG {
         TEXT[ swedish ] = "~Find";
         TEXT[ polish ] = "~Find";
         TEXT[ portuguese_brazilian ] = "~Suchen";
-        TEXT[ japanese ] = "åüçı";
+        TEXT[ japanese ] = "åüçı(~F)";
         TEXT[ korean ] = "√£±‚(~F)";
         TEXT[ chinese_simplified ] = "~Find";
         TEXT[ chinese_traditional ] = "~Find";
@@ -347,12 +347,12 @@ ModalDialog IDD_FIND_DIALOG {
         TEXT[ turkish ] = "~›ptal";
     };
     TEXT[ portuguese ] = "StarBasic: Localizar texto";
-    TEXT[ russian ] = "StarBasic: Find Text";
-    TEXT[ greek ] = "StarBasic: Find Text";
+    TEXT[ russian ] = "Testtool: Find Text";
+    TEXT[ greek ] = "Testtool: ¡Ì·ÊﬁÙÁÛÁ ÍÂÈÏ›ÌÔı";
     TEXT[ dutch ] = "Testtool: tekst zoeken";
-    TEXT[ french ] = "StarBasic: Recherche de texte";
+    TEXT[ french ] = "Testool : Recherche de texte";
     TEXT[ spanish ] = "StarBasic: Buscar texto";
-    TEXT[ italian ] = "StarBasic: Find text";
+    TEXT[ italian ] = "Testtool: trova testo";
     TEXT[ danish ] = "StarBasic: Find Text";
     TEXT[ swedish ] = "Testtool: Find Text";
     TEXT[ polish ] = "Testtool: Find Text";
@@ -360,7 +360,7 @@ ModalDialog IDD_FIND_DIALOG {
     TEXT[ japanese ] = "Testtool: ï∂éöóÒÇÃåüçı";
     TEXT[ korean ] = "StarBasic: ≈ÿΩ∫∆Æ  √£±‚";
     TEXT[ chinese_simplified ] = "StarBasic: Find Text";
-    TEXT[ chinese_traditional ] = "StarBasic: Find Text";
+    TEXT[ chinese_traditional ] = "Testtool: Find Text";
     TEXT[ arabic ] = "StarBasic: Find Text";
     TEXT[ turkish ] = "StarBasic: Metni ara";
 };
@@ -370,7 +370,7 @@ ModalDialog IDD_REPLACE_DIALOG {
     Size = MAP_APPFONT( 185, 88 );
     SVLook = TRUE;
     TEXT = "Testtool: Text ersetzen";
-    TEXT [ english_us ] = "StarBasic: Replace Text";
+    TEXT [ english_us ] = "Testtool: Replace Text";
     MOVEABLE = TRUE;
     // CLOSEABLE = TRUE;    // Hat cancelbutton
     FixedText RID_FIXEDTEXT1 {
@@ -449,7 +449,7 @@ ModalDialog IDD_REPLACE_DIALOG {
         TEXT[ swedish ] = "~Replace";
         TEXT[ polish ] = "~Replace";
         TEXT[ portuguese_brazilian ] = "~Ersetzen";
-        TEXT[ japanese ] = "íuä∑";
+        TEXT[ japanese ] = "íuä∑(~R)";
         TEXT[ korean ] = "πŸ≤Ÿ±‚(~R)";
         TEXT[ chinese_simplified ] = "~Replace";
         TEXT[ chinese_traditional ] = "~Replace";
@@ -481,20 +481,20 @@ ModalDialog IDD_REPLACE_DIALOG {
         TEXT[ turkish ] = "›ptal";
     };
     TEXT[ portuguese ] = "StarBasic: Substituir texto";
-    TEXT[ russian ] = "StarBasic: Replace Text";
-    TEXT[ greek ] = "StarBasic: Replace Text";
+    TEXT[ russian ] = "Testtool: Replace Text";
+    TEXT[ greek ] = "Testtool: ¡ÌÙÈÍ·Ù‹ÛÙ·ÛÁ ÍÂÈÏ›ÌÔı";
     TEXT[ dutch ] = "Testtool: tekst vervangen";
-    TEXT[ french ] = "StarBasic : Remplacement de texte";
+    TEXT[ french ] = "Testtool : Remplacement de texte";
     TEXT[ spanish ] = "StarBasic: Sustituir texto";
-    TEXT[ italian ] = "%PRODUCTNAME Basic: Replace Text";
+    TEXT[ italian ] = "Testtool: sostituire il testo";
     TEXT[ danish ] = "StarBasic: Replace Text";
     TEXT[ swedish ] = "Testtool: Replace Text";
     TEXT[ polish ] = "Testtool: Replace Text";
     TEXT[ portuguese_brazilian ] = "StarBasic: Text ersetzen";
     TEXT[ japanese ] = "Testtool: ï∂éöóÒÇÃíuä∑";
     TEXT[ korean ] = "StarBasic: ≈ÿΩ∫∆Æ πŸ≤Ÿ±‚";
-    TEXT[ chinese_simplified ] = "StarBasic: Replace Text";
-    TEXT[ chinese_traditional ] = "StarBasic°GReplace Text";
+    TEXT[ chinese_simplified ] = "Testtool: Replace Text";
+    TEXT[ chinese_traditional ] = "Testtool°GReplace Text";
     TEXT[ arabic ] = "StarBasic: Replace Text";
     TEXT[ turkish ] = "StarBasic: Metni dei˛tir";
 };
@@ -522,12 +522,12 @@ InfoBox IDS_NOPRINTERERROR {
 };
 ErrorBox IDS_CANTLOAD {
     TITLE = "Testtool-Fehler";
-    TITLE [ english_us ] = "StarBasic Error!";
+    TITLE [ english_us ] = "Testtool Error!";
     MESSAGE = "Library kann nicht geladen werden!";
     MESSAGE [ english_us ] = "Library cannot be loaded!";
     MESSAGE[ portuguese ] = "ImpossÌvel carregar a biblioteca!";
     MESSAGE[ russian ] = "Library cannot be loaded!";
-    MESSAGE[ greek ] = "Library cannot be loaded!";
+    MESSAGE[ greek ] = "ƒÂÌ ÂﬂÌ·È ‰ıÌ·Ù¸Ì Ì· ˆÔÒÙ˘ËÂﬂ Á ‚È‚ÎÈÔËﬁÍÁ!";
     MESSAGE[ dutch ] = "Library kan niet worden geladen";
     MESSAGE[ french ] = "Impossible de charger la bibliothËque !";
     MESSAGE[ spanish ] = "°No se puede cargar la biblioteca!";
@@ -542,19 +542,19 @@ ErrorBox IDS_CANTLOAD {
     MESSAGE[ chinese_traditional ] = "Library cannot be loaded!";
     MESSAGE[ arabic ] = "Library cannot be loaded!";
     Title[ portuguese ] = "Erro StarBasic!";
-    Title[ russian ] = "StarBasic-Fehler";
-    Title[ greek ] = "StarBasic Error";
+    Title[ russian ] = "Testtool Error!";
+    Title[ greek ] = "”ˆ‹ÎÏ· ÙÔı Testtool!";
     Title[ dutch ] = "Testtool-fout!";
-    Title[ french ] = "Erreur StarBasic!";
+    Title[ french ] = "Testtool : Erreur!";
     Title[ spanish ] = "Error de StarBasic";
-    Title[ italian ] = "StarBasic-Fehler";
+    Title[ italian ] = "StarBasic-Fehler!";
     Title[ danish ] = "StarBasic Error";
     Title[ swedish ] = "Testtool error!";
     Title[ polish ] = "Testtool Error!";
     Title[ portuguese_brazilian ] = "StarBasic-Fehler";
     Title[ japanese ] = "Testtool ¥◊∞!";
     Title[ korean ] = "StarBasic-ø¿∑˘r!";
-    Title[ chinese_simplified ] = "StarBasic-Fehler!";
+    Title[ chinese_simplified ] = "Testtool Error!";
     Title[ chinese_traditional ] = "StarBasic Error!";
     Title[ arabic ] = "StarBasic Error!";
     MESSAGE[ turkish ] = "Kitapl˝k y¸klenemiyor!";
@@ -562,12 +562,12 @@ ErrorBox IDS_CANTLOAD {
 };
 ErrorBox IDS_CANTSAVE {
     TITLE = "Testtool-Fehler";
-    TITLE [ english_us ] = "StarBasic Error!";
+    TITLE [ english_us ] = "Testtool Error!";
     MESSAGE = "Library kann nicht gespeichert werden!";
     MESSAGE [ english_us ] = "Library cannot be saved!";
     MESSAGE[ portuguese ] = "ImpossÌvel guardar a biblioteca!";
     MESSAGE[ russian ] = "Library cannot be saved!";
-    MESSAGE[ greek ] = "Library cannot be saved!";
+    MESSAGE[ greek ] = "ƒÂÌ ÂﬂÌ·È ‰ıÌ·Ù¸Ì Ì· ·ÔËÁÍÂıÙÂﬂ Á ‚È‚ÎÈÔËﬁÍÁ!";
     MESSAGE[ dutch ] = "Library kan niet worden opgeslagen!";
     MESSAGE[ french ] = "Impossible d'enregistrer la bibliothËque !";
     MESSAGE[ spanish ] = "°No se puede guardar la biblioteca!";
@@ -582,36 +582,36 @@ ErrorBox IDS_CANTSAVE {
     MESSAGE[ chinese_traditional ] = "Library cannot be saved!";
     MESSAGE[ arabic ] = "Library cannot be saved!";
     Title[ portuguese ] = "Erro StarBasic!";
-    Title[ russian ] = "StarBasic-Fehler";
-    Title[ greek ] = "StarBasic Error";
+    Title[ russian ] = "Testtool Error!";
+    Title[ greek ] = "”ˆ‹ÎÏ· ÙÔı Testtool!";
     Title[ dutch ] = "Testtool-fout!";
-    Title[ french ] = "Erreur StarBasic!";
+    Title[ french ] = "Testtool : Erreur!";
     Title[ spanish ] = "Error de StarBasic";
-    Title[ italian ] = "StarBasic-Fehler";
+    Title[ italian ] = "StarBasic-Fehler!";
     Title[ danish ] = "StarBasic Error";
     Title[ swedish ] = "Testtool error!";
     Title[ polish ] = "Testtool Error!";
     Title[ portuguese_brazilian ] = "StarBasic-Fehler";
     Title[ japanese ] = "Testtool ¥◊∞!";
     Title[ korean ] = "StarBasic-ø¿∑˘!";
-    Title[ chinese_simplified ] = "StarBasic Error!";
-    Title[ chinese_traditional ] = "StarBasic Error!";
+    Title[ chinese_simplified ] = "Testtool Error!";
+    Title[ chinese_traditional ] = "Testtool Error!";
     Title[ arabic ] = "StarBasic Error!";
     MESSAGE[ turkish ] = "Kitapl˝k kaydedilemiyor!";
     Title[ turkish ] = "StarBasic-Fehler";
 };
 ErrorBox IDS_NOMAINPGM {
     TITLE = "Testtool-Fehler";
-    TITLE [ english_us ] = "StarBasic Error!";
+    TITLE [ english_us ] = "Testtool Error!";
     MESSAGE = "Dieses Fenster enth‰lt kein Hauptprogramm!";
     MESSAGE [ english_us ] = "This window does not contain a main program!";
     MESSAGE[ portuguese ] = "Esta janela n„o contÈm nenhum programa principal!";
     MESSAGE[ russian ] = "This window does not contain a main program!";
-    MESSAGE[ greek ] = "This window does not contain a main program!";
+    MESSAGE[ greek ] = "‘Ô ·Ò‹ËıÒÔ ·ıÙ¸ ‰ÂÌ ÂÒÈ›˜ÂÈ Í‹ÔÈÔ Í˝ÒÈÔ Ò¸„Ò·ÏÏ·!";
     MESSAGE[ dutch ] = "Dit venster bevat geen hoofdprogramma!";
     MESSAGE[ french ] = "Cette fenÍtre ne contient aucun programme principal !";
     MESSAGE[ spanish ] = "°Esta ventana no contiene ning˙n programa principal!";
-    MESSAGE[ italian ] = "La finestra non contiene un programma principale.";
+    MESSAGE[ italian ] = "La finestra non contiene un programma principale";
     MESSAGE[ danish ] = "This window does not contain a main program!";
     MESSAGE[ swedish ] = "This window does not contain a main program!";
     MESSAGE[ polish ] = "This window does not contain a main program! ";
@@ -622,32 +622,32 @@ ErrorBox IDS_NOMAINPGM {
     MESSAGE[ chinese_traditional ] = "This window does not contain a main program!";
     MESSAGE[ arabic ] = "This window does not contain a main program!";
     Title[ portuguese ] = "Erro StarBasic!";
-    Title[ russian ] = "StarBasic-Fehler";
-    Title[ greek ] = "StarBasic Error";
+    Title[ russian ] = "Testtool Error!";
+    Title[ greek ] = "”ˆ‹ÎÏ· ÙÔı Testtool!";
     Title[ dutch ] = "Testtool-fout!";
-    Title[ french ] = "Erreur de StarBasic!";
+    Title[ french ] = "Testtool : Erreur!";
     Title[ spanish ] = "Error de StarBasic";
-    Title[ italian ] = "StarBasic-Fehler";
+    Title[ italian ] = "StarBasic-Fehler!";
     Title[ danish ] = "StarBasic Error";
     Title[ swedish ] = "Testtool error!";
     Title[ polish ] = "Testtool Error!";
     Title[ portuguese_brazilian ] = "StarBasic-Fehler";
     Title[ japanese ] = "Testtool ¥◊∞!";
     Title[ korean ] = "StarBasic-ø¿∑˘r!";
-    Title[ chinese_simplified ] = "StarBasic Error!";
-    Title[ chinese_traditional ] = "StarBasic Error!";
+    Title[ chinese_simplified ] = "Testtool Error!";
+    Title[ chinese_traditional ] = "Testtool Error!";
     Title[ arabic ] = "StarBasic Error!";
     MESSAGE[ turkish ] = "Bu pencere ana program iÁermiyor!";
     Title[ turkish ] = "StarBasic-Fehler";
 };
 ErrorBox IDS_READERROR {
     TITLE = "Testtool-Fehler";
-    TITLE [ english_us ] = "StarBasic Error!";
+    TITLE [ english_us ] = "Testtool Error!";
     MESSAGE = "Datei kann nicht eingelesen werden!";
     MESSAGE [ english_us ] = "File cannot be read!";
     MESSAGE[ portuguese ] = "ImpossÌvel ler ficheiro!";
     MESSAGE[ russian ] = "File cannot be read!";
-    MESSAGE[ greek ] = "File cannot be read!";
+    MESSAGE[ greek ] = "« ·Ì‹„Ì˘ÛÁ ÙÔı ·Ò˜ÂﬂÔı ‰ÂÌ ÂﬂÌ·È ‰ıÌ·Ùﬁ!";
     MESSAGE[ dutch ] = "Bestand kan niet worden gelezen!";
     MESSAGE[ french ] = "Impossible de lire le fichier !";
     MESSAGE[ spanish ] = "°No se puede leer el archivo!";
@@ -662,27 +662,27 @@ ErrorBox IDS_READERROR {
     MESSAGE[ chinese_traditional ] = "File cannot be read!";
     MESSAGE[ arabic ] = "File cannot be read!";
     Title[ portuguese ] = "Erro StarBasic!";
-    Title[ russian ] = "StarBasic-Fehler";
-    Title[ greek ] = "StarBasic Error";
+    Title[ russian ] = "Testtool Error!";
+    Title[ greek ] = "”ˆ‹ÎÏ· ÙÔı Testtool!";
     Title[ dutch ] = "Testtool-fout!";
-    Title[ french ] = "Erreur de StarBasic!";
+    Title[ french ] = "Testtool : Erreur!";
     Title[ spanish ] = "Error de StarBasic";
-    Title[ italian ] = "StarBasic-Fehler";
+    Title[ italian ] = "StarBasic-Fehler!";
     Title[ danish ] = "StarBasic Error";
     Title[ swedish ] = "Testtool error!";
     Title[ polish ] = "Testtool Error!";
     Title[ portuguese_brazilian ] = "StarBasic-Fehler";
     Title[ japanese ] = "Testtool ¥◊∞!";
     Title[ korean ] = "StarBasic-ø¿∑˘!";
-    Title[ chinese_simplified ] = "StarBasic Error!";
-    Title[ chinese_traditional ] = "StarBasic Error!";
+    Title[ chinese_simplified ] = "Testtool Error!";
+    Title[ chinese_traditional ] = "Testtool Error!";
     Title[ arabic ] = "StarBasic Error!";
     MESSAGE[ turkish ] = "Dosya okunam˝yor!";
     Title[ turkish ] = "StarBasic-Fehler";
 };
 ErrorBox IDS_WRITEERROR {
     TITLE = "Testtool-Fehler";
-    TITLE [ english_us ] = "StarBasic Error!";
+    TITLE [ english_us ] = "Testtool Error!";
     MESSAGE = "Datei kann nicht abgespeichert werden!";
     MESSAGE [ english_us ] = "File cannot be saved!";
     MESSAGE[ portuguese ] = "ImpossÌvel guardar ficheiro!";
@@ -702,27 +702,27 @@ ErrorBox IDS_WRITEERROR {
     MESSAGE[ chinese_traditional ] = "File cannot be saved!";
     MESSAGE[ arabic ] = "File cannot be saved!";
     Title[ portuguese ] = "Erro StarBasic!";
-    Title[ russian ] = "StarBasic-Fehler";
-    Title[ greek ] = "StarBasic Error";
+    Title[ russian ] = "Testtool Error!";
+    Title[ greek ] = "StarBasic Error!";
     Title[ dutch ] = "Testtool-fout!";
-    Title[ french ] = "Erreur de StarBasic!";
+    Title[ french ] = "Testtool : Erreur!";
     Title[ spanish ] = "Error de StarBasic";
-    Title[ italian ] = "StarBasic-Fehler";
+    Title[ italian ] = "StarBasic-Fehler!";
     Title[ danish ] = "StarBasic Error";
     Title[ swedish ] = "Testtool error!";
     Title[ polish ] = "Testtool Error!";
     Title[ portuguese_brazilian ] = "StarBasic-Fehler";
     Title[ japanese ] = "Testtool ¥◊∞!";
     Title[ korean ] = "StarBasic-ø¿∑˘r!";
-    Title[ chinese_simplified ] = "StarBasic Error!";
-    Title[ chinese_traditional ] = "StarBasic Error!";
+    Title[ chinese_simplified ] = "Testtool Error!";
+    Title[ chinese_traditional ] = "Testtool Error!";
     Title[ arabic ] = "StarBasic Error!";
     MESSAGE[ turkish ] = "Dosya kaydedilemiyor!";
     Title[ turkish ] = "StarBasic-Fehler";
 };
 ErrorBox IDS_PATTERNNOTFOUND {
     TITLE = "Testtool-Fehler";
-    TITLE [ english_us ] = "StarBasic Error!";
+    TITLE [ english_us ] = "Testtool Error!";
     MESSAGE = "Suchbegriff nicht gefunden!";
     MESSAGE [ english_us ] = "Search key not found!";
     MESSAGE[ portuguese ] = "ImpossÌvel encontrar express„o procurada.";
@@ -742,27 +742,27 @@ ErrorBox IDS_PATTERNNOTFOUND {
     MESSAGE[ chinese_traditional ] = "Search key not found!";
     MESSAGE[ arabic ] = "Search term not found!";
     Title[ portuguese ] = "Erro StarBasic!";
-    Title[ russian ] = "StarBasic-Fehler";
-    Title[ greek ] = "StarBasic Error";
+    Title[ russian ] = "Testtool Error!";
+    Title[ greek ] = "StarBasic Error!";
     Title[ dutch ] = "Testtool-fout!";
-    Title[ french ] = "Erreur de StarBasic!";
+    Title[ french ] = "Testtool : Erreur!";
     Title[ spanish ] = "Error de StarBasic";
-    Title[ italian ] = "StarBasic-Fehler";
+    Title[ italian ] = "StarBasic-Fehler!";
     Title[ danish ] = "StarBasic Error";
     Title[ swedish ] = "Testtool error!";
     Title[ polish ] = "Testtool Error!";
     Title[ portuguese_brazilian ] = "StarBasic-Fehler";
     Title[ japanese ] = "Testtool ¥◊∞!";
     Title[ korean ] = "StarBasic-ø¿∑˘!";
-    Title[ chinese_simplified ] = "StarBasic Error!";
-    Title[ chinese_traditional ] = "StarBasic Error!";
+    Title[ chinese_simplified ] = "Testtool Error!";
+    Title[ chinese_traditional ] = "Testtool Error!";
     Title[ arabic ] = "StarBasic Error!";
     MESSAGE[ turkish ] = "Arama terimi bulunamad˝!";
     Title[ turkish ] = "StarBasic-Fehler";
 };
 ErrorBox IDS_INVALID_VALUE {
     TITLE = "Testtool-Fehler";
-    TITLE [ english_us ] = "StarBasic Error!";
+    TITLE [ english_us ] = "Testtool Error!";
     MESSAGE = "Der Wert ist ung¸ltig und kann daher nicht gesetzt werden.";
     MESSAGE [ english_us ] = "The value is invalid and cannot be set.";
     MESSAGE[ portuguese ] = "O valor n„o È v·lido e n„o pode ser aplicado.";
@@ -782,20 +782,20 @@ ErrorBox IDS_INVALID_VALUE {
     MESSAGE[ chinese_traditional ] = "The value is invalid and cannot be set.";
     MESSAGE[ arabic ] = "The value is invalid and cannot be set.";
     Title[ portuguese ] = "Erro StarBasic!";
-    Title[ russian ] = "StarBasic Error";
-    Title[ greek ] = "StarBasic Error";
+    Title[ russian ] = "Testtool Error!";
+    Title[ greek ] = "StarBasic Error!";
     Title[ dutch ] = "Testtool-fout!";
-    Title[ french ] = "Erreur de StarBasic!";
+    Title[ french ] = "Testtool : Erreur!";
     Title[ spanish ] = "StarBasic Error";
-    Title[ italian ] = "StarBasic Error";
+    Title[ italian ] = "StarBasic Error!";
     Title[ danish ] = "StarBasic Error";
     Title[ swedish ] = "Testtool Error!";
     Title[ polish ] = "Testtool Error!";
     Title[ portuguese_brazilian ] = "StarBasic Error";
     Title[ japanese ] = "Testtool ¥◊∞!";
     Title[ korean ] = "StarBasic£≠ø¿∑˘!";
-    Title[ chinese_simplified ] = "StarBasic Error!";
-    Title[ chinese_traditional ] = "StarBasic Error!";
+    Title[ chinese_simplified ] = "Testtool Error!";
+    Title[ chinese_traditional ] = "Testtool Error!";
     Title[ arabic ] = "StarBasic Error!";
     MESSAGE[ turkish ] = "Bu deer geÁersiz olduu iÁin belirlenemez.";
     Title[ turkish ] = "StarBasic-Fehler";
@@ -803,7 +803,7 @@ ErrorBox IDS_INVALID_VALUE {
 
 QueryBox IDS_ASKSAVEERROR {
     TITLE = "Testtool";
-    TITLE [ english_us ] = "StarBasic!";
+    TITLE [ english_us ] = "Testtool!";
     MESSAGE = "Fehler beim Speichern der Dateien! Trotzdem ausf¸hren?";
     MESSAGE [ english_us ] = "Error saving files! Run anyway?";
     BUTTONS = WB_YES_NO;
@@ -821,13 +821,13 @@ QueryBox IDS_ASKSAVEERROR {
     MESSAGE[ japanese ] = "Ãß≤Ÿï€ë∂éûÇÃ¥◊∞Ç≈Ç∑ÅBé¿çsÇµÇƒÇ‡Ç©Ç‹Ç¢Ç‹ÇπÇÒÇ©ÅB";
     MESSAGE[ korean ] = "∆ƒ¿œ ¿˙¿Â Ω√ ø¿∑˘∞° πﬂª˝«ﬂΩ¿¥œ¥Ÿ! ∞Ëº” Ω««‡«œΩ√∞⁄Ω¿¥œ±Ó?";
     MESSAGE[ chinese_simplified ] = "Error saving files! Run anyway?";
-    MESSAGE[ chinese_traditional ] = "StarBasic";
+    MESSAGE[ chinese_traditional ] = "Error saving files! Run anyway?";
     MESSAGE[ arabic ] = "Error saving files! Run anyway?";
     Title[ portuguese ] = "StarBasic!";
-    Title[ russian ] = "StarBasic";
-    Title[ greek ] = "StarBasic";
+    Title[ russian ] = "Testtool!";
+    Title[ greek ] = "StarBasic!";
     Title[ dutch ] = "StarBasic!";
-    Title[ french ] = "StarBasic!";
+    Title[ french ] = "Testtool!";
     Title[ spanish ] = "StarBasic";
     Title[ italian ] = "StarBasic";
     Title[ danish ] = "StarBasic";
@@ -836,15 +836,15 @@ QueryBox IDS_ASKSAVEERROR {
     Title[ portuguese_brazilian ] = "StarBasic";
     Title[ japanese ] = "Testtool!";
     Title[ korean ] = "StarBasic";
-    Title[ chinese_simplified ] = "StarBasic!";
-    Title[ chinese_traditional ] = "StarBasic!";
+    Title[ chinese_simplified ] = "Testtool!";
+    Title[ chinese_traditional ] = "Testtool!";
     Title[ arabic ] = "StarBasic!";
     MESSAGE[ turkish ] = "Dosya kayd˝ s˝ras˝nda bir hata ortaya Á˝kt˝! ›˛lem yine de y¸r¸t¸ls¸n m¸?";
     Title[ turkish ] = "StarBasic";
 };
 QueryBox IDS_ASK_DIRTY_SAVE {
     TITLE = "Testtool";
-    TITLE [ english_us ] = "StarBasic!";
+    TITLE [ english_us ] = "Testtool!";
     MESSAGE = "Datei ist ge‰ndert worden. Abspeichern?";
     MESSAGE [ english_us ] = "File has been changed. Save?";
     BUTTONS = WB_YES_NO_CANCEL;
@@ -862,13 +862,13 @@ QueryBox IDS_ASK_DIRTY_SAVE {
     MESSAGE[ japanese ] = "Ãß≤ŸÇ…ïœçXÇ™Ç†ÇËÇ‹Ç∑ÅBï€ë∂ÇµÇ‹Ç∑Ç©ÅB";
     MESSAGE[ korean ] = "∆ƒ¿œ¿Ã ∫Ø∞Êµ«æ˙Ω¿¥œ¥Ÿ. ¿˙¿Â«œΩ√∞⁄Ω¿¥œ±Ó?";
     MESSAGE[ chinese_simplified ] = "File has been changed. Save?";
-    MESSAGE[ chinese_traditional ] = "StarBasic";
+    MESSAGE[ chinese_traditional ] = "File has been changed. Save?";
     MESSAGE[ arabic ] = "File has been changed. Save?";
     Title[ portuguese ] = "StarBasic!";
-    Title[ russian ] = "StarBasic";
-    Title[ greek ] = "StarBasic";
+    Title[ russian ] = "Testtool!";
+    Title[ greek ] = "StarBasic!";
     Title[ dutch ] = "StarBasic!";
-    Title[ french ] = "StarBasic!";
+    Title[ french ] = "Testtool!";
     Title[ spanish ] = "StarBasic";
     Title[ italian ] = "StarBasic";
     Title[ danish ] = "StarBasic";
@@ -877,15 +877,15 @@ QueryBox IDS_ASK_DIRTY_SAVE {
     Title[ portuguese_brazilian ] = "StarBasic";
     Title[ japanese ] = "Testtool!";
     Title[ korean ] = "StarBasic";
-    Title[ chinese_simplified ] = "StarBasic!";
-    Title[ chinese_traditional ] = "StarBasic!";
+    Title[ chinese_simplified ] = "Testtool!";
+    Title[ chinese_traditional ] = "Testtool!";
     Title[ arabic ] = "StarBasic!";
     MESSAGE[ turkish ] = "Dosya dei˛tirildi. Dei˛iklikler kaydedilsin mi?";
     Title[ turkish ] = "StarBasic";
 };
 QueryBox IDS_ASK_DIRTY_AND_DISKCHANGE_SAVE {
     TITLE = "Testtool";
-    TITLE [ english_us ] = "StarBasic!";
+    TITLE [ english_us ] = "Testtool!";
     MESSAGE = "Datei ist auf dem Datentr‰ger und\nim Editor ge‰ndert worden. Abspeichern?";
     MESSAGE [ english_us ] = "File has been changed on data medium\nand in the Editor. Save?";
     BUTTONS = WB_YES_NO_CANCEL;
@@ -903,13 +903,13 @@ QueryBox IDS_ASK_DIRTY_AND_DISKCHANGE_SAVE {
     MESSAGE[ japanese ] = "Ãß≤ŸÇÕî}ëÃè„Ç∆\n¥√ﬁ®¿Ç≈ïœçXÇ≥ÇÍÇƒÇ¢Ç‹Ç∑ÅBï€ë∂ÇµÇ‹Ç∑Ç©ÅB";
     MESSAGE[ korean ] = "µ•¿Ã≈Õ ∏≈√ºøÕ ∆Ì¡˝±‚ ≥ª¿« ∆ƒ¿œ¿Ã°°∫Ø∞Êµ«æ˙Ω¿¥œ¥Ÿ.  \n¿˙¿Â«œΩ√∞⁄Ω¿¥œ±Ó ?";
     MESSAGE[ chinese_simplified ] = "File has been changed on data medium\nand in the Editor. Save?";
-    MESSAGE[ chinese_traditional ] = "StarBasic";
+    MESSAGE[ chinese_traditional ] = "File has been changed on data medium\nand in the Editor. Save?";
     MESSAGE[ arabic ] = "File has been changed on data medium\nand in the Editor. Save?";
     Title[ portuguese ] = "StarBasic!";
-    Title[ russian ] = "StarBasic";
-    Title[ greek ] = "StarBasic";
+    Title[ russian ] = "Testtool!";
+    Title[ greek ] = "StarBasic!";
     Title[ dutch ] = "Testtool!";
-    Title[ french ] = "StarBasic!";
+    Title[ french ] = "Testtool!";
     Title[ spanish ] = "StarBasic";
     Title[ italian ] = "StarBasic";
     Title[ danish ] = "StarBasic";
@@ -918,15 +918,15 @@ QueryBox IDS_ASK_DIRTY_AND_DISKCHANGE_SAVE {
     Title[ portuguese_brazilian ] = "StarBasic";
     Title[ japanese ] = "Testtool!";
     Title[ korean ] = "StarBasic";
-    Title[ chinese_simplified ] = "StarBasic!";
-    Title[ chinese_traditional ] = "StarBasic!";
+    Title[ chinese_simplified ] = "Testtool!";
+    Title[ chinese_traditional ] = "Testtool!";
     Title[ arabic ] = "StarBasic!";
     MESSAGE[ turkish ] = "Dosya, veri kay˝t ortam˝nda\nve editˆrde dei˛tirildi. Kaydedilsin mi?";
     Title[ turkish ] = "StarBasic";
 };
 QueryBox IDS_ASK_DISKCHANGE_SAVE {
     TITLE = "Testtool";
-    TITLE [ english_us ] = "StarBasic!";
+    TITLE [ english_us ] = "Testtool!";
     MESSAGE = "Datei ist auf dem Datentr‰ger ge‰ndert worden.\n‹berschreiben?";
     MESSAGE [ english_us ] = "File has been changed on data medium.\nOverwrite?";
     BUTTONS = WB_YES_NO_CANCEL;
@@ -944,13 +944,13 @@ QueryBox IDS_ASK_DISKCHANGE_SAVE {
     MESSAGE[ japanese ] = "Ãß≤ŸÇÕî}ëÃè„Ç≈ïœçXÇ≥ÇÍÇƒÇ¢Ç‹Ç∑ÅB\nè„èëÇ´ÇµÇ‹Ç∑Ç©ÅB";
     MESSAGE[ korean ] = "µ•¿Ã≈Õ ∏≈√º¿« ∆ƒ¿œ¿Ã°°∫Ø∞Êµ«æ˙Ω¿¥œ¥Ÿ. \n µ§æÓæ∫øÏΩ√∞⁄Ω¿¥œ±Ó?";
     MESSAGE[ chinese_simplified ] = "File has been changed on data medium.\nOverwrite?";
-    MESSAGE[ chinese_traditional ] = "StarBasic";
+    MESSAGE[ chinese_traditional ] = "File has been changed on data medium.\nOverwrite?";
     MESSAGE[ arabic ] = "File has been changed on data medium.\nOverwrite?";
     Title[ portuguese ] = "StarBasic!";
-    Title[ russian ] = "StarBasic";
-    Title[ greek ] = "StarBasic";
+    Title[ russian ] = "Testtool!";
+    Title[ greek ] = "StarBasic!";
     Title[ dutch ] = "Testtool!";
-    Title[ french ] = "StarBasic!";
+    Title[ french ] = "Testtool!";
     Title[ spanish ] = "StarBasic";
     Title[ italian ] = "StarBasic";
     Title[ danish ] = "StarBasic";
@@ -959,15 +959,15 @@ QueryBox IDS_ASK_DISKCHANGE_SAVE {
     Title[ portuguese_brazilian ] = "StarBasic";
     Title[ japanese ] = "Testtool!";
     Title[ korean ] = "StarBasic";
-    Title[ chinese_simplified ] = "StarBasic!";
-    Title[ chinese_traditional ] = "StarBasic!";
+    Title[ chinese_simplified ] = "Testtool!";
+    Title[ chinese_traditional ] = "Testtool!";
     Title[ arabic ] = "StarBasic!";
     MESSAGE[ turkish ] = "Dosya, veri ortam˝nda dei˛tirildi.\nKaydedilsin mi?";
     Title[ turkish ] = "StarBasic";
 };
 QueryBox IDS_ASKRELOAD {
     TITLE = "Testtool";
-    TITLE [ english_us ] = "StarBasic!";
+    TITLE [ english_us ] = "Testtool!";
     MESSAGE = "Datei ist auf dem Datentr‰ger ge‰ndert worden. Erneut Laden?";
     MESSAGE [ english_us ] = "File has been changed on data medium. Reload?";
     BUTTONS = WB_YES_NO;
@@ -985,13 +985,13 @@ QueryBox IDS_ASKRELOAD {
     MESSAGE[ japanese ] = "Ãß≤ŸÇÕî}ëÃè„Ç≈ïœçXÇ≥ÇÍÇƒÇ¢Ç‹Ç∑ÅBì«Ç›çûÇ›Ç»Ç®ÇµÇ‹Ç∑Ç©ÅB";
     MESSAGE[ korean ] = "µ•¿Ã≈Õ ∏≈√ºøÕ ∆Ì¡˝±‚ ≥ª¿« ∆ƒ¿œ¿Ã°°∫Ø∞Êµ«æ˙Ω¿¥œ¥Ÿ.  ¥ŸΩ√ ∑ŒµÂ«œΩ√∞⁄Ω¿¥œ±Ó?";
     MESSAGE[ chinese_simplified ] = "File has been changed on data medium. Reload?";
-    MESSAGE[ chinese_traditional ] = "StarBasic";
+    MESSAGE[ chinese_traditional ] = "File has been changed on data medium. Reload?";
     MESSAGE[ arabic ] = "File has been changed on data medium. Reload?";
     Title[ portuguese ] = "StarBasic!";
-    Title[ russian ] = "StarBasic";
-    Title[ greek ] = "StarBasic";
+    Title[ russian ] = "Testtool!";
+    Title[ greek ] = "StarBasic!";
     Title[ dutch ] = "Testtool!";
-    Title[ french ] = "StarBasic!";
+    Title[ french ] = "Testtool!";
     Title[ spanish ] = "StarBasic";
     Title[ italian ] = "StarBasic";
     Title[ danish ] = "StarBasic";
@@ -1000,15 +1000,15 @@ QueryBox IDS_ASKRELOAD {
     Title[ portuguese_brazilian ] = "StarBasic";
     Title[ japanese ] = "Testtool!";
     Title[ korean ] = "StarBasic";
-    Title[ chinese_simplified ] = "StarBasic!";
-    Title[ chinese_traditional ] = "StarBasic!";
+    Title[ chinese_simplified ] = "Testtool!";
+    Title[ chinese_traditional ] = "Testtool!";
     Title[ arabic ] = "StarBasic!";
     MESSAGE[ turkish ] = "Dosya, veri ortam˝nda dei˛tirildi. Yeniden y¸klensin mi?";
     Title[ turkish ] = "StarBasic";
 };
 QueryBox IDS_ASKDIRTYRELOAD {
     TITLE = "Testtool";
-    TITLE [ english_us ] = "StarBasic!";
+    TITLE [ english_us ] = "Testtool!";
     MESSAGE = "Datei ist auf dem Datentr‰ger und\nim Editor ge‰ndert worden. Erneut Laden?";
     MESSAGE [ english_us ] = "File has been changed on data medium\nand in the Editor. Reload?";
     BUTTONS = WB_YES_NO;
@@ -1026,13 +1026,13 @@ QueryBox IDS_ASKDIRTYRELOAD {
     MESSAGE[ japanese ] = "Ãß≤ŸÇÕî}ëÃè„Ç∆\n¥√ﬁ®¿Ç≈ïœçXÇ≥ÇÍÇƒÇ¢Ç‹Ç∑ÅBì«Ç›çûÇ›Ç»Ç®ÇµÇ‹Ç∑Ç©ÅB";
     MESSAGE[ korean ] = "µ•¿Ã≈Õ ∏≈√ºøÕ ∆Ì¡˝±‚ ≥ª¿« ∆ƒ¿œ¿Ã°°∫Ø∞Êµ«æ˙Ω¿¥œ¥Ÿ. \n ¥ŸΩ√ ∑ŒµÂ«œΩ√∞⁄Ω¿¥œ±Ó?";
     MESSAGE[ chinese_simplified ] = "File has been changed on data medium\nand in the Editor. Reload?";
-    MESSAGE[ chinese_traditional ] = "StarBasic";
+    MESSAGE[ chinese_traditional ] = "File has been changed on data medium\nand in the Editor. Reload?";
     MESSAGE[ arabic ] = "File has been changed on data medium\nand in the Editor. Reload?";
     Title[ portuguese ] = "StarBasic!";
-    Title[ russian ] = "StarBasic";
-    Title[ greek ] = "StarBasic";
+    Title[ russian ] = "Testtool!";
+    Title[ greek ] = "StarBasic!";
     Title[ dutch ] = "Testtool!";
-    Title[ french ] = "StarBasic!";
+    Title[ french ] = "Testtool!";
     Title[ spanish ] = "StarBasic";
     Title[ italian ] = "StarBasic";
     Title[ danish ] = "StarBasic";
@@ -1041,15 +1041,15 @@ QueryBox IDS_ASKDIRTYRELOAD {
     Title[ portuguese_brazilian ] = "StarBasic";
     Title[ japanese ] = "Testtool!";
     Title[ korean ] = "StarBasic";
-    Title[ chinese_simplified ] = "StarBasic!";
-    Title[ chinese_traditional ] = "StarBasic!";
+    Title[ chinese_simplified ] = "Testtool!";
+    Title[ chinese_traditional ] = "Testtool!";
     Title[ arabic ] = "StarBasic!";
     MESSAGE[ turkish ] = "Dosya, veri ortam˝nda ve\neditˆrde dei˛tirildi dei˛tirildi. Yeniden y¸klensin mi?";
     Title[ turkish ] = "StarBasic";
 };
 QueryBox IDS_RUNNING {
     TITLE = "Testtool";
-    TITLE [ english_us ] = "StarBasic!";
+    TITLE [ english_us ] = "Testtool!";
     MESSAGE = "BASIC-Programm ist noch aktiv! Dennoch beenden?";
     MESSAGE [ english_us ] = "BASIC is still running! Exit anyway?";
     BUTTONS = WB_YES_NO;
@@ -1067,13 +1067,13 @@ QueryBox IDS_RUNNING {
     MESSAGE[ japanese ] = "BASIC Ãﬂ€∏ﬁ◊—ÇÕÇ‹ÇæãNìÆíÜÇ≈Ç∑ÅBÇªÇÃÇ‹Ç‹èIóπÇµÇƒÇ‡Ç©Ç‹Ç¢Ç‹ÇπÇÒÇ©ÅB";
     MESSAGE[ korean ] = "BASIC «¡∑Œ±◊∑•¿Ã æ∆¡˜ ¿€µø¡ﬂ¿‘¥œ¥Ÿ. ±◊∑°µµ°°¡æ∑·«œΩ√∞⁄Ω¿¥œ±Ó??";
     MESSAGE[ chinese_simplified ] = "BASIC is still running! Exit anyway?";
-    MESSAGE[ chinese_traditional ] = "StarBasic";
+    MESSAGE[ chinese_traditional ] = "BASIC is still running! Exit anyway?";
     MESSAGE[ arabic ] = "BASIC is still running! Exit anyway?";
     Title[ portuguese ] = "StarBasic!";
-    Title[ russian ] = "StarBasic";
-    Title[ greek ] = "StarBasic";
+    Title[ russian ] = "Testtool!";
+    Title[ greek ] = "StarBasic!";
     Title[ dutch ] = "Testtool!";
-    Title[ french ] = "StarBasic!";
+    Title[ french ] = "Testtool!";
     Title[ spanish ] = "StarBasic";
     Title[ italian ] = "StarBasic";
     Title[ danish ] = "StarBasic";
@@ -1082,15 +1082,15 @@ QueryBox IDS_RUNNING {
     Title[ portuguese_brazilian ] = "StarBasic";
     Title[ japanese ] = "Testtool!";
     Title[ korean ] = "StarBasic";
-    Title[ chinese_simplified ] = "StarBasic!";
-    Title[ chinese_traditional ] = "StarBasic!";
+    Title[ chinese_simplified ] = "Testtool!";
+    Title[ chinese_traditional ] = "Testtool!";
     Title[ arabic ] = "StarBasic!";
     MESSAGE[ turkish ] = "BASIC program˝ h‚l‚ etkin. Yine de Á˝kmak istiyor musunuz?";
     Title[ turkish ] = "StarBasic";
 };
 QueryBox IDS_LOSS_OF_INFORMATION {
     TITLE = "Testtool";
-    TITLE [ english_us ] = "StarBasic!";
+    TITLE [ english_us ] = "Testtool!";
     MESSAGE = "Speichern in Fremdformat verursacht Informationsverlust";
     MESSAGE [ english_us ] = "Saving in an external format causes information loss.";
     BUTTONS = WB_OK_CANCEL;
@@ -1108,13 +1108,13 @@ QueryBox IDS_LOSS_OF_INFORMATION {
     MESSAGE[ japanese ] = "äOïîèëéÆÇ≈ï€ë∂Ç∑ÇÈÇ∆ÅAèÓïÒÇé∏Ç§â¬î\\ê´Ç™Ç†ÇËÇ‹Ç∑ÅB";
     MESSAGE[ korean ] = "ø‹∫Œ ∆˜∏Àø° ¿˙¿Â«œ¥¬∞Õ¿∫ ¡§∫∏ º’Ω«¿ª°°√ ∑°«’¥œ¥Ÿ.";
     MESSAGE[ chinese_simplified ] = "Saving in an external format causes information loss.";
-    MESSAGE[ chinese_traditional ] = "StarBasic";
+    MESSAGE[ chinese_traditional ] = "Saving in an external format causes information loss";
     MESSAGE[ arabic ] = "Saving in an external format causes information loss.";
     Title[ portuguese ] = "StarBasic!";
-    Title[ russian ] = "StarBasic";
-    Title[ greek ] = "StarBasic";
+    Title[ russian ] = "Testtool!";
+    Title[ greek ] = "StarBasic!";
     Title[ dutch ] = "Testtool!";
-    Title[ french ] = "StarBasic!";
+    Title[ french ] = "Testtool!";
     Title[ spanish ] = "StarBasic";
     Title[ italian ] = "StarBasic";
     Title[ danish ] = "StarBasic";
@@ -1123,8 +1123,8 @@ QueryBox IDS_LOSS_OF_INFORMATION {
     Title[ portuguese_brazilian ] = "StarBasic";
     Title[ japanese ] = "Testtool!";
     Title[ korean ] = "StarBasic";
-    Title[ chinese_simplified ] = "StarBasic!";
-    Title[ chinese_traditional ] = "StarBasic!";
+    Title[ chinese_simplified ] = "Testtool!";
+    Title[ chinese_traditional ] = "Testtool!";
     Title[ arabic ] = "StarBasic!";
     MESSAGE[ turkish ] = "Yabanc˝ formatta kaydetmek bilgi kayb˝na yol aÁar";
     Title[ turkish ] = "StarBasic";
@@ -1309,12 +1309,12 @@ String IDS_EDIT_VAR
 
 String IDS_APPNAME {
     TEXT = "Testtool";
-    TEXT [ english_us ] = "StarBasic";
+    TEXT [ english_us ] = "Testtool";
     TEXT[ portuguese ] = "StarBasic";
-    TEXT[ russian ] = "StarBasic";
-    TEXT[ greek ] = "StarBasic";
+    TEXT[ russian ] = "Testtool";
+    TEXT[ greek ] = "Testtool";
     TEXT[ dutch ] = "Testtool";
-    TEXT[ french ] = "StarBasic";
+    TEXT[ french ] = "Testtool";
     TEXT[ spanish ] = "StarBasic";
     TEXT[ italian ] = "%PRODUCTNAME Basic";
     TEXT[ danish ] = "StarBasic";
@@ -1323,8 +1323,8 @@ String IDS_APPNAME {
     TEXT[ portuguese_brazilian ] = "StarBasic";
     TEXT[ japanese ] = "Testtool";
     TEXT[ korean ] = "%PRODUCTNAME Basic";
-    TEXT[ chinese_simplified ] = "StarBasic";
-    TEXT[ chinese_traditional ] = "StarBasic";
+    TEXT[ chinese_simplified ] = "Testtool";
+    TEXT[ chinese_traditional ] = "Testtool";
     TEXT[ arabic ] = "StarBasic";
     TEXT[ turkish ] = "%PRODUCTNAME Basic";
 };
@@ -1451,12 +1451,12 @@ TEXT = "*.TXT";
 
 String IDS_LOADDLG {
     TEXT = "Testtool: Datei einlesen";
-    TEXT [ english_us ] = "StarBasic: Load File";
+    TEXT [ english_us ] = "Testtool: Load File";
     TEXT[ portuguese ] = "StarBasic: ler ficheiro";
-    TEXT[ russian ] = "StarBasic: Load File";
-    TEXT[ greek ] = "StarBasic: Load File";
+    TEXT[ russian ] = "Testtool: Load File";
+    TEXT[ greek ] = "Testtool: Load File";
     TEXT[ dutch ] = "Testtool: bestand lezen";
-    TEXT[ french ] = "StarBasic : Lecture du fichier";
+    TEXT[ french ] = "Testtool : Lecture du fichier";
     TEXT[ spanish ] = "StarBasic: Leer archivo";
     TEXT[ italian ] = "StarBasic: Load File";
     TEXT[ danish ] = "StarBasic: Load File";
@@ -1465,19 +1465,19 @@ String IDS_LOADDLG {
     TEXT[ portuguese_brazilian ] = "StarBasic: Datei einlesen";
     TEXT[ japanese ] = "Testtool: Ãß≤ŸÇÃì«Ç›éÊÇË";
     TEXT[ korean ] = "StarBasic: ∆ƒ¿œ ∆«µ∂";
-    TEXT[ chinese_simplified ] = "StarBasic: Load File";
-    TEXT[ chinese_traditional ] = "StarBasic°GLoad File";
+    TEXT[ chinese_simplified ] = "Testtool: Load File";
+    TEXT[ chinese_traditional ] = "Testtool°GLoad File";
     TEXT[ arabic ] = "StarBasic: Load File";
     TEXT[ turkish ] = "StarBasic: Dosyay˝ y¸kle";
 };
 String IDS_SAVEDLG {
     TEXT = "Testtool: Datei speichern";
-    TEXT [ english_us ] = "StarBasic: Save File";
+    TEXT [ english_us ] = "Testtool: Save File";
     TEXT[ portuguese ] = "StarBasic: guardar ficheiro";
-    TEXT[ russian ] = "StarBasic: Save File";
-    TEXT[ greek ] = "StarBasic: Save File";
+    TEXT[ russian ] = "Testtool: Save File";
+    TEXT[ greek ] = "Testtool: Save File";
     TEXT[ dutch ] = "Testtool: bestand opslaan";
-    TEXT[ french ] = "StarBasic: Enregistrement du fichier";
+    TEXT[ french ] = "Testtool : Enregistrement du fichier";
     TEXT[ spanish ] = "StarBasic: Guardar archivo";
     TEXT[ italian ] = "StarBasic: Save File";
     TEXT[ danish ] = "StarBasic: Save File";
@@ -1486,8 +1486,8 @@ String IDS_SAVEDLG {
     TEXT[ portuguese_brazilian ] = "StarBasic: Datei speichern";
     TEXT[ japanese ] = "Testtool: Ãß≤ŸÇÃï€ë∂";
     TEXT[ korean ] = "StarBasic: ∆ƒ¿œ ¿˙¿Â";
-    TEXT[ chinese_simplified ] = "StarBasic: Save File";
-    TEXT[ chinese_traditional ] = "StarBasic: Save File";
+    TEXT[ chinese_simplified ] = "Testtool: Save File";
+    TEXT[ chinese_traditional ] = "Testtool: Save File";
     TEXT[ arabic ] = "StarBasic: Save File";
     TEXT[ turkish ] = "StarBasic: Dosyay˝ kaydet";
 };
@@ -1505,7 +1505,7 @@ String IDS_BASFILTER {
     TEXT[ swedish ] = "Source text (*.BAS)";
     TEXT[ polish ] = "Source text (*.BAS) ";
     TEXT[ portuguese_brazilian ] = "Quelltexte (*.BAS)";
-    TEXT[ japanese ] = "ø∞Ω(*.BAS)";
+    TEXT[ japanese ] = "ø∞Ω√∑Ωƒ(*.BAS)";
     TEXT[ korean ] = "º“Ω∫≈ÿΩ∫∆Æ (*.BAS)";
     TEXT[ chinese_simplified ] = "Source text (*.BAS)";
     TEXT[ chinese_traditional ] = "Source text(*.BAS)";
@@ -2030,7 +2030,7 @@ Menu RID_FILE {
             TEXT[ japanese ] = "◊≤Ãﬁ◊ÿÇÃï€ë∂(~B)...";
             TEXT[ korean ] = "∂Û¿Ã∫Í∑Ø∏Æ ¿˙¿Â(~B)...";
             TEXT[ chinese_simplified ] = "Save Li~brary...";
-            TEXT[ chinese_traditional ] = "Save L~ibrary...";
+            TEXT[ chinese_traditional ] = "Save Li~brary...";
             TEXT[ arabic ] = "Save Li~brary...";
             TEXT[ turkish ] = "Kitapl˝˝ kaydet...";
         };
@@ -2081,7 +2081,7 @@ Menu RID_FILE {
             TEXT[ japanese ] = "àÛç¸ê›íË(~R)...";
             TEXT[ korean ] = "«¡∏∞≈Õ º≥¡§(~R)...";
             TEXT[ chinese_simplified ] = "P~rinter Setting...";
-            TEXT[ chinese_traditional ] = "~Printer Setup...";
+            TEXT[ chinese_traditional ] = "P~rinter Setup...";
             TEXT[ arabic ] = "P~rinter Setup...";
             TEXT[ turkish ] = "Yaz˝c˝ ayarlar˝...";
         };
@@ -2106,7 +2106,7 @@ Menu RID_FILE {
             TEXT[ swedish ] = "~Exit";
             TEXT[ polish ] = "~Exit ";
             TEXT[ portuguese_brazilian ] = "~Beenden";
-            TEXT[ japanese ] = "èIóπ(~X)";
+            TEXT[ japanese ] = "èIóπ(~E)";
             TEXT[ korean ] = "¡æ∑·(~E)";
             TEXT[ chinese_simplified ] = "~Exit";
             TEXT[ chinese_traditional ] = "~Exit";
@@ -2188,7 +2188,7 @@ Menu RID_EDIT {
             TEXT[ swedish ] = "~Cut";
             TEXT[ polish ] = "~Cut ";
             TEXT[ portuguese_brazilian ] = "~Ausschneiden";
-            TEXT[ japanese ] = "êÿÇËéÊÇË(~T)";
+            TEXT[ japanese ] = "êÿÇËéÊÇË(~C)";
             TEXT[ korean ] = "¿ﬂ∂Û≥ª±‚(~C)";
             TEXT[ chinese_simplified ] = "~Cut";
             TEXT[ chinese_traditional ] = "~Cut";
@@ -2264,7 +2264,7 @@ Menu RID_EDIT {
             TEXT[ polish ] = "~Delete ";
             TEXT[ portuguese_brazilian ] = "~Lˆschen";
             TEXT[ japanese ] = "çÌèú(~D)";
-            TEXT[ korean ] = "ªË¡¶";
+            TEXT[ korean ] = "ªË¡¶(~D)";
             TEXT[ chinese_simplified ] = "~Delete";
             TEXT[ chinese_traditional ] = "~Delete";
             TEXT[ arabic ] = "~Delete";
@@ -2341,7 +2341,7 @@ Menu RID_EDIT {
             TEXT[ swedish ] = "Repeat S~earch";
             TEXT[ polish ] = "Repeat S~earch ";
             TEXT[ portuguese_brazilian ] = "S~uchen Wiederholen";
-            TEXT[ japanese ] = "åüçıÇÃåJÇËï‘Çµ(~U)";
+            TEXT[ japanese ] = "åüçıÇÃåJÇËï‘Çµ(~E)";
             TEXT[ korean ] = "¥ŸΩ√ √£±‚(~E)";
             TEXT[ chinese_simplified ] = "Repeat S~earch";
             TEXT[ chinese_traditional ] = "Repeat S~earch";
@@ -2370,7 +2370,7 @@ Menu RID_RUN {
             TEXT[ swedish ] = "~Compile";
             TEXT[ polish ] = "~Compile ";
             TEXT[ portuguese_brazilian ] = "~Compilieren";
-            TEXT[ japanese ] = "∫› ﬂ≤ŸÇçsÇ§";
+            TEXT[ japanese ] = "∫› ﬂ≤ŸÇçsÇ§(~C)";
             TEXT[ korean ] = "ƒƒ∆ƒ¿œ(~C)";
             TEXT[ chinese_simplified ] = "~Compile";
             TEXT[ chinese_traditional ] = "~Compile";
@@ -2419,7 +2419,7 @@ Menu RID_RUN {
             TEXT[ swedish ] = "~Start";
             TEXT[ polish ] = "~Start";
             TEXT[ portuguese_brazilian ] = "~Start";
-            TEXT[ japanese ] = "Ω¿∞ƒ";
+            TEXT[ japanese ] = "Ω¿∞ƒ(~S)";
             TEXT[ korean ] = "Ω√¿€(~S)";
             TEXT[ chinese_simplified ] = "~Start";
             TEXT[ chinese_traditional ] = "~Start";
@@ -2527,7 +2527,7 @@ Menu RID_RUN {
             TEXT[ swedish ] = "~Interrupt";
             TEXT[ polish ] = "~Interrupt ";
             TEXT[ portuguese_brazilian ] = "~Unterbrechen";
-            TEXT[ japanese ] = "íÜíf";
+            TEXT[ japanese ] = "íÜíf(~I)";
             TEXT[ korean ] = "¿Œ≈Õ∑¥∆Æ(~I)";
             TEXT[ chinese_simplified ] = "~Interrupt";
             TEXT[ chinese_traditional ] = "~Interrupt";
@@ -2551,7 +2551,7 @@ Menu RID_RUN {
             TEXT[ swedish ] = "~Cancel";
             TEXT[ polish ] = "~Cancel";
             TEXT[ portuguese_brazilian ] = "~Abbrechen";
-            TEXT[ japanese ] = "∑¨›æŸ";
+            TEXT[ japanese ] = "∑¨›æŸ(~C)";
             TEXT[ korean ] = "√Îº“(~C)";
             TEXT[ chinese_simplified ] = "~Cancel";
             TEXT[ chinese_traditional ] = "~Cancel";
@@ -2576,7 +2576,7 @@ Menu RID_RUN {
             TEXT[ swedish ] = "~Next Error";
             TEXT[ polish ] = "~Next Error";
             TEXT[ portuguese_brazilian ] = "~N‰chster Fehler";
-            TEXT[ japanese ] = "éüÇÃ¥◊∞";
+            TEXT[ japanese ] = "éüÇÃ¥◊∞(~N)";
             TEXT[ korean ] = "¥Ÿ¿Ω ø¿∑˘(~N)";
             TEXT[ chinese_simplified ] = "~Next Error";
             TEXT[ chinese_traditional ] = "~Next Error";
@@ -2601,7 +2601,7 @@ Menu RID_RUN {
             TEXT[ swedish ] = "~Previous Error";
             TEXT[ polish ] = "~Previous Error";
             TEXT[ portuguese_brazilian ] = "~Vorheriger Fehler";
-            TEXT[ japanese ] = "ëOÇÃ¥◊∞";
+            TEXT[ japanese ] = "ëOÇÃ¥◊∞(~P)";
             TEXT[ korean ] = "¿Ã¿¸ ø¿∑˘(~P)";
             TEXT[ chinese_simplified ] = "~Previous Error";
             TEXT[ chinese_traditional ] = "~Previous Error";
@@ -2632,7 +2632,7 @@ String RID_TT_EXTRAS_NAME
     Text[ polish ] = "E~xtras";
     Text[ portuguese_brazilian ] = "E~xtras";
     Text[ japanese ] = "E~xtras";
-    Text[ korean ] = "µµ±∏";
+    Text[ korean ] = "µµ±∏(~X)";
     Text[ chinese_simplified ] = "E~xtras";
     Text[ chinese_traditional ] = "E~xtras";
     Text[ arabic ] = "E~xtras";
@@ -2658,7 +2658,7 @@ Menu RID_TT_EXTRAS {
             TEXT[ swedish ] = "~Settings";
             TEXT[ polish ] = "~Settings";
             TEXT[ portuguese_brazilian ] = "~Einstellungen";
-            TEXT[ japanese ] = "ê›íË";
+            TEXT[ japanese ] = "ê›íË(~S)";
             TEXT[ korean ] = "º≥¡§(~S)";
             TEXT[ chinese_simplified ] = "~Settings";
             TEXT[ chinese_traditional ] = "~Settings";
@@ -2710,7 +2710,7 @@ Menu RID_WINDOW {
             TEXT[ swedish ] = "~Overlapping";
             TEXT[ polish ] = "~Overlapping";
             TEXT[ portuguese_brazilian ] = "~‹berlappend";
-            TEXT[ japanese ] = "èdÇÀÇƒï\\é¶";
+            TEXT[ japanese ] = "èdÇÀÇƒï\\é¶(~O)";
             TEXT[ korean ] = "∞„ƒß(~O)";
             TEXT[ chinese_simplified ] = "~Overlapping";
             TEXT[ chinese_traditional ] = "~Overlapping";
@@ -2734,7 +2734,7 @@ Menu RID_WINDOW {
             TEXT[ swedish ] = "~Tile";
             TEXT[ polish ] = "~Tile";
             TEXT[ portuguese_brazilian ] = "~Nebeneinander";
-            TEXT[ japanese ] = "ï¿Ç◊Çƒï\\é¶";
+            TEXT[ japanese ] = "ï¿Ç◊Çƒï\\é¶(~T)";
             TEXT[ korean ] = "√¢ ≥™¥©±‚(~T)";
             TEXT[ chinese_simplified ] = "~Tile";
             TEXT[ chinese_traditional ] = "~Tiled";
@@ -2758,7 +2758,7 @@ Menu RID_WINDOW {
             TEXT[ swedish ] = "~Arrange Horizontally";
             TEXT[ polish ] = "~Arrange Horizontally";
             TEXT[ portuguese_brazilian ] = "~Horizontal anordnen";
-            TEXT[ japanese ] = "ç∂âEÇ…ï¿Ç◊Çƒï\\é¶";
+            TEXT[ japanese ] = "ç∂âEÇ…ï¿Ç◊Çƒï\\é¶(~A)";
             TEXT[ korean ] = "ºˆ∆Ú ¡§∑ƒ(~A)";
             TEXT[ chinese_simplified ] = "~Arrange Horizontally";
             TEXT[ chinese_traditional ] = "~Arrange Horizontally";
@@ -2782,7 +2782,7 @@ Menu RID_WINDOW {
             TEXT[ swedish ] = "~Arrange Vertically";
             TEXT[ polish ] = "~Arrange Vertically";
             TEXT[ portuguese_brazilian ] = "~Vertikal anordnen";
-            TEXT[ japanese ] = "è„â∫Ç…ï¿Ç◊Çƒï\\é¶";
+            TEXT[ japanese ] = "è„â∫Ç…ï¿Ç◊Çƒï\\é¶(~A)";
             TEXT[ korean ] = "ºˆ¡˜ ¡§∑ƒ(~A)";
             TEXT[ chinese_simplified ] = "~Arrange Vertically";
             TEXT[ chinese_traditional ] = "~Arrange Vertically";
@@ -2848,7 +2848,7 @@ Menu RID_HELP {
             TEXT[ swedish ] = "~About...";
             TEXT[ polish ] = "~About...";
             TEXT[ portuguese_brazilian ] = "~Info...";
-            TEXT[ japanese ] = "èÓïÒ(~I)...";
+            TEXT[ japanese ] = "èÓïÒ(~A)...";
             TEXT[ korean ] = "¡§∫∏(~A)...";
             TEXT[ chinese_simplified ] = "~About...";
             TEXT[ chinese_traditional ] = "~About...";
@@ -2861,7 +2861,7 @@ ModelessDialog IDD_PRINT_DIALOG {
     Pos = MAP_APPFONT( 83, 42 );
     Size = MAP_APPFONT( 171, 94 );
     TEXT = "Testtool: Datei drucken";
-    TEXT [ english_us ] = "StarBasic: Print File";
+    TEXT [ english_us ] = "Testtool: Print File";
     MOVEABLE = TRUE;
     SVLook = TRUE;
     FixedText RID_TEXT {
@@ -2912,10 +2912,10 @@ ModelessDialog IDD_PRINT_DIALOG {
         TEXT[ turkish ] = "›ptal";
     };
     TEXT[ portuguese ] = "StarBasic: imprimir ficheiro";
-    TEXT[ russian ] = "StarBasic: Print File";
-    TEXT[ greek ] = "StarBasic: Print File";
+    TEXT[ russian ] = "Testtool: Print File";
+    TEXT[ greek ] = "Testtool: Print File";
     TEXT[ dutch ] = "Testtool: bestand afdrukken";
-    TEXT[ french ] = "StarBasic: Impression du fichier";
+    TEXT[ french ] = "Testtool : Impression du fichier";
     TEXT[ spanish ] = "StarBasic: Imprimir archivo";
     TEXT[ italian ] = "StarBasic: Print file";
     TEXT[ danish ] = "StarBasic: Print File";
@@ -2924,8 +2924,8 @@ ModelessDialog IDD_PRINT_DIALOG {
     TEXT[ portuguese_brazilian ] = "StarBasic: Datei drucken";
     TEXT[ japanese ] = "Testtool: Ãß≤ŸÇÃàÛç¸";
     TEXT[ korean ] = "StarBasic: ∆ƒ¿œ°°¿Œº‚";
-    TEXT[ chinese_simplified ] = "StarBasic: Print File";
-    TEXT[ chinese_traditional ] = "StarBasic: Print File";
+    TEXT[ chinese_simplified ] = "Testtool: Print File";
+    TEXT[ chinese_traditional ] = "Testtool: Print File";
     TEXT[ arabic ] = "StarBasic: Print File";
     TEXT[ turkish ] = "StarBasic: Dosyay˝ yazd˝r";
 };
