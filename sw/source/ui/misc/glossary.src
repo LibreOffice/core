@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glossary.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:59:41 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:09:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,7 +97,7 @@ ModalDialog DLG_GLOSSARY
         Text [ french ] = "Lors de la saisie, afficher le nom complet sous forme d'~infobulle" ;
         Text [ dutch ] = "~Rest van de naam bij invoer als tip weergeven" ;
         Text [ swedish ] = "~Visa resten av namnet som tips vid inmatningen" ;
-        Text [ danish ] = "Vis resten af navnet som tip under skrivning" ;
+        Text [ danish ] = "~Vis resten af navnet som tip under skrivning" ;
         Text [ portuguese_brazilian ] = "Exibir o ~resto do nome como sugest�o durante a digita��o" ;
         Text [ portuguese ] = "Mostrar ~resto do nome como sugest�o durante a digita��o" ;
         Text[ chinese_simplified ] = "自动显示输入文提示(~D)";
@@ -117,6 +117,8 @@ ModalDialog DLG_GLOSSARY
         Text[ hebrew ] = "‮הצגת המשך השם תוך כדי הדפסה, כהצעה‬";
         Text[ hindi ] = "~टइपिंग के समय के सुझाव के अनुसार बचा हुआ नाम को दिखाता है ।";
         Text[ slovak ] = "Zo~brazovať zvyšok názvu ako návrh pri písaní";
+        Text[ hungarian ] = "~Javaslattétel gépelés közben";
+        Text[ slovenian ] = "~Pokaži ostanek imena kot predlog med vnašanjem";
     };
     FixedText FT_NAME
     {
@@ -129,7 +131,7 @@ ModalDialog DLG_GLOSSARY
         Text [ portuguese_brazilian ] = "~Nome" ;
         Text [ portuguese ] = "~Nome" ;
         Text [ finnish ] = "~Nimi" ;
-        Text [ danish ] = "Navn" ;
+        Text [ danish ] = "~Navn" ;
         Text [ french ] = "Nom" ;
         Text [ swedish ] = "~Namn" ;
         Text [ dutch ] = "~Naam" ;
@@ -152,6 +154,8 @@ ModalDialog DLG_GLOSSARY
         Text[ hebrew ] = "‮שם‬";
         Text[ hindi ] = "~नाम";
         Text[ slovak ] = "~Názov";
+        Text[ hungarian ] = "~Név";
+        Text[ slovenian ] = "~Ime";
     };
     Edit ED_NAME
     {
@@ -173,7 +177,7 @@ ModalDialog DLG_GLOSSARY
         Text [ portuguese_brazilian ] = "~Atalho" ;
         Text [ portuguese ] = "~Abreviatura" ;
         Text [ finnish ] = "~Pikavalinta" ;
-        Text [ danish ] = "Genvej" ;
+        Text [ danish ] = "~Genvej" ;
         Text [ french ] = "~Raccourci" ;
         Text [ swedish ] = "~F�rkortning" ;
         Text [ dutch ] = "~Afkorting" ;
@@ -196,6 +200,8 @@ ModalDialog DLG_GLOSSARY
         Text[ hebrew ] = "‮שם מקוצר‬";
         Text[ hindi ] = "~सरल विधि";
         Text[ slovak ] = "~Skratka";
+        Text[ hungarian ] = "~Gyorsbillentyű";
+        Text[ slovenian ] = "~Bližnjica";
     };
     Edit ED_SHORTNAME
     {
@@ -243,6 +249,8 @@ ModalDialog DLG_GLOSSARY
             Text[ hebrew ] = "‮קריאה בלבד‬";
             Text[ hindi ] = "केवल पढ़ने केलिए";
             Text[ slovak ] = "len na čítanie";
+            Text[ hungarian ] = "csak olvasható";
+            Text[ slovenian ] = "samo za branje";
         };
     };
     FixedLine FL_RELATIVE
@@ -277,6 +285,8 @@ ModalDialog DLG_GLOSSARY
         Text[ hebrew ] = "‮שמירת קישורים בהתיחסות ל ‬";
         Text[ hindi ] = "के सम्बन्धित लिंक को संचित करो";
         Text[ slovak ] = "Uložiť odkazy relatívne k";
+        Text[ hungarian ] = "Hivatkozott objektumok mentése";
+        Text[ slovenian ] = "Shrani povezave glede na";
     };
     CheckBox CB_FILE_REL
     {
@@ -291,7 +301,7 @@ ModalDialog DLG_GLOSSARY
         Text [ french ] = "Dans le syst�me de ~fichiers" ;
         Text [ dutch ] = "In b~estandsysteem" ;
         Text [ swedish ] = "I ~filsystemet" ;
-        Text [ danish ] = "i ~filsystemet" ;
+        Text [ danish ] = "~Filsystem" ;
         Text [ portuguese_brazilian ] = "~Sistema de arquivos" ;
         Text [ portuguese ] = "~No sistema de ficheiros" ;
         Text[ chinese_simplified ] = "在文件系统内(~F)";
@@ -311,6 +321,8 @@ ModalDialog DLG_GLOSSARY
         Text[ hebrew ] = "‮מערכת הקבצים‬";
         Text[ hindi ] = "~फाइल सिस्टम";
         Text[ slovak ] = "~Súborovému systému";
+        Text[ hungarian ] = "~Helyi fájlrendszeren";
+        Text[ slovenian ] = "~Datotečni sistem";
     };
     CheckBox CB_NET_REL
     {
@@ -324,7 +336,7 @@ ModalDialog DLG_GLOSSARY
         Text [ french ] = "Sur ~Internet" ;
         Text [ dutch ] = "Op het interne~t" ;
         Text [ swedish ] = "P� ~Internet" ;
-        Text [ danish ] = "p� ~Internettet" ;
+        Text [ danish ] = "p� ~Internet" ;
         Text [ portuguese_brazilian ] = "~Internet" ;
         Text [ portuguese ] = "Na ~Internet" ;
         Text[ chinese_simplified ] = "在国际互联网内(~R)";
@@ -344,6 +356,8 @@ ModalDialog DLG_GLOSSARY
         Text[ hebrew ] = "‮אינטרנט‬";
         Text[ hindi ] = "इन्टरने~ट्";
         Text[ slovak ] = "Inte~rnetu";
+        Text[ hungarian ] = "~Interneten";
+        Text[ slovenian ] = "I~nternet";
     };
     Window WIN_EXAMPLE
     {
@@ -370,7 +384,7 @@ ModalDialog DLG_GLOSSARY
         Text[ french ] = "Afficher l'aper�u";
         Text[ spanish ] = "Mostrar pre~visualizaci�n";
         Text[ italian ] = "Mostra anteprima";
-        Text[ danish ] = "Vis eksempel";
+        Text[ danish ] = "Vis ~eksempel";
         Text[ swedish ] = "Visa f�rhandsvisning";
         Text[ polish ] = "Pok~a� podgl�d";
         Text[ portuguese_brazilian ] = "~Mostrar visualiza��o";
@@ -388,6 +402,8 @@ ModalDialog DLG_GLOSSARY
         Text[ hebrew ] = "‮תצוגה מקדימה‬";
         Text[ hindi ] = "पूर्वदृश्य ~दिखाओ";
         Text[ slovak ] = "Zo~braziť náhľad";
+        Text[ hungarian ] = "~Minta megtekintése";
+        Text[ slovenian ] = "Po~kaži predogled";
     };
     OKButton PB_INSERT
     {
@@ -430,6 +446,8 @@ ModalDialog DLG_GLOSSARY
         Text[ hebrew ] = "‮הוספה‬";
         Text[ hindi ] = "~जोड़ो";
         Text[ slovak ] = "~Vložiť";
+        Text[ hungarian ] = "B~eillesztés";
+        Text[ slovenian ] = "~Vstavi";
     };
     CancelButton PB_CLOSE
     {
@@ -466,6 +484,8 @@ ModalDialog DLG_GLOSSARY
         Text[ hebrew ] = "‮סגירה‬";
         Text[ hindi ] = "~बन्द करो";
         Text[ slovak ] = "~Zavrieť";
+        Text[ hungarian ] = "~Bezárás";
+        Text[ slovenian ] = "~Zapri";
     };
     HelpButton PB_HELP
     {
@@ -483,7 +503,7 @@ ModalDialog DLG_GLOSSARY
         Text [ portuguese_brazilian ] = "AutoTe~xto" ;
         Text [ portuguese ] = "AutoTe~xto" ;
         Text [ finnish ] = "Autom. ~teksti" ;
-        Text [ danish ] = "AutoTekst" ;
+        Text [ danish ] = "Auto~Tekst" ;
         Text [ french ] = "~AutoTexte" ;
         Text [ swedish ] = "AutoTe~xt" ;
         Text [ dutch ] = "~AutoTekst" ;
@@ -506,6 +526,8 @@ ModalDialog DLG_GLOSSARY
         Text[ hebrew ] = "‮טקסט מקובץ‬";
         Text[ hindi ] = "स्व~चालित टेक्स्ट्";
         Text[ slovak ] = "Autom. te~xt";
+        Text[ hungarian ] = "S~zöveg-o-mata";
+        Text[ slovenian ] = "Samobe~sedilo";
     };
     PushButton PB_BIB
     {
@@ -518,10 +540,10 @@ ModalDialog DLG_GLOSSARY
         Text [ portuguese_brazilian ] = "~Categorias..." ;
         Text [ portuguese ] = "~Categorias..." ;
         Text [ finnish ] = "~Luokat..." ;
-        Text [ danish ] = "Omr�der..." ;
+        Text [ danish ] = "~Kategorier..." ;
         Text [ french ] = "Cat�~gories..." ;
         Text [ swedish ] = "~Omr�den..." ;
-        Text [ dutch ] = "~Bereiken..." ;
+        Text [ dutch ] = "~Categorie�n..." ;
         Text [ spanish ] = "~�reas..." ;
         Text [ english_us ] = "C~ategories..." ;
         TabStop = TRUE ;
@@ -541,6 +563,8 @@ ModalDialog DLG_GLOSSARY
         Text[ hebrew ] = "‮קטגוריות‬";
         Text[ hindi ] = "~वर्ग...";
         Text[ slovak ] = "K~ategórie...";
+        Text[ hungarian ] = "~Kategóriák...";
+        Text[ slovenian ] = "K~ategorije...";
     };
     PushButton PB_PATH
     {
@@ -553,7 +577,7 @@ ModalDialog DLG_GLOSSARY
         Text [ english_us ] = "~Path..." ;
         Text [ portuguese_brazilian ] = "~Caminho..." ;
         Text [ swedish ] = "S�k~v�g..." ;
-        Text [ danish ] = "Sti..." ;
+        Text [ danish ] = "~Sti..." ;
         Text [ italian ] = "~Percorso..." ;
         Text [ spanish ] = "~Ruta..." ;
         Text [ french ] = "~Chemin..." ;
@@ -575,6 +599,8 @@ ModalDialog DLG_GLOSSARY
         Text[ hebrew ] = "~Pfad...";
         Text[ hindi ] = "~मार्ग...";
         Text[ slovak ] = "~Cesta...";
+        Text[ hungarian ] = "Ú~tvonalak...";
+        Text[ slovenian ] = "~Pot...";
     };
     String ST_READONLY_PATH
     {
@@ -588,7 +614,7 @@ ModalDialog DLG_GLOSSARY
         Text[ french ] = "Aucun droit d'�criture n'existe pour les r�pertoires 'AutoText'. Voulez-vous appeler la bo�te de dialogue des chemins ?";
         Text[ spanish ] = "No existen derechos de escritura para los directorios de 'Texto autom�tico'. �Desea abrir el di�logo de rutas?";
         Text[ italian ] = "La cartella 'AutoText' � di sola lettura. Volete richiamare il dialogo del percorso?";
-        Text[ danish ] = "Der findes ingen skriverettigheder til 'AutoTekst'-bibliotekerne. Vil du �bne stidialogen?";
+        Text[ danish ] = "Der findes ingen skriverettigheder til 'AutoTekst'-katalogerne. Vil du �bne stidialogen?";
         Text[ swedish ] = "Det saknas skrivr�ttigheter f�r katalogerna f�r 'AutoText'. Vill du �ppna s�kv�gsdialogen?";
         Text[ polish ] = "Katalogi \"Autotekst\" s� tylko do odczytu. Czy wywo�a� okno dialogowe ustawiania �cie�ki?";
         Text[ portuguese_brazilian ] = "Os diret�rios de 'AutoTexto' s�o somente de leitura. Deseja abrir a caixa de di�logo dos caminhos?";
@@ -605,6 +631,8 @@ ModalDialog DLG_GLOSSARY
         Text[ hebrew ] = "Für die Verzeichnisse für 'AutoText' sind sind keine Schreibrechte vorhanden. Möchten Sie den Pfaddialog aufrufen?";
         Text[ hindi ] = "'स्वचालित टेक्स्ट्' डैरक्टरियाँ केवल-पढ़ने केलिए है । आप मार्ग निर्धारण का डयलॉग को बुलाना चाहते है?";
         Text[ slovak ] = "Adresáre s automatickým textom sú len na čítanie. Prajete si zobraziťdialóg na výber ciest?";
+        Text[ hungarian ] = "A 'szöveg-o-mata' könyvtár csak olvasható. Átállítja?";
+        Text[ slovenian ] = "Mape s samobesedilom so samo za branje. Ali želite pogovorno okno z nastavitvami poti?";
     };
     Menu MNU_EDIT
     {
@@ -643,6 +671,8 @@ ModalDialog DLG_GLOSSARY
                 Text[ hebrew ] = "‮חדש‬";
                 Text[ hindi ] = "~नया";
                 Text[ slovak ] = "~Nový";
+                Text[ hungarian ] = "Ú~j";
+                Text[ slovenian ] = "~Nov";
             };
             MenuItem
             {
@@ -676,6 +706,8 @@ ModalDialog DLG_GLOSSARY
                 Text[ hebrew ] = "Neu (nur ~Text)";
                 Text[ hindi ] = "नया (केवल टेक्स्ट्)";
                 Text[ slovak ] = "Nový (iba text)";
+                Text[ hungarian ] = "Új (csak szöveg)";
+                Text[ slovenian ] = "Novo (samo besedilo)";
             };
             MenuItem
             {
@@ -709,6 +741,8 @@ ModalDialog DLG_GLOSSARY
                 Text[ hebrew ] = "‮העתקה‬";
                 Text[ hindi ] = "~प्रतिलिपि";
                 Text[ slovak ] = "~Kopírovať";
+                Text[ hungarian ] = "~Másolás";
+                Text[ slovenian ] = "Kopir~aj";
             };
             MenuItem
             {
@@ -721,7 +755,7 @@ ModalDialog DLG_GLOSSARY
                 Text [ portuguese_brazilian ] = "Substituir" ;
                 Text [ portuguese ] = "~Substituir" ;
                 Text [ finnish ] = "Korvaa" ;
-                Text [ danish ] = "~Erstat" ;
+                Text [ danish ] = "Erstat" ;
                 Text [ french ] = "R~emplacer" ;
                 Text [ swedish ] = "~Ers�tt" ;
                 Text [ dutch ] = "V~ervangen" ;
@@ -743,6 +777,8 @@ ModalDialog DLG_GLOSSARY
                 Text[ hebrew ] = "‮החלפה‬";
                 Text[ hindi ] = "प्रतिस्थापन";
                 Text[ slovak ] = "Nahradiť";
+                Text[ hungarian ] = "Csere";
+                Text[ slovenian ] = "Zamenjaj";
             };
             MenuItem
             {
@@ -776,6 +812,8 @@ ModalDialog DLG_GLOSSARY
                 Text[ hebrew ] = "E~rsetzen (nur Text)";
                 Text[ hindi ] = "प्रतिस्थाप~न (केवल टेक्स्ट्)";
                 Text[ slovak ] = "Na~hradiť (len text)";
+                Text[ hungarian ] = "Cse~re (csak szöveg)";
+                Text[ slovenian ] = "Za~menjaj (samo besedilo)";
             };
             MenuItem
             {
@@ -789,7 +827,7 @@ ModalDialog DLG_GLOSSARY
                 Text [ spanish ] = "~Cambiar nombre..." ;
                 Text [ french ] = "~Renommer..." ;
                 Text [ swedish ] = "~Byt namn..." ;
-                Text [ danish ] = "Omd�b" ;
+                Text [ danish ] = "Omd�b..." ;
                 Text [ portuguese_brazilian ] = "Renomear..." ;
                 Text [ portuguese ] = "~Mudar nome..." ;
                 Text[ chinese_simplified ] = "重命名...";
@@ -809,6 +847,8 @@ ModalDialog DLG_GLOSSARY
                 Text[ hebrew ] = "~Umbenennen...";
                 Text[ hindi ] = "पुनः नाम दो...";
                 Text[ slovak ] = "Premenovať";
+                Text[ hungarian ] = "Átnevezés...";
+                Text[ slovenian ] = "Preimenuj...";
             };
             MenuItem
             {
@@ -844,6 +884,8 @@ ModalDialog DLG_GLOSSARY
                 Text[ hebrew ] = "‮מחיקה‬";
                 Text[ hindi ] = "~मिटाओ";
                 Text[ slovak ] = "Z~mazať";
+                Text[ hungarian ] = "~Törlés";
+                Text[ slovenian ] = "~Izbriši";
             };
             MenuItem
             {
@@ -882,6 +924,8 @@ ModalDialog DLG_GLOSSARY
                 Text[ hebrew ] = "‮עריכה‬";
                 Text[ hindi ] = "~संपादन";
                 Text[ slovak ] = "~Upraviť";
+                Text[ hungarian ] = "~Szerkesztés";
+                Text[ slovenian ] = "~Uredi";
             };
             MenuItem
             {
@@ -920,6 +964,8 @@ ModalDialog DLG_GLOSSARY
                 Text[ hebrew ] = "‮הפעלת מאקרו...‬";
                 Text[ hindi ] = "~मॉक्रो...";
                 Text[ slovak ] = "~Makro...";
+                Text[ hungarian ] = "~Makró...";
+                Text[ slovenian ] = "~Makro...";
             };
             MenuItem
             {
@@ -956,6 +1002,8 @@ ModalDialog DLG_GLOSSARY
                 Text[ hebrew ] = "~Importieren...";
                 Text[ hindi ] = "~आयात...";
                 Text[ slovak ] = "~Importovať...";
+                Text[ hungarian ] = "~Importálás...";
+                Text[ slovenian ] = "~Uvozi...";
             };
         };
     };
@@ -975,6 +1023,8 @@ ModalDialog DLG_GLOSSARY
     Text[ hebrew ] = "AutoText";
     Text[ hindi ] = "स्वचालित टेक्स्ट्";
     Text[ slovak ] = "Automatický text";
+    Text[ hungarian ] = "Szöveg-o-mata";
+    Text[ slovenian ] = "Samobesedilo";
 };
 InfoBox MSG_DOUBLE_SHORTNAME
 {
@@ -986,7 +1036,7 @@ InfoBox MSG_DOUBLE_SHORTNAME
     MESSAGE [ portuguese_brazilian ] = "O nome do atalho j� existe. Por favor escolha outro nome." ;
     MESSAGE [ portuguese ] = "Abreviatura j� existe. Por favor escolha outro nome!" ;
     MESSAGE [ finnish ] = "Pikavalinnan nimi on jo k�yt�ss�. Valitse jokin muu nimi." ;
-    MESSAGE [ danish ] = "Denne genvej eksisterer allerede. V�lg venligst et andet navn!" ;
+    MESSAGE [ danish ] = "Denne genvej findes allerede. V�lg venligst et andet navn." ;
     MESSAGE [ french ] = "Abr�viation d�j� utilis�e. Choisissez un autre nom !" ;
     MESSAGE [ swedish ] = "Kortkommandonamnet anv�nds redan. V�lj ett annat namn!" ;
     MESSAGE [ dutch ] = "Deze afkorting bestaat al. Probeer een andere naam!" ;
@@ -1008,6 +1058,8 @@ InfoBox MSG_DOUBLE_SHORTNAME
     MESSAGE[ hebrew ] = "Kürzel wird bereits verwendet. Bitte einen anderen Namen vergeben";
     MESSAGE[ hindi ] = "सरल विधि नाम पहिले से ही अस्तित्व में है । कृपया दूसरा नाम चुनिए ।";
     MESSAGE[ slovak ] = "Názov skratky už existuje. Prosím vyberte iný.";
+    MESSAGE[ hungarian ] = "A megadott gyorsbillentyűnév már létezik. Válasszon másik nevet.";
+    MESSAGE[ slovenian ] = "Ime bližnjice že obstaja. Izberite drugo ime.";
 };
 QueryBox MSG_QUERY_DELETE
 {
@@ -1043,6 +1095,8 @@ QueryBox MSG_QUERY_DELETE
     MESSAGE[ hebrew ] = "Soll der AutoText gelöscht werden?";
     MESSAGE[ hindi ] = "स्वचालित टेक्स्ट् को मिटाना है?";
     MESSAGE[ slovak ] = "Odstrániť automatický text?";
+    MESSAGE[ hungarian ] = "Törli a szöveg-o-matából?";
+    MESSAGE[ slovenian ] = "Ali želite izbrisati samobesedilo?";
 };
 String STR_QUERY_DELETE_GROUP1
 {
@@ -1054,7 +1108,7 @@ String STR_QUERY_DELETE_GROUP1
     Text [ spanish ] = "Borrar la categor�a" ;
     Text [ french ] = "Supprimer la cat�gorie " ;
     Text [ swedish ] = "Ska kategorin " ;
-    Text [ danish ] = "Skal omr�det " ;
+    Text [ danish ] = "Slet kategorien " ;
     Text [ portuguese ] = "Deseja eliminar " ;
     Text [ portuguese_brazilian ] = "Excluir a categoria" ;
     Text[ chinese_simplified ] = "要删除这个区域 ";
@@ -1074,6 +1128,8 @@ String STR_QUERY_DELETE_GROUP1
     Text[ hebrew ] = "Soll der Bereich";
     Text[ hindi ] = "वर्ग को मिटाना है ";
     Text[ slovak ] = "Zmazať kategóriu ";
+    Text[ hungarian ] = "A kategória  törlése";
+    Text[ slovenian ] = "Izbriši kategorijo";
 };
 String STR_QUERY_DELETE_GROUP2
 {
@@ -1106,6 +1162,8 @@ String STR_QUERY_DELETE_GROUP2
     Text[ hebrew ] = " gelöscht werden?";
     Text[ hindi ] = "?";
     Text[ slovak ] = "?";
+    Text[ hungarian ] = "?";
+    Text[ slovenian ] = "?";
 };
 String STR_GLOSSARY
 {
@@ -1118,7 +1176,7 @@ String STR_GLOSSARY
     Text [ french ] = "AutoTexte : " ;
     Text [ dutch ] = "Tekstbouwsteen:" ;
     Text [ spanish ] = "M�dulo de texto :  " ;
-    Text [ danish ] = "Tekstelement : " ;
+    Text [ danish ] = "AutoTekst: " ;
     Text [ swedish ] = "Textblock :  " ;
     Text [ finnish ] = "Automaattinen teksti : " ;
     Text [ english_us ] = "AutoText : " ;
@@ -1138,6 +1196,8 @@ String STR_GLOSSARY
     Text[ hebrew ] = "Textbaustein :";
     Text[ hindi ] = "स्वचालित टेक्स्ट् : ";
     Text[ slovak ] = "Automatický text: ";
+    Text[ hungarian ] = "Szöveg-o-mata:";
+    Text[ slovenian ] = "Samobesedilo :";
 };
 ModalDialog DLG_RENAME_GLOS
 {
@@ -1174,7 +1234,7 @@ ModalDialog DLG_RENAME_GLOS
         Text [ spanish ] = "N~ombre" ;
         Text [ french ] = "Nom" ;
         Text [ swedish ] = "Na~mn" ;
-        Text [ danish ] = "Navn" ;
+        Text [ danish ] = "Na~vn" ;
         Text [ portuguese_brazilian ] = "No~me" ;
         Text [ portuguese ] = "No~me" ;
         Text[ chinese_simplified ] = "名称(~M)";
@@ -1194,6 +1254,8 @@ ModalDialog DLG_RENAME_GLOS
         Text[ hebrew ] = "Na~me";
         Text[ hindi ] = "ना~म";
         Text[ slovak ] = "~Názov";
+        Text[ hungarian ] = "~Név";
+        Text[ slovenian ] = "I~me";
     };
     Edit ED_ON
     {
@@ -1215,7 +1277,7 @@ ModalDialog DLG_RENAME_GLOS
         Text [ french ] = "Ab~r." ;
         Text [ dutch ] = "Afko~rting" ;
         Text [ swedish ] = "~F�rkortning" ;
-        Text [ danish ] = "Genvej" ;
+        Text [ danish ] = "~Genvej" ;
         Text [ portuguese_brazilian ] = "~Atalho" ;
         Text [ portuguese ] = "Iniciais" ;
         Text[ chinese_simplified ] = "缩写(~C)";
@@ -1235,6 +1297,8 @@ ModalDialog DLG_RENAME_GLOS
         Text[ hebrew ] = "Kü~rzel";
         Text[ hindi ] = "स~रल विधि";
         Text[ slovak ] = "S~kratka";
+        Text[ hungarian ] = "Gy~orsbillentyű";
+        Text[ slovenian ] = "Bližnji~ca";
     };
     Edit ED_OS
     {
@@ -1256,7 +1320,7 @@ ModalDialog DLG_RENAME_GLOS
         Text [ spanish ] = "~Nuevo" ;
         Text [ french ] = "Nou~veau" ;
         Text [ swedish ] = "~Nytt" ;
-        Text [ danish ] = "Ny" ;
+        Text [ danish ] = "~Ny(t)" ;
         Text [ portuguese ] = "~Novo" ;
         Text [ portuguese_brazilian ] = "~Novo" ;
         Text[ chinese_simplified ] = "新建(~N)";
@@ -1276,6 +1340,8 @@ ModalDialog DLG_RENAME_GLOS
         Text[ hebrew ] = "‮חדש‬";
         Text[ hindi ] = "~नया";
         Text[ slovak ] = "~Nový";
+        Text[ hungarian ] = "Ú~j";
+        Text[ slovenian ] = "~Nov";
     };
     Edit ED_NN
     {
@@ -1297,7 +1363,7 @@ ModalDialog DLG_RENAME_GLOS
         Text [ french ] = "~Abr." ;
         Text [ dutch ] = "~Afkorting" ;
         Text [ swedish ] = "F�r~kortning" ;
-        Text [ danish ] = "Erstat" ;
+        Text [ danish ] = "~Genvej" ;
         Text [ portuguese_brazilian ] = "~Atalho" ;
         Text [ portuguese ] = "S~ubstituir" ;
         Text[ chinese_simplified ] = "缩写(~S)";
@@ -1317,6 +1383,8 @@ ModalDialog DLG_RENAME_GLOS
         Text[ hebrew ] = "~Kürzel";
         Text[ hindi ] = "~सरल विधि";
         Text[ slovak ] = "~Skratka";
+        Text[ hungarian ] = "~Gyorsbillentyű";
+        Text[ slovenian ] = "~Bližnjica";
     };
     Edit ED_NS
     {
@@ -1337,7 +1405,7 @@ ModalDialog DLG_RENAME_GLOS
     Text [ spanish ] = "Cambiar nombre al m�dulo de texto" ;
     Text [ french ] = "Renommer l'AutoTexte" ;
     Text [ swedish ] = "Byt namn p� textblock" ;
-    Text [ danish ] = "Omd�b tekstelement" ;
+    Text [ danish ] = "Omd�b AutoTekst" ;
     Text [ portuguese_brazilian ] = "Renomear AutoTexto" ;
     Text [ portuguese ] = "Mudar nome do m�dulo de texto" ;
     Text[ chinese_simplified ] = "重命名自动图文集条目";
@@ -1357,6 +1425,8 @@ ModalDialog DLG_RENAME_GLOS
     Text[ hebrew ] = "Textbaustein umbenennen";
     Text[ hindi ] = "स्वचालित टेक्स्ट् को पुनः नाम दो";
     Text[ slovak ] = "Premenovať automatický text";
+    Text[ hungarian ] = "Szöveg-o-mata elem átnevezése";
+    Text[ slovenian ] = "Preimenuj samobesedilo";
 };
 String STR_SAVE_GLOSSARY
 {
@@ -1364,7 +1434,7 @@ String STR_SAVE_GLOSSARY
     Text[ italian ] = "Salva modulo di testo";
     Text[ portuguese_brazilian ] = "Salvar AutoTexto";
     Text[ portuguese ] = "Guardar m�dulo de texto";
-    Text[ danish ] = "Gem tekstelementer";
+    Text[ danish ] = "Gem AutoTekst";
     Text[ french ] = "Enregistrer l'AutoTexte";
     Text[ swedish ] = "Spara textblock";
     Text[ dutch ] = "Tekstbouwsteen opslaan";
@@ -1388,6 +1458,8 @@ String STR_SAVE_GLOSSARY
     Text[ hebrew ] = "Textbaustein speichern";
     Text[ hindi ] = "स्वचालित टेक्स्ट् को संचित करो";
     Text[ slovak ] = "Uložiť automatický text";
+    Text[ hungarian ] = "Szöveg-o-mata mentése";
+    Text[ slovenian ] = "Shrani samobesedilo";
 };
 InfoBox MSG_NO_GLOSSARIES
 {
@@ -1401,7 +1473,7 @@ InfoBox MSG_NO_GLOSSARIES
     MESSAGE[ french ] = "Ce fichier ne contient aucun AutoTexte.";
     MESSAGE[ spanish ] = "Este archivo no contiene m�dulos de texto.";
     MESSAGE[ italian ] = "Questo documento non contiene testi automatici.";
-    MESSAGE[ danish ] = "Denne fil indeholder ingen tekstelementer.";
+    MESSAGE[ danish ] = "Denne fil indeholder ingen AutoTekst.";
     MESSAGE[ swedish ] = "Den h�r filen inneh�ller inga textblock.";
     MESSAGE[ polish ] = "W pliku tym nie ma �adnych wpis�w Autotekstu.";
     MESSAGE[ portuguese_brazilian ] = "Este arquivo n�o cont�m AutoTexto.";
@@ -1418,7 +1490,25 @@ InfoBox MSG_NO_GLOSSARIES
     MESSAGE[ hebrew ] = "Diese Datei enthält keine Textbausteine.";
     MESSAGE[ hindi ] = "इस फाइल में कोई स्वचालित टेक्स्ट् नहीं है ।";
     MESSAGE[ slovak ] = "V tomto súbore nie je žiadny automatický text.";
+    MESSAGE[ hungarian ] = "A fájl nem tartalmaz szöveg-o-matát.";
+    MESSAGE[ slovenian ] = "V tej datoteki ni samobesedila.";
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
