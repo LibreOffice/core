@@ -118,6 +118,9 @@ jar .PHONY:
 compile .PHONY:
     $(ANT) $(ANT_FLAGS) $@
 
+depend .PHONY:
+    $(ANT) $(ANT_FLAGS) $@
+
 javadoc .PHONY:
     $(ANT) $(ANT_FLAGS) $@
 
