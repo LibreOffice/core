@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XPackage.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 11:54:22 $
+ *  last change: $Author: kz $ $Date: 2004-06-11 11:50:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,40 +62,174 @@
 #if ! defined INCLUDED_com_sun_star_deployment_XPackage_idl
 #define INCLUDED_com_sun_star_deployment_XPackage_idl
 
-#include <com/sun/star/lang/NoSupportException.idl>
-#include <com/sun/star/deployment/DeploymentException.idl>
+#include <com/sun/star/lang/XComponent.idl>
+#include <com/sun/star/task/XAbortChannel.idl>
+#include <com/sun/star/util/XModifyBroadcaster.idl>
+#include <com/sun/star/awt/XBitmap.idl>
 #include <com/sun/star/ucb/XCommandEnvironment.idl>
+#include <com/sun/star/beans/UnknownPropertyException.idl>
+#include <com/sun/star/deployment/DeploymentException.idl>
+#include <com/sun/star/ucb/CommandFailedException.idl>
+#include <com/sun/star/ucb/CommandAbortedException.idl>
+#include <com/sun/star/lang/IllegalArgumentException.idl>
 
 
 module com { module sun { module star { module deployment {
 
-/** Interface to register or revoke a <type>Package</type>.
+/** Objects of this service reflect a bound package and are issued by a
+    <type>PackageRegistryBackend</type>.
 
     @since #i20304#
 */
-interface XPackage : com::sun::star::uno::XInterface
+interface XPackage
 {
-    /** registers this <type>Package</type>.
+    /** implemented to notify that the package has been removed
+     */
+    interface com::sun::star::lang::XComponent;
 
+    /** notifies changes of the registration state of the package
+     */
+    interface com::sun::star::util::XModifyBroadcaster;
+
+    /** creates a command channel to be used to asynchronously abort a command.
+
+        @return
+                abort channel
+    */
+    com::sun::star::task::XAbortChannel createAbortChannel();
+
+    /** determines whether the package is currently is registered, i.e.
+        whether it is active.
+        This method throws an
+        <type scope="com::sun::star::beans">UnknownPropertyException</type>
+        if this status is unknown.
+
+        @param xAbortChannel
+               abort channel to asynchronously abort the registration process,
+               or null
         @param xCmdEnv
                command environment for error and progress handling
         @return
-               <TRUE/> if successful, <FALSE/> if ignored errors occured
+                status whether the package is registered (<TRUE/>) or not
+                (<FALSE/>)
     */
-    boolean registerPackage(
+    boolean isRegistered(
+        [in] com::sun::star::task::XAbortChannel xAbortChannel,
         [in] com::sun::star::ucb::XCommandEnvironment xCmdEnv )
-        raises (DeploymentException, com::sun::star::lang::NoSupportException);
+        raises (DeploymentException,
+                com::sun::star::ucb::CommandFailedException,
+                com::sun::star::ucb::CommandAbortedException,
+                com::sun::star::beans::UnknownPropertyException);
+
+    /** registers this <type>Package</type>, thus activating the package.
+
+        @param xAbortChannel
+               abort channel to asynchronously abort the registration process,
+               or null
+        @param xCmdEnv
+               command environment for error and progress handling
+    */
+    void registerPackage(
+        [in] com::sun::star::task::XAbortChannel xAbortChannel,
+        [in] com::sun::star::ucb::XCommandEnvironment xCmdEnv )
+        raises (DeploymentException,
+                com::sun::star::ucb::CommandFailedException,
+                com::sun::star::ucb::CommandAbortedException,
+                com::sun::star::lang::IllegalArgumentException);
 
     /** revokes this <type>Package</type>.
 
+        @param xAbortChannel
+               abort channel to asynchronously abort the registration process,
+               or null
+        @param xCmdEnv
+               command environment for error and progress handling
+    */
+    void revokePackage(
+        [in] com::sun::star::task::XAbortChannel xAbortChannel,
+        [in] com::sun::star::ucb::XCommandEnvironment xCmdEnv )
+        raises (DeploymentException,
+                com::sun::star::ucb::CommandFailedException,
+                com::sun::star::ucb::CommandAbortedException,
+                com::sun::star::lang::IllegalArgumentException);
+
+    /** reflects whether this package is a bundle of one or more packages,
+        e.g. a zip (legacy) package file or a document hosting script packages.
+
+        @return
+                in case this package relfects a package bundle
+    */
+    boolean isBundle();
+
+    /** Gets packages of the bundle.
+
+        @param xAbortChannel
+               abort channel to asynchronously abort the registration process,
+               or null
         @param xCmdEnv
                command environment for error and progress handling
         @return
-               <TRUE/> if successful, <FALSE/> if ignored errors occured
+                set of packages enclosed in this package
     */
-    boolean revokePackage(
+    sequence<XPackage> getBundle(
+        [in] com::sun::star::task::XAbortChannel xAbortChannel,
         [in] com::sun::star::ucb::XCommandEnvironment xCmdEnv )
-        raises (DeploymentException, com::sun::star::lang::NoSupportException);
+        raises (DeploymentException,
+                com::sun::star::ucb::CommandFailedException,
+                com::sun::star::ucb::CommandAbortedException,
+                com::sun::star::lang::IllegalArgumentException);
+
+    /** returns the name of the package, i.e. the unique name of the package
+        correspondiung to its deployment context (user, shared, ...).
+
+        @return
+                name of the package
+     */
+    string getName();
+
+    /** returns the media type of the package, e.g.
+        <code>application/vnd.sun.star.basic-script</code>.
+
+        @return
+                media type of package
+    */
+    string getMediaType();
+
+    /** returns the location of the package.
+
+        @return
+                location of package
+    */
+    string getURL();
+
+    /** returns the display name of the package, e.g. for graphical user
+        interfaces (GUI).
+
+        @return
+                display name of the package
+    */
+    string getDisplayName();
+
+    /** returns a description string to describe the package.
+
+        @return
+                description
+    */
+    string getDescription();
+
+    /** returns a bitmap id for this package type.
+
+        @param highContrast
+               return high contrast icon
+        @param smallIcon
+               return a small icon (e.g. 16x16 pixel),
+               else return a big one (e.g. 26x26 pixel)
+        @return
+                unsigned short (resource id), string id or
+                <type scope="com::sun::star::awt">XBitmap</type>,
+                <VOID/> any if unknown
+    */
+    any getIcon( [in] boolean highContrast, [in] boolean smallIcon );
 };
 
 }; }; }; };
