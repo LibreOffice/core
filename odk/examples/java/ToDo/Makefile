@@ -76,15 +76,15 @@ $(COMPONENTJARFLAG) : $(JAVAFLAG)
 	@echo bla > $@
 
 $(REGISTERFLAG) : $(COMPONENTJARFLAG)
-ifneq "$(OFFICE_PROGRAM_PATH)" ""
+ifneq "$(SDK_AUTO_DEPLOYMENT)" ""
 	$(BIN_DIR)$(PS)regmerge "$(URLPREFIX)$(OFFICE_FILEURL)/applicat.rdb" /UCR $(GENURDFILES)
 	$(COPY) $(COMPONENT_JAR) "$(OFFICE_CLASSES_DIR)"
 	java -classpath "$(SDK_CLASSPATH)" com.sun.star.tools.uno.RegComp "$(URLPREFIX)$(OFFICE_FILEURL)/applicat.rdb" register "$(URLPREFIX)$(OFFICE_FILEURL)/classes/ToDo.jar" com.sun.star.loader.Java2
 	@echo bla > $@
 else
 	@echo --------------------------------------------------------------------------------
-	@echo  If you want to install your component automatically, please set an 
-	@echo  OFFICE_PROGRAM_PATH environment variable to a valid office installation.
+	@echo  If you want to install your component automatically, please set the environment
+	@echo  variable SDK_AUTO_DEPLOYMENT = YES. 
 	@echo --------------------------------------------------------------------------------
 endif
 

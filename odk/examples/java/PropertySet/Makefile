@@ -56,14 +56,14 @@ $(COMPONENTJARFLAG) : $(CLASSFILES)
 	@echo bla > $@
 
 $(REGISTERFLAG) : $(COMPONENTJARFLAG)
-ifneq "$(OFFICE_PROGRAM_PATH)" ""
+ifneq "$(SDK_AUTO_DEPLOYMENT)" ""
 	$(COPY) $(COMPONENT_JAR) "$(OFFICE_CLASSES_DIR)"
 	java -classpath "$(SDK_CLASSPATH)" com.sun.star.tools.uno.RegComp "$(URLPREFIX)$(OFFICE_FILEURL)/applicat.rdb" register "$(URLPREFIX)$(OFFICE_FILEURL)/classes/PropTest.jar" com.sun.star.loader.Java2
 	@echo bla > $@
 else
 	@echo ----------------------------------------------------------------------------------------
-	@echo  If you want to install your component automatically, please set an OFFICE_PROGRAM_PATH
-	@echo  environment variable to the program directory of a valid office installation .
+	@echo  If you want to install your component automatically, please set the environment
+	@echo  variable SDK_AUTO_DEPLOYMENT = YES. 
 	@echo ----------------------------------------------------------------------------------------
 endif
 
