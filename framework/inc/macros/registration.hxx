@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registration.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:29:23 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 10:03:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,7 @@ ________________________________________________________________________________
 //  public
 //  use it as parameter for COMPONENT_WRITEINFO( INFOS )
 //*****************************************************************************************************************
+
 #define COMPONENTINFO( CLASS )                                                                                                          \
     try                                                                                                                                 \
     {                                                                                                                                   \
