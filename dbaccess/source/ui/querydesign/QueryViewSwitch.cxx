@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryViewSwitch.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-18 13:16:33 $
+ *  last change: $Author: oj $ $Date: 2001-08-15 13:19:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,10 +94,11 @@ using namespace dbaui;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 
-
+DBG_NAME(OQueryViewSwitch);
 OQueryViewSwitch::OQueryViewSwitch(Window* _pParent, OQueryController* _pController,const Reference< XMultiServiceFactory >& _rFactory)
     //  :OQueryView(_pParent,_pController,_rFactory)
 {
+    DBG_CTOR(OQueryViewSwitch,NULL);
     ToolBox* pToolBox = new ToolBox(_pParent, ModuleRes(RID_BRW_QUERYDESIGN_TOOLBOX));
 
     m_pTextView     = new OQueryTextView(_pParent,pToolBox);
@@ -129,6 +130,7 @@ OQueryViewSwitch::~OQueryViewSwitch()
 
     delete m_pTextView;
     //  delete m_pDesignView; // will be deleted by XFrame
+    DBG_DTOR(OQueryViewSwitch,NULL);
 }
 // -------------------------------------------------------------------------
 void OQueryViewSwitch::Construct(const Reference< ::com::sun::star::awt::XControlModel >& xModel)
@@ -184,6 +186,14 @@ void OQueryViewSwitch::clear()
         m_pTextView->clear();
     else
         m_pDesignView->clear();
+}
+// -----------------------------------------------------------------------------
+void OQueryViewSwitch::GetFocus()
+{
+    if(m_pTextView->IsVisible())
+        m_pTextView->GetFocus();
+    else
+        m_pDesignView->GetFocus();
 }
 // -----------------------------------------------------------------------------
 void OQueryViewSwitch::setStatement(const ::rtl::OUString& _rsStatement)

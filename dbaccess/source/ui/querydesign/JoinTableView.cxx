@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinTableView.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-09 09:59:51 $
+ *  last change: $Author: oj $ $Date: 2001-08-15 13:19:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,12 +123,14 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sdbc;
 const long LINE_SIZE = 50;
 
+DBG_NAME(OScrollWindowHelper);
 OScrollWindowHelper::OScrollWindowHelper( Window* pParent) : Window( pParent)
     ,m_aHScrollBar( this, WB_HSCROLL|WB_REPEAT|WB_DRAG )
     ,m_aVScrollBar( this, WB_VSCROLL|WB_REPEAT|WB_DRAG )
     ,m_pTableView(NULL)
     ,m_pCornerWindow(new ScrollBarBox(this, WB_3DLOOK))
 {
+    DBG_CTOR(OScrollWindowHelper,NULL);
     //////////////////////////////////////////////////////////////////////
     // ScrollBars
 
@@ -147,6 +149,7 @@ OScrollWindowHelper::OScrollWindowHelper( Window* pParent) : Window( pParent)
 OScrollWindowHelper::~OScrollWindowHelper()
 {
     delete m_pCornerWindow;
+    DBG_DTOR(OScrollWindowHelper,NULL);
 }
 
 // -----------------------------------------------------------------------------

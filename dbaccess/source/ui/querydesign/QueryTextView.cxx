@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryTextView.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-15 11:15:33 $
+ *  last change: $Author: oj $ $Date: 2001-08-15 13:19:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,11 +107,13 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::frame;
 // temporary class
+DBG_NAME(OQueryContainerWindow);
 OQueryContainerWindow::OQueryContainerWindow(Window* pParent, OQueryController* _pController,const Reference< XMultiServiceFactory >& _rFactory)
     : Window(pParent)
     ,m_pBeamer(NULL)
     ,m_pView(NULL)
 {
+    DBG_CTOR(OQueryContainerWindow,NULL);
     m_pView = new OQueryViewSwitch(this,_pController,_rFactory);
 
     m_pSplitter = new Splitter(this,WB_VSCROLL);
@@ -132,11 +134,17 @@ OQueryContainerWindow::~OQueryContainerWindow()
     delete m_pBeamer;
     delete m_pSplitter;
     delete m_pView;
+    DBG_DTOR(OQueryContainerWindow,NULL);
 }
 // -----------------------------------------------------------------------------
 void OQueryContainerWindow::switchView()
 {
     m_pView->switchView();
+}
+// -----------------------------------------------------------------------------
+void OQueryContainerWindow::GetFocus()
+{
+    m_pView->GetFocus();
 }
 // -----------------------------------------------------------------------------
 IMPL_LINK( OQueryContainerWindow, SplitHdl, void*, p )
@@ -246,25 +254,35 @@ void OQueryContainerWindow::showPreview(const Reference<XFrame>& _xFrame)
 
 // end of temp classes
 // -------------------------------------------------------------------------
+DBG_NAME(OQueryTextView);
 OQueryTextView::OQueryTextView(Window* _pParent,ToolBox*    _pToolBox)
     :Window(_pParent)
     ,m_pToolBox(_pToolBox)
 {
+    DBG_CTOR(OQueryTextView,NULL);
     m_pEdit = new OSqlEdit(this);
     m_pEdit->ClearModifyFlag();
     m_pEdit->SaveValue();
     m_pEdit->Show();
-    m_pEdit->GrabFocus();
+    //  m_pEdit->GrabFocus();
 }
 // -----------------------------------------------------------------------------
 OQueryTextView::~OQueryTextView()
 {
     m_pToolBox = NULL;
     delete m_pEdit;
+    DBG_DTOR(OQueryTextView,NULL);
 }
 // -------------------------------------------------------------------------
 void OQueryTextView::Construct(const Reference< ::com::sun::star::awt::XControlModel >& xModel)
 {
+}
+// -----------------------------------------------------------------------------
+void OQueryTextView::GetFocus()
+{
+    OSL_ENSURE(m_pEdit,"Edit is null");
+    if(m_pEdit)
+        m_pEdit->GrabFocus();
 }
 // -------------------------------------------------------------------------
 void OQueryTextView::Resize()

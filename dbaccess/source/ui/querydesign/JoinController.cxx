@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinController.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-14 12:05:21 $
+ *  last change: $Author: oj $ $Date: 2001-08-15 13:19:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,16 +179,19 @@ using namespace ::dbtools;
 using namespace ::dbaui;
 using namespace ::comphelper;
 
+DBG_NAME(OJoinController);
 // -----------------------------------------------------------------------------
 OJoinController::OJoinController(const Reference< XMultiServiceFactory >& _rM) : OJoinController_BASE(_rM)
     ,m_bEditable(sal_True)
     ,m_bModified(sal_False)
     ,m_pAddTabDlg(NULL)
 {
+    DBG_CTOR(OJoinController,NULL);
 }
 // -----------------------------------------------------------------------------
 OJoinController::~OJoinController()
 {
+    DBG_DTOR(OJoinController,NULL);
 }
 
 // -----------------------------------------------------------------------------

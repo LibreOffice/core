@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinExchange.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2001-08-14 14:51:05 $
+ *  last change: $Author: oj $ $Date: 2001-08-15 13:19:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,17 +85,20 @@ namespace dbaui
     //==================================================================
     // class OJoinExchObj
     //==================================================================
+    DBG_NAME(OJoinExchObj);
     //------------------------------------------------------------------------
     OJoinExchObj::OJoinExchObj(const OJoinExchangeData& jxdSource)
         :m_jxdSourceDescription(jxdSource)
         ,m_pDragListener(NULL)
     {
+        DBG_CTOR(OJoinExchObj,NULL);
         // Verfuegbare Typen in Liste einfuegen
     }
 
     //------------------------------------------------------------------------
     OJoinExchObj::~OJoinExchObj()
     {
+        DBG_DTOR(OJoinExchObj,NULL);
     }
 
     //------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-14 12:08:52 $
+ *  last change: $Author: oj $ $Date: 2001-08-15 13:19:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -251,6 +251,7 @@ Reference< XInterface > SAL_CALL OQueryController::Create(const Reference<XMulti
 {
     return *(new OQueryController(_rxFactory));
 }
+DBG_NAME(OQueryController);
 // -----------------------------------------------------------------------------
 OQueryController::OQueryController(const Reference< XMultiServiceFactory >& _rM)
         : OJoinController(_rM)
@@ -265,6 +266,7 @@ OQueryController::OQueryController(const Reference< XMultiServiceFactory >& _rM)
     ,m_nVisibleRows(0x400)
     ,m_bCreateView(sal_False)
 {
+    DBG_CTOR(OQueryController,NULL);
     m_pParseContext = new OQueryParseContext();
     m_pSqlParser    = new OSQLParser(_rM,m_pParseContext);
     InvalidateAll();
@@ -272,6 +274,7 @@ OQueryController::OQueryController(const Reference< XMultiServiceFactory >& _rM)
 // -----------------------------------------------------------------------------
 OQueryController::~OQueryController()
 {
+    DBG_DTOR(OQueryController,NULL);
 }
 // -----------------------------------------------------------------------------
 void OQueryController::deleteIterator()
