@@ -1,0 +1,961 @@
+/*************************************************************************
+ *
+ *  $RCSfile: chinese_dictionarydialog.cxx,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2004-09-17 13:46:20 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2004 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "chinese_dictionarydialog.hxx"
+#include "chinese_dictionarydialog.hrc"
+#include "resid.hxx"
+#include <cppuhelper/bootstrap.hxx>
+
+#ifndef _COM_SUN_STAR_I18N_TEXTCONVERSIONOPTION_HPP_
+#include <com/sun/star/i18n/TextConversionOption.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LINGUISTIC2_CONVERSIONDICTIONARYTYPE_HPP_
+#include <com/sun/star/linguistic2/ConversionDictionaryType.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LINGUISTIC2_CONVERSIONPROPERTYTYPE_HPP_
+#include <com/sun/star/linguistic2/ConversionPropertyType.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LINGUISTIC2_XCONVERSIONDICTIONARYLIST_HPP_
+#include <com/sun/star/linguistic2/XConversionDictionaryList.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LINGUISTIC2_XCONVERSIONPROPERTYTYPE_HPP_
+#include <com/sun/star/linguistic2/XConversionPropertyType.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UTIL_XFLUSHABLE_HPP_
+#include <com/sun/star/util/XFlushable.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
+#include <com/sun/star/lang/Locale.hpp>
+#endif
+// header for class HeaderBar
+#ifndef _HEADBAR_HXX
+#include <svtools/headbar.hxx>
+#endif
+// header for define RET_OK
+#ifndef _SV_MSGBOX_HXX
+#include <vcl/msgbox.hxx>
+#endif
+// header for class SvtLinguConfigItem
+#ifndef _SVTOOLS_LINGUCFG_HXX_
+#include <svtools/lingucfg.hxx>
+#endif
+#ifndef _SVTOOLS_LINGUPROPS_HXX_
+#include <svtools/linguprops.hxx>
+#endif
+// header for class IntlWrapper
+#ifndef _UNOTOOLS_INTLWRAPPER_HXX
+#include <unotools/intlwrapper.hxx>
+#endif
+#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
+#include <comphelper/processfactory.hxx>
+#endif
+// header for class Application
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
+#ifndef _SVX_HELPID_HRC
+#include "helpid.hrc"
+#endif
+
+//disable compiler warning C4355: 'this' : used in base member initializer list
+#ifdef _MSC_VER
+#  pragma warning (disable : 4355)
+#endif
+
+//.............................................................................
+namespace textconversiondlgs
+{
+//.............................................................................
+
+using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+
+#define HEADER_BAR_BITS ( HIB_LEFT | HIB_VCENTER | HIB_CLICKABLE | HIB_FIXED | HIB_FIXEDPOS )
+
+DictionaryList::DictionaryList( Window* pParent, const ResId& rResId)
+    : SvHeaderTabListBox( pParent, rResId )
+    , m_xDictionary(0)
+    , m_pHeaderBar(0)
+    , m_pPropertyTypeNameListBox(0)
+    , m_aToBeDeleted()
+    , m_nSortColumnIndex(0)
+{
+}
+
+DictionaryList::DictionaryList( Window* pParent )
+    : SvHeaderTabListBox( pParent, 0 )
+    , m_xDictionary(0)
+    , m_pHeaderBar(0)
+    , m_pPropertyTypeNameListBox(0)
+    , m_aToBeDeleted()
+    , m_nSortColumnIndex(0)
+{
+}
+
+String DictionaryList::getPropertyTypeName( sal_Int16 nConversionPropertyType ) const
+{
+    if(!m_pPropertyTypeNameListBox || !m_pPropertyTypeNameListBox->GetEntryCount())
+        return String();
+
+    USHORT nPos = static_cast<USHORT>( nConversionPropertyType )-1;
+    if(nPos<m_pPropertyTypeNameListBox->GetEntryCount())
+        return m_pPropertyTypeNameListBox->GetEntry(nPos);
+    return m_pPropertyTypeNameListBox->GetEntry(0);
+}
+
+String DictionaryList::makeTabString( const DictionaryEntry& rEntry ) const
+{
+    String aStr( rEntry.m_aTerm );
+    aStr += '\t';
+    aStr += String( rEntry.m_aMapping );
+    aStr += '\t';
+    aStr += getPropertyTypeName( rEntry.m_nConversionPropertyType );
+    return aStr;
+}
+
+void DictionaryList::initDictionaryControl( const Reference< linguistic2::XConversionDictionary>& xDictionary
+                                           , ListBox* pPropertyTypeNameListBox )
+{
+    SetWindowBits( WB_VSCROLL );
+    SetSelectionMode( SINGLE_SELECTION );
+    SetBorderStyle( WINDOW_BORDER_MONO );
+    SetHighlightRange();
+
+    if(m_xDictionary.is())
+        return;
+
+    m_xDictionary = xDictionary;
+    m_pPropertyTypeNameListBox = pPropertyTypeNameListBox;
+}
+
+void DictionaryList::save()
+{
+    if( !m_xDictionary.is() )
+        return;
+
+    Reference< linguistic2::XConversionPropertyType > xPropertyType( m_xDictionary, uno::UNO_QUERY );
+
+    sal_Int32 nN;
+    DictionaryEntry* pE;
+
+    for( nN = m_aToBeDeleted.size(); nN--; )
+    {
+        pE = m_aToBeDeleted[nN];
+        m_xDictionary->removeEntry( pE->m_aTerm, pE->m_aMapping );
+    }
+    for( nN = GetRowCount(); nN--; )
+    {
+        pE = getEntryOnPos( nN );
+        if(pE->m_bNewEntry)
+        {
+            try
+            {
+                m_xDictionary->addEntry( pE->m_aTerm, pE->m_aMapping );
+                xPropertyType->setPropertyType( pE->m_aTerm, pE->m_aMapping, pE->m_nConversionPropertyType );
+            }
+            catch( uno::Exception& e )
+            {
+                e;
+            }
+        }
+    }
+    Reference< util::XFlushable > xFlush( m_xDictionary, uno::UNO_QUERY );
+    if( xFlush.is() )
+        xFlush->flush();
+}
+
+void DictionaryList::deleteAll()
+{
+    sal_Int32 nN;
+    for( nN = GetRowCount(); nN--; )
+        deleteEntryOnPos( nN  );
+    for( nN = m_aToBeDeleted.size(); nN--; )
+    {
+        DictionaryEntry* pE = m_aToBeDeleted[nN];
+        delete pE;
+    }
+    m_aToBeDeleted.clear();
+}
+
+void DictionaryList::refillFromDictionary( sal_Int32 nTextConversionOptions )
+{
+    deleteAll();
+
+    if(!m_xDictionary.is())
+        return;
+
+    Sequence< rtl::OUString > aLeftList(  m_xDictionary->getConversionEntries( linguistic2::ConversionDirection_FROM_LEFT ) );
+    sal_Int32 nCount = aLeftList.getLength();
+
+    Reference< linguistic2::XConversionPropertyType > xPropertyType( m_xDictionary, uno::UNO_QUERY );
+
+    rtl::OUString aLeft, aRight;
+    sal_Int16 nConversionPropertyType;
+
+    for(sal_Int32 nN=0; nN<nCount; nN++)
+    {
+        aLeft  = aLeftList[nN];
+        Sequence< rtl::OUString > aRightList( m_xDictionary->getConversions(
+            aLeft, 0, aLeft.getLength()
+            , linguistic2::ConversionDirection_FROM_LEFT, nTextConversionOptions ) );
+
+        if(aRightList.getLength()!=1)
+        {
+            OSL_ASSERT("The Chinese Translation Dictionary should have exactly one Mapping for each term.");
+            continue;
+        }
+
+        aRight = aRightList[0];
+        nConversionPropertyType = linguistic2::ConversionPropertyType::OTHER;
+        if(xPropertyType.is())
+            nConversionPropertyType = xPropertyType->getPropertyType(aLeft, aRight);
+
+        DictionaryEntry* pEntry = new DictionaryEntry( aLeft, aRight, nConversionPropertyType );
+        SvLBoxEntry* pLBEntry = InsertEntry( makeTabString( *pEntry ) );
+        pLBEntry->SetUserData( pEntry );
+    }
+
+    if( GetEntryCount() > 0 )
+        SelectRow( 0 );
+}
+
+DictionaryEntry* DictionaryList::getFirstSelectedEntry() const
+{
+    DictionaryEntry* pRet=0;
+    for( sal_Int32 nN=GetRowCount(); nN--; )
+    {
+        if( IsRowSelected( nN ) )
+        {
+            pRet = getEntryOnPos( nN );
+            break;
+        }
+    }
+    return pRet;
+}
+
+DictionaryEntry* DictionaryList::getEntryOnPos( sal_Int32 nPos ) const
+{
+    DictionaryEntry* pEntry=0;
+    SvLBoxEntry* pLBEntry = GetEntryOnPos( nPos );
+    if(pLBEntry)
+        pEntry = (DictionaryEntry*)pLBEntry->GetUserData();
+    return pEntry;
+}
+
+DictionaryEntry* DictionaryList::getTermEntry( const rtl::OUString& rTerm ) const
+{
+    DictionaryEntry* pE = 0;
+    for( sal_Int32 nN=GetRowCount(); nN--; )
+    {
+        pE = getEntryOnPos( nN );
+        if( pE && rTerm.equals( pE->m_aTerm ) )
+            return pE;
+    }
+    return 0;
+}
+
+bool DictionaryList::hasTerm( const rtl::OUString& rTerm ) const
+{
+    return getTermEntry(rTerm) !=0 ;
+}
+
+void DictionaryList::addEntry( const rtl::OUString& rTerm, const rtl::OUString& rMapping
+                              , sal_Int16 nConversionPropertyType, ULONG nPos )
+{
+    if( hasTerm( rTerm ) )
+        return;
+
+    DictionaryEntry* pEntry = new DictionaryEntry( rTerm, rMapping, nConversionPropertyType, sal_True );
+    SvLBoxEntry* pLBEntry = InsertEntry( makeTabString( *pEntry ), nPos );
+    pLBEntry->SetUserData( pEntry );
+    SelectRow( GetEntryPos( pLBEntry ) );
+}
+
+void DictionaryList::deleteEntryOnPos( sal_Int32 nPos  )
+{
+    SvLBoxEntry* pLBEntry = GetEntryOnPos( nPos );
+    DictionaryEntry* pEntry = getEntryOnPos( nPos );
+    if( pLBEntry )
+        RemoveParentKeepChilds( pLBEntry );
+    if( pEntry )
+    {
+        if( pEntry->m_bNewEntry )
+            delete pEntry;
+        else
+            m_aToBeDeleted.push_back( pEntry );
+    }
+}
+
+ULONG DictionaryList::deleteEntries( const rtl::OUString& rTerm )
+{
+    ULONG nPos = LIST_APPEND;
+    for( sal_Int32 nN=GetRowCount(); nN--; )
+    {
+        DictionaryEntry* pCurEntry = getEntryOnPos( nN );
+        if( rTerm.equals( pCurEntry->m_aTerm ) )
+        {
+            nPos = nN;
+            SvLBoxEntry* pCurLBEntry = GetEntryOnPos( nN );
+            RemoveParentKeepChilds( pCurLBEntry );
+            if( pCurEntry->m_bNewEntry )
+                delete pCurEntry;
+            else
+                m_aToBeDeleted.push_back( pCurEntry );
+        }
+    }
+    return nPos;
+}
+
+DictionaryList::~DictionaryList()
+{
+}
+
+void DictionaryList::activate( HeaderBar* pHeaderBar )
+{
+    if(!m_pHeaderBar)
+    {
+        m_pHeaderBar = pHeaderBar;
+
+        Point aPos = GetPosPixel();
+        Size  aSize = GetSizePixel();
+        Size aHeadSize = pHeaderBar->GetSizePixel();
+
+        aPos.Y() += aHeadSize.Height();
+        SetPosSizePixel( aPos, Size( aSize.Width(), aSize.Height() - aHeadSize.Height() ) );
+        InitHeaderBar( pHeaderBar );
+    }
+    Show();
+}
+
+HeaderBar* DictionaryList::createHeaderBar( const String& rColumn1, const String& rColumn2, const String& rColumn3
+                  , long nWidth1, long nWidth2, long nWidth3 )
+{
+    HeaderBar* pHeaderBar = new HeaderBar( Control::GetParent(), WB_BUTTONSTYLE | WB_BOTTOMBORDER );
+    pHeaderBar->SetPosSizePixel( GetPosPixel(), pHeaderBar->CalcWindowSizePixel() );
+
+    HeaderBarItemBits nBits = HEADER_BAR_BITS;
+    pHeaderBar->InsertItem( 1, rColumn1, nWidth1, nBits | HIB_UPARROW );
+    pHeaderBar->InsertItem( 2, rColumn2, nWidth2, nBits );
+    pHeaderBar->InsertItem( 3, rColumn3, nWidth3, nBits );
+
+    pHeaderBar->Show();
+    return pHeaderBar;
+}
+
+void DictionaryList::Resize()
+{
+    SvHeaderTabListBox::Resize();
+    Size aBoxSize = GetOutputSizePixel();
+
+    if ( !aBoxSize.Width() )
+        return;
+
+       Size aBarSize = m_pHeaderBar->GetSizePixel();
+    aBarSize.Width() = GetSizePixel().Width();
+    m_pHeaderBar->SetSizePixel( aBarSize );
+}
+
+void DictionaryList::sortByColumn( USHORT nSortColumnIndex, bool bSortAtoZ )
+{
+    m_nSortColumnIndex=nSortColumnIndex;
+    if( nSortColumnIndex<3 )
+    {
+        if(bSortAtoZ)
+            GetModel()->SetSortMode(SortAscending);
+        else
+            GetModel()->SetSortMode(SortDescending);
+
+        GetModel()->SetCompareHdl( LINK( this, DictionaryList, CompareHdl));
+        GetModel()->Resort();
+    }
+    else
+        GetModel()->SetSortMode(SortNone);
+}
+
+USHORT DictionaryList::getSortColumn() const
+{
+    return m_nSortColumnIndex;
+}
+
+IMPL_LINK( DictionaryList, CompareHdl, SvSortData*, pData )
+{
+    SvLBoxEntry* pLeft = (SvLBoxEntry*)(pData->pLeft );
+    SvLBoxEntry* pRight = (SvLBoxEntry*)(pData->pRight );
+    return (long) ColumnCompare(pLeft,pRight);
+}
+
+StringCompare DictionaryList::ColumnCompare( SvLBoxEntry* pLeft, SvLBoxEntry* pRight )
+{
+    StringCompare eCompare=COMPARE_EQUAL;
+
+    SvLBoxItem* pLeftItem = getItemAtColumn( pLeft, m_nSortColumnIndex );
+    SvLBoxItem* pRightItem = getItemAtColumn( pRight, m_nSortColumnIndex );
+
+    if(pLeftItem != NULL && pRightItem != NULL)
+    {
+        USHORT nLeftKind=pLeftItem->IsA();
+        USHORT nRightKind=pRightItem->IsA();
+
+        if(nRightKind == SV_ITEM_ID_LBOXSTRING &&
+            nLeftKind == SV_ITEM_ID_LBOXSTRING )
+        {
+            IntlWrapper aIntlWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() );
+            const CollatorWrapper* pCollator = aIntlWrapper.getCaseCollator();
+
+            eCompare=(StringCompare)pCollator->compareString( ((SvLBoxString*)pLeftItem)->GetText(),
+                                    ((SvLBoxString*)pRightItem)->GetText());
+
+            if(eCompare==COMPARE_EQUAL)
+                eCompare=COMPARE_LESS;
+        }
+    }
+    return eCompare;
+}
+
+SvLBoxItem* DictionaryList::getItemAtColumn( SvLBoxEntry* pEntry, USHORT nColumn ) const
+{
+    SvLBoxItem* pItem = NULL;
+    if( pEntry )
+    {
+        USHORT nCount = pEntry->ItemCount();
+        nColumn++;
+        if( nTreeFlags & TREEFLAG_CHKBTN )
+            nColumn++;
+           if( nColumn < nCount )
+            pItem = pEntry->GetItem( nColumn );
+    }
+    return pItem;
+}
+
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+
+DictionaryEntry::DictionaryEntry( const rtl::OUString& rTerm, const rtl::OUString& rMapping
+                    , sal_Int16 nConversionPropertyType
+                    , sal_Bool bNewEntry )
+        : m_aTerm( rTerm )
+        , m_aMapping( rMapping )
+        , m_nConversionPropertyType( nConversionPropertyType )
+        , m_bNewEntry( bNewEntry )
+{
+    if( m_nConversionPropertyType == 0 )
+        m_nConversionPropertyType = 1;
+}
+
+DictionaryEntry::DictionaryEntry()
+        : m_aTerm()
+        , m_aMapping()
+        , m_nConversionPropertyType( linguistic2::ConversionPropertyType::OTHER )
+        , m_bNewEntry( sal_True )
+{
+}
+
+DictionaryEntry::~DictionaryEntry()
+{
+}
+
+bool DictionaryEntry::operator==( const DictionaryEntry& rE ) const
+{
+    return m_aTerm == rE.m_aTerm
+            && m_aMapping == rE.m_aMapping
+            && m_nConversionPropertyType == rE.m_nConversionPropertyType;
+}
+
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+
+ChineseDictionaryDialog::ChineseDictionaryDialog( Window* pParent )
+    : ModalDialog( pParent, TextConversionDlgs_ResId( DLG_CHINESEDICTIONARY ) )
+    , m_nTextConversionOptions( i18n::TextConversionOption::NONE )
+    , m_aRB_To_Simplified( this, ResId( RB_TO_SIMPLIFIED ) )
+    , m_aRB_To_Traditional( this, ResId( RB_TO_TRADITIONAL ) )
+    , m_aCB_Reverse( this, ResId( CB_REVERSE ) )
+    , m_aFT_Term( this, ResId( FT_TERM ) )
+    , m_aED_Term( this, ResId( ED_TERM ) )
+    , m_aFT_Mapping( this, ResId( FT_MAPPING ) )
+    , m_aED_Mapping( this, ResId( ED_MAPPING ) )
+    , m_aFT_Property( this, ResId( FT_PROPERTY ) )
+    , m_aLB_Property( this, ResId( LB_PROPERTY ) )
+    , m_pHeaderBar( 0 )
+    , m_aCT_DictionaryToSimplified( this, ResId( CT_MAPPINGLIST ) )
+    , m_aCT_DictionaryToTraditional( this )
+    , m_aPB_Add( this, ResId( PB_ADD ) )
+    , m_aPB_Modify( this, ResId( PB_MODIFY ) )
+    , m_aPB_Delete( this, ResId( PB_DELETE ) )
+    , m_aFL_Bottomline( this, ResId( FL_BOTTOMLINE ) )
+    , m_aBP_OK( this, ResId( PB_OK ) )
+    , m_aBP_Cancel( this, ResId( PB_CANCEL ) )
+    , m_aBP_Help( this, ResId( PB_HELP ) )
+    , m_xContext( 0 )
+    , m_xFactory( 0 )
+{
+    FreeResource();
+
+    m_aRB_To_Simplified.SetHelpId( HID_SVX_CHINESE_DICTIONARY_RB_CONVERSION_TO_SIMPLIFIED );
+    m_aRB_To_Traditional.SetHelpId( HID_SVX_CHINESE_DICTIONARY_RB_CONVERSION_TO_TRADITIONAL );
+
+    m_aCB_Reverse.SetHelpId( HID_SVX_CHINESE_DICTIONARY_CB_REVERSE );
+
+    m_aCT_DictionaryToSimplified.SetHelpId( HID_SVX_CHINESE_DICTIONARY_LB_TO_SIMPLIFIED );
+    m_aCT_DictionaryToTraditional.SetHelpId( HID_SVX_CHINESE_DICTIONARY_LB_TO_TRADITIONAL );
+
+    SvtLinguConfig  aLngCfg;
+    sal_Bool bValue;
+    Any aAny( aLngCfg.GetProperty( rtl::OUString::createFromAscii( UPN_IS_REVERSE_MAPPING ) ) );
+    if( aAny >>= bValue )
+        m_aCB_Reverse.Check( bValue );
+
+    m_aLB_Property.SetDropDownLineCount( m_aLB_Property.GetEntryCount() );
+    m_aLB_Property.SelectEntryPos(0);
+
+    Reference< linguistic2::XConversionDictionary > xDictionary_To_Simplified(0);
+    Reference< linguistic2::XConversionDictionary > xDictionary_To_Traditional(0);
+    //get dictionaries
+    {
+        if(!m_xContext.is())
+            m_xContext = Reference< XComponentContext >( ::cppu::defaultBootstrap_InitialComponentContext() );
+        if(m_xContext.is())
+            m_xFactory = Reference< lang::XMultiComponentFactory >( m_xContext->getServiceManager() );
+        if(m_xFactory.is())
+        {
+            Reference< linguistic2::XConversionDictionaryList > xDictionaryList(
+                                m_xFactory->createInstanceWithContext(
+                                    rtl::OUString::createFromAscii("com.sun.star.linguistic2.ConversionDictionaryList")
+                                    , m_xContext), uno::UNO_QUERY);
+            if( xDictionaryList.is() )
+            {
+                Reference< container::XNameContainer > xContainer( xDictionaryList->getDictionaryContainer() );
+                if(xContainer.is())
+                {
+                    try
+                    {
+                        rtl::OUString aNameTo_Simplified( rtl::OUString::createFromAscii("ChineseT2S") );
+                        rtl::OUString aNameTo_Traditional( rtl::OUString::createFromAscii("ChineseS2T") );
+                        lang::Locale aLocale;
+                        aLocale.Language = rtl::OUString::createFromAscii("zh");
+
+                        if( xContainer->hasByName( aNameTo_Simplified ) )
+                            xDictionary_To_Simplified = Reference< linguistic2::XConversionDictionary >(
+                                    xContainer->getByName( aNameTo_Simplified ), UNO_QUERY );
+                        else
+                        {
+                            aLocale.Country = rtl::OUString::createFromAscii("TW");
+                            xDictionary_To_Simplified = Reference< linguistic2::XConversionDictionary >(
+                                    xDictionaryList->addNewDictionary( aNameTo_Simplified
+                                    , aLocale, linguistic2::ConversionDictionaryType::SCHINESE_TCHINESE
+                                        ), UNO_QUERY );
+                        }
+                        if (xDictionary_To_Simplified.is())
+                            xDictionary_To_Simplified->setActive( sal_True );
+
+
+                        if( xContainer->hasByName( aNameTo_Traditional ) )
+                            xDictionary_To_Traditional = Reference< linguistic2::XConversionDictionary >(
+                                    xContainer->getByName( aNameTo_Traditional ), UNO_QUERY );
+                        else
+                        {
+                            aLocale.Country = rtl::OUString::createFromAscii("CN");
+                            xDictionary_To_Traditional = Reference< linguistic2::XConversionDictionary >(
+                                    xDictionaryList->addNewDictionary( aNameTo_Traditional
+                                    , aLocale, linguistic2::ConversionDictionaryType::SCHINESE_TCHINESE
+                                        ), UNO_QUERY );
+                        }
+                        if (xDictionary_To_Traditional.is())
+                            xDictionary_To_Traditional->setActive( sal_True );
+
+                    }
+                    catch( uno::Exception& )
+                    {
+                    }
+                }
+            }
+        }
+    }
+
+    //init HeaderBar and set tabs
+    {
+        String aColumn1( OutputDevice::GetNonMnemonicString( m_aFT_Term.GetText() ) );
+        String aColumn2( OutputDevice::GetNonMnemonicString( m_aFT_Mapping.GetText() ) );
+        String aColumn3( OutputDevice::GetNonMnemonicString( m_aFT_Property.GetText() ) );
+
+        long nWidth1 = m_aED_Mapping.GetPosPixel().X() - m_aED_Term.GetPosPixel().X();
+        long nWidth2 = m_aLB_Property.GetPosPixel().X() - m_aED_Mapping.GetPosPixel().X();
+        long nWidth3 = m_aLB_Property.GetSizePixel().Width();
+
+        m_pHeaderBar = m_aCT_DictionaryToSimplified.createHeaderBar( aColumn1, aColumn2, aColumn3, nWidth1, nWidth2, nWidth3 );
+        if(m_pHeaderBar)
+            m_pHeaderBar->SetHelpId( HID_SVX_CHINESE_DICTIONARY_LB_HEADER );
+
+        long pTabs[] = { 3, 0, nWidth1, nWidth1 + nWidth2 };
+        m_aCT_DictionaryToSimplified.SetTabs( &pTabs[0], MAP_PIXEL );
+        m_aCT_DictionaryToTraditional.SetTabs( &pTabs[0], MAP_PIXEL );
+    }
+
+    //init dictionary controls
+    m_aCT_DictionaryToTraditional.SetPosPixel( m_aCT_DictionaryToSimplified.GetPosPixel() );
+    m_aCT_DictionaryToTraditional.SetSizePixel( m_aCT_DictionaryToSimplified.GetSizePixel() );
+
+    m_aCT_DictionaryToSimplified.initDictionaryControl( xDictionary_To_Simplified, &m_aLB_Property );
+    m_aCT_DictionaryToTraditional.initDictionaryControl( xDictionary_To_Traditional, &m_aLB_Property );
+
+    //
+    updateAfterDirectionChange();
+
+    //set hdl
+    if(m_pHeaderBar)
+        m_pHeaderBar->SetSelectHdl( LINK( this, ChineseDictionaryDialog, HeaderBarClick ) );
+
+    m_aED_Term.SetModifyHdl( LINK( this, ChineseDictionaryDialog, EditFieldsHdl ) );
+    m_aED_Mapping.SetModifyHdl( LINK( this, ChineseDictionaryDialog, EditFieldsHdl ) );
+    m_aLB_Property.SetSelectHdl( LINK( this, ChineseDictionaryDialog, EditFieldsHdl ) );
+
+    m_aRB_To_Simplified.SetClickHdl( LINK( this, ChineseDictionaryDialog, DirectionHdl ) );
+    m_aRB_To_Traditional.SetClickHdl( LINK( this, ChineseDictionaryDialog, DirectionHdl ) );
+
+    m_aCT_DictionaryToSimplified.SetSelectHdl( LINK( this, ChineseDictionaryDialog, MappingSelectHdl ));
+    m_aCT_DictionaryToTraditional.SetSelectHdl( LINK( this, ChineseDictionaryDialog, MappingSelectHdl ));
+
+    m_aPB_Add.SetClickHdl( LINK( this, ChineseDictionaryDialog, AddHdl ) );
+    m_aPB_Modify.SetClickHdl( LINK( this, ChineseDictionaryDialog, ModifyHdl ) );
+    m_aPB_Delete.SetClickHdl( LINK( this, ChineseDictionaryDialog, DeleteHdl ) );
+}
+
+ChineseDictionaryDialog::~ChineseDictionaryDialog()
+{
+    m_xContext=0;
+    m_xFactory=0;
+    delete m_pHeaderBar;
+}
+
+void ChineseDictionaryDialog::setDirectionAndTextConversionOptions( bool bDirectionToSimplified, sal_Int32 nTextConversionOptions /*i18n::TextConversionOption*/ )
+{
+    if( bDirectionToSimplified == bool(m_aRB_To_Simplified.IsChecked())
+        && nTextConversionOptions == m_nTextConversionOptions )
+        return;
+
+    m_nTextConversionOptions = nTextConversionOptions;
+
+    if( bDirectionToSimplified )
+        m_aRB_To_Simplified.Check();
+    else
+        m_aRB_To_Traditional.Check();
+    updateAfterDirectionChange();
+}
+
+IMPL_LINK( ChineseDictionaryDialog, DirectionHdl, void*, EMPTYARG )
+{
+    updateAfterDirectionChange();
+    return 0;
+}
+
+void ChineseDictionaryDialog::updateAfterDirectionChange()
+{
+    Reference< linguistic2::XConversionDictionary > xDictionary(0);
+
+    if( m_aRB_To_Simplified.IsChecked() )
+    {
+        m_aCT_DictionaryToSimplified.activate( m_pHeaderBar );
+        m_aCT_DictionaryToTraditional.Hide();
+        xDictionary = m_aCT_DictionaryToSimplified.m_xDictionary;
+    }
+    else
+    {
+        m_aCT_DictionaryToTraditional.activate( m_pHeaderBar );
+        m_aCT_DictionaryToSimplified.Hide();
+        xDictionary = m_aCT_DictionaryToTraditional.m_xDictionary;
+    }
+
+    updateButtons();
+}
+
+IMPL_LINK( ChineseDictionaryDialog, EditFieldsHdl, Control*, pCtrl )
+{
+    updateButtons();
+    return 0;
+}
+IMPL_LINK( ChineseDictionaryDialog, MappingSelectHdl, void*, EMPTYARG )
+{
+    DictionaryEntry* pE = getActiveDictionary().getFirstSelectedEntry();
+    if(pE)
+    {
+        m_aED_Term.SetText( pE->m_aTerm );
+        m_aED_Mapping.SetText( pE->m_aMapping );
+        sal_Int16 nPos = pE->m_nConversionPropertyType-1;
+        if( nPos<0 || nPos>=m_aLB_Property.GetEntryCount() )
+            nPos=0;
+        if( m_aLB_Property.GetEntryCount() )
+            m_aLB_Property.SelectEntryPos(nPos);
+    }
+
+    updateButtons();
+    return 0;
+}
+
+bool ChineseDictionaryDialog::isEditFieldsHaveContent() const
+{
+    return m_aED_Term.GetText().Len() && m_aED_Mapping.GetText().Len();
+}
+
+bool ChineseDictionaryDialog::isEditFieldsContentEqualsSelectedListContent() const
+{
+    DictionaryEntry* pE = getActiveDictionary().getFirstSelectedEntry();
+    if( pE )
+    {
+        if( pE->m_aTerm != rtl::OUString( m_aED_Term.GetText() ) )
+            return false;
+        if( pE->m_aMapping != rtl::OUString( m_aED_Mapping.GetText() ) )
+            return false;
+        if( pE->m_nConversionPropertyType != m_aLB_Property.GetSelectEntryPos()+1 )
+            return false;
+        return true;
+    }
+    return false;
+}
+
+const DictionaryList& ChineseDictionaryDialog::getActiveDictionary() const
+{
+    if( m_aRB_To_Traditional.IsChecked() )
+        return m_aCT_DictionaryToTraditional;
+    return m_aCT_DictionaryToSimplified;
+}
+
+DictionaryList& ChineseDictionaryDialog::getActiveDictionary()
+{
+    if( m_aRB_To_Traditional.IsChecked() )
+        return m_aCT_DictionaryToTraditional;
+    return m_aCT_DictionaryToSimplified;
+}
+
+const DictionaryList& ChineseDictionaryDialog::getReverseDictionary() const
+{
+    if( m_aRB_To_Traditional.IsChecked() )
+        return m_aCT_DictionaryToSimplified;
+    return m_aCT_DictionaryToTraditional;
+}
+
+DictionaryList& ChineseDictionaryDialog::getReverseDictionary()
+{
+    if( m_aRB_To_Traditional.IsChecked() )
+        return m_aCT_DictionaryToSimplified;
+    return m_aCT_DictionaryToTraditional;
+}
+
+void ChineseDictionaryDialog::updateButtons()
+{
+    bool bAdd = isEditFieldsHaveContent() && !getActiveDictionary().hasTerm( m_aED_Term.GetText() );
+    m_aPB_Add.Enable( bAdd );
+
+    m_aPB_Delete.Enable( !bAdd && getActiveDictionary().GetSelectedRowCount()>0 );
+
+    DictionaryEntry* pFirstSelectedEntry = getActiveDictionary().getFirstSelectedEntry();
+
+    bool bModify = false;
+    {
+        DictionaryEntry* pFirstSelectedEntry = getActiveDictionary().getFirstSelectedEntry();
+        bModify = !bAdd && getActiveDictionary().GetSelectedRowCount()==1
+                        && pFirstSelectedEntry && pFirstSelectedEntry->m_aTerm.equals( m_aED_Term.GetText() );
+        if( bModify && isEditFieldsContentEqualsSelectedListContent() )
+            bModify = false;
+    }
+    m_aPB_Modify.Enable( bModify );
+}
+
+IMPL_LINK( ChineseDictionaryDialog, AddHdl, void*, EMPTYARG )
+{
+    if( !isEditFieldsHaveContent() )
+        return 0;
+
+    sal_Int16 nConversionPropertyType = m_aLB_Property.GetSelectEntryPos()+1;
+
+    getActiveDictionary().addEntry( m_aED_Term.GetText(), m_aED_Mapping.GetText(), nConversionPropertyType );
+
+    if( m_aCB_Reverse.IsChecked() )
+    {
+        getReverseDictionary().deleteEntries( m_aED_Mapping.GetText() );
+        getReverseDictionary().addEntry( m_aED_Mapping.GetText(), m_aED_Term.GetText(), nConversionPropertyType );
+    }
+
+    updateButtons();
+    return 0;
+}
+IMPL_LINK( ChineseDictionaryDialog, ModifyHdl, void*, EMPTYARG )
+{
+    rtl::OUString aTerm( m_aED_Term.GetText() );
+    rtl::OUString aMapping( m_aED_Mapping.GetText() );
+    sal_Int16 nConversionPropertyType = m_aLB_Property.GetSelectEntryPos()+1;
+
+    DictionaryList& rActive  = getActiveDictionary();
+    DictionaryList& rReverse = getReverseDictionary();
+
+    DictionaryEntry* pE = rActive.getFirstSelectedEntry();
+    if( pE->m_aTerm != aTerm )
+        return 0;
+
+    if( pE )
+    {
+        if( pE->m_aMapping != aMapping || pE->m_nConversionPropertyType != nConversionPropertyType )
+        {
+            if( m_aCB_Reverse.IsChecked() )
+            {
+                ULONG nPos = rReverse.deleteEntries( pE->m_aMapping );
+                nPos = rReverse.deleteEntries( aMapping );
+                rReverse.addEntry( aMapping, aTerm, nConversionPropertyType, nPos );
+            }
+
+            ULONG nPos = rActive.deleteEntries( aTerm );
+            rActive.addEntry( aTerm, aMapping, nConversionPropertyType, nPos );
+        }
+    }
+
+    updateButtons();
+    return 0;
+}
+
+IMPL_LINK( ChineseDictionaryDialog, DeleteHdl, void*, EMPTYARG )
+{
+    DictionaryList& rActive  = getActiveDictionary();
+    DictionaryList& rReverse = getReverseDictionary();
+
+    if( rActive.GetSelectedRowCount()>0)
+    {
+        DictionaryEntry* pEntry;
+
+        rtl::OUString aMapping;
+        for( sal_Int32 nN=rActive.GetRowCount(); nN--; )
+        {
+            if( rActive.IsRowSelected( nN ) )
+            {
+                pEntry = rActive.getEntryOnPos( nN );
+                if(pEntry)
+                {
+                    aMapping = pEntry->m_aMapping;
+                    rActive.deleteEntryOnPos( nN );
+                    if( m_aCB_Reverse.IsChecked() )
+                        rReverse.deleteEntries( aMapping  );
+                }
+                break;
+            }
+        }
+    }
+
+    updateButtons();
+    return 0;
+}
+
+short ChineseDictionaryDialog::Execute()
+{
+    sal_Int32 nTextConversionOptions = m_nTextConversionOptions;
+    if(m_nTextConversionOptions | i18n::TextConversionOption::USE_CHARACTER_VARIANTS )
+        nTextConversionOptions = nTextConversionOptions^i18n::TextConversionOption::USE_CHARACTER_VARIANTS ;
+
+    m_aCT_DictionaryToSimplified.refillFromDictionary( nTextConversionOptions );
+    m_aCT_DictionaryToTraditional.refillFromDictionary( m_nTextConversionOptions );
+
+    short nRet = ModalDialog::Execute();
+
+    if( nRet == RET_OK )
+    {
+        //save settings to configuration
+        SvtLinguConfig  aLngCfg;
+        Any aAny;
+        aAny <<= sal_Bool( !!m_aCB_Reverse.IsChecked() );
+        aLngCfg.SetProperty( rtl::OUString::createFromAscii( UPN_IS_REVERSE_MAPPING ), aAny );
+
+        m_aCT_DictionaryToSimplified.save();
+        m_aCT_DictionaryToTraditional.save();
+    }
+
+    m_aCT_DictionaryToSimplified.deleteAll();
+    m_aCT_DictionaryToTraditional.deleteAll();
+
+    return nRet;
+}
+
+IMPL_LINK( ChineseDictionaryDialog, HeaderBarClick, void*, EMPTYARG )
+{
+    if(m_pHeaderBar)
+    {
+        USHORT nId = m_pHeaderBar->GetCurItemId();
+        HeaderBarItemBits nBits = m_pHeaderBar->GetItemBits(nId);
+        if( nBits & HIB_CLICKABLE )
+        {
+            //set new arrow positions in headerbar
+            m_pHeaderBar->SetItemBits( getActiveDictionary().getSortColumn()+1, HEADER_BAR_BITS );
+            if( nBits & HIB_UPARROW )
+                m_pHeaderBar->SetItemBits( nId, HEADER_BAR_BITS | HIB_DOWNARROW );
+            else
+                m_pHeaderBar->SetItemBits( nId, HEADER_BAR_BITS | HIB_UPARROW );
+
+            //sort lists
+            nBits = m_pHeaderBar->GetItemBits(nId);
+            bool bSortAtoZ = nBits & HIB_UPARROW;
+            getActiveDictionary().sortByColumn(nId-1,bSortAtoZ);
+            getReverseDictionary().sortByColumn(nId-1,bSortAtoZ);
+        }
+    }
+    return 0;
+}
+
+//.............................................................................
+} //end namespace
+//.............................................................................
