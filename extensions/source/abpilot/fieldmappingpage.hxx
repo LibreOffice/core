@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fieldmappingpage.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 16:00:51 $
+ *  last change: $Author: kz $ $Date: 2004-05-19 13:38:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,9 +92,6 @@ namespace abp
         // TabDialog overridables
         virtual void        ActivatePage();
         virtual void        DeactivatePage();
-
-        // OImportPage overridables
-        virtual sal_Bool    determineNextButtonState();
 
     private:
         DECL_LINK( OnInvokeDialog, void* );
