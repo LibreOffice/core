@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WWD_Startup.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $  $Date: 2004-11-27 09:09:32 $
+ *  last change: $Author: vg $  $Date: 2005-02-21 14:09:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -247,7 +247,6 @@ public abstract class WWD_Startup extends WWD_General {
      * instance used for that purpose.
      */
     protected XFrame myFrame;
-    protected XFrame desktopFrame;
 
 
     /* ******************************************
@@ -299,12 +298,9 @@ public abstract class WWD_Startup extends WWD_General {
         this.buildStep7(proxies, exclamationURL);
         buildStepX();
 
-
-        desktopFrame = Desktop.getActiveFrame(xMSF);
+        this.xMSF = xMSF;
+        XDesktop xDesktop = Desktop.getDesktop(xMSF);
         myFrame = OfficeDocument.createNewFrame(xMSF, this);
-
-        desktopFrame = Desktop.findAFrame(xMSF, myFrame, desktopFrame);
-
         Object doc = OfficeDocument.createNewDocument( myFrame, "swriter", false, true );
 
         loadSettings(doc);
@@ -446,7 +442,7 @@ public abstract class WWD_Startup extends WWD_General {
             addStylePreview();
             checkSteps();
 
-            executeDialog(desktopFrame);
+            executeDialog(myFrame);
 
         } catch (java.lang.Exception jexception) {
             jexception.printStackTrace(System.out);
