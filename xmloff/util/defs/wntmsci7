@@ -10523,3 +10523,5 @@ _TI3?AVSAXParseException@sax@xml@star@sun@com@@
 ??1XMLTextOrientationHdl@@UAE@XZ
 ?exportXML@XMLTextOrientationHdl@@UBEEAAVOUString@rtl@@ABVAny@uno@star@sun@com@@ABVSvXMLUnitConverter@@@Z
 ?importXML@XMLTextOrientationHdl@@UBEEABVOUString@rtl@@AAVAny@uno@star@sun@com@@ABVSvXMLUnitConverter@@@Z
+?FindTextStyleAndHyperlink@XMLTextParagraphExport@@IBE?AVOUString@rtl@@ABV?$Reference@VXPropertySet@beans@star@sun@com@@@uno@star@sun@com@@AAE@Z
+?exportText@XMLTextParagraphExport@@IAEXABV?$Reference@VXText@text@star@sun@com@@@uno@star@sun@com@@ABV?$Reference@VXTextSection@text@star@sun@com@@@3456@EEE@Z

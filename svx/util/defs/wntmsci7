@@ -20344,3 +20344,11 @@ _real@8@3fff8666666666666800
 ?s_pType_com_sun_star_uno_XWeak@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBV?$Reference@VXWeak@uno@star@sun@com@@@3456@@Z@4PAU_typelib_TypeDescriptionReference@@A
 ?__adjust_heap@_STL@@YAXPAPBUSfxItemPropertyMap@@HHPBU2@P6A_N11@Z@Z
 ?__final_insertion_sort@_STL@@YAXPAPBUSfxItemPropertyMap@@0P6A_NPBU2@1@Z@Z
+??0SvxPasswordDialog@@QAE@PAVWindow@@EE@Z
+?ButtonHdl@SvxPasswordDialog@@AAEJPAVOKButton@@@Z
+?EditModifyHdl@SvxPasswordDialog@@AAEJPAVEdit@@@Z
+?LinkStubButtonHdl@SvxPasswordDialog@@CAJPAX0@Z
+?LinkStubEditModifyHdl@SvxPasswordDialog@@CAJPAX0@Z
+??4?$Sequence@V?$Sequence@UPropertyValue@beans@star@sun@com@@@uno@star@sun@com@@@uno@star@sun@com@@QAAAAV01234@ABV01234@@Z
+?getImplementationId@?$WeakImplHelper1@VXSelectionChangeListener@view@star@sun@com@@@cppu@@UAA?AV?$Sequence@C@uno@star@sun@com@@XZ
+?realloc@?$Sequence@V?$Sequence@UPropertyValue@beans@star@sun@com@@@uno@star@sun@com@@@uno@star@sun@com@@QAAXJ@Z
