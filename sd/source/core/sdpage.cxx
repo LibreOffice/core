@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpage.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-05 12:34:12 $
+ *  last change: $Author: kz $ $Date: 2004-05-19 00:44:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -342,7 +342,8 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, BOOL bVertical, const Rec
 
         case PRESOBJ_GRAPHIC:
         {
-            Graphic aGraphic ( SdResId(BMP_PRESOBJ_GRAPHIC) );
+            BitmapEx aBmpEx( SdResId( BMP_PRESOBJ_GRAPHIC ) );
+            Graphic  aGraphic( aBmpEx );
             OutputDevice &aOutDev = *Application::GetDefaultDevice();
             aOutDev.Push();
 
@@ -361,7 +362,8 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, BOOL bVertical, const Rec
         case PRESOBJ_OBJECT:
         {
             pSdrObj = new SdrOle2Obj();
-            Graphic aGraphic( SdResId(BMP_PRESOBJ_OBJECT) );
+            BitmapEx aBmpEx( SdResId( BMP_PRESOBJ_OBJECT ) );
+            Graphic aGraphic( aBmpEx );
             ( (SdrOle2Obj*) pSdrObj)->SetGraphic(&aGraphic);
         }
         break;
@@ -370,7 +372,8 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, BOOL bVertical, const Rec
         {
             pSdrObj = new SdrOle2Obj();
             ( (SdrOle2Obj*) pSdrObj)->SetProgName( String( RTL_CONSTASCII_USTRINGPARAM( "StarChart" )));
-            Graphic aGraphic( SdResId(BMP_PRESOBJ_CHART) );
+            BitmapEx aBmpEx( SdResId( BMP_PRESOBJ_CHART ) );
+            Graphic aGraphic( aBmpEx );
             ( (SdrOle2Obj*) pSdrObj)->SetGraphic(&aGraphic);
         }
         break;
@@ -379,7 +382,8 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, BOOL bVertical, const Rec
         {
             pSdrObj = new SdrOle2Obj();
             ( (SdrOle2Obj*) pSdrObj)->SetProgName( String( RTL_CONSTASCII_USTRINGPARAM( "StarOrg" )));
-            Graphic aGraphic( SdResId(BMP_PRESOBJ_ORGCHART) );
+            BitmapEx aBmpEx( SdResId( BMP_PRESOBJ_ORGCHART ) );
+            Graphic aGraphic( aBmpEx );
             ( (SdrOle2Obj*) pSdrObj)->SetGraphic(&aGraphic);
         }
 
@@ -387,7 +391,8 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, BOOL bVertical, const Rec
         {
             pSdrObj = new SdrOle2Obj();
             ( (SdrOle2Obj*) pSdrObj)->SetProgName( String( RTL_CONSTASCII_USTRINGPARAM( "StarCalc" )));
-            Graphic aGraphic( SdResId(BMP_PRESOBJ_TABLE) );
+            BitmapEx aBmpEx( SdResId( BMP_PRESOBJ_TABLE ) );
+            Graphic aGraphic( aBmpEx );
             ( (SdrOle2Obj*) pSdrObj)->SetGraphic(&aGraphic);
         }
         break;
@@ -397,7 +402,8 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, BOOL bVertical, const Rec
         {
             pSdrObj = new SdrOle2Obj();
             ( (SdrOle2Obj*) pSdrObj)->SetProgName( String( RTL_CONSTASCII_USTRINGPARAM( "StarImage" )));
-            Graphic aGraphic( SdResId(BMP_PRESOBJ_IMAGE) );
+            BitmapEx aBmpEx( SdResId( BMP_PRESOBJ_IMAGE ) );
+            Graphic aGraphic( aBmpEx );
             ( (SdrOle2Obj*) pSdrObj)->SetGraphic(&aGraphic);
         }
         break;
