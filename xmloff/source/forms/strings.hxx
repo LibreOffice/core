@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-11 12:11:26 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 10:31:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -244,9 +244,9 @@ namespace xmloff
     XMLFORM_CONSTASCII_STRING( SERVICE_FORMSCOLLECTION,         "com.sun.star.form.Forms" );
     XMLFORM_CONSTASCII_STRING( SERVICE_NUMBERFORMATSSUPPLIER,   "com.sun.star.util.NumberFormatsSupplier" );
     XMLFORM_CONSTASCII_STRING( SERVICE_SPREADSHEET_DOCUMENT,    "com.sun.star.sheet.SpreadsheetDocument");
-    XMLFORM_CONSTASCII_STRING( SERVICE_CELLVALUEBINDING,        "drafts.com.sun.star.table.CellValueBinding" );
-    XMLFORM_CONSTASCII_STRING( SERVICE_LISTINDEXCELLBINDING,    "drafts.com.sun.star.table.ListPositionCellBinding" );
-    XMLFORM_CONSTASCII_STRING( SERVICE_CELLRANGELISTSOURCE,     "drafts.com.sun.star.table.CellRangeListSource" );
+    XMLFORM_CONSTASCII_STRING( SERVICE_CELLVALUEBINDING,        "com.sun.star.table.CellValueBinding" );
+    XMLFORM_CONSTASCII_STRING( SERVICE_LISTINDEXCELLBINDING,    "com.sun.star.table.ListPositionCellBinding" );
+    XMLFORM_CONSTASCII_STRING( SERVICE_CELLRANGELISTSOURCE,     "com.sun.star.table.CellRangeListSource" );
     XMLFORM_CONSTASCII_STRING( SERVICE_ADDRESS_CONVERSION,      "com.sun.star.table.CellAddressConversion");
     XMLFORM_CONSTASCII_STRING( SERVICE_RANGEADDRESS_CONVERSION, "com.sun.star.table.CellRangeAddressConversion");
 
