@@ -2,9 +2,9 @@
  *
  *  $RCSfile: help.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 12:47:40 $
+ *  last change: $Author: rt $ $Date: 2003-06-12 07:50:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -577,17 +577,6 @@ String HelpTextWindow::GetText() const
 
 BOOL HelpTextWindow::RegisterAccessibleParent()
 {
-    // register frame and make sure our top-window listeners are notified,
-    // otherwise AT tools cannot register to the frame (they rely on an windowOpened
-    // after registration which is triggered by VCLEVENT_WINDOW_SHOW)
-    // we must register after the menu window is visible (StartPopupMode), otherwise it cannot
-    // answer important accessibility request
-    if( mpBorderWindow  )
-    {
-        ImplCallEventListeners( VCLEVENT_WINDOW_SHOW );
-        return TRUE;
-    }
-    else
         return FALSE;
 }
 
@@ -662,7 +651,6 @@ void ImplShowHelpWindow( Window* pParent, USHORT nHelpWinStyle, USHORT nStyle,
         if ( !pSVData->maHelpData.mbRequestingHelp )
             nDelayMode = HELPDELAY_NONE;
         pHelpWin->ShowHelp( nDelayMode );
-        pHelpWin->RegisterAccessibleParent();
     }
 }
 
