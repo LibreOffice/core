@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nlsupport.c,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obr $ $Date: 2001-09-12 11:32:25 $
+ *  last change: $Author: obr $ $Date: 2001-09-17 12:36:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,8 @@
 #define UNICODE
 #include <windows.h>
 #include <wchar.h>
+
+#include <systools/win32/kernel9x.h>
 
 #include <osl/mutex.h>
 #include <osl/nlsupport.h>
