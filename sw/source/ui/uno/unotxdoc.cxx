@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-29 08:12:00 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 16:14:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -287,10 +287,15 @@
 #include <osl/file.hxx>
 #endif
 
+// --> FME 2004-06-08 #i12836# enhanced pdf export
+#ifndef _ENHANCEDPDFEXPORTHELPER_HXX
+#include <EnhancedPDFExportHelper.hxx>
+#endif
+// <--
+
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::i18n;
-using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
@@ -846,7 +851,7 @@ sal_Int32 SwXTextDocument::replaceAll(const Reference< util::XSearchDescriptor >
     sal_Bool bBackward = sal_False;
     int eRanges(FND_IN_BODY|FND_IN_SELALL);
 
-    SearchOptions aSearchOpt;
+    ::com::sun::star::util::SearchOptions aSearchOpt;
     pSearch->FillSearchOptions( aSearchOpt );
 
     SwDocPositions eStart = pSearch->bBack ? DOCPOS_END : DOCPOS_START;
@@ -969,7 +974,7 @@ SwUnoCrsr*  SwXTextDocument::FindAny(const Reference< util::XSearchDescriptor > 
     }
 
     sal_Bool bBackward = sal_False;
-    SearchOptions aSearchOpt;
+    ::com::sun::star::util::SearchOptions aSearchOpt;
     pSearch->FillSearchOptions( aSearchOpt );
 
 /*
@@ -2647,6 +2652,7 @@ SfxViewShell * SwXTextDocument::GuessViewShell()
 
     return static_cast<SwView*>(pView);
 }
+
 /* -----------------------------23.08.02 16:00--------------------------------
 
  ---------------------------------------------------------------------------*/
@@ -2682,11 +2688,14 @@ void SAL_CALL SwXTextDocument::render(
             ((SwPagePreView*)pView)->GetViewShell();
 
     uno::Reference< awt::XDevice >  xRenderDevice;
+    bool bFirstPage = false;
     const sal_Int32                 nPageNumber = nRenderer + 1;
     for( sal_Int32 nProperty = 0, nPropertyCount = rxOptions.getLength(); nProperty < nPropertyCount; ++nProperty )
     {
         if( rxOptions[ nProperty ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "RenderDevice" ) ) )
             rxOptions[ nProperty].Value >>= xRenderDevice;
+        else if( rxOptions[ nProperty ].Name == OUString( RTL_CONSTASCII_USTRINGPARAM( "FirstPage" ) ) )
+            rxOptions[ nProperty].Value >>= bFirstPage;
     }
     OutputDevice*   pOut = 0;
     if (xRenderDevice.is())
@@ -2697,12 +2706,9 @@ void SAL_CALL SwXTextDocument::render(
 
     if(pVwSh && pOut)
     {
-
         SfxProgress     aProgress( pView->GetObjectShell(), C2U("PDF export"), 10 );
         SwPrtOptions    aOptions( C2U("PDF export") );
 
-//      SwView::MakeOptions( PrintDialog* pDlg, SwPrtOptions& rOpts, BOOL* pPrtProspect,
-//              BOOL bWeb, SfxPrinter* pPrt, SwPrintData* pData )
         const TypeId aSwWebDocShellTypeId = TYPE(SwWebDocShell);
         BOOL bWeb = pDocShell->IsA( aSwWebDocShellTypeId );
         SwView::MakeOptions( NULL, aOptions, NULL, bWeb, NULL, NULL );
@@ -2721,7 +2727,26 @@ void SAL_CALL SwXTextDocument::render(
 
         SwViewOptionAdjust_Impl*  pViewOptionAdjust = pView->IsA(aSwViewTypeId) ?
             new SwViewOptionAdjust_Impl(*((SwView*)pView)->GetWrtShellPtr()) : 0;
+
+
         pVwSh->SetPDFExportOption( sal_True );
+
+        // --> FME 2004-06-08 #i12836# enhanced pdf export
+        //
+        // First, we have to export hyperlinks, notes, and outline to pdf.
+        // During this process, additional information required for tagging
+        // the pdf file are collected, which are evaulated during painting.
+        //
+        SwWrtShell* pWrtShell = pView->IsA(aSwViewTypeId) ?
+                                ((SwView*)pView)->GetWrtShellPtr() :
+                                0;
+
+        if ( bFirstPage && pWrtShell )
+        {
+            SwEnhancedPDFExportHelper aHelper( *pWrtShell, *pOut );
+        }
+        // <--
+
         pVwSh->Prt( aOptions, aProgress, pOut );
         pVwSh->SetPDFExportOption( sal_False );
         delete pViewOptionAdjust;
