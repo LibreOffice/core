@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh1.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: jp $ $Date: 2001-09-11 14:57:42 $
+ *  last change: $Author: jp $ $Date: 2001-10-29 11:23:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,12 @@
 #ifndef _OFF_APP_HXX //autogen
 #include <offmgr/app.hxx>
 #endif
+#ifndef _OFAACCFG_HXX //autogen
+#include <offmgr/ofaaccfg.hxx>
+#endif
+#ifndef _MySVXACORR_HXX
+#include <svx/svxacorr.hxx>
+#endif
 #ifndef _SV_GRAPH_HXX //autogen
 #include <vcl/graph.hxx>
 #endif
@@ -251,6 +257,16 @@
         bSelLn = \
         bIsInClickToEdit = FALSE;
 
+
+SvxAutoCorrect* lcl_IsAutoCorr()
+{
+       SvxAutoCorrect* pACorr = OFF_APP()->GetAutoCorrConfig()->GetAutoCorrect();
+    if( pACorr && !pACorr->IsAutoCorrFlag( CptlSttSntnc | CptlSttWrd |
+                            ChgFractionSymbol | ChgOrdinalNumber |
+                            ChgToEnEmDash | SetINetAttr | Autocorrect ))
+        pACorr = 0;
+    return pACorr;
+}
 
 void SwWrtShell::NoEdit(BOOL bHideCrsr)
 {
@@ -993,31 +1009,31 @@ IMPL_LINK( SwWrtShell, ChartSelectionHdl, ChartSelectionInfo *, pInfo )
 
 void SwWrtShell::InsertPageBreak(const String *pPageDesc, USHORT nPgNum )
 {
-    ACT_KONTEXT(this);
     ResetCursorStack();
-    if(!_CanInsert())
-        return;
-
-    StartUndo(UIUNDO_INSERT_PAGE_BREAK);
-
-    if ( !IsCrsrInTbl() )
+    if( _CanInsert() )
     {
-        if(HasSelection())
-            DelRight();
-        SwFEShell::SplitNode();
-    }
+        ACT_KONTEXT(this);
+        StartUndo(UIUNDO_INSERT_PAGE_BREAK);
 
-    const SwPageDesc *pDesc = pPageDesc
-                            ? FindPageDescByName( *pPageDesc, TRUE ) : 0;
-    if( pDesc )
-    {
-        SwFmtPageDesc aDesc( pDesc );
-        aDesc.SetNumOffset( nPgNum );
-        SetAttr( aDesc );
+        if ( !IsCrsrInTbl() )
+        {
+            if(HasSelection())
+                DelRight();
+            SwFEShell::SplitNode();
+        }
+
+        const SwPageDesc *pDesc = pPageDesc
+                                ? FindPageDescByName( *pPageDesc, TRUE ) : 0;
+        if( pDesc )
+        {
+            SwFmtPageDesc aDesc( pDesc );
+            aDesc.SetNumOffset( nPgNum );
+            SetAttr( aDesc );
+        }
+        else
+            SetAttr( SvxFmtBreakItem(SVX_BREAK_PAGE_BEFORE) );
+        EndUndo(UIUNDO_INSERT_PAGE_BREAK);
     }
-    else
-        SetAttr( SvxFmtBreakItem(SVX_BREAK_PAGE_BEFORE) );
-    EndUndo(UIUNDO_INSERT_PAGE_BREAK);
 }
 /*------------------------------------------------------------------------
  Beschreibung:  Einfuegen harter Zeilenumbruch;
@@ -1028,14 +1044,18 @@ void SwWrtShell::InsertPageBreak(const String *pPageDesc, USHORT nPgNum )
 void SwWrtShell::InsertLineBreak()
 {
     ResetCursorStack();
+    if( _CanInsert() )
+    {
+        if(HasSelection())
+            DelRight();
 
-    if(!_CanInsert())
-        return;
-
-    if(HasSelection())
-        DelRight();
-
-    SwWrtShell::Insert(String((char)0x0A));
+        const sal_Unicode cIns = 0x0A;
+        SvxAutoCorrect* pACorr = lcl_IsAutoCorr();
+        if( pACorr )
+            AutoCorrect( *pACorr, cIns );
+        else
+            SwWrtShell::Insert( String( cIns ) );
+    }
 }
 /*------------------------------------------------------------------------
  Beschreibung:  Einfuegen harter Spaltenumbruch;
@@ -1047,19 +1067,20 @@ void SwWrtShell::InsertColumnBreak()
 {
     ACT_KONTEXT(this);
     ResetCursorStack();
-    if(!_CanInsert())
-        return;
-    StartUndo(UIUNDO_INSERT_COLUMN_BREAK);
-
-    if ( !IsCrsrInTbl() )
+    if( _CanInsert() )
     {
-        if(HasSelection())
-            DelRight();
-        SwFEShell::SplitNode();
-    }
-    SetAttr(SvxFmtBreakItem(SVX_BREAK_COLUMN_BEFORE));
+        StartUndo(UIUNDO_INSERT_COLUMN_BREAK);
 
-    EndUndo(UIUNDO_INSERT_COLUMN_BREAK);
+        if ( !IsCrsrInTbl() )
+        {
+            if(HasSelection())
+                DelRight();
+            SwFEShell::SplitNode( FALSE, FALSE );
+        }
+        SetAttr(SvxFmtBreakItem(SVX_BREAK_COLUMN_BEFORE));
+
+        EndUndo(UIUNDO_INSERT_COLUMN_BREAK);
+    }
 }
 
 /*------------------------------------------------------------------------
@@ -1071,23 +1092,23 @@ void SwWrtShell::InsertColumnBreak()
 void SwWrtShell::InsertFootnote(const String &rStr, BOOL bEndNote, BOOL bEdit )
 {
     ResetCursorStack();
-    if(!_CanInsert())
-        return;
-
-    if(HasSelection())
-        DelRight();
-
-    SwFmtFtn aFootNote( bEndNote );
-    if(rStr.Len())
-        aFootNote.SetNumStr( rStr );
-
-    SetAttr(aFootNote);
-
-    if ( bEdit )
+    if( _CanInsert() )
     {
-        // zur Bearbeiung des Fussnotentextes
-        Left();
-        GotoFtnTxt();
+        if(HasSelection())
+            DelRight();
+
+        SwFmtFtn aFootNote( bEndNote );
+        if(rStr.Len())
+            aFootNote.SetNumStr( rStr );
+
+        SetAttr(aFootNote);
+
+        if( bEdit )
+        {
+            // zur Bearbeiung des Fussnotentextes
+            Left();
+            GotoFtnTxt();
+        }
     }
 }
 /*------------------------------------------------------------------------
@@ -1100,22 +1121,22 @@ void SwWrtShell::InsertFootnote(const String &rStr, BOOL bEndNote, BOOL bEdit )
 void SwWrtShell::SplitNode( BOOL bAutoFmt, BOOL bCheckTableStart )
 {
     ResetCursorStack();
-    if(!_CanInsert())
-        return;
-
-    ACT_KONTEXT(this);
-
-    rView.GetEditWin().FlushInBuffer( this );
-    BOOL bHasSel = HasSelection();
-    if( bHasSel )
+    if( _CanInsert() )
     {
-        StartUndo( UNDO_INSERT );
-        DelRight();
-    }
+        ACT_KONTEXT(this);
 
-    SwFEShell::SplitNode( bAutoFmt, bCheckTableStart );
-    if( bHasSel )
-        EndUndo( UNDO_INSERT );
+        rView.GetEditWin().FlushInBuffer( this );
+        BOOL bHasSel = HasSelection();
+        if( bHasSel )
+        {
+            StartUndo( UNDO_INSERT );
+            DelRight();
+        }
+
+        SwFEShell::SplitNode( bAutoFmt, bCheckTableStart );
+        if( bHasSel )
+            EndUndo( UNDO_INSERT );
+    }
 }
 
 /*------------------------------------------------------------------------
