@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldlg.src,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 11:30:06 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 18:25:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,7 +193,7 @@ TabPage RID_TP_MODULS
         Text [ ENGLISH ] = "M~odule/Dialog" ;
         Text [ norwegian ] = "M~odule/Dialog" ;
         Text [ italian ] = "M~odulo/Dialogo" ;
-        Text [ portuguese_brazilian ] = "Mσdulo/Diαl~ogo" ;
+        Text [ portuguese_brazilian ] = "Mσdulo / Diαl~ogo" ;
         Text [ portuguese ] = "M~σdulo/Diαlogo" ;
         Text [ finnish ] = "M~oduuli/valintaikkuna" ;
         Text [ danish ] = "M~odul/Dialog" ;
@@ -444,7 +444,7 @@ TabPage RID_TP_LIBS
         Text[ english_us ] = "Application/D~ocument";
         Text[ portuguese ] = "Aplicaηγo/D~ocumento";
         Text[ russian ] = "Οπθλξζενθε/δξκσμενς";
-        Text[ greek ] = "Application/D~ocument";
+        Text[ greek ] = "Εφαρμογή/Έ~γγραφο";
         Text[ dutch ] = "Toepassing/D~ocument";
         Text[ french ] = "Application/D~ocument";
         Text[ spanish ] = "Aplicaciσn/D~ocumento";
@@ -453,7 +453,7 @@ TabPage RID_TP_LIBS
         Text[ danish ] = "Program/d~okument";
         Text[ swedish ] = "Tillδmpning/d~okument";
         Text[ polish ] = "Aplikacja/D~okument";
-        Text[ portuguese_brazilian ] = "Aplicaηγo/D~ocumento";
+        Text[ portuguese_brazilian ] = "Aplicaηγo / D~ocumento";
         Text[ japanese ] = "γ‚Άγƒ—γƒªγ‚±γƒΌγ‚·γƒ§γƒ³γ¨γƒ‰γ‚­γƒ¥γƒ΅γƒ³γƒ(~O)";
         Text[ korean ] = "μ‘μ© ν”„λ΅κ·Έλ¨/λ¬Έμ„(~O)";
         Text[ chinese_simplified ] = "εΊ”η”¨η¨‹εΊ/ζ–‡ζ΅£(~O)";
@@ -629,7 +629,7 @@ TabPage RID_TP_LIBS
         Text[ japanese ] = "γƒ‘γ‚Ήγƒ―γƒΌγƒ‰(~P)...";
         Text[ chinese_traditional ] = "ε―†ηΆΌ(~P)...";
         Text[ arabic ] = "ίαγΙ ΗαΣΡ...";
-        Text[ greek ] = "Κωδικός ~πρόσβασης";
+        Text[ greek ] = "Κωδικός ~πρόσβασης...";
         Text[ korean ] = "μ•”νΈ(~P)...";
         Text[ turkish ] = "~ήifre...";
         Text[ catalan ] = "~Contrasenya...";
@@ -831,7 +831,7 @@ ModalDialog RID_DLG_LIBS
         Text[ japanese ] = "ε‚η…§γ¨γ—γ¦ζΏε…¥(θª­γΏε–γ‚ε°‚η”¨)";
         Text[ chinese_traditional ] = "η•¶δ½εƒη…§ζ’ε…¥(ε”―θ®€)";
         Text[ arabic ] = "ΕΟΡΗΜ ίγΡΜΪ (ααήΡΗΑΙ έήΨ)";
-        Text[ greek ] = "Εισαγωγή ως αναφορά (μόνο για ανάγνωση)";
+        Text[ greek ] = "Εισαγωγή ως παραπομπή";
         Text[ korean ] = "μ°Έμ΅°λ΅ μ‚½μ…(μ½κΈ° μ „μ©)";
         Text[ turkish ] = "Referans olarak ekle (salt okunur)";
         Text[ catalan ] = "Insereix com a referθncia (nomιs de lectura)";
@@ -863,7 +863,7 @@ ModalDialog RID_DLG_LIBS
         Text[ japanese ] = "ζ—Άε­γƒ©γ‚¤γƒ–γƒ©γƒªγ®η½®ζ›";
         Text[ chinese_traditional ] = "ζ›Ώδ»£ηΎε­η„η¨‹εΌεΊ«";
         Text[ arabic ] = "ΗΣΚΘΟΗα ΗαγίΚΘΗΚ ΗαγζΜζΟΙ";
-        Text[ greek ] = "Αντικατάσταση υπάρχουσες βιβλιοθήκες";
+        Text[ greek ] = "Αντικατάσταση υπαρχουσών βιβλιοθηκών";
         Text[ korean ] = "κΈ°μ΅΄ λΌμ΄λΈλ¬λ¦¬ λ°”κΎΈκΈ°";
         Text[ turkish ] = "Mevcut kitaplύklarύ deπiώtir";
         Text[ catalan ] = "Reemplaηa les biblioteques existents";
@@ -935,6 +935,7 @@ ModalDialog RID_DLG_NEWLIB
         TabStop = TRUE ;
     };
 };
+
 
 
 
