@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sb.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2000-11-09 12:05:43 $
+ *  last change: $Author: rt $ $Date: 2000-11-15 20:36:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ Resource RID_BASIC_START
         Text [ portuguese_brazilian ] = "Syntax error" ;
         Text [ portuguese ] = "Erro de sintaxe" ;
         Text [ french ] = "Erreur de syntaxe" ;
-        Text [ dutch ] = "Fout in syntaxis" ;
+        Text [ dutch ] = "Syntaxisfout" ;
         Text [ spanish ] = "Error de sintaxis" ;
         Text [ danish ] = "Syntaksfejl" ;
         Text [ swedish ] = "Syntaxfel" ;
@@ -88,7 +88,7 @@ Resource RID_BASIC_START
         Text[ japanese ] = "¼İÀ¯¸½´×°";
         Text[ chinese_traditional ] = "»yªk¿ù»~";
         Text[ arabic ] = "ÎØÃ İí ÈäÇÁ ÇáÌãáÉ";
-        Text[ dutch ] = "Fout in syntaxis";
+        Text[ dutch ] = "Syntaxisfout";
         Text[ chinese_simplified ] = "Óï·¨´íÎó";
         Text[ greek ] = "ÓöÜëìá óıíôáîçò";
         Text[ korean ] = "½ÅÅØ½º ¿¡·¯";
@@ -190,7 +190,7 @@ Resource RID_BASIC_START
         Text [ portuguese_brazilian ] = "Overflow" ;
         Text [ portuguese ] = "Transbordo" ;
         Text [ french ] = "Débordement" ;
-        Text [ dutch ] = "Overflow" ;
+        Text [ dutch ] = "Overloop" ;
         Text [ spanish ] = "Desbordamiento" ;
         Text [ danish ] = "Overløb" ;
         Text [ swedish ] = "Spill" ;
@@ -202,7 +202,7 @@ Resource RID_BASIC_START
         Text[ japanese ] = "µ°ÊŞ°ÌÛ°";
         Text[ chinese_traditional ] = "·¸­È";
         Text[ arabic ] = "İÇÆÖ";
-        Text[ dutch ] = "Overflow";
+        Text[ dutch ] = "Overloop";
         Text[ chinese_simplified ] = "ÒçÖµ";
         Text[ greek ] = "Õğåñ÷åßëéóç";
         Text[ korean ] = "³ÑÄ§";
@@ -219,7 +219,7 @@ Resource RID_BASIC_START
         Text [ portuguese_brazilian ] = "Out of memory" ;
         Text [ portuguese ] = "Memória insuficiente" ;
         Text [ french ] = "Mémoire insuffisante" ;
-        Text [ dutch ] = "Niet voldoende geheugen" ;
+        Text [ dutch ] = "Onvoldoende geheugen" ;
         Text [ spanish ] = "No hay memoria suficiente" ;
         Text [ danish ] = "Ikke tilstrækkelig hukommelse" ;
         Text [ swedish ] = "Inte tillräckligt med minne" ;
@@ -231,7 +231,7 @@ Resource RID_BASIC_START
         Text[ japanese ] = "ÒÓØ‹ó‚«—e—Ê‚Ì•s‘«";
         Text[ chinese_traditional ] = "°O¾ĞÅé¤£¨¬";
         Text[ arabic ] = "áÇ íæÌÏ ĞÇßÑÉ ßÇİíÉ";
-        Text[ dutch ] = "Niet voldoende geheugen";
+        Text[ dutch ] = "Onvoldoende geheugen";
         Text[ chinese_simplified ] = "ÄÚ´æ²»×ã";
         Text[ greek ] = "Äåí õğÜñ÷åé áñêåôüò ÷şñïò áğïèŞêåõóçò";
         Text[ korean ] = "¸Ş¸ğ¸® ºÎÁ·";
@@ -247,7 +247,7 @@ Resource RID_BASIC_START
         Text [ portuguese_brazilian ] = "Array already dimensioned" ;
         Text [ portuguese ] = "A matriz já foi dimensionada" ;
         Text [ french ] = "Array déjà dimensionné" ;
-        Text [ dutch ] = "Array reeds gedimensioneerd" ;
+        Text [ dutch ] = "Het aantal dimensies van de matrix is al bepaald" ;
         Text [ spanish ] = "Array ya dimensionado" ;
         Text [ danish ] = "Array er allerede dimensioneret" ;
         Text [ swedish ] = "Array redan dimensionerad" ;
@@ -259,7 +259,7 @@ Resource RID_BASIC_START
         Text[ japanese ] = "”z—ñ‚ÌŸŒ³‰»Ï‚İ";
         Text[ chinese_traditional ] = "¦æ¦C¤w¸g³Q©w¤Ø«×";
         Text[ arabic ] = "ÃÈÚÇÏ ÇáÕİíİ ãÚíäÉ ãÓÈŞÇğ";
-        Text[ dutch ] = "Array reeds gedimensioneerd";
+        Text[ dutch ] = "Het aantal dimensies van de matrix is al bepaald";
         Text[ chinese_simplified ] = "Êı×éÒÑ¾­±»¶¨³ß¶È";
         Text[ greek ] = "¸÷ïõí Şäç ïñéóôåß ïé äéáóôÜóåéò ôçò ìŞôñáò";
         Text[ korean ] = "¹è¿­ÀÇ Â÷¿ø Å©±â°¡ ÀÌ¹Ì Á¤ÇØÁ® ÀÖÀ½";
@@ -304,7 +304,7 @@ Resource RID_BASIC_START
         Text [ portuguese_brazilian ] = "Duplicate definition" ;
         Text [ portuguese ] = "Definição dupla" ;
         Text [ french ] = "Définition faisant double emploi" ;
-        Text [ dutch ] = "Definitie dubbel voorhanden" ;
+        Text [ dutch ] = "Dubbele definitie" ;
         Text [ spanish ] = "La definición existe dos veces" ;
         Text [ danish ] = "Dobbelt foreliggende definition" ;
         Text [ swedish ] = "Dubbelt förekommande definition" ;
@@ -316,7 +316,7 @@ Resource RID_BASIC_START
         Text[ japanese ] = "d•¡‚µ‚½’è‹`";
         Text[ chinese_traditional ] = "¦s¦bÂù­«©w¸q";
         Text[ arabic ] = "ÊÚÑíİ ãßÑÑ";
-        Text[ dutch ] = "Definitie dubbel voorhanden";
+        Text[ dutch ] = "Dubbele definitie";
         Text[ chinese_simplified ] = "´æÔÚË«ÖØ¶¨Òå";
         Text[ greek ] = "Äéğëüò ïñéóìüò";
         Text[ korean ] = "Áßº¹ Á¤ÀÇ";
@@ -332,7 +332,7 @@ Resource RID_BASIC_START
         Text [ portuguese_brazilian ] = "Division by zero" ;
         Text [ portuguese ] = "Dividir por zero" ;
         Text [ french ] = "Division par zéro" ;
-        Text [ dutch ] = "Deling door nul" ;
+        Text [ dutch ] = "Delen door nul" ;
         Text [ spanish ] = "División por cero" ;
         Text [ danish ] = "Divider med nul" ;
         Text [ swedish ] = "Division med noll" ;
@@ -344,7 +344,7 @@ Resource RID_BASIC_START
         Text[ japanese ] = "¾ŞÛ‚É‚æ‚éœZ";
         Text[ chinese_traditional ] = "°£¤_¹s";
         Text[ arabic ] = "ÊŞÓíã Úáì ÕİÑ";
-        Text[ dutch ] = "Deling door nul";
+        Text[ dutch ] = "Delen door nul";
         Text[ chinese_simplified ] = "³ıÓÚÁã";
         Text[ greek ] = "Äéáßñåóç ìå ìçäİí";
         Text[ korean ] = "0 À¸·Î ³ª´®";
@@ -360,7 +360,7 @@ Resource RID_BASIC_START
         Text [ portuguese_brazilian ] = "Variable not defined" ;
         Text [ portuguese ] = "Variável não definida" ;
         Text [ french ] = "Variable indéfinie" ;
-        Text [ dutch ] = "Variabele niet gedefinieerd" ;
+        Text [ dutch ] = "Een variabele is niet gedefinieerd" ;
         Text [ spanish ] = "Variable no definida" ;
         Text [ danish ] = "Variablen er ikke defineret" ;
         Text [ swedish ] = "Variabel inte definierad" ;
@@ -372,7 +372,7 @@ Resource RID_BASIC_START
         Text[ japanese ] = "•Ï”‚Ì–¢’è‹`";
         Text[ chinese_traditional ] = "¨S¦³©w¸qÅÜ¼Æ";
         Text[ arabic ] = "ÇáãÊÛíÑÉ ÛíÑ ãÍÏÏÉ";
-        Text[ dutch ] = "Variabele niet gedefinieerd";
+        Text[ dutch ] = "Een variabele is niet gedefinieerd";
         Text[ chinese_simplified ] = "Ã»ÓĞ¶¨Òå±äÊı";
         Text[ greek ] = "Äåí İ÷åé ïñéóôåß ìåôáâëçôŞ";
         Text[ korean ] = "Á¤ÀÇ µÇÁö¾ÊÀº º¯¼ö";
@@ -389,7 +389,7 @@ Resource RID_BASIC_START
         Text [ portuguese_brazilian ] = "Data type mismatch" ;
         Text [ portuguese ] = "Tipos de dados incompatíveis" ;
         Text [ french ] = "Types de données incompatibles" ;
-        Text [ dutch ] = "Gegevenstypen passen niet bij elkaar" ;
+        Text [ dutch ] = "Gegevenstypen komen niet overeen" ;
         Text [ spanish ] = "Los tipos de datos no coinciden" ;
         Text [ danish ] = "Datatyper er uforenelige" ;
         Text [ swedish ] = "Datatyper passar inte ihop" ;
@@ -401,7 +401,7 @@ Resource RID_BASIC_START
         Text[ japanese ] = "ÃŞ°À‚Ìí—Ş‚Ì‹¦’²«‚È‚µ";
         Text[ chinese_traditional ] = "¸ê®ÆÃş«¬¤£¤Ç°t";
         Text[ arabic ] = "ÚÏã ãØÇÈŞÉ ÃäæÇÚ ÇáÈíÇäÇÊ";
-        Text[ dutch ] = "Gegevenstypen passen niet bij elkaar";
+        Text[ dutch ] = "Gegevenstypen komen niet overeen";
         Text[ chinese_simplified ] = "Êı¾İÀàĞÍ²»Æ¥Åä";
         Text[ greek ] = "Áóõìöùíßá ôığùí äåäïìİíùí";
         Text[ korean ] = "µ¥ÀÌÅÍ Å¸ÀÔÀÌ ¸ÂÁö ¾Ê½À´Ï´Ù.";
@@ -474,7 +474,7 @@ Resource RID_BASIC_START
         Text [ portuguese_brazilian ] = "Resume without error" ;
         Text [ portuguese ] = "Resumo sem erros" ;
         Text [ french ] = "Résumé sans erreur" ;
-        Text [ dutch ] = "Resume zonder fouten" ;
+        Text [ dutch ] = "Hervatten zonder fout" ;
         Text [ spanish ] = "Resumen sin error" ;
         Text [ danish ] = "Resume uden fejl" ;
         Text [ swedish ] = "Resume utan fel" ;
@@ -486,7 +486,7 @@ Resource RID_BASIC_START
         Text[ japanese ] = "Resume without error";
         Text[ chinese_traditional ] = "Resume ¤£±a error";
         Text[ arabic ] = "ãÊÇÈÚÉ ÈÏæä ÎØÃ";
-        Text[ dutch ] = "Resume zonder fouten";
+        Text[ dutch ] = "Hervatten zonder fout";
         Text[ chinese_simplified ] = "Resume ²»´ø error";
         Text[ greek ] = "Óıíïøç ÷ùñßò óöÜëìáôá";
         Text[ korean ] = "¿À·ù¾øÀÌ ´Ù½Ã ½ÃÀÛ";
@@ -643,7 +643,7 @@ Resource RID_BASIC_START
         Text [ portuguese_brazilian ] = "Bad file name or number" ;
         Text [ portuguese ] = "Nome ou número do ficheiro incorrecto" ;
         Text [ french ] = "Nom ou numéro de fichier incorrect" ;
-        Text [ dutch ] = "Foutieve bestandsnaam of -nummer" ;
+        Text [ dutch ] = "Ongeldige bestandsnaam of -nummer" ;
         Text [ spanish ] = "Nombre o número incorrecto de archivo" ;
         Text [ danish ] = "Forkert filnavn eller -nummer" ;
         Text [ swedish ] = "Ogiltigt filnamn eller filnummer" ;
@@ -655,7 +655,7 @@ Resource RID_BASIC_START
         Text[ japanese ] = "Ì§²Ù–¼‚Ü‚½‚ÍÌ§²Ù”Ô†‚ª•s“KØ";
         Text[ chinese_traditional ] = "µL®ÄªºÀÉ®×©Î¸¹½X";
         Text[ arabic ] = "ÇÓã Çáãáİ Ãæ ÑŞãå ÛíÑ ÕÍíÍ";
-        Text[ dutch ] = "Foutieve bestandsnaam of -nummer";
+        Text[ dutch ] = "Ongeldige bestandsnaam of -nummer";
         Text[ chinese_simplified ] = "ÎŞĞ§µÄÎÄ¼ş»òºÅÂë";
         Text[ greek ] = "ËÜèïò üíïìá Ş áñéèìüò áñ÷åßïõ";
         Text[ korean ] = "Àß¸øµÈ ÆÄÀÏ ÀÌ¸§ ¶Ç´Â ÆÄÀÏ ¹øÈ£";
@@ -699,7 +699,7 @@ Resource RID_BASIC_START
         Text [ portuguese_brazilian ] = "Bad file mode" ;
         Text [ portuguese ] = "Modo do ficheiro incorrecto" ;
         Text [ french ] = "Mode de fichier incorrect" ;
-        Text [ dutch ] = "Foutieve bestandsmodus" ;
+        Text [ dutch ] = "Onjuiste bestandsmodus" ;
         Text [ spanish ] = "Modo de archivo incorrecto" ;
         Text [ danish ] = "Forkert filtilstand" ;
         Text [ swedish ] = "Fel filläge" ;
@@ -711,7 +711,7 @@ Resource RID_BASIC_START
         Text[ japanese ] = "Ì§²Ù Ó°ÄŞ‚ª³‚µ‚­‚ ‚è‚Ü‚¹‚ñ@@@@@@@@@@@@@";
         Text[ chinese_traditional ] = "¿ù»~ªºÀÉ®×¼Ò¦¡";
         Text[ arabic ] = "æÖÚ ÎÇØÆ ááãáİ";
-        Text[ dutch ] = "Foutieve bestandsmodus";
+        Text[ dutch ] = "Onjuiste bestandsmodus";
         Text[ chinese_simplified ] = "´íÎóµÄÎÄ¼şÄ£Ê½";
         Text[ greek ] = "Ìç İãêõñç êáôÜóôáóç áñ÷åßïõ";
         Text[ korean ] = "Àß¸øµÈ ÆÄÀÏ ÇüÅÂ";
@@ -757,7 +757,7 @@ Resource RID_BASIC_START
         Text [ portuguese_brazilian ] = "Device I/O error" ;
         Text [ portuguese ] = "Erro periférico I/O" ;
         Text [ french ] = "Erreur de périphérique E/S" ;
-        Text [ dutch ] = "Fout in-/uitvoerapparatuur" ;
+        Text [ dutch ] = "I/O-fout in apparaat" ;
         Text [ spanish ] = "Error de dispositivo E/S" ;
         Text [ danish ] = "I/O-fejl i enhed" ;
         Text [ swedish ] = "Apparat I/O-fel" ;
@@ -769,7 +769,7 @@ Resource RID_BASIC_START
         Text[ japanese ] = "ÃŞ¨ÊŞ²½ I/O ´×°";
         Text[ chinese_traditional ] = "³]³Æµo¥ÍI/O¿ù»~";
         Text[ arabic ] = "ÎØÃ İí ÅÏÎÇá æÅÎÑÇÌ ÇáÌåÇÒ";
-        Text[ dutch ] = "Fout in-/uitvoerapparatuur";
+        Text[ dutch ] = "I/O-fout in apparaat";
         Text[ chinese_simplified ] = "Éè±¸·¢ÉúI/O´íÎó";
         Text[ greek ] = "ÓöÜëìá óõóêåõŞò åéóüäïõ/åîüäïõ";
         Text[ korean ] = "µğ¹ÙÀÌ½º  I/O ¿À·ù";
@@ -814,7 +814,7 @@ Resource RID_BASIC_START
         Text [ portuguese_brazilian ] = "Bad record length" ;
         Text [ portuguese ] = "Comprimento do registo de dados incorrecto" ;
         Text [ french ] = "Longueur d'enregistrement incorrecte" ;
-        Text [ dutch ] = "Foutieve record-lengte" ;
+        Text [ dutch ] = "Onjuiste record-lengte" ;
         Text [ spanish ] = "Longitud errónea del registro de datos" ;
         Text [ danish ] = "Forkert datapostlængde" ;
         Text [ swedish ] = "Felaktig datapostlängd" ;
@@ -826,7 +826,7 @@ Resource RID_BASIC_START
         Text[ japanese ] = "³‚µ‚­‚È‚¢Úº°ÄŞ‚Ì’·‚³";
         Text[ chinese_traditional ] = "¿ù»~ªº¸ê®Æ¶µ¥Øªø«×";
         Text[ arabic ] = "Øæá ÓÌáÇÊ ÇáÈíÇäÇÊ ÛíÑ ÕÍíÍ";
-        Text[ dutch ] = "Foutieve record-lengte";
+        Text[ dutch ] = "Onjuiste record-lengte";
         Text[ chinese_simplified ] = "Êı¾İÌõÄ¿³¤¶È´íÎó";
         Text[ greek ] = "Ìç áğïäåêôü ìŞêïò åããñáöŞò";
         Text[ korean ] = "Àß¸øµÈ µ¥ÀÌÅÍ ·¹ÄÚµå ±æÀÌ";
@@ -842,7 +842,7 @@ Resource RID_BASIC_START
         Text [ portuguese_brazilian ] = "Disk full" ;
         Text [ portuguese ] = "Disquete ou disco rígido cheios" ;
         Text [ french ] = "Disquette/disque dur plein(e)" ;
-        Text [ dutch ] = "Diskette/harde schijf vol" ;
+        Text [ dutch ] = "Diskette/vaste schijf vol" ;
         Text [ spanish ] = "Disquete o disco duro lleno" ;
         Text [ danish ] = "Disketten/harddisken er fuld" ;
         Text [ swedish ] = "Diskett eller hårddisk full" ;
@@ -854,7 +854,7 @@ Resource RID_BASIC_START
         Text[ japanese ] = "ÌÛ¯Ëß°ÃŞ¨½¸‚Ü‚½‚ÍÊ°ÄŞÃŞ¨½¸‚ª‚¢‚Á‚Ï‚¢";
         Text[ chinese_traditional ] = "³nºÏ½L©ÎºÏ½L¤wº¡";
         Text[ arabic ] = "ÇáŞÑÕ ÇáãÑä/ ÇáÕáÈ ããÊáÆ";
-        Text[ dutch ] = "Diskette/harde schijf vol";
+        Text[ dutch ] = "Diskette/vaste schijf vol";
         Text[ chinese_simplified ] = "ÈíÅÌ»òÓ²ÅÌÒÑÂú";
         Text[ greek ] = "Äéóêİôá/ÌïíÜäá äßóêïõ åßíáé ğëŞñçò";
         Text[ korean ] = "µğ½ºÄÏ/ ÇÏµå µğ½ºÅ©°¡ ²Ë Ã¡À½";
@@ -899,7 +899,7 @@ Resource RID_BASIC_START
         Text [ portuguese_brazilian ] = "Bad record number" ;
         Text [ portuguese ] = "Número do registo de dados incorrecto" ;
         Text [ french ] = "Numéro d'enregistrement incorrect" ;
-        Text [ dutch ] = "Foutief record-nummer" ;
+        Text [ dutch ] = "Onjuist record-nummer" ;
         Text [ spanish ] = "Número erróneo de registro de datos" ;
         Text [ danish ] = "Forkert datapostnummer" ;
         Text [ swedish ] = "Felaktigt datapostnummer" ;
@@ -911,7 +911,7 @@ Resource RID_BASIC_START
         Text[ japanese ] = "Úº°ÄŞ”Ô†‚ª•s“KØ";
         Text[ chinese_traditional ] = "¸ê®Æ¶µ¥Ø¸¹½X¿ù»~";
         Text[ arabic ] = "ÑŞã ÓÌáÇÊ ÇáÈíÇäÇÊ ÛíÑ ÕÍíÍ";
-        Text[ dutch ] = "Foutief record-nummer";
+        Text[ dutch ] = "Onjuist record-nummer";
         Text[ chinese_simplified ] = "Êı¾İÌõÄ¿ºÅÂë´íÎó";
         Text[ greek ] = "Ëáíèáóìİíïò áñéèìüò åããñáöŞò";
         Text[ korean ] = "Àß¸øµÈ µ¥ÀÌÅÍ ·¹ÄÚµå ¹øÈ£";
@@ -1012,7 +1012,7 @@ Resource RID_BASIC_START
         Text [ portuguese_brazilian ] = "Disk not ready" ;
         Text [ portuguese ] = "A disquete não está pronta" ;
         Text [ french ] = "La disquette n'est pas prête" ;
-        Text [ dutch ] = "Diskette niet bereid" ;
+        Text [ dutch ] = "Station niet bereid" ;
         Text [ spanish ] = "El disquete no está preparado" ;
         Text [ danish ] = "Disketten er ikke klar" ;
         Text [ swedish ] = "Disketten är inte beredd" ;
@@ -1024,7 +1024,7 @@ Resource RID_BASIC_START
         Text[ japanese ] = "ÃŞ¨½¸‚Í—pˆÓ‚Å‚«‚Ä‚¢‚Ü‚¹‚ñ";
         Text[ chinese_traditional ] = "³nºÏ½LÁÙ¨S¦³·Ç³Æ¦n";
         Text[ arabic ] = "ÇáŞÑÕ ÛíÑ ÌÇåÒ";
-        Text[ dutch ] = "Diskette niet bereid";
+        Text[ dutch ] = "Station niet bereid";
         Text[ chinese_simplified ] = "ÈíÅÌ»¹Ã»ÓĞ×¼±¸ºÃ";
         Text[ greek ] = "Ç äéóêİôá äåí åßíáé İôïéìç";
         Text[ korean ] = "µğ½ºÅ©°¡ ÁØºñµÇÁö ¾Ê¾Ò½À´Ï´Ù.";
@@ -1040,7 +1040,7 @@ Resource RID_BASIC_START
         Text [ portuguese_brazilian ] = "Feature not implemented" ;
         Text [ portuguese ] = "Não implementado" ;
         Text [ french ] = "Non implanté" ;
-        Text [ dutch ] = "Niet geïmplementeerd" ;
+        Text [ dutch ] = "Niet ingevoerd" ;
         Text [ spanish ] = "No implementado" ;
         Text [ danish ] = "Ikke implementeret" ;
         Text [ swedish ] = "Ej implementerad" ;
@@ -1052,7 +1052,7 @@ Resource RID_BASIC_START
         Text[ japanese ] = "À‘•‚³‚ê‚Ä‚¢‚Ü‚¹‚ñ";
         Text[ chinese_traditional ] = "©|¥¼¹ê¬I";
         Text[ arabic ] = "áã íÊã ÇáÊØÈíŞ";
-        Text[ dutch ] = "Niet geïmplementeerd";
+        Text[ dutch ] = "Niet ingevoerd";
         Text[ chinese_simplified ] = "ÉĞÎ´ÊµÊ©";
         Text[ greek ] = "Äåí İ÷åé õëïğïéçèåß";
         Text[ korean ] = "±¸ÇöµÇÁö ¾Ê¾ÒÀ½";
@@ -1097,7 +1097,7 @@ Resource RID_BASIC_START
         Text [ portuguese_brazilian ] = "Path/File access error" ;
         Text [ portuguese ] = "Atalho/Erro de acesso ao ficheiro" ;
         Text [ french ] = "Erreur d'accès au chemin/fichier" ;
-        Text [ dutch ] = "Fout bij toegang op pad/bestand" ;
+        Text [ dutch ] = "Fout bij toegang tot pad/bestand" ;
         Text [ spanish ] = "Error de acceso a la ruta o al archivo" ;
         Text [ danish ] = "Sti/Fil adgangsfejl" ;
         Text [ swedish ] = "Sökväg/fil åtkomstfel" ;
@@ -1109,7 +1109,7 @@ Resource RID_BASIC_START
         Text[ japanese ] = "Êß½‚Ü‚½‚ÍÌ§²Ù‚Ö‚Ì±¸¾½´×°";
         Text[ chinese_traditional ] = "Åª¨ú¸ô®|/ÀÉ®×®Éµo¥Í¿ù»~";
         Text[ arabic ] = "ÎØÃ ÃËäÇÁ ÇáÏÎæá Åáì ÇáãÓÇÑ/Çáãáİ";
-        Text[ dutch ] = "Fout bij toegang op pad/bestand";
+        Text[ dutch ] = "Fout bij toegang tot pad/bestand";
         Text[ chinese_simplified ] = "¶ÁÈ¡Â·¾¶/ÎÄ¼şÊ±·¢Éú´íÎó";
         Text[ greek ] = "ÓöÜëìá ğñüóâáóçò äéáäñïìŞò/áñ÷åßïõ";
         Text[ korean ] = "ÆĞ½º/ÆÄÀÏ Á¢±Ù ¿À·ù";
@@ -1153,7 +1153,7 @@ Resource RID_BASIC_START
         Text [ portuguese_brazilian ] = "Object variable not set" ;
         Text [ portuguese ] = "Variável do objecto não configurada" ;
         Text [ french ] = "Variable d'objet non paramétrée" ;
-        Text [ dutch ] = "Objectvariabele niet gereserveerd" ;
+        Text [ dutch ] = "Objectvariabele niet ingesteld" ;
         Text [ spanish ] = "La variable del objeto no se ha establecido" ;
         Text [ danish ] = "Objektvariablen er ikke optaget" ;
         Text [ swedish ] = "Objektvariablerna inte bestämda" ;
@@ -1165,7 +1165,7 @@ Resource RID_BASIC_START
         Text[ japanese ] = "µÌŞ¼Şª¸Ä•Ï”‚Íİ’è‚Å‚«‚Ä‚¢‚Ü‚¹‚ñ";
         Text[ chinese_traditional ] = "ÁÙ¨S¦³³]©wª«¥óÅÜ¶q";
         Text[ arabic ] = "áã íÊã ÊÚííä ãÊÛííÑÉ ÇáßÇÆä";
-        Text[ dutch ] = "Objectvariabele niet gereserveerd";
+        Text[ dutch ] = "Objectvariabele niet ingesteld";
         Text[ chinese_simplified ] = "»¹Ã»ÓĞÉè¶¨¶ÔÏó±äÁ¿";
         Text[ greek ] = "Äåí ïñßóôçêå ìåôáâëçôŞ áíôéêåéìİíïõ";
         Text[ korean ] = "°³Ã¼º¯¼ö°¡ ¼³Á¤µÇÁö ¾Ê¾Ò½À´Ï´Ù.";
@@ -1182,7 +1182,7 @@ Resource RID_BASIC_START
         Text [ portuguese_brazilian ] = "Invalid pattern string" ;
         Text [ portuguese ] = "Sequência de caracteres não válida" ;
         Text [ french ] = "Échantillon de chaîne de caractères incorrect" ;
-        Text [ dutch ] = "Ontoelaatbare tekenreeks" ;
+        Text [ dutch ] = "Ongeldig tekenreekpatroon" ;
         Text [ spanish ] = "Secuencia de caracteres no válida" ;
         Text [ danish ] = "Ugyldigt strengmønster" ;
         Text [ swedish ] = "Ogiltig mönsterstring" ;
@@ -1194,7 +1194,7 @@ Resource RID_BASIC_START
         Text[ japanese ] = "•¶š—ñÊßÀ°İ‚Í‹–‰Â‚³‚ê‚Ü‚¹‚ñ";
         Text[ chinese_traditional ] = "µL®Äªº¦r¦ê¼Ò¦¡";
         Text[ arabic ] = "äãæĞÌ ÊÊÇÈÚ ÇáÃÍÑİ ÛíÑ ãÓãæÍ Èå";
-        Text[ dutch ] = "Ontoelaatbare tekenreeks";
+        Text[ dutch ] = "Ongeldig tekenreekpatroon";
         Text[ chinese_simplified ] = "ÎŞĞ§µÄ×Ö´®Ä£Ê½";
         Text[ greek ] = "Åóöáëìİíç óõìâïëïóåéñÜ ìïôßâïõ";
         Text[ korean ] = "À¯È¿ÇÏÁö¾ÊÀº ¹®ÀÚ¿­ À¯Çü";
@@ -1211,7 +1211,7 @@ Resource RID_BASIC_START
         Text [ portuguese_brazilian ] = "Invalid use of Null" ;
         Text [ portuguese ] = "Interdito o uso do zero" ;
         Text [ french ] = "Utilisation du zéro interdite" ;
-        Text [ dutch ] = "Ongeldig gebruik van nul" ;
+        Text [ dutch ] = "Gebruik van nul niet toegestaan" ;
         Text [ spanish ] = "No se admite el uso del cero" ;
         Text [ danish ] = "Brug af nul er ikke tilladt" ;
         Text [ swedish ] = "Användning av noll är ej tillåtet" ;
@@ -1223,7 +1223,7 @@ Resource RID_BASIC_START
         Text[ japanese ] = "¾ŞÛ‚Ìg—p‚Í‹–‰Â‚³‚ê‚Ü‚¹‚ñ";
         Text[ chinese_traditional ] = "¤£¤¹³\\½Õ¥Î¹s­È";
         Text[ arabic ] = "ÛíÑ ãÓãæÍ ÈÇÓÊÎÏÇã ÇáÕİÑ";
-        Text[ dutch ] = "Ongeldig gebruik van nul";
+        Text[ dutch ] = "Gebruik van nul niet toegestaan";
         Text[ chinese_simplified ] = "²»ÔÊĞíÊ¹ÓÃÓÃÁãÖµ";
         Text[ greek ] = "Äåí åğéôñİğåôáé ç ÷ñŞóç ôïõ ìçäåíüò";
         Text[ korean ] = "0ÀÇ »ç¿ëÀÌ Çã¿ëµÇÁö ¾Ê¾Ò½À´Ï´Ù.";
@@ -1352,7 +1352,7 @@ Resource RID_BASIC_START
         Text [ portuguese_brazilian ] = "Multiple applications responded to DDE initiate" ;
         Text [ portuguese ] = "Demasiadas aplicações respondem à tentativa de ligação DDE" ;
         Text [ french ] = "Trop d'applications répondent à la tentative de connexion DDE" ;
-        Text [ dutch ] = "Teveel applicatiex antwoorden op de DDE-verbindingsoproep" ;
+        Text [ dutch ] = "Teveel toepassingen antwoorden op de DDE-verbindingsoproep" ;
         Text [ spanish ] = "Demasiadas aplicaciones responden a la conexión deseada DDE" ;
         Text [ danish ] = "For mange applikationer svarer på DDE-forbindelsesinitialiseringen" ;
         Text [ swedish ] = "Alltför många applikationer svarar på DDE-förbindelseinitieringen" ;
@@ -1364,7 +1364,7 @@ Resource RID_BASIC_START
         Text[ japanese ] = "DDEÚ‘±Šó–]‚É‰“š‚·‚é±ÌßØ¹°¼®İ‚ª‘½‚·‚¬‚Ü‚·";
         Text[ chinese_traditional ] = "¤Ó¦hªºÀ³¥Îµ{¦¡¦^À³ DDE ³sµ²½Ğ¨D";
         Text[ arabic ] = "åäÇß ÇÓÊÌÇÈÉ ãä ÚÏÏ ßÈíÑ ÌÏÇğ ãä ÇáÊØÈíŞÇÊ ááÑÛÈÉ İí ÇÊÕÇá DDE";
-        Text[ dutch ] = "Teveel applicatiex antwoorden op de DDE-verbindingsoproep";
+        Text[ dutch ] = "Teveel toepassingen antwoorden op de DDE-verbindingsoproep";
         Text[ chinese_simplified ] = "Ì«¶àµÄÓ¦ÓÃ³ÌĞò»ØÓ¦ DDE Á¬½ÓÇëÇó";
         Text[ greek ] = "ÁğÜíôçóáí õğåñâïëéêÜ ğïëëİò åöáñìïãİò êáôÜ ôçí åğé÷åßñçóç óıíäåóçò DDE";
         Text[ korean ] = "DDE Á¢¼ÓÀÇ ÃÊ±âÈ­¿¡ ÀÀ´äÇÏ´Â  ÀÀ¿ëÇÁ·Î±×·¥ÀÌ ³Ê¹« ¸¹À½";
@@ -1380,7 +1380,7 @@ Resource RID_BASIC_START
         Text [ portuguese_brazilian ] = "DDE channel locked" ;
         Text [ portuguese ] = "Canal DDE bloqueado" ;
         Text [ french ] = "Canal DDE verrouillé" ;
-        Text [ dutch ] = "DDE-kanaal geblokkeerd" ;
+        Text [ dutch ] = "DDE-kanaal vergrendeld" ;
         Text [ spanish ] = "Canal DDE bloqueado" ;
         Text [ danish ] = "DDE-kanalen er låst" ;
         Text [ swedish ] = "DDE-kanalen är spärrad" ;
@@ -1392,7 +1392,7 @@ Resource RID_BASIC_START
         Text[ japanese ] = "DDEÁ¬İÈÙ‚ÍÛ¯¸‚³‚ê‚Ä‚¢‚Ü‚·";
         Text[ chinese_traditional ] = "DDE «H¹D¤w¸g³QÂê©w";
         Text[ arabic ] = "ãÄãäÉ.DDE ŞäÇÉ";
-        Text[ dutch ] = "DDE-kanaal geblokkeerd";
+        Text[ dutch ] = "DDE-kanaal vergrendeld";
         Text[ chinese_simplified ] = "DDE ĞÅµÀÒÑ¾­±»Ëø¶¨";
         Text[ greek ] = "Ôï êáíÜëé DDE åßíáé êëåéäùìİíï";
         Text[ korean ] = "DDE Ã¤³ÎÀÌ ´İÇûÀ½";
@@ -1409,7 +1409,7 @@ Resource RID_BASIC_START
         Text [ portuguese_brazilian ] = "Foreign application won't perform DDE operation" ;
         Text [ portuguese ] = "A aplicação externa não pode executar a operação DDE" ;
         Text [ french ] = "L'application externe ne peut pas exécuter l'opération DDE" ;
-        Text [ dutch ] = "Externe applicatie kan DDE niet uitvoeren" ;
+        Text [ dutch ] = "Externe toepassing kan DDE niet uitvoeren" ;
         Text [ spanish ] = "Una aplicación externa no puede realizar la operación DDE" ;
         Text [ danish ] = "Den eksterne applikation kan ikke udføre DDE-operationen" ;
         Text [ swedish ] = "Den externa applikationen kan inte utföra DDE-operationen" ;
@@ -1421,7 +1421,7 @@ Resource RID_BASIC_START
         Text[ japanese ] = "ŠO•”±ÌßØ¹°¼®İ‚ÍDDE‚ÌµÍßÚ°¼®İ‚ğÀs‚Å‚«‚Ü‚¹‚ñ";
         Text[ chinese_traditional ] = "¥~³¡ªºÀ³¥Îµ{§ÇµLªk°õ¦æ DDE ¹Bºâ";
         Text[ arabic ] = "DDE áÇ íÓÊØíÚ ÇáÊØÈíŞ ÇáÎÇÑÌí ÊäİíĞ ÚãáíÉ";
-        Text[ dutch ] = "Externe applicatie kan DDE niet uitvoeren";
+        Text[ dutch ] = "Externe toepassing kan DDE niet uitvoeren";
         Text[ chinese_simplified ] = "Íâ²¿µÄÓ¦ÓÃ³ÌĞòÎŞ·¨Ö´ĞĞ DDE ÔËËã";
         Text[ greek ] = "Ç åîùôåñéêŞ åöáñìïãŞ äåí åßíáé äõíáôüí íá åêôåëİóåé ôçí ëåéôïõñãßá DDE";
         Text[ korean ] = "¿ÜºÎ ÀÀ¿ëÇÁ·Î±×·¥Àº DDE ÀÛµ¿À» ½ÇÇà½ÃÅ³¼ö ¾ø½À´Ï´Ù.";
@@ -1523,7 +1523,7 @@ Resource RID_BASIC_START
         Text [ portuguese_brazilian ] = "Data not provided in DDE operation" ;
         Text [ portuguese ] = "A operação DDE não tem dados" ;
         Text [ french ] = "Données non fournies dans l'opération DDE" ;
-        Text [ dutch ] = "DDE-operatie zonder gegevens" ;
+        Text [ dutch ] = "DDE-bewerking zonder gegevens" ;
         Text [ spanish ] = "Operación DDE sin datos" ;
         Text [ danish ] = "DDE-operation uden data" ;
         Text [ swedish ] = "DDE-operation utan data" ;
@@ -1535,7 +1535,7 @@ Resource RID_BASIC_START
         Text[ japanese ] = "ÃŞ°À‚È‚µ‚ÌDDEµÍßÚ°¼®İ";
         Text[ chinese_traditional ] = "¨S¦³¸ê®Æªº DDE ¹Bºâ";
         Text[ arabic ] = "ÈÏæä ÈíÇäÇÊ DDE ÚãáíÉ";
-        Text[ dutch ] = "DDE-operatie zonder gegevens";
+        Text[ dutch ] = "DDE-bewerking zonder gegevens";
         Text[ chinese_simplified ] = "Ã»ÓĞÊı¾İµÄ DDE ÔËËã";
         Text[ greek ] = "Ëåéôïõñãßá DDE ÷ùñßò äåäïìİíá";
         Text[ korean ] = "µ¥ÀÌÅÍ ¾ø´Â DDE ÀÛµ¿";
@@ -1579,7 +1579,7 @@ Resource RID_BASIC_START
         Text [ portuguese_brazilian ] = "Foreign application quit" ;
         Text [ portuguese ] = "Cancelada a aplicação externa" ;
         Text [ french ] = "L'application externe a été quittée" ;
-        Text [ dutch ] = "Externe applicatie werd beëindigd" ;
+        Text [ dutch ] = "Externe toepassing werd beëindigd" ;
         Text [ spanish ] = "La aplicación externa se ha cancelado" ;
         Text [ danish ] = "Den eksterne applikation er blevet afsluttet" ;
         Text [ swedish ] = "Den externa applikationen är avslutad" ;
@@ -1591,7 +1591,7 @@ Resource RID_BASIC_START
         Text[ japanese ] = "ŠO•”±ÌßØ¹°¼®İ‚ÍI—¹‚µ‚Ä‚¢‚Ü‚·";
         Text[ chinese_traditional ] = "¥~³¡À³¥Îµ{¦¡¤w¸gµ²§ô";
         Text[ arabic ] = "Êã ÅäåÇÁ ÇáÊØÈíŞ ÇáÎÇÑÌí";
-        Text[ dutch ] = "Externe applicatie werd beëindigd";
+        Text[ dutch ] = "Externe toepassing werd beëindigd";
         Text[ chinese_simplified ] = "Íâ²¿Ó¦ÓÃ³ÌĞòÒÑ¾­½áÊø";
         Text[ greek ] = "Ç åîùôåñéêŞ åöáñìïãŞ ôåñìáôßóôçêå.";
         Text[ korean ] = "¿ÜºÎ ÀÀ¿ëÇÁ·Î±×·¥ÀÌ Á¦°ÅµÇ¾ú½À´Ï´Ù.";
@@ -1665,7 +1665,7 @@ Resource RID_BASIC_START
         Text [ portuguese_brazilian ] = "Invalid DDE Link format" ;
         Text [ portuguese ] = "Formato de ligação DDE não válido" ;
         Text [ french ] = "Format de lien DDE incorrect" ;
-        Text [ dutch ] = "Foutief DDE-link-formaat" ;
+        Text [ dutch ] = "Ongeldig DDE-koppelingsformaat" ;
         Text [ spanish ] = "Formato del vínculo DDE incorrecto" ;
         Text [ danish ] = "Ugyldigt DDE-linkformat" ;
         Text [ swedish ] = "Ogiltigt DDE- linkformat" ;
@@ -1677,7 +1677,7 @@ Resource RID_BASIC_START
         Text[ japanese ] = "–³Œø‚ÈDDEØİ¸è–@";
         Text[ chinese_traditional ] = "µL®ÄªºDDE³sµ²®æ¦¡";
         Text[ arabic ] = "ÛíÑ ÕÇáÍ DDE ÊäÓíŞ ÇÑÊÈÇØ";
-        Text[ dutch ] = "Foutief DDE-link-formaat";
+        Text[ dutch ] = "Ongeldig DDE-koppelingsformaat";
         Text[ chinese_simplified ] = "ÎŞĞ§µÄ DDE Á´½Ó¸ñÊ½";
         Text[ greek ] = "Ìç İãêõñç ìïñöŞ óıíäåóçò DDE";
         Text[ korean ] = "À¯È¿ÇÏÁö ¾ÊÀº DDE ¿¬°á ¼­½Ä";
@@ -1693,7 +1693,7 @@ Resource RID_BASIC_START
         Text [ portuguese_brazilian ] = "Message queue filled; DDE Message lost" ;
         Text [ portuguese ] = "A mensagem DDE perdeu-se" ;
         Text [ french ] = "Le message DDE a été perdu" ;
-        Text [ dutch ] = "DDE-message verloren gegaan" ;
+        Text [ dutch ] = "DDE-resultaat verloren gegaan" ;
         Text [ spanish ] = "El mensaje DDE se ha perdido" ;
         Text [ danish ] = "DDE-meddelelse er gået tabt" ;
         Text [ swedish ] = "DDE-meddelandet är borttappat" ;
@@ -1705,7 +1705,7 @@ Resource RID_BASIC_START
         Text[ japanese ] = "DDEÒ¯¾°¼Ş‚Í¸‚í‚ê‚Ü‚µ‚½";
         Text[ chinese_traditional ] = "DDE°T®§¿ò¥¢";
         Text[ arabic ] = "DDE Êã İŞÏÇä ÑÓÇáÉ";
-        Text[ dutch ] = "DDE-message verloren gegaan";
+        Text[ dutch ] = "DDE-resultaat verloren gegaan";
         Text[ chinese_simplified ] = "DDE ĞÅÏ¢ÒÅÊ§";
         Text[ greek ] = "Ôï ìŞíõìá ôïõ DDE ÷Üèçêå";
         Text[ korean ] = "DDE ¸Ş¼¼Áö°¡ »ç¶óÁ³À½";
@@ -1722,7 +1722,7 @@ Resource RID_BASIC_START
         Text [ portuguese_brazilian ] = "Paste link already performed" ;
         Text [ portuguese ] = "\"Paste link\" já executado" ;
         Text [ french ] = "Le paste link a déjà été exécuté" ;
-        Text [ dutch ] = "Paste link reeds uitgevoerd" ;
+        Text [ dutch ] = "Koppeling plakken reeds uitgevoerd" ;
         Text [ spanish ] = "Pegar vínculo ya ejecutado" ;
         Text [ danish ] = "Paste link er allerede udført" ;
         Text [ swedish ] = "Paste link är redan genomfört" ;
@@ -1735,7 +1735,7 @@ Resource RID_BASIC_START
         Text[ language_user1 ] = " ";
         Text[ chinese_traditional ] = "Öß¶K³sµ²¤w¸g§¹¦¨";
         Text[ arabic ] = "ãÓÈŞÇğ Paste link Êã ÃÏÇÁ ";
-        Text[ dutch ] = "Paste link reeds uitgevoerd";
+        Text[ dutch ] = "Koppeling plakken reeds uitgevoerd";
         Text[ chinese_simplified ] = "Õ³ÌùÁ´½ÓÒÑ¾­Íê³É";
         Text[ greek ] = "Ôï 'Paste link' åêôåëİóôçêå Şäç";
         Text[ korean ] = "¿¬°á ºÙ¿©³Ö±â´Â ÀÌ¹Ì ¼öÇàµÇ¾ú½À´Ï´Ù.";
@@ -1751,7 +1751,7 @@ Resource RID_BASIC_START
         Text [ portuguese_brazilian ] = "Cant set LinkMode; invalid Link Topic" ;
         Text [ portuguese ] = "Impossível configurar o LinkMode devido a LinkTopic não válido" ;
         Text [ french ] = "Impossible de définir le LinkMode à cause d'un Link-Topic incorrect" ;
-        Text [ dutch ] = "Ongeldig Link Topic; LinkMode kan niet worden gezet" ;
+        Text [ dutch ] = "Ongeldig koppeling-onderwerp; koppelingmodus kan niet worden ingesteld" ;
         Text [ spanish ] = "No se puede establecer el LinkMode debido a un Link Topic incorrecto" ;
         Text [ danish ] = "Linktilstand kan ikke indstilles på grund af ugyldige linktopics." ;
         Text [ swedish ] = "LinkMode kan inte ställas in på grund av ogiltiga Link-Topics" ;
@@ -1763,7 +1763,7 @@ Resource RID_BASIC_START
         Text[ japanese ] = "Øİ¸ Ó°ÄŞ‚ÍØİ¸ ÄËß¯¸‚ª–³Œø‚Å‚ ‚é‚½‚ßAİ’è‚Å‚«‚Ü‚¹‚ñ";
         Text[ chinese_traditional ] = "¦]¬°µL®Äªº±¶®|¼ĞÃD¦ÓµLªk³]©w±¶®|¼ĞÃD";
         Text[ arabic ] = "ÛíÑ ÕÇáÍÉ Link-Topics áÃä LinkMode áÇ íãßä ÊÚííä";
-        Text[ dutch ] = "Ongeldig Link Topic; LinkMode kan niet worden gezet";
+        Text[ dutch ] = "Ongeldig koppeling-onderwerp; koppelingmodus kan niet worden ingesteld";
         Text[ chinese_simplified ] = "ÓÉÓÚÎŞĞ§µÄÁ´½Ó±êÌâ¶øÎŞ·¨Éè¶¨Á´½Ó±êÌâ";
         Text[ greek ] = "Äåí åßíáé äõíáôüí íá ïñéóôåß ôï LinkMode åîáéôßáò ìç İãêõñùí Link-Topics.";
         Text[ korean ] = "À¯È¿ÇÏÁö ¾ÊÀº ¿¬°á  ÅäÇÈÀ¸·Î ÀÎÇÏ¿© ¿¬°á À¯ÇüÀÌ ¼³Á¤µÉ¼ö ¾ø½À´Ï´Ù.";
@@ -1896,7 +1896,7 @@ Resource RID_BASIC_START
         Text [ portuguese_brazilian ] = "Bad property value" ;
         Text [ portuguese ] = "Valor de propriedade incorrecto" ;
         Text [ french ] = "Valeur de propriété incorrecte" ;
-        Text [ dutch ] = "Foutieve waarde voor eigenschap" ;
+        Text [ dutch ] = "Onjuiste waarde voor eigenschap" ;
         Text [ spanish ] = "Valor no válido para la propiedad" ;
         Text [ danish ] = "Forkert egenskabsværdi" ;
         Text [ swedish ] = "Felaktigt värde för egenskap" ;
@@ -1908,7 +1908,7 @@ Resource RID_BASIC_START
         Text[ japanese ] = "ÌßÛÊßÃ¨’l‚ª³‚µ‚­‚ ‚è‚Ü‚¹‚ñ";
         Text[ chinese_traditional ] = "¿ù»~ªºÄİ©Ê¼Æ­È";
         Text[ arabic ] = "ŞíãÉ ÛíÑ ÕÍíÍÉ ááÎÇÕíÉ";
-        Text[ dutch ] = "Foutieve waarde voor eigenschap";
+        Text[ dutch ] = "Onjuiste waarde voor eigenschap";
         Text[ chinese_simplified ] = "´íÎóµÄÊôĞÔÊıÖµ";
         Text[ greek ] = "Ìç İãêõñç ôéìŞ ãéá éäéüôçôá";
         Text[ korean ] = "Àß¸øµÈ ÇÁ·ÎÆÛÆ¼ °ª";
@@ -2182,7 +2182,7 @@ Resource RID_BASIC_START
         Text [ portuguese_brazilian ] = "Object doesn't support this action" ;
         Text [ portuguese ] = "O objecto indicado não suporta esta acção" ;
         Text [ french ] = "L'objet indiqué ne supporte pas cette action" ;
-        Text [ dutch ] = "Deze activiteit wordt niet ondersteund door het aangegeven object" ;
+        Text [ dutch ] = "Deze handeling wordt niet ondersteund door het aangegeven object" ;
         Text [ spanish ] = "Esta acción no es apoyada por el objeto dado" ;
         Text [ danish ] = "Denne handling understøttes ikke at det angivne objekt." ;
         Text [ swedish ] = "Denna åtgärd understöds inte av angivet objekt" ;
@@ -2194,7 +2194,7 @@ Resource RID_BASIC_START
         Text[ japanese ] = "‚±‚Ì±¸¼®İ‚Íw’è‚³‚ê‚½µÌŞ¼Şª¸Ä‚©‚çx‰‡‚³‚ê‚Ü‚¹‚ñ";
         Text[ chinese_traditional ] = "«ü©wªºª«¥ó¤£¤ä´©³o­Ó¾Ş§@";
         Text[ arabic ] = "ÇáßÇÆä ÇáãÚØì áÇ íÏÚã åĞå ÇáÚãáíÉ";
-        Text[ dutch ] = "Deze activiteit wordt niet ondersteund door het aangegeven object";
+        Text[ dutch ] = "Deze handeling wordt niet ondersteund door het aangegeven object";
         Text[ chinese_simplified ] = "¸ø¶¨µÄ¶ÔÏó²»Ö§³ÖÕâ¸ö²Ù×÷";
         Text[ greek ] = "Ç åíİñãåéá áõôŞ äåí õğïóôçñßæåôáé áğü ôï äåäïìİíï áíôéêåßìåíï";
         Text[ korean ] = "ÀÌ µ¿ÀÛÀº ÁÖ¾îÁø °³Ã¼¿¡ÀÇÇØ¼­ Áö¿øµÇÁö ¾Ê½À´Ï´Ù.";
@@ -2240,7 +2240,7 @@ Resource RID_BASIC_START
         Text [ portuguese_brazilian ] = "Object doesn't support current locale setting" ;
         Text [ portuguese ] = "O objecto indicado não suporta a configuração local actual" ;
         Text [ french ] = "L'objet indiqué ne supporte pas les paramètres régionaux sélectionnés" ;
-        Text [ dutch ] = "Dit actuele gebiedschema wordt niet ondersteund door het aangegeven object" ;
+        Text [ dutch ] = "De huidige lokale instellingen worden niet ondersteund door het aangegeven object" ;
         Text [ spanish ] = "La configuración local actual no es apoyada por el objeto dado" ;
         Text [ danish ] = "Det aktuelle områdeskema understøttes ikke af det angivne objekt" ;
         Text [ swedish ] = "De aktuella lokala inställningarna understöds inte av angivet objekt" ;
@@ -2252,7 +2252,7 @@ Resource RID_BASIC_START
         Text[ japanese ] = "Œ»İ‚ÌÛ°¶Ùİ’è‚Íw’è‚µ‚½µÌŞ¼Şª¸Ä‚©‚çx‰‡‚³‚ê‚Ü‚¹‚ñ";
         Text[ chinese_traditional ] = "·í«eªº§½³¡³]©w¤£¨ü«ü©wª«¥óªº¤ä´©";
         Text[ arabic ] = "ÇáßÇÆä ÇáãÚØì áÇ íÏÚã ÇáÅÚÏÇÏ ÇáãÍáí ÇáÍÇáí";
-        Text[ dutch ] = "Dit actuele gebiedschema wordt niet ondersteund door het aangegeven object";
+        Text[ dutch ] = "De huidige lokale instellingen worden niet ondersteund door het aangegeven object";
         Text[ chinese_simplified ] = "µ±Ç°µÄ¾Ö²¿Éè¶¨²»ÊÜ¸ø¶¨¶ÔÏóµÄÖ§³Ö";
         Text[ greek ] = "Ïé ôñİ÷ïõóåò ôïğéêİò ñõèìßóåéò äåí õğïóôçñßæïíôáé áğü ôï äåäïìİíï áíôéêåßìåíï";
         Text[ korean ] = "ÇöÀçÀÇ ·ÎÄÃ ¼³Á¤Àº ÁÖ¾îÁø °³Ã¼¿¡ÀÇÇØ¼­ Áö¿øµÇÁö ¾Ê½À´Ï´Ù.";
@@ -2296,7 +2296,7 @@ Resource RID_BASIC_START
         Text [ portuguese_brazilian ] = "Argument not optional" ;
         Text [ portuguese ] = "Argumento não é opcional" ;
         Text [ french ] = "L'argument n'est pas facultatif" ;
-        Text [ dutch ] = "Argument niet optioneel" ;
+        Text [ dutch ] = "Het argument is niet optioneel" ;
         Text [ spanish ] = "El argumento no es opcional" ;
         Text [ danish ] = "Argumentet er ikke valgfrit" ;
         Text [ swedish ] = "Argumentet är inte valfritt" ;
@@ -2308,7 +2308,7 @@ Resource RID_BASIC_START
         Text[ japanese ] = "ˆø”‚ÍµÌß¼®İ‚Å‚Í‚ ‚è‚Ü‚¹‚ñ";
         Text[ chinese_traditional ] = "«D¥i¿ïªº¦ÛÅÜ¶q";
         Text[ arabic ] = "ÇáæÓíØÉ ÛíÑ ÇÎÊíÇÑíÉ";
-        Text[ dutch ] = "Argument niet optioneel";
+        Text[ dutch ] = "Het argument is niet optioneel";
         Text[ chinese_simplified ] = "·Ç¿ÉÑ¡µÄ×Ô±äÁ¿";
         Text[ greek ] = "Ôï üñéóìá äåí åßíáé ğñïáéñåôéêü";
         Text[ korean ] = "µ¶¸³ º¯¼ö´Â ¿É¼ÇÀÌ ¾Æ´Õ´Ï´Ù.";
@@ -2324,7 +2324,7 @@ Resource RID_BASIC_START
         Text [ portuguese_brazilian ] = "Wrong number of arguments" ;
         Text [ portuguese ] = "Número de argumentos incorrecto" ;
         Text [ french ] = "Nombre d'arguments incorrect" ;
-        Text [ dutch ] = "Foutief aantal argumenten" ;
+        Text [ dutch ] = "Ongeldig aantal argumenten" ;
         Text [ spanish ] = "Número erróneo de argumentos" ;
         Text [ danish ] = "Forkert antal argumenter" ;
         Text [ swedish ] = "Felaktigt antal argument" ;
@@ -2336,7 +2336,7 @@ Resource RID_BASIC_START
         Text[ japanese ] = "ˆø”‚Ì”‚ª³‚µ‚­‚ ‚è‚Ü‚¹‚ñ";
         Text[ chinese_traditional ] = "µL®Äªº¦ÛÅÜ¶q¼Æ¥Ø";
         Text[ arabic ] = "ÚÏÏ ÇáæÓÇÆØ ÛíÑ ÕÇáÍ";
-        Text[ dutch ] = "Foutief aantal argumenten";
+        Text[ dutch ] = "Ongeldig aantal argumenten";
         Text[ chinese_simplified ] = "ÎŞĞ§µÄ×Ô±äÁ¿ÊıÄ¿";
         Text[ greek ] = "ËÜèïò ğëŞèïò ïñéóìÜôùí";
         Text[ korean ] = "µ¶¸³º¯¼ö °³¼ö°¡ Æ²¸²";
@@ -2438,7 +2438,7 @@ Resource RID_BASIC_START
         Text [ portuguese_brazilian ] = "Invalid clipboard format" ;
         Text [ portuguese ] = "Formato da área de transferência não válido" ;
         Text [ french ] = "Le format de presse-papiers souhaité est incorrect." ;
-        Text [ dutch ] = "Ongeldig Clipboard- formaat" ;
+        Text [ dutch ] = "Ongeldige indeling voor Klembord" ;
         Text [ spanish ] = "Formato de portapapeles no válido" ;
         Text [ danish ] = "Ugyldigt udklipsholderformat" ;
         Text [ swedish ] = "Ogiltigt urklippsformat" ;
@@ -2450,7 +2450,7 @@ Resource RID_BASIC_START
         Text[ japanese ] = "¸Ø¯ÌßÎŞ°ÄŞ‘®‚ª–³Œø‚Å‚·";
         Text[ chinese_traditional ] = "µL®Äªº°Å¶KÃ¯®æ¦¡";
         Text[ arabic ] = "ÊäÓíŞ ÍÇİÙÉ ÛíÑ ÕÇáÍ";
-        Text[ dutch ] = "Ongeldig Clipboard- formaat";
+        Text[ dutch ] = "Ongeldige indeling voor Klembord";
         Text[ chinese_simplified ] = "ÎŞĞ§µÄ¼ôÌù°å¸ñÊ½";
         Text[ greek ] = "Ìç İãêõñç ìïñöŞ ğñï÷åßñïõ";
         Text[ korean ] = "À¯È¿ÇÏÁö ¾ÊÀº Å¬¸³º¸µå Æ÷¸Ë";
@@ -2522,7 +2522,7 @@ Resource RID_BASIC_START
         Text [ portuguese_brazilian ] = "Missing required argument" ;
         Text [ portuguese ] = "Falta o argumento necessário" ;
         Text [ french ] = "L'argument requis fait défaut" ;
-        Text [ dutch ] = "Noordzakelijk argument ontbreekt" ;
+        Text [ dutch ] = "Vereist argument ontbreekt" ;
         Text [ spanish ] = "Falta el argumento requerido" ;
         Text [ danish ] = "Påkrævet argument mangler" ;
         Text [ swedish ] = "Nödvändigt argument saknas" ;
@@ -2534,7 +2534,7 @@ Resource RID_BASIC_START
         Text[ japanese ] = "•K—v‚Èˆø”‚ª‘«‚è‚Ü‚¹‚ñ";
         Text[ chinese_traditional ] = "¯Ê¤Ö¥²­nªº¦ÛÅÜ¶q";
         Text[ arabic ] = "ÇáæÓíØÉ ÇáãØáæÈÉ ÛíÑ ãÊÇÍÉ";
-        Text[ dutch ] = "Noordzakelijk argument ontbreekt";
+        Text[ dutch ] = "Vereist argument ontbreekt";
         Text[ chinese_simplified ] = "È±ÉÙ±ØÒªµÄ×Ô±äÁ¿";
         Text[ greek ] = "Ëåßğåé áğáéôïıìåíï üñéóìá";
         Text[ korean ] = "¿äÃ»µÈ µ¶¸³º¯¼ö°¡ ¾ø½À´Ï´Ù";
@@ -2608,7 +2608,7 @@ Resource RID_BASIC_START
         Text [ portuguese_brazilian ] = "Unable to set property" ;
         Text [ portuguese ] = "Foi impossível definir propriedade" ;
         Text [ french ] = "Impossible de définir la propriété" ;
-        Text [ dutch ] = "Eigenschap kon niet worden gedefinieerd" ;
+        Text [ dutch ] = "Eigenschap kon niet worden ingesteld" ;
         Text [ spanish ] = "No se pudo determinar la propiedad" ;
         Text [ danish ] = "Det var ikke muligt at definere egenskaben" ;
         Text [ swedish ] = "Egenskap kunde inte definieras" ;
@@ -2620,7 +2620,7 @@ Resource RID_BASIC_START
         Text[ japanese ] = "‘®«‚Íw’è‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½";
         Text[ chinese_traditional ] = "µLªk½T©wÄİ©Ê";
         Text[ arabic ] = "ÊÚĞÑ ÊÚííä ÇáÎÇÕíÉ";
-        Text[ dutch ] = "Eigenschap kon niet worden gedefinieerd";
+        Text[ dutch ] = "Eigenschap kon niet worden ingesteld";
         Text[ chinese_simplified ] = "ÎŞ·¨È·¶¨ÊôĞÔ";
         Text[ greek ] = "Äåí Şôáí äõíáôüí íá ïñéóôåß áõôŞ ç éäéüôçôá";
         Text[ korean ] = "ÇÁ·ÎÆÛÆ¼ ¼³Á¤À» ÇÒ¼ö ¾ø½À´Ï´Ù.";
@@ -2777,7 +2777,7 @@ Resource RID_BASIC_START
         Text [ portuguese_brazilian ] = "Label expected" ;
         Text [ portuguese ] = "Etiqueta esperada" ;
         Text [ french ] = "Étiquette requise" ;
-        Text [ dutch ] = "Label verwacht" ;
+        Text [ dutch ] = "Naam verwacht" ;
         Text [ spanish ] = "Se requiere una etiqueta" ;
         Text [ danish ] = "Etiket forventes" ;
         Text [ swedish ] = "Etikett förväntad" ;
@@ -2789,7 +2789,7 @@ Resource RID_BASIC_START
         Text[ japanese ] = "×ÍŞÙ‚ª•K—v‚Å‚·";
         Text[ chinese_traditional ] = "µ¥«İ¼Ğ¸¹";
         Text[ arabic ] = "ãÊæŞÚ ÈØÇŞÉ ÚäæäÉ";
-        Text[ dutch ] = "Label verwacht";
+        Text[ dutch ] = "Naam verwacht";
         Text[ chinese_simplified ] = "µÈ´ı±êºÅ";
         Text[ greek ] = "Áğáéôåßôáé åğéãñáöŞ";
         Text[ korean ] = "¿¹ÃøµÈ ¶óº§";
@@ -2889,7 +2889,7 @@ Resource RID_BASIC_START
         Text [ portuguese_brazilian ] = "Label $(ARG1) already defined" ;
         Text [ portuguese ] = "Etiqueta $(ARG1) já foi definida" ;
         Text [ french ] = "L'étiquette $(ARG1) est déjà définie" ;
-        Text [ dutch ] = "Label $(ARG1) reeds gedefinieerd" ;
+        Text [ dutch ] = "Naam $(ARG1) reeds gedefinieerd" ;
         Text [ spanish ] = "La etiqueta $(ARG1) ya está definida" ;
         Text [ danish ] = "Etiket $(ARG1) er allerede defineret" ;
         Text [ swedish ] = "Etiketten $(ARG1) är redan definierad" ;
@@ -2901,7 +2901,7 @@ Resource RID_BASIC_START
         Text[ japanese ] = "×ÍŞÙ$(ARG1)‚Í‚·‚Å‚É’è‹`‚³‚ê‚Ä‚¢‚Ü‚·";
         Text[ chinese_traditional ] = "¤w¸g©w¸q¤F¼Ğ°O$(ARG1)";
         Text[ arabic ] = "ãÚÑøİÉ ãÓÈŞÇğ $(ARG1) ÇáÚäæäÉ";
-        Text[ dutch ] = "Label $(ARG1) reeds gedefinieerd";
+        Text[ dutch ] = "Naam $(ARG1) reeds gedefinieerd";
         Text[ chinese_simplified ] = "ÒÑ¾­¶¨ÒåÁË±ê¼Ç $(ARG1)";
         Text[ greek ] = "Ç åğéãñáöŞ $(ARG1) ïñßóôçêå Şäç";
         Text[ korean ] = "¶óº§ $(ARG1) ÀÌ ÀÌ¹Ì Á¤ÀÇ µÇ¾îÀÖ½À´Ï´Ù.";
@@ -2945,7 +2945,7 @@ Resource RID_BASIC_START
         Text [ portuguese_brazilian ] = "Array or function $(ARG1) not found" ;
         Text [ portuguese ] = "Matriz ou função $(ARG1) não encontrados" ;
         Text [ french ] = "Array ou procédure $(ARG1) introuvable" ;
-        Text [ dutch ] = "Array of procedure $(ARG1) niet gevonden" ;
+        Text [ dutch ] = "Matrix of procedure $(ARG1) niet gevonden" ;
         Text [ spanish ] = "No se encontró la matriz o procedimiento $(ARG1)" ;
         Text [ danish ] = "Array eller procedure $(ARG1) blev ikke fundet" ;
         Text [ swedish ] = "Array eller procedur $(ARG1) hittades inte" ;
@@ -2957,7 +2957,7 @@ Resource RID_BASIC_START
         Text[ japanese ] = "”z—ñ‚Ü‚½‚ÍÌßÛ¼°¼Ş¬$(ARG1)‚ÍŒ©‚Â‚©‚è‚Ü‚¹‚ñ";
         Text[ chinese_traditional ] = "¨S¦³§ä¨ì¦æ¦C©Î¹Lµ{$(ARG1)";
         Text[ arabic ] = "$(ARG1) áã íÊã ÇáÚËæÑ Úáì ÇáÕİíİ Ãæ ÇáÅÌÑÇÁ";
-        Text[ dutch ] = "Array of procedure $(ARG1) niet gevonden";
+        Text[ dutch ] = "Matrix of procedure $(ARG1) niet gevonden";
         Text[ chinese_simplified ] = "Ã»ÓĞÕÒµ½Êı×é»ò¹ı³Ì $(ARG1)";
         Text[ greek ] = "Äåí âñİèçêå ç ìŞôñá Ş ç äéáäéêáóßá $(ARG1)";
         Text[ korean ] = "¹è¿­ ¶Ç´Â ÇÔ¼ö $(ARG1) °¡ ¹ß°ßµÇÁö ¾Ê¾Ò½À´Ï´Ù. ";
@@ -3001,7 +3001,7 @@ Resource RID_BASIC_START
         Text [ portuguese_brazilian ] = "Label $(ARG1) undefined" ;
         Text [ portuguese ] = "Rótulo $(ARG1) indefinido" ;
         Text [ french ] = "L'étiquette $(ARG1) n'est pas définie" ;
-        Text [ dutch ] = "Label $(ARG1) ongedefinieerd" ;
+        Text [ dutch ] = "Naam $(ARG1) niet gedefinieerd" ;
         Text [ spanish ] = "La etiqueta $(ARG1) no está definida" ;
         Text [ danish ] = "Etket $(ARG1) er udefineret" ;
         Text [ swedish ] = "Etiketten $(ARG1) är odefinierad" ;
@@ -3013,7 +3013,7 @@ Resource RID_BASIC_START
         Text[ japanese ] = "×ÍŞÙ$(ARG1)‚Í’è‹`‚³‚ê‚Ä‚¢‚Ü‚¹‚ñ";
         Text[ chinese_traditional ] = "©|¥¼©w¸q¼Ğ°O$(ARG1)";
         Text[ arabic ] = "ÛíÑ ãÚÑİÉ $(ARG1) ÇáÚäæäÉ";
-        Text[ dutch ] = "Label $(ARG1) ongedefinieerd";
+        Text[ dutch ] = "Naam $(ARG1) niet gedefinieerd";
         Text[ chinese_simplified ] = "ÉĞÎ´¶¨Òå±ê¼Ç $(ARG1)";
         Text[ greek ] = "Äåí ïñßóôçêå ç åğéãñáöŞ $(ARG1)";
         Text[ korean ] = "¶óº§ $(ARG1) ÀÌ Á¤ÀÇµÇÁö ¾Ê¾Ò½À´Ï´Ù.";
@@ -3057,7 +3057,7 @@ Resource RID_BASIC_START
         Text [ portuguese_brazilian ] = "Exit $(ARG1) erwartet" ;
         Text [ portuguese ] = "Saída de $(ARG1) esperada" ;
         Text [ french ] = "Exit $(ARG1) requis" ;
-        Text [ dutch ] = "Exit $(ARG1) verwacht" ;
+        Text [ dutch ] = "Afsluiten $(ARG1) verwacht" ;
         Text [ spanish ] = "Se requiere salida $(ARG1)" ;
         Text [ danish ] = "Exit $(ARG1) forventes" ;
         Text [ swedish ] = "Exit $(ARG1) förväntat" ;
@@ -3069,7 +3069,7 @@ Resource RID_BASIC_START
         Text[ japanese ] = "$(ARG1)‚ÌI—¹‚ª•K—v‚Å‚·";
         Text[ chinese_traditional ] = "µ¥­Ô°h¥X$(ARG1)";
         Text[ arabic ] = "ãÊæŞÚ ÇáÎÑæÌ ãä $(ARG1)";
-        Text[ dutch ] = "Exit $(ARG1) verwacht";
+        Text[ dutch ] = "Afsluiten $(ARG1) verwacht";
         Text[ chinese_simplified ] = "µÈºòÍË³ö $(ARG1)";
         Text[ greek ] = "Áíáìİíåôáé Exit $(ARG1)";
         Text[ korean ] = "¿¹ÃøµÈ Á¾·á$(ARG1)";
@@ -3085,7 +3085,7 @@ Resource RID_BASIC_START
         Text [ portuguese_brazilian ] = "Unterminated statement block: missing $(ARG1)" ;
         Text [ portuguese ] = "Bloco de instruções ainda incompleto: falta $(ARG1)" ;
         Text [ french ] = "Bloc d'instructions encore ouvert : $(ARG1) fait défaut" ;
-        Text [ dutch ] = "Nog open aanwijzingenblok $(ARG1) ontbreekt" ;
+        Text [ dutch ] = "Instructieblok nog open: $(ARG1) ontbreekt" ;
         Text [ spanish ] = "Bloque de instrucciones incompleto: falta $(ARG1) " ;
         Text [ danish ] = "Endnu åben instruktionsblok: $(ARG1) mangler" ;
         Text [ swedish ] = "Icke avslutat statementblock: $(ARG1) saknas" ;
@@ -3097,7 +3097,7 @@ Resource RID_BASIC_START
         Text[ japanese ] = "‚Ü‚¾ŠJ‚¢‚½‚Ü‚Ü‚Ìw¦ÌŞÛ¯¸: $(ARG1)‚ª‘«‚è‚Ü‚¹‚ñ";
         Text[ chinese_traditional ] = "ÁÙ¯Ê¤Ö¥¼µ²§ôªº¤Àµ{§Ç¶ô¡G$(ARG1)";
         Text[ arabic ] = "ŞÇáÈ ÇáÃæÇãÑ ÇáÛíÑ ãäÊåí: $(ARG1) ãİŞæÏ";
-        Text[ dutch ] = "Nog open aanwijzingenblok $(ARG1) ontbreekt";
+        Text[ dutch ] = "Instructieblok nog open: $(ARG1) ontbreekt";
         Text[ chinese_simplified ] = "»¹È±ÉÙÎ´½áÊøµÄ·Ö³ÌĞò¿é£º$(ARG1)";
         Text[ greek ] = "Ëåßğåé ôìŞìá ïñßóìáôïò: $(ARG1) ôï ïğïßï ğáñáìİíåé áíïé÷ôü.";
         Text[ korean ] = "¹®ÀåÀÌ ¾ÆÁ÷ ¿­·ÁÀÖ½À´Ï´Ù. :$(ARG1) °¡ ¾ø½À´Ï´Ù.";
@@ -3227,7 +3227,7 @@ Resource RID_BASIC_START
         Text [ portuguese_brazilian ] = "Array needs dimensioning" ;
         Text [ portuguese ] = "Necessário dimensionar matriz" ;
         Text [ french ] = "Vous devez dimensionner l'Array" ;
-        Text [ dutch ] = "Array moet worden gedimensioneerd" ;
+        Text [ dutch ] = "Het aantal dimensies van de matrix moet worden nog bepaald" ;
         Text [ spanish ] = "Hay que dimensionar el array" ;
         Text [ danish ] = "Array skal dimensioneres" ;
         Text [ swedish ] = "Array måste dimensioneras" ;
@@ -3239,7 +3239,7 @@ Resource RID_BASIC_START
         Text[ japanese ] = "”z—ñ‚ÌŸŒ³‰»‚ª•K—v‚Å‚·";
         Text[ chinese_traditional ] = "¦æ¦C¥²¶·©w¤Ø«×";
         Text[ arabic ] = "íÌÈ ÊÚííä ÃÈÚÇÏ ÇáÕİíİ";
-        Text[ dutch ] = "Array moet worden gedimensioneerd";
+        Text[ dutch ] = "Het aantal dimensies van de matrix moet worden nog bepaald";
         Text[ chinese_simplified ] = "±ØĞëÎªÊı×é¶¨³ß¶È";
         Text[ greek ] = "Ğñİğåé íá ïñéóôïıí ïé äéáóôÜóåéò ôçò ìŞôñáò";
         Text[ korean ] = "¹è¿­Àº ¹İµå½Ã ¼öÄ¡°¡ ÀÖ¾î¾ßÇÑ´Ù.";
@@ -3341,7 +3341,7 @@ Resource RID_BASIC_START
         Text [ portuguese_brazilian ] = "Dimensions do not match" ;
         Text [ portuguese ] = "As dimensões indicadas não combinam" ;
         Text [ french ] = "Les dimensions indiquées ne concordent pas" ;
-        Text [ dutch ] = "Aangegeven afmetingen passen niet bij elkaar" ;
+        Text [ dutch ] = "Dimensiegegevens passen niet bij elkaar" ;
         Text [ spanish ] = "Las dimensiones no coinciden" ;
         Text [ danish ] = "Dimensionsangivelserne svarer ikke til hinanden" ;
         Text [ swedish ] = "Dimensionsspecificeringarna stämmer inte överens" ;
@@ -3353,7 +3353,7 @@ Resource RID_BASIC_START
         Text[ japanese ] = "ŸŒ³‚Ìw’è‚Í‡‚Á‚Ä‚¢‚Ü‚¹‚ñ";
         Text[ chinese_traditional ] = "©w¤Ø«×ªº³]©w¤£¤Ç°t";
         Text[ arabic ] = "ÈíÇäÇÊ ÇáÃÈÚÇÏ áÇ ÊÊãÇÔì ãÚ ÈÚÖåÇ";
-        Text[ dutch ] = "Aangegeven afmetingen passen niet bij elkaar";
+        Text[ dutch ] = "Dimensiegegevens passen niet bij elkaar";
         Text[ chinese_simplified ] = "¶¨³ß¶ÈµÄÉè¶¨²»Æ¥Åä";
         Text[ greek ] = "Ïé äéáóôÜóåéò ğïõ ïñßóôçêáí äåí óõíäõÜæïíôáé.";
         Text[ korean ] = "¿µ¿ªÀÇ Á¤ÀÇ°¡ ¸ÂÁö ¾Ê½À´Ï´Ù.";
@@ -3455,7 +3455,7 @@ Resource RID_BASIC_START
         Text [ portuguese_brazilian ] = "Sorry, no strings or arrays allowed" ;
         Text [ portuguese ] = "Séries de caracteres ou matrizes não permitidas" ;
         Text [ french ] = "Strings ou Arrays inadmissibles" ;
-        Text [ dutch ] = "Strings of arrays niet toegestaan" ;
+        Text [ dutch ] = "Tekenreeksen en matrices niet toegestaan" ;
         Text [ spanish ] = "No están permitidos strings o arrays" ;
         Text [ danish ] = "Strenge eller arrays er ikke tilladte" ;
         Text [ swedish ] = "Strings eller arrays ej tillåtna" ;
@@ -3467,7 +3467,7 @@ Resource RID_BASIC_START
         Text[ japanese ] = "•¶š—ñ‚Ü‚½‚Í”z—ñ‚Í‹–‰Â‚³‚ê‚Ü‚¹‚ñ";
         Text[ chinese_traditional ] = "¤£¤¹³\\¦r¦ê©Î¦æ¦C";
         Text[ arabic ] = "ÛíÑ ãÓãæÍ ÈåĞå ÇáÓáÇÓá Ãæ ÇáÕİÇÆİ";
-        Text[ dutch ] = "Strings of arrays niet toegestaan";
+        Text[ dutch ] = "Tekenreeksen en matrices niet toegestaan";
         Text[ chinese_simplified ] = "²»ÔÊĞí×Ö´®»òÊı×é";
         Text[ greek ] = "Äåí åğéôñİğïíôáé áêïëïõèßåò ÷áñáêôŞñùí Ş ìŞôñåò";
         Text[ korean ] = "¹®ÀÚ ¶Ç´Â ¹è¿­ÀÌ Çã¿ëµÇÁö ¾Ê¾Ò½À´Ï´Ù.";
