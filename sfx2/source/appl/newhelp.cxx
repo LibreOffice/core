@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: pb $ $Date: 2001-06-21 13:53:46 $
+ *  last change: $Author: pb $ $Date: 2001-06-27 08:27:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,6 +131,9 @@
 #ifndef _UNOTOOLS_STREAMHELPER_HXX_
 #include <unotools/streamhelper.hxx>
 #endif
+#ifndef INCLUDED_SVTOOLS_DYNAMICMENUOPTIONS_HXX
+#include <svtools/dynamicmenuoptions.hxx>
+#endif
 #include <ucbhelper/content.hxx>
 
 using namespace ::ucb;
@@ -156,13 +159,15 @@ extern void AppendConfigToken_Impl( String& rURL, sal_Bool bQuestionMark ); // s
 #define TBI_FORWARD         1004
 #define TBI_CONTEXT         1005
 #define TBI_PRINT           1006
-#define TBI_SOURCEVIEW      1007
+#define TBI_FAVOURITE       1007
+#define TBI_SOURCEVIEW      1008
 
 #define CONFIGNAME_HELPWIN      String(DEFINE_CONST_UNICODE("OfficeHelp"))
 #define CONFIGNAME_INDEXWIN     String(DEFINE_CONST_UNICODE("OfficeHelpIndex"))
 #define CONFIGNAME_SEARCHPAGE   String(DEFINE_CONST_UNICODE("OfficeHelpSearch"))
 #define PROPERTY_KEYWORDLIST    ::rtl::OUString(DEFINE_CONST_UNICODE("KeywordList"))
 #define PROPERTY_KEYWORDREF     ::rtl::OUString(DEFINE_CONST_UNICODE("KeywordRef"))
+#define PROPERTY_TITLE          ::rtl::OUString(DEFINE_CONST_UNICODE("Title"))
 #define HELP_URL                ::rtl::OUString(DEFINE_CONST_UNICODE("vnd.sun.star.help://"))
 #define HELP_SEARCH_TAG         ::rtl::OUString(DEFINE_CONST_UNICODE("/?Query="))
 
@@ -661,6 +666,168 @@ String SearchTabPage_Impl::GetSelectEntry() const
     return aRet;
 }
 
+// class FavouriteTabPage_Impl -------------------------------------------
+
+void GetMenuEntry_Impl
+(
+    Sequence< PropertyValue >& aDynamicMenuEntry,
+    ::rtl::OUString& rTitle,
+    ::rtl::OUString& rURL,
+    ::rtl::OUString& rFrame,
+    ::rtl::OUString& rImageId
+)
+{
+    for ( int i = 0; i < aDynamicMenuEntry.getLength(); i++ )
+    {
+        if ( aDynamicMenuEntry[i].Name == DYNAMICMENU_PROPERTYNAME_URL )
+            aDynamicMenuEntry[i].Value >>= rURL;
+        else if ( aDynamicMenuEntry[i].Name == DYNAMICMENU_PROPERTYNAME_TITLE )
+            aDynamicMenuEntry[i].Value >>= rTitle;
+        else if ( aDynamicMenuEntry[i].Name == DYNAMICMENU_PROPERTYNAME_IMAGEIDENTIFIER )
+            aDynamicMenuEntry[i].Value >>= rImageId;
+        else if ( aDynamicMenuEntry[i].Name == DYNAMICMENU_PROPERTYNAME_TARGETNAME )
+            aDynamicMenuEntry[i].Value >>= rFrame;
+    }
+}
+
+FavouriteBox_Impl::FavouriteBox_Impl( Window* pParent, const ResId& rResId ) :
+
+    ListBox( pParent, rResId )
+
+{
+    Sequence< Sequence< PropertyValue > > aDynamicMenuEntries;
+    aDynamicMenuEntries = SvtDynamicMenuOptions().GetMenu( E_HELPBOOKMARKS );
+
+    ::rtl::OUString aTitle;
+    ::rtl::OUString aURL;
+    ::rtl::OUString aImageURL;
+    ::rtl::OUString aTargetFrame;
+
+    UINT32 i, nCount = aDynamicMenuEntries.getLength();
+    for ( i = 0; i < nCount; ++i )
+    {
+        GetMenuEntry_Impl( aDynamicMenuEntries[i], aTitle, aURL, aTargetFrame, aImageURL );
+        USHORT nPos = InsertEntry( aTitle );
+        SetEntryData( nPos, (void*)(ULONG)( new String( aURL ) ) );
+    }
+}
+
+FavouriteBox_Impl::~FavouriteBox_Impl()
+{
+    SvtDynamicMenuOptions aMenuOpt;
+    aMenuOpt.Clear( E_HELPBOOKMARKS );
+    rtl::OUString aEmpty;
+    USHORT nCount = GetEntryCount();
+    for ( USHORT i = 0; i < nCount; ++i )
+    {
+        String aTitle = GetEntry(i);
+        String* pURL = (String*)(ULONG)GetEntryData(i);
+        aMenuOpt.AppendItem( E_HELPBOOKMARKS, rtl::OUString( *pURL ), rtl::OUString( aTitle ), aEmpty, aEmpty );
+
+        delete pURL;
+    }
+}
+
+long FavouriteBox_Impl::Notify( NotifyEvent& rNEvt )
+{
+    long nRet = 0;
+
+    if ( rNEvt.GetType() == EVENT_KEYINPUT )
+    {
+        const KeyCode& rKey = rNEvt.GetKeyEvent()->GetKeyCode();
+
+        if ( rKey.GetCode() == KEY_DELETE && GetEntryCount() > 0 )
+        {
+            USHORT nPos = GetSelectEntryPos();
+            if ( nPos != LISTBOX_ENTRY_NOTFOUND )
+            {
+                RemoveEntry( nPos );
+                USHORT nCount = GetEntryCount();
+                if ( nCount )
+                {
+                    nCount--;
+                    if ( nPos >= nCount )
+                        nPos = nCount - 1;
+                    SelectEntryPos( nPos );
+                }
+            }
+            nRet = 1;
+        }
+    }
+
+    return nRet ? nRet : ListBox::Notify( rNEvt );
+}
+
+// class FavouriteTabPage_Impl -------------------------------------------
+
+FavouriteTabPage_Impl::FavouriteTabPage_Impl( Window* pParent ) :
+
+    TabPage( pParent, SfxResId( TP_HELP_FAVOURITE ) ),
+
+    aFavouriteFT    ( this, ResId( FT_FAVOURITE ) ),
+    aFavouriteBox   ( this, ResId( LB_FAVOURITE ) ),
+    aFavouritePB    ( this, ResId( PB_FAVOURITE ) )
+
+{
+    FreeResource();
+
+    nMinWidth = GetSizePixel().Width();
+}
+
+void FavouriteTabPage_Impl::Resize()
+{
+    Size aSize = GetSizePixel();
+    long nWidth = aFavouriteFT.GetPosPixel().X() + aFavouriteFT.GetSizePixel().Width();
+    if ( aSize.Width() > nMinWidth || nWidth > aSize.Width() )
+    {
+        Point aPnt = aFavouriteFT.GetPosPixel();
+        long nDelta = ( aPnt.X() / 2 );
+        Size aNewSize = aFavouriteFT.GetSizePixel();
+        aNewSize.Width() = aSize.Width() - ( aPnt.X() * 2 );
+        aFavouriteFT.SetSizePixel( aNewSize );
+
+        Size a6Size = LogicToPixel( Size( 6, 6 ), MAP_APPFONT );
+        Size aBtnSize = aFavouritePB.GetSizePixel();
+
+        aPnt = aFavouriteBox.GetPosPixel();
+        aNewSize = aFavouriteBox.GetSizePixel();
+        aNewSize.Width() = aSize.Width() - ( aPnt.X() * 2 );
+        aNewSize.Height() = aSize.Height() - aPnt.Y();
+        aNewSize.Height() -= ( aBtnSize.Height() + ( a6Size.Height() * 3 / 2 ) );
+        aFavouriteBox.SetSizePixel( aNewSize );
+
+        aPnt.X() += ( aNewSize.Width() - aBtnSize.Width() );
+        aPnt.Y() += aNewSize.Height() + ( a6Size.Height() / 2 );
+        aFavouritePB.SetPosPixel( aPnt );
+    }
+}
+
+// -----------------------------------------------------------------------
+
+void FavouriteTabPage_Impl::SetDoubleClickHdl( const Link& rLink )
+{
+    aFavouriteBox.SetDoubleClickHdl( rLink );
+}
+
+// -----------------------------------------------------------------------
+
+String FavouriteTabPage_Impl::GetSelectEntry() const
+{
+    String aRet;
+    String* pData = (String*)(ULONG)aFavouriteBox.GetEntryData( aFavouriteBox.GetSelectEntryPos() );
+    if ( pData )
+        aRet = String( *pData );
+    return aRet;
+}
+
+// -----------------------------------------------------------------------
+
+void FavouriteTabPage_Impl::AddFavourite( const String& rTitle, const String& rURL )
+{
+    USHORT nPos = aFavouriteBox.InsertEntry( rTitle );
+    aFavouriteBox.SetEntryData( nPos, (void*)(ULONG)( new String( rURL ) ) );
+}
+
 // class SfxHelpIndexWindow_Impl -----------------------------------------
 
 SfxHelpIndexWindow_Impl::SfxHelpIndexWindow_Impl( Window* pParent ) :
@@ -673,7 +840,8 @@ SfxHelpIndexWindow_Impl::SfxHelpIndexWindow_Impl( Window* pParent ) :
 
     pCPage      ( NULL ),
     pIPage      ( NULL ),
-    pSPage      ( NULL )
+    pSPage      ( NULL ),
+    pFPage      ( NULL )
 
 {
     FreeResource();
@@ -702,6 +870,7 @@ SfxHelpIndexWindow_Impl::~SfxHelpIndexWindow_Impl()
     delete pCPage;
     delete pIPage;
     delete pSPage;
+    delete pFPage;
 
     for ( USHORT i = 0; i < aActiveLB.GetEntryCount(); ++i )
         delete (String*)(ULONG)aActiveLB.GetEntryData(i);
@@ -787,6 +956,14 @@ IMPL_LINK( SfxHelpIndexWindow_Impl, ActivatePageHdl, TabControl *, pTabCtrl )
             pPage = pSPage;
             break;
         }
+
+        case HELP_INDEX_PAGE_FAVOURITE:
+        {
+            if ( !pFPage )
+                pFPage = new FavouriteTabPage_Impl( &aTabCtrl );
+            pPage = pFPage;
+            break;
+        }
     }
 
     pTabCtrl->SetTabPage( nId, pPage );
@@ -856,6 +1033,9 @@ void SfxHelpIndexWindow_Impl::SetDoubleClickHdl( const Link& rLink )
     if ( !pSPage )
         pSPage = new SearchTabPage_Impl( &aTabCtrl );
     pSPage->SetDoubleClickHdl( rLink );
+    if ( !pFPage )
+        pFPage = new FavouriteTabPage_Impl( &aTabCtrl );
+    pFPage->SetDoubleClickHdl( rLink );
 }
 
 // -----------------------------------------------------------------------
@@ -873,6 +1053,8 @@ void SfxHelpIndexWindow_Impl::SetFactory( const String& rFactory, sal_Bool bActi
         SetActiveFactory();
 }
 
+// -----------------------------------------------------------------------
+
 String SfxHelpIndexWindow_Impl::GetSelectEntry() const
 {
     String aRet;
@@ -889,9 +1071,22 @@ String SfxHelpIndexWindow_Impl::GetSelectEntry() const
         case HELP_INDEX_PAGE_SEARCH:
             aRet = pSPage->GetSelectEntry();
             break;
+
+        case HELP_INDEX_PAGE_FAVOURITE:
+            aRet = pFPage->GetSelectEntry();
+            break;
     }
 
     return aRet;
+}
+
+// -----------------------------------------------------------------------
+
+void SfxHelpIndexWindow_Impl::AddFavourite( const String& rTitle, const String& rURL )
+{
+    if ( !pFPage )
+        pFPage = new FavouriteTabPage_Impl( &aTabCtrl );
+    pFPage->AddFavourite( rTitle, rURL );
 }
 
 // class SfxHelpTextWindow_Impl ------------------------------------------
@@ -925,6 +1120,8 @@ SfxHelpTextWindow_Impl::SfxHelpTextWindow_Impl( SfxHelpWindow_Impl* pParent ) :
     aToolBox.SetQuickHelpText( TBI_CONTEXT, DEFINE_CONST_UNICODE("Context") );*/
     aToolBox.InsertItem( TBI_PRINT, Image( SfxResId( IMG_HELP_TOOLBOX_PRINT ) ) );
     aToolBox.SetQuickHelpText( TBI_PRINT, String( SfxResId( STR_HELP_BUTTON_PRINT ) ) );
+    aToolBox.InsertItem( TBI_FAVOURITE, Image( SfxResId( IMG_HELP_TOOLBOX_FAVOURITE ) ) );
+    aToolBox.SetQuickHelpText( TBI_FAVOURITE, String( SfxResId( STR_HELP_BUTTON_FAVOURITE ) ) );
 
     Size aSize = aToolBox.CalcWindowSizePixel();
     aToolBox.SetSizePixel( aSize );
@@ -980,6 +1177,8 @@ long SfxHelpTextWindow_Impl::PreNotify( NotifyEvent& rNEvt )
             aMenu.InsertItem( TBI_FORWARD, String( SfxResId( STR_HELP_BUTTON_NEXT ) ) );
             aMenu.InsertSeparator();
             aMenu.InsertItem( TBI_PRINT, String( SfxResId( STR_HELP_BUTTON_PRINT ) ) );
+            aMenu.InsertSeparator();
+            aMenu.InsertItem( TBI_FAVOURITE, String( SfxResId( STR_HELP_BUTTON_FAVOURITE ) ) );
             if ( bIsDebug )
             {
                 aMenu.InsertSeparator();
@@ -1180,7 +1379,7 @@ IMPL_LINK( SfxHelpWindow_Impl, ChangeHdl, HelpListener_Impl*, pListener )
 IMPL_LINK( SfxHelpWindow_Impl, OpenDoneHdl, OpenStatusListener_Impl*, pListener )
 {
     String aModuleName = pListener->GetURL().GetToken( 2, '/' );
-    SetFactory( aModuleName, TRUE );
+    SetFactory( aModuleName, sal_False );
     if ( IsWait() )
         LeaveWait();
     return 0;
@@ -1325,6 +1524,24 @@ void SfxHelpWindow_Impl::DoAction( USHORT nActionId )
                 Reference < XDispatch > xDisp = xProv->queryDispatch( aURL, String(), 0 );
                 if ( xDisp.is() )
                     xDisp->dispatch( aURL, Sequence < PropertyValue >() );
+            }
+            break;
+        }
+
+        case TBI_FAVOURITE :
+        {
+            String aURL = pHelpInterceptor->GetCurrentURL();
+            Content aCnt( aURL, Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
+            ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > xInfo = aCnt.getProperties();
+            if ( xInfo->hasPropertyByName( PROPERTY_TITLE ) )
+            {
+                ::com::sun::star::uno::Any aAny = aCnt.getPropertyValue( PROPERTY_TITLE );
+                rtl::OUString aValue;
+                if ( aAny >>= aValue )
+                {
+                    String aTitle( aValue );
+                    pIndexWin->AddFavourite( aTitle, aURL );
+                }
             }
             break;
         }

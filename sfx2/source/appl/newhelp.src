@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-15 21:44:22 $
+ *  last change: $Author: pb $ $Date: 2001-06-27 08:27:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,6 +157,12 @@ Window WIN_HELP_INDEX
                 Text[ arabic ] = "ÈÍË";
                 Text[ catalan ] = "Buscar";
                 Text[ finnish ] = "Etsi";
+            };
+            PageItem
+            {
+                Identifier = HELP_INDEX_PAGE_FAVOURITE ;
+                Text = "Lesezeichen" ;
+                Text [ ENGLISH ] = "Bookmarks" ;
             };
         };
     };
@@ -350,6 +356,51 @@ TabPage TP_HELP_SEARCH
     };
 };
 
+TabPage TP_HELP_FAVOURITE
+{
+    Hide = TRUE ;
+    Size = MAP_APPFONT ( 120 , 200 ) ;
+    FixedText FT_FAVOURITE
+    {
+        Pos = MAP_APPFONT ( 6 , 6 ) ;
+        Size = MAP_APPFONT ( 108 , 10 ) ;
+        Text = "~Lesezeichen" ;
+        Text [ english_us ] = "Bookmarks" ;
+    };
+    ListBox LB_FAVOURITE
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6 , 19 ) ;
+        Size = MAP_APPFONT ( 108 , 97 ) ;
+    };
+    PushButton PB_FAVOURITE
+    {
+        Pos = MAP_APPFONT ( 64 , 119 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Text = "~Anzeigen" ;
+        Text [ english_us ] = "~Display" ;
+        Text[ portuguese ] = "~Mostrar";
+        Text[ russian ] = "~Ïîêàçàòü";
+        Text[ greek ] = "ÅìöÜíéóç";
+        Text[ dutch ] = "~Weergeven";
+        Text[ french ] = "~Affichage";
+        Text[ spanish ] = "~Visualizar";
+        Text[ italian ] = "~Mostra";
+        Text[ danish ] = "~Display";
+        Text[ swedish ] = "Vis~a";
+        Text[ polish ] = "Poka¿";
+        Text[ portuguese_brazilian ] = "~Display";
+        Text[ japanese ] = "•\\Ž¦(~D)";
+        Text[ korean ] = "³ªÅ¸³»±â(~D)";
+        Text[ chinese_simplified ] = "ÏÔÊ¾(~D)";
+        Text[ chinese_traditional ] = "Åã¥Ü(~D)";
+        Text[ turkish ] = "~Display";
+        Text[ arabic ] = "ÚÑÖ";
+        Text[ catalan ] = "~Visualizar";
+        Text[ finnish ] = "~Näytä";
+    };
+};
+
 Image IMG_HELP_TOOLBOX_INDEX
 {
     ImageBitmap = Bitmap { File = "sc05401.bmp" ; };
@@ -378,6 +429,11 @@ Image IMG_HELP_TOOLBOX_CONTEXT
 Image IMG_HELP_TOOLBOX_PRINT
 {
     ImageBitmap = Bitmap { File = "sc05504.bmp" ; };
+    MaskColor = Color { Red = 0xC000; Green = 0xC000; Blue = 0xC000; };
+};
+Image IMG_HELP_TOOLBOX_FAVOURITE
+{
+    ImageBitmap = Bitmap { File = "favourite.bmp" ; };
     MaskColor = Color { Red = 0xC000; Green = 0xC000; Blue = 0xC000; };
 };
 
@@ -524,6 +580,11 @@ String STR_HELP_BUTTON_PRINT
     Text[ arabic ] = "ØÈÇÚÉ";
     Text[ catalan ] = "Imprimir";
     Text[ finnish ] = "Tulosta";
+};
+String STR_HELP_BUTTON_FAVOURITE
+{
+    Text = "Lesezeichen hinzufügen";
+    Text [ english_us ] = "Add to bookmarks";
 };
 
 String STR_HELP_BUTTON_SOURCEVIEW

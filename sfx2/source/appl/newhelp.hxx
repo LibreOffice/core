@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: pb $ $Date: 2001-06-21 13:53:46 $
+ *  last change: $Author: pb $ $Date: 2001-06-27 08:27:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,6 +208,36 @@ public:
     String              GetSelectEntry() const;
 };
 
+// class FavouriteTabPage_Impl -------------------------------------------
+
+class FavouriteBox_Impl : public ListBox
+{
+public:
+    FavouriteBox_Impl( Window* pParent, const ResId& rResId );
+    ~FavouriteBox_Impl();
+
+    virtual long    Notify( NotifyEvent& rNEvt );
+};
+
+class FavouriteTabPage_Impl : public TabPage
+{
+private:
+    FixedText           aFavouriteFT;
+    FavouriteBox_Impl   aFavouriteBox;
+    PushButton          aFavouritePB;
+
+    long                nMinWidth;
+
+public:
+    FavouriteTabPage_Impl( Window* pParent );
+
+    virtual void        Resize();
+
+    void                SetDoubleClickHdl( const Link& rLink );
+    String              GetSelectEntry() const;
+    void                AddFavourite( const String& rTitle, const String& rURL );
+};
+
 // class SfxHelpIndexWindow_Impl -----------------------------------------
 
 class SfxHelpIndexWindow_Impl : public Window
@@ -222,6 +252,7 @@ private:
     ContentTabPage_Impl*    pCPage;
     IndexTabPage_Impl*      pIPage;
     SearchTabPage_Impl*     pSPage;
+    FavouriteTabPage_Impl*  pFPage;
 
     long                nMinWidth;
 
@@ -242,6 +273,7 @@ public:
     void                SetFactory( const String& rFactory, sal_Bool bActive );
     String              GetFactory() const { return pIPage->GetFactory(); }
     String              GetSelectEntry() const;
+    void                AddFavourite( const String& rTitle, const String& rURL );
 };
 
 // class SfxHelpTextWindow_Impl ------------------------------------------
