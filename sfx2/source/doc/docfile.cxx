@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: dv $ $Date: 2001-07-03 12:10:35 $
+ *  last change: $Author: mba $ $Date: 2001-07-06 14:55:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1081,7 +1081,7 @@ SvStorage* SfxMedium::GetStorage_Impl( BOOL bUCBStorage )
         return aStorage;
 
     BOOL bResetSorage = FALSE;
-    SvStream *pStream;
+    SvStream *pStream = NULL;
 
     String aStorageName;
     if ( pImp->pTempFile )
@@ -1213,7 +1213,8 @@ SvStorage* SfxMedium::GetStorage_Impl( BOOL bUCBStorage )
     if ( bResetSorage )
     {
         aStorage.Clear();
-        pStream->Seek( 0L );
+        if ( pStream )
+            pStream->Seek( 0L );
     }
 
     pImp->bIsStorage = aStorage.Is();
@@ -1298,11 +1299,8 @@ void SfxMedium::Transfer_Impl()
 
                 DELETEZ( pStream );
 
-                // create a link file for unpacked storages
-                String aURL = UCBStorage::CreateLinkFile( GetName() );
-
                 // create a new folder based storage
-                SvStorageRef xStor = new SvStorage( TRUE, GetName() );
+                SvStorageRef xStor = new SvStorage( TRUE, GetName(), STREAM_STD_READWRITE, STORAGE_CREATE_UNPACKED );
 
                 // copy package into unpacked storage
                 if ( GetStorage()->CopyTo( xStor ) )
@@ -1517,7 +1515,7 @@ void SfxMedium::GetMedium_Impl()
             {
                 Any aAny( UCB_Helper::GetProperty( GetContent(), WID_FLAG_READONLY ) );
                 BOOL bReadonly;
-                if ( !( aAny >>= bReadonly ) || bReadonly )
+                if ( ( aAny >>= bReadonly ) && bReadonly )
                 {
                     GetItemSet()->Put( SfxBoolItem(SID_DOC_READONLY, sal_True));
                     SetOpenMode(SFX_STREAM_READONLY, sal_False);
@@ -1531,12 +1529,6 @@ void SfxMedium::GetMedium_Impl()
         }
         else
         {
-            if ( !SfxContentHelper::Exists( GetName() ) )
-            {
-                Done_Impl( ERRCODE_IO_NOTEXISTS );
-                return;
-            }
-
             SFX_ITEMSET_ARG( GetItemSet(), pItem, SfxBoolItem, SID_DOC_READONLY, sal_False);
             BOOL bAllowReadOnlyMode = pItem ? pItem->GetValue() : TRUE;
             BOOL bIsWritable = ( nStorOpenMode & STREAM_WRITE );
