@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parser_s.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-07-25 13:28:40 $
+ *  last change: $Author: fs $ $Date: 2001-08-06 07:34:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,8 +110,11 @@ namespace connectivity
     ::rtl::Reference< simple::ISQLParseNode > OSimpleSQLParser::predicateTree(::rtl::OUString& rErrorMessage, const ::rtl::OUString& rStatement,
         const Reference< XNumberFormatter >& _rxFormatter, const Reference< XPropertySet >& _rxField) const
     {
+        OSimpleParseNode* pReturn = NULL;
         OSQLParseNode* pFullNode = const_cast<OSimpleSQLParser*>(this)->m_aFullParser.predicateTree(rErrorMessage, rStatement, _rxFormatter, _rxField);
-        return new OSimpleParseNode(pFullNode, sal_True);
+        if (pFullNode)
+            pReturn = new OSimpleParseNode(pFullNode, sal_True);
+        return pReturn;
     }
 
 //........................................................................
@@ -121,6 +124,9 @@ namespace connectivity
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/07/25 13:28:40  fs
+ *  initial checkin - main factory for load-on-demand usage of OSQLParser
+ *
  *
  *  Revision 1.0 24.07.01 16:32:42  fs
  ************************************************************************/
