@@ -2,9 +2,9 @@
  *
  *  $RCSfile: instable.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:48 $
+ *  last change: $Author: kz $ $Date: 2000-10-27 17:58:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -300,7 +300,7 @@ ModalDialog DLG_INSERT_TABLE
         Text[ portuguese_brazilian ] = "Don't split table";
         Text[ portuguese ] = "Nγo ~dividir tabela";
         Text[ danish ] = "Opdel tabel ikke";
-        Text[ french ] = "Pas de c~oupure de tableau";
+        Text[ french ] = "Ne pas ~diviser le tableau";
         Text[ swedish ] = "Dela i~nte tabell";
         Text[ dutch ] = "Tabel niet ~splitsen";
         Text[ spanish ] = "~No dividir tabla";
@@ -412,7 +412,7 @@ ModalDialog DLG_INSERT_TABLE
         Text[ japanese ] = "µ°ΔΜ«°Ο―Δ(~F)...";
         Text[ chinese_traditional ] = "¦Ϋ°Κ®ζ¦΅(~F)...";
         Text[ arabic ] = "ΚδΣνή ΚαήΗΖν...";
-        Text[ greek ] = "ΑυτοΜορφοποίηση...";
+        Text[ greek ] = "~ΑυτοΜορφή...";
         Text[ korean ] = "ΐΪµΏ Ό­½Δ(~F)...";
         Text[ turkish ] = "~Otom. formatlama...";
         Text[ language_user1 ] = " ";
