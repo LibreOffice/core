@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docredln.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-25 16:22:43 $
+ *  last change: $Author: rt $ $Date: 2004-06-11 08:54:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -476,6 +476,12 @@ BOOL SwDoc::AppendRedline( SwRedline* pNewRedl, BOOL bCallDelete )
                         pSplit->SetEnd( *pRStt );
                         pNewRedl->SetStart( *pREnd );
                         pRedlineTbl->Insert( pSplit );
+                    }
+                    else if ( POS_EQUAL == eCmpPos )
+                    {
+                        // #112895# handle identical redlines in broken
+                        // documents - delete old (delete) redline
+                        pRedlineTbl->DeleteAndDestroy( n-- );
                     }
                     break;
                 case REDLINE_FORMAT:
