@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: dr $ $Date: 2002-04-22 14:10:38 $
+ *  last change: $Author: dr $ $Date: 2002-07-29 15:18:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1623,7 +1623,7 @@ String ScFuncDesc::GetSignature() const
                 aSig.AppendAscii(RTL_CONSTASCII_STRINGPARAM( "; ... " ));
             }
 
-            aSig.AppendAscii(RTL_CONSTASCII_STRINGPARAM( " )" ));
+            aSig.Append( 0xA0 ).Append( ')' );
         }
         else
             aSig.AppendAscii(RTL_CONSTASCII_STRINGPARAM( "()" ));
