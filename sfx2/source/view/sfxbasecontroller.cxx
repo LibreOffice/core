@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasecontroller.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: as $ $Date: 2001-11-02 07:56:17 $
+ *  last change: $Author: as $ $Date: 2001-11-29 11:06:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -657,6 +657,16 @@ REFERENCE< XDISPATCH > SAL_CALL SfxBaseController::queryDispatch(   const   UNOU
             else if ( aURL.Protocol.compareToAscii( "slot:" ) == COMPARE_EQUAL )
             {
                 nId = (USHORT) aURL.Path.toInt32();
+            }
+            else if( sTargetFrameName.compareToAscii( "_self" )==COMPARE_EQUAL || sTargetFrameName.getLength()==0 )
+            {
+                // check for already loaded URL ... but with additional jumpmark!
+                REFERENCE< XMODEL > xModel = getModel();
+                if( xModel.is() )
+                {
+                    if( aURL.Main.getLength() && aURL.Main == xModel->getURL() )
+                        nId = SID_JUMPTOMARK;
+                }
             }
 
             if ( nId && pAct->GetDispatcher()->HasSlot_Impl( nId ) )
