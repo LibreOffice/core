@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basides2.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-24 16:58:42 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 17:59:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,6 +196,14 @@ void BasicIDEShell::SetMDITitle()
     else
     {
         aTitle = String( IDEResId( RID_STR_ALL ) );
+    }
+
+    if ( m_pCurShell &&
+         m_pCurShell->GetScriptingSignatureState() == SIGNATURESTATE_SIGNATURES_OK )
+    {
+        aTitle += String::CreateFromAscii( " " );
+        aTitle += String( IDEResId( RID_STR_SIGNED ) );
+        aTitle += String::CreateFromAscii( " " );
     }
 
     SfxViewFrame* pViewFrame = GetViewFrame();
