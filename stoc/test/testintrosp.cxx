@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testintrosp.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-23 16:14:39 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 19:00:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,7 @@
  *
  ************************************************************************/
 
+#include <sal/main.h>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase4.hxx>
 #include <cppuhelper/servicefactory.hxx>
@@ -1448,7 +1449,7 @@ static sal_Bool test_introsp( Reference< XMultiServiceFactory > xMgr,
     }
 
     // Schleife ueber alle Kombinationen von Concepts
-    for( nConcepts = 0 ; nConcepts < 128 ; nConcepts++ )
+    for( sal_Int32 nConcepts = 0 ; nConcepts < 128 ; nConcepts++ )
     {
 //printf( "*******************************************************\n" );
 //printf( "nConcepts = %ld\n", nConcepts );
@@ -1577,13 +1578,7 @@ static sal_Bool test_introsp( Reference< XMultiServiceFactory > xMgr,
 }
 
 
-
-
-#if (defined UNX) || (defined OS2)
-int main( int argc, char * argv[] )
-#else
-int __cdecl main( int argc, char * argv[] )
-#endif
+SAL_IMPLEMENT_MAIN()
 {
     Reference< XMultiServiceFactory > xMgr( createRegistryServiceFactory( OUString::createFromAscii("stoctest.rdb") ) );
 
@@ -1596,7 +1591,7 @@ int __cdecl main( int argc, char * argv[] )
 
         // Register services
         OUString libName( RTL_CONSTASCII_USTRINGPARAM(
-                              "corereflection.uno" SAL_DLLEXTENSION) );
+                              "reflection.uno" SAL_DLLEXTENSION) );
 //          ORealDynamicLoader::computeLibraryName( OUString::createFromAscii("corefl"), libName);
         fprintf(stderr, "1\n" );
         xImplReg->registerImplementation(OUString::createFromAscii("com.sun.star.loader.SharedLibrary"),
