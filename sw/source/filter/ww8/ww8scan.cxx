@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: cmc $ $Date: 2001-07-13 14:08:12 $
+ *  last change: $Author: cmc $ $Date: 2001-07-30 09:18:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -6222,7 +6222,8 @@ static SprmInfo aWwSprmTab[] = {
     0x6870, 4, L_FIX, // undocumented
     0x2461, 1, L_FIX, // undocumented
     0x845E, 2, L_FIX, // undocumented
-    0x8460, 2, L_FIX  // undocumented
+    0x8460, 2, L_FIX, // undocumented
+    0x3615, 1, L_FIX  // undocumented
 };
 
 
@@ -6446,11 +6447,14 @@ BYTE WW8SprmDataOfs( USHORT nId )
 /*************************************************************************
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8scan.cxx,v 1.21 2001-07-13 14:08:12 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8scan.cxx,v 1.22 2001-07-30 09:18:10 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.21  2001/07/13 14:08:12  cmc
+      #89125# WW6 Redline authorname table import fix ( + new undocumented sprms)
+
       Revision 1.20  2001/07/11 15:35:45  cmc
       #89029# #87601# old little endian timebomb defused
 

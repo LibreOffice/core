@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: cmc $ $Date: 2001-07-17 13:28:26 $
+ *  last change: $Author: cmc $ $Date: 2001-07-30 09:18:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5022,7 +5022,8 @@ SprmReadInfo aSprmReadTab[] = {
     0x6870, (FNReadRecord)0, //undocumented
     0x2461, (FNReadRecord)0, //undocumented
     0x845E, (FNReadRecord)0, //undocumented
-    0x8460, (FNReadRecord)0  //undocumented
+    0x8460, (FNReadRecord)0, //undocumented
+    0x3615, (FNReadRecord)0 //undocumented
 };
 
 //-----------------------------------------
@@ -5124,12 +5125,15 @@ short SwWW8ImplReader::ImportSprm( const BYTE* pPos, short nSprmsLen, USHORT nId
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par6.cxx,v 1.32 2001-07-17 13:28:26 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par6.cxx,v 1.33 2001-07-30 09:18:10 cmc Exp $
 
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.32  2001/07/17 13:28:26  cmc
+      #89808# ##1192## Retain blank pages before explicit section breaks
+
       Revision 1.31  2001/07/13 14:08:12  cmc
       #89125# WW6 Redline authorname table import fix ( + new undocumented sprms)
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-26 19:23:34 $
+ *  last change: $Author: cmc $ $Date: 2001-07-30 09:18:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -253,6 +253,7 @@ class WW8TabDesc
     USHORT GetLogicalWWCol() const;
     void SetTabBorders( SwTableBox* pBox, short nIdx );
     void SetTabShades( SwTableBox* pBox, short nWwIdx );
+    void SetTabVertAlign( SwTableBox* pBox, short nWwIdx );
     void CalcDefaults();
     BOOL SetPamInCell( short nWwCol, BOOL bPam );
     void DeleteCells( short nDelete );
@@ -2290,6 +2291,35 @@ void WW8TabDesc::SetTabShades( SwTableBox* pBox, short nWwIdx )
     pBox->GetFrmFmt()->SetAttr( SvxBrushItem( aSh.aColor ) );
 }
 
+void WW8TabDesc::SetTabVertAlign( SwTableBox* pBox, short nWwIdx )
+{
+    if( nWwIdx < 0 || nWwIdx >= pActBand->nWwCols )
+        return;
+
+    SwVertOrient eVertOri=VERT_TOP;
+
+    if( pActBand->pTCs )
+    {
+        WW8_TCell* pT = &pActBand->pTCs[nWwIdx];
+        switch (pT->nVertAlign)
+        {
+            case 0:
+            default:
+                eVertOri = VERT_TOP;
+                break;
+            case 1:
+                eVertOri = VERT_CENTER;
+                break;
+            case 2:
+                eVertOri = VERT_BOTTOM;
+                break;
+        }
+    }
+
+    pBox->GetFrmFmt()->SetAttr( SwFmtVertOrient(0,eVertOri) );
+}
+
+
 void WW8TabDesc::AdjustNewBand( SwWW8ImplReader* pReader )
 {
     if( pActBand->nSwCols > nDefaultSwCols )        // Zellen splitten
@@ -2368,6 +2398,7 @@ void WW8TabDesc::AdjustNewBand( SwWW8ImplReader* pReader )
 
                                             // setze Umrandung und Hintergrund
         SetTabBorders( pBox, j );           // und Abstand
+        SetTabVertAlign( pBox, j );
         if( pActBand->pSHDs )
             SetTabShades( pBox, j );
         j++;
@@ -3267,11 +3298,14 @@ void SwWW8ImplReader::ReadDocInfo()
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par2.cxx,v 1.19 2001-07-26 19:23:34 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par2.cxx,v 1.20 2001-07-30 09:18:10 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.19  2001/07/26 19:23:34  jp
+      Bug #88107#: use correct StarSymbol characters
+
       Revision 1.18  2001/07/26 15:56:47  cmc
       #i1154# Merge Cells after table is complete
 
