@@ -2,9 +2,9 @@
  *
  *  $RCSfile: endian.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 16:45:35 $
+ *  last change: $Author: vg $ $Date: 2003-06-12 09:45:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,9 @@ extern "C" {
 #endif
 
 #ifdef FREEBSD
+#   include <sys/param.h>
 #   include <machine/endian.h>
+#if __FreeBSD_version < 500000
 #   if BYTE_ORDER == LITTLE_ENDIAN
 #       define _LITTLE_ENDIAN
 #   elif BYTE_ORDER == BIG_ENDIAN
@@ -115,6 +117,7 @@ extern "C" {
 #   elif BYTE_ORDER == PDP_ENDIAN
 #       define _PDP_ENDIAN
 #   endif
+#endif
 #endif
 
 #ifdef SCO
