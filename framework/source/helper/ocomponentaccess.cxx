@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ocomponentaccess.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: as $ $Date: 2001-06-11 10:28:21 $
+ *  last change: $Author: mav $ $Date: 2002-07-24 08:28:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -244,8 +244,6 @@ void OComponentAccess::impl_collectAllChildComponents(  const   Reference< XFram
                 seqComponents.realloc( nComponentCount );
                 seqComponents[nComponentCount-1] = xComponent;
             }
-
-            impl_collectAllChildComponents( Reference< XFramesSupplier>( seqFrames[nFrame], UNO_QUERY ), seqComponents );
         }
     }
     // ... otherwise break a recursive path and go back at current stack!
