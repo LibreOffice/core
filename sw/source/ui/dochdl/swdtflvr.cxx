@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: jp $ $Date: 2001-08-06 11:37:35 $
+ *  last change: $Author: jp $ $Date: 2001-08-07 17:19:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1712,16 +1712,36 @@ PASTEOLE_SETREADSW3:
         else if( bMsg )
             InfoBox( 0, SW_RES(ERR_CLPBRD_READ) ).Execute();
     }
-    else if( rData.GetTransferableObjectDescriptor(
-                SOT_FORMATSTR_ID_OBJECTDESCRIPTOR, aObjDesc ) &&
-            ( nFmt == nId ? xStore.Is()
-                          : ( xStore.Clear(),
-                              rData.GetSotStorageStream( nFmt, xStrm )) ) )
+    else if( ( rData.GetTransferableObjectDescriptor(
+                        SOT_FORMATSTR_ID_OBJECTDESCRIPTOR, aObjDesc ) &&
+              ( nFmt == nId ? xStore.Is()
+                            : ( xStore.Clear(),
+                                  rData.GetSotStorageStream( nFmt, xStrm )) ))
+#if SUPD>=640
+            || ( rData.GetTransferableObjectDescriptor(
+                ( nFmt = SOT_FORMATSTR_ID_OBJECTDESCRIPTOR_OLE), aObjDesc ))
+#endif
+            )
     {
-        if( !xStore.Is() )
-            xStore = new SvStorage( *xStrm );
-        SvInPlaceObjectRef xIPObj = &( (SvFactory*)SvInPlaceObject::
-                            ClassFactory() )->CreateAndLoad( xStore );
+        SvInPlaceObjectRef xIPObj;
+#if SUPD>=640
+        if( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR_OLE == nFmtId )
+        {
+            xStore = new SvStorage( aEmptyStr, STREAM_STD_READWRITE );
+            xIPObj = ((SvFactory*)SvInPlaceObject::ClassFactory())
+                        ->CreateAndInit(  rData.GetTransferable()/*&rObj*/,
+                                        xStore,
+                                        FALSE, /* Linking; irgendwann ??*/
+                                        FALSE /*bStorFilled*/ );
+        }
+        else
+#endif
+        {
+            if( !xStore.Is() )
+                xStore = new SvStorage( *xStrm );
+            xIPObj = &( (SvFactory*)SvInPlaceObject::
+                                ClassFactory() )->CreateAndLoad( xStore );
+        }
 
         if( xIPObj.Is() )
         {
@@ -2736,7 +2756,11 @@ int SwTransferable::PasteSpecial( SwWrtShell& rSh,
         }
 
     ULONG nFormat = pDlg->Execute( &rSh.GetView().GetEditWin(), aFormats,
-                                    aDesc );
+                                    aDesc
+#if SUPD>=640
+                                    , rData
+#endif
+                                     );
 
     if( nFormat )
         nRet = SwTransferable::PasteFormat( rSh, rData, nFormat );
