@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EnhancedComplexTestCase.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Date: 2004-11-02 11:09:05 $
+ *  last change: $Date: 2005-02-24 17:20:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,7 +130,16 @@ public abstract class EnhancedComplexTestCase extends ComplexTestCase
 
     public GraphicalTestArguments getGraphicalTestArguments()
         {
-            return new GraphicalTestArguments(param);
+            GraphicalTestArguments aGTA = new GraphicalTestArguments(param);
+            if (aGTA.getImportFilterName() != null && aGTA.getImportFilterName().toLowerCase().equals("help"))
+            {
+                aGTA = null;
+            }
+            if (aGTA.getExportFilterName() != null && aGTA.getExportFilterName().toLowerCase().equals("help"))
+            {
+                aGTA = null;
+            }
+            return aGTA;
         }
 
 
