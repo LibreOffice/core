@@ -1,5 +1,4 @@
 mkdir: %_DEST%\inc%_EXT%\jvmaccess
-..\inc\jvmaccess\javainfo.hxx %_DEST%\inc%_EXT%\jvmaccess\javainfo.hxx
 ..\inc\jvmaccess\virtualmachine.hxx %_DEST%\inc%_EXT%\jvmaccess\virtualmachine.hxx
 ..\%__SRC%\bin\jvmaccess*.dll %_DEST%\bin%_EXT%\*
 ..\%__SRC%\lib\ijvmaccess.lib %_DEST%\lib%_EXT%\ijvmaccess.lib
