@@ -2,9 +2,9 @@
  *
  *  $RCSfile: validate.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:51:27 $
+ *  last change: $Author: hjs $ $Date: 2003-08-19 11:39:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,6 @@ TabDialog TAB_DLG_VALIDATION
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 289 , 176 ) ;
-    /* ### ACHTUNG: Neuer Text in Resource? G¸ltigkeit : G≥ltigkeit */
     Text = "G¸ltigkeit" ;
     Text [ ENGLISH ] = "Validation" ;
     Moveable = TRUE ;
@@ -214,8 +213,7 @@ TabPage TP_VALIDATION_VALUES
     {
         Pos = MAP_APPFONT ( 6 , 16 ) ;
         Size = MAP_APPFONT ( 70 , 8 ) ;
-        Text = "~Zulassen" ;
-        Text [ ENGLISH ] = "~Allow" ;
+        Text = "Z~ulassen" ;
         Text [ dutch ] = "~Toestaan" ;
         Text [ english_us ] = "~Allow" ;
         Text [ swedish ] = "T~illÂt" ;
@@ -249,264 +247,296 @@ TabPage TP_VALIDATION_VALUES
         Size = MAP_APPFONT ( 90 , 80 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
-         // Reihenfolge entspricht enum ScValidationMode
         StringList =
         {
-            < "Jeden Wert" ; Default ; > ;
-            < "Ganze Zahl" ; Default ; > ;
-            < "Dezimal" ; Default ; > ;
-            < "Datum" ; Default ; > ;
-            < "Zeit" ; Default ; > ;
-            /* ### ACHTUNG: Neuer Eintrag in Liste? 6 : Textl‰nge*/
-            < "Textl‰nge" ; Default ; > ;
-        };
-        StringList [ ENGLISH ] =
-        {
-            < "Jeden Wert" ; Default ; > ;
-            < "Ganze Zahl" ; Default ; > ;
-            < "Dezimal" ; Default ; > ;
-            < "Datum" ; Default ; > ;
-            < "Zeit" ; Default ; > ;
-            < "Textl‰nge" ; Default ; > ;
+            < "Jeden Wert" ; SC_VALIDDLG_ALLOW_ANY ; > ;
+            < "Ganze Zahl" ; SC_VALIDDLG_ALLOW_WHOLE ; > ;
+            < "Dezimal" ; SC_VALIDDLG_ALLOW_DECIMAL ; > ;
+            < "Datum" ; SC_VALIDDLG_ALLOW_DATE ; > ;
+            < "Zeit" ; SC_VALIDDLG_ALLOW_TIME ; > ;
+            < "Zellbereich" ; SC_VALIDDLG_ALLOW_RANGE ; > ;
+            < "Liste" ; SC_VALIDDLG_ALLOW_LIST ; > ;
+            < "Textl‰nge" ; SC_VALIDDLG_ALLOW_TEXTLEN ; > ;
         };
         stringlist [ portuguese ] =
         {
-            < "Todos os valores" ; Default ; > ;
-            < "N˙meros inteiros" ; Default ; > ;
-            < "Decimal" ; Default ; > ;
-            < "Data" ; Default ; > ;
-            < "Hora" ; Default ; > ;
-            < "Comprimento do texto" ; Default ; > ;
+            < "Todos os valores" ; SC_VALIDDLG_ALLOW_ANY ; > ;
+            < "N˙meros inteiros" ; SC_VALIDDLG_ALLOW_WHOLE ; > ;
+            < "Decimal" ; SC_VALIDDLG_ALLOW_DECIMAL ; > ;
+            < "Data" ; SC_VALIDDLG_ALLOW_DATE ; > ;
+            < "Hora" ; SC_VALIDDLG_ALLOW_TIME ; > ;
+            < "Cell range" ; SC_VALIDDLG_ALLOW_RANGE ; > ;
+            < "List" ; SC_VALIDDLG_ALLOW_LIST ; > ;
+            < "Comprimento do texto" ; SC_VALIDDLG_ALLOW_TEXTLEN ; > ;
         };
         stringlist [ english_us ] =
         {
-            < "All values" ; Default ; > ;
-            < "Whole Numbers" ; Default ; > ;
-            < "Decimal" ; Default ; > ;
-            < "Date" ; Default ; > ;
-            < "Time" ; Default ; > ;
-            < "Text length" ; Default ; > ;
+            < "All values" ; SC_VALIDDLG_ALLOW_ANY ; > ;
+            < "Whole Numbers" ; SC_VALIDDLG_ALLOW_WHOLE ; > ;
+            < "Decimal" ; SC_VALIDDLG_ALLOW_DECIMAL ; > ;
+            < "Date" ; SC_VALIDDLG_ALLOW_DATE ; > ;
+            < "Time" ; SC_VALIDDLG_ALLOW_TIME ; > ;
+            < "Cell range" ; SC_VALIDDLG_ALLOW_RANGE ; > ;
+            < "List" ; SC_VALIDDLG_ALLOW_LIST ; > ;
+            < "Text length" ; SC_VALIDDLG_ALLOW_TEXTLEN ; > ;
         };
         stringlist [ portuguese_brazilian ] =
         {
-            < "Todos os valores" ; Default ; > ;
-            < "N˙mero inteiro" ; Default ; > ;
-            < "N˙mero decimal" ; Default ; > ;
-            < "Data" ; Default ; > ;
-            < "Hora" ; Default ; > ;
-            < "Tamanho do texto" ; Default ; > ;
+            < "Todos os valores" ; SC_VALIDDLG_ALLOW_ANY ; > ;
+            < "N˙mero inteiro" ; SC_VALIDDLG_ALLOW_WHOLE ; > ;
+            < "N˙mero decimal" ; SC_VALIDDLG_ALLOW_DECIMAL ; > ;
+            < "Data" ; SC_VALIDDLG_ALLOW_DATE ; > ;
+            < "Hora" ; SC_VALIDDLG_ALLOW_TIME ; > ;
+            < "Cell range" ; SC_VALIDDLG_ALLOW_RANGE ; > ;
+            < "List" ; SC_VALIDDLG_ALLOW_LIST ; > ;
+            < "Tamanho do texto" ; SC_VALIDDLG_ALLOW_TEXTLEN ; > ;
         };
         stringlist [ swedish ] =
         {
-            < "Alla v‰rden" ; Default ; > ;
-            < "Heltal" ; Default ; > ;
-            < "Decimal" ; Default ; > ;
-            < "Datum" ; Default ; > ;
-            < "Tid" ; Default ; > ;
-            < "Textl‰ngd" ; Default ; > ;
+            < "Alla v‰rden" ; SC_VALIDDLG_ALLOW_ANY ; > ;
+            < "Heltal" ; SC_VALIDDLG_ALLOW_WHOLE ; > ;
+            < "Decimal" ; SC_VALIDDLG_ALLOW_DECIMAL ; > ;
+            < "Datum" ; SC_VALIDDLG_ALLOW_DATE ; > ;
+            < "Tid" ; SC_VALIDDLG_ALLOW_TIME ; > ;
+            < "Cell range" ; SC_VALIDDLG_ALLOW_RANGE ; > ;
+            < "List" ; SC_VALIDDLG_ALLOW_LIST ; > ;
+            < "Textl‰ngd" ; SC_VALIDDLG_ALLOW_TEXTLEN ; > ;
         };
         stringlist [ danish ] =
         {
-            < "VilkÂrlig vÊrdi" ; Default ; > ;
-            < "Helt tal" ; Default ; > ;
-            < "Decimal" ; Default ; > ;
-            < "Dato" ; Default ; > ;
-            < "Tid" ; Default ; > ;
-            < "TekstlÊngde" ; Default ; > ;
+            < "VilkÂrlig vÊrdi" ; SC_VALIDDLG_ALLOW_ANY ; > ;
+            < "Helt tal" ; SC_VALIDDLG_ALLOW_WHOLE ; > ;
+            < "Decimal" ; SC_VALIDDLG_ALLOW_DECIMAL ; > ;
+            < "Dato" ; SC_VALIDDLG_ALLOW_DATE ; > ;
+            < "Tid" ; SC_VALIDDLG_ALLOW_TIME ; > ;
+            < "Cell range" ; SC_VALIDDLG_ALLOW_RANGE ; > ;
+            < "List" ; SC_VALIDDLG_ALLOW_LIST ; > ;
+            < "TekstlÊngde" ; SC_VALIDDLG_ALLOW_TEXTLEN ; > ;
         };
         stringlist [ italian ] =
         {
-            < "Ogni valore" ; Default ; > ;
-            < "Numero intero" ; Default ; > ;
-            < "Decimale" ; Default ; > ;
-            < "Data" ; Default ; > ;
-            < "Orario" ; Default ; > ;
-            < "Lunghezza testo" ; Default ; > ;
+            < "Ogni valore" ; SC_VALIDDLG_ALLOW_ANY ; > ;
+            < "Numero intero" ; SC_VALIDDLG_ALLOW_WHOLE ; > ;
+            < "Decimale" ; SC_VALIDDLG_ALLOW_DECIMAL ; > ;
+            < "Data" ; SC_VALIDDLG_ALLOW_DATE ; > ;
+            < "Orario" ; SC_VALIDDLG_ALLOW_TIME ; > ;
+            < "Cell range" ; SC_VALIDDLG_ALLOW_RANGE ; > ;
+            < "List" ; SC_VALIDDLG_ALLOW_LIST ; > ;
+            < "Lunghezza testo" ; SC_VALIDDLG_ALLOW_TEXTLEN ; > ;
         };
         stringlist [ spanish ] =
         {
-            < "Todos los valores" ; Default ; > ;
-            < "Entero" ; Default ; > ;
-            < "Decimal" ; Default ; > ;
-            < "Fecha" ; Default ; > ;
-            < "Hora" ; Default ; > ;
-            < "Longitud del texto" ; Default ; > ;
+            < "Todos los valores" ; SC_VALIDDLG_ALLOW_ANY ; > ;
+            < "Entero" ; SC_VALIDDLG_ALLOW_WHOLE ; > ;
+            < "Decimal" ; SC_VALIDDLG_ALLOW_DECIMAL ; > ;
+            < "Fecha" ; SC_VALIDDLG_ALLOW_DATE ; > ;
+            < "Hora" ; SC_VALIDDLG_ALLOW_TIME ; > ;
+            < "Cell range" ; SC_VALIDDLG_ALLOW_RANGE ; > ;
+            < "List" ; SC_VALIDDLG_ALLOW_LIST ; > ;
+            < "Longitud del texto" ; SC_VALIDDLG_ALLOW_TEXTLEN ; > ;
         };
         stringlist [ french ] =
         {
-            < "Toutes les valeurs" ; Default ; > ;
-            < "Nombre entier" ; Default ; > ;
-            < "Nombre dÈcimal" ; Default ; > ;
-            < "Date" ; Default ; > ;
-            < "Heure" ; Default ; > ;
-            < "Longueur du texte" ; Default ; > ;
+            < "Toutes les valeurs" ; SC_VALIDDLG_ALLOW_ANY ; > ;
+            < "Nombre entier" ; SC_VALIDDLG_ALLOW_WHOLE ; > ;
+            < "Nombre dÈcimal" ; SC_VALIDDLG_ALLOW_DECIMAL ; > ;
+            < "Date" ; SC_VALIDDLG_ALLOW_DATE ; > ;
+            < "Heure" ; SC_VALIDDLG_ALLOW_TIME ; > ;
+            < "Cell range" ; SC_VALIDDLG_ALLOW_RANGE ; > ;
+            < "List" ; SC_VALIDDLG_ALLOW_LIST ; > ;
+            < "Longueur du texte" ; SC_VALIDDLG_ALLOW_TEXTLEN ; > ;
         };
         stringlist [ dutch ] =
         {
-            < "Elke waarde" ; Default ; > ;
-            < "Geheel getal" ; Default ; > ;
-            < "Decimaal" ; Default ; > ;
-            < "Datum" ; Default ; > ;
-            < "Tijd" ; Default ; > ;
-            < "Tekstlengte" ; Default ; > ;
+            < "Elke waarde" ; SC_VALIDDLG_ALLOW_ANY ; > ;
+            < "Geheel getal" ; SC_VALIDDLG_ALLOW_WHOLE ; > ;
+            < "Decimaal" ; SC_VALIDDLG_ALLOW_DECIMAL ; > ;
+            < "Datum" ; SC_VALIDDLG_ALLOW_DATE ; > ;
+            < "Tijd" ; SC_VALIDDLG_ALLOW_TIME ; > ;
+            < "Cell range" ; SC_VALIDDLG_ALLOW_RANGE ; > ;
+            < "List" ; SC_VALIDDLG_ALLOW_LIST ; > ;
+            < "Tekstlengte" ; SC_VALIDDLG_ALLOW_TEXTLEN ; > ;
         };
-    StringList [ chinese_simplified ] =
-    {
-            < "ÊâÄÊúâÁöÑÊï∞ÂÄº" ; Default ; > ;
-        < "Êï¥Êï∞" ; Default ; > ;
-        < "ÂçÅËøõÂà∂" ; Default ; > ;
-        < "Êó•Êúü" ; Default ; > ;
-        < "Êó∂Èó¥" ; Default ; > ;
-        < "ÊñáÂ≠óÈïøÂ∫¶" ; Default ; > ;
-    };
-    StringList [ russian ] =
-    {
-            < "¬ÒÂ ÁÌ‡˜ÂÌËˇ" ; Default ; > ;
-        < "÷ÂÎÓÂ ˜ËÒÎÓ" ; Default ; > ;
-        < "ƒÂÒˇÚË˜Ì˚È" ; Default ; > ;
-        < "ƒ‡Ú‡" ; Default ; > ;
-        < "¬ÂÏˇ" ; Default ; > ;
-        < "ƒÎËÌ‡ ÚÂÍÒÚ‡" ; Default ; > ;
-    };
-    StringList [ polish ] =
-    {
-            < "Wszystkie wartoúci" ; Default ; > ;
-        < "Liczba ca≥kowita" ; Default ; > ;
-        < "DziesiÍtny" ; Default ; > ;
-        < "Data" ; Default ; > ;
-        < "Czas" ; Default ; > ;
-        < "D≥ugoúÊ tekstu" ; Default ; > ;
-    };
-    StringList [ japanese ] =
-    {
-            < "„Åô„Åπ„Å¶„ÅÆÂÄ§" ; Default ; > ;
-        < "Êï¥Êï∞" ; Default ; > ;
-        < "Â∞èÊï∞" ; Default ; > ;
-        < "Êó•‰ªò" ; Default ; > ;
-        < "ÊôÇÂàª" ; Default ; > ;
-        < "„ÉÜ„Ç≠„Çπ„Éà„ÅÆÈï∑„Åï" ; Default ; > ;
-    };
-    StringList [ chinese_traditional ] =
-    {
-            < "ÊâÄÊúâÁöÑÊï∏ÂÄº" ; Default ; > ;
-        < "Êï¥Êï∏" ; Default ; > ;
-        < "ÂçÅÈÄ≤‰Ωç" ; Default ; > ;
-        < "Êó•Êúü" ; Default ; > ;
-        < "ÊôÇÈñì" ; Default ; > ;
-        < "ÊñáÂ≠óÈï∑Â∫¶" ; Default ; > ;
-    };
-    StringList [ arabic ] =
-    {
-            < "ﬂ· «·ﬁÌ„" ; Default ; > ;
-        < "√—ﬁ«„ ﬂ«„·…" ; Default ; > ;
-        < "⁄‘—Ì…" ; Default ; > ;
-        < "«· «—ÌŒ" ; Default ; > ;
-        < "«·Êﬁ " ; Default ; > ;
-        < "ÿÊ· «·‰’" ; Default ; > ;
-    };
-    StringList [ greek ] =
-    {
-            < "ºÎÂÚ ÙÈÚ ÙÈÏ›Ú" ; Default ; > ;
-        < "¡Í›Ò·ÈÔÈ ·ÒÈËÏÔﬂ" ; Default ; > ;
-        < "ƒÂÍ·‰ÈÍ¸" ; Default ; > ;
-        < "«ÏÂÒÔÏÁÌﬂ·" ; Default ; > ;
-        < "øÒ·" ; Default ; > ;
-        < "ÃﬁÍÔÚ ÍÂÈÏ›ÌÔı" ; Default ; > ;
-    };
-    StringList [ korean ] =
-    {
-            < "Î™®Îì† Í∞í" ; Default ; > ;
-        < "Ï†ÑÏ≤¥ Í∞í" ; Default ; > ;
-        < "ÏÜåÏàò" ; Default ; > ;
-        < "ÎÇ†Ïßú" ; Default ; > ;
-        < "ÏãúÍ∞Ñ" ; Default ; > ;
-        < "ÌÖçÏä§Ìä∏ Í∏∏Ïù¥" ; Default ; > ;
-    };
-    StringList [ language_user1 ] =
-    {
-            < "; Jeden Wert" ; Default ; > ;
-        < "; Ganze Zahl" ; Default ; > ;
-        < "; Dezimal" ; Default ; > ;
-        < "; Datum" ; Default ; > ;
-        < "; Zeit" ; Default ; > ;
-        < "; Textl?nge" ; Default ; > ;
-    };
-    StringList [ turkish ] =
-    {
-            < "T¸m deerler" ; Default ; > ;
-        < "T¸m say˝lar" ; Default ; > ;
-        < "Ondal˝k" ; Default ; > ;
-        < "Tarih" ; Default ; > ;
-        < "Saat" ; Default ; > ;
-        < "Metin uzunluu" ; Default ; > ;
-    };
-    StringList [ catalan ] =
-    {
-            < "Tots els valors" ; Default ; > ;
-        < "N˙meros complets" ; Default ; > ;
-        < "Decimal" ; Default ; > ;
-        < "Data" ; Default ; > ;
-        < "Hora" ; Default ; > ;
-        < "Longitud del text" ; Default ; > ;
-    };
-    StringList [ finnish ] =
-    {
-            < "Kaikki arvot" ; Default ; > ;
-        < "Kokonaiset luvut" ; Default ; > ;
-        < "Desimaali" ; Default ; > ;
-        < "PƒIVƒYS" ; Default ; > ;
-        < "Aika" ; Default ; > ;
-        < "Tekstin pituus" ; Default ; > ;
-    };
-    StringList [ thai ] =
-    {
-         < "‡∏Ñ‡πà‡∏≤‡∏ó‡∏±‡πâ‡∏á‡∏´‡∏°‡∏î" ; Default ; > ;
-        < "‡∏ï‡∏±‡∏ß‡πÄ‡∏•‡∏Ç‡∏ó‡∏±‡πâ‡∏á‡∏´‡∏°‡∏î" ; Default ; > ;
-        < "‡∏ó‡∏®‡∏ô‡∏¥‡∏¢‡∏°" ; Default ; > ;
-        < "‡∏ß‡∏±‡∏ô‡∏ó‡∏µ‡πà" ; Default ; > ;
-        < "‡πÄ‡∏ß‡∏•‡∏≤" ; Default ; > ;
-        < "‡∏Ñ‡∏ß‡∏≤‡∏°‡∏¢‡∏≤‡∏ß‡∏Ç‡πâ‡∏≠‡∏Ñ‡∏ß‡∏≤‡∏°" ; Default ; > ;
-    };
-    StringList [ czech ] =
-    {
-         < "V≈°echny hodnoty" ; Default ; > ;
-        < "Cel√° ƒç√≠sla" ; Default ; > ;
-        < "Desetinn√°" ; Default ; > ;
-        < "Datum" ; Default ; > ;
-        < "ƒåas" ; Default ; > ;
-        < "D√©lka textu" ; Default ; > ;
-    };
-    StringList [ hebrew ] =
-    {
-         < "Jeden Wert" ; Default ; > ;
-        < "Ganze Zahl" ; Default ; > ;
-        < "Dezimal" ; Default ; > ;
-        < "‚ÄÆ◊™◊ê◊®◊ô◊ö‚Ä¨" ; Default ; > ;
-        < "‚ÄÆ◊©◊¢◊î‚Ä¨" ; Default ; > ;
-        < "Textl√§nge" ; Default ; > ;
-    };
-    StringList [ hindi ] =
-    {
-         < "‡§∏‡§¨ ‡§Æ‡•Ç‡§≤‡•ç‡§Ø" ; Default ; > ;
-        < "‡§™‡•Ç‡§∞‡•ç‡§£ ‡§∏‡§Ç‡§ñ‡•ç‡§Ø‡§æ‡§è‡§Å" ; Default ; > ;
-        < "‡§¶‡§∂‡§æ‡§Ç‡§∂" ; Default ; > ;
-        < "‡§¶‡§ø‡§®‡§æ‡§Ç‡§ï" ; Default ; > ;
-        < "‡§∏‡§Æ‡§Ø" ; Default ; > ;
-        < "‡§ü‡•á‡§ï‡•ç‡§∏‡•ç‡§ü‡•ç ‡§≤‡§Æ‡•ç‡§¨‡§æ‡§à" ; Default ; > ;
-    };
-    StringList [ slovak ] =
-    {
-         < "V≈°etky hodnoty" ; Default ; > ;
-        < "Cel√© ƒç√≠sla" ; Default ; > ;
-        < "Desatinn√©" ; Default ; > ;
-        < "D√°tum" ; Default ; > ;
-        < "ƒåas" ; Default ; > ;
-        < "Dƒ∫≈æka textu" ; Default ; > ;
-    };
+        StringList [ chinese_simplified ] =
+        {
+            < "ÊâÄÊúâÁöÑÊï∞ÂÄº" ; SC_VALIDDLG_ALLOW_ANY ; > ;
+            < "Êï¥Êï∞" ; SC_VALIDDLG_ALLOW_WHOLE ; > ;
+            < "ÂçÅËøõÂà∂" ; SC_VALIDDLG_ALLOW_DECIMAL ; > ;
+            < "Êó•Êúü" ; SC_VALIDDLG_ALLOW_DATE ; > ;
+            < "Êó∂Èó¥" ; SC_VALIDDLG_ALLOW_TIME ; > ;
+            < "Cell range" ; SC_VALIDDLG_ALLOW_RANGE ; > ;
+            < "List" ; SC_VALIDDLG_ALLOW_LIST ; > ;
+            < "ÊñáÂ≠óÈïøÂ∫¶" ; SC_VALIDDLG_ALLOW_TEXTLEN ; > ;
+        };
+        StringList [ russian ] =
+        {
+            < "¬ÒÂ ÁÌ‡˜ÂÌËˇ" ; SC_VALIDDLG_ALLOW_ANY ; > ;
+            < "÷ÂÎÓÂ ˜ËÒÎÓ" ; SC_VALIDDLG_ALLOW_WHOLE ; > ;
+            < "ƒÂÒˇÚË˜Ì˚È" ; SC_VALIDDLG_ALLOW_DECIMAL ; > ;
+            < "ƒ‡Ú‡" ; SC_VALIDDLG_ALLOW_DATE ; > ;
+            < "¬ÂÏˇ" ; SC_VALIDDLG_ALLOW_TIME ; > ;
+            < "Cell range" ; SC_VALIDDLG_ALLOW_RANGE ; > ;
+            < "List" ; SC_VALIDDLG_ALLOW_LIST ; > ;
+            < "ƒÎËÌ‡ ÚÂÍÒÚ‡" ; SC_VALIDDLG_ALLOW_TEXTLEN ; > ;
+        };
+        StringList [ polish ] =
+        {
+            < "Wszystkie wartoúci" ; SC_VALIDDLG_ALLOW_ANY ; > ;
+            < "Liczba ca≥kowita" ; SC_VALIDDLG_ALLOW_WHOLE ; > ;
+            < "DziesiÍtny" ; SC_VALIDDLG_ALLOW_DECIMAL ; > ;
+            < "Data" ; SC_VALIDDLG_ALLOW_DATE ; > ;
+            < "Czas" ; SC_VALIDDLG_ALLOW_TIME ; > ;
+            < "Cell range" ; SC_VALIDDLG_ALLOW_RANGE ; > ;
+            < "List" ; SC_VALIDDLG_ALLOW_LIST ; > ;
+            < "D≥ugoúÊ tekstu" ; SC_VALIDDLG_ALLOW_TEXTLEN ; > ;
+        };
+        StringList [ japanese ] =
+        {
+            < "„Åô„Åπ„Å¶„ÅÆÂÄ§" ; SC_VALIDDLG_ALLOW_ANY ; > ;
+            < "Êï¥Êï∞" ; SC_VALIDDLG_ALLOW_WHOLE ; > ;
+            < "Â∞èÊï∞" ; SC_VALIDDLG_ALLOW_DECIMAL ; > ;
+            < "Êó•‰ªò" ; SC_VALIDDLG_ALLOW_DATE ; > ;
+            < "ÊôÇÂàª" ; SC_VALIDDLG_ALLOW_TIME ; > ;
+            < "Cell range" ; SC_VALIDDLG_ALLOW_RANGE ; > ;
+            < "List" ; SC_VALIDDLG_ALLOW_LIST ; > ;
+            < "„ÉÜ„Ç≠„Çπ„Éà„ÅÆÈï∑„Åï" ; SC_VALIDDLG_ALLOW_TEXTLEN ; > ;
+        };
+        StringList [ chinese_traditional ] =
+        {
+            < "ÊâÄÊúâÁöÑÊï∏ÂÄº" ; SC_VALIDDLG_ALLOW_ANY ; > ;
+            < "Êï¥Êï∏" ; SC_VALIDDLG_ALLOW_WHOLE ; > ;
+            < "ÂçÅÈÄ≤‰Ωç" ; SC_VALIDDLG_ALLOW_DECIMAL ; > ;
+            < "Êó•Êúü" ; SC_VALIDDLG_ALLOW_DATE ; > ;
+            < "ÊôÇÈñì" ; SC_VALIDDLG_ALLOW_TIME ; > ;
+            < "Cell range" ; SC_VALIDDLG_ALLOW_RANGE ; > ;
+            < "List" ; SC_VALIDDLG_ALLOW_LIST ; > ;
+            < "ÊñáÂ≠óÈï∑Â∫¶" ; SC_VALIDDLG_ALLOW_TEXTLEN ; > ;
+        };
+        StringList [ arabic ] =
+        {
+            < "ﬂ· «·ﬁÌ„" ; SC_VALIDDLG_ALLOW_ANY ; > ;
+            < "√—ﬁ«„ ﬂ«„·…" ; SC_VALIDDLG_ALLOW_WHOLE ; > ;
+            < "⁄‘—Ì…" ; SC_VALIDDLG_ALLOW_DECIMAL ; > ;
+            < "«· «—ÌŒ" ; SC_VALIDDLG_ALLOW_DATE ; > ;
+            < "«·Êﬁ " ; SC_VALIDDLG_ALLOW_TIME ; > ;
+            < "Cell range" ; SC_VALIDDLG_ALLOW_RANGE ; > ;
+            < "List" ; SC_VALIDDLG_ALLOW_LIST ; > ;
+            < "ÿÊ· «·‰’" ; SC_VALIDDLG_ALLOW_TEXTLEN ; > ;
+        };
+        StringList [ greek ] =
+        {
+            < "ºÎÂÚ ÙÈÚ ÙÈÏ›Ú" ; SC_VALIDDLG_ALLOW_ANY ; > ;
+            < "¡Í›Ò·ÈÔÈ ·ÒÈËÏÔﬂ" ; SC_VALIDDLG_ALLOW_WHOLE ; > ;
+            < "ƒÂÍ·‰ÈÍ¸" ; SC_VALIDDLG_ALLOW_DECIMAL ; > ;
+            < "«ÏÂÒÔÏÁÌﬂ·" ; SC_VALIDDLG_ALLOW_DATE ; > ;
+            < "øÒ·" ; SC_VALIDDLG_ALLOW_TIME ; > ;
+            < "Cell range" ; SC_VALIDDLG_ALLOW_RANGE ; > ;
+            < "List" ; SC_VALIDDLG_ALLOW_LIST ; > ;
+            < "ÃﬁÍÔÚ ÍÂÈÏ›ÌÔı" ; SC_VALIDDLG_ALLOW_TEXTLEN ; > ;
+        };
+        StringList [ korean ] =
+        {
+            < "Î™®Îì† Í∞í" ; SC_VALIDDLG_ALLOW_ANY ; > ;
+            < "Ï†ÑÏ≤¥ Í∞í" ; SC_VALIDDLG_ALLOW_WHOLE ; > ;
+            < "ÏÜåÏàò" ; SC_VALIDDLG_ALLOW_DECIMAL ; > ;
+            < "ÎÇ†Ïßú" ; SC_VALIDDLG_ALLOW_DATE ; > ;
+            < "ÏãúÍ∞Ñ" ; SC_VALIDDLG_ALLOW_TIME ; > ;
+            < "Cell range" ; SC_VALIDDLG_ALLOW_RANGE ; > ;
+            < "List" ; SC_VALIDDLG_ALLOW_LIST ; > ;
+            < "ÌÖçÏä§Ìä∏ Í∏∏Ïù¥" ; SC_VALIDDLG_ALLOW_TEXTLEN ; > ;
+        };
+        StringList [ turkish ] =
+        {
+            < "T¸m deerler" ; SC_VALIDDLG_ALLOW_ANY ; > ;
+            < "T¸m say˝lar" ; SC_VALIDDLG_ALLOW_WHOLE ; > ;
+            < "Ondal˝k" ; SC_VALIDDLG_ALLOW_DECIMAL ; > ;
+            < "Tarih" ; SC_VALIDDLG_ALLOW_DATE ; > ;
+            < "Saat" ; SC_VALIDDLG_ALLOW_TIME ; > ;
+            < "Cell range" ; SC_VALIDDLG_ALLOW_RANGE ; > ;
+            < "List" ; SC_VALIDDLG_ALLOW_LIST ; > ;
+            < "Metin uzunluu" ; SC_VALIDDLG_ALLOW_TEXTLEN ; > ;
+        };
+        StringList [ catalan ] =
+        {
+            < "Tots els valors" ; SC_VALIDDLG_ALLOW_ANY ; > ;
+            < "N˙meros complets" ; SC_VALIDDLG_ALLOW_WHOLE ; > ;
+            < "Decimal" ; SC_VALIDDLG_ALLOW_DECIMAL ; > ;
+            < "Data" ; SC_VALIDDLG_ALLOW_DATE ; > ;
+            < "Hora" ; SC_VALIDDLG_ALLOW_TIME ; > ;
+            < "Cell range" ; SC_VALIDDLG_ALLOW_RANGE ; > ;
+            < "List" ; SC_VALIDDLG_ALLOW_LIST ; > ;
+            < "Longitud del text" ; SC_VALIDDLG_ALLOW_TEXTLEN ; > ;
+        };
+        StringList [ finnish ] =
+        {
+            < "Kaikki arvot" ; SC_VALIDDLG_ALLOW_ANY ; > ;
+            < "Kokonaiset luvut" ; SC_VALIDDLG_ALLOW_WHOLE ; > ;
+            < "Desimaali" ; SC_VALIDDLG_ALLOW_DECIMAL ; > ;
+            < "PƒIVƒYS" ; SC_VALIDDLG_ALLOW_DATE ; > ;
+            < "Aika" ; SC_VALIDDLG_ALLOW_TIME ; > ;
+            < "Cell range" ; SC_VALIDDLG_ALLOW_RANGE ; > ;
+            < "List" ; SC_VALIDDLG_ALLOW_LIST ; > ;
+            < "Tekstin pituus" ; SC_VALIDDLG_ALLOW_TEXTLEN ; > ;
+        };
+        StringList [ thai ] =
+        {
+            < "‡∏Ñ‡πà‡∏≤‡∏ó‡∏±‡πâ‡∏á‡∏´‡∏°‡∏î" ; SC_VALIDDLG_ALLOW_ANY ; > ;
+            < "‡∏ï‡∏±‡∏ß‡πÄ‡∏•‡∏Ç‡∏ó‡∏±‡πâ‡∏á‡∏´‡∏°‡∏î" ; SC_VALIDDLG_ALLOW_WHOLE ; > ;
+            < "‡∏ó‡∏®‡∏ô‡∏¥‡∏¢‡∏°" ; SC_VALIDDLG_ALLOW_DECIMAL ; > ;
+            < "‡∏ß‡∏±‡∏ô‡∏ó‡∏µ‡πà" ; SC_VALIDDLG_ALLOW_DATE ; > ;
+            < "‡πÄ‡∏ß‡∏•‡∏≤" ; SC_VALIDDLG_ALLOW_TIME ; > ;
+            < "Cell range" ; SC_VALIDDLG_ALLOW_RANGE ; > ;
+            < "List" ; SC_VALIDDLG_ALLOW_LIST ; > ;
+            < "‡∏Ñ‡∏ß‡∏≤‡∏°‡∏¢‡∏≤‡∏ß‡∏Ç‡πâ‡∏≠‡∏Ñ‡∏ß‡∏≤‡∏°" ; SC_VALIDDLG_ALLOW_TEXTLEN ; > ;
+        };
+        StringList [ czech ] =
+        {
+            < "V≈°echny hodnoty" ; SC_VALIDDLG_ALLOW_ANY ; > ;
+            < "Cel√° ƒç√≠sla" ; SC_VALIDDLG_ALLOW_WHOLE ; > ;
+            < "Desetinn√°" ; SC_VALIDDLG_ALLOW_DECIMAL ; > ;
+            < "Datum" ; SC_VALIDDLG_ALLOW_DATE ; > ;
+            < "ƒåas" ; SC_VALIDDLG_ALLOW_TIME ; > ;
+            < "Cell range" ; SC_VALIDDLG_ALLOW_RANGE ; > ;
+            < "List" ; SC_VALIDDLG_ALLOW_LIST ; > ;
+            < "D√©lka textu" ; SC_VALIDDLG_ALLOW_TEXTLEN ; > ;
+        };
+        StringList [ hebrew ] =
+        {
+            < "Jeden Wert" ; SC_VALIDDLG_ALLOW_ANY ; > ;
+            < "Ganze Zahl" ; SC_VALIDDLG_ALLOW_WHOLE ; > ;
+            < "Dezimal" ; SC_VALIDDLG_ALLOW_DECIMAL ; > ;
+            < "‚ÄÆ◊™◊ê◊®◊ô◊ö‚Ä¨" ; SC_VALIDDLG_ALLOW_DATE ; > ;
+            < "‚ÄÆ◊©◊¢◊î‚Ä¨" ; SC_VALIDDLG_ALLOW_TIME ; > ;
+            < "Cell range" ; SC_VALIDDLG_ALLOW_RANGE ; > ;
+            < "List" ; SC_VALIDDLG_ALLOW_LIST ; > ;
+            < "Textl√§nge" ; SC_VALIDDLG_ALLOW_TEXTLEN ; > ;
+        };
+        StringList [ hindi ] =
+        {
+            < "‡§∏‡§¨ ‡§Æ‡•Ç‡§≤‡•ç‡§Ø" ; SC_VALIDDLG_ALLOW_ANY ; > ;
+            < "‡§™‡•Ç‡§∞‡•ç‡§£ ‡§∏‡§Ç‡§ñ‡•ç‡§Ø‡§æ‡§è‡§Å" ; SC_VALIDDLG_ALLOW_WHOLE ; > ;
+            < "‡§¶‡§∂‡§æ‡§Ç‡§∂" ; SC_VALIDDLG_ALLOW_DECIMAL ; > ;
+            < "‡§¶‡§ø‡§®‡§æ‡§Ç‡§ï" ; SC_VALIDDLG_ALLOW_DATE ; > ;
+            < "‡§∏‡§Æ‡§Ø" ; SC_VALIDDLG_ALLOW_TIME ; > ;
+            < "Cell range" ; SC_VALIDDLG_ALLOW_RANGE ; > ;
+            < "List" ; SC_VALIDDLG_ALLOW_LIST ; > ;
+            < "‡§ü‡•á‡§ï‡•ç‡§∏‡•ç‡§ü‡•ç ‡§≤‡§Æ‡•ç‡§¨‡§æ‡§à" ; SC_VALIDDLG_ALLOW_TEXTLEN ; > ;
+        };
+        StringList [ slovak ] =
+        {
+            < "V≈°etky hodnoty" ; SC_VALIDDLG_ALLOW_ANY ; > ;
+            < "Cel√© ƒç√≠sla" ; SC_VALIDDLG_ALLOW_WHOLE ; > ;
+            < "Desatinn√©" ; SC_VALIDDLG_ALLOW_DECIMAL ; > ;
+            < "D√°tum" ; SC_VALIDDLG_ALLOW_DATE ; > ;
+            < "ƒåas" ; SC_VALIDDLG_ALLOW_TIME ; > ;
+            < "Cell range" ; SC_VALIDDLG_ALLOW_RANGE ; > ;
+            < "List" ; SC_VALIDDLG_ALLOW_LIST ; > ;
+            < "Dƒ∫≈æka textu" ; SC_VALIDDLG_ALLOW_TEXTLEN ; > ;
+        };
     };
     FixedText FT_VALUE
     {
-        Pos = MAP_APPFONT ( 6 , 48 ) ;
+        Pos = MAP_APPFONT ( 6 , 58 ) ;
         Size = MAP_APPFONT ( 70 , 8 ) ;
         Text = "~Daten" ;
         Text [ ENGLISH ] = "~Data" ;
@@ -539,325 +569,301 @@ TabPage TP_VALIDATION_VALUES
     ListBox LB_VALUE
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 80 , 46 ) ;
+        Pos = MAP_APPFONT ( 80 , 56 ) ;
         Size = MAP_APPFONT ( 90 , 90 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
          // Reihenfolge entspricht enum ScConditionMode
         StringList =
         {
-            < "gleich" ; Default ; > ;
-            < "kleiner als" ; Default ; > ;
-            /* ### ACHTUNG: Neuer Eintrag in Liste? 3 : grˆﬂer als*/
-            < "grˆﬂer als" ; Default ; > ;
-            < "kleiner oder gleich" ; Default ; > ;
-            /* ### ACHTUNG: Neuer Eintrag in Liste? 5 : grˆﬂer oder gleich*/
-            < "grˆﬂer oder gleich" ; Default ; > ;
-            < "ungleich" ; Default ; > ;
-            < "zwischen" ; Default ; > ;
-            < "nicht zwischen" ; Default ; > ;
-        };
-        StringList [ ENGLISH ] =
-        {
-            < "gleich" ; Default ; > ;
-            < "kleiner als" ; Default ; > ;
-            < "grˆﬂer als" ; Default ; > ;
-            < "kleiner oder gleich" ; Default ; > ;
-            < "grˆﬂer oder gleich" ; Default ; > ;
-            < "ungleich" ; Default ; > ;
-            < "zwischen" ; Default ; > ;
-            < "nicht zwischen" ; Default ; > ;
+            < "gleich" ; SC_VALIDDLG_DATA_EQUAL ; > ;
+            < "kleiner als" ; SC_VALIDDLG_DATA_LESS ; > ;
+            < "grˆﬂer als" ; SC_VALIDDLG_DATA_GREATER ; > ;
+            < "kleiner oder gleich" ; SC_VALIDDLG_DATA_EQLESS ; > ;
+            < "grˆﬂer oder gleich" ; SC_VALIDDLG_DATA_EQGREATER ; > ;
+            < "ungleich" ; SC_VALIDDLG_DATA_NOTEQUAL ; > ;
+            < "zwischen" ; SC_VALIDDLG_DATA_BETWEEN ; > ;
+            < "nicht zwischen" ; SC_VALIDDLG_DATA_NOTBETWEEN ; > ;
         };
         stringlist [ english_us ] =
         {
-            < "equal" ; Default ; > ;
-            < "less than" ; Default ; > ;
-            < "greater than" ; Default ; > ;
-            < "less than or equal" ; Default ; > ;
-            < "greater than or equal to" ; Default ; > ;
-            < "not equal" ; Default ; > ;
-            < "between" ; Default ; > ;
-            < "not between" ; Default ; > ;
+            < "equal" ; SC_VALIDDLG_DATA_EQUAL ; > ;
+            < "less than" ; SC_VALIDDLG_DATA_LESS ; > ;
+            < "greater than" ; SC_VALIDDLG_DATA_GREATER ; > ;
+            < "less than or equal" ; SC_VALIDDLG_DATA_EQLESS ; > ;
+            < "greater than or equal to" ; SC_VALIDDLG_DATA_EQGREATER ; > ;
+            < "not equal" ; SC_VALIDDLG_DATA_NOTEQUAL ; > ;
+            < "between" ; SC_VALIDDLG_DATA_BETWEEN ; > ;
+            < "not between" ; SC_VALIDDLG_DATA_NOTBETWEEN ; > ;
         };
         stringlist [ portuguese_brazilian ] =
         {
-            < "igual a" ; Default ; > ;
-            < "menor que" ; Default ; > ;
-            < "maior que" ; Default ; > ;
-            < "menor ou igual a" ; Default ; > ;
-            < "maior ou igual a" ; Default ; > ;
-            < "diferente" ; Default ; > ;
-            < "entre" ; Default ; > ;
-            < "n„o incluso em" ; Default ; > ;
+            < "igual a" ; SC_VALIDDLG_DATA_EQUAL ; > ;
+            < "menor que" ; SC_VALIDDLG_DATA_LESS ; > ;
+            < "maior que" ; SC_VALIDDLG_DATA_GREATER ; > ;
+            < "menor ou igual a" ; SC_VALIDDLG_DATA_EQLESS ; > ;
+            < "maior ou igual a" ; SC_VALIDDLG_DATA_EQGREATER ; > ;
+            < "diferente" ; SC_VALIDDLG_DATA_NOTEQUAL ; > ;
+            < "entre" ; SC_VALIDDLG_DATA_BETWEEN ; > ;
+            < "n„o incluso em" ; SC_VALIDDLG_DATA_NOTBETWEEN ; > ;
         };
         stringlist [ swedish ] =
         {
-            < "lika med" ; Default ; > ;
-            < "mindre ‰n" ; Default ; > ;
-            < "stˆrre ‰n" ; Default ; > ;
-            < "mindre ‰n eller lika med" ; Default ; > ;
-            < "stˆrre ‰n eller lika med" ; Default ; > ;
-            < "inte lika med" ; Default ; > ;
-            < "mellan" ; Default ; > ;
-            < "inte mellan" ; Default ; > ;
+            < "lika med" ; SC_VALIDDLG_DATA_EQUAL ; > ;
+            < "mindre ‰n" ; SC_VALIDDLG_DATA_LESS ; > ;
+            < "stˆrre ‰n" ; SC_VALIDDLG_DATA_GREATER ; > ;
+            < "mindre ‰n eller lika med" ; SC_VALIDDLG_DATA_EQLESS ; > ;
+            < "stˆrre ‰n eller lika med" ; SC_VALIDDLG_DATA_EQGREATER ; > ;
+            < "inte lika med" ; SC_VALIDDLG_DATA_NOTEQUAL ; > ;
+            < "mellan" ; SC_VALIDDLG_DATA_BETWEEN ; > ;
+            < "inte mellan" ; SC_VALIDDLG_DATA_NOTBETWEEN ; > ;
         };
         stringlist [ danish ] =
         {
-            < "lig med" ; Default ; > ;
-            < "mindre end" ; Default ; > ;
-            < "st¯rre end" ; Default ; > ;
-            < "mindre end eller lig med" ; Default ; > ;
-            < "st¯rre end eller lig med" ; Default ; > ;
-            < "forskellig fra" ; Default ; > ;
-            < "mellem" ; Default ; > ;
-            < "ikke mellem" ; Default ; > ;
+            < "lig med" ; SC_VALIDDLG_DATA_EQUAL ; > ;
+            < "mindre end" ; SC_VALIDDLG_DATA_LESS ; > ;
+            < "st¯rre end" ; SC_VALIDDLG_DATA_GREATER ; > ;
+            < "mindre end eller lig med" ; SC_VALIDDLG_DATA_EQLESS ; > ;
+            < "st¯rre end eller lig med" ; SC_VALIDDLG_DATA_EQGREATER ; > ;
+            < "forskellig fra" ; SC_VALIDDLG_DATA_NOTEQUAL ; > ;
+            < "mellem" ; SC_VALIDDLG_DATA_BETWEEN ; > ;
+            < "ikke mellem" ; SC_VALIDDLG_DATA_NOTBETWEEN ; > ;
         };
         stringlist [ italian ] =
         {
-            < "uguale" ; Default ; > ;
-            < "pi˘ piccolo di" ; Default ; > ;
-            < "maggiore di" ; Default ; > ;
-            < "minore o uguale" ; Default ; > ;
-            < "maggiore o uguale" ; Default ; > ;
-            < "diverso" ; Default ; > ;
-            < "tra" ; Default ; > ;
-            < "non tra" ; Default ; > ;
+            < "uguale" ; SC_VALIDDLG_DATA_EQUAL ; > ;
+            < "pi˘ piccolo di" ; SC_VALIDDLG_DATA_LESS ; > ;
+            < "maggiore di" ; SC_VALIDDLG_DATA_GREATER ; > ;
+            < "minore o uguale" ; SC_VALIDDLG_DATA_EQLESS ; > ;
+            < "maggiore o uguale" ; SC_VALIDDLG_DATA_EQGREATER ; > ;
+            < "diverso" ; SC_VALIDDLG_DATA_NOTEQUAL ; > ;
+            < "tra" ; SC_VALIDDLG_DATA_BETWEEN ; > ;
+            < "non tra" ; SC_VALIDDLG_DATA_NOTBETWEEN ; > ;
         };
         stringlist [ spanish ] =
         {
-            < "igual" ; Default ; > ;
-            < "menor que" ; Default ; > ;
-            < "mayor que" ; Default ; > ;
-            < "menor o igual que" ; Default ; > ;
-            < "mayor o igual" ; Default ; > ;
-            < "distinto de" ; Default ; > ;
-            < "entre" ; Default ; > ;
-            < "no entre" ; Default ; > ;
+            < "igual" ; SC_VALIDDLG_DATA_EQUAL ; > ;
+            < "menor que" ; SC_VALIDDLG_DATA_LESS ; > ;
+            < "mayor que" ; SC_VALIDDLG_DATA_GREATER ; > ;
+            < "menor o igual que" ; SC_VALIDDLG_DATA_EQLESS ; > ;
+            < "mayor o igual" ; SC_VALIDDLG_DATA_EQGREATER ; > ;
+            < "distinto de" ; SC_VALIDDLG_DATA_NOTEQUAL ; > ;
+            < "entre" ; SC_VALIDDLG_DATA_BETWEEN ; > ;
+            < "no entre" ; SC_VALIDDLG_DATA_NOTBETWEEN ; > ;
         };
         stringlist [ french ] =
         {
-            < "Ègal ‡" ; Default ; > ;
-            < "infÈrieur ‡" ; Default ; > ;
-            < "supÈrieur ‡" ; Default ; > ;
-            < "infÈrieur ou Ègal ‡" ; Default ; > ;
-            < "supÈrieur ou Ègal ‡" ; Default ; > ;
-            < "diffÈrent" ; Default ; > ;
-            < "entre" ; Default ; > ;
-            < "non compris entre" ; Default ; > ;
+            < "Ègal ‡" ; SC_VALIDDLG_DATA_EQUAL ; > ;
+            < "infÈrieur ‡" ; SC_VALIDDLG_DATA_LESS ; > ;
+            < "supÈrieur ‡" ; SC_VALIDDLG_DATA_GREATER ; > ;
+            < "infÈrieur ou Ègal ‡" ; SC_VALIDDLG_DATA_EQLESS ; > ;
+            < "supÈrieur ou Ègal ‡" ; SC_VALIDDLG_DATA_EQGREATER ; > ;
+            < "diffÈrent" ; SC_VALIDDLG_DATA_NOTEQUAL ; > ;
+            < "entre" ; SC_VALIDDLG_DATA_BETWEEN ; > ;
+            < "non compris entre" ; SC_VALIDDLG_DATA_NOTBETWEEN ; > ;
         };
         stringlist [ dutch ] =
         {
-            < "gelijk aan" ; Default ; > ;
-            < "kleiner dan" ; Default ; > ;
-            < "groter dan" ; Default ; > ;
-            < "kleiner dan of gelijk aan" ; Default ; > ;
-            < "groter dan of gelijk aan" ; Default ; > ;
-            < "niet gelijk aan" ; Default ; > ;
-            < "tussen" ; Default ; > ;
-            < "niet tussen" ; Default ; > ;
+            < "gelijk aan" ; SC_VALIDDLG_DATA_EQUAL ; > ;
+            < "kleiner dan" ; SC_VALIDDLG_DATA_LESS ; > ;
+            < "groter dan" ; SC_VALIDDLG_DATA_GREATER ; > ;
+            < "kleiner dan of gelijk aan" ; SC_VALIDDLG_DATA_EQLESS ; > ;
+            < "groter dan of gelijk aan" ; SC_VALIDDLG_DATA_EQGREATER ; > ;
+            < "niet gelijk aan" ; SC_VALIDDLG_DATA_NOTEQUAL ; > ;
+            < "tussen" ; SC_VALIDDLG_DATA_BETWEEN ; > ;
+            < "niet tussen" ; SC_VALIDDLG_DATA_NOTBETWEEN ; > ;
         };
         stringlist [ portuguese ] =
         {
-            < "igual" ; Default ; > ;
-            < "menor" ; Default ; > ;
-            < "maior" ; Default ; > ;
-            < "menor ou igual a" ; Default ; > ;
-            < "maior ou igual a" ; Default ; > ;
-            < "desigual" ; Default ; > ;
-            < "entre" ; Default ; > ;
-            < "n„o entre" ; Default ; > ;
+            < "igual" ; SC_VALIDDLG_DATA_EQUAL ; > ;
+            < "menor" ; SC_VALIDDLG_DATA_LESS ; > ;
+            < "maior" ; SC_VALIDDLG_DATA_GREATER ; > ;
+            < "menor ou igual a" ; SC_VALIDDLG_DATA_EQLESS ; > ;
+            < "maior ou igual a" ; SC_VALIDDLG_DATA_EQGREATER ; > ;
+            < "desigual" ; SC_VALIDDLG_DATA_NOTEQUAL ; > ;
+            < "entre" ; SC_VALIDDLG_DATA_BETWEEN ; > ;
+            < "n„o entre" ; SC_VALIDDLG_DATA_NOTBETWEEN ; > ;
         };
     StringList [ chinese_simplified ] =
     {
-            < "Á≠â‰∫é" ; Default ; > ;
-        < "Â∞è‰∫é" ; Default ; > ;
-        < "Â§ß‰∫é" ; Default ; > ;
-        < "Â∞è‰∫éÊàñÁ≠â‰∫é" ; Default ; > ;
-        < "Â§ß‰∫éÊàñÁ≠â‰∫é" ; Default ; > ;
-        < "‰∏çÁ≠â‰∫é" ; Default ; > ;
-        < "Âú®‰πãÈó¥" ; Default ; > ;
-        < "‰∏çÂú®‰πãÈó¥" ; Default ; > ;
+            < "Á≠â‰∫é" ; SC_VALIDDLG_DATA_EQUAL ; > ;
+        < "Â∞è‰∫é" ; SC_VALIDDLG_DATA_LESS ; > ;
+        < "Â§ß‰∫é" ; SC_VALIDDLG_DATA_GREATER ; > ;
+        < "Â∞è‰∫éÊàñÁ≠â‰∫é" ; SC_VALIDDLG_DATA_EQLESS ; > ;
+        < "Â§ß‰∫éÊàñÁ≠â‰∫é" ; SC_VALIDDLG_DATA_EQGREATER ; > ;
+        < "‰∏çÁ≠â‰∫é" ; SC_VALIDDLG_DATA_NOTEQUAL ; > ;
+        < "Âú®‰πãÈó¥" ; SC_VALIDDLG_DATA_BETWEEN ; > ;
+        < "‰∏çÂú®‰πãÈó¥" ; SC_VALIDDLG_DATA_NOTBETWEEN ; > ;
     };
     StringList [ russian ] =
     {
-            < "‡‚ÌÓ" ; Default ; > ;
-        < "ÏÂÌ¸¯Â ˜ÂÏ" ; Default ; > ;
-        < "·ÓÎ¸¯Â ˜ÂÏ" ; Default ; > ;
-        < "ÏÂÌ¸¯Â ËÎË ‡‚ÌÓ" ; Default ; > ;
-        < "·ÓÎ¸¯Â ËÎË ‡‚ÌÓ" ; Default ; > ;
-        < "ÌÂ ‡‚ÌÓ" ; Default ; > ;
-        < "ÏÂÊ‰Û" ; Default ; > ;
-        < "‚ÌÂ" ; Default ; > ;
+            < "‡‚ÌÓ" ; SC_VALIDDLG_DATA_EQUAL ; > ;
+        < "ÏÂÌ¸¯Â ˜ÂÏ" ; SC_VALIDDLG_DATA_LESS ; > ;
+        < "·ÓÎ¸¯Â ˜ÂÏ" ; SC_VALIDDLG_DATA_GREATER ; > ;
+        < "ÏÂÌ¸¯Â ËÎË ‡‚ÌÓ" ; SC_VALIDDLG_DATA_EQLESS ; > ;
+        < "·ÓÎ¸¯Â ËÎË ‡‚ÌÓ" ; SC_VALIDDLG_DATA_EQGREATER ; > ;
+        < "ÌÂ ‡‚ÌÓ" ; SC_VALIDDLG_DATA_NOTEQUAL ; > ;
+        < "ÏÂÊ‰Û" ; SC_VALIDDLG_DATA_BETWEEN ; > ;
+        < "‚ÌÂ" ; SC_VALIDDLG_DATA_NOTBETWEEN ; > ;
     };
     StringList [ polish ] =
     {
-            < "rÛwny" ; Default ; > ;
-        < "mniejsze niø" ; Default ; > ;
-        < "wiÍkszy niø" ; Default ; > ;
-        < "mniejsze lub rÛwne" ; Default ; > ;
-        < "wiÍksza niø lub rÛwna" ; Default ; > ;
-        < "nie rÛwny" ; Default ; > ;
-        < "miÍdzy" ; Default ; > ;
-        < "nie miÍdzy" ; Default ; > ;
+            < "rÛwny" ; SC_VALIDDLG_DATA_EQUAL ; > ;
+        < "mniejsze niø" ; SC_VALIDDLG_DATA_LESS ; > ;
+        < "wiÍkszy niø" ; SC_VALIDDLG_DATA_GREATER ; > ;
+        < "mniejsze lub rÛwne" ; SC_VALIDDLG_DATA_EQLESS ; > ;
+        < "wiÍksza niø lub rÛwna" ; SC_VALIDDLG_DATA_EQGREATER ; > ;
+        < "nie rÛwny" ; SC_VALIDDLG_DATA_NOTEQUAL ; > ;
+        < "miÍdzy" ; SC_VALIDDLG_DATA_BETWEEN ; > ;
+        < "nie miÍdzy" ; SC_VALIDDLG_DATA_NOTBETWEEN ; > ;
     };
     StringList [ japanese ] =
     {
-            < "Ê¨°„ÅÆÂÄ§„Å´Á≠â„Åó„ÅÑ" ; Default ; > ;
-        < "Ê¨°„ÅÆÂÄ§„Çà„ÇäÂ∞è„Åï„ÅÑ" ; Default ; > ;
-        < "Ê¨°„ÅÆÂÄ§„Çà„ÇäÂ§ß„Åç„ÅÑ" ; Default ; > ;
-        < "Ê¨°„ÅÆÂÄ§‰ª•‰∏ã" ; Default ; > ;
-        < "Ê¨°„ÅÆÂÄ§‰ª•‰∏ä" ; Default ; > ;
-        < "Ê¨°„ÅÆÂÄ§„Å´Á≠â„Åó„Åè„Å™„ÅÑ" ; Default ; > ;
-        < "Ê¨°„ÅÆÂÄ§„ÅÆÈñì" ; Default ; > ;
-        < "Ê¨°„ÅÆÂÄ§„ÅÆÈñì„Åß„Å™„ÅÑ" ; Default ; > ;
+            < "Ê¨°„ÅÆÂÄ§„Å´Á≠â„Åó„ÅÑ" ; SC_VALIDDLG_DATA_EQUAL ; > ;
+        < "Ê¨°„ÅÆÂÄ§„Çà„ÇäÂ∞è„Åï„ÅÑ" ; SC_VALIDDLG_DATA_LESS ; > ;
+        < "Ê¨°„ÅÆÂÄ§„Çà„ÇäÂ§ß„Åç„ÅÑ" ; SC_VALIDDLG_DATA_GREATER ; > ;
+        < "Ê¨°„ÅÆÂÄ§‰ª•‰∏ã" ; SC_VALIDDLG_DATA_EQLESS ; > ;
+        < "Ê¨°„ÅÆÂÄ§‰ª•‰∏ä" ; SC_VALIDDLG_DATA_EQGREATER ; > ;
+        < "Ê¨°„ÅÆÂÄ§„Å´Á≠â„Åó„Åè„Å™„ÅÑ" ; SC_VALIDDLG_DATA_NOTEQUAL ; > ;
+        < "Ê¨°„ÅÆÂÄ§„ÅÆÈñì" ; SC_VALIDDLG_DATA_BETWEEN ; > ;
+        < "Ê¨°„ÅÆÂÄ§„ÅÆÈñì„Åß„Å™„ÅÑ" ; SC_VALIDDLG_DATA_NOTBETWEEN ; > ;
     };
     StringList [ chinese_traditional ] =
     {
-            < "Á≠âÊñº" ; Default ; > ;
-        < "Â∞èÊñº" ; Default ; > ;
-        < "Â§ßÊñº" ; Default ; > ;
-        < "Â∞èÊñºÊàñÁ≠âÊñº" ; Default ; > ;
-        < "Â§ßÊñºÊàñÁ≠âÊñº" ; Default ; > ;
-        < "‰∏çÁ≠âÊñº" ; Default ; > ;
-        < "Âú®‰πãÈñì" ; Default ; > ;
-        < "‰∏çÂú®‰πãÈñì" ; Default ; > ;
+            < "Á≠âÊñº" ; SC_VALIDDLG_DATA_EQUAL ; > ;
+        < "Â∞èÊñº" ; SC_VALIDDLG_DATA_LESS ; > ;
+        < "Â§ßÊñº" ; SC_VALIDDLG_DATA_GREATER ; > ;
+        < "Â∞èÊñºÊàñÁ≠âÊñº" ; SC_VALIDDLG_DATA_EQLESS ; > ;
+        < "Â§ßÊñºÊàñÁ≠âÊñº" ; SC_VALIDDLG_DATA_EQGREATER ; > ;
+        < "‰∏çÁ≠âÊñº" ; SC_VALIDDLG_DATA_NOTEQUAL ; > ;
+        < "Âú®‰πãÈñì" ; SC_VALIDDLG_DATA_BETWEEN ; > ;
+        < "‰∏çÂú®‰πãÈñì" ; SC_VALIDDLG_DATA_NOTBETWEEN ; > ;
     };
     StringList [ arabic ] =
     {
-            < "Ì”«ÊÌ" ; Default ; > ;
-        < "√ﬁ· „‰" ; Default ; > ;
-        < "√ﬂ»— „‰" ; Default ; > ;
-        < "√’€— „‰ √Ê Ì”«ÊÌ" ; Default ; > ;
-        < "√ﬂ»— „‰ √Ê Ì”«ÊÌ" ; Default ; > ;
-        < "·« Ì”«ÊÌ" ; Default ; > ;
-        < "»Ì‰" ; Default ; > ;
-        < "·Ì” »Ì‰" ; Default ; > ;
+            < "Ì”«ÊÌ" ; SC_VALIDDLG_DATA_EQUAL ; > ;
+        < "√ﬁ· „‰" ; SC_VALIDDLG_DATA_LESS ; > ;
+        < "√ﬂ»— „‰" ; SC_VALIDDLG_DATA_GREATER ; > ;
+        < "√’€— „‰ √Ê Ì”«ÊÌ" ; SC_VALIDDLG_DATA_EQLESS ; > ;
+        < "√ﬂ»— „‰ √Ê Ì”«ÊÌ" ; SC_VALIDDLG_DATA_EQGREATER ; > ;
+        < "·« Ì”«ÊÌ" ; SC_VALIDDLG_DATA_NOTEQUAL ; > ;
+        < "»Ì‰" ; SC_VALIDDLG_DATA_BETWEEN ; > ;
+        < "·Ì” »Ì‰" ; SC_VALIDDLG_DATA_NOTBETWEEN ; > ;
     };
     StringList [ greek ] =
     {
-            < "∫ÛÔÌ" ; Default ; > ;
-        < "ÏÈÍÒ¸ÙÂÒÔ ·¸" ; Default ; > ;
-        < "ÏÂ„·Î˝ÙÂÒÔ ·¸" ; Default ; > ;
-        < "ÏÈÍÒ¸ÙÂÒÔ ﬁ ﬂÛÔ" ; Default ; > ;
-        < "ÏÂ„·Î˝ÙÂÒÔ ﬁ ﬂÛÔ" ; Default ; > ;
-        < "ƒÈ‹ˆÔÒÔ" ; Default ; > ;
-        < "ÏÂÙ·Ó˝" ; Default ; > ;
-        < "¸˜È ÏÂÙ·Ó˝" ; Default ; > ;
+            < "∫ÛÔÌ" ; SC_VALIDDLG_DATA_EQUAL ; > ;
+        < "ÏÈÍÒ¸ÙÂÒÔ ·¸" ; SC_VALIDDLG_DATA_LESS ; > ;
+        < "ÏÂ„·Î˝ÙÂÒÔ ·¸" ; SC_VALIDDLG_DATA_GREATER ; > ;
+        < "ÏÈÍÒ¸ÙÂÒÔ ﬁ ﬂÛÔ" ; SC_VALIDDLG_DATA_EQLESS ; > ;
+        < "ÏÂ„·Î˝ÙÂÒÔ ﬁ ﬂÛÔ" ; SC_VALIDDLG_DATA_EQGREATER ; > ;
+        < "ƒÈ‹ˆÔÒÔ" ; SC_VALIDDLG_DATA_NOTEQUAL ; > ;
+        < "ÏÂÙ·Ó˝" ; SC_VALIDDLG_DATA_BETWEEN ; > ;
+        < "¸˜È ÏÂÙ·Ó˝" ; SC_VALIDDLG_DATA_NOTBETWEEN ; > ;
     };
     StringList [ korean ] =
     {
-            < "ÏßÄÏ†ïÌïú Í∞íÍ≥º Í∞ôÏùå" ; Default ; > ;
-        < "ÎØ∏Îßå" ; Default ; > ;
-        < "Ï¥àÍ≥º" ; Default ; > ;
-        < "Ïù¥Ìïò" ; Default ; > ;
-        < "Îã§Ïùå Í∞í Ïù¥ÏÉÅ" ; Default ; > ;
-        < "ÏßÄÏ†ïÌïú Ï°∞Í±¥Í≥º Îã§Î¶Ñ" ; Default ; > ;
-        < "Îã§Ïùå ÎÇ†Ïßú ÏÇ¨Ïù¥" ; Default ; > ;
-        < "Îã§Ïùå Í∞í ÏÇ¨Ïù¥Ïóê ÏóÜÏùå" ; Default ; > ;
-    };
-    StringList [ language_user1 ] =
-    {
-            < "; gleich" ; Default ; > ;
-        < "; kleiner als" ; Default ; > ;
-        < "; grˆﬂer als" ; Default ; > ;
-        < "; kleiner oder gleich" ; Default ; > ;
-        < "; gr??er oder gleich" ; Default ; > ;
-        < "; ungleich" ; Default ; > ;
-        < "; zwischen" ; Default ; > ;
-        < "; nicht zwischen" ; Default ; > ;
+            < "ÏßÄÏ†ïÌïú Í∞íÍ≥º Í∞ôÏùå" ; SC_VALIDDLG_DATA_EQUAL ; > ;
+        < "ÎØ∏Îßå" ; SC_VALIDDLG_DATA_LESS ; > ;
+        < "Ï¥àÍ≥º" ; SC_VALIDDLG_DATA_GREATER ; > ;
+        < "Ïù¥Ìïò" ; SC_VALIDDLG_DATA_EQLESS ; > ;
+        < "Îã§Ïùå Í∞í Ïù¥ÏÉÅ" ; SC_VALIDDLG_DATA_EQGREATER ; > ;
+        < "ÏßÄÏ†ïÌïú Ï°∞Í±¥Í≥º Îã§Î¶Ñ" ; SC_VALIDDLG_DATA_NOTEQUAL ; > ;
+        < "Îã§Ïùå ÎÇ†Ïßú ÏÇ¨Ïù¥" ; SC_VALIDDLG_DATA_BETWEEN ; > ;
+        < "Îã§Ïùå Í∞í ÏÇ¨Ïù¥Ïóê ÏóÜÏùå" ; SC_VALIDDLG_DATA_NOTBETWEEN ; > ;
     };
     StringList [ turkish ] =
     {
-            < "e˛ittir" ; Default ; > ;
-        < "k¸Á¸kt¸r" ; Default ; > ;
-        < "b¸y¸kt¸r" ; Default ; > ;
-        < "k¸Á¸k ya da e˛ittir" ; Default ; > ;
-        < "b¸y¸kt¸r veya e˛ittir" ; Default ; > ;
-        < "e˛it deil" ; Default ; > ;
-        < "aras˝nda" ; Default ; > ;
-        < "aras˝nda deil" ; Default ; > ;
+            < "e˛ittir" ; SC_VALIDDLG_DATA_EQUAL ; > ;
+        < "k¸Á¸kt¸r" ; SC_VALIDDLG_DATA_LESS ; > ;
+        < "b¸y¸kt¸r" ; SC_VALIDDLG_DATA_GREATER ; > ;
+        < "k¸Á¸k ya da e˛ittir" ; SC_VALIDDLG_DATA_EQLESS ; > ;
+        < "b¸y¸kt¸r veya e˛ittir" ; SC_VALIDDLG_DATA_EQGREATER ; > ;
+        < "e˛it deil" ; SC_VALIDDLG_DATA_NOTEQUAL ; > ;
+        < "aras˝nda" ; SC_VALIDDLG_DATA_BETWEEN ; > ;
+        < "aras˝nda deil" ; SC_VALIDDLG_DATA_NOTBETWEEN ; > ;
     };
     StringList [ catalan ] =
     {
-            < "igual" ; Default ; > ;
-        < "mÈs petit que" ; Default ; > ;
-        < "mÈs gran que" ; Default ; > ;
-        < "mÈs petit o igual" ; Default ; > ;
-        < "mÈs gran o igual" ; Default ; > ;
-        < "diferent" ; Default ; > ;
-        < "entre" ; Default ; > ;
-        < "no entre" ; Default ; > ;
+            < "igual" ; SC_VALIDDLG_DATA_EQUAL ; > ;
+        < "mÈs petit que" ; SC_VALIDDLG_DATA_LESS ; > ;
+        < "mÈs gran que" ; SC_VALIDDLG_DATA_GREATER ; > ;
+        < "mÈs petit o igual" ; SC_VALIDDLG_DATA_EQLESS ; > ;
+        < "mÈs gran o igual" ; SC_VALIDDLG_DATA_EQGREATER ; > ;
+        < "diferent" ; SC_VALIDDLG_DATA_NOTEQUAL ; > ;
+        < "entre" ; SC_VALIDDLG_DATA_BETWEEN ; > ;
+        < "no entre" ; SC_VALIDDLG_DATA_NOTBETWEEN ; > ;
     };
     StringList [ finnish ] =
     {
-            < "yht‰ suuri" ; Default ; > ;
-        < "pienempi kuin" ; Default ; > ;
-        < "suurempi kuin" ; Default ; > ;
-        < "pienempi tai yht‰ suuri kuin" ; Default ; > ;
-        < "suurempi tai yht‰ suuri kuin" ; Default ; > ;
-        < "eri suuri" ; Default ; > ;
-        < "v‰lill‰" ; Default ; > ;
-        < "ei v‰lilt‰" ; Default ; > ;
+            < "yht‰ suuri" ; SC_VALIDDLG_DATA_EQUAL ; > ;
+        < "pienempi kuin" ; SC_VALIDDLG_DATA_LESS ; > ;
+        < "suurempi kuin" ; SC_VALIDDLG_DATA_GREATER ; > ;
+        < "pienempi tai yht‰ suuri kuin" ; SC_VALIDDLG_DATA_EQLESS ; > ;
+        < "suurempi tai yht‰ suuri kuin" ; SC_VALIDDLG_DATA_EQGREATER ; > ;
+        < "eri suuri" ; SC_VALIDDLG_DATA_NOTEQUAL ; > ;
+        < "v‰lill‰" ; SC_VALIDDLG_DATA_BETWEEN ; > ;
+        < "ei v‰lilt‰" ; SC_VALIDDLG_DATA_NOTBETWEEN ; > ;
     };
     StringList [ thai ] =
     {
-         < "‡πÄ‡∏ó‡πà‡∏≤‡∏Å‡∏±‡∏ö" ; Default ; > ;
-        < "‡∏ô‡πâ‡∏≠‡∏¢‡∏Å‡∏ß‡πà‡∏≤" ; Default ; > ;
-        < "‡∏°‡∏≤‡∏Å‡∏Å‡∏ß‡πà‡∏≤" ; Default ; > ;
-        < "‡∏ô‡πâ‡∏≠‡∏¢‡∏Å‡∏ß‡πà‡∏≤‡∏´‡∏£‡∏∑‡∏≠‡πÄ‡∏ó‡πà‡∏≤‡∏Å‡∏±‡∏ö" ; Default ; > ;
-        < "‡∏°‡∏≤‡∏Å‡∏Å‡∏ß‡πà‡∏≤‡∏´‡∏£‡∏∑‡∏≠‡πÄ‡∏ó‡πà‡∏≤‡∏Å‡∏±‡∏ö" ; Default ; > ;
-        < "‡πÑ‡∏°‡πà‡πÄ‡∏ó‡πà‡∏≤‡∏Å‡∏±‡∏ö" ; Default ; > ;
-        < "‡∏£‡∏∞‡∏´‡∏ß‡πà‡∏≤‡∏á" ; Default ; > ;
-        < "‡πÑ‡∏°‡πà‡∏≠‡∏¢‡∏π‡πà‡∏£‡∏∞‡∏´‡∏ß‡πà‡∏≤‡∏á" ; Default ; > ;
+         < "‡πÄ‡∏ó‡πà‡∏≤‡∏Å‡∏±‡∏ö" ; SC_VALIDDLG_DATA_EQUAL ; > ;
+        < "‡∏ô‡πâ‡∏≠‡∏¢‡∏Å‡∏ß‡πà‡∏≤" ; SC_VALIDDLG_DATA_LESS ; > ;
+        < "‡∏°‡∏≤‡∏Å‡∏Å‡∏ß‡πà‡∏≤" ; SC_VALIDDLG_DATA_GREATER ; > ;
+        < "‡∏ô‡πâ‡∏≠‡∏¢‡∏Å‡∏ß‡πà‡∏≤‡∏´‡∏£‡∏∑‡∏≠‡πÄ‡∏ó‡πà‡∏≤‡∏Å‡∏±‡∏ö" ; SC_VALIDDLG_DATA_EQLESS ; > ;
+        < "‡∏°‡∏≤‡∏Å‡∏Å‡∏ß‡πà‡∏≤‡∏´‡∏£‡∏∑‡∏≠‡πÄ‡∏ó‡πà‡∏≤‡∏Å‡∏±‡∏ö" ; SC_VALIDDLG_DATA_EQGREATER ; > ;
+        < "‡πÑ‡∏°‡πà‡πÄ‡∏ó‡πà‡∏≤‡∏Å‡∏±‡∏ö" ; SC_VALIDDLG_DATA_NOTEQUAL ; > ;
+        < "‡∏£‡∏∞‡∏´‡∏ß‡πà‡∏≤‡∏á" ; SC_VALIDDLG_DATA_BETWEEN ; > ;
+        < "‡πÑ‡∏°‡πà‡∏≠‡∏¢‡∏π‡πà‡∏£‡∏∞‡∏´‡∏ß‡πà‡∏≤‡∏á" ; SC_VALIDDLG_DATA_NOTBETWEEN ; > ;
     };
     StringList [ czech ] =
     {
-         < "je rovno" ; Default ; > ;
-        < "je men≈°√≠ ne≈æ" ; Default ; > ;
-        < "je vƒõt≈°√≠ ne≈æ" ; Default ; > ;
-        < "je men≈°√≠ nebo rovno" ; Default ; > ;
-        < "je vƒõt≈°√≠ nebo se rovn√°" ; Default ; > ;
-        < "nen√≠ rovno" ; Default ; > ;
-        < "le≈æ√≠ mezi" ; Default ; > ;
-        < "nen√≠ mezi" ; Default ; > ;
+         < "je rovno" ; SC_VALIDDLG_DATA_EQUAL ; > ;
+        < "je men≈°√≠ ne≈æ" ; SC_VALIDDLG_DATA_LESS ; > ;
+        < "je vƒõt≈°√≠ ne≈æ" ; SC_VALIDDLG_DATA_GREATER ; > ;
+        < "je men≈°√≠ nebo rovno" ; SC_VALIDDLG_DATA_EQLESS ; > ;
+        < "je vƒõt≈°√≠ nebo se rovn√°" ; SC_VALIDDLG_DATA_EQGREATER ; > ;
+        < "nen√≠ rovno" ; SC_VALIDDLG_DATA_NOTEQUAL ; > ;
+        < "le≈æ√≠ mezi" ; SC_VALIDDLG_DATA_BETWEEN ; > ;
+        < "nen√≠ mezi" ; SC_VALIDDLG_DATA_NOTBETWEEN ; > ;
     };
     StringList [ hebrew ] =
     {
-         < "gleich" ; Default ; > ;
-        < "kleiner als" ; Default ; > ;
-        < "gr√∂√üer als" ; Default ; > ;
-        < "kleiner oder gleich" ; Default ; > ;
-        < "gr√∂√üer oder gleich" ; Default ; > ;
-        < "ungleich" ; Default ; > ;
-        < "zwischen" ; Default ; > ;
-        < "nicht zwischen" ; Default ; > ;
+         < "gleich" ; SC_VALIDDLG_DATA_EQUAL ; > ;
+        < "kleiner als" ; SC_VALIDDLG_DATA_LESS ; > ;
+        < "gr√∂√üer als" ; SC_VALIDDLG_DATA_GREATER ; > ;
+        < "kleiner oder gleich" ; SC_VALIDDLG_DATA_EQLESS ; > ;
+        < "gr√∂√üer oder gleich" ; SC_VALIDDLG_DATA_EQGREATER ; > ;
+        < "ungleich" ; SC_VALIDDLG_DATA_NOTEQUAL ; > ;
+        < "zwischen" ; SC_VALIDDLG_DATA_BETWEEN ; > ;
+        < "nicht zwischen" ; SC_VALIDDLG_DATA_NOTBETWEEN ; > ;
     };
     StringList [ hindi ] =
     {
-         < "‡§∏‡§Æ‡§æ‡§®" ; Default ; > ;
-        < "‡§∏‡•á ‡§ï‡§Æ" ; Default ; > ;
-        < "‡§∏‡•á ‡§Ö‡§ß‡§ø‡§ï" ; Default ; > ;
-        < "‡§∏‡•á ‡§ï‡§Æ ‡§Ö‡§•‡§µ‡§æ ‡§∏‡§Æ‡§æ‡§® " ; Default ; > ;
-        < "‡§∏‡•á ‡§Ö‡§ß‡§ø‡§ï ‡§Ö‡§•‡§µ‡§æ ‡§∏‡§Æ‡§æ‡§®" ; Default ; > ;
-        < "‡§∏‡§Æ‡§æ‡§® ‡§®‡§π‡•Ä‡§Ç" ; Default ; > ;
-        < "‡§¨‡•Ä‡§ö ‡§Æ‡•á‡§Ç" ; Default ; > ;
-        < "‡§¨‡•Ä‡§ö ‡§Æ‡•á‡§Ç ‡§®‡§π‡•Ä‡§Ç" ; Default ; > ;
+         < "‡§∏‡§Æ‡§æ‡§®" ; SC_VALIDDLG_DATA_EQUAL ; > ;
+        < "‡§∏‡•á ‡§ï‡§Æ" ; SC_VALIDDLG_DATA_LESS ; > ;
+        < "‡§∏‡•á ‡§Ö‡§ß‡§ø‡§ï" ; SC_VALIDDLG_DATA_GREATER ; > ;
+        < "‡§∏‡•á ‡§ï‡§Æ ‡§Ö‡§•‡§µ‡§æ ‡§∏‡§Æ‡§æ‡§® " ; SC_VALIDDLG_DATA_EQLESS ; > ;
+        < "‡§∏‡•á ‡§Ö‡§ß‡§ø‡§ï ‡§Ö‡§•‡§µ‡§æ ‡§∏‡§Æ‡§æ‡§®" ; SC_VALIDDLG_DATA_EQGREATER ; > ;
+        < "‡§∏‡§Æ‡§æ‡§® ‡§®‡§π‡•Ä‡§Ç" ; SC_VALIDDLG_DATA_NOTEQUAL ; > ;
+        < "‡§¨‡•Ä‡§ö ‡§Æ‡•á‡§Ç" ; SC_VALIDDLG_DATA_BETWEEN ; > ;
+        < "‡§¨‡•Ä‡§ö ‡§Æ‡•á‡§Ç ‡§®‡§π‡•Ä‡§Ç" ; SC_VALIDDLG_DATA_NOTBETWEEN ; > ;
     };
     StringList [ slovak ] =
     {
-         < "je rovn√©" ; Default ; > ;
-        < "je men≈°ie ako" ; Default ; > ;
-        < "je v√§ƒç≈°√≠ ako" ; Default ; > ;
-        < "je men≈°ie alebo rovn√©" ; Default ; > ;
-        < "je v√§ƒç≈°ie alebo sa rovn√°" ; Default ; > ;
-        < "nie je rovn√©" ; Default ; > ;
-        < "medzi" ; Default ; > ;
-        < "nie je medzi" ; Default ; > ;
+         < "je rovn√©" ; SC_VALIDDLG_DATA_EQUAL ; > ;
+        < "je men≈°ie ako" ; SC_VALIDDLG_DATA_LESS ; > ;
+        < "je v√§ƒç≈°√≠ ako" ; SC_VALIDDLG_DATA_GREATER ; > ;
+        < "je men≈°ie alebo rovn√©" ; SC_VALIDDLG_DATA_EQLESS ; > ;
+        < "je v√§ƒç≈°ie alebo sa rovn√°" ; SC_VALIDDLG_DATA_EQGREATER ; > ;
+        < "nie je rovn√©" ; SC_VALIDDLG_DATA_NOTEQUAL ; > ;
+        < "medzi" ; SC_VALIDDLG_DATA_BETWEEN ; > ;
+        < "nie je medzi" ; SC_VALIDDLG_DATA_NOTBETWEEN ; > ;
     };
     };
     FixedText FT_MIN
     {
-        Pos = MAP_APPFONT ( 6 , 66 ) ;
+        Pos = MAP_APPFONT ( 6 , 76 ) ;
         Size = MAP_APPFONT ( 70 , 8 ) ;
         Text = "~Minimum" ;
         Text [ ENGLISH ] = "~Minimum" ;
@@ -890,16 +896,23 @@ TabPage TP_VALIDATION_VALUES
     Edit EDT_MIN
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 80 , 64 ) ;
+        Pos = MAP_APPFONT ( 80 , 74 ) ;
         Size = MAP_APPFONT ( 174 , 12 ) ;
         TabStop = TRUE ;
     };
+    MultiLineEdit EDT_LIST
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 80 , 74 ) ;
+        Size = MAP_APPFONT ( 174 , 105 ) ;
+        VScroll = TRUE ;
+        IgnoreTab = TRUE ;
+    };
     FixedText FT_MAX
     {
-        Pos = MAP_APPFONT ( 6 , 82 ) ;
+        Pos = MAP_APPFONT ( 6 , 92 ) ;
         Size = MAP_APPFONT ( 70 , 8 ) ;
-        Text = "M~aximum" ;
-        Text [ ENGLISH ] = "Ma~ximum" ;
+        Text = "Ma~ximum" ;
         Text [ english_us ] = "Ma~ximum" ;
         Text [ swedish ] = "M~aximum" ;
         Text [ danish ] = "Maksimum" ;
@@ -929,19 +942,18 @@ TabPage TP_VALIDATION_VALUES
     Edit EDT_MAX
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 80 , 80 ) ;
+        Pos = MAP_APPFONT ( 80 , 90 ) ;
         Size = MAP_APPFONT ( 174 , 12 ) ;
         TabStop = TRUE ;
     };
-    TriStateBox TSB_ALLOW_BLANKS
+    CheckBox TSB_ALLOW_BLANKS
     {
         Pos = MAP_APPFONT ( 80 , 30 ) ;
         Size = MAP_APPFONT ( 174 , 10 ) ;
-        Text = "~Leerzellen zulassen" ;
-        Text [ ENGLISH ] = "Allow ~blanks" ;
         TabStop = TRUE ;
+        Text = "~Leerzellen zulassen" ;
+        Text[ english_us ] = "Allow ~blank cells" ;
         Text [ dutch ] = "~Lege cellen toestaan" ;
-        Text [ english_us ] = "Allow ~blanks" ;
         Text [ swedish ] = "TillÂt tomma ce~ller" ;
         Text [ danish ] = "Ignorer tomme" ;
         Text [ italian ] = "Permetti celle vuote" ;
@@ -965,6 +977,30 @@ TabPage TP_VALIDATION_VALUES
         Text[ hebrew ] = "~Leerzellen zulassen";
         Text[ hindi ] = "~‡§ñ‡§æ‡§≤‡•Ä ‡§∏‡•ç‡§µ‡•Ä‡§ï‡•É‡§§ ‡§ï‡§∞‡•ã";
         Text[ slovak ] = "Povoli≈• pr√°z~dne";
+    };
+    CheckBox CB_SHOWLIST
+    {
+        Pos = MAP_APPFONT ( 80 , 44 ) ;
+        Size = MAP_APPFONT ( 174 , 10 ) ;
+        TabStop = TRUE ;
+        Text = "~Auswahlliste anzeigen" ;
+        Text[ english_us ] = "Show selection ~list" ;
+    };
+    CheckBox CB_SORTLIST
+    {
+        Pos = MAP_APPFONT ( 90 , 58 ) ;
+        Size = MAP_APPFONT ( 164 , 10 ) ;
+        TabStop = TRUE ;
+        Text = "Ein~tr‰ge aufsteigend sortieren" ;
+        Text[ english_us ] = "Sor~t entries ascending" ;
+    };
+    FixedText FT_SOURCEHINT
+    {
+        Pos = MAP_APPFONT ( 80 , 90 ) ;
+        Size = MAP_APPFONT ( 174 , 64 ) ;
+        WordBreak = TRUE ;
+        Text = "Als Quelle ist nur eine zusammenh‰ngende Auswahl in einer Spalte oder einer Zeile erlaubt. Bei anderer Auswahl wird nur die erste Spalte des ersten, ausgew‰hlten Bereichs zur Auswertung herangezogen." ;
+        Text[ english_us ] = "A valid source can only consist of a contiguous selection in a single row or single column. If several selections are made, only the first column of the first selected range will be used for validation." ;
     };
     Text [ dutch ] = "Waarden" ;
     Text [ english_us ] = "Values" ;
@@ -1189,7 +1225,6 @@ TabPage TP_VALIDATION_ERROR
     {
         Pos = MAP_APPFONT ( 6 , 6 ) ;
         Size = MAP_APPFONT ( 248 , 10 ) ;
-        /* ### ACHTUNG: Neuer Text in Resource? ~Fehlermeldung bei Eingabe ung¸ltiger Werte anzeigen : ~Fehlermeldung bei Eingabe ung≥ltiger Werte anzeigen */
         Text = "Fehler~meldung bei Eingabe ung¸ltiger Werte anzeigen" ;
         Text [ ENGLISH ] = "Show error ~message after invalid values are entered" ;
         TabStop = TRUE ;
