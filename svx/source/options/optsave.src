@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optsave.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: os $ $Date: 2001-05-29 10:52:55 $
+ *  last change: $Author: rt $ $Date: 2001-05-30 19:52:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,7 +145,7 @@ TabPage RID_SFXPAGE_SAVE
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "ѕ»±аЉ≠ ф–‘(~E)";
         Text[ russian ] = "ѕравка свойств документа до сохранени€";
-        Text[ polish ] = "Edytuj wcze?niej w≥a?ciwo?ci";
+        Text[ polish ] = "Edytuj wczeЬniej w≥aЬciwoЬci";
         Text[ japanese ] = "ХџСґОЮВ…ћяџ я√®ВћКmФF(~E)";
         Text[ chinese_traditional ] = "•эљsњиƒЁ© (~E)";
         Text[ arabic ] = " Ќ—н— ќ’«∆’ «бг” дѕ ё»б «бЌЁў";
@@ -374,7 +374,7 @@ TabPage RID_SFXPAGE_SAVE
         Text[ english_us ] = "Standard file format";
         Text[ portuguese ] = "Formato de ficheiro padrгo";
         Text[ russian ] = "—тандартный формат файла";
-        Text[ greek ] = "Standard file format";
+        Text[ greek ] = "¬буйкё мпсцё бсчеяпх";
         Text[ dutch ] = "Standaard bestandsformaat";
         Text[ french ] = "Format de fichier standard";
         Text[ spanish ] = "Formato de archivo predeterminado";
@@ -401,7 +401,7 @@ TabPage RID_SFXPAGE_SAVE
         Text[ english_us ] = "Document type";
         Text[ portuguese ] = "Tipo de documento";
         Text[ russian ] = "“ип документа";
-        Text[ greek ] = "Document";
+        Text[ greek ] = "‘эрпт еггс№цпх";
         Text[ dutch ] = "Document";
         Text[ french ] = "Type de document";
         Text[ spanish ] = "Tipo de documento";
@@ -428,7 +428,7 @@ TabPage RID_SFXPAGE_SAVE
         Text[ english_us ] = "Always save as";
         Text[ portuguese ] = "Guardar sempre como";
         Text[ russian ] = "¬сегда сохран€ть как";
-        Text[ greek ] = "File formats";
+        Text[ greek ] = "–№нфб брпиёкехуз щт";
         Text[ dutch ] = "Bestandsformaten";
         Text[ french ] = "Enregistrer systйmatiquement comme";
         Text[ spanish ] = "Guardar siempre como";
@@ -571,7 +571,7 @@ TabPage RID_SFXPAGE_SAVE
     StringList [ swedish ] =
     {
             < "Textdokument" ;     APP_WRITER    ; > ;
-        < "HTML-dokument" ;    APP_WRITER_WEB;  > ;
+        < "HTML-Dokument" ;    APP_WRITER_WEB;  > ;
         < "Tabelldokument" ; APP_CALC      ; > ;
         < "Presentation" ;     APP_IMPRESS   ; > ;
         < "Teckning" ;        APP_DRAW      ; > ;
