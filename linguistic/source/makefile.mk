@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-11-17 12:37:40 $
+#   last change: $Author: tl $ $Date: 2000-11-19 09:56:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -158,14 +158,21 @@ SHL1DEPN=		$(SHL1LIBS)
 SHL1DEF=		$(MISC)$/$(SHL1TARGET).def
 
 # build DEF file
-DEF1NAME    =$(SHL1TARGET)
-#DEF1DEPN    =$(MISC)$/$(SHL1TARGET).flt
-#DEFLIB1NAME =$(TARGET)
-#DEF1DES     =Linguistic main DLL
+DEF1NAME	=$(SHL1TARGET)
+DEF1DEPN    =$(MISC)$/$(SHL1TARGET).flt
+DEFLIB1NAME =$(TARGET)
+DEF1DES     =Linguistic main DLL
 
 .ENDIF
 
 # --- Targets ------------------------------------------------------
 
+
 .INCLUDE : target.mk
+
+
+$(MISC)$/$(SHL1TARGET).flt: makefile.mk
+    @echo ------------------------------
+    @echo Making: $@
+    @echo lcl > $@
 
