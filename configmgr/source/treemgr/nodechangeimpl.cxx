@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodechangeimpl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2001-02-07 16:26:28 $
+ *  last change: $Author: jb $ $Date: 2001-02-12 10:33:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -618,7 +618,7 @@ bool SetInsertTreeImpl::doFillChange(NodeChangeInfo& rChange) const
 
 void SetInsertTreeImpl::doTestElement( SetNodeImpl& rNode, Name const& aName)
 {
-    SetEntry anEntry = rNode.findElement(aName,true); // require loaded children
+    SetEntry anEntry = rNode.findElement(aName); // require loaded children
     OSL_ENSURE(!anEntry.isValid(), "ERROR: Configuration: Adding a node that already exists");
 }
 //-----------------------------------------------------------------------------
@@ -678,7 +678,7 @@ void SetReplaceTreeImpl::doTestElement( SetNodeImpl& rNode, Name const& aName)
     OSL_ASSERT(!m_aOldTree.isValid()); // already tested ?
 
     // remove the old node
-    SetEntry anEntry = rNode.findElement(aName,true); // require loaded children
+    SetEntry anEntry = rNode.findElement(aName); // require loaded children
     OSL_ENSURE(anEntry.isValid(), "ERROR: Configuration: Replacing a node that doesn't exist");
 
     m_aOldTree = anEntry.tree();
@@ -743,7 +743,7 @@ void SetRemoveTreeImpl::doTestElement( SetNodeImpl& rNode, Name const& aName)
     OSL_ASSERT(!m_aOldTree.isValid()); // already tested ?
 
     // remove the old node
-    SetEntry anEntry = rNode.findElement(aName,true); // require loaded children
+    SetEntry anEntry = rNode.findElement(aName); // require loaded children
     OSL_ENSURE(anEntry.isValid(), "ERROR: Configuration: Removing a node that doesn't exist");
 
     m_aOldTree = anEntry.tree();
