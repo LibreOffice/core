@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: kz $ $Date: 2003-10-15 10:04:10 $
+ *  last change: $Author: kz $ $Date: 2003-11-18 14:51:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,8 +90,8 @@
 #ifndef _SV_SALDATA_HXX
 #include <saldata.hxx>
 #endif
-#ifndef _SV_SALGDI_HXX
-#include <salgdi.hxx>
+#ifndef _SV_SALGDI_H
+#include <salgdi.h>
 #endif
 #ifndef _SV_OUTFONT_HXX
 #include <outfont.hxx>
@@ -158,7 +158,7 @@ inline int IntFromFixed(FIXED f)
 static BOOL bImplSalCourierScalable = FALSE;
 static BOOL bImplSalCourierNew = FALSE;
 
-static BOOL FontHasCJKUnicodeRange( const SalGraphics* pGraphics, BOOL &bHasKoreanRange );
+static BOOL FontHasCJKUnicodeRange( const WinSalGraphics* pGraphics, BOOL &bHasKoreanRange );
 
 // =======================================================================
 
@@ -514,20 +514,20 @@ void ImplSalLogFontToFontW( HDC hDC, const LOGFONTW& rLogFont, Font& rFont,
 
 // =======================================================================
 
-void SalGraphics::SetTextColor( SalColor nSalColor )
+void WinSalGraphics::SetTextColor( SalColor nSalColor )
 {
     COLORREF aCol = PALETTERGB( SALCOLOR_RED( nSalColor ),
                                 SALCOLOR_GREEN( nSalColor ),
                                 SALCOLOR_BLUE( nSalColor ) );
 
-    if( !maGraphicsData.mbPrinter &&
+    if( !mbPrinter &&
         GetSalData()->mhDitherPal &&
         ImplIsSysColorEntry( nSalColor ) )
     {
         aCol = PALRGB_TO_RGB( aCol );
     }
 
-    ::SetTextColor( maGraphicsData.mhDC, aCol );
+    ::SetTextColor( mhDC, aCol );
 }
 
 // -----------------------------------------------------------------------
@@ -760,14 +760,7 @@ static HFONT ImplSelectFontA( HDC hDC, LOGFONTA& rLogFont, HFONT* pNewFont )
 
 // -----------------------------------------------------------------------
 
-void SalGraphics::RemovingFont( ImplFontData* )
-{
-    // dummy implementation on W32
-}
-
-// -----------------------------------------------------------------------
-
-USHORT SalGraphics::SetFont( ImplFontSelectData* pFont, int nFallbackLevel )
+USHORT WinSalGraphics::SetFont( ImplFontSelectData* pFont, int nFallbackLevel )
 {
     HFONT hNewFont = 0;
     HFONT hOldFont;
@@ -775,24 +768,24 @@ USHORT SalGraphics::SetFont( ImplFontSelectData* pFont, int nFallbackLevel )
     if ( aSalShlData.mbWNT )
     {
         LOGFONTW aLogFont;
-        ImplGetLogFontFromFontSelect( maGraphicsData.mhDC, pFont, aLogFont, true );
+        ImplGetLogFontFromFontSelect( mhDC, pFont, aLogFont, true );
 
         // Auf dem Bildschirm nehmen wir Courier New, wenn Courier nicht
         // skalierbar ist und wenn der Font skaliert oder rotiert werden
         // muss
-        if ( maGraphicsData.mbScreen &&
+        if ( mbScreen &&
              (pFont->mnWidth || pFont->mnOrientation ||
               !pFont->mpFontData || (pFont->mpFontData->mnHeight != pFont->mnHeight)) &&
              !bImplSalCourierScalable && bImplSalCourierNew &&
              (ImplSalWICompareAscii( aLogFont.lfFaceName, "Courier" ) == 0) )
             lstrcpyW( aLogFont.lfFaceName, L"Courier New" );
 
-        hOldFont = ImplSelectFontW( maGraphicsData.mhDC, aLogFont, &hNewFont );
+        hOldFont = ImplSelectFontW( mhDC, aLogFont, &hNewFont );
     }
     else
     {
-        if ( !maGraphicsData.mpLogFont )
-            maGraphicsData.mpLogFont = new LOGFONTA;
+        if ( !mpLogFont )
+            mpLogFont = new LOGFONTA;
 
         ByteString aName;
         if ( pFont->mpFontData )
@@ -802,91 +795,91 @@ USHORT SalGraphics::SetFont( ImplFontSelectData* pFont, int nFallbackLevel )
 
         // Test for vertical
         if ( pFont->mbVertical )
-            ImplSalGetVerticalFontNameA( maGraphicsData.mhDC, aName );
+            ImplSalGetVerticalFontNameA( mhDC, aName );
 
         UINT nNameLen = aName.Len();
-        if ( nNameLen > sizeof( maGraphicsData.mpLogFont->lfFaceName )-1 )
-            nNameLen = sizeof( maGraphicsData.mpLogFont->lfFaceName )-1;
-        memcpy( maGraphicsData.mpLogFont->lfFaceName, aName.GetBuffer(), nNameLen );
-        maGraphicsData.mpLogFont->lfFaceName[nNameLen] = 0;
+        if ( nNameLen > sizeof( mpLogFont->lfFaceName )-1 )
+            nNameLen = sizeof( mpLogFont->lfFaceName )-1;
+        memcpy( mpLogFont->lfFaceName, aName.GetBuffer(), nNameLen );
+        mpLogFont->lfFaceName[nNameLen] = 0;
 
         if ( pFont->mpFontData )
-            maGraphicsData.mpLogFont->lfCharSet = (WIN_BYTE)(pFont->mpFontData->mpSysData);
+            mpLogFont->lfCharSet = (WIN_BYTE)(pFont->mpFontData->mpSysData);
         else
-            maGraphicsData.mpLogFont->lfCharSet = ImplCharSetToWin( pFont->meCharSet );
+            mpLogFont->lfCharSet = ImplCharSetToWin( pFont->meCharSet );
 
-        maGraphicsData.mpLogFont->lfPitchAndFamily  = ImplPitchToWin( pFont->mePitch );
-        maGraphicsData.mpLogFont->lfPitchAndFamily |= ImplFamilyToWin( pFont->meFamily );
-        maGraphicsData.mpLogFont->lfWeight          = ImplWeightToWin( pFont->meWeight );
-        maGraphicsData.mpLogFont->lfHeight          = (int)-pFont->mnHeight;
-        maGraphicsData.mpLogFont->lfWidth           = (int)pFont->mnWidth;
-        maGraphicsData.mpLogFont->lfUnderline       = 0;
-        maGraphicsData.mpLogFont->lfStrikeOut       = 0;
-        maGraphicsData.mpLogFont->lfItalic          = (pFont->meItalic) != ITALIC_NONE;
-        maGraphicsData.mpLogFont->lfEscapement      = pFont->mnOrientation;
-        maGraphicsData.mpLogFont->lfOrientation     = 0;
-        maGraphicsData.mpLogFont->lfClipPrecision   = CLIP_DEFAULT_PRECIS;
-        maGraphicsData.mpLogFont->lfQuality         = DEFAULT_QUALITY;
-        maGraphicsData.mpLogFont->lfOutPrecision    = OUT_TT_PRECIS;
+        mpLogFont->lfPitchAndFamily  = ImplPitchToWin( pFont->mePitch );
+        mpLogFont->lfPitchAndFamily |= ImplFamilyToWin( pFont->meFamily );
+        mpLogFont->lfWeight          = ImplWeightToWin( pFont->meWeight );
+        mpLogFont->lfHeight          = (int)-pFont->mnHeight;
+        mpLogFont->lfWidth           = (int)pFont->mnWidth;
+        mpLogFont->lfUnderline       = 0;
+        mpLogFont->lfStrikeOut       = 0;
+        mpLogFont->lfItalic          = (pFont->meItalic) != ITALIC_NONE;
+        mpLogFont->lfEscapement      = pFont->mnOrientation;
+        mpLogFont->lfOrientation     = 0;
+        mpLogFont->lfClipPrecision   = CLIP_DEFAULT_PRECIS;
+        mpLogFont->lfQuality         = DEFAULT_QUALITY;
+        mpLogFont->lfOutPrecision    = OUT_TT_PRECIS;
         if ( pFont->mnOrientation )
-            maGraphicsData.mpLogFont->lfClipPrecision |= CLIP_LH_ANGLES;
+            mpLogFont->lfClipPrecision |= CLIP_LH_ANGLES;
 
         // disable antialiasing if requested
         if ( pFont->mbNonAntialiased )
-            maGraphicsData.mpLogFont->lfQuality = NONANTIALIASED_QUALITY;
+            mpLogFont->lfQuality = NONANTIALIASED_QUALITY;
 
         // on the display we prefer Courier New when Courier is a
         // bitmap only font and we need to stretch or rotate it
-        if ( maGraphicsData.mbScreen &&
+        if ( mbScreen &&
              (pFont->mnWidth || pFont->mnOrientation ||
               !pFont->mpFontData || (pFont->mpFontData->mnHeight != pFont->mnHeight)) &&
              !bImplSalCourierScalable && bImplSalCourierNew &&
-             (stricmp( maGraphicsData.mpLogFont->lfFaceName, "Courier" ) == 0) )
-            strcpy( maGraphicsData.mpLogFont->lfFaceName, "Courier New" );
+             (stricmp( mpLogFont->lfFaceName, "Courier" ) == 0) )
+            strcpy( mpLogFont->lfFaceName, "Courier New" );
 
-        hOldFont = ImplSelectFontA( maGraphicsData.mhDC, *maGraphicsData.mpLogFont, &hNewFont );
+        hOldFont = ImplSelectFontA( mhDC, *mpLogFont, &hNewFont );
     }
 
-    if( !maGraphicsData.mhDefFont )
+    if( !mhDefFont )
     {
         // keep default font
-        maGraphicsData.mhDefFont = hOldFont;
+        mhDefFont = hOldFont;
     }
     else
     {
         // dereference unused fonts
         for( int i = nFallbackLevel; i < MAX_FALLBACK; ++i )
         {
-            if( maGraphicsData.mhFonts[i] )
+            if( mhFonts[i] )
             {
-                DeleteFont( maGraphicsData.mhFonts[i] );
-                maGraphicsData.mhFonts[i] = 0;
+                DeleteFont( mhFonts[i] );
+                mhFonts[i] = 0;
             }
         }
     }
 
     // store new font in correct layer
-    maGraphicsData.mhFonts[ nFallbackLevel ] = hNewFont;
+    mhFonts[ nFallbackLevel ] = hNewFont;
 
     if( !nFallbackLevel )
     {
-        maGraphicsData.mnFontCharSetCount = 0;
-        maGraphicsData.mbFontKernInit = TRUE;
-        if ( maGraphicsData.mpFontKernPairs )
+        mnFontCharSetCount = 0;
+        mbFontKernInit = TRUE;
+        if ( mpFontKernPairs )
         {
-            delete[] maGraphicsData.mpFontKernPairs;
-            maGraphicsData.mpFontKernPairs = NULL;
+            delete[] mpFontKernPairs;
+            mpFontKernPairs = NULL;
         }
-        maGraphicsData.mnFontKernPairCount = 0;
+        mnFontKernPairCount = 0;
     }
 
-    if (maGraphicsData.mxTextLayoutCache.get() != 0)
-        maGraphicsData.mxTextLayoutCache->flush( nFallbackLevel );
+    if (mxTextLayoutCache.get() != 0)
+        mxTextLayoutCache->flush( nFallbackLevel );
 
     // some printers have higher internal resolution, so their
     // text output would be different from what we calculated
     // => suggest DrawTextArray to workaround this problem
-    if ( maGraphicsData.mbPrinter )
+    if ( mbPrinter )
         return SAL_SETFONT_USEDRAWTEXTARRAY;
     else
         return 0;
@@ -894,16 +887,16 @@ USHORT SalGraphics::SetFont( ImplFontSelectData* pFont, int nFallbackLevel )
 
 // -----------------------------------------------------------------------
 
-void SalGraphics::GetFontMetric( ImplFontMetricData* pMetric )
+void WinSalGraphics::GetFontMetric( ImplFontMetricData* pMetric )
 {
     if ( aSalShlData.mbWNT )
     {
         wchar_t aFaceName[LF_FACESIZE+60];
-        if ( GetTextFaceW( maGraphicsData.mhDC, sizeof( aFaceName ) / sizeof( wchar_t ), aFaceName ) )
+        if ( GetTextFaceW( mhDC, sizeof( aFaceName ) / sizeof( wchar_t ), aFaceName ) )
             pMetric->maName = aFaceName;
 
         TEXTMETRICW aWinMetric;
-        if ( GetTextMetricsW( maGraphicsData.mhDC, &aWinMetric ) )
+        if ( GetTextMetricsW( mhDC, &aWinMetric ) )
         {
             pMetric->mnWidth            = aWinMetric.tmAveCharWidth;
             pMetric->meFamily           = ImplFamilyToSal( aWinMetric.tmPitchAndFamily );;
@@ -960,11 +953,11 @@ void SalGraphics::GetFontMetric( ImplFontMetricData* pMetric )
     else
     {
         char aFaceName[LF_FACESIZE+60];
-        if ( GetTextFaceA( maGraphicsData.mhDC, sizeof( aFaceName ), aFaceName ) )
+        if ( GetTextFaceA( mhDC, sizeof( aFaceName ), aFaceName ) )
             pMetric->maName = ImplSalGetUniString( aFaceName );
 
         TEXTMETRICA aWinMetric;
-        if ( GetTextMetricsA( maGraphicsData.mhDC, &aWinMetric ) )
+        if ( GetTextMetricsA( mhDC, &aWinMetric ) )
         {
             pMetric->mnWidth            = aWinMetric.tmAveCharWidth;
             pMetric->meFamily           = ImplFamilyToSal( aWinMetric.tmPitchAndFamily );;
@@ -1011,7 +1004,7 @@ int CALLBACK SalEnumCharSetsProcExA( const ENUMLOGFONTEXA* pLogFont,
                                      const NEWTEXTMETRICEXA* pMetric,
                                      DWORD nFontType, LPARAM lParam )
 {
-    SalGraphicsData* pData = (SalGraphicsData*)lParam;
+    WinSalGraphics* pData = (WinSalGraphics*)lParam;
     // Charset already in the list?
     for ( BYTE i = 0; i < pData->mnFontCharSetCount; i++ )
     {
@@ -1025,7 +1018,7 @@ int CALLBACK SalEnumCharSetsProcExA( const ENUMLOGFONTEXA* pLogFont,
 
 // -----------------------------------------------------------------------
 
-static void ImplGetAllFontCharSets( SalGraphicsData* pData )
+static void ImplGetAllFontCharSets( WinSalGraphics* pData )
 {
     if ( !pData->mpFontCharSets )
         pData->mpFontCharSets = new BYTE[256];
@@ -1040,7 +1033,7 @@ static void ImplGetAllFontCharSets( SalGraphicsData* pData )
 
 // -----------------------------------------------------------------------
 
-static void ImplAddKerningPairs( SalGraphicsData* pData )
+static void ImplAddKerningPairs( WinSalGraphics* pData )
 {
     ULONG nPairs = ::GetKerningPairsA( pData->mhDC, 0, NULL );
     if ( !nPairs )
@@ -1138,75 +1131,75 @@ static void ImplAddKerningPairs( SalGraphicsData* pData )
 
 // -----------------------------------------------------------------------
 
-ULONG SalGraphics::GetKernPairs( ULONG nPairs, ImplKernPairData* pKernPairs )
+ULONG WinSalGraphics::GetKernPairs( ULONG nPairs, ImplKernPairData* pKernPairs )
 {
     DBG_ASSERT( sizeof( KERNINGPAIR ) == sizeof( ImplKernPairData ),
-                "SalGraphics::GetKernPairs(): KERNINGPAIR != ImplKernPairData" );
+                "WinSalGraphics::GetKernPairs(): KERNINGPAIR != ImplKernPairData" );
 
-    if ( maGraphicsData.mbFontKernInit )
+    if ( mbFontKernInit )
     {
-        if( maGraphicsData.mpFontKernPairs )
+        if( mpFontKernPairs )
         {
-            delete[] maGraphicsData.mpFontKernPairs;
-            maGraphicsData.mpFontKernPairs = NULL;
+            delete[] mpFontKernPairs;
+            mpFontKernPairs = NULL;
         }
-        maGraphicsData.mnFontKernPairCount = 0;
+        mnFontKernPairCount = 0;
 
         if ( aSalShlData.mbWNT )
         {
             KERNINGPAIR* pPairs = NULL;
-            int nCount = ::GetKerningPairsW( maGraphicsData.mhDC, 0, NULL );
+            int nCount = ::GetKerningPairsW( mhDC, 0, NULL );
             if( nCount )
             {
 #ifdef GCP_KERN_HACK
                 pPairs = new KERNINGPAIR[ nCount+1 ];
-                maGraphicsData.mpFontKernPairs = pPairs;
-                maGraphicsData.mnFontKernPairCount = nCount;
-                ::GetKerningPairsW( maGraphicsData.mhDC, nCount, pPairs );
+                mpFontKernPairs = pPairs;
+                mnFontKernPairCount = nCount;
+                ::GetKerningPairsW( mhDC, nCount, pPairs );
 #else // GCP_KERN_HACK
                 pPairs = pKernPairs;
                 nCount = (nCount < nPairs) : nCount : nPairs;
-                ::GetKerningPairsW( maGraphicsData.mhDC, nCount, pPairs );
+                ::GetKerningPairsW( mhDC, nCount, pPairs );
                 return nCount;
 #endif // GCP_KERN_HACK
             }
         }
         else
         {
-            if ( !maGraphicsData.mnFontCharSetCount )
-                ImplGetAllFontCharSets( &maGraphicsData );
+            if ( !mnFontCharSetCount )
+                ImplGetAllFontCharSets( this );
 
-            if ( maGraphicsData.mnFontCharSetCount <= 1 )
-                ImplAddKerningPairs( &maGraphicsData );
+            if ( mnFontCharSetCount <= 1 )
+                ImplAddKerningPairs( this );
             else
             {
                 // Query All Kerning Pairs from all possible CharSets
-                for ( BYTE i = 0; i < maGraphicsData.mnFontCharSetCount; i++ )
+                for ( BYTE i = 0; i < mnFontCharSetCount; i++ )
                 {
-                    maGraphicsData.mpLogFont->lfCharSet = maGraphicsData.mpFontCharSets[i];
-                    HFONT hNewFont = CreateFontIndirectA( maGraphicsData.mpLogFont );
-                    HFONT hOldFont = SelectFont( maGraphicsData.mhDC, hNewFont );
-                    ImplAddKerningPairs( &maGraphicsData );
-                    SelectFont( maGraphicsData.mhDC, hOldFont );
+                    mpLogFont->lfCharSet = mpFontCharSets[i];
+                    HFONT hNewFont = CreateFontIndirectA( mpLogFont );
+                    HFONT hOldFont = SelectFont( mhDC, hNewFont );
+                    ImplAddKerningPairs( this );
+                    SelectFont( mhDC, hOldFont );
                     DeleteFont( hNewFont );
                 }
             }
         }
 
-        maGraphicsData.mbFontKernInit = FALSE;
+        mbFontKernInit = FALSE;
 
-        std::sort( maGraphicsData.mpFontKernPairs,
-            maGraphicsData.mpFontKernPairs + maGraphicsData.mnFontKernPairCount,
+        std::sort( mpFontKernPairs,
+            mpFontKernPairs + mnFontKernPairCount,
             ImplCmpKernData );
     }
 
     if( !pKernPairs )
-        return maGraphicsData.mnFontKernPairCount;
-    else if( maGraphicsData.mpFontKernPairs )
+        return mnFontKernPairCount;
+    else if( mpFontKernPairs )
     {
-        if ( nPairs < maGraphicsData.mnFontKernPairCount )
-            nPairs = maGraphicsData.mnFontKernPairCount;
-        memcpy( pKernPairs, maGraphicsData.mpFontKernPairs,
+        if ( nPairs < mnFontKernPairCount )
+            nPairs = mnFontKernPairCount;
+        memcpy( pKernPairs, mpFontKernPairs,
                 nPairs*sizeof( ImplKernPairData ) );
         return nPairs;
     }
@@ -1221,7 +1214,7 @@ static unsigned GetUShort( const unsigned char* p ){ return((p[0]<<8)+p[1]);}
 static signed GetSShort( const unsigned char* p ){ return((short)((p[0]<<8)+p[1]));}
 static inline DWORD CalcTag( const char p[4]) { return (p[0]+(p[1]<<8)+(p[2]<<16)+(p[3]<<24)); }
 
-static BOOL FontHasCJKUnicodeRange( const SalGraphics* pGraphics, BOOL &bHasKoreanRange )
+static BOOL FontHasCJKUnicodeRange( const WinSalGraphics* pGraphics, BOOL &bHasKoreanRange )
 {
     BOOL bCJKCapable = FALSE;
     bHasKoreanRange = FALSE;
@@ -1229,12 +1222,12 @@ static BOOL FontHasCJKUnicodeRange( const SalGraphics* pGraphics, BOOL &bHasKore
     if ( pGraphics )
     {
         const DWORD Cos2Tag = CalcTag( "OS/2" );
-        DWORD nRCos2 = GetFontData( pGraphics->maGraphicsData.mhDC, Cos2Tag, 0, NULL, 0 );
+        DWORD nRCos2 = GetFontData( pGraphics->mhDC, Cos2Tag, 0, NULL, 0 );
         if ( nRCos2 != GDI_ERROR )
         {
             int nLength = nRCos2;
             unsigned char* pOS2map = (unsigned char*)alloca( nLength );
-            nRCos2 = GetFontData( pGraphics->maGraphicsData.mhDC, Cos2Tag, 0, pOS2map, nLength );
+            nRCos2 = GetFontData( pGraphics->mhDC, Cos2Tag, 0, pOS2map, nLength );
             sal_uInt32 version = GetUShort( pOS2map );
             if ( version >= 0x0001 && nLength >= 58 )
             {
@@ -1260,20 +1253,20 @@ static BOOL FontHasCJKUnicodeRange( const SalGraphics* pGraphics, BOOL &bHasKore
     return bCJKCapable;
 }
 
-ULONG SalGraphics::GetFontCodeRanges( sal_uInt32* pCodePairs ) const
+ULONG WinSalGraphics::GetFontCodeRanges( sal_uInt32* pCodePairs ) const
 {
     int nRangeCount = 0;
 
     // get SFNT font's CMAP table
     const DWORD CmapTag = CalcTag( "cmap" );
-    DWORD nRC = GetFontData( maGraphicsData.mhDC, CmapTag, 0, NULL, 0 );
+    DWORD nRC = GetFontData( mhDC, CmapTag, 0, NULL, 0 );
     if( nRC == GDI_ERROR )
         return 0;
 
     int nLength = nRC;
     std::vector<unsigned char> aCmap( nLength );
     unsigned char* pCmap = &aCmap[0];
-    nRC = GetFontData( maGraphicsData.mhDC, CmapTag, 0, pCmap, nLength );
+    nRC = GetFontData( mhDC, CmapTag, 0, pCmap, nLength );
     if( nRC == GDI_ERROR )
         return 0;
     // check for the CMAP table corruption
@@ -1721,7 +1714,7 @@ String ImplGetFontNameFromFile( SalData& rSalData, const String& rFontFileURL )
 
 // -----------------------------------------------------------------------
 
-ImplFontData* SalGraphics::AddTempDevFont( const String& rFontFileURL, const String& rFontName )
+ImplFontData* WinSalGraphics::AddTempDevFont( const String& rFontFileURL, const String& rFontName )
 {
     String aFontName( rFontName );
 
@@ -1732,7 +1725,7 @@ ImplFontData* SalGraphics::AddTempDevFont( const String& rFontFileURL, const Str
     if ( !aFontName.Len() )
         return NULL;
 
-    if( ::ImplIsFontAvailable( maGraphicsData.mhDC, aFontName ) )
+    if( ::ImplIsFontAvailable( mhDC, aFontName ) )
         return NULL;
 
     // remember temp font for cleanup later
@@ -1778,7 +1771,7 @@ ImplFontData* SalGraphics::AddTempDevFont( const String& rFontFileURL, const Str
 
 // -----------------------------------------------------------------------
 
-void SalGraphics::GetDevFontList( ImplDevFontList* pList )
+void WinSalGraphics::GetDevFontList( ImplDevFontList* pList )
 {
     // make sure all fonts are registered at least temporarily
     static bool bOnce = true;
@@ -1814,13 +1807,13 @@ void SalGraphics::GetDevFontList( ImplDevFontList* pList )
     }
 
     ImplEnumInfo aInfo;
-    aInfo.mhDC          = maGraphicsData.mhDC;
+    aInfo.mhDC          = mhDC;
     aInfo.mpList        = pList;
     aInfo.mpName        = NULL;
     aInfo.mpLogFontA    = NULL;
     aInfo.mpLogFontW    = NULL;
     aInfo.mbCourier     = FALSE;
-    if ( !maGraphicsData.mbPrinter )
+    if ( !mbPrinter )
     {
         aInfo.mbImplSalCourierScalable  = FALSE;
         aInfo.mbImplSalCourierNew       = FALSE;
@@ -1845,7 +1838,7 @@ void SalGraphics::GetDevFontList( ImplDevFontList* pList )
         memset( &aLogFont, 0, sizeof( aLogFont ) );
         aLogFont.lfCharSet = DEFAULT_CHARSET;
         aInfo.mpLogFontW = &aLogFont;
-        EnumFontFamiliesExW( maGraphicsData.mhDC, &aLogFont,
+        EnumFontFamiliesExW( mhDC, &aLogFont,
             (FONTENUMPROCW)SalEnumFontsProcExW, (LPARAM)(void*)&aInfo, 0 );
     }
     else
@@ -1854,13 +1847,13 @@ void SalGraphics::GetDevFontList( ImplDevFontList* pList )
         memset( &aLogFont, 0, sizeof( aLogFont ) );
         aLogFont.lfCharSet = DEFAULT_CHARSET;
         aInfo.mpLogFontA = &aLogFont;
-        EnumFontFamiliesExA( maGraphicsData.mhDC, &aLogFont,
+        EnumFontFamiliesExA( mhDC, &aLogFont,
             (FONTENUMPROCA)SalEnumFontsProcExA, (LPARAM)(void*)&aInfo, 0 );
     }
 
     // Feststellen, was es fuer Courier-Schriften auf dem Bildschirm gibt,
     // um in SetFont() evt. Courier auf Courier New zu mappen
-    if ( !maGraphicsData.mbPrinter )
+    if ( !mbPrinter )
     {
         bImplSalCourierScalable = aInfo.mbImplSalCourierScalable;
         bImplSalCourierNew      = aInfo.mbImplSalCourierNew;
@@ -1869,14 +1862,14 @@ void SalGraphics::GetDevFontList( ImplDevFontList* pList )
 
 // ----------------------------------------------------------------------------
 
-void SalGraphics::GetDevFontSubstList( OutputDevice* pOutDev )
+void WinSalGraphics::GetDevFontSubstList( OutputDevice* pOutDev )
 {}
 
 // -----------------------------------------------------------------------
 
-BOOL SalGraphics::GetGlyphBoundRect( long nIndex, Rectangle& rRect, const OutputDevice* )
+BOOL WinSalGraphics::GetGlyphBoundRect( long nIndex, Rectangle& rRect )
 {
-    HDC hDC = maGraphicsData.mhDC;
+    HDC hDC = mhDC;
 
     // use unity matrix
     MAT2 aMat;
@@ -1905,12 +1898,12 @@ BOOL SalGraphics::GetGlyphBoundRect( long nIndex, Rectangle& rRect, const Output
 
 // -----------------------------------------------------------------------
 
-BOOL SalGraphics::GetGlyphOutline( long nIndex, PolyPolygon& rPolyPoly, const OutputDevice* )
+BOOL WinSalGraphics::GetGlyphOutline( long nIndex, PolyPolygon& rPolyPoly )
 {
     rPolyPoly.Clear();
 
     BOOL bRet = FALSE;
-    HDC  hDC = maGraphicsData.mhDC;
+    HDC  hDC = mhDC;
 
     // use unity matrix
     MAT2 aMat;
@@ -2100,16 +2093,16 @@ private:
 class ScopedFont
 {
 public:
-    explicit ScopedFont(SalGraphicsData & rData);
+    explicit ScopedFont(WinSalGraphics & rData);
 
     ~ScopedFont();
 
 private:
-    SalGraphicsData & m_rData;
+    WinSalGraphics & m_rData;
     HFONT m_hOrigFont;
 };
 
-ScopedFont::ScopedFont(SalGraphicsData & rData): m_rData(rData)
+ScopedFont::ScopedFont(WinSalGraphics & rData): m_rData(rData)
 {
     m_hOrigFont = m_rData.mhFonts[0];
     m_rData.mhFonts[0] = 0; // avoid deletion of current font
@@ -2155,7 +2148,7 @@ int ScopedTrueTypeFont::open(void * pBuffer, sal_uInt32 nLen,
     return OpenTTFont(pBuffer, nLen, nFaceNum, &m_pFont);
 }
 
-BOOL SalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
+BOOL WinSalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
     ImplFontData* pFont, long* pGlyphIDs, sal_uInt8* pEncoding,
     sal_Int32* pWidths, int nGlyphs, FontSubsetInfo& rInfo )
 {
@@ -2181,13 +2174,13 @@ BOOL SalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
     aIFSD.mbNonAntialiased  = false;
 
     // TODO: much better solution: move SetFont and restoration of old font to caller
-    ScopedFont aOldFont(maGraphicsData);
+    ScopedFont aOldFont(*this);
     SetFont( &aIFSD, 0 );
 
 #if OSL_DEBUG_LEVEL > 1
     // get font metrics
     TEXTMETRICA aWinMetric;
-    if( !::GetTextMetricsA( maGraphicsData.mhDC, &aWinMetric ) )
+    if( !::GetTextMetricsA( mhDC, &aWinMetric ) )
         return FALSE;
 
     DBG_ASSERT( !(aWinMetric.tmPitchAndFamily & TMPF_DEVICE), "cannot subset device font" );
@@ -2195,11 +2188,11 @@ BOOL SalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
 #endif
 
     // get raw font file data
-    DWORD nFontSize = ::GetFontData( maGraphicsData.mhDC, 0, 0, NULL, 0 );
+    DWORD nFontSize = ::GetFontData( mhDC, 0, 0, NULL, 0 );
     if( nFontSize == GDI_ERROR )
         return FALSE;
     ScopedCharArray xRawFontData(new char[ nFontSize ]);
-    DWORD nFontSize2 = ::GetFontData( maGraphicsData.mhDC, 0, 0, (void*)xRawFontData.get(), nFontSize );
+    DWORD nFontSize2 = ::GetFontData( mhDC, 0, 0, (void*)xRawFontData.get(), nFontSize );
     if( nFontSize != nFontSize2 )
         return FALSE;
 
@@ -2290,7 +2283,7 @@ BOOL SalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
 
 //--------------------------------------------------------------------------
 
-const void* SalGraphics::GetEmbedFontData( ImplFontData* pFont, sal_Int32* pWidths, FontSubsetInfo& rInfo, long* pDataLen )
+const void* WinSalGraphics::GetEmbedFontData( ImplFontData* pFont, sal_Int32* pWidths, FontSubsetInfo& rInfo, long* pDataLen )
 {
     // TODO: how to get access to Type 1 font files on this platform?
     return NULL;
@@ -2298,16 +2291,22 @@ const void* SalGraphics::GetEmbedFontData( ImplFontData* pFont, sal_Int32* pWidt
 
 //--------------------------------------------------------------------------
 
-void SalGraphics::FreeEmbedFontData( const void* pData, long nLen )
+void WinSalGraphics::FreeEmbedFontData( const void* pData, long nLen )
 {
     // TODO: once GetEmbedFontData() above does something check implementation below
     free( (void*)pData );
 }
 
-const std::map< sal_Unicode, sal_Int32 >* SalGraphics::GetFontEncodingVector( ImplFontData* pFont, const std::map< sal_Unicode, rtl::OString >** pNonEncoded )
+const std::map< sal_Unicode, sal_Int32 >* WinSalGraphics::GetFontEncodingVector( ImplFontData* pFont, const std::map< sal_Unicode, rtl::OString >** pNonEncoded )
 {
     // TODO: once GetEmbedFontData() above does something this needs implementation
     if( pNonEncoded )
         *pNonEncoded = NULL;
     return NULL;
+}
+
+//--------------------------------------------------------------------------
+
+void WinSalGraphics::DrawServerFontLayout( const ServerFontLayout& )
+{
 }
