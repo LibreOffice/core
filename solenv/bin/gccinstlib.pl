@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: gccinstlib.pl,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hr $ $Date: 2004-04-07 10:31:21 $
+#   last change: $Author: hr $ $Date: 2004-04-08 15:09:22 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -67,7 +67,7 @@ $ENV{'LC_MESSAGES'} = 'C';
 
 %SearchDirs = GetGccSearchDirs ();
 
-$LibPaths = $SearchDirs{'libraries'} || die 'Foo';
+$LibPaths = $SearchDirs{'libraries'} || die 'None or invalid output from \"gcc -print-search-dirs\".\n';
 
 @Paths = split(':', $LibPaths);
 
