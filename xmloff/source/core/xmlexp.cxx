@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: sab $ $Date: 2001-09-13 15:18:52 $
+ *  last change: $Author: sab $ $Date: 2001-09-14 14:08:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1545,14 +1545,19 @@ void SvXMLExport::StartElement(sal_uInt16 nPrefix,
                         enum ::xmloff::token::XMLTokenEnum eName,
                         sal_Bool bIgnWSOutside )
 {
+    StartElement(pNamespaceMap->GetQNameByKey( nPrefix, GetXMLToken(eName) ), bIgnWSOutside);
+}
+
+void SvXMLExport::StartElement(const OUString& rName,
+                        sal_Bool bIgnWSOutside )
+{
     if ((mnErrorFlags & ERROR_DO_NOTHING) != ERROR_DO_NOTHING)
     {
-        OUString sName(pNamespaceMap->GetQNameByKey( nPrefix, GetXMLToken(eName) ));
         try
         {
             if( bIgnWSOutside )
                 xHandler->ignorableWhitespace( sWS );
-            xHandler->startElement( sName, GetXAttrList() );
+            xHandler->startElement( rName, GetXAttrList() );
             ClearAttrList();
         }
         catch ( uno::Exception& )
@@ -1586,14 +1591,19 @@ void SvXMLExport::EndElement(sal_uInt16 nPrefix,
                         enum ::xmloff::token::XMLTokenEnum eName,
                         sal_Bool bIgnWSInside )
 {
+    EndElement(pNamespaceMap->GetQNameByKey( nPrefix, GetXMLToken(eName) ), bIgnWSInside);
+}
+
+void SvXMLExport::EndElement(const OUString& rName,
+                        sal_Bool bIgnWSInside )
+{
     if ((mnErrorFlags & ERROR_DO_NOTHING) != ERROR_DO_NOTHING)
     {
-        OUString sName(pNamespaceMap->GetQNameByKey( nPrefix, GetXMLToken(eName) ));
         try
         {
             if( bIgnWSInside )
                 xHandler->ignorableWhitespace( sWS );
-            xHandler->endElement( sName );
+            xHandler->endElement( rName );
         }
         catch ( uno::Exception& )
         {
