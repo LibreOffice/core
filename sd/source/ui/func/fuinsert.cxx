@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuinsert.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 11:02:54 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:02:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,12 +207,12 @@ FuInsertGraphic::FuInsertGraphic (
                 sal_Int8    nAction = DND_ACTION_COPY;
                 SdrGrafObj* pEmptyGrafObj = NULL;
 
-                if ( pView->HasMarkedObj() )
+                if ( pView->AreObjectsMarked() )
                 {
                     /**********************************************************
                     * Is an empty graphic object available?
                     **********************************************************/
-                    const SdrMarkList& rMarkList = pView->GetMarkList();
+                    const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
 
                     if (rMarkList.GetMarkCount() == 1)
                     {
@@ -362,7 +362,7 @@ FuInsertOLE::FuInsertOLE (
 
 #ifdef STARIMAGE_AVAILABLE
     if (nSlotId == SID_INSERT_IMAGE &&
-        (pView->HasMarkedObj() || pView->IsTextEdit()))
+        (pView->AreObjectsMarked() || pView->IsTextEdit()))
     {
         /**********************************************************************
         * Ist ein Graphik-Objekt selektiert?
@@ -372,7 +372,7 @@ FuInsertOLE::FuInsertOLE (
            pView->EndTextEdit();
         }
 
-        const SdrMarkList& rMarkList = pView->GetMarkList();
+        const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
 
         if (rMarkList.GetMarkCount() == 1)
         {
@@ -625,12 +625,12 @@ FuInsertOLE::FuInsertOLE (
                     aSize = OutputDevice::LogicToLogic(aSize, aIPObj->GetMapUnit(), MAP_100TH_MM);
                 }
 
-                if ( pView->HasMarkedObj() )
+                if ( pView->AreObjectsMarked() )
                 {
                     /**********************************************************
                     * Ist ein leeres OLE-Objekt vorhanden?
                     **********************************************************/
-                    const SdrMarkList& rMarkList = pView->GetMarkList();
+                    const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
 
                     if (rMarkList.GetMarkCount() == 1)
                     {
