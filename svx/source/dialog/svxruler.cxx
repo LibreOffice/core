@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxruler.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pb $ $Date: 2001-08-27 13:43:19 $
+ *  last change: $Author: os $ $Date: 2001-09-14 13:46:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -322,6 +322,7 @@ SvxRuler::SvxRuler
   pULSpaceItem(0),
   pTabStopItem(0),
   pParaItem(0),
+  pParaBorderItem(0),
   pPagePosItem(0),
   pColumnItem(0),
   pObjectItem(0),
@@ -396,18 +397,22 @@ SvxRuler::SvxRuler
        SVXRULER_SUPPORT_PARAGRAPH_MARGINS)
     {
         pCtrlItem[i++] = new SvxRulerItem(SID_ATTR_PARA_LRSPACE, *this, rBindings);
-        pIndents = new RulerIndent[3+INDENT_GAP];
+        pIndents = new RulerIndent[5+INDENT_GAP];
         memset(pIndents, 0, sizeof(RulerIndent)*(3+INDENT_GAP));
         pIndents[0].nStyle = RULER_STYLE_DONTKNOW;
         pIndents[1].nStyle = RULER_STYLE_DONTKNOW;
         pIndents[2].nStyle = RULER_INDENT_TOP;
         pIndents[3].nStyle = RULER_INDENT_BOTTOM;
         pIndents[4].nStyle = RULER_INDENT_BOTTOM;
+        pIndents[5].nStyle = RULER_INDENT_BORDER;
+        pIndents[6].nStyle = RULER_INDENT_BORDER;
         pIndents[0].nPos = 0;
         pIndents[1].nPos = 0;
         pIndents[2].nPos = 0;
         pIndents[3].nPos = 0;
         pIndents[4].nPos = 0;
+        pIndents[5].nPos = 0;
+        pIndents[5].nPos = 0;
     }
 
     if((nFlags & SVXRULER_SUPPORT_BORDERS) ==  SVXRULER_SUPPORT_BORDERS)
@@ -428,6 +433,7 @@ SvxRuler::SvxRuler
     }
 
     pCtrlItem[i++] = new SvxRulerItem( SID_RULER_PROTECT, *this, rBindings );
+    pCtrlItem[i++] = new SvxRulerItem(SID_RULER_BORDER_DISTANCE, *this, rBindings);
     pRuler_Imp->nControlerItems=i;
 
     if((nFlags & SVXRULER_SUPPORT_SET_NULLOFFSET) ==
@@ -461,6 +467,7 @@ __EXPORT SvxRuler::~SvxRuler()
     delete pULSpaceItem;
     delete pTabStopItem;
     delete pParaItem;
+    delete pParaBorderItem;
     delete pPagePosItem;
     delete pColumnItem;
     delete pObjectItem;
@@ -671,7 +678,15 @@ void SvxRuler::MouseMove( const MouseEvent& rMEvt )
     }
     Ruler::MouseMove( rMEvt );
 }
-
+void SvxRuler::StartListening_Impl()
+{
+    if(!bListening)
+    {
+        bValid = FALSE;
+        StartListening(*pBindings);
+        bListening = TRUE;
+    }
+}
 
 void SvxRuler::UpdateFrame
 (
@@ -691,12 +706,7 @@ void SvxRuler::UpdateFrame
     delete pLRSpaceItem; pLRSpaceItem = 0;
     if(pItem)
         pLRSpaceItem = new SvxLongLRSpaceItem(*pItem);
-    if(!bListening)
-    {
-        bValid = FALSE;
-        StartListening(*pBindings);
-        bListening = TRUE;
-    }
+    StartListening_Impl();
   }
 }
 
@@ -742,12 +752,7 @@ void SvxRuler::UpdateFrame
     delete pULSpaceItem; pULSpaceItem = 0;
     if(pItem)
         pULSpaceItem = new SvxLongULSpaceItem(*pItem);
-    if(!bListening)
-    {
-        bValid = FALSE;
-        StartListening(*pBindings);
-        bListening = TRUE;
-    }
+    StartListening_Impl();
   }
 }
 
@@ -774,12 +779,7 @@ void SvxRuler::Update
         delete pColumnItem; pColumnItem = 0;
         if(pItem)
             pColumnItem = new SvxColumnItem(*pItem);
-        if(!bListening)
-        {
-            bValid = FALSE;
-            StartListening(*pBindings);
-            bListening = TRUE;
-        }
+        StartListening_Impl();
     }
 }
 
@@ -884,6 +884,8 @@ void SvxRuler::UpdatePara()
    pIndents[2] = Erstzeileneinzug
    pIndents[3] = linker Rand
    pIndents[4] = rechter Rand
+   pIndents[5] = left border distance
+   pIndents[6] = right border distance
 
 */
 
@@ -892,9 +894,11 @@ void SvxRuler::UpdatePara()
     if(pParaItem && pPagePosItem && !pObjectItem)
     {
         // Erstzeileneinzug, ist negativ zum linken Absatzrand
+        long nLeftFrameMargin = GetLeftFrameMargin();
+        long nRightFrameMargin = GetRightFrameMargin();
         pIndents[INDENT_GAP].nPos =
             ConvertHPosPixel(
-                GetLeftFrameMargin()+
+                nLeftFrameMargin +
                 pParaItem->GetTxtLeft() +
                 pParaItem->GetTxtFirstLineOfst() +
                 lAppNullOffset);
@@ -906,14 +910,26 @@ void SvxRuler::UpdatePara()
         // linker Rand
         pIndents[INDENT_GAP+1].nPos =
             ConvertHPosPixel(
-                GetLeftFrameMargin() +
+                nLeftFrameMargin +
                 pParaItem->GetTxtLeft() + lAppNullOffset);
         // rechter Rand, immer negativ zum rechten Rand des umgebenden Frames
         pIndents[INDENT_GAP+2].nPos =
             ConvertHPosPixel(
-                GetRightFrameMargin() -
+                nRightFrameMargin -
                 pParaItem->GetRight() + lAppNullOffset);
-        SetIndents(3, pIndents+INDENT_GAP);
+        USHORT nIndents = 5;
+        if(pParaBorderItem)
+        {
+            pIndents[INDENT_GAP+3].nPos =
+            ConvertHPosPixel( nLeftFrameMargin + lAppNullOffset);
+            pIndents[INDENT_GAP+4].nPos =
+                ConvertHPosPixel(nRightFrameMargin - lAppNullOffset);
+            pIndents[INDENT_GAP+3].nStyle = pIndents[INDENT_GAP+4].nStyle &= ~RULER_STYLE_INVISIBLE;
+        }
+        else
+            pIndents[INDENT_GAP+3].nStyle = pIndents[INDENT_GAP+4].nStyle |= RULER_STYLE_INVISIBLE;
+
+        SetIndents(nIndents, pIndents+INDENT_GAP);
     }
     else
     {
@@ -945,12 +961,22 @@ void SvxRuler::UpdatePara
         delete pParaItem; pParaItem = 0;
         if(pItem)
             pParaItem = new SvxLRSpaceItem(*pItem);
-        if(!bListening)
-        {
-            bValid = FALSE;
-            StartListening(*pBindings);
-            bListening = TRUE;
-        }
+        StartListening_Impl();
+    }
+}
+void SvxRuler::UpdateParaBorder(const SvxLRSpaceItem * pItem )
+/*
+   [Description]
+   Border distance
+*/
+
+{
+    if(bActive)
+    {
+        delete pParaBorderItem; pParaBorderItem = 0;
+        if(pItem)
+            pParaBorderItem = new SvxLRSpaceItem(*pItem);
+        StartListening_Impl();
     }
 }
 
@@ -1016,12 +1042,7 @@ void SvxRuler::Update
         delete pPagePosItem; pPagePosItem = 0;
         if(pItem)
             pPagePosItem = new SvxPagePosSizeItem(*pItem);
-        if(!bListening)
-        {
-            bValid = FALSE;
-            StartListening(*pBindings);
-            bListening = TRUE;
-        }
+        StartListening_Impl();
     }
 }
 
@@ -1199,12 +1220,7 @@ void SvxRuler::Update
         delete pTabStopItem; pTabStopItem = 0;
         if(pItem)
             pTabStopItem = new SvxTabStopItem(*pItem);
-        if(!bListening)
-        {
-            bValid = FALSE;
-            StartListening(*pBindings);
-            bListening = TRUE;
-        }
+        StartListening_Impl();
     }
 }
 
@@ -1227,12 +1243,7 @@ void SvxRuler::Update
         delete pObjectItem; pObjectItem = 0;
         if(pItem)
             pObjectItem = new SvxObjectItem(*pItem);
-        if(!bListening)
-        {
-            bValid = FALSE;
-            StartListening(*pBindings);
-            bListening = TRUE;
-        }
+        StartListening_Impl();
     }
 }
 
@@ -1374,10 +1385,14 @@ long SvxRuler::GetLogicRightIndent() const
 // oder der linke Rand der Spalte, die im Spaltenattribut als
 // altuelle Spalte eingestellt ist.
 
-inline long SvxRuler::GetLeftFrameMargin() const
+long SvxRuler::GetLeftFrameMargin() const
 {
-    return pColumnItem && pColumnItem->Count()?
-        (*pColumnItem)[pColumnItem->GetActColumn()].nStart: 0;
+    long nLeft =
+        pColumnItem && pColumnItem->Count()?
+        (*pColumnItem)[pColumnItem->GetActColumn()].nStart : 0;
+    if(pParaBorderItem && (!pColumnItem || pColumnItem->IsTable()))
+        nLeft += pParaBorderItem->GetLeft();
+    return nLeft;
 }
 
 inline long SvxRuler::GetLeftMin() const
@@ -1410,7 +1425,12 @@ long SvxRuler::GetRightFrameMargin() const
     if(pColumnItem)
     {
         if(!IsActLastColumn( TRUE ))
-            return (*pColumnItem)[GetActRightColumn( TRUE )].nEnd;
+        {
+            long nRet = (*pColumnItem)[GetActRightColumn( TRUE )].nEnd;
+            if(pColumnItem->IsTable() && pParaBorderItem)
+                nRet -= pParaBorderItem->GetRight();
+            return nRet;
+        }
     }
 
     long l = lLogicNullOffset;
@@ -1420,6 +1440,9 @@ long SvxRuler::GetRightFrameMargin() const
         l += pColumnItem->GetRight();
     else if(pLRSpaceItem)
         l += pLRSpaceItem->GetRight();
+
+    if((!pColumnItem || pColumnItem->IsTable())&& pParaBorderItem)
+        l += pParaBorderItem->GetRight();
 
     return pPagePosItem->GetWidth() - l;
 }
@@ -1507,7 +1530,7 @@ void SvxRuler::DragMargin1()
             {
                 // Rechten Einzug an alter Position
                 pIndents[2+INDENT_GAP].nPos -= lDiff;
-                SetIndents(3, pIndents+INDENT_GAP);
+                SetIndents(5, pIndents+INDENT_GAP);
             }
             if(pObjectItem)
             {
@@ -1526,7 +1549,7 @@ void SvxRuler::DragMargin1()
                     if(pParaItem)
                     {
                         pIndents[2+INDENT_GAP].nPos -= lDiff;
-                        SetIndents(3, pIndents+INDENT_GAP);
+                        SetIndents(5, pIndents+INDENT_GAP);
                     }
                 }
                 else
@@ -1536,7 +1559,7 @@ void SvxRuler::DragMargin1()
                         pIndents[0+INDENT_GAP].nPos -= lDiff;
                         pIndents[1+INDENT_GAP].nPos -= lDiff;
                         pIndents[2+INDENT_GAP].nPos -= lDiff;
-                        SetIndents(3, pIndents+INDENT_GAP);
+                        SetIndents(5, pIndents+INDENT_GAP);
                     }
                 }
                 if(pTabStopItem&& (nDragType & DRAG_OBJECT_SIZE_PROPORTIONAL)
@@ -1561,7 +1584,7 @@ void SvxRuler::DragMargin1()
                 // Linke Einzuege an alter Position
                 pIndents[0+INDENT_GAP].nPos += lDiff;
                 pIndents[1+INDENT_GAP].nPos += lDiff;
-                SetIndents(3, pIndents+INDENT_GAP);
+                SetIndents(5, pIndents+INDENT_GAP);
             }
 
             if(pColumnItem)
@@ -1576,7 +1599,7 @@ void SvxRuler::DragMargin1()
                     {
                         pIndents[0+INDENT_GAP].nPos += lDiff;
                         pIndents[1+INDENT_GAP].nPos += lDiff;
-                        SetIndents(3, pIndents+INDENT_GAP);
+                        SetIndents(5, pIndents+INDENT_GAP);
                     }
                 }
                 else
@@ -1586,7 +1609,7 @@ void SvxRuler::DragMargin1()
                         pIndents[0+INDENT_GAP].nPos += lDiff;
                         pIndents[1+INDENT_GAP].nPos += lDiff;
                         pIndents[2+INDENT_GAP].nPos += lDiff;
-                        SetIndents(3, pIndents+INDENT_GAP);
+                        SetIndents(5, pIndents+INDENT_GAP);
                     }
                 }
             }
@@ -1623,7 +1646,7 @@ void SvxRuler::DragMargin2()
     if((!pColumnItem || IsActLastColumn()) && pParaItem)
     {
         pIndents[2+INDENT_GAP].nPos += lDiff;
-        SetIndents(3, pIndents+INDENT_GAP);
+        SetIndents(5, pIndents+INDENT_GAP);
     }
 }
 
@@ -1651,9 +1674,9 @@ void SvxRuler::DragIndents()
     if(1 == GetDragAryPos() &&
        (nDragType & DRAG_OBJECT_LEFT_INDENT_ONLY) !=
        DRAG_OBJECT_LEFT_INDENT_ONLY)
-        SetIndents(5, pIndents);
+        SetIndents(7, pIndents);
     else
-        SetIndents(4, pIndents+1);
+        SetIndents(6, pIndents+1);
     DrawLine_Impl(lTabPos, 1, bHorz);
 }
 
@@ -1856,7 +1879,7 @@ void SvxRuler::UpdateParaContents_Impl
             break;
         }
     }
-    SetIndents(3, pIndents+INDENT_GAP);
+    SetIndents(5, pIndents+INDENT_GAP);
 }
 
 
@@ -3073,7 +3096,7 @@ void __EXPORT SvxRuler::EndDrag()
           case RULER_TYPE_INDENT:                // Absatzeinzuege
             if(lInitialDragPos != lPos)
                 ApplyIndents();
-            SetIndents(3, pIndents+INDENT_GAP);
+            SetIndents(5, pIndents+INDENT_GAP);
             break;
           case RULER_TYPE_TAB:                // Tabs
             {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rlrcitem.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:11 $
+ *  last change: $Author: os $ $Date: 2001-09-14 13:44:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,6 +175,13 @@ void SvxRulerItem::StateChanged( USHORT nSID, SfxItemState eState,
             rRuler.Update(pItem);
             break;
         }
+        case SID_RULER_BORDER_DISTANCE:
+        {
+            const SvxLRSpaceItem *pItem = PTR_CAST(SvxLRSpaceItem, pState);
+            DBG_ASSERT(pState?  0 != pItem: TRUE, "SvxLRSpaceItem erwartet");
+            rRuler.UpdateParaBorder(pItem);
+        }
+        break;
     }
 }
 
