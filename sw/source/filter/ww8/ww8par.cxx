@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.112 $
+ *  $Revision: 1.113 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:00:21 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 15:54:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1202,7 +1202,7 @@ void SwWW8ImplReader::Read_HdFtText(long nStart, long nLen, SwFrmFmt* pHdFtFmt)
     *pPaM->GetPoint() = aTmpPos;
 }
 
-void SwWW8ImplReader::Read_HdFt(BYTE nWhichItems, int nSect, SwPageDesc* pPD,
+void SwWW8ImplReader::Read_HdFt(BYTE nWhichItems, BYTE grpfIhdt, int nSect, SwPageDesc* pPD,
     const SwPageDesc *pPrev)
 {
     if( pHdFt )
@@ -1217,7 +1217,7 @@ void SwWW8ImplReader::Read_HdFt(BYTE nWhichItems, int nSect, SwPageDesc* pPD,
             {
                 bool bOk = true;
                 if( bVer67 )
-                    bOk = ( pHdFt->GetTextPos( nWhichItems, nI, start, nLen ) && nLen >= 2 );
+                    bOk = ( pHdFt->GetTextPos(grpfIhdt, nI, start, nLen ) && nLen >= 2 );
                 else
                 {
                     pHdFt->GetTextPosExact(nNumber + (nSect+1)*6, start, nLen);
@@ -1268,6 +1268,7 @@ void wwSectionManager::SetHdFt(wwSection &rSection, int nSect,
         // 1 Pagedesc reicht
         mrReader.Read_HdFt(
             rSection.maSep.grpfIhdt & ~(WW8_HEADER_FIRST | WW8_FOOTER_FIRST),
+            rSection.maSep.grpfIhdt,
             nSect, rSection.mpPage, pPrevious ? pPrevious->mpPage : 0);
 
     }
@@ -1278,6 +1279,7 @@ void wwSectionManager::SetHdFt(wwSection &rSection, int nSect,
         // 1. Seite einlesen
         mrReader.Read_HdFt(
             rSection.maSep.grpfIhdt & (WW8_HEADER_FIRST | WW8_FOOTER_FIRST),
+            rSection.maSep.grpfIhdt,
             nSect, rSection.mpTitlePage, pPrevious ? pPrevious->mpTitlePage : 0);
     }
 
