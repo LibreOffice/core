@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrodlg.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-23 16:39:51 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 14:08:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -445,7 +445,9 @@ void MacroChooser::DeleteMacro()
         if ( pShell )   // Muss ja nicht aus einem Document kommen...
         {
             pShell->SetModified();
-            BasicIDE::GetBindings().Invalidate( SID_SAVEDOC );
+            SfxBindings* pBindings = BasicIDE::GetBindingsPtr();
+            if ( pBindings )
+                pBindings->Invalidate( SID_SAVEDOC );
         }
 
         SbModule* pModule = pMethod->GetModule();
@@ -565,7 +567,8 @@ void MacroChooser::CheckButtons()
     // Organisieren immer moeglich ?
 
     // Assign...
-    EnableButton( aAssignButton, pMethod ? TRUE : FALSE );
+    SfxViewFrame* pViewFrame = SfxViewFrame::Current();
+    EnableButton( aAssignButton, pMethod && pViewFrame ? TRUE : FALSE );
 
     // Edit...
     EnableButton( aEditButton, pMacroEntry ? TRUE : FALSE );
@@ -797,8 +800,8 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
             }
             else
             {
-                SfxAllItemSet Args( SFX_APP()->GetPool() );
-                SfxRequest aRequest( SID_BASICIDE_APPEAR, SFX_CALLMODE_SYNCHRON, Args );
+                SfxAllItemSet aArgs( SFX_APP()->GetPool() );
+                SfxRequest aRequest( SID_BASICIDE_APPEAR, SFX_CALLMODE_SYNCHRON, aArgs );
                 SFX_APP()->ExecuteSlot( aRequest );
             }
             BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
@@ -849,8 +852,8 @@ IMPL_LINK( MacroChooser, ButtonHdl, Button *, pButton )
                     }
                     else
                     {
-                        SfxAllItemSet Args( SFX_APP()->GetPool() );
-                        SfxRequest aRequest( SID_BASICIDE_APPEAR, SFX_CALLMODE_SYNCHRON, Args );
+                        SfxAllItemSet aArgs( SFX_APP()->GetPool() );
+                        SfxRequest aRequest( SID_BASICIDE_APPEAR, SFX_CALLMODE_SYNCHRON, aArgs );
                         SFX_APP()->ExecuteSlot( aRequest );
                     }
                     BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
