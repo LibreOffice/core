@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewopt.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2002-05-29 13:38:46 $
+ *  last change: $Author: os $ $Date: 2002-05-30 10:13:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ namespace svx{ class ColorConfig;}
 #define VIEWOPT_1_STOP_ANIMATED_GRAPHIC     0x00002000L
 #define VIEWOPT_1_POSTITS       0x00004000L
 #define VIEWOPT_1_HIDDEN        0x00008000L
-
+#define VIEWOPT_1_USE_AUTO_BORDER_COLOR     0x00010000L
 #define VIEWOPT_1_GRAPHIC       0x00020000L
 #define VIEWOPT_1_TABLE         0x00040000L
 #define VIEWOPT_1_DRAW          0x00080000L
@@ -421,6 +421,10 @@ public:
     inline BOOL IsStopAnimatedText() const       { return !bReadonly && (nCoreOptions & VIEWOPT_1_STOP_ANIMATED_TEXT ) ? TRUE : FALSE; }
     inline void SetStopAnimatedText( BOOL b )
         { (b != 0) ? (nCoreOptions |= VIEWOPT_1_STOP_ANIMATED_TEXT  ) : ( nCoreOptions &= ~VIEWOPT_1_STOP_ANIMATED_TEXT ); }
+
+    inline BOOL IsUseAutomaticBorderColor() const       { return !bReadonly && (nCoreOptions & VIEWOPT_1_USE_AUTO_BORDER_COLOR ) ? TRUE : FALSE; }
+    inline void SetUseAutomaticBorderColor( BOOL b )
+        { (b != 0) ? (nCoreOptions |= VIEWOPT_1_USE_AUTO_BORDER_COLOR  ) : ( nCoreOptions &= ~VIEWOPT_1_USE_AUTO_BORDER_COLOR ); }
 
 /*---------------------------------------------------------------------------
 
