@@ -181,6 +181,7 @@ UCBStorageStream_Impl::UCBStorageStream_Impl( const String& rName, StreamMode nM
     : m_pAntiImpl( pStream )
     , m_bModified( FALSE )
     , m_bCommited( FALSE )
+    , m_bIsOLEStorage( FALSE )
     , m_bDirect( bDirect )
     , m_aURL( rName )
     , m_nMode( nMode )
@@ -535,6 +536,10 @@ UCBStorage_Impl::UCBStorage_Impl( const String& rName, StreamMode nMode, UCBStor
     , m_nMode( nMode )
     , m_bIsRoot( bIsRoot )
     , m_bDirect( bDirect )
+    , m_bModified( FALSE )
+    , m_bCommited( FALSE )
+    , m_bDirty( FALSE )
+    , m_nFormat( 0 )
 {
     String aName( rName );
     if( !aName.Len() )
@@ -565,6 +570,10 @@ UCBStorage_Impl::UCBStorage_Impl( SvStream& rStream, UCBStorage* pStorage, BOOL 
     , m_pSource( &rStream )
     , m_bIsRoot( TRUE )
     , m_bDirect( bDirect )
+    , m_bModified( FALSE )
+    , m_bCommited( FALSE )
+    , m_bDirty( FALSE )
+    , m_nFormat( 0 )
 {
     // UCBStorages work on a content, so a temporary file for a content must be created, even if the stream is only
     // accessed readonly
