@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: lla $ $Date: 2001-03-19 14:14:12 $
+ *  last change: $Author: mba $ $Date: 2001-04-09 14:58:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,6 +160,19 @@ void Desktop::Main()
 {
     ResMgr::SetReadStringHook( ReplaceStringHookProc );
     SetAppName( DEFINE_CONST_UNICODE("soffice") );
+
+#ifdef TIMEBOMB
+    Date aDate;
+    Date aFinalDate( 31, 8, 2001 );
+    if ( aFinalDate < aDate )
+    {
+        String aMsg;
+        aMsg += DEFINE_CONST_UNICODE("This Early Access Version has expired!\n");
+        InfoBox aBox( NULL, aMsg );
+        aBox.Execute();
+        return;
+    }
+#endif
 
     bool bTerminate = false;
     int nParamCount = GetCommandLineParamCount();
