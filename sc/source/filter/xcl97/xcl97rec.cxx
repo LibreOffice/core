@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.cxx,v $
  *
- *  $Revision: 1.53 $
+ *  $Revision: 1.54 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 15:41:24 $
+ *  last change: $Author: vg $ $Date: 2003-05-13 12:33:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1611,7 +1611,7 @@ XclCf::XclCf( const XclExpRoot& rRoot, const ScCondFormatEntry& r ) :
 XclCf::~XclCf()
 {
     if( pVarData )
-        delete pVarData;
+        delete [] pVarData;
 }
 
 
