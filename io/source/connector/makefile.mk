@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: jbu $ $Date: 2000-10-31 15:56:36 $
+#   last change: $Author: obr $ $Date: 2000-11-06 11:57:37 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,8 +84,7 @@ INCPRE+= $(UNOUCROUT)
 SLOFILES= \
     $(SLO)$/connector.obj\
     $(SLO)$/ctr_pipe.obj\
-    $(SLO)$/ctr_socket.obj\
-    $(SLO)$/ctr_channel.obj
+    $(SLO)$/ctr_socket.obj
 
 # NETBSD: somewhere we have to instantiate the static data members.
 # NETBSD-1.2.1 doesn't know about weak symbols so the default mechanism for GCC won't work.
