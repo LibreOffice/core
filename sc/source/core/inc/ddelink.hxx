@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ddelink.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-08 20:46:53 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 11:45:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,9 +68,11 @@
 #ifndef _SFXBRDCST_HXX //autogen
 #include <svtools/brdcst.hxx>
 #endif
+#ifndef SC_MATRIX_HXX
+#include "scmatrix.hxx"
+#endif
 
 class ScDocument;
-class ScMatrix;
 class ScMultipleReadHeader;
 class ScMultipleWriteHeader;
 
@@ -88,7 +90,7 @@ static BOOL bIsInUpdate;
 
     BOOL            bNeedUpdate;    // wird gesetzt, wenn Update nicht moeglich war
 
-    ScMatrix*       pResult;        // Ergebnis
+    ScMatrixRef     pResult;        // Ergebnis
 
 public:
     TYPEINFO();
@@ -112,8 +114,11 @@ public:
 
                                             // fuer Interpreter:
 
-    const ScMatrix* GetResult() const   { return pResult; }
-    ScMatrix* GetResult()   {return pResult; }
+    const ScMatrix* GetResult() const           { return pResult; }
+    void            SetResult( ScMatrix* pRes ) { pResult = pRes; }
+
+                                            // XML and Excel import after NewData()
+    ScMatrixRef     GetModifiableResult()   { return pResult; }
 
     const String&   GetAppl() const     { return aAppl; }
     const String&   GetTopic() const    { return aTopic; }
