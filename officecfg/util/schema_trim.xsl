@@ -3,9 +3,9 @@
  *
  *  $RCSfile: schema_trim.xsl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dg $ $Date: 2002-05-16 17:48:28 $
+ *  last change: $Author: dg $ $Date: 2002-05-17 06:44:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,9 @@
 	<xsl:output method="xml" indent="yes"/>
 	<xsl:namespace-alias stylesheet-prefix="xs" result-prefix="xs"></xsl:namespace-alias>
 
+<!-- Parameter -->
+<xsl:param name="root">../registry/schema</xsl:param>
+
 <!-- Remove all comments from the schema files -->
 	<xsl:template match="*|@*">
 	  <xsl:copy>
@@ -97,24 +100,30 @@
 
 <!-- validate for correct node references -->
 	<xsl:template match="@oor:node-type">
-		<!--<xsl:choose>
-			<xsl:when>
-				<xsl:if test="../@oor:component">	
-					<xsl:message terminate="yes">ERROR: extensible sets are currently NOT supported!</xsl:message>
-				</xsl:if> -->
+		<xsl:choose>
+			<xsl:when test="../@oor:component">
+				<xsl:variable name ="file">
+					<xsl:call-template name="locateFile"><xsl:with-param name="componentName" select="../@oor:component"/></xsl:call-template>
+				</xsl:variable>
+				<xsl:if test="not(document($file)/oor:component-schema/templates/*[@oor:name=current()])">
+					<xsl:message terminate="yes">ERROR: node-type '<xsl:value-of select="current()"/>' not found!</xsl:message>
+				</xsl:if>				
+			</xsl:when>
+			<xsl:when test="not(/oor:component-schema/templates/*[@oor:name=current()])">
+				<xsl:message terminate="yes">ERROR: node-type '<xsl:value-of select="current()"/>' not found!</xsl:message>
+			</xsl:when>
+		</xsl:choose>		
 		<xsl:copy/>
 	</xsl:template>
 
 <!-- locate a component file -->
 	<xsl:template name="locateFile">
 		<xsl:param name="componentName"/>
-		<xsl:param name="path" select="$root"/>
-		<xsl:variable name ="file"><xsl:value-of select="$path"/>/<xsl:value-of select="translate($componentName,'.','/')"/>.xcd</xsl:variable>
+		<xsl:variable name ="file"><xsl:value-of select="$root"/>/<xsl:value-of select="translate($componentName,'.','/')"/>.xcs</xsl:variable>
 		<xsl:if	test="not( document($file) )">
 			<xsl:message terminate ="yes">**Error: unable to locate document '<xsl:value-of select="translate($componentName,'.','/')"/>.xcd'</xsl:message>
 		</xsl:if>
 		<xsl:value-of select="$file"/>
 	</xsl:template>
-
 
 </xsl:transform>
