@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: pluby $ $Date: 2000-11-19 02:37:03 $
+ *  last change: $Author: bmahbod $ $Date: 2000-11-20 23:32:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,111 +198,125 @@ void SalGraphics::SetROPFillColor( SalROPColor nROPColor )
 
 void SalGraphics::DrawPixel( long nX, long nY )
 {
-}
+    VCLVIEW hView = maGraphicsData.mhDC;
+
+    if ( hView )
+    {
+        VCLGraphics_DrawPixel ( hView, nX, nY );
+    } // if
+} // SalGraphics::DrawPixel
 
 // -----------------------------------------------------------------------
 
 void SalGraphics::DrawPixel( long nX, long nY, SalColor nSalColor )
 {
+    VCLVIEW hView = maGraphicsData.mhDC;
+
+    if ( hView )
+    {
+        RGBColor pixelRGBColor;
+
+        pixelRGBColor.red   = SALCOLOR_RED   ( nSalColor );
+        pixelRGBColor.green = SALCOLOR_GREEN ( nSalColor );
+        pixelRGBColor.blue  = SALCOLOR_BLUE  ( nSalColor );
+
+        VCLGraphics_DrawColorPixel ( hView, nX, nY, &pixelRGBColor );
+    } // if
 }
 
 // -----------------------------------------------------------------------
 
 void SalGraphics::DrawLine( long nX1, long nY1, long nX2, long nY2 )
-    {
-        VCLVIEW hView = maGraphicsData.mhDC;
+{
+    VCLVIEW hView = maGraphicsData.mhDC;
 
-        if ( hView )
-            {
-                VCLGraphics_DrawLine ( hView,
-                                       nX1,
-                                       nY1,
-                                       nX2,
-                                       nY2
-                                     );
-            } // if
-    } // SalGraphics::DrawLine
+    if ( hView )
+    {
+        VCLGraphics_DrawLine ( hView,
+                       nX1,
+                       nY1,
+                       nX2,
+                       nY2
+                     );
+    } // if
+} // SalGraphics::DrawLine
 
 // -----------------------------------------------------------------------
 
 void SalGraphics::DrawRect( long nX, long nY, long nWidth, long nHeight )
-    {
-        VCLVIEW hView = maGraphicsData.mhDC;
+{
+    VCLVIEW hView = maGraphicsData.mhDC;
 
-        if ( hView )
-            {
-                VCLGraphics_DrawRect ( hView,
-                                       nX,
-                                       nY,
-                                       nWidth,
-                                       nHeight
-                                     );
-            } // if
-    } // SalGraphics::DrawRect
+    if ( hView )
+    {
+        VCLGraphics_DrawRect ( hView,
+                               nX,
+                       nY,
+                       nWidth,
+                       nHeight
+                     );
+    } // if
+} // SalGraphics::DrawRect
 
 // -----------------------------------------------------------------------
 
 void SalGraphics::DrawPolyLine( ULONG nPoints, const SalPoint *pPtAry )
+{
+    if  ( ( nPoints > 1 ) && ( pPtAry != NULL ) )
     {
-        if  ( nPoints > 1 )
-            {
-                long     i;
-                long     pXPtsArray[nPoints];
-                long     pYPtsArray[nPoints];
-                VCLVIEW  hView = maGraphicsData.mhDC;
+        long     i;
+        long     pXPtsArray[nPoints];
+        long     pYPtsArray[nPoints];
+        VCLVIEW  hView = maGraphicsData.mhDC;
 
-                for ( i = 0; i < nPoints; i++ )
-                    {
-                        pXPtsArray[i] = pPtAry[i].mnX;
-                        pYPtsArray[i] = pPtAry[i].mnY;
-                    } // for
+        for ( i = 0; i < nPoints; i++ )
+        {
+            pXPtsArray[i] = pPtAry[i].mnX;
+            pYPtsArray[i] = pPtAry[i].mnY;
+        } // for
 
-                if ( hView )
-                    {
-                        VCLGraphics_DrawPolygon
-                            (
-                                hView,
-                                nPoints,
-                                pXPtsArray,
-                                pYPtsArray
-                            );
-                    } // if
-            } // if
-    } // SalGraphics::DrawPolyLine
+        if ( hView )
+        {
+            VCLGraphics_DrawPolygon ( hView,
+                                      nPoints,
+                                      pXPtsArray,
+                                      pYPtsArray
+                                    );
+        } // if
+    } // if
+} // SalGraphics::DrawPolyLine
 
 // -----------------------------------------------------------------------
 
 void SalGraphics::DrawPolygon( ULONG nPoints, const SalPoint* pPtAry )
+{
+    if  ( ( nPoints > 1 ) && ( pPtAry != NULL ) )
     {
-        // Temporary QD implementation until a proper method
-        // is determined to do a color polygon fill
+        long     i;
+        long     pXPtsArray[nPoints];
+        long     pYPtsArray[nPoints];
+        VCLVIEW  hView = maGraphicsData.mhDC;
 
-        if  ( nPoints > 1 )
-            {
-                long     i;
-                long     pXPtsArray[nPoints];
-                long     pYPtsArray[nPoints];
-                VCLVIEW  hView = maGraphicsData.mhDC;
+        for ( i = 0; i < nPoints; i++ )
+        {
+            pXPtsArray[i] = pPtAry[i].mnX;
+            pYPtsArray[i] = pPtAry[i].mnY;
+        } // for
 
-                for ( i = 0; i < nPoints; i++ )
-                    {
-                        pXPtsArray[i] = pPtAry[i].mnX;
-                        pYPtsArray[i] = pPtAry[i].mnY;
-                    } // for
+        if ( hView )
+        {
+            // Will be changed once set color apis are implemented
+            // passing null  color for now
 
-                if ( hView )
-                    {
-                        VCLGraphics_DrawColorPolygon
-                            (
-                                hView,
-                                nPoints,
-                                pXPtsArray,
-                                pYPtsArray,
-                                NULL
-                            );
-                    } // if
-            } // if
-    } // SalGraphics::DrawPolygon
+            VCLGraphics_DrawColorPolygon ( hView,
+                                           nPoints,
+                                           pXPtsArray,
+                                           pYPtsArray,
+                                           NULL
+                                         );
+        } // if
+    } // if
+} // SalGraphics::DrawPolygon
 
 // -----------------------------------------------------------------------
 
