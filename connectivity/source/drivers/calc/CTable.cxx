@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CTable.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:38:21 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 08:23:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -893,14 +893,14 @@ End:
     return sal_True;
 }
 //------------------------------------------------------------------
-sal_Bool OCalcTable::fetchRow( OValueRow _rRow, const OSQLColumns & _rCols,
+sal_Bool OCalcTable::fetchRow( OValueRefRow& _rRow, const OSQLColumns & _rCols,
                                 sal_Bool _bUseTableDefs, sal_Bool bRetrieveData )
 {
     // read the bookmark
 
     BOOL bIsCurRecordDeleted = sal_False;
     _rRow->setDeleted(bIsCurRecordDeleted);
-    (*_rRow)[0] = m_nFilePos;
+    *(*_rRow)[0] = m_nFilePos;
 
     if (!bRetrieveData)
         return TRUE;
@@ -921,8 +921,8 @@ sal_Bool OCalcTable::fetchRow( OValueRow _rRow, const OSQLColumns & _rCols,
         else
             xColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE)) >>= nType;
 
-        if ((*_rRow)[i].isBound())
-            lcl_SetValue( (*_rRow)[i], m_xSheet, m_nStartCol, m_nStartRow, m_bHasHeaders,
+        if ((*_rRow)[i]->isBound())
+            lcl_SetValue( (*_rRow)[i]->get(), m_xSheet, m_nStartCol, m_nStartRow, m_bHasHeaders,
                             m_aNullDate, m_nFilePos, i, nType );
     }
     return sal_True;
@@ -935,48 +935,4 @@ void OCalcTable::FileClose()
     OCalcTable_BASE::FileClose();
 }
 // -------------------------------------------------------------------------
-BOOL OCalcTable::CreateImpl()
-{
-    return sal_False;       // read-only for now
-}
-
-//------------------------------------------------------------------
-BOOL OCalcTable::DropImpl()
-{
-    return sal_False;       // read-only for now
-}
-//------------------------------------------------------------------
-BOOL OCalcTable::InsertRow(OValueVector& rRow, BOOL bFlush,const Reference<XIndexAccess>& _xCols)
-{
-    return sal_False;       // read-only for now
-}
-
-//------------------------------------------------------------------
-BOOL OCalcTable::UpdateRow(OValueVector& rRow, OValueRow pOrgRow,const Reference<XIndexAccess>& _xCols)
-{
-    return sal_False;       // read-only for now
-}
-
-//------------------------------------------------------------------
-BOOL OCalcTable::DeleteRow(const OSQLColumns& _rCols)
-{
-    return sal_False;       // read-only for now
-}
-
-// -------------------------------------------------------------------------
-Reference<XPropertySet> OCalcTable::isUniqueByColumnName(const ::rtl::OUString& _rColName)
-{
-    return Reference<XPropertySet>();
-}
-//------------------------------------------------------------------
-BOOL OCalcTable::UpdateBuffer(OValueVector& rRow, OValueRow pOrgRow,const Reference<XIndexAccess>& _xCols)
-{
-    return sal_False;       // read-only for now
-}
-//------------------------------------------------------------------
-BOOL OCalcTable::WriteBuffer()
-{
-    return sal_False;       // read-only for now
-}
-// -----------------------------------------------------------------------------
 
