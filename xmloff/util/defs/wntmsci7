@@ -10525,3 +10525,8 @@ _TI3?AVSAXParseException@sax@xml@star@sun@com@@
 ?importXML@XMLTextOrientationHdl@@UBEEABVOUString@rtl@@AAVAny@uno@star@sun@com@@ABVSvXMLUnitConverter@@@Z
 ?FindTextStyleAndHyperlink@XMLTextParagraphExport@@IBE?AVOUString@rtl@@ABV?$Reference@VXPropertySet@beans@star@sun@com@@@uno@star@sun@com@@AAE@Z
 ?exportText@XMLTextParagraphExport@@IAEXABV?$Reference@VXText@text@star@sun@com@@@uno@star@sun@com@@ABV?$Reference@VXTextSection@text@star@sun@com@@@3456@EEE@Z
+?destroy_node@?$_Rb_tree@VOUString@rtl@@U?$pair@$$CBVOUString@rtl@@PAVXMLEventExportHandler@@@_STL@@U?$_Select1st@U?$pair@$$CBVOUString@rtl@@PAVXMLEventExportHandler@@@_STL@@@4@U?$less@VOUString@rtl@@@4@V?$allocator@U?$pair@$$CBVOUString@rtl@@PAVXMLEventExportHandler@@@_STL@@@4@@_STL@@IAEXPAU?$_Rb_tree_node@U?$pair@$$CBVOUString@rtl@@PAVXMLEventExportHandler@@@_STL@@@2@@Z
+?exportStyleAttributes@SvXMLAutoStylePoolP@@MBEXJABV?$vector@UXMLPropertyState@@V?$allocator@UXMLPropertyState@@@_STL@@@_STL@@ABVSvXMLExportPropertyMapper@@@Z
+?exportStyleContent@SvXMLAutoStylePoolP@@MBEXJABV?$vector@UXMLPropertyState@@V?$allocator@UXMLPropertyState@@@_STL@@@_STL@@ABVSvXMLExportPropertyMapper@@@Z
+?exportXML@SvXMLAutoStylePoolP@@QBEXJ@Z
+?exportStyleAttributes@SchXMLAutoStylePoolP@@MBEXJABV?$vector@UXMLPropertyState@@V?$allocator@UXMLPropertyState@@@_STL@@@_STL@@ABVSvXMLExportPropertyMapper@@@Z
