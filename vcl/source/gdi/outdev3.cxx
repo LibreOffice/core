@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: cd $ $Date: 2001-10-08 12:53:19 $
+ *  last change: $Author: cp $ $Date: 2001-10-10 11:19:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1067,7 +1067,7 @@ static char const aImplSubsSTCKai[] = "kai;simkai;fzkai;zycjkkai;mkai"; // SC an
 static char const aImplSubsKRBatang[] = "hymyeongjolightk;myeongjo;batang;batangche;gungsuh;gungsuhche;myeomjo";
 static char const aImplSubsKRGulim[] = "gulim;gulimche;dotum;dotumche;roundgothic;kodig;andalesansui";
 
-static char const aImplSubsCenturyGothic[] = "centurygothic;avantgarde;itcavantgarde;gothic;sheffield;conga";
+static char const aImplSubsCenturyGothic[] = "centurygothic;avantgarde;itcavantgarde;gothic;conga";
 static char const aImplSubsNewCenturySchoolbook[] = "newcenturyschlbk;newcenturyschoolbook;centuryschoolbook;centuryschoolbookl";
 static char const aImplSubsBookman[] = "bookman;itcbookman;bookmanl;bookmanoldstyle;";
 static char const aImplSubsPalatino[] = "palatino;bookantiqua;palladio;palladiol";
