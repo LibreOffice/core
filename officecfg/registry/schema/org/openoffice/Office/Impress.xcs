@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Impress.xcs,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 18:27:32 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 14:30:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -678,21 +678,21 @@
 							<enumeration oor:value="1">
 								<info>
 									<desc xml:lang="en-US">Millimeter</desc>
-									<desc xml:lang="el">Millimeter</desc>
+									<desc xml:lang="el">Χιλιοστά</desc>
 									<desc xml:lang="nl">Millimeter</desc>
-									<desc xml:lang="fr">Millimeter</desc>
-									<desc xml:lang="fi">Millimeter</desc>
-									<desc xml:lang="cs">Millimeter</desc>
+									<desc xml:lang="fr">Millimètre</desc>
+									<desc xml:lang="fi">Millimetri</desc>
+									<desc xml:lang="cs">Milimetr</desc>
 									<desc xml:lang="da">Millimeter</desc>
 									<desc xml:lang="zh-CN">毫米</desc>
 									<desc xml:lang="zh-TW">毫米</desc>
-									<desc xml:lang="ar">Millimeter</desc>
-									<desc xml:lang="he">Millimeter</desc>
-									<desc xml:lang="ca">Millimeter</desc>
+									<desc xml:lang="ar">ميليمتر</desc>
+									<desc xml:lang="he">‮מילימטר‬</desc>
+									<desc xml:lang="ca">Mil?l?metre</desc>
 									<desc xml:lang="pt">Milímetro</desc>
 									<desc xml:lang="ru">Миллиметры</desc>
 									<desc xml:lang="es">Milímetros</desc>
-									<desc xml:lang="it">Millimeter</desc>
+									<desc xml:lang="it">Millimetro</desc>
 									<desc xml:lang="sv">Millimeter</desc>
 									<desc xml:lang="pl">Milimetr</desc>
 									<desc xml:lang="pt-BR">Milímetro</desc>
@@ -706,24 +706,24 @@
 							<enumeration oor:value="2">
 								<info>
 									<desc xml:lang="en-US">Centimeter</desc>
-									<desc xml:lang="el">Centimeter</desc>
+									<desc xml:lang="el">Εκατοστά</desc>
 									<desc xml:lang="nl">Centimeter</desc>
-									<desc xml:lang="fr">Centimeter</desc>
-									<desc xml:lang="fi">Centimeter</desc>
+									<desc xml:lang="fr">Centimètre</desc>
+									<desc xml:lang="fi">Senttimetri</desc>
 									<desc xml:lang="cs">Centimeter</desc>
 									<desc xml:lang="da">Centimeter</desc>
 									<desc xml:lang="zh-CN">厘米</desc>
 									<desc xml:lang="zh-TW">厘米</desc>
-									<desc xml:lang="ar">Centimeter</desc>
-									<desc xml:lang="he">Centimeter</desc>
-									<desc xml:lang="ca">Centimeter</desc>
-									<desc xml:lang="pt">Centimeter</desc>
+									<desc xml:lang="ar">سنتيمتر</desc>
+									<desc xml:lang="he">‮סנטימטר‬</desc>
+									<desc xml:lang="ca">Centímetre</desc>
+									<desc xml:lang="pt">Centímetro</desc>
 									<desc xml:lang="ru">Сантиметры</desc>
-									<desc xml:lang="es">Centimeter</desc>
-									<desc xml:lang="it">Centimeter</desc>
+									<desc xml:lang="es">Centímetro</desc>
+									<desc xml:lang="it">Centimetro</desc>
 									<desc xml:lang="sv">Centimeter</desc>
-									<desc xml:lang="pl">Centimeter</desc>
-									<desc xml:lang="pt-BR">Centimeter</desc>
+									<desc xml:lang="pl">Centymetr</desc>
+									<desc xml:lang="pt-BR">Centímetro</desc>
 									<desc xml:lang="ja">センチメートル</desc>
 									<desc xml:lang="ko">센티미터</desc>
 									<desc xml:lang="tr">Santimetre</desc>
@@ -734,17 +734,17 @@
 							<enumeration oor:value="6">
 								<info>
 									<desc xml:lang="en-US">Point</desc>
-									<desc xml:lang="el">Point</desc>
-									<desc xml:lang="nl">Point</desc>
+									<desc xml:lang="el">Σημείο</desc>
+									<desc xml:lang="nl">Punt</desc>
 									<desc xml:lang="fr">Point</desc>
-									<desc xml:lang="fi">Point</desc>
-									<desc xml:lang="cs">Point</desc>
-									<desc xml:lang="da">Point</desc>
+									<desc xml:lang="fi">Piste</desc>
+									<desc xml:lang="cs">Bod</desc>
+									<desc xml:lang="da">Punkt</desc>
 									<desc xml:lang="zh-CN">点</desc>
 									<desc xml:lang="zh-TW">點</desc>
-									<desc xml:lang="ar">Point</desc>
-									<desc xml:lang="he">Point</desc>
-									<desc xml:lang="ca">Point</desc>
+									<desc xml:lang="ar">نقطة</desc>
+									<desc xml:lang="he">‮נקודה‬</desc>
+									<desc xml:lang="ca">Punt</desc>
 									<desc xml:lang="pt">Ponto</desc>
 									<desc xml:lang="ru">Пункт</desc>
 									<desc xml:lang="es">Punto</desc>
@@ -762,17 +762,17 @@
 							<enumeration oor:value="7">
 								<info>
 									<desc xml:lang="en-US">Pica</desc>
-									<desc xml:lang="el">Pica</desc>
+									<desc xml:lang="el">Pica (Πίκα)</desc>
 									<desc xml:lang="nl">Pica</desc>
 									<desc xml:lang="fr">Pica</desc>
 									<desc xml:lang="fi">Pica</desc>
-									<desc xml:lang="cs">Pica</desc>
+									<desc xml:lang="cs">Pika</desc>
 									<desc xml:lang="da">Pica</desc>
 									<desc xml:lang="zh-CN">皮可</desc>
 									<desc xml:lang="zh-TW">皮可</desc>
-									<desc xml:lang="ar">Pica</desc>
-									<desc xml:lang="he">Pica</desc>
-									<desc xml:lang="ca">Pica</desc>
+									<desc xml:lang="ar">بيكا</desc>
+									<desc xml:lang="he">‮פיקה‬</desc>
+									<desc xml:lang="ca">Piques</desc>
 									<desc xml:lang="pt">Pica</desc>
 									<desc xml:lang="ru">Пики</desc>
 									<desc xml:lang="es">Pica</desc>
@@ -790,17 +790,17 @@
 							<enumeration oor:value="8">
 								<info>
 									<desc xml:lang="en-US">Inch</desc>
-									<desc xml:lang="el">Inch</desc>
-									<desc xml:lang="nl">Inch</desc>
+									<desc xml:lang="el">Ίντσα</desc>
+									<desc xml:lang="nl">Duim</desc>
 									<desc xml:lang="fr">Pouce</desc>
-									<desc xml:lang="fi">Inch</desc>
-									<desc xml:lang="cs">Inch</desc>
-									<desc xml:lang="da">Inch</desc>
+									<desc xml:lang="fi">Tuuma</desc>
+									<desc xml:lang="cs">Palec</desc>
+									<desc xml:lang="da">Tommer</desc>
 									<desc xml:lang="zh-CN">英寸</desc>
 									<desc xml:lang="zh-TW">英吋</desc>
-									<desc xml:lang="ar">Inch</desc>
-									<desc xml:lang="he">Inch</desc>
-									<desc xml:lang="ca">Inch</desc>
+									<desc xml:lang="ar">بوصة</desc>
+									<desc xml:lang="he">‮אינצ&apos;‬</desc>
+									<desc xml:lang="ca">Polzada</desc>
 									<desc xml:lang="pt">Polegada</desc>
 									<desc xml:lang="ru">Дюймы</desc>
 									<desc xml:lang="es">Pulgadas</desc>
@@ -873,21 +873,21 @@
 							<enumeration oor:value="1">
 								<info>
 									<desc xml:lang="en-US">Millimeter</desc>
-									<desc xml:lang="el">Millimeter</desc>
+									<desc xml:lang="el">Χιλιοστά</desc>
 									<desc xml:lang="nl">Millimeter</desc>
-									<desc xml:lang="fr">Millimeter</desc>
-									<desc xml:lang="fi">Millimeter</desc>
-									<desc xml:lang="cs">Millimeter</desc>
+									<desc xml:lang="fr">Millimètre</desc>
+									<desc xml:lang="fi">Millimetri</desc>
+									<desc xml:lang="cs">Milimetr</desc>
 									<desc xml:lang="da">Millimeter</desc>
 									<desc xml:lang="zh-CN">毫米</desc>
 									<desc xml:lang="zh-TW">毫米</desc>
-									<desc xml:lang="ar">Millimeter</desc>
-									<desc xml:lang="he">Millimeter</desc>
-									<desc xml:lang="ca">Millimeter</desc>
+									<desc xml:lang="ar">ميليمتر</desc>
+									<desc xml:lang="he">‮מילימטר‬</desc>
+									<desc xml:lang="ca">Mil?l?metre</desc>
 									<desc xml:lang="pt">Milímetro</desc>
 									<desc xml:lang="ru">Миллиметры</desc>
 									<desc xml:lang="es">Milímetros</desc>
-									<desc xml:lang="it">Millimeter</desc>
+									<desc xml:lang="it">Millimetro</desc>
 									<desc xml:lang="sv">Millimeter</desc>
 									<desc xml:lang="pl">Milimetr</desc>
 									<desc xml:lang="pt-BR">Milímetro</desc>
@@ -901,24 +901,24 @@
 							<enumeration oor:value="2">
 								<info>
 									<desc xml:lang="en-US">Centimeter</desc>
-									<desc xml:lang="el">Centimeter</desc>
+									<desc xml:lang="el">Εκατοστά</desc>
 									<desc xml:lang="nl">Centimeter</desc>
-									<desc xml:lang="fr">Centimeter</desc>
-									<desc xml:lang="fi">Centimeter</desc>
+									<desc xml:lang="fr">Centimètre</desc>
+									<desc xml:lang="fi">Senttimetri</desc>
 									<desc xml:lang="cs">Centimeter</desc>
 									<desc xml:lang="da">Centimeter</desc>
 									<desc xml:lang="zh-CN">厘米</desc>
 									<desc xml:lang="zh-TW">厘米</desc>
-									<desc xml:lang="ar">Centimeter</desc>
-									<desc xml:lang="he">Centimeter</desc>
-									<desc xml:lang="ca">Centimeter</desc>
-									<desc xml:lang="pt">Centimeter</desc>
+									<desc xml:lang="ar">سنتيمتر</desc>
+									<desc xml:lang="he">‮סנטימטר‬</desc>
+									<desc xml:lang="ca">Centímetre</desc>
+									<desc xml:lang="pt">Centímetro</desc>
 									<desc xml:lang="ru">Сантиметры</desc>
-									<desc xml:lang="es">Centimeter</desc>
-									<desc xml:lang="it">Centimeter</desc>
+									<desc xml:lang="es">Centímetro</desc>
+									<desc xml:lang="it">Centimetro</desc>
 									<desc xml:lang="sv">Centimeter</desc>
-									<desc xml:lang="pl">Centimeter</desc>
-									<desc xml:lang="pt-BR">Centimeter</desc>
+									<desc xml:lang="pl">Centymetr</desc>
+									<desc xml:lang="pt-BR">Centímetro</desc>
 									<desc xml:lang="ja">センチメートル</desc>
 									<desc xml:lang="ko">센티미터</desc>
 									<desc xml:lang="tr">Santimetre</desc>
@@ -929,17 +929,17 @@
 							<enumeration oor:value="6">
 								<info>
 									<desc xml:lang="en-US">Point</desc>
-									<desc xml:lang="el">Point</desc>
-									<desc xml:lang="nl">Point</desc>
+									<desc xml:lang="el">Σημείο</desc>
+									<desc xml:lang="nl">Punt</desc>
 									<desc xml:lang="fr">Point</desc>
-									<desc xml:lang="fi">Point</desc>
-									<desc xml:lang="cs">Point</desc>
-									<desc xml:lang="da">Point</desc>
+									<desc xml:lang="fi">Piste</desc>
+									<desc xml:lang="cs">Bod</desc>
+									<desc xml:lang="da">Punkt</desc>
 									<desc xml:lang="zh-CN">点</desc>
 									<desc xml:lang="zh-TW">點</desc>
-									<desc xml:lang="ar">Point</desc>
-									<desc xml:lang="he">Point</desc>
-									<desc xml:lang="ca">Point</desc>
+									<desc xml:lang="ar">نقطة</desc>
+									<desc xml:lang="he">‮נקודה‬</desc>
+									<desc xml:lang="ca">Punt</desc>
 									<desc xml:lang="pt">Ponto</desc>
 									<desc xml:lang="ru">Пункт</desc>
 									<desc xml:lang="es">Punto</desc>
@@ -957,17 +957,17 @@
 							<enumeration oor:value="7">
 								<info>
 									<desc xml:lang="en-US">Pica</desc>
-									<desc xml:lang="el">Pica</desc>
+									<desc xml:lang="el">Pica (Πίκα)</desc>
 									<desc xml:lang="nl">Pica</desc>
 									<desc xml:lang="fr">Pica</desc>
 									<desc xml:lang="fi">Pica</desc>
-									<desc xml:lang="cs">Pica</desc>
+									<desc xml:lang="cs">Pika</desc>
 									<desc xml:lang="da">Pica</desc>
 									<desc xml:lang="zh-CN">皮可</desc>
 									<desc xml:lang="zh-TW">皮可</desc>
-									<desc xml:lang="ar">Pica</desc>
-									<desc xml:lang="he">Pica</desc>
-									<desc xml:lang="ca">Pica</desc>
+									<desc xml:lang="ar">بيكا</desc>
+									<desc xml:lang="he">‮פיקה‬</desc>
+									<desc xml:lang="ca">Piques</desc>
 									<desc xml:lang="pt">Pica</desc>
 									<desc xml:lang="ru">Пики</desc>
 									<desc xml:lang="es">Pica</desc>
@@ -985,17 +985,17 @@
 							<enumeration oor:value="8">
 								<info>
 									<desc xml:lang="en-US">Inch</desc>
-									<desc xml:lang="el">Inch</desc>
-									<desc xml:lang="nl">Inch</desc>
+									<desc xml:lang="el">Ίντσα</desc>
+									<desc xml:lang="nl">Duim</desc>
 									<desc xml:lang="fr">Pouce</desc>
-									<desc xml:lang="fi">Inch</desc>
-									<desc xml:lang="cs">Inch</desc>
-									<desc xml:lang="da">Inch</desc>
+									<desc xml:lang="fi">Tuuma</desc>
+									<desc xml:lang="cs">Palec</desc>
+									<desc xml:lang="da">Tommer</desc>
 									<desc xml:lang="zh-CN">英寸</desc>
 									<desc xml:lang="zh-TW">英吋</desc>
-									<desc xml:lang="ar">Inch</desc>
-									<desc xml:lang="he">Inch</desc>
-									<desc xml:lang="ca">Inch</desc>
+									<desc xml:lang="ar">بوصة</desc>
+									<desc xml:lang="he">‮אינצ&apos;‬</desc>
+									<desc xml:lang="ca">Polzada</desc>
 									<desc xml:lang="pt">Polegada</desc>
 									<desc xml:lang="ru">Дюймы</desc>
 									<desc xml:lang="es">Pulgadas</desc>
@@ -1717,17 +1717,17 @@
 					<enumeration oor:value="0">
 						<info>
 							<desc xml:lang="en-US">Color</desc>
-							<desc xml:lang="el">Color</desc>
-							<desc xml:lang="nl">Color</desc>
+							<desc xml:lang="el">Χρώμα</desc>
+							<desc xml:lang="nl">Kleur</desc>
 							<desc xml:lang="fr">Couleur</desc>
-							<desc xml:lang="fi">Color</desc>
-							<desc xml:lang="cs">Color</desc>
-							<desc xml:lang="da">Color</desc>
+							<desc xml:lang="fi">Väri</desc>
+							<desc xml:lang="cs">Barva</desc>
+							<desc xml:lang="da">Farve</desc>
 							<desc xml:lang="zh-CN">颜色</desc>
 							<desc xml:lang="zh-TW">顏色</desc>
-							<desc xml:lang="ar">Color</desc>
-							<desc xml:lang="he">Color</desc>
-							<desc xml:lang="ca">Color</desc>
+							<desc xml:lang="ar">اللون</desc>
+							<desc xml:lang="he">‮צבע‬</desc>
+							<desc xml:lang="ca">~Color</desc>
 							<desc xml:lang="pt">Cor</desc>
 							<desc xml:lang="ru">Цвет</desc>
 							<desc xml:lang="es">~Color</desc>
@@ -1745,17 +1745,17 @@
 					<enumeration oor:value="868">
 						<info>
 							<desc xml:lang="en-US">Grayscale</desc>
-							<desc xml:lang="el">Grayscale</desc>
-							<desc xml:lang="nl">Grayscale</desc>
+							<desc xml:lang="el">Διαβαθμίσεις του γκρι</desc>
+							<desc xml:lang="nl">Grijswaarden</desc>
 							<desc xml:lang="fr">Niveaux de gris</desc>
-							<desc xml:lang="fi">Grayscale</desc>
-							<desc xml:lang="cs">Grayscale</desc>
-							<desc xml:lang="da">Grayscale</desc>
+							<desc xml:lang="fi">Harmaasävy</desc>
+							<desc xml:lang="cs">Stupně šedi</desc>
+							<desc xml:lang="da">Gråtoner</desc>
 							<desc xml:lang="zh-CN">灰度</desc>
 							<desc xml:lang="zh-TW">灰階</desc>
-							<desc xml:lang="ar">Grayscale</desc>
-							<desc xml:lang="he">Grayscale</desc>
-							<desc xml:lang="ca">Grayscale</desc>
+							<desc xml:lang="ar">درجات الرمادي</desc>
+							<desc xml:lang="he">‮סולם האפור‬</desc>
+							<desc xml:lang="ca">Escala de grisos</desc>
 							<desc xml:lang="pt">Tons de cinzento</desc>
 							<desc xml:lang="ru">Оттенки серого</desc>
 							<desc xml:lang="es">Escala de grises</desc>
@@ -1773,17 +1773,17 @@
 					<enumeration oor:value="5381">
 						<info>
 							<desc xml:lang="en-US">Black/White</desc>
-							<desc xml:lang="el">Black/White</desc>
-							<desc xml:lang="nl">Black/White</desc>
+							<desc xml:lang="el">Μαύρο/Λευκό</desc>
+							<desc xml:lang="nl">Zwart-wit</desc>
 							<desc xml:lang="fr">Noir/Blanc</desc>
-							<desc xml:lang="fi">Black/White</desc>
-							<desc xml:lang="cs">Black/White</desc>
-							<desc xml:lang="da">Black/White</desc>
+							<desc xml:lang="fi">Mustavalkoinen</desc>
+							<desc xml:lang="cs">Černobílá</desc>
+							<desc xml:lang="da">Sort-hvid</desc>
 							<desc xml:lang="zh-CN">黑/白</desc>
 							<desc xml:lang="zh-TW">黑白</desc>
-							<desc xml:lang="ar">Black/White</desc>
-							<desc xml:lang="he">Black/White</desc>
-							<desc xml:lang="ca">Black/White</desc>
+							<desc xml:lang="ar">أسود/أبيض</desc>
+							<desc xml:lang="he">Schwarz/Weiß</desc>
+							<desc xml:lang="ca">Negre/Blanc</desc>
 							<desc xml:lang="pt">Preto/Branco</desc>
 							<desc xml:lang="ru">Черно-белый</desc>
 							<desc xml:lang="es">Blanco y Negro</desc>
@@ -2401,7 +2401,7 @@
 						<label xml:lang="pt">~Sempre com página actual</label>
 						<label xml:lang="ru">~Всегда с текущего слайда</label>
 						<label xml:lang="es">~Siempre con la página actual</label>
-						<label xml:lang="it">Sempre con la pagina corrente</label>
+						<label xml:lang="it">Sempre con la pagina attiva</label>
 						<label xml:lang="sv">Allt~id med aktuell sida</label>
 						<label xml:lang="pl">Za~wsze od bieżącej strony</label>
 						<label xml:lang="pt-BR">Sempre com página atual</label>
@@ -6234,6 +6234,7 @@
 		</group>
 	</component>
 </oor:component-schema>
+
 
 
 
