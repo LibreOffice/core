@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:44:54 $
+#   last change: $Author: dr $ $Date: 2002-07-08 08:00:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,28 +82,30 @@ AUTOSEG=true
 # --- Files --------------------------------------------------------
 
 SLOFILES =	\
-    $(SLO)$/sortdlg.obj	\
-    $(SLO)$/tpsort.obj	\
-    $(SLO)$/filtdlg.obj	\
-    $(SLO)$/sfiltdlg.obj \
-    $(SLO)$/foptmgr.obj  \
-    $(SLO)$/pfiltdlg.obj \
-    $(SLO)$/dbnamdlg.obj \
-     $(SLO)$/expftext.obj	\
-    $(SLO)$/subtdlg.obj  \
-    $(SLO)$/tpsubt.obj	\
-    $(SLO)$/fieldwnd.obj \
-    $(SLO)$/pvlaydlg.obj \
-    $(SLO)$/pvfundlg.obj \
-    $(SLO)$/dapitype.obj \
-    $(SLO)$/dapidata.obj \
-    $(SLO)$/consdlg.obj	\
-    $(SLO)$/scendlg.obj  \
-    $(SLO)$/imoptdlg.obj \
+    $(SLO)$/sortdlg.obj		\
+    $(SLO)$/tpsort.obj		\
+    $(SLO)$/filtdlg.obj		\
+    $(SLO)$/sfiltdlg.obj	\
+    $(SLO)$/foptmgr.obj		\
+    $(SLO)$/pfiltdlg.obj	\
+    $(SLO)$/dbnamdlg.obj	\
+    $(SLO)$/expftext.obj	\
+    $(SLO)$/subtdlg.obj		\
+    $(SLO)$/tpsubt.obj		\
+    $(SLO)$/fieldwnd.obj	\
+    $(SLO)$/pvlaydlg.obj	\
+    $(SLO)$/pvfundlg.obj	\
+    $(SLO)$/dapitype.obj	\
+    $(SLO)$/dapidata.obj	\
+    $(SLO)$/consdlg.obj		\
+    $(SLO)$/scendlg.obj		\
+    $(SLO)$/imoptdlg.obj	\
     $(SLO)$/validate.obj	\
-    $(SLO)$/datagrid.obj	\
-    $(SLO)$/ruler.obj	\
-    $(SLO)$/tabrul.obj	\
+    $(SLO)$/csvsplits.obj	\
+    $(SLO)$/csvcontrol.obj	\
+    $(SLO)$/csvruler.obj	\
+    $(SLO)$/csvgrid.obj		\
+    $(SLO)$/csvtablebox.obj	\
     $(SLO)$/asciiopt.obj
 
 EXCEPTIONSFILES= \
