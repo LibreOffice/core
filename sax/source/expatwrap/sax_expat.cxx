@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sax_expat.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dbo $ $Date: 2001-10-11 14:14:30 $
+ *  last change: $Author: hr $ $Date: 2001-11-21 23:22:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -478,18 +478,17 @@ void SaxExpatParser::parseStream(   const InputSource& structSource)
             m_pImpl->rDocumentHandler->endDocument();
         }
     }
-
-//      catch( SAXParseException & )
-//      {
-//          m_pImpl->popEntity();
-//          XML_ParserFree( entity.pParser );
-//          throw;
-//      }
+      catch( SAXParseException & )
+      {
+          m_pImpl->popEntity();
+          XML_ParserFree( entity.pParser );
+          throw SAXException();
+      }
     catch( SAXException & )
     {
         m_pImpl->popEntity();
         XML_ParserFree( entity.pParser );
-        throw;
+          throw;
     }
     catch( IOException & )
     {
