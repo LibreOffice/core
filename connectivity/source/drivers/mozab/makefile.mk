@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: rt $ $Date: 2005-03-30 11:34:45 $
+#   last change: $Author: rt $ $Date: 2005-04-01 16:25:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,7 +65,7 @@ PRJNAME=connectivity
 TARGET=$(MOZAB_TARGET)
 TARGET2=$(MOZAB_TARGET)drv
 
-.IF  "$(.IF  "$(OS)"=="MACOSX" || ( "$(SYSTEM_MOZILLA)" == "YES" && "$(WITH_MOZILLA)" == "YES") || "$(WITH_MOZILLA)" == "NO"
+.IF  "$(OS)"=="MACOSX" || ( "$(SYSTEM_MOZILLA)" == "YES" && "$(WITH_MOZILLA)" == "YES") || "$(WITH_MOZILLA)" == "NO"
 all: 
     @echo "		Not building the mozabsrc stuff in OpenOffice.org build"
     @echo "		dependency to Mozilla developer snapshots not feasable at the moment"
