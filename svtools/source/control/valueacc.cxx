@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valueacc.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 13:38:17 $
+ *  last change: $Author: vg $ $Date: 2003-06-06 10:47:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,10 +216,9 @@ sal_Int32 SAL_CALL ValueSetAcc::getAccessibleChildCount()
     const vos::OGuard aSolarGuard( Application::GetSolarMutex() );
     ThrowIfDisposed();
 
-    sal_Int32 nCount = 0;
-    if ((mpParent->GetStyle() & ~WB_NONEFIELD) != 0)
+    sal_Int32 nCount = mpParent->ImplGetVisibleItemCount();
+    if (HasNoneField())
         nCount += 1;
-    nCount += mpParent->ImplGetVisibleItemCount();
     return nCount;
 }
 
@@ -734,7 +733,7 @@ USHORT ValueSetAcc::getItemCount (void) const
     USHORT nCount = mpParent->ImplGetVisibleItemCount();
     // When the None-Item is visible then increase the number of items by
     // one.
-    if ((mpParent->GetStyle() & WB_NONEFIELD) != 0)
+    if (HasNoneField())
         nCount += 1;
     return nCount;
 }
@@ -744,7 +743,7 @@ ValueSetItem* ValueSetAcc::getItem (USHORT nIndex) const
 {
     ValueSetItem* pItem = NULL;
 
-    if ((mpParent->GetStyle() & WB_NONEFIELD) != 0)
+    if (HasNoneField())
         if (nIndex == 0)
             // When present the first item is the then allways visible none field.
             pItem = mpParent->ImplGetItem (VALUESET_ITEM_NONEITEM);
@@ -779,6 +778,15 @@ void ValueSetAcc::ThrowIfDisposed (void)
 sal_Bool ValueSetAcc::IsDisposed (void)
 {
     return (rBHelper.bDisposed || rBHelper.bInDispose);
+}
+
+
+
+
+bool ValueSetAcc::HasNoneField (void) const
+{
+    DBG_ASSERT (mpParent!=NULL, "ValueSetAcc::HasNoneField called with mpParent==NULL");
+    return ((mpParent->GetStyle() & WB_NONEFIELD) != 0);
 }
 
 
@@ -909,25 +917,40 @@ sal_Int32 SAL_CALL ValueItemAcc::getAccessibleIndexInParent()
     throw (uno::RuntimeException)
 {
     const vos::OGuard   aSolarGuard( Application::GetSolarMutex() );
-    sal_Int32           nRet = 0;
+    // The index defaults to -1 to indicate the child does not belong to its
+    // parent.
+    sal_Int32 nIndexInParent = -1;
 
     if( mpParent )
     {
-        sal_Bool bDone = sal_False;
+        bool bDone = false;
 
-        for( USHORT i = 0, nCount = mpParent->mrParent.ImplGetVisibleItemCount(); ( i < nCount ) && !bDone; i++ )
+        USHORT nCount = mpParent->mrParent.ImplGetVisibleItemCount();
+        ValueSetItem* pItem;
+        for (USHORT i=0; i<nCount && !bDone; i++)
         {
-            ValueSetItem* pItem = mpParent->mrParent.ImplGetVisibleItem( i );
-
-            if( pItem && ( pItem->GetAccessible().get() == this ) )
+            // Guard the retrieval of the i-th child with a try/catch block
+            // just in case the number of children changes in the mean time.
+            try
             {
-                nRet = i;
-                bDone = sal_True;
+                pItem = mpParent->mrParent.ImplGetVisibleItem (i);
             }
+            catch (lang::IndexOutOfBoundsException aException)
+            {
+                pItem = NULL;
+            }
+
+            // Do not create an accessible object for the test.
+            if (pItem != NULL && pItem->mpxAcc != NULL)
+                if (pItem->GetAccessible().get() == this )
+                {
+                    nIndexInParent = i;
+                    bDone = true;
+                }
         }
     }
 
-    return nRet;
+    return nIndexInParent;
 }
 
 // -----------------------------------------------------------------------------
