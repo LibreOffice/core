@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSQLQueryComposerFactory.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:55:11 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 21:48:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@
     <type scope="com::sun::star::sdb">SQLQueryComposer</type>
     .
  */
-interface XSQLQueryComposerFactory: com::sun::star::uno::XInterface
+published interface XSQLQueryComposerFactory: com::sun::star::uno::XInterface
 {
 
     // DocMerge from xml: method com::sun::star::sdb::XSQLQueryComposerFactory::createQueryComposer
