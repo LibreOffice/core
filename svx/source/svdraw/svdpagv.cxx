@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpagv.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-15 08:03:38 $
+ *  last change: $Author: ka $ $Date: 2002-08-15 08:33:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1135,8 +1135,8 @@ FASTBOOL SdrPageView::DoCachedMasterPaint(const SdrPage* pPg, ExtOutputDevice& r
             {
                 ((SdrPageView*)this)->DrawPaper(pBmp->aVD);
 
-                // if (rView.bPageVisible && rView.bPageBorderVisible)
-                //      ((SdrPageView*)this)->DrawPaperBorder(pBmp->aVD);
+                if (rView.bPageBorderVisible)
+                    ((SdrPageView*)this)->DrawPaperBorder(pBmp->aVD);
             }
 
             if (rView.bBordVisible)
@@ -1305,8 +1305,8 @@ void SdrPageView::InitRedraw(OutputDevice* pOut_, const Region& rReg, USHORT nPa
             {
                 DrawPaper(*pOut);
 
-                // if(rView.bPageBorderVisible)
-                //      DrawPaperBorder(*pOut);
+                if(rView.bPageBorderVisible)
+                    DrawPaperBorder(*pOut);
             }
 
             if(rView.bBordVisible)
@@ -1477,11 +1477,8 @@ void SdrPageView::DrawPaperBorder(OutputDevice& rOut)
 
 void SdrPageView::DrawBorder(OutputDevice& rOut)
 {
-    if( pPage )
+    if( pPage && ( pPage->GetLftBorder() || pPage->GetUppBorder() || pPage->GetRgtBorder() || pPage->GetLwrBorder() ) )
     {
-        // !!! enable again if PaperBorder flag is enabled !!!
-        // !!! if( (pPage->GetLftBorder() == 0) && (pPage->GetUppBorder() == 0) && ( pPage->GetRgtBorder() == 0) && ( pPage->GetLwrBorder() == 0) )
-        // !!!  return;
         svx::ColorConfig    aColorConfig;
         Color               aBorderColor;
 
