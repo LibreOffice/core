@@ -2,9 +2,9 @@
  *
  *  $RCSfile: plctrl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2001-12-07 10:54:52 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 15:13:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,12 +108,6 @@ MRCListenerMultiplexerHelper* PluginControl_Impl::getMultiplexer()
     return _pMultiplexer;
 }
 //==================================================================================================
-Reference< XInterface >  PluginControl_Impl_NewInstance()
-{
-    return (::cppu::OWeakObject*)new PluginControl_Impl();
-}
-
-//--------------------------------------------------------------------------------------------------
 
 void PluginControl_Impl::addEventListener( const Reference< ::com::sun::star::lang::XEventListener > & l )
     throw( RuntimeException )
