@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par6.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: os $ $Date: 2001-02-23 12:45:26 $
+ *  last change: $Author: cmc $ $Date: 2001-03-13 16:21:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -404,10 +404,8 @@ void SwWW8ImplReader::RemoveCols( SwPageDesc& rPageDesc, SwFmtCol*& rpCol )
 }
 
 
-BOOL SwWW8ImplReader::SetCols(  SwFrmFmt* pFmt,
-                                const WW8PLCFx_SEPX* pSep,
-                                USHORT nNettoWidth,
-                                BOOL bTestOnly  )
+BOOL SwWW8ImplReader::SetCols( SwFrmFmt* pFmt, const WW8PLCFx_SEPX* pSep,
+    long nNettoWidth, BOOL bTestOnly )
 {
     if( nIniFlags & WW8FL_NO_COLS )         // ausgeschaltet
         return FALSE;
@@ -928,7 +926,8 @@ void SwWW8ImplReader::SetUseOn( SwPageDesc* pPageDesc0, SwPageDesc* pPageDesc1,
 }
 
 
-void SwWW8ImplReader::InsertSectionWithWithoutCols( SwPaM& rMyPaM, const SwFmtCol* pCol )
+void SwWW8ImplReader::InsertSectionWithWithoutCols( SwPaM& rMyPaM,
+    const SwFmtCol* pCol )
 {
     // if this Node is not empty create a new Node befor inserting the Section
     const SwPosition* pPos  = rMyPaM.GetPoint();
@@ -945,7 +944,8 @@ void SwWW8ImplReader::InsertSectionWithWithoutCols( SwPaM& rMyPaM, const SwFmtCo
             rMyPaM.Move( fnMoveBackward );
             aMarkNd++;
             rMyPaM.GetMark()->nNode = aMarkNd;
-            rMyPaM.GetMark()->nContent.Assign( aMarkNd.GetNode().GetCntntNode(), nMarkCnt );
+            rMyPaM.GetMark()->nContent.Assign(aMarkNd.GetNode().GetCntntNode(),
+                nMarkCnt );
         }
         else
             rDoc.SplitNode( *pPos );
@@ -966,15 +966,12 @@ void SwWW8ImplReader::InsertSectionWithWithoutCols( SwPaM& rMyPaM, const SwFmtCo
     pNewSection = rDoc.Insert( rMyPaM, aSection, &aSet );
     ASSERT( !pBehindSection, "pBehindSection ungleich Null! why Recursion?");
 
-
     // set PaM into first Node of the new Section
     const SwSectionNode* pSectionNode =
         pNewSection->GetFmt()->GetSectionNode();
     ASSERT( pSectionNode, "Kein Inhalt vorbereitet." );
 
-
     pBehindSection = new SwNodeIndex( *pSectionNode->EndOfSectionNode(), 1 );
-
 
     rMyPaM.GetPoint()->nNode =
         pSectionNode->GetIndex()+1;
@@ -1290,6 +1287,20 @@ void SwWW8ImplReader::CreateSep(const long nTxtPos)
                 switch( nBreakCode )
                 {
                 case 0:
+#if 1
+                    InsertSectionWithWithoutCols( *pPaM, 0 );
+                    if( pPageDesc )
+                    {
+                        SwFrmFmt& rFmt = pPageDesc->GetMaster();
+                        const SwFmtFrmSize&   rSz = rFmt.GetFrmSize();
+                        const SvxLRSpaceItem& rLR = rFmt.GetLRSpace();
+                        SwTwips nWidth = rSz.GetWidth();
+                        long nLeft  = rLR.GetTxtLeft();
+                        long nRight = rLR.GetRight();
+                        SetCols( pNewSection->GetFmt(), pSep,
+                            nWidth - nLeft - nRight );
+                    }
+#else   //Old (seemingly) duplicate code
                     {
                         if( 0 < pPaM->GetPoint()->nContent.GetIndex() )
                             rDoc.AppendTxtNode( *pPaM->GetPoint() );
@@ -1304,7 +1315,6 @@ void SwWW8ImplReader::CreateSep(const long nTxtPos)
                             aSet.Put( SwFmtEndAtTxtEnd( FTNEND_ATTXTEND ));
 
                         pNewSection = rDoc.Insert( *pPaM, aSection, &aSet );
-                        pBehindSection = new SwNodeIndex( pPaM->GetPoint()->nNode );
 
                         // Anzahl der Spalten einstellen
                         if( pPageDesc )
@@ -1321,42 +1331,45 @@ void SwWW8ImplReader::CreateSep(const long nTxtPos)
                         const SwSectionNode* pSectionNode =
                             pNewSection->GetFmt()->GetSectionNode();
                         ASSERT( pSectionNode, "Kein Inhalt vorbereitet." );
+                        pBehindSection = new SwNodeIndex( pPaM->GetPoint()->nNode );
+
                         pPaM->GetPoint()->nNode =
                             pSectionNode->GetIndex()+1;
                         pPaM->GetPoint()->nContent.Assign(
                             pPaM->GetCntntNode(), 0 );
                     }
-
+#endif
                     break;
-                case 1: if( bNew )
-                            rDoc.Insert(*pPaM,
-                                SvxFmtBreakItem( SVX_BREAK_COLUMN_BEFORE ));
-                        break;
+                case 1:
+                    if( bNew )
+                        rDoc.Insert(*pPaM, SvxFmtBreakItem(
+                        SVX_BREAK_COLUMN_BEFORE ));
+                    break;
                 //case 2:
                 //case 3:   // alle drei Faelle -> PgDesc-Format-Einfuegung
                 //case 4:
-                default: {
-                            /*
-                                Wir koennen den aktuellen PgDesk einsetzen,
-                                da dies immer der 1st-Page Deskriptor ist,
-                                nie der Follow!
-                                So geht es, auch wenn der Break auf Seite 7
-                                kommt, wieder mit einer ERSTEN Seite weiter.
-                            */
-                            if( bNew )
-                            {
-                                if( 0 < pPaM->GetPoint()->nContent.GetIndex() )
-                                    rDoc.AppendTxtNode( *pPaM->GetPoint() );
+                default:
+                    /*
+                        Wir koennen den aktuellen PgDesk einsetzen, da dies
+                        immer der 1st-Page Deskriptor ist, nie der Follow!
 
-                                if( pPageDesc )
-                                    rDoc.Insert(*pPaM, SwFmtPageDesc( pPageDesc ));
-                                else
-                                    // kein voriger PgDesc vorhanden?
-                                    rDoc.Insert(*pPaM,
-                                                SvxFmtBreakItem( SVX_BREAK_PAGE_BEFORE ));
-                                SetLastPgDeskIdx();
-                            }
-                         }break;
+                        So geht es, auch wenn der Break auf Seite 7 kommt,
+                        wieder mit einer ERSTEN Seite weiter.
+                    */
+                    if( bNew )
+                    {
+                        if( 0 < pPaM->GetPoint()->nContent.GetIndex() )
+                            rDoc.AppendTxtNode( *pPaM->GetPoint() );
+
+                        if( pPageDesc )
+                            rDoc.Insert(*pPaM, SwFmtPageDesc( pPageDesc ));
+                        else
+                            // kein voriger PgDesc vorhanden?
+                            rDoc.Insert(*pPaM,
+                                SvxFmtBreakItem( SVX_BREAK_PAGE_BEFORE ));
+                        SetLastPgDeskIdx();
+                    }
+                    break;
                 }
                 return;
             // ========  Das war's Freunde, jetzt nichts wie weg hier!
@@ -4929,12 +4942,15 @@ short SwWW8ImplReader::ImportSprm( BYTE* pPos, short nSprmsLen, USHORT nId )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par6.cxx,v 1.14 2001-02-23 12:45:26 os Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par6.cxx,v 1.15 2001-03-13 16:21:22 cmc Exp $
 
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.14  2001/02/23 12:45:26  os
+      Complete use of DefaultNumbering component
+
       Revision 1.13  2001/02/20 10:34:57  cmc
       #83546# Don't create a tab stop description without any tab stops
 

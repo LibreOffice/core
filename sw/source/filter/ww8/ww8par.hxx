@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: cmc $ $Date: 2001-02-27 10:59:05 $
+ *  last change: $Author: cmc $ $Date: 2001-03-13 16:21:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -716,9 +716,8 @@ friend class WW8FormulaControl;
     SwPageDesc* CreatePageDesc( SwPageDesc* pFirstPageDesc,
                                 SwPaM** ppPaMWanted = 0 );
     void RemoveCols( SwPageDesc& rPageDesc, SwFmtCol*& rpCol );
-    BOOL SetCols( SwFrmFmt* pFmt, const WW8PLCFx_SEPX* pSep,
-                    USHORT nNettoWidth,
-                    BOOL bTestOnly = FALSE );
+    BOOL SetCols( SwFrmFmt* pFmt, const WW8PLCFx_SEPX* pSep, long nNettoWidth,
+        BOOL bTestOnly = FALSE );
     void SetPage1( SwPageDesc* pPageDesc, SwFrmFmt &rFmt,
                    const WW8PLCFx_SEPX* pSep, USHORT nLIdx,
                    BOOL bIgnoreCols );
@@ -1151,11 +1150,14 @@ public:     // eigentlich private, geht aber leider nur public
 
     Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.hxx,v 1.15 2001-02-27 10:59:05 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8par.hxx,v 1.16 2001-03-13 16:21:22 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.15  2001/02/27 10:59:05  cmc
+      #84122# Missing Cropping on DirectBLIP import
+
       Revision 1.14  2001/02/26 13:44:24  cmc
       Ruby Text Import
 
