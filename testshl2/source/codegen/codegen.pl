@@ -1,4 +1,7 @@
-#!/usr/bin/perl
+eval 'exec perl -wS $0 ${1+"$@"}'
+    if 0;
+
+# #/usr/bin/perl
 
 # @lines
 # push(@lines, $line)    append
@@ -455,11 +458,12 @@ sub generateMakefileEntry
     print MAKEFILE ".ENDIF\n";
     print MAKEFILE "\n";
     print MAKEFILE "SHL${nNumber}IMPLIB= i\$(SHL${nNumber}TARGET)\n";
-    print MAKEFILE "SHL${nNumber}DEF=    \$(MISC)\$/\$(SHL${nNumber}TARGET).def\n";
+    print MAKEFILE "# SHL${nNumber}DEF=    \$(MISC)\$/\$(SHL${nNumber}TARGET).def\n";
     print MAKEFILE "\n";
     # DEF name
     print MAKEFILE "DEF${nNumber}NAME    =\$(SHL${nNumber}TARGET)\n";
-    print MAKEFILE "DEF${nNumber}EXPORTFILE= export.exp\n";
+    print MAKEFILE "# DEF${nNumber}EXPORTFILE= export.exp\n";
+    print MAKEFILE "SHL${nNumber}VERSIONMAP= export.map\n";
     print MAKEFILE "# auto generated Target:$sTargetName\n";
     print MAKEFILE "# END ------------------------------------------------------------------\n\n";
 
@@ -477,7 +481,7 @@ with stub functions for all given test routines from the jobfile.
 Also generate a makefile entry which is insert in the makefile.new
 if a makefile.mk already exist or this tool creates a makefile.add. Which
 has to add into a new makefile.mk by hand.
-Also generate a export.exp file, if no one exist.
+Also generate a export.map file, if no one exist.
 ";
     exit(1);
 }
@@ -535,16 +539,34 @@ sub main
         close(MAKEFILE);
     }
     print "\n";
-    if (! -e "export.exp")
+    # this is the old export.exp method
+    # if (! -e "export.exp")
+    # {
+    #     print "info: create export.exp file\n";
+    #     open(EXPORTEXP, ">export.exp") || die "can't create export.exp";
+    #     print EXPORTEXP "registerAllTestFunction\n";
+    #     close(EXPORTEXP);
+    # }
+    # else
+    # {
+    #     print "The file 'export.exp' file already exist, please make sure that it contains the entry 'registerAllTestFunction'.\n";
+    # }
+    if (! -e "export.map")
     {
-        print "info: create export.exp file\n";
-        open(EXPORTEXP, ">export.exp") || die "can't create export.exp";
-        print EXPORTEXP "registerAllTestFunction\n";
-        close(EXPORTEXP);
+        print "info: create export.map file\n";
+        open(EXPORTMAP, ">export.map") || die "can't create export.map";
+        print EXPORTMAP "UDK_3.1 {\n";
+        print EXPORTMAP "    global:\n";
+        print EXPORTMAP "        registerAllTestFunction\n";
+        print EXPORTMAP "\n";
+        print EXPORTMAP "    local:\n";
+        print EXPORTMAP "        *;\n";
+        print EXPORTMAP "};\n";
+        close(EXPORTMAP);
     }
     else
     {
-        print "The file 'export.exp' file already exist, please make sure that it contains the entry 'registerAllTestFunction'.\n";
+        print "The file 'export.map' file already exist, please make sure that it contains the entry 'registerAllTestFunction'.\n";
     }
 }
 
