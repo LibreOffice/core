@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regcompare.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2002-02-21 11:03:37 $
+ *  last change: $Author: jsc $ $Date: 2002-09-25 13:42:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,11 @@
 
 using namespace ::rtl;
 using namespace ::osl;
+
+OUString shortName(const OUString& fullName)
+{
+    return fullName.copy(fullName.lastIndexOf('/') + 1);
+}
 
 sal_Bool isFileUrl(const OString& fileName)
 {
@@ -626,7 +631,7 @@ static sal_uInt32 checkConstValue(const OUString& keyName,
                         fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
                         bDump = sal_False;
                     }
-                    fprintf(stderr, "    Field %d: Value1 = %s  !=  Value2 = %s\n", index1,
+                    fprintf(stderr, "  Field %d: Value1 = %s  !=  Value2 = %s\n", index1,
                             constValue1.m_value.aBool ? "TRUE" : "FALSE",
                             constValue2.m_value.aBool ? "TRUE" : "FALSE");
                 }
@@ -643,7 +648,7 @@ static sal_uInt32 checkConstValue(const OUString& keyName,
                         fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
                         bDump = sal_False;
                     }
-                    fprintf(stderr, "    Field %d: Value1 = %d  !=  Value2 = %d\n", index1,
+                    fprintf(stderr, "  Field %d: Value1 = %d  !=  Value2 = %d\n", index1,
                             constValue1.m_value.aByte, constValue2.m_value.aByte);
                 }
                 return 1;
@@ -659,7 +664,7 @@ static sal_uInt32 checkConstValue(const OUString& keyName,
                         fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
                         bDump = sal_False;
                     }
-                    fprintf(stderr, "    Field %d: Value1 = %d  !=  Value2 = %d\n", index1,
+                    fprintf(stderr, "  Field %d: Value1 = %d  !=  Value2 = %d\n", index1,
                             constValue1.m_value.aShort, constValue2.m_value.aShort);
                 }
                 return 1;
@@ -675,7 +680,7 @@ static sal_uInt32 checkConstValue(const OUString& keyName,
                         fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
                         bDump = sal_False;
                     }
-                    fprintf(stderr, "    Field %d: Value1 = %d  !=  Value2 = %d\n", index1,
+                    fprintf(stderr, "  Field %d: Value1 = %d  !=  Value2 = %d\n", index1,
                             constValue1.m_value.aUShort, constValue2.m_value.aUShort);
                 }
                 return 1;
@@ -691,7 +696,7 @@ static sal_uInt32 checkConstValue(const OUString& keyName,
                         fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
                         bDump = sal_False;
                     }
-                    fprintf(stderr, "    Field %d: Value1 = %d  !=  Value2 = %d\n", index1,
+                    fprintf(stderr, "  Field %d: Value1 = %d  !=  Value2 = %d\n", index1,
                             constValue1.m_value.aLong, constValue2.m_value.aLong);
                 }
                 return 1;
@@ -707,7 +712,7 @@ static sal_uInt32 checkConstValue(const OUString& keyName,
                         fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
                         bDump = sal_False;
                     }
-                    fprintf(stderr, "    Field %d: Value1 = %d  !=  Value2 = %d\n", index1,
+                    fprintf(stderr, "  Field %d: Value1 = %d  !=  Value2 = %d\n", index1,
                             constValue1.m_value.aULong, constValue2.m_value.aULong);
                 }
                 return 1;
@@ -723,7 +728,7 @@ static sal_uInt32 checkConstValue(const OUString& keyName,
 //                      fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
 //                      bDump = sal_False;
 //                  }
-//                  fprintf(stderr, "    Field %d: Value1 = %d  !=  Value2 = %d\n", index1,
+//                  fprintf(stderr, "  Field %d: Value1 = %d  !=  Value2 = %d\n", index1,
 //                          constValue1.m_value.aHyper, constValue2.m_value.aHyper);
 //              }
 //              return 1;
@@ -739,7 +744,7 @@ static sal_uInt32 checkConstValue(const OUString& keyName,
 //                      fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
 //                      bDump = sal_False;
 //                  }
-//                  fprintf(stderr, "    Field %d: Value1 = %d  !=  Value2 = %d\n", index1,
+//                  fprintf(stderr, "  Field %d: Value1 = %d  !=  Value2 = %d\n", index1,
 //                          constValue1.m_value.aUHyper, constValue2.m_value.aUHyper);
 //              }
 //              return 1;
@@ -755,7 +760,7 @@ static sal_uInt32 checkConstValue(const OUString& keyName,
                         fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
                         bDump = sal_False;
                     }
-                    fprintf(stderr, "    Field %d: Value1 = %d  !=  Value2 = %d\n", index1,
+                    fprintf(stderr, "  Field %d: Value1 = %d  !=  Value2 = %d\n", index1,
                             constValue1.m_value.aFloat, constValue2.m_value.aFloat);
                 }
                 return 1;
@@ -771,7 +776,7 @@ static sal_uInt32 checkConstValue(const OUString& keyName,
                         fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
                         bDump = sal_False;
                     }
-                    fprintf(stderr, "    Field %d: Value1 = %d  !=  Value2 = %d\n", index1,
+                    fprintf(stderr, "  Field %d: Value1 = %d  !=  Value2 = %d\n", index1,
                             constValue1.m_value.aDouble, constValue2.m_value.aDouble);
                 }
                 return 1;
@@ -785,10 +790,10 @@ static sal_uInt32 checkConstValue(const OUString& keyName,
                     if ( bDump )
                     {
                         fprintf(stderr, "%s\n", U2S(keyName));
-                        fprintf(stderr, "    TypeClass = %s\n", getTypeClass(typeClass));
+                        fprintf(stderr, "  TypeClass = %s\n", getTypeClass(typeClass));
                         bDump = sal_False;
                     }
-                    fprintf(stderr, "    Field %d: Value1 = %d  !=  Value2 = %d\n", index1,
+                    fprintf(stderr, "  Field %d: Value1 = %d  !=  Value2 = %d\n", index1,
                             constValue1.m_value.aString, constValue2.m_value.aString);
                 }
                 return 1;
@@ -816,7 +821,7 @@ static sal_uInt32 checkField(const OUString& keyName,
                 fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
                 bDump = sal_False;
             }
-            fprintf(stderr, "    Field %d: Name1 = %s  !=  Name2 = %s\n", index1,
+            fprintf(stderr, "  Field %d: Name1 = %s  !=  Name2 = %s\n", index1,
                     U2S(reader1.getFieldName(index1)), U2S(reader2.getFieldName(index2)));
         }
         nError++;
@@ -831,7 +836,7 @@ static sal_uInt32 checkField(const OUString& keyName,
                 fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
                 bDump = sal_False;
             }
-            fprintf(stderr, "    Field %d: Type1 = %s  !=  Type2 = %s\n", index1,
+            fprintf(stderr, "  Field %d: Type1 = %s  !=  Type2 = %s\n", index1,
                     U2S(reader1.getFieldType(index1)), U2S(reader2.getFieldType(index2)));
         }
         nError++;
@@ -848,9 +853,9 @@ static sal_uInt32 checkField(const OUString& keyName,
                     fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
                     bDump = sal_False;
                 }
-                fprintf(stderr, "    Field %d: Access1 = %s  !=  Access2 = %s\n", index1,
+                fprintf(stderr, "  Field %d: Access1 = %s  !=  Access2 = %s\n", index1,
                         getConstValueType(constValue1), getConstValueType(constValue2));
-                fprintf(stderr, "    Field %d: Value1 = ", index1);
+                fprintf(stderr, "  Field %d: Value1 = ", index1);
                 printConstValue(constValue1);
                 fprintf(stderr, "  !=  Value2 = ");
                 printConstValue(constValue1);
@@ -872,7 +877,7 @@ static sal_uInt32 checkField(const OUString& keyName,
                 fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
                 bDump = sal_False;
             }
-            fprintf(stderr, "    Field %d: FieldAccess1 = %s  !=  FieldAccess2 = %s\n", index1,
+            fprintf(stderr, "  Field %d: FieldAccess1 = %s  !=  FieldAccess2 = %s\n", index1,
                     getFieldAccess(reader1.getFieldAccess(index1)).getStr(),
                     getFieldAccess(reader1.getFieldAccess(index2)).getStr());
         }
@@ -889,7 +894,7 @@ static sal_uInt32 checkField(const OUString& keyName,
                 fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
                 bDump = sal_False;
             }
-            fprintf(stderr, "    Field %d: Doku1 = %s\n             Doku2 = %s\n", index1,
+            fprintf(stderr, "  Field %d: Doku1 = %s\n             Doku2 = %s\n", index1,
                     U2S(reader1.getFieldDoku(index1)), U2S(reader2.getFieldDoku(index2)));
         }
         nError++;
@@ -904,7 +909,7 @@ static sal_uInt32 checkField(const OUString& keyName,
                 fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
                 bDump = sal_False;
             }
-            fprintf(stderr, "    Field %d: FileName1 = %s  !=  FileName2 = %s\n", index1,
+            fprintf(stderr, "  Field %d: FileName1 = %s  !=  FileName2 = %s\n", index1,
                     U2S(reader1.getFieldFileName(index1)), U2S(reader2.getFieldFileName(index2)));
         }
         nError++;
@@ -960,7 +965,7 @@ static sal_uInt32 checkMethod(const OUString& keyName,
                 fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
                 bDump = sal_False;
             }
-            fprintf(stderr, "    Method1 %d: Name1 = %s  !=  Name2 = %s\n", index,
+            fprintf(stderr, "  Method1 %d: Name1 = %s  !=  Name2 = %s\n", index,
                     U2S(reader1.getMethodName(index)),
                     U2S(reader2.getMethodName(index)));
         }
@@ -977,7 +982,7 @@ static sal_uInt32 checkMethod(const OUString& keyName,
                 fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
                 bDump = sal_False;
             }
-            fprintf(stderr, "    Method1 %d: ReturnType1 = %s  !=  ReturnType2 = %s\n", index,
+            fprintf(stderr, "  Method1 %d: ReturnType1 = %s  !=  ReturnType2 = %s\n", index,
                     U2S(reader1.getMethodReturnType(index)),
                     U2S(reader2.getMethodReturnType(index)));
         }
@@ -995,7 +1000,7 @@ static sal_uInt32 checkMethod(const OUString& keyName,
                 fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
                 bDump = sal_False;
             }
-            fprintf(stderr, "    Method %d : nParameters1 = %d  !=  nParameters2 = %d\n", index, nParams1, nParams2);
+            fprintf(stderr, "  Method %d : nParameters1 = %d  !=  nParameters2 = %d\n", index, nParams1, nParams2);
         }
         nError++;
     }
@@ -1011,7 +1016,7 @@ static sal_uInt32 checkMethod(const OUString& keyName,
                     fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
                     bDump = sal_False;
                 }
-                fprintf(stderr, "    Method %d, Parameter %d: Type1 = %s  !=  Type2 = %s\n", index, i,
+                fprintf(stderr, "  Method %d, Parameter %d: Type1 = %s  !=  Type2 = %s\n", index, i,
                         U2S(reader1.getMethodParamType(index, i)),
                         U2S(reader2.getMethodParamType(index, i)));
             }
@@ -1027,7 +1032,7 @@ static sal_uInt32 checkMethod(const OUString& keyName,
                     fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
                     bDump = sal_False;
                 }
-                fprintf(stderr, "    Method %d, Parameter %d: Name1 = %s  !=  Name2 = %s\n", index, i,
+                fprintf(stderr, "  Method %d, Parameter %d: Name1 = %s  !=  Name2 = %s\n", index, i,
                         U2S(reader1.getMethodParamName(index, i)),
                         U2S(reader2.getMethodParamName(index, i)));
             }
@@ -1042,7 +1047,7 @@ static sal_uInt32 checkMethod(const OUString& keyName,
                     fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
                     bDump = sal_False;
                 }
-                fprintf(stderr, "    Method %d, Parameter %d: Mode1 = %s  !=  Mode2 = %s\n", index, i,
+                fprintf(stderr, "  Method %d, Parameter %d: Mode1 = %s  !=  Mode2 = %s\n", index, i,
                         getParamMode(reader1.getMethodParamMode(index, i)),
                         getParamMode(reader2.getMethodParamMode(index, i)));
             }
@@ -1056,7 +1061,7 @@ static sal_uInt32 checkMethod(const OUString& keyName,
             fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
             bDump = sal_False;
         }
-        fprintf(stderr, "    Registry1: Method %d contains %d more parameters\n", index, nParams1 - i);
+        fprintf(stderr, "  Registry1: Method %d contains %d more parameters\n", index, nParams1 - i);
     }
     if ( i < nParams2 && options.forceOutput() )
     {
@@ -1065,7 +1070,7 @@ static sal_uInt32 checkMethod(const OUString& keyName,
             fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
             bDump = sal_False;
         }
-        fprintf(stderr, "    Registry2: Method %d contains %d more parameters\n", index, nParams2 - i);
+        fprintf(stderr, "  Registry2: Method %d contains %d more parameters\n", index, nParams2 - i);
     }
 
     sal_uInt16 nExcep1 = (sal_uInt16)reader1.getMethodExcCount(index);
@@ -1079,7 +1084,7 @@ static sal_uInt32 checkMethod(const OUString& keyName,
                 fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
                 bDump = sal_False;
             }
-            fprintf(stderr, "    nExceptions1 = %d  !=  nExceptions2 = %d\n", nExcep1, nExcep2);
+            fprintf(stderr, "  nExceptions1 = %d  !=  nExceptions2 = %d\n", nExcep1, nExcep2);
         }
         nError++;
     }
@@ -1094,7 +1099,7 @@ static sal_uInt32 checkMethod(const OUString& keyName,
                     fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
                     bDump = sal_False;
                 }
-                fprintf(stderr, "    Method %d, Exception %d: Name1 = %s  !=  Name2 = %s\n", index, i,
+                fprintf(stderr, "  Method %d, Exception %d: Name1 = %s  !=  Name2 = %s\n", index, i,
                         U2S(reader1.getMethodExcType(index, i)),
                         U2S(reader2.getMethodExcType(index, i)));
             }
@@ -1108,7 +1113,7 @@ static sal_uInt32 checkMethod(const OUString& keyName,
             fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
             bDump = sal_False;
         }
-        fprintf(stderr, "    Registry1: Method %d contains %d more exceptions\n", index, nExcep1 - i);
+        fprintf(stderr, "  Registry1: Method %d contains %d more exceptions\n", index, nExcep1 - i);
     }
     if ( i < nExcep2 && options.forceOutput() )
     {
@@ -1117,7 +1122,7 @@ static sal_uInt32 checkMethod(const OUString& keyName,
             fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
             bDump = sal_False;
         }
-        fprintf(stderr, "    Registry2: Method %d contains %d more exceptions\n", index, nExcep2 - i);
+        fprintf(stderr, "  Registry2: Method %d contains %d more exceptions\n", index, nExcep2 - i);
     }
 
     if ( reader1.getMethodMode(index) != reader2.getMethodMode(index) )
@@ -1129,7 +1134,7 @@ static sal_uInt32 checkMethod(const OUString& keyName,
                 fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
                 bDump = sal_False;
             }
-            fprintf(stderr, "    Method %d: Mode1 = %s  !=  Mode2 = %s\n", index,
+            fprintf(stderr, "  Method %d: Mode1 = %s  !=  Mode2 = %s\n", index,
                     getMethodMode(reader1.getMethodMode(index)),
                     getMethodMode(reader2.getMethodMode(index)));
         }
@@ -1146,7 +1151,7 @@ static sal_uInt32 checkMethod(const OUString& keyName,
                 fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
                 bDump = sal_False;
             }
-            fprintf(stderr, "    Method %d: Doku1 = %s\n              Doku2 = %s\n", index,
+            fprintf(stderr, "  Method %d: Doku1 = %s\n              Doku2 = %s\n", index,
                     U2S(reader1.getMethodDoku(index)),
                     U2S(reader2.getMethodDoku(index)));
         }
@@ -1190,7 +1195,7 @@ static sal_uInt32 checkReference(const OUString& keyName,
                 fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
                 bDump = sal_False;
             }
-            fprintf(stderr, "    Reference %d: Name1 = %s  !=  Name2 = %s\n", index1,
+            fprintf(stderr, "  Reference %d: Name1 = %s  !=  Name2 = %s\n", index1,
                     U2S(reader1.getReferenceName(index1)),
                     U2S(reader2.getReferenceName(index2)));
         }
@@ -1206,7 +1211,7 @@ static sal_uInt32 checkReference(const OUString& keyName,
                 fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
                 bDump = sal_False;
             }
-            fprintf(stderr, "    Reference %d: Type1 = %s  !=  Type2 = %s\n", index1,
+            fprintf(stderr, "  Reference %d: Type1 = %s  !=  Type2 = %s\n", index1,
                     getReferenceType(reader1.getReferenceType(index1)),
                     getReferenceType(reader2.getReferenceType(index2)));
         }
@@ -1222,7 +1227,7 @@ static sal_uInt32 checkReference(const OUString& keyName,
                 fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
                 bDump = sal_False;
             }
-            fprintf(stderr, "    Reference %d: Doku1 = %s\n                 Doku2 = %s\n", index1,
+            fprintf(stderr, "  Reference %d: Doku1 = %s\n                 Doku2 = %s\n", index1,
                     U2S(reader1.getReferenceDoku(index1)),
                     U2S(reader2.getReferenceDoku(index2)));
         }
@@ -1238,7 +1243,7 @@ static sal_uInt32 checkReference(const OUString& keyName,
                 fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
                 bDump = sal_False;
             }
-            fprintf(stderr, "    Reference %d: Access1 = %s  !=  Access2 = %s\n", index1,
+            fprintf(stderr, "  Reference %d: Access1 = %s  !=  Access2 = %s\n", index1,
                     getFieldAccess(reader1.getReferenceAccess(index1)).getStr(),
                     getFieldAccess(reader1.getReferenceAccess(index2)).getStr());
         }
@@ -1268,8 +1273,8 @@ static sal_uInt32 checkFieldsWithoutOrder(const OUString& keyName,
                 fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
                 bDump = sal_False;
             }
-            fprintf(stderr, "    service1 contains %d more properties as service2\n",
-                    nFields1-nFields2);
+           fprintf(stderr, "  %s1 contains %d more properties as %s2\n",
+                   getTypeClass(typeClass), nFields1-nFields2, getTypeClass(typeClass));
         }
     }
 
@@ -1287,14 +1292,18 @@ static sal_uInt32 checkFieldsWithoutOrder(const OUString& keyName,
                 break;
             }
         }
-        if (!bFound && options.forceOutput())
+        if (!bFound)
         {
-            if ( bDump )
+            if (options.forceOutput())
             {
-                fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
-                bDump = sal_False;
+                if ( bDump )
+                {
+                    fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
+                    bDump = sal_False;
+                }
+                fprintf(stderr, "  incompatible change: Field %d ('%s') of r1 is not longer a property of this %s in r2\n",
+                        i, U2S(shortName(reader1.getFieldName(i))), getTypeClass(typeClass));
             }
-            fprintf(stderr, "    incompatible change: Field %d is not longer a property of this service\n", i);
             nError++;
         } else
         {
@@ -1317,9 +1326,10 @@ static sal_uInt32 checkFieldsWithoutOrder(const OUString& keyName,
                             fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
                             bDump = sal_False;
                         }
-                        fprintf(stderr, "    incompatible change: Field %d is a new property but not 'optional'\n", j);
-                        nError++;
+                        fprintf(stderr, "  incompatible change: Field %d ('%s') of r2 is a new property compared to this %s in r1 and is not 'optional'\n",
+                                j, U2S(shortName(reader2.getFieldName(j))), getTypeClass(typeClass));
                     }
+                    nError++;
                 }
             }
         }
@@ -1535,14 +1545,18 @@ static sal_uInt32 checkBlob(const OUString& keyName, RegistryTypeReader& reader1
                         break;
                     }
                 }
-                if (!bFound && options.forceOutput())
+                if (!bFound)
                 {
-                    if ( bDump )
+                    if (options.forceOutput())
                     {
-                        fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
-                        bDump = sal_False;
+                        if ( bDump )
+                        {
+                            fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
+                            bDump = sal_False;
+                        }
+                        fprintf(stderr, "  incompatible change: Reference %d ('%s') in 'r1' is not longer a reference of this service in 'r2'\n",
+                                i, U2S(shortName(reader1.getReferenceName(i))));
                     }
-                    fprintf(stderr, "    incompatible change: Reference %d is not longer a reference of this service\n", i);
                     nError++;
                 } else
                 {
@@ -1565,9 +1579,10 @@ static sal_uInt32 checkBlob(const OUString& keyName, RegistryTypeReader& reader1
                                     fprintf(stderr, "%s: %s\n", getTypeClass(typeClass), U2S(keyName));
                                     bDump = sal_False;
                                 }
-                                fprintf(stderr, "    incompatible change: Reference %d is a new reference but not 'optional'\n", j);
-                                nError++;
+                                fprintf(stderr, "  incompatible change: Reference %d ('%s') of r2 is a new reference compared to this service in r1 and is not 'optional'\n",
+                                        j, U2S(shortName(reader2.getReferenceName(j))));
                             }
+                            nError++;
                         }
                     }
                 }
