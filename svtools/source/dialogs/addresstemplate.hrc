@@ -2,9 +2,9 @@
  *
  *  $RCSfile: addresstemplate.hrc,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-24 12:29:04 $
+ *  last change: $Author: thb $ $Date: 2001-05-17 14:19:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,13 +66,14 @@
 #define FIELD_PAIRS_VISIBLE         5
 #define FIELD_CONTROLS_VISIBLE      2 * FIELD_PAIRS_VISIBLE
 
-#define GB_DATASOURCEFRAME          1
+#define FL_DATASOURCEFRAME          1
 #define FT_DATASOURCE               2
 #define CB_DATASOURCE               3
+#define CT_BORDER                   1
 #define PB_ADMINISTATE_DATASOURCES  4
 #define FT_TABLE                    5
 #define CB_TABLE                    6
-#define GB_FIELDS                   7
+#define FT_FIELDS                   7
 #define SB_FIELDSCROLLER            8
 #define PB_OK                       9
 #define PB_CANCEL                   10

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: addresstemplate.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-16 14:42:05 $
+ *  last change: $Author: thb $ $Date: 2001-05-17 14:19:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 #ifndef _SVT_ADDRESSTEMPLATE_HRC_
 #include "addresstemplate.hrc"
 #endif
+#ifndef _SVT_CONTROLDIMS_HRC_
+#include <svtools/controldims.hrc>
+#endif
 
 #define FIELD_ROW_HEIGHT    17
 
@@ -79,14 +82,14 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     Text [ english ] = "Templates: Address Book assignment";
     Text [ english_us ] = "Templates: Address Book ";
 
-    GroupBox GB_DATASOURCEFRAME
+    FixedLine FL_DATASOURCEFRAME
     {
         Text = "Adressbuchquelle";
         Text [ english ] = "Address Book Source";
         Text [ english_us ] = "Address Book Source";
         SVLook = TRUE ;
         Pos = MAP_APPFONT ( 6 , 2 ) ;
-        Size = MAP_APPFONT ( 248 , 48 ) ;
+        Size = MAP_APPFONT ( 248 , RSC_CD_FIXEDLINE_HEIGHT ) ;
         Text[ portuguese ] = "Fonte do livro de endereηos";
         Text[ russian ] = "Θρςξχνθκ ΰδπερνξι κνθγθ";
         Text[ greek ] = "Προέλευση ατζέντας διευθύνσεων";
@@ -214,14 +217,14 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
         DropDown = TRUE;
         TabStop = TRUE;
     };
-    GroupBox GB_FIELDS
+    FixedText FT_FIELDS
     {
         Text = "Feldzuordnung";
         Text [ english ] = "Field assignment";
         Text [ english_us ] = "Field assignment";
         SVLook = TRUE ;
-        Pos = MAP_APPFONT ( 6, 52 ) ;
-        Size = MAP_APPFONT ( 248 , 10 + FIELD_ROW_HEIGHT * FIELD_PAIRS_VISIBLE ) ;
+        Pos = MAP_APPFONT ( 6, 30 + RSC_CD_DROPDOWN_HEIGHT + RSC_SP_CTRL_Y  ) ;
+        Size = MAP_APPFONT ( 248 , RSC_CD_FIXEDTEXT_HEIGHT ) ;
         Text[ portuguese ] = "Atribuiηγo de campos";
         Text[ russian ] = "Νΰηνΰχενθε οξλει";
         Text[ greek ] = "Αντιστοίχιση πεδίου";
@@ -242,19 +245,25 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
         Text[ catalan ] = "Asignaciσn de campo";
         Text[ finnish ] = "Kenttδmδδritys";
     };
+    Window CT_BORDER
+    {
+        Border = TRUE ;
+        Pos = MAP_APPFONT ( 6, 30 + RSC_CD_DROPDOWN_HEIGHT + RSC_SP_CTRL_Y + RSC_CD_FIXEDTEXT_HEIGHT + RSC_SP_CTRL_DESC_Y ) ;
+        Size = MAP_APPFONT ( 248 , 3 + FIELD_ROW_HEIGHT * FIELD_PAIRS_VISIBLE ) ;
+    };
 
 #define DECLARE_FIELD( row, column )    \
         FixedText FT_FIELD_BASE + row * 2 + column  \
         {   \
             SVLook = TRUE ; \
-            Pos = MAP_APPFONT ( 12 + column * 116, 64 + row * FIELD_ROW_HEIGHT ) ;  \
+            Pos = MAP_APPFONT ( 3 + column * 116, RSC_SP_CTRL_GROUP_Y + 2 + row * FIELD_ROW_HEIGHT ) ;  \
             Size = MAP_APPFONT ( 60 , 10 ) ;    \
             Group = TRUE;   \
         };  \
         ListBox LB_FIELD_BASE + row * 2 + column    \
         {   \
             SVLook = TRUE;  \
-            Pos = MAP_APPFONT ( 78 + column * 116, 62 + row * FIELD_ROW_HEIGHT ) ;  \
+            Pos = MAP_APPFONT ( 70 + column * 116, RSC_SP_CTRL_GROUP_Y + row * FIELD_ROW_HEIGHT ) ; \
             Size = MAP_APPFONT ( 43 , 14 ) ;    \
             Border = TRUE;  \
             DropDown = TRUE;    \
@@ -320,8 +329,8 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     ScrollBar SB_FIELDSCROLLER
     {
         SVLook = TRUE;
-        Pos = MAP_APPFONT ( 240, 62 ) ;
-        Size = MAP_APPFONT ( 8 , 14 + FIELD_ROW_HEIGHT * (FIELD_PAIRS_VISIBLE - 1) ) ;
+        Pos = MAP_APPFONT ( 239, 0 ) ;
+        Size = MAP_APPFONT ( 8 , 19 + FIELD_ROW_HEIGHT * (FIELD_PAIRS_VISIBLE - 1) ) ;
     };
 
     OKButton PB_OK

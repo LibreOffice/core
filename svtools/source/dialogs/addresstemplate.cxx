@@ -2,9 +2,9 @@
  *
  *  $RCSfile: addresstemplate.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-02 16:22:03 $
+ *  last change: $Author: thb $ $Date: 2001-05-17 14:19:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -322,15 +322,16 @@ namespace svt
     AddressBookSourceDialog::AddressBookSourceDialog(Window* _pParent,
             const Reference< XMultiServiceFactory >& _rxORB )
         :ModalDialog(_pParent, SvtResId( DLG_ADDRESSBOOKSOURCE ))
-        ,m_aDatasourceFrame         (this, ResId(GB_DATASOURCEFRAME))
+        ,m_aDatasourceFrame         (this, ResId(FL_DATASOURCEFRAME))
         ,m_aDatasourceLabel         (this, ResId(FT_DATASOURCE))
         ,m_aDatasource              (this, ResId(CB_DATASOURCE))
         ,m_aAdministrateDatasources (this, ResId(PB_ADMINISTATE_DATASOURCES))
         ,m_aTableLabel              (this, ResId(FT_TABLE))
         ,m_aTable                   (this, ResId(CB_TABLE))
-        ,m_aFieldsFrame             (this, ResId(GB_FIELDS))
+        ,m_aFieldsTitle             (this, ResId(FT_FIELDS))
+        ,m_aFieldsFrame             (this, ResId(CT_BORDER))
         ,m_nFieldScrollPos(-1)
-        ,m_aFieldScroller           (this, ResId(SB_FIELDSCROLLER))
+        ,m_aFieldScroller           (&m_aFieldsFrame, ResId(SB_FIELDSCROLLER))
         ,m_aOK                      (this, ResId(PB_OK))
         ,m_aCancel                  (this, ResId(PB_CANCEL))
         ,m_sNoFieldSelection(ResId(STR_NO_FIELD_SELECTION))
@@ -348,9 +349,9 @@ namespace svt
             for (sal_Int32 column=0; column<2; ++column)
             {
                 // the label
-                m_pFieldLabels[row * 2 + column] = new FixedText(this, ResId((USHORT)(FT_FIELD_BASE + row * 2 + column)));
+                m_pFieldLabels[row * 2 + column] = new FixedText(&m_aFieldsFrame, ResId((USHORT)(FT_FIELD_BASE + row * 2 + column)));
                 // the listbox
-                m_pFields[row * 2 + column] = new ListBox(this, ResId((USHORT)(LB_FIELD_BASE + row * 2 + column)));
+                m_pFields[row * 2 + column] = new ListBox(&m_aFieldsFrame, ResId((USHORT)(LB_FIELD_BASE + row * 2 + column)));
                 m_pFields[row * 2 + column]->SetDropDownLineCount(8);
                 m_pFields[row * 2 + column]->SetSelectHdl(LINK(this, AddressBookSourceDialog, OnFieldSelect));
             }

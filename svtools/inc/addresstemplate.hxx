@@ -2,9 +2,9 @@
  *
  *  $RCSfile: addresstemplate.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-24 12:29:05 $
+ *  last change: $Author: thb $ $Date: 2001-05-17 14:19:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,14 +158,15 @@ namespace svt
     {
     protected:
         // Controls
-        GroupBox        m_aDatasourceFrame;
+        FixedLine       m_aDatasourceFrame;
         FixedText       m_aDatasourceLabel;
         ComboBox        m_aDatasource;
         PushButton      m_aAdministrateDatasources;
         FixedText       m_aTableLabel;
         ComboBox        m_aTable;
 
-        GroupBox        m_aFieldsFrame;
+        FixedText       m_aFieldsTitle;
+        Window          m_aFieldsFrame;
         FixedText*      m_pFieldLabels[5 * 2];
         ListBox*        m_pFields[5 * 2];
 

@@ -1,0 +1,135 @@
+/*************************************************************************
+ *
+ *  $RCSfile: controldims.hrc,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: thb $ $Date: 2001-05-17 14:19:19 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#ifndef _SVT_CONTROLDIMS_HRC_
+#define _SVT_CONTROLDIMS_HRC_
+
+//
+// From: Dialogue Specification and Guidelines - Visual Design V1.3
+// by Christian Jansen
+//
+
+//
+// Usage:
+// ======
+//
+// all values have to be mapped by MAP_APPFONT
+//
+
+// Base
+#define RSC_BS_CHARHEIGHT                   8
+#define RSC_BS_CHARWIDTH                    4
+
+// control dimensions
+#define RSC_CD_PUSHBUTTON_WIDTH             50
+#define RSC_CD_PUSHBUTTON_HEIGHT            14
+
+#define RSC_CD_FIXEDTEXT_HEIGHT             RSC_BS_CHARHEIGHT
+#define RSC_CD_FIXEDLINE_HEIGHT             RSC_BS_CHARHEIGHT
+#define RSC_CD_FIXEDLINE_WIDTH              RSC_BS_CHARWIDTH    // for vertical FixedLines
+
+#define RSC_CD_DROPDOWN_HEIGHT              12      // also combobox and dropdown list
+#define RSC_CD_TEXTBOX_HEIGHT               12      // also numeric fields etc.
+
+#define RSC_CD_CHECKBOX_HEIGHT              10      // also tristate
+#define RSC_CD_RADIOBUTTON_HEIGHT           10
+
+// spacings
+#define RSC_SP_CTRL_X                       6       // controls that are unrelated
+#define RSC_SP_CTRL_Y                       7
+#define RSC_SP_CTRL_GROUP_X                 3       // related controls, or controls in a groupbox
+#define RSC_SP_CTRL_GROUP_Y                 4
+#define RSC_SP_CTRL_DESC_X                  3       // between description text and related control
+#define RSC_SP_CTRL_DESC_Y                  3
+
+// overruled spacings between certain controls
+#define RSC_SP_FLGR_SPACE_X                 6       // between groupings made with FixedLine
+#define RSC_SP_FLGR_SPACE_Y                 4
+#define RSC_SP_GRP_SPACE_X                  6       // between groupings made with GroupBox
+#define RSC_SP_GRP_SPACE_Y                  6
+#define RSC_SP_TXT_SPACE_X                  5       // spacing between text paragraphs
+#define RSC_SP_TXT_SPACE_Y                  7
+
+// dialog inner border
+#define RSC_SP_DLG_INNERBORDER_LEFT         3
+#define RSC_SP_DLG_INNERBORDER_TOP          6
+#define RSC_SP_DLG_INNERBORDER_RIGHT        3
+#define RSC_SP_DLG_INNERBORDER_BOTTOM       6
+
+// tab page inner border
+#define RSC_SP_TBPG_INNERBORDER_LEFT        6       // for tabpage groupings
+#define RSC_SP_TBPG_INNERBORDER_TOP         3
+#define RSC_SP_TBPG_INNERBORDER_RIGHT       6
+#define RSC_SP_TBPG_INNERBORDER_BOTTOM      6
+
+// FixedLine group inner border
+#define RSC_SP_FLGR_INNERBORDER_LEFT        6       // for FixedLine groupings
+#define RSC_SP_FLGR_INNERBORDER_TOP         3
+#define RSC_SP_FLGR_INNERBORDER_RIGHT       0
+#define RSC_SP_FLGR_INNERBORDER_BOTTOM      0
+
+// GroupBox inner border
+#define RSC_SP_GRP_INNERBORDER_LEFT         6       // for GroupBox groupings
+#define RSC_SP_GRP_INNERBORDER_TOP          6
+#define RSC_SP_GRP_INNERBORDER_RIGHT        6
+#define RSC_SP_GRP_INNERBORDER_BOTTOM       6
+
+#endif // _SVT_CONTROLDIMS_HRC_

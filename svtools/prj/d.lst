@@ -315,6 +315,8 @@ hedabu: ..\inc\ivctrl.hxx %_DEST%\inc%_EXT%\svtools\ivctrl.hxx
 hedabu: ..\inc\fileview.hxx %_DEST%\inc%_EXT%\svtools\fileview.hxx
 hedabu: ..\inc\templdlg.hxx %_DEST%\inc%_EXT%\svtools\templdlg.hxx
 
+hedabu: ..\inc\controldims.hrc %_DEST%\inc%_EXT%\svtools\controldims.hrc
+
 dos: sh -c "if test %OS% = MACOSX; then create-bundle %_DEST%\bin%_EXT%\bmp=%__PRJROOT%\%__SRC%\bin%_EXT%; fi"
 
 ..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib%_EXT%\lib*static*.dylib
