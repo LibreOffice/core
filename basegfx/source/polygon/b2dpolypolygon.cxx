@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dpolypolygon.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: aw $ $Date: 2004-02-03 18:18:23 $
+ *  last change: $Author: aw $ $Date: 2004-02-12 17:33:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -318,13 +318,13 @@ namespace basegfx
         }
     }
 
-    bool B2DPolyPolygon::areControlPointsUsed() const
+    bool B2DPolyPolygon::areControlVectorsUsed() const
     {
         for(sal_uInt32 a(0L); a < mpPolyPolygon->count(); a++)
         {
             const ::basegfx::B2DPolygon& rPolygon = mpPolyPolygon->getB2DPolygon(a);
 
-            if(rPolygon.areControlPointsUsed())
+            if(rPolygon.areControlVectorsUsed())
             {
                 return true;
             }
