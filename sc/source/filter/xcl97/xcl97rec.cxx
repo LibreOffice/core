@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:07:31 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 18:00:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1071,7 +1071,7 @@ XclExpObjTbxCtrl::XclExpObjTbxCtrl(
 
     // control label
     OUString aString;
-    if( ::getPropValue( aString, xPropSet, PROPNAME( "Label" ) ) && aString.getLength() )
+    if( ::getPropValue( aString, xPropSet, PROPNAME( "Label" ) ) )
     {
         /*  Be sure to construct the MSODRAWING ClientTextbox record after the
             base OBJ's MSODRAWING record Escher data is completed. */
@@ -1079,40 +1079,43 @@ XclExpObjTbxCtrl::XclExpObjTbxCtrl(
         pClientTextbox->GetEscherEx()->AddAtom( 0, ESCHER_ClientTextbox );  // TXO record
         pClientTextbox->UpdateStopPos();
 
-        XclFontData aFontData;
-        OUString aFontName;
-        float fFloatVal;
-        sal_Int16 nShortVal;
-
-        if( ::getPropValue( aFontName, xPropSet, PROPNAME( "FontName" ) ) )
-            aFontData.maName = XclTools::GetXclFontName( aFontName );
-        if( ::getPropValue( fFloatVal, xPropSet, PROPNAME( "FontHeight" ) ) )
-            aFontData.SetApiHeight( fFloatVal );
-        if( ::getPropValue( nShortVal, xPropSet, PROPNAME( "FontFamily" ) ) )
-            aFontData.SetApiFamily( nShortVal );
-        if( ::getPropValue( nShortVal, xPropSet, PROPNAME( "FontCharset" ) ) )
-            aFontData.SetApiCharSet( nShortVal );
-        if( ::getPropValue( nShortVal, xPropSet, PROPNAME( "FontSlant" ) ) )
-            aFontData.SetApiPosture( static_cast< ::com::sun::star::awt::FontSlant >( nShortVal ) );
-        if( ::getPropValue( fFloatVal, xPropSet, PROPNAME( "FontWeight" ) ) )
-            aFontData.SetApiWeight( fFloatVal );
-        if( ::getPropValue( nShortVal, xPropSet, PROPNAME( "FontUnderline" ) ) )
-            aFontData.SetApiUnderline( nShortVal );
-        if( ::getPropValue( nShortVal, xPropSet, PROPNAME( "FontStrikeout" ) ) )
-            aFontData.SetApiStrikeout( nShortVal );
-
         sal_uInt16 nFontIx = EXC_FONT_APP;
-        if( aFontData.maName.Len() && aFontData.mnHeight )
+        if( aString.getLength() )
         {
-            XclExpFont* pFont = new XclExpFont( GetRoot(), aFontData );
-            sal_Int32 nApiColor;
-            if( ::getPropValue( nApiColor, xPropSet, PROPNAME( "TextColor" ) ) )
+            XclFontData aFontData;
+            OUString aFontName;
+            float fFloatVal;
+            sal_Int16 nShortVal;
+
+            if( ::getPropValue( aFontName, xPropSet, PROPNAME( "FontName" ) ) )
+                aFontData.maName = XclTools::GetXclFontName( aFontName );
+            if( ::getPropValue( fFloatVal, xPropSet, PROPNAME( "FontHeight" ) ) )
+                aFontData.SetApiHeight( fFloatVal );
+            if( ::getPropValue( nShortVal, xPropSet, PROPNAME( "FontFamily" ) ) )
+                aFontData.SetApiFamily( nShortVal );
+            if( ::getPropValue( nShortVal, xPropSet, PROPNAME( "FontCharset" ) ) )
+                aFontData.SetApiCharSet( nShortVal );
+            if( ::getPropValue( nShortVal, xPropSet, PROPNAME( "FontSlant" ) ) )
+                aFontData.SetApiPosture( static_cast< ::com::sun::star::awt::FontSlant >( nShortVal ) );
+            if( ::getPropValue( fFloatVal, xPropSet, PROPNAME( "FontWeight" ) ) )
+                aFontData.SetApiWeight( fFloatVal );
+            if( ::getPropValue( nShortVal, xPropSet, PROPNAME( "FontUnderline" ) ) )
+                aFontData.SetApiUnderline( nShortVal );
+            if( ::getPropValue( nShortVal, xPropSet, PROPNAME( "FontStrikeout" ) ) )
+                aFontData.SetApiStrikeout( nShortVal );
+
+            if( aFontData.maName.Len() && aFontData.mnHeight )
             {
-                Color aColor( static_cast< sal_uInt32 >( nApiColor ) );
-                pFont->SetColorId( rRoot.GetPalette().InsertColor( aColor, xlColorChartText, EXC_COLOR_FONTAUTO ) );
+                XclExpFont* pFont = new XclExpFont( GetRoot(), aFontData );
+                sal_Int32 nApiColor;
+                if( ::getPropValue( nApiColor, xPropSet, PROPNAME( "TextColor" ) ) )
+                {
+                    Color aColor( static_cast< sal_uInt32 >( nApiColor ) );
+                    pFont->SetColorId( rRoot.GetPalette().InsertColor( aColor, xlColorChartText, EXC_COLOR_FONTAUTO ) );
+                }
+                nFontIx = GetFontBuffer().Insert( pFont );
+                // font buffer owns pFont, forget it
             }
-            nFontIx = GetFontBuffer().Insert( pFont );
-            // font buffer owns pFont, forget it
         }
 
         pTxo = new XclTxo( aString, nFontIx );
