@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sections.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2000-12-06 14:11:42 $
+ *  last change: $Author: kz $ $Date: 2000-12-08 18:00:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,7 +175,7 @@ TabPage RID_TP_GENERAL
         Text[ polish ] = "Autor";
         Text[ portuguese_brazilian ] = "Author";
         Text[ japanese ] = "’˜Ò(~A)";
-        Text[ korean ] = "ÀúÀÚ(~A)";
+        Text[ korean ] = "~ÀÛ¼ºÀÚ";
         Text[ chinese_simplified ] = "×÷Õß(~A)";
         Text[ chinese_traditional ] = "§@ªÌ(~A)";
         Text[ arabic ] = "ÇáãÄáİ";
@@ -1045,7 +1045,7 @@ TabPage RID_TP_GENERAL
         Text[ polish ] = "Wyci¹g z ksi¹¿ki z tytu³em";
         Text[ portuguese_brazilian ] = "Book excerpt with title";
         Text[ japanese ] = "–{‚Ì”²ˆi‘–¼•t‚«j";
-        Text[ korean ] = "Á¦¸ñÀÌ ÀÖ´Â Ã¥ ¹ßÃé";
+        Text[ korean ] = "Ã¥ ¹ßÃé (Á¦¸ñ Æ÷ÇÔ)";
         Text[ chinese_simplified ] = "×¢Ã÷±êÌâµÄÊé¼®ÕªÂ¼ÎÄ";
         Text[ chinese_traditional ] = "§t¦³¼ĞÃDªº®ÑÄy¤å³¹ºK­n";
         Text[ arabic ] = "ãŞÊÈÓÇÊ ãä ßÊÇÈ ĞÇÊ ÚäæÇä";
@@ -1285,7 +1285,7 @@ TabPage RID_TP_GENERAL
         Text[ polish ] = "e-mail";
         Text[ portuguese_brazilian ] = "e-mail";
         Text[ japanese ] = "E-mail";
-        Text[ korean ] = "ÀüÀÚ¿ìÆí";
+        Text[ korean ] = "e-mail";
         Text[ chinese_simplified ] = "µç×ÓÓÊ¼ş";
         Text[ chinese_traditional ] = "¹q¤l¶l¥ó";
         Text[ arabic ] = "ÈÑíÏ ÅáßÊÑæäí";
