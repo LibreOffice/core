@@ -2,9 +2,9 @@
  *
  *  $RCSfile: combobox.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: mt $ $Date: 2002-11-01 09:01:04 $
+ *  last change: $Author: mt $ $Date: 2002-11-22 14:35:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -926,6 +926,7 @@ USHORT ComboBox::InsertEntry( const XubString& rStr, USHORT nPos )
 {
     USHORT nRealPos = mpImplLB->InsertEntry( nPos + mpImplLB->GetEntryList()->GetMRUCount(), rStr );
     nRealPos -= mpImplLB->GetEntryList()->GetMRUCount();
+    CallEventListeners( VCLEVENT_COMBOBOX_ITEMADDED, (void*) nRealPos );
     return nRealPos;
 }
 
@@ -935,6 +936,7 @@ USHORT ComboBox::InsertEntry( const XubString& rStr, const Image& rImage, USHORT
 {
     USHORT nRealPos = mpImplLB->InsertEntry( nPos + mpImplLB->GetEntryList()->GetMRUCount(), rStr, rImage );
     nRealPos -= mpImplLB->GetEntryList()->GetMRUCount();
+    CallEventListeners( VCLEVENT_COMBOBOX_ITEMADDED, (void*) nRealPos );
     return nRealPos;
 }
 
@@ -950,6 +952,7 @@ void ComboBox::RemoveEntry( const XubString& rStr )
 void ComboBox::RemoveEntry( USHORT nPos )
 {
     mpImplLB->RemoveEntry( nPos + mpImplLB->GetEntryList()->GetMRUCount() );
+    CallEventListeners( VCLEVENT_COMBOBOX_ITEMREMOVED, (void*) nPos );
 }
 
 // -----------------------------------------------------------------------
@@ -957,6 +960,7 @@ void ComboBox::RemoveEntry( USHORT nPos )
 void ComboBox::Clear()
 {
     mpImplLB->Clear();
+    CallEventListeners( VCLEVENT_COMBOBOX_ITEMREMOVED, (void*) (-1) );
 }
 
 // -----------------------------------------------------------------------

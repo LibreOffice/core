@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lstbox.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mt $ $Date: 2002-11-01 09:01:04 $
+ *  last change: $Author: mt $ $Date: 2002-11-22 14:35:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -848,6 +848,7 @@ void ListBox::Clear()
         mpImplWin->SetImage( aImage );
         mpImplWin->Invalidate();
     }
+    CallEventListeners( VCLEVENT_LISTBOX_ITEMREMOVED, (void*) (-1) );
 }
 
 // -----------------------------------------------------------------------
@@ -871,6 +872,7 @@ USHORT ListBox::InsertEntry( const XubString& rStr, USHORT nPos )
 {
     USHORT nRealPos = mpImplLB->InsertEntry( nPos + mpImplLB->GetEntryList()->GetMRUCount(), rStr );
     nRealPos -= mpImplLB->GetEntryList()->GetMRUCount();
+    CallEventListeners( VCLEVENT_LISTBOX_ITEMADDED, (void*) nRealPos );
     return nRealPos;
 }
 
@@ -880,6 +882,7 @@ USHORT ListBox::InsertEntry( const Image& rImage, USHORT nPos )
 {
     USHORT nRealPos = mpImplLB->InsertEntry( nPos + mpImplLB->GetEntryList()->GetMRUCount(), rImage );
     nRealPos -= mpImplLB->GetEntryList()->GetMRUCount();
+    CallEventListeners( VCLEVENT_LISTBOX_ITEMADDED, (void*) nRealPos );
     return nRealPos;
 }
 
@@ -889,6 +892,7 @@ USHORT ListBox::InsertEntry( const XubString& rStr, const Image& rImage, USHORT 
 {
     USHORT nRealPos = mpImplLB->InsertEntry( nPos + mpImplLB->GetEntryList()->GetMRUCount(), rStr, rImage );
     nRealPos -= mpImplLB->GetEntryList()->GetMRUCount();
+    CallEventListeners( VCLEVENT_LISTBOX_ITEMADDED, (void*) nRealPos );
     return nRealPos;
 }
 
@@ -904,6 +908,7 @@ void ListBox::RemoveEntry( const XubString& rStr )
 void ListBox::RemoveEntry( USHORT nPos )
 {
     mpImplLB->RemoveEntry( nPos + mpImplLB->GetEntryList()->GetMRUCount() );
+    CallEventListeners( VCLEVENT_LISTBOX_ITEMREMOVED, (void*) nPos );
 }
 
 // -----------------------------------------------------------------------
