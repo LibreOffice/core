@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: tl $ $Date: 2001-05-30 13:45:55 $
+ *  last change: $Author: cmc $ $Date: 2001-06-26 14:49:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -215,7 +215,6 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::uno;
-using namespace ::rtl;
 
 #ifndef SO2_DECL_SVSTORAGESTREAM_DEFINED
 #define SO2_DECL_SVSTORAGESTREAM_DEFINED
