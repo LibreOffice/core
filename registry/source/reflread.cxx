@@ -2,9 +2,9 @@
  *
  *  $RCSfile: reflread.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2004-06-23 11:52:34 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 15:48:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1380,6 +1380,7 @@ void typereg_reader_getFileName(void * hEntry, rtl_uString** pFileName)
         RTL_TEXTENCODING_UTF8, OSTRING_TO_OUSTRING_CVTFLAGS);
 }
 
+
 sal_uInt16 typereg_reader_getFieldCount(void * hEntry) SAL_THROW_EXTERN_C()
 {
     TypeRegistryEntry* pEntry = (TypeRegistryEntry*) hEntry;
@@ -1497,6 +1498,7 @@ void typereg_reader_getFieldFileName(void * hEntry, rtl_uString** pFieldFileName
         pFieldFileName, pTmp, pTmp == 0 ? 0 : rtl_str_getLength(pTmp),
         RTL_TEXTENCODING_UTF8, OSTRING_TO_OUSTRING_CVTFLAGS);
 }
+
 
 sal_uInt16 typereg_reader_getMethodCount(void * hEntry) SAL_THROW_EXTERN_C()
 {
