@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.32 $
+#   $Revision: 1.33 $
 #
-#   last change: $Author: kso $ $Date: 2001-12-07 14:28:48 $
+#   last change: $Author: mav $ $Date: 2002-01-11 17:41:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,6 +74,7 @@ PACKAGE=com$/sun$/star$/ucb
 
 IDLFILES=\
     AlreadyInitializedException.idl\
+    AnyCompareFactory.idl\
     AuthenticationRequest.idl\
     CachedContentResultSet.idl\
     CachedContentResultSetFactory.idl\
