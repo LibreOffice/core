@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews5.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cl $ $Date: 2002-04-15 09:21:13 $
+ *  last change: $Author: af $ $Date: 2002-04-22 09:12:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,9 @@
 #endif
 #ifndef _SVX_FMSHELL_HXX //autogen
 #include <svx/fmshell.hxx>
+#endif
+#ifndef _SD_ACCESSIBILITY_ACCESSIBLE_DRAW_DOCUMENT_VIEW_HXX
+#include "AccessibleDrawDocumentView.hxx"
 #endif
 
 
@@ -799,3 +802,37 @@ void SdDrawViewShell::VisAreaChanged(const Rectangle& rRect)
         pController->fireVisAreaChanged( rRect );
     }
 }
+
+
+
+
+/** If there is a valid controller then create a new instance of
+    <type>AccessibleDrawDocumentView</type>.  Otherwise delegate this call
+    to the base class to return a default object (probably an empty
+    reference).
+*/
+::com::sun::star::uno::Reference<
+    ::drafts::com::sun::star::accessibility::XAccessible>
+    SdDrawViewShell::CreateAccessibleDocumentView (SdWindow* pWindow)
+{
+    if (GetController() != NULL)
+    {
+        accessibility::AccessibleDrawDocumentView* pDocumentView =
+            new accessibility::AccessibleDrawDocumentView (
+                pWindow,
+                this,
+                GetController(),
+                pWindow->GetAccessibleParentWindow()->GetAccessible());
+        pDocumentView->Init();
+        return ::com::sun::star::uno::Reference<
+            ::drafts::com::sun::star::accessibility::XAccessible>
+            (static_cast< ::com::sun::star::uno::XWeak*>(pDocumentView),
+                ::com::sun::star::uno::UNO_QUERY);
+    }
+    else
+    {
+        OSL_TRACE ("SdDrawViewShell::CreateAccessibleDocumentView: no controller");
+        return SdViewShell::CreateAccessibleDocumentView (pWindow);
+    }
+}
+
