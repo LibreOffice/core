@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hdft.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: os $ $Date: 2002-03-20 14:59:19 $
+ *  last change: $Author: os $ $Date: 2002-04-11 09:21:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,12 +65,56 @@
  // pragma ----------------------------------------------------------------
 
 #define  _TEXT_FT_LMARGIN \
-        Text = "~Rand vor Text" ;\
-        Text [ ENGLISH ] = "~Margin before text" ;\
+        Text = "~Linker Rand" ;                                             \
+        Text [ ENGLISH ] = "~Left Margin" ;                                 \
+        Text [ norwegian ] = "~Left Margin" ;                               \
+        Text [ italian ] = "Margine sinistro" ;                             \
+        Text [ portuguese_brazilian ] = "~Cabe?alho da Margem Esquerda" ;   \
+        Text [ portuguese ] = "Margem ~esquerda" ;                          \
+        Text [ finnish ] = "~Vasen marginaali" ;                            \
+        Text [ danish ] = "Venstre margen" ;                                \
+        Text [ french ] = "Marge gauche" ;                                  \
+        Text [ swedish ] = "V‰nstermargina~l" ;                             \
+        Text [ dutch ] = "~Linker marge" ;                                  \
+        Text [ spanish ] = "Margen ~izquierdo" ;                            \
+        Text [ english_us ] = "~Left margin" ;                              \
+        Text[ chinese_simplified ] = "Â∑¶ÊñπÈ°µËæπË∑ù(~L)";                 \
+        Text[ russian ] = "œÓÎÂ ÒÎÂ‚‡";                                     \
+        Text[ polish ] = "Lewy margines";                                   \
+        Text[ japanese ] = "Â∑¶‰ΩôÁôΩ(~L)";                                 \
+        Text[ chinese_traditional ] = "Â∑¶ÈÇäÊ°Ü(~L)";                      \
+        Text[ arabic ] = "«·Â«„‘ «·√Ì”—";                                   \
+        Text[ greek ] = "¡ÒÈÛÙÂÒ¸ ÂÒÈË˛ÒÈÔ";                               \
+        Text[ korean ] = "ÏôºÏ™Ω Ïó¨Î∞±(~L)";                               \
+        Text[ turkish ] = "S~ol kenar";                                     \
+        Text[ language_user1 ] = " ";                                       \
+        Text[ catalan ] = "Margen ~izquierdo";                              \
 
-#define _TEXT_FT_LMARGIN \
-        Text = "R~and hinter Text" ;\
-        Text [ ENGLISH ] = "M~argin after text" ;\
+#define _TEXT_FT_RMARGIN \
+        Text = "~Rechter Rand" ;                                            \
+        Text [ ENGLISH ] = "R~ight Margin" ;                                \
+        Text [ norwegian ] = "R~ight Margin" ;                              \
+        Text [ italian ] = "~Margine destro" ;                              \
+        Text [ portuguese_brazilian ] = "Margem Direita Cabe?alho" ;        \
+        Text [ portuguese ] = "Margem ~direita" ;                           \
+        Text [ finnish ] = "~Oikea marginaali" ;                            \
+        Text [ danish ] = "H¯jre margen" ;                                  \
+        Text [ french ] = "Marge droite" ;                                  \
+        Text [ swedish ] = "Hˆge~rmarginal" ;                               \
+        Text [ dutch ] = "~Rechter marge" ;                                 \
+        Text [ spanish ] = "Margen ~derecho" ;                              \
+        Text [ english_us ] = "R~ight margin" ;                             \
+        Text[ chinese_simplified ] = "Âè≥ÊñπÈ°µËæπË∑ù(~I)";                 \
+        Text[ russian ] = "œÓÎÂ ÒÔ‡‚‡";                                    \
+        Text[ polish ] = "Prawy margines";                                  \
+        Text[ japanese ] = "Âè≥‰ΩôÁôΩ(~I)";                                 \
+        Text[ chinese_traditional ] = "Âè≥ÈÇäÊ°Ü(~I)";                      \
+        Text[ arabic ] = "«·Â«„‘ «·√Ì„‰";                                   \
+        Text[ greek ] = "ƒÂÓÈ¸ ÂÒÈË˛ÒÈÔ";                                  \
+        Text[ korean ] = "Ïò§Î•∏Ï™Ω Ïó¨Î∞±(~I)";                            \
+        Text[ turkish ] = "~Sa kenar";                                     \
+        Text[ language_user1 ] = " ";                                       \
+        Text[ catalan ] = "Margen ~derecho";                                \
 
 
  // RID_SVXPAGE_HEADER ----------------------------------------------------
@@ -176,7 +220,7 @@ TabPage RID_SVXPAGE_HEADER
     {
         Pos = MAP_APPFONT ( 12 , 64 ) ;
         Size = MAP_APPFONT ( 102 , 8 ) ;
-        _TEXT_FT_LMARGIN
+        _TEXT_FT_RMARGIN
         Left = TRUE ;
     };
     MetricField ED_RMARGIN
@@ -489,7 +533,7 @@ TabPage RID_SVXPAGE_FOOTER
     {
         Pos = MAP_APPFONT ( 12 , 64 ) ;
         Size = MAP_APPFONT ( 102 , 8 ) ;
-        _TEXT_FT_LMARGIN
+        _TEXT_FT_RMARGIN
         Left = TRUE ;
     };
     MetricField ED_RMARGIN
