@@ -2,9 +2,9 @@
  *
  *  $RCSfile: alloca.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 17:12:03 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 19:00:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,7 @@
 #define INCLUDED_ALLOCA_H
 #endif
 
-#elif defined (FREEBSD)
+#elif defined (FREEBSD) || defined(NETBSD)
 
 #ifndef INCLUDED_STDLIB_H
 #include <stdlib.h>
