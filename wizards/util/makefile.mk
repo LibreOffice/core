@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: gh $ $Date: 2001-05-17 14:02:11 $
+#   last change: $Author: tv $ $Date: 2001-05-17 14:44:42 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -93,7 +93,7 @@ $(SRS)$/hidother.hid: hidother.src
     @+echo
     @+echo  NO HIDS!
     @+echo
-    +mhids hidother.src ..$/$(INPATH)$/srs sw hidother
+    +mhids hidother.src ..$/$(INPATH)$/srs wizards hidother
 .ENDIF
 .ELSE
     @echo wnt only
