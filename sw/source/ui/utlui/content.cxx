@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:36:31 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 13:10:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3189,11 +3189,11 @@ void NaviContentBookmark::Copy( TransferDataContainer& rData ) const
     rtl_TextEncoding eSysCSet = gsl_getSystemTextEncoding();
 
     ByteString sStr( aUrl, eSysCSet );
-    sStr += NAVI_BOOKMARK_DELIM;
+    sStr += static_cast< char >(NAVI_BOOKMARK_DELIM);
     sStr += ByteString( aDescr, eSysCSet );
-    sStr += NAVI_BOOKMARK_DELIM;
+    sStr += static_cast< char >(NAVI_BOOKMARK_DELIM);
     sStr += ByteString::CreateFromInt32( nDefDrag );
-    sStr += NAVI_BOOKMARK_DELIM;
+    sStr += static_cast< char >(NAVI_BOOKMARK_DELIM);
     sStr += ByteString::CreateFromInt32( nDocSh );
     rData.CopyByteString( SOT_FORMATSTR_ID_SONLK, sStr );
 }
