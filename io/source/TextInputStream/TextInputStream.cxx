@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextInputStream.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ab $ $Date: 2001-04-26 07:49:02 $
+ *  last change: $Author: ab $ $Date: 2001-04-27 15:10:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,7 +156,8 @@ public:
 };
 
 OTextInputStream::OTextInputStream()
-    : mpBuffer( NULL ), mnBufferSize( 0 ), mnCharsInBuffer( 0 ), mbReachedEOF( sal_False )
+    : mSeqSource( READ_BYTE_COUNT ), mpBuffer( NULL ), mnBufferSize( 0 )
+    , mnCharsInBuffer( 0 ), mbReachedEOF( sal_False )
 {
     mbEncodingInitialized = false;
 }
@@ -317,9 +318,9 @@ sal_Int32 OTextInputStream::implReadNext()
 
     try
     {
-        Sequence< sal_Int8 > aData;
         sal_Int32 nBytesToRead = READ_BYTE_COUNT;
-        sal_Int32 nRead = mxStream->readSomeBytes( aData, nBytesToRead );
+        sal_Int32 nRead = mxStream->readSomeBytes( mSeqSource, nBytesToRead );
+        sal_Int32 nTotalRead = nRead;
         if( nRead < nBytesToRead )
             mbReachedEOF = sal_True;
 
@@ -330,14 +331,14 @@ sal_Int32 OTextInputStream::implReadNext()
         sal_Size nSourceCount = 0;
         while( sal_True )
         {
-            const sal_Int8 *pbSource = aData.getConstArray();
+            const sal_Int8 *pbSource = mSeqSource.getConstArray();
 
             // All invalid characters are transformed to the unicode undefined char
             nTargetCount += rtl_convertTextToUnicode(
                                 mConvText2Unicode,
                                 mContextText2Unicode,
                                 (const sal_Char*) &( pbSource[nSourceCount] ),
-                                nRead - nSourceCount,
+                                nTotalRead - nSourceCount,
                                 mpBuffer + mnCharsInBuffer + nTargetCount,
                                 nFreeBufferSize - nTargetCount,
                                 RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_DEFAULT   |
@@ -358,16 +359,21 @@ sal_Int32 OTextInputStream::implReadNext()
             {
                 // read next byte
                 static Sequence< sal_Int8 > aOneByteSeq( 1 );
-                sal_Int32 nRead = mxStream->readSomeBytes( aData, 1 );
+                sal_Int32 nRead = mxStream->readSomeBytes( aOneByteSeq, 1 );
                 if( nRead == 0 )
                 {
                     mbReachedEOF = sal_True;
                     break;
                 }
-                sal_Int32 nOldLen = aData.getLength();
-                aData.realloc( nOldLen + 1 );
-                aData.getArray()[ nOldLen ] = aOneByteSeq.getConstArray()[ 0 ];
-                pbSource = aData.getConstArray();
+
+                sal_Int32 nOldLen = mSeqSource.getLength();
+                nTotalRead++;
+                if( nTotalRead > nOldLen )
+                {
+                    mSeqSource.realloc( nTotalRead );
+                }
+                mSeqSource.getArray()[ nOldLen ] = aOneByteSeq.getConstArray()[ 0 ];
+                pbSource = mSeqSource.getConstArray();
                 bCont = sal_True;
             }
 
