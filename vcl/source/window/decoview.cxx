@@ -2,9 +2,9 @@
  *
  *  $RCSfile: decoview.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 13:37:22 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 14:05:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,13 +59,11 @@
  *
  ************************************************************************/
 
-#define _SV_DECOVIEW_CXX
-
 #ifndef _SV_SETTINGS_HXX
 #include <settings.hxx>
 #endif
-#ifndef _SV_POLY_HXX
-#include <poly.hxx>
+#ifndef _TL_POLY_HXX
+#include <tools/poly.hxx>
 #endif
 #ifndef _SV_OUTDEV_HXX
 #include <outdev.hxx>
@@ -157,7 +155,7 @@ static void ImplDrawSymbol( OutputDevice* pDev, const Rectangle& rRect,
                             SymbolType eType  )
 {
     // Groessen vorberechnen
-    long    n       = ::std::min( rRect.GetWidth(), rRect.GetHeight() );
+    long    n       = Min( rRect.GetWidth(), rRect.GetHeight() );
     long    nSize   = n;
 
     if ( n & 0x01 )
@@ -562,7 +560,8 @@ static void ImplDrawSymbol( OutputDevice* pDev, const Rectangle& rRect,
                 long nStepsY = aPos2.Y()-aPos1.Y();
                 long nX = aPos1.X();
                 long nY = aPos1.Y();
-                for ( long n = 0; n <= nStepsY; n++ )
+                long n;
+                for ( n = 0; n <= nStepsY; n++ )
                 {
                     if( bRTL )
                         nX--;
