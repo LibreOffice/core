@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfunc.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: nn $ $Date: 2002-04-12 19:07:53 $
+ *  last change: $Author: sab $ $Date: 2002-05-03 12:13:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -481,7 +481,7 @@ BOOL ScDocFunc::DetectiveRefresh( BOOL bAutomatic )
 
         USHORT nTabCount = pDoc->GetTableCount();
         for (USHORT nTab=0; nTab<nTabCount; nTab++)
-            ScDetectiveFunc( pDoc,nTab ).DeleteAll( SC_DET_DETECTIVE );
+            ScDetectiveFunc( pDoc,nTab ).DeleteAll( SC_DET_ARROWS );    // don't remove circles
 
         //  Wiederholen
 
