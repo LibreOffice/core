@@ -2,9 +2,9 @@
  *
  *  $RCSfile: page.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: kz $ $Date: 2002-01-16 21:34:06 $
+ *  last change: $Author: kz $ $Date: 2002-01-18 21:20:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2066,7 +2066,7 @@ StringArray RID_SVXSTRARY_PAPERSIZE_STD
         < "C6" ; PAPERSIZE_C6 ; > ;
         < "C65" ; PAPERSIZE_C65 ; > ;
         < "DL" ; PAPERSIZE_DL ; > ;
-        < "봉투 #63/4" ; PAPERSIZE_COM675; > ;
+        < "봉투(용지 종류) #6¾" ; PAPERSIZE_COM675; > ;
         < "monarch 봉투" ; PAPERSIZE_MONARCH; > ;
         < "봉투 #9" ; PAPERSIZE_COM9; > ;
         < "봉투 #10" ; PAPERSIZE_COM10; > ;
