@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scitems.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2002-09-09 13:57:13 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 16:05:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,7 +191,9 @@
 #define ATTR_PAGE_FORMULAS      182
 #define ATTR_PAGE_NULLVALS      183
 
-#define ATTR_ENDINDEX           ATTR_PAGE_NULLVALS      // Ende Pool-Range
+#define ATTR_PAGE_SCALETO       184     // #i8868# scale printout to with/height
+
+#define ATTR_ENDINDEX           ATTR_PAGE_SCALETO        // Ende Pool-Range
 
 //--------------------------------
 // Dummy Slot-IDs fuer Dialoge
@@ -216,6 +218,7 @@
 #define SID_SCATTR_PAGE_FOOTERRIGHT     ATTR_PAGE_FOOTERRIGHT
 #define SID_SCATTR_PAGE_FORMULAS        ATTR_PAGE_FORMULAS
 #define SID_SCATTR_PAGE_NULLVALS        ATTR_PAGE_NULLVALS
+#define SID_SCATTR_PAGE_SCALETO         ATTR_PAGE_SCALETO
 
 //--------------------------------
 // IDs fuer Svx-Items:
