@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OneInstanceFactory.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:40:13 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 16:47:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -90,7 +90,7 @@ public class OneInstanceFactory implements
             //!! the here used services all have exact one constructor!!
             Constructor [] aCtor = aMyClass.getConstructors();
             try {
-                xInstantiatedService = (XInterface) aCtor[0].newInstance( null );
+                xInstantiatedService = (XInterface) aCtor[0].newInstance( (Object[])null );
             }
             catch( Exception e ) {
             }
