@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mediator.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 10:15:16 $
+ *  last change: $Author: rt $ $Date: 2004-07-23 09:57:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,9 @@ Mediator::~Mediator()
 
 ULONG Mediator::SendMessage( ULONG nBytes, const char* pBytes, ULONG nMessageID )
 {
+    if( ! m_pListener )
+        return 0;
+
     NAMESPACE_VOS(OGuard) aGuard( m_aSendMutex );
     if( ! nMessageID )
         nMessageID = m_nCurrentID;
@@ -129,6 +132,9 @@ ULONG Mediator::SendMessage( ULONG nBytes, const char* pBytes, ULONG nMessageID 
 
 BOOL Mediator::WaitForMessage( ULONG nTimeOut )
 {
+    if( ! m_pListener )
+        return FALSE;
+
     int nItems = m_aMessageQueue.Count();
 
     if( ! nTimeOut && nItems > 0 )
@@ -170,7 +176,7 @@ MediatorMessage* Mediator::WaitForAnswer( ULONG nMessageID )
 
 MediatorMessage* Mediator::GetNextMessage( BOOL bWait )
 {
-    while( 1 )
+    while( m_pListener )
     {
         {
             // guard must be after WaitForMessage, else the listener
