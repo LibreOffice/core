@@ -12,13 +12,14 @@ dt	desktop\win32\source\setup				nmake	-	w	dt_setup NULL
 dt	desktop\source\pagein					nmake	-	u	dt_pagein NULL
 dt	desktop\source\pkgchk					nmake	-	all	dt_pkgchk dt_dp_misc dt_app NULL
 dt	desktop\source\pkgchk\msi				nmake	-	w	dt_pkgchk_msi dt_pkgchk NULL
-dt	desktop\source\deployment				nmake	-	all	dt_deployment dt_dp_manager dt_dp_registry dt_dp_registry_package dt_dp_registry_script dt_dp_registry_component dt_dp_registry_configuration NULL
+dt	desktop\source\deployment				nmake	-	all	dt_deployment dt_dp_manager dt_dp_registry dt_dp_registry_package dt_dp_registry_script dt_dp_registry_sfwk dt_dp_registry_component dt_dp_registry_configuration NULL
 dt	desktop\source\deployment\misc				nmake	-	all	dt_dp_misc NULL
 dt	desktop\source\deployment\gui				nmake	-	all	dt_dp_gui dt_dp_misc NULL
 dt	desktop\source\deployment\manager			nmake	-	all	dt_dp_manager dt_dp_misc NULL
 dt	desktop\source\deployment\registry			nmake	-	all	dt_dp_registry dt_dp_misc NULL
 dt	desktop\source\deployment\registry\package		nmake	-	all	dt_dp_registry_package dt_dp_misc NULL
 dt	desktop\source\deployment\registry\script		nmake	-	all	dt_dp_registry_script dt_dp_misc NULL
+dt	desktop\source\deployment\registry\sfwk		nmake	-	all	dt_dp_registry_sfwk dt_dp_misc NULL
 dt	desktop\source\deployment\registry\component		nmake	-	all	dt_dp_registry_component dt_dp_misc NULL
 dt	desktop\source\deployment\registry\configuration	nmake	-	all	dt_dp_registry_configuration dt_dp_misc NULL
 dt	desktop\scripts 						nmake	-	u	dt_scripts NULL
