@@ -515,3 +515,8 @@ UDK_3.2 {
         osl_getFunctionSymbol;
         osl_getModuleURLFromFunctionAddress;
 } UDK_3.1;
+
+UDK_3.3 { # OOo 2.0
+    global:
+        rtl_uStringbuffer_insertUtf32;
+} UDK_3.2;
