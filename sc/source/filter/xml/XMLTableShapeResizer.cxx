@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTableShapeResizer.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sab $ $Date: 2000-12-13 17:17:33 $
+ *  last change: $Author: sab $ $Date: 2000-12-14 09:38:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,7 @@ void ScMyShapeResizer::ResizeShapes(uno::Reference< sheet::XSpreadsheet > xSheet
                 {
                     if (nOldRow != aItr->aCell.Row || !xTableRow.is())
                     {
+                        nOldRow = aItr->aCell.Row;
                         uno::Any aRow = xTableRows->getByIndex(aItr->aCell.Row);
                         aRow >>= xTableRow;
                     }

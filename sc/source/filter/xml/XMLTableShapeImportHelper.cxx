@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTableShapeImportHelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2000-12-13 17:17:33 $
+ *  last change: $Author: sab $ $Date: 2000-12-14 09:38:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,7 +153,7 @@ void XMLTableShapeImportHelper::finishShape(
             awt::Point aPoint = rShape->getPosition();
             awt::Size aSize = rShape->getSize();
             aPoint.X += aRefPoint.X;
-            //aPoint.Y += aRefPoint.Y;
+            aPoint.Y += aRefPoint.Y;
             aSize.Width = X - aPoint.X;
             //aSize.Height = Y - aPoint.Y;
             rShape->setPosition(aPoint);
