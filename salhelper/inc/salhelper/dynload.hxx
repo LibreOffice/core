@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dynload.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 13:21:44 $
+ *  last change: $Author: jl $ $Date: 2001-03-28 11:02:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ class ORealDynamicLoader
 {
 public:
 
-    SAL_DLLEXPORT static ORealDynamicLoader* SAL_CALL newInstance(
+    static ORealDynamicLoader* SAL_CALL newInstance(
             ORealDynamicLoader ** ppSetToZeroInDestructor,
             const ::rtl::OUString& strModuleName,
             const ::rtl::OUString& strInitFunction );

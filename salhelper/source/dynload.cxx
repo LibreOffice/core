@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dynload.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 13:23:40 $
+ *  last change: $Author: jl $ $Date: 2001-03-28 11:02:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@ ORealDynamicLoader::ORealDynamicLoader(ORealDynamicLoader ** ppSetToZeroInDestru
 {
 }
 
-SAL_DLLEXPORT ORealDynamicLoader* ORealDynamicLoader::newInstance(ORealDynamicLoader ** ppSetToZeroInDestructor,
+ORealDynamicLoader* ORealDynamicLoader::newInstance(ORealDynamicLoader ** ppSetToZeroInDestructor,
                                   const rtl::OUString& moduleName,
                                   const rtl::OUString& initFunction)
 {
