@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statemnt.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-03-26 12:07:03 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 15:54:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,7 +213,7 @@
 #include "retstrm.hxx"
 #endif
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 #ifndef _EDITWIN_HXX
 #include "editwin.hxx"
 #endif
@@ -303,7 +303,7 @@ StatementFlow::StatementFlow( ULONG nServiceId, SCmdStream *pCmdIn, ImplRemoteCo
     if( nParams & PARAM_STR_1 )     pCmdIn->Read( aString1 );
     if( nParams & PARAM_BOOL_1 )    pCmdIn->Read( bBool1 ); // sollte nie auftreten!!
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     m_pDbgWin->AddText( "Reading FlowControl: " );
     m_pDbgWin->AddText( String::CreateFromInt32( nArt ) );
     m_pDbgWin->AddText( " Params:" );
@@ -319,7 +319,7 @@ void StatementFlow::SendViaSocket()
 {
     if ( bSending )
     {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         m_pDbgWin->AddText( "SendViaSocket rekursiv aufgerufen. Abgebrochen!!!\n" );
 #endif
         DBG_ERROR("SendViaSocket rekursiv aufgerufen. Abgebrochen!!!");
@@ -344,7 +344,7 @@ void StatementFlow::SendViaSocket()
 
 BOOL StatementFlow::Execute()
 {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     m_pDbgWin->AddText( "Executing Flow: " );
     m_pDbgWin->AddText( String::CreateFromInt32( nArt ) );
     m_pDbgWin->AddText( "\n" );
@@ -390,7 +390,7 @@ BOOL StatementFlow::Execute()
     case F_Sequence:
 
         pRet->GenReturn(RET_Sequence,nLNr1);
-        #ifdef DEBUG
+        #if OSL_DEBUG_LEVEL > 1
         m_pDbgWin->AddText( "Sending Sequence Nr: " );
         m_pDbgWin->AddText( String::CreateFromInt64( nLNr1 ) );
         m_pDbgWin->AddText( "\n" );
@@ -518,7 +518,7 @@ StatementSlot::StatementSlot( SCmdStream *pCmdIn )
 {
     QueStatement( NULL );
     pCmdIn->Read( nFunctionId );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     m_pDbgWin->AddText( "Reading Slot: " );
     m_pDbgWin->AddText( String::CreateFromInt32( nFunctionId ) );
     m_pDbgWin->AddText( "\n" );
@@ -557,7 +557,7 @@ StatementSlot::StatementSlot( ULONG nSlot, SfxPoolItem* pItem )
 {
     QueStatement( NULL );
     nFunctionId = nSlot;
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     m_pDbgWin->AddText( "Reading Slot: " );
     m_pDbgWin->AddText( String::CreateFromInt32( nFunctionId ) );
     m_pDbgWin->AddText( "\n" );
@@ -638,7 +638,7 @@ BOOL StatementSlot::Execute()
 {
     if ( IsError )
     {
-        #ifdef DEBUG
+        #if OSL_DEBUG_LEVEL > 1
         m_pDbgWin->AddText( "Skipping Slot: " );
         m_pDbgWin->AddText( String::CreateFromInt32( nFunctionId ) );
         m_pDbgWin->AddText( "\n" );
@@ -650,7 +650,7 @@ BOOL StatementSlot::Execute()
     }
 
     InitProfile();
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     m_pDbgWin->AddText( "Executing Slot: " );
     m_pDbgWin->AddText( String::CreateFromInt32( nFunctionId ) );
     m_pDbgWin->AddText( "\n" );
@@ -696,7 +696,7 @@ BOOL StatementSlot::Execute()
             while ( xDesktop.is() && xDesktop->getActiveFrame().is() )
             {
                 xFrame = xDesktop->getActiveFrame();
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                 ::rtl::OUString aName;
                 if ( xFrame.is() )
                     aName = xFrame->getName();
@@ -794,7 +794,7 @@ StatementUnoSlot::StatementUnoSlot(SCmdStream *pIn)
     pItemArr[2] = NULL;
 
   */
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     StatementList::m_pDbgWin->AddText( "UnoUrl:" );
     StatementList::m_pDbgWin->AddText( aUnoUrl );
     StatementList::m_pDbgWin->AddText( "\n" );
@@ -806,7 +806,7 @@ BOOL StatementUnoSlot::Execute()
 {
     if ( IsError )
     {
-        #ifdef DEBUG
+        #if OSL_DEBUG_LEVEL > 1
         m_pDbgWin->AddText( "Skipping UnoSlot: " );
         m_pDbgWin->AddText( aUnoUrl );
         m_pDbgWin->AddText( "\n" );
@@ -818,7 +818,7 @@ BOOL StatementUnoSlot::Execute()
     }
 
     InitProfile();
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     m_pDbgWin->AddText( "Executing UnoSlot: " );
     m_pDbgWin->AddText( aUnoUrl );
     m_pDbgWin->AddText( "\n" );
@@ -898,7 +898,7 @@ StatementCommand::StatementCommand( SCmdStream *pCmdIn )
     if( nParams & PARAM_BOOL_1 )    pCmdIn->Read( bBool1 );
     if( nParams & PARAM_BOOL_2 )    pCmdIn->Read( bBool2 );
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     m_pDbgWin->AddText( "Reading Conmmand:" );
     m_pDbgWin->AddText( " Methode: " );
     m_pDbgWin->AddText( String::CreateFromInt32( nMethodId ) );
@@ -917,7 +917,7 @@ StatementCommand::StatementCommand( SCmdStream *pCmdIn )
 
     if ( nMethodId == RC_AppAbort )
     {
-        #ifdef DEBUG
+        #if OSL_DEBUG_LEVEL > 1
         m_pDbgWin->AddText( "*Deleting all Commands:\n" );
         #endif
         bReadingCommands = FALSE;
@@ -928,7 +928,7 @@ StatementCommand::StatementCommand( SCmdStream *pCmdIn )
             delete pDeQue;
         }
         bReadingCommands = TRUE;
-        #ifdef DEBUG
+        #if OSL_DEBUG_LEVEL > 1
         m_pDbgWin->AddText( "*Done deleting all Commands:\n" );
         #endif
     }
@@ -2288,7 +2288,7 @@ BOOL StatementCommand::Execute()
 {
     if ( IsError )
     {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         m_pDbgWin->AddText( "Skipping Command: " );
         m_pDbgWin->AddText( String::CreateFromInt32( nMethodId ) );
         m_pDbgWin->AddText( "\n" );
@@ -2300,7 +2300,7 @@ BOOL StatementCommand::Execute()
     }
 
     InitProfile();
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     m_pDbgWin->AddText( "Executing Command: " );
     m_pDbgWin->AddText( String::CreateFromInt32( nMethodId ) );
     m_pDbgWin->AddText( "\n" );
@@ -2310,7 +2310,7 @@ BOOL StatementCommand::Execute()
 
 
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 #define REPORT_WIN_CLOSED(pControl, aInfo)          \
     _REPORT_WIN_CLOSED(pControl, aInfo)             \
     m_pDbgWin->AddText( aInfo.AppendAscii(" \"").Append( pControl->GetText() ).AppendAscii("\" geschlossen, RType = ").Append( TypeString(pControl->GetType()) ).AppendAscii(", UId = ").Append( UIdString(pControl->GetUniqueOrHelpId()) ) );
@@ -2468,7 +2468,7 @@ BOOL StatementCommand::Execute()
                                 DBG_ERROR( "Unbekannter Fenstertyp" );
                                 REPORT_WIN_CLOSEDc(pControl, "Unbekannter Fenstertyp");
                                 ReportError( 0, GEN_RES_STR0( S_RESETAPPLICATION_FAILED_UNKNOWN ), pControl->GetType() );
-                                #ifdef DEBUG
+                                #if OSL_DEBUG_LEVEL > 1
                                 m_pDbgWin->AddText( " Unbekannter Objekttyp aus UId" );
                                 #endif
                                 break;
@@ -2579,7 +2579,7 @@ BOOL StatementCommand::Execute()
         case RC_WinTree:
             pRet->GenReturn ( RET_Value, nMethodId, Tree( NULL, 0));
             break;
-    #ifdef DEBUG
+    #if OSL_DEBUG_LEVEL > 1
         case RC_NoDebug:
             m_pDbgWin->bQuiet = TRUE;
             m_pDbgWin->Hide();
@@ -3193,7 +3193,7 @@ BOOL StatementCommand::Execute()
                         aDestPath.SetExtension( CUniString( "plaintext" ) );
                     }
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                     USHORT nEntries = Dir( aDestPath, FSYS_KIND_FILE | FSYS_KIND_DIR ).Count();
 #endif
                     // The Count is only larger than 2 is the path is a directory which is not empty
@@ -3383,7 +3383,7 @@ StatementControl::StatementControl( SCmdStream *pCmdIn )
     if( nParams & PARAM_BOOL_1 )    pCmdIn->Read( bBool1 );
     if( nParams & PARAM_BOOL_2 )    pCmdIn->Read( bBool2 );
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     m_pDbgWin->AddText( "Reading Control: UId: " );
     m_pDbgWin->AddText( String::CreateFromInt64( nUId ) );
     m_pDbgWin->AddText( " Methode: " );
@@ -3488,7 +3488,7 @@ BOOL StatementControl::ControlOK( Window *pControl, const sal_Char* cBezeichnung
             else
                 ReportError( nUId, GEN_RES_STR1( S_WIN_DISABLED, aBezeichnung ) );
         }
-        #ifdef DEBUG
+        #if OSL_DEBUG_LEVEL > 1
         m_pDbgWin->AddText( aBezeichnung.AppendAscii(" NotFound or Disabled or Invisible") );
         #endif
 
@@ -4276,7 +4276,7 @@ BOOL StatementControl::Execute()
 
     if ( IsError )
     {
-        #ifdef DEBUG
+        #if OSL_DEBUG_LEVEL > 1
         m_pDbgWin->AddText( "Skipping Window: " );
         m_pDbgWin->AddText( String::CreateFromInt64( nUId ) );
         m_pDbgWin->AddText( " Method: " );
@@ -4289,7 +4289,7 @@ BOOL StatementControl::Execute()
     }
 
     InitProfile();
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     m_pDbgWin->AddText( "Executing Window: " );
     m_pDbgWin->AddText( String::CreateFromInt64( nUId ) );
     m_pDbgWin->AddText( " Method: " );
@@ -4374,7 +4374,7 @@ BOOL StatementControl::Execute()
     if( pControl )          // Das Fenster Existiert irgendwo, kann aber auch hidden sein!
     {
         nRT = ImpGetRType( pControl, nUId );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         m_pDbgWin->AddText( "Type is: " );
         m_pDbgWin->AddText( String::CreateFromInt32( nRT ) );
         m_pDbgWin->AddText( "\n" );
@@ -4386,7 +4386,7 @@ BOOL StatementControl::Execute()
 
     if ( (!ControlOK( pControl, "" )) && ( nMethodId != M_SnapShot ) && (nRetryCount--))
     {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         m_pDbgWin->AddText( CUniString("Reschedule command (").Append( UniString::CreateFromInt32(nRetryCount) ).AppendAscii(")\n") );
 #endif
         return FALSE;
@@ -5820,7 +5820,7 @@ SvLBoxString* pItem = NULL;\
                 case C_ButtonDialog:
                     {
                         ButtonDialog* pBD = (ButtonDialog*)pControl;
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                         m_pDbgWin->AddText( "Working MessBox: " );
                         if (pControl->IsVisible())
                             m_pDbgWin->AddText("*(Visible)\n");
@@ -5957,7 +5957,7 @@ SvLBoxString* pItem = NULL;\
                 default:
                     DBG_ERROR( "Unbekannter Objekttyp aus UId oder Methode nicht unterstützt" );
                     ReportError( nUId, GEN_RES_STR2( S_UNKNOWN_TYPE, UniString::CreateFromInt32( nRT ), MethodString(nMethodId) ) );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                     m_pDbgWin->AddText( " Unbekannter Objekttyp aus UId" );
 #endif
                     break;
@@ -5966,7 +5966,7 @@ SvLBoxString* pItem = NULL;\
         for( int i = 0; i < 32; i++ )
             SafeReschedule();
     }
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     m_pDbgWin->AddText( "\n" );
 #endif
     if (bNormalWeiter)
