@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtdrop.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-25 07:39:23 $
+ *  last change: $Author: kz $ $Date: 2003-10-15 09:57:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -936,8 +936,8 @@ void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTxtFormatInfo &rInf )
         sal_Bool bWinUsed = sal_False;
         Font aOldFnt;
         MapMode aOldMap( MAP_TWIP );
-        OutputDevice *pOut = rInf.GetOut();
-        OutputDevice *pWin;
+        OutputDevice* pOut = rInf.GetOut();
+        OutputDevice* pWin;
         if( rInf.GetVsh() && rInf.GetVsh()->GetWin() )
             pWin = rInf.GetVsh()->GetWin();
         else
@@ -967,9 +967,13 @@ void SwDropCapCache::CalcFontSize( SwDropPortion* pDrop, SwTxtFormatInfo &rInf )
 
                 Size aNewSize( 0, ( nFactor * nCurrHeight ) / 1000 );
                 rFnt.SetSize( aNewSize, rFnt.GetActual() );
-                rFnt.ChgPhysFnt( rInf.GetVsh(), pOut );
-                nAscent = rFnt.GetAscent( rInf.GetVsh(), pOut ) -
-                          rFnt.GetLeading( rInf.GetVsh(), pOut );
+                rFnt.ChgPhysFnt( rInf.GetVsh(), *pOut );
+                // the guessed leading
+                const bool bUseExtLeading = true;
+                nAscent = rFnt.GetAscent( rInf.GetVsh(), *pOut ) -
+                          ( bUseExtLeading ?
+                            0 :
+                            rFnt.GetGuessedLeading( rInf.GetVsh(), *pOut ) );
 
                 // Wir besorgen uns das alle Buchstaben umfassende Rechteck:
                 bHaveGlyphRect = pOut->GetTextBoundRect( aRect, rInf.GetTxt(), 0,
