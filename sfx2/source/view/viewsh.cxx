@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: as $ $Date: 2002-05-24 11:57:54 $
+ *  last change: $Author: mba $ $Date: 2002-05-27 14:19:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -335,7 +335,7 @@ void SfxViewShell::GetState_Impl( SfxItemSet &rSet )
                 rSet.Put( SfxBoolItem( SID_PLUGINS_ACTIVE, !pImp->bPlugInsActive) );
                 break;
             }
-
+/*
             // SelectionText
             case SID_SELECTION_TEXT:
             {
@@ -349,7 +349,7 @@ void SfxViewShell::GetState_Impl( SfxItemSet &rSet )
                 rSet.Put( SfxStringItem( SID_SELECTION_TEXT_EXT, GetSelectionText(TRUE) ) );
                 break;
             }
-
+*/
             case SID_STYLE_FAMILY :
             {
                 rSet.Put( SfxUInt16Item( SID_STYLE_FAMILY, pImp->nFamily ) );
