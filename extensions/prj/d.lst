@@ -13,6 +13,8 @@ mkdir: %_DEST%\xml%_EXT%\uiconfig\modules\sbibliography\menubar
 ..\%__SRC%\bin\*.res %_DEST%\bin%_EXT%\*.res
 ..\%__SRC%\bin\*.exe %_DEST%\bin%_EXT%\*.exe
 ..\%__SRC%\bin\nsplugin %_DEST%\bin%_EXT%\nsplugin
+..\%__SRC%\bin\npsoplugin_oo.dll %_DEST%\bin%_EXT%\npsoplugin.dll
+..\%__SRC%\bin\npsoplugin.dll %_DEST%\bin%_EXT%\so\npsoplugin.dll
 
 
 ..\source\bibliography\uiconfig\sbibliography\menubar\*.xml %_DEST%\xml%_EXT%\uiconfig\modules\sbibliography\menubar\*.xml
