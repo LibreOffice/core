@@ -1,5 +1,4 @@
 #include "WPXSvStream.h"
-
 #include <tools/stream.hxx>
 #include <unotools/streamwrap.hxx>
 #include <unotools/ucbstreamhelper.hxx>
@@ -18,11 +17,27 @@ WPXSvInputStream::WPXSvInputStream( Reference< XInputStream > xStream ) :
         mxStream(xStream),
         mnOffset(0)
 {
-    Reference < XSeekable> xSeekable = Reference < XSeekable > (xStream, UNO_QUERY);
-    if (!xSeekable.is())
+    if (!xStream.is())
+    {
         mnLength = 0;
+    }
     else
-        mnLength = xSeekable->getLength(); // exception
+    {
+        Reference < XSeekable> xSeekable = Reference < XSeekable > (xStream, UNO_QUERY);
+        if (!xSeekable.is())
+            mnLength = 0;
+        else
+        {
+            try
+            {
+                mnLength = xSeekable->getLength(); // exception
+            }
+            catch ( ... )
+            {
+                mnLength = 0;
+            }
+        }
+    }
 }
 
 WPXSvInputStream::~WPXSvInputStream()
@@ -42,9 +57,14 @@ int WPXSvInputStream::seek(long offset, WPX_SEEK_TYPE seekType)
 {
     if (seekType == WPX_SEEK_CUR && offset >= 0)
     {
-            mxStream->skipBytes (offset); // exception ?
-            mnOffset += offset;
-            return FALSE;
+            if (mnOffset + offset <= mnLength)
+            {
+                mxStream->skipBytes (offset); // exception ?
+                mnOffset += offset;
+                return FALSE;
+            }
+            else
+                return TRUE;
     }
     Reference < XSeekable> xSeekable = Reference < XSeekable >(mxStream, UNO_QUERY);
 
@@ -55,6 +75,9 @@ int WPXSvInputStream::seek(long offset, WPX_SEEK_TYPE seekType)
             mnOffset += offset;
     else
             mnOffset = offset;
+
+    if (mnOffset > mnLength)
+        return TRUE;
 
     xSeekable->seek(mnOffset); // FIXME: catch exception!
 
@@ -93,6 +116,9 @@ WPXInputStream * WPXSvInputStream::getDocumentOLEStream()
     mxChildStream = mxChildStorage->OpenSotStream(
             rtl::OUString::createFromAscii( "PerfectOffice_MAIN" ),
             STREAM_STD_READ );
+
+    if ( !mxChildStream.Is() || mxChildStream->GetError() )
+        return NULL;
 
     Reference < XInputStream > xContents = new utl::OSeekableInputStreamWrapper( mxChildStream );
     if (xContents.is())
