@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confuno.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2003-08-27 16:33:41 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:53:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -308,8 +308,8 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
             if ( bUpdateHeights && !pDoc->IsImportingXML() )
             {
                 //  update automatic row heights and repaint
-                USHORT nTabCount = pDoc->GetTableCount();
-                for (USHORT nTab=0; nTab<nTabCount; nTab++)
+                SCTAB nTabCount = pDoc->GetTableCount();
+                for (SCTAB nTab=0; nTab<nTabCount; nTab++)
                     if ( !pDocShell->AdjustRowHeight( 0, MAXROW, nTab ) )
                         pDocShell->PostPaint( 0,0,nTab, MAXCOL,MAXROW,nTab, PAINT_GRID );
                 pDocShell->SetDocumentModified();
