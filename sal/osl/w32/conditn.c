@@ -2,9 +2,9 @@
  *
  *  $RCSfile: conditn.c,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hro $ $Date: 2002-06-14 10:07:42 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 13:26:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@
 /*****************************************************************************/
 /* osl_createCondition */
 /*****************************************************************************/
-oslCondition SAL_CALL osl_createCondition()
+oslCondition SAL_CALL osl_createCondition(void)
 {
     oslCondition Condition;
 
@@ -107,7 +107,7 @@ sal_Bool SAL_CALL osl_setCondition(oslCondition Condition)
 {
     OSL_ASSERT(Condition);
 
-    return SetEvent((HANDLE)Condition);
+    return (sal_Bool)(SetEvent((HANDLE)Condition) != FALSE);
 }
 
 /*****************************************************************************/
@@ -117,7 +117,7 @@ sal_Bool SAL_CALL osl_resetCondition(oslCondition Condition)
 {
     OSL_ASSERT(Condition);
 
-    return ResetEvent((HANDLE)Condition);
+    return (sal_Bool)(ResetEvent((HANDLE)Condition) != FALSE);
 }
 
 /*****************************************************************************/
@@ -155,6 +155,6 @@ sal_Bool SAL_CALL osl_checkCondition(oslCondition Condition)
 {
     OSL_ASSERT(Condition);
 
-    return (WaitForSingleObject((HANDLE)Condition, 0) == WAIT_OBJECT_0);
+    return (sal_Bool)(WaitForSingleObject((HANDLE)Condition, 0) == WAIT_OBJECT_0);
 }
 
