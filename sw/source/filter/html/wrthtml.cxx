@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrthtml.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2001-09-28 06:23:15 $
+ *  last change: $Author: mib $ $Date: 2001-10-09 14:57:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,9 @@
 #endif
 #ifndef _SVX_FONTITEM_HXX
 #include <svx/fontitem.hxx>
+#endif
+#ifndef _SVX_SCRIPTTYPEITEM_HXX
+#include <svx/scripttypeitem.hxx>
 #endif
 #ifndef _SFXSTRITEM_HXX //autogen
 #include <svtools/stritem.hxx>
@@ -417,6 +420,19 @@ sal_uInt32 SwHTMLWriter::WriteStream()
     nHeaderFooterSpace = 0;
     nTxtAttrsToIgnore = 0;
     nCSS1OutMode = 0;
+    sal_uInt16 nScript = GetScriptTypeOfLanguage( GetAppLanguage() );
+    switch( nScript )
+    {
+    case SCRIPTTYPE_ASIAN:
+        nCSS1Script = CSS1_OUTMODE_CJK;
+        break;
+    case SCRIPTTYPE_COMPLEX:
+        nCSS1Script = CSS1_OUTMODE_CTL;
+        break;
+    default:
+        nCSS1Script = CSS1_OUTMODE_WESTERN;
+        break;
+    }
     nFootNote = nEndNote = 0;
 
     nWarn = 0;
@@ -571,6 +587,11 @@ sal_uInt32 SwHTMLWriter::WriteStream()
 
     if( aNumRuleNames.Count() )
         aNumRuleNames.DeleteAndDestroy( sal_uInt16(0), aNumRuleNames.Count() );
+
+    if( aScriptParaStyles.Count() )
+        aScriptParaStyles.DeleteAndDestroy( sal_uInt16(0), aScriptParaStyles.Count() );
+    if( aScriptTextStyles.Count() )
+        aScriptTextStyles.DeleteAndDestroy( sal_uInt16(0), aScriptTextStyles.Count() );
 
     delete pDfltColor;
     pDfltColor = 0;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrthtml.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mib $ $Date: 2001-07-03 07:49:47 $
+ *  last change: $Author: mib $ $Date: 2001-10-09 14:57:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,19 +180,21 @@ const sal_uInt32 HTML_FRMOPTS_GENIMG    =
 
 // Die folgenden Flags bestimmen nur, welche Descriptoren, Tags, Optionen etc.
 // ausgegeben werden ...
-#define CSS1_OUTMODE_SPAN_NO_ON     0x0000
-#define CSS1_OUTMODE_SPAN_TAG_ON    0x0001
-#define CSS1_OUTMODE_STYLE_OPT_ON   0x0002
-#define CSS1_OUTMODE_RULE_ON        0x0003
-#define CSS1_OUTMODE_SPAN_TAG1_ON   0x0004
-#define CSS1_OUTMODE_ANY_ON         0x0007
+// bit 0,1,2
+#define CSS1_OUTMODE_SPAN_NO_ON     0x0000U
+#define CSS1_OUTMODE_SPAN_TAG_ON    0x0001U
+#define CSS1_OUTMODE_STYLE_OPT_ON   0x0002U
+#define CSS1_OUTMODE_RULE_ON        0x0003U
+#define CSS1_OUTMODE_SPAN_TAG1_ON   0x0004U
+#define CSS1_OUTMODE_ANY_ON         0x0007U
 
-#define CSS1_OUTMODE_SPAN_NO_OFF    0x0000
-#define CSS1_OUTMODE_SPAN_TAG_OFF   (0x0001 << 3)
-#define CSS1_OUTMODE_STYLE_OPT_OFF  (0x0002 << 3)
-#define CSS1_OUTMODE_RULE_OFF       (0x0003 << 3)
-#define CSS1_OUTMODE_SPAN_TAG1_OFF  (0x0004 << 3)
-#define CSS1_OUTMODE_ANY_OFF        (0x0007 << 3)
+// bit 3,4,5
+#define CSS1_OUTMODE_SPAN_NO_OFF    0x0000U
+#define CSS1_OUTMODE_SPAN_TAG_OFF   ((sal_uInt16)(0x0001U << 3))
+#define CSS1_OUTMODE_STYLE_OPT_OFF  ((sal_uInt16)(0x0002U << 3))
+#define CSS1_OUTMODE_RULE_OFF       ((sal_uInt16)(0x0003U << 3))
+#define CSS1_OUTMODE_SPAN_TAG1_OFF  ((sal_uInt16)(0x0004U << 3))
+#define CSS1_OUTMODE_ANY_OFF        ((sal_uInt16)(0x0007U << 3))
 
 #define CSS1_OUTMODE_ONOFF(a) (CSS1_OUTMODE_##a##_ON|CSS1_OUTMODE_##a##_OFF)
 #define CSS1_OUTMODE_SPAN_TAG       CSS1_OUTMODE_ONOFF(SPAN_TAG)
@@ -201,19 +203,33 @@ const sal_uInt32 HTML_FRMOPTS_GENIMG    =
 #define CSS1_OUTMODE_SPAN_TAG1      CSS1_OUTMODE_ONOFF(TAG1)
 
 // Die folgenden Flags legen fest, was ausgegeben wird
-#define CSS1_OUTMODE_TEMPLATE       0x0000
-#define CSS1_OUTMODE_BODY           (0x0001 << 6)
-#define CSS1_OUTMODE_PARA           (0x0002 << 6)
-#define CSS1_OUTMODE_HINT           (0x0003 << 6)
-#define CSS1_OUTMODE_FRAME          (0x0004 << 6)
-#define CSS1_OUTMODE_TABLE          (0x0005 << 6)
-#define CSS1_OUTMODE_TABLEBOX       (0x0006 << 6)
-#define CSS1_OUTMODE_DROPCAP        (0x0007 << 6)
-#define CSS1_OUTMODE_SECTION        (0x0008 << 6)
-#define CSS1_OUTMODE_SOURCE         (0x000f << 6)
+// bit 6,7,8,9
+#define CSS1_OUTMODE_TEMPLATE       0x0000U
+#define CSS1_OUTMODE_BODY           ((sal_uInt16)(0x0001U << 6))
+#define CSS1_OUTMODE_PARA           ((sal_uInt16)(0x0002U << 6))
+#define CSS1_OUTMODE_HINT           ((sal_uInt16)(0x0003U << 6))
+#define CSS1_OUTMODE_FRAME          ((sal_uInt16)(0x0004U << 6))
+#define CSS1_OUTMODE_TABLE          ((sal_uInt16)(0x0005U << 6))
+#define CSS1_OUTMODE_TABLEBOX       ((sal_uInt16)(0x0006U << 6))
+#define CSS1_OUTMODE_DROPCAP        ((sal_uInt16)(0x0007U << 6))
+#define CSS1_OUTMODE_SECTION        ((sal_uInt16)(0x0008U << 6))
+#define CSS1_OUTMODE_SOURCE         ((sal_uInt16)(0x000fU << 6))
 
-#define CSS1_OUTMODE_ENCODE         (0x0001 << 10)
+// bit 10
+#define CSS1_OUTMODE_ENCODE         ((sal_uInt16)(0x0001U << 10))
 
+// bit 11,12,13
+// don't care about script
+#define CSS1_OUTMODE_ANY_SCRIPT     0x0000U
+// no cjk or ctl items
+#define CSS1_OUTMODE_WESTERN        ((sal_uInt16)(0x0001U << 11))
+// no western or ctl items
+#define CSS1_OUTMODE_CJK            ((sal_uInt16)(0x0002U << 11))
+// no western or cjk items
+#define CSS1_OUTMODE_CTL            ((sal_uInt16)(0x0003U << 11))
+// no western, cjk or ctl items
+#define CSS1_OUTMODE_NO_SCRIPT      ((sal_uInt16)(0x0004U << 11))
+#define CSS1_OUTMODE_SCRIPT         ((sal_uInt16)(0x0007U << 11))
 
 // der HTML-Writer
 struct HTMLControl;
@@ -258,6 +274,8 @@ public:
     SvStringsSortDtor aImplicitMarks;// implizite Stprungmarken
     SvStringsDtor aOutlineMarks;        // geschriebene Image Maps
     SvStringsSortDtor aNumRuleNames;// Names of exported num rules
+    SvStringsSortDtor aScriptParaStyles;// script dependent para styles
+    SvStringsSortDtor aScriptTextStyles;// script dependent text styles
     SvULongs aOutlineMarkPoss;
     HTMLControls aHTMLControls;     // die zu schreibenden ::com::sun::star::form::Forms
     SwHTMLFmtInfos aChrFmtInfos;
@@ -303,6 +321,8 @@ public:
     sal_uInt16 nTxtAttrsToIgnore;
     sal_uInt16 nExportMode;
     sal_uInt16 nCSS1OutMode;
+    sal_uInt16 nCSS1Script;         // contains default script (that's the one
+                                    // that is not contained in class names)
 
     rtl_TextEncoding    eDestEnc;
 
@@ -388,8 +408,9 @@ public:
 
     void OutFootEndNoteInfo();
     void OutFootEndNotes();
-    xub_StrLen GetFootEndNoteSymLen( const SwFmtFtn& rFmtFtn );
-    void OutFootEndNoteSym( const SwFmtFtn& rFmtFtn );
+    String GetFootEndNoteSym( const SwFmtFtn& rFmtFtn );
+    void OutFootEndNoteSym( const SwFmtFtn& rFmtFtn, const String& rNum,
+                             sal_uInt16 nScript );
 
 #ifdef JAVA_BASIC_IDE
     void OutBasicModule( const String& rName, const String& rLanguage );
@@ -491,7 +512,10 @@ public:
     static void SubtractItemSet( SfxItemSet& rItemSet,
                                  const SfxItemSet& rRefItemSet,
                                  sal_Bool bSetDefaults,
-                                 sal_Bool bClearSame = sal_True );
+                                 sal_Bool bClearSame = sal_True,
+                                   const SfxItemSet *pRefScriptItemSet=0 );
+    static sal_Bool HasScriptDependentItems( const SfxItemSet& rItemSet,
+                                               sal_Bool bCheckDropCap );
 
     static void GetEEAttrsFromDrwObj( SfxItemSet& rItemSet,
                                       const SdrObject *pObj,
@@ -503,10 +527,12 @@ public:
     sal_Bool IsHTMLMode( sal_uInt32 nMode ) const { return (nHTMLMode & nMode) != 0; }
 
     inline sal_Bool IsCSS1Source( sal_uInt16 n ) const;
+    inline sal_Bool IsCSS1Script( sal_uInt16 n ) const;
 
     static const sal_Char *GetNumFormat( sal_uInt16 nFmt );
     static void PrepareFontList( const SvxFontItem& rFontItem, String& rNames,
                                  sal_Unicode cQuote, sal_Bool bGeneric );
+    static sal_uInt16 GetCSS1ScriptForScriptType( sal_uInt16 nScriptType );
 
     FieldUnit GetCSS1Unit() const { return eCSS1Unit; }
 };
@@ -514,6 +540,12 @@ public:
 inline sal_Bool SwHTMLWriter::IsCSS1Source( sal_uInt16 n ) const
 {
     return n == (nCSS1OutMode & CSS1_OUTMODE_SOURCE);
+}
+
+inline sal_Bool SwHTMLWriter::IsCSS1Script( sal_uInt16 n ) const
+{
+    sal_uInt16 nScript = (nCSS1OutMode & CSS1_OUTMODE_SCRIPT);
+    return CSS1_OUTMODE_ANY_SCRIPT == nScript || n == nScript;
 }
 
 inline void SwHTMLWriter::OutCSS1_PropertyAscii( const sal_Char *pProp,

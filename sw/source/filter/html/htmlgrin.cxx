@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlgrin.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2001-09-28 06:27:53 $
+ *  last change: $Author: mib $ $Date: 2001-10-09 14:57:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1320,27 +1320,29 @@ ANCHOR_SETEVENT:
 
     BOOL bEnAnchor = FALSE, bFtnAnchor = FALSE, bFtnEnSymbol = FALSE;
     String aFtnName;
-    if( aClass.Len() >=9  && bHasHRef && sHRef.Len() > 1 &&
-        ('s' == aClass.GetChar(0) || 'S' == aClass.GetChar(0)) &&
-        ('d' == aClass.GetChar(1) || 'D' == aClass.GetChar(1)) )
+    String aStrippedClass( aClass );
+    SwCSS1Parser::GetScriptFromClass( aStrippedClass, sal_False );
+    if( aStrippedClass.Len() >=9  && bHasHRef && sHRef.Len() > 1 &&
+        ('s' == aStrippedClass.GetChar(0) || 'S' == aStrippedClass.GetChar(0)) &&
+        ('d' == aStrippedClass.GetChar(1) || 'D' == aStrippedClass.GetChar(1)) )
     {
-        if( aClass.EqualsIgnoreCaseAscii( sHTML_sdendnote_anc ) )
+        if( aStrippedClass.EqualsIgnoreCaseAscii( sHTML_sdendnote_anc ) )
             bEnAnchor = TRUE;
-        else if( aClass.EqualsIgnoreCaseAscii( sHTML_sdfootnote_anc ) )
+        else if( aStrippedClass.EqualsIgnoreCaseAscii( sHTML_sdfootnote_anc ) )
             bFtnAnchor = TRUE;
-        else if( aClass.EqualsIgnoreCaseAscii( sHTML_sdendnote_sym ) ||
-                 aClass.EqualsIgnoreCaseAscii( sHTML_sdfootnote_sym ) )
+        else if( aStrippedClass.EqualsIgnoreCaseAscii( sHTML_sdendnote_sym ) ||
+                 aStrippedClass.EqualsIgnoreCaseAscii( sHTML_sdfootnote_sym ) )
             bFtnEnSymbol = TRUE;
         if( bEnAnchor || bFtnAnchor || bFtnEnSymbol )
         {
             aFtnName = sHRef.Copy( 1 );
-            aClass = aName = aEmptyStr;
+            aClass = aStrippedClass = aName = aEmptyStr;
             bHasHRef = FALSE;
         }
     }
 
     // Styles parsen
-    if( HasStyleOptions( aStyle, aId, aClass ) )
+    if( HasStyleOptions( aStyle, aId, aStrippedClass ) )
     {
         SfxItemSet aItemSet( pDoc->GetAttrPool(), pCSS1Parser->GetWhichMap() );
         SvxCSS1PropertyInfo aPropInfo;
@@ -1576,7 +1578,12 @@ void SwHTMLParser::StripTrailingPara()
 
     if( bSetSmallFont )
     {
-        pCNd->SetAttr( SvxFontHeightItem(40) );
+        SvxFontHeightItem aFontHeight( 40 );
+        pCNd->SetAttr( aFontHeight );
+        aFontHeight.SetWhich( RES_CHRATR_CJK_FONTSIZE );
+        pCNd->SetAttr( aFontHeight );
+        aFontHeight.SetWhich( RES_CHRATR_CTL_FONTSIZE );
+        pCNd->SetAttr( aFontHeight );
     }
 }
 

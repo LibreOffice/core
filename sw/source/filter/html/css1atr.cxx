@@ -2,9 +2,9 @@
  *
  *  $RCSfile: css1atr.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mib $ $Date: 2001-07-30 14:36:19 $
+ *  last change: $Author: mib $ $Date: 2001-10-09 14:57:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,7 +214,7 @@
 #ifndef _SWTABLE_HXX //autogen
 #include <swtable.hxx>
 #endif
-// FOOTNOTES
+// OTES
 #ifndef _FTNINFO_HXX //autogen
 #include <ftninfo.hxx>
 #endif
@@ -297,7 +297,8 @@ static Writer& OutCSS1_SwPageDesc( Writer& rWrt, const SwPageDesc& rFmt,
 static Writer& OutCSS1_SwFtnInfo( Writer& rWrt, const SwEndNoteInfo& rInfo,
                                   SwDoc *pDoc, USHORT nNotes, BOOL bEndNote );
 static void OutCSS1_SwFmtDropAttrs( SwHTMLWriter& rHWrt,
-                                    const SwFmtDrop& rDrop );
+                                    const SwFmtDrop& rDrop,
+                                     const SfxItemSet *pCharFmtItemSet=0 );
 static Writer& OutCSS1_SvxUnderl_SvxCrOut_SvxBlink( Writer& rWrt,
                     const SvxUnderlineItem *pUItem,
                     const SvxCrossedOutItem *pCOItem,
@@ -1333,15 +1334,14 @@ BOOL lcl_css1atr_equalFontItems( const SfxPoolItem& r1, const SfxPoolItem& r2 )
     return  ((const SvxFontItem &)r1).GetFamilyName() ==
                     ((const SvxFontItem &)r2).GetFamilyName() &&
             ((const SvxFontItem &)r1).GetFamily() ==
-                    ((const SvxFontItem &)r2).GetFamily() &&
-            ((const SvxFontItem &)r1).GetPitch() ==
-                    ((const SvxFontItem &)r2).GetPitch();
+                    ((const SvxFontItem &)r2).GetFamily();
 }
 
 void SwHTMLWriter::SubtractItemSet( SfxItemSet& rItemSet,
                                     const SfxItemSet& rRefItemSet,
                                     BOOL bSetDefaults,
-                                    BOOL bClearSame )
+                                    BOOL bClearSame,
+                                     const SfxItemSet *pRefScriptItemSet )
 {
     ASSERT( bSetDefaults || bClearSame,
             "SwHTMLWriter::SubtractItemSet: Bei diesen Flags passiert nix" );
@@ -1356,13 +1356,46 @@ void SwHTMLWriter::SubtractItemSet( SfxItemSet& rItemSet,
         const SfxPoolItem *pRefItem, *pItem;
         BOOL bItemSet = ( SFX_ITEM_SET ==
                 rItemSet.GetItemState( nWhich, FALSE, &pItem) );
-        BOOL bRefItemSet = ( SFX_ITEM_SET ==
+        BOOL bRefItemSet;
+
+        if( pRefScriptItemSet )
+        {
+            switch( nWhich )
+            {
+            case RES_CHRATR_FONT:
+            case RES_CHRATR_FONTSIZE:
+            case RES_CHRATR_POSTURE:
+            case RES_CHRATR_WEIGHT:
+            case RES_CHRATR_CJK_FONT:
+            case RES_CHRATR_CJK_FONTSIZE:
+            case RES_CHRATR_CJK_POSTURE:
+            case RES_CHRATR_CJK_WEIGHT:
+            case RES_CHRATR_CTL_FONT:
+            case RES_CHRATR_CTL_FONTSIZE:
+            case RES_CHRATR_CTL_POSTURE:
+            case RES_CHRATR_CTL_WEIGHT:
+                bRefItemSet = ( SFX_ITEM_SET ==
+                    pRefScriptItemSet->GetItemState( nWhich, TRUE, &pRefItem) );
+                break;
+            default:
+                bRefItemSet = ( SFX_ITEM_SET ==
+                    aRefItemSet.GetItemState( nWhich, FALSE, &pRefItem) );
+                break;
+            }
+        }
+        else
+        {
+            bRefItemSet = ( SFX_ITEM_SET ==
                 aRefItemSet.GetItemState( nWhich, FALSE, &pRefItem) );
+        }
+
         if( bItemSet )
         {
-            if( bClearSame && bRefItemSet &&
+            if( (bClearSame || pRefScriptItemSet) && bRefItemSet &&
                 ( *pItem == *pRefItem ||
-                  (RES_CHRATR_FONT == nWhich &&
+                  ((RES_CHRATR_FONT == nWhich ||
+                    RES_CHRATR_CJK_FONT == nWhich ||
+                    RES_CHRATR_CTL_FONT == nWhich)  &&
                    lcl_css1atr_equalFontItems( *pItem, *pRefItem )) ) )
             {
                 // das Attribut ist mit dem gleichen Wert in beiden
@@ -1372,7 +1405,7 @@ void SwHTMLWriter::SubtractItemSet( SfxItemSet& rItemSet,
         }
         else
         {
-            if( bSetDefaults && bRefItemSet )
+            if( (bSetDefaults || pRefScriptItemSet) && bRefItemSet )
             {
                 // das Attribut ist nur in der Referenz vorhanden. Das
                 // Default muss ggf. ausgegeben werden
@@ -1460,6 +1493,322 @@ void SwHTMLWriter::PrepareFontList( const SvxFontItem& rFontItem,
     }
 }
 
+sal_Bool SwHTMLWriter::HasScriptDependentItems( const SfxItemSet& rItemSet,
+                                                 sal_Bool bCheckDropCap )
+{
+    static sal_uInt16 aWhichIds[] =
+    {
+        RES_CHRATR_FONT,        RES_CHRATR_CJK_FONT,        RES_CHRATR_CTL_FONT,
+        RES_CHRATR_FONTSIZE,    RES_CHRATR_CJK_FONTSIZE,    RES_CHRATR_CTL_FONTSIZE,
+        RES_CHRATR_POSTURE,     RES_CHRATR_CJK_POSTURE,     RES_CHRATR_CTL_POSTURE,
+        RES_CHRATR_WEIGHT,      RES_CHRATR_CJK_WEIGHT,      RES_CHRATR_CTL_WEIGHT,
+        0,                      0,                          0
+    };
+
+    for( sal_uInt16 i=0; aWhichIds[i]; i += 3 )
+    {
+        const SfxPoolItem *pItem = 0, *pItemCJK = 0, *pItemCTL = 0, *pTmp;
+        sal_uInt16 nItemCount = 0;
+        if( SFX_ITEM_SET == rItemSet.GetItemState( aWhichIds[i], sal_False,
+                                                   &pTmp ) )
+        {
+            pItem = pTmp;
+            nItemCount++;
+        }
+        if( SFX_ITEM_SET == rItemSet.GetItemState( aWhichIds[i+1], sal_False,
+                                                   &pTmp ) )
+        {
+            pItemCJK = pTmp;
+            nItemCount++;
+        }
+        if( SFX_ITEM_SET == rItemSet.GetItemState( aWhichIds[i+2], sal_False,
+                                                   &pTmp ) )
+        {
+            pItemCTL = pTmp;
+            nItemCount++;
+        }
+
+        // If some of the items are set, but not all, we need script dependent
+        // styles
+        if( nItemCount > 0 && nItemCount < 3 )
+            return sal_True;
+
+        if( 3 == nItemCount )
+        {
+            // If all items are set, but some of them have different values,
+            // we need script dependent styles, too. For font items, we have
+            // to take care about their special HTML/CSS1 representation.
+            if( RES_CHRATR_FONT == aWhichIds[i] )
+            {
+                if( !lcl_css1atr_equalFontItems( *pItem, *pItemCJK ) ||
+                    !lcl_css1atr_equalFontItems( *pItem, *pItemCTL ) ||
+                    !lcl_css1atr_equalFontItems( *pItemCJK, *pItemCTL ) )
+                    return sal_True;
+            }
+            else
+            {
+                if( !( *pItem == *pItemCJK ) ||
+                    !( *pItem == *pItemCTL ) ||
+                    !( *pItemCJK == *pItemCTL ) )
+                    return sal_True;
+            }
+        }
+    }
+
+    const SfxPoolItem *pItem;
+    if( bCheckDropCap &&
+        SFX_ITEM_SET == rItemSet.GetItemState( RES_PARATR_DROP, sal_True,
+                &pItem ) )
+    {
+        const SwFmtDrop *pDrop = (const SwFmtDrop *)pItem;
+        const SwCharFmt *pDCCharFmt = pDrop->GetCharFmt();
+        if( pDCCharFmt )
+        {
+            SfxItemSet aTstItemSet( *pDCCharFmt->GetAttrSet().GetPool(),
+                RES_CHRATR_FONT,        RES_CHRATR_FONT,
+                RES_CHRATR_POSTURE,     RES_CHRATR_POSTURE,
+                RES_CHRATR_WEIGHT,      RES_CHRATR_WEIGHT,
+                RES_CHRATR_CJK_FONT,    RES_CHRATR_CJK_FONT,
+                RES_CHRATR_CJK_POSTURE, RES_CHRATR_CJK_WEIGHT,
+                RES_CHRATR_CTL_FONT,    RES_CHRATR_CTL_FONT,
+                RES_CHRATR_CTL_POSTURE, RES_CHRATR_CTL_WEIGHT,
+                0 );
+            aTstItemSet.Set( pDCCharFmt->GetAttrSet(), sal_True );
+            return HasScriptDependentItems( aTstItemSet, sal_False );
+        }
+    }
+
+    return sal_False;
+}
+
+static sal_Bool OutCSS1Rule( SwHTMLWriter& rHTMLWrt, const String& rSelector,
+                    const SfxItemSet& rItemSet, sal_Bool bHasClass,
+                     sal_Bool bCheckForPseudo  )
+{
+    sal_Bool bScriptDependent = sal_False;
+    if( SwHTMLWriter::HasScriptDependentItems( rItemSet,
+                rHTMLWrt.IsHTMLMode(HTMLMODE_DROPCAPS) && bHasClass ) )
+    {
+        bScriptDependent = sal_True;
+        String aSelector( rSelector );
+
+        String aPseudo;
+        if( bCheckForPseudo )
+        {
+            xub_StrLen nPos = aSelector.SearchBackward( ':' );
+            if( STRING_NOTFOUND != nPos )
+            {
+                aPseudo = aSelector.Copy( nPos );
+                aSelector.Erase( nPos );
+            }
+        }
+
+        if( !bHasClass )
+        {
+            // If we are exporting styles for a tag we have to export a tag
+            // rule for all properties that aren't style dependent and
+            // some class rule for the additional style dependen properties
+            {
+                SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_NO_SCRIPT|CSS1_OUTMODE_RULE|CSS1_OUTMODE_TEMPLATE,
+                                     TRUE, &rSelector );
+                rHTMLWrt.OutCSS1_SfxItemSet( rItemSet, FALSE );
+            }
+
+            SfxItemSet aScriptItemSet( *rItemSet.GetPool(),
+                                       RES_CHRATR_FONT, RES_CHRATR_FONTSIZE,
+                                       RES_CHRATR_POSTURE, RES_CHRATR_POSTURE,
+                                       RES_CHRATR_WEIGHT, RES_CHRATR_WEIGHT,
+                                       RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_WEIGHT,
+                                       0 );
+            aScriptItemSet.Put( rItemSet );
+
+            String aNewSelector( aSelector );
+            aNewSelector.AppendAscii( RTL_CONSTASCII_STRINGPARAM(".western") );
+            aNewSelector.Append( aPseudo );
+            {
+                SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_WESTERN|CSS1_OUTMODE_RULE|CSS1_OUTMODE_TEMPLATE,
+                                     TRUE, &aNewSelector );
+                rHTMLWrt.OutCSS1_SfxItemSet( aScriptItemSet, FALSE );
+            }
+
+            aNewSelector = aSelector;
+            aNewSelector.AppendAscii( RTL_CONSTASCII_STRINGPARAM(".cjk") );
+            aNewSelector.Append( aPseudo );
+            {
+                SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_CJK|CSS1_OUTMODE_RULE|CSS1_OUTMODE_TEMPLATE,
+                                     TRUE, &aNewSelector );
+                rHTMLWrt.OutCSS1_SfxItemSet( aScriptItemSet, FALSE );
+            }
+
+            aNewSelector = aSelector;
+            aNewSelector.AppendAscii( RTL_CONSTASCII_STRINGPARAM(".ctl") );
+            aNewSelector.Append( aPseudo );
+            {
+                SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_CTL|CSS1_OUTMODE_RULE|CSS1_OUTMODE_TEMPLATE,
+                                     TRUE, &aNewSelector );
+                rHTMLWrt.OutCSS1_SfxItemSet( aScriptItemSet, FALSE );
+            }
+        }
+        else
+        {
+            // If ther are script dependencies and we are derived from a tag,
+            // when we have to export a style dependent class for all
+            // scripts
+            String aNewSelector( aSelector );
+            aNewSelector.AppendAscii( RTL_CONSTASCII_STRINGPARAM("-western") );
+            aNewSelector.Append( aPseudo );
+            {
+                SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_WESTERN|CSS1_OUTMODE_RULE|CSS1_OUTMODE_TEMPLATE,
+                                     TRUE, &aNewSelector );
+                rHTMLWrt.OutCSS1_SfxItemSet( rItemSet, FALSE );
+            }
+
+            aNewSelector = aSelector;
+            aNewSelector.AppendAscii( RTL_CONSTASCII_STRINGPARAM("-cjk") );
+            aNewSelector.Append( aPseudo );
+            {
+                SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_CJK|CSS1_OUTMODE_RULE|CSS1_OUTMODE_TEMPLATE,
+                                     TRUE, &aNewSelector );
+                rHTMLWrt.OutCSS1_SfxItemSet( rItemSet, FALSE );
+            }
+
+            aNewSelector = aSelector;
+            aNewSelector.AppendAscii( RTL_CONSTASCII_STRINGPARAM("-ctl") );
+            aNewSelector.Append( aPseudo );
+            {
+                SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_CTL|CSS1_OUTMODE_RULE|CSS1_OUTMODE_TEMPLATE,
+                                     TRUE, &aNewSelector );
+                rHTMLWrt.OutCSS1_SfxItemSet( rItemSet, FALSE );
+            }
+        }
+    }
+    else
+    {
+        // If there are no script dependencies, when all items are
+        // exported in one step. For hyperlinks only, a script information
+        // must be there, because these two chr formats don't support
+        // script dependencies by now.
+        SwCSS1OutMode aMode( rHTMLWrt,
+                rHTMLWrt.nCSS1Script|CSS1_OUTMODE_RULE|CSS1_OUTMODE_TEMPLATE,
+                             TRUE, &rSelector );
+        rHTMLWrt.OutCSS1_SfxItemSet( rItemSet, FALSE );
+    }
+
+    return bScriptDependent;
+}
+
+static  OutCSS1DropCapRule(
+                    SwHTMLWriter& rHTMLWrt, const String& rSelector,
+                    const SwFmtDrop& rDrop, sal_Bool bHasClass,
+                     sal_Bool bHasScriptDependencies  )
+{
+    const SwCharFmt *pDCCharFmt = rDrop.GetCharFmt();
+    if( (bHasScriptDependencies && bHasClass) ||
+         (pDCCharFmt && SwHTMLWriter::HasScriptDependentItems( pDCCharFmt->GetAttrSet(), sal_False ) ) )
+    {
+        String aSelector( rSelector );
+
+        String aPseudo;
+        xub_StrLen nPos = aSelector.SearchBackward( ':' );
+        if( STRING_NOTFOUND != nPos )
+        {
+            aPseudo = aSelector.Copy( nPos );
+            aSelector.Erase( nPos );
+        }
+
+        if( !bHasClass )
+        {
+            // If we are exporting styles for a tag we have to export a tag
+            // rule for all properties that aren't style dependent and
+            // some class rule for the additional style dependen properties
+            {
+                SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_NO_SCRIPT|CSS1_OUTMODE_RULE|CSS1_OUTMODE_DROPCAP,
+                                     TRUE, &rSelector );
+                OutCSS1_SwFmtDropAttrs( rHTMLWrt, rDrop );
+            }
+
+            SfxItemSet aScriptItemSet( rHTMLWrt.pDoc->GetAttrPool(),
+                                       RES_CHRATR_FONT, RES_CHRATR_FONTSIZE,
+                                       RES_CHRATR_POSTURE, RES_CHRATR_POSTURE,
+                                       RES_CHRATR_WEIGHT, RES_CHRATR_WEIGHT,
+                                       RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_WEIGHT,
+                                       0 );
+            if( pDCCharFmt )
+                aScriptItemSet.Set( pDCCharFmt->GetAttrSet(), sal_True );
+
+            String aNewSelector( aSelector );
+            aNewSelector.AppendAscii( RTL_CONSTASCII_STRINGPARAM(".western") );
+            aNewSelector.Append( aPseudo );
+            {
+                SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_WESTERN|CSS1_OUTMODE_RULE|CSS1_OUTMODE_DROPCAP,
+                                     TRUE, &aNewSelector );
+                OutCSS1_SwFmtDropAttrs(  rHTMLWrt, rDrop, &aScriptItemSet );
+            }
+
+            aNewSelector = aSelector;
+            aNewSelector.AppendAscii( RTL_CONSTASCII_STRINGPARAM(".cjk") );
+            aNewSelector.Append( aPseudo );
+            {
+                SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_CJK|CSS1_OUTMODE_RULE|CSS1_OUTMODE_DROPCAP,
+                                     TRUE, &aNewSelector );
+                OutCSS1_SwFmtDropAttrs(  rHTMLWrt, rDrop, &aScriptItemSet );
+            }
+
+            aNewSelector = aSelector;
+            aNewSelector.AppendAscii( RTL_CONSTASCII_STRINGPARAM(".ctl") );
+            aNewSelector.Append( aPseudo );
+            {
+                SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_CTL|CSS1_OUTMODE_RULE|CSS1_OUTMODE_DROPCAP,
+                                     TRUE, &aNewSelector );
+                OutCSS1_SwFmtDropAttrs(  rHTMLWrt, rDrop, &aScriptItemSet );
+            }
+        }
+        else
+        {
+            // If ther are script dependencies and we are derived from a tag,
+            // when we have to export a style dependent class for all
+            // scripts
+            String aNewSelector( aSelector );
+            aNewSelector.AppendAscii( RTL_CONSTASCII_STRINGPARAM("-western") );
+            aNewSelector.Append( aPseudo );
+            {
+                SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_WESTERN|CSS1_OUTMODE_RULE|CSS1_OUTMODE_DROPCAP,
+                                     TRUE, &aNewSelector );
+                OutCSS1_SwFmtDropAttrs(  rHTMLWrt, rDrop );
+            }
+
+            aNewSelector = aSelector;
+            aNewSelector.AppendAscii( RTL_CONSTASCII_STRINGPARAM("-cjk") );
+            aNewSelector.Append( aPseudo );
+            {
+                SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_CJK|CSS1_OUTMODE_RULE|CSS1_OUTMODE_DROPCAP,
+                                     TRUE, &aNewSelector );
+                OutCSS1_SwFmtDropAttrs(  rHTMLWrt, rDrop );
+            }
+
+            aNewSelector = aSelector;
+            aNewSelector.AppendAscii( RTL_CONSTASCII_STRINGPARAM("-ctl") );
+            aNewSelector.Append( aPseudo );
+            {
+                SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_CTL|CSS1_OUTMODE_RULE|CSS1_OUTMODE_DROPCAP,
+                                     TRUE, &aNewSelector );
+                OutCSS1_SwFmtDropAttrs(  rHTMLWrt, rDrop );
+            }
+        }
+    }
+    else
+    {
+        // If there are no script dependencies, when all items are
+        // exported in one step. For hyperlinks only, a script information
+        // must be there, because these two chr formats don't support
+        // script dependencies by now.
+        SwCSS1OutMode aMode( rHTMLWrt,
+                rHTMLWrt.nCSS1Script|CSS1_OUTMODE_RULE|CSS1_OUTMODE_DROPCAP,
+                             TRUE, &rSelector );
+                OutCSS1_SwFmtDropAttrs( rHTMLWrt, rDrop );
+    }
+}
+
 static Writer& OutCSS1_SwFmt( Writer& rWrt, const SwFmt& rFmt,
                               SwDoc *pDoc, SwDoc *pTemplate )
 {
@@ -1511,10 +1860,13 @@ static Writer& OutCSS1_SwFmt( Writer& rWrt, const SwFmt& rFmt,
     // (ausser fuer nDeep==1)
     const SfxItemSet& rFmtItemSet = rFmt.GetAttrSet();
     SfxItemSet aItemSet( *rFmtItemSet.GetPool(), rFmtItemSet.GetRanges() );
-    aItemSet.Set( rFmtItemSet, nDeep!=1 );
+    aItemSet.Set( rFmtItemSet, TRUE ); // Was nDeep!=1 that is not working
+                                       // for script dependent items buts should
+                                       // not make a deifference for any other
 
     BOOL bSetDefaults = TRUE, bClearSame = TRUE;
     const SwFmt *pRefFmt = 0;
+    const SwFmt *pRefFmtScript = 0;
     switch( nDeep )
     {
     case CSS1_FMT_ISTAG:
@@ -1522,10 +1874,12 @@ static Writer& OutCSS1_SwFmt( Writer& rWrt, const SwFmt& rFmt,
         break;
     case CSS1_FMT_CMPREF:
         pRefFmt = SwHTMLWriter::GetTemplateFmt( nRefPoolId, pDoc );
+        pRefFmtScript = SwHTMLWriter::GetTemplateFmt( nRefPoolId, pTemplate );
         bClearSame = FALSE;
         break;
     default:
         pRefFmt = SwHTMLWriter::GetParentFmt( rFmt, nDeep );
+        pRefFmtScript = SwHTMLWriter::GetTemplateFmt( nRefPoolId, pTemplate );
         bSetDefaults = FALSE;
         break;
     }
@@ -1535,7 +1889,11 @@ static Writer& OutCSS1_SwFmt( Writer& rWrt, const SwFmt& rFmt,
         // Den Item-Set der Referenz-Vorlage (inkl. seiner Parents) vom
         // ItemSet abziehen
         SwHTMLWriter::SubtractItemSet( aItemSet, pRefFmt->GetAttrSet(),
-                                       bSetDefaults, bClearSame );
+                                       bSetDefaults, bClearSame,
+                                       pRefFmtScript
+                                               ? &pRefFmtScript->GetAttrSet()
+                                            : 0  );
+
         if( !bCharFmt )
         {
             const SvxULSpaceItem& rULItem = pRefFmt->GetULSpace();
@@ -1596,15 +1954,28 @@ static Writer& OutCSS1_SwFmt( Writer& rWrt, const SwFmt& rFmt,
     if( !aItemSet.Count() )
         return rWrt;
 
-    // jetzt die Attribute (inkl. Selektor) ausgeben
-    {
-        SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_RULE|CSS1_OUTMODE_TEMPLATE,
-                             TRUE, &aSelector );
-        rHTMLWrt.OutCSS1_SfxItemSet( aItemSet, FALSE );
+    // There is no support for script dependent hyperlinks by now.
+    sal_Bool bCheckForPseudo = sal_False;
+    if( bCharFmt &&
+        (RES_POOLCHR_INET_NORMAL==nRefPoolId ||
+         RES_POOLCHR_INET_VISIT==nRefPoolId) )
+        bCheckForPseudo = sal_True;
 
-        if( nPoolFmtId==RES_POOLCOLL_TEXT && !rHTMLWrt.bFirstCSS1Property )
-            rHTMLWrt.bPoolCollTextModified = TRUE;
+
+    // jetzt die Attribute (inkl. Selektor) ausgeben
+    sal_Bool bHasScriptDependencies = sal_False;
+    if( OutCSS1Rule( rHTMLWrt, aSelector, aItemSet, CSS1_FMT_ISTAG != nDeep,
+                      bCheckForPseudo ) )
+    {
+        if( bCharFmt )
+            rHTMLWrt.aScriptTextStyles.Insert( new String( rFmt.GetName() ) );
+        else
+            rHTMLWrt.aScriptParaStyles.Insert( new String( rFmt.GetName() ) );
+        bHasScriptDependencies = sal_True;
     }
+
+    if( nPoolFmtId==RES_POOLCOLL_TEXT && !rHTMLWrt.bFirstCSS1Property )
+        rHTMLWrt.bPoolCollTextModified = TRUE;
 
     // Drop-Caps ausgeben
     const SfxPoolItem *pItem;
@@ -1614,12 +1985,8 @@ static Writer& OutCSS1_SwFmt( Writer& rWrt, const SwFmt& rFmt,
         String sOut( aSelector );
         sOut.Append( ':');
         sOut.AppendAscii( sCSS1_first_letter );
-        SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_RULE|CSS1_OUTMODE_DROPCAP,
-                             TRUE, &sOut );
-
         const SwFmtDrop *pDrop = (const SwFmtDrop *)pItem;
-
-        OutCSS1_SwFmtDropAttrs( rHTMLWrt, *pDrop );
+        OutCSS1DropCapRule( rHTMLWrt, sOut, *pDrop, CSS1_FMT_ISTAG != nDeep, bHasScriptDependencies );
     }
 
     return rWrt;
@@ -1781,10 +2148,8 @@ static Writer& OutCSS1_SwFtnInfo( Writer& rWrt, const SwEndNoteInfo& rInfo,
             aSelector.Append( '.');
             aSelector.AppendAscii( bEndNote ? sHTML_sdendnote_sym
                                         : sHTML_sdfootnote_sym );
-            SwCSS1OutMode aMode( rHTMLWrt,
-                                 CSS1_OUTMODE_RULE|CSS1_OUTMODE_TEMPLATE,
-                                 TRUE, &aSelector );
-            rHTMLWrt.OutCSS1_SfxItemSet( aItemSet, FALSE );
+            if( OutCSS1Rule( rHTMLWrt, aSelector, aItemSet, sal_True, sal_False ))
+                rHTMLWrt.aScriptTextStyles.Insert( new String( pSymCharFmt->GetName() ) );
         }
     }
 
@@ -1832,7 +2197,7 @@ Writer& OutCSS1_ParaTagStyleOpt( Writer& rWrt, const SfxItemSet& rItemSet )
 {
     SwHTMLWriter& rHTMLWrt = (SwHTMLWriter&)rWrt;
 
-    SwCSS1OutMode aMode( rHTMLWrt, CSS1_OUTMODE_STYLE_OPT |
+    SwCSS1OutMode aMode( rHTMLWrt, rHTMLWrt.nCSS1Script|CSS1_OUTMODE_STYLE_OPT |
                                    CSS1_OUTMODE_ENCODE|CSS1_OUTMODE_PARA );
     rHTMLWrt.OutCSS1_SfxItemSet( rItemSet, FALSE );
 
@@ -2430,6 +2795,15 @@ static Writer& OutCSS1_SvxFont( Writer& rWrt, const SfxPoolItem& rHt )
     if( rHTMLWrt.IsCSS1Source( CSS1_OUTMODE_PARA ) )
         return rWrt;
 
+    sal_uInt16 nScript = CSS1_OUTMODE_WESTERN;
+    switch( rHt.Which() )
+    {
+    case RES_CHRATR_CJK_FONT:   nScript = CSS1_OUTMODE_CJK; break;
+    case RES_CHRATR_CTL_FONT:   nScript = CSS1_OUTMODE_CTL; break;
+    }
+    if( !rHTMLWrt.IsCSS1Script( nScript ) )
+        return rWrt;
+
     ASSERT( !rHTMLWrt.IsCSS1Source(CSS1_OUTMODE_HINT),
             "Font wirklich als Hint ausgeben?" );
 
@@ -2455,6 +2829,15 @@ static Writer& OutCSS1_SvxFontHeight( Writer& rWrt, const SfxPoolItem& rHt )
         rHTMLWrt.IsCSS1Source( CSS1_OUTMODE_DROPCAP ) )
         return rWrt;
 
+    sal_uInt16 nScript = CSS1_OUTMODE_WESTERN;
+    switch( rHt.Which() )
+    {
+    case RES_CHRATR_CJK_FONTSIZE:   nScript = CSS1_OUTMODE_CJK; break;
+    case RES_CHRATR_CTL_FONTSIZE:   nScript = CSS1_OUTMODE_CTL; break;
+    }
+    if( !rHTMLWrt.IsCSS1Script( nScript ) )
+        return rWrt;
+
     UINT32 nHeight = ((const SvxFontHeightItem&)rHt).GetHeight();
     if( rHTMLWrt.IsCSS1Source(CSS1_OUTMODE_HINT) )
     {
@@ -2475,6 +2858,15 @@ static Writer& OutCSS1_SvxFontHeight( Writer& rWrt, const SfxPoolItem& rHt )
 static Writer& OutCSS1_SvxPosture( Writer& rWrt, const SfxPoolItem& rHt )
 {
     SwHTMLWriter& rHTMLWrt = (SwHTMLWriter&)rWrt;
+
+    sal_uInt16 nScript = CSS1_OUTMODE_WESTERN;
+    switch( rHt.Which() )
+    {
+    case RES_CHRATR_CJK_POSTURE:    nScript = CSS1_OUTMODE_CJK; break;
+    case RES_CHRATR_CTL_POSTURE:    nScript = CSS1_OUTMODE_CTL; break;
+    }
+    if( !rHTMLWrt.IsCSS1Script( nScript ) )
+        return rWrt;
 
     const sal_Char *pStr = 0;
     switch( ((const SvxPostureItem&)rHt).GetPosture() )
@@ -2551,6 +2943,15 @@ static Writer& OutCSS1_SvxUnderline( Writer& rWrt, const SfxPoolItem& rHt )
 static Writer& OutCSS1_SvxFontWeight( Writer& rWrt, const SfxPoolItem& rHt )
 {
     SwHTMLWriter& rHTMLWrt = (SwHTMLWriter&)rWrt;
+
+    sal_uInt16 nScript = CSS1_OUTMODE_WESTERN;
+    switch( rHt.Which() )
+    {
+    case RES_CHRATR_CJK_WEIGHT: nScript = CSS1_OUTMODE_CJK; break;
+    case RES_CHRATR_CTL_WEIGHT: nScript = CSS1_OUTMODE_CTL; break;
+    }
+    if( !rHTMLWrt.IsCSS1Script( nScript ) )
+        return rWrt;
 
     const sal_Char *pStr = 0;
     switch( ((const SvxWeightItem&)rHt).GetWeight() )
@@ -2715,7 +3116,8 @@ static Writer& OutCSS1_SvxOrphans( Writer& rWrt, const SfxPoolItem& rHt )
 }
 
 static void OutCSS1_SwFmtDropAttrs( SwHTMLWriter& rHWrt,
-                                    const SwFmtDrop& rDrop )
+                                    const SwFmtDrop& rDrop,
+                                     const SfxItemSet *pCharFmtItemSet )
 {
     // Text fliesst rechts drumrum
     rHWrt.OutCSS1_PropertyAscii( sCSS1_P_float, sCSS1_PV_left );
@@ -2731,8 +3133,13 @@ static void OutCSS1_SwFmtDropAttrs( SwHTMLWriter& rHWrt,
         rHWrt.OutCSS1_UnitProperty( sCSS1_P_margin_right, nDistance );
 
     const SwCharFmt *pDCCharFmt = rDrop.GetCharFmt();
-    if( pDCCharFmt )
+    if( pCharFmtItemSet )
+        rHWrt.OutCSS1_SfxItemSet( *pCharFmtItemSet );
+    else if( pDCCharFmt )
         rHWrt.OutCSS1_SfxItemSet( pDCCharFmt->GetAttrSet() );
+    else if( (rHWrt.nCSS1OutMode & CSS1_OUTMODE_ANY_OFF) == CSS1_OUTMODE_RULE_OFF )
+        rHWrt.Strm() << sCSS1_rule_end;
+
 }
 
 static Writer& OutCSS1_SwFmtDrop( Writer& rWrt, const SfxPoolItem& rHt )
@@ -2746,7 +3153,7 @@ static Writer& OutCSS1_SwFmtDrop( Writer& rWrt, const SfxPoolItem& rHt )
     if( rHTMLWrt.bTagOn )
     {
         SwCSS1OutMode aMode( rHTMLWrt,
-                             CSS1_OUTMODE_SPAN_TAG1_ON|CSS1_OUTMODE_ENCODE|
+                             rHTMLWrt.nCSS1Script|CSS1_OUTMODE_SPAN_TAG1_ON|CSS1_OUTMODE_ENCODE|
                              CSS1_OUTMODE_DROPCAP );
 
         OutCSS1_SwFmtDropAttrs( rHTMLWrt, (const SwFmtDrop&)rHt );
@@ -3375,16 +3782,16 @@ SwAttrFnTab aCSS1AttrFnTab = {
 /* RES_CHRATR_NOHYPHEN  */          0, // Neu: nicht trennen
 /* RES_CHRATR_NOLINEBREAK */        0, // Neu: nicht umbrechen
 /* RES_CHRATR_BACKGROUND */         OutCSS1_SvxBrush, // Neu: Zeichenhintergrund
-/* RES_CHRATR_CJK_FONT */           0,
-/* RES_CHRATR_CJK_FONTSIZE */       0,
+/* RES_CHRATR_CJK_FONT */           OutCSS1_SvxFont,
+/* RES_CHRATR_CJK_FONTSIZE */       OutCSS1_SvxFontHeight,
 /* RES_CHRATR_CJK_LANGUAGE */       0,
-/* RES_CHRATR_CJK_POSTURE */        0,
-/* RES_CHRATR_CJK_WEIGHT */         0,
-/* RES_CHRATR_CTL_FONT */           0,
-/* RES_CHRATR_CTL_FONTSIZE */       0,
+/* RES_CHRATR_CJK_POSTURE */        OutCSS1_SvxPosture,
+/* RES_CHRATR_CJK_WEIGHT */         OutCSS1_SvxFontWeight,
+/* RES_CHRATR_CTL_FONT */           OutCSS1_SvxFont,
+/* RES_CHRATR_CTL_FONTSIZE */       OutCSS1_SvxFontHeight,
 /* RES_CHRATR_CTL_LANGUAGE */       0,
-/* RES_CHRATR_CTL_POSTURE */        0,
-/* RES_CHRATR_CTL_WEIGHT */         0,
+/* RES_CHRATR_CTL_POSTURE */        OutCSS1_SvxPosture,
+/* RES_CHRATR_CTL_WEIGHT */         OutCSS1_SvxFontWeight,
 /* RES_CHRATR_WRITING_DIRECTION */  0,
 /* RES_CHRATR_DUMMY2 */             0,
 /* RES_CHRATR_DUMMY3 */             0,
@@ -3495,6 +3902,9 @@ SwAttrFnTab aCSS1AttrFnTab = {
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.9  2001/07/30 14:36:19  mib
+      #90539#: Don't export table paragarph styles as P
+
       Revision 1.8  2001/07/11 11:33:26  mib
       #89534#: Export faont-family and some other properties again
 

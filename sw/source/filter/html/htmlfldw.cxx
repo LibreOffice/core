@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlfldw.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-09-28 06:27:53 $
+ *  last change: $Author: mib $ $Date: 2001-10-09 14:57:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 #endif
 
 #pragma hdrstop
+#ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HPP_
+#include <com/sun/star/i18n/ScriptType.hpp>
+#endif
 
 #ifndef _STRING_HXX //autogen
 #include <tools/string.hxx>
@@ -80,6 +83,15 @@
 #endif
 #ifndef _DOC_HXX //autogen
 #include <doc.hxx>
+#endif
+#ifndef _BREAKIT_HXX
+#include <breakit.hxx>
+#endif
+#ifndef _NDTXT_HXX
+#include <ndtxt.hxx>
+#endif
+#ifndef _TXTFLD_HXX
+#include <txtfld.hxx>
 #endif
 #include "fldbas.hxx"
 #include "docufld.hxx"
@@ -205,7 +217,9 @@ const sal_Char *SwHTMLWriter::GetNumFormat( USHORT nFmt )
     return pFmtStr;
 }
 
-static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pFld )
+extern BOOL lcl_css1atr_equalFontItems( const SfxPoolItem& r1, const SfxPoolItem& r2 );
+static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pFld,
+                                 const SwTxtNode& rTxtNd, xub_StrLen nFldPos )
 {
     SwHTMLWriter & rHTMLWrt = (SwHTMLWriter&)rWrt;
 
@@ -424,8 +438,114 @@ static Writer& OutHTML_SwField( Writer& rWrt, const SwField* pFld )
     }
 
     // Inhalt des Feldes ausgeben
-    HTMLOutFuncs::Out_String( rWrt.Strm(), pFld->Expand(),
-                              rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
+    String sExpand( pFld->Expand() );
+    sal_Bool bNeedsCJKProcessing = sal_False;
+    if( sExpand.Len() )
+    {
+        sal_uInt16 nScriptType = pBreakIt->xBreak->getScriptType( sExpand, 0 );
+        xub_StrLen nPos = (xub_StrLen)pBreakIt->xBreak->endOfScript( sExpand, 0,
+                                                          nScriptType );
+
+        sal_uInt16 nScript =
+            SwHTMLWriter::GetCSS1ScriptForScriptType( nScriptType );
+        if( nPos < sExpand.Len() || nScript != rHTMLWrt.nCSS1Script )
+        {
+            bNeedsCJKProcessing = sal_True;
+        }
+    }
+
+    if( bNeedsCJKProcessing )
+    {
+        SfxItemSet aScriptItemSet( rWrt.pDoc->GetAttrPool(),
+                                   RES_CHRATR_FONT, RES_CHRATR_FONTSIZE,
+                                   RES_CHRATR_POSTURE, RES_CHRATR_POSTURE,
+                                   RES_CHRATR_WEIGHT, RES_CHRATR_WEIGHT,
+                                   RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_WEIGHT,
+                                   0 );
+        rTxtNd.GetAttr( aScriptItemSet, nFldPos, nFldPos+1 );
+
+        sal_uInt16 aWesternWhichIds[4] =
+            { RES_CHRATR_FONT, RES_CHRATR_FONTSIZE,
+              RES_CHRATR_POSTURE, RES_CHRATR_WEIGHT };
+        sal_uInt16 aCJKWhichIds[4] =
+            { RES_CHRATR_CJK_FONT, RES_CHRATR_CJK_FONTSIZE,
+              RES_CHRATR_CJK_POSTURE, RES_CHRATR_CJK_WEIGHT };
+        sal_uInt16 aCTLWhichIds[4] =
+            { RES_CHRATR_CTL_FONT, RES_CHRATR_CTL_FONTSIZE,
+              RES_CHRATR_CTL_POSTURE, RES_CHRATR_CTL_WEIGHT };
+
+        sal_uInt16 *pRefWhichIds;
+        switch( rHTMLWrt.nCSS1Script )
+        {
+        case CSS1_OUTMODE_WESTERN:
+            pRefWhichIds = aWesternWhichIds;
+            break;
+        case CSS1_OUTMODE_CJK:
+            pRefWhichIds = aCJKWhichIds;
+            break;
+        case CSS1_OUTMODE_CTL:
+            pRefWhichIds = aCTLWhichIds;
+            break;
+        }
+
+        xub_StrLen nPos = 0;
+        do
+        {
+            sal_uInt16 nScriptType = pBreakIt->xBreak->getScriptType( sExpand, nPos );
+            sal_uInt16 nScript =
+                SwHTMLWriter::GetCSS1ScriptForScriptType( nScriptType );
+            xub_StrLen nEndPos = (xub_StrLen)pBreakIt->xBreak->endOfScript(
+                                    sExpand, nPos, nScriptType );
+            if( nScript != rHTMLWrt.nCSS1Script )
+            {
+                sal_uInt16 *pWhichIds;
+                switch( nScript )
+                {
+                case CSS1_OUTMODE_WESTERN:  pWhichIds = aWesternWhichIds; break;
+                case CSS1_OUTMODE_CJK:      pWhichIds = aCJKWhichIds; break;
+                case CSS1_OUTMODE_CTL:      pWhichIds = aCTLWhichIds; break;
+                }
+
+                rHTMLWrt.bTagOn = TRUE;
+                const SfxPoolItem *aItems[5];
+                sal_uInt16 nItems = 0;
+                for( sal_uInt16 i=0; i<4; i++ )
+                {
+                    const SfxPoolItem *pRefItem =
+                        aScriptItemSet.GetItem( pRefWhichIds[i] );
+                    const SfxPoolItem *pItem =
+                        aScriptItemSet.GetItem( pWhichIds[i] );
+                    if( pRefItem && pItem &&
+                        !(0==i ? lcl_css1atr_equalFontItems( *pRefItem, *pItem )
+                               : *pRefItem == *pItem) )
+                    {
+                        Out( aHTMLAttrFnTab, *pItem, rHTMLWrt );
+                        aItems[nItems++] = pItem;
+                    }
+                }
+
+                HTMLOutFuncs::Out_String( rWrt.Strm(), sExpand.Copy( nPos, nEndPos ),
+                    rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
+
+                rHTMLWrt.bTagOn = FALSE;
+                while( nItems )
+                    Out( aHTMLAttrFnTab, *aItems[--nItems], rHTMLWrt );
+
+            }
+            else
+            {
+                HTMLOutFuncs::Out_String( rWrt.Strm(), sExpand.Copy( nPos, nEndPos ),
+                    rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
+            }
+            nPos = nEndPos;
+        }
+        while( nPos < sExpand.Len() );
+    }
+    else
+    {
+        HTMLOutFuncs::Out_String( rWrt.Strm(), sExpand,
+              rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
+    }
 
     // Off-Tag ausgeben
     if( pTypeStr )
@@ -539,7 +659,11 @@ Writer& OutHTML_SwFmtFld( Writer& rWrt, const SfxPoolItem& rHt )
     }
     else
     {
-        OutHTML_SwField( rWrt, pFld );
+        const SwTxtFld *pTxtFld = rFld.GetTxtFld();
+        ASSERT( pTxtFld, "Where is the txt fld?" );
+        if( pTxtFld )
+            OutHTML_SwField( rWrt, pFld, pTxtFld->GetTxtNode(),
+                             *pTxtFld->GetStart()  );
     }
     return rWrt;
 }

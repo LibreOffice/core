@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swhtml.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mtg $ $Date: 2001-02-22 16:52:06 $
+ *  last change: $Author: mib $ $Date: 2001-10-09 14:57:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -240,12 +240,20 @@ struct _HTMLAttrTable
                 *pINetFmt,
 
                 *pBold,         // Zeichen-Attribute
+                *pBoldCJK,
+                *pBoldCTL,
                 *pItalic,
+                *pItalicCJK,
+                *pItalicCTL,
                 *pStrike,
                 *pUnderline,
                 *pBlink,
                 *pFont,
+                *pFontCJK,
+                *pFontCTL,
                 *pFontHeight,
+                *pFontHeightCJK,
+                *pFontHeightCTL,
                 *pFontColor,
                 *pEscapement,
                 *pCaseMap,
@@ -693,8 +701,10 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     // Tags wie <B>, <I> etc behandeln, die ein bestimmtes Attribut
     // an und ausschalten, oder die wie SPAN nur Attribute aus Styles holen
     void NewStdAttr( int nToken );
-    void NewStdAttr( int nToken, _HTMLAttr **ppAttr,
-                     const SfxPoolItem & rItem );
+    void NewStdAttr( int nToken,
+                     _HTMLAttr **ppAttr, const SfxPoolItem & rItem,
+                     _HTMLAttr **ppAttr2=0, const SfxPoolItem *pItem2=0,
+                     _HTMLAttr **ppAttr3=0, const SfxPoolItem *pItem3=0 );
     void EndTag( int nToken );
 
     // Font-Attribute behandeln

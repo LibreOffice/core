@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxcss1.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-08 10:42:05 $
+ *  last change: $Author: mib $ $Date: 2001-10-09 14:57:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -396,9 +396,17 @@ static USHORT __READONLY_DATA aTDBorderWidths[] =
 struct SvxCSS1ItemIds
 {
     USHORT nFont;
+    USHORT nFontCJK;
+    USHORT nFontCTL;
     USHORT nPosture;
+    USHORT nPostureCJK;
+    USHORT nPostureCTL;
     USHORT nWeight;
+    USHORT nWeightCJK;
+    USHORT nWeightCTL;
     USHORT nFontHeight;
+    USHORT nFontHeightCJK;
+    USHORT nFontHeightCTL;
     USHORT nUnderline;
     USHORT nCrossedOut;
     USHORT nColor;
@@ -859,13 +867,22 @@ SvxCSS1Parser::SvxCSS1Parser( SfxItemPool& rPool, USHORT nMinFixLineSp,
     pSheetItemSet(0), pItemSet(0),
     nMinFixLineSpace( nMinFixLineSp ),
     pSearchEntry( 0 ), bIgnoreFontFamily( FALSE ),
-    eDfltEnc( RTL_TEXTENCODING_DONTKNOW )
+    eDfltEnc( RTL_TEXTENCODING_DONTKNOW ),
+    nScriptFlags( CSS1_SCRIPT_ALL )
 {
     // Item-Ids auch initialisieren
     aItemIds.nFont = rPool.GetTrueWhich( SID_ATTR_CHAR_FONT, FALSE );
+    aItemIds.nFontCJK = rPool.GetTrueWhich( SID_ATTR_CHAR_CJK_FONT, FALSE );
+    aItemIds.nFontCTL = rPool.GetTrueWhich( SID_ATTR_CHAR_CTL_FONT, FALSE );
     aItemIds.nPosture = rPool.GetTrueWhich( SID_ATTR_CHAR_POSTURE, FALSE );
+    aItemIds.nPostureCJK = rPool.GetTrueWhich( SID_ATTR_CHAR_CJK_POSTURE, FALSE );
+    aItemIds.nPostureCTL = rPool.GetTrueWhich( SID_ATTR_CHAR_CTL_POSTURE, FALSE );
     aItemIds.nWeight = rPool.GetTrueWhich( SID_ATTR_CHAR_WEIGHT, FALSE );
+    aItemIds.nWeightCJK = rPool.GetTrueWhich( SID_ATTR_CHAR_CJK_WEIGHT, FALSE );
+    aItemIds.nWeightCTL = rPool.GetTrueWhich( SID_ATTR_CHAR_CTL_WEIGHT, FALSE );
     aItemIds.nFontHeight = rPool.GetTrueWhich( SID_ATTR_CHAR_FONTHEIGHT, FALSE );
+    aItemIds.nFontHeightCJK = rPool.GetTrueWhich( SID_ATTR_CHAR_CJK_FONTHEIGHT, FALSE );
+    aItemIds.nFontHeightCTL = rPool.GetTrueWhich( SID_ATTR_CHAR_CTL_FONTHEIGHT, FALSE );
     aItemIds.nUnderline = rPool.GetTrueWhich( SID_ATTR_CHAR_UNDERLINE, FALSE );
     aItemIds.nCrossedOut = rPool.GetTrueWhich( SID_ATTR_CHAR_STRIKEOUT, FALSE );
     aItemIds.nColor = rPool.GetTrueWhich( SID_ATTR_CHAR_COLOR, FALSE );
@@ -1185,12 +1202,25 @@ static void ParseCSS1_font_size( const CSS1Expression *pExpr,
 
     if( nHeight || nPropHeight!=100 )
     {
-        rItemSet.Put( SvxFontHeightItem( nHeight, nPropHeight,
-                                         aItemIds.nFontHeight ) );
+        SvxFontHeightItem aFontHeight( nHeight, nPropHeight,
+                                       aItemIds.nFontHeight );
+        if( rParser.IsSetWesternProps() )
+            rItemSet.Put( aFontHeight );
+        if( rParser.IsSetCJKProps() )
+        {
+            aFontHeight.SetWhich( aItemIds.nFontHeightCJK );
+            rItemSet.Put( aFontHeight );
+        }
+        if( rParser.IsSetCTLProps() )
+        {
+            aFontHeight.SetWhich( aItemIds.nFontHeightCTL );
+            rItemSet.Put( aFontHeight );
+        }
     }
 }
 
 /*  */
+
 
 static void ParseCSS1_font_family( const CSS1Expression *pExpr,
                                    SfxItemSet &rItemSet,
@@ -1253,8 +1283,22 @@ static void ParseCSS1_font_family( const CSS1Expression *pExpr,
     }
 
     if( aName.Len() && !rParser.IsIgnoreFontFamily() )
-        rItemSet.Put( SvxFontItem( eFamily, aName, aStyleName, ePitch,
-                                   eEnc, aItemIds.nFont ) );
+    {
+        SvxFontItem aFont( eFamily, aName, aStyleName, ePitch,
+                            eEnc, aItemIds.nFont );
+        if( rParser.IsSetWesternProps() )
+            rItemSet.Put( aFont );
+        if( rParser.IsSetCJKProps() )
+        {
+            aFont.SetWhich( aItemIds.nFontCJK );
+            rItemSet.Put( aFont );
+        }
+        if( rParser.IsSetCTLProps() )
+        {
+            aFont.SetWhich( aItemIds.nFontCTL );
+            rItemSet.Put( aFont );
+        }
+    }
 }
 
 /*  */
@@ -1275,17 +1319,39 @@ static void ParseCSS1_font_weight( const CSS1Expression *pExpr,
             if( SvxCSS1Parser::GetEnum( aFontWeightTable, pExpr->GetString(),
                                         nWeight ) )
             {
-                rItemSet.Put( SvxWeightItem( (FontWeight)nWeight,
-                                             aItemIds.nWeight ) );
+                SvxWeightItem aWeight( (FontWeight)nWeight, aItemIds.nWeight );
+                if( rParser.IsSetWesternProps() )
+                    rItemSet.Put( aWeight );
+                if( rParser.IsSetCJKProps() )
+                {
+                    aWeight.SetWhich( aItemIds.nWeightCJK );
+                    rItemSet.Put( aWeight );
+                }
+                if( rParser.IsSetCTLProps() )
+                {
+                    aWeight.SetWhich( aItemIds.nWeightCTL );
+                    rItemSet.Put( aWeight );
+                }
             }
         }
         break;
     case CSS1_NUMBER:
         {
             USHORT nWeight = (USHORT)pExpr->GetNumber();
-            rItemSet.Put( SvxWeightItem( nWeight>400 ? WEIGHT_BOLD
-                                                     : WEIGHT_NORMAL,
-                                         aItemIds.nWeight ) );
+            SvxWeightItem aWeight( nWeight>400 ? WEIGHT_BOLD : WEIGHT_NORMAL,
+                                   aItemIds.nWeight );
+            if( rParser.IsSetWesternProps() )
+                rItemSet.Put( aWeight );
+            if( rParser.IsSetCJKProps() )
+            {
+                aWeight.SetWhich( aItemIds.nWeightCJK );
+                rItemSet.Put( aWeight );
+            }
+            if( rParser.IsSetCTLProps() )
+            {
+                aWeight.SetWhich( aItemIds.nWeightCTL );
+                rItemSet.Put( aWeight );
+            }
         }
         break;
     }
@@ -1342,7 +1408,21 @@ static void ParseCSS1_font_style( const CSS1Expression *pExpr,
     }
 
     if( bPosture )
-        rItemSet.Put( SvxPostureItem( eItalic, aItemIds.nPosture ) );
+    {
+        SvxPostureItem aPosture( eItalic, aItemIds.nPosture );
+        if( rParser.IsSetWesternProps() )
+            rItemSet.Put( aPosture );
+        if( rParser.IsSetCJKProps() )
+        {
+            aPosture.SetWhich( aItemIds.nPostureCJK );
+            rItemSet.Put( aPosture );
+        }
+        if( rParser.IsSetCTLProps() )
+        {
+            aPosture.SetWhich( aItemIds.nPostureCTL );
+            rItemSet.Put( aPosture );
+        }
+    }
 
     if( bCaseMap )
         rItemSet.Put( SvxCaseMapItem( eCaseMap, aItemIds.nCaseMap ) );
@@ -1751,9 +1831,35 @@ static void ParseCSS1_font( const CSS1Expression *pExpr,
 
     // Da "font" alle Werte zurecksetzt, fuer die nichts angegeben ist,
     // tun wir das hier.
-    rItemSet.Put( SvxPostureItem( eItalic, aItemIds.nPosture ) );
+    SvxPostureItem aPosture( eItalic, aItemIds.nPosture );
+    if( rParser.IsSetWesternProps() )
+        rItemSet.Put( aPosture );
+    if( rParser.IsSetCJKProps() )
+    {
+        aPosture.SetWhich( aItemIds.nPostureCJK );
+        rItemSet.Put( aPosture );
+    }
+    if( rParser.IsSetCTLProps() )
+    {
+        aPosture.SetWhich( aItemIds.nPostureCTL );
+        rItemSet.Put( aPosture );
+    }
+
     rItemSet.Put( SvxCaseMapItem( eCaseMap, aItemIds.nCaseMap ) );
-    rItemSet.Put( SvxWeightItem( eWeight, aItemIds.nWeight ) );
+
+    SvxWeightItem aWeight( eWeight, aItemIds.nWeight );
+    if( rParser.IsSetWesternProps() )
+        rItemSet.Put( aWeight );
+    if( rParser.IsSetCJKProps() )
+    {
+        aWeight.SetWhich( aItemIds.nWeightCJK );
+        rItemSet.Put( aWeight );
+    }
+    if( rParser.IsSetCTLProps() )
+    {
+        aWeight.SetWhich( aItemIds.nWeightCTL );
+        rItemSet.Put( aWeight );
+    }
 
 
     // font-size

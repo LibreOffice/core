@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlftn.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mib $ $Date: 2001-07-03 07:49:47 $
+ *  last change: $Author: mib $ $Date: 2001-10-09 14:57:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,10 @@
 #ifndef _NDTXT_HXX //autogen
 #include <ndtxt.hxx>
 #endif
+#ifndef _CHARFMT_HXX //autogen
+#include <charfmt.hxx>
+#endif
+
 
 #include "swhtml.hxx"
 #include "wrthtml.hxx"
@@ -376,13 +380,13 @@ Writer& OutHTML_SwFmtFtn( Writer& rWrt, const SfxPoolItem& rHt )
     (((sOut += sHTML_anchor) += ' ') += sHTML_O_class) += "=\"";
     rWrt.Strm() << sOut.GetBuffer();
     HTMLOutFuncs::Out_String( rWrt.Strm(), sClass, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
-    ((sOut += "\" ") += sHTML_O_name) += "=\"";
+    ((sOut = "\" ") += sHTML_O_name) += "=\"";
     rWrt.Strm() << sOut.GetBuffer();
     HTMLOutFuncs::Out_String( rWrt.Strm(), sFtnName, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
-    (((sOut += sHTML_FTN_anchor) += "\" ") += sHTML_O_href) += "=\"#";
+    (((sOut = sHTML_FTN_anchor) += "\" ") += sHTML_O_href) += "=\"#";
     rWrt.Strm() << sOut.GetBuffer();
     HTMLOutFuncs::Out_String( rWrt.Strm(), sFtnName, rHTMLWrt.eDestEnc, &rHTMLWrt.aNonConvertableCharacters );
-    (sOut += sHTML_FTN_symbol)+= '\"';
+    (sOut = sHTML_FTN_symbol)+= '\"';
     if( rFmtFtn.GetNumStr().Len() )
         (sOut += ' ') += sHTML_O_sdfixed;
     sOut += '>';
@@ -482,23 +486,26 @@ void SwHTMLWriter::OutFootEndNotes()
     nFootNote = nEndNote = 0;
 }
 
-xub_StrLen SwHTMLWriter::GetFootEndNoteSymLen( const SwFmtFtn& rFmtFtn )
+String SwHTMLWriter::GetFootEndNoteSym( const SwFmtFtn& rFmtFtn )
 {
-    xub_StrLen nLen = rFmtFtn.GetViewNumStr( *pDoc ).Len();
-
+    const SwEndNoteInfo * pInfo = 0;
     if( rFmtFtn.GetNumStr().Len() == 0 )
-    {
-        const SwEndNoteInfo * pInfo =
-            rFmtFtn.IsEndNote() ? &pDoc->GetEndNoteInfo() : &pDoc->GetFtnInfo();
+        pInfo = rFmtFtn.IsEndNote() ? &pDoc->GetEndNoteInfo()
+                                    : &pDoc->GetFtnInfo();
 
-        nLen += pInfo->GetPrefix().Len();
-        nLen += pInfo->GetSuffix().Len();
-    }
+    String sRet;
+    if( pInfo )
+        sRet = pInfo->GetPrefix();
+    sRet = rFmtFtn.GetViewNumStr( *pDoc );
+    if( pInfo )
+        sRet = pInfo->GetSuffix();
 
-    return nLen;
+    return sRet;
 }
 
-void SwHTMLWriter::OutFootEndNoteSym( const SwFmtFtn& rFmtFtn )
+void SwHTMLWriter::OutFootEndNoteSym( const SwFmtFtn& rFmtFtn,
+                                         const String& rNum,
+                                         sal_uInt16 nScript )
 {
     const SwEndNoteInfo *pInfo;
 
@@ -518,27 +525,37 @@ void SwHTMLWriter::OutFootEndNoteSym( const SwFmtFtn& rFmtFtn )
         pInfo = &pDoc->GetFtnInfo();
     }
 
+    const SwCharFmt *pSymCharFmt = pInfo->GetCharFmt( *pDoc );
+    if( pSymCharFmt && aScriptTextStyles.Seek_Entry( (String *)&pSymCharFmt->GetName() ) )
+    {
+        switch( nScript )
+        {
+        case CSS1_OUTMODE_WESTERN:
+            sClass.AppendAscii( RTL_CONSTASCII_STRINGPARAM("-western") );
+            break;
+        case CSS1_OUTMODE_CJK:
+            sClass.AppendAscii( RTL_CONSTASCII_STRINGPARAM("-cjk") );
+            break;
+        case CSS1_OUTMODE_CTL:
+            sClass.AppendAscii( RTL_CONSTASCII_STRINGPARAM("-ctl") );
+            break;
+        }
+    }
+
     ByteString sOut( '<' );
     (((sOut += sHTML_anchor) +=  ' ') += sHTML_O_class) += "=\"";
     Strm() << sOut.GetBuffer();
     HTMLOutFuncs::Out_String( Strm(), sClass, eDestEnc, &aNonConvertableCharacters );
-    ((sOut += "\" ") += sHTML_O_name) += "=\"";
+    ((sOut = "\" ") += sHTML_O_name) += "=\"";
     Strm() << sOut.GetBuffer();
     HTMLOutFuncs::Out_String( Strm(), sFtnName, eDestEnc, &aNonConvertableCharacters );
-    (((sOut += sHTML_FTN_symbol) +="\" ") += sHTML_O_href) += "=\"#";
+    (((sOut = sHTML_FTN_symbol) +="\" ") += sHTML_O_href) += "=\"#";
     Strm() << sOut.GetBuffer();
     HTMLOutFuncs::Out_String( Strm(), sFtnName, eDestEnc, &aNonConvertableCharacters );
-    (sOut += sHTML_FTN_anchor) += "\">";
+    (sOut = sHTML_FTN_anchor) += "\">";
     Strm() << sOut.GetBuffer();
 
-    BOOL bAuto = rFmtFtn.GetNumStr().Len() == 0;
-    String sNum;
-    if( bAuto )
-        sNum += pInfo->GetPrefix();
-    sNum += rFmtFtn.GetViewNumStr(*pDoc);
-    if( bAuto )
-        sNum += pInfo->GetSuffix();
-    HTMLOutFuncs::Out_String( Strm(), sNum, eDestEnc, &aNonConvertableCharacters );
+    HTMLOutFuncs::Out_String( Strm(), rNum, eDestEnc, &aNonConvertableCharacters );
     HTMLOutFuncs::Out_AsciiTag( Strm(), sHTML_anchor, FALSE );
 }
 

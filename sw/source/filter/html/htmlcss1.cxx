@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlcss1.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-09-28 06:27:53 $
+ *  last change: $Author: mib $ $Date: 2001-10-09 14:57:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -284,11 +284,17 @@ BOOL SwCSS1Parser::SetFmtBreak( SfxItemSet& rItemSet,
 static void SetCharFmtAttrs( SwCharFmt *pCharFmt, SfxItemSet& rItemSet )
 {
     const SfxPoolItem *pItem;
-    if( SFX_ITEM_SET == rItemSet.GetItemState( RES_CHRATR_FONTSIZE, FALSE, &pItem ) &&
-        ((const SvxFontHeightItem *)pItem)->GetProp() != 100)
+    static USHORT aWhichIds[3] = { RES_CHRATR_FONTSIZE,RES_CHRATR_CJK_FONTSIZE,
+                                   RES_CHRATR_CTL_FONTSIZE };
+       for( USHORT i=0; i<3; i++ )
     {
-        // %-Angaben beim FontHeight-Item werden nicht unterstuetzt
-        rItemSet.ClearItem( RES_CHRATR_FONTSIZE );
+        if( SFX_ITEM_SET == rItemSet.GetItemState( aWhichIds[i], FALSE,
+                                                   &pItem ) &&
+            ((const SvxFontHeightItem *)pItem)->GetProp() != 100)
+        {
+            // %-Angaben beim FontHeight-Item werden nicht unterstuetzt
+            rItemSet.ClearItem( aWhichIds[i] );
+        }
     }
 
     pCharFmt->SetAttr( rItemSet );
@@ -404,12 +410,17 @@ static void SetTxtCollAttrs( SwTxtFmtColl *pColl, SfxItemSet& rItemSet,
         rItemSet.Put( aULItem );
     }
 
-    if( SFX_ITEM_SET == rItemSet.GetItemState( RES_CHRATR_FONTSIZE, FALSE,
-                                               &pItem ) &&
-        ((const SvxFontHeightItem *)pItem)->GetProp() != 100)
+    static USHORT aWhichIds[3] = { RES_CHRATR_FONTSIZE,RES_CHRATR_CJK_FONTSIZE,
+                                   RES_CHRATR_CTL_FONTSIZE };
+       for( USHORT i=0; i<3; i++ )
     {
-        // %-Angaben beim FontHeight-Item werden nicht unterstuetzt
-        rItemSet.ClearItem( RES_CHRATR_FONTSIZE );
+        if( SFX_ITEM_SET == rItemSet.GetItemState( aWhichIds[i], FALSE,
+                                                   &pItem ) &&
+            ((const SvxFontHeightItem *)pItem)->GetProp() != 100)
+        {
+            // %-Angaben beim FontHeight-Item werden nicht unterstuetzt
+            rItemSet.ClearItem( aWhichIds[i] );
+        }
     }
 
 // Feature: PrintExt
@@ -634,13 +645,69 @@ const SvxBrushItem& SwCSS1Parser::GetPageDescBackground() const
                ->GetMaster().GetBackground();
 }
 
-static void GetTokenAndClass( const CSS1Selector *pSelector,
-                              String& rToken, String& rClass )
+sal_uInt16 SwCSS1Parser::GetScriptFromClass( String& rClass,
+                                      sal_Bool bSubClassOnly )
+{
+    sal_uInt16 nScriptFlags = CSS1_SCRIPT_ALL;
+    xub_StrLen nLen = rClass.Len();
+    xub_StrLen nPos = nLen > 4 ? rClass.SearchBackward( '-' ) : STRING_NOTFOUND;
+
+    if( STRING_NOTFOUND == nPos )
+    {
+        if( bSubClassOnly )
+            return nScriptFlags;
+        nPos = 0;
+    }
+    else
+    {
+        nPos++;
+        nLen -= nPos;
+    }
+
+    switch( nLen )
+    {
+    case 3:
+        if( rClass.EqualsIgnoreCaseAscii( "cjk", nPos, 3 ) )
+        {
+            nScriptFlags = CSS1_SCRIPT_CJK;
+        }
+        else if( rClass.EqualsIgnoreCaseAscii( "ctl", nPos, 3 ) )
+        {
+            nScriptFlags = CSS1_SCRIPT_CTL;
+        }
+        break;
+    case 7:
+        if( rClass.EqualsIgnoreCaseAscii( "western", nPos, 7 ) )
+        {
+            nScriptFlags = CSS1_SCRIPT_WESTERN;
+        }
+        break;
+    }
+    if( CSS1_SCRIPT_ALL != nScriptFlags )
+    {
+        if( nPos )
+        {
+            rClass.Erase( nPos-1 );
+        }
+        else
+        {
+            rClass.Erase();
+        }
+    }
+
+    return nScriptFlags;
+}
+
+static CSS1SelectorType GetTokenAndClass( const CSS1Selector *pSelector,
+                              String& rToken, String& rClass,
+                              sal_uInt16& rScriptFlags )
 {
     rToken = pSelector->GetString();
     rClass.Erase();
+    rScriptFlags = CSS1_SCRIPT_ALL;
 
-    if( CSS1_SELTYPE_ELEM_CLASS == pSelector->GetType() )
+    CSS1SelectorType eType = pSelector->GetType();
+    if( CSS1_SELTYPE_ELEM_CLASS==eType  )
     {
         xub_StrLen nPos = rToken.Search( '.' );
         ASSERT( nPos != STRING_NOTFOUND, "kein Punkt in Class-Selektor???" );
@@ -648,10 +715,67 @@ static void GetTokenAndClass( const CSS1Selector *pSelector,
         {
             rClass = rToken.Copy( nPos+1 );
             rToken.Erase( nPos );
+
+            rScriptFlags = SwCSS1Parser::GetScriptFromClass( rClass, sal_False );
+            if( !rClass.Len() )
+                eType = CSS1_SELTYPE_ELEMENT;
         }
     }
 
     rToken.ToUpperAscii();
+    return eType;
+}
+
+extern BOOL lcl_css1atr_equalFontItems( const SfxPoolItem& r1, const SfxPoolItem& r2 );
+
+static void RemoveScriptItems( SfxItemSet& rItemSet, sal_uInt16 nScript,
+                               const SfxItemSet *pParentItemSet = 0 )
+{
+    static sal_uInt16 aWhichIds[3][4] =
+    {
+        { RES_CHRATR_FONT, RES_CHRATR_FONTSIZE,
+            RES_CHRATR_POSTURE, RES_CHRATR_WEIGHT },
+        { RES_CHRATR_CJK_FONT, RES_CHRATR_CJK_FONTSIZE,
+            RES_CHRATR_CJK_POSTURE, RES_CHRATR_CJK_WEIGHT },
+        { RES_CHRATR_CTL_FONT, RES_CHRATR_CTL_FONTSIZE,
+            RES_CHRATR_CTL_POSTURE, RES_CHRATR_CTL_WEIGHT }
+    };
+
+    sal_uInt16 aClearItems[3] = { sal_False, sal_False, sal_False };
+    switch( nScript )
+    {
+    case CSS1_SCRIPT_WESTERN:
+        aClearItems[1] = aClearItems[2] =  sal_True;
+        break;
+    case CSS1_SCRIPT_CJK:
+        aClearItems[0] = aClearItems[2] =  sal_True;
+        break;
+    case CSS1_SCRIPT_CTL:
+        aClearItems[0] = aClearItems[1] =  sal_True;
+        break;
+    case CSS1_SCRIPT_ALL:
+        break;
+    default:
+        ASSERT( aClearItems[0], "unknown script type" );
+        break;
+       }
+
+    for( sal_uInt16 j=0; j < 3; j++ )
+    {
+        for( sal_uInt16 i=0; i < 4; i++ )
+        {
+            sal_uInt16 nWhich = aWhichIds[j][i];
+            const SfxPoolItem *pItem;
+            if( aClearItems[j] ||
+                (pParentItemSet &&
+                 SFX_ITEM_SET == rItemSet.GetItemState( nWhich, sal_False, &pItem ) &&
+                 (0==i ? lcl_css1atr_equalFontItems( *pItem, pParentItemSet->Get(nWhich, sal_True ) )
+                        : *pItem == pParentItemSet->Get(nWhich, sal_True ) ) ) )
+            {
+                rItemSet.ClearItem( nWhich );
+            }
+        }
+    }
 }
 
 BOOL SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
@@ -670,7 +794,18 @@ BOOL SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
     }
     else if( CSS1_SELTYPE_CLASS==eSelType && !pNext )
     {
-        InsertClass( pSelector->GetString(), rItemSet, rPropInfo );
+        String aClass( pSelector->GetString() );
+        sal_uInt16 nScript = GetScriptFromClass( aClass );
+        if( CSS1_SCRIPT_ALL != nScript )
+        {
+            SfxItemSet aScriptItemSet( rItemSet );
+            RemoveScriptItems( aScriptItemSet, nScript );
+            InsertClass( aClass, aScriptItemSet, rPropInfo );
+        }
+        else
+        {
+            InsertClass( aClass, rItemSet, rPropInfo );
+        }
     }
     else if( CSS1_SELTYPE_PAGE==eSelType )
     {
@@ -696,7 +831,8 @@ BOOL SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
 
     // Token und Class zu dem Selektor holen
     String aToken, aClass;
-    GetTokenAndClass( pSelector, aToken, aClass );
+    sal_uInt16 nScript;
+    eSelType = GetTokenAndClass( pSelector, aToken, aClass, nScript );
     int nToken = GetHTMLToken( aToken );
 
     // und noch ein ganz par Infos zum naechsten Element
@@ -741,7 +877,16 @@ BOOL SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
                 {
                     String sTmp( aToken );
                     (sTmp += ':') += aPseudo;
-                    InsertTag( sTmp, rItemSet, rPropInfo );
+                    if( CSS1_SCRIPT_ALL != nScript )
+                    {
+                        SfxItemSet aScriptItemSet( rItemSet );
+                        RemoveScriptItems( aScriptItemSet, nScript );
+                        InsertTag( sTmp, aScriptItemSet, rPropInfo );
+                    }
+                    else
+                    {
+                        InsertTag( sTmp, rItemSet, rPropInfo );
+                    }
                     return FALSE;
                 }
             }
@@ -796,7 +941,17 @@ BOOL SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
             nPoolFmtId = RES_POOLCHR_FOOTNOTE;
         if( nPoolFmtId )
         {
-            SetCharFmtAttrs( GetCharFmtFromPool(nPoolFmtId), rItemSet );
+            if( CSS1_SCRIPT_ALL == nScript )
+            {
+                SetCharFmtAttrs( GetCharFmtFromPool(nPoolFmtId), rItemSet );
+            }
+            else
+            {
+                SfxItemSet aScriptItemSet( rItemSet );
+                RemoveScriptItems( aScriptItemSet, nScript );
+                SetCharFmtAttrs( GetCharFmtFromPool(nPoolFmtId),
+                                 aScriptItemSet);
+            }
             return FALSE;
         }
     }
@@ -871,7 +1026,7 @@ BOOL SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
         {
             // nicht TH und TD, aber TH P und TD P
             String aSubToken, aSubClass;
-            GetTokenAndClass( pNext, aSubToken, aSubClass );
+            GetTokenAndClass( pNext, aSubToken, aSubClass, nScript );
             if( HTML_PARABREAK_ON == GetHTMLToken( aSubToken ) )
             {
                 aClass = aSubClass;
@@ -889,7 +1044,17 @@ BOOL SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
                     String sTmp( aToken );
                     sTmp += ' ';
                     sTmp.AppendAscii( sHTML_parabreak );
-                    InsertTag( sTmp, rItemSet, rPropInfo );
+
+                    if( CSS1_SCRIPT_ALL == nScript )
+                    {
+                        InsertTag( sTmp, rItemSet, rPropInfo );
+                    }
+                    else
+                    {
+                        SfxItemSet aScriptItemSet( rItemSet );
+                        RemoveScriptItems( aScriptItemSet, nScript );
+                        InsertTag( sTmp, aScriptItemSet, rPropInfo );
+                    }
 
                     return FALSE;
                 }
@@ -914,12 +1079,13 @@ BOOL SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
 
             // Die Vorlage Suchen bzw. Anlegen
             SwTxtFmtColl *pColl = GetTxtFmtColl( nPoolCollId, aEmptyStr );
+            SwTxtFmtColl* pParentColl = 0;
             if( aClass.Len() )
             {
                 String aName( pColl->GetName() );
                 AddClassName( aName, aClass );
 
-                SwTxtFmtColl* pParentColl = pColl;
+                pParentColl = pColl;
                 pColl = pDoc->FindTxtFmtCollByName( aName );
                 if( !pColl )
                     pColl = pDoc->MakeTxtFmtColl( aName, pParentColl );
@@ -933,23 +1099,60 @@ BOOL SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
                         pColl->GetAttrSet().GetItemState(RES_BOX,TRUE,&pItem) )
                     pBoxItem = (const SvxBoxItem *)pItem;
                 rPropInfo.SetBoxItem( rItemSet, MIN_BORDER_DIST, pBoxItem );
-                SetTxtCollAttrs( pColl, rItemSet, rPropInfo, this );
+                if( CSS1_SCRIPT_ALL == nScript && !pParentColl )
+                {
+                    SetTxtCollAttrs( pColl, rItemSet, rPropInfo, this );
+                }
+                else
+                {
+                    SfxItemSet aScriptItemSet( rItemSet );
+                    RemoveScriptItems( aScriptItemSet, nScript,
+                                       pParentColl ? &pParentColl->GetAttrSet() : 0 );
+                    SetTxtCollAttrs( pColl, aScriptItemSet, rPropInfo, this );
+                }
             }
             else
             {
                 // ein Drop-Cap-Attribut basteln
-                SwFmtDrop aDrop;
+                SwFmtDrop aDrop( pColl->GetDrop() );
                 aDrop.GetChars() = 1;
 
                 // die Attribute in das DropCap-Attribut einfuegen
-                FillDropCap( aDrop, rItemSet, &pColl->GetName() );
+                if( CSS1_SCRIPT_ALL == nScript )
+                {
+                    FillDropCap( aDrop, rItemSet, &pColl->GetName() );
+                }
+                else
+                {
+                    SfxItemSet aScriptItemSet( rItemSet );
+                    if( CSS1_SCRIPT_WESTERN != nScript )
+                    {
+                        aScriptItemSet.ClearItem( RES_CHRATR_FONT );
+                        aScriptItemSet.ClearItem( RES_CHRATR_POSTURE );
+                        aScriptItemSet.ClearItem( RES_CHRATR_WEIGHT );
+                    }
+                    if( CSS1_SCRIPT_CJK != nScript )
+                    {
+                        aScriptItemSet.ClearItem( RES_CHRATR_CJK_FONT );
+                        aScriptItemSet.ClearItem( RES_CHRATR_CJK_POSTURE );
+                        aScriptItemSet.ClearItem( RES_CHRATR_CJK_WEIGHT );
+                    }
+                    if( CSS1_SCRIPT_CTL != nScript )
+                    {
+                        aScriptItemSet.ClearItem( RES_CHRATR_CTL_FONT );
+                        aScriptItemSet.ClearItem( RES_CHRATR_CTL_POSTURE );
+                        aScriptItemSet.ClearItem( RES_CHRATR_CTL_WEIGHT );
+                    }
+                    FillDropCap( aDrop, aScriptItemSet, &pColl->GetName() );
+                }
 
                 // Das Attribut nur setzen, wenn float: left angegeben wurde
                 // und das Initial ueber mehrere Zeilen geht. Sonst wird die
                 // ggf. angelegte Zeichen-Vorlage spaeter ueber den Namen
                 // gesucht und gesetzt.
-                if( SVX_ADJUST_LEFT == rPropInfo.eFloat &&
-                    aDrop.GetLines() > 1 )
+                if( aDrop.GetLines() > 1 &&
+                    (SVX_ADJUST_LEFT == rPropInfo.eFloat  ||
+                     CSS1_SCRIPT_ALL == nScript) )
                 {
                     pColl->SetAttr( aDrop );
                 }
@@ -969,11 +1172,12 @@ BOOL SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
     SwCharFmt *pCFmt = GetChrFmt( nToken, aEmptyStr );
     if( pCFmt )
     {
+        SwCharFmt *pParentCFmt = 0;
         if( aClass.Len() )
         {
             String aName( pCFmt->GetName() );
             AddClassName( aName, aClass );
-            SwCharFmt *pParentCFmt = pCFmt;
+            pParentCFmt = pCFmt;
 
             pCFmt = pDoc->FindCharFmtByName( aName );
             if( !pCFmt )
@@ -983,7 +1187,17 @@ BOOL SwCSS1Parser::StyleParsed( const CSS1Selector *pSelector,
             }
         }
 
-        SetCharFmtAttrs( pCFmt, rItemSet );
+        if( CSS1_SCRIPT_ALL == nScript && !pParentCFmt )
+        {
+            SetCharFmtAttrs( pCFmt, rItemSet );
+        }
+        else
+        {
+            SfxItemSet aScriptItemSet( rItemSet );
+            RemoveScriptItems( aScriptItemSet, nScript,
+                               pParentCFmt ? &pParentCFmt->GetAttrSet() : 0 );
+            SetCharFmtAttrs( pCFmt, aScriptItemSet );
+        }
         return FALSE;
     }
 
@@ -1095,10 +1309,12 @@ SwCharFmt* SwCSS1Parser::GetChrFmt( USHORT nToken, const String& rClass ) const
 
     // Wenn es eine Klasse gibt, die Klassen-Vorlage suchen aber nicht
     // neu anlegen.
-    if( rClass.Len() )
+    String aClass( rClass );
+    GetScriptFromClass( aClass, sal_False );
+    if( aClass.Len() )
     {
         String aTmp( pCFmt->GetName() );
-        AddClassName( aTmp, rClass );
+        AddClassName( aTmp, aClass );
         SwCharFmt *pClassCFmt = pDoc->FindCharFmtByName( aTmp );
         if( pClassCFmt )
         {
@@ -1106,7 +1322,7 @@ SwCharFmt* SwCSS1Parser::GetChrFmt( USHORT nToken, const String& rClass ) const
         }
         else
         {
-            SvxCSS1MapEntry *pClass = GetClass( rClass );
+            SvxCSS1MapEntry *pClass = GetClass( aClass );
             if( pClass )
             {
                 pCFmt = pDoc->MakeCharFmt( aTmp, pCFmt );
@@ -1164,6 +1380,7 @@ SwTxtFmtColl *SwCSS1Parser::GetTxtFmtColl( USHORT nTxtColl,
     SwTxtFmtColl* pColl = 0;
 
     String aClass( rClass );
+    GetScriptFromClass( aClass, sal_False );
     if( RES_POOLCOLL_TEXT == nTxtColl && aClass.Len() >= 9 &&
         ('s' == aClass.GetChar(0) || 'S' == aClass.GetChar(0) ) )
     {
@@ -1388,7 +1605,7 @@ void SwCSS1Parser::FillDropCap( SwFmtDrop& rDrop,
 {
     // die Anzahl der Zeilen entspricht in etwa einer %-Angabe
     // fuer die Hoehe (was passiert mit absoluten Hoehen???)
-    BYTE nLines = 1;
+    BYTE nLines = rDrop.GetLines();
     const SfxPoolItem *pItem;
     if( SFX_ITEM_SET == rItemSet.GetItemState( RES_CHRATR_FONTSIZE, FALSE, &pItem ) )
     {
@@ -1402,15 +1619,19 @@ void SwCSS1Parser::FillDropCap( SwFmtDrop& rDrop,
         // Nur wenn nLines>1 ist, wird das Attribut auch gesetzt. Dann
         // brauchen wir die Font-Hoehe aber auch nicht in der Zeichen-Vorlage.
         if( nLines > 1 )
+        {
             rItemSet.ClearItem( RES_CHRATR_FONTSIZE );
+            rItemSet.ClearItem( RES_CHRATR_CJK_FONTSIZE );
+            rItemSet.ClearItem( RES_CHRATR_CTL_FONTSIZE );
+        }
     }
 
     // Bei harter Attributierung (pName==0) koennen wir aufhoehren, wenn
     // das Initial nur ueber eine Zeile geht.
 #ifdef FULL_FIRST_LETTER
-    if( nLines==1 && !pName )
+    if( nLines<=1 && !pName )
 #else
-    if( nLines==1 )
+    if( nLines<=1 )
 #endif
         return;
 
@@ -1489,8 +1710,20 @@ _HTMLAttr **SwHTMLParser::GetAttrTabEntry( USHORT nWhich )
     case RES_CHRATR_FONT:
         ppAttr = &aAttrTab.pFont;
         break;
+    case RES_CHRATR_CJK_FONT:
+        ppAttr = &aAttrTab.pFontCJK;
+        break;
+    case RES_CHRATR_CTL_FONT:
+        ppAttr = &aAttrTab.pFontCTL;
+        break;
     case RES_CHRATR_FONTSIZE:
         ppAttr = &aAttrTab.pFontHeight;
+        break;
+    case RES_CHRATR_CJK_FONTSIZE:
+        ppAttr = &aAttrTab.pFontHeightCJK;
+        break;
+    case RES_CHRATR_CTL_FONTSIZE:
+        ppAttr = &aAttrTab.pFontHeightCTL;
         break;
     case RES_CHRATR_KERNING:
         ppAttr = &aAttrTab.pKerning;
@@ -1498,11 +1731,23 @@ _HTMLAttr **SwHTMLParser::GetAttrTabEntry( USHORT nWhich )
     case RES_CHRATR_POSTURE:
         ppAttr = &aAttrTab.pItalic;
         break;
+    case RES_CHRATR_CJK_POSTURE:
+        ppAttr = &aAttrTab.pItalicCJK;
+        break;
+    case RES_CHRATR_CTL_POSTURE:
+        ppAttr = &aAttrTab.pItalicCTL;
+        break;
     case RES_CHRATR_UNDERLINE:
         ppAttr = &aAttrTab.pUnderline;
         break;
     case RES_CHRATR_WEIGHT:
         ppAttr = &aAttrTab.pBold;
+        break;
+    case RES_CHRATR_CJK_WEIGHT:
+        ppAttr = &aAttrTab.pBoldCJK;
+        break;
+    case RES_CHRATR_CTL_WEIGHT:
+        ppAttr = &aAttrTab.pBoldCTL;
         break;
     case RES_CHRATR_BACKGROUND:
         ppAttr = &aAttrTab.pCharBrush;
@@ -1803,7 +2048,9 @@ BOOL SwHTMLParser::ParseStyleOptions( const String &rStyle,
 
     if( rClass.Len() )
     {
-        SvxCSS1MapEntry *pClass = pCSS1Parser->GetClass( rClass );
+        String aClass( rClass );
+        SwCSS1Parser::GetScriptFromClass( aClass );
+        SvxCSS1MapEntry *pClass = pCSS1Parser->GetClass( aClass );
         if( pClass )
         {
             pCSS1Parser->MergeStyles( pClass->GetItemSet(),
@@ -2247,16 +2494,21 @@ void lcl_swcss1_setEncoding( SwFmt& rFmt, rtl_TextEncoding eEnc )
         return;
 
     const SfxItemSet& rItemSet = rFmt.GetAttrSet();
+    static USHORT aWhichIds[3] = { RES_CHRATR_FONT, RES_CHRATR_CJK_FONT,
+                                   RES_CHRATR_CTL_FONT };
     const SfxPoolItem *pItem;
-    if( SFX_ITEM_SET == rItemSet.GetItemState( RES_CHRATR_FONT, FALSE,&pItem ) )
+    for( USHORT i=0; i<3; i++ )
     {
-        const SvxFontItem& rFont = *(const SvxFontItem *)pItem;
-        if( RTL_TEXTENCODING_SYMBOL != rFont.GetCharSet() )
+        if( SFX_ITEM_SET == rItemSet.GetItemState( aWhichIds[i], FALSE,&pItem ) )
         {
-            SvxFontItem aFont( rFont.GetFamily(), rFont.GetFamilyName(),
-                                  rFont.GetStyleName(), rFont.GetPitch(),
-                                  eEnc );
-            rFmt.SetAttr( aFont );
+            const SvxFontItem& rFont = *(const SvxFontItem *)pItem;
+            if( RTL_TEXTENCODING_SYMBOL != rFont.GetCharSet() )
+            {
+                SvxFontItem aFont( rFont.GetFamily(), rFont.GetFamilyName(),
+                                   rFont.GetStyleName(), rFont.GetPitch(),
+                                   eEnc, aWhichIds[i]);
+                rFmt.SetAttr( aFont );
+            }
         }
     }
 }
@@ -2268,16 +2520,24 @@ void SwCSS1Parser::SetDfltEncoding( rtl_TextEncoding eEnc )
         if( bIsNewDoc )
         {
             // Set new encoding as pool default
-            const SvxFontItem& rDfltFont =
-                (const SvxFontItem&)pDoc->GetDefault( RES_CHRATR_FONT );
-            SvxFontItem aFont( rDfltFont.GetFamily(), rDfltFont.GetFamilyName(),
-                               rDfltFont.GetStyleName(), rDfltFont.GetPitch(),
-                               eEnc );
-            pDoc->SetDefault( aFont );
+            static USHORT aWhichIds[3] = { RES_CHRATR_FONT, RES_CHRATR_CJK_FONT,
+                                           RES_CHRATR_CTL_FONT };
+            USHORT i;
+            for( i=0; i<3; i++ )
+            {
+                const SvxFontItem& rDfltFont =
+                    (const SvxFontItem&)pDoc->GetDefault( aWhichIds[i]);
+                SvxFontItem aFont( rDfltFont.GetFamily(),
+                                   rDfltFont.GetFamilyName(),
+                                   rDfltFont.GetStyleName(),
+                                   rDfltFont.GetPitch(),
+                                   eEnc );
+                pDoc->SetDefault( aFont );
+            }
 
             // Change all paragraph styles that do specify a font.
             USHORT nArrLen = pDoc->GetTxtFmtColls()->Count();
-            for( USHORT i=1; i<nArrLen; i++ )
+            for( i=1; i<nArrLen; i++ )
                 lcl_swcss1_setEncoding( *(*pDoc->GetTxtFmtColls())[i], eEnc );
 
             // Change all character styles that do specify a font.
@@ -2289,5 +2549,3 @@ void SwCSS1Parser::SetDfltEncoding( rtl_TextEncoding eEnc )
         SvxCSS1Parser::SetDfltEncoding( eEnc );
     }
 }
-
-

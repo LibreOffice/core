@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmltab.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-09-28 06:27:53 $
+ *  last change: $Author: mib $ $Date: 2001-10-09 14:57:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3098,8 +3098,13 @@ const SwStartNode *SwHTMLParser::InsertTableSection
         pTable->IncBoxCount();
     }
 
-    pDoc->GetNodes()[pStNd->GetIndex()+1]
-        ->GetCntntNode()->SetAttr( SvxFontHeightItem(40) );
+    SwCntntNode *pCNd = pDoc->GetNodes()[pStNd->GetIndex()+1] ->GetCntntNode();
+    SvxFontHeightItem aFontHeight( 40 );
+    pCNd->SetAttr( aFontHeight );
+    aFontHeight.SetWhich( RES_CHRATR_CJK_FONTSIZE );
+    pCNd->SetAttr( aFontHeight );
+    aFontHeight.SetWhich( RES_CHRATR_CTL_FONTSIZE );
+    pCNd->SetAttr( aFontHeight );
 
     return pStNd;
 }
@@ -3237,7 +3242,9 @@ SvxBrushItem* SwHTMLParser::CreateBrushItem( const Color *pColor,
 
         if( rClass.Len() )
         {
-            SvxCSS1MapEntry *pClass = pCSS1Parser->GetClass( rClass );
+            String aClass( rClass );
+            SwCSS1Parser::GetScriptFromClass( aClass );
+            SvxCSS1MapEntry *pClass = pCSS1Parser->GetClass( aClass );
             if( pClass )
                 aItemSet.Put( pClass->GetItemSet() );
         }
@@ -3865,10 +3872,20 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, sal_Bool bReadOptions,
                     {
                         pDoc->SetTxtFmtColl( *pPam,
                             pCSS1Parser->GetTxtCollFromPool(RES_POOLCOLL_STANDARD) );
+                        SvxFontHeightItem aFontHeight( 40 );
+
                         _HTMLAttr* pTmp =
-                            new _HTMLAttr( *pPam->GetPoint(),
-                                            SvxFontHeightItem( 40 ) );
+                            new _HTMLAttr( *pPam->GetPoint(), aFontHeight );
                         aSetAttrTab.Insert( pTmp, aSetAttrTab.Count() );
+
+                        aFontHeight.SetWhich( RES_CHRATR_CJK_FONTSIZE );
+                        pTmp = new _HTMLAttr( *pPam->GetPoint(), aFontHeight );
+                        aSetAttrTab.Insert( pTmp, aSetAttrTab.Count() );
+
+                        aFontHeight.SetWhich( RES_CHRATR_CTL_FONTSIZE );
+                        pTmp = new _HTMLAttr( *pPam->GetPoint(), aFontHeight );
+                        aSetAttrTab.Insert( pTmp, aSetAttrTab.Count() );
+
                         pTmp = new _HTMLAttr( *pPam->GetPoint(),
                                             SvxULSpaceItem( 0, 0 ) );
                         aSetAttrTab.Insert( pTmp, 0 ); // ja, 0, weil schon
@@ -4381,8 +4398,15 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, sal_Bool bReadOptions,
             InsertTableSection( pSaveStruct->IsHeaderCell()
                                         ? RES_POOLCOLL_TABLE_HDLN
                                         : RES_POOLCOLL_TABLE );
-        pDoc->GetNodes()[pStNd->GetIndex()+1]
-            ->GetCntntNode()->SetAttr( SvxFontHeightItem(40) );
+
+        SwCntntNode *pCNd = pDoc->GetNodes()[pStNd->GetIndex()+1] ->GetCntntNode();
+        SvxFontHeightItem aFontHeight( 40 );
+        pCNd->SetAttr( aFontHeight );
+        aFontHeight.SetWhich( RES_CHRATR_CJK_FONTSIZE );
+        pCNd->SetAttr( aFontHeight );
+        aFontHeight.SetWhich( RES_CHRATR_CTL_FONTSIZE );
+        pCNd->SetAttr( aFontHeight );
+
         pSaveStruct->AddContents( new HTMLTableCnts(pStNd) );
         pSaveStruct->ClearIsInSection();
     }

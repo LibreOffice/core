@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmldraw.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-09-28 06:27:53 $
+ *  last change: $Author: mib $ $Date: 2001-10-09 14:57:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -310,15 +310,23 @@ static void PutEEPoolItem( SfxItemSet &rEEItemSet,
 
     switch( rSwItem.Which() )
     {
-    case RES_CHRATR_COLOR:      nEEWhich = EE_CHAR_COLOR; break;
-    case RES_CHRATR_CROSSEDOUT: nEEWhich = EE_CHAR_STRIKEOUT; break;
-    case RES_CHRATR_ESCAPEMENT: nEEWhich = EE_CHAR_ESCAPEMENT; break;
-    case RES_CHRATR_FONT:       nEEWhich = EE_CHAR_FONTINFO; break;
-    case RES_CHRATR_FONTSIZE:   nEEWhich = EE_CHAR_FONTHEIGHT; break;
-    case RES_CHRATR_KERNING:    nEEWhich = EE_CHAR_KERNING; break;
-    case RES_CHRATR_POSTURE:    nEEWhich = EE_CHAR_ITALIC; break;
-    case RES_CHRATR_UNDERLINE:  nEEWhich = EE_CHAR_UNDERLINE; break;
-    case RES_CHRATR_WEIGHT:     nEEWhich = EE_CHAR_WEIGHT; break;
+    case RES_CHRATR_COLOR:          nEEWhich = EE_CHAR_COLOR; break;
+    case RES_CHRATR_CROSSEDOUT:     nEEWhich = EE_CHAR_STRIKEOUT; break;
+    case RES_CHRATR_ESCAPEMENT:     nEEWhich = EE_CHAR_ESCAPEMENT; break;
+    case RES_CHRATR_FONT:           nEEWhich = EE_CHAR_FONTINFO; break;
+    case RES_CHRATR_CJK_FONT:       nEEWhich = EE_CHAR_FONTINFO_CJK; break;
+    case RES_CHRATR_CTL_FONT:       nEEWhich = EE_CHAR_FONTINFO_CTL; break;
+    case RES_CHRATR_FONTSIZE:       nEEWhich = EE_CHAR_FONTHEIGHT; break;
+    case RES_CHRATR_CJK_FONTSIZE:   nEEWhich = EE_CHAR_FONTHEIGHT_CJK; break;
+    case RES_CHRATR_CTL_FONTSIZE:   nEEWhich = EE_CHAR_FONTHEIGHT_CTL; break;
+    case RES_CHRATR_KERNING:        nEEWhich = EE_CHAR_KERNING; break;
+    case RES_CHRATR_POSTURE:        nEEWhich = EE_CHAR_ITALIC; break;
+    case RES_CHRATR_CJK_POSTURE:    nEEWhich = EE_CHAR_ITALIC_CJK; break;
+    case RES_CHRATR_CTL_POSTURE:    nEEWhich = EE_CHAR_ITALIC_CTL; break;
+    case RES_CHRATR_UNDERLINE:      nEEWhich = EE_CHAR_UNDERLINE; break;
+    case RES_CHRATR_WEIGHT:         nEEWhich = EE_CHAR_WEIGHT; break;
+    case RES_CHRATR_CJK_WEIGHT:     nEEWhich = EE_CHAR_WEIGHT_CJK; break;
+    case RES_CHRATR_CTL_WEIGHT:     nEEWhich = EE_CHAR_WEIGHT_CTL; break;
     case RES_BACKGROUND:
     case RES_CHRATR_BACKGROUND:
         {
@@ -502,7 +510,12 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
         RES_CHRATR_COLOR,   RES_CHRATR_CROSSEDOUT, RES_CHRATR_ESCAPEMENT,
         RES_CHRATR_FONT,    RES_CHRATR_FONTSIZE,   RES_CHRATR_KERNING,
         RES_CHRATR_POSTURE, RES_CHRATR_UNDERLINE,  RES_CHRATR_WEIGHT,
-        RES_CHRATR_BACKGROUND,                     0
+        RES_CHRATR_BACKGROUND,
+        RES_CHRATR_CJK_FONT, RES_CHRATR_CJK_FONTSIZE,
+        RES_CHRATR_CJK_POSTURE, RES_CHRATR_CJK_WEIGHT,
+        RES_CHRATR_CTL_FONT, RES_CHRATR_CTL_FONTSIZE,
+        RES_CHRATR_CTL_POSTURE, RES_CHRATR_CTL_WEIGHT,
+        0
     };
     const SwTxtNode *pTxtNd = pDoc->GetNodes()[pPam->GetPoint()->nNode]
                                   ->GetTxtNode();
@@ -712,11 +725,19 @@ void SwHTMLWriter::GetEEAttrsFromDrwObj( SfxItemSet& rItemSet,
             case EE_CHAR_STRIKEOUT:     nSwWhich = RES_CHRATR_CROSSEDOUT;   break;
             case EE_CHAR_ESCAPEMENT:    nSwWhich = RES_CHRATR_ESCAPEMENT;   break;
             case EE_CHAR_FONTINFO:      nSwWhich = RES_CHRATR_FONT;         break;
+            case EE_CHAR_FONTINFO_CJK:  nSwWhich = RES_CHRATR_CJK_FONT;     break;
+            case EE_CHAR_FONTINFO_CTL:  nSwWhich = RES_CHRATR_CTL_FONT;     break;
             case EE_CHAR_FONTHEIGHT:    nSwWhich = RES_CHRATR_FONTSIZE;     break;
+            case EE_CHAR_FONTHEIGHT_CJK:nSwWhich = RES_CHRATR_CJK_FONTSIZE; break;
+            case EE_CHAR_FONTHEIGHT_CTL:nSwWhich = RES_CHRATR_CTL_FONTSIZE; break;
             case EE_CHAR_KERNING:       nSwWhich = RES_CHRATR_KERNING;      break;
             case EE_CHAR_ITALIC:        nSwWhich = RES_CHRATR_POSTURE;      break;
+            case EE_CHAR_ITALIC_CJK:    nSwWhich = RES_CHRATR_CJK_POSTURE;  break;
+            case EE_CHAR_ITALIC_CTL:    nSwWhich = RES_CHRATR_CTL_POSTURE;  break;
             case EE_CHAR_UNDERLINE:     nSwWhich = RES_CHRATR_UNDERLINE;    break;
             case EE_CHAR_WEIGHT:        nSwWhich = RES_CHRATR_WEIGHT;       break;
+            case EE_CHAR_WEIGHT_CJK:    nSwWhich = RES_CHRATR_CJK_WEIGHT;   break;
+            case EE_CHAR_WEIGHT_CTL:    nSwWhich = RES_CHRATR_CTL_WEIGHT;   break;
             }
 
             if( nSwWhich )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swhtml.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mib $ $Date: 2001-06-29 10:37:29 $
+ *  last change: $Author: mib $ $Date: 2001-10-09 14:57:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,10 @@
 #endif
 
 #pragma hdrstop
+
+#ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HPP_
+#include <com/sun/star/i18n/ScriptType.hpp>
+#endif
 
 #ifndef PRODUCT
 #include <stdlib.h>
@@ -277,6 +281,9 @@
 #endif
 #ifndef _LINKENUM_HXX
 #include <linkenum.hxx>
+#endif
+#ifndef _BREAKIT_HXX
+#include <breakit.hxx>
 #endif
 
 #ifndef _STATSTR_HRC
@@ -500,7 +507,12 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, const SwPaM& rCrsr, SvStream& rIn,
 
     bKeepUnknown = pHtmlOptions->IsImportUnknown();
 
-    pDoc->SetDefault( SvxFontHeightItem(aFontHeights[2]) );
+    SvxFontHeightItem aFontHeight(aFontHeights[2]);
+    pDoc->SetDefault( aFontHeight );
+    aFontHeight.SetWhich( RES_CHRATR_CJK_FONTSIZE );
+    pDoc->SetDefault( aFontHeight );
+    aFontHeight.SetWhich( RES_CHRATR_CTL_FONTSIZE );
+    pDoc->SetDefault( aFontHeight );
 
     // Waehrend des Imports in den HTML-Modus schalten, damit die
     // richrigen Vorlagen angelegt werden
@@ -1835,15 +1847,25 @@ void __EXPORT SwHTMLParser::NextToken( int nToken )
     // Attribute :
     case HTML_ITALIC_ON:
         {
-            NewStdAttr( HTML_ITALIC_ON, &aAttrTab.pItalic,
-                        SvxPostureItem(ITALIC_NORMAL) );
+            SvxPostureItem aPosture( ITALIC_NORMAL );
+            SvxPostureItem aPostureCJK( ITALIC_NORMAL, RES_CHRATR_CJK_POSTURE );
+            SvxPostureItem aPostureCTL( ITALIC_NORMAL, RES_CHRATR_CTL_POSTURE );
+            NewStdAttr( HTML_ITALIC_ON,
+                           &aAttrTab.pItalic, aPosture,
+                           &aAttrTab.pItalicCJK, &aPostureCJK,
+                           &aAttrTab.pItalicCTL, &aPostureCTL );
         }
         break;
 
     case HTML_BOLD_ON:
         {
-            NewStdAttr( HTML_BOLD_ON, &aAttrTab.pBold,
-                        SvxWeightItem(WEIGHT_BOLD) );
+            SvxWeightItem aWeight( WEIGHT_BOLD );
+            SvxWeightItem aWeightCJK( WEIGHT_BOLD, RES_CHRATR_CJK_WEIGHT );
+            SvxWeightItem aWeightCTL( WEIGHT_BOLD, RES_CHRATR_CTL_WEIGHT );
+            NewStdAttr( HTML_BOLD_ON,
+                        &aAttrTab.pBold, aWeight,
+                        &aAttrTab.pBoldCJK, &aWeightCJK,
+                        &aAttrTab.pBoldCTL, &aWeightCTL );
         }
         break;
 
@@ -2806,6 +2828,8 @@ void SwHTMLParser::NewAttr( _HTMLAttr **ppAttr, const SfxPoolItem& rItem )
         (*ppAttr) = new _HTMLAttr( *pPam->GetPoint(), rItem, ppAttr );
 }
 
+extern BOOL lcl_css1atr_equalFontItems( const SfxPoolItem& r1, const SfxPoolItem& r2 );
+
 void SwHTMLParser::EndAttr( _HTMLAttr* pAttr, _HTMLAttr **ppDepAttr,
                             BOOL bChkEmpty )
 {
@@ -2854,11 +2878,92 @@ void SwHTMLParser::EndAttr( _HTMLAttr* pAttr, _HTMLAttr **ppDepAttr,
     // nun das Attrubut beenden
     _HTMLAttr *pNext = pAttr->GetNext();
 
+
+    sal_Bool bInsert;
     // ein Bereich ??
     if( !bChkEmpty || (RES_PARATR_BEGIN <= nWhich && bMoveBack) ||
         RES_PAGEDESC == nWhich || RES_BREAK == nWhich ||
         *pEndIdx != pAttr->GetSttPara() ||
         nEndCnt != pAttr->GetSttCnt() )
+    {
+        bInsert = sal_True;
+        // We do some optimization for script depenedent attribtes here.
+        if( *pEndIdx == pAttr->GetSttPara() )
+        {
+            sal_Bool bScript = sal_False, bFont = sal_False;
+            sal_uInt16 nScriptItem;
+            switch( nWhich )
+            {
+            case RES_CHRATR_FONT:
+                bFont = sal_True;
+            case RES_CHRATR_FONTSIZE:
+            case RES_CHRATR_POSTURE:
+            case RES_CHRATR_WEIGHT:
+                nScriptItem = ::com::sun::star::i18n::ScriptType::LATIN;
+                bScript = sal_True;
+                break;
+            case RES_CHRATR_CJK_FONT:
+                bFont = sal_True;
+            case RES_CHRATR_CJK_FONTSIZE:
+            case RES_CHRATR_CJK_POSTURE:
+            case RES_CHRATR_CJK_WEIGHT:
+                nScriptItem = ::com::sun::star::i18n::ScriptType::ASIAN;
+                bScript = sal_True;
+                break;
+            case RES_CHRATR_CTL_FONT:
+                bFont = sal_True;
+            case RES_CHRATR_CTL_FONTSIZE:
+            case RES_CHRATR_CTL_POSTURE:
+            case RES_CHRATR_CTL_WEIGHT:
+                nScriptItem = ::com::sun::star::i18n::ScriptType::COMPLEX;
+                bScript = sal_True;
+                break;
+            }
+
+            if( bScript )
+            {
+                if( !pNext )
+                {
+                    const SfxPoolItem& rItem =
+                        pAttr->GetSttPara().GetNode().GetCntntNode()
+                             ->GetAttr( nWhich );
+                    if( bFont ? lcl_css1atr_equalFontItems( rItem, pAttr->GetItem() )
+                              : rItem == pAttr->GetItem() )
+                    {
+                        // The attribute is set by an outermost element
+                        // and its value is the same as the one of the
+                        // paragagraph. In the case we don't have to
+                        // set the attribute.
+                        bInsert = sal_False;
+                    }
+                }
+
+                if( bInsert )
+                {
+                    const SwTxtNode *pTxtNd = pAttr->GetSttPara().GetNode()
+                                            .GetTxtNode();
+                    ASSERT( pTxtNd, "No text node" );
+                    const String& rText = pTxtNd->GetTxt();
+                    sal_uInt16 nScriptTxt = pBreakIt->xBreak->getScriptType(
+                                rText, pAttr->GetSttCnt() );
+                    xub_StrLen nScriptEnd = (xub_StrLen)pBreakIt->xBreak
+                        ->endOfScript( rText, pAttr->GetSttCnt(), nScriptTxt );
+                    if( nEndCnt <= nScriptEnd && nScriptItem != nScriptTxt )
+                    {
+                        // There is no script change within the attribute
+                        // and it does not have the text's script
+                        bInsert = sal_False;
+                    }
+                }
+            }
+        }
+    }
+    else
+    {
+        bInsert = sal_False;
+    }
+
+    if( bInsert )
     {
         pAttr->nEndPara = *pEndIdx;
         pAttr->nEndCntnt = nEndCnt;
@@ -3222,8 +3327,10 @@ void SwHTMLParser::NewStdAttr( int nToken )
     PushContext( pCntxt );
 }
 
-void SwHTMLParser::NewStdAttr( int nToken, _HTMLAttr **ppAttr,
-                               const SfxPoolItem & rItem )
+void SwHTMLParser::NewStdAttr( int nToken,
+                               _HTMLAttr **ppAttr, const SfxPoolItem & rItem,
+                               _HTMLAttr **ppAttr2, const SfxPoolItem *pItem2,
+                               _HTMLAttr **ppAttr3, const SfxPoolItem *pItem3 )
 {
     String aId, aStyle, aClass;
 
@@ -3255,6 +3362,10 @@ void SwHTMLParser::NewStdAttr( int nToken, _HTMLAttr **ppAttr,
         SvxCSS1PropertyInfo aPropInfo;
 
         aItemSet.Put( rItem );
+        if( pItem2 )
+            aItemSet.Put( *pItem2 );
+        if( pItem3 )
+            aItemSet.Put( *pItem3 );
 
         if( ParseStyleOptions( aStyle, aId, aClass, aItemSet, aPropInfo ) )
             DoPositioning( aItemSet, aPropInfo, pCntxt );
@@ -3264,6 +3375,16 @@ void SwHTMLParser::NewStdAttr( int nToken, _HTMLAttr **ppAttr,
     else
     {
         InsertAttr( ppAttr ,rItem, pCntxt );
+        if( pItem2 )
+        {
+            ASSERT( ppAttr2, "missing table entry for item2" );
+            InsertAttr( ppAttr2, *pItem2, pCntxt );
+        }
+        if( pItem3 )
+        {
+            ASSERT( ppAttr3, "missing table entry for item3" );
+            InsertAttr( ppAttr3, *pItem3, pCntxt );
+        }
     }
 
     // den Kontext merken
@@ -3324,7 +3445,12 @@ void SwHTMLParser::NewBasefontAttr()
         SfxItemSet aItemSet( pDoc->GetAttrPool(), pCSS1Parser->GetWhichMap() );
         SvxCSS1PropertyInfo aPropInfo;
 
-        aItemSet.Put( SvxFontHeightItem( aFontHeights[nSize-1] ) );
+        SvxFontHeightItem aFontHeight( aFontHeights[nSize-1] );
+        aItemSet.Put( aFontHeight );
+        aFontHeight.SetWhich( RES_CHRATR_CJK_FONTSIZE );
+        aItemSet.Put( aFontHeight );
+        aFontHeight.SetWhich( RES_CHRATR_CTL_FONTSIZE );
+        aItemSet.Put( aFontHeight );
 
         if( ParseStyleOptions( aStyle, aId, aClass, aItemSet, aPropInfo ) )
             DoPositioning( aItemSet, aPropInfo, pCntxt );
@@ -3333,7 +3459,12 @@ void SwHTMLParser::NewBasefontAttr()
     }
     else
     {
-        InsertAttr( &aAttrTab.pFontHeight, SvxFontHeightItem( aFontHeights[nSize-1] ), pCntxt );
+        SvxFontHeightItem aFontHeight( aFontHeights[nSize-1] );
+        InsertAttr( &aAttrTab.pFontHeight, aFontHeight, pCntxt );
+        aFontHeight.SetWhich( RES_CHRATR_CJK_FONTSIZE );
+        InsertAttr( &aAttrTab.pFontHeightCJK, aFontHeight, pCntxt );
+        aFontHeight.SetWhich( RES_CHRATR_CTL_FONTSIZE );
+        InsertAttr( &aAttrTab.pFontHeightCTL, aFontHeight, pCntxt );
     }
 
     // den Kontext merken
@@ -3351,6 +3482,12 @@ void SwHTMLParser::EndBasefontAttr()
     if( aBaseFontStack.Count() > nBaseFontStMin )
         aBaseFontStack.Remove( aBaseFontStack.Count()-1, 1 );
 }
+
+#define HTML_FONT_WESTERN 0
+#define HTML_FONT_CJK 1
+#define HTML_FONT_CTL 2
+#define HTML_FONT_DEFAULT 3
+#define HTML_FONT_UNKNOWN 4
 
 void SwHTMLParser::NewFontAttr( int nToken )
 {
@@ -3509,12 +3646,25 @@ void SwHTMLParser::NewFontAttr( int nToken )
         SvxCSS1PropertyInfo aPropInfo;
 
         if( nFontHeight )
-            aItemSet.Put( SvxFontHeightItem( nFontHeight ) );
+        {
+            SvxFontHeightItem aFontHeight( nFontHeight );
+            aItemSet.Put( aFontHeight );
+            aFontHeight.SetWhich( RES_CHRATR_CJK_FONTSIZE );
+            aItemSet.Put( aFontHeight );
+            aFontHeight.SetWhich( RES_CHRATR_CTL_FONTSIZE );
+            aItemSet.Put( aFontHeight );
+        }
         if( bColor )
             aItemSet.Put( SvxColorItem(aColor) );
         if( aFontName.Len() )
-            aItemSet.Put( SvxFontItem( eFamily, aFontName, aStyleName,
-                                       ePitch, eEnc ) );
+        {
+            SvxFontItem aFont( eFamily, aFontName, aStyleName, ePitch, eEnc );
+            aItemSet.Put( aFont );
+            aFont.SetWhich( RES_CHRATR_CJK_FONT );
+            aItemSet.Put( aFont );
+            aFont.SetWhich( RES_CHRATR_CTL_FONT );
+            aItemSet.Put( aFont );
+        }
 
 
         if( ParseStyleOptions( aStyle, aId, aClass, aItemSet, aPropInfo ) )
@@ -3525,14 +3675,25 @@ void SwHTMLParser::NewFontAttr( int nToken )
     else
     {
         if( nFontHeight )
-            InsertAttr( &aAttrTab.pFontHeight,
-                        SvxFontHeightItem( nFontHeight ), pCntxt );
+        {
+            SvxFontHeightItem aFontHeight( nFontHeight );
+            InsertAttr( &aAttrTab.pFontHeight, aFontHeight, pCntxt );
+            aFontHeight.SetWhich( RES_CHRATR_CJK_FONTSIZE );
+            InsertAttr( &aAttrTab.pFontHeightCJK, aFontHeight, pCntxt );
+            aFontHeight.SetWhich( RES_CHRATR_CTL_FONTSIZE );
+            InsertAttr( &aAttrTab.pFontHeightCTL, aFontHeight, pCntxt );
+        }
         if( bColor )
             InsertAttr( &aAttrTab.pFontColor, SvxColorItem(aColor), pCntxt );
         if( aFontName.Len() )
-            InsertAttr( &aAttrTab.pFont,
-                        SvxFontItem( eFamily, aFontName, aStyleName, ePitch,
-                                     eEnc ), pCntxt );
+        {
+            SvxFontItem aFont( eFamily, aFontName, aStyleName, ePitch, eEnc );
+            InsertAttr( &aAttrTab.pFont, aFont, pCntxt );
+            aFont.SetWhich( RES_CHRATR_CJK_FONT );
+            InsertAttr( &aAttrTab.pFontCJK, aFont, pCntxt );
+            aFont.SetWhich( RES_CHRATR_CJK_FONT );
+            InsertAttr( &aAttrTab.pFontCTL, aFont, pCntxt );
+        }
     }
 
     // den Kontext merken
@@ -3974,7 +4135,7 @@ void SwHTMLParser::NewDefList()
     _HTMLAttrContext *pCntxt = new _HTMLAttrContext( HTML_DEFLIST_ON );
 
     // darin auch die Raender merken
-    USHORT nLeft=0, nRight=0;
+    sal_uInt16 nLeft=0, nRight=0;
     short nIndent=0;
     GetMarginsFromContext( nLeft, nRight, nIndent );
 
@@ -4341,8 +4502,8 @@ void SwHTMLParser::SetTxtCollAttrs( _HTMLAttrContext *pContext )
             const SvxLRSpaceItem *pLRItem =
                 (const SvxLRSpaceItem *)pItem;
 
-            USHORT nLeft = pLRItem->GetTxtLeft();
-            USHORT nRight = pLRItem->GetRight();
+            sal_Int32 nLeft = pLRItem->GetTxtLeft();
+            sal_Int32 nRight = pLRItem->GetRight();
             nFirstLineIndent = pLRItem->GetTxtFirstLineOfst();
 
             // In Definitions-Listen enthalten die Abstaende auch die der
@@ -5270,6 +5431,9 @@ void _HTMLAttr::InsertPrev( _HTMLAttr *pPrv )
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.9  2001/06/29 10:37:29  mib
+      #88918#: Use UTF-8 for Clipboard, evaluate encoding in insert mode
+
       Revision 1.8  2001/04/05 15:01:28  jp
       access the html.vor only at used time, not in startup
 

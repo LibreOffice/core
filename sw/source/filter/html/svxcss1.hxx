@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxcss1.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:56 $
+ *  last change: $Author: mib $ $Date: 2001-10-09 14:57:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,7 @@
 class SfxItemPool;
 class SvxBoxItem;
 class FontList;
+class OutputDevice;
 
 /*  */
 
@@ -134,6 +135,11 @@ enum SvxCSS1PageBreak
 };
 
 // /Feature: PrintExt
+
+#define CSS1_SCRIPT_WESTERN 0x01
+#define CSS1_SCRIPT_CJK     0x02
+#define CSS1_SCRIPT_CTL     0x04
+#define CSS1_SCRIPT_ALL     0x07
 
 /*  */
 
@@ -209,6 +215,7 @@ public:
 
     void SetBoxItem( SfxItemSet& rItemSet, sal_uInt16 nMinBorderDist,
                      const SvxBoxItem* pDflt=0, sal_Bool bTable = sal_False );
+
 };
 
 class SvxCSS1MapEntry
@@ -285,6 +292,7 @@ class SvxCSS1Parser : public CSS1Parser
     sal_uInt16 nMinFixLineSpace;    // Mindest-Abstand fuer festen Zeilenabstand
 
     rtl_TextEncoding    eDfltEnc;
+    sal_uInt16          nScriptFlags;
 
     sal_Bool bIgnoreFontFamily;
 
@@ -319,6 +327,7 @@ protected:
     // Sie sollte in abgeleiteten Parsern nicht mehr ueberladen werden!
     virtual sal_Bool DeclarationParsed( const String& rProperty,
                                     const CSS1Expression *pExpr );
+
 
 public:
 
@@ -398,6 +407,10 @@ public:
 
     virtual void SetDfltEncoding( rtl_TextEncoding eEnc );
     rtl_TextEncoding GetDfltEncoding() const { return eDfltEnc; }
+
+    sal_Bool IsSetWesternProps() const { return (nScriptFlags & CSS1_SCRIPT_WESTERN) != 0; }
+    sal_Bool IsSetCJKProps() const { return (nScriptFlags & CSS1_SCRIPT_CJK) != 0; }
+    sal_Bool IsSetCTLProps() const { return (nScriptFlags & CSS1_SCRIPT_CTL) != 0; }
 };
 
 inline void SvxCSS1Parser::InsertId( const String& rId,

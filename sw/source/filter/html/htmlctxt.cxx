@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlctxt.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-09-28 06:27:53 $
+ *  last change: $Author: mib $ $Date: 2001-10-09 14:57:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -730,6 +730,16 @@ void SwHTMLParser::InsertAttrs( SfxItemSet &rItemSet,
             if( ((const SvxFontHeightItem *)pItem)->GetProp() == 100 )
                 ppAttr = &aAttrTab.pFontHeight;
             break;
+        case RES_CHRATR_CJK_FONTSIZE:
+            // es werden keine Attribute mit %-Angaben gesetzt
+            if( ((const SvxFontHeightItem *)pItem)->GetProp() == 100 )
+                ppAttr = &aAttrTab.pFontHeightCJK;
+            break;
+        case RES_CHRATR_CTL_FONTSIZE:
+            // es werden keine Attribute mit %-Angaben gesetzt
+            if( ((const SvxFontHeightItem *)pItem)->GetProp() == 100 )
+                ppAttr = &aAttrTab.pFontHeightCTL;
+            break;
 
         case RES_BACKGROUND:
             if( bCharLvl )
@@ -818,4 +828,3 @@ SfxItemSet *_HTMLAttrContext::GetFrmItemSet( SwDoc *pCreateDoc )
                         RES_FRMATR_BEGIN, RES_FRMATR_END-1 );
     return pFrmItemSet;
 }
-

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swcss1.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:56 $
+ *  last change: $Author: mib $ $Date: 2001-10-09 14:57:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,6 +178,9 @@ public:
 
     static BOOL MayBePositioned( const SvxCSS1PropertyInfo& rPropInfo,
                                  BOOL bAutoWidth=FALSE );
+
+    static sal_uInt16 GetScriptFromClass( String& rClass,
+                                      sal_Bool bSubClassOnly = sal_True );
 
     BOOL IsBodyBGColorSet() const { return bBodyBGColorSet; }
     BOOL IsBodyBackgroundSet() const { return bBodyBackgroundSet; }
