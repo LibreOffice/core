@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleCell.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-16 09:40:15 $
+ *  last change: $Author: sab $ $Date: 2002-08-19 07:58:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,7 +203,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleCell::getAccessibleAt(
         const awt::Point& rPoint )
         throw (uno::RuntimeException)
 {
-    return NULL;
+    return AccessibleStaticTextBase::getAccessibleAt(rPoint);
 }
 
 void SAL_CALL ScAccessibleCell::grabFocus(  )
@@ -271,10 +271,7 @@ sal_Int32 SAL_CALL
     ScAccessibleCell::getAccessibleChildCount(void)
                     throw (uno::RuntimeException)
 {
-    ScUnoGuard aGuard;
-    IsObjectValid();
-
-    return 0;
+    return AccessibleStaticTextBase::getAccessibleChildCount();
 }
 
 uno::Reference< XAccessible > SAL_CALL
@@ -282,10 +279,7 @@ uno::Reference< XAccessible > SAL_CALL
         throw (uno::RuntimeException,
         lang::IndexOutOfBoundsException)
 {
-    ScUnoGuard aGuard;
-    IsObjectValid();
-
-    return NULL;
+    return AccessibleStaticTextBase::getAccessibleChild(nIndex);
 }
 
 uno::Reference<XAccessibleStateSet> SAL_CALL
