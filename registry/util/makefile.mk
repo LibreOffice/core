@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 15:18:43 $
+#   last change: $Author: jsc $ $Date: 2001-02-27 12:44:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -99,101 +99,17 @@ SHL1STDLIBS= \
     $(LIBCIMT)
 
 
-SHL1LIBS=$(LIB1TARGET)	
-SHL1DEPN=	$(LIB1TARGET)
-SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
-DEF1NAME	=$(SHL1TARGET)
-
-DEF1DEPN	=$(MISC)$/$(SHL1TARGET).flt
-
-
-DEFLIB1NAME =$(TARGET)
-DEF1DES 	=RegistryRuntime
-
-.IF "$(COM)"!="ICC" || "$(GUI)"=="OS2"
-.IF "$(GUI)"!="MAC"
-DEF1EXPORT1		=initRegistry_Api @1000
-DEF1EXPORT3		=initRegistryTypeWriter_Api @1001
-DEF1EXPORT4		=initRegistryTypeReader_Api @1002
-.ELSE
-DEF1EXPORT1		=initRegistry_Api
-DEF1EXPORT3		=initRegistryTypeWriter_Api
-DEF1EXPORT4		=initRegistryTypeReader_Api
-.ENDIF
-.ELSE
-DEF1EXPORT1		=_initRegistry_Api @1000
-DEF1EXPORT3		=_initRegistryTypeWriter_Api @1001
-DEF1EXPORT4		=_initRegistryTypeReader_Api @1002
-.ENDIF
+SHL1LIBS= $(LIB1TARGET)	
+SHL1DEPN= $(LIB1TARGET)
+SHL1DEF= $(MISC)$/$(SHL1TARGET).def
+DEF1NAME= $(SHL1TARGET)
+DEF1EXPORTFILE=	exports.dxp
+DEF1DES	= RegistryRuntime
 
 # --- Targets ------------------------------------------------------
-
-.IF "$(GUI)"=="WIN"
-ALL: $(LIB1TARGET) \
-     $(MISC)$/implib.cmd 
-     ALLTAR
-.ENDIF
 
 .INCLUDE :  target.mk
 
 makedocpp: $(DOCPPFILES)
      + docpp -H -m -f  -u -d $(OUT)$/doc$/$(PRJNAME) $(DOCPPFILES)
-
-# --- SO2-Filter-Datei ---
-
-$(MISC)$/$(SHL1TARGET).flt: makefile.mk
-    @echo ------------------------------
-    @echo Making: $@
-    @echo WEP > $@
-    @echo LIBMAIN >> $@
-    @echo LibMain >> $@
-    @echo _Impl >> $@
-    @echo ORegistry >> $@
-    @echo ORegKey >> $@
-    @echo ORegManager >> $@
-    @echo CntStoreFile >> $@
-    @echo CntStoreDirectory >> $@
-    @echo CntStorePageLockBytes >> $@
-    @echo initRegistry >> $@
-    @echo _alloc >> $@
-    @echo malloc >> $@
-    @echo _lower_bound >> $@
-    @echo _stl_prime >> $@
-    @echo _stl_hash >> $@
-    @echo _C >> $@
-    @echo _TI2 >> $@
-    @echo _TI3 >> $@
-    @echo 1Reg >> $@
-    @echo 1OGuard >> $@
-    @echo _E >> $@
-    @echo _H >> $@
-    @echo _B >> $@
-    @echo _I >> $@
-    @echo next >> $@
-    @echo HashString >> $@
-    @echo distance >> $@
-    @echo iterator >> $@
-    @echo lower_bound >> $@
-    @echo endl >> $@
-    @echo flush >> $@
-    @echo String >> $@
-    @echo Const >> $@
-    @echo read >> $@
-    @echo write >> $@
-    @echo Blop >> $@
-    @echo parse >> $@
-    @echo Version >> $@
-    @echo Entry >> $@
-    @echo Type >> $@
-    @echo Field >> $@
-    @echo magic >> $@
-    @echo Pool >> $@
-    @echo Method >> $@
-    @echo 0CPI >> $@
-    @echo exception::exception >> $@
-
-
-
-
-
 
