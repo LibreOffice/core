@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typeselectionpage.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-02 08:04:29 $
+ *  last change: $Author: kz $ $Date: 2004-05-19 13:38:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,9 @@ namespace abp
     public:
         TypeSelectionPage( OAddessBookSourcePilot* _pParent );
 
+        // retrieves the currently selected type
+        AddressSourceType   getSelectedType();
+
     protected:
         // OWizardPage overridables
         virtual void        initializePage();
@@ -111,7 +114,6 @@ namespace abp
         DECL_LINK( OnTypeSelected, void* );
 
         void                selectType( AddressSourceType _eType );
-        AddressSourceType   getSelectedType( );
     };
 
 //.........................................................................
