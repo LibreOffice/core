@@ -34,7 +34,7 @@ if (($BuildAllParents) && ($#TotenEltern != -1)) {
     foreach $DeadPrj (@TotenEltern) {
         print "$DeadPrj\n";
     };
-    print "\nnot found and couldn't be built. Correct the build.lst's.\n";
+    print "\nnot found and couldn't be built. Correct the build.lst.\n";
 };
 #GetPrjDeps();
 #BuildDependent();
@@ -240,8 +240,9 @@ sub GetDmakeCommando {
 
     # Setting alias for dmake
     $dmake = "dmake";
-
-    #$dmake .= " ".$ENV{PROFULLSWITCH};
+    #if (defined $ENV{PROFULLSWITCH}) {
+    #   $dmake .= " ".$ENV{PROFULLSWITCH};
+    #};
     while ($arg = pop(@ARGV)) {
         $dmake .= " "."$arg";
     };
@@ -264,23 +265,44 @@ sub GetQuantityToBuild {
 
 
 #
+# Procedure prooves if current dir is a root dir in the drive
+#
+sub IsRootDir {
+    my ($Dir);
+    $Dir = $_[0];
+    if (($ENV{GUI} eq "UNX") && ($Dir == "\/")) {
+        return 1;
+    } elsif (   ($ENV{GUI} eq "WNT") ||
+                ($ENV{GUI} eq "WIN") ||
+                ($ENV{GUI} eq "MAC") ||
+                ($ENV{GUI} eq "OS2") &&
+                ($Dir =~ /\S:\/$/)) {
+        return 1;
+    } else {
+        return 0;
+    };
+};
+
+
+#
 # Procedure retrieves list of projects to be built from build.lst
 #
 sub GetStandDir {
     my ($StandDir);
 DirLoop:
     do {
+        $StandDir = cwd();
         if (open(PrjBuildFile, "prj/build.lst")) {
-            $StandDir = cwd();
             $StandDir =~ /(\w+$)/;
             $StandDir = $`;
             $CurrentPrj = $1;
             close(PrjBuildFile);
             return $StandDir;
+        } elsif (IsRootDir($StandDir)) {
+            die "Found no project to build\n"
         };
     }
-    while (chdir(".."));
-    die "Found no project to build\n";
+    while (chdir '..');
 };
 
 
@@ -387,8 +409,9 @@ sub IsHashNative {
 # of all from given project dependent projects
 #
 sub RemoveFromDependencies {
-    my ($ExclPrj, $i, $Prj);
+    my ($ExclPrj, $i, $Prj, $Dependencies);
     $ExclPrj = $_[0];
+    $Dependencies = $_[1];
     foreach $Prj (keys %DependenciesHash) {
         PrjDepsLoop:
         foreach $i (0 .. $#{$DependenciesHash{$Prj}}) {
