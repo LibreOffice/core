@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.hxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-23 17:29:20 $
+ *  last change: $Author: sab $ $Date: 2002-08-29 14:58:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -966,6 +966,10 @@ public:
 
     // XServiceInfo
     virtual ::rtl::OUString SAL_CALL getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException);
+
+    // ::com::sun::star::xml::sax::XDocumentHandler
+    virtual void SAL_CALL endDocument(void)
+        throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException );
 
     virtual void DisposingModel();
 

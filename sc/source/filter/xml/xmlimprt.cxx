@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: sab $ $Date: 2002-08-23 17:29:19 $
+ *  last change: $Author: sab $ $Date: 2002-08-29 14:58:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1579,19 +1579,6 @@ ScXMLImport::~ScXMLImport() throw()
     if (pStylesImportHelper)
         delete pStylesImportHelper;
 
-    if (getImportFlags() & IMPORT_CONTENT)
-    {
-        if (pDoc)
-            pDoc->CompileXML();
-        aTables.UpdateRowHeights();
-        aTables.ResizeShapes();
-    }
-    if (GetModel().is())
-    {
-        uno::Reference<document::XActionLockable> xActionLockable(GetModel(), uno::UNO_QUERY);
-        if (xActionLockable.is())
-            xActionLockable->removeActionLock();
-    }
     if (pScUnoGuard)
         delete pScUnoGuard;
 
@@ -2266,6 +2253,25 @@ void SAL_CALL ScXMLImport::setTargetDocument( const ::com::sun::star::uno::Refer
             break;
     }
     return SvXMLImport::getImplementationName();
+}
+
+// ::com::sun::star::xml::sax::XDocumentHandler
+void SAL_CALL ScXMLImport::endDocument(void)
+    throw( ::com::sun::star::xml::sax::SAXException, ::com::sun::star::uno::RuntimeException )
+{
+    if (getImportFlags() & IMPORT_CONTENT)
+    {
+        if (pDoc)
+            pDoc->CompileXML();
+        aTables.UpdateRowHeights();
+        aTables.ResizeShapes();
+    }
+    if (GetModel().is())
+    {
+        uno::Reference<document::XActionLockable> xActionLockable(GetModel(), uno::UNO_QUERY);
+        if (xActionLockable.is())
+            xActionLockable->removeActionLock();
+    }
 }
 
 // XEventListener
