@@ -1,0 +1,232 @@
+/*************************************************************************
+ *
+ *  $RCSfile: xmlfilterdialogstrings.src,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: hr $ $Date: 2003-04-04 16:33:27 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "xmlfilterdialogstrings.hrc"
+
+
+String STR_COLUMN_HEADER_NAME
+{
+    Text                    = "Name";
+    Text [English_US]       = "Name";
+};
+
+String STR_COLUMN_HEADER_TYPE
+{
+    Text                    = "Type";
+    Text [English_US]       = "Type";
+};
+
+String STR_UNKNOWN_APPLICATION
+{
+    Text                    = "Unbekannt";
+    Text [English_US]       = "Unknown";
+};
+
+String STR_IMPORT_ONLY
+{
+    Text                    = "Import Filter";
+    Text [English_US]       = "import filter";
+};
+
+String STR_IMPORT_EXPORT
+{
+    Text                    = "Import/Export Filter";
+    Text [English_US]       = "import/export filter";
+};
+
+String STR_EXPORT_ONLY
+{
+    Text                    = "Export Filter";
+    Text [English_US]       = "export filter";
+};
+
+String STR_APPL_NAME_WRITER
+{
+    Text                    = "%PRODUCTNAME Writer";
+};
+
+String STR_APPL_NAME_CALC
+{
+    Text                    = "%PRODUCTNAME Calc";
+};
+
+String STR_APPL_NAME_IMPRESS
+{
+    Text                    = "%PRODUCTNAME Impress";
+};
+
+String STR_APPL_NAME_DRAW
+{
+    Text                    = "%PRODUCTNAME Draw";
+};
+
+String STR_WARN_DELETE
+{
+    Text                    = "Wollen Sie wirklich den XML-Filter '%s' löschen? Diese Aktion kann nicht rückgängig gemacht werden.";
+    Text [English_US]       = "Do you really want to delete the XML Filter '%s'? This action cannot be undone.";
+};
+
+String STR_ERROR_FILTER_NAME_EXISTS
+{
+    Text                = "Es existiert bereits ein Filter mit dem Namen '%s'. Bitte wählen Sie einen anderen Namen.";
+    Text [english_us]   = "An XML filter with the name '%s' does already exist. Please enter a different name.";
+};
+
+String STR_ERROR_TYPE_NAME_EXISTS
+{
+    Text                = "Der Name auf der  Benutzeroberfläche '%s1' wird bereits von dem XML-Filter '%s2' verwendet. Bitte wählen Sie einen anderen Namen.";
+    Text [english_us]   = "The name for  the user interface '%s1' is already used by the XML filter '%s2'. Please enter a different name.";
+};
+
+String STR_ERROR_DTD_NOT_FOUND
+{
+    Text                = "Die Import-XSLT konnte nicht gefunden werden. Bitte geben Sie einen gültigen Pfad ein.";
+    Text [english_us]   = "The DTD cannot be found. Please enter a valid path.";
+};
+
+String STR_ERROR_EXPORT_XSLT_NOT_FOUND
+{
+    Text                = "Die Export-XSLT konnte nicht gefunden werden. Bitte geben Sie einen gültigen Pfad ein.";
+    Text [english_us]   = "The XSLT for export cannot be found. Please enter a valid path.";
+};
+
+String STR_ERROR_IMPORT_XSLT_NOT_FOUND
+{
+    Text                = "Die Import-Dokumentvorlage konnte nicht gefunden werden. Bitte geben Sie einen gültigen Pfad ein.";
+    Text [english_us]   = "The XSLT for import cannot be found. Please enter a valid path.";
+};
+
+String STR_ERROR_IMPORT_TEMPLATE_NOT_FOUND
+{
+    Text                = "Die DTD konnte nicht gefunden werden. Bitte geben Sie einen gültigen Pfad ein.";
+    Text [english_us]   = "The given import template cannot be found. Please enter a valid path.";
+};
+
+String STR_NOT_SPECIFIED
+{
+    Text                    = "Nicht spezifiziert";
+    Text [english_us]       = "Not specified";
+};
+
+String STR_NO_ERRORS_FOUND
+{
+    Text                = "No errors found.";
+};
+
+String STR_DEFAULT_FILTER_NAME
+{
+    Text                = "Neuer Filter";
+    Text [english_us]   = "New Filter";
+};
+
+String STR_DEFAULT_UI_NAME
+{
+    Text                = "Unbenannt";
+    Text [english_us]   = "Untitled";
+};
+
+String STR_DEFAULT_EXTENSION
+{
+    Text                = "xml";
+};
+
+String STR_UNDEFINED_FILTER
+{
+    Text                = "Undefinierter Filter";
+    Text [english_us]   = "undefined filter";
+};
+
+String STR_FILTER_HAS_BEEN_SAVED
+{
+    Text                = "Der XML-Filter '%s' wurde als Paket '%s' gesichert.";
+    Text [english_us]   = "The XML filter '%s' has been saved as package '%s'. ";
+};
+
+String STR_FILTERS_HAVE_BEEN_SAVED
+{
+    Text                = "%s XML-Filter wurden in dem Paket '%s' gesichert.";
+    Text [english_us]   = "%s XML filters have been saved in the package '%s'.";
+};
+
+String STR_FILTER_PACKAGE
+{
+    Text                = "XSLT Filter Paket";
+    Text [english_us]   = "XSLT filter package";
+};
+
+String STR_FILTER_INSTALLED
+{
+    Text                = "Der XML-Filter '%s' wurde erfolgreich installiert.";
+    Text [english_us]   = "The XML filter '%s' has been installed successfully.";
+};
+
+String STR_FILTERS_INSTALLED
+{
+    Text                = "%s XML-Filter wurden erfolgreich installiert.";
+    Text [english_us]   = "%s XML filters have been installed successfully.";
+};
+
+String STR_NO_FILTERS_FOUND
+{
+    Text                = "Es wurde kein XML-Filter installiert, weil das Paket '%s' keine XML-Filter enthält.";
+    Text [english_us]   = "No XML filter could be installed because the package '%s' does not contain any XML filters.";
+};
+
