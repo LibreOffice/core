@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hjs $ $Date: 2001-06-20 16:12:11 $
+#   last change: $Author: hjs $ $Date: 2001-06-20 17:04:38 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,7 +84,7 @@ SLOFILES =	\
 
 .INCLUDE :  target.mk
 
-$(SLO)$/xmlmetae.obj : $(INCCOM)$/rscrev.hxx ALLTAR
+$(SLO)$/xmlmetae.obj : $(INCCOM)$/rscrev.hxx
 
 $(INCCOM)$/rscrev.hxx: makefile.mk
 .IF "$(GUI)"=="UNX"
