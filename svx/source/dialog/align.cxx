@@ -2,9 +2,9 @@
  *
  *  $RCSfile: align.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dr $ $Date: 2002-09-12 09:53:46 $
+ *  last change: $Author: nn $ $Date: 2002-09-26 14:13:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,6 +185,15 @@ SvxAlignmentTabPage::SvxAlignmentTabPage( Window* pParent,
 
     switch ( eFUnit )
     {
+        //  #103396# the default value (1pt) can't be accurately represented in
+        //  inches or pica with two decimals, so point is used instead.
+        case FUNIT_PICA:
+        case FUNIT_INCH:
+        case FUNIT_FOOT:
+        case FUNIT_MILE:
+            eFUnit = FUNIT_POINT;
+            break;
+
         case FUNIT_CM:
         case FUNIT_M:
         case FUNIT_KM:
