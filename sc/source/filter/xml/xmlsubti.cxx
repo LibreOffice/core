@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsubti.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-11 07:43:40 $
+ *  last change: $Author: sab $ $Date: 2001-05-11 11:57:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,7 +220,6 @@ ScMyTables::ScMyTables(ScXMLImport& rTempImport)
     nCurrentDrawPage( -1 ),
     nCurrentXShapes( -1 ),
     aResizeShapes(rTempImport),
-    aVDev(),
     nCurrentColStylePos(0)
 {
     aTableVec.resize(nDefaultTabCount, NULL);
@@ -662,12 +661,7 @@ void ScMyTables::NewTable(sal_Int32 nTempSpannedCols)
 void ScMyTables::UpdateRowHeights()
 {
     // update automatic row heights
-    Point aLogic = aVDev.LogicToPixel( Point(1000,1000), MAP_TWIP );
-    double nPPTX = aLogic.X() / 1000.0;
-    double nPPTY = aLogic.Y() / 1000.0;
-    nPPTX /= ScModelObj::getImplementation(rImport.GetModel())->GetOutputFactor();          // needed for screen or VDev
-    Fraction aZoom(1,1);
-    rImport.GetDocument()->SetOptimalHeight( 0,MAXROW, nCurrentSheet,0, &aVDev, nPPTX,nPPTY, aZoom,aZoom, FALSE );
+    ScModelObj::getImplementation(rImport.GetModel())->AdjustRowHeight( 0, MAXROW, nCurrentSheet );
 }
 
 void ScMyTables::DeleteTable()

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsubti.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-11 07:43:40 $
+ *  last change: $Author: sab $ $Date: 2001-05-11 11:57:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,10 +87,6 @@
 #include <com/sun/star/frame/XModel.hpp>
 #endif
 
-#ifndef _SV_VIRDEV_HXX
-#include <vcl/virdev.hxx>
-#endif
-
 #ifndef __SGI_STL_VECTOR
 #include <vector>
 #endif
@@ -157,7 +153,6 @@ private:
     ScXMLImport&                        rImport;
 
     ScMyShapeResizer                    aResizeShapes;
-    VirtualDevice                       aVDev;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSpreadsheet > xCurrentSheet;
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage > xDrawPage;
