@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontcfg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pl $ $Date: 2002-02-28 11:53:08 $
+ *  last change: $Author: pl $ $Date: 2002-03-25 17:00:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,7 +199,8 @@ DefaultFontConfigItem::DefaultFontConfigItem()
 
 DefaultFontConfigItem::~DefaultFontConfigItem()
 {
-    Commit();
+    if( IsModified() )
+        Commit();
 }
 
 /*
@@ -248,6 +249,7 @@ void DefaultFontConfigItem::Commit()
         aValues.realloc( nIndex );
         ReplaceSetProperties( aKeyName, aValues );
     }
+    ClearModified();
 }
 
 /*
@@ -431,7 +433,8 @@ FontSubstConfigItem::FontSubstConfigItem() :
 
 FontSubstConfigItem::~FontSubstConfigItem()
 {
-    Commit();
+    if( IsModified() )
+        Commit();
 }
 
 /*
@@ -440,6 +443,7 @@ FontSubstConfigItem::~FontSubstConfigItem()
 
 void FontSubstConfigItem::Commit()
 {
+    ClearModified();
 }
 
 /*
