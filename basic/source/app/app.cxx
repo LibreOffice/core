@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: gh $ $Date: 2001-07-09 12:02:14 $
+ *  last change: $Author: gh $ $Date: 2001-07-11 08:41:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -308,12 +308,14 @@ void BasicApp::Main( )
         aRequestedLanguage = LanguageType( aLang.ToInt32() );
 
         AllSettings aSettings = GetSettings();
-        International aInternational;
-        aInternational = GetSettings().GetInternational();
-        aInternational = International( aRequestedLanguage );
-        aSettings.SetInternational( aInternational );
+        aSettings.SetUILanguage( aRequestedLanguage );
+        aSettings.SetLanguage( aRequestedLanguage );
+//      International aInternational;
+//      aInternational = GetSettings().GetInternational();
+//      aInternational = International( aRequestedLanguage );
+//      aSettings.SetInternational( aInternational );
         SetSettings( aSettings );
-        aInternational = GetSettings().GetInternational();
+//      aInternational = GetSettings().GetInternational();
     }
 
 
