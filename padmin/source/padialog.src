@@ -2,9 +2,9 @@
  *
  *  $RCSfile: padialog.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2001-10-22 06:12:34 $
+ *  last change: $Author: pl $ $Date: 2001-10-29 09:52:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1808,9 +1808,9 @@ ModelessDialog RID_PROGRESS_DLG
     {
         Pos = MAP_APPFONT( 6, 48 );
         Size = MAP_APPFONT( 140, 8 );
-        Text = "Bereits bearbeitet" ;
-        Text [ English ] = "Processed";
-        Text[ english_us ] = "Processed";
+        Text = "Fortschritt" ;
+        Text [ English ] = "Progress";
+        Text[ english_us ] = "Progress";
         Text[ portuguese ] = "Processed";
         Text[ russian ] = "Отредактирован";
         Text[ greek ] = "Processed";
