@@ -158,7 +158,7 @@
 </Calendar>
 </LC_CALENDAR>
 <LC_CURRENCY>
-<Currency default="true">
+<Currency default="true" usedInCompatibleFormatCodes="true">
 <CurrencyID>ر.س.‏</CurrencyID>
 <CurrencySymbol>د.ت.‏</CurrencySymbol>
 <BankSymbol>TND</BankSymbol>
