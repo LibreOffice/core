@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviewsi.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2001-01-26 14:14:13 $
+ *  last change: $Author: ka $ $Date: 2001-06-07 14:58:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -689,7 +689,7 @@ void SdDrawViewShell::UpdateEffectWindow()
         {
             SfxItemSet aSet(pDoc->GetPool(), ATTR_ANIMATION_EFFECT, ATTR_ANIMATION_TEXTEFFECT, 0);
             aSet.Put(SfxAllEnumItem(ATTR_ANIMATION_EFFECT, presentation::AnimationEffect_NONE));
-            aSet.Put(SfxVoidItem(0), ATTR_ANIMATION_TEXTEFFECT );
+            aSet.Put(SfxAllEnumItem(ATTR_ANIMATION_TEXTEFFECT, presentation::AnimationEffect_NONE));
             pEffectWin->Update( aSet );
         }
     }
