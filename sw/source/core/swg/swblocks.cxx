@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swblocks.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mib $ $Date: 2001-04-12 12:57:03 $
+ *  last change: $Author: mtg $ $Date: 2001-04-18 18:31:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -500,24 +500,33 @@ ULONG SwTextBlocks::ConvertToNew()
                 USHORT nCount = pOld->GetCount();
                 for( USHORT i = 0; i < nCount; i++ )
                 {
-                    pNew->ClearDoc();
-                    if (SWBLK_SW2 == nType )
-                    {
-                        // I think this is how it should work (!!!!!!) mtg
-                        pNew->pDoc->SetPersist( pPersist2 );
-                    }
-                    nErr = pOld->GetDoc( i );
-                    if( nErr )
-                        break;
                     String aShort( pOld->GetShortName( i ) );
                     String aLong( pOld->GetLongName( i ) );
-                    nErr = pNew->BeginPutDoc( aShort, aLong );
-                    if( nErr )
-                        break;
-                    nErr = pNew->PutDoc();
-                    if( nErr )
-                        break;
                     pNew->AddName( aShort, aLong );
+                    if ( SWBLK_SW3 == nType && pThree->IsOnlyTextBlock(aShort) )
+                    {
+                        String sText;
+                        pThree->GetText( aShort, sText );
+                        pNew->PutText( aShort, aLong, sText );
+                    }
+                    else
+                    {
+                        pNew->ClearDoc();
+                        if (SWBLK_SW2 == nType )
+                        {
+                            // I think this is how it should work (!!!!!!) mtg
+                            pNew->pDoc->SetPersist( pPersist2 );
+                        }
+                        nErr = pOld->GetDoc( i );
+                        if( nErr )
+                            break;
+                        nErr = pNew->BeginPutDoc( aShort, aLong );
+                        if( nErr )
+                            break;
+                        nErr = pNew->PutDoc();
+                        if( nErr )
+                            break;
+                    }
                     if (SWBLK_SW2 == nType )
                         pNew->pDoc->SetPersist( 0 );
                     else
