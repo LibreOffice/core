@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxrtf.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 15:35:24 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 13:59:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,7 @@ struct SvxRTFStyleType
     SfxItemSet aAttrSet;        // die Attribute vom Style (+Ableitung!)
     String sName;
     USHORT nBasedOn, nNext;
+    BOOL bBasedOnIsSet; //$flr #117411#
     BYTE nOutlineNo;
     BOOL bIsCharFmt;
 
