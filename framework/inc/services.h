@@ -2,9 +2,9 @@
  *
  *  $RCSfile: services.h,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 16:30:09 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:23:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,22 +118,22 @@ namespace framework{
 #define SERVICENAME_DISPATCHHELPER                              DECLARE_ASCII("com.sun.star.frame.DispatchHelper"                   )
 #define SERVICENAME_DETECTORFACTORY                             DECLARE_ASCII("com.sun.star.document.ExtendedTypeDetectionFactory"  )
 #define SERVICENAME_SCRIPTCONVERTER                             DECLARE_ASCII("com.sun.star.script.Converter"                       )
-#define SERVICENAME_LAYOUTMANAGER                               DECLARE_ASCII("drafts.com.sun.star.frame.LayoutManager"             )
-#define SERVICENAME_POPUPMENUCONTROLLERFACTORY                  DECLARE_ASCII("drafts.com.sun.star.frame.PopupMenuControllerFactory" )
-#define SERVICENAME_POPUPMENUCONTROLLER                         DECLARE_ASCII("drafts.com.sun.star.frame.PopupMenuController"       )
-#define SERVICENAME_UICOMMANDDESCRIPTION                        DECLARE_ASCII("drafts.com.sun.star.frame.UICommandDescription"      )
-#define SERVICENAME_UIELEMENTFACTORYMANAGER                     DECLARE_ASCII("drafts.com.sun.star.ui.UIElementFactoryManager"      )
-#define SERVICENAME_MODULEMANAGER                               DECLARE_ASCII("drafts.com.sun.star.frame.ModuleManager"             )
-#define SERVICENAME_UICONFIGURATIONMANAGER                      DECLARE_ASCII("drafts.com.sun.star.ui.UIConfigurationManager"       )
-#define SERVICENAME_MODULEUICONFIGURATIONMANAGERSUPPLIER        DECLARE_ASCII("drafts.com.sun.star.ui.ModuleUIConfigurationManagerSupplier" )
-#define SERVICENAME_MODULEUICONFIGURATIONMANAGER                DECLARE_ASCII("drafts.com.sun.star.ui.ModuleUIConfigurationManager" )
-#define SERVICENAME_MENUBARFACTORY                              DECLARE_ASCII("drafts.com.sun.star.ui.UIElementFactory"             )
-#define SERVICENAME_WINDOWSTATECONFIGURATION                    DECLARE_ASCII("drafts.com.sun.star.ui.WindowStateConfiguration"     )
+#define SERVICENAME_LAYOUTMANAGER                               DECLARE_ASCII("com.sun.star.frame.LayoutManager"             )
+#define SERVICENAME_POPUPMENUCONTROLLERFACTORY                  DECLARE_ASCII("com.sun.star.frame.PopupMenuControllerFactory" )
+#define SERVICENAME_POPUPMENUCONTROLLER                         DECLARE_ASCII("com.sun.star.frame.PopupMenuController"       )
+#define SERVICENAME_UICOMMANDDESCRIPTION                        DECLARE_ASCII("com.sun.star.frame.UICommandDescription"      )
+#define SERVICENAME_UIELEMENTFACTORYMANAGER                     DECLARE_ASCII("com.sun.star.ui.UIElementFactoryManager"      )
+#define SERVICENAME_MODULEMANAGER                               DECLARE_ASCII("com.sun.star.frame.ModuleManager"             )
+#define SERVICENAME_UICONFIGURATIONMANAGER                      DECLARE_ASCII("com.sun.star.ui.UIConfigurationManager"       )
+#define SERVICENAME_MODULEUICONFIGURATIONMANAGERSUPPLIER        DECLARE_ASCII("com.sun.star.ui.ModuleUIConfigurationManagerSupplier" )
+#define SERVICENAME_MODULEUICONFIGURATIONMANAGER                DECLARE_ASCII("com.sun.star.ui.ModuleUIConfigurationManager" )
+#define SERVICENAME_MENUBARFACTORY                              DECLARE_ASCII("com.sun.star.ui.UIElementFactory"             )
+#define SERVICENAME_WINDOWSTATECONFIGURATION                    DECLARE_ASCII("com.sun.star.ui.WindowStateConfiguration"     )
 #define SERVICENAME_STARTMODULE                                 DECLARE_ASCII("com.sun.star.frame.StartModule"                      )
 #define SERVICENAME_FRAMECONTROLLER                             DECLARE_ASCII("com.sun.star.frame.Controller"                       )
-#define SERVICENAME_GLOBALACCELERATORCONFIGURATION              DECLARE_ASCII("drafts.com.sun.star.ui.GlobalAcceleratorConfiguration")
-#define SERVICENAME_MODULEACCELERATORCONFIGURATION              DECLARE_ASCII("drafts.com.sun.star.ui.ModuleAcceleratorConfiguration")
-#define SERVICENAME_DOCUMENTACCELERATORCONFIGURATION            DECLARE_ASCII("drafts.com.sun.star.ui.DocumentAcceleratorConfiguration")
+#define SERVICENAME_GLOBALACCELERATORCONFIGURATION              DECLARE_ASCII("com.sun.star.ui.GlobalAcceleratorConfiguration")
+#define SERVICENAME_MODULEACCELERATORCONFIGURATION              DECLARE_ASCII("com.sun.star.ui.ModuleAcceleratorConfiguration")
+#define SERVICENAME_DOCUMENTACCELERATORCONFIGURATION            DECLARE_ASCII("com.sun.star.ui.DocumentAcceleratorConfiguration")
 #define SERVICENAME_SAXPARSER                                   DECLARE_ASCII("com.sun.star.xml.sax.Parser"                         )
 #define SERVICENAME_SAXWRITER                                   DECLARE_ASCII("com.sun.star.xml.sax.Writer"                         )
 #define SERVICENAME_SIMPLEFILEACCESS                            DECLARE_ASCII("com.sun.star.ucb.SimpleFileAccess"                   )
@@ -141,12 +141,12 @@ namespace framework{
 #define SERVICENAME_FILESYSTEMSTORAGEFACTORY                    DECLARE_ASCII("com.sun.star.embed.FileSystemStorageFactory"         )
 #define SERVICENAME_TEMPFILE                                    DECLARE_ASCII("com.sun.star.io.TempFile"                            )
 #define SERVICENAME_PACKAGESTRUCTURECREATOR                     DECLARE_ASCII("com.sun.star.embed.PackageStructureCreator"          )
-#define SERVICENAME_TOOLBARFACTORY                              DECLARE_ASCII("drafts.com.sun.star.ui.ToolBarFactory"               )
+#define SERVICENAME_TOOLBARFACTORY                              DECLARE_ASCII("com.sun.star.ui.ToolBarFactory"               )
 #define SERVICENAME_TOOLBARCONTROLLERFACTORY                    DECLARE_ASCII("com.sun.star.frame.ToolBarControllerFactory"         )
 #define SERVICENAME_LICENSE                                     DECLARE_ASCII("com.sun.star.task.Job"                       )
 #define SERVICENAME_AUTORECOVERY                                DECLARE_ASCII("com.sun.star.frame.AutoRecovery"                     )
 #define SERVICENAME_GLOBALEVENTBROADCASTER                      DECLARE_ASCII("com.sun.star.frame.GlobalEventBroadcaster"           )
-#define SERVICENAME_STATUSBARFACTORY                            DECLARE_ASCII("drafts.com.sun.star.ui.StatusBarFactory"             )
+#define SERVICENAME_STATUSBARFACTORY                            DECLARE_ASCII("com.sun.star.ui.StatusBarFactory"             )
 #define SERVICENAME_UICATEGORYDESCRIPTION                       DECLARE_ASCII("com.sun.star.ui.UICategoryDescription"               )
 #define SERVICENAME_STATUSBARCONTROLLERFACTORY                  DECLARE_ASCII("com.sun.star.frame.StatusbarControllerFactory"       )
 #define SERVICENAME_SESSIONLISTENER                             DECLARE_ASCII("com.sun.star.frame.SessionListener"                  )
