@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connection.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-12 08:54:23 $
+ *  last change: $Author: fs $ $Date: 2002-08-15 10:36:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,8 +82,8 @@
 #ifndef _COM_SUN_STAR_SDB_XQUERIESSUPPLIER_HPP_
 #include <com/sun/star/sdb/XQueriesSupplier.hpp>
 #endif
-#ifndef _CPPUHELPER_IMPLBASE7_HXX_
-#include <cppuhelper/implbase7.hxx>
+#ifndef _CPPUHELPER_IMPLBASE8_HXX_
+#include <cppuhelper/implbase8.hxx>
 #endif
 #ifndef _DBASHARED_APITOOLS_HXX_
 #include "apitools.hxx"
@@ -108,13 +108,14 @@ namespace dbaccess
 
 //==========================================================================
 //==========================================================================
-typedef ::cppu::ImplHelper7< ::com::sun::star::container::XChild
-                            ,::com::sun::star::sdbcx::XTablesSupplier
-                            ,::com::sun::star::sdbcx::XViewsSupplier
-                            ,::com::sun::star::sdbc::XConnection
-                            ,::com::sun::star::sdb::XQueriesSupplier
-                            ,::com::sun::star::sdb::XSQLQueryComposerFactory
-                            ,::com::sun::star::sdb::XCommandPreparation
+typedef ::cppu::ImplHelper8 <   ::com::sun::star::container::XChild
+                            ,   ::com::sun::star::sdbcx::XTablesSupplier
+                            ,   ::com::sun::star::sdbcx::XViewsSupplier
+                            ,   ::com::sun::star::sdbc::XConnection
+                            ,   ::com::sun::star::sdb::XQueriesSupplier
+                            ,   ::com::sun::star::sdb::XSQLQueryComposerFactory
+                            ,   ::com::sun::star::sdb::XCommandPreparation
+                            ,   ::com::sun::star::lang::XServiceInfo
                             >   OConnection_Base;
 
 class ODatabaseSource;

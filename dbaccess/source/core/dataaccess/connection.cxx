@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connection.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-12 09:21:58 $
+ *  last change: $Author: fs $ $Date: 2002-08-15 10:40:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,23 +149,24 @@ sal_Bool OConnection::supportsService( const ::rtl::OUString& _rServiceName ) th
 //------------------------------------------------------------------------------
 Sequence< ::rtl::OUString > OConnection::getSupportedServiceNames(  ) throw (RuntimeException)
 {
-    Sequence< ::rtl::OUString > aSNS( 2 );
-    aSNS[0] = SERVICE_SDBC_CONNECTION;
-    aSNS[1] = SERVICE_SDB_CONNECTION;
-    return aSNS;
+    Sequence< ::rtl::OUString > aSupported = OConnectionWrapper::getSupportedServiceNames();
+
+    if ( 0 == findValue( aSupported, SERVICE_SDB_CONNECTION, sal_True ).getLength() )
+    {
+        sal_Int32 nLen = aSupported.getLength();
+        aSupported.realloc( nLen + 1 );
+        aSupported[ nLen ] = SERVICE_SDB_CONNECTION;
+    }
+
+    return aSupported;
 }
 
 // XCloseable
 //------------------------------------------------------------------------------
 void OConnection::close(void) throw( SQLException, RuntimeException )
 {
-    MutexGuard aGuard(m_aMutex);
-    checkDisposed();
-    disposing();
-    Reference< XComponent > xDerivedComp;
-    if (queryInterface(::getCppuType(&xDerivedComp)) >>= xDerivedComp)
-        // we ourself do not have an XComponent interface, but our derived classes do
-        xDerivedComp->dispose();
+    // being closed is the same as being disposed
+    dispose();
 }
 
 //------------------------------------------------------------------------------
