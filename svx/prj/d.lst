@@ -34,6 +34,7 @@ mkdir: %COMMON_DEST%\res%_EXT%
 ..\%__SRC%\bin\dg*.sym %_DEST%\bin%_EXT%\dg*.sym
 ..\%__SRC%\misc\dg*.map %_DEST%\bin%_EXT%\dg*.map
 ..\%__SRC%\bin\svx*.dll %_DEST%\bin%_EXT%\svx*.dll
+..\%__SRC%\bin\textconversiondlgs*.dll %_DEST%\bin%_EXT%\textconversiondlgs*.dll
 ..\%__SRC%\bin\*.res %_DEST%\bin%_EXT%\*.res
 ..\%__SRC%\bin\svx*.sym %_DEST%\bin%_EXT%\svx*.sym
 ..\%__SRC%\misc\svx*.map %_DEST%\bin%_EXT%\svx*.map
