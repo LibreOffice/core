@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svtreebx.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-27 11:23:51 $
+ *  last change: $Author: obo $ $Date: 2004-02-16 12:03:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1660,11 +1660,15 @@ long SvTreeListBox::PaintEntry1(SvLBoxEntry* pEntry,long nLine,USHORT nTabFlags,
                         aWallpaper.SetColor( rSettings.GetDeactiveColor() );
                     else
                         aWallpaper.SetColor( rSettings.GetHighlightColor() );
-                    // Font auf Hilite-Farbe setzen ?
+                    // set font color to highlight
                     if( !bCurFontIsSel && nItemType == SV_ITEM_ID_LBOXSTRING )
                     {
-                        Control::SetFont( aHiliteFont );
-                        bCurFontIsSel = TRUE;
+                        // don't paint white on white (pb: #i16031#)
+                        if ( aWallpaper.GetColor().IsBright() != aHiliteFont.GetColor().IsBright() )
+                        {
+                            Control::SetFont( aHiliteFont );
+                            bCurFontIsSel = TRUE;
+                        }
                     }
                 }
                 else // ContextBitmap + InUse-Emphasis + Selektiert
