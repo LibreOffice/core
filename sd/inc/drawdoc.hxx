@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.hxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 18:13:44 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 08:51:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -562,8 +562,8 @@ public:
 
     static SdDrawDocument* pDocLockedInsertingLinks;  // static to prevent recursions while resolving links
 
-    friend SvStream&    operator<<(SvStream& rOut, SdDrawDocument& rDoc);
-    friend SvStream&    operator>>(SvStream& rIn, SdDrawDocument& rDoc);
+//BFS02 friend SvStream&    operator<<(SvStream& rOut, SdDrawDocument& rDoc);
+//BFS02 friend SvStream&    operator>>(SvStream& rIn, SdDrawDocument& rDoc);
 
 
     /** This method acts as a simplified front end for the more complex
