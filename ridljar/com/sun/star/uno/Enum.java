@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Enum.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jbu $ $Date: 2002-01-18 14:04:55 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 08:51:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,8 +69,7 @@ package com.sun.star.uno;
  * You cannot create a object of this class or subclass direct, to
  * avoid enum values with integer values outside the defined range.
  * <p>
- * @version     $Revision: 1.2 $ $ $Date: 2002-01-18 14:04:55 $
- * @since       UDK1.0
+ * @version     $Revision: 1.3 $ $ $Date: 2004-11-03 08:51:24 $
  */
 public abstract class Enum {
     private int m_value;
