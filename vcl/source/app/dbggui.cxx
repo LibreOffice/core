@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbggui.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: er $ $Date: 2000-10-29 17:19:48 $
+ *  last change: $Author: th $ $Date: 2000-11-24 18:53:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,9 @@
 #endif
 #ifndef _SV_SYSTEM_HXX
 #include <system.hxx>
+#endif
+#ifndef _SV_SOUND_HXX
+#include <sound.hxx>
 #endif
 
 #ifndef _SV_DBGGUI_HXX
@@ -1699,12 +1702,15 @@ void DbgPrintMsgBox( const char* pLine )
 #if defined( WNT )
         if ( GetSystemMetrics( SM_DEBUG ) )
         {
+            MessageBeep( MB_ICONHAND );
             strcpy( aDbgOutBuf, pLine );
             strcat( aDbgOutBuf, "\r\n" );
             OutputDebugString( aDbgOutBuf );
             return;
         }
 #endif
+
+        Sound::Beep( SOUND_ERROR );
 #ifdef UNX
         fprintf( stderr, "%s\n", pLine );
         return;
@@ -1728,10 +1734,10 @@ void DbgPrintMsgBox( const char* pLine )
 #if defined( WNT )
     BOOL bOldCallTimer = pSVData->mbNoCallTimer;
     pSVData->mbNoCallTimer = TRUE;
-    short nRet = (short)MessageBox( 0, (LPSTR)aDbgOutBuf, "Debug Output",
-                                    MB_TASKMODAL | MB_YESNOCANCEL |
-                                    MB_DEFBUTTON2 | MB_ICONSTOP );
+    UniString aDebugStr( aDbgOutBuf, RTL_TEXTENCODING_UTF8 );
     MessageBeep( MB_ICONHAND );
+    short nRet = (short)MessageBoxW( 0, (LPWSTR)aDebugStr.GetBuffer(), L"Debug Output",
+                                     MB_TASKMODAL | MB_YESNOCANCEL | MB_DEFBUTTON2 | MB_ICONSTOP );
     pSVData->mbNoCallTimer = bOldCallTimer;
     switch ( nRet )
     {
@@ -1776,23 +1782,6 @@ void DbgPrintMsgBox( const char* pLine )
     short nRet = aBox.Execute();
 #endif
 #else
-#if defined( WNT )
-    if ( GetSystemMetrics( SM_DEBUG ) )
-    {
-        strcpy( aDbgOutBuf, pLine );
-        strcat( aDbgOutBuf, "\r\n" );
-        OutputDebugString( aDbgOutBuf );
-        return;
-    }
-#endif
-#ifdef UNX
-    fprintf( stderr, "%s\n", pLine );
-    return;
-#else
-    DbgPrintFile( pLine );
-    return;
-#endif
-/*
     USHORT nOldMode = Application::GetSystemWindowMode();
     Application::SetSystemWindowMode( nOldMode & ~SYSTEMWINDOW_MODE_NOAUTOMODE );
     ErrorBox aBox( Application::GetAppWindow(), WB_YES_NO_CANCEL | WB_DEF_NO,
@@ -1800,14 +1789,12 @@ void DbgPrintMsgBox( const char* pLine )
     aBox.SetText( String( RTL_CONSTASCII_USTRINGPARAM("Debug Output (Server)") ) );
     Application::SetSystemWindowMode( nOldMode );
     short nRet = aBox.Execute();
-*/
 #endif
-#ifndef REMOTE_APPSERVER
+
     if ( nRet == RET_YES )
         GetpApp()->Abort( XubString( RTL_CONSTASCII_USTRINGPARAM( "Debug-Utilities-Error" ) ) );
     else if ( nRet == RET_CANCEL )
         DbgCoreDump();
-#endif
 }
 
 // -----------------------------------------------------------------------
