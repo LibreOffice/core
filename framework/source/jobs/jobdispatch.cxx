@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jobdispatch.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 18:21:44 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 17:17:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -344,53 +344,48 @@ void JobDispatch::impl_dispatchEvent( /*IN*/ const ::rtl::OUString&             
                                       /*IN*/ const css::uno::Sequence< css::beans::PropertyValue >&            lArgs     ,
                                       /*IN*/ const css::uno::Reference< css::frame::XDispatchResultListener >& xListener )
 {
-    // generate the full qualified path to the configuration entry
-    // for event registrations.
-    ::rtl::OUStringBuffer sCfgEntry(256);
-    sCfgEntry.appendAscii(JobData::EVENTCFG_ROOT                     );
-    sCfgEntry.append     (::utl::wrapConfigurationElementName(sEvent));
-
-    // create a config access and read all registered jobs from there
+    // get list of all enabled jobs
+    // The called static helper methods read it from the configuration and
+    // filter disabled jobs using it's time stamp values.
     /* SAFE { */
     ReadGuard aReadLock(m_aLock);
-    ConfigAccess aConfig(m_xSMGR,sCfgEntry.makeStringAndClear());
+    css::uno::Sequence< ::rtl::OUString > lJobs = JobData::getEnabledJobsForEvent(m_xSMGR, sEvent);
     aReadLock.unlock();
     /* } SAFE */
 
-    aConfig.open(ConfigAccess::E_READONLY);
-    if (aConfig.getMode()==ConfigAccess::E_CLOSED)
+    css::uno::Reference< css::frame::XDispatchResultListener > xThis( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
+
+    // no jobs ... no execution
+    // But a may given listener will know something ...
+    // I think this operaton was finished successfully.
+    // It's not realy an error, if no registered jobs could be located.
+    if (lJobs.getLength()<1 && xListener.is())
     {
-        if (xListener.is())
-        {
-            css::frame::DispatchResultEvent aEvent;
-            aEvent.Source = css::uno::Reference< css::uno::XInterface >(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY);
-            aEvent.State  = css::frame::DispatchResultState::FAILURE;
-            xListener->dispatchFinished(aEvent);
-        }
+        css::frame::DispatchResultEvent aEvent;
+        aEvent.Source = xThis;
+        aEvent.State  = css::frame::DispatchResultState::SUCCESS;
+        xListener->dispatchFinished(aEvent);
         return;
     }
-    css::uno::Reference< css::beans::XPropertySet > xEventProperties(aConfig.cfg(), css::uno::UNO_QUERY);
-    css::uno::Sequence< ::rtl::OUString >           lJobs;
-    if (xEventProperties.is())
-    {
-        css::uno::Any aValue = xEventProperties->getPropertyValue(::rtl::OUString::createFromAscii(JobData::EVENTCFG_PROP_JOBLIST));
-        aValue >>= lJobs;
-    }
-    aConfig.close();
 
     // Step over all found jobs and execute it
-    css::uno::Reference< css::frame::XDispatchResultListener > xThis( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
     for (int j=0; j<lJobs.getLength(); ++j)
     {
         /* SAFE { */
         aReadLock.lock();
 
         JobData aCfg(m_xSMGR);
-        aCfg.setAlias(lJobs[j]);
-        aCfg.setEvent(sEvent  );
+        aCfg.setEvent(sEvent, lJobs[j]);
+        aCfg.setEnvironment(JobData::E_DISPATCH);
 
-        Job aJob(m_xSMGR, m_xFrame);
-        aJob.setJobData(aCfg);
+        /*Attention!
+            Jobs implements interfaces and dies by ref count!
+            And freeing of such uno object is done by uno itself.
+            So we have to use dynamic memory everytimes.
+         */
+        Job* pJob = new Job(m_xSMGR, m_xFrame);
+        css::uno::Reference< css::uno::XInterface > xJob(static_cast< ::cppu::OWeakObject* >(pJob), css::uno::UNO_QUERY);
+        pJob->setJobData(aCfg);
 
         aReadLock.unlock();
         /* } SAFE */
@@ -401,8 +396,28 @@ void JobDispatch::impl_dispatchEvent( /*IN*/ const ::rtl::OUString&             
         // Because this job must fake the source adress of the event.
         // Otherwhise the listener may will ignore it.
         if (xListener.is())
-            aJob.setDispatchResultFake(xListener, xThis);
-        aJob.execute(Converter::convert_seqPropVal2seqNamedVal(lArgs));
+            pJob->setDispatchResultFake(xListener, xThis);
+        try
+        {
+            pJob->execute(Converter::convert_seqPropVal2seqNamedVal(lArgs));
+        }
+#ifdef ENABLE_WARNINGS
+        catch(const css::uno::Exception& exAny)
+        {
+            LOG_EXCEPTION("JobDispatch::impl_dispatchEvent()", "catched on execute job", exAny.Message)
+#else
+        catch(const css::uno::Exception&)
+        {
+#endif // ENABLE_WARNINGS
+            if (xListener.is())
+            {
+                css::frame::DispatchResultEvent aEvent;
+                aEvent.Source = xThis;
+                aEvent.State  = css::frame::DispatchResultState::FAILURE;
+                xListener->dispatchFinished(aEvent);
+                return;
+            }
+        }
     }
 }
 
@@ -432,12 +447,21 @@ void JobDispatch::impl_dispatchService( /*IN*/ const ::rtl::OUString&           
 
     JobData aCfg(m_xSMGR);
     aCfg.setService(sService);
+    aCfg.setEnvironment(JobData::E_DISPATCH);
 
-    Job aJob(m_xSMGR, m_xFrame);
-    aJob.setJobData(aCfg);
+    /*Attention!
+        Jobs implements interfaces and dies by ref count!
+        And freeing of such uno object is done by uno itself.
+        So we have to use dynamic memory everytimes.
+     */
+    Job* pJob = new Job(m_xSMGR, m_xFrame);
+    css::uno::Reference< css::uno::XInterface > xJob(static_cast< ::cppu::OWeakObject* >(pJob), css::uno::UNO_QUERY);
+    pJob->setJobData(aCfg);
 
     aReadLock.unlock();
     /* } SAFE */
+
+    css::uno::Reference< css::frame::XDispatchResultListener > xThis( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
 
     // Special mode for listener.
     // We dont notify it directly here. We delegate that
@@ -445,11 +469,29 @@ void JobDispatch::impl_dispatchService( /*IN*/ const ::rtl::OUString&           
     // Because this job must fake the source adress of the event.
     // Otherwhise the listener may will ignore it.
     if (xListener.is())
+        pJob->setDispatchResultFake(xListener, xThis);
+
+    try
     {
-        css::uno::Reference< css::frame::XDispatchResultListener > xThis( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
-        aJob.setDispatchResultFake(xListener, xThis);
+        pJob->execute(Converter::convert_seqPropVal2seqNamedVal(lArgs));
     }
-    aJob.execute(Converter::convert_seqPropVal2seqNamedVal(lArgs));
+#ifdef ENABLE_WARNINGS
+    catch(const css::uno::Exception& exAny)
+    {
+        LOG_EXCEPTION("JobDispatch::impl_dispatchService()", "catched on execute job", exAny.Message)
+#else
+    catch(const css::uno::Exception&)
+    {
+#endif // ENABLE_WARNINGS
+        if (xListener.is())
+        {
+            css::frame::DispatchResultEvent aEvent;
+            aEvent.Source = xThis;
+            aEvent.State  = css::frame::DispatchResultState::FAILURE;
+            xListener->dispatchFinished(aEvent);
+            return;
+        }
+    }
 }
 
 //________________________________
@@ -477,12 +519,21 @@ void JobDispatch::impl_dispatchAlias( /*IN*/ const ::rtl::OUString&             
 
     JobData aCfg(m_xSMGR);
     aCfg.setAlias(sAlias);
+    aCfg.setEnvironment(JobData::E_DISPATCH);
 
-    Job aJob(m_xSMGR, m_xFrame);
-    aJob.setJobData(aCfg);
+    /*Attention!
+        Jobs implements interfaces and dies by ref count!
+        And freeing of such uno object is done by uno itself.
+        So we have to use dynamic memory everytimes.
+     */
+    Job* pJob = new Job(m_xSMGR, m_xFrame);
+    css::uno::Reference< css::uno::XInterface > xJob(static_cast< ::cppu::OWeakObject* >(pJob), css::uno::UNO_QUERY);
+    pJob->setJobData(aCfg);
 
     aReadLock.unlock();
     /* } SAFE */
+
+    css::uno::Reference< css::frame::XDispatchResultListener > xThis( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
 
     // Special mode for listener.
     // We dont notify it directly here. We delegate that
@@ -490,11 +541,29 @@ void JobDispatch::impl_dispatchAlias( /*IN*/ const ::rtl::OUString&             
     // Because this job must fake the source adress of the event.
     // Otherwhise the listener may will ignore it.
     if (xListener.is())
+        pJob->setDispatchResultFake(xListener, xThis);
+
+    try
     {
-        css::uno::Reference< css::frame::XDispatchResultListener > xThis( static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY );
-        aJob.setDispatchResultFake(xListener, xThis);
+        pJob->execute(Converter::convert_seqPropVal2seqNamedVal(lArgs));
     }
-    aJob.execute(Converter::convert_seqPropVal2seqNamedVal(lArgs));
+#ifdef ENABLE_WARNINGS
+    catch(const css::uno::Exception& exAny)
+    {
+        LOG_EXCEPTION("JobDispatch::impl_dispatchAlias()", "catched on execute job", exAny.Message)
+#else
+    catch(const css::uno::Exception&)
+    {
+#endif // ENABLE_WARNINGS
+        if (xListener.is())
+        {
+            css::frame::DispatchResultEvent aEvent;
+            aEvent.Source = xThis;
+            aEvent.State  = css::frame::DispatchResultState::FAILURE;
+            xListener->dispatchFinished(aEvent);
+            return;
+        }
+    }
 }
 
 //________________________________
@@ -524,7 +593,6 @@ void SAL_CALL JobDispatch::dispatch( /*IN*/ const css::util::URL&               
 void SAL_CALL JobDispatch::addStatusListener( /*IN*/ const css::uno::Reference< css::frame::XStatusListener >& xListener ,
                                               /*IN*/ const css::util::URL&                                     aURL      ) throw(css::uno::RuntimeException)
 {
-    LOG_WARNING("Job::addStatusListener()", "Not supported! There is no status available.")
 }
 
 //________________________________
@@ -534,7 +602,6 @@ void SAL_CALL JobDispatch::addStatusListener( /*IN*/ const css::uno::Reference< 
 void SAL_CALL JobDispatch::removeStatusListener( /*IN*/ const css::uno::Reference< css::frame::XStatusListener >& xListener ,
                                                  /*IN*/ const css::util::URL&                                     aURL      ) throw(css::uno::RuntimeException)
 {
-    LOG_WARNING("Job::removeStatusListener()", "Not supported! There is no status available.")
 }
 
 } // namespace framework
