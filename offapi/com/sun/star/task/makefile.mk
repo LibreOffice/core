@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: fs $ $Date: 2001-09-14 09:48:51 $
+#   last change: $Author: as $ $Date: 2001-12-05 13:18:25 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,6 +76,7 @@ IDLFILES=\
     ClassifiedInteractionRequest.idl\
     InteractionClassification.idl\
     InteractionHandler.idl\
+    JobExecutor.idl\
     NoMasterException.idl\
     PasswordRequest.idl\
     PasswordRequestMode.idl\
@@ -90,6 +91,7 @@ IDLFILES=\
     XInteractionRequest.idl\
     XInteractionRetry.idl\
     XJob.idl\
+    XJobExecutor.idl\
     XJobListener.idl\
     XPasswordContainer.idl\
     XStatusIndicator.idl\

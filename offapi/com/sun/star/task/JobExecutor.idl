@@ -1,8 +1,8 @@
 /*************************************************************************
  *
- *  $RCSfile: XJobListener.idl,v $
+ *  $RCSfile: JobExecutor.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.1 $
  *
  *  last change: $Author: as $ $Date: 2001-12-05 13:18:25 $
  *
@@ -42,13 +42,13 @@
  *  License at http://www.openoffice.org/license.html.
  *
  *  Software provided under this License is provided on an "AS IS" basis,
- *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
  *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
  *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
  *  See the License for the specific provisions governing your rights and
  *  obligations concerning the Software.
  *
- *  The Initial Developer of the Original Code is: Sun Microsystems, Inc..
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
  *
  *  Copyright: 2000 by Sun Microsystems, Inc.
  *
@@ -59,52 +59,28 @@
  *
  ************************************************************************/
 
-#ifndef __com_sun_star_task_XJobListener_idl__
-#define __com_sun_star_task_XJobListener_idl__
+#ifndef __com_sun_star_task_JobExecutor_idl__
+#define __com_sun_star_task_JobExecutor_idl__
 
-#ifndef __com_sun_star_lang_XEventListener_idl__
-#include <com/sun/star/lang/XEventListener.idl>
+#ifndef __com_sun_star_task_XJobExecutor_idl__
+#include <com/sun/star/task/XJobExecutor.idl>
 #endif
 
-//.............................................................................
-module com {  module sun {  module star {  module task {
-//.............................................................................
+module com { module sun { module star { module task {
 
-interface XAsyncJob;
-
-interface XJobListener : com::sun::star::lang::XEventListener
+//============================================================================
+/** generic job execution service
+    Can start registered uno services on triggered events and handle there
+    own configuration.
+ */
+service JobExecutor
 {
-    /** indicates that the job is done.
-        aResult should be the same like for the synchronous mode on XJob::execute()
-        and depends from service specification.
-    */
-    void jobFinished( [in] XAsyncJob xJob    ,
-                      [in] any       aResult );
+    //------------------------------------------------------------------------
+    /** start and regulate execution
+     */
+    interface com::sun::star::task::XJobExecutor;
 };
 
-//.............................................................................
 }; }; }; };
-//.............................................................................
 
-#endif // __com_sun_star_task_XJobListener_idl__
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *
- *  Revision 1.4  2001/11/20 14:30     as
- *  #91062# make it more simple!
- *
- *  Revision 1.3  2001/09/26 16:16:17  fs
- *  #91062# corrected a comment
- *
- *  Revision 1.2  2001/09/25 14:15:44  fs
- *  #91062# jobCancelled renamed to jobAborted / jobDone gets a new param (the result)
- *
- *  Revision 1.1  2001/09/14 09:48:16  fs
- *  initial checkin - specification for a listener to an asynchronous job
- *
- *
- *  Revision 1.0 13.09.01 17:03:45  fs
- ************************************************************************/
-
+#endif

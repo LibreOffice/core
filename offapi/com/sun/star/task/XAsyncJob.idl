@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XAsyncJob.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-09-14 09:48:03 $
+ *  last change: $Author: as $ $Date: 2001-12-05 13:18:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,22 +85,15 @@ interface XJobListener;
 interface XAsyncJob : com::sun::star::uno::XInterface
 {
     /** executes the job asynchronously
-    @param xContext
-        specifies the context in which the job is beeing executed. If not <NULL/>, the semantics depends on the
-        concrete component executing the job.
-    @param aArgs
+    @param lArgs
         are arguments for executing the job. Their semantics is completely implementation dependent. Usually,
         a concrete implementation of a job specifies in its service descriptions which parameters are allowed
         (or expected).
     @param xListener
         specifies a listener which should be notified on events. May be <NULL/>.
     */
-    void    executeAsync(
-        [in] com::sun::star::uno::XInterface                    xContext,
-        [in] sequence< com::sun::star::beans::NamedValue >      aArgs,
-        [in] XJobListener                                       xListener
-    )
-    raises( com::sun::star::lang::IllegalArgumentException );
+    void executeAsync( [in] sequence< com::sun::star::beans::NamedValue > lArgs     ,
+                       [in] XJobListener                                  xListener ) raises( com::sun::star::lang::IllegalArgumentException );
 };
 
 //.............................................................................
@@ -112,6 +105,13 @@ interface XAsyncJob : com::sun::star::uno::XInterface
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *
+ *  Revision 1.2  2001/11/20 14:28:26  as
+ *  #91062# make interface more simple!
+ *
+ *  Revision 1.1  2001/09/14 09:48:03  fs
+ *  initial checkin - specification for a job to be executed asynchronously
+ *
  *
  *  Revision 1.0 13.09.01 17:03:45  fs
  ************************************************************************/
