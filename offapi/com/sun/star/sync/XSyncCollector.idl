@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSyncCollector.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:09:24 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 23:31:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,7 +83,7 @@
 module com {  module sun {  module star {  module sync {
 
 /// @deprecated
-interface XSyncCollector: com::sun::star::uno::XInterface
+published interface XSyncCollector: com::sun::star::uno::XInterface
 {
     boolean                                         initialize( [in] com::sun::star::ucb::XContentProviderManager xMgr,
                                                                 [in] sequence<com::sun::star::sync::SyncScheme> aSyncSchemes,
