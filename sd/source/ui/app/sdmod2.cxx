@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod2.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 15:43:06 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 13:48:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,6 +158,7 @@
 #ifndef SD_OUTLINE_VIEW_HXX
 #include "OutlineView.hxx"
 #endif
+#include "ViewShellBase.hxx"
 #include "sdpage.hxx"
 //CHINA001 #include "tpoption.hxx"
 //CHINA001 #include "prntopts.hxx"
@@ -229,16 +230,21 @@ static SdPage* GetCurrentPage( sd::ViewShell* pViewSh, EditFieldInfo* pInfo, boo
 
         if(pPV)
         {
+            const SdrPage* pSdrPage = NULL;
             // get the current page from the current painting display info
             if( pPV->GetCurrentPaintingDisplayInfo() )
             {
-                pPage = (SdPage*)pPV->GetCurrentPaintingDisplayInfo()->GetProcessedPage();
+                pSdrPage = pPV->GetCurrentPaintingDisplayInfo()->GetProcessedPage();
             }
             else
             {
                 // if this is not available, get the current page from the page view
-                pPage = (SdPage*) pPV->GetPage();
+                pSdrPage = pPV->GetPage();
             }
+            // The following cast is a little hack because it ignores the
+            // const-ness of the page pointer.
+            if (pSdrPage != NULL && pSdrPage->ISA(SdPage))
+                pPage = PTR_CAST(SdPage, pSdrPage);
 
             // if all else failed, geht the current page from the object that is
             // currently formated from the document
@@ -354,8 +360,13 @@ IMPL_LINK(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo)
             aRepresentation += sal_Unicode( ' ' );
 
             ::sd::ViewShell* pViewSh = pDocShell ? pDocShell->GetViewShell() : NULL;
-            if( !pViewSh )
-                pViewSh = PTR_CAST( ::sd::ViewShell, SfxViewShell::Current() );
+            if (pViewSh == NULL)
+            {
+                ::sd::ViewShellBase* pBase = PTR_CAST(::sd::ViewShellBase,
+                    SfxViewShell::Current());
+                if (pBase != NULL)
+                    pViewSh = pBase->GetMainViewShell();
+            }
 
             bool bMasterView;
             SdPage* pPage = GetCurrentPage( pViewSh, pInfo, bMasterView );
@@ -425,12 +436,17 @@ IMPL_LINK(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo)
             String aRepresentation;
 
             sd::ViewShell* pViewSh = pDocShell ? pDocShell->GetViewShell() : NULL;
+            /*af: We now have more than one view shell and documents that
+                are not connected to a view shell.  Using the current view
+                shell is not the right thing to do.
             if( !pViewSh )
                 pViewSh = PTR_CAST( sd::ViewShell, SfxViewShell::Current() );
+            */
 
             bool bMasterView = false;
-
-            SdPage* pPage = GetCurrentPage( pViewSh, pInfo, bMasterView );
+            SdPage* pPage = NULL;
+            if (pViewSh != NULL)
+                pPage = GetCurrentPage( pViewSh, pInfo, bMasterView );
 
             if( (pPage == NULL) || bMasterView )
             {
@@ -528,7 +544,8 @@ SfxItemSet*  SdModule::CreateItemSet( USHORT nSlot )
             pFrameView = pDocSh->GetFrameView();
 
         pViewShell = pDocSh->GetViewShell();
-        pViewShell->WriteFrameViewData();
+        if (pViewShell != NULL)
+            pViewShell->WriteFrameViewData();
     }
 
     SdOptions* pOptions = GetSdOptions(eDocType);
@@ -658,7 +675,8 @@ void SdModule::ApplyItemSet( USHORT nSlot, const SfxItemSet& rSet )
             pFrameView = pDocSh->GetFrameView();
 
         pViewShell = pDocSh->GetViewShell();
-        pViewShell->WriteFrameViewData();
+        if (pViewShell != NULL)
+            pViewShell->WriteFrameViewData();
     }
     SdOptions* pOptions = GetSdOptions(eDocType);
     // Raster
