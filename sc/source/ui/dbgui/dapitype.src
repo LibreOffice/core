@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dapitype.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-01 20:46:02 $
+ *  last change: $Author: kz $ $Date: 2001-03-06 08:58:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,7 +138,7 @@ ModalDialog RID_SCDLG_DAPITYPE
         Text[ swedish ] = "Datakälla som är registrerad i %PRODUCTNAME";
         Text[ polish ] = "Zarejestr. ~w %PRODUCTNAME Ÿród³o danych";
         Text[ portuguese_brazilian ] = "Database source";
-        Text[ japanese ] = "%PRODUCTNAME ‚É“o˜^‚³‚ê‚½ÃÞ°À¿°½(~I)";
+        Text[ japanese ] = "%PRODUCTNAME ‚É“o˜^‚µ‚½ÃÞ°À¿°½(~I)";
         Text[ korean ] = "µ¥ÀÌÅÍº£ÀÌ½º ¼Ò½º(~D)";
         Text[ chinese_simplified ] = "ÔÚ %PRODUCTNAME ÖÐµÇ¼ÇµÄÊý¾ÝÔ´(~I)";
         Text[ chinese_traditional ] = "%PRODUCTNAME ¤w¸gµn°Oªº¸ê®Æ¨Ó·½(~I)";
