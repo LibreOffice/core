@@ -54,14 +54,15 @@ SV_DECL_PTRARR_DEL( ToolBoxDescriptor, ToolBoxItemDescriptorPtr, 10, 2)
 
 struct ToolBoxLayoutItemDescriptor
 {
-    String                      aName;          // Name der Toolbox ( Objectbar, Toolbar etc. )
-    Point                       aFloatingPos;   // Position im nicht angedockten Zustand
-    USHORT                      nFloatingLines; // Anzahl der Zeilen im nicht angedockten Zustand
-    USHORT                      nLines;         // Anzahl der Zeilen im angedockten Zustand
-    ToolBoxAlign                eAlign;         // Alignment im angedockten Zustand
-    BOOL                        bVisible;       // ein - oder ausgeschaltet
-    BOOL                        bFloating;      // angedockt oder nicht
-    ButtonType                  eType;          // Text, Symbol or Text+Symbol
+    String                      aName;          // Unique name of the toolbox ( Objectbar, Toolbar etc. )
+    String                      aUserName;      // Userspecified name for this toolbar
+    Point                       aFloatingPos;   // Position in floating mode
+    USHORT                      nFloatingLines; // Number of lines in floating mode
+    USHORT                      nLines;         // Number of lines in docking mode
+    ToolBoxAlign                eAlign;         // Aligned position in docking mode
+    BOOL                        bVisible;       // Visible or not
+    BOOL                        bFloating;      // Floating mode on/off
+    ButtonType                  eType;          // text, symbol or text+symbol
 
     ToolBoxLayoutItemDescriptor() : nFloatingLines( 0 )
                                     ,nLines( 1 )

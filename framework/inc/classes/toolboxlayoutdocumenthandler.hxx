@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolboxlayoutdocumenthandler.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-09 18:28:09 $
+ *  last change: $Author: cd $ $Date: 2002-07-11 14:56:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,6 +129,7 @@ class OReadToolBoxLayoutDocumentHandler : public ::com::sun::star::xml::sax::XDo
             TBL_ATTRIBUTE_FLOATINGPOSTOP,
             TBL_ATTRIBUTE_VISIBLE,
             TBL_ATTRIBUTE_STYLE,
+            TBL_ATTRIBUTE_USERDEFNAME,
             TBL_XML_ENTRY_COUNT
         };
 

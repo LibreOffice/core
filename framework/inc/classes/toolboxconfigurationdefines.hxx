@@ -39,6 +39,7 @@
 #define ATTRIBUTE_ALIGN             "align"
 #define ATTRIBUTE_FLOATING          "floating"
 #define ATTRIBUTE_BUTTONTYPE        "style"
+#define ATTRIBUTE_USERDEFNAME       "userdefname"
 
 #define ELEMENT_NS_TOOLBAR          "toolbar:toolbar"
 #define ELEMENT_NS_TOOLBARITEM      "toolbar:toolbaritem"

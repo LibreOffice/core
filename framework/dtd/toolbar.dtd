@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-	$Id: toolbar.dtd,v 1.6 2001-10-17 10:57:37 cd Exp $
+	$Id: toolbar.dtd,v 1.7 2002-07-11 14:58:04 cd Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -90,4 +90,5 @@
 	toolbar:visible %boolean; "false"
 	toolbar:floating %boolean; "false"
 	toolbar:style %style; "symbol"
+	toolbar:userdefname CDATA #IMPLIED
 >
