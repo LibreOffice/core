@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connection.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-29 07:07:13 $
+ *  last change: $Author: oj $ $Date: 2001-04-11 06:46:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -404,11 +404,19 @@ OConnection::OConnection(ODatabaseSource& _rDB, const OConfigurationNode& _rTabl
             ,m_aTableFilter(_rDB.m_aTableFilter)
             ,m_aTableTypeFilter(_rDB.m_aTableTypeFilter)
             ,m_xORB(_rxORB)
+            ,m_pTables(NULL)
+            ,m_pViews(NULL)
 {
     DBG_CTOR(OConnection,NULL);
 
-    m_pTables = new OTableContainer(_rTablesConfig,_rCommitLocation,*this, m_aMutex, this, this);
-    m_pViews = new OViewContainer(*this, m_aMutex, this, this);
+    try
+    {
+        m_pTables = new OTableContainer(_rTablesConfig,_rCommitLocation,*this, m_aMutex, this, this);
+        m_pViews = new OViewContainer(*this, m_aMutex, this, this);
+    }
+    catch(const SQLException&)
+    {
+    }
     // initialize the queries
     DBG_ASSERT(_rDB.m_aConfigurationNode.isValid(), "OConnection::OConnection : invalid configuration location of my parent !");
 }
