@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mathtype.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: cmc $ $Date: 2002-05-17 12:15:17 $
+ *  last change: $Author: cmc $ $Date: 2002-07-16 10:49:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,7 +214,7 @@ static sal_Unicode Convert(sal_Unicode nIn)
     {
         case 0x2223:
             nIn = '|';
-        break;
+            break;
         default:
             break;
     }
@@ -858,7 +858,10 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
             {
                 if (nRecord == END)
                 {
-                    sal_Unicode cChar = rRet.GetChar(rRet.Len()-1);
+                    sal_Unicode cChar = 0;
+                    xub_StrLen nI = rRet.Len()-1;
+                    while (nI && ((cChar = rRet.GetChar(nI)) == ' '))
+                        --nI;
                     if ((cChar == '=') || (cChar == '+') || (cChar == '-'))
                         APPEND(rRet,"{}");
                 }
