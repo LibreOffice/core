@@ -2,9 +2,9 @@
  *
  *  $RCSfile: simpleinteractionrequest.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2001-05-28 10:48:20 $
+ *  last change: $Author: kso $ $Date: 2001-05-28 12:42:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,10 +131,10 @@ SimpleInteractionRequest::SimpleInteractionRequest(
 //=========================================================================
 const sal_Int32 SimpleInteractionRequest::getResponse() const
 {
-    vos::ORef< InteractionContinuation > xSelection = getSelection();
-    if ( xSelection.isValid() )
+    rtl::Reference< InteractionContinuation > xSelection = getSelection();
+    if ( xSelection.is() )
     {
-        InteractionContinuation * pSelection = xSelection.getBodyPtr();
+        InteractionContinuation * pSelection = xSelection.get();
 
         uno::Reference< task::XInteractionAbort > xAbort(
                                         pSelection, uno::UNO_QUERY );

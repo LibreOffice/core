@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interactionrequest.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2001-05-28 10:48:20 $
+ *  last change: $Author: kso $ $Date: 2001-05-28 12:42:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,7 @@ namespace ucbhelper
 
 struct InteractionRequest_Impl
 {
-    vos::ORef< InteractionContinuation > m_xSelection;
+    rtl::Reference< InteractionContinuation > m_xSelection;
     com::sun::star::uno::Any m_aRequest;
     com::sun::star::uno::Sequence<
         com::sun::star::uno::Reference<
@@ -140,14 +140,15 @@ void InteractionRequest::setContinuations(
 }
 
 //=========================================================================
-vos::ORef< InteractionContinuation > InteractionRequest::getSelection() const
+rtl::Reference< InteractionContinuation >
+InteractionRequest::getSelection() const
 {
     return m_pImpl->m_xSelection;
 }
 
 //=========================================================================
 void InteractionRequest::setSelection(
-                const vos::ORef< InteractionContinuation > & rxSelection )
+                const rtl::Reference< InteractionContinuation > & rxSelection )
 {
     m_pImpl->m_xSelection = rxSelection;
 }

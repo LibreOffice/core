@@ -2,9 +2,9 @@
  *
  *  $RCSfile: simpleauthenticationrequest.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2001-05-28 10:48:20 $
+ *  last change: $Author: kso $ $Date: 2001-05-28 12:42:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,7 +119,7 @@ SimpleAuthenticationRequest::SimpleAuthenticationRequest(
         uno::Reference< task::XInteractionContinuation > > aContinuations( 3 );
     aContinuations[ 0 ] = new InteractionAbort( this );
     aContinuations[ 1 ] = new InteractionRetry( this );
-    aContinuations[ 2 ] = m_xAuthSupplier.getBodyPtr();
+    aContinuations[ 2 ] = m_xAuthSupplier.get();
 
     setContinuations( aContinuations );
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interactionrequest.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2001-05-28 10:42:33 $
+ *  last change: $Author: kso $ $Date: 2001-05-28 12:42:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,8 +84,8 @@
 #include <com/sun/star/ucb/XInteractionSupplyAuthentication.hpp>
 #endif
 
-#ifndef _VOS_REF_HXX_
-#include <vos/ref.hxx>
+#ifndef _RTL_REF_HXX_
+#include <rtl/ref.hxx>
 #endif
 #ifndef _CPPUHELPER_WEAK_HXX_
 #include <cppuhelper/weak.hxx>
@@ -168,7 +168,7 @@ public:
       * @return the continuation choosen by an interaction handler or an empty
       *         reference, if the request was not (yet) handled.
       */
-    vos::ORef< InteractionContinuation > getSelection() const;
+    rtl::Reference< InteractionContinuation > getSelection() const;
 
     /**
       * This method sets a continuation for the request. It also can be used
@@ -180,7 +180,8 @@ public:
       *        current selection.
       */
     void
-    setSelection( const vos::ORef< InteractionContinuation > & rxSelection );
+    setSelection(
+        const rtl::Reference< InteractionContinuation > & rxSelection );
 };
 
 //============================================================================

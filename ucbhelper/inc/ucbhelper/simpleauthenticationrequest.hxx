@@ -2,9 +2,9 @@
  *
  *  $RCSfile: simpleauthenticationrequest.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2001-05-28 10:42:33 $
+ *  last change: $Author: kso $ $Date: 2001-05-28 12:42:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,9 @@
 #ifndef _UCBHELPER_SIMPLEAUTHENTICATIONREQUEST_HXX
 #define _UCBHELPER_SIMPLEAUTHENTICATIONREQUEST_HXX
 
+#ifndef _RTL_REF_HXX_
+#include <rtl/ref.hxx>
+#endif
 #ifndef _UCBHELPER_INTERATIONREQUEST_HXX
 #include <ucbhelper/interactionrequest.hxx>
 #endif
@@ -89,7 +92,8 @@ namespace ucbhelper {
   */
 class SimpleAuthenticationRequest : public ucbhelper::InteractionRequest
 {
-    vos::ORef< ucbhelper::InteractionSupplyAuthentication > m_xAuthSupplier;
+    rtl::Reference<
+        ucbhelper::InteractionSupplyAuthentication > m_xAuthSupplier;
 
 public:
     /**
@@ -116,7 +120,7 @@ public:
       *
       * @return the supplier for the missing authentication data.
       */
-    const vos::ORef< ucbhelper::InteractionSupplyAuthentication > &
+    const rtl::Reference< ucbhelper::InteractionSupplyAuthentication > &
     getAuthenticationSupplier() const { return m_xAuthSupplier; }
 };
 
