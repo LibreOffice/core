@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FTable.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:38:24 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 08:26:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -247,7 +247,7 @@ void SAL_CALL OFileTable::release() throw()
     OTable_TYPEDEF::release();
 }
 // -----------------------------------------------------------------------------
-BOOL OFileTable::InsertRow(OValueVector& rRow, BOOL bFlush,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xCols)
+BOOL OFileTable::InsertRow(OValueRefVector& rRow, BOOL bFlush,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xCols)
 {
     return sal_False;
 }
@@ -257,7 +257,7 @@ BOOL OFileTable::DeleteRow(const OSQLColumns& _rCols)
     return sal_False;
 }
 // -----------------------------------------------------------------------------
-BOOL OFileTable::UpdateRow(OValueVector& rRow, OValueRow pOrgRow,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xCols)
+BOOL OFileTable::UpdateRow(OValueRefVector& rRow, OValueRefRow& pOrgRow,const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xCols)
 {
     return sal_False;
 }
