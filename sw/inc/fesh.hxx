@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fesh.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: os $ $Date: 2002-08-23 13:36:43 $
+ *  last change: $Author: hbrinkm $ $Date: 2002-08-30 08:52:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -370,6 +370,7 @@ public:
 
     //Get FlyFrameFormat; fuer UI Macro Anbindung an Flys
     const SwFrmFmt* GetFlyFrmFmt() const;
+          SwFrmFmt* GetFlyFrmFmt();
 
     //OLE, Server fordert neue Groesse an, die gewuenschten Werte werden
     //als Rahmenattribute eingestellt. Wenn die Werte nicht erlaubt sind,
@@ -675,7 +676,7 @@ public:
     long GetSectionWidth( SwFmt& rFmt ) const;
 
     void GetConnectableFrmFmts
-    (const SwFrmFmt & rFmt, const String & rReference, BOOL bSuccessors,
+    (SwFrmFmt & rFmt, const String & rReference, BOOL bSuccessors,
      ::std::vector< String > & aPrevPageVec,
      ::std::vector< String > & aThisPageVec,
      ::std::vector< String > & aNextPageVec,
