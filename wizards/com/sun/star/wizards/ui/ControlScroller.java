@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ControlScroller.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-08 14:06:10 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 14:03:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -57,7 +57,6 @@
  *  Contributor(s): _____________________________________
  *
  */
-
 package com.sun.star.wizards.ui;
 import com.sun.star.awt.FocusEvent;
 import com.sun.star.awt.XFocusListener;
@@ -75,6 +74,7 @@ import java.util.*;
 public abstract class ControlScroller {
     protected WizardDialog CurUnoDialog;
     protected XMultiServiceFactory xMSF;
+    private Object oImgControl;
     protected int ncurfieldcount;
     protected int nblockincrement;
     private int nlineincrement;
@@ -100,6 +100,7 @@ public abstract class ControlScroller {
     protected int curHelpIndex;
     String sIncSuffix;
     protected Vector ControlGroupVector = new Vector();
+    protected PeerConfig oTitlePeerConfig;
 
     class AdjustmentListenerImpl implements com.sun.star.awt.XAdjustmentListener {
 
@@ -142,21 +143,28 @@ public abstract class ControlScroller {
         iStartPosY = iCompPosY + SORELFIRSTPOSY;
         int ScrollHeight = iCompHeight - 2;
         nlineincrement = 1;
-        sIncSuffix = com.sun.star.wizards.common.Desktop.getIncrementSuffix(CurUnoDialog.xDlgNameAccess, "lblFields");
-        CurUnoDialog.insertControlModel("com.sun.star.awt.UnoControlImageControlModel", "imgBackground" + sIncSuffix, new String[] { "Border", "Height", "PositionX", "PositionY", "Step", "Width" }, new Object[] { new Short("1"), new Integer(iCompHeight), ICompPosX, new Integer(iCompPosY), IStep, ICompWidth });
-        Object oImgControl = CurUnoDialog.xDlgContainer.getControl("imgBackground" + sIncSuffix);
-        PeerConfigHelper oTitlePeerConfig = new PeerConfigHelper(CurUnoDialog.xUnoDialog);
-        oTitlePeerConfig.setPeerProperties(oImgControl, new String[] { "MouseTransparent" }, new Boolean[] { Boolean.TRUE });
+        sIncSuffix = com.sun.star.wizards.common.Desktop.getIncrementSuffix(CurUnoDialog.xDlgNameAccess, "imgBackground");
+        CurUnoDialog.insertControlModel("com.sun.star.awt.UnoControlImageControlModel", "imgBackground" + sIncSuffix,
+                new String[] { "Border", "Height", "PositionX", "PositionY", "Step", "Width" },
+                new Object[] { new Short("1"), new Integer(iCompHeight), ICompPosX, new Integer(iCompPosY), IStep, ICompWidth });
+        oImgControl = CurUnoDialog.xDlgContainer.getControl("imgBackground" + sIncSuffix);
+        setComponentMouseTransparent();
         xScrollBar = CurUnoDialog.insertScrollBar("TitleScrollBar" + sIncSuffix, 0,
                 new AdjustmentListenerImpl(),
                 new String[] { "Border", "Enabled", "Height", "HelpURL", "Orientation", "PositionX", "PositionY", "Step", "Width" },
-                new Object[] { new Short("0"), new Boolean(true), new Integer(ScrollHeight), "HID:" + curHelpIndex,  new Integer(ScrollBarOrientation.VERTICAL), new Integer(iCompPosX + iCompWidth - iScrollBarWidth - 1), new Integer(iCompPosY + 1), IStep, new Integer(iScrollBarWidth)});
+                new Object[] { new Short((short)0), new Boolean(true), new Integer(ScrollHeight), "HID:" + curHelpIndex,  new Integer(ScrollBarOrientation.VERTICAL), new Integer(iCompPosX + iCompWidth - iScrollBarWidth - 1), new Integer(iCompPosY + 1), IStep, new Integer(iScrollBarWidth)});
         scrollfields = new Vector();
         int ypos = iStartPosY + SORELFIRSTPOSY;
         for (int i = 0; i < nblockincrement; i++) {
             insertControlGroup(i, ypos);
             ypos += linedistance;
         }
+    }
+
+    public void setComponentMouseTransparent(){
+        if (oTitlePeerConfig == null)
+            oTitlePeerConfig = new PeerConfig(CurUnoDialog.xWindow);
+        oTitlePeerConfig.setPeerProperties(oImgControl, new String[] { "MouseTransparent" }, new Boolean[] { Boolean.TRUE });
     }
 
     protected void setScrollBarOrientationHorizontal() {
