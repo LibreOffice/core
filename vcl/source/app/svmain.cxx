@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svmain.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: jbu $ $Date: 2001-06-08 16:22:41 $
+ *  last change: $Author: kr $ $Date: 2001-06-21 11:14:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,6 +162,10 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
 
+using namespace ::rtl;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::lang;
+
 #ifdef REMOTE_APPSERVER
 #include <config.hxx>
 #include <ooffice.hxx>
@@ -179,10 +183,7 @@
 #include <com/sun/star/portal/client/XRmStatus.hpp>
 #include <com/sun/star/portal/client/XRmSync.hpp>
 
-using namespace ::rtl;
 using namespace ::cppu;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::portal::client;
 
 #ifdef UNX
@@ -268,7 +269,7 @@ BOOL SVMain()
 
     DBG_ASSERT( pSVData->mpApp, "no instance of class Application" );
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xMS;
+    Reference<XMultiServiceFactory> xMS;
 
     BOOL bInit = InitVCL( xMS );
 
@@ -331,8 +332,8 @@ BOOL InitVCL( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XM
     // SV bei den Tools anmelden
     InitTools();
 
-    //DBG_ASSERT( !pSVData->maAppData.mxMSF.is(), "VCL service factory already set" )
-    //pSVData->maAppData.mxMSF = rSMgr;
+    DBG_ASSERT( !pSVData->maAppData.mxMSF.is(), "VCL service factory already set" )
+    pSVData->maAppData.mxMSF = rSMgr;
 
     // Main-Thread-Id merken
     pSVData->mnMainThreadId = ::vos::OThread::getCurrentIdentifier();
