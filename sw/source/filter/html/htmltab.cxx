@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmltab.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:49:20 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:48:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3163,19 +3163,6 @@ const SwStartNode *SwHTMLParser::InsertTableSection( sal_uInt16 nPoolId )
     }
 
     return pStNd;
-}
-
-const SwStartNode *SwHTMLParser::InsertEmptyTableSection()
-{
-    ASSERT( !pTable || !pTable->bFirstCell,
-            "erste Zelle der Tabelle nicht genutzt" );
-
-    const SwNode *pNd = pDoc->GetNodes()[pPam->GetPoint()->nNode];
-    const SwTableNode *pTblNd = pNd->FindTableNode();
-    pTable->IncBoxCount();
-
-    return pDoc->GetNodes().MakeEmptySection(
-            SwNodeIndex( *pTblNd->EndOfSectionNode() ), SwTableBoxStartNode );
 }
 
 SwStartNode *SwHTMLParser::InsertTempTableCaptionSection()
