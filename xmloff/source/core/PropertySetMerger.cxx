@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertySetMerger.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cl $ $Date: 2000-11-08 11:30:57 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:14:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -267,7 +267,7 @@ Sequence< Property > SAL_CALL PropertySetMergerImpl::getProperties() throw(Runti
 
     sal_Int32 nIndex;
 
-    Property* pProperties;
+    Property* pProperties = aProperties.getArray();
 
     for( nIndex = 0; nIndex < nCount1; nIndex++ )
         *pProperties++ = *pProps1++;
