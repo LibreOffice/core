@@ -2,9 +2,9 @@
  *
  *  $RCSfile: customizeaddresslistdialog.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:10:29 $
+ *  last change: $Author: rt $ $Date: 2004-09-29 09:30:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,10 @@
  *
  *
  ************************************************************************/
+
+#ifdef SW_DLLIMPLEMENTATION
+#undef SW_DLLIMPLEMENTATION
+#endif
 #pragma hdrstop
 
 #ifndef _SWTYPES_HXX

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mmgreetingspage.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:15:57 $
+ *  last change: $Author: rt $ $Date: 2004-09-29 09:31:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,11 @@
  *
  *
  ************************************************************************/
+
+#ifdef SW_DLLIMPLEMENTATION
+#undef SW_DLLIMPLEMENTATION
+#endif
+
 #pragma hdrstop
 #ifndef _MAILMERGEGREETINGSPAGE_HXX
 #include <mmgreetingspage.hxx>

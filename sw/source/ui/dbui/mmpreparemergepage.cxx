@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mmpreparemergepage.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:19:40 $
+ *  last change: $Author: rt $ $Date: 2004-09-29 09:33:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,11 @@
  *
  *
  ************************************************************************/
+
+#ifdef SW_DLLIMPLEMENTATION
+#undef SW_DLLIMPLEMENTATION
+#endif
+
 #pragma hdrstop
 #ifndef _MAILMERGEPREPAREMERGEPAGE_HXX
 #include <mmpreparemergepage.hxx>

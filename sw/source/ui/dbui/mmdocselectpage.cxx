@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mmdocselectpage.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-27 13:39:38 $
+ *  last change: $Author: rt $ $Date: 2004-09-29 09:31:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,11 @@
  *
  *
  ************************************************************************/
+
+#ifdef SW_DLLIMPLEMENTATION
+#undef SW_DLLIMPLEMENTATION
+#endif
+
 #pragma hdrstop
 
 #ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
