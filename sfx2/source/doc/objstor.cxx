@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.146 $
+ *  $Revision: 1.147 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 13:31:30 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 15:19:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2204,6 +2204,12 @@ sal_Bool SfxObjectShell::DoSave_Impl( const SfxItemSet* pArgs )
 
 sal_Bool SfxObjectShell::Save_Impl( const SfxItemSet* pSet )
 {
+    if ( IsReadOnly() )
+    {
+        SetError( ERRCODE_SFX_DOCUMENTREADONLY );
+        return sal_False;
+    }
+
     DBG_CHKTHIS(SfxObjectShell, 0);
     SfxApplication *pSfxApp = SFX_APP();
 
@@ -2841,8 +2847,8 @@ sal_Bool SfxObjectShell::SaveChildren()
 {
     sal_Bool bResult = sal_True;
 
-    uno::Sequence < ::rtl::OUString > aNames = GetEmbeddedObjectContainer().GetObjectNames();
     sal_Bool bOasis = ( SotStorage::GetVersion( GetStorage() ) > SOFFICE_FILEFORMAT_60 );
+    uno::Sequence < ::rtl::OUString > aNames = GetEmbeddedObjectContainer().GetObjectNames();
 
     for ( sal_Int32 n=0; n<aNames.getLength(); n++ )
     {
@@ -2850,6 +2856,23 @@ sal_Bool SfxObjectShell::SaveChildren()
         OSL_ENSURE( xObj.is(), "An empty entry in the embedded objects list!\n" );
         if ( xObj.is() )
         {
+            sal_Int32 nCurState = xObj->getCurrentState();
+            if ( bOasis && nCurState != embed::EmbedStates::LOADED && nCurState != embed::EmbedStates::RUNNING )
+            {
+                // means that the object is active
+                // the image must be regenerated
+                ::rtl::OUString aMediaType;
+
+                // TODO/LATER: another aspect could be used
+                uno::Reference < io::XInputStream > xStream =
+                            svt::EmbeddedObjectRef::GetGraphicReplacementStream(
+                                                        embed::Aspects::MSOLE_CONTENT,
+                                                        xObj,
+                                                        &aMediaType );
+                   if ( xStream.is() )
+                       GetEmbeddedObjectContainer().InsertGraphicStream( xStream, aNames[n], aMediaType );
+            }
+
             uno::Reference< embed::XEmbedPersist > xPersist( xObj, uno::UNO_QUERY );
             if ( xPersist.is() )
             {
@@ -2937,31 +2960,28 @@ sal_Bool SfxObjectShell::SaveAsChildren( SfxMedium& rMedium )
                 uno::Reference< embed::XLinkageSupport > xLink( xObj, uno::UNO_QUERY );
                 if ( bOasis || xLink.is() && xLink->isLink() )
                 {
-                    // copy replacement image from old to new container
+                    uno::Reference < io::XInputStream > xStream;
                     ::rtl::OUString aMediaType;
-                    uno::Reference < io::XInputStream > xStream = GetEmbeddedObjectContainer().GetGraphicStream( xObj, &aMediaType );
+
+                    sal_Int32 nCurState = xObj->getCurrentState();
+                    if ( nCurState == embed::EmbedStates::LOADED || nCurState == embed::EmbedStates::RUNNING )
+                    {
+                        // means that the object is not active
+                        // copy replacement image from old to new container
+                        xStream = GetEmbeddedObjectContainer().GetGraphicStream( xObj, &aMediaType );
+                    }
+
                     if ( !xStream.is() )
                     {
-                        try
-                        {
-                            // object must be running to get a new visual representation
-                            if ( xObj->getCurrentState() == embed::EmbedStates::LOADED )
-                            {
-                                xObj->changeState( embed::EmbedStates::RUNNING );
+                        // the image must be regenerated
+                        // TODO/LATER: another aspect could be used
+                        if ( xObj->getCurrentState() == embed::EmbedStates::LOADED )
                                 bSwitchBackToLoaded = sal_True;
-                            }
 
-                            // TODO/LATER: another aspect could be used
-                            embed::VisualRepresentation aRep =
-                                            xObj->getPreferredVisualRepresentation( embed::Aspects::MSOLE_CONTENT );
-                            aMediaType = aRep.Flavor.MimeType;
-                            uno::Sequence < sal_Int8 > aSeq;
-                            aRep.Data >>= aSeq;
-                            xStream = new ::comphelper::SequenceInputStream( aSeq );
-                        }
-                        catch ( uno::Exception& )
-                        {
-                        }
+                        xStream = svt::EmbeddedObjectRef::GetGraphicReplacementStream(
+                                                                embed::Aspects::MSOLE_CONTENT,
+                                                                xObj,
+                                                                &aMediaType );
                     }
 
                     if ( xStream.is() )
