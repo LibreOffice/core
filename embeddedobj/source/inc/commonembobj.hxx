@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commonembobj.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 17:52:42 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:45:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -215,7 +215,7 @@ private:
 
     sal_Int32 ConvertVerbToState_Impl( sal_Int32 nVerb );
 
-    void StateChangeNotification_Impl( sal_Bool bBeforeChange, sal_Int32 nOldState, sal_Int32 nNewState );
+    void StateChangeNotification_Impl( sal_Bool bBeforeChange, sal_Int32 nOldState, sal_Int32 nNewState,::osl::ResettableMutexGuard& _rGuard );
 
     void SwitchStateTo_Impl( sal_Int32 nNextState );
 
