@@ -2,9 +2,9 @@
  *
  *  $RCSfile: export2.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: nf $ $Date: 2002-04-04 13:44:01 $
+ *  last change: $Author: nf $ $Date: 2002-06-26 13:06:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 #include "export.hxx"
 #include "utf8conv.hxx"
 #include <tools/datetime.hxx>
+#include <tools/l2txtenc.hxx>
 #include <bootstrp/appdef.hxx>
 
 //
@@ -163,39 +164,7 @@ USHORT Export::GetLangIndex( USHORT nLangId )
 CharSet Export::GetCharSet( USHORT nLangId )
 /*****************************************************************************/
 {
-    switch ( nLangId ) {
-        case COMMENT: return RTL_TEXTENCODING_MS_1252;
-        case ENGLISH_US: return RTL_TEXTENCODING_MS_1252;
-        case PORTUGUESE: return RTL_TEXTENCODING_MS_1252;
-        case RUSSIAN: return RTL_TEXTENCODING_MS_1251;
-        case GREEK: return RTL_TEXTENCODING_MS_1253;
-        case DUTCH: return RTL_TEXTENCODING_MS_1252;
-        case FRENCH: return RTL_TEXTENCODING_MS_1252;
-        case SPANISH: return RTL_TEXTENCODING_MS_1252;
-        case FINNISH: return RTL_TEXTENCODING_MS_1252;
-        case HUNGARIAN: return RTL_TEXTENCODING_MS_1250;
-        case ITALIAN: return RTL_TEXTENCODING_MS_1252;
-        case CZECH: return RTL_TEXTENCODING_MS_1250;
-        case SLOVAK: return RTL_TEXTENCODING_MS_1250;
-        case ENGLISH: return RTL_TEXTENCODING_MS_1252;
-        case DANISH: return RTL_TEXTENCODING_MS_1252;
-        case SWEDISH: return RTL_TEXTENCODING_MS_1252;
-        case NORWEGIAN: return RTL_TEXTENCODING_MS_1252;
-        case POLISH: return RTL_TEXTENCODING_MS_1250;
-        case GERMAN: return RTL_TEXTENCODING_MS_1252;
-        case PORTUGUESE_BRAZILIAN: return RTL_TEXTENCODING_MS_1252;
-        case JAPANESE: return RTL_TEXTENCODING_UTF8;
-        case KOREAN: return RTL_TEXTENCODING_UTF8;
-        case CHINESE_SIMPLIFIED: return RTL_TEXTENCODING_UTF8;
-        case CHINESE_TRADITIONAL: return RTL_TEXTENCODING_UTF8;
-        case TURKISH: return RTL_TEXTENCODING_MS_1254;
-        case ARABIC: return RTL_TEXTENCODING_MS_1256;
-        case HEBREW: return RTL_TEXTENCODING_MS_1255;
-        case CATALAN: return RTL_TEXTENCODING_MS_1252;
-        case THAI: return RTL_TEXTENCODING_UTF8;
-        case EXTERN: return RTL_TEXTENCODING_UTF8;
-    }
-    return 0xFFFF;
+    return Langcode2TextEncoding( nLangId );
 }
 
 /*****************************************************************************/
