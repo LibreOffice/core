@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementimport.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-16 14:36:39 $
+ *  last change: $Author: fs $ $Date: 2001-03-20 08:07:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1023,6 +1023,11 @@ namespace xmloff
             implTranslateStringListProperty(PROPERTY_MASTERFIELDS, _rValue);
         else if (s_sDetailFieldsAttributeName == _rLocalName)
             implTranslateStringListProperty(PROPERTY_DETAILFIELDS, _rValue);
+#if SUPD<628
+        // for compatibility (had a typo in the attribute name)
+        else if (0 == _rLocalName.compareToAscii("detail-fiels"))
+            implTranslateStringListProperty(PROPERTY_DETAILFIELDS, _rValue);
+#endif
         else
             OFormImport_Base::handleAttribute(_nNamespaceKey, _rLocalName, _rValue);
     }
@@ -1099,6 +1104,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.14  2001/03/16 14:36:39  sab
+ *  did the required change (move of extract.hxx form cppuhelper to comphelper)
+ *
  *  Revision 1.13  2001/02/28 16:12:31  fs
  *  #84315# office:events instead of script:events
  *
