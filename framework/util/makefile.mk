@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: rt $ $Date: 2000-12-19 11:28:06 $
+#   last change: $Author: as $ $Date: 2000-12-20 09:48:54 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -114,11 +114,16 @@ SHL2TARGET=		fwl$(UPD)$(DLLPOSTFIX)
 SHL2IMPLIB=		ifwl$(UPD)$(DLLPOSTFIX)
 
 SHL2OBJS=		$(SLO)$/registertemp.obj			\
-                $(SLO)$/mediatypedetectionhelper.obj
+                $(SLO)$/mediatypedetectionhelper.obj\
+                $(SLO)$/frameloaderfactory.obj		\
+                $(SLO)$/registrycache.obj			\
+                $(SLO)$/wildcard.obj
 
 SHL2STDLIBS=	$(CPPULIB)							\
                 $(CPPUHELPERLIB)					\
+                $(COMPHELPERLIB)					\
                 $(TOOLSLIB) 						\
+                $(VOSLIB)							\
                 $(SVLLIB)							\
                 $(SALLIB)
 

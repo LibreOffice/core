@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registertemp.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2000-12-13 09:23:06 $
+ *  last change: $Author: as $ $Date: 2000-12-20 09:48:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,11 +95,17 @@
 #include <baeh_services/mediatypedetectionhelper.hxx>
 #endif
 
+#ifndef __FRAMEWORK_SERVICES_FRAMELOADERFACTORY_HXX_
+#include <services/frameloaderfactory.hxx>
+#endif
+
 COMPONENTGETIMPLEMENTATIONENVIRONMENT
 
 
 COMPONENTWRITEINFO  (   COMPONENTINFO( ::framework::MediaTypeDetectionHelper    )
+                        COMPONENTINFO( ::framework::FrameLoaderFactory          )
                     )
 
-COMPONENTGETFACTORY (   IFFACTORY( ::framework::MediaTypeDetectionHelper    )
+COMPONENTGETFACTORY (   IFFACTORY( ::framework::MediaTypeDetectionHelper        )   else
+                        IFFACTORY( ::framework::FrameLoaderFactory              )
                     )
