@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fwkutil.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jl $ $Date: 2004-05-18 08:05:27 $
+ *  last change: $Author: jl $ $Date: 2004-05-18 08:37:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -405,6 +405,7 @@ rtl::OUString getBaseInstallation()
 rtl::OUString getVendorSettingsURL()
 {
     //get the system path to the javavendors.xml file
+    //First try in an office installation
     rtl::OUString sBaseDir = getBaseInstallation();
     if (sBaseDir.getLength() != 0)
     {
@@ -415,25 +416,49 @@ rtl::OUString getVendorSettingsURL()
         sSettings.appendAscii(VENDORSETTINGS);
         return sSettings.makeStringAndClear();
     }
-    else
-    {
-        //We are not in an office, try to find the javavendors.xml next to this
-        //library
-        rtl::OUString sLib;
-        if (osl_getModuleURLFromAddress((void *) & getVendorSettingsURL,
-                                        & sLib.pData) == sal_True)
-        {
-            sLib = getDirFromFile(sLib);
-            rtl::OUStringBuffer sSettings(256);
-            sSettings.append(sLib);
-            sSettings.appendAscii("/");
-            sSettings.appendAscii(VENDORSETTINGS);
-            return sSettings.makeStringAndClear();
-        }
-        else
-            return rtl::OUString();
 
+    //try next to the executable
+    rtl_uString* sExe = NULL;
+    if (osl_getExecutableFile( & sExe) != osl_Process_E_None)
+    {
+        OSL_ASSERT(0);
+        return rtl::OUString();
     }
+
+    rtl::OUString ouExe(sExe, SAL_NO_ACQUIRE);
+    rtl::OUString sVendor = getDirFromFile(ouExe);
+    rtl::OUStringBuffer sBufVendor(256);
+    sBufVendor.append(sVendor);
+    sBufVendor.appendAscii("/");
+    sBufVendor.appendAscii(VENDORSETTINGS);
+    sVendor = sBufVendor.makeStringAndClear();
+
+    //check if the file exists
+    osl::DirectoryItem vendorItem;
+    osl::File::RC fileError = osl::DirectoryItem::get(sVendor, vendorItem);
+    if (fileError == osl::FileBase::E_None)
+        return sVendor;
+
+    //try next to the jvmfwk.dll
+    rtl::OUString sLib;
+    if (osl_getModuleURLFromAddress((void *) & getVendorSettingsURL,
+                                    & sLib.pData) == sal_True)
+    {
+        sLib = getDirFromFile(sLib);
+        rtl::OUStringBuffer sBufVendor(256);
+        sBufVendor.append(sLib);
+        sBufVendor.appendAscii("/");
+        sBufVendor.appendAscii(VENDORSETTINGS);
+        rtl::OUString sVendor = sBufVendor.makeStringAndClear();
+        //check if the file exists
+        osl::DirectoryItem vendorItem;
+        osl::File::RC fileError = osl::DirectoryItem::get(sVendor, vendorItem);
+        if (fileError == osl::FileBase::E_None)
+            return sVendor;
+    }
+
+    OSL_ASSERT(0);
+    return rtl::OUString();
 }
 
 rtl::OString getVendorSettingsPath()
