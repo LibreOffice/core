@@ -2,9 +2,9 @@
  *
  *  $RCSfile: poolfmt.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: os $ $Date: 2002-06-05 12:25:03 $
+ *  last change: $Author: os $ $Date: 2002-06-17 11:06:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,6 +134,9 @@
 #endif
 #ifndef _SVX_CHARROTATEITEM_HXX
 #include <svx/charrotateitem.hxx>
+#endif
+#ifndef _SVX_FRMDIRITEM_HXX
+#include <svx/frmdiritem.hxx>
 #endif
 #ifndef _VIEWOPT_HXX
 #include <viewopt.hxx>
@@ -1647,6 +1650,7 @@ SwPageDesc* SwDoc::GetPageDescFromPool( USHORT nId, String* pDesc,
     aUL.SetLower( (USHORT)aLR.GetLeft() );
 
     SwAttrSet aSet( GetAttrPool(), aPgFrmFmtSetRange );
+    aSet.Put(SvxFrameDirectionItem());
     BOOL bSetLeft = TRUE;
 
     switch( nId )
