@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printfun.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2001-02-23 09:46:56 $
+ *  last change: $Author: nn $ $Date: 2001-05-08 19:22:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1487,7 +1487,7 @@ void ScPrintFunc::PrintArea( USHORT nX1, USHORT nY1, USHORT nX2, USHORT nY2,
     aOutputData.DrawStrings();
 
 //  pDev->SetMapMode(aLogicMode);
-    aOutputData.DrawEdit(FALSE,1.0,1.0);
+    aOutputData.DrawEdit(FALSE);
 
 //  pDev->SetMapMode(aOffsetMode);
     if (aTableParam.bGrid)
