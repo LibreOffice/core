@@ -2,9 +2,9 @@
  *
  *  $RCSfile: help.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ssa $ $Date: 2002-06-25 14:22:58 $
+ *  last change: $Author: ssa $ $Date: 2002-09-12 09:57:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -384,6 +384,9 @@ HelpTextWindow::~HelpTextWindow()
 {
     maShowTimer.Stop();
     maHideTimer.Stop();
+
+    if( this == ImplGetSVData()->maHelpData.mpHelpWin )
+        ImplGetSVData()->maHelpData.mpHelpWin = NULL;
 
     if ( maStatusText.Len() )
     {
