@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fedesc.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:07:59 $
+ *  last change: $Author: rt $ $Date: 2004-05-25 15:00:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,7 +221,7 @@ void SwFEShell::ChgPageDesc( USHORT i, const SwPageDesc &rChged )
 
 const SwPageDesc& SwFEShell::GetPageDesc( USHORT i ) const
 {
-    return GetDoc()->GetPageDesc( i );
+    return const_cast<const SwDoc *>(GetDoc())->GetPageDesc( i );
 }
 
 SwPageDesc* SwFEShell::FindPageDescByName( const String& rName,
@@ -254,7 +254,8 @@ USHORT SwFEShell::GetMousePageDesc( const Point &rPt ) const
             SwDoc *pDoc = GetDoc();
             for ( USHORT i = 0; i < GetDoc()->GetPageDescCnt(); ++i )
             {
-                if ( pPage->GetPageDesc() == &pDoc->GetPageDesc(i) )
+                if ( pPage->GetPageDesc() == &const_cast<const SwDoc *>(pDoc)
+                     ->GetPageDesc(i) )
                     return i;
             }
         }
@@ -273,7 +274,8 @@ USHORT SwFEShell::GetCurPageDesc( const BOOL bCalcFrm ) const
             SwDoc *pDoc = GetDoc();
             for ( USHORT i = 0; i < GetDoc()->GetPageDescCnt(); ++i )
             {
-                if ( pPage->GetPageDesc() == &pDoc->GetPageDesc(i) )
+                if ( pPage->GetPageDesc() == &const_cast<const SwDoc *>(pDoc)
+                     ->GetPageDesc(i) )
                     return i;
             }
         }
