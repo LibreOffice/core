@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit4.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 15:48:58 $
+ *  last change: $Author: obo $ $Date: 2004-04-28 13:45:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1613,7 +1613,7 @@ void ImpEditEngine::Convert( EditView* pEditView,
     bImpConvertFirstCall = sal_True;    // next ImpConvert call is the very first in this conversion turn
 
     Reference< lang::XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
-    TextConvWrapper aWrp( Application::GetDefModalDialogParent(), xMSF,
+    TextConvWrapper aWrp( Application::GetDefDialogParent(), xMSF,
                           SvxCreateLocale( nLang ), bIsStart, pEditView );
     aWrp.Convert();
 
