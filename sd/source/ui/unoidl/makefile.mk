@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: rt $ $Date: 2003-09-19 08:18:12 $
+#   last change: $Author: obo $ $Date: 2004-01-20 12:33:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -85,6 +85,8 @@ NOOPTFILES= $(SLO)$/unowcntr.obj
 .ENDIF
 
 SLO1FILES =      \
+        $(SLO)$/DrawController.obj \
+        $(SLO)$/DrawSubController.obj \
         $(SLO)$/SdUnoPresView.obj\
         $(SLO)$/SdUnoSlideView.obj\
         $(SLO)$/SdUnoOutlineView.obj\
