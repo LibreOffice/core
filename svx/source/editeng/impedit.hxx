@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.hxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: mt $ $Date: 2001-11-12 13:15:17 $
+ *  last change: $Author: mt $ $Date: 2001-11-14 10:56:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,7 @@ DBG_NAMEEX( EditEngine );
 #define GETCRSR_TXTONLY     0x0002
 
 #define LINE_SEP    0x0A
+
 
 class EditView;
 class EditEngine;
@@ -500,6 +501,8 @@ private:
     Link                aImportHdl;
     Link                aBeginMovingParagraphsHdl;
     Link                aEndMovingParagraphsHdl;
+    Link                aBeginPasteOrDropHdl;
+    Link                aEndPasteOrDropHdl;
 
     vos::ORef<SvxForbiddenCharactersTable>  xForbiddenCharsTable;
 

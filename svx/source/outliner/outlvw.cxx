@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlvw.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mt $ $Date: 2001-10-31 15:43:41 $
+ *  last change: $Author: mt $ $Date: 2001-11-14 11:01:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1110,14 +1110,13 @@ void OutlinerView::PasteSpecial()
 
         pOwner->pEditEngine->SetUpdateMode( FALSE );
         ULONG nStart, nParaCount;
-        nParaCount = pOwner->pEditEngine->GetParagraphCount();
-        USHORT nSize = ImpInitPaste( nStart );
+//      nParaCount = pOwner->pEditEngine->GetParagraphCount();
+        pOwner->bPasting = TRUE;
         pEditView->PasteSpecial();
-        ImpPasted( nStart, nParaCount, nSize);
+//      ImpPasted( nStart, nParaCount, nSize);
+
         pEditView->SetEditEngineUpdateMode( TRUE );
-
         pOwner->UndoActionEnd( OLUNDO_INSERT );
-
         pEditView->ShowCursor( TRUE, TRUE );
     }
 }
@@ -1135,17 +1134,6 @@ List* OutlinerView::CreateSelectionList()
     }
     return pSelList;
 }
-
-/*
-XubString OutlinerView::GetStyleSheet()
-{
-    DBG_CHKTHIS(OutlinerView,0);
-    SfxStyleFamily aFamily;
-    XubString aName;
-    pEditView->GetStyleSheet( aName, aFamily );
-    return aName;
-}
-*/
 
 SfxStyleSheet* OutlinerView::GetStyleSheet() const
 {

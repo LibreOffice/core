@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outliner.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: cl $ $Date: 2001-09-25 10:11:38 $
+ *  last change: $Author: mt $ $Date: 2001-11-14 11:01:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -798,27 +798,32 @@ void Outliner::ImplCheckNumBulletItem( USHORT nPara )
     }
 }
 
-void Outliner::ImplSetLevelDependendStyleSheet( USHORT nPara )
+void Outliner::ImplSetLevelDependendStyleSheet( USHORT nPara, SfxStyleSheet* pLevelStyle )
 {
-    DBG_ASSERT( ImplGetOutlinerMode() == OUTLINERMODE_OUTLINEOBJECT, "SetLevelDependendStyleSheet: Wrong Mode!" );
+    DBG_CHKTHIS(Outliner,0);
 
-    SfxStyleSheet* pCurrentStyle = GetStyleSheet( nPara );
-    if ( pCurrentStyle )
+    DBG_ASSERT( ( ImplGetOutlinerMode() == OUTLINERMODE_OUTLINEOBJECT ) || ( ImplGetOutlinerMode() == OUTLINERMODE_OUTLINEVIEW ), "SetLevelDependendStyleSheet: Wrong Mode!" );
+
+    SfxStyleSheet* pStyle = pLevelStyle;
+    if ( !pStyle )
+        pStyle = GetStyleSheet( nPara );
+
+    if ( pStyle )
     {
-        String aNewStyleSheetName( pCurrentStyle->GetName() );
+        String aNewStyleSheetName( pStyle->GetName() );
         aNewStyleSheetName.Erase( aNewStyleSheetName.Len()-1, 1 );
         aNewStyleSheetName += String::CreateFromInt32( GetDepth( nPara ) );
-        SfxStyleSheet* pNewStyle = (SfxStyleSheet*)GetStyleSheetPool()->Find( aNewStyleSheetName, pCurrentStyle->GetFamily() );
+        SfxStyleSheet* pNewStyle = (SfxStyleSheet*)GetStyleSheetPool()->Find( aNewStyleSheetName, pStyle->GetFamily() );
         DBG_ASSERT( pNewStyle, "AutoStyleSheetName - Style not found!" );
-        if ( pNewStyle && ( pNewStyle != pCurrentStyle ) )
+        if ( pNewStyle && ( pNewStyle != GetStyleSheet( nPara ) ) )
         {
-             SfxItemSet aOldAttrs( pEditEngine->GetParaAttribs( nPara ) );
+             SfxItemSet aOldAttrs( GetParaAttribs( nPara ) );
             SetStyleSheet( nPara, pNewStyle );
             if ( aOldAttrs.GetItemState( EE_PARA_NUMBULLET ) == SFX_ITEM_ON )
             {
-                SfxItemSet aAttrs( pEditEngine->GetParaAttribs( nPara ) );
+                SfxItemSet aAttrs( GetParaAttribs( nPara ) );
                 aAttrs.Put( aOldAttrs.Get( EE_PARA_NUMBULLET ) );
-                pEditEngine->SetParaAttribs( nPara, aAttrs );
+                SetParaAttribs( nPara, aAttrs );
             }
         }
     }
@@ -1475,6 +1480,8 @@ Outliner::Outliner( SfxItemPool* pPool, USHORT nMode )
     pEditEngine = new OutlinerEditEng( this, pPool );
     pEditEngine->SetBeginMovingParagraphsHdl( LINK( this, Outliner, BeginMovingParagraphsHdl ) );
     pEditEngine->SetEndMovingParagraphsHdl( LINK( this, Outliner, EndMovingParagraphsHdl ) );
+    pEditEngine->SetBeginPasteOrDropHdl( LINK( this, Outliner, BeginPasteOrDropHdl ) );
+    pEditEngine->SetEndPasteOrDropHdl( LINK( this, Outliner, EndPasteOrDropHdl ) );
 
     Init( nMode );
 }
@@ -1923,6 +1930,77 @@ IMPL_LINK( Outliner, BeginMovingParagraphsHdl, MoveParagraphsInfo*, pInfos )
     DBG_CHKTHIS(Outliner,0);
 
     GetBeginMovingHdl().Call( this );
+
+    return 0;
+}
+
+IMPL_LINK( Outliner, BeginPasteOrDropHdl, PasteOrDropInfos*, pInfos )
+{
+    BOOL bCheckStyles = ( ( ImplGetOutlinerMode() == OUTLINERMODE_OUTLINEOBJECT ) || ( ImplGetOutlinerMode() == OUTLINERMODE_OUTLINEVIEW ) );
+    if ( bCheckStyles )
+    {
+        UndoActionStart( EDITUNDO_DRAGANDDROP );
+        for ( USHORT n = GetParagraphCount(); n; )
+        {
+            if ( GetDepth( --n ) )
+            {
+                pInfos->pLevelNStyle = GetStyleSheet( n );
+                break;
+            }
+        }
+        if ( ImplGetOutlinerMode() == OUTLINERMODE_OUTLINEVIEW )
+            pInfos->pLevel0Style = GetStyleSheet( 0 );
+    }
+
+    return 0;
+}
+
+IMPL_LINK( Outliner, EndPasteOrDropHdl, PasteOrDropInfos*, pInfos )
+{
+    if ( pInfos->nAction == EE_ACTION_PASTE )
+    {
+        bPasting = FALSE;
+        ImpTextPasted( pInfos->nStartPara, pInfos->nStartPara - pInfos->nEndPara + 1 );
+    }
+
+    BOOL bCheckStyles = ( ( ImplGetOutlinerMode() == OUTLINERMODE_OUTLINEOBJECT ) || ( ImplGetOutlinerMode() == OUTLINERMODE_OUTLINEVIEW ) );
+    if ( bCheckStyles )
+    {
+        BOOL bOutlineView = ( ImplGetOutlinerMode() == OUTLINERMODE_OUTLINEVIEW );
+        for ( USHORT n = pInfos->nStartPara; n <= pInfos->nEndPara; n++ )
+        {
+            USHORT nDepth = GetDepth( n );
+            Paragraph* pPara = GetParagraph( n );
+
+            // Prefer depth from pasted text
+            // First paragraph in OutlineView cannot be on Level > 0!
+            const SfxUInt16Item& rLevel = (const SfxUInt16Item&) pEditEngine->GetParaAttrib( n, EE_PARA_OUTLLEVEL );
+            if ( ( nDepth < GetMinDepth() ) || ( rLevel.GetValue() != nDepth ) || ( bOutlineView && ( n == 0 ) && ( nDepth != 0 ) ) )
+            {
+                nDepth = rLevel.GetValue();
+                if ( bOutlineView && !n )
+                    nDepth = 0;
+                ImplCheckDepth( nDepth );
+                ImplInitDepth( n, nDepth, TRUE );
+            }
+
+            if ( bOutlineView && ( nDepth == 0 ) )
+            {
+                if ( pInfos->pLevel0Style && ( GetStyleSheet( n ) != pInfos->pLevel0Style ) )
+                {
+                    SetStyleSheet( n, pInfos->pLevel0Style );
+                }
+            }
+            else
+            {
+                // ImplSetLevelDependendStyleSheet checks if stylesheet changes...
+                ImplSetLevelDependendStyleSheet( n, pInfos->pLevelNStyle );
+            }
+            ImplCheckNumBulletItem( n );
+        }
+        UndoActionEnd( EDITUNDO_DRAGANDDROP );
+
+    }
 
     return 0;
 }

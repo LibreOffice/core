@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: mt $ $Date: 2001-11-12 13:06:40 $
+ *  last change: $Author: mt $ $Date: 2001-11-14 10:56:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1163,6 +1163,18 @@ void EditEngine::SetEndMovingParagraphsHdl( const Link& rLink )
     pImpEditEngine->aEndMovingParagraphsHdl = rLink;
 }
 
+void EditEngine::SetBeginPasteOrDropHdl( const Link& rLink )
+{
+    DBG_CHKTHIS( EditEngine, 0 );
+    pImpEditEngine->aBeginPasteOrDropHdl = rLink;
+}
+
+void EditEngine::SetEndPasteOrDropHdl( const Link& rLink )
+{
+    DBG_CHKTHIS( EditEngine, 0 );
+    pImpEditEngine->aEndPasteOrDropHdl = rLink;
+}
+
 EditTextObject* EditEngine::CreateTextObject( sal_uInt16 nPara, sal_uInt16 nParas )
 {
     DBG_CHKTHIS( EditEngine, 0 );
@@ -2005,7 +2017,7 @@ ParagraphInfos EditEngine::GetParagraphInfos( sal_uInt16 nPara )
     return aInfos;
 }
 
-// =====================================================================
+// =====================================================================
 // ======================   Virtuelle Methoden   =======================
 // =====================================================================
 void __EXPORT EditEngine::DrawingText( const Point&, const XubString&, const long*, const SvxFont&, sal_uInt16 nPara, sal_uInt16 nIndex )

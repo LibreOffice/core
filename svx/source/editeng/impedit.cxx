@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: mt $ $Date: 2001-10-29 14:19:24 $
+ *  last change: $Author: mt $ $Date: 2001-11-14 10:56:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1261,6 +1261,11 @@ void ImpEditView::Paste( ::com::sun::star::uno::Reference< ::com::sun::star::dat
                 aSel = pEditEngine->pImpEditEngine->ImpDeleteSelection( aSel );
             }
 
+            PasteOrDropInfos aPasteOrDropInfos;
+            aPasteOrDropInfos.nAction = EE_ACTION_PASTE;
+            aPasteOrDropInfos.nStartPara = pEditEngine->pImpEditEngine->GetEditDoc().GetPos( aSel.Min().GetNode() );
+            pEditEngine->pImpEditEngine->aBeginPasteOrDropHdl.Call( &aPasteOrDropInfos );
+
             if ( DoSingleLinePaste() )
             {
                 datatransfer::DataFlavor aFlavor;
@@ -1280,6 +1285,10 @@ void ImpEditView::Paste( ::com::sun::star::uno::Reference< ::com::sun::star::dat
             {
                 aSel = pEditEngine->pImpEditEngine->InsertText( xDataObj, aSel.Min(), pEditEngine->pImpEditEngine->GetStatus().AllowPasteSpecial() );
             }
+
+            aPasteOrDropInfos.nEndPara = pEditEngine->pImpEditEngine->GetEditDoc().GetPos( aSel.Max().GetNode() );
+            pEditEngine->pImpEditEngine->aEndPasteOrDropHdl.Call( &aPasteOrDropInfos );
+
             pEditEngine->pImpEditEngine->UndoActionEnd( EDITUNDO_PASTE );
             SetEditSelection( aSel );
             pEditEngine->pImpEditEngine->UpdateSelections();
@@ -1646,7 +1655,17 @@ void ImpEditView::drop( const ::com::sun::star::datatransfer::dnd::DropTargetDro
             // Selektion wegmalen...
             DrawSelection();
             EditPaM aPaM( pDragAndDropInfo->aDropDest );
+
+            PasteOrDropInfos aPasteOrDropInfos;
+            aPasteOrDropInfos.nAction = EE_ACTION_DROP;
+            aPasteOrDropInfos.nStartPara = pEditEngine->pImpEditEngine->GetEditDoc().GetPos( aPaM.GetNode() );
+            pEditEngine->pImpEditEngine->aBeginPasteOrDropHdl.Call( &aPasteOrDropInfos );
+
             EditSelection aNewSel = pEditEngine->pImpEditEngine->InsertText( xDataObj, aPaM, pEditEngine->pImpEditEngine->GetStatus().AllowPasteSpecial() );
+
+            aPasteOrDropInfos.nEndPara = pEditEngine->pImpEditEngine->GetEditDoc().GetPos( aNewSel.Max().GetNode() );
+            pEditEngine->pImpEditEngine->aEndPasteOrDropHdl.Call( &aPasteOrDropInfos );
+
             SetEditSelection( aNewSel );
             pEditEngine->pImpEditEngine->FormatAndUpdate( pEditEngine->pImpEditEngine->GetActiveView() );
             if ( pDragAndDropInfo->bStarterOfDD )
