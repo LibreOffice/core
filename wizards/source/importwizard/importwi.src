@@ -2,9 +2,9 @@
  *
  *  $RCSfile: importwi.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2001-10-18 20:51:10 $
+ *  last change: $Author: kz $ $Date: 2001-10-22 20:50:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2165,6 +2165,7 @@ String sSumMSDrawTemplates
     Text[ catalan ] = "%1 contained in the following directory will be imported:";
     Text[ finnish ] = "%1 aus dem folgenden Verzeichnis werden importiert:";
 };
+
 
 
 
