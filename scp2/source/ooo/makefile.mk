@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: rt $ $Date: 2004-03-04 14:10:07 $
+#   last change: $Author: hr $ $Date: 2004-05-10 16:12:28 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -80,6 +80,10 @@ SCPDEFS+=-DENABLE_CRASHDUMP
 
 .IF "$(JAVANUMVER)" >= "000100040000"
 SCPDEFS+=-DINCLUDE_JAVA_ACCESSBRIDGE
+.ENDIF
+
+.IF "$(ENABLE_GTK)" != ""
+SCPDEFS+=-DENABLE_GTK
 .ENDIF
 
 SCP_PRODUCT_TYPE=osl
