@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urlobj.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 11:51:58 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 17:12:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,9 @@
 #endif
 #ifndef _RTL_USTRING_HXX_
 #include "rtl/ustring.hxx"
+#endif
+#ifndef INCLUDED_RTL_INSTANCE_HXX
+#include "rtl/instance.hxx"
 #endif
 #ifndef _SAL_TYPES_H_
 #include "sal/types.h"
@@ -1423,8 +1426,7 @@ bool INetURLObject::setAbsURIRef(UniString const & rTheAbsURIRef,
 }
 
 //============================================================================
-// static
-INetURLObject INetURLObject::m_aBaseURIRef;
+namespace { struct BaseURIRef : public rtl::Static< INetURLObject, BaseURIRef > {}; }
 
 //============================================================================
 bool INetURLObject::convertRelToAbs(UniString const & rTheRelURIRef,
@@ -5180,7 +5182,7 @@ UniString INetURLObject::RelToAbs(ByteString const & rTheRelURIRef,
 
     INetURLObject aTheAbsURIRef;
     bool bWasAbsolute;
-    m_aBaseURIRef.convertRelToAbs(extend(rTheRelURIRef), true, aTheAbsURIRef,
+    BaseURIRef::get().convertRelToAbs(extend(rTheRelURIRef), true, aTheAbsURIRef,
                                   bWasAbsolute, eEncodeMechanism, eCharset,
                                   bIgnoreFragment, false, false, eStyle);
     return aTheAbsURIRef.GetMainURL(eDecodeMechanism, eCharset);
@@ -5201,7 +5203,7 @@ UniString INetURLObject::RelToAbs(UniString const & rTheRelURIRef,
 
     INetURLObject aTheAbsURIRef;
     bool bWasAbsolute;
-    return m_aBaseURIRef.convertRelToAbs(rTheRelURIRef, false, aTheAbsURIRef,
+    return BaseURIRef::get().convertRelToAbs(rTheRelURIRef, false, aTheAbsURIRef,
                                          bWasAbsolute, eEncodeMechanism,
                                          eCharset, bIgnoreFragment, false,
                                          false, eStyle)
@@ -5218,7 +5220,7 @@ UniString INetURLObject::RelToAbs(UniString const & rTheRelURIRef,
 
 #include <ucbhelper/content.hxx>
 
-static star::uno::Any GetCasePreservedURL(INetURLObject& aObj)
+static star::uno::Any GetCasePreservedURL(const INetURLObject& aObj)
 {
     DBG_ASSERT( aObj.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
 
@@ -5257,8 +5259,8 @@ UniString INetURLObject::AbsToRel(ByteString const & rTheAbsURIRef,
                                   FSysStyle eStyle)
 {
     UniString aTheRelURIRef;
-    star::uno::Any aAny =
-        GetCasePreservedURL(m_aBaseURIRef);
+    const INetURLObject& rINetURLObject = BaseURIRef::get();
+    star::uno::Any aAny = GetCasePreservedURL(rINetURLObject);
 
     rtl::OUString aBaseURL;
     sal_Bool success = (aAny >>= aBaseURL);
@@ -5283,7 +5285,7 @@ UniString INetURLObject::AbsToRel(ByteString const & rTheAbsURIRef,
                 eCharset, eStyle);
     }
     else
-        m_aBaseURIRef.convertAbsToRel(
+        rINetURLObject.convertAbsToRel(
             extend(rTheAbsURIRef), true, aTheRelURIRef,
             eEncodeMechanism, eDecodeMechanism,
             eCharset, eStyle);
@@ -5301,8 +5303,8 @@ UniString INetURLObject::AbsToRel(UniString const & rTheAbsURIRef,
 {
     UniString aTheRelURIRef;
 
-    star::uno::Any aAny =
-        GetCasePreservedURL(m_aBaseURIRef);
+    const INetURLObject& rINetURLObject = BaseURIRef::get();
+    star::uno::Any aAny = GetCasePreservedURL(rINetURLObject);
 
     rtl::OUString aBaseURL;
     sal_Bool success = (aAny >>= aBaseURL);
@@ -5327,7 +5329,7 @@ UniString INetURLObject::AbsToRel(UniString const & rTheAbsURIRef,
                 eCharset, eStyle);
     }
     else
-        m_aBaseURIRef.convertAbsToRel(
+        rINetURLObject.convertAbsToRel(
             rTheAbsURIRef, false, aTheRelURIRef,
             eEncodeMechanism, eDecodeMechanism,
             eCharset, eStyle);
@@ -5341,7 +5343,7 @@ bool INetURLObject::SetBaseURL(ByteString const & rTheBaseURIRef,
                                EncodeMechanism eMechanism,
                                rtl_TextEncoding eCharset)
 {
-    return m_aBaseURIRef.SetURL(rTheBaseURIRef, eMechanism, eCharset);
+    return BaseURIRef::get().SetURL(rTheBaseURIRef, eMechanism, eCharset);
 }
 
 //============================================================================
@@ -5350,7 +5352,7 @@ bool INetURLObject::SetBaseURL(UniString const & rTheBaseURIRef,
                                EncodeMechanism eMechanism,
                                rtl_TextEncoding eCharset)
 {
-    return m_aBaseURIRef.SetURL(rTheBaseURIRef, eMechanism, eCharset);
+    return BaseURIRef::get().SetURL(rTheBaseURIRef, eMechanism, eCharset);
 }
 
 //============================================================================
@@ -5358,7 +5360,7 @@ bool INetURLObject::SetBaseURL(UniString const & rTheBaseURIRef,
 UniString INetURLObject::GetBaseURL(DecodeMechanism eMechanism,
                                     rtl_TextEncoding eCharset)
 {
-    return m_aBaseURIRef.GetMainURL(eMechanism, eCharset);
+    return BaseURIRef::get().GetMainURL(eMechanism, eCharset);
 }
 
 //============================================================================
