@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-04 14:25:58 $
+ *  last change: $Author: fs $ $Date: 2001-01-05 10:49:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -558,7 +558,7 @@ Any SAL_CALL ORowSet::queryAggregation( const Type& rType ) throw(RuntimeExcepti
 //------------------------------------------------------------------------------
 rtl::OUString ORowSet::getImplementationName_Static(  ) throw(RuntimeException)
 {
-    return rtl::OUString::createFromAscii("com.sun.star.sdb.dbaccess.ORowSet");
+    return rtl::OUString::createFromAscii("com.sun.star.comp.dba.ORowSet");
 }
 // -------------------------------------------------------------------------
 // ::com::sun::star::XServiceInfo

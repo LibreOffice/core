@@ -2,9 +2,9 @@
  *
  *  $RCSfile: databasecontext.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-04 14:32:36 $
+ *  last change: $Author: fs $ $Date: 2001-01-05 10:48:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,7 +183,7 @@ ODatabaseContext::~ODatabaseContext()
 rtl::OUString ODatabaseContext::getImplementationName_Static() throw( RuntimeException )
 
 {
-    return rtl::OUString::createFromAscii("com.sun.star.sdb.ODatabaseContext");
+    return rtl::OUString::createFromAscii("com.sun.star.comp.dba.ODatabaseContext");
 }
 
 //------------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documentdefinition.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-25 07:42:28 $
+ *  last change: $Author: fs $ $Date: 2001-01-05 10:48:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,7 +167,7 @@ Any SAL_CALL ODocumentDefinition::queryInterface( const Type& _rType ) throw(Run
 //--------------------------------------------------------------------------
 ::rtl::OUString ODocumentDefinition::getImplementationName_Static(  ) throw(RuntimeException)
 {
-    return ::rtl::OUString::createFromAscii("com.sun.star.sdb.dbaccess.ODocumentDefinition");
+    return ::rtl::OUString::createFromAscii("com.sun.star.comp.dba.ODocumentDefinition");
 }
 
 //--------------------------------------------------------------------------

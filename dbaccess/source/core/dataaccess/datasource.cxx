@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasource.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: oj $ $Date: 2000-12-12 12:20:31 $
+ *  last change: $Author: fs $ $Date: 2001-01-05 10:48:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -428,7 +428,7 @@ rtl::OUString ODatabaseSource::getImplementationName(  ) throw(RuntimeException)
 //------------------------------------------------------------------------------
 rtl::OUString ODatabaseSource::getImplementationName_Static(  ) throw(RuntimeException)
 {
-    return rtl::OUString::createFromAscii("com.sun.star.sdb.ODatabaseSource");
+    return rtl::OUString::createFromAscii("com.sun.star.comp.dba.ODatabaseSource");
 }
 
 //------------------------------------------------------------------------------
