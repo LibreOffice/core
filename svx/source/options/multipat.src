@@ -2,9 +2,9 @@
  *
  *  $RCSfile: multipat.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 05:33:34 $
+ *  last change: $Author: hjs $ $Date: 2001-05-12 06:25:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,7 +184,7 @@ ModalDialog RID_SVXDLG_MULTIPATH
         Text[ turkish ] = "Veri yollarý";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Rutas";
-        Text[ finnish ] = "Pfade";
+        Text[ finnish ] = "Polut";
     };
     OKButton BTN_MULTIPATH_OK
     {
