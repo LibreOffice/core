@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: hr $ $Date: 2004-10-12 10:06:18 $
+#   last change: $Author: obo $ $Date: 2004-11-17 09:46:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -89,10 +89,11 @@ SLOFILES=\
         $(SLO)$/objectcontactofpageview.obj				\
         $(SLO)$/viewobjectcontact.obj					\
         $(SLO)$/vocbitmapbuffer.obj						\
+        $(SLO)$/vocofmasterpagedescriptor.obj			\
         $(SLO)$/viewobjectcontactlist.obj				\
         $(SLO)$/viewobjectcontactredirector.obj			\
         $(SLO)$/viewcontactofsdrobjcustomshape.obj      \
-        $(SLO)$/viewcontactofsdrmediaobj.obj		\
-        $(SLO)$/viewobjectcontactofsdrmediaobj.obj	\
+        $(SLO)$/viewcontactofsdrmediaobj.obj			\
+        $(SLO)$/viewobjectcontactofsdrmediaobj.obj		\
         $(SLO)$/sdrmediawindow.obj					
 .INCLUDE :  target.mk
