@@ -1,3 +1,5 @@
+// Change the case of a selection, or current word from upper case, 
+// to first char upper case, to all lower case to upper case...
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.frame.XModel;
 import com.sun.star.view.XSelectionSupplier;
@@ -5,8 +7,9 @@ import com.sun.star.container.XIndexAccess;
 import com.sun.star.text.XText;
 import com.sun.star.text.XTextRange;
 import com.sun.star.text.XWordCursor;
-import drafts.com.sun.star.script.provider.XScriptContext;
+import com.sun.star.script.provider.XScriptContext;
 
+// return the new string based on the string passed in 
 String getNewString( theString ) {
     String newString;
     if(theString==null || theString.length()==0) {
@@ -23,14 +26,18 @@ String getNewString( theString ) {
     return newString;
 }
 
+//the method that does the work
 void capitalise() {
 
+    // get the number of regions selected
     count = xIndexAccess.getCount();
     if(count>=1) { //ie we have a selection
         for(i=0;i<count;i++) {
+            // get the i-th region selected
             xTextRange = (XTextRange)
                 UnoRuntime.queryInterface(XTextRange.class, xIndexAccess.getByIndex(i));
             System.out.println("string: "+xTextRange.getString());
+            // get the selected string
             theString = xTextRange.getString();
             if(theString.length()==0) {
                 // sadly we can have a selection where nothing is selected
@@ -39,20 +46,30 @@ void capitalise() {
                     UnoRuntime.queryInterface(XText.class, xTextRange.getText());
                 xWordCursor = (XWordCursor)
                     UnoRuntime.queryInterface(XWordCursor.class, xText.createTextCursorByRange(xTextRange));
+                // move the Word cursor to the start of the word if its not
+                // already there
                 if(!xWordCursor.isStartOfWord()) {
                     xWordCursor.gotoStartOfWord(false);
                 }
+                // move the cursor to the next word, selecting all chars
+                // in between
                 xWordCursor.gotoNextWord(true);
+                // get the selected string
                 theString = xWordCursor.getString();
+                // get the new string 
                 newString = getNewString(theString);
                 if(newString!=null) {
+                    // set the new string 
                     xWordCursor.setString(newString);
+                    // keep the current selection
                     xSelectionSupplier.select(xWordCursor);
                 }
             } else {
                 newString = getNewString( theString );
                 if(newString!=null) {
+                    // set the new string 
                     xTextRange.setString(newString);
+                    // keep the current selection
                     xSelectionSupplier.select(xTextRange);
                 }
             }
@@ -61,10 +78,10 @@ void capitalise() {
     }
 }
 
-// The context variable is of type XScriptContext and is available to
+// The XSCRIPTCONTEXT variable is of type XScriptContext and is available to
 // all BeanShell scripts executed by the Script Framework
 xModel = (XModel)
-    UnoRuntime.queryInterface(XModel.class, context.getDocument());
+    UnoRuntime.queryInterface(XModel.class, XSCRIPTCONTEXT.getDocument());
 //the writer controller impl supports the css.view.XSelectionSupplier interface
 xSelectionSupplier = (XSelectionSupplier)
     UnoRuntime.queryInterface(XSelectionSupplier.class, xModel.getCurrentController());
@@ -72,5 +89,6 @@ xSelectionSupplier = (XSelectionSupplier)
 xIndexAccess = (XIndexAccess)
     UnoRuntime.queryInterface(XIndexAccess.class, xSelectionSupplier.getSelection());
 
+//call the method that does the work
 capitalise();
 return 0;
