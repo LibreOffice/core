@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sc.hrc,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: nn $ $Date: 2002-05-16 13:02:54 $
+ *  last change: $Author: dr $ $Date: 2002-05-22 07:06:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -352,6 +352,9 @@
 
 // Other help IDs (max.70) ---------------------------------------------------
 #define HID_SCDLG_LINKAREAURL   ( HID_SC_OTHER_START )
+#define HID_SCMENU_EDIT_TABLE   ( HID_SC_OTHER_START + 1 )
+
+#define HID_SELECTTABLES        ( HID_SC_OTHER_START + 2 )
 
 // Analysis Addin Functions (max.120) ----------------------------------------
 #define HID_AAI_FUNC_WORKDAY        ( HID_SC_AAI_FUNCS_START )
@@ -567,6 +570,7 @@
 
 #define SID_RENAME_OBJECT               (SC_VIEW_START + 88)
 #define SID_FOCUS_INPUTLINE             (SC_VIEW_START + 89)
+#define SID_SELECT_TABLES               (SC_VIEW_START + 90)
 
 // Nachrichten -------------------------------------------------------------
 
@@ -1240,6 +1244,11 @@
 
 // #98185#
 #define STR_CAPTION_DEFAULT_TEXT    (STR_START + 88)
+
+// dialog: Select Sheets
+#define STR_DLG_SELECTTABLES_TITLE  (STR_START + 89)
+#define STR_DLG_SELECTTABLES_LBNAME (STR_START + 90)
+
 
 // Items
 
