@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgdlg.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 12:03:34 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 09:28:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -303,6 +303,41 @@ TabPage OFA_TP_VIEW
             < "Small" ; > ;
             < "Large" ; > ;
         };
+    };
+    CheckBox CB_SYSTEM_FONT
+    {
+        TabStop = TRUE ;
+        Pos = MAP_APPFONT( 12, ROW_CB_SYSTEM_FONT );
+        Size = MAP_APPFONT( 110, 12 );
+        Text = "~Systemschriftart für die Benutzeroberfläche verwenden" ;
+        Text [ ENGLISH ] = "Use system ~font for user interface" ;
+        Text[ english_us ] = "Use system ~font for user interface";
+        Text[ portuguese ] = "Use system ~font for user interface";
+        Text[ russian ] = "Use system ~font for user interface";
+        Text[ greek ] = "×ñŞóç ãñáììáôïóåéñÜò óõó~ôŞìáôïò ãéá ôç äéåğáöŞ ÷ñŞóôç";
+        Text[ dutch ] = "Gebruik systeemlettertype voor gebruikersinterface";
+        Text[ french ] = "Police du système pour l'interface utilisateur";
+        Text[ spanish ] = "Utilizar las ~fuentes del sistema para la interfaz del usuario";
+        Text[ finnish ] = "Use system ~font for user interface";
+        Text[ italian ] = "Usa i caratteri del sistema per l'interfaccia utente";
+        Text[ danish ] = "Brug systemets skrifttype til brugergrænseflade";
+        Text[ swedish ] = "Använd ~systemteckensnitt för användargränssnittet";
+        Text[ polish ] = "Use system ~font for user interface";
+        Text[ portuguese_brazilian ] = "Usar a fonte do sistema para a interface do usuário";
+        Text[ japanese ] = "ãƒ¦ãƒ¼ã‚¶ãƒ¼ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ãƒ¼ã‚¹ã«ã‚·ã‚¹ãƒ†ãƒ ãƒ•ã‚©ãƒ³ãƒˆã‚’ä½¿ç”¨(~F)";
+        Text[ korean ] = "ì‹œìŠ¤í…œ ê¸€ê¼´ì„ ì‚¬ìš©ì ì¸í„°í˜ì´ìŠ¤ìš©ìœ¼ë¡œ ì‚¬ìš©(~F)";
+        Text[ chinese_simplified ] = "é‡‡ç”¨ä½¿ç”¨è€…ç•Œé¢çš„ç³»ç»Ÿå­—ä½“(~F)";
+        Text[ chinese_traditional ] = "æ¡ç”¨ä½¿ç”¨è€…ä»‹é¢çš„ç³»çµ±å­—å‹(~F)";
+        Text[ turkish ] = "Kullanıcı arayüzü için sistem ~yazıtipini kullan";
+        Text[ arabic ] = "Use system ~font for user interface";
+        Text[ catalan ] = "Use system ~font for user interface";
+        Text[ thai ] = "Use system ~font for user interface";
+        Text[ czech ] = "PouÅ¾Ã­t pÃ­smo systÃ©mu pro uÅ¾ivatelskÃ© rozhranÃ­";
+        Text[ hebrew ] = "â€®×œ×”×©×ª××© ×‘×’×•×¤×Ÿ ××¢×¨×›×ª ×‘×××©×§ ×”××©×ª××©â€¬";
+        Text[ hindi ] = "Use system ~font for user interface";
+        Text[ slovak ] = "PouÅ¾iÅ¥ systÃ©movÃ© ~pÃ­smo pre uÅ¾Ã­vateÄ¾skÃ© rozhranie";
+        Text[ hungarian ] = "A rendszer ~betÅ±kÃ©szletÃ©nek alkalmazÃ¡sa a felhasznÃ¡lÃ³i felÃ¼leten";
+        Text[ slovenian ] = "Uporabi sistemsko ~pisavo za upor. vmesnik";
     };
     CheckBox CB_FONTANTIALIASING
     {
