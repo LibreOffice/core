@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Compatibility.xcs,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-31 15:15:21 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 10:50:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,35 +60,43 @@
  *
  ************************************************************************ -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
-<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Compatibility" oor:package="org.openoffice.Office" xml:lang="en-US">
-    <info>
+<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Compatibility" oor:package="org.openoffice.Office" xml:lang="en-US"> <info>
         <author>PB</author>
         <desc xml:lang="en-US">List of applications and their recommended formatting options</desc>
     </info>
     <templates>
         <group oor:name="FormattingOptions">
-            <info><desc xml:lang="en-US">Recommended formatting options for one application</desc></info>
-            <prop oor:name="Module" oor:type="xs:string"><info><desc xml:lang="en-US">Module of the application</desc></info>
+            <info><desc xml:lang="en-US">Recommended formatting options for one application</desc>	<desc xml:lang="zh-CN">Recommended formatting options for one application</desc>
+</info>
+            <prop oor:name="Module" oor:type="xs:string"><info><desc xml:lang="en-US">Module of the application</desc>	<desc xml:lang="zh-CN">Module of the application</desc>
+</info>
                 <constraints>
-                    <enumeration oor:value="swriter"><info><desc xml:lang="en-US">Writer module</desc></info></enumeration>
+                    <enumeration oor:value="swriter"><info><desc xml:lang="en-US">Writer module</desc>	<desc xml:lang="zh-CN">Writer module</desc>
+</info></enumeration>
                 </constraints>
             </prop>
-            <prop oor:name="UsePrinterMetrics" oor:type="xs:boolean"><info><desc xml:lang="en-US">Use printer metrics for document formatting</desc></info>
+            <prop oor:name="UsePrinterMetrics" oor:type="xs:boolean"><info><desc xml:lang="en-US">Use printer metrics for document formatting</desc>	<desc xml:lang="zh-CN">文档格式采用打印机版式</desc>
+</info>
                 <value>false</value>
             </prop>
-            <prop oor:name="AddSpacing" oor:type="xs:boolean"><info><desc xml:lang="en-US">Add spacing between paragraphs and tables</desc></info>
+            <prop oor:name="AddSpacing" oor:type="xs:boolean"><info><desc xml:lang="en-US">Add spacing between paragraphs and tables</desc>	<desc xml:lang="zh-CN">在段落和表格之间加入间隔</desc>
+</info>
                 <value>false</value>
             </prop>
-            <prop oor:name="AddSpacingAtPages" oor:type="xs:boolean"><info><desc xml:lang="en-US">Add paragraph and table spacing at tops of pages</desc></info>
+            <prop oor:name="AddSpacingAtPages" oor:type="xs:boolean"><info><desc xml:lang="en-US">Add paragraph and table spacing at tops of pages</desc>	<desc xml:lang="zh-CN">在页首位置加入段落和表格的间隔</desc>
+</info>
                 <value>false</value>
             </prop>
-            <prop oor:name="UseOurTabStopFormat" oor:type="xs:boolean"><info><desc xml:lang="en-US">Use OpenOffice.org 1.1 tabstop formatting</desc></info>
+            <prop oor:name="UseOurTabStopFormat" oor:type="xs:boolean"><info><desc xml:lang="en-US">Use OpenOffice.org 1.1 tabstop formatting</desc>	<desc xml:lang="zh-CN">Use OpenOffice.org 1.1 tabstop formatting</desc>
+</info>
                 <value>false</value>
             </prop>
-            <prop oor:name="NoExternalLeading" oor:type="xs:boolean"><info><desc xml:lang="en-US">Do not add leading (extra space) between lines of text</desc></info>
+            <prop oor:name="NoExternalLeading" oor:type="xs:boolean"><info><desc xml:lang="en-US">Do not add leading (extra space) between lines of text</desc>	<desc xml:lang="zh-CN">Do not add leading (extra space) between lines of text</desc>
+</info>
                 <value>false</value>
             </prop>
-            <prop oor:name="UseLineSpacing" oor:type="xs:boolean"><info><desc xml:lang="en-US">Use OpenOffice.org 1.1 line spacing</desc></info>
+            <prop oor:name="UseLineSpacing" oor:type="xs:boolean"><info><desc xml:lang="en-US">Use OpenOffice.org 1.1 line spacing</desc>	<desc xml:lang="zh-CN">Use OpenOffice.org 1.1 line spacing</desc>
+</info>
                 <value>false</value>
             </prop>
             <prop oor:name="AddTableSpacing" oor:type="xs:boolean"><info><desc xml:lang="en-US">???</desc></info>
@@ -102,7 +110,8 @@
 
     <component>
         <set oor:name="AllFileFormats" oor:node-type="FormattingOptions">
-            <info><desc xml:lang="en-US">The List of the applications.</desc></info>
+            <info><desc xml:lang="en-US">The List of the applications.</desc>	<desc xml:lang="zh-CN">The List of the applications.</desc>
+</info>
         </set>
     </component>
 </oor:component-schema>
