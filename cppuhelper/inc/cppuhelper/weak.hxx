@@ -2,9 +2,9 @@
  *
  *  $RCSfile: weak.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:26:09 $
+ *  last change: $Author: dbo $ $Date: 2001-02-14 10:17:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,7 +146,8 @@ public:
     virtual void SAL_CALL release() throw();
 
     // XWeak
-    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAdapter > SAL_CALL queryAdapter() throw();
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAdapter > SAL_CALL queryAdapter()
+        throw (::com::sun::star::uno::RuntimeException);
 
     /// Avoid ambigous cast error from compiler.
     inline SAL_CALL operator ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > () throw()

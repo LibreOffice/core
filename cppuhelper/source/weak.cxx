@@ -2,9 +2,9 @@
  *
  *  $RCSfile: weak.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2000-12-06 16:48:11 $
+ *  last change: $Author: dbo $ $Date: 2001-02-14 10:17:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -257,7 +257,8 @@ OWeakObject::~OWeakObject() throw(::com::sun::star::uno::RuntimeException)
 }
 
 // XWeak
-Reference< XAdapter > SAL_CALL OWeakObject::queryAdapter(void) throw()
+Reference< XAdapter > SAL_CALL OWeakObject::queryAdapter()
+    throw (::com::sun::star::uno::RuntimeException)
 {
     if (!m_pWeakConnectionPoint)
     {
@@ -278,6 +279,7 @@ Reference< XAdapter > SAL_CALL OWeakObject::queryAdapter(void) throw()
 //-- OWeakAggObject ----------------------------------------------------
 //------------------------------------------------------------------------
 OWeakAggObject::~OWeakAggObject()
+    throw (::com::sun::star::uno::RuntimeException)
 {
 }
 

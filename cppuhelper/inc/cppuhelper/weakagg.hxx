@@ -2,9 +2,9 @@
  *
  *  $RCSfile: weakagg.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:26:09 $
+ *  last change: $Author: dbo $ $Date: 2001-02-14 10:17:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,7 +131,8 @@ protected:
     /**
      * Call the destructor is only allowed if the reference count is zero.
      */
-    virtual ~OWeakAggObject();
+    virtual ~OWeakAggObject()
+        throw (::com::sun::star::uno::RuntimeException);
 
     /**
      * The delegator set with setDelegator.
