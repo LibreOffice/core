@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews1.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 15:03:57 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 15:28:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -212,8 +212,10 @@ void DrawViewShell::Activate(BOOL bIsMDIActivate)
     ViewShell::Activate(bIsMDIActivate);
 
     // When no object bars are active then activate some.
-    if (GetObjectBarManager().GetTopObjectBarId() == snInvalidShellId)
-        GetObjectBarManager().SwitchObjectBar (RID_DRAW_OBJ_TOOLBOX);
+    ObjectBarManager& rObjectBarManager (GetObjectBarManager());
+    if (rObjectBarManager.GetTopObjectBarId() == snInvalidShellId)
+        rObjectBarManager.SwitchObjectBar (
+            rObjectBarManager.GetDefaultObjectBarId());
 
     if (bIsMDIActivate)
     {
@@ -373,19 +375,7 @@ void DrawViewShell::SelectionHasChanged (void)
     }
     else
     {
-        USHORT nObjBarId;
-
-        switch( pDrView->GetContext() )
-        {
-            case( SDRCONTEXT_POINTEDIT ): nObjBarId = RID_BEZIER_TOOLBOX; break;
-            case( SDRCONTEXT_GRAPHIC ): nObjBarId = RID_DRAW_GRAF_TOOLBOX; break;
-            case( SDRCONTEXT_TEXTEDIT ): nObjBarId = RID_DRAW_TEXT_TOOLBOX; break;
-            case( SDRCONTEXT_MEDIA ): nObjBarId = RID_DRAW_MEDIA_TOOLBOX; break;
-
-            default: nObjBarId = RID_DRAW_OBJ_TOOLBOX; break;
-        }
-
-        rObjectBarManager.SwitchObjectBar (nObjBarId);
+        GetObjectBarManager().SelectionHasChanged (pDrView);
     }
 
     // #96124# Invalidate for every subshell
