@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.88 $
+ *  $Revision: 1.89 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-18 14:43:50 $
+ *  last change: $Author: hjs $ $Date: 2003-08-19 11:39:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -355,6 +355,7 @@ static __FAR_DATA SvXMLTokenMapEntry aContentValidationAttrTokenMap[] =
     { XML_NAMESPACE_TABLE, XML_CONDITION,           XML_TOK_CONTENT_VALIDATION_CONDITION            },
     { XML_NAMESPACE_TABLE, XML_BASE_CELL_ADDRESS,   XML_TOK_CONTENT_VALIDATION_BASE_CELL_ADDRESS    },
     { XML_NAMESPACE_TABLE, XML_ALLOW_EMPTY_CELL,    XML_TOK_CONTENT_VALIDATION_ALLOW_EMPTY_CELL     },
+    { XML_NAMESPACE_TABLE, XML_SHOW_LIST,           XML_TOK_CONTENT_VALIDATION_SHOW_LIST            },
     XML_TOKEN_MAP_END
 };
 
