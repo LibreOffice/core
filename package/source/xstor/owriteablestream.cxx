@@ -2,9 +2,9 @@
  *
  *  $RCSfile: owriteablestream.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-07-23 11:12:48 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 20:45:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1049,6 +1049,20 @@ uno::Reference< io::XStream > OWriteStream_Impl::GetStream_Impl( sal_Int32 nStre
 }
 
 //-----------------------------------------------
+uno::Reference< io::XInputStream > OWriteStream_Impl::GetPlainRawInStream()
+{
+    ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() ) ;
+
+    OSL_ENSURE( m_xPackageStream.is(), "No package stream is set!\n" );
+
+    // this method is used only internally, this stream object should not go outside of this implementation
+    // if ( m_pAntiImpl )
+    //  throw io::IOException(); // TODO:
+
+    return m_xPackageStream->getPlainRawStream();
+}
+
+//-----------------------------------------------
 uno::Reference< io::XInputStream > OWriteStream_Impl::GetRawInStream()
 {
     ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() ) ;
@@ -1766,7 +1780,8 @@ void SAL_CALL OWriteStream::setPropertyValue( const ::rtl::OUString& aPropertyNa
         else
             throw lang::IllegalArgumentException(); //TODO
     }
-    else if ( aPropertyName.equalsAscii( "Encrypted" ) || aPropertyName.equalsAscii( "Size" ) )
+    else if ( aPropertyName.equalsAscii( "IsEncrypted" ) || aPropertyName.equalsAscii( "Encrypted" )
+            || aPropertyName.equalsAscii( "Size" ) )
         throw beans::PropertyVetoException(); // TODO
     else
         throw beans::UnknownPropertyException(); // TODO
@@ -1778,7 +1793,7 @@ void SAL_CALL OWriteStream::setPropertyValue( const ::rtl::OUString& aPropertyNa
 
 
 //-----------------------------------------------
-uno::Any SAL_CALL OWriteStream::getPropertyValue( const ::rtl::OUString& aPropertyName )
+uno::Any SAL_CALL OWriteStream::getPropertyValue( const ::rtl::OUString& aProp )
         throw ( beans::UnknownPropertyException,
                 lang::WrappedTargetException,
                 uno::RuntimeException )
@@ -1787,6 +1802,12 @@ uno::Any SAL_CALL OWriteStream::getPropertyValue( const ::rtl::OUString& aProper
 
     if ( !m_pImpl )
         throw lang::DisposedException();
+
+    ::rtl::OUString aPropertyName;
+    if ( aProp.equalsAscii( "IsEncrypted" ) )
+        aPropertyName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Encrypted" ) );
+    else
+        aPropertyName = aProp;
 
     if ( aPropertyName.equalsAscii( "MediaType" )
       || aPropertyName.equalsAscii( "Encrypted" )
