@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TestMenu.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:38:17 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 16:57:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,13 +61,29 @@
 
 #include "TestMenu.hxx"
 
+#include "taskpane/TaskPaneControlFactory.hxx"
+
 #include <vcl/image.hxx>
 #include <vcl/svapp.hxx>
 
 namespace sd { namespace toolpanel {
 
+/** This factory class is used to create instances of ColorMenu.  It can be
+    extended so that its constructor stores arguments that later are passed
+    to new ColorMenu objects.
+*/
+class ColorMenuFactory
+    : public ControlFactory
+{
+protected:
+    virtual TreeNode* InternalCreateControl (TreeNode* pTreeNode)
+    {
+        return new ColorMenu (pTreeNode);
+    }
+};
 
-TestMenu::TestMenu (TreeNode* pParent)
+
+ColorMenu::ColorMenu (TreeNode* pParent)
     : Window (pParent->GetWindow()),
       TreeNode(pParent),
       maSet (this),
@@ -92,8 +108,16 @@ TestMenu::TestMenu (TreeNode* pParent)
 
 
 
-TestMenu::~TestMenu (void)
+ColorMenu::~ColorMenu (void)
 {
+}
+
+
+
+
+::std::auto_ptr<ControlFactory> ColorMenu::CreateControlFactory (void)
+{
+    return ::std::auto_ptr<ControlFactory>(new ColorMenuFactory());
 }
 
 
@@ -102,7 +126,7 @@ TestMenu::~TestMenu (void)
 /** The preferred size depends on the preferred number of columns, the
     number of items, and the size of the items.
 */
-Size TestMenu::GetPreferredSize (void)
+Size ColorMenu::GetPreferredSize (void)
 {
     Size aItemSize = maSet.CalcItemSizePixel (Size());
     Size aPreferredWindowSize = maSet.CalcWindowSizePixel (
@@ -115,7 +139,7 @@ Size TestMenu::GetPreferredSize (void)
 
 
 
-sal_Int32 TestMenu::GetPreferredWidth (sal_Int32 nHeight)
+sal_Int32 ColorMenu::GetPreferredWidth (sal_Int32 nHeight)
 {
     sal_Int32 nPreferredWidth = 0;
     if (maSet.GetItemCount() > 0)
@@ -139,7 +163,7 @@ sal_Int32 TestMenu::GetPreferredWidth (sal_Int32 nHeight)
 
 
 
-sal_Int32 TestMenu::GetPreferredHeight (sal_Int32 nWidth)
+sal_Int32 ColorMenu::GetPreferredHeight (sal_Int32 nWidth)
 {
     sal_Int32 nPreferredHeight = 0;
     if (maSet.GetItemCount()>0)
@@ -164,7 +188,7 @@ sal_Int32 TestMenu::GetPreferredHeight (sal_Int32 nWidth)
 
 
 
-bool TestMenu::IsResizable (void)
+bool ColorMenu::IsResizable (void)
 {
     return true;
 }
@@ -172,7 +196,7 @@ bool TestMenu::IsResizable (void)
 
 
 
-::Window* TestMenu::GetWindow (void)
+::Window* ColorMenu::GetWindow (void)
 {
     return this;
 }
@@ -180,7 +204,7 @@ bool TestMenu::IsResizable (void)
 
 
 
-void TestMenu::Resize (void)
+void ColorMenu::Resize (void)
 {
     ::Window::Resize();
     Size aWindowSize = GetOutputSizePixel();
@@ -215,7 +239,7 @@ void TestMenu::Resize (void)
 
 
 
-int TestMenu::CalculateRowCount (const Size& rItemSize, int nColumnCount)
+int ColorMenu::CalculateRowCount (const Size& rItemSize, int nColumnCount)
 {
     int nRowCount = 0;
 
@@ -232,7 +256,7 @@ int TestMenu::CalculateRowCount (const Size& rItemSize, int nColumnCount)
 
 
 
-void TestMenu::Fill (void)
+void ColorMenu::Fill (void)
 {
     const StyleSettings& rSettings (
         Application::GetSettings().GetStyleSettings());
