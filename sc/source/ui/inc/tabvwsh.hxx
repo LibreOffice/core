@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:06:13 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 13:29:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,9 @@ namespace com { namespace sun { namespace star { namespace frame {
     class XDispatchProviderInterceptor;
 } } } }
 
+namespace svx {
+    class ExtrusionBar;
+}
 
 enum ObjectSelectionType
 {
@@ -160,6 +163,7 @@ private:
     ScChartShell*           pChartShell;
     ScGraphicShell*         pGraphicShell;
     ScPageBreakShell*       pPageBreakShell;
+    svx::ExtrusionBar*      pExtrusionBarShell;
 
     FmFormShell*            pFormShell;
 
