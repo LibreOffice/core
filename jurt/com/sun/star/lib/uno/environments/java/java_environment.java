@@ -2,9 +2,9 @@
  *
  *  $RCSfile: java_environment.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jl $ $Date: 2002-03-27 13:03:56 $
+ *  last change: $Author: jbu $ $Date: 2002-05-16 14:58:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@ import com.sun.star.uno.XInterface;
  * interface defined in the uno runtime.
  * <p>
  * <p>
- * @version     $Revision: 1.6 $ $ $Date: 2002-03-27 13:03:56 $
+ * @version     $Revision: 1.7 $ $ $Date: 2002-05-16 14:58:46 $
  * @author      Kay Ramme
  * @see         com.sun.star.uno.UnoRuntime
  * @see         com.sun.star.uno.IEnvironment
@@ -126,10 +126,13 @@ public class java_environment implements IEnvironment, Disposable {
             if(methods_tab == null) {
                 methods_tab = new Hashtable();
 
-                Method methods[] = zClass.getMethods();
-
-                for(int i = 0; i < methods.length; ++ i) {
-                    methods_tab.put(methods[i].getName(), methods[i]);
+                Class [] interfaces = zClass.getInterfaces();
+                for( int j = 0 ; j < interfaces.length ; j ++ )
+                {
+                    Method methods [] = interfaces[j].getMethods();
+                    for(int i = 0; i < methods.length; ++ i) {
+                        methods_tab.put(methods[i].getName(), methods[i]);
+                    }
                 }
 
                 __methodss.put(zClass, methods_tab);
