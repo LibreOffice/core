@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resourceprovider.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2001-06-26 18:36:36 $
+ *  last change: $Author: tra $ $Date: 2001-06-27 07:16:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,10 @@
 #include <osl/diagnose.h>
 #endif
 
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
+#endif
+
 #ifndef _RESOURCEPROVIDER_HXX_
 #include "resourceprovider.hxx"
 #endif
@@ -86,6 +90,14 @@
 #include "filedlghelper.hrc"
 
 //------------------------------------------------------------
+// namespace directives
+//------------------------------------------------------------
+
+using rtl::OUString;
+using namespace ::com::sun::star::ui::dialogs::ExtendedFilePickerElementIds;
+using namespace ::com::sun::star::ui::dialogs::CommonFilePickerElementIds;
+
+//------------------------------------------------------------
 //
 //------------------------------------------------------------
 
@@ -98,13 +110,8 @@
 // id + 100
 #define LB_LABEL_OFFSET 100
 
-//------------------------------------------------------------
-// namespace directives
-//------------------------------------------------------------
-
-using rtl::OUString;
-using namespace ::com::sun::star::ui::dialogs::ExtendedFilePickerElementIds;
-using namespace ::com::sun::star::ui::dialogs::CommonFilePickerElementIds;
+const rtl::OUString TILDE = OUString::createFromAscii( "~" );
+const sal_Unicode TILDE_SIGN = L'~';
 
 //------------------------------------------------------------
 // we have to translate control ids to resource ids
@@ -199,10 +206,34 @@ public:
                 aResString = String( ResId( aResId, m_ResMgr ) );
                 aResOUString = OUString( aResString );
 
-                // filter ~
-                #pragma message( "#########################" )
-                #pragma message( "implement filter ~" )
-                #pragma message( "#########################" )
+                // remove '~' signs, if there are two '~' signs
+                // in a row we remove only one of them
+                if ( aResOUString.indexOf( TILDE ) > -1 )
+                {
+                    sal_Int32 nStrLen = aResOUString.getLength( );
+                    rtl::OUStringBuffer aBuffer( nStrLen );
+                    sal_Int32 i = 0;
+                    const sal_Unicode* pPos  = aResOUString.getStr( );
+                    const sal_Unicode* pNext = aResOUString.getStr( ) + 1;
+                    const sal_Unicode* pEnd  = aResOUString.getStr( ) + nStrLen;
+
+                    while( pPos < pEnd )
+                    {
+                        // we insert the next character only if the current character
+                        // in not a '~' or the following character is also a '~'
+                        if ( (*pPos != TILDE_SIGN) ||
+                             ((*pPos == TILDE_SIGN) && (pNext < pEnd) && (*pNext == TILDE_SIGN)) )
+                        {
+                            aBuffer.insert( i, *pPos );
+                            i++;
+                        }
+
+                        pPos++;
+                        pNext++;
+                    }
+
+                    aResOUString = aBuffer.makeStringAndClear( );
+                }
             }
         }
         catch(...)
