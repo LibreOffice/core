@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoiface.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mt $ $Date: 2002-11-15 11:41:24 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 11:03:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,37 +140,6 @@ public:
     ::com::sun::star::uno::Any SAL_CALL getProperty( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException);
 };
 
-
-/*
-//  ----------------------------------------------------
-//  class VCLXFileDialog
-//  ----------------------------------------------------
-class VCLXFileDialog : public ::com::sun::star::awt::XFileDialog, public VCLXDialog
-{
-public:
-                    VCLXFileDialog();
-                    ~VCLXFileDialog();
-
-    // Interface:
-// automatisch auskommentiert - [getIdlClass or queryInterface] - Bitte XTypeProvider benutzen!
-//  sal_Bool            queryInterface( ::com::sun::star::uno::Uik aUik, ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > & rxInterface );
-
-// automatisch auskommentiert - [getIdlClass or queryInterface] - Bitte XTypeProvider benutzen!
-//  ::com::sun::star::uno::Reference< ::com::sun::star::reflection::XIdlClass >     getIdlClass();
-
-
-    // ::com::sun::star::awt::XFileDialog
-    void            setPath( const ::rtl::OUString& rPath );
-    ::rtl::OUString         getPath();
-
-    void            setFilters( const ::com::sun::star::uno::Sequence<::rtl::OUString>& rFilterNames, const ::com::sun::star::uno::Sequence<::rtl::OUString>& rMasks );
-    void            setCurrentFilter( const ::rtl::OUString& rFilterName );
-    ::rtl::OUString         getCurrentFilter();
-
-    SMART_UNO_DECLARATION( VCLXFileDialog, VCLXDialog );
-
-};
-*/
 
 //  ----------------------------------------------------
 //  class VCLXFileControl
@@ -384,6 +353,19 @@ public:
     // ::com::sun::star::awt::VclWindowPeer
     void SAL_CALL setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value ) throw(::com::sun::star::uno::RuntimeException);
     ::com::sun::star::uno::Any SAL_CALL getProperty( const ::rtl::OUString& PropertyName ) throw(::com::sun::star::uno::RuntimeException);
+};
+
+//  ----------------------------------------------------
+//  class SVTXDateField
+//  ----------------------------------------------------
+class SVTXDateField : public VCLXDateField
+{
+public:
+                    SVTXDateField();
+                    ~SVTXDateField();
+
+    // ::com::sun::star::awt::VclWindowPeer
+    void SAL_CALL setProperty( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Any& Value ) throw(::com::sun::star::uno::RuntimeException);
 };
 
 #endif  // _SVT_UNOIFACE_HXX
