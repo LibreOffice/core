@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prim.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 10:53:33 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 16:03:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,10 +219,11 @@ inline typelib_TypeDescriptionReference * _unionGetSetType(
     SAL_THROW( () )
 {
     typelib_TypeDescriptionReference * pRet;
+    sal_Int32 nPos;
 
     sal_Int64 * pDiscr = ((typelib_UnionTypeDescription *)pTD)->pDiscriminants;
     sal_Int64 nDiscr   = *(sal_Int64 *)pUnion;
-    for ( sal_Int32 nPos = ((typelib_UnionTypeDescription *)pTD)->nMembers; nPos--; )
+    for ( nPos = ((typelib_UnionTypeDescription *)pTD)->nMembers; nPos--; )
     {
         if (pDiscr[nPos] == nDiscr)
         {
