@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr2.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:04:16 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:26:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1918,7 +1918,7 @@ void ScInterpreter::ScBase()
 // so ist es etwas besser
                     double fInt = ::rtl::math::approxFloor( fVal / fBase );
                     double fMult = fInt * fBase;
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
                     // #53943# =BASIS(1e308;36) => GPF mit
                     // nDig = (size_t) ::rtl::math::approxFloor( fVal - fMult );
                     // trotz vorheriger Pruefung ob fVal >= fMult
