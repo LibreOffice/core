@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objtest.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 16:54:38 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 11:41:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,7 @@ using namespace com::sun::star::devtools;
 */
 
 #include "sysdir_win.hxx"
+#include "registry_win.hxx"
 
 #ifndef _OSL_FILE_HXX_
 #include <osl/file.hxx>
@@ -123,6 +124,10 @@ using namespace rtl;
 #endif
 #endif
 
+#ifdef UNX
+#include <unistd.h> // readlink
+#include <errno.h>
+#endif
 
 #include <basic/sbuno.hxx>
 
@@ -486,9 +491,7 @@ void TestToolObj::LoadIniFile()             // Laden der IniEinstellungen, die d
 
     NEWOLD( "BaseDir", "Basisverzeichnis" )
     String aFB;
-    DirEntry aDirEntry( CUniString( DEF_BASE_DIR ), FSYS_STYLE_VFAT );
-    ByteString aText   = ByteString( aDirEntry.GetFull(), RTL_TEXTENCODING_UTF8 );
-    GETSET( aFB, "BaseDir", aText );
+    GETSET( aFB, "BaseDir", "" );
     pImpl->aFileBase = DirEntry(aFB);
 
     // remove old keys
@@ -506,9 +509,7 @@ void TestToolObj::LoadIniFile()             // Laden der IniEinstellungen, die d
 
     NEWOLD( "HIDDir", "HIDVerzeichnis" )
     String aHID;
-    aDirEntry = DirEntry( CUniString(DEF_HID_DIR), FSYS_STYLE_VFAT );
-    aText = ByteString( aDirEntry.GetFull(), RTL_TEXTENCODING_UTF8 );
-    GETSET( aHID, "HIDDir", aText );
+    GETSET( aHID, "HIDDir", "" );
     pImpl->aHIDDir = DirEntry(aHID);
 
 
@@ -521,8 +522,24 @@ void TestToolObj::LoadIniFile()             // Laden der IniEinstellungen, die d
     String aSOSE;
     aCurrentProfile = aConf.ReadKey( "CurrentProfile", "Misc" );
     aConf.SetGroup( aCurrentProfile );
-    GETSET( aSOSE, "StopOnSyntaxError", "0" );     // 45 Sekunden Initial
+    GETSET( aSOSE, "StopOnSyntaxError", "0" );
     pImpl->bStopOnSyntaxError = aSOSE.EqualsAscii("1");
+
+
+    aConf.SetGroup("GUI Platform");
+
+    String aGP;
+    ByteString abGP;
+#ifdef WNT
+    abGP.Append( "501" );  // WinXP
+#elif defined SOLARIS && defined SPARC
+    abGP.Append( "01" );  // Solaris SPARC
+#elif defined SOLARIS && defined INTEL
+    abGP.Append( "05" );  // Solaris x86
+#elif defined LINUX
+    abGP.Append( "03" );  // Linux
+#endif
+    GETSET( aGP, "Current", abGP );
 }
 
 #define MAKE_TT_KEYWORD( cName, aType, aResultType, nID ) \
@@ -576,6 +593,8 @@ void TestToolObj::InitTestToolObj()
 
     pImpl->bEnableQaErrors = TRUE;
     pImpl->bDebugFindNoErrors = FALSE;
+
+    pImpl->pChildEnv = new Environment;
 
     pFehlerListe = new CErrors;             // Vor allem anderen. Wer weiss, wer alles einen Fehler auslöst.
 
@@ -661,6 +680,12 @@ void TestToolObj::InitTestToolObj()
     MAKE_TT_KEYWORD( "GetTestCaseFileName", SbxCLASS_METHOD, SbxSTRING, ID_GetTestCaseFileName );
     MAKE_TT_KEYWORD( "GetTestCaseLineNr", SbxCLASS_METHOD, SbxUSHORT, ID_GetTestCaseLineNr );
 
+    MAKE_TT_KEYWORD( "SetChildEnv", SbxCLASS_METHOD, SbxNULL, ID_SetChildEnv );
+    MAKE_TT_KEYWORD( "GetChildEnv", SbxCLASS_METHOD, SbxSTRING, ID_GetChildEnv );
+
+    MAKE_TT_KEYWORD( "GetLinkDestination", SbxCLASS_METHOD, SbxSTRING, ID_GetLinkDestination );
+    MAKE_TT_KEYWORD( "GetRegistryValue", SbxCLASS_METHOD, SbxSTRING, ID_GetRegistryValue );
+
     // Load the Remote Commands from list
     if ( !pRCommands )                 // Ist static, wird also nur einmal geladen
         ReadFlatArray( arR_Cmds, pRCommands );
@@ -671,7 +696,7 @@ void TestToolObj::InitTestToolObj()
 
 // Konstanten für SetControlType
     MAKE_USHORT_CONSTANT("CTBrowseBox",CONST_CTBrowseBox);
-    MAKE_USHORT_CONSTANT("CTTreeListBox",CONST_CTTreeListBox);
+    MAKE_USHORT_CONSTANT("CTValueSet",CONST_CTValueSet);
 
 // Konstanten für das Alignment des gesuchten Splitters
     MAKE_USHORT_CONSTANT("AlignLeft",CONST_ALIGN_LEFT);
@@ -727,8 +752,6 @@ void TestToolObj::InitTestToolObj()
 
     nMyVar = 0;
     nControlsObj = 0;
-
-
 
 
 // Das ist zum testen des IPC
@@ -809,6 +832,8 @@ TestToolObj::~TestToolObj()
         delete pImpl->pTTSfxBroadcaster;
     delete pShortNames;
     delete pImpl;
+
+    delete pImpl->pChildEnv;
 }
 
 SfxBroadcaster& TestToolObj::GetTTBroadcaster()
@@ -1307,7 +1332,7 @@ void TestToolObj::SendViaSocket()
     }
 
     if ( !pCommunicationManager->IsCommunicationRunning() )
-        if ( !pCommunicationManager->StartCommunication( ProgPath, pImpl->ProgParam ) )
+        if ( !pCommunicationManager->StartCommunication( ProgPath, pImpl->ProgParam, pImpl->pChildEnv ) )
         {
             ADD_ERROR(ERR_RESTART_FAIL,GEN_RES_STR1(S_APPLICATION_START_FAILED, ProgPath));
         }
@@ -1805,6 +1830,8 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
 
                         pImpl->bEnableQaErrors = TRUE;
                         pImpl->bDebugFindNoErrors = FALSE;
+
+                        pImpl->pChildEnv->clear();
 
                         String aName( CUniString( "StopOnSyntaxError" ) );
                         SbxVariableRef xStopOnSyntaxError = SbxObject::Find( aName, SbxCLASS_PROPERTY );
@@ -2537,6 +2564,79 @@ void TestToolObj::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                         pVar->PutUShort( pImpl->nTestCaseLineNr );
                     }
                     break;
+                case ID_SetChildEnv:
+                    {
+                        if( rPar && rPar->Count() == 3 )
+                        {
+                            pImpl->pChildEnv->erase( rPar->Get(1)->GetString() );
+                            pImpl->pChildEnv->insert( EnvironmentVariable( rPar->Get(1)->GetString(), rPar->Get(2)->GetString() ) );
+                        }
+                        else
+                            SetError( SbERR_BAD_ARGUMENT );
+                    }
+                    break;
+                case ID_GetChildEnv:
+                    {
+                        if( rPar && rPar->Count() == 2 )
+                        {
+                            Environment::const_iterator aIter = pImpl->pChildEnv->find( rPar->Get(1)->GetString() );
+                            if ( aIter != pImpl->pChildEnv->end() )
+                                pVar->PutString( (*aIter).second );
+                            else
+                                pVar->PutString( String() );
+                        }
+                        else
+                            SetError( SbERR_BAD_ARGUMENT );
+                    }
+                    break;
+                case ID_GetLinkDestination:
+                    {
+                        if( rPar && rPar->Count() == 2 )
+                        {
+                            String aSource,aDest;
+                            aSource = rPar->Get(1)->GetString();
+#ifdef UNX
+                            ByteString aByteSource( aSource, osl_getThreadTextEncoding() );
+                            char cDest[1024];
+                            int nLen = 0;
+                            if ( ( nLen = readlink( aByteSource.GetBuffer(), cDest, sizeof(cDest) ) ) >= 0 )
+                            {
+                                aDest = String( cDest, nLen, osl_getThreadTextEncoding() );
+                            }
+                            else
+                            {
+                                int nErr = errno;
+                                switch ( nErr )
+                                {
+                                    case EINVAL: aDest = aSource;
+                                        break;
+                                    default:
+                                        SetError( SbERR_ACCESS_ERROR );
+                                }
+                            }
+#else
+                            aDest = aSource;
+#endif
+                            pVar->PutString( aDest );
+                        }
+                        else
+                            SetError( SbERR_BAD_ARGUMENT );
+                    }
+                    break;
+                case ID_GetRegistryValue:
+                    {
+                        if( rPar && rPar->Count() == 3 )
+                        {
+                            String aValue;
+#ifdef WNT
+                            aValue = ReadRegistry( rPar->Get(1)->GetString(), rPar->Get(2)->GetString() );
+#endif
+                            pVar->PutString( aValue );
+                        }
+                        else
+                            SetError( SbERR_BAD_ARGUMENT );
+                    }
+                    break;
             }  //  switch( nUserData )
         }  // if( nHintId == SBX_HINT_DATAWANTED )
         else if( nHintId == SBX_HINT_DATACHANGED )
@@ -2735,7 +2835,7 @@ SbxVariable* TestToolObj::Find( const String& Str, SbxClassType Type)
 
 String TestToolObj::GetRevision( String const &aSourceIn )
 {
-    // search $Revision: 1.9 $
+    // search $Revision: 1.10 $
     xub_StrLen nPos;
     if ( ( nPos = aSourceIn.SearchAscii( "$Revision:" ) ) != STRING_NOTFOUND )
         return aSourceIn.Copy( nPos+ 10, aSourceIn.SearchAscii( "$", nPos+10 ) -nPos-10);
