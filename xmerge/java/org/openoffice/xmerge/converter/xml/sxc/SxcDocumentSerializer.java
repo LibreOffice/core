@@ -382,10 +382,10 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
 
         int debug_i=0;
         Node debug_attrib = null;
+        fmt.clearFormatting();
         if (cellAtt == null || cellAtt.item(0) == null)
         {
            Debug.log(Debug.INFO, "No Cell Attributes\n");
-           fmt.clearFormatting();
         }
         else
         {
