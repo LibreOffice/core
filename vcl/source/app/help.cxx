@@ -2,9 +2,9 @@
  *
  *  $RCSfile: help.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-24 13:10:26 $
+ *  last change: $Author: ssa $ $Date: 2001-10-29 14:39:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -346,7 +346,7 @@ void Help::HideTip( ULONG nId )
 // =======================================================================
 
 HelpTextWindow::HelpTextWindow( Window* pParent, const XubString& rText, USHORT nHelpWinStyle, USHORT nStyle ) :
-    FloatingWindow( pParent->ImplGetFrameWindow(), 0 ),
+    FloatingWindow( pParent->ImplGetFrameWindow(), WB_SYSTEMWINDOW ),
     maHelpText( rText )
 {
     ImplSetMouseTransparent( TRUE );
@@ -425,7 +425,7 @@ void HelpTextWindow::ImplShow()
         ImplSVData* pSVData = ImplGetSVData();
         pSVData->mpApp->ShowHelpStatusText( maStatusText );
     }
-    Show();
+    Show( TRUE, SHOW_NOACTIVATE );
     Update();
 }
 
@@ -615,11 +615,8 @@ void ImplSetHelpWindowPos( Window* pHelpWin, USHORT nHelpWinStyle, USHORT nStyle
 {
     Point       aPos = rPos;
     Size        aSz = pHelpWin->GetSizePixel();
-    //Rectangle aScreenRect = pHelpWin->ImplGetFrameWindow()->GetDesktopRectPixel();
-    // GetDesktopRectPixel only makes sense for system windows, the help window
-    // however is (still) a VCL window, so we have to align it with the frame window:
-    Point aPoint;
-    Rectangle aScreenRect( aPoint, pHelpWin->ImplGetFrameWindow()->GetSizePixel() );
+    Rectangle   aScreenRect = pHelpWin->ImplGetFrameWindow()->GetDesktopRectPixel();
+    aPos = pHelpWin->GetParent()->OutputToAbsoluteScreenPixel( aPos );
 
     if ( nHelpWinStyle == HELPWINSTYLE_QUICK )
     {
@@ -637,7 +634,8 @@ void ImplSetHelpWindowPos( Window* pHelpWin, USHORT nHelpWinStyle, USHORT nStyle
     {
         // Wenn es die Maus-Position ist, dann Fenster leicht versetzt
         // anzeigen, damit MousePointer nicht das Hilfe-Fenster verdeckt
-        if ( aPos == pHelpWin->OutputToScreenPixel( pHelpWin->GetPointerPosPixel() ) )
+        Point mPos( pHelpWin->OutputToAbsoluteScreenPixel( pHelpWin->GetPointerPosPixel() ) );
+//      if ( aPos == mPos )
         {
             aPos.X() += 12;
             aPos.Y() += 16;
@@ -687,5 +685,6 @@ void ImplSetHelpWindowPos( Window* pHelpWin, USHORT nHelpWinStyle, USHORT nStyle
     else if ( ( aPos.Y() + aSz.Height() ) > aScreenRect.Bottom() )
         aPos.Y() = aScreenRect.Bottom() - aSz.Height();
 
+    aPos = pHelpWin->GetParent()->AbsoluteScreenToOutputPixel( aPos );
     pHelpWin->SetPosPixel( aPos );
 }
