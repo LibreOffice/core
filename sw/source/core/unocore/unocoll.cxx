@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocoll.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mib $ $Date: 2001-06-12 07:22:30 $
+ *  last change: $Author: mtg $ $Date: 2001-10-12 13:55:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -372,20 +372,20 @@ uno::Reference< uno::XInterface >   SwXServiceProvider::MakeInstance(sal_uInt16 
         break;
         case  SW_SERVICE_TYPE_TEXTFRAME:
         {
-            SwXTextFrame* pTextFrame = new SwXTextFrame();
+            SwXTextFrame* pTextFrame = new SwXTextFrame( pDoc );
             xRet =  (cppu::OWeakObject*)(SwXFrame*)pTextFrame;
         }
         break;
         case  SW_SERVICE_TYPE_GRAPHIC  :
         {
-            SwXTextGraphicObject* pGraphic = new SwXTextGraphicObject();
+            SwXTextGraphicObject* pGraphic = new SwXTextGraphicObject( pDoc );
             xRet =  (cppu::OWeakObject*)(SwXFrame*)pGraphic;
 
         }
         break;
         case  SW_SERVICE_TYPE_OLE      :
         {
-            SwXTextEmbeddedObject* pOle = new SwXTextEmbeddedObject();
+            SwXTextEmbeddedObject* pOle = new SwXTextEmbeddedObject( pDoc );
             xRet =  (cppu::OWeakObject*)(SwXFrame*)pOle;
         }
         break;
