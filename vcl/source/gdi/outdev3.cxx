@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: th $ $Date: 2001-05-16 11:22:06 $
+ *  last change: $Author: aw $ $Date: 2001-05-18 14:49:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -6688,7 +6688,7 @@ BOOL OutputDevice::GetGlyphBoundRect( xub_Unicode cChar, Rectangle& rRect, BOOL 
 
     BOOL bRet = FALSE;
 
-#ifdef NEW_GLYPH
+    // #83068#
     if( GetFont().GetOrientation() )
     {
         PolyPolygon aPolyPoly;
@@ -6701,7 +6701,6 @@ BOOL OutputDevice::GetGlyphBoundRect( xub_Unicode cChar, Rectangle& rRect, BOOL 
 
         return bRet;
     }
-#endif // NEW_GLYPH
 
 #ifndef REMOTE_APPSERVER
 
@@ -6932,9 +6931,8 @@ BOOL OutputDevice::GetGlyphOutline( xub_Unicode cChar, PolyPolygon& rPolyPoly, B
         long        nOrgWidth, nOrgHeight;
         ULONG       nPolyCount;
 
-#ifdef NEW_GLYPH
+        // #83068#
         aFont.SetOrientation( 0 );
-#endif // NEW_GLYPH
 
         if( bOptimize )
         {
@@ -7121,10 +7119,9 @@ BOOL OutputDevice::GetGlyphOutline( xub_Unicode cChar, PolyPolygon& rPolyPoly, B
 
     if( !bRet )
         rPolyPoly = PolyPolygon();
-#ifdef NEW_GLYPH
+    // #83068#
     else if( GetFont().GetOrientation() )
         rPolyPoly.Rotate( Point(), GetFont().GetOrientation() );
-#endif // NEW_GLYPH
 
     return bRet;
 }
