@@ -2,9 +2,9 @@
  *
  *  $RCSfile: seinitializer_nssimpl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-21 14:31:25 $
+ *  last change: $Author: mmi $ $Date: 2004-07-23 03:00:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,10 +83,12 @@
 /*
  * header files needed for getCurrentProfilePath
  */
+/*
 #include "nsIServiceManager.h"
 #include "nsIProfileInternal.h"
 #include "nsString.h"
 #include "nsEmbedAPI.h"
+*/
 
 #include <sal/types.h>
 
@@ -123,6 +125,7 @@ using namespace com::sun::star;
 //      This is a bug, because any other component who will initialize the XPCOM afterward
 //      will always fail.
 //      This bug will be fixed when there is solution.
+#if 0
 static nsIServiceManager           *sServiceManager = nsnull;
 static nsIDirectoryServiceProvider *appFileLocProvider = nsnull;
 static NS_DEFINE_CID(kProfileCID, NS_PROFILE_CID);
@@ -201,6 +204,10 @@ char* getCurrentProfilePath( )
  * get the current user profile (end)
  */
 
+#endif
+
+bool getMozillaCurrentProfile(rtl::OUString& profilePath);
+
 SEInitializer_NssImpl::SEInitializer_NssImpl(
     const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > &rxMSF)
     :mxMSF( rxMSF )
@@ -227,6 +234,12 @@ cssu::Reference< cssxc::XXMLSecurityContext > SAL_CALL
     }
     else
     {
+        if (!getMozillaCurrentProfile((rtl::OUString&)sCertDir))
+        {
+            return NULL;
+        }
+
+        /*
         char *pCurrentProfilePath = getCurrentProfilePath();
 
         if (pCurrentProfilePath == NULL)
@@ -238,6 +251,7 @@ cssu::Reference< cssxc::XXMLSecurityContext > SAL_CALL
             sCertDir = rtl::OString(pCurrentProfilePath);
             free(pCurrentProfilePath);
         }
+        */
     }
 
     /* Initialize NSPR and NSS */

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsignaturehelper.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: mt $ $Date: 2004-07-22 10:34:22 $
+ *  last change: $Author: mmi $ $Date: 2004-07-23 03:00:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,11 +155,13 @@ bool XMLSignatureHelper::Init( const rtl::OUString& rTokenPath )
     }
     */
 
+/*
 #ifndef WNT
     // MT: HACK for testing
     if ( !aTokenPath.getLength() )
         aTokenPath = rtl::OUString::createFromAscii("/tmp/nss");
 #endif
+*/
 
     mxSecurityContext = mxSEInitializer->createSecurityContext( aTokenPath );
 

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: mt $ $Date: 2004-07-12 13:15:21 $
+#   last change: $Author: mmi $ $Date: 2004-07-23 03:00:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -95,14 +95,12 @@ CFLAGS += -features=tmplife
 .IF "$(GUI)" == "WNT"
 .IF "$(DBG_LEVEL)" == "0"
 INCPRE += \
- -I$(MOZ_INC)$/xpcom \
 -I$(MOZ_INC)$/profile \
 -I$(MOZ_INC)$/string \
 -I$(MOZ_INC)$/embed_base
 CFLAGS +=   -GR- -W3 -Gy -MD -UDEBUG
 .ELSE
 INCPRE += \
- -I$(MOZ_INC)$/xpcom \
 -I$(MOZ_INC)$/profile \
 -I$(MOZ_INC)$/string \
 -I$(MOZ_INC)$/embed_base
@@ -111,8 +109,7 @@ CFLAGS += -Zi -GR- -W3 -Gy -MDd -UNDEBUG
 .ENDIF
 .IF "$(GUI)" == "UNX"
 INCPOST += \
-$(MOZ_INC)$/xpcom \
--I$(MOZ_INC)$/profile \
+$(MOZ_INC)$/profile \
 -I$(MOZ_INC)$/string \
 -I$(MOZ_INC)$/embed_base
 .IF "$(OS)" == "LINUX"
@@ -142,6 +139,7 @@ SOLARINC += \
 -I$(PRJ)$/source$/xmlsec
 
 SLOFILES = \
+    $(SLO)$/moz_profile.obj \
     $(SLO)$/securityenvironment_nssimpl.obj \
     $(SLO)$/xmlencryption_nssimpl.obj \
     $(SLO)$/xmlsecuritycontext_nssimpl.obj \

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: mt $ $Date: 2004-07-21 14:34:06 $
+#   last change: $Author: mmi $ $Date: 2004-07-23 03:00:42 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -121,12 +121,15 @@ SHL2STDLIBS +=			\
     $(SALLIB)			\
     $(CPPULIB)			\
     $(CPPUHELPERLIB)	\
+    $(OSLLIB)	\
+    $(SALLIB)	\
+    $(UNOTOOLSLIB)	    \
     $(SVLLIB)			\
     $(TOOLSLIB)			\
     $(COMPHELPERLIB)	\
     $(CPPUHELPERLIB)	\
     $(XMLOFFLIB)
-    
+
 .IF "$(GUI)"=="WNT"
 .IF "$(CRYPTO_ENGINE)" == "mscrypto"
 SHL2STDLIBS+= "ixml2.lib" "xmlsec.lib" "xmlsec-mscrypto.lib" "crypt32.lib" "advapi32.lib"
