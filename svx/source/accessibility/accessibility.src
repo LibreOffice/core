@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessibility.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: af $ $Date: 2002-05-17 11:25:59 $
+ *  last change: $Author: kz $ $Date: 2002-05-22 20:14:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,7 +195,7 @@ String RID_SVXSTR_A11Y_FILLSTYLE_HATCH
 {
     Text = "schraffiert" ;
     Text[ ENGLISH ] = "hatch" ;
-    Text[ ENGLISH_US ] = "hatch" ;
+    Text[ ENGLISH_US ] = "With hatching" ;
     Text[ portuguese ] = "hatch";
     Text[ russian ] = "hatch";
     Text[ greek ] = "hatch";
@@ -432,7 +432,7 @@ String RID_SVXSTR_RECTCTL_ACC_ANGL_NAME
 String RID_SVXSTR_RECTCTL_ACC_ANGL_DESCR
 {
     Text = "Auswahl eines (Haupt-) Winkels." ;
-    Text [ english_us ] = "Selection of a major angle" ;
+    Text [ english_us ] = "Selection of a major angle." ;
     Text[ portuguese ] = "Selection of a major angle";
     Text[ russian ] = "Selection of a major angle";
     Text[ greek ] = "Selection of a major angle";
@@ -929,7 +929,7 @@ String RID_SVXSTR_GRAPHCTRL_ACC_NAME
 String RID_SVXSTR_GRAPHCTRL_ACC_DESCRIPTION
 {
     Text = "Hier können Sie die Kontur bearbeiten" ;
-    Text [ english_us ] = "Editing of a graph" ;
+    Text [ english_us ] = "Editing of a graph." ;
     Text[ portuguese ] = "Editing of a graph";
     Text[ russian ] = "Editing of a graph";
     Text[ greek ] = "Editing of a graph";
