@@ -2,9 +2,9 @@
  *
  *  $RCSfile: export2.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: nf $ $Date: 2001-10-15 14:46:07 $
+ *  last change: $Author: nf $ $Date: 2002-01-14 14:11:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -565,8 +565,12 @@ BOOL Export::ConvertLineEnds(
 
     while ( !aSource.IsEof()) {
         aSource.ReadLine( sLine );
-        sLine.EraseAllChars( '\r' );
-        aDestination.WriteLine( sLine );
+        if ( !aSource.IsEof()) {
+            sLine.EraseAllChars( '\r' );
+            aDestination.WriteLine( sLine );
+        }
+        else
+            aDestination.WriteByteString( sLine );
     }
 
     aSource.Close();
