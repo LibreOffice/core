@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pathoptions.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mba $ $Date: 2000-11-14 16:53:14 $
+ *  last change: $Author: mba $ $Date: 2000-11-14 17:19:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1444,5 +1444,35 @@ sal_Bool SvtPathOptions::SearchFile( String& rIniFile, Pathes ePath )
     }
 
     return bRet;
+}
+
+void SAL_CALL PathService::addPropertyChangeListener( const ::rtl::OUString& sKeyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& xListener ) throw(::com::sun::star::uno::RuntimeException) {}
+void SAL_CALL PathService::removePropertyChangeListener( const ::rtl::OUString& sKeyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& xListener ) throw(::com::sun::star::uno::RuntimeException) {}
+void SAL_CALL PathService::flush(  ) throw(::com::sun::star::uno::RuntimeException) {}
+
+::rtl::OUString SAL_CALL PathService::substituteVariables( const ::rtl::OUString& sText ) throw(::com::sun::star::uno::RuntimeException)
+{
+    return SvtPathOptions().SubstituteVariable( sText );
+}
+
+::rtl::OUString SAL_CALL PathService::getImplementationName(  ) throw(::com::sun::star::uno::RuntimeException)
+{
+    return ::rtl::OUString::createFromAscii("com.sun.star.comp.svtools.PathService");
+}
+
+sal_Bool SAL_CALL PathService::supportsService( const ::rtl::OUString& ServiceName ) throw(::com::sun::star::uno::RuntimeException)
+{
+    if ( ServiceName.compareToAscii("com.sun.star.config.specialconfigmanager") == COMPARE_EQUAL )
+        return sal_True;
+    else
+        return sal_False;
+}
+
+
+::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL PathService::getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException)
+{
+    Sequence< ::rtl::OUString > aRet(1);
+    *aRet.getArray() = ::rtl::OUString::createFromAscii("com.sun.star.config.specialconfigmanager");
+    return aRet;
 }
 
