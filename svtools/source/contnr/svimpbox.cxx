@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svimpbox.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fs $ $Date: 2001-12-07 15:40:39 $
+ *  last change: $Author: pb $ $Date: 2002-03-08 12:29:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1123,7 +1123,7 @@ USHORT SvImpLBox::AdjustScrollBars( Size& rSize )
 
     Size aOSize( pView->Control::GetOutputSizePixel() );
 
-    int bVerSBar = pView->nWindowStyle & WB_VSCROLL;
+    int bVerSBar = (int)( pView->nWindowStyle & WB_VSCROLL );
     int bHorBar = 0;
     long nMaxRight = aOSize.Width(); //GetOutputSize().Width();
     Point aOrigin( pView->GetMapMode().GetOrigin() );
@@ -1314,7 +1314,7 @@ void SvImpLBox::FillView()
 
 void SvImpLBox::ShowVerSBar()
 {
-    ULONG bVerBar = pView->nWindowStyle & WB_VSCROLL;
+    ULONG bVerBar = (ULONG)( pView->nWindowStyle & WB_VSCROLL );
     ULONG nVis;
     if( !bVerBar )
         nVis = pView->GetVisibleCount();
@@ -1954,32 +1954,30 @@ BOOL SvImpLBox::IsNodeButton( const Point& rPosPixel, SvLBoxEntry* pEntry ) cons
     return TRUE;
 }
 
-// FALSE == kein Expand/Collapse-Button getroffen
-BOOL SvImpLBox::ButtonDownCheckExpand( const MouseEvent& rMEvt,
-                                     SvLBoxEntry* pEntry, long /* nY */ )
+// FALSE == hit no node button
+BOOL SvImpLBox::ButtonDownCheckExpand( const MouseEvent& rMEvt, SvLBoxEntry* pEntry, long /* nY */ )
 {
-    // beim Inplace-Ed. gunnix machen
-    if( pView->IsEditingActive() && pEntry == pView->pEdEntry )
-        return TRUE;
+    BOOL bRet = FALSE;
 
-    if( IsNodeButton( rMEvt.GetPosPixel(), pEntry ) )
+    if ( pView->IsEditingActive() && pEntry == pView->pEdEntry )
+        // inplace editing -> nothing to do
+        bRet = TRUE;
+    else if ( IsNodeButton( rMEvt.GetPosPixel(), pEntry ) )
     {
-        if( rMEvt.GetClicks() == 1 )
+        if ( pView->IsExpanded( pEntry ) )
         {
-            if( pView->IsExpanded(pEntry) )
-            {
-                pView->EndEditing( TRUE );
-                pView->Collapse( pEntry );
-            }
-            else
-            {
-                //einen Entry, der editiert wird, darf man aufklappen
-                pView->Expand( pEntry );
-            }
+            pView->EndEditing( TRUE );
+            pView->Collapse( pEntry );
         }
-        return TRUE;
+        else
+        {
+            // you can expand an entry, which is in editing
+            pView->Expand( pEntry );
+        }
+        bRet = TRUE;
     }
-    return FALSE;
+
+    return bRet;
 }
 
 void SvImpLBox::MouseButtonDown( const MouseEvent& rMEvt )
