@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optjava.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 13:08:40 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-27 16:12:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -951,6 +951,15 @@ IMPL_LINK( SvxJavaClassPathDlg, AddArchiveHdl_Impl, PushButton *, EMPTYARG )
     sfx2::FileDialogHelper aDlg( ::sfx2::FILEOPEN_SIMPLE, 0 );
     aDlg.SetTitle( SVX_RES( RID_SVXSTR_ARCHIVE_TITLE ) );
     aDlg.AddFilter( SVX_RES( RID_SVXSTR_ARCHIVE_HEADLINE ), String::CreateFromAscii("*.jar;*.zip") );
+    String sFolder;
+    if ( m_aPathList.GetSelectEntryCount() > 0 )
+    {
+        INetURLObject aObj( m_aPathList.GetSelectEntry(), INetURLObject::FSYS_DETECT );
+        sFolder = aObj.GetMainURL( INetURLObject::NO_DECODE );
+    }
+    else
+         sFolder = SvtPathOptions().GetWorkPath();
+    aDlg.SetDisplayDirectory( sFolder );
     if ( aDlg.Execute() == ERRCODE_NONE )
     {
         String sURL = aDlg.GetPath();
@@ -976,8 +985,15 @@ IMPL_LINK( SvxJavaClassPathDlg, AddPathHdl_Impl, PushButton *, EMPTYARG )
     Reference < XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
     Reference < XFolderPicker > xFolderPicker( xFactory->createInstance( sService ), UNO_QUERY );
 
-    String sWorkFolder = SvtPathOptions().GetWorkPath();
-    xFolderPicker->setDisplayDirectory( sWorkFolder );
+    String sFolder;
+    if ( m_aPathList.GetSelectEntryCount() > 0 )
+    {
+        INetURLObject aObj( m_aPathList.GetSelectEntry(), INetURLObject::FSYS_DETECT );
+        sFolder = aObj.GetMainURL( INetURLObject::NO_DECODE );
+    }
+    else
+         sFolder = SvtPathOptions().GetWorkPath();
+    xFolderPicker->setDisplayDirectory( sFolder );
     if ( xFolderPicker->execute() == ExecutableDialogResults::OK )
     {
         String sFolderURL( xFolderPicker->getDirectory() );
