@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontwork.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 14:01:41 $
+ *  last change: $Author: rt $ $Date: 2004-05-21 09:37:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1132,13 +1132,13 @@ DockingWindow RID_SVXDLG_FONTWORK
 
     ImageList IL_FONTWORK
     {
-        ImageBitmap = Bitmap { File = "fw_imagelist.bmp" ; };
+        Prefix = "fw";
         MaskColor = IMAGE_STDBTN_COLOR ;
         FONTWORK_IDLIST
     };
     ImageList ILH_FONTWORK
     {
-        ImageBitmap = Bitmap { File = "fwh_imagelist.bmp" ; };
+        Prefix = "fwh";
         MaskColor = IMAGE_STDBTN_COLOR ;
         FONTWORK_IDLIST
     };
