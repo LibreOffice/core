@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TablePageStyle.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 22:56:05 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 16:27:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -231,7 +231,7 @@ published service TablePageStyle
 
     /** contains the number of horizontal pages the sheet will printed on.
 
-    @since #i8868#
+    @since OOo 2.0.0
 
      */
     [property, optional] short ScaleToPagesX;
@@ -240,7 +240,7 @@ published service TablePageStyle
 
     /** contains the number of vertical pages the sheet will printed on.
 
-    @since #i8868#
+    @since OOo 2.0.0
 
      */
     [property, optional] short ScaleToPagesY;
