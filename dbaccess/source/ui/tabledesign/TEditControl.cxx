@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TEditControl.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 13:55:30 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 13:09:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -808,7 +808,16 @@ void OTableEditorCtrl::CellModified( long nRow, sal_uInt16 nColId )
     SetDataPtr( nRow );
     OFieldDescription* pActFieldDescr = pActRow->GetActFieldDescr();
 
-    GetUndoManager()->EnterListAction(String::CreateFromAscii("TODO"), String());
+    String sActionDescription;
+    switch ( nColId )
+    {
+    case FIELD_NAME:    sActionDescription = String( ModuleRes( STR_CHANGE_COLUMN_NAME ) ); break;
+    case FIELD_TYPE:    sActionDescription = String( ModuleRes( STR_CHANGE_COLUMN_TYPE ) ); break;
+    case FIELD_DESCR:   sActionDescription = String( ModuleRes( STR_CHANGE_COLUMN_DESCRIPTION ) ); break;
+    default:            sActionDescription = String( ModuleRes( STR_CHANGE_COLUMN_ATTRIBUTE ) ); break;
+    }
+
+    GetUndoManager()->EnterListAction( sActionDescription, String() );
     if (!pActFieldDescr)
     {
         const OTypeInfoMap* pTypeInfoMap = GetView()->getController()->getTypeInfo();
