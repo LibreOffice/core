@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.src,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-13 20:28:48 $
+ *  last change: $Author: pb $ $Date: 2001-08-14 06:18:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,9 +142,10 @@ Window WIN_HELP_INDEX
             PageItem
             {
                 Identifier = HELP_INDEX_PAGE_SEARCH ;
+                TEXT[ language_user1 ] = "pb: the correct english text here must be 'Search' (said VK and FPE)";
                 Text = "Suchen" ;
                 Text [ ENGLISH ] = "Search" ;
-                Text[ english_us ] = "Find";
+                Text[ english_us ] = "Search";
                 Text[ portuguese ] = "Procurar";
                 Text[ russian ] = "Οξθρκ";
                 Text[ greek ] = "Αναζήτηση";
@@ -419,6 +420,7 @@ TabPage TP_HELP_BOOKMARKS
     ListBox LB_BOOKMARKS
     {
         Border = TRUE ;
+        Sort = TRUE;
         Pos = MAP_APPFONT ( 6 , 19 ) ;
         Size = MAP_APPFONT ( 108 , 97 ) ;
     };
