@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swparrtf.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 12:31:07 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 14:23:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -256,6 +256,17 @@
 #ifndef WW_WWSTYLES_HXX
 #include "../inc/wwstyles.hxx"
 #endif
+
+#ifndef _TBLSEL_HXX
+#include <tblsel.hxx>           // SwSelBoxes
+#endif
+
+#ifndef _FMTTSPLT_HXX
+#include <fmtlsplt.hxx> // SwLayoutSplit
+#endif
+
+#include <svx/keepitem.hxx>
+
 // einige Hilfs-Funktionen
 // char
 inline const SvxFontHeightItem& GetSize(const SfxItemSet& rSet,BOOL bInP=TRUE)
@@ -298,6 +309,8 @@ ULONG RtfReader::Read( SwDoc &rDoc, const String& rBaseURL, SwPaM &rPam, const S
         nRet = *new StringErrorInfo( ERR_FORMAT_ROWCOL, sErr,
                                     ERRCODE_BUTTON_OK | ERRCODE_MSG_ERROR );
     }
+
+
     return nRet;
 }
 
@@ -313,13 +326,15 @@ SwRTFParser::SwRTFParser(SwDoc* pD, const SwPaM& rCrsr, SvStream& rIn, const Str
     nAktFirstPageDesc(0), nAktBox(0), nInsTblRow(USHRT_MAX),
     nNewNumSectDef(USHRT_MAX), nRowsToRepeat(0),
     sBaseURL( rBaseURL ),
-    pAuthorInfos(0)
+    pAuthorInfos(0),
+    bTrowdRead(0)
 {
     mbIsFootnote = mbReadNoTbl = bReadSwFly = bSwPageDesc = bStyleTabValid =
     bInPgDscTbl = bNewNumList = false;
     bFirstContinue = true;
     bContainsPara = false;
     bNestedField = false;
+    bForceNewTable = false;
 
     pPam = new SwPaM( *rCrsr.GetPoint() );
     SetInsPos( SwxPosition( pPam ) );
@@ -528,6 +543,12 @@ if( pSttNdIdx->GetIndex()+1 == pPam->GetBound( FALSE ).nNode.GetIndex() )
         sal_uInt16 nPageDescOffset = pDoc->GetPageDescCnt();
         maSegments.InsertSegments(IsNewDoc());
         UpdatePageDescs(*pDoc, nPageDescOffset);
+        //$flr folloing garbe collecting code has been moved from the previous procedure
+        //     UpdatePageDescs to here in order to fix bug #117882#
+        rtfSections::myrDummyIter aDEnd = maSegments.maDummyPageNos.rend();
+        for (rtfSections::myrDummyIter aI = maSegments.maDummyPageNos.rbegin(); aI != aDEnd; ++aI)
+            pDoc->DelPageDesc(*aI);
+
 
         if( aFlyArr.Count() )
             SetFlysInDoc();
@@ -875,15 +896,15 @@ void rtfSections::MoveFrom(SwPageDesc &rFrom, SwPageDesc &rDest)
     SwFrmFmt &rFromMaster = rFrom.GetMaster();
     rDestMaster.SetAttr(rFromMaster.GetHeader());
     rDestMaster.SetAttr(rFromMaster.GetFooter());
-    rFromMaster.SetAttr(SwFmtHeader());
-    rFromMaster.SetAttr(SwFmtFooter());
+    //rFromMaster.SetAttr(SwFmtHeader()); //$flr uncommented due to bug fix #117882#
+    //rFromMaster.SetAttr(SwFmtFooter()); //$flr uncommented due to bug fix #117882#
 
     SwFrmFmt &rDestLeft = rDest.GetLeft();
     SwFrmFmt &rFromLeft = rFrom.GetLeft();
     rDestLeft.SetAttr(rFromLeft.GetHeader());
     rDestLeft.SetAttr(rFromLeft.GetFooter());
-    rFromLeft.SetAttr(SwFmtHeader());
-    rFromLeft.SetAttr(SwFmtFooter());
+    //rFromLeft.SetAttr(SwFmtHeader()); //$flr uncommented due to bug fix #117882#
+    //rFromLeft.SetAttr(SwFmtFooter()); //$flr uncommented due to bug fix #117882#
 }
 
 void rtfSections::SetHdFt(rtfSection &rSection)
@@ -1064,7 +1085,7 @@ void rtfSections::InsertSegments(bool bNewDoc)
             SetSegmentToPageDesc(*aIter, false, bIgnoreCols);
 
             SwFmtPageDesc aPgDesc(aIter->HasTitlePage() ?
-                    aIter->mpTitlePage : aIter->mpPage);
+                 aIter->mpTitlePage : aIter->mpPage);
 
             if (aIter->mpTitlePage)
                 aIter->mpTitlePage->SetFollow(aIter->mpPage);
@@ -1149,9 +1170,6 @@ void rtfSections::InsertSegments(bool bNewDoc)
             pTxtNd = 0;
         }
     }
-    myrDummyIter aDEnd = maDummyPageNos.rend();
-    for (myrDummyIter aI = maDummyPageNos.rbegin(); aI != aDEnd; ++aI)
-        mrReader.pDoc->DelPageDesc(*aI);
 }
 
 namespace sw{
@@ -1230,6 +1248,7 @@ void SwRTFParser::ReadShpRslt()
     SkipToken(-1);
 }
 
+
 extern void sw3io_ConvertFromOldField( SwDoc& rDoc, USHORT& rWhich,
                                 USHORT& rSubType, ULONG &rFmt,
                                 USHORT nVersion );
@@ -1282,6 +1301,78 @@ USHORT SwRTFParser::ReadRevTbl()
     }
     SkipToken( -1 );
     return nAuthorTableIndex;
+}
+
+// #117910# simulate words behaviour of \keepn in table rows
+void fixKeepAndSplitAttributes(SwTableNode *pTableNode)
+{
+    ASSERT(pTableNode!=NULL, "no table node!");
+    if (!pTableNode) return;
+    SwDoc *pDoc=pTableNode->GetDoc();
+    if (pTableNode==NULL) return;
+    SwTable& rTable=pTableNode->GetTable();
+    SwTableLines& rLns = rTable.GetTabLines();
+    int nLines=rLns.Count();
+    if (nLines==0) return;
+    // get first paragaph in left down-most box
+    SwTableLine* pLastLine = rLns[ nLines-1 ];
+    SwTableBox* pBox = pLastLine->GetTabBoxes()[ 0 ];
+    ULONG iFirstParagraph=pBox->GetSttIdx()+1;
+    SwTxtNode *pTxtNode=(SwTxtNode *)pDoc->GetNodes()[iFirstParagraph];
+    SwFrmFmt* pFmt=rTable.GetFrmFmt();
+
+    SwFmtLayoutSplit *pTableSplit=(SwFmtLayoutSplit *)pFmt->GetAttrSet().GetItem(RES_LAYOUT_SPLIT);
+    BOOL isTableKeep = pTableSplit!=NULL && !pTableSplit->GetValue();
+    SvxFmtKeepItem *pTableKeep=(SvxFmtKeepItem *)pFmt->GetAttrSet().GetItem(RES_KEEP);
+    BOOL isTableKeepNext = pTableKeep!=NULL && pTableKeep->GetValue();
+    SvxFmtKeepItem *pKeepNext = (SvxFmtKeepItem *)pTxtNode->GetSwAttrSet().GetItem(RES_KEEP);
+
+    if (isTableKeepNext)
+    {
+        if (nLines>2 && !isTableKeep)
+            { // split
+                SwTableLine* pSplitLine = rLns[ nLines-2 ];
+                SwTableBox* pSplitBox = pSplitLine->GetTabBoxes()[ 0 ];
+                SwNodeIndex aSplitIdx( *pSplitBox->GetSttNd() );
+                pDoc->SplitTable( aSplitIdx, HEADLINE_NONE, !isTableKeep );
+                SwTable& rSplitTable=aSplitIdx.GetNode().FindTableNode()->GetTable();
+                aSplitIdx-=2;
+                pDoc->GetNodes().Delete(aSplitIdx);
+                pFmt=rSplitTable.GetFrmFmt();
+                pFmt->ResetAttr(RES_PAGEDESC);
+            }
+        // set keep=1(i.e. split=0) attribut
+        SwFmtLayoutSplit aSplit(0);
+        SwAttrSet aNewSet(pFmt->GetAttrSet());
+        aNewSet.Put(aSplit);
+        pFmt->SetAttr(aNewSet);
+    }
+    else // !isTableKeepNext
+    {
+        if (isTableKeep)
+        {
+            SwNodeIndex aTmpIdx( *pBox->GetSttNd() );
+            pDoc->SplitTable( aTmpIdx, HEADLINE_NONE, FALSE );
+            SwTable& rSplitTable=aTmpIdx.GetNode().FindTableNode()->GetTable();
+            aTmpIdx-=2;
+            pDoc->GetNodes().Delete(aTmpIdx);
+            pFmt=rSplitTable.GetFrmFmt();
+            pFmt->ResetAttr(RES_PAGEDESC);
+        }
+        // set keep=0(i.e. split=1) attribut
+        SwFmtLayoutSplit aSplit(1);
+        SwAttrSet aNewSet(pFmt->GetAttrSet());
+        aNewSet.Put(aSplit);
+        pFmt->SetAttr(aNewSet);
+    }
+    // move keepnext attribtue from last paragraph to table
+    if (pKeepNext!=NULL)
+    {
+        SvxFmtKeepItem aNewKeepItem(pKeepNext->GetValue());
+        SwAttrSet aNewSet(pFmt->GetAttrSet());
+        aNewSet.Put(aNewKeepItem);
+        pFmt->SetAttr(aNewSet);
+    }
 }
 
 void SwRTFParser::NextToken( int nToken )
@@ -1384,12 +1475,13 @@ void SwRTFParser::NextToken( int nToken )
         break;
 
 
-    case RTF_PNSECLVL:
-        if( bNewNumList )
+    case RTF_PNSECLVL:{
+        if( bNewNumList)
             SkipGroup();
         else
             ReadNumSecLevel( nToken );
         break;
+                      }
 
     case RTF_PNTEXT:
     case RTF_NONSHPPICT:
@@ -1415,10 +1507,12 @@ void SwRTFParser::NextToken( int nToken )
         break;
 
     case RTF_PAGE:
-        if (lcl_UsedPara(*pPam))
-            InsertPara();
-        CheckInsNewTblLine();
-        pDoc->Insert(*pPam, SvxFmtBreakItem(SVX_BREAK_PAGE_BEFORE));
+        if (pTableNode==NULL) { //#117410#: A \page command within a table is ignored by Word.
+            if (lcl_UsedPara(*pPam))
+                InsertPara();
+            CheckInsNewTblLine();
+            pDoc->Insert(*pPam, SvxFmtBreakItem(SVX_BREAK_PAGE_BEFORE));
+        }
         break;
 
     case RTF_SECT:
@@ -1437,6 +1531,7 @@ void SwRTFParser::NextToken( int nToken )
         break;
 
     case RTF_ROW:
+        bTrowdRead=false;
         if (!CantUseTables())
         {
             // aus der Line raus
@@ -1459,6 +1554,12 @@ void SwRTFParser::NextToken( int nToken )
             }
             nInsTblRow = GetOpenBrakets();
             SetPardTokenRead( FALSE );
+            SwPaM aTmp(*pPam);
+            aTmp.Move( fnMoveBackward, fnGoNode );
+            SwTableNode *pTableNode=aTmp.GetMark()->nNode.GetNode().FindTableNode();
+            //fixKeepAndSplitAttributes(pTableNode); $flr disabled in frrtf01, see #117910#
+
+
         }
         ::SetProgressState( rInput.Tell(), pDoc->GetDocShell() );
         break;
@@ -2397,8 +2498,9 @@ void SwRTFParser::MakeStyleTab()
             }
             else if( !aTxtCollTbl.Get( nNo ) )
             {
-                // existiert noch nicht, also anlegen
-                if( MAXLEVEL > pStyle->nOutlineNo )
+
+#if 0 //$flr replaced by the more sophisticated check adjustOutlineLevel in shellio.cxx
+                if( MAXLEVEL > pStyle->nOutlineNo)
                 {
                     USHORT nOutlFlag = 1 << pStyle->nOutlineNo;
                     if( nValidOutlineLevels & nOutlFlag )
@@ -2406,7 +2508,8 @@ void SwRTFParser::MakeStyleTab()
                     else
                         nValidOutlineLevels |= nOutlFlag;
                 }
-
+#endif
+                // existiert noch nicht, also anlegen
                 MakeStyle( nNo, *pStyle );
             }
 
@@ -2520,6 +2623,9 @@ void SwRTFParser::ReadSectControls( int nToken )
     SectPageInformation aNewSection(maSegments.back().maPageInfo);
 
     bool bNewSection = false;
+    bool bNewSectionHeader = false;
+    const SwFmtHeader* _pKeepHeader = NULL;
+    const SwFmtFooter* _pKeepFooter = NULL;
     int bWeiter = true;
     do {
         USHORT nValue = USHORT( nTokenValue );
@@ -2527,11 +2633,14 @@ void SwRTFParser::ReadSectControls( int nToken )
         {
             case RTF_SECT:
                 bNewSection = true;
+                bForceNewTable = true; // #117882#
                 break;
-            case RTF_SECTD:
+            case RTF_SECTD: {
                 //Reset to page defaults
+                SwPageDesc* oldPageDesc=aNewSection.mpPageHdFt;
                 aNewSection = SectPageInformation(maPageDefaults);
-                break;
+                aNewSection.mpPageHdFt=oldPageDesc;
+                } break;
             case RTF_PGWSXN:
                 if (0 < nTokenValue)
                     aNewSection.mnPgwsxn = nTokenValue;
@@ -2640,9 +2749,22 @@ void SwRTFParser::ReadSectControls( int nToken )
             case RTF_HEADER:
             case RTF_HEADERL:
             case RTF_HEADERR:
+                if (aNewSection.mpPageHdFt!=NULL)
+                {
+                    _pKeepHeader = NULL;
+                    _pKeepFooter = &aNewSection.mpPageHdFt->GetMaster().GetFooter();
+                }
             case RTF_FOOTER:
             case RTF_FOOTERL:
             case RTF_FOOTERR:
+                if (aNewSection.mpPageHdFt!=NULL && _pKeepFooter==NULL)
+                {
+                    _pKeepHeader = &aNewSection.mpPageHdFt->GetMaster().GetHeader();
+                }
+                if (!bNewSectionHeader) { //see #117914# topic 2). If a header is redefined in a section
+                    bNewSectionHeader=true;                    //  a new header must be created.
+                    aNewSection.mpPageHdFt=NULL;
+                }
                 if (!aNewSection.mpPageHdFt)
                 {
                     String aName(RTL_CONSTASCII_STRINGPARAM("rtfHdFt"));
@@ -2653,6 +2775,8 @@ void SwRTFParser::ReadSectControls( int nToken )
                     maSegments.maDummyPageNos.push_back(nPageNo);
                 }
                 ReadHeaderFooter(nToken, aNewSection.mpPageHdFt);
+                if (_pKeepHeader) aNewSection.mpPageHdFt->GetMaster().SetAttr(*_pKeepHeader);
+                if (_pKeepFooter) aNewSection.mpPageHdFt->GetMaster().SetAttr(*_pKeepFooter);
                 break;
             case RTF_FOOTERF:
             case RTF_HEADERF:
@@ -2760,9 +2884,10 @@ void SwRTFParser::ReadSectControls( int nToken )
     if (bNewSection || maSegments.empty())
     {
         AttrGroupEnd(); //#106493#
-        if(!bContainsPara)
+        if(!bContainsPara && !bContainsTablePara) //#117881#: bContainsTablePara is set in rtftbl.cxx
             pDoc->AppendTxtNode(*pPam->GetPoint());
         bContainsPara = false;
+        bContainsTablePara = false;
         maSegments.push_back(rtfSection(*pPam->GetPoint(), aNewSection));
     }
     else //modifying/replacing the current section
@@ -3505,6 +3630,7 @@ void SwRTFParser::SetSwgValues( SfxItemSet& rSet )
             rSet.Put( SwNumRuleItem( pRule->GetName() ));
         else
             rSet.ClearItem( RES_PARATR_NUMRULE );
+
     }
 
 
@@ -3650,7 +3776,7 @@ SwTxtFmtColl* SwRTFParser::MakeStyle( USHORT nNo, const SvxRTFStyleType& rStyle)
         return pColl;
 
     USHORT nStyleNo = rStyle.nBasedOn;
-    if( nStyleNo != nNo )
+    if( rStyle.bBasedOnIsSet && nStyleNo != nNo )
     {
         SvxRTFStyleType* pDerivedStyle = GetStyleTbl().Get( nStyleNo );
         SwTxtFmtColl* pDerivedColl = aTxtCollTbl.Get( nStyleNo );
@@ -3713,7 +3839,7 @@ SwCharFmt* SwRTFParser::MakeCharStyle( USHORT nNo, const SvxRTFStyleType& rStyle
         return pFmt;
 
     USHORT nStyleNo = rStyle.nBasedOn;
-    if( nStyleNo != nNo )
+    if( rStyle.bBasedOnIsSet && nStyleNo != nNo )
     {
         SvxRTFStyleType* pDerivedStyle = GetStyleTbl().Get( nStyleNo );
         SwCharFmt* pDerivedFmt = aCharFmtTbl.Get( nStyleNo );
@@ -3753,10 +3879,19 @@ void SwRTFParser::DelLastNode()
 {
     // sollte der letze Node leer sein, dann loesche ihn
     // (\par heisst ja Absatzende und nicht neuer Absatz!)
+
     if( !pPam->GetPoint()->nContent.GetIndex() )
     {
         ULONG nNodeIdx = pPam->GetPoint()->nNode.GetIndex();
         SwCntntNode* pCNd = pDoc->GetNodes()[ nNodeIdx ]->GetCntntNode();
+        // paragraphs with page break information are not empty! see #117914# topic 1)
+        if(const SfxPoolItem* pItem=&(pCNd->GetAttr( RES_PAGEDESC, FALSE)))
+        {
+            SwFmtPageDesc* pPageDescItem = ((SwFmtPageDesc*)pItem);
+            if (pPageDescItem->GetPageDesc()!=NULL)
+            return;
+        }
+
         if( pCNd && pCNd->StartOfSectionIndex()+2 <
             pCNd->EndOfSectionIndex() )
         {
@@ -3785,6 +3920,7 @@ void SwRTFParser::DelLastNode()
             pPam->GetPoint()->nContent.Assign( 0, 0 );
             pPam->SetMark();
             pPam->DeleteMark();
+
             pDoc->GetNodes().Delete( pPam->GetPoint()->nNode );
         }
     }
@@ -3801,8 +3937,9 @@ void SwRTFParser::UnknownAttrToken( int nToken, SfxItemSet* pSet )
                 NewTblLine();           // evt. Line copieren
             else
             {
+                static int _do=0; //$flr See #117881# for explanation.
                 // Crsr nicht mehr in der Tabelle ?
-                if( !pPam->GetNode()->FindTableNode() )
+                if( !pPam->GetNode()->FindTableNode() && _do )
                 {
                     ULONG nOldPos = pPam->GetPoint()->nNode.GetIndex();
 
@@ -3869,9 +4006,12 @@ void SwRTFParser::UnknownAttrToken( int nToken, SfxItemSet* pSet )
                     pSet->Put( SfxUInt16Item( FN_PARAM_NUM_LEVEL, 0 ));
             }
             else
+            {
                 // wir sind in der Style-Definitions - Phase. Der Name
                 // wird dann spaeter umgesetzt
-                pSet->Put( SwNumRuleItem( String::CreateFromInt32( nTokenValue )));
+                                //#117891# pSet->Put( SwNumRuleItem( String::CreateFromInt32( nTokenValue )));
+            }
+
         }
         break;
 
