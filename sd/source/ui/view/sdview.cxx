@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: cl $ $Date: 2002-04-15 08:52:48 $
+ *  last change: $Author: cl $ $Date: 2002-04-24 07:15:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,9 @@
  *
  ************************************************************************/
 
+#ifndef _SFXREQUEST_HXX //autogen
+#include <sfx2/request.hxx>
+#endif
 #ifndef _E3D_OBJ3D_HXX
 #include <svx/obj3d.hxx>
 #endif
@@ -101,6 +104,8 @@
 #ifndef _SVDOUTL_HXX //autogen
 #include <svx/svdoutl.hxx>
 #endif
+
+#include <svx/dialogs.hrc>
 
 #pragma hdrstop
 
@@ -168,6 +173,10 @@ SdView::SdView(SdDrawDocument* pDrawDoc, OutputDevice* pOutDev,
     aDropErrorTimer.SetTimeout(50);
     aDropInsertFileTimer.SetTimeoutHdl( LINK(this, SdView, DropInsertFileHdl) );
     aDropInsertFileTimer.SetTimeout(50);
+
+    StartListening( maAccessibilityOptions );
+
+    onAccessibilityOptionsChange();
 }
 
 /*************************************************************************
@@ -178,6 +187,8 @@ SdView::SdView(SdDrawDocument* pDrawDoc, OutputDevice* pOutDev,
 
 SdView::~SdView()
 {
+    EndListening( maAccessibilityOptions );
+
     // release content of selection clipboard, if we own the content
     UpdateSelectionClipboard( TRUE );
 
@@ -203,7 +214,6 @@ SdView::~SdView()
         }
         delete pLockedRedraws;
     }
-
 }
 
 
@@ -812,3 +822,46 @@ BOOL SdView::IsVectorizeAllowed() const
 }
 
 
+void SdView::SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType, const SfxHint& rHint, const TypeId& rHintType)
+{
+    if( rHint.ISA( SfxSimpleHint ) && ( (SfxSimpleHint&) rHint ).GetId() == SFX_HINT_ACCESSIBILITY_CHANGED )
+    {
+        onAccessibilityOptionsChange();
+    }
+
+    FmFormView::SFX_NOTIFY(rBC, rBCType, rHint, rHintType);
+}
+
+void SdView::onAccessibilityOptionsChange()
+{
+    if( pViewSh )
+    {
+        SdWindow* pWindow = pViewSh->GetActiveWindow();
+        if( pWindow )
+        {
+            const StyleSettings& rStyleSettings = pWindow->GetSettings().GetStyleSettings();
+
+            USHORT nOutputSlot, nPreviewSlot;
+
+            SvtAccessibilityOptions aAccOptions;
+            if( rStyleSettings.GetHighContrastMode() && aAccOptions.GetIsForDrawings() )
+            {
+                nOutputSlot = SID_OUTPUT_QUALITY_CONTRAST;
+                nPreviewSlot = SID_PREVIEW_QUALITY_CONTRAST;
+            }
+            else
+            {
+                nOutputSlot = SID_OUTPUT_QUALITY_COLOR;
+                nPreviewSlot = SID_PREVIEW_QUALITY_COLOR;
+            }
+
+            if( pViewSh->GetViewFrame() && pViewSh->GetViewFrame()->GetDispatcher() )
+            {
+                pViewSh->GetViewFrame()->GetDispatcher()->Execute( nOutputSlot, SFX_CALLMODE_ASYNCHRON );
+                pViewSh->GetViewFrame()->GetDispatcher()->Execute( nPreviewSlot, SFX_CALLMODE_ASYNCHRON );
+            }
+
+            pViewSh->Invalidate();
+        }
+    }
+}

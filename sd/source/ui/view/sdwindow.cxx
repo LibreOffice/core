@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdwindow.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: af $ $Date: 2002-04-22 15:32:56 $
+ *  last change: $Author: cl $ $Date: 2002-04-24 07:17:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -756,24 +756,28 @@ void SdWindow::DataChanged( const DataChangedEvent& rDCEvt )
             {
                 USHORT nOutputSlot, nPreviewSlot;
 
-                if( GetSettings().GetStyleSettings().GetHighContrastMode() )
+                SvtAccessibilityOptions aAccOptions;
+                if( aAccOptions.GetIsForDrawings() )
                 {
-                    nOutputSlot = SID_OUTPUT_QUALITY_CONTRAST;
-                    nPreviewSlot = SID_PREVIEW_QUALITY_CONTRAST;
-                }
-                else
-                {
-                    nOutputSlot = SID_OUTPUT_QUALITY_COLOR;
-                    nPreviewSlot = SID_PREVIEW_QUALITY_COLOR;
-                }
+                    if( GetSettings().GetStyleSettings().GetHighContrastMode() )
+                    {
+                        nOutputSlot = SID_OUTPUT_QUALITY_CONTRAST;
+                        nPreviewSlot = SID_PREVIEW_QUALITY_CONTRAST;
+                    }
+                    else
+                    {
+                        nOutputSlot = SID_OUTPUT_QUALITY_COLOR;
+                        nPreviewSlot = SID_PREVIEW_QUALITY_COLOR;
+                    }
 
-                if( pViewShell->GetViewFrame() && pViewShell->GetViewFrame()->GetDispatcher() )
-                {
-                    pViewShell->GetViewFrame()->GetDispatcher()->Execute( nOutputSlot, SFX_CALLMODE_ASYNCHRON );
-                    pViewShell->GetViewFrame()->GetDispatcher()->Execute( nPreviewSlot, SFX_CALLMODE_ASYNCHRON );
-                }
+                    if( pViewShell->GetViewFrame() && pViewShell->GetViewFrame()->GetDispatcher() )
+                    {
+                        pViewShell->GetViewFrame()->GetDispatcher()->Execute( nOutputSlot, SFX_CALLMODE_ASYNCHRON );
+                        pViewShell->GetViewFrame()->GetDispatcher()->Execute( nPreviewSlot, SFX_CALLMODE_ASYNCHRON );
+                    }
 
-                pViewShell->Invalidate();
+                    pViewShell->Invalidate();
+                }
             }
         }
 

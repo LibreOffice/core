@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawview.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: cl $ $Date: 2002-04-12 12:23:25 $
+ *  last change: $Author: cl $ $Date: 2002-04-24 07:15:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -504,7 +504,7 @@ void SdDrawView::SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType,
         }
     }
 
-    FmFormView::SFX_NOTIFY(rBC, rBCType, rHint, rHintType);
+    SdView::SFX_NOTIFY(rBC, rBCType, rHint, rHintType);
 }
 
 /*************************************************************************

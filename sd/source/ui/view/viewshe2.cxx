@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshe2.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: cl $ $Date: 2002-02-13 13:19:25 $
+ *  last change: $Author: cl $ $Date: 2002-04-24 07:15:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1831,6 +1831,14 @@ void SdViewShell::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence <
             {
                 if( pValue->Value >>= nInt32 )
                 {
+                    SdWindow* pWindow = GetActiveWindow();
+                    if( pWindow )
+                    {
+                        const StyleSettings& rStyleSettings = pWindow->GetSettings().GetStyleSettings();
+                        SvtAccessibilityOptions aAccOptions;
+                        if( rStyleSettings.GetHighContrastMode() && aAccOptions.GetIsForDrawings() )
+                            continue;
+                    }
                     pFrameView->SetDrawMode( (ULONG)nInt32 );
                 }
             }
@@ -1838,6 +1846,14 @@ void SdViewShell::ReadUserDataSequence ( const ::com::sun::star::uno::Sequence <
             {
                 if( pValue->Value >>= nInt32 )
                 {
+                    SdWindow* pWindow = GetActiveWindow();
+                    if( pWindow )
+                    {
+                        const StyleSettings& rStyleSettings = pWindow->GetSettings().GetStyleSettings();
+                        SvtAccessibilityOptions aAccOptions;
+                        if( rStyleSettings.GetHighContrastMode() && aAccOptions.GetIsForDrawings() )
+                            continue;
+                    }
                     pFrameView->SetPreviewDrawMode( (ULONG)nInt32 );
                 }
             }
