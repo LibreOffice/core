@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforlist.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: er $ $Date: 2001-01-26 17:45:08 $
+ *  last change: $Author: er $ $Date: 2001-01-30 14:56:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1506,7 +1506,7 @@ void SvNumberFormatter::GetFormatSpecialInfo(ULONG nFormat,
                                              USHORT& nAnzLeading)
 
 {
-    SvNumberformat* pFormat = aFTable.Get(nFormat);
+    const SvNumberformat* pFormat = aFTable.Get(nFormat);
     if (pFormat)
         pFormat->GetFormatSpecialInfo(bThousand, IsRed,
                                       nPrecision, nAnzLeading);
@@ -1521,11 +1521,25 @@ void SvNumberFormatter::GetFormatSpecialInfo(ULONG nFormat,
 
 USHORT SvNumberFormatter::GetFormatPrecision( ULONG nFormat ) const
 {
-    SvNumberformat* pFormat = aFTable.Get( nFormat );
+    const SvNumberformat* pFormat = aFTable.Get( nFormat );
     if ( pFormat )
         return pFormat->GetFormatPrecision();
     else
         return pFormatScanner->GetStandardPrec();
+}
+
+
+String SvNumberFormatter::GetFormatDecimalSep( ULONG nFormat ) const
+{
+    const SvNumberformat* pFormat = aFTable.Get( nFormat );
+    if ( !pFormat || pFormat->GetLanguage() == ActLnge )
+        return pLocaleData->getNumDecimalSep();
+
+    ::com::sun::star::lang::Locale aSaveLocale( pLocaleData->getLocale() );
+    pLocaleData->setLocale( ConvertLanguageToLocale( pFormat->GetLanguage() ) );
+    String aRet( pLocaleData->getNumDecimalSep() );
+    pLocaleData->setLocale( aSaveLocale );
+    return aRet;
 }
 
 
