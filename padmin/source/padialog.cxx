@@ -2,9 +2,9 @@
  *
  *  $RCSfile: padialog.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 14:16:06 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:22:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -549,7 +549,7 @@ void PADialog::PrintTestPage()
         aPoint.Y() = (((double)aP2.Y())*cosd + ((double)aP2.X())*sind)*factor;
         aP2 = aPoint;
     }
-#if defined DEBUG || defined DBG_UTIL
+#if (OSL_DEBUG_LEVEL > 1) || defined DBG_UTIL
     fprintf( stderr, "%d lines\n",n );
 #endif
     m_pPrinter->EndPage();
