@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridctrl.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-26 15:07:52 $
+ *  last change: $Author: fs $ $Date: 2001-03-27 14:38:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,9 @@
 
 #ifndef _SVX_FMPROP_HRC
 #include "fmprop.hrc"
+#endif
+#ifndef _SVTOOLS_STRINGTRANSFER_HXX_
+#include <svtools/stringtransfer.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_SDB_XRESULTSETACCESS_HPP_
@@ -189,7 +192,9 @@ String OBJECTTEXT   = String::CreateFromAscii("<OBJECT>");
 
 using namespace ::dbtools;
 using namespace ::svxform;
+using namespace ::svt;
 using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::datatransfer;
 
 #define ROWSTATUS(row)  !row.Is() ? "NULL" : row->GetStatus() == GRS_CLEAN ? "CLEAN" : row->GetStatus() == GRS_MODIFIED ? "MODIFIED" : row->GetStatus() == GRS_DELETED ? "DELETED" : "INVALID"
 
@@ -964,7 +969,6 @@ DbGridControl::DbGridControl(
                        BROWSER_HLINESFULL |
                        BROWSER_VLINESFULL |
                        BROWSER_AUTO_VSCROLL)
-            ,DragSourceHelper(this)
 #pragma warning (disable : 4355)
             ,m_aBar(this)
 #pragma warning (default : 4355)
@@ -1000,7 +1004,6 @@ DbGridControl::DbGridControl(
                     BROWSER_HLINESFULL |
                     BROWSER_VLINESFULL |
                     BROWSER_AUTO_VSCROLL)
-            ,DragSourceHelper(this)
 #pragma warning (disable : 4355)
             ,m_aBar(this)
 #pragma warning (default : 4355)
@@ -2723,14 +2726,13 @@ void DbGridControl::StartDrag( sal_Int8 nAction, const Point& rPosPixel )
     long   nRow = GetRowAtYPosPixel(rPosPixel.Y());
     if (nColId != HANDLE_ID && nRow >= 0)
     {
-        DbGridColumn* pColumn = m_aColumns.GetObject(GetModelColumnPos(nColId));
-        DragServer::CopyString(GetCellText(pColumn));
-        // TODO DND
-
         if (GetDataWindow().IsMouseCaptured())
             GetDataWindow().ReleaseMouse();
 
-        StartDrag(DND_ACTION_COPY, rPosPixel);
+        DbGridColumn* pColumn = m_aColumns.GetObject(GetModelColumnPos(nColId));
+        OStringTransferable* pTransferable = new OStringTransferable(GetCellText(pColumn));
+        Reference< XTransferable > xEnsureDelete(pTransferable);
+        pTransferable->StartDrag(this, DND_ACTION_COPY);
     }
 }
 
@@ -2767,9 +2769,9 @@ void DbGridControl::Command(const CommandEvent& rEvt)
                     case SID_COPY:
                     {
                         DbGridColumn* pColumn = m_aColumns.GetObject(GetModelColumnPos(nColId));
-                        Clipboard::Clear();
-                        Clipboard::CopyString(GetCellText(pColumn));
-                    }   break;
+                        OStringTransfer::CopyString(GetCellText(pColumn));
+                    }
+                    break;
                 }
             }
             else
