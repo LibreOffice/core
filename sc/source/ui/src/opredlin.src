@@ -2,9 +2,9 @@
  *
  *  $RCSfile: opredlin.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 20:04:20 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 20:08:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,176 +72,41 @@ TabPage RID_SCPAGE_OPREDLINE
         HelpID = 1 ;
         Pos = MAP_APPFONT ( 12 , 15 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
-        Text = "~Änderungen" ;
-        Text [ ENGLISH ] = "Changes" ;
-        Text [ english_us ] = "Chan~ges" ;
-        Text [ portuguese_brazilian ] = "~Modificações" ;
-        Text [ swedish ] = "~Ändringar" ;
-        Text [ danish ] = "~Ændringer" ;
-        Text [ italian ] = "~Modifica" ;
-        Text [ spanish ] = "~Modificaciones" ;
-        Text [ french ] = "~Modifications" ;
-        Text [ dutch ] = "~Wijzigingen" ;
-        Text [ portuguese ] = "~Modificações" ;
-        Text[ chinese_simplified ] = "æ›´æ”¹(~G)";
-        Text[ russian ] = "Èçìåíåíèÿ";
-        Text[ polish ] = "~Zmiany";
-        Text[ japanese ] = "å¤‰æ›´(~G)";
-        Text[ chinese_traditional ] = "è®Šæ›´(~G)";
-        Text[ arabic ] = "ÇáÊÛííÑÇÊ";
-        Text[ greek ] = "Áëëáãİò";
-        Text[ korean ] = "ë³€ê²½(~G)";
-        Text[ turkish ] = "~Değişiklikler";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Can~vis";
-        Text[ finnish ] = "Muu~tokset";
-        Text[ thai ] = "à¹€à¸›~à¸¥à¸µà¹ˆà¸¢à¸™";
-        Text[ czech ] = "ZmÄ›ny";
-        Text[ hebrew ] = "â€®×©×™× ×•×™×™×â€¬";
-        Text[ hindi ] = "à¤ªà¤°à¤¿à¤µ~à¤°à¥à¤¤à¤¨à¥‡à¤‚";
-        Text[ slovak ] = "Sledovanie z~mien";
-        Text[ hungarian ] = "VÃ¡lt~oztatÃ¡sok";
-        Text[ slovenian ] = "Spre~membe";
+        Text [ de ] = "~Änderungen" ;
+        Text [ en-US ] = "Chan~ges" ;
+        Text [ x-comment ] = " ";
     };
     FixedText FT_REMOVE
     {
         Pos = MAP_APPFONT ( 12 , 31 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
-        Text = "~Löschungen" ;
-        Text [ ENGLISH ] = "Removed Entrys" ;
-        Text [ portuguese ] = "~Eliminações" ;
-        Text [ english_us ] = "~Deletions" ;
-        Text [ portuguese_brazilian ] = "~Exclusões" ;
-        Text [ swedish ] = "~Raderingar" ;
-        Text [ danish ] = "~Sletninger" ;
-        Text [ italian ] = "~Elimina" ;
-        Text [ spanish ] = "~Borrar" ;
-        Text [ french ] = "~Suppressions" ;
-        Text [ dutch ] = "V~erwijderingen" ;
-        Text[ chinese_simplified ] = "åˆ é™¤(~D)";
-        Text[ russian ] = "Óäàëåíèÿ";
-        Text[ polish ] = "~Usuniêcia";
-        Text[ japanese ] = "å‰Šé™¤(~D)";
-        Text[ chinese_traditional ] = "åˆªé™¤(~D)";
-        Text[ arabic ] = "ÍĞİ";
-        Text[ greek ] = "Äéáãñáöİò";
-        Text[ korean ] = "ì‚­ì œ(~D)";
-        Text[ turkish ] = "~Silinenler";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Supressions";
-        Text[ finnish ] = "~Poistot";
-        Text[ thai ] = "~à¸¥à¸š";
-        Text[ czech ] = "SmazanÃ¡ data";
-        Text[ hebrew ] = "~LÃ¶schungen";
-        Text[ hindi ] = "~à¤®à¤¿à¤Ÿà¤¾à¤¨à¤¾";
-        Text[ slovak ] = "ZmazanÃ© ~dÃ¡ta";
-        Text[ hungarian ] = "~TÃ¶rlÃ©sek";
-        Text[ slovenian ] = "~Izbrisi";
+        Text [ de ] = "~Löschungen" ;
+        Text [ en-US ] = "~Deletions" ;
+        Text [ x-comment ] = " ";
     };
     FixedText FT_INSERT
     {
         Pos = MAP_APPFONT ( 12 , 47 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
-        Text = "~Einfügungen" ;
-        Text [ ENGLISH ] = "Inserted Entrys" ;
-        Text [ portuguese ] = "~Inserções" ;
-        Text [ english_us ] = "~Insertions" ;
-        Text [ portuguese_brazilian ] = "~Inserções" ;
-        Text [ swedish ] = "~Infogningar" ;
-        Text [ danish ] = "~Indsættelser" ;
-        Text [ italian ] = "Inserisci" ;
-        Text [ spanish ] = "~Inserciones" ;
-        Text [ french ] = "~Insertions" ;
-        Text [ dutch ] = "~Invoegingen" ;
-        Text[ chinese_simplified ] = "æ’å…¥(~I)";
-        Text[ russian ] = "Âñòàâêè";
-        Text[ polish ] = "W~stawienia";
-        Text[ japanese ] = "æŒ¿å…¥(~I)";
-        Text[ chinese_traditional ] = "æ’å…¥(~I)";
-        Text[ arabic ] = "ÅÏÑÇÌÇÊ";
-        Text[ greek ] = "Åéóáãùãİò";
-        Text[ korean ] = "ì‚½ì…(~I)";
-        Text[ turkish ] = "~Eklemeler";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Insercions";
-        Text[ finnish ] = "~Lisäykset";
-        Text[ thai ] = "à¹~à¸—à¸£à¸";
-        Text[ czech ] = "VloÅ¾enÃ¡ data";
-        Text[ hebrew ] = "~EinfÃ¼gungen";
-        Text[ hindi ] = "~à¤œà¥‹à¤¡à¤¼à¤¨à¤¾";
-        Text[ slovak ] = "V~loÅ¾enÃ© dÃ¡ta";
-        Text[ hungarian ] = "~BeszÃºrÃ¡sok";
-        Text[ slovenian ] = "~Vstavki";
+        Text [ de ] = "~Einfügungen" ;
+        Text [ en-US ] = "~Insertions" ;
+        Text [ x-comment ] = " ";
     };
     FixedText FT_MOVE
     {
         Pos = MAP_APPFONT ( 12 , 63 ) ;
         Size = MAP_APPFONT ( 70 , 10 ) ;
-        Text = "~Verschiebungen" ;
-        Text [ ENGLISH ] = "Moved Entrys" ;
-        Text [ portuguese ] = "~Deslocamentos" ;
-        Text [ english_us ] = "~Moved entries" ;
-        Text [ portuguese_brazilian ] = "~Entradas movidas" ;
-        Text [ swedish ] = "~Förskjutningar" ;
-        Text [ danish ] = "~Flytninger" ;
-        Text [ italian ] = "~Sposta" ;
-        Text [ spanish ] = "~Desplazamientos" ;
-        Text [ french ] = "Déplacements" ;
-        Text [ dutch ] = "Ver~plaatsingen" ;
-        Text[ chinese_simplified ] = "ç§»åŠ¨(~M)";
-        Text[ russian ] = "Ïåğåìåùåííûå ıëåìåíòû";
-        Text[ polish ] = "~Przeniesione wpisy";
-        Text[ japanese ] = "ç§»å‹•(~M)";
-        Text[ chinese_traditional ] = "ç§»å‹•(~M)";
-        Text[ arabic ] = "ÅÒÇÍÇÊ";
-        Text[ greek ] = "ÌåôáêéíŞóåéò";
-        Text[ korean ] = "ì´ë™(~M)";
-        Text[ turkish ] = "~Taşınan girişler";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Entrades ~mogudes";
-        Text[ finnish ] = "~Siirretyt merkinnät";
-        Text[ thai ] = "~à¸¢à¹‰à¸²à¸¢à¸£à¸²à¸¢à¸à¸²à¸£";
-        Text[ czech ] = "PÅ™esunutÃ© poloÅ¾ky";
-        Text[ hebrew ] = "~Verschiebungen";
-        Text[ hindi ] = "~à¤¸à¥à¤¥à¤¾à¤¨ à¤ªà¤°à¤¿à¤µà¤°à¥à¤¤à¤¨ à¤•à¤¿à¤¯à¤¾ à¤¹à¥à¤† à¤ªà¥à¤°à¤µà¤¿à¤·à¥à¤Ÿà¤¿à¤¯à¤¾à¤";
-        Text[ slovak ] = "Presu~nutÃ© poloÅ¾ky";
-        Text[ hungarian ] = "Ãt~helyezett bejegyzÃ©sek";
-        Text[ slovenian ] = "~Prestavljeni vnosi";
+        Text [ de ] = "~Verschiebungen" ;
+        Text [ en-US ] = "~Moved entries" ;
+        Text [ x-comment ] = " ";
     };
     FixedLine GB_COLORCHGS
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text = "Farbgebung für Änderungen" ;
-        Text [ ENGLISH ] = "Colors for Changes" ;
-        Text [ portuguese ] = "Cores para modificações" ;
-        Text [ english_us ] = "Colors for changes" ;
-        Text [ portuguese_brazilian ] = "Cores para modificações" ;
-        Text [ swedish ] = "Färggivning för ändringar" ;
-        Text [ danish ] = "Farve til markering af ændringer" ;
-        Text [ italian ] = "Colori per i comandi" ;
-        Text [ spanish ] = "Colores para las modificaciones" ;
-        Text [ french ] = "Couleurs pour les modifications" ;
-        Text [ dutch ] = "Kleur voor wijzigingen" ;
-        Text[ chinese_simplified ] = "å½©è‰²æ˜¾ç¤ºæ›´æ”¹çš„éƒ¨åˆ†";
-        Text[ russian ] = "Öâåò äëÿ èñïğàâëåíèé";
-        Text[ polish ] = "Kolory zmian";
-        Text[ japanese ] = "å¤‰æ›´ç®‡æ‰€ã«ä½¿ã†è‰²";
-        Text[ chinese_traditional ] = "å½©è‰²é¡¯ç¤ºè®Šæ›´çš„éƒ¨åˆ†";
-        Text[ arabic ] = "áæä ÇáÊÛííÑÇÊ";
-        Text[ greek ] = "×ñşìáôá ôùí áëëáãşí";
-        Text[ korean ] = "ë³€ê²½ ìƒ‰ìƒ";
-        Text[ turkish ] = "Değişiklik rengi";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Colors per als canvis";
-        Text[ finnish ] = "Muutosten värit";
-        Text[ thai ] = "à¸ªà¸µà¸ªà¸³à¸«à¸£à¸±à¸šà¹€à¸›à¸¥à¸µà¹ˆà¸¢à¸™";
-        Text[ czech ] = "Barva zmÄ›nÄ›nÃ½ch poloÅ¾ek";
-        Text[ hebrew ] = "Farbgebung fÃ¼r Ã„nderungen";
-        Text[ hindi ] = "à¤ªà¤°à¤¿à¤µà¤°à¥à¤¤à¤¨à¥‹à¤‚ à¤•à¥‡à¤²à¤¿à¤ à¤°à¤‚à¤—";
-        Text[ slovak ] = "Farba zmenenÃ½ch poloÅ¾iek";
-        Text[ hungarian ] = "A vÃ¡ltoztatÃ¡sok szÃ­nei";
-        Text[ slovenian ] = "Barve za spremembe";
+        Text [ de ] = "Farbgebung für Änderungen" ;
+        Text [ en-US ] = "Colors for changes" ;
+        Text [ x-comment ] = " ";
     };
     ListBox CLB_CONTENT
     {
@@ -273,36 +138,9 @@ TabPage RID_SCPAGE_OPREDLINE
     };
     String STR_AUTHOR
     {
-        Text = "Nach Autor" ;
-        Text [ English ] = "By author" ;
-        Text [ portuguese ] = "Conforme autor" ;
-        Text [ english_us ] = "By author" ;
-        Text [ portuguese_brazilian ] = "Pelo autor" ;
-        Text [ swedish ] = "Efter författare" ;
-        Text [ danish ] = "Af forfatter" ;
-        Text [ italian ] = "per autore" ;
-        Text [ spanish ] = "Por autor" ;
-        Text [ french ] = "Par auteur" ;
-        Text [ dutch ] = "Naar auteur" ;
-        Text[ chinese_simplified ] = "ä¾ä½œè€…è®¾å®š";
-        Text[ russian ] = "Ïî àâòîğó";
-        Text[ polish ] = "Wed³ug autora";
-        Text[ japanese ] = "ä½œæˆè€…åˆ¥";
-        Text[ chinese_traditional ] = "ä¾ä½œè€…è¨­å®š";
-        Text[ arabic ] = "ÍÓÈ ÇáãÄáİ";
-        Text[ greek ] = "ÊáôÜ óõíôÜêôç";
-        Text[ korean ] = "ì‘ì„±ì ì„¤ì •";
-        Text[ turkish ] = "Yazana göre";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Per l'autor";
-        Text[ finnish ] = "Tekijä";
-        Text[ thai ] = "à¹‚à¸”à¸¢à¸œà¸¹à¹‰à¹à¸•à¹ˆà¸‡";
-        Text[ czech ] = "Podle autora";
-        Text[ hebrew ] = "Nach Autor";
-        Text[ hindi ] = "à¤²à¥‡à¤–à¤• à¤¸à¥‡";
-        Text[ slovak ] = "Autor";
-        Text[ hungarian ] = "SzerzÅ‘ szerint";
-        Text[ slovenian ] = "Glede na avtorja";
+        Text [ de ] = "Nach Autor" ;
+        Text [ en-US ] = "By author" ;
+        Text [ x-comment ] = " ";
     };
 };
 
