@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: hjs $ $Date: 2000-11-15 16:26:37 $
+#   last change: $Author: tbe $ $Date: 2000-11-20 08:40:31 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -95,7 +95,9 @@ SHL1STDLIBS= \
             $(SO2LIB) \
             $(SOTLIB) \
             $(SFX2LIB) \
-            $(BASICLIB)
+            $(BASICLIB) \
+            $(COMPHELPERLIB) \
+            $(UNOTOOLSLIB)
 
 .IF "$(GUI)"=="WNT"
 SHL1STDLIBS+=\
