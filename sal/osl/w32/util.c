@@ -2,9 +2,9 @@
  *
  *  $RCSfile: util.c,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mfe $ $Date: 2001-02-28 12:55:05 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 13:36:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,11 +65,16 @@
 
 extern sal_Bool osl_getEtherAddr(sal_Char* pszAddr, sal_uInt16 BufferSize)
 {
+    /* avoid warnings */
+    pszAddr = pszAddr;
+    BufferSize = BufferSize;
+
     return sal_False;
 }
 
 extern sal_Bool SAL_CALL osl_getEthernetAddress( sal_uInt8 *pAddr )
 {
+    pAddr = pAddr; /* avoid warnings */
     return sal_False;
 }
 
