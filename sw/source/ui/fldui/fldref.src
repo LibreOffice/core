@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldref.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:17:58 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 11:55:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,7 @@ TabPage TP_FLD_REF
         Text[ czech ] = "Typ";
         Text[ hebrew ] = "‮סוג‬";
         Text[ hindi ] = "~वर्ग";
+        Text[ slovak ] = "~Typ";
     };
     ListBox LB_REFTYPE
     {
@@ -145,6 +146,7 @@ TabPage TP_FLD_REF
         Text[ czech ] = "Výběr";
         Text[ hebrew ] = "~Auswahl";
         Text[ hindi ] = "चुना~व";
+        Text[ slovak ] = "Výb~er";
     };
     ListBox LB_REFSELECTION
     {
@@ -186,6 +188,7 @@ TabPage TP_FLD_REF
         Text[ czech ] = "Formát";
         Text[ hebrew ] = "F~ormat";
         Text[ hindi ] = "र~चना";
+        Text[ slovak ] = "F~ormát";
     };
     ListBox LB_REFFORMAT
     {
@@ -228,6 +231,7 @@ TabPage TP_FLD_REF
         Text[ czech ] = "Název";
         Text[ hebrew ] = "Na~me";
         Text[ hindi ] = "ना~म";
+        Text[ slovak ] = "Ná~zov";
     };
     Edit ED_REFNAME
     {
@@ -271,6 +275,7 @@ TabPage TP_FLD_REF
         Text[ czech ] = "Hodnota";
         Text[ hebrew ] = "~Wert";
         Text[ hindi ] = "~मूल्य";
+        Text[ slovak ] = "Ho~dnota";
     };
     Edit ED_REFVALUE
     {
@@ -310,6 +315,7 @@ TabPage TP_FLD_REF
         Text[ czech ] = "Záložky";
         Text[ hebrew ] = "Textmarken";
         Text[ hindi ] = "पृष्ठसंकेत";
+        Text[ slovak ] = "Záložky";
     };
     String STR_REFFOOTNOTE
     {
@@ -341,6 +347,7 @@ TabPage TP_FLD_REF
         Text[ czech ] = "Poznámky pod čarou";
         Text[ hebrew ] = "‮הערות שוליים‬";
         Text[ hindi ] = "पृष्ठ के नीचे की टीका";
+        Text[ slovak ] = "Poznámky pod čiarou";
     };
     String STR_REFENDNOTE
     {
@@ -371,6 +378,7 @@ TabPage TP_FLD_REF
         Text[ czech ] = "Vysvětlivky";
         Text[ hebrew ] = "Endnoten";
         Text[ hindi ] = "अंतिम टीका";
+        Text[ slovak ] = "Vysvetlivky";
     };
     Text [ english_us ] = "References" ;
     Text [ portuguese_brazilian ] = "Refer�ncias" ;
@@ -397,7 +405,10 @@ TabPage TP_FLD_REF
     Text[ czech ] = "Odkazy";
     Text[ hebrew ] = "Referenzen";
     Text[ hindi ] = "रेफरेन्स";
+    Text[ slovak ] = "Odkazy";
 };
+
+
 
 
 
