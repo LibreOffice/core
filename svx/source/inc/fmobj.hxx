@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmobj.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-31 12:54:22 $
+ *  last change: $Author: rt $ $Date: 2004-05-07 15:49:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,15 +93,19 @@ class FmFormObj: public SdrUnoObj
                 // valid if and only if m_pEnvironmentHistory != NULL, this are the events which we're set when
                 // m_pEnvironmentHistory was created
 
-    FmFormView* pTempView;
-    sal_uInt32      nEvent;
+    FmFormView*     m_pControlCreationView;
+    sal_uInt32      m_nControlCreationEvent;
 
     // Informationen fuer die Controlumgebung
     // werden nur vorgehalten, wenn ein Object sich nicht in einer Objectliste befindet
-    ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer>     xParent;
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer>     m_xParent;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer >    m_xEnvironmentHistory;
-    sal_Int32           nPos;
+    sal_Int32           m_nPos;
     sal_Int32           m_nType;
+
+    OutputDevice*       m_pLastKnownRefDevice;
+                            // the last ref device we know, as set at the model
+                            // only to be used for comparison with the current ref device!
 
 public:
     TYPEINFO();
@@ -110,11 +114,11 @@ protected:
     FmFormObj(const ::rtl::OUString& rModelName,sal_Int32 _nType);
     FmFormObj(sal_Int32 _nType);
 
-    const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer>& GetParent() const {return xParent;}
+    const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer>& GetParent() const {return m_xParent;}
     void  SetObjEnv(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer>& xForm, sal_Int32 nIdx = -1,
                     const ::com::sun::star::uno::Sequence< ::com::sun::star::script::ScriptEventDescriptor >& rEvts= ::com::sun::star::uno::Sequence< ::com::sun::star::script::ScriptEventDescriptor >());
     const ::com::sun::star::uno::Sequence< ::com::sun::star::script::ScriptEventDescriptor >& GetEvents() const {return aEvts;}
-    sal_Int32 GetPos() const {return nPos;}
+    sal_Int32 GetPos() const { return m_nPos; }
 
 public:
     virtual ~FmFormObj();
@@ -122,6 +126,7 @@ public:
 
     virtual sal_uInt32 GetObjInventor() const;
     virtual sal_uInt16 GetObjIdentifier() const;
+    virtual void ReformatText();
 
     virtual SdrObject*  Clone() const;
     virtual SdrObject*  Clone(SdrPage* pPage, SdrModel* pModel) const;
