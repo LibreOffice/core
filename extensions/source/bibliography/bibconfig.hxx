@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bibconfig.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-01-25 11:41:22 $
+ *  last change: $Author: os $ $Date: 2001-03-14 12:28:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,17 +172,14 @@ public:
 /* -----------------------------20.11.00 11:47--------------------------------
 
  ---------------------------------------------------------------------------*/
-class DBChangeDialogConfig_Impl : public utl::ConfigItem
+class DBChangeDialogConfig_Impl
 {
     com::sun::star::uno::Sequence<rtl::OUString> aSourceNames;
 public:
     DBChangeDialogConfig_Impl();
     ~DBChangeDialogConfig_Impl();
 
-    virtual void    Commit();
-
-    const com::sun::star::uno::Sequence<rtl::OUString>& GetDataSourceNames() const
-                                        {return aSourceNames;}
+    const com::sun::star::uno::Sequence<rtl::OUString>& GetDataSourceNames();
 
 };
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bibconfig.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2001-03-09 12:26:09 $
+ *  last change: $Author: os $ $Date: 2001-03-14 12:28:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,9 +76,21 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
 #endif
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
+#include <com/sun/star/container/XNameAccess.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
+
 using namespace rtl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::lang;
 /* -----------------11.11.99 14:34-------------------
 
  --------------------------------------------------*/
@@ -314,7 +326,7 @@ void    BibConfig::Commit()
     OUString sCommandType(C2U("CommandType"));
     for(sal_Int32 i = 0; i < pMappingsArr->Count(); i++)
     {
-        const Mapping* pMapping = pMappingsArr->GetObject(i);
+        const Mapping* pMapping = pMappingsArr->GetObject((USHORT)i);
         OUString sPrefix(C2U(cDataSourceHistory));
         sPrefix += C2U("/_");
         sPrefix += OUString::valueOf(i);
@@ -391,10 +403,8 @@ void BibConfig::SetMapping(const BibDBDescriptor& rDesc, const Mapping* pSetMapp
 /* -----------------------------20.11.00 11:56--------------------------------
 
  ---------------------------------------------------------------------------*/
-DBChangeDialogConfig_Impl::DBChangeDialogConfig_Impl() :
-    ConfigItem(C2U("Office.DataAccess/DataSources"))
+DBChangeDialogConfig_Impl::DBChangeDialogConfig_Impl()
 {
-    aSourceNames = GetNodeNames(OUString());
 }
 /* -----------------------------20.11.00 11:57--------------------------------
 
@@ -402,11 +412,25 @@ DBChangeDialogConfig_Impl::DBChangeDialogConfig_Impl() :
 DBChangeDialogConfig_Impl::~DBChangeDialogConfig_Impl()
 {
 }
-/* -----------------------------20.11.00 11:57--------------------------------
+/* -----------------------------14.03.01 12:53--------------------------------
 
  ---------------------------------------------------------------------------*/
-void    DBChangeDialogConfig_Impl::Commit()
+const Sequence<OUString>& DBChangeDialogConfig_Impl::GetDataSourceNames()
 {
-    // read only
+    if(!aSourceNames.getLength())
+    {
+        Reference<XNameAccess> xDBContext;
+        Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
+        if( xMgr.is() )
+        {
+            Reference<XInterface> xInstance = xMgr->createInstance( C2U( "com.sun.star.sdb.DatabaseContext" ));
+            xDBContext = Reference<XNameAccess>(xInstance, UNO_QUERY) ;
+        }
+        if(xDBContext.is())
+        {
+            aSourceNames = xDBContext->getElementNames();
+        }
+    }
+    return aSourceNames;
 }
 
