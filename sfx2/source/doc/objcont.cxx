@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objcont.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:28:14 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 17:36:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -910,7 +910,14 @@ SfxConfigManager* SfxObjectShell::GetConfigManager( BOOL bForceCreation )
     if ( !pImp->pCfgMgr )
     {
         if ( bForceCreation || HasName() && SfxConfigManager::HasConfiguration( *GetStorage() ) )
+        {
             pImp->pCfgMgr = new SfxConfigManager( *this );
+            SfxConfigItem* pItem = GetEventConfig_Impl( FALSE );
+            if ( pItem && !pItem->GetConfigManager() )
+                // imported binary format
+                pItem->Connect( pImp->pCfgMgr );
+
+        }
     }
 
     return pImp->pCfgMgr;
@@ -1793,6 +1800,8 @@ SfxEventConfigItem_Impl* SfxObjectShell::GetEventConfig_Impl( BOOL bForce )
     {
         pImp->pEventConfig = new SfxEventConfigItem_Impl( SFX_ITEMTYPE_DOCEVENTCONFIG,
                     SFX_APP()->GetEventConfig(), this );
+        if (pImp->pCfgMgr)
+            pImp->pEventConfig->Connect( pImp->pCfgMgr );
         pImp->pEventConfig->Initialize();
     }
 
