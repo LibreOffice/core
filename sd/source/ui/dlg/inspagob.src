@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inspagob.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-24 10:52:54 $
+ *  last change: $Author: kz $ $Date: 2001-09-25 20:46:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,7 +166,7 @@ ModalDialog DLG_INSERT_PAGES_OBJS
         Text[ korean ] = "μ‚¬μ©ν•μ§€ μ•μ€ λ°°κ²½ νμ΄μ§€ μ‚­μ (~R)";
         Text[ turkish ] = "Artalandaki kullanύlmayan sayfalarύ sil";
         Text[ catalan ] = "~Eliminar pαginas de fondo no usadas";
-        Text[ finnish ] = "Poista kδyttδmδttφmδt taus~tat";
+        Text[ finnish ] = "Poista k?ytt?m?tt??t taus~tat";
     };
     Text[ greek ] = "Εισαγωγή αντικειμένων/σελίδων";
     Text[ korean ] = "μ¬λΌμ΄λ“/κ°μ²΄ μ‚½μ…";
@@ -175,6 +175,7 @@ ModalDialog DLG_INSERT_PAGES_OBJS
     Text[ catalan ] = "Insertar pαginas/objetos";
     Text[ finnish ] = "Lisδδ diat/objektit";
 };
+
 
 
 
