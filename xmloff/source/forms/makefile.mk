@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: thb $ $Date: 2001-07-24 17:06:08 $
+#   last change: $Author: fs $ $Date: 2002-10-02 14:28:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -120,7 +120,8 @@ SLOFILES =	\
         $(SLO)$/formattributes.obj \
         $(SLO)$/formenums.obj \
         $(SLO)$/formsimp.obj \
-        $(SLO)$/strings.obj
+        $(SLO)$/strings.obj \
+        $(SLO)$/logging.obj \
 
 SVXLIGHTOBJFILES =	\
         $(OBJ)$/controlpropertyhdl.obj \
