@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TextTable.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:10:06 $
+ *  last change: $Author: tl $ $Date: 2002-10-10 11:36:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,8 +101,8 @@
 #ifndef __com_sun_star_chart_XChartDataArray_idl__
 #include <com/sun/star/chart/XChartDataArray.idl>
 #endif
-#ifndef __com_sun_star_util_XSortable_idl__
-#include <com/sun/star/util/XSortable.idl>
+#ifndef __com_sun_star_text_TextSortable_idl__
+#include <com/sun/star/text/TextSortable.idl>
 #endif
 #ifndef __com_sun_star_sheet_XCellRangeData_idl__
 #include <com/sun/star/sheet/XCellRangeData.idl>
@@ -157,6 +157,8 @@ service TextTable
     // DocMerge: empty anyway
     service com::sun::star::text::TextContent;
 
+        [optional] service com::sun::star::text::TextSortable;
+
     // DocMerge: empty anyway
     interface com::sun::star::text::XTextTable;
 
@@ -171,9 +173,6 @@ service TextTable
 
     // DocMerge: empty anyway
     interface com::sun::star::table::XAutoFormattable;
-
-    // DocMerge: empty anyway
-    interface com::sun::star::util::XSortable;
 
     [optional] interface com::sun::star::sheet::XCellRangeData;
 
