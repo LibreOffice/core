@@ -2,9 +2,9 @@
  *
  *  $RCSfile: arealink.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: er $ $Date: 2001-04-21 20:31:39 $
+ *  last change: $Author: dr $ $Date: 2001-04-24 14:43:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,8 @@ private:
     BOOL        bAddUndo;
     BOOL        bInCreate;
     BOOL        bDoInsert;      // wird fuer das erste Update auf FALSE gesetzt
+
+    BOOL        FindExtRange( ScRange& rRange, ScDocument* pSrcDoc, const String& rAreaName );
 
 public:
     TYPEINFO();
