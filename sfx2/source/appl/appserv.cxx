@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appserv.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 19:57:35 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 16:22:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -306,10 +306,12 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             // aus verschachtelten Requests nach 100ms nochmal probieren
             if( Application::GetDispatchLevel() > 1 )
             {
-                Timer *pTimer = new Timer;
-                pTimer->SetTimeout( 100 );
-                pTimer->SetTimeoutHdl( Link( this, QuitAgain_Impl ) );
-                pTimer->Start();
+                /* Dont save the request for closing the application and try it later
+                   again. This is an UI bound functionality ... and the user will  try it again
+                   if the dialog is closed. But we shouldnt close the application automaticly
+                   if this dialog is closed by the user ...
+                   So we ignore this request now and wait for a new user decision.
+                */
                 DBG_TRACE1( "QueryExit => FALSE (DispatchLevel == %u)", Application::GetDispatchLevel() );
                 return;
             }
