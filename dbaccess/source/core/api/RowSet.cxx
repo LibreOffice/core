@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.105 $
+ *  $Revision: 1.106 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-11 07:38:24 $
+ *  last change: $Author: oj $ $Date: 2002-07-25 06:35:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1436,7 +1436,7 @@ void ORowSet::execute_NoApprove_NoNewConn(ClearableMutexGuard& _rClearForNotific
         // xTables will be filled in getCommand
         m_aActiveCommand = getCommand(bUseEscapeProcessing,xTables);
         if (!m_aActiveCommand.getLength())
-            throwFunctionSequenceException(*this);
+            throwGenericSQLException(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Empty command submitted!")),*this);
 
         {
             m_xStatement = m_xActiveConnection->prepareStatement(
@@ -1938,6 +1938,13 @@ rtl::OUString ORowSet::getCommand(sal_Bool& bEscapeProcessing,::com::sun::star::
                         Reference<XColumnsSupplier> xSup(xQuery,UNO_QUERY);
                         if(xSup.is())
                             m_xColumns = xSup->getColumns();
+                    }
+                    else
+                    {
+                        ::rtl::OUString sError(RTL_CONSTASCII_USTRINGPARAM("There exists no query with given name: \""));
+                        sError += m_aCommand;
+                        sError += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\"!"));
+                        throwGenericSQLException(sError,*this);
                     }
                 }
                 else
