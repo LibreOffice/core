@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porlay.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-07 11:47:00 $
+ *  last change: $Author: fme $ $Date: 2001-04-09 10:41:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,17 +61,14 @@
 #ifndef _PORLAY_HXX
 #define _PORLAY_HXX
 
-#ifndef _SVSTDARR_HXX
-#define _SVSTDARR_SHORTS
-#define _SVSTDARR_USHORTS
-#define _SVSTDARR_XUB_STRLEN
-#include <svtools/svstdarr.hxx>
-#endif
 #ifndef _STRING_HXX //autogen
 #include <tools/string.hxx>
 #endif
 #ifndef _FRACT_HXX
 #include <tools/fract.hxx>
+#endif
+#ifndef _DRAWFONT_HXX
+#include <drawfont.hxx>
 #endif
 
 #include "swrect.hxx"   // SwRepaint
@@ -81,7 +78,6 @@
 class SwMarginPortion;
 class SwDropPortion;
 class SvStream;
-class SvUShorts;
 class SwTxtFormatter;
 
 /*************************************************************************
@@ -134,64 +130,6 @@ public:
 };
 
 /*************************************************************************
- *                      class SwScriptInfo
- *
- * encapsultes information about script changes
- *************************************************************************/
-
-class SwScriptInfo
-{
-private:
-    SvXub_StrLens aScriptChg;
-    SvUShorts aScriptType;
-    xub_StrLen nInvalidityPos;
-
-    inline void InsertScriptChg( const xub_StrLen nChg, const USHORT nCnt );
-    inline void InsertScriptType( const USHORT nScript, const USHORT nCnt );
-
-public:
-    inline SwScriptInfo() : nInvalidityPos( 0 ) {};
-
-    // determines script changes
-    void InitScriptInfo( const String& rTxt );
-    // set/get position from which data is invalid
-    inline void SetInvalidity( const xub_StrLen nPos );
-    inline xub_StrLen GetInvalidity() { return nInvalidityPos; };
-
-    // array operations, nCnt refers to array position
-    inline USHORT CountScriptChg() const;
-    inline xub_StrLen GetScriptChg( const USHORT nCnt ) const;
-    inline USHORT GetScriptType( const USHORT nCnt ) const;
-
-    // "high" level operations, nPos refers to string position
-    xub_StrLen NextScriptChg( const xub_StrLen nPos ) const;
-    USHORT ScriptType( const xub_StrLen nPos ) const;
-};
-
-inline void SwScriptInfo::InsertScriptChg( const xub_StrLen nChg, const USHORT nCnt )
-{
-    aScriptChg.Insert( nChg, nCnt );
-}
-inline void SwScriptInfo::InsertScriptType( const USHORT nScript, const USHORT nCnt )
-{
-    aScriptType.Insert( nScript, nCnt );
-}
-inline void SwScriptInfo::SetInvalidity( const xub_StrLen nPos )
-{
-    if ( nPos < nInvalidityPos )
-        nInvalidityPos = nPos;
-};
-inline USHORT SwScriptInfo::CountScriptChg() const { return aScriptChg.Count(); }
-inline xub_StrLen SwScriptInfo::GetScriptChg( const USHORT nCnt ) const
-{
-    return aScriptChg[ nCnt ];
-}
-inline USHORT SwScriptInfo::GetScriptType( const xub_StrLen nCnt ) const
-{
-    return aScriptType[ nCnt ];
-}
-
-/*************************************************************************
  *                      class SwLineLayout
  *************************************************************************/
 
@@ -199,7 +137,8 @@ class SwLineLayout : public SwTxtPortion
 {
 private:
     SwLineLayout *pNext;// Die naechste Zeile.
-    SvShorts *pSpaceAdd;// Fuer den Blocksatz
+    SvShorts* pSpaceAdd;// Fuer den Blocksatz
+    SvUShorts* pKanaComp;
     KSHORT nRealHeight; // Die aus Zeilenabstand/Register resultierende Hoehe
     sal_Bool bFormatAdj : 1;
     sal_Bool bDummy     : 1;
@@ -289,9 +228,13 @@ public:
     inline sal_Bool IsNoSpaceAdd() { return pSpaceAdd == NULL; }
     inline void InitSpaceAdd()
     { if ( !pSpaceAdd ) CreateSpaceAdd(); else (*pSpaceAdd)[0] = 0; }
+    inline void SetKanaComp( SvUShorts* pNew ){ pKanaComp = pNew; }
     inline void FinishSpaceAdd() { delete pSpaceAdd; pSpaceAdd = NULL; }
     inline SvShorts* GetpSpaceAdd() const { return pSpaceAdd; }
-    inline SvShorts &GetSpaceAdd() { return *pSpaceAdd; }
+    inline SvShorts& GetSpaceAdd() { return *pSpaceAdd; }
+    inline SvUShorts* GetpKanaComp() const { return pKanaComp; }
+    inline SvUShorts& GetKanaComp() { return *pKanaComp; }
+
     void CreateSpaceAdd();
 
 #ifndef PRODUCT
@@ -421,6 +364,7 @@ inline void SwLineLayout::ResetFlags()
     = bRest = bBlinking = bClipping = bContent = bRedline
     = bForcedLeftMargin = bHanging = sal_False;
     pSpaceAdd = NULL;
+    pKanaComp = NULL;
 }
 
 inline SwLineLayout::SwLineLayout()

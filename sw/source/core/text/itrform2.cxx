@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrform2.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: tl $ $Date: 2001-03-29 08:02:49 $
+ *  last change: $Author: fme $ $Date: 2001-04-09 10:41:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -337,9 +337,45 @@ void SwTxtFormatter::Recycle( SwTxtFormatInfo &rInf )
     // bTabFlag warnt uns vor rechtsbdg. Tabs
     sal_Bool bTabFlag = pPos->InTabGrp() && !pPos->IsTabLeftPortion();
 
+    const SwScriptInfo& rSI =
+            ((SwParaPortion*)rInf.GetParaPortion())->GetScriptInfo();
+    USHORT nMinSize;
+    USHORT nMaxSizeDiff;
+
     while( pPos->GetPortion() && rInf.GetIdx() + pPos->GetLen() < nReformat )
     {
         DBG_LOOP;
+
+        // for portions to be recycled, we have to provide the correct
+        // maximum sizes (used for compression)
+        // three conditions have to be fulfilled:
+        // A the paragraph contains kanas / asian punctuation
+        // B Current font is CJK
+        // C we disable kana compression in multi line portions
+        if ( rSI.CountCompChg() )
+        {
+            // switch to current font
+            SeekAndChg( rInf );
+
+            USHORT nMaxComp = ( SW_CJK == rInf.GetFont()->GetActual() ) ?
+                                10000 :
+                                    0 ;
+
+            // we omit GetTxtSize if possible
+            if ( nMaxComp )
+            {
+                rInf.GetTxtSize( &rSI, rInf.GetIdx(), pPos->GetLen(),
+                                 nMaxComp, nMinSize, nMaxSizeDiff );
+                if ( nMaxSizeDiff )
+                {
+                    // we have to reset the width to the minimum size,
+                    // SwTxtGuess::Guess requires this
+                    pPos->Width( nMinSize );
+                    rInf.SetMaxWidthDiff( (ULONG)pPos, nMaxSizeDiff );
+                }
+            }
+        }
+
         pPos->Move( rInf );
         pLast = pPos;
         pPos = pPos->GetPortion();
@@ -806,7 +842,7 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
         SwTabPortion *pLastTab = rInf.GetLastTab();
         if( pLastTab )
             pLastTab->FormatEOL( rInf );
-        else if( rInf.GetLast() && rInf.GetLast()->IsKernPortion() )
+        else if( rInf.GetLast() && rInf.LastKernPortion() )
             rInf.GetLast()->FormatEOL( rInf );
     }
     if( pCurr->GetPortion() && pCurr->GetPortion()->InNumberGrp()
@@ -985,11 +1021,22 @@ SwTxtPortion *SwTxtFormatter::NewTxtPortion( SwTxtFormatInfo &rInf )
     if( MAX_TXTPORLEN < nNextChg && STRING_LEN - MAX_TXTPORLEN > rInf.GetIdx() )
     {
         const xub_StrLen nMaxChg = rInf.GetIdx() + MAX_TXTPORLEN;
+
         if( nMaxChg < nNextChg )
         {
             // 6441: uebel ist, wenn die Portion passt...
+            const SwScriptInfo& rSI =
+                ((SwParaPortion*)rInf.GetParaPortion())->GetScriptInfo();
+            USHORT nMaxComp = ( SW_CJK == rInf.GetFont()->GetActual() ) &&
+                                rSI.CountCompChg() &&
+                                ! rInf.IsMulti() ?
+                                10000 :
+                                    0 ;
+
             const KSHORT nWidth =
-                  rInf.GetTxtSize(rInf.GetIdx(), MAX_TXTPORLEN ).Width();
+                rInf.GetTxtSize(
+                     &rInf.GetParaPortion()->GetScriptInfo(),
+                     rInf.GetIdx(), MAX_TXTPORLEN, nMaxComp ).Width();
             if( nWidth > rInf.Width() )
                 nNextChg = Min( nMaxChg, rInf.GetTxt().Len() );
         }
@@ -1385,6 +1432,7 @@ xub_StrLen SwTxtFormatter::FormatLine( const xub_StrLen nStart )
         GetInfo().SetFtnInside( sal_False );
         FeedInf( GetInfo() );
         Recycle( GetInfo() );   // initialisiert sich oder rettet Portions
+
         if( bOldNumDone )
             GetInfo().SetNumDone( sal_True );
         if( bOldArrowDone )
@@ -1424,6 +1472,7 @@ xub_StrLen SwTxtFormatter::FormatLine( const xub_StrLen nStart )
         if( bBuild )
         {
             GetInfo().SetNumDone( bOldNumDone );
+            GetInfo().ResetMaxWidthDiff();
             pCurr->SetLen( 0 );
             pCurr->Width(0);
             pCurr->Truncate();
@@ -1431,6 +1480,19 @@ xub_StrLen SwTxtFormatter::FormatLine( const xub_StrLen nStart )
     }
 
     xub_StrLen nNewStart = nStart + pCurr->GetLen();
+
+    // adjust text if kana compression is enabled
+    const SwScriptInfo& rSI = GetInfo().GetParaPortion()->GetScriptInfo();
+
+    if ( GetInfo().CompressLine() )
+    {
+        USHORT nRepaintOfst = CalcKanaAdj( pCurr );
+
+        // adjust repaint offset
+        if ( nRepaintOfst < GetInfo().GetPaintOfst() )
+            GetInfo().SetPaintOfst( nRepaintOfst );
+    }
+
     CalcAdjustLine( pCurr );
 
     if( nOldHeight != pCurr->Height() || nOldAscent != pCurr->GetAscent() )

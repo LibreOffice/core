@@ -2,9 +2,9 @@
  *
  *  $RCSfile: portxt.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-15 15:58:37 $
+ *  last change: $Author: fme $ $Date: 2001-04-09 10:41:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,7 +124,7 @@ void SwTxtPortion::BreakCut( SwTxtFormatInfo &rInf, const SwTxtGuess &rGuess )
     // Das Wort/Zeichen ist groesser als die Zeile
     // Sonderfall Nr.1: Das Wort ist groesser als die Zeile
     // Wir kappen...
-    const KSHORT nLineWidth = rInf.Width() - rInf.X();
+    const KSHORT nLineWidth = (KSHORT)(rInf.Width() - rInf.X());
     xub_StrLen nLen = rGuess.CutPos() - rInf.GetIdx();
     if( nLen )
     {
@@ -216,7 +216,7 @@ sal_Bool SwTxtPortion::_Format( SwTxtFormatInfo &rInf )
     }
 
     SwTxtGuess aGuess;
-    const sal_Bool bFull = !aGuess.Guess( rInf, Height() );
+    const sal_Bool bFull = !aGuess.Guess( *this, rInf, Height() );
 
     // these are the possible cases:
     // A Portion fits to current line
@@ -283,9 +283,12 @@ sal_Bool SwTxtPortion::_Format( SwTxtFormatInfo &rInf )
                       && lcl_HasContent(*((SwFldPortion*)rInf.GetLast()),rInf) )
                  )
         {
-            ASSERT( rInf.X() + aGuess.BreakWidth() <= rInf.Width(),
-                    "What a guess?!" );
-            Width( aGuess.BreakWidth() );
+            if ( rInf.X() + aGuess.BreakWidth() <= rInf.Width() )
+                Width( aGuess.BreakWidth() );
+            else
+                // this actually should not happen
+                Width( KSHORT(rInf.Width() - rInf.X()) );
+
             SetLen( aGuess.BreakPos() - rInf.GetIdx() );
             if( aGuess.BreakPos() < aGuess.BreakStart() && !InFldGrp() )
             {
@@ -409,13 +412,12 @@ xub_StrLen SwTxtPortion::GetCrsrOfst( const KSHORT nOfst ) const
  *               SwTxtPortion::GetCrsrOfst()
  *************************************************************************/
 
-
-
 xub_StrLen SwTxtPortion::GetCrsrOfst( const KSHORT nOfst,
                                   SwTxtSizeInfo &rSizeInf ) const
 {
-    rSizeInf.SetLen( rSizeInf.GetTxtBreak( nOfst, rSizeInf.GetIdx(),
-        nLineLength ) - rSizeInf.GetIdx() );
+    rSizeInf.SetLen( rSizeInf.GetTxtBreak( nOfst, nLineLength )
+                   - rSizeInf.GetIdx() );
+
     return rSizeInf.GetLen();
 }
 
@@ -423,8 +425,6 @@ xub_StrLen SwTxtPortion::GetCrsrOfst( const KSHORT nOfst,
  *                virtual SwTxtPortion::GetTxtSize()
  *************************************************************************/
 // Das GetTxtSize() geht davon aus, dass die eigene Laenge korrekt ist
-
-
 
 SwPosSize SwTxtPortion::GetTxtSize( const SwTxtSizeInfo &rInf ) const
 {

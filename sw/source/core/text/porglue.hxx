@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porglue.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:25 $
+ *  last change: $Author: fme $ $Date: 2001-04-09 10:41:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,7 @@
 #include "porlin.hxx"
 
 class SwRect;
+class SwLineLayout;
 struct SwPosition;
 
 /*************************************************************************
@@ -122,7 +123,7 @@ class SwMarginPortion : public SwGluePortion
 {
 public:
         SwMarginPortion( const KSHORT nFixWidth );
-        void AdjustRight();
+        void AdjustRight( const SwLineLayout* pCurr );
 #ifdef OLDRECYCLE
     virtual sal_Bool MayRecycle() const;
 #endif

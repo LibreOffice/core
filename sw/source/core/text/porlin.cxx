@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porlin.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ama $ $Date: 2001-01-19 15:21:02 $
+ *  last change: $Author: fme $ $Date: 2001-04-09 10:41:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -388,7 +388,7 @@ void SwLinePortion::Move( SwTxtPaintInfo &rInf )
     }
     else
     {
-        if( InFixMargGrp() )
+        if( InFixMargGrp() && !IsMarginPortion() )
         {
             short nSpAdd = rInf.GetSpaceAdd();
             if( nSpAdd < 0 )
@@ -399,6 +399,7 @@ void SwLinePortion::Move( SwTxtPaintInfo &rInf )
                     rInf.X( rInf.X() + nSpAdd );
             }
             rInf.IncSpaceIdx();
+            rInf.IncKanaIdx();
         }
         if( rInf.IsRotated() )
             rInf.Y( rInf.Y() + ( bB2T ? -PrtWidth() : PrtWidth() ) );

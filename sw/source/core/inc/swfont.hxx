@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfont.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-19 15:41:05 $
+ *  last change: $Author: fme $ $Date: 2001-04-09 10:42:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,18 +75,13 @@
 #include <svx/svxfont.hxx>
 #endif
 
-// Hiermit kann man einen Kerning-Test mit CodeView in ITRPAINT.CXX
-// und FNTCACHE durchfuehren, solange die UI dies nicht anbietet.
-#ifdef DEBUG
-#define KERNINGTEST
-#endif
-
 class LinguBase;        // SetLingu()
 class SfxItemSet;
 class SwAttrSet;
 class SwDoCapitals;     // DoCapitals
 class SwWrongList;
 class SwDrawTextInfo;   // _DrawText
+class SwScriptInfo;     // _GetTxtSize
 class ViewShell;
 class SwAttrHandler;
 
@@ -140,21 +135,15 @@ class SwSubFont : public SvxFont
     BOOL IsSymbol( ViewShell *pSh );
     USHORT GetAscent( ViewShell *pSh, const OutputDevice *pOut );
     USHORT GetHeight( ViewShell *pSh, const OutputDevice *pOut );
-    Size _GetTxtSize( ViewShell *pSh, const OutputDevice *pOut,
-        const XubString &rTxt, const xub_StrLen nIdx, const xub_StrLen nLen );
-    Size GetCapitalSize( ViewShell *pSh, const OutputDevice *pOut,
-        const XubString &rTxt, const xub_StrLen nIdx, const xub_StrLen nLen );
+    Size _GetTxtSize( SwDrawTextInfo& rInf );
+    Size GetCapitalSize( SwDrawTextInfo& rInf );
     void _DrawText( SwDrawTextInfo &rInf, const BOOL bGrey );
     void DrawCapital( SwDrawTextInfo &rInf );
     void DrawStretchCapital( SwDrawTextInfo &rInf );
     void DoOnCapitals( SwDoCapitals &rDo );
     void _DrawStretchText( SwDrawTextInfo &rInf );
-    xub_StrLen _GetCrsrOfst( ViewShell *pSh, OutputDevice *pOut,
-            const XubString &rTxt, const USHORT nOfst, const xub_StrLen nIdx,
-            const xub_StrLen nLen, const short nSpaceAdd );
-    xub_StrLen GetCapitalCrsrOfst( ViewShell *pSh, OutputDevice *pOut,
-            const XubString &rTxt, const USHORT nOfst, const xub_StrLen nIdx,
-            const xub_StrLen nLen, const short nSpaceAdd );
+    xub_StrLen _GetCrsrOfst( SwDrawTextInfo& rInf );
+    xub_StrLen GetCapitalCrsrOfst( SwDrawTextInfo& rInf );
 
     inline void SetColor( const Color& rColor );
     inline void SetFillColor( const Color& rColor );
@@ -388,26 +377,16 @@ public:
     // Macht den logischen Font im OutputDevice wirksam.
     void ChgPhysFnt( ViewShell *pSh, OutputDevice *pOut );
 
-    Size GetCapitalSize( ViewShell *pSh,
-                         const OutputDevice *pOut, const XubString &rTxt,
-                         const xub_StrLen nIdx = 0,
-                         const xub_StrLen nLen = STRING_LEN )
-        { return aSub[nActual].GetCapitalSize( pSh, pOut, rTxt, nIdx, nLen ); }
+    Size GetCapitalSize( SwDrawTextInfo& rInf )
+        { return aSub[nActual].GetCapitalSize( rInf ); }
 
-    xub_StrLen GetCapitalBreak( ViewShell *pSh,
-                            const OutputDevice *pOut, const XubString &rTxt,
-                            long nTextWidth, xub_StrLen *pExtra = 0,
-                            const xub_StrLen nIdx = 0,
-                            const xub_StrLen nLen = STRING_LEN );
+    xub_StrLen GetCapitalBreak( ViewShell *pSh, const OutputDevice *pOut,
+        const SwScriptInfo* pScript, const XubString &rTxt,
+        long nTextWidth, xub_StrLen *pExtra, const xub_StrLen nIdx,
+        const xub_StrLen nLen );
 
-    xub_StrLen GetCapitalCrsrOfst( ViewShell *pSh,
-                    OutputDevice *pOut,
-                    const XubString &rTxt, const USHORT nOfst,
-                    const xub_StrLen nIdx, const xub_StrLen nLen,
-                    const short nSpaceAdd = 0 )
-        { return aSub[nActual].GetCapitalCrsrOfst( pSh, pOut, rTxt, nOfst,
-                                                   nIdx, nLen, nSpaceAdd ); }
-
+    xub_StrLen GetCapitalCrsrOfst( SwDrawTextInfo& rInf )
+        { return aSub[nActual].GetCapitalCrsrOfst( rInf ); }
 
     void DrawCapital( SwDrawTextInfo &rInf )
         { aSub[nActual].DrawCapital( rInf ); }
@@ -418,31 +397,24 @@ public:
     void DoOnCapitals( SwDoCapitals &rDo )
         { aSub[nActual].DoOnCapitals( rDo ); }
 
-    Size _GetTxtSize( ViewShell *pSh,
-                     const OutputDevice *pOut, const XubString &rTxt,
-                     const xub_StrLen nIdx = 0,
-                     const xub_StrLen nLen = STRING_LEN )
-        { return aSub[nActual]._GetTxtSize( pSh, pOut, rTxt, nIdx, nLen ); }
+    Size _GetTxtSize( SwDrawTextInfo& rInf )
+        { return aSub[nActual]._GetTxtSize( rInf ); }
 
-    xub_StrLen GetTxtBreak( ViewShell *pSh,
-                const OutputDevice *pOut, const XubString &rTxt,
-                long nTextWidth, xub_StrLen& rExtraCharPos,
-                const xub_StrLen nIdx = 0,
-                const xub_StrLen nLen = STRING_LEN );
+    xub_StrLen GetTxtBreak( SwDrawTextInfo& rInf, long nTextWidth );
 
-    xub_StrLen GetTxtBreak( ViewShell *pSh,
-                const OutputDevice *pOut, const XubString &rTxt,
-                long nTextWidth, const xub_StrLen nIdx = 0,
-                const xub_StrLen nLen = STRING_LEN );
+    xub_StrLen GetTxtBreak( ViewShell *pSh, const OutputDevice *pOut,
+        const SwScriptInfo* pScript, const XubString &rTxt,
+        long nTextWidth, xub_StrLen& rExtraCharPos,
+        const xub_StrLen nIdx, const xub_StrLen nLen );
 
-    xub_StrLen _GetCrsrOfst( ViewShell *pSh,
-                         OutputDevice *pOut, const XubString &rTxt,
-                         const USHORT nOfst,
-                         const xub_StrLen nIdx = 0,
-                         const xub_StrLen nLen = STRING_LEN,
-                         const short nSpaceAdd = 0 )
-        { return aSub[nActual]._GetCrsrOfst( pSh, pOut, rTxt, nOfst,
-                                             nIdx, nLen, nSpaceAdd ); }
+    xub_StrLen GetTxtBreak( ViewShell *pSh, const OutputDevice *pOut,
+        const SwScriptInfo* pScript, const XubString &rTxt,
+        long nTextWidth, const xub_StrLen nIdx,
+        const xub_StrLen nLen );
+
+    xub_StrLen _GetCrsrOfst( SwDrawTextInfo& rInf )
+        { return aSub[nActual]._GetCrsrOfst( rInf ); }
+
     inline void _DrawText( SwDrawTextInfo &rInf )
         { aSub[nActual]._DrawText( rInf, IsGreyWave() ); }
 
@@ -869,7 +841,7 @@ inline void SwFont::SetNoCol( const BOOL bNew )
 inline void SwSubFont::SetVertical( const USHORT nDir )
 {
     pMagic = 0;
-    Font::SetVertical( nDir != 0 );
+    Font::SetVertical( nDir > 1000 );
     Font::SetOrientation( nDir );
 }
 

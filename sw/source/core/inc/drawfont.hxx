@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawfont.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-13 09:36:59 $
+ *  last change: $Author: fme $ $Date: 2001-04-09 10:42:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,12 @@
 #ifndef _DRAWFONT_HXX
 #define _DRAWFONT_HXX
 
-
+#ifndef _SVSTDARR_HXX
+#define _SVSTDARR_SHORTS
+#define _SVSTDARR_USHORTS
+#define _SVSTDARR_XUB_STRLEN
+#include <svtools/svstdarr.hxx>
+#endif
 #ifndef _GEN_HXX //autogen
 #include <tools/gen.hxx>
 #endif
@@ -79,23 +84,116 @@ class SwWrongList;
 class Size;
 class SwFont;
 class ViewShell;
+class SwTxtNode;
+
+/*************************************************************************
+ *                      class SwScriptInfo
+ *
+ * encapsultes information about script changes
+ *************************************************************************/
+
+class SwScriptInfo
+{
+private:
+    SvXub_StrLens aScriptChg;
+    SvUShorts aScriptType;
+    SvXub_StrLens aCompChg;
+    SvXub_StrLens aCompLen;
+    SvUShorts aCompType;
+    xub_StrLen nInvalidityPos;
+
+public:
+    enum CompType { KANA, SPECIAL_LEFT, SPECIAL_RIGHT, NONE };
+
+    inline SwScriptInfo() : nInvalidityPos( 0 ) {};
+
+    // determines script changes
+    void InitScriptInfo( const SwTxtNode& rNode );
+    // set/get position from which data is invalid
+    inline void SetInvalidity( const xub_StrLen nPos );
+    inline xub_StrLen GetInvalidity() { return nInvalidityPos; };
+
+    // array operations, nCnt refers to array position
+    inline USHORT CountScriptChg() const;
+    inline xub_StrLen GetScriptChg( const USHORT nCnt ) const;
+    inline USHORT GetScriptType( const USHORT nCnt ) const;
+
+    inline USHORT CountCompChg() const;
+    inline xub_StrLen GetCompStart( const USHORT nCnt ) const;
+    inline xub_StrLen GetCompLen( const USHORT nCnt ) const;
+    inline xub_StrLen GetCompType( const USHORT nCnt ) const;
+
+    // "high" level operations, nPos refers to string position
+    xub_StrLen NextScriptChg( const xub_StrLen nPos ) const;
+    USHORT ScriptType( const xub_StrLen nPos ) const;
+    USHORT CompType( const xub_StrLen nPos ) const;
+
+    // examines the range [ nStart, nStart + nEnd ] if there are kanas
+    // returns start index of kana entry in array, otherwise USHRT_MAX
+    USHORT HasKana( xub_StrLen nStart, const xub_StrLen nEnd ) const;
+
+    // modifies the kerning array according to a given compress value
+    long Compress( long* pKernArray, xub_StrLen nIdx, xub_StrLen nLen,
+                   const USHORT nCompress, const USHORT nFontHeight,
+                   Point* pPoint = NULL ) const;
+};
+
+inline void SwScriptInfo::SetInvalidity( const xub_StrLen nPos )
+{
+    if ( nPos < nInvalidityPos )
+        nInvalidityPos = nPos;
+};
+inline USHORT SwScriptInfo::CountScriptChg() const { return aScriptChg.Count(); }
+inline xub_StrLen SwScriptInfo::GetScriptChg( const USHORT nCnt ) const
+{
+    return aScriptChg[ nCnt ];
+}
+inline USHORT SwScriptInfo::GetScriptType( const xub_StrLen nCnt ) const
+{
+    return aScriptType[ nCnt ];
+}
+inline USHORT SwScriptInfo::CountCompChg() const { return aCompChg.Count(); };
+inline xub_StrLen SwScriptInfo::GetCompStart( const USHORT nCnt ) const
+{
+    return aCompChg[ nCnt ];
+}
+inline xub_StrLen SwScriptInfo::GetCompLen( const USHORT nCnt ) const
+{
+    return aCompLen[ nCnt ];
+}
+
+inline USHORT SwScriptInfo::GetCompType( const USHORT nCnt ) const
+{
+    return aCompType[ nCnt ];
+}
+
+/*************************************************************************
+ *                      class SwDrawTextInfo
+ *
+ * encapsultes information for drawing text
+ *************************************************************************/
 
 class SwDrawTextInfo
 {
     OutputDevice* pOut;
     ViewShell* pSh;
+    const SwScriptInfo* pScriptInfo;
     const Point* pPos;
     const XubString* pText;
     const SwWrongList* pWrong;
     const Size* pSize;
     SwFont *pFnt;
+    xub_StrLen* pHyphPos;
     Fraction aZoom;
     long nLeft;
     long nRight;
+    long nKanaDiff;
     xub_StrLen nIdx;
     xub_StrLen nLen;
+    xub_StrLen nOfst;
     USHORT nWidth;
     USHORT nAscent;
+    USHORT nCompress;
     short nSperren;
     short nKern;
     short nSpace;
@@ -128,16 +226,20 @@ public:
     BOOL bGreyWv: 1;
     BOOL bLeft  : 1;
     BOOL bRight : 1;
+    BOOL bKana  : 1;
+    BOOL bOfst  : 1;
+    BOOL bHyph  : 1;
 #endif
-    SwDrawTextInfo( ViewShell *pS, OutputDevice &rO,
+    SwDrawTextInfo( ViewShell *pS, OutputDevice &rO, const SwScriptInfo* pSI,
                     const XubString &rSt, xub_StrLen nI, xub_StrLen nL,
-                    USHORT nW, BOOL bB )
-    {   pSh = pS; pOut = &rO; pText = &rSt; nIdx = nI; nLen = nL; nWidth = nW;
-        bBullet = bB; bSpecialUnderline = bGreyWave = bDarkBack = FALSE;
+                    USHORT nW = 0, BOOL bB = FALSE)
+    {   pSh = pS; pOut = &rO; pScriptInfo = pSI; pText = &rSt; nIdx = nI;
+        nLen = nL; nKern = 0; nCompress = 0; nWidth = nW; bBullet = bB;
+        bSpecialUnderline = bGreyWave = bDarkBack = FALSE;
 #ifndef PRODUCT
-        bOut = bText = bIdx = bLen = bWidth = bBull = bSpec = bGreyWv = TRUE;
-        bPos = bWrong = bSize = bFnt = bAscent = bKern = bSpace = bUppr =
-            bDrawSp = bLeft = bRight = FALSE;
+        bOut = bText = bIdx = bLen = bWidth = bKern = bBull = bSpec = bGreyWv = TRUE;
+        bPos = bWrong = bSize = bFnt = bAscent = bSpace = bUppr =
+            bDrawSp = bLeft = bRight = bKana = bOfst = bHyph = FALSE;
 #endif
     }
     ViewShell *GetShell() const { return pSh; }
@@ -149,9 +251,16 @@ public:
         ASSERT( bOut, "DrawTextInfo: Undefined Outputdevice" );
         return pOut;
     }
+    const SwScriptInfo* GetScriptInfo() const {
+        return pScriptInfo;
+    }
     const Point &GetPos() const {
         ASSERT( bPos, "DrawTextInfo: Undefined Position" );
         return *pPos;
+    }
+    xub_StrLen *GetHyphPos() const {
+        ASSERT( bHyph, "DrawTextInfo: Undefined Hyph Position" );
+        return pHyphPos;
     }
 
     const Fraction &GetZoom() const { return aZoom; }
@@ -181,6 +290,10 @@ public:
         ASSERT( bLen, "DrawTextInfo: Undefined Length" );
         return nLen;
     }
+    xub_StrLen GetOfst() const {
+        ASSERT( bOfst, "DrawTextInfo: Undefined Offset" );
+        return nOfst;
+    }
     xub_StrLen GetEnd() const {
         ASSERT( bIdx, "DrawTextInfo: Undefined Index" );
         ASSERT( bLen, "DrawTextInfo: Undefined Length" );
@@ -194,6 +307,10 @@ public:
         ASSERT( bRight, "DrawTextInfo: Undefined right range" );
         return nRight;
     }
+    long GetKanaDiff() const {
+        ASSERT( bKana, "DrawTextInfo: Undefined kana difference" );
+        return nKanaDiff;
+    }
     USHORT GetWidth() const {
         ASSERT( bWidth, "DrawTextInfo: Undefined Width" );
         return nWidth;
@@ -201,6 +318,9 @@ public:
     USHORT GetAscent() const {
         ASSERT( bAscent, "DrawTextInfo: Undefined Ascent" );
         return nAscent;
+    }
+    USHORT GetKanaComp() const {
+        return nCompress;
     }
     short GetSperren() const {
         ASSERT( bSperr, "DrawTextInfo: Undefined >Sperren<" );
@@ -248,6 +368,11 @@ public:
         bPos = TRUE;
 #endif
     }
+    void SetHyphPos( xub_StrLen *pNew ){ pHyphPos = pNew;
+#ifndef PRODUCT
+        bHyph = TRUE;
+#endif
+    }
     void SetText( const XubString &rNew ){ pText = &rNew;
 #ifndef PRODUCT
         bText = TRUE;
@@ -278,6 +403,11 @@ public:
         bLen = TRUE;
 #endif
     }
+    void SetOfst( xub_StrLen nNew ){ nOfst = nNew;
+#ifndef PRODUCT
+        bOfst = TRUE;
+#endif
+    }
     void SetLeft( long nNew ){ nLeft = nNew;
 #ifndef PRODUCT
         bLeft = TRUE;
@@ -286,6 +416,11 @@ public:
     void SetRight( long nNew ){ nRight = nNew;
 #ifndef PRODUCT
         bRight = TRUE;
+#endif
+    }
+    void SetKanaDiff( long nNew ){ nKanaDiff = nNew;
+#ifndef PRODUCT
+        bKana = TRUE;
 #endif
     }
     void SetWidth( USHORT nNew ){ nWidth = nNew;
@@ -323,6 +458,9 @@ public:
         bSpace = TRUE;
 #endif
     }
+    void SetKanaComp( short nNew ){
+        nCompress = nNew;
+    }
     void SetBullet( BOOL bNew ){ bBullet = bNew;
 #ifndef PRODUCT
         bBull = TRUE;
@@ -356,7 +494,6 @@ public:
         ((Point*)pPos)->X() += GetSize().Width();
     }
 };
-
 
 #endif
 

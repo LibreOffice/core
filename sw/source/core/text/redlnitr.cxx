@@ -2,9 +2,9 @@
  *
  *  $RCSfile: redlnitr.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-19 15:58:50 $
+ *  last change: $Author: fme $ $Date: 2001-04-09 10:41:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,7 +179,7 @@ void SwAttrIter::CtorInit( SwTxtNode& rTxtNode, SwScriptInfo& rScrInf )
     // determine script changes if not already done for current paragraph
     ASSERT( pScriptInfo, "No script info available");
     if ( pScriptInfo->GetInvalidity() != STRING_LEN )
-         pScriptInfo->InitScriptInfo( rTxtNode.GetTxt() );
+         pScriptInfo->InitScriptInfo( rTxtNode );
 
     if ( pBreakIt->xBreak.is() )
     {

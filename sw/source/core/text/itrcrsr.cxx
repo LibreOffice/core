@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrcrsr.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: fme $ $Date: 2001-04-03 11:24:48 $
+ *  last change: $Author: fme $ $Date: 2001-04-09 10:41:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -365,9 +365,12 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
         SwTwips nX = 0;
         SwTwips nFirst = 0;
         SwLinePortion *pPor = pCurr->GetFirstPortion();
-        SvShorts *pSpaceAdd = pCurr->GetpSpaceAdd();
+        SvShorts* pSpaceAdd = pCurr->GetpSpaceAdd();
+        SvUShorts* pKanaComp = pCurr->GetpKanaComp();
         MSHORT nSpaceIdx = 0;
+        MSHORT nKanaIdx = 0;
         short nSpaceAdd = pSpaceAdd ? (*pSpaceAdd)[0] : 0;
+
         sal_Bool bNoTxt = sal_True;
 
         // Zuerst werden alle Portions ohne Len am Zeilenanfang uebersprungen.
@@ -389,18 +392,25 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                 bNoTxt = sal_False;
                 nFirst = nX;
             }
-            if( pPor->IsMultiPortion() && pSpaceAdd &&
-                ((SwMultiPortion*)pPor)->HasTabulator() )
+            if( pPor->IsMultiPortion() && ((SwMultiPortion*)pPor)->HasTabulator() )
             {
-                if ( ++nSpaceIdx < pSpaceAdd->Count() )
-                    nSpaceAdd = (*pSpaceAdd)[nSpaceIdx];
-                else
-                    nSpaceAdd = 0;
+                if ( pSpaceAdd )
+                {
+                    if ( ++nSpaceIdx < pSpaceAdd->Count() )
+                        nSpaceAdd = (*pSpaceAdd)[nSpaceIdx];
+                    else
+                        nSpaceAdd = 0;
+                }
+
+                if( pKanaComp && ( nKanaIdx + 1 ) < pKanaComp->Count() )
+                    ++nKanaIdx;
             }
             if( pPor->InFixMargGrp() )
             {
                 if( pPor->IsMarginPortion() )
                     bNoTxt = sal_False;
+
+                // fix margin portion => next SpaceAdd, KanaComp value
                 if( pSpaceAdd )
                 {
                     if( nSpaceAdd < 0 )
@@ -410,6 +420,9 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                     else
                         nSpaceAdd = 0;
                 }
+
+                if( pKanaComp && ( nKanaIdx + 1 ) < pKanaComp->Count() )
+                    ++nKanaIdx;
             }
             pPor = pPor->GetPortion();
         }
@@ -444,26 +457,41 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                               pPor->CalcSpacing( nSpaceAdd, aInf );
                     else
                     {
-                        if( pPor->InFixMargGrp() && pSpaceAdd )
+                        if( pPor->InFixMargGrp()  )
                         {
-                            if( nSpaceAdd < 0 )
-                                nX += nSpaceAdd;
-                            if ( ++nSpaceIdx < pSpaceAdd->Count() )
-                                nSpaceAdd = (*pSpaceAdd)[nSpaceIdx];
-                            else
-                                nSpaceAdd = 0;
+                            // update to current SpaceAdd, KanaComp values
+                            if ( pSpaceAdd )
+                            {
+                                if( nSpaceAdd < 0 )
+                                    nX += nSpaceAdd;
+                                if ( ++nSpaceIdx < pSpaceAdd->Count() )
+                                    nSpaceAdd = (*pSpaceAdd)[nSpaceIdx];
+                                else
+                                    nSpaceAdd = 0;
+                            }
+
+                            if ( pKanaComp &&
+                                ( nKanaIdx + 1 ) < pKanaComp->Count()
+                                )
+                                ++nKanaIdx;
                         }
                         if ( !pPor->IsFlyPortion() || ( pPor->GetPortion() &&
                                 !pPor->GetPortion()->IsMarginPortion() ) )
                             nX += pPor->PrtWidth();
                     }
-                    if( pPor->IsMultiPortion() && pSpaceAdd &&
+                    if( pPor->IsMultiPortion() &&
                         ((SwMultiPortion*)pPor)->HasTabulator() )
                     {
-                        if ( ++nSpaceIdx < pSpaceAdd->Count() )
-                            nSpaceAdd = (*pSpaceAdd)[nSpaceIdx];
-                        else
-                            nSpaceAdd = 0;
+                        if ( pSpaceAdd )
+                        {
+                            if ( ++nSpaceIdx < pSpaceAdd->Count() )
+                                nSpaceAdd = (*pSpaceAdd)[nSpaceIdx];
+                            else
+                                nSpaceAdd = 0;
+                        }
+
+                        if( pKanaComp && ( nKanaIdx + 1 ) < pKanaComp->Count() )
+                            ++nKanaIdx;
                     }
 
                     aInf.SetIdx( aInf.GetIdx() + pPor->GetLen() );
@@ -473,10 +501,7 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                 {
                     if( pPor->IsMultiPortion() )
                     {
-                        // setting this flag indicates that we are in a double line
-                        // portion, important for cursor travelling in these portions
-                        if ( ((SwMultiPortion*)pPor)->IsDouble() )
-                            GetInfo().SetMulti( sal_True );
+                        GetInfo().SetMulti( sal_True );
 
                         pOrig->Pos().Y() += nTmpAscent - nPorAscent;
                         if( ( ((SwMultiPortion*)pPor)->IsDouble() ||
@@ -518,20 +543,26 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                             Next();
                         }
 
+                        sal_Bool bSpaceChg = ((SwMultiPortion*)pPor)->
+                                                ChgSpaceAdd( pCurr, nSpaceAdd );
+                        Point aOldPos = pOrig->Pos();
+                        _GetCharRect( pOrig, nOfst, pCMS );
+
                         // if we are still in the first row of
                         // our 2 line multiportion, we use the FirstMulti flag
                         // to indicate this
                         if ( pCurr == &((SwMultiPortion*)pPor)->GetRoot() )
                         {
                             GetInfo().SetFirstMulti( sal_True );
-                            if ( !pCurr->GetNext() || !pCurr->GetNext()->GetLen() )
-                            GetInfo().SetMulti( sal_False );
+                            // we want to treat a double line portion like a
+                            // single line portion, if there is no text in the
+                            // second line
+                            if ( ( !pCurr->GetNext() ||
+                                   !pCurr->GetNext()->GetLen() ) &&
+                                 ((SwMultiPortion*)pPor)->IsDouble() )
+                                GetInfo().SetMulti( sal_False );
                         }
 
-                        sal_Bool bSpaceChg = ((SwMultiPortion*)pPor)->
-                                                ChgSpaceAdd( pCurr, nSpaceAdd );
-                        Point aOldPos = pOrig->Pos();
-                        _GetCharRect( pOrig, nOfst, pCMS );
                         if( ((SwMultiPortion*)pPor)->HasRotation() )
                         {
                             long nTmp = pOrig->Width();
@@ -574,6 +605,8 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                             const sal_Bool bOldOnWin = aInf.OnWin();
                             aInf.SetOnWin( sal_False ); // keine BULLETs!
                             SwTwips nTmp = nX;
+                            aInf.SetKanaComp( pKanaComp );
+                            aInf.SetKanaIdx( nKanaIdx );
                             nX += pPor->GetTxtSize( aInf ).Width();
                             aInf.SetOnWin( bOldOnWin );
                             if ( pPor->InSpaceGrp() && nSpaceAdd )
@@ -634,26 +667,38 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                           pPor->CalcSpacing( nSpaceAdd, aInf );
                 else
                 {
-                    if( pPor->InFixMargGrp() && pSpaceAdd )
+                    if( pPor->InFixMargGrp() )
                     {
-                        if( nSpaceAdd < 0 )
-                            nX += nSpaceAdd;
-                        if ( ++nSpaceIdx < pSpaceAdd->Count() )
-                            nSpaceAdd = (*pSpaceAdd)[nSpaceIdx];
-                        else
-                            nSpaceAdd = 0;
+                        if ( pSpaceAdd )
+                        {
+                            if( nSpaceAdd < 0 )
+                                nX += nSpaceAdd;
+                            if ( ++nSpaceIdx < pSpaceAdd->Count() )
+                                nSpaceAdd = (*pSpaceAdd)[nSpaceIdx];
+                            else
+                                nSpaceAdd = 0;
+                        }
+
+                        if( pKanaComp && ( nKanaIdx + 1 ) < pKanaComp->Count() )
+                            ++nKanaIdx;
                     }
                     if ( !pPor->IsFlyPortion() || ( pPor->GetPortion() &&
                             !pPor->GetPortion()->IsMarginPortion() ) )
                         nX += pPor->PrtWidth();
                 }
-                if( pPor->IsMultiPortion() && pSpaceAdd &&
+                if( pPor->IsMultiPortion() &&
                     ((SwMultiPortion*)pPor)->HasTabulator() )
                 {
-                    if ( ++nSpaceIdx < pSpaceAdd->Count() )
-                        nSpaceAdd = (*pSpaceAdd)[nSpaceIdx];
-                    else
-                        nSpaceAdd = 0;
+                    if ( pSpaceAdd )
+                    {
+                        if ( ++nSpaceIdx < pSpaceAdd->Count() )
+                            nSpaceAdd = (*pSpaceAdd)[nSpaceIdx];
+                        else
+                            nSpaceAdd = 0;
+                    }
+
+                    if( pKanaComp && ( nKanaIdx + 1 ) < pKanaComp->Count() )
+                        ++nKanaIdx;
                 }
                 if( !pPor->IsFlyPortion() )
                 {
@@ -722,6 +767,8 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                         aInf.SetLen( pPor->GetLen() );
                         SeekAndChg( aInf );
                         aInf.SetOnWin( sal_False ); // keine BULLETs!
+                        aInf.SetKanaComp( pKanaComp );
+                        aInf.SetKanaIdx( nKanaIdx );
                         nTmp = pPor->GetTxtSize( aInf ).Width();
                         aInf.SetOnWin( bOldOnWin );
                         if ( pPor->InSpaceGrp() && nSpaceAdd )
@@ -858,15 +905,18 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
     sal_Bool bLastHyph = sal_False;
 
     SvShorts *pSpaceAdd = pCurr->GetpSpaceAdd();
+    SvUShorts *pKanaComp = pCurr->GetpKanaComp();
     xub_StrLen nOldIdx = GetInfo().GetIdx();
     MSHORT nSpaceIdx = 0;
+    MSHORT nKanaIdx = 0;
     short nSpaceAdd = pSpaceAdd ? (*pSpaceAdd)[0] : 0;
+    short nKanaComp = pKanaComp ? (*pKanaComp)[0] : 0;
 
     // nWidth ist die Breite der Zeile, oder die Breite des
     // Abschnitts mit dem Fontwechsel, in dem nX liegt.
 
     KSHORT nWidth = pPor->Width();
-    if ( pSpaceAdd )
+    if ( pSpaceAdd || pKanaComp )
     {
         if ( pPor->InSpaceGrp() && nSpaceAdd )
         {
@@ -876,10 +926,21 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
         if( pPor->InFixMargGrp() ||
             (pPor->IsMultiPortion() && ((SwMultiPortion*)pPor)->HasTabulator()))
         {
-            if ( ++nSpaceIdx < pSpaceAdd->Count() )
-                nSpaceAdd = (*pSpaceAdd)[nSpaceIdx];
-            else
-                nSpaceAdd = 0;
+            if ( pSpaceAdd )
+            {
+                if ( ++nSpaceIdx < pSpaceAdd->Count() )
+                    nSpaceAdd = (*pSpaceAdd)[nSpaceIdx];
+                else
+                    nSpaceAdd = 0;
+            }
+
+            if( pKanaComp )
+            {
+                if ( nKanaIdx + 1 < pKanaComp->Count() )
+                    nKanaComp = (*pKanaComp)[++nKanaIdx];
+                else
+                    nKanaComp = 0;
+            }
         }
     }
 
@@ -897,7 +958,7 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
         bHolePortion = pPor->IsHolePortion();
         pPor = pPor->GetPortion();
         nWidth = pPor->Width();
-        if ( pSpaceAdd )
+        if ( pSpaceAdd || pKanaComp )
         {
             if ( pPor->InSpaceGrp() && nSpaceAdd )
             {
@@ -907,10 +968,21 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
             if( pPor->InFixMargGrp() || ( pPor->IsMultiPortion() &&
                 ((SwMultiPortion*)pPor)->HasTabulator() ) )
             {
-                if ( ++nSpaceIdx < pSpaceAdd->Count() )
-                    nSpaceAdd = (*pSpaceAdd)[nSpaceIdx];
-                else
-                    nSpaceAdd = 0;
+                if ( pSpaceAdd )
+                {
+                    if ( ++nSpaceIdx < pSpaceAdd->Count() )
+                        nSpaceAdd = (*pSpaceAdd)[nSpaceIdx];
+                    else
+                        nSpaceAdd = 0;
+                }
+
+                if ( pKanaComp )
+                {
+                    if( nKanaIdx + 1 < pKanaComp->Count() )
+                        nKanaComp = (*pKanaComp)[++nKanaIdx];
+                    else
+                        nKanaComp = 0;
+                }
             }
         }
         nWidth30 = !nWidth && pPor->GetLen() && ( pPor->InToxRefOrFldGrp() ||
@@ -1082,10 +1154,26 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
                 SwTxtSlot aDiffTxt( &aSizeInf, ((SwTxtPortion*)pPor) );
                 SwFontSave aSave( aSizeInf, pPor->IsDropPortion() ?
                         ((SwDropPortion*)pPor)->GetFnt() : NULL );
-                nLength = aSizeInf.GetFont()->_GetCrsrOfst( aSizeInf.GetVsh(),
-                                        aSizeInf.GetOut(),
-                                        aSizeInf.GetTxt(), nX,aSizeInf.GetIdx(),
-                                        pPor->GetLen(), nSpaceAdd );
+
+                SwParaPortion* pPara = (SwParaPortion*)GetInfo().GetParaPortion();
+                ASSERT( pPara, "No paragraph!" );
+
+                SwDrawTextInfo aDrawInf( aSizeInf.GetVsh(),
+                                         *aSizeInf.GetOut(),
+                                         &pPara->GetScriptInfo(),
+                                         aSizeInf.GetTxt(),
+                                         aSizeInf.GetIdx(),
+                                         pPor->GetLen() );
+                aDrawInf.SetOfst( nX );
+                aDrawInf.SetSpace( nSpaceAdd );
+
+                if ( SW_CJK == aSizeInf.GetFont()->GetActual() &&
+                     pPara->GetScriptInfo().CountCompChg() &&
+                    ! pPor->InFldGrp() )
+                    aDrawInf.SetKanaComp( nKanaComp );
+
+                nLength = aSizeInf.GetFont()->_GetCrsrOfst( aDrawInf );
+
                 if( bFieldInfo && nLength == pPor->GetLen() )
                     --nLength;
             }

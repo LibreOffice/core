@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: tl $ $Date: 2001-03-29 08:00:58 $
+ *  last change: $Author: fme $ $Date: 2001-04-09 10:41:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,9 @@
 #include <com/sun/star/linguistic2/XHyphenatedWord.hpp>
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUES_HPP_
 #include <com/sun/star/beans/PropertyValues.hpp>
+#endif
+#ifndef _TABLE_HXX //autogen
+#include <tools/table.hxx>
 #endif
 
 #include "swtypes.hxx"
@@ -179,9 +182,18 @@ public:
  *                      class SwTxtSizeInfo
  *************************************************************************/
 
+DECLARE_TABLE( SwTxtPortionTable, USHORT )
+
 class SwTxtSizeInfo : public SwTxtInfo
 {
 protected:
+    // during formatting, a small database is built, mapping portion pointers
+    // to their maximum size (used for kana compression)
+    SwTxtPortionTable aMaxWidth;
+    // for each line, an array of compression values is calculated
+    // this array is passed over to the info structure
+    SvUShorts* pKanaComp;
+
     ViewShell    *pVsh;
     OutputDevice *pOut;
     OutputDevice *pWin;
@@ -191,6 +203,7 @@ protected:
     const SwViewOption *pOpt;
     const XubString *pTxt;
     xub_StrLen nIdx, nLen;
+    USHORT nKanaIdx;
     sal_Bool bOnWin     : 1;
     sal_Bool bNotEOL    : 1;
     sal_Bool bURLNotify : 1;
@@ -283,17 +296,34 @@ public:
         { return pTxt->GetChar( nPos ); }
 
     inline KSHORT      GetTxtHeight() const;
-    inline SwPosSize   GetTxtSize( const OutputDevice *pOut,
-                                   const XubString &rTxt, const xub_StrLen nIdx,
-                                   const xub_StrLen nLen ) const;
-    inline SwPosSize GetTxtSize() const;
-    inline SwPosSize GetTxtSize( const xub_StrLen nIdx, const xub_StrLen nLen )
-           const;
+
+    //
+    // GetTxtSize
+    //
+    SwPosSize GetTxtSize( OutputDevice *pOut, const SwScriptInfo* pSI,
+                          const XubString& rTxt, const xub_StrLen nIdx,
+                          const xub_StrLen nLen, const USHORT nComp ) const;
+    SwPosSize GetTxtSize() const;
+    void GetTxtSize( const SwScriptInfo* pSI, const xub_StrLen nIdx,
+                      const xub_StrLen nLen, const USHORT nComp,
+                      USHORT& nMinSize, USHORT& nMaxSizeDiff ) const;
+    inline SwPosSize GetTxtSize( const SwScriptInfo* pSI, const xub_StrLen nIdx,
+                                 const xub_StrLen nLen, const USHORT nComp ) const;
     inline SwPosSize GetTxtSize( const XubString &rTxt ) const;
-    inline xub_StrLen GetTxtBreak( long nTxtWidth, const xub_StrLen nNewIdx,
-                               const xub_StrLen nNewLen ) const;
-    inline xub_StrLen GetTxtBreak( long nTxtWidth, const xub_StrLen nNewIdx,
-           const xub_StrLen nNewLen, xub_StrLen& rExtraCharPos ) const;
+
+    //
+    // GetTxtBreak
+    //
+    xub_StrLen SwTxtSizeInfo::GetTxtBreak( const long nLineWidth,
+                                           const xub_StrLen nMaxLen ) const;
+    xub_StrLen SwTxtSizeInfo::GetTxtBreak( const long nLineWidth,
+                                           const xub_StrLen nMaxLen,
+                                           const USHORT nComp ) const;
+    xub_StrLen SwTxtSizeInfo::GetTxtBreak( const long nLineWidth,
+                                           const xub_StrLen nMaxLen,
+                                           const USHORT nComp,
+                                           xub_StrLen& rExtraCharPos ) const;
+
     inline KSHORT GetAscent() const;
 
     inline xub_StrLen GetIdx() const { return nIdx; }
@@ -317,6 +347,42 @@ public:
     inline sal_Bool HasHint( xub_StrLen nPos ) const
         { return _HasHint( pFrm->GetTxtNode(), nPos ); }
     static sal_Bool _HasHint( const SwTxtNode* pTxtNode, xub_StrLen nPos );
+
+    //
+    // If Kana Compression is enabled, a minimum and maximum portion width
+    // is calculated. We format lines with minimal size and share remaining
+    // space among compressed kanas.
+    // During formatting, the maximum values of compressable portions are
+    // stored in aMaxWidth and discarded after a line has been formatted.
+    inline void SetMaxWidthDiff( ULONG nKey, USHORT nVal )
+    {
+        aMaxWidth.Insert( nKey, nVal );
+    };
+    inline USHORT GetMaxWidthDiff( ULONG nKey )
+    {
+        return aMaxWidth.Get( nKey );
+    };
+    inline void ResetMaxWidthDiff()
+    {
+        aMaxWidth.Clear();
+    };
+    inline sal_Bool CompressLine()
+    {
+        return aMaxWidth.Count();
+    };
+
+    //
+    // Feature: Kana Compression
+    //
+    inline const MSHORT GetKanaIdx() const { return nKanaIdx; }
+    inline void ResetKanaIdx(){ nKanaIdx = 0; }
+    inline void SetKanaIdx( MSHORT nNew ) { nKanaIdx = nNew; }
+    inline void IncKanaIdx() { ++nKanaIdx; }
+    inline void SetKanaComp( SvUShorts *pNew ){ pKanaComp = pNew; }
+    inline SvUShorts* GetpKanaComp() const { return pKanaComp; }
+    inline const USHORT GetKanaComp() const
+        { return ( pKanaComp && nKanaIdx < pKanaComp->Count() )
+                   ? (*pKanaComp)[nKanaIdx] : 0; }
 
 #ifndef PRODUCT
     sal_Bool IsOptCalm() const;
@@ -424,6 +490,7 @@ public:
     inline const short GetSpaceAdd() const
         { return ( pSpaceAdd && nSpaceIdx < pSpaceAdd->Count() )
                    ? (*pSpaceAdd)[nSpaceIdx] : 0; }
+
     inline void SetWrongList( SwWrongList *pNew ){ pWrongList = pNew; }
     inline SwWrongList* GetpWrongList() const { return pWrongList; }
 
@@ -634,6 +701,9 @@ public:
     // setzt die FormatInfo wieder in den Anfangszustand
     void Reset( const SwTxtFrm *pFrame); // , const sal_Bool bAll );
 
+    // Sets the last SwKernPortion as pLast, if it is followed by empty portions
+    BOOL LastKernPortion();
+
     // Sucht ab nIdx bis nEnd nach Tabs, TabDec, TXTATR und BRK.
     // Return: gefundene Position, setzt ggf. cHookChar
     xub_StrLen ScanPortionEnd( const xub_StrLen nStart, const xub_StrLen nEnd,
@@ -736,7 +806,7 @@ public:
 };
 
 /*************************************************************************
- *                       Inline-Implementationen
+ *                       Inline-Implementierungen SwTxtSizeInfo
  *************************************************************************/
 
 inline KSHORT SwTxtSizeInfo::GetAscent() const
@@ -747,14 +817,6 @@ inline KSHORT SwTxtSizeInfo::GetAscent() const
 inline KSHORT SwTxtSizeInfo::GetTxtHeight() const
 {
     return ((SwFont*)GetFont())->GetHeight( pVsh, GetOut() );
-}
-
-inline SwPosSize SwTxtSizeInfo::GetTxtSize( const OutputDevice *pOutDev,
-                                     const XubString &rTxt,
-                                     const xub_StrLen nIdx,
-                                     const xub_StrLen nLen ) const
-{
-    return pFnt->_GetTxtSize( pVsh, pOutDev, rTxt, nIdx, nLen );
 }
 
 inline void SwTxtSizeInfo::SetWin( OutputDevice *pNewWin )
@@ -771,34 +833,22 @@ inline void SwTxtSizeInfo::SetPrt( OutputDevice *pNewPrt )
     pPrt = pNewPrt;
 }
 
-inline SwPosSize SwTxtSizeInfo::GetTxtSize() const
-{
-    return GetTxtSize( pOut, *pTxt, nIdx, nLen );
-}
-
 inline SwPosSize SwTxtSizeInfo::GetTxtSize( const XubString &rTxt ) const
 {
-    return GetTxtSize( pOut, rTxt, 0, rTxt.Len() );
+    return GetTxtSize( pOut, 0, rTxt, 0, rTxt.Len(), 0 );
 }
 
-inline SwPosSize SwTxtSizeInfo::GetTxtSize( const xub_StrLen nNewIdx,
-                                            const xub_StrLen nNewLen ) const
+inline SwPosSize SwTxtSizeInfo::GetTxtSize( const SwScriptInfo* pSI,
+                                            const xub_StrLen nNewIdx,
+                                            const xub_StrLen nNewLen,
+                                            const USHORT nCompress ) const
 {
-    return GetTxtSize( pOut, *pTxt, nNewIdx, nNewLen );
+    return GetTxtSize( pOut, pSI, *pTxt, nNewIdx, nNewLen, nCompress );
 }
 
-inline xub_StrLen SwTxtSizeInfo::GetTxtBreak( long nTxtWidth,
-                const xub_StrLen nNewIdx, const xub_StrLen nNewLen ) const
-{
-    return pFnt->GetTxtBreak( pVsh, pOut, *pTxt, nTxtWidth, nNewIdx, nNewLen );
-}
-
-inline xub_StrLen SwTxtSizeInfo::GetTxtBreak( long nTxtWidth, const xub_StrLen
-        nNewIdx, const xub_StrLen nNewLen, xub_StrLen& rExtraCharPos ) const
-{
-    return pFnt->GetTxtBreak( pVsh, pOut, *pTxt, nTxtWidth, rExtraCharPos,
-        nNewIdx, nNewLen );
-}
+/*************************************************************************
+ *                       Inline-Implementierungen SwTxtPaintInfo
+ *************************************************************************/
 
 inline SwTwips SwTxtPaintInfo::GetPaintOfst() const
 {
@@ -830,6 +880,10 @@ inline void SwTxtPaintInfo::DrawWrongText( const SwLinePortion &rPor,
 {
     ((SwTxtPaintInfo*)this)->_DrawText( *pTxt, rPor, nIdx, nLen, bKern, sal_True );
 }
+
+/*************************************************************************
+ *                       Inline-Implementierungen SwTxtFormatInfo
+ *************************************************************************/
 
 inline xub_StrLen SwTxtFormatInfo::GetReformatStart() const
 {

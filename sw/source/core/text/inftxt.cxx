@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: vg $ $Date: 2001-04-04 13:00:51 $
+ *  last change: $Author: fme $ $Date: 2001-04-09 10:41:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -285,6 +285,7 @@ inline xub_StrLen GetMinLen( const SwTxtSizeInfo &rInf )
 
 SwTxtSizeInfo::SwTxtSizeInfo( const SwTxtSizeInfo &rNew )
     : SwTxtInfo( rNew ),
+      pKanaComp(((SwTxtSizeInfo&)rNew).GetpKanaComp()),
       pVsh(((SwTxtSizeInfo&)rNew).GetVsh()),
       pOut(((SwTxtSizeInfo&)rNew).GetOut()),
       pWin(((SwTxtSizeInfo&)rNew).GetWin()),
@@ -295,6 +296,7 @@ SwTxtSizeInfo::SwTxtSizeInfo( const SwTxtSizeInfo &rNew )
       pTxt(&rNew.GetTxt()),
       nIdx(rNew.GetIdx()),
       nLen(rNew.GetLen()),
+      nKanaIdx( rNew.GetKanaIdx() ),
       bOnWin( rNew.OnWin() ),
       bNotEOL( rNew.NotEOL() ),
       bURLNotify( rNew.URLNotify() ),
@@ -323,6 +325,8 @@ void SwTxtSizeInfo::_SelectOut()
 void SwTxtSizeInfo::CtorInit( SwTxtFrm *pFrame, SwFont *pNewFnt,
                    const xub_StrLen nNewIdx, const xub_StrLen nNewLen )
 {
+    pKanaComp = NULL;
+    nKanaIdx = 0;
     pFrm = pFrame;
     SwTxtInfo::CtorInit( pFrm );
     const SwTxtNode *pNd = pFrm->GetTxtNode();
@@ -384,6 +388,7 @@ void SwTxtSizeInfo::CtorInit( SwTxtFrm *pFrame, SwFont *pNewFnt,
 SwTxtSizeInfo::SwTxtSizeInfo( const SwTxtSizeInfo &rNew, const XubString &rTxt,
                               const xub_StrLen nIdx, const xub_StrLen nLen )
     : SwTxtInfo( rNew ),
+      pKanaComp(((SwTxtSizeInfo&)rNew).GetpKanaComp()),
       pVsh(((SwTxtSizeInfo&)rNew).GetVsh()),
       pOut(((SwTxtSizeInfo&)rNew).GetOut()),
       pWin(((SwTxtSizeInfo&)rNew).GetWin()),
@@ -394,6 +399,7 @@ SwTxtSizeInfo::SwTxtSizeInfo( const SwTxtSizeInfo &rNew, const XubString &rTxt,
       pTxt(&rTxt),
       nIdx(nIdx),
       nLen(nLen),
+      nKanaIdx( rNew.GetKanaIdx() ),
       bOnWin( rNew.OnWin() ),
       bNotEOL( rNew.NotEOL() ),
       bURLNotify( rNew.URLNotify() ),
@@ -438,6 +444,123 @@ void SwTxtSizeInfo::_NoteAnimation()
         pOut = pVsh->GetOut();
         pWin = pOut;
     }
+}
+
+/*************************************************************************
+ *                      SwTxtSizeInfo::GetTxtSize()
+ *************************************************************************/
+
+SwPosSize SwTxtSizeInfo::GetTxtSize( OutputDevice* pOutDev,
+                                     const SwScriptInfo* pSI,
+                                     const XubString& rTxt,
+                                     const xub_StrLen nIdx,
+                                     const xub_StrLen nLen,
+                                     const USHORT nComp ) const
+{
+    SwDrawTextInfo aDrawInf( pVsh, *pOutDev, pSI, rTxt, nIdx, nLen );
+    aDrawInf.SetKanaComp( nComp );
+    SwPosSize aSize = pFnt->_GetTxtSize( aDrawInf );
+    return aSize;
+}
+
+/*************************************************************************
+ *                      SwTxtSizeInfo::GetTxtSize()
+ *************************************************************************/
+
+SwPosSize SwTxtSizeInfo::GetTxtSize() const
+{
+    const SwScriptInfo& rSI =
+                     ( (SwParaPortion*)GetParaPortion() )->GetScriptInfo();
+
+    // in some cases, compression is not allowed or surpressed for
+    // performance reasons
+    USHORT nComp =( SW_CJK == GetFont()->GetActual() &&
+                    rSI.CountCompChg() &&
+                    ! IsMulti() ) ?
+                    GetKanaComp() :
+                                0 ;
+
+    SwDrawTextInfo aDrawInf( pVsh, *pOut, &rSI, *pTxt, nIdx, nLen );
+    aDrawInf.SetKanaComp( nComp );
+    return pFnt->_GetTxtSize( aDrawInf );
+}
+
+/*************************************************************************
+ *                      SwTxtSizeInfo::GetTxtSize()
+ *************************************************************************/
+
+void SwTxtSizeInfo::GetTxtSize( const SwScriptInfo* pSI, const xub_StrLen nIdx,
+                                const xub_StrLen nLen, const USHORT nComp,
+                                USHORT& nMinSize, USHORT& nMaxSizeDiff ) const
+{
+    SwDrawTextInfo aDrawInf( pVsh, *pOut, pSI, *pTxt, nIdx, nLen );
+    aDrawInf.SetKanaComp( nComp );
+    SwPosSize aSize = pFnt->_GetTxtSize( aDrawInf );
+    nMaxSizeDiff = aDrawInf.GetKanaDiff();
+    nMinSize = aSize.Width();
+}
+
+/*************************************************************************
+ *                      SwTxtSizeInfo::GetTxtBreak()
+ *************************************************************************/
+
+xub_StrLen SwTxtSizeInfo::GetTxtBreak( const long nLineWidth,
+                                       const xub_StrLen nMaxLen ) const
+{
+    const SwScriptInfo& rSI =
+                     ( (SwParaPortion*)GetParaPortion() )->GetScriptInfo();
+
+    // in some cases, compression is not allowed or surpressed for
+    // performance reasons
+    USHORT nComp =( SW_CJK == GetFont()->GetActual() &&
+                    rSI.CountCompChg() &&
+                    ! IsMulti() ) ?
+                    GetKanaComp() :
+                                0 ;
+
+    SwDrawTextInfo aDrawInf( pVsh, *pOut, &rSI, *pTxt, nIdx, nMaxLen );
+    aDrawInf.SetKanaComp( nComp );
+    aDrawInf.SetHyphPos( 0 );
+    return pFnt->GetTxtBreak( aDrawInf, nLineWidth );
+}
+
+/*************************************************************************
+ *                      SwTxtSizeInfo::GetTxtBreak()
+ *************************************************************************/
+
+xub_StrLen SwTxtSizeInfo::GetTxtBreak( const long nLineWidth,
+                                       const xub_StrLen nMaxLen,
+                                       const USHORT nComp ) const
+{
+    const SwScriptInfo& rScriptInfo =
+                     ( (SwParaPortion*)GetParaPortion() )->GetScriptInfo();
+
+    SwDrawTextInfo aDrawInf( pVsh, *pOut, &rScriptInfo,
+                             *pTxt, GetIdx(), nMaxLen );
+    aDrawInf.SetKanaComp( nComp );
+    aDrawInf.SetHyphPos( 0 );
+
+    return pFnt->GetTxtBreak( aDrawInf, nLineWidth );
+}
+
+/*************************************************************************
+ *                      SwTxtSizeInfo::GetTxtBreak()
+ *************************************************************************/
+
+xub_StrLen SwTxtSizeInfo::GetTxtBreak( const long nLineWidth,
+                                       const xub_StrLen nMaxLen,
+                                       const USHORT nComp,
+                                       xub_StrLen& rExtraCharPos ) const
+{
+    const SwScriptInfo& rScriptInfo =
+                     ( (SwParaPortion*)GetParaPortion() )->GetScriptInfo();
+
+    SwDrawTextInfo aDrawInf( pVsh, *pOut, &rScriptInfo,
+                             *pTxt, GetIdx(), nMaxLen );
+    aDrawInf.SetKanaComp( nComp );
+    aDrawInf.SetHyphPos( &rExtraCharPos );
+
+    return pFnt->GetTxtBreak( aDrawInf, nLineWidth );
 }
 
 /*************************************************************************
@@ -503,15 +626,30 @@ void SwTxtPaintInfo::_DrawText( const XubString &rText, const SwLinePortion &rPo
     short nSpaceAdd = ( rPor.IsBlankPortion() || rPor.IsDropPortion() ||
                         rPor.InNumberGrp() ) ? 0 : GetSpaceAdd();
 
+    const SwScriptInfo& rSI =
+                     ( (SwParaPortion*)GetParaPortion() )->GetScriptInfo();
+
+    // in some cases, compression is not allowed or surpressed for
+    // performance reasons
+    USHORT nComp =( SW_CJK == GetFont()->GetActual() &&
+                    rSI.CountCompChg() &&
+                    ! IsMulti() &&
+                    ! rPor.InFldGrp() ) ?
+                    GetKanaComp() :
+                                0 ;
+
     const sal_Bool bBullet = OnWin() && GetOpt().IsBlank() && IsNoSymbol();
     sal_Bool bTmpWrong = bWrong && OnWin() && GetOpt().IsOnlineSpell()
                              && !GetOpt().IsHideSpell();
-    SwDrawTextInfo aDrawInf( pFrm->GetShell(), *pOut,
+    SwParaPortion* pPara = GetParaPortion();
+    ASSERT( pPara, "No paragraph!");
+    SwDrawTextInfo aDrawInf( pFrm->GetShell(), *pOut, &pPara->GetScriptInfo(),
                              rText, nStart, nLen, rPor.Width(), bBullet );
     aDrawInf.SetLeft( GetPaintRect().Left() );
     aDrawInf.SetRight( GetPaintRect().Right() );
     aDrawInf.SetSpecialUnderline( bSpecialUnderline );
     aDrawInf.SetSpace( nSpaceAdd );
+    aDrawInf.SetKanaComp( nComp );
 
     if( COL_AUTO == GetFont()->GetColor().GetColor() )
     {
@@ -545,6 +683,7 @@ void SwTxtPaintInfo::_DrawText( const XubString &rText, const SwLinePortion &rPo
         aDrawInf.SetAscent( rPor.GetAscent() );
         aDrawInf.SetKern( bKern ? rPor.Width() : 0 );
         aDrawInf.SetSpace( nSpaceAdd );
+        aDrawInf.SetKanaComp( nComp );
         aDrawInf.SetWrong( bTmpWrong ? pWrongList : NULL );
         GetTxtFly()->DrawTextOpaque( aDrawInf );
     }
@@ -557,6 +696,7 @@ void SwTxtPaintInfo::_DrawText( const XubString &rText, const SwLinePortion &rPo
         {
             aDrawInf.SetWrong( bTmpWrong ? pWrongList : NULL );
             aDrawInf.SetSpace( nSpaceAdd );
+            aDrawInf.SetKanaComp( nComp );
             pFnt->_DrawText( aDrawInf );
         }
     }
@@ -1096,34 +1236,35 @@ xub_StrLen SwTxtFormatInfo::ScanPortionEnd( const xub_StrLen nStart,
             }
         }
     }
-/*
-JP 07.08.00: old
-    if ( cTabDec )
-        for( ; i < nEnd; ++i )
-        {
-            const xub_Unicode cPos = GetChar( i );
-            if( cTabDec == cPos || CH_TAB == cPos || CH_BREAK == cPos ||
-                (( CH_TXTATR_BREAKWORD == cPos || CH_TXTATR_INWORD == cPos )
-                    && HasHint( i ) ) )
-            {
-                cHookChar = cPos;
-                return i;
-            }
-        }
-    else
-        for( ; i < nEnd; ++i )
-        {
-            const xub_Unicode cPos = GetChar( i );
-            if( CH_TAB == cPos || CH_BREAK == cPos ||
-                ( ( CH_TXTATR_BREAKWORD == cPos || CH_TXTATR_INWORD == cPos )
-                    && HasHint( i ) ) )
-            {
-                cHookChar = cPos;
-                return i;
-            }
-        }
-*/
     return i;
+}
+
+BOOL SwTxtFormatInfo::LastKernPortion()
+{
+    if( GetLast() )
+    {
+         if( GetLast()->IsKernPortion() )
+            return TRUE;
+        if( GetLast()->Width() || ( GetLast()->GetLen() &&
+            !GetLast()->IsHolePortion() ) )
+            return FALSE;
+    }
+    SwLinePortion* pPor = GetRoot();
+    SwLinePortion *pKern = NULL;
+    while( pPor )
+    {
+        if( pPor->IsKernPortion() )
+            pKern = pPor;
+        else if( pPor->Width() || ( pPor->GetLen() && !pPor->IsHolePortion() ) )
+            pKern = NULL;
+        pPor = pPor->GetPortion();
+    }
+    if( pKern )
+    {
+        SetLast( pKern );
+        return TRUE;
+    }
+    return FALSE;
 }
 
 /*************************************************************************

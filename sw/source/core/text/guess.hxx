@@ -2,9 +2,9 @@
  *
  *  $RCSfile: guess.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ama $ $Date: 2001-02-15 13:40:55 $
+ *  last change: $Author: fme $ $Date: 2001-04-09 10:41:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,8 @@ public:
     ~SwTxtGuess() { delete pHanging; }
 
     // true, if current portion still fits to current line
-    sal_Bool Guess( const SwTxtFormatInfo &rInf, const KSHORT nHeight );
+    sal_Bool Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
+                    const KSHORT nHeight );
     sal_Bool AlternativeSpelling( const SwTxtFormatInfo &rInf, const xub_StrLen nPos );
 
     inline SwHangingPortion* GetHangingPortion() const { return pHanging; }

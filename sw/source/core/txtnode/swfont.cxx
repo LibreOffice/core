@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfont.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-19 15:53:35 $
+ *  last change: $Author: fme $ $Date: 2001-04-09 10:44:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1023,39 +1023,47 @@ USHORT SwSubFont::GetHeight( ViewShell *pSh, const OutputDevice *pOut )
 /*************************************************************************
  *                    SwSubFont::_GetTxtSize()
  *************************************************************************/
-
-Size SwSubFont::_GetTxtSize( ViewShell *pSh,
-                         const OutputDevice *pOut, const XubString &rTxt,
-                         const xub_StrLen nIdx, const xub_StrLen nLen )
+Size SwSubFont::_GetTxtSize( SwDrawTextInfo& rInf )
 {
     // Robust: Eigentlich sollte der Font bereits eingestellt sein, aber
     // sicher ist sicher ...
     if ( !pLastFont || pLastFont->GetOwner()!=pMagic ||
-         !IsSameInstance( pOut->GetFont() ) )
-        ChgFnt( pSh, (OutputDevice *)pOut );
+         !IsSameInstance( rInf.GetpOut()->GetFont() ) )
+        ChgFnt( rInf.GetShell(), rInf.GetpOut() );
 
     Size aTxtSize;
-    xub_StrLen nLn = ( nLen==STRING_LEN ? rTxt.Len() : nLen );
+    xub_StrLen nLn = ( rInf.GetLen() == STRING_LEN ? rInf.GetText().Len()
+                                                   : rInf.GetLen() );
+    rInf.SetLen( nLn );
     if( IsCapital() && nLn )
-        aTxtSize = GetCapitalSize( pSh, pOut, rTxt, nIdx, nLn );
+        aTxtSize = GetCapitalSize( rInf );
     else
     {
         SV_STAT( nGetTextSize );
+        short nOldKern = rInf.GetKern();
+        const XubString &rOldTxt = rInf.GetText();
+        rInf.SetKern( CheckKerning() );
         if ( !IsCaseMap() )
-            aTxtSize = pLastFont->GetTextSize( pSh, pOut, rTxt,
-                                               nIdx, nLn, CheckKerning() );
+            aTxtSize = pLastFont->GetTextSize( rInf );
         else
-            aTxtSize = pLastFont->GetTextSize( pSh, pOut, CalcCaseMap( rTxt ),
-                                               nIdx, nLn, CheckKerning() );
+        {
+            String aTmp = CalcCaseMap( rInf.GetText() );
+            rInf.SetText( aTmp );
+            aTxtSize = pLastFont->GetTextSize( rInf );
+        }
+        rInf.SetKern( nOldKern );
+        rInf.SetText( rOldTxt );
         // 15142: Ein Wort laenger als eine Zeile, beim Zeilenumbruch
         //        hochgestellt, muss seine effektive Hoehe melden.
         if( GetEscapement() )
         {
-            const USHORT nAscent = pLastFont->GetAscent( pSh, pOut );
+            const USHORT nAscent = pLastFont->GetAscent( rInf.GetShell(),
+                                                         rInf.GetpOut() );
             aTxtSize.Height() =
                 (long)CalcEscHeight( (USHORT)aTxtSize.Height(), nAscent);
         }
     }
+
     return aTxtSize;
 }
 
@@ -1064,7 +1072,7 @@ Size SwSubFont::_GetTxtSize( ViewShell *pSh,
  *************************************************************************/
 
 xub_StrLen SwFont::GetTxtBreak( ViewShell *pSh, const OutputDevice *pOut,
-    const XubString &rTxt, long nTextWidth,
+    const SwScriptInfo* pScript, const XubString &rTxt, long nTextWidth,
     const xub_StrLen nIdx, const xub_StrLen nLen )
 {
      ChgFnt( pSh, (OutputDevice *)pOut );
@@ -1073,7 +1081,8 @@ xub_StrLen SwFont::GetTxtBreak( ViewShell *pSh, const OutputDevice *pOut,
 
     USHORT nLn = ( nLen == STRING_LEN ? rTxt.Len() : nLen );
     if( aSub[nActual].IsCapital() && nLn )
-        nTxtBreak = GetCapitalBreak( pSh, pOut, rTxt, nTextWidth, 0, nIdx, nLn );
+        nTxtBreak = GetCapitalBreak( pSh, pOut, pScript, rTxt, nTextWidth,
+                                     0, nIdx, nLn );
     else
     {
         if ( !aSub[nActual].IsCaseMap() )
@@ -1090,9 +1099,9 @@ xub_StrLen SwFont::GetTxtBreak( ViewShell *pSh, const OutputDevice *pOut,
  *                    SwFont::GetTxtBreak()
  *************************************************************************/
 
-xub_StrLen SwFont::GetTxtBreak( ViewShell *pSh,
-   const OutputDevice *pOut, const XubString &rTxt, long nTextWidth,
-   xub_StrLen& rExtraCharPos, const xub_StrLen nIdx, const xub_StrLen nLen)
+xub_StrLen SwFont::GetTxtBreak( ViewShell *pSh, const OutputDevice *pOut,
+   const SwScriptInfo* pScript, const XubString &rTxt, long nTextWidth,
+   xub_StrLen& rExtraCharPos, const xub_StrLen nIdx, const xub_StrLen nLen )
 {
     // Robust ...
     if ( !pLastFont || pLastFont->GetOwner()!= aSub[nActual].pMagic )
@@ -1102,7 +1111,7 @@ xub_StrLen SwFont::GetTxtBreak( ViewShell *pSh,
 
     xub_StrLen nLn = ( nLen == STRING_LEN ? rTxt.Len() : nLen );
     if( aSub[nActual].IsCapital() && nLn )
-            nTxtBreak = GetCapitalBreak( pSh, pOut, rTxt, nTextWidth,
+            nTxtBreak = GetCapitalBreak( pSh, pOut, pScript, rTxt, nTextWidth,
                                 &rExtraCharPos, nIdx, nLn );
     else
     {
@@ -1181,8 +1190,7 @@ void SwSubFont::_DrawText( SwDrawTextInfo &rInf, const BOOL bGrey )
     if( rInf.GetSpecialUnderline() )
     {
 static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
-        Size aSize = _GetTxtSize( rInf.GetShell(), rInf.GetpOut(), rInf.GetText(),
-                                  rInf.GetIdx(), rInf.GetLen() );
+        Size aSize = _GetTxtSize( rInf );
         const XubString &rOldStr = rInf.GetText();
         XubString aStr( sDoubleSpace, RTL_TEXTENCODING_MS_1252 );
         short nOldEsc = GetEscapement();
@@ -1304,27 +1312,33 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
  *                    SwSubFont::_GetCrsrOfst()
  *************************************************************************/
 
-xub_StrLen SwSubFont::_GetCrsrOfst( ViewShell *pSh,
-                             OutputDevice *pOut, const XubString &rTxt,
-                             const USHORT nOfst, const xub_StrLen nIdx,
-                             const xub_StrLen nLen, const short nSpaceAdd )
+xub_StrLen SwSubFont::_GetCrsrOfst( SwDrawTextInfo& rInf )
 {
     if ( !pLastFont || pLastFont->GetOwner()!=pMagic )
-        ChgFnt( pSh, pOut );
+        ChgFnt( rInf.GetShell(), rInf.GetpOut() );
 
-    xub_StrLen nLn = ( nLen==STRING_LEN ? rTxt.Len() : nLen );
+    xub_StrLen nLn = rInf.GetLen() == STRING_LEN ? rInf.GetText().Len()
+                                                 : rInf.GetLen();
+    rInf.SetLen( nLn );
     xub_StrLen nCrsr = 0;
     if( IsCapital() && nLn )
-        nCrsr = GetCapitalCrsrOfst( pSh, pOut, rTxt, nOfst, nIdx, nLn, nSpaceAdd );
+        nCrsr = GetCapitalCrsrOfst( rInf );
     else
     {
+        const XubString &rOldTxt = rInf.GetText();
+        short nOldKern = rInf.GetKern();
+        rInf.SetKern( CheckKerning() );
         SV_STAT( nGetTextSize );
         if ( !IsCaseMap() )
-            nCrsr = pLastFont->GetCrsrOfst( pOut, rTxt, nOfst,
-                                      nIdx, nLn, CheckKerning(), nSpaceAdd );
+            nCrsr = pLastFont->GetCrsrOfst( rInf );
         else
-            nCrsr = pLastFont->GetCrsrOfst( pOut, CalcCaseMap( rTxt ), nOfst,
-                                      nIdx, nLn, CheckKerning(), nSpaceAdd );
+        {
+            String aTmp = CalcCaseMap( rInf.GetText() );
+            rInf.SetText( aTmp );
+            nCrsr = pLastFont->GetCrsrOfst( rInf );
+        }
+        rInf.SetKern( nOldKern );
+        rInf.SetText( rOldTxt );
     }
     return nCrsr;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fntcache.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: pl $ $Date: 2001-04-06 10:47:20 $
+ *  last change: $Author: fme $ $Date: 2001-04-09 10:44:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -607,6 +607,10 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
     // wird die graue Wellenlinie des ExtendedAttributSets zunaechst
     // in der Fontfarbe erscheinen.
 
+    BOOL bCompress = rInf.GetKanaComp() && rInf.GetLen();
+    ASSERT( !bCompress || ( rInf.GetScriptInfo() && rInf.GetScriptInfo()->
+            CountCompChg()), "Compression without info" );
+
     Point aPos( rInf.GetPos() );
     if( !bPrt )
     {
@@ -770,10 +774,7 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
         }
         else if( rInf.GetKern() )
         {
-            long nTmpWidth =
-                GetTextSize( rInf.GetShell(),
-                             rInf.GetpOut(), rInf.GetText(), rInf.GetIdx(),
-                             rInf.GetLen(), rInf.GetKern() ).Width();
+            long nTmpWidth = GetTextSize( rInf ).Width();
             rInf.GetOut().DrawStretchText( aPos, (USHORT)nTmpWidth,
                                rInf.GetText(), rInf.GetIdx(), rInf.GetLen() );
         }
@@ -793,6 +794,18 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
         long nScrPos;
         xub_Unicode cCh = rInf.GetText().GetChar( rInf.GetIdx() );
         rInf.GetOut().GetCharWidth( cCh, cCh, &nScrPos );
+        USHORT nType;
+        if( bCompress && ( SwScriptInfo::NONE !=
+            ( nType = rInf.GetScriptInfo()->CompType( rInf.GetIdx() ) ) )
+            && SwScriptInfo::SPECIAL_LEFT != nType )
+        {
+            long nTmp = nScrPos;
+            nTmp *= rInf.GetKanaComp();
+            if( SwScriptInfo::KANA != nType )
+                nTmp *= 5;
+            nTmp /= 100000;
+            nScrPos -= nTmp;
+        }
 
         if ( pPrinter )
         {
@@ -819,6 +832,10 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
             if( bRestore )
                 rInf.GetOut().SetMapMode( aOld );
         }
+        if( bCompress )
+            rInf.GetScriptInfo()->Compress( pKernArray, rInf.GetIdx(),
+                                    rInf.GetLen(), rInf.GetKanaComp(),
+                                    (USHORT) aFont.GetSize().Height(), &aPos );
 
         if( bBullet )
         {
@@ -877,12 +894,27 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
                 nCh = rInf.GetText().GetChar( rInf.GetIdx() + i );
                 long nScr;
                 rInf.GetOut().GetCharWidth( nCh, nCh, &nScr );
-
+                if( bCompress && ( SwScriptInfo::NONE != ( nType =
+                    rInf.GetScriptInfo()->CompType( rInf.GetIdx() + i ) ) ) )
+                {
+                    if( SwScriptInfo::SPECIAL_LEFT != nType )
+                    {
+                        long nTmp = nScr;
+                        nTmp *= rInf.GetKanaComp();
+                        if( SwScriptInfo::KANA != nType )
+                            nTmp *= 5;
+                        nTmp /= 100000;
+                        nScr -= nTmp;
+                    }
+                    nScrPos = pKernArray[i-1] + nScr;
+                    if ( cChPrev == CH_BLANK )
+                        nSpaceSum += nOtherHalf;
+                }
                 // Wenn vor uns ein (Ex-)SPACE ist, positionieren wir uns optimal,
                 // d.h. unseren rechten Rand auf die 100% Druckerposition,
                 // sind wir sogar selbst ein Ex-SPACE, so positionieren wir uns
                 // linksbuendig zur Druckerposition.
-                if ( nCh == CH_BLANK )
+                else if ( nCh == CH_BLANK )
                 {
                     nScrPos = pKernArray[i-1]+nScr;
                     if ( cChPrev == CH_BLANK )
@@ -1044,6 +1076,7 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
 #pragma optimize("",on)
 #endif
 
+
 /*************************************************************************
  *
  *  Size SwFntObj::GetTextSize( const OutputDevice *pOut, const String &rTxt,
@@ -1056,95 +1089,133 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
  *
  *************************************************************************/
 
-Size SwFntObj::GetTextSize( ViewShell *pSh,
-             const OutputDevice *pOut, const String &rTxt,
-             const xub_StrLen nIdx, const xub_StrLen nLen, const short nKern )
+Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
 {
     Size aTxtSize;
-    if ( OUTDEV_PRINTER != pOut->GetOutDevType() && pPrinter )
+    const xub_StrLen nLn = ( STRING_LEN != rInf.GetLen() ) ? rInf.GetLen() :
+                           rInf.GetText().Len();
+    BOOL bCompress = rInf.GetKanaComp() && nLn;
+    ASSERT( !bCompress || ( rInf.GetScriptInfo() && rInf.GetScriptInfo()->
+            CountCompChg()), "Compression without info" );
+    if ( OUTDEV_PRINTER != rInf.GetpOut()->GetOutDevType() && pPrinter )
     {
         if( !pPrtFont->IsSameInstance( pPrinter->GetFont() ) )
             pPrinter->SetFont(*pPrtFont);
-        aTxtSize.Width() = pPrinter->GetTextWidth( rTxt, nIdx, nLen );
+        aTxtSize.Width() = pPrinter->GetTextWidth( rInf.GetText(),
+                                                rInf.GetIdx(), nLn );
         aTxtSize.Height() = pPrinter->GetTextHeight();
-        const xub_StrLen nLn = ( STRING_LEN != nLen ) ? nLen : rTxt.Len();
-        long *pKernArray = new long[nLen];
-        CheckScrFont( pSh, pOut );
-        if( !GetScrFont()->IsSameInstance( pOut->GetFont() ) )
-            ( (OutputDevice*)pOut )->SetFont( *pScrFont );
+        long *pKernArray = new long[nLn];
+        CheckScrFont( rInf.GetShell(), rInf.GetpOut() );
+        if( !GetScrFont()->IsSameInstance( rInf.GetpOut()->GetFont() ) )
+            rInf.GetpOut()->SetFont( *pScrFont );
         long nScrPos;
-        xub_Unicode cCh = rTxt.GetChar( nIdx );
-        pOut->GetCharWidth( cCh, cCh, &nScrPos );
 
-        pPrinter->GetTextArray( rTxt, pKernArray, nIdx, nLen);
-
-        xub_StrLen nCnt = rTxt.Len();
-        if ( nCnt < nIdx )
-            nCnt=0;
+        pPrinter->GetTextArray( rInf.GetText(), pKernArray, rInf.GetIdx(),nLn );
+        if( bCompress )
+            rInf.SetKanaDiff( rInf.GetScriptInfo()->Compress( pKernArray,
+                rInf.GetIdx(), nLn, rInf.GetKanaComp(),
+                (USHORT)aFont.GetSize().Height() ) );
         else
-            nCnt -= nIdx;
-        nCnt = Min (nCnt, nLn);
-        xub_Unicode nChPrev = rTxt.GetChar( nIdx );
+            rInf.SetKanaDiff( 0 );
 
-        xub_Unicode nCh;
-
-        // Bei Pairkerning waechst der Printereinfluss auf die Positionierung
-        USHORT nMul = 3;
-        if ( pPrtFont->IsKerning() )
-            nMul = 1;
-        const USHORT nDiv = nMul+1;
-        for( xub_StrLen i=1; i<nCnt; i++ )
+        if ( rInf.GetKanaDiff() )
+            nScrPos = pKernArray[ nLn - 1 ];
+        else
         {
-            nCh = rTxt.GetChar( nIdx + i );
-            long nScr;
-            pOut->GetCharWidth( nCh, nCh, &nScr );
-
-            if ( nCh == CH_BLANK )
-                nScrPos = pKernArray[i-1]+nScr;
+            xub_Unicode cCh = rInf.GetText().GetChar( rInf.GetIdx() );
+            rInf.GetpOut()->GetCharWidth( cCh, cCh, &nScrPos );
+            xub_StrLen nCnt = rInf.GetText().Len();
+            if ( nCnt < rInf.GetIdx() )
+                nCnt=0;
             else
+                nCnt -= rInf.GetIdx();
+            nCnt = Min (nCnt, nLn);
+            xub_Unicode nChPrev = rInf.GetText().GetChar( rInf.GetIdx() );
+
+            xub_Unicode nCh;
+
+            // Bei Pairkerning waechst der Printereinfluss auf die Positionierung
+            USHORT nMul = 3;
+            if ( pPrtFont->IsKerning() )
+                nMul = 1;
+            const USHORT nDiv = nMul+1;
+            for( xub_StrLen i=1; i<nCnt; i++ )
             {
-                if ( nChPrev == CH_BLANK || nChPrev == '-' )
+                nCh = rInf.GetText().GetChar( rInf.GetIdx() + i );
+                long nScr;
+                rInf.GetpOut()->GetCharWidth( nCh, nCh, &nScr );
+
+                if ( nCh == CH_BLANK )
                     nScrPos = pKernArray[i-1]+nScr;
                 else
                 {
-                    nScrPos += nScr;
-                    nScrPos = ( nMul * nScrPos + pKernArray[i] ) / nDiv;
+                    if ( nChPrev == CH_BLANK || nChPrev == '-' )
+                        nScrPos = pKernArray[i-1]+nScr;
+                    else
+                    {
+                        nScrPos += nScr;
+                        nScrPos = ( nMul * nScrPos + pKernArray[i] ) / nDiv;
+                    }
                 }
+                nChPrev = nCh;
+                pKernArray[i-1] = nScrPos - nScr;
             }
-            nChPrev = nCh;
-            pKernArray[i-1] = nScrPos - nScr;
         }
+
         delete[] pKernArray;
         aTxtSize.Width() = nScrPos;
     }
     else
     {
-        if( !pPrtFont->IsSameInstance( pOut->GetFont() ) )
-            ( (OutputDevice*)pOut )->SetFont( *pPrtFont );
-        aTxtSize.Width() = pOut->GetTextWidth( rTxt, nIdx, nLen );
-        aTxtSize.Height() = pOut->GetTextHeight();
+        if( !pPrtFont->IsSameInstance( rInf.GetpOut()->GetFont() ) )
+            rInf.GetpOut()->SetFont( *pPrtFont );
+        if( bCompress )
+        {
+            long *pKernArray = new long[nLn];
+            rInf.GetpOut()->GetTextArray( rInf.GetText(), pKernArray,
+                    rInf.GetIdx(), nLn );
+            rInf.SetKanaDiff( rInf.GetScriptInfo()->Compress( pKernArray,
+                rInf.GetIdx(), nLn, rInf.GetKanaComp(),
+                (USHORT) aFont.GetSize().Height() ) );
+            aTxtSize.Width() = pKernArray[ nLn - 1 ];
+            delete[] pKernArray;
+        }
+        else
+        {
+            aTxtSize.Width() = rInf.GetpOut()->GetTextWidth( rInf.GetText(),
+                                                           rInf.GetIdx(), nLn );
+            rInf.SetKanaDiff( 0 );
+        }
+        aTxtSize.Height() = rInf.GetpOut()->GetTextHeight();
     }
-    if ( nKern && nLen )
-        aTxtSize.Width() += ( nLen - 1 ) * long( nKern );
+    if ( rInf.GetKern() && nLn )
+        aTxtSize.Width() += ( nLn - 1 ) * long( rInf.GetKern() );
     aTxtSize.Height() += nLeading;
     return aTxtSize;
 }
 
-xub_StrLen SwFntObj::GetCrsrOfst( const OutputDevice *pOut, const String &rTxt,
-             const USHORT nOfst, const xub_StrLen nIdx, const xub_StrLen nLen,
-             short nKern, short nSpaceAdd )
+xub_StrLen SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
 {
+    short nSpaceAdd = rInf.GetSpace();
+    short nKern = rInf.GetKern();
+
     if( nSpaceAdd < 0 )
     {
         nKern -= nSpaceAdd;
         nSpaceAdd = 0;
     }
-    long *pKernArray = new long[nLen];
+    long *pKernArray = new long[ rInf.GetLen() ];
 
     if ( pPrinter )
-        pPrinter->GetTextArray( rTxt, pKernArray, nIdx, nLen);
+        pPrinter->GetTextArray( rInf.GetText(), pKernArray,
+                                rInf.GetIdx(), rInf.GetLen() );
     else
-        pOut->GetTextArray( rTxt, pKernArray, nIdx, nLen);
+        rInf.GetpOut()->GetTextArray( rInf.GetText(), pKernArray,
+                            rInf.GetIdx(), rInf.GetLen() );
+
+    if( rInf.GetScriptInfo() && rInf.GetKanaComp() && rInf.GetLen() )
+        rInf.GetScriptInfo()->Compress( pKernArray, rInf.GetIdx(),rInf.GetLen(),
+                        rInf.GetKanaComp(), (USHORT) aFont.GetSize().Height() );
 
     long nLeft = 0;
     long nRight = 0;
@@ -1152,15 +1223,17 @@ xub_StrLen SwFntObj::GetCrsrOfst( const OutputDevice *pOut, const String &rTxt,
     xub_StrLen nSpaceSum = 0;
     long nKernSum = 0;
 
-    while ( ( nRight < long(nOfst) ) && ( nCnt < nLen ) )
+    while ( ( nRight < long( rInf.GetOfst() ) ) && ( nCnt < rInf.GetLen() ) )
     {
         nLeft = nRight;
-        if ( nSpaceAdd && ( rTxt.GetChar( nCnt + nIdx ) == CH_BLANK ) )
+        if ( nSpaceAdd &&
+            ( rInf.GetText().GetChar( nCnt + rInf.GetIdx() ) == CH_BLANK ) )
             nSpaceSum += nSpaceAdd;
         nRight = pKernArray[ nCnt++ ] + nKernSum + nSpaceSum;
         nKernSum += nKern;
     }
-    if ( nCnt && ( nRight > long(nOfst) ) && ( nRight - nOfst > nOfst - nLeft ) )
+    if ( nCnt && ( nRight > long( rInf.GetOfst() ) ) &&
+                 ( nRight - rInf.GetOfst() > rInf.GetOfst() - nLeft ) )
       --nCnt;
 
     delete[] pKernArray;
@@ -1291,6 +1364,83 @@ SwCacheObj *SwFntAccess::NewObj( )
 {
     // Ein neuer Font, eine neue "MagicNumber".
     return new SwFntObj( *(SwSubFont *)pOwner, ++pMagicNo, pShell );
+}
+
+xub_StrLen SwFont::GetTxtBreak( SwDrawTextInfo& rInf, long nTextWidth )
+{
+    BOOL bCompress = SW_CJK==GetActual() && rInf.GetKanaComp() && rInf.GetLen();
+    ASSERT( !bCompress || ( rInf.GetScriptInfo() && rInf.GetScriptInfo()->
+            CountCompChg()), "Compression without info" );
+
+     ChgFnt( rInf.GetShell(), rInf.GetpOut() );
+
+    USHORT nTxtBreak = 0;
+    long nKern = 0;
+
+    USHORT nLn = ( rInf.GetLen() == STRING_LEN ? rInf.GetText().Len()
+                                               : rInf.GetLen() );
+    if( aSub[nActual].IsCapital() && nLn )
+        nTxtBreak = GetCapitalBreak( rInf.GetShell(), rInf.GetpOut(),
+        rInf.GetScriptInfo(), rInf.GetText(), nTextWidth,0, rInf.GetIdx(),nLn );
+    else
+    {
+        nKern = CheckKerning();
+        if( rInf.GetHyphPos() )
+        {
+            if ( !aSub[nActual].IsCaseMap() )
+                nTxtBreak = rInf.GetpOut()->GetTextBreak( rInf.GetText(),
+                    nTextWidth,'-',*rInf.GetHyphPos(),rInf.GetIdx(),nLn,nKern );
+            else
+                nTxtBreak = rInf.GetpOut()->GetTextBreak( aSub[nActual].
+                            CalcCaseMap( rInf.GetText() ), nTextWidth, '-',
+                            *rInf.GetHyphPos(), rInf.GetIdx(), nLn, nKern );
+        }
+        else
+        {
+            if ( !aSub[nActual].IsCaseMap() )
+                nTxtBreak = rInf.GetpOut()->GetTextBreak( rInf.GetText(),
+                            nTextWidth, rInf.GetIdx(), nLn, nKern );
+            else
+                nTxtBreak = rInf.GetpOut()->GetTextBreak( aSub[nActual].
+                            CalcCaseMap( rInf.GetText() ), nTextWidth,
+                            rInf.GetIdx(), nLn, nKern );
+        }
+    }
+
+    if ( ! bCompress )
+        return nTxtBreak;
+
+    nTxtBreak -= rInf.GetIdx();
+
+    if( nTxtBreak < nLn )
+    {
+        if( !nTxtBreak && nLn )
+            nLn = 1;
+        else if( nLn > 2 * nTxtBreak )
+            nLn = 2 * nTxtBreak;
+        long *pKernArray = new long[ nLn ];
+        rInf.GetOut().GetTextArray( rInf.GetText(), pKernArray,
+                                    rInf.GetIdx(), nLn );
+        if( rInf.GetScriptInfo()->Compress( pKernArray, rInf.GetIdx(), nLn,
+                            rInf.GetKanaComp(), (USHORT)GetHeight( nActual ) ) )
+        {
+            long nKernAdd = nKern;
+            xub_StrLen nTmpBreak = nTxtBreak;
+            if( nKern && nTxtBreak )
+                nKern *= nTxtBreak - 1;
+            while( nTxtBreak<nLn && nTextWidth >= pKernArray[nTxtBreak] +nKern )
+            {
+                nKern += nKernAdd;
+                ++nTxtBreak;
+            }
+            if( rInf.GetHyphPos() )
+                *rInf.GetHyphPos() += nTxtBreak - nTmpBreak; // It's not perfect
+        }
+        delete[] pKernArray;
+    }
+    nTxtBreak += rInf.GetIdx();
+
+    return nTxtBreak;
 }
 
 

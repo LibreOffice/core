@@ -2,9 +2,9 @@
  *
  *  $RCSfile: guess.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: tl $ $Date: 2001-03-29 08:05:13 $
+ *  last change: $Author: fme $ $Date: 2001-04-09 10:41:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,8 @@
 #include <com/sun/star/i18n/WordType.hpp>
 #endif
 
+class SwScriptInfo;
+
 using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -137,9 +139,11 @@ xub_StrLen SwTxtGuess::GetWordStart( const SwTxtFormatInfo &rInf,
  * otherwise possible break or hyphenation position is determined
  *************************************************************************/
 
-sal_Bool SwTxtGuess::Guess( const SwTxtFormatInfo &rInf, const KSHORT nPorHeight )
+sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
+                            const KSHORT nPorHeight )
 {
     nCutPos = rInf.GetIdx();
+
     // Leere Strings sind immer 0
     if( !rInf.GetLen() || !rInf.GetTxt().Len() )
     {
@@ -150,6 +154,18 @@ sal_Bool SwTxtGuess::Guess( const SwTxtFormatInfo &rInf, const KSHORT nPorHeight
             "+SwTxtGuess::Guess: invalid SwTxtFormatInfo" );
 
     nHeight = nPorHeight;
+    USHORT nMinSize;
+    USHORT nMaxSizeDiff;
+
+    const SwScriptInfo& rSI =
+            ((SwParaPortion*)rInf.GetParaPortion())->GetScriptInfo();
+
+    USHORT nMaxComp = ( SW_CJK == rInf.GetFont()->GetActual() ) &&
+                        rSI.CountCompChg() &&
+                        ! rInf.IsMulti() &&
+                        ! rPor.InFldGrp() ?
+                        10000 :
+                            0 ;
 
     SwTwips nLineWidth = rInf.Width() - rInf.X();
     const xub_StrLen nMaxLen = Min( xub_StrLen(rInf.GetTxt().Len() - rInf.GetIdx()),
@@ -195,7 +211,11 @@ sal_Bool SwTxtGuess::Guess( const SwTxtFormatInfo &rInf, const KSHORT nPorHeight
     // first check if everything fits to line
     if ( long ( nLineWidth ) * 2 > long ( nMaxLen ) * nHeight )
     {
-        nBreakWidth = rInf.GetTxtSize( rInf.GetIdx(), nMaxLen ).Width();
+        // call GetTxtSize with maximum compression (for kanas)
+        rInf.GetTxtSize( &rSI, rInf.GetIdx(), nMaxLen,
+                         nMaxComp, nMinSize, nMaxSizeDiff );
+
+        nBreakWidth = nMinSize;
 
         if ( nBreakWidth <= nLineWidth )
         {
@@ -204,6 +224,11 @@ sal_Bool SwTxtGuess::Guess( const SwTxtFormatInfo &rInf, const KSHORT nPorHeight
             nHeight = rInf.GetTxtHeight();
             if( nItalic && ( nCutPos + 1 ) >= rInf.GetTxt().Len() )
                 nBreakWidth += nItalic;
+
+            // save maximum width for later use
+            if ( nMaxSizeDiff )
+                rInf.SetMaxWidthDiff( (ULONG)&rPor, nMaxSizeDiff );
+
             return sal_True;
         }
     }
@@ -218,17 +243,22 @@ sal_Bool SwTxtGuess::Guess( const SwTxtFormatInfo &rInf, const KSHORT nPorHeight
     // considering an additional "-" for hyphenation
     if( bHyph )
     {
-        nCutPos = rInf.GetTxtBreak( nLineWidth, rInf.GetIdx(), nMaxLen,
-                                    nHyphPos );
+        nCutPos = rInf.GetTxtBreak( nLineWidth, nMaxLen, nMaxComp, nHyphPos );
+
         if ( !nHyphPos && rInf.GetIdx() )
             nHyphPos = rInf.GetIdx() - 1;
     }
     else
     {
-        nCutPos = rInf.GetTxtBreak( nLineWidth, rInf.GetIdx(), nMaxLen );
+        nCutPos = rInf.GetTxtBreak( nLineWidth, nMaxLen, nMaxComp );
+
 #ifndef PRODUCT
-//        xub_StrLen nDebugVal = rInf.GetTxtSize( rInf.GetIdx(), nCutPos - rInf.GetIdx() ).Width();
-//        ASSERT( nDebugVal < nLineWidth, "Wrong break!!!" );
+        if ( STRING_LEN != nCutPos )
+        {
+            rInf.GetTxtSize( &rSI, rInf.GetIdx(), nCutPos - rInf.GetIdx(),
+                             nMaxComp, nMinSize, nMaxSizeDiff );
+            ASSERT( nMinSize < nLineWidth, "What a Guess!!!" );
+        }
 #endif
     }
 
@@ -236,13 +266,22 @@ sal_Bool SwTxtGuess::Guess( const SwTxtFormatInfo &rInf, const KSHORT nPorHeight
     {
         // second check if everything fits to line
         nCutPos = nBreakPos = rInf.GetIdx() + nMaxLen - 1;
-        nBreakWidth = rInf.GetTxtSize( rInf.GetIdx(), nMaxLen ).Width();
+        rInf.GetTxtSize( &rSI, rInf.GetIdx(), nMaxLen, nMaxComp,
+                         nMinSize, nMaxSizeDiff );
+
+        nBreakWidth = nMinSize;
+
         // Der folgende Vergleich sollte eigenlich immer sal_True ergeben, sonst
         // hat es wohl bei GetTxtBreak einen Pixel-Rundungsfehler gegeben...
         if ( nBreakWidth <= nLineWidth )
         {
             if( nItalic && ( nBreakPos + 1 ) >= rInf.GetTxt().Len() )
                 nBreakWidth += nItalic;
+
+            // save maximum width for later use
+            if ( nMaxSizeDiff )
+                rInf.SetMaxWidthDiff( (ULONG)&rPor, nMaxSizeDiff );
+
             return sal_True;
         }
     }
@@ -314,7 +353,7 @@ sal_Bool SwTxtGuess::Guess( const SwTxtFormatInfo &rInf, const KSHORT nPorHeight
             xHyphWord = NULL;
             // check, if break position is soft hyphen
             if( nBreakPos > rInf.GetLineStart() &&
-                rInf.GetTxt().GetChar( nBreakPos - 1 ) == CHAR_SOFTHYPHEN )
+                CHAR_SOFTHYPHEN == rInf.GetTxt().GetChar( nBreakPos - 1 ) )
             {
                 // soft hyphen found, we make sure, that an underflow is
                 // triggered by setting nBreakPos to index - 1
@@ -337,7 +376,8 @@ sal_Bool SwTxtGuess::Guess( const SwTxtFormatInfo &rInf, const KSHORT nPorHeight
 
         if( nBreakPos > nCutPos && nBreakPos != STRING_LEN )
         {
-            SwPosSize aTmpSize = rInf.GetTxtSize( nCutPos, nBreakPos - nCutPos );
+            SwPosSize aTmpSize = rInf.GetTxtSize( &rSI, nCutPos,
+                                                  nBreakPos - nCutPos, 0 );
             ASSERT( !pHanging, "A hanging portion is hanging around" );
             pHanging = new SwHangingPortion( aTmpSize );
             nPorLen = nCutPos - rInf.GetIdx();
@@ -345,7 +385,16 @@ sal_Bool SwTxtGuess::Guess( const SwTxtFormatInfo &rInf, const KSHORT nPorHeight
     }
 
     if( nPorLen )
-        nBreakWidth = nItalic + rInf.GetTxtSize( rInf.GetIdx(), nPorLen ).Width();
+    {
+        rInf.GetTxtSize( &rSI, rInf.GetIdx(), nPorLen,
+                         nMaxComp, nMinSize, nMaxSizeDiff );
+
+        // save maximum width for later use
+        if ( nMaxSizeDiff )
+            rInf.SetMaxWidthDiff( (ULONG)&rPor, nMaxSizeDiff );
+
+        nBreakWidth = nItalic + nMinSize;
+    }
     else
         nBreakWidth = 0;
 

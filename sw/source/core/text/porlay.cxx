@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porlay.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-15 15:54:53 $
+ *  last change: $Author: fme $ $Date: 2001-04-09 10:41:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,12 @@
 #ifndef _COM_SUN_STAR_I18N_SCRIPTTYPE_HDL_
 #include <com/sun/star/i18n/ScriptType.hdl>
 #endif
+#ifndef _DRAWFONT_HXX
+#include <drawfont.hxx>
+#endif
+#ifndef _DOC_HXX
+#include <doc.hxx>
+#endif
 
 using namespace ::com::sun::star;
 
@@ -110,6 +116,8 @@ SwLineLayout::~SwLineLayout()
     if( pBlink )
         pBlink->Delete( this );
     delete pSpaceAdd;
+    if ( pKanaComp )
+        delete pKanaComp;
 }
 
 /*************************************************************************
@@ -209,6 +217,8 @@ SwMarginPortion *SwLineLayout::CalcLeftMargin()
             // Die FlyPortion wird ausgesogen ...
             pLeft->Join( (SwGluePortion*)pPos );
             pPos = pLeft->GetPortion();
+            if( GetpKanaComp() )
+                GetKanaComp().Remove( 0, 1 );
         }
         else
             pPos = 0;
@@ -463,14 +473,20 @@ SwCharRange &SwCharRange::operator+=(const SwCharRange &rRange)
  * searches for script changes in rTxt and stores them
  *************************************************************************/
 
-void SwScriptInfo::InitScriptInfo( const String& rTxt )
+void SwScriptInfo::InitScriptInfo( const SwTxtNode& rNode )
 {
+
     if( !pBreakIt->xBreak.is() )
         return;
 
     xub_StrLen nChg = nInvalidityPos;
     USHORT nCnt = 0;
+    USHORT nCntComp = 0;
     USHORT nScript;
+
+    // compression type
+    const String& rTxt = rNode.GetTxt();
+    SwCharCompressType aCompEnum = rNode.GetDoc()->GetCharCompressType();
 
     // delete invalid data from arrays
     // if change position = 0 we do not use any data from the arrays
@@ -489,12 +505,23 @@ void SwScriptInfo::InitScriptInfo( const String& rTxt )
             else
                 nCnt++;
         }
+        if( CHARCOMPRESS_NONE != aCompEnum )
+        {
+            while( nCntComp < CountCompChg() )
+            {
+                if ( nChg <= GetCompStart( nCntComp ) )
+                    break;
+                else
+                    nCntComp++;
+            }
+        }
     }
     else
         nScript = pBreakIt->xBreak->getScriptType( rTxt, 0 );
 
-    aScriptChg.Remove( nCnt, aScriptChg.Count() - nCnt );
-    aScriptType.Remove( nCnt, aScriptType.Count() - nCnt );
+    USHORT nScriptRemove = aScriptChg.Count() - nCnt;
+    aScriptChg.Remove( nCnt, nScriptRemove );
+    aScriptType.Remove( nCnt, nScriptRemove );
 
     // new data for arrays, we start from changed position - 1
     if ( nChg )
@@ -509,21 +536,125 @@ void SwScriptInfo::InitScriptInfo( const String& rTxt )
     // weak characters
     if( i18n::ScriptType::WEAK == nScript )
     {
-        nChg = pBreakIt->xBreak->endOfScript( rTxt, nChg, nScript );
+        nChg = (xub_StrLen)pBreakIt->xBreak->endOfScript( rTxt, nChg, nScript );
         if( nChg < rTxt.Len() )
             nScript = pBreakIt->xBreak->getScriptType( rTxt, nChg );
         else
             nScript = i18n::ScriptType::LATIN;
     }
+    USHORT nLastChg;
+    if( nCntComp )
+    {
+        --nCntComp;
+        nLastChg = GetCompStart( nCntComp );
+        if( nChg >= nLastChg + GetCompLen( nCntComp ) )
+        {
+            nLastChg = nChg;
+            ++nCntComp;
+        }
+    }
+    else
+        nLastChg = nChg;
+
+    USHORT nCompRemove = aCompChg.Count() - nCntComp;
+    aCompChg.Remove( nCntComp, nCompRemove );
+    aCompLen.Remove( nCntComp, nCompRemove );
+    aCompType.Remove( nCntComp, nCompRemove );
+
     do
     {
-        nChg = pBreakIt->xBreak->endOfScript( rTxt, nChg, nScript );
-        InsertScriptChg( nChg, nCnt );
-        InsertScriptType( nScript, nCnt++ );
+        nChg = (xub_StrLen)pBreakIt->xBreak->endOfScript( rTxt, nChg, nScript );
+        aScriptChg.Insert( nChg, nCnt );
+        aScriptType.Insert( nScript, nCnt++ );
+
+        // if current script is asian, we search for compressable characters
+        // in this range
+        if ( CHARCOMPRESS_NONE != aCompEnum &&
+             i18n::ScriptType::ASIAN == nScript )
+        {
+            while ( nLastChg < nChg )
+            {
+                // skip wrong characters
+                xub_Unicode cChar = rTxt.GetChar( nLastChg );
+                while ( ( 0x3008 > cChar || 0x3011 < cChar ) &&
+                        ( 0x3014 > cChar || 0x301B < cChar ) &&
+                        ( 0x301D > cChar || 0x301F < cChar ) &&
+                        ( 0x3040 > cChar || 0x30FF < cChar ) &&
+                          0x3001 != cChar && 0x3002 != cChar &&
+                          nLastChg < nChg )
+                    cChar = rTxt.GetChar( ++nLastChg );
+
+                if ( nLastChg >= nChg )
+                    break;
+
+                // find end of range
+                USHORT nStart = nLastChg;
+
+                // Kanas found (Hiragana / Katakana)
+                if ( 0x3040 <= cChar && 0x3100 > cChar )
+                {
+                    do
+                        cChar = rTxt.GetChar( ++nLastChg );
+                    while ( 0x3040 <= cChar && 0x3100 > cChar );
+
+                    // insert start and type
+                    if ( CHARCOMPRESS_PUNCTUATION_KANA == aCompEnum )
+                    {
+                        aCompChg.Insert( nStart, nCntComp );
+                        aCompType.Insert( KANA, nCntComp );
+                    }
+                    else
+                        continue;
+                }
+                // Left punctuation found
+                else if ( 0x3008 == cChar || 0x300A == cChar || 0x300C == cChar ||
+                          0x300E == cChar || 0x3010 == cChar || 0x3014 == cChar ||
+                          0x3016 == cChar || 0x3018 == cChar || 0x301A == cChar ||
+                          0x301D == cChar )
+                {
+                    do
+                        cChar = rTxt.GetChar( ++nLastChg );
+                    while ( 0x3008 == cChar || 0x300A == cChar || 0x300C == cChar ||
+                            0x300E == cChar || 0x3010 == cChar || 0x3014 == cChar ||
+                            0x3016 == cChar || 0x3018 == cChar || 0x301A == cChar ||
+                            0x301D == cChar );
+
+                    // insert start and type
+                    aCompChg.Insert( nStart, nCntComp );
+                    aCompType.Insert( SPECIAL_LEFT, nCntComp );
+                }
+                // Right punctuation found
+                else if ( 0x3001 == cChar || 0x3002 == cChar || 0x3009 == cChar ||
+                          0x300B == cChar || 0x300D == cChar || 0x300F == cChar ||
+                          0x3011 == cChar || 0x3015 == cChar || 0x3017 == cChar ||
+                          0x3019 == cChar || 0x301B == cChar || 0x301E == cChar ||
+                          0x301F == cChar )
+                {
+                    do
+                        cChar = rTxt.GetChar( ++nLastChg );
+                    while ( 0x3001 == cChar || 0x3002 == cChar || 0x3009 == cChar ||
+                            0x300B == cChar || 0x300D == cChar || 0x300F == cChar ||
+                            0x3011 == cChar || 0x3015 == cChar || 0x3017 == cChar ||
+                            0x3019 == cChar || 0x301B == cChar || 0x301E == cChar ||
+                            0x301F == cChar );
+
+                    // insert start and type
+                    aCompChg.Insert( nStart, nCntComp );
+                    aCompType.Insert( SPECIAL_RIGHT, nCntComp );
+                }
+                else
+                    ASSERT( 0, "mysterious character found!" );
+
+                // insert len
+                aCompLen.Insert( nLastChg - nStart, nCntComp++ );
+            }
+        }
+
         if( nChg < rTxt.Len() )
             nScript = pBreakIt->xBreak->getScriptType( rTxt, nChg );
         else
             break;
+        nLastChg = nChg;
     } while( TRUE );
 
     // STRING_LEN means the data structure is up to date
@@ -543,9 +674,13 @@ void SwScriptInfo::InitScriptInfo( const String& rTxt )
 
 xub_StrLen SwScriptInfo::NextScriptChg( const xub_StrLen nPos )  const
 {
-    for( USHORT nX = 0; nX < CountScriptChg(); ++nX )
+    USHORT nEnd = CountScriptChg();
+    for( USHORT nX = 0; nX < nEnd; ++nX )
+    {
         if( nPos < GetScriptChg( nX ) )
             return GetScriptChg( nX );
+    }
+
     return STRING_LEN;
 }
 
@@ -556,10 +691,175 @@ xub_StrLen SwScriptInfo::NextScriptChg( const xub_StrLen nPos )  const
 
 USHORT SwScriptInfo::ScriptType( const xub_StrLen nPos ) const
 {
-    for( USHORT nX = 0; nX < CountScriptChg(); ++nX )
+    USHORT nEnd = CountScriptChg();
+    for( USHORT nX = 0; nX < nEnd; ++nX )
+    {
         if( nPos < GetScriptChg( nX ) )
             return GetScriptType( nX );
+    }
+
     return i18n::ScriptType::LATIN;
+}
+
+/*************************************************************************
+ *                        SwScriptInfo::CompType(..)
+ * returns the type of the compressed character
+ *************************************************************************/
+
+USHORT SwScriptInfo::CompType( const xub_StrLen nPos ) const
+{
+    USHORT nEnd = CountCompChg();
+    for( USHORT nX = 0; nX < nEnd; ++nX )
+    {
+        xub_StrLen nChg = GetCompStart( nX );
+
+        if ( nPos < nChg )
+            return NONE;
+
+        if( nPos < nChg + GetCompLen( nX ) )
+            return GetCompType( nX );
+    }
+    return NONE;
+}
+
+/*************************************************************************
+ *                      SwScriptInfo::HasKana()
+ * returns, if there are compressable kanas or specials
+ * betwenn nStart and nEnd
+ *************************************************************************/
+
+USHORT SwScriptInfo::HasKana( xub_StrLen nStart, const xub_StrLen nLen ) const
+{
+    USHORT nCnt = CountCompChg();
+    xub_StrLen nEnd = nStart + nLen;
+
+    for( USHORT nX = 0; nX < nCnt; ++nX )
+    {
+        xub_StrLen nKanaStart  = GetCompStart( nX );
+        xub_StrLen nKanaEnd = nKanaStart + GetCompLen( nX );
+
+        if ( nKanaStart >= nEnd )
+            return USHRT_MAX;
+
+        if ( nStart < nKanaEnd )
+            return nX;
+    }
+
+    return USHRT_MAX;
+}
+
+/*************************************************************************
+ *                      SwScriptInfo::Compress()
+ *************************************************************************/
+
+long SwScriptInfo::Compress( long* pKernArray, xub_StrLen nIdx, xub_StrLen nLen,
+                             const USHORT nCompress, const USHORT nFontHeight,
+                             Point* pPoint ) const
+{
+    ASSERT( nCompress, "Compression without compression?!" );
+    ASSERT( nLen, "Compression without text?!" );
+    USHORT nCompCount = CountCompChg();
+
+    // In asian typography, there are full width and half width characters.
+    // Full width punctuation characters can be compressed by 50 %
+    // to determine this, we compare the font width with 75 % of its height
+    USHORT nMinWidth = ( 3 * nFontHeight ) / 4;
+
+    USHORT nCompIdx = HasKana( nIdx, nLen );
+
+    if ( USHRT_MAX == nCompIdx )
+        return 0;
+
+    xub_StrLen nChg = GetCompStart( nCompIdx );
+    xub_StrLen nCompLen = GetCompLen( nCompIdx );
+    USHORT nI = 0;
+    nLen += nIdx;
+
+    if( nChg > nIdx )
+    {
+        nI = nChg - nIdx;
+        nIdx = nChg;
+    }
+    else if( nIdx < nChg + nCompLen )
+        nCompLen -= nIdx - nChg;
+
+    if( nIdx > nLen || nCompIdx >= nCompCount )
+        return 0;
+
+    long nSub = 0;
+    long nLast = nI ? pKernArray[ nI - 1 ] : 0;
+    do
+    {
+        USHORT nType = GetCompType( nCompIdx );
+        ASSERT( nType == CompType( nIdx ), "Gimme the right type!" );
+        nCompLen += nIdx;
+        if( nCompLen > nLen )
+            nCompLen = nLen;
+
+        // are we allowed to compress the character?
+        if ( pKernArray[ nI ] - nLast < nMinWidth )
+        {
+            nIdx++; nI++;
+        }
+        else
+        {
+            while( nIdx < nCompLen )
+            {
+                ASSERT( SwScriptInfo::NONE != nType, "None compression?!" );
+
+                // nLast is width of current character
+                nLast -= pKernArray[ nI ];
+
+                nLast *= nCompress;
+                long nMove = 0;
+                if( SwScriptInfo::KANA != nType )
+                {
+                    nLast /= 20000;
+                    if( pPoint && SwScriptInfo::SPECIAL_LEFT == nType )
+                    {
+                        if( nI )
+                            nMove = nLast;
+                        else
+                        {
+                            pPoint->X() += nLast;
+                            nLast = 0;
+                        }
+                    }
+                }
+                else
+                    nLast /= 100000;
+                nSub -= nLast;
+                nLast = pKernArray[ nI ];
+                if( nMove )
+                    pKernArray[ nI - 1 ] += nMove;
+                pKernArray[ nI++ ] -= nSub;
+                ++nIdx;
+            }
+        }
+
+        if( nIdx < nLen )
+        {
+            xub_StrLen nChg;
+            if( ++nCompIdx < nCompCount )
+            {
+                nChg = GetCompStart( nCompIdx );
+                if( nChg > nLen )
+                    nChg = nLen;
+                nCompLen = GetCompLen( nCompIdx );
+            }
+            else
+                nChg = nLen;
+            while( nIdx < nChg )
+            {
+                nLast = pKernArray[ nI ];
+                pKernArray[ nI++ ] -= nSub;
+                ++nIdx;
+            }
+        }
+        else
+            break;
+    } while( nIdx < nLen );
+    return nSub;
 }
 
 /*************************************************************************

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpaint.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-15 15:59:12 $
+ *  last change: $Author: fme $ $Date: 2001-04-09 10:41:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -272,7 +272,7 @@ void SwExtraPainter::PaintExtra( SwTwips nY, long nAsc, long nMax, sal_Bool bRed
     XubString aTmp( HasNumber() ? rLineInf.GetNumType().GetNumStr( nLineNr )
                                 : rLineInf.GetDivider() );
 
-    SwDrawTextInfo aDrawInf( pSh, *pSh->GetOut(), aTmp, 0, aTmp.Len(), 0, sal_False );
+    SwDrawTextInfo aDrawInf( pSh, *pSh->GetOut(), 0, aTmp, 0, aTmp.Len() );
     aDrawInf.SetSpace( 0 );
     aDrawInf.SetWrong( NULL );
     aDrawInf.SetLeft( 0 );
@@ -296,7 +296,7 @@ void SwExtraPainter::PaintExtra( SwTwips nY, long nAsc, long nMax, sal_Bool bRed
     sal_Bool bPaint = sal_True;
     if( !IsClipChg() )
     {
-        Size aSize = pTmpFnt->_GetTxtSize( pSh, pSh->GetOut(), aTmp );
+        Size aSize = pTmpFnt->_GetTxtSize( aDrawInf );
         if( bGoLeft )
             aTmpPos.X() -= aSize.Width();
         SwRect aRct( aTmpPos, aSize );
@@ -309,7 +309,7 @@ void SwExtraPainter::PaintExtra( SwTwips nY, long nAsc, long nMax, sal_Bool bRed
         }
     }
     else if( bGoLeft )
-        aTmpPos.X() -= pTmpFnt->_GetTxtSize( pSh, pSh->GetOut(), aTmp ).Width();
+        aTmpPos.X() -= pTmpFnt->_GetTxtSize( aDrawInf ).Width();
     aDrawInf.SetPos( aTmpPos );
     if( bPaint )
         pTmpFnt->_DrawText( aDrawInf );
@@ -559,12 +559,12 @@ sal_Bool SwTxtFrm::PaintEmpty( const SwRect &rRect, sal_Bool bCheck ) const
                 aPos.Y() += pFnt->GetAscent( pSh, pSh->GetOut() );
                 const XubString aTmp( sal_Char( bAlter ? CH_PAR_ALTER : CH_PAR ),
                     RTL_TEXTENCODING_MS_1252 );
-                SwDrawTextInfo aDrawInf( pSh, *pSh->GetOut(), aTmp, 0, 1, 0,
-                                            sal_False );
+                SwDrawTextInfo aDrawInf( pSh, *pSh->GetOut(), 0, aTmp, 0, 1 );
                 aDrawInf.SetLeft( rRect.Left() );
                 aDrawInf.SetRight( rRect.Right() );
                 aDrawInf.SetPos( aPos );
                 aDrawInf.SetSpace( 0 );
+                aDrawInf.SetKanaComp( 0 );
                 aDrawInf.SetWrong( NULL );
                 pFnt->_DrawText( aDrawInf );
                 delete pClip;

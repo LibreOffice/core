@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fntcap.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-20 16:22:08 $
+ *  last change: $Author: fme $ $Date: 2001-04-09 10:44:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,19 +144,16 @@ void SwDoGetCapitalSize::Do()
  *                    SwSubFont::GetCapitalSize()
  *************************************************************************/
 
-Size SwSubFont::GetCapitalSize( ViewShell *pSh,
-                             const OutputDevice *pOut, const XubString &rTxt,
-                             const xub_StrLen nIdx, const xub_StrLen nLen )
+Size SwSubFont::GetCapitalSize( SwDrawTextInfo& rInf )
 {
     // Start:
-    Point aPos( 0, 0 );
-    SwDrawTextInfo aInfo( pSh, *(OutputDevice *)pOut, rTxt, nIdx, nLen, 0, FALSE );
-    aInfo.SetPos( aPos );
-    aInfo.SetWrong( NULL );
-    aInfo.SetDrawSpace( FALSE );
-    aInfo.SetKern( CheckKerning() );
-    aInfo.SetSpace( 0 );
-    SwDoGetCapitalSize aDo( aInfo );
+    short nOldKern = rInf.GetKern();
+    rInf.SetKern( CheckKerning() );
+    Point aPos;
+    rInf.SetPos( aPos );
+    rInf.SetSpace( 0 );
+    rInf.SetDrawSpace( FALSE );
+    SwDoGetCapitalSize aDo( rInf );
     DoOnCapitals( aDo );
     Size aTxtSize( aDo.GetSize() );
 
@@ -164,8 +161,9 @@ Size SwSubFont::GetCapitalSize( ViewShell *pSh,
     if( !aTxtSize.Height() )
     {
         SV_STAT( nGetTextSize );
-        aTxtSize.Height() = short ( pOut->GetTextHeight() );
+        aTxtSize.Height() = short ( rInf.GetpOut()->GetTextHeight() );
     }
+    rInf.SetKern( nOldKern );
     return aTxtSize;
 }
 
@@ -220,21 +218,23 @@ void SwDoGetCapitalBreak::Do()
 }
 
 /*************************************************************************
- *                    SwFont::GetCapitalSize()
+ *                    SwFont::GetCapitalBreak()
  *************************************************************************/
 
 xub_StrLen SwFont::GetCapitalBreak( ViewShell *pSh, const OutputDevice *pOut,
-        const XubString &rTxt, long nTextWidth, xub_StrLen *pExtra,
-        const xub_StrLen nIdx, const xub_StrLen nLen )
+    const SwScriptInfo* pScript, const XubString &rTxt, long nTextWidth,
+    xub_StrLen *pExtra, const xub_StrLen nIdx, const xub_StrLen nLen )
 {
     // Start:
     Point aPos( 0, 0 );
-    SwDrawTextInfo aInfo(pSh, *(OutputDevice*)pOut, rTxt, nIdx, nLen, 0, FALSE);
+    SwDrawTextInfo aInfo(pSh, *(OutputDevice*)pOut, pScript, rTxt, nIdx, nLen,
+        0, FALSE);
     aInfo.SetPos( aPos );
     aInfo.SetSpace( 0 );
     aInfo.SetWrong( NULL );
     aInfo.SetDrawSpace( FALSE );
     aInfo.SetKern( CheckKerning() );
+    aInfo.SetKanaComp( pScript ? 0 : 100 );
     SwDoGetCapitalBreak aDo( aInfo, nTextWidth, pExtra );
     DoOnCapitals( aDo );
     return aDo.GetBreak();
@@ -349,13 +349,37 @@ void SwDoCapitalCrsrOfst::Do()
         }
         else
         {
+#ifdef OLD
             if ( rInf.GetUpper() )
-                nCrsr += pUpperFnt->GetCrsrOfst( rInf.GetpOut(), rInf.GetText(),
-                         nOfst, rInf.GetIdx(), rInf.GetLen(), rInf.GetKern() );
+                nCrsr += pUpperFnt->GetCrsrOfst( rInf.GetpOut(),
+                            rInf.GetScriptInfo(), rInf.GetText(), nOfst,
+                            rInf.GetIdx(), rInf.GetLen(), rInf.GetKern(),
+                            0, rInf.GetKanaComp() );
             else
-                nCrsr += pLowerFnt->GetCrsrOfst( rInf.GetpOut(), rInf.GetText(),
-                         nOfst, rInf.GetIdx(), rInf.GetLen(), rInf.GetKern(),
-                         rInf.GetSpace() );
+                nCrsr += pLowerFnt->GetCrsrOfst( rInf.GetpOut(),
+                    rInf.GetScriptInfo(), rInf.GetText(), nOfst, rInf.GetIdx(),
+                    rInf.GetLen(), rInf.GetKern(), rInf.GetSpace(),
+                    rInf.GetKanaComp() );
+#else
+            SwDrawTextInfo aDrawInf( 0, *rInf.GetpOut(),
+                                     rInf.GetScriptInfo(),
+                                     rInf.GetText(),
+                                     rInf.GetIdx(),
+                                     rInf.GetLen(), 0, FALSE );
+            aDrawInf.SetOfst( nOfst );
+            aDrawInf.SetKern( rInf.GetKern() );
+            aDrawInf.SetKanaComp( rInf.GetKanaComp() );
+            if ( rInf.GetUpper() )
+            {
+                aDrawInf.SetSpace( 0 );
+                nCrsr += pUpperFnt->GetCrsrOfst( aDrawInf );
+            }
+            else
+            {
+                aDrawInf.SetSpace( rInf.GetSpace() );
+                nCrsr += pLowerFnt->GetCrsrOfst( aDrawInf );
+            }
+#endif
             nOfst = 0;
         }
     }
@@ -365,19 +389,16 @@ void SwDoCapitalCrsrOfst::Do()
  *                    SwSubFont::GetCapitalCrsrOfst()
  *************************************************************************/
 
-xub_StrLen SwSubFont::GetCapitalCrsrOfst( ViewShell *pSh,
-    OutputDevice *pOut, const XubString &rTxt, const USHORT nOfst,
-    const xub_StrLen nIdx, const xub_StrLen nLen, const short nSpaceAdd )
+xub_StrLen SwSubFont::GetCapitalCrsrOfst( SwDrawTextInfo& rInf )
 {
-    Point aPos( 0, 0 );
-    SwDrawTextInfo aInfo(pSh, *(OutputDevice*)pOut, rTxt, nIdx, nLen, 0, FALSE);
-    aInfo.SetPos( aPos );
-    aInfo.SetWrong( NULL );
-    aInfo.SetDrawSpace( FALSE );
-    aInfo.SetKern( CheckKerning() );
-    aInfo.SetSpace( nSpaceAdd );
-    SwDoCapitalCrsrOfst aDo( aInfo, nOfst );
+    short nOldKern = rInf.GetKern();
+    rInf.SetKern( CheckKerning() );
+    SwDoCapitalCrsrOfst aDo( rInf, rInf.GetOfst() );
+    Point aPos;
+    rInf.SetPos( aPos );
+    rInf.SetDrawSpace( FALSE );
     DoOnCapitals( aDo );
+    rInf.SetKern( nOldKern );
     return aDo.GetCrsr();
 }
 
@@ -443,12 +464,9 @@ void SwSubFont::DrawStretchCapital( SwDrawTextInfo &rInf )
     // Es wird vorausgesetzt, dass rPos bereits kalkuliert ist!
     // hochgezogen in SwFont: const Point aPos( CalcPos(rPos) );
 
-    // 4023: nie das Kerning draufrechnen, weil wir die
-    // unmanipulierte Width brauchen.
-    const USHORT nCapWidth = (USHORT)( GetCapitalSize( rInf.GetShell(),
-        rInf.GetpOut(), rInf.GetText(), rInf.GetIdx(), rInf.GetLen() ) ).Width();
     if( rInf.GetLen() == STRING_LEN )
         rInf.SetLen( rInf.GetText().Len() );
+    const USHORT nCapWidth = (USHORT)( GetCapitalSize( rInf ).Width() );
     rInf.SetDrawSpace( GetUnderline() != UNDERLINE_NONE ||
                        GetStrikeout() != STRIKEOUT_NONE );
     SwDoDrawStretchCapital aDo( rInf, nCapWidth );
@@ -464,6 +482,7 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
     ASSERT( pLastFont, "SwFont::DoOnCapitals: No LastFont?!" );
 
     Size aPartSize;
+    long nKana = 0;
     const XubString aTxt( CalcCaseMap( rDo.GetInf().GetText() ) );
     xub_StrLen nMaxPos = Min( USHORT(rDo.GetInf().GetText().Len()
                             - rDo.GetInf().GetIdx()), rDo.GetInf().GetLen() );
@@ -529,13 +548,14 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
     OutputDevice* pOutSize = pSmallFont->GetPrt();
     if( !pOutSize )
         pOutSize = rDo.GetOut();
+    OutputDevice* pOldOut = rDo.GetOut();
 
     const LanguageType eLng = LANGUAGE_DONTKNOW == GetLanguage()
                             ? LANGUAGE_SYSTEM : GetLanguage();
 
     if( nPos < nMaxPos )
     {
-        nPos = pBreakIt->xBreak->endOfCharBlock( rOldText, nPos,
+        nPos = (xub_StrLen)pBreakIt->xBreak->endOfCharBlock( rOldText, nPos,
             pBreakIt->GetLocale( eLng ), CharType::LOWER_CASE_CHAR );
         if( nPos == STRING_LEN )
             nPos = nOldPos;
@@ -555,15 +575,16 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
             rDo.GetInf().SetIdx( nOldPos );
             rDo.GetInf().SetLen( nPos - nOldPos );
             rDo.GetInf().SetUpper( FALSE );
-            aPartSize = pSmallFont->GetTextSize( rDo.GetInf().GetShell(),
-                 pOutSize, rDo.GetInf().GetText(), rDo.GetInf().GetIdx(),
-                 rDo.GetInf().GetLen(), rDo.GetInf().GetKern() );
+            rDo.GetInf().SetOut( *pOutSize );
+            aPartSize = pSmallFont->GetTextSize( rDo.GetInf() );
+            nKana += rDo.GetInf().GetKanaDiff();
+            rDo.GetInf().SetOut( *pOldOut );
             if( nKern && nPos < nMaxPos )
                 aPartSize.Width() += nKern;
             rDo.Do();
             nOldPos = nPos;
         }
-        nPos = pBreakIt->xBreak->nextCharBlock( rOldText, nPos,
+        nPos = (xub_StrLen)pBreakIt->xBreak->nextCharBlock( rOldText, nPos,
                pBreakIt->GetLocale( eLng ), CharType::LOWER_CASE_CHAR );
         if( nPos == STRING_LEN || nPos > nMaxPos )
             nPos = nMaxPos;
@@ -597,9 +618,10 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
                                                rDo.GetOut() );
                         rDo.GetInf().SetIdx( nOldPos );
                         rDo.GetInf().SetLen( nTmp - nOldPos );
-                        aPartSize = pBigFont->GetTextSize( rDo.GetInf().
-                            GetShell(), pOutSize, aTxt, rDo.GetInf().GetIdx(),
-                              rDo.GetInf().GetLen(), rDo.GetInf().GetKern() );
+                        rDo.GetInf().SetOut( *pOutSize );
+                        aPartSize = pBigFont->GetTextSize( rDo.GetInf() );
+                        nKana += rDo.GetInf().GetKanaDiff();
+                        rDo.GetInf().SetOut( *pOldOut );
                         if( rDo.GetInf().GetSpace() )
                             aPartSize.Width() += rDo.GetInf().GetSpace() *
                                                  ( nTmp - nOldPos );
@@ -618,9 +640,10 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
                 {
                     rDo.GetInf().SetIdx( nOldPos );
                     rDo.GetInf().SetLen( nTmp - nOldPos );
-                    aPartSize = pBigFont->GetTextSize( rDo.GetInf().GetShell(),
-                                  pOutSize, aTxt, rDo.GetInf().GetIdx(),
-                                  rDo.GetInf().GetLen(), rDo.GetInf().GetKern() );
+                    rDo.GetInf().SetOut( *pOutSize );
+                    aPartSize = pBigFont->GetTextSize( rDo.GetInf() );
+                    nKana += rDo.GetInf().GetKanaDiff();
+                    rDo.GetInf().SetOut( *pOldOut );
                     if( !bWordWise && rDo.GetInf().GetSpace() )
                         for( xub_StrLen nI = nOldPos; nI < nPos; ++nI )
                             if( CH_BLANK == rOldText.GetChar( nI ) )
@@ -632,7 +655,7 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
                 }
             } while( nOldPos != nPos );
         }
-        nPos = pBreakIt->xBreak->endOfCharBlock( rOldText, nPos,
+        nPos = (xub_StrLen)pBreakIt->xBreak->endOfCharBlock( rOldText, nPos,
                pBreakIt->GetLocale( eLng ), CharType::LOWER_CASE_CHAR );
         if( nPos == STRING_LEN || nPos > nMaxPos )
             nPos = nMaxPos;
@@ -663,6 +686,7 @@ void SwSubFont::DoOnCapitals( SwDoCapitals &rDo )
 
     delete pSmallFontAccess;
     rDo.GetInf().SetText( rOldText );
+    rDo.GetInf().SetKanaDiff( nKana );
 }
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmcrsr.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-15 16:08:58 $
+ *  last change: $Author: fme $ $Date: 2001-04-09 10:41:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1065,7 +1065,9 @@ void SwTxtFrm::FillCrsrPos( SwFillData& rFill ) const
                 {
 static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
                     const XubString aTmp( sDoubleSpace, RTL_TEXTENCODING_MS_1252 );
-                    nSpace = pFnt->_GetTxtSize( pSh, pOut, aTmp, 0, 2 ).Width()/2;
+
+                    SwDrawTextInfo aDrawInf( pSh, *pOut, 0, aTmp, 0, 2 );
+                    nSpace = pFnt->_GetTxtSize( aDrawInf ).Width()/2;
                 }
                 if( rFill.X() >= nRight )
                 {

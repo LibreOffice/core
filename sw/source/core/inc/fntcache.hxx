@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fntcache.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ama $ $Date: 2001-02-13 08:49:50 $
+ *  last change: $Author: fme $ $Date: 2001-04-09 10:42:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,7 @@ class OutputDevice;
 class FontMetric;
 class SwFntObj;
 class SwDrawTextInfo;   // DrawText
+class SwScriptInfo;
 class ViewShell;
 class SwSubFont;
 
@@ -170,12 +171,8 @@ public:
     inline BOOL     IsSymbol() const { return bSymbol; }
 
     void   DrawText( SwDrawTextInfo &rInf );
-    Size  GetTextSize( ViewShell *pSh,
-             const OutputDevice *pOut, const XubString &rTxt,
-             const xub_StrLen nIdx, const xub_StrLen nLen, const short nKern = 0 );
-    xub_StrLen GetCrsrOfst( const OutputDevice *pOut, const XubString &rTxt,
-             const USHORT nOfst, const xub_StrLen nIdx, const xub_StrLen nLen,
-             short nKern = 0, short nSpaceAdd = 0 );
+    Size  GetTextSize( SwDrawTextInfo &rInf );
+    xub_StrLen GetCrsrOfst( SwDrawTextInfo &rInf );
 
     void CheckPrtFont( Printer* pPrt )
         { if( nPropWidth != 100 && pPrinter != pPrt ) InitPrtFont( pPrt );  }

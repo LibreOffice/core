@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrpaint.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ama $ $Date: 2000-10-30 09:58:34 $
+ *  last change: $Author: fme $ $Date: 2001-04-09 10:41:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,6 +197,8 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
     GetAdjusted();
     GetInfo().SetSpaceAdd( pCurr->GetpSpaceAdd() );
     GetInfo().ResetSpaceIdx();
+    GetInfo().SetKanaComp( pCurr->GetpKanaComp() );
+    GetInfo().ResetKanaIdx();
     // Die Groesse des Frames
     GetInfo().SetIdx( GetStart() );
     GetInfo().SetPos( GetTopLeft() );
