@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmundo.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 14:37:12 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 16:24:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,9 @@
 #endif
 #ifndef _COM_SUN_STAR_FORM_BINDING_XBINDABLEVALUE_HPP_
 #include <com/sun/star/form/binding/XBindableValue.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FORM_BINDING_XLISTENTRYSINK_HPP_
+#include <com/sun/star/form/binding/XListEntrySink.hpp>
 #endif
 /** === end UNO includes === **/
 
@@ -636,6 +639,14 @@ void SAL_CALL FmXUndoEnvironment::propertyChange(const PropertyChangeEvent& evt)
             }
         }
 
+        if ( bAddUndoAction && ( evt.PropertyName == FM_PROP_STRINGITEMLIST ) )
+        {
+            Reference< XListEntrySink > xSink( evt.Source, UNO_QUERY );
+            if ( xSink.is() && xSink->getListEntrySource().is() )
+                // #i41029# / 2005-01-31 / frank.schoenheit@sun.com
+                bAddUndoAction = false;
+        }
+
         if ( bAddUndoAction )
         {
             aGuard.clear();
@@ -989,9 +1000,15 @@ void FmUndoPropertyAction::Undo()
 
     if (xObj.is() && !rEnv.IsLocked())
     {
-        // Locking damit keine neue UndoAction entsteht
         rEnv.Lock();
-        xObj->setPropertyValue(aPropertyName, aOldValue);
+        try
+        {
+            xObj->setPropertyValue( aPropertyName, aOldValue );
+        }
+        catch( const Exception& )
+        {
+            OSL_ENSURE( sal_False, "FmUndoPropertyAction::Undo: caught an exception!" );
+        }
         rEnv.UnLock();
     }
 }
@@ -1004,7 +1021,14 @@ void FmUndoPropertyAction::Redo()
     if (xObj.is() && !rEnv.IsLocked())
     {
         rEnv.Lock();
-        xObj->setPropertyValue(aPropertyName, aNewValue);
+        try
+        {
+            xObj->setPropertyValue( aPropertyName, aNewValue );
+        }
+        catch( const Exception& )
+        {
+            OSL_ENSURE( sal_False, "FmUndoPropertyAction::Redo: caught an exception!" );
+        }
         rEnv.UnLock();
     }
 }
