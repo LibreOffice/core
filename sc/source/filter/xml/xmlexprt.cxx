@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-23 15:46:38 $
+ *  last change: $Author: bm $ $Date: 2001-02-27 12:47:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2051,7 +2051,7 @@ void ScXMLExport::ExportShape(const uno::Reference < drawing::XShape >& xShape, 
             rtl::OUString sCLSID;
             if (aAny >>= sCLSID)
             {
-                if ( sCLSID.equalsIgnoreCase(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("bf884321-85dd-11d1-89d0-008029e4b0b1"))) )
+                if ( sCLSID.equalsIgnoreCase(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "12DCAE26-281F-416F-a234-c3086127382e" ))) )
                 {
                     uno::Reference < container::XNamed > xNamed (xShape, uno::UNO_QUERY );
                     rtl::OUString sOUName ( xNamed->getName() );
