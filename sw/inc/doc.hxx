@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-31 15:06:19 $
+ *  last change: $Author: hr $ $Date: 2004-04-07 12:41:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2078,6 +2078,11 @@ public:
 
     // call back for API wrapper
     SwModify*   GetUnoCallBack() const;
+
+    // -> #i23726#
+    BOOL IsFirstOfNumRule(SwPosition & rPos);
+    void IndentNumRule(SwPosition & rPos, short nAmount);
+    // <- #i23726#
 };
 
 
