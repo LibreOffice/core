@@ -2,9 +2,9 @@
  *
  *  $RCSfile: opredlin.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 06:33:40 $
+ *  last change: $Author: kz $ $Date: 2001-04-03 19:28:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,10 +187,10 @@ TabPage RID_SCPAGE_OPREDLINE
         Text [ spanish ] = "Colores para las modificaciones" ;
         Text [ french ] = "Couleurs d'affichage des modifications" ;
         Text [ dutch ] = "Kleurgeving voor wijzigingen" ;
-        Text[ chinese_simplified ] = "ΈόΈΔ²Ώ·Φ²ΙΣΓµΔΡΥΙ«";
-        Text[ russian ] = "Φβες δλÿ θημενενθι";
-        Text[ polish ] = "Kolory dla modyfikacji";
-        Text[ japanese ] = "•ΟX‚Ιg‚¤F";
+        Text[ chinese_simplified ] = "²ΚΙ«ΟΤΚΎΈόΈΔµΔ²Ώ·Φ";
+        Text[ russian ] = "Φβες δλÿ θροπΰβλενθι";
+        Text[ polish ] = "Kolory zmian";
+        Text[ japanese ] = "•ΟX‰Σ‚Ιg‚¤F";
         Text[ chinese_traditional ] = "±m¦βΕγ¥άΕά§σªΊ³΅¤ΐ";
         Text[ arabic ] = "αζδ ΗαΚΫννΡΗΚ";
         Text[ greek ] = "Χρώμα αλλαγών";
