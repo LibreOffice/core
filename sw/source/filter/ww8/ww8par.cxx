@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.143 $
+ *  $Revision: 1.144 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-28 13:06:42 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 12:53:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1503,11 +1503,21 @@ void SwWW8ImplReader::Read_Tab(USHORT , const BYTE* pData, short nLen)
         NewAttr(aAttr);
     else
     {
-        using namespace sw::util;
-        SvxTabStopItem aOrig = pSty ?
+        //Here we have a tab definition which inserts no extra tabs, or deletes
+        //no existing tabs. An older version of writer is probably the creater
+        //of the document  :-( . So if we are importing a style we can just
+        //ignore it. But if we are importing into text we cannot as during
+        //text SwWW8ImplReader::Read_Tab is called at the begin and end of
+        //the range the attrib affects, and ignoring it would upset the
+        //balance
+        if (!pAktColl)  //not importing into a style
+        {
+            using namespace sw::util;
+            SvxTabStopItem aOrig = pSty ?
             ItemGet<SvxTabStopItem>(*pSty, RES_PARATR_TABSTOP) :
             DefaultItemGet<SvxTabStopItem>(rDoc, RES_PARATR_TABSTOP);
-        NewAttr(aOrig);
+            NewAttr(aOrig);
+        }
     }
 }
 
