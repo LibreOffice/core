@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: jp $ $Date: 2001-11-06 08:34:24 $
+#   last change: $Author: kz $ $Date: 2001-12-05 11:49:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -144,9 +144,11 @@ EXCEPTIONSFILES=	\
     $(SLO)$/unotbl.obj \
     $(SLO)$/unotext.obj
 
-EXCEPTIONSNOOPTFILES = \
-    $(SLO)$/unoportenum.obj
-
+.IF "$(GUI)$(COM)$(CPU)" == "WNTMSCI"
+EXCEPTIONSNOOPTFILES =$(SLO)$/unoportenum.obj
+.ELSE
+EXCEPTIONSFILES +=$(SLO)$/unoportenum.obj
+.ENDIF
 
 # --- Targets -------------------------------------------------------
 
