@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdstr.src,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 09:05:49 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 09:13:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -376,25 +376,25 @@ String STR_ObjNamePluralPLIN
 String STR_ObjNameSingulPATHLINE
 {
     Text [ de ] = "Bézierkurve" ;
-    Text [ en-US ] = "Bézier curve" ;
+    Text [ en-US ] = "BÃ©zier curve" ;
     Text [ x-comment ] = " ";
 };
 String STR_ObjNamePluralPATHLINE
 {
     Text [ de ] = "Bézierkurven" ;
-    Text [ en-US ] = "Bézier curves" ;
+    Text [ en-US ] = "BÃ©zier curves" ;
     Text [ x-comment ] = " ";
 };
 String STR_ObjNameSingulPATHFILL
 {
     Text [ de ] = "Bézierkurve" ;
-    Text [ en-US ] = "Bézier curve" ;
+    Text [ en-US ] = "BÃ©zier curve" ;
     Text [ x-comment ] = " ";
 };
 String STR_ObjNamePluralPATHFILL
 {
     Text [ de ] = "Bézierkurven" ;
-    Text [ en-US ] = "Bézier curves" ;
+    Text [ en-US ] = "BÃ©zier curves" ;
     Text [ x-comment ] = " ";
 };
 String STR_ObjNameSingulFREELINE
@@ -1115,7 +1115,7 @@ String STR_EditSetPointsSmooth
     /* ### ACHTUNG: Neuer Text in Resource? Béziereigenschaften von %O ändern : BÚziereigenschaften von %O õndern */
     /* ### ACHTUNG: Neuer Text in Resource? Béziereigenschaften von %O ändern : BÚziereigenschaften von %O õndern */
     Text [ de ] = "Béziereigenschaften von %O ändern" ;
-    Text [ en-US ] = "Modify bézier properties of %O" ;
+    Text [ en-US ] = "Modify bÃ©zier properties of %O" ;
     Text [ x-comment ] = " ";
 };
 String STR_EditSetSegmentsKind
@@ -1123,7 +1123,7 @@ String STR_EditSetSegmentsKind
     /* ### ACHTUNG: Neuer Text in Resource? Béziereigenschaften von %O ändern : BÚziereigenschaften von %O õndern */
     /* ### ACHTUNG: Neuer Text in Resource? Béziereigenschaften von %O ändern : BÚziereigenschaften von %O õndern */
     Text [ de ] = "Béziereigenschaften von %O ändern" ;
-    Text [ en-US ] = "Modify bézier properties of %O" ;
+    Text [ en-US ] = "Modify bÃ©zier properties of %O" ;
     Text [ x-comment ] = " ";
 };
 String STR_EditShut
@@ -3448,7 +3448,7 @@ String SIP_SA_MEASURETEXTROTA90
 String SIP_SA_MEASURETEXTUPSIDEDOWN
 {
     Text [ de ] = "Masstext um 180ø drehen";
-    Text [ en-US ] = "Rotate dimension value by 180ø";
+    Text [ en-US ] = "Rotate dimension value by 180Ã¸";
 };
 
 String SIP_SA_MEASUREOVERHANG
