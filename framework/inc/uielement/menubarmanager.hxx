@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menubarmanager.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 19:29:47 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 14:11:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,6 +192,7 @@ class MenuBarManager : public com::sun::star::frame::XStatusListener            
         MenuBarManager(
             const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
             com::sun::star::uno::Reference< com::sun::star::frame::XFrame >& rFrame,
+            const rtl::OUString& aModuleIdentifier,
             Menu* pMenu,
             sal_Bool bDelete,
             sal_Bool bDeleteChildren );
@@ -233,8 +234,8 @@ class MenuBarManager : public com::sun::star::frame::XStatusListener            
         Menu*   GetMenuBar() const { return m_pVCLMenu; }
 
         // Configuration methods
-        static void FillMenu( USHORT& nId, Menu* pMenu, const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& rItemContainer );
-        void FillMenuManager( Menu* pMenu, ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, sal_Bool bDelete, sal_Bool bDeleteChildren );
+        static void FillMenu( USHORT& nId, Menu* pMenu, const ::rtl::OUString& rModuleIdentifier, const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& rItemContainer );
+        void FillMenuManager( Menu* pMenu, ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& rFrame, const rtl::OUString& rModuleIdentifier, sal_Bool bDelete, sal_Bool bDeleteChildren );
         void SetItemContainer( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess >& rItemContainer );
 
     protected:
