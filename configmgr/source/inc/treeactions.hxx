@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeactions.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:19:07 $
+ *  last change: $Author: kz $ $Date: 2004-03-23 10:25:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,39 +79,6 @@ namespace configmgr
 // helper to implement force-writable support
 void forceWritable(INode& _rNode);
 void forceWritable(data::TreeAccessor const & _aTree);
-
-
-//==========================================================================
-//= OIdPropagator
-//==========================================================================
-/** propagates a node id to a subtree and its descendants
-*/
-class OIdPropagator : private NodeModification
-{
-    ::rtl::OUString sId;
-
-    OIdPropagator(const ::rtl::OUString& _rId) : sId(_rId) { }
-    virtual void handle(ValueNode& _rValueNode);
-    virtual void handle(ISubtree& _rSubtree);
-
-public:
-    static void propagateIdToChildren(ISubtree& rTree);
-    static void propagateIdToTree( ::rtl::OUString const& aId, ISubtree& rTree);
-};
-
-//==========================================================================
-//= OIdRemover
-//==========================================================================
-/** propagates a node id to a subtree and its descendants
-*/
-class OIdRemover : private NodeModification
-{
-    virtual void handle(ValueNode& _rValueNode);
-    virtual void handle(ISubtree& _rSubtree);
-
-public:
-    static void removeIds(INode& rNode);
-};
 
 //==========================================================================
 //= OChangeActionCounter
