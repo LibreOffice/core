@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-18 14:39:03 $
+ *  last change: $Author: kz $ $Date: 2005-01-19 15:11:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2577,7 +2577,7 @@ String SwNewDBMgr::LoadAndRegisterDataSource()
                                                      INET_HEX_ESCAPE,
                                                      INetURLObject::DECODE_UNAMBIGUOUS,
                                                      RTL_TEXTENCODING_UTF8 );
-            xub_StrLen nExtLen = aURL.GetExtension().Len();
+            xub_StrLen nExtLen = aURL.GetExtension().getLength();
             sNewName.Erase( sNewName.Len() - nExtLen - 1, nExtLen + 1 );
 
             //find a unique name if sNewName already exists
