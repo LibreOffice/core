@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numfmt.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: kz $ $Date: 2002-11-27 16:45:42 $
+ *  last change: $Author: rt $ $Date: 2002-12-05 10:24:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1076,6 +1076,17 @@ TabPage RID_SVXPAGE_NUMBERFORMAT
     {
         Text = "Automatisch";
         Text [english_us] = "Automatic";
+        Text[ portuguese ] = "Automatic";
+        Text[ russian ] = "Automatic";
+        Text[ spanish ] = "Automatic";
+        Text[ italian ] = "Automatic";
+        Text[ swedish ] = "Automatic";
+        Text[ polish ] = "Automatic";
+        Text[ portuguese_brazilian ] = "Automatic";
+        Text[ japanese ] = "Automatic";
+        Text[ korean ] = "Automatic";
+        Text[ turkish ] = "Automatic";
+        Text[ thai ] = "Automatic";
     };
 
     Text[ chinese_simplified ] = "数字格式";
