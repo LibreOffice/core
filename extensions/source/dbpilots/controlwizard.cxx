@@ -2,9 +2,9 @@
  *
  *  $RCSfile: controlwizard.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2001-11-08 10:48:16 $
+ *  last change: $Author: rt $ $Date: 2001-11-15 11:31:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -271,7 +271,8 @@ namespace dbp
             // nothing to do
             return;
 
-        OLocalResourceAccess aLocalControls(ModuleRes(RID_PAGE_FORM_DATASOURCE_STATUS), RSC_TABPAGE);
+        ModuleRes aModuleRes(RID_PAGE_FORM_DATASOURCE_STATUS);
+        OLocalResourceAccess aLocalControls(aModuleRes, RSC_TABPAGE);
 
         m_pFormSettingsSeparator    = new FixedLine(this,  ResId(FL_FORMSETINGS));
         m_pFormDatasourceLabel      = new FixedText(this,  ResId(FT_FORMDATASOURCELABEL));
@@ -815,6 +816,9 @@ namespace dbp
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.8  2001/11/08 10:48:16  fs
+ *  #94407# setFormConnection allows to be called without auto disposing
+ *
  *  Revision 1.7  2001/11/02 14:42:19  fs
  *  #94077# use an AutoDisposer when setting a Connection on the RowSet
  *
