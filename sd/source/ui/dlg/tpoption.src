@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpoption.src,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:02:13 $
+ *  last change: $Author: rt $ $Date: 2003-05-13 12:20:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -962,9 +962,9 @@ TabPage TP_OPTIONS_MISC
     {
         Pos = MAP_APPFONT ( 6 , 160 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text = "Kompatibilität (dokumentspezifische Einstellungen)" ;
-        Text [ English ] = "Compatibility (document-specific settings)" ;
-        Text[ english_us ] = "Compatibility (document-specific settings)" ;
+        Text = "Kompatibilität" ;
+        Text [ English ] = "Compatibility" ;
+        Text[ english_us ] = "Compatibility" ;
         Text[ portuguese ] = "Compatibilidade";
         Text[ russian ] = "Ñîâìåñòèìîñòü";
         Text[ greek ] = "Óõìâáôüôçôá";
@@ -1011,9 +1011,9 @@ TabPage TP_OPTIONS_MISC
     {
         Pos = MAP_APPFONT ( 12 , 171 ) ;
         Size = MAP_APPFONT ( 242, 10 ) ;
-        Text = "Im aktuellen Dokument alle Absatzabst~ände addieren";
+        Text = "Alle Absatz- und Tabellenabstände addieren (aktuelles ~Dokument)";
         Text [ English ] = "Add ~distances between paragraphs" ;
-        Text[ english_us ] = "Add ~spacing between paragraphs in the current document";
+        Text[ english_us ] = "Add ~spacing between paragraphs and tables (in current document)";
         Text[ portuguese ] = "A~dicionar espaçamento entre os parágrafos no documento activo";
         Text[ russian ] = "Äîáàâèòü â òåêóùåì äîêóìåíòå èíòåğâàëû ìåæäó àáçàöàìè";
         Text[ greek ] = "Ğñüóèåóç ôùí áğïóôÜóåùí ôùí ğáñáãñÜö~ùí óôï ôñİ÷ïí İããñáöï";
