@@ -2,9 +2,9 @@
  *
  *  $RCSfile: oslstream.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: lla $ $Date: 2001-05-31 14:09:46 $
+ *  last change: $Author: dg $ $Date: 2001-07-06 12:41:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -279,10 +279,6 @@ sal_Int32 SAL_CALL OSLInputBufferedStreamWrapper::readBytes(staruno::Sequence< s
     FileBase::RC eError = m_pFile->read((void*)aData.getArray(), nBytesToRead, nRead);
     if (eError != osl_File_E_None)
         throw stario::BufferSizeExceededException(::rtl::OUString(),static_cast<staruno::XWeak*>(this));
-
-    // Wenn gelesene Zeichen < MaxLength, staruno::Sequence anpassen
-    if (nRead < (sal_uInt32)nBytesToRead)
-        aData.realloc( nRead );
 
     return nRead;
 }
