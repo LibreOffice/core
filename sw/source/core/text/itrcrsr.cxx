@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrcrsr.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: fme $ $Date: 2002-09-03 15:00:10 $
+ *  last change: $Author: fme $ $Date: 2002-10-21 10:28:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1209,9 +1209,10 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
     if( nRightMargin == nLeftMargin )
         nRightMargin += 30;
 
-    if(x < nLeftMargin)
+    const sal_Bool bLeftOver = x < nLeftMargin;
+    if( bLeftOver )
         x = nLeftMargin;
-    sal_Bool bRightOver = x > nRightMargin;
+    const sal_Bool bRightOver = x > nRightMargin;
     if( bRightOver )
         x = nRightMargin;
 
@@ -1346,7 +1347,7 @@ xub_StrLen SwTxtCursor::GetCrsrOfst( SwPosition *pPos, const Point &rPoint,
 
     sal_Bool bFieldInfo = pCMS && pCMS->bFieldInfo;
 
-    if( bFieldInfo && ( nWidth30 < nX || bRightOver ||
+    if( bFieldInfo && ( nWidth30 < nX || bRightOver || bLeftOver ||
         ( pPor->InNumberGrp() && !pPor->IsFtnNumPortion() ) ||
         ( pPor->IsMarginPortion() && nWidth > nX + 30 ) ) )
         ((SwCrsrMoveState*)pCMS)->bPosCorr = sal_True;
