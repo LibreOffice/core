@@ -2,9 +2,9 @@
 #
 #   $RCSfile: packagelist.pm,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: obo $ $Date: 2004-11-18 08:36:12 $
+#   last change: $Author: rt $ $Date: 2005-04-04 10:00:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -471,29 +471,12 @@ sub resolve_packagevariables
 }
 
 #####################################################################
-# Adapting the name, after variables are resolved
-#####################################################################
-
-sub adapt_name
-{
-    my ($nameref) = @_;
-
-    $$nameref =~ s/\-\-/\-/g;   # making "--" to "-", if %SHORT_PRODUCTEXTENSION is empty
-    $$nameref =~ s/\-\./\./g;   # making "-." to ".", if %SHORT_PRODUCTEXTENSION is empty
-    $$nameref =~ s/\-\s*$//;    # making "-" to "" at end, if %SHORT_PRODUCTEXTENSION is empty
-}
-
-#####################################################################
 # Adapting the package name, after variables are resolved
 #####################################################################
 
 sub adapt_packagename
 {
     my ($nameref) = @_;
-
-    $$nameref =~ s/\-\-/\-/g;   # making "--" to "-", if %SHORT_PRODUCTEXTENSION is empty
-    $$nameref =~ s/\-\./\./g;   # making "-." to ".", if %SHORT_PRODUCTEXTENSION is empty
-    $$nameref =~ s/\-\s*$//;    # making "-" to "" at end, if %SHORT_PRODUCTEXTENSION is empty
     $$nameref =~ s/\.org/org/g; # openoffice.org -> openofficeorg
 }
 
