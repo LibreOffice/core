@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshtxt.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: cl $ $Date: 2001-08-22 14:22:45 $
+ *  last change: $Author: cl $ $Date: 2001-11-05 13:58:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,8 +128,8 @@ private:
     oslInterlockedCount maRefCount;
 
     SdrObject*              mpObject;
-    Outliner*               mpOutliner;
-    SvxTextForwarder*       mpTextForwarder;
+    SdrOutliner*            mpOutliner;
+    SvxOutlinerForwarder*   mpTextForwarder;
     BOOL                    mbDataValid;
     BOOL                    mbDestroyed;
     BOOL                    mbIsLocked;
@@ -184,7 +184,17 @@ SvxTextEditSourceImpl::~SvxTextEditSourceImpl()
         EndListening( *mpObject->GetModel() );
 
     delete mpTextForwarder;
-    delete mpOutliner;
+    if( mpOutliner )
+    {
+        if( mpObject->GetModel() )
+        {
+            mpObject->GetModel()->disposeOutliner( mpOutliner );
+        }
+        else
+        {
+            delete mpOutliner;
+        }
+    }
 }
 
 //------------------------------------------------------------------------
@@ -240,7 +250,14 @@ void SvxTextEditSourceImpl::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 
         if( mpOutliner )
         {
-            delete mpOutliner;
+            if( mpObject->GetModel() )
+            {
+                mpObject->GetModel()->disposeOutliner( mpOutliner );
+            }
+            else
+            {
+                delete mpOutliner;
+            }
             mpOutliner = NULL;
         }
     }
@@ -269,10 +286,13 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetTextForwarder()
             if( pTextObj && pTextObj->IsTextFrame() && pTextObj->GetTextKind() == OBJ_OUTLINETEXT )
                 nOutlMode = OUTLINERMODE_OUTLINEOBJECT;
             SdrModel* pModel = mpObject->GetModel();
+
+            mpOutliner = pModel->createOutliner( nOutlMode );
+/*
             mpOutliner = SdrMakeOutliner( nOutlMode, pModel );
             Outliner& aDrawOutliner = pModel->GetDrawOutliner();
             mpOutliner->SetCalcFieldValueHdl( aDrawOutliner.GetCalcFieldValueHdl() );
-
+*/
             if( mbIsLocked )
             {
                 ((EditEngine*)&(mpOutliner->GetEditEngine()))->SetUpdateMode( sal_False );
@@ -299,6 +319,8 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetTextForwarder()
 
     if( mpObject && !mbDataValid )
     {
+        mpTextForwarder->flushCache();
+
         OutlinerParaObject* mpOutlinerParaObject = NULL;
         BOOL bTextEditActive = FALSE;
         SdrTextObj* pTextObj = PTR_CAST( SdrTextObj, mpObject );
