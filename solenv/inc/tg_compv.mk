@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_compv.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hjs $ $Date: 2001-11-01 19:33:05 $
+#   last change: $Author: hjs $ $Date: 2001-12-18 14:25:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -59,6 +59,8 @@
 #
 #
 #*************************************************************************
+
+.IF "$(L10N_framework)"==""
 
 COMNAME:=
 
@@ -128,3 +130,4 @@ compiler_version_error:
 
 CDEFS+=-DCPPU_ENV=$(COMNAME)
 
+.ENDIF			# "$(L10N_framework)"==""
