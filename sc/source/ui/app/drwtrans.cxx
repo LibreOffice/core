@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwtrans.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: nn $ $Date: 2002-12-11 16:33:17 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 14:43:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,19 @@
 #include "drawview.hxx"
 #include "viewdata.hxx"
 #include "scmod.hxx"
+
+// #108584#
+#include "scitems.hxx"
+
+// #108584#
+#ifndef _EEITEM_HXX
+#include <svx/eeitem.hxx>
+#endif
+
+// #108584#
+#ifndef _SVX_FHGTITEM_HXX
+#include <svx/fhgtitem.hxx>
+#endif
 
 using namespace com::sun::star;
 
@@ -492,9 +505,35 @@ sal_Bool ScDrawTransferObj::WriteObject( SotStorageStreamRef& rxOStm, void* pUse
         case SCDRAWTRANS_TYPE_DRAWMODEL:
             {
                 SdrModel* pDrawModel = (SdrModel*)pUserObject;
-
                 pDrawModel->SetStreamingSdrModel(TRUE);
                 rxOStm->SetBufferSize( 0xff00 );
+
+                // #108584#
+                // for the changed pool defaults from drawing layer pool set those
+                // attributes as hard attributes to preserve them for saving
+                const SfxItemPool& rItemPool = pModel->GetItemPool();
+                const SvxFontHeightItem& rDefaultFontHeight = (const SvxFontHeightItem&)rItemPool.GetDefaultItem(EE_CHAR_FONTHEIGHT);
+
+                // SW should have no MasterPages
+                DBG_ASSERT(0L == pModel->GetMasterPageCount(), "SW with MasterPages (!)");
+
+                for(sal_uInt16 a(0); a < pModel->GetPageCount(); a++)
+                {
+                    const SdrPage* pPage = pModel->GetPage(a);
+                    SdrObjListIter aIter(*pPage, IM_DEEPNOGROUPS);
+
+                    while(aIter.IsMore())
+                    {
+                        SdrObject* pObj = aIter.Next();
+                        const SvxFontHeightItem& rItem = (const SvxFontHeightItem&)pObj->GetItem(EE_CHAR_FONTHEIGHT);
+
+                        if(rItem.GetHeight() == rDefaultFontHeight.GetHeight())
+                        {
+                            pObj->SetItem(rDefaultFontHeight);
+                        }
+                    }
+                }
+
                 {
                     com::sun::star::uno::Reference<com::sun::star::io::XOutputStream> xDocOut( new utl::OOutputStreamWrapper( *rxOStm ) );
                     if( SvxDrawingLayerExport( pDrawModel, xDocOut ) )
