@@ -2,9 +2,9 @@
  *
  *  $RCSfile: provprox.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sb $ $Date: 2001-04-26 09:03:25 $
+ *  last change: $Author: hr $ $Date: 2004-04-14 13:37:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,7 +201,7 @@ UcbContentProviderProxy::queryInterface( const Type & rType )
     {
         // Get original provider an forward the call...
         osl::Guard< osl::Mutex > aGuard( m_aMutex );
-        Reference< XContentProvider > xProvider = getContentProvider();
+        Reference< XInterface > xProvider = getContentProvider();
         if ( xProvider.is() )
             aRet = xProvider->queryInterface( rType );
     }
@@ -215,12 +215,40 @@ UcbContentProviderProxy::queryInterface( const Type & rType )
 //
 //=========================================================================
 
-XTYPEPROVIDER_IMPL_5( UcbContentProviderProxy,
-                          XTypeProvider,
-                      XServiceInfo,
-                      XContentProvider,
-                      XParameterizedContentProvider,
-                         XContentProviderSupplier );
+XTYPEPROVIDER_COMMON_IMPL( UcbContentProviderProxy );
+
+//=========================================================================
+
+Sequence< Type > SAL_CALL UcbContentProviderProxy::getTypes()                                                           \
+    throw( RuntimeException )
+{
+    // Get original provider an forward the call...
+    osl::Guard< osl::Mutex > aGuard( m_aMutex );
+    Reference< XTypeProvider > xProvider( getContentProvider(), UNO_QUERY );
+    if ( xProvider.is() )
+    {
+        return xProvider->getTypes();
+    }
+    else
+    {
+        static cppu::OTypeCollection * pCollection = 0;
+        if ( !pCollection )
+        {
+            osl::Guard< osl::Mutex > aGuard( m_aMutex );
+            if ( !pCollection )
+            {
+                static cppu::OTypeCollection collection(
+                        CPPU_TYPE_REF( XTypeProvider ),
+                        CPPU_TYPE_REF( XServiceInfo ),
+                        CPPU_TYPE_REF( XContentProvider ),
+                        CPPU_TYPE_REF( XParameterizedContentProvider ),
+                        CPPU_TYPE_REF( XContentProviderSupplier ) );
+                pCollection = &collection;
+            }
+        }
+        return (*pCollection).getTypes();
+    }
+}
 
 //=========================================================================
 //
