@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdograf.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2000-09-29 12:53:01 $
+ *  last change: $Author: ka $ $Date: 2000-10-09 16:32:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,7 @@
  ************************************************************************/
 
 #define _ANIMATION
+#define ITEMID_GRF_CROP 0
 
 #ifndef _SFXINIMGR_HXX //autogen wg. SfxIniManager
 #include <svtools/iniman.hxx>
@@ -97,6 +98,7 @@
 #include "xflbmtit.hxx"
 #include "svdundo.hxx"
 #include "svdfmtf.hxx"
+#include "sdgcpitm.hxx"
 
 #ifndef SVX_LIGHT
 
@@ -106,14 +108,17 @@
 
 class SdrGraphicLink : public SvBaseLink
 {
-    SdrGrafObj*                 pGrafObj;
+    SdrGrafObj*         pGrafObj;
 
 public:
-    SdrGraphicLink(SdrGrafObj* pObj);
-    virtual ~SdrGraphicLink();
-    virtual void Closed();
-    virtual void DataChanged(SvData& rData);
-    BOOL Connect() { return 0 != SvBaseLink::GetRealObject(); }
+                        SdrGraphicLink(SdrGrafObj* pObj);
+    virtual             ~SdrGraphicLink();
+
+    virtual void        Closed();
+    virtual void        DataChanged(SvData& rData);
+
+    BOOL                Connect() { return 0 != SvBaseLink::GetRealObject(); }
+    void                UpdateSynchron();
 };
 
 // -----------------------------------------------------------------------------
@@ -135,7 +140,6 @@ SdrGraphicLink::~SdrGraphicLink()
 
 void SdrGraphicLink::DataChanged(SvData& rData)
 {
-#ifndef SVX_LIGHT
     SdrModel*       pModel      = pGrafObj==NULL ? NULL : pGrafObj->GetModel();
     SvxLinkManager* pLinkManager= pModel  ==NULL ? NULL : pModel->GetLinkManager();
 
@@ -200,7 +204,6 @@ void SdrGraphicLink::DataChanged(SvData& rData)
             }
         }
     }
-#endif
 }
 
 // -----------------------------------------------------------------------------
@@ -212,6 +215,19 @@ void SdrGraphicLink::Closed()
     pGrafObj->pGraphicLink=NULL;
     pGrafObj->ReleaseGraphicLink();
     SvBaseLink::Closed();
+}
+
+// -----------------------------------------------------------------------------
+
+void SdrGraphicLink::UpdateSynchron()
+{
+    if( GetObj() )
+    {
+        SvData aData( GetContentType() );
+        aData.SetAspect( ASPECT_DOCPRINT );
+        GetObj()->GetData( &aData );
+        DataChanged( aData );
+    }
 }
 
 #else
@@ -524,7 +540,7 @@ void SdrGrafObj::ImpLinkAnmeldung()
             if( !bDelayedLoad )
             {
                 BOOL bIsChanged = pModel->IsChanged();
-                pGraphicLink->Update();
+                pGraphicLink->UpdateSynchron();
                 pModel->SetChanged( bIsChanged );
             }
 #endif
@@ -890,7 +906,7 @@ FASTBOOL SdrGrafObj::Paint( ExtOutputDevice& rOut, const SdrPaintInfoRec& rInfoR
     else if( !bSwappedOut && pGraphicLink && ( pGraphic->GetType() == GRAPHIC_NONE ) )
     {
         BOOL bIsChanged = pModel->IsChanged();
-        pGraphicLink->Update();
+        pGraphicLink->UpdateSynchron();
         pModel->SetChanged( bIsChanged );
     }
 #endif
@@ -1571,7 +1587,7 @@ void SdrGrafObj::ReadData( const SdrObjIOHeader& rHead, SvStream& rIn )
             if( pGraphicLink && !bDelayedLoad )
             {
                 BOOL bIsChanged = pModel->IsChanged();
-                pGraphicLink->Update();
+                pGraphicLink->UpdateSynchron();
                 pModel->SetChanged( bIsChanged );
             }
             else
@@ -2014,7 +2030,7 @@ IMPL_LINK( SdrGrafObj, ImpSwapHdl, GraphicObject*, pO )
                     else if( pGraphicLink )
                     {
                         BOOL bIsChanged = pModel->IsChanged();
-                        pGraphicLink->Update();
+                        pGraphicLink->UpdateSynchron();
                         pModel->SetChanged( bIsChanged );
                         bNotLoaded = bSwappedOut = FALSE;
                     }

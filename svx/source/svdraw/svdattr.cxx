@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdattr.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2000-09-29 08:29:47 $
+ *  last change: $Author: ka $ $Date: 2000-10-09 16:32:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,8 @@
  *
  ************************************************************************/
 
+#define ITEMID_GRF_CROP 0
+
 #ifndef _COM_SUN_STAR_DRAWING_TEXTFITTOSIZETYPE_HPP_
 #include <com/sun/star/drawing/TextFitToSizeType.hpp>
 #endif
@@ -112,6 +114,7 @@
 #include "svdtrans.hxx"
 #include "svdglob.hxx"  // Stringcache
 #include "svdstr.hrc"
+#include "sdgcpitm.hxx"
 #include "adjitem.hxx"
 
 #ifndef _BIGINT_HXX //autogen
