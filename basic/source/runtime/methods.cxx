@@ -2,9 +2,9 @@
  *
  *  $RCSfile: methods.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: svesik $ $Date: 2000-11-22 13:27:25 $
+ *  last change: $Author: ab $ $Date: 2000-11-29 11:23:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1414,7 +1414,7 @@ RTLFUNC(Val)
         if ( aStr.GetBuffer()[0] == '&' && aStr.Len() > 1 )
         {
             int nRadix = 10;
-            char aChar = aStr.GetBuffer()[1];
+            char aChar = (char)aStr.GetBuffer()[1];
             if ( aChar == 'h' || aChar == 'H' )
                 nRadix = 16;
             else if ( aChar == 'o' || aChar == 'O' )
@@ -1959,7 +1959,60 @@ RTLFUNC(Dir)
             {
                 if ( nParCount >= 2 )
                 {
-                    String aFileURLStr = getFullPath( rPar.Get(1)->GetString() );
+                    String aFileParam = rPar.Get(1)->GetString();
+                    String aFileURLStr = getFullPath( aFileParam );
+
+
+                    // #80200 HACK to provide minimum wildcard functionality (*.xxx)
+                    // Finally a solution has to be implemented by UCB
+
+                    // If there is still a string File::normalizePath returned no error,
+                    // there can't be wildcards in it. Otherwise we need to have a closer look
+                    pRTLData->bWildcard = sal_False;
+                    pRTLData->sExtension = String();
+                    pRTLData->sPreWildcard = String();
+                    if( !aFileURLStr.Len() )
+                    {
+                        sal_Char cDelim = DirEntry::GetAccessDelimiter().GetBuffer()[0];
+                        xub_StrLen nLen = aFileParam.Len();
+
+                        xub_StrLen nLastDelim = aFileParam.SearchBackward( cDelim );
+                        String aPureFileName;
+                        if( nLastDelim == STRING_NOTFOUND )
+                        {
+                            aPureFileName = aFileParam;
+                            aFileParam = String();
+                        }
+                        else
+                        {
+                            aPureFileName = aFileParam.Copy( nLastDelim + 1 );
+                            aFileParam = aFileParam.Copy( 0, nLastDelim );
+                        }
+
+                        // Try again to get a valid URL with only the path
+                        aFileURLStr = getFullPath( aFileParam );
+
+                        // Is there a pure file name left? Otherwise the path is
+                        // invalid anyway because it was not accepted by OSL before
+                        if( aPureFileName.Len() && aPureFileName != String::CreateFromAscii( "*.*" ) )
+                        {
+                            // We make it very easy and search only for "anything*.xxx" patterns
+                            sal_Char cWild = '*';   // char -> sal_Char ok, because ASCII
+                            sal_Char cDot = '.';    // char -> sal_Char ok, because ASCII
+
+                            xub_StrLen nLastWild = aPureFileName.SearchBackward( cWild );
+                            xub_StrLen nLastDot = aPureFileName.SearchBackward( cDot );
+                            if( nLastWild != STRING_NOTFOUND &&
+                                nLastDot  != STRING_NOTFOUND &&
+                                nLastWild == nLastDot-1 )
+                            {
+                                pRTLData->bWildcard = sal_True;
+                                pRTLData->sExtension = aPureFileName.Copy( nLastDot + 1 );
+                                pRTLData->sPreWildcard = aPureFileName.Copy( 0, nLastWild );
+                            }
+                        }
+                    }
+                    // End #80200 HACK
 
                     try
                     {
@@ -2088,6 +2141,41 @@ RTLFUNC(Dir)
                             INetURLObject aURL( aFile );
                             aPath = aURL.getName( INetURLObject::LAST_SEGMENT, TRUE,
                                 INetURLObject::DECODE_WITH_CHARSET );
+
+                            // #80200 HACK to provide minimum wildcard functionality (*.xxx)
+                            if( pRTLData->bWildcard )
+                            {
+                                sal_Char cDot = '.';    // char -> sal_Char ok, because ASCII
+                                sal_Bool bMatch = sal_False;
+                                xub_StrLen nLastDot = aPath.SearchBackward( cDot );
+                                if( nLastDot  != STRING_NOTFOUND )
+                                {
+                                    String sExtension = aPath.Copy( nLastDot + 1 );
+                                    String sMainName = aPath.Copy( 0, nLastDot );
+                                    if( sExtension == pRTLData->sExtension )
+                                    {
+                                        sal_Int32 nPreWildcardLen = pRTLData->sPreWildcard.Len();
+                                        if( nPreWildcardLen )
+                                        {
+                                            String sTmp = sMainName.Copy( 0, nPreWildcardLen );
+#ifdef UNX
+                                            bMatch = sTmp.Equals( pRTLData->sPreWildcard );
+#else
+                                            bMatch = sTmp.EqualsIgnoreCaseAscii( pRTLData->sPreWildcard );
+#endif
+                                        }
+                                        else
+                                        {
+                                            bMatch = sal_True;
+                                        }
+                                    }
+                                }
+
+                                if( !bMatch )
+                                    continue;
+                            }
+                            // End #80200 HACK
+
                             break;
                         }
                     }
