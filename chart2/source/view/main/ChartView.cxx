@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartView.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: bm $ $Date: 2003-12-12 14:06:26 $
+ *  last change: $Author: iha $ $Date: 2003-12-12 20:15:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,10 +147,6 @@ ChartViewImpl::ChartViewImpl(
     , m_xDrawPage(NULL)
     , m_xDrawPages(NULL)
     , m_pNumberFormatterWrapper( pNumberFormatterWrapper )
-    , m_pVDiagram(NULL)
-    , m_pVLegend(NULL)
-    , m_pVTitle(NULL)
-    , m_pVSubtitle(NULL)
 {
     //get factory from draw model
     m_xShapeFactory = uno::Reference<lang::XMultiServiceFactory>( xDrawPagesSuplier, uno::UNO_QUERY );
@@ -515,6 +511,11 @@ void ChartViewImpl::getExplicitValuesForMeter(
     rfExplicitOrigin = pVCooSys->getOriginByDimension( nDim );
 }
 
+double lcl_getPageLayoutDistancePercentage()
+{
+    return 0.02;
+}
+
 bool getPosAndSizeForDiagram(
     awt::Point& rOutPos, awt::Size& rOutSize
     , const awt::Rectangle& rSpaceLeft
@@ -522,19 +523,27 @@ bool getPosAndSizeForDiagram(
     , const uno::Reference< XDiagram > & xDiagram )
 {
     //@todo: we need a size dependent on the axis labels
-
-    if(rSpaceLeft.Width <= 0 || rSpaceLeft.Height <= 0 )
+    awt::Rectangle aRemainingSpace(rSpaceLeft);
+    {
+        sal_Int32 nYDistance = static_cast<sal_Int32>(rPageSize.Height*lcl_getPageLayoutDistancePercentage());
+        sal_Int32 nXDistance = static_cast<sal_Int32>(rPageSize.Width*lcl_getPageLayoutDistancePercentage());
+        aRemainingSpace.X+=nXDistance;
+        aRemainingSpace.Width-=2*nXDistance;
+        aRemainingSpace.Y+=nYDistance;
+        aRemainingSpace.Height-=2*nYDistance;
+    }
+    if(aRemainingSpace.Width <= 0 || aRemainingSpace.Height <= 0 )
         return false;
 
-    //long nHeight = rSpaceLeft.Height * 5 / 6;
+    //long nHeight = aRemainingSpace.Height * 5 / 6;
     // (1 - 5/6) / 2 = 1/12
-    //long nOffsetY = rSpaceLeft.Y + rSpaceLeft.Height / 12;
-    long nHeight = rSpaceLeft.Height * 11 / 12;
-    long nOffsetY = rSpaceLeft.Y;
+    //long nOffsetY = aRemainingSpace.Y + aRemainingSpace.Height / 12;
+    long nHeight = aRemainingSpace.Height * 11 / 12;
+    long nOffsetY = aRemainingSpace.Y;
 
-    long nWidth = rSpaceLeft.Width * 5 / 6;
+    long nWidth = aRemainingSpace.Width * 5 / 6;
     // (1 - 5/6) / 2 = 1/12
-    long nOffsetX = rSpaceLeft.X + rSpaceLeft.Width / 12;
+    long nOffsetX = aRemainingSpace.X + aRemainingSpace.Width / 12;
 
     if( nHeight <= 0 || nWidth <= 0 )
         return false;
@@ -545,8 +554,8 @@ bool getPosAndSizeForDiagram(
     ::drafts::com::sun::star::layout::RelativeSize aRelativeSize;
     if( xProp.is() && (xProp->getPropertyValue( C2U( "RelativeSize" ) )>>=aRelativeSize) )
     {
-        rOutSize.Height = static_cast< sal_Int32 >( aRelativeSize.Secondary*rPageSize.Height );
-        rOutSize.Width = static_cast< sal_Int32 >( aRelativeSize.Primary*rPageSize.Width );
+        rOutSize.Height = static_cast<sal_Int32>(aRelativeSize.Secondary*rPageSize.Height);
+        rOutSize.Width = static_cast<sal_Int32>(aRelativeSize.Primary*rPageSize.Width);
     }
     else
         rOutSize = awt::Size(nWidth,nHeight);
@@ -574,27 +583,71 @@ bool getPosAndSizeForDiagram(
     return true;
 }
 
-void createTitle( const uno::Reference< XTitle >& xTitle
-                , sal_Int32 nXPosition
-                , sal_Int32& nrYOffset
-                , sal_Int32 nYDistance
+enum TitleAlignment { ALIGN_LEFT, ALIGN_TOP, ALIGN_RIGHT, ALIGN_BOTTOM, ALIGN_Z };
+
+void changePositionOfAxisTitle( VTitle* pVTitle, TitleAlignment eAlignment
+                               , awt::Rectangle& rDiagramPlusAxesRect, const awt::Size & rPageSize )
+{
+    if(!pVTitle)
+        return;
+
+    awt::Point aNewPosition(0,0);
+    awt::Size aTitleSize = pVTitle->getFinalSize();
+    sal_Int32 nYDistance = static_cast<sal_Int32>(rPageSize.Height*lcl_getPageLayoutDistancePercentage());
+    sal_Int32 nXDistance = static_cast<sal_Int32>(rPageSize.Width*lcl_getPageLayoutDistancePercentage());
+    switch( eAlignment )
+    {
+    case ALIGN_BOTTOM:
+        aNewPosition = awt::Point( rDiagramPlusAxesRect.X + rDiagramPlusAxesRect.Width/2
+                                    , rDiagramPlusAxesRect.Y + rDiagramPlusAxesRect.Height + aTitleSize.Height/2  + nYDistance );
+        break;
+    case ALIGN_LEFT:
+        aNewPosition = awt::Point( rDiagramPlusAxesRect.X - aTitleSize.Width/2 - nXDistance
+                                    , rDiagramPlusAxesRect.Y + rDiagramPlusAxesRect.Height/2 );
+        break;
+    case ALIGN_Z:
+        aNewPosition = awt::Point( rDiagramPlusAxesRect.X + rDiagramPlusAxesRect.Width + aTitleSize.Width/2 + nXDistance
+                                    , rDiagramPlusAxesRect.Y + rDiagramPlusAxesRect.Height - aTitleSize.Height/2 );
+       break;
+    default:
+        break;
+    }
+
+    pVTitle->changePosition( aNewPosition );
+}
+
+std::auto_ptr<VTitle> createTitle( const uno::Reference< XTitle >& xTitle
                 , const uno::Reference< drawing::XShapes>& xPageShapes
                 , const uno::Reference< lang::XMultiServiceFactory>& xShapeFactory
+                , awt::Rectangle& rRemainingSpace
                 , const awt::Size & rPageSize
-                 )
+                , TitleAlignment eAlignment
+                , bool& rbAutoPosition )
 {
+    std::auto_ptr<VTitle> apVTitle;
     if(xTitle.is())
     {
-        VTitle aVTitle(xTitle);
-        aVTitle.init(xPageShapes,xShapeFactory);
-        aVTitle.createShapes( awt::Point(0,0), rPageSize );
-        awt::Size aTitleSize = aVTitle.getFinalSize();
+        //create title
+        double fAdditionalRotationAngleDegree = 0.0;
+        if( ALIGN_LEFT==eAlignment)
+            fAdditionalRotationAngleDegree = 90.0;
 
-        awt::Point aNewPosition;
+        apVTitle = std::auto_ptr<VTitle>(new VTitle(xTitle,fAdditionalRotationAngleDegree));
+        apVTitle->init(xPageShapes,xShapeFactory);
+        apVTitle->createShapes( awt::Point(0,0), rPageSize );
+        awt::Size aTitleSize = apVTitle->getFinalSize();
+
+        //position
+        rbAutoPosition=true;
+        awt::Point aNewPosition(0,0);
+        sal_Int32 nYDistance = static_cast<sal_Int32>(rPageSize.Height*lcl_getPageLayoutDistancePercentage());
+        sal_Int32 nXDistance = static_cast<sal_Int32>(rPageSize.Width*lcl_getPageLayoutDistancePercentage());
         ::drafts::com::sun::star::layout::RelativePosition aRelativePosition;
         uno::Reference< beans::XPropertySet > xProp(xTitle, uno::UNO_QUERY);
         if( xProp.is() && (xProp->getPropertyValue( C2U( "RelativePosition" ) )>>=aRelativePosition) )
         {
+            rbAutoPosition = false;
+
             //@todo decide wether x is primary or secondary
             aNewPosition.X = static_cast<sal_Int32>(aRelativePosition.Primary*rPageSize.Width);
             aNewPosition.Y = static_cast<sal_Int32>(aRelativePosition.Secondary*rPageSize.Height);
@@ -602,21 +655,62 @@ void createTitle( const uno::Reference< XTitle >& xTitle
             //the anchor point at the title object is top/middle
             aNewPosition.Y += aTitleSize.Height/2;
         }
-        else
+        else //auto position
         {
-            aNewPosition = awt::Point( nXPosition, nrYOffset + aTitleSize.Height/2 + nYDistance );
-        }
+            switch( eAlignment )
+            {
+            case ALIGN_TOP:
+                aNewPosition = awt::Point( rRemainingSpace.X + rRemainingSpace.Width/2
+                                         , rRemainingSpace.Y + aTitleSize.Height/2 + nYDistance );
+                break;
+            case ALIGN_BOTTOM:
+                aNewPosition = awt::Point( rRemainingSpace.X + rRemainingSpace.Width/2
+                                         , rRemainingSpace.Y + rRemainingSpace.Height - aTitleSize.Height/2 - nYDistance );
+                break;
+            case ALIGN_LEFT:
+                aNewPosition = awt::Point( rRemainingSpace.X + aTitleSize.Width/2 + nXDistance
+                                         , rRemainingSpace.Y + rRemainingSpace.Height/2 );
+                break;
+            case ALIGN_RIGHT:
+                aNewPosition = awt::Point( rRemainingSpace.X + rRemainingSpace.Width - aTitleSize.Width/2 - nXDistance
+                                         , rRemainingSpace.Y + rRemainingSpace.Height/2 );
+                break;
+            default:
+                break;
 
-        aVTitle.changePosition( aNewPosition );
-        nrYOffset += aTitleSize.Height + 2*nYDistance;
+            }
+        }
+        apVTitle->changePosition( aNewPosition );
+
+        //remaining space
+        switch( eAlignment )
+        {
+            case ALIGN_TOP:
+                rRemainingSpace.Y += ( aTitleSize.Height + nYDistance );
+                rRemainingSpace.Height -= ( aTitleSize.Height + nYDistance );
+                break;
+            case ALIGN_BOTTOM:
+                rRemainingSpace.Height -= ( aTitleSize.Height + nYDistance );
+                break;
+            case ALIGN_LEFT:
+                rRemainingSpace.X += ( aTitleSize.Width + nXDistance );
+                rRemainingSpace.Width -= ( aTitleSize.Width + nXDistance );
+                break;
+            case ALIGN_RIGHT:
+                rRemainingSpace.Width -= ( aTitleSize.Width + nXDistance );
+                break;
+            default:
+                break;
+        }
     }
+    return apVTitle;
 }
 
-void createLegend( const uno::Reference< XLegend > & xLegend
-                   , awt::Rectangle & rOutSpaceLeft
-                   , const awt::Size & rPageSize
+bool createLegend( const uno::Reference< XLegend > & xLegend
                    , const uno::Reference< drawing::XShapes>& xPageShapes
                    , const uno::Reference< lang::XMultiServiceFactory>& xShapeFactory
+                   , awt::Rectangle & rOutSpaceLeft
+                   , const awt::Size & rPageSize
     )
 {
     if( VLegend::isVisible( xLegend ))
@@ -626,7 +720,9 @@ void createLegend( const uno::Reference< XLegend > & xLegend
         aVLegend.createShapes( awt::Size( rOutSpaceLeft.Width, rOutSpaceLeft.Height ),
                                rPageSize );
         aVLegend.changePosition( rOutSpaceLeft, rPageSize );
+        return true;
     }
+    return false;
 }
 
 void formatPage(
@@ -693,44 +789,82 @@ bool ChartViewImpl::create( const awt::Size& rPageSize )
     uno::Reference<drawing::XShapes> xPageShapes =
         uno::Reference<drawing::XShapes>( m_xDrawPage, uno::UNO_QUERY );
 
-    sal_Int32 nYOffset = 0;
-    sal_Int32 nXPosition = rPageSize.Width/2;
-    sal_Int32 nYDistance = rPageSize.Height*2/100;
-
     //------------ apply fill properties to page
     // todo: it would be nicer to just pass the page m_xDrawPage and format it,
     // but the page we have here does not support XPropertySet
     formatPage( m_xChartModel, rPageSize, xPageShapes, m_xShapeFactory );
 
+    //sal_Int32 nYDistance = static_cast<sal_Int32>(rPageSize.Height*lcl_getPageLayoutDistancePercentage());
+    awt::Rectangle aRemainingSpace( 0, 0, rPageSize.Width, rPageSize.Height );
+
+    //------------ create some titles
+    std::auto_ptr<VTitle> apVTitle(0);
+    bool bAutoPositionDummy;
+
     //------------ create main title shape
-    createTitle( TitleHelper::getTitle( TitleHelper::MAIN_TITLE, m_xChartModel )
-                , nXPosition, nYOffset, nYDistance, xPageShapes, m_xShapeFactory
-                , rPageSize );
-    if(nYOffset+nYDistance>=rPageSize.Height)
+    createTitle( TitleHelper::getTitle( TitleHelper::MAIN_TITLE, m_xChartModel ), xPageShapes, m_xShapeFactory
+                , aRemainingSpace, rPageSize, ALIGN_TOP, bAutoPositionDummy );
+    if(aRemainingSpace.Width<=0||aRemainingSpace.Height<=0)
         return true;
 
     //------------ create sub title shape
-    createTitle( TitleHelper::getTitle( TitleHelper::SUB_TITLE, m_xChartModel )
-                , nXPosition, nYOffset, nYDistance, xPageShapes, m_xShapeFactory
-                , rPageSize );
-    if(nYOffset+nYDistance>=rPageSize.Height)
+    createTitle( TitleHelper::getTitle( TitleHelper::SUB_TITLE, m_xChartModel ), xPageShapes, m_xShapeFactory
+                , aRemainingSpace, rPageSize, ALIGN_TOP, bAutoPositionDummy );
+    if(aRemainingSpace.Width<=0||aRemainingSpace.Height<=0)
         return true;
 
     //------------ create legend
-    awt::Rectangle aSpaceLeft( 0, nYOffset, rPageSize.Width, rPageSize.Height - nYOffset );
-    createLegend( LegendHelper::getLegend( m_xChartModel )
-                  , aSpaceLeft, rPageSize, xPageShapes, m_xShapeFactory );
+    createLegend( LegendHelper::getLegend( m_xChartModel ), xPageShapes, m_xShapeFactory
+                , aRemainingSpace, rPageSize );
+    if(aRemainingSpace.Width<=0||aRemainingSpace.Height<=0)
+        return true;
+
+    //------------ create x axis title
+    bool bAutoPosition_XTitle;
+    std::auto_ptr<VTitle> apVTitle_X( createTitle( TitleHelper::getTitle( TitleHelper::X_AXIS_TITLE, m_xChartModel ), xPageShapes, m_xShapeFactory
+                , aRemainingSpace, rPageSize, ALIGN_BOTTOM, bAutoPosition_XTitle) );
+    if(aRemainingSpace.Width<=0||aRemainingSpace.Height<=0)
+        return true;
+
+    //------------ create y axis title
+    bool bAutoPosition_YTitle;
+    std::auto_ptr<VTitle> apVTitle_Y( createTitle( TitleHelper::getTitle( TitleHelper::Y_AXIS_TITLE, m_xChartModel ), xPageShapes, m_xShapeFactory
+                , aRemainingSpace, rPageSize, ALIGN_LEFT, bAutoPosition_YTitle) );
+    if(aRemainingSpace.Width<=0||aRemainingSpace.Height<=0)
+        return true;
+
+    //------------ create z axis title
+    bool bAutoPosition_ZTitle;
+    std::auto_ptr<VTitle> apVTitle_Z( createTitle( TitleHelper::getTitle( TitleHelper::Z_AXIS_TITLE, m_xChartModel ), xPageShapes, m_xShapeFactory
+                , aRemainingSpace, rPageSize, ALIGN_RIGHT, bAutoPosition_ZTitle) );
+    if(aRemainingSpace.Width<=0||aRemainingSpace.Height<=0)
+        return true;
 
     //------------ create complete diagram shape (inclusive axis and series)
     awt::Point aPosDia;
     awt::Size  aSizeDia;
-    aSpaceLeft.Y += nYDistance;
-    aSpaceLeft.Height -= nYDistance;//@todo substract 2*nYOffset if the diagram size is calculated dependent on axis labels
-    if( getPosAndSizeForDiagram( aPosDia, aSizeDia, aSpaceLeft, rPageSize, ChartModelHelper::findDiagram( m_xChartModel ) ) )
+    if( getPosAndSizeForDiagram( aPosDia, aSizeDia, aRemainingSpace, rPageSize, ChartModelHelper::findDiagram( m_xChartModel ) ) )
+    {
+        //create diagram and all its content
+        uno::Reference< drawing::XShapes > xDiagramPlusAxesGroup_Shapes = ShapeFactory(m_xShapeFactory).createGroup2D(xPageShapes,C2U("CID/Diagram=XXX_CID"));//@todo read CID from model
+
         initializeDiagramAndGetCooSys( m_aVCooSysList
-                    , m_xCC, xPageShapes, m_xShapeFactory, m_pNumberFormatterWrapper
-                    , aPosDia ,aSizeDia
-                    , m_xChartModel );
+                    , m_xCC, xDiagramPlusAxesGroup_Shapes, m_xShapeFactory, m_pNumberFormatterWrapper
+                    , aPosDia ,aSizeDia, m_xChartModel );
+
+        //correct axis title position
+        uno::Reference< drawing::XShape > xDiagramPlusAxesGroup_Shape( xDiagramPlusAxesGroup_Shapes, uno::UNO_QUERY );
+        awt::Point aPos = xDiagramPlusAxesGroup_Shape->getPosition();
+        awt::Size aSize = xDiagramPlusAxesGroup_Shape->getSize();
+        awt::Rectangle aRect(aPos.X,aPos.Y,aSize.Width,aSize.Height);
+        awt::Rectangle aDiagramPlusAxesRect(aPos.X,aPos.Y,aSize.Width,aSize.Height);
+        if(bAutoPosition_XTitle)
+            changePositionOfAxisTitle( apVTitle_X.get(), ALIGN_BOTTOM, aDiagramPlusAxesRect, rPageSize );
+        if(bAutoPosition_YTitle)
+            changePositionOfAxisTitle( apVTitle_Y.get(), ALIGN_LEFT, aDiagramPlusAxesRect, rPageSize );
+        if(bAutoPosition_ZTitle)
+            changePositionOfAxisTitle( apVTitle_Z.get(), ALIGN_Z, aDiagramPlusAxesRect, rPageSize );
+    }
     return true;
 }
 
