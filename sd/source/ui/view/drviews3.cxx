@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews3.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 10:58:04 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 14:41:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,9 @@
 #endif
 #ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
+#endif
+#ifndef _URLOBJ_HXX
+#include <tools/urlobj.hxx>
 #endif
 #ifndef _AEITEM_HXX //autogen
 #include <svtools/aeitem.hxx>
@@ -420,7 +423,7 @@ void  SdDrawViewShell::ExecCtrl(SfxRequest& rReq)
             {
                 SFX_REQUEST_ARG(rReq, pBookmark, SfxStringItem, SID_JUMPTOMARK, FALSE);
 
-                UniString sBookmark( pBookmark->GetValue() );
+                UniString sBookmark( INetURLObject::decode( pBookmark->GetValue(), '%', INetURLObject::DECODE_WITH_CHARSET ) );
                 if( sBookmark.Search( sal_Unicode('#') ) == 0 )
                     sBookmark = sBookmark.Copy( 1 );
 
