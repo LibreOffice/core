@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XDispatchProviderInterception.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:10:22 $
+ *  last change:$Date: 2003-09-08 10:38:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,14 +61,16 @@
 
 package ifc.frame;
 
+import java.io.PrintWriter;
+
+import lib.MultiMethodTest;
+
 import com.sun.star.frame.DispatchDescriptor;
 import com.sun.star.frame.XDispatch;
 import com.sun.star.frame.XDispatchProvider;
 import com.sun.star.frame.XDispatchProviderInterception;
 import com.sun.star.frame.XDispatchProviderInterceptor;
 import com.sun.star.util.URL;
-import java.io.PrintWriter;
-import lib.MultiMethodTest;
 
 /**
 * Testing <code>com.sun.star.frame.XDispatchProviderInterception</code>
