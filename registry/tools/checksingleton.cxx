@@ -2,9 +2,9 @@
  *
  *  $RCSfile: checksingleton.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jsc $ $Date: 2001-05-18 15:19:31 $
+ *  last change: $Author: jsc $ $Date: 2001-06-25 14:37:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -287,7 +287,7 @@ sal_Bool Options::initOptions(int ac, char* av[], sal_Bool bCmdFile)
 OString Options::prepareHelp()
 {
     OString help("\nusing: ");
-    help += m_program + " -r1<filename> -r2<filename> [-options] | @<filename>\n";
+    help += m_program + " -r<filename> -o<filename> [-options] | @<filename>\n";
     help += "    -o<filename>  = filename specifies the name of the new singleton index registry.\n";
     help += "    -r<filename>  = filename specifies the name of the type registry.\n";
     help += "    @<filename>    = filename specifies a command file.\n";
