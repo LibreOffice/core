@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdgrffilter.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: bm $ $Date: 2002-10-24 13:12:25 $
+ *  last change: $Author: sj $ $Date: 2002-11-21 11:40:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -353,11 +353,14 @@ sal_Bool SdGRFFilter::Export()
         if( !bSelection || !pDrawViewShell )
         {
             // export the whole page
-            const Size aSize( pPage->GetSize() );
+            const Size  aSize( pPage->GetSize() );
+            const Point aNewOrg( pPage->GetLftBorder(), pPage->GetUppBorder() );
+            const Size  aNewSize( aSize.Width() - pPage->GetLftBorder() - pPage->GetRgtBorder(),
+                                  aSize.Height() - pPage->GetUppBorder() - pPage->GetLwrBorder() );
 
             if ( !bVectorType && !bTranslucent )
             {
-                const Size      aSizePix( aVDev.LogicToPixel( aSize, aMap ) );
+                const Size      aSizePix( aVDev.LogicToPixel( aNewSize, aMap ) );
                 const long      nWidthPix = ( aSizePix.Width() > 2048 || aSizePix.Height() > 2048 ) ? 2048 : 0;
                 SdView*         pView = new SdView( &mrDocument, &aVDev );
                 VirtualDevice*  pVDev = pView->CreatePageVDev( nPage, ePageKind, nWidthPix );
@@ -366,7 +369,7 @@ sal_Bool SdGRFFilter::Export()
                 {
                     aGraphic = pVDev->GetBitmap( Point(), pVDev->GetOutputSize() );
                     aGraphic.SetPrefMapMode( aMap );
-                    aGraphic.SetPrefSize( aSize );
+                    aGraphic.SetPrefSize( aNewSize );
                     delete pVDev;
                 }
 
@@ -386,9 +389,6 @@ sal_Bool SdGRFFilter::Export()
                 pView->SetPageVisible( FALSE );
                 pView->ShowPage( pPage, Point() );
 
-                const Point aNewOrg( pPage->GetLftBorder(), pPage->GetUppBorder() );
-                const Size  aNewSize( aSize.Width() - pPage->GetLftBorder() - pPage->GetRgtBorder(),
-                                      aSize.Height() - pPage->GetUppBorder() - pPage->GetLwrBorder() );
                 const Rectangle aClipRect( aNewOrg, aNewSize );
                 MapMode         aVMap( aMap );
 
