@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cclass_unicode.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 11:06:17 $
+ *  last change: $Author: obo $ $Date: 2004-09-08 15:25:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,8 @@
 #include <com/sun/star/i18n/UnicodeScript.hpp>
 #include <com/sun/star/i18n/UnicodeType.hpp>
 #include <i18nutil/unicode.hxx>
+#include <i18nutil/x_rtl_ustring.h>
+#include <breakiteratorImpl.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
@@ -95,20 +97,51 @@ cclass_Unicode::~cclass_Unicode() {
 
 OUString SAL_CALL
 cclass_Unicode::toUpper( const OUString& Text, sal_Int32 nPos, sal_Int32 nCount, const Locale& rLocale ) throw(RuntimeException) {
+    sal_Int32 len = Text.getLength();
+    if (nPos >= len)
+        return OUString();
+    if (nCount + nPos > len)
+        nCount = len - nPos;
+
     trans->setMappingType(MappingTypeToUpper, rLocale);
     return trans->transliterateString2String(Text, nPos, nCount);
 }
 
 OUString SAL_CALL
 cclass_Unicode::toLower( const OUString& Text, sal_Int32 nPos, sal_Int32 nCount, const Locale& rLocale ) throw(RuntimeException) {
+    sal_Int32 len = Text.getLength();
+    if (nPos >= len)
+        return OUString();
+    if (nCount + nPos > len)
+        nCount = len - nPos;
+
     trans->setMappingType(MappingTypeToLower, rLocale);
     return trans->transliterateString2String(Text, nPos, nCount);
 }
 
 OUString SAL_CALL
 cclass_Unicode::toTitle( const OUString& Text, sal_Int32 nPos, sal_Int32 nCount, const Locale& rLocale ) throw(RuntimeException) {
+    sal_Int32 len = Text.getLength();
+    if (nPos >= len)
+        return OUString();
+    if (nCount + nPos > len)
+        nCount = len - nPos;
+
     trans->setMappingType(MappingTypeToTitle, rLocale);
-    return trans->transliterateString2String(Text, nPos, nCount);
+    rtl_uString* pStr = x_rtl_uString_new_WithLength( nCount, 1 );
+    sal_Unicode* out = pStr->buffer;
+    BreakIteratorImpl brk(xMSF);
+    Boundary bdy = brk.getWordBoundary(Text, nPos, rLocale,
+                WordType::ANYWORD_IGNOREWHITESPACES, sal_True);
+    for (sal_Int32 i = nPos; i < nCount + nPos; i++, out++) {
+        if (i >= bdy.endPos)
+            bdy = brk.nextWord(Text, bdy.endPos, rLocale,
+                        WordType::ANYWORD_IGNOREWHITESPACES);
+        *out = (i == bdy.startPos) ?
+            trans->transliterateChar2Char(Text[i]) : Text[i];
+    }
+    *out = 0;
+    return OUString( pStr, SAL_NO_ACQUIRE );
 }
 
 sal_Int16 SAL_CALL
