@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chrdlg.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:12:51 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 11:49:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,7 @@ String STR_TEXTCOLL_HEADER
     TEXT[ czech ] = "Styl odstavce:";
     TEXT[ hebrew ] = " (Absatzvorlage:";
     TEXT[ hindi ] = "(परिच्छेद शैली: ";
+    TEXT[ slovak ] = "Štýl odstavca:";
 };
 String STR_PAGEFMT_HEADER
 {
@@ -121,6 +122,7 @@ String STR_PAGEFMT_HEADER
     TEXT[ czech ] = "Styl stránky:";
     TEXT[ hebrew ] = " ‮(סגנון:‬";
     TEXT[ hindi ] = "(पृष्ठ शैली: ";
+    TEXT[ slovak ] = "Štýl stránky:";
 };
 String SW_STR_NONE
 {
@@ -152,6 +154,7 @@ String SW_STR_NONE
     Text[ czech ] = "[Nic]";
     Text[ hebrew ] = "‮[ללא]‬";
     Text[ hindi ] = "[कोई नहीं]";
+    Text[ slovak ] = "[Nič]";
 };
 InfoBox MSG_ILLEGAL_PAGENUM
 {
@@ -161,7 +164,7 @@ InfoBox MSG_ILLEGAL_PAGENUM
     MESSAGE = "Seitennummer kann nicht gesetzt werden. Auf linken Seiten d�rfen nur gerade Seitenzahlen, auf rechten Seiten nur ungerade Seitenzahlen verwendet werden." ;
     MESSAGE [ English ] = "Page number can't be applied to the actual page.  Even numbers can be used on left pages, odd numbers on right pages." ;
     MESSAGE [ norwegian ] = "Sidenummer kan ikke brukes p� den aktuelle siden. Partall kan brukes p� venstre sider, oddetall p� h�yre sider." ;
-    MESSAGE [ italian ] = "Impossibile usare il numero pagina alla pagina corrente. I numeri pari possono essere usati sulle pagine sinistre, i numeri dispari sulle pagine destre." ;
+    MESSAGE [ italian ] = "Impossibile applicare il numero pagina alla pagina attiva. Potete applicare i numeri pari alle pagine sinistre e i numeri dispari alle pagine destre." ;
     MESSAGE [ portuguese_brazilian ] = "A numera��o de p�gina n�o pode ser aplicada � p�gina atual.  N�meros pares podem ser utilizados em p�ginas da esquerda, n�meros �mpares em p�ginas da direita." ;
     MESSAGE [ portuguese ] = "N�mero de p�gina n�o pode ser atribu�do � p�gina actual. Nas p�ginas da esquerda podem apenas ser usados n�meros pares e nas p�ginas da direita n�meros �mpares." ;
     MESSAGE [ finnish ] = "K�sitelt�v�lle sivulle ei voi lis�t� sivunumeroa. Parillisia numeroita voi k�ytt�� vasemmanpuoleisilla sivuilla, parittomia numeroita oikeanpuoleisilla." ;
@@ -186,7 +189,10 @@ InfoBox MSG_ILLEGAL_PAGENUM
     MESSAGE[ czech ] = "Na aktuální stránce nelze použít číslování stránek. Sudá čísla lze použít jen na levých stránkách, lichá čísla na pravých stránkách.";
     MESSAGE[ hebrew ] = "Seitennummer kann nicht gesetzt werden. Auf linken Seiten dürfen nur gerade Seitenzahlen, auf rechten Seiten nur ungerade Seitenzahlen verwendet werden.";
     MESSAGE[ hindi ] = "वर्तमान पृष्ठ केलिए पृष्ठ संख्या को लागू नहीं कर सकते है ।  सम संख्या को बायाँ ओर के पृष्ठ में , विषम संख्या को दाहिनी ओर के पृष्ठ में उपयोग करता है ।";
+    MESSAGE[ slovak ] = "Na aktuálnej strane nemožno použiť číslovanie strán. Párne čísla možno použiť len na ľavých stránkach, nepárne čísla na pravých stránkach.";
 };
+
+
 
 
 
