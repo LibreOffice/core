@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmview.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-05 14:30:05 $
+ *  last change: $Author: fs $ $Date: 2001-04-20 16:13:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -396,20 +396,23 @@ void FmFormView::ChangeDesignMode(sal_Bool bDesign)
             for (sal_Int32 i = 0, nCount = xForms->getCount(); i < nCount; i++)
             {
                 xForms->getByIndex(i) >>= xReset;
-                Reference< ::com::sun::star::form::XLoadable >  xLoad(xReset, UNO_QUERY);
+                Reference< XLoadable >  xLoad(xReset, UNO_QUERY);
+                if (!xLoad.is())
+                    continue;
 
                 if (bDesign)
                 {
-                    if (xLoad.is() && xLoad->isLoaded())
+                    if (xLoad->isLoaded())
                         xLoad->unload();
 
-                    if (xReset.is())
-                        xReset->reset();
+                    xReset->reset();
                 }
                 else
                 {
                     if (::isLoadable(xLoad) && !xLoad->isLoaded())
                         xLoad->load();
+
+                    pImpl->smartControlReset(Reference< XIndexAccess >(xReset, UNO_QUERY));
                 }
             }
         }
