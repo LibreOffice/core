@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scendlg.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 19:54:52 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 16:12:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,7 @@ ModalDialog RID_SCDLG_NEWSCENARIO
 {
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 260 , 151 ) ;
+    Size = MAP_APPFONT ( 260 , 165 ) ;
     Text = "Szenario anlegen" ;
     Text [ ENGLISH ] = "Create Scenario" ;
     Text [ NORWEGIAN ] = "Lag Scenario" ;
@@ -122,7 +122,7 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Size = MAP_APPFONT ( 109 , 10 ) ;
         Text = "~Rahmen anzeigen" ;
         Text [ ENGLISH ] = "Display ~border" ;
-        Text[ english_us ] = "Display border in";
+        Text[ english_us ] = "~Display border in";
         Text[ portuguese ] = "~Mostrar moldura";
         Text[ russian ] = "œÓÍ‡Á‡Ú¸ ‡ÏÍÛ";
         Text[ greek ] = "≈Ïˆ‹ÌÈÛÁ Î·ÈÛﬂÔı";
@@ -202,7 +202,7 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         /* ### ACHTUNG: Neuer Text in Resource? Zur¸ckkopieren : Zur≥ckkopieren */
         Text = "~Zur¸ckkopieren" ;
         Text [ ENGLISH ] = "C~opy back" ;
-        Text [ english_us ] = "Copy back" ;
+        Text [ english_us ] = "Copy ~back" ;
         Text [ portuguese_brazilian ] = "Copiar de volta" ;
         Text [ swedish ] = "Kopiera t~illbaka" ;
         Text [ danish ] = "Kopier tilbage" ;
@@ -309,7 +309,7 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Size = MAP_APPFONT ( 183 , 10 ) ;
         Text = "Ganze ~Tabelle kopieren" ;
         Text [ ENGLISH ] = "Copy entire ~sheet" ;
-        Text [ english_us ] = "Copy entire sheet" ;
+        Text [ english_us ] = "Copy ~entire sheet" ;
         Text [ portuguese_brazilian ] = "Copiar a planilha inteira" ;
         Text [ swedish ] = "Kopiera hel ~tabell" ;
         Text [ danish ] = "Kopier hele arket" ;
@@ -337,6 +337,13 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Text[ slovak ] = "Kop√≠rova≈• cel√Ω list";
         Text[ hungarian ] = "Teljes munkalap m√°sol√°sa";
         Text[ slovenian ] = "Kopiraj cel list";
+    };
+    CheckBox CB_PROTECT
+    {
+        Pos = MAP_APPFONT ( 12 , 149 ) ;
+        Size = MAP_APPFONT ( 183 , 10 ) ;
+        Text = "~ƒnderungen verhindern" ;
+        Text[ english_us ] = "~Prevent changes" ;
     };
     String STR_EDIT
     {
@@ -445,7 +452,7 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Size = MAP_APPFONT ( 192 , 8 ) ;
         Text = "~Name des Szenarios" ;
         Text [ ENGLISH ] = "~Name of scenario" ;
-        Text [ ENGLISH_US ] = "Name of scenario";
+        Text [ ENGLISH_US ] = "~Name of scenario";
         Text[ italian ] = "Nome dello scenario";
         Text[ portuguese_brazilian ] = "Nome do cen·rio";
         Text[ portuguese ] = "~Nome do cen·rio";
@@ -480,7 +487,7 @@ ModalDialog RID_SCDLG_NEWSCENARIO
         Size = MAP_APPFONT ( 192 , 8 ) ;
         Text = "~Kommentar" ;
         Text [ ENGLISH ] = "~Comment" ;
-        Text [ ENGLISH_US ] = "Comment";
+        Text [ ENGLISH_US ] = "~Comment";
         Text[ italian ] = "~Commento";
         Text[ portuguese_brazilian ] = "Coment·rio";
         Text[ portuguese ] = "~Coment·rio";
