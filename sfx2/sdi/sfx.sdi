@@ -1477,7 +1477,7 @@ SfxStringItem CheckKey SID_CHECK_KEY
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem ChooseMacro SID_BASICIDE_CHOOSEMACRO
+SfxStringItem ChooseMacro SID_BASICIDE_CHOOSEMACRO
 ()
 [
     /* flags: */
