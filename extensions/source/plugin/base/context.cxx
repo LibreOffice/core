@@ -2,9 +2,9 @@
  *
  *  $RCSfile: context.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pl $ $Date: 2001-09-11 12:06:16 $
+ *  last change: $Author: pl $ $Date: 2002-04-11 11:54:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,23 +175,30 @@ void XPluginContext_Impl::getURL(const Reference< ::com::sun::star::plugin::XPlu
 
     if( xLoader.is() && pPlugin )
     {
-        ::com::sun::star::beans::PropertyValue aValue;
-        aValue.Name     = ::rtl::OUString::createFromAscii( "Referer" );
-        aValue.Value <<= pPlugin->getRefererURL();
+        try
+        {
+            ::com::sun::star::beans::PropertyValue aValue;
+            aValue.Name     = ::rtl::OUString::createFromAscii( "Referer" );
+            aValue.Value <<= pPlugin->getRefererURL();
 
-        Sequence< ::com::sun::star::beans::PropertyValue > aArgs( &aValue, 1 );
-        Reference< ::com::sun::star::lang::XComponent >  xComp =
-            xLoader->loadComponentFromURL(
-                url,
-                target,
-                ::com::sun::star::frame::FrameSearchFlag::PARENT        |
-                ::com::sun::star::frame::FrameSearchFlag::SELF          |
-                ::com::sun::star::frame::FrameSearchFlag::CHILDREN      |
-                ::com::sun::star::frame::FrameSearchFlag::SIBLINGS      |
-                ::com::sun::star::frame::FrameSearchFlag::TASKS         |
-                ::com::sun::star::frame::FrameSearchFlag::CREATE,
-                aArgs
-                );
+            Sequence< ::com::sun::star::beans::PropertyValue > aArgs( &aValue, 1 );
+            Reference< ::com::sun::star::lang::XComponent >  xComp =
+                xLoader->loadComponentFromURL(
+                                              url,
+                                              target,
+                                              ::com::sun::star::frame::FrameSearchFlag::PARENT          |
+                                              ::com::sun::star::frame::FrameSearchFlag::SELF            |
+                                              ::com::sun::star::frame::FrameSearchFlag::CHILDREN        |
+                                              ::com::sun::star::frame::FrameSearchFlag::SIBLINGS        |
+                                              ::com::sun::star::frame::FrameSearchFlag::TASKS           |
+                                              ::com::sun::star::frame::FrameSearchFlag::CREATE,
+                                              aArgs
+                                              );
+        }
+        catch(...)
+        {
+            throw ::com::sun::star::plugin::PluginException();
+        }
     }
 }
 
@@ -245,25 +252,32 @@ void XPluginContext_Impl::postURL(const Reference< ::com::sun::star::plugin::XPl
     XPlugin_Impl* pPlugin = XPluginManager_Impl::getPluginImplementation( plugin );
     if( xLoader.is() && pPlugin )
     {
-        ::com::sun::star::beans::PropertyValue aValues[2];
-        aValues[0].Name = ::rtl::OUString::createFromAscii( "Referer" );
-        aValues[0].Value <<= pPlugin->getRefererURL();
+        try
+        {
+            ::com::sun::star::beans::PropertyValue aValues[2];
+            aValues[0].Name = ::rtl::OUString::createFromAscii( "Referer" );
+            aValues[0].Value <<= pPlugin->getRefererURL();
 
-        aValues[1].Name = ::rtl::OUString::createFromAscii( "PostString" );
-        aValues[1].Value <<= ::rtl::OStringToOUString( (char*)( file ? aBuf : buf ).getConstArray(), m_aEncoding );
-        Sequence< ::com::sun::star::beans::PropertyValue > aArgs( aValues, 2 );
-        Reference< ::com::sun::star::lang::XComponent >  xComp =
-            xLoader->loadComponentFromURL(
-                url,
-                target,
-                ::com::sun::star::frame::FrameSearchFlag::PARENT        |
-                ::com::sun::star::frame::FrameSearchFlag::SELF          |
-                ::com::sun::star::frame::FrameSearchFlag::CHILDREN      |
-                ::com::sun::star::frame::FrameSearchFlag::SIBLINGS      |
-                ::com::sun::star::frame::FrameSearchFlag::TASKS         |
-                ::com::sun::star::frame::FrameSearchFlag::CREATE,
-                aArgs
-                );
+            aValues[1].Name = ::rtl::OUString::createFromAscii( "PostString" );
+            aValues[1].Value <<= ::rtl::OStringToOUString( (char*)( file ? aBuf : buf ).getConstArray(), m_aEncoding );
+            Sequence< ::com::sun::star::beans::PropertyValue > aArgs( aValues, 2 );
+            Reference< ::com::sun::star::lang::XComponent >  xComp =
+                xLoader->loadComponentFromURL(
+                                              url,
+                                              target,
+                                              ::com::sun::star::frame::FrameSearchFlag::PARENT          |
+                                              ::com::sun::star::frame::FrameSearchFlag::SELF            |
+                                              ::com::sun::star::frame::FrameSearchFlag::CHILDREN        |
+                                              ::com::sun::star::frame::FrameSearchFlag::SIBLINGS        |
+                                              ::com::sun::star::frame::FrameSearchFlag::TASKS           |
+                                              ::com::sun::star::frame::FrameSearchFlag::CREATE,
+                                              aArgs
+                                              );
+        }
+        catch( ... )
+        {
+            throw ::com::sun::star::plugin::PluginException();
+        }
     }
 }
 
@@ -321,23 +335,29 @@ void FileSink::closeOutput() throw()
 
     if( xLoader.is() && pPlugin )
     {
-        ::com::sun::star::beans::PropertyValue aValue;
-        aValue.Name = ::rtl::OUString::createFromAscii( "Referer" );
-        aValue.Value <<= pPlugin->getRefererURL();
+        try
+        {
+            ::com::sun::star::beans::PropertyValue aValue;
+            aValue.Name = ::rtl::OUString::createFromAscii( "Referer" );
+            aValue.Value <<= pPlugin->getRefererURL();
 
-        Sequence< ::com::sun::star::beans::PropertyValue > aArgs( &aValue, 1 );
-        Reference< ::com::sun::star::lang::XComponent >  xComp =
-            xLoader->loadComponentFromURL(
-                m_aFileName,
-                m_aTarget,
-                ::com::sun::star::frame::FrameSearchFlag::PARENT        |
-                ::com::sun::star::frame::FrameSearchFlag::SELF          |
-                ::com::sun::star::frame::FrameSearchFlag::CHILDREN      |
-                ::com::sun::star::frame::FrameSearchFlag::SIBLINGS      |
-                ::com::sun::star::frame::FrameSearchFlag::TASKS         |
-                ::com::sun::star::frame::FrameSearchFlag::CREATE,
-                aArgs
-                );
+            Sequence< ::com::sun::star::beans::PropertyValue > aArgs( &aValue, 1 );
+            Reference< ::com::sun::star::lang::XComponent >  xComp =
+                xLoader->loadComponentFromURL(
+                                              m_aFileName,
+                                              m_aTarget,
+                                              ::com::sun::star::frame::FrameSearchFlag::PARENT          |
+                                              ::com::sun::star::frame::FrameSearchFlag::SELF            |
+                                              ::com::sun::star::frame::FrameSearchFlag::CHILDREN        |
+                                              ::com::sun::star::frame::FrameSearchFlag::SIBLINGS        |
+                                              ::com::sun::star::frame::FrameSearchFlag::TASKS           |
+                                              ::com::sun::star::frame::FrameSearchFlag::CREATE,
+                                              aArgs
+                                              );
+        }
+        catch( ... )
+        {
+        }
     }
     release();
 }
