@@ -2,9 +2,9 @@
 #
 #   $RCSfile: macro.pl,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: vg $ $Date: 2005-02-21 12:13:55 $
+#   last change: $Author: kz $ $Date: 2005-03-01 13:25:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -60,7 +60,7 @@
 #
 #*************************************************************************
 
-my $completelangiso_var = $ENV{completelangiso_var};
+my $completelangiso_var = $ENV{COMPLETELANGISO_VAR};
 my $lastcompletelangiso_var;;
 my $outfile = "";
 
