@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgdlg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 18:42:20 $
+ *  last change: $Author: hr $ $Date: 2004-02-06 11:36:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,8 +145,8 @@
 
 #include <unotools/localfilehelper.hxx>
 
-#ifndef _SVX_OPTGENRL_HXX
-#include "optgenrl.hxx"
+#ifndef _SVX_CUIOPTGENRL_HXX
+#include "cuioptgenrl.hxx"
 #endif
 #ifndef _SVX_OPTPATH_HXX
 #include "optpath.hxx"

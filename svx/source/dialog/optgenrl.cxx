@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgenrl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 18:43:26 $
+ *  last change: $Author: hr $ $Date: 2004-02-06 11:36:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@
 #include "optgenrl.hrc"
 
 #include "adritem.hxx"
-#include "optgenrl.hxx"
+#include "cuioptgenrl.hxx"
 #include "dialmgr.hxx"
 #include "dlgutil.hxx"
 #include "strarray.hxx"

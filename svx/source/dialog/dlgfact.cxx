@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgfact.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 18:25:10 $
+ *  last change: $Author: hr $ $Date: 2004-02-06 11:36:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,7 @@
 #include "cuitabline.hxx" //add for SvxLineTabDialog
 #include "measure.hxx" //add for SvxMeasureDialog
 #include "connect.hxx" //add for SvxConnectionDialog
-#include "optgenrl.hxx" //add for SvxGeneralTabPage
+#include "cuioptgenrl.hxx"  //add for SvxGeneralTabPage
 
 using namespace svx;
 // AbstractTabDialog implementations just forwards everything to the dialog
