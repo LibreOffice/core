@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wizardmachine.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-02 10:37:38 $
+ *  last change: $Author: fs $ $Date: 2001-08-08 14:57:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -251,6 +251,16 @@ namespace svt
         m_pImpl->sTitleBase = GetText();
 
         // create the buttons according to the wizard button flags
+        // the help button
+        if (_nButtonFlags & WZB_HELP)
+        {
+            m_pHelp= new HelpButton(this, WB_TABSTOP);
+            m_pHelp->SetSizePixel( LogicToPixel( Size( 50, 14 ), MAP_APPFONT ) );
+            m_pHelp->Show();
+
+            AddButton( m_pHelp, WIZARDDIALOG_BUTTON_STDOFFSET_X );
+        }
+
         // the cancel button
         if (_nButtonFlags & WZB_CANCEL)
         {
@@ -300,16 +310,6 @@ namespace svt
 
             AddButton( m_pFinish, WIZARDDIALOG_BUTTON_STDOFFSET_X );
             m_pFinish->SetClickHdl( LINK( this, OWizardMachine, OnFinish ) );
-        }
-
-        // the help button
-        if (_nButtonFlags & WZB_HELP)
-        {
-            m_pHelp= new HelpButton(this, WB_TABSTOP);
-            m_pHelp->SetSizePixel( LogicToPixel( Size( 50, 14 ), MAP_APPFONT ) );
-            m_pHelp->Show();
-
-            AddButton( m_pHelp, WIZARDDIALOG_BUTTON_STDOFFSET_X );
         }
 
     }
@@ -671,6 +671,9 @@ namespace svt
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5  2001/08/02 10:37:38  fs
+ *  #88530# added functionality for adding a WizardHeader (upon request of the derived class)
+ *
  *  Revision 1.4  2001/02/23 10:55:00  fs
  *  small fixes in skip
  *
