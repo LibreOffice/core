@@ -20476,3 +20476,5 @@ _real@8@400cfa00000000000000
 ?setBackground@VCLXWindow@@WBE@AAXJ@Z
 ?setForeground@VCLXWindow@@WBE@AAXJ@Z
 ?setVisible@VCLXWindow@@WBI@AAXE@Z
+?SetTextObjNoInit@SdrOutliner@@QAEXPBVSdrTextObj@@@Z
+?initCommon@FmSearchDialog@@AAEXABV?$Reference@VXResultSet@sdbc@star@sun@com@@@uno@star@sun@com@@@Z
