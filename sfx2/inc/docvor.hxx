@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvor.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pb $ $Date: 2002-06-07 07:07:44 $
+ *  last change: $Author: gt $ $Date: 2002-07-26 12:58:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,14 +85,22 @@ class SfxOrganizeDlg_Impl;
 
 class SfxOrganizeListBox_Impl: public SvTreeListBox
 {
+    enum BMPTYPE            { BMPTYPE_FOLDER, BMPTYPE_DOC };
+
 friend class SfxOrganizeDlg_Impl;
 
-    SfxOrganizeMgr*         pMgr;
-    SfxOrganizeDlg_Impl*    pDlg;
     Image                   aOpenedFolderBmp;
     Image                   aClosedFolderBmp;
     Image                   aOpenedDocBmp;
     Image                   aClosedDocBmp;
+
+    Image                   aOpenedFolderBmpHC;
+    Image                   aClosedFolderBmpHC;
+    Image                   aOpenedDocBmpHC;
+    Image                   aClosedDocBmpHC;
+
+    SfxOrganizeMgr*         pMgr;
+    SfxOrganizeDlg_Impl*    pDlg;
 
     static BOOL             bDropMoveOk;
 
@@ -127,15 +135,9 @@ public:
 
     void SetMgr(SfxOrganizeMgr *pM) { pMgr = pM; }
     void Reset();
-    void SetBitmaps(const Image &rOFolderBitmap,
-                    const Image &rCFolderBitmap,
-                    const Image &rODocBitmap,
-                    const Image &rCDocBitmap) {
-        aOpenedFolderBmp = rOFolderBitmap;
-        aClosedFolderBmp = rCFolderBitmap;
-        aOpenedDocBmp = rODocBitmap;
-        aClosedDocBmp = rCDocBitmap;
-    }
+    inline void SetBitmaps(
+                    const Image &rOFolderBmp, const Image &rCFolderBmp, const Image &rODocBmp, const Image &rCDocBmp,
+                    const Image &rOFolderBmpHC, const Image &rCFolderBmpHC, const Image &rODocBmpHC, const Image &rCDocBmpHC );
     const Image &GetClosedBmp(USHORT nLevel) const;
     const Image &GetOpenedBmp(USHORT nLevel) const;
 
@@ -160,6 +162,10 @@ private:
     BOOL                IsUniqName_Impl( const String &rText,
                                          SvLBoxEntry* pParent, SvLBoxEntry* pEntry = 0 ) const;
     USHORT              GetLevelCount_Impl( SvLBoxEntry* pParent ) const;
+
+    SvLBoxEntry*        InsertEntry( const XubString& rText, BMPTYPE eBmpType,
+                            SvLBoxEntry* pParent = NULL, BOOL bChildsOnDemand = FALSE,
+                            ULONG nPos = LIST_APPEND, void* pUserData = NULL );
 };
 
 #endif // _SFX_HXX
@@ -172,6 +178,7 @@ friend class SfxOrganizeListBox_Impl;
 
     class SfxOrganizeDlg_Impl *pImp;
 
+//  virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 public:
     SfxTemplateOrganizeDlg(Window * pParent, SfxDocumentTemplates* = 0);
     ~SfxTemplateOrganizeDlg();
