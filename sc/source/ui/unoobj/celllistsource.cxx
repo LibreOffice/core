@@ -2,9 +2,9 @@
  *
  *  $RCSfile: celllistsource.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-29 09:16:00 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 14:06:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,10 +106,9 @@ namespace calc
     //=====================================================================
     //= OCellListSource
     //=====================================================================
-#ifdef DBG_UTIL
-    DBG_NAME( OCellListSource );
+    DBG_NAME( OCellListSource )
     //---------------------------------------------------------------------
-//#ifdef DBG_UTIL
+#ifdef DBG_UTIL
     const char* OCellListSource::checkConsistency_static( const void* _pThis )
     {
         return static_cast< const OCellListSource* >( _pThis )->checkConsistency( );
