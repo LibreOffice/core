@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.97 $
+ *  $Revision: 1.98 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 18:20:44 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 15:30:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -571,6 +571,11 @@ XMLTextImportHelper::XMLTextImportHelper(
     bProgress( bPrg ),
     bOrganizerMode( bOrganizerM ),
     bBodyContentStarted( sal_True ),
+
+    // #107848#
+    // Initialize inside_deleted_section flag correctly
+    bInsideDeleteContext( sal_False ),
+
     pFootnoteBackpatcher( NULL ),
     pSequenceIdBackpatcher( NULL ),
     pSequenceNameBackpatcher( NULL ),
