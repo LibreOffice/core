@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: mib $ $Date: 2000-12-06 14:25:52 $
+ *  last change: $Author: os $ $Date: 2000-12-07 16:56:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -344,7 +344,8 @@ SwXMLImport::~SwXMLImport()
             // Revert the first split node.
             SwTxtNode* pTxtNode = pSttNdIdx->GetNode().GetTxtNode();
             SwNodeIndex aNxtIdx( *pSttNdIdx );
-            if( pTxtNode && pTxtNode->CanJoinNext( &aNxtIdx ))
+            if( pTxtNode && pTxtNode->CanJoinNext( &aNxtIdx ) &&
+                pSttNdIdx->GetIndex() + 1 == aNxtIdx.GetIndex() )
             {
                 // If the PaM points to the first new node, move the PaM to the
                 // end of the previous node.
