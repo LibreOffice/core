@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2000-11-29 10:30:42 $
+ *  last change: $Author: kz $ $Date: 2000-12-01 08:28:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1344,7 +1344,7 @@ String STR_NO_BRUSH
     Text[ polish ] = "Brak desenia";
     Text[ japanese ] = "ÊßÀ°İ‚È‚µ";
     Text[ greek ] = "×ùñßò ó÷İäéï";
-    Text[ korean ] = "¹«´Ì ¾øÀ½";
+    Text[ korean ] = "ÆĞÅÏ ¾øÀ½";
     Text[ chinese_traditional ] = "¨S¦³¹Ï®×";
     Text[ arabic ] = "ÈÏæä äŞÔ";
     Text[ turkish ] = "Desen yok";
@@ -1926,7 +1926,7 @@ String STR_COLOR
     Text[ polish ] = "Kolor";
     Text[ japanese ] = "F";
     Text[ greek ] = "×ñşìá";
-    Text[ korean ] = "»ö";
+    Text[ korean ] = "»ö»ó";
     Text[ chinese_traditional ] = "ÃC¦â";
     Text[ arabic ] = "Çááæä";
     Text[ turkish ] = "Renk";
@@ -2210,8 +2210,8 @@ String STR_BASIC_IDE
     Text = "Basic-IDE" ;
     Text [ ENGLISH ] = "Basic-IDE" ;
     Text [ norwegian ] = "Basic-IDE" ;
-    Text [ italian ] = "StarOffice Basic-IDE" ;
-    Text [ portuguese_brazilian ] = "StarOffice Basic IDE" ;
+    Text [ italian ] = "%PRODUCTNAME Basic-IDE" ;
+    Text [ portuguese_brazilian ] = "%PRODUCTNAME Basic IDE" ;
     Text [ portuguese ] = "Basic-IDE" ;
     Text [ finnish ] = "Basic-IDE" ;
     Text [ danish ] = "Basic-IDE" ;
@@ -4255,13 +4255,13 @@ String STR_GRAPHIC
     Text [ swedish ] = "StarDraw 4.0" ;
     Text [ danish ] = "StarDraw 4.0" ;
     Text [ portuguese ] = "StarDraw 4.0" ;
-    Text [ portuguese_brazilian ] = "StarOffice Draw 3.0" ;
+    Text [ portuguese_brazilian ] = "%PRODUCTNAME Draw 3.0" ;
     Text[ chinese_simplified ] = "StarDraw 4.0";
     Text[ russian ] = "StarDraw 4.0";
     Text[ polish ] = "StarDraw 4.0";
     Text[ japanese ] = "StarDraw 4.0";
     Text[ greek ] = "StarDraw 4.0";
-    Text[ korean ] = "StarOffice Draw 4.0";
+    Text[ korean ] = "%PRODUCTNAME Draw 4.0";
     Text[ chinese_traditional ] = "StarDraw 4.0";
     Text[ arabic ] = "StarDraw 4.0";
     Text[ turkish ] = "StarDraw 4.0";
@@ -4278,13 +4278,13 @@ String STR_IMPRESS
     Text [ swedish ] = "StarImpress 4.0" ;
     Text [ danish ] = "StarImpress 4.0" ;
     Text [ portuguese ] = "StarImpress 4.0" ;
-    Text [ portuguese_brazilian ] = "StarOffice Impress 4.0" ;
+    Text [ portuguese_brazilian ] = "%PRODUCTNAME Impress 4.0" ;
     Text[ chinese_simplified ] = "StarImpress 4.0";
     Text[ russian ] = "StarImpress 4.0";
     Text[ polish ] = "StarImpress 4.0";
     Text[ japanese ] = "StarImpress 4.0";
     Text[ greek ] = "StarImpress 4.0";
-    Text[ korean ] = "StarOffice Impress 4.0";
+    Text[ korean ] = "%PRODUCTNAME Impress 4.0";
     Text[ chinese_traditional ] = "StarImpress 4.0";
     Text[ arabic ] = "StarImpress 4.0";
     Text[ turkish ] = "StarImpress 4.0";
@@ -4852,7 +4852,7 @@ String STR_ALL_FILES
     Text[ polish ] = "<Wszystkie>";
     Text[ portuguese_brazilian ] = "Todos os arquivos";
     Text[ japanese ] = "<‚·‚×‚Ä>";
-    Text[ korean ] = "¸ğµç ÆÄÀÏ";
+    Text[ korean ] = "<¸ğµÎ>";
     Text[ chinese_simplified ] = "<È«²¿ÎÄ¼ş>";
     Text[ chinese_traditional ] = "<¥ş³¡ÀÉ®×>";
     Text[ arabic ] = "<Çáßá>";
@@ -4951,7 +4951,7 @@ String STR_SAVE_PACKED_DOCUMENT
     Text[ polish ] = "Zapakuj dokument";
     Text[ portuguese_brazilian ] = "Pack document";
     Text[ japanese ] = "ÄŞ·­ÒİÄ‚Ìˆ³k";
-    Text[ korean ] = "Pack document";
+    Text[ korean ] = "¹®¼­ ¾ĞÃà";
     Text[ chinese_simplified ] = "Ñ¹ËõÎÄµµ";
     Text[ chinese_traditional ] = "À£ÁY¤å¥ó";
     Text[ turkish ] = "Pack document";
@@ -5763,7 +5763,7 @@ String STR_END_SPELLING
     Text[ polish ] = "Sprawdzanie pisowni dla tego dokumentu zosta³o zakoñczone!";
     Text[ japanese ] = "‚±‚ÌÄŞ·­ÒİÄ‚Ì½ÍßÙ Áª¯¸‚ÍI—¹‚µ‚Ü‚µ‚½!";
     Text[ greek ] = "Ï İëåã÷ïò ïñèïãñáößáò ãéá ïëüêëçñï ôï İããñáöï ïëïêëçñşèçêå!";
-    Text[ korean ] = "ÀÌ ¹®¼­ÀÇ ¸ÂÃã¹ı °Ë»ç¸¦ ¿Ï·áÇÏ¿´½À´Ï´Ù!";
+    Text[ korean ] = "ÀÌ ¹®¼­¿¡ ´ëÇÑ ¸ÂÃã¹ı °Ë»ç¸¦ ¿Ï·áÇÏ¿´½À´Ï´Ù!";
     Text[ chinese_traditional ] = "¤w¸g§¹¦¨¤å¥óªº«÷¦rÀË¬d¡I";
     Text[ arabic ] = "Êã ÇáÇäÊåÇÁ ãä ÇáÊÏŞíŞ ÇáÅãáÇÆí áåĞÇ ÇáãÓÊäÏ!";
     Text[ turkish ] = "Bu belge için yazım denetimi tamamlandı!";
@@ -5787,7 +5787,7 @@ String STR_END_SPELLING_OBJ
     Text[ polish ] = "Sprawdzanie pisowni dla wybranych obiektów zosta³o zakoñczone!";
     Text[ japanese ] = "‘I‘ğ‚µ‚½µÌŞ¼Şª¸Ä‚Ì½ÍßÙÁª¯¸‚ÍI—¹‚µ‚Ü‚µ‚½B";
     Text[ greek ] = "Ï ïñèïãñáöéêüò İëåã÷ïò ãéá ôá åğéëåãìİíá áíôéêåßìåíá ïëïêëçñşèçêå!";
-    Text[ korean ] = "¼±ÅÃµÈ °³Ã¼ÀÇ ¸ÂÃã¹ı °Ë»ç¸¦ ¿Ï·áÇÏ¿´½À´Ï´Ù!";
+    Text[ korean ] = "¼±ÅÃµÈ °³Ã¼¿¡ ´ëÇÑ  ¸ÂÃã¹ı °Ë»ç¸¦ ¿Ï·áÇÏ¿´½À´Ï´Ù!";
     Text[ chinese_traditional ] = "¤w¸g§¹¦¨¿ï¨ú­S³òªº«÷¦rÀË¬d¡I";
     Text[ arabic ] = "Êã ÇáÇäÊåÇÁ ãä ÇáÊÏŞíŞ ÇáÅãáÇÆí ááßÇÆäÇÊ ÇáãÍÏÏÉ!";
     Text[ turkish ] = "Seçilen nesnelere ilişkin yazım denetimi tamamlandı!";
@@ -5900,13 +5900,13 @@ String STR_TEMPLATE
     Text [ swedish ] = "StarImpress 4.0 mall" ;
     Text [ danish ] = "StarImpress 4.0 skabelon" ;
     Text [ portuguese ] = "Modelo StarImpress 4.0" ;
-    Text [ portuguese_brazilian ] = "StarOffice Draw 3.0 Vorlage" ;
+    Text [ portuguese_brazilian ] = "%PRODUCTNAME Draw 3.0 Vorlage" ;
     Text[ chinese_simplified ] = "StarImpress 4.0 ÑùÊ½";
     Text[ russian ] = "StarImpress 4.0 - Øàáëîí";
     Text[ polish ] = "StarImpress 4.0 - Szablon";
     Text[ japanese ] = "StarImpress 4.0 ÃİÌßÚ°Ä";
     Text[ greek ] = "StarImpress 4.0 - Ğñüôõğï";
-    Text[ korean ] = "StarOffice Impress 4.0 ¼­½ÄÆÄÀÏ";
+    Text[ korean ] = "%PRODUCTNAME Impress 4.0 ¼­½ÄÆÄÀÏ";
     Text[ chinese_traditional ] = "StarImpress 4.0 ¼Ë¦¡";
     Text[ arabic ] = "ŞÇáÈ  StarImpress 4.0";
     Text[ turkish ] = "StarImpress 4.0 şablonu";
@@ -6202,24 +6202,24 @@ String STR_CANT_READ_OLD_FORMAT_ERROR
 {
     Text = "Das alte StarDraw-Format kann nicht gelesen werden." ;
     Text [ ENGLISH ] = "Can't read the old StarDraw format." ;
-    Text [ dutch ] = "Het oude StarOffice Draw-formaat kan niet worden gelezen." ;
+    Text [ dutch ] = "Het oude %PRODUCTNAME Draw-formaat kan niet worden gelezen." ;
     Text [ english_us ] = "The previous StarDraw format cannot be read." ;
-    Text [ italian ] = "Il vecchio formato StarOffice Draw non può essere letto." ;
-    Text [ spanish ] = "No es posible leer el antiguo formato de StarOffice Draw." ;
-    Text [ french ] = "L'ancien format StarOffice Draw ne peut être lu." ;
-    Text [ swedish ] = "Det gamla StarOffice Draw-formatet kan inte läsas." ;
-    Text [ danish ] = "Det er ikke muligt at læse det gamle StarOffice Draw-format." ;
-    Text [ portuguese ] = "Impossível ler o formato StarOffice Draw antigo." ;
-    Text [ portuguese_brazilian ] = "Das alte StarOffice Draw-Format kann nicht gelesen werden." ;
-    Text[ chinese_simplified ] = "ÎŞ·¨¶Á³öÕâ¸ö¾ÉµÄ StarOffice Draw ¸ñÊ½¡£";
-    Text[ russian ] = "Íå óäàåòñÿ ïğî÷èòàòü ôîğìàò StarOffice Draw.";
-    Text[ polish ] = "Niemo¿liwy odczyt poprzedniego formatu StarOffice Draw.";
-    Text[ japanese ] = "‹ŒStarOffice Draw‚Ì‘®‚Í“Ç‚İæ‚ê‚Ü‚¹‚ñB";
-    Text[ greek ] = "Äåí åßíáé äõíáôüí íá ãßíåé áíÜãíùóç ôçò ğñïçãïõìİíçò ìïñöŞò ôïõ StarOffice Draw.";
-    Text[ korean ] = "¿¹Àü StarOffice DrawÀÇ ¼­½ÄÀº ÀĞÀ» ¼ö ¾ø½À´Ï´Ù.";
-    Text[ chinese_traditional ] = "µLªkÅª¥X³o­ÓÂÂªºStarOffice Draw®æ¦¡¡C";
-    Text[ arabic ] = "áÇ íãßä ŞÑÇÁÉ ÇáÊäÓíŞ ÇáŞÏíã áÜ StarOffice Draw.";
-    Text[ turkish ] = "Eski StarOffice Draw formatı okunamıyor.";
+    Text [ italian ] = "Il vecchio formato %PRODUCTNAME Draw non può essere letto." ;
+    Text [ spanish ] = "No es posible leer el antiguo formato de %PRODUCTNAME Draw." ;
+    Text [ french ] = "L'ancien format %PRODUCTNAME Draw ne peut être lu." ;
+    Text [ swedish ] = "Det gamla %PRODUCTNAME Draw-formatet kan inte läsas." ;
+    Text [ danish ] = "Det er ikke muligt at læse det gamle %PRODUCTNAME Draw-format." ;
+    Text [ portuguese ] = "Impossível ler o formato %PRODUCTNAME Draw antigo." ;
+    Text [ portuguese_brazilian ] = "Das alte %PRODUCTNAME Draw-Format kann nicht gelesen werden." ;
+    Text[ chinese_simplified ] = "ÎŞ·¨¶Á³öÕâ¸ö¾ÉµÄ %PRODUCTNAME Draw ¸ñÊ½¡£";
+    Text[ russian ] = "Íå óäàåòñÿ ïğî÷èòàòü ôîğìàò %PRODUCTNAME Draw.";
+    Text[ polish ] = "Niemo¿liwy odczyt poprzedniego formatu %PRODUCTNAME Draw.";
+    Text[ japanese ] = "‹Œ%PRODUCTNAME Draw‚Ì‘®‚Í“Ç‚İæ‚ê‚Ü‚¹‚ñB";
+    Text[ greek ] = "Äåí åßíáé äõíáôüí íá ãßíåé áíÜãíùóç ôçò ğñïçãïõìİíçò ìïñöŞò ôïõ %PRODUCTNAME Draw.";
+    Text[ korean ] = "¿¹Àü %PRODUCTNAME DrawÀÇ ¼­½ÄÀº ÀĞÀ» ¼ö ¾ø½À´Ï´Ù.";
+    Text[ chinese_traditional ] = "µLªkÅª¥X³o­ÓÂÂªº%PRODUCTNAME Draw®æ¦¡¡C";
+    Text[ arabic ] = "áÇ íãßä ŞÑÇÁÉ ÇáÊäÓíŞ ÇáŞÏíã áÜ %PRODUCTNAME Draw.";
+    Text[ turkish ] = "Eski %PRODUCTNAME Draw formatı okunamıyor.";
 };
 String STR_UNDO_ORIGINALSIZE
 {
@@ -7098,7 +7098,7 @@ String STR_EFFECT_DISCARD_FROM_UL
     Text[ polish ] = "Odkryj z lewej od góry";
     Text[ portuguese_brazilian ] = "Discard from Top Left";
     Text[ japanese ] = "¶ã‚©‚ç½×²ÄŞ²İ";
-    Text[ korean ] = "Discard from Top Left";
+    Text[ korean ] = "À§ ¿ŞÂÊºÎÅÍ ³ëÃâ";
     Text[ chinese_simplified ] = "´Ó×óÉÏ»ºÂıÀ©Õ¹";
     Text[ chinese_traditional ] = "±q¥ª¤WÂX®i";
     Text[ turkish ] = "Discard from Top Left";
@@ -7121,7 +7121,7 @@ String STR_EFFECT_DISCARD_FROM_T
     Text[ polish ] = "Odkryj od góry";
     Text[ portuguese_brazilian ] = "Discard from Top";
     Text[ japanese ] = "ã‚©‚ç½×²ÄŞ²İ";
-    Text[ korean ] = "Discard from Top";
+    Text[ korean ] = "À§ºÎÅÍ ³ëÃâ";
     Text[ chinese_simplified ] = "´ÓÉÏ»ºÂıÀ©Õ¹";
     Text[ chinese_traditional ] = "±q¤WÂX®i";
     Text[ turkish ] = "Discard from Top";
@@ -7144,7 +7144,7 @@ String STR_EFFECT_DISCARD_FROM_UR
     Text[ polish ] = "Odkryj z prawej od góry";
     Text[ portuguese_brazilian ] = "Discard from Upper Right";
     Text[ japanese ] = "‰Eã‚©‚ç½×²ÄŞ²İ";
-    Text[ korean ] = "Discard from Upper Right";
+    Text[ korean ] = "À§ ¿À¸¥ÂÊºÎÅÍ ³ëÃâ";
     Text[ chinese_simplified ] = "´ÓÓÒÉÏ»ºÂıÀ©Õ¹";
     Text[ chinese_traditional ] = "±q¥k¤WÂX®i";
     Text[ turkish ] = "Discard from Upper Right";
@@ -7192,7 +7192,7 @@ String STR_EFFECT_DISCARD_FROM_LR
     Text[ polish ] = "Odkryj z prawej od do³u";
     Text[ portuguese_brazilian ] = "Discard from Lower Right";
     Text[ japanese ] = "‰E‰º‚©‚ç½×²ÄŞ²İ";
-    Text[ korean ] = "Discard from Lower Right";
+    Text[ korean ] = "¾Æ·¡ ¿À¸¥ÂÊºÎÅÍ ³ëÃâ";
     Text[ chinese_simplified ] = "´ÓÓÒÏÂ»ºÂıÀ©Õ¹";
     Text[ chinese_traditional ] = "±q¥k¤UÂX®i";
     Text[ turkish ] = "Discard from Lower Right";
@@ -7240,7 +7240,7 @@ String STR_EFFECT_DISCARD_FROM_LL
     Text[ polish ] = "Odkryj z lewej od do³u";
     Text[ portuguese_brazilian ] = "Discard from Lower Left";
     Text[ japanese ] = "¶‰º‚©‚ç½×²ÄŞ²İ";
-    Text[ korean ] = "Discard from Lower Left";
+    Text[ korean ] = "¾Æ·¡ ¿ŞÂÊºÎÅÍ ³ëÃâ";
     Text[ chinese_simplified ] = "´Ó×óÏÂ»ºÂıÀ©Õ¹";
     Text[ chinese_traditional ] = "±q¥ª¤UÂX®i";
     Text[ turkish ] = "Discard from Lower Left";
@@ -7263,7 +7263,7 @@ String STR_EFFECT_DISCARD_S_FROM_L
     Text[ polish ] = "Odkryj w ramce obiektu z lewej";
     Text[ portuguese_brazilian ] = "Discard short from Left";
     Text[ japanese ] = "¶‚©‚çËß°¸";
-    Text[ korean ] = "Discard short from Left";
+    Text[ korean ] = "¿ŞÂÊºÎÅÍ Discard short from Left";
     Text[ chinese_simplified ] = "´Ó×ó»ºÂıÀ©Õ¹";
     Text[ chinese_traditional ] = "±q¥ª½wºCÂX®i";
     Text[ turkish ] = "Discard short from Left";
@@ -7286,7 +7286,7 @@ String STR_EFFECT_DISCARD_S_FROM_UL
     Text[ polish ] = "Odkryj w ramce obiektu z lewej od góry";
     Text[ portuguese_brazilian ] = "Discard short from Upper Left";
     Text[ japanese ] = "¶ã‚©‚çËß°¸";
-    Text[ korean ] = "Discard short from Upper Left";
+    Text[ korean ] = "À§ ¿ŞÂÊºÎÅÍ Discard short from Upper Left";
     Text[ chinese_simplified ] = "´Ó×óÉÏ»ºÀ©Õ¹";
     Text[ chinese_traditional ] = "±q¥ª¤W½wºCÂX®i";
     Text[ turkish ] = "Discard short from Upper Left";
@@ -7309,7 +7309,7 @@ String STR_EFFECT_DISCARD_S_FROM_T
     Text[ polish ] = "Odkryj w ramce obiektu od góry";
     Text[ portuguese_brazilian ] = "Discard short from Top";
     Text[ japanese ] = "ã‚©‚çËß°¸";
-    Text[ korean ] = "Discard short from Top";
+    Text[ korean ] = "À§ºÎÅÍ Discard short from Top";
     Text[ chinese_simplified ] = "´ÓÉÏ»ºÂıÀ©Õ¹";
     Text[ chinese_traditional ] = "±q¤W½wºCÂX®i";
     Text[ turkish ] = "Discard short from Top";
@@ -7332,7 +7332,7 @@ String STR_EFFECT_DISCARD_S_FROM_UR
     Text[ polish ] = "Odkryj z prawej od góry";
     Text[ portuguese_brazilian ] = "Discard short from Upper Right";
     Text[ japanese ] = "‰Eã‚©‚çËß°¸";
-    Text[ korean ] = "Discard short from Upper Right";
+    Text[ korean ] = "À§ ¿À¸¥ÂÊºÎÅÍ Discard short from Upper Right";
     Text[ chinese_simplified ] = "´ÓÓÒÉÏ»ºÂıµØÀ©Õ¹";
     Text[ chinese_traditional ] = "±q¥k¤W½wºC¦aÂX®i";
     Text[ turkish ] = "Discard short from Upper Right";
@@ -7355,7 +7355,7 @@ String STR_EFFECT_DISCARD_S_FROM_R
     Text[ polish ] = "Odkryj w ramce obiektu z prawej";
     Text[ portuguese_brazilian ] = "Discard short from Right";
     Text[ japanese ] = "‰E‚©‚çËß°¸";
-    Text[ korean ] = "Discard short from Right";
+    Text[ korean ] = "¿À¸¥ÂÊºÎÅÍ Discard short from Right";
     Text[ chinese_simplified ] = "´ÓÓÒ»ºÂıÀ©Õ¹";
     Text[ chinese_traditional ] = "±q¥k½wºCÂX®i";
     Text[ turkish ] = "Discard short from Right";
@@ -7378,7 +7378,7 @@ String STR_EFFECT_DISCARD_S_FROM_LR
     Text[ polish ] = "Odkryj w ramce obiektu z prawej od do³u";
     Text[ portuguese_brazilian ] = "Discard short from Lower Right";
     Text[ japanese ] = "‰E‰º‚©‚çËß°¸";
-    Text[ korean ] = "Discard short from Lower Right";
+    Text[ korean ] = "¾Æ·¡ ¿À¸¥ÂÊºÎÅÍ Discard short from Lower Right";
     Text[ chinese_simplified ] = "´ÓÓÒÏÂ»ºÂıµØÀ©Õ¹";
     Text[ chinese_traditional ] = "±q¥k¤U½wºC¦aÂX®i";
     Text[ turkish ] = "Discard short from Lower Right";
@@ -7401,7 +7401,7 @@ String STR_EFFECT_DISCARD_S_FROM_B
     Text[ polish ] = "Odkryj w ramce obiektu od do³u";
     Text[ portuguese_brazilian ] = "Discard short from Bottom";
     Text[ japanese ] = "‰º‚©‚çËß°¸";
-    Text[ korean ] = "Discard short from Bottom";
+    Text[ korean ] = "¾Æ·¡ºÎÅÍ Discard short from Bottom";
     Text[ chinese_simplified ] = "´ÓÏÂ»ºÂıÀ©Õ¹";
     Text[ chinese_traditional ] = "±q¤U½wºCÂX®i";
     Text[ turkish ] = "Discard short from Bottom";
@@ -7424,7 +7424,7 @@ String STR_EFFECT_DISCARD_S_FROM_LL
     Text[ polish ] = "Odkryj w ramce obiektu z lewej od do³u";
     Text[ portuguese_brazilian ] = "Discard short from Lower Left";
     Text[ japanese ] = "¶‰º‚©‚çËß°¸";
-    Text[ korean ] = "Discard short from Lower Left";
+    Text[ korean ] = "¾Æ·¡ ¿ŞÂÊºÎÅÍ Discard short from Lower Left";
     Text[ chinese_simplified ] = "´Ó×ó»ºÂıµØÀ©Õ¹";
     Text[ chinese_traditional ] = "±q¥ª¤U½wºC¦aÂX®i";
     Text[ turkish ] = "Discard short from Lower Left";
@@ -7543,7 +7543,7 @@ String STR_EFFECT_VERTICAL_CHECKERBOARD
     Text[ polish ] = "Pionowa szachownica";
     Text[ portuguese_brazilian ] = "Vertical checkerboard";
     Text[ japanese ] = "c‚ÉÁª¯¶°Ü²Ìß";
-    Text[ korean ] = "Vertical checkerboard";
+    Text[ korean ] = "¼öÁ÷ ¹ÙµÏÆÇ";
     Text[ chinese_simplified ] = "´¹Ö±Ïò¹ú¼ÊÏóÆåÅÌ";
     Text[ chinese_traditional ] = "««ª½¦V°ê»Ú¶H´Ñ½L";
     Text[ turkish ] = "Vertical checkerboard";
@@ -7566,7 +7566,7 @@ String STR_EFFECT_HORIZONTAL_CHECKERBOARD
     Text[ polish ] = "Pozioma szachownica";
     Text[ portuguese_brazilian ] = "Horizontal checkerboard";
     Text[ japanese ] = "‰¡‚ÉÁª¯¶°Ü²Ìß";
-    Text[ korean ] = "Horizontal checkerboard";
+    Text[ korean ] = "¼öÆò ¹ÙµÏÆÇ";
     Text[ chinese_simplified ] = "Ë®Æ½Ïò¹ú¼ÊÏóÆåÅÌ";
     Text[ chinese_traditional ] = "¤ô¥­¦V°ê»Ú¶H´Ñ½L";
     Text[ turkish ] = "Horizontal checkerboard";
@@ -7617,7 +7617,7 @@ String STR_EFFECT_ROLL_FROM_T
     Text[ polish ] = "Zwijaj z góry";
     Text[ japanese ] = "ã‚©‚çŠª‚«L‚°‚é";
     Text[ greek ] = "Êıëéóç áğü ğÜíù";
-    Text[ korean ] = "À§ºÎÅÍ ·Ñ¸µ";
+    Text[ korean ] = "À§¿¡¼­ ·Ñ¸µ";
     Text[ chinese_traditional ] = "±q¤Wºu°Ê";
     Text[ arabic ] = "İÑÔ ãä ÃÚáì";
     Text[ turkish ] = "Aşağı kaydır";
@@ -7667,7 +7667,7 @@ String STR_EFFECT_ROLL_FROM_B
     Text[ polish ] = "Zwijaj z do³u";
     Text[ japanese ] = "‰º‚©‚çŠª‚«L‚°‚é";
     Text[ greek ] = "Êıëéóç áğü êÜôù";
-    Text[ korean ] = "¾Æ·¡ºÎÅÍ ±¼·¯°¡±â";
+    Text[ korean ] = "¾Æ·¡¿¡¼­ ·Ñ¸µ";
     Text[ chinese_traditional ] = "±q¤Uºu°Ê";
     Text[ arabic ] = "İÑÔ ãä ÃÓİá";
     Text[ turkish ] = "Yukarı kaydır";
@@ -7713,7 +7713,7 @@ String STR_EFFECT_WAVYLINE_FROM_R
     Text[ polish ] = "Linia falista z prawej";
     Text[ japanese ] = "‰E‚©‚çÖs";
     Text[ greek ] = "ÊõìáôéóôŞ ãñáììŞ áğü äåîéÜ";
-    Text[ korean ] = "¿À¸¥ÂÊºÎÅÍ ¹°°á¼±";
+    Text[ korean ] = "¿À¸¥ÂÊ¿¡¼­  ¹°°á¼±";
     Text[ chinese_traditional ] = "¥k¦VÅs¦±½u";
     Text[ arabic ] = "ÎØ ãÊãæøöÌ ãä Çáíãíä";
     Text[ turkish ] = "Sağdan yılan hareketi";
@@ -7759,7 +7759,7 @@ String STR_EFFECT_WAVYLINE_FROM_B
     Text[ polish ] = "Linia falista z do³u";
     Text[ japanese ] = "‰º‚©‚çÖs";
     Text[ greek ] = "ÊõìáôéóôŞ ãñáììŞ áğü êÜôù";
-    Text[ korean ] = "¾Æ·¡ºÎÅÍ ¹°°á¼±";
+    Text[ korean ] = "¾Æ·¡¿¡¼­ºÎÅÍ ¹°°á¼±";
     Text[ chinese_traditional ] = "¦V¤UªºÅs¦±½u";
     Text[ arabic ] = "ÎØ ãÊãæøöÌ ãä ÃÓİá";
     Text[ turkish ] = "Aşağıdan yılan hareketi";
@@ -8073,7 +8073,7 @@ String STR_EFFECT_MOVE_TO_UL
     Text[ polish ] = "Przesuñ w lewo do góry";
     Text[ portuguese_brazilian ] = "Move to upper left";
     Text[ japanese ] = "¶ã‚ÉˆÚ“®";
-    Text[ korean ] = "Move to upper left";
+    Text[ korean ] = "À§ ¿ŞÂÊÀ¸·Î ÀÌµ¿";
     Text[ chinese_simplified ] = "Ïò×óÉÏÒÆ¶¯";
     Text[ chinese_traditional ] = "¦V¥ª¤W²¾°Ê";
     Text[ turkish ] = "Move to upper left";
@@ -8119,7 +8119,7 @@ String STR_EFFECT_MOVE_TO_UR
     Text[ polish ] = "Przesuñ w prawo do góry";
     Text[ portuguese_brazilian ] = "Move to upper right";
     Text[ japanese ] = "‰Eã‚ÉˆÚ“®";
-    Text[ korean ] = "Move to upper right";
+    Text[ korean ] = "À§ ¿À¸¥ÂÊÀ¸·Î ÀÌµ¿";
     Text[ chinese_simplified ] = "ÏòÓÒÉÏÒÆ¶¯";
     Text[ chinese_traditional ] = "¦V¥k¤W²¾°Ê";
     Text[ turkish ] = "Move to upper right";
@@ -8165,7 +8165,7 @@ String STR_EFFECT_MOVE_TO_LR
     Text[ polish ] = "Przesuñ w prawo na dó³";
     Text[ portuguese_brazilian ] = "Move to lower right";
     Text[ japanese ] = "‰E‰º‚ÉˆÚ“®";
-    Text[ korean ] = "Move to lower right";
+    Text[ korean ] = "¾Æ·¡ ¿À¸¥ÂÊÀ¸·Î ÀÌµ¿";
     Text[ chinese_simplified ] = "ÏòÓÒÏÂÒÆ¶¯";
     Text[ chinese_traditional ] = "¦V¥k¤U²¾°Ê";
     Text[ turkish ] = "Move to lower right";
@@ -8211,7 +8211,7 @@ String STR_EFFECT_MOVE_TO_LL
     Text[ polish ] = "Przesuñ w lewo na dó³";
     Text[ portuguese_brazilian ] = "Move to lower left";
     Text[ japanese ] = "¶‰º‚ÉˆÚ“®";
-    Text[ korean ] = "Move to lower left";
+    Text[ korean ] = "¾Æ·¡ ¿ŞÂÊÀ¸·Î ÀÌµ¿";
     Text[ chinese_simplified ] = "Ïò×óÏÂÒÆ¶¯";
     Text[ chinese_traditional ] = "¦V¥ª¤U²¾°Ê";
     Text[ turkish ] = "Move to lower left";
@@ -8234,7 +8234,7 @@ String STR_EFFECT_MOVE_S_TO_L
     Text[ polish ] = "Wysuñ z ramki obiektu w lewo";
     Text[ portuguese_brazilian ] = "Move short to left";
     Text[ japanese ] = "¶‚É­‚µˆÚ“®";
-    Text[ korean ] = "Move short to left";
+    Text[ korean ] = "¿ŞÂÊÀ¸·Î ÀÌµ¿ Move short to left";
     Text[ chinese_simplified ] = "Ïò×ó»ºÂıÒÆ¶¯";
     Text[ chinese_traditional ] = "¦V¥ª½wºCÂX®i";
     Text[ turkish ] = "Move short to left";
@@ -8257,7 +8257,7 @@ String STR_EFFECT_MOVE_S_TO_UL
     Text[ polish ] = "Wysuñ z ramki obiektu w lewo do góry";
     Text[ portuguese_brazilian ] = "Move short to upper left";
     Text[ japanese ] = "¶ã‚É­‚µˆÚ“®";
-    Text[ korean ] = "Move short to upper left";
+    Text[ korean ] = "À§ ¿ŞÂÊÀ¸·Î ÀÌµ¿";
     Text[ chinese_simplified ] = "Ïò×óÉÏÒÆ¶¯";
     Text[ chinese_traditional ] = "¦V¥ª¤W²¾°Ê";
     Text[ turkish ] = "Move short to upper left";
@@ -8280,7 +8280,7 @@ String STR_EFFECT_MOVE_S_TO_T
     Text[ polish ] = "Wysuñ z ramki obiektu do góry";
     Text[ portuguese_brazilian ] = "Move short to top";
     Text[ japanese ] = "ã‚É­‚µˆÚ“®";
-    Text[ korean ] = "Move short to top";
+    Text[ korean ] = "À§·Î ÀÌµ¿Move short to top";
     Text[ chinese_simplified ] = "ÏòÉÏ»ºÂıÒÆ¶¯";
     Text[ chinese_traditional ] = "¦V¤W½wºCÂX®i";
     Text[ turkish ] = "Move short to top";
@@ -8303,7 +8303,7 @@ String STR_EFFECT_MOVE_S_TO_UR
     Text[ polish ] = "Wysuñ z ramki obiektu w prawo do góry";
     Text[ portuguese_brazilian ] = "Move short to upper right";
     Text[ japanese ] = "‰Eã‚É­‚µˆÚ“®";
-    Text[ korean ] = "Move short to upper right";
+    Text[ korean ] = "À§ ¿À¸¥ÂÊÀ¸·Î Move short to upper right";
     Text[ chinese_simplified ] = "ÏòÓÒÉÏÒÆ¶¯";
     Text[ chinese_traditional ] = "¦V¥k¤W²¾°Ê";
     Text[ turkish ] = "Move short to upper right";
@@ -8326,7 +8326,7 @@ String STR_EFFECT_MOVE_S_TO_R
     Text[ polish ] = "Wysuñ z ramki obiektu w prawo";
     Text[ portuguese_brazilian ] = "Move short to right";
     Text[ japanese ] = "‰E‚É­‚µˆÚ“®";
-    Text[ korean ] = "Move short to right";
+    Text[ korean ] = "¿À¸¥ÂÊÀ¸·Î ÀÌµ¿ Move short to right";
     Text[ chinese_simplified ] = "ÏòÓÒ»ºÂıÒÆ¶¯";
     Text[ chinese_traditional ] = "¦V¥k½wºC²¾°Ê";
     Text[ turkish ] = "Move short to right";
@@ -8349,7 +8349,7 @@ String STR_EFFECT_MOVE_S_TO_LR
     Text[ polish ] = "Wysuñ z ramki obiektu w prawo na dó³";
     Text[ portuguese_brazilian ] = "Move short to lower right";
     Text[ japanese ] = "‰E‰º‚É­‚µˆÚ“®";
-    Text[ korean ] = "Move short to lower right";
+    Text[ korean ] = "¾Æ·¡ ¿À¸¥ÂÊÀ¸·Î Move short to lower right";
     Text[ chinese_simplified ] = "ÏòÓÒÏÂ»ºÂıÀ©Õ¹";
     Text[ chinese_traditional ] = "¦V¥k¤U½wºCÂX®i";
     Text[ turkish ] = "Move short to lower right";
@@ -8372,7 +8372,7 @@ String STR_EFFECT_MOVE_S_TO_B
     Text[ polish ] = "Wysuñ z ramki obiektu w dó³";
     Text[ portuguese_brazilian ] = "Move short to bottom";
     Text[ japanese ] = "‰º‚É­‚µˆÚ“®";
-    Text[ korean ] = "Move short to bottom";
+    Text[ korean ] = "¾Æ·¡·Î ÀÌµ¿ Move short to bottom";
     Text[ chinese_simplified ] = "ÏòÏÂ»ºÂıÒÆ¶¯";
     Text[ chinese_traditional ] = "¦V¤U½wºC²¾°Ê";
     Text[ turkish ] = "Move short to bottom";
@@ -8395,7 +8395,7 @@ String STR_EFFECT_MOVE_S_TO_LL
     Text[ polish ] = "Wysuñ z ramki obiektu w lewo na dó³";
     Text[ portuguese_brazilian ] = "Move short to lower left";
     Text[ japanese ] = "¶‰º‚É­‚µˆÚ“®";
-    Text[ korean ] = "Move short to lower left";
+    Text[ korean ] = "¾Æ·¡ ¿ŞÂÊÀ¸·Î Move short to lower left";
     Text[ chinese_simplified ] = "Ïò×óÏÂ»ºÂıÀ©Õ¹";
     Text[ chinese_traditional ] = "¦V¥ª¤U½wºCÂX®i";
     Text[ turkish ] = "Move short to lower left";
@@ -8419,7 +8419,7 @@ String STR_EFFECT_SPIRALIN_L
     Text[ polish ] = "Spirala do œrodka z lewej";
     Text[ japanese ] = "ŠO‚©‚ç“à‚Ö¶‰QŠª‚«";
     Text[ greek ] = "Óğåßñá åóùôåñéêÜ áñéóôåñÜ";
-    Text[ korean ] = "¿ŞÂÊ ¾ÈÀ¸·Î ³ª¼±";
+    Text[ korean ] = "¾ÈÂÊÀ¸·Î ¿ŞÂÊÀ¸·Î ³ª¼±";
     Text[ chinese_traditional ] = "¦V¥ª¤º½L±Û";
     Text[ arabic ] = "ÍáÒæä Åáì ÇáÏÇÎá íÓÇÑÇğ";
     Text[ turkish ] = "Sol içe doğru sarmal";
@@ -8442,7 +8442,7 @@ String STR_EFFECT_SPIRALIN_R
     Text[ polish ] = "Spirala do œrodka z prawej";
     Text[ japanese ] = "ŠO‚©‚ç“à‚Ö‰E‰QŠª‚«";
     Text[ greek ] = "Óğåßñá åóùôåñéêÜ äåîéÜ";
-    Text[ korean ] = "¿À¸¥ÂÊ ¾ÈÀ¸·Î ³ª¼±";
+    Text[ korean ] = "¾ÈÂÊÀ¸·Î ¿À¸¥ÂÊÀ¸·Î ³ª¼±";
     Text[ chinese_traditional ] = "¦V¥k¤º½L±Û";
     Text[ arabic ] = "ÍáÒæä Åáì ÇáÏÇÎá íãíäÇğ";
     Text[ turkish ] = "Sağ içe doğru sarmal";
@@ -8466,7 +8466,7 @@ String STR_EFFECT_SPIRALOUT_L
     Text[ polish ] = "Spirala na zewn¹trz z lewej";
     Text[ japanese ] = "“à‚©‚çŠO‚Ö¶‰QŠª‚«";
     Text[ greek ] = "Óğåßñá åîùôåñéêÜ áñéóôåñÜ";
-    Text[ korean ] = "¿ŞÂÊ ¹Ù±ùÀ¸·Î ³ª¼±";
+    Text[ korean ] = "¹Ù±ùÂÊÀ¸·Î ¿ŞÂÊÀ¸·Î ³ª¼±";
     Text[ chinese_traditional ] = "¦V¥ª¤º¥~½L±Û";
     Text[ arabic ] = "ÍáÒæä Åáì ÇáÎÇÑÌ íÓÇÑÇğ";
     Text[ turkish ] = "Sol dışa doğru sarmal";
@@ -8490,7 +8490,7 @@ String STR_EFFECT_SPIRALOUT_R
     Text[ polish ] = "Spirala na zewn¹trz z prawej";
     Text[ japanese ] = "“à‚©‚çŠO‚Ö‰E‰QŠª‚«";
     Text[ greek ] = "Óğåßñá åîùôåñéêÜ äåîéÜ";
-    Text[ korean ] = "¿À¸¥ÂÊ ¹Ù±ùÀ¸·Î ³ª¼±";
+    Text[ korean ] = "¹Ù±ùÂÊÀ¸·Î ¿À¸¥ÂÊÀ¸·Î ³ª¼±";
     Text[ chinese_traditional ] = "¦V¥k¥~½L±Û";
     Text[ arabic ] = "ÍáÒæä Åáì ÇáÎÇÑÌ íãíäÇğ";
     Text[ turkish ] = "Sağ dışa doğru sarmal";
@@ -8560,7 +8560,7 @@ String STR_EFFECT_STRTCH
     Text[ polish ] = "Rozci¹gnij";
     Text[ portuguese_brazilian ] = "Stretch";
     Text[ japanese ] = "½Ş°Ñ²İ";
-    Text[ korean ] = "Stretch";
+    Text[ korean ] = "È®Àå";
     Text[ chinese_simplified ] = "À©Õ¹";
     Text[ chinese_traditional ] = "ÂX®i";
     Text[ turkish ] = "Stretch";
@@ -8583,7 +8583,7 @@ String STR_EFFECT_STRTCH_FROM_L
     Text[ polish ] = "Rozci¹gnij z lewej";
     Text[ portuguese_brazilian ] = "Stretch from left";
     Text[ japanese ] = "¶‚©‚ç½Ş°Ñ²İ";
-    Text[ korean ] = "Stretch from left";
+    Text[ korean ] = "¿ŞÂÊ¿¡¼­ ´Ã¸®±â";
     Text[ chinese_simplified ] = "´Ó×óÀ©Õ¹";
     Text[ chinese_traditional ] = "±q¥ªÂX®i";
     Text[ turkish ] = "Stretch from left";
@@ -8606,7 +8606,7 @@ String STR_EFFECT_STRTCH_FROM_UL
     Text[ polish ] = "Rozci¹gnij z lewej od góry";
     Text[ portuguese_brazilian ] = "Stretch from upper left";
     Text[ japanese ] = "¶‚©‚çã‚Ö½Ş°Ñ²İ";
-    Text[ korean ] = "Stretch from upper left";
+    Text[ korean ] = "À§ ¿ŞÂÊ¿¡¼­ ´Ã¸®±â";
     Text[ chinese_simplified ] = "´Ó×óÉÏÀ©Õ¹";
     Text[ chinese_traditional ] = "±q¥ª¤WÂX®i";
     Text[ turkish ] = "Stretch from upper left";
@@ -8629,7 +8629,7 @@ String STR_EFFECT_STRTCH_FROM_T
     Text[ polish ] = "Rozci¹gnij od góry";
     Text[ portuguese_brazilian ] = "Stretch from top";
     Text[ japanese ] = "ã‚©‚ç½Ş°Ñ²İ";
-    Text[ korean ] = "Stretch from top";
+    Text[ korean ] = "À§ÂÊ¿¡¼­ ´Ã¸®±â";
     Text[ chinese_simplified ] = "´ÓÉÏÀ©Õ¹";
     Text[ chinese_traditional ] = "±q¤WÂX®i";
     Text[ turkish ] = "Stretch from top";
@@ -8652,7 +8652,7 @@ String STR_EFFECT_STRTCH_FROM_UR
     Text[ polish ] = "Rozci¹gnij z prawej od góry";
     Text[ portuguese_brazilian ] = "Stretch from upper right";
     Text[ japanese ] = "‰E‚©‚çã‚Ö½Ş°Ñ²İ";
-    Text[ korean ] = "Stretch from upper right";
+    Text[ korean ] = "À§ ¿À¸¥ÂÊ¿¡¼­ ´Ã¸®±â";
     Text[ chinese_simplified ] = "´ÓÓÒÉÏÀ©Õ¹";
     Text[ chinese_traditional ] = "±q¥k¤WÂX®i";
     Text[ turkish ] = "Stretch from upper right";
@@ -8675,7 +8675,7 @@ String STR_EFFECT_STRTCH_FROM_R
     Text[ polish ] = "Rozci¹gnij z prawej";
     Text[ portuguese_brazilian ] = "Stretch from right";
     Text[ japanese ] = "‰E‚©‚ç½Ş°Ñ²İ";
-    Text[ korean ] = "Stretch from right";
+    Text[ korean ] = "¿À¸¥ÂÊ¿¡¼­ ´Ã¸®±â";
     Text[ chinese_simplified ] = "´ÓÓÒÀ©Õ¹";
     Text[ chinese_traditional ] = "±q¥kÂX®i";
     Text[ turkish ] = "Stretch from right";
@@ -8698,7 +8698,7 @@ String STR_EFFECT_STRTCH_FROM_LR
     Text[ polish ] = "Rozci¹gnij z prawej od do³u";
     Text[ portuguese_brazilian ] = "Stretch from lower right";
     Text[ japanese ] = "‰E‚©‚ç‰º‚Ö½Ş°Ñ²İ";
-    Text[ korean ] = "Stretch from lower right";
+    Text[ korean ] = "¾Æ·¡ ¿À¸¥ÂÊ¿¡¼­ ´Ã¸®±â";
     Text[ chinese_simplified ] = "´ÓÓÒÏÂÀ©Õ¹";
     Text[ chinese_traditional ] = "±q¥k¤UÂX®i";
     Text[ turkish ] = "Stretch from lower right";
@@ -8721,7 +8721,7 @@ String STR_EFFECT_STRTCH_FROM_B
     Text[ polish ] = "Rozci¹gnij od do³u";
     Text[ portuguese_brazilian ] = "Stretch from bottom";
     Text[ japanese ] = "‰º‚©‚ç½Ş°Ñ²İ";
-    Text[ korean ] = "Stretch from bottom";
+    Text[ korean ] = "¾Æ·¡ÂÊ¿¡¼­ ´Ã¸®±â";
     Text[ chinese_simplified ] = "´ÓÏÂÀ©Õ¹";
     Text[ chinese_traditional ] = "±q¤WÂX®i";
     Text[ turkish ] = "Stretch from bottom";
@@ -8744,7 +8744,7 @@ String STR_EFFECT_STRTCH_FROM_LL
     Text[ polish ] = "Rozci¹gnij z lewej od do³u";
     Text[ portuguese_brazilian ] = "Stretch from lower left";
     Text[ japanese ] = "¶‚©‚ç‰º‚Ö½Ş°Ñ²İ";
-    Text[ korean ] = "Stretch from lower left";
+    Text[ korean ] = "¾Æ·¡ ¿ŞÂÊ¿¡¼­ ´Ã¸®±â";
     Text[ chinese_simplified ] = "´Ó×óÏÂÀ©Õ¹";
     Text[ chinese_traditional ] = "±q¥k¤UÂX®i";
     Text[ turkish ] = "Stretch from lower left";
@@ -8767,7 +8767,7 @@ String STR_EFFECT_STRTCH_ROTATE
     Text[ polish ] = "Rozci¹gnij i obróæ";
     Text[ portuguese_brazilian ] = "Stretch and rotate";
     Text[ japanese ] = "½ÄÚ¯Á‚ÆÀ°İ";
-    Text[ korean ] = "Stretch and rotate";
+    Text[ korean ] = "´Ã¸®±â¿Í È¸Àü";
     Text[ chinese_simplified ] = "À©Õ¹ºÍĞı×ª";
     Text[ chinese_traditional ] = "ÂX®i©M±ÛÂà";
     Text[ turkish ] = "Stretch and rotate";
@@ -8790,7 +8790,7 @@ String STR_EFFECT_STRTCH_HORIZONTAL
     Text[ polish ] = "Rozci¹gnij w poziomie";
     Text[ portuguese_brazilian ] = "Stretch horizontal";
     Text[ japanese ] = "¶‰E‚É½ÄÚ¯Á";
-    Text[ korean ] = "Stretch horizontal";
+    Text[ korean ] = "¼öÆò ´Ã¸®±â";
     Text[ chinese_simplified ] = "Ë®Æ½ÏòÀ©Õ¹";
     Text[ chinese_traditional ] = "¤ô¥­ÂX®i";
     Text[ turkish ] = "Stretch horizontal";
@@ -8813,7 +8813,7 @@ String STR_EFFECT_STRTCH_VERTICAL
     Text[ polish ] = "Rozci¹gnij w pionie";
     Text[ portuguese_brazilian ] = "Stretch vertical";
     Text[ japanese ] = "ã‰º‚É½ÄÚ¯Á";
-    Text[ korean ] = "Stretch vertical";
+    Text[ korean ] = "¼öÁ÷ ´Ã¸®±â";
     Text[ chinese_simplified ] = "´¹Ö±ÏòÀ©Õ¹";
     Text[ chinese_traditional ] = "««ª½ÂX®i";
     Text[ turkish ] = "Stretch vertical";
@@ -8836,7 +8836,7 @@ String STR_EFFECT_ROTATE_HORIZONTAL
     Text[ polish ] = "Obróæ w poziomie";
     Text[ portuguese_brazilian ] = "Rotate horizontally";
     Text[ japanese ] = "¶‰E‚ÉÀ°İ";
-    Text[ korean ] = "Rotate horizontally";
+    Text[ korean ] = "¼öÆò È¸Àü";
     Text[ chinese_simplified ] = "Ë®Æ½ÏòĞı×ª";
     Text[ chinese_traditional ] = "¤ô¥­±ÛÂà";
     Text[ turkish ] = "Rotate horizontally";
@@ -8859,7 +8859,7 @@ String STR_EFFECT_ROTATE_VERTICAL
     Text[ polish ] = "Obróæ w pionie";
     Text[ portuguese_brazilian ] = "Rotate vertically";
     Text[ japanese ] = "ã‰º‚ÉÀ°İ";
-    Text[ korean ] = "Rotate vertically";
+    Text[ korean ] = "¼öÁ÷ È¸Àü";
     Text[ chinese_simplified ] = "´¹Ö±ÏòĞı×ª";
     Text[ chinese_traditional ] = "««ª½±ÛÂà";
     Text[ turkish ] = "Rotate vertically";
@@ -9420,7 +9420,7 @@ String STR_EFFECT_LASER_FROM_R
     Text[ polish ] = "Efekt lasera z prawej";
     Text[ japanese ] = "‰E‚©‚çÚ°»Ş°Œø‰Ê";
     Text[ greek ] = "Åöİ ëİéæåñ áğü äåîéÜ";
-    Text[ korean ] = "¿À¸¥ÂÊ¿¡¼­ºÎÅÍ ·¹ÀÌÀú È¿°ú";
+    Text[ korean ] = "¿À¸¥ÂÊºÎÅÍ ·¹ÀÌÀú È¿°ú";
     Text[ chinese_traditional ] = "¥k¤èªº¹p®g®ÄªG";
     Text[ arabic ] = "ÊÃËíÑ áíÒÑ ãä Çáíãíä";
     Text[ turkish ] = "Sağdan lazer efekti";
@@ -10852,74 +10852,74 @@ String STR_IMPRESS_DOCUMENT
 };
 String STR_IMPRESS_DOCUMENT_FULLTYPE_50
 {
-    Text = "StarOffice 5.0 Präsentation" ;
+    Text = "%PRODUCTNAME 5.0 Präsentation" ;
     Text [ ENGLISH ] = "StarOffice 5.0 Presentation" ;
-    Text [ english_us ] = "StarOffice 5.0 Presentation" ;
-    Text [ dutch ] = "StarOffice 5.0 Presentatie" ;
-    Text [ swedish ] = "StarOffice 5.0 presentation" ;
-    Text [ danish ] = "StarOffice 5.0 præsentation" ;
-    Text [ italian ] = "Presentazione StarOffice 5.0" ;
-    Text [ spanish ] = "Presentación de StarOffice 5.0" ;
-    Text [ french ] = "StarOffice 5.0 Présentation" ;
-    Text [ portuguese ] = "Apresentação (StarOffice 5.0)" ;
-    Text [ portuguese_brazilian ] = "StarOffice 5.0 Präsentation" ;
-    Text[ chinese_simplified ] = "StarOffice 5.0 ÑİÊ¾ÎÄ¸å";
-    Text[ russian ] = "Ïğåçåíòàöèÿ â StarOffice 5.0";
+    Text [ english_us ] = "%PRODUCTNAME 5.0 Presentation" ;
+    Text [ dutch ] = "%PRODUCTNAME 5.0 Presentatie" ;
+    Text [ swedish ] = "%PRODUCTNAME 5.0 presentation" ;
+    Text [ danish ] = "%PRODUCTNAME 5.0 præsentation" ;
+    Text [ italian ] = "Presentazione %PRODUCTNAME 5.0" ;
+    Text [ spanish ] = "Presentación de %PRODUCTNAME 5.0" ;
+    Text [ french ] = "%PRODUCTNAME 5.0 Présentation" ;
+    Text [ portuguese ] = "Apresentação (%PRODUCTNAME 5.0)" ;
+    Text [ portuguese_brazilian ] = "%PRODUCTNAME 5.0 Präsentation" ;
+    Text[ chinese_simplified ] = "%PRODUCTNAME 5.0 ÑİÊ¾ÎÄ¸å";
+    Text[ russian ] = "Ïğåçåíòàöèÿ â %PRODUCTNAME 5.0";
     Text[ polish ] = "Prezentacja w Star Office 5.0";
-    Text[ japanese ] = "StarOffice 5.0 ÌßÚ¾ŞİÃ°¼®İ";
-    Text[ greek ] = "Ğáñïõóßáóç (StarOffice 5.0)";
-    Text[ korean ] = "StarOffice 5.0 ÇÁ¸®Á¨Å×ÀÌ¼Ç";
-    Text[ chinese_traditional ] = "StarOffice 5.0 Â²³ø";
-    Text[ arabic ] = "ÚÑÖ ÊŞÏíãí ãä StarOffice 5.0";
-    Text[ turkish ] = "Sunu (StarOffice 5.0)";
+    Text[ japanese ] = "%PRODUCTNAME 5.0 ÌßÚ¾ŞİÃ°¼®İ";
+    Text[ greek ] = "Ğáñïõóßáóç (%PRODUCTNAME 5.0)";
+    Text[ korean ] = "%PRODUCTNAME 5.0 ÇÁ¸®Á¨Å×ÀÌ¼Ç";
+    Text[ chinese_traditional ] = "%PRODUCTNAME 5.0 Â²³ø";
+    Text[ arabic ] = "ÚÑÖ ÊŞÏíãí ãä %PRODUCTNAME 5.0";
+    Text[ turkish ] = "Sunu (%PRODUCTNAME 5.0)";
 };
 String STR_IMPRESS_DOCUMENT_FULLTYPE_40
 {
     /* ### ACHTUNG: Neuer Text in Resource? StarOffice 4.0 Präsentation : StarOffice 4.0 Prõsentation */
-    Text = "StarOffice 4.0 Präsentation" ;
+    Text = "%PRODUCTNAME 4.0 Präsentation" ;
     Text [ ENGLISH ] = "StarOffice 4.0 Presentation" ;
-    Text [ english_us ] = "StarOffice 4.0 Presentation" ;
-    Text [ dutch ] = "StarOffice 4.0 Presentatie" ;
-    Text [ swedish ] = "StarOffice 4.0 presentation" ;
-    Text [ danish ] = "StarOffice 4.0 præsentation" ;
-    Text [ italian ] = "Grafica / presentazione StarOffice 4.0" ;
-    Text [ spanish ] = "Presentación de StarOffice 4.0" ;
-    Text [ french ] = "StarOffice 4.0 Présentation" ;
-    Text [ portuguese ] = "Apresentação (StarOffice 4.0)" ;
-    Text [ portuguese_brazilian ] = "StarOffice 4.0 Graphik / Präsentation" ;
-    Text[ chinese_simplified ] = "StarOffice 4.0 ÑİÊ¾ÎÄ¸å";
-    Text[ russian ] = "Ïğåçåíòàöèÿ â StarOffice 4.0";
-    Text[ polish ] = "Prezentacja w StarOffice 4.0";
-    Text[ japanese ] = "StarOffice 4.0 ÌßÚ¾ŞİÃ°¼®İ";
-    Text[ greek ] = "Ğáñïõóßáóç (StarOffice 4.0)";
-    Text[ korean ] = "StarOffice 4.0 ÇÁ¸®Á¨Å×ÀÌ¼Ç";
-    Text[ chinese_traditional ] = "StarOffice 4.0 Â²³ø";
-    Text[ arabic ] = "ÚÑÖ ÊŞÏíãí ãä StarOffice 4.0";
-    Text[ turkish ] = "Sunu (StarOffice 4.0)";
+    Text [ english_us ] = "%PRODUCTNAME 4.0 Presentation" ;
+    Text [ dutch ] = "%PRODUCTNAME 4.0 Presentatie" ;
+    Text [ swedish ] = "%PRODUCTNAME 4.0 presentation" ;
+    Text [ danish ] = "%PRODUCTNAME 4.0 præsentation" ;
+    Text [ italian ] = "Grafica / presentazione %PRODUCTNAME 4.0" ;
+    Text [ spanish ] = "Presentación de %PRODUCTNAME 4.0" ;
+    Text [ french ] = "%PRODUCTNAME 4.0 Présentation" ;
+    Text [ portuguese ] = "Apresentação (%PRODUCTNAME 4.0)" ;
+    Text [ portuguese_brazilian ] = "%PRODUCTNAME 4.0 Graphik / Präsentation" ;
+    Text[ chinese_simplified ] = "%PRODUCTNAME 4.0 ÑİÊ¾ÎÄ¸å";
+    Text[ russian ] = "Ïğåçåíòàöèÿ â %PRODUCTNAME 4.0";
+    Text[ polish ] = "Prezentacja w %PRODUCTNAME 4.0";
+    Text[ japanese ] = "%PRODUCTNAME 4.0 ÌßÚ¾ŞİÃ°¼®İ";
+    Text[ greek ] = "Ğáñïõóßáóç (%PRODUCTNAME 4.0)";
+    Text[ korean ] = "%PRODUCTNAME 4.0 ÇÁ¸®Á¨Å×ÀÌ¼Ç";
+    Text[ chinese_traditional ] = "%PRODUCTNAME 4.0 Â²³ø";
+    Text[ arabic ] = "ÚÑÖ ÊŞÏíãí ãä %PRODUCTNAME 4.0";
+    Text[ turkish ] = "Sunu (%PRODUCTNAME 4.0)";
 };
 String STR_IMPRESS_DOCUMENT_FULLTYPE_31
 {
     /* ### ACHTUNG: Neuer Text in Resource? StarOffice 3.0 Graphik / Präsentation : StarOffice 3.0 Graphik / Prõsentation */
-    Text = "StarOffice 3.0 Graphik / Präsentation" ;
+    Text = "%PRODUCTNAME 3.0 Graphik / Präsentation" ;
     Text [ ENGLISH ] = "StarOffice 3.0 Graphic / Presentation" ;
-    Text [ english_us ] = "Graphics/presentation (StarOffice 3.0)" ;
-    Text [ dutch ] = "StarOffice 3.0 Afbeelding / Presentatie" ;
-    Text [ swedish ] = "StarOffice 3.0 grafik / presentation" ;
-    Text [ danish ] = "StarOffice 3.0 grafik / præsentation" ;
-    Text [ italian ] = "Grafica / presentazione StarOffice 3.0" ;
-    Text [ spanish ] = "Imagen / Presentación de StarOffice 3.0" ;
-    Text [ french ] = "StarOffice 3.0 Image / Présentation" ;
-    Text [ portuguese ] = "Gráfica/Apresentação (StarOffice 3.0)" ;
-    Text [ portuguese_brazilian ] = "StarOffice 3.0 Graphik / Präsentation" ;
-    Text[ chinese_simplified ] = "StarOffice 3.0 Í¼ĞÎ/ÑİÊ¾ÎÄ¸å";
-    Text[ russian ] = "Ãğàôèêà/ïğåçåíòàöèÿ â StarOffice 3.0";
-    Text[ polish ] = "Grafika / Prezentacja w StarOffice 3.0";
-    Text[ japanese ] = "StarOffice 3.0 ¸Ş×Ì¨¯¸½/ÌßÚ¾ŞİÃ°¼®İ";
-    Text[ greek ] = "ÃñáöéêÜ/Ğáñïõóßáóç (StarOffice 3.0)";
-    Text[ korean ] = "StarOffice 3.0 ±×·¡ÇÈ/ÇÁ¸®Á¨Å×ÀÌ¼Ç";
-    Text[ chinese_traditional ] = "StarOffice 3.0 ¹Ï¤ù/Â²³ø";
-    Text[ arabic ] = "ÑÓãÉ / ÚÑÖ ÊŞÏíãí ãä StarOffice 3.0";
-    Text[ turkish ] = "Grafik/Sunu (StarOffice 3.0)";
+    Text [ english_us ] = "Graphics/presentation (%PRODUCTNAME 3.0)" ;
+    Text [ dutch ] = "%PRODUCTNAME 3.0 Afbeelding / Presentatie" ;
+    Text [ swedish ] = "%PRODUCTNAME 3.0 grafik / presentation" ;
+    Text [ danish ] = "%PRODUCTNAME 3.0 grafik / præsentation" ;
+    Text [ italian ] = "Grafica / presentazione %PRODUCTNAME 3.0" ;
+    Text [ spanish ] = "Imagen / Presentación de %PRODUCTNAME 3.0" ;
+    Text [ french ] = "%PRODUCTNAME 3.0 Image / Présentation" ;
+    Text [ portuguese ] = "Gráfica/Apresentação (%PRODUCTNAME 3.0)" ;
+    Text [ portuguese_brazilian ] = "%PRODUCTNAME 3.0 Graphik / Präsentation" ;
+    Text[ chinese_simplified ] = "%PRODUCTNAME 3.0 Í¼ĞÎ/ÑİÊ¾ÎÄ¸å";
+    Text[ russian ] = "Ãğàôèêà/ïğåçåíòàöèÿ â %PRODUCTNAME 3.0";
+    Text[ polish ] = "Grafika / Prezentacja w %PRODUCTNAME 3.0";
+    Text[ japanese ] = "%PRODUCTNAME 3.0 ¸Ş×Ì¨¯¸½/ÌßÚ¾ŞİÃ°¼®İ";
+    Text[ greek ] = "ÃñáöéêÜ/Ğáñïõóßáóç (%PRODUCTNAME 3.0)";
+    Text[ korean ] = "%PRODUCTNAME 3.0 ±×·¡ÇÈ/ÇÁ¸®Á¨Å×ÀÌ¼Ç";
+    Text[ chinese_traditional ] = "%PRODUCTNAME 3.0 ¹Ï¤ù/Â²³ø";
+    Text[ arabic ] = "ÑÓãÉ / ÚÑÖ ÊŞÏíãí ãä %PRODUCTNAME 3.0";
+    Text[ turkish ] = "Grafik/Sunu (%PRODUCTNAME 3.0)";
 };
 String STR_GRAPHIC_DOCUMENT
 {
@@ -10946,26 +10946,26 @@ String STR_GRAPHIC_DOCUMENT
 };
 String STR_GRAPHIC_DOCUMENT_FULLTYPE_50
 {
-    Text = "StarOffice 5.0 Zeichnung" ;
+    Text = "%PRODUCTNAME 5.0 Zeichnung" ;
     Text [ ENGLISH ] = "StarOffice 5.0 Drawing" ;
-    Text [ english_us ] = "Drawing (StarOffice 5.0)" ;
-    Text [ portuguese ] = "Desenho (StarOffice 5.0)" ;
-    Text [ portuguese_brazilian ] = "StarOffice 5.0 Zeichnung" ;
-    Text [ swedish ] = "StarOffice 5.0 Teckning" ;
-    Text [ danish ] = "StarOffice 5.0 tegning" ;
-    Text [ italian ] = "Disegno StarOffice 5.0" ;
-    Text [ spanish ] = "Dibujo de StarOffice 5.0 " ;
-    Text [ french ] = "StarOffice 5.0 Dessin" ;
-    Text [ dutch ] = "StarOffice 5.0 tekening" ;
-    Text[ chinese_simplified ] = "StarOffice 5.0 »æÍ¼";
-    Text[ russian ] = "Ğèñóíîê StarOffice 5.0";
-    Text[ polish ] = "Rysunek StarOffice 5.0";
-    Text[ japanese ] = "StarOffice 5.0‚Ì}Œ`•`‰æ";
-    Text[ greek ] = "Ó÷İäéï (StarOffice 5.0)";
-    Text[ korean ] = "StarOffice 5.0 ±×¸®±â";
-    Text[ chinese_traditional ] = "StarOffice 5.0 Ã¸¹Ï";
-    Text[ arabic ] = "ÑÓãÉ ãä StarOffice 5.0";
-    Text[ turkish ] = "StarOffice 5.0 çizimi";
+    Text [ english_us ] = "Drawing (%PRODUCTNAME 5.0)" ;
+    Text [ portuguese ] = "Desenho (%PRODUCTNAME 5.0)" ;
+    Text [ portuguese_brazilian ] = "%PRODUCTNAME 5.0 Zeichnung" ;
+    Text [ swedish ] = "%PRODUCTNAME 5.0 Teckning" ;
+    Text [ danish ] = "%PRODUCTNAME 5.0 tegning" ;
+    Text [ italian ] = "Disegno %PRODUCTNAME 5.0" ;
+    Text [ spanish ] = "Dibujo de %PRODUCTNAME 5.0 " ;
+    Text [ french ] = "%PRODUCTNAME 5.0 Dessin" ;
+    Text [ dutch ] = "%PRODUCTNAME 5.0 tekening" ;
+    Text[ chinese_simplified ] = "%PRODUCTNAME 5.0 »æÍ¼";
+    Text[ russian ] = "Ğèñóíîê %PRODUCTNAME 5.0";
+    Text[ polish ] = "Rysunek %PRODUCTNAME 5.0";
+    Text[ japanese ] = "%PRODUCTNAME 5.0‚Ì}Œ`•`‰æ";
+    Text[ greek ] = "Ó÷İäéï (%PRODUCTNAME 5.0)";
+    Text[ korean ] = "%PRODUCTNAME 5.0 ±×¸®±â";
+    Text[ chinese_traditional ] = "%PRODUCTNAME 5.0 Ã¸¹Ï";
+    Text[ arabic ] = "ÑÓãÉ ãä %PRODUCTNAME 5.0";
+    Text[ turkish ] = "%PRODUCTNAME 5.0 çizimi";
 };
 String STR_VIEWTYPE_VIEW
 {
@@ -11967,7 +11967,7 @@ String STR_PACKNGO_FILEDLG_TITLE
     Text[ polish ] = "Kompresuj - Zapisz jako";
     Text[ portuguese_brazilian ] = "Pack & Go - Save as";
     Text[ japanese ] = "ˆ³k - –¼‘O‚ğ•t‚¯‚Ä•Û‘¶";
-    Text[ korean ] = "Pack & Go - ´Ù¸¥ ÀÌ¸§À¸·Î ÀúÀå";
+    Text[ korean ] = "¾ĞÃà - ´Ù¸¥ ÀÌ¸§À¸·Î ÀúÀå";
     Text[ chinese_simplified ] = "Ñ¹Ëõ - Áí´æÎª";
     Text[ chinese_traditional ] = "À£ÁY - ¥t¦s·sÀÉ";
     Text[ arabic ] = "ÖÛØ - ÍİÙ ÈÇÓã";
@@ -11975,26 +11975,26 @@ String STR_PACKNGO_FILEDLG_TITLE
 };
 String STR_PACKNGO_FILTER
 {
-    Text = "StarOffice Impress 5.0 (gepackt) (*.sdp)" ;
+    Text = "%PRODUCTNAME Impress 5.0 (gepackt) (*.sdp)" ;
     Text [ ENGLISH ] = "StarOffice Impress 5.0 (packed) (*.sdp)" ;
-    Text [ english_us ] = "StarOffice Impress 5.0 (packed) (*.sdp)" ;
-    Text[ portuguese ] = "StarOffice Impress 5.0 (comprimido) (*.sdp)";
-    Text[ russian ] = "StarOffice Impress 5.0 (óæàò) (*.sdp)";
-    Text[ greek ] = "StarOffice Impress 5.0 (óõìğéåóìİíï) (*.sdp)";
-    Text[ dutch ] = "StarOffice Impress 5.0 (gecompr) (*.sdp)";
-    Text[ french ] = "StarOffice Impress 5.0 (compressé) (*.sdp)";
-    Text[ spanish ] = "StarOffice Impress 5.0 (comprimido) (*.sdp)";
-    Text[ italian ] = "StarOffice Impress 5.0 (compresso) (*.sdp)";
-    Text[ danish ] = "StarOffice Impress 5.0 (komprimeret) (*.sdp)";
-    Text[ swedish ] = "StarOffice Impress 5.0 (komprimerat) (*.sdp)";
-    Text[ polish ] = "StarOffice Impress 5.0 (skompresowany) (*.sdp)";
+    Text [ english_us ] = "%PRODUCTNAME Impress 5.0 (packed) (*.sdp)" ;
+    Text[ portuguese ] = "%PRODUCTNAME Impress 5.0 (comprimido) (*.sdp)";
+    Text[ russian ] = "%PRODUCTNAME Impress 5.0 (óæàò) (*.sdp)";
+    Text[ greek ] = "%PRODUCTNAME Impress 5.0 (óõìğéåóìİíï) (*.sdp)";
+    Text[ dutch ] = "%PRODUCTNAME Impress 5.0 (gecompr) (*.sdp)";
+    Text[ french ] = "%PRODUCTNAME Impress 5.0 (compressé) (*.sdp)";
+    Text[ spanish ] = "%PRODUCTNAME Impress 5.0 (comprimido) (*.sdp)";
+    Text[ italian ] = "%PRODUCTNAME Impress 5.0 (compresso) (*.sdp)";
+    Text[ danish ] = "%PRODUCTNAME Impress 5.0 (komprimeret) (*.sdp)";
+    Text[ swedish ] = "%PRODUCTNAME Impress 5.0 (komprimerat) (*.sdp)";
+    Text[ polish ] = "%PRODUCTNAME Impress 5.0 (skompresowany) (*.sdp)";
     Text[ portuguese_brazilian ] = "Pack & Go  (*.sdp)";
-    Text[ japanese ] = "StarOffice Impress 5.0(ˆ³k)(*.sdp)";
-    Text[ korean ] = "StarOffice Impress 5.0 (¾ĞÃà) (*.sdp)";
-    Text[ chinese_simplified ] = "StarOffice Impress 5.0 (Ñ¹Ëõ)   (*.sdp)";
-    Text[ chinese_traditional ] = "StarOffice Impress 5.0 (À£ÁY) (*.sdp)";
-    Text[ arabic ] = "StarOffice Impress 5.0 (ãÖÛæØ) (*.sdp)";
-    Text[ turkish ] = "StarOffice Impress 5.0 (sıkıştırılmış) (*.sdp)";
+    Text[ japanese ] = "%PRODUCTNAME Impress 5.0(ˆ³k)(*.sdp)";
+    Text[ korean ] = "%PRODUCTNAME Impress 5.0 (¾ĞÃà) (*.sdp)";
+    Text[ chinese_simplified ] = "%PRODUCTNAME Impress 5.0 (Ñ¹Ëõ)   (*.sdp)";
+    Text[ chinese_traditional ] = "%PRODUCTNAME Impress 5.0 (À£ÁY) (*.sdp)";
+    Text[ arabic ] = "%PRODUCTNAME Impress 5.0 (ãÖÛæØ) (*.sdp)";
+    Text[ turkish ] = "%PRODUCTNAME Impress 5.0 (sıkıştırılmış) (*.sdp)";
 };
 
 String STR_HTMLEXP_ERROR_CREATE_FILE
@@ -12178,7 +12178,7 @@ String STR_GRAFCROP
     Text[ polish ] = "Przytnij";
     Text[ portuguese_brazilian ] = "Crop";
     Text[ japanese ] = "ÄØĞİ¸Ş";
-    Text[ korean ] = "Crop";
+    Text[ korean ] = "´Ùµë±â";
     Text[ chinese_simplified ] = "¼ôÏÂ";
     Text[ chinese_traditional ] = "°Å¤U";
     Text[ turkish ] = "Crop";
