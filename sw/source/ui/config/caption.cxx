@@ -2,9 +2,9 @@
  *
  *  $RCSfile: caption.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:17:00 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 13:09:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,7 +175,8 @@ SvStream& operator>>( SvStream& rIStream, InsCaptionOpt& rCapOpt )
     rIStream >> nVal;               rCapOpt.nLevel = nVal;
 
     rIStream >> cVal;
-    rCapOpt.cSeparator = UniString( ByteString(cVal) , eEncoding).GetChar(0);
+    rCapOpt.cSeparator = UniString(
+        ByteString(static_cast< char >(cVal)) , eEncoding).GetChar(0);
 
     return rIStream;
 }
