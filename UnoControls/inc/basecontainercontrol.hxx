@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basecontainercontrol.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:11:17 $
+ *  last change: $Author: hjs $ $Date: 2001-09-11 16:45:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -370,8 +370,7 @@ public:
     */
 
     virtual void SAL_CALL addControl(   const   UNO3_OUSTRING&                      sName       ,
-                                        const   UNO3_REFERENCE< UNO3_XCONTROL >&    xControl    ) throw(    UNO3_ILLEGALARGUMENTEXCEPTION   ,
-                                                                                                            UNO3_RUNTIMEEXCEPTION           );
+                                        const   UNO3_REFERENCE< UNO3_XCONTROL >&    xControl    ) throw( UNO3_RUNTIMEEXCEPTION  );
 
     /**_______________________________________________________________________________________________________
         @short      -

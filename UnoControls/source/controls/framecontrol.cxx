@@ -2,9 +2,9 @@
  *
  *  $RCSfile: framecontrol.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jbu $ $Date: 2000-10-09 10:13:27 $
+ *  last change: $Author: hjs $ $Date: 2001-09-11 16:41:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -420,6 +420,7 @@ sal_Bool FrameControl::convertFastPropertyValue(        Any&        rConvertedVa
 
 void FrameControl::setFastPropertyValue_NoBroadcast(            sal_Int32   nHandle ,
                                                         const   Any&        rValue  )
+                                                        throw ( ::com::sun::star::uno::Exception )
 {
     // this method only set the value
     MutexGuard  aGuard (m_aMutex) ;

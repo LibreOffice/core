@@ -2,9 +2,9 @@
  *
  *  $RCSfile: framecontrol.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:11:17 $
+ *  last change: $Author: hjs $ $Date: 2001-09-11 16:43:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -546,7 +546,7 @@ protected:
     */
 
     virtual void SAL_CALL setFastPropertyValue_NoBroadcast(         sal_Int32   nHandle ,
-                                                              const UNO3_ANY&   rValue  );
+                                                              const UNO3_ANY&   rValue  ) throw ( ::com::sun::star::uno::Exception );
 
     /**_________________________________________________________________________________________________________
         @short
