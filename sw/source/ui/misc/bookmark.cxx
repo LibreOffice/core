@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bookmark.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:44 $
+ *  last change: $Author: fme $ $Date: 2001-05-29 13:46:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,7 +180,7 @@ SwInsertBookmarkDlg::SwInsertBookmarkDlg( Window *pParent, SwWrtShell &rS ) :
     SvxStandardDialog(pParent,SW_RES(DLG_INSERT_BOOKMARK)),
 
     aBookmarkBox(this,SW_RES(CB_BOOKMARK)),
-    aBookmarkFrm(this,SW_RES(GB_BOOKMARK)),
+    aBookmarkFl(this,SW_RES(FL_BOOKMARK)),
     aOkBtn(this,SW_RES(BT_OK)),
     aCancelBtn(this,SW_RES(BT_CANCEL)),
     aDeleteBtn(this,SW_RES(BT_DELETE)),
@@ -355,6 +355,9 @@ long BookmarkCombo::PreNotify( NotifyEvent& rNEvt )
 /*------------------------------------------------------------------------
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/18 17:14:44  hr
+      initial import
+
       Revision 1.50  2000/09/18 16:05:55  willem.vandorp
       OpenOffice header added.
 

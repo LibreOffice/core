@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idxmrk.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-25 14:42:02 $
+ *  last change: $Author: fme $ $Date: 2001-05-29 13:39:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,7 +134,7 @@ class SwIndexMarkDlg : public Window //SvxStandardDialog
      CheckBox       aSearchCaseSensitiveCB;
      CheckBox       aSearchCaseWordOnlyCB;
 
-     GroupBox       aIndexGB;
+    FixedLine       aIndexFL;
 
     OKButton        aOKBT;
     CancelButton    aCancelBT;

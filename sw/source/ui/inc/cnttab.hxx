@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-11-03 11:25:50 $
+ *  last change: $Author: fme $ $Date: 2001-05-29 13:39:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,6 +148,7 @@ struct SwIndexSections_Impl;
 class SwMultiTOXTabDialog : public SfxTabDialog
 {
     Window                  aExampleContainerWIN;
+    Window                  aDummyContainerWIN;
     Window                  aExampleWIN;
     CheckBox                aShowExampleCB;
     SwTOXMgr*               pMgr;
@@ -226,19 +227,21 @@ public:
  --------------------------------------------------*/
 class SwTOXSelectTabPage : public SfxTabPage
 {
+    FixedLine       aTypeTitleFL;
+    FixedText       aTitleFT;
+    Edit            aTitleED;
     FixedText       aTypeFT;
     ListBox         aTypeLB;
     CheckBox        aReadOnlyCB;
-    FixedText       aTitleFT;
-    Edit            aTitleED;
-    GroupBox        aTypeTitleGB;
 
+    FixedLine       aAreaFL;
+    FixedText       aAreaFT;
     ListBox         aAreaLB;
     FixedText       aLevelFT;   //content, user
     NumericField    aLevelNF;   //content, user
-    GroupBox        aAreaGB;
 
     //content
+    FixedLine       aCreateFromFL;  // content, user, illustration
     CheckBox        aFromHeadingsCB;
     PushButton      aChapterDlgPB;
     CheckBox        aAddStylesCB;
@@ -266,7 +269,6 @@ class SwTOXSelectTabPage : public SfxTabPage
     CheckBox        aTOXMarksCB;
 
     //
-    GroupBox        aCreateFromGB;  // content, user, illustration
 
     //index only
     CheckBox        aCollectSameCB;
@@ -279,17 +281,17 @@ class SwTOXSelectTabPage : public SfxTabPage
     MenuButton      aAutoMarkPB;
 //  PushButton      aCreateAutoMarkPB;
 //  PushButton      aEditAutoMarkPB;
-    GroupBox        aIdxOptionsGB; // index only
+    FixedLine       aIdxOptionsFL; // index only
 
     // object only
     SwOLENames      aFromNames;
     SvxCheckListBox aFromObjCLB;
-    GroupBox        aFromObjGB;
+    FixedLine       aFromObjFL;
 
     CheckBox        aSequenceCB;
     FixedText       aBracketFT;
     ListBox         aBracketLB;
-    GroupBox        aAuthorityFormatGB;
+    FixedLine       aAuthorityFormatFL;
 
     Point           aCBLeftPos1;
     Point           aCBLeftPos2;
@@ -455,18 +457,18 @@ class SwTOXEntryTabPage : public SfxTabPage
     FixedText       aTabPosFT;
     MetricField     aTabPosMF;          // tab stop position
     CheckBox        aAutoRightCB;
-    GroupBox        aEntryGB;
+    FixedLine       aEntryFL;
 
     CheckBox        aRelToStyleCB;      // position relative to the right margin of the para style
     FixedText       aMainEntryStyleFT;
     ListBox         aMainEntryStyleLB;  // character style of main entries in indexes
     CheckBox        aAlphaDelimCB;
     CheckBox        aCommaSeparatedCB;
-    GroupBox        aFormatGB;
+    FixedLine       aFormatFL;
 
     RadioButton     aSortDocPosRB;
     RadioButton     aSortContentRB;
-    GroupBox        aSortingGB;
+    FixedLine       aSortingFL;
 
     FixedText           aFirstKeyFT;
     ListBox             aFirstKeyLB;
@@ -483,7 +485,7 @@ class SwTOXEntryTabPage : public SfxTabPage
     ImageRadioButton    aThirdSortUpRB;
     ImageRadioButton    aThirdSortDownRB;
 
-    GroupBox        aSortKeyGB;
+    FixedLine       aSortKeyFL;
 
     String          sDelimStr;
     String          sLevelStr;
@@ -546,9 +548,9 @@ class SwTOXStylesTabPage : public SfxTabPage
     FixedText       aTemplateFT;
     ListBox         aParaLayLB;
     PushButton      aStdBT;
-    PushButton      aAssignBT;
+    ImageButton     aAssignBT;
     PushButton      aEditStyleBT;
-    GroupBox        aFormatGB;
+    FixedLine       aFormatFL;
 
     SwForm*         pCurrentForm;
 //  void            UpdatePattern();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bookmark.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:38 $
+ *  last change: $Author: fme $ $Date: 2001-05-29 13:39:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,8 @@
 #include <svx/stddlg.hxx>
 #endif
 
-#ifndef _GROUP_HXX //autogen
-#include <vcl/group.hxx>
+#ifndef _SV_FIXED_HXX //autogen
+#include <vcl/fixed.hxx>
 #endif
 
 #ifndef _BUTTON_HXX //autogen
@@ -105,7 +105,7 @@ public:
 class SwInsertBookmarkDlg: public SvxStandardDialog
 {
     BookmarkCombo   aBookmarkBox;
-    GroupBox        aBookmarkFrm;
+    FixedLine       aBookmarkFl;
     OKButton        aOkBtn;
     CancelButton    aCancelBtn;
     PushButton      aDeleteBtn;

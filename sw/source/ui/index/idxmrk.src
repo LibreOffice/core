@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idxmrk.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-25 14:43:23 $
+ *  last change: $Author: fme $ $Date: 2001-05-29 13:44:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,10 +228,10 @@
             TabStop = TRUE ;                                        \
             SYMBOL = IMAGEBUTTON_LAST ;                             \
         };                                                          \
-        GroupBox GB_INDEX                                           \
+        FixedLine FL_INDEX                                           \
         {                                                           \
             Pos = MAP_APPFONT ( 6 , 3 ) ;                           \
-            Size = MAP_APPFONT ( 151 , GB_HEIGHT ) ;                      \
+            Size = MAP_APPFONT ( 151 , 8 ) ;                      \
             Text = "Markierung" ;                                   \
             Text [ ENGLISH ] = "Mark" ;                             \
             Text [ norwegian ] = "Merk" ;                           \
@@ -621,10 +621,10 @@ ModalDialog DLG_NEW_USER_IDX
         Pos = MAP_APPFONT ( 141 , 43 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
     };
-    GroupBox GB_NAME
+    FixedLine FL_NAME
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 132 , 54 ) ;
+        Size = MAP_APPFONT ( 130 , 8 ) ;
         Text = "Neues Benutzerverzeichnis" ;
         Text [ ENGLISH ] = "New user index name" ;
 
@@ -652,8 +652,8 @@ ModalDialog DLG_NEW_USER_IDX
     };
     FixedText FT_NAME
     {
-        Pos = MAP_APPFONT ( 12 , 16 ) ;
-        Size = MAP_APPFONT ( 40 , 10 ) ;
+        Pos = MAP_APPFONT ( 12 , 17 ) ;
+        Size = MAP_APPFONT ( 40 , 8 ) ;
         Text = "~Name" ;
         Text [ ENGLISH ] = "Name" ;
 
@@ -683,7 +683,7 @@ ModalDialog DLG_NEW_USER_IDX
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 55 , 15 ) ;
-        Size = MAP_APPFONT ( 80 , 12 ) ;
+        Size = MAP_APPFONT ( 78 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
     };

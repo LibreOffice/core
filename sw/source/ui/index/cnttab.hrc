@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.hrc,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:43 $
+ *  last change: $Author: fme $ $Date: 2001-05-29 13:44:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,13 +79,13 @@
 #define BT_TAB         25
 #define BT_STD         26
 #define BT_PAGE        27
-#define GB_ENTRY       28
+#define FL_ENTRY       28
 //#define FT_LEVEL       28
 #define LB_LEVEL       29
 #define FT_TEMPLATE    30
 #define LB_PARALAY     31
 #define BT_ASSIGN      32
-#define GB_FORMAT      33
+#define FL_FORMAT      33
 #define BT_ENTRY        34
 //#define BT_EDIT        34
 #define BT_JUMP        35
@@ -118,11 +118,11 @@
 #define CB_READONLY         3
 #define FT_TITLE            4
 //#define ED_TITLE          5
-#define GB_TYPETITLE        6
+#define FL_TYPETITLE            6
 #define LB_AREA             7
 //#define FT_LEVEL          8
 #define NF_LEVEL            9
-#define GB_AREA             10
+#define FL_AREA                         10
 #define CB_FROMHEADINGS     11
 #define PB_CHAPTERDLG       12
 #define CB_ADDSTYLES        13
@@ -134,7 +134,7 @@
 #define RB_FROMCAPTIONS     19
 #define RB_FROMOBJECTNAMES  20
 #define CB_TOXMARKS         21
-#define GB_CREATEFROM       22
+#define FL_CREATEFROM           22
 #define CB_COLLECTSAME      23
 #define CB_USEFF            24
 #define CB_CASESENSITIVE    25
@@ -143,7 +143,7 @@
 #define CB_FROMFILE         28
 //#define PB_FILE               29
 #define MB_AUTOMARK         29
-#define GB_IDXOPTIONS       30
+#define FL_IDXOPTIONS           30
 //#define PB_CREATE_AUTOMARK    31
 //#define PB_EDIT_AUTOMARK    32
 
@@ -179,12 +179,13 @@
 
 #define STR_NO_CHAR_STYLE       61
 #define CLB_FROMOBJ             62
-#define GB_FROMOBJ              63
+#define FL_FROMOBJ                              63
 #define RES_SRCTYPES            64
 #define WIN_LEFT_SCROLL         65
 #define WIN_CTRL_PARENT         66
 #define WIN_RIGHT_SCROLL        67
 #define PB_ALL_LEVELS           68
+#define FT_AREA                 69
 
 
 #define STR_BUTTON_TEXT_START   70
@@ -237,7 +238,7 @@
 #define CB_SEQUENCE             122
 #define FT_BRACKET              123
 #define LB_BRACKET              124
-#define GB_AUTHORITY            125
+#define FL_AUTHORITY            125
 #define RB_DOCPOS               126
 #define RB_SORTCONTENT          127
 #define FT_FIRSTKEY             128
@@ -246,8 +247,8 @@
 #define LB_SECONDKEY            131
 #define FT_THIRDDKEY            132
 #define LB_THIRDKEY             133
-#define GB_SORTKEY              134
-#define GB_SORTING              135
+#define FL_SORTKEY              134
+#define FL_SORTING              135
 #define STR_NOSORTKEY           136
 #define RB_SORTUP1              137
 #define RB_SORTUP2              138

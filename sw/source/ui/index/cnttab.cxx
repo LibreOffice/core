@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: os $ $Date: 2001-05-15 10:02:40 $
+ *  last change: $Author: fme $ $Date: 2001-05-29 13:44:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -456,6 +456,7 @@ SwMultiTOXTabDialog::SwMultiTOXTabDialog(Window* pParent, const SfxItemSet& rSet
                     sal_uInt16 nToxType, sal_Bool bGlobal) :
         SfxTabDialog(   pParent, SW_RES(DLG_MULTI_TOX), &rSet),
         aExampleContainerWIN(this, ResId(WIN_EXAMPLE)),
+        aDummyContainerWIN(this, ResId(WIN_EXAMPLE)),
         aExampleWIN( &aExampleContainerWIN, 0 ),
         aShowExampleCB( this, ResId(CB_SHOWEXAMPLE)),
         sUserDefinedIndex(ResId(ST_USERDEFINEDINDEX)),
@@ -469,8 +470,10 @@ SwMultiTOXTabDialog::SwMultiTOXTabDialog(Window* pParent, const SfxItemSet& rSet
         bGlobalFlag(bGlobal)
 {
     FreeResource();
+
     aExampleWIN.SetPosSizePixel(aExampleContainerWIN.GetPosPixel(),
                                 aExampleContainerWIN.GetSizePixel());
+
     eCurrentTOXType.eType = TOX_CONTENT;
     eCurrentTOXType.nIndex = 0;
 
@@ -542,10 +545,10 @@ SwMultiTOXTabDialog::SwMultiTOXTabDialog(Window* pParent, const SfxItemSet& rSet
     aShowExampleCB.Check( SW_MOD()->GetModuleConfig()->IsShowIndexPreview());
     SetViewAlign( WINDOWALIGN_LEFT );
     // SetViewWindow does not work if the dialog is visible!
+
     if(!aShowExampleCB.IsChecked())
-    {
         SetViewWindow( &aExampleContainerWIN );
-    }
+
     Point aOldPos = GetPosPixel();
     ShowPreviewHdl(0);
      Point aNewPos = GetPosPixel();
@@ -777,10 +780,12 @@ IMPL_LINK( SwMultiTOXTabDialog, ShowPreviewHdl, CheckBox *, pBox )
     }
     sal_Bool bSetViewWindow = aShowExampleCB.IsChecked()
         && pExampleFrame && pExampleFrame->IsServiceAvailable();
-    aExampleContainerWIN.Show(bSetViewWindow);
 
-    SetViewWindow( bSetViewWindow ? &aExampleContainerWIN  : 0);
-     Point aPos = GetPosPixel();
+    aExampleContainerWIN.Show( bSetViewWindow );
+    aDummyContainerWIN.Show( ! bSetViewWindow );
+    SetViewWindow( bSetViewWindow ? &aExampleContainerWIN  : &aDummyContainerWIN );
+
+    Point aPos = GetPosPixel();
      Size aSize = GetSizePixel();
     if(pBox)
         AdjustLayout();
@@ -1488,16 +1493,20 @@ IMPL_LINK(SwAddStylesDlg_Impl, LeftRightHdl, PushButton*, pBtn)
   -----------------------------------------------------------------------*/
 SwTOXSelectTabPage::SwTOXSelectTabPage(Window* pParent, const SfxItemSet& rAttrSet) :
     SfxTabPage(pParent, SW_RES(TP_TOX_SELECT), rAttrSet),
+    aTypeTitleFL(       this, ResId(FL_TYPETITLE        )),
+    aTitleFT(           this, ResId(FT_TITLE            )),
+    aTitleED(           this, ResId(ED_TITLE            )),
     aTypeFT(            this, ResId(FT_TYPE             )),
     aTypeLB(            this, ResId(LB_TYPE             )),
     aReadOnlyCB(        this, ResId(CB_READONLY         )),
-    aTitleFT(           this, ResId(FT_TITLE            )),
-    aTitleED(           this, ResId(ED_TITLE            )),
-    aTypeTitleGB(       this, ResId(GB_TYPETITLE        )),
+
+    aAreaFL(            this, ResId(FL_AREA             )),
+    aAreaFT(            this, ResId(FT_AREA             )),
     aAreaLB(            this, ResId(LB_AREA             )),
     aLevelFT(           this, ResId(FT_LEVEL            )),
     aLevelNF(           this, ResId(NF_LEVEL            )),
-    aAreaGB(            this, ResId(GB_AREA             )),
+
+    aCreateFromFL(      this, ResId(FL_CREATEFROM       )),
     aFromHeadingsCB(    this, ResId(CB_FROMHEADINGS     )),
     aChapterDlgPB(      this, ResId(PB_CHAPTERDLG       )),
     aAddStylesCB(       this, ResId(CB_ADDSTYLES        )),
@@ -1514,7 +1523,7 @@ SwTOXSelectTabPage::SwTOXSelectTabPage(Window* pParent, const SfxItemSet& rAttrS
     aDisplayTypeFT(     this, ResId(FT_DISPLAYTYPE      )),
     aDisplayTypeLB(     this, ResId(LB_DISPLAYTYPE      )),
     aTOXMarksCB(        this, ResId(CB_TOXMARKS         )),
-    aCreateFromGB(      this, ResId(GB_CREATEFROM       )),
+
     aCollectSameCB(     this, ResId(CB_COLLECTSAME      )),
     aUseFFCB(           this, ResId(CB_USEFF            )),
     aUseDashCB(         this, ResId(CB_USE_DASH         )),
@@ -1526,14 +1535,14 @@ SwTOXSelectTabPage::SwTOXSelectTabPage(Window* pParent, const SfxItemSet& rAttrS
 //  aFilePB(            this, ResId(PB_FILE             )),
 //  aCreateAutoMarkPB(  this, ResId(PB_CREATE_AUTOMARK  )),
 //  aEditAutoMarkPB(    this, ResId(PB_EDIT_AUTOMARK    )),
-    aIdxOptionsGB(      this, ResId(GB_IDXOPTIONS       )),
+    aIdxOptionsFL(      this, ResId(FL_IDXOPTIONS       )),
     aFromNames(         ResId(RES_SRCTYPES              )),
     aFromObjCLB(        this, ResId(CLB_FROMOBJ         )),
-    aFromObjGB(         this, ResId(GB_FROMOBJ          )),
+    aFromObjFL(         this, ResId(FL_FROMOBJ          )),
     aSequenceCB(        this, ResId(CB_SEQUENCE         )),
     aBracketFT(         this, ResId(FT_BRACKET          )),
     aBracketLB(         this, ResId(LB_BRACKET          )),
-    aAuthorityFormatGB( this, ResId(GB_AUTHORITY        )),
+    aAuthorityFormatFL( this, ResId(FL_AUTHORITY        )),
     sAddStyleUser(ResId(ST_USER_ADDSTYLE)),
     sAutoMarkType(ResId(ST_AUTOMARK_TYPE)),
     bFirstCall(sal_True)
@@ -1969,7 +1978,7 @@ IMPL_LINK(SwTOXSelectTabPage, TOXTypeHdl,   ListBox*, pBox)
     aLevelFT.Show(nType & (TO_CONTENT));
     aLevelNF.Show(nType & (TO_CONTENT));
     aLevelFromChapterCB.Show(nType & (TO_USER));
-    aAreaGB.Show(nType & (TO_CONTENT|TO_ILLUSTRATION|TO_USER|TO_INDEX|TO_TABLE|TO_OBJECT));
+    aAreaFL.Show(nType & (TO_CONTENT|TO_ILLUSTRATION|TO_USER|TO_INDEX|TO_TABLE|TO_OBJECT));
 
     aFromHeadingsCB.Show(nType & (TO_CONTENT));
     aChapterDlgPB.Show(nType & (TO_CONTENT));
@@ -1986,7 +1995,7 @@ IMPL_LINK(SwTOXSelectTabPage, TOXTypeHdl,   ListBox*, pBox)
 
     aTOXMarksCB.Show(nType & (TO_CONTENT|TO_USER));
 
-    aCreateFromGB.Show(nType & (TO_CONTENT|TO_ILLUSTRATION|TO_USER|TO_TABLE));
+    aCreateFromFL.Show(nType & (TO_CONTENT|TO_ILLUSTRATION|TO_USER|TO_TABLE));
     aCaptionSequenceFT.Show(nType & (TO_ILLUSTRATION|TO_TABLE));
     aCaptionSequenceLB.Show(nType & (TO_ILLUSTRATION|TO_TABLE));
     aDisplayTypeFT.Show(nType & (TO_ILLUSTRATION|TO_TABLE));
@@ -1995,7 +2004,7 @@ IMPL_LINK(SwTOXSelectTabPage, TOXTypeHdl,   ListBox*, pBox)
     aSequenceCB.Show(nType & TO_AUTHORITIES);
     aBracketFT.Show(nType & TO_AUTHORITIES);
     aBracketLB.Show(nType & TO_AUTHORITIES);
-    aAuthorityFormatGB.Show(nType & TO_AUTHORITIES);
+    aAuthorityFormatFL.Show(nType & TO_AUTHORITIES);
 
     String sStr;
     if(nType & TO_CONTENT)
@@ -2029,11 +2038,11 @@ IMPL_LINK(SwTOXSelectTabPage, TOXTypeHdl,   ListBox*, pBox)
 //  aCreateAutoMarkPB.Show(nType &TO_INDEX);
 //  aEditAutoMarkPB.Show(nType & TO_INDEX);
 
-    aIdxOptionsGB.Show(nType & TO_INDEX);
+    aIdxOptionsFL.Show(nType & TO_INDEX);
 
     //object index
     aFromObjCLB.Show(nType & TO_OBJECT);
-    aFromObjGB.Show(nType & TO_OBJECT);
+    aFromObjFL.Show(nType & TO_OBJECT);
 
     //move controls
     aAddStylesCB.SetPosPixel(nType & TO_USER ? aCBLeftPos1 : aCBLeftPos2);
@@ -2487,17 +2496,17 @@ SwTOXEntryTabPage::SwTOXEntryTabPage(Window* pParent, const SfxItemSet& rAttrSet
     aTabPosFT(this,             ResId(FT_TABPOS             )),
     aTabPosMF(this,             ResId(MF_TABPOS             )),
     aAutoRightCB(this,          ResId(CB_AUTORIGHT          )),
-    aEntryGB(this,              ResId(GB_ENTRY              )),
+    aEntryFL(this,              ResId(FL_ENTRY              )),
     aRelToStyleCB(this,         ResId(CB_RELTOSTYLE         )),
     aMainEntryStyleFT(this,     ResId(FT_MAIN_ENTRY_STYLE)),
     aMainEntryStyleLB(this,     ResId(LB_MAIN_ENTRY_STYLE)),
     aAlphaDelimCB(this,         ResId(CB_ALPHADELIM         )),
     aCommaSeparatedCB(this,     ResId(CB_COMMASEPARATED     )),
-    aFormatGB(this,             ResId(GB_FORMAT             )),
+    aFormatFL(this,             ResId(FL_FORMAT             )),
 
     aSortDocPosRB(this,         ResId(RB_DOCPOS             )),
     aSortContentRB(this,        ResId(RB_SORTCONTENT        )),
-    aSortingGB(this,            ResId(GB_SORTING            )),
+    aSortingFL(this,            ResId(FL_SORTING            )),
 
     aFirstKeyFT(this,           ResId(FT_FIRSTKEY           )),
     aFirstKeyLB(this,           ResId(LB_FIRSTKEY           )),
@@ -2511,7 +2520,7 @@ SwTOXEntryTabPage::SwTOXEntryTabPage(Window* pParent, const SfxItemSet& rAttrSet
     aSecondSortDownRB(this,     ResId(RB_SORTDOWN2          )),
     aThirdSortUpRB(this,        ResId(RB_SORTUP3            )),
     aThirdSortDownRB(this,      ResId(RB_SORTDOWN3          )),
-    aSortKeyGB(this,            ResId(GB_SORTKEY            )),
+    aSortKeyFL(this,            ResId(FL_SORTKEY            )),
     sNoCharStyle(               ResId(STR_NO_CHAR_STYLE)),
     sNoCharSortKey(             ResId(STR_NOSORTKEY     )),
     sDelimStr(                  ResId(STR_DELIM)),
@@ -2799,12 +2808,12 @@ void SwTOXEntryTabPage::ActivatePage( const SfxItemSet& rSet)
             lcl_ChgWidth(aTokenWIN, -nDiff);
             lcl_ChgXPos(aSortDocPosRB,   nDiff);
             lcl_ChgXPos(aSortContentRB,      nDiff);
-            lcl_ChgXPos(aFormatGB,  nDiff);
-            lcl_ChgWidth(aFormatGB,     -nDiff);
-            lcl_ChgXPos(aSortingGB, nDiff);
-            lcl_ChgWidth(aSortingGB,    -nDiff);
-            lcl_ChgXPos(aEntryGB,   nDiff);
-            lcl_ChgWidth(aEntryGB,  -nDiff);
+            lcl_ChgXPos(aFormatFL,  nDiff);
+            lcl_ChgWidth(aFormatFL,     -nDiff);
+            lcl_ChgXPos(aSortingFL, nDiff);
+            lcl_ChgWidth(aSortingFL,    -nDiff);
+            lcl_ChgXPos(aEntryFL,   nDiff);
+            lcl_ChgWidth(aEntryFL,  -nDiff);
 
             lcl_ChgXPos(aFirstKeyFT, nDiff);
             lcl_ChgXPos(aFirstKeyLB, nDiff);
@@ -2812,12 +2821,12 @@ void SwTOXEntryTabPage::ActivatePage( const SfxItemSet& rSet)
             lcl_ChgXPos(aSecondKeyLB, nDiff);
             lcl_ChgXPos(aThirdKeyFT, nDiff);
             lcl_ChgXPos(aThirdKeyLB, nDiff);
-            lcl_ChgXPos(aSortKeyGB,     nDiff);
+            lcl_ChgXPos(aSortKeyFL,     nDiff);
 
             lcl_ChgWidth(aFirstKeyLB, -nDiff);
             lcl_ChgWidth(aSecondKeyLB, -nDiff);
             lcl_ChgWidth(aThirdKeyLB, -nDiff);
-            lcl_ChgWidth(aSortKeyGB, -nDiff);
+            lcl_ChgWidth(aSortKeyFL, -nDiff);
         }
         Link aLink = aLevelLB.GetSelectHdl();
         aLevelLB.SetSelectHdl(Link());
@@ -2847,17 +2856,17 @@ void SwTOXEntryTabPage::ActivatePage( const SfxItemSet& rSet)
         aAuthFieldsLB.Show(     bToxIsAuthorities );
         aAuthInsertPB.Show(     bToxIsAuthorities );
         aAuthRemovePB.Show(     bToxIsAuthorities );
-        aFormatGB.Show(        !bToxIsAuthorities );
+        aFormatFL.Show(        !bToxIsAuthorities );
         aSortDocPosRB.Show(     bToxIsAuthorities );
         aSortContentRB.Show(    bToxIsAuthorities );
-        aSortingGB.Show(        bToxIsAuthorities );
+        aSortingFL.Show(        bToxIsAuthorities );
         aFirstKeyFT.Show(       bToxIsAuthorities );
         aFirstKeyLB.Show(       bToxIsAuthorities );
         aSecondKeyFT.Show(      bToxIsAuthorities );
         aSecondKeyLB.Show(      bToxIsAuthorities );
         aThirdKeyFT.Show(       bToxIsAuthorities );
         aThirdKeyLB.Show(       bToxIsAuthorities );
-        aSortKeyGB.Show(        bToxIsAuthorities );
+        aSortKeyFL.Show(        bToxIsAuthorities );
         aFirstSortUpRB.Show(    bToxIsAuthorities );
         aFirstSortDownRB.Show(  bToxIsAuthorities );
         aSecondSortUpRB.Show(   bToxIsAuthorities );
@@ -3140,7 +3149,7 @@ IMPL_LINK(SwTOXEntryTabPage, SortKeyHdl, RadioButton*, pButton)
     aSecondKeyLB.Enable(bEnable);
     aThirdKeyFT.Enable(bEnable);
     aThirdKeyLB.Enable(bEnable);
-    aSortKeyGB.Enable(bEnable);
+    aSortKeyFL.Enable(bEnable);
     aFirstSortUpRB.Enable(bEnable);
     aFirstSortDownRB.Enable(bEnable);
     aSecondSortUpRB.Enable(bEnable);
@@ -4179,7 +4188,7 @@ SwTOXStylesTabPage::SwTOXStylesTabPage(Window* pParent, const SfxItemSet& rAttrS
     aStdBT(this,        SW_RES(BT_STD    )),
     aAssignBT(this,     SW_RES(BT_ASSIGN  )),
     aEditStyleBT(this,  SW_RES(BT_EDIT_STYLE    )),
-    aFormatGB(this,     SW_RES(GB_FORMAT  )),
+    aFormatFL(this,     SW_RES(FL_FORMAT  )),
     pCurrentForm(0)
 {
     FreeResource();

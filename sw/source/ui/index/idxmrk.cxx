@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idxmrk.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-25 14:43:23 $
+ *  last change: $Author: fme $ $Date: 2001-05-29 13:44:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,7 +224,7 @@ SwIndexMarkDlg::SwIndexMarkDlg(Window *pParent,
     aApplyToAllCB(this,SW_RES(CB_APPLY_TO_ALL)),
     aSearchCaseSensitiveCB(this,    SW_RES(CB_CASESENSITIVE )),
     aSearchCaseWordOnlyCB(this,     SW_RES(CB_WORDONLY      )),
-    aIndexGB(this,  SW_RES(GB_INDEX )),
+    aIndexFL(this,  SW_RES(FL_INDEX )),
     bSelected(sal_False)
 {
     SetStyle(GetStyle()|WB_DIALOGCONTROL);
@@ -607,7 +607,7 @@ class SwNewUserIdxDlg : public ModalDialog
     OKButton        aOKPB;
     CancelButton    aCancelPB;
     HelpButton      aHelpPB;
-    GroupBox        aNameGB;
+    FixedLine       aNameFL;
     FixedText       aNameFT;
     Edit            aNameED;
 
@@ -622,7 +622,7 @@ class SwNewUserIdxDlg : public ModalDialog
             aOKPB(this, ResId(      PB_OK       )),
             aCancelPB(this, ResId(  PB_CANCEL   )),
             aHelpPB(this, ResId(    PB_HELP     )),
-            aNameGB(this, ResId(    GB_NAME     )),
+            aNameFL(this, ResId(    FL_NAME     )),
             aNameFT(this, ResId(    FT_NAME     )),
             aNameED(this, ResId(    ED_NAME     ))
             {
@@ -1784,6 +1784,9 @@ void    SwAuthMarkModalDlg::Apply()
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.9  2001/05/25 14:43:23  fme
+    Fix #86988#: Dialog redesign
+
     Revision 1.8  2001/03/27 21:47:24  jp
     optimize SeachOption initialisation
 

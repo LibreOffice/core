@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bookmark.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-10 06:42:04 $
+ *  last change: $Author: fme $ $Date: 2001-05-29 13:46:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,7 @@ ModalDialog DLG_INSERT_BOOKMARK
     ComboBox CB_BOOKMARK
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 99 , 70 ) ;
+        Size = MAP_APPFONT ( 99 , 76 ) ;
         TABSTOP = TRUE ;
         AutoHScroll = TRUE ;
         SORT = TRUE ;
@@ -137,10 +137,10 @@ ModalDialog DLG_INSERT_BOOKMARK
         TEXT[ turkish ] = "~Sil";
         TEXT[ catalan ] = "~Eliminar";
     };
-    GroupBox GB_BOOKMARK
+    FixedLine FL_BOOKMARK
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
-        Size = MAP_APPFONT ( 111 , 87 ) ;
+        Size = MAP_APPFONT ( 111 , 8 ) ;
         TEXT = "Textmarken" ;
         TEXT [ English ] = "Bookmarks" ;
         TEXT [ norwegian ] = "Bokmerker" ;

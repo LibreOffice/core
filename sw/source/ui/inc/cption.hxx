@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cption.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2001-03-28 14:55:20 $
+ *  last change: $Author: fme $ $Date: 2001-05-29 13:39:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,7 @@ class SwCaptionDialog : public SvxStandardDialog
     CheckBox     aCopyAttributesCB;
     FixedText    aObjectNameFT;
     NoSpaceEdit  aObjectNameED;
-    GroupBox     aSettingsGroup;
+    FixedLine    aSettingsFL;
     OKButton     aOKButton;
     CancelButton aCancelButton;
     HelpButton   aHelpButton;
