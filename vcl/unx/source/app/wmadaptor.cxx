@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wmadaptor.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cp $ $Date: 2001-08-24 15:57:31 $
+ *  last change: $Author: pl $ $Date: 2001-08-27 13:22:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -423,7 +423,8 @@ WMAdaptor::WMAdaptor( SalDisplay* pDisplay ) :
                     &nFormat,
                     &nItems,
                     &nBytesLeft,
-                    &pProperty) == 0)
+                    &pProperty) == 0
+            && nItems )
         {
             if (*(XLIB_Boolean*)pProperty)
             {
