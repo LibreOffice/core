@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.hxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-11 16:39:54 $
+ *  last change: $Author: cmc $ $Date: 2002-07-12 09:02:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,8 +120,8 @@ class WW8PLCFx_SEPX;        //Yucky friend, remove this horror
 struct SprmInfo
 {
     sal_uInt16 nId;         //A ww8 sprm is hardcoded as 16bits
-    int nLen : 6;
-    int nVari : 2;
+    unsigned int nLen : 6;
+    unsigned int nVari : 2;
 };
 
 //a managed sorted sequence of sprminfos
