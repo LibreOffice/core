@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventexport.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-27 16:56:33 $
+ *  last change: $Author: fs $ $Date: 2001-08-27 17:44:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,7 +118,7 @@ namespace xmloff
                 if ( 0 <= nPrefixLen )
                 {
                     sLibrary = sLocalMacroName.copy( 0, nPrefixLen );
-                    sLocalMacroName.copy( nPrefixLen + 1 );
+                    sLocalMacroName = sLocalMacroName.copy( nPrefixLen + 1 );
                 }
             }
 
@@ -188,6 +188,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2001/08/27 16:56:33  fs
+ *  #91537# export a library attribute when exporting a StarBasic script event descriptor
+ *
  *  Revision 1.1  2001/01/02 15:55:28  fs
  *  initial checkin - helper for exporting script events
  *
