@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table2.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-22 18:06:27 $
+ *  last change: $Author: er $ $Date: 2001-03-14 15:57:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -305,6 +305,7 @@
 #ifndef _SVTOOLS_PASSWORDHELPER_HXX
 #include <svtools/PasswordHelper.hxx>
 #endif
+#include <unotools/collatorwrapper.hxx>
 
 #include "patattr.hxx"
 #include "docpool.hxx"
@@ -2985,10 +2986,10 @@ BOOL ScTable::Save( SvStream& rStream, long& rSavedDocCells, ScProgress* pProgre
         aLinkDocSaveName = INetURLObject::AbsToRel( aLinkDocSaveName );
         aLinkDocSaveName = INetURLObject::decode( aLinkDocSaveName,
             INET_HEX_ESCAPE, INetURLObject::DECODE_UNAMBIGUOUS );
-        if ( ScGlobal::pScInternational->CompareEqual(
+        if ( ScGlobal::pCollator->compareString(
                 aLinkDocSaveName,
                 INetURLObject::decode( aLinkDoc, INET_HEX_ESCAPE,
-                INetURLObject::DECODE_UNAMBIGUOUS ), INTN_COMPARE_IGNORECASE ) )
+                INetURLObject::DECODE_UNAMBIGUOUS ) ) == COMPARE_EQUAL )
         {
             aSaveName = INetURLObject::decode( aSaveName,
                 INET_HEX_ESCAPE, INetURLObject::DECODE_UNAMBIGUOUS );

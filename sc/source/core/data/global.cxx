@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: nn $ $Date: 2001-02-14 19:18:47 $
+ *  last change: $Author: er $ $Date: 2001-03-14 15:57:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,12 @@
 #ifndef _UNOTOOLS_CALENDARWRAPPER_HXX
 #include <unotools/calendarwrapper.hxx>
 #endif
+#ifndef _UNOTOOLS_COLLATORWRAPPER_HXX
+#include <unotools/collatorwrapper.hxx>
+#endif
+#ifndef _COM_SUN_STAR_I18N_COLLATOROPTIONS_HPP_
+#include <com/sun/star/i18n/CollatorOptions.hpp>
+#endif
 
 #include "global.hxx"
 #include "scresid.hxx"
@@ -139,6 +145,8 @@ International*  ScGlobal::pScInternational = NULL;
 CharClass*  ScGlobal::pCharClass = NULL;
 LocaleDataWrapper* ScGlobal::pLocaleData = NULL;
 CalendarWrapper* ScGlobal::pCalendar = NULL;
+CollatorWrapper* ScGlobal::pCollator = NULL;
+CollatorWrapper* ScGlobal::pCaseCollator = NULL;
 sal_Unicode     ScGlobal::cListDelimiter = ',';
 String*         ScGlobal::pEmptyString = NULL;
 String*         ScGlobal::pStrClipDocName = NULL;
@@ -582,6 +590,10 @@ void ScGlobal::Init()
     pLocaleData = new LocaleDataWrapper( ::comphelper::getProcessServiceFactory(), *pLocale );
     pCalendar = new CalendarWrapper( ::comphelper::getProcessServiceFactory() );
     pCalendar->loadDefaultCalendar( *pLocale );
+    pCollator = new CollatorWrapper( ::comphelper::getProcessServiceFactory() );
+    pCollator->loadDefaultCollator( *pLocale, SC_COLLATOR_IGNORES );
+    pCaseCollator = new CollatorWrapper( ::comphelper::getProcessServiceFactory() );
+    pCaseCollator->loadDefaultCollator( *pLocale, 0 );
 
     ppRscString = new String *[ STR_COUNT+1 ];
     for( USHORT nC = 0 ; nC <= STR_COUNT ; nC++ ) ppRscString[ nC ] = NULL;
@@ -682,6 +694,8 @@ void ScGlobal::Clear()
     DELETEZ(pOutlineBitmaps);
 //  DELETEZ(pAnchorBitmap);
 //  DELETEZ(pGrayAnchorBitmap);
+    DELETEZ(pCaseCollator);
+    DELETEZ(pCollator);
     DELETEZ(pCalendar);
     DELETEZ(pLocaleData);
     DELETEZ(pCharClass);
@@ -1581,7 +1595,7 @@ ScFunctionMgr::ScFunctionMgr()
             // ist zwar case-sensitiv, aber Umlaute muessen richtig einsortiert werden
 
             ScFuncDesc* pTmpDesc = (ScFuncDesc*)pRootList->GetObject(nTmpCnt);
-            if ( ScGlobal::pScInternational->Compare(
+            if ( ScGlobal::pCaseCollator->compareString(
                         *pDesc->pFuncName, *pTmpDesc->pFuncName ) == COMPARE_LESS )
                 break;
         }

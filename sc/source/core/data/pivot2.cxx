@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pivot2.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:16:15 $
+ *  last change: $Author: er $ $Date: 2001-03-14 15:57:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,7 @@
 #include <svx/wghtitem.hxx>
 #include <svx/algitem.hxx>
 #include <tools/intn.hxx>
+#include <unotools/collatorwrapper.hxx>
 
 #include "globstr.hrc"
 #include "subtotal.hxx"
@@ -329,21 +330,13 @@ short PivotStrCollection::Compare(DataObject* pKey1, DataObject* pKey2) const
     {
         // Strings vergleichen:
 
-        StringCompare eComp;
         if (pUserData)
-            eComp = pUserData->ICompare(rData1.aStrValue, rData2.aStrValue);
+            nResult = pUserData->ICompare(rData1.aStrValue, rData2.aStrValue);
         else
         {
-            eComp = ScGlobal::pScInternational->Compare(
-                rData1.aStrValue, rData2.aStrValue, INTN_COMPARE_IGNORECASE );
+            nResult = (short) ScGlobal::pCollator->compareString(
+                rData1.aStrValue, rData2.aStrValue );
         }
-
-        if ( eComp == COMPARE_EQUAL )
-            nResult = 0;
-        else if ( eComp == COMPARE_LESS )
-            nResult = -1;
-        else
-            nResult = 1;
     }
 
     return nResult;

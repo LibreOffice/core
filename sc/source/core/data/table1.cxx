@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table1.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2001-01-22 14:10:25 $
+ *  last change: $Author: er $ $Date: 2001-03-14 15:57:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,7 +182,8 @@ ScTable::ScTable( ScDocument* pDoc, USHORT nNewTab, const String& rNewName,
     pRepeatColRange( NULL ),
     pRepeatRowRange( NULL ),
     nLockCount( 0 ),
-    pScenarioRanges( NULL )
+    pScenarioRanges( NULL ),
+    pSortCollator( NULL )
 {
     USHORT i;
 
@@ -248,6 +249,7 @@ ScTable::~ScTable()
     delete pRepeatColRange;
     delete pRepeatRowRange;
     delete pScenarioRanges;
+    DestroySortCollator();
 }
 
 void ScTable::GetName( String& rName ) const

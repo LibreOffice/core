@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table3.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: er $ $Date: 2001-03-12 19:37:32 $
+ *  last change: $Author: er $ $Date: 2001-03-14 15:57:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,8 @@
 #include <unotools/textsearch.hxx>
 #include <svtools/zforlist.hxx>
 #include <unotools/charclass.hxx>
+#include <unotools/collatorwrapper.hxx>
+#include <com/sun/star/i18n/CollatorOptions.hpp>
 #include <stdlib.h>
 
 #include "table.hxx"
@@ -196,6 +198,43 @@ ScSortInfoArray* ScTable::CreateSortInfoArray( USHORT nInd1, USHORT nInd2 )
     return pArray;
 }
 
+
+BOOL ScTable::IsSortCollatorGlobal() const
+{
+    return  pSortCollator == ScGlobal::pCollator ||
+            pSortCollator == ScGlobal::pCaseCollator;
+}
+
+
+void ScTable::InitSortCollator( const ScSortParam& rPar )
+{
+    if ( rPar.aCollatorLocale.Language.getLength() )
+    {
+        if ( !pSortCollator || IsSortCollatorGlobal() )
+            pSortCollator = new CollatorWrapper( pDocument->GetServiceManager() );
+        pSortCollator->loadCollatorAlgorithm( rPar.aCollatorAlgorithm,
+            rPar.aCollatorLocale, (rPar.bCaseSens ? 0 : SC_COLLATOR_IGNORES) );
+    }
+    else
+    {   // SYSTEM
+        DestroySortCollator();
+        pSortCollator = (rPar.bCaseSens ? ScGlobal::pCaseCollator :
+            ScGlobal::pCollator);
+    }
+}
+
+
+void ScTable::DestroySortCollator()
+{
+    if ( pSortCollator )
+    {
+        if ( !IsSortCollatorGlobal() )
+            delete pSortCollator;
+        pSortCollator = NULL;
+    }
+}
+
+
 void ScTable::SortReorder( ScSortInfoArray* pArray, ScProgress& rProgress )
 {
     BOOL bByRow = aSortParam.bByRow;
@@ -262,7 +301,6 @@ short ScTable::CompareCell( USHORT nSort,
 
             if ( bStr1 && bStr2 )           // nur Strings untereinander als String vergleichen!
             {
-                StringCompare eCompare;
                 String aStr1;
                 String aStr2;
                 if (eType1 == CELLTYPE_STRING)
@@ -282,23 +320,16 @@ short ScTable::CompareCell( USHORT nSort,
                     if (pData)
                     {
                         if ( aSortParam.bCaseSens )
-                            eCompare = pData->Compare(aStr1, aStr2);
+                            nRes = pData->Compare(aStr1, aStr2);
                         else
-                            eCompare = pData->ICompare(aStr1, aStr2);
+                            nRes = pData->ICompare(aStr1, aStr2);
                     }
                     else
                         bUserDef = FALSE;
 
                 }
                 if (!bUserDef)
-                {
-                    eCompare = ScGlobal::pScInternational->Compare(
-                        aStr1, aStr2, (aSortParam.bCaseSens ? 0 : INTN_COMPARE_IGNORECASE) );
-                }
-                if (eCompare == COMPARE_LESS)
-                    nRes =  -1;
-                else if (eCompare == COMPARE_GREATER)
-                    nRes = 1;
+                    nRes = (short) pSortCollator->compareString( aStr1, aStr2 );
             }
             else if ( bStr1 )               // String <-> Zahl
                 nRes = 1;                   // Zahl vorne
@@ -497,6 +528,7 @@ void ScTable::DecoladeRow( ScSortInfoArray* pArray, USHORT nRow1, USHORT nRow2 )
 void ScTable::Sort(const ScSortParam& rSortParam, BOOL bKeepQuery)
 {
     aSortParam = rSortParam;
+    InitSortCollator( rSortParam );
     bGlobalKeepQuery = bKeepQuery;
     if (rSortParam.bByRow)
     {
@@ -537,6 +569,7 @@ void ScTable::Sort(const ScSortParam& rSortParam, BOOL bKeepQuery)
             delete pArray;
         }
     }
+    DestroySortCollator();
 }
 
 
@@ -878,7 +911,8 @@ BOOL ScTable::ValidQuery(USHORT nRow, const ScQueryParam& rParam, BOOL* pSpecial
     short   nPos = -1;
     USHORT  i    = 0;
     BOOL    bMatchWholeCell = pDocument->GetDocOptions().IsMatchWholeCell();
-    USHORT nCompareFlags = (rParam.bCaseSens ? 0 : INTN_COMPARE_IGNORECASE);
+    CollatorWrapper* pCollator = (rParam.bCaseSens ? ScGlobal::pCaseCollator :
+        ScGlobal::pCollator);
 
     while ( (i < nEntryCount) && rParam.GetEntry(i).bDoQuery )
     {
@@ -945,8 +979,10 @@ BOOL ScTable::ValidQuery(USHORT nRow, const ScQueryParam& rParam, BOOL* pSpecial
                 if ( rEntry.eOp == SC_EQUAL || rEntry.eOp == SC_NOT_EQUAL )
                 {
                     if ( bMatchWholeCell )
-                        bOk = ScGlobal::pScInternational->CompareEqual(
-                            aCellStr, *rEntry.pStr, nCompareFlags );
+                    {
+                        bOk = (pCollator->compareString( aCellStr,
+                            *rEntry.pStr ) == COMPARE_EQUAL);
+                    }
                     else
                     {
                         if ( rParam.bCaseSens )
@@ -964,22 +1000,21 @@ BOOL ScTable::ValidQuery(USHORT nRow, const ScQueryParam& rParam, BOOL* pSpecial
                 }
                 else
                 {
-                    StringCompare eCompare =
-                        ScGlobal::pScInternational->Compare(
-                            aCellStr, *rEntry.pStr, nCompareFlags );
+                    sal_Int32 nCompare = pCollator->compareString(
+                        aCellStr, *rEntry.pStr );
                     switch (rEntry.eOp)
                     {
                         case SC_LESS :
-                            bOk = (eCompare == COMPARE_LESS);
+                            bOk = (nCompare == COMPARE_LESS);
                             break;
                         case SC_GREATER :
-                            bOk = (eCompare == COMPARE_GREATER);
+                            bOk = (nCompare == COMPARE_GREATER);
                             break;
                         case SC_LESS_EQUAL :
-                            bOk = (eCompare == COMPARE_LESS) || (eCompare == COMPARE_EQUAL);
+                            bOk = (nCompare == COMPARE_LESS) || (nCompare == COMPARE_EQUAL);
                             break;
                         case SC_GREATER_EQUAL :
-                            bOk = (eCompare == COMPARE_GREATER) || (eCompare == COMPARE_EQUAL);
+                            bOk = (nCompare == COMPARE_GREATER) || (nCompare == COMPARE_EQUAL);
                             break;
                     }
                 }
@@ -1016,6 +1051,7 @@ BOOL ScTable::ValidQuery(USHORT nRow, const ScQueryParam& rParam, BOOL* pSpecial
 
 void ScTable::TopTenQuery( ScQueryParam& rParam )
 {
+    BOOL bSortCollatorInitialized = FALSE;
     USHORT nEntryCount = rParam.GetEntryCount();
     USHORT nRow1 = (rParam.bHasHeader ? rParam.nRow1 + 1 : rParam.nRow1);
     USHORT nCount = rParam.nRow2 - nRow1 + 1;
@@ -1031,7 +1067,11 @@ void ScTable::TopTenQuery( ScQueryParam& rParam )
             case SC_BOTPERC:
             {
                 ScSortParam aLocalSortParam( rParam, rEntry.nField );
-                aSortParam = aLocalSortParam;
+                if ( !bSortCollatorInitialized )
+                {
+                    bSortCollatorInitialized = TRUE;
+                    InitSortCollator( aLocalSortParam );
+                }
                 ScSortInfoArray* pArray = CreateSortInfoArray( nRow1, rParam.nRow2 );
                 DecoladeRow( pArray, nRow1, rParam.nRow2 );
                 QuickSort( pArray, nRow1, rParam.nRow2 );
@@ -1119,6 +1159,8 @@ void ScTable::TopTenQuery( ScQueryParam& rParam )
             }
         }
     }
+    if ( bSortCollatorInitialized )
+        DestroySortCollator();
 }
 
 USHORT ScTable::Query(ScQueryParam& rParamOrg, BOOL bKeepSub)

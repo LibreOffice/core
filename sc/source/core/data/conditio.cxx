@@ -2,9 +2,9 @@
  *
  *  $RCSfile: conditio.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: er $ $Date: 2001-02-21 18:29:35 $
+ *  last change: $Author: er $ $Date: 2001-03-14 15:57:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,10 @@
 #include <svtools/zforlist.hxx>
 #include <tools/intn.hxx>
 #include <tools/solmath.hxx>
+
+#ifndef _UNOTOOLS_COLLATORWRAPPER_HXX
+#include <unotools/collatorwrapper.hxx>
+#endif
 
 #include "conditio.hxx"
 #include "cell.hxx"
@@ -744,8 +748,8 @@ BOOL ScConditionEntry::IsValidStr( const String& rArg ) const
     String aUpVal2( aStrVal2 );
 
     if ( eOp == SC_COND_BETWEEN || eOp == SC_COND_NOTBETWEEN )
-        if ( ScGlobal::pScInternational->Compare( aUpVal1, aUpVal2,
-                INTN_COMPARE_IGNORECASE ) == COMPARE_GREATER )
+        if ( ScGlobal::pCollator->compareString( aUpVal1, aUpVal2 )
+                == COMPARE_GREATER )
         {
             //  richtige Reihenfolge fuer Wertebereich
             String aTemp( aUpVal1 ); aUpVal1 = aUpVal2; aUpVal2 = aTemp;
@@ -755,37 +759,37 @@ BOOL ScConditionEntry::IsValidStr( const String& rArg ) const
     switch ( eOp )
     {
         case SC_COND_EQUAL:
-            bValid = ScGlobal::pScInternational->CompareEqual(
-                rArg, aUpVal1, INTN_COMPARE_IGNORECASE );
+            bValid = (ScGlobal::pCollator->compareString(
+                rArg, aUpVal1 ) == COMPARE_EQUAL);
         break;
         case SC_COND_NOTEQUAL:
-            bValid = !ScGlobal::pScInternational->CompareEqual(
-                rArg, aUpVal1, INTN_COMPARE_IGNORECASE );
+            bValid = (ScGlobal::pCollator->compareString(
+                rArg, aUpVal1 ) != COMPARE_EQUAL);
         break;
         default:
         {
-            StringCompare eCompare = ScGlobal::pScInternational->Compare(
-                rArg, aUpVal1, INTN_COMPARE_IGNORECASE );
+            sal_Int32 nCompare = ScGlobal::pCollator->compareString(
+                rArg, aUpVal1 );
             switch ( eOp )
             {
                 case SC_COND_GREATER:
-                    bValid = ( eCompare == COMPARE_GREATER );
+                    bValid = ( nCompare == COMPARE_GREATER );
                     break;
                 case SC_COND_EQGREATER:
-                    bValid = ( eCompare == COMPARE_EQUAL || eCompare == COMPARE_GREATER );
+                    bValid = ( nCompare == COMPARE_EQUAL || nCompare == COMPARE_GREATER );
                     break;
                 case SC_COND_LESS:
-                    bValid = ( eCompare == COMPARE_LESS );
+                    bValid = ( nCompare == COMPARE_LESS );
                     break;
                 case SC_COND_EQLESS:
-                    bValid = ( eCompare == COMPARE_EQUAL || eCompare == COMPARE_LESS );
+                    bValid = ( nCompare == COMPARE_EQUAL || nCompare == COMPARE_LESS );
                     break;
                 case SC_COND_BETWEEN:
                 case SC_COND_NOTBETWEEN:
                     //  Test auf NOTBETWEEN:
-                    bValid = ( eCompare == COMPARE_LESS ||
-                        ScGlobal::pScInternational->Compare( rArg, aUpVal2,
-                        INTN_COMPARE_IGNORECASE ) == COMPARE_GREATER );
+                    bValid = ( nCompare == COMPARE_LESS ||
+                        ScGlobal::pCollator->compareString( rArg,
+                        aUpVal2 ) == COMPARE_GREATER );
                     if ( eOp == SC_COND_BETWEEN )
                         bValid = !bValid;
                     break;
