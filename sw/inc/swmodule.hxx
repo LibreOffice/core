@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swmodule.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-01-24 11:33:27 $
+ *  last change: $Author: os $ $Date: 2001-02-21 12:07:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,7 @@ class SfxItemSet;
 class SfxRequest;
 class SfxErrorHandler;
 class SwSrcViewConfig;
+class SwDBConfig;
 class SwModuleOptions;
 class SwMasterUsrPref;
 class SwViewOption;
@@ -106,6 +107,7 @@ class SwNavigationConfig;
 class SwDataExchange;
 class SwToolbarConfigItem;
 class SwAttrPool;
+struct SwDBData;
 #define VIEWOPT_DEST_VIEW       0
 #define VIEWOPT_DEST_TEXT       1
 #define VIEWOPT_DEST_WEB        2
@@ -131,6 +133,7 @@ class SwModule: public SwModuleDummy , public SfxListener
     SwNavigationConfig* pNavigationConfig;
     SwToolbarConfigItem*pToolbarConfig;     //fÅr gestackte Toolbars, welche
     SwToolbarConfigItem*pWebToolbarConfig;  //war sichtbar?
+    SwDBConfig*         pDBConfig;
 
     SfxErrorHandler*    pErrorHdl;
 
@@ -216,6 +219,7 @@ public:
     SwNavigationConfig* GetNavigationConfig();
     SwToolbarConfigItem*GetToolbarConfig()      { return pToolbarConfig;    }
     SwToolbarConfigItem*GetWebToolbarConfig()   { return pWebToolbarConfig; }
+    SwDBConfig*         GetDBConfig();
 
     // UNO
 //  virtual Reflection* GetReflection( UsrUik aUIK );
@@ -233,7 +237,7 @@ public:
     SwDataExchange*     pClipboard;
     SwDataExchange*     pDragDrop;
 
-    void ShowDBObj(SwWrtShell& rShell, const String& rDBName, sal_Bool bShowError = sal_False);
+    void ShowDBObj(SwWrtShell& rShell, const SwDBData& rData, sal_Bool bShowError = sal_False);
 
     // Tabellenmodi
     sal_Bool                IsInsTblFormatNum(sal_Bool bHTML) const;

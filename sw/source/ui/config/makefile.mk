@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: os $ $Date: 2000-12-08 10:22:43 $
+#   last change: $Author: os $ $Date: 2001-02-21 12:06:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,6 +83,7 @@ CXXFILES = \
         barcfg.cxx \
         caption.cxx \
         cfgitems.cxx \
+        dbconfig.cxx \
         fontcfg.cxx \
         modcfg.cxx \
         optins.cxx \
@@ -104,6 +105,7 @@ SLOFILES =	\
         $(SLO)$/barcfg.obj \
         $(SLO)$/caption.obj \
         $(SLO)$/cfgitems.obj \
+        $(SLO)$/dbconfig.obj \
         $(SLO)$/fontcfg.obj \
         $(SLO)$/modcfg.obj \
         $(SLO)$/optins.obj \
