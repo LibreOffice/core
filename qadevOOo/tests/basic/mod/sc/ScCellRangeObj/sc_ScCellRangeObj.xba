@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: sc_ScCellRangeObj.xba,v $ 
 '*
-'*  $Revision: 1.1 $ 
+'*  $Revision: 1.2 $ 
 '*
-'*  last change:$Date: 2003-01-27 17:59:20 $ 
+'*  last change:$Date: 2003-02-27 16:11:56 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -73,6 +73,10 @@ option explicit
 
 ' REQUIRED VARIABLES for interface/service tests:
 
+'com.sun.star.sheet.XCellSeries
+Global aCellSeries(2) as Integer
+
+
 'Required for com.sun.star.chart.XChartData
 Global oCellToChange As Object
 
@@ -89,11 +93,58 @@ On Error Goto ErrHndl
     oDoc = utils.createDocument("scalc", cObjectName)
     oSheet = oDoc.Sheets(0)
     oCellToChange = oSheet.getCellByPosition(0, 0)
-    oRange = oSheet.getCellRangeByPosition(0, 0, 0, 2)
+    oRange = oSheet.getCellRangeByPosition(0, 0, 10, 10)
     oObj = oRange
+    
+    aCellSeries(0) = 10
+    aCellSeries(1) = 10
 
 Exit Sub
 ErrHndl:
     Test.Exception()
 End Sub
+
+Function modifyDescriptor(descr As Variant) As Variant
+On Error Goto ErrHndl
+    Dim i As Integer, oCell As Object
+
+    for i = 0 to aCellSeries(0) - 1
+        oCell = oObj.getCellByPosition(0, i)
+        oCell.String = "" + (aCellSeries(0) - i)
+    next i
+
+    for i = 0 to ubound(descr)
+        if descr(i).Name = "SortAscending" then descr(i).Value = true
+        if descr(i).Name = "SortColumns" then descr(i).Value = true
+
+        if descr(i).Name = "BindFormatsToContent" then descr(i).Value = true
+        if descr(i).Name = "IsUserListEnabled" then descr(i).Value = FALSE
+    next i
+
+    modifyDescriptor() = descr
+Exit Function
+ErrHndl:
+    Out.Log("Exception in ScCellRangeObj.modifyDescriptor() :")
+    Test.Exception()
+end Function
+
+Function checkSort() As Boolean
+On Error Goto ErrHndl
+    Dim i As Integer, oCell As Object
+    Dim bOK As Boolean
+
+    bOK = true
+    for i = 0 to aCellSeries(0) - 1
+        oCell = oObj.getCellByPosition(0,i)
+        bOK = bOK AND oCell.String = "" + (i + 1)
+        out.dbg(oCell.String + ":" + (i+1))
+    next i
+
+    checkSort() = bOK
+Exit Function
+ErrHndl:
+    Out.Log("Exception in SwXTextTable.checkSort() :")
+    Test.Exception()
+end Function
+
 </script:module>

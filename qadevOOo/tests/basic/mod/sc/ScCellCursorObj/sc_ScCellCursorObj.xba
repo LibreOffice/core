@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: sc_ScCellCursorObj.xba,v $ 
 '*
-'*  $Revision: 1.1 $ 
+'*  $Revision: 1.2 $ 
 '*
-'*  last change:$Date: 2003-01-27 17:59:12 $ 
+'*  last change:$Date: 2003-02-27 16:11:35 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -78,6 +78,9 @@ Global nCellCursorRow As Long
 ' Required for com.sun.star.chart.XChartData
 Global oCellToChange As Object
 
+'com.sun.star.sheet.XCellSeries
+Global aCellSeries(2) as Integer
+
 
 Sub CreateObj()
 
@@ -105,6 +108,9 @@ On Error Goto ErrHndl
 	'XSheetCellCursor::colapseToCurrentRegion() :
 	nCellCursorRow = 12
 	nCellCursorCol 2
+
+    aCellSeries(0) = 3
+    aCellSeries(1) = 3
 
     oObj = oSheetCursor
 
