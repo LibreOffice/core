@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resmgr.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: th $ $Date: 2001-05-18 10:35:38 $
+ *  last change: $Author: ok $ $Date: 2001-05-28 12:07:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1222,7 +1222,7 @@ ResMgr* ResMgr::CreateResMgr( const sal_Char* pPrefixName,
                               const UniString* pResPath )
 {
     // Suchreihenfolge festlegen
-    const sal_Char* pLang[5];
+    const sal_Char* pLang[6];
 
     // Resourcefile suchen
     UniString aName;
@@ -1370,11 +1370,11 @@ SimpleResMgr::SimpleResMgr( const sal_Char* pPrefixName,
                             const UniString* pResPath )
 {
     // Suchreihenfolge festlegen
-    const sal_Char* pLang[5];
+    const sal_Char* pLang[6];
 
     // Resourcefile suchen
     UniString aName;
-    for ( int i = 0; i < 5; i++ )
+    for ( int i = 0; i < 6; i++ )
     {
         pLang[i] = ResMgr::GetLang( nType, i );
 
