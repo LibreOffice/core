@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cpp1.c,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 15:50:48 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 15:55:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,7 @@
 FILE *pCppOut = NULL;
 FILE *pCppIn  = NULL;
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 FILE *pDefOut = stdout;     /* ER  evtl. #define's dump */
 #endif
 
@@ -101,7 +101,7 @@ int             wrongline;              /* Force #line to compiler      */
 char            token[IDMAX + 1];       /* Current input token          */
 int             errors;                 /* cpp error counter            */
 FILEINFO        *infile = NULL;         /* Current input file           */
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 int             debug;                  /* TRUE if debugging now        */
 int             bDumpDefs;              /* TRUE if #define's dump req.  */
 #ifdef EVALDEFS
@@ -209,7 +209,7 @@ char    *preset[] = {                   /* names defined at cpp start   */
 #ifdef  COMPILER
         COMPILER,
 #endif
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         "decus_cpp",                    /* Ourselves!                   */
 #endif
         NULL                            /* Must be last                 */
@@ -252,7 +252,7 @@ void InitCpp1()
 
     pCppOut = stdout;
     pCppIn  = stdin;
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     debug = 0;
     bDumpDefs = 0;
     pDefOut = stdout;
@@ -310,7 +310,7 @@ nRunde++;
             useargv=argv;
         }
         switch (i) {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         case 4:
             if ( bDumpDefs )
             {
@@ -336,7 +336,7 @@ nRunde++;
                     }
                 }                           /* Continue by opening output    */
             }
-/* DEBUG */
+/* OSL_DEBUG_LEVEL > 1 */
 #endif
         case 3:
             /*
@@ -400,7 +400,7 @@ nRunde++;
 
         setincdirs();                   /* Setup -I include directories */
         addfile( pCppIn, work);           /* "open" main input file       */
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         if (debug > 0 || bDumpDefs)
             dumpdef("preset #define symbols");
 #endif
@@ -418,7 +418,7 @@ nRunde++;
         }
 /* alt:        fclose(stdout); */
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         fclose( pDefOut );
 #endif
         fclose( pCppOut );
