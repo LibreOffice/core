@@ -2,9 +2,9 @@
  *
  *  $RCSfile: system.h,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:17:21 $
+ *  last change: $Author: pluby $ $Date: 2000-10-23 15:48:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -418,29 +418,16 @@ extern unsigned int nanosleep(unsigned int);
 #endif
 
 #ifndef NORMALIZE_TIMESPEC
-#   ifdef MACOSX
-#   define NORMALIZE_TIMESPEC(timespec) \
-          timespec.tv_sec  += timespec.tv_nsec / 1000000000; \
-          timespec.tv_nsec %= 1000000000;
-#   else
 #   define NORMALIZE_TIMESPEC(timespec) \
           timespec##.tv_sec  += timespec##.tv_nsec / 1000000000; \
           timespec##.tv_nsec %= 1000000000;
-#   endif
 #endif
 
 #ifndef SET_TIMESPEC
-#   ifdef MACOSX
-#   define SET_TIMESPEC(timespec, sec, nsec) \
-          timespec.tv_sec  = (sec);  \
-          timespec.tv_nsec = (nsec); \
-        NORMALIZE_TIMESPEC(timespec);
-#   else
 #   define SET_TIMESPEC(timespec, sec, nsec) \
           timespec##.tv_sec  = (sec);  \
           timespec##.tv_nsec = (nsec); \
         NORMALIZE_TIMESPEC(timespec);
-#   endif
 #endif
 
 #ifndef SLEEP_TIMESPEC
