@@ -2,9 +2,9 @@
  *
  *  $RCSfile: logfile.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cd $ $Date: 2001-07-27 18:54:29 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 19:10:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,13 +60,6 @@
  ************************************************************************/
 #ifndef _RTL_LOGFILE_HXX_
 #define _RTL_LOGFILE_HXX_
-
-#ifndef _OSL_TIME_H_
-#include <osl/time.h>
-#endif
-#ifndef _OSL_THREAD_H_
-#include <osl/thread.h>
-#endif
 
 #ifndef _RTL_LOGFILE_H_
 #include <rtl/logfile.h>
@@ -164,10 +157,7 @@ namespace rtl
     inline Logfile::Logfile( const sal_Char *name )
         : m_sName( name )
     {
-        rtl_logfile_trace( "%06lu %lu { %s\n",
-                           osl_getGlobalTimer(),
-                           osl_getThreadIdentifier( 0 ),
-                           name );
+        rtl_logfile_longTrace( "{ %s\n", name );
     }
 
     inline Logfile::Logfile( const sal_Char *project, const sal_Char *author, const sal_Char *name )
@@ -177,18 +167,12 @@ namespace rtl
         m_sName += author;
         m_sName += ") ";
         m_sName += name;
-        rtl_logfile_trace( "%06lu %lu { %s\n",
-                           osl_getGlobalTimer(),
-                           osl_getThreadIdentifier( 0 ),
-                           m_sName.pData->buffer );
+        rtl_logfile_longTrace( "{ %s\n", m_sName.pData->buffer );
     }
 
     inline Logfile::~Logfile()
     {
-        rtl_logfile_trace( "%06lu %lu } %s\n",
-                           osl_getGlobalTimer(),
-                           osl_getThreadIdentifier(0),
-                           m_sName.pData->buffer );
+        rtl_logfile_longTrace( "} %s\n", m_sName.pData->buffer );
     }
 
     inline const sal_Char * Logfile::getName()
@@ -201,29 +185,21 @@ namespace rtl
 #define RTL_LOGFILE_CONTEXT( instance, name ) ::rtl::Logfile instance( name )
 #define RTL_LOGFILE_CONTEXT_AUTHOR( instance, project, author, name ) ::rtl::Logfile instance(project, author, name )
 #define RTL_LOGFILE_CONTEXT_TRACE( instance, message ) \
-        rtl_logfile_trace( "%06lu %lu | %s : %s\n", \
-                           osl_getGlobalTimer(),  \
-                           osl_getThreadIdentifier( 0 ), \
+        rtl_logfile_longTrace( "| %s : %s\n", \
                            instance.getName(), \
                            message )
 #define RTL_LOGFILE_CONTEXT_TRACE1( instance , frmt, arg1 ) \
-        rtl_logfile_trace( "%06lu %lu | %s : ", \
-                           osl_getGlobalTimer(),  \
-                           osl_getThreadIdentifier( 0 ), \
+        rtl_logfile_longTrace( "| %s : ", \
                            instance.getName() ); \
         rtl_logfile_trace( frmt , arg1 ); \
         rtl_logfile_trace( "\n" )
 #define RTL_LOGFILE_CONTEXT_TRACE2( instance , frmt, arg1 , arg2 ) \
-        rtl_logfile_trace( "%06lu %lu | %s : ", \
-                           osl_getGlobalTimer(),  \
-                           osl_getThreadIdentifier( 0 ), \
+        rtl_logfile_longTrace( "| %s : ", \
                            instance.getName() ); \
         rtl_logfile_trace( frmt , arg1 , arg2 ); \
         rtl_logfile_trace( "\n" )
 #define RTL_LOGFILE_CONTEXT_TRACE3( instance , frmt, arg1 , arg2 , arg3 ) \
-        rtl_logfile_trace( "%06lu %lu | %s : ", \
-                           osl_getGlobalTimer(),  \
-                           osl_getThreadIdentifier( 0 ), \
+        rtl_logfile_longTrace( "| %s : ", \
                            instance.getName() ); \
         rtl_logfile_trace( frmt , arg1 , arg2 , arg3 ); \
         rtl_logfile_trace( "\n" )
