@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salvd.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-02-20 09:00:57 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:00:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,7 @@ SalVirtualDevice* X11SalInstance::CreateVirtualDevice( SalGraphics* pGraphics,
     X11SalVirtualDevice *pVDev = new X11SalVirtualDevice();
     if( !nBitCount && pGraphics )
         nBitCount = pGraphics->GetBitCount();
-    if( !pVDev->Init( GetSalData()->GetDefDisp(), nDX, nDY, nBitCount ) )
+    if( !pVDev->Init( GetSalData()->GetDisplay(), nDX, nDY, nBitCount ) )
     {
         delete pVDev;
         return NULL;
