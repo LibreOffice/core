@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excobj.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 09:34:33 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:43:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,7 +158,7 @@ using namespace com::sun::star;
 void ImportExcel::Obj()
 {
     ScDocument& rDoc = GetDoc();
-    sal_uInt16 nScTab = GetCurrScTab();
+    SCTAB nScTab = GetCurrScTab();
 
     UINT32 nObj;
     UINT16 nType, nId, nFlags;
@@ -191,7 +191,7 @@ void ImportExcel::Obj()
 
         pObj->NbcSetLogicRect( aRect );
         pObj->SetLayer( SC_LAYER_FRONT );
-        rDoc.GetDrawLayer()->GetPage( nScTab )->InsertObject( pObj );
+        rDoc.GetDrawLayer()->GetPage( static_cast<sal_uInt16>(nScTab) )->InsertObject( pObj );
         if( bBiff5 && aIn.GetRecLeft() )
         {
             BYTE nNameLen;
@@ -298,9 +298,9 @@ void ImportExcel::EndChartObj()
 }
 
 
-ExcelChartData::ExcelChartData( ScDocument* p, const Point& rUL, const Point& rLR, const UINT16 nBT ) :
+ExcelChartData::ExcelChartData( ScDocument* p, const Point& rUL, const Point& rLR, const SCTAB nBT ) :
     aRect( rUL, rLR ),
-    nRow1( 32767 ), nCol1( 32767 ), nTab1( 32767 ), nRow2( 0 ), nCol2( 0 ), nTab2( 0 ), pNext( NULL ),
+    nRow1( SCROW_MAX ), nCol1( SCCOL_MAX ), nTab1( SCTAB_MAX ), nRow2( 0 ), nCol2( 0 ), nTab2( 0 ), pNext( NULL ),
     nBaseTab( nBT ), nObjNum( 0xFFFFFFFF )
 {
     pAttrs = new SfxItemSet( p->GetDrawLayer()->GetItemPool(), SDRATTR_START, SDRATTR_END );
@@ -387,8 +387,12 @@ void ImportExcel::ChartSelection( void )
                     nCol2 &= 0x3FFF;
                 }
 
-                if( pExcRoot->pIR->GetLinkManager().GetScTabRange( nTab1, nTab2, nIxti ) )
+                SCTAB nScTab1 = static_cast<SCTAB>(nTab1);
+                SCTAB nScTab2 = static_cast<SCTAB>(nTab2);
+                if( pExcRoot->pIR->GetLinkManager().GetScTabRange( nScTab1, nScTab2, nIxti ) )
                     bValues = TRUE;
+                nTab1 = static_cast<UINT16>(nScTab1);
+                nTab2 = static_cast<UINT16>(nScTab2);
             }
         }   // Ende Biff8
 
@@ -397,18 +401,18 @@ void ImportExcel::ChartSelection( void )
             DBG_ASSERT( pChart, "Keine Chartdaten!" );
             if( pChart )
             {
-                if( pChart->nRow1 > nRow1 )
-                    pChart->nRow1 = nRow1;
-                if( pChart->nCol1 > nCol1 )
-                    pChart->nCol1 = nCol1;
-                if( pChart->nTab1 > nTab1 )
-                    pChart->nTab1 = nTab1;
-                if( pChart->nRow2 < nRow2 )
-                    pChart->nRow2 = nRow2;
-                if( pChart->nCol2 < nCol2 )
-                    pChart->nCol2 = nCol2;
-                if( pChart->nTab2 > nTab2 )
-                    pChart->nTab2 = nTab2;
+                if( pChart->nRow1 > static_cast<SCROW>(nRow1) )
+                    pChart->nRow1 = static_cast<SCROW>(nRow1);
+                if( pChart->nCol1 > static_cast<SCCOL>(nCol1) )
+                    pChart->nCol1 = static_cast<SCCOL>(nCol1);
+                if( pChart->nTab1 > static_cast<SCTAB>(nTab1) )
+                    pChart->nTab1 = static_cast<SCTAB>(nTab1);
+                if( pChart->nRow2 < static_cast<SCROW>(nRow2) )
+                    pChart->nRow2 = static_cast<SCROW>(nRow2);
+                if( pChart->nCol2 < static_cast<SCCOL>(nCol2) )
+                    pChart->nCol2 = static_cast<SCCOL>(nCol2);
+                if( pChart->nTab2 > static_cast<SCTAB>(nTab2) )
+                    pChart->nTab2 = static_cast<SCTAB>(nTab2);
             }
         }
     }
@@ -498,7 +502,7 @@ void ImportExcel::EndAllChartObjects( void )
 
                 pSdrObj->SetLayer( SC_LAYER_FRONT );
 
-                pD->GetDrawLayer()->GetPage( p->nBaseTab )->InsertObject( pSdrObj );
+                pD->GetDrawLayer()->GetPage( static_cast<sal_uInt16>(p->nBaseTab) )->InsertObject( pSdrObj );
 
                 pSdrObj->NbcSetLogicRect( p->aRect );
 
