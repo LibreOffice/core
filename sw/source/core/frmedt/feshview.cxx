@@ -2,9 +2,9 @@
  *
  *  $RCSfile: feshview.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-04 13:20:40 $
+ *  last change: $Author: kz $ $Date: 2003-08-27 16:30:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1069,8 +1069,12 @@ void SwFEShell::ChangeOpaque( SdrLayerID nLayerId )
         const SdrLayerID nControls = GetDoc()->GetControlsId();
         for ( USHORT i = 0; i < rMrkList.GetMarkCount(); ++i )
         {
-            SdrObject *pObj = rMrkList.GetMark( i )->GetObj();
-            if ( pObj->GetLayer() != nLayerId && pObj->GetLayer() != nControls )
+            SdrObject* pObj = rMrkList.GetMark( i )->GetObj();
+            // OD 21.08.2003 #i18447# - no change of layer for controls
+            // or group objects containing controls.
+            const bool bControlObj = ::CheckControlLayer( pObj );
+            //if ( pObj->GetLayer() != nLayerId && pObj->GetLayer() != nControls )
+            if ( !bControlObj && pObj->GetLayer() != nLayerId )
             {
                 pObj->SetLayer( nLayerId );
                 InvalidateWindows( SwRect( pObj->GetBoundRect() ) );
