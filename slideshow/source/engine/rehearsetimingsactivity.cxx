@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rehearsetimingsactivity.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-27 14:16:22 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 13:43:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,13 +71,13 @@
 #include "activitiesqueue.hxx"
 #include "mouseeventhandler.hxx"
 #include "rehearsetimingsactivity.hxx"
-#include "drafts/com/sun/star/rendering/XCanvas.hpp"
-#include "drafts/com/sun/star/rendering/XBitmap.hpp"
+#include <com/sun/star/rendering/XCanvas.hpp>
+#include <com/sun/star/rendering/XBitmap.hpp>
 #include "boost/bind.hpp"
 #include <algorithm>
 
 
-using namespace ::drafts::com::sun::star;
+using namespace ::com::sun::star;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
@@ -95,11 +95,12 @@ RehearseTimingsActivity::RehearseTimingsActivity(
       m_rEventMultiplexer(rEventMultiplexer),
       m_rActivitiesQueue(rActivitiesQueue),
       m_this(),
-      m_elapsedTime(),
+      m_elapsedTime( rEventQueue.getTimer() ),
       m_views(),
       m_spriteRectangle(),
       m_font( Application::GetSettings().GetStyleSettings().GetInfoFont() ),
-      m_wakeUpEvent( new WakeupEvent(rActivitiesQueue) ),
+      m_wakeUpEvent( new WakeupEvent( rEventQueue.getTimer(),
+                                      rActivitiesQueue ) ),
       m_mouseHandler(),
       m_bActive(false),
       m_drawPressed(false)
@@ -192,6 +193,11 @@ void RehearseTimingsActivity::dispose()
 }
 
 // Activity:
+double RehearseTimingsActivity::calcTimeLag() const
+{
+    return 0.0;
+}
+
 bool RehearseTimingsActivity::perform()
 {
     if (! isActive())
@@ -220,9 +226,9 @@ bool RehearseTimingsActivity::needsScreenUpdate() const
     return isActive();
 }
 
-void RehearseTimingsActivity::end()
+void RehearseTimingsActivity::dequeued()
 {
-    dispose();
+    // not used here
 }
 
 basegfx::B2DRectangle RehearseTimingsActivity::calcSpriteRectangle(
@@ -250,13 +256,15 @@ basegfx::B2DRectangle RehearseTimingsActivity::calcSpriteRectangle(
 
 void RehearseTimingsActivity::addView( UnoViewSharedPtr const & rView )
 {
+    const ViewsVecT::iterator iEnd( m_views.end() );
     if (std::find_if(
-            m_views.begin(), m_views.end(),
+            m_views.begin(), iEnd,
             boost::bind(
                 std::equal_to<UnoViewSharedPtr>(),
                 rView,
                 // select view:
-                boost::bind( std::select1st<ViewsVecT::value_type>(), _1 ) ) ))
+                boost::bind( std::select1st<ViewsVecT::value_type>(), _1 ) ) )!=
+        iEnd)
         return; // already added
 
     cppcanvas::CustomSpriteSharedPtr sprite(
@@ -402,16 +410,14 @@ bool RehearseTimingsActivity::MouseHandler::isInArea(
 void RehearseTimingsActivity::MouseHandler::updatePressedState(
     const bool pressedState ) const
 {
-    if (pressedState != m_rta->m_drawPressed) {
+    if (pressedState != m_rta->m_drawPressed)
+    {
         m_rta->m_drawPressed = pressedState;
         m_rta->paintAllSprites();
-        // update screen immediately:
-        std::for_each(
-            m_rta->m_views.begin(), m_rta->m_views.end(),
-            boost::bind( &View::updateScreen,
-                         // select view:
-                         boost::bind(
-                             std::select1st<ViewsVecT::value_type>(), _1 ) ) );
+
+        // update screen immediately (cannot wait for next
+        // ActivitiesQueue loop)
+        m_rta->m_rEventMultiplexer.updateScreenContent( true );
     }
 }
 
