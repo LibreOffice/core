@@ -2,9 +2,9 @@
  *
  *  $RCSfile: styleuno.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2001-04-25 18:54:42 $
+ *  last change: $Author: nn $ $Date: 2001-05-23 18:20:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,9 @@
 #endif
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
 #include <com/sun/star/container/XNameContainer.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XINDEXREPLACE_HPP_
+#include <com/sun/star/container/XIndexReplace.hpp>
 #endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -296,6 +299,9 @@ public:
     void                    InitDoc( ScDocShell* pNewDocSh, const String& rNewName );
 
     virtual void            Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+
+    static ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexReplace >
+                            CreateEmptyNumberingRules();
 
                             // XStyle
     virtual sal_Bool SAL_CALL isUserDefined() throw(::com::sun::star::uno::RuntimeException);

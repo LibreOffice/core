@@ -2,9 +2,9 @@
  *
  *  $RCSfile: styleuno.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-23 17:27:00 $
+ *  last change: $Author: nn $ $Date: 2001-05-23 18:22:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,8 +68,10 @@
 #include "scitems.hxx"
 #include <svx/algitem.hxx>
 #include <svx/langitem.hxx>
+#include <svx/numitem.hxx>
 #include <svx/pageitem.hxx>
 #include <svx/unomid.hxx>
+#include <svx/unonrule.hxx>
 #include <sfx2/bindings.hxx>
 #include <vcl/virdev.hxx>
 #include <svtools/itempool.hxx>
@@ -161,6 +163,7 @@ const SfxItemPropertyMap* lcl_GetCellStyleMap()
         {MAP_CHAR_LEN(SC_UNONAME_WRAP),     ATTR_LINEBREAK,     &::getBooleanCppuType(),            0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_LEFTBORDER),ATTR_BORDER,       &::getCppuType((const table::BorderLine*)0),        0, LEFT_BORDER | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNONAME_NUMFMT),   ATTR_VALUE_FORMAT,  &::getCppuType((const sal_Int32*)0),            0, 0 },
+//      {MAP_CHAR_LEN(SC_UNONAME_NUMRULES), SC_WID_UNO_NUMRULES,&getCppuType((const uno::Reference<container::XIndexReplace>*)0), 0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_CELLORI),  ATTR_ORIENTATION,   &::getCppuType((const table::CellOrientation*)0),   0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_PADJUST),  ATTR_HOR_JUSTIFY,   &::getCppuType((const sal_Int16*)0),    0, MID_HORJUST_ADJUST },
         {MAP_CHAR_LEN(SC_UNONAME_PBMARGIN), ATTR_MARGIN,        &::getCppuType((const sal_Int32*)0),            0, MID_MARGIN_LO_MARGIN | CONVERT_TWIPS },
@@ -1204,6 +1207,13 @@ void SAL_CALL ScStyleObj::setName( const rtl::OUString& aNewName )
             }
         }
     }
+}
+
+// static
+uno::Reference<container::XIndexReplace> ScStyleObj::CreateEmptyNumberingRules()
+{
+    SvxNumRule aRule( 0, 0, TRUE );         // nothing supported
+    return SvxCreateNumRule( &aRule );
 }
 
 // beans::XPropertyState
