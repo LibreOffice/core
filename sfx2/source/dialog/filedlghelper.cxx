@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.111 $
+ *  $Revision: 1.112 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 17:33:03 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 17:23:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,12 @@
 #endif
 #ifndef _COM_SUN_STAR_EMBED_ELEMENTMODES_HPP_
 #include <com/sun/star/embed/ElementModes.hpp>
+#endif
+#ifndef  _COM_SUN_STAR_CONTAINER_XENUMERATION_HPP_
+#include <com/sun/star/container/XEnumeration.hpp>
+#endif
+#ifndef  _COM_SUN_STAR_CONTAINER_XCONTAINERQUERY_HPP_
+#include <com/sun/star/container/XContainerQuery.hpp>
 #endif
 
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
@@ -1759,25 +1765,37 @@ void FileDialogHelper_Impl::addFilters( sal_uInt32 nFlags,
     if ( ! xFltMgr.is() )
         return;
 
-    // create the list of filters
-
-    if ( !rFactory.Len() )
-    {
-        SfxApplication *pSfxApp = SFX_APP();
-
-        mpMatcher = &pSfxApp->GetFilterMatcher();
-        mbDeleteMatcher = sal_False;
-    }
-    else
-    {
-        mpMatcher = new SfxFilterMatcher( rFactory );
-        mbDeleteMatcher = sal_True;
-    }
+    Reference< XMultiServiceFactory > xSMGR = ::comphelper::getProcessServiceFactory();
+    Reference< XContainerQuery > xFilterCont(
+        xSMGR->createInstance(::rtl::OUString::createFromAscii("com.sun.star.document.FilterFactory")),
+        UNO_QUERY);
+    if ( ! xFilterCont.is() )
+        return;
 
     m_nMustFlags |= nMust;
     m_nDontFlags |= nDont;
 
-    SfxFilterMatcherIter aIter( mpMatcher, m_nMustFlags, m_nDontFlags );
+    // create the list of filters
+    ::rtl::OUStringBuffer sQuery(256);
+    sQuery.appendAscii("getSortedFilterList()");
+    if ( rFactory.Len() )
+    {
+        // translöate short to long name
+        SvtModuleOptions::EFactory eFactory = SvtModuleOptions::ClassifyFactoryByShortName(rFactory);
+        ::rtl::OUString            sFactory = SvtModuleOptions().GetFactoryName(eFactory);
+        sQuery.appendAscii(":module=");
+        sQuery.append     (sFactory  );
+    }
+    sQuery.appendAscii(":iflags="                                       );
+    sQuery.append     (::rtl::OUString::valueOf((sal_Int32)m_nMustFlags));
+    sQuery.appendAscii(":eflags="                                       );
+    sQuery.append     (::rtl::OUString::valueOf((sal_Int32)m_nDontFlags));
+
+    Reference< XEnumeration > xResult = xFilterCont->createSubSetEnumerationByQuery(sQuery.makeStringAndClear());
+    TSortedFilterList         aIter   (xResult);
+
+    // no matcher any longer used ...
+    mbDeleteMatcher = sal_False;
 
     // append the filters
     ::rtl::OUString sFirstFilter;
