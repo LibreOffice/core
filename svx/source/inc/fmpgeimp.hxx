@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmpgeimp.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 10:45:38 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 10:58:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,7 +135,6 @@ protected:
 public:
     //  nur wichtig fuer den DesignMode
     void setCurForm(::com::sun::star::uno::Reference< ::com::sun::star::form::XForm> xForm);
-    const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm>& getCurForm() {return xCurrentForm;}
     ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm> getDefaultForm();
 
     // Defaults fuer ein Object setzen
@@ -172,6 +171,19 @@ protected:
                         const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm>& _rxControls,
                         const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XServiceInfo >& _rxObject
                     ) const;
+
+private:
+    /** validates whether <member>xCurrentForm</member> is still valid and to be used
+
+        There are situations where our current form becomes invalid, without us noticing this. Thus,
+        every method which accesses <member>xCurrentForm</member> should beforehand validate the current
+        form by calling this method.
+
+        If <member>xCurrentForm</member> is not valid anymore, it is reset to <NULL/>.
+
+        @since #i40086#
+    */
+    void    validateCurForm();
 
 public:
 
