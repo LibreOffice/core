@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fecopy.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:17:35 $
+ *  last change: $Author: obo $ $Date: 2004-06-01 07:42:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -894,6 +894,7 @@ BOOL SwFEShell::Paste( SwDoc* pClpDoc )
 
     FOREACHPAM_START(this)
 
+/*      TABLE IN TABLE ALLOWED
         if( pSrcNd &&
             0 != ( pDestNd = GetDoc()->IsIdxInTbl( PCURCRSR->GetPoint()->nNode )))
         {
@@ -902,7 +903,7 @@ BOOL SwFEShell::Paste( SwDoc* pClpDoc )
             BOOL bParkTblCrsr = FALSE;
             const SwStartNode* pSttNd =  PCURCRSR->GetNode()->FindTableBoxStartNode();
 
-            // Tabelle in Tabelle kopieren
+            // TABLE IN TABLE: Tabelle in Tabelle kopieren
             // lasse ueber das Layout die Boxen suchen
             SwSelBoxes aBoxes;
             if( IsTableMode() )     // Tabellen-Selecktion ??
@@ -948,8 +949,9 @@ BOOL SwFEShell::Paste( SwDoc* pClpDoc )
             }
 
             break;      // aus der "while"-Schleife heraus
-        }
-        else if( *aCpyPam.GetPoint() == *aCpyPam.GetMark() &&
+        } */
+
+        if( *aCpyPam.GetPoint() == *aCpyPam.GetMark() &&
                  pClpDoc->GetSpzFrmFmts()->Count() )
         {
             // so langsam sollte mal eine DrawView erzeugt werden
