@@ -2,9 +2,9 @@
  *
  *  $RCSfile: targets.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mba $ $Date: 2001-11-28 11:03:50 $
+ *  last change: $Author: as $ $Date: 2002-08-12 11:40:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,19 +80,52 @@ namespace framework{
 //  Values for special frame search ... sTargetFrameName of findFrame() or queryDispatch() or loadComponentFromURL()
 //_________________________________________________________________________________________________________________
 
-#define SPECIALTARGET_SELF                                      DECLARE_ASCII("_self"       )   // The frame himself is searched.
-#define SPECIALTARGET_PARENT                                    DECLARE_ASCII("_parent"     )   // The direct parent frame is searched.
-#define SPECIALTARGET_TOP                                       DECLARE_ASCII("_top"        )   // Search at ouer parents for the first task (if any exist) or a frame without a parent.
-#define SPECIALTARGET_BLANK                                     DECLARE_ASCII("_blank"      )   // Create a new task.
-#define SPECIALTARGET_DEFAULT                                   DECLARE_ASCII("_default"    )   // Create a new task or recycle an existing one
-#define SPECIALTARGET_BEAMER                                    DECLARE_ASCII("_beamer"     )   // special frame in hierarchy
-#define SPECIALTARGET_MENUBAR                                   DECLARE_ASCII("_menubar"    )   // special target for menubars
-#define SPECIALTARGET_HELPAGENT                                 DECLARE_ASCII("_helpagent"  )   // special target for the help agent window
-/* not supported yet!
-#define SPECIALTARGET_DOCUMENT                                  DECLARE_ASCII("_document"   )
-#define SPECIALTARGET_EXPLORER                                  DECLARE_ASCII("_explorer"   )
-#define SPECIALTARGET_PARTWINDOW                                DECLARE_ASCII("_partwindow" )
-*/
+#define SPECIALTARGET_SELF                  DECLARE_ASCII("_self"           )   // The frame himself is searched.
+#define SPECIALTARGET_PARENT                DECLARE_ASCII("_parent"         )   // The direct parent frame is searched.
+#define SPECIALTARGET_TOP                   DECLARE_ASCII("_top"            )   // Search at ouer parents for the first task (if any exist) or a frame without a parent.
+#define SPECIALTARGET_BLANK                 DECLARE_ASCII("_blank"          )   // Create a new task.
+#define SPECIALTARGET_DEFAULT               DECLARE_ASCII("_default"        )   // Create a new task or recycle an existing one
+#define SPECIALTARGET_BEAMER                DECLARE_ASCII("_beamer"         )   // special frame in hierarchy
+#define SPECIALTARGET_MENUBAR               DECLARE_ASCII("_menubar"        )   // special target for menubars
+#define SPECIALTARGET_HELPAGENT             DECLARE_ASCII("_helpagent"      )   // special target for the help agent window
+
+class TargetCheck
+{
+    public:
+
+    //_______________________________________________________________________
+    /**
+        it checks, if the given target name is a well known special one.
+        The it returns <TRUE/> - otherwhise <FALSE/>.
+        Special targets are defined above ...
+     */
+    static sal_Bool isSpecialTarget( const ::rtl::OUString& sTarget )
+    {
+        return  (
+                    sTarget == SPECIALTARGET_SELF       ||
+                    sTarget == SPECIALTARGET_PARENT     ||
+                    sTarget == SPECIALTARGET_TOP        ||
+                    sTarget == SPECIALTARGET_BLANK      ||
+                    sTarget == SPECIALTARGET_DEFAULT    ||
+                    sTarget == SPECIALTARGET_BEAMER     ||
+                    sTarget == SPECIALTARGET_MENUBAR    ||
+                    sTarget == SPECIALTARGET_HELPAGENT
+                );
+    }
+
+    //_______________________________________________________________________
+    /**
+        it checks, if the given target name can be valid
+        Of course we can't check unknwon names, which are not special ones.
+        But we decide, that it's not allowed to use "_" as first sign
+        and the value doesn't represent such special target.
+        We reserve this letter for our own purposes.
+     */
+    static sal_Bool isValidTarget( const ::rtl::OUString& sTarget )
+    {
+        return (sTarget.indexOf('_') == 0 && TargetCheck::isSpecialTarget(sTarget));
+    }
+};
 
 }       //  namespace framework
 

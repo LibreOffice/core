@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: as $ $Date: 2002-07-31 11:03:28 $
+ *  last change: $Author: as $ $Date: 2002-08-12 11:45:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -472,11 +472,12 @@ css::uno::Reference< css::lang::XComponent > SAL_CALL Frame::loadComponentFromUR
 {
     /* SAFE { */
     ReadGuard aReadLock(m_aLock);
-    ComponentLoader aLoader(m_xFactory,this);
+    ComponentLoader* pLoader = new ComponentLoader(m_xFactory,this);
     aReadLock.unlock();
     /* } SAFE */
 
-    return aLoader.loadComponentFromURL(sURL,sTargetFrameName,nSearchFlags,lArguments);
+    css::uno::Reference< css::frame::XComponentLoader > xLoader(static_cast< ::cppu::OWeakObject* >(pLoader), css::uno::UNO_QUERY);
+    return xLoader->loadComponentFromURL(sURL,sTargetFrameName,nSearchFlags,lArguments);
 }
 
 /*-****************************************************************************************************//**
@@ -2328,7 +2329,6 @@ void SAL_CALL Frame::windowDeactivated( const css::lang::EventObject& aEvent ) t
         Window* pFocusWindow = Application::GetFocusWindow();
         if  (
                 ( xContainerWindow.is()                                                              ==  sal_True    )   &&
-                ( pFocusWindow                                                                       !=  NULL        )   &&
                 ( xParent.is()                                                                       ==  sal_True    )   &&
                 ( (css::uno::Reference< css::frame::XDesktop >( xParent, css::uno::UNO_QUERY )).is() ==  sal_False   )
             )
@@ -2336,7 +2336,7 @@ void SAL_CALL Frame::windowDeactivated( const css::lang::EventObject& aEvent ) t
             css::uno::Reference< css::awt::XWindow >  xParentWindow   = xParent->getContainerWindow()             ;
             Window*                                   pOwnWindow      = VCLUnoHelper::GetWindow( xContainerWindow );
             Window*                                   pParentWindow   = VCLUnoHelper::GetWindow( xParentWindow    );
-            if( pParentWindow->IsChild( pFocusWindow ) )
+            if( pFocusWindow==NULL || pParentWindow->IsChild( pFocusWindow ) )
             {
                 css::uno::Reference< css::frame::XFramesSupplier > xSupplier( xParent, css::uno::UNO_QUERY );
                 if( xSupplier.is() == sal_True )
@@ -3137,7 +3137,7 @@ void Frame::implts_setIconOnWindow()
             if( xModel.is() == sal_True )
             {
                 ::rtl::OUString  sFilter;
-                ArgumentAnalyzer aAnalyzer(xModel->getArgs(),(sal_Bool)sal_True);
+                ArgumentAnalyzer aAnalyzer(xModel->getArgs(),sal_True);
                 aAnalyzer.getArgument( E_FILTERNAME, sFilter );
 
                 if( sFilter.getLength() > 0 )

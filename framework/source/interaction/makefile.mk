@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.1 $
 #
-#   last change: $Author: as $ $Date: 2002-08-12 11:44:19 $
+#   last change: $Author: as $ $Date: 2002-08-12 11:45:07 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -61,8 +61,8 @@
 #*************************************************************************
 PRJ=..$/..
 
-PRJNAME=			framework
-TARGET=				fwk_helper
+PRJNAME=		framework
+TARGET=			fwk_interaction
 USE_DEFFILE=		TRUE
 NO_BSYMBOLIC=		TRUE
 ENABLE_EXCEPTIONS=	TRUE
@@ -80,21 +80,8 @@ CDEFS+=-DCOMPMOD_NAMESPACE=framework
 
 # --- Generate -----------------------------------------------------
 
-SLOFILES=			$(SLO)$/timerhelper.obj	 						\
-                    $(SLO)$/ocomponentaccess.obj					\
-                    $(SLO)$/ocomponentenumeration.obj				\
-                    $(SLO)$/oframes.obj								\
-                    $(SLO)$/opluginframedispatcher.obj				\
-                    $(SLO)$/statusindicatorfactory.obj				\
-                    $(SLO)$/statusindicator.obj						\
-                    $(SLO)$/imageproducer.obj						\
-                    $(SLO)$/xmldocproperties.obj					\
-                    $(SLO)$/propertysetcontainer.obj				\
-                    $(SLO)$/actiontriggerhelper.obj					\
-                    $(SLO)$/asyncloadthread.obj					\
-                    $(SLO)$/componentloader.obj					\
-                    $(SLO)$/loadeventlistener.obj					\
-                    $(SLO)$/persistentwindowstate.obj
+SLOFILES=		$(SLO)$/stillinteraction.obj		\
+            $(SLO)$/restricteduiinteraction.obj
 
 # --- Targets ------------------------------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dispatchprovider.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: rt $ $Date: 2002-06-13 08:43:11 $
+ *  last change: $Author: as $ $Date: 2002-08-12 11:43:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -940,8 +940,8 @@ sal_Bool DispatchProvider::implts_isLoadableContent( const css::util::URL& aURL 
     // no else here!
     // (c) such special URL indicates a given input stream - it should be loadable too
     if(
-        ( bLoadable                                             == sal_False )  &&
-        ( aURL.Complete.compareToAscii( "private:stream/", 15 ) == 0         )
+        ( bLoadable                                            == sal_False )  &&
+        ( aURL.Complete.compareToAscii( "private:stream", 15 ) == 0         )
       )
     {
         bLoadable = sal_True;

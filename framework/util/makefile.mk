@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.63 $
+#   $Revision: 1.64 $
 #
-#   last change: $Author: as $ $Date: 2002-07-29 08:25:50 $
+#   last change: $Author: as $ $Date: 2002-08-12 11:47:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -241,6 +241,7 @@ SHL4OBJS=       $(SLO)$/argumentanalyzer.obj		\
                 $(SLO)$/dispatchrecorder.obj		\
                 $(SLO)$/servicehandler.obj		\
                 $(SLO)$/stillinteraction.obj		\
+                $(SLO)$/restricteduiinteraction.obj		\
                 $(SLO)$/loadeventlistener.obj		\
                 $(SLO)$/asyncloadthread.obj		\
                 $(SLO)$/componentloader.obj		\

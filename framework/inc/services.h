@@ -2,9 +2,9 @@
  *
  *  $RCSfile: services.h,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: as $ $Date: 2002-05-02 11:36:58 $
+ *  last change: $Author: as $ $Date: 2002-08-12 11:40:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,6 +139,7 @@ namespace framework{
 #define IMPLEMENTATIONNAME_DISPATCHRECORDER                 DECLARE_ASCII("com.sun.star.comp.framework.DispatchRecorder"        )
 #define IMPLEMENTATIONNAME_MAILTODISPATCHER                 DECLARE_ASCII("com.sun.star.comp.framework.MailToDispatcher"        )
 #define IMPLEMENTATIONNAME_SERVICEHANDLER                   DECLARE_ASCII("com.sun.star.comp.framework.ServiceHandler"          )
+#define IMPLEMENTATIONNAME_UIINTERACTIONHANDLER             DECLARE_ASCII("com.sun.star.comp.uui.UUIInteractionHandler"         )
 
 }       //  namespace framework
 
