@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.19 $
+#   $Revision: 1.20 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-15 13:49:59 $
+#   last change: $Author: vg $ $Date: 2003-07-25 11:39:54 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -100,6 +100,7 @@ SLOFILES=\
     $(SLO)$/DAVProperties.obj	\
     $(SLO)$/DAVSessionFactory.obj	\
     $(SLO)$/DAVResourceAccess.obj	\
+    $(SLO)$/DAVResourceAccessThread.obj	\
     $(SLO)$/NeonUri.obj		\
     $(SLO)$/NeonInputStream.obj	\
     $(SLO)$/NeonPropFindRequest.obj	\
