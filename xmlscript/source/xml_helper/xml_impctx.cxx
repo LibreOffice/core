@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xml_impctx.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dbo $ $Date: 2001-04-04 14:35:08 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:13:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -240,7 +240,7 @@ DocumentHandlerImpl::~DocumentHandlerImpl()
     if (_pMutex)
     {
         delete _pMutex;
-#ifndef _DEBUG
+#if OSL_DEBUG_LEVEL == 0
         _pMutex = 0;
 #endif
     }
@@ -514,7 +514,7 @@ void DocumentHandlerImpl::startElement(
     if (_nSkipElements) // currently skipping elements and waiting for end tags?
     {
         ++_nSkipElements; // wait for another end tag
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
         OString aQName( OUStringToOString( rQElementName, RTL_TEXTENCODING_ASCII_US ) );
         OSL_TRACE( "### no context given on createChildContext() => ignoring element \"%s\" ...", aQName.getStr() );
 #endif
@@ -607,7 +607,7 @@ void DocumentHandlerImpl::startElement(
     else
     {
         ++_nSkipElements;
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
         OString aQName( OUStringToOString( rQElementName, RTL_TEXTENCODING_ASCII_US ) );
         OSL_TRACE( "### no context given on createChildContext() => ignoring element \"%s\" ...", aQName.getStr() );
 #endif
@@ -625,7 +625,7 @@ void DocumentHandlerImpl::endElement(
     if (_nSkipElements)
     {
         --_nSkipElements;
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
         OString aQName( OUStringToOString( rQElementName, RTL_TEXTENCODING_ASCII_US ) );
         OSL_TRACE( "### received endElement() for \"%s\".", aQName.getStr() );
 #endif
@@ -637,7 +637,7 @@ void DocumentHandlerImpl::endElement(
     ContextEntry * pEntry = _contexts.back();
     xCurrentContext = pEntry->_xContext;
 
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
     sal_Int32 nUid;
     OUString aLocalName;
     getElementName( rQElementName, &nUid, &aLocalName );
