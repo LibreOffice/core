@@ -2,9 +2,9 @@
  *
  *  $RCSfile: romenu.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2001-12-06 14:48:03 $
+ *  last change: $Author: os $ $Date: 2002-08-01 14:13:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -329,6 +329,7 @@ SwReadOnlyPopup::SwReadOnlyPopup( const Point &rDPos, SwView &rV ) :
     EnableItem( MN_READONLY_RELOAD, !bReloadFrame);
 
     Check( MN_READONLY_EDITDOC,         SID_EDITDOC,        rDis );
+    Check( MN_READONLY_SELECTION_MODE,  FN_READONLY_SELECTION_MODE,    rDis );
     Check( MN_READONLY_SOURCEVIEW,      SID_SOURCEVIEW,     rDis );
     Check( MN_READONLY_BROWSE_STOP,     SID_BROWSE_STOP,    rDis );
     Check( MN_READONLY_BROWSE_BACKWARD, SID_BROWSE_BACKWARD,rDis );
@@ -399,6 +400,7 @@ void SwReadOnlyPopup::Execute( Window* pWin, const Point &rPixPos )
         case MN_READONLY_OPENURL:           nFilter = URLLOAD_NOFILTER;   break;
         case MN_READONLY_OPENURLNEW:        nFilter = URLLOAD_NEWVIEW;    break;
         case MN_READONLY_EDITDOC:           nExecId = SID_EDITDOC;        break;
+        case MN_READONLY_SELECTION_MODE:    nExecId = FN_READONLY_SELECTION_MODE; break;
         case MN_READONLY_RELOAD:
         case MN_READONLY_RELOAD_FRAME:
             rSh.GetView().GetViewFrame()->GetDispatcher()->Execute(SID_RELOAD);

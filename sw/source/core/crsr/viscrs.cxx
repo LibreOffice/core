@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viscrs.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ama $ $Date: 2001-07-03 12:59:23 $
+ *  last change: $Author: os $ $Date: 2002-08-01 14:12:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -540,7 +540,7 @@ void SwVisCrsr::_SetPosAndShow()
     aTxtCrsr.SetSize( aRect.SSize() );
 
     aTxtCrsr.SetPos( aRect.Pos() );
-    if ( !pCrsrShell->IsCrsrReadonly() )
+    if ( !pCrsrShell->IsCrsrReadonly()  || pCrsrShell->GetViewOptions()->IsSelectionInReadonly() )
     {
         if ( pCrsrShell->GetDrawView() )
             ((SwDrawView*)pCrsrShell->GetDrawView())->SetAnimationEnabled(

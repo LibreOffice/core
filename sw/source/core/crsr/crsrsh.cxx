@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crsrsh.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: dvo $ $Date: 2002-06-26 10:17:12 $
+ *  last change: $Author: os $ $Date: 2002-08-01 14:12:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1530,6 +1530,28 @@ void SwCrsrShell::UpdateCrsr( USHORT eFlags, BOOL bIdleEnd )
 #ifdef ACCESSIBLE_LAYOUT
     if( pFrm && Imp()->IsAccessible() )
         Imp()->InvalidateAccessibleCursorPosition( pFrm );
+#endif
+
+#ifndef REMOTE_APPSERVER
+
+    // switch from blinking cursor to read-only-text-selection cursor
+    long nBlinkTime = GetOut()->GetSettings().GetStyleSettings().
+                      GetCursorBlinkTime();
+
+    if ( (IsCrsrReadonly() && GetViewOptions()->IsSelectionInReadonly()) ==
+        ( nBlinkTime != STYLE_CURSOR_NOBLINKTIME ) )
+    {
+        // non blinking cursor in read only - text selection mode
+        AllSettings aSettings = GetOut()->GetSettings();
+        StyleSettings aStyleSettings = aSettings.GetStyleSettings();
+        long nNewBlinkTime = nBlinkTime == STYLE_CURSOR_NOBLINKTIME ?
+                             500 :
+                             STYLE_CURSOR_NOBLINKTIME;
+        aStyleSettings.SetCursorBlinkTime( nNewBlinkTime );
+        aSettings.SetStyleSettings( aStyleSettings );
+        GetOut()->SetSettings( aSettings );
+    }
+
 #endif
 
     if( bSVCrsrVis )

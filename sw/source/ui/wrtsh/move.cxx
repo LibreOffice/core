@@ -2,9 +2,9 @@
  *
  *  $RCSfile: move.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2002-02-01 12:51:13 $
+ *  last change: $Author: os $ $Date: 2002-08-01 14:13:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,7 +158,7 @@ FASTBOOL SwWrtShell::SimpleMove( FNSimpleMove FnSimpleMove, FASTBOOL bSelect )
 FASTBOOL SwWrtShell::Left( USHORT nMode, FASTBOOL bSelect,
                             USHORT nCount, BOOL bBasicCall )
 {
-    if ( !bSelect && !bBasicCall && IsCrsrReadonly() )
+    if ( !bSelect && !bBasicCall && IsCrsrReadonly()  && !GetViewOptions()->IsSelectionInReadonly())
     {
         Point aTmp( VisArea().Pos() );
         aTmp.X() -= VisArea().Width() * nReadOnlyScrollOfst / 100;
@@ -177,7 +177,7 @@ FASTBOOL SwWrtShell::Left( USHORT nMode, FASTBOOL bSelect,
 FASTBOOL SwWrtShell::Right( USHORT nMode, FASTBOOL bSelect,
                             USHORT nCount, BOOL bBasicCall )
 {
-    if ( !bSelect && !bBasicCall && IsCrsrReadonly() )
+    if ( !bSelect && !bBasicCall && IsCrsrReadonly() && !GetViewOptions()->IsSelectionInReadonly() )
     {
         Point aTmp( VisArea().Pos() );
         aTmp.X() += VisArea().Width() * nReadOnlyScrollOfst / 100;
@@ -196,7 +196,7 @@ FASTBOOL SwWrtShell::Right( USHORT nMode, FASTBOOL bSelect,
 
 FASTBOOL SwWrtShell::Up( FASTBOOL bSelect, USHORT nCount, BOOL bBasicCall )
 {
-    if ( !bSelect && !bBasicCall && IsCrsrReadonly() )
+    if ( !bSelect && !bBasicCall && IsCrsrReadonly()  && !GetViewOptions()->IsSelectionInReadonly())
     {
         Point aTmp( VisArea().Pos() );
         aTmp.Y() -= VisArea().Height() * nReadOnlyScrollOfst / 100;
@@ -214,7 +214,7 @@ FASTBOOL SwWrtShell::Up( FASTBOOL bSelect, USHORT nCount, BOOL bBasicCall )
 
 FASTBOOL SwWrtShell::Down( FASTBOOL bSelect, USHORT nCount, BOOL bBasicCall )
 {
-    if ( !bSelect && !bBasicCall && IsCrsrReadonly() )
+    if ( !bSelect && !bBasicCall && IsCrsrReadonly() && !GetViewOptions()->IsSelectionInReadonly())
     {
         Point aTmp( VisArea().Pos() );
         aTmp.Y() += VisArea().Height() * nReadOnlyScrollOfst / 100;
@@ -726,6 +726,9 @@ FASTBOOL SwWrtShell::SelectTxtAttr( USHORT nWhich, const SwTxtAttr* pAttr )
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.2  2002/02/01 12:51:13  jp
+      Task #92291#: add new character skip modifier
+
       Revision 1.1.1.1  2000/09/18 17:14:53  hr
       initial import
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textsh1.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-19 11:16:34 $
+ *  last change: $Author: os $ $Date: 2002-08-01 14:13:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1060,6 +1060,14 @@ void SwTextShell::Execute(SfxRequest &rReq)
         rReq.Done();
     }
     break;
+    case FN_READONLY_SELECTION_MODE :
+        if(GetView().GetDocShell()->IsReadOnly())
+        {
+            rWrtSh.SetReadonlySelectionOption(
+                !rWrtSh.GetViewOptions()->IsSelectionInReadonly());
+            rWrtSh.ShowCrsr();
+        }
+    break;
     default:
         ASSERT(!this, falscher Dispatcher);
         return;
@@ -1266,6 +1274,14 @@ void SwTextShell::GetState( SfxItemSet &rSet )
                 if(!aCJKOptions.IsChangeCaseMapEnabled())
                     rSet.DisableItem(nWhich);
             }
+            break;
+            case FN_READONLY_SELECTION_MODE :
+                if(!GetView().GetDocShell()->IsReadOnly())
+                    rSet.DisableItem( nWhich );
+                else
+                {
+                    rSet.Put(SfxBoolItem(nWhich, rSh.GetViewOptions()->IsSelectionInReadonly()));
+                }
             break;
         }
         nWhich = aIter.NextWhich();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewopt.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2002-07-31 12:53:23 $
+ *  last change: $Author: os $ $Date: 2002-08-01 14:13:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -474,6 +474,7 @@ SwViewOption::SwViewOption() :
     eZoom( 0 ),
     nTblDest(TBL_DEST_CELL),
     bReadonly(FALSE),
+    bSelectionInReadonly(FALSE),
     aRetoucheColor( COL_TRANSPARENT ),
     nShdwCrsrFillMode( FILL_TAB ),
     bStarOneSetting(FALSE),
@@ -508,6 +509,7 @@ SwViewOption::SwViewOption() :
 SwViewOption::SwViewOption(const SwViewOption& rVOpt)
 {
     bReadonly = FALSE;
+    bSelectionInReadonly = FALSE;
     nZoom           = rVOpt.nZoom       ;
     aSnapSize       = rVOpt.aSnapSize   ;
     nDivisionX      = rVOpt.nDivisionX  ;

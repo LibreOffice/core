@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: ama $ $Date: 2002-06-17 14:37:29 $
+ *  last change: $Author: os $ $Date: 2002-08-01 14:12:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2128,7 +2128,16 @@ void ViewShell::SetReadonlyOption(BOOL bSet)
 #endif
     }
 }
+/* -----------------------------2002/07/31 17:06------------------------------
 
+ ---------------------------------------------------------------------------*/
+void  ViewShell::SetReadonlySelectionOption(sal_Bool bSet)
+{
+    if( bSet != pOpt->IsSelectionInReadonly() )
+    {
+        pOpt->SetSelectionInReadonly(bSet);
+    }
+}
 /******************************************************************************
 |*
 |*  ViewShell::SetPrtFormatOption()
