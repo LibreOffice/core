@@ -510,5 +510,8 @@ UDK_3.1 {
 
 UDK_3.2 {
     global:
-       osl_syncFile;
+        osl_syncFile;
+        osl_createDirectoryPath;
+        osl_getFunctionSymbol;
+        osl_getModuleURLFromFunctionAddress;
 } UDK_3.1;
