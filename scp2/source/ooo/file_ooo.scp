@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_ooo.scp,v $
 *
-*  $Revision: 1.26 $
+*  $Revision: 1.27 $
 *
-*  last change: $Author: hr $ $Date: 2004-07-23 12:33:51 $
+*  last change: $Author: hr $ $Date: 2004-08-02 17:49:42 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -1742,6 +1742,20 @@ File gid_File_Share_Config_Sofficecfg_Dbuquery_Menubar_Xml
     Styles = (PACKED);
     Dir = gid_Dir_Share_Config_Sofficecfg_Dbquery_Menubar;
     Name = "/uiconfig/dbquery/menubar/menubar.xml";
+End
+
+File gid_File_Share_Config_Sofficecfg_Dbubrowser_Menubar_Xml
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Config_Sofficecfg_Dbbrowser_Menubar;
+    Name = "/uiconfig/dbbrowser/menubar/menubar.xml";
+End
+
+File gid_File_Share_Config_Sofficecfg_Dbuapp_Menubar_Xml
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Config_Sofficecfg_Dbapp_Menubar;
+    Name = "/uiconfig/dbapp/menubar/menubar.xml";
 End
 
 File gid_File_Share_Config_Sofficecfg_Dburelation_Menubar_Xml
