@@ -33,7 +33,8 @@ namespace treeview {
 
         TVDom( TVDom* arent = 0 )
             : parent( arent ),
-              childs( 0 )
+              childs( 0 ),
+              kind( other )
         {
         }
 
@@ -472,7 +473,8 @@ TVChildTarget::getByName( const rtl::OUString& aName )
            WrappedTargetException,
            RuntimeException )
 {
-    sal_Int32 idx = aName.toInt32() - 1;
+    rtl::OUString num( aName.getStr()+2,aName.getLength()-4 );
+    sal_Int32 idx = num.toInt32() - 1;
     if( idx < 0 || Elements.size() <= sal_uInt32( idx ) )
         throw NoSuchElementException();
 
@@ -502,7 +504,8 @@ sal_Bool SAL_CALL
 TVChildTarget::hasByName( const rtl::OUString& aName )
     throw( RuntimeException )
 {
-    sal_Int32 idx = aName.toInt32() - 1;
+    rtl::OUString num( aName.getStr()+2,aName.getLength()-4 );
+    sal_Int32 idx = num.toInt32() - 1;
     if( idx < 0 || Elements.size() <= sal_uInt32( idx ) )
         return false;
 
@@ -523,7 +526,8 @@ TVChildTarget::getByHierarchicalName( const rtl::OUString& aName )
 
     if( ( idx = name.indexOf( sal_Unicode( '/' ) ) ) != -1 )
     {
-        sal_Int32 pref = name.copy(0,idx).toInt32() - 1;
+        rtl::OUString num( name.getStr()+2,idx-4 );
+        sal_Int32 pref = num.toInt32() - 1;
 
         if( pref < 0 || Elements.size() <= sal_uInt32( pref ) )
             throw NoSuchElementException();
@@ -545,8 +549,8 @@ TVChildTarget::hasByHierarchicalName( const rtl::OUString& aName )
 
        if( ( idx = name.indexOf( sal_Unicode( '/' ) ) ) != -1 )
     {
-        sal_Int32 pref = name.copy( 0,idx ).toInt32() - 1;
-
+        rtl::OUString num( name.getStr()+2,idx-4 );
+        sal_Int32 pref = num.toInt32() - 1;
         if( pref < 0 || Elements.size() <= sal_uInt32( pref ) )
             return false;
 
