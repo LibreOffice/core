@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idxmrk.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: os $ $Date: 2001-06-28 08:03:34 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 21:59:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,7 +175,7 @@
             Size = MAP_APPFONT ( 12 , 12 ) ;                        \
             QuickHelpText = "Neues benutzerdefiniertes Verzeichnis";            \
             QuickHelpText[English] = "New user defined index";      \
-            QuickHelpText[ english_us ] = "New User-defined Index!";\
+            QuickHelpText[ english_us ] = "New User-defined Index";\
             QuickHelpText[ portuguese ] = "New user defined index";\
             QuickHelpText[ russian ] = "Íîâûé óêàçàòåëü ïîëüçîâàòåëÿ";\
             QuickHelpText[ greek ] = "Äçìéïõñãßá åõñåôçñßïõ ïñéóìİíï áğü ôïí ÷ñŞóôç";\
@@ -185,16 +185,16 @@
             QuickHelpText[ italian ] = "Nuovo indice personalizzato";\
             QuickHelpText[ danish ] = "Nyt brugerdefineret indeks";\
             QuickHelpText[ swedish ] = "Ny användardefinierad förteckning";\
-            QuickHelpText[ polish ] = "Nowy indeks u¿ytkownika!";\
+            QuickHelpText[ polish ] = "Nowy indeks u¿ytkownika";\
             QuickHelpText[ portuguese_brazilian ] = "New user defined index";\
-            QuickHelpText[ japanese ] = "V‚µ‚¢Õ°»Ş°’è‹`‚Ìõˆø!";\
-            QuickHelpText[ korean ] = "»õ¡¡»ç¿ëÀÚÁ¤ÀÇ¡¡»öÀÎ!";\
+            QuickHelpText[ japanese ] = "V‚µ‚¢Õ°»Ş°’è‹`‚Ìõˆø";\
+            QuickHelpText[ korean ] = "»õ¡¡»ç¿ëÀÚÁ¤ÀÇ¡¡»öÀÎ";\
             QuickHelpText[ chinese_simplified ] = "New user defined index";\
-            QuickHelpText[ chinese_traditional ] = "·s¼W¨Ï¥ÎªÌ¦Û­q¥Ø¿ı!";\
+            QuickHelpText[ chinese_traditional ] = "·s¼W¨Ï¥ÎªÌ¦Û­q¥Ø¿ı";\
             QuickHelpText[ arabic ] = "İåÑÓ ÌÏíÏ ãÚÑİ ãä ŞÈá ÇáãÓÊÎÏã";\
             QuickHelpText[ turkish ] = "Neues benutzerdefiniertes Verzeichnis";\
             QuickHelpText[ catalan ] = "Nuevo índice definido por usuario";\
-            QuickHelpText[ finnish ] = "Uusi käyttäjän määrittämä hakemisto!";\
+            QuickHelpText[ finnish ] = "Uusi käyttäjän määrittämä hakemisto";\
         };                                                          \
         ImageButton BT_PREVSAME                                     \
         {                                                           \
@@ -235,9 +235,9 @@
             Text = "Markierung" ;                                   \
             Text [ ENGLISH ] = "Mark" ;                             \
             Text [ norwegian ] = "Merk" ;                           \
-            Text [ italian ] = "Contrassegna" ;                     \
+            Text [ italian ] = "Contrassegno" ;                     \
             Text [ portuguese_brazilian ] = "Marca" ;               \
-            Text [ portuguese ] = "Selecção" ;                        \
+            Text [ portuguese ] = "Marca" ;                        \
             Text [ finnish ] = "Valinta" ;                         \
             Text [ danish ] = "Markering" ;                             \
             Text [ french ] = "Marque" ;                            \
@@ -499,7 +499,7 @@
             Text[ chinese_traditional ] = "¥Î©ó©Ò¦³¬Û¦Pªº¤º¤å(~A)";            \
             Text[ arabic ] = "ÊØÈíŞ Úáì ßá ÇáäÕæÕ ÇáãÊãÇËáÉ.";                   \
             Text[ greek ] = "ÅöáñìïãŞ óå üëá ôá ğáñüìïéá êåßìåíá.";\
-            Text[ korean ] = "¸ğµç¡¡°°Àº ÅØ½ºÆ®¿¡ Àû¿ë(~A)";\
+            Text[ korean ] = "¸ğµç °°Àº ÅØ½ºÆ®¿¡ Àû¿ë(~A)";\
             Text[ turkish ] = "~Tüm eş metinlere uygula.";\
             Text[ language_user1 ] = " ";\
             Text[ catalan ] = "~Aplicar a todos los textos iguales.";\
@@ -525,9 +525,9 @@
             Text[ polish ] = "Dok³adne wyszukiwanie";\
             Text[ portuguese_brazilian ] = "Match case";\
             Text[ japanese ] = "‘å•¶š/¬•¶š‚ğ‹æ•Ê(~T)";\
-            Text[ korean ] = "Á¤È®ÇÏ°Ô¡¡Ã£±â(~T)";\
+            Text[ korean ] = "´ë/¼Ò¹®ÀÚ ±¸ºĞ(~T)";\
             Text[ chinese_simplified ] = "¾«È·ËÑÑ°(~T)";\
-            Text[ chinese_traditional ] = "ºëÚÌ·j´M(~T)";\
+            Text[ chinese_traditional ] = "ºë½T·j´M(~T)";\
             Text[ arabic ] = "ÈÍË ÏŞíŞ";\
             Text[ turkish ] = "BÜYÜK/küçük ~harf duyarlı";\
             Text[ catalan ] = "Coincidencia e~xacta";\
@@ -697,7 +697,7 @@ ModalDialog DLG_NEW_USER_IDX
     Text[ italian ] = "Definisci nuovo indice personalizzato";
     Text[ danish ] = "Opret nyt brugerdefineret indeks";
     Text[ swedish ] = "Skapa ny användardefinierad förteckning";
-    Text[ polish ] = "Utwórz nowy indeks zdefiniowany przez u¿ytkownika";
+    Text[ polish ] = "Utwórz nowy indeks zdefiniowany indywidualnie";
     Text[ portuguese_brazilian ] = "Define new user index";
     Text[ japanese ] = "Õ°»Ş°’è‹`‚Ìí—Ş‚Ìì¬";
     Text[ korean ] = "»õ »ç¿ëÀÚ Á¤ÀÇ »öÀÎ ¸¸µé±â";
@@ -914,7 +914,7 @@ String STR_IDXMRK_INSERT
             Text[ japanese ] = "—ªÌ(~N)";\
             Text[ korean ] = "ÂªÀº ÀÌ¸§(~N)";\
             Text[ chinese_simplified ] = "¼ò³Æ(~N)";\
-            Text[ chinese_traditional ] = "Â²µu´y­z(~N)";\
+            Text[ chinese_traditional ] = "Â²µu´y­z¤å(~N)";\
             Text[ arabic ] = "ÇáÇÓã ÇáãÎÊÕÑ";\
             Text[ turkish ] = "K~ısaltma";\
             Text[ language_user1 ] = " ";\
@@ -1293,6 +1293,7 @@ QueryBox DLG_CHANGE_AUTH_ENTRY
     MESSAGE[ catalan ] = "La entrada bibliográfica existe ya con datos diferentes en el documento. ¿Desea ajustar las entradas ya existentes?";
     MESSAGE[ finnish ] = "The bibliography entry is already contained in the document with different data. ";
 };
+
 
 
 
