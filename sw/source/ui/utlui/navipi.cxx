@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navipi.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-27 16:04:09 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 15:03:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -947,8 +947,9 @@ SwNavigationPI::SwNavigationPI( SfxBindings* pBindings,
 
     Size aItemWinSize( nWidth , aFirstRect.Bottom() - aFirstRect.Top() );
     pEdit->SetSizePixel(aItemWinSize);
-    aContentToolBox.InsertWindow( FN_PAGENUMBER, pEdit, 0, 5);
-    //aContentToolBox.InsertSeparator(4);
+    aContentToolBox.InsertSeparator(4);
+    aContentToolBox.InsertWindow( FN_PAGENUMBER, pEdit, 0, 4);
+    aContentToolBox.InsertSeparator(4);
     aContentToolBox.SetHelpId(FN_PAGENUMBER, HID_NAVI_TBX16);
     aContentToolBox.ShowItem( FN_PAGENUMBER );
 
@@ -964,10 +965,16 @@ SwNavigationPI::SwNavigationPI( SfxBindings* pBindings,
     const Size& rOutSize =  GetOutputSizePixel();
 
     nZoomIn = (short)rOutSize.Height();
-    Point aBoxPos = aContentTree.GetPosPixel();
+
+    // Make sure the toolbox has a size that fits all its contents
+    Size aContentToolboxSize( aContentToolBox.CalcWindowSizePixel() );
+    aContentToolBox.SetOutputSizePixel( aContentToolboxSize );
+
+    // position listbox below toolbar and add some space
+    long nListboxYPos = aContentToolBox.GetPosPixel().Y() + aContentToolboxSize.Height() + 4;
 
     //Der linke und rechte Rand um die Toolboxen soll gleich sein
-    nWishWidth = aContentToolBox.CalcWindowSizePixel().Width();
+    nWishWidth = aContentToolboxSize.Width();
     nWishWidth += 2 * aContentToolBox.GetPosPixel().X();
 
     FloatingWindow* pFloat =  ((DockingWindow*)pParent)->GetFloatingWindow();
@@ -981,6 +988,7 @@ SwNavigationPI::SwNavigationPI( SfxBindings* pBindings,
                 !((SfxDockingWindow*)pParent)->GetFloatingWindow()->IsRollUp())
         ((SfxDockingWindow*)pParent)->SetOutputSizePixel(aMinSize);
 
+    aContentTree.SetPosSizePixel( 0, nListboxYPos, 0, 0, WINDOW_POSSIZE_Y );
     aContentTree.SetWindowBits( WB_HASBUTTONS|WB_HASBUTTONSATROOT|
                             WB_CLIPCHILDREN|WB_HSCROLL|WB_FORCE_MAKEVISIBLE );
     aContentTree.SetSpaceBetweenEntries(3);
@@ -993,6 +1001,7 @@ SwNavigationPI::SwNavigationPI( SfxBindings* pBindings,
     aContentToolBox.CheckItem(FN_SHOW_CONTENT_BOX, TRUE);
 
 //  TreeListBox fuer Globaldokument
+    aGlobalTree.SetPosSizePixel( 0, nListboxYPos, 0, 0, WINDOW_POSSIZE_Y );
     aGlobalTree.SetSelectionMode( MULTIPLE_SELECTION );
     aGlobalTree.SetWindowBits( WB_HASBUTTONS|WB_HASBUTTONSATROOT|
                                 WB_CLIPCHILDREN|WB_HSCROLL );
@@ -1033,7 +1042,10 @@ SwNavigationPI::SwNavigationPI( SfxBindings* pBindings,
                     pActView->GetWrtShellPtr()->IsGlblDocSaveLinks());
         if(pConfig->IsGlobalActive())
             ToggleTree();
+        aGlobalTree.GrabFocus();
     }
+    else
+        aContentTree.GrabFocus();
     UsePage(0);
     aPageChgTimer.SetTimeoutHdl(LINK(this, SwNavigationPI, ChangePageHdl));
     aPageChgTimer.SetTimeout(PAGE_CHANGE_TIMEOUT);
