@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcelli.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: sab $ $Date: 2001-11-20 16:58:02 $
+ *  last change: $Author: sab $ $Date: 2002-08-23 17:27:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -389,32 +389,33 @@ void ScXMLTableRowCellContext::UnlockSolarMutex()
 void ScXMLTableRowCellContext::SetCursorOnTextImport(const rtl::OUString& rOUTempText)
 {
     com::sun::star::table::CellAddress aCellPos = rXMLImport.GetTables().GetRealCellPos();
-    uno::Reference<table::XCellRange> xCellRange = rXMLImport.GetTables().GetCurrentXCellRange();
-    if (xCellRange.is())
+    if (CellExists(aCellPos))
     {
-        if (aCellPos.Column > MAXCOL)
-            aCellPos.Column = MAXCOL;
-        if (aCellPos.Row > MAXROW)
-            aCellPos.Row = MAXROW;
-        xBaseCell = xCellRange->getCellByPosition(aCellPos.Column, aCellPos.Row);
-        if (xBaseCell.is())
+        uno::Reference<table::XCellRange> xCellRange = rXMLImport.GetTables().GetCurrentXCellRange();
+        if (xCellRange.is())
         {
-            xLockable = uno::Reference<document::XActionLockable>(xBaseCell, uno::UNO_QUERY);
-            if (xLockable.is())
-                xLockable->addActionLock();
-            uno::Reference<text::XText> xText(xBaseCell, uno::UNO_QUERY);
-            if (xText.is())
+            xBaseCell = xCellRange->getCellByPosition(aCellPos.Column, aCellPos.Row);
+            if (xBaseCell.is())
             {
-                uno::Reference<text::XTextCursor> xTextCursor = xText->createTextCursor();
-                if (xTextCursor.is())
+                xLockable = uno::Reference<document::XActionLockable>(xBaseCell, uno::UNO_QUERY);
+                if (xLockable.is())
+                    xLockable->addActionLock();
+                uno::Reference<text::XText> xText(xBaseCell, uno::UNO_QUERY);
+                if (xText.is())
                 {
-                    xTextCursor->setString(rOUTempText);
-                    xTextCursor->gotoEnd(sal_False);
-                    rXMLImport.GetTextImport()->SetCursor(xTextCursor);
+                    uno::Reference<text::XTextCursor> xTextCursor = xText->createTextCursor();
+                    if (xTextCursor.is())
+                    {
+                        xTextCursor->setString(rOUTempText);
+                        xTextCursor->gotoEnd(sal_False);
+                        rXMLImport.GetTextImport()->SetCursor(xTextCursor);
+                    }
                 }
             }
         }
     }
+    else
+        DBG_ERRORFILE("this method should only be called for a existing cell");
 }
 
 SvXMLImportContext *ScXMLTableRowCellContext::CreateChildContext( USHORT nPrefix,
@@ -443,26 +444,30 @@ SvXMLImportContext *ScXMLTableRowCellContext::CreateChildContext( USHORT nPrefix
                 }
                 else
                 {
-                    if (bIsFirstTextImport && !rXMLImport.GetRemoveLastChar())
+                    com::sun::star::table::CellAddress aCellPos = rXMLImport.GetTables().GetRealCellPos();
+                    if (CellExists(aCellPos))
                     {
-                        if (pOUTextContent)
+                        if (bIsFirstTextImport && !rXMLImport.GetRemoveLastChar())
                         {
-                            SetCursorOnTextImport(*pOUTextContent);
-                            delete pOUTextContent;
-                            pOUTextContent = NULL;
+                            if (pOUTextContent)
+                            {
+                                SetCursorOnTextImport(*pOUTextContent);
+                                delete pOUTextContent;
+                                pOUTextContent = NULL;
+                            }
+                            else
+                                SetCursorOnTextImport(rtl::OUString());
+                            rXMLImport.SetRemoveLastChar(sal_True);
+                            uno::Reference<text::XTextCursor> xTextCursor = rXMLImport.GetTextImport()->GetCursor();
+                            uno::Reference < text::XText > xText (xTextCursor->getText());
+                            uno::Reference < text::XTextRange > xTextRange (xTextCursor, uno::UNO_QUERY);
+                            if (xText.is() && xTextRange.is())
+                                xText->insertControlCharacter(xTextRange, text::ControlCharacter::PARAGRAPH_BREAK, sal_False);
                         }
-                        else
-                            SetCursorOnTextImport(rtl::OUString());
-                        rXMLImport.SetRemoveLastChar(sal_True);
-                        uno::Reference<text::XTextCursor> xTextCursor = rXMLImport.GetTextImport()->GetCursor();
-                        uno::Reference < text::XText > xText (xTextCursor->getText());
-                        uno::Reference < text::XTextRange > xTextRange (xTextCursor, uno::UNO_QUERY);
-                        if (xText.is() && xTextRange.is())
-                            xText->insertControlCharacter(xTextRange, text::ControlCharacter::PARAGRAPH_BREAK, sal_False);
+                        pContext = rXMLImport.GetTextImport()->CreateTextChildContext(
+                            rXMLImport, nPrefix, rLName, xAttrList);
+                        bIsFirstTextImport = sal_False;
                     }
-                    pContext = rXMLImport.GetTextImport()->CreateTextChildContext(
-                        rXMLImport, nPrefix, rLName, xAttrList);
-                    bIsFirstTextImport = sal_False;
                 }
             }
         }
@@ -536,25 +541,31 @@ SvXMLImportContext *ScXMLTableRowCellContext::CreateChildContext( USHORT nPrefix
 sal_Bool ScXMLTableRowCellContext::IsMerged (const uno::Reference <table::XCellRange>& xCellRange, const sal_Int32 nCol, const sal_Int32 nRow,
                             table::CellRangeAddress& aCellAddress) const
 {
-    uno::Reference <table::XCellRange> xMergeCellRange = xCellRange->getCellRangeByPosition(nCol,nRow,nCol,nRow);
-    uno::Reference <util::XMergeable> xMergeable (xMergeCellRange, uno::UNO_QUERY);
-    if (xMergeable.is())
+    table::CellAddress aCell; // don't need to set the sheet, because every sheet can contain the same count of cells.
+    aCell.Column = nCol;
+    aCell.Row = nRow;
+    if (CellExists(aCell))
     {
-        uno::Reference<sheet::XSheetCellRange> xMergeSheetCellRange (xMergeCellRange, uno::UNO_QUERY);
-        uno::Reference<sheet::XSpreadsheet> xTable = xMergeSheetCellRange->getSpreadsheet();
-        uno::Reference<sheet::XSheetCellCursor> xMergeSheetCursor = xTable->createCursorByRange(xMergeSheetCellRange);
-        if (xMergeSheetCursor.is())
+        uno::Reference <table::XCellRange> xMergeCellRange = xCellRange->getCellRangeByPosition(nCol,nRow,nCol,nRow);
+        uno::Reference <util::XMergeable> xMergeable (xMergeCellRange, uno::UNO_QUERY);
+        if (xMergeable.is())
         {
-            xMergeSheetCursor->collapseToMergedArea();
-            uno::Reference<sheet::XCellRangeAddressable> xMergeCellAddress (xMergeSheetCursor, uno::UNO_QUERY);
-            if (xMergeCellAddress.is())
+            uno::Reference<sheet::XSheetCellRange> xMergeSheetCellRange (xMergeCellRange, uno::UNO_QUERY);
+            uno::Reference<sheet::XSpreadsheet> xTable = xMergeSheetCellRange->getSpreadsheet();
+            uno::Reference<sheet::XSheetCellCursor> xMergeSheetCursor = xTable->createCursorByRange(xMergeSheetCellRange);
+            if (xMergeSheetCursor.is())
             {
-                aCellAddress = xMergeCellAddress->getRangeAddress();
-                if (aCellAddress.StartColumn == nCol && aCellAddress.EndColumn == nCol &&
-                    aCellAddress.StartRow == nRow && aCellAddress.EndRow == nRow)
-                    return sal_False;
-                else
-                    return sal_True;
+                xMergeSheetCursor->collapseToMergedArea();
+                uno::Reference<sheet::XCellRangeAddressable> xMergeCellAddress (xMergeSheetCursor, uno::UNO_QUERY);
+                if (xMergeCellAddress.is())
+                {
+                    aCellAddress = xMergeCellAddress->getRangeAddress();
+                    if (aCellAddress.StartColumn == nCol && aCellAddress.EndColumn == nCol &&
+                        aCellAddress.StartRow == nRow && aCellAddress.EndRow == nRow)
+                        return sal_False;
+                    else
+                        return sal_True;
+                }
             }
         }
     }
@@ -564,28 +575,31 @@ sal_Bool ScXMLTableRowCellContext::IsMerged (const uno::Reference <table::XCellR
 void ScXMLTableRowCellContext::DoMerge(const com::sun::star::table::CellAddress& aCellPos,
                  const sal_Int32 nCols, const sal_Int32 nRows)
 {
-    uno::Reference<table::XCellRange> xCellRange = rXMLImport.GetTables().GetCurrentXCellRange();
-    if ( xCellRange.is() )
+    if (CellExists(aCellPos))
     {
-        table::CellRangeAddress aCellAddress;
-        if (IsMerged(xCellRange, aCellPos.Column, aCellPos.Row, aCellAddress))
+        uno::Reference<table::XCellRange> xCellRange = rXMLImport.GetTables().GetCurrentXCellRange();
+        if ( xCellRange.is() )
         {
-            //unmerge
+            table::CellRangeAddress aCellAddress;
+            if (IsMerged(xCellRange, aCellPos.Column, aCellPos.Row, aCellAddress))
+            {
+                //unmerge
+                uno::Reference <table::XCellRange> xMergeCellRange =
+                    xCellRange->getCellRangeByPosition(aCellAddress.StartColumn, aCellAddress.StartRow,
+                                                        aCellAddress.EndColumn, aCellAddress.EndRow);
+                uno::Reference <util::XMergeable> xMergeable (xMergeCellRange, uno::UNO_QUERY);
+                if (xMergeable.is())
+                    xMergeable->merge(sal_False);
+            }
+
+            //merge
             uno::Reference <table::XCellRange> xMergeCellRange =
                 xCellRange->getCellRangeByPosition(aCellAddress.StartColumn, aCellAddress.StartRow,
-                                                    aCellAddress.EndColumn, aCellAddress.EndRow);
+                                                    aCellAddress.EndColumn + nCols, aCellAddress.EndRow + nRows);
             uno::Reference <util::XMergeable> xMergeable (xMergeCellRange, uno::UNO_QUERY);
             if (xMergeable.is())
-                xMergeable->merge(sal_False);
+                xMergeable->merge(sal_True);
         }
-
-        //merge
-        uno::Reference <table::XCellRange> xMergeCellRange =
-            xCellRange->getCellRangeByPosition(aCellAddress.StartColumn, aCellAddress.StartRow,
-                                                aCellAddress.EndColumn + nCols, aCellAddress.EndRow + nRows);
-        uno::Reference <util::XMergeable> xMergeable (xMergeCellRange, uno::UNO_QUERY);
-        if (xMergeable.is())
-            xMergeable->merge(sal_True);
     }
 }
 
@@ -648,7 +662,7 @@ void ScXMLTableRowCellContext::SetContentValidation(com::sun::star::uno::Referen
 void ScXMLTableRowCellContext::SetCellProperties(const uno::Reference<table::XCellRange>& xCellRange,
                                                 const table::CellAddress& aCellAddress)
 {
-    if (pContentValidationName && pContentValidationName->getLength())
+    if (CellExists(aCellAddress) && pContentValidationName && pContentValidationName->getLength())
     {
         sal_Int32 nBottom = aCellAddress.Row + nRepeatedRows - 1;
         sal_Int32 nRight = aCellAddress.Column + nCellsRepeated - 1;
@@ -734,7 +748,7 @@ void ScXMLTableRowCellContext::SetAnnotation(const uno::Reference<table::XCell>&
 // core implementation
 void ScXMLTableRowCellContext::SetDetectiveObj( const table::CellAddress& rPosition )
 {
-    if( pDetectiveObjVec && pDetectiveObjVec->size() )
+    if( CellExists(rPosition) && pDetectiveObjVec && pDetectiveObjVec->size() )
     {
         LockSolarMutex();
         ScDetectiveFunc aDetFunc( rXMLImport.GetDocument(), rPosition.Sheet );
@@ -758,7 +772,7 @@ void ScXMLTableRowCellContext::SetDetectiveObj( const table::CellAddress& rPosit
 // core implementation
 void ScXMLTableRowCellContext::SetCellRangeSource( const table::CellAddress& rPosition )
 {
-    if( pCellRangeSource  && pCellRangeSource->sSourceStr.getLength() &&
+    if( CellExists(rPosition) && pCellRangeSource  && pCellRangeSource->sSourceStr.getLength() &&
         pCellRangeSource->sFilterName.getLength() && pCellRangeSource->sURL.getLength() )
     {
         ScDocument* pDoc = rXMLImport.GetDocument();
@@ -802,10 +816,6 @@ void ScXMLTableRowCellContext::EndElement()
         uno::Reference<table::XCellRange> xCellRange = rXMLImport.GetTables().GetCurrentXCellRange();
         if (xCellRange.is())
         {
-            if (aCellPos.Column > MAXCOL)
-                aCellPos.Column = MAXCOL - nCellsRepeated + 1;
-            if (aCellPos.Row > MAXROW)
-                aCellPos.Row = MAXROW - nRepeatedRows + 1;
             if (bIsMerged)
                 DoMerge(aCellPos, nMergedCols - 1, nMergedRows - 1);
             if ( !pOUFormula )
@@ -815,10 +825,19 @@ void ScXMLTableRowCellContext::EndElement()
                 {
                     if (xLockable.is())
                         xLockable->removeActionLock();
-                    if ((nCellsRepeated > 1) || (nRepeatedRows > 1))
+                    if (CellExists(aCellPos) && ((nCellsRepeated > 1) || (nRepeatedRows > 1)))
                     {
                         if (!xBaseCell.is())
-                            xBaseCell = xCellRange->getCellByPosition(aCellPos.Column, aCellPos.Row);
+                        {
+                            try
+                            {
+                                xBaseCell = xCellRange->getCellByPosition(aCellPos.Column, aCellPos.Row);
+                            }
+                            catch (lang::IndexOutOfBoundsException&)
+                            {
+                                DBG_ERRORFILE("It seems here are to many columns or rows");
+                            }
+                        }
                         uno::Reference <text::XText> xTempText (xBaseCell, uno::UNO_QUERY);
                         if (xTempText.is())
                         {
@@ -833,6 +852,7 @@ void ScXMLTableRowCellContext::EndElement()
                             if ( (pOUTextValue && !pOUTextValue->getLength()) || !pOUTextValue )
                                 bIsEmpty = sal_True;
                 }
+                sal_Bool bWasEmpty = bIsEmpty;
                 uno::Reference <table::XCell> xCell;
                 table::CellAddress aCurrentPos( aCellPos );
                 if ((pContentValidationName && pContentValidationName->getLength()) ||
@@ -847,59 +867,79 @@ void ScXMLTableRowCellContext::EndElement()
                     {
                         for (sal_Int32 j = 0; j < nRepeatedRows; j++)
                         {
-                            if (xBaseCell.is() && (aCurrentPos == aCellPos))
-                                xCell = xBaseCell;
-                            else
-                                xCell = xCellRange->getCellByPosition(aCurrentPos.Column, aCurrentPos.Row);
                             aCurrentPos.Row = aCellPos.Row + j;
                             if ((aCurrentPos.Column == 0) && (j > 0))
-                                rXMLImport.GetTables().AddRow();
-                            if ((!(bIsCovered) || (xCell->getType() == table::CellContentType_EMPTY)))
                             {
-                                switch (nCellType)
-                                {
-                                case util::NumberFormat::TEXT:
-                                    {
-                                        sal_Bool bDoIncrement = sal_True;
-                                        uno::Reference <text::XText> xText (xCell, uno::UNO_QUERY);
-                                        if (xText.is())
-                                        {
-                                            if(pOUTextValue && pOUTextValue->getLength())
-                                                xText->setString(*pOUTextValue);
-                                            else if (pOUTextContent && pOUTextContent->getLength())
-                                                xText->setString(*pOUTextContent);
-                                            else if ( i > 0 && pOUText && pOUText->getLength() )
-                                            {
-                                                xText->setString(*pOUText);
-                                            }
-                                            else
-                                                bDoIncrement = sal_False;
-                                        }
-                                        if (bDoIncrement || bHasTextImport)
-                                            rXMLImport.GetProgressBarHelper()->Increment();
-                                    }
-                                    break;
-                                case util::NumberFormat::NUMBER:
-                                case util::NumberFormat::PERCENT:
-                                case util::NumberFormat::CURRENCY:
-                                case util::NumberFormat::TIME:
-                                case util::NumberFormat::DATETIME:
-                                case util::NumberFormat::LOGICAL:
-                                    {
-                                        xCell->setValue(fValue);
-                                        rXMLImport.GetProgressBarHelper()->Increment();
-                                    }
-                                    break;
-                                default:
-                                    {
-                                        DBG_ERROR("no cell type given");
-                                    }
-                                    break;
-                                }
+                                rXMLImport.GetTables().AddRow();
+                                rXMLImport.GetTables().AddColumn(sal_False);
                             }
-                            SetAnnotation(xCell);
-                            SetDetectiveObj( aCurrentPos );
-                            SetCellRangeSource( aCurrentPos );
+                            if (CellExists(aCurrentPos))
+                            {
+                                if (xBaseCell.is() && (aCurrentPos == aCellPos))
+                                    xCell = xBaseCell;
+                                else
+                                {
+                                    try
+                                    {
+                                        xCell = xCellRange->getCellByPosition(aCurrentPos.Column, aCurrentPos.Row);
+                                    }
+                                    catch (lang::IndexOutOfBoundsException&)
+                                    {
+                                        DBG_ERRORFILE("It seems here are to many columns or rows");
+                                    }
+                                }
+                                if ((!(bIsCovered) || (xCell->getType() == table::CellContentType_EMPTY)))
+                                {
+                                    switch (nCellType)
+                                    {
+                                    case util::NumberFormat::TEXT:
+                                        {
+                                            sal_Bool bDoIncrement = sal_True;
+                                            uno::Reference <text::XText> xText (xCell, uno::UNO_QUERY);
+                                            if (xText.is())
+                                            {
+                                                if(pOUTextValue && pOUTextValue->getLength())
+                                                    xText->setString(*pOUTextValue);
+                                                else if (pOUTextContent && pOUTextContent->getLength())
+                                                    xText->setString(*pOUTextContent);
+                                                else if ( i > 0 && pOUText && pOUText->getLength() )
+                                                {
+                                                    xText->setString(*pOUText);
+                                                }
+                                                else
+                                                    bDoIncrement = sal_False;
+                                            }
+                                            if (bDoIncrement || bHasTextImport)
+                                                rXMLImport.GetProgressBarHelper()->Increment();
+                                        }
+                                        break;
+                                    case util::NumberFormat::NUMBER:
+                                    case util::NumberFormat::PERCENT:
+                                    case util::NumberFormat::CURRENCY:
+                                    case util::NumberFormat::TIME:
+                                    case util::NumberFormat::DATETIME:
+                                    case util::NumberFormat::LOGICAL:
+                                        {
+                                            xCell->setValue(fValue);
+                                            rXMLImport.GetProgressBarHelper()->Increment();
+                                        }
+                                        break;
+                                    default:
+                                        {
+                                            DBG_ERROR("no cell type given");
+                                        }
+                                        break;
+                                    }
+                                }
+                                SetAnnotation(xCell);
+                                SetDetectiveObj( aCurrentPos );
+                                SetCellRangeSource( aCurrentPos );
+                            }
+                            else
+                            {
+                                if (!bWasEmpty || (pMyAnnotation))
+                                    rXMLImport.SetHasRangeOverflow();
+                            }
                         }
                     }
                     else
@@ -916,15 +956,17 @@ void ScXMLTableRowCellContext::EndElement()
                 }
                 if (nCellsRepeated > 1 || nRepeatedRows > 1)
                 {
-                    SetCellProperties(xCellRange, aCellPos); // set now only the validation
+                    SetCellProperties(xCellRange, aCellPos); // set now only the validation for the complete range with the given cell as start cell
                     //SetType(xCellRange, aCellPos);
-                    ScRange aScRange( static_cast<USHORT>(aCellPos.Column),
-                        static_cast<USHORT>(aCellPos.Row), aCellPos.Sheet,
-                        static_cast<USHORT>(aCellPos.Column + nCellsRepeated - 1),
-                        static_cast<USHORT>(aCellPos.Row + nRepeatedRows - 1), aCellPos.Sheet );
+                    USHORT nStartCol(aCellPos.Column < MAXCOL ? aCellPos.Column : MAXCOL);
+                    USHORT nStartRow(aCellPos.Row < MAXROW ? aCellPos.Row : MAXROW);
+                    USHORT nEndCol(aCellPos.Column + nCellsRepeated - 1 < MAXCOL ? aCellPos.Column + nCellsRepeated - 1 : MAXCOL);
+                    USHORT nEndRow(aCellPos.Row + nRepeatedRows - 1 < MAXROW ? aCellPos.Row + nRepeatedRows - 1 : MAXROW);
+                    ScRange aScRange( nStartCol, nStartRow, aCellPos.Sheet,
+                        nEndCol, nEndRow, aCellPos.Sheet );
                     rXMLImport.GetStylesImportHelper()->AddRange(aScRange);
                 }
-                else
+                else if (CellExists(aCellPos))
                 {
                     rXMLImport.GetStylesImportHelper()->AddCell(aCellPos);
                     SetCellProperties(xCell); // set now only the validation
@@ -935,48 +977,67 @@ void ScXMLTableRowCellContext::EndElement()
             }
             else
             {
-                uno::Reference <table::XCell> xCell = xCellRange->getCellByPosition(aCellPos.Column , aCellPos.Row);
-                SetCellProperties(xCell); // set now only the validation
-                DBG_ASSERT(((nCellsRepeated == 1) && (nRepeatedRows == 1)), "repeated cells with formula not possible now");
-                rXMLImport.GetStylesImportHelper()->AddCell(aCellPos);
-                ScXMLConverter::ParseFormula(*pOUFormula);
-                if (!bIsMatrix)
+                if (CellExists(aCellPos))
                 {
-                    xCell->setFormula(*pOUFormula);
-                    if (bFormulaTextResult && pOUTextValue && pOUTextValue->getLength())
+                    uno::Reference <table::XCell> xCell;
+                    try
                     {
-                        LockSolarMutex();
-                        ScCellObj* pCellObj = (ScCellObj*)ScCellRangesBase::getImplementation(xCell);
-                        if (pCellObj)
-                            pCellObj->SetFormulaResultString(*pOUTextValue);
+                        xCell = xCellRange->getCellByPosition(aCellPos.Column , aCellPos.Row);
                     }
-                    else if (fValue != 0.0)
+                    catch (lang::IndexOutOfBoundsException&)
                     {
-                        LockSolarMutex();
-                        ScCellObj* pCellObj = (ScCellObj*)ScCellRangesBase::getImplementation(xCell);
-                        if (pCellObj)
-                            pCellObj->SetFormulaResultDouble(fValue);
+                        DBG_ERRORFILE("It seems here are to many columns or rows");
+                    }
+                    if (xCell.is())
+                    {
+                        SetCellProperties(xCell); // set now only the validation
+                        DBG_ASSERT(((nCellsRepeated == 1) && (nRepeatedRows == 1)), "repeated cells with formula not possible now");
+                        rXMLImport.GetStylesImportHelper()->AddCell(aCellPos);
+                        ScXMLConverter::ParseFormula(*pOUFormula);
+                        if (!bIsMatrix)
+                        {
+                            xCell->setFormula(*pOUFormula);
+                            if (bFormulaTextResult && pOUTextValue && pOUTextValue->getLength())
+                            {
+                                LockSolarMutex();
+                                ScCellObj* pCellObj = (ScCellObj*)ScCellRangesBase::getImplementation(xCell);
+                                if (pCellObj)
+                                    pCellObj->SetFormulaResultString(*pOUTextValue);
+                            }
+                            else if (fValue != 0.0)
+                            {
+                                LockSolarMutex();
+                                ScCellObj* pCellObj = (ScCellObj*)ScCellRangesBase::getImplementation(xCell);
+                                if (pCellObj)
+                                    pCellObj->SetFormulaResultDouble(fValue);
+                            }
+                        }
+                        else
+                        {
+                            if (nMatrixCols > 0 && nMatrixRows > 0)
+                            {
+                                uno::Reference <table::XCellRange> xMatrixCellRange =
+                                    xCellRange->getCellRangeByPosition(aCellPos.Column, aCellPos.Row,
+                                                aCellPos.Column + nMatrixCols - 1, aCellPos.Row + nMatrixRows - 1);
+                                if (xMatrixCellRange.is())
+                                {
+                                    uno::Reference <sheet::XArrayFormulaRange> xArrayFormulaRange(xMatrixCellRange, uno::UNO_QUERY);
+                                    if (xArrayFormulaRange.is())
+                                        xArrayFormulaRange->setArrayFormula(*pOUFormula);
+                                }
+                            }
+                        }
+                        SetAnnotation(xCell);
+                        SetDetectiveObj( aCellPos );
+                        SetCellRangeSource( aCellPos );
+                        rXMLImport.GetProgressBarHelper()->Increment();
                     }
                 }
                 else
                 {
-                    if (nMatrixCols > 0 && nMatrixRows > 0)
-                    {
-                        uno::Reference <table::XCellRange> xMatrixCellRange =
-                            xCellRange->getCellRangeByPosition(aCellPos.Column, aCellPos.Row,
-                                        aCellPos.Column + nMatrixCols - 1, aCellPos.Row + nMatrixRows - 1);
-                        if (xMatrixCellRange.is())
-                        {
-                            uno::Reference <sheet::XArrayFormulaRange> xArrayFormulaRange(xMatrixCellRange, uno::UNO_QUERY);
-                            if (xArrayFormulaRange.is())
-                                xArrayFormulaRange->setArrayFormula(*pOUFormula);
-                        }
-                    }
+                    rXMLImport.SetHasRangeOverflow();
                 }
-                SetAnnotation(xCell);
-                SetDetectiveObj( aCellPos );
-                SetCellRangeSource( aCellPos );
-                rXMLImport.GetProgressBarHelper()->Increment();
+
             }
         }
         UnlockSolarMutex();
