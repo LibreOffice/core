@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wsfrm.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: od $ $Date: 2002-10-10 07:57:29 $
+ *  last change: $Author: od $ $Date: 2002-10-24 09:42:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1113,7 +1113,40 @@ void SwLayoutFrm::Paste( SwFrm* pParent, SwFrm* pSibling)
     //In den Baum einhaengen.
     InsertBefore( (SwLayoutFrm*)pParent, pSibling );
 
-    SwRectFn fnRect = IsVertical() ? fnRectHori : fnRectVert;
+    // OD 24.10.2002 #103517# - correct setting of variable <fnRect>
+    // <fnRect> is used for the following:
+    // (1) To invalidate the frame's size, if its size, which has to be the
+    //      same as its upper/parent, differs from its upper's/parent's.
+    // (2) To adjust/grow the frame's upper/parent, if it has a dimension in its
+    //      size, which is not determined by its upper/parent.
+    // Which size is which depends on the frame type and the layout direction
+    // (vertical or horizontal).
+    // There are the following cases:
+    // (A) Header and footer frames both in vertical and in horizontal layout
+    //      have to size the width to the upper/parent. A dimension in the height
+    //      has to cause a adjustment/grow of the upper/parent.
+    //      --> <fnRect> = fnRectHori
+    // (B) Cell and column frames in vertical layout, the width has to be the
+    //          same as upper/parent and a dimension in height causes adjustment/grow
+    //          of the upper/parent.
+    //          --> <fnRect> = fnRectHori
+    //      in horizontal layout the other way around
+    //          --> <fnRect> = fnRectVert
+    // (C) Other frames in vertical layout, the height has to be the
+    //          same as upper/parent and a dimension in width causes adjustment/grow
+    //          of the upper/parent.
+    //          --> <fnRect> = fnRectVert
+    //      in horizontal layout the other way around
+    //          --> <fnRect> = fnRectHori
+    //SwRectFn fnRect = IsVertical() ? fnRectHori : fnRectVert;
+    SwRectFn fnRect;
+    if ( IsHeaderFrm() || IsFooterFrm() )
+        fnRect = fnRectHori;
+    else if ( IsCellFrm() || IsColumnFrm() )
+        fnRect = GetUpper()->IsVertical() ? fnRectHori : fnRectVert;
+    else
+        fnRect = GetUpper()->IsVertical() ? fnRectVert : fnRectHori;
+
     if( (Frm().*fnRect->fnGetWidth)() != (pParent->Prt().*fnRect->fnGetWidth)())
         _InvalidateSize();
     _InvalidatePos();
