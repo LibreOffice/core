@@ -2,9 +2,9 @@
  *
  *  $RCSfile: general.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 16:03:02 $
+ *  last change: $Author: rt $ $Date: 2004-01-07 15:57:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,7 +132,7 @@
 #ifndef _VCL_I18NHELP_HXX
 #include <vcl/i18nhelp.hxx>
 #endif
-
+#include <vcl/mnemonic.hxx>
 #include <algorithm>
 #include <functional>
 #ifndef _VECTOR_
@@ -557,8 +557,7 @@ void BibGeneralPage::AddControlWithError( const OUString& rColumnName, const ::P
         if( rErrorString.Len() )
             rErrorString += '\n';
 
-        aColumnUIName.EraseAllChars( '~' );
-        rErrorString += aColumnUIName;
+        rErrorString += MnemonicGenerator::EraseAllMnemonicChars( aColumnUIName );
     }
 }
 //-----------------------------------------------------------------------------
