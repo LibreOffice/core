@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gdimtf.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2001-06-15 14:31:54 $
+ *  last change: $Author: ka $ $Date: 2001-06-18 12:54:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1169,10 +1169,39 @@ void GDIMetaFile::Rotate( long nAngle10 )
                 }
                 break;
 
+                case( META_CLIPREGION_ACTION ):
+                {
+                    MetaClipRegionAction* pAct = (MetaClipRegionAction*) pAction;
+
+                    if( pAct->IsClipping() && pAct->GetRegion().HasPolyPolygon() )
+                        aMtf.AddAction( new MetaClipRegionAction( Region( ImplGetRotatedPolyPolygon( pAct->GetRegion().GetPolyPolygon(), aRotAnchor, aRotOffset, fSin, fCos ) ), TRUE ) );
+                    else
+                    {
+                        pAction->Duplicate();
+                        aMtf.AddAction( pAction );
+                    }
+                }
+                break;
+
                 case( META_ISECTRECTCLIPREGION_ACTION ):
                 {
                     MetaISectRectClipRegionAction*  pAct = (MetaISectRectClipRegionAction*) pAction;
                     aMtf.AddAction( new MetaISectRegionClipRegionAction( ImplGetRotatedPolygon( pAct->GetRect(), aRotAnchor, aRotOffset, fSin, fCos ) ) );
+                }
+                break;
+
+                case( META_ISECTREGIONCLIPREGION_ACTION ):
+                {
+                    MetaISectRegionClipRegionAction*    pAct = (MetaISectRegionClipRegionAction*) pAction;
+                    const Region&                       rRegion = pAct->GetRegion();
+
+                    if( rRegion.HasPolyPolygon() )
+                        aMtf.AddAction( new MetaISectRegionClipRegionAction( Region( ImplGetRotatedPolyPolygon( rRegion.GetPolyPolygon(), aRotAnchor, aRotOffset, fSin, fCos ) ) ) );
+                    else
+                    {
+                        pAction->Duplicate();
+                        aMtf.AddAction( pAction );
+                    }
                 }
                 break;
 
@@ -1200,8 +1229,6 @@ void GDIMetaFile::Rotate( long nAngle10 )
                 case( META_MASKSCALEPART_ACTION ):
                 case( META_WALLPAPER_ACTION ):
                 case( META_TEXTRECT_ACTION ):
-                case( META_CLIPREGION_ACTION ):
-                case( META_ISECTREGIONCLIPREGION_ACTION ):
                 case( META_MOVECLIPREGION_ACTION ):
                 {
                     DBG_ERROR( "GDIMetaFile::Rotate(): unsupported action" );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: region.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:38 $
+ *  last change: $Author: ka $ $Date: 2001-06-18 12:55:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1634,6 +1634,28 @@ Rectangle Region::GetBoundRect() const
 
 // -----------------------------------------------------------------------
 
+BOOL Region::HasPolyPolygon() const
+{
+    DBG_CHKTHIS( Region, ImplDbgTestRegion );
+    return( mpImplRegion && mpImplRegion->mpPolyPoly != NULL );
+}
+
+// -----------------------------------------------------------------------
+
+PolyPolygon Region::GetPolyPolygon() const
+{
+    DBG_CHKTHIS( Region, ImplDbgTestRegion );
+
+    PolyPolygon aRet;
+
+    if( mpImplRegion->mpPolyPoly )
+        aRet = *mpImplRegion->mpPolyPoly;
+
+    return aRet;
+}
+
+// -----------------------------------------------------------------------
+
 BOOL Region::ImplGetFirstRect( ImplRegionInfo& rImplRegionInfo,
                                long& rX, long& rY,
                                long& rWidth, long& rHeight ) const
@@ -2027,13 +2049,14 @@ SvStream& operator>>( SvStream& rIStrm, Region& rRegion )
     {
         case REGION_NULL:
             rRegion.mpImplRegion = (ImplRegion*)&aImplNullRegion;
-            break;
+        break;
 
         case REGION_EMPTY:
             rRegion.mpImplRegion = (ImplRegion*)&aImplEmptyRegion;
-            break;
+        break;
 
         default:
+        {
             // create instance of implementation class
             rRegion.mpImplRegion = new ImplRegion();
 
@@ -2085,7 +2108,22 @@ SvStream& operator>>( SvStream& rIStrm, Region& rRegion )
                 // get next header
                 rIStrm >> nTmp16;
             }
-            break;
+
+            if( aCompat.GetVersion() >= 2 )
+            {
+                BOOL bHasPolyPolygon;
+
+                rIStrm >> bHasPolyPolygon;
+
+                if( bHasPolyPolygon )
+                {
+                    delete rRegion.mpImplRegion->mpPolyPoly;
+                    rRegion.mpImplRegion->mpPolyPoly = new PolyPolygon;
+                    rIStrm >> *( rRegion.mpImplRegion->mpPolyPoly );
+                }
+            }
+        }
+        break;
     }
 
     return rIStrm;
@@ -2097,21 +2135,23 @@ SvStream& operator<<( SvStream& rOStrm, const Region& rRegion )
 {
     DBG_CHKOBJ( &rRegion, Region, ImplDbgTestRegion );
 
-    VersionCompat   aCompat( rOStrm, STREAM_WRITE );
-    UINT16          nVersion = 1;
+    UINT16          nVersion = 2;
+    VersionCompat   aCompat( rOStrm, STREAM_WRITE, nVersion );
+    Region          aTmpRegion( rRegion );
 
-    ((Region*)&rRegion)->ImplPolyPolyRegionToBandRegion();
+    // use tmp region to avoid destruction of internal region (polypolygon) of rRegion
+    aTmpRegion.ImplPolyPolyRegionToBandRegion();
 
     // put version
     rOStrm << nVersion;
 
     // put type
-    rOStrm << (UINT16)rRegion.GetType();
+    rOStrm << (UINT16)aTmpRegion.GetType();
 
     // put all bands if not null or empty
-    if ( (rRegion.mpImplRegion != &aImplEmptyRegion) && (rRegion.mpImplRegion != &aImplNullRegion) )
+    if ( (aTmpRegion.mpImplRegion != &aImplEmptyRegion) && (aTmpRegion.mpImplRegion != &aImplNullRegion) )
     {
-        ImplRegionBand* pBand = rRegion.mpImplRegion->mpFirstBand;
+        ImplRegionBand* pBand = aTmpRegion.mpImplRegion->mpFirstBand;
         while ( pBand )
         {
             // put boundaries
@@ -2137,6 +2177,13 @@ SvStream& operator<<( SvStream& rOStrm, const Region& rRegion )
 
         // put endmarker
         rOStrm << (UINT16) STREAMENTRY_END;
+
+        // write polypolygon if available
+        const BOOL bHasPolyPolygon = rRegion.HasPolyPolygon();
+        rOStrm << bHasPolyPolygon;
+
+        if( bHasPolyPolygon )
+            rOStrm << rRegion.GetPolyPolygon();
     }
 
     return rOStrm;
