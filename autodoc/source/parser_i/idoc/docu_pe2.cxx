@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docu_pe2.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 11:35:09 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 15:28:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,8 +93,8 @@ namespace dsapi
 //
 //  // KORR in future (before next release)
 //
-int G_nDO_Special_Since_OOo11 = 0;  // 0 = normal, 1 = OpenOffice 1.1, 2 = StarOffice 6.1
-String G_sDocuVersionString;            // Text to be used, if G_nDO_Special_Since_OOo11 ==1 or == 2.
+int G_nDO_Special_Since_OOo11 = 0;  // 0 = normal, 1 = OpenOffice 1.1, 2 = StarOffice 6.1, 3 = StarSuite 6.1
+String G_sDocuVersionString;            // Text to be used, if G_nDO_Special_Since_OOo11 ==1 or == 2 or == 3.
 
 
 const char *        AtTagTitle(
@@ -447,6 +447,11 @@ SapiDocu_PE::SetCurSinceAtTagVersion( DYN ary::info::DocuToken & let_drNewToken 
     }
     else if (G_nDO_Special_Since_OOo11 == 2)
     {   // Case StarOffice 6.1:
+//      static const String sSO61_("StarOffice 6.1");
+        pCurAtTag->AddToken(*new DT_TextToken(G_sDocuVersionString));
+    }
+    else if (G_nDO_Special_Since_OOo11 == 3)
+    {   // Case StarSuite 6.1:
 //      static const String sSO61_("StarOffice 6.1");
         pCurAtTag->AddToken(*new DT_TextToken(G_sDocuVersionString));
     }
