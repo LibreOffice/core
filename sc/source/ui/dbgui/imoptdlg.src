@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imoptdlg.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2002-08-01 20:29:20 $
+ *  last change: $Author: kz $ $Date: 2002-08-15 20:21:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,7 +169,7 @@ ModalDialog RID_SCDLG_IMPORTOPT
         Text [ dutch ] = "~Tekenset" ;
         Text [ spanish ] = "J~uego de caracteres" ;
         Text [ danish ] = "Tegns�t" ;
-        Text [ swedish ] = "~Teckenupps�ttning" ;
+        Text [ swedish ] = "Te~ckenupps�ttning" ;
         Text [ finnish ] = "~Merkist�" ;
         Text [ english_us ] = "~Character set" ;
         Text[ chinese_simplified ] = "字符集(~C)";
@@ -243,17 +243,17 @@ ModalDialog RID_SCDLG_IMPORTOPT
         Text[ russian ] = "Fixed text ~width";
         Text[ greek ] = "Fixed text ~width";
         Text[ dutch ] = "Fixed text ~width";
-        Text[ french ] = "Fixed text ~width";
+        Text[ french ] = "Largeur de colonne fixe";
         Text[ spanish ] = "Fixed text ~width";
         Text[ finnish ] = "Fixed text ~width";
-        Text[ italian ] = "Fixed text ~width";
+        Text[ italian ] = "Ampiezza colonna fissa";
         Text[ danish ] = "Fixed text ~width";
-        Text[ swedish ] = "Fixed text ~width";
+        Text[ swedish ] = "Fast kolumn~bredd";
         Text[ polish ] = "Fixed text ~width";
-        Text[ japanese ] = "Fixed text ~width";
-        Text[ korean ] = "Fixed text ~width";
-        Text[ chinese_simplified ] = "Fixed text ~width";
-        Text[ chinese_traditional ] = "Fixed text ~width";
+        Text[ japanese ] = "指定された列幅";
+        Text[ korean ] = "고정 열 너비";
+        Text[ chinese_simplified ] = "固定的列宽";
+        Text[ chinese_traditional ] = "固定的欄寬";
         Text[ turkish ] = "Fixed text ~width";
         Text[ arabic ] = "Fixed text ~width";
     };
