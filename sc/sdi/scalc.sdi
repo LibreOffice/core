@@ -1722,7 +1722,7 @@ SfxVoidItem DefinePrintArea SID_DEFINE_PRINTAREA
 ]
 
 //--------------------------------------------------------------------------
-SfxVoidItem Delete FID_DELETE_CELL
+SfxVoidItem DeleteCell FID_DELETE_CELL
 (SfxStringItem Flags FID_DELETE_CELL)
 [
     /* flags: */
