@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 17:02:40 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 13:52:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,7 @@ class ScNoteMarker;
 class FloatingWindow;
 class SdrHdlList;
 class ScTransferObj;
+struct SpellCallbackInfo;
 
         //  Maus-Status (nMouseStatus)
 
@@ -225,6 +226,7 @@ private:
     Rectangle               aInvertRect;
 
     DECL_LINK( PopupModeEndHdl, FloatingWindow* );
+    DECL_LINK( PopupSpellingHdl, SpellCallbackInfo* );
 
     BOOL            TestMouse( const MouseEvent& rMEvt, BOOL bAction );
 
