@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagedlg.hrc,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-28 14:08:39 $
+ *  last change: $Author: dr $ $Date: 2002-05-31 11:24:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,9 @@
 #define BTN_SCALEPAGENUM    33
 #define ED_SCALEPAGENUM     34
 #define FL_SCALE            39
+
+#define IMG_LEFTRIGHT_H     41
+#define IMG_TOPDOWN_H       42
 
 //================================================
 // Dialog: Druckbereiche

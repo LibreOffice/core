@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tptable.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-28 14:08:39 $
+ *  last change: $Author: dr $ $Date: 2002-05-31 11:24:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,6 +139,8 @@ ScTablePage::ScTablePage( Window*               pParent,
         aBmpPageDir         ( this, ScResId( BMP_PAGEDIR ) ),
         aImgTopDown         ( ScResId( IMG_TOPDOWN ) ),
         aImgLeftRight       ( ScResId( IMG_LEFTRIGHT ) ),
+        aImgTopDownHC       ( ScResId( IMG_TOPDOWN_H ) ),
+        aImgLeftRightHC     ( ScResId( IMG_LEFTRIGHT_H ) ),
         aBtnPageNo          ( this, ScResId( BTN_PAGENO ) ),
         aEdPageNo           ( this, ScResId( ED_PAGENO ) ),
         aFlPageDir          ( this, ScResId( FL_PAGEDIR ) ),
@@ -155,10 +157,21 @@ ScTablePage::ScTablePage( Window*               pParent,
     aBtnScaleAll        .SetClickHdl( SCALE_HDL );
     aBtnScalePageNum    .SetClickHdl( SCALE_HDL );
 
-    Size aBmpSize = Bitmap( IMG_LEFTRIGHT ).GetSizePixel();
+    Size aBmpSize = Image( IMG_LEFTRIGHT ).GetSizePixel();
     aBmpPageDir.SetOutputSizePixel( aBmpSize );
 
     FreeResource();
+}
+
+// -----------------------------------------------------------------------
+
+void ScTablePage::ShowImage()
+{
+    sal_Bool bDark = GetDisplayBackground().GetColor().IsDark();
+    sal_Bool bLeftRight = aBtnLeftRight.IsChecked();
+    aBmpPageDir.SetImage( bDark ?
+        (bLeftRight ? aImgLeftRightHC : aImgTopDownHC) :
+        (bLeftRight ? aImgLeftRight : aImgTopDown) );
 }
 
 // -----------------------------------------------------------------------
@@ -366,14 +379,21 @@ int __EXPORT ScTablePage::DeactivatePage( SfxItemSet* pSet )
 }
 
 //------------------------------------------------------------------------
+
+void __EXPORT ScTablePage::DataChanged( const DataChangedEvent& rDCEvt )
+{
+    if( (rDCEvt.GetType() == DATACHANGED_SETTINGS) && (rDCEvt.GetFlags() & SETTINGS_STYLE) )
+        ShowImage();
+    SfxTabPage::DataChanged( rDCEvt );
+}
+
+//------------------------------------------------------------------------
 // Handler:
 //------------------------------------------------------------------------
 
 IMPL_LINK( ScTablePage, PageDirHdl, RadioButton*, EMPTYARG )
 {
-    aBmpPageDir.SetBitmap( aBtnLeftRight.IsChecked()
-                                ? aImgLeftRight
-                                : aImgTopDown );
+    ShowImage();
     return NULL;
 }
 
