@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XclImpChangeTrack.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:06:45 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 09:07:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,47 +96,38 @@
 #endif
 
 //___________________________________________________________________
-
-extern const sal_Char* pRevLogStreamName;
-extern const sal_Char* pUserNamesStreamName;
-
-//___________________________________________________________________
 // class XclImpChangeTrack
 
-XclImpChangeTrack::XclImpChangeTrack( RootData* pRootData ) :
+XclImpChangeTrack::XclImpChangeTrack( RootData* pRootData, const XclImpStream& rBookStrm ) :
     ExcRoot( pRootData ),
     aRecHeader(),
     sOldUsername(),
     pChangeTrack( NULL ),
-    pInStrm( NULL ),
     pStrm( NULL ),
     nTabIdCount( 0 ),
     bGlobExit( sal_False ),
     eNestedMode( nmBase )
 {
-    String sStreamName( pRevLogStreamName, RTL_TEXTENCODING_ASCII_US );
-    SvStorage& rStorage = *pExcRoot->pRootStorage;
-
-    if( !rStorage.IsContained( sStreamName ) || !rStorage.IsStream( sStreamName ) )
-        return;
+    const XclImpRoot& rRoot = *pExcRoot->pIR;
 
     // Verify that the User Names stream exists before going any further. Excel adds both
     // "Revision Log" and "User Names" streams when Change Tracking is active but the Revision log
     // remains if Change Tracking is turned off.
-    String sUserNamesStreamName( pUserNamesStreamName, RTL_TEXTENCODING_ASCII_US );
-    if( !rStorage.IsContained( sUserNamesStreamName ) || !rStorage.IsStream( sUserNamesStreamName ) )
+    SvStorageStreamRef xUserStrm = rRoot.OpenStream( EXC_STREAM_USERNAMES );
+    if( !xUserStrm.Is() )
         return;
 
-    pInStrm = rStorage.OpenStream( sStreamName, STREAM_STD_READ );
-    if( pInStrm )
+    xInStrm = rRoot.OpenStream( EXC_STREAM_REVLOG );
+    if( xInStrm.Is() )
     {
-        pInStrm->Seek( STREAM_SEEK_TO_END );
-        ULONG nStreamLen = pInStrm->Tell();
-        if( (pInStrm->GetErrorCode() == ERRCODE_NONE) && (nStreamLen != ~((ULONG)0)) )
+        xInStrm->Seek( STREAM_SEEK_TO_END );
+        ULONG nStreamLen = xInStrm->Tell();
+        if( (xInStrm->GetErrorCode() == ERRCODE_NONE) && (nStreamLen != STREAM_SEEK_TO_END) )
         {
-            pInStrm->Seek( STREAM_SEEK_TO_BEGIN );
-            pStrm = new XclImpStream( *pInStrm, *pExcRoot->pIR );
-            pChangeTrack = new ScChangeTrack( pExcRoot->pDoc );
+            xInStrm->Seek( STREAM_SEEK_TO_BEGIN );
+            pStrm = new XclImpStream( *xInStrm, rRoot );
+            pStrm->CopyDecrypterFrom( rBookStrm );
+            pChangeTrack = new ScChangeTrack( rRoot.GetDocPtr() );
 
             sOldUsername = pChangeTrack->GetUser();
             pChangeTrack->SetUseFixDateTime( TRUE );
@@ -148,12 +139,8 @@ XclImpChangeTrack::XclImpChangeTrack( RootData* pRootData ) :
 
 XclImpChangeTrack::~XclImpChangeTrack()
 {
-    if( pChangeTrack )
-        delete pChangeTrack;
-    if( pStrm )
-        delete pStrm;
-    if( pInStrm )
-        delete pInStrm;
+    delete pChangeTrack;
+    delete pStrm;
 }
 
 void XclImpChangeTrack::DoAcceptRejectAction( ScChangeAction* pAction )
@@ -372,6 +359,7 @@ void XclImpChangeTrack::ReadChTrInsert()
 
 void XclImpChangeTrack::ReadChTrInfo()
 {
+    pStrm->DisableDecryption();
     pStrm->Ignore( 32 );
     String sUsername( pStrm->ReadUniString() );
     if( !pStrm->IsValid() ) return;
