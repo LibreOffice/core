@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagedesc.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 12:57:12 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 13:58:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,9 +176,7 @@ enum UseOnPage
 class SwPageDesc : public SwModify
 {
     friend class SwDoc;
-
-    //nicht (mehr) implementiert.
-    SwPageDesc& operator=( const SwPageDesc& );
+    friend class SwUndoPageDescExt;
 
     String      aDescName;
     SvxNumberType   aNumType;
@@ -278,6 +276,8 @@ public:
     //Given a SwNode return the pagedesc in use at that location.
     static const SwPageDesc* GetPageDescOfNode(const SwNode& rNd);
 
+    SwPageDesc& operator=( const SwPageDesc& );
+
     SwPageDesc( const SwPageDesc& );
     ~SwPageDesc();
 };
@@ -361,5 +361,26 @@ inline const SwFrmFmt *SwPageDesc::GetLeftFmt() const
 {
     return PD_LEFT & eUse ? &aLeft : 0;
 }
+
+class SwPageDescExt
+{
+    SwPageDesc aPageDesc;
+    SwDoc * pDoc;
+    String sFollow;
+
+    void SetPageDesc(const SwPageDesc & aPageDesc);
+
+public:
+    SwPageDescExt(const SwPageDesc & rPageDesc, SwDoc * pDoc);
+    SwPageDescExt(const SwPageDescExt & rSrc);
+    ~SwPageDescExt();
+
+    SwPageDescExt & operator = (const SwPageDescExt & rSrc);
+    SwPageDescExt & operator = (const SwPageDesc & rSrc);
+
+    const String & GetName() const;
+
+    operator SwPageDesc() const; // #i7983#
+};
 
 #endif  //_PAGEDESC_HXX
