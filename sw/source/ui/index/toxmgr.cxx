@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toxmgr.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:33:58 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 14:11:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,12 @@
 #endif
 #ifndef _CRSSKIP_HXX
 #include <crsskip.hxx>
+#endif
+#ifndef _DOC_HXX
+#include <doc.hxx>
+#endif
+#ifndef _SWUNDO_HXX
+#include <swundo.hxx>
 #endif
 
 #ifndef _GLOBALS_HRC
@@ -369,6 +375,12 @@ BOOL SwTOXMgr::UpdateOrInsertTOX(const SwTOXDescription& rDesc,
     BOOL bRet = TRUE;
     const SwTOXBase* pCurTOX = ppBase && *ppBase ? *ppBase : GetCurTOX();
     SwTOXBase* pTOX = (SwTOXBase*)pCurTOX;
+
+    SwTOXBase * pNewTOX = NULL;
+
+    if (pTOX)
+        pNewTOX = new SwTOXBase(*pTOX);
+
     TOXTypes eCurTOXType = rDesc.GetTOXType();
     if(pCurTOX && !ppBase && pSh->HasSelection())
         pSh->DelRight();
@@ -381,10 +393,10 @@ BOOL SwTOXMgr::UpdateOrInsertTOX(const SwTOXDescription& rDesc,
             {
                 const SwTOXType* pType = pSh->GetTOXType(eCurTOXType, 0);
                 SwForm aForm(eCurTOXType);
-                pTOX = new SwTOXBase(pType, aForm, TOX_MARK, pType->GetTypeName());
+                pNewTOX = new SwTOXBase(pType, aForm, TOX_MARK, pType->GetTypeName());
             }
-            pTOX->SetOptions(rDesc.GetIndexOptions());
-            pTOX->SetMainEntryCharStyle(rDesc.GetMainEntryCharStyle());
+            pNewTOX->SetOptions(rDesc.GetIndexOptions());
+            pNewTOX->SetMainEntryCharStyle(rDesc.GetMainEntryCharStyle());
             pSh->SetTOIAutoMarkURL(rDesc.GetAutoMarkURL());
             pSh->ApplyAutoMark();
         }
@@ -395,10 +407,10 @@ BOOL SwTOXMgr::UpdateOrInsertTOX(const SwTOXDescription& rDesc,
             {
                 const SwTOXType* pType = pSh->GetTOXType(eCurTOXType, 0);
                 SwForm aForm(eCurTOXType);
-                pTOX = new SwTOXBase(pType, aForm, rDesc.GetContentOptions(), pType->GetTypeName());
+                pNewTOX = new SwTOXBase(pType, aForm, rDesc.GetContentOptions(), pType->GetTypeName());
             }
-            pTOX->SetCreate(rDesc.GetContentOptions());
-            pTOX->SetLevel(rDesc.GetLevel());
+            pNewTOX->SetCreate(rDesc.GetContentOptions());
+            pNewTOX->SetLevel(rDesc.GetLevel());
         }
         break;
         case TOX_USER :
@@ -417,15 +429,15 @@ BOOL SwTOXMgr::UpdateOrInsertTOX(const SwTOXDescription& rDesc,
                 const SwTOXType* pType = pSh->GetTOXType(eCurTOXType, nPos);
 
                 SwForm aForm(eCurTOXType);
-                pTOX = new SwTOXBase(pType, aForm, rDesc.GetContentOptions(), pType->GetTypeName());
+                pNewTOX = new SwTOXBase(pType, aForm, rDesc.GetContentOptions(), pType->GetTypeName());
 
             }
             else
             {
-                SwTOXBase* pTOX = (SwTOXBase*)pCurTOX;
-                pTOX->SetCreate(rDesc.GetContentOptions());
+                SwTOXBase* pNewTOX = (SwTOXBase*)pCurTOX;
+                pNewTOX->SetCreate(rDesc.GetContentOptions());
             }
-            pTOX->SetLevelFromChapter(rDesc.IsLevelFromChapter());
+            pNewTOX->SetLevelFromChapter(rDesc.IsLevelFromChapter());
         }
         break;
         case TOX_OBJECTS:
@@ -460,7 +472,7 @@ BOOL SwTOXMgr::UpdateOrInsertTOX(const SwTOXDescription& rDesc,
             {
                 const SwTOXType* pType = pSh->GetTOXType(eCurTOXType, 0);
                 SwForm aForm(eCurTOXType);
-                pTOX = new SwTOXBase(
+                pNewTOX = new SwTOXBase(
                     pType, aForm,
                     TOX_AUTHORITIES == eCurTOXType ? TOX_MARK : 0, pType->GetTypeName());
             }
@@ -468,48 +480,63 @@ BOOL SwTOXMgr::UpdateOrInsertTOX(const SwTOXDescription& rDesc,
             {
                 if((!ppBase || !(*ppBase)) && pSh->HasSelection())
                     pSh->DelRight();
-                pTOX = (SwTOXBase*)pCurTOX;
+                pNewTOX = (SwTOXBase*)pCurTOX;
             }
 //          pTOX->SetOptions(rDesc.GetIndexOptions());
-            pTOX->SetFromObjectNames(rDesc.IsCreateFromObjectNames());
-            pTOX->SetOLEOptions(rDesc.GetOLEOptions());
+            pNewTOX->SetFromObjectNames(rDesc.IsCreateFromObjectNames());
+            pNewTOX->SetOLEOptions(rDesc.GetOLEOptions());
         }
         break;
     }
 
 
-    DBG_ASSERT(pTOX, "no TOXBase created!" )
-    if(!pTOX)
+    DBG_ASSERT(pNewTOX, "no TOXBase created!" )
+    if(!pNewTOX)
         return FALSE;
-    pTOX->SetFromChapter(rDesc.IsFromChapter());
-    pTOX->SetSequenceName(rDesc.GetSequenceName());
-    pTOX->SetCaptionDisplay(rDesc.GetCaptionDisplay());
-    pTOX->SetProtected(rDesc.IsReadonly());
+
+    pNewTOX->SetFromChapter(rDesc.IsFromChapter());
+    pNewTOX->SetSequenceName(rDesc.GetSequenceName());
+    pNewTOX->SetCaptionDisplay(rDesc.GetCaptionDisplay());
+    pNewTOX->SetProtected(rDesc.IsReadonly());
 
     for(USHORT nLevel = 0; nLevel < MAXLEVEL; nLevel++)
-        pTOX->SetStyleNames(rDesc.GetStyleNames(nLevel), nLevel);
+        pNewTOX->SetStyleNames(rDesc.GetStyleNames(nLevel), nLevel);
 
     if(rDesc.GetTitle())
-        pTOX->SetTitle(*rDesc.GetTitle());
+        pNewTOX->SetTitle(*rDesc.GetTitle());
     if(rDesc.GetForm())
-        pTOX->SetTOXForm(*rDesc.GetForm());
-    pTOX->SetLanguage(rDesc.GetLanguage());
-    pTOX->SetSortAlgorithm(rDesc.GetSortAlgorithm());
+        pNewTOX->SetTOXForm(*rDesc.GetForm());
+    pNewTOX->SetLanguage(rDesc.GetLanguage());
+    pNewTOX->SetSortAlgorithm(rDesc.GetSortAlgorithm());
 
     if(!pCurTOX || (ppBase && !(*ppBase)) )
     {
         // wird ppBase uebergeben, dann wird das TOXBase hier nur erzeugt
         // und dann ueber den Dialog in ein Globaldokument eingefuegt
         if(ppBase)
-            (*ppBase) = pTOX;
+            (*ppBase) = pNewTOX;
         else
         {
-            pSh->InsertTableOf(*pTOX, pSet);
-            delete pTOX;
+            pSh->InsertTableOf(*pNewTOX, pSet);
+            delete pNewTOX;
         }
     }
     else
+    {
+        SwDoc * pDoc = pSh->GetDoc();
+
+        if (pDoc->DoesUndo())
+            pDoc->StartUndo(UNDO_TOXCHANGE);
+
+        if (pNewTOX != NULL) // => pTOX != NULL
+            pDoc->ChgTOX(*pTOX, *pNewTOX);
+
         bRet = pSh->UpdateTableOf(*pTOX, pSet);
+
+        if (pDoc->DoesUndo())
+            pDoc->EndUndo(UNDO_TOXCHANGE);
+
+    }
 
     return bRet;
 }
