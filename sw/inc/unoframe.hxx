@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoframe.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:38:44 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:25:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,7 @@ protected:
     com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > mxStyleData;
     com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >  mxStyleFamily;
 
+    virtual ~SwXFrame();
 public:
     SwXFrame( );
     SwXFrame(FlyCntType eSet,
@@ -130,7 +131,7 @@ public:
                 SwDoc *pDoc ); //Descriptor-If
     SwXFrame(SwFrmFmt& rFrmFmt, FlyCntType eSet,
                 const SfxItemPropertyMap*   pMap);
-    virtual ~SwXFrame();
+
 
     static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId();
 
@@ -217,10 +218,11 @@ protected:
     virtual const SwStartNode *GetStartNode() const;
 
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextCursor >         createCursor()throw(::com::sun::star::uno::RuntimeException);
+    virtual ~SwXTextFrame();
 public:
     SwXTextFrame(SwDoc *pDoc);
     SwXTextFrame(SwFrmFmt& rFmt);
-    virtual ~SwXTextFrame();
+
 
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL acquire(  ) throw();
@@ -282,10 +284,12 @@ SwXTextGraphicObjectBaseClass;
 class SwXTextGraphicObject : public SwXTextGraphicObjectBaseClass,
                             public SwXFrame
 {
+protected:
+    virtual ~SwXTextGraphicObject();
 public:
     SwXTextGraphicObject( SwDoc *pDoc );
     SwXTextGraphicObject(SwFrmFmt& rFmt);
-    virtual ~SwXTextGraphicObject();
+
 
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL acquire(  ) throw();
@@ -327,10 +331,12 @@ typedef cppu::WeakImplHelper3
 class SwXTextEmbeddedObject : public SwXTextEmbeddedObjectBaseClass,
                                 public SwXFrame
 {
+protected:
+    virtual ~SwXTextEmbeddedObject();
 public:
     SwXTextEmbeddedObject( SwDoc *pDoc );
     SwXTextEmbeddedObject(SwFrmFmt& rFmt);
-    virtual ~SwXTextEmbeddedObject();
+
 
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type& aType ) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL acquire(  ) throw();
