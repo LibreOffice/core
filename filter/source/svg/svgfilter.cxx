@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svgfilter.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 15:25:33 $
+ *  last change: $Author: kz $ $Date: 2004-03-25 14:59:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,7 @@
 
 #include "svgfilter.hxx"
 
+using namespace ::rtl;
 // -------------
 // - SVGFilter -
 // -------------
