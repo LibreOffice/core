@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwtxtex.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 13:31:37 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 14:05:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -260,6 +260,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
 {
     SwWrtShell &rSh = GetShell();
 
+    OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
     SfxItemSet aEditAttr(pOLV->GetAttribs());
     SfxItemSet aNewAttr(*aEditAttr.GetPool(), aEditAttr.GetRanges());
 
@@ -457,6 +458,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
         {
 //!! JP 16.03.2001: why??           pSdrView = rSh.GetDrawView();
 //!! JP 16.03.2001: why??           pOutliner = pSdrView->GetTextEditOutliner();
+            SdrOutliner * pOutliner = pSdrView->GetTextEditOutliner();
             sal_uInt32 nCtrl = pOutliner->GetControlWord();
 
             sal_Bool bSet = ((const SfxBoolItem&)rReq.GetArgs()->Get(
@@ -601,6 +603,7 @@ void SwDrawTextShell::GetState(SfxItemSet& rSet)
 
     SfxWhichIter aIter( rSet );
     sal_uInt16 nWhich = aIter.FirstWhich();
+    OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
     SfxItemSet aEditAttr( pOLV->GetAttribs() );
     const SfxPoolItem *pAdjust = 0, *pLSpace = 0, *pEscItem = 0;
     int eAdjust, nLSpace, nEsc;
@@ -695,6 +698,7 @@ ASK_ESCAPE:
             }
             else
             {
+                SdrOutliner * pOutliner = pSdrView->GetTextEditOutliner();
                 if( pOutliner )
                     bFlag = pOutliner->IsVertical() ==
                             (SID_TEXTDIRECTION_TOP_TO_BOTTOM == nSlotId);
@@ -724,6 +728,7 @@ ASK_ESCAPE:
             }
             else
             {
+                SdrOutliner * pOutliner = pSdrView->GetTextEditOutliner();
                 if(pOutliner && pOutliner->IsVertical())
                 {
                     rSet.DisableItem( nWhich );
@@ -778,6 +783,7 @@ void SwDrawTextShell::GetDrawTxtCtrlState(SfxItemSet& rSet)
     if (!IsTextEdit())  // Sonst Absturz!
         return;
 
+    OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
     SfxItemSet aEditAttr(pOLV->GetAttribs());
 
     SfxWhichIter aIter(rSet);
@@ -844,6 +850,7 @@ void SwDrawTextShell::ExecClpbrd(SfxRequest &rReq)
     if (!IsTextEdit())  // Sonst Absturz!
         return;
 
+    OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
     sal_uInt16 nId = rReq.GetSlot();
     switch( nId )
     {
@@ -876,6 +883,7 @@ void SwDrawTextShell::StateClpbrd(SfxItemSet &rSet)
     if (!IsTextEdit())  // Sonst Absturz!
         return;
 
+    OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
     ESelection aSel(pOLV->GetSelection());
     const sal_Bool bCopy = (aSel.nStartPara != aSel.nEndPara) ||
                            (aSel.nStartPos != aSel.nEndPos);
@@ -923,6 +931,7 @@ void SwDrawTextShell::StateInsert(SfxItemSet &rSet)
     if (!IsTextEdit())  // Sonst Absturz!
         return;
 
+    OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
     SfxWhichIter aIter(rSet);
     sal_uInt16 nWhich = aIter.FirstWhich();
 
