@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-16 16:21:14 $
+ *  last change: $Author: fs $ $Date: 2001-03-19 06:00:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,10 +118,10 @@ namespace dbaui
         ::rtl::OUString m_sName;            // table for update data
         String          m_sTypeNames;       // these type names are the ones out of the resource file
 
-        sal_Bool        m_bEditable;        // is the control readonly or not
-        sal_Bool        m_bModified;        // is the data modified
-        sal_Bool        m_bOwnConnection;   // is true when we created our own connection
-        sal_Bool        m_bNew;             // is true when we create a new table
+        sal_Bool        m_bEditable : 1;        // is the control readonly or not
+        sal_Bool        m_bModified : 1;        // is the data modified
+        sal_Bool        m_bOwnConnection : 1;   // is true when we created our own connection
+        sal_Bool        m_bNew : 1;             // is true when we create a new table
 
         void assignTable();                 // set the table if a name is given
         void loadData();
@@ -134,6 +134,7 @@ namespace dbaui
         void dropKey();
         void setColumnProperties(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _rxColumn,const OFieldDescription* _pFieldDesc);
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess> getKeyColumns() const;
+
     protected:
         // all the features which should be handled by this class
         virtual void            AddSupportedFeatures();
@@ -145,7 +146,8 @@ namespace dbaui
 
         void createNewConnection(sal_Bool _bUI = sal_False);
 
-        void doEditIndexes();
+        void        doEditIndexes();
+        sal_Bool    doSaveDoc(sal_Bool _bSaveAs);
 
     public:
         OTableController(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rM);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableController.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-16 16:27:06 $
+ *  last change: $Author: fs $ $Date: 2001-03-19 06:04:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -333,7 +333,8 @@ FeatureState OTableController::GetState(sal_uInt16 _nId)
             aReturn.bEnabled = m_bEditable && m_aUndoManager.GetRedoActionCount() != 0;
             break;
         case SID_INDEXDESIGN:
-            aReturn.bEnabled = sal_True;
+            aReturn.bEnabled = (m_bNew && m_bModified) || Reference< XIndexesSupplier >(m_xTable, UNO_QUERY).is();
+                // for a new table, assume that we can edit indexes
             break;
     }
     return aReturn;
@@ -354,144 +355,10 @@ void OTableController::Execute(sal_uInt16 _nId)
             InvalidateFeature(ID_BROWSER_CLEAR_QUERY);
             break;
         case ID_BROWSER_SAVEASDOC:
+            doSaveDoc(sal_True);
+            break;
         case ID_BROWSER_SAVEDOC:
-            {
-                if(!m_xConnection.is())
-                    createNewConnection(sal_True); // ask the user for a new connection
-                Reference<XTablesSupplier> xTablesSup(m_xConnection,UNO_QUERY);
-                if(xTablesSup.is())
-                {
-                    Reference<XNameAccess> xTables(xTablesSup->getTables(),UNO_QUERY);
-                    OSL_ENSURE(xTables.is(),"The queries can't be null!");
-
-                    // first we need a name for our query so ask the user
-                    ::rtl::OUString sCatalog,sSchema;
-                    sal_Bool bNew = 0 == m_sName.getLength();
-                    bNew = bNew || m_bNew || (ID_BROWSER_SAVEASDOC == _nId);
-                    if(bNew)
-                    {
-                        String aDefaultName;
-                        if(ID_BROWSER_SAVEASDOC == _nId && !bNew)
-                             aDefaultName = String(m_sName);
-                        else
-                        {
-                            String aName = String(ModuleRes(STR_TBL_TITLE));
-                            aName = aName.GetToken(0,' ');
-                            aDefaultName = String(::dbtools::createUniqueName(xTables,aName));
-                        }
-
-                        OSaveAsDlg aDlg(getView(),CommandType::TABLE,xTables,m_xConnection->getMetaData(),aDefaultName);
-                        if(aDlg.Execute() == RET_OK)
-                        {
-                            m_sName = aDlg.getName();
-                            sCatalog = aDlg.getCatalog();
-                            sSchema  = aDlg.getSchema();
-                        }
-                    }
-                    // did we get a name
-                    if(m_sName.getLength())
-                    {
-                        SQLExceptionInfo aInfo;
-                        try
-                        {
-                            // check the columns for double names
-                            checkColumns();
-
-                            Reference<XPropertySet> xTable;
-                            if(bNew || !xTables->hasByName(m_sName)) // just to make sure the table already exists
-                            {
-                                if(xTables->hasByName(m_sName))
-                                {
-                                    Reference<XDrop> xNameCont(xTable,UNO_QUERY);
-                                    xNameCont->dropByName(m_sName);
-                                }
-
-                                Reference<XDataDescriptorFactory> xFact(xTables,UNO_QUERY);
-                                OSL_ENSURE(xFact.is(),"No XDataDescriptorFactory available!");
-                                xTable = xFact->createDataDescriptor();
-                                OSL_ENSURE(xTable.is(),"OTableController::Execute ID_BROWSER_SAVEDOC: Create query failed!");
-                                // to set the name is only allowed when the wuery is new
-                                xTable->setPropertyValue(PROPERTY_CATALOGNAME,makeAny(sCatalog));
-                                xTable->setPropertyValue(PROPERTY_SCHEMANAME,makeAny(sSchema));
-                                xTable->setPropertyValue(PROPERTY_NAME,makeAny(m_sName));
-
-                                // now append the columns
-                                Reference<XColumnsSupplier> xColSup(xTable,UNO_QUERY);
-                                appendColumns(xColSup);
-                                // now append the primary key
-                                Reference<XKeysSupplier> xKeySup(xTable,UNO_QUERY);
-                                appendKey(xKeySup);
-                            }
-//                          else
-//                          {
-//                              xTables->getByName(m_sName) >>= xTable;
-//                          }
-                            // now set the properties
-                            if(bNew)
-                            {
-                                Reference<XAppend> xAppend(xTables,UNO_QUERY);
-                                OSL_ENSURE(xAppend.is(),"No XAppend Interface!");
-                                xAppend->appendByDescriptor(xTable);
-
-                                assignTable();
-                                if(!m_xTable.is()) // correct name and try again
-                                {
-                                    // it can be that someone inserted new data for us
-                                    ::rtl::OUString sCatalog,sSchema,sTable,sComposedName;
-                                    xTable->getPropertyValue(PROPERTY_CATALOGNAME)  >>= sCatalog;
-                                    xTable->getPropertyValue(PROPERTY_SCHEMANAME)   >>= sSchema;
-                                    xTable->getPropertyValue(PROPERTY_NAME)         >>= sTable;
-
-                                    ::dbtools::composeTableName(m_xConnection->getMetaData(),sCatalog,sSchema,sTable,sComposedName,sal_False);
-                                    m_sName = sComposedName;
-                                    assignTable();
-                                }
-                            }
-                            else if(m_xTable.is())
-                            {
-                                alterColumns();
-                            }
-                            setModified(sal_False);
-                        }
-                        catch(SQLContext& e)
-                        {
-                            m_sName = ::rtl::OUString();
-                            stopTableListening();
-                            m_xTable = NULL;
-                            aInfo = SQLExceptionInfo(e);
-                        }
-                        catch(SQLWarning& e)
-                        {
-                            m_sName = ::rtl::OUString();
-                            stopTableListening();
-                            m_xTable = NULL;
-                            aInfo = SQLExceptionInfo(e);
-                        }
-                        catch(SQLException& e)
-                        {
-                            m_sName = ::rtl::OUString();
-                            stopTableListening();
-                            m_xTable = NULL;
-                            aInfo = SQLExceptionInfo(e);
-                        }
-                        catch(Exception&)
-                        {
-                            m_sName = ::rtl::OUString();
-                            stopTableListening();
-                            m_xTable = NULL;
-                            OSL_ENSURE(0,"table could not be inserted!");
-                        }
-                        showError(aInfo);
-                    }
-                }
-                else
-                {
-                    String aMessage(ModuleRes(STR_TABLEDESIGN_CONNECTION_MISSING));
-                    String sTitle(ModuleRes(STR_STAT_WARNING));
-                    OSQLMessageBox aMsg(getView(),sTitle,aMessage);
-                    aMsg.Execute();
-                }
-            }
+            doSaveDoc(sal_False);
             break;
         case ID_BROWSER_CUT:
             static_cast<OTableDesignView*>(getView())->cut();
@@ -518,8 +385,175 @@ void OTableController::Execute(sal_uInt16 _nId)
 }
 
 // -----------------------------------------------------------------------------
+sal_Bool OTableController::doSaveDoc(sal_Bool _bSaveAs)
+{
+    if(!m_xConnection.is())
+        createNewConnection(sal_True); // ask the user for a new connection
+    Reference<XTablesSupplier> xTablesSup(m_xConnection,UNO_QUERY);
+
+    if (!xTablesSup.is())
+    {
+        String aMessage(ModuleRes(STR_TABLEDESIGN_CONNECTION_MISSING));
+        String sTitle(ModuleRes(STR_STAT_WARNING));
+        OSQLMessageBox aMsg(getView(),sTitle,aMessage);
+        aMsg.Execute();
+        return sal_False;
+    }
+
+    Reference<XNameAccess> xTables;
+    ::rtl::OUString sCatalog, sSchema;
+
+    sal_Bool bNew = (0 == m_sName.getLength());
+    bNew = bNew || m_bNew || _bSaveAs;
+
+    try
+    {
+        xTables = xTablesSup->getTables();
+        OSL_ENSURE(xTables.is(),"The queries can't be null!");
+
+        // first we need a name for our query so ask the user
+        if(bNew)
+        {
+            String aDefaultName;
+            if (_bSaveAs && !bNew)
+                 aDefaultName = String(m_sName);
+            else
+            {
+                String aName = String(ModuleRes(STR_TBL_TITLE));
+                aName = aName.GetToken(0,' ');
+                aDefaultName = String(::dbtools::createUniqueName(xTables,aName));
+            }
+
+            OSaveAsDlg aDlg(getView(),CommandType::TABLE,xTables,m_xConnection->getMetaData(),aDefaultName);
+            if(aDlg.Execute() == RET_OK)
+            {
+                m_sName = aDlg.getName();
+                sCatalog = aDlg.getCatalog();
+                sSchema  = aDlg.getSchema();
+            }
+        }
+
+        // did we get a name
+        if(!m_sName.getLength())
+            return sal_False;
+    }
+    catch(Exception&)
+    {
+        OSL_ENSURE(sal_False, "OTableController::doSaveDoc: nothing is expected to happen here!");
+    }
+
+    SQLExceptionInfo aInfo;
+    try
+    {
+        // check the columns for double names
+        checkColumns();
+
+        Reference<XPropertySet> xTable;
+        if(bNew || !xTables->hasByName(m_sName)) // just to make sure the table already exists
+        {
+            if(xTables->hasByName(m_sName))
+            {
+                Reference<XDrop> xNameCont(xTable,UNO_QUERY);
+                xNameCont->dropByName(m_sName);
+            }
+
+            Reference<XDataDescriptorFactory> xFact(xTables,UNO_QUERY);
+            OSL_ENSURE(xFact.is(),"OTableController::doSaveDoc: No XDataDescriptorFactory available!");
+            xTable = xFact->createDataDescriptor();
+            OSL_ENSURE(xTable.is(),"OTableController::doSaveDoc: Create query failed!");
+            // to set the name is only allowed when the wuery is new
+            xTable->setPropertyValue(PROPERTY_CATALOGNAME,makeAny(sCatalog));
+            xTable->setPropertyValue(PROPERTY_SCHEMANAME,makeAny(sSchema));
+            xTable->setPropertyValue(PROPERTY_NAME,makeAny(m_sName));
+
+            // now append the columns
+            Reference<XColumnsSupplier> xColSup(xTable,UNO_QUERY);
+            appendColumns(xColSup);
+            // now append the primary key
+            Reference<XKeysSupplier> xKeySup(xTable,UNO_QUERY);
+            appendKey(xKeySup);
+        }
+//              else
+//              {
+//                  xTables->getByName(m_sName) >>= xTable;
+//              }
+        // now set the properties
+        if(bNew)
+        {
+            Reference<XAppend> xAppend(xTables,UNO_QUERY);
+            OSL_ENSURE(xAppend.is(),"OTableController::doSaveDoc: No XAppend Interface!");
+            xAppend->appendByDescriptor(xTable);
+
+            assignTable();
+            if(!m_xTable.is()) // correct name and try again
+            {
+                // it can be that someone inserted new data for us
+                ::rtl::OUString sCatalog,sSchema,sTable,sComposedName;
+                xTable->getPropertyValue(PROPERTY_CATALOGNAME)  >>= sCatalog;
+                xTable->getPropertyValue(PROPERTY_SCHEMANAME)   >>= sSchema;
+                xTable->getPropertyValue(PROPERTY_NAME)         >>= sTable;
+
+                ::dbtools::composeTableName(m_xConnection->getMetaData(),sCatalog,sSchema,sTable,sComposedName,sal_False);
+                m_sName = sComposedName;
+                assignTable();
+            }
+        }
+        else if(m_xTable.is())
+        {
+            alterColumns();
+        }
+        setModified(sal_False);
+    }
+    catch(SQLContext& e)
+    {
+        m_sName = ::rtl::OUString();
+        stopTableListening();
+        m_xTable = NULL;
+        aInfo = SQLExceptionInfo(e);
+    }
+    catch(SQLWarning& e)
+    {
+        m_sName = ::rtl::OUString();
+        stopTableListening();
+        m_xTable = NULL;
+        aInfo = SQLExceptionInfo(e);
+    }
+    catch(SQLException& e)
+    {
+        m_sName = ::rtl::OUString();
+        stopTableListening();
+        m_xTable = NULL;
+        aInfo = SQLExceptionInfo(e);
+    }
+    catch(Exception&)
+    {
+        m_sName = ::rtl::OUString();
+        stopTableListening();
+        m_xTable = NULL;
+        OSL_ENSURE(sal_False, "OTableController::doSaveDoc: table could not be inserted (caught a generic exception)!");
+        return sal_False;
+    }
+
+    showError(aInfo);
+    return !aInfo.isValid();
+}
+
+// -----------------------------------------------------------------------------
 void OTableController::doEditIndexes()
 {
+    // table needs to be saved before editing indexes
+    if (m_bNew || m_bModified)
+    {
+        QueryBox aAsk(getView(), ModuleRes(QUERY_SAVE_TABLE_EDIT_INDEXES));
+        if (RET_YES != aAsk.Execute())
+            return;
+
+        if (!doSaveDoc(sal_False))
+            return;
+
+        OSL_ENSURE(!m_bNew && !m_bModified, "OTableController::doEditIndexes: what the hell did doSaveDoc do?");
+    }
+
     Reference< XNameAccess > xIndexes;          // will be the keys of the table
     Sequence< ::rtl::OUString > aFieldNames;    // will be the column names of the table
     try
@@ -711,6 +745,7 @@ void OTableController::setModified(sal_Bool _bModified)
     m_bModified = _bModified;
     InvalidateFeature(ID_BROWSER_SAVEDOC);
     InvalidateFeature(ID_BROWSER_SAVEASDOC);
+    InvalidateFeature(SID_INDEXDESIGN);
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL OTableController::disposing( const EventObject& Source ) throw(RuntimeException)
