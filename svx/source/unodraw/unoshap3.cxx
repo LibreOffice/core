@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshap3.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:27 $
+ *  last change: $Author: aw $ $Date: 2000-11-17 10:15:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,7 @@
 #include "extrud3d.hxx"
 #include "polygn3d.hxx"
 #include "poly3d.hxx"
+#include "svdmodel.hxx"
 
 using namespace ::vos;
 using namespace ::rtl;
@@ -214,6 +215,9 @@ void SAL_CALL Svx3DSceneObject::add( const Reference< drawing::XShape >& xShape 
     if( pSdrShape->ISA(E3dObject) )
     {
         pObj->GetSubList()->NbcInsertObject( pSdrShape );
+
+        if(pShape)
+            pShape->Create( pObj, pPage );
     }
     else
     {
@@ -221,6 +225,9 @@ void SAL_CALL Svx3DSceneObject::add( const Reference< drawing::XShape >& xShape 
         pShape->InvalidateSdrObject();
         throw uno::RuntimeException();
     }
+
+    if( pModel )
+        pModel->SetChanged();
 }
 
 //----------------------------------------------------------------------
