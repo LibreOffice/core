@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hints.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:16:17 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 16:08:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,7 @@ TYPEINIT1(ScUpdateRefHint, SfxHint);
 TYPEINIT1(ScPointerChangedHint, SfxHint);
 TYPEINIT1(ScLinkRefreshedHint, SfxHint);
 TYPEINIT1(ScAutoStyleHint, SfxHint);
+TYPEINIT1(ScDBRangeRefreshedHint, SfxHint);
 
 // -----------------------------------------------------------------------
 //      ScPaintHint - Angabe, was neu gezeichnet werden muss
@@ -182,5 +183,12 @@ ScAutoStyleHint::~ScAutoStyleHint()
 }
 
 
+ScDBRangeRefreshedHint::ScDBRangeRefreshedHint( const ScImportParam& rP )
+    : aParam(rP)
+{
+}
+ScDBRangeRefreshedHint::~ScDBRangeRefreshedHint()
+{
+}
 
 
