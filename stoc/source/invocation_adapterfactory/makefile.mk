@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: dbo $ $Date: 2002-08-22 14:41:39 $
+#   last change: $Author: rt $ $Date: 2003-04-23 16:09:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -62,15 +62,15 @@
 PRJ=..$/..
 
 PRJNAME=stoc
-TARGET=invadp
-USE_DEFFILE=TRUE
-NO_BSYMBOLIC=TRUE
+TARGET = invocadapt.uno
 ENABLE_EXCEPTIONS=TRUE
-COMP1TYPELIST=$(TARGET)
+NO_BSYMBOLIC = TRUE
+COMP1TYPELIST = invadp
 
 # --- Settings -----------------------------------------------------
 
 .INCLUDE :  settings.mk
+DLLPRE =
 
 # ------------------------------------------------------------------
 
@@ -86,7 +86,7 @@ SHL1STDLIBS=	\
         $(CPPUHELPERLIB)	\
         $(SALLIB)
 
-SHL1VERSIONMAP=	$(TARGET).map
+SHL1VERSIONMAP = invadp.map
 
 SHL1DEPN=
 SHL1IMPLIB=	i$(TARGET)
@@ -94,15 +94,6 @@ SHL1LIBS=	$(SLB)$/$(TARGET).lib
 SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
 
 DEF1NAME=	$(SHL1TARGET)
-
-.IF "$(debug)" != ""
-
-# msvc++: no inlining
-.IF "$(COM)" == "MSC"
-CFLAGS += -Ob0
-.ENDIF
-
-.ENDIF
 
 # --- Targets ------------------------------------------------------
 
