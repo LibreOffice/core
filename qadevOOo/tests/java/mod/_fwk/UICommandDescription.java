@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UICommandDescription.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Date: 2004-07-23 10:47:43 $
+ *  last change: $Date: 2005-03-01 20:25:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@ public class UICommandDescription extends TestCase {
         TestEnvironment tEnv = null;
         XMultiServiceFactory xMSF = (XMultiServiceFactory)tParam.getMSF();
         try {
-            oObj = (XInterface)xMSF.createInstance("drafts.com.sun.star.frame.UICommandDescription");
+            oObj = (XInterface)xMSF.createInstance("com.sun.star.frame.UICommandDescription");
         }
         catch(com.sun.star.uno.Exception e) {
             e.printStackTrace(log);
