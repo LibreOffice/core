@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleCellBase.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2002-02-21 17:22:54 $
+ *  last change: $Author: sab $ $Date: 2002-02-25 11:45:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,17 +82,17 @@ class ScAccessibleCellBase
 {
 public:
     //=====  internal  ========================================================
-    ScAccessibleCellBase (
+    ScAccessibleCellBase(
         const ::com::sun::star::uno::Reference<
         ::drafts::com::sun::star::accessibility::XAccessible>& rxParent,
         ScDocument* pDoc,
         ScAddress& rCellAddress,
         sal_Int32 nIndex);
 protected:
-    virtual ~ScAccessibleCellBase ();
+    virtual ~ScAccessibleCellBase();
 public:
 
-    //=====  XInterface  ======================================================
+    ///=====  XInterface  ======================================================
 
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
                     const ::com::sun::star::uno::Type & rType )
@@ -101,130 +101,71 @@ public:
     /** Increase the reference count.
     */
     virtual void SAL_CALL
-                acquire (void)
+                acquire(void)
                     throw ();
 
     /** Decrease the reference count.
     */
     virtual void SAL_CALL
-                release (void)
+                release(void)
                     throw ();
 
-    //=====  XAccessibleComponent  ============================================
+    ///=====  XAccessibleComponent  ============================================
 
-    /** Determines if the object is visible.
-
-        <p>If an object and all of its parents are visible then the object
-        is also called showing.  If an object is showing then it has also
-        set the <const>AccessibleStateType::VISIBLE</const> state set in its
-        <type>AccessibleStateSet</type>.</p>
-
-        @return
-            Returns <TRUE/> if the object is visible and <FALSE/> otherwise.
-
-        @see isShowing
-    */
     virtual sal_Bool SAL_CALL isVisible(  )
         throw (::com::sun::star::uno::RuntimeException);
 
-    //=====  XAccessibleContext  ==============================================
+    ///=====  XAccessibleContext  ==============================================
 
     /// Return this objects index among the parents children.
     virtual sal_Int32 SAL_CALL
-        getAccessibleIndexInParent (void)
+        getAccessibleIndexInParent(void)
         throw (::com::sun::star::uno::RuntimeException);
 
 protected:
     /// Return this object's description.
     virtual ::rtl::OUString SAL_CALL
-        createAccessibleDescription (void)
+        createAccessibleDescription(void)
         throw (::com::sun::star::uno::RuntimeException);
 
     /// Return the object's current name.
     virtual ::rtl::OUString SAL_CALL
-        createAccessibleName (void)
+        createAccessibleName(void)
         throw (::com::sun::star::uno::RuntimeException);
 
 public:
-    //=====  XAccessibleValue  ================================================
+    ///=====  XAccessibleValue  ================================================
 
-    /** Returns the value of this object as a number.
-
-        <p>The exact return type is implementation dependent.  Typical types
-        are long and double.</p>
-
-        @return
-            Returns the current value represented by this object.
-    */
     virtual ::com::sun::star::uno::Any SAL_CALL
         getCurrentValue(  )
         throw (::com::sun::star::uno::RuntimeException);
 
-    /** Sets the value of this object to the given number.
-
-        <p>The argument is clipped to the valid interval whose upper and
-        lower bounds are returned by the methods
-        <member>getMaximumAccessibleValue</member> and
-        <member>getMinimumAccessibleValue</member>, i.e. if it is lower than
-        the minimum value the new value will be the minimum and if it is
-        greater than the maximum then the new value will be the maximum.</p>
-
-        @param aNumber
-            The new value represented by this object.  The set of admissible
-            types for this argument is implementation dependent.
-
-        @return
-            Returns <TRUE/> if the new value could successfully be set and
-            <FALSE/> otherwise.
-    */
     virtual sal_Bool SAL_CALL
         setCurrentValue( const ::com::sun::star::uno::Any& aNumber )
         throw (::com::sun::star::uno::RuntimeException);
 
-    /** Returns the maximal value that can be represented by this object.
-
-        <p>The type of the returned value is implementation dependent.  It
-        does not have to be the same type as that returned by
-        <member>getCurrentAccessibleValue</member>.</p>
-
-        @return
-            Returns the maximal value in an implementation dependent type.
-            If this object has no upper bound then an empty object is
-            returned.
-    */
     virtual ::com::sun::star::uno::Any SAL_CALL
         getMaximumValue(  )
         throw (::com::sun::star::uno::RuntimeException);
 
-    /** Returns the minimal value that can be represented by this object.
-
-        <p>The type of the returned value is implementation dependent.  It
-        does not have to be the same type as that returned by
-        <member>getCurrentAccessibleValue</member>.</p>
-
-        @return
-            Returns the minimal value in an implementation dependent type.
-            If this object has no upper bound then an empty object is
-            returned.
-    */
     virtual ::com::sun::star::uno::Any SAL_CALL
         getMinimumValue(  )
         throw (::com::sun::star::uno::RuntimeException);
 
-    //=====  XServiceInfo  ====================================================
+    ///=====  XServiceInfo  ====================================================
 
     /** Returns an identifier for the implementation of this object.
     */
     virtual ::rtl::OUString SAL_CALL
-        getImplementationName (void)
+        getImplementationName(void)
         throw (::com::sun::star::uno::RuntimeException);
 
-    //=====  XTypeProvider  ===================================================
+    ///=====  XTypeProvider  ===================================================
 
     /** Returns a sequence of all supported interfaces.
     */
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> SAL_CALL
-        getTypes (void)
+        getTypes(void)
         throw (::com::sun::star::uno::RuntimeException);
 
 protected:

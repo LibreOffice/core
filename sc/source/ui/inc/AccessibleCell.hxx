@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleCell.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2002-02-21 17:22:54 $
+ *  last change: $Author: sab $ $Date: 2002-02-25 11:45:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@ class ScAccessibleCell
 {
 public:
     //=====  internal  ========================================================
-    ScAccessibleCell (
+    ScAccessibleCell(
         const ::com::sun::star::uno::Reference<
         ::drafts::com::sun::star::accessibility::XAccessible>& rxParent,
         ScTabViewShell* pViewShell,
@@ -96,69 +96,34 @@ public:
         sal_Int32 nIndex,
         ScSplitPos eSplitPos);
 protected:
-    virtual ~ScAccessibleCell ();
+    virtual ~ScAccessibleCell();
 public:
 
-    //=====  XAccessibleComponent  ============================================
+    ///=====  XAccessibleComponent  ============================================
 
-    /** Returns the Accessible child that is rendered under the given point.
-
-        @param aPoint
-            Coordinates of the test point for which to find the Accessible
-            child.
-
-        @return
-            If there is one child which is rendered so that its bounding box
-            contains the test point then a reference to that object is
-            returned.  If there is more than one child which satisfies that
-            condition then a reference to that one is returned that is
-            painted on top of the others.  If no there is no child which is
-            rendered at the test point an empty reference is returned.
-    */
     virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible >
         SAL_CALL getAccessibleAt(
         const ::com::sun::star::awt::Point& rPoint )
         throw (::com::sun::star::uno::RuntimeException);
 
-    /** Determines if the object is visible.
-
-        <p>If an object and all of its parents are visible then the object
-        is also called showing.  If an object is showing then it has also
-        set the <const>AccessibleStateType::VISIBLE</const> state set in its
-        <type>AccessibleStateSet</type>.</p>
-
-        @return
-            Returns <TRUE/> if the object is visible and <FALSE/> otherwise.
-
-        @see isShowing
-    */
     virtual sal_Bool SAL_CALL isVisible(  )
         throw (::com::sun::star::uno::RuntimeException);
 
-    /** Grabs the focus to this object.
-
-        <p>If this object can not accept the focus,
-        i.e. <member>isFocusTraversable</member> returns <FALSE/> for this
-        object then nothing happens.  Otherwise the object will attempt to
-        take the focus.  Nothing happens if that fails, otherwise the object
-        has the focus.  This method is called <code>requestFocus</code> in
-        the Java Accessibility API 1.4.</p>
-    */
     virtual void SAL_CALL grabFocus(  )
         throw (::com::sun::star::uno::RuntimeException);
 
-    //=====  XAccessibleContext  ==============================================
+    ///=====  XAccessibleContext  ==============================================
 
     /// Return the number of currently visible children.
     // is overloaded to calculate this on demand
     virtual sal_Int32 SAL_CALL
-        getAccessibleChildCount (void)
+        getAccessibleChildCount(void)
                     throw (::com::sun::star::uno::RuntimeException);
 
     /// Return the specified child or NULL if index is invalid.
     // is overloaded to calculate this on demand
     virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible> SAL_CALL
-        getAccessibleChild (sal_Int32 nIndex)
+        getAccessibleChild(sal_Int32 nIndex)
         throw (::com::sun::star::uno::RuntimeException,
                 ::com::sun::star::lang::IndexOutOfBoundsException);
 
@@ -174,21 +139,21 @@ public:
     /// Return the set of current states.
     virtual ::com::sun::star::uno::Reference<
             ::drafts::com::sun::star::accessibility::XAccessibleStateSet> SAL_CALL
-        getAccessibleStateSet (void)
+        getAccessibleStateSet(void)
         throw (::com::sun::star::uno::RuntimeException);
 
-    //=====  XServiceInfo  ====================================================
+    ///=====  XServiceInfo  ====================================================
 
     /** Returns an identifier for the implementation of this object.
     */
     virtual ::rtl::OUString SAL_CALL
-        getImplementationName (void)
+        getImplementationName(void)
         throw (::com::sun::star::uno::RuntimeException);
 
     /** Returns a list of all supported services.
     */
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString> SAL_CALL
-        getSupportedServiceNames (void)
+        getSupportedServiceNames(void)
         throw (::com::sun::star::uno::RuntimeException);
 
 private:

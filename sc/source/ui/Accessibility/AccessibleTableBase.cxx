@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTableBase.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sab $ $Date: 2002-02-19 08:26:13 $
+ *  last change: $Author: sab $ $Date: 2002-02-25 11:46:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,9 @@
 #ifndef SC_DOCUMENT_HXX
 #include "document.hxx"
 #endif
+#ifndef SC_UNOGUARD_HXX
+#include "unoguard.hxx"
+#endif
 
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLEROLE_HPP_
 #include <drafts/com/sun/star/accessibility/AccessibleRole.hpp>
@@ -85,7 +88,7 @@ using namespace ::drafts::com::sun::star::accessibility;
 
 //=====  internal  ============================================================
 
-ScAccessibleTableBase::ScAccessibleTableBase (
+ScAccessibleTableBase::ScAccessibleTableBase(
         const uno::Reference<XAccessible>& rxParent,
         ScDocument* pDoc,
         const ScRange& rRange)
@@ -96,7 +99,7 @@ ScAccessibleTableBase::ScAccessibleTableBase (
 {
 }
 
-ScAccessibleTableBase::~ScAccessibleTableBase ()
+ScAccessibleTableBase::~ScAccessibleTableBase()
 {
 }
 
@@ -122,7 +125,7 @@ uno::Any SAL_CALL
 /** Increase the reference count.
 */
 void SAL_CALL
-    ScAccessibleTableBase::acquire (void)
+    ScAccessibleTableBase::acquire(void)
     throw ()
 {
     OWeakObject::acquire ();
@@ -131,7 +134,7 @@ void SAL_CALL
 /** Decrease the reference count.
 */
 void SAL_CALL
-    ScAccessibleTableBase::release (void)
+    ScAccessibleTableBase::release(void)
     throw ()
 {
     OWeakObject::release ();
@@ -142,14 +145,14 @@ void SAL_CALL
 sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleRowCount(  )
                     throw (uno::RuntimeException)
 {
-    ::osl::MutexGuard aGuard (maMutex);
+    ScUnoGuard();
     return maRange.aEnd.Row() - maRange.aStart.Row() + 1;
 }
 
 sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleColumnCount(  )
                     throw (uno::RuntimeException)
 {
-    ::osl::MutexGuard aGuard (maMutex);
+    ScUnoGuard();
     return maRange.aEnd.Col() - maRange.aStart.Col() + 1;
 }
 
@@ -172,7 +175,7 @@ sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleColumnCount(  )
 sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleRowExtentAt( sal_Int32 nRow, sal_Int32 nColumn )
                     throw (uno::RuntimeException)
 {
-    ::osl::MutexGuard aGuard (maMutex);
+    ScUnoGuard();
     sal_Int32 nCount(1); // the same cell
     nRow += maRange.aStart.Row();
     nColumn += maRange.aStart.Col();
@@ -192,7 +195,7 @@ sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleRowExtentAt( sal_Int32 nR
 sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleColumnExtentAt( sal_Int32 nRow, sal_Int32 nColumn )
                     throw (uno::RuntimeException)
 {
-    ::osl::MutexGuard aGuard (maMutex);
+    ScUnoGuard();
     sal_Int32 nCount(1); // the same cell
     nRow += maRange.aStart.Row();
     nColumn += maRange.aStart.Col();
@@ -293,7 +296,7 @@ sal_Bool SAL_CALL ScAccessibleTableBase::isAccessibleSelected( sal_Int32 nRow, s
 sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleIndex( sal_Int32 nRow, sal_Int32 nColumn )
                     throw (uno::RuntimeException)
 {
-    ::osl::MutexGuard aGuard (maMutex);
+    ScUnoGuard();
     nRow -= maRange.aStart.Row();
     nColumn -= maRange.aStart.Col();
     return (nRow * maRange.aEnd.Col() + 1) + nColumn;
@@ -302,7 +305,7 @@ sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleIndex( sal_Int32 nRow, sa
 sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleRow( sal_Int32 nChildIndex )
                     throw (uno::RuntimeException)
 {
-    ::osl::MutexGuard aGuard (maMutex);
+    ScUnoGuard();
     sal_Int32 nRow(-1);
     if (maRange.aEnd.Col() > 0)
         nRow = nChildIndex / (maRange.aEnd.Col() - maRange.aStart.Col() + 1);
@@ -312,7 +315,7 @@ sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleRow( sal_Int32 nChildInde
 sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleColumn( sal_Int32 nChildIndex )
                     throw (uno::RuntimeException)
 {
-    ::osl::MutexGuard aGuard (maMutex);
+    ScUnoGuard();
     sal_Int32 nColumn(-1);
     if (maRange.aEnd.Col() > 0)
         nColumn = nChildIndex % (maRange.aEnd.Col() - maRange.aStart.Col() + 1);
@@ -322,21 +325,21 @@ sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleColumn( sal_Int32 nChildI
     //=====  XAccessibleContext  ==============================================
 
 sal_Int32 SAL_CALL
-    ScAccessibleTableBase::getAccessibleChildCount (void)
+    ScAccessibleTableBase::getAccessibleChildCount(void)
                     throw (uno::RuntimeException)
 {
-    ::osl::MutexGuard aGuard (maMutex);
+    ScUnoGuard();
 /*  return (maRange.aEnd.Row() - maRange.aStart.Row() + 1) *
             (maRange.aEnd.Col() - maRange.aStart.Col() + 1);*/
     return 1;
 }
 
 uno::Reference< XAccessible > SAL_CALL
-    ScAccessibleTableBase::getAccessibleChild (sal_Int32 nIndex)
+    ScAccessibleTableBase::getAccessibleChild(sal_Int32 nIndex)
         throw (uno::RuntimeException,
         lang::IndexOutOfBoundsException)
 {
-    ::osl::MutexGuard aGuard (maMutex);
+    ScUnoGuard();
     sal_Int32 nRow(0);
     sal_Int32 nColumn(0);
     if (maRange.aEnd.Col() > 0)
@@ -349,17 +352,17 @@ uno::Reference< XAccessible > SAL_CALL
 }
 
 ::rtl::OUString SAL_CALL
-    ScAccessibleTableBase::createAccessibleDescription (void)
+    ScAccessibleTableBase::createAccessibleDescription(void)
     throw (uno::RuntimeException)
 {
     return getAccessibleName();
 }
 
 ::rtl::OUString SAL_CALL
-    ScAccessibleTableBase::createAccessibleName (void)
+    ScAccessibleTableBase::createAccessibleName(void)
     throw (uno::RuntimeException)
 {
-    ::osl::MutexGuard aGuard (maMutex);
+    ScUnoGuard();
     rtl::OUString sName;
     String sCoreName;
     if (mpDoc && mpDoc->GetName( maRange.aStart.Tab(), sCoreName ))
@@ -368,7 +371,7 @@ uno::Reference< XAccessible > SAL_CALL
 }
 
 uno::Reference<XAccessibleRelationSet> SAL_CALL
-    ScAccessibleTableBase::getAccessibleRelationSet (void)
+    ScAccessibleTableBase::getAccessibleRelationSet(void)
     throw (uno::RuntimeException)
 {
     DBG_ERROR("should be implemented in the abrevated class");
@@ -376,7 +379,7 @@ uno::Reference<XAccessibleRelationSet> SAL_CALL
 }
 
 uno::Reference<XAccessibleStateSet> SAL_CALL
-    ScAccessibleTableBase::getAccessibleStateSet (void)
+    ScAccessibleTableBase::getAccessibleStateSet(void)
     throw (uno::RuntimeException)
 {
     DBG_ERROR("should be implemented in the abrevated class");
@@ -386,7 +389,7 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
 
     //=====  XServiceInfo  ====================================================
 
-::rtl::OUString SAL_CALL ScAccessibleTableBase::getImplementationName (void)
+::rtl::OUString SAL_CALL ScAccessibleTableBase::getImplementationName(void)
         throw (uno::RuntimeException)
 {
     return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("ScAccessibleTableBase"));
@@ -394,10 +397,10 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
 
     //=====  XTypeProvider  ===================================================
 
-uno::Sequence< uno::Type> SAL_CALL ScAccessibleTableBase::getTypes (void)
+uno::Sequence< uno::Type> SAL_CALL ScAccessibleTableBase::getTypes(void)
         throw (uno::RuntimeException)
 {
-    ::osl::MutexGuard aGuard (maMutex);
+    ScUnoGuard();
     uno::Sequence< uno::Type>
         aTypeSequence = ScAccessibleContextBase::getTypes();
     sal_Int32 nOldSize(aTypeSequence.getLength());

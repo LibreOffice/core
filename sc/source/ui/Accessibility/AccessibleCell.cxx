@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleCell.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2002-02-20 13:49:21 $
+ *  last change: $Author: sab $ $Date: 2002-02-25 11:46:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@
 #ifndef SC_MISCUNO_HXX
 #include "miscuno.hxx"
 #endif
+#ifndef SC_UNOGUARD_HXX
+#include "unoguard.hxx"
+#endif
 
 #ifndef _UTL_ACCESSIBLESTATESETHELPER_HXX
 #include <unotools/accessiblestatesethelper.hxx>
@@ -104,20 +107,20 @@ using namespace ::drafts::com::sun::star::accessibility;
 
 //=====  internal  ============================================================
 
-ScAccessibleCell::ScAccessibleCell (
+ScAccessibleCell::ScAccessibleCell(
         const uno::Reference<XAccessible>& rxParent,
         ScTabViewShell* pViewShell,
         ScAddress& rCellAddress,
         sal_Int32 nIndex,
         ScSplitPos eSplitPos)
     :
-    ScAccessibleCellBase (rxParent, GetDocument(pViewShell), rCellAddress, nIndex),
+    ScAccessibleCellBase(rxParent, GetDocument(pViewShell), rCellAddress, nIndex),
     mpViewShell(pViewShell),
     meSplitPos(eSplitPos)
 {
 }
 
-ScAccessibleCell::~ScAccessibleCell ()
+ScAccessibleCell::~ScAccessibleCell()
 {
 }
 
@@ -135,7 +138,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleCell::getAccessibleAt(
 sal_Bool SAL_CALL ScAccessibleCell::isVisible(  )
         throw (uno::RuntimeException)
 {
-     ::osl::MutexGuard aGuard (maMutex);
+     ScUnoGuard();
     // test whether the cell is hidden (column/row - hidden/filtered)
     sal_Bool bVisible(sal_True);
     if (mpDoc)
@@ -152,7 +155,7 @@ sal_Bool SAL_CALL ScAccessibleCell::isVisible(  )
 void SAL_CALL ScAccessibleCell::grabFocus(  )
         throw (uno::RuntimeException)
 {
-     ::osl::MutexGuard aGuard (maMutex);
+     ScUnoGuard();
     if (getAccessibleParent().is() && mpViewShell)
     {
         uno::Reference<XAccessibleComponent> xAccessibleComponent(getAccessibleParent()->getAccessibleContext(), uno::UNO_QUERY);
@@ -199,7 +202,7 @@ Rectangle ScAccessibleCell::GetBoundingBox(void)
     //=====  XAccessibleContext  ==============================================
 
 sal_Int32 SAL_CALL
-    ScAccessibleCell::getAccessibleChildCount (void)
+    ScAccessibleCell::getAccessibleChildCount(void)
                     throw (uno::RuntimeException)
 {
     sal_Int32 nCount(0);
@@ -208,7 +211,7 @@ sal_Int32 SAL_CALL
 }
 
 uno::Reference< XAccessible > SAL_CALL
-    ScAccessibleCell::getAccessibleChild (sal_Int32 nIndex)
+    ScAccessibleCell::getAccessibleChild(sal_Int32 nIndex)
         throw (uno::RuntimeException,
         lang::IndexOutOfBoundsException)
 {
@@ -217,10 +220,10 @@ uno::Reference< XAccessible > SAL_CALL
 }
 
 uno::Reference<XAccessibleStateSet> SAL_CALL
-    ScAccessibleCell::getAccessibleStateSet (void)
+    ScAccessibleCell::getAccessibleStateSet(void)
     throw (uno::RuntimeException)
 {
-    ::osl::MutexGuard aGuard (maMutex);
+    ScUnoGuard();
     uno::Reference<XAccessibleStateSet> xParentStates;
     if (getAccessibleParent().is())
     {
@@ -253,14 +256,14 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
 
     //=====  XServiceInfo  ====================================================
 
-::rtl::OUString SAL_CALL ScAccessibleCell::getImplementationName (void)
+::rtl::OUString SAL_CALL ScAccessibleCell::getImplementationName(void)
         throw (uno::RuntimeException)
 {
     return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("ScAccessibleCell"));
 }
 
 uno::Sequence< ::rtl::OUString> SAL_CALL
-    ScAccessibleCell::getSupportedServiceNames (void)
+    ScAccessibleCell::getSupportedServiceNames(void)
         throw (uno::RuntimeException)
 {
     uno::Sequence< ::rtl::OUString > aSequence = ScAccessibleContextBase::getSupportedServiceNames();

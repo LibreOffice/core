@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleCellBase.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2002-02-21 17:23:53 $
+ *  last change: $Author: sab $ $Date: 2002-02-25 11:46:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,9 @@
 #ifndef SC_CELL_HXX
 #include "cell.hxx"
 #endif
+#ifndef SC_UNOGUARD_HXX
+#include "unoguard.hxx"
+#endif
 
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLEROLE_HPP_
 #include <drafts/com/sun/star/accessibility/AccessibleRole.hpp>
@@ -101,20 +104,20 @@ using namespace ::drafts::com::sun::star::accessibility;
 
 //=====  internal  ============================================================
 
-ScAccessibleCellBase::ScAccessibleCellBase (
+ScAccessibleCellBase::ScAccessibleCellBase(
         const uno::Reference<XAccessible>& rxParent,
         ScDocument* pDoc,
         ScAddress& rCellAddress,
         sal_Int32 nIndex)
     :
-    ScAccessibleContextBase (rxParent, AccessibleRole::TABLE_CELL),
+    ScAccessibleContextBase(rxParent, AccessibleRole::TABLE_CELL),
     mpDoc(pDoc),
     maCellAddress(rCellAddress),
     mnIndex(nIndex)
 {
 }
 
-ScAccessibleCellBase::~ScAccessibleCellBase ()
+ScAccessibleCellBase::~ScAccessibleCellBase()
 {
 }
 
@@ -133,19 +136,19 @@ uno::Any SAL_CALL
 /** Increase the reference count.
 */
 void SAL_CALL
-    ScAccessibleCellBase::acquire (void)
+    ScAccessibleCellBase::acquire(void)
     throw ()
 {
-    OWeakObject::acquire ();
+    OWeakObject::acquire();
 }
 
 /** Decrease the reference count.
 */
 void SAL_CALL
-    ScAccessibleCellBase::release (void)
+    ScAccessibleCellBase::release(void)
     throw ()
 {
-    OWeakObject::release ();
+    OWeakObject::release();
 }
 
     //=====  XAccessibleComponent  ============================================
@@ -153,7 +156,7 @@ void SAL_CALL
 sal_Bool SAL_CALL ScAccessibleCellBase::isVisible(  )
         throw (uno::RuntimeException)
 {
-     ::osl::MutexGuard aGuard (maMutex);
+     ScUnoGuard();
     // test whether the cell is hidden (column/row - hidden/filtered)
     sal_Bool bVisible(sal_True);
     if (mpDoc)
@@ -170,15 +173,15 @@ sal_Bool SAL_CALL ScAccessibleCellBase::isVisible(  )
     //=====  XAccessibleContext  ==============================================
 
 sal_Int32
-    ScAccessibleCellBase::getAccessibleIndexInParent (void)
+    ScAccessibleCellBase::getAccessibleIndexInParent(void)
         throw (uno::RuntimeException)
 {
-    ::osl::MutexGuard aGuard (maMutex);
+    ScUnoGuard();
     return mnIndex;
 }
 
 ::rtl::OUString SAL_CALL
-    ScAccessibleCellBase::createAccessibleDescription (void)
+    ScAccessibleCellBase::createAccessibleDescription(void)
     throw (uno::RuntimeException)
 {
     rtl::OUString sDescription;
@@ -197,7 +200,7 @@ sal_Int32
 }
 
 ::rtl::OUString SAL_CALL
-    ScAccessibleCellBase::createAccessibleName (void)
+    ScAccessibleCellBase::createAccessibleName(void)
     throw (uno::RuntimeException)
 {
     rtl::OUString sName;
@@ -214,7 +217,7 @@ uno::Any SAL_CALL
     ScAccessibleCellBase::getCurrentValue(  )
     throw (uno::RuntimeException)
 {
-     ::osl::MutexGuard aGuard (maMutex);
+     ScUnoGuard();
     uno::Any aAny;
     if (mpDoc)
         aAny <<= mpDoc->GetValue(maCellAddress);
@@ -226,7 +229,7 @@ sal_Bool SAL_CALL
     ScAccessibleCellBase::setCurrentValue( const uno::Any& aNumber )
     throw (uno::RuntimeException)
 {
-     ::osl::MutexGuard aGuard (maMutex);
+     ScUnoGuard();
     double fValue;
     sal_Bool bResult(sal_False);
     if((aNumber >>= fValue) && mpDoc && mpDoc->GetDocumentShell())
@@ -269,7 +272,7 @@ uno::Any SAL_CALL
 
     //=====  XServiceInfo  ====================================================
 
-::rtl::OUString SAL_CALL ScAccessibleCellBase::getImplementationName (void)
+::rtl::OUString SAL_CALL ScAccessibleCellBase::getImplementationName(void)
         throw (uno::RuntimeException)
 {
     return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("ScAccessibleCellBase"));
@@ -277,10 +280,10 @@ uno::Any SAL_CALL
 
     //=====  XTypeProvider  ===================================================
 
-uno::Sequence< uno::Type> SAL_CALL ScAccessibleCellBase::getTypes (void)
+uno::Sequence< uno::Type> SAL_CALL ScAccessibleCellBase::getTypes(void)
         throw (uno::RuntimeException)
 {
-    ::osl::MutexGuard aGuard (maMutex);
+    ScUnoGuard();
     uno::Sequence< uno::Type>
         aTypeSequence = ScAccessibleContextBase::getTypes();
     sal_Int32 nOldSize(aTypeSequence.getLength());

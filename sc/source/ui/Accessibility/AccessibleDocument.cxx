@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocument.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sab $ $Date: 2002-02-20 13:49:21 $
+ *  last change: $Author: sab $ $Date: 2002-02-25 11:46:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,9 @@
 #endif
 #ifndef SC_DRWLAYER_HXX
 #include "drwlayer.hxx"
+#endif
+#ifndef SC_UNOGUARD_HXX
+#include "unoguard.hxx"
 #endif
 
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
@@ -198,7 +201,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleDocument::getAccessibleAt(
         const awt::Point& rPoint )
         throw (uno::RuntimeException)
 {
-    ::osl::MutexGuard aGuard (maMutex);
+    ScUnoGuard();
     uno::Reference<XAccessible> xAccessible = NULL;
     SdrPage* pDrawPage = GetDrawPage();
     if (pDrawPage)
@@ -213,7 +216,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleDocument::getAccessibleAt(
 void SAL_CALL ScAccessibleDocument::grabFocus(  )
         throw (uno::RuntimeException)
 {
-    ::osl::MutexGuard aGuard (maMutex);
+    ScUnoGuard();
     if (getAccessibleParent().is())
     {
         uno::Reference<XAccessibleComponent> xAccessibleComponent(getAccessibleParent()->getAccessibleContext(), uno::UNO_QUERY);
@@ -235,10 +238,10 @@ void SAL_CALL ScAccessibleDocument::grabFocus(  )
 
     /// Return the number of currently visible children.
 long SAL_CALL
-    ScAccessibleDocument::getAccessibleChildCount (void)
+    ScAccessibleDocument::getAccessibleChildCount(void)
     throw (uno::RuntimeException)
 {
-    ::osl::MutexGuard aGuard (maMutex);
+    ScUnoGuard();
     sal_Int32 nShapes (0);
     SdrPage* pDrawPage = GetDrawPage();
     if (pDrawPage)
@@ -256,11 +259,11 @@ long SAL_CALL
 
     /// Return the specified child or NULL if index is invalid.
 uno::Reference<XAccessible> SAL_CALL
-    ScAccessibleDocument::getAccessibleChild (long nIndex)
-    throw (uno::RuntimeException/*,
-        lang::IndexOutOfBoundsException*/)
+    ScAccessibleDocument::getAccessibleChild(long nIndex)
+    throw (uno::RuntimeException,
+        lang::IndexOutOfBoundsException)
 {
-    ::osl::MutexGuard aGuard (maMutex);
+    ScUnoGuard();
     uno::Reference<XAccessible> xAccessible;// = GetChild(nIndex);
     if (!xAccessible.is())
     {
@@ -280,10 +283,10 @@ uno::Reference<XAccessible> SAL_CALL
 
     /// Return the set of current states.
 uno::Reference<XAccessibleStateSet> SAL_CALL
-    ScAccessibleDocument::getAccessibleStateSet (void)
+    ScAccessibleDocument::getAccessibleStateSet(void)
     throw (uno::RuntimeException)
 {
-    ::osl::MutexGuard aGuard (maMutex);
+    ScUnoGuard();
     uno::Reference<XAccessibleStateSet> xParentStates;
     if (getAccessibleParent().is())
     {
@@ -307,14 +310,14 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
     //=====  XServiceInfo  ====================================================
 
 ::rtl::OUString SAL_CALL
-    ScAccessibleDocument::getImplementationName (void)
+    ScAccessibleDocument::getImplementationName(void)
     throw (uno::RuntimeException)
 {
     return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("ScAccessibleDocument"));
 }
 
 uno::Sequence< ::rtl::OUString> SAL_CALL
-    ScAccessibleDocument::getSupportedServiceNames (void)
+    ScAccessibleDocument::getSupportedServiceNames(void)
         throw (uno::RuntimeException)
 {
     uno::Sequence< ::rtl::OUString > aSequence = ScAccessibleContextBase::getSupportedServiceNames();
@@ -330,17 +333,17 @@ uno::Sequence< ::rtl::OUString> SAL_CALL
     //=====  internal  ========================================================
 
 ::rtl::OUString SAL_CALL
-    ScAccessibleDocument::createAccessibleDescription (void)
+    ScAccessibleDocument::createAccessibleDescription(void)
     throw (uno::RuntimeException)
 {
     return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM ("This is a view of a Spreadsheet Document."));
 }
 
 ::rtl::OUString SAL_CALL
-    ScAccessibleDocument::createAccessibleName (void)
+    ScAccessibleDocument::createAccessibleName(void)
     throw (uno::RuntimeException)
 {
-    ::osl::MutexGuard aGuard (maMutex);
+    ScUnoGuard();
     rtl::OUString sName(RTL_CONSTASCII_USTRINGPARAM ("Spreadsheet Document View "));
     sal_Int32 nNumber(sal_Int32(meSplitPos) + 1);
     sName += rtl::OUString::valueOf(nNumber);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocumentPagePreview.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sab $ $Date: 2002-02-20 13:50:58 $
+ *  last change: $Author: sab $ $Date: 2002-02-25 11:45:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,85 +81,62 @@ public:
 
      virtual void SetDefunc();
 
-   //=====  SfxListener  =====================================================
+   ///=====  SfxListener  =====================================================
 
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
 
-    //=====  XAccessibleComponent  ============================================
+    ///=====  XAccessibleComponent  ============================================
 
-    /** Returns the Accessible child that is rendered under the given point.
-
-        @param aPoint
-            Coordinates of the test point for which to find the Accessible
-            child.
-
-        @return
-            If there is one child which is rendered so that its bounding box
-            contains the test point then a reference to that object is
-            returned.  If there is more than one child which satisfies that
-            condition then a reference to that one is returned that is
-            painted on top of the others.  If no there is no child which is
-            rendered at the test point an empty reference is returned.
-    */
     virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible >
         SAL_CALL getAccessibleAt(
         const ::com::sun::star::awt::Point& rPoint )
         throw (::com::sun::star::uno::RuntimeException);
 
-    /** Grabs the focus to this object.
-
-        <p>If this object can not accept the focus,
-        i.e. <member>isFocusTraversable</member> returns <FALSE/> for this
-        object then nothing happens.  Otherwise the object will attempt to
-        take the focus.  Nothing happens if that fails, otherwise the object
-        has the focus.  This method is called <code>requestFocus</code> in
-        the Java Accessibility API 1.4.</p>
-    */
     virtual void SAL_CALL grabFocus(  )
         throw (::com::sun::star::uno::RuntimeException);
 
-    //=====  XAccessibleContext  ==============================================
+    ///=====  XAccessibleContext  ==============================================
 
     /// Return the number of currently visible children.
     virtual long SAL_CALL
-        getAccessibleChildCount (void)
+        getAccessibleChildCount(void)
         throw (::com::sun::star::uno::RuntimeException);
 
     /// Return the specified child or NULL if index is invalid.
     virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible> SAL_CALL
-        getAccessibleChild (long nIndex)
-        throw (::com::sun::star::uno::RuntimeException/*,
-                ::com::sun::star::lang::IndexOutOfBoundsException*/);
+        getAccessibleChild(long nIndex)
+        throw (::com::sun::star::uno::RuntimeException,
+                ::com::sun::star::lang::IndexOutOfBoundsException);
 
     /// Return the set of current states.
     virtual ::com::sun::star::uno::Reference<
             ::drafts::com::sun::star::accessibility::XAccessibleStateSet> SAL_CALL
-        getAccessibleStateSet (void)
+        getAccessibleStateSet(void)
         throw (::com::sun::star::uno::RuntimeException);
 
-    //=====  XServiceInfo  ====================================================
+    ///=====  XServiceInfo  ====================================================
 
     /** Returns an identifier for the implementation of this object.
     */
     virtual ::rtl::OUString SAL_CALL
-        getImplementationName (void)
+        getImplementationName(void)
         throw (::com::sun::star::uno::RuntimeException);
 
     /** Returns a list of all supported services.
     */
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString> SAL_CALL
-        getSupportedServiceNames (void)
+        getSupportedServiceNames(void)
         throw (::com::sun::star::uno::RuntimeException);
 
 protected:
     /// Return this object's description.
     virtual ::rtl::OUString SAL_CALL
-        createAccessibleDescription (void)
+        createAccessibleDescription(void)
         throw (::com::sun::star::uno::RuntimeException);
 
     /// Return the object's current name.
     virtual ::rtl::OUString SAL_CALL
-        createAccessibleName (void)
+        createAccessibleName(void)
         throw (::com::sun::star::uno::RuntimeException);
 
     /// Return the object's current bounding box relative to the desktop.

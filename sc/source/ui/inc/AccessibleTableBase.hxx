@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTableBase.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sab $ $Date: 2002-02-20 13:50:58 $
+ *  last change: $Author: sab $ $Date: 2002-02-25 11:45:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,18 +86,18 @@ class ScAccessibleTableBase
 {
 public:
     //=====  internal  ========================================================
-    ScAccessibleTableBase (
+    ScAccessibleTableBase(
         const ::com::sun::star::uno::Reference<
         ::drafts::com::sun::star::accessibility::XAccessible>& rxParent,
         ScDocument* pDoc,
         const ScRange& rRange);
 protected:
-    virtual ~ScAccessibleTableBase ();
+    virtual ~ScAccessibleTableBase();
 public:
 
     virtual void SetDefunc();
 
-    //=====  XInterface  ======================================================
+    ///=====  XInterface  ======================================================
 
     virtual ::com::sun::star::uno::Any SAL_CALL queryInterface(
                     const ::com::sun::star::uno::Type & rType )
@@ -106,16 +106,16 @@ public:
     /** Increase the reference count.
     */
     virtual void SAL_CALL
-                acquire (void)
+                acquire(void)
                     throw ();
 
     /** Decrease the reference count.
     */
     virtual void SAL_CALL
-                release (void)
+                release(void)
                     throw ();
 
-    //=====  XAccessibleTable  ================================================
+    ///=====  XAccessibleTable  ================================================
 
     /// Returns the number of rows in the table.
     virtual sal_Int32 SAL_CALL
@@ -201,7 +201,7 @@ public:
                 isAccessibleSelected( sal_Int32 nRow, sal_Int32 nColumn )
                     throw (::com::sun::star::uno::RuntimeException);
 
-    //=====  XAccessibleExtendedTable  ========================================
+    ///=====  XAccessibleExtendedTable  ========================================
 
     /// Returns the index of the cell on the given position.
     virtual sal_Int32 SAL_CALL
@@ -223,55 +223,55 @@ public:
     /// Return the number of currently visible children.
     // is overloaded to calculate this on demand
     virtual sal_Int32 SAL_CALL
-        getAccessibleChildCount (void)
+        getAccessibleChildCount(void)
                     throw (::com::sun::star::uno::RuntimeException);
 
     /// Return the specified child or NULL if index is invalid.
     // is overloaded to calculate this on demand
     virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible> SAL_CALL
-        getAccessibleChild (sal_Int32 nIndex)
+        getAccessibleChild(sal_Int32 nIndex)
         throw (::com::sun::star::uno::RuntimeException,
                 ::com::sun::star::lang::IndexOutOfBoundsException);
 
 protected:
     /// Return this object's description.
     virtual ::rtl::OUString SAL_CALL
-        createAccessibleDescription (void)
+        createAccessibleDescription(void)
         throw (::com::sun::star::uno::RuntimeException);
 
     /// Return the object's current name.
     virtual ::rtl::OUString SAL_CALL
-        createAccessibleName (void)
+        createAccessibleName(void)
         throw (::com::sun::star::uno::RuntimeException);
 
 public:
     /// Return NULL to indicate that an empty relation set.
     virtual ::com::sun::star::uno::Reference<
             ::drafts::com::sun::star::accessibility::XAccessibleRelationSet> SAL_CALL
-        getAccessibleRelationSet (void)
+        getAccessibleRelationSet(void)
         throw (::com::sun::star::uno::RuntimeException);
 
     /// Return the set of current states.
     // perhaps sometimes to be implemented
     virtual ::com::sun::star::uno::Reference<
             ::drafts::com::sun::star::accessibility::XAccessibleStateSet> SAL_CALL
-        getAccessibleStateSet (void)
+        getAccessibleStateSet(void)
         throw (::com::sun::star::uno::RuntimeException);
 
-    //=====  XServiceInfo  ====================================================
+    ///=====  XServiceInfo  ====================================================
 
     /** Returns an identifier for the implementation of this object.
     */
     virtual ::rtl::OUString SAL_CALL
-        getImplementationName (void)
+        getImplementationName(void)
         throw (::com::sun::star::uno::RuntimeException);
 
-    //=====  XTypeProvider  ===================================================
+    ///=====  XTypeProvider  ===================================================
 
     /** Returns a sequence of all supported interfaces.
     */
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> SAL_CALL
-        getTypes (void)
+        getTypes(void)
         throw (::com::sun::star::uno::RuntimeException);
 
 protected:
