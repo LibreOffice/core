@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.src,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: kz $ $Date: 2002-08-05 20:10:57 $
+ *  last change: $Author: kz $ $Date: 2002-08-15 20:31:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -981,14 +981,14 @@ String STR_SVT_NEWDOC_HELP
     Text[ french ] = "Click here to create new documents.";
     Text[ spanish ] = "Click here to create new documents.";
     Text[ finnish ] = "Click here to create new documents.";
-    Text[ italian ] = "Click here to create new documents.";
+    Text[ italian ] = "Cliccate il simbolo per creare nuovi documenti.";
     Text[ danish ] = "Click here to create new documents.";
     Text[ swedish ] = "Click here to create new documents.";
     Text[ polish ] = "Click here to create new documents.";
-    Text[ japanese ] = "Click here to create new documents.";
-    Text[ korean ] = "Click here to create new documents.";
+    Text[ japanese ] = "ここをクリックすると、新しいドキュメントが作成できます。";
+    Text[ korean ] = "새 문서를 만들기 위해 여기를 클릭해주십시오.";
     Text[ chinese_simplified ] = "Click here to create new documents.";
-    Text[ chinese_traditional ] = "Click here to create new documents.";
+    Text[ chinese_traditional ] = "您在此能夠建立新的文件。";
     Text[ turkish ] = "Click here to create new documents.";
     Text[ arabic ] = "Click here to create new documents.";
 };
@@ -1003,14 +1003,14 @@ String STR_SVT_MYDOCS_HELP
     Text[ french ] = "Contains your letters, reports and other documents";
     Text[ spanish ] = "Contains your letters, reports and other documents";
     Text[ finnish ] = "Contains your letters, reports and other documents";
-    Text[ italian ] = "Contains your letters, reports and other documents";
+    Text[ italian ] = "Contiene lettere, rapporti e altri documenti.";
     Text[ danish ] = "Contains your letters, reports and other documents";
     Text[ swedish ] = "Contains your letters, reports and other documents";
     Text[ polish ] = "Contains your letters, reports and other documents";
-    Text[ japanese ] = "Contains your letters, reports and other documents";
-    Text[ korean ] = "Contains your letters, reports and other documents";
+    Text[ japanese ] = "レター、レポート、その他のドキュメントが含まれています";
+    Text[ korean ] = "사용자의 편지, 보고서 및 기타 문서 등을 포함합니다.";
     Text[ chinese_simplified ] = "Contains your letters, reports and other documents";
-    Text[ chinese_traditional ] = "Contains your letters, reports and other documents";
+    Text[ chinese_traditional ] = "存放您的信件、報表及其它文件";
     Text[ turkish ] = "Contains your letters, reports and other documents";
     Text[ arabic ] = "Contains your letters, reports and other documents";
 };
@@ -1025,14 +1025,14 @@ String STR_SVT_TEMPLATES_HELP
     Text[ french ] = "Contains templates for creating new documents";
     Text[ spanish ] = "Contains templates for creating new documents";
     Text[ finnish ] = "Contains templates for creating new documents";
-    Text[ italian ] = "Contains templates for creating new documents";
+    Text[ italian ] = "Contiene modelli per creare nuovi documenti.";
     Text[ danish ] = "Contains templates for creating new documents";
     Text[ swedish ] = "Contains templates for creating new documents";
     Text[ polish ] = "Contains templates for creating new documents";
-    Text[ japanese ] = "Contains templates for creating new documents";
-    Text[ korean ] = "Contains templates for creating new documents";
+    Text[ japanese ] = "新しいドキュメントが作成できるテンプレートが含まれています";
+    Text[ korean ] = "새 문서 만들기용 템플릿을 포함합니다.";
     Text[ chinese_simplified ] = "Contains templates for creating new documents";
-    Text[ chinese_traditional ] = "Contains templates for creating new documents";
+    Text[ chinese_traditional ] = "存放用來新增文件的樣式文件";
     Text[ turkish ] = "Contains templates for creating new documents";
     Text[ arabic ] = "Contains templates for creating new documents";
 };
@@ -1047,14 +1047,14 @@ String STR_SVT_SAMPLES_HELP
     Text[ french ] = "Contains a selection of sample letters, reports and other documents";
     Text[ spanish ] = "Contains a selection of sample letters, reports and other documents";
     Text[ finnish ] = "Contains a selection of sample letters, reports and other documents";
-    Text[ italian ] = "Contains a selection of sample letters, reports and other documents";
+    Text[ italian ] = "Contiene una selezione di documenti di esempio per lettere, rapporti e altro.";
     Text[ danish ] = "Contains a selection of sample letters, reports and other documents";
     Text[ swedish ] = "Contains a selection of sample letters, reports and other documents";
     Text[ polish ] = "Contains a selection of sample letters, reports and other documents";
-    Text[ japanese ] = "Contains a selection of sample letters, reports and other documents";
-    Text[ korean ] = "Contains a selection of sample letters, reports and other documents";
+    Text[ japanese ] = "レター、レポート、その他のドキュメントに使えるサンプル文書が含まれています";
+    Text[ korean ] = "샘플 편지, 보고서 및 기타 문서 등을 포함합니다.";
     Text[ chinese_simplified ] = "Contains a selection of sample letters, reports and other documents";
-    Text[ chinese_traditional ] = "Contains a selection of sample letters, reports and other documents";
+    Text[ chinese_traditional ] = "存放一套信件、報表及其它文件的範例文件";
     Text[ turkish ] = "Contains a selection of sample letters, reports and other documents";
     Text[ arabic ] = "Contains a selection of sample letters, reports and other documents";
 };
