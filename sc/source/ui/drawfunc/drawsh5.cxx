@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawsh5.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-03 13:28:34 $
+ *  last change: $Author: hr $ $Date: 2004-08-05 10:41:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -679,7 +679,7 @@ void ScDrawShell::ExecFormatPaintbrush( SfxRequest& rReq )
             bLock = static_cast<const SfxBoolItem&>(pArgs->Get(SID_FORMATPAINTBRUSH)).GetValue();
 
         ScDrawView* pDrawView = pViewData->GetScDrawView();
-        if ( pDrawView && pDrawView->HasMarked() )
+        if ( pDrawView && pDrawView->AreObjectsMarked() )
         {
             BOOL bOnlyHardAttr = TRUE;
             SfxItemSet* pItemSet = new SfxItemSet( pDrawView->GetAttrFromMarked(bOnlyHardAttr) );
@@ -691,7 +691,7 @@ void ScDrawShell::ExecFormatPaintbrush( SfxRequest& rReq )
 void ScDrawShell::StateFormatPaintbrush( SfxItemSet& rSet )
 {
     ScDrawView* pDrawView = pViewData->GetScDrawView();
-    BOOL bSelection = pDrawView && pDrawView->HasMarked();
+    BOOL bSelection = pDrawView && pDrawView->AreObjectsMarked();
     BOOL bHasPaintBrush = pViewData->GetView()->HasPaintBrush();
 
     if ( !bHasPaintBrush && !bSelection )
