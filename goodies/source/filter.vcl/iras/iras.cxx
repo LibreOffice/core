@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iras.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sj $ $Date: 2001-03-08 15:50:31 $
+ *  last change: $Author: hr $ $Date: 2004-09-09 11:34:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,10 +110,10 @@ public:
 //=================== Methoden von RASReader ==============================
 
 RASReader::RASReader() :
-    mpAcc       ( NULL ),
     mbStatus    ( TRUE ),
-    mbPalette   ( FALSE ),
-    mnRepCount  ( 0 )
+    mpAcc       ( NULL ),
+    mnRepCount  ( 0 ),
+    mbPalette   ( FALSE )
 {
 }
 
@@ -274,7 +274,8 @@ BOOL RASReader::ImplReadHeader()
 BOOL RASReader::ImplReadBody()
 {
     ULONG   x, y;
-    BYTE    nDat, nRed, nGreen, nBlue;
+    BYTE    nDat = 0;
+    BYTE    nRed, nGreen, nBlue;
     switch ( mnDstBitsPerPix )
     {
         case 1 :
@@ -411,8 +412,9 @@ extern "C" BOOL GraphicImport(SvStream & rStream, Graphic & rGraphic,
 }
 
 //================== ein bischen Muell fuer Windows ==========================
-
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #ifdef WIN
 
