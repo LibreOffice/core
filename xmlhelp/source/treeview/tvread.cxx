@@ -1,4 +1,7 @@
 #include <string.h>
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
+#endif
 #ifndef _VOS_DIAGNOSE_HXX_
 #include <vos/diagnose.hxx>
 #endif
@@ -109,13 +112,22 @@ namespace treeview {
             if( ! targetURL.getLength() )
             {
                 const TVDom* p = this;
-                while( ! p->application.getLength() )
+                sal_Int32 len;
+                while( ! ( len = p->application.getLength() ) )
                     p = p->parent;
 
-                targetURL = ( rtl::OUString::createFromAscii( "vnd.sun.star.help://" ) +
-                              p->application +
-                              rtl::OUString::createFromAscii( "/" ) +
-                              id );
+                rtl::OUStringBuffer strBuff( 22 + len + id.getLength() );
+                strBuff.appendAscii(
+                    "vnd.sun.star.help://"
+                ).append(
+                    p->application
+                ).appendAscii(
+                    "/"
+                ).append(
+                    id
+                );
+
+                targetURL = strBuff.makeStringAndClear();
             }
 
             return targetURL;
