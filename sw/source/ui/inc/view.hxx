@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 10:14:30 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 13:09:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -465,8 +465,6 @@ public:
 
     // Shell sofort wechseln ->  fuer GetSelectionObject
     void        StopShellTimer();
-    // hier wird bei Bedarf SelectShell gerufen (getSelection)
-    void        PrepareGetSelection();
 
     inline SwWrtShell&      GetWrtShell   () const { return *pWrtShell; }
     inline SwWrtShell*      GetWrtShellPtr() const { return  pWrtShell; }
