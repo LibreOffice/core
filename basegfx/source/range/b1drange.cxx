@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b1drange.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2003-10-28 11:26:36 $
+ *  last change: $Author: aw $ $Date: 2003-10-31 10:13:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,7 @@
  ************************************************************************/
 
 #ifndef _BGFX_RANGE_B1DRANGE_HXX
-#include <basegfx/inc/range/b1drange.hxx>
+#include <basegfx/range/b1drange.hxx>
 #endif
 
 namespace basegfx

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dhompoint.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2003-10-28 11:26:13 $
+ *  last change: $Author: aw $ $Date: 2003-10-31 10:13:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,15 +60,15 @@
  ************************************************************************/
 
 #ifndef _BGFX_POINT_B2DHOMPOINT_HXX
-#include <basegfx/inc/point/b2dhompoint.hxx>
+#include <basegfx/point/b2dhompoint.hxx>
 #endif
 
 #ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
-#include <basegfx/inc/matrix/b2dhommatrix.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
 #endif
 
 #ifndef _BGFX_NUMERIC_FTOOLS_HXX
-#include <basegfx/inc/numeric/ftools.hxx>
+#include <basegfx/numeric/ftools.hxx>
 #endif
 
 namespace basegfx

@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: b3dhompoint.cxx,v $
+ *  $RCSfile: b2dquadraticbezier.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: aw $ $Date: 2003-10-31 10:13:57 $
+ *  last change: $Author: aw $ $Date: 2003-10-31 10:12:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,23 +59,54 @@
  *
  ************************************************************************/
 
-#ifndef _BGFX_POINT_B3DHOMPOINT_HXX
-#include <basegfx/point/b3dhompoint.hxx>
+#ifndef _BGFX_CURVE_B2DQUADRATICBEZIER_HXX
+#define _BGFX_CURVE_B2DQUADRATICBEZIER_HXX
+
+#ifndef _BGFX_POINT_B2DPOINT_HXX
+#include <basegfx/point/b2dpoint.hxx>
 #endif
+
+//////////////////////////////////////////////////////////////////////////////
 
 namespace basegfx
 {
-    namespace point
+    namespace curve
     {
-        void B3DHomPoint::implHomogenize()
+        class B2DQuadraticBezier
         {
-            const double fFactor(1.0 / mfW);
-            maTuple.setX(maTuple.getX() * fFactor);
-            maTuple.setY(maTuple.getY() * fFactor);
-            maTuple.setZ(maTuple.getZ() * fFactor);
-            mfW = 1.0;
-        }
-    } // end of namespace point
+            point::B2DPoint                                 maStartPoint;
+            point::B2DPoint                                 maEndPoint;
+            point::B2DPoint                                 maControlPoint;
+
+        public:
+            B2DQuadraticBezier();
+            B2DQuadraticBezier(const B2DQuadraticBezier& rBezier);
+            B2DQuadraticBezier(const point::B2DPoint& rStart, const point::B2DPoint& rEnd);
+            B2DQuadraticBezier(const point::B2DPoint& rStart,
+                const point::B2DPoint& rControlPoint, const point::B2DPoint& rEnd);
+            ~B2DQuadraticBezier();
+
+            // assignment operator
+            B2DQuadraticBezier& operator=(const B2DQuadraticBezier& rBezier);
+
+            // compare operators
+            bool operator==(const B2DQuadraticBezier& rBezier) const;
+            bool operator!=(const B2DQuadraticBezier& rBezier) const;
+
+            // test if control point is placed on the edge
+            bool isBezier() const;
+
+            // data interface
+            point::B2DPoint getStartPoint() const { return maStartPoint; }
+            void setStartPoint(const point::B2DPoint& rValue) { maStartPoint = rValue; }
+
+            point::B2DPoint getEndPoint() const { return maEndPoint; }
+            void setEndPoint(const point::B2DPoint& rValue) { maEndPoint = rValue; }
+
+            point::B2DPoint getControlPoint() const { return maControlPoint; }
+            void setControlPoint(const point::B2DPoint& rValue) { maControlPoint = rValue; }
+        };
+    } // end of namespace curve
 } // end of namespace basegfx
 
-// eof
+#endif //   _BGFX_CURVE_B2DQUADRATICBEZIER_HXX

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3dhommatrix.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2003-10-28 11:25:15 $
+ *  last change: $Author: aw $ $Date: 2003-10-31 10:13:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,7 @@
  ************************************************************************/
 
 #ifndef _BGFX_MATRIX_B3DHOMMATRIX_HXX
-#include <basegfx/inc/matrix/b3dhommatrix.hxx>
+#include <basegfx/matrix/b3dhommatrix.hxx>
 #endif
 
 #ifndef _HOMMATRIX_TEMPLATE_HXX
@@ -68,7 +68,7 @@
 #endif
 
 #ifndef _BGFX_VECTOR_B3DVECTOR_HXX
-#include <basegfx/inc/vector/b3dvector.hxx>
+#include <basegfx/vector/b3dvector.hxx>
 #endif
 
 class Impl3DHomMatrix : public ImplHomMatrixTemplate< 4 >

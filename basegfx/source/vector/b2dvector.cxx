@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dvector.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2003-10-28 11:26:56 $
+ *  last change: $Author: aw $ $Date: 2003-10-31 10:14:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,15 +60,15 @@
  ************************************************************************/
 
 #ifndef _BGFX_VECTOR_B2DVECTOR_HXX
-#include <basegfx/inc/vector/b2dvector.hxx>
+#include <basegfx/vector/b2dvector.hxx>
 #endif
 
 #ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
-#include <basegfx/inc/matrix/b2dhommatrix.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
 #endif
 
 #ifndef _BGFX_NUMERIC_FTOOLS_HXX
-#include <basegfx/inc/numeric/ftools.hxx>
+#include <basegfx/numeric/ftools.hxx>
 #endif
 
 namespace basegfx

@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: b3dhompoint.cxx,v $
+ *  $RCSfile: b1drange.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: aw $ $Date: 2003-10-31 10:13:57 $
+ *  last change: $Author: aw $ $Date: 2003-10-31 10:13:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,23 +59,87 @@
  *
  ************************************************************************/
 
-#ifndef _BGFX_POINT_B3DHOMPOINT_HXX
-#include <basegfx/point/b3dhompoint.hxx>
+#ifndef _BGFX_RANGE_B1DRANGE_HXX
+#define _BGFX_RANGE_B1DRANGE_HXX
+
+#ifndef _BDRANGE_HXX
+#include <BDRange.hxx>
 #endif
 
 namespace basegfx
 {
-    namespace point
+    namespace range
     {
-        void B3DHomPoint::implHomogenize()
+        class B1DRange
         {
-            const double fFactor(1.0 / mfW);
-            maTuple.setX(maTuple.getX() * fFactor);
-            maTuple.setY(maTuple.getY() * fFactor);
-            maTuple.setZ(maTuple.getZ() * fFactor);
-            mfW = 1.0;
-        }
-    } // end of namespace point
+            BDRange                                 maRange;
+
+        public:
+            B1DRange()
+            {
+            }
+
+            B1DRange(double fStartValue)
+            :   maRange(fStartValue)
+            {
+            }
+
+            B1DRange(const B1DRange& rRange)
+            :   maRange(rRange.maRange)
+            {
+            }
+
+            bool isEmpty() const
+            {
+                return maRange.isEmpty();
+            }
+
+            void reset()
+            {
+                maRange.reset();
+            }
+
+            void operator=(const B1DRange& rRange)
+            {
+                maRange = rRange.maRange;
+            }
+
+            double getMinimum() const
+            {
+                return maRange.getMinimum();
+            }
+
+            double getMaximum() const
+            {
+                return maRange.getMaximum();
+            }
+
+            double getRange() const
+            {
+                return maRange.getRange();
+            }
+
+            bool isInside(double fValue) const
+            {
+                return maRange.isInside(fValue);
+            }
+
+            bool isInside(const B1DRange& rRange) const
+            {
+                return maRange.isInside(rRange.maRange);
+            }
+
+            void expand(double fValue)
+            {
+                maRange.expand(fValue);
+            }
+
+            void expand(const B1DRange& rRange)
+            {
+                maRange.expand(rRange.maRange);
+            }
+        };
+    } // end of namespace range
 } // end of namespace basegfx
 
-// eof
+#endif //   _BGFX_RANGE_B1DRANGE_HXX

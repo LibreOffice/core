@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dpolypolygon.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2003-10-28 11:23:55 $
+ *  last change: $Author: aw $ $Date: 2003-10-31 10:13:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,11 +60,11 @@
  ************************************************************************/
 
 #ifndef _BGFX_POLYGON_B2DPOLYPOLYGON_HXX
-#include <basegfx/inc/polygon/b2dpolypolygon.hxx>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
 #endif
 
 #ifndef _BGFX_POLYGON_B2DPOLYGON_HXX
-#include <basegfx/inc/polygon/b2dpolygon.hxx>
+#include <basegfx/polygon/b2dpolygon.hxx>
 #endif
 
 #ifndef _TOOLS_DEBUG_HXX

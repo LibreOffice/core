@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: b3dhompoint.cxx,v $
+ *  $RCSfile: b2dcubicbezier.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: aw $ $Date: 2003-10-31 10:13:57 $
+ *  last change: $Author: aw $ $Date: 2003-10-31 10:12:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,23 +59,61 @@
  *
  ************************************************************************/
 
-#ifndef _BGFX_POINT_B3DHOMPOINT_HXX
-#include <basegfx/point/b3dhompoint.hxx>
+#ifndef _BGFX_CURVE_B2DCUBICBEZIER_HXX
+#define _BGFX_CURVE_B2DCUBICBEZIER_HXX
+
+#ifndef _BGFX_POINT_B2DPOINT_HXX
+#include <basegfx/point/b2dpoint.hxx>
 #endif
+
+//////////////////////////////////////////////////////////////////////////////
 
 namespace basegfx
 {
-    namespace point
+    namespace curve
     {
-        void B3DHomPoint::implHomogenize()
+        class B2DCubicBezier
         {
-            const double fFactor(1.0 / mfW);
-            maTuple.setX(maTuple.getX() * fFactor);
-            maTuple.setY(maTuple.getY() * fFactor);
-            maTuple.setZ(maTuple.getZ() * fFactor);
-            mfW = 1.0;
-        }
-    } // end of namespace point
+            point::B2DPoint                                 maStartPoint;
+            point::B2DPoint                                 maEndPoint;
+            point::B2DPoint                                 maControlPointA;
+            point::B2DPoint                                 maControlPointB;
+
+        public:
+            B2DCubicBezier();
+            B2DCubicBezier(const B2DCubicBezier& rBezier);
+            B2DCubicBezier(const point::B2DPoint& rStart, const point::B2DPoint& rEnd);
+            B2DCubicBezier(const point::B2DPoint& rStart, const point::B2DPoint& rControlPointA,
+                const point::B2DPoint& rControlPointB, const point::B2DPoint& rEnd);
+            ~B2DCubicBezier();
+
+            // assignment operator
+            B2DCubicBezier& operator=(const B2DCubicBezier& rBezier);
+
+            // compare operators
+            bool operator==(const B2DCubicBezier& rBezier) const;
+            bool operator!=(const B2DCubicBezier& rBezier) const;
+
+            // test if vectors are used
+            bool isBezier() const;
+
+            // test if contained bezier is trivial and reset vectors accordingly
+            void testAndSolveTrivialBezier();
+
+            // data interface
+            point::B2DPoint getStartPoint() const { return maStartPoint; }
+            void setStartPoint(const point::B2DPoint& rValue) { maStartPoint = rValue; }
+
+            point::B2DPoint getEndPoint() const { return maEndPoint; }
+            void setEndPoint(const point::B2DPoint& rValue) { maEndPoint = rValue; }
+
+            point::B2DPoint getControlPointA() const { return maControlPointA; }
+            void setControlPointA(const point::B2DPoint& rValue) { maControlPointA = rValue; }
+
+            point::B2DPoint getControlPointB() const { return maControlPointB; }
+            void setControlPointB(const point::B2DPoint& rValue) { maControlPointB = rValue; }
+        };
+    } // end of namespace curve
 } // end of namespace basegfx
 
-// eof
+#endif //   _BGFX_CURVE_B2DCUBICBEZIER_HXX

@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: b3dhompoint.cxx,v $
+ *  $RCSfile: b3dpoint.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: aw $ $Date: 2003-10-31 10:13:57 $
+ *  last change: $Author: aw $ $Date: 2003-10-31 10:12:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,23 +59,92 @@
  *
  ************************************************************************/
 
-#ifndef _BGFX_POINT_B3DHOMPOINT_HXX
-#include <basegfx/point/b3dhompoint.hxx>
+#ifndef _BGFX_POINT_B3DPOINT_HXX
+#define _BGFX_POINT_B3DPOINT_HXX
+
+#ifndef _BGFX_TUPLE_B3DTUPLE_HXX
+#include <basegfx/tuple/b3dtuple.hxx>
 #endif
 
 namespace basegfx
 {
     namespace point
     {
-        void B3DHomPoint::implHomogenize()
+        /** Base Point class with three double values
+
+            This class derives all operators and common handling for
+            a 3D data class from B3DTuple. All necessary extensions
+            which are special for points will be added here.
+
+            @see B3DTuple
+        */
+        class B3DPoint : public tuple::B3DTuple
         {
-            const double fFactor(1.0 / mfW);
-            maTuple.setX(maTuple.getX() * fFactor);
-            maTuple.setY(maTuple.getY() * fFactor);
-            maTuple.setZ(maTuple.getZ() * fFactor);
-            mfW = 1.0;
-        }
+        public:
+            /** Create a 3D Point
+
+                @param fVal
+                This parameter is used to initialize the coordinate
+                part of the 3D Point.
+            */
+            B3DPoint(double fVal = 0.0)
+            :   B3DTuple(fVal)
+            {}
+
+            /** Create a 3D Point
+
+                @param fX
+                This parameter is used to initialize the X-coordinate
+                of the 3D Point.
+
+                @param fY
+                This parameter is used to initialize the Y-coordinate
+                of the 3D Point.
+
+                @param fZ
+                This parameter is used to initialize the Z-coordinate
+                of the 3D Point.
+            */
+            B3DPoint(double fX, double fY, double fZ)
+            :   B3DTuple(fX, fY, fZ)
+            {}
+
+            /** Create a copy of a 3D Point
+
+                @param rVec
+                The 3D Point which will be copied.
+            */
+            B3DPoint(const B3DPoint& rVec)
+            :   B3DTuple(rVec)
+            {}
+
+            /** constructor with tuple to allow copy-constructing
+                from B3DTuple-based classes
+            */
+            B3DPoint(const B3DTuple& rTuple)
+            :   B3DTuple(rTuple)
+            {}
+
+            ~B3DPoint()
+            {}
+
+            /** assignment operator to allow assigning the results
+                of B3DTuple calculations
+            */
+            B3DPoint& operator=( const B3DTuple& rVec )
+            {
+                mfX = rVec.getX();
+                mfY = rVec.getY();
+                mfZ = rVec.getZ();
+                return *this;
+            }
+
+            static const B3DPoint& getEmptyPoint()
+            {
+                return (const B3DPoint&) tuple::B3DTuple::getEmptyTuple();
+            }
+        };
     } // end of namespace point
 } // end of namespace basegfx
 
-// eof
+#endif //  _BGFX_POINT_B3DPOINT_HXX

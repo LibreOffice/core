@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dhommatrix.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2003-10-28 11:25:15 $
+ *  last change: $Author: aw $ $Date: 2003-10-31 10:13:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,7 @@
  ************************************************************************/
 
 #ifndef _BGFX_MATRIX_B2DHOMMATRIX_HXX
-#include <basegfx/inc/matrix/b2dhommatrix.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
 #endif
 
 #ifndef _HOMMATRIX_TEMPLATE_HXX
@@ -68,15 +68,15 @@
 #endif
 
 #ifndef _BGFX_MATRIX_B3DHOMMATRIX_HXX
-#include <basegfx/inc/matrix/b3dhommatrix.hxx>
+#include <basegfx/matrix/b3dhommatrix.hxx>
 #endif
 
 #ifndef _BGFX_TUPLE_B3DTUPLE_HXX
-#include <basegfx/inc/tuple/b3dtuple.hxx>
+#include <basegfx/tuple/b3dtuple.hxx>
 #endif
 
 #ifndef _BGFX_TUPLE_B2DTUPLE_HXX
-#include <basegfx/inc/tuple/b2dtuple.hxx>
+#include <basegfx/tuple/b2dtuple.hxx>
 #endif
 
 class Impl2DHomMatrix : public ImplHomMatrixTemplate< 3 >

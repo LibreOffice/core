@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b3dpoint.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: aw $ $Date: 2003-10-28 11:26:14 $
+ *  last change: $Author: aw $ $Date: 2003-10-31 10:13:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,7 @@
  ************************************************************************/
 
 #ifndef _BGFX_POINT_B3DPOINT_HXX
-#include <basegfx/inc/point/b3dpoint.hxx>
+#include <basegfx/point/b3dpoint.hxx>
 #endif
 
 namespace basegfx

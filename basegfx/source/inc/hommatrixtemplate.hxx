@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hommatrixtemplate.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: aw $ $Date: 2003-10-28 11:23:00 $
+ *  last change: $Author: aw $ $Date: 2003-10-31 10:13:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@
 #endif
 
 #ifndef _BGFX_NUMERIC_FTOOLS_HXX
-#include <basegfx/inc/numeric/ftools.hxx>
+#include <basegfx/numeric/ftools.hxx>
 #endif
 
 #include <math.h>
