@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smres.src,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: rt $ $Date: 2002-02-22 21:12:29 $
+ *  last change: $Author: kz $ $Date: 2002-02-26 14:24:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5155,7 +5155,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_traditional ] = "ε°ζ–Ό";
                 Text[ arabic ] = "Γήα γδ";
                 Text[ greek ] = "είναι μικρότερο από";
-                Text[ korean ] = "λ³΄λ‹¤ μ‘λ‹¤";
+                Text[ korean ] = "λ―Έλ§";
                 Text[ turkish ] = "Kόηόktόr";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "es menor que";
@@ -5183,7 +5183,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_traditional ] = "ε¤§ζ–Ό";
                 Text[ arabic ] = "ΓίΘΡ γδ";
                 Text[ greek ] = "είναι μεγαλύτερο από";
-                Text[ korean ] = "λ³΄λ‹¤ ν¬λ‹¤";
+                Text[ korean ] = "μ΄κ³Ό";
                 Text[ turkish ] = "Bόyόktόr";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "es mayor que";
@@ -5301,7 +5301,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_traditional ] = "ε°ζ–Όζ–η­‰ζ–Ό";
                 Text[ arabic ] = "ΓΥΫΡ γδ Γζ νΣΗζν";
                 Text[ greek ] = "είναι μικρότερο ή ίσο με (λοξά)";
-                Text[ korean ] = "μ‘κ±°λ‚ κ°™λ‹¤";
+                Text[ korean ] = "μ΄ν•";
                 Text[ turkish ] = "Kόηόktόr ya da eώittir";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "es menor que o igual a (oblicuo)";
@@ -5421,7 +5421,7 @@ FloatingWindow RID_TOOLBOXWINDOW
                 Text[ chinese_traditional ] = "ε°ζ–Όζ–η­‰ζ–Ό";
                 Text[ arabic ] = "ΓΥΫΡ γδ Γζ νΣΗζν";
                 Text[ greek ] = "είναι μικρότερο ή ίσο με";
-                Text[ korean ] = "μ‘κ±°λ‚ κ°™λ‹¤";
+                Text[ korean ] = "μ΄ν•";
                 Text[ turkish ] = "Kόηόktόr ya da eώittir";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "es menor que o igual a";
