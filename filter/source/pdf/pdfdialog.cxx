@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfdialog.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 11:17:17 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:59:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,12 +68,6 @@
 #ifndef _COM_SUN_STAR_VIEW_XRENDERABLE_HPP_
 #include <com/sun/star/view/XRenderable.hpp>
 #endif
-#ifndef _COM_SUN_STAR_FRAME_XCONTROLLER_HPP_
-#include <com/sun/star/frame/XController.hpp>
-#endif
-#ifndef _COM_SUN_STAR_VIEW_XSELECTIONSUPPLIER_HPP_
-#include <com/sun/star/view/XSelectionSupplier.hpp>
-#endif
 
 using namespace ::rtl;
 using namespace ::vcl;
@@ -81,8 +75,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::frame;
-using namespace ::com::sun::star::view;
 
 // -----------------------
 // - PDFDialog functions -
@@ -213,25 +205,7 @@ Dialog* PDFDialog::createDialog( Window* pParent )
 
     if( mpResMgr && mxSrcDoc.is() )
     {
-        Any aSelection;
-
-        try
-        {
-            Reference< XController > xController( Reference< XModel >( mxSrcDoc, UNO_QUERY )->getCurrentController() );
-
-            if( xController.is() )
-            {
-                Reference< XSelectionSupplier > xView( xController, UNO_QUERY );
-
-                if( xView.is() )
-                    xView->getSelection() >>= aSelection;
-            }
-        }
-        catch( RuntimeException )
-        {
-        }
-
-        ImpPDFDialog* pDlg = new ImpPDFDialog( pParent, *mpResMgr, maFilterData, aSelection );
+        ImpPDFDialog* pDlg = new ImpPDFDialog( pParent, *mpResMgr, maFilterData, mxSrcDoc );
         pRet = pDlg;
     }
 
