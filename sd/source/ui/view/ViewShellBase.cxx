@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ViewShellBase.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-28 15:43:27 $
+ *  last change: $Author: vg $ $Date: 2005-02-24 15:08:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,9 @@
 #include "ViewTabBar.hxx"
 #ifndef SD_DRAW_CONTROLLER_HXX
 #include "DrawController.hxx"
+#endif
+#ifndef SD_PRINT_MANAGER_HXX
+#include "PrintManager.hxx"
 #endif
 #ifndef _SFXEVENT_HXX
 #include <sfx2/event.hxx>
@@ -247,7 +250,7 @@ ViewShellBase::ViewShellBase (
       mpPaneManager (NULL),
       mpDocShell (NULL),
       mpDocument (NULL),
-      maPrintManager (*this),
+      mpPrintManager (new PrintManager(*this)),
       mpFormShellManager(NULL),
       mpEventMultiplexer(NULL)
 {
@@ -309,6 +312,7 @@ ViewShellBase::~ViewShellBase (void)
 
     mpViewShellManager.reset();
     mpPaneManager.reset();
+    mpPrintManager.reset();
 
     SetWindow(NULL);
 }
@@ -623,7 +627,7 @@ ErrCode ViewShellBase::DoVerb (long nVerb)
 
 SfxPrinter* ViewShellBase::GetPrinter (BOOL bCreate)
 {
-    return maPrintManager.GetPrinter (bCreate);
+    return mpPrintManager->GetPrinter (bCreate);
 }
 
 
@@ -634,7 +638,7 @@ USHORT ViewShellBase::SetPrinter (
 
     USHORT nDiffFlags)
 {
-    return maPrintManager.SetPrinter (pNewPrinter, nDiffFlags);
+    return mpPrintManager->SetPrinter (pNewPrinter, nDiffFlags);
 }
 
 
@@ -642,7 +646,7 @@ USHORT ViewShellBase::SetPrinter (
 
 PrintDialog* ViewShellBase::CreatePrintDialog (::Window *pParent)
 {
-    return maPrintManager.CreatePrintDialog (pParent);
+    return mpPrintManager->CreatePrintDialog (pParent);
 }
 
 
@@ -652,7 +656,7 @@ SfxTabPage*  ViewShellBase::CreatePrintOptionsPage(
     ::Window *pParent,
     const SfxItemSet &rOptions)
 {
-    return maPrintManager.CreatePrintOptionsPage (pParent, rOptions);
+    return mpPrintManager->CreatePrintOptionsPage (pParent, rOptions);
 }
 
 
@@ -660,7 +664,7 @@ SfxTabPage*  ViewShellBase::CreatePrintOptionsPage(
 
 USHORT  ViewShellBase::Print(SfxProgress& rProgress, PrintDialog* pDlg)
 {
-    return maPrintManager.Print (rProgress, pDlg);
+    return mpPrintManager->Print (rProgress, pDlg);
 }
 
 
@@ -671,7 +675,7 @@ ErrCode ViewShellBase::DoPrint (
     PrintDialog* pPrintDialog,
     BOOL bSilent)
 {
-    return maPrintManager.DoPrint (pPrinter, pPrintDialog, bSilent);
+    return mpPrintManager->DoPrint (pPrinter, pPrintDialog, bSilent);
 }
 
 
@@ -682,8 +686,10 @@ USHORT ViewShellBase::SetPrinterOptDlg (
     USHORT nDiffFlags,
     BOOL bShowDialog)
 {
-   return maPrintManager.SetPrinterOptDlg (
-       pNewPrinter, nDiffFlags, bShowDialog);
+   return mpPrintManager->SetPrinterOptDlg (
+       pNewPrinter,
+       nDiffFlags,
+       bShowDialog);
 }
 
 
@@ -692,8 +698,11 @@ USHORT ViewShellBase::SetPrinterOptDlg (
 void ViewShellBase::PreparePrint (PrintDialog* pPrintDialog)
 {
     SfxViewShell::PreparePrint (pPrintDialog);
-    return maPrintManager.PreparePrint (pPrintDialog);
+    return mpPrintManager->PreparePrint (pPrintDialog);
 }
+
+
+
 
 void ViewShellBase::UIActivating( SfxInPlaceClient* pClient )
 {
@@ -805,9 +814,9 @@ void ViewShellBase::Execute (SfxRequest& rRequest)
             }
 
             // Set the visibility of the right pane.
-            GetViewFrame()->SetChildWindow (
-                ::sd::RightPaneChildWindow::GetChildWindowId(),
-                bShowToolPanel,
+            GetPaneManager().RequestViewShellChange(
+                PaneManager::PT_RIGHT,
+                ViewShell::ST_TASK_PANE,
                 PaneManager::CM_SYNCHRONOUS);
 
             // Now we can call the tool pane to make the specified panel
