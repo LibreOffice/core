@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sectfrm.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ama $ $Date: 2002-06-19 14:33:21 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 11:12:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,8 +114,8 @@ public:
 
     inline const SwSectionFrm *GetFollow() const;
     inline       SwSectionFrm *GetFollow();
-    inline const SwSectionFrm *FindMaster() const;
-    inline       SwSectionFrm *FindMaster();
+    SwSectionFrm* FindMaster() const;
+
                  SwCntntFrm *FindLastCntnt( BYTE nMode = 0 );
     inline const SwCntntFrm *FindLastCntnt( BYTE nMode = 0 ) const;
     inline SwSection* GetSection() { return pSection; }
@@ -134,8 +134,6 @@ public:
     void DelEmpty( BOOL bRemove );  // wie Cut(), Follow-Verkettung wird aber mitgepflegt
     BOOL IsToIgnore() const         // Keine Groesse, kein Inhalt, muss ignoriert werden
     { return !Frm().Height() && !ContainsCntnt(); }
-    SwSectionFrm *FindSectionMaster();
-    SwSectionFrm *FindFirstSectionMaster();
     SwFtnContFrm* ContainsFtnCont( const SwFtnContFrm* pCont = NULL ) const;
     BOOL Growable() const;
     SwTwips _Shrink( SwTwips, SZPTR BOOL bTst );
@@ -179,16 +177,6 @@ inline SwSectionFrm *SwSectionFrm::GetFollow()
 {
     return (SwSectionFrm*)SwFlowFrm::GetFollow();
 }
-
-inline const SwSectionFrm *SwSectionFrm::FindMaster() const
-{
-    return (const SwSectionFrm*)SwFlowFrm::FindMaster();
-}
-inline SwSectionFrm *SwSectionFrm::FindMaster()
-{
-    return (SwSectionFrm*)SwFlowFrm::FindMaster();
-}
-
 inline const SwCntntFrm *SwSectionFrm::FindLastCntnt( BYTE nMode ) const
 {
     return ((SwSectionFrm*)this)->FindLastCntnt( nMode );
