@@ -8299,3 +8299,6 @@ _TI3?AVWrappedTargetRuntimeException@lang@star@sun@com@@
 ?lcl_translateBasic2Uno@?%O:\SRC641\src\sfx2\source\doc\objmisc.cxx2777011972@@YAXABVSbxVariableRef@@PAX@Z
 ??1?$Reference@VXStatusIndicator@task@star@sun@com@@@uno@star@sun@com@@QAE@XZ
 ?lcl_translateBasic2Uno@?%O:\SRC641\src\sfx2\source\doc\objmisc.cxx2363331086@@YAXABVSbxVariableRef@@PAX@Z
+?lcl_translateBasic2Uno@?%O:\SRX641\src\sfx2\source\doc\objmisc.cxx2057226100@@YAXABVSbxVariableRef@@PAX@Z
+?Move@SfxFloatingWindow@@MAEXXZ
+?Move@SfxModelessDialog@@MAEXXZ
