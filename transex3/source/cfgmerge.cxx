@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgmerge.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: nf $ $Date: 2003-07-14 08:39:00 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 12:40:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,7 +218,7 @@ int InitCfgExport( char *pOutput )
 {
     // instanciate Export
     ByteString sOutput( pOutput );
-
+    Export::InitLanguages();
     pParser = new CfgParser();
 
     if ( bMergeMode )
@@ -312,6 +312,7 @@ int GetError()
 void CfgStackData::FillInFallbacks()
 /*****************************************************************************/
 {
+/*
     for ( USHORT i = 0; i < LANGUAGES; i++ ) {
         if (( i != GERMAN_INDEX ) && ( i != ENGLISH_INDEX )) {
             USHORT nFallbackIndex =
@@ -333,7 +334,7 @@ void CfgStackData::FillInFallbacks()
                 }
             }
         }
-    }
+    }*/
 }
 
 //
@@ -404,7 +405,8 @@ BOOL CfgParser::IsTokenClosed( const ByteString &rToken )
 /*****************************************************************************/
 void CfgParser::WorkOnText(
     ByteString &rText,
-    USHORT nLangIndex,
+//  USHORT nLangIndex,
+    ByteString nLangIndex,
     const ByteString &rResTyp
 )
 /*****************************************************************************/
@@ -419,8 +421,8 @@ void CfgParser::AddText(
 )
 /*****************************************************************************/
 {
-    USHORT nLang = Export::GetLangByIsoLang( rIsoLang );
-    if ( nLang != 0xFFFF ) {
+    //USHORT nLang = Export::GetLangByIsoLang( rIsoLang );
+    //if ( nLang != 0xFFFF ) {
         USHORT nTextLen = 0;
         while ( rText.Len() != nTextLen ) {
             nTextLen = rText.Len();
@@ -429,17 +431,19 @@ void CfgParser::AddText(
             rText.SearchAndReplaceAll( "\t", " " );
             rText.SearchAndReplaceAll( "  ", " " );
         }
-        USHORT nLangIndex = Export::GetLangIndex( nLang );
+        //USHORT nLangIndex = Export::GetLangIndex( nLang );
         pStackData->sResTyp = rResTyp;
-        WorkOnText( rText, nLangIndex, rResTyp );
-         pStackData->sText[ nLangIndex ] = rText;
-    }
-    else if ( rIsoLang != NO_TRANSLATE_ISO ) {
+//      WorkOnText( rText, nLangIndex, rResTyp );
+        WorkOnText( rText, rIsoLang, rResTyp );
+//      pStackData->sText[ nLangIndex ] = rText;
+        pStackData->sText[ rIsoLang ] = rText;
+}
+/*  else if ( rIsoLang != NO_TRANSLATE_ISO ) {
         ByteString sError( "Unknown language code: " );
         sError += rIsoLang;
         Error( sError );
-    }
-}
+    }*/
+
 
 /*****************************************************************************/
 void CfgParser::WorkOnRessourceEnd()
@@ -499,9 +503,14 @@ int CfgParser::ExecuteAnalyzedToken( int nToken, char *pToken )
                     case CFG_TEXT_START: {
                         if ( sCurrentResTyp != sTokenName ) {
                             WorkOnRessourceEnd();
-                            for ( ULONG i = 0; i < LANGUAGES; i++ )
+                            ByteString sCur;
+                            for( long int n = 0; n < aLanguages.size(); n++ ){
+                                sCur = aLanguages[ n ];
+                                pStackData->sText[ sCur ] = ByteString("");
+                            }
+                            /*                          for ( ULONG i = 0; i < LANGUAGES; i++ )
                                 if ( LANGUAGE_ALLOWED( i ))
-                                    pStackData->sText[ i ] = "";
+                                    pStackData->sText[ i ] = "";  */
                         }
                         sCurrentResTyp = sTokenName;
 
@@ -532,9 +541,14 @@ int CfgParser::ExecuteAnalyzedToken( int nToken, char *pToken )
             else if ( sTokenName == "label" ) {
                 if ( sCurrentResTyp != sTokenName ) {
                     WorkOnRessourceEnd();
-                    for ( ULONG i = 0; i < LANGUAGES; i++ )
+                    ByteString sCur;
+                    for( long int n = 0; n < aLanguages.size(); n++ ){
+                        sCur = aLanguages[ n ];
+                        pStackData->sText[ sCur ] = ByteString("");
+                    }
+                    /*                  for ( ULONG i = 0; i < LANGUAGES; i++ )
                         if ( LANGUAGE_ALLOWED( i ))
-                            pStackData->sText[ i ] = "";
+                            pStackData->sText[ i ] = ""; */
                 }
                 sCurrentResTyp = sTokenName;
             }
@@ -669,6 +683,8 @@ CfgExport::CfgExport(
                 sPrj( rProject ),
                 sPath( rFilePath )
 {
+    Export::InitLanguages( false );
+    aLanguages = Export::GetLanguages();
 }
 
 /*****************************************************************************/
@@ -682,7 +698,7 @@ void CfgExport::WorkOnRessourceEnd()
 /*****************************************************************************/
 {
     if ( pOutputStream && bLocalize ) {
-        if (( pStackData->sText[ GERMAN_INDEX ].Len() &&
+/*      if (( pStackData->sText[ GERMAN_INDEX ].Len() &&
             ( pStackData->sText[ ENGLISH_US_INDEX ].Len() ||
                 pStackData->sText[ ENGLISH_INDEX ].Len())) ||
             ( bForce &&
@@ -690,15 +706,25 @@ void CfgExport::WorkOnRessourceEnd()
                     pStackData->sText[ ENGLISH_INDEX ].Len() ||
                     pStackData->sText[ ENGLISH_US_INDEX ].Len())
                 )
-            )
+            )*/
+    if (( pStackData->sText[ ByteString("de") ].Len() &&
+        ( pStackData->sText[ ByteString("en-US") ].Len()
+        )) ||
+            ( bForce &&
+                ( pStackData->sText[ ByteString("de") ].Len() ||
+                    pStackData->sText[ ByteString("én-US") ].Len() )))
         {
             pStackData->FillInFallbacks();
 
-            ByteString sFallback = pStackData->sText[ GERMAN_INDEX ];
-            if ( pStackData->sText[ ENGLISH_US_INDEX ].Len())
+            //ByteString sFallback = pStackData->sText[ GERMAN_INDEX ];
+            ByteString sFallback = pStackData->sText[ ByteString("de") ];
+            /*if ( pStackData->sText[ ENGLISH_US_INDEX ].Len())
                 sFallback = pStackData->sText[ ENGLISH_US_INDEX ];
             else if ( pStackData->sText[ ENGLISH_INDEX ].Len())
-                sFallback = pStackData->sText[ ENGLISH_INDEX ];
+                sFallback = pStackData->sText[ ENGLISH_INDEX ];*/
+
+            if ( pStackData->sText[ ByteString("en-US") ].Len())
+                sFallback = pStackData->sText[ ByteString("en-US") ];
 
             ByteString sLocalId = pStackData->sIdentifier;
             ByteString sGroupId;
@@ -712,9 +738,13 @@ void CfgExport::WorkOnRessourceEnd()
 
             ByteString sTimeStamp( Export::GetTimeStamp());
 
-            for ( ULONG i = 0; i < LANGUAGES; i++ ) {
-                if ( LANGUAGE_ALLOWED( i )) {
-                    ByteString sText = pStackData->sText[ i ];
+            ByteString sCur;
+            for( long int n = 0; n < aLanguages.size(); n++ ){
+                sCur = aLanguages[ n ];
+
+//          for ( ULONG i = 0; i < LANGUAGES; i++ ) {
+//              if ( LANGUAGE_ALLOWED( i )) {
+                    ByteString sText = pStackData->sText[ sCur ];
                     if ( !sText.Len())
                         sText = sFallback;
 
@@ -724,16 +754,17 @@ void CfgExport::WorkOnRessourceEnd()
                     sOutput += pStackData->sResTyp; sOutput += "\t";
                     sOutput += sGroupId; sOutput += "\t";
                     sOutput += sLocalId; sOutput += "\t\t\t0\t";
-                    sOutput += ByteString::CreateFromInt64( Export::LangId[ i ]);
+//                  sOutput += ByteString::CreateFromInt64( Export::LangId[ i ]);
+                    sOutput += sCur;
                     sOutput += "\t";
                     sOutput += sText; sOutput += "\t\t\t\t";
                     sOutput += sTimeStamp;
 
-                    if ( bUTF8 )
-                        sOutput = UTF8Converter::ConvertToUTF8( sOutput, Export::GetCharSet( Export::LangId[ i ] ));
+                    //if ( bUTF8 )
+                    //  sOutput = UTF8Converter::ConvertToUTF8( sOutput, Export::GetCharSet( Export::LangId[ i ] ));
 
                     pOutputStream->WriteLine( sOutput );
-                }
+            //  }
             }
         }
     }
@@ -748,9 +779,9 @@ void CfgExport::WorkOnText(
 /*****************************************************************************/
 {
     Export::UnquotHTML( rText );
-    USHORT nLangId = Export::LangId[ nLangIndex ];
-    rText = UTF8Converter::ConvertFromUTF8(
-        rText, Export::GetCharSet( nLangId ));
+    //USHORT nLangId = Export::LangId[ nLangIndex ];
+    //rText =   UTF8Converter::ConvertFromUTF8(
+    //  rText, Export::GetCharSet( nLangId ));
 }
 
 
@@ -769,9 +800,16 @@ CfgMerge::CfgMerge(
                 bGerman( FALSE ),
                 bEnglish( FALSE )
 {
-    if ( rMergeSource.Len())
+    if ( rMergeSource.Len()){
         pMergeDataFile = new MergeDataFile(
-            rMergeSource, bErrorLog, RTL_TEXTENCODING_MS_1252, bUTF8 );
+            rMergeSource, sInputFileName  , bErrorLog, RTL_TEXTENCODING_MS_1252, bUTF8 );
+        if( Export::sLanguages.EqualsIgnoreCaseAscii("ALL") ){
+            Export::SetLanguages( pMergeDataFile->GetLanguages() );
+            aLanguages = pMergeDataFile->GetLanguages();
+        }
+        else aLanguages = Export::GetLanguages();
+    }else
+        aLanguages = Export::GetLanguages();
 }
 
 /*****************************************************************************/
@@ -785,11 +823,13 @@ CfgMerge::~CfgMerge()
 /*****************************************************************************/
 void CfgMerge::WorkOnText(
     ByteString &rText,
-    USHORT nLangIndex,
+    //USHORT nLangIndex,
+    ByteString nLangIndex,
     const ByteString &rResTyp
 )
 /*****************************************************************************/
 {
+
     if ( pMergeDataFile && bLocalize ) {
         if ( !pResData ) {
             ByteString sLocalId = pStackData->sIdentifier;
@@ -809,22 +849,30 @@ void CfgMerge::WorkOnText(
             pResData->sResTyp = pStackData->sResTyp;
         }
 
-        if ( nLangIndex == GERMAN_INDEX )
+/*      if ( nLangIndex == GERMAN_INDEX )
             bGerman = TRUE;
         if (( nLangIndex == ENGLISH_INDEX ) || ( nLangIndex == ENGLISH_US_INDEX ))
+            bEnglish = TRUE;
+*/
+        if ( nLangIndex.EqualsIgnoreCaseAscii("de") )
+            bGerman = TRUE;
+        if (( nLangIndex.EqualsIgnoreCaseAscii("en-US") ))
             bEnglish = TRUE;
 
         PFormEntrys *pEntrys = pMergeDataFile->GetPFormEntrys( pResData );
         if ( pEntrys ) {
             ByteString sContent;
-            if (( nLangIndex != GERMAN_INDEX ) &&
-                ( nLangIndex != ENGLISH_INDEX ) &&
+//          if (( nLangIndex != GERMAN_INDEX ) &&
+//              ( nLangIndex != ENGLISH_INDEX ) &&
+            if (( !nLangIndex.EqualsIgnoreCaseAscii("de")) &&
+                ( !nLangIndex.EqualsIgnoreCaseAscii("en-US") ) &&
+
                 ( pEntrys->GetText(
                     sContent, STRING_TYP_TEXT, nLangIndex )) &&
                 ( sContent != "-" ) && ( sContent.Len()))
             {
-                rText = UTF8Converter::ConvertToUTF8(
-                    sContent, Export::GetCharSet( Export::LangId[ nLangIndex ]));
+//              rText = UTF8Converter::ConvertToUTF8(
+//                  sContent, Export::GetCharSet( Export::LangId[ nLangIndex ]));
                 Export::QuotHTML( rText );
             }
         }
@@ -843,21 +891,31 @@ void CfgMerge::Output( const ByteString& rOutput )
 void CfgMerge::WorkOnRessourceEnd()
 /*****************************************************************************/
 {
+
     if ( pMergeDataFile && pResData && bLocalize && (( bGerman && bEnglish ) || bForce )) {
         PFormEntrys *pEntrys = pMergeDataFile->GetPFormEntrys( pResData );
         if ( pEntrys ) {
-            for ( ULONG nIndex = 0; nIndex < LANGUAGES; nIndex++ ) {
+            ByteString sCur;
+
+            for( long int n = 0; n < aLanguages.size(); n++ ){
+                sCur = aLanguages[ n ];
+
+//            for ( ULONG nIndex = 0; nIndex < LANGUAGES; nIndex++ ) {
                 ByteString sContent;
-                if (( nIndex != GERMAN_INDEX ) &&
+/*              if (( nIndex != GERMAN_INDEX ) &&
                     ( nIndex != ENGLISH_INDEX ) &&
-                    ( LANGUAGE_ALLOWED( nIndex )) &&
+                    ( LANGUAGE_ALLOWED( nIndex )) &&*/
+                if (( !sCur.EqualsIgnoreCaseAscii("de") ) &&
+                    ( !sCur.EqualsIgnoreCaseAscii("de") ) &&
+
                     ( pEntrys->GetText(
-                        sContent, STRING_TYP_TEXT, ( USHORT ) nIndex, TRUE )) &&
+                        sContent, STRING_TYP_TEXT, sCur , TRUE )) &&
                     ( sContent != "-" ) && ( sContent.Len()))
                 {
-                    ByteString sText = UTF8Converter::ConvertToUTF8(
-                        sContent, Export::GetCharSet( Export::LangId[ nIndex ]));
+/*                  ByteString sText = UTF8Converter::ConvertToUTF8(
+                        sContent, Export::GetCharSet( Export::LangId[ nIndex ]));*/
 
+                    ByteString sText = sContent;
                     Export::QuotHTML( sText );
 
                     ByteString sAdditionalLine( "\t" );
@@ -872,7 +930,8 @@ void CfgMerge::WorkOnRessourceEnd()
 
                     ByteString sReplace = sTemp.GetToken( 0, '\"' );
                     sReplace += "\"";
-                    sReplace += Export::GetIsoLangByIndex(( USHORT ) nIndex );
+                    //sReplace += Export::GetIsoLangByIndex(( USHORT ) nIndex );
+                    sReplace += sCur;
                     sReplace += "\"";
 
                     sTextTag.SearchAndReplace( sSearch, sReplace );
