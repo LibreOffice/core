@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: th $ $Date: 2000-11-24 18:54:59 $
+ *  last change: $Author: th $ $Date: 2000-11-30 12:46:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3529,29 +3529,34 @@ static BOOL ImplHandleIMECompositionInput( SalFrame* pFrame,
         // Only when we get new composition data, we must send this event
         if ( (nTextLen > 0) || !(lParam & GCS_RESULTSTR) )
         {
-            if ( pFrame->maFrameData.mbCandidateMode )
-                aEvt.mnCursorFlags |= SAL_EXTTEXTINPUT_CURSOR_INVISIBLE;
-            if ( lParam & CS_NOMOVECARET )
-                aEvt.mnCursorFlags |= SAL_EXTTEXTINPUT_CURSOR_OVERWRITE;
-
-            // Because Cursor-Position and DeltaStart never updated
-            // from the korean input engine, we must handle this here
-            if ( lParam & CS_INSERTCHAR )
-            {
-                aEvt.mnCursorPos = nTextLen;
-                if ( aEvt.mnCursorPos && (lParam & CS_NOMOVECARET) )
-                    aEvt.mnCursorPos--;
-            }
-            else
-                aEvt.mnCursorPos = LOWORD( ImmGetCompositionStringW( hIMC, GCS_CURSORPOS, 0, 0 ) );
-
-            pFrame->maFrameData.mpProc( pFrame->maFrameData.mpInst, pFrame,
-                                        SALEVENT_EXTTEXTINPUT, (void*)&aEvt );
             // End the mode, if the last character is deleted
-            if ( !nTextLen )
+            if ( !nTextLen && !pFrame->maFrameData.mbCandidateMode )
             {
                 pFrame->maFrameData.mpProc( pFrame->maFrameData.mpInst, pFrame,
+                                            SALEVENT_EXTTEXTINPUT, (void*)&aEvt );
+                pFrame->maFrameData.mpProc( pFrame->maFrameData.mpInst, pFrame,
                                             SALEVENT_ENDEXTTEXTINPUT, (void*)NULL );
+            }
+            else
+            {
+                // Because Cursor-Position and DeltaStart never updated
+                // from the korean input engine, we must handle this here
+                if ( lParam & CS_INSERTCHAR )
+                {
+                    aEvt.mnCursorPos = nTextLen;
+                    if ( aEvt.mnCursorPos && (lParam & CS_NOMOVECARET) )
+                        aEvt.mnCursorPos--;
+                }
+                else
+                    aEvt.mnCursorPos = LOWORD( ImmGetCompositionStringW( hIMC, GCS_CURSORPOS, 0, 0 ) );
+
+                if ( pFrame->maFrameData.mbCandidateMode )
+                    aEvt.mnCursorFlags |= SAL_EXTTEXTINPUT_CURSOR_INVISIBLE;
+                if ( lParam & CS_NOMOVECARET )
+                    aEvt.mnCursorFlags |= SAL_EXTTEXTINPUT_CURSOR_OVERWRITE;
+
+                pFrame->maFrameData.mpProc( pFrame->maFrameData.mpInst, pFrame,
+                                            SALEVENT_EXTTEXTINPUT, (void*)&aEvt );
             }
             ImplUpdateIMECursorPos( pFrame, hIMC );
         }
