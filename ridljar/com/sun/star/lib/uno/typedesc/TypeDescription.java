@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TypeDescription.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kr $ $Date: 2001-04-17 15:01:37 $
+ *  last change: $Author: kr $ $Date: 2001-05-04 11:13:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ import com.sun.star.lib.uno.typeinfo.TypeInfo;
  * methods, which may be changed or moved in the furture, so please
  * do not use these methods.
  * <p>
- * @version     $Revision: 1.6 $ $ $Date: 2001-04-17 15:01:37 $
+ * @version     $Revision: 1.7 $ $ $Date: 2001-05-04 11:13:38 $
  * @author      Kay Ramme
  * @since       UDK2.0
  */
@@ -459,13 +459,14 @@ public class TypeDescription {
 
             // unrole any arrays
             int arrayNesting = 0;
-            while(zClass.isArray()) {
+            Class xClass = zClass;
+            while(xClass.isArray()) {
                 ++ arrayNesting;
 
-                zClass = zClass.getComponentType();
+                xClass = xClass.getComponentType();
             }
 
-            if(zClass.isInterface())
+            if(xClass.isInterface())
                 typeDescription = TypeDescription.getTypeDescription(zClass);
 
             else {
@@ -481,6 +482,7 @@ public class TypeDescription {
                 }
             }
           }
+
 
         return typeDescription;
     }
@@ -553,7 +555,7 @@ public class TypeDescription {
     protected TypeDescription _componentType;
 
 
-    private void initByClass(Class zClass) {
+    private void _initByClass(Class zClass) {
         __cyclicTypes.put(zClass.getName(), this);
 
         _class = zClass;
@@ -628,7 +630,7 @@ public class TypeDescription {
     }
 
     private TypeDescription(Class zClass) {
-        initByClass(zClass);
+        _initByClass(zClass);
     }
 
     private TypeDescription(String typeName) throws ClassNotFoundException {
@@ -646,7 +648,7 @@ public class TypeDescription {
             __cyclicTypes.remove(typeName);
         }
         else {
-            initByClass(Class.forName(typeName));
+            _initByClass(Class.forName(typeName));
         }
 
     }
@@ -692,9 +694,11 @@ public class TypeDescription {
             _offset = 3;
         }
         else {
-            _superType._initMethodTypeInfos();
+            if(_superType != null) {
+                _superType._initMethodTypeInfos();
 
-            superOffset = _superType._offset;
+                superOffset = _superType._offset;
+            }
 
             TypeInfo typeInfos[] = __getTypeInfos(_class);
             Method methods[] = _class.getMethods();
@@ -855,7 +859,7 @@ public class TypeDescription {
      * <p>
      * @return the <code>TypeDescription</code>
      */
-    public TypeDescription getComponentType() throws com.sun.star.uno.Exception {
+    public TypeDescription getComponentType() {
         TypeDescription componentTypeDescription = null;
 
         Class componentClass = getZClass().getComponentType();
