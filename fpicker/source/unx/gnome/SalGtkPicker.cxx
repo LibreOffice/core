@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SalGtkPicker.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2004-12-16 11:13:31 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 13:25:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,7 +146,4 @@ void SAL_CALL SalGtkPicker::implsetTitle( const rtl::OUString& aTitle ) throw( u
 
     ::rtl::OString aWindowTitle = OUStringToOString( aTitle, RTL_TEXTENCODING_UTF8 );
     gtk_window_set_title( GTK_WINDOW( m_pDialog ), aWindowTitle.getStr() );
-
-    fprintf(stderr, "title is %s\n", aWindowTitle.getStr());
-
 }
