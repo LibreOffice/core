@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews2.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-19 14:57:34 $
+ *  last change: $Author: aw $ $Date: 2001-02-20 15:09:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -239,9 +239,6 @@ void SdDrawViewShell::FuTemporary(SfxRequest& rReq)
                     {
                         SfxItemSet aAttr(pDoc->GetPool());
                         pObj = rMarkList.GetMark(i)->GetObj();
-                        // Mergen: TRUE, OnlyHardAttr: FALSE
-
-//-/                        pObj->TakeAttributes(aAttr, TRUE, FALSE);
                         aAttr.Put(pObj->GetItemSet());
 
                         INT32 nActLineWidth = ((const XLineWidthItem&)aAttr.Get(XATTR_LINEWIDTH)).GetValue();
@@ -271,7 +268,6 @@ void SdDrawViewShell::FuTemporary(SfxRequest& rReq)
                             }
 
                             if(bSetItemSet)
-//-/                                pObj->NbcSetAttributes(aAttr, FALSE);
                                 pObj->SetItemSet(aAttr);
                         }
                     }
@@ -288,9 +284,6 @@ void SdDrawViewShell::FuTemporary(SfxRequest& rReq)
                     {
                         SfxItemSet aAttr(pDoc->GetPool());
                         pObj = rMarkList.GetMark(i)->GetObj();
-                        // Mergen: TRUE, OnlyHardAttr: FALSE
-
-//-/                        pObj->TakeAttributes(aAttr, TRUE, FALSE);
                         aAttr.Put(pObj->GetItemSet());
 
                         const XFillStyleItem& rFillStyle =
@@ -311,7 +304,6 @@ void SdDrawViewShell::FuTemporary(SfxRequest& rReq)
                             aAttr.Put(XFillStyleItem(XFILL_SOLID));
                             aAttr.Put(XFillColorItem(String(), COL_WHITE));
 
-//-/                            pObj->NbcSetAttributes(aAttr, FALSE);
                             pObj->SetItemSet(aAttr);
                         }
                     }
@@ -1171,10 +1163,7 @@ void SdDrawViewShell::FuTemporary(SfxRequest& rReq)
                     if( pPresObjList->GetPos( pObj ) != LIST_ENTRY_NOTFOUND )
                     {
                         SfxItemSet* pSet = new SfxItemSet( pDoc->GetPool(), SDRATTR_TEXT_MINFRAMEHEIGHT, SDRATTR_TEXT_AUTOGROWHEIGHT, 0 );
-
-//-/                        pObj->TakeAttributes( *pSet, TRUE, TRUE );
                         pSet->Put(pObj->GetItemSet());
-
                         pAttrList->Insert( pSet, LIST_APPEND );
                         pAttrList->Insert( pObj->GetUserCall(), LIST_APPEND );
                     }
@@ -1221,22 +1210,12 @@ void SdDrawViewShell::FuTemporary(SfxRequest& rReq)
 
                         if ( pSet && pSet->GetItemState( SDRATTR_TEXT_MINFRAMEHEIGHT ) == SFX_ITEM_ON )
                         {
-                            SdrTextMinFrameHeightItem aMinHeight( (const SdrTextMinFrameHeightItem&) pSet->Get(SDRATTR_TEXT_MINFRAMEHEIGHT) );
-                            SfxItemSet aTempAttr( pDoc->GetPool(), SDRATTR_TEXT_MINFRAMEHEIGHT, SDRATTR_TEXT_MINFRAMEHEIGHT, 0 );
-                            aTempAttr.Put( aMinHeight );
-
-//-/                            pObj->NbcSetAttributes(aTempAttr, FALSE);
-                            pObj->SetItemSet(aTempAttr);
+                            pObj->SetItem(pSet->Get(SDRATTR_TEXT_MINFRAMEHEIGHT));
                         }
 
                         if ( pSet && pSet->GetItemState( SDRATTR_TEXT_AUTOGROWHEIGHT ) == SFX_ITEM_ON )
                         {
-                            SdrTextAutoGrowHeightItem aAutoGrowHeight( (const SdrTextAutoGrowHeightItem&) pSet->Get(SDRATTR_TEXT_AUTOGROWHEIGHT) );
-                            SfxItemSet aTempAttr( pDoc->GetPool(), SDRATTR_TEXT_AUTOGROWHEIGHT, SDRATTR_TEXT_AUTOGROWHEIGHT, 0 );
-                            aTempAttr.Put( aAutoGrowHeight );
-
-//-/                            pObj->NbcSetAttributes(aTempAttr, FALSE);
-                            pObj->SetItemSet(aTempAttr);
+                            pObj->SetItem(pSet->Get(SDRATTR_TEXT_AUTOGROWHEIGHT));
                         }
 
                         if( pUserCall )
