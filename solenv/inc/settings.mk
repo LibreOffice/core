@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.118 $
+#   $Revision: 1.119 $
 #
-#   last change: $Author: hjs $ $Date: 2002-07-17 12:04:16 $
+#   last change: $Author: hjs $ $Date: 2002-07-18 10:12:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -1241,16 +1241,8 @@ COMID=$(COM)
 .ENDIF "$(USE_JAVAVER)"!=""
 .ENDIF			# "$(SOLAR_JAVA)"=="TRUE"
 
-# --- Neues Environment erweitern ----------------------------------
+# --- extend new environment ----------------------------------
 CDEFS+= -DSUPD=$(UPD) -DBUILD=$(BUILD)
-
-.IF "$(SWEEPER)"!=""
-CDEFS+= -DSWEEPER
-.ENDIF
-
-.IF "$(T_FORCE)"!=""
-CDEFS+= -D$(T_FORCE)
-.ENDIF
 
 .IF "$(profile)"!=""
 CDEFS+= $(CDEFSPROF)
