@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtftntx.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-16 18:05:44 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 16:33:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,8 +97,9 @@ protected:
         : SfxEnumItem( nWhich, ePos ), nOffset( 0 )
     {}
     SwFmtFtnEndAtTxtEnd( const SwFmtFtnEndAtTxtEnd& rAttr )
-        : SfxEnumItem( rAttr ), nOffset( rAttr.nOffset ), aFmt( rAttr.aFmt ),
-        sPrefix( rAttr.sPrefix ), sSuffix( rAttr.sSuffix )
+        : SfxEnumItem( rAttr ), sPrefix( rAttr.sPrefix ),
+        sSuffix( rAttr.sSuffix ), aFmt( rAttr.aFmt ),
+        nOffset( rAttr.nOffset )
     {}
 
 public:
