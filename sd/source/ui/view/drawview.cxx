@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawview.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ka $ $Date: 2002-03-08 15:36:42 $
+ *  last change: $Author: cl $ $Date: 2002-04-12 12:23:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,8 @@
 #ifndef _SD_STLSHEET_HXX
 #include "stlsheet.hxx"
 #endif
+
+#include <svx/svdoutl.hxx>
 
 #include "glob.hrc"
 #include "strings.hrc"
@@ -810,6 +812,9 @@ void SdDrawView::PresPaint(const Region& rRegion)
 
         if( pPageView )
         {
+            SdrOutliner& rOutl=pDoc->GetDrawOutliner(NULL);
+            rOutl.SetBackgroundColor( pPageView->GetPage()->GetBackgroundColor() );
+
             const Link aPaintProcLink( LINK( this, SdDrawView, PaintProc ) );
 
             pWindow->Push( PUSH_CLIPREGION );

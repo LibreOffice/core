@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ka $ $Date: 2001-10-22 13:36:57 $
+ *  last change: $Author: cl $ $Date: 2002-04-12 12:24:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,6 +218,18 @@ void SdView::InitRedraw(OutputDevice* pOutDev, const Region& rReg)
     // ausfuehren ??
     if (nLockRedrawSmph == 0)
     {
+        SdrPageView* pPgView = GetPageViewPvNum(0);
+
+        if (pPgView)
+        {
+            SdPage* pPage = (SdPage*) pPgView->GetPage();
+            if( pPage )
+            {
+                SdrOutliner& rOutl=pDoc->GetDrawOutliner(NULL);
+                rOutl.SetBackgroundColor( pPage->GetBackgroundColor() );
+            }
+        }
+
         FmFormView::InitRedraw(pOutDev, rReg);
 
         USHORT nDemoKind =  SFX_APP()->GetDemoKind();
