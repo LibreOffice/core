@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgresid.hrc,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tbe $ $Date: 2001-08-17 13:55:42 $
+ *  last change: $Author: tbe $ $Date: 2001-09-17 11:23:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,14 @@
 #define RID_STR_CLASS_PROGRESSBAR           ( RID_DLG_START +  11 )
 #define RID_STR_CLASS_SCROLLBAR             ( RID_DLG_START +  12 )
 #define RID_STR_CLASS_FIXEDLINE             ( RID_DLG_START +  13 )
+#define RID_STR_CLASS_DATEFIELD             ( RID_DLG_START +  14 )
+#define RID_STR_CLASS_TIMEFIELD             ( RID_DLG_START +  15 )
+#define RID_STR_CLASS_NUMERICFIELD          ( RID_DLG_START +  16 )
+#define RID_STR_CLASS_CURRENCYFIELD         ( RID_DLG_START +  17 )
+#define RID_STR_CLASS_FORMATTEDFIELD        ( RID_DLG_START +  18 )
+#define RID_STR_CLASS_PATTERNFIELD          ( RID_DLG_START +  19 )
+#define RID_STR_CLASS_FILECONTROL           ( RID_DLG_START +  20 )
+
 
 // Property Browser Headline Id's -----------------------------------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idetemp.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tbe $ $Date: 2001-05-14 08:44:05 $
+ *  last change: $Author: tbe $ $Date: 2001-09-17 11:23:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,14 @@ enum SvxChooseControlEnum
     SVX_SNAP_IMAGECONTROL,
     SVX_SNAP_PROGRESSBAR,
     SVX_SNAP_HFIXEDLINE,
-    SVX_SNAP_VFIXEDLINE
+    SVX_SNAP_VFIXEDLINE,
+    SVX_SNAP_DATEFIELD,
+    SVX_SNAP_TIMEFIELD,
+    SVX_SNAP_NUMERICFIELD,
+    SVX_SNAP_CURRENCYFIELD,
+    SVX_SNAP_FORMATTEDFIELD,
+    SVX_SNAP_PATTERNFIELD,
+    SVX_SNAP_FILECONTROL
 };
 
 #define SvxChooseControlItem SfxAllEnumItem

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgedfac.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: tbe $ $Date: 2001-08-17 13:57:40 $
+ *  last change: $Author: tbe $ $Date: 2001-09-17 11:24:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,7 +131,7 @@ IMPL_LINK( DlgEdFactory, MakeObject, SdrObjFactory *, pObjFactory )
 
     if( (pObjFactory->nInventor == DlgInventor) &&
         (pObjFactory->nIdentifier >= OBJ_DLG_PUSHBUTTON) &&
-        (pObjFactory->nIdentifier <= OBJ_DLG_VFIXEDLINE)    )
+        (pObjFactory->nIdentifier <= OBJ_DLG_FILECONTROL)    )
     {
         switch( pObjFactory->nIdentifier )
         {
@@ -223,6 +223,27 @@ IMPL_LINK( DlgEdFactory, MakeObject, SdrObjFactory *, pObjFactory )
                  {
                  }
             }    break;
+            case OBJ_DLG_DATEFIELD:
+                 pObjFactory->pNewObj = new DlgEdObj( ::rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlDateFieldModel") , xDialogSFact );
+                 break;
+            case OBJ_DLG_TIMEFIELD:
+                 pObjFactory->pNewObj = new DlgEdObj( ::rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlTimeFieldModel") , xDialogSFact );
+                 break;
+            case OBJ_DLG_NUMERICFIELD:
+                 pObjFactory->pNewObj = new DlgEdObj( ::rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlNumericFieldModel") , xDialogSFact );
+                 break;
+            case OBJ_DLG_CURRENCYFIELD:
+                 pObjFactory->pNewObj = new DlgEdObj( ::rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlCurrencyFieldModel") , xDialogSFact );
+                 break;
+            case OBJ_DLG_FORMATTEDFIELD:
+                 pObjFactory->pNewObj = new DlgEdObj( ::rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlFormattedFieldModel") , xDialogSFact );
+                 break;
+            case OBJ_DLG_PATTERNFIELD:
+                 pObjFactory->pNewObj = new DlgEdObj( ::rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlPatternFieldModel") , xDialogSFact );
+                 break;
+            case OBJ_DLG_FILECONTROL:
+                 pObjFactory->pNewObj = new DlgEdObj( ::rtl::OUString::createFromAscii("com.sun.star.awt.UnoControlFileControlModel") , xDialogSFact );
+                 break;
         }
 
         DlgEdObj* pDlgEdObj = PTR_CAST(DlgEdObj, pObjFactory->pNewObj);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgedobj.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: tbe $ $Date: 2001-08-17 13:57:40 $
+ *  last change: $Author: tbe $ $Date: 2001-09-17 11:24:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -600,6 +600,34 @@ void SAL_CALL DlgEdObj::TabIndexChange( const  ::com::sun::star::beans::Property
     {
         nResId = RID_STR_CLASS_FIXEDLINE;
     }
+    else if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlDateFieldModel") ))
+    {
+        nResId = RID_STR_CLASS_DATEFIELD;
+    }
+    else if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlTimeFieldModel") ))
+    {
+        nResId = RID_STR_CLASS_TIMEFIELD;
+    }
+    else if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlNumericFieldModel") ))
+    {
+        nResId = RID_STR_CLASS_NUMERICFIELD;
+    }
+    else if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlCurrencyFieldModel") ))
+    {
+        nResId = RID_STR_CLASS_CURRENCYFIELD;
+    }
+    else if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlFormattedFieldModel") ))
+    {
+        nResId = RID_STR_CLASS_FORMATTEDFIELD;
+    }
+    else if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlPatternFieldModel") ))
+    {
+        nResId = RID_STR_CLASS_PATTERNFIELD;
+    }
+    else if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlFileControlModel") ))
+    {
+        nResId = RID_STR_CLASS_FILECONTROL;
+    }
     else
     {
         nResId = RID_STR_CLASS_CONTROL;
@@ -698,6 +726,34 @@ sal_uInt16 DlgEdObj::GetObjIdentifier() const
     else if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlFixedLineModel") ))
     {
         return OBJ_DLG_HFIXEDLINE;
+    }
+    else if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlDateFieldModel") ))
+    {
+        return OBJ_DLG_DATEFIELD;
+    }
+    else if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlTimeFieldModel") ))
+    {
+        return OBJ_DLG_TIMEFIELD;
+    }
+    else if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlNumericFieldModel") ))
+    {
+        return OBJ_DLG_NUMERICFIELD;
+    }
+    else if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlCurrencyFieldModel") ))
+    {
+        return OBJ_DLG_CURRENCYFIELD;
+    }
+    else if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlFormattedFieldModel") ))
+    {
+        return OBJ_DLG_FORMATTEDFIELD;
+    }
+    else if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlPatternFieldModel") ))
+    {
+        return OBJ_DLG_PATTERNFIELD;
+    }
+    else if (aServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlFileControlModel") ))
+    {
+        return OBJ_DLG_FILECONTROL;
     }
     else
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxctl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tbe $ $Date: 2001-09-06 12:48:14 $
+ *  last change: $Author: tbe $ $Date: 2001-09-17 11:23:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,23 +171,30 @@ void TbxControls::StateChanged( USHORT nSID, SfxItemState eState,
             USHORT nTemp = 0;
             switch( nLastEnum )
             {
-                case SVX_SNAP_PUSHBUTTON:   nTemp = SID_INSERT_PUSHBUTTON; break;
-                case SVX_SNAP_CHECKBOX:     nTemp = SID_INSERT_CHECKBOX; break;
-                case SVX_SNAP_RADIOBUTTON:  nTemp = SID_INSERT_RADIOBUTTON; break;
-                case SVX_SNAP_SPINBUTTON:   nTemp = SID_INSERT_SPINBUTTON; break;
-                case SVX_SNAP_FIXEDTEXT:    nTemp = SID_INSERT_FIXEDTEXT; break;
-                case SVX_SNAP_GROUPBOX:     nTemp = SID_INSERT_GROUPBOX; break;
-                case SVX_SNAP_LISTBOX:      nTemp = SID_INSERT_LISTBOX; break;
-                case SVX_SNAP_COMBOBOX:     nTemp = SID_INSERT_COMBOBOX; break;
-                case SVX_SNAP_EDIT:         nTemp = SID_INSERT_EDIT; break;
-                case SVX_SNAP_HSCROLLBAR:   nTemp = SID_INSERT_HSCROLLBAR; break;
-                case SVX_SNAP_VSCROLLBAR:   nTemp = SID_INSERT_VSCROLLBAR; break;
-                case SVX_SNAP_PREVIEW:      nTemp = SID_INSERT_PREVIEW; break;
-                case SVX_SNAP_URLBUTTON:    nTemp = SID_INSERT_URLBUTTON; break;
-                case SVX_SNAP_IMAGECONTROL: nTemp = SID_INSERT_IMAGECONTROL; break;
-                case SVX_SNAP_PROGRESSBAR:  nTemp = SID_INSERT_PROGRESSBAR; break;
-                case SVX_SNAP_HFIXEDLINE:   nTemp = SID_INSERT_HFIXEDLINE; break;
-                case SVX_SNAP_VFIXEDLINE:   nTemp = SID_INSERT_VFIXEDLINE; break;
+                case SVX_SNAP_PUSHBUTTON:       nTemp = SID_INSERT_PUSHBUTTON; break;
+                case SVX_SNAP_CHECKBOX:         nTemp = SID_INSERT_CHECKBOX; break;
+                case SVX_SNAP_RADIOBUTTON:      nTemp = SID_INSERT_RADIOBUTTON; break;
+                case SVX_SNAP_SPINBUTTON:       nTemp = SID_INSERT_SPINBUTTON; break;
+                case SVX_SNAP_FIXEDTEXT:        nTemp = SID_INSERT_FIXEDTEXT; break;
+                case SVX_SNAP_GROUPBOX:         nTemp = SID_INSERT_GROUPBOX; break;
+                case SVX_SNAP_LISTBOX:          nTemp = SID_INSERT_LISTBOX; break;
+                case SVX_SNAP_COMBOBOX:         nTemp = SID_INSERT_COMBOBOX; break;
+                case SVX_SNAP_EDIT:             nTemp = SID_INSERT_EDIT; break;
+                case SVX_SNAP_HSCROLLBAR:       nTemp = SID_INSERT_HSCROLLBAR; break;
+                case SVX_SNAP_VSCROLLBAR:       nTemp = SID_INSERT_VSCROLLBAR; break;
+                case SVX_SNAP_PREVIEW:          nTemp = SID_INSERT_PREVIEW; break;
+                case SVX_SNAP_URLBUTTON:        nTemp = SID_INSERT_URLBUTTON; break;
+                case SVX_SNAP_IMAGECONTROL:     nTemp = SID_INSERT_IMAGECONTROL; break;
+                case SVX_SNAP_PROGRESSBAR:      nTemp = SID_INSERT_PROGRESSBAR; break;
+                case SVX_SNAP_HFIXEDLINE:       nTemp = SID_INSERT_HFIXEDLINE; break;
+                case SVX_SNAP_VFIXEDLINE:       nTemp = SID_INSERT_VFIXEDLINE; break;
+                case SVX_SNAP_DATEFIELD:        nTemp = SID_INSERT_DATEFIELD; break;
+                case SVX_SNAP_TIMEFIELD:        nTemp = SID_INSERT_TIMEFIELD; break;
+                case SVX_SNAP_NUMERICFIELD:     nTemp = SID_INSERT_NUMERICFIELD; break;
+                case SVX_SNAP_CURRENCYFIELD:    nTemp = SID_INSERT_CURRENCYFIELD; break;
+                case SVX_SNAP_FORMATTEDFIELD:   nTemp = SID_INSERT_FORMATTEDFIELD; break;
+                case SVX_SNAP_PATTERNFIELD:     nTemp = SID_INSERT_PATTERNFIELD; break;
+                case SVX_SNAP_FILECONTROL:      nTemp = SID_INSERT_FILECONTROL; break;
             }
             if( nTemp )
             {

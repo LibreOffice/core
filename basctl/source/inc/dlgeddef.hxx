@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgeddef.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tbe $ $Date: 2001-08-17 13:55:42 $
+ *  last change: $Author: tbe $ $Date: 2001-09-17 11:23:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,13 @@ const UINT32 DlgInventor = UINT32('D')*0x00000001+
 #define OBJ_DLG_VSCROLLBAR      ((UINT16)14)
 #define OBJ_DLG_HFIXEDLINE      ((UINT16)15)
 #define OBJ_DLG_VFIXEDLINE      ((UINT16)16)
+#define OBJ_DLG_DATEFIELD       ((UINT16)17)
+#define OBJ_DLG_TIMEFIELD       ((UINT16)18)
+#define OBJ_DLG_NUMERICFIELD    ((UINT16)19)
+#define OBJ_DLG_CURRENCYFIELD   ((UINT16)20)
+#define OBJ_DLG_FORMATTEDFIELD  ((UINT16)21)
+#define OBJ_DLG_PATTERNFIELD    ((UINT16)22)
+#define OBJ_DLG_FILECONTROL     ((UINT16)23)
 
 
 #endif // _BASCTL_DLGEDDEF_HXX

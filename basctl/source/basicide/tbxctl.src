@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxctl.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-14 00:14:36 $
+ *  last change: $Author: tbe $ $Date: 2001-09-17 11:23:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -334,7 +334,38 @@ ToolBox RID_TOOLBOX
             Text[ arabic ] = "HFixedLine";
             Text[ catalan ] = "HFixedLine";
         };
-        ToolBoxItem { Type = TOOLBOXITEM_SPACE ; };
+        ToolBoxItem
+        {
+            HelpId = SID_INSERT_DATEFIELD ;
+            Identifier = SID_INSERT_DATEFIELD ;
+            RadioCheck = TRUE ;
+            Text = "Datumsfeld" ;
+            Text [ english ] = "DateField" ;
+        };
+        ToolBoxItem
+        {
+            HelpId = SID_INSERT_NUMERICFIELD ;
+            Identifier = SID_INSERT_NUMERICFIELD ;
+            RadioCheck = TRUE ;
+            Text = "Numerisches Feld" ;
+            Text [ english ] = "NumericField" ;
+        };
+        ToolBoxItem
+        {
+            HelpId = SID_INSERT_FORMATTEDFIELD ;
+            Identifier = SID_INSERT_FORMATTEDFIELD ;
+            RadioCheck = TRUE ;
+            Text = "Formatiertes Feld" ;
+            Text [ english ] = "FormattedField" ;
+        };
+        ToolBoxItem
+        {
+            HelpId = SID_INSERT_FILECONTROL ;
+            Identifier = SID_INSERT_FILECONTROL ;
+            RadioCheck = TRUE ;
+            Text = "Dateiauswahl" ;
+            Text [ english ] = "FileControl" ;
+        };
         ToolBoxItem { Type = TOOLBOXITEM_SEPARATOR ; };
         ToolBoxItem
         {
@@ -569,6 +600,30 @@ ToolBox RID_TOOLBOX
             Text[ turkish ] = "VFixedLine";
             Text[ arabic ] = "VFixedLine";
             Text[ catalan ] = "VFixedLine";
+        };
+        ToolBoxItem
+        {
+            HelpId = SID_INSERT_TIMEFIELD ;
+            Identifier = SID_INSERT_TIMEFIELD ;
+            RadioCheck = TRUE ;
+            Text = "Zeitfeld" ;
+            Text [ english ] = "TimeField" ;
+        };
+        ToolBoxItem
+        {
+            HelpId = SID_INSERT_CURRENCYFIELD ;
+            Identifier = SID_INSERT_CURRENCYFIELD ;
+            RadioCheck = TRUE ;
+            Text = "Währungsfeld" ;
+            Text [ english ] = "CurrencyField" ;
+        };
+        ToolBoxItem
+        {
+            HelpId = SID_INSERT_PATTERNFIELD ;
+            Identifier = SID_INSERT_PATTERNFIELD ;
+            RadioCheck = TRUE ;
+            Text = "Maskiertes Feld" ;
+            Text [ english ] = "PatternField" ;
         };
         ToolBoxItem
         {

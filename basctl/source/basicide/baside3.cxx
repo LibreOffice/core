@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside3.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: tbe $ $Date: 2001-09-06 09:17:41 $
+ *  last change: $Author: tbe $ $Date: 2001-09-17 11:23:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -328,21 +328,28 @@ void __EXPORT DialogWindow::GetState( SfxItemSet& rSet )
                     USHORT nObj;
                     switch( pEditor->GetInsertObj() )
                     {
-                        case OBJ_DLG_PUSHBUTTON:    nObj = SVX_SNAP_PUSHBUTTON; break;
-                        case OBJ_DLG_RADIOBUTTON:   nObj = SVX_SNAP_RADIOBUTTON; break;
-                        case OBJ_DLG_CHECKBOX:      nObj = SVX_SNAP_CHECKBOX; break;
-                        case OBJ_DLG_LISTBOX:       nObj = SVX_SNAP_LISTBOX; break;
-                        case OBJ_DLG_COMBOBOX:      nObj = SVX_SNAP_COMBOBOX; break;
-                        case OBJ_DLG_GROUPBOX:      nObj = SVX_SNAP_GROUPBOX; break;
-                        case OBJ_DLG_EDIT:          nObj = SVX_SNAP_EDIT; break;
-                        case OBJ_DLG_FIXEDTEXT:     nObj = SVX_SNAP_FIXEDTEXT; break;
-                        case OBJ_DLG_IMAGECONTROL:  nObj = SVX_SNAP_IMAGECONTROL; break;
-                        case OBJ_DLG_PROGRESSBAR:   nObj = SVX_SNAP_PROGRESSBAR; break;
-                        case OBJ_DLG_HSCROLLBAR:    nObj = SVX_SNAP_HSCROLLBAR; break;
-                        case OBJ_DLG_VSCROLLBAR:    nObj = SVX_SNAP_VSCROLLBAR; break;
-                        case OBJ_DLG_HFIXEDLINE:    nObj = SVX_SNAP_HFIXEDLINE; break;
-                        case OBJ_DLG_VFIXEDLINE:    nObj = SVX_SNAP_VFIXEDLINE; break;
-                        default:                    nObj = 0;
+                        case OBJ_DLG_PUSHBUTTON:        nObj = SVX_SNAP_PUSHBUTTON; break;
+                        case OBJ_DLG_RADIOBUTTON:       nObj = SVX_SNAP_RADIOBUTTON; break;
+                        case OBJ_DLG_CHECKBOX:          nObj = SVX_SNAP_CHECKBOX; break;
+                        case OBJ_DLG_LISTBOX:           nObj = SVX_SNAP_LISTBOX; break;
+                        case OBJ_DLG_COMBOBOX:          nObj = SVX_SNAP_COMBOBOX; break;
+                        case OBJ_DLG_GROUPBOX:          nObj = SVX_SNAP_GROUPBOX; break;
+                        case OBJ_DLG_EDIT:              nObj = SVX_SNAP_EDIT; break;
+                        case OBJ_DLG_FIXEDTEXT:         nObj = SVX_SNAP_FIXEDTEXT; break;
+                        case OBJ_DLG_IMAGECONTROL:      nObj = SVX_SNAP_IMAGECONTROL; break;
+                        case OBJ_DLG_PROGRESSBAR:       nObj = SVX_SNAP_PROGRESSBAR; break;
+                        case OBJ_DLG_HSCROLLBAR:        nObj = SVX_SNAP_HSCROLLBAR; break;
+                        case OBJ_DLG_VSCROLLBAR:        nObj = SVX_SNAP_VSCROLLBAR; break;
+                        case OBJ_DLG_HFIXEDLINE:        nObj = SVX_SNAP_HFIXEDLINE; break;
+                        case OBJ_DLG_VFIXEDLINE:        nObj = SVX_SNAP_VFIXEDLINE; break;
+                        case OBJ_DLG_DATEFIELD:         nObj = SVX_SNAP_DATEFIELD; break;
+                        case OBJ_DLG_TIMEFIELD:         nObj = SVX_SNAP_TIMEFIELD; break;
+                        case OBJ_DLG_NUMERICFIELD:      nObj = SVX_SNAP_NUMERICFIELD; break;
+                        case OBJ_DLG_CURRENCYFIELD:     nObj = SVX_SNAP_CURRENCYFIELD; break;
+                        case OBJ_DLG_FORMATTEDFIELD:    nObj = SVX_SNAP_FORMATTEDFIELD; break;
+                        case OBJ_DLG_PATTERNFIELD:      nObj = SVX_SNAP_PATTERNFIELD; break;
+                        case OBJ_DLG_FILECONTROL:       nObj = SVX_SNAP_FILECONTROL; break;
+                        default:                        nObj = 0;
                     }
 #ifdef DBG_UTIL
                     if( !nObj )
@@ -474,6 +481,48 @@ void __EXPORT DialogWindow::ExecuteCommand( SfxRequest& rReq )
                 {
                     GetEditor()->SetMode( DLGED_INSERT );
                     GetEditor()->SetInsertObj( OBJ_DLG_VFIXEDLINE );
+                }
+                break;
+                case SVX_SNAP_DATEFIELD:
+                {
+                    GetEditor()->SetMode( DLGED_INSERT );
+                    GetEditor()->SetInsertObj( OBJ_DLG_DATEFIELD );
+                }
+                break;
+                case SVX_SNAP_TIMEFIELD:
+                {
+                    GetEditor()->SetMode( DLGED_INSERT );
+                    GetEditor()->SetInsertObj( OBJ_DLG_TIMEFIELD );
+                }
+                break;
+                case SVX_SNAP_NUMERICFIELD:
+                {
+                    GetEditor()->SetMode( DLGED_INSERT );
+                    GetEditor()->SetInsertObj( OBJ_DLG_NUMERICFIELD );
+                }
+                break;
+                case SVX_SNAP_CURRENCYFIELD:
+                {
+                    GetEditor()->SetMode( DLGED_INSERT );
+                    GetEditor()->SetInsertObj( OBJ_DLG_CURRENCYFIELD );
+                }
+                break;
+                case SVX_SNAP_FORMATTEDFIELD:
+                {
+                    GetEditor()->SetMode( DLGED_INSERT );
+                    GetEditor()->SetInsertObj( OBJ_DLG_FORMATTEDFIELD );
+                }
+                break;
+                case SVX_SNAP_PATTERNFIELD:
+                {
+                    GetEditor()->SetMode( DLGED_INSERT );
+                    GetEditor()->SetInsertObj( OBJ_DLG_PATTERNFIELD );
+                }
+                break;
+                case SVX_SNAP_FILECONTROL:
+                {
+                    GetEditor()->SetMode( DLGED_INSERT );
+                    GetEditor()->SetInsertObj( OBJ_DLG_FILECONTROL );
                 }
                 break;
                 case SVX_SNAP_SELECT:

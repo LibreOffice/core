@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basidesh.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-29 20:28:32 $
+ *  last change: $Author: tbe $ $Date: 2001-09-17 11:23:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1808,6 +1808,13 @@ ImageList RID_DEFAULTIMAGELIST_SC
         SID_INSERT_PROGRESSBAR ;
         SID_INSERT_HFIXEDLINE ;
         SID_INSERT_VFIXEDLINE ;
+        SID_INSERT_DATEFIELD ;
+        SID_INSERT_TIMEFIELD ;
+        SID_INSERT_NUMERICFIELD ;
+        SID_INSERT_CURRENCYFIELD ;
+        SID_INSERT_FORMATTEDFIELD ;
+        SID_INSERT_PATTERNFIELD ;
+        SID_INSERT_FILECONTROL ;
     };
 };
 ImageList RID_DEFAULTIMAGELIST_LC
@@ -1855,6 +1862,13 @@ ImageList RID_DEFAULTIMAGELIST_LC
         SID_INSERT_PROGRESSBAR ;
         SID_INSERT_HFIXEDLINE ;
         SID_INSERT_VFIXEDLINE ;
+        SID_INSERT_DATEFIELD ;
+        SID_INSERT_TIMEFIELD ;
+        SID_INSERT_NUMERICFIELD ;
+        SID_INSERT_CURRENCYFIELD ;
+        SID_INSERT_FORMATTEDFIELD ;
+        SID_INSERT_PATTERNFIELD ;
+        SID_INSERT_FILECONTROL ;
     };
 };
 ToolBox RID_BASICIDE_OBJECTBAR

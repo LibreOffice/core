@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgresid.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2001-09-06 20:41:07 $
+ *  last change: $Author: tbe $ $Date: 2001-09-17 11:24:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,6 +118,34 @@ String RID_STR_CLASS_SCROLLBAR
 String RID_STR_CLASS_FIXEDLINE
 {
     Text = "FixedLine" ;
+};
+String RID_STR_CLASS_DATEFIELD
+{
+    Text = "DateField" ;
+};
+String RID_STR_CLASS_TIMEFIELD
+{
+    Text = "TimeField" ;
+};
+String RID_STR_CLASS_NUMERICFIELD
+{
+    Text = "NumericField" ;
+};
+String RID_STR_CLASS_CURRENCYFIELD
+{
+    Text = "CurrencyField" ;
+};
+String RID_STR_CLASS_FORMATTEDFIELD
+{
+    Text = "FormattedField" ;
+};
+String RID_STR_CLASS_PATTERNFIELD
+{
+    Text = "PatternField" ;
+};
+String RID_STR_CLASS_FILECONTROL
+{
+    Text = "FileControl" ;
 };
 
 
