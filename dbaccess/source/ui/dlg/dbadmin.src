@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.src,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: kz $ $Date: 2001-12-14 16:50:53 $
+ *  last change: $Author: kz $ $Date: 2002-01-09 21:12:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -824,7 +824,7 @@ TabPage PAGE_GENERAL
         Text [ swedish ] = "Du har raderat den h�r datak�llan.";
         Text [ polish ] = "To �r�d�o danych zosta�o usuni�te.";
         Text [ portuguese_brazilian ] = "This data source is scheduled to be deleted.";
-        Text [ japanese ] = "このデータソースはユーザーによって削除されています。";
+        Text [ japanese ] = "このデータソースはユーザーによって削除されました。";
         Text [ korean ] = "이 데이터 소스를 삭제했습니다.";
         Text [ chinese_simplified ] = "您已经删除了这个数据源。";
         Text [ chinese_traditional ] = "您已經刪除了這個資料源。";
@@ -3387,6 +3387,9 @@ String STR_HINT_CONNECTION_NOT_CAPABLE
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.83  2001/12/14 16:50:53  kz
+ *  Merge SRC641: 14.12.01 - 17:51:09
+ *
  *  Revision 1.82  2001/12/04 18:41:04  kz
  *  Merge SRC641: 04.12.01 - 18:38:44
  *
@@ -3431,6 +3434,7 @@ String STR_HINT_CONNECTION_NOT_CAPABLE
  *
  *  Revision 1.0 20.09.00 10:58:47  fs
  ************************************************************************/
+
 
 
 
