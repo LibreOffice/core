@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backingcomp.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:29:30 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 15:41:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,8 +131,8 @@
 #include <cppuhelper/weak.hxx>
 #endif
 
-#ifndef SVTOOLS_ASYNCLINK_HXX
-#include <svtools/asynclink.hxx>
+#ifndef INCLUDED_SVTOOLS_ACCELERATOREXECUTE_HXX
+#include <svtools/acceleratorexecute.hxx>
 #endif
 
 //__________________________________________
@@ -180,12 +180,8 @@ class BackingComp : public  css::lang::XTypeProvider
         /** helper for drag&drop. */
         css::uno::Reference< css::datatransfer::dnd::XDropTargetListener > m_xDropTargetListener;
 
-        /** used for asynchronous callbacks within the main thread, to
-            unbind e.g. key event or other broadcaster from destroying of the window. :-( */
-        ::svtools::AsynchronLink m_aAsyncCallback;
-
-        /** queue of outstanding asynchronous URLs for dispatch. */
-        OUStringQueue m_lAsyncQueue;
+        /** helper, which handle shortcuts for us. */
+        ::svt::AcceleratorExecute* m_pAccExec;
 
     //______________________________________
     // interface
@@ -242,10 +238,6 @@ class BackingComp : public  css::lang::XTypeProvider
         static ::rtl::OUString                                         SAL_CALL impl_getStaticImplementationName   (                                                                     );
         static css::uno::Reference< css::uno::XInterface >             SAL_CALL impl_createInstance                ( const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR ) throw( css::uno::Exception );
         static css::uno::Reference< css::lang::XSingleServiceFactory > SAL_CALL impl_createFactory                 ( const css::uno::Reference< css::lang::XMultiServiceFactory >& xSMGR );
-
-    private:
-
-        DECL_LINK( impl_asyncCallback, void* );
 };
 
 } // namespace framework
