@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfgrf.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-09-25 18:57:21 $
+ *  last change: $Author: jp $ $Date: 2001-11-30 18:18:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,9 @@
 #endif
 #ifndef _SV_GRAPH_HXX //autogen
 #include <vcl/graph.hxx>
+#endif
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
 #endif
 #ifndef _RTFKEYWD_HXX
 #include <svtools/rtfkeywd.hxx>
@@ -347,11 +350,15 @@ BOOL SvxRTFParser::ReadBmpData( Graphic& rGrf, SvxRTFPictureType& rPicType )
     rtl_TextEncoding eOldEnc = GetSrcEncoding();
     SetSrcEncoding( RTL_TEXTENCODING_MS_1252 );
 
-    String sFilter;
+    const sal_Char* pFilterNm = 0;
     SvCacheStream* pTmpFile = 0;
 
     int nToken, bValidBmp = TRUE, bFirstTextToken = TRUE;
-    int nOpenBrakets = 1;       // die erste wurde schon vorher erkannt !!
+    int nOpenBrakets = 1,       // die erste wurde schon vorher erkannt !!
+        nValidDataBraket = 1;
+
+    if( RTF_SHPPICT == GetStackPtr(0)->nTokenId )
+        ++nValidDataBraket;
 
     while( nOpenBrakets && IsParserWorking() && bValidBmp )
     {
@@ -379,20 +386,6 @@ BOOL SvxRTFParser::ReadBmpData( Graphic& rGrf, SvxRTFPictureType& rPicType )
             }
             break;
 
-        case RTF_WBITMAP:
-            rPicType.eStyle = SvxRTFPictureType::RTF_BITMAP;
-            rPicType.nType = nVal;
-            pTmpFile = new SvCacheStream;
-            break;
-
-        case RTF_WMETAFILE:
-            rPicType.eStyle = SvxRTFPictureType::WIN_METAFILE;
-            rPicType.nType = nVal;
-            // WinMetaFile ueber Grafik-Filter einlesen
-            pTmpFile = new SvCacheStream;
-            sFilter.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "WMF" ));
-            break;
-
         case RTF_MACPICT:
             {
                 rPicType.eStyle = SvxRTFPictureType::MAC_QUICKDRAW;
@@ -401,20 +394,51 @@ BOOL SvxRTFParser::ReadBmpData( Graphic& rGrf, SvxRTFPictureType& rPicType )
                 ByteString aStr;
                 aStr.Fill( 512, '\0' );
                 pTmpFile->Write( aStr.GetBuffer(), aStr.Len() );
-                sFilter.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "PCT" ));
+                pFilterNm = "PCT";
             }
             break;
 
+        case RTF_EMFBLIP:
+        case RTF_WMETAFILE:
+        case RTF_PNGBLIP:
+        case RTF_JPEGBLIP:
+        case RTF_WBITMAP:
         case RTF_OSMETAFILE:
-            rPicType.eStyle = SvxRTFPictureType::OS2_METAFILE;
-            rPicType.nType = nVal;
-            pTmpFile = new SvCacheStream;
-            break;
-
         case RTF_DIBITMAP:
-            rPicType.eStyle = SvxRTFPictureType::RTF_DI_BMP;
-            rPicType.nType = nVal;
-            pTmpFile = new SvCacheStream;
+            {
+                switch( nToken )
+                {
+                case RTF_EMFBLIP:
+                    rPicType.eStyle = SvxRTFPictureType::ENHANCED_MF;
+                    pFilterNm = "EMF";
+                    break;
+                case RTF_WMETAFILE:
+                    rPicType.eStyle = SvxRTFPictureType::WIN_METAFILE;
+                    pFilterNm = "WMF";
+                    break;
+                case RTF_PNGBLIP:
+                    rPicType.eStyle = SvxRTFPictureType::RTF_PNG;
+                    pFilterNm = "PNG";
+                    break;
+                case RTF_JPEGBLIP:
+                    rPicType.eStyle = SvxRTFPictureType::RTF_JPG;
+                    pFilterNm = "JPG";
+                    break;
+
+                case RTF_WBITMAP:
+                    rPicType.eStyle = SvxRTFPictureType::RTF_BITMAP;
+                    break;
+                case RTF_OSMETAFILE:
+                    rPicType.eStyle = SvxRTFPictureType::OS2_METAFILE;
+                    break;
+                case RTF_DIBITMAP:
+                    rPicType.eStyle = SvxRTFPictureType::RTF_DI_BMP;
+                    break;
+                }
+
+                rPicType.nType = nVal;
+                pTmpFile = new SvCacheStream;
+            }
             break;
 
         case RTF_PICW:              rPicType.nWidth = nVal; break;
@@ -440,7 +464,7 @@ BOOL SvxRTFParser::ReadBmpData( Graphic& rGrf, SvxRTFPictureType& rPicType )
             // JP 26.06.98: Bug #51719# - nur TextToken auf 1. Ebene
             //              auswerten. Alle anderen sind irgendwelche
             //              nicht auszuwertende Daten
-            if( 1 != nOpenBrakets )
+            if( nValidDataBraket != nOpenBrakets )
                 break;
 
             if( bFirstTextToken )
@@ -479,12 +503,13 @@ BOOL SvxRTFParser::ReadBmpData( Graphic& rGrf, SvxRTFPictureType& rPicType )
             GraphicFilter* pGF = ::GetGrfFilter();
             USHORT nImportFilter = GRFILTER_FORMAT_DONTKNOW;
 
-            if( sFilter.Len() )
+            if( pFilterNm )
             {
+                String sTmp;
                 for( USHORT n = pGF->GetImportFormatCount(); n; )
                 {
-                    String sTmp( pGF->GetImportFormatShortName( --n ) );
-                    if( sTmp == sFilter )
+                    sTmp = pGF->GetImportFormatShortName( --n );
+                    if( sTmp.EqualsAscii( pFilterNm ))
                     {
                         nImportFilter = n;
                         break;
@@ -496,46 +521,6 @@ BOOL SvxRTFParser::ReadBmpData( Graphic& rGrf, SvxRTFPictureType& rPicType )
             pTmpFile->Seek( STREAM_SEEK_TO_BEGIN );
             bValidBmp = 0 == pGF->ImportGraphic( rGrf, sTmpStr, *pTmpFile,
                                                 nImportFilter );
-/*          if( bValidBmp )
-            {
-                MapMode aMapMode;
-                Size aSz;
-
-                if( rPicType.nGoalWidth && rPicType.nGoalHeight )
-                {
-                    aMapMode.SetMapUnit( MAP_TWIP );
-                    aSz.Width() = rPicType.nGoalWidth;
-                    aSz.Height() = rPicType.nGoalHeight;
-                }
-                else
-                {
-                    aMapMode.SetMapUnit( MAP_100TH_MM );
-                    aSz.Width() = rPicType.nWidth;
-                    aSz.Height() = rPicType.nHeight;
-                }
-                switch( rPicType.eStyle )
-                {
-                case SvxRTFPictureType::WIN_METAFILE:
-                    {
-                        GDIMetaFile aMTF( rGrf.GetGDIMetaFile() );
-                        aMTF.SetPrefMapMode( aMapMode );
-                        aMTF.SetPrefSize( aSz );
-                        Fraction aScale( 1, 1 );
-                        aMTF.Scale( aScale, aScale );
-                        rGrf = Graphic( aMTF );
-                    }
-                    break;
-                case SvxRTFPictureType::RTF_BITMAP:
-                    {
-                        Bitmap aBmp( rGrf.GetBitmap() );
-                        aBmp.SetPrefMapMode( aMapMode );
-                        aBmp.SetPrefSize( aSz );
-                        rGrf = Graphic( aBmp );
-                    }
-                    break;
-                }
-            }
-*/
         }
         delete pTmpFile;
     }
@@ -546,11 +531,32 @@ BOOL SvxRTFParser::ReadBmpData( Graphic& rGrf, SvxRTFPictureType& rPicType )
         if( '}' != nToken )
             SkipGroup();
     }
-#ifdef DEBUG_JP
     else
+    {
+        switch( rPicType.eStyle )
+        {
+//??        ENHANCED_MF,        // in den Pict.Daten steht ein Enhanced-Metafile
+        case SvxRTFPictureType::RTF_PNG:
+        case SvxRTFPictureType::RTF_JPG:
+            {
+                const MapMode aMap( MAP_100TH_MM );
+                 Size aSize( rGrf.GetPrefSize() );
+                if( MAP_PIXEL == rGrf.GetPrefMapMode().GetMapUnit() )
+                    aSize = Application::GetDefaultDevice()->PixelToLogic(
+                                        aSize, aMap );
+                else
+                    aSize = OutputDevice::LogicToLogic( aSize,
+                                        rGrf.GetPrefMapMode(), aMap );
+                rPicType.nWidth = aSize.Width();
+                rPicType.nHeight = aSize.Height();
+            }
+            break;
+        }
+
+#ifdef DEBUG_JP
         new GrfWindow( rGrf );
 #endif
-
+    }
     SetSrcEncoding( eOldEnc );
 
     SkipToken( -1 );        // die schliesende Klammer wird "oben" ausgewertet
