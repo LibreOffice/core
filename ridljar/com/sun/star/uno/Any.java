@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Any.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 15:44:54 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 02:55:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@ package com.sun.star.uno;
  * an explicit interface type, so the remote counterpart doesn't need to invoke
  * a queryInterface).
  * <p>
- * @version     $Revision: 1.5 $ $ $Date: 2003-03-26 15:44:54 $
+ * @version     $Revision: 1.6 $ $ $Date: 2004-06-04 02:55:25 $
  * @since       UDK1.0
  */
 public class Any {
@@ -132,6 +132,20 @@ public class Any {
      */
     public Object getObject() {
         return _object;
+    }
+
+    // @see java.lang.Object#equals
+    public boolean equals(Object obj) {
+        return obj instanceof Any && _type.equals(((Any) obj)._type)
+            && (_object == null
+                ? ((Any) obj)._object == null
+                : _object.equals(((Any) obj)._object));
+    }
+
+    // @see java.lang.Object#hashCode
+    public int hashCode() {
+        return _type.hashCode() * 13
+            + (_object == null ? 0 : _object.hashCode());
     }
 
     // @see java.lang.Object#toString
