@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fwkutil.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jl $ $Date: 2004-04-26 14:47:39 $
+ *  last change: $Author: jl $ $Date: 2004-04-26 15:52:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,8 +79,18 @@ rtl::OUString getPlatform();
  */
 rtl::OUString getUserSettingsURL();
 rtl::OString getUserSettingsPath();
+
+/** returns .../javasettings_wnt_x86.xml.
+
+    Or other platform suffixes
+ */
 rtl::OUString getSharedSettingsURL();
 rtl::OString getSharedSettingsPath();
+/** returns .../javasettings.xml.
+
+ */
+rtl::OUString getSharedSettingsURLNoPlatformSuffix();
+rtl::OString getSharedSettingsPathNoPlatformSuffix();
 
 rtl::OUString getBaseInstallation();
 rtl::OUString getVendorSettingsURL();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elements.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jl $ $Date: 2004-04-26 14:47:38 $
+ *  last change: $Author: jl $ $Date: 2004-04-26 15:52:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -258,7 +258,6 @@ javaFrameworkError createSettingsStructure(xmlDoc * document, bool * bNeedsSave)
 
     //only copied during first time setup for the current user and client
     //machine
-    //!!! ToDo replace root later
     errcode = copyShareSettings(document, root);
 
     return errcode;
@@ -271,7 +270,7 @@ javaFrameworkError copyShareSettings(xmlDoc * doc, xmlNode * userParent)
     CXPathObjectPtr pathObj;
 
     //check if there is a share/config/javasettings.xml
-    rtl::OUString sShareSettings = getSharedSettingsURL();
+    rtl::OUString sShareSettings = getSharedSettingsURLNoPlatformSuffix();
 
     osl::DirectoryItem testFileItem;
     osl::File::RC fileError = osl::DirectoryItem::get(
@@ -282,10 +281,8 @@ javaFrameworkError copyShareSettings(xmlDoc * doc, xmlNode * userParent)
         //file exist already
         return JFW_E_ERROR;
 
-
-
     //Prepare access to share javasettings.xml
-    rtl::OString sSettings = getSharedSettingsPath();
+    rtl::OString sSettings = getSharedSettingsPathNoPlatformSuffix();
     CXmlDocPtr docShare = xmlParseFile(sSettings.getStr());
     if (docShare == NULL)
         return JFW_E_CONFIG_READWRITE;
@@ -295,8 +292,6 @@ javaFrameworkError copyShareSettings(xmlDoc * doc, xmlNode * userParent)
         return JFW_E_CONFIG_READWRITE;
 
     //copy <classesDirectory>
-    //ToDo make sure that this works when admin copied the user javasettings.xml
-    //to the share/javasettings.xml
     rtl::OString sExpression= rtl::OString("//jf:classesDirectory[1]/text()");
     pathObj = xmlXPathEvalExpression((xmlChar*) sExpression.getStr(),
                                      contextShare);

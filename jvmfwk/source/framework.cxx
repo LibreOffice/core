@@ -2,9 +2,9 @@
  *
  *  $RCSfile: framework.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jl $ $Date: 2004-04-26 14:47:39 $
+ *  last change: $Author: jl $ $Date: 2004-04-26 15:52:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -267,8 +267,6 @@ javaFrameworkError SAL_CALL jfw_findAllJREs(JavaInfo ***pparInfo, sal_Int32 *pSi
     for (it i = vecInfo.begin(); i != vecInfo.end(); i++)
         (*pparInfo)[index++] = *i;
     //Add the manually detected JREs
-    //ToDo compare if the javainfo is already contained
-    //new function jfw_isEqualJavaInfo
     for (it i = vecInfoManual.begin();i != vecInfoManual.end(); i++)
         (*pparInfo)[index++] = *i;
 

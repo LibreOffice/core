@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fwkutil.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jl $ $Date: 2004-04-26 14:47:39 $
+ *  last change: $Author: jl $ $Date: 2004-04-26 15:52:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -356,9 +356,34 @@ rtl::OUString getSharedSettingsURL()
     return sBufSettings.makeStringAndClear();
 }
 
+rtl::OUString getSharedSettingsURLNoPlatformSuffix()
+{
+    rtl::OUString sBase = getBaseInstallation();
+    if (sBase.getLength() == 0)
+        return sBase;
+    rtl::OUStringBuffer sBufSettings(256);
+    sBufSettings.append(sBase);
+    sBufSettings.appendAscii("/share/config/");
+    sBufSettings.appendAscii(JAVASETTINGS);
+    sBufSettings.appendAscii(".xml");
+    return sBufSettings.makeStringAndClear();
+}
+
 rtl::OString getSharedSettingsPath()
 {
     rtl::OUString sURL = getSharedSettingsURL();
+    rtl::OUString sSystemPathSettings;
+    if (osl_getSystemPathFromFileURL(sURL.pData,
+        & sSystemPathSettings.pData) != osl_File_E_None)
+        return rtl::OString();
+
+    rtl::OString osSystemPathSettings =
+        rtl::OUStringToOString(sSystemPathSettings,osl_getThreadTextEncoding());
+    return osSystemPathSettings;
+}
+rtl::OString getSharedSettingsPathNoPlatformSuffix()
+{
+    rtl::OUString sURL = getSharedSettingsURLNoPlatformSuffix();
     rtl::OUString sSystemPathSettings;
     if (osl_getSystemPathFromFileURL(sURL.pData,
         & sSystemPathSettings.pData) != osl_File_E_None)
@@ -656,7 +681,6 @@ javaFrameworkError buildClassPathFromDirectory(const rtl::OUString & relPath,
                 osl::FileStatus statLink(FileStatusMask_All);
                 if (statLink.getFileType() != osl::FileStatus::Regular)
                     continue;
-                //ToDo check if the link is also a regular file:
                 break;
             }
             default:

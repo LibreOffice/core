@@ -4,5 +4,8 @@ mkdir: %_DEST%\inc%_EXT%\jvmaccess
 ..\%__SRC%\lib\ijvmfwk.lib %_DEST%\lib%_EXT%\ijvmfwk.lib
 ..\%__SRC%\bin\jvmfwk*.dll %_DEST%\bin%_EXT%\*
 ..\%__SRC%\bin\sunjavaplugin*.dll %_DEST%\bin%_EXT%\*
+..\source\useatjava.txt %_DEST%\bin%_EXT%\useatjava.txt
+..\source\javavendors.xml %_DEST%\bin%_EXT%\javavendors.xml
+..\source\javasettings.xml %_DEST%\bin%_EXT%\javasettings.xml
 linklib: libjvmfwk*.so.*.*.*
 
