@@ -327,7 +327,6 @@ void SAL_CALL DispatchRecorder::implts_recordMacro( const ::rtl::OUString& aURL,
     ::rtl::OUString       sArrayName;
 
     aScriptBuffer.appendAscii("rem ----------------------------------------------------------------------\n");
-    aScriptBuffer.appendAscii("rem dispatch\n");
 
     sal_Int32 nLength = lArguments.getLength();
     sal_Int32 nValidArgs = 0;
@@ -427,9 +426,9 @@ sal_Int32 SAL_CALL DispatchRecorder::getCount() throw (::com::sun::star::uno::Ru
     return m_aStatements.size();
 }
 
-com::sun::star::uno::Any SAL_CALL DispatchRecorder::getByIndex(long int idx)  throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+com::sun::star::uno::Any SAL_CALL DispatchRecorder::getByIndex(sal_Int32 idx)  throw (::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
-    if (idx >= m_aStatements.size()) {
+    if (idx >= (sal_Int32)m_aStatements.size()) {
         throw com::sun::star::lang::IndexOutOfBoundsException(
             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
                 "Dispatch recorder out of bounds") ),
@@ -443,7 +442,7 @@ com::sun::star::uno::Any SAL_CALL DispatchRecorder::getByIndex(long int idx)  th
     return element;
 }
 
-void SAL_CALL DispatchRecorder::replaceByIndex(long int idx, const com::sun::star::uno::Any& element) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
+void SAL_CALL DispatchRecorder::replaceByIndex(sal_Int32 idx, const com::sun::star::uno::Any& element) throw (::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
     if (element.getValueType() !=
         ::getCppuType((const com::sun::star::frame::DispatchStatement *)NULL)) {
@@ -453,7 +452,7 @@ void SAL_CALL DispatchRecorder::replaceByIndex(long int idx, const com::sun::sta
                         Reference< XInterface >(), 2 );
     }
 
-    if (idx >= m_aStatements.size()) {
+    if (idx >= (sal_Int32)m_aStatements.size()) {
                 throw com::sun::star::lang::IndexOutOfBoundsException(
                         ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
                                 "Dispatch recorder out of bounds") ),
