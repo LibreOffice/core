@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopool.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cl $ $Date: 2002-11-15 15:33:09 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 15:48:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,10 @@
 #include <cppuhelper/implbase4.hxx>
 #endif
 
+#ifndef INCLUDED_SVXDLLAPI_H
+#include "svx/svxdllapi.h"
+#endif
+
 class SdrModel;
 class SfxItemPool;
 
@@ -83,7 +87,7 @@ class SfxItemPool;
     The class can work in a read only mode without a model. Derivated
     classes can set a model on demand by overiding getModelPool().
 */
-class SvxUnoDrawPool :  public ::cppu::OWeakAggObject,
+class SVX_DLLPUBLIC SvxUnoDrawPool :    public ::cppu::OWeakAggObject,
                         public ::com::sun::star::lang::XServiceInfo,
                         public ::com::sun::star::lang::XTypeProvider,
                         public comphelper::PropertySetHelper
