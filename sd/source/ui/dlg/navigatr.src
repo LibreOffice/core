@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navigatr.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-04 21:11:54 $
+ *  last change: $Author: obo $ $Date: 2001-05-10 06:56:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,7 @@ Window FLT_NAVIGATOR
                 Text[ turkish ] = "\"Canlý sunu\" kipi";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Modo en vivo";
+                Text[ finnish ] = "Reaaliaikainen tila";
             };
             ToolBoxItem
             {
@@ -152,6 +153,7 @@ Window FLT_NAVIGATOR
                 Text[ turkish ] = "Kalem";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Pluma";
+                Text[ finnish ] = "Osoitin";
             };
             ToolBoxItem
             {
@@ -189,6 +191,7 @@ Window FLT_NAVIGATOR
                 Text[ turkish ] = "Ýlk sayfa";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Primera página";
+                Text[ finnish ] = "Ensimmäinen dia";
             };
             ToolBoxItem
             {
@@ -222,6 +225,7 @@ Window FLT_NAVIGATOR
                 Text[ turkish ] = "Önceki sayfa";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Página anterior";
+                Text[ finnish ] = "Edellinen dia";
             };
             ToolBoxItem
             {
@@ -257,6 +261,7 @@ Window FLT_NAVIGATOR
                 Text[ turkish ] = "Sonraki sayfa";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Página siguiente";
+                Text[ finnish ] = "Seuraava dia";
             };
             ToolBoxItem
             {
@@ -290,6 +295,7 @@ Window FLT_NAVIGATOR
                 Text[ turkish ] = "Son sayfa";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Última página";
+                Text[ finnish ] = "Viimeinen dia";
             };
             ToolBoxItem
             {
@@ -324,6 +330,7 @@ Window FLT_NAVIGATOR
                 Text[ turkish ] = "Sürükleme kipi";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Modo Arrastrar";
+                Text[ finnish ] = "Vetotila";
             };
         };
     };
@@ -361,5 +368,6 @@ Window FLT_NAVIGATOR
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Dokumente";
         QuickHelpText[ catalan ] = "Documentos";
+        QuickHelpText[ finnish ] = "Asiakirjat!";
     };
 };
