@@ -506,12 +506,9 @@
 </LC_MISC>
 
 <LC_NumberingLevel>
-
-
-<NumberingLevel Prefix=" " NumType="11" Suffix=")" />
+<NumberingLevel Prefix="(" NumType="11" Suffix=")" Transliteration="NumToTextLower_zh_CN"/>
+<NumberingLevel Prefix="(" NumType="11" Suffix=")" Transliteration="NumToTextUpper_zh_CN"/>
 <NumberingLevel Prefix=" " NumType="4" Suffix="." />
-<NumberingLevel Prefix=" " NumType="4" Suffix="." />
-<NumberingLevel Prefix="(" NumType="4" Suffix="." />
 <NumberingLevel Prefix=" " NumType="2" Suffix="." />
 <NumberingLevel Prefix=" " NumType="0" Suffix=")" />
 <NumberingLevel Prefix=" " NumType="1" Suffix=")" />
@@ -519,13 +516,11 @@
 <NumberingLevel Prefix=" " NumType="3" Suffix="." />
 </LC_NumberingLevel>
 
-
-
 <LC_OutLineNumberingLevel>
 
 <OutlineStyle>
-<OutLineNumberingLevel Prefix=" " NumType="11" Suffix=" " BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0" />
-<OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="1" LeftMargin="50" SymbolTextDistance="50" FirstLineOffset="0" />
+<OutLineNumberingLevel Prefix=" " NumType="11" Suffix=" " BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="0" SymbolTextDistance="50" FirstLineOffset="0" Transliteration="NumToTextLower_zh_CN"/>
+<OutLineNumberingLevel Prefix=" " NumType="4" Suffix="." BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="50" SymbolTextDistance="50" FirstLineOffset="0" />
 <OutLineNumberingLevel Prefix=" " NumType="1" Suffix=")" BulletChar="0020"  BulletFontName=""            ParentNumbering="0" LeftMargin="100" SymbolTextDistance="50" FirstLineOffset="0" />
 <OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " BulletChar="2022"  BulletFontName="StarSymbol"  ParentNumbering="0" LeftMargin="150" SymbolTextDistance="50" FirstLineOffset="0" />
 <OutLineNumberingLevel Prefix=" " NumType="6" Suffix=" " BulletChar="2022"  BulletFontName="StarSymbol"  ParentNumbering="0" LeftMargin="200" SymbolTextDistance="50" FirstLineOffset="0" />
