@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldl2.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: sb $ $Date: 2002-07-03 15:59:32 $
+ *  last change: $Author: sb $ $Date: 2002-07-05 10:27:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,26 +160,29 @@ public:
 
 void BasicLibLBoxString::Paint( const Point& rPos, SvLBox& rDev, USHORT, SvLBoxEntry* pEntry )
 {
-    Font aOldFont( rDev.GetFont() );
-    Font aFont( aOldFont );
-
-    // change text color, if library is readonly
-    if ( pEntry && pEntry->GetUserData() )
+    // Change text color if library is read only:
+    bool bReadOnly = false;
+    if (pEntry && pEntry->GetUserData())
     {
-        SfxObjectShell* pShell = ((BasicLibUserData*)pEntry->GetUserData())->GetShell();
-        ::rtl::OUString aOULibName( ((SvLBoxString*)pEntry->GetItem(1))->GetText() );
-        Reference< script::XLibraryContainer2 > xModLibContainer( BasicIDE::GetModuleLibraryContainer( pShell ), UNO_QUERY );
-        Reference< script::XLibraryContainer2 > xDlgLibContainer( BasicIDE::GetDialogLibraryContainer( pShell ), UNO_QUERY );
-        if ( ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) && xModLibContainer->isLibraryReadOnly( aOULibName ) ) ||
-             ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aOULibName ) && xDlgLibContainer->isLibraryReadOnly( aOULibName ) ) )
-        {
-            aFont.SetColor( Application::GetSettings().GetStyleSettings().GetDeactiveTextColor() );
-        }
+        SfxObjectShell * pShell
+            = static_cast< BasicLibUserData * >(pEntry->GetUserData())->
+            GetShell();
+        rtl::OUString aLibName(
+            static_cast< SvLBoxString * >(pEntry->GetItem(1))->GetText());
+        Reference< script::XLibraryContainer2 > xModLibContainer(
+            BasicIDE::GetModuleLibraryContainer(pShell), UNO_QUERY);
+        Reference< script::XLibraryContainer2 > xDlgLibContainer(
+            BasicIDE::GetDialogLibraryContainer(pShell), UNO_QUERY);
+        bReadOnly
+            = (xModLibContainer.is() && xModLibContainer->hasByName(aLibName)
+               && xModLibContainer->isLibraryReadOnly(aLibName))
+            || (xDlgLibContainer.is() && xDlgLibContainer->hasByName(aLibName)
+                && xDlgLibContainer->isLibraryReadOnly(aLibName));
     }
-
-    rDev.SetFont( aFont );
-    rDev.DrawText( rPos, GetText() );
-    rDev.SetFont( aOldFont );
+    if (bReadOnly)
+        rDev.DrawCtrlText(rPos, GetText(), 0, STRING_LEN, TEXT_DRAW_DISABLE);
+    else
+        rDev.DrawText(rPos, GetText());
 }
 
 
