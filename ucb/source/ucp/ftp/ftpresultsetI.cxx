@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftpresultsetI.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: abi $ $Date: 2002-08-29 09:45:03 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 15:56:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,9 @@ ResultSetI::ResultSetI(const Reference<XMultiServiceFactory>&  xMSF,
                        const std::vector<FTPDirentry>&  dirvec)
     : ResultSetBase(xMSF,xProvider,nOpenMode,seqProp,seqSort)
 {
-    for(unsigned i = 0; i < dirvec.size(); ++i)
+    unsigned i;
+
+    for( i = 0; i < dirvec.size(); ++i)
         m_aPath.push_back(dirvec[i].m_aURL);
 
     // m_aIdents holds the contentidentifiers
