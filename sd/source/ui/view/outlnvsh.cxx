@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outlnvsh.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: thb $ $Date: 2002-01-14 12:59:10 $
+ *  last change: $Author: aw $ $Date: 2002-01-16 11:13:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -877,6 +877,18 @@ void SdOutlineViewShell::FuSupport(SfxRequest &rReq)
             }
 
             rReq.Done();
+        }
+        break;
+
+        // #96090# added Undo/Redo handling
+        case SID_UNDO :
+        {
+            ImpSidUndo(FALSE, rReq);
+        }
+        break;
+        case SID_REDO :
+        {
+            ImpSidRedo(FALSE, rReq);
         }
         break;
 
