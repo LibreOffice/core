@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ClipboardOwner.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:33:01 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 16:36:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -38,8 +38,9 @@
  *
  *************************************************************************/
 
-import com.sun.star.datatransfer.*;
-import com.sun.star.datatransfer.clipboard.*;
+import com.sun.star.datatransfer.XTransferable;
+import com.sun.star.datatransfer.clipboard.XClipboard;
+import com.sun.star.datatransfer.clipboard.XClipboardOwner;
 
 //--------------------------
 //  A simple clipboard owner
