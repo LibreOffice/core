@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bmpmask.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: gt $ $Date: 2002-09-02 10:49:16 $
+ *  last change: $Author: kz $ $Date: 2002-11-27 16:33:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,7 +130,7 @@ DockingWindow RID_SVXDLG_BMPMASK
         Text [ portuguese_brazilian ] = "Quellfarbe" ;
         Text [ portuguese ] = "Cor-fonte" ;
         Text[ chinese_simplified ] = "æºé¢œè‰²";
-        Text[ russian ] = "Èñõîäíûé";
+        Text[ russian ] = "Èñõîäíûé öâåò";
         Text[ polish ] = "Kolor orygin.";
         Text[ japanese ] = "ã‚½ãƒ¼ã‚¹ã‚«ãƒ©ãƒ¼";
         Text[ chinese_traditional ] = "æºé¡è‰²";
@@ -198,7 +198,7 @@ DockingWindow RID_SVXDLG_BMPMASK
         Text[ turkish ] = "Yeni renk...";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Reemplaça amb...";
-        Text[ finnish ] = "Korvaa kohteella...";
+        Text[ finnish ] = "Korvaa värillä...";
         Text[ thai ] = "à¹à¸—à¸™à¸—à¸µà¹ˆà¸”à¹‰à¸§à¸¢...";
     };
 
@@ -470,7 +470,7 @@ DockingWindow RID_SVXDLG_BMPMASK
                 Text[ turkish ] = "Renk örneği al";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Comptagotes";
-                Text[ finnish ] = "Värivalitsin";
+                Text[ finnish ] = "Valitse korvattava väri";
                 Text[ thai ] = "à¸•à¸±à¸§à¸«à¸¢à¸”à¸ªà¸µ";
             };
         };
@@ -502,7 +502,7 @@ DockingWindow RID_SVXDLG_BMPMASK
     Text[ turkish ] = "Renk örneği al";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Comptagotes";
-    Text[ finnish ] = "Värivalitsin";
+    Text[ finnish ] = "Värinvalitsin";
     Text[ thai ] = "à¸•à¸±à¸§à¸«à¸¢à¸”à¸ªà¸µ";
 
     Image IMG_PIPETTE
