@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawsh5.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:15:57 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 17:57:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,9 @@
 #include <vcl/msgbox.hxx>
 #ifndef _SVX_EXTRUSION_BAR_HXX
 #include <svx/extrusionbar.hxx>
+#endif
+#ifndef _SVX_FONTWORK_BAR_HXX
+#include <svx/fontworkbar.hxx>
 #endif
 
 #include <com/sun/star/form/FormButtonType.hpp>
@@ -630,6 +633,20 @@ void ScDrawShell::ExecDrawFunc( SfxRequest& rReq )
         case SID_EXTRUSION_SURFACE_FLOATER:
         case SID_EXTRUSION_DEPTH_DIALOG:
             svx::ExtrusionBar::execute( pView, rReq, rBindings );
+            rReq.Ignore ();
+            break;
+
+        case SID_FONTWORK_SHAPE:
+        case SID_FONTWORK_SHAPE_TYPE:
+        case SID_FONTWORK_SHAPE_TYPES:
+        case SID_FONTWORK_ALIGNMENT:
+        case SID_FONTWORK_SAME_LETTER_HEIGHTS:
+        case SID_FONTWORK_CHARACTER_SPACING:
+        case SID_FONTWORK_KERN_CHARACTER_PAIRS:
+        case SID_FONTWORK_CHARACTER_SPACING_FLOATER:
+        case SID_FONTWORK_ALIGNMENT_FLOATER:
+        case SID_FONTWORK_CHARACTER_SPACING_DIALOG:
+            svx::FontworkBar::execute( pView, rReq, rBindings );
             rReq.Ignore ();
             break;
 
