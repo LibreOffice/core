@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: kz $ $Date: 2005-01-18 16:16:26 $
+#   last change: $Author: vg $ $Date: 2005-02-24 14:46:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -141,20 +141,7 @@ SLOFILES =  \
     $(SLO)$/validat.obj \
     $(SLO)$/postit.obj
 
-.IF "$(OS)$(COM)$(CPUNAME)"=="LINUXGCCSPARC"
-NOOPTFILES= \
-                $(SLO)$/cell.obj \
-        $(SLO)$/column2.obj \
-        $(SLO)$/column3.obj \
-        $(SLO)$/table3.obj \
-        $(SLO)$/table4.obj  \
-        $(SLO)$/documen4.obj \
-        $(SLO)$/conditio.obj \
-        $(SLO)$/validat.obj
-.ENDIF
-
 EXCEPTIONSFILES= \
-    $(SLO)$/cell.obj \
     $(SLO)$/postit.obj \
     $(SLO)$/documen3.obj \
     $(SLO)$/documen5.obj \
@@ -163,11 +150,27 @@ EXCEPTIONSFILES= \
     $(SLO)$/dpsdbtab.obj \
     $(SLO)$/dpobject.obj \
     $(SLO)$/dpoutput.obj \
-    $(SLO)$/dpsave.obj	\
+    $(SLO)$/dpsave.obj \
     $(SLO)$/dbdocutl.obj \
     $(SLO)$/dptabsrc.obj \
     $(SLO)$/drwlayer.obj \
     $(SLO)$/globalx.obj
+
+.IF "$(OS)$(COM)$(CPUNAME)"=="LINUXGCCSPARC"
+NOOPTFILES= \
+        $(SLO)$/column2.obj \
+        $(SLO)$/column3.obj \
+        $(SLO)$/table3.obj \
+        $(SLO)$/table4.obj  \
+        $(SLO)$/documen4.obj \
+        $(SLO)$/conditio.obj \
+        $(SLO)$/validat.obj
+EXCEPTIONSNOOPTFILES= \
+        $(SLO)$/cell.obj
+.ELSE
+EXCEPTIONSFILES+= \
+    $(SLO)$/cell.obj
+.ENDIF
 
 # --- Tagets -------------------------------------------------------
 
