@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: hr $ $Date: 2004-12-17 11:51:20 $
+#   last change: $Author: hjs $ $Date: 2004-12-17 13:27:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -72,10 +72,12 @@ USE_LDUMP2=TRUE
 
 .INCLUDE :  settings.mk
 
+.IF "$(GUI)"!="WNT"
 .IF "$(ENABLE_GTK)" == "TRUE"
 PKGCONFIG_MODULES=gtk+-2.0
 .INCLUDE: pkg_config.mk
 .ENDIF         # "$(ENABLE_GTK)" == "TRUE"
+.ENDIF         #.IF "$(GUI)"!="WNT"
 
 # --- fps dynlib ----------------------------------------------
 
@@ -99,14 +101,6 @@ SHL1STDLIBS=		$(COMMON_LIBS) \
             comdlg32.lib\
             kernel32.lib\
             oleaut32.lib
-SHL2STDLIBS=		$(COMMON_LIBS) \
-            uwinapi.lib \
-            advapi32.lib \
-            ole32.lib\
-            gdi32.lib\
-            shell32.lib\
-            comsupp.lib\
-            oleaut32.lib
 
 SHL1IMPLIB=i$(SHL1TARGET)
 SHL1LIBS=$(SLB)$/fps.lib\
@@ -125,32 +119,39 @@ SHL1STDLIBS= $(COMMON_LIBS) $(PKGCONFIG_LIBS)
 LINKFLAGS!:=$(LINKFLAGSAPP:s/-z defs/-z nodefs/)
 .ENDIF          # "$(OS)"=="SOLARIS"
 
-SHL2STDLIBS= $(SHL1STDLIBS)
 DEF1NAME=$(SHL1TARGET)
 .ENDIF         # "$(ENABLE_GTK)" == "TRUE"
 .ENDIF         # ELSE "$(GUI)"=="WNT"
 
 SHL1DEPN=
-SHL1OBJS=$(SLOFILES)
 
 DEF1EXPORTFILE=	exports.dxp
 
 # --- fop dynlib --------------------------------------------------
 
+.IF "$(GUI)"=="WNT"
 SHL2NOCHECK=TRUE
 SHL2TARGET=$(TARGET2)
 
+SHL2STDLIBS=		$(COMMON_LIBS) \
+            uwinapi.lib \
+            advapi32.lib \
+            ole32.lib\
+            gdi32.lib\
+            shell32.lib\
+            oleaut32.lib
+
 SHL2DEPN=
-SHL2IMPLIB=$(SHL1IMPLIB)
-SHL2LIBS=$(SHL1LIBS)
-SHL2OBJS=$(SLOFILES)
+SHL2IMPLIB=i$(SHL2TARGET)
+SHL2LIBS=$(SLB)$/fop.lib\
+         $(SLB)$/utils.lib
 SHL2DEF=$(MISC)$/$(SHL2TARGET).def
 
 DEF2NAME=$(SHL2TARGET)
 DEF2EXPORTFILE=	exports.dxp
 
-# "$(GUI)"=="WNT" || "$(GUIBASE)"=="unx"
-.ELSE
+.ENDIF          # "$(GUI)"=="WNT"
+.ELSE			# "$(GUI)"=="WNT" || "$(GUIBASE)"=="unx"
 dummy:
     @echo "Nothing to build for OS $(OS)"
 .ENDIF
