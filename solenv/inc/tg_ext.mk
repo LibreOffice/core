@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_ext.mk,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: hjs $ $Date: 2001-11-14 12:59:42 $
+#   last change: $Author: hjs $ $Date: 2001-12-19 12:33:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -60,6 +60,7 @@
 #
 #*************************************************************************
 
+.IF "$(L10N_framework)"==""
 
 .IF "$(GUI)"=="WNT"
 INCLUDE!:=$(shell echo $(INCLUDE:s/\stl//) | sed "s/[ \t]*-I/;/g" )
@@ -243,3 +244,4 @@ create_clean : $(PACKAGE_DIR)$/$(UNTAR_FLAG_FILE)
 patch : $(PACKAGE_DIR)$/$(PATCH_FLAG_FILE)
     @+echo done
 
+.ENDIF			# "$(L10N_framework)"==""
