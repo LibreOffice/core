@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.18 $
+#   $Revision: 1.19 $
 #
-#   last change: $Author: hjs $ $Date: 2001-10-11 17:27:27 $
+#   last change: $Author: hjs $ $Date: 2001-10-23 15:44:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -137,13 +137,16 @@ SHL1STDLIBS+=\
 .ENDIF
 
 .IF "$(GUI)"=="WNT"
+
 SHL1STDLIBS+=\
         advapi32.lib \
         shell32.lib \
         gdi32.lib \
         ole32.lib \
         uuid.lib
-SHL1LIBS+=$(LB)$/user9x.lib
+        
+SHL1STDLIBS+=user9x.lib
+
 .ENDIF
 
 
