@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfac.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mba $ $Date: 2001-05-10 08:03:52 $
+ *  last change: $Author: mba $ $Date: 2001-06-11 10:00:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,11 +123,9 @@ struct SfxObjectFactory_Impl
     SfxVoidFunc                 pInitFactory;
     SfxFactoryFilterContainer*  pFilterContainer;
     SfxModule*                  pModule;
-    SfxMenuBarManager*          pMenu;
     SfxAcceleratorManager*      pAccMgr;
     sal_uInt16                  nImageId;
     sal_Bool                    bOwnsAccel;
-    sal_Bool                    bOwnsMenu;
     String                      aStandardTemplate;
     sal_Bool                    bTemplateInitialized;
     sal_uInt16                  nCreateNewSlotId;
@@ -141,7 +139,6 @@ struct SfxObjectFactory_Impl
         pInitFactory        ( NULL ),
         pFilterContainer    ( NULL ),
         pModule             ( NULL ),
-        pMenu               ( NULL ),
         pAccMgr             ( NULL ),
         nImageId            ( 0 ),
         bTemplateInitialized( sal_False ),
@@ -154,8 +151,6 @@ struct SfxObjectFactory_Impl
         delete pAccelResId;
         // Jetzt vom FilterMatcher
         // delete pFilterContainer;
-        if ( bOwnsMenu )
-            delete pMenu;
         if ( bOwnsAccel )
             delete pAccMgr;
     }
@@ -298,7 +293,7 @@ void SfxObjectFactory::Construct
     pImpl->aHelpPIFile += DEFINE_CONST_UNICODE( "hlppi" );
     pImpl->aHelpFile += DEFINE_CONST_UNICODE( ".hlp" );
     pImpl->aHelpPIFile += DEFINE_CONST_UNICODE( ".hlp" );
-    pImpl->bOwnsMenu = pImpl->bOwnsAccel = sal_False;
+    pImpl->bOwnsAccel = sal_False;
 }
 
 //--------------------------------------------------------------------
@@ -335,6 +330,16 @@ SfxObjectFactory::~SfxObjectFactory()
         delete pImpl->aFilterArr[i];
     delete pImpl->pNameResId;
     delete pImpl;
+}
+
+void SfxObjectFactory::RemoveAll_Impl()
+{
+    for( USHORT n=0; n<pObjFac->Count(); )
+    {
+        SfxObjectFactoryPtr pFac = pObjFac->GetObject(n);
+        pObjFac->Remove( n );
+        delete pFac;
+    }
 }
 
 //--------------------------------------------------------------------
@@ -472,23 +477,7 @@ SfxAcceleratorManager* SfxObjectFactory::GetAccMgr_Impl()
         }
 
         // create accelerator manager
-        pImpl->pAccMgr = new SfxAcceleratorManager( rMyId );
-/*
-        // read configuration as XML format
-        String aUserConfig = SvtPathOptions().GetUserConfigPath();
-        INetURLObject aObj( aUserConfig );
-        String aName( GetFilterContainer()->GetName() );
-        aName += String::CreateFromAscii("KeyBindings.xml");
-        aObj.insertName( aName );
-        SvStream* pStream = ::utl::UcbStreamHelper::CreateStream( aObj.GetMainURL(), STREAM_STD_READ );
-        if ( pStream )
-        {
-            pImpl->pAccMgr->Initialize( *pStream );
-            delete pStream;
-        }
-        else
- */
-            pImpl->pAccMgr->UseDefault();
+        pImpl->pAccMgr = new SfxAcceleratorManager( rMyId, SFX_APP()->GetConfigManager_Impl() );
         pImpl->bOwnsAccel = sal_True;
     }
 
