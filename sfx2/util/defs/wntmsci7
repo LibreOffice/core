@@ -8126,3 +8126,4 @@ _TI4?AVout_of_range@_STL@@
 ?impl_getStaticSupportedServiceNames@SfxScriptLibraryContainer@@SA?AV?$Sequence@VOUString@rtl@@@uno@star@sun@com@@XZ
 ?init@SfxScriptLibraryContainer@@AAEEABVOUString@rtl@@0PAVBasicManager@@PAVSotStorage@@@Z
 ?initialize@SfxScriptLibraryContainer@@UAAXABV?$Sequence@VAny@uno@star@sun@com@@@uno@star@sun@com@@@Z
+lpfnDrawStateW
