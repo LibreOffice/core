@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyperdlg.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2000-12-06 14:34:51 $
+ *  last change: $Author: kz $ $Date: 2000-12-08 17:53:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2403,7 +2403,7 @@ String RID_SVXSTR_HYPDLG_NOVALIDFILENAME
     Text[ polish ] = "Podaj proszê prawid³ow¹ nazwê pliku.";
     Text[ portuguese_brazilian ] = "Please type in a valid filename.";
     Text[ japanese ] = "—LŒø‚ÈÌ§²Ù–¼‚ğ“ü—Í‚µ‚Ä‚­‚¾‚³‚¢B";
-    Text[ korean ] = "À¯È¿ÇÑ ÆÄÀÏ¸íÀ» ÀÔ·ÂÇÏ½Ê½Ã¿À.";
+    Text[ korean ] = "À¯È¿ÇÑ ÆÄÀÏ ÀÌ¸§À» ÀÔ·ÂÇÏ½Ê½Ã¿À.";
     Text[ chinese_simplified ] = "Çë¼üÈëÒ»¸öÓĞĞ§µÄÎÄ¼şÃû¡£";
     Text[ chinese_traditional ] = "½Ğ¿é¤J¤@­Ó¦³®ÄªºÀÉ®×¦W¡C";
     Text[ arabic ] = "ÇáÑÌÇÁ ÅÏÎÇá ÇÓã ãáİ ÕÇáÍ.";
