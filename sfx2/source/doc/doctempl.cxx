@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctempl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dv $ $Date: 2000-11-27 08:55:57 $
+ *  last change: $Author: dv $ $Date: 2000-11-28 12:58:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,14 +238,14 @@ public:
                         ~RegionData_Impl();
 
     EntryData_Impl*     GetEntry( const OUString& rName ) const;
-    EntryData_Impl*     GetEntry( USHORT nIndex ) const;
+    EntryData_Impl*     GetEntry( ULONG nIndex ) const;
 
     const OUString&     GetTitle() const { return maTitle; }
     const OUString&     GetRealTitle() const { return maRealTitle; }
     const OUString&     GetTargetURL() const { return maTargetURL; }
     const OUString&     GetHierarchyURL() const { return maOwnURL; }
 
-    USHORT              GetCount() const;
+    ULONG               GetCount() const;
 
     void                SetTitle( const OUString& rTitle ) { maTitle = rTitle; }
     void                SetRealTitle( const OUString& rTitle ) { maRealTitle = rTitle; }
@@ -259,7 +259,7 @@ public:
     void                AddEntry( Content& rParentFolder,
                                   const OUString& rTitle,
                                   const OUString& rTargetURL );
-    void                DeleteEntry( USHORT nIndex );
+    void                DeleteEntry( ULONG nIndex );
 
     void                SetChecked( sal_Bool bChecked ) { mbChecked = bChecked; }
     int                 Compare( const OUString& rTitle ) const
@@ -295,12 +295,12 @@ public:
                                    const OUString& rRealTitle,
                                    const OUString& rTargetURL,
                                    Content& rContent );
-    void                DeleteRegion( USHORT nIndex );
+    void                DeleteRegion( ULONG nIndex );
 
-    USHORT              GetRegionCount() const
+    ULONG               GetRegionCount() const
                             { return maRegions.Count(); }
     RegionData_Impl*    GetRegion( const OUString& rName ) const;
-    RegionData_Impl*    GetRegion( USHORT nIndex ) const;
+    RegionData_Impl*    GetRegion( ULONG nIndex ) const;
     RegionData_Impl*    GetRegionByPath( const String& rPath ) const;
     void                GetFolders( Content& rRoot, Content& rFolder, ULONG nIndex );
     void                GetTemplates( Content& rTargetFolder,
@@ -400,8 +400,7 @@ void OpenNotifier_Impl::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 //------------------------------------------------------------------------
 #if 0
 //dv!
-void MakeFileName_Impl(DirEntry &rEntry,
-                              const String &rLongName, BOOL bDir)
+void MakeFileName_Impl(const String &rLongName, BOOL bDir)
 {
     String aFName(rLongName);
     if(!bDir)
@@ -584,8 +583,8 @@ String SfxDocumentTemplates::GetFullRegionName
     */
 
     OUString         aCompareMe( aName );
-    USHORT           nCount = pImp->GetRegionCount();
-    USHORT           nIndex = 0;
+    ULONG            nCount = pImp->GetRegionCount();
+    ULONG            nIndex = 0;
     RegionData_Impl *pData2;
 
     for( nIndex = 0; nIndex < nCount; nIndex++ )
@@ -661,10 +660,10 @@ USHORT SfxDocumentTemplates::GetRegionNo
 */
 {
     sal_Bool    bFound;
-    USHORT      nIndex = pImp->GetRegionPos( rRegion, bFound );
+    ULONG       nIndex = pImp->GetRegionPos( rRegion, bFound );
 
     if ( bFound )
-        return nIndex;
+        return (USHORT) nIndex;
     else
         return USHRT_MAX;
 }
@@ -685,12 +684,12 @@ USHORT SfxDocumentTemplates::GetRegionCount() const
 
 */
 {
-    USHORT nCount = 0;
+    ULONG nCount = 0;
 
     if ( pImp )
         nCount = pImp->GetRegionCount();
 
-    return nCount;
+    return (USHORT) nCount;
 }
 
 //------------------------------------------------------------------------
@@ -717,12 +716,12 @@ USHORT SfxDocumentTemplates::GetCount
     DBG_ASSERT( pImp, "not initialized" );
 
     RegionData_Impl *pData = pImp->GetRegion( rName );
-    USHORT           nCount = 0;
+    ULONG            nCount = 0;
 
     if ( pData )
         nCount = pData->GetCount();
 
-    return nCount;
+    return (USHORT) nCount;
 }
 
 //------------------------------------------------------------------------
@@ -759,12 +758,12 @@ USHORT SfxDocumentTemplates::GetCount
     DBG_ASSERT( pImp, "not initialized" );
 
     RegionData_Impl *pData = pImp->GetRegion( nRegion );
-    USHORT           nCount = 0;
+    ULONG            nCount = 0;
 
     if ( pData )
         nCount = pData->GetCount();
 
-    return nCount;
+    return (USHORT) nCount;
 }
 
 //------------------------------------------------------------------------
@@ -1277,17 +1276,47 @@ BOOL SfxDocumentTemplates::CopyTo
 */
 
 {
-    return FALSE;
-#if 0   //dv!
-    DBG_ASSERT( pDirs, "not initialized" );
-    SfxTemplateDirEntry *pSourceDirectory = (*pDirs)[nRegion];
-    SfxTemplateDir &rSourceDir = pSourceDirectory->GetContent();
-    SfxTemplateDirEntry *pSourceEntry = rSourceDir[nIdx];
-    DirEntry aSource(pSourceEntry->GetFull());
-    DirEntry aDest(rName);
-    FSysError eErr = aSource.CopyTo(aDest, FSYS_ACTION_COPYFILE);
-    return FSYS_ERR_OK == eErr;
-#endif
+    RegionData_Impl *pSourceRgn = pImp->GetRegion( nRegion );
+    if ( !pSourceRgn )
+        return FALSE;
+
+    EntryData_Impl *pSource = pSourceRgn->GetEntry( nIdx );
+    if ( !pSource )
+        return FALSE;
+
+    INetURLObject aTargetURL( rName );
+
+    OUString aTitle( aTargetURL.GetName() );
+    aTargetURL.CutName();
+
+    OUString aParentURL = aTargetURL.GetFull();
+
+    Reference< XCommandEnvironment > aCmdEnv;
+    Content aTarget;
+
+    try
+    {
+        aTarget = Content( aParentURL, aCmdEnv );
+
+        TransferInfo aTransferInfo;
+        aTransferInfo.MoveData = FALSE;
+        aTransferInfo.SourceURL = pSource->GetTargetURL();
+        aTransferInfo.NewTitle = aTitle;
+        aTransferInfo.NameClash = NameClash::OVERWRITE;
+
+        Any aArg = makeAny( aTransferInfo );
+        OUString aCmd( RTL_CONSTASCII_USTRINGPARAM( COMMAND_TRANSFER ) );
+
+        aTarget.executeCommand( aCmd, aArg );
+    }
+    catch ( ContentCreationException& )
+    { return FALSE; }
+    catch ( CommandAbortedException& )
+    { return FALSE; }
+    catch ( ... )
+    { return FALSE; }
+
+    return TRUE;
 }
 
 //------------------------------------------------------------------------
@@ -1310,10 +1339,6 @@ BOOL SfxDocumentTemplates::CopyFrom
 
     [R"uckgabewert]                 Erfolg (TRUE) oder Mi"serfpTargetDirectory->GetContent());
 
-
-//------------------------------------------------------------------------
-#pragmaolg (FALSE)
-
     BOOL                            TRUE
                                     Aktion konnte ausgef"uhrt werden
 
@@ -1326,56 +1351,47 @@ BOOL SfxDocumentTemplates::CopyFrom
 */
 
 {
-    return FALSE;
-#if 0   //dv!
-    DBG_ASSERT( pDirs, "not initialized" );
-    // Datei kopieren auf temp. Namen
-    // automatischen Namen erzeugen
-    // Vorlage in die Struktur einfuegen
-    // Struktur speichern
-    // Vorlage in die Listbox einfuegen (geschieht in der rufenden Funktion)
-    DirEntry aSource(rName);
-    SfxTemplateDirEntry *pTargetDirectory = (*pDirs)[nRegion];
-    SfxTemplateDir &rTargetDir=pTargetDirectory->GetContent();
-    DirEntry aTarget(pTargetDirectory->GetFull());
-    rName=aSource.GetBase();
-    MakeFileName_Impl(aTarget, rName, FALSE);
-
-    FSysError eErr = aSource.CopyTo(aTarget, FSYS_ACTION_COPYFILE);
-    if(FSYS_ERR_OK != eErr)
+    RegionData_Impl *pTargetRgn = pImp->GetRegion( nRegion );
+    if ( !pTargetRgn )
         return FALSE;
-    rName = aSource.GetBase();
-    const SfxTemplateDirEntryPtr pNewEntry = new SfxTemplateDirEntry(rName,
-            aTarget.GetFull(), aTarget.GetPath());
-    rTargetDir.Insert(pNewEntry, nIdx+1);
-    return SaveDir(rTargetDir);
-#endif
-}
 
-//------------------------------------------------------------------------
+    EntryData_Impl *pTarget = pTargetRgn->GetEntry( nIdx );
+    if ( !pTarget )
+        return FALSE;
 
-USHORT MakeRegionRelative_Impl
-(
-    USHORT* pDirCount,          /*  Array mit der Anzahl der Eintr"age eines
-                                    jeden Bereiches */
-    USHORT nRegion              //  der absolute Index
-)
+    INetURLObject aSource( rName );
 
-/*  [Beschreibung]
+    OUString aTitle( aSource.GetName() );
 
-    Macht einen Eintrag relativ zu seinem Bereich
+    Reference< XCommandEnvironment > aCmdEnv;
+    Content aTarget;
 
+    try
+    {
+        aTarget = Content( pTargetRgn->GetTargetURL(), aCmdEnv );
 
-    [R"uckgabewert]
+        TransferInfo aTransferInfo;
+        aTransferInfo.MoveData = FALSE;
+        aTransferInfo.SourceURL = rName;
+        aTransferInfo.NewTitle = aTitle;
+        aTransferInfo.NameClash = NameClash::OVERWRITE;
 
-    USHORT                          der Index relativ zu seinem Bereich
+        Any aArg = makeAny( aTransferInfo );
+        OUString aCmd( RTL_CONSTASCII_USTRINGPARAM( COMMAND_TRANSFER ) );
 
-*/
-{
-    USHORT *pIter = pDirCount;
-    while(*pIter <= nRegion)
-        nRegion -= *pIter++;
-    return nRegion;
+        aTarget.executeCommand( aCmd, aArg );
+    }
+    catch ( ContentCreationException& )
+    { return FALSE; }
+    catch ( CommandAbortedException& )
+    { return FALSE; }
+    catch ( ... )
+    { return FALSE; }
+
+    // update data structures ...
+    pTargetRgn->AddEntry( aTarget, aTitle, rName );
+
+    return TRUE;
 }
 
 //------------------------------------------------------------------------
@@ -1915,17 +1931,17 @@ BOOL SfxDocumentTemplates::GetLogicNames
     EntryData_Impl  *pEntry = NULL;
     sal_Bool         bFound = sal_False;
 
-    USHORT nCount = GetRegionCount();
+    ULONG nCount = GetRegionCount();
 
-    for ( USHORT i=0; !bFound && (i<nCount); i++ )
+    for ( ULONG i=0; !bFound && (i<nCount); i++ )
     {
         pData = pImp->GetRegion( i );
         if ( pData->GetTargetURL() == aPathTo )
         {
-            USHORT nChildCount = pData->GetCount();
+            ULONG nChildCount = pData->GetCount();
             OUString aPath( rPath );
 
-            for ( USHORT j=0; !bFound && (j<nChildCount); j++ )
+            for ( ULONG j=0; !bFound && (j<nChildCount); j++ )
             {
                 pEntry = pData->GetEntry( j );
                 if ( pEntry->GetTargetURL() == aPath )
@@ -1971,73 +1987,6 @@ void SfxDocumentTemplates::Construct()
         pImp = new SfxDocTemplate_Impl;
 
     pImp->Construct( aDirs );
-
-#if 0   //dv!
-    // schon von jemandem anders konstruiert?
-    if ( pDirs )
-        return;
-
-    pDirs = new SfxTemplateDir;
-    pDirCount = new USHORT [aDirs.GetTokenCount(cDelim)+1];
-    SfxTemplateDir *pTmp=CreateRootTemplateDir(pDirCount);
-    pDirs->Insert(pTmp,0);
-    pTmp->Remove(0, pTmp->Count()); // Loeschen der Pointer verhindern
-    delete pTmp;
-    DirEntry aDir(aDirs.GetToken(0,cDelim));
-    aDir+=DirEntry( String::CreateFromAscii( pMGName ) );
-    if(aDir.Exists())
-    {
-        if ( aDir.Kill() == ERRCODE_NONE )
-            Rescan();
-    }
-#if 0   //(dv)
-    CntAnchorRef xAnchor = new CntAnchor( NULL, ".component:Template/" );
-
-#ifdef TF_UCB
-    DBG_ERRORFILE( "GetInterface NIY!!!" );
-#else
-    if ( xAnchor->GetInterface() )
-    {
-        OpenNotifier_Impl aOpen( xAnchor, CNT_OPEN_FOLDERS );
-        while ( !aOpen.IsComplete() )
-            Application::Yield();
-    }
-#endif
-
-    for ( USHORT n=0; n<xAnchor->SubAnchorCount(); n++ )
-    {
-        CntAnchorRef xRegion = xAnchor->GetSubAnchor( n );
-        String aStr = xRegion->GetViewURL();
-        USHORT nPos = aStr.Search( '/' );
-        aStr.Cut(0,nPos+2);     // .component:template/_ abschneiden
-
-        xRegion->Put( SfxVoidItem( WID_GETDATA ) );
-        const CntStringItem& rItem = (const CntStringItem&) xRegion->Get( WID_TITLE );
-
-        SfxTemplateDirEntry *pEntry = 0;
-        const USHORT nCount = pDirs->Count();
-        for( USHORT i = 0; i < nCount; ++i )
-        {
-            DirEntry aDir( (*pDirs)[i]->GetFull() );
-            String aName( aDir.GetFull( FSYS_STYLE_URL ) );
-            if( !aDir.IsCaseSensitive() )
-                aName.ToLower();
-
-            if ( aName == aStr )
-            {
-                pEntry = (*pDirs)[i];
-                break;
-            }
-        }
-
-        if( pEntry )
-        {
-            pEntry->SetLongName( rItem.GetValue() );
-            pEntry->SetAnchor( xRegion );
-        }
-    }
-#endif  //(dv)
-#endif  //dv!
 }
 
 //------------------------------------------------------------------------
@@ -2051,11 +2000,7 @@ SfxDocumentTemplates::~SfxDocumentTemplates()
 */
 
 {
-#if 0   //dv!
-    DBG_ASSERT( pDirs, "not initialized" );
-    delete pDirs;
-    delete pDirCount;
-#endif  //dv!
+    delete pImp;
 }
 
 // ------------------------------------------------------------------------
@@ -2372,7 +2317,7 @@ void RegionData_Impl::AddEntry( Content& rParentFolder,
 }
 
 // -----------------------------------------------------------------------
-USHORT RegionData_Impl::GetCount() const
+ULONG RegionData_Impl::GetCount() const
 {
     return maEntries.Count();
 }
@@ -2390,13 +2335,13 @@ EntryData_Impl* RegionData_Impl::GetEntry( const OUString& rName ) const
 }
 
 // -----------------------------------------------------------------------
-EntryData_Impl* RegionData_Impl::GetEntry( USHORT nIndex ) const
+EntryData_Impl* RegionData_Impl::GetEntry( ULONG nIndex ) const
 {
     return maEntries.GetObject( nIndex );
 }
 
 // -----------------------------------------------------------------------
-void RegionData_Impl::DeleteEntry( USHORT nIndex )
+void RegionData_Impl::DeleteEntry( ULONG nIndex )
 {
     EntryData_Impl *pEntry = maEntries.GetObject( nIndex );
 
@@ -2451,10 +2396,10 @@ SfxDocTemplate_Impl::~SfxDocTemplate_Impl()
 RegionData_Impl* SfxDocTemplate_Impl::GetRegion( const OUString& rName )
     const
 {
-    USHORT nCount = maRegions.Count();
+    ULONG nCount = maRegions.Count();
     RegionData_Impl *pData;
 
-    for ( USHORT i=0; i<nCount; i++ )
+    for ( ULONG i=0; i<nCount; i++ )
     {
         pData = maRegions.GetObject( i );
 
@@ -2469,11 +2414,11 @@ RegionData_Impl* SfxDocTemplate_Impl::GetRegion( const OUString& rName )
 RegionData_Impl* SfxDocTemplate_Impl::GetRegionByPath(
                                             const String& rName ) const
 {
-    USHORT           nCount = maRegions.Count();
+    ULONG            nCount = maRegions.Count();
     OUString         aCompare( rName );
     RegionData_Impl *pData;
 
-    for ( USHORT i=0; i<nCount; i++ )
+    for ( ULONG i=0; i<nCount; i++ )
     {
         pData = maRegions.GetObject( i );
 
@@ -2485,13 +2430,13 @@ RegionData_Impl* SfxDocTemplate_Impl::GetRegionByPath(
 }
 
 // -----------------------------------------------------------------------
-RegionData_Impl* SfxDocTemplate_Impl::GetRegion( USHORT nIndex ) const
+RegionData_Impl* SfxDocTemplate_Impl::GetRegion( ULONG nIndex ) const
 {
     return maRegions.GetObject( nIndex );
 }
 
 // -----------------------------------------------------------------------
-void SfxDocTemplate_Impl::DeleteRegion( USHORT nIndex )
+void SfxDocTemplate_Impl::DeleteRegion( ULONG nIndex )
 {
     RegionData_Impl* pRegion = maRegions.GetObject( nIndex );
 
@@ -2644,8 +2589,8 @@ void SfxDocTemplate_Impl::Construct( const String& rDirs )
 
     if ( bNewRoot )
     {
-        USHORT      i;
-        USHORT      nCount = rDirs.GetTokenCount( C_DELIM );
+        USHORT i;
+        USHORT nCount = rDirs.GetTokenCount( C_DELIM );
 
         for ( i=0; i<nCount; i++ )
         {
