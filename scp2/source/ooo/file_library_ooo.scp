@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_library_ooo.scp,v $
 *
-*  $Revision: 1.91 $
+*  $Revision: 1.92 $
 *
-*  last change: $Author: obo $ $Date: 2005-03-15 13:06:33 $
+*  last change: $Author: obo $ $Date: 2005-03-18 10:32:33 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -1925,6 +1925,8 @@ STD_LIB_FILE( gid_File_Lib_Vcl, vcl )
 
 #ifdef USE_PASF
 
+#ifndef SYSTEM_PORTAUDIO
+
 File gid_File_Lib_Portaudio
     TXT_FILE_BODY;
     Name    = STRING(CONCAT3(libportaudio,UNXSUFFIX,.0.0.18));
@@ -1946,6 +1948,10 @@ Shortcut gid_Shortcut_Lib_Portaudio_2
     Styles      = (NETWORK, RELATIVE);
 End
 
+#endif
+
+#ifndef SYSTEM_SNDFILE
+
 File gid_File_Lib_Sndfile
     TXT_FILE_BODY;
     Name    = STRING(CONCAT3(libsndfile,UNXSUFFIX,.1.0.9));
@@ -1966,6 +1972,8 @@ Shortcut gid_Shortcut_Lib_Sndfile_2
     Name        = STRING(CONCAT2(libsndfile,UNXSUFFIX));
     Styles      = (NETWORK, RELATIVE);
 End
+
+#endif
 
 #endif
 
