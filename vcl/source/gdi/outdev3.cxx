@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: th $ $Date: 2001-04-10 09:11:55 $
+ *  last change: $Author: th $ $Date: 2001-04-11 15:12:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2885,10 +2885,10 @@ long OutputDevice::ImplGetCharWidth( sal_Unicode c ) const
 
 // -----------------------------------------------------------------------
 
-static void ImplSortKernPairs( ImplKernPairData* pKernPairs, ULONG l, ULONG r )
+static void ImplSortKernPairs( ImplKernPairData* pKernPairs, long l, long r )
 {
-    ULONG               i = l;
-    ULONG               j = r;
+    long                i = l;
+    long                j = r;
     ImplKernPairData*   pComp = pKernPairs + ((l+r) >> 1);
     sal_uInt32          nComp = *((sal_uInt32*)pComp);
 
@@ -2949,7 +2949,7 @@ void OutputDevice::ImplInitKerningPairs( ImplKernPairData* pKernPairs, long nKer
 
         // Sort Kerning Pairs
         if ( pFontEntry->mpKernPairs )
-            ImplSortKernPairs( pFontEntry->mpKernPairs, 0, pFontEntry->mnKernPairs-1 );
+            ImplSortKernPairs( pFontEntry->mpKernPairs, 0, (long)pFontEntry->mnKernPairs-1 );
     }
 }
 
