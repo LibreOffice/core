@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoControlDialog.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-09-08 13:05:48 $
+ *  last change:$Date: 2003-11-18 16:32:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,7 @@ import com.sun.star.awt.XControlContainer;
 import com.sun.star.awt.XControlModel;
 import com.sun.star.awt.XDevice;
 import com.sun.star.awt.XGraphics;
+import com.sun.star.awt.XTabController;
 import com.sun.star.awt.XToolkit;
 import com.sun.star.awt.XWindow;
 import com.sun.star.awt.XWindowPeer;
@@ -138,6 +139,8 @@ public class UnoControlDialog extends TestCase {
         XControl butControl = null;
         XControl butControl1 = null;
         XControl butControl2 = null;
+        XTabController tabControl1 = null;
+        XTabController tabControl2 = null;
 
         XControlContainer ctrlCont = null;
 
@@ -169,6 +172,17 @@ public class UnoControlDialog extends TestCase {
 
             butControl.setModel(butModel);
 
+
+            // creating additional controls for XUnoControlContainer
+
+            tabControl1 = (XTabController) UnoRuntime.queryInterface(XTabController.class,
+                                                               xMSF.createInstance(
+                                                                       "com.sun.star.awt.TabController"));
+
+
+            tabControl2 = (XTabController) UnoRuntime.queryInterface(XTabController.class,
+                                                               xMSF.createInstance(
+                                                                       "com.sun.star.awt.TabController"));
 
             // creating additional controls for XControlContainer
             butModel = (XControlModel) UnoRuntime.queryInterface(
@@ -231,6 +245,10 @@ public class UnoControlDialog extends TestCase {
 
         tEnv.addObjRelation("INSTANCE", butControl);
         tEnv.addObjRelation("XContainer.Container", ctrlCont);
+
+        // adding relations for XUnoControlContainer
+        tEnv.addObjRelation("TABCONTROL1", tabControl1);
+        tEnv.addObjRelation("TABCONTROL2", tabControl2);
 
 
         // adding relations for XControlContainer
