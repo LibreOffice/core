@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 16:58:08 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 14:43:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,9 +59,6 @@
  *
  ************************************************************************/
 
-#ifdef PRECOMPILED
-#include "core_pch.hxx"
-#endif
 
 #pragma hdrstop
 
@@ -1275,7 +1272,10 @@ SwXTextField::SwXTextField(sal_uInt16 nServiceId) :
     m_bCallUpdate(sal_False)
 {
     //Set visible as default!
-    if(SW_SERVICE_FIELDTYPE_SET_EXP == nServiceId)
+    if(SW_SERVICE_FIELDTYPE_SET_EXP == nServiceId ||
+            SW_SERVICE_FIELDTYPE_DATABASE_SET_NUM == nServiceId ||
+            SW_SERVICE_FIELDTYPE_DATABASE == nServiceId ||
+            SW_SERVICE_FIELDTYPE_DATABASE_NAME == nServiceId  )
         m_pProps->bBool2 = sal_True;
     else if(SW_SERVICE_FIELDTYPE_TABLE_FORMULA == nServiceId)
         m_pProps->bBool1 = sal_True;
@@ -1628,6 +1628,12 @@ void SwXTextField::attachToRange(
                 aData.sCommand = m_pProps->sPar2;
                 aData.nCommandType = m_pProps->nSHORT1;
                 pFld = new SwDBNameField((SwDBNameFieldType*)pFldType, aData);
+                sal_uInt16  nSubType = pFld->GetSubType();
+                if(m_pProps->bBool2)
+                    nSubType &= ~SUB_INVISIBLE;
+                else
+                    nSubType |= SUB_INVISIBLE;
+                pFld->SetSubType(nSubType);
             }
             break;
             case SW_SERVICE_FIELDTYPE_DATABASE_NEXT_SET:
@@ -1666,6 +1672,12 @@ void SwXTextField::attachToRange(
                         aData,
                         m_pProps->nUSHORT1);
                 ((SwDBSetNumberField*)pFld)->SetSetNumber(m_pProps->nFormat);
+                sal_uInt16  nSubType = pFld->GetSubType();
+                if(m_pProps->bBool2)
+                    nSubType &= ~SUB_INVISIBLE;
+                else
+                    nSubType |= SUB_INVISIBLE;
+                pFld->SetSubType(nSubType);
             }
             break;
             case SW_SERVICE_FIELDTYPE_DATABASE:
@@ -1675,7 +1687,12 @@ void SwXTextField::attachToRange(
                     throw uno::RuntimeException();
                 pFld = new SwDBField((SwDBFieldType*)pFldType, m_pProps->nFormat);
                 ((SwDBField*)pFld)->InitContent(m_pProps->sPar1);
-                pFld->SetSubType(pFld->GetSubType()&SUB_OWN_FMT);
+                sal_uInt16  nSubType = pFld->GetSubType();
+                if(m_pProps->bBool2)
+                    nSubType &= ~SUB_INVISIBLE;
+                else
+                    nSubType |= SUB_INVISIBLE;
+                pFld->SetSubType(nSubType);
             }
             break;
             case SW_SERVICE_FIELDTYPE_SET_EXP:
