@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews3.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:54:52 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 13:44:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,6 +191,7 @@
 #endif
 #include "LayerTabBar.hxx"
 #include "sdabstdlg.hxx" //CHINA001
+#include "sdpage.hxx"
 
 namespace sd {
 
@@ -402,6 +403,24 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
             break;
         }
 
+        case SID_MASTER_LAYOUTS:
+        {
+            SdPage* pPage = GetActualPage();
+            if (eEditMode == EM_MASTERPAGE)
+                // Use the master page of the current page.
+                pPage = static_cast<SdPage*>(&pPage->TRG_GetMasterPage());
+
+            SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();//CHINA001
+            DBG_ASSERT(pFact, "SdAbstractDialogFactory fail!");//CHINA001
+            VclAbstractDialog* pDlg = pFact->CreateMasterLayoutDialog( GetActiveWindow(), GetDoc(), pPage );
+            DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
+            pDlg->Execute();
+            delete pDlg;
+            Invalidate();
+            rReq.Done ();
+            break;
+        }
+        /*
         case SID_MASTER_LAYOUTS_SLIDE:
         {
             SdPage* pPage = pActualPage;
@@ -462,7 +481,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
             rReq.Done ();
             break;
         }
-
+        */
         case SID_OBJECTRESIZE:
         {
             /******************************************************************
