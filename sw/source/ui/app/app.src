@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: os $ $Date: 2002-09-06 13:41:42 $
+ *  last change: $Author: kz $ $Date: 2002-09-12 10:11:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3170,21 +3170,21 @@ String STR_FDLG_TEMPLATE_NAME
     Text = "Formatvorlagen: " ;
     Text [ english_us ] = "Styles: " ;
     Text [ portuguese_brazilian ] = "Aktuelle Vorlage: " ;
-    Text [ swedish ] = "Aktuell formatmall:  " ;
+    Text [ swedish ] = "Formatmallar: " ;
     Text [ danish ] = "Aktuel skabelon: " ;
     Text [ italian ] = "Modello corrente: " ;
     Text [ spanish ] = "Estilo actual: " ;
     Text [ french ] = "Modèle actif : " ;
     Text [ dutch ] = "Actuele sjabloon  " ;
     Text [ portuguese ] = "Modelo actual: " ;
-    Text[ chinese_simplified ] = "å½“å‰çš„æ ·å¼ï¼š ";
+    Text[ chinese_simplified ] = "æ ¼å¼æ ·å¼ï¼š";
     Text[ russian ] = "Òåêóùèé øàáëîí:  ";
     Text[ polish ] = "Aktualny szablon  ";
     Text[ japanese ] = "ç¾åœ¨ã®ã‚¹ã‚¿ã‚¤ãƒ«ï¼š ";
     Text[ chinese_traditional ] = "æ ¼å¼ç¯„æœ¬ï¼š ";
     Text[ arabic ] = "ÇáäãØ ÇáÍÇáí: ";
     Text[ dutch ] = "Actuele sjabloon  ";
-    Text[ chinese_simplified ] = "å½“å‰çš„æ ·å¼ï¼š ";
+    Text[ chinese_simplified ] = "æ ¼å¼æ ·å¼ï¼š";
     Text[ greek ] = "Ôñİ÷ùí ğñüôõğï:  ";
     Text[ korean ] = "í˜„ì¬ ì„œì‹ íŒŒì¼: ";
     Text[ turkish ] = "Yürürlükteki biçim: ";
