@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tools.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2004-03-18 10:41:08 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:58:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,9 +59,7 @@
  *
  ************************************************************************/
 
-#include "tools.hxx"
-
-#include <vcl/salbtype.hxx>
+#include <tools.hxx>
 
 
 using namespace ::com::sun::star;
@@ -76,10 +74,10 @@ namespace cppcanvas
         {
             uno::Sequence< double > aRes( 4 );
 
-            aRes[0] = aColor & 0xFF000000 >> 24U;
-            aRes[1] = aColor & 0xFF0000 >> 16U;
-            aRes[2] = aColor & 0xFF00 >> 8U;
-            aRes[3] = aColor & 0xFF;
+            aRes[0] = getRed(aColor) / 255.0;
+            aRes[1] = getGreen(aColor) / 255.0;
+            aRes[2] = getBlue(aColor) / 255.0;
+            aRes[3] = getAlpha(aColor) / 255.0;
 
             return aRes;
         }
@@ -87,14 +85,10 @@ namespace cppcanvas
         Color::IntSRGBA doubleSequenceToIntSRGBA( const uno::Reference< rendering::XGraphicDevice >&    rDevice,
                                                   const uno::Sequence< double >&                        rColor  )
         {
-            Color::IntSRGBA aRes( 0 );
-
-            aRes |= static_cast<UINT8>( 255*rColor[0] + .5 ) << 24U;
-            aRes |= static_cast<UINT8>( 255*rColor[1] + .5 ) << 16U;
-            aRes |= static_cast<UINT8>( 255*rColor[2] + .5 ) << 8U;
-            aRes |= static_cast<UINT8>( 255*rColor[3] + .5 );
-
-            return aRes;
+            return makeColor( static_cast<sal_uInt8>( 255*rColor[0] + .5 ),
+                              static_cast<sal_uInt8>( 255*rColor[1] + .5 ),
+                              static_cast<sal_uInt8>( 255*rColor[2] + .5 ),
+                              static_cast<sal_uInt8>( 255*rColor[3] + .5 ) );
         }
     }
 }
