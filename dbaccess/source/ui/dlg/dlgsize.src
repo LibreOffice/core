@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgsize.src,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2000-12-12 12:33:33 $
+ *  last change: $Author: avy $ $Date: 2001-03-09 20:43:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,7 @@
  // JN
  //
  // Letzte Aenderung:
- // $Author: oj $ $Date: 2000-12-12 12:33:33 $ $Revision: 1.1 $
+ // $Author: avy $ $Date: 2001-03-09 20:43:12 $ $Revision: 1.2 $
  //
  //---------------------------------------------------------------------------
 
@@ -96,12 +96,12 @@ ModalDialog DLG_ROWHEIGHT
         Size = MAP_APPFONT ( 23 , 10 ) ;
         Text = "H~öhe" ;
         Text [ ENGLISH ] = "Height" ;
-        Text [ english_us ] = "Height" ;
+        Text [ english_us ] = "~Height" ;
         Text [ italian ] = "Alte~zza" ;
         Text [ spanish ] = "~Altura" ;
-        Text [ french ] = "Hauteur" ;
+        Text [ french ] = "~Hauteur" ;
         Text [ dutch ] = "H~oogte" ;
-        Text [ swedish ] = "Höjd" ;
+        Text [ swedish ] = "H~öjd" ;
         Text [ danish ] = "Højde" ;
         Text [ portuguese_brazilian ] = "Höhe" ;
         Text [ portuguese ] = "~Altura" ;
@@ -111,7 +111,7 @@ ModalDialog DLG_ROWHEIGHT
         Text[ japanese ] = "‚‚³";
         Text[ chinese_traditional ] = "°ª«×";
         Text[ arabic ] = "ÇáÇÑÊİÇÚ";
-        Text[ greek ] = "¾øïò";
+        Text[ greek ] = "¾~øïò";
         Text[ korean ] = "³ôÀÌ";
         Text[ turkish ] = "Yükseklik";
     };
@@ -137,8 +137,8 @@ ModalDialog DLG_ROWHEIGHT
         Text [ ENGLISH ] = "~automatically" ;
         Text[ english_us ] = "~Automatic";
         Text[ portuguese ] = "~Automático";
-        Text[ russian ] = "Àâòîìàòè÷åñêè";
-        Text[ greek ] = "Áõôüìáôá";
+        Text[ russian ] = "~Àâòîìàòè÷åñêè";
+        Text[ greek ] = "~Áõôüìáôá";
         Text[ dutch ] = "~Automatisch";
         Text[ french ] = "~Automatique";
         Text[ spanish ] = "~Automático";
@@ -186,7 +186,7 @@ ModalDialog DLG_ROWHEIGHT
     Text[ russian ] = "Âûñîòà ñòğîê";
     Text[ polish ] = "Wysokoœæ wierszy";
     Text[ japanese ] = "s‚Ì‚‚³";
-    Text[ chinese_traditional ] = "Äæ°ª";
+    Text[ chinese_traditional ] = "¦C°ª";
     Text[ arabic ] = "ÇÑÊİÇÚ ÇáÕİ";
     Text[ greek ] = "¾øïò ãñáììŞò";
     Text[ korean ] = "Çà ³ôÀÌ";
@@ -208,12 +208,12 @@ ModalDialog DLG_COLWIDTH
         Size = MAP_APPFONT ( 23 , 10 ) ;
         Text = "~Breite" ;
         Text [ ENGLISH ] = "Width" ;
-        Text [ english_us ] = "Width" ;
+        Text [ english_us ] = "~Width" ;
         Text [ italian ] = "~Larghezza" ;
         Text [ spanish ] = "An~cho" ;
-        Text [ french ] = "Largeur" ;
+        Text [ french ] = "~Largeur" ;
         Text [ dutch ] = "~Breedte" ;
-        Text [ swedish ] = "Bredd" ;
+        Text [ swedish ] = "~Bredd" ;
         Text [ danish ] = "Bredde" ;
         Text [ portuguese_brazilian ] = "Breite" ;
         Text [ portuguese ] = "~Largura" ;
@@ -249,8 +249,8 @@ ModalDialog DLG_COLWIDTH
         TabStop = TRUE ;
         Text[ english_us ] = "~Automatic";
         Text[ portuguese ] = "~Automático";
-        Text[ russian ] = "Àâòîìàòè÷åñêè";
-        Text[ greek ] = "Áõôüìáôá";
+        Text[ russian ] = "~Àâòîìàòè÷åñêè";
+        Text[ greek ] = "~Áõôüìáôá";
         Text[ dutch ] = "~Automatisch";
         Text[ french ] = "~Automatique";
         Text[ spanish ] = "~Automático";
@@ -293,13 +293,13 @@ ModalDialog DLG_COLWIDTH
     Text [ swedish ] = "Kolumnbredd" ;
     Text [ danish ] = "Kolonnebredde" ;
     Text [ portuguese_brazilian ] = "Spaltenbreite" ;
-    Text [ portuguese ] = "Largura das colunas" ;
+    Text [ portuguese ] = "Largura da coluna" ;
     Text[ chinese_simplified ] = "ÁĞ¿í";
     Text[ russian ] = "Øèğèíà êîëîíîê";
     Text[ polish ] = "Szeokoœæ kolumn";
     Text[ japanese ] = "—ñ•";
     Text[ chinese_traditional ] = "Äæ¼e";
-    Text[ arabic ] = "ÚÑÖ ÇáÃÚãÏÉ";
+    Text[ arabic ] = "ÚÑÖ ÇáÚãæÏ";
     Text[ greek ] = "ĞëÜôïò óôŞëçò";
     Text[ korean ] = "¿­ ³Êºñ";
     Text[ turkish ] = "Sütun genişliği";
