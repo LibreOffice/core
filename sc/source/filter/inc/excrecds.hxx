@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: dr $ $Date: 2002-04-18 10:00:20 $
+ *  last change: $Author: dr $ $Date: 2002-08-09 12:00:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,8 @@
 #ifndef _TOOLS_COLOR_HXX
 #include <tools/color.hxx>
 #endif
+
+#include <vector>
 
 #ifndef SC_OUTLINETAB_HXX
 #include "olinetab.hxx"
@@ -1100,18 +1102,23 @@ private:
     ULONG                   nFirstPrintRangeIx;
     ULONG                   nFirstPrintTitleIx;
     ULONG                   nFirstOtherNameIx;
+    ::std::vector< sal_uInt32 > maNextInsVec; /// List positions for next insertion for each sheet.
 
     inline ExcNameListEntry* _First()       { return (ExcNameListEntry*) List::First(); }
     inline ExcNameListEntry* _Next()        { return (ExcNameListEntry*) List::Next(); }
     inline ExcNameListEntry* _Get( ULONG nIndex ) const
                                             { return (ExcNameListEntry*) List::GetObject( nIndex ); }
+    UINT16                  Append( ExcNameListEntry* pName );
 
 public:
                             ExcNameList( RootData& rRootData );
     virtual                 ~ExcNameList();
 
-    UINT16                  Append( ExcNameListEntry* pName );
     UINT16                  GetBuiltInIx( const ExcNameListEntry* pName );
+
+    /** Inserts a named range in table name sort order. */
+    void                    InsertSorted( RootData& rRootData, ExcNameListEntry* pName, sal_uInt16 nScTab );
+
 
     virtual void            Save( XclExpStream& rStrm );
 };
