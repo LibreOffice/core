@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-15 13:56:52 $
+#   last change: $Author: vg $ $Date: 2003-06-12 10:44:58 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -135,7 +135,9 @@ SHL1STDLIBS=\
     $(GOODIESLIB)		
 
 .IF "$(GUI)"=="UNX"
+.IF "$(OS)"!="FREEBSD"
 SHL1STDLIBS+=$(SVTOOLLIB) -ldl
+.ENDIF
 .ENDIF
 
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
