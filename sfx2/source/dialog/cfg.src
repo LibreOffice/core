@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:30 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 19:00:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1278,7 +1278,7 @@ TabDialog DLG_CONFIG
         };
     };
     Text[ chinese_simplified ] = "ÅäÖÃ";
-    Text[ russian ] = "Ñîãëàñîâàòü";
+    Text[ russian ] = "Êîíôèãóğàöèè";
     Text[ polish ] = "Konfiguracja";
     Text[ japanese ] = "İ’è";
     Text[ chinese_traditional ] = "°t¸m";
@@ -1757,7 +1757,7 @@ String STR_LOADMENUCONFIG
     Text [ english_us ] = "Load Menu Configuration" ;
     Text [ italian ] = "Carica configurazione menu" ;
     Text [ spanish ] = "Cargar configuración del menú" ;
-    Text [ french ] = "Charger config. du menu" ;
+    Text [ french ] = "Charger la configuration du menu" ;
     Text [ dutch ] = "Menuconfiguratie laden" ;
     Text [ swedish ] = "Ladda menykonfiguration" ;
     Text [ danish ] = "Indlæs menukonfiguration" ;
