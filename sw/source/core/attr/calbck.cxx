@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calbck.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:40:03 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:42:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,10 @@
 #endif
 #ifndef _SWFNTCCH_HXX
 #include <swfntcch.hxx>
+#endif
+
+#ifndef _OSL_DIAGNOSE_H_
+#include "osl/diagnose.h"
 #endif
 
 static SwClientIter* pClientIters = 0;
@@ -173,6 +177,12 @@ BOOL SwClient::GetInfo( SfxPoolItem& ) const
 SwModify::SwModify( SwModify *pToRegisterIn )
     : SwClient(pToRegisterIn), pRoot( 0 )
 {
+}
+
+// @@@ forbidden and not implemented, but needs to be accessible (protected).
+SwModify::SwModify( const SwModify & )
+{
+    OSL_PRECOND(0, "SwModify(const SwModify&): not implemented.");
 }
 
 /*************************************************************************
