@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SdUnoOutlineView.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 12:32:25 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 11:56:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,9 +120,10 @@ namespace sd {
 //----------------------------------------------------------------------
 
 SdUnoOutlineView::SdUnoOutlineView(
-    View& rView,
-    OutlineViewShell& rViewShell) throw()
-    :   DrawSubController (rView, rViewShell)
+    ViewShellBase& rBase,
+    OutlineViewShell& rViewShell,
+    View& rView) throw()
+    :   DrawController (rBase, rViewShell, rView)
 {
 }
 
