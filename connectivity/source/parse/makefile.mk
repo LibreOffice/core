@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: oj $ $Date: 2001-05-25 13:09:27 $
+#   last change: $Author: hjs $ $Date: 2001-06-21 15:50:38 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -87,14 +87,13 @@ EXCEPTIONSFILES =  \
         $(SLO)$/sqliterator.obj		\
         $(SLO)$/sqlnode.obj
 
-all: \
-        $(MISC)$/sqlflex.cxx \
-        $(MISC)$/sqlbison.cxx \
-        ALLTAR
 # --- Targets -------------------------------------------------------
 
 .INCLUDE :  target.mk
 
+$(SLO)$/sqlbison.obj : $(MISC)$/sqlbison.cxx
+
+$(SLO)$/sqlflex.obj : $(MISC)$/sqlflex.cxx
 
 $(MISC)$/sqlflex.cxx:	sqlflex.l
     +flex -i -8 -PSQLyy -L -o$(MISC)$/sqlflex.cxx sqlflex.l
