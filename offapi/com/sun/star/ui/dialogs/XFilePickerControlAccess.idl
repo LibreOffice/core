@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XFilePickerControlAccess.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: tra $ $Date: 2001-08-30 10:20:44 $
+ *  last change: $Author: fs $ $Date: 2001-10-26 08:47:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,16 +88,14 @@ interface XFilePickerControlAccess: com::sun::star::ui::dialogs::XFilePicker
 
     @param aControlAction
         Specifies an action to perform with the given value.
-        Currently this value is only valid for listbox controls
-        in case of a checkbox this value should be 0.
-        For listbox controls aControlAction has to one of the
-        values defined in ListboxControlActions
+        aControlAction has to be one of the values defined in <type>ControlActions</type>.
+        Not all of the values are valid for all controls.
 
     @param aValue
         The value to set. For checkboxes aValue should be a boolean, which
         should be true if the checkbox should be checked else false.
 
-    @see ListboxControlActions
+    @see ControlActions
 */
 void setValue( [in] short aControlId, [in] short aControlAction, [in] any aValue );
 
@@ -108,9 +106,9 @@ void setValue( [in] short aControlId, [in] short aControlAction, [in] any aValue
         Identifies the element which value is to set.
 
     @param aControlAction
-        Specifies which value to retrieve. Currently this value
-        is only valid for listbox controls
-        in case of a checkbox this value should be 0.
+        Specifies which value to retrieve.
+        aControlAction has to be one of the values defined in <type>ControlActions</type>.
+        Not all of the values are valid for all controls.
 
     @returns
         The value of the specified element. If the specified control
@@ -158,6 +156,9 @@ void enableControl( [in] short aControlId, [in] boolean bEnable );
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.1  2001/08/30 10:20:44  tra
+    #88584#moved from drafts
+
     Revision 1.4  2001/07/02 08:05:54  tra
     removed IllegalArgumentException specification from interface methods
 
