@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: nf $ $Date: 2001-04-18 09:50:15 $
+#   last change: $Author: nf $ $Date: 2001-04-25 09:13:43 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,7 +65,6 @@ PRJ=..
 PRJNAME=soltools
 TARGET=checkdll
 TARGETTYPE=CUI
-TARGETTHREAD=MT
 NO_DEFAULT_STL=TRUE
 
 # --- Settings -----------------------------------------------------
