@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helper.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mba $ $Date: 2001-02-28 14:03:11 $
+ *  last change: $Author: mba $ $Date: 2001-03-30 09:24:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -660,10 +660,9 @@ sal_Bool SfxContentHelper::MakeFolder( const String& rFolder )
 {
     INetURLObject aURL( rFolder );
     DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "Invalid URL!" );
-    String aNewFolderURL = aURL.GetMainURL();
     String aTitle = aURL.getName( INetURLObject::LAST_SEGMENT, true, INetURLObject::DECODE_WITH_CHARSET );
     aURL.removeSegment();
-    Sequence<OUString> aNames(2);
+    Sequence < OUString > aNames(2);
     OUString* pNames = aNames.getArray();
     pNames[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" ) );
     pNames[1] = OUString( RTL_CONSTASCII_USTRINGPARAM( "IsFolder" ) );
@@ -676,7 +675,7 @@ sal_Bool SfxContentHelper::MakeFolder( const String& rFolder )
     try
     {
         Content aCnt( aURL.GetMainURL(), aCmdEnv );
-        Content aNewFolder( aNewFolderURL, aCmdEnv );
+        Content aNewFolder;
         OUString aType( RTL_CONSTASCII_USTRINGPARAM( "application/vnd.sun.staroffice.fsys-folder" ) );
         bRet = aCnt.insertNewContent( aType, aNames, aValues, aNewFolder );
     }
@@ -684,7 +683,7 @@ sal_Bool SfxContentHelper::MakeFolder( const String& rFolder )
     {
         DBG_ERRORFILE( "CommandAbortedException" );
     }
-    catch( ... )
+    catch( ::com::sun::star::uno::Exception& e )
     {
         DBG_ERRORFILE( "Any other exception" );
     }
