@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fusel.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 15:20:47 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 16:43:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,6 +140,11 @@
 #include "pgjump.hxx"
 #include <svx/globl3d.hxx>
 #include "sdclient.hxx"
+
+// #108981#
+#ifndef _SVDUNDO_HXX
+#include <svx/svdundo.hxx>
+#endif
 
 using namespace ::com::sun::star;
 
@@ -798,7 +803,18 @@ BOOL FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                             pPool->GetActualStyleSheet());
                         if (pStyleSheet != NULL)
                         {
+                            // #108981#
+                            // Added UNDOs for the WaterCan mode. This was never done in
+                            // the past, thus it was missing all the time.
+                            SdrUndoAttrObj* pUndoAttr = new SdrUndoAttrObj(*pWaterCanCandidate, sal_True, sal_True);
+                            pView->BegUndo(pUndoAttr->GetComment());
+                            pView->AddUndo(new SdrUndoGeoObj(*pWaterCanCandidate));
+                            pView->AddUndo(pUndoAttr);
+
                             pWaterCanCandidate->SetStyleSheet (pStyleSheet, FALSE);
+
+                            // #108981#
+                            pView->EndUndo();
                         }
                     }
                 }
