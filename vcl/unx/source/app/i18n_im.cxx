@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_im.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cp $ $Date: 2001-07-18 10:21:49 $
+ *  last change: $Author: cp $ $Date: 2001-08-16 08:08:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -317,6 +317,14 @@ SalI18N_InputMethod::CreateMethod ( Display *pDisplay )
         {
             maMethod = XOpenIM(pDisplay, NULL, NULL, NULL);
             mbMultiLingual = False;
+        }
+
+        if ((maMethod == (XIM)NULL) && (getenv("XMODIFIERS") != NULL))
+        {
+                putenv ("XMODIFIERS");
+                XSetLocaleModifiers("");
+                maMethod = XOpenIM(pDisplay, NULL, NULL, NULL);
+                mbMultiLingual = False;
         }
 
         if ( maMethod != (XIM)NULL )

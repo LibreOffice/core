@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_ic.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: cp $ $Date: 2001-07-19 14:12:21 $
+ *  last change: $Author: cp $ $Date: 2001-08-16 08:08:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,6 +188,9 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame,
                                 /*  | XIMStatusCallbacks
                                     | XIMStatusArea */ )
 {
+      maClientData.aText.pUnicodeBuffer = NULL;
+      maClientData.aText.pCharStyle     = NULL;
+
     SalI18N_InputMethod *pInputMethod;
     pInputMethod = pFrame->maFrameData.GetDisplay()->GetInputMethod();
     mbMultiLingual = pInputMethod->IsMultiLingual();
@@ -369,6 +372,16 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame,
             XFree( mpStatusAttributes );
         if ( mpPreeditAttributes != NULL )
             XFree( mpPreeditAttributes );
+          if ( maClientData.aText.pUnicodeBuffer != NULL )
+            free ( maClientData.aText.pUnicodeBuffer );
+          if ( maClientData.aText.pUnicodeBuffer != NULL );
+              free ( maClientData.aText.pUnicodeBuffer );
+
+        mpAttributes                      = NULL;
+        mpStatusAttributes                = NULL;
+        mpPreeditAttributes               = NULL;
+        maClientData.aText.pUnicodeBuffer = NULL;
+          maClientData.aText.pUnicodeBuffer = NULL;
     }
 
     if ( maContext != NULL && mbMultiLingual )
