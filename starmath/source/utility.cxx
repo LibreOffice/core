@@ -2,9 +2,9 @@
  *
  *  $RCSfile: utility.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tl $ $Date: 2001-08-17 14:10:32 $
+ *  last change: $Author: tl $ $Date: 2001-08-21 09:05:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -316,6 +316,7 @@ int GetTextEncodingTabIndex( const String &rTxt, xub_StrLen nPos )
 const String ImportString( const ByteString& rByteString )
 {
     String  aString( rByteString, RTL_TEXTENCODING_MS_1252 );
+
     const xub_StrLen nPreLen  = sizeof( PRE_TE ) - 1;
     const xub_StrLen nPostLen = sizeof( POST_TE ) - 1;
 
@@ -348,14 +349,17 @@ const String ImportString( const ByteString& rByteString )
             INT32 nCharVal = aString.Copy( nNumStart, nPostStart - nNumStart ).ToInt32();
             DBG_ASSERT( nCharVal != 0, "String -> Int32 failed ?" );
             if (RTL_TEXTENCODING_UNICODE == nEnc)
-                sRepl = (sal_Unicode) nCharVal;
+            {
+                if (nCharVal)
+                    sRepl = (sal_Unicode) nCharVal;
+            }
             else
             {
                 DBG_ASSERT( 0 <= nCharVal  &&  nCharVal <= 256,
                         "character value out of range" );
                 sRepl = ByteString::ConvertToUnicode( nCharVal, nEnc );
             }
-            DBG_ASSERT( sRepl.Len(), "conversion failed" );
+            DBG_ASSERT( sRepl.Len() || !nCharVal, "conversion failed" );
             nReplLen = nPostStart + nPostLen - nPreStart;
         }
         else
@@ -368,6 +372,11 @@ const String ImportString( const ByteString& rByteString )
         aString.Replace( nPreStart, nReplLen, sRepl );
         nPreStart += sRepl.Len();
     }
+
+    // in old 2.0 or 3.0 formulas the strings to be imported do have an
+    // additional '\0' character at the end that gets removed here.
+    if (aString.Len())
+        aString.EraseTrailingChars( '\0' );
 
     aString.ConvertLineEnd();
     return aString;
