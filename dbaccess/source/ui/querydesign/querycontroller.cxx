@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-28 10:18:26 $
+ *  last change: $Author: fs $ $Date: 2001-03-01 13:27:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1000,8 +1000,14 @@ void OQueryController::Load(const Reference< XObjectInputStream>& _rxIn)
     {
     }
 }
-// -----------------------------------------------------------------------------
 
+// -----------------------------------------------------------------------------
+OTableWindowData* OQueryController::createTableWindowData()
+{
+    return new OQueryTableWindowData();
+}
+
+// -----------------------------------------------------------------------------
 
 
 

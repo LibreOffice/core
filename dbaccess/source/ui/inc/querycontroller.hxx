@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-28 10:10:02 $
+ *  last change: $Author: fs $ $Date: 2001-03-01 13:27:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,6 +217,9 @@ namespace dbaui
         //
         virtual void Load(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream>& _rxIn);
         virtual void Save(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream>& _rxOut);
+
+    protected:
+        virtual OTableWindowData* createTableWindowData();
     };
 }
 #endif // DBAUI_QUERYCONTROLLER_HXX

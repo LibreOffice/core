@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RelationController.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-28 10:06:31 $
+ *  last change: $Author: fs $ $Date: 2001-03-01 13:29:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -549,6 +549,13 @@ sal_Bool ORelationController::existsTable(const ::rtl::OUString& _rComposedTable
     }
     return aIter != m_vTableData.end();
 }
+
+// -----------------------------------------------------------------------------
+OTableWindowData* ORelationController::createTableWindowData()
+{
+    return new OTableWindowData();
+}
+
 // -----------------------------------------------------------------------------
 //void ORelationController::appendColumns(Reference<XColumnsSupplier>& _rxColSup,sal_Bool _bKeyColumns)
 //{

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinController.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-28 10:16:07 $
+ *  last change: $Author: fs $ $Date: 2001-03-01 13:27:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,7 +265,7 @@ void OJoinController::Load(const Reference< XObjectInputStream>& _rxIn)
         _rxIn >> nCount;
         for(sal_Int32 i=0;i<nCount;++i)
         {
-            OTableWindowData* pData = new OTableWindowData();
+            OTableWindowData* pData = createTableWindowData();
             pData->Load(_rxIn);
             m_vTableData.push_back(pData);
         }
