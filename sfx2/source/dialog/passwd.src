@@ -2,9 +2,9 @@
  *
  *  $RCSfile: passwd.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:31 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 19:05:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,7 +169,7 @@ ModalDialog DLG_PASSWD
         Text[ russian ] = "ֿמהעגונהטעü";
         Text[ greek ] = "ֵניגוגבßשףח";
         Text[ dutch ] = "~Bevestigen";
-        Text[ french ] = "~Confirmer";
+        Text[ french ] = "~Confirmation";
         Text[ spanish ] = "~Confirmar";
         Text[ italian ] = "Conferma";
         Text[ danish ] = "Bekrזft";
