@@ -2,9 +2,9 @@
  *
  *  $RCSfile: namedlg.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-29 10:44:40 $
+ *  last change: $Author: kz $ $Date: 2001-02-09 20:39:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,8 @@
  //
  // $Workfile:   namedlg.src  $
  //   $Author: kz $
- //     $Date: 2000-11-29 10:44:40 $
- // $Revision: 1.3 $
+ //     $Date: 2001-02-09 20:39:29 $
+ // $Revision: 1.4 $
  //  $Logfile:   T:/sc/source/ui/src/namedlg.srv  $
  //---------------------------------------------------------------------------
 
@@ -232,7 +232,7 @@ ModelessDialog RID_SCDLG_NAMES
         Text[ chinese_traditional ] = "«ό©w¨μ";
         Text[ arabic ] = "νδΣΘ Εαμ";
         Text[ greek ] = "Αντιστοιχεί σε";
-        Text[ korean ] = "Ώ΅ ΒόΑ¶";
+        Text[ korean ] = "Ώ΅ ΗÒ΄η";
         Text[ turkish ] = "Ait olduπu aralύk";
         Text[ language_user1 ] = " ";
     };
@@ -266,7 +266,7 @@ ModelessDialog RID_SCDLG_NAMES
         QuickHelpText[ chinese_traditional ] = "ΑY¤p";
         QuickHelpText[ arabic ] = "ΚΥΫνΡ";
         QuickHelpText[ greek ] = "Σμίκρυνση";
-        QuickHelpText[ korean ] = "Min/Max";
+        QuickHelpText[ korean ] = "ΓΰΌÒ!";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Verkleinern";
     };
@@ -317,7 +317,7 @@ ModelessDialog RID_SCDLG_NAMES
         Text[ chinese_traditional ] = "°Ο°μΓώ«¬";
         Text[ arabic ] = "δζΪ ΗαδΨΗή";
         Text[ greek ] = "Τύπος περιοχής";
-        Text[ korean ] = "ΏµΏª ΗόΕΒ";
+        Text[ korean ] = "±ΈΏª ΑΎ·ω";
         Text[ turkish ] = "Aralύk tόrό";
         Text[ language_user1 ] = " ";
     };
@@ -404,7 +404,7 @@ ModelessDialog RID_SCDLG_NAMES
         Text[ chinese_traditional ] = "­«½ΖªΊ¦C(~R)";
         Text[ arabic ] = "ΗαΥέ ΗαγίΡΡ";
         Text[ greek ] = "Επαναλαμβανόμεν~η γραμμή";
-        Text[ korean ] = "Ηΰ ΉέΊΉ(~R)";
+        Text[ korean ] = "ΉέΊΉΗΰ(~R)";
         Text[ turkish ] = "Y~inelenen satύr";
         Text[ language_user1 ] = " ";
     };
@@ -433,7 +433,7 @@ ModelessDialog RID_SCDLG_NAMES
         Text[ chinese_traditional ] = "­«½ΖªΊΔζ(~C)";
         Text[ arabic ] = "ΗαΪγζΟ ΗαγίΡΡ";
         Text[ greek ] = "Επαναλαμ~βανόμενη στήλη";
-        Text[ korean ] = "Ώ­ ΉέΊΉ(~C)";
+        Text[ korean ] = "ΉέΊΉΏ­(~C)";
         Text[ turkish ] = "~Yinelenen sόtun";
         Text[ language_user1 ] = " ";
     };
