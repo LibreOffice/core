@@ -2,9 +2,9 @@
  *
  *  $RCSfile: spelleng.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 13:55:04 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 14:07:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -415,16 +415,27 @@ Window* ScSpellingEngine::GetDialogParent()
 ScTextConversionEngine::ScTextConversionEngine(
         SfxItemPool* pEnginePool, ScViewData& rViewData,
         ScDocument* pUndoDoc, ScDocument* pRedoDoc,
-        LanguageType eConvLanguage ) :
-    ScConversionEngineBase( pEnginePool, rViewData, pUndoDoc, pRedoDoc ),
-    meConvLang( eConvLanguage )
+        ESelection* pEdSelection,
+        SCCOL nCol, SCROW nRow, SCTAB nTab,
+        bool bCellSelection,
+        LanguageType eSourceLanguage,
+        LanguageType eTargetLanguage,
+        const Font *pTargetFont,
+        sal_Int32 nOptions,
+        sal_Bool bIsInteractive ) :
+    ScConversionEngineBase( pEnginePool, rViewData, pUndoDoc, pRedoDoc, pEdSelection, nCol, nRow, nTab, bCellSelection ),
+    meSourceLang( eSourceLanguage ),
+    meTargetLang( eTargetLanguage ),
+    mpTargetFont( pTargetFont ),
+    mnOptions( nOptions ),
+    mbIsInteractive( bIsInteractive )
 {
 }
 
 void ScTextConversionEngine::ConvertAll( EditView& rEditView )
 {
     if( FindNextConversionCell() )
-        rEditView.StartTextConversion( meConvLang, TRUE );
+        rEditView.StartTextConversion( meSourceLang, meTargetLang, mpTargetFont, mnOptions, mbIsInteractive, TRUE );
 }
 
 BOOL ScTextConversionEngine::ConvertNextDocument()
@@ -434,7 +445,7 @@ BOOL ScTextConversionEngine::ConvertNextDocument()
 
 bool ScTextConversionEngine::NeedsConversion()
 {
-    return HasConvertibleTextPortion( meConvLang );
+    return HasConvertibleTextPortion( meSourceLang );
 }
 
 // ============================================================================
