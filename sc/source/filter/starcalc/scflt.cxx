@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scflt.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 17:00:43 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 09:13:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2463,9 +2463,9 @@ void Sc10Import::LoadObjects()
         nStartX = (long) ( nStartX * HMM_PER_TWIPS );
         nStartX += (long) ( GraphHeader.x / nPPTX * HMM_PER_TWIPS );
         long nSizeX = (long) ( GraphHeader.w / nPPTX * HMM_PER_TWIPS );
-        long nStartY = 0;
-        for (SCsROW nY=0; nY<static_cast<SCsROW>(GraphHeader.CarretY); nY++)
-            nStartY += pDoc->FastGetRowHeight(nY, static_cast<SCTAB>(GraphHeader.CarretZ));
+        long nStartY = pDoc->FastGetRowHeight( 0,
+                static_cast<SCsROW>(GraphHeader.CarretY) - 1,
+                static_cast<SCTAB>(GraphHeader.CarretZ));
         nStartY = (long) ( nStartY * HMM_PER_TWIPS );
         nStartY += (long) ( GraphHeader.y / nPPTY * HMM_PER_TWIPS );
         long nSizeY = (long) ( GraphHeader.h / nPPTY * HMM_PER_TWIPS );
