@@ -2,9 +2,9 @@
  *
  *  $RCSfile: test_di.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: dbo $ $Date: 2002-08-19 07:18:48 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 12:58:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,7 @@
 #include <rtl/ustring.hxx>
 #include <osl/diagnose.h>
 #include <osl/time.h>
+#include <sal/types.h>
 //
 #include <uno/dispatcher.h>
 #include <uno/environment.h>
@@ -414,7 +415,8 @@ static sal_Bool performTest(
 
         assign( (test::TestElement &)aData,
                 sal_True, '@', 17, 0x1234, 0xfedc, 0x12345678, 0xfedcba98,
-                0x123456789abcdef0, 0xfedcba9876543210,
+                SAL_CONST_INT64(0x123456789abcdef0),
+                SAL_CONST_UINT64(0xfedcba9876543210),
                 (float)17.0815, 3.1415926359, TestEnum_LOLA,
                 OUString::createFromAscii("dumdidum"), xDummyInterface,
                 makeAny( xDummyInterface ) );
