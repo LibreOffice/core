@@ -158,7 +158,7 @@ hedabu: ..\inc\testtoolloader.hxx %_DEST%\inc%_EXT%\tools\testtoolloader.hxx
 
 ..\%__SRC%\bin\rscdep.exe %_DEST%\bin%_EXT%\rscdep.exe
 ..\%__SRC%\bin\rscdep %_DEST%\bin%_EXT%\rscdep
-..\%__SRC%\bin\zipdep.exe %_DEST%\bin%_EXT%\zipdep.exe
-..\%__SRC%\bin\zipdep %_DEST%\bin%_EXT%\zipdep
+..\%__SRC%\bin\so_checksum.exe %_DEST%\bin%_EXT%\so_checksum.exe
+..\%__SRC%\bin\so_checksum %_DEST%\bin%_EXT%\so_checksum
 
 dos: sh -c "if test %OS% = MACOSX; then create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
