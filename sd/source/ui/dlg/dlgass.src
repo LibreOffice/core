@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgass.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 21:23:24 $
+ *  last change: $Author: cl $ $Date: 2001-02-13 12:00:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,7 +142,7 @@ ModalDialog DLG_ASS
     FixedBitmap FB_PAGE1
     {
         OutputSize = TRUE ;
-//      Scale = TRUE;
+        Scale = TRUE;
         Border = TRUE;
         Pos = MAP_APPFONT ( 6 , 4 ) ;
         Size = MAP_APPFONT ( 256 , 29 ) ;
@@ -290,7 +290,7 @@ ModalDialog DLG_ASS
     FixedBitmap FB_PAGE2
     {
         OutputSize = TRUE ;
-//      Scale = TRUE;
+        Scale = TRUE;
         Border = TRUE;
         Pos = MAP_APPFONT ( 6 , 4 ) ;
         Size = MAP_APPFONT ( 256 , 29 ) ;
@@ -517,7 +517,7 @@ ModalDialog DLG_ASS
     FixedBitmap FB_PAGE3
     {
         OutputSize = TRUE ;
-//      Scale = TRUE;
+        Scale = TRUE;
         Border = TRUE;
         Pos = MAP_APPFONT ( 6 , 4 ) ;
         Size = MAP_APPFONT ( 256 , 29 ) ;
@@ -851,7 +851,7 @@ ModalDialog DLG_ASS
     FixedBitmap FB_PAGE4
     {
         OutputSize = TRUE ;
-//      Scale = TRUE;
+        Scale = TRUE;
         Border = TRUE;
         Pos = MAP_APPFONT ( 6 , 4 ) ;
         Size = MAP_APPFONT ( 256 , 29 ) ;
@@ -998,7 +998,7 @@ ModalDialog DLG_ASS
     FixedBitmap FB_PAGE5
     {
         OutputSize = TRUE ;
-//      Scale = TRUE;
+        Scale = TRUE;
         Border = TRUE;
         Pos = MAP_APPFONT ( 6 , 4 ) ;
         Size = MAP_APPFONT ( 256 , 29 ) ;
