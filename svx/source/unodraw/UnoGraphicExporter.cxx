@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoGraphicExporter.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2001-08-31 06:42:28 $
+ *  last change: $Author: cl $ $Date: 2002-01-21 10:01:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,10 @@
  ************************************************************************/
 
 #include <vector>
+
+#ifndef _VOS_MUTEX_HXX_
+#include <vos/mutex.hxx>
+#endif
 
 #ifndef _COM_SUN_STAR_CONTAINER_XCHILD_HPP_
 #include <com/sun/star/container/XChild.hpp>
@@ -173,6 +177,7 @@
 
 using namespace ::comphelper;
 using namespace ::osl;
+using namespace ::vos;
 using namespace ::rtl;
 using namespace ::cppu;
 using namespace ::com::sun::star;
@@ -380,6 +385,8 @@ GraphicExporter::~GraphicExporter()
 sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDescriptor )
     throw(RuntimeException)
 {
+    OGuard aGuard( Application::GetSolarMutex() );
+
     if( NULL == mpUnoPage )
         return sal_False;
 
@@ -675,6 +682,8 @@ void SAL_CALL GraphicExporter::cancel()
 void SAL_CALL GraphicExporter::setSourceDocument( const Reference< lang::XComponent >& xComponent )
     throw(IllegalArgumentException, RuntimeException)
 {
+    OGuard aGuard( Application::GetSolarMutex() );
+
     mxShapes = NULL;
     mpUnoPage = NULL;
 
