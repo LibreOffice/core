@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpstyl.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:35:07 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 15:00:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,6 +160,10 @@
 
 #ifndef _XMLOFF_NUMBERSTYLESIMPORT_HXX
 #include "XMLNumberStylesImport.hxx"
+#endif
+
+#ifndef _XMLOFF_XMLERROR_HXX
+#include "xmlerror.hxx"
 #endif
 
 using namespace ::rtl;
@@ -1312,94 +1316,103 @@ void SdXMLStylesContext::ImpSetGraphicStyles(
     // create all styles and set properties
     for( a = 0; a < GetStyleCount(); a++)
     {
-        const SvXMLStyleContext* pStyle = GetStyle(a);
-
-        if(nFamily == pStyle->GetFamily() && !pStyle->IsDefaultStyle())
+        try
         {
-            const UniString aStyleName(pStyle->GetName(), (sal_uInt16)pStyle->GetName().getLength());
-            sal_uInt16 nStylePrefLen = aStyleName.SearchBackward( sal_Unicode('-') ) + 1;
+            const SvXMLStyleContext* pStyle = GetStyle(a);
 
-            if(!nPrefLen || ((nPrefLen == nStylePrefLen) && aStyleName.Equals(rPrefix, 0, nPrefLen)))
+            if(nFamily == pStyle->GetFamily() && !pStyle->IsDefaultStyle())
             {
-                uno::Reference< style::XStyle > xStyle;
-                const OUString aPureStyleName = nPrefLen ?
-                    pStyle->GetName().copy((sal_Int32)nPrefLen) : pStyle->GetName();
+                const UniString aStyleName(pStyle->GetName(), (sal_uInt16)pStyle->GetName().getLength());
+                sal_uInt16 nStylePrefLen = aStyleName.SearchBackward( sal_Unicode('-') ) + 1;
 
-                if(xPageStyles->hasByName(aPureStyleName))
+                if(!nPrefLen || ((nPrefLen == nStylePrefLen) && aStyleName.Equals(rPrefix, 0, nPrefLen)))
                 {
-                    aAny = xPageStyles->getByName(aPureStyleName);
-                    aAny >>= xStyle;
+                    uno::Reference< style::XStyle > xStyle;
+                    const OUString aPureStyleName = nPrefLen ?
+                        pStyle->GetName().copy((sal_Int32)nPrefLen) : pStyle->GetName();
 
-                    // set properties of existing styles to default
-                    uno::Reference< beans::XPropertySet > xPropSet( xStyle, uno::UNO_QUERY );
-                    uno::Reference< beans::XPropertySetInfo > xPropSetInfo;
-                    if( xPropSet.is() )
-                        xPropSetInfo = xPropSet->getPropertySetInfo();
-
-                    uno::Reference< beans::XPropertyState > xPropState( xStyle, uno::UNO_QUERY );
-
-                    if( xPropState.is() )
+                    if(xPageStyles->hasByName(aPureStyleName))
                     {
-                        UniReference < XMLPropertySetMapper > xPrMap;
-                        UniReference < SvXMLImportPropertyMapper > xImpPrMap = GetImportPropertyMapper( nFamily );
-                        DBG_ASSERT( xImpPrMap.is(), "There is the import prop mapper" );
-                        if( xImpPrMap.is() )
-                            xPrMap = xImpPrMap->getPropertySetMapper();
-                        if( xPrMap.is() )
+                        aAny = xPageStyles->getByName(aPureStyleName);
+                        aAny >>= xStyle;
+
+                        // set properties of existing styles to default
+                        uno::Reference< beans::XPropertySet > xPropSet( xStyle, uno::UNO_QUERY );
+                        uno::Reference< beans::XPropertySetInfo > xPropSetInfo;
+                        if( xPropSet.is() )
+                            xPropSetInfo = xPropSet->getPropertySetInfo();
+
+                        uno::Reference< beans::XPropertyState > xPropState( xStyle, uno::UNO_QUERY );
+
+                        if( xPropState.is() )
                         {
-                            const sal_Int32 nCount = xPrMap->GetEntryCount();
-                            for( sal_Int32 i = 0; i < nCount; i++ )
+                            UniReference < XMLPropertySetMapper > xPrMap;
+                            UniReference < SvXMLImportPropertyMapper > xImpPrMap = GetImportPropertyMapper( nFamily );
+                            DBG_ASSERT( xImpPrMap.is(), "There is the import prop mapper" );
+                            if( xImpPrMap.is() )
+                                xPrMap = xImpPrMap->getPropertySetMapper();
+                            if( xPrMap.is() )
                             {
-                                const OUString& rName = xPrMap->GetEntryAPIName( i );
-                                if( xPropSetInfo->hasPropertyByName( rName ) && beans::PropertyState_DIRECT_VALUE == xPropState->getPropertyState( rName ) )
+                                const sal_Int32 nCount = xPrMap->GetEntryCount();
+                                for( sal_Int32 i = 0; i < nCount; i++ )
                                 {
-                                    xPropState->setPropertyToDefault( rName );
+                                    const OUString& rName = xPrMap->GetEntryAPIName( i );
+                                    if( xPropSetInfo->hasPropertyByName( rName ) && beans::PropertyState_DIRECT_VALUE == xPropState->getPropertyState( rName ) )
+                                    {
+                                        xPropState->setPropertyToDefault( rName );
+                                    }
                                 }
                             }
                         }
                     }
-                }
-                else
-                {
-                    // graphics style does not exist, create and add it
-                    uno::Reference< lang::XMultiServiceFactory > xServiceFact(GetSdImport().GetModel(), uno::UNO_QUERY);
-                    if(xServiceFact.is())
+                    else
                     {
-                        uno::Reference< style::XStyle > xNewStyle(
-                            xServiceFact->createInstance(
-                            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.style.Style"))),
-                            uno::UNO_QUERY);
-
-                        if(xNewStyle.is())
+                        // graphics style does not exist, create and add it
+                        uno::Reference< lang::XMultiServiceFactory > xServiceFact(GetSdImport().GetModel(), uno::UNO_QUERY);
+                        if(xServiceFact.is())
                         {
-                            // remember style
-                            xStyle = xNewStyle;
+                            uno::Reference< style::XStyle > xNewStyle(
+                                xServiceFact->createInstance(
+                                OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.style.Style"))),
+                                uno::UNO_QUERY);
 
-                            // add new style to graphics style pool
-                            uno::Reference< container::XNameContainer > xInsertContainer(xPageStyles, uno::UNO_QUERY);
-                            if(xInsertContainer.is())
+                            if(xNewStyle.is())
                             {
-                                aAny <<= xStyle;
-                                xInsertContainer->insertByName(aPureStyleName, aAny);
+                                // remember style
+                                xStyle = xNewStyle;
+
+                                // add new style to graphics style pool
+                                uno::Reference< container::XNameContainer > xInsertContainer(xPageStyles, uno::UNO_QUERY);
+                                if(xInsertContainer.is())
+                                {
+                                    aAny <<= xStyle;
+                                    xInsertContainer->insertByName(aPureStyleName, aAny);
+                                }
                             }
                         }
                     }
-                }
 
-                if(xStyle.is())
-                {
-                    // set properties at style
-                    XMLShapeStyleContext* pPropStyle =
-                        (pStyle->ISA(XMLShapeStyleContext)) ? (XMLShapeStyleContext*)pStyle : 0L;
-                    uno::Reference< beans::XPropertySet > xPropSet(xStyle, uno::UNO_QUERY);
-
-                    if(xPropSet.is() && pPropStyle)
+                    if(xStyle.is())
                     {
-                        pPropStyle->FillPropertySet(xPropSet);
-                        pPropStyle->SetStyle(xStyle);
+                        // set properties at style
+                        XMLShapeStyleContext* pPropStyle =
+                            (pStyle->ISA(XMLShapeStyleContext)) ? (XMLShapeStyleContext*)pStyle : 0L;
+                        uno::Reference< beans::XPropertySet > xPropSet(xStyle, uno::UNO_QUERY);
+
+                        if(xPropSet.is() && pPropStyle)
+                        {
+                            pPropStyle->FillPropertySet(xPropSet);
+                            pPropStyle->SetStyle(xStyle);
+                        }
                     }
                 }
             }
+        }
+        catch( Exception&e )
+        {
+            (void)e;
+            uno::Sequence<OUString> aSeq(0);
+            const_cast<SdXMLImport*>(&GetSdImport())->SetError( XMLERROR_FLAG_WARNING | XMLERROR_API, aSeq, e.Message, NULL );
         }
     }
 
@@ -1428,8 +1441,11 @@ void SdXMLStylesContext::ImpSetGraphicStyles(
                             xStyle->setParentStyle(pStyle->GetParent());
                     }
                 }
-                catch( container::NoSuchElementException e )
+                catch( Exception& e )
                 {
+                    (void)e;
+                    uno::Sequence<OUString> aSeq(0);
+                    const_cast<SdXMLImport*>(&GetSdImport())->SetError( XMLERROR_FLAG_WARNING | XMLERROR_API, aSeq, e.Message, NULL );
                 }
             }
         }
