@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hro $ $Date: 2001-05-14 07:29:21 $
+ *  last change: $Author: hro $ $Date: 2001-05-14 11:22:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3616,20 +3616,19 @@ extern "C" oslFileError osl_getRealPath(rtl_uString* strPath, rtl_uString** strR
 
 static sal_Bool SAL_CALL makeAbsolutePath( const rtl::OUString& aRelPath, rtl::OUString& aAbsPath )
 {
-    sal_Int32   nTokens = aRelPath.getTokenCount( '/' );
-    sal_Int32   iToken = 0;
+    sal_Int32   nIndex = 0;
 
     std::vector< rtl::OUString >    aTokenStack;
 
-    for ( iToken = 1; iToken < nTokens; iToken++ )
+    do
     {
-        rtl::OUString   aToken = aRelPath.getToken( iToken, '/' );
+        rtl::OUString   aToken = aRelPath.getToken( 0, '/', nIndex );
 
         if ( aToken.compareTo( rtl::OUString::createFromAscii( ".." ) ) == 0 )
             aTokenStack.pop_back();
         else
             aTokenStack.push_back( aToken );
-    }
+    } while ( nIndex >= 0 );
 
 
     std::vector< rtl::OUString >::iterator it;
