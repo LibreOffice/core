@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formcontroller.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-29 10:45:45 $
+ *  last change: $Author: fs $ $Date: 2001-05-29 13:25:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -935,7 +935,18 @@ namespace pcr
             {
                 // are we inspecting a combo-/listbox?
                 if ((FormComponentType::COMBOBOX == m_nClassId) || (FormComponentType::LISTBOX == m_nClassId))
+                {
                     xRowSet = Reference< XRowSet >(m_xObjectParent, UNO_QUERY);
+                    if (!xRowSet.is())
+                    {
+                        if (Reference< XGridColumnFactory >(m_xObjectParent, UNO_QUERY).is())
+                        {   // we're inspecting a grid column
+                            Reference< XChild > xParentAsChild(m_xObjectParent, UNO_QUERY);
+                            if (xParentAsChild.is())
+                                xRowSet = Reference< XRowSet >(xParentAsChild->getParent(), UNO_QUERY);
+                        }
+                    }
+                }
 
                 if (!xRowSet.is())
                 {
@@ -989,7 +1000,18 @@ namespace pcr
             {
                 // are we inspecting a combo-/listbox?
                 if ((FormComponentType::COMBOBOX == m_nClassId) || (FormComponentType::LISTBOX == m_nClassId))
+                {
                     xRowSet = Reference< XRowSet >(m_xObjectParent, UNO_QUERY);
+                    if (!xRowSet.is())
+                    {
+                        if (Reference< XGridColumnFactory >(m_xObjectParent, UNO_QUERY).is())
+                        {   // we're inspecting a grid column
+                            Reference< XChild > xParentAsChild(m_xObjectParent, UNO_QUERY);
+                            if (xParentAsChild.is())
+                                xRowSet = Reference< XRowSet >(xParentAsChild->getParent(), UNO_QUERY);
+                        }
+                    }
+                }
 
                 if (!xRowSet.is())
                 {
@@ -2800,6 +2822,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.25  2001/05/29 10:45:45  fs
+ *  #87461# +OnImageURLClicked - now using the FileDlgHelper instead of the UNO service
+ *
  *  Revision 1.24  2001/05/25 14:10:16  fs
  *  #86865# transport the FontSlant as FontSlant, not as Int16
  *
