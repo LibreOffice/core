@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.src,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: vg $ $Date: 2002-12-05 14:05:56 $
+ *  last change: $Author: kz $ $Date: 2002-12-09 11:38:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,7 +118,7 @@ String STR_TABLEDESIGN_DBFIELDTYPES
 {
     //Text = "Unbekannt;Text;Zahl;Datum/Zeit;Datum;Zeit;Ja/Nein;Währung;Memo;Zähler;Bild;Text (fix);Dezimal;Binärfeld (fix);Binärfeld;BigInt;Double;Float;Real;Integer;Small Integer;Tiny Integer;SQL Null;Objekt;Distinct;Struktur;Feld;BLOB;CLOB;REF;OTHER" ;
 
-    Text [ language_user1 ] = "the ; the sorting of the text doesn't be changed and every type must be translated";
+    Text [ language_user1 ] = "the sorting of the text doesn't be changed and every type must be translated";
 
     Text = "Unbekannt;Text;Zahl;Datum/Zeit;Datum;Zeit;Ja/Nein;Währung;Memo;Zähler;Bild;Text (fix);Dezimal;Binärfeld (fix);Binärfeld;BigInt;Double;Float;Real;Integer;Small Integer;Tiny Integer;SQL Null;Objekt;Distinct;Struktur;Feld;BLOB;CLOB;REF;OTHER" ;
     Text [ ENGLISH ] = "Unknown;Text;Number;Date/Time;Date;Time;Boolean;Currency;Memo;Counter;Image;Text (fix);Decimal;Binary (fix);Binary;BigInt;Double;Float;Real;Integer;Small Integer;Tiny Integer;SQL Null;Object;Distinct;Struct;Feld;BLOB;CLOB;REF;OTHER" ;
@@ -2335,6 +2335,16 @@ String STR_NO_TYPE_INFO_AVAILABLE
     Text[ korean ] = "No type information could be retrieved from the database.\nThe table design mode is not available for this data source.";
     Text[ turkish ] = "No type information could be retrieved from the database.\nThe table design mode is not available for this data source.";
     Text[ thai ] = "No type information could be retrieved from the database.\nThe table design mode is not available for this data source.";
+    Text[ english_us ] = "No type information could be retrieved from the database.\nThe table design mode is not available for this data source.";
+    Text[ greek ] = "No type information could be retrieved from the database.\nThe table design mode is not available for this data source.";
+    Text[ dutch ] = "No type information could be retrieved from the database.\nThe table design mode is not available for this data source.";
+    Text[ french ] = "No type information could be retrieved from the database.\nThe table design mode is not available for this data source.";
+    Text[ finnish ] = "No type information could be retrieved from the database.\nThe table design mode is not available for this data source.";
+    Text[ danish ] = "No type information could be retrieved from the database.\nThe table design mode is not available for this data source.";
+    Text[ chinese_simplified ] = "No type information could be retrieved from the database.\nThe table design mode is not available for this data source.";
+    Text[ chinese_traditional ] = "No type information could be retrieved from the database.\nThe table design mode is not available for this data source.";
+    Text[ arabic ] = "No type information could be retrieved from the database.\nThe table design mode is not available for this data source.";
+    Text[ catalan ] = "No type information could be retrieved from the database.\nThe table design mode is not available for this data source.";
 };
 
 
