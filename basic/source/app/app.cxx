@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: gh $ $Date: 2002-04-24 09:19:47 $
+ *  last change: $Author: gh $ $Date: 2002-05-29 07:27:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,9 +154,11 @@ void TestToolDebugMessageFilter( const sal_Char *pString )
     if ( aMessage.Search( CByteString("getDateFormatsImpl") ) != STRING_NOTFOUND
       && aMessage.Search( CByteString("no date formats") ) != STRING_NOTFOUND ) return;
 
-    DBG_INSTOUTERROR( DBG_OUT_MSGBOX )
+
+    aBasicApp.DbgPrintMsgBox( pString );
+/*    DBG_INSTOUTERROR( DBG_OUT_MSGBOX )
     DBG_ERROR( pString );
-    DBG_INSTOUTERROR( DBG_OUT_TESTTOOL )
+    DBG_INSTOUTERROR( DBG_OUT_TESTTOOL )*/
 }
 void SAL_CALL osl_TestToolDebugMessageFilter( const sal_Char *pString )
 {
@@ -374,16 +376,6 @@ Reference< XContentProviderManager > InitializeUCB( void )
 */
 
 
-
-#ifdef DBG_UTIL
-//  Install filter for OSLAsserts
-    DbgSetPrintTestTool( TestToolDebugMessageFilter );
-    DBG_INSTOUTERROR( DBG_OUT_TESTTOOL )
-
-    if ( osl_setDebugMessageFunc( osl_TestToolDebugMessageFilter ) )
-        DBG_ERROR("osl_setDebugMessageFunc returns non NULL pointer");
-#endif
-
 //  Create unconfigured Ucb:
 /*  Sequence< Any > aArgs(1);
     aArgs[1] = makeAny ( xConfProvider );*/
@@ -412,6 +404,16 @@ Reference< XContentProviderManager > InitializeUCB( void )
 
 void BasicApp::Main( )
 {
+#ifdef DBG_UTIL
+//  Install filter for OSLAsserts
+    DbgPrintMsgBox = DbgGetPrintMsgBox();
+    DbgSetPrintTestTool( TestToolDebugMessageFilter );
+    DBG_INSTOUTERROR( DBG_OUT_TESTTOOL )
+
+    if ( osl_setDebugMessageFunc( osl_TestToolDebugMessageFilter ) )
+        DBG_ERROR("osl_setDebugMessageFunc returns non NULL pointer");
+#endif
+
     try
     {
 #ifdef _USE_UNO

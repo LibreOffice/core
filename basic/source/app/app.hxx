@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: gh $ $Date: 2002-04-24 09:19:47 $
+ *  last change: $Author: gh $ $Date: 2002-05-29 07:27:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,10 @@ public:
     void  SetFocus();
     void  Wait( BOOL );
     DECL_LINK( LateInit, void * );
+
+#ifdef DBG_UTIL
+    DbgPrintLine DbgPrintMsgBox;
+#endif
 };
 
 
