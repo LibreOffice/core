@@ -66,10 +66,10 @@ $(DESTDIRJAVAEXAMPLES)$/% : $(PRJ)$/examples$/java$/% $(DIRLIST) $(BIN)$/$(UDKNA
     $(MY_TEXTCOPY) $(MY_TEXTCOPY_SOURCEPRE) $? $(MY_TEXTCOPY_TARGETPRE) $@
 
 $(DESTDIR)$/classes$/unoil.jar : $(BINOUT)$/unoil.jar 
-    $(GNUCOPY) $? $@
+    $(GNUCOPY) -p $? $@
 
 $(DESTDIRBIN)$/applicat.rdb : $(BINOUT)$/applicat.rdb 
-    $(GNUCOPY) $(BINOUT)$/applicat.rdb $@
+    $(GNUCOPY) -p $(BINOUT)$/applicat.rdb $@
 
 $(DESTDIR)$/settings$/dk.mk : $(PRJ)$/util$/dk.mk
     +-rm -f $@ >& $(NULLDEV)
