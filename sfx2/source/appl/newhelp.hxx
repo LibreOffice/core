@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.hxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: obo $ $Date: 2004-02-16 12:02:04 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 11:03:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,9 +74,10 @@
 #include <com/sun/star/frame/XDispatch.hpp>
 #endif
 
-namespace com { namespace sun { namespace star { namespace frame { class XFrame; } } } }
 namespace com { namespace sun { namespace star { namespace awt { class XWindow; } } } }
+namespace com { namespace sun { namespace star { namespace frame { class XFrame; } } } }
 namespace com { namespace sun { namespace star { namespace i18n { class XBreakIterator; } } } }
+namespace com { namespace sun { namespace star { namespace text { class XTextRange; } } } }
 
 #include <vcl/window.hxx>
 #include <vcl/toolbox.hxx>
@@ -89,6 +90,8 @@ namespace com { namespace sun { namespace star { namespace i18n { class XBreakIt
 #include <vcl/lstbox.hxx>
 #include <vcl/dialog.hxx>
 #include <svtools/svtreebx.hxx>
+
+#include "srchdlg.hxx"
 
 // class OpenStatusListener_Impl -----------------------------------------
 
@@ -423,6 +426,7 @@ private:
 
     SfxHelpWindow_Impl*     pHelpWin;
     Window*                 pTextWin;
+    sfx2::SearchDialog*     pSrchDlg;
     ::com::sun::star::uno::Reference < ::com::sun::star::frame::XFrame >
                             xFrame;
     ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XBreakIterator >
@@ -436,9 +440,14 @@ private:
     void                    InitToolBoxImages();
     ::com::sun::star::uno::Reference< ::com::sun::star::i18n::XBreakIterator >
                             GetBreakIterator();
+    ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextRange >
+                            getCursor() const;
+    bool                    isHandledKey( const KeyCode& _rKeyCode );
 
     DECL_LINK(              SelectHdl, Timer* );
     DECL_LINK(              NotifyHdl, SvtMiscOptions* );
+    DECL_LINK(              FindHdl, sfx2::SearchDialog* );
+    DECL_LINK(              CloseHdl, sfx2::SearchDialog* );
 
 public:
     SfxHelpTextWindow_Impl( SfxHelpWindow_Impl* pParent );
@@ -458,6 +467,7 @@ public:
     void                    SetPageStyleHeaderOff() const;
     inline ToolBox&         GetToolBox() { return aToolBox; }
      void                   CloseFrame();
+    void                    DoSearch();
 };
 
 // class SfxHelpWindow_Impl ----------------------------------------------
