@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: dg $ $Date: 2001-09-05 13:18:19 $
+#   last change: $Author: dg $ $Date: 2001-09-05 14:20:31 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -115,7 +115,7 @@ SHL2TARGET=	$(CFGMGR_TARGET)$(CFGMGR_MAJOR)l
 .IF "$(OS)"=="MACOSX"
 #SHL2VERSIONMAP= $(TARGET).$(DLLPOSTFIX).map
 .ELSE
-SHL2VERSIONMAP= $(TARGET).map
+SHL2VERSIONMAP= $(TARGET)l.map
 .ENDIF
 SHL2OBJS=$(SLOFILES)
 SHL2STDLIBS=\
