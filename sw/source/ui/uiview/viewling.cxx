@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewling.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-17 17:29:20 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 13:32:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,10 @@
 #ifndef _COM_SUN_STAR_LINGUISTIC2_XTHESAURUS_HPP_
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
 #endif
+#ifndef _COM_SUN_STAR_I18N_TEXTCONVERSIONOPTION_HPP_
+#include <com/sun/star/i18n/TextConversionOption.hpp>
+#endif
+
 #ifndef _LINGUISTIC_LNGPROPS_HHX_
 #include <linguistic/lngprops.hxx>
 #endif
@@ -179,6 +183,9 @@
 #include <hhcwrp.hxx>
 #endif
 
+#include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
+#include <com/sun/star/lang/XInitialization.hpp>
+#include <cppuhelper/bootstrap.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
@@ -203,9 +210,78 @@ void SwView::ExecLingu(SfxRequest &rReq)
             SpellDocument( NULL, sal_False );
             break;
         case SID_HANGUL_HANJA_CONVERSION:
-            ConvertDocument( NULL );
+            StartTextConversion( LANGUAGE_KOREAN, LANGUAGE_KOREAN, NULL, 0, sal_True );
             break;
-       case FN_ADD_UNKNOWN:
+        case SID_CHINESE_CONVERSION:
+        {
+            //open ChineseTranslationDialog
+            Reference< XComponentContext > xContext(
+                ::cppu::defaultBootstrap_InitialComponentContext() ); //@todo get context from calc if that has one
+            if(xContext.is())
+            {
+                Reference< lang::XMultiComponentFactory > xMCF( xContext->getServiceManager() );
+                if(xMCF.is())
+                {
+                    Reference< ui::dialogs::XExecutableDialog > xDialog(
+                            xMCF->createInstanceWithContext(
+                                rtl::OUString::createFromAscii("com.sun.star.linguistic2.ChineseTranslationDialog")
+                                , xContext), UNO_QUERY);
+                    Reference< lang::XInitialization > xInit( xDialog, UNO_QUERY );
+                    if( xInit.is() )
+                    {
+                        //  initialize dialog
+                        Reference< awt::XWindow > xDialogParentWindow(0);
+                        Sequence<Any> aSeq(1);
+                        Any* pArray = aSeq.getArray();
+                        PropertyValue aParam;
+                        aParam.Name = rtl::OUString::createFromAscii("ParentWindow");
+                        aParam.Value <<= makeAny(xDialogParentWindow);
+                        pArray[0] <<= makeAny(aParam);
+                        xInit->initialize( aSeq );
+
+                        //execute dialog
+                        sal_Int16 nDialogRet = xDialog->execute();
+                        if( RET_OK == nDialogRet )
+                        {
+                            //get some parameters from the dialog
+                            sal_Bool bToSimplified = sal_True;
+                            sal_Bool bUseVariants = sal_True;
+                            sal_Bool bCommonTerms = sal_True;
+                            Reference< beans::XPropertySet >  xProp( xDialog, UNO_QUERY );
+                            if( xProp.is() )
+                            {
+                                try
+                                {
+                                    xProp->getPropertyValue( C2U("IsDirectionToSimplified") ) >>= bToSimplified;
+                                    xProp->getPropertyValue( C2U("IsUseCharacterVariants") ) >>= bUseVariants;
+                                    xProp->getPropertyValue( C2U("IsTranslateCommonTerms") ) >>= bCommonTerms;
+                                }
+                                catch( Exception& )
+                                {
+                                }
+                            }
+
+                            //execute translation
+                            sal_Int16 nSourceLang = bToSimplified ? LANGUAGE_CHINESE_TRADITIONAL : LANGUAGE_CHINESE_SIMPLIFIED;
+                            sal_Int16 nTargetLang = bToSimplified ? LANGUAGE_CHINESE_SIMPLIFIED : LANGUAGE_CHINESE_TRADITIONAL;
+                            sal_Int32 nOptions    = bUseVariants ? i18n::TextConversionOption::USE_CHARACTER_VARIANTS : 0;
+                            if( !bCommonTerms )
+                                nOptions = nOptions | i18n::TextConversionOption::CHARACTER_BY_CHARACTER;
+
+                            Font aTargetFont = GetEditWin().GetDefaultFont( DEFAULTFONT_CJK_TEXT,
+                                                    nTargetLang, DEFAULTFONT_FLAGS_ONLYONE );
+
+                            StartTextConversion( nSourceLang, nTargetLang, &aTargetFont, nOptions, sal_False );
+                        }
+                    }
+                    Reference< lang::XComponent > xComponent( xDialog, UNO_QUERY );
+                    if( xComponent.is() )
+                        xComponent->dispose();
+                }
+            }
+            break;
+        }
+        case FN_ADD_UNKNOWN:
             {
                 SpellDocument( NULL, sal_True );
             }
@@ -334,16 +410,16 @@ void SwView::_SpellDocument( const String* pStr, sal_Bool bAllRight )
 }
 
 /*--------------------------------------------------------------------
-    Description: start text conversion
+    Description: start language specific text conversion
  --------------------------------------------------------------------*/
 
-
-void SwView::ConvertDocument( const String* pStr )
+void SwView::StartTextConversion(
+        LanguageType nSourceLang,
+        LanguageType nTargetLang,
+        const Font *pTargetFont,
+        sal_Int32 nOptions,
+        sal_Bool bIsInteractive )
 {
-    //
-    // see SpellDocument also
-    //
-
     // do not do text conversion if it is active elsewhere
     if (GetWrtShell().HasConvIter())
     {
@@ -371,64 +447,65 @@ void SwView::ConvertDocument( const String* pStr )
     sal_Bool bOldIns = pWrtShell->IsInsMode();
     pWrtShell->SetInsMode( sal_True );
 
-    // den eigentlichen Inhalt pruefen
-    _ConvertDocument( pStr );
+
+    {
+        sal_Bool bSelection = ((SwCrsrShell*)pWrtShell)->HasSelection() ||
+            pWrtShell->GetCrsr() != pWrtShell->GetCrsr()->GetNext();
+
+//        sal_Bool bIsSpellSpecial = sal_True;
+
+        sal_Bool    bStart = bSelection || pWrtShell->IsStartOfDoc();
+        sal_Bool    bOther = !bSelection && !(pWrtShell->GetFrmType(0,sal_True) & FRMTYPE_BODY);
+
+/*
+        if( bOther && !bIsSpellSpecial )
+        // kein Sonderbereich eingeschaltet
+        {
+            // Ich will auch in Sonderbereichen trennen
+            QueryBox aBox( &GetEditWin(), SW_RES( DLG_SPECIAL_FORCED ) );
+            if( aBox.Execute() == RET_YES  &&  xProp.is())
+            {
+                sal_Bool bTrue = sal_True;
+                Any aTmp(&bTrue, ::getBooleanCppuType());
+                xProp->setPropertyValue( C2U(UPN_IS_SPELL_SPECIAL), aTmp );
+            }
+            else
+                return; // Nein Es wird nicht gespellt
+        }
+*/
+        {
+            const uno::Reference< lang::XMultiServiceFactory > xMgr(
+                        comphelper::getProcessServiceFactory() );
+            SwHHCWrapper aWrap( this, xMgr, nSourceLang, nTargetLang, pTargetFont,
+                                nOptions, bIsInteractive,
+                                bStart, bOther, bSelection );
+            SwCrsrShell *pCrsrSh = ((SwCrsrShell*) pWrtShell);
+
+            //SwViewOption* pVOpt = (SwViewOption*)pWrtShell->GetViewOptions();
+            //sal_Bool bOldIdle = pVOpt->IsIdle();
+            BOOL bOldLockedState = pCrsrSh->IsViewLocked();
+            if (bIsInteractive)
+            {
+                // TBD: show wait cursor...
+                //SwWait aWait( *GetDocShell(), TRUE );
+                //pVOpt->SetIdle( sal_False );
+                pCrsrSh->LockView( TRUE );
+            }
+
+            aWrap.Convert();
+
+            if (bIsInteractive)
+            {
+                pCrsrSh->LockView( bOldLockedState );
+                //pVOpt->SetIdle( bOldIdle );
+            }
+        }
+    }
+
 
     pWrtShell->SetInsMode( bOldIns );
-
-    SpellKontext(sal_False);
-
-//    SvxSaveDictionaries( SvxGetDictionaryList() );
-
     pVOpt->SetIdle( bOldIdle );
-}
-
-/*--------------------------------------------------------------------
-    Description: internal text conversion function
- --------------------------------------------------------------------*/
-
-void SwView::_ConvertDocument( const String* pStr )
-{
-    //
-    // see _SpellDocument also
-    //
-
-    sal_Bool bSelection = ((SwCrsrShell*)pWrtShell)->HasSelection() ||
-        pWrtShell->GetCrsr() != pWrtShell->GetCrsr()->GetNext();
-
-    sal_Bool bIsWrapReverse  = sal_False;
-    sal_Bool bIsSpellSpecial = sal_True;
-
-    sal_Bool    bStart = bSelection || ( bIsWrapReverse ?
-                        pWrtShell->IsEndOfDoc() : pWrtShell->IsStartOfDoc() );
-    sal_Bool    bOther = !bSelection && !(pWrtShell->GetFrmType(0,sal_True) & FRMTYPE_BODY);
-
-    if( bOther && !bIsSpellSpecial )
-    // kein Sonderbereich eingeschaltet
-    {
-/*
-        // Ich will auch in Sonderbereichen trennen
-        QueryBox aBox( &GetEditWin(), SW_RES( DLG_SPECIAL_FORCED ) );
-        if( aBox.Execute() == RET_YES  &&  xProp.is())
-        {
-            sal_Bool bTrue = sal_True;
-            Any aTmp(&bTrue, ::getBooleanCppuType());
-            xProp->setPropertyValue( C2U(UPN_IS_SPELL_SPECIAL), aTmp );
-        }
-        else
-            return; // Nein Es wird nicht gespellt
-*/
-    }
-    {
-        const uno::Reference< lang::XMultiServiceFactory > xMgr(
-                    comphelper::getProcessServiceFactory() );
-        INT16 nLang = LANGUAGE_KOREAN;
-        lang::Locale aLocale( SvxCreateLocale( nLang ) );
-        SwHHCWrapper aWrap( this, xMgr, aLocale,
-                            bStart, bOther, bSelection );
-
-        aWrap.Convert();
-    }
+    SpellKontext(sal_False);
 }
 
 /*--------------------------------------------------------------------
@@ -437,10 +514,10 @@ void SwView::_ConvertDocument( const String* pStr )
 
 void SwView::SpellStart( SvxSpellArea eWhich,
         sal_Bool bStartDone, sal_Bool bEndDone,
-        sal_Bool bIsConversion )
+        SwHHCWrapper *pConvWrapper )
 {
     Reference< beans::XPropertySet >  xProp( ::GetLinguPropertySet() );
-    sal_Bool bIsWrapReverse = (!bIsConversion && xProp.is()) ?
+    sal_Bool bIsWrapReverse = (!pConvWrapper && xProp.is()) ?
             *(sal_Bool*)xProp->getPropertyValue( C2U(UPN_IS_WRAP_REVERSE) ).getValue() : sal_False;
 
     SwDocPositions eStart = DOCPOS_START;
@@ -491,7 +568,7 @@ void SwView::SpellStart( SvxSpellArea eWhich,
         default:
             ASSERT( !this, "SpellStart with unknown Area" );
     }
-    pWrtShell->SpellStart( eStart, eEnde, eCurr, bIsConversion );
+    pWrtShell->SpellStart( eStart, eEnde, eCurr, pConvWrapper );
 }
 
 /*--------------------------------------------------------------------
@@ -564,9 +641,9 @@ IMPL_LINK( SwView, SpellError, void *, nLang )
  --------------------------------------------------------------------*/
 
 
-void SwView::SpellEnd( sal_Bool bIsConversion )
+void SwView::SpellEnd( SwHHCWrapper *pConvWrapper )
 {
-    pWrtShell->SpellEnd( bIsConversion );
+    pWrtShell->SpellEnd( pConvWrapper );
     if( pWrtShell->IsExtMode() )
         pWrtShell->SetMark();
 }
