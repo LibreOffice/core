@@ -2,9 +2,9 @@
  *
  *  $RCSfile: browserline.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-21 09:03:43 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 12:00:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@ namespace pcr
                 Size                m_aOutputSize;
                 Point               m_aLinePos;
                 IBrowserControl*    m_pBrowserControl;
-                PushButton*         m_pXButton;
+                PushButton*         m_pBrowseButton;
                 Window*             m_pTheParent;
                 void*               m_pData;
                 BrowserControlType  m_eControlType;
@@ -97,7 +97,6 @@ namespace pcr
                 sal_Bool            m_bNewNameWidth:1;
                 sal_Bool            m_bNeedsRepaint:1;
                 sal_Bool            m_bIsLocked:1;
-                sal_Bool            m_bHasBrowseButton:1;
                 sal_Bool            m_bIsHyperlink:1;
 
                 DECL_LINK(GetFocusHdl,PushButton*);
@@ -142,11 +141,9 @@ namespace pcr
                 void                        SetTabOrder(Window* pRefWindow, sal_uInt16 nFlags );
 
                 sal_Bool                    GrabFocus();
-                void                        ShowXButton();
-                void                        HideXButton();
-                sal_Bool                    IsVisibleXButton();
-                void                        ShowAsHyperLink(sal_Bool nFlag=sal_True);
-                sal_Bool                    IsShownAsHyperlink();
+                void                        ShowBrowseButton();
+                void                        HideBrowseButton();
+                void                        EnableInputControls( bool _bEnableInput = true, bool _bEnableBrowseButton = true );
 
                 void                        Locked(sal_Bool nFlag=sal_True);
                 sal_Bool                    IsLocked();
