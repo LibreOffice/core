@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldisp.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:56:20 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 14:24:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,8 +185,6 @@ enum SalRGB { RGB,  RBG,
 // -=-= SalVisual =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class SalVisual : public XVisualInfo
 {
-    STDAPI( SalVisual );
-
     SalRGB          eRGBMode_;
     int             nRedShift_;
     int             nGreenShift_;
@@ -213,8 +211,6 @@ public:
 // -=-= SalColormap/SalColormapRef=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class SalColormap : public SvRefBase
 {
-    STDAPI( SalColormap );
-
     SalDisplay     *pDisplay_;
     Colormap        hColormap_;
     SalColor       *pPalette_;          // Pseudocolor
@@ -265,8 +261,6 @@ struct YieldEntry;
 
 class SalXLib
 {
-    STDAPI( SalXLib );
-
     timeval         Timeout_;
     ULONG           nTimeoutMS_;
     int             pTimeoutFDS_[2];
@@ -336,8 +330,6 @@ extern "C" {
 
 class SalDisplay
 {
-    STDAPI( SalDisplay );
-
     SalXLib        *pXLib_;
     SalI18N_InputMethod         *mpInputMethod;
     SalI18N_KeyboardExtension   *mpKbdExtension;
