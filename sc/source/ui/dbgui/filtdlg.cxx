@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtdlg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:54:18 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:53:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -705,7 +705,7 @@ IMPL_LINK( ScFilterDlg, EndDlgHdl, Button*, pBtn )
         Close();
     }
 
-    return NULL;
+    return 0;
 }
 
 
@@ -722,7 +722,7 @@ IMPL_LINK( ScFilterDlg, MoreClickHdl, MoreButton*, pBtn )
         //@BugID 54702 Enablen/Disablen nur noch in Basisklasse
         //SFX_APPWINDOW->Disable(FALSE);        //! allgemeine Methode im ScAnyRefDlg
     }
-    return NULL;
+    return 0;
 }
 
 
@@ -738,7 +738,7 @@ IMPL_LINK( ScFilterDlg, TimeOutHdl, Timer*, _pTimer )
     if ( aBtnMore.GetState() )
         pTimer->Start();
 
-    return NULL;
+    return 0;
 }
 
 
@@ -832,7 +832,7 @@ IMPL_LINK( ScFilterDlg, LbSelectHdl, ListBox*, pLb )
             : UpdateValueList( 3 );
     }
 
-    return NULL;
+    return 0;
 }
 
 
@@ -871,7 +871,7 @@ IMPL_LINK( ScFilterDlg, CheckBoxHdl, CheckBox*, pBox )
         UpdateValueList( 3 );
     }
 
-    return NULL;
+    return 0;
 }
 
 
@@ -899,7 +899,7 @@ IMPL_LINK( ScFilterDlg, ValModifyHdl, ComboBox*, pEd )
             pLb->Enable();
     }
 
-    return NULL;
+    return 0;
 }
 
 
