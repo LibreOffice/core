@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unnum.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:00:34 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 16:06:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -410,24 +410,38 @@ SwUndoNumOrNoNum::SwUndoNumOrNoNum( const SwNodeIndex& rIdx,
 {
 }
 
-// #115901#
+// #115901#, #i40034#
 void SwUndoNumOrNoNum::Undo( SwUndoIter& rUndoIter )
 {
     SwNodeIndex aIdx( rUndoIter.GetDoc().GetNodes(), nIdx );
     SwTxtNode * pTxtNd = aIdx.GetNode().GetTxtNode();
 
     if (NULL != pTxtNd)
+    {
         pTxtNd->UpdateNum(mOldNum);
+
+        SwNumRule * pRule = pTxtNd->GetNumRule();
+
+        if (pRule != NULL)
+            pRule->SetInvalidRule(TRUE);
+    }
 }
 
-// #115901#
+// #115901#, #i40034#
 void SwUndoNumOrNoNum::Redo( SwUndoIter& rUndoIter )
 {
     SwNodeIndex aIdx( rUndoIter.GetDoc().GetNodes(), nIdx );
     SwTxtNode * pTxtNd = aIdx.GetNode().GetTxtNode();
 
     if (NULL != pTxtNd)
+    {
         pTxtNd->UpdateNum(mNewNum);
+
+        SwNumRule * pRule = pTxtNd->GetNumRule();
+
+        if (pRule != NULL)
+            pRule->SetInvalidRule(TRUE);
+    }
 }
 
 // #115901#
