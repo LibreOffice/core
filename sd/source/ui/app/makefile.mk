@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: ka $ $Date: 2001-09-04 14:38:20 $
+#   last change: $Author: hjs $ $Date: 2002-06-14 09:30:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -131,19 +131,15 @@ all: \
 
 $(INCCOM)$/sddll0.hxx: makefile.mk
     +@echo $@
-.IF "$(GUI)"=="OS2"
-    echo #define DLL_NAME "sd$(UPD)$(DLLPOSTFIX)" >$@
-.ELSE
-.IF "$(GUI)"=="MAC"
-    echo "$(HASHMARK)define DLL_NAME ¶"sd$(UPD)$(DLLPOSTFIX).dll¶"" > $@
-.ELSE
 .IF "$(GUI)"=="UNX"
     echo #define DLL_NAME \"libsd$(UPD)$(DLLPOSTFIX)$(DLLPOST)\" >$@
-.ELSE
+.ELSE			# "$(GUI)"=="UNX"
+.IF "$(USE_SHELL)"!="4nt"
+    echo #define DLL_NAME \"sd$(UPD)$(DLLPOSTFIX).DLL\" >$@
+.ELSE			# "$(USE_SHELL)"!="4nt"
     echo #define DLL_NAME "sd$(UPD)$(DLLPOSTFIX).DLL" >$@
-.ENDIF
-.ENDIF
-.ENDIF
+.ENDIF			#  "$(USE_SHELL)"!="4nt"
+.ENDIF			# "$(GUI)"=="UNX"
 
 .INCLUDE :  target.mk
 
