@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-22 09:23:30 $
+ *  last change: $Author: obo $ $Date: 2003-10-22 11:04:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -335,8 +335,12 @@ FileStream::FileStream(const OString& name, FileAccessMode mode)
                            osl_File_Attribute_OthRead;
 
         OUString sUrl(convertToFileUrl(name));
+#ifdef SAL_UNX
         if (osl_openFile(sUrl.pData, &m_file, checkAccessMode(mode)) == osl_File_E_None &&
             osl_setFileAttributes(sUrl.pData, uAttr) == osl_File_E_None)
+#else
+        if (osl_openFile(sUrl.pData, &m_file, checkAccessMode(mode)) == osl_File_E_None)
+#endif
             m_name = name;
         else
             m_file = NULL;
@@ -375,12 +379,15 @@ void FileStream::createTempFile(const OString& sPath)
                        osl_File_Attribute_OthRead;
 
     if (osl_createTempFile(sTmpPath.pData, &m_file, &sTmpName.pData) == osl_File_E_None) {
-        if (osl_setFileAttributes(sTmpName.pData, uAttr) == osl_File_E_None) {
-            OUString sSysTmpName;
-            FileBase::getSystemPathFromFileURL(sTmpName, sSysTmpName);
-            m_name = OUStringToOString(sSysTmpName, osl_getThreadTextEncoding());
-        } else
+#ifdef SAL_UNX
+        if (osl_setFileAttributes(sTmpName.pData, uAttr) != osl_File_E_None) {
             m_file = NULL;
+            return;
+        }
+#endif
+        OUString sSysTmpName;
+        FileBase::getSystemPathFromFileURL(sTmpName, sSysTmpName);
+        m_name = OUStringToOString(sSysTmpName, osl_getThreadTextEncoding());
     } else
         m_file = NULL;
 }
