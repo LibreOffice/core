@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: oj $ $Date: 2002-02-06 08:55:34 $
+#   last change: $Author: oj $ $Date: 2002-09-27 11:26:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -103,7 +103,6 @@ EXCEPTIONSFILES =\
 
 SLOFILES =\
             $(EXCEPTIONSFILES)					\
-            $(SLO)$/ParseContext.obj			\
             $(SLO)$/TableFieldInfo.obj			\
             $(SLO)$/QTableConnectionData.obj	\
             $(SLO)$/QTableWindowData.obj		\

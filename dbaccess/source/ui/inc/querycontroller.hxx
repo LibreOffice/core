@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: fs $ $Date: 2002-04-09 14:51:27 $
+ *  last change: $Author: oj $ $Date: 2002-09-27 11:26:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,8 +97,8 @@
 #ifndef DBAUI_JOINTABLEVIEW_HXX
 #include "JoinTableView.hxx"
 #endif
-#ifndef DBAUI_QUERYDESIGNCONTEXT_HXX
-#include "ParseContext.hxx"
+#ifndef SVX_QUERYDESIGNCONTEXT_HXX
+#include "svx/ParseContext.hxx"
 #endif
 #ifndef DBAUI_QUERYCONTAINERWINDOW_HXX
 #include "querycontainerwindow.hxx"
@@ -123,7 +123,7 @@ namespace dbaui
         OTableFields                            m_vTableFieldDesc;
         OTableFields                            m_vUnUsedFieldsDesc; // contains fields which aren't visible and don't have any criteria
 
-        OSystemParseContext*                    m_pParseContext;
+        ::svxform::OSystemParseContext*             m_pParseContext;
         ::connectivity::OSQLParser*             m_pSqlParser;   // to parse sql statements
         ::connectivity::OSQLParseTreeIterator*  m_pSqlIterator; // to iterate through them
         ::std::vector<sal_uInt32>               m_vColumnWidth;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-19 08:01:31 $
+ *  last change: $Author: oj $ $Date: 2002-09-27 11:26:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -287,7 +287,7 @@ OQueryController::OQueryController(const Reference< XMultiServiceFactory >& _rM)
     ,m_bCreateView(sal_False)
 {
     DBG_CTOR(OQueryController,NULL);
-    m_pParseContext = new OSystemParseContext();
+    m_pParseContext = new svxform::OSystemParseContext();
     m_pSqlParser    = new OSQLParser(_rM,m_pParseContext);
     InvalidateAll();
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paramdialog.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2002-04-09 14:45:02 $
+ *  last change: $Author: oj $ $Date: 2002-09-27 11:26:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,8 +99,8 @@
 #ifndef CONNECTIVITY_PREDICATEINPUT_HXX
 #include <connectivity/predicateinput.hxx>
 #endif
-#ifndef DBAUI_QUERYDESIGNCONTEXT_HXX
-#include "ParseContext.hxx"
+#ifndef SVX_QUERYDESIGNCONTEXT_HXX
+#include "svx/ParseContext.hxx"
 #endif
 
 namespace connectivity
@@ -118,7 +118,7 @@ namespace dbaui
     //==================================================================
     class OParameterDialog
             :public ModalDialog
-            ,public OParseContextClient
+            ,public ::svxform::OParseContextClient
     {
     protected:
         // the controls
@@ -185,6 +185,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2002/04/09 14:45:02  fs
+ *  #98181# use a ::dbtools::OPredicateInputController
+ *
  *  Revision 1.3  2001/06/07 15:09:31  fs
  *  #87912# redesigned the dialog
  *

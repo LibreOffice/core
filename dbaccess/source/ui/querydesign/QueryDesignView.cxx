@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryDesignView.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: oj $ $Date: 2002-09-20 10:25:38 $
+ *  last change: $Author: oj $ $Date: 2002-09-27 11:26:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -796,7 +796,7 @@ namespace
         {
             Reference< XDatabaseMetaData >  xMetaData = xConnection->getMetaData();
             ::rtl::OUString aQuote = xMetaData->getIdentifierQuoteString();
-            const OParseContext& rContext = static_cast<OQueryController*>(_pView->getController())->getParser()->getContext();
+            const IParseContext& rContext = static_cast<OQueryController*>(_pView->getController())->getParser()->getContext();
 
             for (sal_uInt16 i=0 ; i < nMaxCriteria ; i++)
             {
