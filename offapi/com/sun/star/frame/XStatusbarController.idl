@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XStatusbarController.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 16:12:54 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 18:17:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,8 +95,10 @@ module com {  module sun {  module star {  module frame {
     <p>
 
     @see com::sun::star::frame::XDispatchProvider
+
+    @since OOo 2.0.0
  */
-published interface XStatusbarController : ::com::sun::star::uno::XInterface
+interface XStatusbarController : ::com::sun::star::uno::XInterface
 {
     //=============================================================================
     /** is called by a status bar if the mouse position is within the controller
