@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabline.src,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-14 12:15:54 $
+ *  last change: $Author: rt $ $Date: 2004-07-14 12:31:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -283,14 +283,12 @@ TabPage RID_SVXPAGE_LINE
         Pos = MAP_APPFONT ( 124 , 3 + (16 * 6) - 4 ) ;
         Size = MAP_APPFONT ( 130 , 8 ) ;
         Text [ de ]= "Eckenstil" ;
-        Text [ en-US ] = "Corner style" ;
     };
     FixedText FT_EDGE_STYLE
     {
         Pos = MAP_APPFONT ( 130 , 14 + (16 * 6) - 4 ) ;
         Size = MAP_APPFONT ( 118 , 8 ) ;
         Text [ de ] = "Sti~l" ;
-        Text [ en-US ] = "Sty~le" ;
     };
     ListBox LB_EDGE_STYLE
     {
@@ -305,13 +303,6 @@ TabPage RID_SVXPAGE_LINE
             < "- kein -" ; > ;
             < "Gehrung" ; > ;
             < "Abgeschrägt" ; > ;
-        };
-        StringList [ en-US ] =
-        {
-            < "Rounded" ; Default ; > ;
-            < "- none -" ; > ;
-            < "Mitered" ; > ;
-            < "Beveled" ; > ;
         };
     };
 
