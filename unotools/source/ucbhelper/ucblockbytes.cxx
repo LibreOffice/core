@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucblockbytes.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-16 14:16:35 $
+ *  last change: $Author: mba $ $Date: 2000-10-16 16:22:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -460,6 +460,9 @@ sal_Bool UcbLockBytes::setInputStream_Impl( const Reference<XInputStream> &rxInp
     bRet = m_xInputStream.is();
     aGuard.clear();
 
+    if ( GetError() == ERRCODE_NONE && !rxInputStream.is() )
+        SetError( ERRCODE_IO_NOTEXISTS );
+
     if ( m_bStreamValid )
         m_aInitialized.set();
 
@@ -511,7 +514,9 @@ ErrCode UcbLockBytes::ReadAt ( ULONG nPos, void *pBuffer, ULONG nCount, ULONG *p
 
     if ( !xStream.is() )
     {
-        if ( m_bTerminated )
+        if ( GetError() )
+            return GetError();
+        else if ( m_bTerminated )
             return ERRCODE_IO_CANTREAD;
         else
             return ERRCODE_IO_PENDING;
@@ -595,7 +600,12 @@ ErrCode UcbLockBytes::Stat( SvLockBytesStat *pStat, SvLockBytesStatFlag) const
     Reference<XInputStream> xStream = getInputStream_Impl();
 
     if (!xStream.is())
-        return ERRCODE_IO_INVALIDACCESS;
+    {
+        if ( GetError() )
+            return GetError();
+        else
+            return ERRCODE_IO_INVALIDACCESS;
+    }
 
     Reference<XSeekable> xSeekable (xStream, UNO_QUERY);
     if (!xSeekable.is())
