@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typedetection.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 15:24:46 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 08:22:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -596,9 +596,9 @@ void TypeDetection::impl_getPreselection(const css::util::URL&                aP
                                     ++pDeepIt                      )
     {
         ::rtl::OUString              sDetectService = *pDeepIt;
-        OUStringList::const_iterator pAlreadyUsed   = ::std::find(lUsedDetectors.begin(), lUsedDetectors.end(), sDetectService);
-        if (pAlreadyUsed != lUsedDetectors.end())
-            continue;
+        //OUStringList::const_iterator pAlreadyUsed   = ::std::find(lUsedDetectors.begin(), lUsedDetectors.end(), sDetectService);
+        //if (pAlreadyUsed != lUsedDetectors.end())
+        //    continue;
 
         ::rtl::OUString sDeepType = impl_askDetectService(sDetectService, rDescriptor);
         if (sDeepType.getLength())
