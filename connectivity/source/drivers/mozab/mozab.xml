@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding="UTF-8"?>
 <!DOCTYPE COMPONENTDESCRIPTION PUBLIC "-//W3C//DTD HTML 3.2//EN" "module-description.dtd">
 <module-description xmlns:xlink="http://www.w3.org/1999/xlink">
-    <module-name>   mozab   </module-name>
+    <module-name> mozabdrv2 </module-name>
     <component-description>
         <Author>Your name</Author>
         <Name>com.sun.star.comp.sdbc.MozabDriver</Name>
@@ -13,6 +13,7 @@
         <status value="final"/>
         <supported-service> com.sun.star.sdbc.Driver    </supported-service>
         <service-dependency>    ... </service-dependency>
+    </component-description>
         <project-build-dependency>  cppuhelper  </project-build-dependency>
         <project-build-dependency>  cppu        </project-build-dependency>
         <project-build-dependency>  sal         </project-build-dependency>
@@ -59,7 +60,11 @@
         <type>  com.sun.star.sdbc.XRow                      </type>
         <type>  com.sun.star.sdb.XColumnUpdate              </type>
         <type>  com.sun.star.sdb.XColumn                    </type>
-    </component-description>
+        <type> com.sun.star.sdbc.XResultSetUpdate   </type>
+        <type> com.sun.star.sdbc.XRowUpdate         </type>
+        <type> com.sun.star.sdbcx.XRowLocate            </type>
+        <type> com.sun.star.sdbcx.XDeleteRows       </type>
+
 </module-description>
 
 

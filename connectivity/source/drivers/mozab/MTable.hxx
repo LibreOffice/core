@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MTable.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-12 11:48:41 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 18:30:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,7 @@ namespace connectivity
 
             OConnection* getConnection() { return m_pConnection;}
 
-            sal_Bool isReadOnly() const { return sal_True; }
+            sal_Bool isReadOnly() const { return sal_False; }
             virtual void refreshColumns();
 
             ::rtl::OUString getTableName() const { return m_Name; }
