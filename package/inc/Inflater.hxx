@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Inflater.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-04 14:56:13 $
+ *  last change: $Author: mtg $ $Date: 2001-11-15 19:53:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,9 +64,6 @@
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
 #endif
-#ifndef _COM_SUN_STAR_UNO_RUNTIMEEXCEPTION_HDL_
-#include <com/sun/star/uno/RuntimeException.hdl>
-#endif
 
 extern "C"
 {
@@ -84,38 +81,22 @@ protected:
 public:
     Inflater(sal_Bool bNoWrap = sal_False);
     ~Inflater();
-    void SAL_CALL setInputSegment( const ::com::sun::star::uno::Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength )
-        throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL setInput( const ::com::sun::star::uno::Sequence< sal_Int8 >& rBuffer )
-        throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL setDictionarySegment( const ::com::sun::star::uno::Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength )
-        throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL setDictionary( const ::com::sun::star::uno::Sequence< sal_Int8 >& rBuffer )
-        throw(::com::sun::star::uno::RuntimeException);
-    sal_Int32 SAL_CALL getRemaining(  )
-        throw(::com::sun::star::uno::RuntimeException);
-    sal_Bool SAL_CALL needsInput(  )
-        throw(::com::sun::star::uno::RuntimeException);
-    sal_Bool SAL_CALL needsDictionary(  )
-        throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL finish(  )
-        throw(::com::sun::star::uno::RuntimeException);
-    sal_Bool SAL_CALL finished(  )
-        throw(::com::sun::star::uno::RuntimeException);
-    sal_Int32 SAL_CALL doInflateSegment( ::com::sun::star::uno::Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength )
-        throw(::com::sun::star::uno::RuntimeException);
-    sal_Int32 SAL_CALL doInflate( ::com::sun::star::uno::Sequence< sal_Int8 >& rBuffer )
-        throw(::com::sun::star::uno::RuntimeException);
-    sal_Int32 SAL_CALL getAdler(  )
-        throw(::com::sun::star::uno::RuntimeException);
-    sal_Int32 SAL_CALL getTotalIn(  )
-        throw(::com::sun::star::uno::RuntimeException);
-    sal_Int32 SAL_CALL getTotalOut(  )
-        throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL reset(  )
-        throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL end(  )
-        throw(::com::sun::star::uno::RuntimeException);
+    void SAL_CALL setInputSegment( const ::com::sun::star::uno::Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength );
+    void SAL_CALL setInput( const ::com::sun::star::uno::Sequence< sal_Int8 >& rBuffer );
+    void SAL_CALL setDictionarySegment( const ::com::sun::star::uno::Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength );
+    void SAL_CALL setDictionary( const ::com::sun::star::uno::Sequence< sal_Int8 >& rBuffer );
+    sal_Int32 SAL_CALL getRemaining(  );
+    sal_Bool SAL_CALL needsInput(  );
+    sal_Bool SAL_CALL needsDictionary(  );
+    void SAL_CALL finish(  );
+    sal_Bool SAL_CALL finished(  );
+    sal_Int32 SAL_CALL doInflateSegment( ::com::sun::star::uno::Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength );
+    sal_Int32 SAL_CALL doInflate( ::com::sun::star::uno::Sequence< sal_Int8 >& rBuffer );
+    sal_Int32 SAL_CALL getAdler(  );
+    sal_Int32 SAL_CALL getTotalIn(  );
+    sal_Int32 SAL_CALL getTotalOut(  );
+    void SAL_CALL reset(  );
+    void SAL_CALL end(  );
 };
 
 #endif

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Deflater.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-27 14:56:05 $
+ *  last change: $Author: mtg $ $Date: 2001-11-15 19:52:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,13 +61,10 @@
 #ifndef _DEFLATER_HXX_
 #define _DEFLATER_HXX_
 
-
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
 #endif
-#ifndef _COM_SUN_STAR_UNO_RUNTIMEEXCEPTION_HDL_
-#include <com/sun/star/uno/RuntimeException.hdl>
-#endif
+
 extern "C"
 {
     typedef struct z_stream_s z_stream;;
@@ -92,39 +89,22 @@ public:
     ~Deflater();
     Deflater(sal_Int32 nSetLevel);
     Deflater(sal_Int32 nSetLevel, sal_Bool bNowrap);
-    void SAL_CALL setInputSegment( const ::com::sun::star::uno::Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength )
-        throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL setInput( const ::com::sun::star::uno::Sequence< sal_Int8 >& rBuffer )
-        throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL setDictionarySegment( const ::com::sun::star::uno::Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength )
-        throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL setDictionary( const ::com::sun::star::uno::Sequence< sal_Int8 >& rBuffer )
-        throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL setStrategy( sal_Int32 nNewStrategy )
-        throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL setLevel( sal_Int32 nNewLevel )
-        throw(::com::sun::star::uno::RuntimeException);
-    sal_Bool SAL_CALL needsInput(  )
-        throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL finish(  )
-        throw(::com::sun::star::uno::RuntimeException);
-    sal_Bool SAL_CALL finished(  )
-        throw(::com::sun::star::uno::RuntimeException);
-    sal_Int32 SAL_CALL doDeflateSegment( ::com::sun::star::uno::Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength )
-        throw(::com::sun::star::uno::RuntimeException);
-    sal_Int32 SAL_CALL doDeflate( ::com::sun::star::uno::Sequence< sal_Int8 >& rBuffer )
-        throw(::com::sun::star::uno::RuntimeException);
-    sal_Int32 SAL_CALL getAdler(  )
-        throw(::com::sun::star::uno::RuntimeException);
-    sal_Int32 SAL_CALL getTotalIn(  )
-        throw(::com::sun::star::uno::RuntimeException);
-    sal_Int32 SAL_CALL getTotalOut(  )
-        throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL reset(  )
-        throw(::com::sun::star::uno::RuntimeException);
-    void SAL_CALL end(  )
-        throw(::com::sun::star::uno::RuntimeException);
-
+    void SAL_CALL setInputSegment( const ::com::sun::star::uno::Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength );
+    void SAL_CALL setInput( const ::com::sun::star::uno::Sequence< sal_Int8 >& rBuffer );
+    void SAL_CALL setDictionarySegment( const ::com::sun::star::uno::Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength );
+    void SAL_CALL setDictionary( const ::com::sun::star::uno::Sequence< sal_Int8 >& rBuffer );
+    void SAL_CALL setStrategy( sal_Int32 nNewStrategy );
+    void SAL_CALL setLevel( sal_Int32 nNewLevel );
+    sal_Bool SAL_CALL needsInput(  );
+    void SAL_CALL finish(  );
+    sal_Bool SAL_CALL finished(  );
+    sal_Int32 SAL_CALL doDeflateSegment( ::com::sun::star::uno::Sequence< sal_Int8 >& rBuffer, sal_Int32 nNewOffset, sal_Int32 nNewLength );
+    sal_Int32 SAL_CALL doDeflate( ::com::sun::star::uno::Sequence< sal_Int8 >& rBuffer );
+    sal_Int32 SAL_CALL getAdler(  );
+    sal_Int32 SAL_CALL getTotalIn(  );
+    sal_Int32 SAL_CALL getTotalOut(  );
+    void SAL_CALL reset(  );
+    void SAL_CALL end(  );
 };
 
 #endif
