@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FmtFilter.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ka $ $Date: 2002-07-20 10:35:03 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 07:56:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,10 +59,6 @@
  *
  ************************************************************************/
 
-//------------------------------------------------------------------------
-// includes
-//------------------------------------------------------------------------
-
 #ifndef _FMTFILTER_HXX_
 #include "FmtFilter.hxx"
 #endif
@@ -71,17 +67,24 @@
 #include <osl/diagnose.h>
 #endif
 
+#ifndef _COMPHELPER_SEQUENCE_HXX_
+#include <comphelper/sequence.hxx>
+#endif
 
-//------------------------------------------------------------------------
-// namespace directives
-//------------------------------------------------------------------------
+#include <Shobjidl.h>
+#include <shlguid.h>
+#include <ObjIdl.h>
+#include <shellapi.h>
+
+#include <string>
+#include <sstream>
+#include <vector>
+#include <iomanip>
+
+#include <systools/win32/comtools.hxx>
 
 using namespace com::sun::star::uno;
 using rtl::OString;
-
-//------------------------------------------------------------------------
-// implementation
-//------------------------------------------------------------------------
 
 #pragma pack(2)
 struct METAFILEHEADER
@@ -299,7 +302,7 @@ Sequence< sal_Int8 > SAL_CALL OOBmpToWinDIB( Sequence< sal_Int8 >& aOOBmp )
 // <!--StartFragment--> and <!--EndFragment--> (no space between !-- and the
 // text
 //------------------------------------------------------------------------------
-
+/*
 Sequence< sal_Int8 > SAL_CALL TextHtmlToHTMLFormat( Sequence< sal_Int8 >& aTextHtml )
 {
     OSL_ASSERT( aTextHtml.getLength( ) > 0 );
@@ -316,9 +319,10 @@ Sequence< sal_Int8 > SAL_CALL TextHtmlToHTMLFormat( Sequence< sal_Int8 >& aTextH
 
     // fill the buffer with dummy values to calc the
     // exact length
+
     wsprintf(
         aHTMLFmtHdr,
-        "Version:1.0\nStartHTML:%010d\nEndHTML:%010d\nStartFragment:%010d\nEndFragment:%010d\n", 0, 0, 0, 0 );
+        "Version:1.0\nStartHTML:%010d\r\nnEndHTML:%010d\r\nStartFragment:%010\r\nnEndFragment:%010d\r\n", 0, 0, 0, 0 );
 
     sal_uInt32 lHTMLFmtHdr = rtl_str_getLength( aHTMLFmtHdr );
 
@@ -361,7 +365,7 @@ Sequence< sal_Int8 > SAL_CALL TextHtmlToHTMLFormat( Sequence< sal_Int8 >& aTextH
 
         wsprintf(
             aHTMLFmtHdr,
-            "Version:1.0\nStartHTML:%010d\nEndHTML:%010d\nStartFragment:%010d\nEndFragment:%010d\n",
+            "Version:1.0\nStartHTML:%010d\r\nEndHTML:%010d\r\nStartFragment:%010d\r\nEndFragment:%010d\r\n",
             nStartHtml, nEndHtml, nStartFrgmt, nEndFrgmt );
 
         // we add space for a trailing \0
@@ -382,3 +386,186 @@ Sequence< sal_Int8 > SAL_CALL TextHtmlToHTMLFormat( Sequence< sal_Int8 >& aTextH
 
     return aHTMLFmtSequence;
 }
+*/
+
+std::string GetHtmlFormatHeader(size_t startHtml, size_t endHtml, size_t startFragment, size_t endFragment)
+{
+    std::ostringstream htmlHeader;
+    htmlHeader << "Version:1.0" << '\r' << '\n';
+    htmlHeader << "StartHTML:" << std::setw(10) << std::setfill('0') << std::dec << startHtml << '\r' << '\n';
+    htmlHeader << "EndHTML:" << std::setw(10) << std::setfill('0') << std::dec << endHtml << '\r' << '\n';
+    htmlHeader << "StartFragment:" << std::setw(10) << std::setfill('0') << std::dec << startFragment << '\r' << '\n';
+    htmlHeader << "EndFragment:" << std::setw(10) << std::setfill('0') << std::dec << endFragment << '\r' << '\n';
+    return htmlHeader.str();
+}
+
+// the office allways writes the start and end html tag in upper cases and
+// without spaces both tags don't allow parameters
+const std::string TAG_HTML = std::string("<HTML>");
+const std::string TAG_END_HTML = std::string("</HTML>");
+
+// The body tag may have parameters so we need to search for the
+// closing '>' manually e.g. <BODY param> #92840#
+const std::string TAG_BODY = std::string("<BODY");
+const std::string TAG_END_BODY = std::string("</BODY");
+
+Sequence<sal_Int8> SAL_CALL TextHtmlToHTMLFormat(Sequence<sal_Int8>& aTextHtml)
+{
+    OSL_ASSERT(aTextHtml.getLength() > 0);
+
+    if (!(aTextHtml.getLength() > 0))
+        return Sequence<sal_Int8>();
+
+    // fill the buffer with dummy values to calc the exact length
+    std::string dummyHtmlHeader = GetHtmlFormatHeader(0, 0, 0, 0);
+    size_t lHtmlFormatHeader = dummyHtmlHeader.length();
+
+    std::string textHtml(
+        reinterpret_cast<const sal_Char*>(aTextHtml.getConstArray()),
+        reinterpret_cast<const sal_Char*>(aTextHtml.getConstArray()) + aTextHtml.getLength());
+
+    std::string::size_type nStartHtml = textHtml.find(TAG_HTML) + lHtmlFormatHeader - 1; // we start one before '<HTML>' Word 2000 does also so
+    std::string::size_type nEndHtml = textHtml.find(TAG_END_HTML) + lHtmlFormatHeader + TAG_END_HTML.length() + 1; // our SOffice 5.2 wants 2 behind </HTML>?
+
+    // The body tag may have parameters so we need to search for the
+    // closing '>' manually e.g. <BODY param> #92840#
+    std::string::size_type nStartFragment = textHtml.find(">", textHtml.find(TAG_BODY)) + lHtmlFormatHeader + 1;
+    std::string::size_type nEndFragment = textHtml.find(TAG_END_BODY) + lHtmlFormatHeader;
+
+    std::string htmlFormat = GetHtmlFormatHeader(nStartHtml, nEndHtml, nStartFragment, nEndFragment);
+    htmlFormat += textHtml;
+
+    Sequence<sal_Int8> byteSequence(htmlFormat.length() + 1); // space the trailing '\0'
+    rtl_zeroMemory(byteSequence.getArray(), byteSequence.getLength());
+
+    rtl_copyMemory(
+        static_cast<void*>(byteSequence.getArray()),
+        static_cast<const void*>(htmlFormat.c_str()),
+        htmlFormat.length());
+
+    return byteSequence;
+}
+
+std::wstring getFileExtension(const std::wstring& aFilename)
+{
+    std::wstring::size_type idx = aFilename.rfind(L".");
+    if ((idx != std::wstring::npos))
+    {
+        return std::wstring(aFilename, idx);
+    }
+    return std::wstring();
+}
+
+const std::wstring SHELL_LINK_FILE_EXTENSION = L".lnk";
+
+bool isShellLink(const std::wstring& aFilename)
+{
+    std::wstring ext = getFileExtension(aFilename);
+    return (_wcsicmp(ext.c_str(), SHELL_LINK_FILE_EXTENSION.c_str()) == 0);
+}
+
+/** Resolve a Windows Shell Link (lnk) file. If a resolution
+    is not possible simply return the provided name of the
+    lnk file. */
+std::wstring getShellLinkTarget(const std::wstring& aLnkFile)
+{
+    OSL_ASSERT(isShellLink(aLnkFile));
+
+    std::wstring target = aLnkFile;
+
+    try
+    {
+        sal::systools::COMReference<IShellLinkA> pIShellLink;
+        HRESULT hr = CoCreateInstance(
+            CLSID_ShellLink, NULL, CLSCTX_INPROC_SERVER, IID_IShellLink, reinterpret_cast<LPVOID*>(&pIShellLink));
+        if (FAILED(hr))
+            return target;
+
+        sal::systools::COMReference<IPersistFile> pIPersistFile =
+            pIShellLink.QueryInterface<IPersistFile>(IID_IPersistFile);
+
+        hr = pIPersistFile->Load(aLnkFile.c_str(), STGM_READ);
+        if (FAILED(hr))
+            return target;
+
+        hr = pIShellLink->Resolve(NULL, SLR_UPDATE | SLR_NO_UI);
+        if (FAILED(hr))
+            return target;
+
+        char pathA[MAX_PATH];
+        WIN32_FIND_DATA wfd;
+        hr = pIShellLink->GetPath(pathA, MAX_PATH, &wfd, SLGP_RAWPATH);
+        if (FAILED(hr))
+            return target;
+
+        wchar_t pathW[MAX_PATH];
+        MultiByteToWideChar(CP_ACP, 0, pathA, -1, pathW, MAX_PATH);
+        target = pathW;
+    }
+    catch(sal::systools::ComError& ex)
+    {
+        OSL_ENSURE(false, ex.what());
+        ex = ex;
+    }
+    return target;
+}
+
+typedef std::vector<std::wstring> FileList_t;
+typedef FileList_t::value_type FileList_ValueType_t;
+typedef Sequence<sal_Int8> ByteSequence_t;
+
+/* Calculate the size required for turning a string list into
+   a double '\0' terminated string buffer */
+size_t CalcSizeForStringListBuffer(const FileList_t& fileList)
+{
+    if (fileList.size() == 0)
+        return 0;
+
+    size_t size = 1; // one for the very final '\0'
+    FileList_t::const_iterator iter_end = fileList.end();
+    for (FileList_t::const_iterator iter = fileList.begin(); iter != iter_end; ++iter)
+    {
+        size += iter->length() + 1; // length including terminating '\0'
+    }
+    return (size * sizeof(FileList_ValueType_t::value_type));
+}
+
+ByteSequence_t FileListToByteSequence(const FileList_t& fileList)
+{
+    ByteSequence_t bseq;
+    size_t size = CalcSizeForStringListBuffer(fileList);
+
+    if (size > 0)
+    {
+        bseq.realloc(size);
+        wchar_t* p = reinterpret_cast<wchar_t*>(bseq.getArray());
+        ZeroMemory(p, size);
+
+        FileList_t::const_iterator iter;
+        FileList_t::const_iterator iter_end = fileList.end();
+        for (iter = fileList.begin(); iter != iter_end; ++iter)
+        {
+            wcsncpy(p, iter->c_str(), iter->length());
+            p += (iter->length() + 1);
+        }
+    }
+    return bseq;
+}
+
+ByteSequence_t CF_HDROPToFileList(HGLOBAL hGlobal)
+{
+    UINT nFiles = DragQueryFileW((HDROP)hGlobal, 0xFFFFFFFF, NULL, 0);
+    FileList_t files;
+
+    for (UINT i = 0; i < nFiles; i++)
+    {
+        wchar_t buff[MAX_PATH];
+        UINT size = DragQueryFileW((HDROP)hGlobal, i, buff, MAX_PATH);
+        std::wstring filename = buff;
+        if (isShellLink(filename))
+            filename = getShellLinkTarget(filename);
+        files.push_back(filename);
+    }
+    return FileListToByteSequence(files);
+}
+
