@@ -2,9 +2,9 @@
  *
  *  $RCSfile: query.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-26 13:34:47 $
+ *  last change: $Author: kz $ $Date: 2001-05-03 19:16:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -304,17 +304,17 @@ String RID_STR_TABLE_DOESNT_EXIST
     Text = "Der Ausdruck ist ungültig, da keine Tabelle '$name$' existiert !";
     Text [ ENGLISH ] = "The expression is invalid because table '$name$' doesn't exist !";
     Text[ english_us ] = "Invalid expression, table '$name$' does not exist!";
-    Text[ portuguese ] = "A expressão não é válida; a tabela '$name$' não existe!";
-    Text[ russian ] = "Íåïğàâèëüíîå âûğàæåíèå. Òàáëèöà '$name$' íå ñóùåñòâóåò.";
+    Text[ portuguese ] = "A expressão não é válida; a tabela '$name$' não existe.";
+    Text[ russian ] = "Íåäîïóñòèìîå âûğàæåíèå. Òàáëèöà '$name$' íå ñóùåñòâóåò.";
     Text[ dutch ] = "De uitdrukking is ongeldig daar de tabel '$name$' niet bestaat !";
     Text[ french ] = "Expression incorrecte : la table '$name$' n'existe pas !";
     Text[ spanish ] = "¡La expresión no es válida porque no existe ninguna tabla '$name$'!";
     Text[ italian ] = "L'espressione non è valida in quanto la tabella '$name$' non esiste !";
     Text[ danish ] = "Udtrykket er ugyldigt, tabel '$name$' eksisterer ikke !";
     Text[ swedish ] = "Uttrycket är ogiltigt eftersom det inte finns någon tabell med namnet '$name$'!";
-    Text[ polish ] = "Wyra¿enie jest nieprawid³owe, poniewa¿ nie istnieje tabela '$name$'!";
+    Text[ polish ] = "Wyra¿enie jest nieprawid³owe, poniewa¿ brak tabeli '$name$'!";
     Text[ portuguese_brazilian ] = "The expression is invalid because table '$name$' doesn't exist !";
-    Text[ japanese ] = "'$–¼‘O$' ‚ÌÃ°ÌŞÙ‚ª‚È‚¢‚½‚ßA‚±‚Ì•\\Œ»‚Í–³Œø‚Å‚·B";
+    Text[ japanese ] = "'$name$' Ã°ÌŞÙ‚ª‚È‚¢‚Ì‚ÅA•\\Œ»‚Í–³Œø‚Å‚·B";
     Text[ chinese_simplified ] = "Õâ¸ö±í´ïÊ½ÎŞĞ§£¬ÒòÎª±í¸ñ '$name$' ²»´æÔÚ£¡";
     Text[ chinese_traditional ] = "³o­Óªí¹F¦¡µL®Ä¡A¦]¬°ªí®æ¦WºÙ '$name$' ¤£¦s¦b¡I";
     Text[ dutch ] = "De uitdrukking is ongeldig daar de tabel '$name$' niet bestaat !";
@@ -332,23 +332,23 @@ String RID_STR_FIELD_DOESNT_EXIST
     Text [ ENGLISH ] = "The expression is invalid because the field name '$name$' could not be assigned!";
     Text[ english_us ] = "Invalid expression, field name '$name$' does not exist.";
     Text[ portuguese ] = "A expressão não é válida; é impossível atribuir o nome de campo '$name$'!";
-    Text[ russian ] = "Íåïğàâèëüíîå âûğàæåíèå, ïîñêîëüêó èìÿ ïîëÿ '$name$' ïğèñâîèòü íåâîçìîæíî !";
-    Text[ dutch ] = "De uitdrukking is ongeldig omdat de veldnaam '$name$' niet kan worden ondergebracht !";
-    Text[ french ] = "Expression incorrecte : impossible d'attribuer le nom de champ '$name$' !";
+    Text[ russian ] = "Íåïğàâèëüíîå âûğàæåíèå, ïîñêîëüêó èìÿ ïîëÿ '$name$' ïğèñâîèòü íåâîçìîæíî!";
+    Text[ dutch ] = "De uitdrukking is ongeldig omdat de veldnaam '$name$' niet kan worden herleid !";
+    Text[ french ] = "Expression incorrecte car impossible d'attribuer le nom de champ '$name$' !";
     Text[ spanish ] = "¡La expresión no es válida porque no se puede asignar el nombre de campo '$name$'!";
-    Text[ italian ] = "L'espressione non è valida in quanto non è possibile correlare il nome di campo '$name$'!";
+    Text[ italian ] = "L'espressione non è valida in quanto non è possibile assegnare il nome di campo '$name$'!";
     Text[ danish ] = "Udtrykket er ugyldigt, feltnavnet '$name$' kan ikke tildeles!";
-    Text[ swedish ] = "Uttrycket är ogiltigt då fältnamnet '$name$' inte kan tilldelas!";
+    Text[ swedish ] = "Uttrycket är ogiltigt eftersom fältnamnet '$name$' inte kan tilldelas!";
     Text[ polish ] = "Wyra¿enie jest nieprawid³owe, poniewa¿ nie mo¿na by³o przyporz¹dkowaæ nazwy pola '$name$'!";
     Text[ portuguese_brazilian ] = "The expression is invalid because the field name '$name$' kann nicht zugeordnet werden !";
-    Text[ japanese ] = "Ì¨°ÙÄŞ–¼ '$–¼‘O$' ‚Ì•ª—Ş‚ª‚Å‚«‚È‚¢‚½‚ßA‚±‚Ì•\\Œ»‚Í–³Œø‚Å‚·B";
+    Text[ japanese ] = "Ì¨°ÙÄŞ–¼ '$name$' ‚Ì•ª—Ş‚ª‚Å‚«‚È‚¢‚Ì‚ÅA•\\Œ»‚Í–³Œø‚Å‚·B";
     Text[ chinese_simplified ] = "Õâ¸ö±í´ïÊ½ÎŞĞ§£¬ÒòÎª×Ö¶ÎÃû³Æ '$name$' ÎŞ·¨È·ÈÏ£¡";
     Text[ chinese_traditional ] = "¦]µLªk±Æ§ÇÄæ¦ì¦WºÙ '$name$' ¦Ó³y¦¨³o­Óªí¹F¦¡µL®Ä¡T";
-    Text[ dutch ] = "De uitdrukking is ongeldig omdat de veldnaam '$name$' niet kan worden ondergebracht !";
+    Text[ dutch ] = "De uitdrukking is ongeldig omdat de veldnaam '$name$' niet kan worden herleid !";
     Text[ chinese_simplified ] = "Õâ¸ö±í´ïÊ½ÎŞĞ§£¬ÒòÎª×Ö¶ÎÃû³Æ '$name$' ÎŞ·¨È·ÈÏ£¡";
     Text[ greek ] = "Ç İêöñáóç äåí åßíáé İãêõñç åğåéäŞ äåí åßíáé äõíáôüí íá ğñïóäéïñéóôåß ôï üíïìá ôïõ ğåäßïõ '$name$'!";
     Text[ korean ] = "ÇÊµå¸í'$name$'ÀÌ ÁöÁ¤µÉ ¼ö ¾øÀ¸¹Ç·Î ÀÌ ¹®ÀåÀº À¯È¿ÇÏÁö ¾Ê½À´Ï´Ù!";
-    Text[ arabic ] = "ÇáÚÈÇÑÉ ÛíÑ ÕÇáÍÉ áÚÏã ÅãßÇäíÉ ÊÚííä ÇÓã ÇáÍŞá '$name$' !";
+    Text[ arabic ] = "ÇáÚÈÇÑÉ ÛíÑ ÕÇáÍÉ áÚÏã ÊæİÑ ÇÓã ÇáÍŞá '$name$'!";
     Text[ turkish ] = "Geçersiz deyim. Alan adı '$name$' atanamıyor !";
     Text[ language_user1 ] = " ";
 };
@@ -419,7 +419,7 @@ String STR_QUERY_UNDO_MODIFY_CELL
     Text[ swedish ] = "Ändra kolumnbeskrivning";
     Text[ dutch ] = "Kolombeschrijving wijzigen";
     Text[ spanish ] = "Modificar descripción de columnas";
-    Text[ english_us ] = "Edit column description";
+    Text[ english_us ] = "Edit Column Description";
     Text[ chinese_simplified ] = "¸ü¸ÄÁĞ±êÌâ";
     Text[ russian ] = "Èçìåíèòü îïèñàíèå êîëîíêè";
     Text[ polish ] = "Zmieñ opis kolumn";
@@ -837,7 +837,7 @@ ErrorBox ERR_QRY_NOSELECT
     Message [ spanish ] = "Falta una selección" ;
     Message [ english_us ] = "Nothing has been selected" ;
     Message[ chinese_simplified ] = "È±ÉÙÒ»¸öÑ¡Ôñ";
-    Message[ russian ] = "Îòñóòñòâóåò âûäåëåíèå";
+    Message[ russian ] = "Íè÷åãî íå âûäåëåíî";
     Message[ polish ] = "Nale¿y coœ wybraæ";
     Message[ japanese ] = "‘I‘ğ‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB";
     Message[ chinese_traditional ] = "¯Ê¤Ö¤@­Ó¿ï¾Ü";
@@ -1221,7 +1221,7 @@ ToolBox RID_BRW_QUERYDESIGN_TOOLBOX
             HelpId = SID_FM_NATIVESQL ;
             Text = "SQL-Kommando direkt ausführen" ;
             Text [ ENGLISH ] = "Native SQL command" ;
-            Text[ english_us ] = "Native sql command";
+            Text[ english_us ] = "Run SQL command directly";
             Text[ portuguese ] = "Executar comando SQL directamente";
             Text[ russian ] = "Âûïîëíèòü íåïîñğåäñòâåííî êîìàíäó SQL";
             Text[ greek ] = "¢ìåóç åêôİëåóç åíôïëŞò SQL";
@@ -1945,12 +1945,48 @@ ErrorBox ERR_QRY_NOSTATEMENT
 {
     Message = "Es konnte keine Abfrage erstellt werden!" ;
     Message [ ENGLISH ] = "No query could be created!" ;
+    Message[ english_us ] = "No query could be created.";
+    Message[ portuguese ] = "Foi impossível criar a consulta.";
+    Message[ russian ] = "Ñîçäàòü çàïğîñ íå óäàëîñü!";
+    Message[ greek ] = "No query could be created!";
+    Message[ dutch ] = "No query could be created!";
+    Message[ french ] = "No query could be created!";
+    Message[ spanish ] = "¡No se pudo crear ninguna consulta!";
+    Message[ italian ] = "Impossibile creare una ricerca!";
+    Message[ danish ] = "No query could be created!";
+    Message[ swedish ] = "Det gick inte att skapa en sökning!";
+    Message[ polish ] = "Utworzenie kwerendy nie powiod³o siê!";
+    Message[ portuguese_brazilian ] = "No query could be created!";
+    Message[ japanese ] = "¸´Ø°‚Íì¬‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B";
+    Message[ korean ] = "No query could be created!";
+    Message[ chinese_simplified ] = "No query could be created!";
+    Message[ chinese_traditional ] = "No query could be created!";
+    Message[ turkish ] = "No query could be created!";
+    Message[ arabic ] = "No query could be created!";
 };
 
 ErrorBox ERR_QRY_NOCRITERIA
 {
     Message = "Es konnte keine Abfrage erstellt werden, da keine Felder ausgewählt wurden!" ;
     Message [ ENGLISH ] = "No query could be created because no fields were selected!" ;
+    Message[ english_us ] = "No query could be created because no fields were selected.";
+    Message[ portuguese ] = "Não há campos seleccionados e por esta razão foi impossível criar a consulta.";
+    Message[ russian ] = "Ñîçäàòü çàïğîñ íå óäàëîñü, ïîñêîëüêó íå âûáğàíî íè îäíîãî ïîëÿ!";
+    Message[ greek ] = "No query could be created because no fields were selected!";
+    Message[ dutch ] = "No query could be created because no fields were selected!";
+    Message[ french ] = "No query could be created because no fields were selected!";
+    Message[ spanish ] = "¡No se pudo crear ninguna consulta ya que no se ha seleccionado ningún campo!";
+    Message[ italian ] = "Impossibile creare una ricerca perché non è stato selezionato un campo!";
+    Message[ danish ] = "No query could be created because no fields were selected!";
+    Message[ swedish ] = "Det gick inte att skapa en sökning eftersom inga fält hade markerats!";
+    Message[ polish ] = "Utworzenie kwerendy nie powiod³o siê, poniewa¿ nie wybrano ¿adnych pól!";
+    Message[ portuguese_brazilian ] = "No query could be created because no fields were selected!";
+    Message[ japanese ] = "Ì¨°ÙÄŞ‚ª‘I‘ğ‚³‚ê‚Ä‚È‚©‚Á‚½‚Ì‚ÅA¸´Ø°‚Íì¬‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B";
+    Message[ korean ] = "No query could be created because no fields were selected!";
+    Message[ chinese_simplified ] = "No query could be created because no fields were selected!";
+    Message[ chinese_traditional ] = "No query could be created because no fields were selected!";
+    Message[ turkish ] = "No query could be created because no fields were selected!";
+    Message[ arabic ] = "No query could be created because no fields were selected!";
 };
 
 Menu RID_QUERY_DESIGN_MAIN_MENU
