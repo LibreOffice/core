@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleComponentBase.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: af $ $Date: 2002-06-17 09:44:13 $
+ *  last change: $Author: af $ $Date: 2002-08-05 09:13:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,7 @@ sal_Bool SAL_CALL AccessibleComponentBase::contains (
     return (aPoint.X >= 0)
         && (aPoint.X < aSize.Width)
         && (aPoint.Y >= 0)
-        && (aPoint.Y <= aSize.Height);
+        && (aPoint.Y < aSize.Height);
 }
 
 
