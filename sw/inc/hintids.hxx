@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hintids.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 11:06:28 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 18:14:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -230,47 +230,54 @@ RES_FRMATR_BEGIN = RES_PARATR_END,
     RES_FRAMEDIR,                                   // 107
     RES_HEADER_FOOTER_EAT_SPACING,                  // 108
     RES_ROW_SPLIT,                                  // 109
+    // OD 18.09.2003 #i18732# - insert new item and 5 dummies
+    RES_FOLLOW_TEXT_FLOW,                           // 110
+    RES_FRMATR_DUMMY1,                              // 111
+    RES_FRMATR_DUMMY2,                              // 112
+    RES_FRMATR_DUMMY3,                              // 113
+    RES_FRMATR_DUMMY4,                              // 114
+    RES_FRMATR_DUMMY5,                              // 115
 RES_FRMATR_END
 };
 
 enum RES_GRFATR
 {
 RES_GRFATR_BEGIN = RES_FRMATR_END,
-    RES_GRFATR_MIRRORGRF = RES_GRFATR_BEGIN,        // 110
-    RES_GRFATR_CROPGRF,                             // 111
+    RES_GRFATR_MIRRORGRF = RES_GRFATR_BEGIN,        // 116
+    RES_GRFATR_CROPGRF,                             // 117
 
-    RES_GRFATR_ROTATION,                            // 112
-    RES_GRFATR_LUMINANCE,                           // 113
-    RES_GRFATR_CONTRAST,                            // 114
-    RES_GRFATR_CHANNELR,                            // 115
-    RES_GRFATR_CHANNELG,                            // 116
-    RES_GRFATR_CHANNELB,                            // 117
-    RES_GRFATR_GAMMA,                               // 118
-    RES_GRFATR_INVERT,                              // 119
-    RES_GRFATR_TRANSPARENCY,                        // 120
-    RES_GRFATR_DRAWMODE,                            // 121
+    RES_GRFATR_ROTATION,                            // 118
+    RES_GRFATR_LUMINANCE,                           // 119
+    RES_GRFATR_CONTRAST,                            // 120
+    RES_GRFATR_CHANNELR,                            // 121
+    RES_GRFATR_CHANNELG,                            // 122
+    RES_GRFATR_CHANNELB,                            // 123
+    RES_GRFATR_GAMMA,                               // 124
+    RES_GRFATR_INVERT,                              // 125
+    RES_GRFATR_TRANSPARENCY,                        // 126
+    RES_GRFATR_DRAWMODE,                            // 127
 
-    RES_GRFATR_DUMMY1,                              // 122
-    RES_GRFATR_DUMMY2,                              // 123
-    RES_GRFATR_DUMMY3,                              // 124
-    RES_GRFATR_DUMMY4,                              // 125
-    RES_GRFATR_DUMMY5,                              // 126
+    RES_GRFATR_DUMMY1,                              // 128
+    RES_GRFATR_DUMMY2,                              // 129
+    RES_GRFATR_DUMMY3,                              // 130
+    RES_GRFATR_DUMMY4,                              // 131
+    RES_GRFATR_DUMMY5,                              // 132
 RES_GRFATR_END
 };
 
 enum RES_BOXATR
 {
 RES_BOXATR_BEGIN = RES_GRFATR_END,
-    RES_BOXATR_FORMAT = RES_BOXATR_BEGIN,           // 127
-    RES_BOXATR_FORMULA,                             // 128
-    RES_BOXATR_VALUE,                               // 129
+    RES_BOXATR_FORMAT = RES_BOXATR_BEGIN,           // 133
+    RES_BOXATR_FORMULA,                             // 134
+    RES_BOXATR_VALUE,                               // 135
 RES_BOXATR_END
 };
 
 enum RES_UNKNOWNATR
 {
 RES_UNKNOWNATR_BEGIN = RES_BOXATR_END,
-    RES_UNKNOWNATR_CONTAINER = RES_UNKNOWNATR_BEGIN,        // 120
+    RES_UNKNOWNATR_CONTAINER = RES_UNKNOWNATR_BEGIN,// 136
 RES_UNKNOWNATR_END
 };
 
