@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmtree.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-27 14:23:00 $
+ *  last change: $Author: fs $ $Date: 2000-10-27 15:03:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -714,6 +714,7 @@ namespace configmgr
         if (!pSubtree || !bCompleteForRequest)
             throw container::NoSuchElementException();
 
+        return pSubtree;
     }
 
 // -----------------------------------------------------------------------------
