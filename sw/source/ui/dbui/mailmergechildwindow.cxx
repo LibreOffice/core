@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmergechildwindow.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-28 15:28:17 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 15:26:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,49 +202,30 @@ void    SwMailMergeChildWin::FillInfo(SfxChildWinInfo& rInfo) const
     rInfo.aWinState.Erase();
     rInfo.bVisible = sal_False;
 }
-/*------------------------------------------------------------------------
-    Beschreibung:
-------------------------------------------------------------------------*/
-
-/*SwSendMailChildWindow::SwSendMailChildWindow( Window* pParent,
-                                USHORT nId,
-                                SfxBindings* pBindings,
-                                SfxChildWinInfo* pInfo ) :
-                                SfxChildWindow( pParent, nId )
-{
-    pWindow = new SwSendMailDialog( pBindings, this, pParent);
-    static_cast<SwSendMailDialog *>(pWindow)->Initialize(pInfo);
-    pWindow->Show();
-}
-/*-- 01.07.2004 08:21:17---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-/*SwSendMailDialog*   SwSendMailChildWindow::GetMailDialog()
-{
-    return (SwSendMailDialog*)GetWindow();
-}
-
-/*-- 26.08.2004 14:40:00---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-/*sal_Bool    SwSendMailChildWindow::QueryClose()
-{
-    return static_cast<SwSendMailDialog*>(GetWindow())->QueryTermination() &&
-            SfxChildWindow::QueryClose();
-}
 /*-- 21.05.2004 14:07:37---------------------------------------------------
 
   -----------------------------------------------------------------------*/
 struct SwSendMailDialog_Impl
 {
     friend class SwSendMailDialog;
+    ::osl::Mutex                                aDescriptorMutex;
+
     ::std::vector< SwMailDescriptor >           aDescriptors;
+    sal_uInt32                                  nCurrentDescriptor;
+    sal_uInt32                                  nDocumentCount;
     ::rtl::Reference< MailDispatcher >          xMailDispatcher;
     ::rtl::Reference< IMailDispatcherListener>  xMailListener;
     uno::Reference< mail::XMailService >        xConnectedMailService;
     uno::Reference< mail::XMailService >        xConnectedInMailService;
+    Timer                                       aRemoveTimer;
 
-    SwSendMailDialog_Impl() {}
+
+    SwSendMailDialog_Impl() :
+        nCurrentDescriptor(0),
+        nDocumentCount(0)
+             {
+                aRemoveTimer.SetTimeout(500);
+             }
 
     ~SwSendMailDialog_Impl()
     {
@@ -253,9 +234,23 @@ struct SwSendMailDialog_Impl
         // shutdown of the mail dispatcher thread.
         // 'join' with the mail dispatcher thread leads to a
         // deadlock (SolarMutex).
-        xMailDispatcher->shutdown();
+        if(!xMailDispatcher->isShutdownRequested() )
+            xMailDispatcher->shutdown();
     }
+    const SwMailDescriptor* GetNextDescriptor();
 };
+
+const SwMailDescriptor* SwSendMailDialog_Impl::GetNextDescriptor()
+{
+    ::osl::MutexGuard aGuard(aDescriptorMutex);
+    if(nCurrentDescriptor < aDescriptors.size())
+    {
+        ++nCurrentDescriptor;
+        return &aDescriptors[nCurrentDescriptor - 1];
+    }
+    return 0;
+}
+
 /*-- 23.06.2004 10:19:55---------------------------------------------------
 
   -----------------------------------------------------------------------*/
@@ -391,14 +386,11 @@ SwSendWarningBox_Impl::~SwSendWarningBox_Impl()
 #define ITEMID_TASK     1
 #define ITEMID_STATUS   2
 
-//SwSendMailDialog::SwSendMailDialog(SfxBindings* pBindings,
-//                                SfxChildWindow* pChild, Window *pParent) :
-//    SfxFloatingWindow(pBindings, pChild, pParent, SW_RES(DLG_MM_SENDMAILS)),
 SwSendMailDialog::SwSendMailDialog(Window *pParent, SwMailMergeConfigItem& rConfigItem) :
-    SfxModalDialog(pParent, SW_RES(DLG_MM_SENDMAILS)),
+    ModelessDialog /*SfxModalDialog*/(pParent, SW_RES(DLG_MM_SENDMAILS)),
 #pragma warning (disable : 4355)
     m_aStatusFL( this, ResId(             FL_STATUS             )),
-    m_aStatusFT( this, ResId(             FT_STATUS             )),
+    m_aStatusFT( this, ResId(             FT_STATUS1            )),
     m_PausedFI(this, ResId(               FI_PAUSED             )),
     m_aTransferStatusFL( this, ResId(     FL_TRANSFERSTATUS     )),
     m_aTransferStatusFT( this, ResId(     FT_TRANSFERSTATUS     )),
@@ -428,7 +420,8 @@ SwSendMailDialog::SwSendMailDialog(Window *pParent, SwMailMergeConfigItem& rConf
     m_pConfigItem(&rConfigItem),
     m_bCancel(false),
     m_nSendCount(0),
-    m_nErrorCount(0)
+    m_nErrorCount(0),
+    m_bDesctructionEnabled(false)
 {
     m_nStatusHeight =  m_aSeparatorFL.GetPosPixel().Y() - m_aStatusLB.GetPosPixel().Y();
     String sTask(ResId(ST_TASK));
@@ -472,6 +465,7 @@ SwSendMailDialog::SwSendMailDialog(Window *pParent, SwMailMergeConfigItem& rConf
     m_aStatusLB.SetTabs(&nTabs[0], MAP_PIXEL);
     m_aStatusLB.SetSpaceBetweenEntries(3);
 
+    DetailsHdl_Impl( &m_aDetailsPB );
     UpdateTransferStatus();
 }
 /*-- 21.05.2004 14:10:39---------------------------------------------------
@@ -509,7 +503,22 @@ SwSendMailDialog::~SwSendMailDialog()
   -----------------------------------------------------------------------*/
 void SwSendMailDialog::AddDocument( SwMailDescriptor& rDesc )
 {
+    ::osl::MutexGuard aGuard(m_pImpl->aDescriptorMutex);
     m_pImpl->aDescriptors.push_back(rDesc);
+    // if the dialog is already running then continue sending of documents
+    if(m_pImpl->xMailDispatcher.is())
+    {
+        IterateMails();
+    }
+
+}
+/*-- 31.01.2005 08:59:35---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void SwSendMailDialog::SetDocumentCount( sal_Int32 nAllDocuments )
+{
+    m_pImpl->nDocumentCount = nAllDocuments;
+    UpdateTransferStatus();
 }
 /*-- 21.05.2004 14:10:40---------------------------------------------------
 
@@ -575,12 +584,7 @@ IMPL_LINK( SwSendMailDialog, StopHdl_Impl, PushButton*, pButton )
   -----------------------------------------------------------------------*/
 IMPL_LINK( SwSendMailDialog, CloseHdl_Impl, PushButton*, pButton )
 {
-    // prevent a query for termination
-    m_nSendCount = m_pImpl->aDescriptors.size();
-    EndDialog( RET_OK );
-//    GetBindings().GetDispatcher()->Execute(FN_MAILMERGE_SENDMAIL_CHILDWINDOW,
-//        SFX_CALLMODE_ASYNCHRON);
-
+    ModelessDialog::Show( sal_False );
     return 0;
 }
 /*-- 14.06.2004 09:48:30---------------------------------------------------
@@ -589,6 +593,31 @@ IMPL_LINK( SwSendMailDialog, CloseHdl_Impl, PushButton*, pButton )
 IMPL_STATIC_LINK( SwSendMailDialog, StartSendMails, SwSendMailDialog*, pDialog )
 {
     pDialog->SendMails();
+    return 0;
+}
+/*-- 14.06.2004 09:48:30---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+IMPL_STATIC_LINK( SwSendMailDialog, RemoveThis, Timer*, pTimer )
+{
+    if( pThis->m_pImpl->xMailDispatcher.is() )
+    {
+        if(pThis->m_pImpl->xMailDispatcher->isStarted())
+            pThis->m_pImpl->xMailDispatcher->stop();
+        if(!pThis->m_pImpl->xMailDispatcher->isShutdownRequested())
+            pThis->m_pImpl->xMailDispatcher->shutdown();
+    }
+
+    if( pThis->m_bDesctructionEnabled &&
+            (!pThis->m_pImpl->xMailDispatcher.is() ||
+                    !pThis->m_pImpl->xMailDispatcher->isRunning()))
+    {
+        delete pThis;
+    }
+    else
+    {
+        pTimer->Start();
+    }
     return 0;
 }
 /*-- 07.07.2004 14:34:05---------------------------------------------------
@@ -632,19 +661,30 @@ void  SwSendMailDialog::SendMails()
         return;
     }
     m_pImpl->xMailDispatcher.set( new MailDispatcher(xSmtpServer));
-    ::std::vector< SwMailDescriptor >::iterator aCurrentMailDescriptor;
-    for( aCurrentMailDescriptor = m_pImpl->aDescriptors.begin();
-            aCurrentMailDescriptor != m_pImpl->aDescriptors.end();
-                    ++aCurrentMailDescriptor)
+    IterateMails();
+    m_pImpl->xMailListener = new SwMailDispatcherListener_Impl(*this);
+    m_pImpl->xMailDispatcher->addListener(m_pImpl->xMailListener);
+    if(!m_bCancel)
     {
-        if(!SwMailMergeHelper::CheckMailAddress( aCurrentMailDescriptor->sEMail ))
+        m_pImpl->xMailDispatcher->start();
+    }
+}
+/* -----------------28.01.2005 10:17-----------------
+
+ --------------------------------------------------*/
+void  SwSendMailDialog::IterateMails()
+{
+    const SwMailDescriptor* pCurrentMailDescriptor = m_pImpl->GetNextDescriptor();
+    while( pCurrentMailDescriptor )
+    {
+        if(!SwMailMergeHelper::CheckMailAddress( pCurrentMailDescriptor->sEMail ))
         {
             ImageList& rImgLst = GetSettings().GetStyleSettings().GetWindowColor().IsDark() ?
                                         m_aImageListHC : m_aImageList;
             Image aInsertImg =   rImgLst.GetImage( FN_FORMULA_CANCEL );
 
             String sMessage = m_sSendingTo;
-            String sTmp(aCurrentMailDescriptor->sEMail);
+            String sTmp(pCurrentMailDescriptor->sEMail);
             sTmp += '\t';
             sTmp += m_sFailed;
             sMessage.SearchAndReplaceAscii("%1", sTmp);
@@ -652,36 +692,37 @@ void  SwSendMailDialog::SendMails()
             ++m_nSendCount;
             ++m_nErrorCount;
             UpdateTransferStatus( );
+            pCurrentMailDescriptor = m_pImpl->GetNextDescriptor();
             continue;
         }
         SwMailMessage* pMessage = 0;
         uno::Reference< mail::XMailMessage > xMessage = pMessage = new SwMailMessage;
         if(m_pConfigItem->IsMailReplyTo())
             pMessage->setReplyToAddress(m_pConfigItem->GetMailReplyTo());
-        pMessage->addRecipient( aCurrentMailDescriptor->sEMail );
+        pMessage->addRecipient( pCurrentMailDescriptor->sEMail );
         pMessage->SetSenderAddress( m_pConfigItem->GetMailAddress() );
-        if(aCurrentMailDescriptor->sAttachmentURL.getLength())
+        if(pCurrentMailDescriptor->sAttachmentURL.getLength())
         {
             mail::MailAttachment aAttach;
             aAttach.Data =
                     new SwMailTransferable(
-                        aCurrentMailDescriptor->sAttachmentURL,
-                        aCurrentMailDescriptor->sAttachmentName,
-                        aCurrentMailDescriptor->sMimeType );
-            aAttach.ReadableName = aCurrentMailDescriptor->sAttachmentName;
+                        pCurrentMailDescriptor->sAttachmentURL,
+                        pCurrentMailDescriptor->sAttachmentName,
+                        pCurrentMailDescriptor->sMimeType );
+            aAttach.ReadableName = pCurrentMailDescriptor->sAttachmentName;
             pMessage->addAttachment( aAttach );
         }
-        pMessage->setSubject( aCurrentMailDescriptor->sSubject );
+        pMessage->setSubject( pCurrentMailDescriptor->sSubject );
         uno::Reference< datatransfer::XTransferable> xBody =
                     new SwMailTransferable(
-                        aCurrentMailDescriptor->sBodyContent,
-                        aCurrentMailDescriptor->sBodyMimeType);
+                        pCurrentMailDescriptor->sBodyContent,
+                        pCurrentMailDescriptor->sBodyMimeType);
         pMessage->setBody( xBody );
 
         //CC and BCC are tokenized by ';'
-        if(aCurrentMailDescriptor->sCC.getLength())
+        if(pCurrentMailDescriptor->sCC.getLength())
         {
-            String sTokens( aCurrentMailDescriptor->sCC );
+            String sTokens( pCurrentMailDescriptor->sCC );
             sal_uInt16 nTokens = sTokens.GetTokenCount( ';' );
             xub_StrLen nPos = 0;
             for( sal_uInt16 nToken = 0; nToken < nTokens; ++nToken)
@@ -691,9 +732,9 @@ void  SwSendMailDialog::SendMails()
                     pMessage->addCcRecipient( sTmp );
             }
         }
-        if(aCurrentMailDescriptor->sBCC.getLength())
+        if(pCurrentMailDescriptor->sBCC.getLength())
         {
-            String sTokens( aCurrentMailDescriptor->sBCC );
+            String sTokens( pCurrentMailDescriptor->sBCC );
             sal_uInt16 nTokens = sTokens.GetTokenCount( ';' );
             xub_StrLen nPos = 0;
             for( sal_uInt16 nToken = 0; nToken < nTokens; ++nToken)
@@ -704,33 +745,31 @@ void  SwSendMailDialog::SendMails()
             }
         }
         m_pImpl->xMailDispatcher->enqueueMailMessage( xMessage );
+        pCurrentMailDescriptor = m_pImpl->GetNextDescriptor();
     }
-    m_pImpl->aDescriptors.clear();
     UpdateTransferStatus();
-    m_pImpl->xMailListener = new SwMailDispatcherListener_Impl(*this);
-    m_pImpl->xMailDispatcher->addListener(m_pImpl->xMailListener);
-    if(!m_bCancel)
-    {
-        m_pImpl->xMailDispatcher->start();
-    }
 }
 /*-- 27.08.2004 10:50:17---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-short SwSendMailDialog::Execute()
+void SwSendMailDialog::Show()
 {
     Application::PostUserEvent( STATIC_LINK( this, SwSendMailDialog,
                                                 StartSendMails ), this );
-    return SfxModalDialog::Execute();
+    ModelessDialog::Show();
 }
-
-/*-- 14.06.2004 09:50:18---------------------------------------------------
+/*-- 27.08.2004 10:50:17---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-/*void SwSendMailDialog::Start()
+void  SwSendMailDialog::StateChanged( StateChangedType nStateChange )
 {
-    Application::PostUserEvent( STATIC_LINK( this, SwSendMailDialog,
-                                                StartSendMails ), this );
+    ModelessDialog::StateChanged( nStateChange );
+    if(STATE_CHANGE_VISIBLE == nStateChange && !IsVisible())
+    {
+        m_pImpl->aRemoveTimer.SetTimeoutHdl( STATIC_LINK( this, SwSendMailDialog,
+                                                    RemoveThis ) );
+        m_pImpl->aRemoveTimer.Start();
+    }
 }
 
 /*-- 23.06.2004 10:14:22---------------------------------------------------
@@ -776,7 +815,7 @@ void SwSendMailDialog::UpdateTransferStatus()
 {
     String sStatus( m_sTransferStatus );
     sStatus.SearchAndReplaceAscii("%1", String::CreateFromInt32(m_nSendCount) );
-    sStatus.SearchAndReplaceAscii("%2", String::CreateFromInt32(m_pImpl->aDescriptors.size()));
+    sStatus.SearchAndReplaceAscii("%2", String::CreateFromInt32(m_pImpl->nDocumentCount));
     m_aTransferStatusFT.SetText(sStatus);
 
     sStatus = m_sErrorStatus;
@@ -795,27 +834,5 @@ void SwSendMailDialog::AllMailsSent()
 {
     m_aStopPB.Enable(sal_False);
 }
-/*-- 01.07.2004 08:16:26---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-/*void    SwSendMailDialog::FillInfo(SfxChildWinInfo& rInfo) const
-{
-    SfxFloatingWindow::FillInfo(rInfo);
-    rInfo.bVisible = sal_False;
-}
-/*-- 18.08.2004 12:54:30---------------------------------------------------
-
-  -----------------------------------------------------------------------*/
-/*sal_Bool SwSendMailDialog::QueryTermination()
-{
-    bool bRet = sal_True;
-    if(m_nSendCount < m_pImpl->aDescriptors.size())
-    {
-        QueryBox aQuery(this, WB_YES_NO, m_sTerminateQuery);
-        USHORT nRet = aQuery.Execute();
-        bRet = nRet == RET_YES;
-    }
-    return bRet;
-}*/
 
 
