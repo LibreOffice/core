@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interlck.c,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2001-02-23 19:25:55 $
+ *  last change: $Author: hr $ $Date: 2001-02-26 11:42:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,10 @@
 #include <osl/interlck.h>
 #include <osl/diagnose.h>
 
-#if (defined ( __SUNPRO_C ) || defined ( __SUNPRO_CC )) && defined ( SPARC )
+#if defined ( SOLARIS) && defined ( SPARC )
 #error please use asm/interlck_sparc.s
+#elif defined ( SOLARIS) && defined ( X86 )
+#error please use asm/interlck_x86.s
 #elif defined ( GCC ) && defined ( X86 )
 
 /*****************************************************************************/
@@ -100,8 +102,8 @@ oslInterlockedCount SAL_CALL osl_decrementInterlockedCount(oslInterlockedCount* 
     :   "memory");
 }
 
-#elif
-/* use only if nothinig else works, expensive due to single mutex for all reference counts */
+#else
+/* use only if nothing else works, expensive due to single mutex for all reference counts */
 
 static pthread_mutex_t InterLock = PTHREAD_MUTEX_INITIALIZER;
 
@@ -133,4 +135,4 @@ oslInterlockedCount SAL_CALL osl_decrementInterlockedCount(oslInterlockedCount* 
     return (Count);
 }
 
-#endif /* expensive default, works everywhere */
+#endif /* default */
