@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strindlg.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:01 $
+ *  last change: $Author: dr $ $Date: 2002-07-23 14:23:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,8 +94,8 @@ public:
     void GetInputString( String& rString ) const;
 
 private:
-    Edit            aEdInput;   // Edit erhaelt so den Focus
     FixedText       aFtEditTitle;
+    Edit            aEdInput;
     OKButton        aBtnOk;
     CancelButton    aBtnCancel;
     HelpButton      aBtnHelp;
