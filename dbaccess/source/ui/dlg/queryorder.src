@@ -2,9 +2,9 @@
  *
  *  $RCSfile: queryorder.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:24:45 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:55:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,6 +243,11 @@ ModalDialog DLG_ORDERCRIT
          < "आरोहण क्रम" ; Default ; > ;
         < "अवरोहण क्रम" ; Default ; > ;
     };
+    StringList [ slovak ] =
+    {
+         < "vzostupne" ; Default ; > ;
+        < "zostupne" ; Default ; > ;
+    };
     };
     ListBox LB_ORDERFIELD2
     {
@@ -400,6 +405,11 @@ ModalDialog DLG_ORDERCRIT
     {
          < "आरोहण क्रम" ; Default ; > ;
         < "अवरोहण क्रम" ; Default ; > ;
+    };
+    StringList [ slovak ] =
+    {
+         < "vzostupne" ; Default ; > ;
+        < "zostupne" ; Default ; > ;
     };
     };
     ListBox LB_ORDERFIELD3
@@ -559,6 +569,11 @@ ModalDialog DLG_ORDERCRIT
          < "आरोहण क्रम" ; Default ; > ;
         < "अवरोहण क्रम" ; Default ; > ;
     };
+    StringList [ slovak ] =
+    {
+         < "vzostupne" ; Default ; > ;
+        < "zostupne" ; Default ; > ;
+    };
     };
     FixedText FT_ORDERFIELD
     {
@@ -593,6 +608,7 @@ ModalDialog DLG_ORDERCRIT
         Text[ czech ] = "Název pole";
         Text[ hebrew ] = "Feldname";
         Text[ hindi ] = "क्षेत्र नाम";
+        Text[ slovak ] = "Názov poľa";
     };
 
     FixedText FT_ORDERAFTER1
@@ -627,6 +643,7 @@ ModalDialog DLG_ORDERCRIT
         Text[ czech ] = "a pak";
         Text[ hebrew ] = "danach";
         Text[ hindi ] = "उसके बाद";
+        Text[ slovak ] = "a potom";
     };
     FixedText FT_ORDERAFTER2
     {
@@ -660,6 +677,7 @@ ModalDialog DLG_ORDERCRIT
         Text[ czech ] = "a pak";
         Text[ hebrew ] = "danach";
         Text[ hindi ] = "उसके बाद";
+        Text[ slovak ] = "a potom";
     };
     FixedText FT_ORDEROPER
     {
@@ -694,6 +712,7 @@ ModalDialog DLG_ORDERCRIT
         Text[ czech ] = "Operátor";
         Text[ hebrew ] = "Verknüpfung";
         Text[ hindi ] = "प्रवर्तक";
+        Text[ slovak ] = "Operátor";
     };
     FixedText FT_ORDERDIR
     {
@@ -728,6 +747,7 @@ ModalDialog DLG_ORDERCRIT
         Text[ czech ] = "Pořadí";
         Text[ hebrew ] = "Reihenfolge";
         Text[ hindi ] = "क्रम";
+        Text[ slovak ] = "Poradie";
     };
     OKButton BT_OK
     {
@@ -780,6 +800,7 @@ ModalDialog DLG_ORDERCRIT
         Text[ czech ] = "Pořadí řazení";
         Text[ hebrew ] = "Sortierung";
         Text[ hindi ] = "सोर्ट क्रम";
+        Text[ slovak ] = "Poradie radenia";
     };
     String STR_NOENTRY
     {
@@ -811,6 +832,7 @@ ModalDialog DLG_ORDERCRIT
         Text[ czech ] = "<nic>";
         Text[ hebrew ] = "<keines>";
         Text[ hindi ] = "<कोई नहीं>";
+        Text[ slovak ] = "<nič>";
     };
     Text[ chinese_simplified ] = "排序";
     Text[ russian ] = "����������";
@@ -827,7 +849,10 @@ ModalDialog DLG_ORDERCRIT
     Text[ czech ] = "Pořadí řazení";
     Text[ hebrew ] = "Sortierung";
     Text[ hindi ] = "सोर्ट क्रम";
+    Text[ slovak ] = "Poradie radenia";
 };
+
+
 
 
 
