@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: mba $ $Date: 2002-06-04 07:52:41 $
+ *  last change: $Author: mba $ $Date: 2002-06-07 08:40:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -251,6 +251,7 @@ static const String sFrame          = String::CreateFromAscii( "Frame" );
 static const String sViewData       = String::CreateFromAscii( "ViewData" );
 static const String sFilterData     = String::CreateFromAscii( "FilterData" );
 static const String sSelectionOnly  = String::CreateFromAscii( "SelectionOnly" );
+static const String sFilterFlags    = String::CreateFromAscii( "FilterFlags" );
 
 void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>& rArgs, SfxAllItemSet& rSet, const SfxSlot* pSlot )
 {
@@ -312,9 +313,9 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
 #ifdef DBG_UTIL
                     else
                     {
-                        ByteString aStr( "Property not convertable: ");
+                        ByteString aStr( "MacroPlayer: Property not convertable: ");
                         aStr += pSlot->pUnoName;
-                        DBG_ERROR( aStr.GetBuffer() );
+                        DBG_WARNING( aStr.GetBuffer() );
                     }
 #endif
                 }
@@ -322,9 +323,9 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                 else
                 {
                     // for a simple property the name of the only argument *must* match
-                    ByteString aStr( "Property name does not match: ");
+                    ByteString aStr( "MacroPlayer: Property name does not match: ");
                     aStr += ByteString( aName, RTL_TEXTENCODING_UTF8 );
-                    DBG_ERROR( aStr.GetBuffer() );
+                    DBG_WARNING( aStr.GetBuffer() );
                 }
 #endif
             }
@@ -369,9 +370,9 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                 if ( nSub >= nSubCount )
                 {
                     // for complex property slots every passed argument *must* match to the name of a member of the item
-                    ByteString aStr( "Property name does not match: ");
+                    ByteString aStr( "MacroPlayer: Property name does not match: ");
                     aStr += ByteString( String(rProp.Name), RTL_TEXTENCODING_UTF8 );
-                    DBG_ERROR( aStr.GetBuffer() );
+                    DBG_WARNING( aStr.GetBuffer() );
                 }
 #endif
             }
@@ -382,9 +383,9 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
 #ifdef DBG_UTIL
             else
             {
-                ByteString aStr( "Complex property not convertable: ");
+                ByteString aStr( "MacroPlayer: Complex property not convertable: ");
                 aStr += pSlot->pUnoName;
-                DBG_ERROR( aStr.GetBuffer() );
+                DBG_WARNING( aStr.GetBuffer() );
             }
 #endif
         }
@@ -425,9 +426,9 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
 #ifdef DBG_UTIL
                         else
                         {
-                            ByteString aStr( "Property not convertable: ");
+                            ByteString aStr( "MacroPlayer: Property not convertable: ");
                             aStr += rArg.pName;
-                            DBG_ERROR( aStr.GetBuffer() );
+                            DBG_WARNING( aStr.GetBuffer() );
                         }
 #endif
                         break;
@@ -544,6 +545,8 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                     rSet.Put( SfxStringItem( SID_JUMPMARK, *((::rtl::OUString*)rProp.Value.getValue()) ) );
                 else if ( aName == sCharacterSet && rProp.Value.getValueType() == ::getCppuType((const ::rtl::OUString*)0) )
                     rSet.Put( SfxStringItem( SID_CHARSET, *((::rtl::OUString*)rProp.Value.getValue()) ) );
+                else if ( aName == sFilterFlags && rProp.Value.getValueType() == ::getCppuType((const ::rtl::OUString*)0) )
+                    rSet.Put( SfxStringItem( SID_FILE_FILTEROPTIONS, *((::rtl::OUString*)rProp.Value.getValue()) ) );
                 else if ( aName == sPosSize && rProp.Value.getValueType() == ::getCppuType((const ::rtl::OUString*)0) )
                 {
                     String aPar = *((::rtl::OUString*)rProp.Value.getValue());
@@ -554,10 +557,12 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
             }
         }
 #ifdef DB_UTIL
-        else
+        else if ( nFoundArgs == nCount )
         {
             // except for the "special" slots: assure that every argument was convertable
-            DBG_ASSERT( nFoundArgs == nCount, "Some properties didn't match to any formal argument!");
+            ByteString aStr( "MacroPlayer: Some properties didn't match to any formal argument for slot: ");
+            aStr += pSlot->pUnoName;
+            DBG_WARNING( aStr.GetBuffer() );
         }
 #endif
     }
