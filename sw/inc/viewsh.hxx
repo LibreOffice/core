@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.hxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2003-09-11 09:39:16 $
+ *  last change: $Author: kz $ $Date: 2003-10-15 09:53:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -337,6 +337,10 @@ public:
     void UpdateAllCharts();
     sal_Bool HasCharts() const;
 
+    //
+    // DOCUMENT COMPATIBILITY FLAGS START
+    //
+
     // Sollen Absatzabstaende addiert oder maximiert werden?
     sal_Bool IsParaSpaceMax() const;
     sal_Bool IsParaSpaceMaxAtPages() const;
@@ -346,9 +350,22 @@ public:
     sal_Bool IsTabCompat() const;
     void SetTabCompat( sal_Bool bNew );
 
-    //formatting by virtual device or printer
-    sal_Bool IsUseVirtualDevice()const;
-    void SetUseVirtualDevice(sal_Bool bSet);
+    // alternative calculation of fly anchor offset
+    sal_Bool IsAddFlyOffsets()const;
+    void SetAddFlyOffsets( sal_Bool bNew );
+
+    // font metric attribute "External Leading" should be considered
+    sal_Bool IsAddExtLeading()const;
+    void SetAddExtLeading( sal_Bool bNew );
+
+    // formatting by virtual device or printer
+    short IsUseVirtualDevice() const;
+    void SetUseVirtualDevice( short nNew );
+
+    //
+    // DOCUMENT COMPATIBILITY FLAGS END
+    //
+
 
     //Ruft den Idle-Formatierer des Layouts
     void LayoutIdle();
