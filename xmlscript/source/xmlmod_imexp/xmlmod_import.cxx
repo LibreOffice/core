@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlmod_import.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2003-09-04 09:20:27 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 16:19:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,19 +174,15 @@ ModuleElement::~ModuleElement()
 
 //______________________________________________________________________________
 void ModuleImport::startDocument(
-    Reference< container::XNameAccess > const & xUidMapping )
+    Reference< xml::input::XNamespaceMapping > const & xNamespaceMapping )
     throw (xml::sax::SAXException, RuntimeException)
 {
-    if (!(xUidMapping->getByName( OUSTR(XMLNS_SCRIPT_URI) ) >>=
-          XMLNS_SCRIPT_UID) ||
-        !(xUidMapping->getByName( OUSTR(XMLNS_LIBRARY_URI) ) >>=
-          XMLNS_LIBRARY_UID) ||
-        !(xUidMapping->getByName( OUSTR(XMLNS_XLINK_URI) ) >>=
-          XMLNS_XLINK_UID))
-    {
-        throw xml::sax::SAXException(
-            OUSTR("cannot get uids!"), Reference< XInterface >(), Any() );
-    }
+    XMLNS_SCRIPT_UID = xNamespaceMapping->getUidByUri(
+        OUSTR(XMLNS_SCRIPT_URI) );
+    XMLNS_LIBRARY_UID = xNamespaceMapping->getUidByUri(
+        OUSTR(XMLNS_LIBRARY_URI) );
+    XMLNS_XLINK_UID = xNamespaceMapping->getUidByUri(
+        OUSTR(XMLNS_XLINK_URI) );
 }
 
 //__________________________________________________________________________________________________
