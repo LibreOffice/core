@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resultsetmetadata.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:03:37 $
+ *  last change: $Author: kso $ $Date: 2001-01-18 09:03:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,9 +63,11 @@
                                 TODO
  **************************************************************************
 
- - Search for @@@ in this file to find out what's to do
-
  *************************************************************************/
+
+#ifndef _VOS_DIAGNOSE_HXX_
+#include <vos/diagnose.hxx>
+#endif
 
 #ifndef _COM_SUN_STAR_BEANS_PROPERTY_HPP_
 #include <com/sun/star/beans/Property.hpp>
@@ -78,9 +80,6 @@
 #endif
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_COLUMNVALUE_HPP_
-#include <com/sun/star/sdbc/ColumnValue.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SDBC_DATATYPE_HPP_
 #include <com/sun/star/sdbc/DataType.hpp>
@@ -125,10 +124,19 @@ namespace ucb
 
 struct ResultSetMetaData_Impl
 {
-    osl::Mutex  m_aMutex;
-    sal_Bool    m_bObtainedTypes;
+    osl::Mutex                          m_aMutex;
+    std::vector< ResultSetColumnData >  m_aColumnData;
+    sal_Bool                            m_bObtainedTypes;
+    sal_Bool                            m_bGlobalReadOnlyValue;
 
-    ResultSetMetaData_Impl() : m_bObtainedTypes( sal_False ) {}
+    ResultSetMetaData_Impl( sal_Int32 nSize )
+    : m_aColumnData( nSize ), m_bObtainedTypes( sal_False ),
+      m_bGlobalReadOnlyValue( sal_True ) {}
+
+    ResultSetMetaData_Impl(
+        const std::vector< ResultSetColumnData >& rColumnData )
+    : m_aColumnData( rColumnData ), m_bObtainedTypes( sal_False ),
+      m_bGlobalReadOnlyValue( sal_False ) {}
 };
 
 }
@@ -145,11 +153,25 @@ ResultSetMetaData::ResultSetMetaData(
                         const Reference< XMultiServiceFactory >& rxSMgr,
                         const Sequence< Property >& rProps,
                         sal_Bool bReadOnly )
-: m_pImpl( new ResultSetMetaData_Impl ),
+: m_pImpl( new ResultSetMetaData_Impl( rProps.getLength() ) ),
   m_xSMgr( rxSMgr ),
   m_aProps( rProps ),
   m_bReadOnly( bReadOnly )
 {
+}
+
+//=========================================================================
+ResultSetMetaData::ResultSetMetaData(
+                        const Reference< XMultiServiceFactory >& rxSMgr,
+                        const Sequence< Property >& rProps,
+                        const std::vector< ResultSetColumnData >& rColumnData )
+: m_pImpl( new ResultSetMetaData_Impl( rColumnData ) ),
+  m_xSMgr( rxSMgr ),
+  m_aProps( rProps ),
+  m_bReadOnly( sal_True )
+{
+    VOS_ENSURE( rColumnData.size() == sal_uInt32( rProps.getLength() ),
+                "ResultSetMetaData ctor - different array sizes!" );
 }
 
 //=========================================================================
@@ -202,7 +224,10 @@ sal_Bool SAL_CALL ResultSetMetaData::isAutoIncrement( sal_Int32 column )
         read-only.
      */
 
-    return m_bReadOnly;
+    if ( ( column < 1 ) || ( column > m_aProps.getLength() ) )
+        return sal_False;
+
+    return m_pImpl->m_aColumnData[ column - 1 ].isAutoIncrement;
 }
 
 //=========================================================================
@@ -210,8 +235,10 @@ sal_Bool SAL_CALL ResultSetMetaData::isAutoIncrement( sal_Int32 column )
 sal_Bool SAL_CALL ResultSetMetaData::isCaseSensitive( sal_Int32 column )
     throw( SQLException, RuntimeException )
 {
-    // @@@
-    return sal_False;
+    if ( ( column < 1 ) || ( column > m_aProps.getLength() ) )
+        return sal_False;
+
+    return m_pImpl->m_aColumnData[ column - 1 ].isCaseSensitive;
 }
 
 //=========================================================================
@@ -224,8 +251,10 @@ sal_Bool SAL_CALL ResultSetMetaData::isSearchable( sal_Int32 column )
         WHERE clause.
      */
 
-    // @@@
-    return sal_False;
+    if ( ( column < 1 ) || ( column > m_aProps.getLength() ) )
+        return sal_False;
+
+    return m_pImpl->m_aColumnData[ column - 1 ].isSearchable;
 }
 
 //=========================================================================
@@ -237,8 +266,10 @@ sal_Bool SAL_CALL ResultSetMetaData::isCurrency( sal_Int32 column )
         Checks whether column is a cash value.
      */
 
-    // @@@
-    return sal_False;
+    if ( ( column < 1 ) || ( column > m_aProps.getLength() ) )
+        return sal_False;
+
+    return m_pImpl->m_aColumnData[ column - 1 ].isCurrency;
 }
 
 //=========================================================================
@@ -251,9 +282,10 @@ sal_Int32 SAL_CALL ResultSetMetaData::isNullable( sal_Int32 column )
         Possible values: see com/sun/star/sdbc/ColumnValue.idl
      */
 
-    // All columns may contain NULL. Think of result sets containing
-    // UCB contents of different types...
-    return ColumnValue::NULLABLE;
+    if ( ( column < 1 ) || ( column > m_aProps.getLength() ) )
+        return ColumnValue::NULLABLE;
+
+    return m_pImpl->m_aColumnData[ column - 1 ].isNullable;
 }
 
 //=========================================================================
@@ -265,8 +297,10 @@ sal_Bool SAL_CALL ResultSetMetaData::isSigned( sal_Int32 column )
         Checks whether the value stored in column is a signed number.
      */
 
-    // @@@
-    return sal_False;
+    if ( ( column < 1 ) || ( column > m_aProps.getLength() ) )
+        return sal_False;
+
+    return m_pImpl->m_aColumnData[ column - 1 ].isSigned;
 }
 
 //=========================================================================
@@ -278,8 +312,10 @@ sal_Int32 SAL_CALL ResultSetMetaData::getColumnDisplaySize( sal_Int32 column )
         Gets the normal maximum width in characters for column.
      */
 
-    // @@@
-    return 16;
+    if ( ( column < 1 ) || ( column > m_aProps.getLength() ) )
+        return 16;
+
+    return m_pImpl->m_aColumnData[ column - 1 ].columnDisplaySize;
 }
 
 //=========================================================================
@@ -294,6 +330,10 @@ OUString SAL_CALL ResultSetMetaData::getColumnLabel( sal_Int32 column )
 
     if ( ( column < 1 ) || ( column > m_aProps.getLength() ) )
         return OUString();
+
+    OUString aLabel = m_pImpl->m_aColumnData[ column - 1 ].columnLabel;
+    if ( aLabel.getLength() )
+        return aLabel;
 
     return m_aProps.getConstArray()[ column - 1 ].Name;
 }
@@ -325,7 +365,10 @@ OUString SAL_CALL ResultSetMetaData::getSchemaName( sal_Int32 column )
         for many DBMSs will be an empty string.
      */
 
-    return OUString();
+    if ( ( column < 1 ) || ( column > m_aProps.getLength() ) )
+        return OUString();
+
+    return m_pImpl->m_aColumnData[ column - 1 ].schemaName;
 }
 
 //=========================================================================
@@ -341,8 +384,10 @@ sal_Int32 SAL_CALL ResultSetMetaData::getPrecision( sal_Int32 column )
         For binary types, it gets the maximum length in bytes for column.
      */
 
-    // @@@
-    return -1;
+    if ( ( column < 1 ) || ( column > m_aProps.getLength() ) )
+        return -1;
+
+    return m_pImpl->m_aColumnData[ column - 1 ].precision;
 }
 
 //=========================================================================
@@ -355,8 +400,10 @@ sal_Int32 SAL_CALL ResultSetMetaData::getScale( sal_Int32 column )
         values in column.
      */
 
-    // @@@
-    return 0;
+    if ( ( column < 1 ) || ( column > m_aProps.getLength() ) )
+        return 0;
+
+    return m_pImpl->m_aColumnData[ column - 1 ].scale;
 }
 
 //=========================================================================
@@ -371,7 +418,10 @@ OUString SAL_CALL ResultSetMetaData::getTableName( sal_Int32 column )
         for many DBMSs will be an empty string.
      */
 
-    return OUString();
+    if ( ( column < 1 ) || ( column > m_aProps.getLength() ) )
+        return OUString();
+
+    return m_pImpl->m_aColumnData[ column - 1 ].tableName;
 }
 
 //=========================================================================
@@ -386,7 +436,10 @@ OUString SAL_CALL ResultSetMetaData::getCatalogName( sal_Int32 column )
         for many DBMSs will be an empty string.
      */
 
-    return OUString();
+    if ( ( column < 1 ) || ( column > m_aProps.getLength() ) )
+        return OUString();
+
+    return m_pImpl->m_aColumnData[ column - 1 ].catalogName;
 }
 
 //=========================================================================
@@ -541,8 +594,7 @@ OUString SAL_CALL ResultSetMetaData::getColumnTypeName( sal_Int32 column )
     if ( ( column < 1 ) || ( column > m_aProps.getLength() ) )
         return OUString();
 
-    // @@@ According to DG, the type name may be empty.
-    return OUString();
+    return m_pImpl->m_aColumnData[ column - 1 ].columnTypeName;
 }
 
 //=========================================================================
@@ -550,8 +602,15 @@ OUString SAL_CALL ResultSetMetaData::getColumnTypeName( sal_Int32 column )
 sal_Bool SAL_CALL ResultSetMetaData::isReadOnly( sal_Int32 column )
     throw( SQLException, RuntimeException )
 {
-    // ContentResultSet's are completely read-only.
-    return m_bReadOnly;
+    if ( m_pImpl->m_bGlobalReadOnlyValue )
+        return m_bReadOnly;
+
+    if ( ( column < 1 ) || ( column > m_aProps.getLength() ) )
+        return sal_True;
+
+    // autoincrement==true => readonly
+    return m_pImpl->m_aColumnData[ column - 1 ].isAutoIncrement ||
+           m_pImpl->m_aColumnData[ column - 1 ].isReadOnly;
 }
 
 //=========================================================================
@@ -559,8 +618,13 @@ sal_Bool SAL_CALL ResultSetMetaData::isReadOnly( sal_Int32 column )
 sal_Bool SAL_CALL ResultSetMetaData::isWritable( sal_Int32 column )
     throw( SQLException, RuntimeException )
 {
-    // ContentResultSet's are completely read-only.
-    return !m_bReadOnly;
+    if ( m_pImpl->m_bGlobalReadOnlyValue )
+        return !m_bReadOnly;
+
+    if ( ( column < 1 ) || ( column > m_aProps.getLength() ) )
+        return sal_False;
+
+    return m_pImpl->m_aColumnData[ column - 1 ].isWritable;
 }
 
 //=========================================================================
@@ -568,8 +632,13 @@ sal_Bool SAL_CALL ResultSetMetaData::isWritable( sal_Int32 column )
 sal_Bool SAL_CALL ResultSetMetaData::isDefinitelyWritable( sal_Int32 column )
     throw( SQLException, RuntimeException )
 {
-    // ContentResultSet's are completely read-only.
-    return !m_bReadOnly;
+    if ( m_pImpl->m_bGlobalReadOnlyValue )
+        return !m_bReadOnly;
+
+    if ( ( column < 1 ) || ( column > m_aProps.getLength() ) )
+        return sal_False;
+
+    return m_pImpl->m_aColumnData[ column - 1 ].isDefinitelyWritable;
 }
 
 //=========================================================================
@@ -583,6 +652,9 @@ OUString SAL_CALL ResultSetMetaData::getColumnServiceName( sal_Int32 column )
         a value from the column.
      */
 
-    return OUString();
+    if ( ( column < 1 ) || ( column > m_aProps.getLength() ) )
+        return OUString();
+
+    return m_pImpl->m_aColumnData[ column - 1 ].columnServiceName;
 }
 
