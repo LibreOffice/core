@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8sty.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-03 17:33:34 $
+ *  last change: $Author: cmc $ $Date: 2001-08-01 16:56:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -684,39 +684,66 @@ USHORT SwWW8Writer::GetId( const Font& rFont ) const
 
 static void _OutFont( SwWW8Writer& rWrt, const SvxFontItem& rFont )
 {
+    BOOL bAlt=FALSE;
     String sFamilyNm( ::GetFontToken( rFont.GetFamilyName(), 0 ));
-/*  if( sFamilyNm.Len() != rFont.GetFamilyName().Len() )
+    String sAltNm( GetSubsFontName(sFamilyNm, SUBSFONT_ONLYONE | SUBSFONT_MS));
+    if( !sAltNm.Len() )
+        sAltNm = GetFontToken( rFont.GetFamilyName(), 1 );
+    if (sAltNm.Len() && sAltNm != sFamilyNm &&
+        (sFamilyNm.Len() + sAltNm.Len() + 2 <= 65) )
     {
-        String sTmp( ::GetSubsFontName( sFamilyNm,
-                                        SUBSFONT_MS | SUBSFONT_ONLYONE ));
-        if( sTmp.Len() )
-            sFamilyNm = sTmp;
+        //max size of szFfn in 65 chars
+        bAlt=TRUE;
     }
-*/
+
     BYTE aWW8_FFN[ 6 ];
     memset( aWW8_FFN, 0, 6 );                       // 6 == len of fixed Part
     if( rWrt.bWrtWW8 )
+    {
         aWW8_FFN[0] = (BYTE)( 6 - 1 + 0x22 + ( 2 * ( 1 + sFamilyNm.Len() ) ));
+        if (bAlt)
+            aWW8_FFN[0] += 2 * ( 1 + sAltNm.Len());
+    }
     else
+    {
         aWW8_FFN[0] = (BYTE)( 6 - 1 + 1 + sFamilyNm.Len() );
+        if (bAlt)
+            aWW8_FFN[0] += 1 + sAltNm.Len();
+    }
 
     BYTE aB = 0;
     switch( rFont.GetPitch() )
     {
-    case PITCH_VARIABLE: aB |= 2; break;    // aF.prg = 2
-    case PITCH_FIXED:    aB |= 1; break;
-    default:             break;         // aF.prg = 0 : DEFAULT_PITCH (windows.h)
+        case PITCH_VARIABLE:
+            aB |= 2;    // aF.prg = 2
+            break;
+        case PITCH_FIXED:
+            aB |= 1;
+            break;
+        default:        // aF.prg = 0 : DEFAULT_PITCH (windows.h)
+            break;
     }
-    aB |= 1 << 2;                       // aF.fTrueType = 1; weiss ich nicht besser;
+    aB |= 1 << 2;   // aF.fTrueType = 1; weiss ich nicht besser;
 
     switch( rFont.GetFamily() )
     {
-    case FAMILY_ROMAN:      aB |= 1 << 4; break; // aF.ff = 1;
-    case FAMILY_SWISS:      aB |= 2 << 4; break; // aF.ff = 2;
-    case FAMILY_MODERN:     aB |= 3 << 4; break; // aF.ff = 3;
-    case FAMILY_SCRIPT:     aB |= 4 << 4; break; // aF.ff = 4;
-    case FAMILY_DECORATIVE: aB |= 5 << 4; break; // aF.ff = 5;
-    default:                              break; // aF.ff = 0; FF_DONTCARE (windows.h)
+    case FAMILY_ROMAN:
+        aB |= 1 << 4;   // aF.ff = 1;
+        break;
+    case FAMILY_SWISS:
+        aB |= 2 << 4;   // aF.ff = 2;
+        break;
+    case FAMILY_MODERN:
+        aB |= 3 << 4;   // aF.ff = 3;
+        break;
+    case FAMILY_SCRIPT:
+        aB |= 4 << 4;   // aF.ff = 4;
+        break;
+    case FAMILY_DECORATIVE:
+        aB |= 5 << 4;   // aF.ff = 5;
+        break;
+    default:            // aF.ff = 0; FF_DONTCARE (windows.h)
+        break;
     }
     aWW8_FFN[1] = aB;
 
@@ -727,6 +754,9 @@ static void _OutFont( SwWW8Writer& rWrt, const SvxFontItem& rFont )
     else
         aWW8_FFN[4] = 0;
 
+    if (bAlt)
+        aWW8_FFN[5] = sFamilyNm.Len()+1;
+
     rWrt.pTableStrm->Write( aWW8_FFN, 6 );                  // fixed part
     if( rWrt.bWrtWW8 )
     {
@@ -736,10 +766,20 @@ static void _OutFont( SwWW8Writer& rWrt, const SvxFontItem& rFont )
         //char  fs[ 24     ];       //  0x10  FONTSIGNATURE
         SwWW8Writer::FillCount( *rWrt.pTableStrm, 0x22 );
         SwWW8Writer::WriteString16( *rWrt.pTableStrm, sFamilyNm, TRUE );
+        if (bAlt)
+            SwWW8Writer::WriteString16( *rWrt.pTableStrm, sAltNm, TRUE );
     }
     else
-        SwWW8Writer::WriteString8( *rWrt.pTableStrm, sFamilyNm,
-                                    TRUE, RTL_TEXTENCODING_MS_1252 );
+    {
+        SwWW8Writer::WriteString8( *rWrt.pTableStrm, sFamilyNm, TRUE,
+            RTL_TEXTENCODING_MS_1252 );
+        if (bAlt)
+        {
+            SwWW8Writer::WriteString8( *rWrt.pTableStrm, sAltNm, TRUE,
+                RTL_TEXTENCODING_MS_1252 );
+        }
+
+    }
 }
 
 void SwWW8Writer::OutFontTab( WW8Fib& rFib )
@@ -1893,11 +1933,14 @@ const SvULongs* WW8_WrPlcSubDoc::GetShapeIdArr() const
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtw8sty.cxx,v 1.6 2001-07-03 17:33:34 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtw8sty.cxx,v 1.7 2001-08-01 16:56:06 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.6  2001/07/03 17:33:34  jp
+      Bug #89130#: export one font instead of the complete fontlist
+
       Revision 1.5  2001/04/23 11:16:22  cmc
       Enable automatic text foreground color {im|ex}port
 

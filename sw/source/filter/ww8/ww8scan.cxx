@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: cmc $ $Date: 2001-07-30 09:18:10 $
+ *  last change: $Author: cmc $ $Date: 2001-08-01 16:56:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5051,6 +5051,12 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib& rFib )
                 p->chs       = pVer6->chs;
                 p->ibszAlt   = pVer6->ibszAlt;
                 p->sFontname = String( pVer6->szFfn, RTL_TEXTENCODING_MS_1252 );
+                if (p->ibszAlt)
+                {
+                    p->sFontname.Append(';');
+                    p->sFontname += String(pVer6->szFfn+p->ibszAlt,
+                        RTL_TEXTENCODING_MS_1252 );
+                }
                 pVer6 = (WW8_FFN_Ver6*)( ((BYTE*)pVer6) + pVer6->cbFfnM1 + 1 );
             }
         }
@@ -5074,12 +5080,20 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib& rFib )
 
 #ifdef __WW8_NEEDS_COPY
                 {
-                    for(UINT16* pTmp = pVer8->szFfn; *pTmp; ++pTmp )
+                    for(UINT16* pTmp = pVer8->szFfn, BYTE nLen=0x28;
+                        nLen < pVer8->cbFfnM1 + 1 ; ++pTmp, nLen+=2 )
+                    {
                         *pTmp = SVBT16ToShort( *(SVBT16*)pTmp );
+                    }
                 }
 #endif // defined __WW8_NEEDS_COPY
 
                 p->sFontname = pVer8->szFfn;
+                if (p->ibszAlt)
+                {
+                    p->sFontname.Append(';');
+                    p->sFontname.Append(pVer8->szFfn+p->ibszAlt);
+                }
 
                 // Zeiger auf Ursprungsarray einen Font nach hinten setzen
                 pVer8 = (WW8_FFN_Ver8*)( ((BYTE*)pVer8) + pVer8->cbFfnM1 + 1 );
@@ -6447,11 +6461,14 @@ BYTE WW8SprmDataOfs( USHORT nId )
 /*************************************************************************
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8scan.cxx,v 1.22 2001-07-30 09:18:10 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8scan.cxx,v 1.23 2001-08-01 16:56:06 cmc Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.22  2001/07/30 09:18:10  cmc
+      #i1353# Import Vertical Cell Alignment
+
       Revision 1.21  2001/07/13 14:08:12  cmc
       #89125# WW6 Redline authorname table import fix ( + new undocumented sprms)
 
