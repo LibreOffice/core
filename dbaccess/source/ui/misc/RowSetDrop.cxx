@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetDrop.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-01 10:12:39 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:05:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,9 +96,11 @@ using namespace ::com::sun::star::lang;
 // export data
 ORowSetImportExport::ORowSetImportExport(   Window* _pParent,
                                             const Reference< XResultSetUpdate >& _xResultSetUpdate,
+                                            const ::svx::ODataAccessDescriptor& _aDataDescriptor,
                                             const Reference< XMultiServiceFactory >& _rM,
-                                            const String& rExchange)
-                                            : ODatabaseImportExport(_rM,NULL,rExchange)
+                                            const String& rExchange
+                                            )
+                                            : ODatabaseImportExport(_aDataDescriptor,_rM,NULL,rExchange)
                                             ,m_xTargetResultSetUpdate(_xResultSetUpdate)
                                             ,m_xTargetRowUpdate(_xResultSetUpdate,UNO_QUERY)
                                             ,m_pParent(_pParent)
