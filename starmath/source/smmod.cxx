@@ -2,9 +2,9 @@
  *
  *  $RCSfile: smmod.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:53:40 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 20:48:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -303,7 +303,7 @@ SFX_IMPL_INTERFACE(SmModule, SfxModule, SmResId(RID_APPLICATION))
 
 
 SmModule::SmModule(SfxObjectFactory* pObjFact) :
-    SfxModule(SFX_APP()->CreateResManager("sm"), FALSE, pObjFact, NULL),
+    SfxModule(SfxApplication::CreateResManager("sm"), FALSE, pObjFact, NULL),
     pConfig( 0 ),
     pColorConfig( 0 ),
     pLocSymbolData( 0 ),
