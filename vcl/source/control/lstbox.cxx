@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lstbox.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 17:48:00 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 12:13:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -365,7 +365,14 @@ IMPL_LINK( ListBox, ImplPopupModeEndHdl, void*, p )
             mpImplLB->SelectEntry( mpFloatWin->GetPopupModeStartSaveSelection(), TRUE );
             BOOL bTravelSelect = mpImplLB->IsTravelSelect();
             mpImplLB->SetTravelSelect( TRUE );
+
+            ImplDelData aCheckDelete;
+            ImplAddDel( &aCheckDelete );
             Select();
+            if ( aCheckDelete.IsDelete() )
+                return 0;
+            ImplRemoveDel( &aCheckDelete );
+
             mpImplLB->SetTravelSelect( bTravelSelect );
         }
     }
@@ -986,16 +993,14 @@ long ListBox::PreNotify( NotifyEvent& rNEvt )
 
 void ListBox::Select()
 {
-    ImplCallEventListeners( VCLEVENT_LISTBOX_SELECT );
-    maSelectHdl.Call( this );
+    ImplCallEventListenersAndHandler( VCLEVENT_LISTBOX_SELECT, maSelectHdl, this );
 }
 
 // -----------------------------------------------------------------------
 
 void ListBox::DoubleClick()
 {
-    ImplCallEventListeners( VCLEVENT_LISTBOX_DOUBLECLICK );
-    maDoubleClickHdl.Call( this );
+    ImplCallEventListenersAndHandler( VCLEVENT_LISTBOX_DOUBLECLICK, maDoubleClickHdl, this );
 }
 
 // -----------------------------------------------------------------------
