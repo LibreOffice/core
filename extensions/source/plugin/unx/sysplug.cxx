@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sysplug.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-23 17:31:20 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:18:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,7 @@ UnxPluginComm::UnxPluginComm(
     pArgs[3] = pWindow;
     pArgs[4] = NULL;
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     m_nCommPID = 10;
     fprintf( stderr, "Try to launch: %s %s %s %s, descriptors are %d, %d\n", pArgs[0], pArgs[1], pArgs[2], pArgs[3], nDescriptor1, nDescriptor2 );
 #endif
