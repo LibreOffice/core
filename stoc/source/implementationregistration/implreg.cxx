@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implreg.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jbu $ $Date: 2001-06-22 16:20:56 $
+ *  last change: $Author: dbo $ $Date: 2001-09-11 09:27:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,7 @@
 #include <io.h>
 #endif
 
+using namespace com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::loader;
 using namespace com::sun::star::beans;
@@ -117,6 +118,11 @@ namespace stoc_impreg
 #define SERVICENAME         "com.sun.star.registry.ImplementationRegistration"
 
 rtl_StandardModuleCount g_moduleCount = MODULE_COUNT_INIT;
+
+void SAL_CALL mergeKeys(
+    Reference< registry::XRegistryKey > const & xDest,
+    Reference< registry::XRegistryKey > const & xSource )
+    SAL_THROW( (registry::InvalidRegistryException, registry::MergeConflictException) );
 
 static Sequence< OUString > impreg_getSupportedServiceNames()
 {
@@ -1647,13 +1653,15 @@ sal_Bool ImplementationRegistration::doRegistration(
                 {
                     if (prepareRegistry(xDest, xSourceKey, implementationLoaderUrl, locationUrl))
                     {
-                        // Release Source key and registry.
                         xSourceKey->closeKey();
+
+                        xSourceKey = xReg->getRootKey();
+                        Reference < XRegistryKey > xDestKey = xDest->getRootKey();
+                        mergeKeys( xDestKey, xSourceKey );
+                        xDestKey->closeKey();
+                        xSourceKey->closeKey();
+
                         xReg->close();
-
-                        xDest->mergeKey(
-                            OUString( RTL_CONSTASCII_USTRINGPARAM("/") ), aTempName );
-
                         ret = sal_True;
                     }
                 }

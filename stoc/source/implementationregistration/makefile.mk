@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: jbu $ $Date: 2001-06-22 16:20:57 $
+#   last change: $Author: dbo $ $Date: 2001-09-11 09:27:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,6 +78,7 @@ COMP1TYPELIST=$(TARGET)
 .INCLUDE :  ..$/cppumaker.mk
 
 SLOFILES= \
+        $(SLO)$/mergekeys.obj	\
         $(SLO)$/implreg.obj
 
 SHL1TARGET=	$(TARGET)
