@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrthtml.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:17:19 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 13:41:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -317,10 +317,7 @@ sal_uInt32 SwHTMLWriter::WriteStream()
 
     if( HTML_CFG_WRITER==nExportMode || HTML_CFG_NS40==nExportMode ||
         HTML_CFG_MSIE==nExportMode )
-        nHTMLMode |= HTMLMODE_ABS_POS_FLY;
-
-    if( HTML_CFG_WRITER==nExportMode || HTML_CFG_MSIE==nExportMode )
-        nHTMLMode |= HTMLMODE_ABS_POS_DRAW;
+        nHTMLMode |= HTMLMODE_ABS_POS_FLY|HTMLMODE_ABS_POS_DRAW;
 
     if( HTML_CFG_WRITER==nExportMode )
 //      nHTMLMode |= HTMLMODE_FLY_MARGINS | HTMLMODE_FRSTLINE_IN_NUMBUL;
@@ -549,13 +546,6 @@ sal_uInt32 SwHTMLWriter::WriteStream()
     HTMLOutFuncs::Out_AsciiTag( Strm(), sHTML_body, sal_False );
     OutNewLine();
     HTMLOutFuncs::Out_AsciiTag( Strm(), sHTML_html, sal_False );
-
-    if( aNonConvertableCharacters.Len() )
-    {
-        nWarn = *new StringErrorInfo( WARN_UNCONVERTABLE_CHARS,
-                                      aNonConvertableCharacters,
-                                    ERRCODE_BUTTON_OK | ERRCODE_MSG_ERROR );
-    }
 
     // loesche die Tabelle mit den freifliegenden Rahmen
     sal_uInt16 i;
@@ -910,6 +900,7 @@ static Writer& OutHTML_Section( Writer& rWrt, const SwSectionNode& rSectNd )
 void SwHTMLWriter::Out_SwDoc( SwPaM* pPam )
 {
     sal_Bool bSaveWriteAll = bWriteAll;     // sichern
+    sal_uInt16 nSaveBkmkTabPos =  nBkmkTabPos;
 
 
     // suche die naechste ::com::sun::star::text::Bookmark-Position aus der ::com::sun::star::text::Bookmark-Tabelle
@@ -975,6 +966,7 @@ void SwHTMLWriter::Out_SwDoc( SwPaM* pPam )
     } while( CopyNextPam( &pPam ) );        // bis alle PaM's bearbeitet
 
     bWriteAll = bSaveWriteAll;          // wieder auf alten Wert zurueck
+    nBkmkTabPos = nSaveBkmkTabPos;
 }
 
 
