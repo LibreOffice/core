@@ -511,6 +511,9 @@ hedabu: ..\inc\eeitemid.hxx %_DEST%\inc%_EXT%\svx\eeitemid.hxx
 hedabu: ..\inc\eerdll.hxx %_DEST%\inc%_EXT%\svx\editdll.hxx
 hedabu: ..\inc\svxacorr.hxx %_DEST%\inc%_EXT%\svx\svxacorr.hxx
 hedabu: ..\inc\swafopt.hxx %_DEST%\inc%_EXT%\svx\swafopt.hxx
+hedabu: ..\inc\swframeposstrings.hxx %_DEST%\inc%_EXT%\svx\swframeposstrings.hxx
+hedabu: ..\inc\swframevalidation.hxx %_DEST%\inc%_EXT%\svx\swframevalidation.hxx
+hedabu: ..\inc\swframeexample.hxx %_DEST%\inc%_EXT%\svx\swframeexample.hxx
 hedabu: ..\inc\txtrange.hxx %_DEST%\inc%_EXT%\svx\txtrange.hxx
 hedabu: ..\inc\fmmodel.hxx %_DEST%\inc%_EXT%\svx\fmmodel.hxx
 hedabu: ..\inc\fmpage.hxx %_DEST%\inc%_EXT%\svx\fmpage.hxx
@@ -651,6 +654,8 @@ mkdir: %_DEST%\inc%_EXT%\svx\sdr\contact
 ..\inc\svx\sdr\contact\viewcontact.hxx %_DEST%\inc%_EXT%\svx\sdr\contact\viewcontact.hxx
 ..\inc\svx\sdr\contact\viewobjectcontactlist.hxx %_DEST%\inc%_EXT%\svx\sdr\contact\viewobjectcontactlist.hxx
 ..\inc\svx\sdr\contact\displayinfo.hxx %_DEST%\inc%_EXT%\svx\sdr\contact\displayinfo.hxx
+..\inc\svx\sdr\contact\objectcontactofobjlistpainter.hxx %_DEST%\inc%_EXT%\svx\sdr\contact\objectcontactofobjlistpainter.hxx
+..\inc\svx\sdr\contact\objectcontact.hxx %_DEST%\inc%_EXT%\svx\sdr\contact\objectcontact.hxx
 
 ..\xml\SvxDrawPage.xml %_DEST%\xml%_EXT%\SvxDrawPage.xml
 ..\xml\SvxGraphicObject.xml %_DEST%\xml%_EXT%\SvxGraphicObject.xml
