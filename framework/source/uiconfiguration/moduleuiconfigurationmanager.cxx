@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduleuiconfigurationmanager.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 11:51:16 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 14:41:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1446,7 +1446,7 @@ Reference< XInterface > SAL_CALL ModuleUIConfigurationManager::getShortCutManage
 {
     ResetableGuard aGuard( m_aLock );
     Reference< XMultiServiceFactory > xSMGR   = m_xServiceManager;
-    ::rtl::OUString                   aModule = m_aModuleIdentifier;
+    ::rtl::OUString                   aModule = m_aModuleShortName;
     aGuard.unlock();
 
     Reference< XInterface >      xManager = xSMGR->createInstance(SERVICENAME_MODULEACCELERATORCONFIGURATION);
