@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlmod_import.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-23 16:54:41 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 09:20:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,10 +74,10 @@ namespace xmlscript
 //##################################################################################################
 
 //__________________________________________________________________________________________________
-Reference< xml::XImportContext > ModuleElement::getParent()
+Reference< xml::input::XElement > ModuleElement::getParent()
     throw (RuntimeException)
 {
-    return static_cast< xml::XImportContext * >( _pParent );
+    return static_cast< xml::input::XElement * >( _pParent );
 }
 //__________________________________________________________________________________________________
 OUString ModuleElement::getLocalName()
@@ -89,10 +89,10 @@ OUString ModuleElement::getLocalName()
 sal_Int32 ModuleElement::getUid()
     throw (RuntimeException)
 {
-    return XMLNS_SCRIPT_UID;
+    return _pImport->XMLNS_SCRIPT_UID;
 }
 //__________________________________________________________________________________________________
-Reference< xml::sax2::XExtendedAttributes > ModuleElement::getAttributes()
+Reference< xml::input::XAttributes > ModuleElement::getAttributes()
     throw (RuntimeException)
 {
     return _xAttributes;
@@ -111,15 +111,21 @@ void ModuleElement::characters( OUString const & rChars )
     _StrBuffer.append( rChars );
 }
 //__________________________________________________________________________________________________
+void ModuleElement::processingInstruction(
+    OUString const & rTarget, OUString const & rData )
+    throw (xml::sax::SAXException, RuntimeException)
+{
+}
+//__________________________________________________________________________________________________
 void ModuleElement::endElement()
     throw (xml::sax::SAXException, RuntimeException)
 {
     _pImport->mrModuleDesc.aCode = _StrBuffer.makeStringAndClear();
 }
 //__________________________________________________________________________________________________
-Reference< xml::XImportContext > ModuleElement::createChildContext(
+Reference< xml::input::XElement > ModuleElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
-    Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
+    Reference< xml::input::XAttributes > const & xAttributes )
     throw (xml::sax::SAXException, RuntimeException)
 {
     throw xml::sax::SAXException(
@@ -130,7 +136,7 @@ Reference< xml::XImportContext > ModuleElement::createChildContext(
 //__________________________________________________________________________________________________
 ModuleElement::ModuleElement(
     OUString const & rLocalName,
-    Reference< xml::sax2::XExtendedAttributes > const & xAttributes,
+    Reference< xml::input::XAttributes > const & xAttributes,
     ModuleElement * pParent, ModuleImport * pImport )
     SAL_THROW( () )
     : _pImport( pImport )
@@ -164,13 +170,25 @@ ModuleElement::~ModuleElement()
 
 //##################################################################################################
 
-// XImporter
-//__________________________________________________________________________________________________
-void ModuleImport::startDocument()
+// XRoot
+
+//______________________________________________________________________________
+void ModuleImport::startDocument(
+    Reference< container::XNameAccess > const & xUidMapping )
     throw (xml::sax::SAXException, RuntimeException)
 {
-    // ignored
+    if (!(xUidMapping->getByName( OUSTR(XMLNS_SCRIPT_URI) ) >>=
+          XMLNS_SCRIPT_UID) ||
+        !(xUidMapping->getByName( OUSTR(XMLNS_LIBRARY_URI) ) >>=
+          XMLNS_LIBRARY_UID) ||
+        !(xUidMapping->getByName( OUSTR(XMLNS_XLINK_URI) ) >>=
+          XMLNS_XLINK_UID))
+    {
+        throw xml::sax::SAXException(
+            OUSTR("cannot get uids!"), Reference< XInterface >(), Any() );
+    }
 }
+
 //__________________________________________________________________________________________________
 void ModuleImport::endDocument()
     throw (xml::sax::SAXException, RuntimeException)
@@ -182,19 +200,17 @@ void ModuleImport::processingInstruction(
     OUString const & rTarget, OUString const & rData )
     throw (xml::sax::SAXException, RuntimeException)
 {
-    // ignored for now: xxx todo
 }
 //__________________________________________________________________________________________________
 void ModuleImport::setDocumentLocator(
     Reference< xml::sax::XLocator > const & xLocator )
     throw (xml::sax::SAXException, RuntimeException)
 {
-    // ignored for now: xxx todo
 }
 //__________________________________________________________________________________________________
-Reference< xml::XImportContext > ModuleImport::createRootContext(
+Reference< xml::input::XElement > ModuleImport::startRootElement(
     sal_Int32 nUid, OUString const & rLocalName,
-    Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
+    Reference< xml::input::XAttributes > const & xAttributes )
     throw (xml::sax::SAXException, RuntimeException)
 {
     if (XMLNS_SCRIPT_UID != nUid)
@@ -207,16 +223,19 @@ Reference< xml::XImportContext > ModuleImport::createRootContext(
     else if (rLocalName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("module") ))
     {
         mrModuleDesc.aName = xAttributes->getValueByUidName(
-            XMLNS_LIBRARY_UID, OUString( RTL_CONSTASCII_USTRINGPARAM("name") ) );
+            XMLNS_LIBRARY_UID,
+            OUString( RTL_CONSTASCII_USTRINGPARAM("name") ) );
         mrModuleDesc.aLanguage = xAttributes->getValueByUidName(
-            XMLNS_XLINK_UID, OUString( RTL_CONSTASCII_USTRINGPARAM("language") ) );
+            XMLNS_XLINK_UID,
+            OUString( RTL_CONSTASCII_USTRINGPARAM("language") ) );
 
         return new ModuleElement( rLocalName, xAttributes, 0, this );
     }
     else
     {
         throw xml::sax::SAXException(
-            OUString( RTL_CONSTASCII_USTRINGPARAM("illegal root element (expected module) given: ") ) +
+            OUString( RTL_CONSTASCII_USTRINGPARAM(
+                          "illegal root element (expected module) given: ") ) +
             rLocalName, Reference< XInterface >(), Any() );
     }
 }
@@ -235,14 +254,8 @@ SAL_DLLEXPORT Reference< xml::sax::XDocumentHandler >
 SAL_CALL importScriptModule( ModuleDescriptor& rMod )
     SAL_THROW( (Exception) )
 {
-    NameSpaceUid arNamespaceUids[] = {
-        NameSpaceUid( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_SCRIPT_URI) ), XMLNS_SCRIPT_UID ),
-    };
-
     return ::xmlscript::createDocumentHandler(
-        arNamespaceUids, sizeof(arNamespaceUids) / sizeof(NameSpaceUid),
-        -1 /* unknown namespace id */,
-        static_cast< xml::XImporter * >( new ModuleImport( rMod ) ) );
+        static_cast< xml::input::XRoot * >( new ModuleImport( rMod ) ) );
 }
 
 };
