@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdhdl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: aw $ $Date: 2002-08-15 11:33:23 $
+ *  last change: $Author: aw $ $Date: 2002-09-13 12:17:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,6 +265,11 @@ BitmapEx& SdrHdlBitmapSet::GetBitmapEx(BitmapMarkerKind eKindOfMarker, UINT16 nI
         case Anchor: return aAnchor; break;
         // #98388# add AnchorPressed to be able to aninate anchor control
         case AnchorPressed: return aAnchorPressed; break;
+
+        // #101688# AnchorTR for SW
+        case AnchorTR: return aAnchor; break;
+        case AnchorPressedTR: return aAnchorPressed; break;
+
         default: DBG_ERROR( "unknown kind of marker" ); return aRect_7x7[nInd]; break;
     }
 }
@@ -537,6 +542,12 @@ void SdrHdl::CreateB2dIAObject()
             {
                 break;
             }
+            // #101688# top right anchor for SW
+            case HDL_ANCHOR_TR:
+            {
+                eKindOfMarker = AnchorTR;
+                break;
+            }
         }
 
         for(UINT16 a=0;a<pHdlList->GetView()->GetWinCount();a++)
@@ -608,6 +619,9 @@ BitmapMarkerKind SdrHdl::GetNextBigger(BitmapMarkerKind eKnd) const
 
         // #98388# let anchor blink with it's pressed state
         case Anchor:            eRetval = AnchorPressed;    break;
+
+        // #101688# same for AnchorTR
+        case AnchorTR:          eRetval = AnchorPressedTR;  break;
     }
 
     return eRetval;
@@ -672,12 +686,6 @@ B2dIAObject* SdrHdl::CreateMarkerObject(B2dIAOManager* pMan, Point aPos, BitmapC
                 case Glue:
                     eNextBigger = Crosshair;
                     break;
-
-                // #98388# do nothing for anchor here; it's handled by GetNextBigger(...)
-                //case Anchor:
-                //  // here, use the bIsFineHdl state
-                //  bIsFineHdl = !bIsFineHdl;
-                //  break;
             }
         }
 
@@ -686,15 +694,27 @@ B2dIAObject* SdrHdl::CreateMarkerObject(B2dIAOManager* pMan, Point aPos, BitmapC
         BitmapEx& rBmpEx1 = ImpGetBitmapEx(eKindOfMarker, (sal_uInt16)eColIndex, bIsFineHdl, bIsHighContrast);
         BitmapEx& rBmpEx2 = ImpGetBitmapEx(eNextBigger, (sal_uInt16)eColIndex, bIsFineHdl, bIsHighContrast);
 
-        // #98388# when anchor is used take upper left as reference point inside the handle
-        if(eKindOfMarker != Anchor && eKindOfMarker != AnchorPressed)
+        if(eKindOfMarker == Anchor || eKindOfMarker == AnchorPressed)
+        {
+            // #98388# when anchor is used take upper left as reference point inside the handle
+            pRetval = new B2dIAOAnimBmapExRef(pMan, aPos, &rBmpEx1, &rBmpEx2);
+        }
+        else if(eKindOfMarker == AnchorTR || eKindOfMarker == AnchorPressedTR)
+        {
+            // #101688# AnchorTR for SW, take top right as (0,0)
+            pRetval = new B2dIAOAnimBmapExRef(pMan, aPos, &rBmpEx1, &rBmpEx2,
+                (UINT16)(rBmpEx1.GetSizePixel().Width() - 1), 0,
+                (UINT16)(rBmpEx2.GetSizePixel().Width() - 1), 0);
+        }
+        else
+        {
+            // create centered handle as default
             pRetval = new B2dIAOAnimBmapExRef(pMan, aPos, &rBmpEx1, &rBmpEx2,
                 (UINT16)(rBmpEx1.GetSizePixel().Width() - 1) >> 1,
                 (UINT16)(rBmpEx1.GetSizePixel().Height() - 1) >> 1,
                 (UINT16)(rBmpEx2.GetSizePixel().Width() - 1) >> 1,
                 (UINT16)(rBmpEx2.GetSizePixel().Height() - 1) >> 1);
-        else
-            pRetval = new B2dIAOAnimBmapExRef(pMan, aPos, &rBmpEx1, &rBmpEx2);
+        }
     }
     else
     {
@@ -702,13 +722,24 @@ B2dIAObject* SdrHdl::CreateMarkerObject(B2dIAOManager* pMan, Point aPos, BitmapC
         // #101928# use ImpGetBitmapEx(...) now
         BitmapEx& rBmpEx = ImpGetBitmapEx(eKindOfMarker, (sal_uInt16)eColIndex, bIsFineHdl, bIsHighContrast);
 
-        // #98388# upper left as reference point inside the handle for AnchorPressed, too
-        if(eKindOfMarker != Anchor && eKindOfMarker != AnchorPressed)
+        if(eKindOfMarker == Anchor || eKindOfMarker == AnchorPressed)
+        {
+            // #98388# upper left as reference point inside the handle for AnchorPressed, too
+            pRetval = new B2dIAOBitmapExReference(pMan, aPos, &rBmpEx);
+        }
+        else if(eKindOfMarker == AnchorTR || eKindOfMarker == AnchorPressedTR)
+        {
+            // #101688# AnchorTR for SW, take top right as (0,0)
+            pRetval = new B2dIAOBitmapExReference(pMan, aPos, &rBmpEx,
+                (UINT16)(rBmpEx.GetSizePixel().Width() - 1), 0);
+        }
+        else
+        {
+            // create centered handle as default
             pRetval = new B2dIAOBitmapExReference(pMan, aPos, &rBmpEx,
                 (UINT16)(rBmpEx.GetSizePixel().Width() - 1) >> 1,
                 (UINT16)(rBmpEx.GetSizePixel().Height() - 1) >> 1);
-        else
-            pRetval = new B2dIAOBitmapExReference(pMan, aPos, &rBmpEx);
+        }
     }
 
     return pRetval;
@@ -820,6 +851,8 @@ BOOL SdrHdl::IsFocusHdl() const
         // #98388# do NOT activate here, let SW implement their own SdrHdl and
         // overload IsFocusHdl() there to make the anchor accessible
         //case HDL_ANCHOR:      // anchor symbol (SD, SW)
+        // #101688# same for AnchorTR
+        //case HDL_ANCHOR_TR:   // anchor symbol (SD, SW)
 
         //case HDL_TRNS:        // interactive transparence
         //case HDL_GRAD:        // interactive gradient
