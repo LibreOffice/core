@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdstr.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2000-09-29 08:33:08 $
+ *  last change: $Author: mh $ $Date: 2000-10-09 09:02:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3246,7 +3246,7 @@ String STR_ObjNameSingulMEASURE
     Text [ swedish ] = "Dimensioneringsobjekt" ;
     Text [ danish ] = "Dimensioneringsobjekt" ;
     Text [ italian ] = "Oggetto di quotatura" ;
-    Text [ spanish ] = "Objeto de dimensionamiento" ;
+    Text [ spanish ] = "Objeto de dimensiones" ;
     Text [ french ] = "Objet de cotation" ;
     Text [ dutch ] = "Objectafmetingen" ;
     Text[ chinese_simplified ] = "¶¨³ß´ç¶ÔÏó";
@@ -3274,7 +3274,7 @@ String STR_ObjNamePluralMEASURE
     Text [ swedish ] = "Dimensioneringsobjekt" ;
     Text [ danish ] = "Dimensioneringsobjekter" ;
     Text [ italian ] = "Oggetti di quotatura" ;
-    Text [ spanish ] = "Objetos de dimensionamiento" ;
+    Text [ spanish ] = "Objetos de dimensiones" ;
     Text [ french ] = "Objets de cotation" ;
     Text [ dutch ] = "Objectafmetingen" ;
     Text[ chinese_simplified ] = "¶¨³ß¶È¶ÔÏó";
@@ -13857,7 +13857,7 @@ String SIP_SA_MEASURELINEDIST
     Text[ russian ] = "Ğàññòîÿíèå ğàçìåğíîé ëèíèè";
     Text[ dutch ] = "Afstand lijnafmetingen";
     Text[ french ] = "Écart des lignes de cote";
-    Text[ spanish ] = "Distancia líneas dimensionamiento";
+    Text[ spanish ] = "Distancia líneas dimensiones";
     Text[ italian ] = "Distanza linea di quotatura";
     Text[ danish ] = "Målelinjeafstand";
     Text[ swedish ] = "Måttlinjeavstånd";
@@ -13988,7 +13988,7 @@ String SIP_SA_MEASUREBELOWREFEDGE
     Text[ russian ] = "Ğàçìåğû íèæíåãî êàíòà";
     Text[ dutch ] = "Afmetingen onderkant";
     Text[ french ] = "Cotation de l'arête inférieure";
-    Text[ spanish ] = "Dimensionamiento borde inferior";
+    Text[ spanish ] = "Dimensiones borde inferior";
     Text[ italian ] = "Quotatura bordi inferiori";
     Text[ danish ] = "Underkantdimensionering";
     Text[ swedish ] = "Underkantsdimensionering";
@@ -14066,7 +14066,7 @@ String SIP_SA_MEASUREOVERHANG
     Text[ russian ] = "Âûñòóï ğàçìåğíîé ëèíèè";
     Text[ dutch ] = "Lijnafmetingen, uitstekend";
     Text[ french ] = "Saillie des lignes de cote";
-    Text[ spanish ] = "Resalte líneas de dimensionamiento";
+    Text[ spanish ] = "Resalte líneas de dimensiones";
     Text[ italian ] = "Sporgimento linee di quotatura";
     Text[ danish ] = "Målelinjeoverskud";
     Text[ swedish ] = "För lång måttlinje";
@@ -14301,7 +14301,7 @@ String SIP_SA_MEASURERESERVE04
     Text[ russian ] = "Çàğåçåğâèğîâàííûé ğàçìåğ 4";
     Text[ dutch ] = "Afmetingsreserve 4";
     Text[ french ] = "Réservé pour cotation 4";
-    Text[ spanish ] = "Dimensionamiento reserva 4";
+    Text[ spanish ] = "Dimensiones reserva 4";
     Text[ italian ] = "Quotatura riservato 4";
     Text[ danish ] = "Dimensionering reserve 4";
     Text[ swedish ] = "Dimensionering reserverad för 4";
@@ -14405,7 +14405,7 @@ String SIP_SDRATTRSET_MEASURE
     Text[ russian ] = "Àòğèáóòû ğàçìåğîâ";
     Text[ dutch ] = "Afmetingsattributen";
     Text[ french ] = "Attributs de cotation";
-    Text[ spanish ] = "Atributo de dimensionamiento";
+    Text[ spanish ] = "Atributo de dimensiones";
     Text[ italian ] = "Attributi di quotatura";
     Text[ danish ] = "Dimensioneringsattributter";
     Text[ swedish ] = "Dimensioneringsattribut";
@@ -15066,7 +15066,7 @@ String SIP_SA_ROTATEANGLE
     Text[ swedish ] = "Individuell rotationsvinkel";
     Text[ polish ] = "Pojedynczy k¹t obrotowy";
     Text[ portuguese_brazilian ] = "Single turn angle";
-    Text[ japanese ] = "‰ñ“]Šp“x •ÊX";
+    Text[ japanese ] = "•ÊX‚Ì‰ñ“]Šp“x";
     Text[ chinese_simplified ] = "µ¥¸öĞı×ª½Ç¶È";
     Text[ chinese_traditional ] = "³æ­Ó±ÛÂà¨¤«×";
     Text[ arabic ] = "ÒÇæíÉ ÏæÑÇä İÑÏíÉ";
