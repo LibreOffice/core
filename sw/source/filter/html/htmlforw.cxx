@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlforw.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2001-09-28 06:27:53 $
+ *  last change: $Author: mib $ $Date: 2002-03-14 10:04:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -884,6 +884,8 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
         return rWrt;
 
     Reference< beans::XPropertySet > xPropSet( xControlModel, UNO_QUERY );
+    Reference< beans::XPropertySetInfo > xPropSetInfo =
+            xPropSet->getPropertySetInfo();
 
 //!!!   if( rHTMLWrt.pForm != pVCSbxCtrl->GetVCForm() )
 //!!!       rHTMLWrt.nWarn = 1; // Control wird falscher Form zugeordnet
@@ -990,10 +992,13 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
             GetControlSize( rSdrObject, aSz, rWrt.pDoc );
 
             sal_Bool bMultiLine = sal_False;
-            aTmp = xPropSet->getPropertyValue(
-                            OUString::createFromAscii( "MultiLine" ) );
-            bMultiLine = aTmp.getValueType() == ::getBooleanCppuType() &&
-                         *(sal_Bool*)aTmp.getValue();
+            OUString sMultiLine( OUString::createFromAscii( "MultiLine" ) );
+            if( xPropSetInfo->hasPropertyByName( sMultiLine ) )
+            {
+                aTmp = xPropSet->getPropertyValue( sMultiLine );
+                bMultiLine = aTmp.getValueType() == ::getBooleanCppuType() &&
+                             *(sal_Bool*)aTmp.getValue();
+            }
 
             if( bMultiLine )
             {
@@ -1026,13 +1031,15 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
             }
             else
             {
-                aTmp = xPropSet->getPropertyValue(
-                            OUString::createFromAscii( "EchoChar" ) );
-                if( aTmp.getValueType() == ::getCppuType((const sal_Int16*)0) &&
-                    *(sal_Int16*)aTmp.getValue() != 0 )
-                    pType = sHTML_IT_password;
-                else
-                    pType = sHTML_IT_text;
+                pType = sHTML_IT_text;
+                OUString sEchoChar( OUString::createFromAscii( "EchoChar" ) );
+                if( xPropSetInfo->hasPropertyByName( sEchoChar ) )
+                {
+                    aTmp = xPropSet->getPropertyValue( sEchoChar );
+                    if( aTmp.getValueType() == ::getCppuType((const sal_Int16*)0) &&
+                        *(sal_Int16*)aTmp.getValue() != 0 )
+                        pType = sHTML_IT_password;
+                }
 
                 if( aSz.Width() )
                     (((sOptions += ' ' ) += sHTML_O_size ) += '=' )
@@ -1048,12 +1055,15 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
                                 *(sal_Int16*) aTmp.getValue() );
                 }
 
-                aTmp = xPropSet->getPropertyValue(
-                                OUString::createFromAscii( "DefaultText" ) );
-                if( aTmp.getValueType() == ::getCppuType((const OUString*)0) &&
-                    ((OUString*)aTmp.getValue())->getLength() )
+                OUString sDefaultText( OUString::createFromAscii( "DefaultText" ) );
+                if( xPropSetInfo->hasPropertyByName( sDefaultText ) )
                 {
-                    sValue = *(OUString*)aTmp.getValue();
+                    aTmp = xPropSet->getPropertyValue( sDefaultText );
+                    if( aTmp.getValueType() == ::getCppuType((const OUString*)0) &&
+                        ((OUString*)aTmp.getValue())->getLength() )
+                    {
+                        sValue = *(OUString*)aTmp.getValue();
+                    }
                 }
             }
         }
@@ -1233,8 +1243,6 @@ Writer& OutHTML_DrawFrmFmtAsControl( Writer& rWrt,
         sal_Bool bEdit = sHTML_textarea == pTag || sHTML_IT_file == pType ||
                      sHTML_IT_text == pType;
 
-        Reference< beans::XPropertySetInfo > xPropSetInfo =
-                xPropSet->getPropertySetInfo();
         SfxItemSet aItemSet( rHTMLWrt.pDoc->GetAttrPool(), RES_CHRATR_BEGIN,
                              RES_CHRATR_END );
         OUString sPropName = OUString::createFromAscii( "BackgroundColor" );
