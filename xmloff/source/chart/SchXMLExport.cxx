@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLExport.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: bm $ $Date: 2001-03-27 13:21:35 $
+ *  last change: $Author: bm $ $Date: 2001-03-27 16:21:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1806,7 +1806,7 @@ void SchXMLExportHelper::swapDataArray( com::sun::star::uno::Sequence< com::sun:
     uno::Sequence< double >* pArray = aResult.getArray();
     for( i = 0; i < nInnerSize; i++ )
     {
-        pArray->realloc( nOuterSize );
+        pArray[ i ].realloc( nOuterSize );
         for( o = 0 ; o < nOuterSize ; o++ )
             aResult[ i ][ o ] = rSequence[ o ][ i ];
     }
