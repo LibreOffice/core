@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appinit.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: cd $ $Date: 2001-08-10 05:39:53 $
+ *  last change: $Author: cd $ $Date: 2001-08-16 15:09:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,7 +238,7 @@ void SAL_CALL SfxTerminateListener_Impl::notifyTermination( const EventObject& a
 FASTBOOL SfxApplication::Initialize_Impl()
 {
 #if SUPD>637
-    RTL_LOGFILE_CONTEXT( aLog, "sfx2 (mba) ::SfxApplication::Initialize_Impl" );
+    RTL_LOGFILE_CONTEXT( aLog, "sfx2 (mb93783) ::SfxApplication::Initialize_Impl" );
 #endif
 
 #ifdef TLX_VALIDATE
