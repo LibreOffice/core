@@ -16,11 +16,13 @@ cc=			gcc
 #CC=			CC -KPIC -c -n32 -ptused -OPT:Olimit=20523 
 CC=			g++ -c
 CFLAGS=		$(INCLUDE)
-CDEFS+=	-D_STD_NO_NAMESPACE -D_VOS_NO_NAMESPACE -D_UNO_NO_NAMESPACE
+CDEFS+=	-DVCL -D_PTHREADS
+CDEFS+=	-D_STD_NO_NAMESPACE -D_UNO_NO_NAMESPACE -DHAVE_UNISTD_H -DSTLPORT_VERSION=0x450
+#CDEFS+=	-D_STD_NO_NAMESPACE -D_VOS_NO_NAMESPACE -D_UNO_NO_NAMESPACE -DHAVE_UNISTD_H -DSTLPORT_VERSION=0x450
 # CFLAGS+=	-D__STL_NATIVE_INCLUDE_PATH=/usr/include -D__STL_NATIVE_C_INCLUDE_PATH=/usr/include
 # CFLAGS+=	-D_STL_NATIVE_INCLUDE_PATH=/usr/include -D_STL_NATIVE_C_INCLUDE_PATH=/usr/include
-CFLAGSCC=	 -c
-CFLAGSCXX= 	-fno-for-scope -fpermissive
+CFLAGSCC=	 -w -c -nostdinc
+CFLAGSCXX= 	-w -fno-for-scope -fpermissive -nostdinc -nostdinc++
 CFLAGSOBJGUIST=
 CFLAGSOBJCUIST=
 CFLAGSOBJGUIMT=
@@ -44,20 +46,27 @@ DYNAMIC=		-Wl,-Bdynamic
 #				**VALID MECHANISM SOMETIMES MISSING FOR LOCAL STANDS**
 #
 LINK=			g++
-LINKFLAGS=	-L/usr/lib32	
-LINKFLAGSAPPGUI= -Wl,-multigot
-LINKFLAGSAPPCUI= -Wl,-multigot
+LINKFLAGS=	-L/usr/lib32 -Wl,-no_unresolved
 
-LINKFLAGSSHLGUI= -shared
-LINKFLAGSSHLCUI= -shared
+.IF "$(TARGETTHREAD)"=="MT"
+LINKFLAGSAPPGUI= $(THREADLIB) -Wl,-multigot -nodefaultlibs
+LINKFLAGSAPPCUI= $(THREADLIB) -Wl,-multigot -nodefaultlibs
+LINKFLAGSSHLGUI= $(THREADLIB) -shared -nodefaultlibs
+LINKFLAGSSHLCUI= $(THREADLIB) -shared -nodefaultlibs
+.ELSE
+LINKFLAGSAPPGUI= -Wl,-multigot -nodefaultlibs
+LINKFLAGSAPPCUI= -Wl,-multigot -nodefaultlibs
+LINKFLAGSSHLGUI= -shared -nodefaultlibs
+LINKFLAGSSHLCUI= -shared -nodefaultlibs
+.ENDIF
 
 LINKFLAGSTACK=
 LINKFLAGSPROF=
 LINKFLAGSDEBUG= -g
 LINKFLAGSOPT=
 
-LINKFLAGSSHLGUI += -Wl,-Bsymbolic
-LINKFLAGSSHLCUI += -Wl,-Bsymbolic
+#LINKFLAGSSHLGUI += -Wl,-Bsymbolic -Wl,-soname -Wl,$(DLLPRE)$(SHL$(TNR)TARGET)$(DLLPOST) $(DYNAMIC)
+#LINKFLAGSSHLCUI += -Wl,-Bsymbolic -Wl,-soname -Wl,$(DLLPRE)$(SHL$(TNR)TARGET)$(DLLPOST) $(DYNAMIC)
 
 APPLINKSTATIC=-Bstatic
 APPLINKSHARED=-Bsymbolic
@@ -67,16 +76,16 @@ STDOBJGUI=
 STDSLOGUI=
 STDOBJCUI=
 STDSLOCUI=
-# STDLIBGUIST=	$(DYNAMIC) -lX11 -lc -lm
 STDLIBGUIST=	$(DYNAMIC) -lX11 -lc -lm
-STDLIBCUIST=	$(DYNAMIC) -lc -lm
-# STDLIBGUIMT=	$(THREADLIB) $(DYNAMIC) -lX11 -lc -lm
-STDLIBGUIMT=	$(THREADLIB) $(DYNAMIC) -lX11 -lc -lm
-STDLIBCUIMT=	$(THREADLIB) $(DYNAMIC) -lc -lm
-# STDSHLGUIMT=	-L/usr/lib32 $(THREADLIB) $(DYNAMIC) -lX11 -lc -lm
-STDSHLGUIMT=	-L/usr/lib32 $(THREADLIB) $(DYNAMIC) -lX11 -lc -lm
-STDSHLCUIMT=	-L/usr/lib32 $(THREADLIB) $(DYNAMIC) -lc -lm
+STDLIBCUIST=	$(DYNAMIC) -lgcc -lc
+STDLIBGUIMT=	$(THREADLIB) $(DYNAMIC) -lX11 -lm -lgcc -lc
+STDLIBCUIMT=	$(THREADLIB) $(DYNAMIC) -lgcc -lc -lm
+STDSHLGUIMT=	-L/usr/lib32 $(THREADLIB) $(DYNAMIC) -lX11 -lm -lgcc -lc
+STDSHLCUIMT=	-L/usr/lib32 $(THREADLIB) $(DYNAMIC) -lm -lgcc -lc
 THREADLIB=		-lpthread
+
+LIBSTLPORT=$(DYNAMIC) -lstlport_gcc
+LIBSTLPORTST= -lstlport_gcc
 
 LIBMGR=			ar
 LIBFLAGS=		-r
@@ -102,9 +111,9 @@ DLLPRE=			lib
 DLLPOST=		.so
 
 
-LDUMP=
+LDUMP=c++filt
 
-STDLIBCPP = -lstdc++
+#STDLIBCPP = -lstdc++
 
 # --------------------------
 # FROM THE OLE ENVIRONMENT:
