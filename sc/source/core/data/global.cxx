@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-18 12:42:45 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 13:24:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,68 +205,6 @@ USHORT nScFillModeMouseModifier = 0;                //! dito
 //       damit UserList aus Cfg geladen wird
 
 void global_InitAppOptions();
-
-// -----------------------------------------------------------------------
-
-String ScTripel::GetText() const
-{
-    String aString('(');
-    aString += String::CreateFromInt32( nCol );
-    aString += ',';
-    aString += String::CreateFromInt32( nRow );
-    aString += ',';
-    aString += String::CreateFromInt32( nTab );
-    aString += ')';
-    return aString;
-}
-
-String ScTripel::GetColRowString( BOOL bAbsolute ) const
-{
-    String aString;
-    if (bAbsolute)
-        aString.Append( '$' );
-
-    if ( nCol < 26 )
-        aString.Append( (sal_Unicode) ( 'A' + nCol ) );
-    else
-    {
-        aString.Append( (sal_Unicode) ( 'A' + ( nCol / 26 ) - 1 ) );
-        aString.Append( (sal_Unicode) ( 'A' + ( nCol % 26 ) ) );
-    }
-
-    if ( bAbsolute )
-        aString.Append( '$' );
-
-    aString += String::CreateFromInt32(nRow+1);
-
-    return aString;
-}
-
-String ScRefTripel::GetRefString(ScDocument* pDoc, USHORT nActTab) const
-{
-    if ( !pDoc )
-        return EMPTY_STRING;
-    if ( nTab+1 > pDoc->GetTableCount() )
-        return ScGlobal::GetRscString( STR_NOREF_STR );
-
-    String aString;
-    USHORT nFlags = SCA_VALID;
-    if ( nActTab != nTab )
-    {
-        nFlags |= SCA_TAB_3D;
-        if ( !bRelTab )
-            nFlags |= SCA_TAB_ABSOLUTE;
-    }
-    if ( !bRelCol )
-        nFlags |= SCA_COL_ABSOLUTE;
-    if ( !bRelRow )
-        nFlags |= SCA_ROW_ABSOLUTE;
-
-    ScAddress( nCol, nRow, nTab ).Format( aString, nFlags, pDoc );
-
-    return aString;
-}
-
 
 //========================================================================
 //
@@ -1954,21 +1892,6 @@ const ScFuncDesc* ScFunctionMgr::Next() const
 }
 
 //------------------------------------------------------------------------
-
-String ColToAlpha( const USHORT nCol )
-{
-    String aStr;
-
-    if ( nCol < 26 )
-        aStr = (sal_Unicode) ( 'A' + nCol );
-    else
-    {
-        aStr  = (sal_Unicode) ( 'A' + ( nCol / 26 ) - 1 );
-        aStr += (sal_Unicode) ( 'A' + ( nCol % 26 ) );
-    }
-
-    return aStr;
-}
 
 ::utl::TransliterationWrapper* GetScGlobalpTransliteration()//add by CHINA001
 {
