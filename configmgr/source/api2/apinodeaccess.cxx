@@ -2,9 +2,9 @@
  *
  *  $RCSfile: apinodeaccess.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-13 12:22:35 $
+ *  last change: $Author: jb $ $Date: 2000-11-16 08:46:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,10 +203,13 @@ SetElement* findSetElement(Factory& rFactory, configuration::ElementTree const& 
 
 configuration::SetElementInfo NodeSetInfoAccess::getElementInfo() const
 {
-    configuration::ElementTree aElement = configuration::ElementTree::extract(getTree());
-    OSL_ENSURE(aElement.isValid(), "INTERNAL ERROR: This must be an element tree ");
+    using configuration::SetElementInfo;
 
-    return configuration::SetElementInfo(aElement.getTemplate());
+    TemplateHolder aTemplate = SetElementInfo::extractElementInfo(getTree(),getNode());
+
+    OSL_ENSURE(aTemplate.isValid(), "ERROR: Set must have an element template");
+
+    return SetElementInfo(aTemplate);
 }
 //-----------------------------------------------------------------------------
 
