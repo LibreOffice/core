@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldtdlg.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-25 14:40:31 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 15:56:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,6 +162,16 @@
 #define ED_FUNCCOND2        (RC_TP_FUNC_START + 14)
 #define BT_FUNCMACRO        (RC_TP_FUNC_START + 15)
 #define RC_TP_FUNC_END      (RC_TP_FUNC_START + 16)
+#define FT_LISTITEM         (RC_TP_FUNC_START + 17)
+#define ED_LISTITEM         (RC_TP_FUNC_START + 18)
+#define PB_LISTADD          (RC_TP_FUNC_START + 19)
+#define FT_LISTITEMS        (RC_TP_FUNC_START + 20)
+#define LB_LISTITEMS        (RC_TP_FUNC_START + 21)
+#define PB_LISTREMOVE       (RC_TP_FUNC_START + 22)
+#define PB_LISTUP           (RC_TP_FUNC_START + 23)
+#define PB_LISTDOWN         (RC_TP_FUNC_START + 24)
+#define FT_LISTNAME         (RC_TP_FUNC_START + 25)
+#define ED_LISTNAME         (RC_TP_FUNC_START + 26)
 
 // Referenz-TabPage:
 #define RC_TP_REF_START     (RC_TP_FUNC_END)
