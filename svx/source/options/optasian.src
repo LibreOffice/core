@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optasian.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: kz $ $Date: 2002-09-05 17:37:34 $
+ *  last change: $Author: kz $ $Date: 2003-02-27 12:57:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ danish ] = "Knibning";
         Text[ swedish ] = "Kerning";
         Text[ polish ] = "Kerning";
-        Text[ portuguese_brazilian ] = "Kerning";
+        Text[ portuguese_brazilian ] = "Ajustar";
         Text[ japanese ] = "ã‚«ãƒ¼ãƒ‹ãƒ³ã‚°";
         Text[ korean ] = "ì»¤ë‹";
         Text[ chinese_simplified ] = "å­—ç¬¦é—´éš”";
@@ -98,7 +98,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ turkish ] = "Kerning";
         Text[ arabic ] = "ÊŞäíä ÃÍÑİ";
         Text[ catalan ] = "Kerning";
-        Text[ finnish ] = "Fonttilimitys";
+        Text[ finnish ] = "Välistys";
     };
     RadioButton RB_CHAR_KERNING
     {
@@ -108,7 +108,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text [ English ] = "Western characters only" ;
         Text[ english_us ] = "~Western characters only";
         Text[ portuguese ] = "~Só caracteres ocidentais";
-        Text[ russian ] = "Òîëüêî çàïàäíûå çíàêè";
+        Text[ russian ] = "Òîëüêî çàïàäíûå ñèìâîëû";
         Text[ greek ] = "Ìü~íï äõôéêïıò ÷áñáêôŞñåò";
         Text[ dutch ] = "~Alleen westerse tekens";
         Text[ french ] = "U~niquement les caractères occidentaux";
@@ -116,8 +116,8 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ italian ] = "Solo caratteri occidentali";
         Text[ danish ] = "~Kun vestlige tegn";
         Text[ swedish ] = "Bara västliga tecke~n";
-        Text[ polish ] = "Tylko znaki zachodnie";
-        Text[ portuguese_brazilian ] = "Western characters only";
+        Text[ polish ] = "~Tylko znaki zachodnie";
+        Text[ portuguese_brazilian ] = "~Somente caracteres ocidentais";
         Text[ japanese ] = "è‹±å­—ã®ã¿(~W)";
         Text[ korean ] = "ì•ŒíŒŒë²³ ë¬¸ìë§Œ(~W)";
         Text[ chinese_simplified ] = "ä»…é€‚ç”¨äºè¥¿æ–‡(~W)";
@@ -125,7 +125,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ turkish ] = "Western characters only";
         Text[ arabic ] = "ÃÍÑİ ÛÑÈíÉ İŞØ";
         Text[ catalan ] = "Solo caracteres del alfabeto occidental";
-        Text[ finnish ] = "~Vain länsimaiset merkit";
+        Text[ finnish ] = "Vain länsimaiset merkit";
     };
     RadioButton RB_CHAR_PUNCT
     {
@@ -135,17 +135,17 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text [ English ] = "Western characters and Asian punctuation" ;
         Text[ english_us ] = "Western ~text and Asian punctuation";
         Text[ portuguese ] = "~Texto ocidental e pontuação";
-        Text[ russian ] = "Çàïàäíûå çíàêè è àçèàòñêàÿ ïóíêòóàöèÿ";
+        Text[ russian ] = "Çàïàäíûé òåêñò è àçèàòñêàÿ ïóíêòóàöèÿ";
         Text[ greek ] = "Äõôéêü êåßìåíï êáé óçìåßá óôßîçò";
         Text[ dutch ] = "~Westerse tekst en Asiatische interpunctie";
         Text[ french ] = "Caractères ~occidentaux et ponctuation asiatique";
         Text[ spanish ] = "Texto occidental y puntuación asiática";
-        Text[ finnish ] = "Länsimainen ~teksti ja välimerkit";
+        Text[ finnish ] = "Länsimainen teksti ja välimerkit";
         Text[ italian ] = "~Testo occidentale e punteggiatura asiatica";
         Text[ danish ] = "~Vestlig tekst og tegnsætning";
         Text[ swedish ] = "~Västliga tecken och asiatisk interpunktion";
-        Text[ polish ] = "Znaki zachodnie i interpunkcja azjatycka";
-        Text[ portuguese_brazilian ] = "Western text and punctuation";
+        Text[ polish ] = "Znaki ~zachodnie i interpunkcja azjatycka";
+        Text[ portuguese_brazilian ] = "Texto e pontuação ocidentais";
         Text[ japanese ] = "åŠè§’è‹±å­—ã¨æ—¥æœ¬èªã®åŒºåˆ‡ã‚Šè¨˜å·(~T)";
         Text[ korean ] = "ì•ŒíŒŒë²³ ë¬¸ìì™€ ì•„ì‹œì•„ êµ¬ë‘ì (T)";
         Text[ chinese_simplified ] = "è¥¿æ–‡å­—ç¬¦å’Œä¸­æ—¥éŸ©æ ‡ç‚¹ç¬¦å·(~T)";
@@ -162,16 +162,16 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text [ English ] = "Character distance" ;
         Text[ english_us ] = "Character spacing";
         Text[ portuguese ] = "Espaçamento entre caracteres";
-        Text[ russian ] = "Ğàññòîÿíèå ìåæäó çíàêàìè";
+        Text[ russian ] = "Ìåæçíàêîâûé èíòåğâàë";
         Text[ greek ] = "Áğüóôáóç ÷áñáêôŞñùí";
         Text[ dutch ] = "Spatiëring";
         Text[ french ] = "Espacement des caractères";
-        Text[ spanish ] = "Espacio de caracteres";
+        Text[ spanish ] = "Espacio entre caracteres";
         Text[ italian ] = "Spazio tra caratteri";
         Text[ danish ] = "Linjeafstand";
         Text[ swedish ] = "Teckenavstånd";
         Text[ polish ] = "Odstêpy miêdzy znakami";
-        Text[ portuguese_brazilian ] = "Character distance";
+        Text[ portuguese_brazilian ] = "Espaçamento entre caracteres";
         Text[ japanese ] = "æ–‡å­—é–“éš”ã®èª¿æ•´";
         Text[ korean ] = "ìê°„";
         Text[ chinese_simplified ] = "å­—ç¬¦é—´éš”";
@@ -189,7 +189,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text [ English ] = "No compression" ;
         Text[ english_us ] = "~No compression";
         Text[ portuguese ] = "~Sem compressão";
-        Text[ russian ] = "Áåç óæàòèÿ";
+        Text[ russian ] = "Áåç ñæàòèÿ";
         Text[ greek ] = "×ùñßò óõìğßåóç";
         Text[ dutch ] = "~Geen compressie";
         Text[ french ] = "~Sans compression";
@@ -197,8 +197,8 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ italian ] = "Senza compressione";
         Text[ danish ] = "~Ingen kompression";
         Text[ swedish ] = "Ingen ~kompression";
-        Text[ polish ] = "Bez kompresji";
-        Text[ portuguese_brazilian ] = "No compression";
+        Text[ polish ] = "~Bez kompresji";
+        Text[ portuguese_brazilian ] = "~Sem compressão";
         Text[ japanese ] = "é–“éš”ã‚’è©°ã‚ãªã„(~N)";
         Text[ korean ] = "ì••ì¶• ì•ˆí•¨(~N)";
         Text[ chinese_simplified ] = "ä¸å‹ç¼©(~N)";
@@ -206,7 +206,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ turkish ] = "No compression";
         Text[ arabic ] = "ÈÏæä ÖÛØ";
         Text[ catalan ] = "Sin compresión";
-        Text[ finnish ] = "~Ei tiivistystä";
+        Text[ finnish ] = "Ei pakkausta";
     };
     RadioButton RB_PUNCT_COMP
     {
@@ -216,7 +216,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text [ English ] = "Compress punctuation only" ;
         Text[ english_us ] = "~Compress punctuation only";
         Text[ portuguese ] = "~Comprimir apenas pontuação";
-        Text[ russian ] = "Óæàòü òîëüêî ïóíêòóàöèş";
+        Text[ russian ] = "Ñæàòü òîëüêî ïóíêòóàöèş";
         Text[ greek ] = "Óõìğßåóç ìüíï ôùí óçìåßùí óôßîçò";
         Text[ dutch ] = "Alleen ~interpunctie comprimeren";
         Text[ french ] = "Compression uniquement pour la ponctuat~ion";
@@ -224,8 +224,8 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ italian ] = "Comprimi solo le interpunzioni";
         Text[ danish ] = "K~omprimer kun tegnsætning";
         Text[ swedish ] = "Komprimera bara ~interpunktion";
-        Text[ polish ] = "Skompresuj tylko interpunkcjê";
-        Text[ portuguese_brazilian ] = "Compress punctuation only";
+        Text[ polish ] = "~Kondensuj tylko interpunkcjê";
+        Text[ portuguese_brazilian ] = "Compactar somente pontuação";
         Text[ japanese ] = "å¥èª­ç‚¹ã®ã¿ã‚’è©°ã‚ã‚‹(~C)";
         Text[ korean ] = "êµ¬ë‘ì ë§Œ ì••ì¶•(~C)";
         Text[ chinese_simplified ] = "åªå‹ç¼©æ ‡ç‚¹ç¬¦å·(~C)";
@@ -233,7 +233,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ turkish ] = "Compress punctuation only";
         Text[ arabic ] = "ÖÛØ ÚáÇãÇÊ ÇáÊäŞíØ İŞØ";
         Text[ catalan ] = "Comprimir solo puntuación";
-        Text[ finnish ] = "~Vain välimerkkien tiivistys";
+        Text[ finnish ] = "Vain välimerkkien tiivistys";
     };
     RadioButton RB_PUNCT_KANA_COMP
     {
@@ -243,7 +243,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text [ English ] = "Compress punctuation and japanese Kana" ;
         Text[ english_us ] = "Compress ~punctuation and Japanese Kana";
         Text[ portuguese ] = "Co~mprimir pontuação e Kana japonês";
-        Text[ russian ] = "Óæàòü ïóíêòóàöèş è êàíó";
+        Text[ russian ] = "Ñæàòü ïóíêòóàöèş è ÿïîíñêóş êàíó";
         Text[ greek ] = "Óõìğßåóç óçìåßùí óôßîçò êáé ~éáğùíİæéêçò Kana";
         Text[ dutch ] = "Interpunctie en ~Japanse Kana comprimeren";
         Text[ french ] = "Compression pour la ponctuation et les kana japonais";
@@ -251,8 +251,8 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ italian ] = "Comprimi interpunzioni e kana giapponese";
         Text[ danish ] = "Komprimer tegnsætning og ~japansk Kana";
         Text[ swedish ] = "Komprimera interpunktion och ~japansk Kana";
-        Text[ polish ] = "Skompresuj interpunkcjê i japoñsk¹ Kanê";
-        Text[ portuguese_brazilian ] = "Compress punctuation and japanese Kana";
+        Text[ polish ] = "Kondensuj ~interpunkcjê i japoñsk¹ Kanê";
+        Text[ portuguese_brazilian ] = "Compactar pontuação e Kana japonês";
         Text[ japanese ] = "å¥èª­ç‚¹ã¨ã‹ãªã‚’è©°ã‚ã‚‹(~P)";
         Text[ korean ] = "êµ¬ë‘ì ê³¼ ì¼ë³¸ ê°€ë‚˜ë¬¸ìë§Œ ì••ì¶•(~P)";
         Text[ chinese_simplified ] = "å‹ç¼©æ ‡ç‚¹ç¬¦å·å’Œæ—¥æ–‡å‡å(~P)";
@@ -260,7 +260,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ turkish ] = "Compress punctuation and japanese Kana";
         Text[ arabic ] = "Compress punctuation and japanese Kana";
         Text[ catalan ] = "Comprimir puntuación y Kana japonés";
-        Text[ finnish ] = "~Välimerkkien ja japanilaisten kana-merkkien tiivistys";
+        Text[ finnish ] = "Välimerkkien ja japanilaisten kana-merkkien tiivistys";
     };
     FixedLine GB_START_END
     {
@@ -270,7 +270,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text [ English ] = "Start and end characters" ;
         Text[ english_us ] = "First and last characters";
         Text[ portuguese ] = "Caracteres iniciais e finais";
-        Text[ russian ] = "Íà÷àëüíûé è êîíå÷íûé çíàêè";
+        Text[ russian ] = "Íà÷àëüíûé è êîíå÷íûé ñèìâîëû";
         Text[ greek ] = "×áñáêôŞñåò áñ÷Şò êáé ôİëïõò";
         Text[ dutch ] = "Begin- en eindtekens";
         Text[ french ] = "Caractères de début et de fin";
@@ -279,7 +279,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ danish ] = "Start- og sluttegn";
         Text[ swedish ] = "Start- och sluttecken";
         Text[ polish ] = "Znaki wiod¹ce i koñcowe";
-        Text[ portuguese_brazilian ] = "Start and end characters";
+        Text[ portuguese_brazilian ] = "Caracteres iniciais e finais";
         Text[ japanese ] = "è¡Œé ­ç¦å‰‡æ–‡å­—ã¨è¡Œæœ«ç¦å‰‡æ–‡å­—";
         Text[ korean ] = "ì‹œì‘ë¬¸ìì™€ ëë¬¸ì";
         Text[ chinese_simplified ] = "å¼€å¤´å’Œç»“å°¾å­—ç¬¦";
@@ -305,8 +305,8 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ italian ] = "~Lingua";
         Text[ danish ] = "~Sprog";
         Text[ swedish ] = "~Språk";
-        Text[ polish ] = "Jêzyk";
-        Text[ portuguese_brazilian ] = "Language";
+        Text[ polish ] = "~Jêzyk";
+        Text[ portuguese_brazilian ] = "~Idioma";
         Text[ japanese ] = "è¨€èª(~L)";
         Text[ korean ] = "ì–¸ì–´(~L)";
         Text[ chinese_simplified ] = "è¯­è¨€(~L)";
@@ -314,7 +314,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ turkish ] = "Language";
         Text[ arabic ] = "ÇááÛÉ";
         Text[ catalan ] = "Idioma";
-        Text[ finnish ] = "~Kieli";
+        Text[ finnish ] = "Kieli";
     };
     ListBox LB_LANGUAGE
     {
@@ -331,7 +331,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text [ English ] = "Standard" ;
         Text[ english_us ] = "~Default";
         Text[ portuguese ] = "~Padrão";
-        Text[ russian ] = "Ñòàíäàğò";
+        Text[ russian ] = "Ïî óìîë÷àíèş";
         Text[ greek ] = "ĞñïåğéëïãŞ";
         Text[ dutch ] = "S~tandaard";
         Text[ french ] = "Par défaut";
@@ -339,8 +339,8 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ italian ] = "~Standard";
         Text[ danish ] = "Stan~dard";
         Text[ swedish ] = "St~andard";
-        Text[ polish ] = "Domyœlnie";
-        Text[ portuguese_brazilian ] = "Standard";
+        Text[ polish ] = "~Domyœlnie";
+        Text[ portuguese_brazilian ] = "~Padrão";
         Text[ japanese ] = "æ¨™æº–(~D)";
         Text[ korean ] = "í‘œì¤€(~D)";
         Text[ chinese_simplified ] = "æ ‡å‡†(~D)";
@@ -348,7 +348,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ turkish ] = "Standard";
         Text[ arabic ] = "ŞíÇÓí";
         Text[ catalan ] = "~Per defecte";
-        Text[ finnish ] = "~Oletusarvo";
+        Text[ finnish ] = "Oletus";
     };
     FixedText FT_START
     {
@@ -366,8 +366,8 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ italian ] = "No ad inizio riga:";
         Text[ danish ] = "I~ngen linjestart:";
         Text[ swedish ] = "Inte i ~början av rad:";
-        Text[ polish ] = "Nie na pocz¹tku wiersza:";
-        Text[ portuguese_brazilian ] = "No start of line:";
+        Text[ polish ] = "~Nie na pocz¹tku wiersza:";
+        Text[ portuguese_brazilian ] = "Sem início de linha:";
         Text[ japanese ] = "è¡Œé ­ç¦å‰‡æ–‡å­—:";
         Text[ korean ] = "í–‰ ì‹œì‘ ì•„ë‹˜:";
         Text[ chinese_simplified ] = "è¡Œé¦–ç¦æ­¢ä½¿ç”¨å­—ç¬¦ï¼š";
@@ -400,8 +400,8 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ italian ] = "No a fine riga:";
         Text[ danish ] = "Ingen linje~afslutning:";
         Text[ swedish ] = "Inte i slut~et av rad:";
-        Text[ polish ] = "Nie na koñcu wiersza:";
-        Text[ portuguese_brazilian ] = "No end of line:";
+        Text[ polish ] = "Ni~e na koñcu wiersza:";
+        Text[ portuguese_brazilian ] = "Sem final de linha:";
         Text[ japanese ] = "è¡Œæœ«ç¦å‰‡æ–‡å­—:";
         Text[ korean ] = "í–‰ ë ì•„ë‹˜:";
         Text[ chinese_simplified ] = "è¡Œæœ«ç¦æ­¢ä½¿ç”¨å­—ç¬¦ï¼š";
@@ -426,7 +426,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text [ English ] = "Without user-defined line break symbols" ;
         Text[ english_us ] = "Without user-defined line break symbols";
         Text[ portuguese ] = "Sem caracteres de quebra de linha personalizados";
-        Text[ russian ] = "Áåç çàäàííûõ ïîëüçîâàòåëåì çíàêîâ ğàçğûâà ñòğîêè";
+        Text[ russian ] = "Áåç îïğåäåëÿåìûõ ïîëüçîâàòåëåì ñèìâîëîâ ïåğåíîñà ñòğîêè";
         Text[ greek ] = "×ùñßò ğñïóùğéêïıò ÷áñáêôŞñåò áëëáãŞò óåéñÜò";
         Text[ dutch ] = "Zonder door gebruiker gedefinieerde afbreekstreepjes";
         Text[ french ] = "Sans caractères personnalisés de retour à la ligne";
@@ -435,7 +435,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ danish ] = "Uden brugerdefinerede linjeskifttegn";
         Text[ swedish ] = "Utan användardefinierade radbrytningstecken";
         Text[ polish ] = "Bez zdefiniowanych indywidualnie znaków podzia³u wiersza";
-        Text[ portuguese_brazilian ] = "Without user-defined line break symbols";
+        Text[ portuguese_brazilian ] = "Sem quebra de linha definida pelo usuário";
         Text[ japanese ] = "ãƒ¦ãƒ¼ã‚¶ãƒ¼å®šç¾©ã®æ”¹è¡Œæ™‚ã®ç¦å‰‡æ–‡å­—ã¯é™¤ã";
         Text[ korean ] = "ì‚¬ìš©ì ì •ì˜ ì¤„ë°”ê¾¸ê¸° ê¸°í˜¸ ì—†ìŒ";
         Text[ chinese_simplified ] = "ä¸é™„å¸¦ä½¿ç”¨è€…è‡ªå®šçš„æ¢è¡Œç¬¦å·";
