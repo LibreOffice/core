@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbwizres.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: bc $ $Date: 2002-07-08 11:49:26 $
+ *  last change: $Author: bc $ $Date: 2002-07-15 17:55:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -510,7 +510,7 @@ String RID_DB_COMMON_START + 20
 
 String RID_DB_COMMON_START + 21
 {
-    Text = "~Stop";
+    Text = "~Stopp";
     Text [ english ] = "~Stop";
 };
 
@@ -5018,7 +5018,7 @@ String RID_DB_REPORT_WIZARD_START + 58
 
 String RID_DB_REPORT_WIZARD_START + 60
 {
-    Text = "Binärfelder könnnen nicht im Bericht angezeigt werden.";
+    Text = "Binärfelder können nicht im Bericht angezeigt werden.";
     Text [ english_us ] = "Binary Fields cannot be displayed in the report";
 };
 
@@ -5049,7 +5049,7 @@ String RID_DB_REPORT_WIZARD_START + 64
 
 String RID_DB_REPORT_WIZARD_START + 65
 {
-    Text = "Die Abfrage mit dem Statement  <BR>'<STATEMENT>' <BR> konnte nicht ausgeführt werden. <BR> Überprüfen Sie ihre Datenquelle.";
+    Text = "Die Abfrage mit dem Ausdruck <BR>'<STATEMENT>' <BR> konnte nicht ausgeführt werden. <BR> Überprüfen Sie ihre Datenquelle.";
     Text [ english_us ] = "The query with the statement<BR>'<STATEMENT>' <BR> could not be executed. <BR> Verify your Datasource.";
 };
 
