@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetCache.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:51:58 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 14:00:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1084,9 +1084,9 @@ sal_Bool ORowSetCache::moveWindow()
             sal_Bool bCheck = m_pCacheSet->absolute(nPos);
             bCheck = fill(aIter,m_pMatrix->end(),nPos,bCheck);
 
-            // we know that this is the current maximal rowcount here
-            if(!m_bRowCountFinal)
-                m_nRowCount = std::max(nPos,m_nRowCount);
+//          // we know that this is the current maximal rowcount here
+//          if ( !m_bRowCountFinal && bCheck )
+//              m_nRowCount = std::max(nPos,m_nRowCount);
             // we have to read one row forward to enshure that we know when we are on last row
             // but only when we don't know it already
             sal_Bool bOk = sal_True;
@@ -1113,14 +1113,16 @@ sal_Bool ORowSetCache::moveWindow()
             {   // the end was reached before end() so we can set the start before nNewStartPos
 
                 m_nStartPos += (aIter - m_pMatrix->begin());
+                //  m_nStartPos = (aIter - m_pMatrix->begin());
                 ::std::rotate(m_pMatrix->begin(),aIter,m_pMatrix->end());
                 // now correct the iterator in our iterator vector
                 rotateCacheIterator(aIter - m_pMatrix->begin());
 
-                if(!m_bRowCountFinal)
+                if ( !m_bRowCountFinal )
                 {
-                    m_pCacheSet->previous();                                    // because we stand after the last row
-                    m_nRowCount      = std::max(m_nRowCount,m_pCacheSet->getRow()); // here we have the row count
+                    m_pCacheSet->previous();                            // because we stand after the last row
+                    m_nRowCount      = std::max(m_nRowCount,--nPos);    // here we have the row count
+                    OSL_ENSURE(nPos == m_pCacheSet->getRow(),"nPos isn't valid!");
                     m_bRowCountFinal = sal_True;
                 }
                 // TODO check
