@@ -2,9 +2,9 @@
  *
  *  $RCSfile: schedule.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: vg $ $Date: 2002-05-03 08:41:19 $
+ *  last change: $Author: kz $ $Date: 2002-08-01 20:06:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -775,7 +775,7 @@ Text[ dutch ] = "nedland.bmp";
 Text[ swedish ] = "sweden.bmp";
     Text[ russian ] = "russia.bmp";
     Text[ greek ] = "greece.bmp";
-    Text[ danish ] = "denmark.bmp";
+    Text[ danish ] = "germany.wmf";
     Text[ polish ] = "polska.bmp";
     Text[ portuguese_brazilian ] = "usa.bmp";
     Text[ japanese ] = "japan.bmp";
