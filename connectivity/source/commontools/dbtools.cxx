@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtools.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-26 12:35:02 $
+ *  last change: $Author: fs $ $Date: 2002-09-13 08:28:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1323,6 +1323,14 @@ sal_Bool implSetObject( const Reference< XParameters >& _rxParameters,
     sal_Bool bSuccessfullyReRouted = sal_True;
     switch (_rValue.getValueTypeClass())
     {
+        case TypeClass_HYPER:
+        {
+            sal_Int64 nValue = 0;
+            OSL_VERIFY( _rValue >>= nValue );
+            _rxParameters->setLong( _nColumnIndex, nValue );
+        }
+        break;
+
         case TypeClass_ANY:
         {
             Any aInnerValue;
@@ -1708,6 +1716,9 @@ void checkDisposed(sal_Bool _bThrow) throw ( DisposedException )
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.44  2002/08/26 12:35:02  oj
+ *  #98671# change type for sequence to VARBINARY
+ *
  *  Revision 1.43  2001/12/04 14:34:19  oj
  *  #95553# check if scale is greater than 0
  *
