@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: passcrtdlg.src,v $
+ *  $RCSfile: masterpasscrtdlg.hrc,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: mav $ $Date: 2002-10-31 11:08:38 $
+ *  last change: $Author: mav $ $Date: 2002-10-31 11:08:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,69 +59,17 @@
  *
  ************************************************************************/
 
-#define __RSC
+#ifndef UUI_MASTERPASSCRT_HRC
+#define UUI_MASTERPASSCRT_HRC
 
-#ifndef UUI_IDS_HRC
-#include <ids.hrc>
-#endif
-#ifndef UUI_PASSCRTDLG_HRC
-#include <passcrtdlg.hrc>
-#endif
+//============================================================================
+#define FT_MASTERPASSWORD_CRT           20
+#define ED_MASTERPASSWORD_CRT           21
+#define FT_MASTERPASSWORD_REPEAT    22
+#define ED_MASTERPASSWORD_REPEAT    23
 
-ModalDialog DLG_UUI_PASSWORD_CRT
-{
-    HelpId = HID_DLG_PASSWORD_CRT ;
-    Border = TRUE ;
-    Moveable = TRUE ;
-    OutputSize = TRUE ;
-    SVLook = TRUE ;
-    Size = MAP_APPFONT ( 165 , 67 ) ;
-    Text = "Kennwort";
-    Text [ English ] = "Password";
-    FixedText FT_PASSWORD_CRT
-    {
-        Pos = MAP_APPFONT ( 6 , 5 ) ;
-        Size = MAP_APPFONT ( 94 , 10 ) ;
-        Text = "Kennwort ~festlegen";
-        Text [ English ] = "~Enter password" ;
-    };
-    Edit ED_PASSWORD_CRT
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 15 ) ;
-        Size = MAP_APPFONT ( 94 , 12 ) ;
-        PassWord = TRUE ;
-    };
-    FixedText FT_PASSWORD_REPEAT
-    {
-        Pos = MAP_APPFONT ( 6 , 34 ) ;
-        Size = MAP_APPFONT ( 94 , 10 ) ;
-        Text = "Kennwort ~bestätigen" ;
-        Text [ English ] = "~Confirm password" ;
-    };
-    Edit ED_PASSWORD_REPEAT
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 44 ) ;
-        Size = MAP_APPFONT ( 94 , 12 ) ;
-        PassWord = TRUE ;
-    };
+#define BTN_MASTERPASSCRT_OK        50
+#define BTN_MASTERPASSCRT_CANCEL    51
+#define BTN_MASTERPASSCRT_HELP      52
 
-    OKButton BTN_PASSCRT_OK
-    {
-        Pos = MAP_APPFONT ( 109 , 6 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        DefButton = TRUE ;
-    };
-    CancelButton BTN_PASSCRT_CANCEL
-    {
-        Pos = MAP_APPFONT ( 109 , 23 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-    };
-    HelpButton BTN_PASSCRT_HELP
-    {
-        Pos = MAP_APPFONT ( 109 , 43 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-    };
-};
-
+#endif // UUI_MASTERPASSCRT_HRC

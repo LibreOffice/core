@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: as $ $Date: 2001-11-08 12:07:13 $
+#   last change: $Author: mav $ $Date: 2002-10-31 11:08:28 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -74,6 +74,8 @@ SLOFILES = \
     $(SLO)$/iahndl.obj \
     $(SLO)$/logindlg.obj \
     $(SLO)$/services.obj \
+    $(SLO)$/masterpassworddlg.obj \
+    $(SLO)$/masterpasscrtdlg.obj \
     $(SLO)$/passworddlg.obj \
     $(SLO)$/passcrtdlg.obj \
     $(SLO)$/fltdlg.obj
@@ -82,8 +84,11 @@ SRCFILES = \
     cookiedg.src \
     ids.src \
     logindlg.src \
+    masterpassworddlg.src \
+    masterpasscrtdlg.src \
     passworddlg.src \
     passcrtdlg.src \
+    passworderrs.src \
     fltdlg.src
 
 .INCLUDE: target.mk

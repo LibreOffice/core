@@ -2,9 +2,9 @@
  *
  *  $RCSfile: passworddlg.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mav $ $Date: 2001-10-11 06:53:03 $
+ *  last change: $Author: mav $ $Date: 2002-10-31 11:08:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,10 +82,10 @@
 #endif
 
 //============================================================================
-class MasterPasswordDialog : public ModalDialog
+class PasswordDialog : public ModalDialog
 {
-    FixedText       aFTMasterPassword;
-    Edit            aEDMasterPassword;
+    FixedText       aFTPassword;
+    Edit            aEDPassword;
     OKButton        aOKBtn;
     CancelButton    aCancelBtn;
     HelpButton      aHelpBtn;
@@ -94,9 +94,9 @@ class MasterPasswordDialog : public ModalDialog
     DECL_LINK( OKHdl_Impl, OKButton * );
 
 public:
-    MasterPasswordDialog( Window* pParent, ::com::sun::star::task::PasswordRequestMode nDlgMode, ResMgr * pResMgr );
+    PasswordDialog( Window* pParent, ::com::sun::star::task::PasswordRequestMode nDlgMode, ResMgr * pResMgr );
 
-    String          GetMasterPassword() const { return aEDMasterPassword.GetText(); }
+    String          GetPassword() const { return aEDPassword.GetText(); }
 
 private:
     ::com::sun::star::task::PasswordRequestMode     nDialogMode;

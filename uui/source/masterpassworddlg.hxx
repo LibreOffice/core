@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: passcrtdlg.src,v $
+ *  $RCSfile: masterpassworddlg.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: mav $ $Date: 2002-10-31 11:08:38 $
+ *  last change: $Author: mav $ $Date: 2002-10-31 11:08:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,69 +59,49 @@
  *
  ************************************************************************/
 
-#define __RSC
+#ifndef UUI_MASTERPASSWORDDLG_HXX
+#define UUI_MASTERPASSWORDDLG_HXX
 
-#ifndef UUI_IDS_HRC
-#include <ids.hrc>
+#ifndef _COM_SUN_STAR_TASK_PASSWORDREQUESTMODE_HPP
+#include <com/sun/star/task/PasswordRequestMode.hpp>
 #endif
-#ifndef UUI_PASSCRTDLG_HRC
-#include <passcrtdlg.hrc>
+#ifndef _STDCTRL_HXX
+#include <svtools/stdctrl.hxx>
+#endif
+#ifndef _SV_BUTTON_HXX
+#include <vcl/button.hxx>
+#endif
+#ifndef _SV_DIALOG_HXX
+#include <vcl/dialog.hxx>
+#endif
+#ifndef _SV_EDIT_HXX
+#include <vcl/edit.hxx>
+#endif
+#ifndef _SV_GROUP_HXX
+#include <vcl/group.hxx>
 #endif
 
-ModalDialog DLG_UUI_PASSWORD_CRT
+//============================================================================
+class MasterPasswordDialog : public ModalDialog
 {
-    HelpId = HID_DLG_PASSWORD_CRT ;
-    Border = TRUE ;
-    Moveable = TRUE ;
-    OutputSize = TRUE ;
-    SVLook = TRUE ;
-    Size = MAP_APPFONT ( 165 , 67 ) ;
-    Text = "Kennwort";
-    Text [ English ] = "Password";
-    FixedText FT_PASSWORD_CRT
-    {
-        Pos = MAP_APPFONT ( 6 , 5 ) ;
-        Size = MAP_APPFONT ( 94 , 10 ) ;
-        Text = "Kennwort ~festlegen";
-        Text [ English ] = "~Enter password" ;
-    };
-    Edit ED_PASSWORD_CRT
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 15 ) ;
-        Size = MAP_APPFONT ( 94 , 12 ) ;
-        PassWord = TRUE ;
-    };
-    FixedText FT_PASSWORD_REPEAT
-    {
-        Pos = MAP_APPFONT ( 6 , 34 ) ;
-        Size = MAP_APPFONT ( 94 , 10 ) ;
-        Text = "Kennwort ~bestätigen" ;
-        Text [ English ] = "~Confirm password" ;
-    };
-    Edit ED_PASSWORD_REPEAT
-    {
-        Border = TRUE ;
-        Pos = MAP_APPFONT ( 6 , 44 ) ;
-        Size = MAP_APPFONT ( 94 , 12 ) ;
-        PassWord = TRUE ;
-    };
+    FixedText       aFTMasterPassword;
+    Edit            aEDMasterPassword;
+    OKButton        aOKBtn;
+    CancelButton    aCancelBtn;
+    HelpButton      aHelpBtn;
 
-    OKButton BTN_PASSCRT_OK
-    {
-        Pos = MAP_APPFONT ( 109 , 6 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-        DefButton = TRUE ;
-    };
-    CancelButton BTN_PASSCRT_CANCEL
-    {
-        Pos = MAP_APPFONT ( 109 , 23 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-    };
-    HelpButton BTN_PASSCRT_HELP
-    {
-        Pos = MAP_APPFONT ( 109 , 43 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
-    };
+
+    DECL_LINK( OKHdl_Impl, OKButton * );
+
+public:
+    MasterPasswordDialog( Window* pParent, ::com::sun::star::task::PasswordRequestMode nDlgMode, ResMgr * pResMgr );
+
+    String          GetMasterPassword() const { return aEDMasterPassword.GetText(); }
+
+private:
+    ::com::sun::star::task::PasswordRequestMode     nDialogMode;
+    ResMgr*                                         pResourceMgr;
 };
+
+#endif // UUI_MASTERPASSWORDDLG_HXX
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ids.hrc,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mav $ $Date: 2002-10-25 09:04:33 $
+ *  last change: $Author: mav $ $Date: 2002-10-31 11:08:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,12 +81,15 @@
 #define STR_COOKIES_SEND_TITLE (RID_UUI_START + 9)
 #define DLG_FILTER_SELECT (RID_UUI_START + 10)
 // RID_UUI_START + 11 moved to ERRCODE_UUI_WRONGMEDIUM
-#define DLG_UUI_PASSWORD (RID_UUI_START + 12)
+#define DLG_UUI_MASTERPASSWORD (RID_UUI_START + 12)
 #define STR_ERROR_PASSWORDS_NOT_IDENTICAL (RID_UUI_START + 13)
-#define STR_ERROR_PASSWORD_WRONG (RID_UUI_START + 14)
+#define STR_ERROR_MASTERPASSWORD_WRONG (RID_UUI_START + 14)
 // RID_UUI_START + 15, 16, 17 are misused by syncaccess/source/ui/resids.hrc
 #define RID_UUI_ERRHDL (RID_UUI_START + 20)
-#define DLG_UUI_PASSWORD_CRT (RID_UUI_START + 21)
+#define DLG_UUI_MASTERPASSWORD_CRT (RID_UUI_START + 21)
+#define DLG_UUI_PASSWORD (RID_UUI_START + 22)
+#define DLG_UUI_PASSWORD_CRT (RID_UUI_START + 23)
+#define STR_ERROR_PASSWORD_WRONG (RID_UUI_START + 24)
 
 #define ERRCODE_UUI_IO_ABORT (ERRCODE_AREA_UUI + 0)
 #define ERRCODE_UUI_IO_ACCESSDENIED (ERRCODE_AREA_UUI + 1)
@@ -141,11 +144,14 @@
 
 #define HID_DLG_LOGIN (HID_UUI_START + 0)
 #define HID_DLG_COOKIES (HID_UUI_START + 1)
-#define HID_DLG_PASSWORD_UUI (HID_UUI_START+2)
-#define HID_DLG_PASSWORD_CRT (HID_UUI_START+3)
+#define HID_DLG_MASTERPASSWORD_UUI (HID_UUI_START+2)
+#define HID_DLG_MASTERPASSWORD_CRT (HID_UUI_START+3)
 #define HID_DLG_FILTER_SELECT (HID_UUI_START+4)
+#define HID_DLG_PASSWORD_UUI (HID_UUI_START+5)
+#define HID_DLG_PASSWORD_CRT (HID_UUI_START+6)
 
 // HID_UUI_END (aka HID_CHAOS_NEW_DATABASE) is reserved in
 // sfx2/util/hidother.src
 
 #endif // UUI_IDS_HRC
+

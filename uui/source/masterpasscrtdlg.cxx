@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: passcrtdlg.cxx,v $
+ *  $RCSfile: masterpasscrtdlg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: mav $ $Date: 2002-10-31 11:08:37 $
+ *  last change: $Author: mav $ $Date: 2002-10-31 11:08:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,71 +69,66 @@
 #ifndef UUI_IDS_HRC
 #include <ids.hrc>
 #endif
-#ifndef UUI_PASSCRTDLG_HRC
-#include <passcrtdlg.hrc>
+#ifndef UUI_MASTERPASSCRTDLG_HRC
+#include <masterpasscrtdlg.hrc>
 #endif
-#ifndef UUI_PASSCRTDLG_HXX
-#include <passcrtdlg.hxx>
+#ifndef UUI_MASTERPASSCRTDLG_HXX
+#include <masterpasscrtdlg.hxx>
 #endif
 
-#define MAX_PASSWORD_LEN    ( (sal_uInt16) 16 )
-
-// PasswordCreateDialog---------------------------------------------------
+// MasterPasswordCreateDialog---------------------------------------------------
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( PasswordCreateDialog, EditHdl_Impl, Edit *, EMPTYARG )
+IMPL_LINK( MasterPasswordCreateDialog, EditHdl_Impl, Edit *, EMPTYARG )
 {
-    aOKBtn.Enable( aEDPasswordCrt.GetText().Len() >= nMinLen );
+    aOKBtn.Enable( aEDMasterPasswordCrt.GetText().Len() >= nMinLen );
     return 0;
 }
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( PasswordCreateDialog, OKHdl_Impl, OKButton *, EMPTYARG )
+IMPL_LINK( MasterPasswordCreateDialog, OKHdl_Impl, OKButton *, EMPTYARG )
 {
     // compare both passwords and show message box if there are not equal!!
-    if( aEDPasswordCrt.GetText() == aEDPasswordRepeat.GetText() )
+    if( aEDMasterPasswordCrt.GetText() == aEDMasterPasswordRepeat.GetText() )
         EndDialog( RET_OK );
     else
     {
         String aErrorMsg( ResId( STR_ERROR_PASSWORDS_NOT_IDENTICAL, pResourceMgr ));
         ErrorBox aErrorBox( this, WB_OK, aErrorMsg );
         aErrorBox.Execute();
-        aEDPasswordCrt.SetText( String() );
-        aEDPasswordRepeat.SetText( String() );
-        aEDPasswordCrt.GrabFocus();
+        aEDMasterPasswordCrt.SetText( String() );
+        aEDMasterPasswordRepeat.SetText( String() );
+        aEDMasterPasswordCrt.GrabFocus();
     }
     return 1;
 }
 
 // -----------------------------------------------------------------------
 
-PasswordCreateDialog::PasswordCreateDialog
+MasterPasswordCreateDialog::MasterPasswordCreateDialog
 (
     Window*                                     pParent,
     ResMgr*                                     pResMgr
 ) :
 
-    ModalDialog( pParent, ResId( DLG_UUI_PASSWORD_CRT, pResMgr ) ),
+    ModalDialog( pParent, ResId( DLG_UUI_MASTERPASSWORD_CRT, pResMgr ) ),
 
-    aFTPasswordCrt      ( this, ResId( FT_PASSWORD_CRT ) ),
-    aEDPasswordCrt      ( this, ResId( ED_PASSWORD_CRT ) ),
-    aFTPasswordRepeat   ( this, ResId( FT_PASSWORD_REPEAT ) ),
-    aEDPasswordRepeat   ( this, ResId( ED_PASSWORD_REPEAT ) ),
-    aOKBtn                  ( this, ResId( BTN_PASSCRT_OK ) ),
-    aCancelBtn              ( this, ResId( BTN_PASSCRT_CANCEL ) ),
-    aHelpBtn                ( this, ResId( BTN_PASSCRT_HELP ) ),
+    aFTMasterPasswordCrt        ( this, ResId( FT_MASTERPASSWORD_CRT ) ),
+    aEDMasterPasswordCrt        ( this, ResId( ED_MASTERPASSWORD_CRT ) ),
+    aFTMasterPasswordRepeat ( this, ResId( FT_MASTERPASSWORD_REPEAT ) ),
+    aEDMasterPasswordRepeat ( this, ResId( ED_MASTERPASSWORD_REPEAT ) ),
+    aOKBtn                  ( this, ResId( BTN_MASTERPASSCRT_OK ) ),
+    aCancelBtn              ( this, ResId( BTN_MASTERPASSCRT_CANCEL ) ),
+    aHelpBtn                ( this, ResId( BTN_MASTERPASSCRT_HELP ) ),
     pResourceMgr            ( pResMgr ),
     nMinLen(5)
 {
     FreeResource();
 
-    aOKBtn.SetClickHdl( LINK( this, PasswordCreateDialog, OKHdl_Impl ) );
-    aEDPasswordCrt.SetModifyHdl( LINK( this, PasswordCreateDialog, EditHdl_Impl ) );
-
     aOKBtn.Enable( sal_False );
-    aEDPasswordCrt.SetMaxTextLen( MAX_PASSWORD_LEN );
-    aEDPasswordRepeat.SetMaxTextLen( MAX_PASSWORD_LEN );
+    aOKBtn.SetClickHdl( LINK( this, MasterPasswordCreateDialog, OKHdl_Impl ) );
+    aEDMasterPasswordCrt.SetModifyHdl( LINK( this, MasterPasswordCreateDialog, EditHdl_Impl ) );
 };
 

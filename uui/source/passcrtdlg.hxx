@@ -2,9 +2,9 @@
  *
  *  $RCSfile: passcrtdlg.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mav $ $Date: 2001-10-11 06:53:03 $
+ *  last change: $Author: mav $ $Date: 2002-10-31 11:08:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,26 +82,28 @@
 #endif
 
 //============================================================================
-class MasterPasswordCreateDialog : public ModalDialog
+class PasswordCreateDialog : public ModalDialog
 {
-    FixedText       aFTMasterPasswordCrt;
-    Edit            aEDMasterPasswordCrt;
-    FixedText       aFTMasterPasswordRepeat;
-    Edit            aEDMasterPasswordRepeat;
+    FixedText       aFTPasswordCrt;
+    Edit            aEDPasswordCrt;
+    FixedText       aFTPasswordRepeat;
+    Edit            aEDPasswordRepeat;
     OKButton        aOKBtn;
-    CancelButton        aCancelBtn;
+    CancelButton    aCancelBtn;
     HelpButton      aHelpBtn;
 
 
     DECL_LINK( OKHdl_Impl, OKButton * );
+    DECL_LINK( EditHdl_Impl, Edit * );
 
 public:
-    MasterPasswordCreateDialog( Window* pParent, ResMgr * pResMgr );
+    PasswordCreateDialog( Window* pParent, ResMgr * pResMgr );
 
-    String          GetMasterPassword() const { return aEDMasterPasswordCrt.GetText(); }
+    String          GetPassword() const { return aEDPasswordCrt.GetText(); }
 
 private:
     ResMgr*                                         pResourceMgr;
+    sal_uInt16                                      nMinLen;
 };
 
 #endif // UUI_PASSCRTDLG_HXX

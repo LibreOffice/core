@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iahndl.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: mav $ $Date: 2002-10-25 09:04:32 $
+ *  last change: $Author: mav $ $Date: 2002-10-31 11:08:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,12 @@
 #ifndef UUI_LOGINDLG_HXX
 #include "logindlg.hxx"
 #endif
+#ifndef UUI_MASTERPASSWORDDLG_HXX
+#include "masterpassworddlg.hxx"
+#endif
+#ifndef UUI_PASSCRTDLG_HXX
+#include "masterpasscrtdlg.hxx"
+#endif
 #ifndef UUI_PASSWORDDLG_HXX
 #include "passworddlg.hxx"
 #endif
@@ -102,6 +108,12 @@
 #endif
 #ifndef _COM_SUN_STAR_TASK_PASSWORDREQUEST_HPP_
 #include "com/sun/star/task/PasswordRequest.hpp"
+#endif
+#ifndef _COM_SUN_STAR_TASK_MASTERPASSWORDREQUEST_HPP_
+#include "com/sun/star/task/MasterPasswordRequest.hpp"
+#endif
+#ifndef _COM_SUN_STAR_TASK_DOCUMENTPASSWORDREQUEST_HPP_
+#include "com/sun/star/task/DocumentPasswordRequest.hpp"
 #endif
 #ifndef _COM_SUN_STAR_TASK_XINTERACTIONABORT_HPP_
 #include "com/sun/star/task/XInteractionAbort.hpp"
@@ -174,6 +186,9 @@
 #endif
 #ifndef _COM_SUN_STAR_DOCUMENT_XINTERACTIONFILTEROPTIONS_HPP_
 #include "com/sun/star/document/XInteractionFilterOptions.hpp"
+#endif
+#ifndef _COM_SUN_STAR_TASK_XINTERACTIONPASSWORD_HPP_
+#include "com/sun/star/task/XInteractionPassword.hpp"
 #endif
 #ifndef _COM_SUN_STAR_DOCUMENT_FILTEROPTIONSREQUEST_HPP_
 #include "com/sun/star/document/FilterOptionsRequest.hpp"
@@ -354,7 +369,8 @@ getContinuations(
     star::uno::Reference< star::task::XInteractionRetry > * pRetry,
     star::uno::Reference< star::task::XInteractionAbort > * pAbort,
     star::uno::Reference< star::ucb::XInteractionSupplyAuthentication > *
-        pSupplyAuthentication)
+        pSupplyAuthentication,
+    star::uno::Reference< star::task::XInteractionPassword > * pPassword)
     SAL_THROW((star::uno::RuntimeException))
 {
     for (sal_Int32 i = 0; i < rContinuations.getLength(); ++i)
@@ -396,6 +412,13 @@ getContinuations(
                           star::ucb::XInteractionSupplyAuthentication >(
                       rContinuations[i], star::uno::UNO_QUERY);
             if (pSupplyAuthentication->is())
+                continue;
+        }
+        if (pPassword && !pPassword->is())
+        {
+            *pPassword = star::uno::Reference< star::task::XInteractionPassword >(
+                          rContinuations[i], star::uno::UNO_QUERY);
+            if (pPassword->is())
                 continue;
         }
     }
@@ -538,10 +561,27 @@ UUIInteractionHandler::handle(
             return;
         }
 
+        star::task::MasterPasswordRequest aMasterPasswordRequest;
+        if (aAnyRequest >>= aMasterPasswordRequest)
+        {
+            handleMasterPasswordRequest(aMasterPasswordRequest.Mode,
+                                  rRequest->getContinuations());
+            return;
+        }
+
+        star::task::DocumentPasswordRequest aDocumentPasswordRequest;
+        if (aAnyRequest >>= aDocumentPasswordRequest)
+        {
+            handlePasswordRequest(aDocumentPasswordRequest.Mode,
+                                  rRequest->getContinuations(),
+                                  aDocumentPasswordRequest.Name);
+            return;
+        }
+
         star::task::PasswordRequest aPasswordRequest;
         if (aAnyRequest >>= aPasswordRequest)
         {
-            handlePasswordRequest(aPasswordRequest,
+            handlePasswordRequest(aPasswordRequest.Mode,
                                   rRequest->getContinuations());
             return;
         }
@@ -1131,9 +1171,9 @@ void UUIInteractionHandler::executeLoginDialog(LoginErrorInfo & rInfo,
 }
 
 void
-UUIInteractionHandler::executePasswordDialog(LoginErrorInfo & rInfo,
-                                             star::task::PasswordRequestMode
-                                                 nMode)
+UUIInteractionHandler::executeMasterPasswordDialog(LoginErrorInfo & rInfo,
+                                                   star::task::PasswordRequestMode
+                                                   nMode)
     SAL_THROW((star::uno::RuntimeException))
 {
     rtl::OString aMaster;
@@ -1189,6 +1229,65 @@ UUIInteractionHandler::executePasswordDialog(LoginErrorInfo & rInfo,
         aBuffer.append(static_cast< sal_Unicode >('a' + (aKey[i] & 15)));
     }
     rInfo.SetPassword(aBuffer.makeStringAndClear());
+}
+
+void
+UUIInteractionHandler::executePasswordDialog(LoginErrorInfo & rInfo,
+                                             star::task::PasswordRequestMode nMode,
+                                             ::rtl::OUString aDocName)
+    SAL_THROW((star::uno::RuntimeException))
+{
+    try
+    {
+        vos::OGuard aGuard(Application::GetSolarMutex());
+
+        std::auto_ptr< ResMgr >
+            xManager(ResMgr::CreateResMgr(CREATEVERSIONRESMGR_NAME(uui)));
+        if( nMode == star::task::PasswordRequestMode_PASSWORD_CREATE )
+        {
+            std::auto_ptr< PasswordCreateDialog >
+                    xDialog(new PasswordCreateDialog(
+                            getParentProperty(), xManager.get()));
+
+            ::rtl::OUString aTitle( xDialog->GetText() );
+            if( aDocName.getLength() )
+            {
+                aTitle += ::rtl::OUString::createFromAscii( " [" );
+                aTitle += aDocName;
+                aTitle += ::rtl::OUString::createFromAscii( "]" );
+                xDialog->SetText( aTitle );
+            }
+
+            rInfo.SetResult(xDialog->Execute() == RET_OK ? ERRCODE_BUTTON_OK :
+                                                       ERRCODE_BUTTON_CANCEL);
+            rInfo.SetPassword( xDialog->GetPassword() );
+        }
+        else
+        {
+            std::auto_ptr< PasswordDialog >
+                    xDialog(new PasswordDialog(
+                            getParentProperty(), nMode, xManager.get()));
+
+            ::rtl::OUString aTitle( xDialog->GetText() );
+            if( aDocName.getLength() )
+            {
+                aTitle += ::rtl::OUString::createFromAscii( " [" );
+                aTitle += aDocName;
+                aTitle += ::rtl::OUString::createFromAscii( "]" );
+                xDialog->SetText( aTitle );
+            }
+
+            rInfo.SetResult(xDialog->Execute() == RET_OK ? ERRCODE_BUTTON_OK :
+                                                       ERRCODE_BUTTON_CANCEL);
+            rInfo.SetPassword( xDialog->GetPassword() );
+        }
+    }
+    catch (std::bad_alloc const &)
+    {
+        throw star::uno::RuntimeException(
+                  rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("out of memory")),
+                  *this);
+    }
 }
 
 void
@@ -1330,7 +1429,7 @@ UUIInteractionHandler::handleAuthenticationRequest(
     star::uno::Reference< star::ucb::XInteractionSupplyAuthentication >
         xSupplyAuthentication;
     getContinuations(
-        rContinuations, 0, 0, &xRetry, &xAbort, &xSupplyAuthentication);
+        rContinuations, 0, 0, &xRetry, &xAbort, &xSupplyAuthentication, 0);
     bool bRemember;
     bool bRememberPersistent;
     if (xSupplyAuthentication.is())
@@ -1504,8 +1603,8 @@ UUIInteractionHandler::handleAuthenticationRequest(
 }
 
 void
-UUIInteractionHandler::handlePasswordRequest(
-    star::task::PasswordRequest const & rRequest,
+UUIInteractionHandler::handleMasterPasswordRequest(
+    star::task::PasswordRequestMode nMode,
     star::uno::Sequence< star::uno::Reference<
                              star::task::XInteractionContinuation > > const &
         rContinuations)
@@ -1516,9 +1615,12 @@ UUIInteractionHandler::handlePasswordRequest(
     star::uno::Reference< star::ucb::XInteractionSupplyAuthentication >
         xSupplyAuthentication;
     getContinuations(
-        rContinuations, 0, 0, &xRetry, &xAbort, &xSupplyAuthentication);
+        rContinuations, 0, 0, &xRetry, &xAbort, &xSupplyAuthentication, 0);
     LoginErrorInfo aInfo;
-    executePasswordDialog(aInfo, rRequest.Mode);
+
+    // in case of master password a hash code is returned
+    executeMasterPasswordDialog(aInfo, nMode);
+
     switch (aInfo.GetResult())
     {
     case ERRCODE_BUTTON_OK:
@@ -1526,6 +1628,47 @@ UUIInteractionHandler::handlePasswordRequest(
         {
             xSupplyAuthentication->setPassword(aInfo.GetPassword());
             xSupplyAuthentication->select();
+        }
+        break;
+
+    case ERRCODE_BUTTON_RETRY:
+        if (xRetry.is())
+            xRetry->select();
+        break;
+
+    default:
+        if (xAbort.is())
+            xAbort->select();
+        break;
+    }
+}
+
+void
+UUIInteractionHandler::handlePasswordRequest(
+    star::task::PasswordRequestMode nMode,
+    star::uno::Sequence< star::uno::Reference<
+                             star::task::XInteractionContinuation > > const &
+        rContinuations,
+    ::rtl::OUString aDocumentName )
+    SAL_THROW((star::uno::RuntimeException))
+{
+    star::uno::Reference< star::task::XInteractionRetry > xRetry;
+    star::uno::Reference< star::task::XInteractionAbort > xAbort;
+    star::uno::Reference< star::task::XInteractionPassword >
+        xPassword;
+    getContinuations(
+        rContinuations, 0, 0, &xRetry, &xAbort, 0, &xPassword);
+    LoginErrorInfo aInfo;
+
+       executePasswordDialog(aInfo, nMode, aDocumentName);
+
+    switch (aInfo.GetResult())
+    {
+    case ERRCODE_BUTTON_OK:
+        if (xPassword.is())
+        {
+            xPassword->setPassword(aInfo.GetPassword());
+            xPassword->select();
         }
         break;
 
@@ -1987,7 +2130,7 @@ UUIInteractionHandler::handleErrorRequest(
     star::uno::Reference< star::task::XInteractionRetry > xRetry;
     star::uno::Reference< star::task::XInteractionAbort > xAbort;
     getContinuations(
-        rContinuations, &xApprove, &xDisapprove, &xRetry, &xAbort, 0);
+        rContinuations, &xApprove, &xDisapprove, &xRetry, &xAbort, 0, 0);
     // The following mapping uses the bit mask
     //     Approve = 8,
     //     Disapprove = 4,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: passworddlg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mav $ $Date: 2001-10-11 06:53:03 $
+ *  last change: $Author: mav $ $Date: 2002-10-31 11:08:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,11 +76,11 @@
 #include <passworddlg.hxx>
 #endif
 
-// MasterPasswordDialog---------------------------------------------------
+// PasswordDialog---------------------------------------------------------
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( MasterPasswordDialog, OKHdl_Impl, OKButton *, EMPTYARG )
+IMPL_LINK( PasswordDialog, OKHdl_Impl, OKButton *, EMPTYARG )
 {
     EndDialog( RET_OK );
     return 1;
@@ -88,7 +88,7 @@ IMPL_LINK( MasterPasswordDialog, OKHdl_Impl, OKButton *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-MasterPasswordDialog::MasterPasswordDialog
+PasswordDialog::PasswordDialog
 (
     Window*                                     pParent,
     ::com::sun::star::task::PasswordRequestMode aDialogMode,
@@ -97,13 +97,13 @@ MasterPasswordDialog::MasterPasswordDialog
 
     ModalDialog( pParent, ResId( DLG_UUI_PASSWORD, pResMgr ) ),
 
-    aFTMasterPassword       ( this, ResId( FT_MASTERPASSWORD ) ),
-    aEDMasterPassword       ( this, ResId( ED_MASTERPASSWORD ) ),
-    aOKBtn                  ( this, ResId( BTN_MASTERPASSWORD_OK ) ),
-    aCancelBtn              ( this, ResId( BTN_MASTERPASSWORD_CANCEL ) ),
-    aHelpBtn                ( this, ResId( BTN_MASTERPASSWORD_HELP ) ),
-    nDialogMode             ( aDialogMode ),
-    pResourceMgr            ( pResMgr )
+    aFTPassword     ( this, ResId( FT_PASSWORD ) ),
+    aEDPassword     ( this, ResId( ED_PASSWORD ) ),
+    aOKBtn          ( this, ResId( BTN_PASSWORD_OK ) ),
+    aCancelBtn      ( this, ResId( BTN_PASSWORD_CANCEL ) ),
+    aHelpBtn        ( this, ResId( BTN_PASSWORD_HELP ) ),
+    nDialogMode     ( aDialogMode ),
+    pResourceMgr    ( pResMgr )
 {
     if( nDialogMode == ::com::sun::star::task::PasswordRequestMode_PASSWORD_REENTER )
     {
@@ -114,6 +114,6 @@ MasterPasswordDialog::MasterPasswordDialog
 
     FreeResource();
 
-    aOKBtn.SetClickHdl( LINK( this, MasterPasswordDialog, OKHdl_Impl ) );
+    aOKBtn.SetClickHdl( LINK( this, PasswordDialog, OKHdl_Impl ) );
 };
 

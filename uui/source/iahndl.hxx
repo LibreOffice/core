@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iahndl.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mav $ $Date: 2002-05-29 15:55:38 $
+ *  last change: $Author: mav $ $Date: 2002-10-31 11:08:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,8 +220,14 @@ private:
         SAL_THROW((com::sun::star::uno::RuntimeException));
 
     void
+    executeMasterPasswordDialog(LoginErrorInfo & rInfo,
+                                com::sun::star::task::PasswordRequestMode nMode)
+        SAL_THROW((com::sun::star::uno::RuntimeException));
+
+    void
     executePasswordDialog(LoginErrorInfo & rInfo,
-                          com::sun::star::task::PasswordRequestMode nMode)
+                          com::sun::star::task::PasswordRequestMode nMode,
+                          ::rtl::OUString aDocumentName)
         SAL_THROW((com::sun::star::uno::RuntimeException));
 
     void executeCookieDialog(CntHTTPCookieRequest & rRequest)
@@ -250,12 +256,23 @@ private:
         SAL_THROW((com::sun::star::uno::RuntimeException));
 
     void
-    handlePasswordRequest(
-        com::sun::star::task::PasswordRequest const & rRequest,
+    handleMasterPasswordRequest(
+        com::sun::star::task::PasswordRequestMode nMode,
         com::sun::star::uno::Sequence<
                 com::sun::star::uno::Reference<
                     com::sun::star::task::XInteractionContinuation > > const &
             rContinuations)
+        SAL_THROW((com::sun::star::uno::RuntimeException));
+
+
+    void
+    handlePasswordRequest(
+        com::sun::star::task::PasswordRequestMode nMode,
+        com::sun::star::uno::Sequence<
+                com::sun::star::uno::Reference<
+                    com::sun::star::task::XInteractionContinuation > > const &
+            rContinuations,
+        ::rtl::OUString aDocumentName = ::rtl::OUString())
         SAL_THROW((com::sun::star::uno::RuntimeException));
 
     void
