@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SandboxSecurity.java,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:24:28 $
+ *  last change: $Author: jl $ $Date: 2001-11-22 13:55:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,12 +134,12 @@ public class SandboxSecurity extends SecurityManager //implements SecurityManage
         else
             networkMode = NETWORK_HOST;
 
-//          bCheckSecurity = !Boolean.getBoolean( "stardiv.security.disableSecurity" );
+          bCheckSecurity = !Boolean.getBoolean( "stardiv.security.disableSecurity" );
         // see if security is disabled
-        String prop = System.getProperty("Security", "1" );
-        bCheckSecurity = true;
-        if(prop.equals("0"))
-            bCheckSecurity = false;
+//      String prop = System.getProperty("Security", "1" );
+//      bCheckSecurity = true;
+//      if(prop.equals("0"))
+//          bCheckSecurity = false;
 
         // see if the system scope is one we know.
         IdentityScope scope = IdentityScope.getSystemScope();
