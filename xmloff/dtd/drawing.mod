@@ -1,5 +1,5 @@
 <!--
-	$Id: drawing.mod,v 1.17 2000-12-05 18:22:15 cl Exp $
+	$Id: drawing.mod,v 1.18 2000-12-08 16:02:21 mib Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -360,7 +360,7 @@
 <!ATTLIST draw:text-box %draw-transform; >
 
 <!-- image -->
-<!ELEMENT draw:image (svg:desc?)>
+<!ELEMENT draw:image (svg:desc?,(draw:contour-polygon|draw:contour-path)?)>
 <!ATTLIST draw:image %draw-style-name;>
 <!ATTLIST draw:image draw:name %string; #IMPLIED>
 <!ATTLIST draw:image xlink:href %uriReference; #REQUIRED>
@@ -377,6 +377,18 @@
 <!ATTLIST draw:image %zindex;>
 
 <!ELEMENT svg:desc (#PCDATA)>
+
+<!ELEMENT draw:contour-polygon EMPTY>
+<!ATTLIST draw:contour-polygon svg:width %coordinate; #REQUIRED>
+<!ATTLIST draw:contour-polygon svg:height %coordinate; #REQUIRED>
+<!ATTLIST draw:contour-polygon %draw-viewbox;>
+<!ATTLIST draw:contour-polygon svg:points %points; #REQUIRED>
+
+<!ELEMENT draw:contour-path EMPTY>
+<!ATTLIST draw:contour-path svg:width %coordinate; #REQUIRED>
+<!ATTLIST draw:contour-path svg:height %coordinate; #REQUIRED>
+<!ATTLIST draw:contour-path %draw-viewbox;>
+<!ATTLIST draw:contour-path svg:d %pathData; #REQUIRED>
 
 <!-- hyperlink -->
 <!ELEMENT draw:a (draw:image|draw:text-box)>
