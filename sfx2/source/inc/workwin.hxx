@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workwin.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-29 11:33:12 $
+ *  last change: $Author: hr $ $Date: 2001-09-12 16:57:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,7 +84,6 @@ class SfxInPlaceEnv_Impl;
 class SfxPlugInEnv_Impl;
 class SfxSplitWindow;
 class SfxWorkWindow;
-class XDispatch;
 
 //====================================================================
 // Dieser struct h"alt alle relevanten Informationen "uber Toolboxen bereit.
