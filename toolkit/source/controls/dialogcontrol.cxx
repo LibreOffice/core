@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialogcontrol.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-11 11:57:40 $
+ *  last change: $Author: kz $ $Date: 2004-05-19 13:43:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@
 #endif
 #ifndef TOOLKIT_FORMATTED_CONTROL_HXX
 #include "toolkit/controls/formattedcontrol.hxx"
+#endif
+#ifndef TOOLKIT_ROADMAP_CONTROL_HXX
+#include "toolkit/controls/roadmapcontrol.hxx"
 #endif
 #ifndef TOOLKIT_INC_TOOLKIT_CONTROLS_TKSCROLLBAR_HXX
 #include "toolkit/controls/tkscrollbar.hxx"
@@ -404,6 +407,8 @@ Reference< XInterface > UnoControlDialogModel::createInstance( const ::rtl::OUSt
         pNewModel = new OGeometryControlModel< UnoControlScrollBarModel >;
     else if ( aServiceSpecifier.compareToAscii( szServiceName2_UnoControlFixedLineModel ) == 0 )
         pNewModel = new OGeometryControlModel< UnoControlFixedLineModel >;
+    else if ( aServiceSpecifier.compareToAscii( szServiceName2_UnoControlRoadmapModel ) == 0 )
+        pNewModel = new OGeometryControlModel< UnoControlRoadmapModel >;
 
     if ( !pNewModel )
     {
@@ -443,7 +448,7 @@ Sequence< ::rtl::OUString > UnoControlDialogModel::getAvailableServiceNames() th
     static Sequence< ::rtl::OUString >* pNamesSeq = NULL;
     if ( !pNamesSeq )
     {
-        pNamesSeq = new Sequence< ::rtl::OUString >( 19 );
+        pNamesSeq = new Sequence< ::rtl::OUString >( 20 );
         ::rtl::OUString* pNames = pNamesSeq->getArray();
         pNames[0] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlEditModel );
         pNames[1] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlFormattedFieldModel );
@@ -464,6 +469,8 @@ Sequence< ::rtl::OUString > UnoControlDialogModel::getAvailableServiceNames() th
         pNames[16] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlProgressBarModel );
         pNames[17] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlScrollBarModel );
         pNames[18] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlFixedLineModel );
+        pNames[19] = ::rtl::OUString::createFromAscii( szServiceName2_UnoControlRoadmapModel );
+
     }
     return *pNamesSeq;
 }
