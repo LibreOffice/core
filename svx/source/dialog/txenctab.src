@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txenctab.src,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-22 14:09:31 $
+ *  last change: $Author: obo $ $Date: 2004-11-18 14:41:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,13 +65,13 @@
 
 #define _SOLAR_RSC_INVOKED
 #include <rtl/textenc.h>
-
+#define PairedList ItemList
 // Encodings for which no conversion exist yet are commented out.
 
  // RID_SVXSTR_TEXTENCODING_TABLE ----------------------------------------------------
 StringArray RID_SVXSTR_TEXTENCODING_TABLE
 {
-    ItemList [ de ] =
+    PairedList [ de ] =
     {
         < "Westeuropa (Windows-1252/WinLatin 1)"            ; RTL_TEXTENCODING_MS_1252          ; > ;
         < "Westeuropa (Apple Macintosh)"                    ; RTL_TEXTENCODING_APPLE_ROMAN      ; > ;
@@ -162,7 +162,7 @@ StringArray RID_SVXSTR_TEXTENCODING_TABLE
         < "Kyrillisch (KOI8-U)"                             ; RTL_TEXTENCODING_KOI8_U           ; > ;
         < "Kyrillisch (PT154)"                              ; RTL_TEXTENCODING_PT154            ; > ;
     };
-    ItemList [ en-US ] =
+    PairedList [ en-US ] =
     {
          < "Western Europe (Windows-1252/WinLatin 1)"           ; RTL_TEXTENCODING_MS_1252          ; > ;
         < "Western Europe (Apple Macintosh)"                    ; RTL_TEXTENCODING_APPLE_ROMAN      ; > ;
