@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysishelper.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-14 08:38:20 $
+ *  last change: $Author: gt $ $Date: 2001-05-22 11:49:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -351,7 +351,8 @@ void GetDiffParam( sal_Int32 nNullDate, sal_Int32 nStartDate, sal_Int32 nEndDate
     DaysToDate( nDate1, nDay1, nMonth1, nYear1 );
     DaysToDate( nDate2, nDay2, nMonth2, nYear2 );
 
-    sal_uInt16  nYears = nYear2 - nYear1;
+    sal_uInt16  nYears;
+
     sal_Int32   nDayDiff, nDaysInYear;
 
     switch( nMode )
@@ -359,11 +360,18 @@ void GetDiffParam( sal_Int32 nNullDate, sal_Int32 nStartDate, sal_Int32 nEndDate
         case 0:         // 0=USA (NASD) 30/360
         case 4:         // 4=Europe 30/360
             nDaysInYear = 360;
+            nYears = nYear2 - nYear1;
             nDayDiff = GetDiffDate360( nDay1, nMonth1, nYear1, IsLeapYear( nYear1 ),
                                         nDay2, nMonth2, nYear2, nMode == 0 ) - nYears * nDaysInYear;
             break;
         case 1:         // 1=exact/exact
+            nYears = nYear2 - nYear1;
+
             nDaysInYear = IsLeapYear( nYear1 )? 366 : 365;
+
+            if( nYears && ( nMonth1 > nMonth2 || ( nMonth1 == nMonth2 && nDay1 > nDay2 ) ) )
+                nYears--;
+
             if( nYears )
                 nDayDiff = nDate2 - DateToDays( nDay1, nMonth1, nYear2 );
             else
@@ -372,11 +380,13 @@ void GetDiffParam( sal_Int32 nNullDate, sal_Int32 nStartDate, sal_Int32 nEndDate
             break;
         case 2:         // 2=exact/360
             nDaysInYear = 360;
+            nYears = sal_uInt16( ( nDate2 - nDate1 ) / nDaysInYear );
             nDayDiff = nDate2 - nDate1;
             nDayDiff %= nDaysInYear;
             break;
         case 3:         //3=exact/365
             nDaysInYear = 365;
+            nYears = sal_uInt16( ( nDate2 - nDate1 ) / nDaysInYear );
             nDayDiff = nDate2 - nDate1;
             nDayDiff %= nDaysInYear;
             break;
@@ -1697,13 +1707,17 @@ void SortedIndividualInt32List::InsertHolidayList(
     switch( aHDay.getValueTypeClass() )
     {
         case uno::TypeClass_VOID:       break;
+        case uno::TypeClass_STRING:
+            if( ( ( const STRING* ) aHDay.getValue() )->getLength() )
+                THROW_IAE;
+            break;
         case uno::TypeClass_DOUBLE:
             {
-            double                  f = *( double* ) aHDay.getValue();
+            double          f = *( double* ) aHDay.getValue();
             if( f < -2147483648.0 || f >= 2147483648.0 )
                 THROW_IAE;
 
-            sal_Int32   n = sal_Int32( f );
+            sal_Int32       n = sal_Int32( f );
 
             if( n )
             {
@@ -1715,7 +1729,7 @@ void SortedIndividualInt32List::InsertHolidayList(
             break;
         case uno::TypeClass_SEQUENCE:
             {
-            SEQSEQ( ANY )           aValArr;
+            SEQSEQ( ANY )   aValArr;
             if( aHDay >>= aValArr )
             {
                 sal_Int32           nE = aValArr.getLength();
@@ -1801,6 +1815,24 @@ void DoubleList::Append( const SEQSEQ( double )& aVLst ) THROWDEF_RTE_IAE
         const SEQ( double )&    rList = aVLst[ n1 ];
         nE2 = rList.getLength();
         const double*           pList = rList.getConstArray();
+
+        for( n2 = 0 ; n2 < nE2 ; n2++ )
+            AppendDouble( pList[ n2 ] );
+    }
+}
+
+
+void DoubleList::Append( const SEQSEQ( sal_Int32 )& aVLst ) THROWDEF_RTE_IAE
+{
+    sal_Int32   n1, n2;
+    sal_Int32   nE1 = aVLst.getLength();
+    sal_Int32   nE2;
+
+    for( n1 = 0 ; n1 < nE1 ; n1++ )
+    {
+        const SEQ( sal_Int32 )& rList = aVLst[ n1 ];
+        nE2 = rList.getLength();
+        const sal_Int32*        pList = rList.getConstArray();
 
         for( n2 = 0 ; n2 < nE2 ; n2++ )
             AppendDouble( pList[ n2 ] );

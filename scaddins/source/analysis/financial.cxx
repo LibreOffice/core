@@ -2,9 +2,9 @@
  *
  *  $RCSfile: financial.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: gt $ $Date: 2001-05-07 06:53:51 $
+ *  last change: $Author: gt $ $Date: 2001-05-22 11:51:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -330,6 +330,8 @@ double SAL_CALL AnalysisAddIn::getDollarfr( double fDollarDec, sal_Int32 nFrac )
 
     fRet *= pow( 10.0, -ceil( log10( fFrac ) ) );
 
+    fRet += fInt;
+
     return fRet;
 }
 
@@ -347,6 +349,8 @@ double SAL_CALL AnalysisAddIn::getDollarde( double fDollarFrac, sal_Int32 nFrac 
     fRet /= fFrac;
 
     fRet *= pow( 10.0, ceil( log10( fFrac ) ) );
+
+    fRet += fInt;
 
     return fRet;
 }
@@ -526,17 +530,21 @@ double SAL_CALL AnalysisAddIn::getOddlyield( constREFXPS& xOpt,
 
 
 double SAL_CALL AnalysisAddIn::getXirr(
-    const SEQ( double )& rValues, const SEQ( sal_Int32 )& rDates, const ANY& rGuess ) THROWDEF_RTE_IAE
+    const SEQSEQ( double )& rValues, const SEQSEQ( sal_Int32 )& rDates, const ANY& rGuess ) THROWDEF_RTE_IAE
 {
 
     double              fGuess = GetOpt( rGuess, 0.1 );
-    sal_Int32           nNum = rValues.getLength();
 
-    if( nNum != rDates.getLength() || nNum < 2 )
+    DoubleList          aValList;
+    DoubleList          aDateList;
+
+    aValList.Append( rValues );
+    aDateList.Append( rDates );
+
+    sal_Int32           nNum = aValList.Count();
+
+    if( nNum != sal_Int32( aDateList.Count() ) || nNum < 2 )
         THROW_IAE;
-
-    const double*       pVals = rValues.getConstArray();
-    const sal_Int32*    pDates = rDates.getConstArray();
 
     double              f, fG, fK;
     sal_Int32           nMax = 200;
@@ -546,14 +554,15 @@ double SAL_CALL AnalysisAddIn::getXirr(
     double              fOld = 0.0;
     sal_Int32           n = 1;
     sal_Int32           nNew = 0;
-    sal_Int32           nNull = pDates[ 0 ];
+    double              fNull = *aDateList.Get( 0 );
+
 
     while( fabs( fDiff ) > 1E-10 && n <= nMax )
     {
         f = 0.0;
         n++;
         for( sal_Int32 i = 0 ; i < nNum ; i++ )
-            f += pVals[ i ] / pow( 1.0 + fYld, double( pDates[ i ] - nNull ) / 365.0 );
+            f += *aValList.Get( i ) / pow( 1.0 + fYld, ( *aDateList.Get( i ) - fNull ) / 365.0 );
 
         if( ( ( fOld < 0.0 && f > 0.0 ) || ( fOld > 0.0 && f < 0.0 ) ) && nNew == 0 )
         {
@@ -595,21 +604,25 @@ double SAL_CALL AnalysisAddIn::getXirr(
 
 
 double SAL_CALL AnalysisAddIn::getXnpv(
-    double fRate, const SEQ( double )& rValues, const SEQ( sal_Int32 )& rDates ) THROWDEF_RTE_IAE
+    double fRate, const SEQSEQ( double )& rValues, const SEQSEQ( sal_Int32 )& rDates ) THROWDEF_RTE_IAE
 {
-    sal_Int32           nNum = rValues.getLength();
+    DoubleList          aValList;
+    DoubleList          aDateList;
 
-    if( nNum != rDates.getLength() || nNum < 2 )
+    aValList.Append( rValues );
+    aDateList.Append( rDates );
+
+    sal_Int32           nNum = aValList.Count();
+
+    if( nNum != sal_Int32( aDateList.Count() ) || nNum < 2 )
         THROW_IAE;
 
-    const double*       pVals = rValues.getConstArray();
-    const sal_Int32*    pDates = rDates.getConstArray();
     double              fRet = 0.0;
-    sal_Int32           nNull = pDates[ 0 ];
+    double              fNull = *aDateList.Get( 0 );
     fRate++;
 
     for( sal_Int32 i = 0 ; i < nNum ; i++ )
-        fRet += pVals[ i ] / ( pow( fRate, double( pDates[ i ] -nNull ) / 365.0 ) );
+        fRet += *aValList.Get( i ) / ( pow( fRate, ( *aDateList.Get( i ) - fNull ) / 365.0 ) );
 
     return fRet;
 }
@@ -667,14 +680,14 @@ double SAL_CALL AnalysisAddIn::getCoupnum( constREFXPS& xOpt,
 }
 
 
-double SAL_CALL AnalysisAddIn::getFvschedule( double fPrinc, const SEQ( double )& rSchedule ) THROWDEF_RTE_IAE
+double SAL_CALL AnalysisAddIn::getFvschedule( double fPrinc, const SEQSEQ( double )& rSchedule ) THROWDEF_RTE_IAE
 {
-    sal_Int32           nNum = rSchedule.getLength();
+    DoubleList          aSchedList;
 
-    const double*       pVals = rSchedule.getConstArray();
+    aSchedList.Append( rSchedule );
 
-    for( sal_Int32 n = 0 ; n < nNum ; n++ )
-        fPrinc *= 1.0 + pVals[ n ];
+    for( const double* p = aSchedList.First() ; p ; p = aSchedList.Next() )
+        fPrinc *= 1.0 + *p;
 
     return fPrinc;
 }

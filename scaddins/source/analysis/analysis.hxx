@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysis.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: gt $ $Date: 2001-05-09 12:33:08 $
+ *  last change: $Author: gt $ $Date: 2001-05-22 11:49:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,7 +126,7 @@ public:
                             // XAnalysis
 //    virtual double SAL_CALL       get_Test( constREFXPS&, sal_Int32 nMode, double f1, double f2, double f3 ) THROWDEF_RTE;
 
-    virtual sal_Int32 SAL_CALL  getWorkday( constREFXPS&, sal_Int32 nStartDate, sal_Int32 nDays, const SEQSEQ( sal_Int32 )& aHDay ) THROWDEF_RTE;
+    virtual sal_Int32 SAL_CALL  getWorkday( constREFXPS&, sal_Int32 nStartDate, sal_Int32 nDays, const ANY& aHDay ) THROWDEF_RTE;
     virtual double SAL_CALL     getYearfrac( constREFXPS&, sal_Int32 nStartDate, sal_Int32 nEndDate, sal_Int32 nMode ) THROWDEF_RTE_IAE;
     virtual sal_Int32 SAL_CALL  getEdate( constREFXPS&, sal_Int32 nStartDate, sal_Int32 nMonths ) THROWDEF_RTE;
     virtual sal_Int32 SAL_CALL  getWeeknum( constREFXPS&, sal_Int32 nStartDate, sal_Int32 nMode ) THROWDEF_RTE;
@@ -193,7 +193,7 @@ public:
     virtual double SAL_CALL     getImreal( const STRING& aNum ) THROWDEF_RTE_IAE;
     virtual STRING SAL_CALL     getImsin( const STRING& aNum ) THROWDEF_RTE_IAE;
     virtual STRING SAL_CALL     getImsub( const STRING& aNum1, const STRING& aNum2 ) THROWDEF_RTE_IAE;
-    virtual STRING SAL_CALL     getImsum( const STRING& aNum1, const SEQ( CSS::uno::Any )& aFollowingPars ) THROWDEF_RTE_IAE;
+    virtual STRING SAL_CALL     getImsum( const STRING& aNum1, const SEQ( ANY )& aFollowingPars ) THROWDEF_RTE_IAE;
 
     virtual STRING SAL_CALL     getImsqrt( const STRING& aNum ) THROWDEF_RTE_IAE;
     virtual STRING SAL_CALL     getComplex( double fReal, double fImaginary, const STRING& rSuffix ) THROWDEF_RTE_IAE;
@@ -227,8 +227,8 @@ public:
     virtual double SAL_CALL     getOddfyield( constREFXPS& xOpt, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nIssue, sal_Int32 nFirstCoup, double fRate, double fPrice, double fRedemp, sal_Int32 nFreq, const ANY& rOptBase ) THROWDEF_RTE_IAE;
     virtual double SAL_CALL     getOddlprice( constREFXPS& xOpt, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nLastInterest, double fRate, double fYield, double fRedemp, sal_Int32 nFreq, const ANY& rOptBase ) THROWDEF_RTE_IAE;
     virtual double SAL_CALL     getOddlyield( constREFXPS& xOpt, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nLastInterest, double fRate, double fPrice, double fRedemp, sal_Int32 nFreq, const ANY& rOptBase) THROWDEF_RTE_IAE;
-    virtual double SAL_CALL     getXirr( const SEQ( double )& rValues, const SEQ( sal_Int32 )& rDates, const ANY& rGuess ) THROWDEF_RTE_IAE;
-    virtual double SAL_CALL     getXnpv( double fRate, const SEQ( double )& rValues, const SEQ( sal_Int32 )& rDates ) THROWDEF_RTE_IAE;
+    virtual double SAL_CALL     getXirr( const SEQSEQ( double )& rValues, const SEQSEQ( sal_Int32 )& rDates, const ANY& rGuess ) THROWDEF_RTE_IAE;
+    virtual double SAL_CALL     getXnpv( double fRate, const SEQSEQ( double )& rValues, const SEQSEQ( sal_Int32 )& rDates ) THROWDEF_RTE_IAE;
     virtual double SAL_CALL     getIntrate( constREFXPS& xOpt, sal_Int32 nSettle, sal_Int32 nMat, double fInvest, double fRedemp, const ANY& rOptBase ) THROWDEF_RTE_IAE;
     virtual double SAL_CALL     getCoupncd( constREFXPS& xOpt, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, const ANY& rOptBase ) THROWDEF_RTE_IAE;
     virtual double SAL_CALL     getCoupdays( constREFXPS& xOpt, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, const ANY& rOptBase ) THROWDEF_RTE_IAE;
@@ -236,7 +236,7 @@ public:
     virtual double SAL_CALL     getCoupdaybs( constREFXPS& xOpt, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, const ANY& rOptBase ) THROWDEF_RTE_IAE;
     virtual double SAL_CALL     getCouppcd( constREFXPS& xOpt, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, const ANY& rOptBase ) THROWDEF_RTE_IAE;
     virtual double SAL_CALL     getCoupnum( constREFXPS& xOpt, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, const ANY& rOptBase ) THROWDEF_RTE_IAE;
-    virtual double SAL_CALL     getFvschedule( double fPrinc, const SEQ( double )& rSchedule ) THROWDEF_RTE_IAE;
+    virtual double SAL_CALL     getFvschedule( double fPrinc, const SEQSEQ( double )& rSchedule ) THROWDEF_RTE_IAE;
 };
 
 //------------------------------------------------------------------

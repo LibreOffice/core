@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysis.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-14 08:38:20 $
+ *  last change: $Author: gt $ $Date: 2001-05-22 11:49:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -852,7 +852,7 @@ STRING SAL_CALL AnalysisAddIn::getDisplayCategoryName( const STRING& aProgrammat
  */
 
 sal_Int32 SAL_CALL AnalysisAddIn::getWorkday( constREFXPS& xOptions,
-    sal_Int32 nDate, sal_Int32 nDays, const SEQSEQ( sal_Int32 )& aHDay ) THROWDEF_RTE
+    sal_Int32 nDate, sal_Int32 nDays, const ANY& aHDay ) THROWDEF_RTE
 {
     if( !nDays )
         return nDate;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysisadd.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: gt $ $Date: 2001-05-09 12:33:08 $
+ *  last change: $Author: gt $ $Date: 2001-05-22 11:49:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@ module addin
         /// workday.
         long getWorkday(
                     [in] com::sun::star::beans::XPropertySet xOptions,
-                    [in] long nStartDate, [in] long nDays, [in] sequence< sequence<long> > aHolidays );
+                    [in] long nStartDate, [in] long nDays, [in] any aHolidays );
 
         /// yearfrac.
         double getYearfrac(
@@ -414,10 +414,15 @@ module addin
                     [in] long Frequency, [in] any Base );
 
         /// xirr.
-        double getXirr( [in] sequence<double> Values, [in] sequence<long> Dates, [in] any Guess );
+        double getXirr(
+                    [in] sequence< sequence< double > > Values,
+                    [in] sequence< sequence< long > > Dates, [in] any Guess );
 
         /// xnpv.
-        double getXnpv( [in] double Rate, [in] sequence<double> Values, [in] sequence<long> Dates );
+        double getXnpv(
+                    [in] double Rate,
+                    [in] sequence< sequence< double > > Values,
+                    [in] sequence< sequence< long > > Dates );
 
         /// intrate.
         double getIntrate(
@@ -463,7 +468,7 @@ module addin
                     [in] long Frequency, [in] any Base );
 
         /// fvschedule.
-        double getFvschedule( [in] double Principal, [in] sequence<double> Schedule );
+        double getFvschedule( [in] double Principal, [in] sequence< sequence< double > > Schedule );
     };
 
     service Analysis

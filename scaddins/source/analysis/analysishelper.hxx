@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysishelper.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: gt $ $Date: 2001-05-11 10:09:35 $
+ *  last change: $Author: gt $ $Date: 2001-05-22 11:49:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -330,6 +330,7 @@ public:
 
     sal_Bool                Append( double fVal );
     void                    Append( const SEQSEQ( double )& aValList ) THROWDEF_RTE_IAE;
+    void                    Append( const SEQSEQ( sal_Int32 )& aValList ) THROWDEF_RTE_IAE;
     void                    Append( const SEQ( ANY )& aValList,
                                 sal_Bool bEmptyStringAs0 = sal_True,
                                 sal_Bool bForceErrorOnEmpty = sal_False ) THROWDEF_RTE_IAE;
