@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgass.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 23:25:40 $
+ *  last change: $Author: rt $ $Date: 2001-06-15 21:58:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -370,7 +370,7 @@ ModalDialog DLG_ASS
         Text [ french ] = "Média de sortie" ;
         Text [ swedish ] = "Välj ett presentationsmedium" ;
         Text [ danish ] = "Vælg et output-medie" ;
-        Text [ portuguese ] = "Seleccione o modo de apresentação" ;
+        Text [ portuguese ] = "Seleccione o meio de apresentação" ;
         Text [ portuguese_brazilian ] = "W?hlen Sie das Medium Ihrer Pr?sentation" ;
         Text[ chinese_simplified ] = "ÇëÑ¡Ôñ´òÓ¡ÑİÊ¾ÎÄ¸åµÄÃ½Ìå¡£";
         Text[ russian ] = "Ñğåäñòâî ïîêàçà ïğåçåíòàöèè";
@@ -1257,6 +1257,7 @@ ModalDialog DLG_ASS
     Text[ catalan ] = "AutoPiloto Presentación";
     Text[ finnish ] = "Automaattinen esityksen ohjaus";
 };
+
 
 
 
