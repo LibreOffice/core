@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtedt.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:36:48 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 16:09:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,10 +183,8 @@
 #ifndef _DOCARY_HXX
 #include <docary.hxx>       // SwRedlineTbl
 #endif
-#ifdef BIDI
 #ifndef _DRAWFONT_HXX
 #include <drawfont.hxx> // SwDrawTextInfo
-#endif
 #endif
 
 using namespace ::com::sun::star;
@@ -1041,7 +1039,6 @@ SwRect SwTxtFrm::_AutoSpell( SwCntntNode* pActNode, xub_StrLen nActPos )
             // information about end of repaint area
             Sw2LinesPos* pEnd2Pos = aTmpState.p2Lines;
 
-#ifdef VERTICAL_LAYOUT
             SwTxtFrm* pStartFrm = this;
 
             while( pStartFrm->HasFollow() &&
@@ -1054,23 +1051,17 @@ SwRect SwTxtFrm::_AutoSpell( SwCntntNode* pActNode, xub_StrLen nActPos )
                    nChgEnd >= pEndFrm->GetFollow()->GetOfst() )
                 pEndFrm = pEndFrm->GetFollow();
 
-#endif
-
             if ( pEnd2Pos )
             {
                 // we are inside a special portion, take left border
-#ifdef VERTICAL_LAYOUT
                 SWRECTFN( pEndFrm )
                 (aRect.*fnRect->fnSetTop)( (pEnd2Pos->aLine.*fnRect->fnGetTop)() );
-                (aRect.*fnRect->fnSetLeft)( (pEnd2Pos->aPortion.*fnRect->fnGetRight)() );
+                if ( pEndFrm->IsRightToLeft() )
+                    (aRect.*fnRect->fnSetLeft)( (pEnd2Pos->aPortion.*fnRect->fnGetLeft)() );
+                else
+                    (aRect.*fnRect->fnSetLeft)( (pEnd2Pos->aPortion.*fnRect->fnGetRight)() );
                 (aRect.*fnRect->fnSetWidth)( 1 );
                 (aRect.*fnRect->fnSetHeight)( (pEnd2Pos->aLine.*fnRect->fnGetHeight)() );
-#else
-                aRect.Top( pEnd2Pos->aLine.Top() );
-                aRect.Left( pEnd2Pos->aPortion.Right() );
-                aRect.Width( 1 );
-                aRect.Height( pEnd2Pos->aLine.Height() );
-#endif
                 delete pEnd2Pos;
             }
 
@@ -1083,42 +1074,25 @@ SwRect SwTxtFrm::_AutoSpell( SwCntntNode* pActNode, xub_StrLen nActPos )
             if ( pSt2Pos )
             {
                 // we are inside a special portion, take right border
-#ifdef VERTICAL_LAYOUT
                 SWRECTFN( pStartFrm )
                 (aTmp.*fnRect->fnSetTop)( (pSt2Pos->aLine.*fnRect->fnGetTop)() );
-                (aTmp.*fnRect->fnSetLeft)( (pSt2Pos->aPortion.*fnRect->fnGetLeft)() );
+                if ( pStartFrm->IsRightToLeft() )
+                    (aTmp.*fnRect->fnSetLeft)( (pSt2Pos->aPortion.*fnRect->fnGetRight)() );
+                else
+                    (aTmp.*fnRect->fnSetLeft)( (pSt2Pos->aPortion.*fnRect->fnGetLeft)() );
                 (aTmp.*fnRect->fnSetWidth)( 1 );
                 (aTmp.*fnRect->fnSetHeight)( (pSt2Pos->aLine.*fnRect->fnGetHeight)() );
-#else
-                aTmp.Top( pSt2Pos->aLine.Top() );
-                aTmp.Left( pSt2Pos->aPortion.Left() );
-                aTmp.Width( 1 );
-                aTmp.Height( pSt2Pos->aLine.Height() );
-#endif
                 delete pSt2Pos;
             }
 
             BOOL bSameFrame = TRUE;
-#ifndef VERTICAL_LAYOUT
-            SwTxtFrm* pStartFrm = this;
-#endif
 
             if( HasFollow() )
             {
-#ifndef VERTICAL_LAYOUT
-                while( pStartFrm->HasFollow() &&
-                       nChgStart >= pStartFrm->GetFollow()->GetOfst() )
-                    pStartFrm = pStartFrm->GetFollow();
-                SwTxtFrm *pEndFrm = pStartFrm;
-                while( pEndFrm->HasFollow() &&
-                       nChgEnd >= pEndFrm->GetFollow()->GetOfst() )
-                    pEndFrm = pEndFrm->GetFollow();
-#endif
                 if( pEndFrm != pStartFrm )
                 {
                     bSameFrame = FALSE;
                     SwRect aStFrm( pStartFrm->PaintArea() );
-#ifdef VERTICAL_LAYOUT
                     {
                         SWRECTFN( pStartFrm )
                         (aTmp.*fnRect->fnSetLeft)( (aStFrm.*fnRect->fnGetLeft)() );
@@ -1132,15 +1106,6 @@ SwRect SwTxtFrm::_AutoSpell( SwCntntNode* pActNode, xub_StrLen nActPos )
                         (aRect.*fnRect->fnSetLeft)( (aStFrm.*fnRect->fnGetLeft)() );
                         (aRect.*fnRect->fnSetRight)( (aStFrm.*fnRect->fnGetRight)() );
                     }
-#else
-                    aTmp.Left( aStFrm.Left() );
-                    aTmp.Right( aStFrm.Right() );
-                    aTmp.Bottom( aStFrm.Bottom() );
-                    aStFrm = pEndFrm->PaintArea();
-                    aRect.Top( aStFrm.Top() );
-                    aRect.Left( aStFrm.Left() );
-                    aRect.Right( aStFrm.Right() );
-#endif
                     aRect.Union( aTmp );
                     while( TRUE )
                     {
@@ -1153,7 +1118,6 @@ SwRect SwTxtFrm::_AutoSpell( SwCntntNode* pActNode, xub_StrLen nActPos )
             }
             if( bSameFrame )
             {
-#ifdef VERTICAL_LAYOUT
                 SWRECTFN( pStartFrm )
                 if( (aTmp.*fnRect->fnGetTop)() == (aRect.*fnRect->fnGetTop)() )
                     (aRect.*fnRect->fnSetLeft)( (aTmp.*fnRect->fnGetLeft)() );
@@ -1164,18 +1128,6 @@ SwRect SwTxtFrm::_AutoSpell( SwCntntNode* pActNode, xub_StrLen nActPos )
                     (aRect.*fnRect->fnSetRight)( (aStFrm.*fnRect->fnGetRight)() );
                     (aRect.*fnRect->fnSetTop)( (aTmp.*fnRect->fnGetTop)() );
                 }
-#else
-
-                if( aTmp.Top() == aRect.Top() )
-                    aRect.Left( aTmp.Left() );
-                else
-                {
-                    SwRect aStFrm( pStartFrm->PaintArea() );
-                    aRect.Left( aStFrm.Left() );
-                    aRect.Right( aStFrm.Right() );
-                    aRect.Top( aTmp.Top() );
-                }
-#endif
 
                 if( aTmp.Height() > aRect.Height() )
                     aRect.Height( aTmp.Height() );
