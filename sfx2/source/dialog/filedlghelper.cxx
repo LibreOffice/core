@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filedlghelper.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: mba $ $Date: 2001-08-24 07:41:52 $
+ *  last change: $Author: dv $ $Date: 2001-08-24 13:58:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -527,7 +527,8 @@ void FileDialogHelper_Impl::enablePasswordBox()
                             aFilterName, 0, SFX_FILTER_NOTINFILEDLG );
 
         BOOL bEnablePasswd = pFilter &&
-                             ( SOFFICE_FILEFORMAT_60 <= pFilter->GetVersion() );
+                             ( SOFFICE_FILEFORMAT_60 <= pFilter->GetVersion() ) &&
+                             pFilter->UsesStorage();
 
         Reference < XFilePickerControlAccess > xCtrlAccess( mxFileDlg, UNO_QUERY );
 
