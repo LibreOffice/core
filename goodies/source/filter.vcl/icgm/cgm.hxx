@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cgm.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sj $ $Date: 2000-12-15 12:24:03 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:56:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,8 +207,8 @@ class CGM
 #endif
         void                ImplComment( sal_uInt32, char* );
         sal_uInt32              GetBackGroundColor();
-        sal_Bool                IsValid() { return (const) mbStatus; };
-        sal_Bool                IsFinished() { return (const) mbIsFinished; };
+        sal_Bool                IsValid() { return mbStatus; };
+        sal_Bool                IsFinished() { return mbIsFinished; };
         sal_Bool                Write( sal_uInt8* pSource );
         sal_Bool                Write( SvStream& rIStm );
 
