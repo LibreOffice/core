@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bookmark.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 20:52:53 $
+ *  last change: $Author: rt $ $Date: 2001-05-10 06:42:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,5 +199,6 @@ String STR_REMOVE_WARNING
     Text[ arabic ] = "ÇáÃÍÑİ ÇáÊÇáíÉ ÛíÑ ÕÇáÍÉ¡ áåĞÇ Êã ÍĞİåÇ: ";
     Text[ turkish ] = "Aşağıdaki karakterler geçerli değiller ve bu nedenle çıkartıldılar: ";
     Text[ catalan ] = "Los siguientes caracteres han sido eliminados porque no se permiten:  ";
+    Text[ finnish ] = "Seuraavat merkit eivät ole kelvollisia ja ne poistettiin: ";
 };
 
