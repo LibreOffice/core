@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxitems.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-06 14:19:20 $
+ *  last change: $Author: kz $ $Date: 2000-12-07 16:01:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -6947,7 +6947,7 @@ String RID_SVXITEMS_KERNING_EXPANDED
     Text[ chinese_traditional ] = "Вк©w ";
     Text[ arabic ] = "гжУЪ";
     Text[ greek ] = "екфефбмЭнб ";
-    Text[ korean ] = "ЖујвµК ";
+    Text[ korean ] = "Жујв ";
     Text[ turkish ] = "Geniю ";
     Text[ language_user1 ] = " ";
 };
@@ -7204,7 +7204,7 @@ String RID_SVXITEMS_EMPHASIS_CIRCLE_STYLE
 {
     Text = "Kreis ";
     Text [ English ] = "Ring " ;
-    Text[ english_us ] = "Ring ";
+    Text[ english_us ] = "Circle ";
     Text[ portuguese ] = "Ring ";
     Text[ russian ] = "Круг ";
     Text[ greek ] = "Кэклпт ";
@@ -7228,7 +7228,7 @@ String RID_SVXITEMS_EMPHASIS_DISC_STYLE
 // ??? disc == filled ring
     Text = "gefьllter Kreis ";
     Text [ English ] = "Filled ring " ;
-    Text[ english_us ] = "Filled ring ";
+    Text[ english_us ] = "Filled circle ";
     Text[ portuguese ] = "Filled ring ";
     Text[ russian ] = "Закрашенный круг ";
     Text[ greek ] = "Кэклпт ме гЭмйумб ";
@@ -7392,7 +7392,7 @@ String RID_SVXITEMS_SCRPTSPC_ON
 {
     Text = "Kein automatischer Zeichenabstand";
     Text [ English ] = "Automatic character distance" ;
-    Text[ english_us ] = "Automatic character distance";
+    Text[ english_us ] = "No automatic character spacing";
     Text[ portuguese ] = "Automatic character distance";
     Text[ russian ] = "Без автоматического интервала между знаками";
     Text[ greek ] = "ЧщсЯт бхфьмбфз брьуфбуз чбсбкфЮсщн";
