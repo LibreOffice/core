@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AppIconControl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-22 12:00:53 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:07:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,7 +139,7 @@ sal_Int8 OApplicationIconControl::AcceptDrop( const AcceptDropEvent& _rEvt )
         if ( pEntry )
         {
             SetCursor(pEntry);
-            nDropOption = _rEvt.mnAction & m_pActionListener->queryDrop( _rEvt, GetDataFlavorExVector() );
+            nDropOption = m_pActionListener->queryDrop( _rEvt, GetDataFlavorExVector() );
             m_aMousePos = _rEvt.maPosPixel;
         }
     }
