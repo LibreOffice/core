@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pptin.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-09 13:21:15 $
+ *  last change: $Author: kz $ $Date: 2003-12-09 16:35:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2424,7 +2424,7 @@ SdrObject* ImplSdPPTImport::ApplyTextObj( PPTTextObj* pTextObj, SdrTextObj* pObj
                 aTempAttr.Put( aMinHeight );
                 SdrTextAutoGrowHeightItem aAutoGrowHeight( FALSE );
                 aTempAttr.Put( aAutoGrowHeight );
-                pText->SetItemSet(aTempAttr);
+                pText->SetMergedItemSet(aTempAttr);
             }
             else
             {
