@@ -2,9 +2,9 @@
  *
  *  $RCSfile: disposetimer.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: lla $ $Date: 2001-01-26 07:51:57 $
+ *  last change: $Author: lla $ $Date: 2001-01-29 13:02:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -436,7 +436,7 @@ void OTreeCacheWriteScheduler::runDisposer()
 
     for (CacheWriteList::iterator it = m_aWriteList.begin();
          it != m_aWriteList.end();
-         ++it)
+         )
     {
         vos::ORef< OOptions > xTaskOption = *it;
         if (xTaskOption.isValid())
@@ -446,10 +446,13 @@ void OTreeCacheWriteScheduler::runDisposer()
             {
                 it = m_aWriteList.erase(it);
             }
+            else
+                ++it;
         }
         else
         {
             CFG_TRACE_WARNING_NI("runDisposer: TaskOption not valid");
+            it = m_aWriteList.erase(it);
         }
     }
     // m_aWriteList.clear();
