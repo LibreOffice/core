@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unostyle.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: mtg $ $Date: 2001-10-11 18:50:13 $
+ *  last change: $Author: mtg $ $Date: 2001-10-16 12:16:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,6 +193,9 @@
 #endif
 #ifndef _SFX_PRINTER_HXX
 #include <sfx2/printer.hxx>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPPP_
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
 
 #define STYLE_FAMILY_COUNT 5            // wir habe fuenf Familien
@@ -2275,6 +2278,9 @@ void SwXStyle::setPropertyToDefault(const OUString& rPropertyName)
                 const SfxItemPropertyMap* pMap = SfxItemPropertyMap::GetByName(
                                                             _pMap, rPropertyName);
 
+                if ( pMap->nFlags & PropertyAttribute::READONLY)
+                    throw RuntimeException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+
                 aSet.InvalidateItem( pMap->nWID);
                 aStyle.SetItemSet(aSet);
             }
@@ -2320,6 +2326,10 @@ Any SwXStyle::getPropertyDefault(const OUString& rPropertyName)
                 const SfxItemPropertyMap* _pMap = aSwMapProvider.GetPropertyMap(nPropSetId);
                 const SfxItemPropertyMap* pMap = SfxItemPropertyMap::GetByName(
                                                             _pMap, sPropName);
+
+                if ( pMap->nFlags & PropertyAttribute::READONLY)
+                    throw RuntimeException ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "Property is read-only: " ) ) + rPropertyName, static_cast < cppu::OWeakObject * > ( this ) );
+
                 const SfxItemSet* pParentSet = aSet.GetParent();
                 if(pParentSet)
                     aRet = aSwMapProvider.GetPropertySet(nPropSetId).
