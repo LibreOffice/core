@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glob.hrc,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 14:03:46 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 10:24:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,7 +168,6 @@
 #define STR_TASKPANEVIEWSHELL                   RID_GLOB_START+107
 #define STR_MASTERPAGESSELECTOR                 RID_GLOB_START+108
 #define STR_TASKPANELAYOUTMENU                  RID_GLOB_START+109
-
+#define STR_MEDIAOBJECTBARSHELL                 RID_GLOB_START+110
 #define RID_CUSTOMANIMATION_START               RID_GLOB_START+120
 #define RID_CUSTOMANIMATION_END                 RID_GLOB_START+220
-
