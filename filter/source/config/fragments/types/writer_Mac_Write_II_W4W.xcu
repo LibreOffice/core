@@ -6,7 +6,7 @@
         <prop oor:name="Preferred"><value>false</value></prop>
         <prop oor:name="PreferredFilter"><value>Mac Write II (W4W)</value></prop>
         <prop oor:name="UIName">
-            <value xml:lang="en-US">Mac Write II</value>
+            <value>Mac Write II</value>
         </prop>
         <prop oor:name="ClipboardFormat"/>
     </node>
