@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin4.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: dr $ $Date: 2002-07-29 14:18:04 $
+ *  last change: $Author: nn $ $Date: 2002-08-21 10:12:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1661,6 +1661,15 @@ void ScGridWindow::DataChanged( const DataChangedEvent& rDCEvt )
 
                 //  RepeatResize in case scroll bar sizes have changed
                 pView->RepeatResize();
+
+                //  invalidate cell attribs in input handler, in case the
+                //  EditEngine BackgroundColor has to be changed
+                if ( pViewData->IsActive() )
+                {
+                    ScInputHandler* pHdl = SC_MOD()->GetInputHdl();
+                    if (pHdl)
+                        pHdl->ForgetLastPattern();
+                }
             }
         }
 

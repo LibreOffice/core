@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputhdl.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: nn $ $Date: 2002-08-16 17:37:32 $
+ *  last change: $Author: nn $ $Date: 2002-08-21 10:10:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,7 @@
 #include <svx/algitem.hxx>
 #include <svx/adjitem.hxx>
 #include <svx/brshitem.hxx>
+#include <svx/colorcfg.hxx>
 #include <svx/colritem.hxx>
 #include <svx/editobj.hxx>
 #include <svx/editstat.hxx>
@@ -1521,10 +1522,14 @@ BOOL ScInputHandler::StartTable( sal_Unicode cTyped, BOOL bFromCommand )
                     pLastPattern = pPattern;
                     bLastIsSymbol = pPattern->IsSymbolFont();
 
-                    //  Background color must be known for automatic font color
+                    //  Background color must be known for automatic font color.
+                    //  For transparent cell background, the document background color must be used.
 
-                    pEngine->SetBackgroundColor( ((const SvxBrushItem&)
-                                    pPattern->GetItem( ATTR_BACKGROUND )).GetColor() );
+                    Color aBackCol = ((const SvxBrushItem&)
+                                    pPattern->GetItem( ATTR_BACKGROUND )).GetColor();
+                    if ( aBackCol.GetTransparency() > 0 )
+                        aBackCol.SetColor( SC_MOD()->GetColorConfig().GetColorValue(svx::DOCCOLOR).nColor );
+                    pEngine->SetBackgroundColor( aBackCol );
 
                     //  Ausrichtung
 

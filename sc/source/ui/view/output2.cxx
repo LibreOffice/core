@@ -2,9 +2,9 @@
  *
  *  $RCSfile: output2.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: nn $ $Date: 2002-05-06 16:53:04 $
+ *  last change: $Author: nn $ $Date: 2002-08-21 10:12:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,7 @@
 #include <svx/adjitem.hxx>
 #include <svx/algitem.hxx>
 #include <svx/brshitem.hxx>
+#include <svx/colorcfg.hxx>
 #include <svx/colritem.hxx>
 #include <svx/editstat.hxx>
 #include <svx/fhgtitem.hxx>
@@ -98,6 +99,7 @@
 #include "cellform.hxx"
 #include "editutil.hxx"
 #include "progress.hxx"
+#include "scmod.hxx"
 
             //! Autofilter-Breite mit column.cxx zusammenfassen
 #define DROPDOWN_BITMAP_SIZE        17
@@ -1897,8 +1899,12 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic)
                                     bHyphenatorSet = TRUE;
                                 }
 
-                                pEngine->SetBackgroundColor( ((const SvxBrushItem&)
-                                    pPattern->GetItem( ATTR_BACKGROUND, pCondSet )).GetColor() );
+                                Color aBackCol = ((const SvxBrushItem&)
+                                    pPattern->GetItem( ATTR_BACKGROUND, pCondSet )).GetColor();
+                                if ( bUseStyleColor && aBackCol.GetTransparency() > 0 )
+                                    aBackCol.SetColor( SC_MOD()->GetColorConfig().
+                                                        GetColorValue(svx::DOCCOLOR).nColor );
+                                pEngine->SetBackgroundColor( aBackCol );
                             }
 
                             //  horizontal alignment now may depend on cell content
@@ -2665,8 +2671,12 @@ void ScOutputData::DrawRotated(BOOL bPixelToLogic)
                                     bHyphenatorSet = TRUE;
                                 }
 
-                                pEngine->SetBackgroundColor( ((const SvxBrushItem&)
-                                    pPattern->GetItem( ATTR_BACKGROUND, pCondSet )).GetColor() );
+                                Color aBackCol = ((const SvxBrushItem&)
+                                    pPattern->GetItem( ATTR_BACKGROUND, pCondSet )).GetColor();
+                                if ( bUseStyleColor && aBackCol.GetTransparency() > 0 )
+                                    aBackCol.SetColor( SC_MOD()->GetColorConfig().
+                                                        GetColorValue(svx::DOCCOLOR).nColor );
+                                pEngine->SetBackgroundColor( aBackCol );
                             }
 
                             //  Raender
