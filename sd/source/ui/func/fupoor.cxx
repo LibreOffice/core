@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fupoor.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: aw $ $Date: 2002-03-01 10:02:14 $
+ *  last change: $Author: aw $ $Date: 2002-03-04 17:47:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -612,8 +612,43 @@ BOOL FuPoor::KeyInput(const KeyEvent& rKEvt)
 
                     if(0L == pHdl)
                     {
+                        // #90129# restrict movement to WorkArea
+                        const Rectangle& rWorkArea = pView->GetWorkArea();
+
+                        if(!rWorkArea.IsEmpty())
+                        {
+                            Rectangle aMarkRect(pView->GetMarkedObjRect());
+                            aMarkRect.Move(nX, nY);
+
+                            if(!aMarkRect.IsInside(rWorkArea))
+                            {
+                                if(aMarkRect.Left() < rWorkArea.Left())
+                                {
+                                    nX += rWorkArea.Left() - aMarkRect.Left();
+                                }
+
+                                if(aMarkRect.Right() > rWorkArea.Right())
+                                {
+                                    nX -= aMarkRect.Right() - rWorkArea.Right();
+                                }
+
+                                if(aMarkRect.Top() < rWorkArea.Top())
+                                {
+                                    nY += rWorkArea.Top() - aMarkRect.Top();
+                                }
+
+                                if(aMarkRect.Bottom() > rWorkArea.Bottom())
+                                {
+                                    nY -= aMarkRect.Bottom() - rWorkArea.Bottom();
+                                }
+                            }
+                        }
+
                         // no handle selected
-                        pView->MoveAllMarked(Size(nX, nY));
+                        if(0 != nX || 0 != nY)
+                        {
+                            pView->MoveAllMarked(Size(nX, nY));
+                        }
                     }
                     else
                     {
