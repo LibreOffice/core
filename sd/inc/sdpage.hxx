@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpage.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 15:42:50 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 14:54:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,6 @@ class SdPageLink;
 class StarBASIC;
 class SfxItemSet;
 struct StyleRequestData;
-struct SdrPaintProcRec;
 class SdPage;
 
 enum PresObjKind
@@ -354,12 +353,15 @@ public:
 
     sd::HeaderFooterSettings& getHeaderFooterSettings();
 
-    /** this method returns true if the object from the SdrPaintProcRec should
+    /** this method returns true if the object from the ViewObjectContact should
         be visible on this page while rendering.
         bEdit selects if visibility test is for an editing view or a final render,
         like printing.
     */
-    virtual bool checkVisibility( SdrPaintProcRec* pRecord, bool bEdit );
+    virtual bool checkVisibility(
+        ::sdr::contact::ViewObjectContact& rOriginal,
+        ::sdr::contact::DisplayInfo& rDisplayInfo,
+        bool bEdit );
 };
 
 #endif     // _SDPAGE_HXX
