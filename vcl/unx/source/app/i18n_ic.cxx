@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_ic.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 14:31:23 $
+ *  last change: $Author: vg $ $Date: 2003-07-02 13:40:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -487,6 +487,8 @@ SalI18N_InputContext::Map( SalFrame *pFrame )
                                   XNSwitchIMNotifyCallback, &maSwitchIMCallback,
                                   NULL );
             }
+            if( ! mpFocusFrame )
+                SetICFocus( pFrame );
         }
     }
 }
