@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: deliver.pl,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: hr $ $Date: 2001-06-12 08:55:05 $
+#   last change: $Author: hr $ $Date: 2001-08-02 11:03:24 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,7 +77,7 @@ use File::Path;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.11 $ ';
+$id_str = ' $Revision: 1.12 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -108,6 +108,7 @@ $dest               = 0;            # optional destination path
 @action_data        = ();           # LoL with all action data
 @macros             = ();           # d.lst macros
 @hedabu_list        = ();           # files which have to be filtered through hedabu
+@zip_list           = ();           # files which have to be zipped
 
 $files_copied       = 0;            # statistics
 $files_unchanged    = 0;            # statistics
@@ -115,6 +116,7 @@ $files_unchanged    = 0;            # statistics
 $opt_force          = 0;            # option force copy
 $opt_minor          = 0;            # option deliver in minor
 $opt_check          = 0;            # do actually execute any action
+$opt_zip            = 0;            # create an additional zip file
 
 $has_symlinks       = 0;            # system supports symlinks
 
@@ -130,6 +132,7 @@ push_default_actions();
 parse_dlst();
 walk_action_data();
 walk_hedabu_list();
+zip_files() if $opt_zip;
 print_stats();
 
 exit(0);
@@ -234,6 +237,9 @@ sub do_linklib {
                 if ( !symlink("$lib", "$symlib") ) {
                     print_error("can't symlink $lib -> $symlib: $!",0);
                 }
+                else {
+                    push_on_ziplist($symlib) if $opt_zip;
+                }
             }
         }
     }
@@ -265,15 +271,21 @@ sub do_touch {
 sub parse_options {
     my $arg;
     while ( $arg = shift @ARGV ) {
-        $arg =~ /^-force$/ and $opt_force = 1 and next;
-        $arg =~ /^-minor$/ and $opt_minor = 1 and next;
-        $arg =~ /^-check$/ and $opt_check = 1 and next;
+        $arg =~ /^-force$/  and $opt_force  = 1 and next;
+        $arg =~ /^-minor$/  and $opt_minor  = 1 and next;
+        $arg =~ /^-check$/  and $opt_check  = 1 and next;
+        $arg =~ /^-zip$/    and $opt_zip    = 1 and next;
         print_error("invalid option $arg") if ( $arg =~ /-/ );
         if ( $arg =~ /-/ || $#ARGV > -1 ) {
             usage();
             exit(1);
         }
         $dest = $arg;
+    }
+    # $dest and $opt_zip are mutually exclusive
+    if ( $dest and $opt_zip ) {
+        usage();
+        exit(1);
     }
 }
 
@@ -492,6 +504,7 @@ sub copy_if_newer {
         if ( $rc) {
             utime($$from_stat_ref[9], $$from_stat_ref[9], $to);
             fix_file_permissions($$from_stat_ref[2], $to);
+            push_on_ziplist($to) if $opt_zip;
             return 1;
         }
         else {
@@ -589,8 +602,9 @@ sub push_default_actions {
                     'lib',
                     'rdb',
                     'res',
-                    'xml'
+                    'xml',
                 );
+    push(@subdirs, 'zip') if $opt_zip;
 
     # create all the subdirectories on solver
     foreach $subdir (@subdirs) {
@@ -661,11 +675,45 @@ $^W=1;
 
         utime($$from_stat_ref[9], $$from_stat_ref[9], $to);
         fix_file_permissions($$from_stat_ref[2], $to);
+        push_on_ziplist($to) if $opt_zip;
         return 1;
     }
     return 0;
 }
 
+sub push_on_ziplist
+{
+    my $file = shift;
+    # strip $dest from path since we don't want to record it in zip file
+    $file =~ s#^$dest/##o;
+    if ( $opt_minor ){
+        # strip extension from path if delivering in minor
+        my $ext = "%_EXT%";
+        $ext = expand_macros($ext);
+        $file =~ s#^$ext##o;
+    }
+    push(@zip_list, $file);
+}
+
+sub zip_files
+{
+    my $file;
+    my $zipexe = 'zip';
+    $zipexe .= ' -y' unless  $^O eq 'MSWin32';
+
+    my $zip_file = "%_DEST%/zip%_EXT%/$module.zip";
+    $zip_file = expand_macros($zip_file);
+
+    print "ZIP: updating $zip_file\n";
+    # zip content has to be relative to $dest
+    chdir($dest);
+    open(ZIP, "| $zipexe -q -o -u -@ $zip_file");
+    foreach $file (@zip_list) {
+        print "ZIP: adding $file to $zip_file\n" if $is_debug;
+        print ZIP "$file\n";
+    }
+    close(ZIP)
+}
 
 sub print_error {
     my $message = shift;
@@ -688,10 +736,12 @@ sub print_stats {
 }
 
 sub usage {
-    print STDERR "Usage:\ndeliver [-force] [-minor] [-check] [destination-path]\n";
+    print STDERR "Usage:\ndeliver [-force] [-minor] [-check] [-zip] [destination-path]\n";
     print STDERR "Options:\n  -force\tcopy even if not newer\n";
     print STDERR "  -minor\tdeliver into minor\n";
     print STDERR "  -check\tjust print what would happen, no actual copying of files\n";
+    print STDERR "  -zip  \tcreate additional zip files of delivered content\n";
+    print STDERR "The option -zip and a destination-path are mutually exclusive\n";
 }
 
 # vim: set ts=4 shiftwidth=4 expandtab syntax=perl:
