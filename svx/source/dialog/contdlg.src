@@ -2,9 +2,9 @@
  *
  *  $RCSfile: contdlg.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:11:45 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:33:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -417,7 +417,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text[ japanese ] = "ε¶εΎ΅η‚Ήγ®ζΏε…¥";
                 Text[ chinese_traditional ] = "ζ’ε…¥ζ¥ι»";
                 Text[ arabic ] = "ΕΟΡΗΜ δήΗΨ";
-                Text[ greek ] = "Προσθήκη σημείων";
+                Text[ greek ] = "Εισαγωγή σημείων";
                 Text[ korean ] = "μ  μ‚½μ…";
                 Text[ turkish ] = "Nokta ekle";
                 Text[ language_user1 ] = " ";
@@ -487,7 +487,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text[ japanese ] = "γ‚ªγƒΌγƒθΌªιƒ­";
                 Text[ chinese_traditional ] = "θ‡ªε‹•θΌªε»“";
                 Text[ arabic ] = "ΞΨ ίέΗέν ΚαήΗΖν";
-                Text[ greek ] = "ΑυτοΠερίγραμμα";
+                Text[ greek ] = "Αυτόματο Περίγραμμα";
                 Text[ korean ] = "μλ™ μ¤κ³½";
                 Text[ turkish ] = "Otomatik kontur";
                 Text[ language_user1 ] = " ";
@@ -561,7 +561,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
                 Text[ japanese ] = "γ‚„γ‚η›΄γ— ";
                 Text[ chinese_traditional ] = "ζΆεΎ©ζ’¤ζ¶ζ‡δ»¤";
                 Text[ arabic ] = "ΕΪΗΟΙ ";
-                Text[ greek ] = "Επαναφορά ";
+                Text[ greek ] = "Επανεκτέλεση ";
                 Text[ korean ] = "λ‹¤μ‹ μ‹¤ν–‰";
                 Text[ turkish ] = "Tekrarla";
                 Text[ language_user1 ] = " ";
@@ -627,8 +627,8 @@ FloatingWindow RID_SVXDLG_CONTOUR
         QuickHelpText [ english_us ] = "Color Tolerance" ;
         CustomUnitText [ portuguese ] = "%" ;
         QuickHelpText [ portuguese ] = "Tolerβncia de cor" ;
-        CustomUnitText [ portuguese_brazilian ] = "-" ;
-        QuickHelpText [ portuguese_brazilian ] = "Farbtoleranz" ;
+        CustomUnitText [ portuguese_brazilian ] = "%" ;
+        QuickHelpText [ portuguese_brazilian ] = "Tolerβncia da cor" ;
         CustomUnitText [ swedish ] = "%" ;
         QuickHelpText [ swedish ] = "Fδrgtolerans" ;
         CustomUnitText [ danish ] = "%" ;
@@ -869,6 +869,7 @@ String STR_CONTOURDLG_LINKED
     Text[ slovak ] = "Tento obrΓ΅zok je prepojenΓ½ s dokumentom. Prajete si odpojiΕ¥ obrΓ΅zok, aby ste ho mohli upraviΕ¥?";
 };
 /******************************************************************************/
+
 
 
 
