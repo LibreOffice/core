@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ivctrl.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: gt $ $Date: 2002-05-29 11:50:37 $
+ *  last change: $Author: cl $ $Date: 2002-06-06 14:50:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,8 @@ enum SvxIconChoiceCtrlPositionMode
 class SvxIconChoiceCtrlEntry
 {
     Image aImage;
+    Image aImageHC;
+
     String aText;
     void*  pUserData;
 
@@ -164,10 +166,13 @@ class SvxIconChoiceCtrlEntry
 public:
                             SvxIconChoiceCtrlEntry( USHORT nFlags = 0 );
                             SvxIconChoiceCtrlEntry( const String& rText, const Image& rImage, USHORT nFlags = 0 );
+                            SvxIconChoiceCtrlEntry( const String& rText, const Image& rImage, const Image& rImageHC, USHORT nFlags = 0 );
                             ~SvxIconChoiceCtrlEntry () {}
 
     void                    SetImage ( const Image& rImage ) { aImage = rImage; }
+    void                    SetImageHC ( const Image& rImage ) { aImageHC = rImage; }
     Image                   GetImage () const { return aImage; }
+    Image                   GetImageHC () const { return aImageHC; }
     void                    SetText ( const String& rText ) { aText = rText; }
     String                  GetText () const { return aText; }
     void                    SetUserData ( void* _pUserData ) { pUserData = _pUserData; }
@@ -340,7 +345,13 @@ public:
                                      ULONG nPos = LIST_APPEND,
                                      const Point* pPos = 0,
                                      USHORT nFlags = 0 );
+    SvxIconChoiceCtrlEntry* InsertEntry( const String& rText, const Image& rImage, const Image& rImageHC,
+                                     ULONG nPos = LIST_APPEND,
+                                     const Point* pPos = 0,
+                                     USHORT nFlags = 0 );
+
     void                CreateAutoMnemonics( void );
+
     void                RemoveEntry( SvxIconChoiceCtrlEntry* pEntry );
 
     BOOL                DoKeyInput( const KeyEvent& rKEvt );

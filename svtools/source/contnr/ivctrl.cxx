@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ivctrl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: gt $ $Date: 2002-05-29 11:52:59 $
+ *  last change: $Author: cl $ $Date: 2002-06-06 14:52:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,20 @@ SvxIconChoiceCtrlEntry::SvxIconChoiceCtrlEntry( const String& rText, const Image
 {
     aText = rText;
     aImage = rImage;
+    aImageHC = rImage;
+    pUserData = NULL;
+
+    nFlags = _nFlags;
+    eTextMode = IcnShowTextShort;
+    pblink = 0;
+    pflink = 0;
+}
+
+SvxIconChoiceCtrlEntry::SvxIconChoiceCtrlEntry( const String& rText, const Image& rImage, const Image& rImageHC, USHORT _nFlags )
+{
+    aText = rText;
+    aImage = rImage;
+    aImageHC = rImageHC;
     pUserData = NULL;
 
     nFlags = _nFlags;
@@ -189,6 +203,15 @@ SvxIconChoiceCtrlEntry* SvtIconChoiceCtrl::InsertEntry( const String& rText, con
     return pEntry;
 }
 
+SvxIconChoiceCtrlEntry* SvtIconChoiceCtrl::InsertEntry( const String& rText, const Image& rImage, const Image& rImageHC, ULONG nPos, const Point* pPos, USHORT nFlags  )
+{
+    SvxIconChoiceCtrlEntry* pEntry = new SvxIconChoiceCtrlEntry( rText, rImage, rImageHC, nFlags);
+
+    _pImp->InsertEntry( pEntry, nPos, pPos );
+
+    return pEntry;
+}
+
 BOOL SvtIconChoiceCtrl::EditedEntry( SvxIconChoiceCtrlEntry*, const XubString& rNewText, BOOL bCancelled )
 {
     return TRUE;
@@ -199,7 +222,7 @@ BOOL SvtIconChoiceCtrl::EditingEntry( SvxIconChoiceCtrlEntry* pEntry )
 }
 void SvtIconChoiceCtrl::DrawEntryImage( SvxIconChoiceCtrlEntry* pEntry, const Point& rPos, OutputDevice& rDev )
 {
-    rDev.DrawImage ( rPos, pEntry->GetImage() );
+    rDev.DrawImage ( rPos, GetDisplayBackground().GetColor().IsDark() ? pEntry->GetImageHC() : pEntry->GetImage() );
 }
 String SvtIconChoiceCtrl::GetEntryText( SvxIconChoiceCtrlEntry* pEntry, BOOL bInplaceEdit )
 {
