@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: mt $ $Date: 2002-10-17 12:27:55 $
+ *  last change: $Author: mt $ $Date: 2002-11-04 13:34:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1731,12 +1731,12 @@ void ImpEditEngine::ImpBreakLine( ParaPortion* pParaPortion, EditLine* pLine, Te
     }
     else
     {
-        sal_uInt16 nMinBreakPos = 0;
+        sal_uInt16 nMinBreakPos = pLine->GetStart();
         USHORT nAttrs = pNode->GetCharAttribs().GetAttribs().Count();
         for ( USHORT nAttr = nAttrs; nAttr; )
         {
             EditCharAttrib* pAttr = pNode->GetCharAttribs().GetAttribs()[--nAttr];
-            if ( pAttr->IsFeature() && ( pAttr->GetEnd() <= nMaxBreakPos ) )
+            if ( pAttr->IsFeature() && ( pAttr->GetEnd() > nMinBreakPos ) && ( pAttr->GetEnd() <= nMaxBreakPos ) )
             {
                 nMinBreakPos = pAttr->GetEnd();
                 break;
@@ -1775,8 +1775,8 @@ void ImpEditEngine::ImpBreakLine( ParaPortion* pParaPortion, EditLine* pLine, Te
         }
 
         // #101795# nBreakPos can never be outside the portion, even not with hangig punctuation
-        if ( nBreakPos > nMax )
-            nBreakPos = nMax;
+        if ( nBreakPos > nMaxBreakPos )
+            nBreakPos = nMaxBreakPos;
 
         // BUG in I18N - the japanese dot is in the next line!
         // !!!  Testen!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -1799,19 +1799,19 @@ void ImpEditEngine::ImpBreakLine( ParaPortion* pParaPortion, EditLine* pLine, Te
         // auf mehr als Zwei Zeilen gebrochen wird...
         if ( !bHangingPunctuation && bCanHyphenate && GetHyphenator().is() )
         {
-            // MT: I18N Umstellen auf getWordBoundary !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            i18n::Boundary aBoundary = xBI->getWordBoundary( *pNode, nBreakPos, GetLocale( EditPaM( pNode, nBreakPos ) ), ::com::sun::star::i18n::WordType::DICTIONARY_WORD, sal_True );
+//          sal_uInt16 nWordStart = nBreakPos;
+            sal_uInt16 nBreakPos_OLD = nBreakPos;
             sal_uInt16 nWordStart = nBreakPos;
-            sal_uInt16 nWordEnd = nBreakPos;
-            while ( ( nWordEnd < pNode->Len() ) &&
-                        ( pNode->GetChar( nWordEnd ) != ' ' ) &&
-                        ( !pNode->IsFeature( nWordEnd ) ) )
+            sal_uInt16 nWordEnd = (USHORT) aBoundary.endPos;
+            DBG_ASSERT( nWordEnd > nWordStart, "ImpBreakLine: Start >= End?" );
+
+            USHORT nWordLen = nWordEnd - nWordStart;
+            if ( ( nWordEnd >= nMaxBreakPos ) && ( nWordLen > 3 ) )
             {
-                nWordEnd++;
-            }
-            String aWord( *pNode, nWordStart, nWordEnd - nWordStart );
-            if ( aWord.Len() > 3 )
-            {
-                DBG_ASSERT( nWordEnd >= nMaxBreakPos, "Hyph: Break?" );
+                // #104415# May happen, because getLineBreak may differ from getWordBoudary with DICTIONARY_WORD
+                // DBG_ASSERT( nWordEnd >= nMaxBreakPos, "Hyph: Break?" );
+                String aWord( *pNode, nWordStart, nWordLen );
                 sal_uInt16 nMinTrail = nWordEnd-nMaxBreakPos+1;     //+1: Vor dem angeknacksten Buchstaben
                 Reference< XHyphenatedWord > xHyphWord;
                 if (xHyphenator.is())
