@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-08 15:19:44 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:24:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1730,7 +1730,7 @@ void SwView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                         GetFormShell()->SetView(
                             PTR_CAST(FmFormView, GetWrtShell().GetDrawView()) );
                         SfxBoolItem aItem( SID_FM_DESIGN_MODE, !GetDocShell()->IsReadOnly());
-                        GetDispatcher().Execute( SID_FM_DESIGN_MODE, SFX_CALLMODE_ASYNCHRON,
+                        GetDispatcher().Execute( SID_FM_DESIGN_MODE, SFX_CALLMODE_SYNCHRON,
                                                   &aItem, 0L );
                     }
                 }
