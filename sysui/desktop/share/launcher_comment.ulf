@@ -26,6 +26,7 @@ pt-BR = "%PRODUCTNAME Textdokument"
 th = "%PRODUCTNAME Textdokument"
 hi-IN = "%PRODUCTNAME Textdokument"
 
+sk = "%PRODUCTNAME Textový Dokument"
 [web]
 en = "%PRODUCTNAME HTML Document"
 ru = "%PRODUCTNAME HTML-документ"
@@ -54,6 +55,7 @@ tr = "%PRODUCTNAME HTML Dokument"
 th = "%PRODUCTNAME HTML Dokument"
 hi-IN = "%PRODUCTNAME HTML Dokument"
 
+sk = "%PRODUCTNAME HTML Dokument"
 [impress]
 en = "%PRODUCTNAME Presentation"
 ru = "%PRODUCTNAME Презентация"
@@ -74,14 +76,15 @@ zh-TW = "%PRODUCTNAME 簡報"
 tr = "%PRODUCTNAME Pr?sentation"
 ar = "%PRODUCTNAME Pr?sentation"
 0en = "%PRODUCTNAME Presentation"
-fi = "%PRODUCTNAME Pr�sentation"
+fi = "%PRODUCTNAME Präsentation"
 cs = "%PRODUCTNAME Präsentation"
 he = "%PRODUCTNAME Präsentation"
 0pt = "%PRODUCTNAME Pr�sentation"
-pt-BR = "%PRODUCTNAME Pr�sentation"
+pt-BR = "%PRODUCTNAME Präsentation"
 th = "%PRODUCTNAME Präsentation"
 hi-IN = "%PRODUCTNAME Präsentation"
 
+sk = "Prezentácia %PRODUCTNAME"
 [draw]
 en = "%PRODUCTNAME Drawing"
 ru = "%PRODUCTNAME Рисунок"
@@ -110,6 +113,7 @@ pt-BR = "%PRODUCTNAME Zeichnung"
 th = "%PRODUCTNAME Zeichnung"
 hi-IN = "%PRODUCTNAME Zeichnung"
 
+sk = "Kresba %PRODUCTNAME"
 [calc]
 en = "%PRODUCTNAME Spreadsheet"
 ru = "%PRODUCTNAME Электронная таблица"
@@ -139,6 +143,7 @@ pt-BR = "%PRODUCTNAME Tabelle"
 th = "%PRODUCTNAME Tabelle"
 hi-IN = "%PRODUCTNAME Tabelle"
 
+sk = "Tabuľka %PRODUCTNAME"
 [math]
 en = "%PRODUCTNAME Formula"
 ru = "%PRODUCTNAME Формула"
@@ -166,6 +171,11 @@ ca = "%PRODUCTNAME Formel"
 pt-BR = "%PRODUCTNAME Formel"
 th = "%PRODUCTNAME Formel"
 hi-IN = "%PRODUCTNAME Formel"
+
+sk = "%PRODUCTNAME vzorec"
+
+
+
 
 
 

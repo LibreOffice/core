@@ -25,6 +25,8 @@ pt-BR = "%PRODUCTNAME Drucker Verwaltung"
 tr = "%PRODUCTNAME Drucker Verwaltung"
 th = "%PRODUCTNAME Drucker Verwaltung"
 hi-IN = "%PRODUCTNAME Drucker Verwaltung"
+0ru = "%PRODUCTNAME Drucker Verwaltung"
+sk = "Správa tlačiarní %PRODUCTNAME"
 
 [template]
 en = "%PRODUCTNAME From Template"
@@ -53,6 +55,11 @@ pt-BR = "%PRODUCTNAME Aus Vorlage"
 tr = "%PRODUCTNAME Aus Vorlage"
 th = "%PRODUCTNAME Aus Vorlage"
 hi-IN = "%PRODUCTNAME Aus Vorlage"
+
+sk = "%PRODUCTNAME Zo šablóny"
+
+
+
 
 
 
