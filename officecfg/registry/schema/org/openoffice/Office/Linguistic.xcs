@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Linguistic.xcs,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 13:38:29 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 14:06:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,15 @@
 			<info>
 				<desc>Contains general settings for the linguistic configurations.</desc>
 			</info>
+			<prop oor:name="UILocale" oor:type="xs:string">
+				<!-- OldLocation: NEW -->
+				<!-- UIHints: Tools - Options - General - Language Settings - Languages -->
+				<info>
+					<author>LO</author>
+					<desc>Specifies the UI language. An empty string means: use the desktop's UI language if possible.</desc>
+				</info>
+				<value/>
+			</prop>
 			<prop oor:name="IsIgnoreControlCharacters" oor:type="xs:boolean">
 				<!-- OldLocation: NEW -->
 				<info>
