@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdedtv2.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:24 $
+ *  last change: $Author: aw $ $Date: 2000-09-26 13:12:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1043,6 +1043,10 @@ void SdrEditView::MergeMarkedObjects(SdrMergeMode eMode)
             aMergePolyPolygonB.Merge(FALSE);
             aMergePolyPolygonB.FlipDirections();
             aMergePolyPolygonA.Insert(aMergePolyPolygonB);
+            aMergePolyPolygonA.Merge(FALSE);
+
+            // #72995# one more call to resolve self intersections which
+            // may have been built by substracting (see bug)
             aMergePolyPolygonA.Merge(FALSE);
 
             break;
