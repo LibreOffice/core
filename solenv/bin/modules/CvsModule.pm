@@ -2,9 +2,9 @@
 #
 #   $RCSfile: CvsModule.pm,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: vg $ $Date: 2004-07-27 14:52:51 $
+#   last change: $Author: rt $ $Date: 2004-09-08 11:43:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -319,12 +319,19 @@ sub checkout
 # Returns a list of entries corresponding to the files which have been
 # updated or 'nofilesupdated'.
 # The entries of the returned list have the form [$file, 'U|P|M|C'].
+# Parameters:
+#   1) path with top level diretory to be updated
+#   2) possible CVS tag
+#   3) update options, ie '-dP'
+#   4) if true, then update() will return a second reference with all
+#      unknown files - those which are marked by '?' by CVS.
 sub update
 {
-    my $self    = shift;
-    my $path    = shift;
-    my $tag     = shift;
-    my $options = shift;
+    my $self                   = shift;
+    my $path                   = shift;
+    my $tag                    = shift;
+    my $options                = shift;
+    my $return_unknown_entries = shift || '';
 
 
     my $module  = $self->module();
@@ -345,11 +352,16 @@ sub update
         return "cantchdir";
     }
 
-    my ($dirs_ref, $files_ref) = $self->do_update($tag, $options);
+    my ($dirs_ref, $files_ref, $unknown_ref) = $self->do_update($tag, $options);
 
     # chdir() back
     chdir($saved_cwd);
-    return defined($files_ref) ? $files_ref : 'nofilesupdated';
+    if ( $return_unknown_entries ) {
+        return ($files_ref, $unknown_ref);
+    }
+    else {
+        return defined($files_ref) ? $files_ref : 'nofilesupdated';
+    }
 }
 
 # Find all changed files in a module vs. a specfic tag
@@ -454,6 +466,10 @@ sub tag
     open(TAG, "$cvs_binary tag $force $branch $tag 2>&1 |");
     while(<TAG>) {
         # TODO error checking
+        if ( /\[.* aborted\]: connect to/ ) {
+            carp("ERROR: connection to server failed");
+            return 'connectionfailure';
+        }
         if ( /^cvs server: Tagging (.*)$/ ) {
             print "." if $verbose;
         }
@@ -497,6 +513,10 @@ sub get_aliases_hash {
     my $last_alias = '';
     my $string = '';
     while(<CHECKOUT>) {
+        if ( /\[.* aborted\]: connect to/ ) {
+            carp("ERROR: connection to server failed");
+            return 'connectionfailure';
+        }
         if (/^(\S+)\s+(.+)$/o) {
             $last_alias = $1;
             $string = $2;
@@ -549,6 +569,10 @@ sub do_checkout
     open(CHECKOUT, "$cvs_binary -d $root checkout $tag $options $module 2>&1 |");
     while(<CHECKOUT>) {
         # TODO error checking
+        if ( /\[.* aborted\]: connect to/ ) {
+            carp("ERROR: connection to server failed");
+            return 'connectionfailure';
+        }
         if ( /^cvs server: Updating (.*)$/ ) {
             print "." if $verbose;
             push(@updated_dirs, $1);
@@ -585,6 +609,7 @@ sub do_update
     # do the update
     my @updated_dirs;
     my @updated_files;
+    my @unknown_entries;
     my $verbose = $self->verbose();
     my ($t1, $t0);
     if ( $verbose > 1) {
@@ -595,12 +620,19 @@ sub do_update
     open(UPDATE, "$cvs_binary -z6 update $tag $options 2>&1 |");
     while(<UPDATE>) {
         # TODO error checking
+        if ( /\[.* aborted\]: connect to/ ) {
+            carp("ERROR: connection to server failed");
+            return 'connectionfailure';
+        }
         if ( /^cvs server: Updating (.*)$/ ) {
             print "." if $verbose;
             push(@updated_dirs, $1);
         }
         if ( /^([U|M|P|C]) (.*)$/ ) {
             push(@updated_files, [$2, $1]);
+        }
+        if ( /^\? (.*)$/ ) {
+            push(@unknown_entries, $1);
         }
     }
     close(UPDATE);
@@ -610,7 +642,7 @@ sub do_update
         print "update time: " . timestr(timediff($t1, $t0),'nop') . "\n";
         autoflush STDOUT 0
     }
-    return (\@updated_dirs, \@updated_files);
+    return (\@updated_dirs, \@updated_files, \@unknown_entries);
 }
 
 sub get_root
