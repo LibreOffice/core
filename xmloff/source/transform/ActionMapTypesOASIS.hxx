@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ActionMapTypesOASIS.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 12:28:01 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 10:37:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,7 @@ enum ActionMapTypesOOo
     OASIS_STYLE_ACTIONS = MAX_OASIS_PROP_ACTIONS,
     OASIS_FONT_FACE_ACTIONS,
     OASIS_SHAPE_ACTIONS,
+    OASIS_CONNECTOR_ACTIONS,
     OASIS_INDEX_ENTRY_TAB_STOP_ACTIONS,
     OASIS_TAB_STOP_ACTIONS,
     OASIS_LINENUMBERING_ACTIONS,
