@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpids.h,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 16:31:46 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 14:51:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -275,3 +275,9 @@
 #define HID_SD_SLIDETRANSITIONPANE_PB_PLAY              (HID_SD_START + 170)
 #define HID_SD_SLIDETRANSITIONPANE_PB_SLIDE_SHOW        (HID_SD_START + 171)
 #define HID_SD_SLIDETRANSITIONPANE_CB_AUTO_PREVIEW      (HID_SD_START + 172)
+
+#define HID_SD_TASK_PANE_VIEW_MENU          (HID_SD_START + 173)
+#define HID_SD_TASK_PANE_PREVIEW_CURRENT    (HID_SD_START + 174)
+#define HID_SD_TASK_PANE_PREVIEW_RECENT     (HID_SD_START + 175)
+#define HID_SD_TASK_PANE_PREVIEW_ALL        (HID_SD_START + 176)
+#define HID_SD_TASK_PANE_PREVIEW_LAYOUTS    (HID_SD_START + 177)
