@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: cwsresync.pl,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: vg $ $Date: 2005-01-24 15:07:16 $
+#   last change: $Author: rt $ $Date: 2005-01-25 12:50:38 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -108,7 +108,7 @@ use CwsConfig;
 ( my $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
 my $script_rev;
-my $id_str = ' $Revision: 1.14 $ ';
+my $id_str = ' $Revision: 1.15 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -124,6 +124,7 @@ my %obligatory_modules = ();
 $obligatory_modules{'solenv'}++;
 $obligatory_modules{'default_images'}++;
 $obligatory_modules{'custom_images'}++;
+$obligatory_modules{'postprocess'}++;
 $obligatory_modules{'instset_native'}++;
 $obligatory_modules{'instsetoo_native'}++;
 $obligatory_modules{'smoketest_native'}++;
