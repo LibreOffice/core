@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linkmgr.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-08 21:16:11 $
+ *  last change: $Author: jp $ $Date: 2001-07-05 11:05:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,14 +162,14 @@ BOOL SvxLinkManager::InsertFileLink( so3::SvBaseLink& rLink,
         ( sCmd += ::so3::cTokenSeperator ) += *pFilterNm;
 
     return SvLinkManager::InsertLink( &rLink, nFileType,
-                                    LINKUPDATE_ONCALL, &sCmd );
+                                    so3::LINKUPDATE_ONCALL, &sCmd );
 }
 
 BOOL SvxLinkManager::InsertFileLink( so3::SvBaseLink& rLink )
 {
     if( OBJECT_CLIENT_FILE == ( OBJECT_CLIENT_FILE & rLink.GetObjType() ))
         return SvLinkManager::InsertLink( &rLink, rLink.GetObjType(),
-                                            LINKUPDATE_ONCALL );
+                                            so3::LINKUPDATE_ONCALL );
     return FALSE;
 }
 
@@ -428,7 +428,7 @@ BOOL SvxInternalLink::Connect( so3::SvBaseLink* pLink )
 
             pLink->SetObj( pNewSrc );
             pNewSrc->AddDataAdvise( pLink, aFl.MimeType,
-                                LINKUPDATE_ONCALL == pLink->GetUpdateMode()
+                                so3::LINKUPDATE_ONCALL == pLink->GetUpdateMode()
                                     ? ADVISEMODE_ONLYONCE
                                     : 0 );
         }
