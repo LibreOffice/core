@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtask.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: abi $ $Date: 2001-10-02 07:34:45 $
+ *  last change: $Author: abi $ $Date: 2001-11-19 11:11:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,12 +121,14 @@ TaskManager::endTask( shell * pShell,
 
     sal_Int32 ErrorCode = it->second.getInstalledError();
     sal_Int32 MinorCode = it->second.getMinorErrorCode();
+    bool isHandled = it->second.isHandled();
+
     Reference< XCommandEnvironment > xComEnv = it->second.getCommandEnvironment();
 
     m_aTaskMap.erase( it );
 
     if( ErrorCode != TASKHANDLER_NO_ERROR )
-        throw_handler( pShell,ErrorCode,MinorCode,xComEnv,aUncPath );
+        throw_handler( pShell,ErrorCode,MinorCode,xComEnv,aUncPath,isHandled );
 }
 
 
@@ -156,6 +158,14 @@ bool SAL_CALL TaskManager::isAborted( sal_Int32 CommandId )
         return true;
 }
 
+
+void SAL_CALL TaskManager::clearError( sal_Int32 CommandId )
+{
+    vos::OGuard aGuard( m_aMutex );
+    TaskMap::iterator it = m_aTaskMap.find( CommandId );
+    if( it != m_aTaskMap.end() )
+        it->second.clearError();
+}
 
 
 void SAL_CALL TaskManager::installError( sal_Int32 CommandId,
@@ -214,3 +224,24 @@ TaskManager::getCommandEnvironment( sal_Int32 CommandId )
     else
         return it->second.getCommandEnvironment();
 }
+
+
+void SAL_CALL TaskManager::handleTask( sal_Int32 CommandId,
+                                       const uno::Reference< task::XInteractionRequest >& request )
+{
+    vos::OGuard aGuard( m_aMutex );
+    TaskMap::iterator it = m_aTaskMap.find( CommandId );
+    uno::Reference< task::XInteractionHandler > xInt;
+    if( it != m_aTaskMap.end() )
+    {
+        xInt = it->second.getInteractionHandler();
+        if( xInt.is() )
+            xInt->handle( request );
+        it->second.setHandled();
+    }
+}
+
+
+
+
+

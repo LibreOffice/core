@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: as $ $Date: 2001-07-30 12:47:28 $
+#   last change: $Author: abi $ $Date: 2001-11-19 11:11:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,7 +86,8 @@ SLOFILES=\
     $(SLO)$/filinpstr.obj \
     $(SLO)$/filstr.obj    \
     $(SLO)$/filcmd.obj    \
-    $(SLO)$/filglob.obj
+    $(SLO)$/filglob.obj   \
+    $(SLO)$/filinsreq.obj
 
 LIB1TARGET=$(SLB)$/_$(TARGET).lib
 LIB1OBJFILES=$(SLOFILES)

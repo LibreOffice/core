@@ -346,7 +346,8 @@ namespace fileaccess {
                         sal_Int32 errorCode,
                         sal_Int32 minorCode,
                         const Reference< XCommandEnvironment >& xEnv,
-                        const rtl::OUString& aUncPath )
+                        const rtl::OUString& aUncPath,
+                        bool isHandled )
     {
         Any aAny;
         IOErrorCode ioErrorCode;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtask.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: abi $ $Date: 2001-10-02 07:34:45 $
+ *  last change: $Author: abi $ $Date: 2001-11-19 11:11:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,9 @@
 #ifndef  _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #endif
+#ifndef  _COM_SUN_STAR_TASK_XINTERACTIONREQUEST_HPP_
+#include <com/sun/star/task/XInteractionRequest.hpp>
+#endif
 #ifndef _FILERROR_HXX_
 #include "filerror.hxx"
 #endif
@@ -112,7 +115,7 @@ namespace fileaccess
         {
         private:
 
-            bool m_bAbort;
+            bool m_bAbort,m_bHandled;
             sal_Int32 m_nErrorCode,m_nMinorCode;
             com::sun::star::uno::Reference< com::sun::star::task::XInteractionHandler > m_xInteractionHandler;
             com::sun::star::uno::Reference< com::sun::star::ucb::XProgressHandler >     m_xProgressHandler;
@@ -128,6 +131,7 @@ namespace fileaccess
                   m_xProgressHandler( 0 ),
                   m_xCommandEnvironment( xCommandEnv ),
                   m_bAbort( false ),
+                  m_bHandled( false ),
                   m_nErrorCode( TASKHANDLER_NO_ERROR ),
                   m_nMinorCode( TASKHANDLER_NO_ERROR )
             {
@@ -141,6 +145,22 @@ namespace fileaccess
             bool SAL_CALL isAborted()
             {
                 return m_bAbort;
+            }
+
+            void setHandled()
+            {
+                m_bHandled = true;
+            }
+
+            bool isHandled()
+            {
+                return true;
+            }
+
+            void clearError()
+            {
+                m_nErrorCode = TASKHANDLER_NO_ERROR;
+                m_nMinorCode =  TASKHANDLER_NO_ERROR;
             }
 
             void SAL_CALL installError( sal_Int32 nErrorCode,
@@ -218,6 +238,8 @@ namespace fileaccess
          *  The minor code refines the information given in ErrorCode.
          */
 
+        void SAL_CALL clearError();
+
         void SAL_CALL installError( sal_Int32 CommandId,
                                     sal_Int32 ErrorCode,
                                     sal_Int32 minorCode = TASKHANDLER_NO_ERROR );
@@ -239,7 +261,21 @@ namespace fileaccess
         void SAL_CALL endTask( shell * pShell, // must not be null
                                sal_Int32 CommandId,
                                const rtl::OUString& aUnqPath );
-                                   // the physical URL of the object
+                               // the physical URL of the object
+
+        /**
+         *  Handles an interactionrequest
+         */
+
+        void SAL_CALL handleTask( sal_Int32 CommandId,
+                                  const com::sun::star::uno::Reference< com::sun::star::task::XInteractionRequest >& request );
+
+        /**
+         *  Clears any error which are set on the commandid
+         */
+
+        void SAL_CALL clearError( sal_Int32 );
+
 
         com::sun::star::uno::Reference< com::sun::star::task::XInteractionHandler > SAL_CALL
         getInteractionHandler( sal_Int32 CommandId );

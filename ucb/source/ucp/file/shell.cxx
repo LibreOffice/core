@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: abi $ $Date: 2001-11-16 10:59:24 $
+ *  last change: $Author: abi $ $Date: 2001-11-19 11:11:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1585,9 +1585,13 @@ shell::mkdir( sal_Int32 CommandId,
         case osl::FileBase::E_EXIST:   // Directory cannot be overwritten
         {
             if( ! OverWrite )
+            {
                 installError( CommandId,
                               TASKHANDLING_FOLDER_EXISTS_MKDIR );
-            return sal_False;
+                return sal_False;
+            }
+            else
+                return sal_True;
         }
         case osl::FileBase::E_None:
         {

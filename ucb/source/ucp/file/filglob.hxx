@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filglob.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sb $ $Date: 2001-08-07 13:37:40 $
+ *  last change: $Author: abi $ $Date: 2001-11-19 11:11:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,7 +162,8 @@ namespace fileaccess {
                                sal_Int32 minorCode,
                                const com::sun::star::uno::Reference<
                                com::sun::star::ucb::XCommandEnvironment >& xEnv,
-                               const rtl::OUString& aUncPath );
+                               const rtl::OUString& aUncPath,
+                               bool isHandled = false);
                                    // the physical URL of the object
 
 } // end namespace fileaccess
