@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FieldDescControl.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:52:16 $
+ *  last change: $Author: vg $ $Date: 2003-05-19 12:54:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -258,7 +258,7 @@ OFieldDescControl::OFieldDescControl( Window* pParent, const ResId& rResId, OTab
     ,m_pTypeText(NULL)
     ,m_pAutoIncrementValueText(NULL)
     ,m_pAutoIncrementValue(NULL)
-    ,nPos(-1)
+    ,m_nPos(-1)
     ,aYes(ModuleRes(STR_VALUE_YES))
     ,aNo(ModuleRes(STR_VALUE_NO))
     ,nDelayedGrabFocusEvent(0)
@@ -316,7 +316,7 @@ OFieldDescControl::OFieldDescControl( Window* pParent, OTableDesignHelpBar* pHel
     ,m_pTypeText(NULL)
     ,m_pAutoIncrementValueText(NULL)
     ,m_pAutoIncrementValue(NULL)
-    ,nPos(-1)
+    ,m_nPos(-1)
     ,aYes(ModuleRes(STR_VALUE_YES))
     ,aNo(ModuleRes(STR_VALUE_NO))
     ,nDelayedGrabFocusEvent(0)
@@ -951,13 +951,13 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
     case tpDefault:
         if( pDefault )
             return;
-        nPos++;
+        m_nPos++;
         pDefaultText = new FixedText( this );
         pDefaultText->SetText( ModuleRes(STR_DEFAULT_VALUE) );
         pDefault = new OPropEditCtrl( this, STR_HELP_DEFAULT_VALUE, FIELD_PROPERTY_DEFAULT, WB_BORDER );
         pDefault->SetHelpId(HID_TAB_ENT_DEFAULT);
-        SetPosSize( (Control**)&pDefaultText, nPos, 0 );
-        SetPosSize( (Control**)&pDefault, nPos, 3 );
+        SetPosSize( (Control**)&pDefaultText, m_nPos, 0 );
+        SetPosSize( (Control**)&pDefault, m_nPos, 3 );
 
         pDefault->SetGetFocusHdl(LINK(this, OFieldDescControl, OnControlFocusGot));
         pDefault->SetLoseFocusHdl(LINK(this, OFieldDescControl, OnControlFocusLost));
@@ -968,13 +968,13 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
     case tpAutoIncrementValue:
         if( m_pAutoIncrementValue || !isAutoIncrementValueEnabled() )
             return;
-        nPos++;
+        m_nPos++;
         m_pAutoIncrementValueText = new FixedText( this );
         m_pAutoIncrementValueText->SetText( ModuleRes(STR_AUTOINCREMENT_VALUE) );
         m_pAutoIncrementValue = new OPropEditCtrl( this, STR_HELP_AUTOINCREMENT_VALUE, FIELD_PRPOERTY_AUTOINCREMENT, WB_BORDER );
         m_pAutoIncrementValue->SetHelpId(HID_TAB_AUTOINCREMENTVALUE);
-        SetPosSize( (Control**)&m_pAutoIncrementValueText, nPos, 0 );
-        SetPosSize( (Control**)&m_pAutoIncrementValue, nPos, 3 );
+        SetPosSize( (Control**)&m_pAutoIncrementValueText, m_nPos, 0 );
+        SetPosSize( (Control**)&m_pAutoIncrementValue, m_nPos, 3 );
 
         m_pAutoIncrementValue->SetGetFocusHdl(LINK(this, OFieldDescControl, OnControlFocusGot));
         m_pAutoIncrementValue->SetLoseFocusHdl(LINK(this, OFieldDescControl, OnControlFocusLost));
@@ -992,7 +992,7 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
 
         if(xMetaData.is() && xMetaData->supportsNonNullableColumns())
         {
-            nPos++;
+            m_nPos++;
             pRequiredText = new FixedText( this );
             pRequiredText->SetText( ModuleRes(STR_FIELD_REQUIRED) );
             pRequired = new OPropListBoxCtrl( this, STR_HELP_FIELD_REQUIRED, FIELD_PROPERTY_REQUIRED, WB_DROPDOWN);
@@ -1003,8 +1003,8 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
             pRequired->SelectEntryPos(1);
             pRequired->SetSelectHdl(LINK(this,OFieldDescControl,ChangeHdl));
 
-            SetPosSize( (Control**)&pRequiredText, nPos, 0 );
-            SetPosSize( (Control**)&pRequired, nPos, 2 );
+            SetPosSize( (Control**)&pRequiredText, m_nPos, 0 );
+            SetPosSize( (Control**)&pRequired, m_nPos, 2 );
 
             pRequired->SetGetFocusHdl(LINK(this, OFieldDescControl, OnControlFocusGot));
             pRequired->SetLoseFocusHdl(LINK(this, OFieldDescControl, OnControlFocusLost));
@@ -1018,7 +1018,7 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
     {
         if( pAutoIncrement )
             return;
-        nPos++;
+        m_nPos++;
         pAutoIncrementText = new FixedText( this );
         pAutoIncrementText->SetText( ModuleRes(STR_FIELD_AUTOINCREMENT) );
         pAutoIncrement = new OPropListBoxCtrl( this, STR_HELP_AUTOINCREMENT, FIELD_PROPERTY_AUTOINC, WB_DROPDOWN );
@@ -1029,8 +1029,8 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
         pAutoIncrement->SelectEntryPos(0);
         pAutoIncrement->SetSelectHdl(LINK(this,OFieldDescControl,ChangeHdl));
 
-        SetPosSize( (Control**)&pAutoIncrementText, nPos, 0 );
-        SetPosSize( (Control**)&pAutoIncrement, nPos, 2 );
+        SetPosSize( (Control**)&pAutoIncrementText, m_nPos, 0 );
+        SetPosSize( (Control**)&pAutoIncrement, m_nPos, 2 );
 
         pAutoIncrement->SetGetFocusHdl(LINK(this, OFieldDescControl, OnControlFocusGot));
         pAutoIncrement->SetLoseFocusHdl(LINK(this, OFieldDescControl, OnControlFocusLost));
@@ -1042,7 +1042,7 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
     case tpTextLen:
         if( pTextLen )
             return;
-        nPos++;
+        m_nPos++;
         pTextLenText = new FixedText( this );
         pTextLenText->SetText( ModuleRes(STR_TEXT_LENGTH) );
 
@@ -1053,8 +1053,8 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
         pTextLen->SetStrictFormat(TRUE);
 
         pTextLen->SetHelpId(HID_TAB_ENT_TEXT_LEN);
-        SetPosSize( (Control**)&pTextLenText, nPos, 0 );
-        SetPosSize( (Control**)&pTextLen, nPos, 1 );
+        SetPosSize( (Control**)&pTextLenText, m_nPos, 0 );
+        SetPosSize( (Control**)&pTextLen, m_nPos, 1 );
 
         pTextLen->SetGetFocusHdl(LINK(this, OFieldDescControl, OnControlFocusGot));
         pTextLen->SetLoseFocusHdl(LINK(this, OFieldDescControl, OnControlFocusLost));
@@ -1066,7 +1066,7 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
     case tpType:
         if( m_pType)
             return;
-        nPos++;
+        m_nPos++;
         m_pTypeText = new FixedText( this );
         m_pTypeText->SetText( ModuleRes(STR_TAB_FIELD_DATATYPE) );
         m_pType = new OPropListBoxCtrl( this, STR_HELP_AUTOINCREMENT, FIELD_PRPOERTY_TYPE, WB_DROPDOWN );
@@ -1081,8 +1081,8 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
         m_pType->SelectEntryPos(0);
         m_pType->SetSelectHdl(LINK(this,OFieldDescControl,ChangeHdl));
 
-        SetPosSize( (Control**)&m_pTypeText, nPos, 0 );
-        SetPosSize( (Control**)&m_pType, nPos, 2 );
+        SetPosSize( (Control**)&m_pTypeText, m_nPos, 0 );
+        SetPosSize( (Control**)&m_pType, m_nPos, 2 );
 
         m_pType->SetGetFocusHdl(LINK(this, OFieldDescControl, OnControlFocusGot));
         m_pType->SetLoseFocusHdl(LINK(this, OFieldDescControl, OnControlFocusLost));
@@ -1093,7 +1093,7 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
     case tpColumnName:
         if( m_pColumnName )
             return;
-        nPos++;
+        m_nPos++;
         {
             Reference< XDatabaseMetaData> xMetaData = getMetaData();
             sal_uInt32 nMax = xMetaData.is() ? xMetaData->getMaxColumnNameLength() : EDIT_NOLIMIT;
@@ -1110,8 +1110,8 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
             m_pColumnName->setCheck( isSQL92CheckEnabled(getConnection()) );
         }
 
-        SetPosSize( (Control**)&m_pColumnNameText, nPos, 0 );
-        SetPosSize( (Control**)&m_pColumnName, nPos, 1 );
+        SetPosSize( (Control**)&m_pColumnNameText, m_nPos, 0 );
+        SetPosSize( (Control**)&m_pColumnName, m_nPos, 1 );
 
         m_pColumnName->SetGetFocusHdl(LINK(this, OFieldDescControl, OnControlFocusGot));
         m_pColumnName->SetLoseFocusHdl(LINK(this, OFieldDescControl, OnControlFocusLost));
@@ -1122,7 +1122,7 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
     case tpNumType:
         if( pNumType )
             return;
-        nPos++;
+        m_nPos++;
         pNumTypeText = new FixedText( this );
         pNumTypeText->SetText( ModuleRes(STR_NUMERIC_TYPE) );
 
@@ -1138,8 +1138,8 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
         pNumType->SelectEntryPos(2);
         pNumType->SetSelectHdl(LINK(this,OFieldDescControl,ChangeHdl));
 
-        SetPosSize( (Control**)&pNumTypeText, nPos, 0 );
-        SetPosSize( (Control**)&pNumType, nPos, 1 );
+        SetPosSize( (Control**)&pNumTypeText, m_nPos, 0 );
+        SetPosSize( (Control**)&pNumType, m_nPos, 1 );
 
         pNumType->SetGetFocusHdl(LINK(this, OFieldDescControl, OnControlFocusGot));
         pNumType->SetLoseFocusHdl(LINK(this, OFieldDescControl, OnControlFocusLost));
@@ -1151,7 +1151,7 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
     case tpLength:
         if( pLength )
             return;
-        nPos++;
+        m_nPos++;
         pLengthText = new FixedText( this );
         pLengthText->SetText( ModuleRes(STR_LENGTH) );
 
@@ -1162,8 +1162,8 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
         pLength->SetStrictFormat(TRUE);
 
         pLength->SetHelpId(HID_TAB_ENT_LEN);
-        SetPosSize( (Control**)&pLengthText, nPos, 0 );
-        SetPosSize( (Control**)&pLength, nPos, 1 );
+        SetPosSize( (Control**)&pLengthText, m_nPos, 0 );
+        SetPosSize( (Control**)&pLength, m_nPos, 1 );
 
         pLength->SetGetFocusHdl(LINK(this, OFieldDescControl, OnControlFocusGot));
         pLength->SetLoseFocusHdl(LINK(this, OFieldDescControl, OnControlFocusLost));
@@ -1175,7 +1175,7 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
     case tpScale:
         if( pScale )
             return;
-        nPos++;
+        m_nPos++;
         pScaleText = new FixedText( this );
         pScaleText->SetText( ModuleRes(STR_SCALE) );
         pScale = new OPropNumericEditCtrl( this, STR_HELP_SCALE, FIELD_PROPERTY_SCALE, WB_BORDER );
@@ -1186,8 +1186,8 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
 
         pScale->SetHelpId(HID_TAB_ENT_SCALE);
 
-        SetPosSize( (Control**)&pScaleText, nPos, 0 );
-        SetPosSize( (Control**)&pScale, nPos, 1 );
+        SetPosSize( (Control**)&pScaleText, m_nPos, 0 );
+        SetPosSize( (Control**)&pScale, m_nPos, 1 );
 
         pScale->SetGetFocusHdl(LINK(this, OFieldDescControl, OnControlFocusGot));
         pScale->SetLoseFocusHdl(LINK(this, OFieldDescControl, OnControlFocusLost));
@@ -1199,7 +1199,7 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
     case tpFormat:
         if (!pFormat)
         {
-            nPos++;
+            m_nPos++;
             pFormatText = new FixedText( this );
             pFormatText->SetText( ModuleRes(STR_FORMAT) );
 
@@ -1229,7 +1229,7 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
         if (pBoolDefault)
             return;
 
-        nPos++;
+        m_nPos++;
         pBoolDefaultText = new FixedText(this);
         pBoolDefaultText->SetText(ModuleRes(STR_DEFAULT_VALUE));
         pBoolDefault = new OPropListBoxCtrl( this, STR_HELP_BOOL_DEFAULT, FIELD_PROPERTY_BOOL_DEFAULT, WB_DROPDOWN );
@@ -1238,8 +1238,8 @@ void OFieldDescControl::ActivateAggregate( EControlType eType )
         pBoolDefault->InsertEntry(aYes);
         pBoolDefault->InsertEntry(aNo);
         pBoolDefault->SetHelpId(HID_TAB_ENT_BOOL_DEFAULT);
-        SetPosSize( (Control**)&pBoolDefaultText, nPos, 0 );
-        SetPosSize( (Control**)&pBoolDefault, nPos, 3 );
+        SetPosSize( (Control**)&pBoolDefaultText, m_nPos, 0 );
+        SetPosSize( (Control**)&pBoolDefault, m_nPos, 3 );
 
         pBoolDefault->SetGetFocusHdl(LINK(this, OFieldDescControl, OnControlFocusGot));
         pBoolDefault->SetLoseFocusHdl(LINK(this, OFieldDescControl, OnControlFocusLost));
@@ -1262,7 +1262,7 @@ void OFieldDescControl::DeactivateAggregate( EControlType eType )
     case tpDefault:
         if( !pDefault )
             return;
-        nPos--;
+        m_nPos--;
         pDefault->Hide();
         pDefaultText->Hide();
         delete pDefault;
@@ -1274,7 +1274,7 @@ void OFieldDescControl::DeactivateAggregate( EControlType eType )
     case tpAutoIncrementValue:
         if( !m_pAutoIncrementValue )
             return;
-        nPos--;
+        m_nPos--;
         m_pAutoIncrementValue->Hide();
         m_pAutoIncrementValueText->Hide();
         delete m_pAutoIncrementValue;
@@ -1286,7 +1286,7 @@ void OFieldDescControl::DeactivateAggregate( EControlType eType )
     case tpColumnName:
         if( !m_pColumnName )
             return;
-        nPos--;
+        m_nPos--;
         m_pColumnName->Hide();
         m_pColumnNameText->Hide();
         delete m_pColumnName;
@@ -1298,7 +1298,7 @@ void OFieldDescControl::DeactivateAggregate( EControlType eType )
     case tpType:
         if( !m_pType )
             return;
-        nPos--;
+        m_nPos--;
         m_pType->Hide();
         m_pTypeText->Hide();
         delete m_pType;
@@ -1310,7 +1310,7 @@ void OFieldDescControl::DeactivateAggregate( EControlType eType )
     case tpAutoIncrement:
         if( !pAutoIncrement )
             return;
-        nPos--;
+        m_nPos--;
         pAutoIncrement->Hide();
         pAutoIncrementText->Hide();
         delete pAutoIncrement;
@@ -1322,7 +1322,7 @@ void OFieldDescControl::DeactivateAggregate( EControlType eType )
     case tpRequired:
         if( !pRequired )
             return;
-        nPos--;
+        m_nPos--;
         pRequired->Hide();
         pRequiredText->Hide();
         delete pRequired;
@@ -1334,7 +1334,7 @@ void OFieldDescControl::DeactivateAggregate( EControlType eType )
     case tpTextLen:
         if( !pTextLen )
             return;
-        nPos--;
+        m_nPos--;
         pTextLen->Hide();
         pTextLenText->Hide();
         delete pTextLen;
@@ -1346,7 +1346,7 @@ void OFieldDescControl::DeactivateAggregate( EControlType eType )
     case tpNumType:
         if( !pNumType )
             return;
-        nPos--;
+        m_nPos--;
         pNumType->Hide();
         pNumTypeText->Hide();
         delete pNumType;
@@ -1358,7 +1358,7 @@ void OFieldDescControl::DeactivateAggregate( EControlType eType )
     case tpLength:
         if( !pLength )
             return;
-        nPos--;
+        m_nPos--;
         pLength->Hide();
         pLengthText->Hide();
         delete pLength;
@@ -1370,7 +1370,7 @@ void OFieldDescControl::DeactivateAggregate( EControlType eType )
     case tpScale:
         if( !pScale )
             return;
-        nPos--;
+        m_nPos--;
         pScale->Hide();
         pScaleText->Hide();
         delete pScale;
@@ -1395,7 +1395,7 @@ void OFieldDescControl::DeactivateAggregate( EControlType eType )
     case tpBoolDefault:
         if (!pBoolDefault)
             return;
-        nPos--;
+        m_nPos--;
         pBoolDefault->Hide();
         pBoolDefaultText->Hide();
         delete pBoolDefault;
