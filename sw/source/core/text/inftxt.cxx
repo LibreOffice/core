@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inftxt.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: fme $ $Date: 2002-01-11 14:43:51 $
+ *  last change: $Author: fme $ $Date: 2002-01-17 15:44:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -807,6 +807,112 @@ void lcl_CalcRect( const SwTxtPaintInfo* pInf, const SwLinePortion& rPor,
     }
 }
 
+#ifdef VERTICAL_LAYOUT
+
+/*************************************************************************
+ *                          lcl_DrawSpecial
+ *
+ * Draws a special portion, e.g., line break portion, tab portion
+ * rPor provides values about the portion (Ascent and height),
+ * rRect is the
+ *************************************************************************/
+
+void lcl_DrawSpecial( const SwTxtPaintInfo& rInf, const SwLinePortion& rPor,
+                      SwRect& rRect, sal_Unicode cChar )
+{
+    // pRect is given in absolute coordinates
+    if ( rInf.GetTxtFrm()->IsVertical() )
+        rInf.GetTxtFrm()->SwitchVerticalToHorizontal( rRect );
+
+    const SwFont* pOldFnt = rInf.GetFont();
+    SwFont* pFnt = new SwFont( *pOldFnt );
+
+    ((SwTxtPaintInfo&)rInf).SetFont( pFnt );
+
+    pFnt->SetFamily( FAMILY_DONTKNOW, pOldFnt->GetActual() );
+    pFnt->SetName( XubString::CreateFromAscii( sBulletFntName ),
+                        pOldFnt->GetActual() );
+    pFnt->SetStyleName( aEmptyStr, pOldFnt->GetActual() );
+    pFnt->SetCharSet( RTL_TEXTENCODING_SYMBOL, pOldFnt->GetActual() );
+    pFnt->SetFixKerning( 0 );
+
+    const XubString aTmp( cChar );
+
+    Size aFontSize = rInf.GetTxtSize( aTmp ).SvLSize();
+
+    const USHORT nDir = UnMapDirection( pFnt->GetOrientation(),
+                                        rInf.GetTxtFrm()->IsVertical() );
+
+    SwTwips nMaxWidth;
+    switch ( nDir )
+    {
+    case 0 :
+        nMaxWidth = rRect.Width();
+        break;
+    case 900 :
+    case 2700 :
+        nMaxWidth = rRect.Height();
+        break;
+    default:
+        ASSERT( sal_False, "Unknown direction set at font" )
+        break;
+    }
+
+    // check if char fits into rectangle
+    while ( aFontSize.Width() > nMaxWidth )
+    {
+        SwTwips nFactor = ( 100 * aFontSize.Width() ) / nMaxWidth;
+        const SwTwips nOldWidth = aFontSize.Width();
+
+        // new height for font
+        const BYTE nAct = pFnt->GetActual();
+        aFontSize.Height() = ( 100 * pFnt->GetSize( nAct ).Height() ) / nFactor;
+        aFontSize.Width() = ( 100 * pFnt->GetSize( nAct).Width() ) / nFactor;
+
+        pFnt->SetSize( aFontSize, nAct );
+
+        aFontSize = rInf.GetTxtSize( aTmp ).SvLSize();
+
+        if ( aFontSize.Width() >= nOldWidth )
+            break;
+    }
+
+    const Point& rPos = rInf.GetPos();
+    const Point aOldPos( rInf.GetPos() );
+
+    // adjust values so that tab is vertically centered
+    SwTwips nX;
+    SwTwips nY;
+    switch ( nDir )
+    {
+    case 0 :
+        nX = rPos.X() + ( rRect.Width() - aFontSize.Width() ) / 2;
+        nY = rPos.Y() - rPor.GetAscent() + rInf.GetAscent() +
+             ( rPor.Height() - aFontSize.Height() ) / 2;
+        break;
+    case 900 :
+        nX = rPos.X() - rPor.GetAscent() + rInf.GetAscent() +
+             ( rPor.Height() - aFontSize.Height() ) / 2;
+        nY = rPos.Y() - ( rRect.Height() - aFontSize.Width() ) / 2;
+        break;
+    case 2700 :
+        nX = rPos.X() + rPor.GetAscent() - rInf.GetAscent() -
+             ( rPor.Height() - aFontSize.Height() ) / 2;
+        nY = rPos.Y() + ( rRect.Height() - aFontSize.Width() ) / 2;
+        break;
+    }
+
+    Point aTmpPos( nX, nY );
+    ((SwTxtPaintInfo&)rInf).SetPos( aTmpPos );
+
+    rInf.DrawText( aTmp, rPor );
+    delete pFnt;
+    ((SwTxtPaintInfo&)rInf).SetFont( (SwFont*)pOldFnt );
+    ((SwTxtPaintInfo&)rInf).SetPos( aOldPos );
+}
+
+#endif
+
 /*************************************************************************
  *                     SwTxtPaintInfo::DrawRect()
  *************************************************************************/
@@ -844,40 +950,17 @@ void SwTxtPaintInfo::DrawTab( const SwLinePortion &rPor ) const
         if ( ! aRect.HasArea() )
             return;
 
-#ifndef USE_SYMBOL_FONT_FOR_SPECIAL
 #ifndef PRODUCT
 #ifdef DEBUG
         if( IsOptDbg() )
             pWin->DrawRect( aRect.SVRect() );
 #endif
 #endif
-        pOpt->PaintTab( pWin, aRect );
+
+#ifdef VERTICAL_LAYOUT
+        lcl_DrawSpecial( *this, rPor, aRect, 0x2192 );
 #else
-        SwFont* pOldFnt = pFnt;
-        (SwFont*)pFnt = new SwFont( *pOldFnt );
-
-        pFnt->SetFamily( FAMILY_DONTKNOW, pOldFnt->GetActual() );
-        pFnt->SetName( XubString::CreateFromAscii( sBulletFntName ),
-                            pOldFnt->GetActual() );
-        pFnt->SetStyleName( aEmptyStr, pOldFnt->GetActual() );
-        pFnt->SetCharSet( RTL_TEXTENCODING_SYMBOL, pOldFnt->GetActual() );
-        pFnt->SetFixKerning( 0 );
-
-        const XubString aTmp( 0x2192 );
-        USHORT nWidth = GetTxtSize( aTmp ).Width();
-
-        // does the tab fit into the rectangle?
-        if ( nWidth < aRect.Width() )
-            return;
-
-        Point aOldPos( aPos );
-        ((SwTxtPaintInfo*)this)->SetPos(
-                Point( aPos.X() + ( aRect.Width() - nWidth ) / 2, aPos.Y() ) );
-
-        DrawText( aTmp, rPor );
-        delete pFnt;
-        (SwFont*)pFnt = pOldFnt;
-        ((SwTxtPaintInfo*)this)->SetPos( aOldPos );
+        pOpt->PaintTab( pWin, aRect );
 #endif
     }
 }
@@ -897,9 +980,16 @@ void SwTxtPaintInfo::DrawLineBreak( const SwLinePortion &rPor ) const
 
         lcl_CalcRect( this, rPor, &aRect, 0 );
 
+#ifdef VERTICAL_LAYOUT
+        if( aRect.HasArea() )
+            lcl_DrawSpecial( *this, rPor, aRect, 0x21B5 );
+
+        ((SwLinePortion&)rPor).Width( nOldWidth );
+#else
         ((SwLinePortion&)rPor).Width( nOldWidth );
         if( aRect.HasArea() )
              pOpt->PaintLineBreak( pWin, aRect.SVRect() );
+#endif
     }
 }
 
