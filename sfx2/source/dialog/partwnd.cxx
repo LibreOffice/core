@@ -2,9 +2,9 @@
  *
  *  $RCSfile: partwnd.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mba $ $Date: 2000-12-18 09:01:55 $
+ *  last change: $Author: mba $ $Date: 2000-12-18 09:08:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,8 +150,8 @@ void SfxPartwinFrame_Impl::dispatch_Impl( const ::com::sun::star::util::URL& rUR
     {
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >  xTmp( this );
         SfxApplication* pApp = SFX_APP();
-        pApp->SetChildWindow( SID_PARTWIN, sal_False );
-        pApp->GetBindings().Invalidate( SID_PARTWIN );
+        pApp->SetChildWindow( SID_BROWSER, sal_False );
+        pApp->GetBindings().Invalidate( SID_BROWSER );
     }
 }
 
@@ -175,7 +175,7 @@ SfxFrame* SfxPartwinFrame_Impl::CreateFrame( Window* pParent )
 // SfxPartChildWnd_Impl
 //****************************************************************************
 
-SFX_IMPL_DOCKINGWINDOW( SfxPartChildWnd_Impl, SID_PARTWIN );
+SFX_IMPL_DOCKINGWINDOW( SfxPartChildWnd_Impl, SID_BROWSER );
 
 SfxPartChildWnd_Impl::SfxPartChildWnd_Impl
 (
