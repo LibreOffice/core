@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mba $ $Date: 2000-12-11 18:05:03 $
+ *  last change: $Author: mba $ $Date: 2000-12-13 16:42:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -545,8 +545,6 @@ void SfxViewFrame::ExecReload_Impl( SfxRequest& rReq )
                                         aSet.Put( *pOptions );
                                 }
 
-                                aSet.Put( SfxFrameItem( SID_DOCFRAME, GetFrame() ) );
-                                aSet.Put( SfxStringItem( SID_TARGETNAME, String::CreateFromAscii("_blank") ) );
                                 GetDispatcher()->Execute( SID_OPENDOC, SFX_CALLMODE_ASYNCHRON, aSet );
                                 return;
                             }
