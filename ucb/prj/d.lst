@@ -2,27 +2,34 @@
 ..\%__SRC%\lib\libcached*.* %_DEST%\lib%_EXT%\libcached*.*
 ..\%__SRC%\bin\cached*.map %_DEST%\bin%_EXT%\cached*.map
 ..\%__SRC%\bin\cached*.sym %_DEST%\bin%_EXT%\cached*.sym
+..\%__SRC%\cacher\cached.xml %_DEST%\xml%_EXT%\cached.xml
 
 ..\%__SRC%\bin\srtrs*.dll %_DEST%\bin%_EXT%\srtrs*.dll
 ..\%__SRC%\lib\libsrtrs*.* %_DEST%\lib%_EXT%\libsrtrs*.*
 ..\%__SRC%\bin\srtrs*.map %_DEST%\bin%_EXT%\srtrs*.map
 ..\%__SRC%\bin\srtrs*.sym %_DEST%\bin%_EXT%\srtrs*.sym
+..\%__SRC%\sorter\srtrs.xml %_DEST%\xml%_EXT%\srtrs.xml
 
 ..\%__SRC%\bin\ucb*.dll %_DEST%\bin%_EXT%\ucb*.dll
 ..\%__SRC%\lib\libucb*.* %_DEST%\lib%_EXT%\libucb*.*
 ..\%__SRC%\misc\ucb*.map %_DEST%\bin%_EXT%\ucb*.map
 ..\%__SRC%\misc\ucb*.sym %_DEST%\bin%_EXT%\ucb*.sym
+..\%__SRC%\core\ucb.xml %_DEST%\xml%_EXT%\ucb.xml
 
 ..\%__SRC%\bin\ucp*.dll %_DEST%\bin%_EXT%\ucp*.dll
 ..\%__SRC%\lib\libucp*.so %_DEST%\lib%_EXT%\libucp*.so
 ..\%__SRC%\lib\libucp*.dylib %_DEST%\lib%_EXT%\libucp*.dylib
 ..\%__SRC%\misc\ucp*.map %_DEST%\bin%_EXT%\ucp*.map
 ..\%__SRC%\misc\ucp*.sym %_DEST%\bin%_EXT%\ucp*.sym
+..\%__SRC%\ucp\file\ucpfile.xml %_DEST%\xml%_EXT%\ucpfile.xml
+..\%__SRC%\ucp\hierarchy\ucphier.xml %_DEST%\xml%_EXT%\ucphier.xml
+..\%__SRC%\ucp\package\ucppkg.xml %_DEST%\xml%_EXT%\ucppkg.xml
+..\%__SRC%\ucp\remote\ucprmt.xml %_DEST%\xml%_EXT%\ucprmt.xml
+..\%__SRC%\ucp\webdav\ucpdav.xml %_DEST%\xml%_EXT%\ucpdav.xml
 
 ..\%__SRC%\bin\ucb.exe %_DEST%\bin%_EXT%\ucb.exe
 ..\%__SRC%\bin\ucb %_DEST%\bin%_EXT%\ucb.bin
 ..\%__SRC%\misc\ucb.sh %_DEST%\bin%_EXT%\ucb
-
 
 ..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib%_EXT%\lib*static*.dylib
 ..\%__SRC%\misc\*staticdatamembers.cxx %_DEST%\inc%_EXT%\*staticdatamembers.cxx
@@ -30,3 +37,4 @@
 
 dos: sh -c "if test %OS% = MACOSX; then create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
 dos: sh -c "if test %OS% = MACOSX; then create-libstatic-link %_DEST%\lib%_EXT%; fi"
+>>>>>>> 1.6
