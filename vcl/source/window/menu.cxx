@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: ssa $ $Date: 2002-04-24 14:41:23 $
+ *  last change: $Author: ssa $ $Date: 2002-04-25 12:16:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3700,7 +3700,7 @@ BOOL MenuBarWindow::ImplHandleKeyEvent( const KeyEvent& rKEvent, BOOL bFromMenu 
         }
     }
 
-    if ( nCode == KEY_MENU )
+    if ( nCode == KEY_MENU && !rKEvent.GetKeyCode().IsShift() ) // only F10, not Shift-F10
     {
         mbAutoPopup = FALSE;
         if ( nHighlightedItem == ITEMPOS_INVALID )

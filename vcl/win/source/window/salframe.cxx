@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: ssa $ $Date: 2002-04-22 12:25:34 $
+ *  last change: $Author: ssa $ $Date: 2002-04-25 12:19:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3952,7 +3952,8 @@ static int ImplHandleSysCommand( HWND hWnd, WPARAM wParam, LPARAM lParam )
             // Damit nicht bei Alt+Maustaste auch der MenuBar aktiviert wird
             if ( (GetKeyState( VK_LBUTTON ) & 0x8000) ||
                  (GetKeyState( VK_RBUTTON ) & 0x8000) ||
-                 (GetKeyState( VK_MBUTTON ) & 0x8000) )
+                 (GetKeyState( VK_MBUTTON ) & 0x8000) ||
+                 (GetKeyState( VK_SHIFT )   & 0x8000) )
                 return 1;
 
             SalKeyEvent aKeyEvt;
