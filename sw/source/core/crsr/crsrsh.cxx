@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crsrsh.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-17 16:11:58 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 14:00:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,6 +155,8 @@
 #ifndef _FMTEIRO_HXX //autogen
 #include <fmteiro.hxx>
 #endif
+
+#include <globals.hrc>
 
 using namespace com::sun::star;
 using namespace com::sun::star::util;
@@ -3234,4 +3236,17 @@ void SwCrsrShell::ClearUpCrsrs()
     */
     if (pTblCrsr != NULL && bChanged)
         TblCrsrToCursor();
+}
+
+// #111827#
+String SwCrsrShell::GetCrsrDescr() const
+{
+    String aResult;
+
+    if (IsMultiSelection())
+        aResult += String(SW_RES(STR_MULTISEL));
+    else
+        aResult = GetDoc()->GetPaMDescr(*GetCrsr());
+
+    return aResult;
 }
