@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDrawDocumentView.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: af $ $Date: 2002-06-27 12:46:03 $
+ *  last change: $Author: af $ $Date: 2002-06-28 14:46:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -317,18 +317,6 @@ uno::Reference<XAccessible> SAL_CALL
 
 
 
-//=====  XServiceInfo  ========================================================
-
-::rtl::OUString SAL_CALL
-    AccessibleDrawDocumentView::getImplementationName (void)
-    throw (::com::sun::star::uno::RuntimeException)
-{
-    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AccessibleDrawDocumentView"));
-}
-
-
-
-
 //=====  XEventListener  ======================================================
 
 void SAL_CALL
@@ -402,6 +390,40 @@ void SAL_CALL
         OSL_TRACE ("  unhandled");
     }
     OSL_TRACE ("  done");
+}
+
+
+
+//=====  XServiceInfo  ========================================================
+
+::rtl::OUString SAL_CALL
+    AccessibleDrawDocumentView::getImplementationName (void)
+    throw (::com::sun::star::uno::RuntimeException)
+{
+    return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+        "AccessibleDrawDocumentView"));
+}
+
+
+
+
+::com::sun::star::uno::Sequence< ::rtl::OUString> SAL_CALL
+    AccessibleDrawDocumentView::getSupportedServiceNames (void)
+    throw (::com::sun::star::uno::RuntimeException)
+{
+    CheckDisposedState ();
+    // Get list of supported service names from base class...
+    uno::Sequence<OUString> aServiceNames =
+        AccessibleDocumentViewBase::getSupportedServiceNames();
+    sal_Int32 nCount (aServiceNames.getLength());
+
+    // ...and add additional names.
+    aServiceNames.realloc (nCount + 1);
+    static const OUString sAdditionalServiceName (RTL_CONSTASCII_USTRINGPARAM(
+        "drafts.com.sun.star.drawing.AccessibleDrawDocumentView"));
+    aServiceNames[nCount] = sAdditionalServiceName;
+
+    return aServiceNames;
 }
 
 

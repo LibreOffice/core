@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePageShape.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: af $ $Date: 2002-06-13 14:33:25 $
+ *  last change: $Author: af $ $Date: 2002-06-28 14:46:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -321,6 +321,16 @@ sal_Int32 SAL_CALL AccessiblePageShape::getBackground (void)
 {
     CheckDisposedState ();
     return ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AccessiblePageShape"));
+}
+
+
+
+
+::com::sun::star::uno::Sequence< ::rtl::OUString> SAL_CALL
+    AccessiblePageShape::getSupportedServiceNames (void)
+    throw (::com::sun::star::uno::RuntimeException)
+{
+    return AccessibleShape::getSupportedServiceNames();
 }
 
 

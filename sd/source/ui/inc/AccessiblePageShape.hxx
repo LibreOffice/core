@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePageShape.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: af $ $Date: 2002-05-23 10:07:04 $
+ *  last change: $Author: af $ $Date: 2002-06-28 14:45:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,11 +180,14 @@ public:
 
     //=====  XServiceInfo  ====================================================
 
-    /** Returns an identifier for the implementation of this object.
-    */
     virtual ::rtl::OUString SAL_CALL
         getImplementationName (void)
         throw (::com::sun::star::uno::RuntimeException);
+
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString> SAL_CALL
+        getSupportedServiceNames (void)
+        throw (::com::sun::star::uno::RuntimeException);
+
 
     //=====  lang::XEventListener  ============================================
 

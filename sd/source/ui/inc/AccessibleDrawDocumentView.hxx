@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDrawDocumentView.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: af $ $Date: 2002-06-12 12:45:46 $
+ *  last change: $Author: af $ $Date: 2002-06-28 14:43:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,14 +113,6 @@ public:
         throw (::com::sun::star::uno::RuntimeException);
 
 
-    //=====  XServiceInfo  ====================================================
-
-    /** Returns an identifier for the implementation of this object.
-    */
-    virtual ::rtl::OUString SAL_CALL
-        getImplementationName (void)
-        throw (::com::sun::star::uno::RuntimeException);
-
     //=====  lang::XEventListener  ============================================
 
     virtual void SAL_CALL
@@ -135,6 +127,17 @@ public:
         throw (::com::sun::star::uno::RuntimeException);
 
 protected:
+
+    //=====  XServiceInfo  ====================================================
+
+    virtual ::rtl::OUString SAL_CALL
+        getImplementationName (void)
+        throw (::com::sun::star::uno::RuntimeException);
+
+    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString> SAL_CALL
+        getSupportedServiceNames (void)
+        throw (::com::sun::star::uno::RuntimeException);
+
 
     virtual sal_Bool
         implIsSelected( sal_Int32 nAccessibleChildIndex )
