@@ -2,9 +2,9 @@
  *
  *  $RCSfile: opengl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:57:59 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 17:09:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -198,7 +198,7 @@ typedef void ( __OPENGL_CALL *OGLFncBlendFunc ) ( GLenum sfactor, GLenum dfactor
 
 #define INIT_OGLFNC( FncName ) static OGLFnc##FncName pImplOpenGLFnc##FncName = NULL;
 #define GET_OGLFNC_GL( FncName )                                                    \
-pImplOpenGLFnc##FncName = (OGLFnc##FncName##) mpOGL->GetOGLFnc( "gl" #FncName );    \
+pImplOpenGLFnc##FncName = (OGLFnc##FncName) mpOGL->GetOGLFnc( "gl" #FncName );    \
 if( !pImplOpenGLFnc##FncName ) bRet = FALSE;
 
 // ----------
