@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdundo.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:28 $
+ *  last change: $Author: thb $ $Date: 2001-09-17 14:09:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,8 @@ public:
     TYPEINFO();
                    SdUndoAction(SdDrawDocument* pSdDrawDocument)
                               : pDoc(pSdDrawDocument)  {}
+    virtual BOOL   CanRepeat(SfxRepeatTarget& rView) const;
+    virtual void   Repeat(SfxRepeatTarget& rView);
     virtual       ~SdUndoAction()                      {}
     void           SetComment(String& rStr)            { aComment = rStr; }
     virtual String GetComment() const                  { return aComment; }

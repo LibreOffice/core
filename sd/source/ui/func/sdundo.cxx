@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdundo.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:36 $
+ *  last change: $Author: thb $ $Date: 2001-09-17 14:09:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,9 +62,18 @@
 #pragma hdrstop
 
 #include "sdundo.hxx"
+#include <tools/debug.hxx>
 
 TYPEINIT1(SdUndoAction, SfxUndoAction);
 
 
+BOOL SdUndoAction::CanRepeat(SfxRepeatTarget& rView) const
+{
+    // #90102# whole Draw has repeat disabled
+    return FALSE;
+}
 
-
+void SdUndoAction::Repeat(SfxRepeatTarget& rView)
+{
+    DBG_ERROR("Repeat not possible in Draw/Impress");
+}
