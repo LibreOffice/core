@@ -74,9 +74,6 @@ import org.openoffice.xmerge.util.Debug;
 import org.openoffice.xmerge.util.IntArrayList;
 import org.openoffice.xmerge.util.XmlUtil;
 
-import org.openoffice.xmerge.converter.xml.sxc.Format;
-
-
 /**
  *  <p>General spreadsheet implementation of <code>DocumentSerializer</code>
  *  for the {@link
@@ -186,6 +183,23 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
             int len = nodeList.getLength();
 
             for (int i = 0; i < len; i++) {
+                Node searchNode = nodeList.item(i);
+                if (searchNode.getNodeType() == Node.ELEMENT_NODE) {
+
+                    String nodeName = searchNode.getNodeName();
+
+                    if (nodeName.equals(TAG_NAMED_EXPRESSIONS)) {
+
+                        traverseNamedExpressions(searchNode);
+
+                    } else {
+
+                        Debug.log(Debug.TRACE, "Skipping " + XmlUtil.getNodeInfo(searchNode) + " />");
+                    }
+                }
+            }
+
+            for (int i = 0; i < len; i++) {
                 Node child = nodeList.item(i);
 
                 if (child.getNodeType() == Node.ELEMENT_NODE) {
@@ -206,6 +220,84 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
         Debug.log(Debug.TRACE, "</DEBUGLOG>");
     }
 
+
+    /**
+     *  This method traverses the <i>table:table</i> element
+     *  <code>Node</code>.
+     *
+     *  @param  node  A <i>table:table</i> <code>Node</code>.
+     *
+     *  @throws  IOException  If any I/O error occurs.
+     */
+    protected void traverseNamedExpressions(Node node) throws IOException {
+
+        Debug.log(Debug.TRACE, "<NAMED:EXPRESSIONS>");
+
+        // Get table attributes
+        // TODO - extract style from attribute
+
+        NamedNodeMap att = node.getAttributes();
+
+        //String tableName =
+        //    att.getNamedItem(ATTRIBUTE_TABLE_NAME).getNodeValue();
+
+        if (node.hasChildNodes()) {
+
+            NodeList nodeList = node.getChildNodes();
+            int len = nodeList.getLength();
+
+            for (int i = 0; i < len; i++) {
+                Node child = nodeList.item(i);
+
+                if (child.getNodeType() == Node.ELEMENT_NODE) {
+                    String nodeName = child.getNodeName();
+
+                    if (nodeName.equals(TAG_TABLE_NAMED_RANGE)) {
+                        NamedNodeMap cellAtt = child.getAttributes();
+
+                        Node tableNameNode =
+                            cellAtt.getNamedItem(ATTRIBUTE_TABLE_NAME);
+                        Node tableBaseCellAddress =
+                            cellAtt.getNamedItem(ATTRIBUTE_TABLE_BASE_CELL_ADDRESS);
+                        Node tableCellRangeAddress =
+                            cellAtt.getNamedItem(ATTRIBUTE_TABLE_CELL_RANGE_ADDRESS);
+                        Debug.log(Debug.TRACE,"Named-range : " + tableNameNode.getNodeValue());
+                        // Create a named-range name definition
+                        NameDefinition nd = new NameDefinition(tableNameNode.getNodeValue(),
+                                                tableCellRangeAddress.getNodeValue(),
+                                                tableBaseCellAddress.getNodeValue(),
+                                                true,
+                                                false);
+                        encoder.setNameDefinition(nd);
+
+                    } else if (nodeName.equals(TAG_TABLE_NAMED_EXPRESSION)) {
+                        NamedNodeMap cellAtt = child.getAttributes();
+                        Node tableNameNode =
+                            cellAtt.getNamedItem(ATTRIBUTE_TABLE_NAME);
+                        Node tableBaseCellAddress =
+                            cellAtt.getNamedItem(ATTRIBUTE_TABLE_BASE_CELL_ADDRESS);
+                        Node tableExpression=
+                            cellAtt.getNamedItem(ATTRIBUTE_TABLE_EXPRESSION);
+                        Debug.log(Debug.TRACE,"Named-expression: " + tableNameNode.getNodeValue());
+                        // Create a named-range name definition
+                        NameDefinition nd = new NameDefinition(tableNameNode.getNodeValue(),
+                                                tableExpression.getNodeValue(),
+                                                tableBaseCellAddress.getNodeValue(),
+                                                false,
+                                                true);
+                        encoder.setNameDefinition(nd);
+
+                    } else {
+
+                        Debug.log(Debug.TRACE, "<OTHERS " + XmlUtil.getNodeInfo(child) + " />");
+                    }
+                }
+            }
+
+        }
+
+        Debug.log(Debug.TRACE, "</NAMED:EXPRESSIONS>");
+    }
 
     /**
      *  This method traverses the <i>table:table</i> element
@@ -272,7 +364,6 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
 
         Debug.log(Debug.TRACE, "</TABLE>");
     }
-
 
     /**
      *  This method traverses the <i>table:table-row</i> element
@@ -434,7 +525,9 @@ public abstract class SxcDocumentSerializer implements OfficeConstants,
                 fmt.setCategory(CELLTYPE_STRING);
                 Node tableStringValueNode = cellAtt.getNamedItem(ATTRIBUTE_TABLE_STRING_VALUE);
                 Debug.log(Debug.TRACE,"Cell Type String :  " + tableStringValueNode);
-                fmt.setValue(tableStringValueNode.getNodeValue());
+                if(tableStringValueNode != null) {
+                    fmt.setValue(tableStringValueNode.getNodeValue());
+                }
 
             } else if (cellType.equalsIgnoreCase(CELLTYPE_FLOAT)) {
 

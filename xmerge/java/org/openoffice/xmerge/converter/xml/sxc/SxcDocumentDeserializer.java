@@ -60,6 +60,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.Element;
 
 import java.io.IOException;
+import java.util.Enumeration;
 
 import org.openoffice.xmerge.Document;
 import org.openoffice.xmerge.ConvertData;
@@ -67,6 +68,7 @@ import org.openoffice.xmerge.ConvertException;
 import org.openoffice.xmerge.DocumentDeserializer;
 import org.openoffice.xmerge.converter.xml.OfficeConstants;
 import org.openoffice.xmerge.converter.xml.sxc.SxcDocument;
+import org.openoffice.xmerge.converter.xml.sxc.NameDefinition;
 import org.openoffice.xmerge.util.Debug;
 
 /**
@@ -214,30 +216,83 @@ public abstract class SxcDocumentDeserializer implements OfficeConstants,
      */
     protected void decode() throws IOException {
 
-         // Get number of worksheets
+        // Get number of worksheets
         int numSheets = decoder.getNumberOfSheets();
+
+        //  Traverse to the office:body element.
+        //  There should only be one.
+        NodeList list = doc.getElementsByTagName(TAG_OFFICE_BODY);
+        Node node = list.item(0);;
 
         for (int i = 0; i < numSheets; i++) {
 
             // Set the decoder to the correct worksheet
             decoder.setWorksheet(i);
 
-            //  Traverse to the office:body element.
-            //  There should only be one.
-            NodeList list = doc.getElementsByTagName(TAG_OFFICE_BODY);
-
             int len = list.getLength();
 
             if (len > 0) {
-
-                Node node = list.item(0);
 
                 // Process the spreadsheet
                 processTable(node);
             }
         }
+
+        // Add the Defined Name table if there is one
+        Enumeration nameDefinitionTable = decoder.getNameDefinitions();
+        if(nameDefinitionTable.hasMoreElements()) {
+            processNameDefinition(node, nameDefinitionTable);
+        }
+
     }
 
+    /**
+     *  This method process a Name Definition Table and generates a portion
+     *  of the <code>Document</code>.
+     *
+     *  @param  root  The root <code>Node</code> of the
+     *                <code>Document</code> we are building.  This
+     *                <code>Node</code> should be a TAG_OFFICE_BODY
+     *                tag.
+     *
+     *  @throws  IOException  If any I/O error occurs.
+     */
+    protected void processNameDefinition(Node root, Enumeration eNameDefinitions) throws IOException {
+
+        Debug.log(Debug.TRACE, "<NAMED-EXPRESSIONS>");
+
+        Element namedExpressionsElement = (Element) doc.createElement(TAG_NAMED_EXPRESSIONS);
+
+        while(eNameDefinitions.hasMoreElements()) {
+
+            NameDefinition tableEntry = (NameDefinition) eNameDefinitions.nextElement();
+
+            if(tableEntry.isRangeType()) {
+
+                Debug.log(Debug.TRACE, "Found Range Name : " + tableEntry.getName());
+                Element namedRangeElement = (Element) doc.createElement(TAG_TABLE_NAMED_RANGE);
+                namedRangeElement.setAttribute(ATTRIBUTE_TABLE_NAME, tableEntry.getName());
+                namedRangeElement.setAttribute(ATTRIBUTE_TABLE_BASE_CELL_ADDRESS, tableEntry.getBaseCellAddress());
+                namedRangeElement.setAttribute(ATTRIBUTE_TABLE_CELL_RANGE_ADDRESS, tableEntry.getDefinition());
+                namedExpressionsElement.appendChild(namedRangeElement);
+            } else if (tableEntry.isExpressionType()) {
+
+                Debug.log(Debug.TRACE, "Found Expression Name : " + tableEntry.getName());
+                Element namedExpressionElement = (Element) doc.createElement(TAG_TABLE_NAMED_EXPRESSION);
+                namedExpressionElement.setAttribute(ATTRIBUTE_TABLE_NAME, tableEntry.getName());
+                namedExpressionElement.setAttribute(ATTRIBUTE_TABLE_BASE_CELL_ADDRESS,tableEntry.getBaseCellAddress());
+                namedExpressionElement.setAttribute(ATTRIBUTE_TABLE_EXPRESSION, tableEntry.getDefinition());
+                namedExpressionsElement.appendChild(namedExpressionElement);
+            } else {
+
+                Debug.log(Debug.TRACE, "Unknown Name Definition : " + tableEntry.getName());
+            }
+        }
+
+        root.appendChild(namedExpressionsElement);
+
+        Debug.log(Debug.TRACE, "</NAMED-EXPRESSIONS>");
+    }
 
     /**
      *  This method process a WorkSheet and generates a portion
@@ -271,9 +326,7 @@ public abstract class SxcDocumentDeserializer implements OfficeConstants,
         // Append the table element to the root node
         root.appendChild(tableElement);
 
-        Debug.log(Debug.TRACE, "<SheetName>");
-        Debug.log(Debug.TRACE, sheetName);
-        Debug.log(Debug.TRACE, "</SheetName>");
+        Debug.log(Debug.TRACE, "<SheetName>" + sheetName + "</SheetName>");
 
         // Get each cell and add to doc
         processCells(tableElement);
