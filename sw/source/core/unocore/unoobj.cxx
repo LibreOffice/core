@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:41:25 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 15:34:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1125,7 +1125,7 @@ sal_Int64 SAL_CALL SwXTextCursor::getSomething( const uno::Sequence< sal_Int8 >&
     {
             return (sal_Int64)this;
     }
-    return 0;
+    return OTextCursorHelper::getSomething(rId);
 }
 
 /*-- 09.12.98 14:18:12---------------------------------------------------
@@ -1316,13 +1316,13 @@ void SwXTextCursor::gotoRange(const uno::Reference< XTextRange > & xRange, sal_B
 
     uno::Reference<lang::XUnoTunnel> xRangeTunnel( xRange, uno::UNO_QUERY);
     SwXTextRange* pRange = 0;
-    SwXTextCursor* pCursor = 0;
+    OTextCursorHelper* pCursor = 0;
     if(xRangeTunnel.is())
     {
         pRange = (SwXTextRange*)xRangeTunnel->getSomething(
                                 SwXTextRange::getUnoTunnelId());
-        pCursor = (SwXTextCursor*)xRangeTunnel->getSomething(
-                                SwXTextCursor::getUnoTunnelId());
+        pCursor = (OTextCursorHelper*)xRangeTunnel->getSomething(
+                                OTextCursorHelper::getUnoTunnelId());
     }
 
     SwStartNodeType eSearchNodeType = SwNormalStartNode;
@@ -1340,9 +1340,9 @@ void SwXTextCursor::gotoRange(const uno::Reference< XTextRange > & xRange, sal_B
                                             FindSttNodeByType(eSearchNodeType);
 
     const SwNode* pSrcNode = 0;
-    if(pCursor && pCursor->GetCrsr())
+    if(pCursor && pCursor->GetPaM())
     {
-        pSrcNode = pCursor->GetCrsr()->GetNode();
+        pSrcNode = pCursor->GetPaM()->GetNode();
     }
     else if(pRange && pRange->GetBookmark())
     {
@@ -1382,7 +1382,7 @@ void SwXTextCursor::gotoRange(const uno::Reference< XTextRange > & xRange, sal_B
         SwPosition* pParamRight;
         if(pCursor)
         {
-            const SwUnoCrsr* pTmp = pCursor->GetCrsr();
+            const SwPaM* pTmp = pCursor->GetPaM();
             pParamLeft = new SwPosition(*pTmp->GetPoint());
             pParamRight = new SwPosition(pTmp->HasMark() ? *pTmp->GetMark() : *pParamLeft);
         }
@@ -1416,7 +1416,7 @@ void SwXTextCursor::gotoRange(const uno::Reference< XTextRange > & xRange, sal_B
         //der Cursor soll dem uebergebenen Range entsprechen
         if(pCursor)
         {
-            const SwUnoCrsr* pTmp = pCursor->GetCrsr();
+            const SwPaM* pTmp = pCursor->GetPaM();
             *pOwnCursor->GetPoint() = *pTmp->GetPoint();
             if(pTmp->HasMark())
             {
