@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uuid.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-25 10:45:49 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 16:10:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,7 +130,7 @@ static sal_uInt64 getGregorianTime()
 
     nTime = ((sal_uInt64) val.Seconds) *((sal_uInt64)10000000) +
             ((sal_uInt64) val.Nanosec) /100 +
-            (sal_uInt64)(0x01B21DD213814000);
+            (sal_uInt64)SAL_CONST_UINT64(0x01B21DD213814000);
 
     return nTime;
 }
@@ -254,7 +254,7 @@ static void retrieve_v1( const sal_uInt8 *pPredecessorUUID,
                  ((sal_uInt16) uuid.clock_seq_low );
 
     memcpy( pNode, &( uuid.node ) , 6 );
-    *pTime = *pTime & 0x0fffffffffffffff;
+    *pTime = *pTime & SAL_CONST_UINT64(0x0fffffffffffffff);
     *pClockSeq = *pClockSeq & 0x3fff;
 
 }
@@ -267,7 +267,7 @@ static void write_v1( sal_uInt8 *pTargetUUID,
     UUID uuid;
     /*                                1
                             0123456789012345 */
-    nTime     = ( nTime & 0x0fffffffffffffff ) | 0x1000000000000000;
+    nTime     = ( nTime & SAL_CONST_UINT64(0x0fffffffffffffff)) | SAL_CONST_UINT64(0x1000000000000000);
     nClockSeq = ( nClockSeq & 0x3fff ) | 0x8000;
 
     uuid.time_low = (sal_uInt32) ( nTime & 0xffffffff );
