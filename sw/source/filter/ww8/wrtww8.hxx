@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtww8.hxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-04 13:26:44 $
+ *  last change: $Author: hjs $ $Date: 2003-08-18 15:27:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,9 @@
 #endif
 #ifndef _FLYPOS_HXX
 #include <flypos.hxx>
+#endif
+#ifndef _ORNTENUM_HXX
+#include <orntenum.hxx>
 #endif
 #ifndef _MSOCXIMEX_HXX
 #include <svx/msocximex.hxx>
@@ -666,6 +669,10 @@ public:
                                 rtl_TextEncoding eCodeSet );
     bool CollapseScriptsforWordOk(USHORT nScript, USHORT nWhich);
     USHORT DupNumRuleWithLvlStart(const SwNumRule *pRule,BYTE nLvl,USHORT nVal);
+
+    SwTwips CurrentPageWidth(SwTwips &rLeft, SwTwips &rRight) const;
+    bool MiserableRTLGraphicsHack(long &rLeft,  long nWidth,
+        SwHoriOrient eHoriOri, SwRelationOrient eHoriRel, bool bBiDi);
 
     void InsUInt16( UINT16 n )      { SwWW8Writer::InsUInt16( *pO, n ); }
     void InsUInt32( UINT32 n )      { SwWW8Writer::InsUInt32( *pO, n ); }
