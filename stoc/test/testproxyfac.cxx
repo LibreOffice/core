@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testproxyfac.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jbu $ $Date: 2001-06-22 16:21:02 $
+ *  last change: $Author: hr $ $Date: 2002-08-19 14:22:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,7 +196,7 @@ static sal_Bool test_proxyfac( const Reference< XProxyFactory > & xProxyFac )
 #ifdef UNX
 #define REG_PREFIX      "lib"
 #ifdef MACOSX
-#define DLL_POSTFIX     ".dylib.framework"
+#define DLL_POSTFIX     ".dylib"
 #else
 #define DLL_POSTFIX     ".so"
 #endif
