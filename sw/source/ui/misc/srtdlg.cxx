@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srtdlg.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jp $ $Date: 2002-03-21 13:13:35 $
+ *  last change: $Author: ama $ $Date: 2002-05-08 13:30:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -282,7 +282,7 @@ SwSortDlg::SwSortDlg(Window* pParent, SwWrtShell &rShell) :
     if( LANGUAGE_NONE == nLang || LANGUAGE_DONTKNOW == nLang )
         nLang = (USHORT)GetAppLanguage();
 
-    aLangLB.SetLanguageList( LANG_LIST_ALL, TRUE, FALSE );
+    aLangLB.SetLanguageList( LANG_LIST_ALL | LANG_LIST_ONLY_KNOWN, TRUE, FALSE);
     aLangLB.SelectLanguage( nLang );
 
     LanguageHdl( 0 );
@@ -526,111 +526,4 @@ IMPL_LINK( SwSortDlg, LanguageHdl, ListBox*, pLBox )
     }
     return 0;
 }
-
-
-
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.7  2001/06/01 11:04:53  fme
-    Fix #86988#: Redesign of dialogs
-
-    Revision 1.6  2001/04/24 18:11:39  jp
-    use CollatorResource
-
-    Revision 1.5  2001/04/06 08:59:00  jp
-    changes for international (CJK)-sorting
-
-    Revision 1.4  2001/04/04 08:18:54  jp
-    changes for CJK sorting
-
-    Revision 1.3  2000/12/15 14:46:49  os
-    #80953# SortOptions-delimiter: char->sal_Unicode
-
-    Revision 1.2  2000/11/30 11:47:50  jp
-    Bug #80930#: handle the return value correct
-
-    Revision 1.1.1.1  2000/09/18 17:14:45  hr
-    initial import
-
-    Revision 1.58  2000/09/18 16:06:00  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.57  2000/05/26 07:21:31  os
-    old SW Basic API Slots removed
-
-    Revision 1.56  2000/02/11 14:56:48  hr
-    #70473# changes for unicode ( patched by automated patchtool )
-
-    Revision 1.55  1998/09/30 08:29:10  OS
-    #52654# Sortable und SortDescriptor eingebaut, auf- und absteigend fuer jeden Schluessel
-
-
-      Rev 1.54   30 Sep 1998 10:29:10   OS
-   #52654# Sortable und SortDescriptor eingebaut, auf- und absteigend fuer jeden Schluessel
-
-      Rev 1.53   07 Apr 1998 13:04:20   OM
-   #49223 Infobox nicht mit hidden Parent executen
-
-      Rev 1.52   24 Nov 1997 16:47:48   MA
-   includes
-
-      Rev 1.51   21 Nov 1997 13:50:44   OS
-   richtigen Schluesseltext setzen #45697#
-
-      Rev 1.50   03 Nov 1997 13:22:42   MA
-   precomp entfernt
-
-      Rev 1.49   25 Jul 1997 15:39:10   HJS
-   includes
-
-      Rev 1.48   11 Nov 1996 11:05:44   MA
-   ResMgr
-
-      Rev 1.47   24 Oct 1996 13:36:36   JP
-   String Umstellung: [] -> GetChar()
-
-      Rev 1.46   02 Oct 1996 18:29:32   MA
-   Umstellung Enable/Disable
-
-      Rev 1.45   11 Sep 1996 17:23:46   NF
-   add: svxids.hrc
-
-      Rev 1.44   28 Aug 1996 14:12:24   OS
-   includes
-
-      Rev 1.43   26 Jun 1996 15:25:54   OS
-   Aufruf von Dispatcher.Execute an 324 angepasst
-
-      Rev 1.42   25 Jun 1996 18:39:38   HJS
-   includes
-
-      Rev 1.41   07 Jun 1996 14:25:56   OS
-   SelectionType auf SEL_TBL* testen, nicht auf SEL_TXT
-
-      Rev 1.40   06 Feb 1996 15:21:14   JP
-   Link Umstellung 305
-
-      Rev 1.39   24 Nov 1995 16:58:46   OM
-   PCH->PRECOMPILED
-
-      Rev 1.38   13 Nov 1995 10:52:46   OM
-   Neues Seg
-
-      Rev 1.37   13 Nov 1995 10:51:34   OM
-   static entfernt
-
-      Rev 1.36   08 Nov 1995 13:31:48   JP
-   Umstellung zur 301: Change -> Set
-
-      Rev 1.35   24 Oct 1995 17:05:52   OS
-   Sorting recordable und dazu ueber Slot imlementiert
-
-      Rev 1.34   12 Sep 1995 17:30:20   OM
-   Helpbutton eingefuegt
-
-
-------------------------------------------------------------------------*/
-
-
 
