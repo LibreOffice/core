@@ -2,9 +2,9 @@
  *
  *  $RCSfile: step0.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-28 16:09:33 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 11:52:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,10 +250,8 @@ void SbiRuntime::StepPUT()
 // Speichern Objektvariable
 // Nicht-Objekt-Variable fuehren zu Fehlern
 
-void SbiRuntime::StepSET()
+void SbiRuntime::StepSET_Impl( SbxVariableRef& refVal, SbxVariableRef& refVar )
 {
-    SbxVariableRef refVal = PopVar();
-    SbxVariableRef refVar = PopVar();
     // #67733 Typen mit Array-Flag sind auch ok
     SbxDataType eValType = refVal->GetType();
     SbxDataType eVarType = refVar->GetType();
@@ -268,17 +266,13 @@ void SbiRuntime::StepSET()
         SbxBase* pObjVarObj = refVal->GetObject();
         if( pObjVarObj )
         {
-            SbxVariableRef xTypeHolderObj = PTR_CAST(TypeHolderObject,pObjVarObj);
-            if( !xTypeHolderObj )
-            {
-                SbxVariableRef refObjVal = PTR_CAST(SbxObject,pObjVarObj);
+            SbxVariableRef refObjVal = PTR_CAST(SbxObject,pObjVarObj);
 
-                // #67733 Typen mit Array-Flag sind auch ok
-                if( refObjVal )
-                    refVal = refObjVal;
-                else if( !(eValType & SbxARRAY) )
-                    refVal = NULL;
-            }
+            // #67733 Typen mit Array-Flag sind auch ok
+            if( refObjVal )
+                refVal = refObjVal;
+            else if( !(eValType & SbxARRAY) )
+                refVal = NULL;
         }
 
         // #52896 Wenn Uno-Sequences bzw. allgemein Arrays einer als
@@ -310,6 +304,14 @@ void SbiRuntime::StepSET()
                 refVar->SetFlags( n );
         }
     }
+}
+
+void SbiRuntime::StepSET()
+{
+    SbxVariableRef refVal = PopVar();
+    SbxVariableRef refVar = PopVar();
+
+    StepSET_Impl( refVal, refVar );
 }
 
 // JSM 07.10.95
