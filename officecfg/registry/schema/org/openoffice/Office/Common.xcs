@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: as $ $Date: 2002-11-26 11:01:07 $
+ *  last change: $Author: sb $ $Date: 2002-11-26 15:21:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4818,6 +4818,22 @@
 				<author>OS</author>
 				<desc xml:lang="en-US">Contains various language/localization specific settings.</desc>
 			</info>
+			<group oor:name="InputMethod">
+				<info>
+					<author>PL</author>
+					<desc xml:lang="en-US">Contains settings for (language/localization specific) input methods.</desc>
+				</info>
+				<prop oor:name="ShowStatusWindow" oor:type="xs:boolean">
+					<info>
+						<desc xml:lang="en-US">
+							Currently, this entry only controls the behavior of the IIIMP status window on Unix.
+							If true, the status window is always displayed.
+							If false, the status window is never displayed.
+							If nil (the default), the status window is displayed depending on the current locale.
+						</desc>
+					</info>
+				</prop>
+			</group>
 			<group oor:name="CJK">
 				<info>
 					<desc xml:lang="en-US">Contains settings for the Asian languages (Chinese, Japanese, Korean,...) layout.</desc>
