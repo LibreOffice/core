@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLSectionImportContext.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-19 19:19:50 $
+ *  last change: $Author: dvo $ $Date: 2001-03-20 18:53:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,12 +145,14 @@ const sal_Char sAPI_IndexHeaderSection[] = "com.sun.star.text.IndexHeaderSection
 const sal_Char sAPI_IsProtected[] = "IsProtected";
 const sal_Char sAPI_Condition[] = "Condition";
 const sal_Char sAPI_IsVisible[] = "IsVisible";
+const sal_Char sAPI_Password[] = "Password";
 
 enum XMLSectionToken {
     XML_TOK_SECTION_STYLE_NAME,
     XML_TOK_SECTION_NAME,
     XML_TOK_SECTION_CONDITION,
-    XML_TOK_SECTION_DISPLAY
+    XML_TOK_SECTION_DISPLAY,
+    XML_TOK_SECTION_PASSWORD
 };
 
 static __FAR_DATA SvXMLTokenMapEntry aSectionTokenMap[] =
@@ -159,6 +161,7 @@ static __FAR_DATA SvXMLTokenMapEntry aSectionTokenMap[] =
     { XML_NAMESPACE_TEXT, sXML_name, XML_TOK_SECTION_NAME },
     { XML_NAMESPACE_TEXT, sXML_condition, XML_TOK_SECTION_CONDITION },
     { XML_NAMESPACE_TEXT, sXML_display, XML_TOK_SECTION_DISPLAY },
+    { XML_NAMESPACE_TEXT, sXML_password, XML_TOK_SECTION_PASSWORD },
     XML_TOKEN_MAP_END
 };
 
@@ -181,13 +184,15 @@ XMLSectionImportContext::XMLSectionImportContext(
             sAPI_IndexHeaderSection)),
         sCondition(RTL_CONSTASCII_USTRINGPARAM(sAPI_Condition)),
         sIsVisible(RTL_CONSTASCII_USTRINGPARAM(sAPI_IsVisible)),
+        sPassword(RTL_CONSTASCII_USTRINGPARAM(sAPI_Password)),
         sStyleName(),
         sName(),
         sCond(),
         sEmpty(),
         bValid(sal_False),
         bCondOK(sal_False),
-        bIsVisible(sal_True)
+        bIsVisible(sal_True),
+        bSequenceOK(sal_False)
 {
 }
 
@@ -256,6 +261,16 @@ void XMLSectionImportContext::StartElement(
                         aAny <<= sCond;
                         xPropSet->setPropertyValue( sCondition, aAny );
                     }
+                }
+
+                // password (only for regular sections)
+                if (bSequenceOK &&
+                    GetLocalName().equalsAsciiL(sXML_section,
+                                                sizeof(sXML_section)-1))
+                {
+                    Any aAny;
+                    aAny <<= aSequence;
+                    xPropSet->setPropertyValue(sPassword, aAny);
                 }
 
                 // insert marker, <paragraph>, marker; then insert
@@ -337,6 +352,10 @@ void XMLSectionImportContext::ProcessAttributes(
                     bIsVisible = sal_False;
                 }
                 // else: ignore
+                break;
+            case XML_TOK_SECTION_PASSWORD:
+                SvXMLUnitConverter::decodeBase64(aSequence, sAttr);
+                bSequenceOK = sal_True;
                 break;
             default:
                 ; // ignore

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLSectionExport.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dvo $ $Date: 2001-02-20 13:49:45 $
+ *  last change: $Author: dvo $ $Date: 2001-03-20 18:53:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -255,6 +255,7 @@ XMLSectionExport::XMLSectionExport(
         sIndexTitle(RTL_CONSTASCII_USTRINGPARAM(sXML_index_title)),
         sTextSection(RTL_CONSTASCII_USTRINGPARAM("TextSection")),
         sIsGlobalDocumentSection(RTL_CONSTASCII_USTRINGPARAM("IsGlobalDocumentSection")),
+        sPassword(RTL_CONSTASCII_USTRINGPARAM("Password")),
         sEmpty()
 {
 }
@@ -571,6 +572,17 @@ void XMLSectionExport::ExportRegularSectionStart(
     {
         GetExport().AddAttributeASCII(XML_NAMESPACE_TEXT, sXML_display,
                                       pDisplay);
+    }
+
+    // password
+    Sequence<sal_Int8> aPassword;
+    xPropSet->getPropertyValue(sPassword) >>= aPassword;
+    if (aPassword.getLength() > 0)
+    {
+        OUStringBuffer aBuffer;
+        SvXMLUnitConverter::encodeBase64(aBuffer, aPassword);
+        GetExport().AddAttribute(XML_NAMESPACE_TEXT, sXML_password,
+                                 aBuffer.makeStringAndClear());
     }
 
     // export element

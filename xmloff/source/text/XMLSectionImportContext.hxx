@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLSectionImportContext.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dvo $ $Date: 2000-12-02 21:43:40 $
+ *  last change: $Author: dvo $ $Date: 2001-03-20 18:53:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,10 @@
 #include <com/sun/star/uno/Reference.h>
 #endif
 
+#ifndef _COM_SUN_STAR_UNO_SEQUENCE_H_
+#include <com/sun/star/uno/Sequence.h>
+#endif
+
 namespace com { namespace sun { namespace star {
     namespace text { class XTextRange;  }
     namespace beans { class XPropertySet; }
@@ -103,14 +107,17 @@ class XMLSectionImportContext : public SvXMLImportContext
     const ::rtl::OUString sIndexHeaderSection;
     const ::rtl::OUString sCondition;
     const ::rtl::OUString sIsVisible;
+    const ::rtl::OUString sPassword;
     const ::rtl::OUString sEmpty;
 
     ::rtl::OUString sStyleName;
     ::rtl::OUString sName;
     ::rtl::OUString sCond;
+    ::com::sun::star::uno::Sequence<sal_Int8> aSequence;
     sal_Bool bCondOK;
     sal_Bool bIsVisible;
     sal_Bool bValid;
+    sal_Bool bSequenceOK;
 
 public:
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLSectionExport.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dvo $ $Date: 2001-02-20 13:49:46 $
+ *  last change: $Author: dvo $ $Date: 2001-03-20 18:53:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,6 +183,7 @@ class XMLSectionExport
 
     const ::rtl::OUString sTextSection;
     const ::rtl::OUString sIsGlobalDocumentSection;
+    const ::rtl::OUString sPassword;
 
     const ::rtl::OUString sEmpty;
 
