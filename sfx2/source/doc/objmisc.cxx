@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objmisc.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-10 13:31:29 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 13:54:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,6 +188,7 @@ using namespace ::drafts::com::sun::star::script;
 #include "helper.hxx"
 #include "doc.hrc"
 #include "helpid.hrc"
+#include "sfxdlg.hxx"
 
 // class SfxHeaderAttributes_Impl ----------------------------------------
 
@@ -1218,6 +1219,9 @@ ErrCode SfxObjectShell::CallXScript( const String& rScriptURL,
     OSL_TRACE( "in CallXScript" );
     ErrCode nErr = ERRCODE_NONE;
 
+    bool bCaughtException = FALSE;
+    ::com::sun::star::uno::Any aException;
+
     // security check if it's not an application script?
     // or if it's a document script??
     if( rScriptURL.Search( UniString::CreateFromAscii( "location=document" ) )
@@ -1259,26 +1263,48 @@ ErrCode SfxObjectShell::CallXScript( const String& rScriptURL,
         OSL_TRACE( "CallXScript, invoke is finished");
     }
     // Use the errors from basic for the time being
-    catch ( ::com::sun::star::uno::RuntimeException )
+    catch ( ::com::sun::star::uno::RuntimeException& rte )
     {
         OSL_TRACE( "CallXScript: exception rte" );
+
+        aException = makeAny( rte );
+        bCaughtException = TRUE;
         nErr = ERRCODE_BASIC_INTERNAL_ERROR;
     }
-    catch ( ::com::sun::star::lang::IllegalArgumentException )
-    {
-        OSL_TRACE( "CallXScript: exception iae" );
-        nErr = ERRCODE_BASIC_BAD_ARGUMENT;
-    }
-    catch ( ::com::sun::star::script::CannotConvertException )
-    {
-        OSL_TRACE( "CallXScript: exception cce" );
-        nErr = ERRCODE_BASIC_CONVERSION;
-    }
-    catch ( ::com::sun::star::reflection::InvocationTargetException )
+    catch ( provider::ScriptFrameworkErrorException& ite )
     {
         OSL_TRACE( "CallXScript: exception ite" );
+
+        aException = makeAny( ite );
+        bCaughtException = TRUE;
         nErr = ERRCODE_BASIC_INTERNAL_ERROR;
     }
+    catch ( ::com::sun::star::reflection::InvocationTargetException& ite )
+    {
+        OSL_TRACE( "CallXScript: exception ite" );
+
+        aException = makeAny( ite );
+        bCaughtException = TRUE;
+        nErr = ERRCODE_BASIC_INTERNAL_ERROR;
+    }
+
+    if ( bCaughtException )
+    {
+        SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
+
+        if ( pFact != NULL )
+        {
+            VclAbstractDialog* pDlg =
+                pFact->CreateScriptErrorDialog( NULL, aException );
+
+            if ( pDlg != NULL )
+            {
+                pDlg->Execute();
+                delete pDlg;
+            }
+        }
+    }
+
     OSL_TRACE( "leaving CallXScript" );
     return nErr;
 }
