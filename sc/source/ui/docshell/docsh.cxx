@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-11 17:10:37 $
+ *  last change: $Author: sab $ $Date: 2001-05-18 17:06:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -547,6 +547,7 @@ BOOL ScDocShell::LoadXML( SfxMedium* pMedium, SvStorage* pStor )
     sal_Bool bRet(sal_False);
     if (eShellMode != SFX_CREATE_MODE_ORGANIZER)
     {
+        ScColumn::bDoubleAlloc = sal_True;
         bRet = aImport.Import(sal_False);
         UpdateLinks();
         // don't prevent establishing of listeners anymore
@@ -558,6 +559,7 @@ BOOL ScDocShell::LoadXML( SfxMedium* pMedium, SvStorage* pStor )
             if (pChartListener)
                 pChartListener->UpdateDirtyCharts();
         }
+        ScColumn::bDoubleAlloc = sal_False;
     }
     else
     {
