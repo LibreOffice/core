@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TestAcquire.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-08-13 17:21:16 $
+ *  last change: $Author: rt $ $Date: 2004-07-23 14:49:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,10 +61,11 @@
 
 package test.javauno.acquire;
 
+import com.sun.star.bridge.UnoUrlResolver;
 import com.sun.star.bridge.XBridgeFactory;
 import com.sun.star.bridge.XInstanceProvider;
-import com.sun.star.bridge.XUnoUrlResolver;
 import com.sun.star.comp.helper.Bootstrap;
+import com.sun.star.connection.Acceptor;
 import com.sun.star.connection.XAcceptor;
 import com.sun.star.connection.XConnection;
 import com.sun.star.lib.uno.helper.UnoUrl;
@@ -101,12 +102,8 @@ public final class TestAcquire {
     private static void execClient(XComponentContext context, String url)
         throws Exception
     {
-        XUnoUrlResolver resolver = (XUnoUrlResolver) UnoRuntime.queryInterface(
-            XUnoUrlResolver.class,
-            context.getServiceManager().createInstanceWithContext(
-                "com.sun.star.bridge.UnoUrlResolver", context));
         XTest test = (XTest) UnoRuntime.queryInterface(
-            XTest.class, resolver.resolve(url));
+            XTest.class, UnoUrlResolver.create(context).resolve(url));
 
         WaitUnreachable u;
 
@@ -217,21 +214,17 @@ public final class TestAcquire {
     private static void execServer(XComponentContext context, String url)
         throws Exception
     {
-        XBridgeFactory bridgeFactory
-            = (XBridgeFactory) UnoRuntime.queryInterface(
-                XBridgeFactory.class,
-                context.getServiceManager().createInstanceWithContext(
-                    "com.sun.star.bridge.BridgeFactory", context));
-        XAcceptor acceptor = (XAcceptor) UnoRuntime.queryInterface(
-            XAcceptor.class,
+        XAcceptor acceptor = Acceptor.create(context);
+        XBridgeFactory factory = (XBridgeFactory) UnoRuntime.queryInterface(
+            XBridgeFactory.class,
             context.getServiceManager().createInstanceWithContext(
-                "com.sun.star.connection.Acceptor", context));
+                "com.sun.star.bridge.BridgeFactory", context));
         UnoUrl unoUrl = UnoUrl.parseUnoUrl(url);
         System.out.println("Server: Accepting...");
         XConnection connection = acceptor.accept(
             unoUrl.getConnectionAndParametersAsString());
         System.out.println("Server: ...connected...");
-        bridgeFactory.createBridge(
+        factory.createBridge(
             "", unoUrl.getProtocolAndParametersAsString(), connection,
             new Provider());
         System.out.println("Server: ...bridged.");
