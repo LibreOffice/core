@@ -2,9 +2,9 @@
  *
  *  $RCSfile: framework.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: as $ $Date: 2001-02-20 09:58:46 $
+ *  last change: $Author: mt $ $Date: 2001-03-15 11:31:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -306,8 +306,6 @@ void FrameWork::Main()
     {
         // If it was successful - set in as static value in UNOTOOLS!
         setProcessServiceFactory( xGlobalServiceManager );
-        // Initialize toolkit.
-         InitExtVclToolkit();
 
         //---------------------------------------------------------------------------------------------------------
         // b) Create root of ouer frame tree
