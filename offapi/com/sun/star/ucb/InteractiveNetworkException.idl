@@ -2,9 +2,9 @@
  *
  *  $RCSfile: InteractiveNetworkException.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-12-15 11:29:29 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 01:13:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@ module com { module sun { module star { module ucb {
 
     <p> Various meaningful errors are derived from this exception. </p>
 */
-exception InteractiveNetworkException: com::sun::star::task::ClassifiedInteractionRequest
+published exception InteractiveNetworkException: com::sun::star::task::ClassifiedInteractionRequest
 {
 };
 
