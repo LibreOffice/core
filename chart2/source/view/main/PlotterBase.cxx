@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PlotterBase.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: bm $ $Date: 2003-10-06 09:58:34 $
+ *  last change: $Author: iha $ $Date: 2003-11-17 15:29:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,7 @@ void PlotterBase::setTransformationSceneToScreen( const drawing::HomogenMatrix& 
 
 uno::Reference< drawing::XShapes > PlotterBase::createGroupShape(
             const uno::Reference< drawing::XShapes >& xTarget
-            , const ::rtl::OUString& rName )
+            , ::rtl::OUString rName )
 {
     if(!m_xShapeFactory.is())
         return NULL;
