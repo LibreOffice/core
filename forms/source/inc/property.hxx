@@ -2,9 +2,9 @@
  *
  *  $RCSfile: property.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2000-10-24 13:07:20 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 10:58:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,30 +162,30 @@ public:
 
 //------------------------------------------------------------------------------
 #define DECL_PROP_IMPL(varname, type) \
-        pProps[nPos++] = com::sun::star::beans::Property(PROPERTY_##varname, PROPERTY_ID_##varname, ::getCppuType(reinterpret_cast< type* >(NULL)),
+    *pProperties++ = com::sun::star::beans::Property(PROPERTY_##varname, PROPERTY_ID_##varname, ::getCppuType(reinterpret_cast< type* >(NULL)),
 
 //------------------------------------------------------------------------------
 #define DECL_BOOL_PROP_IMPL(varname) \
-pProps[nPos++] = com::sun::star::beans::Property(PROPERTY_##varname, PROPERTY_ID_##varname, ::getBooleanCppuType(),
+    *pProperties++ = com::sun::star::beans::Property(PROPERTY_##varname, PROPERTY_ID_##varname, ::getBooleanCppuType(),
 
 //------------------------------------------------------------------------------
 #define DECL_IFACE_PROP_IMPL(varname, type) \
-pProps[nPos++] = com::sun::star::beans::Property(PROPERTY_##varname, PROPERTY_ID_##varname, ::getCppuType(reinterpret_cast< com::sun::star::uno::Reference< type >* >(NULL)),
+    *pProperties++ = com::sun::star::beans::Property(PROPERTY_##varname, PROPERTY_ID_##varname, ::getCppuType(reinterpret_cast< com::sun::star::uno::Reference< type >* >(NULL)),
 
 //------------------------------------------------------------------------------
-#define BEGIN_AGGREGATION_PROPERTY_HELPER(count, aggregate) \
-    _rProps.realloc(count); \
-        com::sun::star::beans::Property* pProps = _rProps.getArray();       \
-    sal_Int32 nPos = 0; \
+#define BEGIN_DESCRIBE_PROPERTIES( count, baseclass )   \
+    baseclass::fillProperties( _rProps, _rAggregateProps ); \
+    sal_Int32 nOldCount = _rProps.getLength(); \
+    _rProps.realloc( nOldCount + ( count ) );   \
+    ::com::sun::star::beans::Property* pProperties = _rProps.getArray() + nOldCount;       \
+
+//------------------------------------------------------------------------------
+#define BEGIN_DESCRIBE_AGGREGATION_PROPERTIES( count, aggregate )   \
+    _rProps.realloc( count );   \
+    ::com::sun::star::beans::Property* pProperties = _rProps.getArray();       \
     \
     if (aggregate.is()) \
         _rAggregateProps = aggregate->getPropertySetInfo()->getProperties();    \
-
-//------------------------------------------------------------------------------
-#define BEGIN_PROPERTY_ARRAY_HELPER(count)  \
-    staruno::Sequence<starbeans::Property> aProps(count);   \
-    starbeans::Property* pProps = aProps.getArray();    \
-    sal_Int32 nPos = 0; \
 
 // ===
 //------------------------------------------------------------------------------
@@ -243,15 +243,14 @@ pProps[nPos++] = com::sun::star::beans::Property(PROPERTY_##varname, PROPERTY_ID
 #define DECL_BOOL_PROP2(varname, attrib1, attrib2)  \
         DECL_BOOL_PROP_IMPL(varname) com::sun::star::beans::PropertyAttribute::attrib1 | com::sun::star::beans::PropertyAttribute::attrib2)
 
+//------------------------------------------------------------------------------
+#define DECL_BOOL_PROP3( varname, attrib1, attrib2, attrib3 )   \
+        DECL_BOOL_PROP_IMPL(varname) com::sun::star::beans::PropertyAttribute::attrib1 | com::sun::star::beans::PropertyAttribute::attrib2 | com::sun::star::beans::PropertyAttribute::attrib3 )
+
 // ===
 //------------------------------------------------------------------------------
-#define END_AGGREGATION_PROPERTY_HELPER()   \
-    DBG_ASSERT(nPos == _rProps.getLength(), "<...>::getInfohelper : forgot to adjust the count ?"); \
-
-//------------------------------------------------------------------------------
-#define END_PROPERTY_ARRAY_HELPER() \
-    DBG_ASSERT(nPos == aProps.getLength(), "<...>::getInfohelper : forgot to adjust the count ?");  \
-    return new ::cppu::OPropertyArrayHelper(aProps);
+#define END_DESCRIBE_PROPERTIES()   \
+    DBG_ASSERT( pProperties == _rProps.getArray() + _rProps.getLength(), "<...>::fillProperties/getInfoHelper: forgot to adjust the count ?");  \
 
 //.........................................................................
 }
