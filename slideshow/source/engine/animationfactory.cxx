@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animationfactory.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 13:40:58 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 07:52:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,6 @@
 #include <functional>
 
 
-using namespace ::com::sun::star;
 using namespace ::com::sun::star;
 
 
@@ -1150,13 +1149,12 @@ namespace presentation
                                                                  &ShapeAttributeLayer::setFillColor );
 
                 case ATTRIBUTE_DIMCOLOR:
-                    // TODO(F2): This is just mapped to fill color to make it work
                     return makeGenericAnimation<ColorAnimation>( rLayerManager,
                                                                  nFlags,
-                                                                 &ShapeAttributeLayer::isFillColorValid,
+                                                                 &ShapeAttributeLayer::isDimColorValid,
                                                                  getDefault<RGBColor>( rShape, rAttrName ),
-                                                                 &ShapeAttributeLayer::getFillColor,
-                                                                 &ShapeAttributeLayer::setFillColor );
+                                                                 &ShapeAttributeLayer::getDimColor,
+                                                                 &ShapeAttributeLayer::setDimColor );
 
                 case ATTRIBUTE_FILL_COLOR:
                     return makeGenericAnimation<ColorAnimation>( rLayerManager,
