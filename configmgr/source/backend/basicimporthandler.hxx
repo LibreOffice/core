@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basicimporthandler.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 13:13:47 $
+ *  last change: $Author: hr $ $Date: 2004-06-18 15:47:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,9 @@ namespace configmgr
             typedef uno::Reference< backenduno::XBackend >          Backend;
 
             explicit
-            BasicImportHandler(Backend const & xBackend,OUString const & aEntity = OUString());
+            BasicImportHandler(){}
+
+            BasicImportHandler(Backend const & xBackend,OUString const & aEntity = OUString(), const sal_Bool& bNofity= sal_False);
             ~BasicImportHandler();
 
         // XLayerHandler subset - call these implementations from your derived class implementations
@@ -119,10 +121,14 @@ namespace configmgr
             bool startComponent( const OUString& aName );
 
             void raiseMalformedDataException(sal_Char const * pMsg);
+            /** If True, notification should be send to backend
+            */
+            sal_Bool        m_bSendNotification;
         private:
             Backend const   m_xBackend;
             OUString        m_aComponentName;
             OUString const  m_aEntity;
+
         };
 // -----------------------------------------------------------------------------
     } // namespace xml
