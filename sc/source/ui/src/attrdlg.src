@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attrdlg.src,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 17:19:18 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 12:54:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -672,6 +672,10 @@ TabPage RID_SCPAGE_PROTECTION
         Text[ slovak ] = "Tlač";
     };
 };
+
+
+
+
 
 
 
