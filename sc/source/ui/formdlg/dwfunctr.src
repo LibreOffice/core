@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dwfunctr.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-06 07:40:02 $
+ *  last change: $Author: nf $ $Date: 2001-04-12 07:28:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,7 +136,7 @@ DockingWindow FID_FUNCTION_BOX
             < "Statistical" ; Default ; > ;
             < "Spreadsheet" ; Default ; > ;
             < "Text" ; Default ; > ;
-            < "Add-In" ; Default ; > ;
+            < "Add-in" ; Default ; > ;
         };
         StringList [ norwegian ] =
         {
