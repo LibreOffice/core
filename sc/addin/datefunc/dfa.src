@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dfa.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2001-10-11 20:19:56 $
+ *  last change: $Author: kz $ $Date: 2001-10-17 08:06:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -324,7 +324,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ italian ] = "Modo di calcolo della differenza Modo=0 per l'intervallo, Modo=1 per le settimane dell'anno";
         Text[ danish ] = "Differensdannelsestype Type=O betyder interval, Type=1 betyder i kalenderuger";
         Text[ swedish ] = "Typ av differensbildning typ=0 heter intervall, typ=1 heter i kalenderveckan";
-        Text[ polish ] = "Rodzaj obliczania r�nicy: 0 oznacza przedzia�, 1 - tygodnie kalendarzowe.";
+        Text[ polish ] = "Rodzaj obliczania r�nicy: Typ=0 oznacza przedzia�, Typ=1 - tygodnie kalendarzowe.";
         Text[ portuguese_brazilian ] = "Mode=0 means week interval, Mode=1 means by week of year";
         Text[ japanese ] = "計算方法: ﾓｰﾄﾞ=0 は7日単位、ﾓｰﾄﾞ=1 はｶﾚﾝﾀﾞｰの週で計算されます。";
         Text[ chinese_simplified ] = "得出差额的类型 Mode=0 表示间隔， Mode=1 表示一年的星期数";
@@ -462,7 +462,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ italian ] = "Modo di calcolo della differenza Modo=0 per l'intervallo, Modo=1 per i mesi dell'anno";
         Text[ danish ] = "Differensdannelsestype Type=O betyder interval, Type=1 betyder i kalenderm�neder";
         Text[ swedish ] = "Typ av differensbildning typ=0 heter intervall, typ=1 heter i kalenderm�naden";
-        Text[ polish ] = "Rodzaj obliczania r�nicy: 0 oznacza przedzia�, 1 - miesi�ce kalendarzowe.";
+        Text[ polish ] = "Rodzaj obliczania r�nicy: Typ=0 oznacza przedzia�, Typ=1 - miesi�ce kalendarzowe.";
         Text[ portuguese_brazilian ] = "Mode=0 means month interval, Mode=1 means by month of year";
         Text[ japanese ] = "計算方法: ﾓｰﾄﾞ=0 は一定単位、ﾓｰﾄﾞ=1 はｶﾚﾝﾀﾞｰの月で計算されます。";
         Text[ chinese_simplified ] = "得出差额 Mode=0 表示间隔， Mode=1 表示一年的月数";
@@ -600,7 +600,7 @@ Resource RID_SC_ADDIN_DFA
         Text[ italian ] = "Modo di calcolo della differenza Modo=0 per l'intervallo, Modo=1 per l'anno";
         Text[ danish ] = "Differensdannelsestype Type=O betyder interval, Type=1 betyder i kalender�r";
         Text[ swedish ] = "Typ av differensbildning typ=0 heter intervall, typ=1 heter i kalender�ren";
-        Text[ polish ] = "Rodzaj obliczania r�nicy: 0 oznacza przedzia�, 1 - lata kalendarzowe.";
+        Text[ polish ] = "Rodzaj obliczania r�nicy: Typ=0 oznacza przedzia�, Typ=1 - lata kalendarzowe.";
         Text[ portuguese_brazilian ] = "Mode=0 means year interval, Mode=1 means by calendar years";
         Text[ japanese ] = "計算方法: ﾓｰﾄﾞ=0 は一定単位、ﾓｰﾄﾞ=1 はｶﾚﾝﾀﾞｰの年で計算されます。";
         Text[ chinese_simplified ] = "得出差额的类型 Mode=0 表示年间隔， Mode=1 表示星期年数";
@@ -844,6 +844,7 @@ Resource RID_SC_ADDIN_DFA
     };
 
 };
+
 
 
 
