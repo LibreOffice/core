@@ -225,15 +225,6 @@ ${sd_prog}/pagein -L${sd_prog} ${sd_pagein_args}
 PATH="$sd_prog":$PATH
 export PATH
 
-# disable crash reporter if accessibility is enabled
-accessible=`gconftool-2 -g /desktop/gnome/interface/accessibility 2>/dev/null`
-
-if [ $? -eq 0 ] && [ $accessible = "true" ]; then
-    crashrepswitch=-nocrashreport
-else
-    crashrepswitch=
-fi
-
 # execute soffice binary
-exec "$sd_prog/$sd_binary" $crashrepswitch "$@"
+exec "$sd_prog/$sd_binary" "$@"
 
