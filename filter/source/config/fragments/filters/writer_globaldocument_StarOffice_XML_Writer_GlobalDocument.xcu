@@ -1,4 +1,4 @@
-    <node oor:name="writer_globaldocument_StarOffice_XML_Writer_GlobalDocument" oor:op="replace">
+    <node oor:name="writer_globaldocument_StarOffice_XML_Writer_GlobalDocument" oor:op="replace" oor:finalized="true" oor:mandatory="true">
         <prop oor:name="FileFormatVersion"><value>6200</value></prop>
         <prop oor:name="Type"><value>writer_globaldocument_StarOffice_XML_Writer_GlobalDocument</value></prop>
         <prop oor:name="DocumentService"><value>com.sun.star.text.GlobalDocument</value></prop>
@@ -13,10 +13,10 @@
             <value xml:lang="es">%productname% %formatversion% Documento maestro</value>
             <value xml:lang="tr">%productname% %formatversion% Ana Belgesi</value>
             <value xml:lang="ru">%productname% %formatversion% Главный документ</value>
-            <value xml:lang="th">ต้นฉบับเอกสาร %productname% %formatversion% </value>
+            <value xml:lang="th">ต้นฉบับเอ�?สาร %productname% %formatversion% </value>
             <value xml:lang="x-comment">%productname% %formatversion% Globaldokument</value>
             <value xml:lang="ca">%productname% %formatversion% Master Document</value>
-            <value xml:lang="el">%productname% %formatversion% Κύριο έγγραφο</value>
+            <value xml:lang="el">%productname% %formatversion% Κ�?�?ιο έγγ�?αφο</value>
             <value xml:lang="zh-CN">%productname% %formatversion% 主控文档</value>
             <value xml:lang="pt">%productname% %formatversion% Documento-mestre</value>
             <value xml:lang="cs">Hlavní dokument %productname% %formatversion%</value>
@@ -28,7 +28,7 @@
             <value xml:lang="hi-IN">%productname% %formatversion% Master Document</value>
             <value xml:lang="en-US">%productname% %formatversion% Master Document</value>
             <value xml:lang="sk">Hlavný dokument %productname% %formatversion%</value>
-            <value xml:lang="he">‮מסמך אב %productname% %formatversion%‬</value>
+            <value xml:lang="he">‮מסמך �?ב %productname% %formatversion%‬</value>
             <value xml:lang="sv">%productname% %formatversion% samlingsdokument</value>
             <value xml:lang="da">%productname% %formatversion%-hoveddokument</value>
             <value xml:lang="de">%productname% %formatversion% Globaldokument</value>
@@ -38,5 +38,5 @@
             <value xml:lang="it">%productname% %formatversion% Documento master</value>
             <value xml:lang="x-translate">%productname% %formatversion% Globaldokument</value>
         </prop>
-        <prop oor:name="Flags"><value>IMPORT EXPORT TEMPLATE OWN DEFAULT PREFERRED</value></prop>
+        <prop oor:name="Flags"><value>IMPORT EXPORT TEMPLATE OWN PREFERRED</value></prop>
     </node>
