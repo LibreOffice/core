@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: rt $ $Date: 2004-12-03 14:19:01 $
+#   last change: $Author: kz $ $Date: 2004-12-16 12:25:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -142,8 +142,8 @@ VBC_FLAGS = -warnaserror+
 CSCFLAGS += -debug+ -checked+ -define:DEBUG -define:TRACE
 VBC_FLAGS += -debug+ -define:DEBUG=TRUE -define:TRACE=TRUE
 .ELSE
-CSCFLAGS += -o
-VBC_FLAGS += -o
+CSCFLAGS += -optimize
+VBC_FLAGS += -optimize
 .ENDIF
 
 
@@ -154,7 +154,7 @@ $(DESTDIR)$/cli_cs_testobj.uno.dll : \
         $(CLI_BASETYPES) \
         $(CLI_TYPES) \
         $(CLI_URE)
-    +$(WRAPCMD) csc $(CSCFLAGS) -target:library -out:$@ \
+    +$(WRAPCMD) $(CSC) $(CSCFLAGS) -target:library -out:$@ \
         -reference:$(CLI_TYPES_BRIDGETEST) \
         -reference:$(CLI_URE) \
         -reference:$(CLI_BASETYPES) \
@@ -166,7 +166,7 @@ $(DESTDIR)$/cli_cs_bridgetest.uno.dll : \
         $(CLI_BASETYPES) \
         $(CLI_TYPES) \
         $(CLI_URE)
-    +$(WRAPCMD) csc $(CSCFLAGS) -target:library -out:$@ \
+    +$(WRAPCMD) $(CSC) $(CSCFLAGS) -target:library -out:$@ \
         -reference:$(CLI_TYPES_BRIDGETEST) \
         -reference:$(CLI_TYPES) \
         -reference:$(CLI_BASETYPES) \
@@ -180,7 +180,7 @@ $(DESTDIR)$/cli_vb_bridgetest.uno.dll : \
         $(CLI_BASETYPES) \
         $(CLI_TYPES) \
         $(CLI_URE)
-    +$(WRAPCMD) vbc $(VBC_FLAGS) \
+    +$(WRAPCMD) $(VBC) $(VBC_FLAGS) \
         -target:library \
         -out:$@ \
         -reference:$(CLI_TYPES) \
@@ -197,7 +197,7 @@ $(DESTDIR)$/cli_vb_testobj.uno.dll : \
         $(CLI_BASETYPES) \
         $(CLI_TYPES) \
         $(CLI_URE)
-    +$(WRAPCMD) vbc $(VBC_FLAGS) \
+    +$(WRAPCMD) $(VBC) $(VBC_FLAGS) \
         -target:library \
         -out:$@ \
         -reference:$(CLI_BASETYPES) \
@@ -221,7 +221,7 @@ $(DESTDIR)$/cli_bridgetest_inprocess.exe : \
         $(CLI_TYPES) \
         $(CLI_URE) \
         $(CLI_CPPUHELPER)
-    +$(WRAPCMD) csc $(CSCFLAGS) -target:exe -out:$@ \
+    +$(WRAPCMD) $(CSC) $(CSCFLAGS) -target:exe -out:$@ \
         -reference:$(CLI_TYPES_BRIDGETEST) \
         -reference:$(CLI_BASETYPES) \
         -reference:$(CLI_TYPES) \
