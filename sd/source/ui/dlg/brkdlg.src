@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brkdlg.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:57:53 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 13:01:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,7 @@ ModalDialog DLG_BREAK
         Text[ czech ] = "Zpracování metasouboru:";
         Text[ hebrew ] = "Bearbeitetes Metafile:";
         Text[ hindi ] = "Processing metafile:";
+        Text[ slovak ] = "Spracovávam metasúbor:";
     };
     FixedText FT_ACT_INFO
     {
@@ -132,6 +133,7 @@ ModalDialog DLG_BREAK
         Text[ czech ] = "Rozbité metaobjekty:";
         Text[ hebrew ] = "Metaobjekte aufgebrochen:";
         Text[ hindi ] = "Broken down metaobjects:";
+        Text[ slovak ] = "Zlomené meta objekty:";
     };
     FixedText FT_INS_INFO
     {
@@ -164,6 +166,7 @@ ModalDialog DLG_BREAK
         Text[ czech ] = "Vložené kreslící objekty:";
         Text[ hebrew ] = "Zeichenobjekte eingefügt:";
         Text[ hindi ] = "Inserted drawing objects:";
+        Text[ slovak ] = "Vložené kresby:";
     };
     FixedText FI_OBJ_INFO
     {
@@ -211,7 +214,10 @@ ModalDialog DLG_BREAK
     Text[ czech ] = "Rozbít";
     Text[ hebrew ] = "Aufbrechen";
     Text[ hindi ] = "खण्डन";
+    Text[ slovak ] = "Zalomenie";
 };
+
+
 
 
 
