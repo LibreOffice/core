@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datman.src,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 16:03:00 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 17:43:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,17 +102,20 @@ ModalDialog RID_DLG_MAPPING
         Text[ danish ] = "Kolonnenavne";
         Text[ swedish ] = "Kolumnnamn";
         Text[ polish ] = "Nazwy kolumn";
-        Text[ portuguese_brazilian ] = "Column names";
+        Text[ portuguese_brazilian ] = "Nomes das colunas";
         Text[ japanese ] = "列名";
         Text[ korean ] = "열 이름";
         Text[ chinese_simplified ] = "列名称";
         Text[ chinese_traditional ] = "欄名";
         Text[ arabic ] = "����� �������";
-        Text[ turkish ] = "S�tun adlar�";
+        Text[ turkish ] = "S�tun ismi";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Noms de columna";
         Text[ finnish ] = "Sarakkeiden nimet";
         Text[ thai ] = "ชื่อคอลัมน์";
+        Text[ czech ] = "Názvy sloupců";
+        Text[ hebrew ] = "Spaltennamen";
+        Text[ hindi ] = "स्तंभ का नाम्";
     };
     FixedText   FT_IDENTIFIER
     {
@@ -470,7 +473,7 @@ ModalDialog RID_DLG_MAPPING
         Text[ danish ] = "<ingen>";
         Text[ swedish ] = "<ingen>";
         Text[ polish ] = "<brak>";
-        Text[ portuguese_brazilian ] = "<none>";
+        Text[ portuguese_brazilian ] = "<nenhum>";
         Text[ japanese ] = "<なし>";
         Text[ korean ] = "<없음>";
         Text[ chinese_simplified ] = "<无>";
@@ -481,6 +484,9 @@ ModalDialog RID_DLG_MAPPING
         Text[ catalan ] = "<cap>";
         Text[ finnish ] = "<ei mit��n>";
         Text[ thai ] = "<ไม่มี>";
+        Text[ czech ] = "<nic>";
+        Text[ hebrew ] = "<kein>";
+        Text[ hindi ] = "<कोई नहीं>";
     };
     Text[ english_us ] = "Column Layout for Table %1";
     Text[ portuguese ] = "Atribui��o de colunas para a tabela %1";
@@ -493,17 +499,20 @@ ModalDialog RID_DLG_MAPPING
     Text[ italian ] = "Assegnazione colonne per la tabella %1";
     Text[ danish ] = "Kolonnetildeling for tabel %1";
     Text[ swedish ] = "Kolumntilldelning f�r tabell %1";
-    Text[ polish ] = "Przyporz�dkowanie kolumn tabeli %1";
-    Text[ portuguese_brazilian ] = "Column assignment for table %1";
+    Text[ polish ] = "Uk�ad kolumn w tabeli %1";
+    Text[ portuguese_brazilian ] = "Layout das colunas para a tabela %1";
     Text[ japanese ] = "テーブル %1 の列分類";
     Text[ korean ] = "테이블 %1 의 열 레이아웃";
     Text[ chinese_simplified ] = "编排 %1 表格的列";
     Text[ chinese_traditional ] = "編排 %1 表格的欄";
-    Text[ turkish ] = "Tablo %1 i�in s�tun d�zeni";
+    Text[ turkish ] = "%1 Tablosu i�in s�tun d�zeni";
     Text[ arabic ] = "����� ������� ������ %1";
     Text[ catalan ] = "Assignaci� de columnes per a la taula %1";
     Text[ thai ] = "เค้าโครงคอลัมน์ของตาราง %1";
     Text[ language_user1 ] = "EM (29 July 2002): this was just a German spelling error, no change in translation";
+    Text[ czech ] = "Rozložení sloupců pro tabulku %1";
+    Text[ hebrew ] = "Spaltenzuordnung für Tabelle %1";
+    Text[ hindi ] = "सारणी %1 केलिए स्तंभ के अभिन्यास";
 };
 ModalDialog RID_DLG_DBCHANGE
 {
@@ -549,7 +558,7 @@ ModalDialog RID_DLG_DBCHANGE
         Text[ danish ] = "Element";
         Text[ swedish ] = "Post";
         Text[ polish ] = "Wpis";
-        Text[ portuguese_brazilian ] = "Entry";
+        Text[ portuguese_brazilian ] = "Entrada";
         Text[ japanese ] = "項目";
         Text[ korean ] = "항목";
         Text[ chinese_simplified ] = "条目";
@@ -559,6 +568,9 @@ ModalDialog RID_DLG_DBCHANGE
         Text[ catalan ] = "Entrada";
         Text[ finnish ] = "Merkint�";
         Text[ thai ] = "รายการ";
+        Text[ czech ] = "Položka";
+        Text[ hebrew ] = "‮שורה‬";
+        Text[ hindi ] = "प्रविष्टि";
     };
     Control LB_SELECTION
     {
@@ -590,10 +602,23 @@ ModalDialog RID_DLG_DBCHANGE
     Text[ korean ] = "데이터 원본 선택";
     Text[ chinese_simplified ] = "选择数据源";
     Text[ chinese_traditional ] = "選擇資料源";
-    Text[ turkish ] = "Veri kayna�� se�imi";
+    Text[ turkish ] = "Veri Kayna��n� Se�in";
     Text[ arabic ] = "����� ���� ��������";
     Text[ catalan ] = "Seleccioneu la font de dades";
     Text[ thai ] = "เลือกแหล่งข้อมูล";
+    Text[ czech ] = "Vybrat zdroj dat...";
+    Text[ hebrew ] = "Datenquelle auswählen";
+    Text[ hindi ] = "ड़ॉटा मूल चुनो";
 };
+
+
+
+
+
+
+
+
+
+
 
 
