@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sections.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-27 07:50:13 $
+ *  last change: $Author: kz $ $Date: 2000-11-29 10:04:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -648,7 +648,7 @@ TabPage RID_TP_GENERAL
         Text[ chinese_simplified ] = "±àºÅ(~E)";
         Text[ chinese_traditional ] = "¸¹(~E)";
         Text[ arabic ] = "ÑÞã";
-        Text[ language_user1 ] = "\"Sayý\" burada istisna (dergi için)";
+        Text[ language_user1 ] = "\"Say? burada istisna (dergi i?n)";
         Text[ turkish ] = "Sayý";
     };
     FixedText FT_SERIES
