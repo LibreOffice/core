@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FieldDescriptions.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-19 13:56:26 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 16:31:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,7 @@ OFieldDescription::OFieldDescription() :
     ,m_eHorJustify(SVX_HOR_JUSTIFY_STANDARD)
     ,m_nScale(0)
     ,m_nPrecision(0)
-    ,m_pType(NULL)
+    ,m_pType(static_cast<dbaui::OTypeInfo*>(0))
     ,m_nIsNullable(ColumnValue::NULLABLE)
     ,m_nType(DataType::VARCHAR)
     ,m_bIsCurrency(sal_False)
@@ -186,7 +186,7 @@ OFieldDescription::OFieldDescription(const Reference< XPropertySet >& xAffectedC
     ,m_eHorJustify(SVX_HOR_JUSTIFY_STANDARD)
     ,m_nScale(0)
     ,m_nPrecision(0)
-    ,m_pType(NULL)
+    ,m_pType(static_cast<dbaui::OTypeInfo*>(0))
     ,m_nIsNullable(ColumnValue::NULLABLE)
     ,m_nType(DataType::VARCHAR)
     ,m_bIsCurrency(sal_False)
