@@ -2,9 +2,9 @@
  *
  *  $RCSfile: component.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jbu $ $Date: 2000-10-06 16:01:45 $
+ *  last change: $Author: jbu $ $Date: 2000-12-06 10:25:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,7 +152,6 @@ void OComponentHelper::dispose()
     }
     }
 
-    OSL_ENSHURE( bDoDispose, "dispose called twice" );
     // Do not hold the mutex because we are broadcasting
     if( bDoDispose )
     {
@@ -182,6 +181,12 @@ void OComponentHelper::dispose()
         // No multithread call overcome the "!rBHelper.bDisposed && !rBHelper.bInDispose" guard.
         rBHelper.bDisposed = sal_True;
         rBHelper.bInDispose = sal_False;
+    }
+    else
+    {
+        // in a multithreaded environment, it can't be avoided, that dispose is called twice.
+        // However this condition is traced, because it MAY indicate an error.
+        OSL_TRACE( "OComponentHelper::dispose() - dispose called twice" );
     }
 }
 
