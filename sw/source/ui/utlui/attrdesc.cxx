@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attrdesc.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2003-05-27 16:12:30 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 11:29:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,9 @@
 #endif
 #ifndef _FMTTSPLT_HXX //autogen
 #include <fmtlsplt.hxx>
+#endif
+#ifndef _FMTROWSPLT_HXX //autogen
+#include <fmtrowsplt.hxx>
 #endif
 #ifndef _FMTPDSC_HXX //autogen
 #include <fmtpdsc.hxx>
@@ -933,6 +936,19 @@ SfxItemPresentation SwFmtLayoutSplit::GetPresentation
     }
     return SFX_ITEM_PRESENTATION_NONE;
 }
+
+SfxItemPresentation SwFmtRowSplit::GetPresentation
+(
+    SfxItemPresentation ePres,
+    SfxMapUnit          eCoreUnit,
+    SfxMapUnit          ePresUnit,
+    String&             rText,
+    const IntlWrapper*        pIntl
+)   const
+{
+    return SFX_ITEM_PRESENTATION_NONE;
+}
+
 
 SfxItemPresentation SwFmtFtnEndAtTxtEnd::GetPresentation
 (
