@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.91 $
+ *  $Revision: 1.92 $
  *
- *  last change: $Author: dvo $ $Date: 2001-12-06 17:10:01 $
+ *  last change: $Author: mib $ $Date: 2002-01-17 13:11:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -245,6 +245,9 @@ static __FAR_DATA SvXMLTokenMapEntry aTextElemTokenMap[] =
     { XML_NAMESPACE_DRAW, XML_IMAGE,            XML_TOK_TEXT_IMAGE_PAGE },
     { XML_NAMESPACE_DRAW, XML_OBJECT,           XML_TOK_TEXT_OBJECT_PAGE },
     { XML_NAMESPACE_DRAW, XML_OBJECT_OLE,       XML_TOK_TEXT_OBJECT_OLE_PAGE },
+    { XML_NAMESPACE_DRAW, XML_APPLET,           XML_TOK_TEXT_APPLET_PAGE },
+    { XML_NAMESPACE_DRAW, XML_PLUGIN,           XML_TOK_TEXT_PLUGIN_PAGE },
+    { XML_NAMESPACE_DRAW, XML_FLOATING_FRAME,   XML_TOK_TEXT_FLOATING_FRAME_PAGE },
     { XML_NAMESPACE_DRAW, XML_A,                XML_TOK_DRAW_A_PAGE },
     { XML_NAMESPACE_TABLE,XML_TABLE,            XML_TOK_TABLE_TABLE         },
 //  { XML_NAMESPACE_TABLE,XML_SUB_TABLE,        XML_TOK_TABLE_SUBTABLE      },
@@ -1509,6 +1512,36 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
                                     rLocalName, xAttrList, eAnchorType,
                                     bObjectOLE ? XML_TEXT_FRAME_OBJECT_OLE
                                                : XML_TEXT_FRAME_OBJECT );
+            bContent = sal_False;
+        }
+        break;
+
+    case XML_TOK_TEXT_APPLET_PAGE:
+    case XML_TOK_TEXT_PLUGIN_PAGE:
+    case XML_TOK_TEXT_FLOATING_FRAME_PAGE:
+        if( (XML_TEXT_TYPE_BODY == eType && bBodyContentStarted) ||
+            XML_TEXT_TYPE_TEXTBOX == eType ||
+             XML_TEXT_TYPE_CHANGED_REGION == eType )
+        {
+            TextContentAnchorType eAnchorType =
+                XML_TEXT_TYPE_TEXTBOX == eType ? TextContentAnchorType_AT_FRAME
+                                               : TextContentAnchorType_AT_PAGE;
+            sal_uInt16 nType;
+            switch( nToken )
+            {
+            case XML_TOK_TEXT_APPLET_PAGE:
+                nType = XML_TEXT_FRAME_APPLET;
+                break;
+            case XML_TOK_TEXT_PLUGIN_PAGE:
+                nType = XML_TEXT_FRAME_PLUGIN;
+                break;
+            case XML_TOK_TEXT_FLOATING_FRAME_PAGE:
+                nType = XML_TEXT_FRAME_FLOATING_FRAME;
+                break;
+            }
+            pContext = new XMLTextFrameContext( rImport, nPrefix,
+                                    rLocalName, xAttrList, eAnchorType,
+                                    nType );
             bContent = sal_False;
         }
         break;
