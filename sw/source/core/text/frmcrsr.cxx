@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmcrsr.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 14:14:52 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:34:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -697,21 +697,6 @@ sal_Bool SwTxtFrm::_GetCrsrOfst(SwPosition* pPos, const Point& rPoint,
     // darf pPos nicht berechnet werden.
         if( STRING_LEN != nOffset )
         {
-#ifdef USED
-            // 8626: bei Up/Down darf diese Zeile nicht verlassen werden.
-            if( pCMS && MV_UPDOWN == pCMS->eState )
-            {
-                const xub_StrLen nEnd = aLine.GetEnd();
-                if( nOffset >= nEnd && nEnd )
-                {
-                    // Man muss hinter das letzte Zeichen kommen duerfen?!
-                    nOffset = nEnd - 1;                 // UnitUp-Korrektur
-                }
-                else
-                    if( nOffset < aLine.GetStart() )
-                        nOffset = aLine.GetStart(); // UnitDown-Korrektur
-            }
-#endif
             SwTxtNode* pTxtNd = ((SwTxtFrm*)this)->GetTxtNode();
             pPos->nNode = *pTxtNd;
             pPos->nContent.Assign( pTxtNd, nOffset );
