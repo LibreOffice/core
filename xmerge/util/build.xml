@@ -182,8 +182,7 @@
      <!-- create pexcel.jar file -->
     <target name="pexcel" depends="prepare,xmerge" if="build.class">
         <jar jarfile="${build.class}/${jarname5}.jar"
-             basedir="${build.class}"
-             manifest="${jarname5}.mf">
+             basedir="${build.class}">
             <include name="${pexcel}/**"/>
             <include name="${pexcel}/Records/**"/>
             <metainf dir="${java.dir}/${pexcel}" includes="converter.xml"/>
