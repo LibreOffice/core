@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: kz $ $Date: 2004-04-22 17:20:04 $
+#   last change: $Author: hr $ $Date: 2004-11-09 13:55:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,6 +77,7 @@ UNOUCROUT = $(OUT)$/inc$/$(TARGET)
 INCPRE += $(UNOUCROUT)
 CPPUMAKERFLAGS += -C
 
+UNIXTEXT= $(MISC)$/regcomp.sh
 UNOTYPES=\
              com.sun.star.uno.TypeClass \
              com.sun.star.lang.XMultiServiceFactory \
@@ -110,3 +111,10 @@ APP1STDLIBS+= \
 
 .INCLUDE :  target.mk
 
+
+.IF "$(GUI)"=="UNX"
+ALLTAR: REGCOMPSH
+
+REGCOMPSH :
+    +chmod +x $(MISC)$/regcomp.sh
+.ENDIF	
