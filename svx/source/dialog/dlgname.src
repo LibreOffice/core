@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgname.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:16:36 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 14:00:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,6 +133,8 @@ ModalDialog RID_SVXDLG_NAME
     Text[ hebrew ] = "Name";
     Text[ hindi ] = "नाम";
     Text[ slovak ] = "Názov";
+    Text[ hungarian ] = "Név";
+    Text[ slovenian ] = "Ime";
 };
  // RID_SVXDLG_MESSBOX -------------------------------------------------------
 ModalDialog RID_SVXDLG_MESSBOX
@@ -169,6 +171,7 @@ ModalDialog RID_SVXDLG_MESSBOX
     };
 };
  // ********************************************************************** EOF
+
 
 
 
