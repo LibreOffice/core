@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Outliner.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 17:02:52 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 14:04:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -501,17 +501,19 @@ void Outliner::HandleOutsideChange (ChangeHint eHint)
     bool bFoundNextSentence = false;
     while ( ! bFoundNextSentence)
     {
-        ESelection aCurrentSelection (GetView(0)->GetSelection());
-        if ( ! mbMatchMayExist
-            && maStartSelection.IsLess(aCurrentSelection))
-            EndOfSearch();
-
-        // Advance to the next sentence.
         OutlinerView* pOutlinerView = GetView(0);
         if (pOutlinerView != NULL)
+        {
+            ESelection aCurrentSelection (pOutlinerView->GetSelection());
+            if ( ! mbMatchMayExist
+                && maStartSelection.IsLess(aCurrentSelection))
+                EndOfSearch();
+
+            // Advance to the next sentence.
             bFoundNextSentence = SpellSentence (
                 pOutlinerView->GetEditView(),
                 aResult);
+        }
 
         // When no sentence with spelling errors has been found in the
         // currently selected text shape or there is no selected text
@@ -963,6 +965,7 @@ void Outliner::RestoreStartPosition (void)
             {
                 SdrPageView* pPageView = mpView->GetPageViewPvNum(0);
                 mpView->BegTextEdit (mpStartEditedObject);
+
                 ::Outliner* pOutliner =
                       static_cast<DrawView*>(mpView)->GetTextEditOutliner();
                 if (pOutliner!=NULL && pOutliner->GetViewCount()>0)
