@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pormulti.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-19 08:59:14 $
+ *  last change: $Author: ama $ $Date: 2001-03-29 12:01:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -907,7 +907,7 @@ SwMultiCreator* SwTxtSizeInfo::GetMultiCreator( xub_StrLen &rPos ) const
         {
             if( RES_TXTATR_CJK_RUBY == pTmp->Which() )
                 pRuby = pTmp;
-            else if( RES_CHRATR_ROTATE == pTmp->Which() )
+            else
             {
                 const SvxCharRotateItem* pRoTmp = NULL;
                 if( lcl_HasRotation( *pTmp, pRoTmp, bRot ) )
@@ -915,9 +915,6 @@ SwMultiCreator* SwTxtSizeInfo::GetMultiCreator( xub_StrLen &rPos ) const
                     nRotate = bRot ? i : nCount;
                     pRotate = pRoTmp;
                 }
-            }
-            else
-            {
                 const SvxTwoLinesItem* p2Tmp = NULL;
                 if( lcl_Has2Lines( *pTmp, p2Tmp, bTwo ) )
                 {
