@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabarea.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: kz $ $Date: 2002-01-29 21:16:24 $
+ *  last change: $Author: kz $ $Date: 2002-02-04 11:20:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
         Text[ russian ] = "~Íå ïðîçðà÷íûé";
         Text[ greek ] = "×ùñßò äéáöÜíåéá";
         Text[ dutch ] = "~Geen transparantie";
-        Text[ french ] = "~Aucune transparence";
+        Text[ french ] = "Aucune transparence";
         Text[ spanish ] = "~Sin transparencia";
         Text[ italian ] = "Nessuna trasparenza";
         Text[ danish ] = "Ingen transparens";
@@ -211,9 +211,9 @@ TabPage RID_SVXPAGE_TRANSPARENCE
         Text[ russian ] = "Òèï";
         Text[ greek ] = "~Ôýðïò";
         Text[ dutch ] = "Ty~pe";
-        Text[ french ] = "Ty~pe";
+        Text[ french ] = "Type";
         Text[ spanish ] = "Ti~po";
-        Text[ italian ] = "Ti~po";
+        Text[ italian ] = "Tipo";
         Text[ danish ] = "Type";
         Text[ swedish ] = "Ty~p";
         Text[ polish ] = "Ty~p";
@@ -497,7 +497,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
         Text[ russian ] = "Öåíòð ~Y";
         Text[ greek ] = "ÊÝíôñï ~Õ";
         Text[ dutch ] = "Centrum ~Y";
-        Text[ french ] = "Centre ~Y";
+        Text[ french ] = "Centre Y";
         Text[ spanish ] = "Centro ~Y";
         Text[ italian ] = "Centro ~Y";
         Text[ danish ] = "Center Y";
@@ -540,7 +540,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
         Text[ russian ] = "~Óãîë";
         Text[ greek ] = "Ãùíßá";
         Text[ dutch ] = "~Hoek";
-        Text[ french ] = "~Angle";
+        Text[ french ] = "Angle";
         Text[ spanish ] = "~Ángulo";
         Text[ italian ] = "Angolo";
         Text[ danish ] = "Vinkel";
@@ -645,7 +645,7 @@ TabPage RID_SVXPAGE_TRANSPARENCE
         Text[ russian ] = "~Íà÷àëüíîå çíà÷åíèå";
         Text[ greek ] = "Áñ÷éêÞ ôéìÞ";
         Text[ dutch ] = "~Beginwaarde";
-        Text[ french ] = "~Valeur initiale";
+        Text[ french ] = "Valeur initiale";
         Text[ spanish ] = "~Valor inicial";
         Text[ italian ] = "Valore iniziale";
         Text[ danish ] = "Startværdi";
@@ -687,8 +687,8 @@ TabPage RID_SVXPAGE_TRANSPARENCE
         Text[ russian ] = "~Êîíå÷íîå çíà÷åíèå";
         Text[ greek ] = "ÔåëéêÞ ôéìÞ";
         Text[ dutch ] = "~Eindwaarde";
-        Text[ french ] = "~Valeur finale";
-        Text[ spanish ] = "~Valor final";
+        Text[ french ] = "Valeur finale";
+        Text[ spanish ] = "Valor final";
         Text[ italian ] = "Valore finale";
         Text[ danish ] = "Slutværdi";
         Text[ swedish ] = "Slutvärde";
@@ -1203,9 +1203,9 @@ TabPage RID_SVXPAGE_AREA
         Text = "B~reite" ;
         Text [ ENGLISH ] = "~Width" ;
         Text [ english_us ] = "Wi~dth" ;
-        Text [ italian ] = "Largh." ;
-        Text [ spanish ] = "A~ncho" ;
-        Text [ french ] = "L~argeur" ;
+        Text [ italian ] = "Larghezza" ;
+        Text [ spanish ] = "Ancho" ;
+        Text [ french ] = "Largeur" ;
         Text [ dutch ] = "B~reedte" ;
         Text [ swedish ] = "B~redd" ;
         Text [ danish ] = "Bredde" ;
@@ -1751,12 +1751,12 @@ TabPage RID_SVXPAGE_SHADOW
         Text = "~Farbe" ;
         Text [ ENGLISH ] = "~Color" ;
         Text [ norwegian ] = "~Color" ;
-        Text [ italian ] = "~Colore" ;
+        Text [ italian ] = "Colore" ;
         Text [ portuguese_brazilian ] = "~Cor" ;
         Text [ portuguese ] = "~Cor" ;
         Text [ finnish ] = "~Väri" ;
         Text [ danish ] = "Farve" ;
-        Text [ french ] = "~Couleur" ;
+        Text [ french ] = "Couleur" ;
         Text [ swedish ] = "~Färg" ;
         Text [ dutch ] = "~Kleur" ;
         Text [ spanish ] = "Co~lor" ;
@@ -1882,7 +1882,7 @@ TabPage RID_SVXPAGE_HATCH
         Text [ portuguese ] = "~Espaçamento" ;
         Text [ finnish ] = "~Objektivälit" ;
         Text [ danish ] = "Afstand" ;
-        Text [ french ] = "É~cart" ;
+        Text [ french ] = "Écart" ;
         Text [ swedish ] = "Avstå~nd" ;
         Text [ dutch ] = "~Afstand" ;
         Text [ spanish ] = "E~spacio" ;
@@ -1927,7 +1927,7 @@ TabPage RID_SVXPAGE_HATCH
         Text [ portuguese ] = "Â~ngulo" ;
         Text [ finnish ] = "~Kulma" ;
         Text [ danish ] = "Vinkel" ;
-        Text [ french ] = "A~ngle" ;
+        Text [ french ] = "Angle" ;
         Text [ swedish ] = "~Vinkel" ;
         Text [ dutch ] = "~Hoek" ;
         Text [ spanish ] = "Á~ngulo" ;
@@ -2182,7 +2182,7 @@ TabPage RID_SVXPAGE_HATCH
         Text [ portuguese ] = "~Cor da linha" ;
         Text [ finnish ] = "~Viivan väri" ;
         Text [ danish ] = "Stregfarve" ;
-        Text [ french ] = "~Couleur" ;
+        Text [ french ] = "Couleur" ;
         Text [ swedish ] = "Linje~färg" ;
         Text [ dutch ] = "Lijn~kleur" ;
         Text [ spanish ] = "~Color de línea" ;
@@ -2507,7 +2507,7 @@ TabPage RID_SVXPAGE_BITMAP
         Text[ greek ] = "~Óå ðñþôï ðëÜíï";
         Text[ dutch ] = "V~oorgrondkleur";
         Text[ french ] = "~Premier plan";
-        Text[ spanish ] = "~Color de primer plano";
+        Text[ spanish ] = "Color de primer plano";
         Text[ finnish ] = "~Edustan väri";
         Text[ italian ] = "~Colore in primo piano";
         Text[ danish ] = "Forgrund";
@@ -2543,7 +2543,7 @@ TabPage RID_SVXPAGE_BITMAP
         Text[ russian ] = "Öâåò ôîíà";
         Text[ greek ] = "Öüíôï";
         Text[ dutch ] = "~Achtergrondkleur";
-        Text[ french ] = "~Arrière-plan";
+        Text[ french ] = "Arrière-plan";
         Text[ spanish ] = "~Color de fondo";
         Text[ finnish ] = "~Taustaväri";
         Text[ italian ] = "Colore di ~sfondo";
@@ -2853,12 +2853,12 @@ TabPage RID_SVXPAGE_GRADIENT
         Text = "~Typ" ;
         Text [ ENGLISH ] = "Ty~pe" ;
         Text [ norwegian ] = "Ty~pe" ;
-        Text [ italian ] = "Ti~po" ;
+        Text [ italian ] = "Tipo" ;
         Text [ portuguese_brazilian ] = "Ti~po" ;
         Text [ portuguese ] = "Ti~po" ;
         Text [ finnish ] = "Tyyp~pi" ;
         Text [ danish ] = "Type" ;
-        Text [ french ] = "T~ype" ;
+        Text [ french ] = "Type" ;
         Text [ swedish ] = "~Typ" ;
         Text [ dutch ] = "Ty~pe" ;
         Text [ spanish ] = "Ti~po" ;
@@ -3155,7 +3155,7 @@ TabPage RID_SVXPAGE_GRADIENT
         Text [ portuguese ] = "Centro ~Y" ;
         Text [ finnish ] = "Keski~Y" ;
         Text [ danish ] = "Center Y" ;
-        Text [ french ] = "Centre ~Y" ;
+        Text [ french ] = "Centre Y" ;
         Text [ swedish ] = "Centrum ~Y" ;
         Text [ dutch ] = "Centrum ~Y" ;
         Text [ spanish ] = "Centro ~Y" ;
@@ -3199,7 +3199,7 @@ TabPage RID_SVXPAGE_GRADIENT
         Text [ portuguese ] = "~Ângulo" ;
         Text [ finnish ] = "~Kulma" ;
         Text [ danish ] = "Vinkel" ;
-        Text [ french ] = "~Angle" ;
+        Text [ french ] = "Angle" ;
         Text [ swedish ] = "~Vinkel" ;
         Text [ dutch ] = "~Hoek" ;
         Text [ spanish ] = "Án~gulo" ;
@@ -3304,7 +3304,7 @@ TabPage RID_SVXPAGE_GRADIENT
         Text = "~Von" ;
         Text [ ENGLISH ] = "~From" ;
         Text [ norwegian ] = "~Fra" ;
-        Text [ italian ] = "~Da" ;
+        Text [ italian ] = "Da" ;
         Text [ portuguese_brazilian ] = "~De" ;
         Text [ portuguese ] = "~De" ;
         Text [ finnish ] = "~Kohteesta" ;
@@ -3699,7 +3699,7 @@ TabPage RID_SVXPAGE_COLOR
         Text [ portuguese ] = "~Cor" ;
         Text [ finnish ] = "~Väri" ;
         Text [ danish ] = "Farve" ;
-        Text [ french ] = "~Couleur" ;
+        Text [ french ] = "Couleur" ;
         Text [ swedish ] = "~Färg" ;
         Text [ dutch ] = "~Kleur" ;
         Text [ spanish ] = "Co~lor" ;
@@ -3982,7 +3982,7 @@ TabPage RID_SVXPAGE_COLOR
         Text [ portuguese ] = "~Adicionar" ;
         Text [ finnish ] = "~Lisää" ;
         Text [ danish ] = "Tilføj" ;
-        Text [ french ] = "~Ajouter" ;
+        Text [ french ] = "Ajouter" ;
         Text [ swedish ] = "Lägg t~ill" ;
         Text [ dutch ] = "~Toevoegen" ;
         Text [ spanish ] = "~Añadir" ;
@@ -4007,7 +4007,7 @@ TabPage RID_SVXPAGE_COLOR
         Text = "B~earbeiten..." ;
         Text [ ENGLISH ] = "~Work on..." ;
         Text [ norwegian ] = "~Arbeide med..." ;
-        Text [ italian ] = "Modifica..." ;
+        Text [ italian ] = "Modi~fica..." ;
         Text [ portuguese_brazilian ] = "~Operar em..." ;
         Text [ portuguese ] = "~Editar..." ;
         Text [ finnish ] = "~Muokkaa" ;
@@ -4072,7 +4072,7 @@ TabPage RID_SVXPAGE_COLOR
         Text [ portuguese ] = "~Modificar" ;
         Text [ finnish ] = "~Muokkaa" ;
         Text [ danish ] = "Modificer" ;
-        Text [ french ] = "~Appliquer" ;
+        Text [ french ] = "Modifier" ;
         Text [ swedish ] = "~Ändra" ;
         Text [ dutch ] = "Wij~zigen" ;
         Text [ spanish ] = "M~odificar" ;
