@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svmedit.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: sb $ $Date: 2002-07-23 13:51:32 $
+ *  last change: $Author: mt $ $Date: 2002-08-14 13:09:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,6 +151,7 @@ protected:
     virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
     void                ImpInitScrollBars();
     void                ImpSetScrollBarRanges();
+    void                ImpSetHScrollBarThumbPos();
     DECL_LINK(          ScrollHdl, ScrollBar* );
 
 public:
@@ -336,7 +337,7 @@ void ImpSvMEdit::ImpInitScrollBars()
             mpHScrollBar->SetVisibleSize( aOutSz.Width() );
             mpHScrollBar->SetPageSize( aOutSz.Width() * 8 / 10 );
             mpHScrollBar->SetLineSize( aCharBox.Width()*10 );
-            mpHScrollBar->SetThumbPos( mpTextWindow->GetTextView()->GetStartDocPos().X() );
+            ImpSetHScrollBarThumbPos();
         }
         if ( mpVScrollBar )
         {
@@ -346,6 +347,16 @@ void ImpSvMEdit::ImpInitScrollBars()
             mpVScrollBar->SetThumbPos( mpTextWindow->GetTextView()->GetStartDocPos().Y() );
         }
     }
+}
+
+void ImpSvMEdit::ImpSetHScrollBarThumbPos()
+{
+    long nX = mpTextWindow->GetTextView()->GetStartDocPos().X();
+    if ( !mpTextWindow->GetTextEngine()->IsRightToLeft() )
+        mpHScrollBar->SetThumbPos( nX );
+    else
+        mpHScrollBar->SetThumbPos( mnTextWidth - mpHScrollBar->GetVisibleSize() - nX );
+
 }
 
 IMPL_LINK( ImpSvMEdit, ScrollHdl, ScrollBar*, pCurScrollBar )
@@ -513,7 +524,7 @@ void ImpSvMEdit::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         if( rTextHint.GetId() == TEXT_HINT_VIEWSCROLLED )
         {
             if ( mpHScrollBar )
-                mpHScrollBar->SetThumbPos( mpTextWindow->GetTextView()->GetStartDocPos().X() );
+                ImpSetHScrollBarThumbPos();
             if ( mpVScrollBar )
                 mpVScrollBar->SetThumbPos( mpTextWindow->GetTextView()->GetStartDocPos().Y() );
         }
@@ -538,7 +549,7 @@ void ImpSvMEdit::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 {
                     mnTextWidth = nWidth;
                     mpHScrollBar->SetRange( Range( 0, (long)mnTextWidth ) );
-                    mpHScrollBar->SetThumbPos( mpTextWindow->GetTextView()->GetStartDocPos().X() );
+                    ImpSetHScrollBarThumbPos();
                 }
             }
         }

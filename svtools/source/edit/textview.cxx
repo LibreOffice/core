@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textview.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: mt $ $Date: 2002-08-12 15:36:21 $
+ *  last change: $Author: mt $ $Date: 2002-08-14 13:09:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -741,13 +741,12 @@ BOOL TextView::KeyInput( const KeyEvent& rKeyEvent )
             break;
             default:
             {
-                #if defined( DEBUG ) && !defined( PRODUCT )
-                    if ( ( nCode == KEY_W ) && rKeyEvent.GetKeyCode().IsMod1() && rKeyEvent.GetKeyCode().IsMod2() )
-                    {
-                        mpTextEngine->SetRightToLeft( !mpTextEngine->IsRightToLeft() );
-                        mpTextEngine->SetTextAlign( mpTextEngine->IsRightToLeft() ? TXTALIGN_RIGHT : TXTALIGN_LEFT );
-                    }
-                #endif
+//              #if defined( DEBUG ) && !defined( PRODUCT )
+//                    if ( ( nCode == KEY_W ) && rKeyEvent.GetKeyCode().IsMod1() && rKeyEvent.GetKeyCode().IsMod2() )
+//                    {
+//                        mpTextEngine->SetRightToLeft( !mpTextEngine->IsRightToLeft() );
+//                    }
+//              #endif
                 if ( TextEngine::IsSimpleCharInput( rKeyEvent ) )
                 {
                     xub_Unicode nCharCode = rKeyEvent.GetCharCode();
@@ -1047,6 +1046,8 @@ void TextView::Scroll( long ndX, long ndY )
         mpWindow->Update();
         maStartDocPos = aNewStartPos;
 
+        if ( mpTextEngine->IsRightToLeft() )
+            nDiffX = -nDiffX;
         mpWindow->Scroll( nDiffX, nDiffY );
         mpWindow->Update();
         mpCursor->SetPos( mpCursor->GetPos() + Point( nDiffX, nDiffY ) );
@@ -1649,14 +1650,14 @@ void TextView::ImpShowCursor( BOOL bGotoCursor, BOOL bForceVisCursor, BOOL bSpec
             aNewStartPos.Y() -= ( nVisStartY - aEditCursor.Top() );
         }
 
-        if ( aEditCursor.Right() > nVisEndX )
+        if ( aEditCursor.Right() >= nVisEndX )
         {
             aNewStartPos.X() += ( aEditCursor.Right() - nVisEndX );
 
             // Darfs ein bischen mehr sein?
             aNewStartPos.X() += nMoreX;
         }
-        else if ( aEditCursor.Left() < nVisStartX )
+        else if ( aEditCursor.Left() <= nVisStartX )
         {
             aNewStartPos.X() -= ( nVisStartX - aEditCursor.Left() );
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: texteng.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mt $ $Date: 2002-08-13 14:07:14 $
+ *  last change: $Author: mt $ $Date: 2002-08-14 13:09:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -976,8 +976,9 @@ long TextEngine::ImpGetXPos( ULONG nPara, TextLine* pLine, USHORT nIndex, BOOL b
                 if ( ( pPortion->GetKind() == PORTIONKIND_TAB ) && ( (nTextPortion+1) < pParaPortion->GetTextPortions().Count() ) )
                 {
                     TETextPortion* pNextPortion = pParaPortion->GetTextPortions().GetObject( nTextPortion+1 );
-                    if ( ( !IsRightToLeft() && pNextPortion->IsRightToLeft() ) ||
-                         ( IsRightToLeft() && !pNextPortion->IsRightToLeft() ) )
+                    if ( ( pNextPortion->GetKind() != PORTIONKIND_TAB ) && (
+                              ( !IsRightToLeft() && pNextPortion->IsRightToLeft() ) ||
+                              ( IsRightToLeft() && !pNextPortion->IsRightToLeft() ) ) )
                     {
                         nX += pNextPortion->GetWidth();
                     }
@@ -2091,8 +2092,14 @@ void TextEngine::ImpPaint( OutputDevice* pOutDev, const Point& rStartPos, Rectan
                                         {
                                             pOutDev->Erase( aTabArea );
                                         }
-
                                     }
+#ifdef EDITDEBUG
+                                    Rectangle aTabArea( aTmpPos, Point( aTmpPos.X()+nTxtWidth, aTmpPos.Y()+mnCharHeight-1 ) );
+                                    Color aOldColor = pOutDev->GetFillColor();
+                                    pOutDev->SetFillColor( (y%2) ? COL_RED : COL_GREEN );
+                                    pOutDev->DrawRect( aTabArea );
+                                    pOutDev->SetFillColor( aOldColor );
+#endif
                                 }
                                 break;
                                 default:    DBG_ERROR( "ImpPaint: Unknown Portion-Type !" );
@@ -2856,6 +2863,7 @@ void TextEngine::SetRightToLeft( BOOL bR2L )
     if ( mbRightToLeft != bR2L )
     {
         mbRightToLeft = bR2L;
+        meAlign = bR2L ? TXTALIGN_RIGHT : TXTALIGN_LEFT;
         FormatFullDoc();
         UpdateViews();
     }
