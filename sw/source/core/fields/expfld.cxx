@@ -2,9 +2,9 @@
  *
  *  $RCSfile: expfld.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 12:35:32 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 15:40:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -711,11 +711,8 @@ USHORT SwSetExpFieldType::GetSeqFldList( SwSeqFldList& rList )
 void SwSetExpFieldType::SetChapter( SwSetExpField& rFld, const SwNode& rNd )
 {
     const SwTxtNode* pTxtNd = rNd.FindOutlineNodeOfLevel( nLevel );
-    if( pTxtNd )
+    if( pTxtNd && pTxtNd->GetOutlineNum() )
     {
-        ASSERT( pTxtNd && pTxtNd->GetOutlineNum(),
-                "kein Outline TextNode" );
-
         SwNodeNum aNum( *pTxtNd->GetOutlineNum() );
         if( nLevel < aNum.GetLevel() )
             aNum.SetLevel( nLevel );
