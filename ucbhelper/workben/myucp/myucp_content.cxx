@@ -2,9 +2,9 @@
  *
  *  $RCSfile: myucp_content.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kso $ $Date: 2001-02-22 10:51:47 $
+ *  last change: $Author: kso $ $Date: 2001-03-27 14:04:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -322,7 +322,7 @@ Any SAL_CALL Content::execute( const Command& aCommand,
         //////////////////////////////////////////////////////////////////
 
         // Note: Implemented by base class.
-        aRet <<= getPropertySetInfo();
+        aRet <<= getPropertySetInfo( Environment );
     }
     else if ( aCommand.Name.compareToAscii( "getCommandInfo" ) == 0 )
     {
@@ -331,7 +331,7 @@ Any SAL_CALL Content::execute( const Command& aCommand,
         //////////////////////////////////////////////////////////////////
 
         // Note: Implemented by base class.
-        aRet <<= getCommandInfo();
+        aRet <<= getCommandInfo( Environment );
     }
 #if 0
     else if ( aCommand.Name.compareToAscii( "open" ) == 0 )
