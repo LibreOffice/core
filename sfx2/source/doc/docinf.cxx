@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docinf.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 17:36:01 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 16:10:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,7 @@
 #include <svtools/saveopt.hxx>
 #include <tools/tenccvt.hxx>
 #include <svtools/useroptions.hxx>
+#include <sot/exchange.hxx>
 #include "rtl/tencinfo.h"
 
 #include "docfilt.hxx"
@@ -1150,7 +1151,18 @@ BOOL SfxDocumentInfo::Load(SvStorage* pStorage)
         return FALSE;
     aStr->SetVersion( pStorage->GetVersion() );
     aStr->SetBufferSize(STREAM_BUFFER_SIZE);
-    return Load(*aStr);
+    BOOL bRet = Load(*aStr);
+    if ( bRet )
+    {
+        String aStr = SotExchange::GetFormatMimeType( pStorage->GetFormat() );
+        USHORT nPos = aStr.Search(';');
+        if ( nPos != STRING_NOTFOUND )
+            pImp->aSpecialMimeType = aStr.Copy( 0, nPos );
+        else
+            pImp->aSpecialMimeType = aStr;
+    }
+
+    return bRet;
 }
 
 //-------------------------------------------------------------------------
