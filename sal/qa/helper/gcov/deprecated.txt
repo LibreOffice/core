@@ -5,3 +5,178 @@
         rtl_ustr_trim;
         rtl_str_trim;
 
+# since 16.9.2003
+# Function List:
+# A. deprecated functions:
+#    1) Profile class and all its sub C API:
+        osl_openProfile;
+        osl_closeProfile;
+        osl_flushProfile;
+        osl_readProfileString;
+
+        osl_readProfileBool;
+        osl_readProfileIdent;
+        osl_writeProfileString;
+
+        osl_writeProfileBool;
+        osl_writeProfileIdent;
+        osl_removeProfileEntry;
+
+        osl_getProfileSectionEntries;
+        osl_getProfileSections;
+
+#    2) VolumeDevice class and all this sub C API:
+        osl_unmountVolumeDevice;
+        osl_automountVolumeDevice;
+        osl_releaseVolumeDeviceHandle;
+
+        osl_acquireVolumeDeviceHandle;
+        osl_getVolumeDeviceMountPath;
+
+#    3) in FileBase class:
+        osl_getCanonicalName;
+
+# B. untested functions:
+#    functions need Client/Server model and blocking mode of transmission. some of the functions
+#    can not run through on testshl2 env while the same code can run successfully in normal seperate
+#    files.
+#    1) in DatagramSocket class:
+        osl_receiveFromSocket;
+        osl_sendToSocket;
+
+#    2) in StreamSocket class:
+        osl_readSocket;
+        osl_writeSocket;
+        osl_receiveSocket;
+        osl_sendSocket;
+
+#    3) in Socket class:
+        osl_isExceptionPending;
+        osl_shutdownSocket;
+
+#    4) in Pipe class:
+        osl_acceptPipe;
+
+#    5) in StreamPipe class:
+        osl_readPipe;
+        osl_writePipe;
+        osl_receivePipe;
+        osl_sendPipe;
+
+#C. unreachable functions
+#    (*)in .map file but does not appear in.hxx header file thus unreachable,
+#       mostly for internal use, can not be reached by accessing class, so need
+#       not be tested.
+#    1) in file module*:
+        osl_abbreviateSystemPath;
+
+#    2) in socket module*:
+        osl_addToSocketSet;
+        osl_clearSocketSet;
+        osl_createSocketSet;
+
+        osl_copyHostAddr;
+        osl_destroySocketSet;
+        osl_createHostAddr;
+
+        osl_createHostAddrByName;
+        osl_createHostAddrByAddr;
+
+        osl_copyHostAddr;
+        osl_destroyHostAddr;
+        osl_getHostnameOfHostAddr;
+
+        osl_getSocketAddrOfHostAddr;
+        osl_createInetBroadcastAddr;
+
+        osl_demultiplexSocketEvents;
+        osl_getDottedInetAddrOfSocketAddr;
+
+        osl_getFamilyOfSocketAddr;
+        osl_isInSocketSet;
+
+#    3) in thread module*:
+        osl_createThread;
+        osl_setThreadTextEncoding;
+
+#    or (#)does not wrapper into a class, only in C API. does not in our Class
+#       check list.
+#    1) all diagnose module#:
+        osl_breakDebug;
+        osl_assertFailedLine;
+        osl_trace;
+        osl_reportError;
+
+        osl_setDebugMessageFunc;
+
+#    2) all signal module#:
+        osl_addSignalHandler;
+        osl_removeSignalHandler;
+        osl_raiseSignal;
+
+#    3) all time module#:
+        osl_getSystemTime;
+        osl_getDateTimeFromTimeValue;
+
+        osl_getTimeValueFromDateTime;
+        osl_getLocalTimeFromSystemTime;
+
+        osl_getSystemTimeFromLocalTime;
+        osl_getGlobalTimer;
+
+#    4) all process module#:
+        osl_executeProcess;
+        osl_executeProcess_WithRedirectedIO;
+
+        osl_terminateProcess;
+        osl_getProcess;
+
+        osl_freeProcessHandle;
+        osl_joinProcess;
+        osl_joinProcessWithTimeout;
+
+        osl_getProcessInfo;
+        osl_getExecutableFile;
+        osl_getCommandArgCount;
+
+        osl_getCommandArg;
+        osl_getEnvironment;
+        osl_getProcessWorkingDir;
+
+        osl_getProcessLocale;
+        osl_setProcessLocale;
+        osl_sendResourcePipe;
+
+        osl_receiveResourcePipe;
+
+#    5) all util module#:
+        osl_getEthernetAddress;
+
+
+
+###
+# LLA:
+# this functions are not deprecated, they only marked as deprecated, to say that
+# there is no test need.
+###
+        rtl_zeroMemory;
+        rtl_fillMemory;
+        rtl_copyMemory;
+        rtl_moveMemory;
+        rtl_compareMemory;
+        rtl_findInMemory;
+
+# LLA:
+# Marked as deprecated by Stephan Bergmann
+
+        rtl_byte_sequence_reference2One;
+        rtl_byte_sequence_realloc;
+        rtl_byte_sequence_acquire;
+        rtl_byte_sequence_release;
+        rtl_byte_sequence_construct;
+        rtl_byte_sequence_constructNoDefault;
+        rtl_byte_sequence_constructFromArray;
+        rtl_byte_sequence_assign;
+        rtl_byte_sequence_equals;
+        rtl_byte_sequence_getConstArray;
+        rtl_byte_sequence_getLength;
