@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imoptdlg.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 19:54:00 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 19:59:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,54 +70,15 @@ ModalDialog RID_SCDLG_IMPORTOPT
     Size = MAP_APPFONT ( 256 , 66 ) ;
     Moveable = TRUE ;
     Closeable = FALSE ;
-    Text = "Datei Importieren" ;
-    Text [ ENGLISH ] = "Import File" ;
-    Text [ norwegian ] = "Import File" ;
-    Text [ italian ] = "Importa file" ;
-    Text [ portuguese_brazilian ] = "Importar Arquivo" ;
-    Text [ portuguese ] = "Importar ficheiro" ;
-    Text [ french ] = "Import de fichier" ;
-    Text [ dutch ] = "Bestand importeren" ;
-    Text [ spanish ] = "Importar archivo" ;
-    Text [ danish ] = "Importer fil" ;
-    Text [ swedish ] = "Importera fil" ;
-    Text [ finnish ] = "Tuo tiedosto" ;
-    Text [ english_us ] = "Import File" ;
+    Text [ de ] = "Datei Importieren" ;
+    Text [ en-US ] = "Import File" ;
     FixedText FT_FIELDSEP
     {
         Pos = MAP_APPFONT ( 12 , 32 ) ;
         Size = MAP_APPFONT ( 55 , 8 ) ;
-        Text = "~Feldtrenner" ;
-        Text [ ENGLISH ] = "~Field delimiter" ;
-        Text [ norwegian ] = "~Field delimiter" ;
-        Text [ italian ] = "Separatore di campo" ;
-        Text [ portuguese_brazilian ] = "Delimitador de ~campo" ;
-        Text [ portuguese ] = "Separador de ~campo" ;
-        Text [ french ] = "~Séparateur de champ" ;
-        Text [ dutch ] = "~Veldbegrenzing" ;
-        Text [ spanish ] = "Separador de campos" ;
-        Text [ danish ] = "~Feltseparator" ;
-        Text [ swedish ] = "~Fältavgränsare" ;
-        Text [ finnish ] = "~Kentän erotin" ;
-        Text [ english_us ] = "~Field delimiter" ;
-        Text[ chinese_simplified ] = "å­—æ®µåˆ†éš”ç¬¦(~F)";
-        Text[ russian ] = "Ğàçäåëèòåëü ïîëÿ";
-        Text[ polish ] = "Separator ~pola";
-        Text[ japanese ] = "ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã®åŒºåˆ‡ã‚Šè¨˜å·(~F)";
-        Text[ chinese_traditional ] = "æ¬„ä½åˆ†éš”ç¬¦(~F)";
-        Text[ arabic ] = "İÇÕá ÇáÍŞá";
-        Text[ greek ] = "Äéá÷ùñéóôéêü ğåäßùí";
-        Text[ korean ] = "í•„ë“œ êµ¬ë¶„ ê¸°í˜¸(~F)";
-        Text[ turkish ] = "~Alan ayracı";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Delimitador de camp";
-        Text[ thai ] = "à¸•à¸±à¸§à¸„à¸±à¹ˆà¸™à¹€~à¸‚à¸•à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
-        Text[ czech ] = "OddÄ›lovaÄ pole";
-        Text[ hebrew ] = "~Feldtrenner";
-        Text[ hindi ] = "~à¤•à¥à¤·à¥‡à¤¤à¥à¤° à¤ªà¤°à¤¿à¤¸à¥€à¤®à¤¿à¤¤ à¤•à¤°à¤¨à¥‡à¤µà¤¾à¤²à¤¾";
-        Text[ slovak ] = "OddeÄ¾ovaÄ ~poÄ¾a";
-        Text[ hungarian ] = "MezÅ‘~elvÃ¡lasztÃ³";
-        Text[ slovenian ] = "LoÄilo ~polj";
+        Text [ de ] = "~Feldtrenner" ;
+        Text [ en-US ] = "~Field delimiter" ;
+        Text [ x-comment ] = " ";
     };
     ComboBox ED_FIELDSEP
     {
@@ -129,37 +90,9 @@ ModalDialog RID_SCDLG_IMPORTOPT
     {
         Pos = MAP_APPFONT ( 12 , 48 ) ;
         Size = MAP_APPFONT ( 55 , 8 ) ;
-        Text = "~Texttrenner" ;
-        Text [ ENGLISH ] = "~Text delimiter" ;
-        Text [ norwegian ] = "~Text delimiter" ;
-        Text [ italian ] = "Separatore di ~testo" ;
-        Text [ portuguese_brazilian ] = "Delimitador de ~texto" ;
-        Text [ portuguese ] = "Delimitador de ~texto" ;
-        Text [ french ] = "Séparateur de ~texte" ;
-        Text [ dutch ] = "~Tekstbegrenzing" ;
-        Text [ spanish ] = "S~eparador de texto" ;
-        Text [ danish ] = "~Tekstseparator" ;
-        Text [ swedish ] = "~Textavgränsare" ;
-        Text [ finnish ] = "~Tekstin erottimet" ;
-        Text [ english_us ] = "~Text delimiter" ;
-        Text[ chinese_simplified ] = "æ–‡å­—åˆ†éš”ç¬¦(~T)";
-        Text[ russian ] = "Ğàçäåëèòåëü òåêñòà";
-        Text[ polish ] = "Separator ~tekstu";
-        Text[ japanese ] = "ãƒ†ã‚­ã‚¹ãƒˆã®åŒºåˆ‡ã‚Šè¨˜å·(~T)";
-        Text[ chinese_traditional ] = "æ–‡å­—åˆ†éš”ç¬¦(~T)";
-        Text[ arabic ] = "İÇÕá ÇáäÕ";
-        Text[ greek ] = "Äéá÷ùñéóôéêü êåéìİíïõ";
-        Text[ korean ] = "í…ìŠ¤íŠ¸ êµ¬ë¶„ ê¸°í˜¸(~T)";
-        Text[ turkish ] = "~Metin ayracı";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Delimitador de text";
-        Text[ thai ] = "à¸•à¸±à¸§à¸„à¸±à¹ˆà¸™~à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡";
-        Text[ czech ] = "OddÄ›lovaÄ textu";
-        Text[ hebrew ] = "~Texttrenner";
-        Text[ hindi ] = "~à¤Ÿà¥‡à¤•à¥à¤¸à¥à¤Ÿà¥ à¤ªà¤°à¤¿à¤¸à¥€à¤®à¤¿à¤¤ à¤•à¤°à¤¨à¥‡à¤µà¤¾à¤²à¤¾";
-        Text[ slovak ] = "OddeÄ¾ovaÄ ~textu";
-        Text[ hungarian ] = "~SzÃ¶veghatÃ¡rolÃ³";
-        Text[ slovenian ] = "LoÄilo ~besedila";
+        Text [ de ] = "~Texttrenner" ;
+        Text [ en-US ] = "~Text delimiter" ;
+        Text [ x-comment ] = " ";
     };
     ComboBox ED_TEXTSEP
     {
@@ -171,37 +104,9 @@ ModalDialog RID_SCDLG_IMPORTOPT
     {
         Pos = MAP_APPFONT ( 12 , 16 ) ;
         Size = MAP_APPFONT ( 55 , 8 ) ;
-        Text = "~Zeichensatz" ;
-        Text [ ENGLISH ] = "F~ont" ;
-        Text [ norwegian ] = "F~ont" ;
-        Text [ italian ] = "Set di caratteri" ;
-        Text [ portuguese_brazilian ] = "~Conjunto de caracteres" ;
-        Text [ portuguese ] = "~Conjunto de caracteres" ;
-        Text [ french ] = "~Jeu de caractères" ;
-        Text [ dutch ] = "~Tekenset" ;
-        Text [ spanish ] = "J~uego de caracteres" ;
-        Text [ danish ] = "T~egnsæt" ;
-        Text [ swedish ] = "Te~ckenuppsättning" ;
-        Text [ finnish ] = "~Merkistö" ;
-        Text [ english_us ] = "~Character set" ;
-        Text[ chinese_simplified ] = "å­—ç¬¦é›†(~C)";
-        Text[ russian ] = "Êîäèğîâêà";
-        Text[ polish ] = "Z~estaw znaków";
-        Text[ japanese ] = "æ–‡å­—åˆ—(~C)";
-        Text[ chinese_traditional ] = "å­—å‹(~C)";
-        Text[ arabic ] = "ãÌãæÚÉ ÃÍÑİ";
-        Text[ greek ] = "~Óåô ÷áñáêôŞñùí";
-        Text[ korean ] = "ë¬¸ìì§‘í•©(~C)";
-        Text[ turkish ] = "~Karakter kümesi";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Joc de caràcters";
-        Text[ thai ] = "à¸Šà¸¸à¸”~à¸•à¸±à¸§à¸­à¸±à¸à¸‚à¸£à¸°";
-        Text[ czech ] = "ZnakovÃ¡ sada";
-        Text[ hebrew ] = "~Zeichensatz";
-        Text[ hindi ] = "~à¤…à¤•à¥à¤·à¤° à¤¸à¤®à¥‚à¤¹";
-        Text[ slovak ] = "~ZnakovÃ¡ sada";
-        Text[ hungarian ] = "~KarakterkÃ©szlet";
-        Text[ slovenian ] = "~Nabor znakov";
+        Text [ de ] = "~Zeichensatz" ;
+        Text [ en-US ] = "~Character set" ;
+        Text [ x-comment ] = " ";
     };
     ListBox DDLB_FONT
     {
@@ -223,72 +128,17 @@ ModalDialog RID_SCDLG_IMPORTOPT
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 188 , 8 ) ;
-        Text = "Feldoptionen" ;
-        Text [ ENGLISH ] = "Field Options" ;
-        Text [ norwegian ] = "Field Options" ;
-        Text [ italian ] = "Opzioni campo" ;
-        Text [ portuguese_brazilian ] = "Opções do campo" ;
-        Text [ portuguese ] = "Opções de campo" ;
-        Text [ french ] = "Options de champ" ;
-        Text [ dutch ] = "Veldopties" ;
-        Text [ spanish ] = "Opciones de campo" ;
-        Text [ danish ] = "Feltindstillinger" ;
-        Text [ swedish ] = "Fältalternativ" ;
-        Text [ finnish ] = "Kentän asetukset" ;
-        Text [ english_us ] = "Field options" ;
-        Text[ chinese_simplified ] = "å­—æ®µé€‰é¡¹";
-        Text[ russian ] = "Ïàğàìåòğû ïîëÿ";
-        Text[ polish ] = "Opcje pola";
-        Text[ japanese ] = "ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã®ã‚ªãƒ—ã‚·ãƒ§ãƒ³";
-        Text[ chinese_traditional ] = "æ¬„ä½é¸é …";
-        Text[ arabic ] = "ÎíÇÑÇÊ ÇáÍŞá";
-        Text[ greek ] = "Åğéëïãİò ğåäßïõ";
-        Text[ korean ] = "í•„ë“œ ì˜µì…˜";
-        Text[ turkish ] = "Alan seçenekleri";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Opcions de camp";
-        Text[ thai ] = "à¸•à¸±à¸§à¹€à¸¥à¸·à¸­à¸à¹€à¸‚à¸•à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
-        Text[ czech ] = "Volby pole";
-        Text[ hebrew ] = "Feldoptionen";
-        Text[ hindi ] = "à¤•à¥à¤·à¥‡à¤¤à¥à¤° à¤µà¤¿à¤•à¤²à¥à¤ª";
-        Text[ slovak ] = "VoÄ¾by poÄ¾a";
-        Text[ hungarian ] = "MezÅ‘beÃ¡llÃ­tÃ¡sok";
-        Text[ slovenian ] = "MoÅ¾nosti polja";
+        Text [ de ] = "Feldoptionen" ;
+        Text [ en-US ] = "Field options" ;
+        Text [ x-comment ] = " ";
     };
     CheckBox CB_FIXEDWIDTH
     {
         Pos = MAP_APPFONT( 12, 66 );
         Size = MAP_APPFONT( 172, 10 );
         Hide = TRUE;
-        Text = "Feste Spalten~breite";
-        Text[ english ] = "Fixed column ~width";
-        Text[ english_us ] = "Fixed column ~width";
-        Text[ portuguese ] = "Fixed text ~width";
-        Text[ russian ] = "Fixed text ~width";
-        Text[ greek ] = "Fixed text ~width";
-        Text[ dutch ] = "Fixed text ~width";
-        Text[ french ] = "Largeur de colonne fixe";
-        Text[ spanish ] = "~Ancho de columna fijo";
-        Text[ finnish ] = "Fixed text ~width";
-        Text[ italian ] = "Ampiezza colonna fissa";
-        Text[ danish ] = "Fast ~kolonnebredde";
-        Text[ swedish ] = "Fast kolumn~bredd";
-        Text[ polish ] = "Fixed text ~width";
-        Text[ japanese ] = "æŒ‡å®šã•ã‚ŒãŸåˆ—å¹…(~W)";
-        Text[ korean ] = "ê³ ì • ì—´ ë„ˆë¹„(~W)";
-        Text[ chinese_simplified ] = "å›ºå®šçš„åˆ—å®½(~W)";
-        Text[ chinese_traditional ] = "å›ºå®šçš„æ¬„å¯¬(~W)";
-        Text[ turkish ] = "Sabit kolon ~genişliği";
-        Text[ arabic ] = "Fixed text ~width";
-        Text[ czech ] = "PevnÃ¡ Å¡Ã­Å™ka sloupce";
-        Text[ hebrew ] = "Feste Spalten~breite";
-        Text[ catalan ] = "Fixed column ~width";
-        Text[ portuguese_brazilian ] = "Largura de coluna fixa";
-        Text[ thai ] = "Fixed column ~width";
-        Text[ hindi ] = "Fixed column ~width";
-        Text[ slovak ] = "~PevnÃ¡ Å¡Ã­rka stÄºpca";
-        Text[ hungarian ] = "RÃ¶gzÃ­tett ~oszlopszÃ©lessÃ©g";
-        Text[ slovenian ] = "Fiksna ~Å¡irina stolpca";
+        Text [ de ] = "Feste Spalten~breite";
+        Text [ en-US ] = "Fixed column ~width";
     };
     OKButton BTN_OK
     {
@@ -306,24 +156,7 @@ ModalDialog RID_SCDLG_IMPORTOPT
         Pos = MAP_APPFONT ( 202 , 43 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
     };
-    Text[ chinese_simplified ] = "è¾“å…¥æ–‡ä»¶";
-    Text[ russian ] = "Èìïîğò ôàéëà";
-    Text[ polish ] = "Importuj plik";
-    Text[ japanese ] = "ãƒ•ã‚¡ã‚¤ãƒ«ã®ã‚¤ãƒ³ãƒãƒ¼ãƒˆ";
-    Text[ chinese_traditional ] = "åŒ¯å…¥æª”æ¡ˆ";
-    Text[ arabic ] = "ÇÓÊíÑÇÏ ãáİ";
-    Text[ greek ] = "ÅéóáãùãŞ áñ÷åßïõ";
-    Text[ korean ] = "íŒŒì¼ ê°€ì ¸ì˜¤ê¸°";
-    Text[ turkish ] = "Dosyayı içe aktar";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Importa el fitxer";
-    Text[ thai ] = "à¸™à¸³à¹€à¸‚à¹‰à¸²à¹à¸Ÿà¹‰à¸¡";
-    Text[ czech ] = "Importovat soubor";
-    Text[ hebrew ] = "Datei Importieren";
-    Text[ hindi ] = "à¤«à¤¾à¤‡à¤² à¤•à¥‹ à¤¨à¤¿à¤°à¥à¤¯à¤¾à¤¤ à¤•à¤°à¥‹";
-    Text[ slovak ] = "ImportovaÅ¥ sÃºbor";
-    Text[ hungarian ] = "FÃ¡jl importÃ¡lÃ¡sa";
-    Text[ slovenian ] = "Uvozi datoteko";
+    Text [ x-comment ] = " ";
 };
 
 
