@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xsecctl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:56:39 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:22:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -423,7 +423,7 @@ void XSecController::createXSecComponent( )
             xStatusChangeListener = this;
 
         xSAXEventKeeperStatusChangeBroadcaster
-            ->addXSAXEventKeeperStatusChangeListener( xStatusChangeListener );
+            ->addSAXEventKeeperStatusChangeListener( xStatusChangeListener );
 
         m_nStatusOfSecurityComponents = INITIALIZED;
     }
@@ -1064,7 +1064,7 @@ void XSecController::endMission()
         cssu::Reference<cssxc::sax::XSAXEventKeeperStatusChangeBroadcaster>
             xSAXEventKeeperStatusChangeBroadcaster(m_xSAXEventKeeper, cssu::UNO_QUERY);
         xSAXEventKeeperStatusChangeBroadcaster
-            ->addXSAXEventKeeperStatusChangeListener( NULL );
+            ->addSAXEventKeeperStatusChangeListener( NULL );
     }
 }
 
