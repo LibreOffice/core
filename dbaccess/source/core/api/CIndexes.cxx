@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CIndexes.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-12 11:58:44 $
+ *  last change: $Author: oj $ $Date: 2001-11-06 12:48:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,7 +125,6 @@ Reference< XNamed > OIndexes::createObject(const ::rtl::OUString& _rName)
 
         Reference< XResultSet > xResult = m_pTable->getMetaData()->getIndexInfo(makeAny(aCatalog),aSchema,aTable,sal_False,sal_False);
 
-        Reference< XNamed > xRet = NULL;
         if(xResult.is())
         {
             Reference< XRow > xRow(xResult,UNO_QUERY);
@@ -138,6 +137,7 @@ Reference< XNamed > OIndexes::createObject(const ::rtl::OUString& _rName)
                         sal_False,
                         xRow->getShort(7) == IndexType::CLUSTERED);
                     xRet = pRet;
+                    break;
                 }
             }
         }
@@ -153,24 +153,20 @@ void OIndexes::impl_refresh() throw(RuntimeException)
 // -------------------------------------------------------------------------
 Reference< XPropertySet > OIndexes::createEmptyObject()
 {
-    if(m_xIndexes.is())
-    {
-        Reference<XDataDescriptorFactory> xData( m_xIndexes,UNO_QUERY);
+    Reference<XDataDescriptorFactory> xData( m_xIndexes,UNO_QUERY);
+    if(xData.is())
         return xData->createDataDescriptor();
-    }
     else
-    {
-        connectivity::sdbcx::OIndex* pNew = new connectivity::sdbcx::OIndex(sal_True);
-        return pNew;
-    }
+        return new connectivity::sdbcx::OIndex(sal_True);
 }
 // -------------------------------------------------------------------------
 // XAppend
 void OIndexes::appendObject( const Reference< XPropertySet >& descriptor )
 {
-    if(m_xIndexes.is())
+    Reference<XAppend> xData( m_xIndexes,UNO_QUERY);
+    if(xData.is())
     {
-        Reference<XAppend> xData( m_xIndexes,UNO_QUERY);
+
         xData->appendByDescriptor(descriptor);
     }
     else
