@@ -2,9 +2,9 @@
  *
  *  $RCSfile: print.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: pl $ $Date: 2002-03-18 14:15:43 $
+ *  last change: $Author: ka $ $Date: 2002-05-29 12:53:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -532,7 +532,7 @@ void Printer::ImplInit( SalPrinterQueueInfo* pInfo )
         if ( (pJobSetup->maPrinterName != pInfo->maPrinterName) ||
              (pJobSetup->maDriver != pInfo->maDriver) )
         {
-            delete pJobSetup->mpDriverData;
+            delete[] pJobSetup->mpDriverData;
             pJobSetup->mpDriverData = NULL;
             pJobSetup->mnDriverDataLen = 0;
         }

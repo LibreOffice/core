@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev4.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ka $ $Date: 2002-03-21 15:24:00 $
+ *  last change: $Author: ka $ $Date: 2002-05-29 12:53:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,8 +217,8 @@ void OutputDevice::ImplDrawPolyPolygon( const PolyPolygon& rPolyPoly, const Poly
         else
             mpGraphics->DrawPolyPolygon( nCount, pPointAry, pPointAryAry );
 
-        delete pPointAry;
-        delete pPointAryAry;
+        delete[] pPointAry;
+        delete[] pPointAryAry;
     }
 
     if( pClipPolyPoly )

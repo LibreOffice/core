@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ka $ $Date: 2002-03-04 17:05:42 $
+ *  last change: $Author: ka $ $Date: 2002-05-29 12:53:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1694,8 +1694,8 @@ void OutputDevice::DrawPolyPolygon( const PolyPolygon& rPolyPoly )
 
         if ( pPointAry != aStackAry1 )
         {
-            delete pPointAry;
-            delete pPointAryAry;
+            delete[] pPointAry;
+            delete[] pPointAryAry;
         }
     }
 #else

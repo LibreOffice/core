@@ -2,9 +2,9 @@
  *
  *  $RCSfile: image.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2002-03-01 12:35:42 $
+ *  last change: $Author: ka $ $Date: 2002-05-29 12:53:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,7 @@ ImplImageList::~ImplImageList()
 {
     if ( mpImageBitmap )
         delete mpImageBitmap;
-    delete mpAry;
+    delete[] mpAry;
 }
 
 // =======================================================================
@@ -877,7 +877,7 @@ ImageList::ImageList( const ResId& rResId )
                 pAry[ i ] = pResMgr->ReadShort();
             ImplBmpImageCreate( this, aImageBitmap, aMaskBitmap, aMaskColor,
                                 bCol, nCount, pAry, 4 );
-            delete pAry;
+            delete[] pAry;
         }
         if ( nObjMask & RSC_IMAGELIST_IDCOUNT )
         {
@@ -995,7 +995,7 @@ void ImageList::AddImage( USHORT nId, const Image& rImage )
         memset( mpImplData->mpAry, 0, mpImplData->mnArySize*sizeof(ImageAryData) );
         memcpy( mpImplData->mpAry, pOldAry, nOldSize*sizeof(ImageAryData) );
         mpImplData->mpImageBitmap->Expand( mnGrowSize );
-        delete pOldAry;
+        delete[] pOldAry;
 
         nIndex = mpImplData->mnRealCount;
     }
@@ -1083,7 +1083,7 @@ void ImageList::CopyImage( USHORT nId, USHORT nCopyId )
         memset( mpImplData->mpAry, 0, mpImplData->mnArySize*sizeof(ImageAryData) );
         memcpy( mpImplData->mpAry, pOldAry, nOldSize*sizeof(ImageAryData) );
         mpImplData->mpImageBitmap->Expand( mnGrowSize );
-        delete pOldAry;
+        delete[] pOldAry;
 
         nIndex = mpImplData->mnRealCount;
     }
@@ -1385,7 +1385,7 @@ Bitmap ImageList::GetBitmap() const
         aBmp = mpImplData->mpImageBitmap->GetBitmap( nPosCount, mpPosAry );
 
         // Temporaeres Array loeschen
-        delete mpPosAry;
+        delete[] mpPosAry;
     }
 
     return aBmp;
@@ -1417,7 +1417,7 @@ Bitmap ImageList::GetMaskBitmap() const
         aBmp = mpImplData->mpImageBitmap->GetMaskBitmap( nPosCount, mpPosAry );
 
         // Temporaeres Array loeschen
-        delete mpPosAry;
+        delete[] mpPosAry;
     }
 
     return aBmp;
@@ -1674,7 +1674,7 @@ SvStream& operator<<( SvStream& rOStream, const ImageList& rImageList )
     }
 
     // Temporaeres Array loeschen
-    delete mpPosAry;
+    delete[] mpPosAry;
 
     return rOStream;
 }

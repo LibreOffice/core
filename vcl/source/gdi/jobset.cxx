@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jobset.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pl $ $Date: 2001-09-06 12:46:14 $
+ *  last change: $Author: ka $ $Date: 2002-05-29 12:53:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,7 +146,7 @@ ImplJobSetup::ImplJobSetup( const ImplJobSetup& rJobSetup ) :
 
 ImplJobSetup::~ImplJobSetup()
 {
-    delete mpDriverData;
+    delete[] mpDriverData;
 }
 
 // =======================================================================
@@ -400,7 +400,7 @@ SvStream& operator>>( SvStream& rIStream, JobSetup& rJobSetup )
                 }
             }
         }
-        delete pTempBuf;
+        delete[] pTempBuf;
     }
 /*
     else
