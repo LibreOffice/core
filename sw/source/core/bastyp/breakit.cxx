@@ -2,9 +2,9 @@
  *
  *  $RCSfile: breakit.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-10-20 14:29:22 $
+ *  last change: $Author: tl $ $Date: 2000-10-27 11:50:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,15 +81,14 @@
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::text;
-using namespace ::com::sun::star::linguistic;
-
 
 
 SwBreakIt::SwBreakIt()
 {
     _GetLocale( LANGUAGE_NONE );
     Reference< XMultiServiceFactory > xMSF = ::comphelper::getProcessServiceFactory();
-    Reference < XInterface > xI = xMSF->createInstance( ::rtl::OUString::createFromAscii( "com.sun.star.text.BreakIterator" ) );
+    Reference < XInterface > xI = xMSF->createInstance(
+        ::rtl::OUString::createFromAscii( "com.sun.star.text.BreakIterator" ) );
     if ( xI.is() )
     {
         Any x = xI->queryInterface( ::getCppuType((const Reference< XBreakIterator >*)0) );
