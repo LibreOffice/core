@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ETable.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2000-12-12 10:44:18 $
+ *  last change: $Author: oj $ $Date: 2000-12-13 15:21:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -343,9 +343,9 @@ void OFlatTable::fillColumns()
         }
         else
         {
-            ByteString aField(aFirstLine.GetToken(i,pConnection->getFieldDelimiter(),pConnection->getStringDelimiter()));
+            ByteString aField2(aFirstLine.GetToken(i,pConnection->getFieldDelimiter(),pConnection->getStringDelimiter()));
 
-            if (aField.Len() == 0)
+            if (aField2.Len() == 0)
             {
                 bNumeric = FALSE;
             }
@@ -353,9 +353,9 @@ void OFlatTable::fillColumns()
             {
                 bNumeric = TRUE;
                 xub_StrLen nDot = 0;
-                for (xub_StrLen j = 0; j < aField.Len(); j++)
+                for (xub_StrLen j = 0; j < aField2.Len(); j++)
                 {
-                    char c = aField.GetChar(j);
+                    char c = aField2.GetChar(j);
                     // nur Ziffern und Dezimalpunkt und Tausender-Trennzeichen?
                     if ((!cDecimalDelimiter || c != cDecimalDelimiter) &&
                         (!cThousandDelimiter || c != cThousandDelimiter) &&
@@ -377,10 +377,10 @@ void OFlatTable::fillColumns()
                 if (bNumeric && cThousandDelimiter)
                 {
                     // Ist der Trenner richtig angegeben?
-                    ByteString aValue = aField.GetToken(0,cDecimalDelimiter);
-                    for (xub_StrLen j = aValue.Len() - 4; j >= 0; j -= 4)
+                    ByteString aValue = aField2.GetToken(0,cDecimalDelimiter);
+                    for (sal_Int32 j = aValue.Len() - 4; j >= 0; j -= 4)
                     {
-                        char c = aField.GetChar(j);
+                        char c = aValue.GetChar(j);
                         // nur Ziffern und Dezimalpunkt und Tausender-Trennzeichen?
                         if (c == cThousandDelimiter && j)
                             continue;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTable.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-10 19:25:56 $
+ *  last change: $Author: oj $ $Date: 2000-12-13 15:18:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -291,7 +291,6 @@ void ODbaseTable::fillColumns()
 ODbaseTable::ODbaseTable(ODbaseConnection* _pConnection)
         :ODbaseTable_BASE(_pConnection)
         ,m_pMemoStream(NULL)
-        ,m_bWriteable(sal_False)
         ,m_bWriteableMemo(sal_False)
         ,m_bValid(sal_False)
 {
@@ -314,7 +313,6 @@ ODbaseTable::ODbaseTable(ODbaseConnection* _pConnection,
                                   _SchemaName,
                                   _CatalogName)
                 ,m_pMemoStream(NULL)
-                ,m_bWriteable(sal_False)
                 ,m_bWriteableMemo(sal_False)
                 ,m_bValid(sal_False)
 {
@@ -717,14 +715,16 @@ sal_Bool ODbaseTable::fetchRow(file::OValueRow _rRow,const OSQLColumns & _rCols,
         //  pVal = (*_rRow)[i].getBodyPtr();
         Reference< XPropertySet> xColumn = *aIter;
 
+        ::rtl::OUString aName;
+        xColumn->getPropertyValue(PROPERTY_NAME) >>= aName;
         // Laengen je nach Datentyp:
         // nyi: eine zentrale Funktion, die die Laenge liefert!
         sal_Int32 nLen;
         sal_Int32 nType;
         if(_bUseTableDefs)
         {
-            nLen    = m_aPrecisions[(_rCols.end()-aIter)-1];
-            nType   = m_aTypes[(_rCols.end()-aIter)-1];
+            nLen    = m_aPrecisions[i-1];
+            nType   = m_aTypes[i-1];
         }
         else
         {
@@ -736,7 +736,7 @@ sal_Bool ODbaseTable::fetchRow(file::OValueRow _rRow,const OSQLColumns & _rCols,
             case DataType::DATE:        nLen = 8; break;
             case DataType::DECIMAL:
                 if(_bUseTableDefs)
-                    nLen = SvDbaseConverter::ConvertPrecisionToDbase(nLen,m_aScales[(_rCols.end()-aIter)-1]);
+                    nLen = SvDbaseConverter::ConvertPrecisionToDbase(nLen,m_aScales[i-1]);
                 else
                     nLen = SvDbaseConverter::ConvertPrecisionToDbase(nLen,getINT32(xColumn->getPropertyValue(PROPERTY_SCALE)));
                 break;  // das Vorzeichen und das Komma
