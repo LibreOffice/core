@@ -2,9 +2,9 @@
  *
  *  $RCSfile: labfmt.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 06:36:41 $
+ *  last change: $Author: kz $ $Date: 2001-05-12 07:18:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -451,13 +451,13 @@ TabPage TP_LAB_FMT
         Text[ polish ] = "Zapisz...";
         Text[ portuguese_brazilian ] = "Save...";
         Text[ japanese ] = "ï€ë∂(~S)...";
-        Text[ korean ] = "~Save...";
+        Text[ korean ] = "~¿˙¿Â...";
         Text[ chinese_simplified ] = "¥Ê≈Ã(~S)...";
         Text[ chinese_traditional ] = "¿x¶s(~S)...";
         Text[ turkish ] = "Save...";
         Text[ arabic ] = "Õ›Ÿ...";
         Text[ catalan ] = "~Guardar...";
-        Text[ finnish ] = "~Speichern...";
+        Text[ finnish ] = "~Tallenna";
     };
 };
  // String *******************************************************************
@@ -694,7 +694,7 @@ ModalDialog DLG_SAVE_LABEL
         Text [ italian ] = "Marca" ;
         Text [ portuguese_brazilian ] = "Fazer" ;
         Text [ portuguese ] = "~Marca" ;
-        Text [ finnish ] = "~Marke" ;
+        Text [ finnish ] = "Tuotemerkki" ;
         Text [ danish ] = "MÊrke" ;
         Text [ french ] = "~Marque" ;
         Text [ swedish ] = "~M‰rke" ;
@@ -731,7 +731,7 @@ ModalDialog DLG_SAVE_LABEL
         Text [ italian ] = "~Tipo" ;
         Text [ portuguese_brazilian ] = "Tipo" ;
         Text [ portuguese ] = "~Tipo" ;
-        Text [ finnish ] = "~Typ" ;
+        Text [ finnish ] = "~Tyyppi" ;
         Text [ danish ] = "Type" ;
         Text [ french ] = "~Type" ;
         Text [ swedish ] = "~Typ" ;
@@ -776,13 +776,13 @@ ModalDialog DLG_SAVE_LABEL
         Text[ polish ] = "Opcje";
         Text[ portuguese_brazilian ] = "Options";
         Text[ japanese ] = "µÃﬂºÆ›";
-        Text[ korean ] = "Options";
+        Text[ korean ] = "ø…º«";
         Text[ chinese_simplified ] = "—°œÓ";
         Text[ chinese_traditional ] = "øÔ∂µ";
         Text[ turkish ] = "Options";
         Text[ arabic ] = "«·ŒÌ«—« ";
         Text[ catalan ] = "Opciones";
-        Text[ finnish ] = "Optionen";
+        Text[ finnish ] = "Mukauta";
     };
     OKButton PB_OK
     {
@@ -825,7 +825,7 @@ ModalDialog DLG_SAVE_LABEL
         Message[ polish ] = "Etykieta \"%1 / %2\" juø istnieje.\nSkasowaÊ dane przez zapisanie?";
         Message[ portuguese_brazilian ] = "The label \"%1 / %2\" already exists.\nDo you want to overwrite it?";
         Message[ japanese ] = "◊ÕﬁŸÅu%1 / %2ÅvÇÕÇ∑Ç≈Ç…Ç†ÇËÇ‹Ç∑ÅB\nè„èëÇ´ÇµÇ‹Ç∑Ç©ÅB";
-        Message[ korean ] = "The label \"%1 / %2\" already exists.\nDo you want to overwrite it?";
+        Message[ korean ] = "\"%1 / %2\"∂Û∫ß¿∫ ¿ÃπÃ ¡∏¿Á«’¥œ¥Ÿ.\nµ•¿Ã≈Õ∏¶ µ§æÓæ∫øÏΩ√∞⁄Ω¿¥œ±Ó?";
         Message[ chinese_simplified ] = "’‚∏ˆÃ˘±Í \"%1 / %2\" “—æ≠¥Ê‘⁄°£\n“™∏≤–¥£ø";
         Message[ chinese_traditional ] = "≥o≠”∂Kº–°u%1 / %2°v§w∏g¶s¶b°C\n≠n¬–ºg°H";
         Message[ turkish ] = "The label \"%1 / %2\" already exists.\nDo you want to overwrite it?";
@@ -846,7 +846,7 @@ ModalDialog DLG_SAVE_LABEL
     Text[ polish ] = "Zapisz format etykiety";
     Text[ portuguese_brazilian ] = "Save label format";
     Text[ japanese ] = "◊ÕﬁŸÇÃèëéÆÇï€ë∂Ç∑ÇÈ";
-    Text[ korean ] = "Save label format";
+    Text[ korean ] = "∂Û∫ß ∆˜∏À ¿˙¿Â";
     Text[ chinese_simplified ] = "¥Ê≈ÃÃ˘±Í∏Ò Ω";
     Text[ chinese_traditional ] = "¿x¶s∂Kº–ÆÊ¶°";
     Text[ turkish ] = "Save label format";
