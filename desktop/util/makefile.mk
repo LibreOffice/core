@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.26 $
+#   $Revision: 1.27 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-25 13:52:52 $
+#   last change: $Author: mh $ $Date: 2003-04-02 10:16:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -229,13 +229,13 @@ APP5OBJS +=	$(OBJ)$/icon_resource_ooo.obj
 APP5STDLIBS+= -lXext -lSM -lICE
 .ENDIF
 
-APP5DEPN= $(APP1RES) verinfo.rc
+APP5DEPN= $(APP1RES) ooverinfo.rc
 APP5DEF=    $(MISCX)$/$(TARGET).def
 
 .IF "$(GUI)" == "WNT"
-APP5RES=    $(RES)$/desktop.res
-APP5ICON=$(SOLARRESDIR)$/icons/001_star_butterfly.ico
-APP5VERINFO=verinfo.rc
+APP5RES=    $(RES)$/oodesktop.res
+APP5ICON=$(SOLARRESDIR)$/icons/ooo_gulls.ico
+APP5VERINFO=ooverinfo.rc
 APP5LINKRES=$(MISC)$/ooffice.res
 .ENDIF
 
