@@ -2,9 +2,9 @@
 #
 #   $RCSfile: idtglobal.pm,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: hr $ $Date: 2004-09-08 14:22:13 $
+#   last change: $Author: hr $ $Date: 2004-09-08 14:56:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -811,6 +811,12 @@ sub add_language_checkboxes_to_database
         my $onelanguage = ${$languagesarrayref}[$i];
         my $windowslanguage = installer::windows::language::get_windows_language($onelanguage);
 
+        my $is_english = 0;
+        if ( $windowslanguage eq "1033" ) { $is_english = 1; }
+
+        my $checkboxattribute = "3";
+        if ( $is_english ) { $checkboxattribute = "1"; }    # english is not deselectable
+
         my $count = $i + 1;
         my $nextcount = $i + 2;
         my $checkboxcount = "CheckBox" . $count;
@@ -822,13 +828,15 @@ sub add_language_checkboxes_to_database
         else { $controlnext = "CheckBox" . $nextcount; }
 
         my $line1 = "LanguageSelection" . "\t" . $checkboxcount . "\t" . "CheckBox" . "\t" .
-                    "22" . "\t" . $yvalue . "\t" . "15" . "\t" . "15" . "\t" . "3" . "\t" .
+                    "22" . "\t" . $yvalue . "\t" . "15" . "\t" . "15" . "\t" . $checkboxattribute . "\t" .
                     $property . "\t" . "\t" . $controlnext . "\t" . "\n";
 
         push(@{$controltable}, $line1);
 
         my $textcount = "Text" . $count;
         my $stringname = "OOO_CONTROL_LANG_" . $windowslanguage;
+
+        $yvalue = $yvalue + 2;      # text 2 pixel lower than checkbox
 
         my $line2 = "LanguageSelection" . "\t" . $textcount . "\t" . "Text" . "\t" .
                     "40" . "\t" . $yvalue . "\t" . "70" . "\t" . "15" . "\t" . "65539" . "\t" .
@@ -1179,7 +1187,9 @@ sub add_childprojects
     # InstallAdabas 98 SystemFolder msiexec.exe /i "[SourceDir]adabas\adabasd1201.msi" /qr
     # InstallJava 98 SystemFolder msiexec.exe /i "[SourceDir]java\Java 2 Runtime Environment, SE v1.4.2.msi" /qr REBOOT=R
 
-    my $adabasinstallsetdir = $installer::globals::msifilespath . $installer::globals::separator . "adabas2" . $installer::globals::separator . $installer::globals::adafilename;
+    if ( $installer::globals::msichildpath eq "" ) { installer::exiter::exit_program("ERROR: Path for child products not set!", "add_childprojects"); }
+
+    my $adabasinstallsetdir = $installer::globals::msichildpath . $installer::globals::separator . "adabas2" . $installer::globals::separator . $installer::globals::adafilename;
     my $msifilenamesref = installer::systemactions::find_file_with_file_extension("msi", $adabasinstallsetdir);
     if ( ! ($#{$msifilenamesref} > -1) ) { installer::exiter::exit_program("ERROR: Did not find msi file in $adabasinstallsetdir !", "add_childprojects"); }
 
