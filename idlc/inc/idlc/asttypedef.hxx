@@ -2,9 +2,9 @@
  *
  *  $RCSfile: asttypedef.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-15 12:23:01 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:42:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,18 +68,18 @@
 class AstTypeDef : public AstType
 {
 public:
-    AstTypeDef(AstType* pBaseType, const ::rtl::OString& name, AstScope* pScope)
-        : AstType(NT_typedef, name, pScope)
-        , m_pBaseType(pBaseType)
-        {}
+    AstTypeDef(
+        AstType const * baseType, rtl::OString const & name, AstScope * scope):
+        AstType(NT_typedef, name, scope), m_pBaseType(baseType) {}
+
     virtual ~AstTypeDef() {}
 
-    AstType* getBaseType()
+    AstType const * getBaseType() const
         { return m_pBaseType; }
 
-    virtual sal_Bool dump(RegistryKey& rKey, RegistryTypeWriterLoader* pLoader);
+    virtual sal_Bool dump(RegistryKey& rKey);
 private:
-    AstType* m_pBaseType;
+    AstType const * m_pBaseType;
 };
 
 #endif // _IDLC_ASTTYPEDEF_HXX_
