@@ -2,9 +2,9 @@
  *
  *  $RCSfile: diagnose.c,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hro $ $Date: 2000-10-30 12:06:27 $
+ *  last change: $Author: hro $ $Date: 2000-10-31 12:10:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,16 @@
 
 #define NO_DEBUG_CRT
 
+static pfunc_osl_printDebugMessage  _pPrintDebugMessage = NULL;
+
+pfunc_osl_printDebugMessage SAL_CALL osl_setDebugMessageFunc( pfunc_osl_printDebugMessage pNewFunc )
+{
+    pfunc_osl_printDebugMessage pOldFunc = _pPrintDebugMessage;
+    _pPrintDebugMessage = pNewFunc;
+
+    return pOldFunc;
+}
+
 /*
  Trace output
 */
@@ -107,27 +117,39 @@ sal_Bool SAL_CALL osl_assertFailedLine(const sal_Char* pszFileName, sal_Int32 nL
 
     OutputDebugString(szMessage);
 
-    /* active popup window for the current thread */
-    hWndParent = GetActiveWindow();
-    if (hWndParent != NULL)
-        hWndParent = GetLastActivePopup(hWndParent);
+    if ( _pPrintDebugMessage )
+        _pPrintDebugMessage( szMessage );
+    else if ( !getenv( "DISABLE_SAL_DBGBOX" ) )
+    {
+        TCHAR   szBoxMessage[1024];
 
-    /* set message box flags */
-    nFlags = MB_TASKMODAL | MB_ICONWARNING | MB_YESNOCANCEL | MB_DEFBUTTON2;
-    if (hWndParent == NULL)
-        nFlags |= MB_SERVICE_NOTIFICATION;
+        /* active popup window for the current thread */
+        hWndParent = GetActiveWindow();
+        if (hWndParent != NULL)
+            hWndParent = GetLastActivePopup(hWndParent);
 
-    /* display the assert */
-    nCode = MessageBox(hWndParent, szMessage, "Assertion Failed!", nFlags);
+        /* set message box flags */
+        nFlags = MB_TASKMODAL | MB_ICONWARNING | MB_YESNOCANCEL | MB_DEFBUTTON2;
+        if (hWndParent == NULL)
+            nFlags |= MB_SERVICE_NOTIFICATION;
 
-    if (nCode == IDABORT)
-        PostQuitMessage(-1);
+        /* display the assert */
 
-    if (nCode == IDIGNORE)
-        return sal_False;   /* ignore */
+        szBoxMessage[sizeof(szBoxMessage)-1] = 0;
+        _snprintf(szBoxMessage, sizeof(szBoxMessage)-1, "%s\n( Yes=Abort / No=Ignore / Cancel=Debugger )",
+                   szMessage);
 
-    if (nCode == IDRETRY)
-        return sal_True;    /* will cause oslDebugBreak */
+        nCode = MessageBox(hWndParent, szBoxMessage, "Assertion Failed!", nFlags);
+
+        if (nCode == IDYES)
+            FatalExit(-1);
+
+        if (nCode == IDNO)
+            return sal_False;   /* ignore */
+
+        if (nCode == IDCANCEL)
+            return sal_True;    /* will cause oslDebugBreak */
+    }
 #endif /* NO_DEBUG_CRT */
     return sal_False;  /* not shure, not care */
 }
@@ -143,12 +165,12 @@ sal_Int32 SAL_CALL osl_reportError(sal_uInt32 nType, const sal_Char* pszMessage)
         hWndParent = GetLastActivePopup(hWndParent);
 
     /* set message box flags */
-    nFlags = MB_TASKMODAL|MB_ICONHAND|MB_ABORTRETRYIGNORE|MB_SETFOREGROUND;
+    nFlags = MB_TASKMODAL | MB_ICONERROR | MB_YESNOCANCEL | MB_DEFBUTTON2 | MB_SETFOREGROUND;
     if (hWndParent == NULL)
         nFlags |= MB_SERVICE_NOTIFICATION;
 
     // display the assert
-    nDisposition = MessageBox(hWndParent, pszMessage, "Exception !", nFlags);
+    nDisposition = MessageBox(hWndParent, pszMessage, "Exception!", nFlags);
 
     return nDisposition;
 }
