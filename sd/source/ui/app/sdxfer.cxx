@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxfer.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2001-02-11 17:10:28 $
+ *  last change: $Author: ka $ $Date: 2001-02-19 12:49:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,6 +187,8 @@ SdTransferable::SdTransferable( SdDrawDocument* pSrcDoc, SdView* pWorkView ) :
 
 SdTransferable::~SdTransferable()
 {
+    Application::GetSolarMutex().acquire();
+
     if( bOwnView )
         delete pSdViewIntern;
 
@@ -207,6 +209,8 @@ SdTransferable::~SdTransferable()
 
     delete pVDev;
     delete pObjDesc;
+
+    Application::GetSolarMutex().release();
 }
 
 // -----------------------------------------------------------------------------
