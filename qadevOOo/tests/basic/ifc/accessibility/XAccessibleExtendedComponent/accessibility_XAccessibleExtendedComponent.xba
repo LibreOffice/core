@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: accessibility_XAccessibleExtendedComponent.xba,v $ 
 '*
-'*  $Revision: 1.1 $ 
+'*  $Revision: 1.2 $ 
 '*
-'*  last change:$Date: 2003-01-27 17:43:31 $ 
+'*  last change:$Date: 2003-10-06 12:44:00 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -82,20 +82,6 @@ Sub RunTest()
 On Error Goto ErrHndl
     Dim bOK As Boolean
 
-    Test.StartMethod("getForeground()")
-    Dim fColor As Long
-    bOK = true
-    fColor = oObj.getForeground()
-    Out.Log("Foreground color is: "+fColor)
-    Test.MethodTested("getForeground()",bOK)
-
-    Test.StartMethod("getBackground()")
-    Dim bColor As Long
-    bOK = true
-    bColor = oObj.getBackground()
-    Out.Log("Background color is: "+bColor)
-    Test.MethodTested("getBackground()",bOK)
-
     Test.StartMethod("getFont()")
     Dim font As Variant
     Dim fDescr As new com.sun.star.awt.FontDescriptor
@@ -108,19 +94,6 @@ On Error Goto ErrHndl
         Out.Log("Font: null")
     End If
     Test.MethodTested("getFont()",bOK)
-
-    Test.StartMethod("isEnabled()")
-    Dim isEnab As Boolean
-    bOK = true
-    isEnab = oObj.isEnabled()
-    Out.Log("isEnabled: "+isEnab)
-    if hasUNOInterfaces(oObj,"drafts.com.sun.star.accessibility.XAccessibleStateSet") then
-        Out.Log("Testing using XAccessibleStateSet interface...")
-        bOK = bOK AND (oObj.contains(8) = isEnab)
-    else
-        Out.Log("Object does not implement XAccessibleStateSet interface.")
-    End If
-    Test.MethodTested("isEnabled()",bOK)
 
     Test.StartMethod("getTitledBorderText()")
     Dim tbText As String
