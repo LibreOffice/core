@@ -2,9 +2,9 @@
  *
  *  $RCSfile: orgmgr.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pb $ $Date: 2001-07-10 09:15:29 $
+ *  last change: $Author: pb $ $Date: 2001-08-29 08:20:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,7 +250,7 @@ SfxOrganizeMgr::SfxOrganizeMgr( SfxOrganizeListBox_Impl *pLeft,
     pLeftBox(pLeft),
     pRightBox(pRight),
     pTemplates(pTempl? pTempl: new SfxDocumentTemplates),
-    pDocList(new SfxObjectList),
+    pImpl(new SfxOrganizeMgr_Impl),
     bModified(0),
     bDeleteTemplates(pTempl == 0)
 
@@ -263,8 +263,9 @@ SfxOrganizeMgr::SfxOrganizeMgr( SfxOrganizeListBox_Impl *pLeft,
 
 */
 {
-    IntlWrapper aIntlWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() );
-    const CollatorWrapper* pCollator = aIntlWrapper.getCaseCollator();
+    pImpl->pDocList = new SfxObjectList;
+    pImpl->pIntlWrapper = new IntlWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() );
+    const CollatorWrapper* pCollator = pImpl->pIntlWrapper->getCaseCollator();
     for ( SfxObjectShell* pTmp = SfxObjectShell::GetFirst(); pTmp; pTmp = SfxObjectShell::GetNext(*pTmp) )
     {
         if ( pTmp->GetCreateMode() != SFX_CREATE_MODE_STANDARD ||
@@ -276,12 +277,12 @@ SfxOrganizeMgr::SfxOrganizeMgr( SfxOrganizeListBox_Impl *pLeft,
         pNewEntry = new _FileListEntry( pTmp->GetMedium()->GetName(), pCollator, &aTitle );
         pNewEntry->aDocShell = pTmp;
 #if defined( SOLARIS )
-        pDocList->Insert( (_FileListEntry const *)pNewEntry );
+        pImpl->pDocList->Insert( (_FileListEntry const *)pNewEntry );
 #else
 #if defined( WTC) || ( defined( IRIX ) && defined( C700 ) ) || defined( ICC ) || defined ( HPUX )
-        pDocList->Insert( (_FileListEntry const *&) pNewEntry );
+        pImpl->pDocList->Insert( (_FileListEntry const *&) pNewEntry );
 #else
-        pDocList->Insert( pNewEntry );
+        pImpl->pDocList->Insert( pNewEntry );
 #endif
 #endif
     }
@@ -291,10 +292,12 @@ SfxOrganizeMgr::SfxOrganizeMgr( SfxOrganizeListBox_Impl *pLeft,
 
 SfxOrganizeMgr::~SfxOrganizeMgr()
 {
-    if(bDeleteTemplates)
+    if ( bDeleteTemplates )
         delete pTemplates;
-    delete pDocList;
-    pLeftBox = pRightBox = 0;
+    delete pImpl->pDocList;
+    delete pImpl->pIntlWrapper;
+    delete pImpl;
+    pLeftBox = pRightBox = NULL;
 }
 
 //-------------------------------------------------------------------------
@@ -310,7 +313,7 @@ SfxObjectShellRef SfxOrganizeMgr::CreateObjectShell( USHORT nIdx )
 */
 
 {
-    _FileListEntry* pEntry = (*pDocList)[nIdx];
+    _FileListEntry* pEntry = (*pImpl->pDocList)[nIdx];
     // andernfalls Doc-Shell anlegen
     if ( !pEntry->aDocShell.Is() )
     {
@@ -393,7 +396,7 @@ BOOL SfxOrganizeMgr::DeleteObjectShell(USHORT nIdx)
 
 */
 {
-    return (*pDocList)[nIdx]->DeleteObjectShell();
+    return (*pImpl->pDocList)[nIdx]->DeleteObjectShell();
 }
 
 //-------------------------------------------------------------------------
@@ -730,21 +733,20 @@ BOOL SfxOrganizeMgr::InsertFile( SfxOrganizeListBox_Impl* pCaller, const String&
 */
 
 {
-    IntlWrapper aIntlWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() );
-    const CollatorWrapper* pCollator = aIntlWrapper.getCaseCollator();
+    const CollatorWrapper* pCollator = pImpl->pIntlWrapper->getCaseCollator();
     _FileListEntry* pEntry = new _FileListEntry( rFileName, pCollator );
 #if defined( SOLARIS )
-    if ( pDocList->Insert( (_FileListEntry const *)pEntry ) )
+    if ( pImpl->pDocList->Insert( (_FileListEntry const *)pEntry ) )
 #else
 #if defined( WTC ) || ( defined( IRIX ) && defined( C700 ) ) || defined( ICC ) || defined ( HPUX )
-    if ( pDocList->Insert( (_FileListEntry const *&)pEntry ) )
+    if ( pImpl->pDocList->Insert( (_FileListEntry const *&)pEntry ) )
 #else
-    if ( pDocList->Insert( pEntry ) )
+    if ( pImpl->pDocList->Insert( pEntry ) )
 #endif
 #endif
     {
         USHORT nPos = 0;
-        pDocList->Seek_Entry( pEntry, &nPos );
+        pImpl->pDocList->Seek_Entry( pEntry, &nPos );
         pCaller->InsertEntry( pEntry->aBaseName, pCaller->GetOpenedBmp(1),
                               pCaller->GetClosedBmp(1), 0, TRUE, nPos );
         return TRUE;
@@ -816,10 +818,10 @@ void SfxOrganizeMgr::SaveAll(Window *pParent)
             }
         }
     }
-    nRangeCount = pDocList->Count();
+    nRangeCount = pImpl->pDocList->Count();
     for(i = 0; i < nRangeCount; ++i)
     {
-        _FileListEntry *pEntry = (*pDocList)[i];
+        _FileListEntry *pEntry = (*pImpl->pDocList)[i];
         if(!pEntry->DeleteObjectShell())
         {
             String aText(SfxResId(STR_ERROR_SAVE_TEMPLATE));

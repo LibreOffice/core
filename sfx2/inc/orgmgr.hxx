@@ -2,9 +2,9 @@
  *
  *  $RCSfile: orgmgr.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:24 $
+ *  last change: $Author: pb $ $Date: 2001-08-29 08:18:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,12 +84,21 @@ public:
     const String&   GetFileName( USHORT nId ) const;
 };
 
+class IntlWrapper;
+struct SfxOrganizeMgr_Impl
+{
+    SfxObjectList*      pDocList;
+    IntlWrapper*        pIntlWrapper;
+
+    SfxOrganizeMgr_Impl() :  pDocList( NULL ), pIntlWrapper( NULL ) {}
+};
+
 //=========================================================================
 
 class SfxOrganizeMgr
 {
 private:
-    SfxObjectList*              pDocList;
+    SfxOrganizeMgr_Impl*        pImpl;
     SfxDocumentTemplates*       pTemplates;
     SfxOrganizeListBox_Impl*    pLeftBox;
     SfxOrganizeListBox_Impl*    pRightBox;
@@ -118,8 +127,8 @@ public:
     BOOL    IsModified() const { return bModified ? TRUE : FALSE; }
 
     const SfxDocumentTemplates* GetTemplates() const { return pTemplates; }
-    SfxObjectList&              GetObjectList() { return *pDocList; }
-    const SfxObjectList&        GetObjectList() const { return *pDocList; }
+    SfxObjectList&              GetObjectList() { return *pImpl->pDocList; }
+    const SfxObjectList&        GetObjectList() const { return *pImpl->pDocList; }
 
     SfxObjectShellRef   CreateObjectShell( USHORT nIdx );
     SfxObjectShellRef   CreateObjectShell( USHORT nRegion, USHORT nIdx );
