@@ -2,9 +2,9 @@
  *
  *  $RCSfile: extract.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-07 13:55:53 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 15:34:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,7 +149,7 @@ inline void SAL_CALL any2enum( E & eRet, const ::com::sun::star::uno::Any & rAny
 template< typename E >
 inline ::com::sun::star::uno::Any SAL_CALL enum2any( E eEnum )
 {
-    return ::com::sun::star::uno::Any( &eEnum, ::getCppuType((const E*)0) );
+    return ::com::sun::star::uno::Any( &eEnum, getCppuType((const E*)0) );
 }
 
 /**
