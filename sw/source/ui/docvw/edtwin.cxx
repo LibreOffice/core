@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtwin.cxx,v $
  *
- *  $Revision: 1.100 $
+ *  $Revision: 1.101 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 15:19:43 $
+ *  last change: $Author: hr $ $Date: 2004-11-27 12:30:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4716,6 +4716,17 @@ BOOL SwEditWin::SelectMenuPosition(SwWrtShell& rSh, const Point& rMousePos )
     SdrView *pSdrView = rSh.GetDrawView();
     if ( pSdrView )
     {
+        if ( rView.GetDrawFuncPtr() )
+        {
+
+            rView.GetDrawFuncPtr()->Deactivate();
+            rView.SetDrawFuncPtr(NULL);
+            rView.LeaveDrawCreate();
+            SfxBindings& rBind = rView.GetViewFrame()->GetBindings();
+            rBind.Invalidate( SID_ATTR_SIZE );
+            rBind.Invalidate( SID_TABLE_CELL );
+        }
+
         // if draw text is active and there's a text selection
         // at the mouse position then do nothing
         if(rSh.GetSelectionType() & SwWrtShell::SEL_DRW_TXT)
@@ -4813,8 +4824,8 @@ BOOL SwEditWin::SelectMenuPosition(SwWrtShell& rSh, const Point& rMousePos )
                     rSh.EnterSelFrmMode( &aDocPos );
                     bFrmDrag = TRUE;
                     UpdatePointer( aDocPos, 0 );
+                    return bRet;
                 }
-
             }
 
             if (!rView.GetDrawFuncPtr())
