@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hintids.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-30 12:49:29 $
+ *  last change: $Author: jp $ $Date: 2000-11-02 17:26:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,7 +121,7 @@ RES_CHRATR_BEGIN = HINT_BEGIN,
     RES_CHRATR_CTL_WEIGHT,                  // 31
     RES_CHRATR_WRITING_DIRECTION,           // 32
     RES_CHRATR_EMPHASIS_MARK,               // 33
-    RES_CHRATR_DUMMY3,                      // 34
+    RES_CHRATR_TWO_LINES,                   // 34
     RES_CHRATR_DUMMY4,                      // 35
     RES_CHRATR_DUMMY5,                      // 36
     RES_CHRATR_DUMMY1,                      // 37
@@ -145,11 +145,11 @@ RES_TXTATR_WITHEND_BEGIN = RES_TXTATR_BEGIN ,
     RES_TXTATR_REFMARK,                             // 40
     RES_TXTATR_TOXMARK,                             // 41
     RES_TXTATR_CHARFMT,                             // 42
-    RES_TXTATR_TWO_LINES,                           // 43
+    RES_TXTATR_DUMMY5,                              // 43
     RES_TXTATR_CJK_RUBY,                            // 44
     RES_TXTATR_UNKNOWN_CONTAINER,                   // 45
-    RES_TXTATR_DUMMY5,                              // 46
-    RES_TXTATR_DUMMY6,                              // 47
+    RES_TXTATR_DUMMY6,                              // 46
+    RES_TXTATR_DUMMY7,                              // 47
 RES_TXTATR_WITHEND_END,
 
 // alle TextAttribute ohne ein Ende

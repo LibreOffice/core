@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txatbase.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-30 12:49:30 $
+ *  last change: $Author: jp $ $Date: 2000-11-02 17:26:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -416,7 +416,7 @@ inline const SwFmtRuby& SwTxtAttr::GetRuby() const
 }
 inline const SwFmt2Lines& SwTxtAttr::Get2Lines() const
 {
-    ASSERT( pAttr && pAttr->Which() == RES_TXTATR_TWO_LINES,
+    ASSERT( pAttr && pAttr->Which() == RES_CHRATR_TWO_LINES,
             "Falsche Abfrage" );
     return (const SwFmt2Lines&)*pAttr;
 }
@@ -430,6 +430,9 @@ inline const SvxEmphasisMarkItem& SwTxtAttr::GetEmphasisMark() const
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.3  2000/10/30 12:49:30  jp
+      new: EmphasisItem
+
       Revision 1.2  2000/10/23 11:58:55  jp
       new attributes Ruby and 2Lines
 

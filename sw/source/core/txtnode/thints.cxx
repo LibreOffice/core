@@ -2,9 +2,9 @@
  *
  *  $RCSfile: thints.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-30 12:50:46 $
+ *  last change: $Author: jp $ $Date: 2000-11-02 17:28:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -329,6 +329,9 @@ SwTxtAttr* SwTxtNode::MakeTxtAttr( const SfxPoolItem& rAttr,
     case RES_CHRATR_BACKGROUND:
         pNew = new SwTxtBackground( (SvxBrushItem&)rNew, nStt, nEnd );
         break;
+    case RES_CHRATR_TWO_LINES:
+        pNew = new SwTxt2Lines( (SwFmt2Lines&)rNew, nStt, nEnd );
+        break;
     case RES_TXTATR_REFMARK:
         pNew = nStt == nEnd
                 ? new SwTxtRefMark( (SwFmtRefMark&)rNew, nStt )
@@ -341,9 +344,6 @@ SwTxtAttr* SwTxtNode::MakeTxtAttr( const SfxPoolItem& rAttr,
     case RES_TXTATR_UNKNOWN_CONTAINER:
         pNew = new SwTxtXMLAttrContainer( (SvXMLAttrContainerItem&)rNew,
                                         nStt, nEnd );
-        break;
-    case RES_TXTATR_TWO_LINES:
-        pNew = new SwTxt2Lines( (SwFmt2Lines&)rNew, nStt, nEnd );
         break;
     case RES_TXTATR_CJK_RUBY:
         pNew = new SwTxtRuby( (SwFmtRuby&)rNew, nStt, nEnd );

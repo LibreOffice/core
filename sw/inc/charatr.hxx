@@ -2,9 +2,9 @@
  *
  *  $RCSfile: charatr.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-30 12:49:30 $
+ *  last change: $Author: jp $ $Date: 2000-11-02 17:26:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,6 +136,8 @@ inline const SvxBrushItem &SwAttrSet::GetChrBackground( BOOL bInP ) const
     {   return (const SvxBrushItem&)Get( RES_CHRATR_BACKGROUND, bInP ); }
 inline const SvxEmphasisMarkItem &SwAttrSet::GetEmphasisMark( BOOL bInP ) const
     {   return (const SvxEmphasisMarkItem&)Get( RES_CHRATR_EMPHASIS_MARK, bInP ); }
+inline const SwFmt2Lines        &SwAttrSet::Get2Lines( BOOL bInP ) const
+    {   return (const SwFmt2Lines&)Get( RES_CHRATR_TWO_LINES, bInP ); }
 
 /******************************************************************************
  *  Implementierung der Charakter-Attribut Methoden vom SwFmt
@@ -184,5 +186,7 @@ inline const SvxBrushItem            &SwFmt::GetChrBackground(BOOL bInP) const
     {   return aSet.GetChrBackground(bInP); }
 inline const SvxEmphasisMarkItem    &SwFmt::GetEmphasisMark( BOOL bInP ) const
     {   return aSet.GetEmphasisMark(bInP); }
+inline const SwFmt2Lines            &SwFmt::Get2Lines( BOOL bInP ) const
+    {   return aSet.Get2Lines(bInP); }
 
 #endif

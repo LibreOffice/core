@@ -2,9 +2,9 @@
  *
  *  $RCSfile: init.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-30 12:50:05 $
+ *  last change: $Author: jp $ $Date: 2000-11-02 17:28:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -448,7 +448,7 @@ SfxItemInfo __FAR_DATA aSlotTab[] =
     { 0, SFX_ITEM_POOLABLE },                           // RES_CHRATR_CTL_WEIGHT
     { 0, SFX_ITEM_POOLABLE },                           // RES_CHRATR_WRITING_DIRECTION
     { SID_ATTR_CHAR_EMPHASISMARK, SFX_ITEM_POOLABLE },  // RES_CHRATR_EMPHASIS_MARK
-    { 0, SFX_ITEM_POOLABLE },                           // RES_CHRATR_DUMMY3
+    { 0, SFX_ITEM_POOLABLE },                           // RES_CHRATR_TWO_LINES
     { 0, SFX_ITEM_POOLABLE },                           // RES_CHRATR_DUMMY4
     { 0, SFX_ITEM_POOLABLE },                           // RES_CHRATR_DUMMY5
     { 0, SFX_ITEM_POOLABLE },                           // RES_CHRATR_DUMMY1
@@ -674,10 +674,10 @@ void _InitCore()
 
     aAttrTab[ RES_CHRATR_EMPHASIS_MARK - POOLATTR_BEGIN ] =
                 new SvxEmphasisMarkItem();
+    aAttrTab[ RES_CHRATR_TWO_LINES - POOLATTR_BEGIN ] = new SwFmt2Lines( FALSE );
 
 // CharakterAttr - Dummies
     aAttrTab[ RES_CHRATR_DUMMY1 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_CHRATR_DUMMY1 );
-    aAttrTab[ RES_CHRATR_DUMMY3 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_CHRATR_DUMMY3 );
     aAttrTab[ RES_CHRATR_DUMMY4 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_CHRATR_DUMMY4 );
     aAttrTab[ RES_CHRATR_DUMMY5 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_CHRATR_DUMMY5 );
 // CharakterAttr - Dummies
@@ -693,7 +693,6 @@ void _InitCore()
     aAttrTab[ RES_TXTATR_TOXMARK - POOLATTR_BEGIN ] = new SwTOXMark;
     aAttrTab[ RES_TXTATR_CHARFMT- POOLATTR_BEGIN ] = new SwFmtCharFmt( 0 );
 
-    aAttrTab[ RES_TXTATR_TWO_LINES - POOLATTR_BEGIN ] = new SwFmt2Lines;
     aAttrTab[ RES_TXTATR_CJK_RUBY - POOLATTR_BEGIN ] = new SwFmtRuby( aEmptyStr );
     aAttrTab[ RES_TXTATR_UNKNOWN_CONTAINER - POOLATTR_BEGIN ] =
                 new SvXMLAttrContainerItem( RES_TXTATR_UNKNOWN_CONTAINER );
@@ -709,6 +708,7 @@ void _InitCore()
     aAttrTab[ RES_TXTATR_DUMMY2 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_TXTATR_DUMMY2 );
     aAttrTab[ RES_TXTATR_DUMMY5 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_TXTATR_DUMMY5 );
     aAttrTab[ RES_TXTATR_DUMMY6 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_TXTATR_DUMMY6 );
+    aAttrTab[ RES_TXTATR_DUMMY7 - POOLATTR_BEGIN ] = new SfxBoolItem( RES_TXTATR_DUMMY7 );
 // TextAttr ohne Ende - Dummies
 
     aAttrTab[ RES_PARATR_LINESPACING- POOLATTR_BEGIN ] = new SvxLineSpacingItem;

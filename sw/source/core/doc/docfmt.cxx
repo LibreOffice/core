@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfmt.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-25 15:31:11 $
+ *  last change: $Author: jp $ $Date: 2000-11-02 17:28:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -627,7 +627,7 @@ BOOL InsAttr( SwDoc *pDoc, const SwPaM &rRg, const SfxItemSet& rChgSet,
             // JP 22.08.96: URL-Attribute auch!!
             SfxItemSet aTxtSet( pDoc->GetAttrPool(),
                                 RES_TXTATR_DUMMY4, RES_TXTATR_TOXMARK,
-                                RES_TXTATR_TWO_LINES, RES_TXTATR_WITHEND_END-1,
+                                RES_TXTATR_DUMMY5, RES_TXTATR_WITHEND_END-1,
                                 0 );
 
             aTxtSet.Put( rChgSet );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtatr2.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-23 11:57:54 $
+ *  last change: $Author: jp $ $Date: 2000-11-02 17:28:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -400,15 +400,17 @@ BOOL SwFmtINetFmt::PutValue( const uno::Any& rVal, BYTE nMemberId  )
 |*    class SwFmt2Lines
 *************************************************************************/
 
-SwFmt2Lines::SwFmt2Lines( sal_Unicode nStartBracket, sal_Unicode nEndBracket )
-    : SfxPoolItem( RES_TXTATR_TWO_LINES ),
-    cStartBracket( nStartBracket ), cEndBracket( nEndBracket )
+SwFmt2Lines::SwFmt2Lines( sal_Bool bFlag, sal_Unicode nStartBracket,
+                                          sal_Unicode nEndBracket )
+    : SfxPoolItem( RES_CHRATR_TWO_LINES ),
+    bOn( bFlag ), cStartBracket( nStartBracket ), cEndBracket( nEndBracket )
 {
 }
 
 SwFmt2Lines::SwFmt2Lines( const SwFmt2Lines& rAttr )
-    : SfxPoolItem( RES_TXTATR_TWO_LINES ),
-    cStartBracket( rAttr.cStartBracket ), cEndBracket( rAttr.cEndBracket )
+    : SfxPoolItem( RES_CHRATR_TWO_LINES ),
+    bOn( rAttr.bOn ), cStartBracket( rAttr.cStartBracket ),
+    cEndBracket( rAttr.cEndBracket )
 {
 }
 
@@ -419,7 +421,8 @@ SwFmt2Lines::~SwFmt2Lines()
 int SwFmt2Lines::operator==( const SfxPoolItem& rAttr ) const
 {
     ASSERT( SfxPoolItem::operator==( rAttr ), "keine gleichen Attribute" );
-    return cStartBracket == ((SwFmt2Lines&)rAttr).cStartBracket &&
+    return bOn == ((SwFmt2Lines&)rAttr).bOn &&
+           cStartBracket == ((SwFmt2Lines&)rAttr).cStartBracket &&
            cEndBracket == ((SwFmt2Lines&)rAttr).cEndBracket;
 }
 
