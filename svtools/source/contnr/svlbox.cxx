@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svlbox.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: pb $ $Date: 2002-04-05 08:50:53 $
+ *  last change: $Author: pb $ $Date: 2002-04-09 07:50:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,13 +65,12 @@
         - SelectAll( FALSE ), nur die deselektierten Entries repainten
 */
 
-#define _SVSTDARR_ULONGSSORT
-
-#include <stdio.h>
 #include <string.h>
-#ifndef _SVEDI_HXX
-#include <svmedit.hxx>
+
+#ifndef _SVLBOX_HXX
+#include "svlbox.hxx"
 #endif
+
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
 #endif
@@ -81,17 +80,26 @@
 #ifndef _SOT_FORMATS_HXX
 #include <sot/formats.hxx>
 #endif
+#ifndef _UTL_ACCESSIBLESTATESETHELPER_HXX_
+#include <unotools/accessiblestatesethelper.hxx>
+#endif
 
-#pragma hdrstop
+#define _SVSTDARR_ULONGSSORT
+#include "svstdarr.hxx"
 
-#include <svlbox.hxx>
-#include <svlbitm.hxx>
-#include <svstdarr.hxx>
+#ifndef _SVEDI_HXX
+#include "svmedit.hxx"
+#endif
+#ifndef _SVLBOXITM_HXX
+#include "svlbitm.hxx"
+#endif
+#ifndef _SVTOOLS_ACCESSIBLELISTBOX_HXX_
+#include "accessiblelistbox.hxx"
+#endif
 
-
-// fuer Drag&Drop
-static SvLBox* pDDSource = 0;
-static SvLBox* pDDTarget = 0;
+// Drag&Drop
+static SvLBox* pDDSource = NULL;
+static SvLBox* pDDTarget = NULL;
 
 DBG_NAME(SvInplaceEdit);
 DBG_NAME(SvInplaceEdit2);
@@ -99,19 +107,25 @@ DBG_NAME(SvInplaceEdit2);
 #define SVLBOX_ACC_RETURN 1
 #define SVLBOX_ACC_ESCAPE 2
 
-SvInplaceEdit::SvInplaceEdit( Window* pParent, const Point& rPos,
-    const Size& rSize, const XubString& rData, const Link& rNotifyEditEnd,
-    const Selection& rSelection) :
-#ifndef OS2
+SvInplaceEdit::SvInplaceEdit
+(
+    Window*             pParent,
+    const Point&        rPos,
+    const Size&         rSize,
+    const String&       rData,
+    const Link&         rNotifyEditEnd,
+    const Selection&    rSelection
+) :
+
     Edit( pParent, WB_LEFT ),
-#else
-    Edit( pParent, WB_LEFT | WB_BORDER ),
-#endif
-    aCallBackHdl( rNotifyEditEnd ),
-    bCanceled( FALSE ),
-    bAlreadyInCallBack( FALSE )
+
+    aCallBackHdl        ( rNotifyEditEnd ),
+    bCanceled           ( FALSE ),
+    bAlreadyInCallBack  ( FALSE )
+
 {
     DBG_CTOR(SvInplaceEdit,0);
+
     Font aFont( pParent->GetFont() );
     aFont.SetTransparent( FALSE );
     Color aColor( pParent->GetBackground().GetColor() );
@@ -136,7 +150,7 @@ SvInplaceEdit::SvInplaceEdit( Window* pParent, const Point& rPos,
     GrabFocus();
 }
 
-__EXPORT SvInplaceEdit::~SvInplaceEdit()
+SvInplaceEdit::~SvInplaceEdit()
 {
     DBG_DTOR(SvInplaceEdit,0);
     if( !bAlreadyInCallBack )
@@ -145,8 +159,6 @@ __EXPORT SvInplaceEdit::~SvInplaceEdit()
         GetpApp()->RemoveAccel( &aAccEscape );
     }
 }
-
-
 
 IMPL_LINK_INLINE_START( SvInplaceEdit, ReturnHdl_Impl, Accelerator *, pAccelerator )
 {
@@ -166,8 +178,7 @@ IMPL_LINK_INLINE_START( SvInplaceEdit, EscapeHdl_Impl, Accelerator *, pAccelerat
 }
 IMPL_LINK_INLINE_END( SvInplaceEdit, EscapeHdl_Impl, Accelerator *, pAccelerator )
 
-
-void __EXPORT SvInplaceEdit::KeyInput( const KeyEvent& rKEvt )
+void SvInplaceEdit::KeyInput( const KeyEvent& rKEvt )
 {
     DBG_CHKTHIS(SvInplaceEdit,0);
     USHORT nCode = rKEvt.GetKeyCode().GetCode();
@@ -198,7 +209,7 @@ void SvInplaceEdit::StopEditing( BOOL bCancel )
     }
 }
 
-void __EXPORT SvInplaceEdit::LoseFocus()
+void SvInplaceEdit::LoseFocus()
 {
     DBG_CHKTHIS(SvInplaceEdit,0);
     if ( !bAlreadyInCallBack )
@@ -254,14 +265,12 @@ public:
     virtual void LoseFocus();
 };
 
-MyEdit_Impl::MyEdit_Impl( Window* pParent, SvInplaceEdit2* _pOwner )
-    :
-#ifndef OS2
+MyEdit_Impl::MyEdit_Impl( Window* pParent, SvInplaceEdit2* _pOwner ) :
+
     Edit( pParent, WB_LEFT ),
-#else
-    Edit( pParent, WB_LEFT | WB_BORDER ),
-#endif
-    pOwner(_pOwner)
+
+    pOwner( _pOwner )
+
 {
 }
 
@@ -295,15 +304,24 @@ void MyMultiEdit_Impl::LoseFocus()
 }
 
 
-SvInplaceEdit2::SvInplaceEdit2( Window* pParent, const Point& rPos,
-    const Size& rSize, const XubString& rData, const Link& rNotifyEditEnd,
-    const Selection& rSelection, BOOL bMulti) :
-    aCallBackHdl( rNotifyEditEnd ),
-    bCanceled( FALSE ),
-    bAlreadyInCallBack( FALSE ),
-    bMultiLine( bMulti )
+SvInplaceEdit2::SvInplaceEdit2
+(
+    Window* pParent, const Point& rPos,
+    const Size& rSize,
+    const String& rData,
+    const Link& rNotifyEditEnd,
+    const Selection& rSelection,
+    BOOL bMulti
+) :
+
+     aCallBackHdl       ( rNotifyEditEnd ),
+    bCanceled           ( FALSE ),
+    bAlreadyInCallBack  ( FALSE ),
+    bMultiLine          ( bMulti )
+
 {
     DBG_CTOR(SvInplaceEdit2,0);
+
     if( bMulti )
         pEdit = new MyMultiEdit_Impl( pParent, this );
     else
@@ -318,12 +336,7 @@ SvInplaceEdit2::SvInplaceEdit2( Window* pParent, const Point& rPos,
     pEdit->SetPosPixel( rPos );
     pEdit->SetSizePixel( rSize );
     pEdit->SetText( rData );
-#ifndef OS2
     pEdit->SetSelection( rSelection );
-#else
-    if( !bMulti )
-        pEdit->SetSelection( rSelection );
-#endif
     pEdit->SaveValue();
 
     aAccReturn.InsertItem( SVLBOX_ACC_RETURN, KeyCode(KEY_RETURN) );
@@ -349,7 +362,7 @@ SvInplaceEdit2::~SvInplaceEdit2()
     delete pEdit;
 }
 
-XubString SvInplaceEdit2::GetSavedValue() const
+String SvInplaceEdit2::GetSavedValue() const
 {
     return pEdit->GetSavedValue();
 }
@@ -450,7 +463,7 @@ void SvInplaceEdit2::CallCallBackHdl_Impl()
     }
 }
 
-XubString SvInplaceEdit2::GetText() const
+String SvInplaceEdit2::GetText() const
 {
     return pEdit->GetText();
 }
@@ -522,7 +535,7 @@ long SvLBoxTab::CalcOffset( long nItemWidth, long nTabWidth )
 }
 
 /*
-long SvLBoxTab::CalcOffset( const XubString& rStr, const OutputDevice& rOutDev )
+long SvLBoxTab::CalcOffset( const String& rStr, const OutputDevice& rOutDev )
 {
     DBG_CHKTHIS(SvLBoxTab,0);
     long nWidth;
@@ -690,6 +703,15 @@ SvLBoxItem* SvLBoxEntry::GetFirstItem( USHORT nId )
         nCur++;
     }
     return 0;
+}
+
+::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > SvLBoxEntry::CreateAccessibleEntry( void* pParentPath )
+{
+    return ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible >();
+}
+
+void SvLBoxEntry::FillAccessibleStateSet( ::utl::AccessibleStateSetHelper& rStateSet ) const
+{
 }
 
 // ***************************************************************
@@ -1008,7 +1030,7 @@ BOOL SvLBox::NotifyCopying(
     */
 }
 
-SvLBoxEntry* __EXPORT SvLBox::CloneEntry( SvLBoxEntry* pSource )
+SvLBoxEntry* SvLBox::CloneEntry( SvLBoxEntry* pSource )
 {
     DBG_CHKTHIS(SvLBox,0);
     SvLBoxEntry* pEntry = (SvLBoxEntry*)CreateEntry(); // new SvLBoxEntry;
@@ -1243,6 +1265,19 @@ void SvLBox::SelectAll( BOOL /* bSelect */ , BOOL /* bPaint */ )
     DBG_CHKTHIS(SvLBox,0);
 }
 
+ULONG SvLBox::GetLevelChildCount( SvLBoxEntry* _pParent ) const
+{
+    ULONG nCount = 0;
+    SvLBoxEntry* pEntry = FirstChild( _pParent );
+    while ( pEntry )
+    {
+        ++nCount;
+        pEntry = NextSibling( pEntry );
+    }
+
+    return nCount;
+}
+
 void SvLBox::SetSelectionMode( SelectionMode eSelectMode )
 {
     DBG_CHKTHIS(SvLBox,0);
@@ -1335,13 +1370,13 @@ SvLBoxEntry* SvLBox::GetDropTarget( const Point& )
 // InplaceEditing
 // ******************************************************************
 
-void SvLBox::EditText( const XubString& rStr, const Rectangle& rRect,
+void SvLBox::EditText( const String& rStr, const Rectangle& rRect,
     const Selection& rSel )
 {
     EditText( rStr, rRect, rSel, FALSE );
 }
 
-void SvLBox::EditText( const XubString& rStr, const Rectangle& rRect,
+void SvLBox::EditText( const String& rStr, const Rectangle& rRect,
     const Selection& rSel, BOOL bMulti )
 {
     DBG_CHKTHIS(SvLBox,0);
@@ -1362,7 +1397,7 @@ IMPL_LINK( SvLBox, TextEditEndedHdl_Impl, SvInplaceEdit2 *, pSvInplaceEdit )
     if ( nImpFlags & SVLBOX_EDTEND_CALLED ) // Nesting verhindern
         return 0;
     nImpFlags |= SVLBOX_EDTEND_CALLED;
-    XubString aStr;
+    String aStr;
     if ( !pEdCtrl->EditingCanceled() )
         aStr = pEdCtrl->GetText();
     else
@@ -1396,7 +1431,7 @@ void SvLBox::EndEditing( BOOL bCancel )
 }
 
 
-void SvLBox::EditedText( const XubString& )
+void SvLBox::EditedText( const String& )
 {
     DBG_CHKTHIS(SvLBox,0);
 }
@@ -1429,7 +1464,7 @@ SvLBoxEntry* SvLBox::GetEntry( const Point& rPos, BOOL ) const
     return 0;
 }
 
-void __EXPORT SvLBox::ModelHasEntryInvalidated( SvListEntry* pEntry )
+void SvLBox::ModelHasEntryInvalidated( SvListEntry* pEntry )
 {
     DBG_CHKTHIS(SvLBox,0);
     USHORT nCount = ((SvLBoxEntry*)pEntry)->ItemCount();
@@ -1721,4 +1756,27 @@ Link SvLBox::GetDragFinishedHdl() const
     return STATIC_LINK( this, SvLBox, DragFinishHdl_Impl );
 }
 
+::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > SvLBox::CreateAccessible()
+{
+    Window* pParent = GetAccessibleParentWindow();
+    DBG_ASSERT( pParent, "SvLBox::::CreateAccessible - accessible parent not found" );
+
+    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > xAccessible;
+    if ( pParent )
+    {
+        ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > xAccParent = pParent->GetAccessible();
+        if ( xAccParent.is() )
+            xAccessible = new AccessibleListBox( *this, xAccParent );
+    }
+    return xAccessible;
+}
+
+void SvLBox::FillAccessibleStateSet( ::utl::AccessibleStateSetHelper& rStateSet ) const
+{
+}
+
+Rectangle SvLBox::GetBoundingRect( SvLBoxEntry* pEntry )
+{
+    return Rectangle();
+}
 
