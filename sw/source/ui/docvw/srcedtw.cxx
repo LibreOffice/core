@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srcedtw.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2003-11-12 17:13:05 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 13:01:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,7 +158,7 @@ SV_IMPL_VARARR(SwTextPortions, SwTextPortion)
 
 --------------------------------------------------*/
 
-void lcl_Highlight(const String& rSource, SwTextPortions& aPortionList)
+static void lcl_Highlight(const String& rSource, SwTextPortions& aPortionList)
 {
     const sal_Unicode cOpenBracket = '<';
     const sal_Unicode cCloseBracket= '>';
@@ -872,17 +872,7 @@ void SwSrcEditWindow::ImpDoHighlight( const String& rSource, USHORT nLineOff )
         pTextEngine->SetAttrib( TextAttribFontColor( aColor ), nLine, r.nStart, r.nEnd+1, TRUE );
     }
 }
-/*-----------------21.04.97 09:42-------------------
 
---------------------------------------------------*/
-void SwSrcEditWindow::SyntaxColorsChanged()
-{
-    for(USHORT i = 0; i < pTextEngine->GetParagraphCount(); i++)
-        aSyntaxLineTable.Insert( i, (void*)(USHORT)1 );
-    if(!aSyntaxIdleTimer.IsActive())
-        aSyntaxIdleTimer.Start();
-
-}
 /*-----------------30.06.97 09:12-------------------
 
 --------------------------------------------------*/
