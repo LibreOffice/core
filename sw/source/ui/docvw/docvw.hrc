@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docvw.hrc,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-29 08:10:17 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 09:14:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,10 @@
 
 #define STR_TABLE_COL_ADJUST            (RC_DOCVW_BEGIN + 16)
 #define STR_TABLE_ROW_ADJUST            (RC_DOCVW_BEGIN + 17)
+#define STR_TABLE_SELECT_ALL            (RC_DOCVW_BEGIN + 18)
+#define STR_TABLE_SELECT_ROW            (RC_DOCVW_BEGIN + 19)
+#define STR_TABLE_SELECT_COL            (RC_DOCVW_BEGIN + 20)
+
 
 #define MSG_READONLY_CONTENT            (RC_DOCVW_BEGIN + 1)
 
