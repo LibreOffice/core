@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docnew.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ama $ $Date: 2000-09-29 13:52:36 $
+ *  last change: $Author: jp $ $Date: 2000-10-13 08:32:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -284,7 +284,7 @@ SwDoc::SwDoc() :
     pNumRuleTbl( new SwNumRuleTbl ),
     eRedlineMode( SwRedlineMode(REDLINE_SHOW_INSERT | REDLINE_SHOW_DELETE) ),
     pRedlineTbl( new SwRedlineTbl ),
-    pUnoCrsrTbl( new SwUnoCrsrTbl ),
+    pUnoCrsrTbl( new SwUnoCrsrTbl( 0, 16 ) ),
     pPgPViewPrtData( 0 ),
     pAutoFmtRedlnComment( 0 ),
     pUnoCallBack(new SwUnoCallBack(0)),
