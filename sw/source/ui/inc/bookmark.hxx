@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bookmark.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-01 08:57:03 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 13:03:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,6 @@ public:
     BookmarkCombo( Window* pWin, const ResId& rResId );
 
     USHORT          GetSelectEntryCount() const;
-    XubString       GetSelectEntry( USHORT nSelIndex = 0 ) const;
     USHORT          GetSelectEntryPos( USHORT nSelIndex = 0 ) const;
 
     static const String aForbiddenChars;
