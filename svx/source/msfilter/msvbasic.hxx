@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msvbasic.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 17:42:09 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 17:52:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@
 #include <tools/debug.hxx>
 #endif
 #ifndef _SVSTOR_HXX //autogen
-#include <so3/svstor.hxx>
+#include <sot/storage.hxx>
 #endif
 #ifndef _DYNARY_HXX
 #include <tools/dynary.hxx>
