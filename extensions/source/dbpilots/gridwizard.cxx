@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwizard.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-15 11:52:55 $
+ *  last change: $Author: fs $ $Date: 2001-07-16 16:32:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -502,12 +502,20 @@ namespace dbp
         // remove the entry from it's old list
         if (bMoveRight)
         {
+            sal_uInt16 nSelectPos = m_aExistFields.GetSelectEntryPos();
             m_aExistFields.RemoveEntry(nSelected);
+            if ((LISTBOX_ENTRY_NOTFOUND != nSelectPos) && (nSelectPos < m_aExistFields.GetEntryCount()))
+                m_aExistFields.SelectEntryPos(nSelectPos);
+
             m_aExistFields.GrabFocus();
         }
         else
         {
+            sal_uInt16 nSelectPos = m_aSelFields.GetSelectEntryPos();
             m_aSelFields.RemoveEntry(nSelected);
+            if ((LISTBOX_ENTRY_NOTFOUND != nSelectPos) && (nSelectPos < m_aSelFields.GetEntryCount()))
+                m_aSelFields.SelectEntryPos(nSelectPos);
+
             m_aSelFields.GrabFocus();
         }
 
@@ -534,6 +542,9 @@ namespace dbp
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.4  2001/06/15 11:52:55  fs
+ *  enhanced the focus behaviour
+ *
  *  Revision 1.3  2001/05/30 16:48:06  fs
  *  #86714# show the data source of the form on the first not data source related page
  *
