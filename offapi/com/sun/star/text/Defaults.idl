@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Defaults.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:56:43 $
+ *  last change: $Author: hr $ $Date: 2003-06-30 14:55:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,9 @@
 #ifndef __com_sun_star_style_CharacterPropertiesComplex_idl__
 #include <com/sun/star/style/CharacterPropertiesComplex.idl>
 #endif
+#ifndef __com_sun_star_style_ParagraphPropertiesAsian_idl__
+#include <com/sun/star/style/ParagraphPropertiesAsian.idl>
+#endif
 #ifndef __com_sun_star_style_ParagraphPropertiesComplex_idl__
 #include <com/sun/star/style/ParagraphPropertiesComplex.idl>
 #endif
@@ -99,6 +102,8 @@ service Defaults
     [optional] service com::sun::star::style::CharacterPropertiesAsian;
 
     [optional] service com::sun::star::style::CharacterPropertiesComplex;
+
+    [optional] service com::sun::star::style::ParagraphPropertiesAsian;
 
     [optional] service com::sun::star::style::ParagraphPropertiesComplex;
 
