@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.cxx,v $
  *
- *  $Revision: 1.126 $
+ *  $Revision: 1.127 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-05 14:32:54 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:35:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3186,7 +3186,10 @@ SwFlyFrmFmt* SwWW8ImplReader::ImportReplaceableDrawables( SdrObject* &rpObject,
         if (pGrf->IsLinkedGraphic() && pGrf->GetFileName().Len())
         {
             GraphicType eType = pGrf->GetGraphicType();
-            String aGrfName(URIHelper::SmartRelToAbs(pGrf->GetFileName()));
+            String aGrfName(
+                URIHelper::SmartRel2Abs(
+                    INetURLObject(sBaseURL), pGrf->GetFileName(),
+                    URIHelper::GetMaybeFileHdl()));
             if (GRAPHIC_NONE == eType && CanUseRemoteLink(aGrfName))
             {
                 pRetFrmFmt = rDoc.Insert(*pPaM, aGrfName, aEmptyStr, 0,
