@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: obo $ $Date: 2000-10-31 16:19:47 $
+#   last change: $Author: ka $ $Date: 2001-02-13 14:14:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -116,7 +116,6 @@ APP1STDLIBS= 		\
         $(APP1_STDPOST)     \
                 $(SCHLIB)               \
                 $(SMLIB)                \
-                $(SIMLIB)               \
                 $(SWLIB)                \
                 $(SDLIB)                \
                 $(SCLIB)                \
