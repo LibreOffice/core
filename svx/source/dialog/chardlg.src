@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.src,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: kz $ $Date: 2002-05-21 09:17:16 $
+ *  last change: $Author: kz $ $Date: 2002-05-27 12:48:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1058,7 +1058,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ japanese ] = "Complex script font";
         Text[ korean ] = "Complex script font";
         Text[ chinese_simplified ] = "Complex script font";
-        Text[ chinese_traditional ] = "Complex script font";
+        Text[ chinese_traditional ] = "複雜語言的字型";
         Text[ turkish ] = "Complex script font";
         Text[ arabic ] = "Complex script font";
         Text[ catalan ] = "Complex script font";
@@ -1085,7 +1085,7 @@ TabPage RID_SVXPAGE_CHAR_NAME
         Text[ japanese ] = "ﾌｫﾝﾄの種類";
         Text[ korean ] = "글꼴";
         Text[ chinese_simplified ] = "字体";
-        Text[ chinese_traditional ] = "字型類型";
+        Text[ chinese_traditional ] = "字型";
         Text[ turkish ] = "Font";
         Text[ arabic ] = "��� ����";
         Text[ catalan ] = "Fuente";
