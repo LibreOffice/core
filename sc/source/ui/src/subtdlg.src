@@ -2,9 +2,9 @@
  *
  *  $RCSfile: subtdlg.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-08 23:22:51 $
+ *  last change: $Author: kz $ $Date: 2001-06-13 23:37:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,9 +74,9 @@ TabPage RID_SCPAGE_SUBT_OPTIONS
         Text = "Gruppen" ;
         Text [ ENGLISH ] = "Groups" ;
         Text[ english_us ] = "Groups";
-        Text[ portuguese ] = "Groups";
+        Text[ portuguese ] = "Grupos";
         Text[ russian ] = "√руппы";
-        Text[ greek ] = "Groups";
+        Text[ greek ] = "ѕм№дет";
         Text[ dutch ] = "Groups";
         Text[ french ] = "Groupes";
         Text[ spanish ] = "Grupos";
@@ -1006,6 +1006,7 @@ TabDialog RID_SCDLG_SUBTOTALS
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Subtotales";
 };
+
 
 
 
