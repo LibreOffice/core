@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.110 $
+ *  $Revision: 1.111 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 14:31:57 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 15:06:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -945,6 +945,7 @@ XMLTextParagraphExport::XMLTextParagraphExport(
     sRubyText(RTL_CONSTASCII_USTRINGPARAM("RubyText")),
     sRubyAdjust(RTL_CONSTASCII_USTRINGPARAM("RubyAdjust")),
     sRubyCharStyleName(RTL_CONSTASCII_USTRINGPARAM("RubyCharStyleName")),
+    sWidthType( RTL_CONSTASCII_USTRINGPARAM( "WidthType" ) ),
 #if SUPD < 628 && !defined( TEST_MIB )
     nProgress( nProg ),
 #else
@@ -2121,14 +2122,28 @@ sal_Int32 XMLTextParagraphExport::addTextFrameAttributes(
     Reference< XPropertySetInfo > xPropSetInfo = rPropSet->getPropertySetInfo();
 
     // svg:width
+    sal_Int16 nWidthType = SizeType::FIX;
+    if( xPropSetInfo->hasPropertyByName( sWidthType ) )
+    {
+        aAny = rPropSet->getPropertyValue( sWidthType );
+        aAny >>= nWidthType;
+    }
     if( xPropSetInfo->hasPropertyByName( sWidth ) )
     {
         sal_Int32 nWidth =  0;
-        aAny = rPropSet->getPropertyValue( sWidth );
-        aAny >>= nWidth;
+        // VAR size will be written as zero min-size
+        if( SizeType::VARIABLE != nWidthType )
+        {
+            aAny = rPropSet->getPropertyValue( sWidth );
+            aAny >>= nWidth;
+        }
         GetExport().GetMM100UnitConverter().convertMeasure( sValue, nWidth );
-        GetExport().AddAttribute( XML_NAMESPACE_SVG, XML_WIDTH,
-                                  sValue.makeStringAndClear() );
+        if( SizeType::FIX != nWidthType )
+            GetExport().AddAttribute( XML_NAMESPACE_FO, XML_MIN_WIDTH,
+                                      sValue.makeStringAndClear() );
+        else
+            GetExport().AddAttribute( XML_NAMESPACE_SVG, XML_WIDTH,
+                                      sValue.makeStringAndClear() );
     }
     sal_Bool bSyncWidth = sal_False;
     if( xPropSetInfo->hasPropertyByName( sIsSyncWidthToHeight ) )
@@ -2177,8 +2192,11 @@ sal_Int32 XMLTextParagraphExport::addTextFrameAttributes(
     if( xPropSetInfo->hasPropertyByName( sHeight ) )
     {
         sal_Int32 nHeight =  0;
-        aAny = rPropSet->getPropertyValue( sHeight );
-        aAny >>= nHeight;
+        if( SizeType::VARIABLE != nSizeType )
+        {
+            aAny = rPropSet->getPropertyValue( sHeight );
+            aAny >>= nHeight;
+        }
         GetExport().GetMM100UnitConverter().convertMeasure( sValue,
                                                             nHeight );
         if( SizeType::FIX != nSizeType && 0==nRelHeight && !bSyncHeight )
