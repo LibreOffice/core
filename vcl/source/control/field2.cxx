@@ -2,9 +2,9 @@
  *
  *  $RCSfile: field2.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mt $ $Date: 2001-06-29 10:39:19 $
+ *  last change: $Author: th $ $Date: 2001-07-06 16:17:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,9 @@
 #endif
 #ifndef _SV_SOUND_HXX
 #include <sound.hxx>
+#endif
+#ifndef _SV_EVENT_HXX
+#include <event.hxx>
 #endif
 #ifndef _SV_FIELD_HXX
 #include <field.hxx>
@@ -891,7 +894,7 @@ void PatternFormatter::SelectFixedFont()
 {
     if ( GetField() )
     {
-        Font aFont = System::GetStandardFont( STDFONT_FIXED );
+        Font aFont = OutputDevice::GetDefaultFont( DEFAULTFONT_FIXED, Application::GetSettings().GetLanguage(), 0 );
         Font aControlFont;
         aControlFont.SetName( aFont.GetName() );
         aControlFont.SetFamily( aFont.GetFamily() );
