@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XSpellChecker.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-09-08 10:47:33 $
+ *  last change:$Date: 2003-10-06 13:31:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,8 @@ import com.sun.star.beans.PropertyValue;
 import com.sun.star.lang.Locale;
 import com.sun.star.linguistic2.XSpellAlternatives;
 import com.sun.star.linguistic2.XSpellChecker;
+import lib.Status;
+import lib.StatusException;
 
 /**
 * Testing <code>com.sun.star.linguistic2.XSpellChecker</code>
@@ -80,6 +82,13 @@ import com.sun.star.linguistic2.XSpellChecker;
 public class _XSpellChecker extends MultiMethodTest {
 
     public XSpellChecker oObj = null;
+    XSpellChecker alternative = null;
+
+    public void before() {
+        alternative = (XSpellChecker) tEnv.getObjRelation("AlternativeChecker");
+        if  (alternative == null) throw new StatusException(Status.failed
+            ("Relation AlternativeChecker not found")) ;
+    }
 
     /**
     * Test calls the method for a correctly spelled word and
@@ -91,9 +100,14 @@ public class _XSpellChecker extends MultiMethodTest {
     public void _isValid() {
         boolean res = true;
         try {
+            log.println("Checking 'original' Spellchecker");
             PropertyValue[] empty = new PropertyValue[0] ;
             res &= oObj.isValid("Sun", new Locale("en","US",""), empty);
             res &= !oObj.isValid("Summersun", new Locale("en","US","") ,empty);
+            log.println("Result so far is - "+ (res ? "OK" : "failed"));
+            log.println("Checking alternative Spellchecker");
+            res &= alternative.isValid("Sun", new Locale("en","US",""), empty);
+            res &= !alternative.isValid("Summersun", new Locale("en","US","") ,empty);
         } catch (com.sun.star.lang.IllegalArgumentException ex) {
             log.println("Exception while checking 'isValid'");
             res = false;
@@ -111,11 +125,18 @@ public class _XSpellChecker extends MultiMethodTest {
     public void _spell() {
         boolean res = true;
         try {
+            log.println("Checking 'original' Spellchecker");
             PropertyValue[] empty = new PropertyValue[0] ;
             XSpellAlternatives alt = oObj.spell(
                             "Summersun",new Locale("en","US",""),empty);
-            String alternative = alt.getAlternatives()[0];
-            res = (alternative != null);
+            String alternatives = alt.getAlternatives()[0];
+            res = (alternatives != null);
+            log.println("Result so far is - "+ (res ? "OK" : "failed"));
+            log.println("Checking alternative Spellchecker");
+            alt =alternative.spell(
+                            "Summersun",new Locale("en","US",""),empty);
+            alternatives = alt.getAlternatives()[0];
+            res &= (alternatives != null);
         } catch (com.sun.star.lang.IllegalArgumentException ex) {
             log.println("Exception while checking 'spell'");
             res = false;
