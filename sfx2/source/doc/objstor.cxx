@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.125 $
+ *  $Revision: 1.126 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-19 23:17:37 $
+ *  last change: $Author: svesik $ $Date: 2004-04-22 13:47:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -734,10 +734,8 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
 
         // Falls nicht asynchron geladen wird selbst FinishedLoading aufrufen
         if ( !( pImp->nLoadedFlags & SFX_LOADED_MAINDOCUMENT ) &&
-            ( !pMedium->GetFilter() ||
-               pMedium->GetFilter()->UsesStorage() ||
-               !( pMedium->GetFilter()->GetFilterFlags() & SFX_FILTER_ASYNC ) ||
-               !pMedium->GetLoadEnvironment() ) )
+            ( !pMedium->GetFilter() || pMedium->GetFilter()->UsesStorage() )
+            )
             FinishedLoading( SFX_LOADED_MAINDOCUMENT );
 
         if ( pSalvageItem )
