@@ -2,9 +2,9 @@
  *
  *  $RCSfile: waitsymbol.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 16:57:10 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 13:46:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,7 @@
 #include <algorithm>
 
 
-using namespace ::drafts::com::sun::star;
+using namespace ::com::sun::star;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
@@ -76,25 +76,27 @@ namespace internal {
 const sal_Int32 LEFT_BORDER_SPACE  = 10;
 const sal_Int32 LOWER_BORDER_SPACE = 10;
 
-WaitSymbol::WaitSymbol( Reference<rendering::XBitmap> const & xBitmap )
-    : m_xBitmap(xBitmap),
-      m_bVisible(false)
+    WaitSymbol::WaitSymbol( Reference<rendering::XBitmap> const &   xBitmap,
+                            EventMultiplexer&                       rEventMultiplexer ) :
+        m_xBitmap(xBitmap),
+        m_views(),
+        mrEventMultiplexer( rEventMultiplexer ),
+        m_bVisible(false)
 {
 }
 
 void WaitSymbol::setVisible( const bool bVisible )
 {
-    if (m_bVisible != bVisible) {
+    if (m_bVisible != bVisible)
+    {
         m_bVisible = bVisible;
         for_each_sprite( boost::bind( bVisible ? &cppcanvas::Sprite::show
                                                : &cppcanvas::Sprite::hide,
                                       _1 ) );
-        std::for_each(
-            m_views.begin(), m_views.end(),
-            boost::bind( &View::updateScreen,
-                         // select view:
-                         boost::bind(
-                             std::select1st<ViewsVecT::value_type>(), _1 ) ) );
+
+        // force screen update, this implementation bypasses the layer
+        // manager.
+        mrEventMultiplexer.updateScreenContent( true );
     }
 }
 
@@ -119,13 +121,15 @@ basegfx::B2DPoint WaitSymbol::calcSpritePos(
 
 void WaitSymbol::addView( UnoViewSharedPtr const & rView )
 {
+    const ViewsVecT::iterator iEnd( m_views.end() );
     if (std::find_if(
-            m_views.begin(), m_views.end(),
+            m_views.begin(), iEnd,
             boost::bind(
                 std::equal_to<UnoViewSharedPtr>(),
                 rView,
                 // select view:
-                boost::bind( std::select1st<ViewsVecT::value_type>(), _1 ) ) ))
+                boost::bind( std::select1st<ViewsVecT::value_type>(), _1 ) ) )!=
+        iEnd)
         return; // already added
 
     const geometry::IntegerSize2D spriteSize( m_xBitmap->getSize() );
