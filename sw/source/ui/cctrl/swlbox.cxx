@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swlbox.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:14:58 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:58:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -274,18 +274,6 @@ SwComboBox::~SwComboBox()
 }
 
 /*--------------------------------------------------------------------
-     Beschreibung: neue Eintraege verwalten
- --------------------------------------------------------------------*/
-
-
-void SwComboBox::InsertNewEntry(const SwBoxEntry& rEntry)
-{
-    SwBoxEntry* pNew = new SwBoxEntry(rEntry);
-    pNew->bNew = TRUE;
-    InsertSorted(pNew);
-}
-
-/*--------------------------------------------------------------------
      Beschreibung: Eintrag in die ComboBox aufnehmen
  --------------------------------------------------------------------*/
 
@@ -357,39 +345,6 @@ const SwBoxEntry& SwComboBox::GetRemovedEntry(USHORT nPos) const
 {
     if(nPos < aDelEntryLst.Count())
         return *aDelEntryLst[nPos];
-
-    return aDefault;
-}
-
-/*--------------------------------------------------------------------
-     Beschreibung: Neue Entries begutachten
- --------------------------------------------------------------------*/
-
-
-USHORT SwComboBox::GetNewCount() const
-{
-    USHORT nNew = 0;
-    USHORT nSize = aEntryLst.Count();
-    for(USHORT i=0; i < nSize; ++i)
-        if(aEntryLst[i]->bNew)
-            nNew++;
-
-    return nNew;
-}
-
-/*--------------------------------------------------------------------
-     Beschreibung:  Alle neuen Eintraege ueberpruefen
- --------------------------------------------------------------------*/
-
-
-const SwBoxEntry& SwComboBox::GetNewEntry(USHORT nPos) const
-{
-    USHORT nSize = aEntryLst.Count();
-    USHORT nNew  = 0;
-
-    for(USHORT i=0; i < nSize; ++i)
-        if( aEntryLst[i]->bNew && nNew++ == nPos )
-            return *aEntryLst[i];
 
     return aDefault;
 }
