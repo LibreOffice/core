@@ -7,6 +7,8 @@
 package com.sun.star.wizards.web.export;
 
 import com.sun.star.beans.PropertyValue;
+import com.sun.star.document.MacroExecMode;
+import com.sun.star.document.UpdateDocMode;
 import com.sun.star.frame.XComponentLoader;
 import com.sun.star.frame.XDesktop;
 import com.sun.star.frame.XStorable;
@@ -73,6 +75,8 @@ public abstract class AbstractExporter implements Exporter {
             XDesktop desktop = Desktop.getDesktop(xmsf);
             Properties props = new Properties();
             props.put("Hidden", Boolean.TRUE);
+            props.put("MacroExecutionMode", new Short(MacroExecMode.NEVER_EXECUTE));
+            props.put( "UpdateDocMode", new Short(UpdateDocMode.NO_UPDATE));
             document = (
                 (XComponentLoader) UnoRuntime.queryInterface(
                     XComponentLoader.class,
@@ -133,7 +137,7 @@ public abstract class AbstractExporter implements Exporter {
          * binary format, get the size of the destination.
          */
         if (exporter.cp_Binary)
-            doc.sizeKB = getFileAccess(xmsf).getSize(url);
+            doc.sizeBytes = getFileAccess(xmsf).getSize(url);
 
     }
 
