@@ -1,7 +1,7 @@
 %{
 //--------------------------------------------------------------------------
 //
-// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlbison.y,v 1.41 2002-09-27 11:10:30 oj Exp $
+// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlbison.y,v 1.42 2002-11-27 17:14:33 obo Exp $
 //
 // Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.
 //
@@ -9,7 +9,7 @@
 //	OJ
 //
 // Last change:
-//	$Author: oj $ $Date: 2002-09-27 11:10:30 $ $Revision: 1.41 $
+//	$Author: obo $ $Date: 2002-11-27 17:14:33 $ $Revision: 1.42 $
 //
 // Description:
 //
@@ -93,6 +93,7 @@ int fprintf(FILE* stream, const char* format, ...)
     return res;
 }
 
+#if _MSC_VER < 1300
 void* malloc( size_t size )
 {
     return ::malloc(size);
@@ -102,7 +103,7 @@ void free( void *memblock )
 {
     ::free(memblock);
 }
-    
+#endif
 };
 #endif
 
