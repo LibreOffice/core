@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ssfrm.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-15 13:30:56 $
+ *  last change: $Author: jp $ $Date: 2001-10-15 13:34:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -564,6 +564,7 @@ const SwRect SwFrm::UnionFrm( BOOL bBorder ) const
     (aRet.*fnRect->fnSetPosX)( nLeft );
     (aRet.*fnRect->fnSetWidth)( nWidth );
 #else
+    SwRect aRet( Frm() );
     if( Prt().Left() < 0 )
         aRet.Left( aRet.Left() + Prt().Left() );
     if( Prt().Left() + Prt().Width() > Frm().Width() )
