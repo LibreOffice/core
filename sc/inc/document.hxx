@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-19 11:33:04 $
+ *  last change: $Author: obo $ $Date: 2003-10-21 08:46:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,13 +169,18 @@ class ScPoolHelper;
 class ScImpExpLogMsg;
 struct ScSortParam;
 class ScRefreshTimerControl;
+class ScUnoListenerCalls;
 
 namespace com { namespace sun { namespace star {
     namespace lang {
         class XMultiServiceFactory;
+        struct EventObject;
     }
     namespace i18n {
         class XBreakIterator;
+    }
+    namespace util {
+        class XModifyListener;
     }
 } } }
 
@@ -383,6 +388,7 @@ private:
     ScDetOpList*        pDetOpList;
     ScChangeTrack*      pChangeTrack;
     SfxBroadcaster*     pUnoBroadcaster;
+    ScUnoListenerCalls* pUnoListenerCalls;
     ScChangeViewSettings* pChangeViewSettings;
     ScScriptTypeData*   pScriptTypeData;
     ScRefreshTimerControl* pRefreshTimerControl;
@@ -489,6 +495,7 @@ private:
     BYTE                nInDdeLinkUpdate;   // originating DDE links (stacked bool)
 
     BOOL                bInUnoBroadcast;
+    BOOL                bInUnoListenerCall;
 
     mutable BOOL        bStyleSheetUsageInvalid;
 
@@ -1608,6 +1615,9 @@ public:
     void            AddUnoObject( SfxListener& rObject );
     void            RemoveUnoObject( SfxListener& rObject );
     void            BroadcastUno( const SfxHint &rHint );
+    void            AddUnoListenerCall( const ::com::sun::star::uno::Reference<
+                                            ::com::sun::star::util::XModifyListener >& rListener,
+                                        const ::com::sun::star::lang::EventObject& rEvent );
 
     void            SetInLinkUpdate(BOOL bSet);             // TableLink or AreaLink
     BOOL            IsInLinkUpdate() const;                 // including DdeLink
