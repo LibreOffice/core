@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLChartContext.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: bm $ $Date: 2001-04-10 10:25:34 $
+ *  last change: $Author: bm $ $Date: 2001-05-04 17:18:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,6 +204,7 @@ void SchXMLChartContext::StartElement( const uno::Reference< xml::sax::XAttribut
     awt::Size aChartSize;
     // this flag is necessarry for pie charts in the core
     sal_Bool bSetSwitchData = sal_False;
+    sal_Bool bDomainForDefaultDataNeeded = sal_False;
 
     rtl::OUString aServiceName;
     rtl::OUString sAutoStyleName;
@@ -244,6 +245,7 @@ void SchXMLChartContext::StartElement( const uno::Reference< xml::sax::XAttribut
                             case XML_CHART_CLASS_SCATTER:
                                 aServiceName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
                                     "com.sun.star.chart.XYDiagram" ));
+                                bDomainForDefaultDataNeeded = sal_True;
                                 break;
                             case XML_CHART_CLASS_RADAR:
                                 aServiceName = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
@@ -301,8 +303,17 @@ void SchXMLChartContext::StartElement( const uno::Reference< xml::sax::XAttribut
         // attention: the data must at least be 1 x 1,
         // otherwise BuildChart doesn't perform much.
         uno::Sequence< uno::Sequence< double > > aAlmostEmptySeq( 1 );
-        aAlmostEmptySeq[ 0 ].realloc( 1 );
-        aAlmostEmptySeq[ 0 ][ 0 ] = fNan;
+        if( bDomainForDefaultDataNeeded )
+        {
+            aAlmostEmptySeq[ 0 ].realloc( 2 );
+            aAlmostEmptySeq[ 0 ][ 0 ] = 0.0;
+            aAlmostEmptySeq[ 0 ][ 1 ] = fNan;
+        }
+        else
+        {
+            aAlmostEmptySeq[ 0 ].realloc( 1 );
+            aAlmostEmptySeq[ 0 ][ 0 ] = fNan;
+        }
         xArray->setData( aAlmostEmptySeq );
     }
 

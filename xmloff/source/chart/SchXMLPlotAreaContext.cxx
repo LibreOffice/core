@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLPlotAreaContext.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: bm $ $Date: 2001-05-04 15:13:40 $
+ *  last change: $Author: bm $ $Date: 2001-05-04 17:18:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -991,8 +991,7 @@ void SchXMLSeriesContext::StartElement( const uno::Reference< xml::sax::XAttribu
     sal_Int16 nAttrCount = xAttrList.is()? xAttrList->getLength(): 0;
     ::rtl::OUString aValue;
     const SvXMLTokenMap& rAttrTokenMap = mrImportHelper.GetSeriesAttrTokenMap();
-    ::rtl::OUString sAutoStyleName;
-    sal_Int32 nAttachedAxis = 1;
+    mnAttachedAxis = 1;
 
     for( sal_Int16 i = 0; i < nAttrCount; i++ )
     {
@@ -1023,7 +1022,7 @@ void SchXMLSeriesContext::StartElement( const uno::Reference< xml::sax::XAttribu
                 }
                 break;
             case XML_TOK_SERIES_STYLE_NAME:
-                sAutoStyleName = aValue;
+                msAutoStyleName = aValue;
                 break;
             case XML_TOK_SERIES_CHART_CLASS:
                 // not supported yet
@@ -1036,15 +1035,8 @@ void SchXMLSeriesContext::StartElement( const uno::Reference< xml::sax::XAttribu
         if( mpAttachedAxis->nIndexInCategory > 0 )
         {
             // secondary axis => property has to be set (primary is default)
-            nAttachedAxis = 2;
+            mnAttachedAxis = 2;
         }
-    }
-
-    if( sAutoStyleName.getLength() ||
-        nAttachedAxis != 1 )
-    {
-        ::chartxml::DataRowPointStyle aStyle( mnSeriesIndex, -1, 1, sAutoStyleName, nAttachedAxis );
-        mrStyleList.push_back( aStyle );
     }
 }
 
@@ -1052,6 +1044,13 @@ void SchXMLSeriesContext::EndElement()
 {
     if( mrMaxSeriesLength < mnDataPointIndex )
         mrMaxSeriesLength = mnDataPointIndex;
+
+    if( msAutoStyleName.getLength() ||
+        mnAttachedAxis != 1 )
+    {
+        ::chartxml::DataRowPointStyle aStyle( mnSeriesIndex + mrDomainOffset, -1, 1, msAutoStyleName, mnAttachedAxis );
+        mrStyleList.push_back( aStyle );
+    }
 }
 
 SvXMLImportContext* SchXMLSeriesContext::CreateChildContext(

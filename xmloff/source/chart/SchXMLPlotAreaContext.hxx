@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLPlotAreaContext.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: bm $ $Date: 2001-03-28 19:30:56 $
+ *  last change: $Author: bm $ $Date: 2001-05-04 17:18:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,6 +195,8 @@ private:
     sal_Int32& mrMaxSeriesLength;
     sal_Int32& mrDomainOffset;
     SchXMLAxis* mpAttachedAxis;
+    sal_Int32 mnAttachedAxis;
+    ::rtl::OUString msAutoStyleName;
 
 public:
     SchXMLSeriesContext( SchXMLImportHelper& rImpHelper,
