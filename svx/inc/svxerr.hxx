@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxerr.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 17:45:45 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 08:54:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,19 @@
 #define ERRCODE_SVX_VBASIC_STORAGE_EXIST       (14UL | ERRCODE_AREA_SVX     \
                                                      | ERRCODE_WARNING_MASK \
                                                      | ERRCODE_CLASS_WRITE )
+
+/** Error message: "Wrong password." */
+#define ERRCODE_SVX_WRONGPASS               (15UL | ERRCODE_AREA_SVX | ERRCODE_CLASS_NONE)
+
+/** Error message: "Read error. Unsupported encryption method." */
+#define ERRCODE_SVX_READ_FILTER_CRYPT       (16UL | ERRCODE_AREA_SVX | ERRCODE_CLASS_READ)
+
+/** Error message: "Read error. Passwort encrypted Powerpoint documents..." */
+#define ERRCODE_SVX_READ_FILTER_PPOINT      (17UL | ERRCODE_AREA_SVX | ERRCODE_CLASS_READ)
+
+/** Error message: "Warning. Passwort protection is not suppported when ..." */
+#define ERRCODE_SVX_EXPORT_FILTER_CRYPT      (18UL | ERRCODE_AREA_SVX | ERRCODE_CLASS_EXPORT)
+
 
 // both codes will be used twice : with ERRCODE_CLASS_READ- and ERRCODE_CLASS_WRITE-bits
 #define ERRCTX_SVX_LINGU_THESAURUS              1
