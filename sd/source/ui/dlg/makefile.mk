@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.23 $
+#   $Revision: 1.24 $
 #
-#   last change: $Author: rt $ $Date: 2004-07-13 13:50:27 $
+#   last change: $Author: rt $ $Date: 2004-08-23 08:16:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -189,7 +189,6 @@ LIB1OBJFILES= \
         $(SLO)$/animobjs.obj \
         $(SLO)$/filedlg.obj   \
         $(SLO)$/unchss.obj  \
-        $(SLO)$/dlgassim.obj	\
         $(SLO)$/assclass.obj \
         $(SLO)$/graphpro.obj \
         $(SLO)$/navigatr.obj \
@@ -229,6 +228,7 @@ LIB2OBJFILES= \
         $(SLO)$/custsdlg.obj \
         $(SLO)$/dlgchar.obj \
         $(SLO)$/dlgass.obj \
+        $(SLO)$/dlgassim.obj \
         $(SLO)$/dlgfield.obj \
         $(SLO)$/dlgpage.obj \
         $(SLO)$/dlgsnap.obj \
