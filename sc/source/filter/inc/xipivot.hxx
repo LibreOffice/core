@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xipivot.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:47:22 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:45:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifndef SC_XIPIVOT_HXX
 #define SC_XIPIVOT_HXX
 
@@ -394,7 +393,7 @@ private:
     ScfUInt16Vec        maOrigDataFields;   /// Original data field indexes.
     ScfUInt16Vec        maFiltDataFields;   /// Filtered data field indexes.
     XclImpPTField       maDataOrientField;  /// Special data field orientation field.
-    ScRange             maOutputRange;      /// Output range in the Calc document.
+    ScRange             maOutScRange;       /// Output range in the Calc document.
     XclImpPTField*      mpCurrField;        /// Current field for importing additional info.
 };
 

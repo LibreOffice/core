@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlpivot.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:50:17 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:47:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifndef SC_XLPIVOT_HXX
 #define SC_XLPIVOT_HXX
 
@@ -86,6 +85,9 @@
 
 #ifndef SC_FTOOLS_HXX
 #include "ftools.hxx"
+#endif
+#ifndef SC_XLADDRESS_HXX
+#include "xladdress.hxx"
 #endif
 
 class XclImpStream;
@@ -780,13 +782,9 @@ struct XclPTInfo
 {
     String              maTableName;        /// The name of the pivot table.
     String              maDataName;         /// The visible name of the data field.
-    sal_uInt16          mnFirstRow;         /// First row of output range.
-    sal_uInt16          mnLastRow;          /// Last row of output range.
-    sal_uInt16          mnFirstCol;         /// First column of output range.
-    sal_uInt16          mnLastCol;          /// Last column of output range.
+    XclRange            maOutXclRange;      /// Output range.
+    XclAddress          maDataXclPos;       /// First cell containing data.
     sal_uInt16          mnFirstHeadRow;     /// First heading row.
-    sal_uInt16          mnFirstDataRow;     /// First row containing data.
-    sal_uInt16          mnFirstDataCol;     /// First column containing data.
     sal_uInt16          mnCacheIdx;         /// 0-based index of the pivot cache.
     sal_uInt16          mnDataAxis;         /// Orientation of data fields.
     sal_uInt16          mnDataPos;          /// Position of data fields.
