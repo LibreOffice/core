@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipFile.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mtg $ $Date: 2001-11-15 19:55:24 $
+ *  last change: $Author: mtg $ $Date: 2001-12-04 17:44:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,13 @@ protected:
             const vos::ORef < EncryptionData > &rData,
             sal_Bool bRawStream,
             sal_Bool bDecrypt );
+
+    com::sun::star::uno::Reference < com::sun::star::io::XInputStream >  createUnbufferedStream(
+            ZipEntry & rEntry,
+            const vos::ORef < EncryptionData > &rData,
+            sal_Bool bRawStream,
+            sal_Bool bDecrypt );
+
     sal_Bool hasValidPassword ( ZipEntry & rEntry, const vos::ORef < EncryptionData > &rData );
 public:
     ZipFile( com::sun::star::uno::Reference < com::sun::star::io::XInputStream > &xInput,
