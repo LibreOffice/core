@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.34 $
+#   $Revision: 1.35 $
 #
-#   last change: $Author: kz $ $Date: 2004-08-02 14:30:16 $
+#   last change: $Author: hr $ $Date: 2004-08-02 16:39:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -141,7 +141,9 @@ SRC1FILES =  \
         treeopt.src					\
         optfltr.src					\
         connpooloptions.src			\
-        internationaloptions.src \
+        dbregister.src				\
+        doclinkdialog.src			\
+        internationaloptions.src	\
         macropg.src \
         eventdlg.src \
         cfg.src \
@@ -205,6 +207,9 @@ EXCEPTIONSFILES=\
     $(SLO)$/multifil.obj	\
     $(SLO)$/optdict.obj	\
     $(SLO)$/cuigaldlg.obj \
+    $(SLO)$/dbregister.obj				\
+    $(SLO)$/doclinkdialog.obj				\
+    $(SLO)$/dbregisterednamesconfig.obj \
     $(SLO)$/scriptdlg.obj \
     $(SLO)$/selector.obj \
     $(SLO)$/showcols.obj \
@@ -216,7 +221,9 @@ EXCEPTIONSFILES=\
 SLOFILES=\
     $(EXCEPTIONSFILES)	\
     $(SLO)$/internationaloptions.obj	\
+    $(SLO)$/optHeaderTabListbox.obj		\
     $(SLO)$/connpooloptions.obj			\
+    $(SLO)$/dbregistersettings.obj		\
     $(SLO)$/fontsubs.obj				\
     $(SLO)$/optmemory.obj				\
     $(SLO)$/opthtml.obj					\
@@ -405,8 +412,13 @@ LIB1OBJFILES= \
 LIB2TARGET= $(SLB)$/cui.lib
 
 LIB2OBJFILES= \
+    $(SLO)$/optHeaderTabListbox.obj		\
     $(SLO)$/sdbcdriverenum.obj	\
     $(SLO)$/connpoolsettings.obj \
+    $(SLO)$/dbregisterednamesconfig.obj \
+    $(SLO)$/dbregistersettings.obj \
+    $(SLO)$/dbregister.obj				\
+    $(SLO)$/doclinkdialog.obj				\
     $(SLO)$/connpoolconfig.obj \
     $(SLO)$/internationaloptions.obj	\
     $(SLO)$/connpooloptions.obj			\
