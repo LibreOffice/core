@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brkdlg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ab $ $Date: 2002-11-01 14:38:48 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 12:39:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,11 +152,12 @@ BreakPointDialog::BreakPointDialog( Window* pParent, BreakPointList& rBrkPntList
     CheckButtons();
 }
 
-void BreakPointDialog::SetCurrentBreakPoint( const BreakPoint& rBrk )
+void BreakPointDialog::SetCurrentBreakPoint( BreakPoint* pBrk )
 {
     String aStr( RTL_CONSTASCII_USTRINGPARAM( "# " ) );
-    aStr += String::CreateFromInt32( rBrk.nLine );
+    aStr += String::CreateFromInt32( pBrk->nLine );
     aComboBox.SetText( aStr );
+    UpdateFields( pBrk );
 }
 
 void BreakPointDialog::CheckButtons()
