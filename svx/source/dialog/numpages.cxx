@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numpages.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: cl $ $Date: 2002-03-01 14:24:26 $
+ *  last change: $Author: os $ $Date: 2002-04-05 14:17:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1343,7 +1343,7 @@ SvxBitmapPickTabPage::SvxBitmapPickTabPage(Window* pParent,
                                const SfxItemSet& rSet) :
     SfxTabPage( pParent, SVX_RES( RID_SVXPAGE_PICK_BMP ), rSet ),
     aValuesFL(      this, ResId(FL_VALUES) ),
-    pExamplesVS(    new SvxBmpNumValueSet(this, ResId(VS_VALUES), aGrfNames )),
+    pExamplesVS(    new SvxBmpNumValueSet(this, ResId(VS_VALUES)/*, aGrfNames*/ )),
     aErrorText(     this, ResId(FT_ERROR)),
     aLinkedCB(      this, ResId(CB_LINKED)),
     pActNum(0),
@@ -1554,14 +1554,14 @@ IMPL_LINK(SvxBitmapPickTabPage, NumSelectHdl_Impl, ValueSet*, EMPTYARG)
                 aFmt.SetSuffix( aEmptyStr );
                 aFmt.SetCharFmtName( sNumCharFmtName );
 
-                SvxBmpItemInfo* pInfo = pExamplesVS->FindInfo(nIdx + 1);
-                const Graphic* pGraphic = pInfo->pBrushItem->GetGraphic(SfxObjectShell::Current());
-                if(pGraphic)
+                Graphic aGraphic;
+                if(GalleryExplorer::GetGraphicObj( String::CreateFromAscii("Bullets"), nIdx, &aGraphic))
                 {
-                    Size aSize = SvxNumberFormat::GetGraphicSizeMM100(pGraphic);
+                    Size aSize = SvxNumberFormat::GetGraphicSizeMM100(&aGraphic);
                     SvxFrameVertOrient eOrient = SVX_VERT_LINE_CENTER;
                     aSize = OutputDevice::LogicToLogic(aSize, MAP_100TH_MM, (MapUnit)eCoreUnit);
-                    aFmt.SetGraphicBrush( pInfo->pBrushItem, &aSize, &eOrient );
+                    SvxBrushItem aBrush(aGraphic, GPOS_AREA );
+                    aFmt.SetGraphicBrush( &aBrush, &aSize, &eOrient );
                 }
                 else if(pGrfName)
                     aFmt.SetGraphic( *pGrfName );
@@ -1599,14 +1599,15 @@ IMPL_LINK(SvxBitmapPickTabPage, LinkBmpHdl_Impl, CheckBox*, pBox )
 
 --------------------------------------------------*/
 
-SvxBmpNumValueSet::SvxBmpNumValueSet( Window* pParent, const ResId& rResId, const List& rStrNames ) :
+SvxBmpNumValueSet::SvxBmpNumValueSet( Window* pParent, const ResId& rResId/*, const List& rStrNames*/ ) :
 
     SvxNumValueSet( pParent, rResId, NUM_PAGETYPE_BMP ),
-
-    rStrList    ( rStrNames ),
+//    rStrList    ( rStrNames ),
+    sBullets(String::CreateFromAscii("Bullets")),
     bGrfNotFound( FALSE )
 
 {
+    GalleryExplorer::BeginLocking(sBullets);
     SetStyle( GetStyle() | WB_VSCROLL );
     SetLineCount( 3 );
     aFormatTimer.SetTimeout(300);
@@ -1619,33 +1620,9 @@ SvxBmpNumValueSet::SvxBmpNumValueSet( Window* pParent, const ResId& rResId, cons
 
  SvxBmpNumValueSet::~SvxBmpNumValueSet()
 {
+    GalleryExplorer::EndLocking(sBullets);
     aFormatTimer.Stop();
-    SvxBmpItemInfo* pInfo = (SvxBmpItemInfo*)aGrfBrushItems.First();
-    while( pInfo )
-    {
-        delete pInfo->pBrushItem;
-        delete pInfo;
-        pInfo = (SvxBmpItemInfo*)aGrfBrushItems.Next();
-    }
 }
-/*-----------------13.02.97 14.19-------------------
-
---------------------------------------------------*/
-
-SvxBmpItemInfo*  SvxBmpNumValueSet::FindInfo(USHORT nInfo)
-{
-    SvxBmpItemInfo* pRet = 0;
-    for ( USHORT i = 0; i < aGrfBrushItems.Count(); i++ )
-    {
-        SvxBmpItemInfo* pInfo = (SvxBmpItemInfo*)aGrfBrushItems.GetObject(i);
-        if(pInfo->nItemId == nInfo)
-        {
-            pRet = pInfo; break;
-        }
-    }
-    return pRet;
-}
-
 /*-----------------13.02.97 09.41-------------------
 
 --------------------------------------------------*/
@@ -1662,49 +1639,22 @@ void    SvxBmpNumValueSet::UserDraw( const UserDrawEvent& rUDEvt )
     int nRectHeight = aRect.GetHeight();
     Size aSize(nRectHeight/8, nRectHeight/8);
 
-
-    if(rStrList.Count() > USHORT( nItemId - 1) )
+    Bitmap aThumb;
+    if(!GalleryExplorer::GetGraphicObj( sBullets, nItemId - 1,
+                        NULL, &aThumb))
     {
-        String* pGrfName = (String*)rStrList.GetObject(nItemId - 1);
-        SvxBmpItemInfo* pInfo;
-        if(0 == (pInfo = FindInfo(nItemId)))
+        bGrfNotFound = TRUE;
+    }
+    else
+    {
+        Point aPos(aBLPos.X() + 5, 0);
+        for( USHORT i = 0; i < 3; i++ )
         {
-            pInfo = new SvxBmpItemInfo();
-            pInfo->nItemId = nItemId;
-            String aEmptyStr;
-            pInfo->pBrushItem = new SvxBrushItem(*pGrfName, aEmptyStr, GPOS_AREA);
-            pInfo->pBrushItem->SetDoneLink(STATIC_LINK(
-                                    this, SvxBmpNumValueSet, GraphicArrivedHdl_Impl));
-            aGrfBrushItems.Insert(pInfo, aGrfBrushItems.Count());
-        }
-
-        const Graphic* pGraphic = pInfo->pBrushItem->GetGraphic(SfxObjectShell::Current());
-        if(pGraphic)
-        {
-            Point aPos(aBLPos.X() + 5, 0);
-            for( USHORT i = 0; i < 3; i++ )
-            {
-                USHORT nY = 11 + i * 33;
-                aPos.Y() = aBLPos.Y() + nRectHeight  * nY / 100;
-                pGraphic->Draw(pDev, aPos, aSize);
-            }
-        }
-        else
-        {
-            bGrfNotFound = TRUE;
+            USHORT nY = 11 + i * 33;
+            aPos.Y() = aBLPos.Y() + nRectHeight  * nY / 100;
+            pDev->DrawBitmap( aPos, aSize, aThumb );
         }
     }
-}
-
-/*-----------------13.02.97 09.41-------------------
-
---------------------------------------------------*/
-
-IMPL_STATIC_LINK(SvxBmpNumValueSet, GraphicArrivedHdl_Impl, SvxBrushItem*, pItem)
-{
-    // Ueber Timer wird ein Format angeworfen
-    pThis->aFormatTimer.Start();
-    return 0;
 }
 
 /*-----------------14.02.97 07.34-------------------
@@ -1799,6 +1749,8 @@ SvxNumOptionsTabPage::SvxNumOptionsTabPage(Window* pParent,
     aBulRelSizeMF.SetModifyHdl(LINK(this,SvxNumOptionsTabPage, BulRelSizeHdl_Impl));
     aBulColLB.SetSelectHdl(LINK(this, SvxNumOptionsTabPage, BulColorHdl_Impl));
     aUseBulletCB.SetClickHdl(LINK(this, SvxNumOptionsTabPage, UseBulletHdl_Impl));
+    aInvalidateTimer.SetTimeoutHdl(LINK(this, SvxNumOptionsTabPage, PreviewInvalidateHdl_Impl));
+    aInvalidateTimer.SetTimeout(50);
 
     aBitmapMB.GetPopupMenu()->SetHighlightHdl(LINK(this, SvxNumOptionsTabPage, PopupActivateHdl_Impl));
     PopupMenu* pPopup = new PopupMenu;
@@ -1855,13 +1807,6 @@ SvxNumOptionsTabPage::~SvxNumOptionsTabPage()
     {
         delete pStr;
         pStr = (String*)aGrfNames.Next();
-    }
-    SvxBmpItemInfo* pInfo = (SvxBmpItemInfo*)aGrfBrushItems.First();
-    while( pInfo )
-    {
-        delete pInfo->pBrushItem;
-        delete pInfo;
-        pInfo = (SvxBmpItemInfo*)aGrfBrushItems.Next();
     }
     delete pActNum;
     delete pPreviewWIN;
@@ -2461,6 +2406,14 @@ IMPL_LINK( SvxNumOptionsTabPage, UseBulletHdl_Impl, TriStateBox*, pBox )
     SetModified();
     return 0;
 }
+/* -----------------------------05.04.2002 15:30------------------------------
+
+ ---------------------------------------------------------------------------*/
+IMPL_LINK( SvxNumOptionsTabPage, PreviewInvalidateHdl_Impl, Timer*, EMPTYARG )
+{
+    pPreviewWIN->Invalidate();
+    return 0;
+}
 /*-----------------03.12.97 12:01-------------------
 
 --------------------------------------------------*/
@@ -2681,13 +2634,11 @@ IMPL_LINK( SvxNumOptionsTabPage, GraphicHdl_Impl, MenuButton *, pButton )
 
     if(MN_GALLERY_ENTRY <= nItemId )
     {
-        const Graphic* pGraphic = 0;
-
         aGrfName = *((String*)aGrfNames.GetObject( nItemId - MN_GALLERY_ENTRY));
-        SvxBmpItemInfo* pInfo = (SvxBmpItemInfo*)aGrfBrushItems.GetObject(nItemId - MN_GALLERY_ENTRY);
-        if( (pGraphic=pInfo->pBrushItem->GetGraphic()) )
+        Graphic aGraphic;
+        if(GalleryExplorer::GetGraphicObj( String::CreateFromAscii("Bullets"), nItemId - MN_GALLERY_ENTRY, &aGraphic))
         {
-            aSize = SvxNumberFormat::GetGraphicSizeMM100(pGraphic);
+            aSize = SvxNumberFormat::GetGraphicSizeMM100(&aGraphic);
             bSucc = sal_True;
         }
     }
@@ -2723,6 +2674,8 @@ IMPL_LINK( SvxNumOptionsTabPage, GraphicHdl_Impl, MenuButton *, pButton )
 
                 // Size schon mal fuer spaeteren Groessenabgleich setzen
                 const SvxBrushItem* pBrushItem = aNumFmt.GetBrush();
+                // initiate asynchronous loading
+                const Graphic* pGrf = pBrushItem->GetGraphic();
                 SvxFrameVertOrient eOrient = aNumFmt.GetVertOrient();
                 aNumFmt.SetGraphicBrush( pBrushItem, &aSize, &eOrient );
                 aInitSize[i] = aNumFmt.GetGraphicSize();
@@ -2741,6 +2694,8 @@ IMPL_LINK( SvxNumOptionsTabPage, GraphicHdl_Impl, MenuButton *, pButton )
         aOrientFT.Enable();
         aOrientLB.Enable();
         SetModified();
+        //needed due to asynchronous loading of graphics in the SvxBrushItem
+        aInvalidateTimer.Start();
     }
     return 0;
 }
@@ -2760,23 +2715,16 @@ IMPL_LINK( SvxNumOptionsTabPage, PopupActivateHdl_Impl, Menu *, pMenu )
             pPopup->RemoveItem( pPopup->GetItemPos( NUM_NO_GRAPHIC ));
             String aEmptyStr;
             SfxObjectShell *pDocSh = SfxObjectShell::Current();
+            String sBullets(String::CreateFromAscii("Bullets"));
+            GalleryExplorer::BeginLocking(sBullets);
+
             for(USHORT i = 0; i < aGrfNames.Count(); i++)
             {
+                Graphic aGraphic;
                 const String* pGrfName = (const String*)aGrfNames.GetObject(i);
-
-                SvxBrushItem* pBrushItem = new SvxBrushItem(*pGrfName, aEmptyStr, GPOS_AREA);
-                pBrushItem->SetDoneLink(STATIC_LINK(
-                            this, SvxNumOptionsTabPage, GraphicArrivedHdl_Impl));
-
-                SvxBmpItemInfo* pInfo = new SvxBmpItemInfo();
-                pInfo->pBrushItem = pBrushItem;
-                pInfo->nItemId = MN_GALLERY_ENTRY + i;
-                aGrfBrushItems.Insert(pInfo, i);
-                const Graphic* pGraphic = pBrushItem->GetGraphic(pDocSh);
-
-                if(pGraphic)
+                if(GalleryExplorer::GetGraphicObj( String::CreateFromAscii("Bullets"), i, &aGraphic))
                 {
-                    Bitmap aBitmap(pGraphic->GetBitmap());
+                    Bitmap aBitmap(aGraphic.GetBitmap());
                     Size aSize(aBitmap.GetSizePixel());
                     if(aSize.Width() > MAX_BMP_WIDTH ||
                         aSize.Height() > MAX_BMP_HEIGHT)
@@ -2786,19 +2734,18 @@ IMPL_LINK( SvxNumOptionsTabPage, PopupActivateHdl_Impl, Menu *, pMenu )
                                             (double)MAX_BMP_WIDTH / (double)aSize.Width():
                                                 (double)MAX_BMP_HEIGHT / (double)aSize.Height();
                         aBitmap.Scale(nScale, nScale);
-
                     }
                     Image aImage(aBitmap);
-                    pPopup->InsertItem(
-                        pInfo->nItemId, *pGrfName, aImage );
+                    pPopup->InsertItem(MN_GALLERY_ENTRY + i, *pGrfName, aImage );
                 }
                 else
                 {
                     Image aImage;
                     pPopup->InsertItem(
-                        pInfo->nItemId, *pGrfName, aImage );
+                        MN_GALLERY_ENTRY + i, *pGrfName, aImage );
                 }
             }
+            GalleryExplorer::EndLocking(sBullets);
         }
         LeaveWait();
     }
@@ -3025,33 +2972,6 @@ IMPL_LINK( SvxNumOptionsTabPage, EditModifyHdl_Impl, Edit *, pEdit )
         nMask <<= 1;
     }
     SetModified();
-
-    return 0;
-}
-
-/*-----------------02.12.97 11:38-------------------
-
---------------------------------------------------*/
-IMPL_STATIC_LINK( SvxNumOptionsTabPage, GraphicArrivedHdl_Impl,
-                    SvxBrushItem*, pItem )
-{
-    PopupMenu* pPopup = pThis->aBitmapMB.GetPopupMenu()->GetPopupMenu( MN_GALLERY );
-
-    SvxBmpItemInfo* pBmpInfo = 0;
-    for ( USHORT i = 0; i < pThis->aGrfBrushItems.Count(); i++ )
-    {
-        SvxBmpItemInfo* pInfo = (SvxBmpItemInfo*)pThis->aGrfBrushItems.GetObject(i);
-        if( pInfo->pBrushItem == pItem )
-        {
-            pBmpInfo = pInfo;
-            break;
-        }
-    }
-    if(pBmpInfo)
-    {
-        Image aImage( pItem->GetGraphic()->GetBitmap() );
-        pPopup->SetItemImage( pBmpInfo->nItemId, aImage );
-    }
 
     return 0;
 }

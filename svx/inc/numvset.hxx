@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numvset.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2001-06-22 16:15:11 $
+ *  last change: $Author: os $ $Date: 2002-04-05 14:17:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,6 @@ class SvxNumValueSet : public ValueSet
     Rectangle       aOrgRect;
     VirtualDevice*  pVDev;
 
-//  const SvxNumSettingsArr_Impl* pNumSettingsArr;
     com::sun::star::uno::Reference<com::sun::star::text::XNumberingFormatter> xFormatter;
     com::sun::star::lang::Locale aLocale;
 
@@ -149,28 +148,22 @@ class SvxNumValueSet : public ValueSet
 
 class SvxBmpNumValueSet : public SvxNumValueSet
 {
-    const List& rStrList;
-    List        aGrfBrushItems;
+    String      sBullets;
     Timer       aFormatTimer;
     BOOL        bGrfNotFound;
 
     protected:
-        DECL_STATIC_LINK(SvxBmpNumValueSet, GraphicArrivedHdl_Impl, SvxBrushItem*);
         DECL_LINK(FormatHdl_Impl, Timer*);
 
     void            SetGrfNotFound(BOOL bSet) {bGrfNotFound = bSet;}
     BOOL            IsGrfNotFound()const {return bGrfNotFound;}
 
-    const List&     GetStringList(){return rStrList;}
-    List&           GetGrfBrushItems() {return aGrfBrushItems;}
-
     Timer&          GetFormatTimer() {return aFormatTimer;}
 
     public:
-        SvxBmpNumValueSet( Window* pParent, const ResId& rResId, const List& rStrNames);
+        SvxBmpNumValueSet( Window* pParent, const ResId& rResId/*, const List& rStrNames*/);
         ~SvxBmpNumValueSet();
 
-    SvxBmpItemInfo* FindInfo(USHORT nInfo);
     virtual void    UserDraw( const UserDrawEvent& rUDEvt );
 
 };
