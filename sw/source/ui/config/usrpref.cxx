@@ -2,9 +2,9 @@
  *
  *  $RCSfile: usrpref.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:42:48 $
+ *  last change: $Author: dvo $ $Date: 2003-04-04 13:59:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,7 +120,8 @@ SwMasterUsrPref::SwMasterUsrPref(BOOL bWeb) :
     nFldUpdateFlags(0),
     nLinkUpdateMode(0),
     bIsHScrollMetricSet(sal_False),
-    bIsVScrollMetricSet(sal_False)
+    bIsVScrollMetricSet(sal_False),
+    nDefTab( MM50 * 4 )
 {
     MeasurementSystem eSystem = GetAppLocaleData().getMeasurementSystemEnum();
     eUserMetric = MEASURE_METRIC == eSystem ? FUNIT_CM : FUNIT_INCH;
