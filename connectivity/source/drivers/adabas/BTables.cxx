@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BTables.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 08:41:50 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 15:21:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,7 @@
 #endif
 
 using namespace ::comphelper;
-
+using namespace connectivity;
 using namespace ::cppu;
 using namespace connectivity::adabas;
 using namespace ::com::sun::star::uno;
@@ -118,7 +118,7 @@ using namespace ::com::sun::star::lang;
 using namespace dbtools;
 typedef connectivity::sdbcx::OCollection OCollection_TYPE;
 
-Reference< XNamed > OTables::createObject(const ::rtl::OUString& _rName)
+sdbcx::ObjectType OTables::createObject(const ::rtl::OUString& _rName)
 {
     ::rtl::OUString aName,aSchema;
     sal_Int32 nLen = _rName.indexOf('.');
@@ -132,7 +132,7 @@ Reference< XNamed > OTables::createObject(const ::rtl::OUString& _rName)
 
     Reference< XResultSet > xResult = m_xMetaData->getTables(Any(),aSchema,aName,aTypes);
 
-    Reference< XNamed > xRet = NULL;
+    sdbcx::ObjectType xRet = NULL;
     if(xResult.is())
     {
         Reference< XRow > xRow(xResult,UNO_QUERY);
@@ -162,13 +162,6 @@ void OTables::disposing(void)
 Reference< XPropertySet > OTables::createEmptyObject()
 {
     return new OAdabasTable(this,static_cast<OAdabasCatalog&>(m_rParent).getConnection());
-}
-// -----------------------------------------------------------------------------
-Reference< XNamed > OTables::cloneObject(const Reference< XPropertySet >& _xDescriptor)
-{
-    Reference< XNamed > xName(_xDescriptor,UNO_QUERY);
-    OSL_ENSURE(xName.is(),"Must be a XName interface here !");
-    return xName.is() ? createObject(xName->getName()) : Reference< XNamed >();
 }
 // -------------------------------------------------------------------------
 // XAppend
@@ -581,4 +574,20 @@ void OTables::appendNew(const ::rtl::OUString& _rsNewTable)
     return aValue;
 }
 // -----------------------------------------------------------------------------
+::rtl::OUString OTables::getNameForObject(const sdbcx::ObjectType& _xObject)
+{
+    OSL_ENSURE(_xObject.is(),"OTables::getNameForObject: Object is NULL!");
+    ::rtl::OUString sName,sTemp;
+    _xObject->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCHEMANAME)) >>= sName;
+    if( sName.getLength() )
+    {
+        const ::rtl::OUString& sDot = OAdabasCatalog::getDot();
+        sName += sDot;
+    }
 
+    _xObject->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)) >>= sTemp;
+    sName += sTemp;
+
+    return sName;
+}
+// -----------------------------------------------------------------------------
