@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drformsh.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 06:14:52 $
+ *  last change: $Author: hjs $ $Date: 2001-05-04 20:17:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,7 @@
                     Text[ chinese_traditional ] = "¤W²¾¤@¼h(~F)";\
                     Text[ arabic ] = "ÅÍÖÇÑ ÃãÇãÇğ";\
                     Text[ turkish ] = "~Bir öne getir";\
+                    Text[ catalan ] = "Traer más a~delante";\
                 };\
                 MenuItem\
                 {\
@@ -158,6 +159,7 @@
                     Text[ chinese_traditional ] = "¤U²¾¤@¼h(~W)";\
                     Text[ arabic ] = "ÅÑÓÇá ÎáİÇğ";\
                     Text[ turkish ] = "Bir alta gönder";\
+                    Text[ catalan ] = "Enviar hacia a~trás";\
                 };\
                 MenuItem\
                 {\
@@ -183,6 +185,7 @@
         Text[ chinese_traditional ] = "±Æ§Ç(~A)";\
         Text[ arabic ] = "ÊÑÊíÈ~";\
         Text[ turkish ] = "Düzen";\
+        Text[ catalan ] = "~Posición";\
     };
 
 #define MN_ANCHORSUB \
@@ -225,6 +228,7 @@
                     Text[ chinese_traditional ] = "¦b­¶­±¤W(~A)";\
                     Text[ arabic ] = "Úáì ÇáÕİÍÉ";\
                     Text[ turkish ] = "Sayfa";\
+                    Text[ catalan ] = "A la ~página";\
                 };\
                 MenuItem\
                 {\
@@ -250,6 +254,7 @@
                     Text[ chinese_traditional ] = "¦bÀx¦s®æ¤W(~C)";\
                     Text[ arabic ] = "Úáì ÇáÎáíÉ";\
                     Text[ turkish ] = "Hücre";\
+                    Text[ catalan ] = "A la ~celda";\
                 };\
             };\
         };\
@@ -266,6 +271,7 @@
         Text[ chinese_traditional ] = "Âê©w(~C)";\
         Text[ arabic ] = "~ÅÑÓÇÁ";\
         Text[ turkish ] = "~Sabitleyici";\
+        Text[ catalan ] = "~Anclaje";\
     };
 
 #define MN_ALIGNSUB \
@@ -329,6 +335,7 @@
         Text[ chinese_traditional ] = "¹ï»ô(~L)";\
         Text[ arabic ] = "~ãÍÇĞÇÉ";\
         Text[ turkish ] = "Hi~zalama";\
+        Text[ catalan ] = "Ali~neación";\
     };
 
 
@@ -362,6 +369,7 @@ String RID_OBJECTBAR_DRAWFORM
     Text[ greek ] = "ÃñáììŞ ğåäßùí åëİã÷ïõ";
     Text[ korean ] = "ÄÁÆ®·Ñ µµ±¸¸ğÀ½";
     Text[ turkish ] = "Komut alanı çubuğu";
+    Text[ catalan ] = "Barra de campos de control";
 };
 
 ToolBox RID_OBJECTBAR_DRAWFORM
@@ -537,6 +545,7 @@ String RID_POPUP_DRAWFORM
     Text[ greek ] = "Áíáäõüìåíï ìåíïı ãéá áíôéêåßìåíá öüñìáò";
     Text[ korean ] = "¾ç½Ä°³Ã¼ÀÇ ÆË¾÷ ¸Ş´º";
     Text[ turkish ] = "Form nesneleri için popup mönü";
+    Text[ catalan ] = "Menú emergente para objetos de formulario";
 };
  //
  //     Popup-Menue fuer (Uno-) Controls
