@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.100 $
+ *  $Revision: 1.101 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-18 15:29:23 $
+ *  last change: $Author: obo $ $Date: 2003-09-01 12:44:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3430,7 +3430,7 @@ const BYTE* WW8PLCFx_SEPX::HasSprm( USHORT nId, BYTE n2nd ) const
 WW8PLCFx_SubDoc::WW8PLCFx_SubDoc(SvStream* pSt, BYTE nVersion,
     WW8_CP nStartCp, long nFcRef, long nLenRef, long nFcTxt, long nLenTxt,
     long nStruct)
-    : WW8PLCFx(nVersion, false), pRef(0), pTxt(0)
+    : WW8PLCFx(nVersion, true), pRef(0), pTxt(0)
 {
     if( nLenRef && nLenTxt )
     {
@@ -3473,38 +3473,41 @@ WW8_CP WW8PLCFx_SubDoc::Where()
     return ( pRef ) ? pRef->Where() : LONG_MAX;
 }
 
-long WW8PLCFx_SubDoc::GetNoSprms( WW8_CP& rStart, long& rEnd, long& rLen )
+void WW8PLCFx_SubDoc::GetSprms(WW8PLCFxDesc* p)
 {
-    void* pData;
-    long nSt, nE;
-    rEnd = LONG_MAX;
+    p->nStartPos = p->nEndPos = LONG_MAX;
+    p->pMemPos = 0;
+    p->nSprmsLen = 0;
+    p->bRealLineEnd = false;
 
-    if ( !pRef )
-    {
-        rStart  = LONG_MAX;             // Es gibt keine Noten
-        rLen = 0;
-        return -1;
-    }
+    if (!pRef)
+        return;
 
     ULONG nNr = pRef->GetIdx();
 
-    if (!pRef->Get( rStart, nE, pData ))
+    void *pData;
+    long nFoo;
+    if (!pRef->Get(p->nStartPos, nFoo, pData))
     {
-        rStart = LONG_MAX;              // PLCF fertig abgearbeitet
-        rLen = 0;
-        return -1;
-    }
-    pTxt->SetIdx( nNr );
-
-    if(!pTxt->Get( nSt, rLen, pData ))
-    {
-        rStart = LONG_MAX;              // PLCF fertig abgearbeitet
-        rLen = 0;
-        return -1;
+        p->nEndPos = p->nStartPos = LONG_MAX;
+        return;
     }
 
-    rLen -= nSt;
-    return nSt;
+    p->nEndPos = p->nStartPos + 1;
+
+    if (!pTxt)
+        return;
+
+    pTxt->SetIdx(nNr);
+
+    if (!pTxt->Get(p->nCp2OrIdx, p->nSprmsLen, pData))
+    {
+        p->nEndPos = p->nStartPos = LONG_MAX;
+        p->nSprmsLen = 0;
+        return;
+    }
+
+    p->nSprmsLen -= p->nCp2OrIdx;
 }
 
 WW8PLCFx& WW8PLCFx_SubDoc::operator ++( int )
@@ -4139,6 +4142,10 @@ USHORT WW8PLCFMan::GetId(const WW8PLCFxDesc* p) const
 
     if (p == pFld)
         nId = eFLD;
+    else if (p == pFtn)
+        nId = eFTN;
+    else if (p == pEdn)
+        nId = eEDN;
     else if (p->nSprmsLen > 0)
         nId = maSprmParser.GetSprmId(p->pMemPos);
     else
@@ -4445,7 +4452,9 @@ void WW8PLCFMan::GetSprmStart( short nIdx, WW8PLCFManResult* pRes ) const
     pRes->pMemPos = p->pMemPos;
     pRes->nSprmId = GetId(p);
     pRes->nCp2OrIdx = p->nCp2OrIdx;
-    if (p->nSprmsLen)
+    if ((p == pFtn) || (p == pEdn))
+        pRes->nMemLen = p->nSprmsLen;
+    else if (p->nSprmsLen)  //Normal
     {
         // Length of actual sprm
         pRes->nMemLen = maSprmParser.GetSprmSize(pRes->nSprmId, pRes->pMemPos);
@@ -5802,14 +5811,13 @@ struct WW8_FFN_Ver8 : public WW8_FFN_BASE
 };
 
 WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib& rFib )
+    : pFontA(0), nMax(0)
 {
     // Attention: MacWord-Documents have their Fontnames
     // always in ANSI, even if eStructCharSet == CHARSET_MAC !!
     if( rFib.lcbSttbfffn <= 2 )
     {
         ASSERT( !this, "Fonttabelle kaputt! (rFib.lcbSttbfffn < 2)" );
-        pFontA = 0;
-        nMax = 0;
         return;
     }
 
