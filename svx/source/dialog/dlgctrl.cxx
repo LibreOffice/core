@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgctrl.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cl $ $Date: 2002-02-15 14:28:33 $
+ *  last change: $Author: gt $ $Date: 2002-03-06 09:45:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,7 @@
 #include "xpool.hxx"
 
 #include "dialogs.hrc"
+#include "accessibility.hrc"
 #include "dlgctrl.hxx"
 #include "dialmgr.hxx"
 
@@ -90,6 +91,16 @@
 #include <vcl/hatch.hxx>
 #endif
 
+#include "svxrectctaccessiblecontext.hxx"
+
+#ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
+#include <com/sun/star/lang/XUnoTunnel.hpp>
+#endif
+
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::lang;
+using namespace ::drafts::com::sun::star::accessibility;
+
 
 /*************************************************************************
 |*
@@ -103,6 +114,7 @@ SvxRectCtl::SvxRectCtl( Window* pParent, const ResId& rResId, RECT_POINT eRpt,
 
     Control( pParent, rResId ),
 
+    pAccContext ( NULL ),
     eDefRP      ( eRpt ),
     nBorderWidth( nBorder ),
     nRadius     ( nCircle),
@@ -156,6 +168,9 @@ SvxRectCtl::SvxRectCtl( Window* pParent, const ResId& rResId, RECT_POINT eRpt,
 SvxRectCtl::~SvxRectCtl()
 {
     delete pBitmap;
+
+    if( pAccContext )
+        pAccContext->release();
 }
 
 // -----------------------------------------------------------------------
@@ -192,36 +207,9 @@ void SvxRectCtl::InitSettings( BOOL bForeground, BOOL bBackground )
 
 void SvxRectCtl::MouseButtonDown( const MouseEvent& rMEvt )
 {
-    Point aPt = PixelToLogic( rMEvt.GetPosPixel() );
     Point aPtLast = aPtNew;
 
-    if( (m_nState & CS_NOHORZ) == 0 )
-    {
-        if( aPt.X() < aSize.Width() / 3 )
-            aPtNew.X() = aPtLT.X();
-        else if( aPt.X() < aSize.Width() * 2 / 3)
-            aPtNew.X() = aPtMM.X();
-        else
-            aPtNew.X() = aPtRB.X();
-    }
-    else
-    {
-        aPtNew.X() = aPtMM.X();
-    }
-
-    if( (m_nState & CS_NOVERT) == 0 )
-    {
-        if( aPt.Y() < aSize.Height() / 3)
-            aPtNew.Y() = aPtLT.Y();
-        else if( aPt.Y() < aSize.Height() * 2 / 3)
-            aPtNew.Y() = aPtMM.Y();
-        else
-            aPtNew.Y() = aPtRB.Y();
-    }
-    else
-    {
-            aPtNew.Y() = aPtMM.Y();
-    }
+    aPtNew = GetApproxLogPtFromPixPt( rMEvt.GetPosPixel() );
 
     if( aPtNew == aPtMM && ( eCS == CS_SHADOW || eCS == CS_ANGLE ) )
     {
@@ -235,11 +223,11 @@ void SvxRectCtl::MouseButtonDown( const MouseEvent& rMEvt )
                                aPtNew + Point( nRadius, nRadius ) ) );
         eRP = GetRPFromPoint( aPtNew );
 
+        SetActualRP( eRP );
+
         if( WINDOW_TABPAGE == GetParent()->GetType() )
             ( (SvxTabPage*) GetParent() )->PointChanged( this, eRP );
     }
-
-    SetFocusRectangle();
 }
 
 // -----------------------------------------------------------------------
@@ -318,7 +306,7 @@ void SvxRectCtl::KeyInput( const KeyEvent& rKeyEvt )
         if( WINDOW_TABPAGE == GetParent()->GetType() )
             ( (SvxTabPage*) GetParent() )->PointChanged( this, eRP );
 
-        SetFocusRectangle();
+        SetFocusRect();
     }
 }
 
@@ -439,13 +427,25 @@ void SvxRectCtl::Paint( const Rectangle& rRect )
     pColorAry1[4] = Color( 0x00, 0x00, 0x00 );  // black
     pColorAry1[5] = Color( 0x00, 0xFF, 0x00 );  // green
     pColorAry1[6] = Color( 0x00, 0x00, 0xFF );  // blue
-    pColorAry2[0] = rStyles.GetFaceColor();
+    pColorAry2[0] = rStyles.GetDialogColor();       // background
     pColorAry2[1] = rStyles.GetWindowColor();
     pColorAry2[2] = rStyles.GetLightColor();
     pColorAry2[3] = rStyles.GetShadowColor();
     pColorAry2[4] = rStyles.GetDarkShadowColor();
     pColorAry2[5] = rStyles.GetWindowTextColor();
     pColorAry2[6] = rStyles.GetDialogColor();
+
+#ifdef DBG_UTIL
+    static BOOL     bModify = FALSE;
+    if( bModify )
+    {
+        static int      n = 0;
+        static UINT8    r = 0xFF;
+        static UINT8    g = 0x00;
+        static UINT8    b = 0xFF;
+        pColorAry2[ n ] = Color( r, g, b );
+    }
+#endif
 
     pBitmap->Replace( pColorAry1, pColorAry2, 7, NULL );
 
@@ -468,34 +468,10 @@ void SvxRectCtl::Paint( const Rectangle& rRect )
     // draw active button, avoid center pos for angle
     if( IsEnabled() && (eCS != CS_ANGLE || aPtNew != aPtMM) )
     {
-        DrawBitmap( aPtNew - aToCenter, aDstBtnSize, aBtnPnt2, aBtnSize, *pBitmap );
-    }
-}
+        Point       aCenterPt( aPtNew );
+        aCenterPt -= aToCenter;
 
-void SvxRectCtl::GetFocus()
-{
-    Control::GetFocus();
-
-    SetFocusRectangle();
-}
-
-void SvxRectCtl::LoseFocus()
-{
-    Control::HideFocus();
-
-    HideFocus();
-}
-
-void SvxRectCtl::SetFocusRectangle()
-{
-    if( HasFocus() && IsEnabled() && (eCS != CS_ANGLE || aPtNew != aPtMM) )
-    {
-        Size aBtnSize( 16, 16 );
-        Size aDstBtnSize(  PixelToLogic( aBtnSize ) );
-        Point aToCenter( aDstBtnSize.Width() >> 1, aDstBtnSize.Height() >> 1);
-
-        Rectangle aFocusRect( aPtNew - aToCenter, aDstBtnSize );
-        ShowFocus( aFocusRect );
+        DrawBitmap( aCenterPt, aDstBtnSize, aBtnPnt2, aBtnSize, *pBitmap );
     }
 }
 
@@ -521,6 +497,82 @@ Point SvxRectCtl::GetPointFromRP( RECT_POINT eRP) const
     }
     return( aPtMM ); // default
 }
+
+
+void SvxRectCtl::SetFocusRect( const Rectangle* pRect )
+{
+    HideFocus();
+
+    if( pRect )
+        ShowFocus( *pRect );
+    else
+        ShowFocus( CalculateFocusRectangle() );
+}
+
+Point SvxRectCtl::SetActualRPWithoutInvalidate( RECT_POINT eNewRP )
+{
+    Point aPtLast = aPtNew;
+    aPtNew = GetPointFromRP( eNewRP );
+
+    if( (m_nState & CS_NOHORZ) != 0 )
+        aPtNew.X() = aPtMM.X();
+
+    if( (m_nState & CS_NOVERT) != 0 )
+        aPtNew.Y() = aPtMM.Y();
+
+    eNewRP = GetRPFromPoint( aPtNew );
+
+    eDefRP = eNewRP;
+    eRP = eNewRP;
+
+    return aPtLast;
+}
+
+void SvxRectCtl::GetFocus()
+{
+    SetFocusRect();
+}
+
+
+void SvxRectCtl::LoseFocus()
+{
+    HideFocus();
+}
+
+
+Point SvxRectCtl::GetApproxLogPtFromPixPt( const Point& rPt ) const
+{
+    Point   aPt = PixelToLogic( rPt );
+    long    x;
+    long    y;
+
+    if( ( m_nState & CS_NOHORZ ) == 0 )
+    {
+        if( aPt.X() < aSize.Width() / 3 )
+            x = aPtLT.X();
+        else if( aPt.X() < aSize.Width() * 2 / 3 )
+            x = aPtMM.X();
+        else
+            x = aPtRB.X();
+    }
+    else
+        x = aPtMM.X();
+
+    if( ( m_nState & CS_NOVERT ) == 0 )
+    {
+        if( aPt.Y() < aSize.Height() / 3 )
+            y = aPtLT.Y();
+        else if( aPt.Y() < aSize.Height() * 2 / 3 )
+            y = aPtMM.Y();
+        else
+            y = aPtRB.Y();
+    }
+    else
+            y = aPtMM.Y();
+
+    return Point( x, y );
+}
+
 
 /*************************************************************************
 |*
@@ -575,23 +627,14 @@ RECT_POINT SvxRectCtl::GetActualRP() const
 
 void SvxRectCtl::SetActualRP( RECT_POINT eNewRP )
 {
-    Point aPtLast = aPtNew;
-    aPtNew = GetPointFromRP( eNewRP );
+    Point aPtLast( SetActualRPWithoutInvalidate( eNewRP ) );
 
-    if( (m_nState & CS_NOHORZ) != 0 )
-        aPtNew.X() = aPtMM.X();
+    Invalidate( Rectangle( aPtLast - Point( nRadius, nRadius ), aPtLast + Point( nRadius, nRadius ) ) );
+    Invalidate( Rectangle( aPtNew - Point( nRadius, nRadius ), aPtNew + Point( nRadius, nRadius ) ) );
 
-    if( (m_nState & CS_NOVERT) != 0 )
-        aPtNew.Y() = aPtMM.Y();
-
-    eNewRP = GetRPFromPoint( aPtNew );
-
-    eDefRP = eNewRP;
-    eRP = eNewRP;
-    Invalidate( Rectangle( aPtLast - Point( nRadius, nRadius ),
-                            aPtLast + Point( nRadius, nRadius ) ) );
-    Invalidate( Rectangle( aPtNew - Point( nRadius, nRadius ),
-                            aPtNew + Point( nRadius, nRadius ) ) );
+    // notify accessability object about change
+    if( pAccContext )
+        pAccContext->selectChild( eNewRP );
 }
 
 void SvxRectCtl::SetState( CTL_STATE nState )
@@ -613,6 +656,63 @@ void SvxRectCtl::SetState( CTL_STATE nState )
     if( WINDOW_TABPAGE == GetParent()->GetType() )
         ( (SvxTabPage*) GetParent() )->PointChanged( this, eRP );
 }
+
+UINT8 SvxRectCtl::GetNumOfChilds( void ) const
+{
+    return ( eCS == CS_ANGLE )? 8 : 9;
+}
+
+Rectangle SvxRectCtl::CalculateFocusRectangle( void ) const
+{
+    Size        aDstBtnSize( PixelToLogic( Size( 15, 15 ) ) );
+    return Rectangle( aPtNew - Point( aDstBtnSize.Width() >> 1, aDstBtnSize.Height() >> 1 ), aDstBtnSize );
+}
+
+Rectangle SvxRectCtl::CalculateFocusRectangle( RECT_POINT eRectPoint ) const
+{
+    Rectangle   aRet;
+    RECT_POINT  eOldRectPoint = GetActualRP();
+
+    if( eOldRectPoint == eRectPoint )
+        aRet = CalculateFocusRectangle();
+    else
+    {
+        SvxRectCtl* pThis = const_cast< SvxRectCtl* >( this );
+
+        pThis->SetActualRPWithoutInvalidate( eRectPoint );      // no invalidation because it's only temporary!
+        aRet = CalculateFocusRectangle();
+
+        pThis->SetActualRPWithoutInvalidate( eOldRectPoint );   // no invalidation because nothing has changed!
+    }
+
+    return aRet;
+}
+
+Reference< XAccessible > SvxRectCtl::CreateAccessible()
+{
+    Window*                     pParent = GetParent();
+
+    DBG_ASSERT( pParent, "-SvxRectCtl::CreateAccessible(): No Parent!" );
+
+    Reference< XAccessible >    xAccParent  = pParent->GetAccessible();
+    if( xAccParent.is() )
+    {
+        pAccContext = new SvxRectCtlAccessibleContext( xAccParent, *this );
+        pAccContext->acquire();
+
+        SetActualRP( GetActualRP() );
+
+        return pAccContext;
+    }
+    else
+        return Reference< XAccessible >();
+}
+
+RECT_POINT SvxRectCtl::GetApproxRPFromPixPt( const ::com::sun::star::awt::Point& r ) const
+{
+    return GetRPFromPoint( GetApproxLogPtFromPixPt( Point( r.X, r.Y ) ) );
+}
+
 
 /*************************************************************************
 |*

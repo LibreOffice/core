@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessibility.src,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: af $ $Date: 2002-03-04 16:59:30 $
+ *  last change: $Author: gt $ $Date: 2002-03-06 09:43:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,4 +193,135 @@ String RID_SVXSTR_A11Y_ST_OPEN_BEZIER_CURVE
     Text = "Offene Bezier Kurve" ;
     Text[ ENGLISH ] = "Open bezier curve" ;
     Text[ ENGLISH_US ] = "Open bezier curve" ;
+};
+
+
+// SvxRectCtl
+
+String RID_SVXSTR_RECTCTL_ACC_CORN_NAME
+{
+    Text = "Ecken-Kontrollelement" ;
+    Text [ english_us ] = "Corner control" ;
+};
+
+String RID_SVXSTR_RECTCTL_ACC_CORN_DESCR
+{
+    Text = "Auswahl eines Eckpunktes." ;
+    Text [ english_us ] = "Selection of a corner point." ;
+};
+
+String RID_SVXSTR_RECTCTL_ACC_ANGL_NAME
+{
+    Text = "Winkel-Kontrollelement" ;
+    Text [ english_us ] = "Angle control" ;
+};
+
+String RID_SVXSTR_RECTCTL_ACC_ANGL_DESCR
+{
+    Text = "Auswahl eines (Haupt-) Winkels." ;
+    Text [ english_us ] = "Selection of a major angle" ;
+};
+
+
+String RID_SVXSTR_RECTCTL_ACC_CHLD_LT
+{
+    Text = "Links oben" ;
+    Text [ english_us ] = "Top left" ;
+};
+
+String RID_SVXSTR_RECTCTL_ACC_CHLD_MT
+{
+    Text = "Mitte oben" ;
+    Text [ english_us ] = "Top middle" ;
+};
+
+String RID_SVXSTR_RECTCTL_ACC_CHLD_RT
+{
+    Text = "Rechts oben" ;
+    Text [ english_us ] = "Top right" ;
+};
+
+String RID_SVXSTR_RECTCTL_ACC_CHLD_LM
+{
+    Text = "Links mittig" ;
+    Text [ english_us ] = "Left center" ;
+};
+
+String RID_SVXSTR_RECTCTL_ACC_CHLD_MM
+{
+    Text = "Mitte" ;
+    Text [ english_us ] = "Center" ;
+};
+
+String RID_SVXSTR_RECTCTL_ACC_CHLD_RM
+{
+    Text = "Rechts mittig" ;
+    Text [ english_us ] = "Right center" ;
+};
+
+String RID_SVXSTR_RECTCTL_ACC_CHLD_LB
+{
+    Text = "Links unten" ;
+    Text [ english_us ] = "Bottom left" ;
+};
+
+String RID_SVXSTR_RECTCTL_ACC_CHLD_MB
+{
+    Text = "Mitte unten" ;
+    Text [ english_us ] = "Bottom middle" ;
+};
+
+String RID_SVXSTR_RECTCTL_ACC_CHLD_RB
+{
+    Text = "Rechts unten" ;
+    Text [ english_us ] = "Bottom right" ;
+};
+
+
+String RID_SVXSTR_RECTCTL_ACC_CHLD_A000
+{
+    Text = "0 Grad" ;
+    Text [ english_us ] = "0 degrees" ;
+};
+
+String RID_SVXSTR_RECTCTL_ACC_CHLD_A045
+{
+    Text = "45 Grad" ;
+    Text [ english_us ] = "45 degrees" ;
+};
+
+String RID_SVXSTR_RECTCTL_ACC_CHLD_A090
+{
+    Text = "90 Grad" ;
+    Text [ english_us ] = "90 degrees" ;
+};
+
+String RID_SVXSTR_RECTCTL_ACC_CHLD_A135
+{
+    Text = "135 Grad" ;
+    Text [ english_us ] = "135 degrees" ;
+};
+
+String RID_SVXSTR_RECTCTL_ACC_CHLD_A180
+{
+    Text = "180 Grad" ;
+    Text [ english_us ] = "180 degrees" ;
+};
+
+String RID_SVXSTR_RECTCTL_ACC_CHLD_A225
+{
+    Text = "225 Grad" ;
+    Text [ english_us ] = "225 degrees" ;
+};
+
+String RID_SVXSTR_RECTCTL_ACC_CHLD_A270
+{
+    Text = "270 Grad" ;
+    Text [ english_us ] = "270 degrees" ;
+};
+
+String RID_SVXSTR_RECTCTL_ACC_CHLD_A315
+{
+    Text = "315 Grad" ;
+    Text [ english_us ] = "315 degrees" ;
 };
