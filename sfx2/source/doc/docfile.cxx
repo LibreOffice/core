@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.109 $
+ *  $Revision: 1.110 $
  *
- *  last change: $Author: mav $ $Date: 2002-07-30 14:42:52 $
+ *  last change: $Author: mav $ $Date: 2002-08-05 09:51:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -960,7 +960,9 @@ SvStorage* SfxMedium::GetStorage_Impl( BOOL bUCBStorage )
     {
         // open storage with the URL of the tempfile
         if ( !::utl::LocalFileHelper::ConvertPhysicalNameToURL( aName, aStorageName ) )
+        {
             DBG_ERROR("Physical name not convertable!");
+        }
         CloseOutStream();
         aStorage = new SvStorage( bUCBStorage, aStorageName, nStorOpenMode, bDirect ? 0 : STORAGE_TRANSACTED );
     }
@@ -969,7 +971,9 @@ SvStorage* SfxMedium::GetStorage_Impl( BOOL bUCBStorage )
         if ( aName.Len() )
         {
             if ( !::utl::LocalFileHelper::ConvertPhysicalNameToURL( aName, aStorageName ) )
+            {
                 DBG_ERROR("Physical name not convertable!");
+            }
         }
         else
             aStorageName = GetURLObject().GetMainURL( INetURLObject::NO_DECODE );
@@ -996,7 +1000,7 @@ SvStorage* SfxMedium::GetStorage_Impl( BOOL bUCBStorage )
 
                 if ( IsReadOnly() && ::utl::LocalFileHelper::IsLocalFile( aLogicName ) )
                 {
-                    CreateTempFile();
+                    CreateLocalTempFile();
                     aStorage = new SvStorage( aName, nStorOpenMode, bDirect ? 0 : STORAGE_TRANSACTED );
                 }
                 else
@@ -2527,6 +2531,56 @@ sal_Bool SfxMedium::IsReadOnly()
     }
 
     return bReadOnly;
+}
+
+//----------------------------------------------------------------
+void SfxMedium::CreateLocalTempFile()
+{
+    if ( pImp->pTempFile )
+        DELETEZ( pImp->pTempFile );
+
+    StreamMode nOpenMode = nStorOpenMode;
+    GetInStream();
+    BOOL bCopy = ( nStorOpenMode == nOpenMode && ! ( nOpenMode & STREAM_TRUNC ) );
+    nStorOpenMode = nOpenMode;
+    ResetError();
+
+    pImp->pTempFile = new ::utl::TempFile();
+    pImp->pTempFile->EnableKillingFile( sal_True );
+    aName = pImp->pTempFile->GetFileName();
+    if ( !aName.Len() )
+    {
+        SetError( ERRCODE_IO_CANTWRITE );
+        return;
+    }
+
+    if ( bCopy )
+    {
+        GetOutStream();
+        if ( pInStream && pOutStream )
+        {
+            char        *pBuf = new char [8192];
+            sal_uInt32   nErr = ERRCODE_NONE;
+
+            pInStream->Seek(0);
+            pOutStream->Seek(0);
+
+            while( !pInStream->IsEof() && nErr == ERRCODE_NONE )
+            {
+                sal_uInt32 nRead = pInStream->Read( pBuf, 8192 );
+                nErr = pInStream->GetError();
+                pOutStream->Write( pBuf, nRead );
+            }
+
+            delete pBuf;
+            CloseInStream();
+        }
+        CloseOutStream_Impl();
+    }
+    else
+        CloseInStream();
+
+    CloseStorage();
 }
 
 //----------------------------------------------------------------
