@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprmap.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: dvo $ $Date: 2002-08-29 17:47:23 $
+ *  last change: $Author: dvo $ $Date: 2002-10-15 09:34:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -369,7 +369,7 @@ XMLPropertyMapEntry aXMLParaPropMap[] =
     // RES_PARATR_SNAPTOGRID
     M_E( "SnapToGrid", STYLE, SNAP_TO_LAYOUT_GRID, XML_TYPE_BOOL, 0 ),
 
-    M_E( "WritingMode",      STYLE, WRITING_MODE,       XML_TYPE_TEXT_WRITING_MODE_WITH_DEFAULT, 0 ),
+    M_ED( "WritingMode",      STYLE, WRITING_MODE,       XML_TYPE_TEXT_WRITING_MODE_WITH_DEFAULT, 0 ),
 
     M_END()
 };
