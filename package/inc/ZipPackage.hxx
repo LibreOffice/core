@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: mtg $ $Date: 2001-08-08 18:19:35 $
+ *  last change: $Author: mtg $ $Date: 2001-08-22 19:18:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,8 +164,7 @@ protected:
     sal_Bool HandleError ( com::sun::star::uno::Any &rAny, sal_uInt16 eContinuations );
     sal_Bool HandleError ( oslFileError, sal_uInt16 eContinuations, const ::rtl::OUString &rFileName );
     sal_Int32 RequestDisk ( ::rtl::OUString &rMountPath, sal_Int16 nDiskNum);
-    ::com::sun::star::uno::Reference < com::sun::star::io::XInputStream > unSpanFile (
-                       ::com::sun::star::uno::Reference < com::sun::star::io::XInputStream > &rStream );
+    void unSpanFile ( );
     sal_Bool checkEnd ( com::sun::star::uno::Sequence < sal_Int8 > &rSequence );
 
 public:

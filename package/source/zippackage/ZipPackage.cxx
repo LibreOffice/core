@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: mtg $ $Date: 2001-08-22 16:12:18 $
+ *  last change: $Author: mtg $ $Date: 2001-08-22 19:17:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,8 @@
 #endif
 #include <memory>
 
+#define MTG_DEBUG
+
 using namespace rtl;
 using namespace ucb;
 using namespace std;
@@ -175,6 +177,21 @@ void SuffixGenerator::generateFileName( OUString &rFileName, const OUString &rPr
     aStringBuf.append ( static_cast < sal_Int32 > ( nDiskNum-1) );
 
     rFileName = aStringBuf.makeStringAndClear();
+}
+
+char * ImplGetChars( const OUString & rString )
+{
+    // Memory leak ? oh yeah! Who cares, this function lives until this feature works
+    // and no longer
+    sal_Int32 nLength = rString.getLength();
+    const sal_Unicode *pString = rString.getStr();
+    char * pChar = new char [nLength+1];
+    for ( sal_Int16 i = 0; i < nLength; i++ )
+    {
+        pChar[i] = static_cast < char > (pString[i]);
+    }
+    pChar[nLength] = '\0';
+    return pChar;
 }
 
 ZipPackage::ZipPackage (const Reference < XMultiServiceFactory > &xNewFactory)
@@ -398,9 +415,13 @@ void SAL_CALL ZipPackage::initialize( const Sequence< Any >& aArguments )
     pContent = new Content(sURL, Reference < XCommandEnvironment >() );
     sal_Bool bBadZipFile = sal_False, bHaveZipFile = sal_True;
 
-    Reference < XActiveDataSink > xSink = new ZipPackageSink;
+#ifdef MTG_DEBUG
+    fprintf ( stderr, "MTG: initialise called on %s\n", ImplGetChars ( sURL ) );
+#endif
+
     try
     {
+        Reference < XActiveDataSink > xSink = new ZipPackageSink;
         if (pContent->openStream ( xSink ) )
             xContentStream = xSink->getInputStream();
         if (xContentStream.is())
@@ -432,7 +453,9 @@ void SAL_CALL ZipPackage::initialize( const Sequence< Any >& aArguments )
         {
             if ( bSpanned)
             {
-                xContentStream = unSpanFile ( xContentStream );
+                // after unSpanFile, xContentStream will refer to the tempfile containing
+                // the unspanned file
+                unSpanFile ();
                 pZipFile = new ZipFile ( xContentStream, sURL );
             }
             else
@@ -647,20 +670,6 @@ Reference< XInterface > SAL_CALL ZipPackage::createInstanceWithArguments( const 
     return xRef;
 }
 
-char * ImplGetChars( const OUString & rString )
-{
-    // Memory leak ? oh yeah! Who cares, this function lives until this feature works
-    // and no longer
-    sal_Int32 nLength = rString.getLength();
-    const sal_Unicode *pString = rString.getStr();
-    char * pChar = new char [nLength+1];
-    for ( sal_Int16 i = 0; i < nLength; i++ )
-    {
-        pChar[i] = static_cast < char > (pString[i]);
-    }
-    pChar[nLength] = '\0';
-    return pChar;
-}
 // XChangesBatch
 void SAL_CALL ZipPackage::commitChanges(  )
         throw(WrappedTargetException, RuntimeException)
@@ -714,6 +723,8 @@ void SAL_CALL ZipPackage::commitChanges(  )
     {
         try
         {
+            if ( !pContent )
+                pContent = new Content(sURL, Reference < XCommandEnvironment >() );
             pContent->writeStream ( xTempIn, sal_True );
         }
         catch (::com::sun::star::uno::Exception& r)
@@ -811,6 +822,8 @@ void SAL_CALL ZipPackage::commitChanges(  )
                 {
                     try
                     {
+                        if ( !pContent )
+                            pContent = new Content(sURL, Reference < XCommandEnvironment >() );
                         pContent->writeStream ( xTempIn, sal_True );
                     }
                     catch (::com::sun::star::uno::Exception& r)
@@ -849,11 +862,17 @@ sal_Int32 ZipPackage::RequestDisk ( OUString &rMountPath, sal_Int16 nDiskNum)
     do
     {
         aRC = Directory::getVolumeInfo ( rMountPath, aInfo );
+#ifdef MTG_DEBUG
+        fprintf ( stderr, "MTG: Requesting disk for %s, result is %d\n", ImplGetChars ( rMountPath ), aRC );
+#endif
         if ( aRC == FileBase::E_None )
             aDevice = aInfo.getDeviceHandle();
         else
         {
-            if ( ! HandleError ( osl_File_E_INVAL, EC_RETRY|EC_ABORT, rMountPath) )
+#ifdef MTG_DEBUG
+        fprintf ( stderr, "MTG: Requesting disk calling HandleError with osl_File_E_INVAL\n" );
+#endif
+            if ( ! HandleError ( (oslFileError) aRC, EC_RETRY|EC_ABORT, rMountPath) )
                 return -1;
         }
     }
@@ -862,9 +881,12 @@ sal_Int32 ZipPackage::RequestDisk ( OUString &rMountPath, sal_Int16 nDiskNum)
     do
     {
         aRC = aDevice.unmount();
+#ifdef MTG_DEBUG
+        fprintf ( stderr, "MTG: unmount returned %d\n", aRC );
+#endif
         if ( aRC != FileBase::E_None )
         {
-            if ( ! HandleError ( osl_File_E_ACCES, EC_RETRY|EC_ABORT, rMountPath) )
+            if ( ! HandleError ( (oslFileError) aRC, EC_RETRY|EC_ABORT, rMountPath) )
                 return -1;
         }
     }
@@ -883,9 +905,12 @@ sal_Int32 ZipPackage::RequestDisk ( OUString &rMountPath, sal_Int16 nDiskNum)
     {
         aRC = aDevice.automount();
 
+#ifdef MTG_DEBUG
+        fprintf ( stderr, "MTG: automount returned %d\n", aRC );
+#endif
         if ( aRC != FileBase::E_None )
         {
-            if ( ! HandleError ( osl_File_E_ACCES, EC_RETRY|EC_ABORT, rMountPath ) )
+            if ( ! HandleError ( (oslFileError) aRC, EC_RETRY|EC_ABORT, rMountPath) )
                 return -1;
         }
     }
@@ -894,6 +919,9 @@ sal_Int32 ZipPackage::RequestDisk ( OUString &rMountPath, sal_Int16 nDiskNum)
 
     if (aNewMountPath != rMountPath)
         rMountPath = aNewMountPath;
+#ifdef MTG_DEBUG
+        fprintf ( stderr, "MTG: returning, new mountpath is %s\n", ImplGetChars ( rMountPath ) );
+#endif
 #endif
     return FileBase::E_None;
 }
@@ -1065,10 +1093,16 @@ SegmentEnum ZipPackage::readSegment ( const OUString &rFileName, OUString &rMoun
     aStringBuffer.append ( rFileName );
     OUString sFullPath ( aStringBuffer.makeStringAndClear() );
 
+#ifdef MTG_DEBUG
+    fprintf ( stderr, "MTG: trying to read %s\n", ImplGetChars ( sFullPath ) );
+#endif
     DirectoryItem aItem;
     do
     {
         aRC = DirectoryItem::get ( sFullPath, aItem );
+#ifdef MTG_DEBUG
+    fprintf ( stderr, "MTG: DirectoryItem::get returned %d\n", aRC );
+#endif
         if ( aRC != FileBase::E_None &&  !HandleError (  (oslFileError) aRC, EC_RETRY|EC_ABORT, sFullPath ) )
             return e_Aborted;
     }
@@ -1077,6 +1111,9 @@ SegmentEnum ZipPackage::readSegment ( const OUString &rFileName, OUString &rMoun
     {
         pFile = new File ( sFullPath );
         aRC = pFile->open ( osl_File_OpenFlag_Read );
+#ifdef MTG_DEBUG
+    fprintf ( stderr, "MTG:file open returned %d\n", aRC );
+#endif
         if ( aRC != FileBase::E_None )
         {
             delete pFile;
@@ -1095,6 +1132,9 @@ SegmentEnum ZipPackage::readSegment ( const OUString &rFileName, OUString &rMoun
     {
         nToRead = nLeft < n_ConstBufferSize ? nLeft : n_ConstBufferSize;
         aRC = pFile->read ( static_cast < void* > ( aBuffer.getArray() ), nToRead, nRead );
+#ifdef MTG_DEBUG
+    fprintf ( stderr, "MTG:file read returned %d\n", aRC );
+#endif
         if ( aRC != FileBase::E_None )
         {
             if ( ! HandleError (  (oslFileError) aRC, EC_RETRY|EC_ABORT, sFullPath ) )
@@ -1389,36 +1429,52 @@ sal_Bool ZipPackage::HandleError ( oslFileError aRC, sal_uInt16 eContinuations, 
     return HandleError (aAny, eContinuations );
 }
 
-Reference < XInputStream > ZipPackage::unSpanFile ( Reference < XInputStream > &rStream )
+void ZipPackage::unSpanFile ( )
 {
     const OUString sServiceName ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.io.TempFile" ) );
     Reference < XInputStream > xTempIn = Reference < XInputStream > ( xFactory->createInstance ( sServiceName ), UNO_QUERY );
     Reference < XOutputStream > xTempOut = Reference < XOutputStream > ( xTempIn, UNO_QUERY );
     Reference < XSeekable > xTempSeek = Reference < XSeekable > ( xTempIn, UNO_QUERY );
-    Reference < XSeekable > xInSeek = Reference < XSeekable > ( rStream, UNO_QUERY );
 
+#ifdef MTG_DEBUG
+    fprintf ( stderr, "MTG: unspanning %s\n", ImplGetChars ( sURL ) );
+#endif
     Sequence < sal_Int8 > aBuffer;
     sal_Int64 nRead;
-    xInSeek->seek ( 0 ); // Skip spanned header
+    xContentSeek->seek ( 0 );
     do
     {
-        nRead = rStream->readBytes ( aBuffer, n_ConstBufferSize );
+        nRead = xContentStream->readBytes ( aBuffer, n_ConstBufferSize );
         xTempOut->writeBytes ( aBuffer );
     }
     while ( nRead == n_ConstBufferSize );
 
+    // Clear the references to the first segment so that we can unmount the disk
+    xContentStream = xTempIn;
+    xContentSeek = xTempSeek;
+    delete pContent; pContent = NULL;
+
     // Check if the buffer just read is the last one
     if ( checkEnd ( aBuffer ) )
-        return xTempIn;
+        return;
 
     sal_Int16 nDiskNum = 1;
     VolumeInfo aInfo ( osl_VolumeInfo_Mask_FreeSpace | osl_VolumeInfo_Mask_DeviceHandle | osl_VolumeInfo_Mask_Attributes );
     FileBase::RC aRC = Directory::getVolumeInfo ( sURL, aInfo );
+#ifdef MTG_DEBUG
+    fprintf ( stderr, "GetVolumeInfo returned %d\n", aRC );
+#endif
     VolumeDevice aDevice = aInfo.getDeviceHandle();
     sal_Bool bIsRemovable = aInfo.getRemoveableFlag();
+#ifdef MTG_DEBUG
+    fprintf ( stderr, "isRemovable is %d\n", bIsRemovable );
+#endif
 
     sal_Int32 nLastSlash = sURL.lastIndexOf ( '/' );
     OUString sFileName, sMountPath = aDevice.getMountPath();
+#ifdef MTG_DEBUG
+    fprintf ( stderr, "mountpath is %s\n", ImplGetChars ( sMountPath ) );
+#endif
     const OUString sFilePrefix = sURL.copy ( 1 + nLastSlash,  sURL.lastIndexOf ( '.' ) - nLastSlash );
     SegmentEnum eRet = e_Finished;
     SuffixGenerator aGenerator;
@@ -1432,10 +1488,13 @@ Reference < XInputStream > ZipPackage::unSpanFile ( Reference < XInputStream > &
             // We need an interaction handler to request disks
             getInteractionHandler();
             if ( RequestDisk( sMountPath, nDiskNum ) < 0 )
-                return Reference < XInputStream > ();
+                return;
+#ifdef MTG_DEBUG
+    fprintf ( stderr, "unSpanFile calling readSegment on disk number %d (mount path is %s )\n", nDiskNum, ImplGetChars ( sMountPath ) );
+#endif
             eRet = readSegment ( sFileName, sMountPath, xTempOut, nDiskNum );
             if (eRet == e_Aborted)
-                return Reference < XInputStream > ();
+                return;
         }
         else
         {
@@ -1466,8 +1525,6 @@ Reference < XInputStream > ZipPackage::unSpanFile ( Reference < XInputStream > &
         }
     }
     while ( eRet != e_Finished );
-
-    return xTempIn;
 }
 
 sal_Bool ZipPackage::checkEnd ( Sequence < sal_Int8 > &rSequence )
