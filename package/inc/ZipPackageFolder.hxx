@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageFolder.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: mtg $ $Date: 2001-07-04 14:56:14 $
+ *  last change: $Author: mtg $ $Date: 2001-08-08 18:20:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,10 +82,14 @@
 #ifndef _ZIP_PACKAGE_ENTRY_HXX
 #include <ZipPackageEntry.hxx>
 #endif
+#ifndef _RTL_RANDOM_H_
+#include <rtl/random.h>
+#endif
 
 class ZipFile;
 class ZipPackage;
 class ZipOutputStream;
+
 class ZipPackageFolder : public ZipPackageEntry,
                          public ::cppu::OWeakObject,
                          public ::com::sun::star::container::XNameContainer,
@@ -100,7 +104,7 @@ public:
 
     static void copyZipEntry( com::sun::star::packages::zip::ZipEntry &rDest, const com::sun::star::packages::zip::ZipEntry &rSource);
     // Recursive functions
-    void  saveContents(rtl::OUString &rPath, std::vector < com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue > > &rManList, ZipOutputStream & rZipOut, com::sun::star::uno::Sequence < sal_Int8 > &rEncryptionKey)
+    void  saveContents(rtl::OUString &rPath, std::vector < com::sun::star::uno::Sequence < com::sun::star::beans::PropertyValue > > &rManList, ZipOutputStream & rZipOut, com::sun::star::uno::Sequence < sal_Int8 > &rEncryptionKey, rtlRandomPool & rRandomPool)
         throw(::com::sun::star::uno::RuntimeException);
     void  releaseUpwardRef();
 
