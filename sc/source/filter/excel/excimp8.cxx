@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: dr $ $Date: 2001-08-23 09:56:17 $
+ *  last change: $Author: gt $ $Date: 2001-08-31 07:12:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1586,7 +1586,6 @@ void ImportExcel8::PostDocLoad( void )
             UINT32                      nChartCnt = 0;
             const SvxMSDffShapeInfo*    p;
             ULONG                       nShapeId;
-            SdrObject*                  pSdrObj = NULL;
             SvxMSDffImportData*         pMSDffImportData;
             UINT32                      n;
             BOOL                        bRangeTest;
@@ -1644,7 +1643,7 @@ void ImportExcel8::PostDocLoad( void )
                                     if( bHasCtrls )
                                     {
                                         ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
-                                                xShapeRef = GetXShapeForSdrObject( pSdrObj );
+                                                xShapeRef = GetXShapeForSdrObject( ( SdrObject* ) pObj->GetSdrObj() );
                                         if( pCtrlConv->ReadOCXExcelKludgeStream( xStStream, &xShapeRef, TRUE ) )
                                         {
                                             SdrObject*  pNewObj = GetSdrObjectFromXShape( xShapeRef );
