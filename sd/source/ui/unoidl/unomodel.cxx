@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: cl $ $Date: 2001-11-08 16:27:27 $
+ *  last change: $Author: cl $ $Date: 2001-12-04 16:07:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -905,7 +905,7 @@ uno::Reference< uno::XInterface > SAL_CALL SdXImpressDocument::createInstance( c
     if( xShape.is() )
     {
         xRet.clear();
-        new SdXShape( xShape, (SdXImpressDocument*)this );
+        new SdXShape( SvxShape::getImplementation( xShape ), (SdXImpressDocument*)this );
         xRet = xShape;
         xShape.clear();
     }

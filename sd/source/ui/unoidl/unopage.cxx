@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: cl $ $Date: 2001-11-08 16:30:00 $
+ *  last change: $Author: cl $ $Date: 2001-12-04 16:08:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -902,7 +902,7 @@ uno::Reference< drawing::XShape >  SdGenericDrawPage::_CreateShape( SdrObject *p
     }
 
     // SdXShape aggregiert SvxShape
-    new SdXShape( xShape, mpModel );
+    new SdXShape( SvxShape::getImplementation( xShape ), mpModel );
     return xShape;
 }
 

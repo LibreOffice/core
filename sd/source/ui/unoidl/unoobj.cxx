@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-23 09:37:53 $
+ *  last change: $Author: cl $ $Date: 2001-12-04 16:10:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,9 +179,11 @@ using namespace ::com::sun::star;
 
 ///////////////////////////////////////////////////////////////////////
 
-DECLARE_STL_USTRINGACCESS_MAP( uno::Sequence< sal_Int8 > *, SdShapeImplementationIdMap );
+DECLARE_STL_STDKEY_MAP(sal_uInt32, SfxExtItemPropertySetInfo*, SdExtPropertySetInfoCache);
+static SdExtPropertySetInfoCache gImplPropertySetInfoCache;
 
-static SdShapeImplementationIdMap aImplementationIdMap;
+DECLARE_STL_STDKEY_MAP(sal_uInt32, uno::Sequence< uno::Type >*, SdTypesCache);
+static SdTypesCache gImplTypesCache;
 
 ///////////////////////////////////////////////////////////////////////
 
@@ -296,105 +298,90 @@ SdXShape::SdXShape() throw()
 {
 }
 
-SdXShape::SdXShape(uno::Reference< drawing::XShape > & xShape, SdXImpressDocument* pModel) throw()
+SdXShape::SdXShape( SvxShape* pShape, SdXImpressDocument* pModel) throw()
 :   maPropSet( pModel?
-                    ImplGetShapePropertyMap(pModel->IsImpressDocument(), xShape->getShapeType().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(sUNO_Service_GraphicObjectShape)))
+                    ImplGetShapePropertyMap(pModel->IsImpressDocument(), pShape->getShapeType().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(sUNO_Service_GraphicObjectShape)))
                 :   aEmpty_SdXShapePropertyMap_Impl ),
     mpMap( pModel?
-                    ImplGetShapePropertyMap(pModel->IsImpressDocument(), xShape->getShapeType().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(sUNO_Service_GraphicObjectShape)))
+                    ImplGetShapePropertyMap(pModel->IsImpressDocument(), pShape->getShapeType().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(sUNO_Service_GraphicObjectShape)))
                 :   aEmpty_SdXShapePropertyMap_Impl ),
     mpModel(pModel),
-    mpImplementationId( NULL )
+    mpImplementationId( NULL ),
+    mpShape( pShape )
 {
-    m_refCount++;
-    {
-        uno::Any aAny( xShape->queryInterface( ITYPE( uno::XAggregation ) ) );
-        xShape = NULL;
-
-        aAny >>= mxShapeAgg;
-    }
-
-    {
-        if( mxShapeAgg.is() )
-            mxShapeAgg->setDelegator( (::cppu::OWeakObject*)this );
-    }
-
-    {
-        uno::Any aAny = mxShapeAgg->queryInterface( ITYPE( drawing::XShape ) );
-        aAny >>= xShape;
-    }
-
-    m_refCount--;
+    pShape->setMaster( this );
 }
 
 SdXShape::~SdXShape() throw()
 {
-    OGuard aGuard( Application::GetSolarMutex() );
-    mxShapeAgg.clear();
+}
+
+void SdXShape::dispose()
+{
+    mpShape->setMaster( NULL );
+    delete this;
 }
 
 // XInterface
-uno::Any SAL_CALL SdXShape::queryInterface( const ::com::sun::star::uno::Type & rType )
-    throw(::com::sun::star::uno::RuntimeException)
+uno::Any SAL_CALL SdXShape::queryAggregation( const uno::Type & rType )
+    throw(uno::RuntimeException)
 {
     uno::Any aAny;
+    mpShape->queryAggregation( rType, aAny );
+    return aAny;
+}
 
-    if( rType == ::getCppuType((const uno::Reference< beans::XPropertySet >*)0) )
-    {
-        aAny <<= uno::Reference< beans::XPropertySet >(this);
-    }
-    else if( rType == ::getCppuType((const uno::Reference< beans::XPropertyState >*)0) )
-    {
-        aAny <<= uno::Reference< beans::XPropertyState >(this);
-    }
-    else if( rType == ::getCppuType((const uno::Reference< lang::XTypeProvider >*)0) )
-    {
-        aAny <<= uno::Reference< lang::XTypeProvider >(this);
-    }
-    else if( rType == ::getCppuType((const uno::Reference< lang::XServiceInfo >*)0) )
-    {
-        aAny <<= uno::Reference< lang::XServiceInfo >(this);
-    }
-    else if( rType == ::getCppuType(( const uno::Reference< document::XEventsSupplier >*)0) )
+uno::Any SAL_CALL SdXShape::queryInterface( const uno::Type & rType )
+    throw(uno::RuntimeException)
+{
+    return mpShape->queryInterface( rType );
+}
+
+void SAL_CALL SdXShape::acquire() throw()
+{
+    mpShape->acquire();
+}
+
+void SAL_CALL SdXShape::release() throw()
+{
+    mpShape->release();
+}
+
+sal_Bool SdXShape::queryAggregation( const com::sun::star::uno::Type & rType, com::sun::star::uno::Any& aAny )
+{
+    if( rType == ::getCppuType(( const uno::Reference< document::XEventsSupplier >*)0) )
     {
         aAny <<= uno::Reference< document::XEventsSupplier >(this);
-    }
-    else
-    {
-        aAny = OWeakObject::queryInterface(rType);
-
-        if(!aAny.hasValue() && mxShapeAgg.is())
-            return mxShapeAgg->queryAggregation( rType );
+        return sal_True;
     }
 
-    return aAny;
+    return sal_False;
 }
 
 uno::Sequence< uno::Type > SAL_CALL SdXShape::getTypes()
     throw (uno::RuntimeException)
 {
-    uno::Sequence< uno::Type > aTypeSequence;
+    const sal_uInt32 nObjId = mpShape->getShapeKind();
 
-    uno::Reference< lang::XTypeProvider > xBaseProvider;
-    mxShapeAgg->queryAggregation( ::getCppuType((const uno::Reference< lang::XTypeProvider >*)0) ) >>= xBaseProvider;
-    DBG_ASSERT( xBaseProvider.is(), "SdXShape: No XTypeProvider from aggregatet shape!" );
+    uno::Sequence< uno::Type >* pTypes;
 
-    if( xBaseProvider.is() )
+    SdTypesCache::iterator aIter( gImplTypesCache.find( nObjId ) );
+    if( aIter == gImplTypesCache.end() )
     {
-        const uno::Sequence< uno::Type > aBaseTypes( xBaseProvider->getTypes() );
-        const uno::Type* pBaseTypes = aBaseTypes.getConstArray();
-        const sal_Int32 nBaseTypes = aBaseTypes.getLength();
-        const sal_Int32 nOwnTypes = 1;      // !DANGER! Keep this updated!
+        uno::Sequence< uno::Type >* pTypes = new uno::Sequence< uno::Type >( mpShape->_getTypes() );
+        sal_uInt32 nCount = pTypes->getLength();
+        pTypes->realloc( nCount+1 );
+        (*pTypes)[nCount] = ::getCppuType((const uno::Reference< lang::XTypeProvider>*)0);
 
-        aTypeSequence.realloc( nBaseTypes  + nOwnTypes );
-        uno::Type* pTypes = aTypeSequence.getArray();
-
-        *pTypes++ = ::getCppuType((const uno::Reference< lang::XTypeProvider>*)0);
-
-        for( sal_Int32 nType = 0; nType < nBaseTypes; nType++ )
-            *pTypes++ = *pBaseTypes++;
+        gImplTypesCache[ nObjId ] = pTypes;
     }
-    return aTypeSequence;
+    else
+    {
+        // use the already computed implementation id
+        pTypes = (*aIter).second;
+    }
+
+    return *pTypes;
 }
 
 // XPropertyState
@@ -402,55 +389,19 @@ beans::PropertyState SAL_CALL SdXShape::getPropertyState( const OUString& Proper
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
-    if(!mxShapeAgg.is())
-        throw uno::RuntimeException();
-
-    uno::Any aRet;
-
     if( maPropSet.getPropertyMapEntry(PropertyName) )
     {
         return beans::PropertyState_DIRECT_VALUE;
     }
     else
     {
-        uno::Reference< beans::XPropertyState >  xPrSet;
-        mxShapeAgg->queryAggregation(::getCppuType((const uno::Reference< beans::XPropertyState >*)0)) >>= xPrSet;
-
-        if(xPrSet.is())
-        {
-            return xPrSet->getPropertyState(PropertyName);
-        }
-        else
-        {
-            return beans::PropertyState_DIRECT_VALUE;
-        }
+        return mpShape->_getPropertyState( PropertyName );
     }
-}
-
-uno::Sequence< beans::PropertyState > SAL_CALL SdXShape::getPropertyStates( const uno::Sequence< OUString >& aPropertyName ) throw( beans::UnknownPropertyException, uno::RuntimeException)
-{
-    const sal_Int32 nCount = aPropertyName.getLength();
-    const OUString* pNames = aPropertyName.getConstArray();
-
-    uno::Sequence< beans::PropertyState > aRet( nCount );
-    beans::PropertyState* pState = aRet.getArray();;
-
-    for( sal_Int32 nIdx = 0; nIdx < nCount; nIdx++ )
-        pState[nIdx] = getPropertyState( pNames[nIdx] );
-
-    return aRet;
 }
 
 void SAL_CALL SdXShape::setPropertyToDefault( const OUString& PropertyName ) throw( beans::UnknownPropertyException, uno::RuntimeException)
 {
     OGuard aGuard( Application::GetSolarMutex() );
-
-    if(!mxShapeAgg.is())
-        throw uno::RuntimeException();
-
-    uno::Any aRet;
-
-    const SfxItemPropertyMap* pMap = maPropSet.getPropertyMapEntry(PropertyName);
 
     if( maPropSet.getPropertyMapEntry(PropertyName) )
     {
@@ -458,14 +409,7 @@ void SAL_CALL SdXShape::setPropertyToDefault( const OUString& PropertyName ) thr
     }
     else
     {
-        uno::Reference< beans::XPropertyState > xPrSet;
-        mxShapeAgg->queryAggregation(::getCppuType((const uno::Reference< beans::XPropertyState >*)0)) >>= xPrSet;
-
-        if( xPrSet.is() )
-        {
-            xPrSet->setPropertyToDefault(PropertyName);
-        }
-
+        mpShape->_setPropertyToDefault(PropertyName);
     }
 }
 
@@ -473,117 +417,52 @@ uno::Any SAL_CALL SdXShape::getPropertyDefault( const OUString& aPropertyName ) 
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
-    if(!mxShapeAgg.is())
-        throw uno::RuntimeException();
-
-    uno::Any aRet;
-
     if( maPropSet.getPropertyMapEntry(aPropertyName) )
     {
         return getPropertyValue( aPropertyName );
     }
     else
     {
-        uno::Reference< beans::XPropertyState >  xPrSet;
-        uno::Any aAny(mxShapeAgg->queryAggregation(::getCppuType((const uno::Reference< beans::XPropertyState >*)0)));
+        uno::Any aRet( mpShape->_getPropertyDefault(aPropertyName) );
 
-        if( aAny >>= xPrSet)
+        if( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_shape_layername ) ) )
         {
-            aRet = xPrSet->getPropertyDefault(aPropertyName);
-
-            if( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_shape_layername ) ) )
+            OUString aName;
+            if( aRet >>= aName )
             {
-                OUString aName;
-                if( aRet >>= aName )
-                {
-                    aName = SdLayer::convertToExternalName( aName );
-                    aRet <<= aName;
-                }
+                aName = SdLayer::convertToExternalName( aName );
+                aRet <<= aName;
             }
         }
+        return aRet;
     }
-
-    return aRet;
-}
-
-/** return a unique implementation id depending on the type of the agregated shape */
-uno::Sequence< sal_Int8 > SAL_CALL SdXShape::getImplementationId()
-    throw (uno::RuntimeException)
-{
-    OGuard aGuard( Application::GetSolarMutex() );
-
-    // do we need to compute the implementation id for this instance?
-    if( NULL == mpImplementationId )
-    {
-        uno::Reference< drawing::XShape > xAggShape;
-        mxShapeAgg->queryAggregation( ITYPE( drawing::XShape ) ) >>= xAggShape;
-        if( xAggShape.is() )
-        {
-            const OUString aShapeType( xAggShape->getShapeType() );
-
-            // did we already computed an implementation id for the agregated shape type?
-            SdShapeImplementationIdMap::iterator aIter( aImplementationIdMap.find( aShapeType ) );
-            if( aIter == aImplementationIdMap.end() )
-            {
-                // we need to create a new implementation id for this
-                // note: this memory is not free'd until application exists
-                //       but since we have a fixed set of shapetypes and the
-                //       memory will be reused this is ok.
-                mpImplementationId = new uno::Sequence< sal_Int8 >( 16 );
-                rtl_createUuid( (sal_uInt8 *)mpImplementationId->getArray(), 0, sal_True );
-                aImplementationIdMap[ aShapeType ] = mpImplementationId;
-            }
-            else
-            {
-                // use the already computed implementation id
-                mpImplementationId = (*aIter).second;
-            }
-        }
-    }
-
-    if( NULL == mpImplementationId )
-    {
-        DBG_ERROR( "Could not create an implementation id for a SdXShape!" );
-        uno::Sequence< sal_Int8 > aEmptyId;
-        return aEmptyId;
-    }
-    else
-    {
-        return *mpImplementationId;
-    }
-}
-
-void SAL_CALL SdXShape::acquire() throw()
-{
-    OWeakObject::acquire();
-}
-
-void SAL_CALL SdXShape::release() throw()
-{
-    OWeakObject::release();
 }
 
 //XPropertySet
 ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL SdXShape::getPropertySetInfo()
     throw(::com::sun::star::uno::RuntimeException)
 {
-    uno::Reference< beans::XPropertySetInfo > aRet;
-    if(mxShapeAgg.is())
-    {
-        uno::Reference< beans::XPropertySet > xPrSet;
-        uno::Any aAny( mxShapeAgg->queryAggregation( ITYPE( beans::XPropertySet )));
+    sal_uInt32 nObjId = (sal_uInt32)mpShape->getPropertyMap();
 
-        if( aAny >>= xPrSet )
-        {
-            uno::Reference< beans::XPropertySetInfo > xInfo( xPrSet->getPropertySetInfo() );
-            // PropertySetInfo verlaengern!
-            const uno::Sequence<beans::Property> aPropSeq = xInfo->getProperties();
-            aRet = new SfxExtItemPropertySetInfo( mpMap, aPropSeq );
-        }
+    SfxExtItemPropertySetInfo* pInfo = NULL;
+
+    SdExtPropertySetInfoCache::iterator aIter( gImplPropertySetInfoCache.find( nObjId ) );
+    if( aIter == gImplPropertySetInfoCache.end() )
+    {
+        uno::Reference< beans::XPropertySetInfo > xInfo( mpShape->_getPropertySetInfo() );
+        pInfo = new SfxExtItemPropertySetInfo( mpMap, xInfo->getProperties() );
+        pInfo->acquire();
+
+        gImplPropertySetInfoCache[ nObjId ] = pInfo;
     }
-    if(!aRet.is())
-        aRet = new SfxItemPropertySetInfo( mpMap );
-    return aRet;
+    else
+    {
+        // use the already computed implementation id
+        pInfo = (*aIter).second;
+    }
+
+    uno::Reference< beans::XPropertySetInfo > xInfo( pInfo );
+    return pInfo;
 }
 
 void SAL_CALL SdXShape::setPropertyValue( const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Any& aValue )
@@ -591,14 +470,11 @@ void SAL_CALL SdXShape::setPropertyValue( const ::rtl::OUString& aPropertyName, 
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
-    if(!mxShapeAgg.is())
-        throw uno::RuntimeException();
-
     const SfxItemPropertyMap* pMap = maPropSet.getPropertyMapEntry(aPropertyName);
 
     if( pMap )
     {
-        SdrObject* pObj = GetSdrObject();
+        SdrObject* pObj = mpShape->GetSdrObject();
         if( pObj )
         {
             SdAnimationInfo* pInfo = GetAnimationInfo((pMap->nWID <= WID_THAT_NEED_ANIMINFO)?sal_True:sal_False);
@@ -771,7 +647,7 @@ void SAL_CALL SdXShape::setPropertyValue( const ::rtl::OUString& aPropertyName, 
         }
         else if( aPropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_shape_zorder ) ) )
         {
-            SdrObject* pObj = GetSdrObject();
+            SdrObject* pObj = mpShape->GetSdrObject();
             SdPage* pPage = pObj ? (SdPage*)pObj->GetPage() : NULL;
             if( pPage && pPage == pObj->GetObjList() && pPage->IsMasterPage() && pPage->GetPageKind() == PK_STANDARD )
             {
@@ -793,10 +669,7 @@ void SAL_CALL SdXShape::setPropertyValue( const ::rtl::OUString& aPropertyName, 
             }
         }
 
-        uno::Reference< beans::XPropertySet >  xPrSet;
-        mxShapeAgg->queryAggregation( ITYPE( beans::XPropertySet ) ) >>= xPrSet;
-        if( xPrSet.is() )
-            xPrSet->setPropertyValue(aPropertyName, aAny);
+        mpShape->_setPropertyValue(aPropertyName, aAny);
     }
 
     if( mpModel )
@@ -808,14 +681,11 @@ void SAL_CALL SdXShape::setPropertyValue( const ::rtl::OUString& aPropertyName, 
 {
     OGuard aGuard( Application::GetSolarMutex() );
 
-    if(!mxShapeAgg.is())
-        throw uno::RuntimeException();
-
     uno::Any aRet;
 
     const SfxItemPropertyMap* pMap = maPropSet.getPropertyMapEntry(PropertyName);
 
-    if( pMap && GetSdrObject() )
+    if( pMap && mpShape->GetSdrObject() )
     {
         SdAnimationInfo* pInfo = GetAnimationInfo(sal_False);
 
@@ -892,7 +762,6 @@ void SAL_CALL SdXShape::setPropertyValue( const ::rtl::OUString& aPropertyName, 
             if( pInfo && pInfo->pPathObj )
                 aRet <<= pInfo->pPathObj->getUnoShape();
             break;
-#if SUPD>=626
         case WID_IMAGEMAP:
             {
                 uno::Reference< uno::XInterface > xImageMap;
@@ -901,7 +770,7 @@ void SAL_CALL SdXShape::setPropertyValue( const ::rtl::OUString& aPropertyName, 
                 if( pDoc )
                 {
 
-                    SdIMapInfo* pIMapInfo = pDoc->GetIMapInfo(GetSdrObject());
+                    SdIMapInfo* pIMapInfo = pDoc->GetIMapInfo(mpShape->GetSdrObject());
                     if( pIMapInfo )
                     {
                         const ImageMap& rIMap = pIMapInfo->GetImageMap();
@@ -916,47 +785,40 @@ void SAL_CALL SdXShape::setPropertyValue( const ::rtl::OUString& aPropertyName, 
                 aRet <<= uno::Reference< container::XIndexContainer >::query( xImageMap );
                 break;
             }
-#endif
         }
     }
     else
     {
-        uno::Reference< beans::XPropertySet >  xPrSet;
-        uno::Any aAny(mxShapeAgg->queryAggregation(::getCppuType((const uno::Reference< beans::XPropertySet >*)0)));
+        aRet = mpShape->_getPropertyValue(PropertyName);
 
-        if( aAny >>= xPrSet)
+        if( PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_shape_layername ) ) )
         {
-            aRet = xPrSet->getPropertyValue(PropertyName);
-
-            if( PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_shape_layername ) ) )
+            OUString aName;
+            if( aRet >>= aName )
             {
-                OUString aName;
-                if( aRet >>= aName )
-                {
-                    aName = SdLayer::convertToExternalName( aName );
-                    aRet <<= aName;
-                }
+                aName = SdLayer::convertToExternalName( aName );
+                aRet <<= aName;
             }
-            else if( PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_shape_zorder ) ) )
+        }
+        else if( PropertyName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( sUNO_shape_zorder ) ) )
+        {
+            SdrObject* pObj = mpShape->GetSdrObject();
+            SdPage* pPage = pObj ? (SdPage*)pObj->GetPage() : NULL;
+            if( pPage && pPage == pObj->GetObjList() && pPage->IsMasterPage() && pPage->GetPageKind() == PK_STANDARD )
             {
-                SdrObject* pObj = GetSdrObject();
-                SdPage* pPage = pObj ? (SdPage*)pObj->GetPage() : NULL;
-                if( pPage && pPage == pObj->GetObjList() && pPage->IsMasterPage() && pPage->GetPageKind() == PK_STANDARD )
+                sal_Int32 nOrdNum;
+                if( aRet >>= nOrdNum )
                 {
-                    sal_Int32 nOrdNum;
-                    if( aRet >>= nOrdNum )
+                    // if this is a masterpage, there is always a background shape with the ord num 0
+                    // so we add one to the api ordnum to hide the background shape over the api
+                    if( nOrdNum > 0 )
                     {
-                        // if this is a masterpage, there is always a background shape with the ord num 0
-                        // so we add one to the api ordnum to hide the background shape over the api
-                        if( nOrdNum > 0 )
-                        {
-                            nOrdNum--;
-                            aRet <<= nOrdNum;
-                        }
-                        else
-                        {
-                            DBG_ERROR( "Masterpage without a background shape, ZOrder property will be corrupt!" );
-                        }
+                        nOrdNum--;
+                        aRet <<= nOrdNum;
+                    }
+                    else
+                    {
+                        DBG_ERROR( "Masterpage without a background shape, ZOrder property will be corrupt!" );
                     }
                 }
             }
@@ -967,55 +829,6 @@ void SAL_CALL SdXShape::setPropertyValue( const ::rtl::OUString& aPropertyName, 
     return aRet;
 }
 
-void SAL_CALL SdXShape::addPropertyChangeListener( const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& xListener )
-    throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
-{
-    if(mxShapeAgg.is())
-    {
-        uno::Reference< beans::XPropertySet >  xPrSet;
-        uno::Any aAny(mxShapeAgg->queryAggregation(::getCppuType((const uno::Reference< beans::XPropertySet >*)0)));
-        if( aAny >>= xPrSet)
-            xPrSet->addPropertyChangeListener(aPropertyName, xListener);
-    }
-
-}
-
-void SAL_CALL SdXShape::removePropertyChangeListener( const ::rtl::OUString& aPropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertyChangeListener >& aListener )
-    throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
-{
-    if(mxShapeAgg.is())
-    {
-        uno::Reference< beans::XPropertySet >  xPrSet;
-        uno::Any aAny( mxShapeAgg->queryAggregation(::getCppuType((const uno::Reference< beans::XPropertySet >*)0)));
-        if( aAny >>= xPrSet )
-            xPrSet->removePropertyChangeListener(aPropertyName, aListener);
-    }
-}
-
-void SAL_CALL SdXShape::addVetoableChangeListener( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener )
-    throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
-{
-    if(mxShapeAgg.is())
-    {
-        uno::Reference< beans::XPropertySet >  xPrSet;
-        uno::Any aAny(mxShapeAgg->queryAggregation(::getCppuType((const uno::Reference< beans::XPropertySet >*)0)));
-        if( aAny >>= xPrSet )
-            xPrSet->addVetoableChangeListener(PropertyName, aListener);
-    }
-}
-
-void SAL_CALL SdXShape::removeVetoableChangeListener( const ::rtl::OUString& PropertyName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XVetoableChangeListener >& aListener )
-    throw(::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
-{
-    if(mxShapeAgg.is())
-    {
-        uno::Reference< beans::XPropertySet > xPrSet;
-        uno::Any aAny(mxShapeAgg->queryAggregation(::getCppuType((const uno::Reference< beans::XPropertySet >*)0)));
-        if( aAny >>= xPrSet )
-            xPrSet->removeVetoableChangeListener(PropertyName, aListener);
-    }
-}
-
 /** */
 SdAnimationInfo* SdXShape::GetAnimationInfo( sal_Bool bCreate ) const throw()
 {
@@ -1024,7 +837,7 @@ SdAnimationInfo* SdXShape::GetAnimationInfo( sal_Bool bCreate ) const throw()
     SdDrawDocument* pDoc = mpModel?mpModel->GetDoc():NULL;
     if(pDoc)
     {
-        SdrObject* pObj = GetSdrObject();
+        SdrObject* pObj = mpShape->GetSdrObject();
         if(pObj)
         {
             pInfo = pDoc->GetAnimationInfo(pObj);
@@ -1039,61 +852,14 @@ SdAnimationInfo* SdXShape::GetAnimationInfo( sal_Bool bCreate ) const throw()
     return pInfo;
 }
 
-// XServiceInfo
-OUString SAL_CALL SdXShape::getImplementationName()
-    throw(::com::sun::star::uno::RuntimeException)
-{
-    return OUString( RTL_CONSTASCII_USTRINGPARAM("SdXShape") );
-}
-
-sal_Bool SAL_CALL SdXShape::supportsService( const ::rtl::OUString& ServiceName )
-    throw(::com::sun::star::uno::RuntimeException)
-{
-    if( ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.presentation.shape") ) ||
-        ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.document.LinkTarget") ) )
-    {
-        return sal_True;
-    }
-
-    if( ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.presentation.TitleTextShape") ) )
-    {
-        SdrObject* pObj = GetSdrObject();
-        return pObj && (pObj->GetObjInventor() == SdrInventor) && (pObj->GetObjIdentifier() == OBJ_TITLETEXT );
-    }
-
-    if( ServiceName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.presentation.OutlinerShape") ) )
-    {
-        SdrObject* pObj = GetSdrObject();
-        return pObj && (pObj->GetObjInventor() == SdrInventor) && (pObj->GetObjIdentifier() == OBJ_OUTLINETEXT );
-    }
-
-    uno::Reference< lang::XServiceInfo > xParentInfo;
-    if(mxShapeAgg.is())
-    {
-        mxShapeAgg->queryAggregation( ITYPE( lang::XServiceInfo )) >>= xParentInfo;
-        if( xParentInfo.is() )
-            return xParentInfo->supportsService( ServiceName );
-    }
-
-    return sal_False;
-}
-
 uno::Sequence< ::rtl::OUString > SAL_CALL SdXShape::getSupportedServiceNames() throw(::com::sun::star::uno::RuntimeException)
 {
-    uno::Sequence< OUString > aSeq;
-
-    uno::Reference< lang::XServiceInfo > xParentInfo;
-    if(mxShapeAgg.is())
-    {
-        mxShapeAgg->queryAggregation( ITYPE( lang::XServiceInfo )) >>= xParentInfo;
-        if( xParentInfo.is() )
-            aSeq = xParentInfo->getSupportedServiceNames();
-    }
+    uno::Sequence< OUString > aSeq( mpShape->_getSupportedServiceNames() );
 
     SvxServiceInfoHelper::addToSequence( aSeq, 2, "com.sun.star.presentation.shape",
                                                   "com.sun.star.document.LinkTarget" );
 
-    SdrObject* pObj = GetSdrObject();
+    SdrObject* pObj = mpShape->GetSdrObject();
     if(pObj && pObj->GetObjInventor() == SdrInventor )
     {
         sal_uInt32 nInventor = pObj->GetObjIdentifier();
@@ -1110,26 +876,11 @@ uno::Sequence< ::rtl::OUString > SAL_CALL SdXShape::getSupportedServiceNames() t
     return aSeq;
 }
 
-
-/** returns the SdrObject of the aggregatet SvxShape
- */
-SdrObject* SdXShape::GetSdrObject() const throw()
-{
-    if(mxShapeAgg.is())
-    {
-        SvxShape* pShape = SvxShape::getImplementation( mxShapeAgg );
-        if(pShape)
-            return pShape->GetSdrObject();
-    }
-
-    return NULL;
-}
-
 /** checks if this is a presentation object
  */
 sal_Bool SdXShape::IsPresObj() const throw()
 {
-    SdrObject* pObj = GetSdrObject();
+    SdrObject* pObj = mpShape->GetSdrObject();
     if(pObj)
     {
         SdPage* pPage = PTR_CAST(SdPage,pObj->GetPage());
@@ -1139,50 +890,11 @@ sal_Bool SdXShape::IsPresObj() const throw()
     return sal_False;
 }
 
-/** converts this shape to a presentation object or
-    a ordinary shape to a presentation object.
-void SdXShape::SetPresObj( sal_Bool bPresObj ) throw()
-{
-    if( IsPresObj() != bPresObj )
-    {
-        SdrObject* pObj = GetSdrObject();
-        if( pObj )
-        {
-            SdPage* pPage = PTR_CAST(SdPage,pObj->GetPage());
-            if(pPage)
-            {
-                List* pPresObjList = pPage->GetPresObjList();
-                if( bPresObj )
-                {
-                    // convert a shape to a pres obj
-                    List* pPresObjList = pPage->GetPresObjList();
-                    pPresObjList->Insert( pObj );
-
-                    // check if this is now a valid pres obj
-                    if( pPage->GetPresObjKind( pObj ) == PRESOBJ_NONE )
-                    {
-                        // this is an invalid pres obj, so remove
-                        // it from the pres obj list
-                        pPresObjList->Remove( pObj );
-                    }
-                }
-                else
-                {
-                    // convert a pres obj to a shape
-                    pObj->SetUserCall( pPage );
-                    pPresObjList->Remove(pObj);
-                }
-            }
-        }
-    }
-}
- */
-
 /** checks if this presentation object is empty
  */
 sal_Bool SdXShape::IsEmptyPresObj() const throw()
 {
-    SdrObject* pObj = GetSdrObject();
+    SdrObject* pObj = mpShape->GetSdrObject();
     if( pObj == NULL || !pObj->IsEmptyPresObj() )
         return sal_False;
 
@@ -1199,7 +911,7 @@ void SdXShape::SetEmptyPresObj( sal_Bool bEmpty ) throw()
     if( !IsPresObj() )
         return;
 
-    SdrObject* pObj = GetSdrObject();
+    SdrObject* pObj = mpShape->GetSdrObject();
     if( pObj == NULL )
         return;
 
@@ -1232,7 +944,6 @@ void SdXShape::SetEmptyPresObj( sal_Bool bEmpty ) throw()
         }
         else
         {
-#ifndef SVX_LIGHT
             // now set an empty OutlinerParaObject at pObj without
             // any content but with the style of the old OutlinerParaObjects
             // first paragraph
@@ -1267,7 +978,6 @@ void SdXShape::SetEmptyPresObj( sal_Bool bEmpty ) throw()
                 pOutliner->Clear();
             }
             while(0);
-#endif
         }
 
         pObj->SetEmptyPresObj(bEmpty);
@@ -1276,7 +986,7 @@ void SdXShape::SetEmptyPresObj( sal_Bool bEmpty ) throw()
 
 sal_Bool SdXShape::IsMasterDepend() const throw()
 {
-    SdrObject* pObj = GetSdrObject();
+    SdrObject* pObj = mpShape->GetSdrObject();
     return pObj && pObj->GetUserCall() != NULL;
 }
 
@@ -1284,7 +994,7 @@ void SdXShape::SetMasterDepend( sal_Bool bDepend ) throw()
 {
     if( IsMasterDepend() != bDepend )
     {
-        SdrObject* pObj = GetSdrObject();
+        SdrObject* pObj = mpShape->GetSdrObject();
         if( pObj )
         {
             if( bDepend )
@@ -1321,7 +1031,7 @@ inline sal_Bool IsPathObj( SdrObject* pObj, SdAnimationInfo* pInfo )
  */
 sal_Int32 SdXShape::GetPresentationOrderPos() const throw()
 {
-    SdrObject* pObj = GetSdrObject();
+    SdrObject* pObj = mpShape->GetSdrObject();
     SdDrawDocument* pDoc = mpModel?mpModel->GetDoc():NULL;
     if(pDoc == NULL || pObj == NULL)
         return -1;
@@ -1360,7 +1070,7 @@ sal_Int32 SdXShape::GetPresentationOrderPos() const throw()
  */
 void SdXShape::SetPresentationOrderPos( sal_Int32 nPos ) throw()
 {
-    SdrObject* pObj = GetSdrObject();
+    SdrObject* pObj = mpShape->GetSdrObject();
     SdDrawDocument* pDoc = mpModel?mpModel->GetDoc():NULL;
     if(pDoc == 0 || pObj == NULL)
         return;
@@ -1424,7 +1134,7 @@ void SdXShape::SetStyleSheet( const uno::Any& rAny ) throw( lang::IllegalArgumen
     if( rAny.hasValue() && rAny.getValueTypeClass() == uno::TypeClass_INTERFACE )
         pStyleSheet = SdUnoPseudoStyle::getImplementation(*(uno::Reference< uno::XInterface > *)rAny.getValue() );
 
-    SdrObject* pObj = GetSdrObject();
+    SdrObject* pObj = mpShape->GetSdrObject();
 
     // check if it is a style and if its not a presentation style
     if( NULL == pObj || NULL == pStyleSheet || pStyleSheet->getStyleSheet()->GetFamily() == SFX_STYLE_FAMILY_PSEUDO )
@@ -1457,7 +1167,7 @@ void SdXShape::SetStyleSheet( const uno::Any& rAny ) throw( lang::IllegalArgumen
 
 uno::Any SdXShape::GetStyleSheet() const throw( beans::UnknownPropertyException  )
 {
-    SdrObject* pObj = GetSdrObject();
+    SdrObject* pObj = mpShape->GetSdrObject();
     if( pObj == NULL )
         throw beans::UnknownPropertyException();
 
