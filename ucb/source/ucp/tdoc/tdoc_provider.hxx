@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdoc_provider.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-14 13:43:05 $
+ *  last change: $Author: obo $ $Date: 2004-05-28 15:16:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,6 +157,9 @@ public:
     com::sun::star::uno::Reference< com::sun::star::embed::XStorage >
     queryStorage( const rtl::OUString & rUri, StorageAccessMode eMode ) const;
 
+    com::sun::star::uno::Reference< com::sun::star::embed::XStorage >
+    queryStorageClone( const rtl::OUString & rUri ) const;
+
     com::sun::star::uno::Reference< com::sun::star::io::XInputStream >
     queryInputStream( const rtl::OUString & rUri,
                       const rtl::OUString & rPassword ) const
@@ -164,7 +167,14 @@ public:
 
     com::sun::star::uno::Reference< com::sun::star::io::XOutputStream >
     queryOutputStream( const rtl::OUString & rUri,
-                       const rtl::OUString & rPassword ) const
+                       const rtl::OUString & rPassword,
+                       bool bTruncate ) const
+        throw ( com::sun::star::packages::WrongPasswordException );
+
+    com::sun::star::uno::Reference< com::sun::star::io::XStream >
+    queryStream( const rtl::OUString & rUri,
+                 const rtl::OUString & rPassword,
+                 bool bTruncate ) const
         throw ( com::sun::star::packages::WrongPasswordException );
 
     bool queryNamesOfChildren(
