@@ -139,6 +139,7 @@
             <include name="${package}/XmlUtil.java"/>
             <include name="${package}/Debug.java"/>
             <include name="${package}/EndianConverter.java"/>
+            <include name="${package}/TwipsConverter.java"/>
             <include name="${package}/OfficeUtil.java"/>
             <include name="${package}/ActiveSyncDriver.java"/>
         </javac>
