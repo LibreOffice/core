@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salsys.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:42 $
+ *  last change: $Author: pl $ $Date: 2001-07-25 11:39:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,116 +59,16 @@
  *
  ************************************************************************/
 
-#define _SV_SALSYS_CXX
-
-#include <cstdio>
-#include <string>
-
-#ifndef _SV_SALDISP_HXX
-#include <saldisp.hxx>
-#endif
-#ifndef _SV_SALINST_HXX
-#include <salinst.hxx>
-#endif
-#ifndef _SV_SALSYS_HXX
 #include <salsys.hxx>
-#endif
-#ifndef _SV_DTINT_HXX
-#include <dtint.hxx>
-#endif
-#include <salframe.hxx>
-
-#include <strhelper.hxx>
 #include <stacktrace.hxx>
 
-
-void SalSystemData::CreateDtIntegrator( SalFrame* pNewFrame )
-{
-    if( pNewFrame )
-    {
-        if( m_pDtIntegrator && m_pDtIntegrator->GetDisplay() !=
-            pNewFrame->maFrameData.GetDisplay()->GetDisplay() )
-        {
-            m_pDtIntegrator->Release();
-            m_pDtIntegrator = 0;
-        }
-        if( ! m_pDtIntegrator )
-        {
-            m_pDtIntegrator = DtIntegrator::CreateDtIntegrator( pNewFrame );
-            m_pDtIntegrator->Acquire();
-        }
-    }
-}
-
-void SalSystemData::SetSalDisplay( SalDisplay *pSalDisplay )
-{
-    m_pSalDisplay = pSalDisplay;
-}
-
-SalSystemData::~SalSystemData()
-{
-    if( m_pDtIntegrator )
-        m_pDtIntegrator->Release();
-}
-
+#ifdef DEBUG
+#include <stdio.h>
+#endif
 
 // -----------------------------------------------------------------------
 
-SalSystem* SalInstance::CreateSystem()
-{
-    return new SalSystem();
-}
-
-// -----------------------------------------------------------------------
-
-void SalInstance::DestroySystem( SalSystem* pSystem )
-{
-    delete pSystem;
-}
-
-// =======================================================================
-
-SalSystem::SalSystem()
-{
-    maSystemData.m_pSalDisplay      = 0;
-    maSystemData.m_pDtIntegrator    = 0;
-}
-
-// -----------------------------------------------------------------------
-
-SalSystem::~SalSystem()
-{
-}
-
-// -----------------------------------------------------------------------
-
-BOOL SalSystem::StartProcess( SalFrame* pFrame, const String& rFileName,
-                              const String& rParam,
-                              const String& rWorkingDirectory )
-{
-    maSystemData.CreateDtIntegrator( pFrame );
-
-    XubString aFileName( '\"' );
-    aFileName += rFileName;
-    aFileName += '\"';
-
-    // StartProcess is desktop specific
-    return maSystemData.m_pDtIntegrator->
-        StartProcess( aFileName,
-                      const_cast<XubString&>(rParam),
-                      const_cast<XubString&>(rWorkingDirectory) );
-}
-
-// -----------------------------------------------------------------------
-
-BOOL SalSystem::AddRecentDoc( SalFrame* pFrame, const XubString& rFileName )
-{
-    return FALSE;
-}
-
-// -----------------------------------------------------------------------
-
-String SalSystem::GetSummarySystemInfos( ULONG nFlags )
+String GetSalSummarySystemInfos( ULONG nFlags )
 {
     sal_PostMortem aPostMortem;
 
