@@ -2,9 +2,9 @@
  *
  *  $RCSfile: browserlistbox.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-13 09:04:05 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 12:00:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,7 @@ namespace pcr
             ,m_aPlayGround(this,WB_DIALOGCONTROL | WB_CLIPCHILDREN)
             ,m_pLineListener(NULL)
             ,m_bUpdate(sal_True)
-            ,m_aStandard(ModuleRes(RID_STR_STANDARD))
+            ,m_aStandard( getStandardString() )
             ,m_bIsActive(sal_False)
             ,m_nYOffset(0)
             ,m_nSelectedLine(0)
@@ -211,8 +211,8 @@ namespace pcr
             m_aPlayGround.SetSizePixel(a2Size);
         }
 
-        for (sal_uInt16 i=0; i<m_aLines.size(); ++i)
-            m_aLines[i]->SetNeedsRepaint(sal_True);
+        for ( sal_uInt16 i = 0; i < m_aLines.size(); ++i )
+            m_aOutOfDateLines.insert( i );
 
         // repaint
         EnablePaint(sal_False);
@@ -263,45 +263,41 @@ namespace pcr
     }
 
     //------------------------------------------------------------------
-    void OBrowserListBox::ShowLine(sal_uInt16 i)
+    void OBrowserListBox::PositionLine( sal_uInt16 _nIndex )
     {
         Size aSize(m_aPlayGround.GetOutputSizePixel());
         Point aPos(0, m_nYOffset);
 
         aSize.Height() = m_nRowHeight;
 
-        aPos.Y() += i * m_nRowHeight;
+        aPos.Y() += _nIndex * m_nRowHeight;
 
-        if (i<m_aLines.size())
+        if ( _nIndex < m_aLines.size() )
         {
-            // adjust the pos and - if needed - the size
-            if (m_aLines[i]->GetSizePixel() != aSize)
-                m_aLines[i]->SetPosSizePixel(aPos, aSize);
-            else
-                m_aLines[i]->SetPosPixel(aPos);
+            m_aLines[ _nIndex ]->SetPosSizePixel( aPos, aSize );
 
-            m_aLines[i]->SetTitleWidth(m_nTheNameSize + 2 * FRAME_OFFSET);
+            m_aLines[ _nIndex ]->SetTitleWidth( m_nTheNameSize + 2 * FRAME_OFFSET );
 
             // show the line if necessary
-            if (!m_aLines[i]->IsVisible())
-                m_aLines[i]->Show();
+            if ( !m_aLines[ _nIndex ]->IsVisible() )
+                m_aLines[ _nIndex ]->Show();
         }
-
     }
 
     //------------------------------------------------------------------
     void OBrowserListBox::UpdatePosNSize()
     {
-        sal_uInt16 i;
-
-        for (i=0; i<m_aLines.size(); ++i)
+        for  (  ::std::set< sal_uInt16 >::const_iterator aLoop = m_aOutOfDateLines.begin();
+                aLoop != m_aOutOfDateLines.end();
+                ++aLoop
+             )
         {
-            if (m_aLines[i]->NeedsRepaint())
-                ShowLine(i);
+            DBG_ASSERT( *aLoop < m_aLines.size(),
+                "OBrowserListBox::UpdatePosNSize: invalid line index!" );
+            if ( *aLoop < m_aLines.size() )
+                PositionLine( *aLoop );
         }
-        for (i=0; i<m_aLines.size(); ++i)
-            m_aLines[i]->SetNeedsRepaint(sal_False);
-
+        m_aOutOfDateLines.clear();
     }
 
     //------------------------------------------------------------------
@@ -316,8 +312,8 @@ namespace pcr
 
         if (m_aLines.size()>0)
         {
-            for (sal_uInt16 i = (sal_uInt16)nThumbPos; i<=nEnd; ++i)
-                m_aLines[i]->SetNeedsRepaint(sal_True);
+            for ( sal_uInt16 i = (sal_uInt16)nThumbPos; i <= nEnd; ++i )
+                m_aOutOfDateLines.insert( i );
             UpdatePosNSize();
         }
     }
@@ -395,7 +391,22 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    void OBrowserListBox::EnablePropertyInput( const ::rtl::OUString& _rEntryName, bool _bEnableInput, bool _bEnableBrowseButton )
+    sal_Bool OBrowserListBox::IsPropertyInputEnabled( const ::rtl::OUString& _rEntryName ) const
+    {
+        // TODO: O(log n) search
+        sal_uInt16 i, nEnd = m_aLines.size();
+        for ( i = 0 ; i<nEnd ; ++i )
+        {
+            OBrowserLine* pLine = m_aLines[i];
+            IBrowserControl* pControl = pLine->getControl();
+            if ( pControl && ( pControl->GetMyName() == _rEntryName ) )
+                return pLine->IsPropertyInputEnabled();
+        }
+        return sal_True;
+    }
+
+    //------------------------------------------------------------------------
+    void OBrowserListBox::EnablePropertyControls( const ::rtl::OUString& _rEntryName, bool _bEnableInput, bool _bEnablePrimaryButton, bool _bEnableSecondaryButton )
     {
         // TODO: O(log n) search
         sal_uInt16 i, nEnd = m_aLines.size();
@@ -405,7 +416,7 @@ namespace pcr
             IBrowserControl* pControl = pLine->getControl();
             if ( pControl && ( pControl->GetMyName() == _rEntryName ) )
             {
-                pLine->EnableInputControls( _bEnableInput, _bEnableBrowseButton );
+                pLine->EnablePropertyControls( _bEnableInput, _bEnablePrimaryButton, _bEnableSecondaryButton );
                 break;
             }
         }
@@ -422,7 +433,7 @@ namespace pcr
             IBrowserControl* pControl = pLine->getControl();
             if ( pControl && ( pControl->GetMyName() == _rEntryName ) )
             {
-                pLine->Enable( _bEnable );
+                pLine->EnablePropertyLine( _bEnable );
                 break;
             }
         }
@@ -458,23 +469,6 @@ namespace pcr
         return NULL;
     }
 
-    //------------------------------------------------------------------------
-    void OBrowserListBox::SetPropertyData(const ::rtl::OUString& _rEntryName, void* pData)
-    {
-        // TODO: O(log n) search
-        sal_uInt16 i, nEnd = m_aLines.size();
-        for (i = 0 ; i<nEnd ; ++i)
-        {
-            OBrowserLine* pLine = m_aLines[i];
-            IBrowserControl* pControl = pLine->getControl();
-            if (pControl && (pControl->GetMyName() == _rEntryName))
-            {
-                pControl->SetMyData(pData);
-                break;
-            }
-        }
-    }
-
     //------------------------------------------------------------------
     sal_uInt16 OBrowserListBox::InsertEntry(const OLineDescriptor& _rPropertyData, sal_uInt16 _nPos)
     {
@@ -500,6 +494,13 @@ namespace pcr
 
         // initialize the entry
         ChangeEntry(_rPropertyData, nInsertPos);
+
+        // update the positions of possibly affected lines
+        sal_uInt16 nUpdatePos = nInsertPos;
+        while ( nUpdatePos < m_aLines.size() )
+            m_aOutOfDateLines.insert( nUpdatePos++ );
+        UpdatePosNSize( );
+
         return nInsertPos;
     }
 
@@ -578,13 +579,13 @@ namespace pcr
 
         if (1 == nDelta)
         {
-            // TODO: what's the sense of this two ShowLines? Why not just one call?
-            ShowLine(nEnd-1);
-            ShowLine(nEnd);
+            // TODO: what's the sense of this two PositionLines? Why not just one call?
+            PositionLine(nEnd-1);
+            PositionLine(nEnd);
         }
         else if (-1 == nDelta)
         {
-            ShowLine((sal_uInt16)nThumbPos);
+            PositionLine((sal_uInt16)nThumbPos);
         }
         else if (0 != nDelta)
         {
@@ -614,12 +615,12 @@ namespace pcr
 
         if (1 == nDelta)
         {
-            ShowLine(nEnd-1);
-            ShowLine(nEnd);
+            PositionLine(nEnd-1);
+            PositionLine(nEnd);
         }
         else if (nDelta==-1)
         {
-            ShowLine((sal_uInt16)nThumbPos);
+            PositionLine((sal_uInt16)nThumbPos);
         }
         else if (nDelta!=0 || m_aVScroll.GetType() == SCROLL_DONTKNOW)
         {
@@ -631,20 +632,14 @@ namespace pcr
     }
 
     //------------------------------------------------------------------
-    IMPL_LINK( OBrowserListBox, ClickHdl, PushButton*,pPB)
+    void OBrowserListBox::buttonClicked( OBrowserLine* _pLine, bool _bPrimary )
     {
-        DBG_ASSERT(pPB, "OBrowserListBox::ClickHdl: invalid button!");
-        if (pPB)
+        DBG_ASSERT( _pLine, "OBrowserListBox::buttonClicked: invalid browser line!" );
+        if ( _pLine && m_pLineListener )
         {
-            // notify our LineListener of the ClickecEvent
-            if (m_pLineListener)
-            {
-                OBrowserLine* pBrowserLine = static_cast<OBrowserLine*>(pPB->GetData());
-                IBrowserControl* pControl = pBrowserLine->getControl();
-                m_pLineListener->Clicked(pControl->GetMyName(), pControl->GetProperty(), pControl->GetMyData());
-            }
+            IBrowserControl* pControl = _pLine->getControl();
+            m_pLineListener->Clicked( pControl->GetMyName(), _pLine->GetFlags(), _bPrimary );
         }
-        return 0;
     }
 
     //------------------------------------------------------------------
@@ -652,12 +647,11 @@ namespace pcr
     {
         DBG_ASSERT(_pControl, "OBrowserListBox::Modified: invalid event source!");
         // notify our line listener
-        if (_pControl && m_pLineListener)
+        if ( _pControl && m_pLineListener )
         {
             m_pLineListener->Modified(
                 _pControl->GetMyName(),
-                _pControl->GetProperty(),
-                _pControl->GetMyData()
+                _pControl->GetProperty()
             );
 
         }
@@ -669,15 +663,6 @@ namespace pcr
         DBG_ASSERT(_pControl, "OBrowserListBox::GetFocus: invalid event source!");
         if (!_pControl)
             return;
-
-        // notify our line listener
-        if (m_pLineListener)
-        {
-            m_pLineListener->Select(
-                _pControl->GetMyName(),
-                _pControl->GetMyData()
-            );
-        }
 
         m_nSelectedLine = _pControl->GetLine();
         ShowEntry(m_nSelectedLine);
@@ -695,8 +680,7 @@ namespace pcr
         {
             m_pLineListener->Commit(
                 _pControl->GetMyName(),
-                _pControl->GetProperty(),
-                _pControl->GetMyData()
+                _pControl->GetProperty()
             );
         }
     }
@@ -706,8 +690,8 @@ namespace pcr
     {
         sal_Int32 nLine = _pControl->GetLine();
 
-        if (_pControl->GetDirection())
-        {
+//      if (_pControl->GetDirection())
+//      {
             // cycle forwards, 'til we've the next control which can grab the focus
             ++nLine;
             while ((sal_uInt32)nLine<m_aLines.size())
@@ -722,23 +706,23 @@ namespace pcr
                 )
                 // wrap around
                 m_aLines[0]->GrabFocus();
-        }
-        else
-        {   // cycle backwards, 'til we've the next control which can grab the focus
-            --nLine;
-            while (nLine>=0)
-            {
-                if (m_aLines[nLine]->GrabFocus())
-                    break;
-                --nLine;
-            }
-
-            if  (   (nLine < 0)
-                &&  (0 < m_aLines.size())
-                )
-                // wrap around
-                m_aLines[m_aLines.size() - 1]->GrabFocus();
-        }
+//      }
+//      else
+//      {   // cycle backwards, 'til we've the next control which can grab the focus
+//          --nLine;
+//          while (nLine>=0)
+//          {
+//              if (m_aLines[nLine]->GrabFocus())
+//                  break;
+//              --nLine;
+//          }
+//
+//          if  (   (nLine < 0)
+//              &&  (0 < m_aLines.size())
+//              )
+//              // wrap around
+//              m_aLines[m_aLines.size() - 1]->GrabFocus();
+//      }
     }
 
     //------------------------------------------------------------------
@@ -773,10 +757,37 @@ namespace pcr
     }
 
     //------------------------------------------------------------------
-    void OBrowserListBox::ChangeEntry(const OLineDescriptor& _rPropertyData, sal_uInt16 nPos)
+    sal_Bool OBrowserListBox::RemoveEntry( const ::rtl::OUString& _rName )
+    {
+        sal_uInt16 nPos = GetPropertyPos( _rName );
+        if ( nPos == LISTBOX_ENTRY_NOTFOUND )
+            return sal_False;
+
+        OBrowserLine* pLine = m_aLines[ nPos ];
+        pLine->Hide();
+        pLine->getControl()->setListener(NULL);
+        delete pLine->getControl();
+        delete pLine;
+        m_aLines.erase( m_aLines.begin() + nPos );
+        m_aOutOfDateLines.erase( m_aLines.size() );
+            // this index *may* have been out of date, which is obsoleted now by m_aLines shrinking
+
+        // update the positions of possibly affected lines
+        while ( nPos < m_aLines.size() )
+            m_aOutOfDateLines.insert( nPos++ );
+        UpdatePosNSize( );
+
+        return sal_True;
+    }
+
+    //------------------------------------------------------------------
+    void OBrowserListBox::ChangeEntry( const OLineDescriptor& _rPropertyData, sal_uInt16 nPos )
     {
         sal_Bool bNew=sal_True;
-        if (nPos < m_aLines.size())
+        if ( nPos == EDITOR_LIST_REPLACE_EXISTING )
+            nPos = GetPropertyPos( _rPropertyData.sName );
+
+        if ( nPos < m_aLines.size() )
         {
             Window* pRefWindow=NULL;
             if (nPos>0)
@@ -837,22 +848,15 @@ namespace pcr
                         break;
 
                     case BCT_NUMFIELD:
-                        {
-                            ONumericControl* pField = new ONumericControl( &m_aPlayGround, _rPropertyData.nDigits,
-                                                            nWinBits | WB_TABSTOP | WB_SPIN | WB_REPEAT );
-                            if (_rPropertyData.bHaveMinMax)
-                            {
-                                pField->SetMin(_rPropertyData.nMinValue);
-                                pField->SetMax(_rPropertyData.nMaxValue);
-                            }
-                            pField->SetFieldUnit( _rPropertyData.eDisplayUnit );
-                            pField->SetValueUnit( _rPropertyData.eValueUnit );
-                            pNewControl = pField;
-                        }
+                        pNewControl = new ONumericControl( &m_aPlayGround, _rPropertyData.nDigits, nWinBits | WB_TABSTOP | WB_SPIN | WB_REPEAT );
                         break;
 
                     case BCT_CURFIELD:
                         pNewControl = new OCurrencyControl( &m_aPlayGround,_rPropertyData.nDigits, nWinBits | WB_TABSTOP | WB_SPIN | WB_REPEAT );
+                        break;
+
+                    case BCT_DATETIME:
+                        pNewControl = new ODateTimeControl( &m_aPlayGround, _rPropertyData.nDigits, nWinBits | WB_TABSTOP );
                         break;
 
                     case BCT_DATEFIELD:
@@ -870,7 +874,7 @@ namespace pcr
                     case BCT_USERDEFINED:
                         DBG_ASSERT(_rPropertyData.pControl, "OBrowserListBox::ChangeEntry: invalid user defined control!");
                         pNewControl = _rPropertyData.pControl;
-                        pNewControl->SetCtrParent(&m_aPlayGround);
+                        pNewControl->GetMe()->SetParent( &m_aPlayGround );
                         break;
 
                     default:
@@ -881,8 +885,6 @@ namespace pcr
 
                 pBrowserLine->setControl(pNewControl);
                 pNewControl->SetCtrPos(aControlPos);
-                // forward the locking flag to the control
-                pNewControl->SetLocked(_rPropertyData.bIsLocked);
 
                 // remember this new control
                 pControl = pNewControl;
@@ -894,11 +896,21 @@ namespace pcr
                     pControl->ClearList();
             }
 
+            if ( BCT_NUMFIELD == _rPropertyData.eControlType )
+            {
+                if (_rPropertyData.bHaveMinMax)
+                {
+                    static_cast< ONumericControl* >( pControl )->SetMin(_rPropertyData.nMinValue);
+                    static_cast< ONumericControl* >( pControl )->SetMax(_rPropertyData.nMaxValue);
+                }
+                static_cast< ONumericControl* >( pControl )->SetFieldUnit( _rPropertyData.eDisplayUnit );
+                static_cast< ONumericControl* >( pControl )->SetValueUnit( _rPropertyData.eValueUnit );
+            }
+
             if (pControl)
             {
                 pControl->setListener(this);
                 // forward the data from the descriptor
-                pControl->SetMyData(_rPropertyData.pDataPtr);
                 pControl->SetMyName(_rPropertyData.sName);
                 pControl->SetLine(nPos);
 
@@ -923,27 +935,35 @@ namespace pcr
             if (m_nTheNameSize< nTextWidth)
                 m_nTheNameSize = nTextWidth;
 
-            if ( _rPropertyData.nUniqueButtonId )
+            if ( _rPropertyData.nButtonHelpId )
             {
-                pBrowserLine->ShowBrowseButton();
-                pBrowserLine->SetClickHdl(LINK( this, OBrowserListBox, ClickHdl ) );
+                pBrowserLine->ShowBrowseButton( _rPropertyData.aButtonImage, true );
+
+                if ( _rPropertyData.nAdditionalButtonHelpId )
+                    pBrowserLine->ShowBrowseButton( _rPropertyData.aAdditionalButtonImage, false );
+                else
+                    pBrowserLine->HideBrowseButton( false );
+
+                pBrowserLine->SetClickListener( this );
             }
             else
-                pBrowserLine->HideBrowseButton();
+            {
+                pBrowserLine->HideBrowseButton( true );
+                pBrowserLine->HideBrowseButton( false );
+            }
 
-            pBrowserLine->Locked(_rPropertyData.bIsLocked);
-
-            pBrowserLine->SetData(_rPropertyData.pDataPtr);
+            pBrowserLine->IndentTitle( _rPropertyData.bIndent );
+            pBrowserLine->SetFlags (_rPropertyData.nFlags );
 
             if (bNew)
             {
                 if (nPos>0)
                     pBrowserLine->SetTabOrder(pRefWindow, WINDOW_ZORDER_BEHIND);
                 else
-                    pBrowserLine->SetTabOrder(pRefWindow, WINDOW_ZORDER_FIRST );
+                    pBrowserLine->SetTabOrder( pRefWindow, WINDOW_ZORDER_FIRST );
 
-                pBrowserLine->SetNeedsRepaint(sal_True);
-                pBrowserLine->SetHelpId(_rPropertyData.nHelpId,_rPropertyData.nUniqueButtonId);
+                m_aOutOfDateLines.insert( nPos );
+                pBrowserLine->SetComponentHelpIds( _rPropertyData.nHelpId, _rPropertyData.nButtonHelpId, _rPropertyData.nAdditionalButtonHelpId );
             }
         }
     }
