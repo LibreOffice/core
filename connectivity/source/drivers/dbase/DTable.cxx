@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTable.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 14:17:57 $
+ *  last change: $Author: oj $ $Date: 2000-11-06 10:27:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -728,7 +728,7 @@ sal_Bool ODbaseTable::fetchRow(file::OValueRow _rRow,const OSQLColumns & _rCols,
                     pData[k] = ' ';
             }
 
-            String aStr(pData, nLen);       // Spaces am Anfang und am Ende entfernen:
+            String aStr(pData, nLen,getConnection()->getTextEncoding());        // Spaces am Anfang und am Ende entfernen:
             aStr.EraseLeadingChars();
             aStr.EraseTrailingChars();
 
