@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RtfReader.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2002-05-23 12:03:56 $
+ *  last change: $Author: oj $ $Date: 2002-05-28 08:41:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -418,13 +418,14 @@ sal_Bool ORTFReader::CreateTable(int nToken)
     sal_Bool bOk = !m_vDestVector.empty();
     if(bOk)
     {
-
         if(aColumnName.Len())
             CreateDefaultColumn(aColumnName);
 
         m_bInTbl        = sal_False;
         m_bFoundTable   = sal_True;
 
+        if ( isCheckEnabled() )
+            return sal_True;
         Any aTextColor;
         if(!m_vecColor.empty())
             aTextColor <<= m_vecColor[0];

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TokenWriter.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-23 14:51:40 $
+ *  last change: $Author: oj $ $Date: 2002-05-28 08:41:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,6 +184,7 @@ ODatabaseImportExport::ODatabaseImportExport(const ODataAccessDescriptor& _aData
     ,m_xFactory(_rM)
     ,m_nCommandType(CommandType::TABLE)
     ,m_bDisposeConnection(sal_False)
+    ,m_bCheckOnly(sal_False)
 {
 
     DBG_CTOR(ODatabaseImportExport,NULL);
@@ -222,6 +223,7 @@ ODatabaseImportExport::ODatabaseImportExport(   const ::com::sun::star::uno::Ref
     ,m_nCommandType(::com::sun::star::sdb::CommandType::TABLE)
     ,m_bDisposeConnection(sal_False)
     ,m_bInInitialize(sal_False)
+    ,m_bCheckOnly(sal_False)
 {
     DBG_CTOR(ODatabaseImportExport,NULL);
 }
@@ -599,6 +601,8 @@ BOOL ORTFImportExport::Read()
 {
     m_pReader = new ORTFReader((*m_pStream),m_xConnection,m_xFormatter,m_xFactory);
     ((ORTFReader*)m_pReader)->AddRef();
+    if ( isCheckEnabled() )
+        m_pReader->enableCheckOnly();
     SvParserState eState = ((ORTFReader*)m_pReader)->CallParser();
     m_pReader->release();
     m_pReader = NULL;
@@ -669,6 +673,8 @@ BOOL OHTMLImportExport::Read()
 {
     m_pReader = new OHTMLReader((*m_pStream),m_xConnection,m_xFormatter,m_xFactory);
     ((OHTMLReader*)m_pReader)->AddRef();
+    if ( isCheckEnabled() )
+        m_pReader->enableCheckOnly();
     SvParserState eState = ((OHTMLReader*)m_pReader)->CallParser();
     m_pReader->release();
     m_pReader = NULL;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: HtmlReader.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2002-05-23 12:03:56 $
+ *  last change: $Author: oj $ $Date: 2002-05-28 08:39:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -324,7 +324,7 @@ void OHTMLReader::NextToken( int nToken )
                 }
             case HTML_THEAD_ON:
             case HTML_TBODY_ON:
-                if(!m_xTable.is()) // erste Zeile als Header verwenden
+                if ( !m_xTable.is() ) // erste Zeile als Header verwenden
                     m_bError = !CreateTable(nToken);
                 break;
             case HTML_TABLE_OFF:
@@ -652,11 +652,18 @@ sal_Bool OHTMLReader::CreateTable(int nToken)
 
     if(aColumnName.Len())
         CreateDefaultColumn(aColumnName);
+
+    if ( m_vDestVector.empty() )
+        return sal_False;
+
     if(!aTableName.Len())
         aTableName = aTempName;
 
     m_bInTbl        = sal_False;
     m_bFoundTable   = sal_True;
+
+    if ( isCheckEnabled() )
+        return sal_True;
 
     return !executeWizard(aTableName,makeAny(nTextColor),aFont) && m_xTable.is();
 }

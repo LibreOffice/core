@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DExport.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2002-05-23 11:30:20 $
+ *  last change: $Author: oj $ $Date: 2002-05-28 08:37:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,6 +194,7 @@ ODatabaseExport::ODatabaseExport(sal_Int32 nRows,
     ,m_vFormatKey(0)
     ,m_vColumns(_rColumnPositions)
     ,m_bFoundTable(sal_False)
+    ,m_bCheckOnly(sal_False)
 {
     DBG_CTOR(ODatabaseExport,NULL);
 
@@ -247,6 +248,7 @@ ODatabaseExport::ODatabaseExport(const Reference< XConnection >& _rxConnection,
     ,m_xFactory(_rM)
     ,m_pTypeInfo(NULL)
     ,m_bFoundTable(sal_False)
+    ,m_bCheckOnly(sal_False)
 {
     DBG_CTOR(ODatabaseExport,NULL);
     try
