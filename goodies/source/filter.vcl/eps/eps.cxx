@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eps.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: sj $ $Date: 2002-09-24 14:44:21 $
+ *  last change: $Author: thb $ $Date: 2002-11-01 14:14:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1537,7 +1537,12 @@ void PSWriter::ImplPolyLine( const Polygon & rPoly )
                         ImplLineTo( rPoly.GetPoint( i++ ), PS_SPACE | PS_WRAP );
                 }
             }
-            ImplPathDraw();
+
+            // #104645# explicitely close path if polygon is closed
+            if( rPoly[ 0 ] == rPoly[ nPointCount-1 ] )
+                ImplClosePathDraw( PS_RET );
+            else
+                ImplPathDraw();
         }
     }
 }
