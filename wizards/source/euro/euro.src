@@ -2,9 +2,9 @@
  *
  *  $RCSfile: euro.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2000-12-01 08:54:43 $
+ *  last change: $Author: kz $ $Date: 2000-12-04 12:00:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1323,21 +1323,21 @@ Text[ english_us ] = "Cancel";
 {
 Text = "Bitte wählen Sie ein %PRODUCTNAME Calc-Dokument zur Bearbeitung aus!";
 Text[English] = "Please choose a StarOffice Calc-document to work on!";
-Text[ english_us ] = "Please choose a %PRODUCTNAME Calc-document to work on!";
+Text[ english_us ] = "Please select a %PRODUCTNAME Calc document for editing!";
     Text[ portuguese ] = "Please choose a %PRODUCTNAME Calc-document to work on!";
     Text[ russian ] = "Please choose a %PRODUCTNAME Calc-document to work on!";
     Text[ greek ] = "Please choose a %PRODUCTNAME Calc-document to work on!";
     Text[ dutch ] = "Please choose a %PRODUCTNAME Calc-document to work on!";
-    Text[ french ] = "Please choose a %PRODUCTNAME Calc-document to work on!";
-    Text[ spanish ] = "Please choose a %PRODUCTNAME Calc-document to work on!";
+    Text[ french ] = "Sélectionnez un document %PRODUCTNAME Calc pour l'édition !";
+    Text[ spanish ] = "Elija un documento %PRODUCTNAME Calc para trabajar";
     Text[ italian ] = "Please choose a %PRODUCTNAME Calc-document to work on!";
     Text[ danish ] = "Please choose a %PRODUCTNAME Calc-document to work on!";
     Text[ swedish ] = "Välj ett %PRODUCTNAME Calc-dokument som du vill redigera!";
-    Text[ polish ] = "Please choose a %PRODUCTNAME Calc-document to work on!";
+    Text[ polish ] = "Nale¿y wybraæ dokument %PRODUCTNAME Calc, który ma zostaæ opracowany.";
     Text[ portuguese_brazilian ] = "Please choose a %PRODUCTNAME Calc-document to work on!";
     Text[ japanese ] = "Please choose a %PRODUCTNAME Calc-document to work on!";
-    Text[ korean ] = "Please choose a %PRODUCTNAME Calc-document to work on!";
-    Text[ chinese_simplified ] = "Please choose a %PRODUCTNAME Calc-document to work on!";
+    Text[ korean ] = "ÆíÁýÇÏ±â À§ÇØ %PRODUCTNAME Calc-¹®¼­¸¦  ¼±ÅÃÇÏ½Ê½Ã¿À!";
+    Text[ chinese_simplified ] = "ÇëÄúÑ¡ÔñÒ»¸öÒª±à¼­µÄ %PRODUCTNAME Calc ÎÄµµ£¡";
     Text[ chinese_traditional ] = "Please choose a %PRODUCTNAME Calc-document to work on!";
     Text[ turkish ] = "Please choose a %PRODUCTNAME Calc-document to work on!";
     Text[ arabic ] = "Please choose a %PRODUCTNAME Calc-document to work on!";
@@ -1348,21 +1348,21 @@ String MESSAGES + 20
 {
 Text = "'<1>' ist kein Verzeichnis!";
 Text[English] = "<1> is not a directory!";
-Text[ english_us ] = "<1> is not a directory!";
+Text[ english_us ] = "'<1>' is not a directory!";
     Text[ portuguese ] = "<1> is not a directory!";
     Text[ russian ] = "<1> is not a directory!";
-    Text[ greek ] = "<1> is not a directory!";
+    Text[ greek ] = "Ôï '<1>' äåí åßíáé êáôÜëïãïò!";
     Text[ dutch ] = "<1> is not a directory!";
-    Text[ french ] = "<1> is not a directory!";
-    Text[ spanish ] = "<1> is not a directory!";
+    Text[ french ] = "<1> n'est pas un répertoire !";
+    Text[ spanish ] = "¡'<1>' no es un directorio!";
     Text[ italian ] = "<1> is not a directory!";
     Text[ danish ] = "<1> is not a directory!";
     Text[ swedish ] = "<1> är inte en katalog!";
-    Text[ polish ] = "<1> is not a directory!";
+    Text[ polish ] = "<1> nie jest katalogiem!";
     Text[ portuguese_brazilian ] = "<1> is not a directory!";
     Text[ japanese ] = "<1> is not a directory!";
-    Text[ korean ] = "<1> is not a directory!";
-    Text[ chinese_simplified ] = "<1> is not a directory!";
+    Text[ korean ] = "'<1>'Àº(´Â) µð·ºÅä¸®°¡ ¾Æ´Õ´Ï´Ù!";
+    Text[ chinese_simplified ] = "'<1>' ²»ÊÇÒ»¸öÄ¿Â¼£¡";
     Text[ chinese_traditional ] = "<1> is not a directory!";
     Text[ turkish ] = "<1> is not a directory!";
     Text[ arabic ] = "<1> is not a directory!";
