@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parse.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 13:25:22 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 15:08:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -408,6 +408,8 @@ static const SmTokenTableEntry * GetTokenTableEntry( const String &rName )
 
 ///////////////////////////////////////////////////////////////////////////
 
+#if OSL_DEBUG_LEVEL
+
 BOOL SmParser::IsDelimiter( const String &rTxt, xub_StrLen nPos )
     // returns 'TRUE' iff cChar is '\0' or a delimeter
 {
@@ -432,6 +434,7 @@ BOOL SmParser::IsDelimiter( const String &rTxt, xub_StrLen nPos )
     return bIsDelim;
 }
 
+#endif
 
 void SmParser::Insert(const String &rText, USHORT nPos)
 {
@@ -2387,43 +2390,6 @@ SmParser::SmParser()
     eConversion = CONVERT_NONE;
     bImportSymNames = bExportSymNames = FALSE;
     nLang = Application::GetSettings().GetUILanguage();
-}
-
-
-BOOL SmParser::CheckSyntax(const String &rBuffer)
-{
-    SmErrDescList OldErrorList;
-
-    BufferString = rBuffer;
-    BufferString.ConvertLineEnd( LINEEND_LF );
-    BufferIndex  =
-    nTokenIndex  = 0;
-    Row    = 1;
-    ColOff = 0;
-
-    NodeStack.Clear();
-
-    OldErrorList = ErrDescList;
-    ErrDescList.Clear();
-
-    SetLanguage( Application::GetSettings().GetUILanguage() );
-    NextToken();
-    Table();
-
-    delete NodeStack.Pop();
-
-    if (ErrDescList.Count() > 0)
-    {
-        for (USHORT i = 0;  i < ErrDescList.Count();  i++)
-            delete ErrDescList.Remove(i);
-
-        ErrDescList = OldErrorList;
-
-        return (FALSE);
-    }
-    ErrDescList = OldErrorList;
-
-    return (TRUE);
 }
 
 
