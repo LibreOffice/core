@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typelib.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-09 12:10:57 $
+ *  last change: $Author: dbo $ $Date: 2001-03-12 11:41:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,9 +60,9 @@
  ************************************************************************/
 
 #ifdef CPPU_ASSERTIONS
-#define CPPU_TRACE(x) OSL_TRACE(x)
+#define CPPU_TRACE OSL_TRACE
 #else
-#define CPPU_TRACE(x)
+#define CPPU_TRACE
 #endif
 
 #include <hash_map>
@@ -373,16 +373,12 @@ TypeDescriptor_Init_Impl::~TypeDescriptor_Init_Impl() SAL_THROW( () )
         aIt = pWeakMap->begin();
         while( aIt != pWeakMap->end() )
         {
-            CPPU_TRACE( "\n" );
             typelib_TypeDescriptionReference * pTDR = (*aIt).second;
             if (pTDR)
             {
                 OString aTypeName( OUStringToOString( pTDR->pTypeName, RTL_TEXTENCODING_ASCII_US ) );
-                OString aRef( OString::valueOf( pTDR->nRefCount ) );
-                CPPU_TRACE( "### remaining type: " );
-                CPPU_TRACE( aTypeName.getStr() );
-                CPPU_TRACE( ", ref count = " );
-                CPPU_TRACE( aRef.getStr() );
+                CPPU_TRACE( "### remaining type: %s; ref count = %d",
+                            aTypeName.getStr(), pTDR->nRefCount );
             }
             else
             {
@@ -498,8 +494,7 @@ static inline void typelib_typedescription_initTables(
             else
             {
                 OString aStr( OUStringToOString( pITD->ppAllMembers[i]->pTypeName, RTL_TEXTENCODING_ASCII_US ) );
-                CPPU_TRACE( "\n### cannot get attribute type description: " );
-                CPPU_TRACE( aStr.getStr() );
+                CPPU_TRACE( "\n### cannot get attribute type description: %s", aStr.getStr() );
             }
 #endif
         }
@@ -2131,8 +2126,7 @@ extern "C" SAL_DLLEXPORT sal_Bool SAL_CALL typelib_typedescription_complete(
         {
 #ifdef CPPU_ASSERTIONS
             OString aStr( OUStringToOString( (*ppTypeDescr)->pTypeName, RTL_TEXTENCODING_ASCII_US ) );
-            CPPU_TRACE( "\n### type cannot be completed: " );
-            CPPU_TRACE( aStr.getStr() );
+            CPPU_TRACE( "\n### type cannot be completed: %s", aStr.getStr() );
 #endif
             return sal_False;
         }
