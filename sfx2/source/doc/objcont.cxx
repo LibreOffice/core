@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objcont.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-12 09:13:47 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:01:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1918,10 +1918,7 @@ SfxObjectShellRef MakeObjectShellForOrganizer_Impl( const String& aTargetURL, BO
         if ( SVSTREAM_OK == xStor->GetError() )
         {
             // create document
-            const SfxObjectFactory &rFactory =
-                ((SfxFactoryFilterContainer*)pFilter->GetFilterContainer())->GetFactory();
-
-            xDoc = (SfxObjectShell *) rFactory.CreateObject( SFX_CREATE_MODE_ORGANIZER );
+            xDoc = SfxObjectShell::CreateObject( pFilter->GetServiceName(), SFX_CREATE_MODE_ORGANIZER );
             if ( xDoc.Is() )
             {
                 // partially load, so don't use DoLoad!
