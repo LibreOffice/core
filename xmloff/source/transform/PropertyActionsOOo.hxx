@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyActionsOOo.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 10:38:53 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:11:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,7 @@ enum XMLPropOOOTransformerAction
     XML_PTACTION_SYMBOL,
     XML_PTACTION_SYMBOL_IMAGE_NAME,
     XML_PTACTION_TRANSPARENCY,
+    XML_PTACTION_BREAK_INSIDE,
     XML_ATACTION_CAPTION_ESCAPE_OOO,
     XML_ATACTION_MOVE_PROTECT,
     XML_ATACTION_SIZE_PROTECT,
