@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.hxx,v $
  *
- *  $Revision: 1.97 $
+ *  $Revision: 1.98 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-05 11:33:18 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 15:39:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -768,15 +768,10 @@ struct SwPropNameLen
 typedef const SwPropNameLen SwPropNameTab[ SW_PROPNAME_END - SW_PROPNAME_BEGIN ];
 extern const SwPropNameTab aPropNameTab;
 
-#ifndef PRODUCT
+// !!! function must not(!) be inline because it is called via the below  !!!
+// !!! listed macros from the swui DLL and that can not access the        !!!
+// !!! array aPropNameTab which is located in a different DLL.            !!!
 const SwPropNameLen& GetPropName( USHORT nId );
-#else
-inline const SwPropNameLen& GetPropName( USHORT nId )
-{
-    return aPropNameTab[ nId - SW_PROPNAME_BEGIN];
-}
-#endif
-
 
 
 #define SW_PROP_NAME(nId) \
