@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:13:42 $
+#   last change: $Author: dg $ $Date: 2000-11-23 12:04:19 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,6 +79,7 @@ ENVCFLAGS+=/FR$(SLO)$/
 
 SLOFILES=\
     $(SLO)$/changes.obj		\
+    $(SLO)$/treeactions.obj		\
     $(SLO)$/cmtreemodel.obj	\
     $(SLO)$/cmtree.obj
     
