@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxpicklist.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-12 16:48:32 $
+ *  last change: $Author: mba $ $Date: 2001-11-01 18:09:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -313,7 +313,6 @@ void SfxPickList::ExecuteEntry( sal_uInt32 nIndex )
         aReq.AppendItem( SfxStringItem( SID_FILE_NAME, pPick->aName ));
         aReq.AppendItem( SfxStringItem( SID_REFERER, DEFINE_CONST_UNICODE( SFX_REFERER_USER ) ) );
         aReq.AppendItem( SfxStringItem( SID_TARGETNAME, DEFINE_CONST_UNICODE("_blank") ) );
-        aReq.AppendItem( SfxBoolItem( SID_DOC_READONLY, FALSE ) );
         String aFilter( pPick->aFilter );
         aGuard.clear();
 
