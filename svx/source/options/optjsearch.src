@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optjsearch.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hjs $ $Date: 2001-05-12 06:36:04 $
+ *  last change: $Author: kz $ $Date: 2001-05-16 15:30:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,7 +143,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ italian ] = "Forme larghezza normale/dimezzata";
         Text[ danish ] = "Match full/half width form";
         Text[ swedish ] = "Normala/halvbreda former";
-        Text[ polish ] = "Zwyk≥a/po≥owa szerokoúci";
+        Text[ polish ] = "Zwyk≥a/po≥owa szeroko?ci";
         Text[ portuguese_brazilian ] = "Match full/half width form";
         Text[ japanese ] = "ëSäp/îºäp";
         Text[ korean ] = "¿¸∆¯/π›∆¯ «¸Ωƒ";
@@ -227,7 +227,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ italian ] = "Meno/trattino/cho-on";
         Text[ danish ] = "Match minus/dash/cho-on";
         Text[ swedish ] = "Minus/bindestreck/cho-on";
-        Text[ polish ] = "Minus/myúlnik/cho-on";
+        Text[ polish ] = "Minus/my?lnik/cho-on";
         Text[ portuguese_brazilian ] = "Match minus/dash/cho-on";
         Text[ japanese ] = "É}ÉCÉiÉX/ÉnÉCÉtÉì/í∑âπ[Å|/Å]/Å[]";
         Text[ korean ] = "∏∂¿Ã≥ Ω∫/¥ÎΩ√/cho-on";
@@ -643,7 +643,7 @@ TabPage RID_SVXPAGE_JSEARCH_OPTIONS
         Text[ italian ] = "Punto al centro";
         Text[ danish ] = "Middle dots";
         Text[ swedish ] = "Mittpunkt";
-        Text[ polish ] = "Kropka poúrodku";
+        Text[ polish ] = "Kropka po?rodku";
         Text[ portuguese_brazilian ] = "Middle dots";
         Text[ japanese ] = "íÜçï";
         Text[ korean ] = "¡ﬂ∞£ ¡°";
