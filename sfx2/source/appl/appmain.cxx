@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appmain.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 19:53:21 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 15:41:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,7 @@
 #include <svtools/urihelper.hxx>
 #include <svtools/helpopt.hxx>
 #include <vos/process.hxx>
+#include <framework/sfxhelperfunctions.hxx>
 
 #include "appimp.hxx"
 #include "sfxtypes.hxx"
@@ -115,6 +116,7 @@
 #include "objuno.hxx"
 #include "app.hrc"
 #include "docfile.hxx"
+#include "workwin.hxx"
 #if SUPD<613//MUSTINI
 #include "inimgr.hxx"
 #endif
@@ -220,6 +222,7 @@ void SfxApplication::Init
     }
 #endif
 #endif
+    SetToolBoxCreator( CreateToolBox );
 }
 
 //--------------------------------------------------------------------
