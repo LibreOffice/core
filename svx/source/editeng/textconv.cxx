@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textconv.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 15:49:23 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 13:45:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,13 @@
 #include <com/sun/star/lang/Locale.hpp>
 #endif
 
+#ifndef _SVX_LANGITEM_HXX
+#include <langitem.hxx>
+#endif
+#ifndef _SVX_FONTITEM_HXX
+#include <fontitem.hxx>
+#endif
+
 #ifndef _TEXTCONV_HXX
 #include "textconv.hxx"
 #endif
@@ -93,20 +100,27 @@ using namespace com::sun::star::linguistic2;
 
 TextConvWrapper::TextConvWrapper( Window* pWindow,
         const Reference< XMultiServiceFactory >& rxMSF,
-        const Locale& rLocale,
+        const Locale& rSourceLocale,
+        const Locale& rTargetLocale,
+        const Font* pTargetFont,
+        sal_Int32 nOptions,
+        sal_Bool bIsInteractive,
         BOOL bIsStart,
         EditView* pView ) :
-    HangulHanjaConversion( pWindow, rxMSF, rLocale )
+    HangulHanjaConversion( pWindow, rxMSF, rSourceLocale, rTargetLocale, pTargetFont, nOptions, bIsInteractive )
 {
     DBG_ASSERT( pWindow, "TextConvWrapper: window missing" );
 
     nUnitOffset = 0;
-    nLang = SvxLocaleToLanguage( rLocale );
+//    nSourceLang = SvxLocaleToLanguage( rSourceLocale );
+//    nTargetLang = SvxLocaleToLanguage( rTargetLocale );
 
+#ifdef TL_OLD
     // currently this implementation only works for Korean (Hangu/Hanja conversion)
     // since it is derived by 'HangulHanjaConversion' and there is not
     // a more general base class for text conversion yet...
     DBG_ASSERT( nLang == LANGUAGE_KOREAN, "unexpected language" );
+#endif
 
     bStartChk   = sal_False;
     bStartDone  = bIsStart;
@@ -313,7 +327,7 @@ sal_Bool TextConvWrapper::ConvContinue_impl()
 {
     // modified version of EditSpellWrapper::SpellContinue
 
-    aConvText = pEditView->GetImpEditEngine()->ImpConvert( pEditView, nLang, aConvSel );
+    aConvText = pEditView->GetImpEditEngine()->ImpConvert( pEditView, GetSourceLanguage(), aConvSel );
     return aConvText.getLength() != 0;
 }
 
@@ -400,6 +414,43 @@ void TextConvWrapper::ReplaceUnit(
     nUnitOffset += (USHORT) (nUnitStart + aNewTxt.getLength() );
 
     pEditView->InsertText( aNewTxt );
+
+    // change language and font if necessary
+    if (GetSourceLanguage() != GetTargetLanguage())
+    {
+        DBG_ASSERT( GetTargetLanguage() == LANGUAGE_CHINESE_SIMPLIFIED || GetTargetLanguage() == LANGUAGE_CHINESE_TRADITIONAL,
+                "TextConvWrapper::ReplaceUnit : unexpected target language" );
+
+        ESelection aOldSel = pEditView->GetSelection();
+        ESelection aNewSel( aOldSel );
+        aNewSel.nStartPos -= (xub_StrLen) aNewTxt.getLength();
+        DBG_ASSERT( aOldSel.nEndPos >= 0, "error while building selection" );
+
+        pEditView->SetSelection( aNewSel );
+
+        // get new language
+        SfxItemSet aNewSet( pEditView->GetEmptyItemSet() );
+        aNewSet.Put( SvxLanguageItem( GetTargetLanguage(), EE_CHAR_LANGUAGE_CJK ) );
+
+        // new font to be set?
+        const Font *pTargetFont = GetTargetFont();
+        DBG_ASSERT( pTargetFont, "target font missing?" );
+        if (pTargetFont)
+        {
+            SvxFontItem aFontItem = (SvxFontItem&) aNewSet.Get( EE_CHAR_FONTINFO_CJK );
+            aFontItem.GetFamilyName()   = pTargetFont->GetName();
+            aFontItem.GetFamily()       = pTargetFont->GetFamily();
+            aFontItem.GetStyleName()    = pTargetFont->GetStyleName();
+            aFontItem.GetPitch()        = pTargetFont->GetPitch();
+            aFontItem.GetCharSet()      = pTargetFont->GetCharSet();
+            aNewSet.Put( aFontItem );
+        }
+
+        // set new language and font attributes
+        pEditView->SetAttribs( aNewSet );
+
+        pEditView->SetSelection( aOldSel );
+    }
 
     // adjust ConvContinue / ConvTo if necessary
     ImpEditEngine* pImpEE = pEditView->GetImpEditEngine();
