@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pgfnote.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:00:52 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:11:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ TabPage TP_FOOTNOTE_PAGE
         Text [ portuguese_brazilian ] = "Me~nor que a �rea da p�gina" ;
         Text [ portuguese ] = "N�o superior � �rea da p�gina" ;
         Text [ finnish ] = "E~i sivualuetta suurempi" ;
-        Text [ danish ] = "Op til maksimal sideh�jde" ;
+        Text [ danish ] = "~Op til maksimal sideh�jde" ;
         Text [ french ] = "Hauteur maximale de la p~age" ;
         Text [ swedish ] = "H�jd maximalt som ~sida" ;
         Text [ dutch ] = "Pag~inahoogte is max. hoogte" ;
@@ -102,6 +102,8 @@ TabPage TP_FOOTNOTE_PAGE
         Text[ hebrew ] = "Höhe maximal wie ~Seite";
         Text[ hindi ] = "पृष्ठ विस्ती~र्ण से अधिक नहीं";
         Text[ slovak ] = "~Nie väčší ako oblasť stránky";
+        Text[ hungarian ] = "~Lábjegyzet automatikus méretezése";
+        Text[ slovenian ] = "Ne ~večje kot področje strani";
     };
     RadioButton RB_MAXHEIGHT
     {
@@ -136,6 +138,8 @@ TabPage TP_FOOTNOTE_PAGE
         Text[ hebrew ] = "Ma~x. Höhe der Fußnote";
         Text[ hindi ] = "पृष्ठ के ~नीचे की टीका का अधिकतम ऊँचाई";
         Text[ slovak ] = "Maximálna ~výška zápätia";
+        Text[ hungarian ] = "Lá~bjegyzet maximális magassága";
+        Text[ slovenian ] = "Največja ~višina sprotne opombe";
     };
     MetricField ED_MAXHEIGHT
     {
@@ -167,7 +171,7 @@ TabPage TP_FOOTNOTE_PAGE
         Text [ portuguese_brazilian ] = "Dist�ncia at� corpo do texto" ;
         Text [ portuguese ] = "~Dist�ncia at� corpo do texto" ;
         Text [ finnish ] = "Et�isyys tekstist�" ;
-        Text [ danish ] = "Afstand til br�dtekst" ;
+        Text [ danish ] = "Afstand til tekst" ;
         Text [ french ] = "~�cart du corps de texte" ;
         Text [ swedish ] = "~Avst�nd till br�dtext" ;
         Text [ dutch ] = "A~fstand tot tekst" ;
@@ -190,6 +194,8 @@ TabPage TP_FOOTNOTE_PAGE
         Text[ hebrew ] = "~Abstand zum Textkörper";
         Text[ hindi ] = "टेक्स्ट् केलिए अंतर";
         Text[ slovak ] = "Vzdialenosť k textu";
+        Text[ hungarian ] = "~Távolság a szövegtől";
+        Text[ slovenian ] = "Razmik do besedila";
     };
     MetricField ED_DIST
     {
@@ -241,6 +247,8 @@ TabPage TP_FOOTNOTE_PAGE
         Text[ hebrew ] = "Fußnotenbereich";
         Text[ hindi ] = "पृष्ठ के नीचे की टीका का विस्तीर्ण";
         Text[ slovak ] = "Oblasť poznámok pod čiarou";
+        Text[ hungarian ] = "Lábjegyzet";
+        Text[ slovenian ] = "Področje sprotne opombe";
     };
     FixedText FT_LINEPOS
     {
@@ -253,7 +261,7 @@ TabPage TP_FOOTNOTE_PAGE
         Text [ english_us ] = "~Position" ;
         Text [ portuguese_brazilian ] = "~Posi��o" ;
         Text [ swedish ] = "~Position" ;
-        Text [ danish ] = "Placering" ;
+        Text [ danish ] = "~Placering" ;
         Text [ italian ] = "Posizione" ;
         Text [ spanish ] = "~Posici�n" ;
         Text [ french ] = "Position" ;
@@ -275,6 +283,8 @@ TabPage TP_FOOTNOTE_PAGE
         Text[ hebrew ] = "‮מיקום‬";
         Text[ hindi ] = "~स्थान";
         Text[ slovak ] = "U~miestnenie";
+        Text[ hungarian ] = "~Pozíció";
+        Text[ slovenian ] = "~Položaj";
     };
     ListBox DLB_LINEPOS
     {
@@ -458,6 +468,18 @@ TabPage TP_FOOTNOTE_PAGE
         < "Na stred" ; Default ; > ;
         < "Vpravo" ; Default ; > ;
     };
+    StringList [ hungarian ] =
+    {
+         < "Bal oldalon" ; Default ; > ;
+        < "Középen" ; Default ; > ;
+        < "Jobb oldalon" ; Default ; > ;
+    };
+    StringList [ slovenian ] =
+    {
+         < "Levo" ; Default ; > ;
+        < "Na sredini" ; Default ; > ;
+        < "Desno" ; Default ; > ;
+    };
     };
     FixedText FT_LINETYPE
     {
@@ -471,11 +493,11 @@ TabPage TP_FOOTNOTE_PAGE
         Text [ english_us ] = "~Weight" ;
         Text [ portuguese_brazilian ] = "~Espessura do tra�o" ;
         Text [ swedish ] = "Styr~ka" ;
-        Text [ danish ] = "Styrke" ;
+        Text [ danish ] = "~V�gt" ;
         Text [ italian ] = "~Spessore" ;
         Text [ spanish ] = "~Espesor" ;
         Text [ french ] = "~�paisseur" ;
-        Text [ dutch ] = "~Sterkte" ;
+        Text [ dutch ] = "~Lijndikte" ;
         Text[ chinese_simplified ] = "线条粗细(~W)";
         Text[ russian ] = "������� �����";
         Text[ polish ] = "~Grubo��";
@@ -493,6 +515,8 @@ TabPage TP_FOOTNOTE_PAGE
         Text[ hebrew ] = "Stär~ke";
         Text[ hindi ] = "~भार";
         Text[ slovak ] = "~Hrúbka";
+        Text[ hungarian ] = "~Vonalvastagság";
+        Text[ slovenian ] = "~Debelina";
     };
     ListBox DLB_LINETYPE
     {
@@ -515,7 +539,7 @@ TabPage TP_FOOTNOTE_PAGE
         Text [ english_us ] = "~Length" ;
         Text [ portuguese_brazilian ] = "~Comprimento" ;
         Text [ swedish ] = "L�n~gd" ;
-        Text [ danish ] = "L�ngde" ;
+        Text [ danish ] = "~L�ngde" ;
         Text [ italian ] = "~Lunghezza" ;
         Text [ spanish ] = "~Longitud" ;
         Text [ french ] = "~Longueur" ;
@@ -537,6 +561,8 @@ TabPage TP_FOOTNOTE_PAGE
         Text[ hebrew ] = "Län~ge";
         Text[ hindi ] = "~लम्बाई";
         Text[ slovak ] = "~Dĺžka";
+        Text[ hungarian ] = "~Hosszúság";
+        Text[ slovenian ] = "Do~lžina";
     };
     MetricField ED_LINEWIDTH
     {
@@ -565,7 +591,7 @@ TabPage TP_FOOTNOTE_PAGE
         Text [ portuguese_brazilian ] = "~Afastamento at� a nota de rodap�" ;
         Text [ portuguese ] = "E~spa�am. entre tra�o e texto" ;
         Text [ finnish ] = "~Et�isyys alaviitteiden sis�ll�st�" ;
-        Text [ danish ] = "A~fstand til fodnoteindholdet" ;
+        Text [ danish ] = "~Afstand til fodnoteindholdet" ;
         Text [ french ] = "~�cart entre trait et texte" ;
         Text [ swedish ] = "Avst�n~d till fotnotens inneh�ll" ;
         Text [ dutch ] = "~Afstand tot inhoud voetnoot" ;
@@ -588,6 +614,8 @@ TabPage TP_FOOTNOTE_PAGE
         Text[ hebrew ] = "Abstan~d zum Fußnoteninhalt";
         Text[ hindi ] = "पृष्ठ ~के नीचे की टीका के विषय को अंतर देना";
         Text[ slovak ] = "~Vzdialenosť k obsahu zápätia";
+        Text[ hungarian ] = "Lábj~egyzet és az elválasztó távolsága";
+        Text[ slovenian ] = "~Razmik do vsebine sprotne opombe";
     };
     MetricField ED_LINEDIST
     {
@@ -617,7 +645,7 @@ TabPage TP_FOOTNOTE_PAGE
         Text [ portuguese_brazilian ] = "Linha de separa��o" ;
         Text [ portuguese ] = "Linha de separa��o" ;
         Text [ finnish ] = "Erotinviiva" ;
-        Text [ danish ] = "Separator" ;
+        Text [ danish ] = "Skillelinje" ;
         Text [ french ] = "Trait de s�paration" ;
         Text [ swedish ] = "Skiljelinje" ;
         Text [ dutch ] = "Scheidingslijn" ;
@@ -639,46 +667,7 @@ TabPage TP_FOOTNOTE_PAGE
         Text[ hebrew ] = "Trennlinie";
         Text[ hindi ] = "अलगानेवाला रेखा";
         Text[ slovak ] = "Oddeľovacia čiara";
+        Text[ hungarian ] = "Elválasztó vonal";
+        Text[ slovenian ] = "Ločilna črta";
     };
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
