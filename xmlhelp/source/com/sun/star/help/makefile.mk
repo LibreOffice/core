@@ -3,9 +3,9 @@
 #*    $Workfile:$
 #*
 #*    Creation date     KR 28.06.99
-#*    last change       $Author: abi $ $Date: 2000-10-16 11:51:47 $
+#*    last change       $Author: abi $ $Date: 2000-10-30 10:35:11 $
 #*
-#*    $Revision: 1.2 $
+#*    $Revision: 1.3 $
 #*
 #*    $Logfile:$
 #*
@@ -22,7 +22,7 @@ TARGET  = com_sun_star_help
 
 .INCLUDE : settings.mk
 
-JARFILES 		= sandbox.jar unoil.jar jurt.jar juh.jar jut.jar bdb.jar sax.jar xp.jar xt.jar
+JARFILES 		= jaxp.jar parser.jar xt.jar unoil.jar jurt.jar jut.jar db31.jar
 EXTRAJARFILES 	=  
 
 CLASSGENDIR		= $(OUT)$/classgen
@@ -36,17 +36,19 @@ JAVAFILES		= $(subst,$(CLASSDIR)$/$(PACKAGE)$/, $(subst,.class,.java $(JAVACLASS
 # --- Files --------------------------------------------------------
 
 JAVACLASSFILES = \
-    $(CLASSDIR)$/$(PACKAGE)$/HelpServer.class                  \
-    $(CLASSDIR)$/$(PACKAGE)$/HelpContentIdentifier.class       \
-    $(CLASSDIR)$/$(PACKAGE)$/HelpProvider.class                \
-    $(CLASSDIR)$/$(PACKAGE)$/HelpContent.class                 \
-    $(CLASSDIR)$/$(PACKAGE)$/HelpURLStreamHandlerFactory.class \
-    $(CLASSDIR)$/$(PACKAGE)$/HelpURLStreamHandler.class        \
-    $(CLASSDIR)$/$(PACKAGE)$/HelpURLConnection.class           \
-    $(CLASSDIR)$/$(PACKAGE)$/CreateDb.class                    \
-    $(CLASSDIR)$/$(PACKAGE)$/OutputStreamImpl.class            \
-    $(CLASSDIR)$/$(PACKAGE)$/ParameterImpl.class               \
-    $(CLASSDIR)$/$(PACKAGE)$/XSLData.class                     \
+    $(CLASSDIR)$/$(PACKAGE)$/HelpServer.class                   \
+    $(CLASSDIR)$/$(PACKAGE)$/HelpContentIdentifier.class        \
+    $(CLASSDIR)$/$(PACKAGE)$/HelpProvider.class                 \
+    $(CLASSDIR)$/$(PACKAGE)$/HelpContent.class                  \
+    $(CLASSDIR)$/$(PACKAGE)$/HelpURLStreamHandlerFactory.class  \
+    $(CLASSDIR)$/$(PACKAGE)$/HelpURLStreamHandler.class         \
+    $(CLASSDIR)$/$(PACKAGE)$/HelpURLConnection.class            \
+    $(CLASSDIR)$/$(PACKAGE)$/HelpURLStreamHandlerWithJars.class \
+    $(CLASSDIR)$/$(PACKAGE)$/HelpURLConnectionWithJars.class    \
+    $(CLASSDIR)$/$(PACKAGE)$/CreateDb.class                     \
+    $(CLASSDIR)$/$(PACKAGE)$/OutputStreamImpl.class             \
+    $(CLASSDIR)$/$(PACKAGE)$/ParameterImpl.class                \
+    $(CLASSDIR)$/$(PACKAGE)$/XSLData.class                      \
     $(CLASSDIR)$/$(PACKAGE)$/StringDbt.class
 
 
