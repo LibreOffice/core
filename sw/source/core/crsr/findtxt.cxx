@@ -2,9 +2,9 @@
  *
  *  $RCSfile: findtxt.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fme $ $Date: 2002-08-02 09:33:17 $
+ *  last change: $Author: fme $ $Date: 2002-08-02 11:01:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -280,8 +280,8 @@ BYTE SwPaM::Find( const SearchOptions& rSearchOpt, utl::TextSearch& rSTxt,
                                 aFltArr, sCleanStr );
 
             SwScriptIterator* pScriptIter = 0;
-            USHORT nSearchScript;
-            USHORT nCurrScript;
+            USHORT nSearchScript = 0;
+            USHORT nCurrScript = 0;
 
             if ( SearchAlgorithms_APPROXIMATE == rSearchOpt.algorithmType &&
                  pBreakIt->xBreak.is() )
