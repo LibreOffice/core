@@ -637,8 +637,8 @@
             </node>
             <node oor:name=".uno:InsertExternalDataSource" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">E~xterne Daten...</value>
-                    <value xml:lang="en-US">E~xternal Data...</value>
+                                        <value xml:lang="de">Verknüpfung zu e~xternen Daten...</value>
+                                        <value xml:lang="en-US">Link to E~xternal Data...</value>
                     <value xml:lang="ar">External Data Source...</value>
                     <value xml:lang="no">E~xternal Data...</value>
                     <value xml:lang="ca">Font de dades externa...</value>
@@ -1811,7 +1811,7 @@
             </node>
             <node oor:name=".uno:StarChartDialog" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">D~iagramm...</value>
+                                        <value xml:lang="de">~Diagramm...</value>
                     <value xml:lang="en-US">Ch~art...</value>
                     <value xml:lang="ar">...رسم بياني</value>
                     <value xml:lang="no">Ch~art...</value>
@@ -4037,6 +4037,12 @@
                     <value xml:lang="pt">~Folha...</value>
                 </prop>
             </node>
+                        <node oor:name=".uno:InsertSheetFromFile" oor:op="replace">
+                                <prop oor:name="Label" oor:type="xs:string">
+                                        <value xml:lang="de">Ta~belle aus Datei...</value>
+                                        <value xml:lang="en-US">Shee~t from file...</value>
+                                </prop>
+                        </node>
             <node oor:name=".uno:DefineName" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">~Festlegen...</value>
