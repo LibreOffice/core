@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwshe.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2001-11-14 20:30:03 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 12:08:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,7 +116,8 @@ String __EXPORT ScTabViewShell::GetSelectionText( BOOL bWholeWord )
                 ScHorizontalCellIterator aIter( pDoc, aRange.aStart.Tab(),
                     aRange.aStart.Col(), aRange.aStart.Row(),
                     aRange.aEnd.Col(), aRange.aEnd.Row() );
-                USHORT nCol, nRow;
+                SCCOL nCol;
+                SCROW nRow;
                 if ( aIter.GetNext( nCol, nRow ) )
                 {
                     aRange.aStart.SetCol( nCol );
@@ -179,8 +180,8 @@ void ScTabViewShell::InsertURL( const String& rName, const String& rURL, const S
             //  -> use InsertBookmark to directly manipulate cell content
             //  bTryReplace=TRUE -> if cell contains only one URL, replace it
 
-            USHORT nPosX = GetViewData()->GetCurX();
-            USHORT nPosY = GetViewData()->GetCurY();
+            SCCOL nPosX = GetViewData()->GetCurX();
+            SCROW nPosY = GetViewData()->GetCurY();
             InsertBookmark( rName, rURL, nPosX, nPosY, &rTarget, TRUE );
         }
     }
