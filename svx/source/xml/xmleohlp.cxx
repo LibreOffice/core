@@ -2,7 +2,7 @@
  *
  *  $RCSfile: xmleohlp.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
  *  last change: $Author: cl $
  *
@@ -402,7 +402,8 @@ sal_Bool SvXMLEmbeddedObjectHelper::ImplGetStorageNames(
             sal_Int32 nPathStart = 1;
             if( 0 == rURLStr.compareToAscii( "#./", 3 ) )
                 nPathStart = 3;
-            rContainerStorageName = rURLStr.copy( nPathStart, nPos-nPathStart);
+            if( nPos >= nPathStart )
+                rContainerStorageName = rURLStr.copy( nPathStart, nPos-nPathStart);
             rObjectStorageName = rURLStr.copy( nPos+1 );
         }
     }
