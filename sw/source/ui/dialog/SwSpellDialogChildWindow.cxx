@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwSpellDialogChildWindow.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 14:01:49 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 17:04:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,6 +166,7 @@ struct SpellState
     bool                m_bBodySpelled;  //body already spelled
     bool                m_bOtherSpelled; //frames, footnotes, headers and footers spelled
     bool                m_bStartedInOther; //started the spelling insided of the _other_ area
+    bool                m_bStartedInSelection; // there was an initial text selection
     SwPaM*              pOtherCursor; // position where the spelling inside the _other_ area started
     bool                m_bDrawingsSpelled; //all drawings spelled
     Reference<XTextRange> m_xStartRange; //text range that marks the start of spelling
@@ -204,6 +205,7 @@ struct SpellState
         m_bRestartDrawing(false),
         m_bTextObjectsCollected(false),
         m_bStartedInOther(false),
+        m_bStartedInSelection(false),
         pOtherCursor(0)
         {}
 
@@ -309,6 +311,8 @@ svx::SpellPortions SwSpellDialogChildWindow::GetNextWrongSentence (void)
                 //set cursor to the start of the sentence
                 if(!pWrtShell->HasSelection())
                     pWrtShell->GoStartSentence();
+                else
+                    m_pSpellState->m_bStartedInSelection = true;
                 //determine if the selection is outside of the body text
                 bOtherText = !(pWrtShell->GetFrmType(0,sal_True) & FRMTYPE_BODY);
                 m_pSpellState->m_SpellStartPosition = bOtherText ? SPELL_START_OTHER : SPELL_START_BODY;
@@ -444,7 +448,7 @@ svx::SpellPortions SwSpellDialogChildWindow::GetNextWrongSentence (void)
         // if the spelling started inside of the body
         //
         bool bCloseMessage = true;
-        if(!aRet.size())
+        if(!aRet.size() && !m_pSpellState->m_bStartedInSelection)
         {
             DBG_ASSERT(m_pSpellState->m_bDrawingsSpelled &&
                         m_pSpellState->m_bOtherSpelled && m_pSpellState->m_bBodySpelled,
