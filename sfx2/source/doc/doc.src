@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.src,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-04 10:44:06 $
+ *  last change: $Author: kz $ $Date: 2002-02-05 21:17:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1227,7 +1227,7 @@ String STR_CLOSEDOC
     Text [ english_us ] = "~Close" ;
     Text [ italian ] = "Chiudi" ;
     Text [ spanish ] = "~Cerrar" ;
-    Text [ french ] = "~Fermer" ;
+    Text [ french ] = "Fermer" ;
     Text [ swedish ] = "St~‰ng" ;
     Text [ danish ] = "Luk" ;
     Text [ portuguese_brazilian ] = "S~chlie?en" ;
@@ -2101,7 +2101,7 @@ String STR_EDITOBJECT
     Text[ portuguese ] = "~Editar";
     Text[ russian ] = "œ‡‚Í‡";
     Text[ dutch ] = "~Bewerken";
-    Text[ french ] = "~…diter";
+    Text[ french ] = "…diter";
     Text[ spanish ] = "~Editar";
     Text[ italian ] = "~Modifica";
     Text[ danish ] = "Rediger";
