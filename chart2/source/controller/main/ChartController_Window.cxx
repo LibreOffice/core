@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartController_Window.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: iha $ $Date: 2003-10-28 18:03:29 $
+ *  last change: $Author: iha $ $Date: 2003-11-22 18:23:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -328,11 +328,11 @@ void ChartController::execute_MouseButtonDown( const MouseEvent& rMEvt )
         pWindow->CaptureMouse();
     }
 
-    if( m_pDrawViewWrapper->IsTextEdit() )
+    if( pDrawViewWrapper->IsTextEdit() )
     {
-        if( m_pDrawViewWrapper->IsTextEditHit( aMPos, HITPIX) )
+        if( pDrawViewWrapper->IsTextEditHit( aMPos, HITPIX) )
         {
-            m_pDrawViewWrapper->MouseButtonDown(rMEvt,m_pChartWindow);
+            pDrawViewWrapper->MouseButtonDown(rMEvt,m_pChartWindow);
             return;
         }
         else
@@ -350,29 +350,22 @@ void ChartController::execute_MouseButtonDown( const MouseEvent& rMEvt )
         return;
     }
 
-    //selection
-    if( !isDoubleClick(rMEvt) ) //do not change selection if double click
+    if( isDoubleClick(rMEvt) ) //do not change selection if double click
+        return;//double click is handled further in mousebutton up
+
+    bool bClickedTwiceOnDragableObject = SelectionHelper::isDragableObjectHitTwice( aMPos, m_aSelectedObjectCID, *pDrawViewWrapper );
+    if( !bClickedTwiceOnDragableObject ) //do not change selection if clicked twice on a dragable object
     {
-        pDrawViewWrapper->UnmarkAll();
-        SdrObject* pNewObj = SelectionHelper::getObjectToSelect(
-                                    aMPos, m_aSelectedObjectCID
-                                    , *pDrawViewWrapper
-                                    , !rMEvt.IsRight() ); //do not change selection if right clicked on the selected object
-        if(!pNewObj)
-            return;
-        SelectionHelper aSelectionHelper( pNewObj, m_aSelectedObjectCID );
-        SdrObject* pMarkObj = aSelectionHelper.getObjectToMark();
-        pDrawViewWrapper->setMarkHandleProvider(&aSelectionHelper);
-        pDrawViewWrapper->MarkObject(pMarkObj);
-        pDrawViewWrapper->setMarkHandleProvider(NULL);
+        SelectionHelper::changeSelection( aMPos, m_aSelectedObjectCID
+                                , *pDrawViewWrapper
+                                , !rMEvt.IsRight() ); //do not change selection if right clicked on the selected object
     }
-
-    //dragging
-    if(false)
+    if( bClickedTwiceOnDragableObject
+        || ObjectIdentifier::isDragableObject( m_aSelectedObjectCID ) )
     {
-        SdrDragMode eDragMode(SDRDRAG_MOVE);//SDRDRAG_CREATE,SDRDRAG_MOVE,SDRDRAG_RESIZE,SDRDRAG_ROTATE,SDRDRAG_MIRROR,SDRDRAG_SHEAR,SDRDRAG_CROOK
+        //start drag
 
-        pDrawViewWrapper->SetDragMode(eDragMode);
+        //@todo maybe change selection to according group object ?...
         SdrHdl* pHdl = NULL;//pDrawViewWrapper->PickHandle( aMPos, *pWindow );
         USHORT  nDrgLog = (USHORT)pWindow->PixelToLogic(Size(DRGPIX,0)).Width();
         pDrawViewWrapper->BegDragObj(aMPos, NULL, pHdl, nDrgLog);
@@ -467,6 +460,7 @@ void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
 {
     Window* pWindow = m_pChartWindow;
     DrawViewWrapper* pDrawViewWrapper = m_pDrawViewWrapper;
+    Point   aMPos   = pWindow->PixelToLogic(rMEvt.GetPosPixel());
 
     //??? select Fu ( SchFuDraw SchFuText SchFuSelection ) and call MouseButtonUp there
     //----------------------------
@@ -505,11 +499,12 @@ void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
 
     if(!pDrawViewWrapper)
         return;
-    if( m_pDrawViewWrapper->IsTextEdit() )
+    if(pDrawViewWrapper->IsTextEdit())
     {
-        if( m_pDrawViewWrapper->MouseButtonUp(rMEvt,m_pChartWindow) )
+        if( pDrawViewWrapper->MouseButtonUp(rMEvt,m_pChartWindow) )
             return;
     }
+
     if(pDrawViewWrapper->IsDragObj())
     {
         if( pDrawViewWrapper->EndDragObj(rMEvt.IsMod1()) )
@@ -529,9 +524,27 @@ void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
             }
             */
 
-            pDrawViewWrapper->SetDragWithCopy( rMEvt.IsMod1());
+//          pDrawViewWrapper->SetDragWithCopy( rMEvt.IsMod1());
+        }
+        else //mouse wasn't moved while dragging
+        {
+            bool bClickedTwiceOnDragableObject = SelectionHelper::isDragableObjectHitTwice( aMPos, m_aSelectedObjectCID, *pDrawViewWrapper );
+            bool bIsRotateable = ObjectIdentifier::isRotateableObject( m_aSelectedObjectCID );
+
+            //toogle between move and rotate
+            SdrDragMode eDragMode = pDrawViewWrapper->GetDragMode();
+            if( bIsRotateable && bClickedTwiceOnDragableObject && SDRDRAG_MOVE==eDragMode )
+                eDragMode=SDRDRAG_ROTATE;
+            else
+                eDragMode=SDRDRAG_MOVE;
+            pDrawViewWrapper->SetDragMode(eDragMode);
+
+            m_aSelectedObjectCID = rtl::OUString();
+            SelectionHelper::changeSelection( aMPos, m_aSelectedObjectCID, *pDrawViewWrapper, true );
         }
     }
+    else if( isDoubleClick(rMEvt) )
+        execute_DoubleClick();
 
     pWindow->ReleaseMouse();
 
@@ -548,8 +561,7 @@ void ChartController::execute_MouseButtonUp( const MouseEvent& rMEvt )
         return TRUE; // Event von der SdrView ausgewertet
 
     */
-    if( isDoubleClick(rMEvt) )
-        execute_DoubleClick();
+
 
     //if(!pFunction) //if no Fu active/set ...
     //  Window::MouseButtonUp(rMEvt);
