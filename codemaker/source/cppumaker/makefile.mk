@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: hr $ $Date: 2001-06-01 18:11:13 $
+#   last change: $Author: hjs $ $Date: 2001-07-18 16:34:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,23 +70,24 @@ LIBTARGET=NO
 ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 
 # --- Files --------------------------------------------------------
 
-CXXFILES=	cppumaker.cxx	\
-            cppuoptions.cxx	\
-            cpputype.cxx
+.IF "$(GUI)"=="WNT"
+CFLAGSNOOPT+=-Ob0
+.ENDIF
 
+OBJFILES=   $(OBJ)$/cppumaker.obj	\
+            $(OBJ)$/cppuoptions.obj	\
+            $(OBJ)$/cpputype.obj
+
+NOOPTFILES= \
+            $(OBJ)$/cpputype.obj
 
 APP1TARGET= $(TARGET)
 
-APP1OBJS=   $(OBJ)$/cppumaker.obj	\
-            $(OBJ)$/cppuoptions.obj	\
-            $(OBJ)$/cpputype.obj			
-
+APP1OBJS=   $(OBJFILES)
 APP1STDLIBS=\
             $(SALLIB) \
             $(SALHELPERLIB) \
