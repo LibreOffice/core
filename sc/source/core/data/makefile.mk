@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: rt $ $Date: 2004-08-24 11:57:57 $
+#   last change: $Author: hr $ $Date: 2004-09-08 13:44:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -103,8 +103,8 @@ SLOFILES =  \
     $(SLO)$/documen8.obj \
     $(SLO)$/documen9.obj \
     $(SLO)$/document.obj \
-    $(SLO)$/dpdimsave.obj \
-    $(SLO)$/dpgroup.obj \
+        $(SLO)$/dpdimsave.obj \
+        $(SLO)$/dpgroup.obj \
     $(SLO)$/dpobject.obj \
     $(SLO)$/dpoutput.obj \
     $(SLO)$/dpsave.obj \
@@ -138,7 +138,8 @@ SLOFILES =  \
     $(SLO)$/table5.obj \
     $(SLO)$/table6.obj \
     $(SLO)$/userdat.obj \
-    $(SLO)$/validat.obj
+    $(SLO)$/validat.obj \
+    $(SLO)$/postit.obj
 
 .IF "$(OS)$(COM)$(CPUNAME)"=="LINUXGCCSPARC"
 NOOPTFILES= \
