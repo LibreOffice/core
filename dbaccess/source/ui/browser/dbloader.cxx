@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbloader.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-23 13:24:16 $
+ *  last change: $Author: fs $ $Date: 2001-05-14 07:24:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -284,7 +284,10 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const ::
     if (bSuccess && rListener.is())
         rListener->loadFinished(this);
     else if (!bSuccess && rListener.is())
+    {
+        rFrame->setComponent(NULL, NULL);
         rListener->loadCancelled(this);
+    }
 }
 
 // -----------------------------------------------------------------------
