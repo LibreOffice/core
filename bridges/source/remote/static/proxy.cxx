@@ -2,9 +2,9 @@
  *
  *  $RCSfile: proxy.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 16:29:53 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 13:42:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,9 @@
  *
  ************************************************************************/
 #if OSL_DEBUG_LEVEL == 0
-#define NDEBUG
+#  ifndef NDEBUG
+#    define NDEBUG
+#  endif
 #endif
 #include <assert.h>
 #include <sal/alloca.h>
