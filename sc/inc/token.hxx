@@ -2,9 +2,9 @@
  *
  *  $RCSfile: token.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 11:42:25 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 11:28:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -430,14 +430,14 @@ private:
             BYTE                nByte;
 public:
                                 ScExternalToken( OpCode e, BYTE n, const String& r ) :
-                                    ScToken( e, svExternal ), nByte( n ),
-                                    aExternal( r ) {}
+                                    ScToken( e, svExternal ), aExternal( r ),
+                                    nByte( n ) {}
                                 ScExternalToken( OpCode e, const String& r ) :
-                                    ScToken( e, svExternal ), nByte( 0 ),
-                                    aExternal( r ) {}
+                                    ScToken( e, svExternal ), aExternal( r ),
+                                    nByte( 0 ) {}
                                 ScExternalToken( const ScExternalToken& r ) :
-                                    ScToken( r ), nByte( r.nByte ),
-                                    aExternal( r.aExternal ) {}
+                                    ScToken( r ), aExternal( r.aExternal ),
+                                    nByte( r.nByte ) {}
     virtual const String&       GetExternal() const;
     virtual BYTE                GetByte() const;
     virtual void                SetByte( BYTE n );
