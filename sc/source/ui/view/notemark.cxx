@@ -2,9 +2,9 @@
  *
  *  $RCSfile: notemark.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2002-04-25 15:20:15 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 17:28:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,7 +150,7 @@ IMPL_LINK( ScNoteMarker, TimeHdl, Timer*, pTimer )
                     ShowCommentUser( nCol, nRow, aUserText, aVisible, bLeft, FALSE, pPage );
 
         if (pObject)
-            aRect = pObject->GetBoundRect();
+            aRect = pObject->GetCurrentBoundRect();
 
         // #39351# Page einfuegen damit das Model sie kennt und auch deleted
         pModel->InsertPage( pPage );
@@ -177,7 +177,7 @@ void lcl_DrawWin( SdrObject* pObject, Window* pWindow, const MapMode& rMap )
     ExtOutputDevice* pXOut = new ExtOutputDevice( pWindow );
     pXOut->SetOutDev( pWindow );
     SdrPaintInfoRec aInfoRec;
-    pObject->Paint( *pXOut, aInfoRec );
+    pObject->SingleObjectPainter( *pXOut, aInfoRec ); // #110094#-17
     delete pXOut;
 
     pWindow->SetDrawMode( nOldDrawMode );
