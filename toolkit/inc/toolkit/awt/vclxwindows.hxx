@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindows.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: tbe $ $Date: 2002-03-07 20:05:05 $
+ *  last change: $Author: mt $ $Date: 2002-03-08 08:52:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -406,7 +406,8 @@ private:
     ::rtl::OUString             maActionCommand;
 
 protected:
-    void            ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
+    void    ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
+    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext > CreateAccessibleContext();
 
 
 public:
@@ -463,6 +464,7 @@ private:
 protected:
     void            ImplClickedOrToggled( BOOL bToggled );
     void            ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
+    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext > CreateAccessibleContext();
 
 
 public:
@@ -655,6 +657,7 @@ private:
 
 protected:
     void            ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
+    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext > CreateAccessibleContext();
 
 
 public:
