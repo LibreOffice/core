@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsselect.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: vg $ $Date: 2001-10-22 20:15:57 $
+ *  last change: $Author: kz $ $Date: 2001-10-30 21:18:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,7 +117,7 @@ ModalDialog DLG_DATASOURCE_SELECTION
         Text[ polish ] = "Wybierz �r�d�o danych:";
         Text[ portuguese_brazilian ] = "Choose a data source:";
         Text[ japanese ] = "ﾃﾞｰﾀｿｰｽを選択します:";
-        Text[ korean ] = "데이터소스를 선택하십시오:";
+        Text[ korean ] = "데이터 소스를 선택하십시오:";
         Text[ chinese_simplified ] = "请您选择一个数据源：";
         Text[ chinese_traditional ] = "選擇資料源：";
         Text[ turkish ] = "Choose a data source:";
@@ -227,7 +227,7 @@ ModalDialog DLG_DATASOURCE_SELECTION
         Text[ polish ] = "Za�adowanie biblioteki programu #lib# nie by�o mo�liwe. Jest ona by� mo�e uszkodzona. Wyb�r �r�d�a danych ODBC nie jest mo�liwy.";
         Text[ portuguese_brazilian ] = "The program library #lib# could not be loaded or is corrupted. The ODBC data source configuration is not available.";
         Text[ japanese ] = "#lib# ﾌﾟﾛｸﾞﾗﾑﾗｲﾌﾞﾗﾘを読み込めなかったか、またはそれ自体にﾄﾗﾌﾞﾙがあります。ODBC ﾃﾞｰﾀｿｰｽの設定はできません。";
-        Text[ korean ] = "프로그램 라이브러리 #lib#를 로드할 수 없었거나 또는 고장입니다.  ODBC데이터 소스 컨피규레이션을 사용할 수 없습니다.";
+        Text[ korean ] = "프로그램 라이브러리 #lib#를 로드할 수 없었거나 라이브러리에 오류가 있습니다. ODBC데이터 소스 구성을 사용할 수 없습니다.";
         Text[ chinese_simplified ] = "无法装入程序库 #lib# 或已经损坏。无法配置 ODBC 数据源。";
         Text[ chinese_traditional ] = "無法載入程式庫 #lib# 或已經損坏。無法設定 ODBC 資料源。";
         Text[ turkish ] = "The program library #lib# could not be loaded or is corrupted. The ODBC data source configuration is not available.";
@@ -241,6 +241,9 @@ ModalDialog DLG_DATASOURCE_SELECTION
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.26  2001/10/22 20:15:57  vg
+ *  Merge SRC638: 22.10.01 - 22:16:12
+ *
  *  Revision 1.25  2001/09/26 20:30:45  kz
  *  Merge SRC638: 09/26/01 - 22:30:02
  *
@@ -319,6 +322,7 @@ ModalDialog DLG_DATASOURCE_SELECTION
  *
  *  Revision 1.0 24.10.00 09:42:47  fs
  ************************************************************************/
+
 
 
 
