@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b2dvector.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: aw $ $Date: 2004-01-16 14:30:10 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 08:40:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,22 +180,34 @@ namespace basegfx
     {
         double fVal(rVecA.getX() * rVecB.getY() - rVecA.getY() * rVecB.getX());
 
+        if(::basegfx::fTools::equalZero(fVal))
+        {
+            return ORIENTATION_NEUTRAL;
+        }
+
         if(fVal > 0.0)
         {
             return ORIENTATION_POSITIVE;
         }
-
-        if(fVal < 0.0)
+        else
         {
             return ORIENTATION_NEGATIVE;
         }
-
-        return ORIENTATION_NEUTRAL;
     }
 
     B2DVector getPerpendicular( const B2DVector& rNormalizedVec )
     {
         B2DVector aPerpendicular(-rNormalizedVec.getY(), rNormalizedVec.getX());
+        return aPerpendicular;
+    }
+
+    B2DVector getNormalizedPerpendicular( const B2DVector& rVec )
+    {
+        B2DVector aPerpendicular(rVec);
+        aPerpendicular.normalize();
+        const double aTemp(-aPerpendicular.getY());
+        aPerpendicular.setY(aPerpendicular.getX());
+        aPerpendicular.setX(aTemp);
         return aPerpendicular;
     }
 
