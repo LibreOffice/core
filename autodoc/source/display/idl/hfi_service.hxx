@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hfi_service.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:14:41 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:28:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,7 @@
 #include "hi_factory.hxx"
     // COMPONENTS
     // PARAMETERS
+#include <ary/idl/i_comrela.hxx>
 
 class HF_NaviSubRow;
 class HF_SubTitleTable;
@@ -75,15 +76,21 @@ class HF_SubTitleTable;
 class HF_IdlService : public HtmlFactory_Idl
 {
   public:
-    typedef ::ary::StdConstIterator< ::ary::idl::CommentedReference> comref_list;
+    typedef ::ary::StdConstIterator< ::ary::idl::CommentedRelation> comref_list;
                         HF_IdlService(
-                            Environment &       io_rEnv,    // The CurDirecory() is the one of the here displayed Module.
+                            Environment &       io_rEnv,
                             Xml::Element &      o_rOut );
     virtual             ~HF_IdlService();
 
     void                Produce_byData(
                            const client &       i_ce ) const;
    private:
+    // Overwritten from HtmlFactory_Idl:
+    virtual void        produce_SummaryDeclaration(
+                            Xml::Element &      o_row,
+                            const client &      i_ce ) const;
+
+    // Locals
     DYN HF_NaviSubRow & make_Navibar(
                             const client &      i_ce ) const;
 

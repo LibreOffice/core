@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hfi_singleton.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 17:14:42 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:28:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,9 @@ class HF_IdlSingleton : public HtmlFactory_Idl
                             Xml::Element &      o_rOut );
     virtual             ~HF_IdlSingleton();
 
-    void                Produce_byData(
+    void                Produce_byData_ServiceBased(
+                           const client &       i_ce ) const;
+    void                Produce_byData_InterfaceBased(
                            const client &       i_ce ) const;
    private:
     void                make_Navibar(
