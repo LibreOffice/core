@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docuno.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-12-13 18:56:22 $
+ *  last change: $Author: sab $ $Date: 2001-01-22 17:01:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -349,7 +349,8 @@ class ScDrawPagesObj : public cppu::WeakImplHelper2<
 private:
     ScDocShell*             pDocShell;
 
-    SvxFmDrawPage*          GetObjectByIndex_Impl(INT32 nIndex) const;
+::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >
+                            GetObjectByIndex_Impl(INT32 nIndex) const;
 
 public:
                             ScDrawPagesObj(ScDocShell* pDocSh);
