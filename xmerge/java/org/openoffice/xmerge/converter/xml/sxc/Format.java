@@ -65,6 +65,7 @@ import java.awt.Color;
 public class Format implements Cloneable {
 
     private String category;
+    private String value;
     private String formatSpecifier;
     private int decimalPlaces;
     private boolean bold;
@@ -79,6 +80,7 @@ public class Format implements Cloneable {
      */
     public Format() {
         category = "";
+        value = "";
         formatSpecifier = "";
         font = "";
         foreground = Color.black;
@@ -94,6 +96,7 @@ public class Format implements Cloneable {
      */
     public Format(Format fmt) {
         category = fmt.getCategory();
+        value = fmt.getValue();
         formatSpecifier = fmt.getFormatSpecifier();
         decimalPlaces = fmt.getDecimalPlaces();
         bold = fmt.isBold();
@@ -110,6 +113,7 @@ public class Format implements Cloneable {
      */
     public void clearFormatting() {
        category = "";
+       value = "";
        formatSpecifier = "";
        decimalPlaces = 0;
        bold = false;
@@ -134,7 +138,6 @@ public class Format implements Cloneable {
         category = newCategory;
     }
 
-
      /**
       *  Return the formatting category of the object.
       *
@@ -145,6 +148,25 @@ public class Format implements Cloneable {
      public String getCategory() {
          return category;
      }
+
+     /**
+      *  In the case of Formula returns the value of the formula.
+      *
+      *  @return  The value of the formula
+      */
+     public String getValue() {
+         return value;
+     }
+
+     /**
+     *  In the case of formula the contents are set as the formula string and
+     *  the value of the formula is a formatting attribute.
+     *
+     *  @param   newValue the formuala value
+     */
+    public void setValue(String newValue) {
+        value = newValue;
+    }
 
 
      /**
