@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawsh2.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 16:31:33 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 14:37:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,6 +147,15 @@ void ScDrawShell::GetState( SfxItemSet& rSet )          // Zustaende / Toggles
 void ScDrawShell::GetDrawFuncState( SfxItemSet& rSet )      // Funktionen disablen
 {
     ScDrawView* pView = pViewData->GetScDrawView();
+
+    //  #111711# call IsMirrorAllowed first to make sure ForcePossibilities (and thus CheckMarked)
+    //  is called before GetMarkCount, so the nMarkCount value is valid for the rest of this method.
+    if (!pView->IsMirrorAllowed(TRUE,TRUE))
+    {
+        rSet.DisableItem( SID_MIRROR_HORIZONTAL );
+        rSet.DisableItem( SID_MIRROR_VERTICAL );
+    }
+
     const SdrMarkList& rMarkList = pView->GetMarkList();
     ULONG nMarkCount = rMarkList.GetMarkCount();
 
@@ -158,12 +167,6 @@ void ScDrawShell::GetDrawFuncState( SfxItemSet& rSet )      // Funktionen disabl
         rSet.DisableItem( SID_ENTER_GROUP );
     if ( !pView->IsGroupEntered() )
         rSet.DisableItem( SID_LEAVE_GROUP );
-
-    if (!pView->IsMirrorAllowed(TRUE,TRUE))
-    {
-        rSet.DisableItem( SID_MIRROR_HORIZONTAL );
-        rSet.DisableItem( SID_MIRROR_VERTICAL );
-    }
 
     if ( nMarkCount <= 1 )                      // nichts oder nur ein Objekt selektiert
     {
