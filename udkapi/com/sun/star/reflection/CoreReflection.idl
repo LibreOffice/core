@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CoreReflection.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:28:46 $
+ *  last change: $Author: dbo $ $Date: 2000-11-23 11:27:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,8 +61,8 @@
 #ifndef __com_sun_star_reflection_CoreReflection_idl__
 #define __com_sun_star_reflection_CoreReflection_idl__
 
-#ifndef __com_sun_star_reflection_XIdlClassProvider_idl__
-#include <com/sun/star/reflection/XIdlClassProvider.idl>
+#ifndef __com_sun_star_reflection_XIdlReflection_idl__
+#include <com/sun/star/reflection/XIdlReflection.idl>
 #endif
 
 
@@ -72,25 +72,11 @@
 
 //=============================================================================
 
-// DocMerge from xml: service com::sun::star::reflection::CoreReflection
-/** This service is the implementation of the interface XIdlClassProvider.
-
-
-    <p>The service must provide the description and access to all uno types
-    (interfaces, structs, enums, ...). It is not necessary to install
-    multible CoreReflection services.</p>
-    <h4>Guarantees:</h4>
-    <ul>
-    <li>thread safe</li>
-    <li>one instance service
-    </li>
-    </ul>
- */
+/** This service is the implementation of the interface XIdlReflection.
+*/
 service CoreReflection
 {
-    // DocMerge: empty anyway
-    interface com::sun::star::reflection::XIdlClassProvider;
-
+    interface com::sun::star::reflection::XIdlReflection;
 };
 
 //=============================================================================
@@ -100,6 +86,9 @@ service CoreReflection
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2000/11/08 12:28:46  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:31  hjs
     initial import
 
