@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envprt.src,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 21:04:12 $
+ *  last change: $Author: kz $ $Date: 2001-03-31 06:44:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,14 +132,14 @@ TabPage TP_ENV_PRT
         TabStop = TRUE ;
         Group = TRUE ;
         Check = TRUE ;
-        Text[ chinese_simplified ] = "´ÓÉÏ·½¿ªÊ¼´òÓ¡(~T)";
+        Text[ chinese_simplified ] = "´ÓÉÏ·½¿ªÊ¼´òÓ¡(~P)";
         Text[ russian ] = "Ïå÷àòàòü ñâåğõó";
         Text[ polish ] = "Drukuj od góry";
-        Text[ japanese ] = "••“›‚Ì•\\‚ğã‚É‚·‚é(~T)";
-        Text[ chinese_traditional ] = "±q¤W¤è¶}©l¦C¦L(~T)";
+        Text[ japanese ] = "••“›‚Ì•\\‚ğã‚É‚·‚é(~P)";
+        Text[ chinese_traditional ] = "±q¤W¤è¶}©l¦C¦L(~P)";
         Text[ arabic ] = "ÇáØÈÇÚÉ ãä ÃÚáì";
         Text[ greek ] = "Åêôığùóç áğü ğÜíù";
-        Text[ korean ] = "À§¿¡¼­ºÎÅÍ ÀÎ¼â";
+        Text[ korean ] = "À§¿¡¼­ºÎÅÍ ÀÎ¼â(~P)";
         Text[ turkish ] = "Üstten yazdır";
         Text[ language_user1 ] = " ";
     };
@@ -168,7 +168,7 @@ TabPage TP_ENV_PRT
         Text[ chinese_traditional ] = "±q¤U¤è¶}©l¦C¦L(~B)";
         Text[ arabic ] = "ÇáØÈÇÚÉ ãä ÃÓİá";
         Text[ greek ] = "Åêôığùóç áğü êÜôù";
-        Text[ korean ] = "¾Æ·¡¿¡¼­ºÎÅÍ ÀÎ¼â";
+        Text[ korean ] = "¾Æ·¡¿¡¼­ºÎÅÍ ÀÎ¼â(~B)";
         Text[ turkish ] = "Alttan yazdır";
         Text[ language_user1 ] = " ";
     };
@@ -197,7 +197,7 @@ TabPage TP_ENV_PRT
         Text[ chinese_traditional ] = "¦V¥k(~S)";
         Text[ arabic ] = "Åáì Çáíãíä";
         Text[ greek ] = "Ğñïò ôá äåîéÜ";
-        Text[ korean ] = "¿À¸¥ÂÊÀ¸·Î ÀÌµ¿";
+        Text[ korean ] = "¿À¸¥ÂÊÀ¸·Î ÀÌµ¿(~S)";
         Text[ turkish ] = "S~ağa";
         Text[ language_user1 ] = " ";
     };
@@ -243,7 +243,7 @@ TabPage TP_ENV_PRT
         Text[ chinese_traditional ] = "¦V¤U(~D)";
         Text[ arabic ] = "Åáì ÃÓİá";
         Text[ greek ] = "Ğñïò ôá êÜôù";
-        Text[ korean ] = "¾Æ·¡·Î ÀÌµ¿";
+        Text[ korean ] = "¾Æ·¡·Î ÀÌµ¿(~D)";
         Text[ turkish ] = "~Aşağı";
         Text[ language_user1 ] = " ";
     };
