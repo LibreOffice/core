@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctdlg.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 21:35:49 $
+ *  last change: $Author: kz $ $Date: 2001-03-28 12:15:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,7 +248,7 @@ ModalDialog DLG_DOC_TEMPLATE
         Text[ chinese_simplified ] = "±‡º≠(~E)";
         Text[ russian ] = "~œ‡‚Í‡";
         Text[ polish ] = "~Edytuj";
-        Text[ japanese ] = "ï“èW(~EÅj";
+        Text[ japanese ] = "ï“èW(EÅj(~E)";
         Text[ chinese_traditional ] = "ΩsøË(~E)";
         Text[ arabic ] = " Õ—Ì—";
         Text[ greek ] = "~≈ÂÓÂÒ„·Ûﬂ·";
