@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cmc $ $Date: 2002-05-09 12:32:00 $
+ *  last change: $Author: cmc $ $Date: 2002-05-22 13:04:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,7 +160,6 @@ class wwZOrderer
 private:
     //No of objects in doc before starting (always 0 unless using file->insert
     //and probably 0 then as well
-    ::std::stack<SdrObjList*> maGroupStack;
     SvUShorts maEscherLayer;
     SvShorts maDrawHeight;
     ULONG mnNoInitialObjects;
@@ -176,24 +175,12 @@ public:
     wwZOrderer(SdrPage* pDrawPg, const SvxMSDffShapeOrders *pShapeOrders,
         sal_Int8 nHeaven, sal_Int8 nHell);
     void InsertTextLayerObject(SdrObject* pObject);
-    void InsertEscherObject(SdrObject* pObject, ULONG nSpId);
     /*
-     cmc: Note if we can remove use of pDrawFmt then we can have seperate
-     ZOrder classes for 95- and 97+ and instantiate the appropiate one at run
-     time.
+     cmc: We could have have seperate ZOrder classes for 95- and 97+ and
+     instantiate the appropiate one at run time.
      */
-    void InsertDrawingObject(SdrObject* pObj, SwDrawFrmFmt *pDrawFmt,
-        short nWwHeight);
-
-    void EnterDrawingGroup(SdrObjList *pDrawGroup)
-    {
-        maGroupStack.push(pDrawGroup);
-    }
-
-    void LeaveDrawingGroup()
-    {
-        maGroupStack.pop();
-    }
+    void InsertDrawingObject(SdrObject* pObj, short nWwHeight);
+    void InsertEscherObject(SdrObject* pObject, ULONG nSpId);
 };
 
 void WW8FSPAShadowToReal( WW8_FSPA_SHADOW* pFSPAS, WW8_FSPA* pPic );

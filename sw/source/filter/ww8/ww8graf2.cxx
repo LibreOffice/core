@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf2.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: cmc $ $Date: 2002-05-16 13:01:55 $
+ *  last change: $Author: cmc $ $Date: 2002-05-22 13:04:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,37 +223,15 @@ USHORT wwZOrderer::GetEscherObjectPos(ULONG nSpId)
 
 // InsertObj() fuegt das Objekt in die Sw-Page ein und merkt sich die Z-Pos in
 // einem VarArr
-void wwZOrderer::InsertDrawingObject(SdrObject* pObj, SwDrawFrmFmt *pDrawFmt,
-    short nWwHeight)
+void wwZOrderer::InsertDrawingObject(SdrObject* pObj, short nWwHeight)
 {
-    /*
-    cmc: Note, This use of pDrawFmt seems odd to me. It works but I'm not
-    altogether happy with it.
-    */
-    if (!maGroupStack.empty())
-    {
-        SdrObjList *pDrawGroup = maGroupStack.top();
-        pDrawGroup->InsertObject(pObj, 0);      // Group: Vorne einfuegen
-    }
+    USHORT nPos = GetDrawingObjectPos(nWwHeight);
+    if (nWwHeight & 0x2000)                 // Heaven ?
+        pObj->SetLayer(mnHeaven);
     else
-    {
-        SwDrawContact* pContact = new SwDrawContact(pDrawFmt, pObj);
-        USHORT nPos = GetDrawingObjectPos(nWwHeight);
-        if (nWwHeight & 0x2000)                 // Heaven ?
-            pObj->SetLayer(mnHeaven);
-        else
-        {
-            pObj->SetLayer(mnHell);
-            pDrawFmt->SetAttr(SvxOpaqueItem(RES_OPAQUE, FALSE));
-        }
-        pDrawFmt->SetAttr(SwFmtSurround(SURROUND_THROUGHT));
+        pObj->SetLayer(mnHell);
 
-        mpDrawPg->InsertObject(pObj, nPos + mnNoInitialObjects + mnInlines);
-        maDrawHeight.Insert(nWwHeight, nPos);   // Pflege WW-Height-Array mit
-
-        pObj->NbcSetAnchorPos( Point( USHRT_MAX, USHRT_MAX ) );
-        pContact->ConnectToLayout( &pDrawFmt->GetAnchor() );
-    }
+    mpDrawPg->InsertObject(pObj, nPos + mnNoInitialObjects + mnInlines);
 }
 
 void wwZOrderer::InsertTextLayerObject(SdrObject* pObject)

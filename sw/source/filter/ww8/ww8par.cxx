@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: cmc $ $Date: 2002-05-16 16:22:47 $
+ *  last change: $Author: cmc $ $Date: 2002-05-22 13:04:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2231,7 +2231,6 @@ SwWW8ImplReader::SwWW8ImplReader( BYTE nVersionPara, SvStorage* pStorage,
     pAfterSection = 0;
     pNewSection    = 0;
     pNode_FLY_AT_CNTNT = 0;
-    pDrawFmt = 0;
     pDrawModel = 0;
     pDrawPg = 0;
     pFontSrcCharSets = new SvUShorts;

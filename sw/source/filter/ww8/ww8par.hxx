@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: cmc $ $Date: 2002-05-15 13:17:03 $
+ *  last change: $Author: cmc $ $Date: 2002-05-22 13:04:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -660,7 +660,6 @@ friend class WW8FormulaControl;
 
     SwNode* pNode_FLY_AT_CNTNT; // set: WW8SwFlyPara()   read: CreateSwTable()
 
-    SwDrawFrmFmt *pDrawFmt;     // wie FlyFrmFmt
     SdrModel* pDrawModel;
     SdrPage* pDrawPg;
     EditEngine* pDrawEditEngine;
@@ -999,12 +998,17 @@ friend class WW8FormulaControl;
 // GrafikLayer
 
     BOOL ReadGrafStart( void* pData, short nDataSiz, WW8_DPHEAD* pHd,
-                        WW8_DO* pDo );
-    void ReadLine( WW8_DPHEAD* pHd, WW8_DO* pDo );
-    void ReadRect( WW8_DPHEAD* pHd, WW8_DO* pDo );
-    void ReadElipse( WW8_DPHEAD* pHd, WW8_DO* pDo );
-    void ReadArc( WW8_DPHEAD* pHd, WW8_DO* pDo );
-    void ReadPolyLine( WW8_DPHEAD* pHd, WW8_DO* pDo );
+        const WW8_DO* pDo, SfxAllItemSet &rSet );
+    SdrObject *ReadLine(WW8_DPHEAD* pHd, const WW8_DO* pDo,
+        SfxAllItemSet &rSet);
+    SdrObject *ReadRect(WW8_DPHEAD* pHd, const WW8_DO* pDo,
+        SfxAllItemSet &rSet);
+    SdrObject *ReadElipse(WW8_DPHEAD* pHd, const WW8_DO* pDo,
+        SfxAllItemSet &rSet);
+    SdrObject *ReadArc(WW8_DPHEAD* pHd, const WW8_DO* pDo,
+        SfxAllItemSet &rSet);
+    SdrObject *ReadPolyLine(WW8_DPHEAD* pHd, const WW8_DO* pDo,
+        SfxAllItemSet &rSet);
     ESelection GetESelection( long nCpStart, long nCpEnd );
     void InsertTxbxStyAttrs( SfxItemSet& rS, USHORT nColl );
     void InsertTxbxAttrs( long nStartCp, long nEndCp, BOOL bONLYnPicLocFc );
@@ -1028,10 +1032,14 @@ friend class WW8FormulaControl;
     BOOL TxbxChainContainsRealText( USHORT nTxBxS,
                                     long&  rStartCp,
                                     long&  rEndCp );
-    void ReadTxtBox( WW8_DPHEAD* pHd, WW8_DO* pDo );
-    void ReadCaptionBox( WW8_DPHEAD* pHd, WW8_DO* pDo );
-    void ReadGroup( WW8_DPHEAD* pHd, WW8_DO* pDo );
-    void ReadGrafPrimitive( short& rLeft, WW8_DO* pDo );
+    SdrObject *ReadTxtBox(WW8_DPHEAD* pHd, const WW8_DO* pDo,
+        SfxAllItemSet &rSet);
+    SdrObject *ReadCaptionBox(WW8_DPHEAD* pHd, const WW8_DO* pDo,
+        SfxAllItemSet &rSet);
+    SdrObject *ReadGroup(WW8_DPHEAD* pHd, const WW8_DO* pDo,
+        SfxAllItemSet &rSet);
+    SdrObject *ReadGrafPrimitive(short& rLeft, const WW8_DO* pDo,
+        SfxAllItemSet &rSet);
     void ReadGrafLayer1( WW8PLCFspecial* pPF, long nGrafAnchorCp );
     SdrObject* CreateContactObject(SwFrmFmt* pFlyFmt);
     void ProcessEscherAlign( SvxMSDffImportRec* pRecord, WW8_FSPA *pFSPA,
