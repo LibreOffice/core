@@ -1,0 +1,262 @@
+:
+    eval 'exec perl -S $0 ${1+"$@"}'
+        if 0;
+
+#*************************************************************************
+#
+#    This tool makes it easy to cleanly re-locate a
+# build, eg. after you have copied or moved it to a new
+# path. It tries to re-write all the hard-coded path logic
+# internally.
+#
+#*************************************************************************
+#
+#   $RCSfile: relocate,v $
+#
+#   $Revision: 1.2 $
+#
+#   last change: $Author: hr $ $Date: 2004-10-12 16:06:43 $
+#
+#   The Contents of this file are made available subject to the terms of
+#   either of the following licenses
+#
+#          - GNU Lesser General Public License Version 2.1
+#          - Sun Industry Standards Source License Version 1.1
+#
+#   GNU Lesser General Public License Version 2.1
+#   =============================================
+#   Copyright 2000 by Sun Microsystems, Inc.
+#   901 San Antonio Road, Palo Alto, CA 94303, USA
+#
+#   This library is free software; you can redistribute it and/or
+#   modify it under the terms of the GNU Lesser General Public
+#   License version 2.1, as published by the Free Software Foundation.
+#
+#   This library is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+#   Lesser General Public License for more details.
+#
+#   You should have received a copy of the GNU Lesser General Public
+#   License along with this library; if not, write to the Free Software
+#   Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+#   MA  02111-1307  USA
+#
+#
+#   Sun Industry Standards Source License Version 1.1
+#   =================================================
+#   The contents of this file are subject to the Sun Industry Standards
+#   Source License Version 1.1 (the "License"); You may not use this file
+#   except in compliance with the License. You may obtain a copy of the
+#   License at http://www.openoffice.org/license.html.
+#
+#   Software provided under this License is provided on an "AS IS" basis,
+#   WITHOUT WARRUNTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING,
+#   WITHOUT LIMITATION, WARRUNTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+#   MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+#   See the License for the specific provisions governing your rights and
+#   obligations concerning the Software.
+#
+#   The Initial Developer of the Original Code is: Novell, Inc.
+#
+#   Copyright 2002, 2004 Novell, Inc.
+#
+#   All Rights Reserved.
+#
+#   Contributor(s): __________________________________________________
+#
+#*************************************************************************
+
+sub sniff_set($)
+{
+    my $build_dir = shift;
+    my ($dirhandle, $fname);
+
+    opendir ($dirhandle, $build_dir) || die "Can't open $build_dir";
+    while ($fname = readdir ($dirhandle)) {
+	$fname =~ /[Ss]et.sh$/ && last;
+    }
+    closedir ($dirhandle);
+
+    return $fname;
+}
+
+sub sed_file($$$)
+{
+    my ($old_fname, $function, $state) = @_;
+    my $tmp_fname = "$old_fname.new";
+    my $old_file;
+    my $new_file;
+
+    open ($old_file, $old_fname) || die "Can't open $old_fname: $!";
+    open ($new_file, ">$tmp_fname") || die "Can't open $tmp_fname: $!";
+    
+    while (<$old_file>) {
+	my $value = &$function($state, $_);
+	print $new_file $value;
+    }
+    
+    close ($new_file) || die "Failed to close $tmp_fname: $!";
+    close ($old_file) || die "Failed to close $old_fname: $!";
+
+    rename $tmp_fname, $old_fname || die "Failed to replace $old_fname: $!";
+}
+
+sub rewrite_value($$)
+{
+    my ($state, $value) = @_;
+
+    $value =~ s/$state->{'old_root'}/$state->{'new_root'}/g;
+    $value =~ s/$state->{'win32_old_root'}/$state->{'win32_new_root'}/g;
+
+    return $value;
+}
+
+sub rewrite_set($$$)
+{
+    my $new_root = shift;
+    my $old_root = shift;
+    my $set = shift;
+    my $tmp;
+    my %state;
+
+    print "   $set\n";
+
+# unix style
+    $state{'old_root'} = $old_root;
+    $state{'new_root'} = $new_root;
+# win32 style
+    $tmp = $old_root;
+    $tmp =~ s/\//\\\\\\\\\\\\\\\\/g;
+    $state{'win32_old_root'} = $tmp;
+    $tmp = $new_root;
+    $tmp =~ s/\//\\\\\\\\/g;
+    $state{'win32_new_root'} = $tmp;
+
+    sed_file ("$new_root/$set", \&rewrite_value, \%state);
+
+    my $tcsh_set = $set;
+    $tcsh_set =~ s/\.sh$//;
+
+    print "   $tcsh_set\n";
+
+    sed_file ("$new_root/$tcsh_set", \&rewrite_value, \%state);
+}
+
+sub find_old_root($$)
+{
+    my $new_root = shift;
+    my $set = shift;
+    my $fname = "$new_root/$set";
+    my $old_root;
+    my $file;
+
+    open ($file, $fname) || die "Can't open $fname: $!";
+    
+    while (<$file>) {
+	if (/\s*([^=]+)\s*=\s*\"([^\"]+)\"/) {
+	    my ($name, $value) = ($1, $2);
+
+	    if ($name eq 'SRC_ROOT') {
+		$old_root = $value;
+		last;
+	    }
+	}
+    }
+    
+    close ($file) || die "Failed to close $fname: $!";
+
+    return $old_root;
+}
+
+sub rewrite_product_dpcc($$$)
+{
+    my $new_root = shift;
+    my $product_path = shift;
+    my $old_root = shift;
+
+    my $path = "$new_root/$product_path/misc";
+    my $misc_dir;
+    opendir ($misc_dir, $path) || return;
+    my $name;
+    while ($name = readdir ($misc_dir)) {
+	$name =~ /\.dpcc$/ || next;
+# Should re-write the dpcc files - but perhaps this'd screw with timestamps ?
+	unlink ("$path/$name");
+    }
+    closedir ($misc_dir);
+}
+
+sub rewrite_dpcc($$)
+{
+    my $new_root = shift;
+    my $old_root = shift;
+
+    my $top_dir;
+    my $idx = 0;
+    opendir ($top_dir, $new_root) || die "Can't open $new_root: $!";
+    my $name;
+    while ($name = readdir ($top_dir)) {
+	my $sub_dir;
+	opendir ($sub_dir, "$new_root/$name") || next;
+	my $sub_name;
+	while ($sub_name = readdir ($sub_dir)) {
+	    if ($sub_name =~ /\.pro$/) {
+		$idx || print "\n    ";
+		if ($idx++ == 6) {
+		    $idx = 0;
+		}
+		print "$name ";
+		rewrite_product_dpcc ($new_root, "$name/$sub_name", $old_root);
+	    }
+	}
+	closedir ($sub_dir);
+    }
+    closedir ($top_dir);
+}
+
+sub rewrite_bootstrap($$)
+{
+    my $new_root = shift;
+    my $old_root = shift;
+
+    print "   bootstrap\n";
+
+    my %state;
+    $state{'old_root'} = $old_root;
+    $state{'new_root'} = $new_root;
+
+    my $rewrite = sub { my $state = shift; my $value = shift;
+			$value =~ s/$state->{'old_root'}/$state->{'new_root'}/g;
+			return $value; };
+    sed_file ("$new_root/bootstrap", $rewrite, \%state);
+    `chmod +x $new_root/bootstrap`;
+}
+
+for $a (@ARGV) {
+    if ($a eq '--help' || $a eq '-h') {
+	print "relocate: syntax\n";
+	print "  relocate /path/to/new/ooo/source_root\n";
+    }
+}
+
+$OOO_BUILD = shift (@ARGV) || die "Pass path to relocated source tree";
+substr ($OOO_BUILD, 0, 1) eq '/' || die "relocate requires absolute paths";
+
+my $set;
+
+$set = sniff_set($OOO_BUILD) || die "Can't find env. set";
+$OLD_ROOT = find_old_root($OOO_BUILD, $set);
+
+print "Relocate: $OLD_ROOT -> $OOO_BUILD\n";
+
+print "re-writing environment:\n";
+
+rewrite_set($OOO_BUILD, $OLD_ROOT, $set);
+rewrite_bootstrap($OOO_BUILD, $OLD_ROOT);
+
+print "re-writing dependencies:\n";
+
+rewrite_dpcc($OOO_BUILD, $OLD_ROOT);
+
+print "done.\n";

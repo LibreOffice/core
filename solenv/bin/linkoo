@@ -1,0 +1,289 @@
+:
+    eval 'exec perl -S $0 ${1+"$@"}'
+        if 0;
+
+#*************************************************************************
+#
+#    This app makes it easy to link a live build
+# set into an install set. Then your devel iteration
+# is: 'build', execute.
+#
+#*************************************************************************
+#
+#   $RCSfile: linkoo,v $
+#
+#   $Revision: 1.2 $
+#
+#   last change: $Author: hr $ $Date: 2004-10-12 16:06:31 $
+#
+#   The Contents of this file are made available subject to the terms of
+#   either of the following licenses
+#
+#          - GNU Lesser General Public License Version 2.1
+#          - Sun Industry Standards Source License Version 1.1
+#
+#   GNU Lesser General Public License Version 2.1
+#   =============================================
+#   Copyright 2000 by Sun Microsystems, Inc.
+#   901 San Antonio Road, Palo Alto, CA 94303, USA
+#
+#   This library is free software; you can redistribute it and/or
+#   modify it under the terms of the GNU Lesser General Public
+#   License version 2.1, as published by the Free Software Foundation.
+#
+#   This library is distributed in the hope that it will be useful,
+#   but WITHOUT ANY WARRANTY; without even the implied warranty of
+#   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+#   Lesser General Public License for more details.
+#
+#   You should have received a copy of the GNU Lesser General Public
+#   License along with this library; if not, write to the Free Software
+#   Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+#   MA  02111-1307  USA
+#
+#
+#   Sun Industry Standards Source License Version 1.1
+#   =================================================
+#   The contents of this file are subject to the Sun Industry Standards
+#   Source License Version 1.1 (the "License"); You may not use this file
+#   except in compliance with the License. You may obtain a copy of the
+#   License at http://www.openoffice.org/license.html.
+#
+#   Software provided under this License is provided on an "AS IS" basis,
+#   WITHOUT WARRUNTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING,
+#   WITHOUT LIMITATION, WARRUNTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+#   MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+#   See the License for the specific provisions governing your rights and
+#   obligations concerning the Software.
+#
+#   The Initial Developer of the Original Code is: Novell, Inc.
+#
+#   Copyright 2002, 2004 Novell, Inc.
+#
+#   All Rights Reserved.
+#
+#   Contributor(s): Michael Meeks, Martin Kretzschmar, Chris Halls,
+#                   Federico Mena Quintero
+#
+#*************************************************************************
+
+# ends up in program/env
+$env_script = '
+ulimit -c unlimited
+export PATH=".:$PATH"
+export LD_LIBRARY_PATH=".:$LD_LIBRARY_PATH"
+export GNOME_DISABLE_CRASH_DIALOG=1
+';
+
+my @exceptions = ( 'cppuhelper', 'configmgr', 'cfgmgr' );
+
+%replaceable = (
+    'program' => '\.so$',
+    'program/resource' => '\.res$',
+    'program/classes' => '\.jar$',
+#    'share/uno_packages' => '\.zip$'
+);
+
+@search_dirs = ( 'lib', 'bin', 'class' );
+
+@known_duplicates = ( 'db.jar', 'libi18n' );
+
+sub sniff_target($)
+{
+    my $build_dir = shift;
+    my ($dirhandle, $fname);
+    my ($target, $libver, $lang, $dllsuffix) = ( 'unxlngi4.pro', '645', '01', 'li' ); # defaults
+    
+    opendir ($dirhandle, $build_dir) || die "Can't open $build_dir";
+    while ($fname = readdir ($dirhandle)) {
+	$fname =~ /Set.sh$/ || next;
+	
+	my $file;
+	open ($file, "$build_dir/$fname") || die "Can't open $build_dir/$fname";
+	while (<$file>) {
+	    /\s*(\S+)\s*=\s*\"(\S+)\"/ || next;
+	    if ($1 eq 'INPATH') {
+		$target = $2;
+	    }
+	    if ($1 eq 'UPD') {
+		$libver = $2;
+	    }
+	    if ($1 eq 'DLLSUFFIX') {
+		$dllsuffix = $2;
+	    }
+	}
+	close ($file);
+    }
+
+    closedir ($dirhandle);
+
+    print "Sniffed target: $target, $libver, $dllsuffix\n";
+
+    if ($libver >= 680) {
+	$lang = 'en-US';
+    }
+
+    return ($target, $libver, $lang, $dllsuffix);
+}
+
+sub build_installed_list($)
+{
+    my $path = shift;
+    my %files = ();
+
+    for my $suffix (keys %replaceable) {
+	my $dirname = "$path/$suffix";
+	my $dirhandle;
+	my $pattern = $replaceable{$suffix};
+	if (opendir ($dirhandle, $dirname)) {
+	    while (my $fname = readdir ($dirhandle)) {
+		$fname =~ m/$pattern/ || next;
+
+		my $skip = 0;
+		for $pattern (@exceptions) {
+		    $fname =~ /$pattern/ || next;
+		    $skip = 1;
+		}
+		$files{$fname} = $dirname if !$skip;
+	    }
+	    closedir ($dirhandle);
+	} else {
+	    print "Couldn't find '$dirname': skipping\n";
+	}
+    }
+    return \%files;
+}
+
+sub check_create_linked($)
+{
+    my $path = shift;
+    my $linked_dir = "$path/linked";
+    if (! -d $linked_dir) {
+	mkdir $linked_dir || die "Can't make $linked_dir: $!";
+    }
+}
+
+
+sub scan_and_link_files($$$)
+{
+    my $build_path = shift;
+    my $installed_files = shift;
+    my $target = shift;
+    
+    my @modules = ();
+    my $dirh_toplevel;
+    opendir ($dirh_toplevel, $build_path) || die "Can't open '$build_path': $!";
+    while (my $subdir = readdir ($dirh_toplevel)) {
+	my $test = "$build_path/$subdir/$target";
+	-d $test && push @modules, $test;
+    }
+    closedir ($dirh_toplevel);
+
+# FIXME: re-implement the $product functionality
+    my $module;
+    my %build_files;
+    for $module (@modules) {
+	for $elem (@search_dirs) {
+	    my $dirh_module;
+	    my $module_path = "$module/$elem";
+	    opendir ($dirh_module, $module_path) || die "Can't open '$module_path': $!";
+	    while (my $file = readdir($dirh_module)) {
+		if (defined $installed_files->{$file}) {
+		    if (defined $build_files{$file}) {
+			my $known = 0;
+			for my $regexp (@known_duplicates) {
+			    if ($file =~ m/$regexp/) {
+				$known = 1;
+			    }
+			}
+			if (!$known) {
+			    print "Unknown duplicate file '$file' in: '" . 
+				$build_files{$file} . "' vs '" .
+				$module_path . "' in module $module\n";
+			    exit (1);
+			}
+		    }
+		    $build_files{$file} = $module_path;
+		}
+	    }
+	    closedir ($dirh_module);
+	}
+    }
+
+    for my $file (keys %build_files) {
+	my $src = $build_files{$file};
+	my $dest = $installed_files->{$file};
+
+	if (-l "$dest/$file") {
+	    if (!$dry_run) {
+		# re-write the link
+		unlink ("$dest/$file");
+		symlink ("$src/$file", "$dest/$file") || die "Failed to symlink: $!";
+		print " [$file]";
+	    } else {
+		print "re-make link $src/$file => $dest/$file\n";
+	    }
+	} else {
+	    check_create_linked ($dest);
+	    if (!$dry_run) {
+		# move / write the link
+		rename ("$dest/$file", "$dest/linked/$file") || die "Failed rename of $dest/$file: $!";
+		symlink ("$src/$file", "$dest/$file") || die "Failed to symlink: $!";
+		print " $file";
+	    } else {
+		print "move / symlink $src/$file => $dest/$file\n";
+	    }
+	}
+    }
+    print "\n";
+}
+
+if (@ARGV < 2) {
+    printf "Usage: linkoo </path/to/ooo/install> </path/to/ooo/build/tree> [--product]\n";
+    exit (1);
+}
+
+$OOO_INSTALL = shift (@ARGV);
+$OOO_BUILD = shift (@ARGV);
+
+substr ($OOO_INSTALL, 0, 1) eq '/' || die "linkoo requires absolute paths";
+substr ($OOO_BUILD, 0, 1)   eq '/' || die "linkoo requires absolute paths";
+
+my $a;
+for $a (@ARGV) {
+    $product = 1 if $a =~ /--product/;
+    $dry_run = 1 if $a =~ /--dry-run/;
+}
+
+if ($OOO_BUILD !~ m|^/|) {
+    printf "second argument must be an absolute path\n";
+    exit (1);
+}
+
+-d $OOO_INSTALL || die "No such directory $OOO_INSTALL";
+-w $OOO_INSTALL || die "You need write access to $OOO_INSTALL";
+-d $OOO_BUILD || die "No such directory $OOO_BUILD";
+-d "$OOO_INSTALL/program/resource" || die "$OOO_INSTALL doesn't look like an OO install";
+
+($TARGET, $LIBVER, $LANG, $DLLSUFFIX) = sniff_target ($OOO_BUILD);
+
+my $installed_files = build_installed_list ($OOO_INSTALL);
+
+scan_and_link_files ($OOO_BUILD, $installed_files, $TARGET);
+
+print "Special iso.res case:";
+$ooo_res="$OOO_INSTALL/program/resource/ooo".$LIBVER.$LANG.".res";
+$star_res="$OOO_INSTALL/program/resource/iso".$LIBVER.$LANG.".res";
+if (-l $ooo_res && -l $star_res) {
+    unlink ($star_res);
+    symlink ($ooo_res, $star_res);
+    print " clobbered";
+}
+print "\n";
+
+if (!-f "$OOO_INSTALL/program/env") {
+    print "Creating '$OOO_INSTALL/program/env'\n";
+    open ($env, ">$OOO_INSTALL/program/env") || die "Can't open $OOO_INSTALL/program/env: $!";
+    print $env $env_script;
+    close ($env);
+}
