@@ -1,0 +1,10 @@
+# test can be long: so increase the time until the test is interrupted
+# time in milliseconds
+ThreadTimeOut=50000000
+
+# wait for the Office to close: may be increased on slower machines
+# time in milliseconds
+OfficeCloseTime=5000
+
+# do not start an Office initially
+NoOffice=yes
