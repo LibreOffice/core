@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SvxUnoNumberingRules.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change:$Date: 2004-01-05 19:52:25 $
+ *  last change:$Date: 2004-03-19 14:37:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,8 +58,15 @@
  *
  *
  ************************************************************************/
-
 package mod._svx;
+
+import com.sun.star.beans.Property;
+import com.sun.star.container.XIndexAccess;
+import com.sun.star.lang.XComponent;
+import com.sun.star.lang.XMultiServiceFactory;
+import com.sun.star.uno.Exception;
+import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XInterface;
 
 import java.io.PrintWriter;
 
@@ -67,42 +74,56 @@ import lib.StatusException;
 import lib.TestCase;
 import lib.TestEnvironment;
 import lib.TestParameters;
+
 import util.DrawTools;
 
-import com.sun.star.lang.XComponent;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.uno.Exception;
-import com.sun.star.uno.UnoRuntime;
-import com.sun.star.uno.XInterface;
 
 public class SvxUnoNumberingRules extends TestCase {
     XComponent xDrawDoc;
 
-    protected void initialize( TestParameters tParam, PrintWriter log ) {
-        log.println( "creating a drawdoc" );
-        xDrawDoc = DrawTools.createDrawDoc((XMultiServiceFactory)tParam.getMSF());
+    protected void initialize(TestParameters tParam, PrintWriter log) {
+        log.println("creating a drawdoc");
+        xDrawDoc = DrawTools.createDrawDoc(
+                           (XMultiServiceFactory) tParam.getMSF());
     }
 
     protected TestEnvironment createTestEnvironment(TestParameters tParam,
-            PrintWriter log) {
-        XMultiServiceFactory docMSF = (XMultiServiceFactory)UnoRuntime.
-                queryInterface(XMultiServiceFactory.class, xDrawDoc);
+                                                    PrintWriter log) {
+        XMultiServiceFactory docMSF = (XMultiServiceFactory) UnoRuntime.queryInterface(
+                                              XMultiServiceFactory.class,
+                                              xDrawDoc);
+        XInterface oObj = null;
 
         try {
-            XInterface xInt = (XInterface)docMSF.createInstance(
-                    "com.sun.star.text.NumberingRules");
-
-            TestEnvironment tEnv = new TestEnvironment(xInt);
-
-            return tEnv;
+            oObj = (XInterface) docMSF.createInstance(
+                           "com.sun.star.text.NumberingRules");
         } catch (Exception e) {
             e.printStackTrace(log);
             throw new StatusException("Unexpected exception", e);
         }
+
+        TestEnvironment tEnv = new TestEnvironment(oObj);
+
+        log.println("Implementationname: " + util.utils.getImplName(oObj));
+
+        Object NewRules=null;
+
+        try{
+        XIndexAccess xIA = (XIndexAccess) UnoRuntime.queryInterface(XIndexAccess.class, oObj);
+        NewRules = xIA.getByIndex(2);
+        } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
+            log.println("Couldn't get new Rules for XIndexReplace");
+        } catch (com.sun.star.lang.WrappedTargetException e) {
+            log.println("Couldn't get new Rules for XIndexReplace");
+        }
+
+        tEnv.addObjRelation("INSTANCE1",NewRules);
+
+        return tEnv;
     }
 
-    protected void cleanup( TestParameters tParam, PrintWriter log ) {
-        log.println( "    disposing xDrawDoc " );
+    protected void cleanup(TestParameters tParam, PrintWriter log) {
+        log.println("    disposing xDrawDoc ");
         util.DesktopTools.closeDoc(xDrawDoc);
     }
 }
