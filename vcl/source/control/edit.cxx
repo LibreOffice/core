@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 13:17:11 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 18:21:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -649,7 +649,7 @@ void Edit::ImplRepaint( xub_StrLen nStart, xub_StrLen nEnd, bool bLayout )
                     USHORT nAttr = mpIMEInfos->pAttribs[i];
                     Region aClip;
                     int nIndex = i;
-                    while( mpIMEInfos->pAttribs[nIndex] == nAttr && nIndex < mpIMEInfos->nLen )
+                    while( nIndex < mpIMEInfos->nLen && mpIMEInfos->pAttribs[nIndex] == nAttr)  // #112631# check nIndex before using it
                     {
                         Rectangle aRect( aPos, Size( 10, nTH ) );
                         aRect.Left() = pDX[2*(nIndex+mpIMEInfos->nPos)] + mnXOffset + ImplGetExtraOffset();
