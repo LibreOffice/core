@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-25 10:49:42 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 15:59:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -546,10 +546,10 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
         };
         FilterList [ greek ] =
         {
-         < "Αυτόματα" ; SFXSTYLEBIT_ALL ; > ;
-            < "Όλα τα πρότυπα" ; SFXSTYLEBIT_USED ; > ;
-            < "Εφαρμοσμένα στυλ" ; SFXSTYLEBIT_USERDEF ; > ;
-            < "Πρότυπα χρήστη" ; SFXSTYLEBIT_AUTO ; > ;
+         < "Όλα τα στυλ" ; SFXSTYLEBIT_ALL ; > ;
+            < "Εφαρμοσμένα στυλ" ; SFXSTYLEBIT_USED ; > ;
+            < "Προσαρμοσμένα στυλ" ; SFXSTYLEBIT_USERDEF ; > ;
+            < "Αυτόματα" ; SFXSTYLEBIT_AUTO ; > ;
             < "Πρότυπο κειμένου" ; SWSTYLEBIT_TEXT ; > ;
             < "Πρότυπα κεφαλαίων" ; SWSTYLEBIT_CHAPTER ; > ;
             < "Στυλ λίστας" ; SWSTYLEBIT_LIST ; > ;
@@ -679,7 +679,7 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
             < "Estilos de Texto" ; SWSTYLEBIT_TEXT ; > ;
             < "Estilos de Capνtulo" ; SWSTYLEBIT_CHAPTER ; > ;
             < "Estilos de Lista" ; SWSTYLEBIT_LIST ; > ;
-            < "Estilos de Νndice" ; SWSTYLEBIT_IDX ; > ;
+            < "Estilos de νndice" ; SWSTYLEBIT_IDX ; > ;
             < "Estilos Especiais" ; SWSTYLEBIT_EXTRA ; > ;
             < "Estilos de HTML" ; SWSTYLEBIT_HTML ; > ;
             < "Estilos Condicionais" ; SWSTYLEBIT_CONDCOLL ; > ;
@@ -1993,17 +1993,17 @@ String STR_WRITER_DOCUMENT_FULLTYPE
     Text[ russian ] = "Òεκρςξβϋι δξκσμενς (%PRODUCTNAME 6.0)";
     Text[ greek ] = "Έγγραφο κειμένου %PRODUCTNAME 6.0";
     Text[ dutch ] = "%PRODUCTNAME 6.0 Tekstdocument";
-    Text[ french ] = "%PRODUCTNAME 6.0 Texte";
-    Text[ spanish ] = "%PRODUCTNAME 6.0 Documento de texto";
-    Text[ italian ] = "Documento di testo %PRODUCTNAME 6.0";
+    Text[ french ] = "%PRODUCTNAME %PRODUCTVERSION Texte";
+    Text[ spanish ] = "Documento de texto %PRODUCTNAME %PRODUCTVERSION ";
+    Text[ italian ] = "%PRODUCTNAME %PRODUCTVERSION Documento di testo ";
     Text[ danish ] = "%PRODUCTNAME 6.0 Tekstdokument";
-    Text[ swedish ] = "Textdokument %PRODUCTNAME 6.0";
+    Text[ swedish ] = "%PRODUCTNAME %PRODUCTVERSION-textdokument";
     Text[ polish ] = "%PRODUCTNAME 6.0 - Dokument tekstowy";
     Text[ portuguese_brazilian ] = "Documento Texto %PRODUCTNAME 4.0";
-    Text[ japanese ] = "%PRODUCTNAME 6.0 ζ–‡ζ›Έγƒ‰γ‚­γƒ¥γƒ΅γƒ³γƒ";
-    Text[ korean ] = "%PRODUCTNAME 6.0 ν…μ¤νΈ λ¬Έμ„";
-    Text[ chinese_simplified ] = "%PRODUCTNAME 6.0 ζ–‡ζ¬ζ–‡ζ΅£";
-    Text[ chinese_traditional ] = "%PRODUCTNAME 6.0 ζ–‡ε­—ζ–‡δ»¶";
+    Text[ japanese ] = "%PRODUCTNAME %PRODUCTVERSION ζ–‡ζ›Έγƒ‰γ‚­γƒ¥γƒ΅γƒ³γƒ";
+    Text[ korean ] = "%PRODUCTNAME %PRODUCTVERSION ν…μ¤νΈ λ¬Έμ„";
+    Text[ chinese_simplified ] = "%PRODUCTNAME %PRODUCTVERSION ζ–‡ζ¬ζ–‡ζ΅£";
+    Text[ chinese_traditional ] = "%PRODUCTNAME %PRODUCTVERSION ζ–‡ε­—ζ–‡δ»¶";
     Text[ turkish ] = "%PRODUCTNAME 6.0 Metin Belgesi";
     Text[ arabic ] = "γΣΚδΟ δΥ γδ %PRODUCTNAME 6.0";
     Text[ catalan ] = "%PRODUCTNAME 6.0 Text";
@@ -2898,7 +2898,7 @@ String STR_STATSTR_SPELL
     Text[ arabic ] = "ΚΟήνή ΕγαΗΖν...";
     Text[ dutch ] = "Bezig met spellingcontrole...";
     Text[ chinese_simplified ] = "ζ‹Όε†™ζ£€ζ¥...";
-    Text[ greek ] = "Έλεγχος ορθογραφίας...";
+    Text[ greek ] = "Ορθογραφικός έλεγχος...";
     Text[ korean ] = "λ§μ¶¤λ²• κ²€μ‚¬...";
     Text[ turkish ] = "Yazύm denetimi...";
     Text[ language_user1 ] = " ";
@@ -2956,7 +2956,7 @@ String STR_STATSTR_TOX_INSERT
     Text [ dutch ] = "Index wordt ingevoegd..." ;
     Text [ swedish ] = "Fφrteckning infogas..." ;
     Text [ danish ] = "Indsζtter indeks..." ;
-    Text [ portuguese_brazilian ] = "Inserindo o Νndice..." ;
+    Text [ portuguese_brazilian ] = "Inserindo o νndice..." ;
     Text [ portuguese ] = "Inserindo νndice..." ;
     Text[ chinese_simplified ] = "ζ’ε…¥η›®ε½•...";
     Text[ language_user1 ] = " ";
@@ -2990,7 +2990,7 @@ String STR_STATSTR_TOX_UPDATE
     Text [ dutch ] = "Index wordt bijgewerkt..." ;
     Text [ swedish ] = "Fφrteckning uppdateras..." ;
     Text [ danish ] = "Opdaterer indeks..." ;
-    Text [ portuguese_brazilian ] = "Atualizando o Νndice..." ;
+    Text [ portuguese_brazilian ] = "Atualizando o νndice..." ;
     Text [ portuguese ] = "Actualizando νndice..." ;
     Text[ chinese_simplified ] = "ζ›΄ζ–°η›®ε½•...";
     Text[ language_user1 ] = " ";
@@ -3257,7 +3257,7 @@ String STR_FRAME_DEFNAME
     Text[ arabic ] = "ίΗΟΡ";
     Text[ dutch ] = "Kader";
     Text[ chinese_simplified ] = "ζ΅†";
-    Text[ greek ] = "Περίγραμμα";
+    Text[ greek ] = "Πλαίσιο";
     Text[ korean ] = "ν”„λ μ„";
     Text[ turkish ] = "Ηerηeve";
     Text[ language_user1 ] = " ";
@@ -3452,7 +3452,7 @@ QueryBox MSG_SAVEAS_HTML_QUERY
     MESSAGE[ english_us ] = "The source code can only be displayed if the document is saved in HTML format.\nWould you like to save the document as HTML?";
     MESSAGE[ portuguese ] = "Sσ ι possνvel ver o texto-fonte se o documento for guardado em formato HTML.\nGuardar o documento em formato HTML?";
     MESSAGE[ russian ] = "Θρυξδνϋι κξδ μξζες αϋςό ξςξαπΰζεν ςξλόκξ, ερλθ δξκσμενς ρξυπΰνεν β τξπμΰςε HTML.\nΡξυπΰνθςό δξκσμενς β τξπμΰςε HTML?";
-    MESSAGE[ greek ] = "Ο κώδικας HTML μπορεί να εμφανιστεί μόνο αν το έγγραφο είναι αποθηκευμένο σε μορφή HTML.\nΘέλετε να αποθηκεύσετε το έγγραφο σαν HTML;";
+    MESSAGE[ greek ] = "Ο πηγαίος κώδικας μπορεί να εμφανιστεί μόνο αν το έγγραφο έχει αποθηκευτεί σε μορφή HTML.\nΘέλετε να αποθηκεύσετε το έγγραφο ως HTML;";
     MESSAGE[ dutch ] = "De brontekst kan alleen worden weergegeven als het document in de HTML-indeling is opgeslagen.\nWilt u het document nu in de HTML-indeling opslaan?";
     MESSAGE[ french ] = "Le texte source ne peut κtre affichι que si le document a ιtι enregistrι au format HTML.\nVoulez-vous enregistrer le document au format HTML ?";
     MESSAGE[ spanish ] = "Sσlo se puede mostrar el texto fuente si el documento estα guardado en formato HTML.\nΏDesea guardar ahora el documento en formato HTML?";
@@ -3650,7 +3650,7 @@ String STR_WESTERN_FONT
     Text[ english_us ] = "Western text: ";
     Text[ portuguese ] = "Texto ocidental:";
     Text[ russian ] = "Ηΰοΰδνϋι ςεκρς:";
-    Text[ greek ] = "Δυτικό κείμενο:";
+    Text[ greek ] = "Κείμενο δυτικής γραφής:";
     Text[ dutch ] = "Westelijke tekst:";
     Text[ french ] = "Texte occidental : ";
     Text[ spanish ] = "Texto occidental: ";
@@ -3680,7 +3680,7 @@ String STR_CJK_FONT
     Text[ english_us ] = "Asian text: ";
     Text[ portuguese ] = "Texto asiαtico:";
     Text[ russian ] = "ΐηθΰςρκθι ςεκρς:";
-    Text[ greek ] = "Ασιατικό κείμενο:";
+    Text[ greek ] = "Κείμενο ασιατικής γραφής: ";
     Text[ dutch ] = "Aziatische tekst:";
     Text[ french ] = "Texte asiatique : ";
     Text[ spanish ] = "Texto asiαtico: ";
@@ -3752,7 +3752,7 @@ WarningBox MSG_DISABLE_UNDO_QUESTION
     Message[ danish ] = "This action deletes the list of actions that can be undone. Previous changes made to the document are still valid, but cannot be undone. Do you want to continue formatting?";
     Message[ swedish ] = "Den hδr εtgδrden raderar listan med arbetssteg som gεr att εngra. Δndringar som har gjorts hittills i dokumentet finns kvar men gεr inte att εngra lδngre. Vill du fortsδtta med formateringen?";
     Message[ polish ] = "This action deletes the list of actions that can be undone. Previous changes made to the document are still valid, but cannot be undone. Do you want to continue formatting?";
-    Message[ portuguese_brazilian ] = "This action deletes the list of actions that can be undone. Previous changes made to the document are still valid, but cannot be undone. Do you want to continue formatting?";
+    Message[ portuguese_brazilian ] = "Esta aηγo exclui a lista de aηυes passνveis de serem desfeitas. As alteraηυes anteriores feitas no documento continuam vαlidas, mas nγo podem ser desfeitas. Deseja continuar a formataηγo?";
     Message[ japanese ] = "γ“γ®γ‚Άγ‚―γ‚·γƒ§γƒ³γ§γ€ε…ƒγ«ζ»γ™γ®γε―θƒ½γªγ‚Άγ‚―γ‚·γƒ§γƒ³γ®γƒªγ‚Ήγƒγε‰ι™¤γ•γ‚γΎγ™γ€‚γ“γ‚γΎγ§γ«γƒ‰γ‚­γƒ¥γƒ΅γƒ³γƒγ§θ΅γ£γε¤‰ζ›΄γ―γγ®γΎγΎζ®‹γ‚γΎγ™γγ€γ‚Άγ‚―γ‚·γƒ§γƒ³γ‚’ε…ƒγ«ζ»γ™γ“γ¨γ―γ§γγΎγ›γ‚“γ€‚ζ›ΈεΌθ¨­ε®γ‚’η¶θ΅γ—γΎγ™γ‹γ€‚";
     Message[ korean ] = "μ΄ μ‘λ™μ„ μ‹¤ν–‰ν•λ©΄ μ‹¤ν–‰ μ·¨μ†ν•  μ μλ” λª¨λ“  μ‘μ—… λ‹¨κ³„μ μ…λ ¥ λª©λ΅μ΄ μ‚­μ λ©λ‹λ‹¤. ν„μ¬κΉμ§€ λ¬Έμ„μ—μ„ λ³€κ²½λ λ‚΄μ©μ€ μ ν¨ν•λ‚ λ” μ΄μƒ μ›λλ€λ΅ λλλ¦΄ μλ” μ—†μµλ‹λ‹¤. μ„μ‹μ„ κ³„μ†ν•μ‹κ² μµλ‹κΉ?";
     Message[ chinese_simplified ] = "θΏ™ι΅Ήζ“δ½δΌε ι™¤η”¨δΊζ’¤ζ¶ε‘½δ»¤η„ζ―δΈ€ζ­¥ιª¤η„θ®°ε½•ε—ε•γ€‚θ‡³η›®ε‰δΈΊζ­Άζ–‡ζ΅£ζ‰€ζ‰η„ζ›΄ζ”Ήε°†δΌδΏε­οΌδ½†ζ―ζ‚¨ζ— ζ³•ε†ζ’¤ζ¶θΏ™δΊ›ζ›΄ζ”Ήγ€‚ζ‚¨θ¦η»§η»­ζ‰§θ΅ζ ΌεΌε–οΌ";
@@ -3808,7 +3808,7 @@ QueryBox MSG_PRINT_AS_MERGE
     Message[ italian ] = "Il vostro documento contiene un database Rubrica. Volete eseguire una stampa in serie?";
     Message[ swedish ] = "Ditt dokument innehεller adressdatabasfδlt. Vill du skriva ut ett standardbrev (kopplad utskrift)?";
     Message[ polish ] = "Your document contains address database fields. Do you want to print a form letter?";
-    Message[ portuguese_brazilian ] = "Your document contains address database fields. Do you want to print a form letter?";
+    Message[ portuguese_brazilian ] = "Seu documento contιm campos do banco de dados de endereηos. Deseja imprimir uma mala direta?";
     Message[ japanese ] = "γƒ‰γ‚­γƒ¥γƒ΅γƒ³γƒγ«γ‚Άγƒ‰γƒ¬γ‚Ήγƒ‡γƒΌγ‚Ώγƒ™γƒΌγ‚Ήγ®γƒ•γ‚£γƒΌγƒ«γƒ‰γε«γΎγ‚γ¦γ„γΎγ™γ€‚ε·®γ—θΎΌγΏε°ε·γ‚’ε®θ΅γ—γΎγ™γ‹γ€‚";
     Message[ korean ] = "λ¬Έμ„μ— λ°μ΄ν„°λ² μ΄μ¤ μ£Όμ† ν•„λ“κ°€ μμµλ‹λ‹¤. νΈμ§€ μ–‘μ‹μ„ μΈμ‡„ν•μ‹κ² μµλ‹κΉ?";
     Message[ turkish ] = "Belgenizde veritabanύ alanlarύ adresi var. Form mektubu yazmak ister misiniz?";
@@ -3840,7 +3840,7 @@ WarningBox MSG_MERGE_SOURCE_UNAVAILABLE
     Message[ italian ] = "Impossibile trovare la sorgente dati \"%1\".\nControllate le impostazioni in \'Strumenti - Sorgente dati...\'";
     Message[ swedish ] = "Det gick inte att hitta datakδllan \\%1\\.\nKontrollera instδllningarna under \'Verktyg - Datakδllor...\'";
     Message[ polish ] = "The data source \"%1\" was not found.\nCheck the settings in \'Tools - Data Sources...\'";
-    Message[ portuguese_brazilian ] = "The data source \"%1\" was not found.\nCheck the settings in \'Tools - Data Sources...\'";
+    Message[ portuguese_brazilian ] = "Nγo foi encontrada a fonte de dados  \"%1\" . \nVerifique as configuraηυes em  'Ferramentas - Fontes de dados...'";
     Message[ japanese ] = "γƒ‡γƒΌγ‚Ώγ‚½γƒΌγ‚Ήγ€%1γ€γθ¦‹γ¤γ‹γ‚γΎγ›γ‚“γ§γ—γγ€‚\nγƒ„γƒΌγƒ« - γƒ‡γƒΌγ‚Ώγ‚½γƒΌγ‚Ή...γ§θ¨­ε®γ‚’γƒγ‚§γƒƒγ‚―γ—γ¦γγ γ•γ„γ€‚";
     Message[ korean ] = "\'%1\' λ°μ΄ν„° μ›λ³Έμ„ μ°Ύμ„ μ μ—†μµλ‹λ‹¤.\n[λ„κµ¬] - [λ°μ΄ν„° μ›λ³Έ...] λ©”λ‰΄μ—μ„ μ„¤μ •μ„ μ κ²€ν•΄ λ³΄μ‹­μ‹μ¤.";
     Message[ turkish ] = "Veri kaynaπύ \'%1\' bulunamadύ. \n\'Tools - Data Sources...\' iηindeki ayarlarύ kontrol et";
@@ -3871,7 +3871,7 @@ WarningBox MSG_DATA_SOURCES_UNAVAILABLE
     Message[ italian ] = "Non θ stata impostata nessuna sorgente dati. Una sorgente dati, come un database, θ necessaria per fornire dati (come nomi o indirizzi) per i campi.";
     Message[ swedish ] = "Ingen datakδlla har stδllts in δnnu. Du behφver en datakδlla som fδlten kan hδmta data ifrεn (t.ex. namn och adresser frεn en databas).";
     Message[ polish ] = "There is no data source available.\nDo you want to establish a data source connnection?";
-    Message[ portuguese_brazilian ] = "There is no data source available.\nDo you want to establish a data source connnection?";
+    Message[ portuguese_brazilian ] = "Nγo hα fonte de dados disponνvel.\nDeseja estabelecer uma conexγo a uma fonte de dados?";
     Message[ japanese ] = "γƒ‡γƒΌγ‚Ώγ‚½γƒΌγ‚ΉγγΎγ θ¨­ε®γ•γ‚γ¦γ„γΎγ›γ‚“γ€‚γ“γ®γƒ•γ‚£γƒΌγƒ«γƒ‰γ«γ―γ€εε‰γ‚„δ½ζ‰€γªγ©γƒ‡γƒΌγ‚Ώγƒ™γƒΌγ‚Ήγ§δ½Ώη”¨γ™γ‚‹γƒ‡γƒΌγ‚Ώγ‚½γƒΌγ‚ΉγεΏ…θ¦γ§γ™γ€‚";
     Message[ korean ] = "λ°μ΄ν„° μ›λ³Έμ΄ μ•„μ§ μ„¤μΉλμ§€ μ•μ•μµλ‹λ‹¤. μλ¥Ό λ“¤μ–΄ μ΄λ¦„μ΄λ‚ μ£Όμ†μ™€ κ°™μ€ ν•„λ“μ© λ°μ΄ν„°λ¥Ό μ κ³µν•λ ¤λ©΄, λ°μ΄ν„°λ² μ΄μ¤μ™€ κ°™μ€ λ°μ΄ν„° μ›λ³Έμ΄ ν•„μ”ν•©λ‹λ‹¤.";
     Message[ turkish ] = "Veri kaynaπύ henόz kurulmadύ. Alanlara veri giriώi iηin (φrnek: adresler ve isimler) veri kaynaπύna gereksiniminiz var.";
@@ -4017,7 +4017,10 @@ WarningBox MSG_DISABLE_READLINE_QUESTION
     Message[ chinese_simplified ] = "η›®ε‰η„ζ–‡ζ΅£δΉ‹δΈ­η„ζ›΄ζ”Ήε·²η»θΆ«ηΊªε½•οΌδ½†ζ―εΉ¶ζ²΅ζ‰η«‹ε»ζΎη¤Ίε‡Ίζ¥γ€‚ε¨ηΌ–θΎ‘δΈ€δΈªζ―”θΎƒεΊε¤§η„ζ–‡ζ΅£ζ—¶δΌε‘η”ε»¶θΏη„η°θ±΅γ€‚ζ‚¨ζƒ³θ¦θ®©ζ›΄ζ”Ήιƒ¨ε†ζΎη¤Ίε‡Ίζ¥δ»¥ιΏε…ε»¶θΏοΌ";
     Message[ chinese_traditional ] = "ε·²η΄€ι„η›®ε‰η„ζ–‡δ»¶δΉ‹ε†…η„θ®ζ›΄οΌδ½†ζ―δΈ¦ζ²’ζ‰η«‹ε»ι΅―η¤Ίε‡ΊδΎ†γ€‚ε¨η·¨θΌ―δΈ€ε€‹ζ―”θΌƒιΎε¤§η„ζ–‡δ»¶ζ™‚ζƒη™Όη”ε»¶ι²η„ηΎθ±΅γ€‚ζ‚¨ζƒ³θ¦θ®“θ®ζ›΄ιƒ¨ε†ι΅―η¤Ίε‡ΊδΎ†δ»¥ιΏε…ε»¶ι²οΌ";
     Message[ slovak ] = "V aktΓ­vnom dokumente sa nahrΓ΅vajΓΊ zmeny, ale program ich neeviduje. Vo veΔΎkΓ½ch dokumentoch, mΓ΄ΕΎe nastaΕ¥ oneskorenie pri ΓΊpravΓ΅ch. Chcete zobraziΕ¥ zmeny, aby sa zabrΓ΅nilo oneskoreniu?";
+    Message[ portuguese_brazilian ] = "No documento atual, as modificaηυes sγo gravadas mas nγo sγo apresentadas como tal. Em documentos grandes, atrasos poderγo ocorrer quando o documento ι editado. Deseja exibir as modificalηυes para evitar os atrasos?";
 };
+
+
 
 
 
