@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querydlg.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-14 15:07:54 $
+ *  last change: $Author: kz $ $Date: 2001-08-21 22:02:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -334,7 +334,7 @@ String STR_QUERY_LEFTRIGHT_JOIN
     Text[ portuguese_brazilian ] = "(no function);Average;Count;Maximum;Minimum;Sum;Grouping";
     Text[ japanese ] = "'%1' γ®γ™γΉγ¦γ®οΎο½Ίο½°οΎ„οΎγ€γγ‚γ³δΈ΅ζ–Ήγ®οΎƒο½°οΎοΎοΎ™γ§οΎοΎο½Έγ•γ‚γοΎο½¨ο½°οΎ™οΎ„οΎγ®ε†…ε®ΉγδΈ€θ‡΄γ™γ‚‹ '%2' γ®οΎο½Ίο½°οΎ„οΎγ γ‘γ‚’ε«γΏγΎγ™γ€‚";
     Text[ chinese_simplified ] = "ε«ζ‰'%1'δΈ­η„ζ‰€ζ‰ζ•°ζ®ζ΅η›®ε’'%2'δΈ­δΈ¤δΈªθ΅¨ζ ΌεΌ•η”¨ε­—ζ®µη›Έεη„ζ•°ζ®ζ΅η›®γ€‚";
-    Text[ chinese_traditional ] = "ε«ζ‰'%1'δΈ­η„ζ‰€ζ‰θ³‡ζ–™ζΆη›®ε’'%2'δΈ­ε…©ε€‹θ΅¨ζ Όη„ι€£ηµζ¬„δ½η›Έεη„θ³‡ζ–™ζΆη›®γ€‚";
+    Text[ chinese_traditional ] = "ε«ζ‰<%1>δΈ­η„ζ‰€ζ‰θ³‡ζ–™ζΆη›®ε’<%2>δΈ­ε…©ε€‹θ΅¨ζ Όη„ι€£ηµζ¬„δ½η›Έεη„θ³‡ζ–™ζΆη›®γ€‚";
     Text[ dutch ] = "Bevat ALLE records uit '%1' en alleen de records uit '%2' waarbij de inhoud van de gekoppelde velden in beide tabellen gelijk is.";
     Text[ chinese_simplified ] = "ε«ζ‰'%1'δΈ­η„ζ‰€ζ‰ζ•°ζ®ζ΅η›®ε’'%2'δΈ­δΈ¤δΈªθ΅¨ζ ΌεΌ•η”¨ε­—ζ®µη›Έεη„ζ•°ζ®ζ΅η›®γ€‚";
     Text[ greek ] = "Περιέχει ΟΛΕΣ τις εγγραφές του πίνακα '%1' και τις εγγραφές του πίνακα '%2' στις οποίες ταυτίζονται τα περιεχόμενα των συνδεδεμένων πεδίων των ";
@@ -363,7 +363,7 @@ String STR_QUERY_FULL_JOIN
     Text[ portuguese_brazilian ] = "(no function);Average;Count;Maximum;Minimum;Sum;Grouping";
     Text[ japanese ] = "'%1' γ¨ '%2' γ®γ™γΉγ¦γ®οΎο½Ίο½°οΎ„οΎγ‚’ε«γΏγΎγ™γ€‚";
     Text[ chinese_simplified ] = "ε«ζ‰ '%1'ε’'%2'ε†…ε…¨ιƒ¨η„ζ•°ζ®ζ΅η›®";
-    Text[ chinese_traditional ] = "ε«ζ‰ '%1'ε’'%2'ε…§ε…¨ιƒ¨η„θ³‡ζ–™ζΆη›®";
+    Text[ chinese_traditional ] = "ε«ζ‰<%1>ε’<%2>ε…§ε…¨ιƒ¨η„θ³‡ζ–™ζΆη›®";
     Text[ dutch ] = "Bevat ALLE records uit '%1' en '%2'.";
     Text[ chinese_simplified ] = "ε«ζ‰ '%1'ε’'%2'ε†…ε…¨ιƒ¨η„ζ•°ζ®ζ΅η›®";
     Text[ greek ] = "Περιέχει ΟΛΕΣ τις εγγραφές των '%1' και '%2'.";
@@ -374,6 +374,7 @@ String STR_QUERY_FULL_JOIN
     Text[ catalan ] = "Contiene TODOS los registros de datos de '%1' y de '%2'";
     Text[ finnish ] = "Beinhaltet ALLE Datensδtze aus '%1' und aus '%2'.";
 };
+
 
 
 
