@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filelckb.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:18:31 $
+ *  last change: $Author: mhu $ $Date: 2001-02-26 14:24:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -54,22 +54,26 @@
  *
  *  All Rights Reserved.
  *
- *  Contributor(s): _______________________________________
+ *  Contributor(s): Matthias Huetsch <matthias.huetsch@sun.com>
  *
  *
  ************************************************************************/
 
-#define _STORE_FILELCKB_CXX_ "$Revision: 1.1.1.1 $"
+#define _STORE_FILELCKB_CXX_ "$Revision: 1.2 $"
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
 #endif
 
+#ifndef _RTL_STRING_HXX_
+#include <rtl/string.hxx>
+#endif
+
 #ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
 #endif
-#ifndef _RTL_STRING_HXX_
-#include <rtl/string.hxx>
+#ifndef _OSL_THREAD_H_
+#include <osl/thread.h>
 #endif
 
 #ifndef _STORE_MACROS_HXX_
@@ -102,24 +106,6 @@ using namespace store;
 #ifdef DEBUG
 #define inline static
 #endif /* DEBUG */
-
-/*
- * __store_getProcessTextEncoding (@@@, platform specific).
- */
-inline rtl_TextEncoding __store_getProcessTextEncoding (void)
-{
-    rtl_TextEncoding eEncoding;
-#if defined(SAL_OS2)
-    eEncoding = RTL_TEXTENCODING_IBM850;
-#elif defined(SAL_UNX)
-    eEncoding = RTL_TEXTENCODING_ISO_8859_1;
-#elif defined(SAL_W32)
-    eEncoding = RTL_TEXTENCODING_MS_1252;
-#else
-    eEncoding = RTL_TEXTENCODING_ASCII_US;
-#endif
-    return eEncoding;
-}
 
 /*
  * __store_memcpy.
@@ -523,7 +509,7 @@ inline storeError OFileLockBytes_Impl::create (
     OString aFilename (
         pFilename->buffer,
         pFilename->length,
-        __store_getProcessTextEncoding());
+        osl_getThreadTextEncoding());
 
     return create (aFilename.pData->buffer, eAccessMode);
 }
