@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ToolBoxHelper.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2002-04-29 07:59:56 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 13:26:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,9 @@
 #ifndef _SV_TOOLBOX_HXX
 #include <vcl/toolbox.hxx>
 #endif
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
 #ifndef INCLUDED_SVTOOLS_MISCOPT_HXX
 #include <svtools/miscopt.hxx>
 #endif
@@ -82,21 +85,42 @@ namespace dbaui
     OToolBoxHelper::OToolBoxHelper()
         : m_bIsHiContrast(sal_False)
         ,m_pToolBox(NULL)
-        ,m_nBitmapSet(SFX_SYMBOLS_SMALL)
+        ,m_nBitmapSet( getCurrentSymbolSet() )
     {
         SvtMiscOptions().AddListener( LINK( this, OToolBoxHelper, ConfigOptionsChanged ) );
+        Application::AddEventListener( LINK( this, OToolBoxHelper, SettingsChanged ) );
     }
     // -----------------------------------------------------------------------------
     OToolBoxHelper::~OToolBoxHelper()
     {
         SvtMiscOptions().RemoveListener( LINK( this, OToolBoxHelper, ConfigOptionsChanged ) );
+        Application::RemoveEventListener( LINK( this, OToolBoxHelper, SettingsChanged ) );
     }
+    // -----------------------------------------------------------------------------
+    sal_Int16 OToolBoxHelper::getCurrentSymbolSet()
+    {
+        sal_Int16   eOptSymbolSet = SvtMiscOptions().GetSymbolSet();
+
+        if ( eOptSymbolSet == SFX_SYMBOLS_AUTO )
+        {
+            // Use system settings, we have to retrieve the toolbar icon size from the
+            // Application class
+            ULONG nStyleIconSize = Application::GetSettings().GetStyleSettings().GetToolbarIconSize();
+            if ( nStyleIconSize == STYLE_TOOLBAR_ICONSIZE_LARGE )
+                eOptSymbolSet = SFX_SYMBOLS_LARGE;
+            else
+                eOptSymbolSet = SFX_SYMBOLS_SMALL;
+        }
+
+        return eOptSymbolSet;
+    }
+
     // -----------------------------------------------------------------------------
     void OToolBoxHelper::checkImageList()
     {
         if ( m_pToolBox )
         {
-            sal_Int16 nCurBitmapSet = SvtMiscOptions().GetSymbolSet();
+            sal_Int16 nCurBitmapSet = getCurrentSymbolSet();
             if ( nCurBitmapSet != m_nBitmapSet ||
                 m_bIsHiContrast != m_pToolBox->GetBackground().GetColor().IsDark() )
             {
@@ -124,6 +148,17 @@ namespace dbaui
             checkImageList();
             if ( aOptions.GetToolboxStyle() != m_pToolBox->GetOutStyle() )
                 m_pToolBox->SetOutStyle(aOptions.GetToolboxStyle());
+        }
+
+        return 0L;
+    }
+    // -----------------------------------------------------------------------------
+    IMPL_LINK(OToolBoxHelper, SettingsChanged, void*, _pVoid)
+    {
+        if ( m_pToolBox )
+        {
+            // check if imagelist changed
+            checkImageList();
         }
 
         return 0L;
