@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxhtml.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-07-26 05:48:21 $
+ *  last change: $Author: mib $ $Date: 2001-07-27 10:24:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,11 +93,6 @@
 #ifndef _GOODIES_IMAPRECT_HXX
 #include <svtools/imaprect.hxx>
 #endif
-#if SUPD<613//MUSTINI
-    #ifndef _SFXINIMGR_HXX
-    #include <svtools/iniman.hxx>
-    #endif
-#endif
 #ifndef _SVSTDARR_ULONGS_DECL
 #define _SVSTDARR_ULONGS
 #include <svtools/svstdarr.hxx>
@@ -116,11 +111,11 @@
 #ifndef _RTL_TENCINFO_H
 #include <rtl/tencinfo.h>
 #endif
+#ifndef _TOOLS_TENCCVT_HXX
+#include <tools/tenccvt.hxx>
+#endif
 
 #include "sfxhtml.hxx"
-#if SUPD<613//MUSTINI
-#include "inimgr.hxx"
-#endif
 sal_Char __FAR_DATA sHTML_MIME_text[] = "text/";
 sal_Char __FAR_DATA sHTML_MIME_application[] = "application/";
 sal_Char __FAR_DATA sHTML_MIME_experimental[] = "x-";
@@ -180,12 +175,9 @@ SfxHTMLParser::SfxHTMLParser( SvStream& rStream, BOOL bNewDoc,
     DBG_ASSERT( !IsSwitchToUCS2(),
                 "SfxHTMLParser::SfxHTMLParser: Switch to UCS2?" );
 
-    // If the system encoding is ANSI, this encoding is used as default
-    // source encoding. Otherwise ISO-8859-1 will be used, because this
-    // is the real default encoding.
-    SetSrcEncoding( RTL_TEXTENCODING_MS_1252 == gsl_getSystemTextEncoding()
-                        ? RTL_TEXTENCODING_MS_1252
-                        : RTL_TEXTENCODING_ISO_8859_1 );
+    // Altough the real default encoding is ISO8859-1, we use MS-1252
+    // als default encoding.
+    SetSrcEncoding( GetExtendedCompatibilityTextEncoding(  RTL_TEXTENCODING_ISO_8859_1 ) );
 
     // If the file starts with a BOM, switch to UCS2.
     SetSwitchToUCS2( TRUE );
@@ -584,9 +576,7 @@ BOOL SfxHTMLParser::FinishFileDownload( String& rStr )
 
         // TODO: untested!!!
         rtl_TextEncoding eEnc =
-            RTL_TEXTENCODING_MS_1252 == gsl_getSystemTextEncoding()
-                        ? RTL_TEXTENCODING_MS_1252
-                        : RTL_TEXTENCODING_ISO_8859_1;
+            GetExtendedCompatibilityTextEncoding( RTL_TEXTENCODING_ISO_8859_1 );
         String sMime;
         if( pDLMedium->GetMIMEAndRedirect( sMime ) == 0 )
         {
@@ -633,7 +623,7 @@ rtl_TextEncoding SfxHTMLParser::GetEncodingByMIME( const String& rMime )
         if (pCharset != 0)
         {
             ByteString sValue( pCharset->m_sValue, RTL_TEXTENCODING_ASCII_US );
-            return rtl_getTextEncodingFromMimeCharset( sValue.GetBuffer() );
+            return GetExtendedCompatibilityTextEncoding(rtl_getTextEncodingFromMimeCharset( sValue.GetBuffer() ) );
         }
     }
     return RTL_TEXTENCODING_DONTKNOW;
