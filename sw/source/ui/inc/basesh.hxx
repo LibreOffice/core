@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basesh.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-12-22 12:07:52 $
+ *  last change: $Author: os $ $Date: 2001-04-02 05:54:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,8 +157,6 @@ public:
 
     void        ExecBckCol(SfxRequest& rReq);
     void        SetWrapMode( USHORT nSlot );
-
-    void        ExecDB(SfxRequest &rReq);
 
     void        StateDisableItems(SfxItemSet &);
 
