@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.hxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-05 08:07:49 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 08:28:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,10 +160,11 @@ namespace connectivity
             ::std::vector<sal_Int32>                m_aOrderbyColumnNumber;
             ::std::vector<sal_Int16>                m_aOrderbyAscending;
 
-            OValueRow                               m_aRow;
-            OValueRow                               m_aEvaluateRow; // contains all values of a row
-            OValueRow                               m_aParameterRow;
-            OValueRow                               m_aInsertRow;   // needed for insert by cursor
+            OValueRefRow                            m_aSelectRow;
+            OValueRefRow                            m_aRow;
+            OValueRefRow                            m_aEvaluateRow; // contains all values of a row
+            OValueRefRow                            m_aParameterRow;
+            OValueRefRow                            m_aInsertRow;   // needed for insert by cursor
             ORefAssignValues                        m_aAssignValues; // needed for insert,update and parameters
                                                                     // to compare with the restrictions
             TIntVector*                             m_pEvaluationKeySet;
@@ -218,7 +219,7 @@ namespace connectivity
             sal_Bool                                m_bRowDeleted;
             sal_Bool                                m_bShowDeleted;
 
-            void initializeRow(OValueRow& _rRow,sal_Int32 _nColumnCount);
+            void initializeRow(OValueRefRow& _rRow,sal_Int32 _nColumnCount);
             void construct();
             sal_Bool evaluate();
 
@@ -228,7 +229,7 @@ namespace connectivity
                                 BOOL bEvaluate = TRUE,
                                 BOOL bRetrieveData = TRUE);
 
-            OKeyValue* GetOrderbyKeyValue(OValueRow _rRow);
+            OKeyValue* GetOrderbyKeyValue(OValueRefRow& _rRow);
             BOOL IsSorted() const { return !m_aOrderbyColumnNumber.empty() && m_aOrderbyColumnNumber[0] != SQL_COLUMN_NOTFOUND;}
 
             // return true when the select statement is "select count(*) from table"
@@ -360,11 +361,12 @@ namespace connectivity
             virtual void doTableSpecials(const OSQLTable& _xTable);
 
             sal_Int32 getRowCountResult() const { return m_nRowCountResult; }
-            void setParameterRow(const OValueRow& _rParaRow)                        { m_aParameterRow = _rParaRow; }
-            void setEvaluationRow(const OValueRow& _aRow)                           { m_aEvaluateRow = _aRow; }
+            void setParameterRow(const OValueRefRow& _rParaRow)                     { m_aParameterRow = _rParaRow; }
+            void setEvaluationRow(const OValueRefRow& _aRow)                        { m_aEvaluateRow = _aRow; }
             void setParameterColumns(const ::vos::ORef<connectivity::OSQLColumns>&  _xParamColumns) { m_xParamColumns = _xParamColumns; }
             void setAssignValues(const ORefAssignValues& _aAssignValues)            { m_aAssignValues = _aAssignValues; }
-            void setBindingRow(const OValueRow& _aRow)                              { m_aRow = _aRow; }
+            void setBindingRow(const OValueRefRow& _aRow)                           { m_aRow = _aRow; }
+            void setSelectRow(const OValueRefRow& _rRow)                            { m_aSelectRow = _rRow; }
             void setColumnMapping(const ::std::vector<sal_Int32>& _aColumnMapping)  { m_aColMapping = _aColumnMapping; }
             void setSqlAnalyzer(OSQLAnalyzer* _pSQLAnalyzer)                        { m_pSQLAnalyzer = _pSQLAnalyzer; }
 
@@ -374,12 +376,13 @@ namespace connectivity
 
             // clears the resultset so it can be reused by a preparedstatement
             void clear();
-            static void setBoundedColumns(const OValueRow& _rRow,
-                                   const ::vos::ORef<connectivity::OSQLColumns>& _rxColumns,
-                                   const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xNames,
-                                   sal_Bool _bSetColumnMapping,
-                                   const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>& _xMetaData,
-                                   ::std::vector<sal_Int32>& _rColMapping);
+            static void setBoundedColumns(const OValueRefRow& _rRow,
+                                    const OValueRefRow& _rSelectRow,
+                                    const ::vos::ORef<connectivity::OSQLColumns>& _rxColumns,
+                                    const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>& _xNames,
+                                    sal_Bool _bSetColumnMapping,
+                                    const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData>& _xMetaData,
+                                    ::std::vector<sal_Int32>& _rColMapping);
 
             // IResultSetHelper
             virtual sal_Bool move(IResultSetHelper::Movement _eCursorPosition, sal_Int32 _nOffset, sal_Bool _bRetrieveData);
