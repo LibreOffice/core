@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objshimp.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:59:10 $
+ *  last change: $Author: obo $ $Date: 2004-11-19 11:36:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,6 @@ struct MarkData_Impl
 class SfxFrame;
 class SfxDialogLibraryContainer;
 class SfxScriptLibraryContainer;
-class SfxImageManager;
 class SfxToolBoxConfig;
 class SfxAcceleratorManager;
 struct SfxObjectShell_Impl
@@ -156,7 +155,6 @@ struct SfxObjectShell_Impl
     sal_uInt16              nAutoLoadLocks;
     SfxModule*              pModule;
     SfxFrame*               pFrame;
-    SfxImageManager*        pImageManager;
     SfxToolBoxConfig*       pTbxConfig;
     SfxEventConfigItem_Impl* pEventConfig;
     SfxObjectShellFlags     eFlags;
@@ -223,7 +221,6 @@ struct SfxObjectShell_Impl
         pModule( 0 ),
         bModuleSearched( sal_False ),
         pFrame( 0 ),
-        pImageManager( 0 ),
         pTbxConfig( 0 ),
         pEventConfig(NULL),
         bIsHelpObjSh( sal_False ),
