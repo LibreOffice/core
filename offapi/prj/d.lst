@@ -45,6 +45,7 @@ mkdir: %_DEST%\idl%_EXT%\com\sun\star\util
 mkdir: %_DEST%\idl%_EXT%\com\sun\star\view
 mkdir: %_DEST%\idl%_EXT%\com\sun\star\xml
 mkdir: %_DEST%\idl%_EXT%\com\sun\star\xml\sax
+mkdir: %_DEST%\idl%_EXT%\com\sun\star\ui\dialogs
 
 ..\%__SRC%\ucr\offapi.db %_DEST%\bin%_EXT%\offapi.rdb
 ..\%__SRC%\ucrdoc\offapi_doc.db %_DEST%\bin%_EXT%\applicat_doc.rdb
@@ -94,7 +95,7 @@ mkdir: %_DEST%\idl%_EXT%\com\sun\star\xml\sax
 ..\com\sun\star\view\*.idl %_DEST%\idl%_EXT%\com\sun\star\view\*.idl
 ..\com\sun\star\xml\*.idl %_DEST%\idl%_EXT%\com\sun\star\xml\*.idl
 ..\com\sun\star\xml\sax\*.idl %_DEST%\idl%_EXT%\com\sun\star\xml\sax\*.idl
-
+..\com\sun\star\ui\dialogs\*.idl %_DEST%\idl%_EXT%\com\sun\star\ui\dialogs\*.idl
 
 ..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib%_EXT%\lib*static*.dylib
 ..\%__SRC%\misc\*staticdatamembers.cxx %_DEST%\inc%_EXT%\*staticdatamembers.cxx
