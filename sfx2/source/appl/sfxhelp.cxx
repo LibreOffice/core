@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxhelp.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: pb $ $Date: 2000-12-20 16:32:20 $
+ *  last change: $Author: pb $ $Date: 2000-12-20 16:59:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,9 @@
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
 #endif
+#ifndef _UTL_CONFIGMGR_HXX_
+#include <unotools/configmgr.hxx>
+#endif
 
 #include "sfxsids.hrc"
 #include "app.hxx"
@@ -120,13 +123,18 @@ using namespace ::com::sun::star::util;
 
 void AppendConfigToken_Impl( String& rURL, sal_Bool bQuestionMark )
 {
+    Any aLocale = ::utl::ConfigManager::GetConfigManager()->GetDirectConfigProperty( ::utl::ConfigManager::LOCALE );
+    ::rtl::OUString aLocaleStr;
+    if ( !( aLocale >>= aLocaleStr ) )
+        aLocaleStr = ::rtl::OUString( DEFINE_CONST_UNICODE("en") );
+
     SvtHelpOptions aHelpOpt;
     if ( bQuestionMark )
         rURL += '?';
     else
         rURL += '&';
     rURL += DEFINE_CONST_UNICODE("Language=");
-    rURL += aHelpOpt.GetLocale();
+    rURL += String( aLocaleStr );
     rURL += DEFINE_CONST_UNICODE("&System=");
     rURL += aHelpOpt.GetSystem();
 }
