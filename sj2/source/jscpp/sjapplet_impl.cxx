@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sjapplet_impl.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jl $ $Date: 2002-03-21 12:16:02 $
+ *  last change: $Author: jl $ $Date: 2002-10-24 07:54:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,11 +226,11 @@ SjApplet2_Impl::~SjApplet2_Impl() throw() {
 if (_joAppletExecutionContext) {
     TKTThreadAttach jenv(_pJVM, _xJavaThreadRegister_11.get());
 
-        _pEmbeddedWindow->dispose(jenv.pEnv);
-        delete _pEmbeddedWindow;
+    _pEmbeddedWindow->dispose(jenv.pEnv);
+    delete _pEmbeddedWindow;
 
-        jenv.pEnv->DeleteGlobalRef(_joAppletExecutionContext);
-        jenv.pEnv->DeleteGlobalRef(_jcAppletExecutionContext);
+    jenv.pEnv->DeleteGlobalRef(_joAppletExecutionContext);
+    jenv.pEnv->DeleteGlobalRef(_jcAppletExecutionContext);
     }
 }
 
@@ -340,6 +340,7 @@ void SjApplet2_Impl::init(Window * pParentWin,
                               joDocBase, joParameters, _pEmbeddedWindow->_joWindow, (jlong)0);                             testJavaException(jenv.pEnv);
     jenv.pEnv->CallVoidMethod(_joAppletExecutionContext, jmAppletExecutionContext_init);                                   testJavaException(jenv.pEnv);
     jenv.pEnv->CallVoidMethod(_joAppletExecutionContext, jmAppletExecutionContext_startUp);                                testJavaException(jenv.pEnv);
+
 }
 
 void SjApplet2_Impl::setSize(const Size & rSize) throw(com::sun::star::uno::RuntimeException)
@@ -391,6 +392,11 @@ void SjApplet2_Impl::close() throw(com::sun::star::uno::RuntimeException)
 
     jmethodID jmAppletExecutionContext_shutdown  = jenv.pEnv->GetMethodID(_jcAppletExecutionContext, "shutdown", "()V"); testJavaException(jenv.pEnv);
     jenv.pEnv->CallVoidMethod(_joAppletExecutionContext, jmAppletExecutionContext_shutdown);                             testJavaException(jenv.pEnv);
+
+    jmethodID jmWaitForDispose= jenv.pEnv->GetMethodID(_jcAppletExecutionContext,"waitForDispose","()V");
+    testJavaException(jenv.pEnv);
+    //blocks until the applet has destroyed itself and the container was disposed (stardiv.applet.AppletExecutionContext.dispose)
+    jenv.pEnv->CallVoidMethod(_joAppletExecutionContext, jmWaitForDispose);
 
     if( _pParentWin )
     {
