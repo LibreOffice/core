@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XAccessibleEventBroadcaster.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change:$Date: 2003-04-28 12:22:41 $
+ *  last change:$Date: 2003-09-08 10:05:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,16 +61,17 @@
 
 package ifc.accessibility;
 
-import com.sun.star.lang.EventObject;
-import com.sun.star.accessibility.AccessibleEventObject;
-import com.sun.star.accessibility.XAccessible;
-import com.sun.star.accessibility.XAccessibleEventBroadcaster;
-import com.sun.star.accessibility.XAccessibleEventListener;
-import com.sun.star.accessibility.XAccessibleContext;
-import com.sun.star.uno.UnoRuntime;
 import lib.MultiMethodTest;
 import lib.Status;
 import lib.StatusException;
+
+import com.sun.star.accessibility.AccessibleEventObject;
+import com.sun.star.accessibility.XAccessible;
+import com.sun.star.accessibility.XAccessibleContext;
+import com.sun.star.accessibility.XAccessibleEventBroadcaster;
+import com.sun.star.accessibility.XAccessibleEventListener;
+import com.sun.star.lang.EventObject;
+import com.sun.star.uno.UnoRuntime;
 
 /**
  * Testing <code>
@@ -97,17 +98,10 @@ public class _XAccessibleEventBroadcaster extends MultiMethodTest {
         void fireEvent();
     }
 
-    private static final String className =
-    "com.sun.star.accessibility.XAccessibleEventBroadcaster" ;
-
     public XAccessibleEventBroadcaster oObj = null;
     public String EventMsg = "";
     public boolean destroy = false;
 
-    // temporary while accessibility package is in com.sun.star
-    protected String getTestedClassName() {
-        return className;
-    }
 
     /**
      * Listener implementation which registers listener calls.
