@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nav_main.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:24 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 08:57:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,16 +151,10 @@ MainRowItem::do_Write2( TableRow & o_rOut )
     TableCell & rCell = o_rOut.AddCell();
 
     rCell
-        << new AnAttribute( "bgcolor", "#eeeeff" )
+        << new ClassAttr( "navimain" )
         << new XmlCode("&nbsp;")
         >> *new Link(sLink.c_str())
-                    << new AnAttribute( "alt", sTip.c_str() )
-                    >> *new AnElement( "font")
-                            << new AnAttribute( "family", "Arial" )
-                            << new AnAttribute( "color", "#000000" )
-                            << new AnAttribute( "size", "+1" )
-                            >> *new Bold
-                                    << sText.c_str();
+            << sText.c_str();
     rCell
         << new XmlCode("&nbsp;");
 }
@@ -184,15 +178,9 @@ SelectedItem::do_Write2( TableRow & o_rOut )
     TableCell & rCell = o_rOut.AddCell();
 
     rCell
-        << new AnAttribute( "bgcolor", "#2222ad" )
+        << new ClassAttr( "navimainself" )
         << new XmlCode("&nbsp;")
-        >> *new AnElement( "font")
-                << new AnAttribute( "family", "Arial" )
-                << new AnAttribute( "color", "#ffffff" )
-                << new AnAttribute( "size", "+1" )
-                >> *new Bold
-                        << sText.c_str();
-    rCell
+        << sText.c_str()
         << new XmlCode("&nbsp;");
 }
 
@@ -214,14 +202,9 @@ UnavailableItem::do_Write2( TableRow & o_rOut )
     TableCell & rCell = o_rOut.AddCell();
 
     rCell
-        << new AnAttribute( "bgcolor", "#eeeeff" )
+        << new ClassAttr( "navimainnone" )
         << new XmlCode("&nbsp;")
-                >> *new AnElement( "font")
-                            << new AnAttribute( "family", "Arial" )
-                            << new AnAttribute( "color", "#000000" )
-                            << new AnAttribute( "size", "+1" )
-                            << sText.c_str();
-    rCell
+        << sText.c_str()
         << new XmlCode("&nbsp;");
 }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: opageenv.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:24 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 08:57:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -406,6 +406,12 @@ OuputPage_Environment::MoveDir_Up()
         --pi->nDepth;
     }
 */
+}
+
+void
+OuputPage_Environment::SetFile_Css()
+{
+    pi->aMyPath.SetFile( C_sHFN_Css );
 }
 
 void
