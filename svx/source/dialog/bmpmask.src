@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bmpmask.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-24 20:23:56 $
+ *  last change: $Author: kz $ $Date: 2001-08-07 14:45:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,14 +97,14 @@ DockingWindow RID_SVXDLG_BMPMASK
         Text [ danish ] = "Farver" ;
         Text [ portuguese_brazilian ] = "Farben" ;
         Text [ portuguese ] = "Cores" ;
-        Text[ chinese_simplified ] = "ÑÕÉ«";
+        Text[ chinese_simplified ] = "é¢œè‰²";
         Text[ russian ] = "Öâåòà";
         Text[ polish ] = "Kolory";
-        Text[ japanese ] = "F";
-        Text[ chinese_traditional ] = "ÃC¦â";
+        Text[ japanese ] = "è‰²";
+        Text[ chinese_traditional ] = "é¡”è‰²";
         Text[ arabic ] = "ÇáÃáæÇä";
         Text[ greek ] = "×ñşìáôá";
-        Text[ korean ] = "»ö»ó";
+        Text[ korean ] = "ìƒ‰ìƒ";
         Text[ turkish ] = "Renkler";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Colores";
@@ -125,14 +125,14 @@ DockingWindow RID_SVXDLG_BMPMASK
         Text [ danish ] = "Kildefarve" ;
         Text [ portuguese_brazilian ] = "Quellfarbe" ;
         Text [ portuguese ] = "Cor-fonte" ;
-        Text[ chinese_simplified ] = "Ô´ÑÕÉ«";
+        Text[ chinese_simplified ] = "æºé¢œè‰²";
         Text[ russian ] = "Èñõîäíûé";
         Text[ polish ] = "Kolor orygin.";
-        Text[ japanese ] = "¿°½¶×°";
-        Text[ chinese_traditional ] = "·½ÃC¦â";
+        Text[ japanese ] = "ï½¿ï½°ï½½ï½¶ï¾—ï½°";
+        Text[ chinese_traditional ] = "æºé¡”è‰²";
         Text[ arabic ] = "Çááæä ÇáÃÕáí";
         Text[ greek ] = "Âáóéêü ÷ñşìá";
-        Text[ korean ] = "¼Ò½º »ö»ó";
+        Text[ korean ] = "ì†ŒìŠ¤ ìƒ‰ìƒ";
         Text[ turkish ] = "Kaynak renk";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Color fuente";
@@ -153,14 +153,14 @@ DockingWindow RID_SVXDLG_BMPMASK
         Text [ danish ] = "Tolerance" ;
         Text [ portuguese_brazilian ] = "Toleranz" ;
         Text [ portuguese ] = "Tolerância" ;
-        Text[ chinese_simplified ] = "Æ«²î";
+        Text[ chinese_simplified ] = "åå·®";
         Text[ russian ] = "Äîïóñê";
         Text[ polish ] = "Tolerancja";
-        Text[ japanese ] = "‹–—e”ÍˆÍ";
-        Text[ chinese_traditional ] = "°¾®t";
+        Text[ japanese ] = "è¨±å®¹ç¯„å›²";
+        Text[ chinese_traditional ] = "åå·®";
         Text[ arabic ] = "ÇáÊÓÇãÍ";
         Text[ greek ] = "Áíï÷Ş";
-        Text[ korean ] = "Çã¿ë ¿ÀÂ÷";
+        Text[ korean ] = "í—ˆìš© ì˜¤ì°¨";
         Text[ turkish ] = "Tolerans";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Tolerancia";
@@ -181,14 +181,14 @@ DockingWindow RID_SVXDLG_BMPMASK
         Text [ danish ] = "Erstat med..." ;
         Text [ portuguese_brazilian ] = "Ersetzen durch..." ;
         Text [ portuguese ] = "Substituir por..." ;
-        Text[ chinese_simplified ] = "Ìæ»»Îª...";
+        Text[ chinese_simplified ] = "æ›¿æ¢ä¸º...";
         Text[ russian ] = "Çàìåíèòü íà...";
         Text[ polish ] = "Zamieñ na...";
-        Text[ japanese ] = "’uŠ·Œó•â...";
-        Text[ chinese_traditional ] = "´À¥N¦¨...";
+        Text[ japanese ] = "ç½®æ›å€™è£œ...";
+        Text[ chinese_traditional ] = "æ›¿ä»£æˆ...";
         Text[ arabic ] = "ÇÓÊÈÏÇá ÈÜ...";
         Text[ greek ] = "ÁíôéêáôÜóôáóç ìå...";
-        Text[ korean ] = "...·Î ¹Ù²Ù±â";
+        Text[ korean ] = "...ë¡œ ë°”ê¾¸ê¸°";
         Text[ turkish ] = "Yeni renk...";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Reemplazar con...";
@@ -241,14 +241,14 @@ DockingWindow RID_SVXDLG_BMPMASK
         Text [ danish ] = "Transparens" ;
         Text [ portuguese_brazilian ] = "Transparenz" ;
         Text [ portuguese ] = "~Transparência" ;
-        Text[ chinese_simplified ] = "Í¸Ã÷(~A)";
+        Text[ chinese_simplified ] = "é€æ˜(~A)";
         Text[ russian ] = "Ïğîçğà÷íîñòü";
         Text[ polish ] = "Przezroczystoœæ";
-        Text[ japanese ] = "“§‰ß«(~A)";
-        Text[ chinese_traditional ] = "³z©ú(~A)";
+        Text[ japanese ] = "é€éæ€§(~A)";
+        Text[ chinese_traditional ] = "é€æ˜(~A)";
         Text[ arabic ] = "ÔİÇİíÉ";
         Text[ greek ] = "ÄéáöÜíåéá";
-        Text[ korean ] = "Åõ¸í(~A)";
+        Text[ korean ] = "íˆ¬ëª…(~A)";
         Text[ turkish ] = "Saydamlık";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Transparencia";
@@ -325,14 +325,14 @@ DockingWindow RID_SVXDLG_BMPMASK
         Text [ danish ] = "Erstat" ;
         Text [ portuguese ] = "~Substituir" ;
         Text [ portuguese_brazilian ] = "Ersetzen" ;
-        Text[ chinese_simplified ] = "Ìæ»»(~R)";
+        Text[ chinese_simplified ] = "æ›¿æ¢(~R)";
         Text[ russian ] = "Çàìåíèòü";
         Text[ polish ] = "Zamieñ";
-        Text[ japanese ] = "’uŠ·(~R)";
-        Text[ chinese_traditional ] = "´À¥N(~R)";
+        Text[ japanese ] = "ç½®æ›(~R)";
+        Text[ chinese_traditional ] = "æ›¿ä»£(~R)";
         Text[ arabic ] = "ÇÓÊÈÏÇá";
         Text[ greek ] = "ÁíôéêáôÜóôáóç";
-        Text[ korean ] = "¹Ù²Ù±â(~R)";
+        Text[ korean ] = "ë°”ê¾¸ê¸°(~R)";
         Text[ turkish ] = "Değiştir";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Reemplazar";
@@ -410,14 +410,14 @@ DockingWindow RID_SVXDLG_BMPMASK
                 Text [ danish ] = "Pipette" ;
                 Text [ portuguese ] = "Pipeta" ;
                 Text [ portuguese_brazilian ] = "Pipette" ;
-                Text[ chinese_simplified ] = "È¡É«Æ÷";
+                Text[ chinese_simplified ] = "å–è‰²å™¨";
                 Text[ russian ] = "Ïèïåòêà";
                 Text[ polish ] = "Pipeta";
-                Text[ japanese ] = "ËßÍß¯Ä";
-                Text[ chinese_traditional ] = "¨ú¦â";
+                Text[ japanese ] = "ï¾‹ï¾Ÿï¾ï¾Ÿï½¯ï¾„";
+                Text[ chinese_traditional ] = "å–è‰²";
                 Text[ arabic ] = "ŞØøÇÑÉ";
                 Text[ greek ] = "Óôáãïíüìåôñï";
-                Text[ korean ] = "»ö °ñ¶ó³»±â";
+                Text[ korean ] = "ìƒ‰ ê³¨ë¼ë‚´ê¸°";
                 Text[ turkish ] = "Renk örneği al";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Pipeta";
@@ -441,14 +441,14 @@ DockingWindow RID_SVXDLG_BMPMASK
     Text [ danish ] = "Pipette" ;
     Text [ portuguese_brazilian ] = "Pipette" ;
     Text [ portuguese ] = "Pipeta" ;
-    Text[ chinese_simplified ] = "È¡É«Æ÷";
+    Text[ chinese_simplified ] = "å–è‰²å™¨";
     Text[ russian ] = "Ïèïåòêà";
     Text[ polish ] = "Pipeta";
-    Text[ japanese ] = "ËßÍß¯Ä";
-    Text[ chinese_traditional ] = "¨ú¦â";
+    Text[ japanese ] = "ï¾‹ï¾Ÿï¾ï¾Ÿï½¯ï¾„";
+    Text[ chinese_traditional ] = "å–è‰²";
     Text[ arabic ] = "ŞØøÇÑÉ";
     Text[ greek ] = "Óôáãïíüìåôñï";
-    Text[ korean ] = "»ö °ñ¶ó³»±â";
+    Text[ korean ] = "ìƒ‰ ê³¨ë¼ë‚´ê¸°";
     Text[ turkish ] = "Renk örneği al";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Pipeta";
@@ -471,10 +471,10 @@ String RID_SVXDLG_BMPMASK_STR_TRANSP
     Text[ swedish ] = "Transparent";
     Text[ polish ] = "PrzeŸroczysty";
     Text[ portuguese_brazilian ] = "Transparent";
-    Text[ japanese ] = "“h‚è‚Â‚Ô‚µ‚È‚µ";
-    Text[ korean ] = "Åõ¸í";
-    Text[ chinese_simplified ] = "Í¸Ã÷";
-    Text[ chinese_traditional ] = "³z©ú";
+    Text[ japanese ] = "å¡—ã‚Šã¤ã¶ã—ãªã—";
+    Text[ korean ] = "íˆ¬ëª…";
+    Text[ chinese_simplified ] = "é€æ˜";
+    Text[ chinese_traditional ] = "é€æ˜";
     Text[ turkish ] = "Saydam";
     Text[ arabic ] = "ÔİÇİ";
     Text[ catalan ] = "Transparente";
@@ -482,6 +482,7 @@ String RID_SVXDLG_BMPMASK_STR_TRANSP
 };
 
  // ********************************************************************** EOF
+
 
 
 
