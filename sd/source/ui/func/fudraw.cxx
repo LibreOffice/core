@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fudraw.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 15:50:17 $
+ *  last change: $Author: rt $ $Date: 2004-05-19 07:43:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1164,12 +1164,19 @@ BOOL FuDraw::SetHelpText(SdrObject* pObj, const Point& rPosPixel, const SdrViewE
                 aHelpText = String(SdResId(STR_CLICK_ACTION_MACRO));
                 aHelpText.AppendAscii( RTL_CONSTASCII_STRINGPARAM( ": " ) );
 
-                sal_Unicode cToken = '.';
-                aHelpText.Append( pInfo->aBookmark.GetToken( 2, cToken ) );
-                aHelpText.Append( cToken );
-                aHelpText.Append( pInfo->aBookmark.GetToken( 1, cToken ) );
-                aHelpText.Append( cToken );
-                aHelpText.Append(  pInfo->aBookmark.GetToken( 0, cToken ) );
+                if ( SfxApplication::IsXScriptURL( pInfo->aBookmark ) )
+                {
+                    aHelpText.Append( pInfo->aBookmark );
+                }
+                else
+                {
+                    sal_Unicode cToken = '.';
+                    aHelpText.Append( pInfo->aBookmark.GetToken( 2, cToken ) );
+                    aHelpText.Append( cToken );
+                    aHelpText.Append( pInfo->aBookmark.GetToken( 1, cToken ) );
+                    aHelpText.Append( cToken );
+                    aHelpText.Append(  pInfo->aBookmark.GetToken( 0, cToken ) );
+                }
             }
             break;
 
