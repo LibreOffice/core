@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementformatter.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jb $ $Date: 2002-07-14 16:49:46 $
+ *  last change: $Author: ssmith $ $Date: 2002-10-21 13:17:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,9 +173,27 @@ void ElementFormatter::prepareSimpleElement(ElementType::Enum _eType)
 
 void ElementFormatter::addName(OUString const & _aName)
 {
-    // TODO: split off package part to ATTR_CONTEXT (?)
+    OUString _aContext;
+    OUString _aNodeName;
+    sal_Int32 _aIndex;
 
-    if (_aName.getLength()) addAttribute(ATTR_NAME, _aName);
+    if ( m_aElementType == ElementType::layer )
+    {
+        _aIndex = _aName.lastIndexOf ( '.');
+
+        if (_aName.getLength())
+        {
+            _aNodeName = _aName.copy(++_aIndex);
+            addAttribute(ATTR_NAME, _aNodeName);
+        }
+        _aContext = _aName.copy( 0, --_aIndex);
+        addAttribute(ATTR_CONTEXT, _aContext);
+    }
+    else
+    {
+        if (_aName.getLength())
+            addAttribute(ATTR_NAME, _aName);
+    }
 }
 // -----------------------------------------------------------------------------
 
