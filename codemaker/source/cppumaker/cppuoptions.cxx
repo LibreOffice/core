@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cppuoptions.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jsc $ $Date: 2002-11-20 16:17:48 $
+ *  last change: $Author: jsc $ $Date: 2002-11-21 10:48:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -267,7 +267,6 @@ sal_Bool CppuOptions::initOptions(int ac, char* av[], sal_Bool bCmdFile)
 
                     m_options["-G"] = OString("");
                     break;
-
                 case 'X': // support for eXtra type rdbs
                 {
                     if (av[i][2] == '\0')
@@ -330,10 +329,15 @@ sal_Bool CppuOptions::initOptions(int ac, char* av[], sal_Bool bCmdFile)
                 }
             } else
             {
-                OUString system_filepath;
-                OSL_VERIFY( osl_Process_E_None == osl_getCommandArg( i-1, &system_filepath.pData ) );
-                m_inputFiles.push_back(OUStringToOString(system_filepath, osl_getThreadTextEncoding()));
-//              m_inputFiles.push_back(av[i]);
+                if (bCmdFile)
+                {
+                    m_inputFiles.push_back(av[i]);
+                } else
+                {
+                    OUString system_filepath;
+                    OSL_VERIFY( osl_Process_E_None == osl_getCommandArg( i-1, &system_filepath.pData ) );
+                    m_inputFiles.push_back(OUStringToOString(system_filepath, osl_getThreadTextEncoding()));
+                }
             }
         }
     }
