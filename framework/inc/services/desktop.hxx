@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: as $ $Date: 2001-01-26 08:39:19 $
+ *  last change: $Author: as $ $Date: 2001-03-05 08:09:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1336,6 +1336,7 @@ class Desktop   :   public XTYPEPROVIDER            ,
         eIMPL_loadState                             m_eLoadState                ;   /// hold information about state of asynchron loading of component for loadComponentFromURL()!
         TaskCreator                                 m_aTaskCreator              ;   /// Helper to create new tasks or plugin frames!
         REFERENCE< XFRAME >                         m_xLastFrame                ;
+        sal_Bool                                    m_bAlreadyDisposed          ;   /// protection against multiple dispose calls
 
         // Properties
 //OLD   REFERENCE< XCOMPONENT >                     m_xActiveComponent          ;   Durch setActive/getActive am Container zu ersetzen! (+cast nach XComponent!)

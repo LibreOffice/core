@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mba $ $Date: 2001-02-14 13:22:23 $
+ *  last change: $Author: as $ $Date: 2001-03-05 08:09:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -266,6 +266,7 @@ Desktop::Desktop( const Reference< XMultiServiceFactory >& xFactory )
         ,   m_bHasStatusBar         ( sal_True                                                                              )
         ,   m_bHasToolbar           ( sal_True                                                                              )
         ,   m_aISOLocale            (                                                                                       )
+        ,   m_bAlreadyDisposed      ( sal_False                                                                             )
         #ifdef ENABLE_ASSERTIONS
         ,   m_bIsTerminated         ( sal_False )   // see dispose() for further informations!
         #endif
@@ -311,8 +312,8 @@ Desktop::Desktop( const Reference< XMultiServiceFactory >& xFactory )
 //*****************************************************************************************************************
 Desktop::~Desktop()
 {
-    // Reset instance, free memory ....
-    impl_resetObject();
+    LOG_ASSERT( !(m_bAlreadyDisposed==sal_False), "Desktop::~Desktop()\nYou forgot to dispose the desktop!\n"   )
+    LOG_ASSERT( !(m_bIsTerminated   ==sal_False), "Desktop::~Desktop()\nYou forgot to terminate the desktop!\n" )
 }
 
 //*****************************************************************************************************************
@@ -1308,31 +1309,38 @@ void SAL_CALL Desktop::dispose() throw( RuntimeException )
     // It's an programming error if dispose is called before terminate!
     LOG_ASSERT( !(m_bIsTerminated==sal_False), "Desktop::dispose()\nIt's not allowed to dispose the desktop before terminate() is called!\n" )
 
-    // Release all used references, delete all listener
-    // and free our child task container.
+    LOG_ASSERT( !(m_bAlreadyDisposed==sal_True), "Desktop::dispose()\nDont call dispose more then ones!\n" )
+    if( m_bAlreadyDisposed == sal_False )
+    {
+        m_bAlreadyDisposed = sal_True ;
 
-    /* Attention 1:
-            We must disable the special quit timer of our frame container.
-            Because it will call terminate at THESE instance (last task is removed!) ...
-    */
-    m_aChildTaskContainer.disableQuitTimer();
+        // Release all used references, delete all listener
+        // and free our child task container.
 
-    /* Attention 2:
-            We must send the dispose message to all listener BEFORE we clear our container.
-            Otherwise our child tasks are disposed and try to remove it by himself at our container ...
-            Next call remove all frames which components are dispose listener at these desktop;
-             and then we clear all other frames from the container which are not listener!
-    */
-    EventObject aDisposeEvent( (OWeakObject*)this );
-    m_aListenerContainer.disposeAndClear( aDisposeEvent );
+        /* Attention 1:
+                We must disable the special quit timer of our frame container.
+                Because it will call terminate at THESE instance (last task is removed!) ...
+        */
+        m_aChildTaskContainer.disableQuitTimer();
 
-    m_aChildTaskContainer.clear();
+        /* Attention 2:
+                We must send the dispose message to all listener BEFORE we clear our container.
+                Otherwise our child tasks are disposed and try to remove it by himself at our container ...
+                Next call remove all frames which components are dispose listener at these desktop;
+                 and then we clear all other frames from the container which are not listener!
+        */
+        EventObject aDisposeEvent( (OWeakObject*)this );
+        m_aListenerContainer.disposeAndClear( aDisposeEvent );
+        Reference< XEventListener >( m_xDispatchHelper, UNO_QUERY )->disposing( aDisposeEvent );
 
-    // Release some other references.
-    m_xLastFrame        = Reference< XFrame >();
-    m_xFactory          = Reference< XMultiServiceFactory >();
-    m_xFramesHelper     = Reference< XFrames >();
-    m_xDispatchHelper   = Reference< XDispatch >();
+        m_aChildTaskContainer.clear();
+
+        // Release some other references.
+        m_xLastFrame        = Reference< XFrame >();
+        m_xFactory          = Reference< XMultiServiceFactory >();
+        m_xFramesHelper     = Reference< XFrames >();
+        m_xDispatchHelper   = Reference< XDispatch >();
+    }
 }
 
 //*****************************************************************************************************************
