@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetBase.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-01 14:34:01 $
+ *  last change: $Author: fs $ $Date: 2001-08-06 11:00:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,8 +156,6 @@ ORowSetBase::ORowSetBase(::cppu::OBroadcastHelper   &_rBHelper,::osl::Mutex& _rM
             : OPropertyContainer(_rBHelper)
             , m_rMutex(_rMutex)
             , m_rBHelper(_rBHelper)
-            , m_aListeners(m_rMutex)
-            , m_aApproveListeners(m_rMutex)
             , m_pCache(NULL)
             , m_pColumns(NULL)
             , m_nRowCount(0)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetBase.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-30 08:53:02 $
+ *  last change: $Author: fs $ $Date: 2001-08-06 11:00:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,9 +154,6 @@ namespace dbaccess
                                                 // we need a extra mutex for columns to prevend deadlock when setting new values
                                                 // for a row
                                                 m_aColumnsMutex;
-
-        ::cppu::OInterfaceContainerHelper       m_aListeners,
-                                                m_aApproveListeners;// when clone -> they are empty
 
         ::com::sun::star::uno::Any              m_aBookmark;
         ORowSetCacheIterator                    m_aCurrentRow;      // contains the actual fetched row
