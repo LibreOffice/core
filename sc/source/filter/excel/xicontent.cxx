@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xicontent.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 13:35:15 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 09:37:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,6 +167,9 @@
 #ifndef SC_XILINK_HXX
 #include "xilink.hxx"
 #endif
+#ifndef SC_XLTRACER_HXX
+#include "xltracer.hxx"
+#endif
 
 #include "excform.hxx"
 
@@ -260,18 +263,18 @@ void lclGetAbsPath( String& rPath, sal_uInt16 nLevel, SfxObjectShell* pDocShell 
 }
 
 /** Inserts the URL into a text cell. Does not modify value or formula cells. */
-void lclInsertUrl( const XclImpRoot& rRoot, const String& rURL, sal_uInt16 nCol, sal_uInt16 nRow )
+void lclInsertUrl( const XclImpRoot& rRoot, const String& rURL, USHORT nScCol, USHORT nScRow )
 {
     ScDocument& rDoc = rRoot.GetDoc();
-    sal_uInt16 nTab = rRoot.GetScTab();
-    ScAddress aPos( nCol, nRow, nTab );
+    USHORT nScTab = rRoot.GetCurrScTab();
+    ScAddress aPos( nScCol, nScRow, nScTab );
     CellType eCellType = rDoc.GetCellType( aPos );
 
     // hyperlinks in value/formula cells not supported
     if( (eCellType != CELLTYPE_FORMULA) && (eCellType != CELLTYPE_VALUE) )
     {
         String aOrigText;
-        rDoc.GetString( nCol, nRow, nTab, aOrigText );
+        rDoc.GetString( nScCol, nScRow, nScTab, aOrigText );
         if( !aOrigText.Len() )
             aOrigText = rURL;
 
@@ -321,6 +324,10 @@ void XclImpHyperlink::ReadHlink( XclImpStream& rStrm )
     // target frame (ignore) !! DESCR/FRAME - is this the right order? (never seen them together)
     if( ::get_flag( nFlags, EXC_HLINK_FRAME ) )
         lclIgnoreString32( rStrm, true );
+
+    // URL fields are zero-terminated - do not let the stream replace them
+    // in the lclAppendString32() with the '?' character.
+    rStrm.SetNulSubstChar( '\0' );
 
     // UNC path
     if( ::get_flag( nFlags, EXC_HLINK_UNC ) )
@@ -376,6 +383,8 @@ void XclImpHyperlink::ReadHlink( XclImpStream& rStrm )
         lclAppendString32( *pTextMark, rStrm, true );
     }
 
+    rStrm.SetNulSubstChar();    // back to default
+
     DBG_ASSERT( !rStrm.GetRecLeft(), "XclImpHyperlink::ReadHlink - record size mismatch" );
 
     if( !pLongName.get() && pShortName.get() )
@@ -393,14 +402,16 @@ void XclImpHyperlink::ReadHlink( XclImpStream& rStrm )
             *pLongName += *pTextMark;
         }
 
-        sal_uInt16 nTab = rRoot.GetScTab();
-        ScRange aRange( nCol1, nRow1, nTab, nCol2, nRow2, nTab );
+        USHORT nScTab = rRoot.GetCurrScTab();
+        ScRange aRange( nCol1, nRow1, nScTab, nCol2, nRow2, nScTab );
         if( rRoot.CheckCellRange( aRange ) )
         {
-            aRange.GetVars( nCol1, nRow1, nTab, nCol2, nRow2, nTab );
-            for( sal_uInt16 nCol = nCol1; nCol <= nCol2 ; ++nCol )
-                for( sal_uInt16 nRow = nRow1; nRow <= nRow2; ++nRow )
-                    lclInsertUrl( rRoot, *pLongName, nCol, nRow );
+            USHORT nScCol1, nScCol2;
+            USHORT nScRow1, nScRow2;
+            aRange.GetVars( nScCol1, nScRow1, nScTab, nScCol2, nScRow2, nScTab );
+            for( USHORT nScCol = nScCol1; nScCol <= nScCol2 ; ++nScCol )
+                for( USHORT nScRow = nScRow1; nScRow <= nScRow2; ++nScRow )
+                    lclInsertUrl( rRoot, *pLongName, nScCol, nScRow );
         }
     }
 }
@@ -414,7 +425,6 @@ void XclImpLabelranges::ReadLabelranges( XclImpStream& rStrm )
     DBG_ASSERT_BIFF( rRoot.GetBiff() == xlBiff8 );
 
     ScDocument& rDoc = rRoot.GetDoc();
-    sal_uInt16 nTab = rRoot.GetScTab();
     ScRangeList aRanges;
     ScRangePairListRef xLabelRangesRef;
     const ScRange* pRange;
@@ -540,7 +550,7 @@ void XclImpCondFormat::ReadCF( XclImpStream& rStrm )
 
     // *** create style sheet ***
 
-    String aStyleName( XclTools::GetCondFormatStyleName( GetScTab(), mnFormatIndex, mnCondIndex ) );
+    String aStyleName( XclTools::GetCondFormatStyleName( GetCurrScTab(), mnFormatIndex, mnCondIndex ) );
     SfxItemSet& rStyleItemSet = ScfTools::MakeCellStyleSheet( GetStyleSheetPool(), aStyleName, true ).GetItemSet();
 
     const XclImpPalette& rPalette = GetPalette();
@@ -684,7 +694,7 @@ void XclImpValidation::ReadDval( XclImpStream& rStrm )
     if( nObjId != EXC_DVAL_NOOBJ )
     {
         DBG_ASSERT( nObjId <= 0xFFFF, "XclImpValidation::ReadDval - invalid object ID" );
-        rRoot.GetObjectManager().SetSkipObj( rRoot.GetScTab(), static_cast< sal_uInt16 >( nObjId ) );
+        rRoot.GetObjectManager().SetSkipObj( rRoot.GetCurrScTab(), static_cast< sal_uInt16 >( nObjId ) );
     }
 }
 
@@ -694,7 +704,6 @@ void XclImpValidation::ReadDV( XclImpStream& rStrm )
     DBG_ASSERT_BIFF( rRoot.GetBiff() == xlBiff8 );
 
     ScDocument& rDoc = rRoot.GetDoc();
-    sal_uInt16 nTab = rRoot.GetScTab();
     ExcelToSc& rFmlaConv = rRoot.GetFmlaConverter();
 
     // flags
@@ -771,6 +780,7 @@ void XclImpValidation::ReadDV( XclImpStream& rStrm )
                 case EXC_DV_MODE_CUSTOM:    eValMode = SC_VALID_CUSTOM;     break;
                 default:                    bIsValid = false;
             }
+            rRoot.GetTracer().TraceDVType(eValMode == SC_VALID_CUSTOM);
 
             ScConditionMode eCondMode;
             switch( nFlags & EXC_DV_COND_MASK )
@@ -826,9 +836,10 @@ void XclImpValidation::ReadDV( XclImpStream& rStrm )
                 aPattern.GetItemSet().Put( SfxUInt32Item( ATTR_VALIDDATA, nHandle ) );
 
                 // apply all ranges
+                USHORT nScTab = rRoot.GetCurrScTab();
                 for( pRange = aRanges.First(); pRange; pRange = aRanges.Next() )
                     rDoc.ApplyPatternAreaTab( pRange->aStart.Col(), pRange->aStart.Row(),
-                        pRange->aEnd.Col(), pRange->aEnd.Row(), nTab, aPattern );
+                        pRange->aEnd.Col(), pRange->aEnd.Row(), nScTab, aPattern );
             }
         }
     }
@@ -929,7 +940,7 @@ void XclImpWebQueryBuffer::ReadQsi( XclImpStream& rStrm )
         rStrm.AppendUniString( aXclName );
 
         // #101529# find the defined name used in Calc
-        if( const XclImpName* pName = GetNameBuffer().FindName( aXclName, GetScTab() ) )
+        if( const XclImpName* pName = GetNameBuffer().FindName( aXclName, GetCurrScTab() ) )
         {
             if( const ScRangeData* pRangeData = pName->GetScRangeData() )
             {
