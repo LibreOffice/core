@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbunoobj.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-23 16:57:46 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 13:35:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,9 @@
 #ifndef __SBX_SBX_FACTORY_HXX //autogen
 #include <svtools/sbxfac.hxx>
 #endif
+#ifndef __SBX_SBX_HXX //autogen
+#include <svtools/sbx.hxx>
+#endif
 
 #ifndef _COM_SUN_STAR_BEANS_XMATERIALHOLDER_HPP_
 #include <com/sun/star/beans/XMaterialHolder.hpp>
@@ -92,6 +95,9 @@
 #endif
 #ifndef _COM_SUN_STAR_REFLECTION_XIDLCLASS_HPP_
 #include <com/sun/star/reflection/XIdlClass.hpp>
+#endif
+#ifndef _RTL_USTRING_
+#include <rtl/ustring>
 #endif
 
 using namespace com::sun::star::uno;
@@ -156,7 +162,7 @@ public:
 
     SbUnoMethod( const String& aName, SbxDataType eSbxType, Reference< XIdlMethod > xUnoMethod_ );
     virtual ~SbUnoMethod();
-    //virtual SbxInfo* GetInfo() { return NULL; }
+    virtual SbxInfo* GetInfo();
 
     const Sequence<ParamInfo>& getParamInfos( void );
 };
@@ -232,6 +238,23 @@ public:
         { return mVal; }
 
     TYPEINFO();
+};
+
+
+// #112509 Special SbxArray to transport named parameters for calls
+// to OLEAutomation objects through the UNO OLE automation bridge
+
+class AutomationNamedArgsSbxArray : public SbxArray
+{
+    Sequence< ::rtl::OUString >     maNameSeq;
+public:
+    TYPEINFO();
+    AutomationNamedArgsSbxArray( sal_Int32 nSeqSize )
+        : maNameSeq( nSeqSize )
+    {}
+
+    Sequence< ::rtl::OUString >& getNames( void )
+        { return maNameSeq; }
 };
 
 
