@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: abi $ $Date: 2001-05-16 07:36:23 $
+#   last change: $Author: abi $ $Date: 2001-05-16 14:53:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -90,13 +90,14 @@ CFLAGS+=/GR
 
 # @@@ Adjust template file names. Add own files here.
 SLOFILES=\
-    $(SLO)$/services.obj    	\
-    $(SLO)$/provider.obj    	\
-    $(SLO)$/content.obj     	\
-    $(SLO)$/resultset.obj     	\
-    $(SLO)$/resultsetbase.obj   \
-    $(SLO)$/contentcaps.obj     \
-    $(SLO)$/urlparameter.obj    \
+    $(SLO)$/services.obj    	   \
+    $(SLO)$/provider.obj    	   \
+    $(SLO)$/content.obj     	   \
+    $(SLO)$/resultset.obj     	   \
+    $(SLO)$/resultsetbase.obj      \
+    $(SLO)$/resultsetforroot.obj   \
+    $(SLO)$/contentcaps.obj        \
+    $(SLO)$/urlparameter.obj       \
     $(SLO)$/databases.obj
 
 # You need these only if you implement a folder content,
@@ -119,7 +120,8 @@ SHL1STDLIBS=\
     $(CPPULIB) \
     $(SALLIB)  \
     $(VOSLIB)  \
-    $(UCBHELPERLIB)
+    $(UCBHELPERLIB) \
+    libdb32.lib
 
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 SHL1LIBS=$(LIB1TARGET)

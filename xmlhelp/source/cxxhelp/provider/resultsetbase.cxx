@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resultsetbase.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: abi $ $Date: 2001-05-16 07:36:23 $
+ *  last change: $Author: abi $ $Date: 2001-05-16 14:53:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -444,7 +444,10 @@ ResultSetBase::queryContentIdentifierString(
     void )
     throw( uno::RuntimeException )
 {
-    return getDocumentURL();
+    if( 0 <= m_nRow && m_nRow < m_aItems.size() )
+        return m_aPath[m_nRow];
+    else
+        return rtl::OUString();
 }
 
 
@@ -455,7 +458,7 @@ ResultSetBase::queryContentIdentifier(
 {
     if( 0 <= m_nRow && m_nRow < m_aItems.size() )
     {
-        rtl::OUString url = getDocumentURL();
+        rtl::OUString url = queryContentIdentifierString();
         if( ! m_aIdents[m_nRow].is() && url.getLength() )
             m_aIdents[m_nRow] = uno::Reference< XContentIdentifier >( new ::ucb::ContentIdentifier( m_xMSF,url ) );
         return m_aIdents[m_nRow];
@@ -490,13 +493,12 @@ ResultSetBase::getPropertySetInfo()
     seq[0].Type = getCppuType( static_cast< sal_Int32* >(0) );
     seq[0].Attributes = beans::PropertyAttribute::READONLY;
 
-    seq[0].Name = rtl::OUString::createFromAscii( "IsRowCountFinal" );
-    seq[0].Handle = -1;
-    seq[0].Type = getCppuType( static_cast< sal_Bool* >(0) );
-    seq[0].Attributes = beans::PropertyAttribute::READONLY;
+    seq[1].Name = rtl::OUString::createFromAscii( "IsRowCountFinal" );
+    seq[1].Handle = -1;
+    seq[1].Type = getCppuType( static_cast< sal_Bool* >(0) );
+    seq[1].Attributes = beans::PropertyAttribute::READONLY;
 
-//      XPropertySetInfoImpl* p = new XPropertySetInfoImpl( m_pMyShell,
-//                                                            seq );
+    //t
     return uno::Reference< beans::XPropertySetInfo > ( 0 );
 }
 

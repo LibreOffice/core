@@ -2,9 +2,9 @@
  *
  *  $RCSfile: contentcaps.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: abi $ $Date: 2001-05-16 07:36:23 $
+ *  last change: $Author: abi $ $Date: 2001-05-16 14:53:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,12 +59,6 @@
  *
  ************************************************************************/
 
-/**************************************************************************
-                                TODO
- **************************************************************************
-
- *************************************************************************/
-
 #ifndef _COM_SUN_STAR_BEANS_PROPERTY_HPP_
 #include <com/sun/star/beans/Property.hpp>
 #endif
@@ -77,20 +71,14 @@
 #ifndef _COM_SUN_STAR_UCB_COMMANDINFO_HPP_
 #include <com/sun/star/ucb/CommandInfo.hpp>
 #endif
-/*
-#ifndef _COM_SUN_STAR_UCB_INSERTCOMMANDARGUMENT_HPP_
-#include <com/sun/star/ucb/InsertCommandArgument.hpp>
-#endif
 #ifndef _COM_SUN_STAR_UCB_OPENCOMMANDARGUMENT2_HPP_
 #include <com/sun/star/ucb/OpenCommandArgument2.hpp>
 #endif
-*/
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
 #endif
 
-// @@@ Adjust multi-include-protection-ifdef and header file name.
-#ifndef _MYUCP_CONTENT_HXX
+#ifndef _CONTENT_HXX
 #include <provider/content.hxx>
 #endif
 
@@ -99,93 +87,110 @@ using namespace com::sun::star::uno;
 using namespace com::sun::star::ucb;
 using namespace rtl;
 
-// @@@ Adjust namespace name.
 using namespace chelp;
 
-//=========================================================================
-//
-// Content implementation.
-//
-//=========================================================================
-
-//=========================================================================
-//
-// IMPORTENT: If any property data ( name / type / ... ) are changed, then
-//            Content::getPropertyValues(...) must be adapted too!
-//
-//=========================================================================
-
 // virtual
-Sequence< Property > Content::getProperties(
-                            const Reference< XCommandEnvironment > & xEnv )
+Sequence< Property > Content::getProperties( const Reference< XCommandEnvironment > & xEnv )
 {
-    // @@@ Add additional properties...
+    bool withMediaType = m_aURLParameter.isFile() || m_aURLParameter.isRoot();
+    bool isModule = m_aURLParameter.isModule();
+    bool isFile = m_aURLParameter.isFile();
 
-    // @@@ Note: If your data source supports adding/removing properties,
-    //           you should implement the interface XPropertyContainer
-    //           by yourself and supply your own logic here. The base class
-    //           uses the service "com.sun.star.ucb.Store" to maintain
-    //           Additional Core properties. But using server functionality
-    //           is preferred! In fact you should return a table conatining
-    //           even that dynamicly added properties.
+    sal_Int32 num = withMediaType ? 5 : 4;
+    if( isModule ) num+=5;
+    if( isFile )   num++;
 
-//  osl::Guard< osl::Mutex > aGuard( m_aMutex );
+    Sequence< Property > props(num);
 
-    //=================================================================
-    //
-    // Supported properties
-    //
-    //=================================================================
-
-    #define PROPERTY_COUNT 4
-
-    static Property aPropertyInfoTable[] =
-    {
-        ///////////////////////////////////////////////////////////////
-        // Required properties
-        ///////////////////////////////////////////////////////////////
+    sal_Int32 idx = 0;
+    props[idx++] =
         Property(
             OUString( RTL_CONSTASCII_USTRINGPARAM( "ContentType" ) ),
             -1,
             getCppuType( static_cast< const OUString * >( 0 ) ),
-            PropertyAttribute::BOUND | PropertyAttribute::READONLY
-        ),
+            PropertyAttribute::BOUND | PropertyAttribute::READONLY );
+
+    props[idx++] =
         Property(
             OUString( RTL_CONSTASCII_USTRINGPARAM( "IsDocument" ) ),
             -1,
             getCppuBooleanType(),
-            PropertyAttribute::BOUND | PropertyAttribute::READONLY
-        ),
+            PropertyAttribute::BOUND | PropertyAttribute::READONLY );
+
+    props[idx++] =
         Property(
             OUString( RTL_CONSTASCII_USTRINGPARAM( "IsFolder" ) ),
             -1,
             getCppuBooleanType(),
-            PropertyAttribute::BOUND | PropertyAttribute::READONLY
-        ),
+            PropertyAttribute::BOUND | PropertyAttribute::READONLY );
+
+    props[idx++] =
         Property(
             OUString( RTL_CONSTASCII_USTRINGPARAM( "Title" ) ),
             -1,
             getCppuType( static_cast< const OUString * >( 0 ) ),
-            PropertyAttribute::BOUND
-        )
-        ///////////////////////////////////////////////////////////////
-        // Optional standard properties
-        ///////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////
-        // New properties
-        ///////////////////////////////////////////////////////////////
-    };
-    return Sequence< Property >( aPropertyInfoTable, PROPERTY_COUNT );
+            PropertyAttribute::BOUND  | PropertyAttribute::READONLY );
+
+    if( withMediaType )
+        props[idx++] =
+            Property( OUString( RTL_CONSTASCII_USTRINGPARAM( "MediaType" ) ),
+                      -1,
+                      getCppuType( static_cast< const OUString * >( 0 ) ),
+                      PropertyAttribute::BOUND  | PropertyAttribute::READONLY );
+
+    if( isModule )
+    {
+        props[idx++] =
+            Property( OUString( RTL_CONSTASCII_USTRINGPARAM( "KeywordList" ) ),
+                      -1,
+                      getCppuType( static_cast< const Sequence< OUString >* >( 0 ) ),
+                      PropertyAttribute::BOUND  | PropertyAttribute::READONLY );
+
+        props[idx++] =
+            Property( OUString( RTL_CONSTASCII_USTRINGPARAM( "KeywordRef" ) ),
+                      -1,
+                      getCppuType( static_cast< const Sequence< Sequence< OUString > >* >( 0 ) ),
+                      PropertyAttribute::BOUND  | PropertyAttribute::READONLY );
+
+        props[idx++] =
+            Property( OUString( RTL_CONSTASCII_USTRINGPARAM( "KeywordTitleForRef" ) ),
+                      -1,
+                      getCppuType( static_cast< const Sequence< Sequence< OUString > >* >( 0 ) ),
+                      PropertyAttribute::BOUND  | PropertyAttribute::READONLY );
+
+        props[idx++] =
+            Property( OUString( RTL_CONSTASCII_USTRINGPARAM( "KeywordAnchorForRef" ) ),
+                      -1,
+                      getCppuType( static_cast< const Sequence< Sequence< OUString > >* >( 0 ) ),
+                      PropertyAttribute::BOUND  | PropertyAttribute::READONLY );
+
+        props[idx++] =
+            Property( OUString( RTL_CONSTASCII_USTRINGPARAM( "SearchScopes" ) ),
+                      -1,
+                      getCppuType( static_cast< const Sequence< OUString >* >( 0 ) ),
+                      PropertyAttribute::BOUND  | PropertyAttribute::READONLY );
+    }
+
+    if( isFile )
+    {
+        props[idx++] =
+            Property( OUString( RTL_CONSTASCII_USTRINGPARAM( "AnchorName" ) ),
+                      -1,
+                      getCppuType( static_cast< const OUString * >( 0 ) ),
+                      PropertyAttribute::BOUND  | PropertyAttribute::READONLY );
+    }
+
+    return props;
 }
+
+
 
 //=========================================================================
 // virtual
 Sequence< CommandInfo > Content::getCommands(
                             const Reference< XCommandEnvironment > & xEnv )
 {
-    // @@@ Add additional commands...
-
-//  osl::Guard< osl::Mutex > aGuard( m_aMutex );
+//  osl::MutexGuard aGuard( m_aMutex );
 
     //=================================================================
     //
@@ -193,7 +198,7 @@ Sequence< CommandInfo > Content::getCommands(
     //
     //=================================================================
 
-    #define COMMAND_COUNT 4
+#define COMMAND_COUNT 5
 
     static CommandInfo aCommandInfoTable[] =
     {
@@ -219,30 +224,12 @@ Sequence< CommandInfo > Content::getCommands(
             OUString( RTL_CONSTASCII_USTRINGPARAM( "setPropertyValues" ) ),
             -1,
             getCppuType( static_cast< Sequence< PropertyValue > * >( 0 ) )
-        )
-        ///////////////////////////////////////////////////////////////
-        // Optional standard commands
-        ///////////////////////////////////////////////////////////////
-/*
-        CommandInfo(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "delete" ) ),
-            -1,
-            getCppuBooleanType()
-        ),
-        CommandInfo(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "insert" ) ),
-            -1,
-            getCppuType( static_cast< InsertCommandArgument * >( 0 ) )
         ),
         CommandInfo(
             OUString( RTL_CONSTASCII_USTRINGPARAM( "open" ) ),
             -1,
             getCppuType( static_cast< OpenCommandArgument2 * >( 0 ) )
         )
-*/
-        ///////////////////////////////////////////////////////////////
-        // New commands
-        ///////////////////////////////////////////////////////////////
     };
 
     return Sequence< CommandInfo >( aCommandInfoTable, COMMAND_COUNT );

@@ -1,13 +1,77 @@
+/*************************************************************************
+ *
+ *  $RCSfile: databases.cxx,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: abi $ $Date: 2001-05-16 14:53:27 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
 #ifndef _DATABASES_HXX_
 #include <provider/databases.hxx>
 #endif
 #ifndef _OSL_FILE_HXX_
 #include <osl/file.hxx>
 #endif
-
+#ifndef _URLPARAMETER_HXX_
+#include <provider/urlparameter.hxx>
+#endif
+#include <berkeleydb/db_cxx.h>
 
 using namespace chelp;
-
+using namespace com::sun::star::uno;
 
 // The same for the jar files
 //  private static final Hashtable _jarHash = new Hashtable();
@@ -21,7 +85,7 @@ rtl::OUString               Databases::m_aInstallDirectory;  // Installation dir
 Databases::DatabasesTable   Databases::m_aDatabases;         // Language and module dependent databases
 Databases::LangSetTable     Databases::m_aLangSet;           // Mapping to of lang-country to lang
 Databases::ModInfoTable     Databases::m_aModInfo;           // Module information
-
+Databases::KeywordInfoTable Databases::m_aKeywordInfo;
 
 void Databases::setInstallPath( const rtl::OUString& aInstallDirectory )
 {
@@ -197,85 +261,37 @@ rtl::OUString Databases::lang( const rtl::OUString& Language )
 }
 
 
+Db* Databases::getBerkeley( const rtl::OUString& Database,
+                            const rtl::OUString& Language )
+{
+    if( ! Database.getLength() || ! Language.getLength() )
+        return 0;
 
+    osl::MutexGuard aGuard( m_aMutex );
 
+    rtl::OUString key = lang(Language) + rtl::OUString::createFromAscii( "/" ) + Database;
 
+    DatabasesTable::iterator it =
+        m_aDatabases.insert( DatabasesTable::value_type( key,0 ) ).first;
 
+    if( ! it->second )
+    {
+        Db* table = it->second = new Db( 0,0 );
 
+        rtl::OUString fileNameOU =
+            getInstallPath() +
+            key +
+            rtl::OUString::createFromAscii( ".db" );
 
+        rtl::OString fileName( fileNameOU.getStr(),fileNameOU.getLength(),RTL_TEXTENCODING_UTF8 );
 
+        table->open( fileName.getStr(),0,DB_BTREE,DB_RDONLY,0644 );
+        m_aDatabases[ key ] = table;
+    }
 
+    return it->second;
+}
 
-
-
-
-//  public static synchronized Db getDatabaseForLanguage( String Database,String Language )
-//  {
-//      if( Database == null || Language == null )
-//          return null;
-//      String key = lang(Language) + File.separator + Database;       // For example de/swriter
-//      Db table = ( Db ) _dbHash.get( key );
-//      if( table == null )
-//      {
-//          try
-//          {
-//              table = new Db( null,0 );
-
-//              String tablePath = _installDirectory + key + ".db";
-//              table.open( tablePath,null,Db.DB_BTREE,Db.DB_RDONLY,0644 );
-//              _dbHash.put( key,table );
-//          }
-//          catch( DbException e )
-//          {
-//              System.err.println( "Unsupported language in helpsystem: " + Language );
-//              System.err.println( "module: " + Database );
-//              System.err.println( e.getMessage() );
-//          }
-//          catch( FileNotFoundException e )
-//          {
-//              System.err.println( "Unsupported language in helpsystem: " + Language );
-//              System.err.println( "module: " + Database );
-//              System.err.println( e.getMessage() );
-//          }
-//      }
-
-//      return table;
-//  }
-
-
-//  static Hashtable _helptextHash = new Hashtable();
-
-
-//  public static synchronized Db getHelptextDbForLanguage( String Database,String Language )
-//  {
-//      String key = lang( Language ) + File.separator + Database;       // For example de/swriter
-//      Db table = ( Db ) _helptextHash.get( key );
-//      if( table == null )
-//      {
-//          try
-//          {
-//              table = new Db( null,0 );
-
-//              String tablePath = _installDirectory + key + ".ht";
-//              table.open( tablePath,null,Db.DB_BTREE,Db.DB_RDONLY,0644 );
-//              _dbHash.put( key,table );
-//          }
-//          catch( DbException e )
-//          {
-//              System.err.println( "Unsupported language in helpsystem: " + Language );
-//              System.err.println( "module: " + Database );
-//              System.err.println( e.getMessage() );
-//          }
-//          catch( FileNotFoundException e )
-//          {
-//              System.err.println( "Unsupported language in helpsystem: " + Language );
-//              System.err.println( "module: " + Database );
-//              System.err.println( e.getMessage() );
-//          }
-//      }
-
-//      return table;
-//  }
 
 
 
@@ -368,205 +384,159 @@ rtl::OUString Databases::lang( const rtl::OUString& Language )
 //  private static final Hashtable _keyword = new Hashtable();
 
 
-//  public static final class KeywordInfo
-//  {
-//      int pos = 0;
-//      String[] listKey = new String[100];
-//      String[][] listId;
-//      String[][] listAnchor;
-//      String[][] listTitle;
-
-//  public String [] getKeywordList()
-//      {
-//          return listKey;
-//      }
-
-//  public String[][] getIdList()
-//      {
-//          return listId;
-//      }
-
-
-//  public String[][] getAnchorList()
-//      {
-//          return listAnchor;
-//      }
-
-//  public String[][] getTitleList()
-//      {
-//          return listTitle;
-//      }
-
-//  private void realloc( int length )
-//      {
-//          String[] buff = listKey;
-//          listKey = new String[ length ];
-//          int count = ( listKey.length > buff.length ) ? buff.length : listKey.length;
-//          for( int i = 0; i < count; ++i )
-//              listKey[i] = buff[i];
-//          buff = null;
-//      }
-
-
-//  public String[] getTitleForIndex( int i )
-//      {
-//          return listTitle[i];
-//      }
-
-
-//      void insert( String id )
-//      {
-//          if( pos == listKey.length )
-//              realloc( pos + 100 );
-//          listKey[ pos++ ] = id;
-//      }
-
-
-//  public String[] insertId( int index,String ids )
-//      {
-//          int pos = 0;
-//          String[] test = new String[10];
-//          while( ids != null && ids.length() != 0 )
-//          {
-//              int idx = ids.indexOf( ';' );
-//              if( pos == test.length )
-//              {
-//                  String[] buff = test;
-//                  test = new String[ pos+10 ];
-//                  for( int i = 0; i < buff.length; ++i )
-//                      test[i] = buff[i];
-//                  buff = null;
-//              }
-
-//              test[pos++] = ids.substring(0,idx);
-//              ids = ids.substring( 1+idx );
-//          }
-
-//          String[] buff = test;
-//          test = new String[ pos ];
-//          for( int i = 0; i < pos; ++i )
-//              test[i] = buff[i];
-
-//          listId[index] = test;
-//          listAnchor[index] = new String[test.length];
-
-//          for( int k = 0; k < listId[index].length; ++k )
-//          {
-//              if( listId[index][k] == null )
-//              {
-//                  listId[index][k] = "";
-//                  listAnchor[index][k] = "";
-//              }
-//              else
-//              {
-//                  int idx = listId[index][k].indexOf('#');
-//                  if( idx != -1 )
-//                  {
-//                      listAnchor[index][k] = listId[index][k].substring(1+idx).trim();
-//                      listId[index][k] = listId[index][k].substring(0,idx).trim();
-//                  }
-//                  else
-//                      listAnchor[index][k] = "";
-//              }
-//          }
-
-//          listTitle[index] = new String[test.length];
-//          return test;
-//      }
 
 
 
-//  public void sort()
-//      {
-//          realloc( pos );
-//          Arrays.sort( listKey );
-//          listId = new String[ listKey.length ][];
-//          listAnchor = new String[ listKey.length ][];
-//          listTitle = new String[ listKey.length ][];
-//      }
-//  }
+
+KeywordInfo::KeywordInfo()
+    : pos( 0 ),
+      listKey( 100 )
+{
+}
 
 
-//  public static synchronized KeywordInfo getKeyword( String Database, String Language )
-//  {
-//      String keyStr = lang(Language) + File.separator + Database;
-//      KeywordInfo info = ( KeywordInfo ) _keyword.get( keyStr );
 
-//      if( info == null )
-//      {
-//          try
-//          {
-//              HashMap internalHash = new HashMap();
-//              String fileName = HelpDatabases.getInstallDirectory() + keyStr + ".key";
-//              Db table = new Db( null,0 );
-//              System.err.println( fileName );
-//              table.open( fileName,null,Db.DB_BTREE,Db.DB_RDONLY,0644 );
-//              Dbc cursor = table.cursor( null,0 );
-//              StringDbt key = new StringDbt();
-//              StringDbt data = new StringDbt();
+Sequence< rtl::OUString >& KeywordInfo::insertId( sal_Int32 index,rtl::OUString ids )
+{
+    std::vector< rtl::OUString > test;
+    while( ids.getLength() )
+    {
+        sal_Int32 idx = ids.indexOf( ';' );
+        test.push_back( ids.copy(0,idx) );
+        ids = ids.copy( 1+idx );
+    }
 
-//              boolean first = true;
-//              key.set_flags( Db.DB_DBT_MALLOC );      // Initially the cursor must allocate the necessary memory
-//              data.set_flags( Db.DB_DBT_MALLOC );
-//              info = new KeywordInfo();
+    listId[index].realloc( test.size() );
+    for( sal_uInt32 i = 0; i < test.size(); ++i )
+        listId[index][i] = test[i];
 
-//              String keyStri;
+    listAnchor[index].realloc( test.size() );
 
-//              while( Db.DB_NOTFOUND != cursor.get( key,data,Db.DB_NEXT ) )
-//              {
-//                  keyStri = key.getString();
-//                  info.insert( keyStri );
-//                  internalHash.put( keyStri,data.getString() );
-//                  if( first )
-//                  {
-//                      key.set_flags( Db.DB_DBT_REALLOC );
-//                      data.set_flags( Db.DB_DBT_REALLOC );
-//                      first = false;
-//                  }
-//              }
+    for( sal_Int32 k = 0; k < listId[index].getLength(); ++k )
+    {
+        if( listId[index][k].getLength() )
+        {
+            sal_Int32 idx = listId[index][k].indexOf( sal_Unicode( '#' ) );
+            if( idx != -1 )
+            {
+                listAnchor[index][k] = listId[index][k].copy(1+idx).trim();
+                listId[index][k] = listId[index][k].copy(0,idx).trim();
+            }
+        }
+    }
 
-//              info.sort();
-//              cursor.close();
-//              table.close( 0 );
-
-//              String[] keywords = info.getKeywordList();
-//              Db table2 = getDatabaseForLanguage( Database,Language );
-//              for( int i = 0; i < keywords.length; ++i )
-//              {
-//                  String[] id = info.insertId( i,((String)internalHash.get( keywords[i])) );
-//                  String[] title = info.getTitleForIndex( i );
-
-//                  for( int j = 0; j < id.length; ++j )
-//                  {
-//                      StringDbt key1 = new StringDbt();
-//                      key1.setString( id[j] );
-//                      StringDbt data1 = new StringDbt();
-//                      try
-//                      {
-//                          table2.get( null,key1,data1,0 );
-//                          title[j] = data1.getTitle();
-//                      }
-//                      catch( Exception e )
-//                      {
-//                          e.printStackTrace();
-//                          title[j] = "";
-//                      }
-//                  }
-//              }
-
-//              _keyword.put( keyStr,info );
-//          }
-//          catch( Exception e )
-//          {
-//              e.printStackTrace();
-//              System.err.println( "any other exception in getKeyword: " + e.getMessage() );
-//          }
-//      }
-
-//      return info;
-//  }
-
-//  }    // end class HelpDatabases
+    listTitle[index].realloc( test.size() );
+    return listId[index];
+}
 
 
-//  }
+struct comp
+{
+    int operator()( const rtl::OUString& l,const rtl::OUString& r )
+    {
+        if( l <= r )
+            return 1;
+        else
+            return 0;
+    }
+};
+
+
+void KeywordInfo::sort( std::vector< rtl::OUString >& listKey_ )
+{
+    std::sort( listKey_.begin(),listKey_.end(),comp() );
+    listKey.realloc( listKey_.size() );
+    listId.realloc( listKey_.size() );
+    listAnchor.realloc( listKey_.size() );
+    listTitle.realloc( listKey_.size() );
+
+    for( sal_uInt32 i = 0; i < listKey_.size(); ++i )
+        listKey[i] = listKey_[i];
+}
+
+
+
+KeywordInfo* Databases::getKeyword( const rtl::OUString& Database,
+                                    const rtl::OUString& Language )
+{
+    osl::MutexGuard aGuard( m_aMutex );
+
+    rtl::OUString key = lang(Language) + rtl::OUString::createFromAscii( "/" ) + Database;
+
+    KeywordInfoTable::iterator it =
+        m_aKeywordInfo.insert( KeywordInfoTable::value_type( key,0 ) ).first;
+
+    if( ! it->second )
+    {
+        std::vector< rtl::OUString > listKey_;
+        std::hash_map< rtl::OUString,rtl::OUString,ha,eq > internalHash;
+
+        rtl::OUString fileNameOU =
+            getInstallPath() +
+            key +
+            rtl::OUString::createFromAscii( ".key" );
+
+        rtl::OString fileName( fileNameOU.getStr(),fileNameOU.getLength(),RTL_TEXTENCODING_UTF8 );
+
+        Db table(0,0);
+        table.open( fileName.getStr(),0,DB_BTREE,DB_RDONLY,0644 );
+
+        Dbc* cursor = 0;
+        table.cursor( 0,&cursor,0 );
+        Dbt key,data;
+
+        bool first = true;
+        key.set_flags( DB_DBT_MALLOC );      // Initially the cursor must allocate the necessary memory
+        data.set_flags( DB_DBT_MALLOC );
+        KeywordInfo* info = it->second = new KeywordInfo();
+
+        rtl::OUString keyStri;
+
+        while( cursor && DB_NOTFOUND != cursor->get( &key,&data,DB_NEXT ) )
+        {
+            keyStri = rtl::OUString( static_cast<sal_Char*>(key.get_data()),
+                                     key.get_size(),
+                                     RTL_TEXTENCODING_UTF8 );
+            info->insert( listKey_,keyStri );
+            internalHash[ keyStri ] = rtl::OUString( static_cast<sal_Char*>(data.get_data()),
+                                                     data.get_size(),
+                                                     RTL_TEXTENCODING_UTF8 );
+
+            if( first )
+            {
+                key.set_flags( DB_DBT_REALLOC );
+                data.set_flags( DB_DBT_REALLOC );
+                first = false;
+            }
+        }
+
+        info->sort( listKey_ );
+        cursor->close();
+        table.close( 0 );
+
+        Sequence< rtl::OUString >& keywords = info->getKeywordList();
+        Db *table2 = getBerkeley( Database,Language );
+        for( sal_Int32 i = 0; i < keywords.getLength(); ++i )
+        {
+            Sequence< rtl::OUString >& id = info->insertId( i,internalHash[ keywords[i] ] );
+            Sequence< rtl::OUString >& title = info->getTitleForIndex( i );
+
+            for( sal_Int32 j = 0; j < id.getLength(); ++j )
+            {
+                rtl::OString idj( id[j].getStr(),id[j].getLength(),RTL_TEXTENCODING_UTF8 );
+                Dbt key1( static_cast< void* >( const_cast< sal_Char* >( idj.getStr() ) ),
+                          idj.getLength() );
+                Dbt data1;
+                if( table2 )
+                    table2->get( 0,&key1,&data1,0 );
+
+                DbtToStringConverter converter( static_cast< sal_Char* >( data1.get_data() ),
+                                                data1.get_size() );
+
+                title[j] = converter.getTitle();
+            }
+        }
+    }
+
+    return it->second;
+}

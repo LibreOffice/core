@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: abi $ $Date: 2001-05-16 07:36:23 $
+ *  last change: $Author: abi $ $Date: 2001-05-16 14:53:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -400,9 +400,86 @@ Any SAL_CALL Content::execute( const Command& aCommand,
 
 
 //=========================================================================
-Reference< XRow > Content::getPropertyValues(
-                                const Sequence< Property >& rProperties )
+Reference< XRow > Content::getPropertyValues( const Sequence< Property >& rProperties )
 {
-    osl::Guard< osl::Mutex > aGuard( m_aMutex );
-    return Reference< XRow >(0);
+    osl::MutexGuard aGuard( m_aMutex );
+
+    vos::ORef< ::ucb::PropertyValueSet > xRow = new ::ucb::PropertyValueSet( m_xSMgr );
+
+    for ( sal_Int32 n = 0; n < rProperties.getLength(); ++n )
+    {
+        const Property& rProp = rProperties[n];
+
+        if ( rProp.Name.compareToAscii( "ContentType" ) == 0 )
+            xRow->appendString( rProp,rtl::OUString::createFromAscii( "application/vnd.sun.star.help" ) );
+        else if( rProp.Name.compareToAscii( "Title" ) == 0 )
+            xRow->appendString ( rProp,m_aURLParameter.get_title() );
+        else if( rProp.Name.compareToAscii( "IsDocument" ) == 0 )
+            xRow->appendBoolean( rProp,m_aURLParameter.isFile() || m_aURLParameter.isRoot() );
+        else if( rProp.Name.compareToAscii( "IsFolder" ) == 0 )
+            xRow->appendBoolean( rProp, ! m_aURLParameter.isFile() || m_aURLParameter.isRoot() );
+        else if( rProp.Name.compareToAscii( "MediaType" ) == 0  )
+            if( m_aURLParameter.isPicture() )
+                xRow->appendString( rProp,rtl::OUString::createFromAscii( "image/gif" ) );
+            else if( m_aURLParameter.isFile() )
+                xRow->appendString( rProp,rtl::OUString::createFromAscii( "text/html" ) );
+            else if( m_aURLParameter.isRoot() )
+                xRow->appendString( rProp,rtl::OUString::createFromAscii( "text/css" ) );
+            else
+                xRow->appendVoid( rProp );
+        else if( m_aURLParameter.isModule() )
+            if( rProp.Name.compareToAscii( "KeywordList" ) == 0 )
+            {
+                KeywordInfo *inf = Databases::getKeyword( m_aURLParameter.get_module(),
+                                                          m_aURLParameter.get_language() );
+
+                Any aAny;
+                aAny <<= inf->getKeywordList();
+                xRow->appendObject( rProp,aAny );
+            }
+            else if( rProp.Name.compareToAscii( "KeywordRef" ) == 0 )
+            {
+                KeywordInfo *inf = Databases::getKeyword( m_aURLParameter.get_module(),
+                                                          m_aURLParameter.get_language() );
+
+                Any aAny;
+                aAny <<= inf->getIdList();
+                xRow->appendObject( rProp,aAny );
+            }
+            else if( rProp.Name.compareToAscii( "KeywordAnchorForRef" ) == 0 )
+            {
+                KeywordInfo *inf = Databases::getKeyword( m_aURLParameter.get_module(),
+                                                          m_aURLParameter.get_language() );
+
+                Any aAny;
+                aAny <<= inf->getAnchorList();
+                xRow->appendObject( rProp,aAny );
+            }
+            else if( rProp.Name.compareToAscii( "KeywordTitleForRef" ) == 0 )
+            {
+                KeywordInfo *inf = Databases::getKeyword( m_aURLParameter.get_module(),
+                                                          m_aURLParameter.get_language() );
+
+                Any aAny;
+                aAny <<= inf->getTitleList();
+                xRow->appendObject( rProp,aAny );
+            }
+            else if( rProp.Name.compareToAscii( "SearchScopes" ) == 0 )
+            {
+                Sequence< rtl::OUString > seq( 2 );
+                seq[0] = rtl::OUString::createFromAscii( "Heading" );
+                seq[1] = rtl::OUString::createFromAscii( "FullText" );
+                Any aAny;
+                aAny <<= seq;
+                xRow->appendObject( rProp,aAny );
+            }
+            else
+                xRow->appendVoid( rProp );
+        else if( rProp.Name.compareToAscii( "AnchorName" ) == 0 && m_aURLParameter.isFile() )
+            xRow->appendString( rProp,m_aURLParameter.get_tag() );
+        else
+            xRow->appendVoid( rProp );
+    }
+
+    return Reference< XRow >( xRow.getBodyPtr() );
 }
