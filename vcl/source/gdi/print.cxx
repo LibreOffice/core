@@ -2,9 +2,9 @@
  *
  *  $RCSfile: print.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: sb $ $Date: 2002-01-17 15:48:51 $
+ *  last change: $Author: pl $ $Date: 2002-02-11 15:44:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,17 +87,9 @@
 
 
 #else
-
-#include "rmoutdev.hxx"
-#include "rmprint.hxx"
-#include "rmwindow.hxx"
 #include "rvp.hxx"
-#include <vos/mutex.hxx>
-#ifndef _VCL_UNOHELP_HXX
-#include <unohelp.hxx>
-#endif
-
-using namespace com::sun::star::portal::client;
+#include "rmoutdev.hxx"
+#include "rmwindow.hxx"
 
 struct SalPrinterQueueInfo
 {
@@ -112,6 +104,14 @@ struct SalPrinterQueueInfo
                             SalPrinterQueueInfo();
                             ~SalPrinterQueueInfo();
 };
+#include "rmprint.hxx"
+
+#include <vos/mutex.hxx>
+#ifndef _VCL_UNOHELP_HXX
+#include <unohelp.hxx>
+#endif
+
+using namespace com::sun::star::portal::client;
 
 #endif
 
@@ -515,6 +515,9 @@ void Printer::ImplInitData()
     else
         pSVData->maGDIData.mpLastPrinter = this;
     pSVData->maGDIData.mpFirstPrinter = this;
+#ifdef REMOTE_APPSERVER
+    mpRemotePages = new ::std::vector< PrinterPage* >();
+#endif
 }
 
 // -----------------------------------------------------------------------
@@ -884,6 +887,9 @@ Printer::~Printer()
         delete mpGraphics, mpGraphics = NULL;
         delete mpInfoPrinter, mpInfoPrinter = NULL;
     }
+    for( int i = 0; i < mpRemotePages->size(); i++ )
+        delete (*mpRemotePages)[i];
+    delete mpRemotePages;
 #endif
     if ( mpDisplayDev )
         delete mpDisplayDev;
@@ -1663,48 +1669,12 @@ BOOL Printer::StartJob( const XubString& rJobName )
         }
     }
 #else
-    BOOL                bResult = FALSE;
-    ImplSVData* pSVData = ImplGetSVData();
-
-    try
-    {
-        mpPrinter = new RmPrinter();
-        mpPrinter->mxRemotePrinter = REF( XRmPrinter )( pSVData->mxClientFactory->createInstance( ::rtl::OUString::createFromAscii( "OfficePrinter.stardiv.de" ) ), NMSP_UNO::UNO_QUERY );
-        RmJobSetup aRmJobSetup;
-        maJobSetup.SetRmJobSetup( aRmJobSetup );
-        mpPrinter->CreatePrintInstance( aRmJobSetup );
-        if( mpPrinter->mxRemotePrinter.is() )
-        {
-            CHECK_FOR_RVPSYNC_NORMAL();
-            bResult = mpPrinter->mxRemotePrinter->StartJob( mnCopyCount, mbCollateCopy, rJobName, maPrintFile, mbPrintFile );
-        }
-    }
-    catch( RuntimeException &e )
-    {
-        rvpExceptionHandler();
-        bResult = FALSE;
-        mpPrinter = NULL;
-    }
-
-    if ( bResult )
-    {
-        mbNewJobSetup   = FALSE;
-        maJobName       = rJobName;
-        mnCurPage       = 1;
-        mnCurPrintPage  = 1;
-        mbJobActive     = TRUE;
-        mbPrinting      = TRUE;
-    }
-    else if ( mpPrinter )
-    {
-        delete mpPrinter;
-        mpPrinter = NULL;
-    }
-
-    if ( !bResult )
-        mnError = PRINTER_GENERALERROR;
-
-    return bResult;
+    mbNewJobSetup   = FALSE;
+    maJobName       = rJobName;
+    mnCurPage       = 1;
+    mnCurPrintPage  = 1;
+    mbJobActive     = TRUE;
+    mbPrinting      = TRUE;
 #endif
 
     return TRUE;
@@ -1749,16 +1719,56 @@ BOOL Printer::EndJob()
         return TRUE;
     }
 #else
+    ImplSVData* pSVData = ImplGetSVData();
+    sal_Bool bResult = sal_False;
+
+    try
+    {
+        mpPrinter = new RmPrinter();
+        mpPrinter->mxRemotePrinter = REF( XRmPrinter )( pSVData->mxClientFactory->createInstance( ::rtl::OUString::createFromAscii( "OfficePrinter.stardiv.de" ) ), NMSP_UNO::UNO_QUERY );
+        RmJobSetup aRmJobSetup;
+        maJobSetup.SetRmJobSetup( aRmJobSetup );
+        mpPrinter->CreatePrintInstance( aRmJobSetup );
+        if( mpPrinter->mxRemotePrinter.is() )
+        {
+            RmPageRequestor* pRequestor = new RmPageRequestor( this );
+            Reference< XRmPageRequestor > xReq( pRequestor );
+            CHECK_FOR_RVPSYNC_NORMAL();
+            bResult = mpPrinter->mxRemotePrinter->StartJob( mnCopyCount,
+                                                            mbCollateCopy,
+                                                            maJobName,
+                                                            maPrintFile,
+                                                            mbPrintFile,
+                                                            mpRemotePages->size(),
+                                                            xReq );
+            if( bResult )
+                do Application::Reschedule(); while( ! pRequestor->isCompleted() );
+        }
+    }
+    catch( RuntimeException &e )
+    {
+        rvpExceptionHandler();
+        bResult = FALSE;
+        if( mpPrinter )
+        {
+            delete mpPrinter;
+            mpPrinter = NULL;
+        }
+    }
+
     if ( mpPrinter )
     {
-        CHECK_FOR_RVPSYNC_NORMAL();
-        try
+        if( bResult )
         {
-            mpPrinter->mxRemotePrinter->EndJob( vcl::unohelper::GetMultiServiceFactory() );
-        }
-        catch( RuntimeException &e )
-        {
-            rvpExceptionHandler();
+            CHECK_FOR_RVPSYNC_NORMAL();
+            try
+            {
+                mpPrinter->mxRemotePrinter->EndJob( vcl::unohelper::GetMultiServiceFactory() );
+            }
+            catch( RuntimeException &e )
+            {
+                rvpExceptionHandler();
+            }
         }
         mbPrinting = FALSE;
         mbDevOutput = FALSE;
@@ -1770,7 +1780,7 @@ BOOL Printer::EndJob()
         delete mpPrinter;
         mpPrinter = NULL;
 
-        return TRUE;
+        return bResult;
     }
 #endif
 
@@ -1824,28 +1834,19 @@ BOOL Printer::AbortJob()
         return TRUE;
     }
 #else
-    if ( mpPrinter )
-    {
-        CHECK_FOR_RVPSYNC_NORMAL();
-        try
-        {
-            mpPrinter->mxRemotePrinter->AbortJob();
-        }
-        catch( RuntimeException &e )
-        {
-            rvpExceptionHandler();
-        }
-        mbPrinting      = FALSE;
-        mbDevOutput = FALSE;
-        mnCurPage       = 0;
-        mnCurPrintPage  = 0;
-        maJobName.Erase();
-        delete mpPrinter;
-        mpPrinter = NULL;
-        EndPrint();
+    for( int i = 0; i < mpRemotePages->size(); i++ )
+        delete (*mpRemotePages)[i];
+    *mpRemotePages = ::std::vector< PrinterPage* >();
+    mbPrinting      = FALSE;
+    mbDevOutput = FALSE;
+    mnCurPage       = 0;
+    mnCurPrintPage  = 0;
+    maJobName.Erase();
+    delete mpPrinter;
+    mpPrinter = NULL;
+    EndPrint();
 
-        return TRUE;
-    }
+    return TRUE;
 #endif
 
     return FALSE;
@@ -1899,28 +1900,16 @@ BOOL Printer::StartPage()
         return TRUE;
     }
 #else
-    if ( mpPrinter && mpPrinter->mxRemotePrinter.is() )
-    {
-        if( mpGraphics ) {
-            REF( XRmOutputDevice ) aTmp;
-            mpGraphics->SetInterface( aTmp );
-            delete mpGraphics;
-        }
+        mpQMtf = new GDIMetaFile;
+        mpQMtf->Record( this );
+        mpQMtf->SaveStatus();
 
-        mpGraphics = new ImplServerGraphics( ImplGetSVData()->mpAtoms );
-        Reference< XRmOutputDevice > temp( mpPrinter->mxRemotePrinter, UNO_QUERY );
-        mpGraphics->SetInterface( temp );
-
-        mbDevOutput = TRUE;
         mbInPrintPage = TRUE;
         mnCurPage++;
         mnCurPrintPage++;
-        CHECK_FOR_RVPSYNC_NORMAL();
-        mpPrinter->mxRemotePrinter->StartPage();
         PrintPage();
 
         return TRUE;
-    }
 #endif
 
     return FALSE;
@@ -1960,8 +1949,73 @@ BOOL Printer::EndPage()
         return TRUE;
     }
 #else
-    if ( mpPrinter )
+    mpQMtf->Stop();
+    mpQMtf->WindStart();
+    mpRemotePages->push_back( new PrinterPage( mpQMtf, mbNewJobSetup, GetJobSetup() ) );
+    mpQMtf = NULL;
+    mbNewJobSetup = FALSE;
+
+    return TRUE;
+#endif
+
+    return FALSE;
+}
+
+#ifdef REMOTE_APPSERVER
+void Printer::PrintRemotePage( ULONG nPage )
+{
+    if ( mpPrinter && mpPrinter->mxRemotePrinter.is() )
     {
+        CHECK_FOR_RVPSYNC_NORMAL();
+        try
+        {
+            mpPrinter->mxRemotePrinter->StartPage();
+        }
+        catch( RuntimeException &e )
+        {
+            rvpExceptionHandler();
+        }
+
+        if( nPage >=  mpRemotePages->size() )
+        {
+            CHECK_FOR_RVPSYNC_NORMAL();
+            try
+            {
+                mpPrinter->mxRemotePrinter->EndPage();
+            }
+            catch( RuntimeException &e )
+            {
+                rvpExceptionHandler();
+            }
+            return;
+        }
+
+        if( mpGraphics ) {
+            REF( XRmOutputDevice ) aTmp;
+            mpGraphics->SetInterface( aTmp );
+            delete mpGraphics;
+        }
+
+        mpGraphics = new ImplServerGraphics( ImplGetSVData()->mpAtoms );
+        Reference< XRmOutputDevice > temp( mpPrinter->mxRemotePrinter, UNO_QUERY );
+        mpGraphics->SetInterface( temp );
+
+        PrinterPage* pPage = (*mpRemotePages)[nPage];
+        if( pPage->IsNewJobSetup() )
+        {
+            RmJobSetup aSetup;
+            pPage->GetJobSetup().SetRmJobSetup( aSetup );
+            mpPrinter->SetJobSetup( aSetup );
+        }
+
+        mbDevOutput     = TRUE;
+        mbInPrintPage   = TRUE;
+        mnCurPage       = nPage;
+        mnCurPrintPage  = nPage;
+
+        pPage->GetGDIMetaFile()->WindStart();
+        pPage->GetGDIMetaFile()->Play( this );
+
         CHECK_FOR_RVPSYNC_NORMAL();
         try
         {
@@ -1973,10 +2027,6 @@ BOOL Printer::EndPage()
         }
         mbDevOutput = FALSE;
         mbNewJobSetup = FALSE;
-
-        return TRUE;
     }
-#endif
-
-    return FALSE;
 }
+#endif
