@@ -192,7 +192,6 @@
 "ScCellObj";"com::sun::star::style::CharacterProperties";"CharNoHyphenation#optional"
 "ScCellObj";"com::sun::star::style::CharacterProperties";"CharUnderlineColor"
 "ScCellObj";"com::sun::star::style::CharacterProperties";"CharUnderlineHasColor"
-"ScCellObj";"com::sun::star::style::CharacterProperties";"CharStyleNames#optional"
 "ScCellObj";"com::sun::star::text::Text";"StartRedline#optional"
 "ScCellObj";"com::sun::star::text::Text";"EndRedline#optional"
 "ScCellObj";"com::sun::star::beans::XPropertySet";"getPropertySetInfo()"

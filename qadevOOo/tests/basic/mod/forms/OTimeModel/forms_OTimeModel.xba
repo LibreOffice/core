@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: forms_OTimeModel.xba,v $ 
 '*
-'*  $Revision: 1.2 $ 
+'*  $Revision: 1.3 $ 
 '*
-'*  last change:$Date: 2003-03-19 14:39:19 $ 
+'*  last change:$Date: 2003-03-26 14:54:07 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -121,7 +121,7 @@ On Error Goto ErrHndl
     ' Copying DB file to temp location
     srcFile = utils.Path2URL(cTestDocsDir) + "TestDB/testDB.dbf"
     dstFile = utils.getTempFileURL("OTimeModelDB.dbf")
-    dbSrcURL = "sdbc:dbase:" + utils.StrReplace(dstFile, "/OTimeModelDB.dbf", "")
+    dbSrcURL = "sdbc:dbase:" + gsub(dstFile, "/OTimeModelDB.dbf", "")
 
     facc = createUnoService("com.sun.star.ucb.SimpleFileAccess")
     if (facc.exists(dstFile)) then facc.kill(dstFile)

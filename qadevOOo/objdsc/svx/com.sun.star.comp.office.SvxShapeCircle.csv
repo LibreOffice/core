@@ -209,7 +209,6 @@
 "SvxShapeCircle";"com::sun::star::style::CharacterProperties";"CharNoHyphenation#optional"
 "SvxShapeCircle";"com::sun::star::style::CharacterProperties";"CharUnderlineColor"
 "SvxShapeCircle";"com::sun::star::style::CharacterProperties";"CharUnderlineHasColor"
-"SvxShapeCircle";"com::sun::star::style::CharacterProperties";"CharStyleNames#optional"
 "SvxShapeCircle";"com::sun::star::beans::XPropertySet";"getPropertySetInfo()"
 "SvxShapeCircle";"com::sun::star::beans::XPropertySet";"setPropertyValue()"
 "SvxShapeCircle";"com::sun::star::beans::XPropertySet";"getPropertyValue()"

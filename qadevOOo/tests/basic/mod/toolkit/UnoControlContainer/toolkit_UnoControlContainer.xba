@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: toolkit_UnoControlContainer.xba,v $ 
 '*
-'*  $Revision: 1.3 $ 
+'*  $Revision: 1.4 $ 
 '*
-'*  last change:$Date: 2003-03-21 15:01:21 $ 
+'*  last change:$Date: 2003-03-26 14:54:45 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -82,13 +82,9 @@ Global oModel as Object
 Global oXWindow as Object
 Global oCtrlShape as Object
 
-' com.sun.star.container.XContainer
-Global oElementToInsert As Object
-Global oContainer As Object 
-
-' com.sun.star.awt.XControlContainer
 Global oXControl1 as Object
 Global oXControl2 as Object
+
 
 Sub CreateObj()
 
@@ -124,13 +120,11 @@ On Error Goto ErrHndl
 
     oObj = createUnoService("com.sun.star.awt.UnoControlContainer")
     oComponentInstance = createUnoService("com.sun.star.awt.UnoControlContainer")
-    oContainer = oObj
 
     oCurrCtrl = oDoc.getCurrentController()
     oXControl1 = oCurrCtrl.getControl(oShape1.getControl())
     oXControl2 = oCurrCtrl.getControl(oShape2.getControl())
-    oElementToInsert = oCurrCtrl.getControl(oShape3.getControl())
-    
+
     oModel = oShape1.getControl()
     oObj.setModel(oModel)
     oWin = oCurrCtrl.getControl(oModel).getPeer()

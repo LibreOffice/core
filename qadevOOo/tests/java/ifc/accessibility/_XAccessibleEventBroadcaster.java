@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XAccessibleEventBroadcaster.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-03-18 14:53:02 $
+ *  last change:$Date: 2003-03-26 14:54:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,6 @@ public class _XAccessibleEventBroadcaster extends MultiMethodTest {
 
     public XAccessibleEventBroadcaster oObj = null;
     public String EventMsg = "";
-    public boolean destroy = false;
 
     // temporary while accessibility package is in drafts.com.sun.star
     protected String getTestedClassName() {
@@ -142,10 +141,6 @@ public class _XAccessibleEventBroadcaster extends MultiMethodTest {
             throw new StatusException(Status.failed("Relation missed."));
         }
         EventMsg = (String) tEnv.getObjRelation("EventMsg");
-        Object dp = tEnv.getObjRelation("Destroy");
-        if (dp != null) {
-            destroy=true;
-        }
     }
 
     EventProducer prod = null ;
@@ -244,7 +239,7 @@ public class _XAccessibleEventBroadcaster extends MultiMethodTest {
     * Forces environment recreation.
     */
     protected void after() {
-        if (destroy) disposeEnvironment();
+        disposeEnvironment();
     }
 
 

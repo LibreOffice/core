@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: sd_AccessibleOutlineView.xba,v $ 
 '*
-'*  $Revision: 1.2 $ 
+'*  $Revision: 1.3 $ 
 '*
-'*  last change:$Date: 2003-03-18 12:04:32 $ 
+'*  last change:$Date: 2003-03-26 14:54:16 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -118,7 +118,7 @@ ErrHndl:
 End Sub
 
 Sub DisposeObj()
-    utils.closeObject(oDoc)
+    oDoc.dispose()
 End Sub
 
 

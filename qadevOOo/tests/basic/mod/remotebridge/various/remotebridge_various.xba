@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: remotebridge_various.xba,v $ 
 '*
-'*  $Revision: 1.3 $ 
+'*  $Revision: 1.4 $ 
 '*
-'*  last change:$Date: 2003-03-18 11:54:48 $ 
+'*  last change:$Date: 2003-03-26 14:54:07 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -124,6 +124,9 @@ End Sub
 
 Sub DisposeObj()
     Out.Log("Disposing object...")
-    utils.closeObject(oObj)
+    if (NOT isNULL(xConnection)) then
+        xConnection.close()
+    end if
+    oObj.dispose()
 End Sub
 </script:module>

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ClParser.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-03-20 13:34:00 $
+ *  last change:$Date: 2003-03-26 14:53:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,10 +96,6 @@ public class ClParser {
         String job="";
         for (int k=j;k<args.length;k++) {
             job += args[k]+" ";
-        }
-        String iniJob= (String) param.get("TestJob");
-        if (iniJob != null && job.equals("")){
-            job=iniJob;
         }
         param.put("TestJob",job);
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XAccessibleAction.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change:$Date: 2003-03-26 11:29:42 $
+ *  last change:$Date: 2003-03-26 14:54:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,12 +110,7 @@ public class _XAccessibleAction extends lib.MultiMethodTest {
         }
 
         try {
-            boolean act = false;
-            for (int i = 0; i< count; i++) {
-                log.println("do Action "+ oObj.getAccessibleActionDescription(i));
-                act = oObj.doAccessibleAction(i);
-                log.println("Worked: "+act);
-            }
+            boolean act = oObj.doAccessibleAction(0);
             log.println("Did action: "+act);
             res &= act ;
         } catch (com.sun.star.lang.IndexOutOfBoundsException ioe) {
@@ -187,10 +182,8 @@ public class _XAccessibleAction extends lib.MultiMethodTest {
         for (int i=0;i<count;i++) {
             try {
                 Object key = oObj.getAccessibleKeyBinding(i);
-                if (key != null ) {
-                    log.println("Found key: "+key.toString());
-                }
-                res &= true;
+                log.println("Found key: "+key.toString());
+                res &= key!=null ;
             } catch (com.sun.star.lang.IndexOutOfBoundsException ioe) {
                 log.println("Unexepected exception -- FAILED");
                 res &= false;

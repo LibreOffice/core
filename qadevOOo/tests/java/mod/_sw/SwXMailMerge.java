@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXMailMerge.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-03-21 11:18:06 $
+ *  last change:$Date: 2003-03-26 14:55:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,6 @@ import util.utils;
 import com.sun.star.sdbc.XResultSet;
 import com.sun.star.sdbc.XRowSet;
 import com.sun.star.sdbc.XConnection;
-import com.sun.star.sdbcx.XRowLocate;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.beans.NamedValue;
 import com.sun.star.task.XJob;
@@ -126,7 +125,6 @@ public class SwXMailMerge extends TestCase {
         Object[] sel = new Object[2];
         sel[0] = new int[2];
         sel[1] = new int[5];
-        Object[] myBookMarks = new Object[2];
         // </set some variables>
 
         // <create XResultSet>
@@ -177,19 +175,6 @@ public class SwXMailMerge extends TestCase {
                     UnoRuntime.queryInterface(XConnection.class, oConnection);
         // </create XResultSet>
 
-
-        // <create Bookmarks>
-        try {
-            XRowLocate oRowLocate = (XRowLocate) UnoRuntime.queryInterface(
-                                                  XRowLocate.class, oResultSet);
-            oResultSet.first();
-            myBookMarks[0] = oRowLocate.getBookmark();
-            oResultSet.next();
-            myBookMarks[1] = oRowLocate.getBookmark();
-        } catch (com.sun.star.sdbc.SQLException e) {
-            throw new StatusException("Cant get Bookmarks", e);
-        }
-        // </create Bookmarks>
         // <fill object with values>
         XPropertySet oObjProps = (XPropertySet)
                             UnoRuntime.queryInterface(XPropertySet.class, oObj);
@@ -217,8 +202,8 @@ public class SwXMailMerge extends TestCase {
 
         // <create object relations>
         Object[] vXJobArgs = new Object[4];
-    NamedValue[] vXJobArg0 = new NamedValue[8];
-    NamedValue[] vXJobArg1 = new NamedValue[7];
+    NamedValue[] vXJobArg0 = new NamedValue[9];
+    NamedValue[] vXJobArg1 = new NamedValue[8];
         NamedValue[] vXJobArg2 = new NamedValue[10];
     NamedValue[] vXJobArg3 = new NamedValue[0];
 
@@ -233,7 +218,7 @@ public class SwXMailMerge extends TestCase {
     vXJobArg0[5] = new NamedValue("OutputURL", cOutputURL);
     vXJobArg0[6] = new NamedValue("FileNamePrefix", "Identifier");
     vXJobArg0[7] = new NamedValue("FileNameFromColumn", new Boolean(true));
-//  vXJobArg0[8] = new NamedValue("Selection", sel);
+    vXJobArg0[8] = new NamedValue("Selection", sel);
 
         //second Arguments
            vXJobArg1[0] = new NamedValue("DataSourceName", cDataSourceName);
@@ -245,7 +230,7 @@ public class SwXMailMerge extends TestCase {
     vXJobArg1[4] = new NamedValue("DocumentURL", cTestDoc);
     vXJobArg1[5] = new NamedValue("FileNamePrefix", "Author");
     vXJobArg1[6] = new NamedValue("FileNameFromColumn", new Boolean(true));
-//  vXJobArg1[7] = new NamedValue("Selection", sel);
+    vXJobArg1[7] = new NamedValue("Selection", sel);
 
         // third Arguments
            vXJobArg2[0] = new NamedValue("Connection", oXConnection);
@@ -259,8 +244,7 @@ public class SwXMailMerge extends TestCase {
     vXJobArg2[6] = new NamedValue("OutputURL", cOutputURL);
     vXJobArg2[7] = new NamedValue("FileNamePrefix", "Identifier");
     vXJobArg2[8] = new NamedValue("FileNameFromColumn", new Boolean(true));
-    vXJobArg2[9] = new NamedValue("Selection", myBookMarks);
-//      vXJobArg2[9] = new NamedValue("Selection", sel);
+    vXJobArg2[9] = new NamedValue("Selection", sel);
 
         vXJobArgs[0] = vXJobArg0;
         vXJobArgs[1] = vXJobArg1;

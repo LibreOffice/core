@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: sd_SdXImpressDocument.xba,v $ 
 '*
-'*  $Revision: 1.4 $ 
+'*  $Revision: 1.5 $ 
 '*
-'*  last change:$Date: 2003-03-18 12:58:01 $ 
+'*  last change:$Date: 2003-03-26 14:54:19 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -124,11 +124,11 @@ ErrHndl:
 End Sub
 
 Sub DisposeObj()
-    utils.closeObject(oComponentInstance)
+    if NOT isNULL(oComponentInstance) then oComponentInstance.dispose()
 
     ' To successfully dispose oControllerDoc re-open it first.
     Dim oControllerDoc As Object
     oControllerDoc = utils.createDocument(cObjectName + "XModel")
-    utils.closeObject(oControllerDoc)
+    oControllerDoc.dispose()
 End Sub
 </script:module>

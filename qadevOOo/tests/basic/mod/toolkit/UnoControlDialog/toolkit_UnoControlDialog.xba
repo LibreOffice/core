@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: toolkit_UnoControlDialog.xba,v $ 
 '*
-'*  $Revision: 1.3 $ 
+'*  $Revision: 1.4 $ 
 '*
-'*  last change:$Date: 2003-03-21 15:00:49 $ 
+'*  last change:$Date: 2003-03-26 14:54:47 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -79,13 +79,7 @@ Global oToolkit as Object
 Global oModel as Object
   Global oXWindow as Object
   Global oCtrlShape as Object
-Global oComponentInstance As Object
 
-' com.sun.star.container.XContainer
-Global oElementToInsert As Object
-Global oContainer As Object 
-
-' com.sun.star.awt.XControlContainer
 Global oXControl1 as Object
 Global oXControl2 as Object
 
@@ -104,6 +98,7 @@ On Error Goto ErrHndl
     Dim oDlgModel As Object
     Dim oButModel As Object
     Dim oDlgControl As Object
+    Dim oComponentInstance As Object
     Dim oComponentModel As Object
     Dim oXWindowModel As Object
 
@@ -126,10 +121,6 @@ On Error Goto ErrHndl
     oXControl2 = createUnoService("com.sun.star.awt.UnoControlButton")
     oXControl2.setModel(oButModel)
 
-    oButModel = createUnoService("com.sun.star.awt.UnoControlButtonModel")
-    oElementToInsert = createUnoService("com.sun.star.awt.UnoControlButton")
-    oElementToInsert.setModel(oButModel)
-
     oDlgControl.setVisible(true)
     oDlgControl.setPosSize(0, 0, 200, 100, com.sun.star.awt.PosSize.SIZE)
     oContext = oDlgModel
@@ -138,8 +129,7 @@ On Error Goto ErrHndl
     oToolkit = oWinpeer.getToolkit()
     oDevice = oToolKit.createScreenCompatibleDevice(200,200)
     oGraphics = oDevice.createGraphics()
-    
-    oContainer = oDlgControl
+
     oObj = oDlgControl
 Exit Sub
 ErrHndl:

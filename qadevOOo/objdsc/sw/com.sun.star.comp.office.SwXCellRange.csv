@@ -129,6 +129,5 @@
 "SwXCellRange";"com::sun::star::style::CharacterProperties";"CharNoHyphenation#optional"
 "SwXCellRange";"com::sun::star::style::CharacterProperties";"CharUnderlineColor"
 "SwXCellRange";"com::sun::star::style::CharacterProperties";"CharUnderlineHasColor"
-"SwXCellRange";"com::sun::star::style::CharacterProperties";"CharStyleNames#optional"
 "SwXCellRange";"com::sun::star::sheet::XCellRangeData#optional";"getDataArray()"
 "SwXCellRange";"com::sun::star::sheet::XCellRangeData#optional";"setDataArray()"

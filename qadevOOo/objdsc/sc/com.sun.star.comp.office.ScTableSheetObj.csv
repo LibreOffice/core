@@ -239,7 +239,6 @@
 "ScTableSheetObj";"com::sun::star::style::CharacterProperties";"CharNoHyphenation#optional"
 "ScTableSheetObj";"com::sun::star::style::CharacterProperties";"CharUnderlineColor"
 "ScTableSheetObj";"com::sun::star::style::CharacterProperties";"CharUnderlineHasColor"
-"ScTableSheetObj";"com::sun::star::style::CharacterProperties";"CharStyleNames#optional"
 "ScTableSheetObj";"com::sun::star::drawing::XDrawPageSupplier";"getDrawPage()"
 "ScTableSheetObj";"com::sun::star::beans::XPropertySet";"getPropertySetInfo()"
 "ScTableSheetObj";"com::sun::star::beans::XPropertySet";"setPropertyValue()"

@@ -123,7 +123,6 @@
 "SvxUnoTextRange";"com::sun::star::style::CharacterProperties";"CharNoHyphenation#optional"
 "SvxUnoTextRange";"com::sun::star::style::CharacterProperties";"CharUnderlineColor"
 "SvxUnoTextRange";"com::sun::star::style::CharacterProperties";"CharUnderlineHasColor"
-"SvxUnoTextRange";"com::sun::star::style::CharacterProperties";"CharStyleNames#optional"
 "SvxUnoTextRange";"com::sun::star::beans::XPropertySet";"getPropertySetInfo()"
 "SvxUnoTextRange";"com::sun::star::beans::XPropertySet";"setPropertyValue()"
 "SvxUnoTextRange";"com::sun::star::beans::XPropertySet";"getPropertyValue()"

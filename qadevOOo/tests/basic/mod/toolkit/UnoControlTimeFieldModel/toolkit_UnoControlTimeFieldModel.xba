@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: toolkit_UnoControlTimeFieldModel.xba,v $ 
 '*
-'*  $Revision: 1.2 $ 
+'*  $Revision: 1.3 $ 
 '*
-'*  last change:$Date: 2003-03-18 14:03:59 $ 
+'*  last change:$Date: 2003-03-26 14:54:55 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -85,7 +85,7 @@ Sub CreateObj()
 On Error Goto ErrHndl
     oObj = createUnoService("com.sun.star.awt.UnoControlTimeFieldModel")
     oComponentInstance = createUnoService("com.sun.star.awt.UnoControlTimeFieldModel")
-    oPersistInstance = createUnoService("com.sun.star.awt.UnoControlTimeFieldModel")
+    oPersistInstance = oObj
 Exit Sub
 ErrHndl:
     Test.Exception()

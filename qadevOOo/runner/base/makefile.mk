@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Date: 2003-03-25 15:33:51 $
+#   last change: $Date: 2003-03-26 14:53:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,8 +73,7 @@ TARGET  = $(PRJNAME)
 # --- Files --------------------------------------------------------
 
 JARFILES = sandbox.jar ridl.jar jurt.jar unoil.jar 
-JAVAFILES =	TestBase.java java_complex.java java_fat.java basic_fat.java \
-            java_fat_service.java
+JAVAFILES =	TestBase.java java_complex.java java_fat.java basic_fat.java
 JAVACLASSFILES=	$(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
 
 # --- Targets ------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BasicTestCase.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-03-20 13:37:43 $
+ *  last change:$Date: 2003-03-26 14:53:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,28 +134,44 @@ public class BasicTestCase extends TestCase {
         LogWriter log = (LogWriter)pLog;
         oBasicHandler = BasicHandlerProvider.getHandler(tParam, log);
         try {
-            String command;
-            command =  "cBASPath = \"" + tParam.get("BASICRESPTH") + "/\"\n";
-            command += "cTestDocsDir = \"" + tParam.get("DOCPTH") + "/\"\n";
-            command += "CNCSTR = \"" + tParam.get("CNCSTR") + "\"\n";
+            oBasicHandler.perform("setValue",
+                        "cBASPath = \"" + tParam.get("BASICRESPTH") + "/\"");
+            oBasicHandler.perform("setValue",
+                        "cTestDocsDir = \"" + tParam.get("DOCPTH") + "/\"");
+            oBasicHandler.perform("setValue",
+                        "CNCSTR = \"" + tParam.get("CNCSTR") + "\"");
             if (tParam.get("soapi.test.hidewindows") != null) {
-              command += "soapi_test_hidewindows = true\n";
+              oBasicHandler.perform("setValue",
+                        "soapi_test_hidewindows = true");
             } else {
-              command += "soapi_test_hidewindows = false\n";
+              oBasicHandler.perform("setValue",
+                        "soapi_test_hidewindows = false");
             }
-            command += "dbaseUrl = \"sdbc:dbase:" + tParam.get("dbase.url") + "\"\n";
-            command += "flatUrl = \"sdbc:flat:" + tParam.get("flat.url") + "\"\n";
-            command += "calcUrl = \"sdbc:calc:"+ tParam.get("calc.url") + "\"\n";
-            command += "odbcUrl = \"sdbc:odbc:" + tParam.get("odbc.url") + "\"\n";
-            command += "jdbcUrl = \"jdbc:" + tParam.get("jdbc.url") + "\"\n";
-            command += "jdbcUser = \"" + tParam.get("jdbc.user") + "\"\n";
-            command += "jdbcPassword = \"" + tParam.get("jdbc.password") + "\"\n";
-            command += "adabasUrl = \"sdbc:adabas:" + tParam.get("adabas.url") + "\"\n";
-            command += "adabasUser = \"" + tParam.get("adabas.user") + "\"\n";
-            command += "adabasPassword = \"" + tParam.get("adabas.password") + "\"\n";
-            command += "mozabUrl = \"sdbc:address:" + tParam.get("mozab.url") + "\"\n";
-            oBasicHandler.perform("setValue", command);
-
+            //this parameters are used by testcases of db-driver components
+            oBasicHandler.perform("setValue", "dbaseUrl = \"sdbc:dbase:" +
+                tParam.get("dbase.url") + "\"");
+            oBasicHandler.perform("setValue", "flatUrl = \"sdbc:flat:" +
+                tParam.get("flat.url") + "\"");
+            oBasicHandler.perform("setValue", "calcUrl = \"sdbc:calc:" +
+                tParam.get("calc.url") + "\"");
+            oBasicHandler.perform("setValue", "odbcUrl = \"sdbc:odbc:" +
+                tParam.get("odbc.url") + "\"");
+            oBasicHandler.perform("setValue", "jdbcUrl = \"jdbc:" +
+                tParam.get("jdbc.url") + "\"");
+            oBasicHandler.perform("setValue", "jdbcUser = \"" +
+                tParam.get("jdbc.user") + "\"");
+            oBasicHandler.perform("setValue", "jdbcPassword = \"" +
+                tParam.get("jdbc.password") + "\"");
+            oBasicHandler.perform("setValue", "adabasUrl = \"sdbc:adabas:" +
+                tParam.get("adabas.url") + "\"");
+            oBasicHandler.perform("setValue", "adabasUser = \"" +
+                tParam.get("adabas.user") + "\"");
+            oBasicHandler.perform("setValue", "adabasPassword = \"" +
+                tParam.get("adabas.password") + "\"");
+            oBasicHandler.perform("setValue", "adoUrl = \"sdbc:ado:" +
+                tParam.get("ado.url") + "\"");
+            oBasicHandler.perform("setValue", "mozabUrl = \"sdbc:address:" +
+                tParam.get("mozab.url") + "\"");
         } catch (BasicException e) {
             log.println(e.info);
             helper.ProcessHandler ph =

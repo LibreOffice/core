@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: sw_SwXTextCursor.xba,v $ 
 '*
-'*  $Revision: 1.2 $ 
+'*  $Revision: 1.3 $ 
 '*
-'*  last change:$Date: 2003-03-26 14:07:31 $ 
+'*  last change:$Date: 2003-03-26 14:54:27 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -98,60 +98,4 @@ Exit Sub
 ErrHndl:
     Test.Exception()
 End Sub
-
-Function modifyDescriptor(descr As Variant) As Variant
-Dim cText as String
-Dim n as Integer, i as Integer
-Dim vFields as Variant
-On Error Goto ErrHndl
-
-    cText = ". Zeile : test of " &amp; cObjectName
-    ' write some strings to document
-    oObj.gotoEnd(false)
-    oText.insertControlCharacter(oObj, 0, false)
-    for i = 1 to 9
-        oObj.gotoEnd(false)
-        oText.insertString(oObj,Trim(Str(i)) &amp; cText,false)
-        oText.insertControlCharacter(oObj, 0, false)
-    next i
-    for i = 0 to ubound(descr)
-        if descr(i).Name = "SortFields" then 
- 			vFields = descr(i).Value
- 			for n = lBound(vFields) to uBound(vFields)
-	 			vFields(n).IsCaseSensitive = false
-	 			vFields(n).IsAscending = false
-        	next n
-            descr(i).Value = vFields()        
-        end if
-    next i
-    ' select inserted paragraphs
-	for i = 1 to 9
-		oObj.gotoPreviousParagraph(true)
-	next i
-    modifyDescriptor() = descr
-Exit Function
-ErrHndl:
-    Out.Log("Exception in SwXTextCursor.modifyDescriptor() :")
-    Test.Exception()
-end Function
-
-Function checkSort() As Boolean
-On Error Goto ErrHndl
-    Dim bOK as Boolean
-
-    bOK = true
-    oObj.gotoEnd(false)
-	for i = 1 to 9
-		oObj.gotoPreviousParagraph(false)
-		oObj.gotoStartOfParagraph(false)
-		oObj.gotoEndOfParagraph(true)
-		bOK = bOK and (CInt(mid(oObj.String,1,1)) = i)
-        print oObj.String,i
-    next i
-    checkSort() = bOK
-Exit Function
-ErrHndl:
-    Out.Log("Exception in SwXTextCursor.checkSort() :")
-    Test.Exception()
-end Function
 </script:module>

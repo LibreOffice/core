@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: sc_ScModelObj.xba,v $ 
 '*
-'*  $Revision: 1.4 $ 
+'*  $Revision: 1.5 $ 
 '*
-'*  last change:$Date: 2003-03-18 11:59:57 $ 
+'*  last change:$Date: 2003-03-26 14:54:14 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -101,7 +101,7 @@ ErrHndl:
 End Sub
 
 Sub DisposeObj()
-    utils.closeObject(oComponentInstance)
-    utils.closeObject(oControllerDoc)
+    if NOT isNULL(oComponentInstance) then oComponentInstance.dispose()
+    if NOT isNULL(oControllerDoc) then oControllerDoc.dispose()
 End Sub
 </script:module>

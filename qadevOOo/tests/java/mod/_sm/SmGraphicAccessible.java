@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SmGraphicAccessible.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-03-19 11:39:35 $
+ *  last change:$Date: 2003-03-26 14:55:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,9 @@ public class SmGraphicAccessible extends TestCase {
      * Creates a <code>StarMath</code> document and obtains an accessibility
      * component with the role <code>AccessibleRole.PANEL</code>.
      */
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
+    public synchronized TestEnvironment createTestEnvironment
+            ( TestParameters Param, PrintWriter log )
+            throws StatusException {
 
         SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF() );
         try {
@@ -164,9 +166,6 @@ public class SmGraphicAccessible extends TestCase {
         log.println("ImplementationName " + utils.getImplName(oObj));
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
-
-        tEnv.addObjRelation("EditOnly",
-                    "This method isn't supported in this dialog");
 
         tEnv.addObjRelation("EventProducer",
             new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer(){

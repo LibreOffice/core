@@ -183,7 +183,6 @@
 "SvxGraphicObject";"com::sun::star::style::CharacterProperties";"CharNoHyphenation#optional"
 "SvxGraphicObject";"com::sun::star::style::CharacterProperties";"CharUnderlineColor"
 "SvxGraphicObject";"com::sun::star::style::CharacterProperties";"CharUnderlineHasColor"
-"SvxGraphicObject";"com::sun::star::style::CharacterProperties";"CharStyleNames#optional"
 "SvxGraphicObject";"com::sun::star::beans::XPropertySet";"getPropertySetInfo()"
 "SvxGraphicObject";"com::sun::star::beans::XPropertySet";"setPropertyValue()"
 "SvxGraphicObject";"com::sun::star::beans::XPropertySet";"getPropertyValue()"

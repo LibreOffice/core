@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ThreadRunner.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-03-17 16:25:45 $
+ *  last change:$Date: 2003-03-26 14:53:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -275,3 +275,19 @@ class ExecuteDialogThread extends Thread {
         execDlg.execute();
     }
 }
+
+// $Log: not supported by cvs2svn $
+// Revision 1.1  2003/01/27 16:27:27  sw
+// NEW: initial version
+//
+// Revision 1.2  2002/10/16 15:11:51  cn
+// CHG: ExecuteDialogThread added
+//
+// Revision 1.2  2002/10/16 10:07:06  moa
+// CHG: ExecuteDialogThread added
+//
+// Revision 1.1  2002/09/11 11:17:06  pav
+// ADD: initial version
+//
+
+

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XAccessibleText.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change:$Date: 2003-03-24 15:25:03 $
+ *  last change:$Date: 2003-03-26 14:54:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,12 +126,6 @@ public class _XAccessibleText extends MultiMethodTest {
      * The length of retrieved string must be greater than zero.
      */
     protected void before() {
-        Object xat = tEnv.getObjRelation("XAccessibleText");
-
-        if (xat != null) {
-            oObj = (XAccessibleText) UnoRuntime.queryInterface(XAccessibleText.class, xat);
-        }
-
         text = (String)tEnv.getObjRelation("XAccessibleText.Text");
         if (text == null) {
             text = oObj.getText();

@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: toolkit_UnoControlButtonModel.xba,v $ 
 '*
-'*  $Revision: 1.2 $ 
+'*  $Revision: 1.3 $ 
 '*
-'*  last change:$Date: 2003-03-18 13:48:13 $ 
+'*  last change:$Date: 2003-03-26 14:54:44 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -74,7 +74,6 @@ option explicit
 ' REQUIRED VARIABLES for interface/service tests:
 Global oComponentInstance As Object
 
-Global oPersistInstance As Object
 
 Sub CreateObj()
 
@@ -85,7 +84,6 @@ Sub CreateObj()
 On Error Goto ErrHndl
     oObj = createUnoService("com.sun.star.awt.UnoControlButtonModel")
     oComponentInstance = createUnoService("com.sun.star.awt.UnoControlButtonModel")
-    oPersistInstance = createUnoService("com.sun.star.awt.UnoControlButtonModel")
 Exit Sub
 ErrHndl:
     Test.Exception()

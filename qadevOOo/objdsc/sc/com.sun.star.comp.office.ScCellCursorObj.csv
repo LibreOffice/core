@@ -194,7 +194,6 @@
 "ScCellCursorObj";"com::sun::star::style::CharacterProperties";"CharNoHyphenation#optional"
 "ScCellCursorObj";"com::sun::star::style::CharacterProperties";"CharUnderlineColor"
 "ScCellCursorObj";"com::sun::star::style::CharacterProperties";"CharUnderlineHasColor"
-"ScCellCursorObj";"com::sun::star::style::CharacterProperties";"CharStyleNames#optional"
 "ScCellCursorObj";"com::sun::star::beans::XPropertySet";"getPropertySetInfo()"
 "ScCellCursorObj";"com::sun::star::beans::XPropertySet";"setPropertyValue()"
 "ScCellCursorObj";"com::sun::star::beans::XPropertySet";"getPropertyValue()"

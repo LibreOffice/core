@@ -79,7 +79,6 @@
 "ChXChartAxis";"com::sun::star::style::CharacterProperties";"CharNoHyphenation#optional"
 "ChXChartAxis";"com::sun::star::style::CharacterProperties";"CharUnderlineColor"
 "ChXChartAxis";"com::sun::star::style::CharacterProperties";"CharUnderlineHasColor"
-"ChXChartAxis";"com::sun::star::style::CharacterProperties";"CharStyleNames#optional"
 "ChXChartAxis";"com::sun::star::beans::XPropertySet";"getPropertySetInfo()"
 "ChXChartAxis";"com::sun::star::beans::XPropertySet";"setPropertyValue()"
 "ChXChartAxis";"com::sun::star::beans::XPropertySet";"getPropertyValue()"

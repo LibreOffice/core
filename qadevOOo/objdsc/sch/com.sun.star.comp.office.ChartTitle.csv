@@ -62,7 +62,6 @@
 "ChartTitle";"com::sun::star::style::CharacterProperties";"CharNoHyphenation#optional"
 "ChartTitle";"com::sun::star::style::CharacterProperties";"CharUnderlineColor"
 "ChartTitle";"com::sun::star::style::CharacterProperties";"CharUnderlineHasColor"
-"ChartTitle";"com::sun::star::style::CharacterProperties";"CharStyleNames#optional"
 "ChartTitle";"com::sun::star::beans::XPropertySet";"getPropertySetInfo()"
 "ChartTitle";"com::sun::star::beans::XPropertySet";"setPropertyValue()"
 "ChartTitle";"com::sun::star::beans::XPropertySet";"getPropertyValue()"

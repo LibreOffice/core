@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: cached_CachedDynamicResultSetStubFactory.xba,v $ 
 '*
-'*  $Revision: 1.2 $ 
+'*  $Revision: 1.3 $ 
 '*
-'*  last change:$Date: 2003-03-19 14:33:11 $ 
+'*  last change:$Date: 2003-03-26 14:54:04 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -96,7 +96,7 @@ On Error Goto ErrHndl
     Dim sURL, sCntURL As String
     Dim oCI, oContent As Object
     sURL = utils.Path2URL(cTestDocsDir &amp; "solibrary.jar")
-    sURL = utils.StrReplace(sURL, "/", "%2F")
+    sURL = utils.gsub(sURL, "/", "%2F")
     sCntURL = "vnd.sun.star.pkg://" &amp; sURL &amp; "/"
     
     oCI = oUCB.createContentIdentifier(sCntUrl)

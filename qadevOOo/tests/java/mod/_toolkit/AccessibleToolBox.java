@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleToolBox.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-03-25 12:15:10 $
+ *  last change:$Date: 2003-03-26 14:55:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,7 +181,7 @@ public class AccessibleToolBox extends TestCase {
 
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
-        //at.printAccessibleTree(log, xRoot);
+        at.printAccessibleTree(log, xRoot);
 
         oObj = at.getAccessibleObjectForRole(xRoot,
             AccessibleRole.TOOLBAR);

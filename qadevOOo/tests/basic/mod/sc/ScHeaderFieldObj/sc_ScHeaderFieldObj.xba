@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: sc_ScHeaderFieldObj.xba,v $ 
 '*
-'*  $Revision: 1.3 $ 
+'*  $Revision: 1.4 $ 
 '*
-'*  last change:$Date: 2003-03-18 11:56:58 $ 
+'*  last change:$Date: 2003-03-26 14:54:12 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -114,7 +114,7 @@ ErrHndl:
 End Sub
 
 Sub DisposeObj()
-    utils.closeObject(oObj)
-    utils.closeObject(oComponentInstance)
+    if NOT isNULL(oObj) then oObj.dispose()
+    if NOT isNULL(oComponentInstance) then oComponentInstance.dispose()
 End Sub
 </script:module>

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SmEditAccessible.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-03-18 14:55:56 $
+ *  last change:$Date: 2003-03-26 14:55:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,9 @@ public class SmEditAccessible extends TestCase {
      * Creates a <code>StarMath</code> document and obtains an accessibility
      * component with the role <code>AccessibleRole.PANEL</code>.
      */
-    protected synchronized TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
+    public synchronized TestEnvironment createTestEnvironment
+            ( TestParameters Param, PrintWriter log )
+            throws StatusException {
 
         SOfficeFactory SOF = SOfficeFactory.getFactory( Param.getMSF() );
         try {
@@ -163,9 +165,6 @@ public class SmEditAccessible extends TestCase {
         log.println("ImplementationName " + utils.getImplName(oObj));
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
-
-        tEnv.addObjRelation("Destroy", new Boolean(true));
-
         final XAccessibleContext con = (XAccessibleContext) UnoRuntime.queryInterface(XAccessibleContext.class, oObj);
         tEnv.addObjRelation("EventProducer",
             new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer(){
