@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgfield.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 17:09:34 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 12:43:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -298,6 +298,8 @@ ModalDialog DLG_FIELD_MODIFY
     Text[ hindi ] = "क्षेत्र का संपादन";
     Text[ slovak ] = "Upraviť pole";
 };
+
+
 
 
 
