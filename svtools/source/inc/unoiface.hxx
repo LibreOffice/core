@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoiface.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 11:03:38 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 13:22:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,7 @@ class VCLXMultiLineEdit :   public ::com::sun::star::awt::XTextComponent,
 {
 private:
     TextListenerMultiplexer maTextListeners;
+    LineEnd                 meLineEndType;
 
 protected:
     void                ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent );
