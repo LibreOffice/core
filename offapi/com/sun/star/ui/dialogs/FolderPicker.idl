@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FolderPicker.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tra $ $Date: 2001-10-09 08:10:29 $
+ *  last change: $Author: tra $ $Date: 2002-07-12 13:11:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,8 @@ module com { module sun { module star { module ui { module dialogs {
 //=============================================================================
 
 interface XFolderPicker;
+interface XControlInformation;
+interface XControlAccess;
 
 //=============================================================================
 /** A FolderPicker service.
@@ -114,6 +116,27 @@ service FolderPicker
     /** For canceling a running dialog instance.
     */
     [optional] interface com::sun::star::util::XCancellable;
+
+    //-------------------------------------------------------------------------
+    /** Use this interface to query for the controls and control
+            properties supported.
+    */
+    [optional] interface com::sun::star::ui::dialogs::XControlInformation;
+
+    //-------------------------------------------------------------------------
+    /** Use this interface to query for or modify the properties of the
+            supported controls.
+
+            The following controls and control properties are currently supported:
+
+            Control name    Control
+                                  property    Value type      Description
+            ---------------------------------------------------------------------------------
+            "HelpButton"   "State"      boolean           Enable the button with a value
+                                                                       of true, disable the button
+                                                                       with a value of false
+    */
+    [optional] interface com::sun::star::ui::dialogs::XControlAccess;
 };
 
 //=============================================================================
