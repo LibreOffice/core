@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SelectionBrowseBox.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-18 08:38:19 $
+ *  last change: $Author: oj $ $Date: 2001-04-18 08:46:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -813,6 +813,7 @@ sal_Bool OSelectionBrowseBox::SaveModified()
                         {
                             pEntry->SetDatabase(pEntryTab->GetComposedName());
                             pEntry->SetTable(pEntryTab->GetTableName());
+                            pEntry->SetTabWindow(pEntryTab);
                         }
                     }
                 }
