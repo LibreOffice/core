@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editbrowsebox.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 16:59:06 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 15:47:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,11 +107,11 @@
 #ifndef SVTOOLS_EDITBROWSEBOX_IMPL_HXX
 #include "editbrowseboximpl.hxx"
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
-#include <drafts/com/sun/star/accessibility/AccessibleEventId.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_ACCESSIBLEEVENTID_HPP_
+#include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
-#include <drafts/com/sun/star/accessibility/XAccessible.hpp>
+#ifndef _COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
+#include <com/sun/star/accessibility/XAccessible.hpp>
 #endif
 #ifndef _COMPHELPER_TYPES_HXX_
 #include <comphelper/types.hxx>
@@ -156,8 +156,8 @@ namespace svt
         }
     }
 
-    using namespace drafts::com::sun::star::accessibility::AccessibleEventId;
-    using  drafts::com::sun::star::accessibility::XAccessible;
+    using namespace com::sun::star::accessibility::AccessibleEventId;
+    using  com::sun::star::accessibility::XAccessible;
     using ::com::sun::star::uno::Reference;
     //==================================================================
 
@@ -1076,7 +1076,7 @@ namespace svt
                 }
             }
             else if ( isAccessibleCreated() && HasFocus() )
-                commitTableEvent(ACCESSIBLE_ACTIVE_DESCENDANT_EVENT,
+                commitTableEvent(ACTIVE_DESCENDANT_CHANGED,
                                  com::sun::star::uno::makeAny(CreateAccessibleCell(nRow,nCol)),
                                  com::sun::star::uno::Any());
         }
@@ -1087,7 +1087,7 @@ namespace svt
     {
         if (IsEditing())
         {
-            commitBrowseBoxEvent(ACCESSIBLE_CHILD_EVENT,com::sun::star::uno::Any(),com::sun::star::uno::makeAny(m_aImpl->m_xActiveCell));
+            commitBrowseBoxEvent(CHILD,com::sun::star::uno::Any(),com::sun::star::uno::makeAny(m_aImpl->m_xActiveCell));
             m_aImpl->disposeCell();
 
             m_aImpl->m_pFocusCell  = NULL;
