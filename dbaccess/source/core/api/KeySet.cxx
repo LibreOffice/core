@@ -2,9 +2,9 @@
  *
  *  $RCSfile: KeySet.cxx,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-19 12:53:57 $
+ *  last change: $Author: vg $ $Date: 2003-06-25 11:02:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,7 +228,6 @@ sal_Bool SAL_CALL OKeySet::moveToBookmark( const Any& bookmark ) throw(SQLExcept
 {
     m_bInserted = m_bUpdated = m_bDeleted = sal_False;
     m_aKeyIter = m_aKeyMap.find(::comphelper::getINT32(bookmark));
-
     return m_aKeyIter != m_aKeyMap.end();
 }
 // -------------------------------------------------------------------------
@@ -726,10 +725,10 @@ void SAL_CALL OKeySet::deleteRow(const ORowSetRow& _rDeleteRow,const connectivit
 
     if(m_bDeleted)
     {
-        sal_Int32 nPos = ::comphelper::getINT32((*_rDeleteRow)[0].getAny());
-        if(m_aKeyIter == m_aKeyMap.find(nPos) && m_aKeyIter != m_aKeyMap.end())
+        sal_Int32 nBookmark = ::comphelper::getINT32((*_rDeleteRow)[0].getAny());
+        if(m_aKeyIter == m_aKeyMap.find(nBookmark) && m_aKeyIter != m_aKeyMap.end())
             ++m_aKeyIter;
-        m_aKeyMap.erase(nPos);
+        m_aKeyMap.erase(nBookmark);
         m_bDeleted = sal_True;
     }
 }
@@ -1095,7 +1094,7 @@ sal_Bool OKeySet::fetchRow()
             const TPositionTypePair& rPair = aPosIter->second;
             fetchValue(rPair.first,rPair.second,m_xDriverRow,*aIter);
         }
-        m_aKeyIter = m_aKeyMap.insert(OKeySetMatrix::value_type(m_aKeyMap.size(),OKeySetValue(aKeyRow,0))).first;
+        m_aKeyIter = m_aKeyMap.insert(OKeySetMatrix::value_type(m_aKeyMap.rbegin()->first+1,OKeySetValue(aKeyRow,0))).first;
     }
     else
         m_bRowCountFinal = sal_True;
