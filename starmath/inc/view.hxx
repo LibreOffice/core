@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:57:25 $
+ *  last change: $Author: jp $ $Date: 2001-05-11 13:01:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,6 @@
  ************************************************************************/
 #ifndef VIEW_HXX
 #define VIEW_HXX
-
 
 #ifndef _SFXDOCKWIN_HXX //autogen
 #include <sfx2/dockwin.hxx>
@@ -244,10 +243,20 @@ public:
 
 class SmViewShell: public SfxViewShell
 {
+    // for handling the PasteClipboardState
+    friend class SmClipboardChangeListener;
+
     SmGraphicWindow     aGraphic;
     SmGraphicController aGraphicController;
     String              StatusText;
+
+    ::com::sun::star::uno:: Reference <
+            ::com::sun::star::lang:: XEventListener > xClipEvtLstnr;
+    SmClipboardChangeListener*  pClipEvtLstnr;
     Window             *pViewFrame;
+    BOOL                bPasteState;
+
+    void AddRemoveClipboardListener( BOOL bAdd );
 
 protected:
 

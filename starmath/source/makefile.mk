@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: tl $ $Date: 2001-05-02 16:58:48 $
+#   last change: $Author: jp $ $Date: 2001-05-11 13:00:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -113,6 +113,7 @@ SLOFILES =  \
         $(SLO)$/smdll.obj \
         $(SLO)$/smmod.obj \
         $(SLO)$/view.obj \
+        $(SLO)$/viewhdl.obj \
         $(SLO)$/edit.obj \
         $(SLO)$/rect.obj \
         $(SLO)$/unomodel.obj \
@@ -121,6 +122,7 @@ SLOFILES =  \
 EXCEPTIONSFILES =   \
         $(SLO)$/register.obj  \
         $(SLO)$/mathml.obj \
+        $(SLO)$/viewhdl.obj \
         $(SLO)$/unomodel.obj
 
 

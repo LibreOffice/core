@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: tl $ $Date: 2001-05-02 16:58:48 $
+ *  last change: $Author: jp $ $Date: 2001-05-11 13:01:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,7 +160,6 @@ class SmDocShell : public SfxObjectShell, public SfxInPlaceObject,
     String              aText;
     SmFormat            aFormat;
     SmParser            aInterpreter;
-    SvDataTypeList      aDataTypeList;
     SvStorageStreamRef  aDocStream;
     SmSymSetManager    *pSymSetMgr;
     SmNode             *pTree;
@@ -200,9 +199,6 @@ class SmDocShell : public SfxObjectShell, public SfxInPlaceObject,
                                   String* pShortTypeName,
                                   long    nFileFormat = SOFFICE_FILEFORMAT_CURRENT) const;
 
-    virtual const       SvDataTypeList& GetTypeList() const;
-    virtual BOOL        GetData(SvData *pData);
-    virtual BOOL        SetData(SvData *pData);
     virtual BOOL        SetData( const String& rData );
     virtual ULONG       GetMiscStatus() const;
     virtual void        OnDocumentPrinterChanged( Printer * );
@@ -232,11 +228,7 @@ class SmDocShell : public SfxObjectShell, public SfxInPlaceObject,
 public:
     TYPEINFO();
     SFX_DECL_INTERFACE(SFX_INTERFACE_SMA_START+1);
-#if 0
-    SFX_DECL_OBJECTFACTORY(SmDocShell);
-#else
     SFX_DECL_OBJECTFACTORY_DLL(SmDocShell, SM_MOD());
-#endif
 
                 SmDocShell(SfxObjectCreateMode eMode = SFX_CREATE_MODE_EMBEDDED);
     virtual     ~SmDocShell();
@@ -286,7 +278,6 @@ public:
     void        Execute( SfxRequest& rReq );
     void        GetState(SfxItemSet &);
 
-    virtual SvDataMemberObjectRef CreateSnapshot ();
     virtual void SetVisArea (const Rectangle & rVisArea);
     virtual void UIActivate (BOOL bActivate);
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: tl $ $Date: 2001-05-02 16:58:48 $
+ *  last change: $Author: jp $ $Date: 2001-05-11 13:00:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,10 @@
 #ifndef _SVTOOLS_FSTATHELPER_HXX
 #include <svtools/fstathelper.hxx>
 #endif
+#ifndef _TRANSFER_HXX
+#include <svtools/transfer.hxx>
+#endif
+
 #ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
 #endif
@@ -610,7 +614,6 @@ void SmDocShell::Resize()
 
 SmDocShell::SmDocShell(SfxObjectCreateMode eMode) :
     SfxObjectShell(eMode),
-    aDataTypeList(SvEmbeddedObject::GetStdFormatList()),
     pSymSetMgr          ( 0 ),
     pTree               ( 0 ),
     pPrinter            ( 0 ),
@@ -633,7 +636,6 @@ SmDocShell::SmDocShell(SfxObjectCreateMode eMode) :
     SetModel( new SmModel(this) );  //! das hier mit new erzeugte Model brauch
                                     //! im Destruktor nicht explizit gelöscht werden.
                                     //! Dies erledigt das Sfx.
-    aDataTypeList.Append(SvDataType(FORMAT_STRING, MEDIUM_MEMORY));
 }
 
 
@@ -651,32 +653,6 @@ SmDocShell::~SmDocShell()
     delete pPrinter;
 }
 
-
-
-BOOL SmDocShell::GetData(SvData *pData)
-{
-    if ( FORMAT_STRING == pData->GetFormat() )
-    {
-        pData->SetData(GetText());
-        return TRUE;
-    }
-
-    return SfxInPlaceObject::GetData(pData);
-}
-
-BOOL SmDocShell::SetData( SvData *pData )
-{
-    if ( FORMAT_STRING == pData->GetFormat() )
-    {
-        String aData;
-        if ( pData->GetData( aData ) )
-        {
-            SetText( aData );
-            return TRUE;
-        }
-    }
-    return SvPseudoObject::SetData( pData );
-}
 
 BOOL SmDocShell::SetData( const String& rData )
 {
@@ -832,21 +808,39 @@ BOOL SmDocShell::Load(SvStorage *pStor)
 BOOL SmDocShell::Insert(SvStorage *pStor)
 {
     String aTemp = aText;
-    BOOL bRet = TRUE;
+    BOOL bRet = TRUE, bChkOldVersion = TRUE;
 
-    if (!Try3x (pStor, STREAM_STD_READ))
+    String aTmpStr( C2S( "Equation Native" ));
+    if( pStor->IsStream( aTmpStr ))
+    {
+        bChkOldVersion = FALSE;
+        // is this a MathType Storage?
+        MathType aEquation(aText);
+        if (bRet = (1 == aEquation.Parse(pStor)))
+            Parse();
+    }
+    else if( pStor->IsStream(C2S("content.xml")) ||
+             pStor->IsStream(C2S("Content.xml")) )
+    {
+        bChkOldVersion = FALSE;
+        // is this a fabulous math package ?
+        SmXMLWrapper aEquation(GetModel());
+        SfxMedium aMedium(pStor);
+        bRet = aEquation.Import(aMedium);
+    }
+    else if (!Try3x (pStor, STREAM_STD_READ))
     {
         pStor->Remove (String::CreateFromAscii(pStarMathDoc));
         bRet = !Try2x (pStor, STREAM_STD_READ);
         pStor->Remove(C2S("\1Ole10Native"));
     }
 
-    if ( bRet )
+    if( bRet )
     {
         aTemp += aText;
         aText  = aTemp;
 
-        if ( pStor->GetVersion() <= SOFFICE_FILEFORMAT_40 )
+        if( bChkOldVersion && SOFFICE_FILEFORMAT_40 >= pStor->GetVersion() )
             Convert40To50Txt();
 
         Parse();
@@ -1096,30 +1090,30 @@ void SmDocShell::Execute(SfxRequest& rReq)
         pBindings = &pViewSh->GetViewFrame()->GetBindings();
     switch (rReq.GetSlot())
     {
-        case SID_TEXTMODE:
+    case SID_TEXTMODE:
         {
             SmFormat  &rFormat = GetFormat();
             rFormat.SetTextmode(!rFormat.IsTextmode());
             rFormat.RequestApplyChanges();
-            break;
         }
+        break;
 
-        case SID_AUTO_REDRAW :
+    case SID_AUTO_REDRAW :
         {
             SmModule *pp = SM_MOD1();
             BOOL bRedraw = pp->GetConfig()->IsAutoRedraw();
             pp->GetConfig()->SetAutoRedraw(!bRedraw);
-            break;
         }
+        break;
 
-        case SID_SYMBOLS_CATALOGUE:
+    case SID_SYMBOLS_CATALOGUE:
         {
             SmSymbolDialog(NULL, GetSymSetManager()).Execute();
             RestartFocusTimer();
-            break;
         }
+        break;
 
-        case SID_TOOLBOX:
+    case SID_TOOLBOX:
         {
             SmViewShell *pView = SmGetActiveView();
             if (pView)
@@ -1127,10 +1121,10 @@ void SmDocShell::Execute(SfxRequest& rReq)
                 pView->GetViewFrame()->ToggleChildWindow(
                         SmToolBoxWrapper::GetChildWindowId() );
             }
-            break;
         }
+        break;
 
-        case SID_INSERT_FORMULA:
+    case SID_INSERT_FORMULA:
         {
             SfxMedium *pMedium = SFX_APP()->
                     InsertDocumentDialog(SFXWB_INSERT | WB_OPEN | WB_3DLOOK,
@@ -1153,18 +1147,18 @@ void SmDocShell::Execute(SfxRequest& rReq)
             }
             RestartFocusTimer();
             rReq.SetReturnValue (SfxBoolItem (rReq.GetSlot(), TRUE));
-            break;
         }
+        break;
 
-        case SID_LOADSYMBOLS:
-            LoadSymbols();
-            break;
+    case SID_LOADSYMBOLS:
+        LoadSymbols();
+        break;
 
-        case SID_SAVESYMBOLS:
-            SaveSymbols();
-            break;
+    case SID_SAVESYMBOLS:
+        SaveSymbols();
+        break;
 
-        case SID_FONT:
+    case SID_FONT:
         {
             SmFontTypeDialog *pFontTypeDialog = new SmFontTypeDialog(NULL);
 
@@ -1189,10 +1183,10 @@ void SmDocShell::Execute(SfxRequest& rReq)
             }
             delete pFontTypeDialog;
             RestartFocusTimer ();
-            break;
         }
+        break;
 
-        case SID_FONTSIZE:
+    case SID_FONTSIZE:
         {
             SmFontSizeDialog *pFontSizeDialog = new SmFontSizeDialog(NULL);
 
@@ -1218,10 +1212,10 @@ void SmDocShell::Execute(SfxRequest& rReq)
             }
             delete pFontSizeDialog;
             RestartFocusTimer ();
-            break;
         }
+        break;
 
-        case SID_DISTANCE:
+    case SID_DISTANCE:
         {
             SmDistanceDialog *pDistanceDialog = new SmDistanceDialog(NULL);
 
@@ -1248,10 +1242,10 @@ void SmDocShell::Execute(SfxRequest& rReq)
             }
             delete pDistanceDialog;
             RestartFocusTimer ();
-            break;
         }
+        break;
 
-        case SID_ALIGN:
+    case SID_ALIGN:
         {
             SmAlignDialog *pAlignDialog = new SmAlignDialog(NULL);
 
@@ -1283,10 +1277,10 @@ void SmDocShell::Execute(SfxRequest& rReq)
             }
             delete pAlignDialog;
             RestartFocusTimer ();
-            break;
         }
+        break;
 
-        case SID_TEXT:
+    case SID_TEXT:
         {
             const SfxStringItem& rItem =
                 (const SfxStringItem&)rReq.GetArgs()->Get(SID_TEXT);
@@ -1295,38 +1289,53 @@ void SmDocShell::Execute(SfxRequest& rReq)
             {
                 SetText(rItem.GetValue());
             }
-            break;
         }
+        break;
 
-        case SID_COPYOBJECT:
+    case SID_COPYOBJECT:
         {
-            SvDataMemberObjectRef ObjRef = CreateSnapshot();
-            ObjRef->CopyClipboard();
-            break;
-        }
-
-        case SID_PASTEOBJECT:
-        {
-            SvDataObjectRef ObjRef = SvDataObject::PasteClipboard();
-
-            if (ObjRef.Is())
+            Reference< datatransfer::XTransferable > xTrans(
+                                               CreateTransferableSnapshot() );
+            if( xTrans.is() )
             {
-                SvObjectDescriptor ObjDesc(ObjRef);
-
-                if (ObjDesc.GetClassName() == *GetSvFactory())
+                Reference< lang::XUnoTunnel> xTnnl( xTrans, uno::UNO_QUERY);
+                if( xTnnl.is() )
                 {
-                    SvStorageRef StorageRef(new SvStorage(String()));
-                    SvData       ObjData(SOT_FORMATSTR_ID_EMBED_SOURCE);
-
-                    ObjData.SetData(StorageRef, TRANSFER_REFERENCE);
-
-                    if (ObjRef->GetDataHere(&ObjData))
-                        Insert(StorageRef);
+                    TransferableHelper* pTrans = (TransferableHelper*)
+                        xTnnl->getSomething(
+                                TransferableHelper::getUnoTunnelId() );
+                    if( pTrans )
+                        pTrans->CopyToClipboard();
                 }
             }
-
-            break;
         }
+        break;
+
+    case SID_PASTEOBJECT:
+        {
+            TransferableDataHelper aData(
+                        TransferableDataHelper::CreateFromSystemClipboard() );
+            SotStorageStreamRef xStrm;
+            SotFormatStringId nId;
+            if( aData.GetTransferable().is() &&
+                ( aData.HasFormat( nId = SOT_FORMATSTR_ID_EMBEDDED_OBJ ) ||
+                  (aData.HasFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR ) &&
+                   aData.HasFormat( nId = SOT_FORMATSTR_ID_EMBED_SOURCE ))) &&
+                aData.GetSotStorageStream( nId, xStrm ) && xStrm.Is() )
+            {
+                SvStorageRef xStore( new SvStorage( *xStrm ));
+                switch( xStore->GetFormat() )
+                {
+                case SOT_FORMATSTR_ID_STARMATH_60:
+                case SOT_FORMATSTR_ID_STARMATH_50:
+                case SOT_FORMATSTR_ID_STARMATH_40:
+//??            case SOT_FORMATSTR_ID_STARMATH:
+                    Insert( xStore );
+                    break;
+                }
+            }
+        }
+        break;
     }
 }
 
@@ -1460,22 +1469,9 @@ void SmDocShell::HandsOff()
 }
 
 
-
-SvDataMemberObjectRef SmDocShell::CreateSnapshot ()
-{
-    return SfxInPlaceObject::CreateSnapshot ();
-}
-
-
-
 SfxItemPool& SmDocShell::GetPool()
 {
     return SFX_APP()->GetPool();
-}
-
-const SvDataTypeList& SmDocShell::GetTypeList() const
-{
-    return aDataTypeList;
 }
 
 void SmDocShell::SetVisArea (const Rectangle & rVisArea)

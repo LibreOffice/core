@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tl $ $Date: 2001-05-02 16:58:48 $
+ *  last change: $Author: jp $ $Date: 2001-05-11 13:00:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,6 +127,9 @@
 #endif
 #ifndef _SV_WRKWIN_HXX //autogen
 #include <vcl/wrkwin.hxx>
+#endif
+#ifndef _TRANSFER_HXX
+#include <svtools/transfer.hxx>
 #endif
 
 
@@ -1312,15 +1315,27 @@ void SmViewShell::Execute(SfxRequest& rReq)
             break;
 
         case SID_PASTE:
-            if (pWin && Clipboard::HasFormat(FORMAT_STRING))
-                pWin->Paste();
-            else
             {
-                SmViewShell *pViewSh = SmGetActiveView();
-                if (pViewSh)
-                    pViewSh->GetViewFrame()->GetDispatcher()->Execute(
+                BOOL bCallExec = 0 == pWin;
+                if( !bCallExec )
+                {
+                    TransferableDataHelper aDataHelper(
+                        TransferableDataHelper::CreateFromSystemClipboard() );
+
+                    if( aDataHelper.GetTransferable().is() &&
+                        aDataHelper.HasFormat( FORMAT_STRING ))
+                        pWin->Paste();
+                    else
+                        bCallExec = TRUE;
+                }
+                if( bCallExec )
+                {
+                    SmViewShell *pViewSh = SmGetActiveView();
+                    if( pViewSh )
+                        pViewSh->GetViewFrame()->GetDispatcher()->Execute(
                             SID_PASTEOBJECT, SFX_CALLMODE_STANDARD,
                             new SfxVoidItem(SID_PASTEOBJECT), 0L);
+                }
             }
             break;
 
@@ -1462,54 +1477,66 @@ void SmViewShell::GetState(SfxItemSet &rSet)
     {
         switch (nWh)
         {
-            case SID_CUT:
-            case SID_COPY:
-            case SID_DELETE:
-                if (! GetEditWindow() || ! GetEditWindow()->IsSelected())
-                    rSet.DisableItem(nWh);
-                break;
+        case SID_CUT:
+        case SID_COPY:
+        case SID_DELETE:
+            if (! GetEditWindow() || ! GetEditWindow()->IsSelected())
+                rSet.DisableItem(nWh);
+            break;
 
-            case SID_PASTE:
-                if (Clipboard::GetFormatCount() == 0)
-                    rSet.DisableItem( nWh );
-                break;
+        case SID_PASTE:
+            if( !xClipEvtLstnr.is() )
+            {
+                AddRemoveClipboardListener( TRUE );
+                TransferableDataHelper aDataHelper(
+                        TransferableDataHelper::CreateFromSystemClipboard() );
 
-            case SID_ATTR_ZOOM:
-                rSet.Put(SvxZoomItem( SVX_ZOOM_PERCENT, aGraphic.GetZoom()));
-                /* no break here */
-            case SID_VIEW050:
-            case SID_VIEW100:
-            case SID_VIEW200:
-            case SID_ADJUST:
-            case SID_ZOOMIN:
-            case SID_ZOOMOUT:
-            case SID_FITINWINDOW:
-                if ( GetDoc()->GetProtocol().IsInPlaceActive() )
-                    rSet.DisableItem( nWh );
-                break;
+                bPasteState = aDataHelper.GetTransferable().is() &&
+                 ( aDataHelper.HasFormat( FORMAT_STRING ) ||
+                   aDataHelper.HasFormat( SOT_FORMATSTR_ID_EMBEDDED_OBJ ) ||
+                   (aDataHelper.HasFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR )
+                      && aDataHelper.HasFormat( SOT_FORMATSTR_ID_EMBED_SOURCE )));
+            }
+            if( !bPasteState )
+                rSet.DisableItem( nWh );
+            break;
 
-            case SID_NEXTERR:
-            case SID_PREVERR:
-            case SID_NEXTMARK:
-            case SID_PREVMARK:
-            case SID_DRAW:
-            case SID_SELECT:
-                if (! GetEditWindow() || GetEditWindow()->IsEmpty())
-                    rSet.DisableItem(nWh);
-                break;
+        case SID_ATTR_ZOOM:
+            rSet.Put(SvxZoomItem( SVX_ZOOM_PERCENT, aGraphic.GetZoom()));
+            /* no break here */
+        case SID_VIEW050:
+        case SID_VIEW100:
+        case SID_VIEW200:
+        case SID_ADJUST:
+        case SID_ZOOMIN:
+        case SID_ZOOMOUT:
+        case SID_FITINWINDOW:
+            if ( GetDoc()->GetProtocol().IsInPlaceActive() )
+                rSet.DisableItem( nWh );
+            break;
 
-            case SID_TEXTSTATUS:
+        case SID_NEXTERR:
+        case SID_PREVERR:
+        case SID_NEXTMARK:
+        case SID_PREVMARK:
+        case SID_DRAW:
+        case SID_SELECT:
+            if (! GetEditWindow() || GetEditWindow()->IsEmpty())
+                rSet.DisableItem(nWh);
+            break;
+
+        case SID_TEXTSTATUS:
             {
                 rSet.Put(SfxStringItem(nWh, StatusText));
-                break;
             }
+            break;
 
-            case SID_FORMULACURSOR:
+        case SID_FORMULACURSOR:
             {
                 SmModule *pp = SM_MOD1();
                 rSet.Put(SfxBoolItem(nWh, pp->GetConfig()->IsShowFormulaCursor()));
-                break;
             }
+            break;
         }
     }
 }
@@ -1532,6 +1559,7 @@ SmViewShell::SmViewShell(SfxViewFrame *pFrame, SfxViewShell *):
 
 SmViewShell::~SmViewShell()
 {
+    AddRemoveClipboardListener( FALSE );
 }
 
 void SmViewShell::Deactivate( BOOL bIsMDIActivate )
