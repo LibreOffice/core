@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optpage.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2001-05-04 11:20:22 $
+ *  last change: $Author: os $ $Date: 2001-05-10 08:47:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -528,7 +528,7 @@ BOOL    SwAddPrinterTabPage::FillItemSet( SfxItemSet& rCoreSet )
         SwAddPrinterItem aAddPrinterAttr (FN_PARAM_ADDPRINTER);
         aAddPrinterAttr.bPrintGraphic   = aGrfCB.IsChecked();
         aAddPrinterAttr.bPrintTable     = aTabCB.IsChecked();
-        aAddPrinterAttr.bPrintDrawing   = aDrawCB.IsChecked();
+        aAddPrinterAttr.bPrintDraw   = aDrawCB.IsChecked();
         aAddPrinterAttr.bPrintControl   = aCtrlFldCB.IsChecked();
         aAddPrinterAttr.bPrintPageBackground = aBackgroundCB.IsChecked();
         aAddPrinterAttr.bPrintBlackFont = aBlackFontCB.IsChecked();
@@ -568,7 +568,7 @@ void    SwAddPrinterTabPage::Reset( const SfxItemSet&  )
     {
         aGrfCB.Check(           pAddPrinterAttr->bPrintGraphic);
         aTabCB.Check(           pAddPrinterAttr->bPrintTable);
-        aDrawCB.Check(          pAddPrinterAttr->bPrintDrawing);
+        aDrawCB.Check(          pAddPrinterAttr->bPrintDraw);
         aCtrlFldCB.Check(       pAddPrinterAttr->bPrintControl);
         aBackgroundCB.Check(    pAddPrinterAttr->bPrintPageBackground);
         aBlackFontCB.Check(     pAddPrinterAttr->bPrintBlackFont);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vprint.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ama $ $Date: 2001-03-02 10:25:44 $
+ *  last change: $Author: os $ $Date: 2001-05-10 08:45:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1536,7 +1536,7 @@ SwPrtOptSave::~SwPrtOptSave()
 void ViewShell::PrepareForPrint(  const SwPrtOptions &rOptions )
 {
     // Viewoptions fuer den Drucker setzen
-    pOpt->SetGraphic ( TRUE == rOptions.bPrintGraph );
+    pOpt->SetGraphic ( TRUE == rOptions.bPrintGraphic );
     pOpt->SetTable   ( TRUE == rOptions.bPrintTable );
     pOpt->SetDraw    ( TRUE == rOptions.bPrintDraw  );
     pOpt->SetControl ( TRUE == rOptions.bPrintControl );
@@ -1557,6 +1557,9 @@ void ViewShell::PrepareForPrint(  const SwPrtOptions &rOptions )
 /************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.5  2001/03/02 10:25:44  ama
+      Fix #65244#: Right and left pages, virtual page numbering
+
       Revision 1.4  2001/02/14 09:57:12  jp
       changes: international -> localdatawrapper
 

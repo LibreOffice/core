@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prtopt.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-10-10 08:37:39 $
+ *  last change: $Author: os $ $Date: 2001-05-10 08:48:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,29 +64,13 @@
 #ifndef _UTL_CONFIGITEM_HXX_
 #include <unotools/configitem.hxx>
 #endif
+#ifndef _SW_PRINTDATA_HXX
+#include <printdata.hxx>
+#endif
 
-class SwPrintOptions : public utl::ConfigItem
+class SwPrintOptions : public SwPrintData, public utl::ConfigItem
 {
-    sal_Bool
-         bPrintGraphic       :1,
-         bPrintTable         :1,
-         bPrintDraw          :1,
-         bPrintControl       :1,
-         bPrintPageBackground:1,
-         bPrintBlackFont     :1,
-
-         bPrintLeftPage      :1,
-         bPrintRightPage     :1,
-         bReverse            :1,
-         bPrintProspect      :1,
-         bPrintSingleJobs    :1,
-
-         bPaperFromSetup     :1;
-
-         sal_Bool           bIsWeb;
-
-    sal_uInt32  nPrintPostIts;
-    rtl::OUString       sFaxName;
+    sal_Bool            bIsWeb;
 
     com::sun::star::uno::Sequence<rtl::OUString> GetPropertyNames();
 public:
@@ -102,13 +86,13 @@ public:
     sal_Bool IsPrintControl()   const { return bPrintControl; }
     sal_Bool IsPrintLeftPage()  const { return bPrintLeftPage; }
     sal_Bool IsPrintRightPage() const { return bPrintRightPage; }
-    sal_Bool IsPrintReverse()   const { return bReverse; }
+    sal_Bool IsPrintReverse()   const { return bPrintReverse; }
     sal_Bool IsPaperFromSetup() const { return bPaperFromSetup; }
     sal_Bool IsPrintProspect()  const { return bPrintProspect; }
     sal_Bool IsPrintPageBackground() const { return bPrintPageBackground; }
     sal_Bool IsPrintBlackFont() const { return bPrintBlackFont;}
     sal_Bool IsPrintSingleJobs() const { return bPrintSingleJobs;}
-    sal_uInt32 GetPrintPostIts() const { return nPrintPostIts; }
+    sal_Int16 GetPrintPostIts() const { return nPrintPostIts; }
     const rtl::OUString     GetFaxName() const{return sFaxName;}
 
     void SetPrintGraphic  ( sal_Bool b ) { SetModified(); bPrintGraphic = b;}
@@ -117,14 +101,21 @@ public:
     void SetPrintControl  ( sal_Bool b ) { SetModified(); bPrintControl = b; }
     void SetPrintLeftPage ( sal_Bool b ) { SetModified(); bPrintLeftPage = b;}
     void SetPrintRightPage( sal_Bool b ) { SetModified(); bPrintRightPage = b;}
-    void SetPrintReverse  ( sal_Bool b ) { SetModified(); bReverse = b;}
+    void SetPrintReverse  ( sal_Bool b ) { SetModified(); bPrintReverse = b;}
     void SetPaperFromSetup( sal_Bool b ) { SetModified(); bPaperFromSetup = b;}
-    void SetPrintPostIts    ( sal_uInt32 n){ SetModified(); nPrintPostIts = n; }
+    void SetPrintPostIts    ( sal_Int16 n){ SetModified(); nPrintPostIts = n; }
     void SetPrintProspect   ( sal_Bool b ) { SetModified(); bPrintProspect = b; }
     void SetPrintPageBackground(sal_Bool b){ SetModified(); bPrintPageBackground = b;}
     void SetPrintBlackFont(sal_Bool b){ SetModified(); bPrintBlackFont = b;}
     void SetPrintSingleJobs(sal_Bool b){ SetModified(); bPrintSingleJobs = b;}
     void SetFaxName(const rtl::OUString& rSet){sFaxName = rSet;}
+
+    SwPrintOptions& operator=(const SwPrintData& rData)
+    {
+        SwPrintData::operator=( rData );
+        SetModified();
+        return *this;
+    }
 };
 
 #endif

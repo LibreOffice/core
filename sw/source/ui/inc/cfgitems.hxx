@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgitems.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-03-22 09:40:18 $
+ *  last change: $Author: os $ $Date: 2001-05-10 08:48:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,9 @@
 #ifndef _AUTHRATR_HXX
 #include <authratr.hxx>
 #endif
+#ifndef _SW_PRINTDATA_HXX
+#include <printdata.hxx>
+#endif
 
 class SwWriterApp;
 class SwModule;
@@ -78,7 +81,6 @@ class SwAddPrinterTabPage;
 class SfxPrinter;
 class ViewShell;
 class SwViewOption;
-class SwPrintOptions;
 class SwContentOptPage;
 class SwShdwCrsrOptionsTabPage;
 class SwDocEditDialog;
@@ -172,36 +174,20 @@ public:
 Item fuer Einstellungsdialog - Drucker/Zusaetze
 --------------------------------------------------------- */
 
-class SwAddPrinterItem : public SfxPoolItem
+class SwAddPrinterItem : public SfxPoolItem, public SwPrintData
 {
     friend  SwAddPrinterTabPage;
-
-    String sFaxName;
-    ULONG nPrintPostIts;
-
-    BOOL bPrintGraphic      :1,
-         bPrintTable        :1,
-         bPrintDrawing      :1,
-         bPrintLeftPage     :1,
-         bPrintRightPage    :1,
-         bPrintControl      :1,
-         bPrintReverse      :1,
-         bPaperFromSetup    :1,
-         bPrintProspect     :1,
-         bPrintPageBackground:1,
-         bPrintBlackFont    :1,
-         bPrintSingleJobs   :1;
 
 public:
     TYPEINFO();
     SwAddPrinterItem( USHORT nWhich = FN_PARAM_ADDPRINTER );
-    SwAddPrinterItem( USHORT nWhich, SwPrintOptions* pPrtOpt );
+    SwAddPrinterItem( USHORT nWhich, const SwPrintData& rPrtData );
     SwAddPrinterItem( const SwAddPrinterItem& rAddPrinterItem);
 
     virtual SfxPoolItem* Clone( SfxItemPool *pPool = 0 ) const;
     virtual int          operator==( const SfxPoolItem& ) const;
-    void          SetPrintOptions( SwPrintOptions* pPrtOpt ) const;
-    const String &GetFax() const              { return sFaxName; }
+
+    const rtl::OUString &GetFax() const              { return sFaxName; }
     void          SetFax( const String& rFax) { sFaxName = rFax; }
 
 
@@ -209,7 +195,7 @@ public:
     void   SetPrintProspect(BOOL bFlag ){ bPrintProspect = bFlag; }
     BOOL IsPrintGraphic () const { return bPrintGraphic; }
     BOOL IsPrintTable () const { return bPrintTable; }
-    BOOL IsPrintDraw () const { return bPrintDrawing; }
+    BOOL IsPrintDraw () const { return bPrintDraw; }
     BOOL IsPrintControl () const { return bPrintControl; }
     BOOL IsPrintLeftPage () const { return bPrintLeftPage; }
     BOOL IsPrintRightPage() const { return bPrintRightPage; }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewpg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-25 12:03:41 $
+ *  last change: $Author: os $ $Date: 2001-05-10 08:45:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1271,6 +1271,9 @@ Size ViewShell::GetPagePreViewPrtMaxSize() const
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.2  2000/10/25 12:03:41  jp
+      Spellchecker/Hyphenator are not longer member of the shells
+
       Revision 1.1.1.1  2000/09/19 00:08:29  hr
       initial import
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prtopt.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-10-10 08:29:28 $
+ *  last change: $Author: os $ $Date: 2001-05-10 08:47:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,21 +127,10 @@ Sequence<OUString> SwPrintOptions::GetPropertyNames()
  ---------------------------------------------------------------------------*/
 SwPrintOptions::SwPrintOptions(sal_Bool bWeb) :
     ConfigItem(bWeb ? C2U("Office.WriterWeb/Print") :  C2U("Office.Writer/Print")),
-    bPrintGraphic(sal_True),
-    bPrintTable(sal_True),
-    bPrintDraw(sal_True),
-    bPrintControl(sal_True),
-    bPrintLeftPage(sal_True),
-    bPrintRightPage(sal_True),
-    bReverse(sal_False),
-    bPaperFromSetup(sal_False),
-    bPrintProspect(sal_False),
-    bPrintSingleJobs(sal_False),
-    bPrintPageBackground(!bWeb),
-    bPrintBlackFont(bWeb),
-    nPrintPostIts(POSTITS_NONE),
     bIsWeb(bWeb)
 {
+    bPrintPageBackground = !bWeb;
+    bPrintBlackFont = bWeb;
     Sequence<OUString> aNames = GetPropertyNames();
     Sequence<Any> aValues = GetProperties(aNames);
     EnableNotification(aNames);
@@ -161,7 +150,7 @@ SwPrintOptions::SwPrintOptions(sal_Bool bWeb) :
                     case  3: bPrintPageBackground= *(sal_Bool*)pValues[nProp].getValue();  break;
                     case  4: bPrintBlackFont        = *(sal_Bool*)pValues[nProp].getValue();  break;
                     case  5: pValues[nProp] >>=  nPrintPostIts       ;  break;
-                    case  6: bReverse           = *(sal_Bool*)pValues[nProp].getValue();  break;
+                    case  6: bPrintReverse      = *(sal_Bool*)pValues[nProp].getValue();  break;
                     case  7: bPrintProspect      = *(sal_Bool*)pValues[nProp].getValue();  break;
                     case  8: bPrintSingleJobs   = *(sal_Bool*)pValues[nProp].getValue();  break;
                     case  9: pValues[nProp] >>= sFaxName;  break;
@@ -203,7 +192,7 @@ void    SwPrintOptions::Commit()
             case  3: bVal = bPrintPageBackground; pValues[nProp].setValue(&bVal, rType);  break;
             case  4: bVal = bPrintBlackFont     ; pValues[nProp].setValue(&bVal, rType);  break;
             case  5: pValues[nProp] <<=  nPrintPostIts       ; break;
-            case  6: bVal = bReverse             ; pValues[nProp].setValue(&bVal, rType);  break;
+            case  6: bVal = bPrintReverse       ; pValues[nProp].setValue(&bVal, rType);  break;
             case  7: bVal = bPrintProspect      ; pValues[nProp].setValue(&bVal, rType);  break;
             case  8: bVal = bPrintSingleJobs     ; pValues[nProp].setValue(&bVal, rType);  break;
             case  9: pValues[nProp] <<= sFaxName;  break;

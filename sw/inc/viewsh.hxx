@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-03 10:13:40 $
+ *  last change: $Author: os $ $Date: 2001-05-10 08:41:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,7 @@ class SwLayIdle;
 struct ShellResource;
 class SwRegionRects;
 class SwFrm;
+struct SwPrintData;
 
 //JP 19.07.98: - Bug 52312
 // define fuer Flags, die im CTOR oder den darunter liegenden Schichten
@@ -202,6 +203,9 @@ public:
 
     SfxPrinter*     GetPrt( sal_Bool bCreate = sal_False ) const;
     void            InitPrt( SfxPrinter * );    //Nach Druckerwechsel, vom Doc
+
+    SwPrintData*    GetPrintData() const;
+    void            SetPrintData(SwPrintData& rPrtData);
 
     //Klammerung von zusammengehoerenden Aktionen.
     inline void StartAction();
@@ -310,8 +314,8 @@ public:
     void SetParaSpaceMax( sal_Bool bNew, sal_Bool bAtPages );
 
     // compatible behaviour of tabs
-    sal_Bool IsTabCompat() const;
-    void SetTabCompat( sal_Bool bNew );
+    sal_Bool IsTabCompat() const {return FALSE;}
+    void SetTabCompat( sal_Bool bNew ){};
 
     //Ruft den Idle-Formatierer des Layouts
     void LayoutIdle();

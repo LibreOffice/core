@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfgitems.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-03-22 09:28:06 $
+ *  last change: $Author: os $ $Date: 2001-05-10 08:47:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -370,21 +370,7 @@ void SwElemItem::FillViewOptions( SwViewOption& rVOpt) const
 SwAddPrinterItem::SwAddPrinterItem( const SwAddPrinterItem& rAddPrinterItem ):
             SfxPoolItem(rAddPrinterItem)
 {
-    bPrintGraphic       = rAddPrinterItem.bPrintGraphic  ;
-    bPrintTable         = rAddPrinterItem.bPrintTable    ;
-    bPrintDrawing       = rAddPrinterItem.bPrintDrawing  ;
-    bPrintControl       = rAddPrinterItem.bPrintControl  ;
-    bPrintLeftPage      = rAddPrinterItem.bPrintLeftPage ;
-    bPrintRightPage     = rAddPrinterItem.bPrintRightPage;
-    bPrintReverse       = rAddPrinterItem.bPrintReverse  ;
-    bPaperFromSetup     = rAddPrinterItem.bPaperFromSetup;
-    bPrintProspect      = rAddPrinterItem.bPrintProspect ;
-    bPrintPageBackground= rAddPrinterItem.bPrintPageBackground;
-    bPrintBlackFont     = rAddPrinterItem.bPrintBlackFont;
-    bPrintSingleJobs    = rAddPrinterItem.bPrintSingleJobs;
-    nPrintPostIts       = rAddPrinterItem.nPrintPostIts  ;
-    sFaxName            = rAddPrinterItem.sFaxName       ;
-
+    *((SwPrintData*)this) = rAddPrinterItem;
 };
 
 /*--------------------------------------------------------------------
@@ -392,42 +378,17 @@ SwAddPrinterItem::SwAddPrinterItem( const SwAddPrinterItem& rAddPrinterItem ):
  --------------------------------------------------------------------*/
 
 SwAddPrinterItem::SwAddPrinterItem( USHORT nWhich):
-                SfxPoolItem(nWhich),
-                bPrintGraphic(FALSE),
-                bPrintTable(FALSE),
-                bPrintDrawing(FALSE),
-                bPrintControl(FALSE),
-                bPrintLeftPage(FALSE),
-                bPrintRightPage(FALSE),
-                bPrintReverse(FALSE),
-                bPaperFromSetup(FALSE),
-                bPrintProspect(FALSE),
-                bPrintPageBackground(FALSE),
-                nPrintPostIts(0),
-                sFaxName( aEmptyStr )
+                SfxPoolItem(nWhich)
 {
 }
 /*--------------------------------------------------------------------
     Beschreibung: CTOR aus SwPrintOptions
  --------------------------------------------------------------------*/
 
-SwAddPrinterItem::SwAddPrinterItem( USHORT nWhich, SwPrintOptions* pPrtOpt ) :
+SwAddPrinterItem::SwAddPrinterItem( USHORT nWhich, const SwPrintData& rPrtData ) :
     SfxPoolItem(nWhich)
 {
-    bPrintGraphic  = pPrtOpt->IsPrintGraphic();
-    bPrintTable    = pPrtOpt->IsPrintTable();
-    bPrintDrawing  = pPrtOpt->IsPrintDraw();
-    bPrintControl  = pPrtOpt->IsPrintControl();
-    bPrintLeftPage = pPrtOpt->IsPrintLeftPage();
-    bPrintRightPage= pPrtOpt->IsPrintRightPage();
-    bPrintReverse  = pPrtOpt->IsPrintReverse();
-    bPaperFromSetup= pPrtOpt->IsPaperFromSetup();
-    bPrintProspect = pPrtOpt->IsPrintProspect();
-    bPrintPageBackground= pPrtOpt->IsPrintPageBackground();
-    nPrintPostIts       = pPrtOpt->GetPrintPostIts();
-    bPrintBlackFont     = pPrtOpt->IsPrintBlackFont();
-    bPrintSingleJobs    = pPrtOpt->IsPrintSingleJobs();
-    sFaxName     = pPrtOpt->GetFaxName();
+    SwPrintData::operator=(rPrtData);
 }
 /*--------------------------------------------------------------------
     Beschreibung:
@@ -448,41 +409,8 @@ int SwAddPrinterItem::operator==( const SfxPoolItem& rAttr ) const
 
     const SwAddPrinterItem& rItem = (SwAddPrinterItem&)rAttr;
 
-    return (    bPrintGraphic   == rItem.bPrintGraphic   &&
-                bPrintDrawing   == rItem.bPrintDrawing   &&
-                bPrintControl   == rItem.bPrintControl   &&
-                bPrintTable     == rItem.bPrintTable     &&
-                bPrintLeftPage  == rItem.bPrintLeftPage  &&
-                bPrintRightPage == rItem.bPrintRightPage &&
-                bPrintReverse   == rItem.bPrintReverse   &&
-                bPaperFromSetup == rItem.bPaperFromSetup &&
-                bPrintProspect  == rItem.bPrintProspect  &&
-                bPrintPageBackground == rItem.bPrintPageBackground &&
-                bPrintBlackFont == rItem.bPrintBlackFont &&
-                bPrintSingleJobs== rItem.bPrintSingleJobs&&
-                nPrintPostIts   == rItem.nPrintPostIts   &&
-                sFaxName        == rItem.sFaxName    );
+    return  SwPrintData::operator==(rItem);
 }
-// -----------------------------------------------------------------------
-
-void SwAddPrinterItem::SetPrintOptions( SwPrintOptions* pPrtOpt ) const
-{
-    pPrtOpt->SetPrintGraphic    (bPrintGraphic);
-    pPrtOpt->SetPrintTable      (bPrintTable);
-    pPrtOpt->SetPrintDraw       (bPrintDrawing);
-    pPrtOpt->SetPrintControl    (bPrintControl);
-    pPrtOpt->SetPrintLeftPage   (bPrintLeftPage);
-    pPrtOpt->SetPrintRightPage  (bPrintRightPage);
-    pPrtOpt->SetPrintReverse    (bPrintReverse);
-    pPrtOpt->SetPaperFromSetup  (bPaperFromSetup);
-    pPrtOpt->SetPrintPostIts    (nPrintPostIts);
-    pPrtOpt->SetPrintProspect   (bPrintProspect);
-    pPrtOpt->SetPrintPageBackground( bPrintPageBackground );
-    pPrtOpt->SetPrintBlackFont( bPrintBlackFont );
-    pPrtOpt->SetPrintSingleJobs( bPrintSingleJobs );
-}
-
-
 /*-----------------03.11.97 10:00-------------------
  Item fuer Einstellungsdialog, ShadowCursorSeite
 --------------------------------------------------*/
@@ -591,6 +519,9 @@ int SwTestItem::operator==( const SfxPoolItem& rAttr ) const
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.2  2001/03/22 09:28:06  os
+    options dialog changes
+
     Revision 1.1.1.1  2000/09/18 17:14:32  hr
     initial import
 

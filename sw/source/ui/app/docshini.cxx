@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docshini.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: os $ $Date: 2001-04-03 13:39:55 $
+ *  last change: $Author: os $ $Date: 2001-05-10 08:46:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,7 +164,9 @@
 #include <offmgr/app.hxx>
 #endif
 
-
+#ifndef _PRTOPT_HXX
+#include <prtopt.hxx>
+#endif
 #ifndef _FMTCOL_HXX //autogen
 #include <fmtcol.hxx>
 #endif
@@ -291,7 +293,8 @@ sal_Bool SwDocShell::InitNew( SvStorage * pStor )
     {
         AddLink();      // pDoc / pIo ggf. anlegen
 
-        if ( ISA( SwWebDocShell ) )
+        sal_Bool bWeb = ISA( SwWebDocShell );
+        if ( bWeb )
             SetHTMLTemplate( *GetDoc() );   //Styles aus HTML.vor
         else if( ISA( SwGlobalDocShell ) )
             GetDoc()->SetGlobalDoc();       // Globaldokument
@@ -380,6 +383,7 @@ sal_Bool SwDocShell::InitNew( SvStorage * pStor )
         }
         pDoc->SetKernAsianPunctuation(!aAsian.IsKerningWesternTextOnly());
         pDoc->SetCharCompressType((SwCharCompressType)aAsian.GetCharDistanceCompression());
+        pDoc->SetPrintData(*SW_MOD()->GetPrtOptions(bWeb));
 
         SubInitNew();
     }

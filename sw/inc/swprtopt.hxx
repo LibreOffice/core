@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swprtopt.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:28 $
+ *  last change: $Author: os $ $Date: 2001-05-10 08:41:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,13 +65,16 @@
 #ifndef _SV_MULTISEL_HXX //autogen
 #include <tools/multisel.hxx>
 #endif
+#ifndef _SW_PRINTDATA_HXX
+#include <printdata.hxx>
+#endif
 
 #define POSTITS_NONE    0
 #define POSTITS_ONLY    1
 #define POSTITS_ENDDOC  2
 #define POSTITS_ENDPAGE 3
 
-class SwPrtOptions
+class SwPrtOptions : public SwPrintData
 {
     USHORT nJobNo;
     String sJobName;
@@ -95,21 +98,31 @@ public:
     ULONG  nMergeCnt;           // Anzahl der Serienbriefe
     ULONG  nMergeAct;           // Aktueller Serienbriefnr.
     USHORT nCopyCount;
-    USHORT nPrintPostIts;
-    BOOL   bPrintGraph,         //Grafiken/OLE Drucken
-           bPrintTable,         //Tabellen Drucken
-           bPrintDraw,          //Zeichenobjekte Drucken
-           bPrintControl,       //Controls Drucken
-           bPrintLeftPage,
-           bPrintRightPage,
-           bPrintReverse,
-           bPaperFromSetup,
-           bCollate,
+
+//    USHORT nPrintPostIts;
+//    BOOL   bPrintGraph,         //Grafiken/OLE Drucken
+//           bPrintTable,         //Tabellen Drucken
+//           bPrintDraw,          //Zeichenobjekte Drucken
+//           bPrintControl,       //Controls Drucken
+//           bPrintLeftPage,
+//           bPrintRightPage,
+//           bPrintReverse,
+//           bPaperFromSetup,
+    BOOL   bCollate,
+
            bPrintSelection,     // Markierung drucken
-           bPrintPageBackground,
-           bPrintBlackFont,
+
+//           bPrintPageBackground,
+//           bPrintBlackFont,
+
            bSinglePrtJobs,
            bJobStartet;
+
+        SwPrtOptions& operator=(const SwPrintData& rData)
+            {
+                SwPrintData::operator=(rData);
+                return *this;
+            }
 };
 
 

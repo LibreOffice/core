@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-03 10:14:42 $
+ *  last change: $Author: os $ $Date: 2001-05-10 08:45:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1779,6 +1779,14 @@ SfxPrinter *ViewShell::GetPrt( BOOL bCreate ) const
     return GetDoc()->GetPrt( bCreate );
 }
 
+SwPrintData*    ViewShell::GetPrintData() const
+{
+    return GetDoc()->GetPrintData();
+}
+void            ViewShell::SetPrintData(SwPrintData& rPrtData)
+{
+    GetDoc()->SetPrintData(rPrtData);
+}
 
 const SwNodes& ViewShell::GetNodes() const
 {
@@ -2117,75 +2125,5 @@ BOOL ViewShell::IsNewLayout() const
     return GetLayout()->IsNewLayout();
 }
 
-
-
-/************************************************************************
-
-      $Log: not supported by cvs2svn $
-      Revision 1.3  2001/02/23 12:45:24  os
-      Complete use of DefaultNumbering component
-
-      Revision 1.2  2000/10/17 09:25:09  os
-      #79537# CareChildWin/GetCareWin need current shell as parameter
-
-      Revision 1.1.1.1  2000/09/19 00:08:29  hr
-      initial import
-
-      Revision 1.384  2000/09/18 16:04:37  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.383  2000/09/08 08:12:53  os
-      Change: Set/Toggle/Has/Knows/Show/GetChildWindow
-
-      Revision 1.382  2000/07/17 10:30:51  ama
-      Opt: Smarter scrolling for RVP
-
-      Revision 1.381  2000/05/10 13:44:10  ama
-      Unicode changes
-
-      Revision 1.380  2000/04/05 10:02:14  os
-      #67584# scroll bar settings in read-only documents corrected
-
-      Revision 1.379  2000/03/03 15:17:22  os
-      StarView remainders removed
-
-      Revision 1.378  1999/12/22 12:08:47  jp
-      Bug #69762#: VisPortChg - dont ignore FlyFrames
-
-      Revision 1.377  1999/12/06 17:27:18  jp
-      Bug #69762#: VisPortChg - calculate the correct scroll range
-
-      Revision 1.376  1999/10/20 16:42:39  jp
-      Bug #68106#: new slot/interface for update all charts in a document
-
-      Revision 1.375  1999/10/06 13:29:31  jp
-      SmoothScroll: change the calculation of the scrollfactor
-
-      Revision 1.374  1999/09/30 09:46:53  os
-      new compatibility option
-
-      Revision 1.373  1999/09/29 14:31:40  kz
-      Check for Existance of ViewPort before use
-
-      Revision 1.372  1999/09/27 10:22:54  os
-      #68725# smooth scrolling: added missing flag in GetWindowClipRegionPixel()
-
-      Revision 1.371  1999/09/22 12:39:08  aw
-      changes for IAO-Handle handling in SW (AW)
-
-      Revision 1.370  1999/09/22 12:37:10  os
-      big handles
-
-      Revision 1.369  1999/09/06 13:19:24  aw
-      changes due to support of new handles
-
-
-      Rev 1.365   13 Aug 1999 15:11:32   MA
-   adoption to new markers, but still inkomplete
-
-      Rev 1.364   23 Jul 1999 16:23:02   AW
-   changes for new markers
-
-*************************************************************************/
 
 

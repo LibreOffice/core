@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfunc.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:49 $
+ *  last change: $Author: os $ $Date: 2001-05-10 08:48:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,9 +78,9 @@ class SwScrollbar;
 class ViewShell;
 class Window;
 class SwWrtShell;
-
+struct SwPrintData;
 // folgende Funktionen stehen im viewprt.cxx
-void MakeOptions( PrintDialog*, SwPrtOptions&, BOOL* pFlag, BOOL bWeb, SfxPrinter* pPrt = 0 );
+void MakeOptions( PrintDialog*, SwPrtOptions&, BOOL* pFlag, BOOL bWeb, SfxPrinter* pPrt, SwPrintData* pData );
 PrintDialog* CreatePrintDialog( Window* , USHORT, SwWrtShell* );
 void SetPrinter( SfxPrinter*, BOOL bWeb );
 SfxTabPage* CreatePrintOptionsPage( Window*, const SfxItemSet& );

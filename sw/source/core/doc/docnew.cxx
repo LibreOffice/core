@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docnew.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jp $ $Date: 2001-04-26 19:46:43 $
+ *  last change: $Author: os $ $Date: 2001-05-10 08:42:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,6 +138,9 @@
 #endif
 #ifndef _NDTXT_HXX
 #include <ndtxt.hxx>
+#endif
+#ifndef _SW_PRINTDATA_HXX
+#include <printdata.hxx>
 #endif
 #ifndef _DOCFLD_HXX
 #include <docfld.hxx>
@@ -287,6 +290,7 @@ SwDoc::SwDoc() :
     pOutlineRule( 0 ),
     pLayout( 0 ),                   // Rootframe des spezifischen Layouts.
     pPrt( 0 ),
+    pPrtData( 0 ),
     pUndos( new SwUndos( 0, 20 ) ),
     pExtInputRing( 0 ),
     pLayouter( 0 ),
@@ -697,8 +701,19 @@ SfxPrinter* SwDoc::_GetPrt() const
     ((SwDoc*)this)->SetPrt( pNewPrt );
     return pPrt;
 }
+//---------------------------------------------------
 
-
+SwPrintData*    SwDoc::GetPrintData() const
+{
+    return pPrtData;
+}
+//---------------------------------------------------
+void  SwDoc::SetPrintData(SwPrintData& rPrtData)
+{
+    if(!pPrtData)
+        pPrtData = new SwPrintData;
+    *pPrtData = rPrtData;
+}
 //---------------------------------------------------
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewprt.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jp $ $Date: 2001-04-12 13:31:23 $
+ *  last change: $Author: os $ $Date: 2001-05-10 08:48:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -215,7 +215,7 @@ void SetPrinter( SfxPrinter* pNew, BOOL bWeb )
     {
 //      Wir lassen die Druckoptionen so, wie sie sind.
 //      pAddPrinterAttr->SetPrintOptions( pOpt );
-        if( pAddPrinterAttr->GetFax().Len() )
+        if( pAddPrinterAttr->GetFax().getLength() )
             pOpt->SetFaxName(pAddPrinterAttr->GetFax());
     }
 }
@@ -258,48 +258,22 @@ USHORT __EXPORT SwView::SetPrinter(SfxPrinter* pNew, USHORT nDiffFlags )
  --------------------------------------------------------------------*/
 
 void MakeOptions( PrintDialog* pDlg, SwPrtOptions& rOpts, BOOL* pPrtProspect,
-                  BOOL bWeb, SfxPrinter* pPrt )
+                  BOOL bWeb, SfxPrinter* pPrt, SwPrintData* pData )
 {
+    if(!pData)
+        pData = SW_MOD()->GetPrtOptions(bWeb);
     const SwAddPrinterItem* pAddPrinterAttr;
     if( pPrt && SFX_ITEM_SET == pPrt->GetOptions().GetItemState(
         FN_PARAM_ADDPRINTER, FALSE, (const SfxPoolItem**)&pAddPrinterAttr ))
     {
-        rOpts.bPrintGraph       = pAddPrinterAttr->IsPrintGraphic  ();
-        rOpts.bPrintTable       = pAddPrinterAttr->IsPrintTable    ();
-        rOpts.bPrintDraw        = pAddPrinterAttr->IsPrintDraw     ();
-        rOpts.bPrintControl     = pAddPrinterAttr->IsPrintControl  ();
-        rOpts.bPrintLeftPage    = pAddPrinterAttr->IsPrintLeftPage ();
-        rOpts.bPrintRightPage   = pAddPrinterAttr->IsPrintRightPage();
-        rOpts.bPrintReverse     = pAddPrinterAttr->IsPrintReverse  ();
-        rOpts.bPaperFromSetup   = pAddPrinterAttr->IsPaperFromSetup();
-        rOpts.bPrintPageBackground = pAddPrinterAttr->IsPrintPageBackground();
-        rOpts.bPrintBlackFont   = pAddPrinterAttr->IsPrintBlackFont();
-        rOpts.bSinglePrtJobs    = pAddPrinterAttr->IsPrintSingleJobs();
-        rOpts.nPrintPostIts     = pAddPrinterAttr->GetPrintPostIts ();
-
-        if( pPrtProspect )
-            *pPrtProspect = pAddPrinterAttr->IsPrintProspect();
+        SfxItemSet aSet(pPrt->GetOptions());
+        aSet.Put(SwAddPrinterItem(FN_PARAM_ADDPRINTER, *pData));
+        pPrt->SetOptions(aSet);
     }
-    else
-    {
-        SwPrintOptions* pOpts = SW_MOD()->GetPrtOptions(bWeb);
 
-        rOpts.bPrintGraph     = pOpts->IsPrintGraphic  ();
-        rOpts.bPrintTable     = pOpts->IsPrintTable    ();
-        rOpts.bPrintDraw      = pOpts->IsPrintDraw     ();
-        rOpts.bPrintControl   = pOpts->IsPrintControl  ();
-        rOpts.bPrintLeftPage  = pOpts->IsPrintLeftPage ();
-        rOpts.bPrintRightPage = pOpts->IsPrintRightPage();
-        rOpts.bPrintReverse   = pOpts->IsPrintReverse  ();
-        rOpts.bPaperFromSetup = pOpts->IsPaperFromSetup();
-        rOpts.bPrintPageBackground = pOpts->IsPrintPageBackground();
-        rOpts.bPrintBlackFont   = pOpts->IsPrintBlackFont();
-        rOpts.bSinglePrtJobs    = pOpts->IsPrintSingleJobs();
-        rOpts.nPrintPostIts     = pOpts->GetPrintPostIts ();
-
-        if( pPrtProspect )
-            *pPrtProspect = pOpts->IsPrintProspect();
-    }
+    rOpts = *pData;
+    if( pPrtProspect )
+        *pPrtProspect = pData->bPrintProspect;
     rOpts.aMulti.SetTotalRange( Range( 0, RANGE_MAX ) );
     rOpts.aMulti.SelectAll( FALSE );
     rOpts.nCopyCount = 1;
@@ -385,7 +359,7 @@ ErrCode SwView::DoPrint( SfxPrinter *pPrinter, PrintDialog *pDlg,
     BOOL bWeb = 0 != PTR_CAST(SwWebView, this);
     if( pMgr->GetMergeType() == DBMGR_MERGE_MAILMERGE )
     {
-        ::MakeOptions( pDlg, aOpts, 0, bWeb, GetPrinter() );
+        ::MakeOptions( pDlg, aOpts, 0, bWeb, GetPrinter(), pSh->GetPrintData() );
         bStartJob = pMgr->MergePrint( *this, aOpts, *pProgress );
     }
     else
@@ -423,7 +397,7 @@ ErrCode SwView::DoPrint( SfxPrinter *pPrinter, PrintDialog *pDlg,
             pSh->ResetModified();
 
         BOOL bPrtPros;
-        ::MakeOptions( pDlg, aOpts, &bPrtPros, bWeb, GetPrinter() );
+        ::MakeOptions( pDlg, aOpts, &bPrtPros, bWeb, GetPrinter(), pSh->GetPrintData() );
         if( -1 != bPrintSelection )
             aOpts.bPrintSelection = 0 != bPrintSelection;
 
@@ -614,7 +588,7 @@ void SetAppPrintOptions( ViewShell* pSh, BOOL bWeb )
     if( pSh && pSh->GetPrt() && pOpt)
     {
         // Applikationseigene Druckoptionen in SfxPrinter schiessen
-        SwAddPrinterItem aAddPrinterItem (FN_PARAM_ADDPRINTER, pOpt);
+        SwAddPrinterItem aAddPrinterItem (FN_PARAM_ADDPRINTER, *pOpt);
         SfxItemSet aSet( pSh->GetAttrPool(),
                     FN_PARAM_ADDPRINTER,        FN_PARAM_ADDPRINTER,
                     SID_HTML_MODE,              SID_HTML_MODE,

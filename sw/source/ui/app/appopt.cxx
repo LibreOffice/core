@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopt.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: os $ $Date: 2001-05-07 13:58:02 $
+ *  last change: $Author: os $ $Date: 2001-05-10 08:46:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -315,8 +315,10 @@ SfxItemSet*  SwModule::CreateItemSet( USHORT nId )
     /*-----------------01.02.97 13.02-------------------
         Optionen fuer PrintTabPage
     --------------------------------------------------*/
-    SwPrintOptions* pOpt = GetPrtOptions(!bTextDialog);
-    SwAddPrinterItem aAddPrinterItem (FN_PARAM_ADDPRINTER, pOpt );
+    SwPrintData* pOpt = pAppView ? pAppView->GetWrtShell().GetPrintData() : 0;
+    if(!pOpt)
+        pOpt = GetPrtOptions(!bTextDialog);
+    SwAddPrinterItem aAddPrinterItem (FN_PARAM_ADDPRINTER, *pOpt );
     pRet->Put(aAddPrinterItem);
 
     /*-----------------01.02.97 13.12-------------------
@@ -505,8 +507,10 @@ void SwModule::ApplyItemSet( USHORT nId, const SfxItemSet& rSet )
         if (pOpt)
         {
             const SwAddPrinterItem* pAddPrinterAttr = (const SwAddPrinterItem*)pItem;
-            pAddPrinterAttr->SetPrintOptions(pOpt);
-            pOpt->SetFaxName( pAddPrinterAttr->GetFax());
+            *pOpt = *pAddPrinterAttr;
+
+            if(pAppView)
+                pAppView->GetWrtShell().SetPrintData(*pOpt);
         }
 
     }
@@ -619,6 +623,9 @@ SfxTabPage*  SwModule::CreateTabPage( USHORT nId, Window* pParent, const SfxItem
 
 /*-------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.11  2001/05/07 13:58:02  os
+    #86002# don't apply web settings to text view and vice versa
+
     Revision 1.10  2001/05/04 12:06:24  os
     check whether the view is active
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: fme $ $Date: 2001-05-03 10:10:14 $
+ *  last change: $Author: os $ $Date: 2001-05-10 08:41:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,6 +229,7 @@ struct SwDocStat;
 struct SwHash;
 struct SwSortOptions;
 struct SwDefTOXBase_Impl;
+struct SwPrintData;
 
 namespace com { namespace sun { namespace star {
 namespace i18n {
@@ -337,6 +338,7 @@ class SwDoc
     SwNewDBMgr      *pNewDBMgr;         // Pointer auf den neuen DBMgr fuer
                                         // Evaluierung der DB-Fields
     SfxPrinter      *pPrt;
+    SwPrintData     *pPrtData;          // Print configuration
 
     SwDoc           *pGlossaryDoc;      // Pointer auf das Glossary-Dokument. Dieses
 
@@ -1227,6 +1229,9 @@ public:
     void        SetPrt( SfxPrinter *pP );
     const JobSetup* GetJobsetup() const;
     void        SetJobsetup( const JobSetup& rJobSetup );
+
+    SwPrintData*    GetPrintData() const;
+    void            SetPrintData(SwPrintData& rPrtData);
 
         // Dokument - Info
             // legt sie auf jedenfall an!

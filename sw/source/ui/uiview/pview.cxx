@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pview.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2000-11-09 10:14:21 $
+ *  last change: $Author: os $ $Date: 2001-05-10 08:48:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,6 +156,7 @@
 #endif
 #include "wrtsh.hxx"
 #include "docsh.hxx"
+#include "doc.hxx"
 #include "cmdid.h"
 #include "viewopt.hxx"
 #include "globals.hrc"
@@ -2002,7 +2003,7 @@ USHORT  SwPagePreView::Print( SfxProgress &rProgress, PrintDialog *pDlg )
     SwPrtOptions aOpts( pObjShell->GetTitle(0) );
 
     BOOL bPrtPros;
-    ::MakeOptions( pDlg, aOpts, &bPrtPros, FALSE, GetPrinter() );
+    ::MakeOptions( pDlg, aOpts, &bPrtPros, FALSE, GetPrinter(), GetDocShell()->GetDoc()->GetPrintData() );
 
     if( bNormalPrint )
     {
@@ -2220,6 +2221,9 @@ BOOL SwPagePreView::HandleWheelCommands( const CommandEvent& rCEvt )
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.5  2000/11/09 10:14:21  obo
+      Without string include
+
       Revision 1.4  2000/11/07 13:09:54  hjs
       use min/max from stl
 
