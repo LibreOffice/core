@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlideSorterViewShell.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:01:35 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 20:14:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -217,6 +217,23 @@ public:
         The container does not have to be empty.  It is not cleared.
     */
     void GetSelectedPages (::std::vector<SdPage*>& pPageContainer);
+
+    /** Add a listener that is called when the selection of the slide sorter
+        changes.
+        @param rListener
+            When this method is called multiple times for the same listener
+            the second and all following calls are ignored.  Each listener
+            is added only once.
+    */
+    void AddSelectionChangeListener (const Link& rListener);
+
+    /** Remove a listener that was called when the selection of the slide
+        sorter changes.
+        @param rListener
+            It is save to pass a listener that was not added are has been
+            removed previously.  Such calls are ignored.
+    */
+    void RemoveSelectionChangeListener (const Link& rListener);
 
     virtual DrawController* GetController (void);
 
