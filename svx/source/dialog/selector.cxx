@@ -2,9 +2,9 @@
  *
  *  $RCSfile: selector.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 14:43:46 $
+ *  last change: $Author: obo $ $Date: 2004-11-21 15:02:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -814,7 +814,8 @@ void SvxConfigGroupListBox_Impl::Init( SvStringsDtor *pArr )
                         if ( pCurrentDoc )
                         {
                             sDisplayTitle = pCurrentDoc->GetTitle();
-                            sModelTitle = xModelToDocTitle( pCurrentDoc->GetModel() );
+                            //sModelTitle = xModelToDocTitle( pCurrentDoc->GetModel() );
+                            SvxScriptSelectorDialog::GetDocTitle( pCurrentDoc->GetModel(), sModelTitle );
                         }
 
                         if ( sDisplayTitle.getLength() == 0 && sModelTitle.getLength() != 0 )
@@ -1403,7 +1404,8 @@ void SvxConfigGroupListBox_Impl::RequestingChilds( SvLBoxEntry *pEntry )
                         if ( pCurrentDoc )
                         {
                             sDisplayTitle = pCurrentDoc->GetTitle();
-                            sModelTitle = xModelToDocTitle( pCurrentDoc->GetModel() );
+                            //sModelTitle = xModelToDocTitle( pCurrentDoc->GetModel() );
+                            SvxScriptSelectorDialog::GetDocTitle( pCurrentDoc->GetModel(), sModelTitle );
                         }
 
                         if ( sDisplayTitle.getLength() == 0 && sModelTitle.getLength() != 0 )
