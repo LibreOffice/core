@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxerr.src,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2002-01-23 21:18:21 $
+ *  last change: $Author: kz $ $Date: 2002-05-06 07:48:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -258,7 +258,7 @@ Resource RID_SVXERRCODE
         Text [ spanish ] = "No hay ningún diccionario de sinónimos disponible para el idioma seleccionado.\nExamine por favor su instalación e instale en caso dado el idioma deseado." ;
         Text [ french ] = "Aucun dictionnaire des synonymes n'est disponible pour la langue sélectionnée.\nVeuillez vérifiez l'installation et installer\nle cas échéant la langue concernée." ;
         Text [ dutch ] = "Een thesaurus voor de ingestelde taal is niet beschikbaar.\nControleer uw installatie en installeer de gewenste taal" ;
-        Text [ swedish ] = "Ingen synonymordbok är tillgänglig för det inställda språket.\nKontrollera Din installation och installera eventuellt det önskade språket." ;
+        Text [ swedish ] = "Ingen synonymordbok är tillgänglig för det inställda språket.\nKontrollera din installation och installera eventuellt det önskade språket." ;
         Text [ danish ] = "Synonymordbogen står ikke til rådighed for det indstillede sprog.\nKontroller venligst din installation og installer i givet fald det ønskede sprog." ;
         Text [ portuguese ] = "O dicionário de sinónimos não se encontra disponível para a língua especificada.\nConfira a sua instalação e, se necessário, instale a língua desejada." ;
         Text [ portuguese_brazilian ] = "Ein Thesaurus f? die eingestellte Sprache ist nicht verf?bar.\n?berpr?en Sie bitte Ihre Installation und installieren Sie gegebenenfalls die gew?schte Sprache" ;
