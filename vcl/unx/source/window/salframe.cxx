@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: pl $ $Date: 2001-02-21 17:24:04 $
+ *  last change: $Author: pl $ $Date: 2001-02-21 17:46:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -486,30 +486,6 @@ void SalFrameData::Init( USHORT nSalFrameStyle, SystemParentData* pParentData )
                 y = 20; // leave some space for dcoration
             }
             SetPosSize( Rectangle( Point( x, y ), Size( w, h ) ) );
-        }
-        if( s_aFullScreenWindow != None )
-        {
-            Atom nAtom = XInternAtom( GetXDisplay(), "_MOTIF_WM_HINTS", True );
-            if( nAtom )
-            {
-                struct _mwmhints {
-                    unsigned int flags, func, deco;
-                    int input_mode;
-                    unsigned int status;
-                } mwm_del_hints;
-
-                memset( &mwm_del_hints, 0, sizeof( mwm_del_hints ) );
-                mwm_del_hints.flags         = (1L << 1);
-                mwm_del_hints.deco          = 112;
-                XChangeProperty( GetXDisplay(), GetShellWindow(),
-                                 nAtom, XA_ATOM, 32,
-                                 PropModeReplace,
-                                 (unsigned char*)&mwm_del_hints, 5 );
-            }
-#ifdef DEBUG
-            else
-                fprintf( stderr, "SalFrameData::Init: _MOTIF_WM_HINTS not supported\n" );
-#endif
         }
     }
 
