@@ -88,6 +88,7 @@
         <language>c++</language>
         <status value="final"/>
         <supported-service>com.sun.star.form.component.ImageButton</supported-service>
+        <supported-service>com.sun.star.form.component.SubmitButton</supported-service>
         <supported-service>com.sun.star.form.FormComponent</supported-service>
         <supported-service>com.sun.star.form.FormControlModel</supported-service>
         <supported-service>com.sun.star.awt.UnoControlImageControlModel</supported-service>
@@ -101,6 +102,7 @@
         <language>c++</language>
         <status value="final"/>
         <supported-service>com.sun.star.form.component.CommandButton</supported-service>
+        <supported-service>com.sun.star.form.component.SubmitButton</supported-service>
         <supported-service>com.sun.star.form.FormComponent</supported-service>
         <supported-service>com.sun.star.form.FormControlModel</supported-service>
         <supported-service>com.sun.star.awt.UnoControlButtonModel</supported-service>
@@ -228,7 +230,11 @@
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
         <status value="final"/>
+        <supported-service>com.sun.star.form.binding.BindableControlModel</supported-service>
+        <supported-service>com.sun.star.form.binding.BindableDataAwareControlModel</supported-service>
         <supported-service>com.sun.star.form.validation.ValidatableControlModel</supported-service>
+        <supported-service>com.sun.star.form.validation.ValidatableBindableControlModel</supported-service>
+        <supported-service>com.sun.star.form.binding.BindableDatabaseDateField</supported-service>
         <supported-service>com.sun.star.form.component.DatabaseDateField</supported-service>
         <supported-service>com.sun.star.form.component.DateField</supported-service>
         <supported-service>com.sun.star.form.DataAwareControlModel</supported-service>
@@ -244,7 +250,11 @@
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
         <status value="final"/>
+        <supported-service>com.sun.star.form.binding.BindableControlModel</supported-service>
+        <supported-service>com.sun.star.form.binding.BindableDataAwareControlModel</supported-service>
         <supported-service>com.sun.star.form.validation.ValidatableControlModel</supported-service>
+        <supported-service>com.sun.star.form.validation.ValidatableBindableControlModel</supported-service>
+        <supported-service>com.sun.star.form.binding.BindableDatabaseTimeField</supported-service>
         <supported-service>com.sun.star.form.component.DatabaseTimeField</supported-service>
         <supported-service>com.sun.star.form.component.TimeField</supported-service>
         <supported-service>com.sun.star.form.DataAwareControlModel</supported-service>
@@ -466,6 +476,7 @@
         <language>c++</language>
         <status value="final"/>
         <supported-service>com.sun.star.form.control.CommandButton</supported-service>
+        <supported-service>com.sun.star.form.control.SubmitButton</supported-service>
         <supported-service>com.sun.star.awt.UnoControlButton</supported-service>
         <service-dependency>com.sun.star.util.URLTransformer</service-dependency>
         <service-dependency>com.sun.star.awt.Pointer</service-dependency>
@@ -478,6 +489,7 @@
         <language>c++</language>
         <status value="final"/>
         <supported-service>com.sun.star.form.control.ImageButton</supported-service>
+        <supported-service>com.sun.star.form.control.SubmitButton</supported-service>
         <supported-service>com.sun.star.awt.UnoControlImageControl</supported-service>
         <service-dependency>com.sun.star.util.URLTransformer</service-dependency>
         <service-dependency>com.sun.star.awt.Pointer</service-dependency>
