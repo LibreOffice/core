@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: cl $ $Date: 2001-04-06 13:40:26 $
+ *  last change: $Author: cl $ $Date: 2001-05-28 12:48:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,9 @@
 #ifndef _COM_SUN_STAR_I18N_XFORBIDDENCHARACTERS_HPP_
 #include <com/sun/star/i18n/XForbiddenCharacters.hpp>
 #endif
+#ifndef _COM_SUN_STAR_PRESENTATION_XHANDOUTMASTERSUPPLIER_HPP_
+#include <com/sun/star/presentation/XHandoutMasterSupplier.hpp>
+#endif
 
 #ifndef _SFXLSTNER_HXX //autogen
 #include <svtools/lstner.hxx>
@@ -160,7 +163,8 @@ class SdXImpressDocument : public SfxBaseModel, // implements SfxListener, OWEAK
                            public ::com::sun::star::style::XStyleFamiliesSupplier,
                            public ::com::sun::star::lang::XServiceInfo,
                            public ::com::sun::star::lang::XUnoTunnel,
-                           public ::com::sun::star::ucb::XAnyCompareFactory
+                           public ::com::sun::star::ucb::XAnyCompareFactory,
+                           public ::com::sun::star::presentation::XHandoutMasterSupplier
 {
     friend class SdDrawPagesAccess;
     friend class SdMasterPagesAccess;
@@ -243,6 +247,9 @@ public:
 
     // XCustomPresentationSupplier
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer > SAL_CALL getCustomPresentations(  ) throw(::com::sun::star::uno::RuntimeException);
+
+    // XHandoutMasterSupplier
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage > SAL_CALL getHandoutMasterPage(  ) throw (::com::sun::star::uno::RuntimeException);
 
     // XPresentationSupplier
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::presentation::XPresentation > SAL_CALL getPresentation(  ) throw(::com::sun::star::uno::RuntimeException);

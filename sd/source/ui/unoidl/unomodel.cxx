@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-02 11:08:11 $
+ *  last change: $Author: cl $ $Date: 2001-05-28 12:47:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -328,6 +328,7 @@ uno::Any SAL_CALL SdXImpressDocument::queryInterface( const uno::Type & rType ) 
     else QUERYINT(drawing::XLayerSupplier);
     else QUERYINT(drawing::XMasterPagesSupplier);
     else QUERYINT(drawing::XDrawPagesSupplier);
+    else QUERYINT(presentation::XHandoutMasterSupplier);
     else QUERYINT(document::XLinkTargetSupplier);
     else QUERYINT(style::XStyleFamiliesSupplier);
     else QUERYINT(lang::XUnoTunnel);
@@ -373,6 +374,7 @@ uno::Sequence< uno::Type > SAL_CALL SdXImpressDocument::getTypes(  ) throw(uno::
         *pTypes++ = ITYPE(drawing::XLayerSupplier);
         *pTypes++ = ITYPE(drawing::XMasterPagesSupplier);
         *pTypes++ = ITYPE(drawing::XDrawPagesSupplier);
+        *pTypes++ = ITYPE(presentation::XHandoutMasterSupplier);
         *pTypes++ = ITYPE(document::XLinkTargetSupplier);
         *pTypes++ = ITYPE(style::XStyleFamiliesSupplier);
         *pTypes++ = ITYPE(lang::XUnoTunnel);
@@ -664,6 +666,25 @@ uno::Reference< presentation::XPresentation > SAL_CALL SdXImpressDocument::getPr
         mxPresentation = aPresentation = new SdXPresentation(*this);
 
     return aPresentation;
+}
+
+// XHandoutMasterSupplier
+uno::Reference< drawing::XDrawPage > SAL_CALL SdXImpressDocument::getHandoutMasterPage()
+    throw (uno::RuntimeException)
+{
+    OGuard aGuard( Application::GetSolarMutex() );
+
+    uno::Any aAny;
+
+    uno::Reference< drawing::XDrawPage > xPage;
+
+    if( pDoc )
+    {
+        SdPage* pPage = pDoc->GetMasterSdPage( 0, PK_HANDOUT );
+        if( pPage )
+            xPage = uno::Reference< drawing::XDrawPage >::query( pPage->getUnoPage() );
+    }
+    return xPage;
 }
 
 // XMultiServiceFactory ( SvxFmMSFactory )

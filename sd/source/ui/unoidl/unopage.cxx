@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-22 13:00:55 $
+ *  last change: $Author: cl $ $Date: 2001-05-28 12:47:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,7 +243,7 @@ const SfxItemPropertyMap* ImplGetDrawPagePropertyMap( sal_Bool bImpress )
 }
 
 /** this function stores the property map for master pages in impress and draw */
-const SfxItemPropertyMap* ImplGetMasterPagePropertyMap()
+const SfxItemPropertyMap* ImplGetMasterPagePropertyMap( PageKind ePageKind )
 {
     static const SfxItemPropertyMap aMasterPagePropertyMap_Impl[] =
     {
@@ -261,7 +261,28 @@ const SfxItemPropertyMap* ImplGetMasterPagePropertyMap()
         { MAP_CHAR_LEN("BackgroundFullSize"),           WID_PAGE_BACKFULL,  &::getBooleanCppuType(),                        0, 0},
         {0,0,0,0,0}
     };
-    return aMasterPagePropertyMap_Impl;
+
+    static const SfxItemPropertyMap aHandoutMasterPagePropertyMap_Impl[] =
+    {
+        { MAP_CHAR_LEN(UNO_NAME_PAGE_BOTTOM),           WID_PAGE_BOTTOM,    &::getCppuType((const sal_Int32*)0),            0,  0},
+        { MAP_CHAR_LEN(UNO_NAME_PAGE_LEFT),             WID_PAGE_LEFT,      &::getCppuType((const sal_Int32*)0),            0,  0},
+        { MAP_CHAR_LEN(UNO_NAME_PAGE_RIGHT),            WID_PAGE_RIGHT,     &::getCppuType((const sal_Int32*)0),            0,  0},
+        { MAP_CHAR_LEN(UNO_NAME_PAGE_TOP),              WID_PAGE_TOP,       &::getCppuType((const sal_Int32*)0),            0,  0},
+        { MAP_CHAR_LEN(UNO_NAME_PAGE_HEIGHT),           WID_PAGE_HEIGHT,    &::getCppuType((const sal_Int32*)0),            0,  0},
+        { MAP_CHAR_LEN(UNO_NAME_PAGE_ORIENTATION),      WID_PAGE_ORIENT,    &::getCppuType((const view::PaperOrientation*)0),0, 0},
+        { MAP_CHAR_LEN(UNO_NAME_PAGE_WIDTH),            WID_PAGE_WIDTH,     &::getCppuType((const sal_Int32*)0),            0,  0},
+        { MAP_CHAR_LEN(UNO_NAME_PAGE_LAYOUT),           WID_PAGE_LAYOUT,    &::getCppuType((const sal_Int16*)0),            0,  0},
+        {0,0,0,0,0}
+    };
+
+    if( ePageKind == PK_HANDOUT )
+    {
+        return aHandoutMasterPagePropertyMap_Impl;
+    }
+    else
+    {
+        return aMasterPagePropertyMap_Impl;
+    }
 }
 
 UNO3_GETIMPLEMENTATION2_IMPL( SdGenericDrawPage, SvxFmDrawPage );
@@ -1828,7 +1849,7 @@ void SdDrawPage::getBackground( uno::Any& rValue ) throw()
 //========================================================================
 
 SdMasterPage::SdMasterPage( SdXImpressDocument* mpModel, SdPage* pPage ) throw()
-: SdGenericDrawPage( mpModel, pPage, ImplGetMasterPagePropertyMap() ),
+: SdGenericDrawPage( mpModel, pPage, ImplGetMasterPagePropertyMap( pPage ? pPage->GetPageKind() : PK_STANDARD ) ),
   mpBackgroundObj(NULL)
 {
     if( pPage && GetPage()->GetPageKind() == PK_STANDARD )
@@ -1951,6 +1972,9 @@ uno::Sequence< OUString > SAL_CALL SdMasterPage::getSupportedServiceNames() thro
 {
     uno::Sequence< OUString > aSeq( SdGenericDrawPage::getSupportedServiceNames() );
     SvxServiceInfoHelper::addToSequence( aSeq, 1, "com.sun.star.drawing.MasterPage" );
+
+    if( pPage && ((SdPage*)pPage)->GetPageKind() == PK_HANDOUT )
+        SvxServiceInfoHelper::addToSequence( aSeq, 1, "com.sun.star.presentation.HandoutMasterPage" );
 
     return aSeq;
 }
