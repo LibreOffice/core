@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configdefaultprovider.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2001-11-05 16:50:20 $
+ *  last change: $Author: jb $ $Date: 2001-11-09 12:01:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,7 +136,7 @@ DefaultProvider::DefaultProvider(rtl::Reference< DefaultProviderProxy > const& _
 //-----------------------------------------------------------------------------
 
 /// tries to load default data into the specified tree
-bool DefaultProvider::fetchDefaultData(Tree const& _aTree) const SAL_THROW((uno::Exception))
+bool DefaultProvider::fetchDefaultData(Tree const& _aTree) const CFG_UNO_THROW_ALL()
 {
     node::Attributes aAttributes = _aTree.getAttributes(_aTree.getRootNode());
 
@@ -152,7 +152,7 @@ bool DefaultProvider::fetchDefaultData(Tree const& _aTree) const SAL_THROW((uno:
 //-----------------------------------------------------------------------------
 
 /// tries to load a default instance of the specified node
-std::auto_ptr<ISubtree> DefaultProvider::getDefaultTree(Tree const& _aTree, NodeRef const& _aNode) const SAL_THROW((uno::Exception))
+std::auto_ptr<ISubtree> DefaultProvider::getDefaultTree(Tree const& _aTree, NodeRef const& _aNode) const CFG_UNO_THROW_ALL()
 {
     std::auto_ptr<ISubtree> aRet;
 

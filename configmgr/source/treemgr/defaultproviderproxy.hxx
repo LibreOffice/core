@@ -2,9 +2,9 @@
  *
  *  $RCSfile: defaultproviderproxy.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2001-10-02 13:16:36 $
+ *  last change: $Author: jb $ $Date: 2001-11-09 12:01:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 #ifndef CONFIGMGR_CONFIGPATH_HXX_
 #include "configpath.hxx"
 #endif
+#ifndef CONFIGMGR_UTILITY_HXX_
+#include "utility.hxx"
+#endif
 
 #ifndef _SALHELPER_SIMPLEREFERENCEOBJECT_HXX_
 #include <salhelper/simplereferenceobject.hxx>
@@ -116,10 +119,10 @@ namespace configmgr
             ~DefaultProviderProxy();
 
         /// tries to load default data into the specified location (which must be within the request range owned)
-            bool fetchDefaultData(AbsolutePath const& _aLocation) const SAL_THROW((uno::Exception));
+            bool fetchDefaultData(AbsolutePath const& _aLocation) const CFG_UNO_THROW_ALL();
 
         /// tries to load a default instance of the specified node (which must be within the request range owned)
-            std::auto_ptr<ISubtree> getDefaultTree(AbsolutePath const& _aLocation) const SAL_THROW((uno::Exception));
+            std::auto_ptr<ISubtree> getDefaultTree(AbsolutePath const& _aLocation) const CFG_UNO_THROW_ALL();
 
         private:
             sal_Int16 implGetRemainingDepth(AbsolutePath const& _aLocation) const;

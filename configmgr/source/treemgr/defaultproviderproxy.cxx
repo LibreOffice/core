@@ -2,9 +2,9 @@
  *
  *  $RCSfile: defaultproviderproxy.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2001-09-28 12:44:39 $
+ *  last change: $Author: jb $ $Date: 2001-11-09 12:01:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,7 +126,7 @@ sal_Int16 DefaultProviderProxy::implGetRemainingDepth(AbsolutePath const& _aLoca
 //-----------------------------------------------------------------------------
 
 /// tries to load default data into the specified location (which must be within the request range owned)
-bool DefaultProviderProxy::fetchDefaultData(AbsolutePath const& _aLocation) const SAL_THROW((uno::Exception))
+bool DefaultProviderProxy::fetchDefaultData(AbsolutePath const& _aLocation) const CFG_UNO_THROW_ALL()
 {
     sal_Int16 nDepth = implGetRemainingDepth(_aLocation);
 
@@ -136,7 +136,7 @@ bool DefaultProviderProxy::fetchDefaultData(AbsolutePath const& _aLocation) cons
 //-----------------------------------------------------------------------------
 
 /// tries to load a default instance of the specified node (which must be within the request range owned)
-std::auto_ptr<ISubtree> DefaultProviderProxy::getDefaultTree(AbsolutePath const& _aLocation) const SAL_THROW((uno::Exception))
+std::auto_ptr<ISubtree> DefaultProviderProxy::getDefaultTree(AbsolutePath const& _aLocation) const CFG_UNO_THROW_ALL()
 {
     sal_Int16 nDepth = implGetRemainingDepth(_aLocation);
 
