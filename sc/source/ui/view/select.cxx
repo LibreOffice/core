@@ -2,9 +2,9 @@
  *
  *  $RCSfile: select.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 12:05:23 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 09:17:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -311,7 +311,14 @@ BOOL __EXPORT ScViewFunctionSet::SetCursorAtPoint( const Point& rPointPixel, BOO
         if ( bLeft && !bRightScroll )
             do --nPosX; while ( nPosX>=0 && ( pDoc->GetColFlags( nPosX, nTab ) & CR_HIDDEN ) );
         if ( bTop && !bBottomScroll )
-            do --nPosY; while ( nPosY>=0 && ( pDoc->GetRowFlags( nPosY, nTab ) & CR_HIDDEN ) );
+        {
+            if (--nPosY >= 0)
+            {
+                pDoc->GetRowFlagsArray( nTab).GetLastForCondition( 0, nPosY, CR_HIDDEN, 0);
+                if (!ValidRow(nPosY))
+                    nPosY = -1;
+            }
+        }
         //  negativ ist erlaubt
     }
 
@@ -410,9 +417,7 @@ BOOL ScViewFunctionSet::SetCursorAtCell( SCsCOL nPosX, SCsROW nPosY, BOOL bScrol
             long nSizeX = 0;
             for (SCCOL i=nPosX+1; i<=nEndX; i++)
                 nSizeX += pDoc->GetColWidth( i, nTab );
-            long nSizeY = 0;
-            for (SCROW j=nPosY+1; j<=nEndY; j++)
-                nSizeY += pDoc->GetRowHeight( j, nTab );
+            long nSizeY = (long) pDoc->GetRowHeight( nPosY+1, nEndY, nTab );
 
             SCCOL nDelStartX = nStartX;
             SCROW nDelStartY = nStartY;
@@ -491,13 +496,17 @@ BOOL ScViewFunctionSet::SetCursorAtCell( SCsCOL nPosX, SCsROW nPosY, BOOL bScrol
             {
                 //  #94321# in SetCursorAtPoint hidden rows are skipped.
                 //  They must be skipped here too, or the result will always be the first hidden row.
-                do ++nPosY; while ( nPosY<nStartY && ( pDoc->GetRowFlags( nPosY, nTab ) & CR_HIDDEN ) );
-                for (SCROW i=nPosY; i<nStartY; i++)
-                    nSizeY += pDoc->GetRowHeight( i, nTab );
+                if (++nPosY < nStartY)
+                {
+                    nPosY = pDoc->GetRowFlagsArray( nTab).GetFirstForCondition(
+                            nPosY, nStartY-1, CR_HIDDEN, 0);
+                    if (!ValidRow(nPosY))
+                        nPosY = nStartY;
+                }
+                nSizeY += pDoc->GetRowHeight( nPosY, nStartY-1, nTab );
             }
             else
-                for (SCROW i=nEndY+1; i<=nPosY; i++)
-                    nSizeY += pDoc->GetRowHeight( i, nTab );
+                nSizeY += pDoc->GetRowHeight( nEndY+1, nPosY, nTab );
 
             if ( nSizeX > nSizeY )          // Fill immer nur in einer Richtung
             {
