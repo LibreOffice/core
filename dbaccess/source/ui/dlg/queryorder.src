@@ -2,9 +2,9 @@
  *
  *  $RCSfile: queryorder.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:18:45 $
+ *  last change: $Author: vg $ $Date: 2003-07-22 16:45:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -851,6 +851,7 @@ ModalDialog DLG_ORDERCRIT
     Text[ hindi ] = "सोर्ट क्रम";
     Text[ slovak ] = "Poradie triedenia";
 };
+
 
 
 
