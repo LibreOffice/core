@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8atr.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: cmc $ $Date: 2002-11-29 10:22:36 $
+ *  last change: $Author: cmc $ $Date: 2002-12-10 09:43:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -340,6 +340,10 @@
 #endif
 #ifndef _WW8PAR_HXX
 #include "ww8par.hxx"
+#endif
+
+#ifndef _SV_OUTDEV_HXX
+#include <vcl/outdev.hxx>
 #endif
 
 /*
@@ -3852,11 +3856,38 @@ static Writer& OutWW8_SvxLineSpacing( Writer& rWrt, const SfxPoolItem& rHt )
             switch( rAttr.GetInterLineSpaceRule() )
             {
             case SVX_INTER_LINE_SPACE_FIX:      // unser Durchschuss
-                // gibt es aber nicht in WW - also wie kommt man an
-                // die MaxLineHeight heran?
-                nSpace = (short)rAttr.GetInterLineSpace();
+                {
+                    // gibt es aber nicht in WW - also wie kommt man an
+                    // die MaxLineHeight heran?
+                    nSpace = (short)rAttr.GetInterLineSpace();
+                    sal_uInt16 nScript =
+                        com::sun::star::i18n::ScriptType::LATIN;
+                    const SwAttrSet *pSet = 0;
+                    if (rWrtWW8.pOutFmtNode && rWrtWW8.pOutFmtNode->ISA(SwFmt))
+                    {
+                        const SwFmt *pFmt = (const SwFmt*)(rWrtWW8.pOutFmtNode);
+                        pSet = &pFmt->GetAttrSet();
+                    }
+                    else if (rWrtWW8.pOutFmtNode &&
+                        rWrtWW8.pOutFmtNode->ISA(SwTxtNode))
+                    {
+                        const SwTxtNode* pNd =
+                            (const SwTxtNode*)rWrtWW8.pOutFmtNode;
+                        pSet = &pNd->GetSwAttrSet();
+                        if (pBreakIt->xBreak.is())
+                        {
+                            nScript = pBreakIt->xBreak->
+                                getScriptType(pNd->GetTxt(), 0);
+                        }
+                    }
+                    ASSERT(pSet, "No attrset for lineheight :-(");
+                    if (pSet)
+                    {
+                        nSpace += (short)(AttrSetToLineHeight(*rWrtWW8.pDoc,
+                            *pSet, *Application::GetDefaultDevice(), nScript));
+                    }
+                }
                 break;
-
             case SVX_INTER_LINE_SPACE_PROP:
                 nSpace = (short)(( 240L * rAttr.GetPropLineSpace() ) / 100L );
                 nMulti = 1;
