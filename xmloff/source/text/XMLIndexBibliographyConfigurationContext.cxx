@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLIndexBibliographyConfigurationContext.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:21 $
+ *  last change: $Author: dvo $ $Date: 2002-10-30 10:17:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -326,17 +326,11 @@ void XMLIndexBibliographyConfigurationContext::CreateAndInsert(
                 Reference<XPropertySet> xPropSet( xIfc, UNO_QUERY );
                 Any aAny;
 
-                if (sSuffix.getLength() > 0)
-                {
-                    aAny <<= sSuffix;
-                    xPropSet->setPropertyValue(sBracketAfter, aAny);
-                }
+                aAny <<= sSuffix;
+                xPropSet->setPropertyValue(sBracketAfter, aAny);
 
-                if (sPrefix.getLength() > 0)
-                {
-                    aAny <<= sPrefix;
-                    xPropSet->setPropertyValue(sBracketBefore, aAny);
-                }
+                aAny <<= sPrefix;
+                xPropSet->setPropertyValue(sBracketBefore, aAny);
 
                 aAny.setValue(&bNumberedEntries, ::getBooleanCppuType());
                 xPropSet->setPropertyValue(sIsNumberEntries, aAny);
