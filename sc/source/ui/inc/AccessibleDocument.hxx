@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocument.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: sab $ $Date: 2002-04-11 09:44:59 $
+ *  last change: $Author: sab $ $Date: 2002-04-19 18:20:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,45 +73,30 @@
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLESELECTION_HPP_
 #include <drafts/com/sun/star/accessibility/XAccessibleSelection.hpp>
 #endif
-#ifndef _COM_SUN_STAR_VIEW_XSELECTIONSUPPLIER_HPP_
-#include <com/sun/star/view/XSelectionSupplier.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DRAWING_XSHAPE_HPP_
-#include <com/sun/star/drawing/XShape.hpp>
+#ifndef _COM_SUN_STAR_VIEW_XSELECTIONCHANGELISTENER_HPP_
+#include <com/sun/star/view/XSelectionChangeListener.hpp>
 #endif
 
-#ifndef _SVX_ACCESSIBILITY_ACCESSIBLE_SHAPE_TREE_INFO_HXX
-#include <svx/AccessibleShapeTreeInfo.hxx>
-#endif
-#ifndef _CPPUHELPER_IMPLBASE1_HXX_
-#include <cppuhelper/implbase1.hxx>
+#ifndef _CPPUHELPER_IMPLBASE2_HXX_
+#include <cppuhelper/implbase2.hxx>
 #endif
 
 class ScTabViewShell;
 class ScAccessibleSpreadsheet;
-class SdrPage;
+class ScChildrenShapes;
 
 namespace accessibility
 {
     class AccessibleShape;
 }
 
-struct ScAccessibleShapeData
-{
-    ScAccessibleShapeData() : pAccShape(NULL), nIndex(-1) {}
-    ScAccessibleShapeData(sal_Int32 nTempIndex) : pAccShape(NULL), nIndex(nTempIndex) {}
-    ~ScAccessibleShapeData();
-    accessibility::AccessibleShape* pAccShape;
-    com::sun::star::uno::Reference< com::sun::star::drawing::XShape > xShape;
-    sal_Int32           nIndex; // Index in drawpage.
-};
-
 /** @descr
         This base class provides an implementation of the
         <code>AccessibleContext</code> service.
 */
 
-typedef cppu::ImplHelper1< ::drafts::com::sun::star::accessibility::XAccessibleSelection >
+typedef cppu::ImplHelper2< ::drafts::com::sun::star::accessibility::XAccessibleSelection,
+                            ::com::sun::star::view::XSelectionChangeListener >
                     ScAccessibleDocumentImpl;
 
 class ScAccessibleDocument
@@ -125,6 +110,8 @@ public:
         ::drafts::com::sun::star::accessibility::XAccessible>& rxParent,
         ScTabViewShell* pViewShell,
         ScSplitPos eSplitPos);
+
+    virtual void Init();
 protected:
     virtual ~ScAccessibleDocument(void);
 public:
@@ -205,11 +192,19 @@ public:
         ::com::sun::star::uno::RuntimeException);
 
     virtual void SAL_CALL
-        deselectSelectedAccessibleChild( sal_Int32 nSelectedChildIndex )
+        deselectSelectedAccessibleChild( sal_Int32 nChildIndex )
         throw (::com::sun::star::lang::IndexOutOfBoundsException,
         ::com::sun::star::uno::RuntimeException);
 
-    ///=====  XServiceInfo  ====================================================
+    ///=====  XSelectionListener  =============================================
+
+    virtual void SAL_CALL selectionChanged( const ::com::sun::star::lang::EventObject& aEvent )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    virtual void SAL_CALL disposing( const ::com::sun::star::lang::EventObject& Source )
+        throw (::com::sun::star::uno::RuntimeException);
+
+    ///=====  XServiceInfo  ===================================================
 
     /** Returns an identifier for the implementation of this object.
     */
@@ -259,32 +254,20 @@ private:
     ScTabViewShell* mpViewShell;
     ScSplitPos      meSplitPos;
     ScAccessibleSpreadsheet* mpAccessibleSpreadsheet;
-    mutable std::vector<ScAccessibleShapeData> maShapes;
-    mutable accessibility::AccessibleShapeTreeInfo maShapeTreeInfo;
-    mutable com::sun::star::uno::Reference<com::sun::star::view::XSelectionSupplier> xSelectionSupplier;
+    ScChildrenShapes* mpChildrenShapes;
+    sal_Bool mbCompleteSheetSelected;
 
-    sal_uInt16 getVisibleTable() const;
+public:
+    sal_uInt16 getVisibleTable() const; // use it in ScChildrenShapes
 
+private:
     ::com::sun::star::uno::Reference
         < ::drafts::com::sun::star::accessibility::XAccessible >
         GetAccessibleSpreadsheet();
 
     void FreeAccessibleSpreadsheet();
 
-    SdrPage* GetDrawPage() const;
-    sal_Int32 GetShapesCount() const;
-    com::sun::star::uno::Reference< drafts::com::sun::star::accessibility::XAccessible >
-            GetShape(sal_Int32 nIndex) const;
-
-    // gets the index of the shape starting on 0 (without the index of the table)
-    // returns the selected shape
-    sal_Bool IsAccessibleShapeChildSelected(sal_Int32 nIndex,
-        com::sun::star::uno::Reference<com::sun::star::drawing::XShape>& rShape) const;
     sal_Bool IsTableSelected() const;
-    void FillSelectionSupplier() const;
-
-    sal_Bool IsEqual(const com::sun::star::uno::Reference<com::sun::star::drawing::XShape>& xShape1,
-        const com::sun::star::uno::Reference<com::sun::star::drawing::XShape>& xShape2) const;
 
     sal_Bool IsDefunc(
         const com::sun::star::uno::Reference<
