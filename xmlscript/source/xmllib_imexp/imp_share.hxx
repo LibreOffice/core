@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imp_share.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ab $ $Date: 2001-07-02 12:02:12 $
+ *  last change: $Author: ab $ $Date: 2001-08-09 15:40:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,7 +103,7 @@ inline bool getBoolAttr(
     sal_Bool * pRet, OUString const & rAttrName,
     Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
 {
-    OUString aValue( xAttributes->getValueByUidName( XMLNS_DIALOGS_UID, rAttrName ) );
+    OUString aValue( xAttributes->getValueByUidName( XMLNS_LIBRARY_UID, rAttrName ) );
     if (aValue.getLength())
     {
         if (aValue.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("true") ))
@@ -129,14 +129,14 @@ inline bool getStringAttr(
     OUString * pRet, OUString const & rAttrName,
     Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
 {
-    *pRet = xAttributes->getValueByUidName( XMLNS_DIALOGS_UID, rAttrName );
+    *pRet = xAttributes->getValueByUidName( XMLNS_LIBRARY_UID, rAttrName );
     return (pRet->getLength() > 0);
 }
 inline bool getLongAttr(
     sal_Int32 * pRet, OUString const & rAttrName,
     Reference< xml::sax2::XExtendedAttributes > const & xAttributes )
 {
-    OUString aValue( xAttributes->getValueByUidName( XMLNS_DIALOGS_UID, rAttrName ) );
+    OUString aValue( xAttributes->getValueByUidName( XMLNS_LIBRARY_UID, rAttrName ) );
     if (aValue.getLength())
     {
         *pRet = toInt32( aValue );
