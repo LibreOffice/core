@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: jbu $ $Date: 2002-10-01 07:45:21 $
+#   last change: $Author: vg $ $Date: 2003-04-15 13:38:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -63,7 +63,7 @@ PRJ=..
 
 PRJNAME=	eventattacher
 TARGET=		evtatt
-USE_DEFFILE=	TRUE
+
 NO_BSYMBOLIC=	TRUE
 ENABLE_EXCEPTIONS=TRUE
 
@@ -102,19 +102,19 @@ SLOFILES= \
         $(SLO)$/eventattacher.obj
 
 SHL1TARGET=	$(TARGET)
+SHL1IMPLIB=	i$(TARGET)
+
+SHL1VERSIONMAP=exports.map
+SHL1DEF=$(MISC)$/$(SHL1TARGET).def
+DEF1NAME=$(SHL1TARGET)
 
 SHL1STDLIBS= \
-        $(CPPULIB)					\
         $(CPPUHELPERLIB)				\
+        $(CPPULIB)					\
         $(SALLIB)
 
 SHL1DEPN=
-SHL1IMPLIB=	i$(TARGET)
 SHL1LIBS=	$(SLB)$/$(TARGET).lib
-SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
-
-DEF1NAME=	$(SHL1TARGET)
-DEF1EXPORTFILE=	exports.dxp
 
 # --- Targets ------------------------------------------------------
 
