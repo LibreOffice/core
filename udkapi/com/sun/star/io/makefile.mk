@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: dbo $ $Date: 2001-03-14 16:44:15 $
+#   last change: $Author: dbo $ $Date: 2002-01-10 13:35:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,6 +73,7 @@ PACKAGE=com$/sun$/star$/io
 # ------------------------------------------------------------------------
 
 IDLFILES=\
+    FilePermission.idl\
     BufferSizeExceededException.idl\
     MarkableInputStream.idl\
     MarkableOutputStream.idl\
