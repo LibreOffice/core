@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stgcache.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-22 11:12:58 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 12:39:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,9 @@
 #ifndef _STGCACHE_HXX
 #define _STGCACHE_HXX
 
+#ifndef _OSL_ENDIAN_H_
+#include <osl/endian.h>
+#endif
 #ifndef _TOOLS_SOLAR_H
 #include <tools/solar.h>
 #endif
@@ -156,7 +159,7 @@ public:
         if( ( nOff >= (short) ( nData / sizeof( INT32 ) ) ) || nOff < 0 )
             return -1;
         INT32 n = ((INT32*) pData )[ nOff ];
-#ifdef __BIGENDIAN
+#ifdef OSL_BIGENDIAN
         return SWAPLONG(n);
 #else
         return n;
