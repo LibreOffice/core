@@ -23056,3 +23056,15 @@ _TI2?AVPropertyVetoException@beans@star@sun@com@@
 ?setFocusEntry@OControlTransferData@svxform@@QAEXPAVSvLBoxEntry@@@Z
 ?updateFormats@OControlTransferData@svxform@@IAEXXZ
 ??1?$vector@UDataFlavorEx@@V?$allocator@UDataFlavorEx@@@_STL@@@_STL@@QAE@XZ
+?ModelHasRemoved@NavigatorTree@svxform@@UAEXPAVSvListEntry@@@Z
+??0NavigatorTreeModel@svxform@@QAE@ABVImageList@@0@Z
+??0FmControlData@@QAE@ABV?$Reference@VXFormComponent@form@star@sun@com@@@uno@star@sun@com@@ABVImageList@@1PAVFmFormData@@@Z
+??0FmFormData@@QAE@ABV?$Reference@VXForm@form@star@sun@com@@@uno@star@sun@com@@ABVImageList@@1PAV0@@Z
+?ModelReplaced@FmControlData@@QAEXABV?$Reference@VXFormComponent@form@star@sun@com@@@uno@star@sun@com@@ABVImageList@@1@Z
+?GetImage@FmFilterData@svxform@@UBE?AVImage@@W4BmpColorMode@@@Z
+?GetImage@FmFilterItem@svxform@@UBE?AVImage@@W4BmpColorMode@@@Z
+?GetImage@FmFilterItems@svxform@@UBE?AVImage@@W4BmpColorMode@@@Z
+?GetImage@FmFormItem@svxform@@UBE?AVImage@@W4BmpColorMode@@@Z
+?SetPosAndSize@?%O:\SRX642\src\svx\source\fmcomp\gridctrl.cxx159711031@@YAXAAVButton@@AAVPoint@@ABVSize@@@Z
+?setCheckBoxState@?%O:\SRX642\src\svx\source\fmcomp\gridcell.cxx1032422613@@YAXABV?$Reference@VXColumn@sdb@star@sun@com@@@uno@star@sun@com@@PAVCheckBoxControl@svt@@@Z
+?getColumnPropertyFromPeer@?%O:\SRX642\src\svx\source\fmcomp\fmgridcl.cxx2265412005@@YA?AVOUString@rtl@@PAVFmXGridPeer@@JABV23@@Z
