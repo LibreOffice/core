@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confignode.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2002-12-05 09:03:49 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-22 12:38:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -688,9 +688,13 @@ namespace utl
                             try { xComp->dispose(); } catch(Exception&) { }
                     }
                 }
-                catch(Exception&)
+                catch(Exception& e)
                 {
-                    OSL_ENSURE(sal_False, "OConfigurationTreeRoot::createWithProvider: caught an exception while creating the access object!");
+#if OSL_DEBUG_LEVEL > 0
+                    ::rtl::OString sMessage( "OConfigurationTreeRoot::createWithProvider: caught an exception while creating the access object!\nmessage:\n" );
+                    sMessage += ::rtl::OString( e.Message.getStr(), e.Message.getLength(), RTL_TEXTENCODING_ASCII_US );
+                    OSL_ENSURE( sal_False, sMessage.getStr() );
+#endif
                 }
             }
             bTryAgain = CM_PREFER_UPDATABLE == _eMode;
@@ -749,26 +753,4 @@ namespace utl
 //........................................................................
 }   // namespace utl
 //........................................................................
-
-/*************************************************************************
- * history:
- *  $Log: not supported by cvs2svn $
- *  Revision 1.5  2001/08/21 12:40:41  fs
- *  #87721# +hasByHierarchicalName
- *
- *  Revision 1.4  2001/07/26 09:10:58  oj
- *  #89831# new method to append an existing node with different name
- *
- *  Revision 1.3  2001/07/10 11:30:37  jb
- *  #87904# Use public helpers for handling of new configuration pathes
- *
- *  Revision 1.2  2001/07/05 15:43:16  jb
- *  #87904# Adjusted to new configuration path format
- *
- *  Revision 1.1  2001/06/13 16:27:29  fs
- *  initial checkin - non-UNO wrapper for configuration nodes
- *
- *
- *  Revision 1.0 13.06.01 17:05:36  fs
- ************************************************************************/
 
