@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 14:38:13 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 18:26:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -512,10 +512,30 @@ void X11SalGraphics::GetResolution( long &rDPIX, long &rDPIY ) // const
             rDPIX = Divide( rDPIX * 96, rDPIY );
             rDPIY = 96;
         }
+        else if ( rDPIY > 200 )
+        {
+            rDPIX = Divide( rDPIX * 200, rDPIY );
+            rDPIY = 200;
+        }
 
 #ifndef _USE_PRINT_EXTENSION_
     }
 #endif
+
+    // #i12705# equalize x- and y-resolution if they are close enough
+    if( rDPIX != rDPIY )
+    {
+        // different x- and y- resolutions are usually artifacts of
+        // a wrongly calculated screen size.
+        //if( (13*rDPIX >= 10*rDPIY) && (13*rDPIY >= 10*rDPIX) )  //+-30%
+        {
+#ifdef DEBUG
+            printf("Forcing Resolution from %dx%d to %dx%d\n",
+                rDPIX,rDPIY,rDPIY,rDPIY);
+#endif
+            rDPIX = rDPIY; // y-resolution is more trustworthy
+        }
+    }
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
