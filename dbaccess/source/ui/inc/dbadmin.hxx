@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-30 08:33:51 $
+ *  last change: $Author: fs $ $Date: 2001-02-05 13:47:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -546,6 +546,11 @@ public:
     /// translate the current dialog SfxItems into driver relevant PropertyValues
     sal_Bool    getCurrentSettings(::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& _rDriverParams);
 
+    /// apply the current changes, return sal_True if successfull
+    sal_Bool    applyChanges();
+    /// return <TRUE/> if in the current state, the changes can be saved (i.e. they produce no conflict)
+    sal_Bool    isApplyable();
+
 protected:
     virtual void PageCreated(USHORT _nId, SfxTabPage& _rPage);
     virtual short Ok();
@@ -636,6 +641,9 @@ private:
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.9  2000/11/30 08:33:51  fs
+ *  #80003# changed some sal_uInt16 to sal_Int32 (need some -1's)
+ *
  *  Revision 1.8  2000/11/28 13:49:41  fs
  *  #80152# +ODatasourceSelector::count
  *
