@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementimport.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-21 08:38:52 $
+ *  last change: $Author: kz $ $Date: 2003-12-11 12:08:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -432,6 +432,35 @@ namespace xmloff
         // SvXMLImportContext overridables
         virtual void StartElement(
             const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList);
+    };
+
+    //=====================================================================
+    //= OValueRangeImport
+    //=====================================================================
+    /** A specialized version of the <type>OControlImport</type> class, which imports
+        the value-range elements
+    */
+    class OValueRangeImport : public OControlImport
+    {
+    private:
+        sal_Int32   m_nStepSizeValue;
+
+    public:
+        OValueRangeImport(
+            IFormsImportContext& _rImport, IEventAttacherManager& _rEventManager, sal_uInt16 _nPrefix, const ::rtl::OUString& _rName,
+            const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameContainer >& _rxParentContainer,
+            OControlElement::ElementType _eType
+        );
+
+    protected:
+        // SvXMLImportContext overridables
+        virtual void StartElement(
+            const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList >& _rxAttrList );
+
+        // OPropertyImport overridables
+        virtual void    handleAttribute( sal_uInt16 _nNamespaceKey,
+            const ::rtl::OUString& _rLocalName,
+            const ::rtl::OUString& _rValue );
     };
 
     //=====================================================================
