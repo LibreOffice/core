@@ -2,9 +2,9 @@
  *
  *  $RCSfile: environment.h,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dbo $ $Date: 2001-08-21 09:17:07 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 12:56:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -259,7 +259,7 @@ typedef struct _uno_ExtEnvironment
         sal_Int32 * pnLen,
         uno_memAlloc memAlloc );
 
-    /* ===== the following part will be late initialized by a matching bridge ===== *
+    /* ===== the following part will be late initialized by a matching bridge ===== */
 
     /** Computes an object id of the given interface; is called by the environment implementation.
 
