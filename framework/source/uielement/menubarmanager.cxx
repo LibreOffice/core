@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menubarmanager.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 14:07:16 $
+ *  last change: $Author: rt $ $Date: 2004-08-12 15:52:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -935,7 +935,7 @@ void MenuBarManager::RemoveListener()
         }
 
         pItemHandler->xMenuItemDispatch.clear();
-        if ( pItemHandler->xPopupMenuController.is() )
+        if ( pItemHandler->xPopupMenu.is() )
         {
             {
                 // Remove popup menu from menu structure
@@ -1007,13 +1007,12 @@ void SAL_CALL MenuBarManager::disposing( const EventObject& Source ) throw ( Run
         pMenuItemDisposing->xMenuItemDispatch->removeStatusListener(
             static_cast< XStatusListener* >( this ), aTargetURL );
         pMenuItemDisposing->xMenuItemDispatch = Reference< XDispatch >();
-        if ( pMenuItemDisposing->xPopupMenuController.is() )
+        if ( pMenuItemDisposing->xPopupMenu.is() )
         {
             Reference< com::sun::star::lang::XEventListener > xEventListener( pMenuItemDisposing->xPopupMenuController, UNO_QUERY );
             if ( xEventListener.is() )
                 xEventListener->disposing( Source );
 
-            if ( pMenuItemDisposing->xPopupMenuController.is() )
             {
                 // Remove popup menu from menu structure as we release our reference to
                 // the controller.
