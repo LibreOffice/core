@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforlist.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: er $ $Date: 2001-06-25 12:58:00 $
+ *  last change: $Author: er $ $Date: 2001-06-26 12:48:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2751,23 +2751,34 @@ IMPL_STATIC_LINK( SvNumberFormatter, CurrencyChangeLink, void*, pNull )
 void SvNumberFormatter::SetDefaultSystemCurrency( const String& rAbbrev, LanguageType eLang )
 {
     ::osl::MutexGuard aGuard( GetMutex() );
-    if ( !rAbbrev.Len() )
-    {   // SYSTEM
-        nSystemCurrencyPosition = 0;
-        return ;
-    }
+    if ( eLang == LANGUAGE_SYSTEM )
+        eLang = Application::GetSettings().GetLanguage();
     const NfCurrencyTable& rTable = GetTheCurrencyTable();
     USHORT nCount = rTable.Count();
     const NfCurrencyEntryPtr* ppData = rTable.GetData();
-    for ( USHORT j = 0; j < nCount; j++, ppData++ )
+    if ( rAbbrev.Len() )
     {
-        if ( (*ppData)->GetLanguage() == eLang && (*ppData)->GetBankSymbol() == rAbbrev )
+        for ( USHORT j = 0; j < nCount; j++, ppData++ )
         {
-            nSystemCurrencyPosition = j;
-            return ;
+            if ( (*ppData)->GetLanguage() == eLang && (*ppData)->GetBankSymbol() == rAbbrev )
+            {
+                nSystemCurrencyPosition = j;
+                return ;
+            }
         }
     }
-    nSystemCurrencyPosition = 0;    // not found => SYSTEM
+    else
+    {
+        for ( USHORT j = 0; j < nCount; j++, ppData++ )
+        {
+            if ( (*ppData)->GetLanguage() == eLang )
+            {
+                nSystemCurrencyPosition = j;
+                return ;
+            }
+        }
+    }
+    nSystemCurrencyPosition = 0;    // not found => simple SYSTEM
 }
 
 
@@ -3169,8 +3180,10 @@ void SvNumberFormatter::ImpInitCurrencyTable()
     // ::osl::MutexGuard aGuard( GetMutex() );
     // while ( !bCurrencyTableInitialized )
     //      ImpInitCurrencyTable();
-    if ( bCurrencyTableInitialized )
+    static BOOL bInitializing = FALSE;
+    if ( bCurrencyTableInitialized || bInitializing )
         return ;
+    bInitializing = TRUE;
 
     LanguageType eSysLang = Application::GetSettings().GetLanguage();
     LocaleDataWrapper* pLocaleData = new LocaleDataWrapper(
@@ -3182,6 +3195,7 @@ void SvNumberFormatter::ImpInitCurrencyTable()
     SvtSysLocaleOptions().GetCurrencyAbbrevAndLanguage(
         aConfiguredCurrencyAbbrev, eConfiguredCurrencyLanguage );
     USHORT nSecondarySystemCurrencyPosition = 0;
+    USHORT nMatchingSystemCurrencyPosition = 0;
     NfCurrencyEntryPtr pEntry;
 
     // first entry is SYSTEM
@@ -3215,6 +3229,9 @@ void SvNumberFormatter::ImpInitCurrencyTable()
                 pEntry->GetBankSymbol() == aConfiguredCurrencyAbbrev :
                 pEntry->GetLanguage() == eConfiguredCurrencyLanguage) )
             nSystemCurrencyPosition = nCurrencyPos-1;
+        if ( !nMatchingSystemCurrencyPosition &&
+                pEntry->GetLanguage() == eSysLang )
+            nMatchingSystemCurrencyPosition = nCurrencyPos-1;
 
         // all available currencies for each locale
         Sequence< Currency > aCurrSeq = pLocaleData->getAllCurrencies();
@@ -3248,18 +3265,26 @@ void SvNumberFormatter::ImpInitCurrencyTable()
                             pEntry->GetBankSymbol() == aConfiguredCurrencyAbbrev :
                             pEntry->GetLanguage() == eConfiguredCurrencyLanguage) )
                         nSecondarySystemCurrencyPosition = nCurrencyPos-1;
+                    if ( !nMatchingSystemCurrencyPosition &&
+                            pEntry->GetLanguage() ==  eSysLang )
+                        nMatchingSystemCurrencyPosition = nCurrencyPos-1;
                 }
             }
         }
     }
     if ( !nSystemCurrencyPosition )
         nSystemCurrencyPosition = nSecondarySystemCurrencyPosition;
-    // first entry is System
     DBG_ASSERT( !aConfiguredCurrencyAbbrev.Len() || nSystemCurrencyPosition,
         "configured currency not in I18N locale data" );
+    // match SYSTEM if no configured currency found
+    if ( !nSystemCurrencyPosition )
+        nSystemCurrencyPosition = nMatchingSystemCurrencyPosition;
+    DBG_ASSERT( aConfiguredCurrencyAbbrev.Len() || nSystemCurrencyPosition,
+        "system currency not in I18N locale data" );
     delete pLocaleData;
     SvtSysLocaleOptions::SetCurrencyChangeLink(
         STATIC_LINK( NULL, SvNumberFormatter, CurrencyChangeLink ) );
+    bInitializing = FALSE;
     bCurrencyTableInitialized = TRUE;
 }
 
