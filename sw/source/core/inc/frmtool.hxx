@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmtool.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fme $ $Date: 2002-08-26 07:53:39 $
+ *  last change: $Author: od $ $Date: 2002-08-28 11:58:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,8 +95,11 @@ class SwCrsrShell;
 #define GRFNUM_REPLACE 2
 
 //Painten des Hintergrunds. Mit Brush oder Graphic.
+/// OD 05.08.2002 #99657# - add 6th parameter to indicate that method should
+///     consider background transparency, saved in the color of the brush item
 void MA_FASTCALL DrawGraphic( const SvxBrushItem *, OutputDevice *,
-      const SwRect &rOrg, const SwRect &rOut, const BYTE nGrfNum = GRFNUM_NO );
+      const SwRect &rOrg, const SwRect &rOut, const BYTE nGrfNum = GRFNUM_NO,
+      const sal_Bool bConsiderBackgroundTransparency = sal_False );
 
 //Fly besorgen, wenn keine List hineingereicht wird, wir die der aktuellen
 //Shell benutzt.
