@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.176 $
+ *  $Revision: 1.177 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:13:14 $
+ *  last change: $Author: rt $ $Date: 2004-07-05 09:12:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2019,19 +2019,20 @@ void ScXMLExport::_ExportAutoStyles()
                     exportAutoDataStyles();
                     GetAutoStylePool()->exportXML(XML_STYLE_FAMILY_TABLE_CELL,
                         GetDocHandler(), GetMM100UnitConverter(), GetNamespaceMap());
-                    GetTextParagraphExport()->exportTextAutoStyles();
 
                     GetShapeExport()->exportAutoStyles();
                     GetFormExport()->exportAutoStyles( );
                 }
-                if ((getExportFlags() & EXPORT_ALL) == EXPORT_ALL)
-                    GetChartExport()->exportAutoStyles();
                 if (getExportFlags() & EXPORT_MASTERSTYLES)
                 {
                     GetPageExport()->collectAutoStyles(sal_True);
-                    GetTextParagraphExport()->exportTextAutoStyles();
                       GetPageExport()->exportAutoStyles();
                 }
+
+                // #i30251#; only write Text Styles once
+
+                if ((getExportFlags() & EXPORT_CONTENT) || (getExportFlags() & EXPORT_MASTERSTYLES))
+                    GetTextParagraphExport()->exportTextAutoStyles();
             }
         }
     }
