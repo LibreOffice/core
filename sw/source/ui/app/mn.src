@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mn.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:12:19 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 11:48:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,7 @@ String MN_TEXT_POPUPMENU
     Text[ czech ] = "Text";
     Text[ hebrew ] = "‮טקסט‬";
     Text[ hindi ] = "टेक्स्ट्";
+    Text[ slovak ] = "Text";
 };
 
 
@@ -131,6 +132,7 @@ String MN_TAB_POPUPMENU
     Text[ czech ] = "Tabulka";
     Text[ hebrew ] = "‮טבלה‬";
     Text[ hindi ] = "सारणी";
+    Text[ slovak ] = "Tabuľka";
 };
 
 Menu MN_TAB_POPUPMENU
@@ -187,6 +189,7 @@ Menu MN_TAB_POPUPMENU
             Text[ czech ] = "Limity tabulky";
             Text[ hebrew ] = "‮גבולות טבלה‬";
             Text[ hindi ] = "सारणी सीमा";
+            Text[ slovak ] = "Limity tabuľky";
         };
         MenuItem
         {
@@ -218,6 +221,7 @@ Menu MN_TAB_POPUPMENU
             Text[ czech ] = "Rozpoznávání čísel";
             Text[ hebrew ] = "‮זיהוי מספרים‬";
             Text[ hindi ] = "~संख्या पहचान";
+            Text[ slovak ] = "~Rozpoznávanie čísel";
         };
         SEPARATOR ;
         _DEFAULT_TEXT_EDIT_ELEMENTS
@@ -254,6 +258,7 @@ String MN_FRM_POPUPMENU
     Text[ czech ] = "Rámec";
     Text[ hebrew ] = "‮מסגרת‬";
     Text[ hindi ] = "फ्रेम ";
+    Text[ slovak ] = "Rámček";
 };
 
 Menu MN_FRM_POPUPMENU
@@ -298,6 +303,7 @@ String MN_DRAW_POPUPMENU
     Text[ czech ] = "Obrázek";
     Text[ hebrew ] = "Grafik";
     Text[ hindi ] = "सुचित्र";
+    Text[ slovak ] = "Obrázok";
 };
 
 Menu MN_DRAW_POPUPMENU
@@ -349,6 +355,7 @@ String MN_DRAWFORM_POPUPMENU
     Text[ czech ] = "Ovládací prvek";
     Text[ hebrew ] = "Kontrollfeld";
     Text[ hindi ] = "नियंत्रण";
+    Text[ slovak ] = "Ovládací prvok";
 };
 
 Menu MN_DRAWFORM_POPUPMENU
@@ -398,6 +405,7 @@ String MN_DRWTXT_POPUPMENU
     Text[ czech ] = "Text kresby";
     Text[ hebrew ] = "Zeichenobjekt Text";
     Text[ hindi ] = "चित्रित वस्तु का टेक्स्ट्";
+    Text[ slovak ] = "Text kresby";
 };
 
 Menu MN_DRWTXT_POPUPMENU
@@ -444,6 +452,7 @@ String MN_GRF_POPUPMENU
     Text[ czech ] = "Obrázek";
     Text[ hebrew ] = "Grafik";
     Text[ hindi ] = "सुचित्र";
+    Text[ slovak ] = "Obrázok";
 };
 
 Menu MN_GRF_POPUPMENU
@@ -494,6 +503,7 @@ String MN_OLE_POPUPMENU
     Text[ czech ] = "Objekt";
     Text[ hebrew ] = "‮אוביקט‬";
     Text[ hindi ] = "वस्तु";
+    Text[ slovak ] = "Objekt";
 };
 
 
@@ -540,6 +550,7 @@ String MN_PPREVIEW_POPUPMENU
     Text[ czech ] = "Text kresby";
     Text[ hebrew ] = "Zeichenobjekt Text";
     Text[ hindi ] = "चित्रित वस्तु का टेक्स्ट्";
+    Text[ slovak ] = "Text kresby";
 };
 
 Menu MN_PPREVIEW_POPUPMENU
@@ -576,6 +587,7 @@ Menu MN_PPREVIEW_POPUPMENU
             Text[ czech ] = "Předchozí strana";
             Text[ hebrew ] = "‮הדף הקודם‬";
             Text[ hindi ] = "पिछला पृष्ठ";
+            Text[ slovak ] = "Predchádzajúca strana";
         };
         MenuItem
         {
@@ -608,6 +620,7 @@ Menu MN_PPREVIEW_POPUPMENU
             Text[ czech ] = "Další stránka";
             Text[ hebrew ] = "‮הדף הבא‬";
             Text[ hindi ] = "अगला पृष्ठ";
+            Text[ slovak ] = "Ďalšia strana";
         };
         MenuItem
         {
@@ -646,6 +659,7 @@ Menu MN_PPREVIEW_POPUPMENU
             Text[ czech ] = "Tisk";
             Text[ hebrew ] = "‮הדפסה‬";
             Text[ hindi ] = "छपाई";
+            Text[ slovak ] = "Tlač";
         };
         MenuItem
         {
@@ -677,6 +691,7 @@ Menu MN_PPREVIEW_POPUPMENU
             Text[ czech ] = "Volby tisku";
             Text[ hebrew ] = "Druckoptionen";
             Text[ hindi ] = "छपाई विकल्प";
+            Text[ slovak ] = "Nastavenia tlače";
         };
         SEPARATOR ;
         MenuItem
@@ -708,9 +723,12 @@ Menu MN_PPREVIEW_POPUPMENU
             Text[ czech ] = "Zavřít náhled";
             Text[ hebrew ] = "‮סגירת תצוגה מקדימה‬";
             Text[ hindi ] = "Close Preview";
+            Text[ slovak ] = "Zatvoriť náhľad";
         };
     };
 };
+
+
 
 
 
