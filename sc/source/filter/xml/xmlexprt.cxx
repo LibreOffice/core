@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.170 $
+ *  $Revision: 1.171 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:52:31 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:53:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -913,7 +913,9 @@ void ScXMLExport::ExportColumns(const sal_uInt16 nTable, const table::CellRangeA
     sal_Bool bIsClosed (sal_True);
     sal_Bool bIsFirst (sal_False);
     sal_Int32 nPrevIndex (-1);
-    for (sal_Int32 nColumn = 0; nColumn <= pSharedData->GetLastColumn(nTable); nColumn++)
+    sal_Int32 nColumn;
+
+    for ( nColumn = 0; nColumn <= pSharedData->GetLastColumn(nTable); nColumn++)
     {
         CheckAttrList();
         sal_Bool bIsVisible(sal_True);
@@ -1164,7 +1166,9 @@ void ScXMLExport::OpenRow(const sal_uInt16 nTable, const sal_Int32 nStartRow, co
         sal_Int8 nFlag(0);
         sal_Int32 nEqualRows(1);
         sal_Int32 nEndRow(nStartRow + nRepeatRow);
-        for (sal_Int32 nRow = nStartRow; nRow < nEndRow; nRow++)
+        sal_Int32 nRow;
+
+        for ( nRow = nStartRow; nRow < nEndRow; nRow++)
         {
             if (nRow == nStartRow)
             {
