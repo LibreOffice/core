@@ -2,9 +2,9 @@
  *
  *  $RCSfile: label.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: os $ $Date: 2001-06-01 11:12:04 $
+ *  last change: $Author: os $ $Date: 2001-06-05 05:49:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -753,7 +753,7 @@ String STR_CUSTOM
     Text [ English ]            = "(Custom)" ;
     Text [ norwegian ]          = "(Custom)" ;
     Text [ italian ]            = "(Utente)" ;
-    Text [ portuguese_brazilian ) = "(Pessoal)" ;
+    Text [ portuguese_brazilian ] = "(Pessoal)" ;
     Text [ portuguese ]         = "(Utilizador)" ;
     Text [ finnish ]            = "(K‰ytt‰j‰n m‰‰ritt‰m‰)" ;
     Text [ danish ]             = "(Bruger)" ;
