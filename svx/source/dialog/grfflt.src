@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfflt.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2000-12-06 14:31:15 $
+ *  last change: $Author: kz $ $Date: 2001-01-12 21:19:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_MOSAIC
         Text = "Vorschau" ;
         Text[ ENGLISH ] = "Preview" ;
         Text[ english_us ] = "Preview" ;
-        Text[ portuguese ] = "Preview";
+        Text[ portuguese ] = "Previsualizar";
         Text[ russian ] = "Предв. просмотр";
         Text[ greek ] = "Рсперйукьрзуз";
         Text[ dutch ] = "Voorbeeld";
@@ -256,7 +256,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_MOSAIC
         Text = "~Kanten hervorheben" ;
         Text[ ENGLISH ] = "~Enhance edges" ;
         Text[ english_us ] = "E~nhance edges" ;
-        Text[ portuguese ] = "~Enhance edges";
+        Text[ portuguese ] = "~Destacar arestas";
         Text[ russian ] = "~Выделить контуры";
         Text[ greek ] = "ЕрйуЮмбнуз Ь~ксщн";
         Text[ dutch ] = "~Kanten accentueren";
@@ -339,7 +339,7 @@ ModalDialog RID_SVX_GRFFILTER_DLG_SOLARIZE
         Text = "Vorschau" ;
         Text[ ENGLISH ] = "Preview" ;
         Text[ english_us ] = "Preview" ;
-        Text[ portuguese ] = "Preview";
+        Text[ portuguese ] = "Previsualizar";
         Text[ russian ] = "Предв. просмотр";
         Text[ greek ] = "Рсперйукьрзуз";
         Text[ dutch ] = "Voorbeeld";
