@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basedlgs.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mba $ $Date: 2002-04-17 12:42:12 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 13:10:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,9 @@
 #ifndef INCLUDED_SVTOOLS_VIEWOPTIONS_HXX
 #include <svtools/viewoptions.hxx>
 #endif
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #include "basedlgs.hxx"
 #include "viewfrm.hxx"
