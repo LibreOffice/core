@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoparagraph.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mib $ $Date: 2001-06-07 08:01:20 $
+ *  last change: $Author: mib $ $Date: 2001-06-13 11:27:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -708,8 +708,10 @@ void SwXParagraph::dispose(void) throw( uno::RuntimeException )
     if(pUnoCrsr)
     {
         // Absatz selektieren
-        SwParaSelection aSelection(pUnoCrsr);
-        pUnoCrsr->GetDoc()->DelFullPara(*pUnoCrsr);
+        {
+            SwParaSelection aSelection(pUnoCrsr);
+            pUnoCrsr->GetDoc()->DelFullPara(*pUnoCrsr);
+        }
         aLstnrCntnr.Disposing();
         delete pUnoCrsr;
     }
