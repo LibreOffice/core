@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh1.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: jp $ $Date: 2001-12-10 22:28:35 $
+ *  last change: $Author: jp $ $Date: 2002-02-01 12:57:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -220,6 +220,9 @@
 #endif
 #ifndef _SWDTFLVR_HXX
 #include <swdtflvr.hxx>
+#endif
+#ifndef _CRSSKIP_HXX
+#include <crsskip.hxx>
 #endif
 
 #ifndef _SWERROR_H
@@ -1108,7 +1111,7 @@ void SwWrtShell::InsertFootnote(const String &rStr, BOOL bEndNote, BOOL bEdit )
         if( bEdit )
         {
             // zur Bearbeiung des Fussnotentextes
-            Left();
+            Left(CRSR_SKIP_CHARS, FALSE, 1, FALSE );
             GotoFtnTxt();
         }
     }
