@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlideSorterController.sdi,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-25 15:12:59 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 14:10:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -267,11 +267,6 @@ interface SlideSorterView : Object
         ExecMethod = FuTemporary ;
         StateMethod = GetMenuState ;
     ]
-    SID_PREVIEW_WIN // ole : no, status : ?
-    [
-        ExecMethod = FuTemporary ;
-        StateMethod = GetMenuState ;
-    ]
     SID_SLIDE_TRANSITIONS_PANEL // ole : no, status : ?
     [
         ExecMethod = FuTemporary ;
@@ -326,26 +321,6 @@ interface SlideSorterView : Object
         StateMethod = GetCtrlState ;
     ]
     SID_OUTPUT_QUALITY_CONTRAST // ole : no, status : play rec
-    [
-        ExecMethod = ExecCtrl ;
-        StateMethod = GetCtrlState ;
-    ]
-    SID_PREVIEW_QUALITY_COLOR // ole : no, status : play rec
-    [
-        ExecMethod = ExecCtrl ;
-        StateMethod = GetCtrlState ;
-    ]
-    SID_PREVIEW_QUALITY_GRAYSCALE // ole : no, status : play rec
-    [
-        ExecMethod = ExecCtrl ;
-        StateMethod = GetCtrlState ;
-    ]
-    SID_PREVIEW_QUALITY_BLACKWHITE // ole : no, status : play rec
-    [
-        ExecMethod = ExecCtrl ;
-        StateMethod = GetCtrlState ;
-    ]
-    SID_PREVIEW_QUALITY_CONTRAST // ole : no, status : play rec
     [
         ExecMethod = ExecCtrl ;
         StateMethod = GetCtrlState ;
