@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navigatr.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-08 23:16:32 $
+ *  last change: $Author: rt $ $Date: 2001-06-29 02:30:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -355,20 +355,21 @@ Window FLT_NAVIGATOR
         /* ### ACHTUNG: Neuer Text in Resource? Geöffnete Dokumente : Ge÷ffnete Dokumente */
         QuickHelpText [ swedish ] = "Dokument" ;
     QuickHelpText[ russian ] = "Äîêóìåíòû";
-        QuickHelpText[ polish ] = "Dokumenty!";
-        QuickHelpText[ japanese ] = "ÄÞ·­ÒÝÄ!";
+        QuickHelpText[ polish ] = "Dokumenty";
+        QuickHelpText[ japanese ] = "ÄÞ·­ÒÝÄ";
         QuickHelpText[ chinese_simplified ] = "ÎÄµµ";
         QuickHelpText[ chinese_traditional ] = "¤å¥ó";
         QuickHelpText[ arabic ] = "ãÓÊäÏÇÊ";
         QuickHelpText[ greek ] = "¸ããñáöá";
-        QuickHelpText[ korean ] = "¹®¼­!";
+        QuickHelpText[ korean ] = "¹®¼­";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Dokumente";
         QuickHelpText[ catalan ] = "Documentos";
-        QuickHelpText[ finnish ] = "Asiakirjat!";
+        QuickHelpText[ finnish ] = "Asiakirjat";
     };
 };
+
 
