@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-02 09:18:37 $
+ *  last change: $Author: oj $ $Date: 2001-04-04 14:26:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -552,7 +552,7 @@ sal_Bool SAL_CALL OResultSet::isFirst(  ) throw(SQLException, RuntimeException)
     if (OResultSet_BASE::rBHelper.bDisposed)
         throw DisposedException();
 
-    return m_nRowPos == 1;
+    return m_nRowPos == 0;
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL OResultSet::isLast(  ) throw(SQLException, RuntimeException)
@@ -687,7 +687,7 @@ sal_Bool SAL_CALL OResultSet::isBeforeFirst(  ) throw(SQLException, RuntimeExcep
     if (OResultSet_BASE::rBHelper.bDisposed)
         throw DisposedException();
 
-    return m_nRowPos == 0;
+    return m_nRowPos == -1;
 }
 // -------------------------------------------------------------------------
 sal_Bool OResultSet::evaluate()
@@ -1893,6 +1893,8 @@ BOOL OResultSet::OpenImpl()
     for(;aInsertIter != m_aInsertRow->end();++aInsertIter)
         aInsertIter->setBound(sal_False);
 
+    if(m_aAssignValues.isValid())
+        m_aAssignValues->clear();
     m_aAssignValues = new OAssignValues();
 
     if(!m_xParamColumns.isValid())
@@ -2420,6 +2422,8 @@ void OResultSet::GetAssignValues()
     else if (SQL_ISRULE(m_pParseTree,insert_statement))
     {
         // Row fuer die zu setzenden Werte anlegen (Referenz durch new)
+        if(m_aAssignValues.isValid())
+            m_aAssignValues->clear();
         m_aAssignValues = new OAssignValues(Reference<XIndexAccess>(m_xColNames,UNO_QUERY)->getCount());
 
         // Liste der Columns-Namen, die in der column_commalist vorkommen (mit ; getrennt):
@@ -2524,6 +2528,8 @@ void OResultSet::GetAssignValues()
     else if (SQL_ISRULE(m_pParseTree,update_statement_positioned) ||
                SQL_ISRULE(m_pParseTree,update_statement_searched))
     {
+        if(m_aAssignValues.isValid())
+            m_aAssignValues->clear();
         m_aAssignValues = new OAssignValues(Reference<XIndexAccess>(m_xColNames,UNO_QUERY)->getCount());
 
         OSL_ENSURE(m_pParseTree->count() >= 4,"OResultSet: Fehler im Parse Tree");
