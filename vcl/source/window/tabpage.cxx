@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabpage.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: th $ $Date: 2001-07-06 16:04:57 $
+ *  last change: $Author: tbe $ $Date: 2002-08-19 16:01:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,8 +78,16 @@
 #ifndef _SV_TABPAGE_HXX
 #include <tabpage.hxx>
 #endif
+#ifndef _SV_TABCTRL_HXX
+#include <tabctrl.hxx>
+#endif
+
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
+#include <drafts/com/sun/star/accessibility/XAccessible.hpp>
+#endif
 
 #pragma hdrstop
+
 
 // =======================================================================
 
@@ -182,4 +190,38 @@ void TabPage::ActivatePage()
 
 void TabPage::DeactivatePage()
 {
+}
+
+// -----------------------------------------------------------------------
+
+::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > TabPage::CreateAccessible()
+{
+    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > xAcc;
+
+    Window* pParent = GetAccessibleParentWindow();
+    if ( pParent && pParent->GetType() == WINDOW_TABCONTROL )
+    {
+        TabControl* pTabControl = static_cast< TabControl* >( pParent );
+        if ( pTabControl )
+        {
+            for ( sal_uInt16 i = 0, nCount = pTabControl->GetPageCount(); i < nCount; ++i )
+            {
+                sal_uInt16 nPageId = pTabControl->GetPageId( i );
+                if ( pTabControl->GetTabPage( nPageId ) == this )
+                {
+                    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > xParent = pTabControl->GetAccessible();
+                    if ( xParent.is() )
+                    {
+                        ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext > xParentContext( xParent->getAccessibleContext() );
+                        if ( xParentContext.is() )
+                            xAcc = xParentContext->getAccessibleChild( i );
+                    }
+                }
+            }
+        }
+    }
+    else
+        xAcc = Window::CreateAccessible();
+
+    return xAcc;
 }
