@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinTableView.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-24 09:08:40 $
+ *  last change: $Author: oj $ $Date: 2002-11-08 09:26:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -381,8 +381,8 @@ void OJoinTableView::AddTabWin(const ::rtl::OUString& _rComposedName, const ::rt
 
     //////////////////////////////////////////////////////////////////
     // Neues Fenster in Fensterliste eintragen
-    OTableWindow* pNewTabWin = new OTableWindow( this, pNewTabWinData );
-    if(pNewTabWin->Init())
+    OTableWindow* pNewTabWin = createWindow( pNewTabWinData );
+    if ( pNewTabWin->Init() )
     {
         m_pView->getController()->getTableWindowData()->push_back( pNewTabWinData);
         // when we already have a table with this name insert the full qualified one instead

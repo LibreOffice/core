@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryTableView.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-08 13:43:23 $
+ *  last change: $Author: oj $ $Date: 2002-11-08 09:26:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -378,7 +378,7 @@ void OQueryTableView::ReSync()
     for(;aIter != pTabWinDataList->rend();++aIter)
     {
         OQueryTableWindowData* pData = static_cast<OQueryTableWindowData*>(*aIter);
-        OQueryTableWindow* pTabWin = new OQueryTableWindow(this, pData);
+        OTableWindow* pTabWin = createWindow(pData);
 
         // ich gehe jetzt NICHT ueber ShowTabWin, da dieses die Daten des Fensters in die Liste des Docs einfuegt, was
         // schlecht waere, denn genau von dort hole ich sie ja gerade
@@ -438,6 +438,12 @@ void OQueryTableView::ClearAll()
 
     SetUpdateMode(sal_True);
     m_pView->getController()->setModified(sal_True);
+}
+
+// -----------------------------------------------------------------------------
+OTableWindow* OQueryTableView::createWindow(OTableWindowData* _pData)
+{
+    return new OQueryTableWindow(this,static_cast<OQueryTableWindowData*>(_pData));
 }
 
 //------------------------------------------------------------------------------
@@ -570,7 +576,7 @@ void OQueryTableView::AddTabWin(const ::rtl::OUString& _rComposedName, const ::r
         // die TabWinData brauche ich nicht in die entsprechende Liste der DocShell eintragen, das macht ShowTabWin
 
     // neues Fenster erzeugen
-    OQueryTableWindow* pNewTabWin = new OQueryTableWindow(this, pNewTabWinData);
+    OQueryTableWindow* pNewTabWin = static_cast<OQueryTableWindow*>(createWindow(pNewTabWinData));
     // das Init kann ich hier weglassen, da das in ShowTabWin passiert
 
     // Neue UndoAction

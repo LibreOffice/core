@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RelationTableView.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2002-05-22 11:25:53 $
+ *  last change: $Author: oj $ $Date: 2002-11-08 09:27:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,8 @@ namespace dbaui
     protected:
         virtual void ConnDoubleClicked( OTableConnection* pConnection );
         virtual void AddTabWin(const ::rtl::OUString& _rComposedName, const ::rtl::OUString& rWinName, BOOL bNewTable = FALSE);
+
+        virtual OTableWindow* createWindow(OTableWindowData* _pData);
 
     public:
         ORelationTableView( Window* pParent, ORelationDesignView* pView );

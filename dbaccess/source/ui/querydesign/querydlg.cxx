@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querydlg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-19 08:01:31 $
+ *  last change: $Author: oj $ $Date: 2002-11-08 09:27:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -141,6 +141,7 @@ DlgQryJoin::DlgQryJoin( Window * pParent,
         m_pTableControl->Init( m_pConnData );
     }
 
+    m_pTableControl->lateInit();
 
     sal_Bool bFull = sal_False;
     sal_Bool bOuter = sal_False;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RelationTableView.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-19 07:52:46 $
+ *  last change: $Author: oj $ $Date: 2002-11-08 09:27:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,6 +142,9 @@
 #ifndef _DBHELPER_DBEXCEPTION_HXX_
 #include <connectivity/dbexception.hxx>
 #endif
+#ifndef DBAUI_RELTABLEWINDOW_HXX
+#include "RTableWindow.hxx"
+#endif
 
 
 using namespace dbaui;
@@ -151,6 +154,8 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::sdbcx;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
+
+TYPEINIT1(ORelationTableWindow, OTableWindow);
 
 //==================================================================
 // class ORelationTableView
@@ -189,7 +194,7 @@ void ORelationTableView::ReSync()
     for(;aIter != pTabWinDataList->rend();++aIter)
     {
         OTableWindowData* pData = *aIter;
-        OTableWindow* pTabWin = new OTableWindow(this, pData);
+        OTableWindow* pTabWin = createWindow(pData);
 
         if (!pTabWin->Init())
         {
@@ -462,7 +467,7 @@ void ORelationTableView::AddTabWin(const ::rtl::OUString& _rComposedName, const 
 
     //////////////////////////////////////////////////////////////////
     // Neues Fenster in Fensterliste eintragen
-    OTableWindow* pNewTabWin = new OTableWindow( this, pNewTabWinData );
+    OTableWindow* pNewTabWin = createWindow( pNewTabWinData );
     if(pNewTabWin->Init())
     {
         m_pView->getController()->getTableWindowData()->push_back( pNewTabWinData);
@@ -518,3 +523,9 @@ void ORelationTableView::lookForUiActivities()
     }
 }
 // -----------------------------------------------------------------------------
+OTableWindow* ORelationTableView::createWindow(OTableWindowData* _pData)
+{
+    return new ORelationTableWindow(this,_pData);
+}
+// -----------------------------------------------------------------------------
+

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableWindow.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2002-06-27 08:19:42 $
+ *  last change: $Author: oj $ $Date: 2002-11-08 09:27:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,9 +168,11 @@ namespace dbaui
         virtual void* createUserData(const ::com::sun::star::uno::Reference<
                                     ::com::sun::star::beans::XPropertySet>& _xColumn,
                                     bool _bPrimaryKey);
+
+        OTableWindow( Window* pParent, OTableWindowData* pTabWinData);
     public:
         TYPEINFO();
-        OTableWindow( Window* pParent, OTableWindowData* pTabWinData);
+
         virtual ~OTableWindow();
 
         // spaeter Constructor, siehe auch CreateListbox und FillListbox
@@ -196,6 +198,12 @@ namespace dbaui
         ::rtl::OUString             GetComposedName() const { return m_pData->GetComposedName(); }
         OTableWindowListBox*        GetListBox() const { return m_pListBox; }
         OTableWindowData*           GetData() const { return m_pData; }
+
+        /** returns the name which should be used when displaying join or relations
+            @return
+                The composed name or the window name.
+        */
+        virtual ::rtl::OUString     GetName() const = 0;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess> GetOriginalColumns() const { ::osl::MutexGuard aGuard( m_aMutex  ); return m_xColumns; }
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>    GetTable() const { ::osl::MutexGuard aGuard( m_aMutex  ); return m_xTable; }
 

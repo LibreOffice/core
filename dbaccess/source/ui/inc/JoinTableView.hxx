@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinTableView.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: oj $ $Date: 2002-06-24 07:49:59 $
+ *  last change: $Author: oj $ $Date: 2002-11-08 09:27:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -324,6 +324,14 @@ namespace dbaui
 
         virtual OTableWindowData* CreateImpl(const ::rtl::OUString& _rComposedName,
                                              const ::rtl::OUString& _rWinName);
+
+        /** factory method to create table windows
+            @param  _pData
+                The data corresponding to the window.
+            @return
+                The new TableWindow
+        */
+        virtual OTableWindow* createWindow(OTableWindowData* _pData) = 0;
 
     private:
         void    InitColors();

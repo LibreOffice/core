@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RelationControl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2002-02-08 08:56:33 $
+ *  last change: $Author: oj $ $Date: 2002-11-08 09:27:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,7 @@ namespace dbaui
                     the connection data which is used to init the control
         */
         void Init(OTableConnectionData* _pConnData);
+        void lateInit();
 
         BOOL SaveModified();
 

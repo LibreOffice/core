@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryTableView.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2002-05-22 11:09:25 $
+ *  last change: $Author: oj $ $Date: 2002-11-08 09:27:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,8 @@ namespace dbaui
     protected:
         virtual void ConnDoubleClicked(OTableConnection* pConnection);
         virtual void KeyInput(const KeyEvent& rEvt);
+
+        virtual OTableWindow* createWindow(OTableWindowData* _pData);
     public:
         TYPEINFO();
         OQueryTableView(Window* pParent,OQueryDesignView* pView);

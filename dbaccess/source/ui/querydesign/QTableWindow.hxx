@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QTableWindow.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2002-06-27 08:21:02 $
+ *  last change: $Author: oj $ $Date: 2002-11-08 09:26:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,8 @@ namespace dbaui
 
         BOOL            ExistsField(const ::rtl::OUString& strFieldName, OTableFieldDescRef& rInfo);
         BOOL            ExistsAVisitedConn() const;
+
+        virtual ::rtl::OUString     GetName() const { return GetWinName(); }
 
     protected:
         virtual void    KeyInput( const KeyEvent& rEvt );
