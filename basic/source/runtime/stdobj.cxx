@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stdobj.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-15 16:37:47 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 18:48:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -339,6 +339,9 @@ static Methods aMethods[] = {
   { "Variant1",     SbxVARIANT },
   { "Variant2",     SbxVARIANT },
 
+{ "Input",          SbxSTRING,    2 | _FUNCTION | _COMPTMASK, RTLNAME(Input)},
+  { "Number",       SbxLONG },
+  { "FileNumber",   SbxLONG },
 { "InputBox",       SbxSTRING,    5 | _FUNCTION, RTLNAME(InputBox)          },
   { "Prompt",       SbxSTRING },
   { "Title",        SbxSTRING,        _OPT },
