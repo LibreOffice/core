@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: hr $ $Date: 2004-12-13 12:50:24 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 13:27:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -529,7 +529,7 @@ ULONG SfxApplication::LoadTemplate( SfxObjectShellLock& xDoc, const String &rFil
 
 //REMOVE                // the following operations should be done in one step
 //REMOVE                xDoc->DoHandsOff();
-               if ( !xDoc->DoSaveCompleted( xTempStorage ) )
+            if ( !xDoc->DoSaveCompleted( new SfxMedium( xTempStorage, String() ) ) )
                 throw uno::RuntimeException();
         }
         catch( uno::Exception& )
