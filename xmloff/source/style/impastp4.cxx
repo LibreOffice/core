@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impastp4.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-20 10:15:09 $
+ *  last change: $Author: sab $ $Date: 2001-01-09 11:45:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -426,9 +426,11 @@ void SvXMLAutoStylePoolP_Impl::exportXML(
                     sal_Int32 nIndex = 0;
                     UniReference< XMLPropertySetMapper > aPropMapper =
                         pFamily->mxMapper->getPropertySetMapper();
+                    sal_Int16 nContextID;
                     while(nIndex < aPropMapper->GetEntryCount() && nEnd == -1)
                     {
-                        if (aPropMapper->GetEntryContextId( nIndex ) & CTF_PM_FLAGMASK)
+                        nContextID = aPropMapper->GetEntryContextId( nIndex );
+                        if (nContextID && ((nContextID & CTF_PM_FLAGMASK) != XML_PM_CTF_START))
                             nEnd = nIndex;
                         nIndex++;
                     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PageMasterImportContext.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-15 14:03:33 $
+ *  last change: $Author: sab $ $Date: 2001-01-09 11:45:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,9 +184,11 @@ SvXMLImportContext *PageStyleContext::CreateChildContext(
             sal_Int32 nEndIndex (-1);
             sal_Bool bEnd(sal_False);
             sal_Int32 nIndex = 0;
+            sal_Int16 nContextID;
             while ( nIndex < rMapper->GetEntryCount() && !bEnd)
             {
-                if ((rMapper->GetEntryContextId( nIndex ) & CTF_PM_FLAGMASK) != 0)
+                nContextID = rMapper->GetEntryContextId( nIndex );
+                if (nContextID && ((nContextID & CTF_PM_FLAGMASK) != XML_PM_CTF_START))
                 {
                     nEndIndex = nIndex;
                     bEnd = sal_True;
