@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optcolor.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: kz $ $Date: 2002-11-25 15:07:25 $
+ *  last change: $Author: pb $ $Date: 2002-11-28 08:43:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -550,9 +550,18 @@ TabPage RID_SVXPAGE_COLORCONFIG
             };
             LB_WN( TABLEBOUNDARIES, 5 )
 
+            FixedText FT_FONTCOLOR
+            {
+                FT_POS_SIZE( 6 );
+                Text = "Schriftfarbe" ;
+                Text [ ENGLISH ] = "Font color" ;
+                Text[ english_us ] = "Font color";
+            };
+            LB_WN( FONTCOLOR, 6 )
+
             CheckBox CB_LINKS
             {
-                CB_POS_SIZE( 6 );
+                CB_POS_SIZE( 7 );
                 Text = "Unbesuchte Verknüpfungen" ;
                 Text [ ENGLISH ] = "Unvisited Links" ;
                 Text[ english_us ] = "Unvisited links";
@@ -577,11 +586,11 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ catalan ] = "Unvisited Links (new documents only)";
                 Text[ thai ] = "Unvisited Links (new documents only)";
             };
-            LB_WN( LINKS, 6 )
+            LB_WN( LINKS, 7 )
 
             CheckBox CB_LINKSVISITED
             {
-                CB_POS_SIZE( 7 );
+                CB_POS_SIZE( 8 );
                 Text = "Besuchte Verknüpfungen" ;
                 Text [ ENGLISH ] = "Visited Links" ;
                 Text[ english_us ] = "Visited links";
@@ -606,11 +615,11 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ catalan ] = "Visited Links (new documents only)";
                 Text[ thai ] = "Visited Links (new documents only)";
             };
-            LB_WN( LINKSVISITED, 7 )
+            LB_WN( LINKSVISITED, 8 )
 
             FixedText FT_SPELL
             {
-                FT_POS_SIZE( 8 );
+                FT_POS_SIZE( 9 );
                 Text = "AutoRechtschreibung" ;
                 Text [ ENGLISH ] = "AutoSpellcheck" ;
                 Text[ english_us ] = "AutoSpellcheck";
@@ -635,11 +644,11 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ catalan ] = "AutoSpellcheck";
                 Text[ thai ] = "AutoSpellcheck";
             };
-            LB_WN( SPELL, 8 )
+            LB_WN( SPELL, 9 )
 
             FixedText FT_WRITER
             {
-                FT_SEP_POS_SIZE( 9 );
+                FT_SEP_POS_SIZE( 10 );
                 Text = "Textdokument" ;
                 Text [ ENGLISH ] = "Text Document" ;
                 Text[ english_us ] = "Text Document";
@@ -667,7 +676,7 @@ TabPage RID_SVXPAGE_COLORCONFIG
 
             FixedText FT_WRITERTEXTGRID
             {
-                FT_POS_SIZE( 10 );
+                FT_POS_SIZE( 11 );
                 Text = "Raster" ;
                 Text [ ENGLISH ] = "Grid" ;
                 Text[ english_us ] = "Grid";
@@ -692,11 +701,11 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ catalan ] = "Grid";
                 Text[ thai ] = "Grid";
             };
-            LB_WN( WRITERTEXTGRID, 10 )
+            LB_WN( WRITERTEXTGRID, 11 )
 
             CheckBox CB_WRITERFIELDSHADINGS
             {
-                CB_POS_SIZE( 11 );
+                CB_POS_SIZE( 12 );
                 Text = "Feldhinterlegung" ;
                 Text [ ENGLISH ] = "Field shadings" ;
                 Text[ english_us ] = "Field shadings";
@@ -721,11 +730,11 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ catalan ] = "Field shadings";
                 Text[ thai ] = "Field shadings";
             };
-            LB_WN( WRITERFIELDSHADINGS, 11 )
+            LB_WN( WRITERFIELDSHADINGS, 12 )
 
             CheckBox CB_WRITERIDXSHADINGS
             {
-                CB_POS_SIZE( 12 );
+                CB_POS_SIZE( 13 );
                 Text = "Verzeichnishinterlegung" ;
                 Text [ ENGLISH ] = "Index and table shadings" ;
                 Text[ english_us ] = "Index and table shadings";
@@ -750,11 +759,11 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ catalan ] = "Index and table shadings";
                 Text[ thai ] = "Index and table shadings";
             };
-            LB_WN( WRITERIDXSHADINGS, 12 )
+            LB_WN( WRITERIDXSHADINGS, 13 )
 
             FixedText FT_WRITERNOTESINDICATOR
             {
-                FT_POS_SIZE( 13 );
+                FT_POS_SIZE( 14 );
                 Text = "Notizanzeiger" ;
                 Text [ ENGLISH ] = "Note indicator" ;
                 Text[ english_us ] = "Note indicator";
@@ -779,11 +788,11 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ catalan ] = "Note indicator";
                 Text[ thai ] = "Note indicator";
             };
-            LB_WN( WRITERNOTESINDICATOR, 13 )
+            LB_WN( WRITERNOTESINDICATOR, 14 )
 
             FixedText FT_WRITERSCRIPTINDICATOR
             {
-                FT_POS_SIZE( 14 );
+                FT_POS_SIZE( 15 );
                 Text = "Skriptanzeiger" ;
                 Text [ ENGLISH ] = "Script indicator" ;
                 Text[ english_us ] = "Script indicator";
@@ -808,11 +817,11 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ catalan ] = "Script indicator";
                 Text[ thai ] = "Script indicator";
             };
-            LB_WN( WRITERSCRIPTINDICATOR, 14 )
+            LB_WN( WRITERSCRIPTINDICATOR, 15 )
 
             CheckBox CB_WRITERSECTIONBOUNDARIES
             {
-                CB_POS_SIZE( 15 );
+                CB_POS_SIZE( 16 );
                 Text = "Bereichsumrandungen" ;
                 Text [ ENGLISH ] = "Section boundaries" ;
                 Text[ english_us ] = "Section boundaries";
@@ -837,19 +846,19 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ catalan ] = "Section boundaries";
                 Text[ thai ] = "Section boundaries";
             };
-            LB_WN( WRITERSECTIONBOUNDARIES, 15 )
+            LB_WN( WRITERSECTIONBOUNDARIES, 16 )
 
             FixedText FT_WRITERPAGEBREAKS
             {
-                FT_POS_SIZE( 16 );
+                FT_POS_SIZE( 17 );
                 Text = "Seiten- und Spaltenumbrüche" ;
                 Text[ english_us ] = "Page and column breaks";
             };
-            LB_WN( WRITERPAGEBREAKS, 16 )
+            LB_WN( WRITERPAGEBREAKS, 17 )
 
             FixedText FT_WRITERDIRECTCURSOR
             {
-                FT_POS_SIZE( 17 );
+                FT_POS_SIZE( 18 );
                 Text = "Direkt-Cursor" ;
                 Text [ ENGLISH ] = "Direct Cursor" ;
                 Text[ english_us ] = "Direct cursor";
@@ -874,11 +883,11 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ catalan ] = "Direct Cursor";
                 Text[ thai ] = "Direct Cursor";
             };
-            LB_WN( WRITERDIRECTCURSOR, 17 )
+            LB_WN( WRITERDIRECTCURSOR, 18 )
 
             FixedText FT_HTML
             {
-                FT_SEP_POS_SIZE( 18 );
+                FT_SEP_POS_SIZE( 19 );
                 Text = "HTML-Dokument" ;
                 Text [ ENGLISH ] = "HTML document" ;
                 Text[ english_us ] = "HTML Document";
@@ -906,7 +915,7 @@ TabPage RID_SVXPAGE_COLORCONFIG
 
             FixedText FT_HTMLSGML
             {
-                FT_POS_SIZE( 19 );
+                FT_POS_SIZE( 20 );
                 Text = "SGML Syntax-Hervorhebung" ;
                 Text [ ENGLISH ] = "SGML syntax highlighting" ;
                 Text[ english_us ] = "SGML syntax highlighting";
@@ -931,11 +940,11 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ catalan ] = "SGML syntax highlighting";
                 Text[ thai ] = "SGML syntax highlighting";
             };
-            LB_WN( HTMLSGML, 19 )
+            LB_WN( HTMLSGML, 20 )
 
             FixedText FT_HTMLCOMMENT
             {
-                FT_POS_SIZE( 20 );
+                FT_POS_SIZE( 21 );
                 Text = "Kommentar-Hervorhebung" ;
                 Text [ ENGLISH ] = "Comment highlighting" ;
                 Text[ english_us ] = "Comment highlighting";
@@ -960,11 +969,11 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ catalan ] = "Comment highlighting";
                 Text[ thai ] = "Comment highlighting";
             };
-            LB_WN( HTMLCOMMENT, 20 )
+            LB_WN( HTMLCOMMENT, 21 )
 
             FixedText FT_HTMLKEYWORD
             {
-                FT_POS_SIZE( 21 );
+                FT_POS_SIZE( 22 );
                 Text = "Schlüsselwort-Hervorhebung" ;
                 Text [ ENGLISH ] = "Keyword highlighting" ;
                 Text[ english_us ] = "Keyword highlighting";
@@ -989,11 +998,11 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ catalan ] = "Keyword highlighting";
                 Text[ thai ] = "Keyword highlighting";
             };
-            LB_WN( HTMLKEYWORD, 21 )
+            LB_WN( HTMLKEYWORD, 22 )
 
             FixedText FT_HTMLUNKNOWN
             {
-                FT_POS_SIZE( 22 );
+                FT_POS_SIZE( 23 );
                 Text = "Text" ;
                 Text [ ENGLISH ] = "Text" ;
                 Text[ english_us ] = "Text";
@@ -1018,11 +1027,11 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ catalan ] = "Text";
                 Text[ thai ] = "à¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡";
             };
-            LB_WN( HTMLUNKNOWN, 22 )
+            LB_WN( HTMLUNKNOWN, 23 )
 
             FixedText FT_CALC
             {
-                FT_SEP_POS_SIZE( 23 );
+                FT_SEP_POS_SIZE( 24 );
                 Text = "Tabellendokument" ;
                 Text [ ENGLISH ] = "Spreadsheet" ;
                 Text[ english_us ] = "Spreadsheet";
@@ -1050,7 +1059,7 @@ TabPage RID_SVXPAGE_COLORCONFIG
 
             FixedText FT_CALCGRID
             {
-                FT_POS_SIZE( 24 );
+                FT_POS_SIZE( 25 );
                 Text = "Gitterlinien" ;
                 Text [ ENGLISH ] = "Grid lines" ;
                 Text[ english_us ] = "Grid lines";
@@ -1075,11 +1084,11 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ catalan ] = "Grid lines";
                 Text[ thai ] = "Grid lines";
             };
-            LB_WN( CALCGRID, 24 )
+            LB_WN( CALCGRID, 25 )
 
             FixedText FT_CALCPAGEBREAK
             {
-                FT_POS_SIZE( 25 );
+                FT_POS_SIZE( 26 );
                 Text = "Seitenumbrüche" ;
                 Text [ ENGLISH ] = "Page breaks" ;
                 Text[ english_us ] = "Page breaks";
@@ -1104,11 +1113,11 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ catalan ] = "Page breaks";
                 Text[ thai ] = "Page breaks";
             };
-            LB_WN( CALCPAGEBREAK, 25 )
+            LB_WN( CALCPAGEBREAK, 26 )
 
             FixedText FT_CALCPAGEBREAKMANUAL
             {
-                FT_POS_SIZE( 26 );
+                FT_POS_SIZE( 27 );
                 Text = "Manuelle Seitenumbrüche" ;
                 Text [ ENGLISH ] = "Manual page breaks" ;
                 Text[ english_us ] = "Manual page breaks";
@@ -1133,11 +1142,11 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ catalan ] = "Manual page breaks";
                 Text[ thai ] = "Manual page breaks";
             };
-            LB_WN( CALCPAGEBREAKMANUAL, 26 )
+            LB_WN( CALCPAGEBREAKMANUAL, 27 )
 
             FixedText FT_CALCPAGEBREAKAUTO
             {
-                FT_POS_SIZE( 27 );
+                FT_POS_SIZE( 28 );
                 Text = "Automatische Seitenumbrüche" ;
                 Text [ ENGLISH ] = "Automatic page breaks" ;
                 Text[ english_us ] = "Automatic page breaks";
@@ -1162,11 +1171,11 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ catalan ] = "Automatic page breaks";
                 Text[ thai ] = "Automatic page breaks";
             };
-            LB_WN( CALCPAGEBREAKAUTO, 27 )
+            LB_WN( CALCPAGEBREAKAUTO, 28 )
 
             FixedText FT_CALCDETECTIVE
             {
-                FT_POS_SIZE( 28 );
+                FT_POS_SIZE( 29 );
                 Text = "Detektiv" ;
                 Text [ ENGLISH ] = "Detective" ;
                 Text[ english_us ] = "Detective";
@@ -1191,11 +1200,11 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ catalan ] = "Detective";
                 Text[ thai ] = "Detective";
             };
-            LB_WN( CALCDETECTIVE, 28 )
+            LB_WN( CALCDETECTIVE, 29 )
 
             FixedText FT_CALCDETECTIVEERROR
             {
-                FT_POS_SIZE( 29 );
+                FT_POS_SIZE( 30 );
                 Text = "Detektiv-Fehler" ;
                 Text [ ENGLISH ] = "Detective error"  ;
                 Text[ english_us ] = "Detective error";
@@ -1220,11 +1229,11 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ catalan ] = "Detective error";
                 Text[ thai ] = "Detective error";
             };
-            LB_WN( CALCDETECTIVEERROR, 29 )
+            LB_WN( CALCDETECTIVEERROR, 30 )
 
             FixedText FT_CALCREFERENCE
             {
-                FT_POS_SIZE( 30 );
+                FT_POS_SIZE( 31 );
                 Text = "Referenzen" ;
                 Text [ ENGLISH ] = "References" ;
                 Text[ english_us ] = "References";
@@ -1249,11 +1258,11 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ catalan ] = "References";
                 Text[ thai ] = "References";
             };
-            LB_WN( CALCREFERENCE, 30 )
+            LB_WN( CALCREFERENCE, 31 )
 
             FixedText FT_CALCNOTESBACKGROUND
             {
-                FT_POS_SIZE( 31 );
+                FT_POS_SIZE( 32 );
                 Text = "Notizhintergrund" ;
                 Text [ ENGLISH ] = "Notes background" ;
                 Text[ english_us ] = "Notes background";
@@ -1278,11 +1287,11 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ catalan ] = "Notes background";
                 Text[ thai ] = "Notes background";
             };
-            LB_WN( CALCNOTESBACKGROUND, 31 )
+            LB_WN( CALCNOTESBACKGROUND, 32 )
 
             FixedText FT_DRAW
             {
-                FT_SEP_POS_SIZE( 32 );
+                FT_SEP_POS_SIZE( 33 );
                 Text = "Zeichnung / Präsentation" ;
                 Text [ ENGLISH ] = "Drawing / Presentation" ;
                 Text[ english_us ] = "Drawing / Presentation";
@@ -1310,7 +1319,7 @@ TabPage RID_SVXPAGE_COLORCONFIG
 
             FixedText FT_DRAWGRID
             {
-                FT_POS_SIZE( 33 );
+                FT_POS_SIZE( 34 );
                 Text = "Raster" ;
                 Text [ ENGLISH ] = "Grid" ;
                 Text[ english_us ] = "Grid";
@@ -1335,11 +1344,11 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ catalan ] = "Grid";
                 Text[ thai ] = "Grid";
             };
-            LB_WN( DRAWGRID, 33 )
+            LB_WN( DRAWGRID, 34 )
 
             FixedText FT_BASIC
             {
-                FT_SEP_POS_SIZE( 34 );
+                FT_SEP_POS_SIZE( 35 );
                 Text = "Basic Syntaxhervorhebung" ;
                 Text [ ENGLISH ] = "Basic Syntax Highlighting" ;
                 Text[ language_user1 ] = "EM July 31, 2002: Title of a section";
@@ -1368,7 +1377,7 @@ TabPage RID_SVXPAGE_COLORCONFIG
 
             FixedText FT_BASICIDENTIFIER
             {
-                FT_POS_SIZE( 35 );
+                FT_POS_SIZE( 36 );
                 Text = "Bezeichner" ;
                 Text [ ENGLISH ] = "Identifier" ;
                 Text[ english_us ] = "Identifier";
@@ -1393,11 +1402,11 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ catalan ] = "Identifier";
                 Text[ thai ] = "Identifier";
             };
-            LB_WN( BASICIDENTIFIER, 35 )
+            LB_WN( BASICIDENTIFIER, 36 )
 
             FixedText FT_BASICCOMMENT
             {
-                FT_POS_SIZE( 36 );
+                FT_POS_SIZE( 37 );
                 Text = "Kommentar" ;
                 Text [ ENGLISH ] = "Comment" ;
                 Text[ english_us ] = "Comment";
@@ -1422,11 +1431,11 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ catalan ] = "Comment";
                 Text[ thai ] = "Comment";
             };
-            LB_WN( BASICCOMMENT, 36 )
+            LB_WN( BASICCOMMENT, 37 )
 
             FixedText FT_BASICNUMBER
             {
-                FT_POS_SIZE( 37 );
+                FT_POS_SIZE( 38 );
                 Text = "Zahl" ;
                 Text [ ENGLISH ] = "Number" ;
                 Text[ english_us ] = "Number";
@@ -1451,11 +1460,11 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ catalan ] = "Number";
                 Text[ thai ] = "Number";
             };
-            LB_WN( BASICNUMBER, 37 )
+            LB_WN( BASICNUMBER, 38 )
 
             FixedText FT_BASICSTRING
             {
-                FT_POS_SIZE( 38 );
+                FT_POS_SIZE( 39 );
                 Text = "Zeichenkette" ;
                 Text [ ENGLISH ] = "String" ;
                 Text[ english_us ] = "String";
@@ -1480,11 +1489,11 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ catalan ] = "String";
                 Text[ thai ] = "String";
             };
-            LB_WN( BASICSTRING, 38 )
+            LB_WN( BASICSTRING, 39 )
 
             FixedText FT_BASICOPERATOR
             {
-                FT_POS_SIZE( 39 );
+                FT_POS_SIZE( 40 );
                 Text = "Operator" ;
                 Text [ ENGLISH ] = "Operator" ;
                 Text[ english_us ] = "Operator";
@@ -1509,11 +1518,11 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ catalan ] = "Operator";
                 Text[ thai ] = "Operator";
             };
-            LB_WN( BASICOPERATOR, 39 )
+            LB_WN( BASICOPERATOR, 40 )
 
             FixedText FT_BASICKEYWORD
             {
-                FT_POS_SIZE( 40 );
+                FT_POS_SIZE( 41 );
                 Text = "Reservierter Ausdruck" ;
                 Text [ ENGLISH ] = "Reserved expression" ;
                 Text[ english_us ] = "Reserved expression";
@@ -1538,11 +1547,11 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ catalan ] = "Reserved expression";
                 Text[ thai ] = "Reserved expression";
             };
-            LB_WN( BASICKEYWORD, 40 )
+            LB_WN( BASICKEYWORD, 41 )
 
             FixedText FT_BASICERROR
             {
-                FT_POS_SIZE( 41 );
+                FT_POS_SIZE( 42 );
                 Text = "Fehler" ;
                 Text [ ENGLISH ] = "Error" ;
                 Text[ english_us ] = "Error";
@@ -1567,7 +1576,7 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ catalan ] = "Error";
                 Text[ thai ] = "Error";
             };
-            LB_WN( BASICERROR, 41 )
+            LB_WN( BASICERROR, 42 )
 
         };
     };
