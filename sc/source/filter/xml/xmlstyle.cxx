@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyle.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-15 09:25:53 $
+ *  last change: $Author: sab $ $Date: 2001-02-26 09:08:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,37 +127,37 @@ using namespace com::sun::star;
 
 const XMLPropertyMapEntry aXMLScCellStylesProperties[] =
 {
+    { "BottomBorder", XML_NAMESPACE_FO, sXML_border_bottom, XML_TYPE_BORDER, CTF_SC_BOTTOMBORDER },
+    { "BottomBorder", XML_NAMESPACE_STYLE, sXML_border_line_width_bottom, XML_TYPE_BORDER_WIDTH, CTF_SC_BOTTOMBORDERWIDTH },
     { "CellBackColor", XML_NAMESPACE_FO, sXML_background_color, XML_TYPE_COLORTRANSPARENT|MID_FLAG_MULTI_PROPERTY|MID_FLAG_MERGE_ATTRIBUTE, 0 },
     { "CellProtection", XML_NAMESPACE_STYLE, sXML_cell_protect, XML_SC_TYPE_CELLPROTECTION|MID_FLAG_MERGE_PROPERTY, 0 },
     { "CellProtection", XML_NAMESPACE_STYLE, sXML_print_content, XML_SC_TYPE_PRINTCONTENT|MID_FLAG_MERGE_PROPERTY, 0 },
-    { "NumberFormat", XML_NAMESPACE_STYLE, sXML_data_style_name, XML_TYPE_NUMBER|MID_FLAG_SPECIAL_ITEM, CTF_SC_NUMBERFORMAT},
+    { "ConditionalFormatXML", XML_NAMESPACE_STYLE, sXML_map, XML_TYPE_STRING|MID_FLAG_SPECIAL_ITEM, CTF_SC_MAP },
     { "HoriJustify", XML_NAMESPACE_FO, sXML_text_align, XML_SC_TYPE_HORIJUSTIFY|MID_FLAG_MERGE_PROPERTY, 0 },
     { "HoriJustify", XML_NAMESPACE_STYLE, sXML_text_align_source, XML_SC_TYPE_HORIJUSTIFYSOURCE|MID_FLAG_MERGE_PROPERTY, 0 },
 //  { "HoriJustify", XML_NAMESPACE_FO, sXML_text_align, XML_SC_TYPE_HORIJUSTIFY|MID_FLAG_MULTI_PROPERTY, CTF_SC_HORIJUSTIFY },
 //  { "HoriJustify", XML_NAMESPACE_STYLE, sXML_text_align_source, XML_SC_TYPE_HORIJUSTIFYSOURCE|MID_FLAG_MULTI_PROPERTY, CTF_SC_HORIJUSTIFY_SOURCE },
     { "IsCellBackgroundTransparent", XML_NAMESPACE_FO, sXML_background_color, XML_TYPE_ISTRANSPARENT|MID_FLAG_MULTI_PROPERTY|MID_FLAG_MERGE_ATTRIBUTE, 0 },
     { "IsTextWrapped", XML_NAMESPACE_FO, sXML_wrap_option, XML_SC_ISTEXTWRAPPED, 0 },
+    { "LeftBorder", XML_NAMESPACE_FO, sXML_border, XML_TYPE_BORDER, CTF_SC_ALLBORDER },
+    { "LeftBorder", XML_NAMESPACE_FO, sXML_border_left, XML_TYPE_BORDER, CTF_SC_LEFTBORDER },
+    { "LeftBorder", XML_NAMESPACE_STYLE, sXML_border_line_width, XML_TYPE_BORDER_WIDTH, CTF_SC_ALLBORDERWIDTH },
+    { "LeftBorder", XML_NAMESPACE_STYLE, sXML_border_line_width_left, XML_TYPE_BORDER_WIDTH, CTF_SC_LEFTBORDERWIDTH },
+    { "NumberFormat", XML_NAMESPACE_STYLE, sXML_data_style_name, XML_TYPE_NUMBER|MID_FLAG_SPECIAL_ITEM, CTF_SC_NUMBERFORMAT},
     { "Orientation", XML_NAMESPACE_FO, sXML_direction, XML_SC_TYPE_ORIENTATION, 0 },
-    { "ParaIndent", XML_NAMESPACE_FO, sXML_margin_left, XML_TYPE_MEASURE16, 0 },
     { "ParaBottomMargin", XML_NAMESPACE_FO, sXML_padding, XML_TYPE_MEASURE, CTF_SC_ALLPADDING },
     { "ParaBottomMargin", XML_NAMESPACE_FO, sXML_padding_bottom, XML_TYPE_MEASURE, CTF_SC_BOTTOMPADDING },
+    { "ParaIndent", XML_NAMESPACE_FO, sXML_margin_left, XML_TYPE_MEASURE16, 0 },
     { "ParaLeftMargin", XML_NAMESPACE_FO, sXML_padding_left, XML_TYPE_MEASURE, CTF_SC_LEFTPADDING },
     { "ParaRightMargin", XML_NAMESPACE_FO, sXML_padding_right, XML_TYPE_MEASURE, CTF_SC_RIGHTPADDING },
     { "ParaTopMargin", XML_NAMESPACE_FO, sXML_padding_top, XML_TYPE_MEASURE, CTF_SC_TOPPADDING },
+    { "RightBorder", XML_NAMESPACE_FO, sXML_border_right, XML_TYPE_BORDER, CTF_SC_RIGHTBORDER },
+    { "RightBorder", XML_NAMESPACE_STYLE, sXML_border_line_width_right, XML_TYPE_BORDER_WIDTH, CTF_SC_RIGHTBORDERWIDTH },
     { "RotateAngle", XML_NAMESPACE_STYLE, sXML_rotation_angle, XML_SC_TYPE_ROTATEANGLE, 0 },
     { "RotateReference", XML_NAMESPACE_STYLE, sXML_rotation_align, XML_SC_TYPE_ROTATEREFERENCE, 0},
     { "ShadowFormat", XML_NAMESPACE_STYLE, sXML_shadow, XML_TYPE_TEXT_SHADOW, 0 },
-    { "ConditionalFormatXML", XML_NAMESPACE_STYLE, sXML_map, XML_TYPE_STRING|MID_FLAG_SPECIAL_ITEM, CTF_SC_MAP },
-    { "LeftBorder", XML_NAMESPACE_FO, sXML_border, XML_TYPE_BORDER, CTF_SC_ALLBORDER },
-    { "LeftBorder", XML_NAMESPACE_FO, sXML_border_left, XML_TYPE_BORDER, CTF_SC_LEFTBORDER },
-    { "RightBorder", XML_NAMESPACE_FO, sXML_border_right, XML_TYPE_BORDER, CTF_SC_RIGHTBORDER },
     { "TopBorder", XML_NAMESPACE_FO, sXML_border_top, XML_TYPE_BORDER, CTF_SC_TOPBORDER },
-    { "BottomBorder", XML_NAMESPACE_FO, sXML_border_bottom, XML_TYPE_BORDER, CTF_SC_BOTTOMBORDER },
-    { "LeftBorder", XML_NAMESPACE_STYLE, sXML_border_line_width, XML_TYPE_BORDER_WIDTH, CTF_SC_ALLBORDERWIDTH },
-    { "LeftBorder", XML_NAMESPACE_STYLE, sXML_border_line_width_left, XML_TYPE_BORDER_WIDTH, CTF_SC_LEFTBORDERWIDTH },
-    { "RightBorder", XML_NAMESPACE_STYLE, sXML_border_line_width_right, XML_TYPE_BORDER_WIDTH, CTF_SC_RIGHTBORDERWIDTH },
     { "TopBorder", XML_NAMESPACE_STYLE, sXML_border_line_width_top, XML_TYPE_BORDER_WIDTH, CTF_SC_TOPBORDERWIDTH },
-    { "BottomBorder", XML_NAMESPACE_STYLE, sXML_border_line_width_bottom, XML_TYPE_BORDER_WIDTH, CTF_SC_BOTTOMBORDERWIDTH },
     { "VertJustify", XML_NAMESPACE_FO, sXML_vertical_align, XML_SC_TYPE_VERTJUSTIFY, 0},
 
 // CharacterProperties
@@ -197,8 +197,8 @@ const XMLPropertyMapEntry aXMLScCellStylesProperties[] =
 
 const XMLPropertyMapEntry aXMLScColumnStylesProperties[] =
 {
-    { "Width", XML_NAMESPACE_STYLE, sXML_column_width, XML_TYPE_MEASURE, 0 },
     { "IsManualPageBreak", XML_NAMESPACE_FO, sXML_break_before, XML_SC_TYPE_BREAKBEFORE, 0},
+    { "Width", XML_NAMESPACE_STYLE, sXML_column_width, XML_TYPE_MEASURE, 0 },
 //  { "OptimalWidth", XML_NAMESPACE_STYLE, sXML_use_optimal_column_width, XML_TYPE_BOOL, 0},
     { 0L }
 };
