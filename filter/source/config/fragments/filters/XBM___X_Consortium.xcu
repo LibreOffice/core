@@ -7,7 +7,7 @@
         <prop oor:name="FilterService"/>
         <prop oor:name="TemplateName"/>
         <prop oor:name="UIName">
-            <value xml:lang="en-US">XBM - X Bitmap</value>
+            <value>XBM - X Bitmap</value>
         </prop>
         <prop oor:name="Flags"><value>IMPORT ALIEN</value></prop>
     </node>
