@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WCPage.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-02 15:37:28 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:06:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,6 +243,7 @@ OCopyTable::~OCopyTable()
 //------------------------------------------------------------------------
 IMPL_LINK( OCopyTable, AppendDataClickHdl, Button*, pButton )
 {
+    DBG_CHKTHIS(OCopyTable,NULL);
     m_pParent->EnableButton(OCopyTableWizard::WIZARD_NEXT,sal_True);
     m_aFT_KeyName.Enable(sal_False);
     m_aCB_PrimaryColumn.Enable(sal_False);
@@ -254,6 +255,7 @@ IMPL_LINK( OCopyTable, AppendDataClickHdl, Button*, pButton )
 //------------------------------------------------------------------------
 IMPL_LINK( OCopyTable, RadioChangeHdl, Button*, pButton )
 {
+    DBG_CHKTHIS(OCopyTable,NULL);
     m_pParent->EnableButton(OCopyTableWizard::WIZARD_NEXT,pButton != &m_aRB_View);
     sal_Bool bKey = m_bPKeyAllowed && pButton != &m_aRB_View;
     m_aFT_KeyName.Enable(bKey && m_aCB_PrimaryColumn.IsChecked());
@@ -273,6 +275,7 @@ IMPL_LINK( OCopyTable, RadioChangeHdl, Button*, pButton )
 //------------------------------------------------------------------------
 IMPL_LINK( OCopyTable, KeyClickHdl, Button*, pButton )
 {
+    DBG_CHKTHIS(OCopyTable,NULL);
     m_edKeyName.Enable(m_aCB_PrimaryColumn.IsChecked());
     m_aFT_KeyName.Enable(m_aCB_PrimaryColumn.IsChecked());
     return 0;
@@ -280,6 +283,7 @@ IMPL_LINK( OCopyTable, KeyClickHdl, Button*, pButton )
 //------------------------------------------------------------------------
 sal_Bool OCopyTable::LeavePage()
 {
+    DBG_CHKTHIS(OCopyTable,NULL);
     m_pParent->m_bCreatePrimaryColumn   = (m_bPKeyAllowed && m_aCB_PrimaryColumn.IsEnabled()) ? m_aCB_PrimaryColumn.IsChecked() : sal_False;
     m_pParent->m_aKeyName               = m_pParent->m_bCreatePrimaryColumn ? m_edKeyName.GetText() : String();
 
@@ -378,15 +382,21 @@ sal_Bool OCopyTable::LeavePage()
 //------------------------------------------------------------------------
 void OCopyTable::ActivatePage()
 {
+    DBG_CHKTHIS(OCopyTable,NULL);
     m_pParent->GetOKButton().Enable( TRUE );
     m_eOldStyle = m_pParent->getCreateStyle();
     m_edTableName.GrabFocus();
 }
 //------------------------------------------------------------------------
-String OCopyTable::GetTitle() const { return String(ModuleRes(STR_WIZ_TABLE_COPY)); }
+String OCopyTable::GetTitle() const
+{
+    DBG_CHKTHIS(OCopyTable,NULL);
+    return String(ModuleRes(STR_WIZ_TABLE_COPY));
+}
 //------------------------------------------------------------------------
 void OCopyTable::Reset()
 {
+    DBG_CHKTHIS(OCopyTable,NULL);
     m_bFirstTime = sal_False;
 
     m_edTableName.SetText( m_pParent->m_sName );
@@ -395,6 +405,7 @@ void OCopyTable::Reset()
 //------------------------------------------------------------------------
 sal_Bool OCopyTable::checkAppendData()
 {
+    DBG_CHKTHIS(OCopyTable,NULL);
     m_pParent->clearDestColumns();
     m_pParent->m_xDestObject = NULL;
     Reference<XTablesSupplier > xSup(m_pParent->m_xConnection,UNO_QUERY);
