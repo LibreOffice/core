@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbcmds.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2001-02-12 13:17:09 $
+ *  last change: $Author: kso $ $Date: 2001-03-29 11:54:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -425,11 +425,13 @@ static uno::Reference< XContent > createNew(
             // Copy / Move
 
             // Is source a link? Create link in target folder then.
-            if ( bSourceIsLink &&
-                 ( nAttribs & ContentInfoAttribute::KIND_LINK ) )
+            if ( bSourceIsLink )
             {
-                // Match!
-                bMatch = sal_True;
+                if ( nAttribs & ContentInfoAttribute::KIND_LINK )
+                {
+                    // Match!
+                    bMatch = sal_True;
+                }
             }
             else
             {
