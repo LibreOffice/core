@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JavaLoader.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dbo $ $Date: 2002-06-14 13:12:10 $
+ *  last change: $Author: dbo $ $Date: 2002-07-03 08:49:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,7 @@ import java.net.MalformedURLException;
  * service. Therefor the <code>JavaLoader</code> activates external UNO components which are implemented in Java.
  * The loader is used by the <code>ServiceManger</code>.
  * <p>
- * @version     $Revision: 1.5 $ $ $Date: 2002-06-14 13:12:10 $
+ * @version     $Revision: 1.6 $ $ $Date: 2002-07-03 08:49:50 $
  * @author      Markus Herzog
  * @see         com.sun.star.loader.XImplementationLoader
  * @see         com.sun.star.loader.Java
@@ -155,18 +155,18 @@ public class JavaLoader implements XImplementationLoader,
                     m_xMacroExpander = (XMacroExpander)AnyConverter.toObject(
                         new Type( XMacroExpander.class ),
                         xContext.getValueByName( "/singletons/com.sun.star.util.theMacroExpander" ) );
-                    // decode uric class chars
-                    String macro = URLDecoder.decode(
-                        url.substring( EXPAND_PROTOCOL_PREFIX.length() ) /* cut protocol */ );
-                    // expand macro string
-                    String ret = m_xMacroExpander.expandMacros( macro );
-                    if (DEBUG)
-                    {
-                        System.err.println(
-                            "JavaLoader.expand_url(): " + url + " => " + macro + " => " + ret );
-                    }
-                    return ret;
                 }
+                // decode uric class chars
+                String macro = URLDecoder.decode(
+                    url.substring( EXPAND_PROTOCOL_PREFIX.length() ) /* cut protocol */ );
+                // expand macro string
+                String ret = m_xMacroExpander.expandMacros( macro );
+                if (DEBUG)
+                {
+                    System.err.println(
+                        "JavaLoader.expand_url(): " + url + " => " + macro + " => " + ret );
+                }
+                return ret;
             }
             catch (com.sun.star.uno.Exception exc)
             {
@@ -485,7 +485,7 @@ public class JavaLoader implements XImplementationLoader,
  * the registration at a registry in a default manner. The class is used by the <code>JavaLoader</code> if the
  * a component does not comes with its own methods for creating a factory or for the registration.
  * <p>
- * @version     $Revision: 1.5 $ $ $Date: 2002-06-14 13:12:10 $
+ * @version     $Revision: 1.6 $ $ $Date: 2002-07-03 08:49:50 $
  * @author      Markus Herzog
  * @since       UDK1.0
  */
