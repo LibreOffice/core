@@ -2,9 +2,9 @@
  *
  *  $RCSfile: syswin.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: ssa $ $Date: 2002-03-14 08:51:18 $
+ *  last change: $Author: ssa $ $Date: 2002-03-15 13:53:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,6 +192,19 @@ long SystemWindow::PreNotify( NotifyEvent& rNEvt )
                 SystemWindow* pW = (SystemWindow*)ImplGetFrameWindow()->ImplGetWindow();
                 if ( pW )
                     pTList = pW->mpTaskPaneList;
+            }
+            if( !pTList )
+            {
+                // search topmost system window which is the one to handle dialog/toolbar cycling
+                SystemWindow *pSysWin = this;
+                Window *pWin = this;
+                while( pWin )
+                {
+                    pWin = pWin->GetParent();
+                    if( pWin && pWin->IsSystemWindow() )
+                        pSysWin = (SystemWindow*) pWin;
+                }
+                pTList = pSysWin->mpTaskPaneList;
             }
             if( pTList && pTList->HandleKeyEvent( *rNEvt.GetKeyEvent() ) )
                 return TRUE;
