@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 13:01:27 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 08:45:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -539,12 +539,12 @@ const BYTE* SwWW8ImplReader::TestApo(bool& rbStartApo, bool& rbStopApo,
     // text autoshape, e.g. #94418#)
     rpNowStyleApo = 0;
     if (!bTxbxFlySection)
-        rpNowStyleApo = pCollA[nAktColl].pWWFly;
+        rpNowStyleApo = StyleExists(nAktColl) ? pCollA[nAktColl].pWWFly : 0;
 
     rbStartApo = rbStopApo  = false;
 
     /*
-    ##1140##
+    #i1140#
     If I have a table and apply a style to one of its frames that should cause
     a paragraph that its applied to it to only exist as a seperate floating
     frame, then the behavour depends on which cell that it has been applied
@@ -558,23 +558,13 @@ const BYTE* SwWW8ImplReader::TestApo(bool& rbStartApo, bool& rbStopApo,
     in word 97 onwards and hidden away from the user
 
 
-    #i1532#
+    #i1532# & #i5379#
     If we are already a table in a frame then we must grab the para properties
     to see if we are still in that frame.
     */
 
-    if (nInTable && InLocalApo() && rpNowStyleApo && (!(pTableDesc &&
-        pTableDesc->GetAktCol())))
-    {
-        pSprm37       = 0;
-        pSprm29       = 0;
-        rpNowStyleApo = 0;
-    }
-    else
-    {
-        pSprm37 = pPlcxMan->HasParaSprm( bVer67 ? 37 : 0x2423 );
-        pSprm29 = pPlcxMan->HasParaSprm( bVer67 ? 29 : 0x261B );
-    }
+    pSprm37 = pPlcxMan->HasParaSprm( bVer67 ? 37 : 0x2423 );
+    pSprm29 = pPlcxMan->HasParaSprm( bVer67 ? 29 : 0x261B );
 
     // Is there some frame data here
     bool bNowApo = rpNowStyleApo || pSprm29 || pSprm37 || pTabPos;
@@ -601,7 +591,7 @@ const BYTE* SwWW8ImplReader::TestApo(bool& rbStartApo, bool& rbStopApo,
     //unit no matter what else happens. So if we are not in a table at
     //all, or if we are in the first cell then test that the last frame
     //data is the same as the current one
-    if (bNowApo && !bTableRowEnd && nCellLevel == nInTable && InLocalApo())
+    if (bNowApo && !bTableRowEnd && InLocalApo())
     {
         // two bordering eachother
         if (!TestSameApo(pSprm29, rpNowStyleApo, pTabPos))
@@ -948,8 +938,8 @@ void SwWW8ImplReader::StartAnl( const BYTE* pSprm13 )
         sNumRule = pTableDesc->GetNumRuleName();
         if( sNumRule.Len() )
         {
-            pNumRule = rDoc.FindNumRulePtr( sNumRule );
-            if( !pNumRule )
+            mpNumRule = rDoc.FindNumRulePtr( sNumRule );
+            if( !mpNumRule )
                 sNumRule.Erase();
             else
             {
@@ -964,21 +954,21 @@ void SwWW8ImplReader::StartAnl( const BYTE* pSprm13 )
     if (!sNumRule.Len() && pCollA[nAktColl].bHasStyNumRule)
     {
         sNumRule = pCollA[nAktColl].pFmt->GetNumRule().GetValue();
-        pNumRule = rDoc.FindNumRulePtr(sNumRule);
-        if (!pNumRule)
+        mpNumRule = rDoc.FindNumRulePtr(sNumRule);
+        if (!mpNumRule)
             sNumRule.Erase();
     }
 
     if (!sNumRule.Len())
     {
-        if (!pNumRule)
-            pNumRule = rDoc.GetNumRuleTbl()[rDoc.MakeNumRule(sNumRule)];
+        if (!mpNumRule)
+            mpNumRule = rDoc.GetNumRuleTbl()[rDoc.MakeNumRule(sNumRule)];
         if( pTableDesc )
         {
             if (!pS12)
                 pS12 = pPlcxMan->HasParaSprm(bVer67 ? 12 : 0xC63E); // sprmAnld
             if (!pS12 || !SVBT8ToByte( ((WW8_ANLD*)pS12)->fNumberAcross))
-                pTableDesc->SetNumRuleName( pNumRule->GetName() );
+                pTableDesc->SetNumRuleName( mpNumRule->GetName() );
         }
     }
 
@@ -986,7 +976,7 @@ void SwWW8ImplReader::StartAnl( const BYTE* pSprm13 )
 
     // NumRules ueber Stack setzen
     pCtrlStck->NewAttr(*pPaM->GetPoint(),
-            SfxStringItem(RES_FLTR_NUMRULE, pNumRule->GetName()));
+            SfxStringItem(RES_FLTR_NUMRULE, mpNumRule->GetName()));
 }
 
 
@@ -1004,27 +994,27 @@ void SwWW8ImplReader::NextAnlLine(const BYTE* pSprm13)
     if (*pSprm13 == 10 || *pSprm13 == 11)
     {
         nSwNumLevel = 0;
-        if (!pNumRule->GetNumFmt(nSwNumLevel))
+        if (!mpNumRule->GetNumFmt(nSwNumLevel))
         {
             // noch nicht definiert
             // sprmAnld o. 0
             const BYTE* pS12 = pPlcxMan->HasParaSprm(bVer67 ? 12 : 0xC63E);
-            SetAnld(pNumRule, (WW8_ANLD*)pS12, nSwNumLevel, false);
+            SetAnld(mpNumRule, (WW8_ANLD*)pS12, nSwNumLevel, false);
         }
     }
     else if (*pSprm13 <= MAXLEVEL)          // Bereich WW:1..9 -> SW:0..8
     {
         nSwNumLevel = *pSprm13 - 1;             // Gliederung
         // noch nicht definiert
-        if (!pNumRule->GetNumFmt(nSwNumLevel))
+        if (!mpNumRule->GetNumFmt(nSwNumLevel))
         {
             if (pNumOlst)                       // es gab ein OLST
-                SetNumOlst(pNumRule, pNumOlst , nSwNumLevel);
+                SetNumOlst(mpNumRule, pNumOlst , nSwNumLevel);
             else                                // kein Olst, nimm Anld
             {
                 // sprmAnld
                 const BYTE* pS12 = pPlcxMan->HasParaSprm(bVer67 ? 12 : 0xC63E);
-                SetAnld(pNumRule, (WW8_ANLD*)pS12, nSwNumLevel, false);
+                SetAnld(mpNumRule, (WW8_ANLD*)pS12, nSwNumLevel, false);
             }
         }
     }
@@ -1055,6 +1045,7 @@ void SwWW8ImplReader::StopAnl(bool bGoBack)
     nSwNumLevel = 0xff;
     nWwNumType = WW8_None;
     bAnl = false;
+    mpNumRule = 0; //#100doctest#
 }
 
 WW8TabBandDesc::WW8TabBandDesc( WW8TabBandDesc& rBand )
@@ -2043,7 +2034,7 @@ void WW8TabDesc::CalcDefaults()
 
 void WW8TabDesc::SetSizePosition(SwFrmFmt* pFrmFmt)
 {
-    SwFrmFmt* pApply=pFrmFmt;
+    SwFrmFmt* pApply = pFrmFmt;
     if (!pApply )
         pApply = pTable->GetFrmFmt();
     ASSERT(pApply,"No frame");
@@ -2184,7 +2175,9 @@ void WW8TabDesc::CreateSwTable()
             if ((eHori == HORI_NONE) || (eHori == HORI_LEFT) ||
                 (eHori == HORI_LEFT_AND_WIDTH))
             {
-                aHori.SetPos(aHori.GetPos()+GetMinLeft());
+                //With multiple table, use last table settings. Perhaps
+                //the maximum is what word does ?
+                aHori.SetPos(pIo->pSFlyPara->nXPos + GetMinLeft());
                 aHori.SetHoriOrient(HORI_NONE);
                 pIo->pSFlyPara->pFlyFmt->SetAttr(aHori);
             }
@@ -3053,18 +3046,7 @@ bool SwWW8ImplReader::StartTable(WW8_CP nStartCp)
             pTableDesc->pFlyFmt->SetAttr(SwFmtSurround(SURROUND_NONE));
             pTableDesc->pFlyFmt->SetAttr(aHori);
         }
-        else if (InEqualApo(nNewInTable) && pSFlyPara->pFlyFmt)
-        {
-            pTableDesc->SetSizePosition(pSFlyPara->pFlyFmt);
-            const SfxPoolItem *pItem;
-            if (SFX_ITEM_SET ==
-                pTableDesc->aItemSet.GetItemState(RES_FRM_SIZE, true, &pItem))
-            {
-                const SwFmtFrmSize *pSize = (const SwFmtFrmSize *)pItem;
-                pSFlyPara->BoxUpWidth(pSize->GetWidth());
-            }
-        }
-        else if (!InEqualApo(nNewInTable))
+        else
             pTableDesc->SetSizePosition(0);
         pTableDesc->UseSwTable();
     }
@@ -3635,6 +3617,7 @@ void WW8RStyle::Import1Style( USHORT nNr )
             pSI->nTxtFirstLineOfst = pj->nTxtFirstLineOfst;
             pSI->n81Flags = pj->n81Flags;
             pSI->n81BiDiFlags = pj->n81BiDiFlags;
+            pSI->bInvisFlag = pj->bInvisFlag;
 
             if (pj->pWWFly)
                 pSI->pWWFly = new WW8FlyPara(pIo->bVer67, pj->pWWFly);
