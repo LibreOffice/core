@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdxcgv.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mib $ $Date: 2001-02-06 15:30:57 $
+ *  last change: $Author: sj $ $Date: 2001-05-22 10:27:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -494,7 +494,7 @@ BOOL SdrExchangeView::Paste(const SdrModel& rMod, const Point& rPos, SdrObjList*
             else
             {
                 aStr += "von ";
-                aStr += nCloneErrCnt;
+                aStr += ByteString::CreateFromInt32( nCloneErrCnt );
                 aStr += " Zeichenobjekten.";
             }
 
@@ -541,7 +541,7 @@ void SdrExchangeView::ImpYank(ULONG nFormat, BOOL bClp) const
             SvMemoryStream aMemStream(4096,4096);
             aMemStream.SetVersion(SOFFICE_FILEFORMAT_50);
             // StyleSheetPool und Persist fehlt hier wohl noch ...
-            pModel->GetItemPool().SetFileFormatVersion( aMemStream.GetVersion() );
+            pModel->GetItemPool().SetFileFormatVersion( (sal_uInt16)aMemStream.GetVersion() );
             pModel->GetItemPool().Store(aMemStream);
             aMemStream<<*pModel;
             if (bClp) Clipboard::CopyData(aMemStream.GetData(),aMemStream.GetSize(),nSdrFormat);
@@ -1129,7 +1129,7 @@ SdrModel* SdrExchangeView::GetMarkedObjModel() const
         else
         {
             aStr += "von ";
-            aStr += nCloneErrCnt;
+            aStr += ByteString::CreateFromInt32( nCloneErrCnt );
             aStr += " Zeichenobjekten.";
         }
 
