@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: vg $ $Date: 2002-04-16 10:31:34 $
+ *  last change: $Author: hr $ $Date: 2002-04-16 11:31:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3750,7 +3750,7 @@ void Window::ImplGrabFocus( USHORT nFlags )
 #ifndef REMOTE_APPSERVER
                 mpFrame->ToTop( SAL_FRAME_TOTOP_GRABFOCUS );
 #else
-                mpFrame->ToTop();
+                mpFrame->ToTop(0);
 #endif
                 return;
             }
