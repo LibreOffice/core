@@ -2,9 +2,9 @@
  *
  *  $RCSfile: signal.c,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 11:06:51 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:41:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -214,7 +214,7 @@ static BOOL ReportCrash( LPEXCEPTION_POINTERS lpEP )
             GetCurrentProcessId(),
             lpEP,
             GetCurrentThreadId(),
-            fAutoReport ? _T(" -noui") : _T("") );
+            fAutoReport ? _T(" -noui -send") : _T(" -noui") );
 
         if (
             CreateProcess(
