@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfer.cxx,v $
  *
- *  $Revision: 1.61 $
+ *  $Revision: 1.62 $
  *
- *  last change: $Author: ka $ $Date: 2002-11-21 12:07:35 $
+ *  last change: $Author: dvo $ $Date: 2002-12-02 11:30:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1239,6 +1239,12 @@ void TransferableDataHelper::FillDataFlavorExVector( const Sequence< DataFlavor 
                     aFlavorEx.mnSotId = SOT_FORMAT_GDIMETAFILE;
                     rDataFlavorExVector.push_back( aFlavorEx );
                 }
+            }
+            else if ( SOT_FORMATSTR_ID_HTML_SIMPLE == aFlavorEx.mnSotId  )
+            {
+                // #104735# HTML_SIMPLE may also be inserted without comments
+                aFlavorEx.mnSotId = SOT_FORMATSTR_ID_HTML_NO_COMMENT;
+                rDataFlavorExVector.push_back( aFlavorEx );
             }
             else if( xMimeType.is() && xMimeType->getFullMediaType().equalsIgnoreAsciiCase( ::rtl::OUString::createFromAscii( "text/plain" ) ) )
             {
