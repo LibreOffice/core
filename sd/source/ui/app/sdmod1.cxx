@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod1.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: iha $ $Date: 2002-10-23 15:09:05 $
+ *  last change: $Author: ka $ $Date: 2002-11-05 15:37:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -621,7 +621,8 @@ void SdModule::Execute(SfxRequest& rReq)
 
                             // interner Sprung?
                             String aDocName(aBookmark.GetToken(0, '#'));
-                            if (aDocName.Len() > 0 &&
+                            if (aBookmark.Search( '#' ) != STRING_NOTFOUND &&
+                                aDocName.Len() > 0 &&
                                 pDocShell->GetMedium()->GetName() != aDocName &&
                                 pDocShell->GetName() != aDocName              &&
                                 aDocName.Search( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( ".wav" ) ) ) == STRING_NOTFOUND )
