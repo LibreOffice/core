@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animobjs.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 17:09:43 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:44:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -502,7 +502,9 @@ IMPL_LINK( SdAnimationWin, ClickRemoveBitmapHdl, void *, pBtn )
         {
             // Bitmapliste bereinigen
             long nCount = aBmpExList.Count();
-            for( long i = nCount - 1; i >= 0; i-- )
+            long i;
+
+            for( i = nCount - 1; i >= 0; i-- )
             {
                 pBitmapEx = static_cast< BitmapEx* >( aBmpExList.GetObject( i ) );
                 delete pBitmapEx;
@@ -1083,9 +1085,10 @@ void SdAnimationWin::CreateAnimObj( SdView& rView )
     const OutputDevice* pDefDev = Application::GetDefaultDevice();
     const ULONG         nCount = aBmpExList.Count();
     BitmapAdjustment    eBA = (BitmapAdjustment) aLbAdjustment.GetSelectEntryPos();
+    ULONG               i;
 
     // Groesste Bitmap ermitteln
-    for( ULONG i = 0; i < nCount; i++ )
+    for( i = 0; i < nCount; i++ )
     {
         const BitmapEx& rBmpEx = *static_cast< BitmapEx* >( aBmpExList.GetObject( i ) );
         const Graphic   aGraphic( rBmpEx );
