@@ -2,9 +2,9 @@
  *
  *  $RCSfile: btntext.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:39 $
+ *  last change: $Author: kz $ $Date: 2000-10-27 18:11:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,11 +216,11 @@ String SV_BUTTONTEXT_HELP
     TEXT[ russian ] = "Ñï~ğàâêà";
     TEXT[ polish ] = "~Pomoc";
     TEXT[ japanese ] = "ÍÙÌß(~H)";
-    TEXT[ chinese_simplified ] = "ÇóÖú(~H)";
+    TEXT[ chinese_simplified ] = "°ïÖú(~H)";
     TEXT[ chinese_traditional ] = "»¡©ú(~H)";
     TEXT[ arabic ] = "ãÓÇÚÏÉ";
     TEXT[ dutch ] = "~Help";
-    TEXT[ chinese_simplified ] = "ÇóÖú(~H)";
+    TEXT[ chinese_simplified ] = "°ïÖú(~H)";
     TEXT[ greek ] = "ÂïŞèåéá";
     TEXT[ korean ] = "µµ¿ò¸»(~H)";
     TEXT[ turkish ] = "~Yardım";
@@ -242,7 +242,7 @@ String SV_BUTTONTEXT_MORE
     TEXT[ english_us ] = "~More";
     TEXT[ russian ] = "Áîëüøå";
     TEXT[ polish ] = "~Dodatki";
-    TEXT[ japanese ] = "’Ç‰Á(~M)";
+    TEXT[ japanese ] = "µÌß¼®İ(~M)";
     TEXT[ chinese_simplified ] = "ÆäËû(~M)";
     TEXT[ chinese_traditional ] = "¨ä¥L(~M)";
     TEXT[ arabic ] = "ÅÖÇİÇÊ";
