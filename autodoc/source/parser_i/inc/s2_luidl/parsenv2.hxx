@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parsenv2.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 13:44:25 $
+ *  last change: $Author: obo $ $Date: 2005-01-27 11:31:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,6 +79,8 @@
 #include <ary_i/codeinf2.hxx>
 #endif
 
+
+class ParserInfo;
 
 namespace ary
 {
@@ -155,6 +157,8 @@ class UnoIDL_PE : virtual protected TokenProcessing_Types
                                                 { aMyNode.SetTokenResult( i_eDone, i_eWhat2DoWithEnvStack, i_pParseEnv2Push ); }
     virtual const ary::idl::Module &
                         CurNamespace() const;
+    virtual const ParserInfo &
+                        ParseInfo() const;
     ary::idl::Gate &    Gate() const            { return aMyNode.AryGate(); }
     TokenProcessing_Result &
                         TokenResult() const     { return aMyNode.TokenResult(); }
