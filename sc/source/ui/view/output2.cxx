@@ -2,9 +2,9 @@
  *
  *  $RCSfile: output2.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:45:09 $
+ *  last change: $Author: nn $ $Date: 2000-11-23 20:24:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,7 @@
 #include <svx/fhgtitem.hxx>
 #include <svx/langitem.hxx>
 #include <svx/rotmodit.hxx>
+#include <svx/scripttypeitem.hxx>
 #include <svtools/zforlist.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/metric.hxx>
@@ -132,7 +133,7 @@ public:
                 //  SetPattern = ex-SetVars
                 //  SetPatternSimple: ohne Font
 
-    void        SetPattern( const ScPatternAttr* pNew, const SfxItemSet* pSet, ScBaseCell* pCell );
+    void        SetPattern( const ScPatternAttr* pNew, const SfxItemSet* pSet, ScBaseCell* pCell, BYTE nScript );
     void        SetPatternSimple( const ScPatternAttr* pNew, const SfxItemSet* pSet );
 
     BOOL        SetText( ScBaseCell* pCell );   // TRUE -> pOldPattern vergessen
@@ -184,7 +185,7 @@ ScDrawStringsVars::~ScDrawStringsVars()
 }
 
 void ScDrawStringsVars::SetPattern( const ScPatternAttr* pNew, const SfxItemSet* pSet,
-                                    ScBaseCell* pCell )
+                                    ScBaseCell* pCell, BYTE nScript )
 {
     pPattern = pNew;
     pCondSet = pSet;
@@ -196,7 +197,7 @@ void ScDrawStringsVars::SetPattern( const ScPatternAttr* pNew, const SfxItemSet*
 
     //  Font
 
-    pPattern->GetFont( aFont, pRefDevice, &pOutput->aZoomY, pCondSet );
+    pPattern->GetFont( aFont, pRefDevice, &pOutput->aZoomY, pCondSet, nScript );
     aFont.SetAlign(ALIGN_BASELINE);
 
     //  Orientierung
@@ -626,11 +627,27 @@ inline BOOL StringDiffer( const ScPatternAttr*& rpOldPattern, const ScPatternAtt
         return TRUE;
     else if ( &rpNewPattern->GetItem( ATTR_FONT ) != &rpOldPattern->GetItem( ATTR_FONT ) )
         return TRUE;
+    else if ( &rpNewPattern->GetItem( ATTR_CJK_FONT ) != &rpOldPattern->GetItem( ATTR_CJK_FONT ) )
+        return TRUE;
+    else if ( &rpNewPattern->GetItem( ATTR_CTL_FONT ) != &rpOldPattern->GetItem( ATTR_CTL_FONT ) )
+        return TRUE;
     else if ( &rpNewPattern->GetItem( ATTR_FONT_HEIGHT ) != &rpOldPattern->GetItem( ATTR_FONT_HEIGHT ) )
+        return TRUE;
+    else if ( &rpNewPattern->GetItem( ATTR_CJK_FONT_HEIGHT ) != &rpOldPattern->GetItem( ATTR_CJK_FONT_HEIGHT ) )
+        return TRUE;
+    else if ( &rpNewPattern->GetItem( ATTR_CTL_FONT_HEIGHT ) != &rpOldPattern->GetItem( ATTR_CTL_FONT_HEIGHT ) )
         return TRUE;
     else if ( &rpNewPattern->GetItem( ATTR_FONT_WEIGHT ) != &rpOldPattern->GetItem( ATTR_FONT_WEIGHT ) )
         return TRUE;
+    else if ( &rpNewPattern->GetItem( ATTR_CJK_FONT_WEIGHT ) != &rpOldPattern->GetItem( ATTR_CJK_FONT_WEIGHT ) )
+        return TRUE;
+    else if ( &rpNewPattern->GetItem( ATTR_CTL_FONT_WEIGHT ) != &rpOldPattern->GetItem( ATTR_CTL_FONT_WEIGHT ) )
+        return TRUE;
     else if ( &rpNewPattern->GetItem( ATTR_FONT_POSTURE ) != &rpOldPattern->GetItem( ATTR_FONT_POSTURE ) )
+        return TRUE;
+    else if ( &rpNewPattern->GetItem( ATTR_CJK_FONT_POSTURE ) != &rpOldPattern->GetItem( ATTR_CJK_FONT_POSTURE ) )
+        return TRUE;
+    else if ( &rpNewPattern->GetItem( ATTR_CTL_FONT_POSTURE ) != &rpOldPattern->GetItem( ATTR_CTL_FONT_POSTURE ) )
         return TRUE;
     else if ( &rpNewPattern->GetItem( ATTR_FONT_UNDERLINE ) != &rpOldPattern->GetItem( ATTR_FONT_UNDERLINE ) )
         return TRUE;
@@ -696,6 +713,20 @@ BOOL lcl_IsValueDataAtPos( BOOL& bProgress, ScDocument* pDoc,
         return FALSE;
 }
 
+inline BYTE GetScriptType( ScDocument* pDoc, ScBaseCell* pCell,
+                            const ScPatternAttr* pPattern,
+                            const SfxItemSet* pCondSet )
+{
+    return pDoc->GetCellScriptType( pCell, pPattern->GetNumberFormat( pDoc->GetFormatTable(), pCondSet ) );
+}
+
+inline BOOL IsAmbiguousScript( BYTE nScript )
+{
+    return ( nScript != SCRIPTTYPE_LATIN &&
+             nScript != SCRIPTTYPE_ASIAN &&
+             nScript != SCRIPTTYPE_COMPLEX );
+}
+
 void ScOutputData::DrawStrings()
 {
     DBG_ASSERT( pDev == pRefDevice ||
@@ -711,6 +742,7 @@ void ScOutputData::DrawStrings()
 
     const ScPatternAttr* pOldPattern = NULL;
     const SfxItemSet* pOldCondSet = NULL;
+    BYTE nOldScript = 0;
 
     BOOL bProgress = FALSE;
 
@@ -763,20 +795,23 @@ void ScOutputData::DrawStrings()
                                         pDoc->GetPattern( nOverX, nOverY, nTab );
                                 const SfxItemSet* pCondSet =
                                         pDoc->GetCondResult( nOverX, nOverY, nTab );
-                                if ( pPattern != pOldPattern ||
-                                     pCondSet != pOldCondSet || bSyntaxMode )
+                                BYTE nScript = GetScriptType( pDoc, pCell, pPattern, pCondSet );
+                                if (nScript == 0) nScript = SCRIPTTYPE_LATIN;
+                                if ( pPattern != pOldPattern || pCondSet != pOldCondSet ||
+                                     nScript != nOldScript || bSyntaxMode )
                                 {
                                     if ( StringDiffer(pOldPattern,pPattern) ||
-                                         pCondSet != pOldCondSet || bSyntaxMode )
-                                        aVars.SetPattern( pPattern, pCondSet, pCell );
+                                         pCondSet != pOldCondSet || nScript != nOldScript || bSyntaxMode )
+                                        aVars.SetPattern( pPattern, pCondSet, pCell, nScript );
                                     else
                                         aVars.SetPatternSimple( pPattern, pCondSet );
                                     pOldPattern = pPattern;
                                     pOldCondSet = pCondSet;
+                                    nOldScript = nScript;
                                 }
 
                                 if ( aVars.GetOrient() == SVX_ORIENTATION_STACKED ||
-                                     aVars.IsRotated() )
+                                     aVars.IsRotated() || IsAmbiguousScript(nScript) )
                                     bEdit = TRUE;
                             }
                             if (!bEdit)
@@ -841,35 +876,48 @@ void ScOutputData::DrawStrings()
                                         pDoc->GetPattern( nTempX, nY, nTab );
                                 const SfxItemSet* pCondSet =
                                         pDoc->GetCondResult( nTempX, nY, nTab );
-                                if ( pPattern != pOldPattern ||
-                                     pCondSet != pOldCondSet || bSyntaxMode )
+                                BYTE nScript = GetScriptType( pDoc, pCell, pPattern, pCondSet );
+                                if (nScript == 0) nScript = SCRIPTTYPE_LATIN;
+                                if ( pPattern != pOldPattern || pCondSet != pOldCondSet ||
+                                     nScript != nOldScript || bSyntaxMode )
                                 {
                                     if ( StringDiffer(pOldPattern,pPattern) ||
-                                         pCondSet != pOldCondSet || bSyntaxMode )
-                                        aVars.SetPattern( pPattern, pCondSet, pCell );
+                                         pCondSet != pOldCondSet || nScript != nOldScript || bSyntaxMode )
+                                        aVars.SetPattern( pPattern, pCondSet, pCell, nScript );
                                     else
                                         aVars.SetPatternSimple( pPattern, pCondSet );
                                     pOldPattern = pPattern;
                                     pOldCondSet = pCondSet;
+                                    nOldScript = nScript;
                                 }
 
                                 if ( aVars.GetOrient() == SVX_ORIENTATION_STANDARD &&
                                         !aVars.GetLineBreak() && !aVars.IsRotated() &&
                                         aVars.GetHorJust() != SVX_HOR_JUSTIFY_BLOCK )
                                 {
-                                    if ( eCellType == CELLTYPE_FORMULA )
-                                        lcl_CreateInterpretProgress( bProgress,
-                                            pDoc, (ScFormulaCell*)pCell );
-                                    if ( aVars.SetText(pCell) )
-                                        pOldPattern = NULL;
-
-                                    nJustPosX += (long) ( aVars.GetLeftTotal() * nPPTX );
-
-                                    if ( nJustPosX + aVars.GetTextSize().Width() + 1 > nPosX &&
-                                            !pDoc->HasAttrib( nTempX,nY,nTab, nX,nY,nTab,
-                                                    HASATTR_MERGED | HASATTR_OVERLAPPED ) )
+                                    if ( IsAmbiguousScript(nScript) )
                                     {
-                                        bLeftOver = TRUE;
+                                        // need edit engine
+                                        if ( !pDoc->HasAttrib( nTempX,nY,nTab, nX,nY,nTab,
+                                                            HASATTR_MERGED | HASATTR_OVERLAPPED ) )
+                                            pThisRowInfo->pCellInfo[nTempX+1].bEditEngine = TRUE;
+                                    }
+                                    else
+                                    {
+                                        if ( eCellType == CELLTYPE_FORMULA )
+                                            lcl_CreateInterpretProgress( bProgress,
+                                                pDoc, (ScFormulaCell*)pCell );
+                                        if ( aVars.SetText(pCell) )
+                                            pOldPattern = NULL;
+
+                                        nJustPosX += (long) ( aVars.GetLeftTotal() * nPPTX );
+
+                                        if ( nJustPosX + aVars.GetTextSize().Width() + 1 > nPosX &&
+                                                !pDoc->HasAttrib( nTempX,nY,nTab, nX,nY,nTab,
+                                                        HASATTR_MERGED | HASATTR_OVERLAPPED ) )
+                                        {
+                                            bLeftOver = TRUE;
+                                        }
                                     }
                                 }
                             }
@@ -912,20 +960,23 @@ void ScOutputData::DrawStrings()
                 {
                     const ScPatternAttr* pPattern = pInfo->pPatternAttr;
                     const SfxItemSet* pCondSet = pInfo->pConditionSet;
-                    if ( pPattern != pOldPattern ||
-                         pCondSet != pOldCondSet || bSyntaxMode )
+                    BYTE nScript = GetScriptType( pDoc, pInfo->pCell, pPattern, pCondSet );
+                    if (nScript == 0) nScript = SCRIPTTYPE_LATIN;
+                    if ( pPattern != pOldPattern || pCondSet != pOldCondSet ||
+                         nScript != nOldScript || bSyntaxMode )
                     {
                         if ( StringDiffer(pOldPattern,pPattern) ||
-                             pCondSet != pOldCondSet || bSyntaxMode )
-                            aVars.SetPattern( pPattern, pCondSet, pInfo->pCell );
+                             pCondSet != pOldCondSet || nScript != nOldScript || bSyntaxMode )
+                            aVars.SetPattern( pPattern, pCondSet, pInfo->pCell, nScript );
                         else
                             aVars.SetPatternSimple( pPattern, pCondSet );
                         pOldPattern = pPattern;
                         pOldCondSet = pCondSet;
+                        nOldScript = nScript;
                     }
 
                     if ( aVars.GetOrient() == SVX_ORIENTATION_STACKED ||
-                         aVars.IsRotated() )
+                         aVars.IsRotated() || IsAmbiguousScript(nScript) )
                     {
                         pInfo->bEditEngine = TRUE;
                         bEmpty = TRUE;
@@ -1439,6 +1490,28 @@ void lcl_ClearEdit( EditEngine& rEngine )       // Text und Attribute
                     SfxItemSet( *rPara.GetPool(), rPara.GetRanges() ) );
 }
 
+BOOL lcl_SafeIsValue( ScBaseCell* pCell )
+{
+    if (!pCell)
+        return FALSE;
+
+    BOOL bRet = FALSE;
+    switch ( pCell->GetCellType() )
+    {
+        case CELLTYPE_VALUE:
+            bRet = TRUE;
+            break;
+        case CELLTYPE_FORMULA:
+            {
+                ScFormulaCell* pFCell = (ScFormulaCell*)pCell;
+                if ( pFCell->IsRunning() || pFCell->IsValue() )
+                    bRet = TRUE;
+            }
+            break;
+    }
+    return bRet;
+}
+
 void ScOutputData::DrawEdit(BOOL bPixelToLogic, double nScaleX, double nScaleY)
 {
     Size aMinSize = pRefDevice->PixelToLogic(Size(0,100));      // erst darueber wird ausgegeben
@@ -1541,6 +1614,8 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic, double nScaleX, double nScaleY)
                             if (bFromDoc)
                                 pCondSet = pDoc->GetCondResult( nX, nY, nTab );
                         }
+
+                        BOOL bIsValue = lcl_SafeIsValue(pCell);
 
                         long nCellWidth = (long) pRowInfo[0].pCellInfo[nX+1].nWidth;
 
@@ -1664,49 +1739,6 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic, double nScaleX, double nScaleY)
                                 SfxItemSet* pSet = new SfxItemSet( pEngine->GetEmptyItemSet() );
                                 pPattern->FillEditItemSet( pSet, pCondSet );
 
-                                                                    // Ausrichtung fuer EditEngine
-                                SvxAdjust eSvxAdjust = SVX_ADJUST_LEFT;
-                                if (eOrient==SVX_ORIENTATION_STACKED)
-                                    eSvxAdjust = SVX_ADJUST_CENTER;
-                                else if (bBreak)
-                                {
-                                    if (eOrient==SVX_ORIENTATION_STANDARD)
-                                        switch (eHorJust)
-                                        {
-                                            case SVX_HOR_JUSTIFY_LEFT:
-                                            case SVX_HOR_JUSTIFY_REPEAT:            // nicht implementiert
-                                            case SVX_HOR_JUSTIFY_STANDARD:          // immer Text
-                                                    eSvxAdjust = SVX_ADJUST_LEFT;
-                                                    break;
-                                            case SVX_HOR_JUSTIFY_RIGHT:
-                                                    eSvxAdjust = SVX_ADJUST_RIGHT;
-                                                    break;
-                                            case SVX_HOR_JUSTIFY_CENTER:
-                                                    eSvxAdjust = SVX_ADJUST_CENTER;
-                                                    break;
-                                            case SVX_HOR_JUSTIFY_BLOCK:
-                                                    eSvxAdjust = SVX_ADJUST_BLOCK;
-                                                    break;
-                                        }
-                                    else
-                                        switch (eVerJust)
-                                        {
-                                            case SVX_VER_JUSTIFY_TOP:
-                                                    eSvxAdjust = (eOrient==SVX_ORIENTATION_TOPBOTTOM) ?
-                                                                SVX_ADJUST_LEFT : SVX_ADJUST_RIGHT;
-                                                    break;
-                                            case SVX_VER_JUSTIFY_CENTER:
-                                                    eSvxAdjust = SVX_ADJUST_CENTER;
-                                                    break;
-                                            case SVX_VER_JUSTIFY_BOTTOM:
-                                            case SVX_HOR_JUSTIFY_STANDARD:
-                                                    eSvxAdjust = (eOrient==SVX_ORIENTATION_TOPBOTTOM) ?
-                                                                SVX_ADJUST_RIGHT : SVX_ADJUST_LEFT;
-                                                    break;
-                                        }
-                                }
-                                pSet->Put( SvxAdjustItem( eSvxAdjust, EE_PARA_JUST ) );
-
                                 pEngine->SetDefaults( pSet );
                                 pOldPattern = pPattern;
                                 pOldCondSet = pCondSet;
@@ -1718,6 +1750,54 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic, double nScaleX, double nScaleY)
                                     nControl &= ~EE_CNTRL_ONECHARPERLINE;
                                 pEngine->SetControlWord( nControl );
                             }
+
+                            //  horizontal alignment now may depend on cell content
+                            //  (for values with number formats with mixed script types)
+                            //  -> always set adjustment
+
+                            SvxAdjust eSvxAdjust = SVX_ADJUST_LEFT;
+                            if (eOrient==SVX_ORIENTATION_STACKED)
+                                eSvxAdjust = SVX_ADJUST_CENTER;
+                            else if (bBreak)
+                            {
+                                if (eOrient==SVX_ORIENTATION_STANDARD)
+                                    switch (eHorJust)
+                                    {
+                                        case SVX_HOR_JUSTIFY_STANDARD:
+                                            eSvxAdjust = bIsValue ? SVX_ADJUST_RIGHT : SVX_ADJUST_LEFT;
+                                            break;
+                                        case SVX_HOR_JUSTIFY_LEFT:
+                                        case SVX_HOR_JUSTIFY_REPEAT:            // nicht implementiert
+                                            eSvxAdjust = SVX_ADJUST_LEFT;
+                                            break;
+                                        case SVX_HOR_JUSTIFY_RIGHT:
+                                            eSvxAdjust = SVX_ADJUST_RIGHT;
+                                            break;
+                                        case SVX_HOR_JUSTIFY_CENTER:
+                                            eSvxAdjust = SVX_ADJUST_CENTER;
+                                            break;
+                                        case SVX_HOR_JUSTIFY_BLOCK:
+                                            eSvxAdjust = SVX_ADJUST_BLOCK;
+                                            break;
+                                    }
+                                else
+                                    switch (eVerJust)
+                                    {
+                                        case SVX_VER_JUSTIFY_TOP:
+                                            eSvxAdjust = (eOrient==SVX_ORIENTATION_TOPBOTTOM) ?
+                                                        SVX_ADJUST_LEFT : SVX_ADJUST_RIGHT;
+                                            break;
+                                        case SVX_VER_JUSTIFY_CENTER:
+                                            eSvxAdjust = SVX_ADJUST_CENTER;
+                                            break;
+                                        case SVX_VER_JUSTIFY_BOTTOM:
+                                        case SVX_HOR_JUSTIFY_STANDARD:
+                                            eSvxAdjust = (eOrient==SVX_ORIENTATION_TOPBOTTOM) ?
+                                                        SVX_ADJUST_RIGHT : SVX_ADJUST_LEFT;
+                                            break;
+                                    }
+                            }
+                            pEngine->SetDefaultItem( SvxAdjustItem( eSvxAdjust, EE_PARA_JUST ) );
 
                             //  Raender
 
@@ -1867,7 +1947,17 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic, double nScaleX, double nScaleY)
                                 else
                                     aCellSize = Size( (long)( nOutWidth / nScaleX ),
                                                         (long)( nOutHeight / nScaleY ) );
-                                if ( !bBreak || eOrient!=SVX_ORIENTATION_STANDARD )
+                                if ( bIsValue )
+                                {
+                                    if ( nEngineWidth > aCellSize.Width() )
+                                    {
+                                        pEngine->SetText( String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("###")) );
+                                        //if ( bSyntaxMode )
+                                        //  SetEditSyntaxColor( *pEngine, pCell );
+                                        nEngineWidth = (long) pEngine->CalcTextWidth();
+                                    }
+                                }
+                                else if ( !bBreak || eOrient!=SVX_ORIENTATION_STANDARD )
                                 {
                                     if ( eOrient == SVX_ORIENTATION_STANDARD && !bMerged )
                                     {
@@ -2057,11 +2147,12 @@ void ScOutputData::DrawEdit(BOOL bPixelToLogic, double nScaleX, double nScaleY)
                                     if (eOrient==SVX_ORIENTATION_STANDARD)
                                     {
                                         if (eHorJust==SVX_HOR_JUSTIFY_RIGHT ||
-                                            eHorJust==SVX_HOR_JUSTIFY_CENTER)
+                                            eHorJust==SVX_HOR_JUSTIFY_CENTER ||
+                                            (eHorJust==SVX_HOR_JUSTIFY_STANDARD && bIsValue) )
                                         {
                                             SvxAdjust eSvxAdjust =
-                                                (eHorJust==SVX_HOR_JUSTIFY_RIGHT) ?
-                                                    SVX_ADJUST_RIGHT : SVX_ADJUST_CENTER;
+                                                (eHorJust==SVX_HOR_JUSTIFY_CENTER) ?
+                                                    SVX_ADJUST_CENTER : SVX_ADJUST_RIGHT;
                                             pEngine->SetDefaultItem(
                                                 SvxAdjustItem( eSvxAdjust, EE_PARA_JUST ) );
 
