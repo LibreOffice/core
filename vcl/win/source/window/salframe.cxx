@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: ssa $ $Date: 2002-10-08 13:24:49 $
+ *  last change: $Author: ssa $ $Date: 2002-10-09 13:48:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1341,7 +1341,12 @@ void SalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight,
     if ( nY < nScreenY )
         nY = nScreenY;
 
-    SetWindowPos( maFrameData.mhWnd, 0, nX, nY, (int)nWidth, (int)nHeight, SWP_NOZORDER | SWP_NOACTIVATE | nPosSize );
+    UINT nPosFlags = SWP_NOACTIVATE | nPosSize;
+    // bring floating windows always to top
+    if( !(maFrameData.mnStyle & SAL_FRAME_STYLE_FLOAT) )
+        nPosFlags |= SWP_NOZORDER; // do not change z-order
+
+    SetWindowPos( maFrameData.mhWnd, HWND_TOP, nX, nY, (int)nWidth, (int)nHeight, nPosFlags  );
     UpdateFrameGeometry( maFrameData.mhWnd, this );
 
     // Notification -- really ???
