@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-22 15:25:20 $
+ *  last change: $Author: dv $ $Date: 2001-03-23 15:11:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,6 +192,7 @@ using namespace ::rtl;
 #include "objsh.hxx"
 #include "objuno.hxx"
 #include "filepicker.hxx"
+#include "doctemplates.hxx"
 
 #define FRAMELOADER_SERVICENAME     "com.sun.star.frame.FrameLoader"
 
@@ -953,6 +954,15 @@ sal_Bool SAL_CALL component_writeInfo(  void*   pServiceManager ,
     xNewKey = xLoaderKey->createKey( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Pattern")) );
     xNewKey->setAsciiValue( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("macro:*" )) );
 
+    // - sfx document templates
+    aImpl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+    aImpl += SfxDocTplService::impl_getStaticImplementationName();
+
+    aTempStr = aImpl;
+    aTempStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
+    xNewKey = xKey->createKey( aTempStr );
+    xNewKey->createKey( ::rtl::OUString::createFromAscii("com.sun.star.frame.DocumentTemplates") );
+
     aImpl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
     aImpl += SfxFilePicker::impl_getStaticImplementationNameOpen();
 
@@ -1017,6 +1027,7 @@ void* SAL_CALL component_getFactory(    const   sal_Char*   pImplementationName 
         IF_NAME_CREATECOMPONENTFACTORY( SfxFrameLoader_Impl )
         IF_NAME_CREATECOMPONENTFACTORY( SfxMacroLoader )
         IF_NAME_CREATECOMPONENTFACTORY( SfxStandaloneDocumentInfoObject )
+        IF_NAME_CREATECOMPONENTFACTORY( SfxDocTplService )
         if ( SfxFilePicker::impl_getStaticImplementationNameOpen().equals( UNOOUSTRING::createFromAscii( pImplementationName ) ) )
         {
             xFactory = SfxFilePicker::impl_createFactoryOpen( xServiceManager );
