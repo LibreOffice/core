@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glosdoc.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-13 10:42:26 $
+ *  last change: $Author: hr $ $Date: 2000-11-15 14:43:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -823,11 +823,11 @@ void SwGlossaries::UpdateGlosPath(sal_Bool bFull)
             delete pTmp;
         }
         String sErrPath;
-        sal_uInt16 nTokenCount = aPath.GetTokenCount(SFX_SEARCHPATH_DELIMITER);
+        sal_uInt16 nTokenCount = aPath.GetTokenCount(SVT_SEARCHPATH_DELIMITER);
         SvStrings aDirArr;
         for( i = 0; i < nTokenCount; i++ )
         {
-            String sPth(aPath.GetToken(i, SFX_SEARCHPATH_DELIMITER));
+            String sPth(aPath.GetToken(i, SVT_SEARCHPATH_DELIMITER));
             sPth = URIHelper::SmartRelToAbs(sPth);
 
             if(i && lcl_FindSameEntry(aDirArr, sPth))
@@ -849,7 +849,7 @@ void SwGlossaries::UpdateGlosPath(sal_Bool bFull)
             if(!bExists)
             {
                 if(sErrPath.Len())
-                    sErrPath += SFX_SEARCHPATH_DELIMITER;
+                    sErrPath += SVT_SEARCHPATH_DELIMITER;
                 INetURLObject aTemp(sPth);
                 sErrPath += aTemp.GetFull();
 
@@ -908,6 +908,9 @@ String  SwGlossaries::GetExtension()
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.6  2000/11/13 10:42:26  jp
+    must changes: use Search from SvtPathOptions
+
     Revision 1.5  2000/11/06 09:04:00  jp
     must changes: GlossaryPath -> AutoTextPath
 

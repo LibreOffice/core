@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glosbib.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2000-11-13 10:54:33 $
+ *  last change: $Author: hr $ $Date: 2000-11-15 14:43:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,7 @@
 #endif
 
 #include <svtools/svstdarr.hxx>
+#include <svtools/pathoptions.hxx>
 
 #ifndef _SWTYPES_HXX
 #include <swtypes.hxx>
@@ -620,7 +621,7 @@ void FEdit::KeyInput( const KeyEvent& rKEvent )
 
     if (aCode.GetGroup() == KEYGROUP_CURSOR ||
         ((aCode.GetGroup() == KEYGROUP_MISC) && aCode.GetCode() <= KEY_DELETE) ||
-        sKey != SFX_SEARCHPATH_DELIMITER)
+        sKey != SVT_SEARCHPATH_DELIMITER)
         Edit::KeyInput( rKEvent );
 }
 /* -----------------------------08.02.00 15:07--------------------------------
@@ -676,6 +677,9 @@ void    SwGlossaryGroupTLB::Clear()
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.4  2000/11/13 10:54:33  jp
+      remove IniManager
+
       Revision 1.3  2000/11/06 09:19:24  jp
       must changes: tempfile
 
