@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sm.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 13:52:10 $
+ *  last change: $Author: hr $ $Date: 2004-10-13 08:59:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -294,10 +294,10 @@ bool SessionManagerClient::checkDocumentsSaved()
 
 IMPL_STATIC_LINK( SessionManagerClient, SaveYourselfHdl, void*, pDummy )
 {
-    SMprintf( "posting save documents event\n" );
+    SMprintf( "posting save documents event shutdown = %s\n", (pThis!=0) ? "true" : "false" );
     if( pOneInstance )
     {
-        SalSessionSaveRequestEvent aEvent( pDummy != 0, false );
+        SalSessionSaveRequestEvent aEvent( pThis != 0, false );
         pOneInstance->CallCallback( &aEvent );
     }
     else
@@ -308,6 +308,7 @@ IMPL_STATIC_LINK( SessionManagerClient, SaveYourselfHdl, void*, pDummy )
 
 IMPL_STATIC_LINK( SessionManagerClient, InteractionHdl, void*, pDummy )
 {
+    SMprintf( "interaction link\n" );
     if( pOneInstance )
     {
         SalSessionInteractionEvent aEvent( true );
