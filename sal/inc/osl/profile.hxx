@@ -2,9 +2,9 @@
  *
  *  $RCSfile: profile.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mh $ $Date: 2001-09-28 16:00:03 $
+ *  last change: $Author: obo $ $Date: 2002-10-08 15:28:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,7 @@
 #ifndef _RTL_USTRING_HXX_
 #include <rtl/ustring.hxx>
 #endif
-
+#include <string.h>
 #include <list>
 
 namespace osl {
