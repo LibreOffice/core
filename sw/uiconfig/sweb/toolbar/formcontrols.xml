@@ -17,5 +17,5 @@
  <toolbar:toolbaritem xlink:href=".uno:FileControl" toolbar:helpid="helpid:10605" toolbar:text="" toolbar:style="radio auto" />
  <toolbar:toolbarbreak/>
  <toolbar:toolbaritem xlink:href=".uno:Imagebutton" toolbar:helpid="helpid:10604" toolbar:text="" toolbar:style="radio auto" />
- <toolbar:toolbaritem xlink:href=".uno:FormDesignTools" toolbar:helpid="helpid:11017" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:FormDesignTools" toolbar:helpid="helpid:11046" toolbar:text="" />
 </toolbar:toolbar>
