@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_layout.cxx,v $
  *
- *  $Revision: 1.14 $
- *  last change: $Author: hdu $ $Date: 2002-09-04 17:33:07 $
+ *  $Revision: 1.15 $
+ *  last change: $Author: hdu $ $Date: 2002-09-11 09:59:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -520,7 +520,6 @@ bool IcuLayoutEngine::operator()( ServerFontLayout& rLayout,
     bool bRightToLeft = (0 != (rArgs.mnFlags & SAL_LAYOUT_BIDI_RTL));
     UBiDi* pParaBidi;
     UBiDi* pLineBidi;
-    int32_t* pVisualMap;
     UTextOffset nMinBidiPos;
     UTextOffset nEndBidiPos;
     int nRunCount = 1;
@@ -529,7 +528,6 @@ bool IcuLayoutEngine::operator()( ServerFontLayout& rLayout,
     {
         pParaBidi   = NULL;
         pLineBidi   = NULL;
-        pVisualMap  = NULL;
         nMinBidiPos = rArgs.mnMinCharPos;
         nEndBidiPos = rArgs.mnEndCharPos;
     }
@@ -545,16 +543,12 @@ bool IcuLayoutEngine::operator()( ServerFontLayout& rLayout,
             ubidi_setLine( pParaBidi, rArgs.mnMinCharPos, rArgs.mnEndCharPos, pLineBidi, &rcI18n );
         }
         nRunCount = ubidi_countRuns( pLineBidi, &rcI18n );
-        pVisualMap = (int32_t*)alloca( nRunCount * sizeof(*pVisualMap) );
-        ubidi_getVisualMap( pLineBidi, pVisualMap, &rcI18n );
-        if( U_FAILURE(rcI18n) )
-            return false;
     }
 
     // layout bidi/script runs and export them to a ServerFontLayout
     Point aNewPos( 0, 0 );
     bool bWantFallback = false;
-    int nGlyphCapacity = 2 * (rArgs.mnEndCharPos - rArgs.mnMinCharPos) + 16;
+    int nGlyphCapacity = 3 * (rArgs.mnEndCharPos - rArgs.mnMinCharPos) + 16;
     int nSumGlyphCount = 0;
 
     // allocate temporary arrays
@@ -566,9 +560,9 @@ bool IcuLayoutEngine::operator()( ServerFontLayout& rLayout,
 
     for( int i = 0; i < nRunCount; ++i )
     {
-        if( pVisualMap )
+        if( pLineBidi )
         {
-            nMinBidiPos = pVisualMap[i];
+            nMinBidiPos = rArgs.mnMinCharPos;
             bRightToLeft = (UBIDI_RTL == ubidi_getVisualRun( pLineBidi, i, &nMinBidiPos, &nEndBidiPos ));
             nEndBidiPos += nMinBidiPos;
         }
