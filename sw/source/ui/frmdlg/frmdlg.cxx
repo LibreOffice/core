@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmdlg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:30:20 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 16:40:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,13 +87,6 @@
 #ifndef _SVX_GRFPAGE_HXX //autogen
 #include <svx/grfpage.hxx>
 #endif
-#ifndef _OFA_HTMLCFG_HXX //autogen
-#include <offmgr/htmlcfg.hxx>
-#endif
-#ifndef _OFF_APP_HXX //autogen
-#include <offmgr/app.hxx>
-#endif
-
 
 #ifndef _FMTFSIZE_HXX //autogen
 #include <fmtfsize.hxx>
