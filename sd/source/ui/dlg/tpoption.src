@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpoption.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:34 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 21:14:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,12 +128,12 @@ TabPage TP_OPTIONS_SNAP
         Text [ SWEDISH ] = "Vid ~raster" ;
         Text [ PORTUGUESE ] = "Na quadrнcula" ;
         Text[ chinese_simplified ] = "Ншёс(~G)";
-        Text[ russian ] = "К решетке";
+        Text[ russian ] = "К сетке";
         Text[ polish ] = "Przy r~astrze";
         Text[ japanese ] = "ёЮШЇДЮ‚Й(~G)";
         Text[ chinese_traditional ] = "єф®ж(~G)";
         Text[ arabic ] = "Эн ЗбФИЯЙ";
-        Text[ greek ] = "Уфп рлЭгмб (кпхкЯдет)";
+        Text[ greek ] = "Уфп рлЭгмб";
         Text[ korean ] = "±Ґј±(~G)";
         Text[ turkish ] = "Kэlavuz зizgilerde";
         Text[ language_user1 ] = " ";
@@ -365,7 +365,7 @@ TabPage TP_OPTIONS_SNAP
         Text [ SWEDISH ] = "Med Anpassa till stцdraster definierar Du om ett objekt fixeras horisontellt, vertikalt eller diagonalt (45 grader) under rцrelse.\nNдr en rektangel skapas blir den en kvadrat och en ellips blir en cirkel." ;
         Text [ PORTUGUESE ] = "O encaixe define se o objecto serб alinhado na horizontal, na vertical ou diagonal (45 graus).\nAo criar um rectвngulo este serб transformado em quadrado e uma elipse serб transformada em cнrculo." ;
         Text[ chinese_simplified ] = "ЅиЦъ¶ФЖлО»ЦГДъДЬ№»¶ЁТеТ»ёц¶ФПуКЗ·сЛ®ЖЅЈ¬ґ№Ц±»тХЯ¶ФЅЗ(45¶И)ТЖ¶ЇЎЈФЪТЖ¶Ї¶ФПуК±Т»ёці¤·ЅРО±діЙТ»ёцХэ·ЅРО»тХЯТ»ёцФІРО±діЙТ»ёцНЦФІРОЎЈ";
-        Text[ russian ] = "С помощью привязки к сетке Вы можете установить, в какой позиции горизонтально, вертикально или диагонально (45 градусов) должен быть зафиксирован объект при перемещении. \nПри создании прямоугольник превратится в квадрат или эллипс превратится в круг.";
+        Text[ russian ] = "С помощью привязки к сетке Вы можете установить, в какой позиции горизонтально, вертикально или диагонально (под углом 45 градусов) должен быть зафиксирован объект при перемещении. \nПри создании прямоугольник превратится в квадрат, а эллипс превратится в круг.";
         Text[ polish ] = "Pozycja Zaskocz okreњla, czy obiekt przy przesuwaniu zachowa poіoїenie poziome, pionowe lub po przek№tnej (45 stopni). \nPrzy tworzeniu obiektu z prostok№ta powstanie kwadrat, a z elipsy koіo.";
         Text[ japanese ] = "µМЮјЮЄёД‚р€Ъ“®‚і‚№‚й‚Ж‚«ЃAЏг‰єЌ¶‰EЋО‚Я(45“x)‚ЙЊЕ’и‚і‚№‚й‚©‚µ‚И‚ў‚©‚рЋw’и‚µ‚Ь‚·ЃB\nµМЮјЮЄёД‚МЌмђ¬’†‚НЃAЋlЉpЊ`‚Нђі•ыЊ`‚ЙЃA‘И‰~Њ`‚Н‰~‚Й‚И‚и‚Ь‚·ЃB";
         Text[ chinese_traditional ] = "іz№L№п»ф¦мёm±zЇа°ч©wёq¤@­УЄ«Ґу¬O§_¤фҐ­ЎM««ЄЅ©ОЄМ№пЁ¤(45«Ч)Іѕ°КЎC¦bІѕ°К¤@­УЄ«Ґу®Й¤@­УЄш¤и§ОЕЬ¦Ё¤@­УҐї¤и§О©ОЄМ¤@­У¶к§ОЕЬ¦Ё¤@­Уѕт¶к§ОЎC";
@@ -694,7 +694,7 @@ TabPage TP_OPTIONS_LAYOUT
         Text [ portuguese ] = "~Todas as guias do editor Bйzier" ;
         Text[ chinese_simplified ] = "ЗъПЯ±ај­ЖчДЪµДИ«ІїїШµг(~A)";
         Text[ russian ] = "~Все точки в Редакторе Безье";
-        Text[ polish ] = "~Wszystkie punkty sterownicze w edytorze Beziera";
+        Text[ polish ] = "~Wszystkie punkty sterown. w edytorze Beziera";
         Text[ japanese ] = "НЮјЮЄ‹Иђь•ТЏW‚М‚·‚Ч‚Д‚Мђ§Њд“_(~A)";
         Text[ chinese_traditional ] = "¦±ЅuЅsїиµ{¦Ў¤єЄєҐюіЎ±±ВI(~A)";
         Text[ arabic ] = "Яб дЮЗШ ЗбКНЯг Эн гНСС Bйzier";
@@ -891,7 +891,7 @@ TabPage TP_OPTIONS_CONTENTS
         Text = "~Fremdgrafiken andeuten" ;
         Text [ ENGLISH ] = "Fremdgrafiken andeuten" ;
         Text [ NORWEGIAN ] = "Fremdgrafiken andeuten" ;
-        Text [ DANISH ] = "Antyd eksterne billeder" ;
+        Text [ DANISH ] = "Antyd ekstern grafik" ;
         Text [ ENGLISH_US ] = "~Picture placeholders" ;
         Text [ SPANISH ] = "~Indicar imбgenes externas" ;
         Text [ FINNISH ] = "Fremdgrafiken andeuten" ;
@@ -899,7 +899,7 @@ TabPage TP_OPTIONS_CONTENTS
         Text [ ITALIAN ] = "Mostra solo ~ingombro immagini" ;
         Text [ DUTCH ] = "~Externe afbeeldingen aanduiden" ;
         Text [ PORTUGUESE_BRAZILIAN ] = "Fremdgrafiken andeuten" ;
-        Text [ SWEDISH ] = "Antyd externa gra~fiker" ;
+        Text [ SWEDISH ] = "Antyd extern gra~fik" ;
         Text [ PORTUGUESE ] = "Separadores de imagens e~xternas" ;
         Text[ chinese_simplified ] = "ПФКѕНвІїНјРОїт(~P)";
         Text[ russian ] = "Обозначить внешние рисунки";
@@ -1090,7 +1090,7 @@ TabPage TP_OPTIONS_MISC
         Text [ italian ] = "Seleziona solo area testo" ;
         Text [ spanish ] = "~Seleccionar solo бreas de texto" ;
         Text [ french ] = "Sйlection que pour la zone de texte" ;
-        Text [ swedish ] = "~Endast textomrеdet kan markeras" ;
+        Text [ swedish ] = "Bara textomrеde ka~n markeras" ;
         Text [ danish ] = "Kun tekstomrеde markerbar" ;
         Text [ portuguese ] = "Apenas бrea do texto seleccionбvel" ;
         Text [ portuguese_brazilian ] = "Nur Textbereich selektierbar" ;
@@ -1306,7 +1306,7 @@ TabPage TP_OPTIONS_MISC
         Text [ PORTUGUESE ] = "Objectos sempre deslocбveis" ;
         Text[ chinese_simplified ] = "ЧЬКЗДЬ№»ТЖ¶Ї¶ФПу";
         Text[ russian ] = "~Объекты всегда перещаемы";
-        Text[ polish ] = "Obiekty zawsze moїliwe do przeniesienia";
+        Text[ polish ] = "Obiekty zawsze przesuwalne";
         Text[ japanese ] = "µМЮјЮЄёД‚НЏн‚Й€Ъ“®‰В”\\";
         Text[ chinese_traditional ] = "Б`¬OЇа°чІѕ°КЄ«Ґу";
         Text[ arabic ] = "ЗбЯЗЖдЗК ЮЗИбЙ ббЕТЗНЙ ПЗЖгЗр";
@@ -1389,7 +1389,7 @@ TabPage TP_OPTIONS_MISC
         Text [ dutch ] = "~Steeds met actuele pagina" ;
         Text [ portuguese ] = "~Sempre com pбgina actual" ;
         Text[ chinese_simplified ] = "ЧЬКЗґУµ±З°µДТіГжїЄКј";
-        Text[ russian ] = "~Всегда с текущей страницей";
+        Text[ russian ] = "~Всегда с текущего слайда";
         Text[ polish ] = "Za~wsze z aktualn№ stron№";
         Text[ japanese ] = "Џн‚ЙЊ»ЌЭ‚МНЯ°јЮ";
         Text[ chinese_traditional ] = "Б`¬O±q·н«eЄє­¶­±¶}©l";
