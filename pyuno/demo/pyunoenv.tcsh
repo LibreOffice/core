@@ -1,4 +1,4 @@
-# the path to the office installation (e.g. /home/joe/OpenOffice.org643)
+# the path to the office installation (e.g. /home/joe/OpenOffice.org1.1Beta)
 setenv OOOHOME
 
 # don't modify anything beyond these lines

@@ -4,7 +4,7 @@ PRJ=..
 .INCLUDE : settings.mk
 .INCLUDE : pyversion.mk
 
-VERSION=0.9.2
+VERSION=0.9.3
 PYDIRNAME=python-$(PYVERSION)
 .IF "$(GUI)"=="WNT"
 INISUFFIX=.ini
@@ -133,9 +133,9 @@ $(DESTROOT)$/program$/pyuno_setup$(BATCHSUFFIX) : makefile.mk
     echo #\!/bin/sh >> $@
     chmod +x $@
 .ENDIF
-    echo regcomp -register -r applicat.rdb -c pycpld >>$@
+    echo regcomp -register -r services.rdb -c pycpld >>$@
 #	echo "$(MYCOPY) applicat.rdb pydemo$/applicat.rdb" >> $@
-    echo regcomp -register -br applicat.rdb -r applicat.rdb -c vnd.openoffice.pymodule:swritercomp -l com.sun.star.loader.Python >>$@
+    echo regcomp -register -br types.rdb -br services.rdb -r services.rdb -c vnd.openoffice.pymodule:swritercomp -l com.sun.star.loader.Python >>$@
 
 $(DESTROOT)$/program$/$(DLLPRE)python$(DLLPOST).$(PYVERSION) : $(SOLARLIBDIR)$/$(DLLPRE)python$(DLLPOST).$(PYVERSION)
     cp $? $@
@@ -157,8 +157,8 @@ $(DESTROOT)$/program$/pydemo$/%.py : %.py
 
 $(DESTROOT)$/program$/pyuno$(INISUFFIX) : makefile.mk
     -rm -f $@ $(DESTROOT)$/program$/pyuno.tmp
-    echo UNO_TYPES=$(DOLLAR_SIGN)PYUNOLIBDIR/applicat.rdb > $(DESTROOT)$/program$/pyuno.tmp
-    echo UNO_SERVICES=$(DOLLAR_SIGN)PYUNOLIBDIR/applicat.rdb >> $(DESTROOT)$/program$/pyuno.tmp
+    echo UNO_TYPES=$(DOLLAR_SIGN)PYUNOLIBDIR/types.rdb > $(DESTROOT)$/program$/pyuno.tmp
+    echo UNO_SERVICES=$(DOLLAR_SIGN)PYUNOLIBDIR/services.rdb >> $(DESTROOT)$/program$/pyuno.tmp
     mv $(DESTROOT)$/program$/pyuno.tmp $@
 
 $(DESTROOT)$/program$/pydemo$/python-bridge.html : ..$/doc$/python-bridge.html
