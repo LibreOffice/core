@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: dv $ $Date: 2001-07-27 13:40:14 $
+#   last change: $Author: pb $ $Date: 2001-08-10 08:54:44 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -154,8 +154,6 @@ SHL1STDLIBS+=\
         $(UNOTOOLSLIB) \
         $(UCBHELPERLIB) \
         $(COMPHELPERLIB) \
-        $(BERKELEYLIB) \
-        $(BERKELEYCPPLIB) \
         $(XMLOFFLIB) \
         $(XMLSCRIPTLIB)
 
