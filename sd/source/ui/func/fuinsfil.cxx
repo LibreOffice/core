@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuinsfil.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: thb $ $Date: 2001-07-23 12:15:41 $
+ *  last change: $Author: ka $ $Date: 2001-12-12 12:48:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,46 +185,42 @@ FuInsertFile::FuInsertFile(SdViewShell*    pViewSh,
                            SfxRequest&     rReq)
            : FuPoor(pViewSh, pWin, pView, pDoc, rReq)
 {
-    String           aSDDSpec (SdResId (STR_IMPRESS));
-    String           aTemplateSpec(SdResId(STR_TEMPLATE));
-    String           aPlainTextSpec (SdResId (STR_FORMAT_STRING));
-    String           aRTFSpec (SdResId (STR_FORMAT_RTF));
-    String           aHTMLSpec (SdResId(STR_FORMAT_HTML));
-    String           aAllSpec (SdResId (STR_ALL_FILES));
-    const SfxItemSet *pArgs = rReq.GetArgs ();
+    SfxFilterMatcher&       rMatcher = SFX_APP()->GetFilterMatcher();
+    ::std::vector< String > aTextFilterVector;
+    const SfxItemSet*       pArgs = rReq.GetArgs ();
 
     if (!pArgs)
     {
-        sfx2::FileDialogHelper aFileDialog( WB_OPEN | SFXWB_INSERT | WB_STDMODAL );
-        Reference< XFilePicker > xFilePicker( aFileDialog.GetFilePicker(), UNO_QUERY );
+        sfx2::FileDialogHelper      aFileDialog( WB_OPEN | SFXWB_INSERT | WB_STDMODAL );
+        Reference< XFilePicker >    xFilePicker( aFileDialog.GetFilePicker(), UNO_QUERY );
         Reference< XFilterManager > xFilterManager( xFilePicker, UNO_QUERY );
-
-        SfxFilterMatcher&   rMatcher = SFX_APP()->GetFilterMatcher();
-        SfxFilterContainer* pCont = NULL;
-        SfxFilterContainer* pSecondCont = NULL;
-        String              aExt;
-        const SfxFilter*    pFilter = NULL;
+        SfxFilterContainer*         pCont = NULL;
+        const SfxFilter*            pFilter = NULL;
 
         aFileDialog.SetTitle( String( SdResId(STR_DLG_INSERT_PAGES_FROM_FILE ) ) );
 
         if( pDoc->GetDocumentType() == DOCUMENT_TYPE_IMPRESS )
-            pCont = rMatcher.GetContainer( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "simpress" ) ) );
+            pCont = rMatcher.GetContainer( String( RTL_CONSTASCII_USTRINGPARAM( "simpress" ) ) );
         else
-            pCont = rMatcher.GetContainer( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "sdraw" ) ) );
+            pCont = rMatcher.GetContainer( String( RTL_CONSTASCII_USTRINGPARAM( "sdraw" ) ) );
 
-        // Get filter for current format
         if( xFilterManager.is() )
         {
+            // Get filter for current format
             try
             {
+                String  aExt;
+                String  aAllSpec( SdResId( STR_ALL_FILES ) );
+
                 xFilterManager->appendFilter( aAllSpec, UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "*.*" ) ) );
                 xFilterManager->setCurrentFilter( aAllSpec ); // set default-filter (<All>)
 
+                // Get main filter
                 pFilter = pCont->GetFilter( 0 );
                 if( pFilter )
                     xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
 
-                // Get Draw filter for Impress and Impress filter for Draw as secondary
+                // Get Draw filter for Impress and Impress filter for Draw as secondary filter
                 if( pDoc->GetDocumentType() == DOCUMENT_TYPE_IMPRESS )
                     aExt = UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( ".sxd" ) );
                 else
@@ -238,6 +234,7 @@ FuInsertFile::FuInsertFile(SdViewShell*    pViewSh,
                 pFilter = pCont->GetFilter4ClipBoardId( SOT_FORMATSTR_ID_STARIMPRESS_50 );
                 if( pFilter )
                     xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
+
                 pFilter = pCont->GetFilter4ClipBoardId( SOT_FORMATSTR_ID_STARIMPRESS_50, SFX_FILTER_TEMPLATEPATH );
                 if( pFilter )
                     xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
@@ -245,6 +242,7 @@ FuInsertFile::FuInsertFile(SdViewShell*    pViewSh,
                 pFilter = pCont->GetFilter4ClipBoardId( SOT_FORMATSTR_ID_STARDRAW_50 );
                 if( pFilter )
                     xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
+
                 pFilter = pCont->GetFilter4ClipBoardId( SOT_FORMATSTR_ID_STARDRAW_50, SFX_FILTER_TEMPLATEPATH  );
                 if( pFilter )
                     xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
@@ -252,6 +250,7 @@ FuInsertFile::FuInsertFile(SdViewShell*    pViewSh,
                 pFilter = pCont->GetFilter4ClipBoardId( SOT_FORMATSTR_ID_STARDRAW_40 );
                 if( pFilter )
                     xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
+
                 pFilter = pCont->GetFilter4ClipBoardId( SOT_FORMATSTR_ID_STARDRAW_40, SFX_FILTER_TEMPLATEPATH  );
                 if( pFilter )
                     xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
@@ -259,19 +258,50 @@ FuInsertFile::FuInsertFile(SdViewShell*    pViewSh,
                 pFilter = pCont->GetFilter4ClipBoardId( SOT_FORMATSTR_ID_STARDRAW );
                 if( pFilter )
                     xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
+
                 pFilter = pCont->GetFilter4ClipBoardId( SOT_FORMATSTR_ID_STARDRAW, SFX_FILTER_TEMPLATEPATH  );
                 if( pFilter )
                     xFilterManager->appendFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
 
-                xFilterManager->appendFilter( aPlainTextSpec, UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "*.txt" ) ) );
-                xFilterManager->appendFilter( aRTFSpec, UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "*.rtf" ) ));
-                xFilterManager->appendFilter( aHTMLSpec, UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "*.htm;*.html" ) ));
+                // Get text filters
+                pFilter = rMatcher.GetFilter4Mime( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "text/plain" ) ) );
+                if( pFilter )
+                {
+                    aTextFilterVector.push_back( pFilter->GetUIName() );
+                    xFilterManager->appendFilter( aTextFilterVector.back(), pFilter->GetDefaultExtension() );
+                }
+                else
+                {
+                    aTextFilterVector.push_back( String( SdResId( STR_FORMAT_STRING ) ) );
+                    xFilterManager->appendFilter( aTextFilterVector.back(), UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "*.txt" ) ) );
+                }
+
+                pFilter = rMatcher.GetFilter4Mime( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "application/rtf" ) ) );
+                if( pFilter )
+                {
+                    aTextFilterVector.push_back( pFilter->GetUIName() );
+                    xFilterManager->appendFilter( aTextFilterVector.back(), pFilter->GetDefaultExtension() );
+                }
+                else
+                {
+                    aTextFilterVector.push_back( String( SdResId( STR_FORMAT_RTF ) ) );
+                    xFilterManager->appendFilter( aTextFilterVector.back(), UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "*.rtf" ) ) );
+                }
+
+                pFilter = rMatcher.GetFilter4Mime( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "text/html" ) ) );
+                if( pFilter )
+                {
+                    aTextFilterVector.push_back( pFilter->GetUIName() );
+                    xFilterManager->appendFilter( aTextFilterVector.back(), pFilter->GetDefaultExtension() );
+                }
+                else
+                {
+                    aTextFilterVector.push_back( String( SdResId( STR_FORMAT_HTML ) ) );
+                    xFilterManager->appendFilter( aTextFilterVector.back(), UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "*.htm;*.html" ) ) );
+                }
             }
             catch(IllegalArgumentException)
             {
-#ifdef DBG_UTIL
-                DBG_ERROR( "Cannot setup filters" );
-#endif
             }
         }
 
@@ -302,7 +332,6 @@ FuInsertFile::FuInsertFile(SdViewShell*    pViewSh,
 
     pDocSh->SetWaitCursor( TRUE );
 
-    // Das Medium muss ggf. mit READ/WRITE geoeffnet werden, daher wird ersteinmal nachgeschaut, ob es einen Storage enthaelt
     SfxMedium*          pMedium = new SfxMedium( aFile, STREAM_READ | STREAM_NOCREATE, FALSE );
     const SfxFilter*    pFilter = NULL;
     ErrCode             nErr = SFX_APP()->GetFilterMatcher().GuessFilter( *pMedium, &pFilter, SFX_FILTER_IMPORT, SFX_FILTER_NOTINSTALLED | SFX_FILTER_EXECUTABLE );
@@ -335,27 +364,35 @@ FuInsertFile::FuInsertFile(SdViewShell*    pViewSh,
             aErrorBox.Execute();
         }
     }
-    else
+    else if( pFilter )
     {
-        // no storage
-        if( pFilter )
-        {
-            aFilterName = pFilter->GetFilterName();
+        ::std::vector< String >::const_iterator aIter( aTextFilterVector.begin() ), aEnd( aTextFilterVector.end() );
+        BOOL                                    bFound = FALSE;
 
-            if( ( aFilterName.SearchAscii( "Text" ) != STRING_NOTFOUND ) ||
-                ( aFilterName.SearchAscii( "Rich Text Format" ) != STRING_NOTFOUND ) ||
-                ( aFilterName.SearchAscii( "HTML" ) != STRING_NOTFOUND ) )
-            {
-                if( bDrawMode )
-                    InsTextOrRTFinDrMode(pMedium);
-                else
-                    InsTextOrRTFinOlMode(pMedium);
-            }
+        while( !bFound && ( aIter != aEnd ) )
+            if( *aIter++ == pFilter->GetUIName() )
+                bFound = TRUE;
+
+        if( !bFound &&
+            ( aFilterName.SearchAscii( "Text" ) != STRING_NOTFOUND ||
+              aFilterName.SearchAscii( "Rich Text Format" ) != STRING_NOTFOUND ||
+              aFilterName.SearchAscii( "RTF" ) != STRING_NOTFOUND ||
+              aFilterName.SearchAscii( "HTML" ) != STRING_NOTFOUND ) )
+        {
+            bFound = TRUE;
+        }
+
+        if( bFound )
+        {
+            if( bDrawMode )
+                InsTextOrRTFinDrMode(pMedium);
             else
-            {
-                ErrorBox aErrorBox( pWindow, (WinBits)WB_OK, String(SdResId(STR_READ_DATA_ERROR)));
-                aErrorBox.Execute();
-            }
+                InsTextOrRTFinOlMode(pMedium);
+        }
+        else
+        {
+            ErrorBox aErrorBox( pWindow, (WinBits) WB_OK, String( SdResId( STR_READ_DATA_ERROR ) ) );
+            aErrorBox.Execute();
         }
     }
 
