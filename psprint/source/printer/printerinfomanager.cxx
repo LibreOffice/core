@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printerinfomanager.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-23 10:09:11 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:51:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1360,7 +1360,7 @@ void SystemQueueInfo::run()
 #endif
         {
             aPrtQueueCmd += ByteString( " 2>/dev/null" );
-            if( pPipe = popen( aPrtQueueCmd.GetBuffer(), "r" ) )
+            if( (pPipe = popen( aPrtQueueCmd.GetBuffer(), "r" )) )
             {
                 while( fgets( pBuffer, 1024, pPipe ) )
                     aLines.push_back( ByteString( pBuffer ) );
