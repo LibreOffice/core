@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AdabasStat.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-07 13:06:33 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 10:36:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -299,22 +299,26 @@ OAdabasStatistics::~OAdabasStatistics()
 sal_Bool OAdabasStatistics::checkSystemTable(const ::rtl::OUString& _rsSystemTable, ::rtl::OUString& _rsSchemaName )
 {
     sal_Bool bCanSelect = sal_False;
-    Reference<XResultSet> xRes = m_xConnection->getMetaData()->getTablePrivileges(Any(),::rtl::OUString::createFromAscii("%"),  _rsSystemTable);
-    if(xRes.is())
+    Reference<XDatabaseMetaData> xMeta = m_xConnection->getMetaData();
+    if ( xMeta.is() )
     {
-        Reference<XRow> xRow(xRes,UNO_QUERY);
-        static const ::rtl::OUString sSelect = ::rtl::OUString::createFromAscii("SELECT");
-        // first the db sizes
-        while(xRes.is() && xRes->next())
+        Reference<XResultSet> xRes = xMeta->getTablePrivileges(Any(),::rtl::OUString::createFromAscii("%"),  _rsSystemTable);
+        if(xRes.is())
         {
-            _rsSchemaName = xRow->getString(2);
-            if(sSelect == xRow->getString(6) && !xRow->wasNull())
+            Reference<XRow> xRow(xRes,UNO_QUERY);
+            static const ::rtl::OUString sSelect = ::rtl::OUString::createFromAscii("SELECT");
+            // first the db sizes
+            while(xRes.is() && xRes->next())
             {
-                bCanSelect = sal_True;
-                break;
+                _rsSchemaName = xRow->getString(2);
+                if(sSelect == xRow->getString(6) && !xRow->wasNull())
+                {
+                    bCanSelect = sal_True;
+                    break;
+                }
             }
+            ::comphelper::disposeComponent(xRes);
         }
-        ::comphelper::disposeComponent(xRes);
     }
     return bCanSelect;
 }
