@@ -2,9 +2,9 @@
  *
  *  $RCSfile: selctrl.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:00:59 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 15:38:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@ public:
 
     SFX_DECL_STATUSBAR_CONTROL();
 
-    SvxSelectionModeControl( USHORT nId, StatusBar& rStb, SfxBindings& rBind );
+    SvxSelectionModeControl( USHORT nSlotId, USHORT nId, StatusBar& rStb );
 
     static  ULONG   GetDefItemWidth(const StatusBar& rStb);
 

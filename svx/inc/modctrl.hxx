@@ -2,9 +2,9 @@
  *
  *  $RCSfile: modctrl.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:00:57 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 15:37:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ public:
 
     SFX_DECL_STATUSBAR_CONTROL();
 
-    SvxModifyControl( USHORT nId, StatusBar& rStb, SfxBindings& rBind );
+    SvxModifyControl( USHORT nSlotId, USHORT nId, StatusBar& rStb );
 
     static  ULONG   GetDefItemWidth(const StatusBar& rStb);
 
