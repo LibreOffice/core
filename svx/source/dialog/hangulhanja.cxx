@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hangulhanja.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-02-11 16:38:11 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 15:46:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifndef SVX_HANGUL_HANJA_CONVERSION_HXX
 #include "hangulhanja.hxx"
 #endif
@@ -321,6 +320,8 @@ namespace svx
                 m_pConversionDialog = pFact->CreateHangulHanjaConversionDialog(m_pUIParent, m_ePrimaryConversionDirection, ResId(RID_SVX_MDLG_HANGULHANJA));
                 DBG_ASSERT(m_pConversionDialog, "Dialogdiet fail!");//CHINA001
 
+                m_pConversionDialog->EnableRubySupport( m_pAntiImpl->HasRubySupport() );
+
                 m_pConversionDialog->SetByCharacter( m_bByCharacter );
                 m_pConversionDialog->SetConversionFormat( m_eConversionFormat );
 
@@ -409,7 +410,9 @@ namespace svx
         sal_Int16 nConversionType = HHC::eHangulToHanja == m_ePrimaryConversionDirection ? TO_HANJA : TO_HANGUL;
         sal_Int32 nConversionOption = IsByCharacter() ? CHARACTER_BY_CHARACTER : NONE;
 
-        sal_Bool bTryBothDirections = m_pConversionDialog ? m_pConversionDialog->GetUseBothDirections() : sal_True;
+        // if the dialog does not yet exist we stay with the
+        // primary conversion direction only
+        sal_Bool bTryBothDirections = m_pConversionDialog ? m_pConversionDialog->GetUseBothDirections() : sal_False;
 
         // until we know better, assume that this very conversion attempt will end up with
         // the conversion direction which is our primary direction
@@ -649,7 +652,7 @@ namespace svx
         // hangul or hanja character in the first text
         if ( !implRetrieveNextPortion( ) )
         {
-            DBG_ERROR( "HangulHanjaConversion_Impl::DoDocumentConversion: why did you call me if you do have nothing to convert?" );
+            DBG_WARNING( "HangulHanjaConversion_Impl::DoDocumentConversion: why did you call me if you do have nothing to convert?" );
             // nothing to do
             return;
         }
@@ -913,6 +916,15 @@ namespace svx
 #ifndef FS_HANGUL_HANJA
         DBG_ERROR( "HangulHanjaConversion::ReplaceUnit: to be overridden!" );
 #endif
+    }
+
+    //-------------------------------------------------------------------------
+    sal_Bool HangulHanjaConversion::HasRubySupport() const
+    {
+#ifndef FS_HANGUL_HANJA
+        DBG_ERROR( "HangulHanjaConversion::HasRubySupport: to be overridden!" );
+#endif
+        return sal_False;
     }
 
     //-------------------------------------------------------------------------
