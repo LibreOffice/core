@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appmain.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:27:37 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 07:56:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -457,7 +457,7 @@ SfxFilterMatcher& SfxApplication::GetFilterMatcher()
 {
     if( !pAppData_Impl->pMatcher )
     {
-        pAppData_Impl->pMatcher = new SfxFilterMatcher( TRUE );
+        pAppData_Impl->pMatcher = new SfxFilterMatcher();
         URIHelper::SetMaybeFileHdl( STATIC_LINK(
             pAppData_Impl->pMatcher, SfxFilterMatcher, MaybeFileHdl_Impl ) );
     }
