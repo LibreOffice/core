@@ -2,9 +2,9 @@
  *
  *  $RCSfile: emfwr.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 13:23:46 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 10:18:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -776,7 +776,7 @@ void EMFWriter::ImplWriteTextRecord( const Point& rPos, const String rText, cons
 
     if( nLen )
     {
-        sal_Int32   nNormWidth;
+        unsigned long nNormWidth;
         long*       pOwnArray;
         long*       pDX;
 
