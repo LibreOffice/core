@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltoken.cxx,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 09:41:43 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 11:32:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2154,7 +2154,7 @@ namespace xmloff { namespace token {
         TOKEN( "font-independent-line-spacing" ),   // XML_FONT_INDEPENDENT_LINE_SPACING
         TOKEN( "selection" ),                  // XML_SELECTION
         TOKEN( "selection-indexes" ),          // XML_SELECTION_INDEXES
-
+        TOKEN( "keep-together" ),              // XML_KEEP_TOGETHER
         { 0, NULL, NULL }                      // XML_TOKEN_END
     };
 
