@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.114 $
+ *  $Revision: 1.115 $
  *
- *  last change: $Author: cl $ $Date: 2004-04-07 12:43:21 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 14:52:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2014,14 +2014,21 @@ void SAL_CALL SvxShape::_setPropertyValue( const OUString& rPropertyName, const 
             sal_Int32 nPageNum;
             if( (rVal >>= nPageNum) && ( nPageNum >= 0 ) && ( nPageNum <= 0xffff ) )
             {
-                nPageNum <<= 1;
-                nPageNum -= 1;
-
                 SdrPageObj* pPageObj = PTR_CAST(SdrPageObj,pObj);
                 if( pPageObj )
                 {
                     SdrModel* pModel = pPageObj->GetModel();
-                    SdrPage* pNewPage = ((pModel) ? pModel->GetPage((sal_uInt16)nPageNum) : 0L);
+                    SdrPage* pNewPage = 0L;
+                    const sal_uInt16 nDestinationPageNum((sal_uInt16)((nPageNum << 1L) - 1L));
+
+                    if(pModel)
+                    {
+                        if(nDestinationPageNum < pModel->GetPageCount())
+                        {
+                            pNewPage = pModel->GetPage(nDestinationPageNum);
+                        }
+                    }
+
                     pPageObj->SetReferencedPage(pNewPage);
                 }
 
