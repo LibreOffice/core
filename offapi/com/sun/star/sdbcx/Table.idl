@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Table.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 11:16:19 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 22:12:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,12 +67,12 @@
 
  module com {  module sun {  module star {  module sdbcx {
 
-interface XDataDescriptorFactory;
-interface XColumnsSupplier;
-interface XIndexesSupplier;
-interface XKeysSupplier;
-interface XRename;
-interface XAlterTable;
+ published interface XDataDescriptorFactory;
+ published interface XColumnsSupplier;
+ published interface XIndexesSupplier;
+ published interface XKeysSupplier;
+ published interface XRename;
+ published interface XAlterTable;
 
 
 // DocMerge from xml: service com::sun::star::sdbcx::Table
@@ -97,7 +97,7 @@ interface XAlterTable;
     @see com::sun::star::sdbc::XDatabaseMetaData
     @see com::sun::star::sdbcx::Privilege
  */
-service Table
+published service Table
 {
 
     // DocMerge from xml: service com::sun::star::sdbcx::Table: interface com::sun::star::sdbcx::XDataDescriptorFactory
