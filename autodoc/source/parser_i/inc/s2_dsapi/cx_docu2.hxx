@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cx_docu2.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:35 $
+ *  last change: $Author: np $ $Date: 2002-05-14 09:02:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,7 +142,7 @@ class Cx_EoXmlConst : public Cx_Base
     virtual void        ReadCharChain(
                             CharacterSource &   io_rText );
     void                SetTokenId(
-                            udm::Enum< Tok_XmlConst::E_TokenId >
+                            lux::Enum< Tok_XmlConst::E_TokenId >
                                                 i_eTokenId )
                                                 { eTokenId = i_eTokenId; }
   private:
@@ -202,11 +202,11 @@ class Cx_EoXmlFormat_BeginTag : public Cx_Base
     virtual void        ReadCharChain(
                             CharacterSource &   io_rText );
     void                SetTokenId(
-                            udm::Enum< Tok_XmlFormat_BeginTag::E_TokenId >
+                            lux::Enum< Tok_XmlFormat_BeginTag::E_TokenId >
                                                 i_eTokenId )
                                                 { eTokenId = i_eTokenId; }
   private:
-    udm::Enum< Tok_XmlFormat_BeginTag::E_TokenId >
+    lux::Enum< Tok_XmlFormat_BeginTag::E_TokenId >
                         eTokenId;
 };
 
@@ -222,11 +222,11 @@ class Cx_EoXmlFormat_EndTag : public Cx_Base
     virtual void        ReadCharChain(
                             CharacterSource &   io_rText );
     void                SetTokenId(
-                            udm::Enum< Tok_XmlFormat_EndTag::E_TokenId >
+                            lux::Enum< Tok_XmlFormat_EndTag::E_TokenId >
                                                 i_eTokenId )
                                                 { eTokenId = i_eTokenId; }
   private:
-    udm::Enum< Tok_XmlFormat_EndTag::E_TokenId >
+    lux::Enum< Tok_XmlFormat_EndTag::E_TokenId >
                         eTokenId;
 };
 

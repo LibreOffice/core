@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tk_atag2.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:35 $
+ *  last change: $Author: np $ $Date: 2002-05-14 09:02:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@
 
 using csi::dsapi::Tok_AtTag;
 
-udm::EnumValueMap   G_aTokAtTag_EV_TokenId_Values;
+lux::EnumValueMap   G_aTokAtTag_EV_TokenId_Values;
 Tok_AtTag::EV_TokenId ev_none2(Tok_AtTag::e_none,"");
 Tok_AtTag::EV_TokenId ev_author(Tok_AtTag::author,"@author");
 Tok_AtTag::EV_TokenId ev_see(Tok_AtTag::see,"@see");
@@ -87,7 +87,7 @@ Tok_AtTag::EV_TokenId ev_guarantees(Tok_AtTag::guarantees,"@guarantees");
 Tok_AtTag::EV_TokenId ev_exception(Tok_AtTag::exception,"@exception");
 
 
-namespace udm
+namespace lux
 {
 EnumValueMap &
 Tok_AtTag::EV_TokenId::Values_()    { return G_aTokAtTag_EV_TokenId_Values; }

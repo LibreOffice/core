@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tk_keyw.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:36 $
+ *  last change: $Author: np $ $Date: 2002-05-14 09:02:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,7 @@ class TokBuiltInType : public TokKeyword
         bty_string = 9,
         bty_void = 10
     };
-    typedef udm::Enum<E_TokenId> EV_TokenId;
+    typedef lux::Enum<E_TokenId> EV_TokenId;
 
                         TokBuiltInType(
                             EV_TokenId          i_eTag )
@@ -123,7 +123,7 @@ class TokTypeModifier : public TokKeyword
         tmod_unsigned = 1,
         tmod_sequence
     };
-    typedef udm::Enum<E_TokenId> EV_TokenId;
+    typedef lux::Enum<E_TokenId> EV_TokenId;
 
                         TokTypeModifier(
                             EV_TokenId          i_eTag )
@@ -158,7 +158,7 @@ class TokMetaType : public TokKeyword
         mt_typedef,
         mt_uik
     };
-    typedef udm::Enum<E_TokenId> EV_TokenId;
+    typedef lux::Enum<E_TokenId> EV_TokenId;
 
                         TokMetaType(
                             EV_TokenId          i_eTag )
@@ -189,7 +189,7 @@ class TokStereotype : public TokKeyword
         ste_readonly,
         ste_virtual
     };
-    typedef udm::Enum<E_TokenId> EV_TokenId;
+    typedef lux::Enum<E_TokenId> EV_TokenId;
 
                         TokStereotype(
                             EV_TokenId          i_eTag )
@@ -218,7 +218,7 @@ class TokParameterHandling : public TokKeyword
         ph_out,
         ph_inout
     };
-    typedef udm::Enum<E_TokenId> EV_TokenId;
+    typedef lux::Enum<E_TokenId> EV_TokenId;
 
                         TokParameterHandling(
                             EV_TokenId          i_eTag )

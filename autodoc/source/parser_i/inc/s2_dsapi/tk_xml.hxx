@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tk_xml.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:35 $
+ *  last change: $Author: np $ $Date: 2002-05-14 09:02:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,7 @@ class Tok_XmlConst : public Tok_XmlTag
         e_null = 3,
         e_void = 4
     };
-    typedef udm::Enum<E_TokenId> EV_TokenId;
+    typedef lux::Enum<E_TokenId> EV_TokenId;
 
     // Spring and Fall
                         Tok_XmlConst(
@@ -122,7 +122,7 @@ class Tok_XmlLink_Tag : public Tok_XmlTag
         member = 2,
         type = 3
     };
-    typedef udm::Enum<E_TokenId> EV_TokenId;
+    typedef lux::Enum<E_TokenId> EV_TokenId;
 };
 
 class Tok_XmlLink_BeginTag : public Tok_XmlLink_Tag
@@ -182,7 +182,7 @@ class Tok_XmlFormat_Tag : public Tok_XmlTag
         listing = 2,
         atom = 3
     };
-    typedef udm::Enum<E_TokenId> EV_TokenId;
+    typedef lux::Enum<E_TokenId> EV_TokenId;
 };
 
 class Tok_XmlFormat_BeginTag : public Tok_XmlFormat_Tag

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hdimpl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:23 $
+ *  last change: $Author: np $ $Date: 2002-05-14 09:02:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -333,7 +333,7 @@ Create_ChildListTable( const char * i_sTitle )
     html::Table *
             dpTable = new html::Table;
     *dpTable
-//      << new xml::AnAttribute( "border", "1" )
+        << new xml::AnAttribute( "border", "1" )
         << new xml::AnAttribute( "cellpadding", "5" )
         << new xml::AnAttribute( "cellspacing", "0" )
         << new html::WidthAttr( "100%" );

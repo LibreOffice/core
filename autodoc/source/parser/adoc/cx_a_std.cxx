@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cx_a_std.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:28 $
+ *  last change: $Author: np $ $Date: 2002-05-14 09:02:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,7 +225,8 @@ Context_AdocStd::PerformStatusFunction( uintt               i_nStatusSignal,
     {
         case nF_fin_Error:
         {
-            udmstri sChar( &io_rText.CurChar(), 1 );
+            char cCC = io_rText.CurChar();
+            udmstri sChar( &cCC, 1 );
             throw X_Parser(X_Parser::x_InvalidChar, sChar, udmstri::Null_(), 0);
         }   break;
         case nF_fin_Ignore:
@@ -272,7 +273,8 @@ Context_AdocStd::PerformStatusFunction( uintt               i_nStatusSignal,
             break;
         default:
         {
-            udmstri sChar( &io_rText.CurChar(), 1 );
+            char cCC = io_rText.CurChar();
+            udmstri sChar( &cCC, 1 );
             throw X_Parser(X_Parser::x_InvalidChar, sChar, udmstri::Null_(), 0);
         }
     }   // end switch (i_nStatusSignal)

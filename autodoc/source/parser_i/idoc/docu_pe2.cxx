@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docu_pe2.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:35 $
+ *  last change: $Author: np $ $Date: 2002-05-14 09:02:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@ const char *        AtTagTitle(
 SapiDocu_PE::SapiDocu_PE()
     :   pDocu(0),
         eState(e_none),
-        fCurTokenAddFunction(AddDocuToken2Void),
+        fCurTokenAddFunction(&SapiDocu_PE::AddDocuToken2Void),
         pCurAtTag(0)
 {
 }
@@ -114,7 +114,7 @@ SapiDocu_PE::ProcessToken( DYN csi::dsapi::Token & let_drToken )
     {
         pDocu = new ary::info::CodeInformation;
         eState = st_short;
-        fCurTokenAddFunction = AddDocuToken2Short;
+        fCurTokenAddFunction = &SapiDocu_PE::AddDocuToken2Short;
     }
 
     csv_assert(pDocu);
@@ -129,7 +129,7 @@ SapiDocu_PE::Process_AtTag( const Tok_AtTag & i_rToken )
     if (NOT pCurAtTag)
     {
         eState = st_attags;
-        fCurTokenAddFunction = AddDocuToken2CurAtTag;
+        fCurTokenAddFunction = &SapiDocu_PE::AddDocuToken2CurAtTag;
     }
     else
     {
@@ -140,23 +140,23 @@ SapiDocu_PE::Process_AtTag( const Tok_AtTag & i_rToken )
     if (i_rToken.Id() == Tok_AtTag::param)
     {
         pCurAtTag = new DT_ParameterAtTag;
-        fCurTokenAddFunction = SetCurParameterAtTagName;
+        fCurTokenAddFunction = &SapiDocu_PE::SetCurParameterAtTagName;
     }
     else if (i_rToken.Id() == Tok_AtTag::see)
     {
         pCurAtTag = new DT_SeeAlsoAtTag;
-        fCurTokenAddFunction = SetCurSeeAlsoAtTagLinkText;
+        fCurTokenAddFunction = &SapiDocu_PE::SetCurSeeAlsoAtTagLinkText;
     }
     else if (i_rToken.Id() == Tok_AtTag::deprecated)
     {
         pDocu->SetDeprecated();
         pCurAtTag = new DT_StdAtTag("");
-        fCurTokenAddFunction = AddDocuToken2CurAtTag;
+        fCurTokenAddFunction = &SapiDocu_PE::AddDocuToken2CurAtTag;
     }
     else
     {
         pCurAtTag = new DT_StdAtTag( AtTagTitle(i_rToken) );
-        fCurTokenAddFunction = AddDocuToken2CurAtTag;
+        fCurTokenAddFunction = &SapiDocu_PE::AddDocuToken2CurAtTag;
     }
 }
 
@@ -166,7 +166,7 @@ SapiDocu_PE::Process_HtmlTag( const Tok_HtmlTag & i_rToken )
     if (eState == st_short AND i_rToken.IsParagraphStarter())
     {
         eState = st_description;
-        fCurTokenAddFunction = AddDocuToken2Description;
+        fCurTokenAddFunction = &SapiDocu_PE::AddDocuToken2Description;
     }
 
     // Workaround special for some errors in API docu:
@@ -318,7 +318,7 @@ SapiDocu_PE::Process_DocuEnd()
     eState = st_complete;
     if (pCurAtTag)
         pDocu->AddAtTag(*pCurAtTag.Release());
-    fCurTokenAddFunction = AddDocuToken2Void;
+    fCurTokenAddFunction = &SapiDocu_PE::AddDocuToken2Void;
 }
 
 void
@@ -383,7 +383,7 @@ SapiDocu_PE::SetCurParameterAtTagName( DYN ary::info::DocuToken & let_drNewToken
     else
         pCurAtTag->SetName("parameter ?");
     delete &let_drNewToken;
-    fCurTokenAddFunction = AddDocuToken2CurAtTag;
+    fCurTokenAddFunction = &SapiDocu_PE::AddDocuToken2CurAtTag;
 }
 
 void
@@ -396,7 +396,7 @@ SapiDocu_PE::SetCurSeeAlsoAtTagLinkText( DYN ary::info::DocuToken & let_drNewTok
     else
         pCurAtTag->SetName("unknown ?");
     delete &let_drNewToken;
-    fCurTokenAddFunction = AddDocuToken2CurAtTag;
+    fCurTokenAddFunction = &SapiDocu_PE::AddDocuToken2CurAtTag;
 }
 
 const char *

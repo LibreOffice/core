@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filecoll.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:28 $
+ *  last change: $Author: np $ $Date: 2002-05-14 09:02:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,19 +94,8 @@ class FileCollector : public autodoc::FileCollector_Ifc
     virtual uintt       Size() const;
 
   private:
-    typedef StringVector        FilePathList;
-    typedef StringVector        FileNameList;
-    typedef StringVector        DirNameList;
-
-    void                GetSubDirectories(
-                            DirNameList &       o_rList,
-                            const char *        i_sParentDir );
-    void                GetFiles(
-                            FileNameList &      o_rList,
-                            const char *        i_sParentDir,
-                            const char *        i_sFilter );
-
-    FilePathList        aFoundFiles;
+    // DATA
+    StringVector        aFoundFiles;
 };
 
 

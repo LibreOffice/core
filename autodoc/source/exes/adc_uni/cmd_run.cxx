@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmd_run.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: np $ $Date: 2002-05-02 12:36:16 $
+ *  last change: $Author: np $ $Date: 2002-05-14 09:02:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,6 @@
 
 // NOT FULLY DEFINED SERVICES
 #include <cosv/x.hxx>
-#include <cosv/ploc.hxx>
 #include <ary/ary.hxx>
 #include <ary/ary.hxx>
 #include <ary/cpp/c_rwgate.hxx>
@@ -141,11 +140,15 @@ CommandRunner::CommandRunner()
         pReposy(0),
         nResultCode(0)
 {
+    Cout() << "\nAutodoc version 2.1"
+           << "\n-------------------"
+           << "\n" << Endl();
 }
 
 CommandRunner::~CommandRunner()
 {
     ary::Repository::Destroy_();
+    Cout() << "\n" << Endl();
 }
 
 int
@@ -211,14 +214,14 @@ CommandRunner::Parse()
 
         switch ( Get_ProjectLanguage(rCmd, *(*it)).eLanguage )
         {
-             case command::S_LanguageInfo::cpp:
+            case command::S_LanguageInfo::cpp:
             {
                 Get_CppParser().Run( (*it)->sName,
                                      (*it)->aRootDirectory,
                                      *pFiles );
 //              pReposy->RwGate_Cpp().Connect_AllTypes_2_TheirRelated_CodeEntites();
             }   break;
-             case command::S_LanguageInfo::idl:
+            case command::S_LanguageInfo::idl:
             {
                 Get_IdlParser().Run(*pFiles);
             }   break;
@@ -404,8 +407,8 @@ CommandRunner::CreateHtml_NewStyle()
             rGate = pReposy->DisplayGate_Cpp();
 
     Dyn< autodoc::HtmlDisplay_UdkStd > pHtmlDisplay;
-            pHtmlDisplay = DisplayToolsFactory_Ifc::GetIt_().
-                                Create_HtmlDisplay_UdkStd();
+            pHtmlDisplay = DisplayToolsFactory_Ifc::GetIt_()
+                                .Create_HtmlDisplay_UdkStd();
 
     pHtmlDisplay->Run( pCommandLine->Cmd_CreateHtml()->OutputDir(),
                        rGate,
@@ -417,7 +420,9 @@ CommandRunner::CreateHtml_OldIdlStyle()
 {
     ary::uidl::Gate &
         rAryGate            = pReposy->RwGate_Idl();
+#if 0   // Should become obsolete
     G_pGate                 = &rAryGate;
+
     ary::uidl::CeNamespace &
         rGlobalNamespace    = rAryGate.GlobalNamespace();
 
@@ -426,11 +431,19 @@ CommandRunner::CreateHtml_OldIdlStyle()
                                     pCommandLine->Cmd_CreateHtml()->OutputDir(),
                                     DisplayToolsFactory_Ifc::GetIt_()
                                         .Create_StdFrame() );
-
     Recursive_PutOutNamespace( *pDisplay,
                                rGlobalNamespace,
                                rAryGate );
     pDisplay->WriteGlobalIndices();
+#endif // 0
+
+    // New Style Output
+    Dyn<autodoc::HtmlDisplay_Idl_Ifc> pNewDisplay;
+        pNewDisplay         = DisplayToolsFactory_Ifc::GetIt_()
+                                .Create_HtmlDisplay_Idl();
+    pNewDisplay->Run( pCommandLine->Cmd_CreateHtml()->OutputDir(),
+                      rAryGate,
+                      DisplayToolsFactory_Ifc::GetIt_().Create_StdFrame() );
 }
 
 

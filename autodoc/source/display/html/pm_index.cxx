@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pm_index.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:25 $
+ *  last change: $Author: np $ $Date: 2002-05-14 09:02:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -313,7 +313,6 @@ PageMaker_Index::Write_CeIndexEntry( const ary::CodeEntity & i_rCe,
     static csv::StreamStr aQualification(500);
 
     const ary::CodeEntity & rOwner = Env().Gate().Ref_Ce(i_rCe.Owner());
-
 
     pCurIndex->AddEntry();
     pCurIndex->Term()

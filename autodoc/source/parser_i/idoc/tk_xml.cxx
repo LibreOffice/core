@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tk_xml.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:35 $
+ *  last change: $Author: np $ $Date: 2002-05-14 09:02:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,27 +71,27 @@ using csi::dsapi::Tok_XmlLink_Tag;
 using csi::dsapi::Tok_XmlFormat_Tag;
 
 
-udm::EnumValueMap           G_aTok_XmlConst_EV_TokenId_Values;
+lux::EnumValueMap           G_aTok_XmlConst_EV_TokenId_Values;
 Tok_XmlConst::EV_TokenId    ev_consts_none(Tok_XmlConst::e_none,"");
 Tok_XmlConst::EV_TokenId    ev_e_true(Tok_XmlConst::e_true,"true");
 Tok_XmlConst::EV_TokenId    ev_e_false(Tok_XmlConst::e_false,"false");
 Tok_XmlConst::EV_TokenId    ev_e_null(Tok_XmlConst::e_null,"NULL");
 Tok_XmlConst::EV_TokenId    ev_e_void(Tok_XmlConst::e_void,"void");
 
-udm::EnumValueMap           G_aTok_XmlLink_Tag_EV_TokenId_Values;
+lux::EnumValueMap           G_aTok_XmlLink_Tag_EV_TokenId_Values;
 Tok_XmlLink_Tag::EV_TokenId ev_linktags_none(Tok_XmlLink_Tag::e_none,"");
 Tok_XmlLink_Tag::EV_TokenId ev_e_const(Tok_XmlLink_Tag::e_const,"const");
 Tok_XmlLink_Tag::EV_TokenId ev_member(Tok_XmlLink_Tag::member,"member");
 Tok_XmlLink_Tag::EV_TokenId ev_type(Tok_XmlLink_Tag::type,"type");
 
-udm::EnumValueMap               G_aTok_XmlFormat_Tag_EV_TokenId_Values;
+lux::EnumValueMap               G_aTok_XmlFormat_Tag_EV_TokenId_Values;
 Tok_XmlFormat_Tag::EV_TokenId   ev_formattags_none(Tok_XmlFormat_Tag::e_none,"");
 Tok_XmlFormat_Tag::EV_TokenId   ev_code(Tok_XmlFormat_Tag::code,"code");
 Tok_XmlFormat_Tag::EV_TokenId   ev_listing(Tok_XmlFormat_Tag::listing,"listing");
 Tok_XmlFormat_Tag::EV_TokenId   ev_atom(Tok_XmlFormat_Tag::atom,"code");
 
 
-namespace udm
+namespace lux
 {
 
 EnumValueMap &
@@ -101,7 +101,7 @@ Tok_XmlLink_Tag::EV_TokenId::Values_()      { return G_aTok_XmlLink_Tag_EV_Token
 EnumValueMap &
 Tok_XmlFormat_Tag::EV_TokenId::Values_()    { return G_aTok_XmlFormat_Tag_EV_TokenId_Values; }
 
-}   // namespace udm
+}   // namespace lux
 
 
 

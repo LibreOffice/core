@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tk_keyw.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:35 $
+ *  last change: $Author: np $ $Date: 2002-05-14 09:02:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@ using csi::uidl::TokStereotype;
 using csi::uidl::TokParameterHandling;
 
 
-udm::EnumValueMap           G_aTokBuiltInType_EV_TokenId_Values;
+lux::EnumValueMap           G_aTokBuiltInType_EV_TokenId_Values;
 TokBuiltInType::EV_TokenId  ev_bty_none(TokBuiltInType::e_none,"");
 TokBuiltInType::EV_TokenId  ev_bty_any(TokBuiltInType::bty_any,"any");
 TokBuiltInType::EV_TokenId  ev_bty_boolean(TokBuiltInType::bty_boolean,"boolean");
@@ -88,13 +88,13 @@ TokBuiltInType::EV_TokenId  ev_bty_string(TokBuiltInType::bty_string,"string");
 TokBuiltInType::EV_TokenId  ev_bty_void(TokBuiltInType::bty_void,"void");
 
 
-udm::EnumValueMap           G_aTokTypeModifier_EV_TokenId_Values;
+lux::EnumValueMap           G_aTokTypeModifier_EV_TokenId_Values;
 TokTypeModifier::EV_TokenId ev_tmod_none(TokTypeModifier::e_none,"");
 TokTypeModifier::EV_TokenId ev_tmod_unsigned(TokTypeModifier::tmod_unsigned,"unsigned");
 TokTypeModifier::EV_TokenId ev_tmod_sequence(TokTypeModifier::tmod_sequence,"sequence");
 
 
-udm::EnumValueMap           G_aTokMetaType_EV_TokenId_Values;
+lux::EnumValueMap           G_aTokMetaType_EV_TokenId_Values;
 TokMetaType::EV_TokenId     ev_mt_none(TokMetaType::e_none,"");
 TokMetaType::EV_TokenId     ev_mt_attribute(TokMetaType::mt_attribute,"attribute");
 TokMetaType::EV_TokenId     ev_mt_constants(TokMetaType::mt_constants,"constants");
@@ -110,7 +110,7 @@ TokMetaType::EV_TokenId     ev_mt_typedef(TokMetaType::mt_typedef,"typedef");
 TokMetaType::EV_TokenId     ev_mt_uik(TokMetaType::mt_uik,"uik");
 
 
-udm::EnumValueMap           G_aTokStereotype_EV_TokenId_Values;
+lux::EnumValueMap           G_aTokStereotype_EV_TokenId_Values;
 TokStereotype::EV_TokenId   ev_ste_none(TokStereotype::e_none,"");
 TokStereotype::EV_TokenId   ev_ste_const(TokStereotype::ste_const,"const");
 TokStereotype::EV_TokenId   ev_ste_oneway(TokStereotype::ste_oneway,"oneway");
@@ -119,14 +119,14 @@ TokStereotype::EV_TokenId   ev_ste_readonly(TokStereotype::ste_readonly,"readonl
 TokStereotype::EV_TokenId   ev_ste_virtual(TokStereotype::ste_virtual,"virtual");
 
 
-udm::EnumValueMap                   G_aTokParameterHandling_EV_TokenId_Values;
+lux::EnumValueMap                   G_aTokParameterHandling_EV_TokenId_Values;
 TokParameterHandling::EV_TokenId    ev_ph_none(TokParameterHandling::e_none,"");
 TokParameterHandling::EV_TokenId    ev_ph_in(TokParameterHandling::ph_in,"in");
 TokParameterHandling::EV_TokenId    ev_ph_out(TokParameterHandling::ph_out,"out");
 TokParameterHandling::EV_TokenId    ev_ph_inout(TokParameterHandling::ph_inout,"inout");
 
 
-namespace udm
+namespace lux
 {
 
 EnumValueMap &
@@ -140,7 +140,7 @@ TokStereotype::EV_TokenId::Values_()        { return G_aTokStereotype_EV_TokenId
 EnumValueMap &
 TokParameterHandling::EV_TokenId::Values_() { return G_aTokParameterHandling_EV_TokenId_Values; }
 
-}   // namespace udm
+}   // namespace lux
 
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tkpchars.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:36 $
+ *  last change: $Author: np $ $Date: 2002-05-14 09:02:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,7 +163,7 @@ CharacterSource::BeginSource()
 }
 
 ///  KORR:  So far, this works only when tokens do not cross inserted text boundaries.
-const char &
+char
 CharacterSource::MoveOn_OverStack()
 {
     while ( aSourcesStack.size() > 0 AND nCurPos >= nSourceSize-1 )

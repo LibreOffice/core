@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dsp_html_std.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:16 $
+ *  last change: $Author: np $ $Date: 2002-05-14 09:02:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,10 @@ namespace ary
     namespace cpp
     {
         class DisplayGate;
+    }
+    namespace uidl
+    {
+        class Gate;
     }
 }
 
@@ -201,8 +205,43 @@ HtmlDisplay_UdkStd::Run( const char *                    i_sOutputDirectory,
                          const ary::cpp::DisplayGate &   i_rAryGate,
                          const display::CorporateFrame & i_rLayout,
                          const StringVector *  i_pProjectList )
-    { do_Run( i_sOutputDirectory, i_rAryGate, i_rLayout, i_pProjectList ); }
+{
+    do_Run( i_sOutputDirectory, i_rAryGate, i_rLayout, i_pProjectList );
+}
 
+
+
+// class HtmlDisplay_Idl_Ifc
+
+class HtmlDisplay_Idl_Ifc
+{
+  public:
+    virtual             ~HtmlDisplay_Idl_Ifc() {}
+
+    void                Run(
+                            const char *        i_sOutputDirectory,
+                            const ary::uidl::Gate &
+                                                i_rAryGate,
+                            const display::CorporateFrame &
+                                                i_rLayout );
+  private:
+    virtual void        do_Run(
+                            const char *        i_sOutputDirectory,
+                            const ary::uidl::Gate &
+                                                i_rAryGate,
+                            const display::CorporateFrame &
+                                                i_rLayout ) = 0;
+};
+
+// IMPLEMENTATION
+
+inline void
+HtmlDisplay_Idl_Ifc::Run( const char *                    i_sOutputDirectory,
+                          const ary::uidl::Gate &         i_rAryGate,
+                          const display::CorporateFrame & i_rLayout )
+{
+    do_Run( i_sOutputDirectory, i_rAryGate, i_rLayout );
+}
 
 
 } // namespace autodoc

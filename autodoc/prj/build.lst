@@ -53,6 +53,7 @@ ar	autodoc\source\display\inc\funclist	get		-	all	ar_sdi_flist NULL
 ar	autodoc\source\display\inc\html 	get		-	all	ar_sdi_html NULL
 ar	autodoc\source\display\html	        nmake	-	all	ar_sd_html NULL
 ar	autodoc\source\display\kernel	    nmake	-	all	ar_sd_kernel NULL
+ar	autodoc\source\display\udm2html     nmake	-	all	ar_sd_u2h NULL
 ar	autodoc\source\parser				get		-	all	ar_sp NULL
 ar	autodoc\source\parser\inc			get		-	all	ar_spi NULL
 ar	autodoc\source\parser\inc\adoc		get		-	all	ar_spi_adoc NULL
@@ -78,7 +79,7 @@ ar	autodoc\prj							get		-	all	ar_prj NULL
 ar	autodoc\source\mkinc				get		-	all	ar_smk NULL
 ar	autodoc\util						get		-	all	ar_util NULL
 ar	autodoc\source\exes					get		-	all	ar_se NULL
-ar	autodoc\source\exes\comphelp		nmake	-	all	ar_se_chelp NULL
-ar	autodoc\source\exes\adc_uni			nmake	-	all	ar_se_uni ar_sr_cpp ar_sr_info ar_sr_kernel ar_sr_loc ar_sr_store ar_sr2_idl ar_sr2_krnl ar_sc_html ar_sc2_idoc ar_sc2_html ar_sc2_idl ar_sd2_idoc ar_sd_html ar_sd_kernel ar_sp_adoc ar_sp_cpp ar_sp_krnl ar_sp_sem ar_sp_tok ar_sp2_idl ar_sp2_idoc ar_sp2_tok ar_st ar_se_chelp NULL
+ar	autodoc\source\exes\adc_uni			nmake	-	all	ar_se_uni ar_sr_cpp ar_sr_info ar_sr_kernel ar_sr_loc ar_sr_store ar_sr2_idl ar_sr2_krnl ar_sc_html ar_sc2_idoc ar_sc2_html ar_sc2_idl ar_sd2_idoc ar_sd_html ar_sd_kernel ar_sd_u2h ar_sp_adoc ar_sp_cpp ar_sp_krnl ar_sp_sem ar_sp_tok ar_sp2_idl ar_sp2_idoc ar_sp2_tok ar_st NULL
 #====================================================================================
+# ar	autodoc\source\exes\comphelp		nmake	-	all	ar_se_chelp NULL
 

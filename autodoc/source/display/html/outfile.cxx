@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outfile.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:24 $
+ *  last change: $Author: np $ $Date: 2002-05-14 09:02:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,6 +193,10 @@ HtmlDocuFile::CreateFile()
 
     WriteHeader(aFile);
     WriteBody(aFile);
+
+    // Write end
+    static const char sCompletion[] = "\n</html>\n";
+    aFile.write( sCompletion );
 
     aFile.close();
     Cout() << '.' << Flush();

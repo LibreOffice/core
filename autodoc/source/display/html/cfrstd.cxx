@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfrstd.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:22 $
+ *  last change: $Author: np $ $Date: 2002-05-14 09:02:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,7 @@ StdFrame::LogoLink() const
 const char *
 StdFrame::CopyrightText() const
 {
-    return "Copyright 2001-2002 Sun Microsystems, Inc., 901 San Antonio Road, Palo Alto, CA 94303 USA.";
+    return "Copyright 2002 Sun Microsystems, Inc., 901 San Antonio Road, Palo Alto, CA 94303 USA.";
 //  return "Copyright 2001 OpenOffice.org Foundation. All Rights Reserved.";
 
 }

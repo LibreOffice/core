@@ -2,9 +2,9 @@
  *
  *  $RCSfile: disdocum.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:16 $
+ *  last change: $Author: np $ $Date: 2002-05-14 09:02:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,44 @@ class DocumentationDisplay
                             const csi::dsapi::DT_ParameterAtTag &
                                                 i_rToken ) = 0;
 };
+
+
+class DocuTag_Display : public DocumentationDisplay
+{
+  public:
+    // Dummies, implemented in source\ary_i\kernel\ci_atag2.cxx
+    virtual void        Display_TextToken(
+                            const csi::dsapi::DT_TextToken &
+                                                i_rToken );
+    virtual void        Display_MupType(
+                            const csi::dsapi::DT_MupType &  i_rToken );
+    virtual void        Display_MupMember(
+                            const csi::dsapi::DT_MupMember &
+                                                i_rToken );
+    virtual void        Display_MupConst(
+                            const csi::dsapi::DT_MupConst &
+                                                i_rToken );
+    virtual void        Display_Style(
+                            const csi::dsapi::DT_Style &    i_rToken );
+    virtual void        Display_EOL();
+};
+
+class DocuText_Display : public DocumentationDisplay
+{
+  public:
+    // Dummies, implemented in source\ary_i\kernel\ci_text2.cxx
+    virtual void        Display_StdAtTag(
+                            const csi::dsapi::DT_StdAtTag &
+                                                i_rToken );
+    virtual void        Display_SeeAlsoAtTag(
+                            const csi::dsapi::DT_SeeAlsoAtTag &
+                                                i_rToken );
+    virtual void        Display_ParameterAtTag(
+                            const csi::dsapi::DT_ParameterAtTag &
+                                                i_rToken );
+};
+
+
 
 }   // namespace info
 }   // namespace ary

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: displfct.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:25 $
+ *  last change: $Author: np $ $Date: 2002-05-14 09:02:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,10 +75,14 @@ class DisplayToolsFactory : public autodoc::DisplayToolsFactory_Ifc
                         DisplayToolsFactory();
     virtual             ~DisplayToolsFactory();
 
-    virtual DYN autodoc::HtmlDisplay_UdkStd *
-                        Create_HtmlDisplay_UdkStd() const;
 //    virtual DYN autodoc::TextDisplay_FunctionList_Ifc *
 //                        Create_TextDisplay_FunctionList() const;
+
+    virtual DYN autodoc::HtmlDisplay_UdkStd *
+                        Create_HtmlDisplay_UdkStd() const;
+    virtual DYN autodoc::HtmlDisplay_Idl_Ifc *
+                        Create_HtmlDisplay_Idl() const;
+
     virtual const display::CorporateFrame &
                         Create_StdFrame() const;
   private:

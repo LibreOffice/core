@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pm_index.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:25 $
+ *  last change: $Author: np $ $Date: 2002-05-14 09:02:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ class ChildList_Display;
 class NavigationBar;
 
 class PageMaker_Index : public SpecializedPageMaker,
-                        private ary::cpp::Display
+                        public ary::cpp::Display      // Must be 'public' because of a Solaris-Compiler-bug with dynamic_cast in hierarchies with private inheritance.
 {
   public:
                         PageMaker_Index(

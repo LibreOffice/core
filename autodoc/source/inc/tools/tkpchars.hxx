@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tkpchars.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:28 $
+ *  last change: $Author: np $ $Date: 2002-05-14 09:02:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,7 +118,7 @@ class CharacterSource
                             const char *        i_sText2Insert );
 
         /// @return CurChar() after moving forward one char.
-        const char &    MoveOn();
+            char            MoveOn();
         /** @return
             The token which starts at the char which was CurChar(), when
             CutToken() was called the last time - or at the beginning of the text.
@@ -129,7 +129,7 @@ class CharacterSource
         const char *    CutToken();
 
         // INQUIRY
-        const char &    CurChar() const;
+        char            CurChar() const;
         /// @return The result of the last CutToken(). Or NULL, if there was none yet.
         const char *    CurToken() const;
 
@@ -159,7 +159,7 @@ class CharacterSource
 
         void            BeginSource();
         intt            CurPos() const;
-        const char &    MoveOn_OverStack();
+        char            MoveOn_OverStack();
 
         // DATA
         std::stack< S_SourceState >
@@ -175,7 +175,7 @@ class CharacterSource
 };
 
 
-inline const char &
+inline char
 CharacterSource::MoveOn()
     {
 if (DEBUG_ShowText())
@@ -189,7 +189,7 @@ if (DEBUG_ShowText())
         else
             return dpSource[nCurPos = nSourceSize];
     }
-inline const char &
+inline char
 CharacterSource::CurChar() const
     { return nCurPos != nLastCut ? dpSource[nCurPos] : cCharAtLastCut; }
 inline const char *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: displaying.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:16 $
+ *  last change: $Author: np $ $Date: 2002-05-14 09:02:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,8 @@ namespace autodoc
 {
 
 class HtmlDisplay_UdkStd;
+class HtmlDisplay_Idl_Ifc;
+
 // class TextDisplay_FunctionList_Ifc;
 
 
@@ -90,9 +92,10 @@ class DisplayToolsFactory_Ifc
 //    virtual DYN autodoc::TextDisplay_FunctionList_Ifc *
 //                        Create_TextDisplay_FunctionList() const = 0;
 
-
     virtual DYN autodoc::HtmlDisplay_UdkStd *
                         Create_HtmlDisplay_UdkStd() const = 0;
+    virtual DYN autodoc::HtmlDisplay_Idl_Ifc *
+                        Create_HtmlDisplay_Idl() const = 0;
 
     virtual const display::CorporateFrame &
                         Create_StdFrame() const = 0;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: displfct.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:25 $
+ *  last change: $Author: np $ $Date: 2002-05-14 09:02:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,7 @@
 
 // NOT FULLY DECLARED SERVICES
 #include <html/chd_udk2.hxx>
+#include <html/hd_udk2.hxx>
 #include <html/cfrstd.hxx>
 
 
@@ -93,17 +94,24 @@ DisplayToolsFactory::~DisplayToolsFactory()
 {
 }
 
+// DYN autodoc::TextDisplay_FunctionList_Ifc *
+// DisplayToolsFactory::Create_TextDisplay_FunctionList() const
+// {
+//      return new CppTextDisplay_FunctionList;
+// }
+
+
 DYN autodoc::HtmlDisplay_UdkStd *
 DisplayToolsFactory::Create_HtmlDisplay_UdkStd() const
 {
     return new CppHtmlDisplay_Udk2;
 }
 
-// DYN autodoc::TextDisplay_FunctionList_Ifc *
-// DisplayToolsFactory::Create_TextDisplay_FunctionList() const
-// {
-//      return new CppTextDisplay_FunctionList;
-// }
+DYN autodoc::HtmlDisplay_Idl_Ifc *
+DisplayToolsFactory::Create_HtmlDisplay_Idl() const
+{
+    return new IdlHtmlDisplay_Udk2;
+}
 
 const display::CorporateFrame &
 DisplayToolsFactory::Create_StdFrame() const

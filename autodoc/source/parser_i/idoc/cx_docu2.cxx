@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cx_docu2.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:35 $
+ *  last change: $Author: np $ $Date: 2002-05-14 09:02:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,6 @@ Cx_Base::FollowUpContext()
 void
 Cx_Base::Handle_DocuSyntaxError( CharacterSource & io_rText )
 {
-    io_rText.MoveOn();
     Cerr() << "Error:  Syntax error in documentation within "
               << "this text:\n\""
               << io_rText.CutToken()
@@ -152,6 +151,8 @@ Cx_EoXmlLink_BeginTag::ReadCharChain( CharacterSource & io_rText )
                 char c = jumpTo(io_rText,'"','*', '>');
                 if ( NULCH == c OR '*' == c OR '>' == c)
                 {
+                    if ( '>' == c )
+                        io_rText.MoveOn();
                     Handle_DocuSyntaxError(io_rText);
                     return;
                 }
@@ -211,6 +212,8 @@ Cx_EoXmlFormat_BeginTag::ReadCharChain( CharacterSource & io_rText )
             char c = jumpTo(io_rText,'"','*','>');
             if ( NULCH == c OR '*' == c OR '>' == c )
             {
+                if ('>' == c )
+                    io_rText.MoveOn();
                 Handle_DocuSyntaxError(io_rText);
                 return;
             }

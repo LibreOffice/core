@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filecoll.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: np $ $Date: 2002-05-07 18:32:25 $
+ *  last change: $Author: np $ $Date: 2002-05-14 09:02:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,7 @@ FileCollector::AddFilesFrom( const char *                 i_sRootDir,
         aPath << i_sRootDir << csv::ploc::Delimiter();
         uintt nSubDirStart = aPath.tellp();
 
-        DirNameList aSubDirs;
+        StringVector aSubDirs;
         aDir.GetContainedDirectories(aSubDirs);
 
         for ( const_iterator iter = aSubDirs.begin();
@@ -161,32 +161,6 @@ FileCollector::Size() const
     return aFoundFiles.size();
 }
 
-void
-FileCollector::GetSubDirectories( DirNameList &     o_rList,
-                                  const char *      i_sParentDir )
-{
-    csv::ploc::Directory aSubDirs(i_sParentDir);
-    aSubDirs.GetContainedDirectories(o_rList);
-}
-
-void
-FileCollector::GetFiles( FileNameList &     o_rList,
-                         const char *       i_sParentDir,
-                         const char *       i_sFilter )
-{
-    // Alife sign:
-    Cout() << "." << Flush();
-
-    csv::ploc::Directory aDir(i_sParentDir);
-    if (NOT aDir.Exists())
-    {
-        Cerr() << "Error: The path for the files to be parsed could not be found."
-             << Endl();
-        return;
-    }
-
-    aDir.GetContainedFiles(o_rList, i_sFilter);
-}
 
 
 

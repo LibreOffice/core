@@ -2,9 +2,9 @@
  *
  *  $RCSfile: atokdeal.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:32 $
+ *  last change: $Author: np $ $Date: 2002-05-14 09:02:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@ namespace adoc
 
 class Token;
 
-class TokenDealer : public virtual ::TokenDealer
+class TokenDealer : virtual public ::TokenDealer
 {
   public:
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ci_atag2.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:21 $
+ *  last change: $Author: np $ $Date: 2002-05-14 09:02:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,27 @@
 
 
 // NOT FULLY DEFINED SERVICES
+#include <ary_i/disdocum.hxx>
 
 
+namespace ary
+{
+namespace info
+{
+
+void    DocuTag_Display::Display_TextToken(
+                            const csi::dsapi::DT_TextToken & ) {}
+void    DocuTag_Display::Display_MupType(
+                            const csi::dsapi::DT_MupType & ) {}
+void    DocuTag_Display::Display_MupMember(
+                            const csi::dsapi::DT_MupMember & ) {}
+void    DocuTag_Display::Display_MupConst(
+                            const csi::dsapi::DT_MupConst & ) {}
+void    DocuTag_Display::Display_Style(
+                            const csi::dsapi::DT_Style & ) {}
+void    DocuTag_Display::Display_EOL() {}
+
+
+}   // namespace info
+}   // namespace ary
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hd_chlst.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:23 $
+ *  last change: $Author: np $ $Date: 2002-05-14 09:02:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -400,6 +400,7 @@ ChildList_Display::Display_Class( const ary::cpp::Class & i_rData )
     if ( i_rData.Protection() == ary::cpp::PROTECT_global )
     {
         sLink = ClassFileName(i_rData.LocalName());
+
     }
     else
     {

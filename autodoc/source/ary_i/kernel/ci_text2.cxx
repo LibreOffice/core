@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ci_text2.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:21 $
+ *  last change: $Author: np $ $Date: 2002-05-14 09:02:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,7 @@
 
 
 // NOT FULLY DEFINED SERVICES
+#include <ary_i/disdocum.hxx>
 
 
 namespace ary
@@ -119,6 +120,16 @@ DocuTex2::IsEmpty() const
         return;
 */
 }
+
+
+
+void    DocuText_Display::Display_StdAtTag(
+                            const csi::dsapi::DT_StdAtTag & ) {}
+void    DocuText_Display::Display_SeeAlsoAtTag(
+                            const csi::dsapi::DT_SeeAlsoAtTag & ) {}
+void    DocuText_Display::Display_ParameterAtTag(
+                            const csi::dsapi::DT_ParameterAtTag & ) {}
+
 
 
 }   // namespace info

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: np $ $Date: 2002-03-22 12:43:36 $
+#   last change: $Author: np $ $Date: 2002-05-14 09:02:17 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -94,13 +94,13 @@ LIB1FILES= \
             $(LB)$/parser_kernel.lib $(LB)$/parser_tokens.lib $(LB)$/parser_semantic.lib \
             $(LB)$/parser_cpp.lib $(LB)$/parser_adoc.lib \
             $(LB)$/csi_html.lib \
-            $(LB)$/display_kernel.lib $(LB)$/display_html.lib \
+            $(LB)$/display_kernel.lib $(LB)$/display_html.lib $(LB)$/display_udm2html.lib \
             $(LB)$/ary2_kernel.lib $(LB)$/ary2_uidl.lib  \
             $(LB)$/csi2_uidl.lib $(LB)$/csi2_dsapi.lib $(LB)$/csi2_html.lib \
             $(LB)$/parser2_tokens.lib  \
             $(LB)$/parser2_s2_luidl.lib $(LB)$/parser2_s2_dsapi.lib \
-            $(LB)$/display2_dsapi.lib \
-            $(LB)$/comphelp.lib
+            $(LB)$/display2_dsapi.lib
+#			$(LB)$/comphelp.lib
 
 #           $(LB)$/display_funclist.lib
 
@@ -126,13 +126,13 @@ APP1DEPN=   $(LB)$/$(TARGET).lib $(LB)$/autodoc_tools.lib \
             $(LB)$/parser_kernel.lib $(LB)$/parser_tokens.lib $(LB)$/parser_semantic.lib \
             $(LB)$/parser_cpp.lib $(LB)$/parser_adoc.lib \
             $(LB)$/csi_html.lib \
-            $(LB)$/display_kernel.lib $(LB)$/display_html.lib \
+            $(LB)$/display_kernel.lib $(LB)$/display_html.lib $(LB)$/display_udm2html.lib \
             $(LB)$/ary2_kernel.lib $(LB)$/ary2_uidl.lib  \
             $(LB)$/csi2_uidl.lib $(LB)$/csi2_dsapi.lib $(LB)$/csi2_html.lib \
             $(LB)$/parser2_tokens.lib  \
             $(LB)$/parser2_s2_luidl.lib $(LB)$/parser2_s2_dsapi.lib \
-            $(LB)$/display2_dsapi.lib \
-            $(LB)$/comphelp.lib
+            $(LB)$/display2_dsapi.lib
+#			$(LB)$/comphelp.lib
 
 #           $(LB)$/display_funclist.lib
 

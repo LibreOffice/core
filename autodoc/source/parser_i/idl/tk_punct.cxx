@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tk_punct.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:35 $
+ *  last change: $Author: np $ $Date: 2002-05-14 09:02:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@
 using csi::uidl::TokPunctuation;
 
 
-udm::EnumValueMap           G_aTokPunctuation_EV_TokenId_Values;
+lux::EnumValueMap           G_aTokPunctuation_EV_TokenId_Values;
 TokPunctuation::EV_TokenId  ev_none(TokPunctuation::e_none,"");
 TokPunctuation::EV_TokenId  BracketOpen(TokPunctuation::BracketOpen,"(");
 TokPunctuation::EV_TokenId  BracketClose(TokPunctuation::BracketClose,")");
@@ -88,7 +88,7 @@ TokPunctuation::EV_TokenId  Fullstop(TokPunctuation::Fullstop,".");
 
 
 
-namespace udm
+namespace lux
 {
 EnumValueMap &
 TokPunctuation::EV_TokenId::Values_()       { return G_aTokPunctuation_EV_TokenId_Values; }

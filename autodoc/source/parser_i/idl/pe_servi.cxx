@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pe_servi.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: np $ $Date: 2002-03-08 14:45:34 $
+ *  last change: $Author: np $ $Date: 2002-05-14 09:02:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -327,7 +327,6 @@ PE_Service::ReceiveData()
                 if (bOptionalMember)
                 {
                     pPE_Type->SetOptional();
-                    bOptionalMember = false;
                 }
                 pData->Data().aServedInterfaces.push_back(
                         CommentedLink(aCurParsed_Type.Id(),pPE_Type->ReleaseDocu()) );
@@ -336,7 +335,9 @@ PE_Service::ReceiveData()
                 break;
         case in_service_type:
                 if (bOptionalMember)
+                {
                     pPE_Type->SetOptional();
+                }
                 pData->Data().aIncludedServices.push_back(
                         CommentedLink(aCurParsed_Type.Id(),pPE_Type->ReleaseDocu()) );
                 aCurParsed_Type = 0;
@@ -345,6 +346,8 @@ PE_Service::ReceiveData()
         default:
             csv_assert(false);
     }
+
+    bOptionalMember = false;
 }
 
 
