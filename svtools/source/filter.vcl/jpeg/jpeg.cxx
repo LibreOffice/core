@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jpeg.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sj $ $Date: 2002-08-19 15:02:55 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:22:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,10 @@
 
 extern "C"
 {
+    #include "stdio.h"
     #include "jpeg.h"
+    #include "jpeglib.h"
+    #include "jerror.h"
 }
 
 #define _JPEGPRIVATE
@@ -81,55 +84,6 @@ extern "C"
 // -------------
 // - (C-Calls) -
 // -------------
-
-extern "C" void* JPEGMalloc( size_t nSize )
-{
-    return (void*) new BYTE[ nSize ];
-}
-
-// ------------------------------------------------------------------------
-
-extern "C" void JPEGFree( void* pBuf )
-{
-    delete[] (BYTE*) pBuf;
-}
-
-// ------------------------------------------------------------------------
-
-extern "C" long StreamRead( void* pIStm, void* pBuffer, long nBufferSize )
-{
-    SvStream*   pSvStm = (SvStream*) pIStm;
-    long        nRead;
-
-    if( pSvStm->GetError() != ERRCODE_IO_PENDING )
-    {
-        long nActPos = pSvStm->Tell();
-
-        nRead = (long) pSvStm->Read( pBuffer, nBufferSize );
-
-        if( pSvStm->GetError() == ERRCODE_IO_PENDING )
-        {
-            nRead = 0;
-
-            // Damit wir wieder an die alte Position
-            // seeken koennen, setzen wir den Error temp.zurueck
-            pSvStm->ResetError();
-            pSvStm->Seek( nActPos );
-            pSvStm->SetError( ERRCODE_IO_PENDING );
-        }
-    }
-    else
-        nRead = 0;
-
-    return nRead;
-}
-
-// ------------------------------------------------------------------------
-
-extern "C" long StreamWrite( void* pOStm, void* pBuffer, long nBufferSize )
-{
-    return (long) ( (SvStream*) pOStm )->Write( pBuffer, nBufferSize );
-}
 
 // ------------------------------------------------------------------------
 
@@ -160,6 +114,219 @@ extern "C" long JPEGCallback( void* pCallbackData, long nPercent )
 */
 
     return 0L;
+}
+
+#define BUF_SIZE  4096
+
+typedef struct
+{
+  struct jpeg_destination_mgr pub;  /* public fields */
+
+  SvStream* outfile;                /* target stream */
+  JOCTET * buffer;                  /* start of buffer */
+} my_destination_mgr;
+
+typedef my_destination_mgr * my_dest_ptr;
+
+extern "C" void init_destination (j_compress_ptr cinfo)
+{
+  my_dest_ptr dest = (my_dest_ptr) cinfo->dest;
+
+  /* Allocate the output buffer --- it will be released when done with image */
+  dest->buffer = (JOCTET *)
+      (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo, JPOOL_IMAGE,
+                                  BUF_SIZE * sizeof(JOCTET));
+
+  dest->pub.next_output_byte = dest->buffer;
+  dest->pub.free_in_buffer = BUF_SIZE;
+}
+
+extern "C" int empty_output_buffer (j_compress_ptr cinfo)
+{
+  my_dest_ptr dest = (my_dest_ptr) cinfo->dest;
+
+  if (dest->outfile->Write(dest->buffer, BUF_SIZE) !=
+      (size_t) BUF_SIZE)
+    ERREXIT(cinfo, JERR_FILE_WRITE);
+
+  dest->pub.next_output_byte = dest->buffer;
+  dest->pub.free_in_buffer = BUF_SIZE;
+
+  return TRUE;
+}
+
+extern "C" void term_destination (j_compress_ptr cinfo)
+{
+  my_dest_ptr dest = (my_dest_ptr) cinfo->dest;
+  size_t datacount = BUF_SIZE - dest->pub.free_in_buffer;
+
+  /* Write any data remaining in the buffer */
+  if (datacount > 0) {
+    if (dest->outfile->Write(dest->buffer, datacount) != datacount)
+      ERREXIT(cinfo, JERR_FILE_WRITE);
+  }
+}
+
+extern "C" void jpeg_svstream_dest (j_compress_ptr cinfo, void* out)
+{
+  SvStream * outfile = (SvStream*)out;
+  my_dest_ptr dest;
+
+  /* The destination object is made permanent so that multiple JPEG images
+   * can be written to the same file without re-executing jpeg_svstream_dest.
+   * This makes it dangerous to use this manager and a different destination
+   * manager serially with the same JPEG object, because their private object
+   * sizes may be different.  Caveat programmer.
+   */
+  if (cinfo->dest == NULL) {    /* first time for this JPEG object? */
+    cinfo->dest = (struct jpeg_destination_mgr *)
+      (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo, JPOOL_PERMANENT,
+                                  sizeof(my_destination_mgr));
+  }
+
+  dest = (my_dest_ptr) cinfo->dest;
+  dest->pub.init_destination = init_destination;
+  dest->pub.empty_output_buffer = empty_output_buffer;
+  dest->pub.term_destination = term_destination;
+  dest->outfile = outfile;
+}
+
+/* Expanded data source object for stdio input */
+
+typedef struct {
+  struct jpeg_source_mgr pub;   /* public fields */
+
+  SvStream * infile;            /* source stream */
+  JOCTET * buffer;              /* start of buffer */
+  boolean start_of_file;        /* have we gotten any data yet? */
+} my_source_mgr;
+
+typedef my_source_mgr * my_src_ptr;
+
+/*
+ * Initialize source --- called by jpeg_read_header
+ * before any data is actually read.
+ */
+
+extern "C" void init_source (j_decompress_ptr cinfo)
+{
+  my_src_ptr src = (my_src_ptr) cinfo->src;
+
+  /* We reset the empty-input-file flag for each image,
+   * but we don't clear the input buffer.
+   * This is correct behavior for reading a series of images from one source.
+   */
+  src->start_of_file = TRUE;
+}
+
+long StreamRead( SvStream* pSvStm, void* pBuffer, long nBufferSize )
+{
+        long            nRead;
+
+        if( pSvStm->GetError() != ERRCODE_IO_PENDING )
+        {
+                long nActPos = pSvStm->Tell();
+
+                nRead = (long) pSvStm->Read( pBuffer, nBufferSize );
+
+                if( pSvStm->GetError() == ERRCODE_IO_PENDING )
+                {
+                        nRead = 0;
+
+                        // Damit wir wieder an die alte Position
+                        // seeken koennen, setzen wir den Error temp.zurueck
+                        pSvStm->ResetError();
+                        pSvStm->Seek( nActPos );
+                        pSvStm->SetError( ERRCODE_IO_PENDING );
+                }
+        }
+        else
+                nRead = 0;
+
+        return nRead;
+}
+
+extern "C" int fill_input_buffer (j_decompress_ptr cinfo)
+{
+  my_src_ptr src = (my_src_ptr) cinfo->src;
+  size_t nbytes;
+
+  nbytes = StreamRead(src->infile, src->buffer, BUF_SIZE);
+
+  if (nbytes <= 0) {
+    if (src->start_of_file)     /* Treat empty input file as fatal error */
+      ERREXIT(cinfo, JERR_INPUT_EMPTY);
+    WARNMS(cinfo, JWRN_JPEG_EOF);
+    /* Insert a fake EOI marker */
+    src->buffer[0] = (JOCTET) 0xFF;
+    src->buffer[1] = (JOCTET) JPEG_EOI;
+    nbytes = 2;
+  }
+
+  src->pub.next_input_byte = src->buffer;
+  src->pub.bytes_in_buffer = nbytes;
+  src->start_of_file = FALSE;
+
+  return TRUE;
+}
+
+extern "C" void skip_input_data (j_decompress_ptr cinfo, long num_bytes)
+{
+  my_src_ptr src = (my_src_ptr) cinfo->src;
+
+  /* Just a dumb implementation for now.  Could use fseek() except
+   * it doesn't work on pipes.  Not clear that being smart is worth
+   * any trouble anyway --- large skips are infrequent.
+   */
+  if (num_bytes > 0) {
+    while (num_bytes > (long) src->pub.bytes_in_buffer) {
+      num_bytes -= (long) src->pub.bytes_in_buffer;
+      (void) fill_input_buffer(cinfo);
+      /* note we assume that fill_input_buffer will never return FALSE,
+       * so suspension need not be handled.
+       */
+    }
+    src->pub.next_input_byte += (size_t) num_bytes;
+    src->pub.bytes_in_buffer -= (size_t) num_bytes;
+  }
+}
+
+extern "C" void term_source (j_decompress_ptr cinfo)
+{
+  /* no work necessary here */
+}
+
+extern "C" void jpeg_svstream_src (j_decompress_ptr cinfo, void * in)
+{
+  my_src_ptr src;
+  SvStream * infile = (SvStream*)in;
+
+  /* The source object and input buffer are made permanent so that a series
+   * of JPEG images can be read from the same file by calling jpeg_stdio_src
+   * only before the first one.  (If we discarded the buffer at the end of
+   * one image, we'd likely lose the start of the next one.)
+   * This makes it unsafe to use this manager and a different source
+   * manager serially with the same JPEG object.  Caveat programmer.
+   */
+  if (cinfo->src == NULL) {     /* first time for this JPEG object? */
+    cinfo->src = (struct jpeg_source_mgr *)
+      (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo, JPOOL_PERMANENT,
+                                  sizeof(my_source_mgr));
+    src = (my_src_ptr) cinfo->src;
+    src->buffer = (JOCTET *)
+      (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo, JPOOL_PERMANENT,
+                                  BUF_SIZE * sizeof(JOCTET));
+  }
+
+  src = (my_src_ptr) cinfo->src;
+  src->pub.init_source = init_source;
+  src->pub.fill_input_buffer = fill_input_buffer;
+  src->pub.skip_input_data = skip_input_data;
+  src->pub.resync_to_restart = jpeg_resync_to_restart; /* use default method */
+  src->pub.term_source = term_source;
+  src->infile = infile;
+  src->pub.bytes_in_buffer = 0; /* forces fill_input_buffer on first read */
+  src->pub.next_input_byte = NULL; /* until buffer loaded */
 }
 
 // --------------
