@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptMetadataImporter.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dfoster $ $Date: 2002-09-20 14:33:50 $
+ *  last change: $Author: dsherwin $ $Date: 2002-09-24 13:20:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,8 @@ typedef ::std::vector< bool > Bool_vec;
  * Script Meta Data Importer
  */
 class ScriptMetadataImporter
-            : public ::cppu::WeakImplHelper1< ::com::sun::star::xml::sax::XExtendedDocumentHandler >
+            : public ::cppu::WeakImplHelper1<
+                ::com::sun::star::xml::sax::XExtendedDocumentHandler >
 {
     // private member
 private:
@@ -110,9 +111,10 @@ private:
     osl::Mutex     m_mutex;
 
     /** @internal */
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >  m_xContext;
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
+        m_xContext;
 
-    //Placeholder for the parcel URI
+    /** Placeholder for the parcel URI */
     ::rtl::OUString ms_parcelURI;
 
     /** States for state machine during parsing */
@@ -121,10 +123,16 @@ private:
 
     ::com::sun::star::uno::Sequence< ::rtl::OUString > ms_dependFiles;
 
-    //Build up the struct during parsing the meta data
-    ::drafts::com::sun::star::script::framework::storage::ScriptImplInfo m_scriptImplInfo;
+    /** Build up the struct during parsing the meta data */
+    ::drafts::com::sun::star::script::framework::storage::ScriptImplInfo
+        m_scriptImplInfo;
 
-    //Helper function to set the state
+    /**
+     *   Helper function to set the state
+     *
+     *   @param tagName
+     *           The current tag being processed
+     */
     void setState(const ::rtl::OUString & tagName);
 
     // public interface
@@ -142,11 +150,22 @@ public:
         ::com::sun::star::uno::Reference<
         ::com::sun::star::io::XInputStream >
         const & xInput, const ::rtl::OUString & parcelURI )
-    throw ( ::com::sun::star::xml::sax::SAXException,
+        throw ( ::com::sun::star::xml::sax::SAXException,
             ::com::sun::star::io::IOException,
             ::com::sun::star::uno::RuntimeException);
 
-    explicit ScriptMetadataImporter( const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&  );
+    /**
+     * Constructor for the meta-data parser
+     *
+     * @param XComponentContext
+     */
+    explicit ScriptMetadataImporter(
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::uno::XComponentContext >&  );
+
+    /**
+     * Destructor for the parser
+     */
     virtual ~ScriptMetadataImporter() SAL_THROW( () );
 
     // XExtendedDocumentHandler impl
@@ -156,7 +175,7 @@ public:
      * @see com::sun::star::xml::sax::XExtendedDocumentHandler
      */
     virtual void SAL_CALL startCDATA()
-    throw ( ::com::sun::star::xml::sax::SAXException,
+        throw ( ::com::sun::star::xml::sax::SAXException,
             ::com::sun::star::uno::RuntimeException );
 
     /**
@@ -165,7 +184,7 @@ public:
      * @see com::sun::star::xml::sax::XExtendedDocumentHandler
      */
     virtual void SAL_CALL endCDATA()
-    throw ( ::com::sun::star::uno::RuntimeException );
+        throw ( ::com::sun::star::uno::RuntimeException );
 
     /**
      * Function to handle comments in XML
@@ -173,7 +192,7 @@ public:
      * @see com::sun::star::xml::sax::XExtendedDocumentHandler
      */
     virtual void SAL_CALL comment( const ::rtl::OUString & sComment )
-    throw ( ::com::sun::star::xml::sax::SAXException,
+        throw ( ::com::sun::star::xml::sax::SAXException,
             ::com::sun::star::uno::RuntimeException );
 
     /**
@@ -182,7 +201,7 @@ public:
      * @see com::sun::star::xml::sax::XExtendedDocumentHandler
      */
     virtual void SAL_CALL allowLineBreak()
-    throw ( ::com::sun::star::xml::sax::SAXException,
+        throw ( ::com::sun::star::xml::sax::SAXException,
             ::com::sun::star::uno::RuntimeException );
 
     /**
@@ -191,7 +210,7 @@ public:
      * @see com::sun::star::xml::sax::XExtendedDocumentHandler
      */
     virtual void SAL_CALL unknown( const ::rtl::OUString & sString )
-    throw ( ::com::sun::star::xml::sax::SAXException,
+        throw ( ::com::sun::star::xml::sax::SAXException,
             ::com::sun::star::uno::RuntimeException );
 
     /**
@@ -201,7 +220,7 @@ public:
      */
     // XDocumentHandler impl
     virtual void SAL_CALL startDocument()
-    throw ( ::com::sun::star::xml::sax::SAXException,
+        throw ( ::com::sun::star::xml::sax::SAXException,
             ::com::sun::star::uno::RuntimeException );
 
     /**
@@ -210,7 +229,7 @@ public:
      * @see com::sun::star::xml::sax::XDocumentHandler
      */
     virtual void SAL_CALL endDocument()
-    throw ( ::com::sun::star::xml::sax::SAXException,
+        throw ( ::com::sun::star::xml::sax::SAXException,
             ::com::sun::star::uno::RuntimeException );
 
     /**
@@ -221,7 +240,7 @@ public:
     virtual void SAL_CALL startElement(
         const ::rtl::OUString& aName,
         const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XAttributeList > & xAttribs )
-    throw ( ::com::sun::star::xml::sax::SAXException,
+        throw ( ::com::sun::star::xml::sax::SAXException,
             ::com::sun::star::uno::RuntimeException );
 
     /**
@@ -230,7 +249,7 @@ public:
      * @see com::sun::star::xml::sax::XDocumentHandler
      */
     virtual void SAL_CALL endElement( const ::rtl::OUString & aName )
-    throw ( ::com::sun::star::xml::sax::SAXException,
+        throw ( ::com::sun::star::xml::sax::SAXException,
             ::com::sun::star::uno::RuntimeException );
 
     /**
@@ -239,7 +258,7 @@ public:
      * @see com::sun::star::xml::sax::XDocumentHandler
      */
     virtual void SAL_CALL characters( const ::rtl::OUString & aChars )
-    throw ( ::com::sun::star::xml::sax::SAXException,
+        throw ( ::com::sun::star::xml::sax::SAXException,
             ::com::sun::star::uno::RuntimeException );
 
     /**
@@ -249,7 +268,7 @@ public:
      */
     virtual void SAL_CALL ignorableWhitespace(
         const ::rtl::OUString & aWhitespaces )
-    throw ( ::com::sun::star::xml::sax::SAXException,
+        throw ( ::com::sun::star::xml::sax::SAXException,
             ::com::sun::star::uno::RuntimeException );
 
     /**
@@ -259,7 +278,7 @@ public:
      */
     virtual void SAL_CALL processingInstruction(
         const ::rtl::OUString & aTarget, const ::rtl::OUString & aData )
-    throw ( ::com::sun::star::xml::sax::SAXException,
+        throw ( ::com::sun::star::xml::sax::SAXException,
             ::com::sun::star::uno::RuntimeException );
 
     /**
@@ -269,7 +288,7 @@ public:
      */
     virtual void SAL_CALL setDocumentLocator(
         const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XLocator >& xLocator )
-    throw ( ::com::sun::star::xml::sax::SAXException,
+        throw ( ::com::sun::star::xml::sax::SAXException,
             ::com::sun::star::uno::RuntimeException );
 }
 ; // class ScriptMetadataImporter

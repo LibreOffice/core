@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptMetadataImporter.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dfoster $ $Date: 2002-09-20 14:33:50 $
+ *  last change: $Author: dsherwin $ $Date: 2002-09-24 13:20:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,9 @@
 #include <osl/mutex.hxx>
 #include <com/sun/star/xml/sax/XParser.hpp>
 
+#ifdef _DEBUG
 #include <stdio.h>
+#endif
 #include <util/util.hxx>
 #include <rtl/string.h>
 
@@ -76,7 +78,9 @@ namespace scripting_impl
 {
 
 //*************************************************************************
-ScriptMetadataImporter::ScriptMetadataImporter( const Reference< XComponentContext > & xContext ) : m_xContext( xContext )
+ScriptMetadataImporter::ScriptMetadataImporter(
+    const Reference< XComponentContext > & xContext )
+    : m_xContext( xContext )
 {
     OSL_TRACE( "< ScriptMetadataImporter ctor called >\n" );
 }
@@ -90,8 +94,9 @@ ScriptMetadataImporter::~ScriptMetadataImporter() SAL_THROW( () )
 
 //*************************************************************************
 Impls_vec ScriptMetadataImporter::parseMetaData(
-    Reference< io::XInputStream > const & xInput, const ::rtl::OUString & parcelURI )
-throw ( xml::sax::SAXException, io::IOException, RuntimeException )
+    Reference< io::XInputStream > const & xInput,
+    const ::rtl::OUString & parcelURI )
+    throw ( xml::sax::SAXException, io::IOException, RuntimeException )
 {
     //Clear the vector of parsed information
     ms_scriptInfos.clear();
@@ -101,14 +106,16 @@ throw ( xml::sax::SAXException, io::IOException, RuntimeException )
 
     //Get the parser service
     validateXRef(m_xContext,
-                 "ScriptMetadataImporter::parseMetaData: No context available");
+        "ScriptMetadataImporter::parseMetaData: No context available");
 
-    Reference< lang::XMultiComponentFactory > xMgr = m_xContext->getServiceManager();
+    Reference< lang::XMultiComponentFactory > xMgr =
+        m_xContext->getServiceManager();
+
     validateXRef(xMgr,
-                 "ScriptMetadataImporter::parseMetaData: No service manager available");
+        "ScriptMetadataImporter::parseMetaData: No service manager available");
 
     Reference< XInterface > xx = xMgr->createInstanceWithContext(
-                                     OUString::createFromAscii("com.sun.star.xml.sax.Parser"), m_xContext );
+        OUString::createFromAscii("com.sun.star.xml.sax.Parser"), m_xContext );
 
     validateXRef(xMgr, "ScriptMetadataImporter::parseMetaData: cannot get SAX Parser");
     Reference< xml::sax::XParser > xParser(xx,UNO_QUERY_THROW);
@@ -131,30 +138,35 @@ throw ( xml::sax::SAXException, io::IOException, RuntimeException )
     }
     catch ( xml::sax::SAXException & saxe )
     {
-        throw xml::sax::SAXException(
-            OUString::createFromAscii(
-                "ScriptMetadataImporter::parseMetaData SAXException: ") +saxe.Message,
-            Reference< XInterface > (), saxe.WrappedException);
+        OUString msg = OUString::createFromAscii(
+            "ScriptMetadata:Importer::parserMetaData SAXException");
+        msg.concat(saxe.Message);
+        throw xml::sax::SAXException( msg, Reference< XInterface > (),
+            saxe.WrappedException);
     }
     catch ( io::IOException & ioe )
     {
         throw io::IOException( OUString::createFromAscii(
-                                   "ScriptMetadataImporter::parseMetaData IOException: ")+ioe.Message,
-                               Reference< XInterface > ());
+            "ScriptMetadataImporter::parseMetaData IOException: ")+ioe.Message,
+            Reference< XInterface > ());
     }
+
 #ifdef _DEBUG
     catch ( ... )
     {
         throw RuntimeException(OUString::createFromAscii(
-                                   "ScriptMetadataImporter::parseMetadata UnknownException: "),
-                               Reference< XInterface > ());
+            "ScriptMetadataImporter::parseMetadata UnknownException: "),
+            Reference< XInterface > ());
     }
 #endif
-    OSL_TRACE("ScriptMetadataImporter: Parser finished\n");
-#ifdef _DEBUG
 
-    printf("ScriptMetadataImporter: vector size is %d\n", ms_scriptInfos.size());
+    OSL_TRACE("ScriptMetadataImporter: Parser finished\n");
+
+#ifdef _DEBUG
+    fprintf(stderr, "ScriptMetadataImporter: vector size is %d\n",
+        ms_scriptInfos.size());
 #endif
+
     //return the vector of ScriptImplInfos
     return ms_scriptInfos;
 }
@@ -162,35 +174,35 @@ throw ( xml::sax::SAXException, io::IOException, RuntimeException )
 //*************************************************************************
 // XExtendedDocumentHandler impl
 void ScriptMetadataImporter::startCDATA()
-throw (xml::sax::SAXException, RuntimeException)
+    throw (xml::sax::SAXException, RuntimeException)
 {
     OSL_TRACE("ScriptMetadataImporter: startCDATA()\n");
 }
 
 //*************************************************************************
 void ScriptMetadataImporter::endCDATA()
-throw (RuntimeException)
+    throw (RuntimeException)
 {
     OSL_TRACE("ScriptMetadataImporter: endDATA()\n");
 }
 
 //*************************************************************************
 void ScriptMetadataImporter::comment( const ::rtl::OUString & sComment )
-throw (xml::sax::SAXException, RuntimeException)
+    throw (xml::sax::SAXException, RuntimeException)
 {
     OSL_TRACE("ScriptMetadataImporter: comment()\n");
 }
 
 //*************************************************************************
 void ScriptMetadataImporter::allowLineBreak()
-throw (xml::sax::SAXException, RuntimeException)
+    throw (xml::sax::SAXException, RuntimeException)
 {
     OSL_TRACE("ScriptMetadataImporter: allowLineBreak()\n");
 }
 
 //*************************************************************************
 void ScriptMetadataImporter::unknown( const ::rtl::OUString & sString )
-throw (xml::sax::SAXException, RuntimeException)
+    throw (xml::sax::SAXException, RuntimeException)
 {
     OSL_TRACE("ScriptMetadataImporter: unknown()\n");
 }
@@ -198,7 +210,7 @@ throw (xml::sax::SAXException, RuntimeException)
 //*************************************************************************
 // XDocumentHandler impl
 void ScriptMetadataImporter::startDocument()
-throw (xml::sax::SAXException, RuntimeException)
+    throw (xml::sax::SAXException, RuntimeException)
 {
     // Ignore for now
     OSL_TRACE("ScriptMetadataImporter: startDocument()\n");
@@ -206,7 +218,7 @@ throw (xml::sax::SAXException, RuntimeException)
 
 //*************************************************************************
 void ScriptMetadataImporter::endDocument()
-throw (xml::sax::SAXException, RuntimeException)
+    throw (xml::sax::SAXException, RuntimeException)
 {
     // Ignore for now
     OSL_TRACE("ScriptMetadataImporter: endDocument()\n");
@@ -216,10 +228,11 @@ throw (xml::sax::SAXException, RuntimeException)
 void ScriptMetadataImporter::startElement(
     const ::rtl::OUString& tagName,
     const Reference< xml::sax::XAttributeList >& xAttribs )
-throw (xml::sax::SAXException, RuntimeException)
+    throw (xml::sax::SAXException, RuntimeException)
 {
+
 #ifdef _DEBUG
-    printf("ScriptMetadataImporter: startElement() %s\n",
+    fprintf(stderr, "Trace Message : ScriptMetadataImporter: startElement() %s\n",
            ::rtl::OUStringToOString(tagName,
                                     RTL_TEXTENCODING_ASCII_US).pData->buffer);
 #endif
@@ -244,11 +257,11 @@ throw (xml::sax::SAXException, RuntimeException)
         m_scriptImplInfo.logicalName =
             xAttribs->getValueByName(
                 ::rtl::OUString::createFromAscii("value"));
-#ifdef _DEBUG
 
-        printf("ScriptMetadataImporter: Got  logicalname: %s\n",
-               ::rtl::OUStringToOString(m_scriptImplInfo.logicalName,
-                                        RTL_TEXTENCODING_ASCII_US).pData->buffer);
+#ifdef _DEBUG
+        fprintf(stderr, "ScriptMetadataImporter: Got  logicalname: %s\n",
+            ::rtl::OUStringToOString(m_scriptImplInfo.logicalName,
+                RTL_TEXTENCODING_ASCII_US).pData->buffer);
 #endif
 
         break;
@@ -261,11 +274,11 @@ throw (xml::sax::SAXException, RuntimeException)
         m_scriptImplInfo.scriptLocation =
             xAttribs->getValueByName(
                 ::rtl::OUString::createFromAscii("location"));
-#ifdef _DEBUG
 
-        printf("ScriptMetadataImporter: Got language: %s\n",
-               ::rtl::OUStringToOString(m_scriptImplInfo.functionName,
-                                        RTL_TEXTENCODING_ASCII_US).pData->buffer);
+#ifdef _DEBUG
+        fprintf(stderr, "ScriptMetadataImporter: Got language: %s\n",
+            ::rtl::OUStringToOString(m_scriptImplInfo.functionName,
+                RTL_TEXTENCODING_ASCII_US).pData->buffer);
 #endif
 
         break;
@@ -273,19 +286,19 @@ throw (xml::sax::SAXException, RuntimeException)
     case DELIVERFILE:
         //Get Info about delivered files
         mv_delivFile.push_back( xAttribs->getValueByName(
-                                    ::rtl::OUString::createFromAscii("name")));
+            ::rtl::OUString::createFromAscii("name")));
         mv_deliverType.push_back( xAttribs->getValueByName(
-                                      ::rtl::OUString::createFromAscii("type")));
+            ::rtl::OUString::createFromAscii("type")));
 
         break;
 
     case DEPENDFILE:
         //push the dependency into the the vector
         mv_deps.push_back( xAttribs->getValueByName(
-                               ::rtl::OUString::createFromAscii("name")));
+            ::rtl::OUString::createFromAscii("name")));
 
         t_delivered = xAttribs->getValueByName(
-                          ::rtl::OUString::createFromAscii("isdeliverable"));
+            ::rtl::OUString::createFromAscii("isdeliverable"));
 
         if( t_delivered.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("yes")) )
         {
@@ -297,10 +310,10 @@ throw (xml::sax::SAXException, RuntimeException)
         }
 
 #ifdef _DEBUG
-        printf("ScriptMetadataImporter: Got dependency: %s\n",
-               ::rtl::OUStringToOString( xAttribs->getValueByName(
-                                             ::rtl::OUString::createFromAscii("name")),
-                                         RTL_TEXTENCODING_ASCII_US).pData->buffer);
+        fprintf(stderr, "ScriptMetadataImporter: Got dependency: %s\n",
+            ::rtl::OUStringToOString( xAttribs->getValueByName(
+               ::rtl::OUString::createFromAscii("name")),
+                   RTL_TEXTENCODING_ASCII_US).pData->buffer);
 #endif
 
         break;
@@ -320,23 +333,22 @@ throw (xml::sax::SAXException, RuntimeException)
 
             //script language
             m_scriptImplInfo.scriptLanguage = xAttribs->getValueByName(
-                                                  ::rtl::OUString::createFromAscii("language"));
+                ::rtl::OUString::createFromAscii("language"));
 
 #ifdef _DEBUG
-
-            printf("ScriptMetadataImporter: Got language: %s\n",
-                   ::rtl::OUStringToOString(m_scriptImplInfo.scriptLanguage,
-                                            RTL_TEXTENCODING_ASCII_US).pData->buffer);
+            fprintf(stderr, "ScriptMetadataImporter: Got language: %s\n",
+                ::rtl::OUStringToOString(m_scriptImplInfo.scriptLanguage,
+                    RTL_TEXTENCODING_ASCII_US).pData->buffer);
 #endif
+
             //script root directory
             m_scriptImplInfo.scriptRoot = xAttribs->getValueByName(
-                                              ::rtl::OUString::createFromAscii( "deploymentdir" ));
+                ::rtl::OUString::createFromAscii( "deploymentdir" ));
 
 #ifdef _DEBUG
-
-            printf("ScriptMetadataImporter: Got dir: %s\n",
-                   ::rtl::OUStringToOString(m_scriptImplInfo.scriptRoot,
-                                            RTL_TEXTENCODING_ASCII_US).pData->buffer);
+            fprintf(stderr, "ScriptMetadataImporter: Got dir: %s\n",
+                ::rtl::OUStringToOString(m_scriptImplInfo.scriptRoot,
+                    RTL_TEXTENCODING_ASCII_US).pData->buffer);
 #endif
 
         }
@@ -346,12 +358,13 @@ throw (xml::sax::SAXException, RuntimeException)
 
 //*************************************************************************
 void ScriptMetadataImporter::endElement( const ::rtl::OUString & aName )
-throw (xml::sax::SAXException, RuntimeException)
+    throw (xml::sax::SAXException, RuntimeException)
 {
 
     //The end tag of an element
 #ifdef _DEBUG
-    printf("ScriptMetadataImporter: endElement() %s\n", ::rtl::OUStringToOString(aName,
+    fprintf(stderr, "ScriptMetadataImporter: endElement() %s\n",
+        ::rtl::OUStringToOString(aName,
             RTL_TEXTENCODING_ASCII_US).pData->buffer);
 #endif
 
@@ -368,13 +381,13 @@ throw (xml::sax::SAXException, RuntimeException)
     case PARCEL:
         break;
     case SCRIPT:
+
 #ifdef _DEBUG
-
         OSL_TRACE("ScriptMetadataImporter: Got a scriptImplInfo\n");
-
-        printf("ScriptMetadataImporter: \t %s\n", ::rtl::OUStringToOString(
-                   m_scriptImplInfo.scriptLanguage, RTL_TEXTENCODING_ASCII_US).pData->buffer);
+        fprintf(stderr, "ScriptMetadataImporter: \t %s\n", ::rtl::OUStringToOString(
+            m_scriptImplInfo.scriptLanguage, RTL_TEXTENCODING_ASCII_US).pData->buffer);
 #endif
+
         //Push the struct into the vector
         ms_scriptInfos.push_back(m_scriptImplInfo);
         break;
@@ -438,7 +451,7 @@ throw (xml::sax::SAXException, RuntimeException)
 
 //*************************************************************************
 void ScriptMetadataImporter::characters( const ::rtl::OUString & aChars )
-throw (xml::sax::SAXException, RuntimeException)
+    throw (xml::sax::SAXException, RuntimeException)
 {
     OSL_TRACE("ScriptMetadataImporter: characters()\n");
 
@@ -472,7 +485,7 @@ throw (xml::sax::SAXException, RuntimeException)
 //*************************************************************************
 void ScriptMetadataImporter::ignorableWhitespace(
     const ::rtl::OUString & aWhitespaces )
-throw (xml::sax::SAXException, RuntimeException)
+    throw (xml::sax::SAXException, RuntimeException)
 {
     OSL_TRACE("ScriptMetadataImporter: ignorableWhiteSpace()\n");
 }
@@ -480,7 +493,7 @@ throw (xml::sax::SAXException, RuntimeException)
 //*************************************************************************
 void ScriptMetadataImporter::processingInstruction(
     const ::rtl::OUString & aTarget, const ::rtl::OUString & aData )
-throw (xml::sax::SAXException, RuntimeException)
+    throw (xml::sax::SAXException, RuntimeException)
 {
     OSL_TRACE("ScriptMetadataImporter: processingInstruction()\n");
 }
@@ -488,7 +501,7 @@ throw (xml::sax::SAXException, RuntimeException)
 //*************************************************************************
 void ScriptMetadataImporter::setDocumentLocator(
     const Reference< xml::sax::XLocator >& xLocator )
-throw (xml::sax::SAXException, RuntimeException)
+    throw (xml::sax::SAXException, RuntimeException)
 {
     OSL_TRACE("ScriptMetadataImporter: setDocumentLocator()\n");
 }
@@ -550,9 +563,9 @@ void ScriptMetadataImporter::setState(const ::rtl::OUString & tagName)
         ::rtl::OUString str_sax = ::rtl::OUString::createFromAscii( "No Such Tag" );
 
 #ifdef _DEBUG
-
-        printf("ScriptMetadataImporter: No Such Tag: %s\n", ::rtl::OUStringToOString(
-                   tagName, RTL_TEXTENCODING_ASCII_US).pData->buffer);
+        fprintf(stderr, "ScriptMetadataImporter: No Such Tag: %s\n",
+            ::rtl::OUStringToOString(
+                tagName, RTL_TEXTENCODING_ASCII_US).pData->buffer);
 #endif
 
         throw xml::sax::SAXException(
