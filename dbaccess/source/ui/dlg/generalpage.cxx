@@ -2,9 +2,9 @@
  *
  *  $RCSfile: generalpage.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-27 13:04:10 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:33:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -522,7 +522,6 @@ namespace dbaui
         return 0L;
     }
 
-
     IMPL_LINK(OGeneralPage, OnSetupModeSelected, RadioButton*, _pBox)
     {
         String sDisplayName;
@@ -541,10 +540,8 @@ namespace dbaui
             m_aDatasourceType.SelectEntry(m_sMySQLEntry);
         if ( m_aCreationModeHandler.IsSet() )
             m_aCreationModeHandler.Call(this);
-        return true;
+        return 1L;
     }
-
-
     // -----------------------------------------------------------------------
 //.........................................................................
 }   // namespace dbaui
