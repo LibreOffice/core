@@ -2,9 +2,9 @@
  *
  *  $RCSfile: export.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-11-14 11:41:46 $
+ *  last change: $Author: nf $ $Date: 2000-11-15 12:29:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1418,7 +1418,7 @@ BOOL Export::WriteExportList( ResData *pResData, ExportList *pExportList,
     sTimeStamp += ByteString::CreateFromInt32( aTime.GetSec());
 
     for ( ULONG i = 0; i < pExportList->Count(); i++ ) {
-        ByteString sLID( i + 1 );
+        ByteString sLID( ByteString::CreateFromInt64( i + 1 ));
         ExportListEntry *pEntry = pExportList->GetObject( i );
         for ( USHORT j = 0;  j < LANGUAGES; j++ ) {
             if ( LANGUAGE_ALLOWED( j )) {
