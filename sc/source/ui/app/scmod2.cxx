@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scmod2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-26 13:38:36 $
+ *  last change: $Author: nn $ $Date: 2001-04-20 10:52:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,6 +69,7 @@
 
 #include <comphelper/processfactory.hxx>
 #include <vos/xception.hxx>
+#include <svx/unolingu.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/linguistic2/XThesaurus.hpp>
@@ -78,7 +79,6 @@
 using namespace com::sun::star;
 
 #include "scmod.hxx"
-#include "convuno.hxx"
 
 //------------------------------------------------------------------
 
@@ -113,20 +113,23 @@ void ScModule::GetSpellSettings( USHORT& rDefLang, USHORT& rCjkLang, USHORT& rCt
             uno::Any aAny;
             lang::Locale aLocale;
 
+            // SvxLocaleToLanguage returns LANGUAGE_NONE for empty locale
+            // (LANGUAGE_SYSTEM is not allowed in linguistic)
+
             aAny = xProp->getPropertyValue(
                 rtl::OUString::createFromAscii( LINGUPROP_DEFLOCALE ) );
             aAny >>= aLocale;
-            rDefLang = ScUnoConversion::GetLanguage( aLocale );
+            rDefLang = SvxLocaleToLanguage( aLocale );
 
             aAny = xProp->getPropertyValue(
                 rtl::OUString::createFromAscii( LINGUPROP_CJKLOCALE ) );
             aAny >>= aLocale;
-            rCjkLang = ScUnoConversion::GetLanguage( aLocale );
+            rCjkLang = SvxLocaleToLanguage( aLocale );
 
             aAny = xProp->getPropertyValue(
                 rtl::OUString::createFromAscii( LINGUPROP_CTLLOCALE ) );
             aAny >>= aLocale;
-            rCtlLang = ScUnoConversion::GetLanguage( aLocale );
+            rCtlLang = SvxLocaleToLanguage( aLocale );
 
             aAny = xProp->getPropertyValue(
                 rtl::OUString::createFromAscii( LINGUPROP_AUTOSPELL ) );
@@ -199,7 +202,7 @@ BOOL ScModule::HasThesaurusLanguage( USHORT nLang )
         return FALSE;
 
     lang::Locale aLocale;
-    ScUnoConversion::FillLocale( aLocale, nLang );
+    SvxLanguageToLocale( aLocale, nLang );
 
     BOOL bHasLang = FALSE;
     TRY
