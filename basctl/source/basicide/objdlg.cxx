@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objdlg.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: sb $ $Date: 2002-07-03 15:53:23 $
+ *  last change: $Author: sb $ $Date: 2002-07-04 13:33:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -439,9 +439,9 @@ ObjectCatalogToolBox_Impl::ObjectCatalogToolBox_Impl(
 void ObjectCatalogToolBox_Impl::DataChanged(DataChangedEvent const & rDCEvt)
 {
     ToolBox::DataChanged(rDCEvt);
-    if (rDCEvt.GetType() == DATACHANGED_SETTINGS
-        || (rDCEvt.GetType() == DATACHANGED_DISPLAY
-            && (rDCEvt.GetFlags() & SETTINGS_STYLE) != 0))
+    if ((rDCEvt.GetType() == DATACHANGED_SETTINGS
+         || rDCEvt.GetType() == DATACHANGED_DISPLAY)
+        && (rDCEvt.GetFlags() & SETTINGS_STYLE) != 0)
         setImages();
 }
 
