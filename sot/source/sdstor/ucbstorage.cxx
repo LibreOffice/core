@@ -79,7 +79,11 @@ sal_Int32 GetFormatId_Impl( SvGlobalName aName )
         return SOT_FORMATSTR_ID_STARCHART_60;
     if ( aName == SvGlobalName( SO3_SM_CLASSID_60 ) )
         return SOT_FORMATSTR_ID_STARMATH_60;
-    if ( aName == SvGlobalName( SO3_OUT_CLASSID ) )
+    if ( aName == SvGlobalName( SO3_OUT_CLASSID ) ||
+         aName == SvGlobalName( SO3_APPLET_CLASSID ) ||
+         aName == SvGlobalName( SO3_PLUGIN_CLASSID ) ||
+         aName == SvGlobalName( SO3_IFRAME_CLASSID ) )
+        // allowed, but not supported
         return 0;
     else
     {
@@ -1599,17 +1603,24 @@ BaseStorage* UCBStorage::OpenStorage_Impl( const String& rEleName, StreamMode nM
         // Such a storage will be created on a UCBStorageStream; it will write into the stream
         // if it is opened in direct mode or when it is committed. In this case the stream will be
         // modified and then it MUST be treated as commited.
-        BaseStorageStream* pStr = OpenStream( rEleName, nMode, bDirect );
-        UCBStorageStream* pStream = PTR_CAST( UCBStorageStream, pStr );
-        if ( !pStream )
+        if ( !pElement->m_xStream.Is() )
         {
-            SetError( ( nMode & STREAM_WRITE ) ? SVSTREAM_CANNOT_MAKE : SVSTREAM_FILE_NOT_FOUND );
-            return NULL;
+            BaseStorageStream* pStr = OpenStream( rEleName, nMode, bDirect );
+            UCBStorageStream* pStream = PTR_CAST( UCBStorageStream, pStr );
+            if ( !pStream )
+            {
+                SetError( ( nMode & STREAM_WRITE ) ? SVSTREAM_CANNOT_MAKE : SVSTREAM_FILE_NOT_FOUND );
+                return NULL;
+            }
+
+            pElement->m_xStream = pStream->pImp;
+            delete pStream;
         }
 
+        BOOL bIsWritable = ( pElement->m_xStream->m_nMode & STREAM_WRITE );
+        if ( !bIsWritable && ( nMode & STREAM_WRITE ) )
+            pElement->m_xStream->SwitchToWritable( nMode, bDirect );
         pElement->m_bIsStorage = TRUE;
-        pElement->m_xStream = pStream->pImp;
-        delete pStream;
         return pElement->m_xStream->CreateStorage();  // can only be created in transacted mode
     }
     else if ( pElement->m_xStorage.Is() )
