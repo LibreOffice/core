@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside2b.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ab $ $Date: 2000-11-28 14:12:28 $
+ *  last change: $Author: tbe $ $Date: 2000-12-20 16:15:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,10 @@
 #include <iderdll2.hxx>
 
 #include <vcl/system.hxx>
+
+#ifndef _SV_HELP_HXX //autogen
+#include <vcl/help.hxx>
+#endif
 
 //#ifndef _SFX_HELP_HXX //autogen
 //#include <sfx2/sfxhelp.hxx>
@@ -416,7 +420,7 @@ void __EXPORT EditorWindow::RequestHelp( const HelpEvent& rHEvt )
                     }
                 }
             }
-            //Help::ShowQuickHelp( this, Rectangle( aTopLeft, Size( 1, 1 ) ), aHelpText, QUICKHELP_TOP|QUICKHELP_LEFT);
+            Help::ShowQuickHelp( this, Rectangle( aTopLeft, Size( 1, 1 ) ), aHelpText, QUICKHELP_TOP|QUICKHELP_LEFT);
         }
     }
     else
