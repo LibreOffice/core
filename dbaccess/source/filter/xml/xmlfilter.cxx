@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfilter.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 17:59:20 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 09:57:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -406,7 +406,7 @@ sal_Bool ODBFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
                                         ,"Settings.xml"
                                         ,getServiceFactory()
                                         ,this
-                                        ) == 0;
+                                        );
 
             if ( nRet == 0 )
                 nRet = ReadThroughComponent( xStorage
@@ -415,7 +415,7 @@ sal_Bool ODBFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
                                         ,"Content.xml"
                                         ,getServiceFactory()
                                         ,this
-                                        ) == 0;
+                                        );
 
             bRet = nRet == 0;
 
