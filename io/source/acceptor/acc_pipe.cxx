@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acc_pipe.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:24:17 $
+ *  last change: $Author: jbu $ $Date: 2000-11-28 08:23:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@ using namespace ::com::sun::star::connection;
 using namespace ::com::sun::star::io;
 
 
-namespace stoc_acceptor
+namespace io_acceptor
 {
 
     typedef WeakImplHelper1< XConnection > MyPipeConnection;
@@ -81,7 +81,7 @@ namespace stoc_acceptor
         public MyPipeConnection
     {
     public:
-        PipeConnection( const OUString & s , sal_Bool bIgnoreClose);
+        PipeConnection( const OUString & s , const OUString &sConnectionDescription);
 
         virtual sal_Int32 SAL_CALL read( Sequence< sal_Int8 >& aReadBytes, sal_Int32 nBytesToRead )
             throw(::com::sun::star::io::IOException,
@@ -101,21 +101,17 @@ namespace stoc_acceptor
         ::vos::OStreamPipe m_pipe;
         oslInterlockedCount m_nStatus;
         OUString m_sDescription;
-        sal_Bool m_bIgnoreClose;
     };
 
 
 
-    PipeConnection::PipeConnection( const OUString &s , sal_Bool bIgnoreClose) :
+    PipeConnection::PipeConnection( const OUString &s, const OUString &sConnectionDescription) :
         m_nStatus( 0 ),
-        m_sDescription( OUString::createFromAscii( "pipe:" ) ),
-        m_bIgnoreClose( bIgnoreClose )
+        m_sDescription( sConnectionDescription )
     {
-        m_sDescription += s;
-        m_sDescription += OUString::createFromAscii( ":" );
-
         // make it unique
-        m_sDescription += OUString::valueOf( (sal_Int64) (OObject * ) &m_pipe , 10 );
+        m_sDescription += OUString::createFromAscii( ",uniqueValue=" );
+        m_sDescription += OUString::valueOf( (sal_Int64) &m_pipe , 10 );
     }
 
     sal_Int32 PipeConnection::read( Sequence < sal_Int8 > & aReadBytes , sal_Int32 nBytesToRead )
@@ -163,7 +159,7 @@ namespace stoc_acceptor
         throw( ::com::sun::star::io::IOException,
                ::com::sun::star::uno::RuntimeException)
     {
-        if( ! m_bIgnoreClose && 1 == osl_incrementInterlockedCount( (&m_nStatus) ) )
+        if(  1 == osl_incrementInterlockedCount( (&m_nStatus) ) )
         {
             m_pipe.close();
         }
@@ -178,10 +174,10 @@ namespace stoc_acceptor
     /***************
      * PipeAcceptor
      **************/
-    PipeAcceptor::PipeAcceptor( const OUString &sPipeName , sal_Bool bIgnoreClose) :
+    PipeAcceptor::PipeAcceptor( const OUString &sPipeName , const OUString & sConnectionDescription) :
         m_bClosed( sal_False ),
         m_sPipeName( sPipeName ),
-        m_bIgnoreClose( bIgnoreClose )
+        m_sConnectionDescription( sConnectionDescription )
     {
     }
 
@@ -198,7 +194,7 @@ namespace stoc_acceptor
 
     Reference< XConnection > PipeAcceptor::accept( )
     {
-        PipeConnection *pConn = new PipeConnection( m_sPipeName , m_bIgnoreClose );
+        PipeConnection *pConn = new PipeConnection( m_sPipeName , m_sConnectionDescription );
 
         OPipe::TPipeError status = m_pipe.accept( pConn->m_pipe );
 

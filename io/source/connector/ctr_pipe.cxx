@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctr_pipe.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:24:18 $
+ *  last change: $Author: jbu $ $Date: 2000-11-28 08:20:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,15 +70,12 @@ using namespace ::com::sun::star::connection;
 
 namespace stoc_connector {
 
-    PipeConnection::PipeConnection( const OUString &s , sal_Bool bIgnoreClose ) :
+    PipeConnection::PipeConnection( const OUString &s, const OUString & sConnectionDescription ) :
         m_nStatus( 0 ),
-        m_sDescription( OUString::createFromAscii( "pipe:" ) ),
-        m_bIgnoreClose( bIgnoreClose )
+        m_sDescription( sConnectionDescription )
     {
-        m_sDescription += s;
-        m_sDescription += OUString::createFromAscii( ":" );
-
         // make it unique
+        m_sDescription += OUString::createFromAscii( ",uniqueValue=" );
         m_sDescription += OUString::valueOf( (sal_Int64) &m_pipe , 10 );
     }
 
@@ -127,7 +124,7 @@ namespace stoc_connector {
                   ::com::sun::star::uno::RuntimeException)
     {
         // ensure that close is called only once
-        if( ! m_bIgnoreClose  && 1 == osl_incrementInterlockedCount( (&m_nStatus) ) )
+        if(1 == osl_incrementInterlockedCount( (&m_nStatus) ) )
         {
             m_pipe.close();
         }

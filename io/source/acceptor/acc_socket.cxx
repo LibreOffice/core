@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acc_socket.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: svesik $ $Date: 2000-11-23 14:39:46 $
+ *  last change: $Author: jbu $ $Date: 2000-11-28 08:23:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 
 #include <hash_set>
 
+#include <rtl/ustrbuf.hxx>
 #include <com/sun/star/connection/XConnectionBroadcaster.hpp>
 #include <com/sun/star/connection/ConnectionSetupException.hpp>
 
@@ -75,7 +76,7 @@ using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::connection;
 
 
-namespace stoc_acceptor {
+namespace io_acceptor {
     template<class T>
     struct ReferenceHash
     {
@@ -108,7 +109,7 @@ namespace stoc_acceptor {
 
     {
     public:
-        SocketConnection( const ::rtl::OUString & s , sal_uInt16 nPort , sal_Bool bIgnoreClose );
+        SocketConnection( const ::rtl::OUString & s , sal_uInt16 nPort, const OUString & sConnectionDescription );
 
         virtual sal_Int32 SAL_CALL read( ::com::sun::star::uno::Sequence< sal_Int8 >& aReadBytes,
                                          sal_Int32 nBytesToRead )
@@ -133,11 +134,12 @@ namespace stoc_acceptor {
             throw(::com::sun::star::uno::RuntimeException);
 
     public:
+        void completeConnectionString();
+
         ::vos::OStreamSocket m_socket;
         ::vos::OInetSocketAddr m_addr;
         oslInterlockedCount m_nStatus;
         ::rtl::OUString m_sDescription;
-        sal_Bool m_bIgnoreClose;
 
         ::osl::Mutex _mutex;
         sal_Bool     _started;
@@ -193,22 +195,43 @@ namespace stoc_acceptor {
 
 
     SocketConnection::SocketConnection( const OUString &s,
-                                        sal_uInt16 nPort ,
-                                        sal_Bool bIgnoreClose) :
+                                        sal_uInt16 nPort,
+                                        const OUString &sConnectionDescription) :
         m_nStatus( 0 ),
-        m_sDescription( OUString::createFromAscii( "socket:" ) ),
-        m_bIgnoreClose( bIgnoreClose ),
+        m_sDescription( sConnectionDescription ),
         _started(sal_False),
         _closed(sal_False),
         _error(sal_False)
     {
-        m_sDescription += s;
-        m_sDescription += OUString::createFromAscii( ":" );
-        m_sDescription += OUString::valueOf( (sal_Int32) nPort , 10 );
-        m_sDescription += OUString::createFromAscii( ":" );
-
         // make it unique
+        m_sDescription += OUString( RTL_CONSTASCII_USTRINGPARAM( ",uniqueValue=" ) );
         m_sDescription += OUString::valueOf( (sal_Int64) (::vos::OObject * ) &m_socket , 10 );
+    }
+
+    void SocketConnection::completeConnectionString()
+    {
+        OUString sHost;
+        sal_Int32 nPort;
+
+        nPort = m_socket.getPeerPort();
+        m_socket.getPeerHost( sHost );
+
+        OUStringBuffer buf( 256 );
+        buf.appendAscii( ",peerPort=" );
+        buf.append( (sal_Int32) nPort );
+        buf.appendAscii( ",peerHost=" );
+        buf.append( sHost );
+
+
+        nPort = m_socket.getLocalPort();
+        m_socket.getLocalHost( sHost );
+
+        buf.appendAscii( ",localPort=" );
+        buf.append( (sal_Int32) nPort );
+        buf.appendAscii( ",localHost=" );
+        buf.append( sHost );
+
+        m_sDescription += buf.makeStringAndClear();
     }
 
     sal_Int32 SocketConnection::read( Sequence < sal_Int8 > & aReadBytes , sal_Int32 nBytesToRead )
@@ -313,7 +336,7 @@ namespace stoc_acceptor {
                   ::com::sun::star::uno::RuntimeException)
     {
         // enshure close is called only once
-        if( ! m_bIgnoreClose && 1 == osl_incrementInterlockedCount( (&m_nStatus) ) )
+        if(  1 == osl_incrementInterlockedCount( (&m_nStatus) ) )
         {
             m_socket.shutdown();
             notifyListeners(this, &_closed, callClosed);
@@ -344,11 +367,11 @@ namespace stoc_acceptor {
 
     SocketAcceptor::SocketAcceptor( const OUString &sSocketName ,
                                     sal_uInt16 nPort ,
-                                    sal_Bool bIgnoreClose ) :
+                                    const OUString &sConnectionDescription) :
         m_bClosed( sal_False ),
         m_sSocketName( sSocketName ),
         m_nPort( nPort ),
-        m_bIgnoreClose( bIgnoreClose )
+        m_sConnectionDescription( sConnectionDescription )
     {
     }
 
@@ -356,12 +379,7 @@ namespace stoc_acceptor {
     void SocketAcceptor::init()
     {
         m_addr.setPort( m_nPort );
-#ifdef ENABLEUNICODE
         m_addr.setAddr( m_sSocketName.pData );
-#else
-        OString o = OUStringToOString( m_sSocketName , RTL_TEXTENCODING_ASCII_US );
-        m_addr.setAddr( o.pData->buffer );
-#endif
         m_socket.setReuseAddr(1);
 
         if(! m_socket.bind(m_addr) )
@@ -381,8 +399,7 @@ namespace stoc_acceptor {
 
     Reference< XConnection > SocketAcceptor::accept( )
     {
-
-        SocketConnection *pConn = new SocketConnection( m_sSocketName , m_nPort, m_bIgnoreClose );
+        SocketConnection *pConn = new SocketConnection( m_sSocketName , m_nPort, m_sConnectionDescription );
 
         if( m_socket.acceptConnection( pConn->m_socket, pConn->m_addr )!= osl_Socket_Ok )
         {
@@ -396,6 +413,7 @@ namespace stoc_acceptor {
             return Reference < XConnection > ();
         }
 
+        pConn->completeConnectionString();
         pConn->m_socket.setTcpNoDelay( 1 );
 
         return Reference < XConnection > ( (XConnection * ) pConn );

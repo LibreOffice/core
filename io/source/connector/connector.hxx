@@ -2,9 +2,9 @@
  *
  *  $RCSfile: connector.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: svesik $ $Date: 2000-11-23 14:41:13 $
+ *  last change: $Author: jbu $ $Date: 2000-11-28 08:20:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,7 @@ namespace stoc_connector
 
     {
     public:
-        PipeConnection( const ::rtl::OUString & s , sal_Bool bIgnoreClose );
+        PipeConnection( const ::rtl::OUString & s, const ::rtl::OUString &sConnectionDescription );
 
         virtual sal_Int32 SAL_CALL read( ::com::sun::star::uno::Sequence< sal_Int8 >& aReadBytes,
                                          sal_Int32 nBytesToRead )
@@ -126,7 +126,6 @@ namespace stoc_connector
         ::vos::OStreamPipe m_pipe;
         oslInterlockedCount m_nStatus;
         ::rtl::OUString m_sDescription;
-        sal_Bool m_bIgnoreClose;
     };
 
     class SocketConnection :
@@ -134,7 +133,7 @@ namespace stoc_connector
 
     {
     public:
-        SocketConnection( const ::rtl::OUString & s , sal_uInt16 nPort  , sal_Bool bIgnoreClose );
+        SocketConnection( const ::rtl::OUString & s , sal_uInt16 nPort, const ::rtl::OUString & sConnectionDescription  );
 
         virtual sal_Int32 SAL_CALL read( ::com::sun::star::uno::Sequence< sal_Int8 >& aReadBytes,
                                          sal_Int32 nBytesToRead )
@@ -160,11 +159,12 @@ namespace stoc_connector
             throw(::com::sun::star::uno::RuntimeException);
 
     public:
+        void completeConnectionString();
+
         ::vos::OConnectorSocket m_socket;
         ::vos::OInetSocketAddr m_addr;
         oslInterlockedCount m_nStatus;
         ::rtl::OUString m_sDescription;
-        sal_Bool m_bIgnoreClose;
 
         ::osl::Mutex _mutex;
         sal_Bool     _started;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctr_socket.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kr $ $Date: 2000-10-30 12:32:33 $
+ *  last change: $Author: jbu $ $Date: 2000-11-28 08:20:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,6 +60,7 @@
  ************************************************************************/
 
 #include "connector.hxx"
+#include <rtl/ustrbuf.hxx>
 
 using namespace ::osl;
 using namespace ::rtl;
@@ -116,21 +117,42 @@ namespace stoc_connector {
     }
 
 
-    SocketConnection::SocketConnection( const OUString &s, sal_uInt16 nPort, sal_Bool bIgnoreClose ) :
+    SocketConnection::SocketConnection( const OUString &s, sal_uInt16 nPort, const OUString &sConnectionDescription ) :
         m_nStatus( 0 ),
-        m_sDescription( OUString::createFromAscii( "socket:" ) ),
-        m_bIgnoreClose( bIgnoreClose ),
+        m_sDescription( sConnectionDescription ),
         _started(sal_False),
         _closed(sal_False),
         _error(sal_False)
     {
-        m_sDescription += s;
-        m_sDescription += OUString::createFromAscii( ":" );
-        m_sDescription += OUString::valueOf( (sal_Int32) nPort , 10 );
-        m_sDescription += OUString::createFromAscii( ":" );
-
         // make it unique
+        m_sDescription += OUString( RTL_CONSTASCII_USTRINGPARAM( ",uniqueValue=" ) );
         m_sDescription += OUString::valueOf( (sal_Int64) &m_socket , 10 );
+    }
+
+    void SocketConnection::completeConnectionString()
+    {
+        OUString sHost;
+        sal_Int32 nPort;
+
+        nPort = m_socket.getPeerPort();
+        m_socket.getPeerHost( sHost );
+
+        OUStringBuffer buf( 256 );
+        buf.appendAscii( ",peerPort=" );
+        buf.append( (sal_Int32) nPort );
+        buf.appendAscii( ",peerHost=" );
+        buf.append( sHost );
+
+
+        nPort = m_socket.getLocalPort();
+        m_socket.getLocalHost( sHost );
+
+        buf.appendAscii( ",localPort=" );
+        buf.append( (sal_Int32) nPort );
+        buf.appendAscii( ",localHost=" );
+        buf.append( sHost );
+
+        m_sDescription += buf.makeStringAndClear();
     }
 
     sal_Int32 SocketConnection::read( Sequence < sal_Int8 > & aReadBytes , sal_Int32 nBytesToRead )
@@ -232,8 +254,8 @@ namespace stoc_connector {
             throw(::com::sun::star::io::IOException,
                   ::com::sun::star::uno::RuntimeException)
     {
-            // enshure that close is called only once
-        if( ! m_bIgnoreClose && 1 == osl_incrementInterlockedCount( (&m_nStatus) ) )
+            // ensure that close is called only once
+        if( 1 == osl_incrementInterlockedCount( (&m_nStatus) ) )
         {
             m_socket.shutdown();
             notifyListeners(this, &_closed, callClosed);

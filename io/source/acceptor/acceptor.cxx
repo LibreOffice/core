@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acceptor.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:24:17 $
+ *  last change: $Author: jbu $ $Date: 2000-11-28 08:23:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ using namespace ::com::sun::star::registry;
 using namespace ::com::sun::star::connection;
 
 
-namespace stoc_acceptor
+namespace io_acceptor
 {
     typedef WeakImplHelper1< XAcceptor > MyImplHelper;
 
@@ -128,6 +128,75 @@ namespace stoc_acceptor
         }
     }
 
+    // helper class
+    class TokenContainer
+    {
+    public:
+        TokenContainer( const OUString &sString );
+
+        ~TokenContainer()
+        {
+            delete [] m_aTokens;
+        }
+
+        inline OUString & getToken( sal_Int32 nElement )
+        {
+            return m_aTokens[nElement];
+        }
+
+        inline sal_Int32 getTokenCount()
+        {
+            return m_nTokenCount;
+        }
+
+        OUString *m_aTokens;
+        sal_Int32 m_nTokenCount;
+    };
+
+    TokenContainer::TokenContainer( const OUString & sString ) :
+        m_nTokenCount( 0 ),
+        m_aTokens( 0 )
+    {
+        // split into separate tokens
+        sal_Int32 i = 0,nMax;
+
+        nMax = sString.getLength();
+        for( i = 0 ; i < nMax ; i ++ )
+        {
+            if( ',' == sString.pData->buffer[i] )
+            {
+                m_nTokenCount ++;
+            }
+        }
+
+        if( sString.getLength() )
+        {
+            m_nTokenCount ++;
+        }
+        if( m_nTokenCount )
+        {
+            m_aTokens = new OUString[m_nTokenCount];
+            sal_Int32 nIndex = 0;
+            for( i = 0 ; i < m_nTokenCount ; i ++ )
+            {
+                sal_Int32 nLastIndex = nIndex;
+                nIndex = sString.indexOf( ( sal_Unicode ) ',' , nIndex );
+                if( -1 == nIndex )
+                {
+                    m_aTokens[i] = sString.copy( nLastIndex );
+                    break;
+                }
+                else
+                {
+                    m_aTokens[i] = sString.copy( nLastIndex , nIndex-nLastIndex );
+                }
+                m_aTokens[i] = m_aTokens[i].trim();
+                nIndex ++;
+            }
+        }
+    }
+
+
     Reference< XConnection > OAcceptor::accept( const OUString &sConnectionDescription )
         throw( AlreadyAcceptingException,
                ConnectionSetupException,
@@ -144,62 +213,38 @@ namespace stoc_acceptor
             m_sLastDescription != sConnectionDescription )
         {
             // instantiate another acceptor for different ports
-            throw ConnectionSetupException();
+            OUString sMessage = OUString( RTL_CONSTASCII_USTRINGPARAM(
+                "acceptor::accept called multiple times with different conncetion strings\n" ) );
+            throw ConnectionSetupException( sMessage, Reference< XInterface > () );
         }
 
         if( ! m_sLastDescription.getLength() )
         {
             // setup the acceptor
+            TokenContainer container( sConnectionDescription );
 
-            OUString aTokens[10];
-
-            // split into separate tokens
-            sal_Int32 i = 0,nIndex = 0;
-//              OUString sConnectionId = OUStringToOString( sConnectionDescription , RTL_TEXTENCODING_ASCII_US );
-
-            for(i=0; i < 10 ; i ++ )
-            {
-                sal_Int32 nLastIndex = nIndex;
-                nIndex = sConnectionDescription.indexOf( ( sal_Unicode ) ',' , nIndex );
-                if( -1 == nIndex )
-                {
-                    aTokens[i] = sConnectionDescription.copy( nLastIndex );
-                    break;
-                }
-                else
-                {
-                    aTokens[i] = sConnectionDescription.copy( nLastIndex , nIndex-nLastIndex );
-                }
-                aTokens[i] = aTokens[i].trim();
-                nIndex ++;
-            }
-
-            if( aTokens[0] == OUString( RTL_CONSTASCII_USTRINGPARAM("pipe") ) )
+            if( 0 == container.getToken(0).compareToAscii("pipe") )
             {
                 OUString sName;
-                sal_Bool bIgnoreFirstClose = sal_False;;
-
-                for( i = 1 ; i < 10 ; i ++ )
+                sal_Int32 i;
+                for( i = 1 ; i < container.getTokenCount() ; i ++ )
                 {
-                    sal_Int32 nIndex = aTokens[i].indexOf( '=' );
+                    sal_Int32 nIndex = container.getToken(i).indexOf( '=' );
                     if( -1 != nIndex )
                     {
-                        OUString aName = aTokens[i].copy( 0 , nIndex ).trim().toLowerCase();
-                        if( nIndex < aTokens[i].getLength() )
+                        OUString aName = container.getToken(i).copy( 0 , nIndex ).trim().toLowerCase();
+                        if( nIndex < container.getToken(i).getLength() )
                         {
-                            OUString oValue = aTokens[i].copy( nIndex+1 , aTokens[i].getLength() - nIndex -1 ).trim();
-                            if( aName == OUString( RTL_CONSTASCII_USTRINGPARAM("ignorefirstclose") ) )
-                            {
-                                bIgnoreFirstClose = ( OUString( RTL_CONSTASCII_USTRINGPARAM("1")) == oValue );
-                            }
-                            else if ( aName == OUString( RTL_CONSTASCII_USTRINGPARAM("name") ) )
+                            OUString oValue = container.getToken(i).copy(
+                                nIndex+1 , container.getToken(i).getLength() - nIndex -1 ).trim();
+                            if ( 0 == aName.compareToAscii("name") )
                             {
                                 sName = oValue;
                             }
                         }
                     }
                 }
-                m_pPipe = new PipeAcceptor(sName , bIgnoreFirstClose );
+                m_pPipe = new PipeAcceptor(sName , sConnectionDescription );
 
                 try
                 {
@@ -215,38 +260,34 @@ namespace stoc_acceptor
                     throw;
                 }
             }
-            else if ( aTokens[0] == OUString( RTL_CONSTASCII_USTRINGPARAM("socket")) )
+            else if ( 0 == container.getToken(0).compareToAscii("socket") )
             {
                 OUString sHost = OUString( RTL_CONSTASCII_USTRINGPARAM("localhost"));
                 sal_uInt16 nPort;
-                sal_Bool bIgnoreFirstClose = sal_False;;
+                sal_Int32 i;
 
-                for( i = 1 ; i < 10 ; i ++ )
+                for( i = 1 ;i < container.getTokenCount() ; i ++ )
                 {
-                    sal_Int32 nIndex = aTokens[i].indexOf( '=' );
+                    sal_Int32 nIndex = container.getToken(i).indexOf( '=' );
                     if( -1 != nIndex )
                     {
-                        OUString aName = aTokens[i].copy( 0 , nIndex ).trim().toLowerCase();
-                        if( nIndex < aTokens[i].getLength() )
+                        OUString aName = container.getToken(i).copy( 0 , nIndex ).trim().toLowerCase();
+                        if( nIndex < container.getToken(i).getLength() )
                         {
-                            OUString oValue = aTokens[i].copy( nIndex+1 , aTokens[i].getLength() - nIndex -1 ).trim();
-                            if( aName == OUString( RTL_CONSTASCII_USTRINGPARAM("ignorefirstclose")) )
-                            {
-                                bIgnoreFirstClose = ( OUString( RTL_CONSTASCII_USTRINGPARAM("1")) == oValue );
-                            }
-                            else if( OUString( RTL_CONSTASCII_USTRINGPARAM("host")) == aName )
+                            OUString oValue = container.getToken(i).copy( nIndex+1 , container.getToken(i).getLength() - nIndex -1 ).trim();
+                            if( aName.compareToAscii("host") == 0 )
                             {
                                 sHost = oValue;
                             }
-                            else if( OUString( RTL_CONSTASCII_USTRINGPARAM("port")) == aName )
+                            else if( aName.compareToAscii("port") == 0 )
                             {
-                                nPort = oValue.toInt32();
+                                nPort = (sal_uInt16) oValue.toInt32();
                             }
                         }
                     }
                 }
 
-                m_pSocket = new SocketAcceptor( sHost , nPort , bIgnoreFirstClose );
+                m_pSocket = new SocketAcceptor( sHost , nPort, sConnectionDescription );
 
                 try
                 {
@@ -262,9 +303,10 @@ namespace stoc_acceptor
                     throw;
                 }
             }
-            else {
+            else
+            {
                 OUString delegatee = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.connection.Acceptor."));
-                delegatee += aTokens[0];
+                delegatee += container.getToken(0);
 
 #ifdef DEBUG
                 OString tmp = OUStringToOString(delegatee, RTL_TEXTENCODING_ASCII_US);
@@ -344,7 +386,7 @@ namespace stoc_acceptor
 
 }
 
-using namespace stoc_acceptor;
+using namespace io_acceptor;
 
 
 

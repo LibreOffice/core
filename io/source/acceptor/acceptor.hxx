@@ -2,9 +2,9 @@
  *
  *  $RCSfile: acceptor.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:24:18 $
+ *  last change: $Author: jbu $ $Date: 2000-11-28 08:23:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,12 +64,12 @@
 
 #include <com/sun/star/connection/XConnection.hpp>
 
-namespace stoc_acceptor {
+namespace io_acceptor {
 
     class PipeAcceptor
     {
     public:
-        PipeAcceptor( const ::rtl::OUString &sPipeName , sal_Bool bIgnoreClose );
+        PipeAcceptor( const ::rtl::OUString &sPipeName , const ::rtl::OUString &sConnectionDescription );
 
         void init();
         ::com::sun::star::uno::Reference < ::com::sun::star::connection::XConnection >
@@ -79,14 +79,16 @@ namespace stoc_acceptor {
 
         ::vos::OPipe m_pipe;
         ::rtl::OUString m_sPipeName;
+        ::rtl::OUString m_sConnectionDescription;
         sal_Bool m_bClosed;
-        sal_Bool m_bIgnoreClose;
     };
 
     class SocketAcceptor
     {
     public:
-        SocketAcceptor( const ::rtl::OUString & sSocketName , sal_uInt16 nPort, sal_Bool bIgnoreClose );
+        SocketAcceptor( const ::rtl::OUString & sSocketName ,
+                        sal_uInt16 nPort,
+                        const ::rtl::OUString &sConnectionDescription );
 
         void init();
         ::com::sun::star::uno::Reference < ::com::sun::star::connection::XConnection >
@@ -97,9 +99,9 @@ namespace stoc_acceptor {
         ::vos::OInetSocketAddr m_addr;
         ::vos::OAcceptorSocket m_socket;
         ::rtl::OUString m_sSocketName;
+        ::rtl::OUString m_sConnectionDescription;
         sal_uInt16 m_nPort;
         sal_Bool m_bClosed;
-        sal_Bool m_bIgnoreClose;
     };
 
 };
