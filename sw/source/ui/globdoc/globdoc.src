@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globdoc.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:19:55 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 11:57:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,7 @@ String STR_HUMAN_SWGLOBDOC_NAME
     Text[ czech ] = "Hlavní dokument";
     Text[ hebrew ] = "‮מסמך אב‬";
     Text[ hindi ] = "मास्टर लेखपत्र";
+    Text[ slovak ] = "Hlavný dokument";
 };
 String STR_WRITER_GLOBALDOC_FULLTYPE_40
 {
@@ -128,12 +129,15 @@ String STR_WRITER_GLOBALDOC_FULLTYPE
     TEXT[ czech ] = "Hlavní dokument %PRODUCTNAME 6.0";
     TEXT[ hebrew ] = "%PRODUCTNAME 6.0 Global Dokument";
     TEXT[ hindi ] = "%PRODUCTNAME 6.0 मास्टर लेखपत्र";
+    TEXT[ slovak ] = "Hlavný dokument %PRODUCTNAME 6.0";
 };
 
 #define MN_SW_GLOBAL
 #include "swmn.hrc"
 #define MN_SW_PORTAL
 #include "swmn.hrc"
+
+
 
 
 
