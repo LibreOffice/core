@@ -2,9 +2,9 @@
  *
  *  $RCSfile: query.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-13 15:10:03 $
+ *  last change: $Author: fs $ $Date: 2001-02-13 15:54:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1203,14 +1203,14 @@ ToolBox RID_BRW_QUERYDESIGN_TOOLBOX
             Identifier = ID_BROWSER_CLEAR_QUERY;
             HelpId = ID_BROWSER_CLEAR_QUERY ;
             Text = "Abfrage löschen" ;
-            Text [ ENGLISH ] = "clear query" ;
+            Text [ ENGLISH ] = "Clear query" ;
         };
         ToolBoxItem
         {
             Identifier = ID_BROWSER_SQL;
             HelpId = ID_BROWSER_SQL ;
             Text = "Design Ansicht an-, ausschalten" ;
-            Text [ ENGLISH ] = "switch design view on/off" ;
+            Text [ ENGLISH ] = "Switch design view on/off" ;
         };
         ToolBoxItem
         {
