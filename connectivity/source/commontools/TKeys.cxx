@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TKeys.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-25 09:00:29 $
+ *  last change: $Author: oj $ $Date: 2002-11-07 08:43:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -306,14 +306,12 @@ void OKeysHelper::dropObject(sal_Int32 _nPos,const ::rtl::OUString _sElementName
         ObjectIter aIter = m_aElements[_nPos];
         if(!aIter->second.is()) // we want to drop a object which isn't loaded yet so we must load it
             aIter->second = createObject(_sElementName);
+
         Reference<XPropertySet> xKey(aIter->second,UNO_QUERY);
-        sal_Int32 nKeyType = 0;
-        ::dbtools::OPropertyMap& rPropMap = OMetaConnection::getPropMap();
-        xKey->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_TYPE)) >>= nKeyType;
 
         aSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" DROP CONSTRAINT "));
         ::rtl::OUString aQuote  = m_pTable->getConnection()->getMetaData()->getIdentifierQuoteString();
-        aSql += aQuote + _sElementName + aQuote;
+        aSql += ::dbtools::quoteName( aQuote,_sElementName);
 
         Reference< XStatement > xStmt = m_pTable->getConnection()->createStatement(  );
         if ( xStmt.is() )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtools2.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-25 09:00:00 $
+ *  last change: $Author: oj $ $Date: 2002-11-07 08:43:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,18 +169,35 @@ namespace dbtools
         }
     }
 
-    aSql += sTypeName;
-    if(nPrecision > 0 && bUseLiteral)
+
+    if ( nPrecision > 0 && bUseLiteral )
     {
-        aSql += ::rtl::OUString::createFromAscii("(");
+        sal_Int32 nParenPos = sTypeName.indexOf('(');
+        if ( nParenPos == -1 )
+        {
+            aSql += sTypeName;
+            aSql += ::rtl::OUString::createFromAscii("(");
+        }
+        else
+        {
+            aSql += sTypeName.copy(0,++nParenPos);
+        }
         aSql += ::rtl::OUString::valueOf(nPrecision);
-        if(nScale > 0)
+        if ( nScale > 0 )
         {
             aSql += ::rtl::OUString::createFromAscii(",");
             aSql += ::rtl::OUString::valueOf(nScale);
         }
-        aSql += ::rtl::OUString::createFromAscii(")");
+        if ( nParenPos == -1 )
+            aSql += ::rtl::OUString::createFromAscii(")");
+        else
+        {
+            nParenPos = sTypeName.indexOf(')',nParenPos);
+            aSql += sTypeName.copy(nParenPos);
+        }
     }
+    else
+        aSql += sTypeName; // simply add the type name
 
     ::rtl::OUString aDefault = ::comphelper::getString(xColProp->getPropertyValue(rPropMap.getNameByIndex(PROPERTY_ID_DEFAULTVALUE)));
     if(aDefault.getLength())
@@ -365,13 +382,33 @@ namespace dbtools
         }
     }
 
-    if(aSql.lastIndexOf(',') == (aSql.getLength()-1))
-        aSql = aSql.replaceAt(aSql.getLength()-1,1,::rtl::OUString::createFromAscii(")"));
-    else
-        aSql += ::rtl::OUString::createFromAscii(")");
+    if ( aSql.getLength() )
+    {
+        if ( aSql.lastIndexOf(',') == (aSql.getLength()-1) )
+            aSql = aSql.replaceAt(aSql.getLength()-1,1,::rtl::OUString::createFromAscii(")"));
+        else
+            aSql += ::rtl::OUString::createFromAscii(")");
+    }
 
     return aSql;
 
+}
+// -----------------------------------------------------------------------------
+::rtl::OUString createSqlCreateTableStatement(  const Reference< XPropertySet >& descriptor,
+                                                const Reference< XConnection>& _xConnection)
+{
+    ::rtl::OUString aSql = ::dbtools::createStandardCreateStatement(descriptor,_xConnection);
+    ::rtl::OUString sKeyStmt = ::dbtools::createStandardKeyStatement(descriptor,_xConnection);
+    if ( sKeyStmt.getLength() )
+        aSql += sKeyStmt;
+    else
+    {
+        if ( aSql.lastIndexOf(',') == (aSql.getLength()-1) )
+            aSql = aSql.replaceAt(aSql.getLength()-1,1,::rtl::OUString::createFromAscii(")"));
+        else
+            aSql += ::rtl::OUString::createFromAscii(")");
+    }
+    return aSql;
 }
 // -----------------------------------------------------------------------------
 Reference<XPropertySet> createSDBCXColumn(const Reference<XPropertySet>& _xTable,
