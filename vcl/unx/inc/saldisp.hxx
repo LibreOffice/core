@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldisp.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: obo $ $Date: 2004-02-20 08:55:21 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 15:54:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -254,6 +254,7 @@ protected:
 
     BOOL            bWasXError_;
     BOOL            bIgnoreXErrors_;
+    bool            m_bHaveSystemChildFrames;
     int                         nIgnoreErrorLevel;
 
     int             nFDs_;
@@ -268,6 +269,7 @@ public:
 
     virtual void        Yield( BOOL bWait );
     virtual void        Wakeup();
+    virtual void        PostUserEvent();
 
     virtual void    Insert( int fd, void* data,
                             YieldFunc   pending,
@@ -283,10 +285,13 @@ public:
     inline  void            SetIgnoreXErrors( BOOL b )
     { bIgnoreXErrors_ = b; bWasXError_ = FALSE; }
 
-    inline  void            StartTimer( ULONG nMS );
-    inline  void            StopTimer();
+    virtual void            StartTimer( ULONG nMS );
+    virtual void            StopTimer();
 
     bool            CheckTimeout( bool bExecuteTimers = true );
+
+    void            setHaveSystemChildFrame()
+    { m_bHaveSystemChildFrames = true; }
 };
 
 // -=-= SalDisplay -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -383,12 +388,13 @@ protected:
 
     bool            m_bXinerama;
     std::vector< Rectangle > m_aXineramaScreens;
+    std::list<SalFrame*> m_aFrames;
 
     struct SnDisplay           *m_pSnDisplay;
     struct SnLauncheeContext   *m_pSnLauncheeContext;
 
     void            DestroyFontCache();
-    long            Dispatch( XEvent *pEvent );
+    virtual long    Dispatch( XEvent *pEvent ) = 0;
     void            InitXinerama();
 
     void            doDestruct();
@@ -402,6 +408,12 @@ public:
                                         Colormap aColMap = None );
 
     virtual ~SalDisplay();
+
+
+    virtual void            registerFrame( SalFrame* pFrame );
+    virtual void            deregisterFrame( SalFrame* pFrame );
+    void                    setHaveSystemChildFrame() const
+    { pXLib_->setHaveSystemChildFrame(); }
 
     void            Init( Colormap hXColmap, Visual *pVisual );
 
@@ -481,6 +493,10 @@ public:
     ::vcl_sal::WMAdaptor* getWMAdaptor() const { return m_pWMAdaptor; }
     bool            IsXinerama() const { return m_bXinerama; }
     const std::vector< Rectangle >& GetXineramaScreens() const { return m_aXineramaScreens; }
+
+    const std::list< SalFrame* >& getFrames()
+    { return m_aFrames; }
+
 };
 
 // -=-= inlines =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -511,8 +527,11 @@ public:
                          Visual* pVisual = NULL,
                          Colormap aColMap = None );
     virtual ~SalX11Display();
+
+    virtual long        Dispatch( XEvent *pEvent );
+    virtual void        Yield( BOOL bWait );
+
     BOOL     IsEvent();
-    void     Yield( BOOL bWait );
 };
 
 /*----------------------------------------------------------
