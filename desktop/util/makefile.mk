@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.51 $
+#   $Revision: 1.52 $
 #
-#   last change: $Author: rt $ $Date: 2004-11-26 14:49:30 $
+#   last change: $Author: hr $ $Date: 2004-11-26 22:28:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -180,7 +180,7 @@ APP1DEF=    $(MISCX)$/$(TARGET).def
 
 .IF "$(GUI)" == "WNT"
 APP1RES=    $(RES)$/desktop.res
-APP1ICON=$(SOLARRESDIR)$/icons/001_star_main.ico
+APP1ICON=$(SOLARRESDIR)$/icons/so8-main-app.ico
 APP1VERINFO=verinfo.rc
 APP1LINKRES=$(MISC)$/$(TARGET).res
 APP1STACK=10000000
@@ -202,7 +202,7 @@ APP2OBJS=       $(OBJ)$/sowrapper.obj \
                 $(OBJ)$/wrapperw.obj \
                 $(OBJ)$/wrappera.obj
 APP2RES=    $(RES)$/$(APP2TARGET).res
-APP2ICON=$(SOLARRESDIR)$/icons/001_star_main.ico
+APP2ICON=$(SOLARRESDIR)$/icons/so8-main-app.ico
 APP2VERINFO=verinfo.rc
 APP2LINKRES=$(MISC)$/$(APP2TARGET).res
 
@@ -216,7 +216,7 @@ APP3OBJS= \
                 $(OBJ)$/lwrapw.obj \
                 $(OBJ)$/lwrapa.obj
 APP3RES=    $(RES)$/$(APP3TARGET).res
-APP3ICON=$(SOLARRESDIR)$/icons/001_star_main.ico
+APP3ICON=$(SOLARRESDIR)$/icons/so8-main-app.ico
 APP3VERINFO=verinfo.rc
 APP3LINKRES=$(MISC)$/$(APP3TARGET).res
 
@@ -230,7 +230,7 @@ APP4OBJS= \
                 $(OBJ)$/rwrapa.obj
 
 APP4RES=    $(RES)$/$(APP4TARGET).res
-APP4ICON=$(SOLARRESDIR)$/icons/001_star_main.ico
+APP4ICON=$(SOLARRESDIR)$/icons/so8-main-app.ico
 APP4VERINFO=verinfo.rc
 APP4LINKRES=$(MISC)$/$(APP4TARGET).res
 .ENDIF # "$(GUI)" == "WNT"
@@ -271,7 +271,7 @@ APP5DEF=    $(MISCX)$/$(TARGET).def
 
 .IF "$(GUI)" == "WNT"
 APP5RES=    $(RES)$/oodesktop.res
-APP5ICON=$(SOLARRESDIR)$/icons/ooo_gulls.ico
+APP5ICON=$(SOLARRESDIR)$/icons/ooo-main-app.ico
 APP5VERINFO=ooverinfo.rc
 APP5LINKRES=$(MISC)$/ooffice.res
 APP5STACK=10000000
