@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objstor.cxx,v $
  *
- *  $Revision: 1.103 $
+ *  $Revision: 1.104 $
  *
- *  last change: $Author: mav $ $Date: 2002-08-27 10:43:49 $
+ *  last change: $Author: mba $ $Date: 2002-08-28 09:07:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -595,6 +595,17 @@ sal_Bool SfxObjectShell::DoLoad( SfxMedium *pMed )
                             Reference< XInteractionHandler > rHandler = pMedium->GetInteractionHandler();
                             if( rHandler.is() )
                             {
+                                // we need some properties in the media descriptor, so we have to make sure that they are in
+                                Any aAny;
+                                aAny <<= pMedium->GetInputStream();
+                                SfxItemSet* pSet = GetMedium()->GetItemSet();
+                                if ( pSet->GetItemState( SID_INPUTSTREAM ) < SFX_ITEM_SET )
+                                    pSet->Put( SfxUsrAnyItem( SID_INPUTSTREAM, aAny ) );
+                                if ( pSet->GetItemState( SID_FILE_NAME ) < SFX_ITEM_SET )
+                                    pSet->Put( SfxStringItem( SID_FILE_NAME, pMedium->GetName() ) );
+                                if ( pSet->GetItemState( SID_FILTER_NAME ) < SFX_ITEM_SET )
+                                    pSet->Put( SfxStringItem( SID_FILTER_NAME, pFilter->GetName() ) );
+
                                 Sequence< PropertyValue > rProperties;
                                 TransformItems( SID_OPENDOC, *GetMedium()->GetItemSet(), rProperties, NULL );
                                 RequestFilterOptions* pFORequest = new RequestFilterOptions( GetModel(), rProperties );
