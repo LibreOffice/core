@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfly.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 09:49:57 $
+ *  last change: $Author: vg $ $Date: 2003-07-04 13:24:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,12 +203,43 @@
  *
  *****************************************************************************/
 
-const SwFrm* lcl_TheAnchor( const SdrObject* pObj )
+// OD 03.07.2003 #108784# - change return type from <pointer> to <reference>
+const SwFrm& lcl_TheAnchor( const SdrObject* pObj )
 {
-    SwFrm* pRet = pObj->IsWriterFlyFrame() ?
-        ( (SwVirtFlyDrawObj*)pObj )->GetFlyFrm()->GetAnchor()
-        : ( (SwDrawContact*)GetUserCall(pObj) )->GetAnchor();
-    return pRet;
+    // OD 03.07.2003 #108784# - adjustments for support of drawing objects in
+    // header/footer.
+    const SwFrm* pRet = 0L;
+    if ( pObj->IsWriterFlyFrame() )
+    {
+        pRet = static_cast<const SwVirtFlyDrawObj*>(pObj)->GetFlyFrm()->GetAnchor();
+    }
+    else
+    {
+        SwDrawContact* pDrawContact =
+                static_cast<SwDrawContact*>(GetUserCall( pObj ));
+        if ( pObj->ISA(SwDrawVirtObj) )
+        {
+            const SwDrawVirtObj* pDrawVirtObj = static_cast<const SwDrawVirtObj*>(pObj);
+            pRet = pDrawVirtObj->GetAnchorFrm();
+
+            // error handling, if no anchor frame is found.
+            if ( !pRet )
+            {
+                // assert, if no anchor frame found at 'virtual' drawing object
+                // and return anchor frame of 'master' drawing object.
+                ASSERT( false, "<lcl_TheAnchor(..)> - virtual drawing object with no anchor frame!" );
+                pRet = pDrawContact->GetAnchor();
+            }
+        }
+        else
+        {
+            pRet = pDrawContact->GetAnchor();
+        }
+    }
+
+    ASSERT( pRet, "<lcl_TheAnchor(..)> - no anchor frame found!" );
+
+    return *pRet;
 }
 
 /*****************************************************************************
@@ -1054,7 +1085,7 @@ sal_Bool SwTxtFly::DrawTextOpaque( SwDrawTextInfo &rInf )
                            || pFly->IsShadowTransparent() ) &&
                         SURROUND_THROUGHT == rSur.GetSurround() &&
                         ( !rSur.IsAnchorOnly() ||
-                          GetMaster() == lcl_TheAnchor( pTmp ) ||
+                          GetMaster() == &lcl_TheAnchor( pTmp ) ||
                           ( FLY_AT_CNTNT != rAnchor.GetAnchorId() &&
                               FLY_AUTO_CNTNT != rAnchor.GetAnchorId()
                           )
@@ -1288,7 +1319,7 @@ sal_Bool SwTxtFly::GetTop( const SdrObject *pNew, const sal_Bool bInFtn,
             // Wenn wir aber gerade den Text des FlyCnt formatieren, dann
             // muss er natuerlich dem absatzgebundenen Frm ausweichen!
             // pCurrFrm ist der Anker von pNew?
-            const SwFrm* pTmp = lcl_TheAnchor( pNew );
+            const SwFrm* pTmp = &lcl_TheAnchor( pNew );
             if( pTmp == pCurrFrm )
                 return sal_True;
             if( pTmp->IsTxtFrm() && ( pTmp->IsInFly() || pTmp->IsInFtn() ) )
@@ -1420,7 +1451,7 @@ SwFlyList *SwTxtFly::InitFlyList()
 
                 SwContact *pContact = (SwContact*)GetUserCall(pO);
                 const SwFmtSurround &rFlyFmt = pContact->GetFmt()->GetSurround();
-                if( rFlyFmt.IsAnchorOnly() && lcl_TheAnchor( pO ) == GetMaster() )
+                if( rFlyFmt.IsAnchorOnly() && &lcl_TheAnchor( pO ) == GetMaster() )
                 {
                     const SwFmtVertOrient &rTmpFmt = pContact->GetFmt()->GetVertOrient();
                     if( VERT_BOTTOM != rTmpFmt.GetVertOrient() )
@@ -1815,14 +1846,14 @@ sal_Bool SwTxtFly::ForEach( const SwRect &rRect, SwRect* pRect, sal_Bool bAvoid 
                     const SwFmtAnchor& rAnchor = pFmt->GetAnchor();
                     if( ( SURROUND_THROUGHT == rSur.GetSurround() &&
                           ( !rSur.IsAnchorOnly() ||
-                            GetMaster() == lcl_TheAnchor( pObj ) ||
+                            GetMaster() == &lcl_TheAnchor( pObj ) ||
                             ( FLY_AT_CNTNT != rAnchor.GetAnchorId() &&
                               FLY_AUTO_CNTNT != rAnchor.GetAnchorId() ) ) )
                         || aRect.Top() == WEIT_WECH )
                         continue;
                 }
 
-                if ( mbIgnoreCurrentFrame && pCurrFrm == lcl_TheAnchor( pObj ) )
+                if ( mbIgnoreCurrentFrame && pCurrFrm == &lcl_TheAnchor( pObj ) )
                     continue;
 
                 if( pRect )
@@ -2195,7 +2226,7 @@ _FlyCntnt SwTxtFly::GetOrder( const SdrObject *pObj ) const
     const SwFmtSurround &rFlyFmt = pFmt->GetSurround();
     _FlyCntnt eOrder = rFlyFmt.GetSurround();
 
-    if( rFlyFmt.IsAnchorOnly() && lcl_TheAnchor( pObj ) != GetMaster() )
+    if( rFlyFmt.IsAnchorOnly() && &lcl_TheAnchor( pObj ) != GetMaster() )
     {
         const SwFmtAnchor& rAnchor = pFmt->GetAnchor();
         if( FLY_AT_CNTNT == rAnchor.GetAnchorId() ||
@@ -2281,7 +2312,7 @@ const SwFrmFmt* SwTxtFrm::IsFirstBullet()
         for ( MSHORT i = 0; i < pSorted->Count(); ++i )
         {
             const SdrObject *pObj = (*pSorted)[i];
-            if( this == lcl_TheAnchor( pObj ) )
+            if( this == &lcl_TheAnchor( pObj ) )
             {
                 SwRect aBound( GetBoundRect( pObj ) );
                 if( aBound.Top() > Frm().Top() + Prt().Top() )
