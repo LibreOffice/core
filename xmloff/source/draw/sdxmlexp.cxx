@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-09 14:40:42 $
+ *  last change: $Author: aw $ $Date: 2001-05-14 14:41:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -543,6 +543,7 @@ SdXMLExport::SdXMLExport( sal_Bool bIsDraw, sal_uInt16 nExportFlags )
     mnDocMasterPageCount(0L),
     mnDocDrawPageCount(0L),
     mnShapeStyleInfoIndex(0L),
+    mnObjectCount(0L),
     mbIsDraw(bIsDraw),
     mbFamilyGraphicUsed(FALSE),
     mbFamilyPresentationUsed(FALSE),
@@ -648,11 +649,78 @@ void SAL_CALL SdXMLExport::setSourceDocument( const uno::Reference< lang::XCompo
         }
     }
 
+    // #82003# count all draw objects for use with progress bar. Do this
+    // at META export to also export hint value.
+    if(getExportFlags() & EXPORT_META)
+    {
+        mnObjectCount = 0L;
+
+        if(mxDocMasterPages.is())
+        {
+            for(sal_Int32 a(0); a < mnDocMasterPageCount; a++)
+            {
+                uno::Any aAny(mxDocMasterPages->getByIndex(a));
+                uno::Reference< drawing::XShapes > xMasterPage;
+
+                if((aAny >>= xMasterPage) && xMasterPage.is())
+                {
+                    mnObjectCount += ImpRecursiveObjectCount(xMasterPage);
+                }
+            }
+        }
+
+        if(mxDocDrawPages.is())
+        {
+            for(sal_Int32 a(0); a < mnDocDrawPageCount; a++)
+            {
+                uno::Any aAny(mxDocDrawPages->getByIndex(a));
+                uno::Reference< drawing::XShapes > xPage;
+
+                if((aAny >>= xPage) && xPage.is())
+                {
+                    mnObjectCount += ImpRecursiveObjectCount(xPage);
+                }
+            }
+        }
+
+        // #82003# init progress bar
+        GetProgressBarHelper()->SetReference(mnObjectCount);
+    }
+
     // add namespaces
     _GetNamespaceMap().AddAtIndex(
         XML_NAMESPACE_PRESENTATION, sXML_np_presentation, sXML_n_presentation, XML_NAMESPACE_PRESENTATION);
 
     GetShapeExport()->enableLayerExport();
+}
+
+//////////////////////////////////////////////////////////////////////////////
+// #82003# helper function for recursive object count
+sal_uInt32 SdXMLExport::ImpRecursiveObjectCount(uno::Reference< drawing::XShapes > xShapes)
+{
+    sal_uInt32 nRetval(0L);
+
+    if(xShapes.is())
+    {
+        sal_Int32 nCount = xShapes->getCount();
+
+        for(sal_Int32 a(0L); a < nCount; a++)
+        {
+            uno::Any aAny(xShapes->getByIndex(a));
+            uno::Reference< drawing::XShapes > xGroup;
+
+            if((aAny >>= xGroup) && xGroup.is())
+            {
+                nRetval += ImpRecursiveObjectCount(xGroup);
+            }
+            else
+            {
+                nRetval++;
+            }
+        }
+    }
+
+    return nRetval;
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -703,12 +771,15 @@ __EXPORT SdXMLExport::~SdXMLExport()
         mpAutoLayoutInfoList = 0L;
     }
 
-    // stop progress view
-    if(GetStatusIndicator().is())
-    {
-        GetStatusIndicator()->end();
-        GetStatusIndicator()->reset();
-    }
+// #82003# status indicator stop is called exclusively
+// from SdXMLFilter::Export() now.
+//
+// stop progress view
+//  if(GetStatusIndicator().is())
+//  {
+//      GetStatusIndicator()->end();
+//      GetStatusIndicator()->reset();
+//  }
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -1548,6 +1619,31 @@ void SdXMLExport::SetProgress(sal_Int32 nProg)
     // set progress view
     if(GetStatusIndicator().is())
         GetStatusIndicator()->setValue(nProg);
+}
+
+//////////////////////////////////////////////////////////////////////////////
+// #82003#
+
+void SdXMLExport::_ExportMeta()
+{
+    // call parent
+    SvXMLExport::_ExportMeta();
+
+    // prepare export statistic info (mainly for progress bar at reload)
+    sal_Bool bContentUsed(FALSE);
+    rtl::OUStringBuffer sBuffer;
+
+    // export shape count info
+    if(mnObjectCount)
+    {
+        GetMM100UnitConverter().convertNumber(sBuffer, mnObjectCount);
+        AddAttribute(XML_NAMESPACE_META, sXML_object_count, sBuffer.makeStringAndClear());
+        bContentUsed = TRUE;
+    }
+
+    // when there is data, export it
+    if(bContentUsed)
+        SvXMLElementExport aElemStat(*this, XML_NAMESPACE_META, sXML_document_statistic, sal_True, sal_True);
 }
 
 //////////////////////////////////////////////////////////////////////////////
