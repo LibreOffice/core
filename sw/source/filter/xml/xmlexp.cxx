@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: dvo $ $Date: 2001-02-14 16:35:00 $
+ *  last change: $Author: mib $ $Date: 2001-03-02 16:49:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -247,8 +247,6 @@ sal_uInt32 SwXMLExport::exportDoc( const sal_Char *pClass )
     if( !GetModel().is() )
         return ERR_SWG_WRITE_ERROR;
 
-    GetTextParagraphExport()->SetBlockMode( bBlock );
-
     Reference < XTextDocument > xTextDoc( GetModel(), UNO_QUERY );
     Reference < XText > xText = xTextDoc->getText();
     Reference<XUnoTunnel> xTextTunnel( xText, UNO_QUERY);
@@ -263,36 +261,43 @@ sal_uInt32 SwXMLExport::exportDoc( const sal_Char *pClass )
         return ERR_SWG_WRITE_ERROR;
 
     SwDoc *pDoc = pText->GetDoc();
-    const SfxPoolItem* pItem;
-    const SfxItemPool& rPool = pDoc->GetAttrPool();
-    sal_uInt16 nItems = rPool.GetItemCount( RES_UNKNOWNATR_CONTAINER );
-    sal_Bool bExtended = sal_False;
-    for( sal_uInt16 i = 0; i < nItems; ++i )
-    {
-        if( 0 != (pItem = rPool.GetItem( RES_UNKNOWNATR_CONTAINER, i ) ) )
-        {
-            const SvXMLAttrContainerItem *pUnknown =
-                        (const SvXMLAttrContainerItem *)pItem;
-            if( (pUnknown->GetAttrCount() > 0) )
-            {
-                sal_uInt16 nIdx = pUnknown->GetFirstNamespaceIndex();
-                while( USHRT_MAX != nIdx )
-                {
-                    const OUString& rPrefix = pUnknown->GetPrefix( nIdx );
-                    if( USHRT_MAX ==
-                                GetNamespaceMap().GetIndexByPrefix( rPrefix ) )
-                    {
-                        // Add namespace declaration for unknown attributes if
-                        // there aren't existing ones for the prefix used by the
-                        // attibutes
-                        _GetNamespaceMap().Add( rPrefix,
-                                                pUnknown->GetNamespace( nIdx ),
-                                                XML_NAMESPACE_UNKNOWN );
-                    }
-                    nIdx = pUnknown->GetNextNamespaceIndex( nIdx );
-                }
 
-                bExtended = sal_True;
+    sal_Bool bExtended = sal_False;
+    if( (getExportFlags() & (EXPORT_FONTDECLS|EXPORT_STYLES|
+                             EXPORT_MASTERSTYLES|EXPORT_CONTENT)) != 0 )
+    {
+        GetTextParagraphExport()->SetBlockMode( bBlock );
+
+        const SfxPoolItem* pItem;
+        const SfxItemPool& rPool = pDoc->GetAttrPool();
+        sal_uInt16 nItems = rPool.GetItemCount( RES_UNKNOWNATR_CONTAINER );
+        for( sal_uInt16 i = 0; i < nItems; ++i )
+        {
+            if( 0 != (pItem = rPool.GetItem( RES_UNKNOWNATR_CONTAINER, i ) ) )
+            {
+                const SvXMLAttrContainerItem *pUnknown =
+                            (const SvXMLAttrContainerItem *)pItem;
+                if( (pUnknown->GetAttrCount() > 0) )
+                {
+                    sal_uInt16 nIdx = pUnknown->GetFirstNamespaceIndex();
+                    while( USHRT_MAX != nIdx )
+                    {
+                        const OUString& rPrefix = pUnknown->GetPrefix( nIdx );
+                        if( USHRT_MAX ==
+                                    GetNamespaceMap().GetIndexByPrefix( rPrefix ) )
+                        {
+                            // Add namespace declaration for unknown attributes if
+                            // there aren't existing ones for the prefix used by the
+                            // attibutes
+                            _GetNamespaceMap().Add( rPrefix,
+                                                    pUnknown->GetNamespace( nIdx ),
+                                                    XML_NAMESPACE_UNKNOWN );
+                        }
+                        nIdx = pUnknown->GetNextNamespaceIndex( nIdx );
+                    }
+
+                    bExtended = sal_True;
+                }
             }
         }
     }
@@ -311,11 +316,18 @@ sal_uInt32 SwXMLExport::exportDoc( const sal_Char *pClass )
     SetCurPaM( rPaM, bExportWholeDoc, bExportFirstTableOnly );
 #endif
 
-    // Update doc stat, so that correct values are exported and
-    // the progress works correctly.
     SwDocStat aDocStat( pDoc->GetDocStat() );
-    if( aDocStat.bModified )
-        pDoc->UpdateDocStat( aDocStat );
+    if( (getExportFlags() & EXPORT_META) != 0 )
+    {
+        // Update doc stat, so that correct values are exported and
+        // the progress works correctly.
+        if( aDocStat.bModified )
+            pDoc->UpdateDocStat( aDocStat );
+
+        SfxObjectShell* pObjSh = pDoc->GetDocShell();
+        if( pObjSh )
+            pObjSh->UpdateDocInfoForSave();     // update information
+    }
     if( bShowProgress )
     {
         nContentProgressStart = (sal_Int32)aDocStat.nPara / 2;
@@ -324,29 +336,29 @@ sal_uInt32 SwXMLExport::exportDoc( const sal_Char *pClass )
         pProgress->SetValue( 0 );
     }
 
-    SfxObjectShell* pObjSh = pDoc->GetDocShell();
-    if( pObjSh )
-        pObjSh->UpdateDocInfoForSave();     // update information
-
-    //Auf die Korrektheit der OrdNums sind wir schon angewiesen.
-    SdrModel* pModel = pDoc->GetDrawModel();
-    if( pModel )
-        pModel->GetPage( 0 )->RecalcObjOrdNums();
-
-    // switch redline mode
-    Reference<XPropertySet> xPropSet(GetModel(), UNO_QUERY);
-    OUString sShowChanges(RTL_CONSTASCII_USTRINGPARAM("ShowChanges"));
     sal_Bool bSaveShowRedline = sal_False;
-    if (xPropSet.is())
+    Reference<XPropertySet> xPropSet;
+    OUString sShowChanges(RTL_CONSTASCII_USTRINGPARAM("ShowChanges"));
+    if( (getExportFlags() & (EXPORT_MASTERSTYLES|EXPORT_CONTENT)) != 0 )
     {
-        // record old mode
-        Any aAny = xPropSet->getPropertyValue(sShowChanges);
-        bSaveShowRedline = *(sal_Bool*)aAny.getValue();
+        //Auf die Korrektheit der OrdNums sind wir schon angewiesen.
+        SdrModel* pModel = pDoc->GetDrawModel();
+        if( pModel )
+            pModel->GetPage( 0 )->RecalcObjOrdNums();
 
-        // set show = false
-        sal_Bool bTmp = sal_False;
-        aAny.setValue(&bTmp, ::getBooleanCppuType());
-        xPropSet->setPropertyValue(sShowChanges, aAny);
+        // switch redline mode
+        xPropSet = Reference<XPropertySet>(GetModel(), UNO_QUERY);
+        if (xPropSet.is())
+        {
+            // record old mode
+            Any aAny = xPropSet->getPropertyValue(sShowChanges);
+            bSaveShowRedline = *(sal_Bool*)aAny.getValue();
+
+            // set show = false
+            sal_Bool bTmp = sal_False;
+            aAny.setValue(&bTmp, ::getBooleanCppuType());
+            xPropSet->setPropertyValue(sShowChanges, aAny);
+        }
     }
 
     // adjust document class (pClass)
@@ -369,12 +381,15 @@ sal_uInt32 SwXMLExport::exportDoc( const sal_Char *pClass )
 
     sal_uInt32 nRet = SvXMLExport::exportDoc( pClass );
 
-    // switch redline mode back
-    if (xPropSet.is())
+    if( (getExportFlags() & (EXPORT_MASTERSTYLES|EXPORT_CONTENT)) != 0 )
     {
-        Any aAny;
-        aAny.setValue(&bSaveShowRedline, ::getBooleanCppuType());
-        xPropSet->setPropertyValue(sShowChanges, aAny);
+        // switch redline mode back
+        if (xPropSet.is())
+        {
+            Any aAny;
+            aAny.setValue(&bSaveShowRedline, ::getBooleanCppuType());
+            xPropSet->setPropertyValue(sShowChanges, aAny);
+        }
     }
 
 #ifdef XML_CORE_API

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfmte.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: dvo $ $Date: 2001-02-06 13:11:23 $
+ *  last change: $Author: mib $ $Date: 2001-03-02 16:49:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -249,27 +249,32 @@ void SwXMLExport::_ExportAutoStyles()
     // the order in which they are exported. Otherwise, caching will
     // fail.
     // exported in _ExportMasterStyles
-    GetPageExport()->collectAutoStyles( sal_False );
+    if( (getExportFlags() & EXPORT_MASTERSTYLES) != 0 )
+        GetPageExport()->collectAutoStyles( sal_False );
 
     // exported in _ExportContent
-    GetTextParagraphExport()->exportTrackedChanges( sal_True );
-    Reference < XTextDocument > xTextDoc( GetModel(), UNO_QUERY );
-    Reference < XText > xText = xTextDoc->getText();
-
-    GetTextParagraphExport()->collectFrameBoundToPageAutoStyles( bShowProgress );
-    GetTextParagraphExport()->collectTextAutoStyles( xText, bShowProgress );
-
-    // collect form autostyle
-    Reference<XDrawPageSupplier> xDrawPageSupplier( GetModel(), UNO_QUERY );
-    if (xDrawPageSupplier.is() && GetFormExport().is())
+    if( (getExportFlags() & EXPORT_CONTENT) != 0 )
     {
-        Reference<XDrawPage> xPage = xDrawPageSupplier->getDrawPage();
-        if (xPage.is())
-            GetFormExport()->examineForms(xPage);
+        GetTextParagraphExport()->exportTrackedChanges( sal_True );
+        Reference < XTextDocument > xTextDoc( GetModel(), UNO_QUERY );
+        Reference < XText > xText = xTextDoc->getText();
+
+        GetTextParagraphExport()->collectFrameBoundToPageAutoStyles( bShowProgress );
+        GetTextParagraphExport()->collectTextAutoStyles( xText, bShowProgress );
+
+        // collect form autostyle
+        Reference<XDrawPageSupplier> xDrawPageSupplier( GetModel(), UNO_QUERY );
+        if (xDrawPageSupplier.is() && GetFormExport().is())
+        {
+            Reference<XDrawPage> xPage = xDrawPageSupplier->getDrawPage();
+            if (xPage.is())
+                GetFormExport()->examineForms(xPage);
+        }
     }
 
     GetTextParagraphExport()->exportTextAutoStyles();
-    GetPageExport()->exportAutoStyles();
+    if( (getExportFlags() & EXPORT_MASTERSTYLES) != 0 )
+        GetPageExport()->exportAutoStyles();
 
     // we rely on data styles being written after cell styles in the
     // ExportFmt() method; so be careful when changing order.
