@@ -2,9 +2,9 @@
  *
  *  $RCSfile: collator_unicode.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:08:14 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 11:06:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,7 @@
 
 #include <collator_unicode.hxx>
 #include <com/sun/star/i18n/CollatorOptions.hpp>
-#include <casefolding.hxx>
+#include <i18nutil/casefolding.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::lang;
