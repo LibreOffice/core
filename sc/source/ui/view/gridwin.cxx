@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-27 15:09:21 $
+ *  last change: $Author: vg $ $Date: 2003-06-02 07:28:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1885,7 +1885,12 @@ void __EXPORT ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
         BOOL bRefMode = pScMod->IsFormulaMode();
         DBG_ASSERT( pDisp || bRefMode, "Cursor auf nicht aktiver View bewegen ?" );
 
-        if ( pDisp && !bRefMode )                       // noch ein Execute fuer Basic
+        //  #i14927# execute SID_CURRENTCELL (for macro recording) only if there is no
+        //  multiple selection, so the argument string completely describes the selection,
+        //  and executing the slot won't change the existing selection (executing the slot
+        //  here and from a recorded macro is treated equally)
+
+        if ( pDisp && !bRefMode && !rMark.IsMultiMarked() )
         {
             String aAddr;                               // CurrentCell
             if( rMark.IsMarked() )
@@ -1895,6 +1900,13 @@ void __EXPORT ScGridWindow::MouseButtonUp( const MouseEvent& rMEvt )
                 ScRange aScRange;
                 rMark.GetMarkArea( aScRange );
                 aScRange.Format( aAddr, SCR_ABS );
+                if ( aScRange.aStart == aScRange.aEnd )
+                {
+                    //  make sure there is a range selection string even for a single cell
+                    String aSingle = aAddr;
+                    aAddr.Append( (sal_Char) ':' );
+                    aAddr.Append( aSingle );
+                }
 
                 //! SID_MARKAREA gibts nicht mehr ???
                 //! was passiert beim Markieren mit dem Cursor ???
