@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testproxyfac.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2002-08-19 14:22:19 $
+ *  last change: $Author: rt $ $Date: 2003-04-23 16:14:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,18 +219,26 @@ int __cdecl main( int argc, char * argv[] )
         try
         {
             Reference< XImplementationRegistration > xImplReg(
-                xMgr->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.registry.ImplementationRegistration") ) ), UNO_QUERY );
+                xMgr->createInstance(
+                    OUString(
+                        RTL_CONSTASCII_USTRINGPARAM(
+                            "com.sun.star.registry.ImplementationRegistration")
+                        ) ),
+                UNO_QUERY );
             OSL_ENSURE( xImplReg.is(), "### no impl reg!" );
 
-            OUString aLibName( OUString::createFromAscii(REG_PREFIX) );
-            aLibName += OUString::createFromAscii("proxyfac");
-#ifndef OS2
-            aLibName += OUString::createFromAscii(DLL_POSTFIX);
-#endif
+            OUString aLibName(
+                RTL_CONSTASCII_USTRINGPARAM("proxyfac.uno" SAL_DLLEXTENSION) );
             xImplReg->registerImplementation(
-                OUString::createFromAscii("com.sun.star.loader.SharedLibrary"), aLibName, Reference< XSimpleRegistry >() );
+                OUString(
+                    RTL_CONSTASCII_USTRINGPARAM(
+                        "com.sun.star.loader.SharedLibrary") ),
+                aLibName, Reference< XSimpleRegistry >() );
 
-            Reference< XInterface > r = xMgr->createInstance( OUString::createFromAscii("com.sun.star.reflection.ProxyFactory") );
+            Reference< XInterface > r =
+                xMgr->createInstance(
+                    OUString::createFromAscii(
+                        "com.sun.star.reflection.ProxyFactory") );
             Reference< XProxyFactory > xProxyFac(r , UNO_QUERY );
             OSL_ENSURE( xProxyFac.is(), "### no proxy factory!" );
 
