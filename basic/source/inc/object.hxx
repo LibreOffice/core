@@ -2,9 +2,9 @@
  *
  *  $RCSfile: object.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:12:10 $
+ *  last change: $Author: hr $ $Date: 2000-10-26 14:59:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,7 +93,7 @@ class SampleObject : public SbxObject
     // Definition eines Tabelleneintrags. Dies wird hier gemacht,
     // da dadurch die Methoden und Properties als private deklariert
     // werden koennen.
-#if defined ( ICC ) || defined ( HPUX ) || defined ( C50 )
+#if defined ( ICC ) || defined ( HPUX ) || defined ( C50 ) || defined ( C52 )
 public:
 #endif
     typedef void( SampleObject::*pMeth )
