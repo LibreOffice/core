@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baslibnode.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 14:00:52 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 17:42:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,12 @@
 #include <com/sun/star/script/browse/BrowseNodeTypes.hpp>
 #endif
 
+#ifndef _VOS_MUTEX_HXX_
+#include <vos/mutex.hxx>
+#endif
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
 #ifndef _BASMGR_HXX
 #include <basic/basmgr.hxx>
 #endif
@@ -123,7 +129,7 @@ namespace basprov
 
     ::rtl::OUString BasicLibraryNodeImpl::getName(  ) throw (RuntimeException)
     {
-        ::osl::MutexGuard aGuard( StarBASIC::GetGlobalMutex() );
+        ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
         return m_sLibName;
     }
@@ -132,7 +138,7 @@ namespace basprov
 
     Sequence< Reference< browse::XBrowseNode > > BasicLibraryNodeImpl::getChildNodes(  ) throw (RuntimeException)
     {
-        ::osl::MutexGuard aGuard( StarBASIC::GetGlobalMutex() );
+        ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
         Sequence< Reference< browse::XBrowseNode > > aChildNodes;
 
@@ -166,7 +172,7 @@ namespace basprov
 
     sal_Bool BasicLibraryNodeImpl::hasChildNodes(  ) throw (RuntimeException)
     {
-        ::osl::MutexGuard aGuard( StarBASIC::GetGlobalMutex() );
+        ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
         sal_Bool bReturn = sal_False;
         if ( m_xLibrary.is() )
@@ -179,7 +185,7 @@ namespace basprov
 
     sal_Int16 BasicLibraryNodeImpl::getType(  ) throw (RuntimeException)
     {
-        ::osl::MutexGuard aGuard( StarBASIC::GetGlobalMutex() );
+        ::vos::OGuard aGuard( Application::GetSolarMutex() );
 
         return browse::BrowseNodeTypes::CONTAINER;
     }
