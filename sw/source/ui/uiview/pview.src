@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pview.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:44:44 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:26:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         Text [ English ] = "Aufteilung" ;
 
             TEXT[ italian ] = "Distribuzione";
-        TEXT[ portuguese_brazilian ] = "Aufteilung";
+        TEXT[ portuguese_brazilian ] = "DistribuiÁ„o";
         TEXT[ portuguese ] = "DistribuiÁ„o";
         TEXT[ danish ] = "Opdeling";
         TEXT[ french ] = "RÈpartition";
@@ -90,7 +90,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ english_us ] = "Distribution";
     TEXT[ chinese_simplified ] = "ÂàÜÂ∏É";
         TEXT[ russian ] = "–‡ÒÔÂ‰ÂÎÂÌËÂ";
-        TEXT[ polish ] = "Podzia≥";
+        TEXT[ polish ] = "Rozmieszczenie";
         TEXT[ japanese ] = "ÂàÜÂâ≤";
         TEXT[ chinese_traditional ] = "ÂàÜÂ∏É";
         TEXT[ arabic ] = "«· ﬁ”Ì„";
@@ -98,11 +98,14 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ chinese_simplified ] = "ÂàÜÂ∏É";
         TEXT[ greek ] = " ·Ù·ÌÔÏﬁ";
         TEXT[ korean ] = "Î∞∞Î∂Ñ";
-        TEXT[ turkish ] = "Da˝l˝m";
+        TEXT[ turkish ] = "Da˝t˝m";
         TEXT[ language_user1 ] = " ";
         TEXT[ catalan ] = "DistribuciÛ";
         TEXT[ finnish ] = "Jakauma";
         TEXT[ thai ] = "‡∏Å‡∏≤‡∏£‡πÅ‡∏à‡∏Å‡πÅ‡∏à‡∏á";
+        TEXT[ czech ] = "Rozdƒõlen√≠";
+        TEXT[ hebrew ] = "Aufteilung";
+        TEXT[ hindi ] = "‡§µ‡§ø‡§§‡§∞‡§£";
     };
     FixedText FT_ROWS
     {
@@ -112,7 +115,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         Text [ ENGLISH ] = "~Rows" ;
         Left = TRUE ;
             TEXT[ italian ] = "Righe";
-        TEXT[ portuguese_brazilian ] = "~Zeilen";
+        TEXT[ portuguese_brazilian ] = "~Linhas";
         TEXT[ portuguese ] = "~Linhas";
         TEXT[ danish ] = "RÊkker";
         TEXT[ french ] = "Lignes";
@@ -135,6 +138,9 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ catalan ] = "Fi~les";
         TEXT[ finnish ] = "~Rivit";
         TEXT[ thai ] = "‡πÅ‡∏ñ~‡∏ß";
+        TEXT[ czech ] = "≈ò√°dky";
+        TEXT[ hebrew ] = "~Zeilen";
+        TEXT[ hindi ] = "‡§™‡§Ç~‡§ï‡•ç‡§§‡§ø‡§Ø‡§æ‡§Å";
     };
     NumericField NF_ROWS
     {
@@ -159,7 +165,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         Text [ ENGLISH ] = "~Spalten" ;
         Left = TRUE ;
             TEXT[ italian ] = "~Colonne";
-        TEXT[ portuguese_brazilian ] = "~Spalten";
+        TEXT[ portuguese_brazilian ] = "~Colunas";
         TEXT[ portuguese ] = "~Colunas";
         TEXT[ danish ] = "Kolonner";
         TEXT[ french ] = "C~olonnes";
@@ -169,7 +175,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ english_us ] = "~Columns";
     TEXT[ chinese_simplified ] = "Ê†è(~C)";
         TEXT[ russian ] = "—ÚÓÎ·ˆ˚";
-        TEXT[ polish ] = "Kolumny";
+        TEXT[ polish ] = "~Kolumny";
         TEXT[ japanese ] = "Ê®™(~C)";
         TEXT[ chinese_traditional ] = "Ê¨Ñ(~C)";
         TEXT[ arabic ] = "√⁄„œ…";
@@ -182,6 +188,9 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ catalan ] = "~Columnes";
         TEXT[ finnish ] = "Pal~stat";
         TEXT[ thai ] = "~‡∏Ñ‡∏≠‡∏•‡∏±‡∏°‡∏ô‡πå";
+        TEXT[ czech ] = "Sloupce";
+        TEXT[ hebrew ] = "‚ÄÆ◊ò◊ï◊®◊ô◊ù‚Ä¨";
+        TEXT[ hindi ] = "~‡§∏‡•ç‡§§‡§Ç‡§≠‡•á‡§Ç ";
     };
     NumericField NF_COLS
     {
@@ -206,7 +215,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         Text [ English ] = "Margins" ;
 
             TEXT[ italian ] = "Margini";
-        TEXT[ portuguese_brazilian ] = "R?nder";
+        TEXT[ portuguese_brazilian ] = "Margens";
         TEXT[ portuguese ] = "Margens";
         TEXT[ danish ] = "Margener";
         TEXT[ french ] = "Marges";
@@ -224,11 +233,14 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ chinese_simplified ] = "ËæπË∑ù";
         TEXT[ greek ] = "–ÂÒÈË˛ÒÈ·";
         TEXT[ korean ] = "Ïô∏Í≥ΩÏÑ†";
-        TEXT[ turkish ] = "Kenarlar";
+        TEXT[ turkish ] = "Kenar bo˛luklar˝";
         TEXT[ language_user1 ] = " ";
         TEXT[ catalan ] = "Marges";
         TEXT[ finnish ] = "Marginaalit";
         TEXT[ thai ] = "‡∏£‡∏∞‡∏¢‡∏∞‡∏Ç‡∏≠‡∏ö";
+        TEXT[ czech ] = "Okraje";
+        TEXT[ hebrew ] = "R√§nder";
+        TEXT[ hindi ] = "‡§™‡•É‡§∑‡•ç‡§†-‡§™‡•ç‡§∞‡§æ‡§®‡•ç‡§§";
     };
     FixedText FT_LMARGIN
     {
@@ -238,7 +250,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         Text [ ENGLISH ] = "~Left" ;
         Left = TRUE ;
             TEXT[ italian ] = "A ~sinistra";
-        TEXT[ portuguese_brazilian ] = "~Links";
+        TEXT[ portuguese_brazilian ] = "~Esquerda";
         TEXT[ portuguese ] = "~Esquerda";
         TEXT[ danish ] = "Venstre";
         TEXT[ french ] = "¿ gauche";
@@ -248,7 +260,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ english_us ] = "L~eft";
     TEXT[ chinese_simplified ] = "Â∑¶(~E)";
         TEXT[ russian ] = "—ÎÂ‚‡";
-        TEXT[ polish ] = "Z lewej";
+        TEXT[ polish ] = "Z l~ewej";
         TEXT[ japanese ] = "Â∑¶(~E)";
         TEXT[ chinese_traditional ] = "Â∑¶(~E)";
         TEXT[ arabic ] = "Ì”«—";
@@ -261,6 +273,9 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ catalan ] = "E~squerra";
         TEXT[ finnish ] = "~Vasen";
         TEXT[ thai ] = "‡∏ã‡πâ‡∏≤~‡∏¢";
+        TEXT[ czech ] = "Vlevo";
+        TEXT[ hebrew ] = "~Links";
+        TEXT[ hindi ] = "‡§¨‡§æ~‡§Ø‡§æ‡§Å";
     };
     MetricField MF_LMARGIN
     {
@@ -286,7 +301,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         Text [ ENGLISH ] = "~Right" ;
         Left = TRUE ;
             TEXT[ italian ] = "A ~destra";
-        TEXT[ portuguese_brazilian ] = "~Rechts";
+        TEXT[ portuguese_brazilian ] = "~Direita";
         TEXT[ portuguese ] = "~Direita";
         TEXT[ danish ] = "H¯jre";
         TEXT[ french ] = "¿ droite";
@@ -296,7 +311,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ english_us ] = "~Right";
     TEXT[ chinese_simplified ] = "Âè≥(~R)";
         TEXT[ russian ] = "—Ô‡‚‡";
-        TEXT[ polish ] = "Z prawej";
+        TEXT[ polish ] = "Z p~rawej";
         TEXT[ japanese ] = "Âè≥(~R)";
         TEXT[ chinese_traditional ] = "Âè≥(~R)";
         TEXT[ arabic ] = "Ì„Ì‰";
@@ -304,11 +319,14 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ chinese_simplified ] = "Âè≥(~R)";
         TEXT[ greek ] = "ƒÂÓÈ‹";
         TEXT[ korean ] = "Ïò§Î•∏Ï™Ω(~R)";
-        TEXT[ turkish ] = "Sa~";
+        TEXT[ turkish ] = "~Sa";
         TEXT[ language_user1 ] = " ";
         TEXT[ catalan ] = "~Dreta";
         TEXT[ finnish ] = "~Oikea";
         TEXT[ thai ] = "~‡∏Ç‡∏ß‡∏≤";
+        TEXT[ czech ] = "Vpravo";
+        TEXT[ hebrew ] = "~Rechts";
+        TEXT[ hindi ] = "~‡§¶‡§æ‡§π‡§ø‡§®‡§æ";
     };
     MetricField MF_RMARGIN
     {
@@ -334,7 +352,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         Text [ ENGLISH ] = "~Top" ;
         Left = TRUE ;
             TEXT[ italian ] = "~In alto";
-        TEXT[ portuguese_brazilian ] = "~Oben";
+        TEXT[ portuguese_brazilian ] = "Em ~Cima";
         TEXT[ portuguese ] = "~Topo";
         TEXT[ danish ] = "Foroven";
         TEXT[ french ] = "~Sup.";
@@ -344,7 +362,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ english_us ] = "~Top";
     TEXT[ chinese_simplified ] = "‰∏ä(~T)";
         TEXT[ russian ] = "—‚ÂıÛ";
-        TEXT[ polish ] = "W gÛrze";
+        TEXT[ polish ] = "U ~gÛry";
         TEXT[ japanese ] = "‰∏ä(~T)";
         TEXT[ chinese_traditional ] = "‰∏ä(~T)";
         TEXT[ arabic ] = "√⁄·Ï";
@@ -357,6 +375,9 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ catalan ] = "~Superior";
         TEXT[ finnish ] = "~Yl‰reuna";
         TEXT[ thai ] = "~‡∏ö‡∏ô";
+        TEXT[ czech ] = "Naho≈ôe";
+        TEXT[ hebrew ] = "~Oben";
+        TEXT[ hindi ] = "~‡§ä‡§™‡§∞";
     };
     MetricField MF_TMARGIN
     {
@@ -382,7 +403,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         Text [ ENGLISH ] = "~Bottom" ;
         Left = TRUE ;
             TEXT[ italian ] = "~In basso";
-        TEXT[ portuguese_brazilian ] = "~Unten";
+        TEXT[ portuguese_brazilian ] = "Em ~Baixo";
         TEXT[ portuguese ] = "~Inferior";
         TEXT[ danish ] = "Forneden";
         TEXT[ french ] = "~Inf.";
@@ -392,7 +413,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ english_us ] = "~Bottom";
     TEXT[ chinese_simplified ] = "‰∏ã(~B)";
         TEXT[ russian ] = "—ÌËÁÛ";
-        TEXT[ polish ] = "W dole";
+        TEXT[ polish ] = "~U do≥u";
         TEXT[ japanese ] = "‰∏ã(~B)";
         TEXT[ chinese_traditional ] = "‰∏ã(~B)";
         TEXT[ arabic ] = "√”›·";
@@ -405,6 +426,9 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ catalan ] = "~Part inferior";
         TEXT[ finnish ] = "~Alareuna";
         TEXT[ thai ] = "~‡∏•‡πà‡∏≤‡∏á";
+        TEXT[ czech ] = "Dole";
+        TEXT[ hebrew ] = "~Unten";
+        TEXT[ hindi ] = "~‡§®‡•Ä‡§ö‡•á";
     };
     MetricField MF_BMARGIN
     {
@@ -430,7 +454,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         Text [ English ] = "Distance" ;
 
             TEXT[ italian ] = "Distanza";
-        TEXT[ portuguese_brazilian ] = "Abstand";
+        TEXT[ portuguese_brazilian ] = "Afastamento";
         TEXT[ portuguese ] = "EspaÁamento";
         TEXT[ danish ] = "Afstand";
         TEXT[ french ] = "…cart";
@@ -448,11 +472,14 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ chinese_simplified ] = "Èó¥Èöî";
         TEXT[ greek ] = "¡¸ÛÙ·ÛÁ";
         TEXT[ korean ] = "Í∞ÑÍ≤©";
-        TEXT[ turkish ] = "Aral˝k";
+        TEXT[ turkish ] = "Bo˛luk";
         TEXT[ language_user1 ] = " ";
         TEXT[ catalan ] = "Espaiat";
         TEXT[ finnish ] = "V‰lit";
         TEXT[ thai ] = "‡∏£‡∏∞‡∏¢‡∏∞‡∏´‡πà‡∏≤‡∏á";
+        TEXT[ czech ] = "Vzd√°lenost";
+        TEXT[ hebrew ] = "‚ÄÆ◊®◊ô◊ï◊ï◊ó‚Ä¨";
+        TEXT[ hindi ] = "‡§Ö‡§Ç‡§§‡§∞ ‡§¶‡•á‡§®‡§æ";
     };
     FixedText FT_HMARGIN
     {
@@ -462,7 +489,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         Text [ ENGLISH ] = "H~orizontal" ;
         Left = TRUE ;
             TEXT[ italian ] = "~Orizzontale";
-        TEXT[ portuguese_brazilian ] = "H~orizontal";
+        TEXT[ portuguese_brazilian ] = "~Horizontal";
         TEXT[ portuguese ] = "EspaÁamento ~horizontal";
         TEXT[ danish ] = "Vandret";
         TEXT[ french ] = "~Horizontal";
@@ -472,7 +499,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ english_us ] = "Hori~zontal";
         TEXT[ chinese_simplified ] = "Ê®™Âêë(~Z)";
         TEXT[ russian ] = "√ÓËÁÓÌÚ‡Î¸ÌÓ";
-        TEXT[ polish ] = "Poziomo";
+        TEXT[ polish ] = "Po~ziomo";
         TEXT[ japanese ] = "Ê®™(~Z)";
         TEXT[ chinese_traditional ] = "Ê∞¥Âπ≥(~Z)";
         TEXT[ arabic ] = "√›ﬁÌ";
@@ -480,11 +507,14 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ chinese_simplified ] = "Ê®™Âêë(~Z)";
         TEXT[ greek ] = "œÒÈÊ¸ÌÙÈ·";
         TEXT[ korean ] = "ÏàòÌèâ(~Z)";
-        TEXT[ turkish ] = "~Yatay";
+        TEXT[ turkish ] = "Ya~tay";
         TEXT[ language_user1 ] = " ";
         TEXT[ catalan ] = "Hori~tzontal";
         TEXT[ finnish ] = "Vaaka~taso";
         TEXT[ thai ] = "‡πÅ‡∏ô‡∏ß‡∏ô~‡∏≠‡∏ô";
+        TEXT[ czech ] = "Vodorovnƒõ";
+        TEXT[ hebrew ] = "H~orizontal";
+        TEXT[ hindi ] = "‡§∏‡§Æ~‡§§‡§≤";
     };
 
     MetricField MF_HMARGIN
@@ -511,7 +541,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         Text [ ENGLISH ] = "~Vertical" ;
         Left = TRUE ;
             TEXT[ italian ] = "Verticale";
-        TEXT[ portuguese_brazilian ] = "~Vertikal";
+        TEXT[ portuguese_brazilian ] = "~Verticalmente";
         TEXT[ portuguese ] = "~Vertical";
         TEXT[ danish ] = "Lodret";
         TEXT[ french ] = "¿ la verticale";
@@ -521,7 +551,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ english_us ] = "~Vertically";
         TEXT[ chinese_simplified ] = "Á∫µÂêë(~V)";
         TEXT[ russian ] = "¬ÂÚËÍ‡Î¸ÌÓ";
-        TEXT[ polish ] = "Pionowo";
+        TEXT[ polish ] = "Pio~nowo";
         TEXT[ japanese ] = "Á∏¶(~V)";
         TEXT[ chinese_traditional ] = "ÂûÇÁõ¥(~V)";
         TEXT[ arabic ] = "—√”Ì";
@@ -534,6 +564,9 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ catalan ] = "~Verticalment";
         TEXT[ finnish ] = "~Pystytaso";
         TEXT[ thai ] = "‡πÅ‡∏ô‡∏ß~‡∏ï‡∏±‡πâ‡∏á";
+        TEXT[ czech ] = "Svisle";
+        TEXT[ hebrew ] = "~Vertikal";
+        TEXT[ hindi ] = "~‡§≤‡§Ç‡§¨‡§∞‡•Ç‡§™ ‡§™‡•ç‡§∞‡§ï‡§æ‡§∞ ‡§∏‡•á";
     };
 
     MetricField MF_VMARGIN
@@ -559,7 +592,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         Text = "Format" ;
         Text [ English ] = "Format" ;
             TEXT[ italian ] = "Formato";
-        TEXT[ portuguese_brazilian ] = "Format";
+        TEXT[ portuguese_brazilian ] = "Formato";
         TEXT[ portuguese ] = "Formato";
         TEXT[ danish ] = "Format";
         TEXT[ french ] = "Format";
@@ -582,6 +615,9 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ catalan ] = "Formato";
         TEXT[ finnish ] = "Muotoilu";
         TEXT[ thai ] = "‡∏£‡∏π‡∏õ‡πÅ‡∏ö‡∏ö";
+        TEXT[ czech ] = "Form√°t";
+        TEXT[ hebrew ] = "‚ÄÆ◊¢◊ô◊¶◊ï◊ë‚Ä¨";
+        TEXT[ hindi ] = "‡§∞‡§ö‡§®‡§æ";
     };
     RadioButton RB_LANDSCAPE
     {
@@ -592,7 +628,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TabStop = TRUE ;
         Group = TRUE ;
             TEXT[ italian ] = "Orizzontale";
-        TEXT[ portuguese_brazilian ] = "~Querformat";
+        TEXT[ portuguese_brazilian ] = "~Paisagem";
         TEXT[ portuguese ] = "~Horizontal";
         TEXT[ danish ] = "Liggende";
         TEXT[ french ] = "Paysage";
@@ -602,7 +638,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ english_us ] = "~Landscape";
     TEXT[ chinese_simplified ] = "Ê®™Âêë(~L)";
         TEXT[ russian ] = "¿Î¸·ÓÏÌ˚È ÙÓÏ‡Ú";
-        TEXT[ polish ] = "Orientacja pozioma";
+        TEXT[ polish ] = "~Poziomo";
         TEXT[ japanese ] = "Ê®™(~L)";
         TEXT[ chinese_traditional ] = "Ê©´Âêë(~L)";
         TEXT[ arabic ] = "»«·⁄—÷";
@@ -610,11 +646,14 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ chinese_simplified ] = "Ê®™Âêë(~L)";
         TEXT[ greek ] = "œÒÈÊÔÌÙﬂ˘Ú";
         TEXT[ korean ] = "Í∞ÄÎ°ú(~L)";
-        TEXT[ turkish ] = "Ya~tay";
+        TEXT[ turkish ] = "~Yatay";
         TEXT[ language_user1 ] = " ";
         TEXT[ catalan ] = "A~paÔsat";
         TEXT[ finnish ] = "~Vaaka";
         TEXT[ thai ] = "~‡πÅ‡∏ô‡∏ß‡∏ô‡∏≠‡∏ô";
+        TEXT[ czech ] = "Na ≈°√≠≈ôku";
+        TEXT[ hebrew ] = "‚ÄÆ◊ú◊®◊ï◊ó◊ë ◊î◊ì◊£‚Ä¨";
+        TEXT[ hindi ] = "‡§≤‡§æ‡§®‡•ç‡§°‡§∏‡•ç‡§ï‡•á~‡§™‡•ç";
     };
     RadioButton RB_PORTRAIT
     {
@@ -623,7 +662,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         Text = "Ho~chformat" ;
         Text [ ENGLISH ] = "~Portrait" ;
             TEXT[ italian ] = "Verticale";
-        TEXT[ portuguese_brazilian ] = "Ho~chformat";
+        TEXT[ portuguese_brazilian ] = "~Retrato";
         TEXT[ portuguese ] = "~Vertical";
         TEXT[ danish ] = "StÂende";
         TEXT[ french ] = "Portrait";
@@ -633,7 +672,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ english_us ] = "P~ortrait";
     TEXT[ chinese_simplified ] = "Á∫µÂêë(~O)";
         TEXT[ russian ] = " ÌËÊÌ˚È ÙÓÏ‡Ú";
-        TEXT[ polish ] = "Orientacja pionowa";
+        TEXT[ polish ] = "Pi~onowo";
         TEXT[ japanese ] = "Á∏¶(~O)";
         TEXT[ chinese_traditional ] = "Á∏±Âêë(~O)";
         TEXT[ arabic ] = "»«·ÿÊ·";
@@ -646,6 +685,9 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ catalan ] = "V~ertical";
         TEXT[ finnish ] = "~Pysty";
         TEXT[ thai ] = "‡πÅ‡∏ô‡∏ß‡∏ï‡∏±‡πâ~‡∏á";
+        TEXT[ czech ] = "Na v√Ω≈°ku";
+        TEXT[ hebrew ] = "‚ÄÆ◊ú◊ê◊ï◊®◊ö ◊î◊ì◊£‚Ä¨";
+        TEXT[ hindi ] = "‡§™‡•ã~‡§∞‡•ç‡§ü‡§∞‡•à‡§ü‡•ç";
     };
     Window WIN_PREVIEW
     {
@@ -680,7 +722,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         Text = "Standar~d" ;
         Text [ English ] = "Standar~d" ;
             TEXT[ italian ] = "~Standard";
-        TEXT[ portuguese_brazilian ] = "Standar~d";
+        TEXT[ portuguese_brazilian ] = "~Padr„o";
         TEXT[ portuguese ] = "~Padr„o";
         TEXT[ danish ] = "Standar~d";
         TEXT[ french ] = "Par dÈfaut";
@@ -690,7 +732,7 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ english_us ] = "~Default";
     TEXT[ chinese_simplified ] = "ÈªòËÆ§(~D)";
         TEXT[ russian ] = "—Ú‡Ì‰‡Ú";
-        TEXT[ polish ] = "Domyúlnie";
+        TEXT[ polish ] = "~Domyúlnie";
         TEXT[ japanese ] = "Ê®ôÊ∫ñ(~D)";
         TEXT[ language_user1 ] = " ";
         TEXT[ chinese_traditional ] = "ÈªòË™ç(~D)";
@@ -699,13 +741,16 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
         TEXT[ chinese_simplified ] = "ÈªòËÆ§(~D)";
         TEXT[ greek ] = "–ÒÔÂÈÎÔ„ﬁ";
         TEXT[ korean ] = "Í∏∞Î≥∏Í∞í(~D)";
-        TEXT[ turkish ] = "Standar~t";
+        TEXT[ turkish ] = "~÷ndeer";
         TEXT[ catalan ] = "~Per defecte";
         TEXT[ finnish ] = "~Oletus";
         TEXT[ thai ] = "~‡∏Ñ‡πà‡∏≤‡πÄ‡∏£‡∏¥‡πà‡∏°‡∏ï‡πâ‡∏ô";
+        TEXT[ czech ] = "V√Ωchoz√≠";
+        TEXT[ hebrew ] = "‚ÄÆ◊ë◊®◊ô◊®◊™ ◊û◊ó◊ì◊ú‚Ä¨";
+        TEXT[ hindi ] = "~‡§Ö‡§®‡•Å‡§™‡§∏‡•ç‡§•‡§ø‡§§‡§ø";
     };
     TEXT[ italian ] = "Opzioni di stampa";
-    TEXT[ portuguese_brazilian ] = "Druckoptionen";
+    TEXT[ portuguese_brazilian ] = "OpÁıes de Impress„o";
     TEXT[ portuguese ] = "OpÁıes de impress„o";
     TEXT[ danish ] = "Udskriftsindstillinger";
     TEXT[ french ] = "Options d'impression";
@@ -728,6 +773,9 @@ ModalDialog DLG_PAGEPREVIEW_PRINTOPTIONS
     TEXT[ catalan ] = "Opcions d'impressiÛ";
     TEXT[ finnish ] = "Tulostusasetukset";
     TEXT[ thai ] = "‡∏ï‡∏±‡∏ß‡πÄ‡∏•‡∏∑‡∏≠‡∏Å‡∏Å‡∏≤‡∏£‡∏û‡∏¥‡∏°‡∏û‡πå";
+    TEXT[ czech ] = "Volby tisku";
+    TEXT[ hebrew ] = "Druckoptionen";
+    TEXT[ hindi ] = "‡§õ‡§™‡§æ‡§à ‡§µ‡§ø‡§ï‡§≤‡•ç‡§™";
 };
 ModalDialog DLG_PAGEPREVIEW_ZOOM
 {
@@ -758,7 +806,7 @@ ModalDialog DLG_PAGEPREVIEW_ZOOM
         Left = TRUE ;
         Text[ chinese_simplified ] = "Ê†è(~C)";
         Text[ russian ] = "—ÚÓÎ·ˆ˚";
-        Text[ polish ] = "Kolumny";
+        Text[ polish ] = "~Kolumny";
         Text[ japanese ] = "Ê®™(~C)";
         Text[ chinese_traditional ] = "Ê¨Ñ(~C)";
         Text[ arabic ] = "√⁄„œ…";
@@ -770,6 +818,9 @@ ModalDialog DLG_PAGEPREVIEW_ZOOM
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Columnes";
         Text[ thai ] = "~‡∏Ñ‡∏≠‡∏•‡∏±‡∏°‡∏ô‡πå";
+        Text[ czech ] = "Sloupce";
+        Text[ hebrew ] = "‚ÄÆ◊ò◊ï◊®◊ô◊ù‚Ä¨";
+        Text[ hindi ] = "~‡§∏‡•ç‡§§‡§Ç‡§≠‡•á‡§Ç";
     };
     FixedText FT_ROW
     {
@@ -779,7 +830,7 @@ ModalDialog DLG_PAGEPREVIEW_ZOOM
         Text [ ENGLISH ] = "~Rows" ;
         Text [ norwegian ] = "~Rows" ;
         Text [ italian ] = "Righe" ;
-        Text [ portuguese_brazilian ] = "Filei~ras" ;
+        Text [ portuguese_brazilian ] = "~Linhas" ;
         Text [ portuguese ] = "~Linhas" ;
         Text [ finnish ] = "~Rivit" ;
         Text [ danish ] = "RÊkker" ;
@@ -791,7 +842,7 @@ ModalDialog DLG_PAGEPREVIEW_ZOOM
         Left = TRUE ;
         Text[ chinese_simplified ] = "Ë°å(~R)";
         Text[ russian ] = "—ÚÓÍË";
-        Text[ polish ] = "Wiersze";
+        Text[ polish ] = "~Wiersze";
         Text[ japanese ] = "Á∏¶(~R)";
         Text[ chinese_traditional ] = "Ë°å(~R)";
         Text[ arabic ] = "’›Ê›";
@@ -799,10 +850,13 @@ ModalDialog DLG_PAGEPREVIEW_ZOOM
         Text[ chinese_simplified ] = "Ë°å(~R)";
         Text[ greek ] = "√Ò·ÏÏ›Ú";
         Text[ korean ] = "Ìñâ(~R)";
-        Text[ turkish ] = "S~at˝r";
+        Text[ turkish ] = "~Sat˝r";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Files";
         Text[ thai ] = "‡πÅ~‡∏ñ‡∏ß";
+        Text[ czech ] = "≈ò√°dky";
+        Text[ hebrew ] = "~Zeilen";
+        Text[ hindi ] = "~‡§™‡§Ç‡§ï‡•ç‡§§‡§ø‡§Ø‡§æ‡§Å";
     };
     NumericField ED_COL
     {
@@ -863,7 +917,7 @@ ModalDialog DLG_PAGEPREVIEW_ZOOM
     Text[ chinese_simplified ] = "Â§öÈ°µ";
     Text[ greek ] = " ÎﬂÏ·Í·";
     Text[ korean ] = "Îã§Ï§ë ÌéòÏù¥ÏßÄ";
-    Text[ turkish ] = "Yak˝nla˛t˝r";
+    Text[ turkish ] = "«oklu Sayfa";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Zoom";
     Text[ thai ] = "‡∏¢‡πà‡∏≠/‡∏Ç‡∏¢‡∏≤‡∏¢";
@@ -874,6 +928,10 @@ ModalDialog DLG_PAGEPREVIEW_ZOOM
     Text[ italian ] = "Pi˘ pagine";
     Text[ danish ] = "MÂlestok";
     Text[ swedish ] = "Flera sidor";
+    Text[ czech ] = "Lupa";
+    Text[ hebrew ] = "‚ÄÆ◊ñ◊ï◊ù‚Ä¨";
+    Text[ portuguese_brazilian ] = "Zoom";
+    Text[ hindi ] = "‡§ù‡•Ç‡§Æ";
 };
 String RID_PVIEW_TOOLBOX
 {
@@ -887,7 +945,7 @@ String RID_PVIEW_TOOLBOX
     Text [ swedish ] = "Fˆrhandsgranskning" ;
     Text [ danish ] = "Sidevisning" ;
     Text [ portuguese ] = "Ver p·gina" ;
-    Text [ portuguese_brazilian ] = "Seitenansicht" ;
+    Text [ portuguese_brazilian ] = "Visualizar P·gina" ;
     Text[ chinese_simplified ] = "È°µÈù¢ËßÜÂõæ";
     Text[ russian ] = "œÂ‰‚‡ËÚÂÎ¸Ì˚È ÔÓÒÏÓÚ";
     Text[ polish ] = "Podglπd wydruku";
@@ -903,6 +961,9 @@ String RID_PVIEW_TOOLBOX
     Text[ catalan ] = "VisualitzaciÛ prËvia de la p‡gina";
     Text[ finnish ] = "Esikatselu";
     Text[ thai ] = "‡πÅ‡∏™‡∏î‡∏á‡∏ï‡∏±‡∏ß‡∏≠‡∏¢‡πà‡∏≤‡∏á‡∏´‡∏ô‡πâ‡∏≤";
+    Text[ czech ] = "N√°hled str√°nky";
+    Text[ hebrew ] = "‚ÄÆ◊û◊ë◊ò ◊õ◊ú◊ú◊ô‚Ä¨";
+    Text[ hindi ] = "‡§™‡•É‡§∑‡•ç‡§† ‡§ï‡§æ ‡§™‡•Ç‡§∞‡•ç‡§µ‡§¶‡•É‡§∂‡•ç‡§Ø";
 };
 ToolBox RID_PVIEW_TOOLBOX
 {
@@ -992,6 +1053,15 @@ ToolBox RID_PVIEW_TOOLBOX
     };
     Scroll = TRUE ;
 };
+
+
+
+
+
+
+
+
+
 
 
 
