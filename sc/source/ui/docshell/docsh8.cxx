@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh8.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: nn $ $Date: 2001-06-11 09:06:37 $
+ *  last change: $Author: nn $ $Date: 2001-07-26 19:20:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,14 +152,14 @@ BOOL ScDocShell::MoveFile( const INetURLObject& rSourceObj, const INetURLObject&
 
     try
     {
-        ::ucb::Content aDestPath( aDestPathObj.GetMainURL(),
+        ::ucb::Content aDestPath( aDestPathObj.GetMainURL(INetURLObject::NO_DECODE),
                             uno::Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
         uno::Reference< ::com::sun::star::ucb::XCommandInfo > xInfo = aDestPath.getCommands();
         rtl::OUString aTransferName = rtl::OUString::createFromAscii( "transfer" );
         if ( xInfo->hasCommandByName( aTransferName ) )
         {
             aDestPath.executeCommand( aTransferName, uno::makeAny(
-                ::com::sun::star::ucb::TransferInfo( bMoveData, rSourceObj.GetMainURL(), aName,
+                ::com::sun::star::ucb::TransferInfo( bMoveData, rSourceObj.GetMainURL(INetURLObject::NO_DECODE), aName,
                                                        ::com::sun::star::ucb::NameClash::ERROR ) ) );
         }
         else
@@ -186,7 +186,7 @@ BOOL ScDocShell::KillFile( const INetURLObject& rURL )
     sal_Bool bRet = sal_True;
     try
     {
-        ::ucb::Content aCnt( rURL.GetMainURL(),
+        ::ucb::Content aCnt( rURL.GetMainURL(INetURLObject::NO_DECODE),
                         uno::Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
         aCnt.executeCommand( rtl::OUString::createFromAscii( "delete" ),
                                 comphelper::makeBoolAny( sal_True ) );
@@ -206,7 +206,7 @@ BOOL ScDocShell::IsDocument( const INetURLObject& rURL )
     sal_Bool bRet = sal_False;
     try
     {
-        ::ucb::Content aCnt( rURL.GetMainURL(),
+        ::ucb::Content aCnt( rURL.GetMainURL(INetURLObject::NO_DECODE),
                         uno::Reference< ::com::sun::star::ucb::XCommandEnvironment > () );
         bRet = aCnt.isDocument();
     }
@@ -275,7 +275,7 @@ ULONG ScDocShell::DBaseImport( const String& rFullFileName, CharSet eCharSet,
         String aExtension = aURL.getExtension();
         aURL.removeSegment();
         aURL.removeFinalSlash();
-        String aPath = aURL.GetMainURL();
+        String aPath = aURL.GetMainURL(INetURLObject::NO_DECODE);
 
         uno::Reference<lang::XMultiServiceFactory> xFactory = comphelper::getProcessServiceFactory();
         if (!xFactory.is())
@@ -779,7 +779,7 @@ ULONG ScDocShell::DBaseExport( const String& rFullFileName, CharSet eCharSet, BO
     String aExtension = aURL.getExtension();
     aURL.removeSegment();
     aURL.removeFinalSlash();
-    String aPath = aURL.GetMainURL();
+    String aPath = aURL.GetMainURL(INetURLObject::NO_DECODE);
 
     try
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwtrans.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-11 18:28:08 $
+ *  last change: $Author: nn $ $Date: 2001-07-26 19:19:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,7 +187,9 @@ ScDrawTransferObj::ScDrawTransferObj( SdrModel* pClipModel, ScDocShell* pContain
                                     if (pContainerShell && (pMedium = pContainerShell->GetMedium()))
                                     {
                                         bool bWasAbs = true;
-                                        aAbs = pMedium->GetURLObject().smartRel2Abs( aUrl, bWasAbs ).GetMainURL();
+                                        aAbs = pMedium->GetURLObject().smartRel2Abs( aUrl, bWasAbs ).
+                                                    GetMainURL(INetURLObject::NO_DECODE);
+                                        // full path as stored INetBookmark must be encoded
                                     }
                                     else
                                         aAbs = aUrl;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lotus.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-06 09:52:35 $
+ *  last change: $Author: nn $ $Date: 2001-07-26 19:19:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,7 +132,7 @@ FltError ScImportLotus123( SfxMedium& rMedium, ScDocument* pDocument, CharSet eS
     {// versuchen *.FM3-File zu laden
         INetURLObject aURL( rMedium.GetURLObject() );
         aURL.setExtension( _STRINGCONST( "FM3" ) );
-        SfxMedium aMedium( aURL.GetMainURL(), STREAM_STD_READ, TRUE );
+        SfxMedium aMedium( aURL.GetMainURL(INetURLObject::NO_DECODE), STREAM_STD_READ, TRUE );
         SvStream* pStream = aMedium.GetInStream();
         if ( pStream )
         {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: er $ $Date: 2001-07-26 16:06:42 $
+ *  last change: $Author: nn $ $Date: 2001-07-26 19:21:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1286,7 +1286,8 @@ static void lcl_GetAbs( String& rPath, UINT16 nDl, SfxObjectShell* pDocShell )
     aTmpStr += rPath;
 
     bool bWasAbs = false;
-    rPath = pDocShell->GetMedium()->GetURLObject().smartRel2Abs( aTmpStr, bWasAbs ).GetMainURL();
+    rPath = pDocShell->GetMedium()->GetURLObject().smartRel2Abs( aTmpStr, bWasAbs ).GetMainURL(INetURLObject::NO_DECODE);
+    // full path as stored in SvxURLField must be encoded
 }
 
 

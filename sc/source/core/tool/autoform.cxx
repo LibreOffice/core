@@ -2,9 +2,9 @@
  *
  *  $RCSfile: autoform.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: er $ $Date: 2001-07-19 16:44:21 $
+ *  last change: $Author: nn $ $Date: 2001-07-26 19:18:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1039,7 +1039,7 @@ BOOL ScAutoFormat::Load()
     aURL.setFinalSlash();
     aURL.Append( String( RTL_CONSTASCII_USTRINGPARAM( sAutoTblFmtName ) ) );
 
-    SfxMedium aMedium( aURL.GetMainURL(), STREAM_READ, TRUE );
+    SfxMedium aMedium( aURL.GetMainURL(INetURLObject::NO_DECODE), STREAM_READ, TRUE );
     SvStream* pStream = aMedium.GetInStream();
     bRet = (pStream && pStream->GetError() == 0);
     if (bRet)
@@ -1145,7 +1145,7 @@ BOOL ScAutoFormat::Save()
     aURL.setFinalSlash();
     aURL.Append( String( RTL_CONSTASCII_USTRINGPARAM( sAutoTblFmtName ) ) );
 
-    SfxMedium aMedium( aURL.GetMainURL(), STREAM_WRITE, TRUE );
+    SfxMedium aMedium( aURL.GetMainURL(INetURLObject::NO_DECODE), STREAM_WRITE, TRUE );
     SvStream* pStream = aMedium.GetOutStream();
     bRet = (pStream && pStream->GetError() == 0);
     if (bRet)

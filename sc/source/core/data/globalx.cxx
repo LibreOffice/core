@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globalx.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2001-06-20 10:43:22 $
+ *  last change: $Author: nn $ $Date: 2001-07-26 19:18:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,7 +117,7 @@ void ScGlobal::InitAddIns()
                 aObj.setFinalSlash();
                 try
                 {
-                    ::ucb::Content aCnt( aObj.GetMainURL(),
+                    ::ucb::Content aCnt( aObj.GetMainURL(INetURLObject::NO_DECODE),
                         Reference< XCommandEnvironment > () );
                     Reference< sdbc::XResultSet > xResultSet;
                     Sequence< rtl::OUString > aProps;

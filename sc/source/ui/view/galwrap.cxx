@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galwrap.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-16 09:34:25 $
+ *  last change: $Author: nn $ $Date: 2001-07-26 19:20:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,8 @@ String GalleryGetFullPath()
     GalleryExplorer* pGal = SVX_GALLERY();
     DBG_ASSERT( pGal, "Wo ist die Gallery?" );
 //  return pGal->GetPath().GetFull();
-    return pGal->GetURL().GetMainURL();
+    return pGal->GetURL().GetMainURL(INetURLObject::NO_DECODE);
+    // URL as stored in GraphicLink must be encoded
 }
 
 String GalleryGetFilterName()
