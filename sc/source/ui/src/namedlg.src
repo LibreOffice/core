@@ -2,9 +2,9 @@
  *
  *  $RCSfile: namedlg.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-23 16:56:55 $
+ *  last change: $Author: vg $ $Date: 2001-05-30 20:13:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,9 +64,9 @@
  // (C) 1994-96 StarDivision GmbH, Hamburg, Germany
  //
  // $Workfile:   namedlg.src  $
- //   $Author: dr $
- //     $Date: 2001-05-23 16:56:55 $
- // $Revision: 1.12 $
+ //   $Author: vg $
+ //     $Date: 2001-05-30 20:13:27 $
+ // $Revision: 1.13 $
  //  $Logfile:   T:/sc/source/ui/src/namedlg.srv  $
  //---------------------------------------------------------------------------
 
@@ -223,11 +223,11 @@ ModelessDialog RID_SCDLG_NAMES
         Text [ portuguese ] = "Refere-se a" ;
         Text [ finnish ] = "Viittauskohde" ;
         Text [ danish ] = "Henviser til" ;
-        Text [ french ] = "RÈfËre ‡" ;
-        Text [ swedish ] = "H‰nvisar till" ;
+        Text [ french ] = "AssignÈ ‡" ;
+        Text [ swedish ] = "Refererar till" ;
         Text [ dutch ] = "Toepassen op" ;
         Text [ spanish ] = "Asignado a" ;
-        Text [ english_us ] = "Refers to" ;
+        Text [ english_us ] = "Assigned to" ;
         Text[ chinese_simplified ] = "÷∏∂®∏¯";
         Text[ russian ] = "—Ò˚ÎÍ‡ Ì‡";
         Text[ polish ] = "Odnosi siÍ do";
@@ -264,7 +264,7 @@ ModelessDialog RID_SCDLG_NAMES
         QuickHelpText [ dutch ] = "Verkleinen" ;
         QuickHelpText [ portuguese ] = "Afastar" ;
         QuickHelpText[ russian ] = "”ÏÂÌ¸¯ËÚ¸";
-        QuickHelpText[ polish ] = "Pomniejsz";
+        QuickHelpText[ polish ] = "Pomniejsz!";
         QuickHelpText[ japanese ] = "èkè¨!";
         QuickHelpText[ chinese_simplified ] = "Àı–°";
         QuickHelpText[ chinese_traditional ] = "¡Y§p";
@@ -303,7 +303,7 @@ ModelessDialog RID_SCDLG_NAMES
         Text [ english_us ] = "Area type" ;
         Text[ chinese_simplified ] = "«¯”Ú¿‡–Õ";
         Text[ russian ] = "“ËÔ Ó·Î‡ÒÚË";
-        Text[ polish ] = "Rodzaj obszaru";
+        Text[ polish ] = "Rodzaj zakresu";
         Text[ japanese ] = "îÕàÕÇÃéÌóﬁ";
         Text[ chinese_traditional ] = "∞œ∞Ï√˛´¨";
         Text[ arabic ] = "‰Ê⁄ «·‰ÿ«ﬁ";
