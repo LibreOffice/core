@@ -2,9 +2,9 @@
  *
  *  $RCSfile: alignment.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dbo $ $Date: 2001-10-17 14:04:26 $
+ *  last change: $Author: dbo $ $Date: 2001-10-19 13:25:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,8 +140,8 @@ struct C14 : C1
 
 struct C1x
 {
-    short s;
-    double d;
+    short sx;
+    double dx;
 };
 
 struct C6x : C1x
@@ -226,11 +226,11 @@ struct O : M
 };
 struct O2 : O
 {
-    double  p;
+    double  p2;
 };
 struct P : N
 {
-    double  p;
+    double  p2;
 };
 
 }; // alignment

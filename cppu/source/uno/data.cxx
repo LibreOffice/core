@@ -2,9 +2,9 @@
  *
  *  $RCSfile: data.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: dbo $ $Date: 2001-10-19 13:04:06 $
+ *  last change: $Author: dbo $ $Date: 2001-10-19 13:25:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -386,12 +386,12 @@ struct O : public M
 };
 struct O2 : public O
 {
-    double  p;
+    double  p2;
 };
 
 struct P : public N
 {
-    double  p;
+    double  p2;
 };
 
 struct empty
@@ -504,7 +504,7 @@ BinaryCompatible_Impl::BinaryCompatible_Impl()
 #endif
 
     BINTEST_VERIFYSIZE( O2, 24 );
-    BINTEST_VERIFYOFFSET( O2, p, 16 );
+    BINTEST_VERIFYOFFSET( O2, p2, 16 );
 
     BINTEST_VERIFYSIZE( Char3, 3 );
     BINTEST_VERIFYOFFSET( Char4, c, 3 );
