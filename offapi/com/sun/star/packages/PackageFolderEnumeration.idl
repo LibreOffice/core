@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PackageFolderEnumeration.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mtg $ $Date: 2001-04-05 18:36:41 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 21:18:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@ PackageFolder at the time of construction. It is the responsibility of the
 caller to ensure that any given member of the enumeration refers to a valid
 PackageStream or PackageFolder.
 */
-service PackageFolderEnumeration
+published service PackageFolderEnumeration
 {
     interface com::sun::star::container::XEnumeration;
 };
