@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdmodel.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: dl $ $Date: 2001-03-16 09:45:13 $
+ *  last change: $Author: cl $ $Date: 2001-03-19 09:49:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2424,7 +2424,6 @@ uno::Reference< uno::XInterface > SdrModel::getUnoModel()
     // try weak reference first
     uno::Reference< uno::XInterface > xModel( mxUnoModel );
 
-#ifndef SVX_LIGHT
     if( !xModel.is() )
     {
         // create one
@@ -2432,7 +2431,6 @@ uno::Reference< uno::XInterface > SdrModel::getUnoModel()
 
         mxUnoModel = xModel;
     }
-#endif
 
     return xModel;
 

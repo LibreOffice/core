@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: cl $ $Date: 2001-02-23 21:37:19 $
+#   last change: $Author: cl $ $Date: 2001-03-19 09:53:25 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -264,7 +264,10 @@ LIB3FILES=  \
             $(LB)$/sxl_outliner.lib \
             $(LB)$/sxl_svdraw.lib \
             $(LB)$/sxl_xout.lib \
-            $(LB)$/sxl_options.lib
+            $(LB)$/sxl_options.lib \
+            $(LB)$/sxl_xml.lib \
+            $(LB)$/sxl_unoedit.lib \
+            $(LB)$/sxl_unodraw.lib
 .ENDIF
 
 .IF "$(BIG_SVX)"==""

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdograf.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-08 21:15:38 $
+ *  last change: $Author: cl $ $Date: 2001-03-19 09:49:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,7 +205,7 @@ void SdrGraphicLink::UpdateSynchron()
 
 GraphicFilter* SVX_LIGHT_pGrapicFilter = NULL;
 
-GraphicFilter* SVX_LIGHT_GetGrfFilter_Impl()
+GraphicFilter* GetGrfFilter()
 {
     if( !SVX_LIGHT_pGrapicFilter )
         SVX_LIGHT_pGrapicFilter = new GraphicFilter;
@@ -1551,7 +1551,7 @@ void SdrGrafObj::ReadData( const SdrObjIOHeader& rHead, SvStream& rIn )
             if( pIStm )
             {
                 Graphic         aGraphic;
-                GraphicFilter*  pFilter = SVX_LIGHT_GetGrfFilter_Impl();
+                GraphicFilter*  pFilter = GetGrfFilter();
                 USHORT          nFilter = pFilter->GetImportFormatNumber( aFilterName );
                 USHORT          nError = pFilter->ImportGraphic( aGraphic, aFileName, *pIStm, nFilter );
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdobj.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: dl $ $Date: 2001-03-16 09:51:01 $
+ *  last change: $Author: cl $ $Date: 2001-03-19 09:52:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4290,7 +4290,6 @@ void SdrObject::MigrateItemPool(SfxItemPool* pSrcPool, SfxItemPool* pDestPool)
     // try weak reference first
     uno::Reference< uno::XInterface > xShape( mxUnoShape );
 
-#ifndef SVX_LIGHT
     if( !xShape.is() && pPage )
     {
         uno::Reference< uno::XInterface > xPage( pPage->getUnoPage() );
@@ -4305,7 +4304,6 @@ void SdrObject::MigrateItemPool(SfxItemPool* pSrcPool, SfxItemPool* pDestPool)
             }
         }
     }
-#endif
 
     return xShape;
 }

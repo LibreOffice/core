@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpage.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dl $ $Date: 2001-03-16 09:45:48 $
+ *  last change: $Author: cl $ $Date: 2001-03-19 09:49:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,8 @@
 
 #ifndef SVX_LIGHT
 #include "fmdpage.hxx"
+#else
+#include "unopage.hxx"
 #endif
 
 #define CONVERT_STARIMAGE_OLE_OBJECT_TO_GRAPHIC 1
@@ -226,7 +228,7 @@ void SdrObjList::CopyObjects(const SdrObjList& rSrcList)
         else
         {
             aStr += "von ";
-            aStr += nCloneErrCnt;
+            aStr += ByteString::CreateFromInt32( nCloneErrCnt );
             aStr += " Zeichenobjekten.";
         }
 
@@ -1141,7 +1143,7 @@ void SdrObjList::Load(SvStream& rIn, SdrPage& rPage)
                 UINT32 nPos(GetObjCount());
 
                 aStr += "Listenposition: ";
-                aStr += nPos;
+                aStr += ByteString::CreateFromInt32( nPos );
                 aStr += "\n";
                 aStr += "Inventor: ";
                 aStr += char(aHead.nInventor);
@@ -1149,12 +1151,12 @@ void SdrObjList::Load(SvStream& rIn, SdrPage& rPage)
                 aStr += char(aHead.nInventor >> 16);
                 aStr += char(aHead.nInventor >> 24);
                 aStr += ", Identifier: ";
-                aStr += aHead.nIdentifier;
+                aStr += ByteString::CreateFromInt32( aHead.nIdentifier );
                 aStr += "\n";
                 aStr += "FilePos: ";
-                aStr += aHead.GetFilePos();
+                aStr += ByteString::CreateFromInt32( aHead.GetFilePos() );
                 aStr += ", BlockSize: ";
-                aStr += aHead.GetBlockSize();
+                aStr += ByteString::CreateFromInt32( aHead.GetBlockSize() );
 
                 DBG_ERROR(aStr.GetBuffer());
 #endif
@@ -1803,7 +1805,6 @@ uno::Reference< uno::XInterface > SdrPage::getUnoPage()
     // try weak reference first
     uno::Reference< uno::XInterface > xPage( mxUnoPage );
 
-#ifndef SVX_LIGHT
     if( !xPage.is() )
     {
         // create one
@@ -1811,18 +1812,18 @@ uno::Reference< uno::XInterface > SdrPage::getUnoPage()
 
         mxUnoPage = xPage;
     }
-#endif
 
     return xPage;
 }
 
 uno::Reference< uno::XInterface > SdrPage::createUnoPage()
 {
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xInt
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > xInt =
 #ifndef SVX_LIGHT
-        = static_cast<cppu::OWeakObject*>( new SvxFmDrawPage( this ) )
+        static_cast<cppu::OWeakObject*>( new SvxFmDrawPage( this ) );
+#else
+        static_cast<cppu::OWeakObject*>( new SvxDrawPage( this ) );
 #endif
-        ;
     return xInt;
 }
 
