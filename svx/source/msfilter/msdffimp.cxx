@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sj $ $Date: 2000-10-17 13:57:52 $
+ *  last change: $Author: sj $ $Date: 2000-10-20 12:07:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1185,13 +1185,9 @@ void DffPropertyReader::ApplyAttributes( SvStream& rIn, SfxItemSet& rSet, SdrObj
         }
         rSet.Put( XFillStyleItem( eXFill ) );
 
-        if ( eXFill == XFILL_GRADIENT )     // hier nehmen wir mal lieber die Implementierung aus dem PPT
-        {                                   // die urspruengliche ist angehaengt
-            // Rotationswinkel des Objeltes einbeziehen, da bei uns die Fuellung
-            // mit dem Objekt mitdreht - im Gegensatz zu PPT
+        if ( eXFill == XFILL_GRADIENT )
+        {
             long nAngle = 1800;
-            if ( mnFix16Angle )
-                nAngle = nAngle + ( 3600 - ( ( mnFix16Angle + 5 ) / 10 ) );
 
             // FadeAngle der Fuellung feststellen
             INT32 nFadeAngle = GetPropertyValue( DFF_Prop_fillAngle, 0 );
