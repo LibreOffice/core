@@ -2,9 +2,9 @@
  *
  *  $RCSfile: browserline.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-21 09:03:32 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 11:59:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,9 @@
 #ifndef _TOOLS_DEBUG_HXX
 #include <tools/debug.hxx>
 #endif
+#ifndef _SV_SVAPP_HXX
+#include <vcl/svapp.hxx>
+#endif
 
 //............................................................................
 namespace pcr
@@ -83,14 +86,13 @@ namespace pcr
     OBrowserLine::OBrowserLine( Window* pParent)
             :m_aFtTitle(pParent)
             ,m_pData(NULL)
-            ,m_pXButton(NULL)
+            ,m_pBrowseButton(NULL)
             ,m_pBrowserControl(NULL)
             ,m_bIsLocked(sal_False)
             ,m_bIsHyperlink(sal_False)
             ,m_nNameWidth(0)
             ,m_pTheParent(pParent)
             ,m_bNeedsRepaint(sal_True)
-            ,m_bHasBrowseButton(sal_False)
             ,m_eControlType(BCT_UNDEFINED)
     {
         DBG_CTOR(OBrowserLine,NULL);
@@ -99,11 +101,11 @@ namespace pcr
     //------------------------------------------------------------------
     OBrowserLine::~OBrowserLine()
     {
-        if(m_pXButton)
+        if(m_pBrowseButton)
         {
-            m_pXButton->Hide();
-            delete m_pXButton;
-            m_pXButton=NULL;
+            m_pBrowseButton->Hide();
+            delete m_pBrowseButton;
+            m_pBrowseButton=NULL;
         }
         DBG_DTOR(OBrowserLine,NULL);
     }
@@ -114,10 +116,10 @@ namespace pcr
         if(m_pBrowserControl)
             m_pBrowserControl->SetCtrHelpId(nHelpId);
 
-        if(m_pXButton)
+        if(m_pBrowseButton)
         {
-            m_pXButton->SetHelpId(nHelpId);
-            m_pXButton->SetUniqueId(nBtUniqueId);
+            m_pBrowseButton->SetHelpId(nHelpId);
+            m_pBrowseButton->SetUniqueId(nBtUniqueId);
         }
     }
 
@@ -158,9 +160,9 @@ namespace pcr
         {
             aCtrPos.X()=m_pBrowserControl->GetCtrPos().X();
         }
-        if(m_pXButton)
+        if(m_pBrowseButton)
         {
-            aBtnPos.X()=m_pXButton->GetPosPixel().X();
+            aBtnPos.X()=m_pBrowseButton->GetPosPixel().X();
         }
         m_aFtTitle.SetPosPixel(aTitlePos);
 
@@ -169,9 +171,9 @@ namespace pcr
             m_pBrowserControl->SetCtrPos(aCtrPos);
         }
 
-        if(m_pXButton)
+        if(m_pBrowseButton)
         {
-            m_pXButton->SetPosPixel(aBtnPos);
+            m_pBrowseButton->SetPosPixel(aBtnPos);
         }
     }
 
@@ -180,9 +182,9 @@ namespace pcr
     {
         Window* pRefWindow=&m_aFtTitle;
 
-        if(m_pXButton)
+        if(m_pBrowseButton)
         {
-            pRefWindow=(Window*)m_pXButton;
+            pRefWindow=(Window*)m_pBrowseButton;
         }
         else if(m_pBrowserControl)
         {
@@ -201,9 +203,9 @@ namespace pcr
                 SetTabOrder((Window*)&m_aFtTitle,WINDOW_ZORDER_BEHIND);
         }
 
-        if(m_pXButton)
+        if(m_pBrowseButton)
         {
-            m_pXButton->SetZOrder(m_pBrowserControl->GetMe(),
+            m_pBrowseButton->SetZOrder(m_pBrowserControl->GetMe(),
                             WINDOW_ZORDER_BEHIND);
         }
     }
@@ -219,9 +221,9 @@ namespace pcr
             m_pBrowserControl->GetMe()->GrabFocus();
             bRes=sal_True;
         }
-        else if(m_pXButton && m_pXButton->IsEnabled())
+        else if(m_pBrowseButton && m_pBrowseButton->IsEnabled())
         {
-            m_pXButton->GrabFocus();
+            m_pBrowseButton->GrabFocus();
             bRes=sal_True;
         }
         return bRes;
@@ -253,8 +255,8 @@ namespace pcr
         m_aFtTitle.Enable( _bDoEnable );
         if ( m_pBrowserControl )
             m_pBrowserControl->EnableControl( _bDoEnable );
-        if ( m_pXButton )
-            m_pXButton->Enable( _bDoEnable );
+        if ( m_pBrowseButton )
+            m_pBrowseButton->Enable( _bDoEnable );
     }
 
     //------------------------------------------------------------------
@@ -265,9 +267,9 @@ namespace pcr
         {
             m_pBrowserControl->ShowCtr(bFlag);
         }
-        if(m_pXButton)
+        if(m_pBrowseButton)
         {
-            m_pXButton->Show(bFlag);
+            m_pBrowseButton->Show(bFlag);
         }
     }
 
@@ -291,9 +293,9 @@ namespace pcr
         {
             m_pBrowserControl->InvalidateCtr();
         }
-        if(m_pXButton)
+        if(m_pBrowseButton)
         {
-            m_pXButton->Invalidate();
+            m_pBrowseButton->Invalidate();
         }
     }
 
@@ -305,9 +307,9 @@ namespace pcr
         {
             m_pBrowserControl->UpdateCtr();
         }
-        if(m_pXButton)
+        if(m_pBrowseButton)
         {
-            m_pXButton->Update();
+            m_pBrowseButton->Update();
         }
     }
 
@@ -338,11 +340,11 @@ namespace pcr
         aTitlePos.Y()+=8;
 
         m_aFtTitle.SetPosSizePixel(aTitlePos,aSize);
-        sal_uInt16 nXButtonWidth=0;
+        sal_uInt16 nBrowseButtonWidth=0;
 
-        nXButtonWidth=(sal_uInt16)aSize.Height()-4;
+        nBrowseButtonWidth=(sal_uInt16)aSize.Height()-4;
 
-        a2Size.Width()=a2Size.Width()-nXButtonWidth;
+        a2Size.Width()=a2Size.Width()-nBrowseButtonWidth;
 
         aPos.X()+=aSize.Width();
 
@@ -353,16 +355,16 @@ namespace pcr
             m_pBrowserControl->SetCtrSize(a2Size);
         }
 
-        if(m_bHasBrowseButton)
+        if ( m_pBrowseButton )
         {
-            long nx=m_aOutputSize.Width()-nXButtonWidth;
+            long nx=m_aOutputSize.Width()-nBrowseButtonWidth;
             if(nx>aPos.X())
             {
                 aPos.X()=nx;
             }
-            aSize.Width()=nXButtonWidth-3;
-            aSize.Height()=nXButtonWidth-2;
-            m_pXButton->SetPosSizePixel(aPos,aSize);
+            aSize.Width()=nBrowseButtonWidth-3;
+            aSize.Height()=nBrowseButtonWidth-2;
+            m_pBrowseButton->SetPosSizePixel(aPos,aSize);
         }
     }
 
@@ -381,11 +383,11 @@ namespace pcr
         Point aTitlePos(m_aLinePos);
         aTitlePos.Y()+=8;
 
-        sal_uInt16 nXButtonWidth=0;
+        sal_uInt16 nBrowseButtonWidth=0;
 
-        nXButtonWidth=(sal_uInt16)aSize.Height()-4;
+        nBrowseButtonWidth=(sal_uInt16)aSize.Height()-4;
 
-        a2Size.Width()=a2Size.Width()-nXButtonWidth;
+        a2Size.Width()=a2Size.Width()-nBrowseButtonWidth;
 
         aPos.X()+=aSize.Width();
 
@@ -395,16 +397,16 @@ namespace pcr
             m_pBrowserControl->SetCtrSize(a2Size);
         }
 
-        if(m_bHasBrowseButton)
+        if ( m_pBrowseButton )
         {
-            long nx=m_aOutputSize.Width()-nXButtonWidth;
+            long nx=m_aOutputSize.Width()-nBrowseButtonWidth;
             if(nx>aPos.X())
             {
                 aPos.X()=nx;
             }
-            aSize.Width()=nXButtonWidth-3;
-            aSize.Height()=nXButtonWidth-2;
-            m_pXButton->SetPosSizePixel(aPos,aSize);
+            aSize.Width()=nBrowseButtonWidth-3;
+            aSize.Height()=nBrowseButtonWidth-2;
+            m_pBrowseButton->SetPosSizePixel(aPos,aSize);
         }
     }
 
@@ -460,60 +462,40 @@ namespace pcr
     }
 
     //------------------------------------------------------------------
-    void OBrowserLine::ShowXButton()
+    void OBrowserLine::EnableInputControls( bool _bEnableInput, bool _bEnableBrowseButton )
     {
-        m_bHasBrowseButton=sal_True;
-        if(m_pXButton)
-            delete m_pXButton;
-        m_pXButton=new PushButton(m_pTheParent);
-        m_pXButton->SetGetFocusHdl(LINK( this, OBrowserLine, GetFocusHdl));
-        m_pXButton->SetData((void *)this);
-        m_pXButton->SetText(String::CreateFromAscii("..."));
-        m_pXButton->Show();
+        if ( m_pBrowseButton )
+            m_pBrowseButton->Enable( _bEnableBrowseButton );
+        if ( m_pBrowserControl )
+            m_pBrowserControl->EnableControl( _bEnableInput );
+        m_aFtTitle.Enable( _bEnableInput );
+    }
+
+    //------------------------------------------------------------------
+    void OBrowserLine::ShowBrowseButton()
+    {
+        if ( !m_pBrowseButton )
+        {
+            delete m_pBrowseButton;
+            m_pBrowseButton=new PushButton( m_pTheParent, WB_NOPOINTERFOCUS );
+            m_pBrowseButton->SetGetFocusHdl( LINK( this, OBrowserLine, GetFocusHdl ) );
+            m_pBrowseButton->SetData( (void*)this );
+            m_pBrowseButton->SetText( String::CreateFromAscii( "..." ) );
+        }
+        m_pBrowseButton->Show();
         Resize();
     }
 
     //------------------------------------------------------------------
-    void OBrowserLine::HideXButton()
+    void OBrowserLine::HideBrowseButton()
     {
-        m_bHasBrowseButton=sal_False;
-        if(m_pXButton)
+        if ( m_pBrowseButton )
         {
-            m_pXButton->Hide();
-            delete m_pXButton;
-            m_pXButton=NULL;
+            m_pBrowseButton->Hide();
+            delete m_pBrowseButton;
+            m_pBrowseButton=NULL;
         }
         Resize();
-    }
-
-    //------------------------------------------------------------------
-    sal_Bool OBrowserLine::IsVisibleXButton()
-    {
-        return m_bHasBrowseButton;
-    }
-
-    //------------------------------------------------------------------
-    void OBrowserLine::ShowAsHyperLink(sal_Bool nFlag)
-    {
-        m_bIsHyperlink=nFlag;
-        if(nFlag)
-        {
-            Font aFont(m_aFtTitle.GetFont());
-            aFont.SetUnderline(UNDERLINE_SINGLE);
-            aFont.SetColor(Color(COL_BLUE));
-            m_aFtTitle.SetFont(aFont);
-        }
-        else
-        {
-            Font aFont=m_aFtTitle.GetFont();
-            m_aFtTitle.SetFont(aFont);
-        }
-    }
-
-    //------------------------------------------------------------------
-    sal_Bool OBrowserLine::IsShownAsHyperlink()
-    {
-        return m_bIsHyperlink;
     }
 
     //------------------------------------------------------------------
@@ -543,8 +525,8 @@ namespace pcr
     //------------------------------------------------------------------
     void OBrowserLine::SetClickHdl(const Link& rLink)
     {
-        if(m_pXButton)
-            m_pXButton->SetClickHdl(rLink );
+        if(m_pBrowseButton)
+            m_pBrowseButton->SetClickHdl(rLink );
     }
 
     //------------------------------------------------------------------
