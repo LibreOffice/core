@@ -2,9 +2,9 @@
  *
  *  $RCSfile: root.hxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: dr $ $Date: 2001-11-30 16:05:20 $
+ *  last change: $Author: dr $ $Date: 2002-09-27 13:11:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,7 +157,6 @@ struct RootData     // -> Inkarnation jeweils im ImportExcel-Objekt!
     USHORT*             pAktTab;                // Zeiger auf aktuelle Tab-Nummer
     const CharSet*      pCharset;               // actual charset (im- / export!)
     ScExtDocOptions*    pExtDocOpt;
-    FilterProgressBar*  pProgress;              // aktueller Progressbar
 
     ScEditEngineDefaulter*  pEdEng;             // for rstrings, etc
     ScEditEngineDefaulter*  pEdEngHF;           // special for header and footer

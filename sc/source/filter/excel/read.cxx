@@ -2,9 +2,9 @@
  *
  *  $RCSfile: read.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: dr $ $Date: 2002-09-27 09:47:15 $
+ *  last change: $Author: dr $ $Date: 2002-09-27 13:10:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,9 +88,6 @@
 #ifndef _EXCIMP8_HXX
 #include "excimp8.hxx"
 #endif
-#ifndef _FLTPRGRS_HXX
-#include "fltprgrs.hxx"
-#endif
 #ifndef _SC_XCLIMPEXTERNSHEET_HXX
 #include "XclImpExternsheet.hxx"
 #endif
@@ -159,7 +156,9 @@ FltError ImportExcel::Read( void )
 
     DBG_ASSERT( &aIn != NULL, "-ImportExcel::Read(): Kein Stream - wie dass?!" );
 
-    FilterProgressBar*  pPrgrsBar = new FilterProgressBar( aIn );
+    ScfProgressBar* pProgress = new ScfProgressBar( STR_LOAD_DOC );
+    sal_uInt32 nStreamSeg = pProgress->AddSegment( aIn.GetStreamLen() );
+    pProgress->ActivateSegment( nStreamSeg );
 
     while( eAkt != Z_Ende )
     {
@@ -173,7 +172,7 @@ FltError ImportExcel::Read( void )
         }
 
         if( eAkt != Z_Biff5Pre && eAkt != Z_Biff5WPre )
-            pPrgrsBar->Progress();
+            pProgress->Progress( aIn.GetStreamPos() );
 
         switch( eAkt )
         {
@@ -999,10 +998,10 @@ FltError ImportExcel::Read( void )
     for( nTabCount = 0 ; nTabCount < nTabLast ; nTabCount++ )
         pD->SetPageStyle( nTabCount, GetPageStyleName( nTabCount ) );
 
+    DELETEZ( pProgress );
+
     AdjustRowHeight();
     PostDocLoad();
-
-    delete pPrgrsBar;
 
     if( bTabTruncated )
         eLastErr = eERR_RNGOVRFLW;
@@ -1054,8 +1053,6 @@ FltError ImportExcel8::Read( void )
     sal_uInt32 nStreamSeg = pProgress->AddSegment( aIn.GetStreamLen() );
     pProgress->ActivateSegment( nStreamSeg );
 
-//    FilterProgressBar*  pPrgrsBar = new FilterProgressBar( aIn );
-//    pExcRoot->pProgress = pPrgrsBar;
     bObjSection = FALSE;
 
     while( eAkt != Z_Ende )
@@ -1491,11 +1488,6 @@ FltError ImportExcel8::Read( void )
     }
 
     DELETEZ( pProgress );
-//    if( pPrgrsBar )
-//    {
-//        delete pPrgrsBar;
-//        pPrgrsBar = pExcRoot->pProgress = NULL;
-//    }
 
     AdjustRowHeight();
     PostDocLoad();

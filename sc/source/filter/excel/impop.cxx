@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impop.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: dr $ $Date: 2002-09-27 09:47:15 $
+ *  last change: $Author: dr $ $Date: 2002-09-27 13:10:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -222,7 +222,6 @@ ImportExcel::ImportExcel( SvStream& aStream, ScDocument* pDoc ):
     if( pDoc->GetExtDocOptions() )
         *pExcRoot->pExtDocOpt = *pDoc->GetExtDocOptions();
     pExcRoot->pExtDocOpt->SetChanged( TRUE );
-    pExcRoot->pProgress = NULL;
     pExcRoot->pEdEng = NULL;
     pExcRoot->pEdEngHF = NULL;
 

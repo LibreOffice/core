@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exctools.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: dr $ $Date: 2001-11-30 16:08:10 $
+ *  last change: $Author: dr $ $Date: 2002-09-27 13:10:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,7 +194,6 @@ RootData::RootData( void )
     pAktTab = NULL;
     pCharset = NULL;
     pExtDocOpt = NULL;
-    pProgress = NULL;
 
     pEdEng = pEdEngHF = NULL;
 
