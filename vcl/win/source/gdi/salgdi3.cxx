@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: th $ $Date: 2001-05-15 12:20:52 $
+ *  last change: $Author: th $ $Date: 2001-06-07 16:51:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,6 +150,7 @@ struct ImplEnumInfo
     XubString*          mpName;
     LOGFONTA*           mpLogFontA;
     LOGFONTW*           mpLogFontW;
+    UINT                mnPreferedCharSet;
     BOOL                mbCourier;
     BOOL                mbImplSalCourierScalable;
     BOOL                mbImplSalCourierNew;
@@ -418,27 +419,30 @@ static void ImplLogMetricToDevFontDataW( const LOGFONTW* pLogFont,
 
 // -----------------------------------------------------------------------
 
-void ImplSalLogFontToFontA( const LOGFONTA& rLogFont, Font& rFont )
+void ImplSalLogFontToFontA( HDC hDC, const LOGFONTA& rLogFont, Font& rFont,
+                            BOOL bReplaceFont )
 {
     XubString aFontName( ImplSalGetUniString( rLogFont.lfFaceName ) );
     if ( aFontName.Len() )
     {
-        rFont.SetName( aFontName );
+        if ( bReplaceFont )
+        {
+            rFont.SetName( aFontName );
+            rFont.SetCharSet( ImplCharSetToSal( rLogFont.lfCharSet ) );
+            rFont.SetFamily( ImplFamilyToSal( rLogFont.lfPitchAndFamily ) );
+            rFont.SetPitch( ImplLogPitchToSal( rLogFont.lfPitchAndFamily ) );
+            rFont.SetWeight( ImplWeightToSal( rLogFont.lfWeight ) );
+        }
+
         long nFontHeight = rLogFont.lfHeight;
         if ( nFontHeight < 0 )
             nFontHeight = -nFontHeight;
-        HDC hDC = GetDC( 0 );
         long nDPIY = GetDeviceCaps( hDC, LOGPIXELSY );
-        ReleaseDC( 0, hDC );
         nFontHeight *= 72;
         nFontHeight += nDPIY/2;
         nFontHeight /= nDPIY;
         rFont.SetSize( Size( 0, nFontHeight ) );
         rFont.SetOrientation( (short)rLogFont.lfEscapement );
-        rFont.SetCharSet( ImplCharSetToSal( rLogFont.lfCharSet ) );
-        rFont.SetFamily( ImplFamilyToSal( rLogFont.lfPitchAndFamily ) );
-        rFont.SetPitch( ImplLogPitchToSal( rLogFont.lfPitchAndFamily ) );
-        rFont.SetWeight( ImplWeightToSal( rLogFont.lfWeight ) );
         if ( rLogFont.lfItalic )
             rFont.SetItalic( ITALIC_NORMAL );
         else
@@ -456,27 +460,30 @@ void ImplSalLogFontToFontA( const LOGFONTA& rLogFont, Font& rFont )
 
 // -----------------------------------------------------------------------
 
-void ImplSalLogFontToFontW( const LOGFONTW& rLogFont, Font& rFont )
+void ImplSalLogFontToFontW( HDC hDC, const LOGFONTW& rLogFont, Font& rFont,
+                            BOOL bReplaceFont )
 {
     XubString aFontName( rLogFont.lfFaceName );
     if ( aFontName.Len() )
     {
-        rFont.SetName( aFontName );
+        if ( bReplaceFont )
+        {
+            rFont.SetName( aFontName );
+            rFont.SetCharSet( ImplCharSetToSal( rLogFont.lfCharSet ) );
+            rFont.SetFamily( ImplFamilyToSal( rLogFont.lfPitchAndFamily ) );
+            rFont.SetPitch( ImplLogPitchToSal( rLogFont.lfPitchAndFamily ) );
+            rFont.SetWeight( ImplWeightToSal( rLogFont.lfWeight ) );
+        }
+
         long nFontHeight = rLogFont.lfHeight;
         if ( nFontHeight < 0 )
             nFontHeight = -nFontHeight;
-        HDC hDC = GetDC( 0 );
         long nDPIY = GetDeviceCaps( hDC, LOGPIXELSY );
-        ReleaseDC( 0, hDC );
         nFontHeight *= 72;
         nFontHeight += nDPIY/2;
         nFontHeight /= nDPIY;
         rFont.SetSize( Size( 0, nFontHeight ) );
         rFont.SetOrientation( (short)rLogFont.lfEscapement );
-        rFont.SetCharSet( ImplCharSetToSal( rLogFont.lfCharSet ) );
-        rFont.SetFamily( ImplFamilyToSal( rLogFont.lfPitchAndFamily ) );
-        rFont.SetPitch( ImplLogPitchToSal( rLogFont.lfPitchAndFamily ) );
-        rFont.SetWeight( ImplWeightToSal( rLogFont.lfWeight ) );
         if ( rLogFont.lfItalic )
             rFont.SetItalic( ITALIC_NORMAL );
         else
@@ -584,6 +591,48 @@ static void ImplSalGetVerticalFontNameA( HDC hDC, ByteString& rName )
                          (LPARAM)(void*)&bAvailable, 0 );
     if ( bAvailable )
         rName = aTemp;
+}
+
+// -----------------------------------------------------------------------
+
+BOOL ImplIsFontAvailable( HDC hDC, const UniString& rName )
+{
+    BOOL bAvailable = FALSE;
+
+    if ( aSalShlData.mbWNT )
+    {
+        // Test, if Font available
+        LOGFONTW aLogFont;
+        memset( &aLogFont, 0, sizeof( aLogFont ) );
+
+        UINT nNameLen = rName.Len();
+        if ( nNameLen > (sizeof( aLogFont.lfFaceName )/sizeof( wchar_t ))-1 )
+            nNameLen = (sizeof( aLogFont.lfFaceName )/sizeof( wchar_t ))-1;
+        memcpy( aLogFont.lfFaceName, rName.GetBuffer(), nNameLen*sizeof( wchar_t ) );
+        aLogFont.lfFaceName[nNameLen] = 0;
+
+        EnumFontFamiliesExW( hDC, &aLogFont, (FONTENUMPROCW)SalEnumQueryFontProcExW,
+                             (LPARAM)(void*)&bAvailable, 0 );
+    }
+    else
+    {
+        ByteString aTemp = ImplSalGetWinAnsiString( rName );
+
+        // Test, if Font available
+        LOGFONTA aLogFont;
+        memset( &aLogFont, 0, sizeof( aLogFont ) );
+
+        UINT nNameLen = aTemp.Len();
+        if ( nNameLen > sizeof( aLogFont.lfFaceName )-1 )
+            nNameLen = sizeof( aLogFont.lfFaceName )-1;
+        memcpy( aLogFont.lfFaceName, aTemp.GetBuffer(), nNameLen );
+        aLogFont.lfFaceName[nNameLen] = 0;
+
+        EnumFontFamiliesExA( hDC, &aLogFont, (FONTENUMPROCA)SalEnumQueryFontProcExA,
+                             (LPARAM)(void*)&bAvailable, 0 );
+    }
+
+    return bAvailable;
 }
 
 // -----------------------------------------------------------------------
@@ -1115,6 +1164,12 @@ int CALLBACK SalEnumFontsProcExA( const ENUMLOGFONTEXA* pLogFont,
         pData->mpSysData = (void*)(pLogFont->elfLogFont.lfCharSet);
         BOOL bAdd = TRUE;
 
+        // We prefer the system character set, so that we get as much as
+        // possible important characters. In the other case we could only
+        // display a limited set of characters (#87309#)
+        if ( pInfo->mnPreferedCharSet == pLogFont->elfLogFont.lfCharSet )
+            pData->mnQuality += 100;
+
         // Wenn es sich um einen nicht skalierbaren Bildschirm-Font
         // handelt, dann auf dem Drucker ignorieren
         if ( pData->meType != TYPE_SCALABLE )
@@ -1174,6 +1229,7 @@ int CALLBACK SalEnumFontsProcExW( const ENUMLOGFONTEXW* pLogFont,
         pData->maName = *(pInfo->mpName);
 
         ImplLogMetricToDevFontDataW( &(pLogFont->elfLogFont), &(pMetric->ntmTm), nFontType, pData );
+
         // Test if Stylename is correct
         const wchar_t* pStyleName = pLogFont->elfStyle;
         const wchar_t* pTemp = pStyleName;
@@ -1191,6 +1247,12 @@ int CALLBACK SalEnumFontsProcExW( const ENUMLOGFONTEXW* pLogFont,
             pData->maStyleName = pStyleName;
         pData->mpSysData = (void*)(pLogFont->elfLogFont.lfCharSet);
         BOOL bAdd = TRUE;
+
+        // We prefer the system character set, so that we get as much as
+        // possible important characters. In the other case we could only
+        // display a limited set of characters (#87309#)
+        if ( pInfo->mnPreferedCharSet == pLogFont->elfLogFont.lfCharSet )
+            pData->mnQuality += 100;
 
         // Wenn es sich um einen nicht skalierbaren Bildschirm-Font
         // handelt, dann auf dem Drucker ignorieren
@@ -1238,6 +1300,12 @@ void SalGraphics::GetDevFontList( ImplDevFontList* pList )
         aInfo.mbImplSalCourierNew       = TRUE;
         aInfo.mbPrinter                 = TRUE;
     }
+
+    aInfo.mnPreferedCharSet = DEFAULT_CHARSET;
+    DWORD nCP = GetACP();
+    CHARSETINFO aCharSetInfo;
+    if ( TranslateCharsetInfo( (DWORD*)nCP, &aCharSetInfo, TCI_SRCCODEPAGE ) )
+        aInfo.mnPreferedCharSet = aCharSetInfo.ciCharset;
 
     if ( aSalShlData.mbWNT )
     {
