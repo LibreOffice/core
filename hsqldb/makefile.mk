@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: rt $ $Date: 2004-11-26 13:10:37 $
+#   last change: $Author: obo $ $Date: 2005-01-25 15:11:29 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -71,6 +71,11 @@ TARGET=so_hsqldb
 # --- Files --------------------------------------------------------
 
 .IF "$(SOLAR_JAVA)" != ""
+.IF "$(JDK)" == "gcj"
+all:
+    @echo This dir cannot be build with gcj because of sun.security.action.GetPropertyAction
+.ELSE
+# --- Files --------------------------------------------------------
 
 TARFILE_NAME=hsqldb_$(HSQLDB_VERSION)
 PATCH_FILE_NAME=hsqldb_$(HSQLDB_VERSION).patch
@@ -98,6 +103,7 @@ ANT_BUILDFILE=build$/build.xml
 
 BUILD_ACTION=$(ANT) -f $(ANT_BUILDFILE) jar				
 
+.ENDIF
 .ENDIF # $(SOLAR_JAVA)!= ""
 
 # --- Targets ------------------------------------------------------
