@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysis.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: gt $ $Date: 2001-06-15 08:16:21 $
+ *  last change: $Author: gt $ $Date: 2001-06-26 09:00:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -9515,7 +9515,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
     {
         String 1    // description Cumprinc_add
         {
-            Text = "Liefert die aufgelaufene Tilgung eines Darlehens, die zwischen zwie Perioden zu zahlen ist.";
+            Text = "Liefert die aufgelaufene Tilgung eines Darlehens, die zwischen zwei Perioden zu zahlen ist.";
             Text[ english ] = "Returns the cumulative principal paid a loan between two periods";
             Text[ english_us ] = "Returns the cumulative principal paid a loan between two periods";
             Text[ portuguese ] = "Returns the cumulative principal paid a loan between two periods";
