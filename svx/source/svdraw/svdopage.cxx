@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdopage.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: aw $ $Date: 2001-02-15 16:11:33 $
+ *  last change: $Author: aw $ $Date: 2001-05-02 12:10:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,11 @@ const SfxItemSet& SdrPageObj::GetItemSet() const
 SfxItemSet* SdrPageObj::CreateNewItemSet(SfxItemPool& rPool)
 {
     return new SfxItemSet(rPool);
+}
+
+void SdrPageObj::ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem)
+{
+    // #86481# simply ignore item setting on page objects
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
