@@ -58,16 +58,28 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 // DllRegisterServer - Adds entries to the system registry
 
 // for now database component and chart are always installed
-#define SUPPORTED_EXT_NUM 19
-const char* aFileExt[] = { ".sds", ".sda", ".sdd", ".sdc", ".sdw", ".smf",
+#define SUPPORTED_EXT_NUM 30
+const char* aFileExt[] = { ".vor",
+                           ".sds", ".sda", ".sdd", ".sdc", ".sdw", ".smf",
+                           ".stw", ".stc", ".sti", ".std", ".stm",
                            ".sxw", ".sxc", ".sxi", ".sxd", ".sxg", ".sxm",
+                           ".ott", ".otg", ".otp", ".ots", ".otf",
                            ".odt", ".odm", ".odg", ".odp", ".ods", ".odf", ".odb"};
-const char* aMimeType[] = { "application/vnd.stardivision.chart",
+const char* aMimeType[] = {
+                          "application/vnd.stardivision.writer",
+
+                          "application/vnd.stardivision.chart",
                           "application/vnd.stardivision.draw",
                           "application/vnd.stardivision.impress",
                           "application/vnd.stardivision.calc",
                           "application/vnd.stardivision.writer",
                           "application/vnd.stardivision.math",
+
+                          "application/vnd.sun.xml.writer.template",
+                          "application/vnd.sun.xml.calc.template",
+                          "application/vnd.sun.xml.impress.template",
+                          "application/vnd.sun.xml.draw.template",
+                          "application/vnd.sun.xml.math.template",
 
                           "application/vnd.sun.xml.writer",
                           "application/vnd.sun.xml.calc",
@@ -75,6 +87,12 @@ const char* aMimeType[] = { "application/vnd.stardivision.chart",
                           "application/vnd.sun.xml.draw",
                           "application/vnd.sun.xml.writer.global",
                           "application/vnd.sun.xml.math",
+
+                          MIMETYPE_OASIS_OPENDOCUMENT_TEXT_TEMPLATE_ASCII,
+                          MIMETYPE_OASIS_OPENDOCUMENT_DRAWING_TEMPLATE_ASCII,
+                          MIMETYPE_OASIS_OPENDOCUMENT_PRESENTATION_TEMPLATE_ASCII,
+                          MIMETYPE_OASIS_OPENDOCUMENT_SPREADSHEET_TEMPLATE_ASCII,
+                          MIMETYPE_OASIS_OPENDOCUMENT_FORMULA_TEMPLATE_ASCII,
 
                           MIMETYPE_OASIS_OPENDOCUMENT_TEXT_ASCII,
                           MIMETYPE_OASIS_OPENDOCUMENT_TEXT_GLOBAL_ASCII,
@@ -84,8 +102,11 @@ const char* aMimeType[] = { "application/vnd.stardivision.chart",
                           MIMETYPE_OASIS_OPENDOCUMENT_FORMULA_ASCII,
                           MIMETYPE_OASIS_OPENDOCUMENT_DATABASE_ASCII };
 
-const int nForModes[] = {  1,  2,  4,  8, 16, 32,
+const int nForModes[] = { 16,
+                           1,  2,  4,  8, 16, 32,
+                          16,  8,  4,  2, 32,
                           16,  8,  4,  2, 16, 32,
+                          16,  2,  4,  8, 32,
                           16, 16,  2,  4,  8, 32, 1 };
 
 const char* aClassID = "{67F2A879-82D5-4A6D-8CC5-FFB3C114B69D}";
