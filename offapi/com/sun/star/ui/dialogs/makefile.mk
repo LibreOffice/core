@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: cl $ $Date: 2002-03-27 12:54:02 $
+#   last change: $Author: tra $ $Date: 2002-07-12 13:11:57 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -93,7 +93,9 @@ IDLFILES=\
     XFilePreview.idl\
     XFilterGroupManager.idl\
     XFilterManager.idl\
-    XFolderPicker.idl
+    XFolderPicker.idl\
+    XControlAccess.idl\
+    XControlInformation.idl
 
 # ------------------------------------------------------------------
 
