@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basmgr.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ab $ $Date: 2001-08-28 08:17:03 $
+ *  last change: $Author: ab $ $Date: 2001-11-20 17:39:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -723,11 +723,21 @@ BasicManager::BasicManager( SotStorage& rStorage, StarBASIC* pParentFromStdLib, 
 }
 
 
-void copyToLibraryContainer( StarBASIC* pBasic, BasicManagerImpl* pImpl )
+struct BasicManagerImpl
+{
+    LibraryContainerInfo* mpInfo;
+
+    BasicManagerImpl( void )
+        : mpInfo( NULL )
+    {}
+};
+
+
+void copyToLibraryContainer( StarBASIC* pBasic, LibraryContainerInfo* pInfo )
 {
     Reference< XLibraryContainer > xScriptCont;
     String aLibName = pBasic->GetName();
-    if( pImpl && (xScriptCont = pImpl->xScriptCont).is() )
+    if( pInfo && (xScriptCont = pInfo->mxScriptCont).is() )
     {
         if( !xScriptCont->hasByName( aLibName ) )
             xScriptCont->createLibrary( aLibName );
@@ -756,17 +766,17 @@ void copyToLibraryContainer( StarBASIC* pBasic, BasicManagerImpl* pImpl )
     }
 }
 
-void BasicManager::SetImpl( BasicManagerImpl* pImpl )
+void BasicManager::SetLibraryContainerInfo( LibraryContainerInfo* pInfo )
 {
-    if( !pImpl )
+    if( !pInfo )
         return;
-    mpImpl = pImpl;
+    mpImpl->mpInfo = pInfo;
 
 
     Reference< XLibraryContainer > xScriptCont;
     StarBASIC* pStdLib = GetStdLib();
     String aLibName = pStdLib->GetName();
-    if( mpImpl && (xScriptCont = mpImpl->xScriptCont).is() )
+    if( mpImpl->mpInfo && (xScriptCont = mpImpl->mpInfo->mxScriptCont).is() )
     {
         OUString aScriptLanguage = DEFINE_CONST_UNICODE( "StarBasic" );
 
@@ -806,7 +816,20 @@ void BasicManager::SetImpl( BasicManagerImpl* pImpl )
                 BasicLibInfo* pInfo = pLibs->GetObject( nL );
                 StarBASIC* pLib = pInfo->GetLib();
                 if( pLib )
-                    copyToLibraryContainer( pLib, mpImpl );
+                {
+                    copyToLibraryContainer( pLib, mpImpl->mpInfo );
+                    if( pInfo->HasPassword() )
+                    {
+                        OldBasicPassword* pOldBasicPassword =
+                            mpImpl->mpInfo->mpOldBasicPassword;
+                        if( pOldBasicPassword )
+                        {
+                            pOldBasicPassword->setLibraryPassword
+                                ( pLib->GetName(), pInfo->GetPassword() );
+                            pInfo->SetPasswordVerified();
+                        }
+                    }
+                }
             }
         }
     }
@@ -832,7 +855,6 @@ BasicManager::BasicManager( StarBASIC* pSLib, String* pLibPath )
     // Speichern lohnt sich nur, wenn sich das Basic aendert.
     xStdLib->SetModified( FALSE );
     bBasMgrModified = FALSE;
-    mpImpl = NULL;
 }
 
 BasicManager::BasicManager()
@@ -1086,7 +1108,7 @@ void BasicManager::Init()
     bBasMgrModified = FALSE;
     pErrorMgr = new BasicErrorManager;
     pLibs = new BasicLibs;
-    mpImpl = NULL;
+    mpImpl = new BasicManagerImpl();
 }
 
 BasicLibInfo* BasicManager::CreateLibInfo()
@@ -1175,6 +1197,85 @@ void BasicManager::Store( SotStorage& rStorage )
 
 void BasicManager::Store( SotStorage& rStorage, BOOL bStoreLibs )
 {
+    // #91626
+    sal_Bool bModified = IsModified();
+
+    // #92172 Password handling
+    OldBasicPassword* pOldBasicPassword = mpImpl->mpInfo->mpOldBasicPassword;
+    USHORT nLibs = GetLibCount();
+    for( USHORT nL = 0; nL < nLibs; nL++ )
+    {
+        BasicLibInfo* pInfo = pLibs->GetObject( nL );
+        DBG_ASSERT( pInfo, "pInfo?!" );
+
+        String aLibName = pInfo->GetLibName();
+        sal_Bool bPassword = pOldBasicPassword->hasLibraryPassword( aLibName );
+        String aPassword = pOldBasicPassword->getLibraryPassword( aLibName );
+        if( pInfo->GetPassword() != aPassword )
+            bModified = sal_True;
+
+        if( bPassword && aPassword.Len() == 0 )
+        {
+            String aDummySource( String::CreateFromAscii(
+                "REM This module belonged to a password protected library that was exported without\n"
+                "REM verifying the password. So the original module source could not be exported!\n"
+                "sub main\n"
+                "end sub\n" ) );
+            Any aDummySourceAny;
+            aDummySourceAny <<= OUString( aDummySource );
+
+            Reference< XLibraryContainer > xScriptCont = mpImpl->mpInfo->mxScriptCont;
+            if( xScriptCont.is() && xScriptCont->hasByName( aLibName ) )
+            {
+                xScriptCont->loadLibrary( aLibName );
+
+                // Now the library isn't password protected any more
+                // but the modules don't contain any source
+                pOldBasicPassword->clearLibraryPassword( aLibName );
+
+                Any aLibAny = xScriptCont->getByName( aLibName );
+                Reference< XNameContainer > xLib;
+                aLibAny >>= xLib;
+
+                Sequence< OUString > aNames = xLib->getElementNames();
+                sal_Int32 nNameCount = aNames.getLength();
+                const OUString* pNames = aNames.getConstArray();
+                for( sal_Int32 i = 0 ; i < nNameCount ; i++ )
+                {
+                    OUString aElementName = pNames[ i ];
+                    xLib->replaceByName( aElementName, aDummySourceAny );
+                }
+            }
+
+            StarBASIC* pBasic = GetLib( aLibName );
+            if( pBasic )
+            {
+                SbxArray* pModules = pBasic->GetModules();
+                USHORT nModCount = pModules->Count();
+                for( USHORT j = 0; j < nModCount ; j++ )
+                {
+                    SbModule* pMod = (SbModule*)pModules->Get( j );
+                    pMod->SetSource( aDummySource );
+                    pMod->Compile();
+                }
+            }
+
+            bModified = sal_True;
+        }
+        else
+        {
+            pInfo->SetPassword( aPassword );
+        }
+    }
+
+    // #91626
+    if( !bModified )
+    {
+        // TODO: Store saved streams
+        // return;
+    }
+
+
     DBG_CHKTHIS( BasicManager, 0 );
     // Neue Bibliotheken sind nicht unbedingt modified, muessen aber trotzdem
     // gespeichert werden.
@@ -1187,7 +1288,6 @@ void BasicManager::Store( SotStorage& rStorage, BOOL bStoreLibs )
     DBG_ASSERT( xManagerStream.Is(), "Kein ManagerStream!");
 
     ClearErrors();
-    USHORT nLibs = GetLibCount();
 
     String aStorName( rStorage.GetName() );
     DBG_ASSERT( aStorName.Len(), "No Storage Name!" );
@@ -1511,7 +1611,7 @@ BOOL BasicManager::ImplLoadBasic( SvStream& rStrm, StarBASICRef& rOldBasic ) con
             rOldBasic = pNew;
 
             // Fill new libray container (5.2 -> 6.0)
-            copyToLibraryContainer( pNew, mpImpl );
+            copyToLibraryContainer( pNew, mpImpl->mpInfo );
 
 /*
             if( rOldBasic->GetParent() )
