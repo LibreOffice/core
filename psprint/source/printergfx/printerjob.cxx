@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printerjob.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: cp $ $Date: 2001-11-01 16:25:08 $
+ *  last change: $Author: cp $ $Date: 2001-11-14 13:40:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -791,7 +791,7 @@ bool PrinterJob::writeProlog (osl::File* pFile)
         "/p /q /r /s /t /u /v /w\n"
         "/x /y /z /braceleft /bar /braceright /asciitilde /unused\n"
         "/euro /unused /quotesinglbase /florin /quotedblbase /ellipsis /dagger /daggerdbl\n"
-        "/circumflex /perthousand /Scaron /guilsinglleft /OE /unused /zcaron /unused\n"
+        "/circumflex /perthousand /Scaron /guilsinglleft /OE /unused /Zcaron /unused\n"
         "/unused /quoteleft /quoteright /quotedblleft /quotedblright /bullet /endash /emdash\n"
         "/tilde /trademark /scaron /guilsinglright /oe /unused /zcaron /Ydieresis\n"
         "/space /exclamdown /cent /sterling /currency /yen /brokenbar /section\n"
