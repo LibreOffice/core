@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.103 $
+ *  $Revision: 1.104 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:05:11 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 17:27:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,6 +112,7 @@
 
 #include <rtl/uuid.h>
 #include <rtl/memory.h>
+#include <so3/outplace.hxx>
 
 #ifndef SVX_LIGHT
 #ifndef _IPOBJ_HXX
@@ -2388,13 +2389,16 @@ uno::Any SvxShape::_getPropertyValue( const OUString& PropertyName )
             }
             case OWN_ATTR_OLEMODEL:
             {
-                uno::Reference< frame::XModel > xModel;
                 if( pObj->ISA(SdrOle2Obj))
                 {
                     SdrOle2Obj& aObj = *(SdrOle2Obj*)pObj;
-                    xModel = ((SdrOle2Obj*)pObj)->getXModel();
+                    SvOutPlaceObjectRef xOut( aObj.GetObjRef() );
+                    if ( xOut.Is() )
+                        aAny <<= xOut->GetUnoComponent();
+                    else
+                        aAny <<= ((SdrOle2Obj*)pObj)->getXModel();
                 }
-                aAny <<= xModel;
+
                 break;
             }
             case OWN_ATTR_MIRRORED:
