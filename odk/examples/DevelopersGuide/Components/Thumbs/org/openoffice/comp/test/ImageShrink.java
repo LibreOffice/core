@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImageShrink.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:15:21 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 16:17:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -61,8 +61,7 @@ import com.sun.star.lib.uno.helper.WeakBase;
 
 public class ImageShrink extends WeakBase
         implements com.sun.star.lang.XServiceInfo,
-                   org.openoffice.test.XImageShrink,
-                   com.sun.star.document.XFilter  {
+                   org.openoffice.test.XImageShrinkFilter {
 
     com.sun.star.uno.XComponentContext xComponentContext = null;
 
@@ -107,7 +106,7 @@ public class ImageShrink extends WeakBase
                                                     regKey);
     }
 
-    // XFilter implementation
+    // XFilter implementation  (a sub-interface of XImageShrinkFilter)
     public void cancel() {
         cancel = true;
     }
@@ -122,7 +121,7 @@ public class ImageShrink extends WeakBase
         return true;
     }
 
-    // XImageShrink implementation
+    // XImageShrink implementation (a sub-interface of XImageShrinkFilter)
     public String getDestinationDirectory() {
         return destDir;
     }
@@ -159,9 +158,7 @@ public class ImageShrink extends WeakBase
     }
 
     public String[] getSupportedServiceNames(  ) {
-        String[] retValue= new String[0];
-        retValue[0]= __serviceName;
-        return retValue;
+        return new String[] { __serviceName };
     }
 
 }
