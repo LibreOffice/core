@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xeescher.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-13 10:39:48 $
+ *  last change: $Author: obo $ $Date: 2004-10-18 15:14:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 
 #ifndef _COM_SUN_STAR_FORM_FORMCOMPONENTTYPE_HPP_
 #include <com/sun/star/form/FormComponentType.hpp>
+#endif
+#ifndef _COM_SUN_STAR_AWT_VISUALEFFECT_HPP_
+#include <com/sun/star/awt/VisualEffect.hpp>
 #endif
 #ifndef _COM_SUN_STAR_AWT_SCROLLBARORIENTATION_HPP_
 #include <com/sun/star/awt/ScrollBarOrientation.hpp>
@@ -181,6 +184,7 @@ void XclExpCtrlLinkHelper::WriteFormula( XclExpStream& rStrm, const ExcUPN& rTok
 XclExpObjOcxCtrl::XclExpObjOcxCtrl(
         const XclExpRoot& rRoot,
         const Reference< XShape >& rxShape,
+        const Reference< XControlModel >& rxCtrlModel,
         const String& rClassName,
         sal_uInt32 nStrmStart, sal_uInt32 nStrmSize ) :
     XclObj( rRoot, EXC_OBJ_CMO_PICTURE, true ),
@@ -190,9 +194,12 @@ XclExpObjOcxCtrl::XclExpObjOcxCtrl(
     mnStrmSize( nStrmSize )
 {
     SetLocked( TRUE );
-    SetPrintable( ::getPropBool( xPropSet, CREATE_OUSTRING( "Printable" ) ) );
     SetAutoFill( FALSE );
     SetAutoLine( FALSE );
+
+    Reference< XPropertySet > xPropSet( rxCtrlModel, UNO_QUERY );
+    if( xPropSet.is() )
+        SetPrintable( ::getPropBool( xPropSet, CREATE_OUSTRING( "Printable" ) ) );
 
     XclEscherEx& rEscherEx = *pMsodrawing->GetEscherEx();
     rEscherEx.OpenContainer( ESCHER_SpContainer );
@@ -256,9 +263,16 @@ void XclExpObjOcxCtrl::WriteSubRecs( XclExpStream& rStrm )
     sal_uInt16 nClassNameSize = static_cast< sal_uInt16 >( aClass.GetSize() );
     sal_uInt16 nClassNamePad = nClassNameSize & 1;
     sal_uInt16 nFirstPartSize = 12 + nClassNameSize + nClassNamePad;
-    sal_uInt16 nPictFmlaSize = nFirstPartSize + 18;
 
+    const ExcUPN* pCellLink = GetCellLinkTokArr();
+    sal_uInt16 nCellLinkSize = pCellLink ? ((pCellLink->GetLen() + 7) & 0xFFFE) : 0;
+
+    const ExcUPN* pSrcRange = GetSourceRangeTokArr();
+    sal_uInt16 nSrcRangeSize = pSrcRange ? ((pSrcRange->GetLen() + 7) & 0xFFFE) : 0;
+
+    sal_uInt16 nPictFmlaSize = nFirstPartSize + nCellLinkSize + nSrcRangeSize + 18;
     rStrm.StartRecord( EXC_ID_OBJ_FTPICTFMLA, nPictFmlaSize );
+
     rStrm   << sal_uInt16( nFirstPartSize )             // size of first part
             << sal_uInt16( 5 )                          // formula size
             << sal_uInt32( 0 )                          // unknown ID
@@ -268,11 +282,17 @@ void XclExpObjOcxCtrl::WriteSubRecs( XclExpStream& rStrm )
     rStrm.WriteZeroBytes( nClassNamePad );              // pad to word
     rStrm   << mnStrmStart                              // start in 'Ctls' stream
             << mnStrmSize                               // size in 'Ctls' stream
-            << sal_uInt32( 0 ) << sal_uInt32( 0 );      // unknown
-    rStrm.EndRecord();
+            << sal_uInt32( 0 );                         // unknown
+    // cell link
+    rStrm << nCellLinkSize;
+    if( pCellLink )
+        WriteFormula( rStrm, *pCellLink );
+    // list source range
+    rStrm << nSrcRangeSize;
+    if( pSrcRange )
+        WriteFormula( rStrm, *pSrcRange );
 
-    // TODO: writing the sheet link formulas
-    DBG_ERRORFILE( "XclExpObjOcxCtrl::WriteSubRecs - export of sheet links not implemented" );
+    rStrm.EndRecord();
 }
 
 #else
@@ -292,11 +312,13 @@ XclExpObjTbxCtrl::XclExpObjTbxCtrl(
     mnScrollMax( 100 ),
     mnScrollStep( 1 ),
     mnScrollPage( 10 ),
-    mb3DStyle( false ),
+    mbFlatButton( false ),
+    mbFlatBorder( false ),
     mbMultiSel( false ),
     mbScrollHor( false )
 {
     namespace FormCompType = ::com::sun::star::form::FormComponentType;
+    namespace AwtVisualEffect = ::com::sun::star::awt::VisualEffect;
     namespace AwtScrollOrient = ::com::sun::star::awt::ScrollBarOrientation;
 
     Reference< XPropertySet > xPropSet( rxCtrlModel, UNO_QUERY );
@@ -409,10 +431,44 @@ XclExpObjTbxCtrl::XclExpObjTbxCtrl(
     // other properties
     ::getPropValue( mnLineCount, xPropSet, PROPNAME( "LineCount" ) );
 
-    sal_Int16 nBorder = 0;
-    if( ::getPropValue( nBorder, xPropSet, PROPNAME( "Border" ) ) )
-        mb3DStyle = (nBorder == 2);
+    // border style
+    sal_Int16 nApiButton = AwtVisualEffect::LOOK3D;
+    sal_Int16 nApiBorder = AwtVisualEffect::LOOK3D;
+    switch( nClassId )
+    {
+        case FormCompType::LISTBOX:
+        case FormCompType::COMBOBOX:
+            ::getPropValue( nApiBorder, xPropSet, PROPNAME( "Border" ) );
+        break;
+        case FormCompType::CHECKBOX:
+        case FormCompType::RADIOBUTTON:
+            ::getPropValue( nApiButton, xPropSet, PROPNAME( "VisualEffect" ) );
+            nApiBorder = AwtVisualEffect::NONE;
+        break;
+        // Push button cannot be set to flat in Excel
+        case FormCompType::COMMANDBUTTON:
+            nApiBorder = AwtVisualEffect::LOOK3D;
+        break;
+        // Label does not support a border in Excel
+        case FormCompType::FIXEDTEXT:
+            nApiBorder = AwtVisualEffect::NONE;
+        break;
+        /*  Scroll bar and spin button have a "Border" property, but it is
+            really used for a border, and not for own 3D/flat look (#i34712#). */
+        case FormCompType::SCROLLBAR:
+        case FormCompType::SPINBUTTON:
+            nApiButton = AwtVisualEffect::LOOK3D;
+            nApiBorder = AwtVisualEffect::NONE;
+        break;
+        // Group box does not support flat style (#i34712#)
+        case FormCompType::GROUPBOX:
+            nApiBorder = AwtVisualEffect::LOOK3D;
+        break;
+    }
+    mbFlatButton = nApiButton != AwtVisualEffect::LOOK3D;
+    mbFlatBorder = nApiBorder != AwtVisualEffect::LOOK3D;
 
+    // control state
     sal_Int16 nApiState = 0;
     if( ::getPropValue( nApiState, xPropSet, PROPNAME( "State" ) ) )
     {
@@ -519,7 +575,7 @@ void XclExpObjTbxCtrl::WriteSubRecs( XclExpStream& rStrm )
         {
             // ftCbls - box properties
             sal_uInt16 nStyle = 0;
-            ::set_flag( nStyle, EXC_OBJ_CBLS_3D, mb3DStyle );
+            ::set_flag( nStyle, EXC_OBJ_CBLS_FLAT, mbFlatButton );
 
             rStrm.StartRecord( EXC_ID_OBJ_FTCBLS, 12 );
             rStrm << mnState;
@@ -557,7 +613,7 @@ void XclExpObjTbxCtrl::WriteSubRecs( XclExpStream& rStrm )
 
             // ftLbsData - source data range and box properties
             sal_uInt16 nStyle = mbMultiSel ? EXC_OBJ_LBS_SEL_MULTI : EXC_OBJ_LBS_SEL_SIMPLE;
-            ::set_flag( nStyle, EXC_OBJ_LBS_3D, mb3DStyle );
+            ::set_flag( nStyle, EXC_OBJ_LBS_FLAT, mbFlatBorder );
 
             rStrm.StartRecord( EXC_ID_OBJ_FTLBSDATA, 0 );
 
@@ -602,6 +658,21 @@ void XclExpObjTbxCtrl::WriteSubRecs( XclExpStream& rStrm )
             WriteCellLinkFmla( rStrm, EXC_ID_OBJ_FTSBSFMLA );
         }
         break;
+
+        // *** Group boxes ***
+
+        case EXC_OBJ_CMO_GROUPBOX:
+        {
+            // ftGboData subrecord - group box properties
+            sal_uInt16 nStyle = 0;
+            ::set_flag( nStyle, EXC_OBJ_GBO_FLAT, mbFlatBorder );
+
+            rStrm.StartRecord( EXC_ID_OBJ_FTGBODATA, 6 );
+            rStrm   << sal_uInt32( 0 )
+                    << nStyle;
+            rStrm.EndRecord();
+        }
+        break;
     }
 }
 
@@ -619,6 +690,8 @@ void XclExpObjTbxCtrl::WriteSbs( XclExpStream& rStrm )
 {
     sal_uInt16 nOrient = 0;
     ::set_flag( nOrient, EXC_OBJ_SBS_HORIZONTAL, mbScrollHor );
+    sal_uInt16 nStyle = EXC_OBJ_SBS_DEFAULTFLAGS;
+    ::set_flag( nStyle, EXC_OBJ_SBS_FLAT, mbFlatButton );
 
     rStrm.StartRecord( EXC_ID_OBJ_FTSBS, 20 );
     rStrm   << sal_uInt32( 0 )              // reserved
@@ -629,7 +702,7 @@ void XclExpObjTbxCtrl::WriteSbs( XclExpStream& rStrm )
             << mnScrollPage                 // page increment
             << nOrient                      // 0 = vertical, 1 = horizontal
             << sal_uInt16( 15 )             // thumb width
-            << sal_uInt16( 1 );             // reserved
+            << nStyle;                      // flags/style
     rStrm.EndRecord();
 }
 
