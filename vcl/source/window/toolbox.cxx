@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: pl $ $Date: 2002-11-01 15:25:23 $
+ *  last change: $Author: ssa $ $Date: 2002-12-04 17:36:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2619,6 +2619,62 @@ static void ImplDrawToolArrow( ToolBox* pBox, long nX, long nY, BOOL bBlack, BOO
     }
 }
 
+static void SetToolArrowClipregion( ToolBox* pBox, long nX, long nY,
+                               BOOL bLeft = FALSE, BOOL bTop = FALSE,
+                               long nSize = 6 )
+{
+    WindowAlign     eAlign = pBox->meAlign;
+    long            n = 0;
+    long            nHalfSize;
+    if ( bLeft )
+        eAlign = WINDOWALIGN_RIGHT;
+    else if ( bTop )
+        eAlign = WINDOWALIGN_BOTTOM;
+
+    nHalfSize = nSize/2;
+
+    Point p[6];
+
+    switch ( eAlign )
+    {
+        case WINDOWALIGN_LEFT:
+            p[0].X() = nX-1; p[0].Y() = nY-1;
+            p[1].X() = nX-1; p[1].Y() = nY+nSize+1;
+            p[2].X() = nX+1; p[2].Y() = nY+nSize+1;
+            p[3].X() = nX+nHalfSize+1; p[3].Y() = nY+nHalfSize+1;
+            p[4].X() = nX+nHalfSize+1; p[4].Y() = nY+nHalfSize-1;
+            p[5].X() = nX+1; p[5].Y() = nY-1;
+            break;
+        case WINDOWALIGN_TOP:
+            p[0].X() = nX-1; p[0].Y() = nY-1;
+            p[1].X() = nX-1; p[1].Y() = nY+1;
+            p[2].X() = nX+nHalfSize-1; p[2].Y() = nY+nHalfSize+1;
+            p[3].X() = nX+nHalfSize+1; p[3].Y() = nY+nHalfSize+1;
+            p[4].X() = nX+nSize+1; p[4].Y() = nY+1;
+            p[5].X() = nX+nSize+1; p[5].Y() = nY-1;
+            break;
+        case WINDOWALIGN_RIGHT:
+            p[0].X() = nX+nHalfSize-1; p[0].Y() = nY-1;
+            p[1].X() = nX-1; p[1].Y() = nY+nHalfSize-1;
+            p[2].X() = nX-1; p[2].Y() = nY+nHalfSize+1;
+            p[3].X() = nX+nHalfSize-1; p[3].Y() = nY+nSize+1;
+            p[4].X() = nX+nHalfSize+1; p[4].Y() = nY+nSize+1;
+            p[5].X() = nX+nHalfSize+1; p[5].Y() = nY-1;
+            break;
+        case WINDOWALIGN_BOTTOM:
+            p[0].X() = nX-1; p[0].Y() = nY+nHalfSize-1;
+            p[1].X() = nX-1; p[1].Y() = nY+nHalfSize+1;
+            p[2].X() = nX+nSize+1; p[2].Y() = nY+nHalfSize+1;
+            p[3].X() = nX+nSize+1; p[3].Y() = nY+nHalfSize-1;
+            p[4].X() = nX+nHalfSize+1; p[4].Y() = nY-1;
+            p[5].X() = nX+nHalfSize-1; p[5].Y() = nY-1;
+            break;
+    }
+    Polygon aPoly(6,p);
+    Region aRgn( aPoly );
+    pBox->SetClipRegion( aRgn );
+}
+
 // -----------------------------------------------------------------------
 
 void ToolBox::ImplDrawSpin( BOOL bUpperIn, BOOL bLowerIn )
@@ -3091,6 +3147,7 @@ void ToolBox::ImplDrawItem( USHORT nPos, BOOL bHighlight, BOOL bPaint, BOOL bLay
     // Evt. noch Pfeil rechts/oben in der Ecke zeichnen
     if ( pItem->mnBits & TIB_DROPDOWN )
     {
+
         Point aArrowPos( nOffX, nOffY );
         // shadows
         if( bHighlight == 2 )
@@ -3117,6 +3174,14 @@ void ToolBox::ImplDrawItem( USHORT nPos, BOOL bHighlight, BOOL bPaint, BOOL bLay
         else
             aClearRect.Right()  += 2;
 
+        Region aOldRegion = GetClipRegion();
+
+        // set expanded arrow as clipping region
+        SetToolArrowClipregion( this, aArrowPos.X(), aArrowPos.Y() );
+
+        aClearRect.Right()+=2;
+        aClearRect.Bottom()+=2;
+
         Erase( aClearRect );
 
         BOOL bColTransform = FALSE;
@@ -3136,6 +3201,9 @@ void ToolBox::ImplDrawItem( USHORT nPos, BOOL bHighlight, BOOL bPaint, BOOL bLay
             SetFillColor( COL_LIGHTGREEN );
             bBlack = TRUE;
         }
+
+        SetClipRegion( aOldRegion );
+
         ImplDrawToolArrow( this, aArrowPos.X(), aArrowPos.Y(), bBlack, bColTransform );
         SetLineColor( aOldLineColor );
         SetFillColor( aOldFillColor );
