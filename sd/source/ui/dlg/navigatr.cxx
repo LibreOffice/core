@@ -2,9 +2,9 @@
  *
  *  $RCSfile: navigatr.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: cl $ $Date: 2002-05-30 12:53:39 $
+ *  last change: $Author: ka $ $Date: 2002-10-23 09:37:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -736,25 +736,21 @@ NavDocInfo* SdNavigatorWin::GetDocInfo()
 
 long SdNavigatorWin::ParentNotify(NotifyEvent& rNEvt)
 {
-    long nOK = FALSE;
-
     const KeyEvent* pKEvt = rNEvt.GetKeyEvent();
+    long            nOK = FALSE;
 
-    if (pKEvt)
+    if( pKEvt )
     {
-        USHORT nCode = pKEvt->GetKeyCode().GetCode();
-
-        if (nCode == KEY_ESCAPE)
+        if( KEY_ESCAPE == pKEvt->GetKeyCode().GetCode() )
         {
             SdViewShell* pViewShell = (SdViewShell*) pBindings->GetDispatcher()->GetFrame()->GetViewShell();
 
-            if (pViewShell)
+            if( pViewShell )
             {
                 FuSlideShow* pFuSlideShow = pViewShell->GetSlideShow();
 
-                if (pFuSlideShow && !pFuSlideShow->IsLivePresentation())
+                if( pFuSlideShow )
                 {
-                    // Im Native-Mode soll ESC die Pr„sentation beenden
                     nOK = TRUE;
                     pFuSlideShow->Terminate();
                 }
@@ -762,12 +758,10 @@ long SdNavigatorWin::ParentNotify(NotifyEvent& rNEvt)
         }
     }
 
-    if (!nOK)
-    {
-        nOK = Window::Notify(rNEvt);
-    }
+    if( !nOK )
+        nOK = Window::Notify( rNEvt );
 
-    return (nOK);
+    return( nOK );
 }
 
 
