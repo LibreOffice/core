@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrolmodel.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-13 15:57:30 $
+ *  last change: $Author: jl $ $Date: 2001-03-21 14:24:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -780,7 +780,7 @@ void UnoControlModel::read( const ::com::sun::star::uno::Reference< ::com::sun::
                     sal_Int32 n = InStream->readLong();
                     aValue <<= n;
                 }
-                else if ( *pType == ::getCppuType((const Double*)0) )
+                else if ( *pType == ::getCppuType((const double*)0) )
                 {
                     double n = InStream->readDouble();
                     aValue <<= n;
