@@ -2,9 +2,9 @@
  *
  *  $RCSfile: desktop.src,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-07 14:51:36 $
+ *  last change: $Author: lo $ $Date: 2003-11-10 13:32:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1749,8 +1749,8 @@ ModalDialog DLG_LICENSE
         {
             ImageBitmap = Bitmap
             {
-                File = "arrow.bmp" ;
-                File[ arabic ] = "m_arrow.bmp" ;
+                File = "../res/arrow.bmp" ;
+                File[ arabic ] = "../res/m_arrow.bmp" ;
             };
             MaskColor = Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
         };
