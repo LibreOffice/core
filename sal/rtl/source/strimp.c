@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strimp.c,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: th $ $Date: 2001-04-03 12:03:57 $
+ *  last change: $Author: pl $ $Date: 2001-07-13 17:05:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,130 +112,78 @@ static sal_Int32 rtl_ImplFloatNumToString( sal_Char* pStr,
                                            sal_Int16 nSignificantDigits )
 {
     sal_Char*   pTempStr = pStr;
-    sal_Char*   pEndStr;
-    sal_Int16   i;
     sal_Int16   nDigit;
-    sal_Int16   nDotPos;
-    sal_Int16   nExpDigits;
-    sal_Bool    bExp;
-    sal_Bool    bDotSet;
-    double      dExp;
-    double      dRem;
+    int         nExp;
+    int         nPowTen;
+    int         nIntegralPart;
+    double      fEpsilon;
 
     if ( d == 0.0 )
     {
-        *pTempStr = '0';
-        *pTempStr++;
-        *pTempStr = '.';
-        *pTempStr++;
-        *pTempStr = '0';
-        *pTempStr++;
+        *pTempStr++ = '0';
+        *pTempStr++ = '.';
+        *pTempStr++ = '0';
     }
     else
     {
         if ( d < 0.0 )
         {
-            *pTempStr = '-';
-            *pTempStr++;
+            *pTempStr++ = '-';
             d = -d;
         }
 
-        dExp = log10( d );
-        bExp = sal_False;
-        if ( (dExp > 7) || (dExp <= -7) )
-            bExp = sal_True;
+        nExp = (int)log10( d );
+        if ( (nExp < 8) && (nExp > -7) )
+            nExp = 0;
 
-        dExp = floor( dExp );
-        d /= pow( 10, dExp );
-        while ( d > 10 )
+        d /= pow( 10, nExp );
+        if( nExp < 0 && d < 1.0 )
+            d *= 10.0, nExp--;
+
+        if( d >= 1.0 )
         {
-            d /= 10.0;
-            dExp += 1.0;
-        }
+            nPowTen = (int)pow( 10, floor( log10( d ) ) );
+            nIntegralPart = (int)d;
+            d -= (double)nIntegralPart;
 
-        if ( d < 1.0 )
-            nSignificantDigits++;
-
-        nDotPos = bExp ? 0 : (sal_Int16)dExp;
-        bDotSet = sal_False;
-
-        /* handle leading zeros */
-        if ( nDotPos < 0 )
-        {
-            *pTempStr = '0';
-            *pTempStr++;
-            *pTempStr = '.';
-            *pTempStr++;
-            while( ++nDotPos < 0 )
+            do
             {
-                *pTempStr = '0';
-                *pTempStr++;
-            }
-            pEndStr = pTempStr;
-            bDotSet = sal_True;
+                nDigit = nIntegralPart / nPowTen;
+                *pTempStr++ = nDigit + '0';
+                nIntegralPart -= nPowTen * nDigit;
+                nPowTen /= 10;
+                nSignificantDigits--;
+            } while( nPowTen );
         }
         else
-            pEndStr = pTempStr;
-
-        for ( i=0; i < nSignificantDigits; i++ )
+            *pTempStr++ = '0';
+        *pTempStr++ = '.';
+        /* avoid trailing zeros */
+        fEpsilon = pow( 10, -nSignificantDigits );
+        do
         {
-            nDigit = (sal_Int16)d;
-            *pTempStr = '0' + nDigit;
-            *pTempStr++;
-            if ( i == nDotPos && !bDotSet )
-            {
-                *pTempStr = '.';
-                *pTempStr++;
-                pEndStr = pTempStr+1;   /* We want one 0 behind the . */
-            }
-            else if ( nDigit )
-                pEndStr = pTempStr;
+            d *= 10, fEpsilon *= 10;
+            nIntegralPart = (int)d;
+            d -= (double)nIntegralPart;
+            *pTempStr++ = nIntegralPart + '0';
+        } while( d >= fEpsilon && --nSignificantDigits > 0 );
 
-            d -= (double)nDigit;
-            d *= 10.0;
-        }
-
-        /* Add/Kill trailing zeros */
-        while ( pTempStr < pEndStr )
+        if( nExp )
         {
-            *pTempStr = '0';
-            pTempStr++;
-        }
-        pTempStr = pEndStr;
-
-        /* exponent */
-        if ( bExp )
-        {
-            *pTempStr = 'E';
-            *pTempStr++;
-            if ( dExp < 0.0 )
+            *pTempStr++ = 'E';
+            if( nExp < 0 )
             {
-                dExp = -dExp;
-                *pTempStr = '-';
-                *pTempStr++;
+                *pTempStr++ = '-';
+                nExp = -nExp;
             }
-
-            nExpDigits = 1;
-            while ( dExp >= 10.0 )
+            nPowTen = (int)pow( 10, floor( log10( (double)nExp ) ) );
+            do
             {
-                nExpDigits++;
-                dExp /= 10;
-            }
-            for ( i=0; i < nExpDigits; i++ )
-            {
-                nDigit = (sal_Int16)dExp; /* sometimes if the debugger shows dExp= 2, the cast produces 1 */
-                dRem = fmod( dExp, 1 );
-
-                /* max exponent is about 357 */
-                if ( dRem >0.999 )
-                    nDigit++;
-
-                *pTempStr = '0' + nDigit;
-                *pTempStr++;
-
-                dExp -= (double)nDigit;
-                dExp *= 10.0;
-            }
+                nDigit = nExp / nPowTen;
+                *pTempStr++ = nDigit + '0';
+                nExp -= nPowTen*nDigit;
+                nPowTen /= 10;
+            } while( nPowTen );
         }
     }
 
