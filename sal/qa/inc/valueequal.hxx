@@ -41,34 +41,37 @@ bool is_equal(T x, T y, sal_Int16 _nPrec)
     //      we have to use %lf instead.
 
     if (_nPrec != PREC_long_double)
-        printf("# double equal: %.20f\n#               %.20f\n", x, y);
+    {
+        t_print(T_VERBOSE, "double equal: %.20f\n", x);
+        t_print(T_VERBOSE, "              %.20f\n", y);
+    }
 
     sal_Int32 nPrecOfN = -nPRECISION + sal_Int32( log10(x) );
 
     if (_nPrec != PREC_long_double)
-        printf("# prec: %d\n", nPrecOfN);
+        t_print(T_VERBOSE, "prec: %d\n", nPrecOfN);
 
     T nPrec = pow(10, nPrecOfN) * 1;
 
     if (_nPrec != PREC_long_double)
-        printf("#         prec: %.20f\n", nPrec);
+        t_print(T_VERBOSE, "        prec: %.20f\n", nPrec);
 
     T nDelta = fabs( x - y );
 
     if (_nPrec != PREC_long_double)
     {
-        printf("#        delta: %.20f\n", nDelta);
-        printf("# delta must be less or equal to prec!\n\n");
+        t_print(T_VERBOSE, "       delta: %.20f\n", nDelta);
+        t_print(T_VERBOSE, "delta must be less or equal to prec!\n\n");
     }
 
     if (nDelta > nPrec)
     {
-        // printf("# values are not equal! ndelta:%.20f\n", nDelta);
+        // t_print(T_VERBOSE, "values are not equal! ndelta:%.20f\n", nDelta);
         return false;
     }
     // else
     // {
-    // printf("# values are equal.     ndelta:%.20f\n", nDelta);
+    // t_print(T_VERBOSE, "values are equal.     ndelta:%.20f\n", nDelta);
     return true;
     // }
 }
@@ -90,25 +93,25 @@ bool is_equal(T x, T y, sal_Int16 _nPrec)
 // LLA:         y = -y;
 // LLA:     }
 // LLA:
-// LLA:     printf("# double equal: %.20f\n#               %.20f\n", x, y);
+// LLA:     t_print(T_VERBOSE, "double equal: %.20f\n#               %.20f\n", x, y);
 // LLA:     sal_Int32 nPrecOfN = -nPRECISION + sal_Int32( log10(x) );
 // LLA:
-// LLA:     printf("# prec: %d\n", nPrecOfN);
+// LLA:     t_print(T_VERBOSE, "prec: %d\n", nPrecOfN);
 // LLA:     double nPrec = pow(10, nPrecOfN) * 1;
 // LLA:
-// LLA:     printf("#         prec: %.20f\n", nPrec);
+// LLA:     t_print(T_VERBOSE, "        prec: %.20f\n", nPrec);
 // LLA:
 // LLA:     double nDelta = fabs( x - y );
-// LLA:     printf("#        delta: %.20f\n\n", nDelta);
+// LLA:     t_print(T_VERBOSE, "       delta: %.20f\n\n", nDelta);
 // LLA:
 // LLA:     if (nDelta > nPrec)
 // LLA:     {
-// LLA:         // printf("# values are not equal! ndelta:%.20f\n", nDelta);
+// LLA:         // t_print(T_VERBOSE, "values are not equal! ndelta:%.20f\n", nDelta);
 // LLA:         return false;
 // LLA:     }
 // LLA:     // else
 // LLA:     // {
-// LLA:     // printf("# values are equal.     ndelta:%.20f\n", nDelta);
+// LLA:     // t_print(T_VERBOSE, "values are equal.     ndelta:%.20f\n", nDelta);
 // LLA:     return true;
 // LLA:     // }
 // LLA: }
