@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: obo $ $Date: 2004-03-17 13:15:03 $
+#   last change: $Author: rt $ $Date: 2004-08-20 12:34:55 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -87,6 +87,7 @@ UNOUCROUT=	$(OUT)$/inc
 INCPRE+=	$(OUT)$/inc -I$(ATL_INCLUDE)
 
 
+.IF "$(NETTOOLKIT)"==""
 UNOTYPES= \
     com.sun.star.lang.XMultiServiceFactory \
     com.sun.star.script.XInvocation \
@@ -127,6 +128,7 @@ APP1STDLIBS= \
 
 APP1DEF=	$(MISC)\$(APP1TARGET).def
 
+.ENDIF  # "$(NETTOOLKIT)"==""
 # --- Targets ---
 
 .INCLUDE : target.mk
