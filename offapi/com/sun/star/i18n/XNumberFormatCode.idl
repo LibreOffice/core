@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XNumberFormatCode.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:05:51 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 20:46:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ module com { module sun { module star { module i18n {
     Access number format codes defined in locale data.
  */
 
-interface XNumberFormatCode : com::sun::star::uno::XInterface
+published interface XNumberFormatCode : com::sun::star::uno::XInterface
 {
     //------------------------------------------------------------------------
     /**
