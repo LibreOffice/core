@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxhelp.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: kz $ $Date: 2004-12-16 12:37:28 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 13:01:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -879,6 +879,7 @@ XubString SfxHelp::GetHelpText( const String& aCommandURL, const Window* pWindow
 {
     String sModuleName = GetHelpModuleName_Impl();
     String sHelpText = pImp->GetHelpText( aCommandURL, sModuleName );
+
     // add some debug information?
     if ( bIsDebug )
     {
