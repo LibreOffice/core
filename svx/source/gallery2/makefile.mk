@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: hr $ $Date: 2004-02-03 19:17:05 $
+#   last change: $Author: rt $ $Date: 2004-05-21 09:43:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -94,6 +94,7 @@ EXCEPTIONSFILES =	\
                     $(SLO)$/galbrws1.obj	
 
 RESLIB1NAME = $(TARGET)
+RESLIB1IMAGES = $(PRJ)$/res
 RESLIB1SRSFILES = $(SRS)$/$(TARGET).srs
 
 # --- Targets --------------------------------------------------------------
