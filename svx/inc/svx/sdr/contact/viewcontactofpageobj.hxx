@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewcontactofpageobj.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:26:55 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 13:31:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,18 @@ namespace sdr
             // only needs to refresh maPaintRectangle itself.
             virtual void CalcPaintRectangle();
 
+            /** Return the rectangle that specifies where and how large the
+                page will be painted.  This rectangle will usually be
+                identical to the one returned by GetPaintRectangle().
+                The returned rectangle has to lie completly inside the
+                rectangle returned by GetPaintRectangle().  Making it
+                smaller results in a border arround the page rectangle.
+
+                Note: This method may calculate and store internally the
+                requested rectangle and thus can not be const.
+            */
+            virtual Rectangle GetPageRectangle (void);
+
             // get rid of evtl. remembered PagePainter
             void GetRidOfPagePainter();
 
@@ -121,15 +133,26 @@ namespace sdr
             // mpPagePainter
             void PreparePagePainter(const SdrPage* pPage);
 
-            // Paint support methods for page content painting
+            /** Paint support methods for page content painting
+                @param rPaintRectangle
+                    The painting of the page content will be transformed so
+                    that it fills exactly this rectangle.  Usually this will
+                    be the paint rectangle.  Making the content rectangle
+                    smaller will result in a border between the outer paint
+                    rectangle (the bounding box) and the page content
+                    rectangle.
+            */
             sal_Bool PaintPageContents(
-                DisplayInfo& rDisplayInfo, Rectangle& rPaintRectangle,
+                DisplayInfo& rDisplayInfo,
+                const Rectangle& rPaintRectangle,
                 const ViewObjectContact& rAssociatedVOC);
             sal_Bool PaintPageReplacement(
-                DisplayInfo& rDisplayInfo, Rectangle& rPaintRectangle,
+                DisplayInfo& rDisplayInfo,
+                const Rectangle& rPaintRectangle,
                 const ViewObjectContact& rAssociatedVOC);
             sal_Bool PaintPageBorder(
-                DisplayInfo& rDisplayInfo, Rectangle& rPaintRectangle,
+                DisplayInfo& rDisplayInfo,
+                const Rectangle& rPaintRectangle,
                 const ViewObjectContact& rAssociatedVOC);
 
             // On StopGettingViewed the PagePainter can be dismissed.
