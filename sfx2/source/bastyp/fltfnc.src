@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltfnc.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 14:12:58 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 18:11:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ String STR_FILTER_CHANNELON_OFFLINE
     Text[ japanese ] = "γ“γ®θ³Όθª­γ―γ‚ªγƒ•γƒ©γ‚¤γƒ³γƒΆγƒΌγƒ‰θ¨­ε®γ«γ‚‚γ¨γ¥γ„γ¦θª­γΏε–γ‚‰γ‚γΎγ™γ€‚\n\n%PRODUCTNAME γ―ηΎε¨γ‚ªγƒ³γƒ©γ‚¤γƒ³γƒΆγƒΌγƒ‰γ«γªγ£γ¦γ„γΎγ™γ€‚%PRODUCTNAME γ‚’γ‚ªγƒ•γƒ©γ‚¤γƒ³γƒΆγƒΌγƒ‰γ«ε‡γ‚ζ›γγΎγ™γ‹γ€‚";
     Text[ chinese_traditional ] = "ζ‰η…§θ¨­ε®δ½Ώη”¨θ€…δ½Ώη”¨ι›Άη·ι–±θ®€ζ¨΅εΌγ€‚\n\n%PRODUCTNAME ηΎε¨θ™•ζ–Όη·δΈη‹€ζ…‹γ€‚ζ‚¨θ¦θ®“ %PRODUCTNAME θ½‰ε°ι€£η·ζ¨΅εΌοΌ";
     Text[ arabic ] = "νΜΘ Γδ νήΡΓ εΠΗ ΗαΗΤΚΡΗί΅ ΝΣΘ ΗαΕΪΟΗΟΗΚ΅ έν ζΦΪ ΗαΗδέΥΗα.\n\n%PRODUCTNAMEΝΗανΗπ έν ζΦΪ ΗαΗΚΥΗα. εα ΚΡνΟ ΚΫννΡ %PRODUCTNAME ΗαΒδ Εαμ ζΦΪ ΗαΗδέΥΗαΏ";
-    Text[ greek ] = "Η ανάγνωση αυτής της συνδρομής θα πρέπει να γίνει, βάσει των ρυθμίσεων, σε κατάσταση 'Χωρίς σύνδεση'.\n\nΤο %PRODUCTNAME βρίσκεται όμως σε κατάσταση ";
+    Text[ greek ] = "Αυτή η συνδρομή έχει οριστεί να διαβάζεται μόνο σε λειτουργία χωρίς σύνδεση.\n\nΤο %PRODUCTNAME είναι αυτή τη στιγμή σε λειτουργία με σύνδεση. Θέλετε να γίνει τώρα μετάβαση σε λειτουργία χωρίς σύνδεση;";
     Text[ korean ] = "κ°€μ…μ€ μ„¤μ •μ— λ”°λΌ  μ¤ν”„λΌμΈ λª¨λ“μ—μ„ μ½μ–΄μ•Ό ν•©λ‹λ‹¤.\n\n%PRODUCTNAMEμ€(λ”) ν„μ¬ μ¨λΌμΈ λª¨λ“μ— μμµλ‹λ‹¤. μ§€κΈ μ¤ν”„λΌμΈ λª¨λ“λ΅ μ „ν™ν•κ² μµλ‹κΉ?";
     Text[ turkish ] = "Bu όyelik, ηevrimdύώύ kipte okunmak όzere ayarlanmύώtύr.\n\n%PRODUCTNAME ώu an ηevrimiηi kipinde. %PRODUCTNAME, ηevrimdύώύ kipe geηsin mi?";
     Text[ language_user1 ] = " ";
@@ -202,7 +202,7 @@ String STR_FILTER_CONSULT_SERVICE
     Text[ danish ] = "De udvalgte filter $(FILTER) er ikke indeholdt i din version.\nDu kan finde informationer omkring ordremuligheder pε vores hjemmeside.";
     Text[ swedish ] = "Det utvalda filtret $(FILTER) finns inte med i din version.\nDu hittar information om bestδllningsmφjligheter pε vεr hemsida.";
     Text[ polish ] = "Wybrany filtr $(FILTER) nie jest do³Ήczony do zainstalowanej edycji.\nInformacje na temat zamawiania sΉ dostκpne na naszej stronie internetowej.";
-    Text[ portuguese_brazilian ] = "O filtro selecionado $(FILTER) nγo estα incluνdo na sua ediηγo\nVocκ pode encontrar informaηυes sobre como adquirν-las na nossa pαgina principal.";
+    Text[ portuguese_brazilian ] = "O filtro selecionado $(FILTER) nγo estα incluνdo na sua ediηγo\nVocκ pode encontrar informaηυes sobre como adquiri-las na nossa pαgina principal.";
     Text[ japanese ] = "ιΈζγ•γ‚γγƒ•γ‚£γƒ«γ‚Ώ$(FILTER)γ―γƒ¦γƒΌγ‚¶γƒΌγ®δ½Ώη”¨η‰γ«ε«γΎγ‚γ¦γΎγ›γ‚“γ€‚\nζ³¨ζ–‡ε―θƒ½γªζƒ…ε ±γ―γ‚γη¤Ύγ®γƒ›γƒΌγƒ γƒγƒΌγ‚·γ§ζ‰‹γ«ε…¥γ‚γ‚‰γ‚γΎγ™γ€‚";
     Text[ chinese_simplified ] = "θΏ™δΈªη‰ζ¬θΏζ²΅ζ‰ζδΎ›ζ‚¨ζ‰€ι€‰ζ‹©η„θ½¬ζΆε™¨ $(FILTER)γ€‚\nζ‚¨ε‚ι…ζ‘δ»¬ε…¬εΈη„η½‘ι΅µζδΎ›ε®θ΄­θ½―δ»¶η„δΏ΅ζ―γ€‚";
     Text[ chinese_traditional ] = "ι€™ε€‹η‰ζ¬ι‚„ζ²’ζ‰ζδΎ›ζ‚¨ιΈζ“‡η„η―©ιΈε™¨ $(FILTER)γ€‚\nθ«‹εƒι–±ζ‘ε€‘η„η¶²ι ζδΎ›η„ε®θ³Όθ»ι«”η„θ³‡θ¨γ€‚";
@@ -219,6 +219,7 @@ String STR_FILTER_CONSULT_SERVICE
     Text[ hindi ] = "ΰ¤ΰ¥ΰ¤¨ΰ¤Ύ ΰ¤Ήΰ¥ΰ¤† ΰ¤«ΰ¤Όΰ¤Ώΰ¤²ΰ¥ΰ¤ΰ¤° $(FILTER) ΰ¤•ΰ¥‹ ΰ¤†ΰ¤ªΰ¤•ΰ¥‡ ΰ¤ªΰ¥ΰ¤°ΰ¤•ΰ¤Ύΰ¤¶ΰ¤¨ ΰ¤®ΰ¥‡ΰ¤‚ ΰ¤Έΰ¤®ΰ¥ΰ¤®ΰ¤Ώΰ¤²ΰ¤Ώΰ¤¤ ΰ¤¨ΰ¤Ήΰ¥€ΰ¤‚ ΰ¤•ΰ¤Ώΰ¤―ΰ¤Ύ ΰ¤Ήΰ¥ ΰ¥¤\nΰ¤Ήΰ¤®ΰ¥ΰ¤Ήΰ¤Ύΰ¤°ΰ¥‡ ΰ¤®ΰ¥ΰ¤–ΰ¥ΰ¤― ΰ¤ªΰ¥ƒΰ¤·ΰ¥ΰ¤  ΰ¤®ΰ¥‡ΰ¤‚ ΰ¤†ΰ¤ª ΰ¤‘ΰ¤°ΰ¥ΰ¤΅ΰ¤° ΰ¤•ΰ¥‡ ΰ¤¬ΰ¤Ύΰ¤° ΰ¤®ΰ¥‡ΰ¤‚ ΰ¤µΰ¤Ώΰ¤·ΰ¤― ΰ¤…ΰ¤¨ΰ¥ΰ¤µΰ¥‡ΰ¤·ΰ¤£ ΰ¤•ΰ¤° ΰ¤Έΰ¤•ΰ¤¤ΰ¥‡ ΰ¤Ήΰ¥ ΰ¥¤";
     Text[ slovak ] = "VybranΓ½ filter $(FILTER) nebol zahrnutΓ½ vo vaΕ΅ej verzii programu.\nInformΓ΅cie o objednΓ΅vkach mΓ΄ΕΎete nΓ΅jsΕ¥ na naΕ΅ich domovskΓ½ch strΓ΅nkach.";
 };
+
 
 
 
