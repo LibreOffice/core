@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: lo $ $Date: 2004-02-06 10:15:05 $
+#   last change: $Author: rt $ $Date: 2004-05-11 15:51:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -72,6 +72,8 @@ TARGET=so_libxml2
 # --- Files --------------------------------------------------------
 
 LIBXML2VERSION=2.5.11
+
+NO_SHL1DESCRIPTION=TRUE
 
 TARFILE_NAME=$(PRJNAME)-$(LIBXML2VERSION)
 PATCH_FILE_NAME=$(TARFILE_NAME).patch
