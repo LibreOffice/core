@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-26 08:08:12 $
+ *  last change: $Author: ka $ $Date: 2002-08-26 08:31:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -585,10 +585,25 @@ OutputDevice* PDFWriterImpl::getReferenceDevice()
 {
     if( ! m_pReferenceDevice )
     {
-        VirtualDevice* pVDev = new VirtualDevice( 0 );
+        VirtualDevice*  pVDev = new VirtualDevice( 0 );
+        sal_Int32       nDPI;
+
         m_pReferenceDevice = pVDev;
+
+        switch( m_eCompression )
+        {
+            case( PDFWriter::Print ): nDPI = 1200; break;
+            case( PDFWriter::Press ): nDPI = 2400; break;
+
+            default:
+                nDPI = 600;
+            break;
+        }
+
         pVDev->SetOutputSizePixel( Size( 640, 480 ) );
         pVDev->SetMapMode( MAP_MM );
+        pVDev->mnDPIX = pVDev->mnDPIY = nDPI;
+
         m_pReferenceDevice->mpPDFWriter = this;
         m_pReferenceDevice->ImplUpdateFontData( TRUE );
     }
