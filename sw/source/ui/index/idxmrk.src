@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idxmrk.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 19:07:32 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 03:35:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,35 +66,8 @@
 #include "cmdid.h"
 
 #define     IDX_PHONETIC_LISTBOX_DESCRIPTION \
-Text = "Phonetische Lesart"; \
-Text[English] = "Phonetic reading"; \
-Text[ english_us ] = "Phonetic reading";    \
-    Text[ portuguese ] = "Phonetic reading";    \
-    Text[ russian ] = "Phonetic reading";   \
-    Text[ greek ] = "Phonetic reading"; \
-    Text[ dutch ] = "Phonetic reading"; \
-    Text[ french ] = "Lecture phonétique";  \
-    Text[ spanish ] = "Lectura fonética";   \
-    Text[ finnish ] = "Phonetic reading";   \
-    Text[ italian ] = "Lettura fonetica";   \
-    Text[ danish ] = "Fonetisk læsning";    \
-    Text[ swedish ] = "Fonetiskt uttal";    \
-    Text[ polish ] = "Phonetic reading";    \
-    Text[ portuguese_brazilian ] = "Leitura fonética";  \
-    Text[ japanese ] = "èª­ã¿";    \
-    Text[ korean ] = "ë°œìŒ í‘œê¸°";   \
-    Text[ chinese_simplified ] = "è¯­éŸ³æè¿°";    \
-    Text[ chinese_traditional ] = "èªéŸ³æè¿°";   \
-    Text[ turkish ] = "Fonetik okuma";  \
-    Text[ arabic ] = "Phonetic reading";    \
-    Text[ catalan ] = "Phonetic reading";   \
-    Text[ thai ] = "Phonetic reading";  \
-    Text[ czech ] = "FonetickÃ© ÄtenÃ­";   \
-    Text[ hebrew ] = "Phonetische Lesart";  \
-    Text[ hindi ] = "Phonetic reading"; \
-    Text[ slovak ] = "FonetickÃ© ÄÃ­tanie"; \
-    Text[ hungarian ] = "Fonetikus Ã¡tirat"; \
-    Text[ slovenian ] = "FonetiÄna transkripcija";
+Text [ de ] = "Phonetische Lesart"; \
+Text [ en-US ] = "Phonetic reading";
 
 #define IDX_DIALOG_WINDOW \
     Window WIN_DLG                                                  \
@@ -107,71 +80,17 @@ Text[ english_us ] = "Phonetic reading";    \
             Size = MAP_APPFONT ( 50 , RSC_CD_PUSHBUTTON_HEIGHT ) ;                        \
             TabStop = TRUE ;                                        \
             DefButton = TRUE ;                                      \
-            Text = "Einfügen";                                      \
-            Text[English] = "Insert";                               \
-            Text[ english_us ] = "Insert";\
-            Text[ portuguese ] = "Inserir";\
-            Text[ russian ] = "Âñòàâèòü";\
-            Text[ greek ] = "ÅéóáãùãŞ";\
-            Text[ dutch ] = "Invoegen";\
-            Text[ french ] = "Insérer";\
-            Text[ spanish ] = "Insertar";\
-            Text[ italian ] = "Inserisci";\
-            Text[ danish ] = "Indsæt";\
-            Text[ swedish ] = "Infoga";\
-            Text[ polish ] = "Wstaw";\
-            Text[ portuguese_brazilian ] = "Inserir";\
-            Text[ japanese ] = "æŒ¿å…¥";\
-            Text[ korean ] = "ì‚½ì…";\
-            Text[ chinese_simplified ] = "æ’å…¥";\
-            Text[ chinese_traditional ] = "æ’å…¥";\
-            Text[ arabic ] = "ÅÏÑÇÌ";\
-            Text[ turkish ] = "Ekle";\
-            Text[ language_user1 ] = " ";\
-            Text[ catalan ] = "Insereix";\
-            Text[ finnish ] = "Lisää";\
-            Text[ thai ] = "à¹à¸—à¸£à¸";\
-            Text[ czech ] = "VloÅ¾it";\
-            Text[ hebrew ] = "â€®×”×•×¡×¤×”â€¬";\
-            Text[ hindi ] = "à¤œà¥‹à¤¡à¤¼à¥‹";\
-            Text[ slovak ] = "VloÅ¾iÅ¥";\
-            Text[ hungarian ] = "BeszÃºrÃ¡s";\
-            Text[ slovenian ] = "Vstavi";\
+            Text [ de ] = "Einfügen";                                      \
+            Text [ en-US ] = "Insert";\
+            Text [ x-comment ] = " ";\
         };                                                          \
         CancelButton BT_CANCEL                                      \
         {                                                           \
             Pos = MAP_APPFONT ( COL_BUTTONS , 23 ) ;                        \
             Size = MAP_APPFONT ( 50 , RSC_CD_PUSHBUTTON_HEIGHT ) ;                        \
-            Text = "Schließen";                                     \
-            Text[English] = "Close";                                \
-            Text[ english_us ] = "Close";\
-            Text[ portuguese ] = "Fechar";\
-            Text[ russian ] = "Çàêğûòü";\
-            Text[ greek ] = "Êëåßóéìï";\
-            Text[ dutch ] = "Sluiten";\
-            Text[ french ] = "Fermer";\
-            Text[ spanish ] = "Cerrar";\
-            Text[ italian ] = "Chiudi";\
-            Text[ danish ] = "Luk";\
-            Text[ swedish ] = "Stäng";\
-            Text[ polish ] = "Zamknij";\
-            Text[ portuguese_brazilian ] = "Fechar";\
-            Text[ japanese ] = "é–‰ã˜ã‚‹";\
-            Text[ korean ] = "ë‹«ê¸°";\
-            Text[ chinese_simplified ] = "å…³é—­";\
-            Text[ chinese_traditional ] = "é—œé–‰";\
-            Text[ arabic ] = "ÅÛáÇŞ";\
-            Text[ turkish ] = "Kapat";\
-            Text[ language_user1 ] = " ";\
-            Text[ catalan ] = "Tanca";\
-            Text[ finnish ] = "Sulje";\
-            Text[ thai ] = "à¸›à¸´à¸”";\
-            Text[ czech ] = "ZavÅ™Ã­t";\
-            Text[ hebrew ] = "â€®×¡×’×™×¨×”â€¬";\
-            Text[ hindi ] = "à¤¬à¤¨à¥à¤¦ à¤•à¤°à¥‹";\
-            Text[ slovak ] = "ZavrieÅ¥";\
-            Text[ hungarian ] = "BezÃ¡rÃ¡s";\
-            Text[ slovenian ] = "Zapri";\
+            Text [ de ] = "Schließen";                                     \
+            Text [ en-US ] = "Close";\
+            Text [ x-comment ] = " ";\
         };                                                          \
         HelpButton BT_HELP                                          \
         {                                                           \
@@ -182,38 +101,10 @@ Text[ english_us ] = "Phonetic reading";    \
         {                                                           \
             Pos = MAP_APPFONT ( COL_BUTTONS , 63 ) ;                        \
             Size = MAP_APPFONT ( 50 , RSC_CD_PUSHBUTTON_HEIGHT ) ;                        \
-            Text = "L~öschen" ;                                     \
-            Text [ ENGLISH ] = "~Delete" ;                          \
-            Text [ norwegian ] = "~Slett" ;                         \
-            Text [ italian ] = "~Elimina" ;                         \
-            Text [ portuguese_brazilian ] = "E~xcluir" ;             \
-            Text [ portuguese ] = "E~liminar" ;                     \
-            Text [ finnish ] = "~Poista" ;                          \
-            Text [ danish ] = "~Slet" ;                              \
-            Text [ french ] = "Supprimer" ;                        \
-            Text [ swedish ] = "~Radera" ;                         \
-            Text [ dutch ] = "~Wissen" ;                            \
-            Text [ spanish ] = "~Borrar" ;                        \
-            Text [ english_us ] = "~Delete" ;                       \
+            Text [ de ] = "L~öschen" ;                                     \
+            Text [ en-US ] = "~Delete" ;                       \
             TabStop = TRUE ;                                        \
-            Text[ chinese_simplified ] = "åˆ é™¤(~D)";               \
-            Text[ russian ] = "Óäàëèòü";                            \
-            Text[ polish ] = "~Usuñ";                                \
-            Text[ japanese ] = "å‰Šé™¤(~D)";                         \
-            Text[ chinese_traditional ] = "åˆªé™¤(~D)";              \
-            Text[ arabic ] = "ÍĞİ";                                 \
-            Text[ greek ] = "ÄéáãñáöŞ";\
-            Text[ korean ] = "ì‚­ì œ(~D)";\
-            Text[ turkish ] = "~Sil";\
-            Text[ language_user1 ] = " ";\
-            Text[ catalan ] = "~Suprimeix";\
-            Text[ thai ] = "~à¸¥à¸š";\
-            Text[ czech ] = "Smazat";\
-            Text[ hebrew ] = "â€®××—×™×§×”â€¬";\
-            Text[ hindi ] = "~à¤®à¤¿à¤Ÿà¤¾à¤“";\
-            Text[ slovak ] = "Z~mazaÅ¥";\
-            Text[ hungarian ] = "~TÃ¶rlÃ©s";\
-            Text[ slovenian ] = "~IzbriÅ¡i";\
+            Text [ x-comment ] = " ";\
         };                                                          \
         ListBox DCB_INDEX                                           \
         {                                                           \
@@ -226,35 +117,8 @@ Text[ english_us ] = "Phonetic reading";    \
         {                                                           \
             Pos = MAP_APPFONT ( IDX_NEWIMAGE_XPOS , 14 ) ;                        \
             Size = MAP_APPFONT ( IDX_NEWIMAGE_WIDTH , 12 ) ;                        \
-            QuickHelpText = "Neues benutzerdefiniertes Verzeichnis";            \
-            QuickHelpText[English] = "New user defined index";      \
-            QuickHelpText[ english_us ] = "New User-defined Index";\
-            QuickHelpText[ portuguese ] = "New user defined index";\
-            QuickHelpText[ russian ] = "Íîâûé óêàçàòåëü ïîëüçîâàòåëÿ";\
-            QuickHelpText[ greek ] = "Äçìéïõñãßá åõñåôçñßïõ ïñéóìİíï áğü ôïí ÷ñŞóôç";\
-            QuickHelpText[ dutch ] = "Nieuwe gebruikergedefinieerde index";\
-            QuickHelpText[ french ] = "Definir un nouvel index personnalisé";\
-            QuickHelpText[ spanish ] = "Nuevo índice definido por usuario";\
-            QuickHelpText[ italian ] = "Nuovo indice personalizzato";\
-            QuickHelpText[ danish ] = "Nyt brugerdefineret indeks";\
-            QuickHelpText[ swedish ] = "Ny användardefinierad förteckning";\
-            QuickHelpText[ polish ] = "Nowy indeks u¿ytkownika";\
-            QuickHelpText[ portuguese_brazilian ] = "Novo índice definido por usuário";\
-            QuickHelpText[ japanese ] = "æ–°ã—ã„ãƒ¦ãƒ¼ã‚¶ãƒ¼å®šç¾©ã®ç´¢å¼•";\
-            QuickHelpText[ korean ] = "ìƒˆ ì‚¬ìš©ì ì •ì˜ ìƒ‰ì¸";\
-            QuickHelpText[ chinese_simplified ] = "æ–°å»ºä½¿ç”¨è€…è‡ªå®šç›®å½•";\
-            QuickHelpText[ chinese_traditional ] = "æ–°å¢ä½¿ç”¨è€…è‡ªè¨‚ç›®éŒ„";\
-            QuickHelpText[ arabic ] = "İåÑÓ ÌÏíÏ ãÚÑİ ãä ŞÈá ÇáãÓÊÎÏã";\
-            QuickHelpText[ turkish ] = "Neues benutzerdefiniertes Verzeichnis";\
-            QuickHelpText[ catalan ] = "Nou índex definit per l'usuari";\
-            QuickHelpText[ finnish ] = "Uusi uusi käyttäjän määrittämä hakemisto";\
-            QuickHelpText[ thai ] = "New User-defined Index";\
-            QuickHelpText[ czech ] = "NovÃ½ rejstÅ™Ã­k (vytvoÅ™enÃ½ uÅ¾ivatelem)Â ";\
-            QuickHelpText[ hebrew ] = "Neues benutzerdefiniertes Verzeichnis";\
-            QuickHelpText[ hindi ] = "à¤¨à¤¯à¤¾ à¤‰à¤ªà¤­à¥‹à¤•à¥à¤¤à¤¾ à¤¸à¥‡ à¤ªà¤°à¤¿à¤­à¤¾à¤·à¤¿à¤¤ à¤…à¤¨à¥à¤•à¥à¤°à¤®à¤£à¥€";\
-            QuickHelpText[ slovak ] = "NovÃ½ register (vytvorenÃ½ uÅ¾Ã­vateÄ¾om)Â ";\
-            QuickHelpText[ hungarian ] = "Ãšj egyÃ©ni jegyzÃ©k";\
-            QuickHelpText[ slovenian ] = "Novo uporabniÅ¡ko doloÄeno kazalo";\
+            QuickHelpText [ de ] = "Neues benutzerdefiniertes Verzeichnis";            \
+            QuickHelpText [ en-US ] = "New User-defined Index";\
         };                                                          \
         ImageButton BT_PREVSAME                                     \
         {                                                           \
@@ -292,74 +156,18 @@ Text[ english_us ] = "Phonetic reading";    \
         {                                                           \
             Pos = MAP_APPFONT ( 6 , 3 ) ;                           \
             Size = MAP_APPFONT ( COL_BUTTONS-5-6 , RSC_CD_FIXEDLINE_HEIGHT ) ;                      \
-            Text = "Markierung" ;                                   \
-            Text [ ENGLISH ] = "Mark" ;                             \
-            Text [ norwegian ] = "Merk" ;                           \
-            Text [ italian ] = "Contrassegno" ;                     \
-            Text [ portuguese_brazilian ] = "Seleção" ;               \
-            Text [ portuguese ] = "Marca" ;                        \
-            Text [ finnish ] = "Valinta" ;                         \
-            Text [ danish ] = "Markering" ;                             \
-            Text [ french ] = "Marque" ;                            \
-            Text [ swedish ] = "Markering" ;                        \
-            Text [ dutch ] = "Markering" ;                          \
-            Text [ spanish ] = "Marca" ;                            \
-            Text [ english_us ] = "Selection" ;                    \
-            Text[ chinese_simplified ] = "æ ‡è®°";                    \
-            Text[ russian ] = "Âûäåëåíèå";                          \
-            Text[ polish ] = "Zaznaczenie";                         \
-            Text[ japanese ] = "é¸æŠ";                           \
-            Text[ chinese_traditional ] = "æ¨™è¨˜";                   \
-            Text[ arabic ] = "ÇáÊÍÏíÏ";                      \
-            Text[ greek ] = "ÓŞìáíóç";\
-            Text[ korean ] = "ì„ íƒ";\
-            Text[ turkish ] = "Seçim";\
-            Text[ language_user1 ] = " ";\
-            Text[ catalan ] = "Marca";\
-            Text[ thai ] = "à¹€à¸¥à¸·à¸­à¸";\
-            Text[ czech ] = "VÃ½bÄ›r";\
-            Text[ hebrew ] = "â€®××‘×—×¨â€¬";\
-            Text[ hindi ] = "à¤šà¥à¤¨à¤¾à¤µ";\
-            Text[ slovak ] = "VÃ½ber";\
-            Text[ hungarian ] = "KijelÃ¶lÃ©s";\
-            Text[ slovenian ] = "Izbor";\
+            Text [ de ] = "Markierung" ;                                   \
+            Text [ en-US ] = "Selection" ;                    \
+            Text [ x-comment ] = " ";\
         };                                                          \
         FixedText LBL_INDEX                                         \
         {                                                           \
             Pos = MAP_APPFONT ( IDX_COL1 , 16 ) ;                         \
             Size = MAP_APPFONT ( 40 , 10 ) ;                        \
-            Text = "~Verzeichnis" ;                                 \
-            Text [ ENGLISH ] = "~Index" ;                           \
-            Text [ norwegian ] = "~Index" ;                         \
-            Text [ italian ] = "Indice" ;                          \
-            Text [ portuguese_brazilian ] = "Índ~ice" ;             \
-            Text [ portuguese ] = "~Índice" ;                       \
-            Text [ finnish ] = "~Hakemisto" ;                       \
-            Text [ danish ] = "~Indeks" ;                           \
-            Text [ french ] = "Type" ;                             \
-            Text [ swedish ] = "~Förteckning" ;                     \
-            Text [ dutch ] = "~Index" ;                             \
-            Text [ spanish ] = "Ín~dice" ;                          \
-            Text [ english_us ] = "~Index" ;                        \
+            Text [ de ] = "~Verzeichnis" ;                                 \
+            Text [ en-US ] = "~Index" ;                        \
             Left = TRUE ;                                           \
-            Text[ chinese_simplified ] = "ç›®å½•(~I)";               \
-            Text[ russian ] = "Óêàçàòåëü";                          \
-            Text[ polish ] = "~Indeks";                              \
-            Text[ japanese ] = "ç¨®é¡(~I)";                         \
-            Text[ chinese_traditional ] = "ç›®éŒ„(~I)";              \
-            Text[ arabic ] = "İåÑÓ";                                \
-            Text[ greek ] = "ÅõñåôŞñéï";\
-            Text[ korean ] = "ìƒ‰ì¸(~I)";\
-            Text[ language_user1 ] = " ";\
-            Text[ turkish ] = "~Dizin";\
-            Text[ catalan ] = "Ín~dex";\
-            Text[ thai ] = "~à¸”à¸±à¸Šà¸™à¸µ";\
-            Text[ czech ] = "RejstÅ™Ã­k";\
-            Text[ hebrew ] = "~Verzeichnis";\
-            Text[ hindi ] = "~à¤…à¤¨à¤•à¥à¤°à¤®à¤£à¥€";\
-            Text[ slovak ] = "Re~gister";\
-            Text[ hungarian ] = "~JegyzÃ©k";\
-            Text[ slovenian ] = "~Kazalo";\
+            Text [ x-comment ] = " ";\
         };                                                          \
         Edit SL_ENTRY                                               \
         {                                                           \
@@ -373,76 +181,20 @@ Text[ english_us ] = "Phonetic reading";    \
         {                                                           \
             Pos = MAP_APPFONT ( IDX_COL1 , IDX_ROW_2_TEXT ) ;                         \
             Size = MAP_APPFONT ( 27 , RSC_CD_FIXEDTEXT_HEIGHT ) ;                         \
-            Text = "~Eintrag" ;                                     \
-            Text [ ENGLISH ] = "~Entry" ;                           \
-            Text [ norwegian ] = "~Inngang" ;                       \
-            Text [ italian ] = "Voce" ;                            \
-            Text [ portuguese_brazilian ] = "~Entrada" ;            \
-            Text [ portuguese ] = "E~ntrada" ;                      \
-            Text [ finnish ] = "~Merkintä" ;                        \
-            Text [ danish ] = "~Element" ;                           \
-            Text [ french ] = "Entrée" ;                           \
-            Text [ swedish ] = "~Post" ;                       \
-            Text [ dutch ] = "~Item" ;                              \
-            Text [ spanish ] = "~Entrada" ;                         \
-            Text [ english_us ] = "~Entry" ;                        \
+            Text [ de ] = "~Eintrag" ;                                     \
+            Text [ en-US ] = "~Entry" ;                        \
             Left = TRUE ;                                           \
-            Text[ chinese_simplified ] = "æ¡ç›®(~E)";               \
-            Text[ russian ] = "İëåìåíò";                            \
-            Text[ polish ] = "~Wpis";                                \
-            Text[ japanese ] = "é …ç›®(~E)";                         \
-            Text[ chinese_traditional ] = "é …ç›®(~E)";              \
-            Text[ arabic ] = "ÇáÅÏÎÇá";                               \
-            Text[ greek ] = "Êáôá÷şñéóç";\
-            Text[ korean ] = "í•­ëª©(~E)";\
-            Text[ turkish ] = "~Giriş";\
-            Text[ language_user1 ] = " ";\
-            Text[ catalan ] = "~Entrada";\
-            Text[ thai ] = "~à¸£à¸²à¸¢à¸à¸²à¸£";\
-            Text[ czech ] = "PoloÅ¾ka";\
-            Text[ hebrew ] = "â€®×©×•×¨×”â€¬";\
-            Text[ hindi ] = "~à¤ªà¥à¤°à¤µà¤¿à¤·à¥à¤Ÿà¤¿";\
-            Text[ slovak ] = "Po~loÅ¾ka";\
-            Text[ hungarian ] = "~BejegyzÃ©s";\
-            Text[ slovenian ] = "~Vnos";\
+            Text [ x-comment ] = " ";\
         };                                                          \
         FixedText LBL_KEY                                           \
         {                                                           \
             Disable = TRUE ;                                        \
             Pos = MAP_APPFONT ( IDX_COL1 , IDX_ROW_3_TEXT ) ;                         \
             Size = MAP_APPFONT ( 42 , RSC_CD_FIXEDTEXT_HEIGHT ) ;                         \
-            Text = "~1. Schlüssel" ;                                \
-            Text [ ENGLISH ] = "~1. Key" ;                          \
-            Text [ norwegian ] = "~1. Nøkkel" ;                     \
-            Text [ italian ] = "Chiave ~1" ;                        \
-            Text [ portuguese_brazilian ] = "~1ª chave" ;           \
-            Text [ portuguese ] = "~1ª chave" ;                    \
-            Text [ finnish ] = "~1. avain" ;                        \
-            Text [ danish ] = "~1. nøgle" ;                         \
-            Text [ french ] = "Clé 1" ;                      \
-            Text [ swedish ] = "Sorteringskod ~1" ;                  \
-            Text [ dutch ] = "~1e sleutel" ;                        \
-            Text [ spanish ] = "~1ra clave" ;                      \
-            Text [ english_us ] = "~1st key" ;                      \
+            Text [ de ] = "~1. Schlüssel" ;                                \
+            Text [ en-US ] = "~1st key" ;                      \
             Left = TRUE ;                                           \
-            Text[ chinese_simplified ] = "ç¬¬ä¸€ä¸ªå…³é”®å­—";            \
-            Text[ russian ] = "1-ûé êëş÷";                          \
-            Text[ polish ] = "Pi~erwszy klucz";                      \
-            Text[ japanese ] = "åˆ†é¡ã‚¿ã‚¤ãƒˆãƒ« ~1";                         \
-            Text[ chinese_traditional ] = "ç¬¬ä¸€å€‹é—œéµå­—";       \
-            Text[ arabic ] = "ÇáãİÊÇÍ ÇáÃæá";                       \
-            Text[ greek ] = "~1ï êëåéäß";\
-            Text[ korean ] = "1. í‚¤";\
-            Text[ turkish ] = "~1. Anahtar";\
-            Text[ language_user1 ] = " ";\
-            Text[ catalan ] = "Clau ~1a";\
-            Text[ thai ] = "à¸„à¸µà¸¢à¹Œà¸—à¸µà¹ˆ~1";\
-            Text[ czech ] = "PrvnÃ­ klÃ­Ä";\
-            Text[ hebrew ] = "~1. SchlÃ¼ssel";\
-            Text[ hindi ] = "~1st à¤šà¤¾à¤¬à¥€";\
-            Text[ slovak ] = "~PrvÃ½ kÄ¾ÃºÄ";\
-            Text[ hungarian ] = "~1. kulcs";\
-            Text[ slovenian ] = "~1. kljuÄ";\
+            Text [ x-comment ] = " ";\
         };                                                          \
         ComboBox DCB_KEY                                            \
         {                                                           \
@@ -457,38 +209,10 @@ Text[ english_us ] = "Phonetic reading";    \
             Disable = TRUE ;                                        \
             Pos = MAP_APPFONT ( IDX_COL1 , IDX_ROW_4_TEXT ) ;                         \
             Size = MAP_APPFONT ( 42 , RSC_CD_FIXEDTEXT_HEIGHT ) ;                         \
-            Text = "~2. Schlüssel" ;                                \
-            Text [ ENGLISH ] = "~2. Key" ;                          \
-            Text [ norwegian ] = "~2. Nøkkel" ;                     \
-            Text [ italian ] = "Chiave ~2" ;                        \
-            Text [ portuguese_brazilian ] = "~2ª chave" ;           \
-            Text [ portuguese ] = "~2ª chave" ;                    \
-            Text [ finnish ] = "~2. avain" ;                        \
-            Text [ danish ] = "~2. nøgle" ;                         \
-            Text [ french ] = "Clé 2" ;                     \
-            Text [ swedish ] = "Sorteringskod ~2" ;                  \
-            Text [ dutch ] = "~2e sleutel" ;                        \
-            Text [ spanish ] = "~2a clave" ;                      \
-            Text [ english_us ] = "~2nd key" ;                      \
+            Text [ de ] = "~2. Schlüssel" ;                                \
+            Text [ en-US ] = "~2nd key" ;                      \
             Left = TRUE ;                                           \
-            Text[ chinese_simplified ] = "ç¬¬äºŒä¸ªå…³é”®å­—";            \
-            Text[ russian ] = "2-îé êëş÷";                          \
-            Text[ polish ] = "~Drugi klucz";                         \
-            Text[ japanese ] = "åˆ†é¡ã‚¿ã‚¤ãƒˆãƒ« ~2";                         \
-            Text[ chinese_traditional ] = "ç¬¬äºŒå€‹é—œéµå­—";       \
-            Text[ arabic ] = "ÇáãİÊÇÍ ÇáËÇäí";                      \
-            Text[ greek ] = "~2ï Êëåéäß";\
-            Text[ korean ] = "~2. í‚¤";\
-            Text[ turkish ] = "~2. Anahtar";\
-            Text[ language_user1 ] = " ";\
-            Text[ catalan ] = "Clau ~2a";\
-            Text[ thai ] = "à¸„à¸µà¸¢à¹Œà¸—à¸µà¹ˆ~2";\
-            Text[ czech ] = "DruhÃ½ klÃ­Ä";\
-            Text[ hebrew ] = "~2. SchlÃ¼ssel";\
-            Text[ hindi ] = "~2nd à¤šà¤¾à¤¬à¥€";\
-            Text[ slovak ] = "~DruhÃ½ kÄ¾ÃºÄ";\
-            Text[ hungarian ] = "~2. kulcs";\
-            Text[ slovenian ] = "~2. kljuÄ";\
+            Text [ x-comment ] = " ";\
         };                                                          \
         ComboBox DCB_KEY2                                           \
         {                                                           \
@@ -550,38 +274,10 @@ Text[ english_us ] = "Phonetic reading";    \
         {                                                           \
             Pos = MAP_APPFONT ( IDX_COL1 , 76 ) ;                         \
             Size = MAP_APPFONT ( 41 , RSC_CD_FIXEDTEXT_HEIGHT ) ;                         \
-            Text = "St~ufe" ;                                       \
-            Text [ ENGLISH ] = "~Level" ;                           \
-            Text [ norwegian ] = "~Nivå" ;                          \
-            Text [ italian ] = "Livello" ;                         \
-            Text [ portuguese_brazilian ] = "~Nível" ;              \
-            Text [ portuguese ] = "~Nível" ;                        \
-            Text [ finnish ] = "~Taso" ;                            \
-            Text [ danish ] = "~Niveau" ;                             \
-            Text [ french ] = "~Niveau" ;                           \
-            Text [ swedish ] = "Ni~vå" ;                            \
-            Text [ dutch ] = "~Niveau" ;                            \
-            Text [ spanish ] = "~Nivel" ;                           \
-            Text [ english_us ] = "~Level" ;                        \
+            Text [ de ] = "St~ufe" ;                                       \
+            Text [ en-US ] = "~Level" ;                        \
             Left = TRUE ;                                           \
-            Text[ chinese_simplified ] = "çº§(~L)";                 \
-            Text[ russian ] = "Óğîâåíü";                            \
-            Text[ polish ] = "P~oziom";                              \
-            Text[ japanese ] = "ãƒ¬ãƒ™ãƒ«(~L)";                         \
-            Text[ chinese_traditional ] = "ç´š(~L)";                \
-            Text[ arabic ] = "ÇáãÓÊæì";                             \
-            Text[ greek ] = "Åğßğåäï";\
-            Text[ korean ] = "ìˆ˜ì¤€(~L)";\
-            Text[ turkish ] = "~Düzey";\
-            Text[ language_user1 ] = " ";\
-            Text[ catalan ] = "~Nivell";\
-            Text[ thai ] = "~à¸£à¸°à¸”à¸±à¸š";\
-            Text[ czech ] = "ÃšroveÅˆ";\
-            Text[ hebrew ] = "St~ufe";\
-            Text[ hindi ] = "~à¤¸à¥à¤¤à¤°";\
-            Text[ slovak ] = "Ãš~roveÅˆ";\
-            Text[ hungarian ] = "S~zint";\
-            Text[ slovenian ] = "~Raven";\
+            Text [ x-comment ] = " ";\
         };                                                          \
         NumericField SL_LEVEL                                       \
         {                                                           \
@@ -602,142 +298,34 @@ Text[ english_us ] = "Phonetic reading";    \
         {                                                                       \
             Pos = MAP_APPFONT ( IDX_COL1 , 76 ) ;                                     \
             Size = MAP_APPFONT ( 100 , 8 ) ;                                    \
-            Text = "Ha~upteintrag" ;                                            \
-            Text [ ENGLISH ] = "~Main entry" ;                                  \
-            Text[ english_us ] = "~Main entry";\
-            Text[ portuguese ] = "~Entrada principal";\
-            Text[ russian ] = "Îñíîâíîé ıëåìåíò";\
-            Text[ greek ] = "Êıñéá êáôá÷şñéóç";\
-            Text[ dutch ] = "~Hoofditem";\
-            Text[ french ] = "Entrée principale";\
-            Text[ spanish ] = "Entrada principal";\
-            Text[ italian ] = "Voce principale";\
-            Text[ danish ] = "Ho~vedelement";\
-            Text[ swedish ] = "H~uvudpost";\
-            Text[ polish ] = "Wpis ~g³ówny";\
-            Text[ portuguese_brazilian ] = "~Entrada principal";\
-            Text[ japanese ] = "ä¸»é …ç›®(~M)";\
-            Text[ korean ] = "ì£¼ í•­ëª©(~M)";\
-            Text[ chinese_simplified ] = "ä¸»æ¡ç›®(~M)";\
-            Text[ chinese_traditional ] = "ä¸»é …ç›®(~M)";\
-            Text[ arabic ] = "ÅÏÎÇá ÑÆíÓí";\
-            Text[ turkish ] = "~Ana giriş";\
-            Text[ language_user1 ] = " ";\
-            Text[ catalan ] = "Entrada ~principal";\
-            Text[ finnish ] = "~Päämerkintä";\
-            Text[ thai ] = "à¸£à¸²à¸¢à¸à¸²à¸£~à¸«à¸¥à¸±à¸";\
-            Text[ czech ] = "HlavnÃ­ poloÅ¾ka";\
-            Text[ hebrew ] = "Ha~upteintrag";\
-            Text[ hindi ] = "~à¤ªà¥à¤°à¤§à¤¾à¤¨ à¤ªà¥à¤°à¤µà¤¿à¤·à¥à¤Ÿà¤¿";\
-            Text[ slovak ] = "~HlavnÃ¡ poloÅ¾ka";\
-            Text[ hungarian ] = "FÅ‘b~ejegyzÃ©s";\
-            Text[ slovenian ] = "~Glavni vnos";\
+            Text [ de ] = "Ha~upteintrag" ;                                            \
+            Text [ en-US ] = "~Main entry";\
+            Text [ x-comment ] = " ";\
         };                                                                      \
         CheckBox CB_APPLY_TO_ALL                                                \
         {                                                                       \
             Pos = MAP_APPFONT ( IDX_COL1 , 90 ) ;                                     \
             Size = MAP_APPFONT ( 140 , 12 ) ;                                   \
-            Text = "~Auf alle gleichen Texte anwenden." ;                       \
-            Text [ ENGLISH ] = "~Apply to all similar texts." ;                 \
+            Text [ de ] = "~Auf alle gleichen Texte anwenden." ;                       \
             Hide = TRUE;                                                        \
-            Text[ english_us ] = "~Apply to all similar texts.";                \
-            Text[ portuguese ] = "~Aplicar a todos os textos semelhantes.";     \
-            Text[ russian ] = "Ïğèìåíèòü êî âñåì âõîæäåíèÿì";           \
-            Text[ dutch ] = "~Alle gelijkluidende teksten";              \
-            Text[ french ] = "~Appliquer à tous les textes similaires.";         \
-            Text[ spanish ] = "~Aplicar a todos los textos similares";           \
-            Text[ italian ] = "~Applica a tutti i testi simili";                 \
-            Text[ danish ] = "~Anvend på alle lignende tekster.";                    \
-            Text[ swedish ] = "~Använd på alla liknande texter.";               \
-            Text[ polish ] = "~Zastosuj we wszystkich podobnych tekstach.";                  \
-            Text[ portuguese_brazilian ] = "~Aplicar a todos os textos similares.";      \
-            Text[ japanese ] = "åˆ¥ã®ç®‡æ‰€ã«ã‚‚ã‚ã‚‹åŒã˜èªå¥ã«é©ç”¨(~A)";               \
-            Text[ chinese_simplified ] = "é€‚ç”¨äºç›¸åŒçš„æ­£æ–‡(~A)";           \
-            Text[ chinese_traditional ] = "ç”¨æ–¼æ‰€æœ‰ç›¸åŒçš„å…§æ–‡(~A)";            \
-            Text[ arabic ] = "ÊØÈíŞ Úáì ßá ÇáäÕæÕ ÇáãÊãÇËáÉ.";                   \
-            Text[ greek ] = "ÅöáñìïãŞ óå üëá ôá ğáñüìïéá êåßìåíá.";\
-            Text[ korean ] = "ë¬¸ì„œ ë‚´ì—ì„œ ê°™ì€ ë¬¸ìì—´ì— ëŒ€í•´ ì ìš©(~A)";\
-            Text[ turkish ] = "~Tüm eş metinlere uygula.";\
-            Text[ language_user1 ] = " ";\
-            Text[ catalan ] = "~Aplica-ho a tots els textos semblants.";\
-            Text[ finnish ] = "~Käytä kaikissa samanlaisissa teksteissä.";\
-            Text[ thai ] = "à¹ƒ~à¸Šà¹‰à¸à¸±à¸šà¸‚à¹‰à¸­à¸„à¸§à¸²à¸¡à¸—à¸µà¹ˆà¸„à¸¥à¹‰à¸²à¸¢à¸à¸±à¸™à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”";\
-            Text[ czech ] = "PouÅ¾Ã­t na vÅ¡echny podobnÃ© texty.";\
-            Text[ hebrew ] = "~Auf alle gleichen Texte anwenden.";\
-            Text[ hindi ] = "~à¤¸à¤¬ à¤¸à¤®à¤¾à¤¨ à¤Ÿà¥‡à¤•à¥à¤¸à¥à¤Ÿà¥‹à¤‚ à¤•à¥‡à¤²à¤¿à¤ à¤²à¤¾à¤—à¥‚ à¤•à¤°à¥‹ à¥¤";\
-            Text[ slovak ] = "~PouÅ¾iÅ¥ na vÅ¡etky podobnÃ© texty.";\
-            Text[ hungarian ] = "~AlkalmazÃ¡s minden hasonlÃ³ szÃ¶vegre.";\
-            Text[ slovenian ] = "~Uporabi v vseh podobnih besedilih.";\
+            Text [ en-US ] = "~Apply to all similar texts.";                \
+            Text [ x-comment ] = " ";\
         };                                                                      \
         CheckBox CB_CASESENSITIVE                                                \
         {                                                                       \
             Pos = MAP_APPFONT ( 21 , 104 ) ;                                     \
             Size = MAP_APPFONT ( 131 , 12 ) ;                                   \
-            Text = "E~xakte Suche" ;                       \
-            Text [ ENGLISH ] = "Match case" ;                 \
+            Text [ de ] = "E~xakte Suche" ;                       \
             Hide = TRUE;\
-            Text[ english_us ] = "Ma~tch case";\
-            Text[ portuguese ] = "Procura e~xacta";\
-            Text[ russian ] = "Ó÷èòûâàòü ğåãèñòğ";\
-            Text[ greek ] = "ÁêñéâŞò áíáæŞôçóç";\
-            Text[ dutch ] = "~Exact dezelfde tekens";\
-            Text[ french ] = "Respecter la casse";\
-            Text[ spanish ] = "Coincidencia e~xacta";\
-            Text[ italian ] = "Ricerca esatta";\
-            Text[ danish ] = "~STORE og små bogstaver";\
-            Text[ swedish ] = "E~xakt sökning";\
-            Text[ polish ] = "Uwzglêdni~aj wielkoœæ liter";\
-            Text[ portuguese_brazilian ] = "~Diferenciar Maiúsculas/Minúsculas";\
-            Text[ japanese ] = "å¤§æ–‡å­—ã¨å°æ–‡å­—ã‚’åŒºåˆ¥ã™ã‚‹(~T)";\
-            Text[ korean ] = "ëŒ€ë¬¸ì ë° ì†Œë¬¸ìë¥¼ êµ¬ë¶„(~T)";\
-            Text[ chinese_simplified ] = "ç²¾ç¡®æœå¯»(~T)";\
-            Text[ chinese_traditional ] = "ç²¾ç¢ºæœå°‹(~T)";\
-            Text[ arabic ] = "ÈÍË ÏŞíŞ";\
-            Text[ turkish ] = "Büyük/küçük ~harf duyarlı olarak aynı olma";\
-            Text[ catalan ] = "Coincidència e~xacta";\
-            Text[ finnish ] = "Sama kirjainkoko";\
-            Text[ thai ] = "à¸•à¸±à¸§à¸à¸´à¸¡à¸à¹Œà¸—à¸µà¹ˆà¸•à¸£~à¸‡à¸à¸±à¸™";\
-            Text[ czech ] = "RozliÅ¡ovat velikost";\
-            Text[ hebrew ] = "E~xakte Suche";\
-            Text[ hindi ] = "à¤•à¥‡~à¤¸ à¤¤à¥à¤²à¤¨à¤¾";\
-            Text[ slovak ] = "~RozliÅ¡ovaÅ¥ veÄ¾kosÅ¥";\
-            Text[ hungarian ] = "~Kis- Ã©s nagybetÅ±k egyeztetÃ©se";\
-            Text[ slovenian ] = "Ra~zlikuj velike in male Ärke";\
+            Text [ en-US ] = "Ma~tch case";\
         };                                                                      \
         CheckBox CB_WORDONLY                                                \
         {                                                                       \
             Pos = MAP_APPFONT ( 21 , 118 ) ;                                     \
             Size = MAP_APPFONT ( 131 , 12 ) ;                                   \
-            Text = "Nur ganze ~Wörter" ;                       \
-            Text [ ENGLISH ] = "Whole words only" ;                 \
+            Text [ de ] = "Nur ganze ~Wörter" ;                       \
             Hide = TRUE;\
-            Text[ english_us ] = "~Whole words only";\
-            Text[ portuguese ] = "Só ~palavras inteiras";\
-            Text[ russian ] = "Òîëüêî ñëîâî öåëèêîì";\
-            Text[ greek ] = "Ìüíï ïëüêëçñåò ëİîåéò";\
-            Text[ dutch ] = "Alleen hele ~woorden";\
-            Text[ french ] = "Uniquement les mots entiers";\
-            Text[ spanish ] = "~Sólo palabras completas";\
-            Text[ italian ] = "Solo parole intere";\
-            Text[ danish ] = "~Kun hele ord";\
-            Text[ swedish ] = "Bara hela ~ord";\
-            Text[ polish ] = "~Tylko ca³e wyrazy";\
-            Text[ portuguese_brazilian ] = "Somente ~palavras inteiras";\
-            Text[ japanese ] = "å˜èªã¨ã—ã¦(~W)";\
-            Text[ korean ] = "ë‹¨ì–´ ë‹¨ìœ„ë¡œ(~W)";\
-            Text[ chinese_simplified ] = "åªå…è®¸å•è¯(~W)";\
-            Text[ chinese_traditional ] = "åƒ…æ˜¯å–®è©(~W)";\
-            Text[ arabic ] = "ßáãÇÊ ßÇãáÉ İŞØ";\
-            Text[ turkish ] = "~Yalnızca tam sözcükler";\
-            Text[ catalan ] = "Només paraules se~nceres";\
-            Text[ finnish ] = "~Vain kokonaiset sanat";\
-            Text[ thai ] = "à¸„à¸³~à¸—à¸±à¹‰à¸‡à¸«à¸¡à¸”à¸­à¸¢à¹ˆà¸²à¸‡à¹€à¸”à¸µà¸¢à¸§";\
-            Text[ czech ] = "Pouze celÃ¡ slova";\
-            Text[ hebrew ] = "â€®××œ×™× ×©×œ××™× ×‘×œ×‘×“â€¬";\
-            Text[ hindi ] = "~à¤•à¥‡à¤µà¤² à¤ªà¥‚à¤°à¥à¤£ à¤¶à¤¬à¥à¤¦";\
-            Text[ slovak ] = "Len ~celÃ© slova";\
-            Text[ hungarian ] = "Csak ~teljes szavak";\
-            Text[ slovenian ] = "~Samo cele besede";\
+            Text [ en-US ] = "~Whole words only";\
         };                                                                      \
     };
 
@@ -831,8 +419,7 @@ ModalDialog DLG_NEW_USER_IDX
     HelpID = HID_DLG_NEW_USER_IDX;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 194 , 60 ) ;
-    Text = "Neues benutzerdefiniertes  Verzeichnis anlegen" ;
-    Text [ ENGLISH ] = "Create new user-defined index" ;
+    Text [ de ] = "Neues benutzerdefiniertes  Verzeichnis anlegen" ;
     OKButton PB_OK
     {
         Pos = MAP_APPFONT ( 141 , 6 ) ;
@@ -854,73 +441,19 @@ ModalDialog DLG_NEW_USER_IDX
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 130 , 8 ) ;
-        Text = "Neues Benutzerverzeichnis" ;
-        Text [ ENGLISH ] = "New user index name" ;
+        Text [ de ] = "Neues Benutzerverzeichnis" ;
 
-        Text[ english_us ] = "New user index";
-        Text[ portuguese ] = "Novo índice personalizado";
-        Text[ russian ] = "Íîâûé óêàçàòåëü ïîëüçîâàòåëÿ";
-        Text[ greek ] = "Äçìéïõñãßá åõñåôçñßïõ ÷ñŞóôç";
-        Text[ dutch ] = "Nieuwe gebruikersindex";
-        Text[ french ] = "Nouvel index personnalisé";
-        Text[ spanish ] = "Nuevo índice de usuario";
-        Text[ italian ] = "Nuovo indice personalizzato";
-        Text[ danish ] = "Nyt brugerindeks";
-        Text[ swedish ] = "Ny användarförteckning";
-        Text[ polish ] = "Nowy indeks u¿ytkownika";
-        Text[ portuguese_brazilian ] = "Novo índice de usuário";
-        Text[ japanese ] = "æ–°ã—ã„ãƒ¦ãƒ¼ã‚¶ãƒ¼å®šç¾©ã®ç¨®é¡";
-        Text[ korean ] = "ìƒˆë¡œìš´ ì‚¬ìš©ì ìƒ‰ì¸";
-        Text[ chinese_simplified ] = "æ–°å¢ä½¿ç”¨è€…ç›®å½•";
-        Text[ chinese_traditional ] = "æ–°å¢è‡ªè¨‚ç›®éŒ„";
-        Text[ arabic ] = "İåÑÓ ÌÏíÏ ááãÓÊÎÏã";
-        Text[ turkish ] = "Yeni kullanıcı indexi";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Nou índex d'usuari";
-        Text[ finnish ] = "Uusi käyttäjähakemisto";
-        Text[ thai ] = "à¸”à¸±à¸Šà¸™à¸µà¸œà¸¹à¹‰à¹ƒà¸Šà¹‰à¹ƒà¸«à¸¡à¹ˆ";
-        Text[ czech ] = "NovÃ½ rejstÅ™Ã­k (vytvoÅ™enÃ½ uÅ¾ivatelem)";
-        Text[ hebrew ] = "Neues Benutzerverzeichnis";
-        Text[ hindi ] = "à¤¨à¤¯à¤¾ à¤‰à¤ªà¤­à¥‹à¤•à¥à¤¤à¤¾ à¤…à¤¨à¥à¤•à¥à¤°à¤®à¤£à¥€";
-        Text[ slovak ] = "NovÃ½ uÅ¾Ã­vateÄ¾skÃ½ index";
-        Text[ hungarian ] = "Ãšj egyÃ©ni jegyzÃ©k";
-        Text[ slovenian ] = "Novo uporabniÅ¡ko kazalo";
+        Text [ en-US ] = "New user index";
+        Text [ x-comment ] = " ";
     };
     FixedText FT_NAME
     {
         Pos = MAP_APPFONT ( 12 , 17 ) ;
         Size = MAP_APPFONT ( 40 , 8 ) ;
-        Text = "~Name" ;
-        Text [ ENGLISH ] = "Name" ;
+        Text [ de ] = "~Name" ;
 
-        Text[ english_us ] = "~Name";
-        Text[ portuguese ] = "~Nome";
-        Text[ russian ] = "Èìÿ";
-        Text[ greek ] = "¼íïìá";
-        Text[ dutch ] = "~Naam";
-        Text[ french ] = "Nom";
-        Text[ spanish ] = "~Nombre";
-        Text[ italian ] = "~Nome";
-        Text[ danish ] = "~Navn";
-        Text[ swedish ] = "~Namn";
-        Text[ polish ] = "~Nazwa";
-        Text[ portuguese_brazilian ] = "~Nome";
-        Text[ japanese ] = "åå‰(~N)";
-        Text[ korean ] = "ì´ë¦„(~N)";
-        Text[ chinese_simplified ] = "åç§°(~N)";
-        Text[ chinese_traditional ] = "åç¨±(~N)";
-        Text[ arabic ] = "ÇáÇÓã";
-        Text[ turkish ] = "~Ad";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Nom";
-        Text[ finnish ] = "~Nimi";
-        Text[ thai ] = "~à¸Šà¸·à¹ˆà¸­";
-        Text[ czech ] = "NÃ¡zev";
-        Text[ hebrew ] = "~Name";
-        Text[ hindi ] = "~à¤¨à¤¾à¤®";
-        Text[ slovak ] = "~NÃ¡zov";
-        Text[ hungarian ] = "~NÃ©v";
-        Text[ slovenian ] = "~Ime";
+        Text [ en-US ] = "~Name";
+        Text [ x-comment ] = " ";
     };
     Edit ED_NAME
     {
@@ -930,104 +463,22 @@ ModalDialog DLG_NEW_USER_IDX
         TabStop = TRUE ;
         Left = TRUE ;
     };
-    Text[ english_us ] = "Create New User-defined Index";
-    Text[ portuguese ] = "Criar novo índice personalizado";
-    Text[ russian ] = "Ñîçäàòü íîâûé óêàçàòåëü";
-    Text[ greek ] = "Äçìéïõñãßá íİïõ åõñåôçñßïõ ÷ñŞóôç";
-    Text[ dutch ] = "Nieuwe gebruikersindex definiëren";
-    Text[ french ] = "Création d'un nouvel index personnalisé";
-    Text[ spanish ] = "Crear un índice de usuario nuevo";
-    Text[ italian ] = "Definisci nuovo indice personalizzato";
-    Text[ danish ] = "Opret nyt brugerdefineret indeks";
-    Text[ swedish ] = "Skapa ny användardefinierad förteckning";
-    Text[ polish ] = "Utwórz nowy indeks definiowany przez u¿ytkownika";
-    Text[ portuguese_brazilian ] = "Criar novo índice personalizado do usuário";
-    Text[ japanese ] = "ãƒ¦ãƒ¼ã‚¶ãƒ¼å®šç¾©ã®ç¨®é¡ã®ä½œæˆ";
-    Text[ korean ] = "ìƒˆ ì‚¬ìš©ì ì •ì˜ ìƒ‰ì¸ ë§Œë“¤ê¸°";
-    Text[ chinese_simplified ] = "æ–°å»ºä½¿ç”¨è€…è‡ªå®šç›®å½•";
-    Text[ chinese_traditional ] = "æ–°å¢è‡ªè¨‚çš„ç›®éŒ„";
-    Text[ arabic ] = "ÅäÔÇÁ İåÑÓ ÌÏíÏ ãõÚóÑøóİ ãä ŞÈá ÇáãÓÊÎÏã";
-    Text[ turkish ] = "Yeni kullanıcı~ tanımlı dizin oluştur";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Crea nou índex d'usuari";
-    Text[ finnish ] = "Luo uusi käyttäjän määrittämä hakemisto";
-    Text[ thai ] = "à¸ªà¸£à¹‰à¸²à¸‡à¸”à¸±à¸Šà¸™à¸µà¸£à¸°à¸šà¸¸à¸œà¸¹à¹‰à¹ƒà¸Šà¹‰à¹ƒà¸«à¸¡à¹ˆ";
-    Text[ czech ] = "VytvoÅ™it novÃ½ rejstÅ™Ã­k (vytvoÅ™enÃ½ uÅ¾ivatelem)";
-    Text[ hebrew ] = "Neues benutzerdefiniertes  Verzeichnis anlegen";
-    Text[ hindi ] = "à¤¨à¤¯à¤¾ à¤‰à¤ªà¤­à¥‹à¤•à¥à¤¤à¤¾ à¤¸à¥‡ à¤ªà¤°à¤¿à¤­à¤¾à¤·à¤¿à¤¤ à¤…à¤¨à¥à¤•à¥à¤°à¤®à¤£à¥€ à¤•à¥‹ à¤‰à¤¤à¥à¤ªà¤¨à¥à¤¨ à¤•à¤°à¥‹";
-    Text[ slovak ] = "VytvoriÅ¥ novÃ½ index (vytvorenÃ½ uÅ¾Ã­vateÄ¾om)";
-    Text[ hungarian ] = "Ãšj egyÃ©ni jegyzÃ©k lÃ©trehozÃ¡sa";
-    Text[ slovenian ] = "Ustvari novo uporabniÅ¡ko doloÄeno kazalo";
+    Text [ en-US ] = "Create New User-defined Index";
+    Text [ x-comment ] = " ";
 };
 
 String STR_IDXMRK_EDIT
 {
-    Text = "Verzeichniseintrag bearbeiten" ;
-    Text [ ENGLISH ] = "Edit index entry" ;
-    Text [ norwegian ] = "Rediger stikkordregisterinngang" ;
-    Text [ italian ] = "Modifica voce di indice" ;
-    Text [ portuguese_brazilian ] = "Editar entrada do índice" ;
-    Text [ portuguese ] = "Editar entrada de índice" ;
-    Text [ finnish ] = "Muokkaa hakemistomerkintää" ;
-    Text [ danish ] = "Rediger indekselement" ;
-    Text [ french ] = "Édition d'une entrée d'index" ;
-    Text [ swedish ] = "Redigera förteckningspost" ;
-    Text [ dutch ] = "Indexitem bewerken" ;
-    Text [ spanish ] = "Editar entrada de índice" ;
-    Text [ english_us ] = "Edit Index Entry" ;
-    Text[ chinese_simplified ] = "ç¼–è¾‘ç›®å½•æ¡ç›®";
-    Text[ russian ] = "Ïğàâêà ıëåìåíòà óêàçàòåëÿ";
-    Text[ polish ] = "Edytuj wpis indeksu";
-    Text[ japanese ] = "ç›®æ¬¡ã¨ç´¢å¼•ã®é …ç›®ç·¨é›†";
-    Text[ chinese_traditional ] = "ç·¨è¼¯ç›®éŒ„é …ç›®";
-    Text[ arabic ] = "ÊÍÑíÑ ÅÏÎÇá İåÑÓí";
-    Text[ greek ] = "Åğåîåñãáóßá êáôá÷şñéóçò åõñåôçñßïõ";
-    Text[ korean ] = "ìƒ‰ì¸ í•­ëª© í¸ì§‘";
-    Text[ turkish ] = "Dizin girişini düzenle";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Edita entrada d'índex";
-    Text[ thai ] = "à¹à¸à¹‰à¹„à¸‚à¸£à¸²à¸¢à¸à¸²à¸£à¸”à¸±à¸Šà¸™à¸µ";
-    Text[ czech ] = "Upravit poloÅ¾ku rejstÅ™Ã­ku";
-    Text[ hebrew ] = "Verzeichniseintrag bearbeiten";
-    Text[ hindi ] = "à¤…à¤¨à¥à¤•à¥à¤°à¤®à¤£à¤¿à¤•à¤¾ à¤ªà¥à¤°à¤µà¤¿à¤·à¥à¤Ÿà¤¿ à¤¸à¤‚à¤ªà¤¾à¤¦à¤¨";
-    Text[ slovak ] = "UpraviÅ¥ poloÅ¾ku registra";
-    Text[ hungarian ] = "JegyzÃ©kbejegyzÃ©s szerkesztÃ©se";
-    Text[ slovenian ] = "Uredi vnos v kazalu";
+    Text [ de ] = "Verzeichniseintrag bearbeiten" ;
+    Text [ en-US ] = "Edit Index Entry" ;
+    Text [ x-comment ] = " ";
 };
 String STR_IDXMRK_INSERT
 {
     /* ### ACHTUNG: Neuer Text in Resource? Verzeichniseintrag einfügen : Verzeichniseintrag einf³gen */
-    Text = "Verzeichniseintrag einfügen" ;
-    Text [ ENGLISH ] = "Insert index entry" ;
-    Text [ norwegian ] = "Sett inn oppføring i stikkkordregister" ;
-    Text [ italian ] = "Inserisci voce di indice" ;
-    Text [ portuguese_brazilian ] = "Inserir entrada do índice" ;
-    Text [ portuguese ] = "Inserir entrada no índice" ;
-    Text [ finnish ] = "Lisää hakemistomerkintä" ;
-    Text [ danish ] = "Indsæt indekselement" ;
-    Text [ french ] = "Insertion d'une entrée d'index" ;
-    Text [ swedish ] = "Infoga förteckningspost" ;
-    Text [ dutch ] = "Indexitem invoegen" ;
-    Text [ spanish ] = "Insertar una entrada de índice" ;
-    Text [ english_us ] = "Insert Index Entry" ;
-    Text[ chinese_simplified ] = "æ’å…¥ç›®å½•æ¡ç›®";
-    Text[ russian ] = "Âñòàâèòü ıëåìåíò óêàçàòåëÿ";
-    Text[ polish ] = "Wstaw wpis indeksu";
-    Text[ japanese ] = "ç›®æ¬¡ã¨ç´¢å¼•ã®é …ç›®ç™»éŒ²";
-    Text[ chinese_traditional ] = "æ’å…¥ç›®éŒ„æ¢ç›®";
-    Text[ arabic ] = "ÅÏÑÇÌ ÅÏÎÇá İåÑÓí";
-    Text[ greek ] = "ÅéóáãùãŞ êáôá÷şñéóçò åõñåôçñßïõ";
-    Text[ korean ] = "ìƒ‰ì¸ ë° ëª©ì°¨ í•­ëª© ì‚½ì…";
-    Text[ turkish ] = "Dizin girişi ekle";
-    Text[ language_user1 ] = " ";
-    Text[ catalan ] = "Insereix una entrada d'índex";
-    Text[ thai ] = "à¹à¸—à¸£à¸à¸£à¸²à¸¢à¸à¸²à¸£à¸”à¸±à¸Šà¸™à¸µ";
-    Text[ czech ] = "VloÅ¾it poloÅ¾ku rejstÅ™Ã­ku";
-    Text[ hebrew ] = "Verzeichniseintrag einfÃ¼gen";
-    Text[ hindi ] = "à¤…à¤¨à¥à¤•à¥à¤°à¤®à¤£à¤¿à¤•à¤¾ à¤ªà¥à¤°à¤µà¤¿à¤·à¥à¤Ÿà¤¿ à¤œà¥‹à¤¡à¤¼à¥‹";
-    Text[ slovak ] = "VloÅ¾iÅ¥ poloÅ¾ku obsahu";
-    Text[ hungarian ] = "BejegyzÃ©s beszÃºrÃ¡sa";
-    Text[ slovenian ] = "Vstavi vnos v kazalo";
+    Text [ de ] = "Verzeichniseintrag einfügen" ;
+    Text [ en-US ] = "Insert Index Entry" ;
+    Text [ x-comment ] = " ";
 };
 
 #define     AUTH_DIALOG_WINDOW  \
@@ -1039,104 +490,23 @@ String STR_IDXMRK_INSERT
         {                                                           \
             Pos = MAP_APPFONT ( 12 , 14 ) ;                         \
             Size = MAP_APPFONT ( 147 , 12 ) ;                       \
-            Text = "Aus Literatur~datenbank" ;                      \
-            Text [ ENGLISH ] = "Form bibliography database" ;       \
-            Text[ english_us ] = "From bibliography ~database";\
-            Text[ portuguese ] = "A partir da ~base de dados bibliográfica";\
-            Text[ russian ] = "Èç áàçû äàííûõ áèáëèîãğàôèè";\
-            Text[ greek ] = "Áğü ôç âÜóç ~äåäïìİíùí âéâëéïãñáößáò";\
-            Text[ dutch ] = "Uit ~literatuur-database";\
-            Text[ french ] = "À partir de la ~base de données bibliographique";\
-            Text[ spanish ] = "De la base de datos ~bibliográfica";\
-            Text[ italian ] = "Dal ~database bibliografico";\
-            Text[ danish ] = "Fra l~itteraturdatabase";\
-            Text[ swedish ] = "Från litteratur~databas";\
-            Text[ polish ] = "Z bibliograficznej ~bazy danych";\
-            Text[ portuguese_brazilian ] = "A partir do banco de ~dados de bibliografia";\
-            Text[ japanese ] = "è”µæ›¸ç®¡ç†ãƒ‡ãƒ¼ã‚¿ãƒ™ãƒ¼ã‚¹ã‹ã‚‰(~D)";\
-            Text[ korean ] = "ì°¸ê³  ë¬¸í—Œ ë°ì´í„°ë² ì´ìŠ¤ë¡œë¶€í„°(~D)";\
-            Text[ chinese_simplified ] = "é‡‡ç”¨æ–‡çŒ®æ•°æ®åº“(~D)";\
-            Text[ chinese_traditional ] = "å¾æ–‡ç»è³‡æ–™åº«(~D)";\
-            Text[ arabic ] = "ãä ŞÇÚÏÉ ÈíÇäÇÊ ÇáãÑÇÌÚ";\
-            Text[ turkish ] = "Kaynakça veritabanından";\
-            Text[ catalan ] = "Des de la base de ~dades de la bibliografia";\
-            Text[ finnish ] = "Lähdeluettelo~tietokannasta";\
-            Text[ thai ] = "à¸ˆà¸²à¸~à¸à¸²à¸™à¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸šà¸£à¸£à¸“à¸²à¸™à¸¸à¸à¸£à¸¡";\
-            Text[ czech ] = "Ze seznamu literatury";\
-            Text[ hebrew ] = "Aus Literatur~datenbank";\
-            Text[ hindi ] = "à¤—à¥à¤°à¤¨à¥à¤¥-à¤¸à¥‚à¤šà¥€ ~à¤²à¥‡à¤–à¤¾à¤¸à¤‚à¤šà¤¯ à¤¸à¥‡";\
-            Text[ slovak ] = "Zo ~zoznamu literatÃºry";\
-            Text[ hungarian ] = "~IrodalomjegyzÃ©k-adatbÃ¡zisbÃ³l";\
-            Text[ slovenian ] = "Iz bibliografske zbirke pod~atkov";\
+            Text [ de ] = "Aus Literatur~datenbank" ;                      \
+            Text [ en-US ] = "From bibliography ~database";\
         };                                                          \
         RadioButton RB_FROMDOCCONTENT                               \
         {                                                           \
             Pos = MAP_APPFONT ( 12,  29 ) ;                         \
             Size = MAP_APPFONT ( 147 , 12 ) ;                       \
-            Text = "~Aus Dokumentinhalt" ;                          \
-            Text [ ENGLISH ] = "From document content" ;            \
-            Text[ english_us ] = "~From document content";\
-            Text[ portuguese ] = "A partir do ~conteúdo do documento";\
-            Text[ russian ] = "Èç ñîäåğæèìîãî äîêóìåíòà";\
-            Text[ greek ] = "~Áğü ôï ğåñéå÷üìåíï ôïõ åããñÜöïõ";\
-            Text[ dutch ] = "Uit ~documentinhoud";\
-            Text[ french ] = "À partir du contenu du document";\
-            Text[ spanish ] = "~Del contenido del documento";\
-            Text[ italian ] = "Dal contenuto del documento";\
-            Text[ danish ] = "Fra ~dokumentindhold";\
-            Text[ swedish ] = "~Från dokumentinnehåll";\
-            Text[ polish ] = "N~a podstawie zawartoœci dokumentu";\
-            Text[ portuguese_brazilian ] = "A partir do ~conteúdo do documento";\
-            Text[ japanese ] = "ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã‹ã‚‰(~F)";\
-            Text[ korean ] = "ë¬¸ì„œ ë‚´ìš©ìœ¼ë¡œë¶€í„°(~F)";\
-            Text[ chinese_simplified ] = "é‡‡ç”¨æ–‡æ¡£å†…å®¹(~F)";\
-            Text[ chinese_traditional ] = "å¾æ–‡ä»¶å…§å®¹(~F)";\
-            Text[ arabic ] = "ãä ãÍÊæíÇÊ ÇáãÓÊäÏ";\
-            Text[ turkish ] = "~Belge içeriğinden";\
-            Text[ catalan ] = "~Des del contingut del document";\
-            Text[ finnish ] = "~Asiakirjan sisällöstä";\
-            Text[ thai ] = "~à¸ˆà¸²à¸à¹€à¸™à¸·à¹‰à¸­à¸«à¸²à¹€à¸­à¸à¸ªà¸²à¸£";\
-            Text[ czech ] = "Z obsahu dokumentu";\
-            Text[ hebrew ] = "~Aus Dokumentinhalt";\
-            Text[ hindi ] = "à¤²à¥‡~à¤–à¤ªà¤¤à¥à¤° à¤µà¤¿à¤·à¤¯ à¤¸à¥‡";\
-            Text[ slovak ] = "Z o~bsahu dokumentu";\
-            Text[ hungarian ] = "~Dokumentum tartalmÃ¡bÃ³l";\
-            Text[ slovenian ] = "Iz ~vsebine dokumenta";\
+            Text [ de ] = "~Aus Dokumentinhalt" ;                          \
+            Text [ en-US ] = "~From document content";\
         };                                                          \
         FixedText FT_AUTHOR                             \
         {                                               \
             Pos = MAP_APPFONT ( 12 , 14 + RADIO_BUTTON_HEIGHT) ; \
             Size = MAP_APPFONT ( 60 , 8 ) ;             \
-            Text = "Autor" ;                            \
-            Text [ ENGLISH ] = "Author" ;               \
-            Text[ english_us ] = "Author";\
-            Text[ portuguese ] = "Autor";\
-            Text[ russian ] = "Àâòîğ";\
-            Text[ greek ] = "ÓõíôÜêôçò";\
-            Text[ dutch ] = "Auteur";\
-            Text[ french ] = "Auteur";\
-            Text[ spanish ] = "Autor";\
-            Text[ italian ] = "Autore";\
-            Text[ danish ] = "Forfatter";\
-            Text[ swedish ] = "Författare";\
-            Text[ polish ] = "Autor";\
-            Text[ portuguese_brazilian ] = "Autor";\
-            Text[ japanese ] = "è‘—è€…";\
-            Text[ korean ] = "ì €ì";\
-            Text[ chinese_simplified ] = "ä½œè€…";\
-            Text[ chinese_traditional ] = "ä½œè€…";\
-            Text[ arabic ] = "ÇáãÄáİ";\
-            Text[ turkish ] = "Yazar";\
-            Text[ language_user1 ] = " ";\
-            Text[ catalan ] = "Autor";\
-            Text[ finnish ] = "Tekijä";\
-            Text[ thai ] = "à¸œà¸¹à¹‰à¹€à¸‚à¸µà¸¢à¸™";\
-            Text[ czech ] = "Autor";\
-            Text[ hebrew ] = "â€®××—×‘×¨â€¬";\
-            Text[ hindi ] = "à¤²à¥‡à¤–à¤•";\
-            Text[ slovak ] = "Autor";\
-            Text[ hungarian ] = "SzerzÅ‘";\
-            Text[ slovenian ] = "Avtor";\
+            Text [ de ] = "Autor" ;                            \
+            Text [ en-US ] = "Author";\
+            Text [ x-comment ] = " ";\
         };                                              \
         FixedText   FI_AUTHOR                           \
         {                                               \
@@ -1148,36 +518,9 @@ String STR_IDXMRK_INSERT
         {                                               \
             Pos = MAP_APPFONT ( 12 , 37 + RADIO_BUTTON_HEIGHT) ; \
             Size = MAP_APPFONT ( 60 , 8 ) ;             \
-            Text = "Titel" ;                            \
-            Text [ ENGLISH ] = "Title" ;                \
-            Text[ english_us ] = "Title";\
-            Text[ portuguese ] = "Título";\
-            Text[ russian ] = "Çàãîëîâîê";\
-            Text[ greek ] = "Ôßôëïò";\
-            Text[ dutch ] = "Titel";\
-            Text[ french ] = "Titre";\
-            Text[ spanish ] = "Título";\
-            Text[ italian ] = "Titolo";\
-            Text[ danish ] = "Titel";\
-            Text[ swedish ] = "Titel";\
-            Text[ polish ] = "Tytu³";\
-            Text[ portuguese_brazilian ] = "Título";\
-            Text[ japanese ] = "ã‚¿ã‚¤ãƒˆãƒ«";\
-            Text[ korean ] = "ì œëª©";\
-            Text[ chinese_simplified ] = "æ ‡é¢˜";\
-            Text[ chinese_traditional ] = "æ¨™é¡Œ";\
-            Text[ arabic ] = "ÇáÚäæÇä";\
-            Text[ turkish ] = "Başlık";\
-            Text[ language_user1 ] = " ";\
-            Text[ catalan ] = "Títol";\
-            Text[ finnish ] = "Otsikko";\
-            Text[ thai ] = "à¸Šà¸·à¹ˆà¸­";\
-            Text[ czech ] = "Titul";\
-            Text[ hebrew ] = "â€®×›×•×ª×¨×ªâ€¬";\
-            Text[ hindi ] = "à¤¶à¥€à¤°à¥à¤·à¤•";\
-            Text[ slovak ] = "Titul";\
-            Text[ hungarian ] = "CÃ­m";\
-            Text[ slovenian ] = "Naslov";\
+            Text [ de ] = "Titel" ;                            \
+            Text [ en-US ] = "Title";\
+            Text [ x-comment ] = " ";\
         };                                              \
         FixedText   FI_TITLE                            \
         {                                               \
@@ -1189,36 +532,9 @@ String STR_IDXMRK_INSERT
         {                                               \
             Pos = MAP_APPFONT ( 12 , 62 + RADIO_BUTTON_HEIGHT) ; \
             Size = MAP_APPFONT ( 60 , 8 ) ;             \
-            Text = "~Kurzbezeichnung" ;                 \
-            Text [ ENGLISH ] = "Short name" ;           \
-            Text[ english_us ] = "Short ~name";\
-            Text[ portuguese ] = "~Abreviatura";\
-            Text[ russian ] = "Ñîêğàùåííîå íàçâàíèå";\
-            Text[ greek ] = "Óõíôïìïãñáößá";\
-            Text[ dutch ] = "Beknopte aand~uiding";\
-            Text[ french ] = "Abrégé";\
-            Text[ spanish ] = "Abre~viatura";\
-            Text[ italian ] = "Abbreviazione";\
-            Text[ danish ] = "~Kort betegnelse";\
-            Text[ swedish ] = "~Kort beteckning";\
-            Text[ polish ] = "Na~zwa krótka";\
-            Text[ portuguese_brazilian ] = "~Abreviatura";\
-            Text[ japanese ] = "ç•¥ç§°(~N)";\
-            Text[ korean ] = "ì•½ì¹­(~N)";\
-            Text[ chinese_simplified ] = "ç®€ç§°(~N)";\
-            Text[ chinese_traditional ] = "ç°¡çŸ­æè¿°æ–‡(~N)";\
-            Text[ arabic ] = "ÇáÇÓã ÇáãÎÊÕÑ";\
-            Text[ turkish ] = "K~ısa ad";\
-            Text[ language_user1 ] = " ";\
-            Text[ catalan ] = "Dre~cera";\
-            Text[ finnish ] = "Lyhyt ~nimi";\
-            Text[ thai ] = " ~à¸Šà¸·à¹ˆà¸­à¸¢à¹ˆà¸­";\
-            Text[ czech ] = "KrÃ¡tkÃ½ nÃ¡zev";\
-            Text[ hebrew ] = "~Kurzbezeichnung";\
-            Text[ hindi ] = "à¤›à¥‹à¤Ÿà¤¾ ~à¤¨à¤¾à¤®";\
-            Text[ slovak ] = "KrÃ¡tky ~nÃ¡zov";\
-            Text[ hungarian ] = "RÃ¶vid ~nÃ©v";\
-            Text[ slovenian ] = "Kratko ~ime";\
+            Text [ de ] = "~Kurzbezeichnung" ;                 \
+            Text [ en-US ] = "Short ~name";\
+            Text [ x-comment ] = " ";\
         };                                              \
         Edit ED_ENTRY                                   \
         {                                               \
@@ -1240,36 +556,9 @@ String STR_IDXMRK_INSERT
         {                                               \
             Pos = MAP_APPFONT ( 6 , 3 ) ;               \
             Size = MAP_APPFONT ( 146 , 8 ) ; \
-            Text = "Eintrag" ;                          \
-            Text [ ENGLISH ] = "Entry" ;                \
-            Text[ english_us ] = "Entry";\
-            Text[ portuguese ] = "Entrada";\
-            Text[ russian ] = "İëåìåíò";\
-            Text[ greek ] = "Êáôá÷şñéóç";\
-            Text[ dutch ] = "Item";\
-            Text[ french ] = "Entrée";\
-            Text[ spanish ] = "Entrada";\
-            Text[ italian ] = "Voce";\
-            Text[ danish ] = "Element";\
-            Text[ swedish ] = "Post";\
-            Text[ polish ] = "Wpis";\
-            Text[ portuguese_brazilian ] = "Entrada";\
-            Text[ japanese ] = "é …ç›®";\
-            Text[ korean ] = "í•­ëª©";\
-            Text[ chinese_simplified ] = "æ¡ç›®";\
-            Text[ chinese_traditional ] = "æ¢ç›®";\
-            Text[ arabic ] = "ÅÏÎÇá";\
-            Text[ turkish ] = "Girdi";\
-            Text[ language_user1 ] = " ";\
-            Text[ catalan ] = "Entrada";\
-            Text[ finnish ] = "Merkintä";\
-            Text[ thai ] = "à¸£à¸²à¸¢à¸à¸²à¸£";\
-            Text[ czech ] = "PoloÅ¾ka";\
-            Text[ hebrew ] = "â€®×©×•×¨×”â€¬";\
-            Text[ hindi ] = "à¤ªà¥à¤°à¤µà¤¿à¤·à¥à¤Ÿà¤¿";\
-            Text[ slovak ] = "PoloÅ¾ka";\
-            Text[ hungarian ] = "BejegyzÃ©s";\
-            Text[ slovenian ] = "Vnos";\
+            Text [ de ] = "Eintrag" ;                          \
+            Text [ en-US ] = "Entry";\
+            Text [ x-comment ] = " ";\
         };                                              \
         OKButton PB_OK                                  \
         {                                               \
@@ -1277,71 +566,17 @@ String STR_IDXMRK_INSERT
             Size = MAP_APPFONT ( 50 , 14 ) ;            \
             TabStop = TRUE ;                            \
             DefButton = TRUE ;                          \
-            Text = "Einfügen";                          \
-            Text[English] = "Insert";                   \
-            Text[ english_us ] = "Insert";\
-            Text[ portuguese ] = "Inserir";\
-            Text[ russian ] = "Âñòàâèòü";\
-            Text[ greek ] = "ÅéóáãùãŞ";\
-            Text[ dutch ] = "Invoegen";\
-            Text[ french ] = "Insérer";\
-            Text[ spanish ] = "Insertar";\
-            Text[ italian ] = "Inserisci";\
-            Text[ danish ] = "Indsæt";\
-            Text[ swedish ] = "Infoga";\
-            Text[ polish ] = "Wstaw";\
-            Text[ portuguese_brazilian ] = "Inserir";\
-            Text[ japanese ] = "æŒ¿å…¥";\
-            Text[ korean ] = "ì‚½ì…";\
-            Text[ chinese_simplified ] = "æ’å…¥";\
-            Text[ chinese_traditional ] = "æ’å…¥";\
-            Text[ arabic ] = "ÅÏÑÇÌ";\
-            Text[ turkish ] = "Ekle";\
-            Text[ language_user1 ] = " ";\
-            Text[ catalan ] = "Insereix";\
-            Text[ finnish ] = "Lisää";\
-            Text[ thai ] = "à¹à¸—à¸£à¸";\
-            Text[ czech ] = "VloÅ¾it";\
-            Text[ hebrew ] = "â€®×”×•×¡×¤×”â€¬";\
-            Text[ hindi ] = "à¤œà¥‹à¤¡à¤¼à¥‹";\
-            Text[ slovak ] = "VloÅ¾iÅ¥";\
-            Text[ hungarian ] = "BeszÃºrÃ¡s";\
-            Text[ slovenian ] = "Vstavi";\
+            Text [ de ] = "Einfügen";                          \
+            Text [ en-US ] = "Insert";\
+            Text [ x-comment ] = " ";\
         };                                              \
         CancelButton PB_CANCEL                          \
         {                                               \
             Pos = MAP_APPFONT ( 162 , 23 ) ;            \
             Size = MAP_APPFONT ( 50 , 14 ) ;            \
-            Text = "Schließen";                         \
-            Text[English] = "Close";                    \
-            Text[ english_us ] = "Close";\
-            Text[ portuguese ] = "Fechar";\
-            Text[ russian ] = "Çàêğûòü";\
-            Text[ greek ] = "Êëåßóéìï";\
-            Text[ dutch ] = "Sluiten";\
-            Text[ french ] = "Fermer";\
-            Text[ spanish ] = "Cerrar";\
-            Text[ italian ] = "Chiudi";\
-            Text[ danish ] = "Luk";\
-            Text[ swedish ] = "Stäng";\
-            Text[ polish ] = "Zamknij";\
-            Text[ portuguese_brazilian ] = "Fechar";\
-            Text[ japanese ] = "é–‰ã˜ã‚‹";\
-            Text[ korean ] = "ë‹«ê¸°";\
-            Text[ chinese_simplified ] = "å…³é—­";\
-            Text[ chinese_traditional ] = "é—œé–‰";\
-            Text[ arabic ] = "ÅÛáÇŞ";\
-            Text[ turkish ] = "Kapat";\
-            Text[ language_user1 ] = " ";\
-            Text[ catalan ] = "Tanca";\
-            Text[ finnish ] = "Sulje";\
-            Text[ thai ] = "à¸›à¸´à¸”";\
-            Text[ czech ] = "ZavÅ™Ã­t";\
-            Text[ hebrew ] = "â€®×¡×’×™×¨×”â€¬";\
-            Text[ hindi ] = "à¤¬à¤¨à¥à¤¦ à¤•à¤°à¥‹";\
-            Text[ slovak ] = "ZavrieÅ¥";\
-            Text[ hungarian ] = "BezÃ¡rÃ¡s";\
-            Text[ slovenian ] = "Zapri";\
+            Text [ de ] = "Schließen";                         \
+            Text [ en-US ] = "Close";\
+            Text [ x-comment ] = " ";\
         };                                              \
         HelpButton PB_HELP                              \
         {                                               \
@@ -1352,103 +587,22 @@ String STR_IDXMRK_INSERT
         {                                               \
             Pos = MAP_APPFONT ( 162 , 60 ) ;            \
             Size = MAP_APPFONT ( 50 , 14 ) ;            \
-            Text = "Ne~u";                  \
-            Text[English] = "New";             \
-            Text[ english_us ] = "~New";\
-            Text[ portuguese ] = "~Novo";\
-            Text[ russian ] = "Ñîçäàòü";\
-            Text[ greek ] = "Äçìéïõñãßá";\
-            Text[ dutch ] = "Nie~uw";\
-            Text[ french ] = "~Nouveau";\
-            Text[ spanish ] = "N~uevo";\
-            Text[ italian ] = "Nuovo";\
-            Text[ danish ] = "~Ny(t)";\
-            Text[ swedish ] = "N~y";\
-            Text[ polish ] = "~Nowy";\
-            Text[ portuguese_brazilian ] = "~Novo";\
-            Text[ japanese ] = "æ–°è¦ä½œæˆ(~N)";\
-            Text[ korean ] = "ìƒˆë¡œ ë§Œë“¤ê¸°(~N)";\
-            Text[ chinese_simplified ] = "æ–°å»º(~N)";\
-            Text[ chinese_traditional ] = "æ–°å»º(~N)";\
-            Text[ arabic ] = "ÌÏíÏ";\
-            Text[ turkish ] = "~Yeni";\
-            Text[ language_user1 ] = " ";\
-            Text[ catalan ] = "~Nou";\
-            Text[ finnish ] = "~Uusi";\
-            Text[ thai ] = "à¹ƒ~à¸«à¸¡à¹ˆ";\
-            Text[ czech ] = "NovÃ½";\
-            Text[ hebrew ] = "â€®×—×“×©â€¬";\
-            Text[ hindi ] = "~à¤¨à¤¯à¤¾";\
-            Text[ slovak ] = "~NovÃ½";\
-            Text[ hungarian ] = "Ãš~j";\
-            Text[ slovenian ] = "~Nov";\
+            Text [ de ] = "Ne~u";                  \
+            Text [ en-US ] = "~New";\
+            Text [ x-comment ] = " ";\
         };                                              \
         PushButton PB_EDITENTRY                       \
         {                                               \
             Pos = MAP_APPFONT ( 162 , 77 ) ;            \
             Size = MAP_APPFONT ( 50 , 14 ) ;            \
-            Text = "~Bearbeiten";                  \
-            Text[English] = "Edit";             \
-            Text[ english_us ] = "Edit";\
-            Text[ portuguese ] = "~Editar";\
-            Text[ russian ] = "Ïğàâêà";\
-            Text[ greek ] = "Åğåîåñãáóßá";\
-            Text[ dutch ] = "B~ewerken";\
-            Text[ french ] = "Éditer";\
-            Text[ spanish ] = "Editar";\
-            Text[ italian ] = "~Modifica";\
-            Text[ danish ] = "Rediger";\
-            Text[ swedish ] = "~Redigera";\
-            Text[ polish ] = "Edytuj";\
-            Text[ portuguese_brazilian ] = "Editar";\
-            Text[ japanese ] = "ç·¨é›†";\
-            Text[ korean ] = "í¸ì§‘";\
-            Text[ chinese_simplified ] = "ç¼–è¾‘";\
-            Text[ chinese_traditional ] = "ç·¨è¼¯";\
-            Text[ arabic ] = "ÊÍÑíÑ";\
-            Text[ turkish ] = "D~üzenle";\
-            Text[ catalan ] = "Edita";\
-            Text[ finnish ] = "Muokkaa";\
-            Text[ thai ] = "à¹à¸à¹‰à¹„à¸‚";\
-            Text[ czech ] = "Upravit";\
-            Text[ hebrew ] = "â€®×¢×¨×™×›×”â€¬";\
-            Text[ hindi ] = "à¤¸à¤‚à¤ªà¤¾à¤¦à¤¨";\
-            Text[ slovak ] = "UpraviÅ¥";\
-            Text[ hungarian ] = "SzerkesztÃ©s";\
-            Text[ slovenian ] = "Uredi";\
+            Text [ de ] = "~Bearbeiten";                  \
+            Text [ en-US ] = "Edit";\
         };                                              \
         String ST_CHANGE                                \
         {                                               \
-            Text = "Ändern";                            \
-            Text[English] = "Apply";                    \
-            Text[ english_us ] = "Modify";\
-            Text[ portuguese ] = "Modificar";\
-            Text[ russian ] = "Èçìåíèòü";\
-            Text[ greek ] = "ÁëëáãŞ";\
-            Text[ dutch ] = "Wijzigen";\
-            Text[ french ] = "Modifier";\
-            Text[ spanish ] = "Modificar";\
-            Text[ italian ] = "Cambia";\
-            Text[ danish ] = "Modificer";\
-            Text[ swedish ] = "Ändra";\
-            Text[ polish ] = "Modyfikuj";\
-            Text[ portuguese_brazilian ] = "Modificar";\
-            Text[ japanese ] = "å¤‰æ›´";\
-            Text[ korean ] = "ìˆ˜ì •";\
-            Text[ chinese_simplified ] = "æ›´æ”¹";\
-            Text[ chinese_traditional ] = "è®Šæ›´";\
-            Text[ arabic ] = "ÊØÈíŞ";\
-            Text[ turkish ] = "Değiştir";\
-            Text[ language_user1 ] = " ";\
-            Text[ catalan ] = "Modifica";\
-            Text[ finnish ] = "Muuta";\
-            Text[ thai ] = "à¸”à¸±à¸”à¹à¸›à¸¥à¸‡à¹à¸à¹‰à¹„à¸‚";\
-            Text[ czech ] = "ZmÄ›nit";\
-            Text[ hebrew ] = "â€®×©×™× ×•×™â€¬";\
-            Text[ hindi ] = "à¤¸à¥à¤§à¤¾à¤°à¥‹";\
-            Text[ slovak ] = "UpraviÅ¥";\
-            Text[ hungarian ] = "MÃ³dosÃ­tÃ¡s";\
-            Text[ slovenian ] = "Spremeni";\
+            Text [ de ] = "Ändern";                            \
+            Text [ en-US ] = "Modify";\
+            Text [ x-comment ] = " ";\
         };                                              \
     };
 
@@ -1484,8 +638,7 @@ ModalDialog DLG_CREATE_AUTH_ENTRY
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 365 , 203 ) ;
-    Text = "Literatureintrag definieren" ;
-    Text [ ENGLISH ] = "Define authority entry" ;
+    Text [ de ] = "Literatureintrag definieren" ;
     Moveable = TRUE ;
     OKButton PB_OK
     {
@@ -1508,166 +661,32 @@ ModalDialog DLG_CREATE_AUTH_ENTRY
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 300 , 8 ) ;
-        Text = "Eintragsdaten" ;
-        Text [ ENGLISH ] = "Entry data" ;
-        Text[ english_us ] = "Entry data";
-        Text[ portuguese ] = "Dados da entrada";
-        Text[ russian ] = "Äàííûå ıëåìåíòà";
-        Text[ greek ] = "Äåäïìİíá êáôá÷şñéóçò";
-        Text[ dutch ] = "Itemgegevens";
-        Text[ french ] = "Données de l'entrée";
-        Text[ spanish ] = "Datos de la entrada";
-        Text[ italian ] = "Dati voce";
-        Text[ danish ] = "Elementdata";
-        Text[ swedish ] = "Postdata";
-        Text[ polish ] = "Dane wpisu";
-        Text[ portuguese_brazilian ] = "Dados de entrada";
-        Text[ japanese ] = "å…¥åŠ›ãƒ‡ãƒ¼ã‚¿";
-        Text[ korean ] = "í•­ëª© ë°ì´í„°";
-        Text[ chinese_simplified ] = "æ¡ç›®æ•°æ®";
-        Text[ chinese_traditional ] = "æ¢ç›®è³‡æ–™";
-        Text[ arabic ] = "ÈíÇäÇÊ ÇáÅÏÎÇá";
-        Text[ turkish ] = "Veri girişi";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "Dades de l'entrada";
-        Text[ finnish ] = "Merkintätiedot";
-        Text[ thai ] = "à¸›à¹‰à¸­à¸™à¸‚à¹‰à¸­à¸¡à¸¹à¸¥";
-        Text[ czech ] = "PoloÅ¾ka";
-        Text[ hebrew ] = "Eintragsdaten";
-        Text[ hindi ] = "à¤ªà¥à¤°à¤µà¤¿à¤·à¥à¤Ÿà¤¿ à¤¡à¤¼à¥‰à¤Ÿà¤¾";
-        Text[ slovak ] = "DÃ¡ta poloÅ¾ky";
-        Text[ hungarian ] = "BejegyzÃ©s-adat";
-        Text[ slovenian ] = "Podatki o vnosu";
+        Text [ de ] = "Eintragsdaten" ;
+        Text [ en-US ] = "Entry data";
+        Text [ x-comment ] = " ";
     };
-    Text[ english_us ] = "Define Bibliography Entry";
-    Text[ portuguese ] = "Definir entrada bibliográfica";
-    Text[ russian ] = "Çàäàòü áèáëèîãğàôè÷åñêóş ññûëêó";
-    Text[ greek ] = "Ïñéóìüò êáôá÷şñéóçò âéâëéïãñáößáò";
-    Text[ dutch ] = "Item voor literatuurlijst definiëren";
-    Text[ french ] = "Définir une entrée de bibliographie";
-    Text[ spanish ] = "Definir entrada de bibliografía";
-    Text[ italian ] = "Definisci voce bibliografica";
-    Text[ danish ] = "Definer litteraturlisteelement";
-    Text[ swedish ] = "Definiera litteraturpost";
-    Text[ polish ] = "Definiuj pozycjê bibliograficzn¹";
-    Text[ portuguese_brazilian ] = "Definir Entrada de Bibliografia";
-    Text[ japanese ] = "å‚è€ƒæ–‡çŒ®é …ç›®ã®ç™»éŒ²";
-    Text[ korean ] = "ì°¸ê³  ë¬¸í—Œ í•­ëª© ì •ì˜";
-    Text[ chinese_simplified ] = "å®šä¹‰æ–‡çŒ®æ¡ç›®";
-    Text[ chinese_traditional ] = "å®šç¾©åƒè€ƒæ–‡ç»æ¢ç›®";
-    Text[ arabic ] = "ÊÚÑíİ ÅÏÎÇá İí İåÑÓ ÇáãÑÇÌÚ";
-    Text[ turkish ] = "Kaynakça girişini tanımla";
-    Text[ catalan ] = "Defineix entrada de bibliografia";
-    Text[ finnish ] = "Määritä lähdeluettelomerkintä";
-    Text[ thai ] = "à¸£à¸°à¸šà¸¸à¸£à¸²à¸¢à¸à¸²à¸£à¸šà¸£à¸£à¸“à¸²à¸™à¸¸à¸à¸£à¸¡";
-    Text[ czech ] = "Definovat poloÅ¾ku pouÅ¾itÃ© literatury";
-    Text[ hebrew ] = "Literatureintrag definieren";
-    Text[ hindi ] = "à¤—à¥à¤°à¤¨à¥à¤¥-à¤¸à¥‚à¤šà¥€ à¤ªà¥à¤°à¤µà¤¿à¤·à¥à¤Ÿà¤¿ à¤•à¥‹ à¤ªà¤°à¤¿à¤­à¤¾à¤·à¤¾ à¤¦à¥‹";
-    Text[ slovak ] = "DefinovaÅ¥ poloÅ¾ku pouÅ¾itej literatÃºry";
-    Text[ hungarian ] = "IrodalomjegyzÃ©k-bejegyzÃ©s megadÃ¡sa";
-    Text[ slovenian ] = "DoloÄi bibliografski vnos";
+    Text [ en-US ] = "Define Bibliography Entry";
 };
 String STR_AUTHMRK_EDIT
 {
-    Text = "Literaturverzeichniseintrag bearbeiten" ;
-    Text [ ENGLISH ] = "Edit authority entry" ;
+    Text [ de ] = "Literaturverzeichniseintrag bearbeiten" ;
 
-    Text[ english_us ] = "Edit Bibliography Entry";
-    Text[ portuguese ] = "Editar entrada bibliográfica";
-    Text[ russian ] = "Ïğàâêà áèáëèîãğàôè÷åñêîé ññûëêè";
-    Text[ greek ] = "Åğåîåñãáóßá êáôá÷şñéóçò âéâëéïãñáößáò";
-    Text[ dutch ] = "Item voor literatuurlijst bewerken";
-    Text[ french ] = "Éditer une entrée de bibliographie";
-    Text[ spanish ] = "Editar entrada de bibliografía";
-    Text[ italian ] = "Modifica voce bibliografica";
-    Text[ danish ] = "Rediger litteraturlisteelement";
-    Text[ swedish ] = "Redigera post i litteraturförteckning";
-    Text[ polish ] = "Edytuj pozycjê bibliograficzn¹";
-    Text[ portuguese_brazilian ] = "Editar Entrada de Bibliografia";
-    Text[ japanese ] = "å‚è€ƒæ–‡çŒ®é …ç›®ã®ç·¨é›†";
-    Text[ korean ] = "ì°¸ê³  ë¬¸í—Œ í•­ëª© í¸ì§‘";
-    Text[ chinese_simplified ] = "ç¼–è¾‘æ–‡çŒ®ç›®å½•æ¡ç›®";
-    Text[ chinese_traditional ] = "ç·¨è¼¯åƒè€ƒæ–‡ç»ç›®éŒ„æ¢ç›®";
-    Text[ arabic ] = "ÊÍÑíÑ ÅÏÎÇá İí İåÑÓ ÇáãÑÇÌÚ";
-    Text[ turkish ] = "Kaynakça dizini girişini düzenle";
-    Text[ language_user1 ] = "; EM28; EM28.9.01: MODALDIALOG title";
-    Text[ catalan ] = "Edita entrada de bibliografia";
-    Text[ finnish ] = "Muokkaa lähdeluettelomerkintää";
-    Text[ thai ] = "à¹à¸à¹‰à¹„à¸‚à¸£à¸²à¸¢à¸à¸²à¸£à¸šà¸£à¸£à¸“à¸²à¸™à¸¸à¸à¸£à¸¡";
-    Text[ czech ] = "Upravit poloÅ¾ku pouÅ¾itÃ© literatury";
-    Text[ hebrew ] = "Literaturverzeichniseintrag bearbeiten";
-    Text[ hindi ] = "à¤—à¥à¤°à¤¨à¥à¤¥-à¤¸à¥‚à¤šà¥€ à¤ªà¥à¤°à¤µà¤¿à¤·à¥à¤Ÿà¤¿ à¤¸à¤‚à¤ªà¤¾à¤¦à¤¨";
-    Text[ slovak ] = "UpraviÅ¥ poloÅ¾ku pouÅ¾itej literatÃºry";
-    Text[ hungarian ] = "IrodalomjegyzÃ©k-bejegyzÃ©s szerkesztÃ©se";
-    Text[ slovenian ] = "Uredi bibliografski vnos";
+    Text [ en-US ] = "Edit Bibliography Entry";
+    Text [ x-comment ] = "; EM28; EM28.9.01: MODALDIALOG title";
 };
 String STR_AUTHMRK_INSERT
 {
-    Text = "Literaturverzeichniseintrag einfügen" ;
-    Text [ ENGLISH ] = "Insert authority entry" ;
+    Text [ de ] = "Literaturverzeichniseintrag einfügen" ;
 
-    Text[ english_us ] = "Insert Bibliography Entry";
-    Text[ portuguese ] = "Inserir entrada bibliográfica";
-    Text[ russian ] = "Âñòàâèòü áèáëèîãğàôè÷åñêóş ññûëêó";
-    Text[ greek ] = "ÅéóáãùãŞ êáôá÷şñéóçò âéâëéïãñáößáò";
-    Text[ dutch ] = "Item invoegen in literatuurlijst";
-    Text[ french ] = "Insertion d'une entrée de bibliographie";
-    Text[ spanish ] = "Insertar entrada de bibliografía";
-    Text[ italian ] = "Inserisci voce bibliografica";
-    Text[ danish ] = "Indsæt litteraturlisteelement";
-    Text[ swedish ] = "Infoga post i litteraturförteckning";
-    Text[ polish ] = "Wstaw pozycjê bibliograficzn¹";
-    Text[ portuguese_brazilian ] = "Inserir Entrada de Bibliografia";
-    Text[ japanese ] = "å‚è€ƒæ–‡çŒ®é …ç›®ã®æŒ¿å…¥";
-    Text[ korean ] = "ì°¸ê³  ë¬¸í—Œ í•­ëª© ì‚½ì…";
-    Text[ chinese_simplified ] = "æ’å…¥æ–‡çŒ®ç›®å½•æ¡ç›®";
-    Text[ chinese_traditional ] = "æ’å…¥åƒè€ƒæ–‡ç»ç›®éŒ„æ¢ç›®";
-    Text[ arabic ] = "ÅÏÑÇÌ ÅÏÎÇá İí İåÑÓ ÇáãÑÇÌÚ";
-    Text[ turkish ] = "Kaynakça dizini girişi ekle";
-    Text[ language_user1 ] = "; EM28; EM28.9.01: MODALDIALOG title";
-    Text[ catalan ] = "Insereix entrada de bibliografia";
-    Text[ finnish ] = "Lisää lähdeluettelomerkintä";
-    Text[ thai ] = "à¹à¸—à¸£à¸à¸£à¸²à¸¢à¸à¸²à¸£à¸šà¸£à¸£à¸“à¸²à¸™à¸¸à¸à¸£à¸¡";
-    Text[ czech ] = "VloÅ¾it poloÅ¾ku pouÅ¾itÃ© literatury";
-    Text[ hebrew ] = "Literaturverzeichniseintrag einfÃ¼gen";
-    Text[ hindi ] = "à¤—à¥à¤°à¤¨à¥à¤¥-à¤¸à¥‚à¤šà¥€ à¤ªà¥à¤°à¤µà¤¿à¤·à¥à¤Ÿà¤¿ à¤œà¥‹à¤¡à¤¼à¥‹";
-    Text[ slovak ] = "VloÅ¾iÅ¥ poloÅ¾ku pouÅ¾itej literatÃºry";
-    Text[ hungarian ] = "IrodalomjegyzÃ©k-bejegyzÃ©s beszÃºrÃ¡sa";
-    Text[ slovenian ] = "Vstavi bibliografski vnos";
+    Text [ en-US ] = "Insert Bibliography Entry";
+    Text [ x-comment ] = "; EM28; EM28.9.01: MODALDIALOG title";
 };
 QueryBox DLG_CHANGE_AUTH_ENTRY
 {
     BUTTONS = WB_YES_NO ;
     DEFBUTTON = WB_DEF_NO ;
-    MESSAGE = "Der Bibliographie-Eintrag ist bereits mit abweichenden Daten im Dokument enthalten. Möchten sie die bereits enthaltenen Einträge anpassen?" ;
-    MESSAGE [ English ] = "The bibliography entry is already contained in the document with different data. Do you want to adjust the existing bibliography entries?" ;
-    MESSAGE[ english_us ] = "The document already contains the bibliography entry but with different data. Do you want to adjust the existing entries?";
-    MESSAGE[ portuguese ] = "A entrada bibliográfica já existe no documento com dados diferentes. Ajustar as entradas existentes?";
-    MESSAGE[ russian ] = "İòà äîêóìåíò óæå ñîäåğæèò áèáëèîãğàôèş, íî ñ äğóãèìè äàííûìè. Ñîãëàñîâàòü ñóùåñòâóşùèå ññûëêè?";
-    MESSAGE[ greek ] = "Ç êáôá÷şñéóç âéâëéïèŞêçò õğÜñ÷åé Şäç óôï İããñáöï ìå äéáöïñåôéêÜ äåäïìİíá. Èİëåôå íá åöáñìïóôïıí ôá íİá äåäïìİíá;";
-    MESSAGE[ dutch ] = "Het bibliografie-item bevindt zich reeds met andere gegevens in het document. Wilt u de bestaande items aanpassen?";
-    MESSAGE[ french ] = "L'entrée de bibliographie existe déjà en relation avec des données différentes dans le document. Voulez-vous ajuster les entrées existantes ?";
-    MESSAGE[ spanish ] = "La entrada bibliográfica existe ya con datos diferentes en el documento. ¿Desea ajustar las entradas ya existentes?";
-    MESSAGE[ italian ] = "La voce bibliografica è già presente nel documento con dati diversi. Volete adattare le voci già contenute?";
-    MESSAGE[ danish ] = "Bibliografielementet findes allerede i dokumentet med afvigende data. Vil du tilpasse de eksisterende elementer i dokumentet?";
-    MESSAGE[ swedish ] = "Bibliografiposten finns redan med avvikande data i dokumentet. Vill du anpassa posterna som redan finns där?";
-    MESSAGE[ polish ] = "Dokument zawiera ju¿ pozycjê bibliograficzn¹, ale z innymi danymi. Dopasowaæ istniej¹ce wpisy?";
-    MESSAGE[ portuguese_brazilian ] = "A entrada de bibliografia já existe no documento mas com dados diferentes. Deseja ajustar as entradas existentes?";
-    MESSAGE[ japanese ] = "ã“ã®å‚è€ƒæ–‡çŒ®ã®é …ç›®ã¯ã“ã®æ–‡æ›¸ã®åˆ¥ã®ç®‡æ‰€ã«ã™ã§ã«å‡ºã¦ãã¦ã„ã¾ã™ã€‚ã“ã®æ—¢å­˜é …ç›®ã«é©åˆã•ã›ã¾ã™ã‹ã€‚";
-    MESSAGE[ korean ] = "ì°¸ê³  ë¬¸í—Œ í•­ëª©ì€ ì´ë¯¸ ë‹¤ë¥¸ ë°ì´í„°ì™€ í•¨ê»˜ ë¬¸ì„œì— í¬í•¨ë˜ì–´ ìˆìŠµë‹ˆë‹¤. ì´ë¯¸ í¬í•¨ëœ í•­ëª©ì„ ì¡°ì •í•˜ê² ìŠµë‹ˆê¹Œ?";
-    MESSAGE[ chinese_simplified ] = "æ–‡æ¡£å†…å·²ç»å«æœ‰é™„å¸¦ä¸åŒæ•°æ®çš„ç›®å½•æ¡ç›®ã€‚è¦è°ƒæ•´å·²ç»å­˜åœ¨çš„æ¡ç›®ï¼Ÿ";
-    MESSAGE[ chinese_traditional ] = "æ–‡ä»¶å…§å·²ç¶“å«æœ‰é™„å¸¶ä¸åŒè³‡æ–™çš„ç›®éŒ„æ¢ç›®ã€‚è¦èª¿æ•´å·²ç¶“å­˜åœ¨çš„æ¢ç›®ï¼Ÿ";
-    MESSAGE[ arabic ] = "ÅÏÎÇá ÇáãÑÌÚ ãæÌæÏ ÈÇáİÚá İí ÇáãÓÊäÏ ÈÈíÇäÇÊ ãÎÊáİÉ. åá ÊÑíÏ ãáÇÁãÉ ÇáÅÏÎÇáÇÊ ÇáãæÌæÏÉ¿";
-    MESSAGE[ turkish ] = "Kaynakça girişi, farklı veriler ile belgede mevcut. Bulunan girişleri ayarlamak istiyor musunuz?";
-    MESSAGE[ catalan ] = "L'entrada bibliogràfica ja existeix amb dades diferents en el document. Voleu ajustar les dades ja existents?";
-    MESSAGE[ finnish ] = "Asiakirja sisältää jo lähdeluettelomerkinnän, mutta siinä on eri tiedot. Haluatko muokata olemassa olevia merkintöjä?";
-    MESSAGE[ thai ] = "à¹€à¸­à¸à¸ªà¸²à¸£à¸¡à¸µà¸£à¸²à¸¢à¸à¸²à¸£à¸šà¸£à¸£à¸“à¸²à¸™à¸¸à¸à¸£à¸¡à¸­à¸¢à¸¹à¹ˆà¹à¸¥à¹‰à¸§à¹à¸•à¹ˆà¸¡à¸µà¸‚à¹‰à¸­à¸¡à¸¹à¸¥à¸—à¸µà¹ˆà¸•à¹ˆà¸²à¸‡à¸à¸±à¸™ à¸„à¸¸à¸“à¸•à¹‰à¸­à¸‡à¸à¸²à¸£à¸›à¸£à¸±à¸šà¸£à¸²à¸¢à¸à¸²à¸£à¸—à¸µà¹ˆà¸¡à¸µà¸­à¸¢à¸¹à¹ˆà¸«à¸£à¸·à¸­à¹„à¸¡à¹ˆ?";
-    MESSAGE[ czech ] = "Dokument jiÅ¾ obsahuje zÃ¡znam seznamu pouÅ¾itÃ© literatury, ale s jinÃ½mi Ãºdaji. Chcete upravit existujÃ­cÃ­ zÃ¡znamy?";
-    MESSAGE[ hebrew ] = "Der Bibliographie-Eintrag ist bereits mit abweichenden Daten im Dokument enthalten. MÃ¶chten sie die bereits enthaltenen EintrÃ¤ge anpassen?";
-    MESSAGE[ hindi ] = "à¤²à¥‡à¤–à¤ªà¤¤à¥à¤° à¤®à¥‡à¤‚ à¤ªà¤¹à¤¿à¤²à¥‡ à¤¸à¥‡ à¤¹à¥€ à¤—à¥à¤°à¤¨à¥à¤¥-à¤¸à¥‚à¤šà¥€ à¤ªà¥à¤°à¤µà¤¿à¤·à¥à¤Ÿà¤¿ à¤¹à¥ˆ, à¤²à¥‡à¤•à¤¿à¤¨ à¤…à¤²à¤— à¤¡à¤¼à¥‰à¤Ÿà¤¾ à¤¹à¥ˆ à¥¤ à¤†à¤ª à¤…à¤¸à¥à¤¤à¤¿à¤¤à¥à¤µ à¤®à¥‡à¤‚ à¤°à¤¹à¤¨à¥‡à¤µà¤¾à¤²à¥‡ à¤ªà¥à¤°à¤µà¤¿à¤·à¥à¤Ÿà¤¿à¤¯à¥‹à¤‚ à¤•à¥‹ à¤µà¥à¤¯à¤µà¤¸à¥à¤¥à¤¾ à¤•à¤°à¤¨à¤¾ à¤šà¤¾à¤¹à¤¤à¥‡ à¤¹à¥ˆ?";
-    MESSAGE[ slovak ] = "Dokument uÅ¾ obsahuje zÃ¡znam zoznamu pouÅ¾itej literatÃºry, ale s inÃ½mi Ãºdajmi. Chcete upraviÅ¥ existujÃºce zÃ¡znamy?";
-    MESSAGE[ hungarian ] = "A dokumentum mÃ¡r tartalmaz ilyen irodalomjegyzÃ©k-bejegyzÃ©st, de mÃ¡s adattartalommal. MÃ³dosÃ­tja a mÃ¡r lÃ©tezÅ‘ bejegyzÃ©seket?";
-    MESSAGE[ slovenian ] = "Dokument Å¾e vsebuje bibliografski vnos z drugaÄnimi podatki. Ali Å¾elite prilagoditi obstojeÄe vnose?";
+    Message [ de ] = "Der Bibliographie-Eintrag ist bereits mit abweichenden Daten im Dokument enthalten. Möchten sie die bereits enthaltenen Einträge anpassen?" ;
+    Message [ en-US ] = "The document already contains the bibliography entry but with different data. Do you want to adjust the existing entries?";
 };
 
 
