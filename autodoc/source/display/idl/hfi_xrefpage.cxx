@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hfi_xrefpage.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-02-20 09:41:23 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:30:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,8 @@
 
 // NOT FULLY DEFINED SERVICES
 #include <ary/idl/i_ce.hxx>
+#include <ary/idl/i_gate.hxx>
+#include <ary/idl/ip_ce.hxx>
 #include <toolkit/hf_title.hxx>
 #include "hfi_navibar.hxx"
 #include "hfi_typetext.hxx"
@@ -148,8 +150,6 @@ HF_IdlXrefs::Write_ManualLinks( const client &  i_ce ) const
             << C_sCRLF;
         ++it;
     }   // end for
-
-    CurOut() << new Html::HorizontalLine();
 }
 
 void
@@ -185,7 +185,47 @@ HF_IdlXrefs::Produce_List( const char *        i_title,
         aTypeWriter.Produce_byData(*it);
         rOutCell << new Html::LineBreak;
     }   // end for
-    CurOut() << new Html::HorizontalLine();
+}
+
+void
+HF_IdlXrefs::Produce_Tree(  const char *        i_title,
+                            const char *        i_label,
+                            const client &      i_ce,
+                            F_GET_SUBLIST       i_sublistcreator ) const
+{
+    dyn_ce_list pResult;
+    (*i_sublistcreator)(pResult, i_ce);
+
+    if (NOT (*pResult).operator bool())
+    {
+        rContentDirectory
+            << i_title
+            << new Html::LineBreak
+            << C_sCRLF;
+        return;
+    }
+
+    csv_assert(*i_label == '#');
+
+    rContentDirectory
+        >> *new Html::Link(i_label)
+            << i_title
+            << new Html::LineBreak
+            << C_sCRLF;
+
+    HF_SubTitleTable
+        aList(CurOut(), i_label+1, i_title, 1);
+    Xml::Element &
+        rOut = aList.Add_Row()
+                    >>* new Html::TableCell
+                        >> *new csi::xml::AnElement("pre")
+                            << new csi::html::StyleAttr("font-family:monospace;");
+
+    recursive_make_ListInTree( rOut,
+                               0,
+                               i_ce,
+                               *pResult,
+                               i_sublistcreator );
 }
 
 void
@@ -229,4 +269,39 @@ HF_IdlXrefs::make_Navibar( const client & i_ce ) const
         aNaviBar(Env(), CurOut());
     aNaviBar.Produce_CeXrefsMainRow(i_ce);
     CurOut() << new Html::HorizontalLine();
+}
+
+void
+HF_IdlXrefs::recursive_make_ListInTree( Xml::Element &      o_rDisplay,
+                                        uintt               i_level,
+                                        const client &      i_ce,
+                                        ce_list &           i_iterator,
+                                        F_GET_SUBLIST       i_sublistcreator ) const
+{
+    const char * sLevelIndentation = "    ";
+
+    HF_IdlTypeText
+        aTypeWriter(Env(), o_rDisplay, true, &i_ce);
+    for ( ; i_iterator.operator bool(); ++i_iterator )
+    {
+        for (uintt i = 0; i < i_level; ++i)
+        {
+            o_rDisplay << sLevelIndentation;
+        }   // end for
+
+        aTypeWriter.Produce_byData(*i_iterator);
+        o_rDisplay << C_sCRLF;
+
+        dyn_ce_list     pResult;
+        const client &  rCe = Env().Gate().Ces().Find_Ce(*i_iterator);
+        (*i_sublistcreator)(pResult, rCe);
+        if ( (*pResult).operator bool() )
+        {
+            recursive_make_ListInTree( o_rDisplay,
+                                       i_level + 1,
+                                       rCe,
+                                       *pResult,
+                                       i_sublistcreator );
+        }
+    }   // end for
 }
