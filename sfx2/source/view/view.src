@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2000-10-27 16:58:24 $
+ *  last change: $Author: kz $ $Date: 2000-11-03 16:37:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -389,7 +389,7 @@ String STR_READONLY
     Text [ swedish ] = "(skrivskyddad)" ;
     Text [ dutch ] = "(alleen lezen)" ;
     Text [ spanish ] = "(solo lectura)" ;
-    Text [ english_us ] = "(read only)" ;
+    Text [ english_us ] = " (read-only)" ;
     Text[ chinese_simplified ] = "(·АёІРґ)";
     Text[ russian ] = "(только для чтения)";
     Text[ polish ] = "(tylko do odczytu)";
