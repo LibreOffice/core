@@ -2,9 +2,9 @@
  *
  *  $RCSfile: databasecontext.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:09:01 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:03:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,8 +138,20 @@ class ODatabaseContext
             :public DatabaseAccessContext_Base
 {
 private:
+    /** loads the given object from the given URL
+    @throws WrappedTargetException
+        if an error occurs accessing the URL via the UCB
+
+    */
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > loadObjectFromURL(const ::rtl::OUString& _rName,const ::rtl::OUString& _sURL);
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > getObject(const ::rtl::OUString& _rName);
+
+    /** retrieves the URL for a given registration name, if any
+        @returns <FALSE/> if and only if there exists a registration for the given name
+        @throws IllegalArgumentException if the name is empty
+    */
+    bool    getURLForRegisteredObject( const ::rtl::OUString& _rRegisteredName, ::rtl::OUString& _rURL );
+
 protected:
     ::osl::Mutex    m_aMutex;
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >            m_xServiceManager;
