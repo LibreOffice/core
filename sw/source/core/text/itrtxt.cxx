@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrtxt.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ama $ $Date: 2001-05-11 14:01:30 $
+ *  last change: $Author: ama $ $Date: 2001-05-23 07:55:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -500,7 +500,7 @@ void SwTxtIter::TruncLines( sal_Bool bNoteFollow )
             GetInfo().GetParaPortion()->SetFollowField( pDel->IsRest() );
         delete pDel;
     }
-    if( pCurr->IsDummy() )
+    if( pCurr->IsDummy() && nStart < GetTxtFrm()->GetTxt().Len() )
         pCurr->SetRealHeight( 1 );
     if( GetHints() )
         pFrm->RemoveFtn( nStart + pCurr->GetLen() );
