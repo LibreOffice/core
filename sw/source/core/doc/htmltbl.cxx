@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmltbl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 12:24:58 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 13:32:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -529,12 +529,12 @@ USHORT SwHTMLTableLayout::GetBrowseWidthByTabFrm(
 
     const SwFrm *pUpper = rTabFrm.GetUpper();
     if( MayBeInFlyFrame() && pUpper->IsFlyFrm() &&
-        ((const SwFlyFrm *)pUpper)->GetAnchor() )
+        ((const SwFlyFrm *)pUpper)->GetAnchorFrm() )
     {
         // Wenn die Tabelle in einem selbst angelegten Rahmen steht, dann ist
         // die Breite Ankers und nicht die Breite Rahmens von Bedeutung.
         // Bei Absatz-gebundenen Rahmen werden Absatz-Einzuege nicht beachtet.
-        const SwFrm *pAnchor = ((const SwFlyFrm *)pUpper)->GetAnchor();
+        const SwFrm *pAnchor = ((const SwFlyFrm *)pUpper)->GetAnchorFrm();
         if( pAnchor->IsTxtFrm() )
             nWidth = pAnchor->Frm().Width();
         else
