@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javaoptions.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 14:37:33 $
+ *  last change: $Author: obo $ $Date: 2004-04-29 16:47:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,14 +150,12 @@ struct SvtJavaOptions_Impl
     sal_Bool                bROSecurity;
     sal_Bool                bRONetAccess;
     sal_Bool                bROUserClassPath;
-    sal_Bool                bROExecuteApplets;
 
     SvtJavaOptions_Impl() :
         bROEnabled          (CFG_READONLY_DEFAULT),
         bROSecurity         (CFG_READONLY_DEFAULT),
         bRONetAccess        (CFG_READONLY_DEFAULT),
         bROUserClassPath    (CFG_READONLY_DEFAULT),
-        bROExecuteApplets   (CFG_READONLY_DEFAULT),
         bEnabled            (sal_False),
         bSecurity           (sal_False),
         nNetAccess          (0),
@@ -189,33 +187,17 @@ SvtJavaOptions::SvtJavaOptions() :
             {
                 switch ( nProp )
                 {
-                    case 0:
-                    {
-                        pImpl->bEnabled = *(sal_Bool*)pValues[nProp].getValue();
-                        pImpl->bROEnabled = pROStates[nProp];
-                    }
-                    break;
-                    case 1:
-                    {
-                        pImpl->bSecurity = *(sal_Bool*)pValues[nProp].getValue();
-                        pImpl->bROSecurity = pROStates[nProp];
-                    }
-                    break;
-                    case 2:
-                    {
-                        pValues[nProp] >>= pImpl->nNetAccess;
-                        pImpl->bRONetAccess = pROStates[nProp];
-                    }
-                    break;
-                    case 3:
-                    {
-                        pValues[nProp] >>= pImpl->sUserClassPath;
-                        pImpl->bROUserClassPath = pROStates[nProp];
-                    }
-                    break;
+                    case 0: pImpl->bEnabled = *(sal_Bool*)pValues[nProp].getValue(); break;
+                    case 1: pImpl->bSecurity = *(sal_Bool*)pValues[nProp].getValue();break;
+                    case 2: pValues[nProp] >>= pImpl->nNetAccess; break;
+                    case 3: pValues[nProp] >>= pImpl->sUserClassPath; break;
                 }
             }
         }
+        pImpl->bROEnabled = pROStates[0];
+        pImpl->bROSecurity = pROStates[1];
+        pImpl->bRONetAccess = pROStates[2];
+        pImpl->bROUserClassPath = pROStates[3];
     }
 }
 /* -----------------------------18.05.01 13:28--------------------------------
