@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:26:32 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 09:53:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -790,7 +790,7 @@ sal_Bool SwTransferable::WriteObject( SotStorageStreamRef& xStream,
         {
             //JP 28.02.2001: dont change the sequence of commands - Bug 8
             SdrModel *pModel = (SdrModel*)pObject;
-            pModel->SetStreamingSdrModel( TRUE );
+//BFS04         pModel->SetStreamingSdrModel( TRUE );
             xStream->SetBufferSize( 16348 );
 
             // #108584#
@@ -825,7 +825,7 @@ sal_Bool SwTransferable::WriteObject( SotStorageStreamRef& xStream,
                     xStream->Commit();
             }
 
-            pModel->SetStreamingSdrModel( FALSE );
+//BFS04         pModel->SetStreamingSdrModel( FALSE );
 
             bRet = ERRCODE_NONE == xStream->GetError();
         }
