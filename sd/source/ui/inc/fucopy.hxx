@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fucopy.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:38 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 11:59:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,26 +59,34 @@
  *
  ************************************************************************/
 
-#ifndef _SD_FUCOPY_HXX
-#define _SD_FUCOPY_HXX
+#ifndef SD_FU_COPY_HXX
+#define SD_FU_COPY_HXX
 
-#ifndef _SD_FUPOOR_HXX
+#ifndef SD_FU_POOR_HXX
 #include "fupoor.hxx"
 #endif
 
-class FuCopy : public FuPoor
+namespace sd {
+
+class FuCopy
+    : public FuPoor
 {
- public:
+public:
     TYPEINFO();
 
-    FuCopy(SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
-                SdDrawDocument* pDoc, SfxRequest& rReq);
-
-    virtual ~FuCopy();
+    FuCopy (
+        ViewShell* pViewSh,
+        ::sd::Window* pWin,
+        ::sd::View* pView,
+        SdDrawDocument* pDoc,
+        SfxRequest& rReq);
+    virtual ~FuCopy (void);
 
     virtual void Activate();           // Function aktivieren
     virtual void Deactivate();         // Function deaktivieren
 };
 
-#endif      // _SD_FUCOPY_HXX
+} // end of namespace sd
+
+#endif
 

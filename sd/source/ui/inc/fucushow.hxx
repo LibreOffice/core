@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fucushow.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:38 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 11:59:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,23 +59,30 @@
  *
  ************************************************************************/
 
+#ifndef SD_FU_CUSTOM_SHOW_DLG_HXX
+#define SD_FU_CUSTOM_SHOW_DLG_HXX
 
-#ifndef _SD_FUCUSHOW_HXX
-#define _SD_FUCUSHOW_HXX
-
-#ifndef _SD_FUPOOR_HXX
+#ifndef SD_FU_POOR_HXX
 #include "fupoor.hxx"
 #endif
 
-class FuCustomShowDlg : public FuPoor
+namespace sd {
+
+class FuCustomShowDlg
+    : public FuPoor
 {
 public:
+    TYPEINFO();
 
-                TYPEINFO();
-
-                FuCustomShowDlg( SdViewShell* pViewSh, SdWindow* pWin, SdView* pView,
-                                SdDrawDocument* pDoc, SfxRequest& rReq);
-                ~FuCustomShowDlg() {}
+    FuCustomShowDlg (
+        ViewShell* pViewSh,
+        ::sd::Window* pWin,
+        ::sd::View* pView,
+        SdDrawDocument* pDoc,
+        SfxRequest& rReq);
+    virtual ~FuCustomShowDlg (void) {}
 };
 
-#endif // _SD_FUCUSHOW_HXX
+} // end of namespace sd
+
+#endif
