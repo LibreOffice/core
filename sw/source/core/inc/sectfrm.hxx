@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sectfrm.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 11:12:58 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:28:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,9 +91,6 @@ class SwSectionFrm: public SwLayoutFrm, public SwFlowFrm
     BOOL IsSuperfluous() const { return !ContainsAny() && !ContainsFtnCont(); }
     void CalcFtnAtEndFlag();
     void CalcEndAtEndFlag();
-    BOOL IsAncestorOf( const SwSection* pSect ) const;
-    BOOL IsAncestorOf( const SwSectionFrm* pSct ) const
-        { return IsAncestorOf( pSct->pSection ); }
     const SwSectionFmt* _GetEndSectFmt() const;
     BOOL IsEndnoteAtMyEnd() const;
 protected:
