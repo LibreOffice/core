@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox2.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 15:12:24 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 16:23:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,6 @@ using namespace vcl;
 
 ImplToolBoxPrivateData::ImplToolBoxPrivateData() : m_pLayoutData( NULL )
 {
-    m_nDeltaSizeX = m_nDeltaSizeY = 0;
     meButtonSize = TOOLBOX_BUTTONSIZE_DONTCARE;
     mpMenu = new PopupMenu();
     mnEventId = 0;
@@ -128,8 +127,6 @@ ImplToolBoxPrivateData::ImplToolBoxPrivateData() : m_pLayoutData( NULL )
     mbKeyInputDisabled = FALSE;
     mbMenubuttonSelected = FALSE;
     mbPageScroll = FALSE;
-
-    m_nUpdateAutoSizeTries = 0;
 }
 
 ImplToolBoxPrivateData::~ImplToolBoxPrivateData()
