@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.86 $
+ *  $Revision: 1.87 $
  *
- *  last change: $Author: vg $ $Date: 2002-05-13 12:13:00 $
+ *  last change: $Author: ssa $ $Date: 2002-05-15 11:07:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -699,6 +699,10 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, const ::com::sun::star::
     // init data
     mpRealParent = pRealParent;
 
+    // #99318: make sure fontcache and list is available before call to SetSettings
+    mpFontList      = mpFrameData->mpFontList;
+    mpFontCache     = mpFrameData->mpFontCache;
+
     if ( mbFrame )
     {
 #ifndef REMOTE_APPSERVER
@@ -822,8 +826,6 @@ void Window::ImplInit( Window* pParent, WinBits nStyle, const ::com::sun::star::
     USHORT nScreenZoom = rStyleSettings.GetScreenZoom();
     mnDPIX          = (mpFrameData->mnDPIX*nScreenZoom)/100;
     mnDPIY          = (mpFrameData->mnDPIY*nScreenZoom)/100;
-    mpFontList      = mpFrameData->mpFontList;
-    mpFontCache     = mpFrameData->mpFontCache;
     maFont          = rStyleSettings.GetAppFont();
     ImplPointToLogic( maFont );
 
