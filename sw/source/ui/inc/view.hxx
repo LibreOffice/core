@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 17:50:18 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 11:41:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -283,7 +283,9 @@ class SwView: public SfxViewShell
                     bTopCrsr : 1,
                     bAllwaysShowSel : 1,
                     bTabColFromDoc : 1,
+                    bTabRowFromDoc : 1,
                     bSetTabColFromDoc : 1 ,
+                    bSetTabRowFromDoc : 1,
                     bAttrChgNotified : 1,
                     bAttrChgNotifiedWithRegistrations : 1,
                     bVerbsActive : 1,
@@ -481,6 +483,8 @@ public:
     void            SetTabColFromDocPos( const Point &rPt ) { aTabColFromDocPos = rPt; }
     void            SetTabColFromDoc( BOOL b ) { bTabColFromDoc = b; }
     BOOL            IsTabColFromDoc() const    { return bTabColFromDoc; }
+    void            SetTabRowFromDoc( BOOL b ) { bTabRowFromDoc = b; }
+    BOOL            IsTabRowFromDoc() const    { return bTabRowFromDoc; }
 
             void    DocSzChgd( const Size& rNewSize );
     const   Size&   GetDocSz() const { return aDocSz; }
