@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: os $ $Date: 2001-01-12 16:12:45 $
+ *  last change: $Author: os $ $Date: 2001-01-15 15:57:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2439,17 +2439,17 @@ uno::Any SwXTextField::getPropertyValue(const OUString& rPropertyName)
         throw UnknownPropertyException();
     if(FN_UNO_TEXT_WRAP == pMap->nWID)
     {
-        aRet <<= (INT16) WrapTextMode_NONE;
+        aRet <<= WrapTextMode_NONE;
     }
     else if(FN_UNO_ANCHOR_TYPE == pMap->nWID)
     {
-        aRet <<= (INT16) TextContentAnchorType_AT_PARAGRAPH;
+        aRet <<= TextContentAnchorType_AS_CHARACTER;
     }
     else if(FN_UNO_ANCHOR_TYPES == pMap->nWID)
     {
         uno::Sequence<TextContentAnchorType> aTypes(1);
         TextContentAnchorType* pArray = aTypes.getArray();
-        pArray[0] = TextContentAnchorType_AT_PARAGRAPH;
+        pArray[0] = TextContentAnchorType_AS_CHARACTER;
         aRet.setValue(&aTypes, ::getCppuType((uno::Sequence<TextContentAnchorType>*)0));
     }
     else if(pField)
