@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strmunx.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-15 17:56:06 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 13:21:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -394,7 +394,7 @@ ULONG SvFileStream::GetData( void* pData, ULONG nSize )
 {
 #ifdef DBG_UTIL
     ByteString aTraceStr( "SvFileStream::GetData(): " );
-    aTraceStr += nSize;
+    aTraceStr += ByteString::CreateFromInt64(nSize);
     aTraceStr += " Bytes from ";
     aTraceStr += ByteString(aFilename, osl_getThreadTextEncoding());
     DBG_TRACE( aTraceStr.GetBuffer() );
@@ -424,7 +424,7 @@ ULONG SvFileStream::PutData( const void* pData, ULONG nSize )
 {
 #ifdef DBG_UTIL
     ByteString aTraceStr( "SvFileStrean::PutData: " );
-    aTraceStr += nSize;
+    aTraceStr += ByteString::CreateFromInt64(nSize);
     aTraceStr += " Bytes to ";
     aTraceStr += ByteString(aFilename, osl_getThreadTextEncoding());
     DBG_TRACE( aTraceStr.GetBuffer() );
