@@ -823,3 +823,6 @@ DestroyRemoteControl
 ??_GExtraIdle@@UAEPAXI@Z
 ??1TTProfiler@@UAE@XZ
 ??_GTTProfiler@@UAEPAXI@Z
+?iquery@?$Reference@VXAttributeList@sax@xml@star@sun@com@@@uno@star@sun@com@@CAPAVXInterface@2345@PAV62345@@Z
+?iquery@?$Reference@VXCloneable@util@star@sun@com@@@uno@star@sun@com@@CAPAVXInterface@2345@PAV62345@@Z
+?iquery@?$Reference@VXParser@sax@xml@star@sun@com@@@uno@star@sun@com@@CAPAVXInterface@2345@PAV62345@@Z
