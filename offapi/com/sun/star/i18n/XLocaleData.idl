@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XLocaleData.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: bustamam $ $Date: 2000-12-08 22:56:00 $
+ *  last change: $Author: bustamam $ $Date: 2000-12-09 00:30:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,7 +146,7 @@ interface XLocaleData: com::sun::star::uno::XInterface
     ForbiddenCharacters getForbiddenCharacters ([in] com::sun::star::lang::Locale rLocale);
     sequence<string> getReservedWord ([in] com::sun::star::lang::Locale rLocale);
 
-    sequence<string> getAllInstalledLocaleNames();
+    sequence<com::sun::star::lang::Locale> getAllInstalledLocaleNames();
 };
 
 //=============================================================================
