@@ -2,9 +2,9 @@
  *
  *  $RCSfile: addresstemplate.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-24 12:28:55 $
+ *  last change: $Author: mh $ $Date: 2000-11-28 14:41:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,9 @@
  *
  *
  ************************************************************************/
+
+#include <stdio.h>
+
 
 #ifndef _SVT_ADDRESSTEMPLATE_HXX_
 #include "addresstemplate.hxx"
