@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLSectionSourceDDEImportContext.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-02 14:41:38 $
+ *  last change: $Author: dvo $ $Date: 2001-02-16 16:20:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,9 +107,17 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_BEANS_XMULTIPROPERTYSET_HPP_
+#include <com/sun/star/beans/XMultiPropertySet.hpp>
+#endif
+
+#ifndef _TOOLS_DEBUG_HXX
+#include <tools/debug.hxx>
+#endif
 
 using ::rtl::OUString;
 using ::com::sun::star::beans::XPropertySet;
+using ::com::sun::star::beans::XMultiPropertySet;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::xml::sax::XAttributeList;
 
@@ -210,19 +218,28 @@ void XMLSectionSourceDDEImportContext::StartElement(
     if (rSectionPropertySet->getPropertySetInfo()->
         hasPropertyByName(sDdeCommandFile))
     {
-        Any aAny;
+        // use multi property set to force single update of connection #83654#
+        Sequence<OUString> aNames(4);
+        Sequence<Any> aValues(4);
 
-        aAny <<= sApplication;
-        rSectionPropertySet->setPropertyValue(sDdeCommandFile, aAny);
+        aValues[0] <<= sApplication;
+        aNames[0] = sDdeCommandFile;
 
-        aAny <<= sTopic;
-        rSectionPropertySet->setPropertyValue(sDdeCommandType, aAny);
+        aValues[1] <<= sTopic;
+        aNames[1] = sDdeCommandType;
 
-        aAny <<= sItem;
-        rSectionPropertySet->setPropertyValue(sDdeCommandElement, aAny);
+        aValues[2] <<= sItem;
+        aNames[2] = sDdeCommandElement;
 
-        aAny.setValue(&bAutomaticUpdate, ::getBooleanCppuType());
-        rSectionPropertySet->setPropertyValue(sIsAutomaticUpdate, aAny);
+        aValues[3].setValue(&bAutomaticUpdate, ::getBooleanCppuType());
+        aNames[3] = sIsAutomaticUpdate;
+
+        Reference<XMultiPropertySet> rMultiPropSet(rSectionPropertySet,
+                                                   UNO_QUERY);
+        DBG_ASSERT(rMultiPropSet.is(), "we'd really like a XMultiPropertySet");
+        if (rMultiPropSet.is())
+            rMultiPropSet->setPropertyValues(aNames, aValues);
+        // else: ignore
     }
 }
 
