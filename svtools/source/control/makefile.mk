@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: fs $ $Date: 2001-09-04 09:01:32 $
+#   last change: $Author: dr $ $Date: 2001-11-19 13:22:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,26 +75,6 @@ LIBTARGET=NO
 
 # --- Files --------------------------------------------------------
 
-CXXFILES=	ctrltool.cxx		\
-            ctrlbox.cxx 		\
-            stdctrl.cxx 		\
-            stdmenu.cxx 		\
-            valueset.cxx		\
-            tabbar.cxx			\
-            headbar.cxx 		\
-            prgsbar.cxx 		\
-            ruler.cxx			\
-            taskbar.cxx 		\
-            taskbox.cxx 		\
-            taskstat.cxx		\
-            taskmisc.cxx		\
-            calendar.cxx		\
-            filectrl.cxx		\
-            scrwin.cxx			\
-            reginfo.cxx			\
-            collatorres.cxx		\
-            fmtfield.cxx
-
 .IF "$(GUI)"!="DOS"
 SRCFILES=	ctrltool.src		\
             ctrlbox.src			\
@@ -125,7 +105,8 @@ SLOFILES=	$(EXCEPTIONSFILES) \
             $(SLO)$/scrwin.obj	 \
             $(SLO)$/reginfo.obj	\
             $(SLO)$/collatorres.obj \
-            $(SLO)$/fmtfield.obj
+            $(SLO)$/fmtfield.obj \
+            $(SLO)$/scriptedtext.obj
 
 # statisch fuer setup
 

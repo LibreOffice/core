@@ -120,6 +120,7 @@ hedabu: ..\inc\cnclhint.hxx %_DEST%\inc%_EXT%\svtools\cnclhint.hxx
 hedabu: ..\inc\inettype.hxx %_DEST%\inc%_EXT%\svtools\inettype.hxx
 hedabu: ..\inc\brwhead.hxx %_DEST%\inc%_EXT%\svtools\brwhead.hxx
 hedabu: ..\inc\solar.hrc %_DEST%\inc%_EXT%\svtools\solar.hrc
+hedabu: ..\inc\scriptedtext.hxx %_DEST%\inc%_EXT%\svtools\scriptedtext.hxx
 hedabu: ..\inc\stdctrl.hxx %_DEST%\inc%_EXT%\svtools\stdctrl.hxx
 hedabu: ..\inc\stritem.hxx %_DEST%\inc%_EXT%\svtools\stritem.hxx
 hedabu: ..\inc\style.hrc %_DEST%\inc%_EXT%\svtools\style.hrc
