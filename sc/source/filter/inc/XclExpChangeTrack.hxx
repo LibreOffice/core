@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XclExpChangeTrack.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:04:56 $
+ *  last change: $Author: rt $ $Date: 2004-03-02 09:41:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -406,7 +406,7 @@ private:
     sal_Bool                    bAccepted;
 
 protected:
-    const XclExpTabIdBuffer&    rTabBuffer;     // for table num export (sc num -> xcl num)
+    const XclExpTabInfo&        rTabInfo;       // for table num export (sc num -> xcl num)
     const XclExpChTrTabIdBuffer& rIdBuffer;     // for table num export (xcl num -> tab id)
     sal_uInt32                  nLength;        // this is not the record size
     sal_uInt16                  nOpCode;        // EXC_CHTR_OP_***
@@ -475,7 +475,7 @@ inline void XclExpChTrAction::Write2DRange( XclExpStream& rStrm, const ScRange& 
 
 inline void XclExpChTrAction::WriteTabId( XclExpStream& rStrm, sal_uInt16 nTab ) const
 {
-    rStrm << rIdBuffer.GetId( rTabBuffer.GetXclTab( nTab ) );
+    rStrm << rIdBuffer.GetId( rTabInfo.GetXclTab( nTab ) );
 }
 
 //___________________________________________________________________
