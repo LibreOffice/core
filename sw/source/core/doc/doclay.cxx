@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doclay.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 14:01:34 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:16:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1886,7 +1886,7 @@ IMPL_STATIC_LINK( SwDoc, BackgroundDone, SvxBrushItem*, EMPTYARG )
     return 0;
 }
 
-String lcl_GetUniqueFlyName( const SwDoc* pDoc, sal_uInt16 nDefStrId )
+static String lcl_GetUniqueFlyName( const SwDoc* pDoc, sal_uInt16 nDefStrId )
 {
     ResId aId( nDefStrId, pSwResMgr );
     String aName( aId );
@@ -1931,17 +1931,17 @@ String lcl_GetUniqueFlyName( const SwDoc* pDoc, sal_uInt16 nDefStrId )
 
 String SwDoc::GetUniqueGrfName() const
 {
-    return ::lcl_GetUniqueFlyName( this, STR_GRAPHIC_DEFNAME );
+    return lcl_GetUniqueFlyName( this, STR_GRAPHIC_DEFNAME );
 }
 
 String SwDoc::GetUniqueOLEName() const
 {
-    return ::lcl_GetUniqueFlyName( this, STR_OBJECT_DEFNAME );
+    return lcl_GetUniqueFlyName( this, STR_OBJECT_DEFNAME );
 }
 
 String SwDoc::GetUniqueFrameName() const
 {
-    return ::lcl_GetUniqueFlyName( this, STR_FRAME_DEFNAME );
+    return lcl_GetUniqueFlyName( this, STR_FRAME_DEFNAME );
 }
 
 const SwFlyFrmFmt* SwDoc::FindFlyByName( const String& rName, sal_Int8 nNdTyp ) const
@@ -1984,7 +1984,7 @@ void SwDoc::SetFlyName( SwFlyFrmFmt& rFmt, const String& rName )
             case ND_GRFNODE:    nTyp = STR_GRAPHIC_DEFNAME; break;
             case ND_OLENODE:    nTyp = STR_OBJECT_DEFNAME;  break;
             }
-        sName = ::lcl_GetUniqueFlyName( this, nTyp );
+        sName = lcl_GetUniqueFlyName( this, nTyp );
     }
     rFmt.SetName( sName, sal_True );
 }
