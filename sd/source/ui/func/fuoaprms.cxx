@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuoaprms.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 11:06:52 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 15:47:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,14 +108,15 @@
 #ifndef SD_VIEW_HXX
 #include "View.hxx"
 #endif
-#include "tpaction.hxx"
+//CHINA001 #include "tpaction.hxx"
 #ifndef SD_PREVIEW_WINDOW_HXX
 #include "PreviewWindow.hxx"
 #endif
 #ifndef SD_PREVIEW_CHILD_WINDOW_HXX
 #include "PreviewChildWindow.hxx"
 #endif
-
+#include "sdabstdlg.hxx" //CHINA001
+#include "tpaction.hrc" //CHINA001
 using namespace ::com::sun::star;
 
 namespace sd {
@@ -519,8 +520,11 @@ FuObjectAnimationParameters::FuObjectAnimationParameters (
         else
             aSet.Put(SfxBoolItem(ATTR_ACTION_PLAYFULL, FALSE));
 
-        SdActionDlg* pDlg = new SdActionDlg(NULL, &aSet, pView);
-
+        //CHINA001 SdActionDlg* pDlg = new SdActionDlg(NULL, &aSet, pView);
+        SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();//CHINA001
+        DBG_ASSERT(pFact, "SdAbstractDialogFactory fail!");//CHINA001
+        AbstractSfxSingleTabDialog* pDlg = pFact->CreateSfxSingleTabDialog(ResId( TP_ANIMATION_ACTION ), NULL, &aSet, pView );
+        DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
         USHORT nResult = pDlg->Execute();
 
         switch( nResult )
