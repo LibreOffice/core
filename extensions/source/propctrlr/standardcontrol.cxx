@@ -2,9 +2,9 @@
  *
  *  $RCSfile: standardcontrol.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-06 13:46:39 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 12:12:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,13 @@
 #ifndef _EXTENSIONS_PROPCTRLR_BRWCONTROLLISTENER_HXX_
 #include "brwcontrollistener.hxx"
 #endif
+#ifndef EXTENSIONS_SOURCE_PROPCTRLR_STRINGREPRESENTATION_HXX
+#include "stringrepresentation.hxx"
+#endif
+
+#ifndef _COM_SUN_STAR_UTIL_DATETIME_HPP_
+#include <com/sun/star/util/DateTime.hpp>
+#endif
 
 #ifndef INCLUDED_RTL_MATH_HXX
 #include <rtl/math.hxx>
@@ -93,6 +100,15 @@
 #ifndef _SVEDIT_HXX
 #include <svtools/svmedit.hxx>
 #endif
+#ifndef INCLUDED_SVTOOLS_SYSLOCALE_HXX
+#include <svtools/syslocale.hxx>
+#endif
+#ifndef _UNOTOOLS_DATETIME_HXX_
+#include <unotools/datetime.hxx>
+#endif
+#ifndef _ISOLANG_HXX
+#include <tools/isolang.hxx>
+#endif
 #ifndef _SV_BUTTON_HXX
 #include <vcl/button.hxx>
 #endif
@@ -106,6 +122,11 @@
 namespace pcr
 {
 //............................................................................
+
+    using namespace ::com::sun::star;
+    using namespace ::com::sun::star::uno;
+    using namespace ::com::sun::star::lang;
+    using namespace ::com::sun::star::util;
 
     //==================================================================
     //= OTimeControl
@@ -140,7 +161,7 @@ namespace pcr
             if (rString.getLength())
             {
                 sal_uInt32 nTime = rString.toInt32();
-                SetTime(Time(nTime));
+                SetTime( ::Time( nTime ) );
             }
             else
             {
@@ -186,10 +207,10 @@ namespace pcr
         SetGetFocusHdl(LINK(this, OCommonBehaviourControl, GetFocusHdl));
         SetLoseFocusHdl(LINK(this, OCommonBehaviourControl, LoseFocusHdl));
 
-        SetMin(Date(1,1,1600));
-        SetFirst(Date(1,1,1600));
-        SetLast(Date(1,1,9999));
-        SetMax(Date(1,1,9999));
+        SetMin( ::Date( 1,1,1600 ) );
+        SetFirst( ::Date( 1,1,1600 ) );
+        SetLast( ::Date( 1, 1, 9999 ) );
+        SetMax( ::Date( 1, 1, 9999 ) );
 
         autoSizeWindow();
 
@@ -210,7 +231,7 @@ namespace pcr
             if (rString.getLength())
             {
                 sal_uInt32 nDate = rString.toInt32();
-                SetDate(Date(nDate));
+                SetDate( ::Date( nDate ) );
             }
             else
             {
@@ -410,6 +431,86 @@ namespace pcr
             return nResult;
 
         return LongCurrencyField::PreNotify(rNEvt);
+    }
+
+    //==================================================================
+    // class ODateTimeControl
+    //==================================================================
+    //------------------------------------------------------------------
+    ODateTimeControl::ODateTimeControl( Window* _pParent, sal_uInt16 _nDigits, WinBits _nWinStyle)
+            :OCommonBehaviourControl(this)
+            ,FormattedField(_pParent, _nWinStyle)
+            ,m_pConverter( new StringRepresentation( NULL ) )
+    {
+        SetModifyHdl( LINK( this, OCommonBehaviourControl, ModifiedHdl ) );
+        SetGetFocusHdl( LINK( this, OCommonBehaviourControl, GetFocusHdl ) );
+        SetLoseFocusHdl( LINK( this, OCommonBehaviourControl, LoseFocusHdl ) );
+
+        EnableEmptyField( sal_True );
+
+        autoSizeWindow();
+
+        // determine a default format
+        Locale aSysLocale = SvtSysLocale().GetLocaleData().getLocale();
+        LanguageType eSysLanguage = ConvertIsoNamesToLanguage( aSysLocale.Language, aSysLocale.Country );
+
+        SetFormatter( StandardFormatter() );
+        SvNumberFormatter* pFormatter = GetFormatter();
+        ULONG nStandardDateTimeFormat = pFormatter->GetStandardFormat( NUMBERFORMAT_DATETIME, eSysLanguage );
+
+        SetFormatKey( nStandardDateTimeFormat );
+    }
+
+    //------------------------------------------------------------------
+    void ODateTimeControl::SetProperty( const ::rtl::OUString& _rString, sal_Bool _bIsUnknown )
+    {
+        if ( _bIsUnknown || ( _rString == m_sStandardString ) || !_rString.getLength() )
+        {
+            SetText( String() );
+        }
+        else
+        {
+            Any aValue;
+            util::DateTime aUNODateTime;
+            OSL_VERIFY(
+                m_pConverter->convertStringToGenericValue( _rString, aValue, ::getCppuType( static_cast< util::DateTime* >( NULL ) ) )
+                &&  ( aValue >>= aUNODateTime )
+            );
+
+            ::DateTime aDateTime;
+            ::utl::typeConvert( aUNODateTime, aDateTime );
+
+            double nValue = aDateTime - ::DateTime( *GetFormatter()->GetNullDate() );
+            SetValue( nValue );
+        }
+    }
+
+    //------------------------------------------------------------------
+    ::rtl::OUString ODateTimeControl::GetProperty() const
+    {
+        ::rtl::OUString sValue;
+        if ( GetText().Len() )
+        {
+            double nValue = const_cast< ODateTimeControl* >( this )->GetValue();
+
+            ::DateTime aDateTime( *GetFormatter()->GetNullDate() );
+
+            // add the "days" part
+            double nDays = floor( nValue );
+            aDateTime += nDays;
+
+            // add the "time" part
+            double nTime = nValue - nDays;
+            nTime = ::rtl::math::round( nTime * 86400.0 ) / 86400.0;
+                // we're not interested in 100th seconds, and this here prevents rounding errors
+            aDateTime += nTime;
+
+            util::DateTime aUNODateTime;
+            ::utl::typeConvert( aDateTime, aUNODateTime );
+
+            OSL_VERIFY( m_pConverter->convertGenericValueToString( makeAny( aUNODateTime ), sValue ) );
+        }
+        return sValue;
     }
 
     //==================================================================
@@ -910,6 +1011,8 @@ namespace pcr
         m_pImplEdit->SetLoseFocusHdl(LINK( this, OCommonBehaviourControl, LoseFocusHdl));
 
         autoSizeWindow();
+
+        m_pFloatingEdit->getEdit()->SetReadOnly( nWinStyle & WB_READONLY );
     }
 
     //------------------------------------------------------------------
@@ -1019,24 +1122,6 @@ namespace pcr
     }
 
     //------------------------------------------------------------------
-    void OMultilineEditControl::SetLocked(sal_Bool bFlag)
-    {
-        m_bLocked = bFlag;
-        Font aFont = GetFont();
-
-        m_pFloatingEdit->getEdit()->SetReadOnly(bFlag);
-        if (m_bLocked)
-        {
-            aFont.SetColor(Color(COL_GRAY));
-        }
-        else
-        {
-            aFont = GetParent()->GetFont();
-        }
-        SetFont(aFont);
-    }
-
-    //------------------------------------------------------------------
     void OMultilineEditControl::SetProperty(const ::rtl::OUString &rString,sal_Bool bIsUnknown)
     {
         String aStr;
@@ -1108,7 +1193,6 @@ namespace pcr
             if (nKey==KEY_RETURN &&!aKeyCode.IsShift())
             {
                 LoseFocusHdl(m_pImplEdit);
-                m_bDir = sal_True;
                 if (getListener())
                     getListener()->TravelLine(this);
             }
