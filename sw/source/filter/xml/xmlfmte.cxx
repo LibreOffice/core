@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlfmte.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: mib $ $Date: 2001-11-22 19:07:35 $
+ *  last change: $Author: mib $ $Date: 2001-11-29 11:37:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -246,20 +246,10 @@ void SwXMLExport::ExportFmt( const SwFmt& rFmt, enum XMLTokenEnum eFamily )
 void SwXMLExport::_ExportStyles( sal_Bool bUsed )
 {
     SvXMLExport::_ExportStyles( bUsed );
-    Reference < XMultiServiceFactory > xFactory (GetModel(), UNO_QUERY);
-    if (xFactory.is())
-    {
-        OUString sDrawingDefaults ( RTL_CONSTASCII_USTRINGPARAM ( "com.sun.star.drawing.Defaults" ) );
-        Reference < XInterface > xInt = xFactory->createInstance ( sDrawingDefaults );
-        if ( xInt.is() )
-        {
-            Reference < XPropertySet > xPropSet (xInt, UNO_QUERY);
-            if (xPropSet.is())
-                GetTextParagraphExport()->exportDefaultStyle(
-                                    xPropSet, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_SD_GRAPHICS_NAME)),
-                                       GetShapeExport()->CreateShapePropMapper(*this));
-        }
-    }
+
+    // drawing defaults
+    GetShapeExport()->ExportGraphicDefaults();
+
 #if SUPD <628 && !defined(TEST_MIB)
     GetTextParagraphExport()->SetProgress( IsShowProgress() ? 1 : 0 );
 #endif
