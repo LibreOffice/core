@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ConditionalText.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-19 12:05:20 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 13:23:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,7 @@
 module com { module sun { module star { module text { module textfield {
 
 //=============================================================================
-/** specifies service of a hidden text field.
+/** specifies service of a conditional text field.
     @see com::sun::star::text::TextField
 */
 service ConditionalText
