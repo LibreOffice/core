@@ -2,71 +2,140 @@
  *
  *  $RCSfile: DocumentHelper.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:27:13 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 16:29:28 $
  *
  *  The Contents of this file are made available subject to the terms of
- *  the BSD license.
+ *  either of the following licenses
  *
- *  Copyright (c) 2003 by Sun Microsystems, Inc.
- *  All rights reserved.
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
  *
- *  Redistribution and use in source and binary forms, with or without
- *  modification, are permitted provided that the following conditions
- *  are met:
- *  1. Redistributions of source code must retain the above copyright
- *     notice, this list of conditions and the following disclaimer.
- *  2. Redistributions in binary form must reproduce the above copyright
- *     notice, this list of conditions and the following disclaimer in the
- *     documentation and/or other materials provided with the distribution.
- *  3. Neither the name of Sun Microsystems, Inc. nor the names of its
- *     contributors may be used to endorse or promote products derived
- *     from this software without specific prior written permission.
+ *  Sun Microsystems Inc., October, 2000
  *
- *  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
- *  "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
- *  LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
- *  FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
- *  COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
- *  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
- *  BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS
- *  OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
- *  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
- *  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
- *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
  *
- *************************************************************************/
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
 
+/**************************************************************************/
 import com.sun.star.uno.*;
 import com.sun.star.lang.*;
 import com.sun.star.util.*;
-import com.sun.star.container.*;
 import com.sun.star.awt.*;
 import com.sun.star.drawing.*;
 import com.sun.star.frame.*;
 import com.sun.star.form.*;
 import com.sun.star.beans.*;
+import com.sun.star.container.*;
+import com.sun.star.container.*;
 
 /**************************************************************************/
 /** provides a small wrapper around a document
 */
 public class DocumentHelper
 {
-    protected XMultiServiceFactory  m_xMSF;
-    protected XComponent            m_xDocument;
+    /// the remote office context
+    protected XComponentContext         m_remoteContext;
+    /// the remote service manager
+    protected XMultiServiceFactory      m_orb;
+    protected XComponent                m_documentComponent;
 
     /* ------------------------------------------------------------------ */
-    public XComponent   getDocument( )
+    public XComponent getDocument( )
     {
-        return m_xDocument;
+        return m_documentComponent;
     }
 
     /* ------------------------------------------------------------------ */
-    public DocumentHelper( XMultiServiceFactory xMSF, XComponent xDocument )
+    public XComponentContext getContext( )
     {
-        m_xMSF = xMSF;
-        m_xDocument = xDocument;
+        return m_remoteContext;
+    }
+
+    /* ------------------------------------------------------------------ */
+    public XMultiServiceFactory getOrb( )
+    {
+        return m_orb;
+    }
+
+    /* ------------------------------------------------------------------ */
+    public DocumentHelper( XComponentContext xContext, XComponent document )
+    {
+        m_remoteContext = xContext;
+        m_orb = (XMultiServiceFactory)UnoRuntime.queryInterface(
+            XMultiServiceFactory.class, m_remoteContext.getServiceManager());
+        m_documentComponent = document;
+    }
+
+    /* ------------------------------------------------------------------ */
+    protected static XComponent implCreateBlankDocument( XComponentContext xCtx, String factoryURL ) throws com.sun.star.uno.Exception
+    {
+        XComponentLoader aLoader = (XComponentLoader)UnoRuntime.queryInterface(
+            XComponentLoader.class,
+            xCtx.getServiceManager().createInstanceWithContext(
+                "com.sun.star.frame.Desktop", xCtx ));
+
+        return UNO.queryComponent(
+            aLoader.loadComponentFromURL( factoryURL, "_blank", 0, new PropertyValue[ 0 ] )
+        );
+    }
+
+    /* ------------------------------------------------------------------ */
+    public static DocumentHelper blankTextDocument( XComponentContext xCtx ) throws com.sun.star.uno.Exception
+    {
+        return blankDocument( xCtx, DocumentType.WRITER );
+    }
+
+    /* ------------------------------------------------------------------ */
+    public static DocumentHelper blankDocument( XComponentContext xCtx, DocumentType eType ) throws com.sun.star.uno.Exception
+    {
+        XComponent document = implCreateBlankDocument( xCtx, getDocumentFactoryURL( eType ) );
+        if ( eType == DocumentType.CALC )
+            return new SpreadsheetDocument( xCtx, document );
+
+        return new DocumentHelper( xCtx, document );
     }
 
     /* ------------------------------------------------------------------ */
@@ -77,27 +146,15 @@ public class DocumentHelper
     public DocumentViewHelper getCurrentView( )
     {
         // get the model interface for the document
-        XModel xDocModel = (XModel)UnoRuntime.queryInterface(XModel.class, m_xDocument );
+        XModel xDocModel = (XModel)UnoRuntime.queryInterface(XModel.class, m_documentComponent );
         // get the current controller for the document - as a controller is tied to a view,
         // this gives us the currently active view for the document.
         XController xController = xDocModel.getCurrentController();
-        return new DocumentViewHelper( m_xMSF, this, xController );
-    }
 
-    /* ------------------------------------------------------------------ */
-    /** classifies a document
-    */
-    public DocumentType classify( )
-    {
-        XServiceInfo xSI = UNO.queryServiceInfo( m_xDocument );
-        if ( xSI.supportsService( "com.sun.star.text.TextDocument" ) )
-            return DocumentType.WRITER;
-        else if ( xSI.supportsService( "com.sun.star.sheet.SpreadsheetDocument" ) )
-            return DocumentType.CALC;
-        else if ( xSI.supportsService( "com.sun.star.drawing.DrawingDocument" ) )
-            return DocumentType.DRAWING;
+        if ( classify() == DocumentType.CALC )
+            return new SpreadsheetView( m_orb, this, xController );
 
-        return DocumentType.UNKNOWN;
+        return new DocumentViewHelper( m_orb, this, xController );
     }
 
     /* ------------------------------------------------------------------ */
@@ -110,10 +167,10 @@ public class DocumentHelper
             is an implementation detail) applies.
     */
     protected XIndexContainer createSubForm( XIndexContainer xParentContainer, String sInitialName )
-        throws com.sun.star.uno.Exception
+            throws com.sun.star.uno.Exception
     {
         // create a new form
-        Object xNewForm = m_xMSF.createInstance( "com.sun.star.form.component.DataForm" );
+        Object xNewForm = m_orb.createInstance( "com.sun.star.form.component.DataForm" );
 
         // insert
         xParentContainer.insertByIndex( xParentContainer.getCount(), xNewForm );
@@ -126,7 +183,7 @@ public class DocumentHelper
         }
 
         // outta here
-        return UNO.queryIndexContainer( xNewForm );
+        return (XIndexContainer)UnoRuntime.queryInterface( XIndexContainer.class, xNewForm );
     }
 
     /* ------------------------------------------------------------------ */
@@ -141,13 +198,13 @@ public class DocumentHelper
     public XIndexContainer createSubForm( Object aParentContainer, String sInitialName )
         throws com.sun.star.uno.Exception
     {
-        XIndexContainer xParentContainer = UNO.queryIndexContainer( aParentContainer );
+        XIndexContainer xParentContainer = (XIndexContainer)UnoRuntime.queryInterface(
+            XIndexContainer.class, aParentContainer );
         return createSubForm( xParentContainer, sInitialName );
     }
 
     /* ------------------------------------------------------------------ */
     /** creates a form which is a sibling of the given form
-
         @param aForm
             A sinbling of the to be created form.
 
@@ -158,8 +215,9 @@ public class DocumentHelper
     public XIndexContainer createSiblingForm( Object aForm, String sInitialName ) throws com.sun.star.uno.Exception
     {
         // get the parent
-        XIndexContainer xContainer = (XIndexContainer)FLTools.getParent(
-            aForm, XIndexContainer.class );
+        XChild xAsChild = (XChild)UnoRuntime.queryInterface( XChild.class, aForm );
+        XIndexContainer xContainer = (XIndexContainer)UnoRuntime.queryInterface(
+            XIndexContainer.class, xAsChild.getParent() );;
         // append a new form to this parent container
         return createSubForm( xContainer, sInitialName );
     }
@@ -167,7 +225,7 @@ public class DocumentHelper
     /* ------------------------------------------------------------------ */
     /** retrieves the document model which a given form component belongs to
     */
-    static public DocumentHelper getDocumentForComponent( Object aFormComponent, XMultiServiceFactory xMSF )
+    static public DocumentHelper getDocumentForComponent( Object aFormComponent, XComponentContext xCtx )
     {
         XChild xChild = (XChild)UnoRuntime.queryInterface( XChild.class, aFormComponent );
         XModel xModel = null;
@@ -178,11 +236,59 @@ public class DocumentHelper
             xChild = (XChild)UnoRuntime.queryInterface( XChild.class, xParent );
         }
 
-        return new DocumentHelper( xMSF, xModel );
+        return new DocumentHelper( xCtx, xModel );
     }
 
     /* ------------------------------------------------------------------ */
-    /** gets the <type scope="com.sun.star.drawing">DrawPage</type> of the document
+    /** returns a URL which can be used to create a document of a certain type
+    */
+    public static String getDocumentFactoryURL( DocumentType eType )
+    {
+        if ( eType == DocumentType.WRITER )
+            return "private:factory/swriter";
+        if ( eType == DocumentType.CALC )
+            return "private:factory/scalc";
+        if ( eType == DocumentType.DRAWING )
+            return "private:factory/sdraw";
+        return "private:factory/swriter";
+    }
+
+    /* ------------------------------------------------------------------ */
+    /** classifies a document
+    */
+    public DocumentType classify( )
+    {
+        XServiceInfo xSI = (XServiceInfo)UnoRuntime.queryInterface(
+            XServiceInfo.class, m_documentComponent );
+
+        if ( xSI.supportsService( "com.sun.star.text.TextDocument" ) )
+            return DocumentType.WRITER;
+        else if ( xSI.supportsService( "com.sun.star.sheet.SpreadsheetDocument" ) )
+            return DocumentType.CALC;
+        else if ( xSI.supportsService( "com.sun.star.drawing.DrawingDocument" ) )
+            return DocumentType.DRAWING;
+
+        return DocumentType.UNKNOWN;
+    }
+    /* ------------------------------------------------------------------ */
+    /** retrieves a com.sun.star.drawing.DrawPage of the document, denoted by index
+     *  @param index
+     *      the index of the draw page<br/>
+     *  @throws
+     *      com.sun.star.lang.IndexOutOfBoundsException
+     *      com.sun.star.lang.WrappedTargetException
+     */
+    protected XDrawPage getDrawPage( int index ) throws com.sun.star.lang.IndexOutOfBoundsException, com.sun.star.lang.WrappedTargetException
+    {
+        XDrawPagesSupplier xSuppPages = (XDrawPagesSupplier)UnoRuntime.queryInterface(
+            XDrawPagesSupplier.class, getDocument() );
+        XDrawPages xPages = xSuppPages.getDrawPages();
+
+        return (XDrawPage)UnoRuntime.queryInterface( XDrawPage.class, xPages.getByIndex( index ) );
+    }
+
+    /* ------------------------------------------------------------------ */
+    /** retrieves the <type scope="com.sun.star.drawing">DrawPage</type> of the document
     */
     protected XDrawPage getMainDrawPage( ) throws com.sun.star.uno.Exception
     {
@@ -200,8 +306,7 @@ public class DocumentHelper
                 XDrawPagesSupplier.class, getDocument() );
             XDrawPages xPages = xSuppPages.getDrawPages();
 
-            xReturn = (XDrawPage)UnoRuntime.queryInterface( XDrawPage.class,
-                xPages.getByIndex( 0 ) );
+            xReturn = (XDrawPage)UnoRuntime.queryInterface( XDrawPage.class, xPages.getByIndex( 0 ) );
 
             // Note that this is no really error-proof code: If the document model does not support the
             // XDrawPagesSupplier interface, or if the pages collection returned is empty, this will break.
@@ -224,6 +329,26 @@ public class DocumentHelper
             xFormsCollection = xSuppForms.getForms();
         }
         return xFormsCollection;
+    }
+
+    /* ------------------------------------------------------------------ */
+    /** creates a component at the service factory provided by the document
+    */
+    public XInterface createInstance( String serviceSpecifier ) throws com.sun.star.uno.Exception
+    {
+        XMultiServiceFactory xORB = (XMultiServiceFactory)UnoRuntime.queryInterface( XMultiServiceFactory.class,
+            m_documentComponent );
+        return (XInterface)xORB.createInstance( serviceSpecifier );
+    }
+
+    /* ------------------------------------------------------------------ */
+    /** creates a component at the service factory provided by the document
+    */
+    public XInterface createInstanceWithArguments( String serviceSpecifier, Object[] arguments ) throws com.sun.star.uno.Exception
+    {
+        XMultiServiceFactory xORB = (XMultiServiceFactory)UnoRuntime.queryInterface( XMultiServiceFactory.class,
+            m_documentComponent );
+        return (XInterface) xORB.createInstanceWithArguments( serviceSpecifier, arguments );
     }
 };
 
