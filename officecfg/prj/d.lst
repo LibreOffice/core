@@ -143,5 +143,8 @@ mkdir: %_DEST%\xml%_EXT%\registry\data\org\openoffice\ucb
 ..\%__SRC%\misc\registry\data\org\openoffice\Office\*.xcu %_DEST%\xml%_EXT%\registry\data\org\openoffice\Office
 ..\%__SRC%\misc\registry\data\org\openoffice\ucb\*.xcu %_DEST%\xml%_EXT%\registry\data\org\openoffice\ucb
 
+..\%__SRC%\misc\*.properties %_DEST%\pck%_EXT%
+..\%__SRC%\misc\*.ldif %_DEST%\pck%_EXT%
+..\%__SRC%\misc\*.conf %_DEST%\pck%_EXT%
 
 ..\%__SRC%\bin\*.zip %_DEST%\pck%_EXT%
