@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datauno.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: sab $ $Date: 2002-10-11 07:53:55 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 16:03:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,9 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMED_HPP_
 #include <com/sun/star/container/XNamed.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UTIL_XREFRESHABLE_HPP_
+#include <com/sun/star/util/XRefreshable.hpp>
+#endif
 
 #ifndef _CPPUHELPER_IMPLBASE2_HXX_
 #include <cppuhelper/implbase2.hxx>
@@ -145,6 +148,9 @@ class ScDataPilotDescriptorBase;
 
 struct ScSortParam;
 
+typedef ::com::sun::star::uno::Reference<
+            ::com::sun::star::util::XRefreshListener >* XDBRefreshListenerPtr;
+SV_DECL_PTRARR_DEL( XDBRefreshListenerArr_Impl, XDBRefreshListenerPtr, 4, 4 );
 
 class ScDataUnoConversion
 {
@@ -551,8 +557,9 @@ public:
 };
 
 
-class ScDatabaseRangeObj : public cppu::WeakImplHelper5<
+class ScDatabaseRangeObj : public cppu::WeakImplHelper6<
                                 com::sun::star::sheet::XDatabaseRange,
+                                com::sun::star::util::XRefreshable,
                                 com::sun::star::container::XNamed,
                                 com::sun::star::sheet::XCellRangeReferrer,
                                 com::sun::star::beans::XPropertySet,
@@ -563,9 +570,11 @@ private:
     ScDocShell*             pDocShell;
     String                  aName;
     SfxItemPropertySet      aPropSet;
+    XDBRefreshListenerArr_Impl aRefreshListeners;
 
 private:
     ScDBData*               GetDBData_Impl() const;
+    void                    Refreshed_Impl();
 
 public:
                             ScDatabaseRangeObj(ScDocShell* pDocSh, const String& rNm);
@@ -601,7 +610,17 @@ public:
                             getSubTotalDescriptor() throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue > SAL_CALL
                             getImportDescriptor() throw(::com::sun::star::uno::RuntimeException);
+// implemented for the XRefreshable Interface
+//    virtual void SAL_CALL refresh() throw(::com::sun::star::uno::RuntimeException);
+
+                            // XRefreshable
     virtual void SAL_CALL   refresh() throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL   addRefreshListener( const ::com::sun::star::uno::Reference<
+                                    ::com::sun::star::util::XRefreshListener >& l )
+                                throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL   removeRefreshListener( const ::com::sun::star::uno::Reference<
+                                    ::com::sun::star::util::XRefreshListener >& l )
+                                throw(::com::sun::star::uno::RuntimeException);
 
                             // XCellRangeReferrer
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::table::XCellRange > SAL_CALL
