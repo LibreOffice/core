@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datasource.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-23 08:32:02 $
+ *  last change: $Author: fs $ $Date: 2001-02-27 08:44:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,7 +233,7 @@ namespace dbaccess
     Sequence< RememberAuthentication > SAL_CALL OAuthenticationContinuation::getRememberPasswordModes( RememberAuthentication& _reDefault ) throw(RuntimeException)
     {
         Sequence< RememberAuthentication > aReturn(1);
-        _reDefault = aReturn[0] = m_bDatasourceReadonly ? RememberAuthentication_NO : RememberAuthentication_SESSION;
+        _reDefault = aReturn[0] = (m_bDatasourceReadonly ? RememberAuthentication_NO : RememberAuthentication_SESSION);
         return aReturn;
     }
 
