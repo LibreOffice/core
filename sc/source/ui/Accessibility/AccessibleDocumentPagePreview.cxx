@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocumentPagePreview.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: nn $ $Date: 2002-03-11 19:26:25 $
+ *  last change: $Author: sab $ $Date: 2002-03-12 09:43:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,9 +221,12 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleDocumentPagePreview::getAcces
         {
             if ( !mxTable.is() )
             {
-                //  order is background shapes, header, table, footer, foreground shapes, controls
-                sal_Int32 nIndex = aCount.nBackShapes + aCount.nHeaders;
-                mxTable = new ScAccessiblePreviewTable( this, mpViewShell, nIndex );
+                //! order is background shapes, header, table, footer, foreground shapes, controls
+                sal_Int32 nIndex = 0;
+
+                ScAccessiblePreviewTable* pTable = new ScAccessiblePreviewTable( this, mpViewShell, nIndex );
+                mxTable = pTable;
+                pTable->Init();
             }
             xAccessible = mxTable;
         }

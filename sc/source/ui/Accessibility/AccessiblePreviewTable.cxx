@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePreviewTable.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2002-03-11 19:26:25 $
+ *  last change: $Author: sab $ $Date: 2002-03-12 09:43:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -360,12 +360,16 @@ uno::Reference< XAccessible > SAL_CALL ScAccessiblePreviewTable::getAccessibleCe
         if ( rColInfo.bIsHeader || rRowInfo.bIsHeader )
         {
             Rectangle aPosition( rColInfo.nPixelStart, rRowInfo.nPixelStart, rColInfo.nPixelEnd, rRowInfo.nPixelEnd );
-            xRet = new ScAccessiblePreviewHeaderCell( this, mpViewShell, aCellPos,
+            ScAccessiblePreviewHeaderCell* pHeaderCell = new ScAccessiblePreviewHeaderCell( this, mpViewShell, aCellPos,
                                         rRowInfo.bIsHeader, rColInfo.bIsHeader, nNewIndex, aPosition );
+            xRet = pHeaderCell;
+            pHeaderCell->Init();
         }
         else
         {
-            xRet = new ScAccessiblePreviewCell( this, mpViewShell, aCellPos, nNewIndex );
+            ScAccessiblePreviewCell* pCell = new ScAccessiblePreviewCell( this, mpViewShell, aCellPos, nNewIndex );
+            xRet = pCell;
+            pCell->Init();
         }
     }
 

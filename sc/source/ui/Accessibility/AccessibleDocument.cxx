@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocument.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-04 14:09:25 $
+ *  last change: $Author: sab $ $Date: 2002-03-12 09:44:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -407,6 +407,7 @@ uno::Reference < XAccessible >
     {
         mpAccessibleSpreadsheet = new ScAccessibleSpreadsheet(this, mpViewShell, getVisibleTable(), meSplitPos);
         mpAccessibleSpreadsheet->acquire();
+        mpAccessibleSpreadsheet->Init();
     }
     return mpAccessibleSpreadsheet;
 }
