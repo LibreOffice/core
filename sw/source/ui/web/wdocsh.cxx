@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wdocsh.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:50:02 $
+ *  last change: $Author: kz $ $Date: 2004-01-28 19:40:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,7 +143,6 @@ void SwWebDocShell::FillClass( SvGlobalName * pClassName,
         *pClassName = SvGlobalName( SO3_SWWEB_CLASSID_40 );
         *pClipFormat = SOT_FORMATSTR_ID_STARWRITERWEB_40;
         *pAppName = C2S("StarWriter/Web 4.0");
-
         *pLongUserName = SW_RESSTR(STR_WRITER_WEBDOC_FULLTYPE_40);
     }
     else if ( nVersion == SOFFICE_FILEFORMAT_50)
@@ -154,6 +153,8 @@ void SwWebDocShell::FillClass( SvGlobalName * pClassName,
     }
     else if (nVersion == SOFFICE_FILEFORMAT_60)
     {
+        *pClassName = SvGlobalName( SO3_SWWEB_CLASSID_60 );
+        *pClipFormat = SOT_FORMATSTR_ID_STARWRITERWEB_60;
         *pLongUserName = SW_RESSTR(STR_WRITER_WEBDOC_FULLTYPE);
     }
     *pUserName = SW_RESSTR(STR_HUMAN_SWWEBDOC_NAME);
