@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optload.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: os $ $Date: 2001-04-04 14:25:25 $
+ *  last change: $Author: kz $ $Date: 2001-04-06 19:25:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -559,7 +559,7 @@ TabPage TP_OPTLOAD_PAGE
             < "Kilometer" ; FUNIT_KM ; > ;
             < "Tum" ; FUNIT_INCH ; > ;
             < "Fot" ; FUNIT_FOOT ; > ;
-            < "Miles" ; FUNIT_MILE ; > ;
+            < "Mil" ; FUNIT_MILE ; > ;
             < "Pica" ; FUNIT_PICA ; > ;
             < "Punkt" ; FUNIT_POINT ; > ;
         };
@@ -771,8 +771,8 @@ TabPage TP_OPTLOAD_PAGE
         Text[ polish ] = "ZgodnoúÊ";
         Text[ portuguese_brazilian ] = "Compatibility";
         Text[ japanese ] = "å›ä∑ê´";
-        Text[ chinese_simplified ] = "ºÊ»›";
-        Text[ chinese_traditional ] = "¨€Æe";
+        Text[ chinese_simplified ] = "∫Õ MS Office ŒƒµµºÊ»›";
+        Text[ chinese_traditional ] = "©M MS Office §Â•Û¨€Æe";
     Text[ arabic ] = " Ê«›ﬁ";
     Text[ greek ] = "”ıÏ‚·Ù¸ÙÁÙ·";
     Text[ korean ] = "»£»Ø";
@@ -871,7 +871,7 @@ TabPage TP_OPTCAPTION_PAGE
         Text[ portuguese ] = "Tabela %PRODUCTNAME Writer";
         Text[ danish ] = "%PRODUCTNAME Writer tabel";
         Text[ french ] = "Tableau %PRODUCTNAME Writer";
-        Text[ swedish ] = "%PRODUCTNAME Writer tabell";
+        Text[ swedish ] = "Tabell %PRODUCTNAME Writer";
         Text[ dutch ] = "%PRODUCTNAME Writer tabel";
         Text[ spanish ] = "%PRODUCTNAME Writer Tabla";
         Text[ english_us ] = "%PRODUCTNAME Writer Table";
@@ -895,7 +895,7 @@ TabPage TP_OPTCAPTION_PAGE
         Text[ portuguese ] = "Moldura %PRODUCTNAME Writer";
         Text[ danish ] = "%PRODUCTNAME Writer ramme";
         Text[ french ] = "Cadre %PRODUCTNAME Writer";
-        Text[ swedish ] = "%PRODUCTNAME Writer ram";
+        Text[ swedish ] = "Ram %PRODUCTNAME Writer";
         Text[ dutch ] = "%PRODUCTNAME Writer kader";
         Text[ spanish ] = "%PRODUCTNAME Writer Marco";
         Text[ english_us ] = "%PRODUCTNAME Writer Frame";
@@ -919,7 +919,7 @@ TabPage TP_OPTCAPTION_PAGE
         Text[ portuguese ] = "Imagem %PRODUCTNAME Writer";
         Text[ danish ] = "%PRODUCTNAME Writer grafik";
         Text[ french ] = "Image %PRODUCTNAME Writer";
-        Text[ swedish ] = "%PRODUCTNAME Writer grafik";
+        Text[ swedish ] = "Grafik %PRODUCTNAME Writer";
         Text[ dutch ] = "%PRODUCTNAME Writer afbeelding";
         Text[ spanish ] = "%PRODUCTNAME Writer Imagen ";
         Text[ english_us ] = "%PRODUCTNAME Writer Graphics";
