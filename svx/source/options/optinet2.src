@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optinet2.src,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 12:36:08 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 17:09:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -886,8 +886,8 @@ TabPage RID_SVXPAGE_INET_MAIL
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 248 , 8 ) ;
-        Text = "Versenden von Dokumenten als E-Mail-Anhang" ;
-        Text[ english_us ] = "Sending documents as e-mail attachments";
+        Text [ de ] = "Versenden von Dokumenten als E-Mail-Anhang" ;
+        Text [ en-US ] = "Sending documents as e-mail attachments";
     };
 
     FixedImage FI_MAILERURL
@@ -901,8 +901,8 @@ TabPage RID_SVXPAGE_INET_MAIL
     {
         Pos = MAP_APPFONT ( 14 , 20 ) ;
         Size = MAP_APPFONT ( 40 , 8 ) ;
-        Text = "~E-Mail-Programm" ;
-        Text[ english_us ] = "~E-mail program";
+        Text [ de ] = "~E-Mail-Programm" ;
+        Text [ en-US ] = "~E-mail program";
     };
 
     Edit ED_MAILERURL
@@ -921,34 +921,8 @@ TabPage RID_SVXPAGE_INET_MAIL
 
     String STR_DEFAULT_FILENAME
     {
-        Text = "Alle Dateien (*.*)" ;
-        Text[english_us] = "All files (*.*)" ;
-        Text[ french ] = "Tous les fichiers (*.*)";
-        Text[ spanish ] = "Todos los archivos (*.*)";
-        Text[ italian ] = "Tutti i file (*.*)";
-        Text[ swedish ] = "Alla filer (*.*)";
-        Text[ japanese ] = "„Åô„Åπ„Å¶„ÅÆ„Éï„Ç°„Ç§„É´ (*.*)";
-        Text[ korean ] = "Î™®Îì† ÌååÏùº(*.*)";
-        Text[ chinese_simplified ] = "ÂÖ®ÈÉ®Êñá‰ª∂ (*.*)";
-        Text[ chinese_traditional ] = "ÂÖ®ÈÉ®ÁöÑÊ™îÊ°à(*.*)";
-        Text[ portuguese ] = "Todos os ficheiros (*.*)";
-        Text[ russian ] = "¬ÒÂ Ù‡ÈÎ˚ (*.*)";
-        Text[ greek ] = "ºÎ· Ù· ·Ò˜Âﬂ· (*.*)";
-        Text[ dutch ] = "Alle bestanden (*.*)";
-        Text[ finnish ] = "<Kaikki>";
-        Text[ czech ] = "V≈°echny soubory (*.*)";
-        Text[ danish ] = "Alle filer (*.*)";
-        Text[ polish ] = "Wszystkie pliki (*.*)";
-        Text[ portuguese_brazilian ] = "Todos os arquivos (*.*)";
-        Text[ turkish ] = "T¸m dosyalar (*.*)";
-        Text[ arabic ] = "(*.*) ﬂ· «·„·›« ";
-        Text[ hebrew ] = "‚ÄÆ◊õ◊ú ◊î◊ß◊ë◊¶◊ô◊ù (*.*)‚Ä¨";
-        Text[ catalan ] = "<Tot>";
-        Text[ thai ] = "‡∏ó‡∏∏‡∏Å‡πÑ‡∏ü‡∏•‡πå (*.*)";
-        Text[ slovak ] = "V≈°etky s√∫bory (*.*)";
-        Text[ hindi ] = "‡§∏‡§≠‡•Ä ‡§´‡§æ‡§á‡§≤ (*.*)";
-        Text[ hungarian ] = "Minden f√°jl (*.*)";
-        Text[ slovenian ] = "Vse datoteke (*.*)";
+        Text [ de ] = "Alle Dateien (*.*)" ;
+        Text [ en-US ] = "All files (*.*)" ;
     };
 };
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swpossizetabpage.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 14:43:27 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 17:11:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ TabPage RID_SVXPAGE_SWPOSSIZE
         Pos = MAP_APPFONT ( 6 , 3  ) ;
         Size = MAP_APPFONT ( 104 , 8 ) ;
         Text [ de ] = "Größe" ;
-        Text [ english_us ] = "Size" ;
+        Text [ en-US ] = "Size" ;
     };
     FixedText FT_WIDTH
     {
