@@ -2,9 +2,9 @@
  *
  *  $RCSfile: conncleanup.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-21 14:15:04 $
+ *  last change: $Author: fs $ $Date: 2001-11-08 10:47:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,8 @@
 #ifndef _CPPUHELPER_IMPLBASE2_HXX_
 #include <cppuhelper/implbase2.hxx>
 #endif
-#ifndef _COM_SUN_STAR_BEANS_XPROPERTYCHANGELISTENER_HPP_
-#include <com/sun/star/beans/XPropertyChangeListener.hpp>
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SDBC_XROWSET_HPP_
 #include <com/sun/star/sdbc/XRowSet.hpp>
@@ -92,7 +92,8 @@ namespace dbtools
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >
                     m_xOriginalConnection;
         ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet > m_xRowSet; // needed to add as listener
-        sal_Bool m_bWasAttached; // true when we are listen on rowset
+        sal_Bool    m_bRSListening          : 1; // true when we're listening on rowset
+        sal_Bool    m_bPropertyListening    : 1; // true when we're listening for property changes
 
     public:
         /** constructs an object
@@ -117,9 +118,16 @@ namespace dbtools
         virtual void SAL_CALL rowChanged( const ::com::sun::star::lang::EventObject& event ) throw (::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL rowSetChanged( const ::com::sun::star::lang::EventObject& event ) throw (::com::sun::star::uno::RuntimeException);
 
-    protected:
-        void detach(const ::com::sun::star::lang::EventObject& _rReason);
+    private:
         void clearConnection();
+
+        void        startRowSetListening();
+        void        stopRowSetListening();
+        sal_Bool    isRowSetListening() const { return m_bRSListening; }
+
+        void        startPropertyListening( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxProps );
+        void        stopPropertyListening( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxEventSource );
+        sal_Bool    isPropertyListening() const { return m_bPropertyListening; }
     };
 
 //.........................................................................
@@ -131,6 +139,9 @@ namespace dbtools
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2001/06/21 14:15:04  oj
+ *  #88525# connect as rowlistener to get notified when the rowset changed
+ *
  *  Revision 1.1  2001/04/12 09:48:22  fs
  *  initial checkin - helper for automatically disposing a rowset's connection
  *

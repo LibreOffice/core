@@ -2,9 +2,9 @@
  *
  *  $RCSfile: conncleanup.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-06-21 14:13:24 $
+ *  last change: $Author: fs $ $Date: 2001-11-08 10:46:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,9 +83,9 @@ namespace dbtools
     using namespace ::com::sun::star::lang;
 
     //=====================================================================
-    static ::rtl::OUString getActiveConnectionPropertyName()
+    static const ::rtl::OUString& getActiveConnectionPropertyName()
     {
-        static ::rtl::OUString s_sActiveConnectionPropertyName = ::rtl::OUString::createFromAscii("ActiveConnection");
+        static const ::rtl::OUString s_sActiveConnectionPropertyName = ::rtl::OUString::createFromAscii("ActiveConnection");
         return s_sActiveConnectionPropertyName;
     }
 
@@ -94,8 +94,9 @@ namespace dbtools
     //=====================================================================
     //---------------------------------------------------------------------
     OAutoConnectionDisposer::OAutoConnectionDisposer(const Reference< XRowSet >& _rxRowSet, const Reference< XConnection >& _rxConnection)
-        : m_xRowSet(_rxRowSet)
-        ,m_bWasAttached(sal_False)
+        :m_xRowSet( _rxRowSet )
+        ,m_bRSListening( sal_False )
+        ,m_bPropertyListening( sal_False )
     {
         Reference< XPropertySet > xProps(_rxRowSet, UNO_QUERY);
         OSL_ENSURE(xProps.is(), "OAutoConnectionDisposer::OAutoConnectionDisposer: invalid rowset (no XPropertySet)!");
@@ -105,57 +106,133 @@ namespace dbtools
 
         try
         {
-            xProps->setPropertyValue(getActiveConnectionPropertyName(), makeAny(_rxConnection));
+            xProps->setPropertyValue( getActiveConnectionPropertyName(), makeAny( _rxConnection ) );
             m_xOriginalConnection = _rxConnection;
-            xProps->addPropertyChangeListener(getActiveConnectionPropertyName(), this);
+            startPropertyListening( xProps );
         }
-        catch(Exception&)
+        catch( const Exception& )
         {
-            OSL_ENSURE(sal_False, "OAutoConnectionDisposer::OAutoConnectionDisposer: caught an exception!");
+            OSL_ENSURE( sal_False, "OAutoConnectionDisposer::OAutoConnectionDisposer: caught an exception!" );
         }
     }
 
     //---------------------------------------------------------------------
-    void OAutoConnectionDisposer::detach(const EventObject& _rReason)
+    void OAutoConnectionDisposer::startPropertyListening( const Reference< XPropertySet >& _rxRowSet )
+    {
+        try
+        {
+            _rxRowSet->addPropertyChangeListener( getActiveConnectionPropertyName(), this );
+            m_bPropertyListening = sal_True;
+        }
+        catch( const Exception& )
+        {
+            OSL_ENSURE( sal_False, "OAutoConnectionDisposer::startPropertyListening: caught an exception!" );
+        }
+    }
+
+    //---------------------------------------------------------------------
+    void OAutoConnectionDisposer::stopPropertyListening( const Reference< XPropertySet >& _rxEventSource )
     {
         // prevent deletion of ourself while we're herein
         Reference< XInterface > xKeepAlive(static_cast< XWeak* >(this));
 
         try
-        {
-            // remove ourself as property change listener
-            Reference< XPropertySet > xProps(_rReason.Source, UNO_QUERY);
-            OSL_ENSURE(xProps.is(), "OAutoConnectionDisposer::detach: invalid event source (no XPropertySet)!");
-            xProps->removePropertyChangeListener(getActiveConnectionPropertyName(), this);
+        {   // remove ourself as property change listener
+            OSL_ENSURE( _rxEventSource.is(), "OAutoConnectionDisposer::stopPropertyListening: invalid event source (no XPropertySet)!" );
+            if ( _rxEventSource.is() )
+            {
+                _rxEventSource->removePropertyChangeListener( getActiveConnectionPropertyName(), this );
+                m_bPropertyListening = sal_False;
+            }
         }
-        catch(Exception&)
+        catch( const Exception& )
         {
-            OSL_ENSURE(sal_False, "OAutoConnectionDisposer::detach: caught an exception!");
+            OSL_ENSURE( sal_False, "OAutoConnectionDisposer::stopPropertyListening: caught an exception!" );
         }
+    }
+
+    //---------------------------------------------------------------------
+    void OAutoConnectionDisposer::startRowSetListening()
+    {
+        OSL_ENSURE( !m_bRSListening, "OAutoConnectionDisposer::startRowSetListening: already listening!" );
+        try
+        {
+            if ( !m_bRSListening )
+                m_xRowSet->addRowSetListener( this );
+        }
+        catch( const Exception& )
+        {
+            OSL_ENSURE( sal_False, "OAutoConnectionDisposer::startRowSetListening: caught an exception!" );
+        }
+        m_bRSListening = sal_True;
+    }
+
+    //---------------------------------------------------------------------
+    void OAutoConnectionDisposer::stopRowSetListening()
+    {
+        OSL_ENSURE( m_bRSListening, "OAutoConnectionDisposer::stopRowSetListening: not listening!" );
+        try
+        {
+            m_xRowSet->removeRowSetListener( this );
+        }
+        catch( const Exception& )
+        {
+            OSL_ENSURE( sal_False, "OAutoConnectionDisposer::stopRowSetListening: caught an exception!" );
+        }
+        m_bRSListening = sal_False;
     }
 
     //---------------------------------------------------------------------
     void SAL_CALL OAutoConnectionDisposer::propertyChange( const PropertyChangeEvent& _rEvent ) throw (RuntimeException)
     {
-        if (_rEvent.PropertyName.equals(getActiveConnectionPropertyName()))
+        if ( _rEvent.PropertyName.equals( getActiveConnectionPropertyName() ) )
         {   // somebody set a new ActiveConnection
+
+            Reference< XConnection > xNewConnection;
+            _rEvent.NewValue >>= xNewConnection;
+
+            if ( isRowSetListening() )
+            {
+                // we're listening at the row set, this means that the row set does not have our
+                // m_xOriginalConnection as active connection anymore
+                // So there are two possibilities
+                // a. somebody sets a new connection which is not our original one
+                // b. somebody sets a new connection, which is exactly the original one
+                // a. we're not interested in a, but in b: In this case, we simply need to move to the state
+                // we had originally: listen for property changes, do not listen for row set changes, and
+                // do not dispose the connection until the row set does not need it anymore
+                if ( xNewConnection.get() == m_xOriginalConnection.get() )
+                {
+                    stopRowSetListening();
+                }
+            }
+            else
+            {
+                // start listening at the row set. We're allowed to dispose the old connection as soon
+                // as the RowSet changed
+
+                // Unfortunately, the our database form implementations sometimes fire the change of their
+                // ActiveConnection twice. This is a error in forms/source/component/DatabaseForm.cxx, but
+                // changing this would require incompatible changes we can't do for a while.
+                // So for the moment, we have to live with it here.
+                //
+                // The only scenario where this doubled notification causes problems is when the connection
+                // of the form is reset to the one we're responsible for (m_xOriginalConnection), so we
+                // check this here.
+                //
+                // Yes, this is a HACK :(
+                //
+                // 94407 - 08.11.2001 - fs@openoffice.org
+                if ( xNewConnection.get() != m_xOriginalConnection.get() )
+                {
 #ifdef _DEBUG
-            Reference< XConnection > xOldConnection;
-            _rEvent.OldValue >>= xOldConnection;
-            OSL_ENSURE(xOldConnection.get() == m_xOriginalConnection.get(), "OAutoConnectionDisposer::propertyChange: unexpected (original) property value!");
+                    Reference< XConnection > xOldConnection;
+                    _rEvent.OldValue >>= xOldConnection;
+                    OSL_ENSURE( xOldConnection.get() == m_xOriginalConnection.get(), "OAutoConnectionDisposer::propertyChange: unexpected (original) property value!" );
 #endif
-            try
-            {
-                // add as listener
-                m_xRowSet->addRowSetListener(this);
+                    startRowSetListening();
+                }
             }
-            catch(Exception&)
-            {
-                OSL_ENSURE(sal_False, "OAutoConnectionDisposer::propertyChange: caught an exception!");
-            }
-            m_bWasAttached = sal_True;
-            // detach
-            detach(_rEvent);
         }
     }
 
@@ -163,24 +240,20 @@ namespace dbtools
     void SAL_CALL OAutoConnectionDisposer::disposing( const EventObject& _rSource ) throw (RuntimeException)
     {
         // the rowset is beeing disposed, and nobody has set a new ActiveConnection in the meantime
-        try
-        {
-            if(m_bWasAttached)
-                m_xRowSet->removeRowSetListener(this);
-        }
-        catch(Exception&)
-        {
-            OSL_ENSURE(sal_False, "OAutoConnectionDisposer::disposing: caught an exception!");
-        }
+        if ( isRowSetListening() )
+            stopRowSetListening();
+
         clearConnection();
-        detach(_rSource);
+
+        if ( isPropertyListening() )
+            stopPropertyListening( Reference< XPropertySet >( _rSource.Source, UNO_QUERY ) );
     }
     //---------------------------------------------------------------------
     void OAutoConnectionDisposer::clearConnection()
     {
         try
         {
-        // dispose the old connection
+            // dispose the old connection
             Reference< XComponent > xComp(m_xOriginalConnection, UNO_QUERY);
             if (xComp.is())
                 xComp->dispose();
@@ -202,15 +275,7 @@ namespace dbtools
     //---------------------------------------------------------------------
     void SAL_CALL OAutoConnectionDisposer::rowSetChanged( const ::com::sun::star::lang::EventObject& event ) throw (::com::sun::star::uno::RuntimeException)
     {
-        try
-        {
-            m_xRowSet->removeRowSetListener(this);
-            m_bWasAttached = sal_False;
-        }
-        catch(Exception&)
-        {
-            OSL_ENSURE(sal_False, "OAutoConnectionDisposer::rowSetChanged: caught an exception!");
-        }
+        stopRowSetListening();
         clearConnection();
 
     }
@@ -223,6 +288,9 @@ namespace dbtools
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2  2001/06/21 14:13:24  oj
+ *  #88525# connect as rowlistener to get notified when the rowset changed
+ *
  *  Revision 1.1  2001/04/12 09:48:11  fs
  *  initial checkin - helper for automatically disposing a rowset's connection
  *
