@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ComponentContext.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2001-06-25 14:27:51 $
+ *  last change: $Author: jbu $ $Date: 2001-08-23 14:30:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,7 +165,7 @@ public class ComponentContext implements XComponentContext, XComponent
                         {
                             if (m_xSMgr != null)
                             {
-                                m_xSMgr.createInstanceWithContext( serviceName, this );
+                                xInstance = m_xSMgr.createInstanceWithContext( serviceName, this );
                             }
                             else
                             {
