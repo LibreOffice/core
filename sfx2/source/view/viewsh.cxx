@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:04:31 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 11:59:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -610,6 +610,12 @@ void SfxViewShell::Activate( BOOL bMDI )
 void SfxViewShell::Deactivate(BOOL bMDI)
 {
     DBG_CHKTHIS(SfxViewShell, 0);
+    if ( bMDI )
+    {
+        SfxObjectShell *pSh = GetViewFrame()->GetObjectShell();
+        if ( pSh == SfxObjectShell::GetWorkingDocument() )
+            SfxObjectShell::SetWorkingDocument( 0 );
+    }
 }
 
 //--------------------------------------------------------------------
