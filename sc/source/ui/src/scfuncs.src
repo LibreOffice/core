@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scfuncs.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-03 16:46:02 $
+ *  last change: $Author: kz $ $Date: 2000-11-09 13:11:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3186,7 +3186,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ arabic ] = "ÊÍæá ÇáÊÇÑíÎ ãä Ôßáå ÇáäÕí Åáì ÑŞã íãËá ÇáÊÇÑíÎ.";
             Text[ dutch ] = "Converteert datum in de vorm van tekst naar een serieel getal.";
             Text[ chinese_simplified ] = "½«¾ß±¸ÈÕÆÚÊäÈë¸ñÊ½µÄÎÄ×Ö×ª»»³ÉÈÕÆÚµÄÏµÍ³ÄÚ²¿ĞòÁĞÊı¡£";
-            Text[ greek ] = "Áğïäßäåé İíáí åóùôåñéêü áñéèìü ãéá İíá êåßìåíï ğïõ ğåñéİ÷åé ìéá ğéèáíŞ ìïñöŞ çìåñïìçíßáò";
+            Text[ greek ] = "Áğïäßäåé İíáí åóùôåñéêü áñéèìü ãéá İíá êåßìåíï ìå ìéá ğéèáíŞ ìïñöŞ çìåñïìçíßáò";
             Text[ korean ] = "°¡´ÉÇÑ ÀÏÀÚ ¼­½Ä¿¡ ´ëÇÑ ³»ºÎ ¼ö¸¦ ¹İÈ¯";
             Text[ turkish ] = "Muhtemel bir tarih formatındaki bir metinden iç sayı üretir.";
             Text[ language_user1 ] = " ";
@@ -4338,7 +4338,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text[ arabic ] = "ÊÍæá ÇáæŞÊ Úáì Ôßá äÕ Åáì ÑŞã ÊÓáÓáí.";
             Text[ dutch ] = "Converteert een datum in de vorm van tekst te naar een serieel getal.";
             Text[ chinese_simplified ] = "×ª»»ÎÄ±¾ÀàĞÍµÄÊ±¼äÖµ³ÉÎªĞòÁĞÊ±¼äÖµ¡£";
-            Text[ greek ] = "Ïñßæåé ãéá İíá êåßìåíï áğü ìéá ğéèáíŞ ìïñöŞ åéóáãùãŞò ÷ñüíïõ İíáí óõíå÷üìåíï áñéèìü.";
+            Text[ greek ] = "Ïñßæåé İíáí óõíå÷üìåíï áñéèìü ãéá İíá êåßìåíï ìå ìéá ğéèáíŞ ìïñöŞ ÷ñüíïõ.";
             Text[ korean ] = "°¡´ÉÇÑ ½Ã°£ Ç×¸ñ ¼­½Ä¿¡¼­ º¸¿©Áö´Â ÅØ½ºÆ®¿¡ ´ëÇÑ ¿¬¼ÓÀûÀÎ ¼ö¸¦ ¹İÈ¯";
             Text[ turkish ] = "Muhtemel bir saat formatındaki bir metinden iç sayı üretir.";
             Text[ language_user1 ] = " ";
@@ -5179,7 +5179,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ finnish ] = "Barwert. Berechnet den Barwert einer Investition." ;
             Text [ danish ] = "Nutidværdi. Beregner den nuværende værdi for en investering." ;
             Text [ french ] = "Calcule la valeur actuelle d'un investissement." ;
-            Text [ swedish ] = "Nuvärdet. Beräknar nuvarande värdet av en investering." ;
+            Text [ swedish ] = "Nuvarande värde. Beräknar nuvarande värdet av en investering." ;
             Text [ dutch ] = "Huidige waarde. Berekent de huidige waarde van een investering." ;
             Text [ spanish ] = "Devuelve el valor actual de una inversión." ;
             Text [ english_us ] = "Present value. Calculates the present value of an investment." ;
@@ -5783,7 +5783,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ swedish ] = "NV" ;
             Text [ dutch ] = "HW" ;
             Text [ spanish ] = "va" ;
-            Text [ english_us ] = "pv" ;
+            Text [ english_us ] = "PV" ;
             Text[ chinese_simplified ] = "pv";
             Text[ russian ] = "Íç";
             Text[ polish ] = "PV";
@@ -6086,7 +6086,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ swedish ] = "NV" ;
             Text [ dutch ] = "HW" ;
             Text [ spanish ] = "va" ;
-            Text [ english_us ] = "pv" ;
+            Text [ english_us ] = "PV" ;
             Text[ chinese_simplified ] = "pv";
             Text[ russian ] = "Íç";
             Text[ polish ] = "PV";
@@ -6454,7 +6454,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ swedish ] = "NV" ;
             Text [ dutch ] = "HW" ;
             Text [ spanish ] = "va" ;
-            Text [ english_us ] = "pv" ;
+            Text [ english_us ] = "PV" ;
             Text[ chinese_simplified ] = "pv";
             Text[ russian ] = "Òç";
             Text[ polish ] = "PV";
@@ -6823,7 +6823,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ swedish ] = "NV" ;
             Text [ dutch ] = "HW" ;
             Text [ spanish ] = "va" ;
-            Text [ english_us ] = "pv" ;
+            Text [ english_us ] = "PV" ;
             Text[ chinese_simplified ] = "pv";
             Text[ russian ] = "Íç";
             Text[ polish ] = "PV";
@@ -7019,7 +7019,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ swedish ] = "gissning" ;
             Text [ dutch ] = "SW" ;
             Text [ spanish ] = "estimar" ;
-            Text [ english_us ] = "guess" ;
+            Text [ english_us ] = "Guess" ;
             Text[ chinese_simplified ] = "guess";
             Text[ russian ] = "Ïğåäïîëîæåíèå";
             Text[ polish ] = "Wartoœæ szacowana";
@@ -7191,7 +7191,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ swedish ] = "P" ;
             Text [ dutch ] = "P" ;
             Text [ spanish ] = "período" ;
-            Text [ english_us ] = "per" ;
+            Text [ english_us ] = "Period" ;
             Text[ chinese_simplified ] = "per";
             Text[ russian ] = "Ïåğèîä";
             Text[ polish ] = "Okres";
@@ -7624,7 +7624,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ swedish ] = "P" ;
             Text [ dutch ] = "P" ;
             Text [ spanish ] = "Período" ;
-            Text [ english_us ] = "per" ;
+            Text [ english_us ] = "Period" ;
             Text[ chinese_simplified ] = "per";
             Text[ russian ] = "Ïåğèîä";
             Text[ polish ] = "Okres";
@@ -7754,7 +7754,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ swedish ] = "NV" ;
             Text [ dutch ] = "HW" ;
             Text [ spanish ] = "Va" ;
-            Text [ english_us ] = "pv" ;
+            Text [ english_us ] = "PV" ;
             Text[ chinese_simplified ] = "pv";
             Text[ russian ] = "Òç";
             Text[ polish ] = "PV";
@@ -8122,7 +8122,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ swedish ] = "NV" ;
             Text [ dutch ] = "HW" ;
             Text [ spanish ] = "Va" ;
-            Text [ english_us ] = "pv" ;
+            Text [ english_us ] = "PV" ;
             Text[ chinese_simplified ] = "pv";
             Text[ russian ] = "Òç";
             Text[ polish ] = "PV";
@@ -8652,7 +8652,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ swedish ] = "Startperiod. Den första perioden för beräkningen. A = 1 är den allra första perioden." ;
             Text [ dutch ] = "Begintermijn. De eerste termijn die in de berekening wordt opgenomen. B = 1 is de allereerste termijn." ;
             Text [ spanish ] = "Es el período inicial para el cálculo." ;
-            Text [ english_us ] = "The start period. The first period to be taken into account. A = 1 the very first period." ;
+            Text [ english_us ] = "The start period. The first period to be taken into account. A = 1 denotes the very first period." ;
             Text[ chinese_simplified ] = "ÆğÊ¼ÖÜÆÚ¡£µÚÒ»¸ö¼ÆËãÖÜÆÚ¡£ Start_period = 1 ±íÊ¾µÚÒ»¸öÖÜÆÚ¡£";
             Text[ russian ] = "Íîìåğ ïåğâîãî ïåğèîäà, ó÷èòûâàåìîãî â âû÷èñëåíèÿõ. Åñëè íà÷_ïåğèîä ğàâåí 1, òî ıòî îçíà÷àåò ñàìûé ïåğâûé ïåğèîä.";
             Text[ polish ] = "Okres pocz¹tkowy do obliczenia amortyzacji. A = 1 oznacza pierwszy okres.";
@@ -11193,7 +11193,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ swedish ] = "gissning" ;
             Text [ dutch ] = "SW" ;
             Text [ spanish ] = "Estimar" ;
-            Text [ english_us ] = "guess" ;
+            Text [ english_us ] = "Guess" ;
             Text[ chinese_simplified ] = "guess";
             Text[ russian ] = "Ïğåäïîëîæåíèå";
             Text[ polish ] = "Wartoœæ szacowana";
@@ -20505,7 +20505,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ swedish ] = "Matristransponering. Byter rader och kolumner i en matris." ;
             Text [ dutch ] = "Matrix transpositie. Verwisselt rijen en kolommen van een matrix." ;
             Text [ spanish ] = "Devuelve la transposición de una matriz dada." ;
-            Text [ english_us ] = "Matrix transposition. Exchanges the rows and columns of an aray." ;
+            Text [ english_us ] = "Array transposition. Exchanges the rows and columns of an aray." ;
             Text[ chinese_simplified ] = "¾ØÕó×ªÖÃ¡£×ªÖÃÒ»¸ö¾ØÕóµÄÁĞºÍĞĞ¡£";
             Text[ russian ] = "Ïåğåñòàíîâêà ìàòğèöû: ìåíÿåò ìåñòàìè ñòğîêè ñî ñòîëáöàìè";
             Text[ polish ] = "Transponowanie macierzy. Zamienia wiersze i kolumny macierzy.";
@@ -20611,7 +20611,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ swedish ] = "Matrismultiplikation. Bildar produkten av två matriser." ;
             Text [ dutch ] = "Vermenigvuldigt twee matrices." ;
             Text [ spanish ] = "Devuelve la matriz producto de dos matrices." ;
-            Text [ english_us ] = "Matrix multiplication. Returns the product of two arrays." ;
+            Text [ english_us ] = "Array multiplication. Returns the product of two arrays." ;
             Text[ chinese_simplified ] = "¾ØÕó³Ë»ı¡£¼ÆËãÁ½¸ö¾ØÕóµÄ³Ë»ı¡£";
             Text[ russian ] = "Âû÷èñëÿåò ïğîèçâåäåíèå ìàòğèö.";
             Text[ polish ] = "Mno¿enie macierzy. Jest iloczynem dwóch tablic.";
@@ -20682,7 +20682,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ swedish ] = "Den första matrisen för matrisprodukten." ;
             Text [ dutch ] = "De eerste matrix voor de vermenigvuldiging." ;
             Text [ spanish ] = "Es la primera matriz para el producto de matrices." ;
-            Text [ english_us ] = "The first matrix for the matrix product." ;
+            Text [ english_us ] = "The first array for the array product." ;
             Text[ chinese_simplified ] = "ÓÃÓÚ¼ÆËã¾ØÕó³Ë»ıµÄµÚÒ»¸ö¾ØÕó¡£";
             Text[ russian ] = "Ïåğâàÿ ìàòğèöà äëÿ âû÷èñëåíèÿ ïğîèçâåäåíèÿ ìàòğèö.";
             Text[ polish ] = "Pierwsza macierz dla iloczynu macierzy.";
@@ -20746,7 +20746,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ swedish ] = "Den andra matrisen med samma antal rader som den första matrisen har kolumner." ;
             Text [ dutch ] = "De tweede matrix met hetzelde aantal rijen als de eerste matrix kolommen heeft." ;
             Text [ spanish ] = "Es la segunda matriz con el mismo número de filas y columnas que la primera." ;
-            Text [ english_us ] = "The second matrix with the same number of rows as the first matrix has columns." ;
+            Text [ english_us ] = "The second array having the same number of rows as the first array has columns." ;
             Text[ chinese_simplified ] = "µÚ¶ş¸ö¾ØÕóµÄĞĞÊıºÍµÚÒ»¸ö¾ØÕóºÍÁĞÊıÏàµÈ¡£";
             Text[ russian ] = "Âòîğàÿ ìàòğèöà. Êîëè÷åñòâî ñòğîê âòîğîé ìàòğèöû è êîëè÷åñòâî ñòîëáöîâ ïåğâîé ìàòğèöû äîëæíî áûòü îäèíàêîâûì.";
             Text[ polish ] = "Druga macierz zawiera tak¹ sam¹ iloœæ wierszy, jak pierwsza kolumn.";
@@ -20782,7 +20782,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ swedish ] = "Bestämmer matrisdeterminanten." ;
             Text [ dutch ] = "Berekent de determinant van een matrix." ;
             Text [ spanish ] = "Devuelve la matriz determinante." ;
-            Text [ english_us ] = "Returns the matrix determinant of an array." ;
+            Text [ english_us ] = "Returns the array determinant." ;
             Text[ chinese_simplified ] = "È·¶¨¾ØÕóĞĞÁĞÊ½µÄÖµ¡£";
             Text[ russian ] = "Âîçâğàùàåò îïğåäåëèòåëü ìàòğèöû.";
             Text[ polish ] = "Okreœla wyznacznik macierzy.";
@@ -20995,7 +20995,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ swedish ] = "Bestämmer den kvadratiska enhetsmatrisen för en bestämd storlek." ;
             Text [ dutch ] = "Bepaalt de vierkante eenheidsmatrix van een bepaalde grootte." ;
             Text [ spanish ] = "Devuelve la matriz unitaria (con el mismo número de filas y columnas) de un tamaño determinado." ;
-            Text [ english_us ] = "Returns the unitary square matrix of a certain size." ;
+            Text [ english_us ] = "Returns the unitary square array of a certain size." ;
             Text[ chinese_simplified ] = "È·¶¨Ò»¸ö¸ø¶¨ĞĞÁĞÊıµÄÕı·½µ¥Ôª¾ØÕó¡£";
             Text[ russian ] = "Îïğåäåëÿåò êâàäğàòíóş åäèíè÷íóş ìàòğèöó çàäàííîãî ğàçìåğà.";
             Text[ polish ] = "Okreœla kwadratow¹ macierz unitarn¹ pewnego rozmiaru.";
@@ -21066,7 +21066,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS1
             Text [ swedish ] = "Storleken på enhetsmatrisen." ;
             Text [ dutch ] = "De grootte van de eenheidsmatrix." ;
             Text [ spanish ] = "Es el tamaño de la matriz unitaria." ;
-            Text [ english_us ] = "The size of the unitary matrix." ;
+            Text [ english_us ] = "The size of the unitary array." ;
             Text[ chinese_simplified ] = "Ö¸¶¨µ¥Ôª¾ØÕóµÄ´óĞ¡¡£";
             Text[ russian ] = "Ğàçìåğ åäèíè÷íîé ìàòğèöû.";
             Text[ polish ] = "Rozmiar macierzy unitarnej.";
@@ -25530,7 +25530,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "ÊÍÓÈ ÇáãÆæí Ğí ÇáãæŞÚ k ãä ÚíäÉ ãÇ.";
             Text[ dutch ] = "Bepaalt het alfa-kwantiel van waarden in een bereik.";
             Text[ chinese_simplified ] = "¼ÆËãÊıÖµÇøÓòµÄ K °Ù·Ö±ÈÊıÖµµã¡£";
-            Text[ greek ] = "Õğïëïãßæåé ôï ğïóïóôçìüñéï á åíüò äåßãìáôïò.";
+            Text[ greek ] = "Õğïëïãßæåé ôï ğïóïóôçìüñéï ¢ëöá åíüò äåßãìáôïò.";
             Text[ korean ] = "Ç¥º»ÀÇ ¾ËÆÄ quantileÀ» °è»êÇÕ´Ï´Ù.";
             Text[ turkish ] = "Örneğin alfa kuvantilini hesaplar.";
             Text[ language_user1 ] = " ";
@@ -25632,7 +25632,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "K";
             Text[ dutch ] = "Alfa";
             Text[ chinese_simplified ] = "k";
-            Text[ greek ] = "á";
+            Text[ greek ] = "¢ëöá";
             Text[ korean ] = "¾ËÆÄ";
             Text[ turkish ] = "Alfa";
             Text[ language_user1 ] = " ";
@@ -25763,7 +25763,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ spanish ] = "es la matriz o área de celdas de valores numéricos cuyo cuartil desea obtener." ;
             Text [ english_us ] = "The array of the data in the sample." ;
             Text[ chinese_simplified ] = "ĞèÒªÇóµÃËÄ·ÖÎ»ÊıÖµµÄ³éÑùÊı×é»òÊı×ÖĞÍµ¥Ôª¸ñÇøÓò¡£";
-            Text[ russian ] = "Ìàññèâ èëè äèàïàçîí ÿ÷ååê ñ ÷èñëîâûìè çíà÷åíèÿìè,äëÿ êîòîğûõ îïğåäåëÿåòñÿ çíà÷åíèå êâàğòèëÿ.";
+            Text[ russian ] = "Ìàññèâ èëè äèàïàçîí ÿ÷ååê ñ ÷èñëîâûìè çíà÷åíèÿìè, äëÿ êîòîğûõ îïğåäåëÿåòñÿ çíà÷åíèå êâàğòèëÿ.";
             Text[ polish ] = "Macierz danych w próbce.";
             Text[ japanese ] = "‘ÎÛ‚Æ‚È‚é”’lÃŞ°À‚ğŠÜ‚Ş”z—ñ‚Ü‚½‚Í¾Ù”ÍˆÍ¡";
             Text[ chinese_traditional ] = "»İ­n¨D±o¥|¤À¦ì¼Æ­Èªº©â¼Ë¼Æ²Õ©Î¼Æ¦r«¬Àx¦s®æ°Ï°ì¡C";
@@ -26721,7 +26721,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "Alpha";
             Text[ dutch ] = "Alfa";
             Text[ chinese_simplified ] = "Alpha";
-            Text[ greek ] = "á";
+            Text[ greek ] = "¢ëöá";
             Text[ korean ] = "¾ËÆÄ";
             Text[ turkish ] = "Alfa";
             Text[ language_user1 ] = " ";
@@ -28511,7 +28511,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "Alpha";
             Text[ dutch ] = "Alfa";
             Text[ chinese_simplified ] = "alpha";
-            Text[ greek ] = "á";
+            Text[ greek ] = "¢ëöá";
             Text[ korean ] = "¾ËÆÄ";
             Text[ turkish ] = "Alfa";
             Text[ language_user1 ] = " ";
@@ -30362,7 +30362,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "Alpha";
             Text[ dutch ] = "Alfa";
             Text[ chinese_simplified ] = "alpha";
-            Text[ greek ] = "á";
+            Text[ greek ] = "¢ëöá";
             Text[ korean ] = "¾ËÆÄ";
             Text[ turkish ] = "Alfa";
             Text[ language_user1 ] = " ";
@@ -30394,7 +30394,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "ÇáãÚáãÉ ÃáİÇ áÊæÒíÚ ÛÇãÇ.";
             Text[ dutch ] = "De paramter Alfa van de gamma-verdeling.";
             Text[ chinese_simplified ] = "Ù¤Âê·Ö²¼µÄ²ÎÊı°¢¶û·¨¡£";
-            Text[ greek ] = "Ç ğáñÜìåôñïò á ôçò êáôáíïìŞò ÃÜììá.";
+            Text[ greek ] = "Ç ğáñÜìåôñïò ¢ëöá ôçò êáôáíïìŞò ÃÜììá.";
             Text[ korean ] = "°¨¸¶ ºĞÆ÷ÀÇ ÆÄ¶ó¹ÌÅÍ ¾ËÆÄÀÔ´Ï´Ù.";
             Text[ turkish ] = "Gamma dağıtımının alfa parametresi.";
             Text[ language_user1 ] = " ";
@@ -30458,7 +30458,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "ÇáãÚáãÉ ÈíÊÇ áÊæÒíÚ ÛÇãÇ.";
             Text[ dutch ] = "De parameter Beta van de gamma-verdeling.";
             Text[ chinese_simplified ] = "Ù¤Âê·Ö²¼µÄ²ÎÊı±´Ëş¡£";
-            Text[ greek ] = "Ç ğáñÜìåôñïò â ôçò êáôáíïìŞò ÃÜììá.";
+            Text[ greek ] = "Ç ğáñÜìåôñïò ÂŞôá ôçò êáôáíïìŞò ÃÜììá.";
             Text[ korean ] = "°¨¸¶ ºĞÆ÷ÀÇ ÆÄ¶ó¹ÌÅÍ º£Å¸ÀÔ´Ï´Ù.";
             Text[ turkish ] = "Gamma dağıtımının beta parametresi.";
             Text[ language_user1 ] = " ";
@@ -30660,7 +30660,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "Alpha";
             Text[ dutch ] = "Alfa";
             Text[ chinese_simplified ] = "alpha";
-            Text[ greek ] = "á";
+            Text[ greek ] = "¢ëöá";
             Text[ korean ] = "¾ËÆÄ";
             Text[ turkish ] = "Alfa";
             Text[ language_user1 ] = " ";
@@ -30692,7 +30692,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "ÇáãÚáãÉ ÃáİÇ áÊæÒíÚ ÛÇãÇ.";
             Text[ dutch ] = "De parameter Alfa van de gamma-verdeling.";
             Text[ chinese_simplified ] = "Ù¤Âê·Ö²¼µÄ²ÎÊı°¢¶û·¨¡£";
-            Text[ greek ] = "Ç ğáñÜìåôñïò á ôçò êáôáíïìŞò ÃÜììá.";
+            Text[ greek ] = "Ç ğáñÜìåôñïò ¢ëöá ôçò êáôáíïìŞò ÃÜììá.";
             Text[ korean ] = "°¨¸¶ ºĞÆ÷ÀÇ ÆÄ¶ó¹ÌÅÍ ¾ËÆÄÀÔ´Ï´Ù.";
             Text[ turkish ] = "Gamma dağıtımının alfa parametresi.";
             Text[ language_user1 ] = " ";
@@ -30756,7 +30756,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "ÇáãÚáãÉ ÈíÊÇ áÊæÒíÚ ÛÇãÇ.";
             Text[ dutch ] = "De parameter Beta van de gamma-verdeling.";
             Text[ chinese_simplified ] = "Ù¤Âê·Ö²¼µÄ²ÎÊı±´Ëş¡£";
-            Text[ greek ] = "Ç ğáñÜìåôñïò â ôçò êáôáíïìŞò ÃÜììá.";
+            Text[ greek ] = "Ç ğáñÜìåôñïò ÂŞôá ôçò êáôáíïìŞò ÃÜììá.";
             Text[ korean ] = "°¨¸¶ ºĞÆ÷ÀÇ ÆÄ¶ó¹ÌÅÍ º£Å¸ÀÔ´Ï´Ù.";
             Text[ turkish ] = "Gamma dağıtımının beta parametresi.";
             Text[ language_user1 ] = " ";
@@ -31001,7 +31001,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "Alpha";
             Text[ dutch ] = "Alfa";
             Text[ chinese_simplified ] = "alpha";
-            Text[ greek ] = "á";
+            Text[ greek ] = "¢ëöá";
             Text[ korean ] = "¾ËÆÄ";
             Text[ turkish ] = "Alfa";
             Text[ language_user1 ] = " ";
@@ -31033,7 +31033,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "ÇáãÚáãÉ ÃáİÇ áÊæÒíÚ ÈíÊÇ.";
             Text[ dutch ] = "De parameter alfa van de beta-verdeling";
             Text[ chinese_simplified ] = "±´Ëş·Ö²¼µÄ²Î±äÁ¿°¢¶û·¨¡£";
-            Text[ greek ] = "Ç ğáñÜìåôñïò á ôçò êáôáíïìŞò Â.";
+            Text[ greek ] = "Ç ğáñÜìåôñïò ¢ëöá ôçò êáôáíïìŞò ÂŞôá.";
             Text[ korean ] = "º£Å¸ ¹èºĞÀÇ ¾ËÆÄ ÆÄ¶ó¹ÌÅÍ";
             Text[ turkish ] = "Beta dağıtımının alfa parametresi.";
             Text[ language_user1 ] = " ";
@@ -31365,7 +31365,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "Alpha";
             Text[ dutch ] = "Alfa";
             Text[ chinese_simplified ] = "alpha";
-            Text[ greek ] = "á";
+            Text[ greek ] = "¢ëöá";
             Text[ korean ] = "¾ËÆÄ";
             Text[ turkish ] = "Alfa";
             Text[ language_user1 ] = " ";
@@ -31397,7 +31397,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "ÇáãÚáãÉ ÃáİÇ áÊæÒíÚ ÈíÊÇ.";
             Text[ dutch ] = "De parameter alfa van de beta-verdeling.";
             Text[ chinese_simplified ] = "±´Ëş·Ö²¼µÄ²Î±äÁ¿°¢¶û·¨¡£";
-            Text[ greek ] = "Ç ğáñÜìåôñïò á ôçò êáôáíïìŞò Â.";
+            Text[ greek ] = "Ç ğáñÜìåôñïò ¢ëöá ôçò êáôáíïìŞò ÂŞôá.";
             Text[ korean ] = "º£Å¸ ºĞÆ÷ÀÇ ¾ËÆÄ ÆÄ¶ó¹ÌÅÍ";
             Text[ turkish ] = "Beta dağıtımın alfa parametresi.";
             Text[ language_user1 ] = " ";
@@ -31729,7 +31729,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "Alpha";
             Text[ dutch ] = "Alfa";
             Text[ chinese_simplified ] = "Alpha";
-            Text[ greek ] = "á";
+            Text[ greek ] = "¢ëöá";
             Text[ korean ] = "¾ËÆÄ";
             Text[ turkish ] = "Alfa";
             Text[ language_user1 ] = " ";
@@ -31761,7 +31761,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "ãÚáãÉ ááÊæÒíÚ.";
             Text[ dutch ] = "De parameter alfa van de Weibull-verdeling.";
             Text[ chinese_simplified ] = "Î¤²®·Ö²¼µÄ°¢¶û·¨²ÎÊı¡£";
-            Text[ greek ] = "Ç ğáñÜìåôñïò á ôçò êáôáíïìŞò Weibull.";
+            Text[ greek ] = "Ç ğáñÜìåôñïò ¢ëöá ôçò êáôáíïìŞò Weibull.";
             Text[ korean ] = "¿ÍÀÌºí ºĞÆ÷ÀÇ ¾ËÆÄ ÆÄ¶ó¹ÌÅÍÀÔ´Ï´Ù.";
             Text[ turkish ] = "Weibull dağıtımının alfa parametresi.";
             Text[ language_user1 ] = " ";
@@ -34021,7 +34021,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "ÊÍÓÈ İÇÕá ÇáËŞÉ (1-alpha) Åáì ÇáÊæÒíÚ ÇáØÈíÚí.";
             Text[ dutch ] = "Berekent een (1-alfa)-confidentie-interval voor een normale verdeling.";
             Text[ chinese_simplified ] = "¼ÆËãÕıÌ¬·Ö²¼ (1-alpha) µÄÖÃĞÅÇø¼ä¡£";
-            Text[ greek ] = "Õğïëïãßæåé İíá äéÜóôçìá åìğéóôïóıíçò (1-á) ãéá ìéá êáíïíéêŞ êáôáíïìŞ.";
+            Text[ greek ] = "Õğïëïãßæåé İíá äéÜóôçìá åìğéóôïóıíçò (1-Üëöá) ãéá ìéá êáíïíéêŞ êáôáíïìŞ.";
             Text[ korean ] = "Á¤±Ô ºĞÆ÷¸¦ À§ÇÑ (1-¾ËÆÄ) ½Å·Ú±¸°£À» »êÃâÇÕ´Ï´Ù.";
             Text[ turkish ] = "Normal dağıtım ile ilgili (1-alfa)-güven aralığını hesaplar.";
             Text[ language_user1 ] = " ";
@@ -34059,7 +34059,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "Alpha";
             Text[ dutch ] = "Alfa";
             Text[ chinese_simplified ] = "alpha";
-            Text[ greek ] = "á";
+            Text[ greek ] = "¢ëöá";
             Text[ korean ] = "¾ËÆÄ";
             Text[ turkish ] = "Alfa";
             Text[ language_user1 ] = " ";
@@ -37057,7 +37057,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ english_us ] = "value " ;
             Text[ chinese_simplified ] = "value ";
             Text[ russian ] = "Çíà÷åíèå  ";
-            Text[ polish ] = "Wartoœæ  ";
+            Text[ polish ] = "Wartoœæ ";
             Text[ japanese ] = "’l ";
             Text[ chinese_traditional ] = "value ";
             Text[ arabic ] = "ÇáŞíãÉ ";
@@ -38962,7 +38962,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ swedish ] = "Bestämmer en position i en matris enligt en värdejämförelse." ;
             Text [ dutch ] = "Bepaalt een positie in een matrix na een vergelijking van de waarden." ;
             Text [ spanish ] = "Devuelve la posición relativa de un elemento en una matriz que coincida con un valor especificado." ;
-            Text [ english_us ] = "Defines a position in a matrix after a comparison of values." ;
+            Text [ english_us ] = "Defines a position in a array after comparing values." ;
             Text[ chinese_simplified ] = "Í¨¹ıÊıÖµ±È½ÏÀ´È·¶¨Êı¾İÔÚÊı¾İ×éÖĞµÄÎ»ÖÃ¡£";
             Text[ russian ] = "Îïğåäåëÿåò ïóòåì ñğàâíåíèÿ çíà÷åíèé ïîçèöèş â ìàññèâå.";
             Text[ polish ] = "Okreœla pozycjê w macierzy porównuj¹c wartoœæ";
@@ -39906,7 +39906,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ spanish ] = "Resultado de un vínculo DDE." ;
             Text [ english_us ] = "Result of a DDE link." ;
             Text[ chinese_simplified ] = "Ò»¸ö DDE Á´½ÓµÄ½á¹û¡£";
-            Text[ russian ] = "Ğåçóëüòàò ññûëêè DDE.";
+            Text[ russian ] = "Ğåçóëüòàò ñâÿçè DDE.";
             Text[ polish ] = "Rezultat ³¹cza DDE.";
             Text[ japanese ] = "DDEØİ¸‚ÌŒ‹‰Ê";
             Text[ chinese_traditional ] = "¤@­Ó DDE ³sµ²ªºµ²ªG¡C";
@@ -40960,7 +40960,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ finnish ] = "Sucht ein Teilwort in einem Text unter Berücksichtigung von Groß- und Kleinschreibung." ;
             Text [ danish ] = "Finder en tekststreng i en tekst (skelner mellem store og små bogstaver)." ;
             Text [ french ] = "Recherche une chaîne de texte dans un texte en respectant la casse (majuscules et minuscules)." ;
-            Text [ swedish ] = "Söker efter en textsträng i en text under beaktande av versaler och gemener." ;
+            Text [ swedish ] = "Söker efter en textsträng i en text (versalkänslig)." ;
             Text [ dutch ] = "Zoekt een gedeelte van een woord (er wordt daarbij onderscheid gemaakt tussen hoofdletters en kleine letters)." ;
             Text [ spanish ] = "Busca un valor de texto dentro de otro tomando en cuenta las mayúsculas y minúsculas." ;
             Text [ english_us ] = "Looks for a string of text within another (case sensitive)" ;
@@ -41195,7 +41195,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text [ finnish ] = "Sucht ein Teilwort in einem Text ohne Berücksichtigung von Groß- und Kleinschreibung." ;
             Text [ danish ] = "Finder en tekststreng i en tekst (skelner ikke mellem store og små bogstaver)." ;
             Text [ french ] = "Recherche une chaîne de texte dans un texte sans respecter la casse (majuscules et minuscules)." ;
-            Text [ swedish ] = "Söker en textsträng i en text utan att beakta stora och små bokstäver." ;
+            Text [ swedish ] = "Söker en textsträng i en text (inte versalkänsligt)." ;
             Text [ dutch ] = "Zoekt een tekenreeks in een tekst (er wordt geen onderscheid gemaakt tussen hoofdletters en kleine letters)." ;
             Text [ spanish ] = "Busca un valor de texto dentro de otro sin reconocer mayúsculas o minúsculas." ;
             Text [ english_us ] = "Looks for one text value within another (not case-sensitive)." ;
@@ -44267,7 +44267,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ arabic ] = "ÊÍæá ŞíãÉ ÊÈÚÇğ áÅÏÎÇá İí ÌÏæá convert.ini.";
             Text[ dutch ] = "Converteert een waarde aan de hand van een item in de tabel convert.ini.";
             Text[ chinese_simplified ] = "¸ù¾İ convert.ini ÎÄ¼şÄÚµÄÌõÄ¿×ª»»Ò»¸öÊıÖµµÄ»õ±Òµ¥Î»¡£";
-            Text[ greek ] = "Ìåôáôñİğåé ìéá ôéìŞ óıìöùíá ìå ìéá åããñáöŞ ôïõ ğßíáêá convert.ini.";
+            Text[ greek ] = "Ìåôáôñİğåé ìéá ôéìŞ óıìöùíá ìå ìéá êáôá÷şñéóç ôïõ ğßíáêá convert.ini.";
             Text[ korean ] = "convert.ini¿¡ ÀÖ´Â Ç×¸ñ¿¡µû¶ó °ªÀ» Å×ÀÌºí·Î º¯È¯";
             Text[ turkish ] = "convert.ini tablosundaki girişe göre değeri dönüştürür.";
             Text[ language_user1 ] = " ";
@@ -44370,7 +44370,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ spanish ] = "Unidad de la que se convierte; diferenciación mayúsculas/minúsculas";
             Text[ italian ] = "Unità a partire dalla quale si converte; sensibile all'utilizzo delle maiuscole/minuscole.";
             Text[ danish ] = "Enhed som konverteres fra (skelner mellem store og små bogstaver).";
-            Text[ swedish ] = "Enhet från vilken omräkning sker, stora/små bokstäver är relevant.";
+            Text[ swedish ] = "Enhet från vilken omräkning sker, versalkänslighet är relevant.";
             Text[ polish ] = "Jednostka, z której bêdzie siê przeliczaæ; wa¿na jest pisownia ma³ych i du¿ych liter.";
             Text[ portuguese_brazilian ] = "Unit to convert from, case sensitive.";
             Text[ japanese ] = "•ÏŠ·‘O‚Ì”’l‚Ì’PˆÊB’PˆÊ–¼‚Æ—ªŒê‚Ì‘å•¶š‚Æ¬•¶š‚Í‹æ•Ê‚³‚ê‚Ü‚·B";
@@ -44422,7 +44422,7 @@ Resource RID_SC_FUNCTION_DESCRIPTIONS2
             Text[ spanish ] = "Unidad a convertir; diferenciación mayúsculas/minúsculas";
             Text[ italian ] = "Unità nella quale si converte; sensibile all'utilizzo delle maiuscole/minuscole.";
             Text[ danish ] = "Enhed som konverteres til (skelner mellem store og små bogstaver).";
-            Text[ swedish ] = "Enhet till vilken omräkning sker, stora/små bokstäver är relevant.";
+            Text[ swedish ] = "Enhet till vilken omräkning sker, versalkänslighet är relevant.";
             Text[ polish ] = "Jednostka do przeliczenia (uwzglêdnij du¿e i ma³e litery).";
             Text[ portuguese_brazilian ] = "Unit to convert to, case sensitive.";
             Text[ japanese ] = "•ÏŠ·Œã‚Ì”’l‚Ì’PˆÊB’PˆÊ–¼‚Æ—ªŒê‚Ì‘å•¶š‚Æ¬•¶š‚Í‹æ•Ê‚³‚ê‚Ü‚·B";
