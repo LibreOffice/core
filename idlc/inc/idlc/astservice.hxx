@@ -2,9 +2,9 @@
  *
  *  $RCSfile: astservice.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:42:04 $
+ *  last change: $Author: rt $ $Date: 2004-07-23 14:42:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,14 +75,21 @@ public:
     AstService(const ::rtl::OString& name, AstScope* pScope)
         : AstDeclaration(NT_service, name, pScope)
         , AstScope(NT_service)
+        , m_defaultConstructor(false)
         {}
     AstService(const NodeType type, const ::rtl::OString& name, AstScope* pScope)
         : AstDeclaration(type, name, pScope)
         , AstScope(type)
+        , m_defaultConstructor(false)
         {}
     virtual ~AstService() {}
 
     virtual sal_Bool dump(RegistryKey& rKey);
+
+    void setDefaultConstructor(bool b) { m_defaultConstructor = b; }
+
+private:
+    bool m_defaultConstructor;
 };
 
 #endif // _IDLC_ASTSERVICE_HXX_
