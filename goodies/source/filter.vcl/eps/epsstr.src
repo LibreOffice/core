@@ -2,9 +2,9 @@
  *
  *  $RCSfile: epsstr.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-09-27 18:28:38 $
+ *  last change: $Author: kz $ $Date: 2000-10-27 15:22:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,7 +176,7 @@ String KEY_VERSION_CHECK
     Text[ spanish ] = "°Atenciуn: No han podido ser guardados en Level1 todos los grбficos EPS importados\nporque existen algunos en un nivel mбs alto!";
     Text[ english_us ] = "Warning: Not all of the imported EPS graphics could be saved at level1\nas some are at a higher level!";
     Text[ chinese_simplified ] = "„Ґ“в: ќёЈ®љЂЋщ”–µƒ д»лЌЉ–ќ“‘°∞Љґ±р 1°±іж≈ћ£ђ\n“тќ™“ї–©ЌЉ–ќ «Єя”Џ°∞Љґ±р 1°± £°";
-    Text[ russian ] = "¬нимание! —охранить все импортированные изображени€ EPS на уровне 1 невозможно,\nтак как некоторые из них наход€тс€ на более высоком уровне !";
+    Text[ russian ] = "¬нимание! —охранить все импортированные изображени€ EPS на уровне 1 невозможно,\nтак как некоторые из них наход€тс€ на более высоком уровне!";
     Text[ polish ] = "Uwaga: Nie wszystkie importowane grafiki EPS mog≥y zostaж zapisane na poziomie1, \nponiewaњ niektуre znajdujє siк na wyњszym poziomie!";
     Text[ japanese ] = "ТНИ”: ≤Ёќя∞ƒВ≥ВкВљ EPS Єё„ћ®ѓЄВћВҐВ≠В¬В©В™ИкВ¬ПгВћЏЌёўВ…В†Ви\nЏЌёўВPВ…ВЈВ„ВƒВрКiФ[ВЈВйВ±В∆ВЌВ≈ВЂВ№ВєВсВ≈ВµВљБB";
     Text[ greek ] = "–спупчё: ƒен ёфбн дхнбфьн нб гяней брпиёкехуз ьлщн фщн ейузгмЁнщн гсбцйкюн EPS,\nерейдё месйк№ брь бхф№ хр№счпхн уе мпсцё хшзльфеспх ерйрЁдпх!";
