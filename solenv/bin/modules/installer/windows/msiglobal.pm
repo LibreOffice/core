@@ -2,9 +2,6 @@
 #
 #   $RCSfile: msiglobal.pm,v $
 #
-#   $Revision: 1.12 $
-#
-#   last change: $Author: hr $ $Date: 2004-11-09 18:33:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -587,7 +584,7 @@ sub create_transforms
 
 #########################################################################
 # The default language msi database does not need to contain
-# the langugage in the database name. Therefore the file
+# the language in the database name. Therefore the file
 # is renamed. Example: "openofficeorg20_01.msi" to "openofficeorg20.msi"
 #########################################################################
 
