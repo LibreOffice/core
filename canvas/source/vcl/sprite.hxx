@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sprite.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 17:15:14 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 12:00:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,8 +66,8 @@
 #include <rtl/ref.hxx>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_RENDERING_XCANVAS_HPP_
-#include <drafts/com/sun/star/rendering/XCanvas.hpp>
+#ifndef _COM_SUN_STAR_RENDERING_XCANVAS_HPP_
+#include <com/sun/star/rendering/XCanvas.hpp>
 #endif
 
 #ifndef _BGFX_POINT_B2DPOINT_HXX
