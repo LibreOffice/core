@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.hxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: cl $ $Date: 2001-11-15 17:14:01 $
+ *  last change: $Author: cl $ $Date: 2001-12-14 14:06:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,6 +155,8 @@ protected:
     const SvXMLImport& GetImport() const { return SvXMLImportContext::GetImport(); }
 
     void addGluePoint( const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList>& xAttrList );
+
+    sal_Bool isPresentationShape() const;
 
 public:
     TYPEINFO();

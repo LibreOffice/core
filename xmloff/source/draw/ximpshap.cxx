@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.71 $
+ *  $Revision: 1.72 $
  *
- *  last change: $Author: cl $ $Date: 2001-12-06 17:39:18 $
+ *  last change: $Author: cl $ $Date: 2001-12-14 14:06:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -827,6 +827,14 @@ void SdXMLShapeContext::processAttribute( sal_uInt16 nPrefix, const ::rtl::OUStr
     }
 }
 
+sal_Bool SdXMLShapeContext::isPresentationShape() const
+{
+    return (XML_STYLE_FAMILY_SD_PRESENTATION_ID == mnStyleFamily) &&
+           maPresentationClass.getLength() &&
+           (const_cast<SdXMLShapeContext*>(this))->GetImport().GetShapeImport()->IsPresentationShapesSupported();
+}
+
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -1417,7 +1425,7 @@ void SdXMLTextBoxShapeContext::StartElement(const uno::Reference< xml::sax::XAtt
 
     char *pService = NULL;
 
-    if(maPresentationClass.getLength())
+    if( isPresentationShape() )
     {
         // check if the current document supports presentation shapes
         if( GetImport().GetShapeImport()->IsPresentationShapesSupported() )
@@ -1899,7 +1907,7 @@ void SdXMLPageShapeContext::StartElement(const uno::Reference< xml::sax::XAttrib
 
     // #86163# take into account which type of PageShape needs to
     // be constructed. It's an pres shape if presentation:XML_CLASS == XML_PRESENTATION_PAGE.
-    sal_Bool bIsPresentation = GetImport().GetShapeImport()->IsPresentationShapesSupported() && (maPresentationClass.getLength() != 0);
+    sal_Bool bIsPresentation = isPresentationShape();
 
     uno::Reference< lang::XServiceInfo > xInfo( mxShapes, uno::UNO_QUERY );
     const sal_Bool bIsOnHandoutPage = xInfo.is() && xInfo->supportsService( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.HandoutMasterPage")) );
@@ -2233,7 +2241,7 @@ SdXMLChartShapeContext::~SdXMLChartShapeContext()
 
 void SdXMLChartShapeContext::StartElement(const uno::Reference< xml::sax::XAttributeList>& xAttrList)
 {
-    const sal_Bool bIsPresentation = (maPresentationClass.getLength() != 0) && GetImport().GetShapeImport()->IsPresentationShapesSupported();
+    const sal_Bool bIsPresentation = isPresentationShape();
 
     AddShape( bIsPresentation ? "com.sun.star.presentation.ChartShape" : "com.sun.star.drawing.OLE2Shape" );
 
@@ -2335,7 +2343,7 @@ void SdXMLObjectShapeContext::StartElement( const ::com::sun::star::uno::Referen
 {
     char* pService = "com.sun.star.drawing.OLE2Shape";
 
-    sal_Bool bIsPresShape = (maPresentationClass.getLength() != 0) && GetImport().GetShapeImport()->IsPresentationShapesSupported();
+    sal_Bool bIsPresShape = isPresentationShape();
 
     if( bIsPresShape )
     {
