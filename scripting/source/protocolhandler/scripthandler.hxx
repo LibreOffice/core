@@ -2,9 +2,9 @@
 *
 *  $RCSfile: scripthandler.hxx,v $
 *
-*  $Revision: 1.4 $
+*  $Revision: 1.5 $
 *
-*  last change: $Author: dfoster $ $Date: 2003-07-23 14:01:00 $
+*  last change: $Author: toconnor $ $Date: 2003-10-29 15:26:02 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -68,7 +68,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <cppuhelper/implbase4.hxx>
-#include <drafts/com/sun/star/script/framework/provider/XScriptProvider.hpp>
+#include <drafts/com/sun/star/script/provider/XScriptProvider.hpp>
 
 namespace rtl
 {
@@ -126,7 +126,7 @@ private:
     bool m_bInitialised;
     css::uno::Reference < css::lang::XMultiServiceFactory > m_xFactory;
     css::uno::Reference < css::frame::XFrame > m_xFrame;
-    css::uno::Reference < dcss::script::framework::provider::XScriptProvider >
+    css::uno::Reference < dcss::script::provider::XScriptProvider >
     m_xScriptProvider;
     void createScriptProvider( const ::rtl::OUString& url ) throw( css::uno::RuntimeException );
 public:

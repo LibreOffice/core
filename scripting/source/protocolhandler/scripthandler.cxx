@@ -2,9 +2,9 @@
 *
 *  $RCSfile: scripthandler.cxx,v $
 *
-*  $Revision: 1.12 $
+*  $Revision: 1.13 $
 *
-*  last change: $Author: dfoster $ $Date: 2003-10-17 11:22:23 $
+*  last change: $Author: toconnor $ $Date: 2003-10-29 15:26:02 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -76,7 +76,7 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
-using namespace ::drafts::com::sun::star::script::framework;
+using namespace ::drafts::com::sun::star::script;
 
 namespace scripting_protocolhandler
 {
@@ -355,7 +355,7 @@ throw ( RuntimeException )
         Reference< XInterface > xXinterface =
         m_xFactory->createInstanceWithArguments(
             ::rtl::OUString::createFromAscii(
-            "drafts.com.sun.star.script.framework.provider.MasterScriptProvider" ),
+            "drafts.com.sun.star.script.provider.MasterScriptProvider" ),
             args );
         validateXRef( xXinterface,
             "ScriptProtocolHandler::initialize: cannot get instance of MasterScriptProvider" );
