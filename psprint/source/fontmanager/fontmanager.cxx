@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontmanager.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-01 14:52:08 $
+ *  last change: $Author: kz $ $Date: 2003-08-25 13:58:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1373,7 +1373,7 @@ void PrintFontManager::analyzeTrueTypeFamilyName( void* pTTFont, ::std::list< OU
         int nLastMatch = -1;
         for( int i = 0; i < nNameRecords; i++ )
         {
-            if( pNameRecords[i].nameID != 1 )
+            if( pNameRecords[i].nameID != 1 || pNameRecords[i].sptr == NULL )
                 continue;
             int nMatch = -1;
             if( pNameRecords[i].platformID == 0 ) // Unicode
