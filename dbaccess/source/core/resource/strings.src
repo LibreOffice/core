@@ -2,9 +2,9 @@
  *
  *  $RCSfile: strings.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2001-06-13 22:13:52 $
+ *  last change: $Author: kz $ $Date: 2001-07-03 22:12:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,7 +103,7 @@ String RID_STR_CONNECTION_INVALID
     Text[ polish ] = "Brak po³¹czenia!";
     Text[ portuguese_brazilian ] = "Not possible to create a connection!";
     Text[ japanese ] = "Ú‘±‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B";
-    Text[ korean ] = "Not possible to create a connection!";
+    Text[ korean ] = "Á¢¼ÓµµÇÏÁö ¸øÇß½À´Ï´Ù!";
     Text[ chinese_simplified ] = "ÎŞ·¨½¨Á¢Á¬½Ó£¡";
     Text[ chinese_traditional ] = "µLªk«Ø¥ß³s½u!";
     Text[ turkish ] = "Not possible to create a connection!";
@@ -129,7 +129,7 @@ String RID_STR_TABLE_IS_FILTERED
     Text[ polish ] = "Tabela $name$ ju¿ istenieje. Zosta³a ona przefiltrowana!";
     Text[ portuguese_brazilian ] = "the table $name$ already exists. She is only filtered!";
     Text[ japanese ] = "Ã°ÌŞÙ $name$ ‚Í‚·‚Å‚É‚ ‚è‚Ü‚·BÌ¨ÙÀ‚³‚ê‚Ä‚¢‚Ü‚·B";
-    Text[ korean ] = "the table $name$ already exists. She is only filtered!";
+    Text[ korean ] = "Å×ÀÌºí $name$ÀÌ(°¡) ÀÌ¹Ì ÀÖ½À´Ï´Ù. ÀÌ Å×ÀÌºíÀÌ ÇÊÅÍ¸µ µÇ¾ú½À´Ï´Ù!";
     Text[ chinese_simplified ] = "Õâ¸ö±í¸ñ $name$ ÒÑ¾­´æÔÚ¡£ÒÑ¾­É¸³öÕâ¸ö±í¸ñ!";
     Text[ chinese_traditional ] = "³o­Óªí®æ $name$ ¤w¸g¦s¦b¡C¤w¿z¿ï¥X³o­Óªí®æ!";
     Text[ turkish ] = "the table $name$ already exists. She is only filtered!";
@@ -156,12 +156,13 @@ String RID_STR_NEED_CONFIG_WRITE_ACCESS
     Text[ polish ] = "Brak praw na zapisywanie danych konfiguracjynych obiektu.";
     Text[ portuguese_brazilian ] = "You have no write access to the configuration data the object is based on.";
     Text[ japanese ] = "µÌŞ¼Şª¸Ä‚Ìİ’èÃŞ°À‚Ö‚Ì‘‚«‚İŒ ‚Í‚ ‚è‚Ü‚¹‚ñB";
-    Text[ korean ] = "You have no write access to the configuration data the object is based on.";
+    Text[ korean ] = "°³Ã¼ÀÇ ÄÁÇÇ±Ô·¹ÀÌ¼Ç µ¥ÀÌÅÍ¿¡ ´ëÇÑ ¾²±â ±ÇÇÑÀÌ ¾ø½À´Ï´Ù";
     Text[ chinese_simplified ] = "ÄúÃ»ÓĞÈ¨ÏŞ¶ÁÈ¡Õâ¸ö¶ÔÏóµÄÅäÖÃÊı¾İ¡£";
     Text[ chinese_traditional ] = "±z¨S¦³Åv­­¦s¨ú³o­Óª«¥óªº°t¸m¸ê®Æ¡C";
     Text[ turkish ] = "You have no write access to the configuration data the object is based on.";
     Text[ arabic ] = "You have no write access to the configuration data the object is based on.";
     Text[ catalan ] = "You have no write access to the configuration data the object is based on.";
 };
+
 
 
