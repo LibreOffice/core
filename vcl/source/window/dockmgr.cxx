@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dockmgr.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 13:25:12 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 09:07:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,13 +188,22 @@ IMPL_LINK( ImplDockFloatWin2, DockTimerHdl, ImplDockFloatWin2*, pWin )
 
     maDockTimer.Stop();
     PointerState aState = GetPointerState();
-    if( ! ( aState.mnState & ( MOUSE_LEFT | MOUSE_MIDDLE | MOUSE_RIGHT ) ) )
+
+    if( aState.mnState & KEY_MOD1 )
+    {
+        // i43499 CTRL disables docking now
+        mpDockWin->GetWindow()->GetParent()->ImplGetFrameWindow()->HideTracking();
+        if( aState.mnState & ( MOUSE_LEFT | MOUSE_MIDDLE | MOUSE_RIGHT ) )
+            maDockTimer.Start();
+    }
+    else if( ! ( aState.mnState & ( MOUSE_LEFT | MOUSE_MIDDLE | MOUSE_RIGHT ) ) )
     {
         mpDockWin->GetWindow()->GetParent()->ImplGetFrameWindow()->HideTracking();
         mpDockWin->EndDocking( maDockRect, FALSE );
     }
     else
     {
+        mpDockWin->GetWindow()->GetParent()->ImplGetFrameWindow()->ShowTracking( maDockRect, SHOWTRACK_BIG | SHOWTRACK_WINDOW );
         maDockTimer.Start();
     }
 
@@ -260,6 +269,7 @@ IMPL_LINK( ImplDockFloatWin2, DockingHdl, ImplDockFloatWin2*, pWindow )
         mpDockWin->GetWindow()->IsVisible() &&
         (Time::GetSystemTicks() - mnLastTicks > 500) &&
         ( aState.mnState & ( MOUSE_LEFT | MOUSE_MIDDLE | MOUSE_RIGHT ) ) &&
+        !(aState.mnState & KEY_MOD1) && // i43499 CTRL disables docking now
         bRealMove )
     {
         maDockPos = Point( pDockingArea->OutputToScreenPixel( pDockingArea->AbsoluteScreenToOutputPixel( OutputToAbsoluteScreenPixel( Point() ) ) ) );
@@ -1172,7 +1182,11 @@ void ImplDockingWindowWrapper::EndDocking( const Rectangle& rRect, BOOL bFloatMo
             SetFloatingMode( bFloatMode );
             bShow = TRUE;
             if ( bFloatMode )
-                mpFloatWin->SetPosSizePixel( aRect.TopLeft(), aRect.GetSize() );
+            {
+                // #i44800# always use outputsize - as in all other places
+                mpFloatWin->SetOutputSizePixel( aRect.GetSize() );
+                mpFloatWin->SetPosPixel( aRect.TopLeft() );
+            }
         }
         if ( !bFloatMode )
         {
