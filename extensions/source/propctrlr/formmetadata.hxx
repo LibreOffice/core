@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formmetadata.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 13:45:13 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 16:23:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,7 +151,9 @@ namespace pcr
                                                 //  dependent properties (their UI, more concrete) need
                                                 //  also to be updated
 #define PROP_FLAG_ENUM              0x00000020  // the property is some kind of enum property, i.e. its
-                                                // value is chose from a fixed list of possible values
+                                                //  value is chose from a fixed list of possible values
+#define PROP_FLAG_ENUM_ONE          0x00000060  // the property is an enum property, which starts at 1
+                                                //  (not that the flags here include PROP_FLAG_ENUM)
 
     //========================================================================
     //= property ids (for all browseable properties)
@@ -266,7 +268,7 @@ namespace pcr
     #define PROPERTY_ID_BLOCKINCREMENT       109
     #define PROPERTY_ID_VISIBLESIZE          110
     #define PROPERTY_ID_ORIENTATION          111
-    #define PROPERTY_ID_IMAGEALIGN           112
+    #define PROPERTY_ID_IMAGEPOSITION        112
     #define PROPERTY_ID_DATE                 113
     #define PROPERTY_ID_STATE                114
     #define PROPERTY_ID_TIME                 115
@@ -297,6 +299,11 @@ namespace pcr
     #define PROPERTY_ID_TEXTTYPE             140
     #define PROPERTY_ID_AUTOLINEBREAK        141
     #define PROPERTY_ID_LINEEND_FORMAT       142
+    #define PROPERTY_ID_TOGGLE               143
+    #define PROPERTY_ID_FOCUSONCLICK         144
+    #define PROPERTY_ID_HIDEINACTIVESELECTION 145
+    #define PROPERTY_ID_VISUALEFFECT         146
+    #define PROPERTY_ID_BORDERCOLOR          147
 
 //............................................................................
 } // namespace pcr
