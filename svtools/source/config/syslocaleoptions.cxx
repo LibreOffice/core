@@ -2,9 +2,9 @@
  *
  *  $RCSfile: syslocaleoptions.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 17:25:24 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 17:23:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,9 @@
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
 #endif
+#include <rtl/logfile.hxx>
+#include "itemholder2.hxx"
+
 
 #define CFG_READONLY_DEFAULT    sal_False
 
@@ -498,7 +501,13 @@ SvtSysLocaleOptions::SvtSysLocaleOptions()
 {
     MutexGuard aGuard( GetMutex() );
     if ( !pOptions )
+    {
+        RTL_LOGFILE_CONTEXT(aLog, "svtools (???) ::SvtSysLocaleOptions_Impl::ctor()");
         pOptions = new SvtSysLocaleOptions_Impl;
+
+        ItemHolder2* pHolder = ItemHolder2::getGlobalItemHolder();
+        pHolder->holdConfigItem(E_SYSLOCALEOPTIONS);
+    }
     ++nRefCount;
 }
 
