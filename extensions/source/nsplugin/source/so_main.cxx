@@ -2,9 +2,9 @@
  *
  *  $RCSfile: so_main.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 10:08:44 $
+ *  last change: $Author: kz $ $Date: 2004-11-26 16:02:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -257,6 +257,8 @@ sal_Bool start_office(NSP_PIPE_FD read_fd)
 {
     int my_sock;
     struct sockaddr_in dst_addr;
+    char sCommand[NPP_PATH_MAX];
+    sCommand[0] = 0;
 #ifdef WNT
     {
         WSADATA wsaData;
@@ -299,6 +301,8 @@ sal_Bool start_office(NSP_PIPE_FD read_fd)
        {
             NSP_CloseSocket(my_sock);
             NSP_Close_Pipe(read_fd);
+            sprintf(sCommand, "/bin/sh soffice -nologo -nodefault %s", para);
+            debug_fprintf(NSP_LOG_APPEND,"StarOffice will be started by command: %s\n",sCommand);
             execl("/bin/sh", "/bin/sh", "soffice", "-nologo", "-nodefault", para, NULL);
             _exit(255);
         }
@@ -310,12 +314,22 @@ sal_Bool start_office(NSP_PIPE_FD read_fd)
             PROCESS_INFORMATION NSP_ProcessInfo;
             memset((void*)&NSP_ProcessInfo, 0, sizeof(PROCESS_INFORMATION));
             sprintf(para, " -nologo -nodefault -accept=socket,host=0,port=%d;urp", SO_SERVER_PORT);
+            //sprintf(para, " -accept=socket,host=0,port=%d;urp\n", SO_SERVER_PORT);
             SECURITY_ATTRIBUTES  NSP_access = { sizeof(SECURITY_ATTRIBUTES), NULL, FALSE};
-            CreateProcess(findSofficeExecutable(), para, NULL, NULL, FALSE,
+            sprintf(sCommand, "\"%s\" %s", findSofficeExecutable(), para);
+            debug_fprintf(NSP_LOG_APPEND,"StarOffice will be started by command: %s",sCommand);
+            BOOL ret = false;
+            ret = CreateProcess(findSofficeExecutable(), sCommand, NULL, NULL, FALSE,
                         0 , NULL, NULL, &NSP_StarInfo, &NSP_ProcessInfo);
+            if(ret==false){
+                debug_fprintf(NSP_LOG_APPEND,"run staroffice error: %u \n",
+                    GetLastError());
+            }
+            else   debug_fprintf(NSP_LOG_APPEND,"run staroffice success\n");
 #endif //end of WNT
     }
 
+    NSP_Sleep(5);
     // try to connect to background SO, thus judge if it is ready
     while(0 > connect(my_sock, (struct sockaddr *)&dst_addr, sizeof(dst_addr)))
     {
