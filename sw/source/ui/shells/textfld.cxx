@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textfld.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-19 12:00:28 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 11:49:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -697,6 +697,7 @@ FIELD_INSERT:
                 SwInsertFld_Data aData(nInsertType, nInsertSubType,
                                     aEmptyStr, aEmptyStr, nInsertFormat);
                 aFldMgr.InsertFld(aData);
+                rReq.Done();
             }
             break;
             default:
