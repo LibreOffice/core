@@ -1,0 +1,459 @@
+/*************************************************************************
+ *
+ *  $RCSfile: UpdateLockManager.cxx,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: rt $ $Date: 2005-03-30 09:27:12 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+
+#include "UpdateLockManager.hxx"
+
+#include "MutexOwner.hxx"
+#include "ViewShellBase.hxx"
+
+#ifndef _COM_SUN_STAR_FRAME_XLAYOUTMANAGER_HPP_
+#include <com/sun/star/frame/XLayoutManager.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_XLAYOUTMANAGEREVENTBROADCASTER_HPP_
+#include <com/sun/star/frame/XLayoutManagerEventBroadcaster.hpp>
+#endif
+#ifndef _COM_SUN_STAR_FRAME_LAYOUTMANAGEREVENTS_HPP_
+#include <com/sun/star/frame/LayoutManagerEvents.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
+#include <com/sun/star/beans/XPropertySet.hpp>
+#endif
+
+#ifndef _CPPUHELPER_COMPBASE1_HXX_
+#include <cppuhelper/compbase1.hxx>
+#endif
+
+#include <vcl/timer.hxx>
+#include <sfx2/viewfrm.hxx>
+
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star;
+using namespace ::rtl;
+
+namespace {
+typedef cppu::WeakComponentImplHelper1<frame::XLayoutManagerListener> InterfaceBase;
+}
+
+namespace sd {
+
+
+/** This implementation class not only implements the Lock() and Unlock()
+    methods but as well listens for the right combination of events to call
+    Unlock() when all is ready after the PaneManager has switched (some of)
+    its view shells.
+*/
+
+class UpdateLockManager::Implementation
+    : protected MutexOwner,
+      public InterfaceBase
+{
+public:
+    Implementation (ViewShellBase& rBase);
+    virtual ~Implementation (void);
+
+    void Lock (void);
+    void Unlock (void);
+    bool IsLocked (void) const;
+
+    /** Unlock regardless of the current lock level.
+    */
+    void ForceUnlock (void);
+
+private:
+    ViewShellBase& mrBase;
+    /// A lock level greater than 0 indicates that the ViewShellBase is locked.
+    sal_Int32 mnLockDepth;
+    /// The emergency timer to unlock the ViewShellBase when all else fails.
+    Timer maTimer;
+    /// Remember when to unlock after a layout event from frame::XLayoutManager
+    bool mbUnlockOnNextLayout;
+    /// Remember whether we are listening to the frame::XLayoutManager
+    bool mbListenerIsRegistered;
+    /// Remember whether the frame::XLayoutManager is locked.
+    bool mbLayouterIsLocked;
+
+    //=====  frame::XLayoutEventListener  =====================================
+
+    /** The event of the layouter are observed to find the best moment for
+        unlocking.  This is the first layout after the lock level of the
+        layouter drops to one (we hold a lock to it ourselves which we
+        release when unlocking).
+    */
+    virtual void SAL_CALL layoutEvent (
+        const lang::EventObject& xSource,
+        sal_Int16 eLayoutEvent,
+        const Any& rInfo)
+        throw (uno::RuntimeException);
+
+    //=====  lang::XEventListener  ============================================
+    virtual void SAL_CALL
+        disposing (const lang::EventObject& rEventObject)
+        throw (::com::sun::star::uno::RuntimeException);
+
+    virtual void SAL_CALL disposing (void);
+
+    /** This is only a fallback to make the office usable when for some
+        reason the intended way of unlocking it failed.
+    */
+    DECL_LINK(Timeout, void*);
+
+    /** Convenience method that finds the layout manager associated with the
+        frame that shows the ViewShellBase.
+    */
+    Reference<frame::XLayoutManager> GetLayoutManager (void);
+
+    Implementation (const Implementation&); // Not implemented.
+    Implementation& operator= (const Implementation&); // Not implemented.
+};
+
+
+
+
+//===== UpdateLockManager =====================================================
+
+UpdateLockManager::UpdateLockManager (ViewShellBase& rBase)
+    : mpImpl(new Implementation(rBase))
+{
+    mpImpl->acquire();
+}
+
+
+
+UpdateLockManager::~UpdateLockManager (void)
+{
+    if (mpImpl != NULL)
+    {
+        mpImpl->ForceUnlock();
+        mpImpl->release();
+    }
+}
+
+
+
+
+void UpdateLockManager::Disable (void)
+{
+    if (mpImpl != NULL)
+    {
+        mpImpl->ForceUnlock();
+        mpImpl->release();
+        mpImpl = NULL;
+    }
+}
+
+
+
+
+void UpdateLockManager::Lock (void)
+{
+    if (mpImpl != NULL)
+        mpImpl->Lock();
+}
+
+
+
+
+void UpdateLockManager::Unlock (void)
+{
+    if (mpImpl != NULL)
+        mpImpl->Unlock();
+}
+
+
+
+
+bool UpdateLockManager::IsLocked (void) const
+{
+    if (mpImpl != NULL)
+        return mpImpl->IsLocked();
+    else
+        return false;
+}
+
+
+
+//===== UpdateLock::Implementation ============================================
+
+UpdateLockManager::Implementation::Implementation (ViewShellBase& rBase)
+    : InterfaceBase(maMutex),
+      mrBase(rBase),
+      mnLockDepth(0),
+      maTimer(),
+      mbUnlockOnNextLayout(false),
+      mbListenerIsRegistered(false),
+      mbLayouterIsLocked(false)
+{
+}
+
+
+
+
+UpdateLockManager::Implementation::~Implementation (void)
+{
+    OSL_ASSERT(mnLockDepth==0);
+    ForceUnlock();
+}
+
+
+
+
+void UpdateLockManager::Implementation::Lock (void)
+{
+    ++mnLockDepth;
+    if (mnLockDepth == 1)
+    {
+        Reference<frame::XLayoutManager> xLayouter (GetLayoutManager());
+        if (xLayouter.is())
+        {
+            // Register as event listener.
+            Reference<frame::XLayoutManagerEventBroadcaster> xBroadcaster (
+                xLayouter, UNO_QUERY);
+            if (xBroadcaster.is())
+            {
+                mbListenerIsRegistered = true;
+                xBroadcaster->addLayoutManagerEventListener(
+                    Reference<frame::XLayoutManagerListener> (
+                        static_cast<XWeak*>(this), UNO_QUERY) );
+            }
+
+            // Lock the layout manager.
+            mbLayouterIsLocked = true;
+            xLayouter->lock();
+        }
+
+        // As a fallback, when the notification mechanism does not work (or is
+        // incorrectly used) we use a timer that will unlock us eventually.
+        maTimer.SetTimeout(5000 /*ms*/);
+        maTimer.SetTimeoutHdl(LINK(this,UpdateLockManager::Implementation,Timeout));
+        maTimer.Start();
+    }
+}
+
+
+
+
+void UpdateLockManager::Implementation::Unlock (void)
+{
+    --mnLockDepth;
+
+    if (mnLockDepth == 0)
+    {
+        // Stop the timer.  We don't need it anymore.
+        maTimer.Stop();
+
+        try
+        {
+            Reference<frame::XLayoutManager> xLayouter (GetLayoutManager());
+            if (xLayouter.is())
+            {
+                // Detach from the layouter.
+                if (mbListenerIsRegistered)
+                {
+                    Reference<frame::XLayoutManagerEventBroadcaster> xBroadcaster (
+                        xLayouter, UNO_QUERY);
+                    if (xBroadcaster.is())
+                    {
+                        mbListenerIsRegistered = false;
+                        xBroadcaster->removeLayoutManagerEventListener(
+                            Reference<frame::XLayoutManagerListener> (
+                                static_cast<XWeak*>(this), UNO_QUERY) );
+                    }
+                }
+
+                // Unlock the layouter.
+                if (mbLayouterIsLocked)
+                {
+                    mbLayouterIsLocked = false;
+                    xLayouter->unlock();
+                }
+            }
+        }
+        catch (RuntimeException)
+        { }
+
+        // Force a rearrangement of the UI elements of the views.
+        mrBase.Rearrange();
+    }
+}
+
+
+
+
+bool UpdateLockManager::Implementation::IsLocked (void) const
+{
+    return (mnLockDepth > 0);
+}
+
+
+
+
+void UpdateLockManager::Implementation::ForceUnlock (void)
+{
+    while (IsLocked())
+        Unlock();
+}
+
+
+
+
+void SAL_CALL UpdateLockManager::Implementation::layoutEvent (
+    const lang::EventObject& xSource,
+    sal_Int16 eLayoutEvent,
+    const Any& rInfo)
+    throw (uno::RuntimeException)
+{
+    switch (eLayoutEvent)
+    {
+        case frame::LayoutManagerEvents::LOCK:
+        {
+            sal_Int32 nLockCount;
+            rInfo >>= nLockCount;
+        }
+        break;
+
+        case frame::LayoutManagerEvents::UNLOCK:
+        {
+            sal_Int32 nLockCount;
+            rInfo >>= nLockCount;
+            if (nLockCount == 1)
+            {
+                // The lock count dropped to one.  This means that we are
+                // the only one that still holds a lock to the layout
+                // manager.  We unlock the layout manager now and the
+                // ViewShellBase on the next layout of the layout manager.
+                mbUnlockOnNextLayout = true;
+                Reference<frame::XLayoutManager> xLayouter (GetLayoutManager());
+                if (xLayouter.is() && mbLayouterIsLocked)
+                {
+                    mbLayouterIsLocked = false;
+                    xLayouter->unlock();
+                }
+            }
+        }
+        break;
+
+        case frame::LayoutManagerEvents::LAYOUT:
+            // Unlock when the layout manager is not still locked.
+            if (mbUnlockOnNextLayout)
+                Unlock();
+            break;
+    }
+}
+
+
+
+
+void SAL_CALL UpdateLockManager::Implementation::disposing (const lang::EventObject& rEventObject)
+    throw (::com::sun::star::uno::RuntimeException)
+{
+}
+
+
+
+
+void SAL_CALL UpdateLockManager::Implementation::disposing (void)
+{
+}
+
+
+
+
+IMPL_LINK(UpdateLockManager::Implementation, Timeout, void*, unused)
+{
+    // This method is only called when all else failed.  We unlock
+    // regardless of how deep the lock depth.
+    while (mnLockDepth > 0)
+        Unlock();
+    return 1;
+}
+
+
+
+
+Reference< ::com::sun::star::frame::XLayoutManager>
+    UpdateLockManager::Implementation::GetLayoutManager (void)
+{
+    Reference<frame::XLayoutManager> xLayouter;
+
+    Reference<beans::XPropertySet> xFrameProperties (
+        mrBase.GetViewFrame()->GetFrame()->GetFrameInterface(),
+        UNO_QUERY);
+    if (xFrameProperties.is())
+    {
+        try
+        {
+            Any aValue (xFrameProperties->getPropertyValue(
+                ::rtl::OUString::createFromAscii("LayoutManager")));
+            aValue >>= xLayouter;
+        }
+        catch (const beans::UnknownPropertyException& rException)
+        {
+            (void)rException;
+        }
+    }
+
+    return xLayouter;
+}
+
+
+
+
+} // end of anonymous namespace
