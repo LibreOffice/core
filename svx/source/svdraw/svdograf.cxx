@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdograf.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 16:33:27 $
+ *  last change: $Author: vg $ $Date: 2003-07-09 09:08:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1026,7 +1026,8 @@ FASTBOOL SdrGrafObj::Paint( ExtOutputDevice& rOut, const SdrPaintInfoRec& rInfoR
         // #110290# Remove the SdrGraphObj from the list of objects to be removed on
         // page switch. This is permissible, as the Draw above reenabled the swapout
         // timer.
-        if( bDidPaint )
+        // #110573# Occasionally, the view is NULL (e.g. previews in impress and calc)
+        if( bDidPaint && pView )
             ( (SdrView*) pView )->ImpAsyncPaintDone( this );
     }
 
