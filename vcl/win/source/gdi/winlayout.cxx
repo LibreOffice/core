@@ -3,9 +3,9 @@
  *
  *  $RCSfile: winlayout.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hdu $ $Date: 2002-06-21 12:25:27 $
+ *  last change: $Author: hdu $ $Date: 2002-06-21 14:22:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,9 +183,6 @@ bool SimpleWinLayout::LayoutText( const ImplLayoutArgs& rArgs )
     // enable kerning if requested
     if( rArgs.mnFlags & SAL_LAYOUT_KERNING_PAIRS )
         nGcpOption |= GCP_USEKERNING;
-    // justify if requested
-    if( rArgs.mnLayoutWidth )
-        nGcpOption |= GCP_JUSTIFY | GCP_MAXEXTENT;
     // apply reordering if requested
     static char aGcpClass[2] = { 0, 0 };
     if( 0 == (rArgs.mnFlags & SAL_LAYOUT_BIDI_STRONG) )
@@ -202,15 +199,7 @@ bool SimpleWinLayout::LayoutText( const ImplLayoutArgs& rArgs )
     if( aSalShlData.mbWNT )
     {
         nRC = ::GetCharacterPlacementW( mhDC, rArgs.mpStr + rArgs.mnFirstCharIndex,
-                    nMaxGlyphCount, rArgs.mnLayoutWidth, &aGCP, nGcpOption );
-        // try again if it didn't fit
-        if( aGCP.nMaxFit < nMaxGlyphCount )
-        {
-            nGcpOption &= ~(GCP_JUSTIFY | GCP_MAXEXTENT);
-            aGCP.nGlyphs = nMaxGlyphCount;
-            nRC = ::GetCharacterPlacementW( mhDC, rArgs.mpStr + rArgs.mnFirstCharIndex,
                     nMaxGlyphCount, 0, &aGCP, nGcpOption );
-        }
     }
     else
     {
@@ -225,15 +214,7 @@ bool SimpleWinLayout::LayoutText( const ImplLayoutArgs& rArgs )
             nMaxGlyphCount, pMBStr, nMBLen, NULL, NULL );
         // note: because aGCP.lpOutString==NULL GCP_RESULTSA is compatible with GCP_RESULTSW
         nRC = ::GetCharacterPlacementA( mhDC, pMBStr, nMBLen,
-                    rArgs.mnLayoutWidth, (GCP_RESULTSA*)&aGCP, nGcpOption );
-        // try again if it didn't fit
-        if( aGCP.nMaxFit < nMaxGlyphCount )
-        {
-            nGcpOption &= ~(GCP_JUSTIFY | GCP_MAXEXTENT);
-            aGCP.nGlyphs = nMaxGlyphCount;
-            nRC = ::GetCharacterPlacementA( mhDC, pMBStr, nMBLen,
                     0, (GCP_RESULTSA*)&aGCP, nGcpOption );
-        }
     }
 
     // cache essential layout properties
@@ -266,7 +247,7 @@ bool SimpleWinLayout::LayoutText( const ImplLayoutArgs& rArgs )
     if( rArgs.mpDXArray )
         ApplyDXArray( rArgs.mpDXArray );
 
-    if( rArgs.mnLayoutWidth && (rArgs.mnLayoutWidth < mnWidth) )
+    if( rArgs.mnLayoutWidth )
         Justify( rArgs.mnLayoutWidth );
 
     if( (rArgs.mnFlags & SAL_LAYOUT_KERNING_ASIAN)
@@ -425,8 +406,8 @@ void SimpleWinLayout::Justify( long nNewWidth )
     if( nNewWidth == nOldWidth )
         return;
 
-    int i = mnGlyphCount-1;
-    // the last glyph cannot be stretched
+    int i = mnGlyphCount - 1;
+    // the rightmost glyph cannot be stretched
     nOldWidth -= mpGlyphAdvances[i];
     nNewWidth -= mpGlyphAdvances[i];
 
@@ -920,13 +901,13 @@ bool UniscribeLayout::GetOutline( SalGraphics& rSalGraphics, PolyPolygon& rPolyP
             if( !rVisualItem.mpScriptItem->a.fRTL )
             {
                 while( (--i >= rVisualItem.mnMinCharPos) && (nStartIndex == mpLogClusters[i]) )
-                    aRelPos -= Point( mpCharWidths[i], 0 );
+                    aRelPos.X() -= mpCharWidths[i];
             }
             else
             {
                 int nMaxIndex = mpLogClusters[ nEndIndex - 1 ];
                 while( (--i >= rVisualItem.mnMinCharPos) && (nMaxIndex == mpLogClusters[i]) )
-                    aRelPos += Point( mpCharWidths[i], 0 );
+                    aRelPos.X() += mpCharWidths[i];
             }
 
             // now we know the matching glyphs in this item
@@ -942,7 +923,7 @@ bool UniscribeLayout::GetOutline( SalGraphics& rSalGraphics, PolyPolygon& rPolyP
 
                 // insert outline at correct position
                 aGlyphOutline.Move( aRelPos.X(), aRelPos.Y() );
-                aRelPos += Point( mpGlyphAdvances[ i ], 0 );
+                aRelPos.X() += mpGlyphAdvances[ i ];
                 for( int j = 0; j < aGlyphOutline.Count(); ++j )
                     rPolyPoly.Insert( aGlyphOutline[j] );
             }
@@ -978,8 +959,8 @@ int UniscribeLayout::GetTextBreak( long nMaxWidth ) const
         nWidth += mpCharWidths[ i ];
         if( nWidth >= nMaxWidth )
         {
-            while( !mpVisualAttrs[ mpLogClusters[i] ].fClusterStart )
-                if( --i <= mnFirstCharIndex )
+            for(; i >= mnFirstCharIndex; --i )
+                if( mpVisualAttrs[ mpLogClusters[i] ].fClusterStart )
                     break;
             return i;
         }
@@ -1000,7 +981,7 @@ Point UniscribeLayout::GetCharPosition( int nCharIndex, bool bRTL ) const
     for( int nItem = 0; nItem < mnItemCount; ++nItem )
     {
         const VisualItem& rVisualItem = mpVisualItems[ nItem ];
-        if( !rVisualItem.mnGlyphCount )
+        if( rVisualItem.mnGlyphCount <= 0 )
             continue;
 
         if( (rVisualItem.mnMinCharPos <= nCharIndex) && (nCharIndex < rVisualItem.mnEndCharPos) )
@@ -1077,10 +1058,11 @@ void UniscribeLayout::ApplyDXArray( const long* pDXArray )
     for( int nItem = 0; nItem < mnItemCount; ++nItem )
     {
         const VisualItem& rVisualItem = mpVisualItems[ nItem ];
-        if( !rVisualItem.mnGlyphCount )
+        if( rVisualItem.mnGlyphCount <= 0 )
             continue;
 
-        if( (mnEndCharIndex > rVisualItem.mnMinCharPos) && (mnFirstCharIndex < rVisualItem.mnEndCharPos) )
+        if( (rVisualItem.mnMinCharPos < mnEndCharIndex)
+         && (rVisualItem.mnEndCharPos > mnFirstCharIndex) )
         {
             HRESULT nRC = (*pScriptApplyLogicalWidth)(
                 mpCharWidths + rVisualItem.mnMinCharPos,
@@ -1121,10 +1103,11 @@ void UniscribeLayout::Justify( long nNewWidth )
     for( int nItem = 0; nItem < mnItemCount; ++nItem )
     {
         const VisualItem& rVisualItem = mpVisualItems[ nItem ];
-        if( !rVisualItem.mnGlyphCount )
+        if( rVisualItem.mnGlyphCount <= 0 )
             continue;
 
-        if( (mnEndCharIndex > rVisualItem.mnMinCharPos) &&  (mnFirstCharIndex < rVisualItem.mnEndCharPos) )
+        if( (rVisualItem.mnMinCharPos < mnEndCharIndex)
+         && (rVisualItem.mnEndCharPos > mnFirstCharIndex) )
         {
             long nItemWidth = 0;
             for( i = rVisualItem.mnMinCharPos; i < rVisualItem.mnEndCharPos; ++i )
