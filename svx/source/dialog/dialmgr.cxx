@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dialmgr.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 11:52:21 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:34:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,10 @@
  *
  *
  ************************************************************************/
+
+//#ifdef SVX_DLLIMPLEMENTATION
+//#undef SVX_DLLIMPLEMENTATION
+//#endif
 
 // include ---------------------------------------------------------------
 
