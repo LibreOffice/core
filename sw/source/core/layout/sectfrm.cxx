@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sectfrm.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:31:44 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 10:39:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1201,60 +1201,116 @@ void SwSectionFrm::SimpleFormat()
     UnlockJoin();
 }
 
-// OD 2004-05-17 #i28701# - extra format for a section consisting of more than
-// one column to position its floating screen objects.
-void lcl_ExtraFormatToPositionObjs( SwSectionFrm& _rSectFrm )
+// --> OD 2005-01-11 #i40147# - helper class to perform extra section format
+// to position anchored objects and to keep the position of whose objects locked.
+class ExtraFormatToPositionObjs
 {
-    if ( _rSectFrm.Lower() && _rSectFrm.Lower()->IsColumnFrm() &&
-         _rSectFrm.Lower()->GetNext() )
-    {
-        // unlock position of lower floating screen objects for the extra format
-        SwPageFrm* pPageFrm = _rSectFrm.FindPageFrm();
-        SwSortedObjs* pObjs = pPageFrm ? pPageFrm->GetSortedObjs() : 0L;
-        if ( pObjs )
-        {
-            sal_uInt32 i = 0;
-            for ( i = 0; i < pObjs->Count(); ++i )
-            {
-                SwAnchoredObject* pAnchoredObj = (*pObjs)[i];
+    private:
+        SwSectionFrm* mpSectFrm;
+        bool mbExtraFormatPerformed;
 
-                if ( _rSectFrm.IsAnLower( pAnchoredObj->GetAnchorFrm() ) )
+    public:
+        ExtraFormatToPositionObjs( SwSectionFrm& _rSectFrm)
+            : mpSectFrm( &_rSectFrm ),
+              mbExtraFormatPerformed( false )
+        {}
+
+        ~ExtraFormatToPositionObjs()
+        {
+            if ( mbExtraFormatPerformed )
+            {
+                // release keep locked position of lower floating screen objects
+                SwPageFrm* pPageFrm = mpSectFrm->FindPageFrm();
+                SwSortedObjs* pObjs = pPageFrm ? pPageFrm->GetSortedObjs() : 0L;
+                if ( pObjs )
                 {
-                    pAnchoredObj->UnlockPosition();
+                    sal_uInt32 i = 0;
+                    for ( i = 0; i < pObjs->Count(); ++i )
+                    {
+                        SwAnchoredObject* pAnchoredObj = (*pObjs)[i];
+
+                        if ( mpSectFrm->IsAnLower( pAnchoredObj->GetAnchorFrm() ) )
+                        {
+                            pAnchoredObj->SetKeepPosLocked( false );
+                        }
+                    }
                 }
             }
         }
 
-        // grow section till bottom of printing area of upper frame
-        SWRECTFN( (&_rSectFrm) );
-        SwTwips nTopMargin = (_rSectFrm.*fnRect->fnGetTopMargin)();
-        Size aOldSectPrtSize( _rSectFrm.Prt().SSize() );
-        SwTwips nDiff = (_rSectFrm.Frm().*fnRect->fnBottomDist)(
-                                (_rSectFrm.GetUpper()->*fnRect->fnGetPrtBottom)() );
-        (_rSectFrm.Frm().*fnRect->fnAddBottom)( nDiff );
-        (_rSectFrm.*fnRect->fnSetYMargins)( nTopMargin, 0 );
-        _rSectFrm.ChgLowersProp( aOldSectPrtSize );
-
-        // format column frames and its body and footnote container
-        SwColumnFrm* pColFrm = static_cast<SwColumnFrm*>(_rSectFrm.Lower());
-        while ( pColFrm )
+        void FormatSectionToPositionObjs()
         {
-            pColFrm->Calc();
-            pColFrm->Lower()->Calc();
-            if ( pColFrm->Lower()->GetNext() )
+            // perform extra format for multi-columned section.
+            if ( mpSectFrm->Lower() && mpSectFrm->Lower()->IsColumnFrm() &&
+                 mpSectFrm->Lower()->GetNext() )
             {
-                pColFrm->Lower()->GetNext()->Calc();
+                // unlock position of lower floating screen objects for the extra format
+                SwPageFrm* pPageFrm = mpSectFrm->FindPageFrm();
+                SwSortedObjs* pObjs = pPageFrm ? pPageFrm->GetSortedObjs() : 0L;
+                if ( pObjs )
+                {
+                    sal_uInt32 i = 0;
+                    for ( i = 0; i < pObjs->Count(); ++i )
+                    {
+                        SwAnchoredObject* pAnchoredObj = (*pObjs)[i];
+
+                        if ( mpSectFrm->IsAnLower( pAnchoredObj->GetAnchorFrm() ) )
+                        {
+                            pAnchoredObj->UnlockPosition();
+                        }
+                    }
+                }
+
+                // grow section till bottom of printing area of upper frame
+                SWRECTFN( mpSectFrm );
+                SwTwips nTopMargin = (mpSectFrm->*fnRect->fnGetTopMargin)();
+                Size aOldSectPrtSize( mpSectFrm->Prt().SSize() );
+                SwTwips nDiff = (mpSectFrm->Frm().*fnRect->fnBottomDist)(
+                                        (mpSectFrm->GetUpper()->*fnRect->fnGetPrtBottom)() );
+                (mpSectFrm->Frm().*fnRect->fnAddBottom)( nDiff );
+                (mpSectFrm->*fnRect->fnSetYMargins)( nTopMargin, 0 );
+                mpSectFrm->ChgLowersProp( aOldSectPrtSize );
+
+                // format column frames and its body and footnote container
+                SwColumnFrm* pColFrm = static_cast<SwColumnFrm*>(mpSectFrm->Lower());
+                while ( pColFrm )
+                {
+                    pColFrm->Calc();
+                    pColFrm->Lower()->Calc();
+                    if ( pColFrm->Lower()->GetNext() )
+                    {
+                        pColFrm->Lower()->GetNext()->Calc();
+                    }
+
+                    pColFrm = static_cast<SwColumnFrm*>(pColFrm->GetNext());
+                }
+
+                // format content - first with collecting its foot-/endnotes before content
+                // format, second without collecting its foot-/endnotes.
+                ::CalcCntnt( mpSectFrm );
+                ::CalcCntnt( mpSectFrm, true );
+
+                // keep locked position of lower floating screen objects
+                pPageFrm = mpSectFrm->FindPageFrm();
+                pObjs = pPageFrm ? pPageFrm->GetSortedObjs() : 0L;
+                if ( pObjs )
+                {
+                    sal_uInt32 i = 0;
+                    for ( i = 0; i < pObjs->Count(); ++i )
+                    {
+                        SwAnchoredObject* pAnchoredObj = (*pObjs)[i];
+
+                        if ( mpSectFrm->IsAnLower( pAnchoredObj->GetAnchorFrm() ) )
+                        {
+                            pAnchoredObj->SetKeepPosLocked( true );
+                        }
+                    }
+                }
+
+                mbExtraFormatPerformed = true;
             }
-
-            pColFrm = static_cast<SwColumnFrm*>(pColFrm->GetNext());
         }
-
-        // format content - first with collecting its foot-/endnotes before content
-        // format, second without collecting its foot-/endnotes.
-        ::CalcCntnt( &_rSectFrm );
-        ::CalcCntnt( &_rSectFrm, true );
-    }
-}
+};
 
 /*************************************************************************
 |*
@@ -1314,11 +1370,17 @@ void SwSectionFrm::Format( const SwBorderAttrs *pAttr )
         // OD 2004-05-17 #i28701# - If the wrapping style has to be considered
         // on object positioning, an extra formatting has to be performed
         // to determine the correct positions the floating screen objects.
+        // --> OD 2005-01-11 #i40147#
+        // use new helper class <ExtraFormatToPositionObjs>.
+        // This class additionally keep the locked position of the objects
+        // and releases this position lock keeping on destruction.
+        ExtraFormatToPositionObjs aExtraFormatToPosObjs( *this );
         if ( !bMaximize &&
              GetFmt()->GetDoc()->ConsiderWrapOnObjPos() )
         {
-            lcl_ExtraFormatToPositionObjs( *this );
+            aExtraFormatToPosObjs.FormatSectionToPositionObjs();
         }
+        // <--
 
         // Column widths have to be adjusted before calling _CheckClipping.
         // _CheckClipping can cause the formatting of the lower frames
