@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.35 $
+#   $Revision: 1.36 $
 #
-#   last change: $Author: vg $ $Date: 2002-04-23 14:30:03 $
+#   last change: $Author: hdu $ $Date: 2002-08-07 13:10:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -254,6 +254,7 @@ SHL1STDLIBS += gdi32.lib        \
                ole32.lib        \
                shell32.lib      \
                advapi32.lib     \
+               apsp.lib         \
                imm32.lib
 
 .IF "$(GUI)$(COM)$(CPU)" == "WNTMSCI"
