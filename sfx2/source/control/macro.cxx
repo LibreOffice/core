@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macro.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mba $ $Date: 2002-04-05 11:32:19 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:31:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 #include <tools/stream.hxx>
 #endif
 
@@ -533,7 +533,7 @@ SfxMacro::~SfxMacro()
 */
 
 {
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     SvFileStream aStream( String::CreateFromAscii("file:///f:/testmacro.bas" ), STREAM_STD_READWRITE | STREAM_TRUNC );
     aStream << ByteString( GenerateSource(), RTL_TEXTENCODING_UTF8 ).GetBuffer();
 #endif
