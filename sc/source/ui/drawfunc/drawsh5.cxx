@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawsh5.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2001-02-16 18:56:37 $
+ *  last change: $Author: th $ $Date: 2001-05-11 10:02:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,7 +134,7 @@ void ScDrawShell::GetHLinkState( SfxItemSet& rSet )             //  Hyperlink
                     if(xInfo->hasPropertyByName( sPropLabel ))
                     {
                         aAny = xPropSet->getPropertyValue( sPropLabel );
-                        if ( (aAny >>= sTmp) && sTmp.len() )
+                        if ( (aAny >>= sTmp) && sTmp.getLength() )
                         {
                             aHLinkItem.SetName(sTmp);
                         }
@@ -143,7 +143,7 @@ void ScDrawShell::GetHLinkState( SfxItemSet& rSet )             //  Hyperlink
                     if(xInfo->hasPropertyByName( sPropTargetURL ))
                     {
                         aAny = xPropSet->getPropertyValue( sPropTargetURL );
-                        if ( (aAny >>= sTmp) && sTmp.len() )
+                        if ( (aAny >>= sTmp) && sTmp.getLength() )
                         {
                             aHLinkItem.SetURL(sTmp);
                         }
@@ -152,7 +152,7 @@ void ScDrawShell::GetHLinkState( SfxItemSet& rSet )             //  Hyperlink
                     if(xInfo->hasPropertyByName( sPropTargetFrame ))
                     {
                         aAny = xPropSet->getPropertyValue( sPropTargetFrame );
-                        if ( (aAny >>= sTmp) && sTmp.len() )
+                        if ( (aAny >>= sTmp) && sTmp.getLength() )
                         {
                             aHLinkItem.SetTargetFrame(sTmp);
                         }

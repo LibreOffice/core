@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwtrans.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: nn $ $Date: 2001-04-10 07:54:24 $
+ *  last change: $Author: th $ $Date: 2001-05-11 10:01:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,7 +179,7 @@ ScDrawTransferObj::ScDrawTransferObj( SdrModel* pClipModel, ScDocShell* pContain
                             {
                                 aAny = xPropSet->getPropertyValue( sPropTargetURL );
                                 rtl::OUString sTmp;
-                                if ( (aAny >>= sTmp) && sTmp.len() )
+                                if ( (aAny >>= sTmp) && sTmp.getLength() )
                                 {
                                     String aUrl = sTmp;
                                     String aAbs;
@@ -197,7 +197,7 @@ ScDrawTransferObj::ScDrawTransferObj( SdrModel* pClipModel, ScDocShell* pContain
                                     if(xInfo->hasPropertyByName( sPropLabel ))
                                     {
                                         aAny = xPropSet->getPropertyValue( sPropLabel );
-                                        if ( (aAny >>= sTmp) && sTmp.len() )
+                                        if ( (aAny >>= sTmp) && sTmp.getLength() )
                                         {
                                             aLabel = String(sTmp);
                                         }

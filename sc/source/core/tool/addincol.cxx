@@ -2,9 +2,9 @@
  *
  *  $RCSfile: addincol.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: er $ $Date: 2001-03-14 18:10:21 $
+ *  last change: $Author: th $ $Date: 2001-05-11 10:03:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -240,8 +240,8 @@ const uno::Sequence<sheet::LocalizedName>& ScUnoAddInFuncData::GetCompNames()
                     for (long i=0; i<nSeqLen; i++)
                     {
                         lang::Locale& rLocale = pArray[i].Locale;
-                        rLocale.Language = rLocale.Language.toLowerCase();
-                        rLocale.Country  = rLocale.Country.toUpperCase();
+                        rLocale.Language = rLocale.Language.toAsciiLowerCase();
+                        rLocale.Country  = rLocale.Country.toAsciiUpperCase();
                     }
                 }
             }
