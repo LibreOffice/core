@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabbar.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 15:42:56 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 12:05:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -389,7 +389,7 @@ private:
     long            mnCurMaxWidth;
     long            mnOffX;
     long            mnOffY;
-    long            mnOutWidth;
+    long            mnLastOffX;
     long            mnSplitSize;
     ULONG           mnSwitchTime;
     WinBits         mnWinStyle;
@@ -409,6 +409,7 @@ private:
     BOOL            mbInSelect;
     BOOL            mbSelColor;
     BOOL            mbSelTextColor;
+    BOOL            mbMirrored;
     Link            maSelectHdl;
     Link            maDoubleClickHdl;
     Link            maSplitHdl;
@@ -418,7 +419,6 @@ private:
     Link            maAllowRenamingHdl;
     Link            maEndRenamingHdl;
 
-#ifdef _SV_TABBAR_CXX
     void            ImplInit( WinBits nWinStyle );
     void            ImplInitSettings( BOOL bFont, BOOL bBackground );
     void            ImplGetColors( Color& rFaceColor, Color& rFaceTextColor,
@@ -433,7 +433,6 @@ private:
     void            ImplActivatePage();
     long            ImplDeactivatePage();
                     DECL_LINK( ImplClickHdl, ImplTabButton* );
-#endif
 
 public:
                     TabBar( Window* pParent, WinBits nWinStyle = WB_STDTABBAR );
@@ -456,6 +455,7 @@ public:
     virtual long    StartRenaming();
     virtual long    AllowRenaming();
     virtual void    EndRenaming();
+    virtual void    Mirror();
 
     void            InsertPage( USHORT nPageId, const XubString& rText,
                                 TabBarPageBits nBits = 0,
@@ -509,6 +509,10 @@ public:
     BOOL            IsInEditMode() const { return (mpEdit != NULL); }
     BOOL            IsEditModeCanceled() const { return mbEditCanceled; }
     USHORT          GetEditPageId() const { return mnEditId; }
+
+    /** Mirrors the entire control. It will draw RTL in LTR GUI, and vice versa. */
+    void            SetMirrored( BOOL bMirrored = TRUE );
+    BOOL            IsMirrored() const { return mbMirrored; }
 
     BOOL            StartDrag( const CommandEvent& rCEvt, Region& rRegion );
     USHORT          ShowDropPos( const Point& rPos );
