@@ -2,9 +2,9 @@
 #*
 #*  $RCSfile: makefile.mk,v $
 #*
-#*  $Revision: 1.14 $
+#*  $Revision: 1.15 $
 #*
-#*  last change: $Author: vg $ $Date: 2003-04-15 15:03:47 $
+#*  last change: $Author: vg $ $Date: 2003-04-17 18:01:59 $
 #*
 #*  The Contents of this file are made available subject to the terms of
 #*  either of the following licenses
@@ -88,9 +88,8 @@ LIB1FILES=	$(SLB)$/defaultnumberingprovider.lib	\
         $(SLB)$/transliterationImpl.lib \
         $(SLB)$/characterclassification.lib \
         $(SLB)$/collator.lib \
-        $(SLB)$/search.lib \
-        $(SLB)$/regexp.lib \
-        $(SLB)$/inputchecker.lib
+        $(SLB)$/inputchecker.lib \
+        $(SLB)$/textconversion.lib
 
 SHL1TARGET= $(TARGET)$(VERSION)$(DLLPOSTFIX)
 SHL1IMPLIB= i$(TARGET)
