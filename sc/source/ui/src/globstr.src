@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globstr.src,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 12:54:44 $
+ *  last change: $Author: rt $ $Date: 2004-07-14 15:26:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2522,14 +2522,14 @@ Resource RID_GLOBSTR
 
     String STR_CHANGED_MOVE_REJECTION_WARNING
     {
-        Text = "ACHTUNG: Diese Aktion kann zu unbeabsichtigten Änderungen von Zellreferenzen in Formeln geführt haben!";
-        Text[ english_us ] = "WARNING: This action may have resulted in unintended changes to cell references in formulas.";
+        Text [ de ] = "ACHTUNG: Diese Aktion kann zu unbeabsichtigten Änderungen von Zellreferenzen in Formeln geführt haben!";
+        Text[ en-US ] = "WARNING: This action may have resulted in unintended changes to cell references in formulas.";
     };
 
     String STR_CHANGED_DELETE_REJECTION_WARNING
     {
-        Text = "ACHTUNG: Diese Aktion kann dazu geführt haben, dass Referenzen auf den gelöschten Bereich nicht wieder hergestellt wurden.";
-        Text[ english_us ] = "WARNING: This action may have resulted in references to the deleted area not being restored.";
+        Text [ de ] = "ACHTUNG: Diese Aktion kann dazu geführt haben, dass Referenzen auf den gelöschten Bereich nicht wieder hergestellt wurden.";
+        Text[ en-US ] = "WARNING: This action may have resulted in references to the deleted area not being restored.";
     };
 };
 
