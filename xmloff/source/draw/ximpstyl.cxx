@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpstyl.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-01 16:31:32 $
+ *  last change: $Author: cl $ $Date: 2001-03-04 23:07:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,8 +125,14 @@
 #include "layerimp.hxx"
 #endif
 
+#ifndef _XMLOFF_XMLGRAPHICSDEFAULTSTYLE_HXX
+#include "XMLGraphicsDefaultStyle.hxx"
+#endif
+
 using namespace ::rtl;
 using namespace ::com::sun::star;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::xml::sax;
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -1050,6 +1056,30 @@ SvXMLStyleContext* SdXMLStylesContext::CreateStyleStyleChildContext(
 
 //////////////////////////////////////////////////////////////////////////////
 
+SvXMLStyleContext* SdXMLStylesContext::CreateDefaultStyleStyleChildContext(
+    sal_uInt16 nFamily,
+    sal_uInt16 nPrefix,
+    const OUString& rLocalName,
+    const Reference< XAttributeList > & xAttrList )
+{
+    SvXMLStyleContext* pContext = 0;
+
+    switch( nFamily )
+    {
+    case XML_STYLE_FAMILY_SD_GRAPHICS_ID:
+        pContext = new XMLGraphicsDefaultStyle(GetSdImport(), nPrefix, rLocalName, xAttrList, *this );
+        break;
+    }
+
+    // call base class
+    if(!pContext)
+        pContext = SvXMLStylesContext::CreateDefaultStyleStyleChildContext(nFamily, nPrefix, rLocalName, xAttrList);
+
+    return pContext;
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
 sal_uInt16 SdXMLStylesContext::GetFamily( const OUString& rFamily ) const
 {
 //  if(rFamily.getLength())
@@ -1151,12 +1181,6 @@ void SdXMLStylesContext::EndElement()
     }
     else
     {
-        // find pool defaults and set on model
-        const SvXMLStyleContext* pStyle = FindStyleChildContext(XML_STYLE_FAMILY_SD_POOL_ID,
-            OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_drawpool)));
-        if(pStyle)
-            GetSdImport().ImportPoolDefaults((const XMLPropStyleContext*)pStyle);
-
         // Process styles list
         ImpSetGraphicStyles();
     }
@@ -1216,12 +1240,25 @@ void SdXMLStylesContext::ImpSetGraphicStyles(
     xub_StrLen nPrefLen(rPrefix.Len());
     uno::Any aAny;
 
-    // create all styles and set properties
-    for(sal_uInt32 a(0L); a < GetStyleCount(); a++)
+    sal_uInt32 a;
+
+    // set defaults
+    for( a = 0; a < GetStyleCount(); a++)
     {
         const SvXMLStyleContext* pStyle = GetStyle(a);
 
-        if(nFamily == pStyle->GetFamily())
+        if(nFamily == pStyle->GetFamily() && pStyle->IsDefaultStyle())
+        {
+            ((SvXMLStyleContext*)pStyle)->SetDefaults();
+        }
+    }
+
+    // create all styles and set properties
+    for( a = 0; a < GetStyleCount(); a++)
+    {
+        const SvXMLStyleContext* pStyle = GetStyle(a);
+
+        if(nFamily == pStyle->GetFamily() && !pStyle->IsDefaultStyle())
         {
             const UniString aStyleName(pStyle->GetName(), (sal_uInt16)pStyle->GetName().getLength());
             if(!nPrefLen || aStyleName.Equals(rPrefix, 0, nPrefLen))
@@ -1289,28 +1326,18 @@ void SdXMLStylesContext::ImpSetGraphicStyles(
             const UniString aStyleName(pStyle->GetName(), (sal_uInt16)pStyle->GetName().getLength());
             if(!nPrefLen || aStyleName.Equals(rPrefix, 0, nPrefLen))
             {
-                OUString aPureParentName;
-
                 if(pStyle->GetParent().getLength())
                 {
-                    // no "drawpool" parents (!)
-                    if(!pStyle->GetParent().equals(OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_drawpool))))
+                    const OUString aPureStyleName = nPrefLen ? pStyle->GetName().copy((sal_Int32)nPrefLen) : pStyle->GetName();
+                    uno::Reference< style::XStyle > xStyle;
+                    aAny = xPageStyles->getByName(aPureStyleName);
+                    aAny >>= xStyle;
+
+                    if(xStyle.is())
                     {
-                        aPureParentName = nPrefLen ?
-                            pStyle->GetParent().copy((sal_Int32)nPrefLen) : pStyle->GetParent();
+                        // set parent style name
+                        xStyle->setParentStyle(pStyle->GetParent());
                     }
-                }
-
-                const OUString aPureStyleName = nPrefLen ?
-                    pStyle->GetName().copy((sal_Int32)nPrefLen) : pStyle->GetName();
-                uno::Reference< style::XStyle > xStyle;
-                aAny = xPageStyles->getByName(aPureStyleName);
-                aAny >>= xStyle;
-
-                if(xStyle.is())
-                {
-                    // set parent style name
-                    xStyle->setParentStyle(aPureParentName);
                 }
             }
         }

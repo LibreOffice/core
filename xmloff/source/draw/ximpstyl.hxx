@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpstyl.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-13 19:13:03 $
+ *  last change: $Author: cl $ $Date: 2001-03-04 23:07:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -267,6 +267,11 @@ protected:
         const rtl::OUString& rLocalName,
         const com::sun::star::uno::Reference< com::sun::star::xml::sax::XAttributeList >& xAttrList);
 
+    virtual SvXMLStyleContext *CreateDefaultStyleStyleChildContext(
+        sal_uInt16 nFamily, sal_uInt16 nPrefix,
+        const ::rtl::OUString& rLocalName,
+        const ::com::sun::star::uno::Reference<
+            ::com::sun::star::xml::sax::XAttributeList > & xAttrList );
 public:
     TYPEINFO();
 

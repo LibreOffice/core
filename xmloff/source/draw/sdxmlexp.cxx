@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-04 16:10:26 $
+ *  last change: $Author: cl $ $Date: 2001-03-04 23:07:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -711,65 +711,24 @@ void SAL_CALL ImpDefaultMapper::removeVetoableChangeListener( const OUString& Pr
 
 //////////////////////////////////////////////////////////////////////////////
 
-void SdXMLExport::ImpWriteDefaultStyleInfos()
-{
-    // create annd write pool defaults
-    AddAttribute(XML_NAMESPACE_STYLE, sXML_name, OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_drawpool)));
-    AddAttribute(XML_NAMESPACE_STYLE, sXML_family, OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_SD_POOL_NAME)));
-
-    // write drawpool style
-    SvXMLElementExport aPSY(*this, XML_NAMESPACE_STYLE, sXML_style, sal_True, sal_True);
-
-    // write graphics style properites
-    uno::Any aAny(mxDocStyleFamilies->getByName(OUString(RTL_CONSTASCII_USTRINGPARAM(XML_STYLE_FAMILY_SD_GRAPHICS_NAME))));
-    uno::Reference< container::XIndexAccess > xGraphicStyles;
-
-    if(aAny >>= xGraphicStyles)
-    {
-        BOOL bDone(FALSE);
-        const sal_Int32 nNum = xGraphicStyles->getCount();
-
-        for(sal_Int32 a(0L); !bDone && a < nNum; a++)
-        {
-            aAny = xGraphicStyles->getByIndex(a);
-            uno::Reference< style::XStyle > xSingleStyle;
-
-            if(aAny >>= xSingleStyle)
-            {
-                OUString aParentStyle = xSingleStyle->getParentStyle();
-                if(!aParentStyle.getLength())
-                {
-                    // style without parent found
-                    uno::Reference< beans::XPropertyState > xPropState(xSingleStyle, uno::UNO_QUERY);
-                    if(xPropState.is())
-                    {
-                        uno::Reference< beans::XPropertySet > xImpDefaultMapper( new ImpDefaultMapper( xPropState ) );
-                        const UniReference< SvXMLExportPropertyMapper > aMapperRef = GetPropertySetMapper();
-                        std::vector< XMLPropertyState > xPropStates = aMapperRef->Filter( xImpDefaultMapper );
-
-                        if(xPropStates.size())
-                        {
-                            aMapperRef->exportXML(GetDocHandler(), xPropStates,
-                                GetMM100UnitConverter(), GetNamespaceMap());
-                            bDone = TRUE;
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
-//////////////////////////////////////////////////////////////////////////////
-
 void SdXMLExport::ImpWriteObjGraphicStyleInfos()
 {
-    XMLStyleExport aStEx(*this,
-        OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_drawpool)), GetAutoStylePool().get());
-    const UniReference< SvXMLExportPropertyMapper > aMapperRef = GetPropertySetMapper();
+    XMLStyleExport aStEx(*this, OUString(), GetAutoStylePool().get());
+    const UniReference< SvXMLExportPropertyMapper > aMapperRef( GetPropertySetMapper() );
 
-    aStEx.exportStyleFamily(XML_STYLE_FAMILY_SD_GRAPHICS_NAME, XML_STYLE_FAMILY_SD_GRAPHICS_NAME,
-        aMapperRef, FALSE, XML_STYLE_FAMILY_SD_GRAPHICS_ID);
+    // write graphic family default style
+    uno::Reference< lang::XMultiServiceFactory > xFact( GetModel(), uno::UNO_QUERY );
+    if( !xFact.is() )
+        return;
+
+    uno::Reference< beans::XPropertySet > xDefaults( xFact->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.drawing.Defaults") ) ), uno::UNO_QUERY );
+    if( !xDefaults.is() )
+        return;
+
+    aStEx.exportDefaultStyle( xDefaults, XML_STYLE_FAMILY_SD_GRAPHICS_NAME, aMapperRef );
+
+    // write graphic family styles
+    aStEx.exportStyleFamily(XML_STYLE_FAMILY_SD_GRAPHICS_NAME, XML_STYLE_FAMILY_SD_GRAPHICS_NAME, aMapperRef, FALSE, XML_STYLE_FAMILY_SD_GRAPHICS_ID);
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -1478,8 +1437,7 @@ void SdXMLExport::ImpWritePresentationStyles()
                 // write presentation styles (ONLY if presentation)
                 if(IsImpress() && mxDocStyleFamilies.is() && xNamed.is())
                 {
-                    XMLStyleExport aStEx(*this,
-                        OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_drawpool)), GetAutoStylePool().get());
+                    XMLStyleExport aStEx(*this, OUString(), GetAutoStylePool().get());
                     const UniReference< SvXMLExportPropertyMapper > aMapperRef( GetPropertySetMapper() );
 
                     OUString aPrefix = xNamed->getName();
@@ -1814,9 +1772,6 @@ void SdXMLExport::_ExportStyles(BOOL bUsed)
 
     // export fill styles
     SvXMLExport::_ExportStyles( bUsed );
-
-    // prepare and write default-draw-style-pool
-    ImpWriteDefaultStyleInfos();
 
     // write draw:style-name for object graphic-styles
     ImpWriteObjGraphicStyleInfos();

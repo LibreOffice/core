@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp_impl.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-01 16:31:32 $
+ *  last change: $Author: cl $ $Date: 2001-03-04 23:07:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,8 +181,6 @@ class SdXMLExport : public SvXMLExport
     void ImpWriteAutoLayoutPlaceholder(XmlPlaceholder ePl, const Rectangle& rRect);
 
     void ImpWriteObjGraphicStyleInfos();
-
-    void ImpWriteDefaultStyleInfos();
 
     void exportFormsElement( com::sun::star::uno::Reference< com::sun::star::drawing::XDrawPage > xDrawPage );
     void exportPresentationSettings();
