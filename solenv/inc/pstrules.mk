@@ -2,9 +2,9 @@
 #
 #   $RCSfile: pstrules.mk,v $
 #
-#   $Revision: 1.28 $
+#   $Revision: 1.29 $
 #
-#   last change: $Author: rt $ $Date: 2004-02-10 14:33:46 $
+#   last change: $Author: hjs $ $Date: 2004-06-25 16:11:58 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -187,11 +187,13 @@ $(SLO)$/$(SECOND_BUILD)_%.obj :  %.c
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 .IF "$(PARFILES)"!=""
-ALLPARFILES=$(foreach,i,$(PARFILES) $(foreach,j,$(SCP_PRODUCT_TYPE) $(PAR)$/$j$/$i ))
+ULFPARFILES=$(foreach,i,$(ULFFILES) $(foreach,j,$(SCP_PRODUCT_TYPE) $(PAR)$/$j$/$(i:b).par))
+MOREPARFILES=$(foreach,i,$(PARFILES) $(foreach,j,$(SCP_PRODUCT_TYPE) $(PAR)$/$j$/$i ))
+ALLPARFILES=$(uniq $(ULFPARFILES) $(MOREPARFILES))
 
 SCP_PRODUCT_TYPE*=FAT
 
-$(PAR)$/%.par : 
+$(PAR)$/%.par :
     @echo ------------------------------
     @echo Making: $@
     @+-$(MKDIR) $(MISC)$/{$(subst,$(@:d:d:d), $(@:d:d))} >& $(NULLDEV)
@@ -205,8 +207,13 @@ $(PAR)$/%.par :
     cpp.lcc -+ -P $(CDEFS) $(SCPDEFS) -DDLLSUFFIX=$(DLLSUFFIX) -I. -I$(INC) -I$(INCLOCAL) -I$(INCGUI) -I$(INCCOM) $(SOLARINC) $(*:b).scp > $(MISC)$/{$(subst,$(@:d:d:d), $(@:d:d))}$/$(*:b).pre
 .ENDIF
 .ENDIF
-#	+scpcomp -s $(MISC)$/{$(subst,$(@:d:d:d), $(@:d:d))}$/$(*:b).pre -o $@
-    +$(PERL) $(SOLARENV)$/bin$/pre2par.pl -s $(MISC)$/{$(subst,$(@:d:d:d), $(@:d:d))}$/$(*:b).pre -o $@
+.IF "$(common_build_srs)"!=""
+    +$(PERL) $(SOLARENV)$/bin$/pre2par.pl -l {$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(MISC))$/$(TARGET)$/$(@:b).ulf} -s $(MISC)$/{$(subst,$(@:d:d:d), $(@:d:d))}$/$(*:b).pre -o $@
+.ELSE          # "$(common_build_srs)"!=""
+    +$(PERL) $(SOLARENV)$/bin$/pre2par.pl -l {$(MISC)$/$(@:b).ulf} -s $(MISC)$/{$(subst,$(@:d:d:d), $(@:d:d))}$/$(*:b).pre -o $@
+.ENDIF          # "$(common_build_srs)"!=""
+# hacked version    
+#    +$(PERL) $(SOLARENV)$/bin$/pre2par.pl -l $(@:b).ulf -s $(MISC)$/{$(subst,$(@:d:d:d), $(@:d:d))}$/$(*:b).pre -o $@
 
 .ENDIF			# "$(PARFILES)"!=""
 
