@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageEntry.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mtg $ $Date: 2001-10-02 22:13:16 $
+ *  last change: $Author: mtg $ $Date: 2001-10-26 21:55:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,9 +104,9 @@ public:
     ZipPackageFolder* GetParent ( ) { return pParent; }
     void SetFolder ( bool bSetFolder ) { mbIsFolder = bSetFolder; }
 
-    inline void clearParent ( void )
+    void clearParent ( void )
     {
-        xParent = com::sun::star::uno::Reference < com::sun::star::container::XNameContainer > ();
+        xParent.clear();
     }
     // XNamed
     virtual ::rtl::OUString SAL_CALL getName(  )
