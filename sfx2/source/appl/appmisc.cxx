@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appmisc.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: pb $ $Date: 2000-11-23 07:47:43 $
+ *  last change: $Author: pb $ $Date: 2000-11-23 09:46:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1043,8 +1043,8 @@ Config* SfxApplication::GetFilterIni()
         // load modules path from configuration
         String aIniFile( SvtPathOptions().GetModulePath() );
         ::rtl::OUString aTemp;
-        // it's an URL -> convert to normalized path
-        if ( ::osl::FileBase::getNormalizedPathFromFileURL( aIniFile, aTemp ) == osl::FileBase::E_None )
+        // convert to normalized path
+        if ( ::osl::FileBase::normalizePath( aIniFile, aTemp ) == osl::FileBase::E_None )
         {
             // append the name of the filter ini
             aIniFile = aTemp;
