@@ -2,9 +2,9 @@
  *
  *  $RCSfile: styledlg.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 21:18:05 $
+ *  last change: $Author: kz $ $Date: 2001-07-24 20:40:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -314,7 +314,7 @@ TabDialog RID_SCDLG_STYLES_PAR
     Text[ chinese_simplified ] = "µ¥Ôª¸ñÑùÊ½";
     Text[ russian ] = "Ñòèëü ÿ÷åéêè";
     Text[ polish ] = "Styl komórki";
-    Text[ japanese ] = "¾Ù‚Ì½À²Ù";
+    Text[ japanese ] = "¾Ù½À²Ù";
     Text[ chinese_traditional ] = "Àx¦s®æ¼Ë¦¡";
     Text[ arabic ] = "äãØ ÎáíÉ";
     Text[ greek ] = "Óôõë êåëéïı";
@@ -366,7 +366,7 @@ TabDialog RID_SCDLG_STYLES_PAGE
                 Text [ dutch ] = "Pagina" ;
                 Text [ spanish ] = "Página" ;
                 Text [ english_us ] = "Page" ;
-                Text[ chinese_simplified ] = "Ò³Âë";
+                Text[ chinese_simplified ] = "Ò³";
                 Text[ russian ] = "Ñòğàíèöà";
                 Text[ polish ] = "Strona";
                 Text[ japanese ] = "Íß°¼Ş";
@@ -532,6 +532,7 @@ TabDialog RID_SCDLG_STYLES_PAGE
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Estilo de hoja";
 };
+
 
 
 
