@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shellio.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mib $ $Date: 2001-12-06 13:07:58 $
+ *  last change: $Author: jp $ $Date: 2002-02-22 13:58:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -345,7 +345,11 @@ ULONG SwReader::Read( const Reader& rOptions )
                         else
                         {
                             if( bSaveUndo )
+                            {
+                                pDoc->SetRedlineMode_intern( eOld );
                                 pDoc->AppendUndo( new SwUndoInsLayFmt( pFrmFmt ) );
+                                pDoc->SetRedlineMode_intern( REDLINE_IGNORE );
+                            }
                             if( pFrmFmt->GetDepends() )
                             {
                                 // beim Insert legen Draw-Objecte einen Frame an
@@ -381,8 +385,10 @@ ULONG SwReader::Read( const Reader& rOptions )
         }
         if( bSaveUndo )
         {
+            pDoc->SetRedlineMode_intern( eOld );
             pUndo->SetInsertRange( *pUndoPam, FALSE );
             pDoc->AppendUndo( pUndo );
+            pDoc->SetRedlineMode_intern( REDLINE_IGNORE );
         }
 
         delete pUndoPam;
@@ -416,7 +422,11 @@ ULONG SwReader::Read( const Reader& rOptions )
     {
         pDoc->DoUndo( bDocUndo );
         if( bSaveUndo )
+        {
+            pDoc->SetRedlineMode_intern( eOld );
             pDoc->EndUndo( UNDO_INSDOKUMENT );
+            pDoc->SetRedlineMode_intern( REDLINE_IGNORE );
+        }
     }
 
     // Wenn der Pam nur fuers Lesen konstruiert wurde, jetzt zerstoeren.
