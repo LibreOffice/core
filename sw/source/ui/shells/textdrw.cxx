@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textdrw.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:52:22 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:43:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,6 +101,15 @@
 #include <poolfmt.hrc>
 #endif
 
+#ifndef _DOCSH_HXX
+#include <docsh.hxx>
+#endif
+#ifndef _SFXDOCFILE_HXX
+#include <sfx2/docfile.hxx>
+#endif
+#ifndef SVTOOLS_URIHELPER_HXX
+#include <svtools/urihelper.hxx>
+#endif
 #ifndef _SV_SOUND_HXX
 #include <vcl/sound.hxx>
 #endif
@@ -156,7 +165,12 @@ void SwBaseShell::InsertURLButton(const String& rURL, const String& rTarget, con
             aTmp <<= OUString(rTxt);
             xPropSet->setPropertyValue( C2U("Label"), aTmp );
 
-            aTmp <<= OUString(INetURLObject::RelToAbs(rURL));
+            SfxMedium* pMedium = rSh.GetView().GetDocShell()->GetMedium();
+            INetURLObject aAbs;
+            if( pMedium )
+                aAbs = pMedium->GetURLObject();
+
+            aTmp <<= OUString(URIHelper::SmartRel2Abs(aAbs, rURL));
             xPropSet->setPropertyValue( C2U("TargetURL"), aTmp );
 
             if( rTarget.Len() )
