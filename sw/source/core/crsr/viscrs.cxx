@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viscrs.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:14:39 $
+ *  last change: $Author: rt $ $Date: 2005-04-04 08:14:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1084,7 +1084,7 @@ void SwShellTableCrsr::FillRects()
         // (see also lcl_FindTopLevelTable in unoobj2.cxx for a different
         // version to do this)
         const SwTableNode* pCurTblNd = pCNd->FindTableNode();
-        while ( pSelTblNd != pCurTblNd )
+        while ( pSelTblNd != pCurTblNd && pCurTblNd )
         {
             aIdx = pCurTblNd->EndOfSectionIndex();
             pCNd = rNds.GoNextSection( &aIdx, TRUE, FALSE );
