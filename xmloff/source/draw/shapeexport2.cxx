@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport2.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 18:11:16 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:16:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1179,9 +1179,10 @@ void XMLShapeExport::ImpExportGraphicObjectShape(
 
 void XMLShapeExport::ImpExportChartShape(
     const uno::Reference< drawing::XShape >& xShape,
-    XmlShapeType eShapeType, sal_Int32 nFeatures, awt::Point* pRefPoint)
+    XmlShapeType eShapeType, sal_Int32 nFeatures, awt::Point* pRefPoint,
+    SvXMLAttributeList* pAttrList )
 {
-    ImpExportOLE2Shape( xShape, eShapeType, nFeatures, pRefPoint );
+    ImpExportOLE2Shape( xShape, eShapeType, nFeatures, pRefPoint, pAttrList );
 /*
         // Transformation
         ImpExportNewTrans(xPropSet, nFeatures, pRefPoint);
@@ -1471,7 +1472,8 @@ void XMLShapeExport::ImpExportMeasureShape(
 
 void XMLShapeExport::ImpExportOLE2Shape(
     const uno::Reference< drawing::XShape >& xShape,
-    XmlShapeType eShapeType, sal_Int32 nFeatures /* = SEF_DEFAULT */, awt::Point* pRefPoint /* = NULL */)
+    XmlShapeType eShapeType, sal_Int32 nFeatures /* = SEF_DEFAULT */, awt::Point* pRefPoint /* = NULL */,
+    SvXMLAttributeList* pAttrList /* = NULL */ )
 {
     uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY);
     uno::Reference< container::XNamed > xNamed(xShape, uno::UNO_QUERY);
@@ -1497,6 +1499,11 @@ void XMLShapeExport::ImpExportOLE2Shape(
                                   XML_FRAME, bCreateNewline, sal_True );
 
         {
+            if (pAttrList)
+            {
+                rExport.AddAttributeList(pAttrList);
+            }
+
             OUString sClassId;
             OUString sURL;
             sal_Bool bExportEmbedded(0 != (rExport.getExportFlags() & EXPORT_EMBEDDED));
