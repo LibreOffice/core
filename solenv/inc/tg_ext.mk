@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_ext.mk,v $
 #
-#   $Revision: 1.13 $
+#   $Revision: 1.14 $
 #
-#   last change: $Author: hjs $ $Date: 2001-07-17 15:04:05 $
+#   last change: $Author: armin $ $Date: 2001-07-17 15:26:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -141,7 +141,7 @@ $(PACKAGE_DIR)$/$(PATCH_FLAG_FILE) : $(PACKAGE_DIR)$/$(ADD_FILES_FLAG_FILE)
     +cd $(PACKAGE_DIR) && echo no patch needed...
 .ELSE			# "$(PATCH_FILE_NAME)"=="none" ||	"$(PATCH_FILE_NAME)"==""
 .IF "$(GUI)"=="WNT"
-    +cd $(PACKAGE_DIR) && $(TYPE) ..$/..$/$(PATCH_FILE_NAME) | tr -d "\015" | d:\temp\patch -b -p2 && $(TOUCH) $(PATCH_FLAG_FILE)
+    +cd $(PACKAGE_DIR) && $(TYPE) ..$/..$/$(PATCH_FILE_NAME) | tr -d "\015" | patch -b -p2 && $(TOUCH) $(PATCH_FLAG_FILE)
 .ELSE           # "$(GUI)"=="WNT"
     +cd $(PACKAGE_DIR) && $(TYPE) ..$/..$/$(PATCH_FILE_NAME) | patch -b -p2 && $(TOUCH) $(PATCH_FLAG_FILE)
 .ENDIF          # "$(GUI)"=="WNT"
