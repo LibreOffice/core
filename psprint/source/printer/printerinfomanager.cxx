@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printerinfomanager.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jbu $ $Date: 2001-05-14 09:09:53 $
+ *  last change: $Author: jbu $ $Date: 2001-05-22 09:03:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -532,7 +532,11 @@ static bool checkWriteability( const OUString& rUniPath )
 {
     bool bRet = false;
     OUString aSysPath;
+#ifdef TF_FILEURL
+    FileBase::getSystemPathFromFileURL( rUniPath, aSysPath );
+#else
     FileBase::getSystemPathFromNormalizedPath( rUniPath, aSysPath );
+#endif
     SvFileStream aStream( aSysPath, STREAM_READ | STREAM_WRITE );
     if( aStream.IsOpen() && aStream.IsWritable() )
         bRet = true;

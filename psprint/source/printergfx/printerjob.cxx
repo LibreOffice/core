@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printerjob.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jbu $ $Date: 2001-05-15 12:53:43 $
+ *  last change: $Author: jbu $ $Date: 2001-05-22 09:02:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,16 +111,16 @@ PrinterJob::CreateSpoolFile (const rtl::OUString& rName, const rtl::OUString& rE
 
     rtl::OUString aFileName = maSpoolDirName + rtl::OUString::createFromAscii ("/")
         + rName + rExtension;
-    rtl::OUString aUNCFileName;
+    rtl::OUString aNormFileName;
 #ifdef TF_FILEURL
-    OSL_VERIFY( osl_File_E_None == osl::File::getFileURLFromSystemPath( aSubDir, aUNCSubDir ) );
+    OSL_VERIFY( osl_File_E_None == osl::File::getFileURLFromSystemPath( aFileName, aNormFileName ) );
 #else
-    osl::File::normalizePath (aFileName, aUNCFileName);
+    osl::File::normalizePath (aFileName, aNormFileName);
 #endif
 
-    osl::File* pFile = new osl::File (aUNCFileName);
+    osl::File* pFile = new osl::File (aNormFileName);
     pFile->open (OpenFlag_Read | OpenFlag_Write | OpenFlag_Create);
-    pFile->setAttributes (aUNCFileName,
+    pFile->setAttributes (aNormFileName,
                           osl_File_Attribute_OwnWrite | osl_File_Attribute_OwnRead );
 
     return pFile;
@@ -338,7 +338,11 @@ createSpoolDir ()
     char* pName = tempnam (pTmpDir, "psp");
     rtl::OUString aSubDir = rtl::OUString::createFromAscii (pName);
     rtl::OUString aUNCSubDir;
+#ifdef TF_FILEURL
+    osl::File::getFileURLFromSystemPath (aSubDir, aUNCSubDir);
+#else
     osl::File::normalizePath (aSubDir, aUNCSubDir);
+#endif
     free (pName);
 
     /* create directory with attributes */
