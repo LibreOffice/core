@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.6 $
+#  $Revision: 1.7 $
 #
-#  last change: $Author: vg $ $Date: 2003-07-09 10:41:01 $
+#  last change: $Author: rt $ $Date: 2004-05-18 13:29:37 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -57,8 +57,8 @@ COMPONENT_RDB = $(OUT_BIN)/$(COMPONENT_RDB_NAME)
 
 OUT_COMP_INC = $(OUT_INC)/$(COMPONENT_NAME)
 OUT_COMP_GEN = $(OUT_MISC)/$(COMPONENT_NAME)
-OUT_COMP_OBJ=$(OUT_OBJ)/$(COMPONENT_NAME)
-OUT_COMP_SLO=$(OUT_SLO)/$(COMPONENT_NAME)
+OUT_COMP_OBJ = $(OUT_OBJ)/$(COMPONENT_NAME)
+OUT_COMP_SLO = $(OUT_SLO)/$(COMPONENT_NAME)
 
 COMPONENT_TYPEFLAG = $(OUT_MISC)/cpp_$(COMPONENT_NAME)_types.flag
 
@@ -73,7 +73,7 @@ OBJFILES = $(patsubst %.cxx,$(OUT_COMP_SLO)/%.$(OBJ_EXT),$(CXXFILES))
 
 GENURDFILES = $(patsubst %.idl,$(OUT_COMP_GEN)/%.urd,$(IDLFILES))
 
-TYPES = $(shell xml2cmp -types stdout $(COMPONENT_XML))
+TYPES = $(shell $(XML2CMP) -types stdout $(COMPONENT_XML))
 TYPESLIST = $(foreach t,$(TYPES),-T$(t))
 
 # Targets
@@ -85,19 +85,19 @@ include $(SETTINGS)/stdtarget.mk
 
 $(OUT_COMP_GEN)/%.urd : %.idl
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	idlc -I. -I$(IDL_DIR) -O$(OUT_COMP_GEN) $<
+	$(IDLC) -I. -I$(IDL_DIR) -O$(OUT_COMP_GEN) $<
 
 # This example type library will be extended by the office types
 $(OUT_BIN)/%.rdb : $(GENURDFILES)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	-$(DEL) $(subst /,$(PS),$@)
-	regmerge $@ /UCR $(GENURDFILES)
-	regmerge $@ / $(DKREGISTRYNAME) 
+	$(REGMERGE) $@ /UCR $(GENURDFILES)
+	$(REGMERGE) $@ / $(DKREGISTRYNAME) 
 
 $(COMPONENT_TYPEFLAG) : $(COMPONENT_RDB) $(COMPONENT_XML)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	-$(DEL) $(subst /,$(PS),$(COMPONENT_TYPEFLAG))
-	cppumaker -Gc -BUCR -O$(OUT_COMP_INC) $(TYPESLIST) $(COMPONENT_RDB)
+	$(CPPUMAKER) -Gc -BUCR -O$(OUT_COMP_INC) $(TYPESLIST) $(COMPONENT_RDB)
 	echo flagged > $@
 
 $(OUT_COMP_OBJ)/%.$(OBJ_EXT) : %.cxx $(COMPONENT_TYPEFLAG)
@@ -129,7 +129,7 @@ $(SHAREDLIB_OUT)/%.$(SHAREDLIB_EXT) : $(SLOFILES)
 	$(CPPUHELPERLIB) $(CPPULIB) $(SALLIB) $(STLPORTLIB) $(STC++LIB)
 endif	
 
-$(OUT_BIN)/%$(EXE_EXT) : $(OUT_COMP_OBJ)/%.$(OBJ_EXT) $(SHAREDLIB_OUT)/counter.uno.$(SHAREDLIB_EXT)
+$(OUT_BIN)/countermain$(EXE_EXT) : $(OUT_COMP_OBJ)/countermain.$(OBJ_EXT) $(SHAREDLIB_OUT)/counter.uno.$(SHAREDLIB_EXT)
 ifeq "$(OS)" "WIN"
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	$(LINK) $(EXE_LINK_FLAGS) /OUT:$@ /MAP:$(OUT_COMP_GEN)/$(basename $(@F)).map \
@@ -157,7 +157,7 @@ clean :
 	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_GEN))
 	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_OBJ))
 	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_SLO))
-	-$(DEL) $(subst /,$(PS),$(COMPONENT_TYPEFLAG))
-	-$(DEL) $(subst /,$(PS),$(COMPONENT_RDB))
-	-$(DEL) $(subst /,$(PS),$(SHAREDLIB_OUT)/$(COMPONENT_NAME).*)
-	-$(DEL) $(subst /,$(PS),$(OUT_BIN)/countermain*)
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMPONENT_TYPEFLAG)))
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMPONENT_RDB)))
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(SHAREDLIB_OUT)/$(COMPONENT_NAME).*))
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(OUT_BIN)/countermain*))
