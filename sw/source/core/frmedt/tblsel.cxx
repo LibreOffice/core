@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tblsel.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 08:43:33 $
+ *  last change: $Author: hjs $ $Date: 2004-06-28 12:59:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2357,24 +2357,6 @@ void _FndBox::DelFrms( SwTable &rTable )
         --nEndPos;
     }
 
-    // Delete all follow flow line:
-    const USHORT nRepeat = rTable.GetRowsToRepeat();
-    SwFrmFmt* pTblFmt = rTable.GetFrmFmt();
-    SwClientIter aTblIter( *pTblFmt );
-    SwClient* pLastTbl = aTblIter.GoStart();
-    if ( pLastTbl )
-    {
-        do
-        {
-            SwTabFrm* pTabFrm = PTR_CAST( SwTabFrm, pLastTbl );
-            if ( pTabFrm )
-            {
-                if ( pTabFrm->GetFollow() && pTabFrm->HasFollowFlowLine() )
-                    pTabFrm->RemoveFollowFlowLine();
-            }
-        } while( 0 != ( pLastTbl = aTblIter++ ));
-    }
-
     for ( USHORT i = nStPos; i <= nEndPos; ++i)
     {
         SwFrmFmt *pFmt = rTable.GetTabLines()[i]->GetFrmFmt();
@@ -2453,6 +2435,17 @@ void _FndBox::DelFrms( SwTable &rTable )
                     }
                     if ( bDel )
                     {
+                        SwFrm* pTabFrm = pFrm->GetUpper();
+                        if ( pTabFrm->IsTabFrm() &&
+                            !pFrm->GetNext() &&
+                             ((SwTabFrm*)pTabFrm)->GetFollow() )
+                        {
+                            // We do not delete the follow flow line,
+                            // this will be done automatically in the
+                            // next turn.
+                            ((SwTabFrm*)pTabFrm)->SetFollowFlowLine( FALSE );
+                        }
+
                         pFrm->Cut();
                         delete pFrm;
                     }
@@ -2466,7 +2459,7 @@ BOOL lcl_IsLineOfTblFrm( const SwTabFrm& rTable, const SwFrm& rChk )
 {
     const SwTabFrm* pTblFrm = rChk.FindTabFrm();
     if( pTblFrm->IsFollow() )
-        pTblFrm->FindMaster( true );
+        pTblFrm = pTblFrm->FindMaster( true );
     return &rTable == pTblFrm;
 }
 
