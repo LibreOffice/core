@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fews.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2001-10-11 15:32:13 $
+ *  last change: $Author: ama $ $Date: 2002-08-09 13:42:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -846,6 +846,7 @@ void SwFEShell::CalcBoundRect( SwRect &rRect, RndStdIds nAnchorId,
     bMirror = bMirror && !pPage->OnRightPage();
 
     Point aPos;
+    BOOL bVertic = FALSE;
     if( FLY_PAGE == nAnchorId || FLY_AT_FLY == nAnchorId ) // LAYER_IMPL
     {
 #ifdef AMA_OUT_OF_FLY
@@ -863,8 +864,22 @@ void SwFEShell::CalcBoundRect( SwRect &rRect, RndStdIds nAnchorId,
         if( !pFrm )
             pFrm = pTmp;
         rRect = pFrm->Frm();
-        aPos = pFrm->Frm().Pos();
-        if( bMirror )
+        SWRECTFN( pFrm )
+        aPos = (pFrm->Frm().*fnRect->fnGetPos)();
+        if( bVert )
+        {
+            bVertic = TRUE;
+            bMirror = FALSE; // no mirroring in vertical environment
+            switch ( eRelOrient )
+            {
+                case REL_PG_RIGHT:
+                case REL_FRM_RIGHT: aPos.Y() += pFrm->Prt().Height();
+                // no break!
+                case PRTAREA:
+                case REL_PG_PRTAREA: aPos.Y() += pFrm->Prt().Top(); break;
+            }
+        }
+        else if( bMirror )
         {
             switch ( eRelOrient )
             {
@@ -901,6 +916,7 @@ void SwFEShell::CalcBoundRect( SwRect &rRect, RndStdIds nAnchorId,
         SwFrm *pUpper = ( pFrm->IsPageFrm() || pFrm->IsFlyFrm() ) ?
                         pFrm : pFrm->GetUpper();
         rRect = pUpper->Frm();
+        SWRECTFN( pUpper );
         if( pPercent )
             *pPercent = pUpper->Prt().SSize();
         if( bAtCntnt )
@@ -914,27 +930,56 @@ void SwFEShell::CalcBoundRect( SwRect &rRect, RndStdIds nAnchorId,
         {
             rRect += pUpper->Prt().Pos();
             rRect.SSize( pUpper->Prt().SSize() );
-            if ( bAtCntnt )
-                rRect.Top( pFrm->Frm().Top() );
             if ( pUpper->IsCellFrm() )//MA_FLY_HEIGHT
             {
                 SwFrm *pTab = pUpper->FindTabFrm();
-                long nBottom = pTab->GetUpper()->Frm().Top() +
-                               pTab->GetUpper()->Prt().Bottom();
-                rRect.Bottom( nBottom );
+                long nBottom = (pTab->GetUpper()->*fnRect->fnGetPrtBottom)();
+                (rRect.*fnRect->fnSetBottom)( nBottom );
             }
         }
         if( bAtCntnt )
         {
-            rRect.Left( pPage->Frm().Left() );
-            rRect.Width( pPage->Frm().Width() );
+            (rRect.*fnRect->fnSetTop)( (pFrm->Frm().*fnRect->fnGetTop)() );
+            if( bVert )
+            {
+                rRect.Top( pPage->Frm().Top() );
+                rRect.Height( pPage->Frm().Height() );
+            }
+            else
+            {
+                rRect.Left( pPage->Frm().Left() );
+                rRect.Width( pPage->Frm().Width() );
+            }
         }
         else  // bei zeichengebundenen lieber nur 90% der Hoehe ausnutzen
-            rRect.Height( (rRect.Height()*9)/10 );
+        {
+            if( bVert )
+                rRect.Width( (rRect.Width()*9)/10 );
+            else
+                rRect.Height( (rRect.Height()*9)/10 );
+        }
 
-        aPos = pFrm->Frm().Pos();
+        aPos = (pFrm->Frm().*fnRect->fnGetPos)();
 
-        if( bMirror )
+        if( bVert )
+        {
+            bVertic = TRUE;
+            bMirror = FALSE;
+            switch ( eRelOrient )
+            {
+                case REL_FRM_RIGHT: aPos.Y() += pFrm->Prt().Height();
+                // kein break!
+                case PRTAREA: aPos += (pFrm->Prt().*fnRect->fnGetPos)(); break;
+
+                case REL_PG_RIGHT: aPos.Y() = pPage->Frm().Top()
+                                            + pPage->Prt().Bottom(); break;
+                case REL_PG_PRTAREA: aPos.Y() = pPage->Frm().Top()
+                                              + pPage->Prt().Top(); break;
+                case REL_PG_LEFT:
+                case REL_PG_FRAME: aPos.Y() = pPage->Frm().Top(); break;
+            }
+        }
+        else if( bMirror )
         {
             switch ( eRelOrient )
             {
@@ -968,7 +1013,10 @@ void SwFEShell::CalcBoundRect( SwRect &rRect, RndStdIds nAnchorId,
     }
     if( !pRef )
     {
-        rRect.Pos( rRect.Left() - aPos.X(), rRect.Top() - aPos.Y() );
+        if( bVertic )
+            rRect.Pos( aPos.X() - rRect.Width() - rRect.Left(), rRect.Top() - aPos.Y() );
+        else
+            rRect.Pos( rRect.Left() - aPos.X(), rRect.Top() - aPos.Y() );
         if( bMirror )
             rRect.Pos( -rRect.Right(), rRect.Top() );
     }
