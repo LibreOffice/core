@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc4.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 17:08:03 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:43:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -776,12 +776,13 @@ void SdDrawDocument::StartOnlineSpelling(BOOL bForceSpelling)
         SdPage* pPage = NULL;
         SdrObject* pObj = NULL;
         pOnlineSpellingList = new List(64, 32);
+        USHORT nPage;
 
         // Um im OnlineSpellingHdl mit List::Next() arbeiten zu  koennen,
         // wird ein Position 0 ein Dummy-Objekt (NULL-Pointer) eingefuegt
         pOnlineSpellingList->Insert(NULL, LIST_APPEND);
 
-        for (USHORT nPage = 0; nPage < GetPageCount(); nPage++)
+        for ( nPage = 0; nPage < GetPageCount(); nPage++ )
         {
             // Alle Pages durchsuchen
             FillOnlineSpellingList((SdPage*) GetPage(nPage));
