@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calendar_gregorian.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: khong $ $Date: 2002-07-12 17:25:28 $
+ *  last change: $Author: er $ $Date: 2002-07-26 16:01:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -367,48 +367,53 @@ Calendar_gregorian::getDisplayString( sal_Int32 nCalendarDisplayCode, sal_Int16 
     sal_Char aStr[10];
 
     switch( nCalendarDisplayCode ) {
-        case CalendarDisplayCode::SHORT_DAY:
         case CalendarDisplayCode::SHORT_MONTH:
+            value += 1;     // month is zero based
+            // fall thru
+        case CalendarDisplayCode::SHORT_DAY:
         case CalendarDisplayCode::LONG_YEAR:
-        sprintf(aStr, "%d", value);
-        break;
-        case CalendarDisplayCode::SHORT_YEAR:
-        // take last 2 digits
-        value %= 100;
-        // fall through
-        case CalendarDisplayCode::LONG_DAY:
+            sprintf(aStr, "%d", value);
+            break;
         case CalendarDisplayCode::LONG_MONTH:
-        sprintf(aStr, "%02d", value);
-        break;
+            value += 1;     // month is zero based
+            sprintf(aStr, "%02d", value);
+            break;
+        case CalendarDisplayCode::SHORT_YEAR:
+            // take last 2 digits
+            value %= 100;
+            // fall through
+        case CalendarDisplayCode::LONG_DAY:
+            sprintf(aStr, "%02d", value);
+            break;
 
         case CalendarDisplayCode::SHORT_DAY_NAME:
-        return getDisplayName(CalendarDisplayIndex::DAY, value, 0);
+            return getDisplayName(CalendarDisplayIndex::DAY, value, 0);
         case CalendarDisplayCode::LONG_DAY_NAME:
-        return getDisplayName(CalendarDisplayIndex::DAY, value, 1);
+            return getDisplayName(CalendarDisplayIndex::DAY, value, 1);
         case CalendarDisplayCode::SHORT_MONTH_NAME:
-        return getDisplayName(CalendarDisplayIndex::MONTH, value, 0);
+            return getDisplayName(CalendarDisplayIndex::MONTH, value, 0);
         case CalendarDisplayCode::LONG_MONTH_NAME:
-        return getDisplayName(CalendarDisplayIndex::MONTH, value, 1);
+            return getDisplayName(CalendarDisplayIndex::MONTH, value, 1);
         case CalendarDisplayCode::SHORT_ERA:
-        return getDisplayName(CalendarDisplayIndex::ERA, value, 0);
+            return getDisplayName(CalendarDisplayIndex::ERA, value, 0);
         case CalendarDisplayCode::LONG_ERA:
-        return getDisplayName(CalendarDisplayIndex::ERA, value, 1);
+            return getDisplayName(CalendarDisplayIndex::ERA, value, 1);
 
         case CalendarDisplayCode::SHORT_YEAR_AND_ERA:
-        return  getDisplayString( CalendarDisplayCode::SHORT_ERA, nNativeNumberMode ) +
-            getDisplayString( CalendarDisplayCode::SHORT_YEAR, nNativeNumberMode );
+            return  getDisplayString( CalendarDisplayCode::SHORT_ERA, nNativeNumberMode ) +
+                getDisplayString( CalendarDisplayCode::SHORT_YEAR, nNativeNumberMode );
 
         case CalendarDisplayCode::LONG_YEAR_AND_ERA:
-        return  getDisplayString( CalendarDisplayCode::LONG_ERA, nNativeNumberMode ) +
-            getDisplayString( CalendarDisplayCode::LONG_YEAR, nNativeNumberMode );
+            return  getDisplayString( CalendarDisplayCode::LONG_ERA, nNativeNumberMode ) +
+                getDisplayString( CalendarDisplayCode::LONG_YEAR, nNativeNumberMode );
 
         default:
-        throw ERROR;
+            throw ERROR;
     }
     if (nNativeNumberMode > 0) {
         sal_Int16 nNatNum = NatNumForCalendar(aLocale, nCalendarDisplayCode, nNativeNumberMode);
         if (nNatNum > 0)
-        return aNatNum.getNativeNumberString(OUString::createFromAscii(aStr), aLocale, nNatNum);
+            return aNatNum.getNativeNumberString(OUString::createFromAscii(aStr), aLocale, nNatNum);
     }
     return OUString::createFromAscii(aStr);
 }
