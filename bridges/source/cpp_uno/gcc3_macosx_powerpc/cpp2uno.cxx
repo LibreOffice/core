@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cpp2uno.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 12:42:53 $
+ *  last change: $Author: hr $ $Date: 2004-03-09 12:11:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -363,7 +363,7 @@ static typelib_TypeClass cpp_mediate(
         pThis = gpreg[0];
         }
 
-        pThis = static_cast< char * >IpThis) - nVtableOffset;
+        pThis = static_cast< char * >(pThis) - nVtableOffset;
         bridges::cpp_uno::shared::CppInterfaceProxy * pCppI
     = bridges::cpp_uno::shared::CppInterfaceProxy::castInterfaceToProxy(pThis);
 
@@ -497,7 +497,7 @@ static void cpp_vtable_call( int nFunctionIndex, int nVtableOffset, void** gpreg
         sal_Bool bComplex = nFunctionIndex & 0x80000000 ? sal_True : sal_False;
 
     typelib_TypeClass aType =
-             cpp_mediate( nFunctionIndex, nVtabelOffset, (void**)gpreg, (void**)fpreg, ovrflw, (sal_Int64*)nRegReturn );
+             cpp_mediate( nFunctionIndex, nVtableOffset, (void**)gpreg, (void**)fpreg, ovrflw, (sal_Int64*)nRegReturn );
 
         // FIXME: why are we restoring the volatile ctr register here
         // FIXME: and why are we putting back the values for r4, r5, and r6 as well
@@ -581,8 +581,8 @@ void flush_range(unsigned char * addr1, int size)
 
 int const codeSnippetSize = 136;
 
-unsigned char * void codeSnippet( unsigned char * code, sal_Int32 functionIndex,
-                  sal_Int32 vtableOffset, sal, bool simpleRetType )
+unsigned char * codeSnippet( unsigned char * code, sal_Int32 functionIndex,
+                  sal_Int32 vtableOffset, bool simpleRetType )
 {
     if (! simpleRetType )
         functionIndex |= 0x80000000;
