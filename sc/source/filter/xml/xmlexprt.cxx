@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.174 $
+ *  $Revision: 1.175 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-19 22:10:31 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:56:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -330,7 +330,9 @@ uno::Sequence< rtl::OUString > SAL_CALL ScXMLExport_getSupportedServiceNames() t
 uno::Reference< uno::XInterface > SAL_CALL ScXMLExport_createInstance(
                 const uno::Reference< lang::XMultiServiceFactory > & rSMgr ) throw( uno::Exception )
 {
-    return (cppu::OWeakObject*)new ScXMLExport(EXPORT_ALL);
+    // #110680#
+    // return (cppu::OWeakObject*)new ScXMLExport(EXPORT_ALL);
+    return (cppu::OWeakObject*)new ScXMLExport( rSMgr, EXPORT_ALL );
 }
 
 OUString SAL_CALL ScXMLExport_Meta_getImplementationName() throw()
@@ -348,7 +350,9 @@ uno::Sequence< rtl::OUString > SAL_CALL ScXMLExport_Meta_getSupportedServiceName
 uno::Reference< uno::XInterface > SAL_CALL ScXMLExport_Meta_createInstance(
                 const uno::Reference< lang::XMultiServiceFactory > & rSMgr ) throw( uno::Exception )
 {
-    return (cppu::OWeakObject*)new ScXMLExport(EXPORT_META);
+    // #110680#
+    // return (cppu::OWeakObject*)new ScXMLExport(EXPORT_META);
+    return (cppu::OWeakObject*)new ScXMLExport( rSMgr, EXPORT_META );
 }
 
 OUString SAL_CALL ScXMLExport_Styles_getImplementationName() throw()
@@ -366,7 +370,9 @@ uno::Sequence< rtl::OUString > SAL_CALL ScXMLExport_Styles_getSupportedServiceNa
 uno::Reference< uno::XInterface > SAL_CALL ScXMLExport_Styles_createInstance(
                 const uno::Reference< lang::XMultiServiceFactory > & rSMgr ) throw( uno::Exception )
 {
-    return (cppu::OWeakObject*)new ScXMLExport(EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES|EXPORT_FONTDECLS);
+    // #110680#
+    // return (cppu::OWeakObject*)new ScXMLExport(EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES|EXPORT_FONTDECLS);
+    return (cppu::OWeakObject*)new ScXMLExport( rSMgr, EXPORT_STYLES|EXPORT_MASTERSTYLES|EXPORT_AUTOSTYLES|EXPORT_FONTDECLS);
 }
 
 OUString SAL_CALL ScXMLExport_Content_getImplementationName() throw()
@@ -384,7 +390,9 @@ uno::Sequence< rtl::OUString > SAL_CALL ScXMLExport_Content_getSupportedServiceN
 uno::Reference< uno::XInterface > SAL_CALL ScXMLExport_Content_createInstance(
                 const uno::Reference< lang::XMultiServiceFactory > & rSMgr ) throw( uno::Exception )
 {
-    return (cppu::OWeakObject*)new ScXMLExport(EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_FONTDECLS);
+    // #110680#
+    // return (cppu::OWeakObject*)new ScXMLExport(EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_FONTDECLS);
+    return (cppu::OWeakObject*)new ScXMLExport( rSMgr, EXPORT_AUTOSTYLES|EXPORT_CONTENT|EXPORT_SCRIPTS|EXPORT_FONTDECLS);
 }
 
 OUString SAL_CALL ScXMLExport_Settings_getImplementationName() throw()
@@ -402,7 +410,9 @@ uno::Sequence< rtl::OUString > SAL_CALL ScXMLExport_Settings_getSupportedService
 uno::Reference< uno::XInterface > SAL_CALL ScXMLExport_Settings_createInstance(
                 const uno::Reference< lang::XMultiServiceFactory > & rSMgr ) throw( uno::Exception )
 {
-    return (cppu::OWeakObject*)new ScXMLExport(EXPORT_SETTINGS);
+    // #110680#
+    // return (cppu::OWeakObject*)new ScXMLExport(EXPORT_SETTINGS);
+    return (cppu::OWeakObject*)new ScXMLExport( rSMgr, EXPORT_SETTINGS );
 }
 
 //----------------------------------------------------------------------------
@@ -451,8 +461,11 @@ sal_Int16 ScXMLExport::GetFieldUnit()
 }
 
 
-ScXMLExport::ScXMLExport(const sal_uInt16 nExportFlag) :
-    SvXMLExport( SvXMLUnitConverter::GetMapUnit(GetFieldUnit()), XML_SPREADSHEET, nExportFlag ),
+// #110680#
+ScXMLExport::ScXMLExport(
+    const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > xServiceFactory,
+    const sal_uInt16 nExportFlag)
+:   SvXMLExport( xServiceFactory, SvXMLUnitConverter::GetMapUnit(GetFieldUnit()), XML_SPREADSHEET, nExportFlag ),
     pDoc(NULL),
     mbShowProgress( sal_False ),
     pSharedData(NULL),
