@@ -2,9 +2,9 @@
  *
  *  $RCSfile: instbdlg.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:35:10 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 11:38:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,7 +110,7 @@ class ScDocShell;
 class ScInsertTableDlg : public ModalDialog
 {
 public:
-            ScInsertTableDlg( Window* pParent, ScViewData& rViewData, SCTAB nTabCount);
+            ScInsertTableDlg( Window* pParent, ScViewData& rViewData, SCTAB nTabCount, bool bFromFile );
             ~ScInsertTableDlg();
 
     virtual short   Execute();      // ueberladen, um Dialog-Parent zu setzen
@@ -153,7 +153,7 @@ private:
     SCTAB               nTableCount;
 
 #ifdef SC_INSTBDLG_CXX
-    void    Init_Impl();
+    void    Init_Impl( bool bFromFile );
     void    SetNewTable_Impl();
     void    SetFromTo_Impl();
     void    FillTables_Impl( ScDocument* pSrcDoc );
