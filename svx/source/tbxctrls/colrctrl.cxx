@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colrctrl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-20 17:35:53 $
+ *  last change: $Author: ka $ $Date: 2001-03-20 20:01:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,8 @@ protected:
 
 public:
 
-                            SvxColorValueSetData( const XFillExchangeData& rData ) { maData = rData; }
+                            SvxColorValueSetData( const XFillAttrSetItem& rSetItem ) :
+                                maData( rSetItem ) {}
 };
 
 // -----------------------------------------------------------------------------
@@ -192,6 +193,8 @@ void SvxColorValueSet::MouseButtonDown( const MouseEvent& rMEvt )
                           rMEvt.GetModifier() );
         ValueSet::MouseButtonDown( aMEvt );
     }
+
+    aDragPosPixel = GetPointerPosPixel();
 }
 
 /*************************************************************************
@@ -241,7 +244,6 @@ void SvxColorValueSet::Command(const CommandEvent& rCEvt)
 
 void SvxColorValueSet::StartDrag( sal_Int8 nAction, const Point& rPtPixel )
 {
-    aDragPosPixel = rPtPixel;
     Application::PostUserEvent(STATIC_LINK(this, SvxColorValueSet, ExecDragHdl));
 }
 
@@ -254,28 +256,18 @@ void SvxColorValueSet::StartDrag( sal_Int8 nAction, const Point& rPtPixel )
 void SvxColorValueSet::DoDrag()
 {
     SfxObjectShell* pDocSh = SfxObjectShell::Current();
+    USHORT          nItemId = GetItemId( aDragPosPixel );
 
-    if (pDocSh)
+    if( pDocSh && nItemId )
     {
-        SfxObjectShell* pDocSh = SfxObjectShell::Current();
-        XFillAttrSetItem aXFillSetItem(&pDocSh->GetPool());
-        SfxItemSet& rSet = aXFillSetItem.GetItemSet();
-        USHORT nItemId = GetItemId(GetPointerPosPixel());
-        rSet.Put(XFillColorItem(GetItemText( nItemId ), GetItemColor(nItemId)));
+        XFillAttrSetItem    aXFillSetItem( &pDocSh->GetPool() );
+        SfxItemSet&         rSet = aXFillSetItem.GetItemSet();
 
-        if (nItemId == 1)
-        {
-            rSet.Put(XFillStyleItem(XFILL_NONE));
-        }
-        else
-        {
-            rSet.Put(XFillStyleItem(XFILL_SOLID));
-        }
-
-        XFillExchangeData aXFillExchangeData( aXFillSetItem );
+        rSet.Put( XFillColorItem( GetItemText( nItemId ), GetItemColor( nItemId ) ) );
+        rSet.Put(XFillStyleItem( ( 1 == nItemId ) ? XFILL_NONE : XFILL_SOLID ) );
 
         EndSelection();
-        ( new SvxColorValueSetData( aXFillExchangeData ) )->StartDrag( this, DND_ACTION_COPY );
+        ( new SvxColorValueSetData( aXFillSetItem ) )->StartDrag( this, DND_ACTION_COPY );
         ReleaseMouse();
     }
 }
