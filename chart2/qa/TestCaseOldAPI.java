@@ -62,7 +62,8 @@ public class TestCaseOldAPI extends ComplexTestCase {
             "testDiagram",
             "testAxis",
             "testLegend",
-            "testArea"
+            "testArea",
+            "testChartType"
         };
     }
 
@@ -338,6 +339,45 @@ public class TestCaseOldAPI extends ComplexTestCase {
 
             int nNewColor = AnyConverter.toInt( xArea.getPropertyValue( "FillColor" ) );
             assure( "Changing FillColor of Area failed", nNewColor == nColor );
+        }
+        catch( Exception ex )
+        {
+            failed( ex.getMessage() );
+            ex.printStackTrace( (PrintWriter)log );
+        }
+    }
+
+    // ------------
+
+    public void testChartType()
+    {
+        XMultiServiceFactory xFact = (XMultiServiceFactory) UnoRuntime.queryInterface(
+            XMultiServiceFactory.class, mxOldDoc );
+        assure( "document is no factory", xFact != null );
+
+        try
+        {
+            String aMyServiceName = new String( "com.sun.star.chart.AreaDiagram" );
+            String aServices[] = xFact.getAvailableServiceNames();
+            boolean bServiceFound = false;
+            for( int i = 0; i < aServices.length; ++i )
+            {
+                if( aServices[ i ].equals( aMyServiceName ))
+                {
+                    bServiceFound = true;
+                    break;
+                }
+            }
+            assure( "getAvailableServiceNames did not return " + aMyServiceName, bServiceFound );
+
+            if( bServiceFound )
+            {
+                XDiagram xDia = (XDiagram) UnoRuntime.queryInterface(
+                    XDiagram.class, xFact.createInstance( aMyServiceName ));
+                assure( "AreaDiagram could not be created", xDia != null );
+
+                mxOldDoc.setDiagram( xDia );
+            }
         }
         catch( Exception ex )
         {
