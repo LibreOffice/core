@@ -1,4 +1,4 @@
-    <node oor:name="StarCalc 5.0 Vorlage/Template" oor:op="replace">
+    <node oor:name="StarCalc 5.0 Vorlage/Template" oor:op="replace" oor:finalized="true" oor:mandatory="true">
         <prop oor:name="FileFormatVersion"><value>5050</value></prop>
         <prop oor:name="Type"><value>calc_StarCalc_50_VorlageTemplate</value></prop>
         <prop oor:name="DocumentService"><value>com.sun.star.sheet.SpreadsheetDocument</value></prop>
@@ -16,13 +16,13 @@
             <value xml:lang="th">StarCalc 5.0 Template</value>
             <value xml:lang="x-comment">StarCalc 5.0 Vorlage</value>
             <value xml:lang="ca">Plantilla de l</value>
-            <value xml:lang="el">StarCalc 5.0 Πρότυπο</value>
-            <value xml:lang="zh-CN">StarCalc 5.0 样式</value>
+            <value xml:lang="el">StarCalc 5.0 Π�?ότυπο</value>
+            <value xml:lang="zh-CN">StarCalc 5.0 样�?</value>
             <value xml:lang="pt">StarCalc 5.0 Modelo</value>
             <value xml:lang="cs">Šablona StarCalc 5.0</value>
             <value xml:lang="fr">StarCalc 5.0 Modèle</value>
             <value xml:lang="ar">StarCalc 5.0 قالب</value>
-            <value xml:lang="zh-TW">StarCalc 5.0 樣式</value>
+            <value xml:lang="zh-TW">StarCalc 5.0 樣�?</value>
             <value xml:lang="sl">StarCalc 5.0 Predloga</value>
             <value xml:lang="fi">StarCalc 5.0 -mallipohja</value>
             <value xml:lang="hi-IN">StarCalc 5.0 Template</value>
@@ -32,7 +32,7 @@
             <value xml:lang="sv">StarCalc 5.0 mall</value>
             <value xml:lang="da">StarCalc 5.0-skabelon</value>
             <value xml:lang="de">StarCalc 5.0 Vorlage</value>
-            <value xml:lang="ko">StarCalc 5.0 서식 파일</value>
+            <value xml:lang="ko">StarCalc 5.0 서�? 파�?�</value>
             <value xml:lang="nl">StarCalc 5.0 Sjabloon</value>
             <value xml:lang="pt-BR">Modelo do StarCalc 5.0 </value>
             <value xml:lang="it">StarCalc 5.0 Modello</value>
