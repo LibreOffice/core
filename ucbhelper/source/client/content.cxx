@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:24:16 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:20:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1498,7 +1498,7 @@ Content_Impl::Content_Impl( const Reference< XMultiServiceFactory >& rSMgr,
         m_xContentEventListener = new ContentEventListener_Impl( *this );
         m_xContent->addContentEventListener( m_xContentEventListener );
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         // Only done on demand in product version for performance reasons,
         // but a nice debug helper.
         getURL();
@@ -1532,7 +1532,7 @@ void Content_Impl::reinit( const Reference< XContent >& xContent )
         m_xContent = xContent;
         m_xContent->addContentEventListener( m_xContentEventListener );
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
         // Only done on demand in product version for performance reasons,
         // but a nice debug helper.
         getURL();
