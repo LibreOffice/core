@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ViewShellBase.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:37:47 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:41:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,8 +142,11 @@
 #include <com/sun/star/frame/XModel.hpp>
 #endif
 
-#define ViewShellBase
+#include <sfx2/objface.hxx>
+#include <sfx2/viewfrm.hxx>
+
 using namespace sd;
+#define ViewShellBase
 #include "sdslots.hxx"
 
 namespace {
@@ -494,9 +497,20 @@ void ViewShellBase::SFX_NOTIFY(SfxBroadcaster& rBC,
 
 void ViewShellBase::InnerResizePixel (const Point& rOrigin, const Size &rSize)
 {
+    Size aObjSize = GetObjectShell()->GetVisArea().GetSize();
+    if ( aObjSize.Width() > 0 && aObjSize.Height() > 0 )
+    {
+        SvBorder aBorder( GetBorderPixel() );
+        Size aSize( rSize );
+        aSize.Width() -= (aBorder.Left() + aBorder.Right());
+        aSize.Height() -= (aBorder.Top() + aBorder.Bottom());
+        Size aObjSizePixel = GetWindow()->LogicToPixel( aObjSize, MAP_100TH_MM );
+        SfxViewShell::SetZoomFactor( Fraction( aSize.Width(), aObjSizePixel.Width() ),
+                        Fraction( aSize.Height(), aObjSizePixel.Height() ) );
+    }
+
     ResizePixel (rOrigin, rSize, false);
 }
-
 
 
 
@@ -519,8 +533,8 @@ void ViewShellBase::ResizePixel (
         = mpPaneManager->GetViewShell(PaneManager::PT_CENTER);
     if (pMainViewShell != NULL)
     {
-        Rectangle aModelRectangle (GetWindow()->PixelToLogic(
-            Rectangle(rOrigin, rSize)));
+        //Rectangle aModelRectangle (GetWindow()->PixelToLogic(
+        //    Rectangle(rOrigin, rSize)));
         SetWindow (pMainViewShell->GetActiveWindow());
         if (mpViewTabBar.get()!=NULL && mpViewTabBar->IsVisible())
             mpViewTabBar->SetPosSizePixel (rOrigin, rSize);
@@ -648,7 +662,23 @@ void ViewShellBase::PreparePrint (PrintDialog* pPrintDialog)
     return maPrintManager.PreparePrint (pPrintDialog);
 }
 
+void ViewShellBase::UIActivating( SfxInPlaceClient* pClient )
+{
+    ViewShell* pViewShell = mpPaneManager->GetViewShell(PaneManager::PT_CENTER);
+    if ( pViewShell )
+        pViewShell->UIActivating( pClient );
 
+    SfxViewShell::UIActivating( pClient );
+}
+
+void ViewShellBase::UIDeactivated( SfxInPlaceClient* pClient )
+{
+    SfxViewShell::UIDeactivated( pClient );
+
+    ViewShell* pViewShell = mpPaneManager->GetViewShell(PaneManager::PT_CENTER);
+    if ( pViewShell )
+        pViewShell->UIDeactivated( pClient );
+}
 
 
 SvBorder ViewShellBase::GetBorder (bool bOuterResize)
@@ -757,28 +787,6 @@ void ViewShellBase::Activate (BOOL IsMDIActivate)
 
 void ViewShellBase::Deactivate (BOOL IsMDIActivate)
 {
-}
-
-
-
-
-void ViewShellBase::UIActivate (SvInPlaceObject *pIPObj)
-{
-    // Forward call to main sub shell.
-    ViewShell* pShell = GetMainViewShell();
-    if (pShell != NULL)
-        pShell->UIActivate (pIPObj);
-}
-
-
-
-
-void ViewShellBase::UIDeactivate (SvInPlaceObject *pIPObj)
-{
-    // Forward call to main sub shell.
-    ViewShell* pShell = GetMainViewShell();
-    if (pShell != NULL)
-        pShell->UIDeactivate (pIPObj);
 }
 
 
