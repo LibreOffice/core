@@ -1,0 +1,191 @@
+/*************************************************************************
+ *
+ *  $RCSfile: CaptionShape.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: mh $ $Date: 2002-02-28 16:12:47 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_drawing_CaptionShape_idl__
+#define __com_sun_star_drawing_CaptionShape_idl__
+
+#ifndef __com_sun_star_drawing_Shape_idl__
+#include <com/sun/star/drawing/Shape.idl>
+#endif
+
+#ifndef __com_sun_star_drawing_Text_idl__
+#include <com/sun/star/drawing/Text.idl>
+#endif
+
+#ifndef __com_sun_star_drawing_FillProperties_idl__
+#include <com/sun/star/drawing/FillProperties.idl>
+#endif
+
+#ifndef __com_sun_star_drawing_LineProperties_idl__
+#include <com/sun/star/drawing/LineProperties.idl>
+#endif
+
+#ifndef __com_sun_star_drawing_ShadowProperties_idl__
+#include <com/sun/star/drawing/ShadowProperties.idl>
+#endif
+
+#ifndef __com_sun_star_drawing_RotationDescriptor_idl__
+#include <com/sun/star/drawing/RotationDescriptor.idl>
+#endif
+
+#ifndef __com_sun_star_awt_Point_idl__
+#include <com/sun/star/awt/Point.idl>
+#endif
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module drawing {
+
+//=============================================================================
+
+/** The <type>CaptionShape</type> represents a rectangular drawing shape
+    with an additional set of lines. It can be used as a description for
+    a fixed point inside a drawing.
+ */
+service CaptionShape
+{
+    /** the position and size is only used for the
+        caption area
+    */
+    service com::sun::star::drawing::Shape;
+
+    service com::sun::star::drawing::FillProperties;
+
+    service com::sun::star::drawing::LineProperties;
+
+    service com::sun::star::drawing::ShadowProperties;
+
+    service com::sun::star::drawing::Text;
+
+    service com::sun::star::drawing::RotationDescriptor;
+
+    /** This is the radius of the caption area corners.
+     */
+    [property] long CornerRadius;
+
+    /** The caption point property specify the position of
+        the point that is captioned. A set of lines are
+        rendered from the caption area.
+    */
+    [property] com.sun.star.awt.Point CaptionPoint
+
+    /** This property specifies the geometry of the line of a caption.
+
+        @see CaptionType
+    */
+    [property] short CaptionType;
+
+    /** This property specifies if the escape angle of
+        the line of a caption is fixed or free. If this
+        is set to <false/>, the application can choose
+        the best possible angle. If not, the value in
+        <code>CaptionAngle</code> is used.
+    */
+    [property] boolean CaptionIsFixedAngle;
+
+    /** This property specifies the escape angle of
+        the line of a caption.
+        It is only used if <code>CaptionIsFixedAngle</code>
+        is set to <true/>
+    */
+    [property] long CaptionAngle;
+
+    /** This property specifies the distance between the
+        text area of the caption and the start of the line.
+    */
+    [property] long CaptionGap;
+
+    /** This property specifies the escape direction for the
+        line of a caption.
+
+        @see CaptionEscapeDirection;
+    */
+    [property] long CaptionEscapeDirection;
+
+    /** If this property is <true/>, the property <code>CaptionEscapeRelative</code>
+        is used, else the property <code>CaptionEscapeAbsolute</code> is used.
+    */
+    [property] boolean CaptionIsEscapeRelative;
+
+    /** This property specifies the relativ escape distance for
+        the line of a caption.
+    */
+    [property] long CaptionEscapeRelative;
+
+    /** This property specifies the absolut escape distance for
+        the line of a caption.
+    */
+    [property] long CaptionEscapeAbsolute;
+
+    /** This property specifies the length of the caption line.
+    */
+    [property] long CaptionLineLength;
+
+    /** If this property is <true/>, the application determines
+        the best possible length for the caption line.
+    */
+    [property] boolean CaptionIsFitLineLength;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif

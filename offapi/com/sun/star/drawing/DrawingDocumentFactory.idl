@@ -1,0 +1,171 @@
+/*************************************************************************
+ *
+ *  $RCSfile: DrawingDocumentFactory.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: mh $ $Date: 2002-02-28 16:18:37 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_drawing_DrawingDocumentFactory_idl__
+#define __com_sun_star_drawing_DrawingDocumentFactory_idl__
+
+#ifndef __com_sun_star_lang_XMultiServiceFactory_idl__
+#include <com/sun/star/lang/XMultiServiceFactory.idl>
+#endif
+
+//=============================================================================
+
+ module com {  module sun {  module star {  module drawing {
+
+//=============================================================================
+
+/** this service describes a factory for documents that
+    can contain drawing objects
+
+    @see DrawingDocument
+ */
+service DrawingDocumentFactory
+{
+    /** this factory lets you create various services that are
+        used inside a drawing document
+
+        <p>The following services are <type>Shape</type>s.
+        They are created by the documents factory and must
+        be inserted into a <type>DrawPage</type> or <type>MasterPage</type>
+        of this document.
+
+        <ul>
+            <li><type>RectangleShape</type></li>
+            <li><type>EllipseShape</type></li>
+            <li><type>ControlShape</type></li>
+            <li><type>ConnectorShape</type></li>
+            <li><type>MeasureShape</type></li>
+            <li><type>LineShape</type></li>
+            <li><type>PolyPolygonShape</type></li>
+            <li><type>PolyLineShape</type></li>
+            <li><type>OpenBezierShape</type></li>
+            <li><type>ClosedBezierShape</type></li>
+            <li><type>GraphicObjectShape</type></li>
+            <li><type>GroupShape</type></li>
+            <li><type>TextShape</type></li>
+            <li><type>OLE2Shape</type></li>
+            <li><type>PageShape</type></li>
+            <li><type>CaptionShape</type></li>
+            <li><type>PluginShape</type></li>
+            <li><type>AppletShape</type></li>
+        </ul>
+
+        <p>The following services are all <type>com.sun.star.text.TextField</type>
+        and can be inserted into text as <type>com.sun.star.text.TextContent</type>.
+
+        <ul>
+            <li><type>com.sun.star.text.TextField.DateTime</type></li>
+            <li><type>com.sun.star.text.TextField.URL</type></li>
+            <li><type>com.sun.star.text.TextField.PageNumber</type></li>
+            <li><type>com.sun.star.text.TextField.PageCount</type></li>
+            <li><type>com.sun.star.text.TextField.SheetName</type></li>
+            <li><type>com.sun.star.text.TextField.FileName</type></li>
+            <li><type>com.sun.star.text.TextField.DocInfo.Title</type></li>
+            <li><type>com.sun.star.text.TextField.Author</type></li>
+            <li><type>com.sun.star.text.TextField.Measure</type></li>
+        </ul>
+
+        <p>The following services gives access to resources used inside the document
+        and let you add new resources.
+
+        <ul>
+            <li><type>com.sun.star.drawing.DashTable</type></li>
+            <li><type>com.sun.star.drawing.GradientTable</type></li>
+            <li><type>com.sun.star.drawing.HatchTable</type></li>
+            <li><type>com.sun.star.drawing.BitmapTable</type></li>
+            <li><type>com.sun.star.drawing.TransparencyGradientTable</type></li>
+            <li><type>com.sun.star.drawing.MarkerTable</type></li>
+        </ul>
+
+        <p>The following service can be set at the <code>Numbering</code> property
+        inside a <type>com.sun.star.style.ParagraphProperties</type>
+
+        <ul>
+            <li><type>com.sun.star.text.NumberingRules</type></li>
+        </ul>
+
+        <p>The following services can be used for a <type>com.sun.star.image.ImageMap</type>
+        inside the document.
+
+        <br>A <type>com.sun.star.image.ImageMap</type> can be obtained from a
+        <type>GraphicObjectShape</type>
+
+        <ul>
+            <li><type>com.sun.star.image.ImageMapRectangleObject</type></li>
+            <li><type>com.sun.star.image.ImageMapCircleObject</type></li>
+            <li><type>com.sun.star.image.ImageMapPolygonObject</type></li>
+        </ul>
+
+        <p>The following services lets you access the drawing property defaults
+        of a document.
+
+        <ul>
+            <li><type>com.sun.star.document.Defaults</type></li>
+        </ul>
+    */
+    interface com::sun::star::lang::XMultiServiceFactory;
+
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
