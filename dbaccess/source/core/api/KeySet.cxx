@@ -2,9 +2,9 @@
  *
  *  $RCSfile: KeySet.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-25 06:38:47 $
+ *  last change: $Author: oj $ $Date: 2002-08-22 10:07:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -596,13 +596,14 @@ void SAL_CALL OKeySet::insertRow( const ORowSetRow& _rInsertRow,const connectivi
         for (;aAutoIter !=  m_aAutoColumns.end(); ++aAutoIter)
         {
             // we will only fetch values which are keycolumns
-            if(m_pKeyColumnNames->find(*aAutoIter) != m_pKeyColumnNames->end())
+            if ( m_pKeyColumnNames->find(*aAutoIter) != m_pKeyColumnNames->end() )
             {
                 sMaxStmt += ::rtl::OUString::createFromAscii(" MAX(");
                 sMaxStmt += ::dbtools::quoteName( sQuote,*aAutoIter);
                 sMaxStmt += ::rtl::OUString::createFromAscii("),");
             }
         }
+
         if(sMaxStmt.getLength())
         {
             sMaxStmt = sMaxStmt.replaceAt(sMaxStmt.getLength()-1,1,::rtl::OUString::createFromAscii(" "));
@@ -626,7 +627,6 @@ void SAL_CALL OKeySet::insertRow( const ORowSetRow& _rInsertRow,const connectivi
                         if(aFind != m_pKeyColumnNames->end())
                             fetchValue(aFind->second,(*_rInsertRow)[aFind->second].getTypeKind(),xRow,(*_rInsertRow)[aFind->second]);
                     }
-                    bAutoValuesFetched = sal_True;
                 }
                 ::comphelper::disposeComponent(xStatement);
             }
@@ -636,7 +636,7 @@ void SAL_CALL OKeySet::insertRow( const ORowSetRow& _rInsertRow,const connectivi
             }
         }
     }
-    if ( m_bInserted && bAutoValuesFetched )
+    if ( m_bInserted )
     {
         ORowSetRow aKeyRow = new connectivity::ORowVector< ORowSetValue >((*m_pKeyColumnNames).size());
         connectivity::ORowVector< ORowSetValue >::iterator aIter = aKeyRow->begin();
@@ -1394,6 +1394,9 @@ namespace dbaccess
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.33  2002/07/25 06:38:47  oj
+    #95146# ask for generated values after insert new row
+
     Revision 1.32  2002/03/18 13:59:43  oj
     #97987# append index columns only when not null
 
