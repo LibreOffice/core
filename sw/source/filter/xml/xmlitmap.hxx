@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlitmap.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mib $ $Date: 2001-07-04 14:15:13 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 12:36:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,19 +76,19 @@
 
 namespace rtl { class OUString; }
 
-#define MID_FLAG_MASK                   0x0000ffff
+#define MID_SW_FLAG_MASK                    0x0000ffff
 
 // this flags are used in the item mapper for import and export
 
-#define MID_FLAG_SPECIAL_ITEM_IMPORT    0x80000000
-#define MID_FLAG_NO_ITEM_IMPORT         0x40000000
-#define MID_FLAG_SPECIAL_ITEM_EXPORT    0x20000000
-#define MID_FLAG_NO_ITEM_EXPORT         0x10000000
-#define MID_FLAG_SPECIAL_ITEM           0xa0000000 // both import and export
-#define MID_FLAG_NO_ITEM                0x50000000 // both import and export
-#define MID_FLAG_ELEMENT_ITEM_IMPORT    0x08000000
-#define MID_FLAG_ELEMENT_ITEM_EXPORT    0x04000000
-#define MID_FLAG_ELEMENT_ITEM           0x0c000000  // both import and export
+#define MID_SW_FLAG_SPECIAL_ITEM_IMPORT 0x80000000
+#define MID_SW_FLAG_NO_ITEM_IMPORT          0x40000000
+#define MID_SW_FLAG_SPECIAL_ITEM_EXPORT 0x20000000
+#define MID_SW_FLAG_NO_ITEM_EXPORT          0x10000000
+#define MID_SW_FLAG_SPECIAL_ITEM            0xa0000000 // both import and export
+#define MID_SW_FLAG_NO_ITEM             0x50000000 // both import and export
+#define MID_SW_FLAG_ELEMENT_ITEM_IMPORT 0x08000000
+#define MID_SW_FLAG_ELEMENT_ITEM_EXPORT 0x04000000
+#define MID_SW_FLAG_ELEMENT_ITEM            0x0c000000  // both import and export
 
 // ---
 
