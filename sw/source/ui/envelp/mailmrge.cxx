@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmrge.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-11 11:09:13 $
+ *  last change: $Author: iha $ $Date: 2002-11-22 13:10:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -626,8 +626,8 @@ void SwMailMergeDlg::ExecQryShell(BOOL bVisible)
     else
     {
         nMergeType = DBMGR_MERGE_MAILFILES;
-        String sPath(aPathED.GetText());
-        pModOpt->SetMailingPath(URIHelper::SmartRelToAbs(sPath));
+        String sPath(URIHelper::SmartRelToAbs(aPathED.GetText()));
+        pModOpt->SetMailingPath(sPath);
         String sDelim(INET_PATH_TOKEN);
 
         if (sPath.Len() >= sDelim.Len() &&
