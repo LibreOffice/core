@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galbrws2.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: ka $ $Date: 2000-12-09 16:33:21 $
+ *  last change: $Author: sj $ $Date: 2001-02-22 11:42:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -737,28 +737,10 @@ String GalleryBrowser2::GetFilterName() const
         {
             GraphicFilter*      pFilter = GetGrfFilter();
             INetURLObject       aURL; mpCurTheme->GetURL( mnCurActionPos, aURL );
-            const String        aExt( aURL.GetExtension() );
-            Config&             rConfig = pFilter->GetConfig();
-            const ByteString    aOldGroup( rConfig.GetGroup() );
-            USHORT              nFilter = GRFILTER_FORMAT_DONTKNOW;
-
-            rConfig.SetGroup( IMP_FILTERSECTION );
-
-            for( USHORT i = 0, nKeyCount = rConfig.GetKeyCount(); i < nKeyCount; i++ )
-            {
-                const String aStr( rConfig.ReadKey( i ).GetToken(2, ',').GetBuffer(), RTL_TEXTENCODING_UTF8 );
-
-                if( aStr.CompareIgnoreCaseToAscii( aExt ) == COMPARE_EQUAL )
-                {
-                    nFilter = i;
-                    break;
-                }
-            }
+            sal_uInt16          nFilter = pFilter->GetImportFormatNumberForShortName( aURL.GetExtension() );
 
             if( GRFILTER_FORMAT_DONTKNOW != nFilter )
                 aFilterName = pFilter->GetImportFormatName( nFilter );
-
-            rConfig.SetGroup( aOldGroup );
         }
     }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impgrf.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: sj $ $Date: 2001-01-25 15:31:53 $
+ *  last change: $Author: sj $ $Date: 2001-02-22 11:41:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -210,25 +210,6 @@ USHORT FillFilter( GraphicFilter& rFilter )
 {
     ResMgr* pMgr = DIALOG_MGR();
     SvtPathOptions aPathOpt;
-    String aModulesPath( aPathOpt.GetModulePath() );
-    String aFullConfigPath;
-
-    for ( xub_StrLen i = 0, nCount = aModulesPath.GetTokenCount(); i < nCount; i++ )
-    {
-        String aToken( aModulesPath.GetToken( i ) );
-        ::rtl::OUString aDest;
-        ::osl::FileBase::normalizePath( aToken, aDest );
-        aDest += ::rtl::OUString( sal_Unicode( '/' ) );
-        aDest += ::rtl::OUString( DEFINE_CONST_UNICODE(IMPGRF_GRAPHIC_FILTER_FILE) );
-
-        if ( aFullConfigPath.Len() )
-            aFullConfigPath += sal_Unicode(';');
-        ::rtl::OUString aNormalizedPath;
-        ::osl::FileBase::getSystemPathFromNormalizedPath( aDest, aNormalizedPath );
-        aFullConfigPath.Append( String( aNormalizedPath ) );
-    }
-    rFilter.SetConfigPath( aFullConfigPath );
-
     String aURL;
     ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aPathOpt.GetFilterPath(), aURL );
     INetURLObject aFilterPathUrl( aURL );
