@@ -5,9 +5,7 @@ TARGET=unxfontspsprintgeneral
 .INCLUDE : settings.mk
 
 ZIP1TARGET      = fontunxpsprint
-ZIP1LIST        = * -x makefile.* -x delzip
-
-
+ZIP1LIST        = psprint.conf
 
 .INCLUDE : target.mk
 
