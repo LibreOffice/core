@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optlingu.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: os $ $Date: 2001-02-08 16:47:32 $
+ *  last change: $Author: os $ $Date: 2001-02-09 10:54:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1491,19 +1491,6 @@ void SvxLinguTabPage::HideGroups( sal_uInt16 nGrp )
     }
 #endif
 }
-/* -----------------------------27.01.00 12:14--------------------------------
-
- ---------------------------------------------------------------------------*/
-void SvxLinguTabPage::EnableAutoSpelling()
-{
-#ifdef NEVER
-    aAutoCheckBtn.Show();
-    aMarkOffBtn.Show();
-    aAutoSpellBox.Show();
-#endif
-}
-
-
 /*--------------------------------------------------
 --------------------------------------------------*/
 
