@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eerdll.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:00:55 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 17:21:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,8 +89,9 @@ public:
 
     ResMgr*         GetResMgr() const       { return pResMgr; }
     GlobalEditData* GetGlobalData() const   { return pGlobalData; }
+    static EditDLL* Get();
 };
 
-#define EE_DLL() (*(EditDLL**)GetAppData( SHL_EDIT ) )
+#define EE_DLL() EditDLL::Get()
 
 #endif //_EERDLL_HXX
