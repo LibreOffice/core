@@ -2,9 +2,9 @@
  *
  *  $RCSfile: evntconf.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 15:38:24 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:48:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,9 +68,6 @@
 #ifndef _SFXLSTNER_HXX //autogen
 #include <svtools/lstner.hxx>
 #endif
-#ifndef _SVSTOR_HXX //autogen
-#include <so3/svstor.hxx>
-#endif
 #ifndef _BASMGR_HXX //autogen
 #include <basic/basmgr.hxx>
 #endif
@@ -84,6 +81,7 @@
 #include <svtools/sbx.hxx>
 #endif
 
+#include <sot/storage.hxx>
 #include <svtools/securityoptions.hxx>
 
 #ifndef GCC
@@ -724,7 +722,7 @@ void SfxEventConfiguration::SetDocEventTable( SfxObjectShell *pDoc,
     if ( pDoc )
     {
         // if CfgMgr does not exist, create it, otherwise ConfigItem will not have a ConfigManager!
-        pDoc->GetConfigManager(TRUE);
+//REMOVE            pDoc->GetConfigManager(TRUE);
         pDocEventConfig = pDoc->GetEventConfig_Impl( TRUE );
         //pDocEventConfig->aMacroTable = rTable;
         //pDocEventConfig->SetDefault(FALSE);
