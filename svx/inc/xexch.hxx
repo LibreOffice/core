@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xexch.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2001-06-22 15:40:10 $
+ *  last change: $Author: ka $ $Date: 2001-07-02 09:58:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,23 +82,16 @@ private:
     XFillAttrSetItem*   pXFillAttrSetItem;
     SfxItemPool*        pPool;
 
-protected:
-    // SvData-Methoden
-    virtual void        Load( SvStream& );
-    virtual void        Save( SvStream& );
-    virtual void        Assign( const SvDataCopyStream& );
-
 public:
-            TYPEINFO();
+                        TYPEINFO();
 
-            XFillExchangeData();
-            XFillExchangeData(const XFillAttrSetItem rXFillAttrSetItem);
-            ~XFillExchangeData();
+                        XFillExchangeData();
+                        XFillExchangeData(const XFillAttrSetItem rXFillAttrSetItem);
+                        ~XFillExchangeData();
 
-            // Zuweisungsoperator
-            XFillExchangeData& operator=( const XFillExchangeData& rXFillExchangeData );
+                        // Zuweisungsoperator
+                        XFillExchangeData& operator=( const XFillExchangeData& rXFillExchangeData );
 
-    // Im-/Export
     friend SvStream&    operator<<( SvStream& rOStm, const XFillExchangeData& rXFillExchangeData );
     friend SvStream&    operator>>( SvStream& rIStm, XFillExchangeData& rXFillExchangeData );
 
@@ -107,4 +100,3 @@ public:
 };
 
 #endif                  // _SVX_XEXCH_HXX
-
