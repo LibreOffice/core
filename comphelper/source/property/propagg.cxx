@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propagg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-22 13:32:35 $
+ *  last change: $Author: fs $ $Date: 2001-05-31 09:33:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -454,10 +454,10 @@ void OPropertySetAggregationHelper::setAggregation(const  ::com::sun::star::uno:
 //------------------------------------------------------------------------------
 void OPropertySetAggregationHelper::startListening()
 {
+    osl::MutexGuard aGuard(rBHelper.rMutex);
+
     if (!m_bListening && m_xAggregateSet.is())
     {
-        osl::MutexGuard aGuard(rBHelper.rMutex);
-
         // als einziger Listener anmelden
          ::com::sun::star::uno::Sequence< ::rtl::OUString > aPropertyNames;
         m_xAggregateMultiSet->addPropertiesChangeListener(aPropertyNames, this);
