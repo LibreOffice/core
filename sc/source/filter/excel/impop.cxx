@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impop.cxx,v $
  *
- *  $Revision: 1.70 $
+ *  $Revision: 1.71 $
  *
- *  last change: $Author: vg $ $Date: 2004-12-23 10:44:44 $
+ *  last change: $Author: kz $ $Date: 2005-01-14 12:01:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -931,12 +931,6 @@ void ImportExcel::Hideobj( void )
 
 void ImportExcel::Bundleheader( void )
 {
-}
-
-
-void ImportExcel::Palette( void )
-{
-    GetPalette().ReadPalette( maStrm );
 }
 
 
