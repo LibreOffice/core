@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.10 $
+#   $Revision: 1.11 $
 #
-#   last change: $Author: hjs $ $Date: 2001-11-21 18:37:54 $
+#   last change: $Author: kz $ $Date: 2003-08-25 14:37:57 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,9 +75,7 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Settings -----------------------------------------------------------
 
-.INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
-.INCLUDE :  sv.mk
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 # --- Allgemein ----------------------------------------------------------
@@ -137,7 +135,8 @@ SVXLIGHTOBJFILES= \
             $(OBJ)$/unolingu.obj
 .ENDIF
 
-SRCFILES=	editeng.src
+SRS1NAME=$(TARGET)
+SRC1FILES=	editeng.src
 
 EXCEPTIONSFILES= \
     $(SLO)$/unolingu.obj
