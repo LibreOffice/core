@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 15:27:56 $
+#   last change: $Author: vg $ $Date: 2003-05-22 09:19:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -57,29 +57,16 @@
 #   Contributor(s): _______________________________________
 #
 #
-#
 #*************************************************************************
 
-PRJ=..$/..$/..$/..$/..$/..
-
+PRJ := ..$/..$/..$/..$/..$/..
 PRJNAME := jurt
+TARGET := test_com_sun_star_lib_util
+
 PACKAGE := com$/sun$/star$/lib$/util
-TARGET  := test_com_sun_star_lib_util
+JAVATESTFILES := \
+    NativeLibraryLoader_Test.java \
+    WeakTable_Test.java
+JARFILES := sandbox.jar
 
-
-# --- Settings -----------------------------------------------------
-.INCLUDE : $(PRJ)$/util$/makefile.pmk
-
-
-# Files --------------------------------------------------------
-
-JARFILES = sandbox.jar 
-
-JAVACLASSFILES= \
-    $(CLASSDIR)$/$(PACKAGE)$/WeakTable_Test.class
-
-
-# --- Targets ------------------------------------------------------
-
-.INCLUDE :  target.mk
-
+.INCLUDE: javaunittest.mk
