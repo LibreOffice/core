@@ -1,4 +1,4 @@
-/* RCS  $Id: rulparse.c,v 1.2 2002-04-10 15:40:39 hjs Exp $
+/* RCS  $Id: rulparse.c,v 1.3 2002-07-11 08:53:30 mh Exp $
 --
 -- SYNOPSIS
 --      Perform semantic analysis on input

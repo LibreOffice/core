@@ -1,4 +1,4 @@
-/* RCS  $Id: extern.h,v 1.2 2001-04-20 14:21:05 mh Exp $
+/* RCS  $Id: extern.h,v 1.3 2002-07-11 08:53:29 mh Exp $
 --
 -- SYNOPSIS
 --      External declarations for dmake functions.

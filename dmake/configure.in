@@ -11,7 +11,6 @@ AC_PREREQ(1.4)
 AM_INIT_AUTOMAKE($PACKAGE, $VERSION, no-define)
 
 dnl Checks for programs.
-#AC_PROG_CXX
 AC_PROG_CC
 AC_PROG_CPP
 AC_PROG_INSTALL
@@ -45,35 +44,27 @@ AC_CHECK_FUNCS(getcwd getwd putenv strcspn strerror strspn strstr)
 
 dnl Checks for OS
 OS_UNAME=`uname`
-case $OS_UNAME in
-	SunOS)
-		OS_VERSION=solaris
-		echo "Solaris found"
-	;;
-	Linux)
-		OS_VERSION=linux
-		echo "Linux found"
-	;;
-	Irix)
-		OS_VERSION=sysvr4
-		echo "Irix found"
-	;;
-	FreeBSD)
-		OS_VERSION=386ix
-		echo "FreeBSD found"
-	;;
-	CYGWIN* | cygwin* | mingw*)
-		OS_VERSION=cygwin
-		echo "cygwin found"
-	;;
-	*)
-		echo "Unknown OS"
-	;;
-esac
+if test ${OS_UNAME} = SunOS; then
+	echo "Solaris found"
+	OS_VERSION=solaris  
+fi
+if test ${OS_UNAME} = Linux; then
+	echo "Linux found"
+	OS_VERSION=linux
+fi
+if test ${OS_UNAME} = Irix; then
+	echo "Irix found"
+	OS_VERSION=sysvr4
+fi
+if test ${OS_UNAME} = Darwin; then
+	echo "Mac OS X found"
+	OS_VERSION=macosx
+fi
 AC_SUBST(OS_VERSION)
 
 AC_OUTPUT(Makefile unix/Makefile startup/Makefile startup/unix/Makefile \
-		startup/unix/linux/Makefile startup/unix/solaris/Makefile dmakeroot.h )
+		startup/unix/linux/Makefile startup/unix/solaris/Makefile \
+		startup/unix/macosx/Makefile dmakeroot.h )
 #AC_OUTPUT(unix/bsd43/Makefile Makefile makefile unix/solaris/Makefile dbug/malloc/makefile unix/Makefile)
 
 dnl ******************************
@@ -108,7 +99,7 @@ _______EOF
 
 if test x$prefix != x; then
        echo '"DMAKEROOT := '$prefix'/share/startup",' >> $outfile
-       echo '"OS := '`uname`'",' >> $outfile
+       echo '"OS := '${OS_VERSION}'",' >> $outfile
 fi
 if cmp -s $outfile dmakeroot.h; then
     echo dmakeroot.h is unchanged
