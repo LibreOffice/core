@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textattr.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:55:30 $
+ *  last change: $Author: hr $ $Date: 2004-05-12 12:14:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,9 @@ private:
     TriStateBox         aTsbAutoGrowHeight;
     TriStateBox         aTsbFitToSize;
     TriStateBox         aTsbContour;
+    TriStateBox         aTsbWordWrapText;
+    TriStateBox         aTsbAutoGrowSize;
+
 
     FixedLine           aFlDistance;
     FixedText           aFtLeft;
@@ -117,6 +120,11 @@ private:
 
     BOOL                bAutoGrowSizeEnabled;
     BOOL                bContourEnabled;
+    BOOL                bAutoGrowWidthEnabled;
+    BOOL                bAutoGrowHeightEnabled;
+    BOOL                bWordWrapTextEnabled;
+    BOOL                bFitToSizeEnabled;
+
 
 #ifdef _SVX_TEXTATTR_CXX
     DECL_LINK( ClickFullWidthHdl_Impl, void * );
