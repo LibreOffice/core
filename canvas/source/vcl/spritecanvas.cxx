@@ -2,9 +2,9 @@
  *
  *  $RCSfile: spritecanvas.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: thb $ $Date: 2004-12-02 12:41:49 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 12:00:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,11 +117,10 @@
 #include "windowgraphicdevice.hxx"
 
 using namespace ::com::sun::star;
-using namespace ::drafts::com::sun::star;
 
 
 #define IMPLEMENTATION_NAME "VCLCanvas::SpriteCanvas"
-#define SERVICE_NAME "drafts.com.sun.star.rendering.VCLCanvas"
+#define SERVICE_NAME "com.sun.star.rendering.VCLCanvas"
 
 namespace
 {
