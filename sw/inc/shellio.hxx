@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shellio.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:38:41 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 08:42:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,13 +88,14 @@
 #endif
 
 // einige Forward - Deklarationen
-class SfxFactoryFilterContainer;
+class SfxFilterContainer;
 class SfxFilter;
 class SfxItemPool;
 class SfxItemSet;
 class SfxMedium;
 class SvPtrarr;
 class SvStorage;
+class SotStorage;
 class SvStorageStreamRef;
 class SvStream;
 class SvStrings;
@@ -667,10 +668,10 @@ class SwIoSystem
 public:
         // suche ueber den Filtertext den Filtereintrag
     static const SfxFilter* GetFilterOfFilterTxt( const String& rFilterNm,
-                                const SfxFactoryFilterContainer* pCnt = 0 );
+                                const SfxFilterContainer* pCnt = 0 );
         // suche ueber den internen FormatNamen den Filtereintrag
     static const SfxFilter* GetFilterOfFormat( const String& rFormat,
-                                const SfxFactoryFilterContainer* pCnt = 0 );
+                                const SfxFilterContainer* pCnt = 0 );
 
     // Feststellen des zu verwendenden Filters fuer die uebergebene
     // Datei. Der Filtername wird zurueckgeliefert. Konnte kein Filter
@@ -684,7 +685,7 @@ public:
     static FASTBOOL IsFileFilter( SfxMedium& rMedium, const String& rFmtName,
                                     const SfxFilter** ppFlt = 0 );
 
-    static FASTBOOL IsValidStgFilter( SvStorage& , const SfxFilter& );
+    static FASTBOOL IsValidStgFilter( SotStorage& , const SfxFilter& );
 
         static bool IsDetectableText(const sal_Char* pBuf, ULONG &rLen,
         CharSet *pCharSet=0, bool *pSwap=0, LineEnd *pLineEnd=0);
