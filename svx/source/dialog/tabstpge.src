@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabstpge.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:18:43 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:40:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,7 +234,7 @@ TabPage RID_SVXPAGE_TABULATOR
         Text[ japanese ] = "ä¸­å¤®æƒãˆ(~E)";
         Text[ chinese_traditional ] = "ç½®ä¸­(~E)";
         Text[ arabic ] = "ÊæÓíØ";
-        Text[ greek ] = "Êåíôñáñéóìİíá";
+        Text[ greek ] = "Êå~íôñáñéóìİíá";
         Text[ korean ] = "ê°€ìš´ë°(~E)";
         Text[ turkish ] = "Or~talanmış";
         Text[ language_user1 ] = " ";
@@ -312,7 +312,7 @@ TabPage RID_SVXPAGE_TABULATOR
         Text[ japanese ] = "è¨˜å·(~C)";
         Text[ chinese_traditional ] = "å­—å…ƒ(~C)";
         Text[ arabic ] = "ÍÑİ";
-        Text[ greek ] = "×áñáêôŞñåò";
+        Text[ greek ] = "~×áñáêôŞñáò";
         Text[ korean ] = "ë¬¸ì ë° ê¸°í˜¸(~C)";
         Text[ turkish ] = "~Karakter";
         Text[ language_user1 ] = " ";
@@ -615,16 +615,16 @@ TabPage RID_SVXPAGE_TABULATOR
         Text[ danish ] = "~Left/Top";
         Text[ swedish ] = "Vänster/uppe";
         Text[ polish ] = "~Left/Top";
-        Text[ japanese ] = "å·¦/ä¸Š";
-        Text[ korean ] = "ì™¼ìª½/ìœ„";
-        Text[ chinese_simplified ] = "å·¦/ä¸Š";
-        Text[ chinese_traditional ] = "å·¦/ä¸Š";
+        Text[ japanese ] = "å·¦/ä¸Š(~L)";
+        Text[ korean ] = "ì™¼ìª½/ìœ„(~L)";
+        Text[ chinese_simplified ] = "å·¦/ä¸Š(~L)";
+        Text[ chinese_traditional ] = "å·¦/ä¸Š(~L)";
         Text[ turkish ] = "~Sol/Üst";
         Text[ arabic ] = "~Left/Top";
         Text[ czech ] = "Vlevo/nahoÅ™e";
         Text[ hebrew ] = "â€®×©×××œ\\×¢×œ×™×•×Ÿâ€¬";
         Text[ catalan ] = "~Left/Top";
-        Text[ portuguese_brazilian ] = "~Left/Top";
+        Text[ portuguese_brazilian ] = "A esquerda / em cima";
         Text[ thai ] = "~Left/Top";
         Text[ hindi ] = "~Left/Top";
         Text[ slovak ] = "~VÄ¾avo/Hore";
@@ -644,16 +644,16 @@ TabPage RID_SVXPAGE_TABULATOR
         Text[ danish ] = "Righ~t/Bottom";
         Text[ swedish ] = "Höger/nere";
         Text[ polish ] = "Righ~t/Bottom";
-        Text[ japanese ] = "å³/ä¸‹";
-        Text[ korean ] = "ì˜¤ë¥¸ìª½/ì•„ë˜";
-        Text[ chinese_simplified ] = "å³/ä¸‹";
-        Text[ chinese_traditional ] = "å³/ä¸‹";
+        Text[ japanese ] = "å³/ä¸‹(~T)";
+        Text[ korean ] = "ì˜¤ë¥¸ìª½/ì•„ë˜(~T)";
+        Text[ chinese_simplified ] = "å³/ä¸‹(~T)";
+        Text[ chinese_traditional ] = "å³/ä¸‹(~T)";
         Text[ turkish ] = "Sağ/~Alt";
         Text[ arabic ] = "Righ~t/Bottom";
         Text[ czech ] = "Vpravo/dole";
         Text[ hebrew ] = "â€®×™××™×Ÿ\\×ª×—×ª×•×Ÿâ€¬";
         Text[ catalan ] = "Righ~t/Bottom";
-        Text[ portuguese_brazilian ] = "Righ~t/Bottom";
+        Text[ portuguese_brazilian ] = "A direita / em baixo";
         Text[ thai ] = "Righ~t/Bottom";
         Text[ hindi ] = "Righ~t/Bottom";
         Text[ slovak ] = "Vp~ravo/Dole";
@@ -676,6 +676,7 @@ TabPage RID_SVXPAGE_TABULATOR
     Text[ slovak ] = "TabulÃ¡tory";
 };
  // ********************************************************************** EOF
+
 
 
 
