@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optlingu.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 05:49:27 $
+ *  last change: $Author: hjs $ $Date: 2001-05-12 06:37:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,7 +135,7 @@ ModalDialog RID_SVXDLG_EDIT_MODULES
         Text[ turkish ] = "Options";
         Text[ arabic ] = "ÇáÎíÇÑÇÊ";
         Text[ catalan ] = "Opciones";
-        Text[ finnish ] = "Optionen";
+        Text[ finnish ] = "Mukauta";
     };
     FixedText FT_EDIT_MODULES_LANGUAGE
     {
@@ -290,7 +290,7 @@ ModalDialog RID_SVXDLG_EDIT_MODULES
         Text[ turkish ] = "Personal dictionaries";
         Text[ arabic ] = "ŞæÇãíÓ ÇáãÓÊÎÏã";
         Text[ catalan ] = "Diccionarios de usuario";
-        Text[ finnish ] = "Benutzerwörterbücher";
+        Text[ finnish ] = "Käyttäjän määrittämät sanastot";
     };
     Control CLB_EDIT_MODULES_DICS
     {
@@ -565,7 +565,7 @@ ModalDialog RID_SVXDLG_LNG_ED_NUM_PREBREAK
         Text[ polish ] = "Znaki przed podzia³em s³owa";
         Text[ portuguese_brazilian ] = "Characters before linebreak";
         Text[ japanese ] = "‰üs‘O‚Éc‚·•¶š”";
-        Text[ korean ] = "Characters before linebreak";
+        Text[ korean ] = "¹®ÀÚ, °³Çà Àü";
         Text[ chinese_simplified ] = "Á¬×ÖºÅÖ®Ç°µÄ×ÖÄ¸";
         Text[ chinese_traditional ] = "³s¦r¸¹¤§«eªº¦r¥À";
         Text[ turkish ] = "Characters before linebreak";
@@ -590,7 +590,7 @@ ModalDialog RID_SVXDLG_LNG_ED_NUM_PREBREAK
         Text[ polish ] = "Znaki za podzia³em s³owa";
         Text[ portuguese_brazilian ] = "Characters after linebreak";
         Text[ japanese ] = "‰üsŒã‚É‹ó‚¯‚é•¶š”";
-        Text[ korean ] = "Characters after linebreak";
+        Text[ korean ] = "¹®ÀÚ, °³Çà ÈÄ";
         Text[ chinese_simplified ] = "Á¬×ÖºÅÖ®ºóµÄ×ÖÄ¸";
         Text[ chinese_traditional ] = "³s¦r¸¹¤§«áªº¦r¥À";
         Text[ turkish ] = "Characters after linebreak";
@@ -615,7 +615,7 @@ ModalDialog RID_SVXDLG_LNG_ED_NUM_PREBREAK
         Text[ polish ] = "Minimalna d³ugoœæ s³owa";
         Text[ portuguese_brazilian ] = "Minimal wordlength";
         Text[ japanese ] = "Å’á•¶š”";
-        Text[ korean ] = "Minimal wordlength";
+        Text[ korean ] = "ÃÖ¼Ò ´Ü¾î ±æÀÌ";
         Text[ chinese_simplified ] = "×î¶ÌµÄ×Ö´Ê";
         Text[ chinese_traditional ] = "³Ìµuªº¦rµü";
         Text[ turkish ] = "Minimal wordlength";
@@ -660,7 +660,7 @@ TabPage RID_SFXPAGE_LINGU
         Text[ turkish ] = "Linguistic";
         Text[ arabic ] = "ÅÚÏÇÏ ÇááÛÉ";
         Text[ catalan ] = "Linguística";
-        Text[ finnish ] = "Linguistik";
+        Text[ finnish ] = "Kirjoituksen aputyökalut";
     };
     FixedText FT_LINGU_MODULES
     {
@@ -1006,7 +1006,7 @@ TabPage RID_SFXPAGE_LINGU
         Text[ polish ] = "Minimalna d³ugoœæ wyrazów do dzielenia:";
         Text[ portuguese_brazilian ] = "Minimal wordlength for hyphenation: ";
         Text[ japanese ] = "Ê²Ìİ‚ğ‚Â‚¯‚é‘O‚ÌÅ’á•¶š”: ";
-        Text[ korean ] = "Minimal wordlength for hyphenation: ";
+        Text[ korean ] = "ÇÏÀÌÇÂ ºĞ¸®¿¡ ´ëÇÑ ÃÖ¼Ò ´Ü¾î ±æÀÌ: ";
         Text[ chinese_simplified ] = "ÓÃÓÚÁ¬×Ö·ûµÄ×î¶ÌµÄ×Ö´Ê³¤¶È£º";
         Text[ chinese_traditional ] = "¥Î©ó³s¦r²Åªº³Ìµuªº¦rµüªø«×¡G";
         Text[ turkish ] = "Minimal wordlength for hyphenation: ";
@@ -1031,7 +1031,7 @@ TabPage RID_SFXPAGE_LINGU
         Text[ polish ] = "Znaki przed podzia³em wiersza:";
         Text[ portuguese_brazilian ] = "Characters before hyphenation";
         Text[ japanese ] = "‰üs‘O•¶š”: ";
-        Text[ korean ] = "ÇÏÀÌÇÂ ¾Õ ¹®ÀÚ";
+        Text[ korean ] = "°³Çà ¾Õ ¹®ÀÚ";
         Text[ chinese_simplified ] = "Á¬×Ö·ûÖ®Ç°µÄ×Ö·û£º";
         Text[ chinese_traditional ] = "³s¦r²Å¤§«eªº¦r¤¸¡G";
         Text[ turkish ] = "Characters before hyphenation";
@@ -1056,7 +1056,7 @@ TabPage RID_SFXPAGE_LINGU
         Text[ polish ] = "Znaki za podzia³em wiersza:";
         Text[ portuguese_brazilian ] = "Characters behind hyphenation";
         Text[ japanese ] = "‰üsŒã•¶š”: ";
-        Text[ korean ] = "ÇÏÀÌÇÂ ´ÙÀ½  ¹®ÀÚ";
+        Text[ korean ] = "°³Çà ´ÙÀ½  ¹®ÀÚ";
         Text[ chinese_simplified ] = "Á¬×Ö·ûºÅÖ®ºóµÄ×Ö·û£º";
         Text[ chinese_traditional ] = "³s¦r²Å¤§«áªº¦r¤¸¡G";
         Text[ turkish ] = "Characters behind hyphenation";
