@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmduicollector.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 15:35:15 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 16:48:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,10 @@
 #include <tools/isolang.hxx>
 //#include <vcl/rc.hxx>
 #include <vcl/menu.hxx>
+#include <vcl/toolbox.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/wrkwin.hxx>
+#include <vcl/floatwin.hxx>
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
@@ -107,6 +110,128 @@ const unsigned short MENUBAR_DBACCESS_TABLE     = 19210;
 const unsigned short MENUBAR_DBACCESS_QUERY     = 19211;
 const unsigned short MENUBAR_DBACCESS_RELATION  = 19212;
 
+// Toolbars
+const unsigned short TOOLBAR_functionbar                = 560;
+const unsigned short TOOLBAR_fullscreenbar              = 558;
+const unsigned short TOOLBAR_macrobar                   = 14850;
+const unsigned short TOOLBAR_formsnavigationbar         = 18003;
+const unsigned short TOOLBAR_formsfilterbar             = 18004;
+const unsigned short TOOLBAR_mathtoolbar                = 20050;
+//const unsigned short TOOLBAR_chartobjectbar             = 30001;
+const unsigned short TOOLBAR_charttoolbar               = 30513;
+const unsigned short TOOLBAR_calctextobjectbar          = 25005;
+const unsigned short TOOLBAR_calcformsobjectbar         = 25047;
+const unsigned short TOOLBAR_calcdrawobjectbar          = 25053;
+const unsigned short TOOLBAR_calcgrapicobjectbar        = 25054;
+const unsigned short TOOLBAR_calcformatobjectbar        = 25001;
+const unsigned short TOOLBAR_calcpreviewbar             = 25006;
+const unsigned short TOOLBAR_calctoolbar                = 25035;
+const unsigned short TOOLBAR_drawbezierobjectbar        = 23015;
+const unsigned short TOOLBAR_drawgluepointsobjectbar    = 23019;
+const unsigned short TOOLBAR_impressgraphicobjectbar    = 23030;
+const unsigned short TOOLBAR_drawdrawingobjectbar       = 23013;
+const unsigned short TOOLBAR_impresstextobjectbar       = 23016;
+const unsigned short TOOLBAR_drawtextobjectbar          = 23028;
+const unsigned short TOOLBAR_impresstoolbar             = 23011;
+const unsigned short TOOLBAR_impressoptionsbar          = 23020;
+const unsigned short TOOLBAR_impresscommontaskbar       = 23021;
+const unsigned short TOOLBAR_drawtoolbar                = 23025;
+const unsigned short TOOLBAR_drawoptionsbar             = 23026;
+const unsigned short TOOLBAR_drawgraphicobjectbar       = 23027;
+const unsigned short TOOLBAR_impressoutlinetoolbar      = 23017;
+const unsigned short TOOLBAR_impressslideviewtoolbar    = 23012;
+const unsigned short TOOLBAR_impressslideviewobjectbar  = 23014;
+const unsigned short TOOLBAR_writerbezierobjectbar      = 23283;
+const unsigned short TOOLBAR_writerdrawingobjectbar     = 23269;
+const unsigned short TOOLBAR_writerformsobjectbar       = 23299;
+const unsigned short TOOLBAR_writerdrawtextobjectbar    = 23270;
+const unsigned short TOOLBAR_writerframeobjectbar       = 23267;
+const unsigned short TOOLBAR_writergraphicobjectbar     = 23268;
+const unsigned short TOOLBAR_writernumobjectbar         = 23271;
+const unsigned short TOOLBAR_writeroleobjectbar         = 23272;
+const unsigned short TOOLBAR_writertableobjectbar       = 23266;
+const unsigned short TOOLBAR_writertextobjectbar        = 23265;
+const unsigned short TOOLBAR_writerpreviewobjectbar     = 20631;
+//const unsigned short TOOLBAR_websourceviewobjectbar     = 23282;
+//const unsigned short TOOLBAR_websourceviewtoolbar       = 20412;
+const unsigned short TOOLBAR_webtextobjectbar           = 20403;
+const unsigned short TOOLBAR_writertoolbar              = 23273;
+const unsigned short TOOLBAR_webframeobjectbar          = 20408;
+const unsigned short TOOLBAR_webgraphicobjectbar        = 20410;
+const unsigned short TOOLBAR_weboleobjectbar            = 20411;
+const unsigned short TOOLBAR_webtoolbar                 = 20402;
+//const unsigned short TOOLBAR_BRW_TAB_TOOLBOX            = 19200;
+const unsigned short TOOLBAR_BRW_QRY_TOOLBOX            = 19201;
+//const unsigned short TOOLBAR_QRY_TOOLBOX_SQL            = 19202;
+const unsigned short TOOLBAR_BRW_QUERYDESIGN_TOOLBOX    = 19203;
+const unsigned short TOOLBAR_BRW_REALTIONDESIGN_TOOLBOX = 19204;
+const unsigned short TOOLBAR_fontworkobjectbar          = 10987;
+const unsigned short TOOLBAR_extrusionobjectbar         = 10986;
+
+// Sub-Toolbars
+const unsigned short RID_LIB_START                      = 10000;
+const unsigned short RID_APP_START                      = 20000;
+
+// Draw/Impress
+const unsigned short SUBTOOLBAR_DRAWIMPRESS_RID_ALIGNMENT       = RID_APP_START+1;
+const unsigned short SUBTOOLBAR_DRAWIMPRESS_RID_ALIGNMENT_TBX   = RID_APP_START+5;
+const unsigned short SUBTOOLBAR_DRAWIMPRESS_RID_ZOOM            = RID_APP_START+2;
+const unsigned short SUBTOOLBAR_DRAWIMPRESS_RID_ZOOM_TBX        = RID_APP_START+6;
+const unsigned short SUBTOOLBAR_DRAWIMPRESS_CHOOSE_MODE         = RID_APP_START+7;
+const unsigned short SUBTOOLBAR_DRAWIMPRESS_CHOOSE_MODE_TBX     = RID_APP_START+8;
+const unsigned short SUBTOOLBAR_DRAWIMPRESS_RID_TEXT            = RID_APP_START+10;
+const unsigned short SUBTOOLBAR_DRAWIMPRESS_RID_TEXT_TBX        = RID_APP_START+11;
+const unsigned short SUBTOOLBAR_DRAWIMPRESS_RID_RECTANGLES      = RID_APP_START+12;
+const unsigned short SUBTOOLBAR_DRAWIMPRESS_RID_RECTANGLES_TBX  = RID_APP_START+13;
+const unsigned short SUBTOOLBAR_DRAWIMPRESS_RID_ELLIPSES        = RID_APP_START+14;
+const unsigned short SUBTOOLBAR_DRAWIMPRESS_RID_ELLIPSES_TBX    = RID_APP_START+15;
+const unsigned short SUBTOOLBAR_DRAWIMPRESS_RID_LINES           = RID_APP_START+16;
+const unsigned short SUBTOOLBAR_DRAWIMPRESS_RID_LINES_TBX       = RID_APP_START+17;
+const unsigned short SUBTOOLBAR_DRAWIMPRESS_RID_3D_OBJECTS      = RID_APP_START+18;
+const unsigned short SUBTOOLBAR_DRAWIMPRESS_RID_3D_OBJECTS_TBX  = RID_APP_START+19;
+const unsigned short SUBTOOLBAR_DRAWIMPRESS_RID_INSERT          = RID_APP_START+20;
+const unsigned short SUBTOOLBAR_DRAWIMPRESS_RID_INSERT_TBX      = RID_APP_START+21;
+const unsigned short SUBTOOLBAR_DRAWIMPRESS_RID_POSITION        = RID_APP_START+22;
+const unsigned short SUBTOOLBAR_DRAWIMPRESS_RID_POSITION_TBX    = RID_APP_START+23;
+const unsigned short SUBTOOLBAR_DRAWIMPRESS_RID_CONNECTORS      = RID_APP_START+24;
+const unsigned short SUBTOOLBAR_DRAWIMPRESS_RID_CONNECTORS_TBX  = RID_APP_START+25;
+const unsigned short SUBTOOLBAR_DRAWIMPRESS_RID_ARROWS          = RID_APP_START+26;
+const unsigned short SUBTOOLBAR_DRAWIMPRESS_RID_ARROWS_TBX      = RID_APP_START+27;
+const unsigned short SUBTOOLBAR_DRAWIMPRESS_RID_GRAFFILTERS     = RID_APP_START+29;
+const unsigned short SUBTOOLBAR_DRAWIMPRESS_RID_GRAFFILTERS_TBX = RID_APP_START+30;
+
+//Writer
+const unsigned short RID_SW_START = 20000;
+const unsigned short RC_BASE   = RID_SW_START;
+const unsigned short RC_RIBBAR = (RC_BASE + 720);
+const unsigned short RC_RIBBAR_BEGIN = RC_RIBBAR;
+const unsigned short SUBTOOLBAR_WRITER_RID_INSERT_CTRL          = (RC_RIBBAR_BEGIN + 24);
+const unsigned short SUBTOOLBAR_WRITER_TBX_INSERT               = 1;
+const unsigned short SUBTOOLBAR_WRITER_RID_INSERT_OBJ_CTRL      = (RC_RIBBAR_BEGIN + 25);
+const unsigned short SUBTOOLBAR_WRITER_TBX_OBJ_INSERT           = 2;
+const unsigned short SUBTOOLBAR_WRITER_RID_TBL_OPT_CTRL         = (RC_RIBBAR_BEGIN + 27);
+const unsigned short SUBTOOLBAR_WRITER_TBX_OPTIMIZE_TABLE       = 1;
+
+//Calc
+const unsigned short SC_RESOURCE_START                          = (RID_APP_START+5000);
+const unsigned short SUBTOOLBAR_CALC_RID_TBXCTL_INSERT          = (SC_RESOURCE_START+38);
+const unsigned short SUBTOOLBAR_CALC_RID_TOOLBOX_INSERT         = 1;
+const unsigned short SUBTOOLBAR_CALC_RID_TBXCTL_INSCELLS        = (SC_RESOURCE_START+39);
+const unsigned short SUBTOOLBAR_CALC_RID_TOOLBOX_INSCELLS       = 2;
+const unsigned short SUBTOOLBAR_CALC_RID_TBXCTL_INSOBJ          = (SC_RESOURCE_START+40);
+const unsigned short SUBTOOLBAR_CALC_RID_TOOLBOX_INSOBJ         = 3;
+
+//Basic
+const unsigned short RID_BASICIDE_START                         = (RID_LIB_START+4850);
+const unsigned short SUBTOOLBAR_BASIC_RID_TBXCONTROLS           = ( RID_BASICIDE_START + 65 );
+const unsigned short SUBTOOLBAR_BASIC_RID_TOOLBOX               = ( RID_BASICIDE_START + 66 );
+
+//Global
+const unsigned short RID_SVX_START                              = (RID_LIB_START);
+const unsigned short SUBTOOLBAR_GLOBAL_RID_SVXTBX_DRAW          = (RID_SVX_START + 189);
+const unsigned short SUBTOOLBAR_GLOBAL_TBX_DRAW                 = 1;
+const unsigned short SUBTOOLBAR_GLOBAL_RID_SVXTBX_ALIGNMENT     = (RID_SVX_START + 190);
+const unsigned short SUBTOOLBAR_GLOBAL_TBX_ALIGNMENT            = 10131; // SID_OBJECT_ALIGN_LEFT
 
 struct ISO_code
 {
@@ -114,8 +239,8 @@ struct ISO_code
     const char* pCountry;
 };
 
-const int NUM_LANGUAGES = 27;
-//const int NUM_LANGUAGES = 2;
+//const int NUM_LANGUAGES = 27;
+const int NUM_LANGUAGES = 1;
 
 ISO_code Language_codes[] =
 {
@@ -164,6 +289,30 @@ enum MODULES
     MODULE_COUNT
 };
 
+enum SUBMODULES
+{
+    SUBMODULE_GLOBAL       = 1,
+    SUBMODULE_WRITER       = 2,
+    SUBMODULE_WRITERWEB    = 4,
+    SUBMODULE_WRITERGLOBAL = 8,
+    SUBMODULE_CALC         = 16,
+    SUBMODULE_DRAW         = 32,
+    SUBMODULE_IMPRESSS     = 64,
+    SUBMODULE_CHART        = 128,
+    SUBMODULE_MATH         = 256,
+    SUBMODULE_BASIC        = 512,
+    SUBMODULE_BIBLIO       = 1024,
+    SUBMODULE_BACKINGCOMP  = 2048,
+    SUBMODULE_DB_TABLE     = 4096,
+    SUBMODULE_DB_QUERY     = 8192,
+    SUBMODULE_DB_RELATION  = 16384
+};
+
+enum PARENT_RESTYPES
+{
+    PARENT_RESTYPE_FLOATINGWINDOW
+};
+
 struct Projects
 {
     const char* pProjectFolder;
@@ -177,7 +326,7 @@ Projects ProjectModule_Mapping[] =
 {
     { "sfx2"        , "sfx",    "sfx2",     true,   MODULE_GLOBAL         },
     { "svx"         , "svx",    "svx",      true,   MODULE_GLOBAL         },
-    { "offmgr"      , "ofa",    "ofa",      true,   MODULE_GLOBAL         },
+    { "svx"         , "ofa",    "ofa",      true,   MODULE_GLOBAL         },
     { "sw"          , "sw",     "sw",       true,   MODULE_WRITER         },
     { "sd"          , "sd",     "sd",       true,   MODULE_DRAWIMPRESS    },
     { "sc"          , "sc",     "sc",       true,   MODULE_CALC           },
@@ -207,14 +356,25 @@ const char* ModuleToXML_Mapping[] =
     0
 };
 
-struct MenuResourceToModule
+struct ResourceToModule
 {
     unsigned short nResId;
     const char*    pXMLPrefix;
     MODULES        eBelongsTo;
+    bool           bWritten;
 };
 
-MenuResourceToModule ResourceModule_Mapping[] =
+struct SubResourceToModule
+{
+    unsigned short  nParentResId;
+    PARENT_RESTYPES eParentResType;
+    unsigned short  nResId;
+    const char*     pXMLPrefix;
+    MODULES         eBelongsTo;
+    bool            bWritten;
+};
+
+ResourceToModule ResourceModule_Mapping[] =
 {
     { MENUBAR_GLOBAL,           "default",      MODULE_GLOBAL       },  // important: To prevent duplicate popup menu entries make sure this is the first entry!!
     { MENUBAR_BASIC,            "basic",        MODULE_BASIC        },
@@ -234,6 +394,94 @@ MenuResourceToModule ResourceModule_Mapping[] =
     { 0,                        "",             MODULE_DBACCESS     }
 };
 
+ResourceToModule TBResourceModule_Mapping[] =
+{
+    { TOOLBAR_functionbar                   ,"standardbar",                 MODULE_GLOBAL        , false        },
+    { TOOLBAR_fullscreenbar                 ,"fullscreenbar",               MODULE_GLOBAL        , false        },
+    { TOOLBAR_macrobar                      ,"macrobar",                    MODULE_BASIC         , false        },
+    { TOOLBAR_formsnavigationbar            ,"formsnavigationbar",          MODULE_GLOBAL        , false        },
+    { TOOLBAR_formsfilterbar                ,"formsfilterbar",              MODULE_GLOBAL        , false        },
+    { TOOLBAR_fontworkobjectbar             ,"fontworkobjectbar",           MODULE_GLOBAL        , false        },
+    { TOOLBAR_extrusionobjectbar            ,"extrusionobjectbar",          MODULE_GLOBAL        , false        },
+    { TOOLBAR_mathtoolbar                   ,"mathtoolbar",                 MODULE_MATH          , false        },
+//    { TOOLBAR_chartobjectbar                ,"chartobjectbar",              MODULE_CHART         , false        },
+    { TOOLBAR_charttoolbar                  ,"charttoolbar",                MODULE_CHART         , false        },
+    { TOOLBAR_calctextobjectbar             ,"calctextobjectbar",           MODULE_CALC          , false        },
+    { TOOLBAR_calcformsobjectbar            ,"calcformsobjectbar",          MODULE_CALC          , false        },
+    { TOOLBAR_calcdrawobjectbar             ,"calcdrawobjectbar",           MODULE_CALC          , false        },
+    { TOOLBAR_calcgrapicobjectbar           ,"calcgrapicobjectbar",         MODULE_CALC          , false        },
+    { TOOLBAR_calcformatobjectbar           ,"calcformatobjectbar",         MODULE_CALC          , false        },
+    { TOOLBAR_calcpreviewbar                ,"calcpreviewbar",              MODULE_CALC          , false        },
+    { TOOLBAR_calctoolbar                   ,"calctoolbar",                 MODULE_CALC          , false        },
+    { TOOLBAR_drawbezierobjectbar           ,"drawbezierobjectbar",         MODULE_DRAWIMPRESS   , false        },
+    { TOOLBAR_drawgluepointsobjectbar       ,"drawgluepointsobjectbar",     MODULE_DRAWIMPRESS   , false        },
+    { TOOLBAR_impressgraphicobjectbar       ,"impressgraphicobjectbar",     MODULE_DRAWIMPRESS   , false        },
+    { TOOLBAR_drawdrawingobjectbar          ,"drawdrawingobjectbar",        MODULE_DRAWIMPRESS   , false        },
+    { TOOLBAR_impresstextobjectbar          ,"impresstextobjectbar",        MODULE_DRAWIMPRESS   , false        },
+    { TOOLBAR_drawtextobjectbar             ,"drawtextobjectbar",           MODULE_DRAWIMPRESS   , false        },
+    { TOOLBAR_impresstoolbar                ,"impresstoolbar",              MODULE_DRAWIMPRESS   , false        },
+    { TOOLBAR_impressoptionsbar             ,"impressoptionsbar",           MODULE_DRAWIMPRESS   , false        },
+    { TOOLBAR_impresscommontaskbar          ,"impresscommontaskbar",        MODULE_DRAWIMPRESS   , false        },
+    { TOOLBAR_drawtoolbar                   ,"drawtoolbar",                 MODULE_DRAWIMPRESS   , false        },
+    { TOOLBAR_drawoptionsbar                ,"drawoptionsbar",              MODULE_DRAWIMPRESS   , false        },
+    { TOOLBAR_drawgraphicobjectbar          ,"drawgraphicobjectbar",        MODULE_DRAWIMPRESS   , false        },
+    { TOOLBAR_impressoutlinetoolbar         ,"impressoutlinetoolbar",       MODULE_DRAWIMPRESS   , false        },
+    { TOOLBAR_impressslideviewtoolbar       ,"impressslideviewtoolbar",     MODULE_DRAWIMPRESS   , false        },
+    { TOOLBAR_impressslideviewobjectbar     ,"impressslideviewobjectbar",   MODULE_DRAWIMPRESS   , false        },
+    { TOOLBAR_writerbezierobjectbar         ,"writerbezierobjectbar",       MODULE_WRITER        , false        },
+    { TOOLBAR_writerdrawingobjectbar        ,"writerdrawingobjectbar",      MODULE_WRITER        , false        },
+    { TOOLBAR_writerformsobjectbar          ,"writerformsobjectbar",        MODULE_WRITER        , false        },
+    { TOOLBAR_writerdrawtextobjectbar       ,"writerdrawtextobjectbar",     MODULE_WRITER        , false        },
+    { TOOLBAR_writerframeobjectbar          ,"writerframeobjectbar",        MODULE_WRITER        , false        },
+    { TOOLBAR_writergraphicobjectbar        ,"writergraphicobjectbar",      MODULE_WRITER        , false        },
+    { TOOLBAR_writernumobjectbar            ,"writernumobjectbar",          MODULE_WRITER        , false        },
+    { TOOLBAR_writeroleobjectbar            ,"writeroleobjectbar",          MODULE_WRITER        , false        },
+    { TOOLBAR_writertableobjectbar          ,"writertableobjectbar",        MODULE_WRITER        , false        },
+    { TOOLBAR_writertextobjectbar           ,"writertextobjectbar",         MODULE_WRITER        , false        },
+    { TOOLBAR_writerpreviewobjectbar        ,"writerpreviewobjectbar",      MODULE_WRITER        , false        },
+//    { TOOLBAR_websourceviewobjectbar        ,"websourceviewobjectbar",      MODULE_WRITER        , false        },
+//    { TOOLBAR_websourceviewtoolbar          ,"websourceviewtoolbar",        MODULE_WRITER        , false        },
+    { TOOLBAR_webtextobjectbar              ,"webtextobjectbar",            MODULE_WRITER        , false        },
+    { TOOLBAR_writertoolbar                 ,"writertoolbar",               MODULE_WRITER        , false        },
+    { TOOLBAR_webframeobjectbar             ,"webframeobjectbar",           MODULE_WRITER        , false        },
+    { TOOLBAR_webgraphicobjectbar           ,"webgraphicobjectbar",         MODULE_WRITER        , false        },
+    { TOOLBAR_weboleobjectbar               ,"weboleobjectbar",             MODULE_WRITER        , false        },
+    { TOOLBAR_webtoolbar                    ,"webtoolbar",                  MODULE_WRITER        , false        },
+//    { TOOLBAR_BRW_TAB_TOOLBOX               ,"dbtablebrowsebar",            MODULE_DBACCESS      , false        },
+    { TOOLBAR_BRW_QRY_TOOLBOX               ,"dbquerybrowsebar",            MODULE_DBACCESS      , false        },
+//    { TOOLBAR_QRY_TOOLBOX_SQL               ,"dbquerysqlbar",               MODULE_DBACCESS      , false        },
+    { TOOLBAR_BRW_QUERYDESIGN_TOOLBOX       ,"dbquerydesignbar",            MODULE_DBACCESS      , false        },
+    { TOOLBAR_BRW_REALTIONDESIGN_TOOLBOX    ,"dbrelationbrowsebar",         MODULE_DBACCESS      , false        },
+    { 0                                     ,"",                            MODULE_GLOBAL        , false        }
+};
+
+struct SubResourceToModule TBSubResourceModule_Mapping[] =
+{
+    { SUBTOOLBAR_DRAWIMPRESS_RID_ALIGNMENT,   PARENT_RESTYPE_FLOATINGWINDOW, SUBTOOLBAR_DRAWIMPRESS_RID_ALIGNMENT_TBX     , "drawimpressalignmentbar"   ,   MODULE_DRAWIMPRESS  , false },
+    { SUBTOOLBAR_DRAWIMPRESS_RID_ZOOM,        PARENT_RESTYPE_FLOATINGWINDOW, SUBTOOLBAR_DRAWIMPRESS_RID_ZOOM_TBX          , "drawimpresszoombar"        ,   MODULE_DRAWIMPRESS  , false },
+    { SUBTOOLBAR_DRAWIMPRESS_CHOOSE_MODE,     PARENT_RESTYPE_FLOATINGWINDOW, SUBTOOLBAR_DRAWIMPRESS_CHOOSE_MODE_TBX       , "drawimpresschoosemodebar"  ,   MODULE_DRAWIMPRESS  , false },
+    { SUBTOOLBAR_DRAWIMPRESS_RID_TEXT,        PARENT_RESTYPE_FLOATINGWINDOW, SUBTOOLBAR_DRAWIMPRESS_RID_TEXT_TBX          , "drawimpresstextbar"        ,   MODULE_DRAWIMPRESS  , false },
+    { SUBTOOLBAR_DRAWIMPRESS_RID_RECTANGLES,  PARENT_RESTYPE_FLOATINGWINDOW, SUBTOOLBAR_DRAWIMPRESS_RID_RECTANGLES_TBX    , "drawimpressrectanglebar"   ,   MODULE_DRAWIMPRESS  , false },
+    { SUBTOOLBAR_DRAWIMPRESS_RID_ELLIPSES,    PARENT_RESTYPE_FLOATINGWINDOW, SUBTOOLBAR_DRAWIMPRESS_RID_ELLIPSES_TBX      , "drawimpressellipsesbar"    ,   MODULE_DRAWIMPRESS  , false },
+    { SUBTOOLBAR_DRAWIMPRESS_RID_LINES,       PARENT_RESTYPE_FLOATINGWINDOW, SUBTOOLBAR_DRAWIMPRESS_RID_LINES_TBX         , "drawimpresslinesbar"       ,   MODULE_DRAWIMPRESS  , false },
+    { SUBTOOLBAR_DRAWIMPRESS_RID_3D_OBJECTS,  PARENT_RESTYPE_FLOATINGWINDOW, SUBTOOLBAR_DRAWIMPRESS_RID_3D_OBJECTS_TBX    , "drawimpress3dobjectsbar"   ,   MODULE_DRAWIMPRESS  , false },
+    { SUBTOOLBAR_DRAWIMPRESS_RID_INSERT,      PARENT_RESTYPE_FLOATINGWINDOW, SUBTOOLBAR_DRAWIMPRESS_RID_INSERT_TBX        , "drawimpressinsertbar"      ,   MODULE_DRAWIMPRESS  , false },
+    { SUBTOOLBAR_DRAWIMPRESS_RID_POSITION,    PARENT_RESTYPE_FLOATINGWINDOW, SUBTOOLBAR_DRAWIMPRESS_RID_POSITION_TBX      , "drawimpresspositionbar"    ,   MODULE_DRAWIMPRESS  , false },
+    { SUBTOOLBAR_DRAWIMPRESS_RID_CONNECTORS,  PARENT_RESTYPE_FLOATINGWINDOW, SUBTOOLBAR_DRAWIMPRESS_RID_CONNECTORS_TBX    , "drawimpressconnectorsbar"  ,   MODULE_DRAWIMPRESS  , false },
+    { SUBTOOLBAR_DRAWIMPRESS_RID_ARROWS,      PARENT_RESTYPE_FLOATINGWINDOW, SUBTOOLBAR_DRAWIMPRESS_RID_ARROWS_TBX        , "drawimpressarrowsbar"      ,   MODULE_DRAWIMPRESS  , false },
+//    { SUBTOOLBAR_DRAWIMPRESS_RID_GRAFFILTERS, PARENT_RESTYPE_FLOATINGWINDOW, SUBTOOLBAR_DRAWIMPRESS_RID_GRAFFILTERS_TBX   , "drawimpressgraffiltersbar" ,   MODULE_DRAWIMPRESS, false },
+    { SUBTOOLBAR_WRITER_RID_INSERT_CTRL     , PARENT_RESTYPE_FLOATINGWINDOW, SUBTOOLBAR_WRITER_TBX_INSERT                 , "writerinsertbar"           ,   MODULE_WRITER       , false },
+    { SUBTOOLBAR_WRITER_RID_INSERT_OBJ_CTRL , PARENT_RESTYPE_FLOATINGWINDOW, SUBTOOLBAR_WRITER_TBX_OBJ_INSERT             , "writerinsertobjectbar"     ,   MODULE_WRITER       , false },
+    { SUBTOOLBAR_WRITER_RID_TBL_OPT_CTRL    , PARENT_RESTYPE_FLOATINGWINDOW, SUBTOOLBAR_WRITER_TBX_OPTIMIZE_TABLE         , "writeroptimizetablebar"    ,   MODULE_WRITER       , false },
+    { SUBTOOLBAR_GLOBAL_RID_SVXTBX_DRAW     , PARENT_RESTYPE_FLOATINGWINDOW, SUBTOOLBAR_GLOBAL_TBX_DRAW                   , "genericdrawbar"            ,   MODULE_GLOBAL       , false },
+    { SUBTOOLBAR_GLOBAL_RID_SVXTBX_ALIGNMENT, PARENT_RESTYPE_FLOATINGWINDOW, SUBTOOLBAR_GLOBAL_TBX_ALIGNMENT              , "genericalignmentbar"       ,   MODULE_GLOBAL       , false },
+    { SUBTOOLBAR_CALC_RID_TBXCTL_INSERT     , PARENT_RESTYPE_FLOATINGWINDOW, SUBTOOLBAR_CALC_RID_TOOLBOX_INSERT           , "calcinsertbar"             ,   MODULE_CALC         , false },
+    { SUBTOOLBAR_CALC_RID_TBXCTL_INSCELLS   , PARENT_RESTYPE_FLOATINGWINDOW, SUBTOOLBAR_CALC_RID_TOOLBOX_INSCELLS         , "calcinsertcellsbar"        ,   MODULE_CALC         , false },
+    { SUBTOOLBAR_CALC_RID_TBXCTL_INSOBJ     , PARENT_RESTYPE_FLOATINGWINDOW, SUBTOOLBAR_CALC_RID_TOOLBOX_INSOBJ           , "calcinsertobjectbar"       ,   MODULE_CALC         , false },
+    { SUBTOOLBAR_BASIC_RID_TBXCONTROLS      , PARENT_RESTYPE_FLOATINGWINDOW, SUBTOOLBAR_BASIC_RID_TOOLBOX                 , "basicinsertcontrolsbar"    ,   MODULE_BASIC        , false },
+    { 0,                                      PARENT_RESTYPE_FLOATINGWINDOW, 0                                            , ""                          ,   MODULE_GLOBAL       , false }
+};
+
 struct CommandLabels
 {
     unsigned short  nID;
@@ -242,12 +490,29 @@ struct CommandLabels
     rtl::OUString   aCommand;
     unsigned long   nModules;
     rtl::OUString   aLabels[NUM_LANGUAGES];
+    unsigned long   nProperties;
 
     CommandLabels() :
     nID( 0 ),
     bWritten( false ),
     bPopupMenu( false ),
-    nModules( 0 ) {}
+    nModules( 0 ),
+    nProperties( 0 )
+
+    {}
+};
+
+struct ToolBarInfo
+{
+    unsigned short nID;
+    bool           bWritten;
+    unsigned long  nModules; // Which sub modules need this toolbar
+    rtl::OUString  aUIName[NUM_LANGUAGES];
+
+    ToolBarInfo() :
+        nID( 0 ),
+        bWritten( false ),
+        nModules( 0 ) {}
 };
 
 struct OUStringHashCode
@@ -260,9 +525,10 @@ struct OUStringHashCode
 
 typedef std::hash_map< int, CommandLabels > CommandIDToLabelsMap;
 typedef std::hash_map< OUString, CommandLabels, OUStringHashCode, ::std::equal_to< OUString > > CommandToLabelsMap;
+typedef std::hash_map< int, ToolBarInfo > ResIdToToolBarInfoMap;
 
-static CommandIDToLabelsMap moduleMapFiles[MODULE_COUNT];
-static CommandToLabelsMap   modulePopupMenusCmd[MODULE_COUNT];
+static CommandIDToLabelsMap     moduleMapFiles[MODULE_COUNT];
+static CommandToLabelsMap       modulePopupMenusCmd[MODULE_COUNT];
 
 bool ExtractVersionNumber( const OUString& rVersion, OUString& rVersionNumber )
 {
@@ -308,15 +574,19 @@ bool ReadCSVFile( const OUString& aCVSFileURL, MODULES eModule, const OUString& 
             OString     aToolbarState;
             OString     aCmdName;
             OString     aSlotName;
+            OString     aImageRotationState;
+            OString     aImageReflectionState;
 
             sal_Int32 nIndex = 0;
-            aID              = aLine.getToken( 2, ',', nIndex );
-            aAccelState      = aLine.getToken( 2, ',', nIndex );
-            aMenuState       = aLine.getToken( 0, ',', nIndex );
-            aStatusState     = aLine.getToken( 0, ',', nIndex );
-            aToolbarState    = aLine.getToken( 0, ',', nIndex );
-            aCmdName         = aLine.getToken( 18, ',', nIndex );
-            aSlotName        = aLine.getToken( 1, ',', nIndex );
+            aID                     = aLine.getToken( 2, ',', nIndex );
+            aAccelState             = aLine.getToken( 2, ',', nIndex );
+            aMenuState              = aLine.getToken( 0, ',', nIndex );
+            aStatusState            = aLine.getToken( 0, ',', nIndex );
+            aToolbarState           = aLine.getToken( 0, ',', nIndex );
+            aImageRotationState     = aLine.getToken( 8, ',', nIndex );
+            aImageReflectionState   = aLine.getToken( 0, ',', nIndex );
+            aCmdName                = aLine.getToken( 10, ',', nIndex );
+            aSlotName               = aLine.getToken( 1, ',', nIndex );
 
             if ( aCmdName.getLength() == 0 )
                 aCmdName = aSlotName;
@@ -334,6 +604,11 @@ bool ReadCSVFile( const OUString& aCVSFileURL, MODULES eModule, const OUString& 
                 aCmdLabel.aCommand = aUnoCmd;
                 aCmdLabel.aCommand += OStringToOUString( aCmdName, RTL_TEXTENCODING_ASCII_US );
                 aCmdLabel.nModules |= ( 1 << (unsigned long)( eModule ));
+
+                // Set bitfield
+                aCmdLabel.nProperties = (( aImageRotationState.equalsIgnoreAsciiCase( "TRUE" ) ? 1 : 0 ) << 1 );
+                aCmdLabel.nProperties |= (( aImageReflectionState.equalsIgnoreAsciiCase( "TRUE" ) ? 1 : 0 ) << 2 );
+
                 moduleMapFiles[int(eModule)].insert( CommandIDToLabelsMap::value_type( nID, aCmdLabel ));
                 modulePopupMenusCmd[int(eModule)].insert( CommandToLabelsMap::value_type( aCmdLabel.aCommand, aCmdLabel ));
             }
@@ -388,15 +663,6 @@ void AddCommandLabelsToCommandHashMap( MODULES eModule, const CommandLabels& rNe
 bool ReadMenuLabels( int nLangIndex, Menu* pMenu, MODULES eModule, bool bHasSlotInfos, OUString aResourceFilePrefix )
 {
     OUString aCmd( RTL_CONSTASCII_USTRINGPARAM( ".uno:" ));
-
-    CommandIDToLabelsMap::const_iterator pIter = moduleMapFiles[MODULE_GLOBAL].find( 5510 );
-    if ( pIter != moduleMapFiles[MODULE_GLOBAL].end() )
-    {
-        if (( pIter->second.aLabels[2].getLength() == 0 ) || ( pIter->second.aLabels[2].equalsAscii( "~File" )))
-        {
-            int a = 1;
-        }
-    }
 
     for ( unsigned short n = 0; n < pMenu->GetItemCount(); n++ )
     {
@@ -524,12 +790,11 @@ SfxSlotInfo::SfxSlotInfo( const ResId &rResId ) :
 
 bool ReadSlotInfos( int nLangIndex, ResMgr* pResMgr, MODULES eModule, const OUString& aProjectName )
 {
-    CommandIDToLabelsMap::const_iterator pTestIter = moduleMapFiles[MODULE_GLOBAL].find( 5510 );
     CommandIDToLabelsMap::iterator pIter = moduleMapFiles[MODULE_GLOBAL].begin();;
 
     if ( eModule != MODULE_GLOBAL )
     {
-        while ( pIter != moduleMapFiles[eModule].end() )
+        while ( pIter != moduleMapFiles[MODULE_GLOBAL].end() )
         {
             int nId = pIter->first;
             CommandLabels& rCmdLabels = pIter->second;
@@ -792,8 +1057,11 @@ bool WriteXMLFiles( const OUString& aOutputDirURL)
     static const char NodeStart[]               = "\t\t\t<node oor:name=\"";
     static const char ReplaceOp[]               = "\" oor:op=\"replace\">\n";
     static const char NodeEnd[]                 = "\t\t\t</node>\n";
-    static const char PropNodeStart[]           = "\t\t\t\t<prop oor:name=\"Label\" oor:type=\"xs:string\">\n";
+    static const char PropLabelNodeStart[]      = "\t\t\t\t<prop oor:name=\"Label\" oor:type=\"xs:string\">\n";
     static const char PropNodeEnd[]             = "\t\t\t\t</prop>\n";
+    static const char PropPropNodeStart[]       = "\t\t\t\t<prop oor:name=\"Properties\" oor:type=\"xs:int\">\n";
+    static const char PropHelpIdStart[]         = "\t\t\t\t<prop oor:name=\"HelpId\" oor:type=\"xs:int\">\n";
+    static const char ValueSimpleNodeStart[]    = "\t\t\t\t\t<value>";
     static const char ValueNodeStart[]          = "\t\t\t\t\t<value xml:lang=\"";
     static const char ValueNodeMid[]            = "\">";
     static const char ValueNodeEnd[]            = "</value>\n";
@@ -884,7 +1152,7 @@ bool WriteXMLFiles( const OUString& aOutputDirURL)
                         aXMLFile.write( NodeStart, strlen( NodeStart ), nWritten );
                         aXMLFile.write( aCmd.getStr(), aCmd.getLength(), nWritten );
                         aXMLFile.write( ReplaceOp, strlen( ReplaceOp ), nWritten );
-                        aXMLFile.write( PropNodeStart, strlen( PropNodeStart ), nWritten );
+                        aXMLFile.write( PropLabelNodeStart, strlen( PropLabelNodeStart ), nWritten );
 
                         sal_Bool bLabels( sal_False );
                         for ( int j = 0; j < NUM_LANGUAGES; j++ )
@@ -930,8 +1198,30 @@ bool WriteXMLFiles( const OUString& aOutputDirURL)
 
                         if ( !bLabels )
                             aXMLFile.write( ValueNodeEmpty, strlen( ValueNodeEmpty ), nWritten );
-
                         aXMLFile.write( PropNodeEnd, strlen( PropNodeEnd ), nWritten );
+
+                        char aBuf[16] = {0};
+
+                        // write properties node which stores additional information about a command
+                        if ( rCmdLabels.nProperties != 0 )
+                        {
+                            sprintf( aBuf, "%d", rCmdLabels.nProperties );
+                            aXMLFile.write( PropPropNodeStart, strlen( PropPropNodeStart ), nWritten );
+                            aXMLFile.write( ValueSimpleNodeStart, strlen( ValueSimpleNodeStart ), nWritten );
+                            aXMLFile.write( aBuf, strlen( aBuf ), nWritten );
+                            aXMLFile.write( ValueNodeEnd, strlen( ValueNodeEnd ), nWritten );
+                            aXMLFile.write( PropNodeEnd, strlen( PropNodeEnd ), nWritten );
+                        }
+
+/*
+                        // write help ID property node
+                        sprintf( aBuf, "%d", rCmdLabels.nID );
+                        aXMLFile.write( PropHelpIdStart, strlen( PropHelpIdStart ), nWritten );
+                        aXMLFile.write( ValueSimpleNodeStart, strlen( ValueSimpleNodeStart ), nWritten );
+                        aXMLFile.write( aBuf, strlen( aBuf ), nWritten );
+                        aXMLFile.write( ValueNodeEnd, strlen( ValueNodeEnd ), nWritten );
+                        aXMLFile.write( PropNodeEnd, strlen( PropNodeEnd ), nWritten );
+*/
                         aXMLFile.write( NodeEnd, strlen( NodeEnd ), nWritten );
                         ++pIter;
                     }
@@ -957,7 +1247,7 @@ bool WriteXMLFiles( const OUString& aOutputDirURL)
                                 aXMLFile.write( NodeStart, strlen( NodeStart ), nWritten );
                                 aXMLFile.write( aCmd.getStr(), aCmd.getLength(), nWritten );
                                 aXMLFile.write( ReplaceOp, strlen( ReplaceOp ), nWritten );
-                                aXMLFile.write( PropNodeStart, strlen( PropNodeStart ), nWritten );
+                                aXMLFile.write( PropLabelNodeStart, strlen( PropLabelNodeStart ), nWritten );
 
                                 sal_Bool bLabels( sal_False );
                                 for ( int k = 0; k < NUM_LANGUAGES; k++ )
@@ -1276,6 +1566,374 @@ bool ReadResourceWriteMenuBarXML( const OUString& aOutDirURL,
     return true;
 }
 
+bool WriteToolBarSeparator( osl::File& rFile )
+{
+    static const char ToolBarSeparator[] = " <toolbar:toolbarseparator/>\n";
+
+    sal_uInt64 nWritten;
+    rFile.write( ToolBarSeparator, strlen( ToolBarSeparator ), nWritten );
+
+    return true;
+}
+
+bool WriteToolBarSpace( osl::File& rFile )
+{
+    static const char ToolBarSpace[] = " <toolbar:toolbarspace/>\n";
+
+    sal_uInt64 nWritten;
+    rFile.write( ToolBarSpace, strlen( ToolBarSpace ), nWritten );
+
+    return true;
+}
+
+bool WriteToolBarBreak( osl::File& rFile )
+{
+    static const char ToolBarBlank[] = " <toolbar:toolbarbreak/>\n";
+
+    sal_uInt64 nWritten;
+    rFile.write( ToolBarBlank, strlen( ToolBarBlank ), nWritten );
+
+    return true;
+}
+
+bool WriteToolBarItem( osl::File& rFile, const OUString& aCmd, const OUString& aHelpID, ToolBoxItemBits nStyle, bool bVisible )
+{
+    static const char ToolBarItemStart[]                = " <toolbar:toolbaritem xlink:href=\"";
+    static const char ToolBarItemLabel[]                = "toolbar:text=\"";
+    static const char ToolBarItemHelp[]                 = "toolbar:helpid=\"helpid:";
+    static const char ToolBarItemStyle[]                = "toolbar:style=\"";
+    static const char ToolBarItemVisible[]              = "toolbar:visible=\"false";
+    static const char ToolBarItemAttrEnd[]              = "\" ";
+    static const char ToolBarItemEnd[]                  = "/>\n";
+    static const char ATTRIBUTE_ITEMSTYLE_RADIO[]       = "radio";
+    static const char ATTRIBUTE_ITEMSTYLE_AUTO[]        = "auto";
+    static const char ATTRIBUTE_ITEMSTYLE_LEFT[]        = "left";
+    static const char ATTRIBUTE_ITEMSTYLE_AUTOSIZE[]    = "autosize";
+    static const char ATTRIBUTE_ITEMSTYLE_DROPDOWN[]    = "dropdown";
+    static const char ATTRIBUTE_ITEMSTYLE_REPEAT[]      = "repeat";
+
+    OString aCmdStr = OUStringToOString( aCmd, RTL_TEXTENCODING_UTF8 );
+    OString aHelpId = OUStringToOString( aHelpID, RTL_TEXTENCODING_UTF8 );
+
+    sal_uInt64 nWritten;
+    rFile.write( ToolBarItemStart, strlen( ToolBarItemStart ), nWritten );
+    rFile.write( aCmdStr.getStr(), aCmdStr.getLength(), nWritten );
+    rFile.write( ToolBarItemAttrEnd, strlen( ToolBarItemAttrEnd ), nWritten );
+    rFile.write( ToolBarItemHelp, strlen( ToolBarItemHelp ), nWritten );
+    rFile.write( aHelpId.getStr(), aHelpId.getLength(), nWritten );
+    rFile.write( ToolBarItemAttrEnd, strlen( ToolBarItemAttrEnd ), nWritten );
+    rFile.write( ToolBarItemLabel, strlen( ToolBarItemLabel ), nWritten );
+    rFile.write( ToolBarItemAttrEnd, strlen( ToolBarItemAttrEnd ), nWritten );
+    if ( nStyle != 0 )
+    {
+        rFile.write( ToolBarItemStyle, strlen( ToolBarItemStyle ), nWritten );
+        sal_Bool bBitSet( sal_False );
+        if ( nStyle & TIB_RADIOCHECK )
+        {
+            rFile.write( ATTRIBUTE_ITEMSTYLE_RADIO, strlen( ATTRIBUTE_ITEMSTYLE_RADIO ), nWritten );
+            bBitSet = sal_True;
+        }
+        if ( nStyle & TIB_AUTOCHECK )
+        {
+            if ( bBitSet )
+                rFile.write( " ", 1, nWritten );
+            rFile.write( ATTRIBUTE_ITEMSTYLE_AUTO, strlen( ATTRIBUTE_ITEMSTYLE_AUTO ), nWritten );
+            bBitSet = sal_True;
+        }
+        if ( nStyle & TIB_LEFT )
+        {
+            if ( bBitSet )
+                rFile.write( " ", 1, nWritten );
+            rFile.write( ATTRIBUTE_ITEMSTYLE_LEFT, strlen( ATTRIBUTE_ITEMSTYLE_LEFT ), nWritten );
+            bBitSet = sal_True;
+        }
+        if ( nStyle & TIB_AUTOSIZE )
+        {
+            if ( bBitSet )
+                rFile.write( " ", 1, nWritten );
+            rFile.write( ATTRIBUTE_ITEMSTYLE_AUTOSIZE, strlen( ATTRIBUTE_ITEMSTYLE_AUTOSIZE ), nWritten );
+            bBitSet = sal_True;
+        }
+        if ( nStyle & TIB_DROPDOWN )
+        {
+            if ( bBitSet )
+                rFile.write( " ", 1, nWritten );
+            rFile.write( ATTRIBUTE_ITEMSTYLE_DROPDOWN, strlen( ATTRIBUTE_ITEMSTYLE_DROPDOWN ), nWritten );
+            bBitSet = sal_True;
+        }
+        if ( nStyle & TIB_REPEAT )
+        {
+            if ( bBitSet )
+                rFile.write( " ", 1, nWritten );
+            rFile.write( ATTRIBUTE_ITEMSTYLE_REPEAT, strlen( ATTRIBUTE_ITEMSTYLE_REPEAT ), nWritten );
+        }
+        rFile.write( ToolBarItemAttrEnd, strlen( ToolBarItemAttrEnd ), nWritten );
+    }
+    if ( !bVisible )
+    {
+        rFile.write( ToolBarItemVisible, strlen( ToolBarItemVisible ), nWritten );
+        rFile.write( ToolBarItemAttrEnd, strlen( ToolBarItemAttrEnd ), nWritten );
+    }
+
+    rFile.write( ToolBarItemEnd, strlen( ToolBarItemEnd ), nWritten );
+
+    return true;
+}
+
+bool WriteToolBarXML( osl::File& rFile, ToolBox* pToolBar, MODULES eModule )
+{
+   OUString aCmd( RTL_CONSTASCII_USTRINGPARAM( ".uno:" ));
+
+    for ( unsigned short n = 0; n < pToolBar->GetItemCount(); n++ )
+    {
+        unsigned short  nId = pToolBar->GetItemId( n );
+        ToolBoxItemType eType = pToolBar->GetItemType( n );
+
+        if ( eType == TOOLBOXITEM_BUTTON )
+        {
+            OUString        aLabel( pToolBar->GetItemText( nId ));
+            OUString        aCommand( pToolBar->GetItemCommand( nId ));
+            bool            bHasUnoCommand( aCommand.getLength() > 0 && ( aCommand.indexOf( aCmd ) == 0 ));
+            bool            bVisible( pToolBar->IsItemVisible( nId ));
+            ToolBoxItemBits nItemBits( pToolBar->GetItemBits( nId ));
+
+            CommandLabels* pCmdLabels = RetrieveCommandLabelsFromID( nId, eModule );
+            if ( !pCmdLabels )
+                pCmdLabels = RetrieveCommandLabelsFromCommand( aCommand, eModule );
+
+            if ( pCmdLabels )
+                aCommand = pCmdLabels->aCommand;
+            else
+                aCommand = OUString( RTL_CONSTASCII_USTRINGPARAM( "???" ));
+
+            sal_uInt32 nHelpId = pToolBar->GetHelpId( nId );
+            if ( nHelpId == 0 )
+                nHelpId = nId;
+
+            OUString aHelpId = OUString::valueOf( sal_Int32( nHelpId ));
+            WriteToolBarItem( rFile, aCommand, aHelpId, nItemBits, bVisible );
+        }
+        else if ( eType == TOOLBOXITEM_SEPARATOR )
+        {
+            WriteToolBarSeparator( rFile );
+        }
+        else if ( eType == TOOLBOXITEM_SPACE )
+        {
+            WriteToolBarSpace( rFile );
+        }
+        else if ( eType == TOOLBOXITEM_BREAK )
+        {
+            WriteToolBarBreak( rFile );
+        }
+    }
+
+    return true;
+}
+
+bool ReadResourceWriteToolBarXML( const OUString& aOutDirURL,
+                                  const OUString& aResourceDirURL,
+                                  const OUString& aResourceFilePrefix,
+                                  MODULES eModule,
+                                  const OUString& aProjectName )
+{
+    static const char ToolBarDocType[]  = "<!DOCTYPE toolbar:toolbar PUBLIC \"-//OpenOffice.org//DTD OfficeDocument 1.0//EN\" \"toolbar.dtd\">\n";
+    static const char ToolBarStart[]    = "<toolbar:toolbar xmlns:toolbar=\"http://openoffice.org/2001/toolbar\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" toolbar:id=\"toolbar\">\n";
+    static const char ToolBarEnd[]      = "</toolbar:toolbar>";
+
+    OUString aSysDirPath;
+    OString  aResFilePrefix = OUStringToOString( aResourceFilePrefix, RTL_TEXTENCODING_ASCII_US );
+
+    osl::FileBase::getSystemPathFromFileURL( aResourceDirURL, aSysDirPath );
+
+    String aSysDirPathStr( aSysDirPath );
+
+    String aLangString( String::CreateFromAscii( Language_Mapping[0].pISO ));
+    LanguageType aLangtype = ConvertIsoStringToLanguage( aLangString );
+    ResMgr* pResMgr = ResMgr::CreateResMgr( aResFilePrefix.getStr(),
+                                            aLangtype,
+                                            NULL,
+                                            &aSysDirPathStr );
+
+    WorkWindow* pWindow = new WorkWindow( NULL, WB_APP | WB_STDWORK | WB_HIDE );
+    if ( pResMgr )
+    {
+        int i = 0;
+        while ( TBResourceModule_Mapping[i].nResId > 0 )
+        {
+            if ( TBResourceModule_Mapping[i].eBelongsTo == eModule )
+            {
+                ResId   aResId( TBResourceModule_Mapping[i].nResId, pResMgr );
+                aResId.SetRT( RSC_TOOLBOX );
+
+                if ( pResMgr->IsAvailable( aResId ))
+                {
+                    OUString aOutputDirectoryURL( aOutDirURL );
+                    if ( aOutputDirectoryURL.getLength() > 0 && aOutputDirectoryURL[aOutputDirectoryURL.getLength()-1] != '/' )
+                        aOutputDirectoryURL += OUString::createFromAscii( "/" );
+
+                    OUString aOutputFileURL( aOutputDirectoryURL );
+                    aOutputFileURL += OUString::createFromAscii( TBResourceModule_Mapping[i].pXMLPrefix );
+                    aOutputFileURL += OUString::createFromAscii( ".xml" );
+
+                    osl::File aXMLFile( aOutputFileURL );
+                    osl::File::RC nRet = aXMLFile.open( OpenFlag_Create|OpenFlag_Write );
+                    if ( nRet == osl::File::E_EXIST )
+                    {
+                        nRet = aXMLFile.open( OpenFlag_Write );
+                        if ( nRet == osl::File::E_None )
+                            nRet = aXMLFile.setSize( 0 );
+                    }
+
+                    if ( nRet == osl::FileBase::E_None )
+                    {
+                        sal_uInt64 nWritten;
+
+                        aXMLFile.write( XMLStart, strlen( XMLStart ), nWritten );
+                        aXMLFile.write( ToolBarDocType, strlen( ToolBarDocType ), nWritten );
+                        aXMLFile.write( ToolBarStart, strlen( ToolBarStart ), nWritten );
+
+                        ToolBox* pToolBox = new ToolBox( pWindow, aResId );
+                        WriteToolBarXML( aXMLFile, (ToolBox *)pToolBox, eModule );
+                        delete pToolBox;
+
+                        aXMLFile.write( ToolBarEnd, strlen( ToolBarEnd ), nWritten );
+                        aXMLFile.close();
+
+                        TBResourceModule_Mapping[i].bWritten = true;
+                    }
+                }
+            }
+            ++i;
+        }
+
+        delete pResMgr;
+    }
+
+    delete pWindow;
+
+    return true;
+}
+
+class MyFloatingWindow : public FloatingWindow
+{
+    public:
+        MyFloatingWindow( Window* pParent, const ResId& rResId, const ResId& rSubTbxResId );
+        ~MyFloatingWindow()
+        {
+            delete pMyToolBox;
+        }
+
+        ToolBox* GetSubToolBox() { return pMyToolBox; }
+
+    private:
+        ToolBox* pMyToolBox;
+};
+
+MyFloatingWindow::MyFloatingWindow( Window* pParent, const ResId& rResId, const ResId& rSubTbxResId ) :
+    FloatingWindow( pParent, rResId )
+{
+    pMyToolBox = new ToolBox( this, rSubTbxResId );
+
+    FreeResource();
+}
+
+
+bool ReadResourceWriteSubToolBarXML( const OUString& aOutDirURL,
+                                     const OUString& aResourceDirURL,
+                                     const OUString& aResourceFilePrefix,
+                                     MODULES eModule,
+                                     const OUString& aProjectName )
+{
+    static const char ToolBarDocType[]  = "<!DOCTYPE toolbar:toolbar PUBLIC \"-//OpenOffice.org//DTD OfficeDocument 1.0//EN\" \"toolbar.dtd\">\n";
+    static const char ToolBarStart[]    = "<toolbar:toolbar xmlns:toolbar=\"http://openoffice.org/2001/toolbar\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" toolbar:id=\"toolbar\">\n";
+    static const char ToolBarEnd[]      = "</toolbar:toolbar>";
+
+    OUString aSysDirPath;
+    OString  aResFilePrefix = OUStringToOString( aResourceFilePrefix, RTL_TEXTENCODING_ASCII_US );
+
+    osl::FileBase::getSystemPathFromFileURL( aResourceDirURL, aSysDirPath );
+
+    String aSysDirPathStr( aSysDirPath );
+
+    String aLangString( String::CreateFromAscii( Language_Mapping[0].pISO ));
+    LanguageType aLangtype = ConvertIsoStringToLanguage( aLangString );
+    ResMgr* pResMgr = ResMgr::CreateResMgr( aResFilePrefix.getStr(),
+                                            aLangtype,
+                                            NULL,
+                                            &aSysDirPathStr );
+
+    WorkWindow* pWindow = new WorkWindow( NULL, WB_APP | WB_STDWORK | WB_HIDE );
+    if ( pResMgr )
+    {
+        int i = 0;
+        while ( TBSubResourceModule_Mapping[i].nParentResId > 0 )
+        {
+            if ( TBSubResourceModule_Mapping[i].eBelongsTo == eModule )
+            {
+                ResId   aParentResId( TBSubResourceModule_Mapping[i].nParentResId, pResMgr );
+                ResId   aResId( TBSubResourceModule_Mapping[i].nResId, pResMgr );
+                MyFloatingWindow* pFloatWin( 0 );
+
+                aResId.SetRT( RSC_TOOLBOX );
+                aParentResId.SetRT( RSC_FLOATINGWINDOW );
+
+                if ( pResMgr->IsAvailable( aParentResId ))
+                {
+                    pFloatWin = new MyFloatingWindow( pWindow, aParentResId, aResId );
+
+                    OUString aOutputDirectoryURL( aOutDirURL );
+                    if ( aOutputDirectoryURL.getLength() > 0 && aOutputDirectoryURL[aOutputDirectoryURL.getLength()-1] != '/' )
+                        aOutputDirectoryURL += OUString::createFromAscii( "/" );
+
+                    OUString aOutputFileURL( aOutputDirectoryURL );
+                    aOutputFileURL += OUString::createFromAscii( TBSubResourceModule_Mapping[i].pXMLPrefix );
+                    aOutputFileURL += OUString::createFromAscii( ".xml" );
+
+                    osl::File aXMLFile( aOutputFileURL );
+                    osl::File::RC nRet = aXMLFile.open( OpenFlag_Create|OpenFlag_Write );
+                    if ( nRet == osl::File::E_EXIST )
+                    {
+                        nRet = aXMLFile.open( OpenFlag_Write );
+                        if ( nRet == osl::File::E_None )
+                            nRet = aXMLFile.setSize( 0 );
+                    }
+
+                    if ( nRet == osl::FileBase::E_None )
+                    {
+                        sal_uInt64 nWritten;
+
+                        aXMLFile.write( XMLStart, strlen( XMLStart ), nWritten );
+                        aXMLFile.write( ToolBarDocType, strlen( ToolBarDocType ), nWritten );
+                        aXMLFile.write( ToolBarStart, strlen( ToolBarStart ), nWritten );
+
+                        ToolBox* pToolBox = pFloatWin->GetSubToolBox();
+                        if ( pToolBox )
+                            WriteToolBarXML( aXMLFile, (ToolBox *)pToolBox, eModule );
+
+                        aXMLFile.write( ToolBarEnd, strlen( ToolBarEnd ), nWritten );
+                        aXMLFile.close();
+
+                        TBSubResourceModule_Mapping[i].bWritten = true;
+                    }
+
+                    if ( pFloatWin )
+                    {
+                        delete pFloatWin;
+                        pFloatWin = 0;
+                    }
+                }
+            }
+            ++i;
+        }
+
+        delete pResMgr;
+    }
+
+    delete pWindow;
+
+    return true;
+}
+
 bool Convert( sal_Bool        bUseProduct,
               const OUString& aUseRes,
               const OUString& rVersion,
@@ -1404,6 +2062,8 @@ bool Convert( sal_Bool        bUseProduct,
                             osl::FileBase::getAbsoluteFileURL( aWorkDir, aOutDirURL, aOutDirURL );
 
                             ReadResourceWriteMenuBarXML( aOutDirURL, aResDirURL, aLangResPrefix, ProjectModule_Mapping[j].eBelongsTo, OUString::createFromAscii( ProjectModule_Mapping[j].pProjectFolder ));
+                            ReadResourceWriteToolBarXML( aOutDirURL, aResDirURL, aLangResPrefix, ProjectModule_Mapping[j].eBelongsTo, OUString::createFromAscii( ProjectModule_Mapping[j].pProjectFolder ));
+                            ReadResourceWriteSubToolBarXML( aOutDirURL, aResDirURL, aLangResPrefix, ProjectModule_Mapping[j].eBelongsTo, OUString::createFromAscii( ProjectModule_Mapping[j].pProjectFolder ));
                         }
                         j++;
                     }
@@ -1419,6 +2079,22 @@ bool Convert( sal_Bool        bUseProduct,
     osl::FileBase::getAbsoluteFileURL( aWorkDir, aOutDirURL, aOutDirURL );
 
     WriteXMLFiles( aOutDirURL );
+
+    sal_Int32 n = 0;
+    while ( TBResourceModule_Mapping[n].nResId > 0 )
+    {
+        if ( !TBResourceModule_Mapping[n].bWritten )
+            fprintf( stderr, "Warning: Couldn't convert toolbar %s\n", TBResourceModule_Mapping[n].pXMLPrefix );
+        n++;
+    }
+
+    n = 0;
+    while ( TBSubResourceModule_Mapping[n].nResId > 0 )
+    {
+        if ( !TBSubResourceModule_Mapping[n].bWritten )
+            fprintf( stderr, "Warning: Couldn't convert sub toolbar %s\n", TBSubResourceModule_Mapping[n].pXMLPrefix );
+        n++;
+    }
 
     return true;
 }
