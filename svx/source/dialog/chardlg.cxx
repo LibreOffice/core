@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: pb $ $Date: 2001-05-22 09:13:22 $
+ *  last change: $Author: pb $ $Date: 2001-05-22 10:09:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5169,6 +5169,10 @@ USHORT* SvxCharPositionPage::GetRanges()
 }
 
 // -----------------------------------------------------------------------
+#define ENABLE_AND_CHECK( aCheckBox )   \
+    if ( !aCheckBox.IsEnabled() )       \
+        aCheckBox.Enable();             \
+    aCheckBox.Check( TRUE )
 
 void SvxCharPositionPage::Reset( const SfxItemSet& rSet )
 {
@@ -5215,7 +5219,7 @@ void SvxCharPositionPage::Reset( const SfxItemSet& rSet )
                 m_aHighPosBtn.Check( TRUE );
                 if ( nEsc == DFLT_ESC_AUTO_SUPER )
                 {
-                    m_aHighLowRB.Check( TRUE );
+                    ENABLE_AND_CHECK( m_aHighLowRB );
                     nEsc = DFLT_ESC_SUPER;
                 }
             }
@@ -5225,7 +5229,7 @@ void SvxCharPositionPage::Reset( const SfxItemSet& rSet )
                 m_aLowPosBtn.Check( TRUE );
                 if ( nEsc == DFLT_ESC_AUTO_SUB )
                 {
-                    m_aHighLowRB.Check(TRUE);
+                    ENABLE_AND_CHECK( m_aHighLowRB );
                     nEsc = DFLT_ESC_SUB;
                 }
             }
