@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undo.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: thb $ $Date: 2001-08-01 13:22:46 $
+ *  last change: $Author: mh $ $Date: 2001-10-17 16:49:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,8 +69,6 @@
 #include "undo.hxx"
 #include "svarray.hxx"
 
-#include "segmentc.hxx"
-
 //========================================================================
 
 SV_DECL_PTRARR( SfxUndoActions, SfxUndoAction*, 20, 8 )
@@ -133,8 +131,6 @@ class SfxListUndoAction : public SfxUndoAction, public SfxUndoArray
 
 DBG_NAME(SfxUndoAction);
 
-SEG_EOFGLOBALS()
-
 //========================================================================
 
 TYPEINIT0(SfxUndoAction);
@@ -144,15 +140,11 @@ TYPEINIT0(SfxRepeatTarget);
 
 //------------------------------------------------------------------------
 
-#pragma SEG_FUNCDEF(undo_01)
-
 SfxRepeatTarget::~SfxRepeatTarget()
 {
 }
 
 //------------------------------------------------------------------------
-
-#pragma SEG_FUNCDEF(undo_34)
 
 BOOL SfxUndoAction::IsLinked()
 {
@@ -161,8 +153,6 @@ BOOL SfxUndoAction::IsLinked()
 
 //------------------------------------------------------------------------
 
-#pragma SEG_FUNCDEF(undo_35)
-
 void SfxUndoAction::SetLinked( BOOL bIsLinked )
 {
     bLinked = bIsLinked;
@@ -170,16 +160,12 @@ void SfxUndoAction::SetLinked( BOOL bIsLinked )
 
 //------------------------------------------------------------------------
 
-#pragma SEG_FUNCDEF(undo_36)
-
 SfxUndoAction::~SfxUndoAction()
 {
     DBG_DTOR(SfxUndoAction, 0);
     DBG_ASSERT( !IsLinked(), "Gelinkte Action geloescht" )
 }
 
-
-#pragma SEG_FUNCDEF(undo_02)
 
 SfxUndoAction::SfxUndoAction()
 {
@@ -189,8 +175,6 @@ SfxUndoAction::SfxUndoAction()
 
 //------------------------------------------------------------------------
 
-#pragma SEG_FUNCDEF(undo_03)
-
 BOOL SfxUndoAction::Merge( SfxUndoAction * )
 {
     DBG_CHKTHIS(SfxUndoAction, 0);
@@ -198,8 +182,6 @@ BOOL SfxUndoAction::Merge( SfxUndoAction * )
 }
 
 //------------------------------------------------------------------------
-
-#pragma SEG_FUNCDEF(undo_04)
 
 XubString SfxUndoAction::GetComment() const
 {
@@ -210,8 +192,6 @@ XubString SfxUndoAction::GetComment() const
 //------------------------------------------------------------------------
 
 
-#pragma SEG_FUNCDEF(undo_05)
-
 USHORT SfxUndoAction::GetId() const
 {
     DBG_CHKTHIS(SfxUndoAction, 0);
@@ -219,8 +199,6 @@ USHORT SfxUndoAction::GetId() const
 }
 
 //------------------------------------------------------------------------
-
-#pragma SEG_FUNCDEF(undo_06)
 
 XubString SfxUndoAction::GetRepeatComment(SfxRepeatTarget&) const
 {
@@ -231,8 +209,6 @@ XubString SfxUndoAction::GetRepeatComment(SfxRepeatTarget&) const
 //------------------------------------------------------------------------
 
 
-#pragma SEG_FUNCDEF(undo_07)
-
 void SfxUndoAction::Undo()
 {
     // die sind nur konzeptuell pure virtual
@@ -240,8 +216,6 @@ void SfxUndoAction::Undo()
 }
 
 //------------------------------------------------------------------------
-
-#pragma SEG_FUNCDEF(undo_08)
 
 void SfxUndoAction::Redo()
 {
@@ -251,8 +225,6 @@ void SfxUndoAction::Redo()
 
 //------------------------------------------------------------------------
 
-#pragma SEG_FUNCDEF(undo_09)
-
 void SfxUndoAction::Repeat(SfxRepeatTarget&)
 {
     // die sind nur konzeptuell pure virtual
@@ -261,7 +233,6 @@ void SfxUndoAction::Repeat(SfxRepeatTarget&)
 
 //------------------------------------------------------------------------
 
-#pragma SEG_FUNCDEF(undo_0A)
 
 BOOL SfxUndoAction::CanRepeat(SfxRepeatTarget&) const
 {
@@ -270,7 +241,6 @@ BOOL SfxUndoAction::CanRepeat(SfxRepeatTarget&) const
 
 //========================================================================
 
-#pragma SEG_FUNCDEF(undo_0B)
 
 SfxUndoManager::SfxUndoManager( USHORT nMaxUndoActionCount )
  : pFatherUndoArray(0)
@@ -282,7 +252,6 @@ SfxUndoManager::SfxUndoManager( USHORT nMaxUndoActionCount )
 
 //------------------------------------------------------------------------
 
-#pragma SEG_FUNCDEF(undo_0C)
 
 SfxUndoManager::~SfxUndoManager()
 {
@@ -292,7 +261,6 @@ SfxUndoManager::~SfxUndoManager()
 
 //------------------------------------------------------------------------
 
-#pragma SEG_FUNCDEF(undo_0D)
 
 void SfxUndoManager::SetMaxUndoActionCount( USHORT nMaxUndoActionCount )
 {
@@ -320,16 +288,12 @@ void SfxUndoManager::SetMaxUndoActionCount( USHORT nMaxUndoActionCount )
 
 //------------------------------------------------------------------------
 
-#pragma SEG_FUNCDEF(undo_0E)
-
 USHORT SfxUndoManager::GetMaxUndoActionCount() const
 {
     return pActUndoArray->nMaxUndoActions;
 }
 
 //------------------------------------------------------------------------
-
-#pragma SEG_FUNCDEF(undo_0F)
 
 void SfxUndoManager::Clear()
 {
@@ -358,8 +322,6 @@ void SfxUndoManager::ClearRedo()
 }
 
 //------------------------------------------------------------------------
-
-#pragma SEG_FUNCDEF(undo_10)
 
 void SfxUndoManager::AddUndoAction( SfxUndoAction *pAction, BOOL bTryMerge )
 {
@@ -403,16 +365,12 @@ void SfxUndoManager::AddUndoAction( SfxUndoAction *pAction, BOOL bTryMerge )
 
 //------------------------------------------------------------------------
 
-#pragma SEG_FUNCDEF(undo_11)
-
 USHORT SfxUndoManager::GetUndoActionCount() const
 {
     return pActUndoArray->nCurUndoAction;
 }
 
 //------------------------------------------------------------------------
-
-#pragma SEG_FUNCDEF(undo_12)
 
 XubString SfxUndoManager::GetUndoActionComment( USHORT nNo ) const
 {
@@ -421,16 +379,12 @@ XubString SfxUndoManager::GetUndoActionComment( USHORT nNo ) const
 
 //------------------------------------------------------------------------
 
-#pragma SEG_FUNCDEF(undo_13)
-
 USHORT SfxUndoManager::GetUndoActionId( USHORT nNo ) const
 {
     return pActUndoArray->aUndoActions[pActUndoArray->nCurUndoAction-1-nNo]->GetId(); //!
 }
 
 //------------------------------------------------------------------------
-
-#pragma SEG_FUNCDEF(undo_14)
 
 BOOL SfxUndoManager::Undo( USHORT nCount )
 {
@@ -444,16 +398,12 @@ BOOL SfxUndoManager::Undo( USHORT nCount )
 
 //------------------------------------------------------------------------
 
-#pragma SEG_FUNCDEF(undo_15)
-
 void SfxUndoManager::Undo( SfxUndoAction &rAction )
 {
     rAction.Undo();
 }
 
 //------------------------------------------------------------------------
-
-#pragma SEG_FUNCDEF(undo_16)
 
 USHORT SfxUndoManager::GetRedoActionCount() const
 {
@@ -462,8 +412,6 @@ USHORT SfxUndoManager::GetRedoActionCount() const
 
 //------------------------------------------------------------------------
 
-#pragma SEG_FUNCDEF(undo_17)
-
 XubString SfxUndoManager::GetRedoActionComment( USHORT nNo ) const
 {
     return pActUndoArray->aUndoActions[pActUndoArray->nCurUndoAction+nNo]->GetComment(); //!
@@ -471,16 +419,12 @@ XubString SfxUndoManager::GetRedoActionComment( USHORT nNo ) const
 
 //------------------------------------------------------------------------
 
-#pragma SEG_FUNCDEF(undo_18)
-
 USHORT SfxUndoManager::GetRedoActionId( USHORT nNo ) const
 {
     return pActUndoArray->aUndoActions[pActUndoArray->nCurUndoAction+nNo]->GetId(); //!
 }
 
 //------------------------------------------------------------------------
-
-#pragma SEG_FUNCDEF(undo_19)
 
 BOOL SfxUndoManager::Redo( USHORT nNumber )
 {
@@ -495,16 +439,12 @@ BOOL SfxUndoManager::Redo( USHORT nNumber )
 
 //------------------------------------------------------------------------
 
-#pragma SEG_FUNCDEF(undo_1A)
-
 void SfxUndoManager::Redo( SfxUndoAction &rAction )
 {
     rAction.Redo();
 }
 
 //------------------------------------------------------------------------
-
-#pragma SEG_FUNCDEF(undo_1B)
 
 USHORT SfxUndoManager::GetRepeatActionCount() const
 {
@@ -513,8 +453,6 @@ USHORT SfxUndoManager::GetRepeatActionCount() const
 
 //------------------------------------------------------------------------
 
-#pragma SEG_FUNCDEF(undo_1C)
-
 XubString SfxUndoManager::GetRepeatActionComment( SfxRepeatTarget &rTarget, USHORT nNo ) const
 {
     return pActUndoArray->aUndoActions[ pActUndoArray->aUndoActions.Count() - 1 - nNo ]
@@ -522,8 +460,6 @@ XubString SfxUndoManager::GetRepeatActionComment( SfxRepeatTarget &rTarget, USHO
 }
 
 //------------------------------------------------------------------------
-
-#pragma SEG_FUNCDEF(undo_1D)
 
 BOOL SfxUndoManager::Repeat( SfxRepeatTarget &rTarget, USHORT nFrom, USHORT nCount )
 {
@@ -538,8 +474,6 @@ BOOL SfxUndoManager::Repeat( SfxRepeatTarget &rTarget, USHORT nFrom, USHORT nCou
 
 //------------------------------------------------------------------------
 
-#pragma SEG_FUNCDEF(undo_1E)
-
 void SfxUndoManager::Repeat( SfxRepeatTarget &rTarget, SfxUndoAction &rAction )
 {
     if ( rAction.CanRepeat(rTarget) )
@@ -548,16 +482,12 @@ void SfxUndoManager::Repeat( SfxRepeatTarget &rTarget, SfxUndoAction &rAction )
 
 //------------------------------------------------------------------------
 
-#pragma SEG_FUNCDEF(undo_1F)
-
 BOOL SfxUndoManager::CanRepeat( SfxRepeatTarget &rTarget, SfxUndoAction &rAction ) const
 {
     return rAction.CanRepeat(rTarget);
 }
 
 //------------------------------------------------------------------------
-
-#pragma SEG_FUNCDEF(undo_20)
 
 BOOL SfxUndoManager::CanRepeat( SfxRepeatTarget &rTarget, USHORT nNo ) const
 {
@@ -571,8 +501,6 @@ BOOL SfxUndoManager::CanRepeat( SfxRepeatTarget &rTarget, USHORT nNo ) const
 }
 
 //------------------------------------------------------------------------
-
-#pragma SEG_FUNCDEF(undo_21)
 
 void SfxUndoManager::EnterListAction(
     const XubString& rComment, const XubString &rRepeatComment, USHORT nId )
@@ -594,8 +522,6 @@ void SfxUndoManager::EnterListAction(
 }
 
 //------------------------------------------------------------------------
-
-#pragma SEG_FUNCDEF(undo_22)
 
 void SfxUndoManager::LeaveListAction()
 
@@ -625,16 +551,12 @@ void SfxUndoManager::LeaveListAction()
 
 //------------------------------------------------------------------------
 
-#pragma SEG_FUNCDEF(undo_23)
-
 USHORT SfxListUndoAction::GetId() const
 {
     return nId;
 }
 
 //------------------------------------------------------------------------
-
-#pragma SEG_FUNCDEF(undo_24)
 
 XubString SfxListUndoAction::GetComment() const
 {
@@ -643,8 +565,6 @@ XubString SfxListUndoAction::GetComment() const
 
 //------------------------------------------------------------------------
 
-#pragma SEG_FUNCDEF(undo_25)
-
 XubString SfxListUndoAction::GetRepeatComment(SfxRepeatTarget &r) const
 {
     return aRepeatComment;
@@ -652,8 +572,6 @@ XubString SfxListUndoAction::GetRepeatComment(SfxRepeatTarget &r) const
 
 
 //------------------------------------------------------------------------
-
-#pragma SEG_FUNCDEF(undo_26)
 
 SfxListUndoAction::SfxListUndoAction
 (
@@ -670,8 +588,6 @@ SfxListUndoAction::SfxListUndoAction
 
 //------------------------------------------------------------------------
 
-#pragma SEG_FUNCDEF(undo_27)
-
 void SfxListUndoAction::Undo()
 {
     for(INT16 i=nCurUndoAction-1;i>=0;i--)
@@ -680,8 +596,6 @@ void SfxListUndoAction::Undo()
 }
 
 //------------------------------------------------------------------------
-
-#pragma SEG_FUNCDEF(undo_28)
 
 void SfxListUndoAction::Redo()
 {
@@ -692,8 +606,6 @@ void SfxListUndoAction::Redo()
 
 //------------------------------------------------------------------------
 
-#pragma SEG_FUNCDEF(undo_29)
-
 void SfxListUndoAction::Repeat(SfxRepeatTarget&rTarget)
 {
     for(USHORT i=0;i<nCurUndoAction;i++)
@@ -701,8 +613,6 @@ void SfxListUndoAction::Repeat(SfxRepeatTarget&rTarget)
 }
 
 //------------------------------------------------------------------------
-
-#pragma SEG_FUNCDEF(undo_2A)
 
 BOOL SfxListUndoAction::CanRepeat(SfxRepeatTarget&r)  const
 {
@@ -713,8 +623,6 @@ BOOL SfxListUndoAction::CanRepeat(SfxRepeatTarget&r)  const
 }
 
 //------------------------------------------------------------------------
-
-#pragma SEG_FUNCDEF(undo_2B)
 
 SfxLinkUndoAction::SfxLinkUndoAction(SfxUndoManager *pManager)
 /*  [Beschreibung]
@@ -738,8 +646,6 @@ SfxLinkUndoAction::SfxLinkUndoAction(SfxUndoManager *pManager)
 
 //------------------------------------------------------------------------
 
-#pragma SEG_FUNCDEF(undo_2C)
-
 void SfxLinkUndoAction::Undo()
 {
     if ( pAction )
@@ -747,8 +653,6 @@ void SfxLinkUndoAction::Undo()
 }
 
 //------------------------------------------------------------------------
-
-#pragma SEG_FUNCDEF(undo_2D)
 
 void SfxLinkUndoAction::Redo()
 {
@@ -758,7 +662,6 @@ void SfxLinkUndoAction::Redo()
 
 //------------------------------------------------------------------------
 
-#pragma SEG_FUNCDEF(undo_2E)
 
 BOOL SfxLinkUndoAction::CanRepeat(SfxRepeatTarget& r) const
 {
@@ -768,7 +671,6 @@ BOOL SfxLinkUndoAction::CanRepeat(SfxRepeatTarget& r) const
 
 //------------------------------------------------------------------------
 
-#pragma SEG_FUNCDEF(undo_2F)
 
 void SfxLinkUndoAction::Repeat(SfxRepeatTarget&r)
 {
@@ -778,8 +680,6 @@ void SfxLinkUndoAction::Repeat(SfxRepeatTarget&r)
 
 
 //------------------------------------------------------------------------
-
-#pragma SEG_FUNCDEF(undo_30)
 
 XubString SfxLinkUndoAction::GetComment() const
 {
@@ -792,8 +692,6 @@ XubString SfxLinkUndoAction::GetComment() const
 
 //------------------------------------------------------------------------
 
-#pragma SEG_FUNCDEF(undo_31)
-
 XubString SfxLinkUndoAction::GetRepeatComment(SfxRepeatTarget&r) const
 {
     if ( pAction )
@@ -804,8 +702,6 @@ XubString SfxLinkUndoAction::GetRepeatComment(SfxRepeatTarget&r) const
 
 //------------------------------------------------------------------------
 
-#pragma SEG_FUNCDEF(undo_37)
-
 SfxLinkUndoAction::~SfxLinkUndoAction()
 {
     if( pAction )
@@ -814,15 +710,6 @@ SfxLinkUndoAction::~SfxLinkUndoAction()
 
 
 //------------------------------------------------------------------------
-
-#pragma SEG_FUNCDEF(undo_32)
-
-USHORT SfxLinkUndoAction::GetId() const
-{
-    return pAction ? pAction->GetId() : 0;
-}
-
-#pragma SEG_FUNCDEF(undo_33)
 
 SfxUndoArray::~SfxUndoArray()
 {
@@ -834,144 +721,4 @@ SfxUndoArray::~SfxUndoArray()
         delete pAction;
     }
 }
-
-
-
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.1.1.1  2000/09/18 16:59:06  hr
-    initial import
-
-    Revision 1.44  2000/09/18 14:13:48  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.43  2000/08/31 13:53:28  willem.vandorp
-    Header and footer replaced
-
-    Revision 1.42  2000/02/09 16:29:42  hr
-    #70473# changes for unicode ( patched by automated patchtool )
-
-    Revision 1.41  1998/01/20 09:08:18  MH
-    chg: header
-
-
-      Rev 1.40   20 Jan 1998 10:08:18   MH
-   chg: header
-
-      Rev 1.39   07 Aug 1997 16:32:38   TJ
-   include
-
-      Rev 1.38   01 Oct 1996 13:29:00   MI
-   ClearRedo()
-
-      Rev 1.37   13 Jun 1996 10:47:00   MI
-   weniger Compiler-Keys
-
-      Rev 1.36   21 Mar 1996 14:56:34   MI
-   alte C_VErSION
-
-      Rev 1.35   19 Mar 1996 12:05:34   TLX
-   #25200# noch vorsichtiger mit gelinten Actions
-
-      Rev 1.34   14 Mar 1996 17:42:58   MH
-   del: S_VERSION
-
-      Rev 1.33   09 Feb 1996 18:43:38   TLX
-   #25200# Bei Remove von Undoactions Linking beachten
-
-      Rev 1.32   01 Dec 1995 17:40:34   TLX
-   Loesche gemergte Actions
-
-      Rev 1.31   29 Nov 1995 12:09:28   TLX
-   Destruktor fuer UndoArrays
-
-      Rev 1.30   23 Nov 1995 16:39:42   AB
-   Unicode-Anpassung
-
-      Rev 1.29   13 Nov 1995 10:48:38   TLX
-   SetMaxUndoCount loescht nur noch ueberzaehlige Actions
-
-      Rev 1.27   06 Nov 1995 16:18:18   MI
-   Bugfix Absturz bei ListActions und zu kleinem MaxCount
-
-      Rev 1.26   04 Oct 1995 16:28:10   MI
-   CanRepeat-Syntax-Fehler in 257
-
-      Rev 1.25   29 Sep 1995 08:30:08   MI
-   neue Methode SfxUndoManager::CanRepeat() mit Index
-
-      Rev 1.24   07 Aug 1995 19:49:42   TLX
-   Auschneiden gibt keinen gpf mehr
-
-      Rev 1.23   31 Jul 1995 14:28:26   MT
-   Undo/Redo in ListUndoAction behoben (nCurPos)
-
-      Rev 1.22   31 Jul 1995 13:09:04   PB
-
-      Rev 1.21   31 Jul 1995 12:50:36   PB
-
-      Rev 1.20   31 Jul 1995 12:46:14   PB
-
-      Rev 1.19   31 Jul 1995 12:38:54   PB
-
-      Rev 1.18   31 Jul 1995 11:22:20   TLX
-
-      Rev 1.17   05 Jul 1995 16:10:48   TLX
-   Neue Undofeatures
-
-      Rev 1.16   06 Jun 1995 18:48:26   TRI
-   ~SfxRepeatTarget impl.
-
-      Rev 1.15   06 Jun 1995 13:26:54   MI
-   SfxRepeatTarget -- INKOMPATIBEL
-
-      Rev 1.14   02 May 1995 18:40:36   TRI
-   WATCOM Anpassung
-
-      Rev 1.13   18 Apr 1995 19:03:50   MI
-   neue Methode Clear() -- kompatibel
-
-      Rev 1.12   29 Mar 1995 17:30:48   MI
-   Bugfix: AddUndoAction
-
-      Rev 1.11   23 Mar 1995 18:45:20   MI
-   Begrenzung implementiert
-
-      Rev 1.10   15 Dec 1994 09:32:38   MI
-   svmem
-
-      Rev 1.9   31 Oct 1994 11:22:54   MI
-   CanRepeat
-
-      Rev 1.8   25 Oct 1994 12:00:48   VB
-   hdrstop
-
-      Rev 1.7   20 Oct 1994 17:10:54   MI
-   Jobsetup
-
-      Rev 1.6   28 Sep 1994 19:29:30   MI
-   pch-Probleme und Printing
-
-      Rev 1.5   23 Sep 1994 09:43:14   MI
-   Bugfix: Syntaxfehler
-
-      Rev 1.4   23 Sep 1994 09:10:56   MI
-   repeat dummy ersetzt
-
-      Rev 1.3   23 Sep 1994 09:01:52   MI
-   repeat-dummy
-
-      Rev 1.2   22 Sep 1994 17:37:02   MI
-   Undo und ItemSet immer mit Pool
-
-      Rev 1.1   21 Sep 1994 10:49:04   MI
-   pch
-
-      Rev 1.0   19 Sep 1994 17:04:18   MI
-   Initial revision.
-
-------------------------------------------------------------------------*/
-
-#pragma SEG_EOFMODULE
 
