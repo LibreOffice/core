@@ -1,15 +1,13 @@
-DMAKE 4.1 [http://dmake.wticorp.com/]
-----------------------------------------------------
+DMAKE 4.3
+---------
 
-The dmake home page can be found at:
-
-   http://dmake.wticorp.com/
-
-Visit there for the latest in dmake related information.
+The original sources of dmake were available on http://dmake.wticorp.com.
+This site has not been reachable for some time and the source is hosted
+in the OpenOffice.org http://www.openoffice.org/ cvs now. You can view
+the source at: http://tools.openoffice.org/source/browse/tools/dmake.
 
 dmake is different from other versions of Make in that it supports significant
-enhancements (See the WWW page).  A short summary of the more important
-features follows:
+enhancements.  A short summary of the more important features follows:
 
 	. support for portable makefiles
 	. portable accross many platforms
@@ -32,12 +30,10 @@ features follows:
 	. directory caching
 	. highly configurable
 
-Additional information pertaining to installation can be found in either the
+Release notes of dmake can be found in the file
 
-	gold/	- sub-folder for the Dmake Gold release
-	public/ - sub-folder for the Damke public release
+	readme/release.txt
 
-Release notes for this release of dmake can be found in the file
+and are continued in the file
 
-	release.txt
-
+    NEWS
