@@ -2,9 +2,9 @@
 #
 #   $RCSfile: libs.mk,v $
 #
-#   $Revision: 1.22 $
+#   $Revision: 1.23 $
 #
-#   last change: $Author: jsc $ $Date: 2001-05-08 09:49:17 $
+#   last change: $Author: rt $ $Date: 2001-05-16 13:21:00 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -165,6 +165,7 @@ SALHELPERLIB=-lsalhelper$(UDK_MAJOR)$(COM)
 XMLSCRIPTLIB =-lxcr$(UPD)$(DLLPOSTFIX)
 COMPHELPERLIB=-lcomphelp2
 CONNECTIVITYLIB=-lconnectivity
+DBFILELIB=-lfile$(UPD)$(DLLPOSTFIX)
 LDAPBERLIB=-lldapber
 TOOLSLIBST=-latools
 DVOSUTILLIBST=-ldvosutil
