@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SpreadsheetView.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 16:21:24 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 22:50:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,7 +117,7 @@
 
 /** represents a view of a spreadsheet document.
  */
-service SpreadsheetView
+published service SpreadsheetView
 {
     /** provides the integration into the framework.
      */
