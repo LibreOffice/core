@@ -2,9 +2,9 @@
  *
  *  $RCSfile: contdlg.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 06:00:33 $
+ *  last change: $Author: vg $ $Date: 2001-05-16 15:31:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -659,7 +659,7 @@ FloatingWindow RID_SVXDLG_CONTOUR
         CustomUnitText[ arabic ] = "%";
         QuickHelpText[ russian ] = "Öâåòîâîé äîïóñê!";
         QuickHelpText[ polish ] = "Tolerancja koloru!";
-        QuickHelpText[ japanese ] = "F‚Ì‹–—e";
+        QuickHelpText[ japanese ] = "F‚Ì‹–—e!";
         QuickHelpText[ chinese_simplified ] = "ÑÕÉ«Æ«²î";
         QuickHelpText[ chinese_traditional ] = "ÃC¦â°¾®t";
         QuickHelpText[ arabic ] = "Color Tolerance";
@@ -711,7 +711,7 @@ String STR_CONTOURDLG_MODIFY
     Text = "Die Kontur wurde geändert.\nSollen die Änderungen übernommen werden?" ;
     Text [ English ] = "The contour has been modified.\nDo you want to take your changes?" ;
     Text [ english_us ] = "The contour has been modified.\nDo you want to save the changes?" ;
-    Text [ portuguese_brazilian ] = "Die Kontur wurde geändert.\nSollen die Änderungen übernommen werden?" ;
+    Text [ portuguese_brazilian ] = "Die Kontur wurde ge?ndert.\nSollen die ?nderungen ?ernommen werden?" ;
     Text [ swedish ] = "Konturen har ändrats.\nSkall ändringarna övertas?" ;
     Text [ danish ] = "Konturen er blevet ændret.\nSkal ændringerne overtages?" ;
     Text [ italian ] = "Il contorno è stato modificato.\nAccettate le modifiche?" ;
@@ -739,7 +739,7 @@ String STR_CONTOURDLG_NEWPIPETTE
     Text = "Möchten Sie eine neue Kontur erzeugen?" ;
     Text [ English ] = "Do you want to create a new contour?" ;
     Text [ english_us ] = "Do you want to create a new contour?" ;
-    Text [ portuguese_brazilian ] = "Möchten Sie eine neue Kontur erzeugen?" ;
+    Text [ portuguese_brazilian ] = "M?hten Sie eine neue Kontur erzeugen?" ;
     Text [ swedish ] = "Vill Du skapa en ny kontur?" ;
     Text [ danish ] = "Vil du skabe en ny kontur?" ;
     Text [ italian ] = "Creare un nuovo contorno?" ;
@@ -767,7 +767,7 @@ String STR_CONTOURDLG_WORKPLACE
     Text = "Das Setzen eines neuen Arbeitsbereiches\nführt zu einem Löschen der Kontur.\nMöchten sie wirklich fortfahren?" ;
     Text [ English ] = "Setting a new working area will\ncause a removal of the contour.\nDo you really want to continue?" ;
     Text [ english_us ] = "Setting a new workspace will\ncause the contour to be deleted.\nAre you sure you want to continue?" ;
-    Text [ portuguese_brazilian ] = "Das Setzen eines neuen Arbeitsbereiches\nführt zu einem Löschen der Kontur.\nMöchten sie wirklich fortfahren?" ;
+    Text [ portuguese_brazilian ] = "Das Setzen eines neuen Arbeitsbereiches\nf?rt zu einem L?chen der Kontur.\nM?hten sie wirklich fortfahren?" ;
     Text [ swedish ] = "Definition av ett nytt arbetsområde\nleder till att konturen raderas.\nVill Du fortsätta ändå?" ;
     Text [ danish ] = "Hvis du definerer et nyt arbejdsområde\nbliver konturen slettet.\nEr du sikker på at du vil fortsætte?" ;
     Text [ italian ] = "L'impostazione di una nuova area di lavoro\ncauserà la cancellazione del contorno.\nVolete proseguire?" ;
