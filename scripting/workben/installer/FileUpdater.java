@@ -4,7 +4,7 @@ import java.io.*;
 
 public class FileUpdater {
 
-    public static void updateProtocolHandler( String installPath ) {
+    public static boolean updateProtocolHandler( String installPath ) {
             File in_file = null;
             FileInputStream in = null;
             File out_file = null;
@@ -65,6 +65,7 @@ public class FileUpdater {
                     System.err.println(e);
                 }
             }
+        return true;
     }// updateProtocolHandler
 
         /*
@@ -73,7 +74,7 @@ public class FileUpdater {
             FileUpdater.updateStarBasicXLC( "/scriptdev/neil/openoffice1.0.1ScriptFrame" );
         }*/
 
-        public static void updateScriptXLC( String installPath ) {
+        public static boolean updateScriptXLC( String installPath ) {
 
             File in_file = null;
             FileInputStream in = null;
@@ -184,10 +185,11 @@ public class FileUpdater {
                     System.err.println(e);
                 }
             }
+        return true;
         }// updateScriptXLC
 
 
-        public static void updateDialogXLC( String installPath ) {
+        public static boolean updateDialogXLC( String installPath ) {
     //System.out.println( installPath+File.separator+"user"+File.separator+"basic"+File.separator+"dialog.xlc" );
             File in_file = null;
             FileInputStream in = null;
@@ -277,6 +279,7 @@ public class FileUpdater {
                     System.err.println(e);
                 }
             }
+        return true;
         }// updateScriptXLC
 
 

@@ -14,13 +14,14 @@ import java.awt.event.*;
 import javax.swing.*;
 import java.io.*;
 import java.net.*;
+import java.util.Properties;
 
 public class Welcome extends javax.swing.JPanel implements ActionListener {
 
     /** Creates new form Welcome */
     public Welcome(InstallWizard wizard) {
-        this.wizard = wizard;
-        setBorder(new javax.swing.border.EtchedBorder(javax.swing.border.EtchedBorder.RAISED));
+    this.wizard = wizard;
+    setBorder(new javax.swing.border.EtchedBorder(javax.swing.border.EtchedBorder.RAISED));
         initComponents();
     }
 
@@ -32,6 +33,7 @@ public class Welcome extends javax.swing.JPanel implements ActionListener {
     private void initComponents() {//GEN-BEGIN:initComponents
         welcomePanel = new javax.swing.JPanel();
         area = new javax.swing.JTextArea();
+    nextButtonEnable = true;
         
         setLayout(new java.awt.BorderLayout());
         
@@ -39,19 +41,101 @@ public class Welcome extends javax.swing.JPanel implements ActionListener {
         //area.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         area.setEditable(false);
         area.setLineWrap(true);
-        area.setText("\n \t Please ensure that you have exited from Office");
+        //area.setText("\n \t Please ensure that you have exited from Office");
+    
+    String message = "\n \t Please ensure that you have exited from Office";
+    String userDir = (String) System.getProperty( "user.dir" );
+    boolean isValid = validateCurrentUserDir(userDir);
+    if( !isValid ) {
+        nextButtonEnable = false;
+        message = "Please run Installer from the program directory in a valid Office installation";
+        setUpWelcomePanel(message);
+        return;
+    }
+
+    int programPosition = userDir.lastIndexOf("program");
+    String offInstallPth = null;
+    offInstallPth = userDir.substring( 0, programPosition );
+    
+    try {
+        LogStream log = new LogStream( "SFrameworkInstall.log" );
+                System.setErr(log);
         
-        welcomePanel.add(area, java.awt.BorderLayout.CENTER);
-        add(welcomePanel, java.awt.BorderLayout.CENTER);
-        NavPanel nav = new NavPanel(wizard, false, true, true, "", InstallWizard.VERSIONS);
-        nav.setNextListener(this);
-        add(nav, java.awt.BorderLayout.SOUTH);
-        
-        //Banner br = new Banner();
-        //add(br, java.awt.BorderLayout.WEST);
+                System.setOut(log);
+    }
+    catch( FileNotFoundException fnfe ) {
+        String stackTrace = ExceptionTraceHelper.getTrace( fnfe );
+        nextButtonEnable = false;
+        message = "Error creating log file, please ensure you have write access to update office installation.\n";
+        message += "Error Detail:\n" + stackTrace;
+        setUpWelcomePanel(message);
+        return;
+        //fnfe.printStackTrace();   
+    }
+        wizard.storeLocation(offInstallPth);
+    setUpWelcomePanel(message);
         
     }//GEN-END:initComponents
 
+    private void setUpWelcomePanel(String message){
+    area.setText( message );
+        welcomePanel.add(area, java.awt.BorderLayout.CENTER);
+        add(welcomePanel, java.awt.BorderLayout.CENTER);
+    NavPanel nav = new NavPanel(wizard, false, nextButtonEnable, true, "", InstallWizard.FINAL);
+    nav.setNextListener(this);
+    add(nav, java.awt.BorderLayout.SOUTH);
+        
+    //Banner br = new Banner();
+    //add(br, java.awt.BorderLayout.WEST);
+    }
+    
+    
+    private boolean validateCurrentUserDir(String userDir){
+
+    
+    
+    Properties props = null;
+    
+        File fileVersions = null;
+    try
+    {
+            fileVersions = InstUtil.buildSversionLocation();
+    }
+    catch(IOException eFnF)
+    {
+            System.err.println("Cannot find sversion.ini/.sversionrc");
+            JOptionPane.showMessageDialog(this, eFnF.getMessage(), "File not Found", JOptionPane.ERROR_MESSAGE);
+            wizard.exitForm(null);
+    }
+        
+        try {
+            props = InstUtil.getOfficeVersions(fileVersions);
+        }
+        catch (IOException eIO) {
+            //Message about no installed versions found
+            System.err.println("Failed to parse SVERSION");
+            JOptionPane.showMessageDialog(this, "There was a problem reading from the Office settings file.", "Parse Error", JOptionPane.ERROR_MESSAGE);            
+            wizard.exitForm(null);
+        }
+
+
+    boolean versionMatch = false;
+    for( int i = 0; i < versions.length; i++ ) {
+        String key = versions[i];
+        String progPath = ( String )props.getProperty( key );
+        if ( progPath != null ){
+            progPath = progPath  + "program";
+            if( userDir.equals( progPath ) ){
+                versionMatch = true;
+                break;
+            }
+        }
+    }   
+    return versionMatch;
+    }
+    
+    
+    
     public java.awt.Dimension getPreferredSize() {
         return new java.awt.Dimension(InstallWizard.DEFWIDTH, InstallWizard.DEFHEIGHT);
     }    
@@ -66,6 +150,8 @@ public class Welcome extends javax.swing.JPanel implements ActionListener {
     private javax.swing.JPanel welcomePanel;
     private javax.swing.JTextArea area;
     private InstallWizard wizard;
-    
+    private static final String [] versions = {"OpenOffice.org 643", "StarOffice 6.1"}; 
+    private boolean nextButtonEnable = true;
+
     // End of variables declaration//GEN-END:variables
 }

@@ -367,7 +367,12 @@ public class XmlUpdater extends Thread {
     } */
 
         //System.out.println("About to call register");
-    Register.register(installPath+File.separator, statusLabel, progressBar);
+    if(!Register.register(installPath+File.separator, statusLabel, progressBar) )
+        {
+           onInstallComplete();
+           return;
+    }
+
     statusLabel.setText("Installation Complete");
     progressBar.setString("Installation Complete");
     progressBar.setValue(10);
