@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: pb $ $Date: 2002-11-22 13:01:11 $
+ *  last change: $Author: iha $ $Date: 2002-11-28 19:19:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2691,9 +2691,12 @@ BOOL SvxCharEffectsPage::FillItemSet( SfxItemSet& rSet )
 
     if ( pOld )
     {
-        const SvxEmphasisMarkItem& rItem = *( (const SvxEmphasisMarkItem*)pOld );
-        if ( rItem.GetEmphasisMark() == eMark )
-            bChanged = FALSE;
+        if( rOldSet.GetItemState( nWhich ) != SFX_ITEM_DONTCARE )
+        {
+            const SvxEmphasisMarkItem& rItem = *( (const SvxEmphasisMarkItem*)pOld );
+            if ( rItem.GetEmphasisMark() == eMark )
+                bChanged = FALSE;
+        }
     }
 
     if ( rOldSet.GetItemState( nWhich ) == SFX_ITEM_DONTCARE &&
