@@ -1,32 +1,18 @@
-mkdir: %_DEST%\inc\sfx2
-mkdir: %_DEST%\inc\enus
-mkdir: %_DEST%\inc\fren
-mkdir: %_DEST%\inc\dtch
-mkdir: %_DEST%\inc\ital
-mkdir: %_DEST%\inc\swed
-mkdir: %_DEST%\inc\port
-mkdir: %_DEST%\inc\dan
-mkdir: %_DEST%\inc\span
-mkdir: %_DEST%\inc\chinsim
-mkdir: %_DEST%\inc\japn
-mkdir: %_DEST%\inc\russ
-mkdir: %_DEST%\inc\pol
+mkdir: %_DEST%\inc%_EXT%\sfx2
 
 touch: ..\%__SRC%\misc\sfx2.hid %_DEST%\bin%_EXT%\sfx2.hid
 
 ..\%__SRC%\inc\sfxslots.ilb %_DEST%\inc%_EXT%\sfxslots.ilb
 ..\%__SRC%\inc\sfxslots.ilb* %_DEST%\inc%_EXT%\sfxslots.ilb*
 ..\%__SRC%\lib\sfx.lib %_DEST%\lib%_EXT%\sfx.lib
-..\%__SRC%\lib\*.so %_DEST%\lib%_EXT%\*.so
+..\%__SRC%\lib\lib*.so %_DEST%\lib%_EXT%
 ..\%__SRC%\lib\*.a %_DEST%\lib%_EXT%\*.a
 ..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*.dylib
 ..\%__SRC%\slb\sfx.lib %_DEST%\lib%_EXT%\xsfx.lib
-..\%__SRC%\obj\appctor.obj %_DEST%\lib%_EXT%\xsfxapp.obj
 ..\%__SRC%\lib\isfx.lib %_DEST%\lib%_EXT%\isfx.lib
 ..\%__SRC%\lib\debug.lib %_DEST%\lib%_EXT%\sfxdebug.lib
 ..\%__SRC%\bin\sfx?????.sym %_DEST%\bin%_EXT%\sfx?????.sym
 ..\%__SRC%\bin\sfx?????.dll %_DEST%\bin%_EXT%\sfx?????.dll
-..\%__SRC%\bin\sfx???[0-9][0-9].dll %_DEST%\bin%_EXT%\sfx?????.dll
 ..\%__SRC%\bin\sfx?????.res %_DEST%\bin%_EXT%\sfx?????.res
 ..\%__SRC%\bin\sfx?????.sym %_DEST%\bin%_EXT%\sfx?????.sym
 ..\%__SRC%\misc\sfx?????.map %_DEST%\bin%_EXT%\sfx?????.map
@@ -39,7 +25,6 @@ touch: ..\%__SRC%\misc\sfx2.hid %_DEST%\bin%_EXT%\sfx2.hid
 ..\%__SRC%\misc\sfx2.csv %_DEST%\inc%_EXT%\sfx2.csv
 ..\%__SRC%\inc\macropg.hxx %_DEST%\inc%_EXT%\macropg.hxx
 
-hedabu: ..\inc\accmgr.hxx %_DEST%\inc%_EXT%\sfx2\accmgr.hxx
 hedabu: ..\inc\app.hxx %_DEST%\inc%_EXT%\sfx2\app.hxx
 hedabu: ..\inc\basedlgs.hxx %_DEST%\inc%_EXT%\sfx2\basedlgs.hxx
 hedabu: ..\inc\bindings.hxx %_DEST%\inc%_EXT%\sfx2\bindings.hxx
@@ -147,10 +132,7 @@ hedabu: ..\inc\basmgr.hxx %_DEST%\inc%_EXT%\sfx2\basmgr.hxx
 hedabu: ..\inc\imagemgr.hxx %_DEST%\inc%_EXT%\sfx2\imagemgr.hxx
 hedabu: ..\inc\accelinfo.hxx %_DEST%\inc%_EXT%\sfx2\accelinfo.hxx
 
-
 ..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib%_EXT%\lib*static*.dylib
 ..\%__SRC%\misc\*staticdatamembers.cxx %_DEST%\inc%_EXT%\*staticdatamembers.cxx
 ..\%__SRC%\misc\*staticdatamembers.h* %_DEST%\inc%_EXT%\*staticdatamembers.h*
 
-dos: sh -c "if test %OS% = MACOSX; then create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
-dos: sh -c "if test %OS% = MACOSX; then create-libstatic-link %_DEST%\lib%_EXT%; fi"
