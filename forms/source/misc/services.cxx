@@ -2,9 +2,9 @@
  *
  *  $RCSfile: services.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 11:45:06 $
+ *  last change: $Author: rt $ $Date: 2004-05-07 16:10:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -337,6 +337,8 @@ void SAL_CALL createRegistryInfo_OScrollBarModel();
 void SAL_CALL createRegistryInfo_OSpinButtonModel();
 void SAL_CALL createRegistryInfo_ONavigationBarModel();
 void SAL_CALL createRegistryInfo_ONavigationBarControl();
+void SAL_CALL createRegistryInfo_ORichTextModel();
+void SAL_CALL createRegistryInfo_ORichTextControl();
 
 //---------------------------------------------------------------------------------------
 void SAL_CALL createRegistryInfo_FORMS()
@@ -350,6 +352,8 @@ void SAL_CALL createRegistryInfo_FORMS()
         createRegistryInfo_OSpinButtonModel();
         createRegistryInfo_ONavigationBarModel();
         createRegistryInfo_ONavigationBarControl();
+        createRegistryInfo_ORichTextModel();
+        createRegistryInfo_ORichTextControl();
         bInit = sal_True;
     }
 }
