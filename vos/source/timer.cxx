@@ -2,9 +2,9 @@
  *
  *  $RCSfile: timer.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-14 10:01:10 $
+ *  last change: $Author: jbu $ $Date: 2001-06-25 16:04:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -533,23 +533,10 @@ void OTimerManager::run()
 // Timer manager cleanup
 //
 
-/* should be removed by the new init/deint-routines of the RTL */
-
-class OTimerManagerCleanup
-{
-public:
-     ~OTimerManagerCleanup();
-};
-
-OTimerManagerCleanup::~OTimerManagerCleanup()
-{
-    if ( OTimerManager::m_pManager != 0 )
-    {
-        OTimerManager::m_pManager->kill();
-    }
-}
-
-static OTimerManagerCleanup TimerManagerCleanup;
-
-
-
+// jbu:
+// The timer manager cleanup has been removed (no thread is killed anymore).
+// So the thread leaks.
+// This will result in a GPF in case the vos-library gets unloaded before
+// process termination.
+// -> TODO : rewrite this file, so that the timerManager thread gets destroyed,
+//           when there are no timers anymore !
