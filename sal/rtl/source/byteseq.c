@@ -2,9 +2,9 @@
  *
  *  $RCSfile: byteseq.c,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 17:10:24 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 13:27:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -275,7 +275,7 @@ sal_Bool SAL_CALL rtl_byte_sequence_equals( sal_Sequence *pSequence1 , sal_Seque
 //==================================================================================================
 const sal_Int8 *SAL_CALL rtl_byte_sequence_getConstArray( sal_Sequence *pSequence )
 {
-    return pSequence->elements;
+    return ((const sal_Int8*)(pSequence->elements));
 }
 
 //==================================================================================================
