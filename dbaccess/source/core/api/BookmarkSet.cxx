@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BookmarkSet.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-01 10:08:02 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 14:58:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@ using namespace ::osl;
 void OBookmarkSet::construct(const Reference< XResultSet>& _xDriverSet)
 {
     OCacheSet::construct(_xDriverSet);
-    m_xRowLocate = Reference< XRowLocate>(_xDriverSet,UNO_QUERY);
+    m_xRowLocate.set(_xDriverSet,UNO_QUERY);
 }
 // -----------------------------------------------------------------------------
 Any SAL_CALL OBookmarkSet::getBookmark( const ORowSetRow& _rRow ) throw(SQLException, RuntimeException)
