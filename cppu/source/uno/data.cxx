@@ -2,9 +2,9 @@
  *
  *  $RCSfile: data.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: dbo $ $Date: 2001-10-16 11:11:46 $
+ *  last change: $Author: dbo $ $Date: 2001-10-17 13:24:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -344,9 +344,9 @@ struct C5 : public C4
     sal_Int64 n5;
     sal_Bool b5;
 };
-struct C6
+struct C6 : public C1
 {
-    C5 c6;
+    C5 c6 CPPU_GNU3_ALIGN( C1 );
     sal_Bool b6;
 };
 
@@ -485,9 +485,9 @@ BinaryCompatible_Impl::BinaryCompatible_Impl()
     BINTEST_VERIFYSIZE( C5, 44 );
     BINTEST_VERIFYOFFSET( C5, n5, 32 );
     BINTEST_VERIFYOFFSET( C5, b5, 40 );
-    BINTEST_VERIFYSIZE( C6, 48 );
-    BINTEST_VERIFYOFFSET( C6, c6, 0 );
-    BINTEST_VERIFYOFFSET( C6, b6, 44 );
+    BINTEST_VERIFYSIZE( C6, 52 );
+    BINTEST_VERIFYOFFSET( C6, c6, 4 );
+    BINTEST_VERIFYOFFSET( C6, b6, 48 );
 #else
     BINTEST_VERIFYSIZE( C3, 24 );
     BINTEST_VERIFYOFFSET( C3, d3, 8 );
@@ -498,9 +498,9 @@ BinaryCompatible_Impl::BinaryCompatible_Impl()
     BINTEST_VERIFYSIZE( C5, 56 );
     BINTEST_VERIFYOFFSET( C5, n5, 40 );
     BINTEST_VERIFYOFFSET( C5, b5, 48 );
-    BINTEST_VERIFYSIZE( C6, 64 );
-    BINTEST_VERIFYOFFSET( C6, c6, 0 );
-    BINTEST_VERIFYOFFSET( C6, b6, 56 );
+    BINTEST_VERIFYSIZE( C6, 72 );
+    BINTEST_VERIFYOFFSET( C6, c6, 8 );
+    BINTEST_VERIFYOFFSET( C6, b6, 64 );
 #endif
 
     BINTEST_VERIFYSIZE( O2, 24 );
