@@ -1,0 +1,190 @@
+/*************************************************************************
+ *
+ *  $RCSfile: HierarchyDataReadAccess.idl,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: kso $ $Date: 2001-07-03 11:00:34 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_ucb_HierarchyDataReadAccess_idl__
+#define __com_sun_star_ucb_HierarchyDataReadAccess_idl__
+
+#ifndef __com_sun_star_container_XNameAccess_idl__
+#include <com/sun/star/container/XNameAccess.idl>
+#endif
+#ifndef __com_sun_star_container_XHierarchicalNameAccess_idl__
+#include <com/sun/star/container/XHierarchicalNameAccess.idl>
+#endif
+#ifndef __com_sun_star_util_XChangesNotifier_idl__
+#include <com/sun/star/util/XChangesNotifier.idl>
+#endif
+#ifndef __com_sun_star_lang_XComponent_idl__
+#include <com/sun/star/lang/XComponent.idl>
+#endif
+
+//=============================================================================
+
+module com { module sun { module star { module ucb {
+
+//=============================================================================
+/** provides read access to a fragment of the hierarchy data.
+
+    <p>A hierarchy data source provides access to a tree of hierarchy data
+    nodes. Each hierarchy data node, except the root node, has a parent that
+    is a hierarchy data node too. A hierarchy data node has a name.
+
+    <p>Each hierarchy data node has three data members:
+
+    <ul>
+    <li>"Title", which is of type <atom>string</atom>. It contains a title
+    for the node. This value must not be empty.
+    <li>"TargetURL", which is of type <atom>string</atom></li> It may contain
+    any URL, which will be treated as the target of a hierarchy link.
+    <li>"Children", which is of type <type>HierarchyDataReadAccess</type> or
+    of type <type>HierarchyDataReadWriteAccess</type></li>, depending on the
+    type of the node. This member provides access to the children of a node.
+    </ul>
+*/
+service HierarchyDataReadAccess
+{
+    //-------------------------------------------------------------------------
+    /** gives access to the data members of a hierarchy data node.
+
+        <p>Examples:
+        <ul>
+        <li><code>getByName( "Title" )</code> will return an <atom>any</atom>
+        containing a string containing the title of the node.
+        </li>
+        <li><code>getByName( "Children" )</code> will return an <atom>any</atom>
+        containing an implementation of service
+        <type>HierarchyDataReadAccess</type>, if it was called on a read-only
+        node. It will return an implementation of service
+        <type>HierarchyDataReadWriteAccess</type> if it was called on a
+        writable node.
+        </li>
+        </ul>
+     */
+    interface com::sun::star::container::XNameAccess;
+
+    //-------------------------------------------------------------------------
+    /** gives access to the data members of a hierarchy data node as well
+        as to any child nodes or to the data members of child nodes using a
+        hierarchical name.
+
+        <p>A hierarchical name consists of segments that are separated by a
+        single slash ('/'). There is neither a leading nor a trailing slash
+        allowed. A segment may contain any character, accept the slash.
+
+        <p>Examples:
+        <ul>
+        <li>
+        <code>getByHierarchicalName( "Title" )</code> will return an
+        <atom>any</atom> containing a string containing the title of the node
+        itself.
+        </li>
+        <li>
+        <code>getByHierarchicalName( "Children/subnode1" )</code> will give
+        access to the child node named "subnode1" of the node. It will return
+        an <atom>any</atom> containing an implementation of service
+        <type>HierarchyDataReadAccess</type>, if it was called on a read-only
+        node. It will return an implementation of service
+        <type>HierarchyDataReadWriteAccess</type> if it was called on a
+        writable node.
+        </li>
+        <li>
+        <code>getByHierarchicalName( "Children/subnode2/TargetURL" )</code> will
+        give direct access to the "TargetURL" data member of the child node
+        named "subnode2" of the node. It will return an <atom>any</atom>
+        containing a <atom>string</atom> containing the target URL of the node.
+        </li>
+        <li>
+        <code>getByHierarchicalName( "Children/subnode3/Children" )</code> will
+        give direct access to the "Children" data member of the child node
+        named "subnode3" of the node. It will return an <atom>any</atom>
+        conntaining an implementation of service
+        <type>HierarchyDataReadAccess</type>, if it was called on a read-only
+        node. It will return an implementation of service
+        <type>HierarchyDataReadWriteAccess</type> if it was called on a
+        writable node.
+        </li>
+        </ul>
+     */
+    interface com::sun::star::container::XHierarchicalNameAccess;
+
+    //-------------------------------------------------------------------------
+    /** allows registering listeners that observe the hierarchy data source.
+
+        <p>A client can register an
+        <type scope="com::sun::star::util">XChangesListener</type>, which will
+        receive notifications for any changes within the hierarchy (fragment)
+        this object represents.
+
+        <p>An implementation should collect as many changes as possible into a
+        single <type scope="com::sun::star::util">ChangesEvent</type>.
+    */
+    interface com::sun::star::util::XChangesNotifier;
+
+    //-------------------------------------------------------------------------
+    /** allows controlling or observing the lifetime of the hierarchy data
+        access object.
+     */
+    interface com::sun::star::lang::XComponent;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
