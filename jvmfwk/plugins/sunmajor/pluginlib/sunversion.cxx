@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sunversion.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jl $ $Date: 2004-04-19 15:36:26 $
+ *  last change: $Author: jl $ $Date: 2004-05-12 09:43:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -232,37 +232,24 @@ bool SunVersion::init(const char *szVersion)
             m_preRelease = Rel_EA1;
         else if( ! strcmp(pCur,"ea2"))
             m_preRelease = Rel_EA2;
+        else if( ! strcmp(pCur,"ea3"))
+            m_preRelease = Rel_EA3;
         else if ( ! strcmp(pCur,"beta"))
             m_preRelease = Rel_BETA;
         else if ( ! strcmp(pCur,"beta1"))
             m_preRelease = Rel_BETA1;
         else if ( ! strcmp(pCur,"beta2"))
             m_preRelease = Rel_BETA2;
+        else if ( ! strcmp(pCur,"beta3"))
+            m_preRelease = Rel_BETA3;
         else if (! strcmp(pCur, "rc"))
             m_preRelease = Rel_RC;
         else if (! strcmp(pCur, "rc1"))
             m_preRelease = Rel_RC1;
         else if (! strcmp(pCur, "rc2"))
             m_preRelease = Rel_RC2;
-#if defined FREEBSD
-    // #i21615#: FreeBSD adds p[1-8] to their JDK port.
-        else if (! strcmp(pCur, "p8"))
-            m_preRelease = Rel_BETA;
-        else if (! strcmp(pCur, "p7"))
-            m_preRelease = Rel_BETA;
-        else if (! strcmp(pCur, "p6"))
-            m_preRelease = Rel_BETA;
-        else if (! strcmp(pCur, "p5"))
-            m_preRelease = Rel_BETA;
-        else if (! strcmp(pCur, "p4"))
-            m_preRelease = Rel_BETA;
-        else if (! strcmp(pCur, "p3"))
-            m_preRelease = Rel_BETA;
-        else if (! strcmp(pCur, "p2"))
-            m_preRelease = Rel_BETA;
-        else if (! strcmp(pCur, "p1"))
-            m_preRelease = Rel_BETA;
-#endif
+        else if (! strcmp(pCur, "rc3"))
+            m_preRelease = Rel_RC3;
         else
             return false;
     }
@@ -290,49 +277,30 @@ bool SunVersion::operator > (const SunVersion& ver) const
     if( &ver == this)
         return false;
 
-    bool ret= false;
-    bool bDone = false;
-
-    if (m_preRelease == ver.m_preRelease)
+    //compare major.minor.maintainance
+    for( int i= 0; i < 4; i ++)
     {
-        //compare major.minor.maintainance
-        for( int i= 0; i < 4; i ++)
+        // 1.4 > 1.3
+        if(m_arVersionParts[i] > ver.m_arVersionParts[i])
         {
-            // 1.4 > 1.3
-            if(m_arVersionParts[i] > ver.m_arVersionParts[i])
-            {
-                ret= true;
-                bDone = true;
-                break;
-            }
-            else if (m_arVersionParts[i] < ver.m_arVersionParts[i])
-            {
-                bDone = true;
-                break;
-            }
+            return true;
         }
-        //major.minor.maintainance_update are equal. test for a trailing char
-        if (bDone == false
-            &&  m_nUpdateSpecial > ver.m_nUpdateSpecial)
-            ret = true;
+        else if (m_arVersionParts[i] < ver.m_arVersionParts[i])
+        {
+            return false;
+        }
     }
-    else if (m_preRelease == Rel_NONE && ver.m_preRelease > Rel_NONE)
-    {// a pre release is always minor to a relesase version:
-        // 1.3.1 > 1.4.0-beta
-        ret = true;
-    }
-    else if (m_preRelease > Rel_NONE && ver.m_preRelease == Rel_NONE)
+    //major.minor.maintainance_update are equal. test for a trailing char
+    if (m_nUpdateSpecial > ver.m_nUpdateSpecial)
     {
-        ret = false;
+        return true;
     }
-    else if(m_preRelease > ver.m_preRelease)
-    {
-        ret = true;
-    }
-    else
-        ret = false; // m_preRelease < ver.m_preRelease
 
-    return ret;
+    //compare pre -release values
+    if (m_preRelease > ver.m_preRelease)
+        return true;
+
+    return false;
 }
 
 bool SunVersion::operator < (const SunVersion& ver) const

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sunversion.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jl $ $Date: 2004-04-19 15:36:59 $
+ *  last change: $Author: jl $ $Date: 2004-05-12 09:43:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,12 +99,15 @@ protected:
         Rel_EA,
         Rel_EA1,
         Rel_EA2,
+        Rel_EA3,
         Rel_BETA,
         Rel_BETA1,
         Rel_BETA2,
+        Rel_BETA3,
         Rel_RC,
         Rel_RC1,
-        Rel_RC2
+        Rel_RC2,
+        Rel_RC3
     };
 
     //contains major,minor,micro,update
@@ -119,6 +122,10 @@ public:
     SunVersion(const rtl::OUString& usVer);
     ~SunVersion();
 
+    /**
+       Pre-release versions are taken into account.
+       1.5.0-beta > 1.5.0-ea > 1.4.2
+     */
     bool operator > (const SunVersion& ver) const;
     bool operator < (const SunVersion& ver) const;
     bool operator == (const SunVersion& ver) const;
