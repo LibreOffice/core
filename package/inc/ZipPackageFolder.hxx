@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageFolder.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: mtg $ $Date: 2001-10-02 22:05:53 $
+ *  last change: $Author: mtg $ $Date: 2001-10-26 21:44:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,9 +100,7 @@ class ZipPackageFolder : public cppu::OWeakObject,
     static cppu::class_data6 s_cd;
 protected:
     ContentHash maContents;
-    bool mbHasReleased;
 public:
-    bool HasReleased ( ) { return mbHasReleased; }
 
     ZipPackageFolder ();
     virtual ~ZipPackageFolder();
