@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.cxx,v $
  *
- *  $Revision: 1.144 $
+ *  $Revision: 1.145 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-16 12:53:58 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 13:29:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1015,7 +1015,7 @@ const SwNumFmt* SwWW8FltControlStack::GetNumFmtFromStack(const SwPosition &rPos,
     {
         String sName(((SfxStringItem*)pItem)->GetValue());
         const SwNodeNum *pNum = rTxtNode.GetNum();
-        if (pNum && NO_NUM > pNum->GetLevel())
+        if (pNum && pNum->IsNum())
         {
             const SwNumRule *pRule = pDoc->FindNumRulePtr(sName);
             BYTE nLvl = GetRealLevel(pNum->GetLevel());
