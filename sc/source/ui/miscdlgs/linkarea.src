@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linkarea.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-09-25 20:25:19 $
+ *  last change: $Author: kz $ $Date: 2001-10-22 20:19:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ ModalDialog RID_SCDLG_LINKAREA
         Text [ ENGLISH ] = "External Data Source Location" ;
         Text[ english_us ] = "URL of ~external data source";
         Text[ portuguese ] = "~URL da fonte de dados externa";
-        Text[ russian ] = "URL внешнего источника данных";
+        Text[ russian ] = "URL внешних исходных данных";
         Text[ greek ] = "~URL фзт еощфесйкёт рспЁлехузт фщн дедпмЁнщн";
         Text[ dutch ] = "~URL van de externe gegevensbron";
         Text[ french ] = "~URL de la source de donnйes externe";
@@ -165,7 +165,7 @@ ModalDialog RID_SCDLG_LINKAREA
         Text[ russian ] = "ƒоступные листы/области";
         Text[ greek ] = "ƒйбиЁуймпй рянбкет/ресйпчЁт";
         Text[ dutch ] = "~Beschikbare tabellen/Bereiken";
-        Text[ french ] = "Tables/Plages dis~ponibles";
+        Text[ french ] = "Feuilles/plages dis~ponibles";
         Text[ spanish ] = "Tablas/Ѕreas dispo~nibles";
         Text[ italian ] = "Sezioni/tabelle disponibili";
         Text[ danish ] = "Available Tables/Ranges";
@@ -201,7 +201,7 @@ ModalDialog RID_SCDLG_LINKAREA
         Text[ russian ] = "ќбновление каждые";
         Text[ greek ] = "≈~нзмЁсщуз ьлщн";
         Text[ dutch ] = "~Actualisering alle";
-        Text[ french ] = "Tout ~actualiser";
+        Text[ french ] = "~Actualisation toutes les";
         Text[ spanish ] = "Actuali~zar cada";
         Text[ italian ] = "Aggiorna ogni";
         Text[ danish ] = "Auto reload data every";
@@ -276,6 +276,7 @@ ModalDialog RID_SCDLG_LINKAREA
     Text[ catalan ] = "External Data Source";
     Text[ finnish ] = "Ulkoinen lдhde";
 };
+
 
 
 
