@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winproc.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: th $ $Date: 2001-07-06 16:07:09 $
+ *  last change: $Author: rt $ $Date: 2001-07-11 09:14:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,9 +129,6 @@
 #endif
 #ifndef _SV_DIALOG_HXX
 #include <dialog.hxx>
-#endif
-#ifndef _SV_GETSYS_HXX
-#include <getsys.hxx>
 #endif
 #ifndef _SV_HELP_HXX
 #include <help.hxx>
