@@ -2,9 +2,9 @@
  *
  *  $RCSfile: validate.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:55 $
+ *  last change: $Author: nn $ $Date: 2001-01-17 19:28:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,6 @@
 #include <svtools/eitem.hxx>
 #include <vcl/svapp.hxx>
 #include <basic/sbmeth.hxx>
-#include <segmentc.hxx>
 #include <basctl/basobj.hxx>
 #include <basic/sbstar.hxx>
 #include <basic/sbmod.hxx>
@@ -110,10 +109,7 @@ static USHORT pErrorRanges[] =
     0
 };
 
-SEG_EOFGLOBALS()
-
 //==================================================================
-#pragma SEG_FUNCDEF(validate_01)
 
 ScValidationDlg::ScValidationDlg( Window*           pParent,
                       const SfxItemSet* pArgSet ) :
@@ -129,16 +125,13 @@ ScValidationDlg::ScValidationDlg( Window*           pParent,
 
 // -----------------------------------------------------------------------
 
-#pragma SEG_FUNCDEF(validate_02)
-
 __EXPORT ScValidationDlg::~ScValidationDlg()
 {
 }
 
 //========================================================================
 //========================================================================
-// Werte-Tabpage:
-#pragma SEG_FUNCDEF(validate_03)
+// Values page
 
 ScTPValidationValue::ScTPValidationValue( Window*           pParent,
                                           const SfxItemSet& rArgSet )
@@ -168,14 +161,12 @@ ScTPValidationValue::ScTPValidationValue( Window*           pParent,
 }
 
 // -----------------------------------------------------------------------
-#pragma SEG_FUNCDEF(validate_04)
 
 __EXPORT ScTPValidationValue::~ScTPValidationValue()
 {
 }
 
 // -----------------------------------------------------------------------
-#pragma SEG_FUNCDEF(validate_05)
 
 void ScTPValidationValue::Init()
 {
@@ -191,7 +182,6 @@ void ScTPValidationValue::Init()
 }
 
 //------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(validate_06)
 
 USHORT* __EXPORT ScTPValidationValue::GetRanges()
 {
@@ -199,7 +189,6 @@ USHORT* __EXPORT ScTPValidationValue::GetRanges()
 }
 
 // -----------------------------------------------------------------------
-#pragma SEG_FUNCDEF(validate_07)
 
 SfxTabPage* __EXPORT ScTPValidationValue::Create( Window*   pParent,
                                          const SfxItemSet&  rArgSet )
@@ -208,7 +197,6 @@ SfxTabPage* __EXPORT ScTPValidationValue::Create( Window*   pParent,
 }
 
 // -----------------------------------------------------------------------
-#pragma SEG_FUNCDEF(validate_08)
 
 void __EXPORT ScTPValidationValue::Reset( const SfxItemSet& rArgSet )
 {
@@ -216,23 +204,34 @@ void __EXPORT ScTPValidationValue::Reset( const SfxItemSet& rArgSet )
 
     if ( rArgSet.GetItemState( FID_VALID_MODE, TRUE, &pItem ) == SFX_ITEM_SET )
         aLbAllow.SelectEntryPos( ((const SfxAllEnumItem*)pItem)->GetValue() );
+    else
+        aLbAllow.SelectEntryPos( 0 );       // default: all values
+
     if ( rArgSet.GetItemState( FID_VALID_CONDMODE, TRUE, &pItem ) == SFX_ITEM_SET )
         aLbValue.SelectEntryPos( ((const SfxAllEnumItem*)pItem)->GetValue() );
+    else
+        aLbValue.SelectEntryPos( 0 );       // default: equal
+
     if ( rArgSet.GetItemState( FID_VALID_VALUE1, TRUE, &pItem ) == SFX_ITEM_SET )
         aEdtMin.SetText( ((const SfxStringItem*)pItem)->GetValue() );
+    else
+        aEdtMin.SetText( EMPTY_STRING );
+
     if ( rArgSet.GetItemState( FID_VALID_VALUE2, TRUE, &pItem ) == SFX_ITEM_SET )
         aEdtMax.SetText( ((const SfxStringItem*)pItem)->GetValue() );
+    else
+        aEdtMax.SetText( EMPTY_STRING );
+
     if ( rArgSet.GetItemState( FID_VALID_BLANK, TRUE, &pItem ) == SFX_ITEM_SET )
         aTsbAllow.SetState( ((const SfxBoolItem*)pItem)->GetValue() ? STATE_CHECK : STATE_NOCHECK );
     else
-        aTsbAllow.SetState( STATE_CHECK );  // default an
+        aTsbAllow.SetState( STATE_CHECK );  // default: on
 
     SelectAllowHdl( NULL );
     SelectValueHdl( NULL );
 }
 
 // -----------------------------------------------------------------------
-#pragma SEG_FUNCDEF(validate_09)
 
 BOOL __EXPORT ScTPValidationValue::FillItemSet( SfxItemSet& rArgSet )
 {
@@ -247,7 +246,6 @@ BOOL __EXPORT ScTPValidationValue::FillItemSet( SfxItemSet& rArgSet )
 
 
 // -----------------------------------------------------------------------
-#pragma SEG_FUNCDEF(validate_0a)
 
 IMPL_LINK( ScTPValidationValue, SelectAllowHdl, ListBox *, pLb )
 {
@@ -265,7 +263,6 @@ IMPL_LINK( ScTPValidationValue, SelectAllowHdl, ListBox *, pLb )
 }
 
 // -----------------------------------------------------------------------
-#pragma SEG_FUNCDEF(validate_0b)
 
 IMPL_LINK( ScTPValidationValue, SelectValueHdl, ListBox *, pLb )
 {
@@ -305,8 +302,7 @@ IMPL_LINK( ScTPValidationValue, SelectValueHdl, ListBox *, pLb )
 
 //========================================================================
 //========================================================================
-// Werte-Tabpage:
-#pragma SEG_FUNCDEF(validate_0c)
+// Input Help Page
 
 ScTPValidationHelp::ScTPValidationHelp( Window*         pParent,
                                           const SfxItemSet& rArgSet )
@@ -328,14 +324,12 @@ ScTPValidationHelp::ScTPValidationHelp( Window*         pParent,
 }
 
 // -----------------------------------------------------------------------
-#pragma SEG_FUNCDEF(validate_0d)
 
 __EXPORT ScTPValidationHelp::~ScTPValidationHelp()
 {
 }
 
 // -----------------------------------------------------------------------
-#pragma SEG_FUNCDEF(validate_0e)
 
 void ScTPValidationHelp::Init()
 {
@@ -345,7 +339,6 @@ void ScTPValidationHelp::Init()
 }
 
 //------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(validate_0f)
 
 USHORT* __EXPORT ScTPValidationHelp::GetRanges()
 {
@@ -353,7 +346,6 @@ USHORT* __EXPORT ScTPValidationHelp::GetRanges()
 }
 
 // -----------------------------------------------------------------------
-#pragma SEG_FUNCDEF(validate_10)
 
 SfxTabPage* __EXPORT ScTPValidationHelp::Create( Window*    pParent,
                                          const SfxItemSet&  rArgSet )
@@ -362,7 +354,6 @@ SfxTabPage* __EXPORT ScTPValidationHelp::Create( Window*    pParent,
 }
 
 // -----------------------------------------------------------------------
-#pragma SEG_FUNCDEF(validate_11)
 
 void __EXPORT ScTPValidationHelp::Reset( const SfxItemSet& rArgSet )
 {
@@ -370,14 +361,21 @@ void __EXPORT ScTPValidationHelp::Reset( const SfxItemSet& rArgSet )
 
     if ( rArgSet.GetItemState( FID_VALID_SHOWHELP, TRUE, &pItem ) == SFX_ITEM_SET )
         aTsbHelp.SetState( ((const SfxBoolItem*)pItem)->GetValue() ? STATE_CHECK : STATE_NOCHECK );
+    else
+        aTsbHelp.SetState( STATE_NOCHECK );
+
     if ( rArgSet.GetItemState( FID_VALID_HELPTITLE, TRUE, &pItem ) == SFX_ITEM_SET )
         aEdtTitle.SetText( ((const SfxStringItem*)pItem)->GetValue() );
+    else
+        aEdtTitle.SetText( EMPTY_STRING );
+
     if ( rArgSet.GetItemState( FID_VALID_HELPTEXT, TRUE, &pItem ) == SFX_ITEM_SET )
         aEdInputHelp.SetText( ((const SfxStringItem*)pItem)->GetValue() );
+    else
+        aEdInputHelp.SetText( EMPTY_STRING );
 }
 
 // -----------------------------------------------------------------------
-#pragma SEG_FUNCDEF(validate_12)
 
 BOOL __EXPORT ScTPValidationHelp::FillItemSet( SfxItemSet& rArgSet )
 {
@@ -392,8 +390,7 @@ BOOL __EXPORT ScTPValidationHelp::FillItemSet( SfxItemSet& rArgSet )
 
 //========================================================================
 //========================================================================
-// Werte-Tabpage:
-#pragma SEG_FUNCDEF(validate_13)
+// Error Alert Page
 
 ScTPValidationError::ScTPValidationError( Window*           pParent,
                                           const SfxItemSet& rArgSet )
@@ -418,14 +415,12 @@ ScTPValidationError::ScTPValidationError( Window*           pParent,
 }
 
 // -----------------------------------------------------------------------
-#pragma SEG_FUNCDEF(validate_14)
 
 __EXPORT ScTPValidationError::~ScTPValidationError()
 {
 }
 
 // -----------------------------------------------------------------------
-#pragma SEG_FUNCDEF(validate_15)
 
 void ScTPValidationError::Init()
 {
@@ -439,7 +434,6 @@ void ScTPValidationError::Init()
 }
 
 //------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(validate_16)
 
 USHORT* __EXPORT ScTPValidationError::GetRanges()
 {
@@ -447,7 +441,6 @@ USHORT* __EXPORT ScTPValidationError::GetRanges()
 }
 
 // -----------------------------------------------------------------------
-#pragma SEG_FUNCDEF(validate_17)
 
 SfxTabPage* __EXPORT ScTPValidationError::Create( Window*   pParent,
                                          const SfxItemSet&  rArgSet )
@@ -456,7 +449,6 @@ SfxTabPage* __EXPORT ScTPValidationError::Create( Window*   pParent,
 }
 
 // -----------------------------------------------------------------------
-#pragma SEG_FUNCDEF(validate_18)
 
 void __EXPORT ScTPValidationError::Reset( const SfxItemSet& rArgSet )
 {
@@ -464,18 +456,28 @@ void __EXPORT ScTPValidationError::Reset( const SfxItemSet& rArgSet )
 
     if ( rArgSet.GetItemState( FID_VALID_SHOWERR, TRUE, &pItem ) == SFX_ITEM_SET )
         aTsbShow.SetState( ((const SfxBoolItem*)pItem)->GetValue() ? STATE_CHECK : STATE_NOCHECK );
+    else
+        aTsbShow.SetState( STATE_NOCHECK );
+
     if ( rArgSet.GetItemState( FID_VALID_ERRSTYLE, TRUE, &pItem ) == SFX_ITEM_SET )
         aLbAction.SelectEntryPos( ((const SfxAllEnumItem*)pItem)->GetValue() );
+    else
+        aLbAction.SelectEntryPos( 0 );
+
     if ( rArgSet.GetItemState( FID_VALID_ERRTITLE, TRUE, &pItem ) == SFX_ITEM_SET )
         aEdtTitle.SetText( ((const SfxStringItem*)pItem)->GetValue() );
+    else
+        aEdtTitle.SetText( EMPTY_STRING );
+
     if ( rArgSet.GetItemState( FID_VALID_ERRTEXT, TRUE, &pItem ) == SFX_ITEM_SET )
         aEdError.SetText( ((const SfxStringItem*)pItem)->GetValue() );
+    else
+        aEdError.SetText( EMPTY_STRING );
 
     SelectActionHdl( NULL );
 }
 
 // -----------------------------------------------------------------------
-#pragma SEG_FUNCDEF(validate_19)
 
 BOOL __EXPORT ScTPValidationError::FillItemSet( SfxItemSet& rArgSet )
 {
@@ -488,7 +490,6 @@ BOOL __EXPORT ScTPValidationError::FillItemSet( SfxItemSet& rArgSet )
 }
 
 // -----------------------------------------------------------------------
-#pragma SEG_FUNCDEF(validate_1a)
 
 IMPL_LINK( ScTPValidationError, SelectActionHdl, ListBox *, pLb )
 {
@@ -503,7 +504,6 @@ IMPL_LINK( ScTPValidationError, SelectActionHdl, ListBox *, pLb )
 }
 
 // -----------------------------------------------------------------------
-#pragma SEG_FUNCDEF(validate_1b)
 
 IMPL_LINK( ScTPValidationError, ClickSearchHdl, PushButton*, pBtn )
 {
@@ -549,42 +549,4 @@ IMPL_LINK( ScTPValidationError, ClickSearchHdl, PushButton*, pBtn )
     return( 0L );
 }
 
-
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.9  2000/09/17 14:08:59  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.8  2000/09/04 13:52:08  tbe
-    basicide, isetbrw, si, vcdlged from svx to basctl
-
-    Revision 1.7  2000/08/31 16:38:21  willem.vandorp
-    Header and footer replaced
-
-    Revision 1.6  2000/05/25 10:20:06  er
-    NOOLDSV
-
-    Revision 1.5  2000/02/11 12:24:23  hr
-    #70473# changes for unicode ( patched by automated patchtool )
-
-    Revision 1.4  1997/12/05 18:54:46  ANK
-    Includes geaendert
-
-
-      Rev 1.3   05 Dec 1997 19:54:46   ANK
-   Includes geaendert
-
-      Rev 1.2   16 Dec 1996 20:14:32   NN
-   Leerzellen default an, ggf.disablen, SetDefModalDialogParent
-
-      Rev 1.1   16 Dec 1996 16:57:30   NN
-   Items rein/raus
-
-      Rev 1.0   13 Dec 1996 09:35:24   SOH
-   Initial revision.
-
-------------------------------------------------------------------------*/
-
-#pragma SEG_EOFMODULE
 
