@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoctitm.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-23 12:23:19 $
+ *  last change: $Author: mba $ $Date: 2001-03-30 15:55:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -365,7 +365,16 @@ SfxOfficeDispatch::SfxOfficeDispatch( SfxBindings& rBindings, SfxDispatcher* pDi
 //    nOfficeDispatchCount++;
 
     // this object is an adapter that shows a ::com::sun::star::frame::XDispatch-Interface to the outside and uses a SfxControllerItem to monitor a state
-    pControllerItem = new SfxDispatchController_Impl( this, rBindings, pDispat, nSlotId, rURL, bInter );
+    pControllerItem = new SfxDispatchController_Impl( this, &rBindings, pDispat, nSlotId, rURL, bInter );
+}
+
+SfxOfficeDispatch::SfxOfficeDispatch( SfxDispatcher* pDispat, sal_uInt16 nSlotId, const ::com::sun::star::util::URL& rURL, sal_Bool bInter )
+    : bIntercept( bInter )
+{
+//    nOfficeDispatchCount++;
+
+    // this object is an adapter that shows a ::com::sun::star::frame::XDispatch-Interface to the outside and uses a SfxControllerItem to monitor a state
+    pControllerItem = new SfxDispatchController_Impl( this, NULL, pDispat, nSlotId, rURL, bInter );
 }
 
 SfxOfficeDispatch::~SfxOfficeDispatch()
@@ -402,10 +411,10 @@ SfxDispatcher* SfxOfficeDispatch::GetDispatcher_Impl()
     return pControllerItem->GetDispatcher();
 }
 
-SfxDispatchController_Impl::SfxDispatchController_Impl( SfxOfficeDispatch* pDisp, SfxBindings& rBindings, SfxDispatcher* pDispat, sal_uInt16 nSlotId, const ::com::sun::star::util::URL& rURL, sal_Bool bInter )
+SfxDispatchController_Impl::SfxDispatchController_Impl( SfxOfficeDispatch* pDisp, SfxBindings* pBind, SfxDispatcher* pDispat, sal_uInt16 nSlotId, const ::com::sun::star::util::URL& rURL, sal_Bool bInter )
     : pDispatch( pDisp )
     , aDispatchURL( rURL )
-    , pBindings( &rBindings )
+    , pBindings( pBind )
     , pDispatcher( pDispat )
     , pLastState( 0 )
     , nSlot( nSlotId )
@@ -444,7 +453,7 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
 {
     if ( pDispatch && aURL == aDispatchURL )
     {
-        if ( !GetId() )
+        if ( !GetId() && pBindings )
         {
             pBindings->ENTERREGISTRATIONS();
             Bind( nSlot, pBindings );
@@ -454,7 +463,7 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
         SfxAllItemSet aSet( SFX_APP()->GetPool() );
         TransformParameters( GetId(), aArgs, aSet );
         aSet.Put( SfxBoolItem( SID_INTERCEPTOR, sal_False ) );
-        if ( !pDispatcher )
+        if ( !pDispatcher && pBindings )
             pDispatcher = GetBindings().GetDispatcher_Impl();
 
         SfxCallMode nCall = SFX_CALLMODE_SLOT;
@@ -471,13 +480,14 @@ void SAL_CALL SfxDispatchController_Impl::dispatch( const ::com::sun::star::util
                 break;
             }
         }
+
         pDispatcher->Execute( GetId(), nCall, aSet );
     }
 }
 
 SfxDispatcher* SfxDispatchController_Impl::GetDispatcher()
 {
-    if ( !pDispatcher )
+    if ( !pDispatcher && pBindings )
         pDispatcher = GetBindings().GetDispatcher_Impl();
     return pDispatcher;
 }
@@ -487,7 +497,7 @@ void SAL_CALL SfxDispatchController_Impl::addStatusListener(const ::com::sun::st
     if ( !pDispatch )
         return;
 
-    if ( !GetId() )
+    if ( !GetId() && pBindings )
     {
         pBindings->ENTERREGISTRATIONS();
         Bind( nSlot, pBindings );
@@ -495,7 +505,7 @@ void SAL_CALL SfxDispatchController_Impl::addStatusListener(const ::com::sun::st
     }
 
     const SfxPoolItem *pItem = 0;
-    if ( !pDispatcher )
+    if ( !pDispatcher && pBindings )
         pDispatcher = GetBindings().GetDispatcher_Impl();
     SfxItemState eState = pDispatcher->QueryState( GetId(), pItem );
     ::com::sun::star::uno::Any aState;
@@ -521,7 +531,7 @@ void SfxDispatchController_Impl::StateChanged( sal_uInt16 nSID, SfxItemState eSt
     {
         // If this Controller is made for an interception, the state can't be set from outside
         // because this would be the state of the interceptor itself!
-        if ( !pDispatcher )
+        if ( !pDispatcher && pBindings )
             pDispatcher = GetBindings().GetDispatcher_Impl();
         eState = pDispatcher->QueryState( GetId(), pState );
     }

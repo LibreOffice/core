@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: dv $ $Date: 2001-03-23 15:11:40 $
+ *  last change: $Author: mba $ $Date: 2001-03-30 15:52:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,8 @@
  *
  *
  ************************************************************************/
+
+#include "appuno.hxx"
 
 #ifndef _SFXRECTITEM_HXX //autogen
 #include <svtools/rectitem.hxx>
@@ -173,7 +175,6 @@ using namespace ::rtl;
 
 #pragma hdrstop
 
-#include "appuno.hxx"
 #include "sfxtypes.hxx"
 #include "sfxuno.hxx"
 #include "appdata.hxx"
@@ -192,6 +193,8 @@ using namespace ::rtl;
 #include "objsh.hxx"
 #include "objuno.hxx"
 #include "filepicker.hxx"
+#include "unoctitm.hxx"
+#include "dispatch.hxx"
 #include "doctemplates.hxx"
 
 #define FRAMELOADER_SERVICENAME     "com.sun.star.frame.FrameLoader"
@@ -872,12 +875,36 @@ ErrCode SfxMacroLoader::loadMacro( const ::rtl::OUString& rURL )
     return nErr;
 }
 
+SFX_IMPL_XSERVICEINFO( SfxAppDispatchProvider, "com.sun.star.frame.DispatchProvider", "com.sun.star.comp.sfx2.AppDispatchProvider" )                                                                \
+SFX_IMPL_SINGLEFACTORY( SfxAppDispatchProvider );
+
+Reference < XDispatch > SAL_CALL SfxAppDispatchProvider::queryDispatch( const ::com::sun::star::util::URL& aURL, const ::rtl::OUString& sTargetFrameName,
+                    FrameSearchFlags eSearchFlags ) throw( RuntimeException )
+{
+    USHORT nId = 0;
+    Reference < XDispatch > xDisp;
+    if ( aURL.Protocol.compareToAscii( "slot:" ) == COMPARE_EQUAL ||
+         aURL.Protocol.compareToAscii( "commandId:" ) == COMPARE_EQUAL )
+    {
+        nId = (USHORT) aURL.Path.toInt32();
+    }
+
+    if ( nId && SFX_APP()->GetAppDispatcher_Impl()->HasSlot_Impl( nId ) )
+        xDisp = new SfxOfficeDispatch( SFX_APP()->GetAppDispatcher_Impl(), nId, aURL ) ;
+
+    return xDisp;
+}
+
+Sequence< Reference < XDispatch > > SAL_CALL SfxAppDispatchProvider::queryDispatches( const Sequence < DispatchDescriptor >& seqDescriptor )
+                        throw( RuntimeException )
+{
+    return Sequence< Reference < XDispatch > >();
+}
+
 // -----------------------------------------------------------------------
 
 #define IMPLEMENTATION_NAME "com.sun.comp.jsimport.IchitaroImportFilter"
 #define SERVICE_NAME        "com.sun.star.document.ImportFilter"
-
-
 
 extern "C" {
 
@@ -898,6 +925,14 @@ sal_Bool SAL_CALL component_writeInfo(  void*   pServiceManager ,
     ::rtl::OUString aKeyStr;
     Reference< XRegistryKey > xNewKey;
     Reference< XRegistryKey > xLoaderKey;
+
+    aImpl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
+    aImpl += SfxAppDispatchProvider::impl_getStaticImplementationName();
+
+    aTempStr = aImpl;
+    aTempStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/UNO/SERVICES"));
+    xNewKey = xKey->createKey( aTempStr );
+    xNewKey->createKey( ::rtl::OUString::createFromAscii("com.sun.star.frame.DispatchProvider") );
 
     aImpl = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/"));
     aImpl += SfxStandaloneDocumentInfoObject::impl_getStaticImplementationName();
@@ -1027,6 +1062,7 @@ void* SAL_CALL component_getFactory(    const   sal_Char*   pImplementationName 
         IF_NAME_CREATECOMPONENTFACTORY( SfxFrameLoader_Impl )
         IF_NAME_CREATECOMPONENTFACTORY( SfxMacroLoader )
         IF_NAME_CREATECOMPONENTFACTORY( SfxStandaloneDocumentInfoObject )
+        IF_NAME_CREATECOMPONENTFACTORY( SfxAppDispatchProvider )
         IF_NAME_CREATECOMPONENTFACTORY( SfxDocTplService )
         if ( SfxFilePicker::impl_getStaticImplementationNameOpen().equals( UNOOUSTRING::createFromAscii( pImplementationName ) ) )
         {
