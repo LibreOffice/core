@@ -2,9 +2,9 @@
  *
  *  $RCSfile: csvgrid.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dr $ $Date: 2002-07-17 14:52:27 $
+ *  last change: $Author: dr $ $Date: 2002-07-23 15:22:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -556,6 +556,8 @@ void ScCsvGrid::ImplSetTextLineSep(
             ImplInsertSplit( nLastPos );
         }
 
+        // #101655# replace TABs with SPACEs
+        aCellText.SearchAndReplaceAll( '\t', ' ' );
         if( aCellText.Len() <= CSV_MAXSTRLEN )
             rStrVec.push_back( aCellText );
         else
@@ -567,7 +569,11 @@ void ScCsvGrid::ImplSetTextLineSep(
 
 void ScCsvGrid::ImplSetTextLineFix( sal_Int32 nLine, const String& rTextLine )
 {
-    sal_Int32 nChars = rTextLine.Len();
+    String aTextLine( rTextLine );
+    // #101655# replace TABs with SPACEs
+    aTextLine.SearchAndReplaceAll( '\t', ' ' );
+
+    sal_Int32 nChars = aTextLine.Len();
     if( nChars > GetPosCount() )
         CommitRequest( CSVREQ_POSCOUNT, nChars );
 
@@ -583,7 +589,7 @@ void ScCsvGrid::ImplSetTextLineFix( sal_Int32 nLine, const String& rTextLine )
     for( sal_uInt32 nColIx = 0; (nColIx < nColCount) && (nStrIx < nStrLen); ++nColIx )
     {
         xub_StrLen nChars = static_cast< xub_StrLen >( GetColumnWidth( nColIx ) );
-        rStrVec.push_back( rTextLine.Copy( nStrIx, Max( nChars, CSV_MAXSTRLEN ) ) );
+        rStrVec.push_back( aTextLine.Copy( nStrIx, Max( nChars, CSV_MAXSTRLEN ) ) );
         nStrIx += nChars;
     }
     InvalidateGfx();
