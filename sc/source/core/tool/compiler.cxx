@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compiler.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: er $ $Date: 2001-08-31 12:31:45 $
+ *  last change: $Author: er $ $Date: 2001-08-31 14:53:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -908,10 +908,10 @@ BOOL ScCompiler::IsReference( const String& rName )
     if ( ch1 == cDecSep )
         return FALSE;
     // Who was that imbecile introducing '.' as the sheet name separator!?!
-    if ( cDecSep == '.' && CharClass::isAsciiNumeric( ch1 ) )
+    if ( CharClass::isAsciiNumeric( ch1 ) )
     {   // Numerical sheet name is valid.
         // But English 1.E2 or 1.E+2 is value 100, 1.E-2 is 0.01
-        // Don't create a #REF! of those values.
+        // Don't create a #REF! of values.
         const xub_StrLen nPos = rName.Search( '.' );
         if ( nPos == STRING_NOTFOUND )
             return FALSE;
@@ -919,7 +919,7 @@ BOOL ScCompiler::IsReference( const String& rName )
         sal_Unicode ch2 = pTabSep[1];   // maybe a column identifier
         if ( !(ch2 == '$' || CharClass::isAsciiAlpha( ch2 )) )
             return FALSE;
-        if ( (ch2 == 'E' || ch2 == 'e')   // E + - digit
+        if ( cDecSep == '.' && (ch2 == 'E' || ch2 == 'e')   // E + - digit
                 && (GetCharTableFlags( pTabSep[2] ) & SC_COMPILER_C_VALUE_EXP) )
         {   // #91053#
             // If it is an 1.E2 expression check if "1" is an existent sheet
