@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr1.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 12:34:56 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:36:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,16 +131,16 @@ void ScInterpreter::ScIfJump()
             {
                 // DoubleError handled by JumpMatrix
                 pMat->SetErrorInterpreter( NULL);
-                USHORT nCols, nRows;
+                SCSIZE nCols, nRows;
                 pMat->GetDimensions( nCols, nRows );
                 if ( nCols == 0 || nRows == 0 )
                     SetIllegalParameter();
                 else
                 {
                     ScJumpMatrix* pJumpMat = new ScJumpMatrix( nCols, nRows );
-                    for ( USHORT nC=0; nC < nCols; ++nC )
+                    for ( SCSIZE nC=0; nC < nCols; ++nC )
                     {
-                        for ( USHORT nR=0; nR < nRows; ++nR )
+                        for ( SCSIZE nR=0; nR < nRows; ++nR )
                         {
                             double fVal;
                             bool bTrue;
@@ -252,16 +252,16 @@ void ScInterpreter::ScChoseJump()
             {
                 // DoubleError handled by JumpMatrix
                 pMat->SetErrorInterpreter( NULL);
-                USHORT nCols, nRows;
+                SCSIZE nCols, nRows;
                 pMat->GetDimensions( nCols, nRows );
                 if ( nCols == 0 || nRows == 0 )
                     SetIllegalParameter();
                 else
                 {
                     ScJumpMatrix* pJumpMat = new ScJumpMatrix( nCols, nRows );
-                    for ( USHORT nC=0; nC < nCols; ++nC )
+                    for ( SCSIZE nC=0; nC < nCols; ++nC )
                     {
-                        for ( USHORT nR=0; nR < nRows; ++nR )
+                        for ( SCSIZE nR=0; nR < nRows; ++nR )
                         {
                             double fVal;
                             BOOL bIsValue;
@@ -324,7 +324,7 @@ bool ScInterpreter::JumpMatrix( short nStackLevel )
 {
     pJumpMatrix = pStack[sp-nStackLevel]->GetJumpMatrix();
     ScMatrixRef pResMat = pJumpMatrix->GetResultMatrix();
-    USHORT nC, nR;
+    SCSIZE nC, nR;
     if ( nStackLevel == 2 )
     {
         if ( aCode.HasStacked() )
@@ -430,16 +430,16 @@ bool ScInterpreter::JumpMatrix( short nStackLevel )
                         nGlobalError = 0;
                         pResMat->PutDouble( fVal, nC, nR );
                     }
-                    else if ( nCol > aRange.aEnd.Col() ||
-                            nRow > aRange.aEnd.Row())
+                    else if ( nCol > static_cast<ULONG>(aRange.aEnd.Col()) ||
+                            nRow > static_cast<ULONG>(aRange.aEnd.Row()))
                     {
                         fVal = CreateDoubleError( errNoValue );
                         pResMat->PutDouble( fVal, nC, nR );
                     }
                     else
                     {
-                        rAdr.SetCol( (USHORT)nCol );
-                        rAdr.SetRow( (USHORT)nRow );
+                        rAdr.SetCol( static_cast<SCCOL>(nCol) );
+                        rAdr.SetRow( static_cast<SCROW>(nRow) );
                         ScBaseCell* pCell = GetCell( rAdr );
                         switch ( GetCellType( pCell ) )
                         {
@@ -495,7 +495,7 @@ bool ScInterpreter::JumpMatrix( short nStackLevel )
                     }
                     else
                     {
-                        USHORT nCols, nRows;
+                        SCSIZE nCols, nRows;
                         pMat->GetDimensions( nCols, nRows );
                         if ( nCols <= nC || nRows <= nR )
                         {
@@ -766,17 +766,18 @@ ScMatrixRef ScInterpreter::CompareMat()
     {
         if ( pMat[0] && pMat[1] )
         {
-            USHORT nC0, nR0, nC1, nR1;
+            SCSIZE nC0, nC1;
+            SCSIZE nR0, nR1;
             pMat[0]->GetDimensions( nC0, nR0 );
             pMat[1]->GetDimensions( nC1, nR1 );
-            USHORT nC = Max( nC0, nC1 );
-            USHORT nR = Max( nR0, nR1 );
+            SCSIZE nC = Max( nC0, nC1 );
+            SCSIZE nR = Max( nR0, nR1 );
             pResMat = GetNewMat( nC, nR);
             if ( !pResMat )
                 return NULL;
-            for ( USHORT j=0; j<nC; j++ )
+            for ( SCSIZE j=0; j<nC; j++ )
             {
-                for ( USHORT k=0; k<nR; k++ )
+                for ( SCSIZE k=0; k<nR; k++ )
                 {
                     if ( j < nC0 && j < nC1 && k < nR0 && k < nR1 )
                     {
@@ -805,13 +806,13 @@ ScMatrixRef ScInterpreter::CompareMat()
         else if ( pMat[0] || pMat[1] )
         {
             short i = ( pMat[0] ? 0 : 1);
-            USHORT nC, nR;
+            SCSIZE nC, nR;
             pMat[i]->GetDimensions( nC, nR );
             pResMat = GetNewMat( nC, nR);
             if ( !pResMat )
                 return NULL;
-            ULONG n = (ULONG) nC * nR;
-            for ( ULONG j=0; j<n; j++ )
+            SCSIZE n = nC * nR;
+            for ( SCSIZE j=0; j<n; j++ )
             {
                 if ( pMat[i]->IsValue(j) )
                 {
@@ -1143,15 +1144,15 @@ void ScInterpreter::ScNeg()
                 PushError();
             else
             {
-                USHORT nC, nR;
+                SCSIZE nC, nR;
                 pMat->GetDimensions( nC, nR );
                 ScMatrixRef pResMat = GetNewMat( nC, nR);
                 if ( !pResMat )
                     PushError();
                 else
                 {
-                    ULONG nCount = nC * nR;
-                    for ( ULONG j=0; j<nCount; ++j )
+                    SCSIZE nCount = nC * nR;
+                    for ( SCSIZE j=0; j<nCount; ++j )
                     {
                         if ( pMat->IsValueOrEmpty(j) )
                             pResMat->PutDouble( -pMat->GetDouble(j), j );
@@ -1197,15 +1198,15 @@ void ScInterpreter::ScNot()
                 PushError();
             else
             {
-                USHORT nC, nR;
+                SCSIZE nC, nR;
                 pMat->GetDimensions( nC, nR );
                 ScMatrixRef pResMat = GetNewMat( nC, nR);
                 if ( !pResMat )
                     PushError();
                 else
                 {
-                    ULONG nCount = nC * nR;
-                    for ( ULONG j=0; j<nCount; ++j )
+                    SCSIZE nCount = nC * nR;
+                    for ( SCSIZE j=0; j<nCount; ++j )
                     {
                         if ( pMat->IsValueOrEmpty(j) )
                             pResMat->PutDouble( (pMat->GetDouble(j) == 0.0), j );
@@ -1413,7 +1414,7 @@ void ScInterpreter::ScIsEmpty()
                 nRes = pMat->IsEmpty( 0 );
             else
             {
-                USHORT nCols, nRows, nC, nR;
+                SCSIZE nCols, nRows, nC, nR;
                 pMat->GetDimensions( nCols, nRows);
                 pJumpMatrix->GetPos( nC, nR);
                 if ( nC < nCols && nR < nRows )
@@ -1472,7 +1473,7 @@ short ScInterpreter::IsString()
                 nRes = pMat->IsString(0) && !pMat->IsEmpty(0);
             else
             {
-                USHORT nCols, nRows, nC, nR;
+                SCSIZE nCols, nRows, nC, nR;
                 pMat->GetDimensions( nCols, nRows);
                 pJumpMatrix->GetPos( nC, nR);
                 if ( nC < nCols && nR < nRows )
@@ -1667,7 +1668,7 @@ void ScInterpreter::ScCell()
             }
             else if( aInfoType.EqualsAscii( "FILENAME" ) )
             {   // file name and table name: 'FILENAME'#$TABLE
-                USHORT nTab = aCellPos.Tab();
+                SCTAB nTab = aCellPos.Tab();
                 if( nTab < pDok->GetTableCount() )
                 {
                     if( pDok->GetLinkMode( nTab ) == SC_LINK_VALUE )
@@ -1690,7 +1691,8 @@ void ScInterpreter::ScCell()
             }
             else if( aInfoType.EqualsAscii( "COORD" ) )
             {   // address, lotus 1-2-3 formatted: $TABLE:$COL$ROW
-                ScAddress( aCellPos.Tab(), 0, 0 ).Format( aResult, (SCA_COL_ABSOLUTE|SCA_VALID_COL) );
+                // Yes, passing tab as col is intentional!
+                ScAddress( static_cast<SCCOL>(aCellPos.Tab()), 0, 0 ).Format( aResult, (SCA_COL_ABSOLUTE|SCA_VALID_COL) );
                 aResult += ':';
                 String aCellStr;
                 aCellPos.Format( aCellStr, (SCA_COL_ABSOLUTE|SCA_VALID_COL|SCA_ROW_ABSOLUTE|SCA_VALID_ROW) );
@@ -1896,7 +1898,7 @@ void ScInterpreter::ScIsValue()
                 nRes = pMat->IsValue( 0 );
             else
             {
-                USHORT nCols, nRows, nC, nR;
+                SCSIZE nCols, nRows, nC, nR;
                 pMat->GetDimensions( nCols, nRows);
                 pJumpMatrix->GetPos( nC, nR);
                 if ( nC < nCols && nR < nRows )
@@ -1998,7 +2000,7 @@ void ScInterpreter::ScIsNV()
                 nRes = (GetDoubleErrorValue( pMat->GetDouble( 0 )) == NOVALUE);
             else
             {
-                USHORT nCols, nRows, nC, nR;
+                SCSIZE nCols, nRows, nC, nR;
                 pMat->GetDimensions( nCols, nRows);
                 pJumpMatrix->GetPos( nC, nR);
                 if ( nC < nCols && nR < nRows )
@@ -2049,7 +2051,7 @@ void ScInterpreter::ScIsErr()
             }
             else
             {
-                USHORT nCols, nRows, nC, nR;
+                SCSIZE nCols, nRows, nC, nR;
                 pMat->GetDimensions( nCols, nRows);
                 pJumpMatrix->GetPos( nC, nR);
                 if ( nC < nCols && nR < nRows )
@@ -2103,7 +2105,7 @@ void ScInterpreter::ScIsError()
                 nRes = (GetDoubleErrorValue( pMat->GetDouble( 0 )) != 0);
             else
             {
-                USHORT nCols, nRows, nC, nR;
+                SCSIZE nCols, nRows, nC, nR;
                 pMat->GetDimensions( nCols, nRows);
                 pJumpMatrix->GetPos( nC, nR);
                 if ( nC < nCols && nR < nRows )
@@ -2176,7 +2178,7 @@ short ScInterpreter::IsEven()
             }
             else
             {
-                USHORT nCols, nRows, nC, nR;
+                SCSIZE nCols, nRows, nC, nR;
                 pMat->GetDimensions( nCols, nRows);
                 pJumpMatrix->GetPos( nC, nR);
                 if ( nC < nCols && nR < nRows )
@@ -2457,13 +2459,13 @@ void ScInterpreter::ScMin( BOOL bTextAsZero )
                 ScMatrixRef pMat = PopMatrix();
                 if (pMat)
                 {
-                    USHORT nC, nR;
+                    SCSIZE nC, nR;
                     nFuncFmtType = NUMBERFORMAT_NUMBER;
                     pMat->GetDimensions(nC, nR);
                     if (pMat->IsNumeric())
                     {
-                        for (USHORT i = 0; i < nC; i++)
-                            for (USHORT j = 0; j < nR; j++)
+                        for (SCSIZE i = 0; i < nC; i++)
+                            for (SCSIZE j = 0; j < nR; j++)
                             {
                                 nVal = pMat->GetDouble(i,j);
                                 if (nMin > nVal) nMin = nVal;
@@ -2471,9 +2473,9 @@ void ScInterpreter::ScMin( BOOL bTextAsZero )
                     }
                     else
                     {
-                        for (USHORT i = 0; i < nC; i++)
+                        for (SCSIZE i = 0; i < nC; i++)
                         {
-                            for (USHORT j = 0; j < nR; j++)
+                            for (SCSIZE j = 0; j < nR; j++)
                             {
                                 if (!pMat->IsString(i,j))
                                 {
@@ -2578,12 +2580,12 @@ void ScInterpreter::ScMax( BOOL bTextAsZero )
                 if (pMat)
                 {
                     nFuncFmtType = NUMBERFORMAT_NUMBER;
-                    USHORT nC, nR;
+                    SCSIZE nC, nR;
                     pMat->GetDimensions(nC, nR);
                     if (pMat->IsNumeric())
                     {
-                        for (USHORT i = 0; i < nC; i++)
-                            for (USHORT j = 0; j < nR; j++)
+                        for (SCSIZE i = 0; i < nC; i++)
+                            for (SCSIZE j = 0; j < nR; j++)
                             {
                                 nVal = pMat->GetDouble(i,j);
                                 if (nMax < nVal) nMax = nVal;
@@ -2591,9 +2593,9 @@ void ScInterpreter::ScMax( BOOL bTextAsZero )
                     }
                     else
                     {
-                        for (USHORT i = 0; i < nC; i++)
+                        for (SCSIZE i = 0; i < nC; i++)
                         {
-                            for (USHORT j = 0; j < nR; j++)
+                            for (SCSIZE j = 0; j < nR; j++)
                             {
                                 if (!pMat->IsString(i,j))
                                 {
@@ -2836,16 +2838,16 @@ double ScInterpreter::IterateParameters( ScIterFunc eFunc, BOOL bTextAsZero )
                 ScMatrixRef pMat = PopMatrix();
                 if (pMat)
                 {
-                    USHORT nC, nR;
+                    SCSIZE nC, nR;
                     nFuncFmtType = NUMBERFORMAT_NUMBER;
                     pMat->GetDimensions(nC, nR);
                     if( eFunc == ifCOUNT2 )
                         nCount += (ULONG) nC * nR;
                     else
                     {
-                        for (USHORT i = 0; i < nC; i++)
+                        for (SCSIZE i = 0; i < nC; i++)
                         {
-                            for (USHORT j = 0; j < nR; j++)
+                            for (SCSIZE j = 0; j < nR; j++)
                             {
                                 if (!pMat->IsString(i,j))
                                 {
@@ -2997,11 +2999,11 @@ void ScInterpreter::GetStVarParams( double& rVal, double& rValCount,
                 ScMatrixRef pMat = PopMatrix();
                 if (pMat)
                 {
-                    USHORT nC, nR;
+                    SCSIZE nC, nR;
                     pMat->GetDimensions(nC, nR);
-                    for (USHORT i = 0; i < nC; i++)
+                    for (SCSIZE i = 0; i < nC; i++)
                     {
-                        for (USHORT j = 0; j < nR; j++)
+                        for (SCSIZE j = 0; j < nR; j++)
                         {
                             if (!pMat->IsString(i,j))
                             {
@@ -3076,7 +3078,12 @@ void ScInterpreter::ScColumns()
 {
     BYTE nParamCount = GetByte();
     ULONG nVal = 0;
-    USHORT nCol1, nRow1, nTab1, nCol2, nRow2, nTab2;
+    SCCOL nCol1;
+    SCROW nRow1;
+    SCTAB nTab1;
+    SCCOL nCol2;
+    SCROW nRow2;
+    SCTAB nTab2;
     for (USHORT i = 1; i <= nParamCount; i++)
     {
         switch ( GetStackType() )
@@ -3087,14 +3094,15 @@ void ScInterpreter::ScColumns()
                 break;
             case svDoubleRef:
                 PopDoubleRef(nCol1, nRow1, nTab1, nCol2, nRow2, nTab2);
-                nVal += (nTab2 - nTab1 + 1) * (nCol2 - nCol1 + 1);
+                nVal += static_cast<ULONG>(nTab2 - nTab1 + 1) *
+                    static_cast<ULONG>(nCol2 - nCol1 + 1);
                 break;
             case svMatrix:
             {
                 ScMatrixRef pMat = PopMatrix();
                 if (pMat)
                 {
-                    USHORT nC, nR;
+                    SCSIZE nC, nR;
                     pMat->GetDimensions(nC, nR);
                     nVal += nC;
                 }
@@ -3113,7 +3121,12 @@ void ScInterpreter::ScRows()
 {
     BYTE nParamCount = GetByte();
     ULONG nVal = 0;
-    USHORT nCol1, nRow1, nTab1, nCol2, nRow2, nTab2;
+    SCCOL nCol1;
+    SCROW nRow1;
+    SCTAB nTab1;
+    SCCOL nCol2;
+    SCROW nRow2;
+    SCTAB nTab2;
     for (USHORT i = 1; i <= nParamCount; i++)
     {
         switch ( GetStackType() )
@@ -3124,14 +3137,15 @@ void ScInterpreter::ScRows()
                 break;
             case svDoubleRef:
                 PopDoubleRef(nCol1, nRow1, nTab1, nCol2, nRow2, nTab2);
-                nVal += (nTab2 - nTab1 + 1) * (nRow2 - nRow1 + 1);
+                nVal += static_cast<ULONG>(nTab2 - nTab1 + 1) *
+                    static_cast<ULONG>(nRow2 - nRow1 + 1);
                 break;
             case svMatrix:
             {
                 ScMatrixRef pMat = PopMatrix();
                 if (pMat)
                 {
-                    USHORT nC, nR;
+                    SCSIZE nC, nR;
                     pMat->GetDimensions(nC, nR);
                     nVal += nR;
                 }
@@ -3154,7 +3168,12 @@ void ScInterpreter::ScTables()
     else
     {
         nVal = 0;
-        USHORT nCol1, nRow1, nTab1, nCol2, nRow2, nTab2;
+        SCCOL nCol1;
+        SCROW nRow1;
+        SCTAB nTab1;
+        SCCOL nCol2;
+        SCROW nRow2;
+        SCTAB nTab2;
         for (USHORT i = 1; i <= nParamCount; i++)
         {
             switch ( GetStackType() )
@@ -3165,7 +3184,7 @@ void ScInterpreter::ScTables()
                 break;
                 case svDoubleRef:
                     PopDoubleRef(nCol1, nRow1, nTab1, nCol2, nRow2, nTab2);
-                    nVal += (nTab2 - nTab1 + 1);
+                    nVal += static_cast<ULONG>(nTab2 - nTab1 + 1);
                 break;
                 case svMatrix:
                     PopError();
@@ -3195,22 +3214,31 @@ void ScInterpreter::ScColumn()
             {
                 case svSingleRef :
                 {
-                    USHORT nCol1, nRow1, nTab1;
+                    SCCOL nCol1;
+                    SCROW nRow1;
+                    SCTAB nTab1;
                     PopSingleRef( nCol1, nRow1, nTab1 );
                     nVal = (double) (nCol1 + 1);
                 }
                 break;
                 case svDoubleRef :
                 {
-                    USHORT nCol1, nRow1, nTab1, nCol2, nRow2, nTab2;
+                    SCCOL nCol1;
+                    SCROW nRow1;
+                    SCTAB nTab1;
+                    SCCOL nCol2;
+                    SCROW nRow2;
+                    SCTAB nTab2;
                     PopDoubleRef( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
                     if (nCol2 > nCol1)
                     {
-                        ScMatrixRef pResMat = GetNewMat(nCol2-nCol1+1, 1);
+                        ScMatrixRef pResMat = GetNewMat(
+                                static_cast<SCSIZE>(nCol2-nCol1+1), 1);
                         if (pResMat)
                         {
-                            for (USHORT i = nCol1; i <= nCol2; i++)
-                                pResMat->PutDouble((double)(i+1), i-nCol1, 0);
+                            for (SCCOL i = nCol1; i <= nCol2; i++)
+                                pResMat->PutDouble((double)(i+1),
+                                        static_cast<SCSIZE>(i-nCol1), 0);
                             PushMatrix(pResMat);
                             return;
                         }
@@ -3245,22 +3273,31 @@ void ScInterpreter::ScRow()
             {
                 case svSingleRef :
                 {
-                    USHORT nCol1, nRow1, nTab1;
+                    SCCOL nCol1;
+                    SCROW nRow1;
+                    SCTAB nTab1;
                     PopSingleRef( nCol1, nRow1, nTab1 );
                     nVal = (double) (nRow1 + 1);
                 }
                 break;
                 case svDoubleRef :
                 {
-                    USHORT nCol1, nRow1, nTab1, nCol2, nRow2, nTab2;
+                    SCCOL nCol1;
+                    SCROW nRow1;
+                    SCTAB nTab1;
+                    SCCOL nCol2;
+                    SCROW nRow2;
+                    SCTAB nTab2;
                     PopDoubleRef( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
                     if (nRow2 > nRow1)
                     {
-                        ScMatrixRef pResMat = GetNewMat(1, nRow2-nRow1+1);
+                        ScMatrixRef pResMat = GetNewMat( 1,
+                                static_cast<SCSIZE>(nRow2-nRow1+1));
                         if (pResMat)
                         {
-                            for (USHORT i = nRow1; i <= nRow2; i++)
-                                pResMat->PutDouble((double)(i+1), 0, i-nRow1);
+                            for (SCROW i = nRow1; i <= nRow2; i++)
+                                pResMat->PutDouble((double)(i+1), 0,
+                                        static_cast<SCSIZE>(i-nRow1));
                             PushMatrix(pResMat);
                             return;
                         }
@@ -3285,7 +3322,7 @@ void ScInterpreter::ScTable()
     BYTE nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 0, 1 ) )
     {
-        USHORT nVal;
+        SCTAB nVal;
         if ( nParamCount == 0 )
             nVal = aPos.Tab() + 1;
         else
@@ -3303,14 +3340,21 @@ void ScInterpreter::ScTable()
                 break;
                 case svSingleRef :
                 {
-                    USHORT nCol1, nRow1, nTab1;
+                    SCCOL nCol1;
+                    SCROW nRow1;
+                    SCTAB nTab1;
                     PopSingleRef( nCol1, nRow1, nTab1 );
                     nVal = nTab1 + 1;
                 }
                 break;
                 case svDoubleRef :
                 {
-                    USHORT nCol1, nRow1, nTab1, nCol2, nRow2, nTab2;
+                    SCCOL nCol1;
+                    SCROW nRow1;
+                    SCTAB nTab1;
+                    SCCOL nCol2;
+                    SCROW nRow2;
+                    SCTAB nTab2;
                     PopDoubleRef( nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 );
                     nVal = nTab1 + 1;
                 }
@@ -3336,7 +3380,12 @@ void ScInterpreter::ScMatch()
             fTyp = GetDouble();
         else
             fTyp = 1.0;
-        USHORT nCol1, nRow1, nTab1, nCol2, nRow2, nTab2;
+        SCCOL nCol1;
+        SCROW nRow1;
+        SCTAB nTab1;
+        SCCOL nCol2;
+        SCROW nRow2;
+        SCTAB nTab2;
         if (GetStackType() == svDoubleRef)
         {
             PopDoubleRef(nCol1, nRow1, nTab1, nCol2, nRow2, nTab2);
@@ -3419,7 +3468,9 @@ void ScInterpreter::ScMatch()
             }
             if ( rEntry.bQueryByString )
                 rParam.bRegExp = MayBeRegExp( *rEntry.pStr, pDok );
-            USHORT nDelta, nR, nC;
+            SCCOLROW nDelta;
+            SCROW nR;
+            SCCOL nC;
             if (nCol1 == nCol2)
             {                                           // search row in column
                 rParam.nRow2 = nRow2;
@@ -3500,7 +3551,7 @@ void ScInterpreter::ScCountEmptyCells()
 {
     if ( MustHaveParamCount( GetByte(), 1 ) )
     {
-        long nMaxCount = 0, nCount = 0;
+        ULONG nMaxCount = 0, nCount = 0;
         CellType eCellType;
         switch (GetStackType())
         {
@@ -3516,10 +3567,16 @@ void ScInterpreter::ScCountEmptyCells()
             break;
             case svDoubleRef :
             {
-                USHORT nCol1, nRow1, nTab1, nCol2, nRow2, nTab2;
+                SCCOL nCol1;
+                SCROW nRow1;
+                SCTAB nTab1;
+                SCCOL nCol2;
+                SCROW nRow2;
+                SCTAB nTab2;
                 PopDoubleRef(nCol1, nRow1, nTab1, nCol2, nRow2, nTab2);
-                nMaxCount = (nRow2 - nRow1 + 1) * (nCol2 - nCol1 + 1)
-                                                * (nTab2 - nTab1 + 1);
+                nMaxCount = static_cast<ULONG>(nRow2 - nRow1 + 1) *
+                    static_cast<ULONG>(nCol2 - nCol1 + 1) *
+                    static_cast<ULONG>(nTab2 - nTab1 + 1);
                 ScBaseCell* pCell;
                 ScCellIterator aDocIter(pDok, nCol1, nRow1, nTab1,
                                               nCol2, nRow2, nTab2, glSubTotal);
@@ -3594,7 +3651,12 @@ void ScInterpreter::ScCountIf()
                 bIsString = FALSE;
             }
         }
-        USHORT nCol1, nRow1, nTab1, nCol2, nRow2, nTab2;
+        SCCOL nCol1;
+        SCROW nRow1;
+        SCTAB nTab1;
+        SCCOL nCol2;
+        SCROW nRow2;
+        SCTAB nTab2;
         switch ( GetStackType() )
         {
             case svDoubleRef :
@@ -3641,7 +3703,7 @@ void ScInterpreter::ScCountIf()
             }
             else if( rString.Len() )
             {
-                rParam.FillInExcelSyntax(rString,(USHORT) 0);
+                rParam.FillInExcelSyntax(rString, 0);
                 ULONG nIndex = 0;
                 rEntry.bQueryByString =
                     !(pFormatter->IsNumberFormat(
@@ -3681,7 +3743,12 @@ void ScInterpreter::ScSumIf()
     BYTE nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 2, 3 ) )
     {
-        USHORT nCol3, nRow3, nTab3, nCol4, nRow4, nTab4;
+        SCCOL nCol3;
+        SCROW nRow3;
+        SCTAB nTab3;
+        SCCOL nCol4;
+        SCROW nRow4;
+        SCTAB nTab4;
         if (nParamCount == 3)
         {
             switch ( GetStackType() )
@@ -3754,7 +3821,12 @@ void ScInterpreter::ScSumIf()
                 bIsString = FALSE;
             }
         }
-        USHORT nCol1, nRow1, nTab1, nCol2, nRow2, nTab2;
+        SCCOL nCol1;
+        SCROW nRow1;
+        SCTAB nTab1;
+        SCCOL nCol2;
+        SCROW nRow2;
+        SCTAB nTab2;
         switch ( GetStackType() )
         {
             case svDoubleRef :
@@ -3811,7 +3883,7 @@ void ScInterpreter::ScSumIf()
             }
             else
             {
-                rParam.FillInExcelSyntax(rString,(USHORT) 0);
+                rParam.FillInExcelSyntax(rString, 0);
                 ULONG nIndex = 0;
                 rEntry.bQueryByString =
                     !(pFormatter->IsNumberFormat(
@@ -3827,8 +3899,8 @@ void ScInterpreter::ScSumIf()
             rParam.nCol1  = nCol1;
             rParam.nCol2  = nCol2;
             rEntry.nField = nCol1;
-            short nColDiff = nCol3 - nCol1;
-            short nRowDiff = nRow3 - nRow1;
+            long nColDiff = nCol3 - nCol1;
+            long nRowDiff = nRow3 - nRow1;
             ScQueryCellIterator aCellIter(pDok, nTab1, rParam, FALSE);
             // Entry.nField im Iterator bei Spaltenwechsel weiterschalten
             aCellIter.SetAdvanceQueryParamEntryField( TRUE );
@@ -3865,12 +3937,23 @@ void ScInterpreter::ScLookup()
     BYTE nParamCount = GetByte();
     if ( !MustHaveParamCount( nParamCount, 2, 3 ) )
         return ;
-    USHORT nC3, nR3, nC1, nR1;
+    SCSIZE nC3, nC1;
+    SCSIZE nR3, nR1;
     ScMatrixRef pMat3 = NULL;
     ScMatrixRef pMat1 = NULL;
-    USHORT nCol1, nRow1, nTab1, nCol2, nRow2, nTab2;
-    USHORT nCol3, nRow3, nTab3, nCol4, nRow4, nTab4;
-    USHORT nDelta;
+    SCCOL nCol1;
+    SCROW nRow1;
+    SCTAB nTab1;
+    SCCOL nCol2;
+    SCROW nRow2;
+    SCTAB nTab2;
+    SCCOL nCol3;
+    SCROW nRow3;
+    SCTAB nTab3;
+    SCCOL nCol4;
+    SCROW nRow4;
+    SCTAB nTab4;
+    SCSIZE nDelta;
 
     // param 3: data range
     if ( nParamCount == 3 )
@@ -3943,17 +4026,17 @@ void ScInterpreter::ScLookup()
         return;
     }
     BOOL bSpMatrix, bSpVector;
-    USHORT nMatCount, nVecCount;
+    SCSIZE nMatCount, nVecCount;
     if (pMat1 == NULL)
     {
         if (nRow1 == nRow2)
         {
-            nMatCount = nCol2 - nCol1 + 1;
+            nMatCount = static_cast<SCSIZE>(nCol2 - nCol1 + 1);
             bSpMatrix = FALSE;
         }
         else
         {
-            nMatCount = nRow2 - nRow1 + 1;
+            nMatCount = static_cast<SCSIZE>(nRow2 - nRow1 + 1);
             bSpMatrix = TRUE;
         }
     }
@@ -3979,12 +4062,12 @@ void ScInterpreter::ScLookup()
     {
         if (nRow3 == nRow4)
         {
-            nVecCount = nCol4 - nCol3 + 1;
+            nVecCount = static_cast<SCSIZE>(nCol4 - nCol3 + 1);
             bSpVector = FALSE;
         }
         else
         {
-            nVecCount = nRow4 - nRow3 + 1;
+            nVecCount = static_cast<SCSIZE>(nRow4 - nRow3 + 1);
             bSpVector = TRUE;
         }
     }
@@ -4083,7 +4166,7 @@ void ScInterpreter::ScLookup()
                 BOOL bFound = FALSE;
                 sal_Int32 nRes;
                 String aParamStr = *rEntry.pStr;
-                USHORT i;
+                SCSIZE i;
                 for ( i = 0; i < nMatCount; i++)
                 {
                     if (!pMat1->IsValue(i))
@@ -4111,7 +4194,7 @@ void ScInterpreter::ScLookup()
             {
                 BOOL bFound = FALSE;
                 double fVal1;
-                USHORT i;
+                SCSIZE i;
                 for ( i = 0; i < nMatCount; i++)
                 {
                     if (pMat1->IsValue(i))
@@ -4139,9 +4222,10 @@ void ScInterpreter::ScLookup()
         {
             rEntry.eOp = SC_LESS_EQUAL;
             ScQueryCellIterator aCellIter(pDok, nTab1, rParam, FALSE);
-            USHORT nC, nR;
+            SCCOL nC;
+            SCROW nR;
             if ( aCellIter.FindEqualOrSortedLastInRange( nC, nR ) )
-                nDelta = nR - nRow1;
+                nDelta = static_cast<SCSIZE>(nR - nRow1);
             else
             {
                 SetNV();
@@ -4154,9 +4238,10 @@ void ScInterpreter::ScLookup()
             ScQueryCellIterator aCellIter(pDok, nTab1, rParam, FALSE);
             // advance Entry.nField in Iterator upon switching columns
             aCellIter.SetAdvanceQueryParamEntryField( TRUE );
-            USHORT nC, nR;
+            SCCOL nC;
+            SCROW nR;
             if ( aCellIter.FindEqualOrSortedLastInRange( nC, nR ) )
-                nDelta = nC - nCol1;
+                nDelta = static_cast<SCSIZE>(nC - nCol1);
             else
             {
                 SetNV();
@@ -4232,8 +4317,13 @@ void ScInterpreter::ScHLookup()
             bSorted = TRUE;
         double fIndex = ::rtl::math::approxFloor( GetDouble() ) - 1.0;
         ScMatrixRef pMat = NULL;
-        USHORT nC, nR;
-        USHORT nCol1, nRow1, nTab1, nCol2, nRow2, nTab2;
+        SCSIZE nC, nR;
+        SCCOL nCol1;
+        SCROW nRow1;
+        SCTAB nTab1;
+        SCCOL nCol2;
+        SCROW nRow2;
+        SCTAB nTab2;
         if (GetStackType() == svDoubleRef)
         {
             PopDoubleRef(nCol1, nRow1, nTab1, nCol2, nRow2, nTab2);
@@ -4264,7 +4354,7 @@ void ScInterpreter::ScHLookup()
             SetIllegalArgument();
             return;
         }
-        USHORT nZIndex = (USHORT) fIndex;
+        SCROW nZIndex = static_cast<SCROW>(fIndex);
         if (!pMat)
             nZIndex += nRow1;                       // Wertzeile
         if (nGlobalError == 0)
@@ -4341,15 +4431,15 @@ void ScInterpreter::ScHLookup()
                 rParam.bRegExp = MayBeRegExp( *rEntry.pStr, pDok );
             if (pMat)
             {
-                USHORT nMatCount = nC;
-                short nDelta = -1;
+                SCSIZE nMatCount = nC;
+                SCSIZE nDelta = SCSIZE_MAX;
                 if (rEntry.bQueryByString)
                 {
 //!!!!!!!
 //! TODO: enable regex on matrix strings
 //!!!!!!!
                     String aParamStr = *rEntry.pStr;
-                    USHORT i;
+                    SCSIZE i;
                     if ( bSorted )
                     {
                         for (i = 0; i < nMatCount; i++)
@@ -4385,7 +4475,7 @@ void ScInterpreter::ScHLookup()
                 else
                 {
                     double fVal1;
-                    USHORT i;
+                    SCSIZE i;
                     if ( bSorted )
                     {
                         for (i = 0; i < nMatCount; i++)
@@ -4416,12 +4506,14 @@ void ScInterpreter::ScHLookup()
                         }
                     }
                 }
-                if ( nDelta >= 0 )
+                if ( nDelta != SCSIZE_MAX )
                 {
-                    if (!pMat->IsString(nDelta, nZIndex))
-                        PushDouble(pMat->GetDouble(nDelta, nZIndex));
+                    if (!pMat->IsString( nDelta, static_cast<SCSIZE>(nZIndex)))
+                        PushDouble(pMat->GetDouble( nDelta,
+                                    static_cast<SCSIZE>(nZIndex)));
                     else
-                        PushString(pMat->GetString(nDelta, nZIndex));
+                        PushString(pMat->GetString( nDelta,
+                                    static_cast<SCSIZE>(nZIndex)));
                 }
                 else
                     SetNV();
@@ -4430,7 +4522,7 @@ void ScInterpreter::ScHLookup()
             {
                 rEntry.nField = nCol1;
                 BOOL bFound = FALSE;
-                USHORT nC;
+                SCCOL nC;
                 if ( bSorted )
                     rEntry.eOp = SC_LESS_EQUAL;
                 ScQueryCellIterator aCellIter(pDok, nTab1, rParam, FALSE);
@@ -4438,7 +4530,7 @@ void ScInterpreter::ScHLookup()
                 aCellIter.SetAdvanceQueryParamEntryField( TRUE );
                 if ( bSorted )
                 {
-                    USHORT nR;
+                    SCROW nR;
                     bFound = aCellIter.FindEqualOrSortedLastInRange( nC, nR );
                 }
                 else if ( aCellIter.GetFirst() )
@@ -4486,8 +4578,13 @@ void ScInterpreter::ScVLookup()
             bSorted = TRUE;
         double fIndex = ::rtl::math::approxFloor( GetDouble() ) - 1.0;
         ScMatrixRef pMat = NULL;
-        USHORT nC, nR;
-        USHORT nCol1, nRow1, nTab1, nCol2, nRow2, nTab2;
+        SCSIZE nC, nR;
+        SCCOL nCol1;
+        SCROW nRow1;
+        SCTAB nTab1;
+        SCCOL nCol2;
+        SCROW nRow2;
+        SCTAB nTab2;
         if (GetStackType() == svDoubleRef)
         {
             PopDoubleRef(nCol1, nRow1, nTab1, nCol2, nRow2, nTab2);
@@ -4518,7 +4615,7 @@ void ScInterpreter::ScVLookup()
             SetIllegalArgument();
             return;
         }
-        USHORT nSpIndex = (USHORT) fIndex;
+        SCCOL nSpIndex = static_cast<SCCOL>(fIndex);
         if (!pMat)
             nSpIndex += nCol1;                      // Wertspalte
         if (nGlobalError == 0)
@@ -4595,15 +4692,15 @@ void ScInterpreter::ScVLookup()
                 rParam.bRegExp = MayBeRegExp( *rEntry.pStr, pDok );
             if (pMat)
             {
-                USHORT nMatCount = nR;
-                short nDelta = -1;
+                SCSIZE nMatCount = nR;
+                SCSIZE nDelta = SCSIZE_MAX;
                 if (rEntry.bQueryByString)
                 {
 //!!!!!!!
 //! TODO: enable regex on matrix strings
 //!!!!!!!
                     String aParamStr = *rEntry.pStr;
-                    USHORT i;
+                    SCSIZE i;
                     if ( bSorted )
                     {
                         for (i = 0; i < nMatCount; i++)
@@ -4639,7 +4736,7 @@ void ScInterpreter::ScVLookup()
                 else
                 {
                     double fVal1;
-                    USHORT i;
+                    SCSIZE i;
                     if ( bSorted )
                     {
                         for (i = 0; i < nMatCount; i++)
@@ -4670,12 +4767,14 @@ void ScInterpreter::ScVLookup()
                         }
                     }
                 }
-                if ( nDelta >= 0 )
+                if ( nDelta != SCSIZE_MAX )
                 {
-                    if (!pMat->IsString(nSpIndex, nDelta))
-                        PushDouble(pMat->GetDouble(nSpIndex, nDelta));
+                    if (!pMat->IsString( static_cast<SCSIZE>(nSpIndex), nDelta))
+                        PushDouble( pMat->GetDouble(
+                                    static_cast<SCSIZE>(nSpIndex), nDelta));
                     else
-                        PushString(pMat->GetString(nSpIndex, nDelta));
+                        PushString( pMat->GetString(
+                                    static_cast<SCSIZE>(nSpIndex), nDelta));
                 }
                 else
                     SetNV();
@@ -4684,13 +4783,13 @@ void ScInterpreter::ScVLookup()
             {
                 rEntry.nField = nCol1;
                 BOOL bFound = FALSE;
-                USHORT nR;
+                SCROW nR;
                 if ( bSorted )
                     rEntry.eOp = SC_LESS_EQUAL;
                 ScQueryCellIterator aCellIter(pDok, nTab1, rParam, FALSE);
                 if ( bSorted )
                 {
-                    USHORT nC;
+                    SCCOL nC;
                     bFound = aCellIter.FindEqualOrSortedLastInRange( nC, nR );
                 }
                 else if ( aCellIter.GetFirst() )
@@ -4772,7 +4871,7 @@ void ScInterpreter::ScSubTotal()
 #endif
 
 
-BOOL ScInterpreter::GetDBParams(USHORT& rTab, ScQueryParam& rParam,
+BOOL ScInterpreter::GetDBParams(SCTAB& rTab, ScQueryParam& rParam,
         BOOL& rMissingField )
 {
     BOOL bRet = FALSE;
@@ -4785,7 +4884,12 @@ BOOL ScInterpreter::GetDBParams(USHORT& rTab, ScQueryParam& rParam,
     if ( GetByte() == 3 )
     {
 
-        USHORT nQCol1, nQRow1, nQTab1, nQCol2, nQRow2, nQTab2;
+        SCCOL nQCol1;
+        SCROW nQRow1;
+        SCTAB nQTab1;
+        SCCOL nQCol2;
+        SCROW nQRow2;
+        SCTAB nQTab2;
         PopDoubleRef(nQCol1, nQRow1, nQTab1, nQCol2, nQRow2, nQTab2);
 
         BOOL    bByVal = TRUE;
@@ -4842,7 +4946,12 @@ BOOL ScInterpreter::GetDBParams(USHORT& rTab, ScQueryParam& rParam,
                 SetError( errIllegalParameter );
         }
 
-        USHORT nDBCol1, nDBRow1, nDBTab1, nDBCol2, nDBRow2, nDBTab2;
+        SCCOL nDBCol1;
+        SCROW nDBRow1;
+        SCTAB nDBTab1;
+        SCCOL nDBCol2;
+        SCROW nDBRow2;
+        SCTAB nDBTab2;
         PopDoubleRef(nDBCol1, nDBRow1, nDBTab1, nDBCol2, nDBRow2, nDBTab2);
 
         if ( nGlobalError == 0 && bRangeFake )
@@ -4857,7 +4966,7 @@ BOOL ScInterpreter::GetDBParams(USHORT& rTab, ScQueryParam& rParam,
 
         if (nGlobalError == 0)
         {
-            USHORT  nField = nDBCol1;
+            SCCOL   nField = nDBCol1;
             BOOL    bFound = TRUE;
             if ( rMissingField )
                 ;   // special case
@@ -4866,7 +4975,7 @@ BOOL ScInterpreter::GetDBParams(USHORT& rTab, ScQueryParam& rParam,
                 if ( nVal <= 0 || nVal > (nDBCol2 - nDBCol1 + 1) )
                     bFound = FALSE;
                 else
-                    nField = Min(nDBCol2, (USHORT)(nDBCol1 + (USHORT)nVal - 1));
+                    nField = Min(nDBCol2, (SCCOL)(nDBCol1 + (SCCOL)nVal - 1));
             }
             else
             {
@@ -4902,14 +5011,14 @@ BOOL ScInterpreter::GetDBParams(USHORT& rTab, ScQueryParam& rParam,
                     // to any of the query fields, just to be able to return
                     // some cell from the iterator.
                     if ( rMissingField )
-                        nField = rParam.GetEntry(0).nField;
+                        nField = static_cast<SCCOL>(rParam.GetEntry(0).nField);
 
                     rParam.nCol1 = nField;
                     rParam.nCol2 = nField;
                     rTab = nDBTab1;
                     bRet = TRUE;
-                    USHORT nCount = rParam.GetEntryCount();
-                    for ( USHORT i=0; i < nCount; i++ )
+                    SCSIZE nCount = rParam.GetEntryCount();
+                    for ( SCSIZE i=0; i < nCount; i++ )
                     {
                         ScQueryEntry& rEntry = rParam.GetEntry(i);
                         if ( rEntry.bDoQuery )
@@ -4933,7 +5042,7 @@ BOOL ScInterpreter::GetDBParams(USHORT& rTab, ScQueryParam& rParam,
 
 void ScInterpreter::DBIterator( ScIterFunc eFunc )
 {
-    USHORT nTab1;
+    SCTAB nTab1;
     double nErg = 0.0;
     double fMem = 0.0;
     BOOL bNull = TRUE;
@@ -4998,7 +5107,7 @@ void ScInterpreter::ScDBSum()
 
 void ScInterpreter::ScDBCount()
 {
-    USHORT nTab;
+    SCTAB nTab;
     ScQueryParam aQueryParam;
     BOOL bMissingField = TRUE;
     if ( GetDBParams( nTab, aQueryParam, bMissingField) )
@@ -5046,7 +5155,7 @@ void ScInterpreter::ScDBCount()
 
 void ScInterpreter::ScDBCount2()
 {
-    USHORT nTab;
+    SCTAB nTab;
     ScQueryParam aQueryParam;
     BOOL bMissingField = TRUE;
     if (GetDBParams( nTab, aQueryParam, bMissingField))
@@ -5096,7 +5205,7 @@ void ScInterpreter::GetDBStVarParams( double& rVal, double& rValCount )
     rValCount = 0.0;
     double fSum    = 0.0;
     double fSumSqr = 0.0;
-    USHORT nTab;
+    SCTAB nTab;
     ScQueryParam aQueryParam;
     BOOL bMissingField = FALSE;
     if (GetDBParams( nTab, aQueryParam, bMissingField))
@@ -5172,14 +5281,14 @@ void ScInterpreter::ScIndirect()
 */
     if ( MustHaveParamCount( nParamCount, 1 )  )
     {
-        USHORT nTab = aPos.Tab();
+        SCTAB nTab = aPos.Tab();
         String sRefStr( GetString() );
-        ScRefTripel aRefTr, aRefTr2;
-        if ( ConvertDoubleRef( pDok, sRefStr, nTab, aRefTr, aRefTr2 ) )
-            PushDoubleRef( aRefTr.GetCol(), aRefTr.GetRow(), aRefTr.GetTab(),
-                aRefTr2.GetCol(), aRefTr2.GetRow(), aRefTr2.GetTab() );
-        else if ( ConvertSingleRef( pDok, sRefStr, nTab, aRefTr ) )
-            PushSingleRef( aRefTr.GetCol(), aRefTr.GetRow(), aRefTr.GetTab() );
+        ScRefAddress aRefAd, aRefAd2;
+        if ( ConvertDoubleRef( pDok, sRefStr, nTab, aRefAd, aRefAd2 ) )
+            PushDoubleRef( aRefAd.Col(), aRefAd.Row(), aRefAd.Tab(),
+                aRefAd2.Col(), aRefAd2.Row(), aRefAd2.Tab() );
+        else if ( ConvertSingleRef( pDok, sRefStr, nTab, aRefAd ) )
+            PushSingleRef( aRefAd.Col(), aRefAd.Row(), aRefAd.Tab() );
         else
             SetIllegalArgument();
     }
@@ -5197,8 +5306,8 @@ void ScInterpreter::ScAdress()
             sTabStr = GetString();
         if (nParamCount >= 3)
             nAbs = (USHORT) ::rtl::math::approxFloor(GetDouble());
-        USHORT nCol = (USHORT) ::rtl::math::approxFloor(GetDouble());
-        USHORT nRow = (USHORT) ::rtl::math::approxFloor(GetDouble());
+        SCCOL nCol = (SCCOL) ::rtl::math::approxFloor(GetDouble());
+        SCROW nRow = (SCROW) ::rtl::math::approxFloor(GetDouble());
         if (nCol < 1 || nCol > MAXCOL + 1 || nRow < 1 || nRow > MAXROW + 1)
         {
             SetIllegalParameter();
@@ -5210,14 +5319,12 @@ void ScInterpreter::ScAdress()
             nCol--;
         }
         String aRefStr;
-        ScTripel aScTr;
-        aScTr.SetCol(nCol);
-        aScTr.SetRow(nRow);
+        ScAddress aAdr( nCol, nRow, 0);
         if (nAbs == 4)
-            aRefStr = aScTr.GetColRowString();
+            aRefStr = aAdr.GetColRowString();
         else
         {
-            aRefStr = aScTr.GetColRowString(TRUE);
+            aRefStr = aAdr.GetColRowString(TRUE);
             if (nAbs == 2)
                 aRefStr.EraseLeadingChars('$');
             else if (nAbs == 3)
@@ -5238,14 +5345,19 @@ void ScInterpreter::ScOffset()
     BYTE nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 3, 5 ) )
     {
-        short nColNew, nRowNew, nColPlus, nRowPlus;
+        long nColNew, nRowNew, nColPlus, nRowPlus;
         if (nParamCount == 5)
-            nColNew = (short) ::rtl::math::approxFloor(GetDouble());
+            nColNew = (long) ::rtl::math::approxFloor(GetDouble());
         if (nParamCount >= 4)
-            nRowNew = (short) ::rtl::math::approxFloor(GetDouble());
-        nColPlus = (short) ::rtl::math::approxFloor(GetDouble());
-        nRowPlus = (short) ::rtl::math::approxFloor(GetDouble());
-        USHORT nCol1, nRow1, nTab1, nCol2, nRow2, nTab2;
+            nRowNew = (long) ::rtl::math::approxFloor(GetDouble());
+        nColPlus = (long) ::rtl::math::approxFloor(GetDouble());
+        nRowPlus = (long) ::rtl::math::approxFloor(GetDouble());
+        SCCOL nCol1;
+        SCROW nRow1;
+        SCTAB nTab1;
+        SCCOL nCol2;
+        SCROW nRow2;
+        SCTAB nTab2;
         if ( (nParamCount == 5 && nColNew == 0)
           || (nParamCount >= 4 && nRowNew == 0) )
         {
@@ -5257,9 +5369,9 @@ void ScInterpreter::ScOffset()
             PopSingleRef(nCol1, nRow1, nTab1);
             if (nParamCount == 3)
             {
-                nCol1 = (USHORT)((short) nCol1 + nColPlus);
-                nRow1 = (USHORT)((short) nRow1 + nRowPlus);
-                if (nCol1 > MAXCOL || nRow1 > MAXROW)
+                nCol1 = (SCCOL)((long) nCol1 + nColPlus);
+                nRow1 = (SCROW)((long) nRow1 + nRowPlus);
+                if (!ValidCol(nCol1) || !ValidRow(nRow1))
                     SetIllegalParameter();
                 else
                     PushSingleRef(nCol1, nRow1, nTab1);
@@ -5268,12 +5380,12 @@ void ScInterpreter::ScOffset()
             {
                 if (nParamCount == 4)
                     nColNew = 1;
-                nCol1 = (USHORT)((short)nCol1+nColPlus);        // ! nCol1 wird veraendert!
-                nRow1 = (USHORT)((short)nRow1+nRowPlus);
-                nCol2 = (USHORT)((short)nCol1+nColNew-1);
-                nRow2 = (USHORT)((short)nRow1+nRowNew-1);
-                if (nCol1 > MAXCOL || nRow1 > MAXROW ||
-                    nCol2 > MAXCOL || nRow2 > MAXROW)
+                nCol1 = (SCCOL)((long)nCol1+nColPlus);      // ! nCol1 wird veraendert!
+                nRow1 = (SCROW)((long)nRow1+nRowPlus);
+                nCol2 = (SCCOL)((long)nCol1+nColNew-1);
+                nRow2 = (SCROW)((long)nRow1+nRowNew-1);
+                if (!ValidCol(nCol1) || !ValidRow(nRow1) ||
+                    !ValidCol(nCol2) || !ValidRow(nRow2))
                     SetIllegalParameter();
                 else
                     PushDoubleRef(nCol1, nRow1, nTab1, nCol2, nRow2, nTab1);
@@ -5286,12 +5398,12 @@ void ScInterpreter::ScOffset()
                 nColNew = nCol2 - nCol1 + 1;
             if (nParamCount < 4)
                 nRowNew = nRow2 - nRow1 + 1;
-            nCol1 = (USHORT)((short)nCol1+nColPlus);
-            nRow1 = (USHORT)((short)nRow1+nRowPlus);
-            nCol2 = (USHORT)((short)nCol1+nColNew-1);
-            nRow2 = (USHORT)((short)nRow1+nRowNew-1);
-            if (nCol1 > MAXCOL || nRow1 > MAXROW ||
-                nCol2 > MAXCOL || nRow2 > MAXROW || nTab1 != nTab2)
+            nCol1 = (SCCOL)((long)nCol1+nColPlus);
+            nRow1 = (SCROW)((long)nRow1+nRowPlus);
+            nCol2 = (SCCOL)((long)nCol1+nColNew-1);
+            nRow2 = (SCROW)((long)nRow1+nRowNew-1);
+            if (!ValidCol(nCol1) || !ValidRow(nRow1) ||
+                !ValidCol(nCol2) || !ValidRow(nRow2) || nTab1 != nTab2)
                 SetIllegalParameter();
             else
                 PushDoubleRef(nCol1, nRow1, nTab1, nCol2, nRow2, nTab1);
@@ -5308,17 +5420,18 @@ void ScInterpreter::ScIndex()
     if ( MustHaveParamCount( nParamCount, 1, 4 ) )
     {
         short nBereich, nMaxAnz, nCount;
-        USHORT nCol, nRow;
+        SCCOL nCol;
+        SCROW nRow;
         if (nParamCount == 4)
             nBereich = (short) ::rtl::math::approxFloor(GetDouble());
         else
             nBereich = 1;
         if (nParamCount >= 3)
-            nCol = (USHORT) ::rtl::math::approxFloor(GetDouble());
+            nCol = (SCCOL) ::rtl::math::approxFloor(GetDouble());
         else
             nCol = 0;
         if (nParamCount >= 2)
-            nRow = (USHORT) ::rtl::math::approxFloor(GetDouble());
+            nRow = (SCROW) ::rtl::math::approxFloor(GetDouble());
         else
             nRow = 0;
         if (GetStackType() == svByte)                   // vorher MultiSelektion?
@@ -5338,9 +5451,10 @@ void ScInterpreter::ScIndex()
             ScMatrixRef pMat = GetMatrix();
             if (pMat)
             {
-                USHORT nC, nR;
+                SCSIZE nC, nR;
                 pMat->GetDimensions(nC, nR);
-                if (nC == 0 || nR == 0 || nCol > nC || nRow > nR)
+                if (nC == 0 || nR == 0 || static_cast<SCSIZE>(nCol) > nC ||
+                        static_cast<SCSIZE>(nRow) > nR)
                     SetIllegalArgument();
                 else if (nCol == 0 && nRow == 0)
                     sp = nOldSp;
@@ -5349,8 +5463,8 @@ void ScInterpreter::ScIndex()
                     ScMatrixRef pResMat = GetNewMat(nC, 1);
                     if (pResMat)
                     {
-                        USHORT nColMinus1 = nCol - 1;
-                        for (USHORT i = 0; i < nC; i++)
+                        SCSIZE nColMinus1 = static_cast<SCSIZE>(nCol - 1);
+                        for (SCSIZE i = 0; i < nC; i++)
                             if (!pMat->IsString(i, nColMinus1))
                                 pResMat->PutDouble(pMat->GetDouble(i,
                                     nColMinus1), i, 0);
@@ -5367,8 +5481,8 @@ void ScInterpreter::ScIndex()
                     ScMatrixRef pResMat = GetNewMat(1, nR);
                     if (pResMat)
                     {
-                        USHORT nRowMinus1 = nRow - 1;
-                        for (USHORT i = 0; i < nR; i++)
+                        SCSIZE nRowMinus1 = static_cast<SCSIZE>(nRow - 1);
+                        for (SCSIZE i = 0; i < nR; i++)
                             if (!pMat->IsString(nRowMinus1, i))
                                 pResMat->PutDouble(pMat->GetDouble(nRowMinus1,
                                     i), i);
@@ -5382,10 +5496,15 @@ void ScInterpreter::ScIndex()
                 }
                 else
                 {
-                    if (!pMat->IsString(nCol-1, nRow-1))
-                        PushDouble(pMat->GetDouble(nCol-1, nRow-1));
+                    if (!pMat->IsString( static_cast<SCSIZE>(nCol-1),
+                                static_cast<SCSIZE>(nRow-1)))
+                        PushDouble( pMat->GetDouble(
+                                    static_cast<SCSIZE>(nCol-1),
+                                    static_cast<SCSIZE>(nRow-1)));
                     else
-                        PushString(pMat->GetString(nCol-1, nRow-1));
+                        PushString( pMat->GetString(
+                                    static_cast<SCSIZE>(nCol-1),
+                                    static_cast<SCSIZE>(nRow-1)));
                 }
             }
         }
@@ -5393,7 +5512,12 @@ void ScInterpreter::ScIndex()
         {
             ScAddress aDummyAdr;
             ScRange aDummyRange;
-            USHORT nCol1, nRow1, nTab1, nCol2, nRow2, nTab2 = MAXTAB+1;
+            SCCOL nCol1;
+            SCROW nRow1;
+            SCTAB nTab1;
+            SCCOL nCol2;
+            SCROW nRow2;
+            SCTAB nTab2 = MAXTAB+1;
             nCount = nMaxAnz;   // Refs liegen umgekehrt auf dem Stack!
             while (nCount > nBereich && !nGlobalError)      // erste Refs weg
             {
