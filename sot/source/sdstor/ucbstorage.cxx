@@ -29,6 +29,9 @@
 #ifndef _COM_SUN_STAR_SDBC_XROW_HPP_
 #include <com/sun/star/sdbc/XRow.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UCB_COMMANDABORTEDEXCEPTION_HPP_
+#include <com/sun/star/ucb/CommandAbortedException.hpp>
+#endif
 
 #include <tools/ref.hxx>
 #include <tools/debug.hxx>
