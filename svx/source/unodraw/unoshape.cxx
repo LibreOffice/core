@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: cl $ $Date: 2001-11-19 15:02:42 $
+ *  last change: $Author: cl $ $Date: 2001-11-27 13:09:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1642,7 +1642,8 @@ void SAL_CALL SvxShape::setPropertyValue( const OUString& rPropertyName, const u
                 pSet = new SfxItemSet( pModel->GetItemPool(),   pMap->nWID, pMap->nWID);
             }
 
-            pSet->Put(pObj->GetItem(pMap->nWID));
+            if( pSet->GetItemState( pMap->nWID ) != SFX_ITEM_SET )
+                pSet->Put(pObj->GetItem(pMap->nWID));
 
             if( !SvxUnoTextRangeBase::SetPropertyValueHelper( *pSet, pMap, rVal, *pSet ))
             {
