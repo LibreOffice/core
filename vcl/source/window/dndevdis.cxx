@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dndevdis.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obr $ $Date: 2001-02-20 11:17:45 $
+ *  last change: $Author: pb $ $Date: 2001-06-15 09:25:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,13 @@ void SAL_CALL DNDEventDispatcher::drop( const DropTargetDropEvent& dtde )
     // find the window that is toplevel for this coordinates
     OClearableGuard aSolarGuard( Application::GetSolarMutex() );
     Window * pChildWindow = m_pTopWindow->ImplFindWindow( location );
+
+    if( NULL == pChildWindow )
+        pChildWindow = m_pTopWindow;
+
+    while( pChildWindow->ImplGetClientWindow() )
+        pChildWindow = pChildWindow->ImplGetClientWindow();
+
     aSolarGuard.clear();
 
     // handle the case that drop is in an other vcl window than the last dragOver
@@ -147,6 +154,13 @@ void SAL_CALL DNDEventDispatcher::dragEnter( const DropTargetDragEnterEvent& dtd
     // find the window that is toplevel for this coordinates
     OClearableGuard aSolarGuard( Application::GetSolarMutex() );
     Window * pChildWindow = m_pTopWindow->ImplFindWindow( location );
+
+    if( NULL == pChildWindow )
+        pChildWindow = m_pTopWindow;
+
+    while( pChildWindow->ImplGetClientWindow() )
+        pChildWindow = pChildWindow->ImplGetClientWindow();
+
     aSolarGuard.clear();
 
     // assume pointer write operation to be atomic
@@ -196,6 +210,13 @@ void SAL_CALL DNDEventDispatcher::dragOver( const DropTargetDragEvent& dtde )
     // find the window that is toplevel for this coordinates
     OClearableGuard aSolarGuard( Application::GetSolarMutex() );
     Window * pChildWindow = m_pTopWindow->ImplFindWindow( location );
+
+    if( NULL == pChildWindow )
+        pChildWindow = m_pTopWindow;
+
+    while( pChildWindow->ImplGetClientWindow() )
+        pChildWindow = pChildWindow->ImplGetClientWindow();
+
     aSolarGuard.clear();
 
     if( pChildWindow != m_pCurrentWindow )
@@ -240,6 +261,13 @@ void SAL_CALL DNDEventDispatcher::dropActionChanged( const DropTargetDragEvent& 
     // find the window that is toplevel for this coordinates
     OClearableGuard aSolarGuard( Application::GetSolarMutex() );
     Window * pChildWindow = m_pTopWindow->ImplFindWindow( location );
+
+    if( NULL == pChildWindow )
+        pChildWindow = m_pTopWindow;
+
+    while( pChildWindow->ImplGetClientWindow() )
+        pChildWindow = pChildWindow->ImplGetClientWindow();
+
     aSolarGuard.clear();
 
     if( pChildWindow != m_pCurrentWindow )
