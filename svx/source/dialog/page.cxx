@@ -2,9 +2,9 @@
  *
  *  $RCSfile: page.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 18:48:48 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:53:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,6 +139,14 @@
 #include <svtools/stritem.hxx>
 #endif
 
+#include "svxids.hrc" //CHINA001
+#ifndef _SFXSLSTITM_HXX //CHINA001
+#include <svtools/slstitm.hxx> //CHINA001
+#endif //CHINA001
+#ifndef _AEITEM_HXX //CHINA001
+#include <svtools/aeitem.hxx> //CHINA001
+#endif //CHINA001
+#include <sfx2/request.hxx> //CHINA001
 // configuration helper =======================================================
 
 /** Helper to get a configuration setting.
@@ -1819,3 +1827,16 @@ bool SvxPageDescPage::IsMarginOutOfRange()
     return bRet;
 }
 
+void SvxPageDescPage::PageCreated (SfxAllItemSet aSet) //add CHINA001
+{
+    SFX_ITEMSET_ARG (&aSet,pModeItem,SfxAllEnumItem,SID_ENUM_PAGE_MODE,sal_False);
+    SFX_ITEMSET_ARG (&aSet,pPaperStartItem,SfxAllEnumItem,SID_PAPER_START,sal_False);
+    SFX_ITEMSET_ARG (&aSet,pPaperEndItem,SfxAllEnumItem,SID_PAPER_END,sal_False);
+    SFX_ITEMSET_ARG (&aSet,pCollectListItem,SfxStringListItem,SID_COLLECT_LIST,sal_False);
+    if (pModeItem)
+        SetMode((SvxModeType)pModeItem->GetEnumValue());
+    if (pPaperStartItem && pPaperEndItem)
+        SetPaperFormatRanges( (SvxPaper)pPaperStartItem->GetEnumValue(), (SvxPaper)pPaperEndItem->GetEnumValue() );
+    if (pCollectListItem)
+        SetCollectionList(pCollectListItem->GetList());
+}
