@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: jb $ $Date: 2001-08-06 16:06:35 $
+ *  last change: $Author: jb $ $Date: 2001-08-10 16:53:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1166,8 +1166,10 @@ namespace {
     {
         rtl::OUStringBuffer sMessage;
 
-        sMessage.appendAscii(RTL_CONSTASCII_STRINGPARAM("A main configuration file ")).appendAscii(_sWhat);
-        sMessage.appendAscii(RTL_CONSTASCII_STRINGPARAM(". (")).append(_sIniName).append(sal_Unicode(')'));
+        sMessage.appendAscii(RTL_CONSTASCII_STRINGPARAM("The program cannot start. "));
+        sMessage.appendAscii(RTL_CONSTASCII_STRINGPARAM("The configuration file "));
+        sMessage.appendAscii(RTL_CONSTASCII_STRINGPARAM(" '")).append(_sIniName).appendAscii(RTL_CONSTASCII_STRINGPARAM("' "));
+        sMessage.appendAscii(_sWhat).appendAscii(". ");
 
         return sMessage.makeStringAndClear();
     }
@@ -1186,7 +1188,7 @@ namespace {
         switch( eStatus )
         {
         case Bootstrap::PATH_EXISTS:
-            _rMessage = buildConfigBootstrapError(_rIniFile.copy(1+_rIniFile.lastIndexOf('/')),"is invalid");
+            _rMessage = buildConfigBootstrapError(_rIniFile.copy(1+_rIniFile.lastIndexOf('/')),"is corrupt");
             eResult = INVALID_BOOTSTRAP_DATA;
             break;
 
@@ -1196,7 +1198,7 @@ namespace {
             break;
 
         case Bootstrap::DATA_INVALID:
-            _rMessage = buildConfigBootstrapError(_rIniFile,"cannot be located");
+            _rMessage = buildConfigBootstrapError(_rIniFile,"is missing (invalid path)");
             eResult = BOOTSTRAP_FAILURE;
             break;
 
