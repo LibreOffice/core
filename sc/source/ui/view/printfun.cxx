@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printfun.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: nn $ $Date: 2002-05-06 16:53:04 $
+ *  last change: $Author: nn $ $Date: 2002-05-30 18:39:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1267,7 +1267,11 @@ void ScPrintFunc::DrawBorder( long nScrX, long nScrY, long nScrW, long nScrH,
     if (nEffHeight<=0 || nEffWidth<=0)
         return;                                         // leer
 
-    if (pBackground)
+    BOOL bCellContrast = bUseStyleColor &&
+            Application::GetSettings().GetStyleSettings().GetHighContrastMode() &&
+            SC_MOD()->GetAccessOptions().GetIsForBorders();
+
+    if ( pBackground && !bCellContrast )
     {
 //      Rectangle aBackRect( Point(nScrX+nLeft, nScrY+nTop), Size(nEffWidth,nEffHeight) );
         if (pBackground->GetGraphicPos() != GPOS_NONE)
@@ -1282,7 +1286,10 @@ void ScPrintFunc::DrawBorder( long nScrX, long nScrY, long nScrW, long nScrH,
 
     if ( pShadow && pShadow->GetLocation() != SVX_SHADOW_NONE )
     {
-        pDev->SetFillColor(pShadow->GetColor());
+        if ( bCellContrast )
+            pDev->SetFillColor(Application::GetSettings().GetStyleSettings().GetWindowTextColor());
+        else
+            pDev->SetFillColor(pShadow->GetColor());
         pDev->SetLineColor();
         long nShadowX = (long) ( pShadow->GetWidth() * nScaleX );
         long nShadowY = (long) ( pShadow->GetWidth() * nScaleY );
@@ -1342,6 +1349,7 @@ void ScPrintFunc::DrawBorder( long nScrX, long nScrY, long nScrW, long nScrH,
 
         ScOutputData aOutputData( pDev, OUTTYPE_PRINTER, pRowInfo, nArrCount, pBorderDoc, 0,
                                     nScrX+nLeft, nScrY+nTop, 0,0, 0,0, nScaleX, nScaleY );
+        aOutputData.SetUseStyleColor( bUseStyleColor );
 
 //      pDev->SetMapMode(aTwipMode);
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: output.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: nn $ $Date: 2002-05-03 11:58:48 $
+ *  last change: $Author: nn $ $Date: 2002-05-30 18:39:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -790,8 +790,10 @@ void ScOutputData::DrawBackground()
 {
     FindRotated();              //! von aussen ?
 
+    ScModule* pScMod = SC_MOD();
+
     // used only if bSolidBackground is set (only for ScGridWindow):
-    Color aBgColor( SC_MOD()->GetColorConfig().GetColorValue(svx::DOCCOLOR).nColor );
+    Color aBgColor( pScMod->GetColorConfig().GetColorValue(svx::DOCCOLOR).nColor );
 
     Rectangle aRect;
     Size aOnePixel = pDev->PixelToLogic(Size(1,1));
@@ -805,6 +807,10 @@ void ScOutputData::DrawBackground()
 
     BOOL bShowProt = bSyntaxMode && pDoc->IsTabProtected(nTab);
     BOOL bDoAll = bShowProt || bPagebreakMode || bSolidBackground;
+
+    BOOL bCellContrast = bUseStyleColor &&
+            Application::GetSettings().GetStyleSettings().GetHighContrastMode() &&
+            pScMod->GetAccessOptions().GetIsForBorders();
 
     long nPosY = nScrY;
     for (USHORT nArrY=1; nArrY+1<nArrCount; nArrY++)
@@ -839,7 +845,12 @@ void ScOutputData::DrawBackground()
                 {
                     CellInfo* pInfo = &pThisRowInfo->pCellInfo[nX+1];
 
-                    if (bShowProt)          // Zellschutz im Syntax-Modus anzeigen
+                    if (bCellContrast)
+                    {
+                        //  high contrast for cell borders and backgrounds -> empty background
+                        pBackground = ScGlobal::GetEmptyBrushItem();
+                    }
+                    else if (bShowProt)         // show cell protection in syntax mode
                     {
                         const ScPatternAttr* pP = pInfo->pPatternAttr;
                         if (pP)
@@ -861,7 +872,8 @@ void ScOutputData::DrawBackground()
                         pBackground = ScGlobal::GetProtectedBrushItem();
 
                     if ( pInfo->nRotateDir > SC_ROTDIR_STANDARD &&
-                            pBackground->GetColor().GetTransparency() != 255 )
+                            pBackground->GetColor().GetTransparency() != 255 &&
+                            !bCellContrast )
                     {
                         USHORT nY = pRowInfo[nArrY].nRowNo;
                         pBackground = lcl_FindBackground( pDoc, nX, nY, nTab );
@@ -909,6 +921,13 @@ void ScOutputData::DrawBackground()
 void ScOutputData::DrawShadow()
 {
     pDev->SetLineColor();
+
+    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+    BOOL bCellContrast = bUseStyleColor && rStyleSettings.GetHighContrastMode() &&
+                            SC_MOD()->GetAccessOptions().GetIsForBorders();
+    Color aAutoTextColor;
+    if ( bCellContrast )
+        aAutoTextColor = rStyleSettings.GetWindowTextColor();
 
     long nPosY = nScrY;
     for (USHORT nArrY=1; nArrY+1<nArrCount; nArrY++)
@@ -985,7 +1004,8 @@ void ScOutputData::DrawShadow()
                                 aRect.Top() += nSizeY;
                         }
 
-                        pDev->SetFillColor( pAttr->GetColor() );        //! zusammenfassen
+                        //! merge rectangles?
+                        pDev->SetFillColor( bCellContrast ? aAutoTextColor : pAttr->GetColor() );
                         pDev->DrawRect( aRect );
                     }
                 }
@@ -1003,6 +1023,13 @@ void ScOutputData::DrawExtraShadow(BOOL bLeft, BOOL bTop, BOOL bRight, BOOL bBot
     //! DrawShadow weglassen, stattdessen DrawExtraShadow(FALSE,FALSE,FALSE,FALSE) ???
 
     pDev->SetLineColor();
+
+    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+    BOOL bCellContrast = bUseStyleColor && rStyleSettings.GetHighContrastMode() &&
+                            SC_MOD()->GetAccessOptions().GetIsForBorders();
+    Color aAutoTextColor;
+    if ( bCellContrast )
+        aAutoTextColor = rStyleSettings.GetWindowTextColor();
 
     long nPosY = nScrY - pRowInfo[0].nHeight;
     for (USHORT nArrY=0; nArrY<nArrCount; nArrY++)
@@ -1091,7 +1118,8 @@ void ScOutputData::DrawExtraShadow(BOOL bLeft, BOOL bTop, BOOL bRight, BOOL bBot
                                     aRect.Top() += nSizeY;
                             }
 
-                            pDev->SetFillColor( pAttr->GetColor() );        //! zusammenfassen
+                            //! merge rectangles?
+                            pDev->SetFillColor( bCellContrast ? aAutoTextColor : pAttr->GetColor() );
                             pDev->DrawRect( aRect );
                         }
                     }
@@ -1315,6 +1343,13 @@ void ScOutputData::DrawFrame()
     BOOL bOldValid2 = FALSE;                            // zweite Linien
     Rectangle aOldRect2;
 
+    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+    BOOL bCellContrast = bUseStyleColor && rStyleSettings.GetHighContrastMode() &&
+                            SC_MOD()->GetAccessOptions().GetIsForBorders();
+    Color aAutoTextColor;
+    if ( bCellContrast )
+        aAutoTextColor = rStyleSettings.GetWindowTextColor();
+
     pDev->SetLineColor();
     pDev->SetFillColor( aOldCol );
 
@@ -1360,6 +1395,8 @@ void ScOutputData::DrawFrame()
                         if ( pDrawLine != pOldLine )
                         {
                             Color aColor( pDrawLine->GetColor() );
+                            if ( bCellContrast )
+                                aColor = aAutoTextColor;
                             if ( aColor != aOldCol )
                             {
                                 FinishOldRect( pDev, aOldRect, bOldValid );
@@ -1494,6 +1531,8 @@ void ScOutputData::DrawFrame()
                         if ( pDrawLine != pOldLine )
                         {
                             Color aColor( pDrawLine->GetColor() );
+                            if ( bCellContrast )
+                                aColor = aAutoTextColor;
                             if ( aColor != aOldCol )
                             {
                                 FinishOldRect( pDev, aOldRect, bOldValid );
@@ -1666,7 +1705,7 @@ const SvxBorderLine* lcl_FindHorLine( ScDocument* pDoc,
 // lcl_HorizLine muss genau zu normal ausgegebenen Linien passen!
 
 void lcl_HorizLine( OutputDevice* pDev, const Point& rLeft, const Point& rRight,
-                    const SvxBorderLine* pLine, double nLineScale )
+                    const SvxBorderLine* pLine, double nLineScale, const Color* pForceColor )
 {
     //  horizontal ist nicht schraeg
     DBG_ASSERT( rLeft.Y() == rRight.Y(), "Horizontale Linie schraeg ???!?" );
@@ -1675,7 +1714,7 @@ void lcl_HorizLine( OutputDevice* pDev, const Point& rLeft, const Point& rRight,
         return;
 
     pDev->SetLineColor();
-    pDev->SetFillColor(pLine->GetColor());
+    pDev->SetFillColor( pForceColor ? *pForceColor : pLine->GetColor() );
 
     long nFirst = (long) ( pLine->GetOutWidth() * nLineScale );
     if (nFirst == 0)
@@ -1733,7 +1772,7 @@ long lcl_LineTotal( const SvxBorderLine& rLine, double nScale )
 void lcl_VertLine( OutputDevice* pDev, const Point& rTop, const Point& rBottom,
                     const SvxBorderLine* pLine, double nLineScale,
                     const SvxBorderLine* pTopLine, const SvxBorderLine* pBottomLine,
-                    double nPPTY, long nTopCenter, long nBottomCenter )
+                    double nPPTY, long nTopCenter, long nBottomCenter, const Color* pForceColor )
 {
     if (!pLine || !pLine->GetOutWidth())
         return;
@@ -1758,20 +1797,21 @@ void lcl_VertLine( OutputDevice* pDev, const Point& rTop, const Point& rBottom,
         aNewBottom.X() = rBottom.X() - nMove;
         SvxBorderLine aLeft( &pLine->GetColor(), pLine->GetOutWidth() );
         lcl_VertLine( pDev, aNewTop, aNewBottom, &aLeft, nLineScale,
-                        pTopLine, pBottomLine, nPPTY, nTopCenter, nBottomCenter );
+                        pTopLine, pBottomLine, nPPTY, nTopCenter, nBottomCenter, pForceColor );
 
         // rechts
         aNewTop.X() += nFirst + nSpace;
         aNewBottom.X() += nFirst + nSpace;
         SvxBorderLine aRight( &pLine->GetColor(), pLine->GetInWidth() );
         lcl_VertLine( pDev, aNewTop, aNewBottom, &aRight, nLineScale,
-                        pTopLine, pBottomLine, nPPTY, nTopCenter, nBottomCenter );
+                        pTopLine, pBottomLine, nPPTY, nTopCenter, nBottomCenter, pForceColor );
 
         return;
     }
 
-    pDev->SetLineColor(pLine->GetColor());              // PEN_NULL ???
-    pDev->SetFillColor(pLine->GetColor());
+    Color aDrawColor( pForceColor ? *pForceColor : pLine->GetColor() );
+    pDev->SetLineColor(aDrawColor);             // PEN_NULL ???
+    pDev->SetFillColor(aDrawColor);
 
     long nWidth = (long) ( pLine->GetOutWidth() * nLineScale );
     if (nWidth == 0)
@@ -1844,6 +1884,18 @@ void ScOutputData::DrawRotatedFrame()
     const SfxItemSet*    pCondSet;
     const ScPatternAttr* pOldPattern = NULL;
     const SfxItemSet*    pOldCondSet = NULL;
+
+    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+    BOOL bCellContrast = bUseStyleColor && rStyleSettings.GetHighContrastMode() &&
+                            SC_MOD()->GetAccessOptions().GetIsForBorders();
+
+    Color aAutoTextColor;
+    const Color* pForceColor = NULL;
+    if ( bCellContrast )
+    {
+        aAutoTextColor = rStyleSettings.GetWindowTextColor();
+        pForceColor = &aAutoTextColor;
+    }
 
     Rectangle aClipRect( Point(nScrX, nScrY), Size(nScrW, nScrH) );
     if (bMetaFile)
@@ -1952,6 +2004,11 @@ void ScOutputData::DrawRotatedFrame()
                         if (!pBackground)
                             pBackground = (const SvxBrushItem*) &pPattern->GetItem(
                                                 ATTR_BACKGROUND, pCondSet );
+                        if (bCellContrast)
+                        {
+                            //  high contrast for cell borders and backgrounds -> empty background
+                            pBackground = ScGlobal::GetEmptyBrushItem();
+                        }
                         const Color& rColor = pBackground->GetColor();
                         if ( rColor.GetTransparency() != 255 )
                         {
@@ -1988,16 +2045,16 @@ void ScOutputData::DrawRotatedFrame()
                                     &pLeftLine, &pTopLine, &pRightLine, &pBottomLine );
                         }
 
-                        lcl_HorizLine( pDev, aPoints[0],aPoints[1], pTopLine, nPPTY );
-                        lcl_HorizLine( pDev, aPoints[3],aPoints[2], pBottomLine, nPPTY );
+                        lcl_HorizLine( pDev, aPoints[0],aPoints[1], pTopLine, nPPTY, pForceColor );
+                        lcl_HorizLine( pDev, aPoints[3],aPoints[2], pBottomLine, nPPTY, pForceColor );
 
                         double nVLineScale = nPPTX / fabs(nSin);
                         lcl_VertLine( pDev, aPoints[0],aPoints[3], pLeftLine,
                                         nVLineScale, pTopLine, pBottomLine, nPPTY,
-                                        aPoints[0].X(), aPoints[3].X() );
+                                        aPoints[0].X(), aPoints[3].X(), pForceColor );
                         lcl_VertLine( pDev, aPoints[1],aPoints[2], pRightLine,
                                         nVLineScale, pTopLine, pBottomLine, nPPTY,
-                                        aPoints[1].X(), aPoints[2].X() );
+                                        aPoints[1].X(), aPoints[2].X(), pForceColor );
                     }
                 }
                 nPosX += nColWidth;
