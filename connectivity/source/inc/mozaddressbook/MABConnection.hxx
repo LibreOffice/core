@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MABConnection.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dkenny $ $Date: 2001-05-28 22:02:59 $
+ *  last change: $Author: dkenny $ $Date: 2001-05-31 07:22:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,8 +78,9 @@ namespace connectivity
         class OMozabDriver;
         class OMozabConnection : public file::OConnection
         {
-            // the spreadsheet document:
-            ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSpreadsheetDocument > m_xDoc;
+
+            sal_Int32       m_nAnonABCount;
+            rtl::OUString   m_sMozillaURI;
 
         public:
             OMozabConnection(OMozabDriver* _pDriver);
@@ -103,8 +104,11 @@ namespace connectivity
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XPreparedStatement > SAL_CALL prepareCall( const ::rtl::OUString& sql ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
             // no interface methods
-            ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSpreadsheetDocument> getDoc() const
-                { return m_xDoc; }
+            rtl::OUString getMozURI() const
+                { return m_sMozillaURI; }
+
+            sal_Int32 getNextAnonymousAB()
+                { return (++m_nAnonABCount); }
         };
     }
 }

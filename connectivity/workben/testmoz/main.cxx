@@ -2,9 +2,9 @@
  *
  *  $RCSfile: main.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dkenny $ $Date: 2001-05-23 10:55:48 $
+ *  last change: $Author: dkenny $ $Date: 2001-05-31 07:22:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,8 +195,20 @@ void _cdecl main( int argc, char * argv[] )
 
             Sequence<PropertyValue> aValue;
 
+
+            // LDAP AB
+            aValue.realloc(2);
+            aValue[0].Name = ::rtl::OUString::createFromAscii("HostName");
+            aValue[0].Value <<= rtl::OUString::createFromAscii("sunldap1.sun.com");
+            aValue[1].Name = ::rtl::OUString::createFromAscii("BaseDN");
+            aValue[1].Value <<= rtl::OUString::createFromAscii("dc=sun,dc=com");
+
             m_xConnection =
-            m_xDriver->connect(OUString::createFromAscii("sdbc:mozab:put_URL_here"),aValue);
+            m_xDriver->connect(OUString::createFromAscii("sdbc:address:ldap://"),aValue);
+
+            // Mozilla ABs
+            // m_xConnection =
+            // m_xDriver->connect(OUString::createFromAscii("sdbc:address:mozilla://"),aValue);
 
             if(m_xConnection.is())
             {
@@ -245,7 +257,8 @@ void _cdecl main( int argc, char * argv[] )
                     printf(":   excuteQuery() : START \n");
                     try {
                         Reference<XResultSet> xRes =
-                        xStmt->executeQuery(OUString::createFromAscii("SELECT DisplayName, PrimaryEmail FROM \"Personal Address Book\""));
+                        xStmt->executeQuery(OUString::createFromAscii("SELECT * FROM \"AddressBook\" WHERE ( PrimaryEmail LIKE \"Darren\" )"));
+                        // xStmt->executeQuery(OUString::createFromAscii("SELECT DisplayName, PrimaryEmail FROM \"Personal Address Book\""));
                         // xStmt->executeQuery(OUString::createFromAscii("SELECT * FROM \"Personal Address Book\" WHERE ( PrimaryEmail IS NULL )"));
                         // xStmt->executeQuery(OUString::createFromAscii("SELECT * FROM \"Personal Address Book\" WHERE ( PrimaryEmail LIKE \"Darren\" )"));
                         // xStmt->executeQuery(OUString::createFromAscii("SELECT * FROM \"Personal Address Book\""));

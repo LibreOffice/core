@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: dkenny $ $Date: 2001-05-23 10:55:48 $
+#   last change: $Author: dkenny $ $Date: 2001-05-31 07:22:02 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,7 +79,7 @@ OBJFILES=       $(OBJ)$/main.obj
 
 APP1TARGET= $(TARGET)
 APP1OBJS=       $(OBJFILES)
-.IF $(GUI) = "WNT"
+.IF $(GUI) == "WNT"
 APPSTDLIBS=$(SALLIB) \
             $(VOSLIB) \
             $(CPPULIB)	\
