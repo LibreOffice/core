@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: mba $ $Date: 2002-03-28 16:24:02 $
+#   last change: $Author: mba $ $Date: 2002-04-18 14:18:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,7 +73,7 @@ TARGET=svxslots
 .INCLUDE :  sv.mk
 
 SDINAME=$(TARGET)
-#SDI1NAME=baside
+SDIEXPORT=svx
 
 # --- Files --------------------------------------------------------
 
