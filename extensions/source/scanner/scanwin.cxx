@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scanwin.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2000-12-07 08:44:51 $
+ *  last change: $Author: ka $ $Date: 2002-07-04 15:20:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -253,7 +253,7 @@ BOOL ImpTwain::SelectSource()
 
     ImplFallback( TWAIN_EVENT_QUIT );
 
-    return( nRet == TWRC_SUCCESS || nRet == TWRC_CANCEL );
+    return( TWRC_SUCCESS == nRet );
 }
 
 // -----------------------------------------------------------------------------
