@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 13:49:09 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 11:52:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -538,6 +538,8 @@ BOOL OutputDevice::ImplHasMirroredGraphics()
 {
     return ( ImplGetGraphics() && (mpGraphics->GetLayout() & SAL_LAYOUT_BIDI_RTL) );
 }
+
+// note: the coordiantes to be remirrored are in frame coordiantes !
 
 void    OutputDevice::ImplReMirror( Point &rPoint ) const
 {
