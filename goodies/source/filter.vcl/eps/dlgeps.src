@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dlgeps.src,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:10:27 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 18:24:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,6 +136,8 @@ ModalDialog DLG_EXPORT_EPS
         Text[ hebrew ] = "‮תצוגה מקדימה‬";
         Text[ hindi ] = "पूर्वदृश्य";
         Text[ slovak ] = "Náhľad";
+        Text[ hungarian ] = "Előnézet";
+        Text[ slovenian ] = "Predogled";
     };
     CheckBox CB_PREVIEW_TIFF
     {
@@ -171,6 +173,8 @@ ModalDialog DLG_EXPORT_EPS
         Text[ hebrew ] = "‮תצוגה מקדימה של צלם (Tiff)‬";
         Text[ hindi ] = "चित्र का ~पूर्वदृश्य (TIFF)";
         Text[ slovak ] = "Náhľad ob~rázku (TIFF)";
+        Text[ hungarian ] = "~Előnézeti kép (TIFF)";
+        Text[ slovenian ] = "~Predogled slike (TIFF)";
     };
     CheckBox CB_PREVIEW_EPSI
     {
@@ -204,6 +208,8 @@ ModalDialog DLG_EXPORT_EPS
         Text[ hebrew ] = "‮העברה (EPSI)‬";
         Text[ hindi ] = "~परस्पर बदलो (EPSI)";
         Text[ slovak ] = "~Interchange (EPSI)";
+        Text[ hungarian ] = "~Adatcsere (EPSI)";
+        Text[ slovenian ] = "~Izmenjava (EPSI)";
     };
     FixedLine GRP_VERSION
     {
@@ -238,6 +244,8 @@ ModalDialog DLG_EXPORT_EPS
         Text[ hebrew ] = "‮גירסה‬";
         Text[ hindi ] = "आवर्तन";
         Text[ slovak ] = "Verzia";
+        Text[ hungarian ] = "Verzió";
+        Text[ slovenian ] = "Različica";
     };
     RadioButton RB_LEVEL1
     {
@@ -273,6 +281,8 @@ ModalDialog DLG_EXPORT_EPS
         Text[ hebrew ] = "‮רמה 1‬";
         Text[ hindi ] = "सतह ~1";
         Text[ slovak ] = "Úroveň ~1";
+        Text[ hungarian ] = "~1. szint";
+        Text[ slovenian ] = "Raven ~1";
     };
     RadioButton RB_LEVEL2
     {
@@ -308,6 +318,8 @@ ModalDialog DLG_EXPORT_EPS
         Text[ hebrew ] = "‮רמה 2‬";
         Text[ hindi ] = "सतह ~2";
         Text[ slovak ] = "Úroveň ~2";
+        Text[ hungarian ] = "~2. szint";
+        Text[ slovenian ] = "Raven ~2";
     };
 
     FixedLine GRP_COLOR
@@ -343,6 +355,8 @@ ModalDialog DLG_EXPORT_EPS
         Text[ hebrew ] = "‮שיטת צבע‬";
         Text[ hindi ] = "रंग रचना";
         Text[ slovak ] = "Farebný formát";
+        Text[ hungarian ] = "Színformátum";
+        Text[ slovenian ] = "Oblika barve";
     };
     RadioButton RB_COLOR
     {
@@ -378,6 +392,8 @@ ModalDialog DLG_EXPORT_EPS
         Text[ hebrew ] = "‮צבע‬";
         Text[ hindi ] = "~रंग";
         Text[ slovak ] = "F~arebný";
+        Text[ hungarian ] = "~Szín";
+        Text[ slovenian ] = "~Barva";
     };
     RadioButton RB_GRAYSCALE
     {
@@ -389,7 +405,7 @@ ModalDialog DLG_EXPORT_EPS
         Text[ italian ] = "Toni di grigio";
         Text[ portuguese_brazilian ] = "~Escala de cinza";
         Text[ portuguese ] = "~Tons de cinzento";
-        Text[ danish ] = "Gr�toner";
+        Text[ danish ] = "~Gr�toner";
         Text[ french ] = "~Niveaux de gris";
         Text[ swedish ] = "~Gr�skalor";
         Text[ dutch ] = "~Grijswaarden";
@@ -413,6 +429,8 @@ ModalDialog DLG_EXPORT_EPS
         Text[ hebrew ] = "‮סולם האפור‬";
         Text[ hindi ] = "~ग्रेस्केल्";
         Text[ slovak ] = "Odtie~ne šedi";
+        Text[ hungarian ] = "~Szürkeskála";
+        Text[ slovenian ] = "S~ivine";
     };
 
     FixedLine  GRP_COMPRESSION
@@ -424,7 +442,7 @@ ModalDialog DLG_EXPORT_EPS
         Text[ italian ] = "Compressione";
         Text[ portuguese_brazilian ] = "Compress�o";
         Text[ portuguese ] = "Compress�o";
-        Text[ danish ] = "Kompression";
+        Text[ danish ] = "Komprimering";
         Text[ french ] = "Compression";
         Text[ swedish ] = "Kompression";
         Text[ dutch ] = "Compressie";
@@ -448,6 +466,8 @@ ModalDialog DLG_EXPORT_EPS
         Text[ hebrew ] = "‮דחיסה‬";
         Text[ hindi ] = "दबाव";
         Text[ slovak ] = "Kompresia";
+        Text[ hungarian ] = "Tömörítés";
+        Text[ slovenian ] = "Stiskanje";
     };
     RadioButton RB_COMPRESSION_LZW
     {
@@ -483,6 +503,8 @@ ModalDialog DLG_EXPORT_EPS
         Text[ hebrew ] = "‮קידוד LZW‬";
         Text[ hindi ] = "LZW ऐनकोडिंग";
         Text[ slovak ] = "LZW kódovanie";
+        Text[ hungarian ] = "LZW-kódolás";
+        Text[ slovenian ] = "LZW kodiranje";
     };
     RadioButton RB_COMPRESSION_NONE
     {
@@ -518,6 +540,8 @@ ModalDialog DLG_EXPORT_EPS
         Text[ hebrew ] = "‮ללא‬";
         Text[ hindi ] = "कोई नहीं";
         Text[ slovak ] = "Žiadne";
+        Text[ hungarian ] = "Egyik sem";
+        Text[ slovenian ] = "Brez";
     };
     Text[ italian ] = "Opzioni d'esportazione EPS";
     Text[ portuguese_brazilian ] = "Op��es de exporta��o EPS";
@@ -546,7 +570,10 @@ ModalDialog DLG_EXPORT_EPS
     Text[ hebrew ] = "‮אפשרויות יצאו ל EPS‬";
     Text[ hindi ] = "EPS निर्यात विकल्प";
     Text[ slovak ] = "Voľby pre export EPS";
+    Text[ hungarian ] = "EPS exportálási beállítások";
+    Text[ slovenian ] = "Možnosti izvoza za EPS";
 };
+
 
 
 
