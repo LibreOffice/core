@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sduiexp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 15:45:26 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:19:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,15 @@
  *
  ************************************************************************/
 
+#ifdef SD_DLLIMPLEMENTATION
+#undef SD_DLLIMPLEMENTATION
+#endif
+
 #include "sddlgfact.hxx"
+
+#ifndef _SAL_TYPES_H_
+#include "sal/types.h"
+#endif
 
 namespace sdui
 {
@@ -68,15 +76,13 @@ namespace sdui
     {
         if ( !pFactory )
             pFactory = new SdAbstractDialogFactory_Impl;
-        //if ( !pSdResMgr)
-            //SdDialogsResMgr::GetResMgr();
         return pFactory;
     }
 };
 
 extern "C"
 {
-    SdAbstractDialogFactory* CreateDialogFactory()
+    SAL_DLLPUBLIC_EXPORT SdAbstractDialogFactory* CreateDialogFactory()
     {
         return ::sdui::GetFactory();
     }
