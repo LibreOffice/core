@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optctl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 18:39:43 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 14:05:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,12 +79,19 @@
 
 // class SvxCTLOptionsPage -----------------------------------------------------
 
+IMPL_LINK( SvxCTLOptionsPage, SequenceCheckingCB_Hdl, void*, NOTINTERESTEDIN )
+{
+    m_aRestrictedCB.Enable( m_aSequenceCheckingCB.IsChecked() );
+    return 0;
+}
+
 SvxCTLOptionsPage::SvxCTLOptionsPage( Window* pParent, const SfxItemSet& rSet ) :
 
     SfxTabPage( pParent, ResId( RID_SVXPAGE_OPTIONS_CTL, DIALOG_MGR() ), rSet ),
 
     m_aSequenceCheckingFL   ( this, ResId( FL_SEQUENCECHECKING ) ),
     m_aSequenceCheckingCB   ( this, ResId( CB_SEQUENCECHECKING ) ),
+    m_aRestrictedCB         ( this, ResId( CB_RESTRICTED ) ),
     m_aCursorControlFL      ( this, ResId( FL_CURSORCONTROL ) ),
     m_aMovementFT           ( this, ResId( FT_MOVEMENT ) ),
     m_aMovementLogicalRB    ( this, ResId( RB_MOVEMENT_LOGICAL ) ),
@@ -95,6 +102,8 @@ SvxCTLOptionsPage::SvxCTLOptionsPage( Window* pParent, const SfxItemSet& rSet ) 
 
 {
     FreeResource();
+
+    m_aSequenceCheckingCB.SetClickHdl( LINK( this, SvxCTLOptionsPage, SequenceCheckingCB_Hdl ) );
 
     m_aNumeralsLB.SetDropDownLineCount( m_aNumeralsLB.GetEntryCount() );
 }
@@ -118,6 +127,13 @@ BOOL SvxCTLOptionsPage::FillItemSet( SfxItemSet& rSet )
     if ( bChecked != m_aSequenceCheckingCB.GetSavedValue() )
     {
         aCTLOptions.SetCTLSequenceChecking( bChecked );
+        bModified = TRUE;
+    }
+
+    bChecked = m_aRestrictedCB.IsChecked();
+    if( bChecked != m_aRestrictedCB.GetSavedValue() )
+    {
+        aCTLOptions.SetCTLSequenceCheckingRestricted( bChecked );
         bModified = TRUE;
     }
 
@@ -147,6 +163,7 @@ void SvxCTLOptionsPage::Reset( const SfxItemSet& rSet )
     SvtCTLOptions aCTLOptions;
 
     m_aSequenceCheckingCB.Check( aCTLOptions.IsCTLSequenceChecking() );
+    m_aRestrictedCB.Check( aCTLOptions.IsCTLSequenceCheckingRestricted() );
 
     SvtCTLOptions::CursorMovement eMovement = aCTLOptions.GetCTLCursorMovement();
     switch ( eMovement )
@@ -168,8 +185,11 @@ void SvxCTLOptionsPage::Reset( const SfxItemSet& rSet )
     m_aNumeralsLB.SelectEntryPos( nPos );
 
     m_aSequenceCheckingCB.SaveValue();
+    m_aRestrictedCB.SaveValue();
     m_aMovementLogicalRB.SaveValue();
     m_aMovementVisualRB.SaveValue();
     m_aNumeralsLB.SaveValue();
+
+    SequenceCheckingCB_Hdl( NULL );
 }
 
