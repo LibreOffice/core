@@ -272,6 +272,4 @@ NOSPACEONDRIVE:
 		Resume LETSGO
 		LETSGO:
 	End If		
-End Function
-
-</script:module>
+End Function</script:module>

@@ -2,6 +2,30 @@
 <!DOCTYPE script:module PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "module.dtd">
  <script:module xmlns:script="http://openoffice.org/2000/script" script:name="Debug" script:language="StarBasic">REM  *****  BASIC  *****
 
+Sub ActivateReadOnlyFlag()
+	SetBasicReadOnlyFlag(True)
+End Sub
+
+
+Sub DeactivateReadOnlyFlag()
+	SetBasicReadOnlyFlag(False)
+End Sub
+
+
+Sub SetBasicReadOnlyFlag(bReadOnly as Boolean)
+Dim i as Integer
+Dim LibName as String
+Dim BasicLibNames() as String
+	BasicLibNames() = BasicLibraries.ElementNames()
+	For i = 0 To Ubound(BasicLibNames())
+		LibName = BasicLibNames(i)
+		If LibName &lt;&gt; &quot;Standard&quot; Then
+			BasicLibraries.SetLibraryReadOnly(LibName, bReadOnly)
+		End If
+	Next i
+End Sub
+
+
 Sub WritedbgInfo(LocObject as Object)
 Dim locUrl as String
 Dim oLocDocument as Object
@@ -201,4 +225,5 @@ Dim bDoProtect as Boolean
 			End If
 		End If
 	End If
-End Sub</script:module>
+End Sub
+</script:module>
