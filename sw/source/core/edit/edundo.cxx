@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edundo.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:18 $
+ *  last change: $Author: tl $ $Date: 2001-04-09 07:21:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,7 @@
 #endif
 
 
-BOOL SwEditShell::Undo(USHORT nUndoId)
+BOOL SwEditShell::Undo( USHORT nUndoId, USHORT nCnt )
 {
     SET_CURR_SHELL( this );
 
@@ -121,8 +121,8 @@ BOOL SwEditShell::Undo(USHORT nUndoId)
         // JP 02.04.98: Cursor merken - beim Auto-Format/-Korrektur
         //              soll dieser wieder an die Position
         USHORT nLastUndoId = GetDoc()->GetUndoIds();
-        BOOL bRestoreCrsr = UNDO_AUTOFORMAT == nLastUndoId ||
-                            UNDO_AUTOCORRECT == nLastUndoId;
+        BOOL bRestoreCrsr = 1 == nCnt && ( UNDO_AUTOFORMAT == nLastUndoId ||
+                                           UNDO_AUTOCORRECT == nLastUndoId );
         Push();
 
         //JP 18.09.97: gesicherten TabellenBoxPtr zerstoeren, eine autom.
@@ -132,22 +132,25 @@ BOOL SwEditShell::Undo(USHORT nUndoId)
         SwRedlineMode eOld = GetDoc()->GetRedlineMode();
 
         SwUndoIter aUndoIter( GetCrsr(), nUndoId );
-        do {
+        while( nCnt-- )
+        {
+            do {
 
-            bRet |= GetDoc()->Undo( aUndoIter );
+                bRet |= GetDoc()->Undo( aUndoIter );
 
-            if( !aUndoIter.IsNextUndo() )
-                break;
+                if( !aUndoIter.IsNextUndo() )
+                    break;
 
-            // es geht weiter, also erzeuge einen neuen Cursor wenn
-            // der alte schon eine Selection hat
-            // JP 02.04.98: aber nicht wenns ein Autoformat ist
-            if( !bRestoreCrsr && HasSelection() )
-            {
-                CreateCrsr();
-                aUndoIter.pAktPam = GetCrsr();
-            }
-        } while( TRUE );
+                // es geht weiter, also erzeuge einen neuen Cursor wenn
+                // der alte schon eine Selection hat
+                // JP 02.04.98: aber nicht wenns ein Autoformat ist
+                if( !bRestoreCrsr && HasSelection() )
+                {
+                    CreateCrsr();
+                    aUndoIter.pAktPam = GetCrsr();
+                }
+            } while( TRUE );
+        }
 
         Pop( !bRestoreCrsr );
 
@@ -194,7 +197,7 @@ BOOL SwEditShell::Undo(USHORT nUndoId)
 }
 
 
-USHORT SwEditShell::Redo()
+USHORT SwEditShell::Redo( USHORT nCnt )
 {
     SET_CURR_SHELL( this );
 
@@ -218,21 +221,24 @@ USHORT SwEditShell::Redo()
         SwRedlineMode eOld = GetDoc()->GetRedlineMode();
 
         SwUndoIter aUndoIter( GetCrsr(), 0 );
-        do {
+        while( nCnt-- )
+        {
+            do {
 
-            bRet |= GetDoc()->Redo( aUndoIter );
+                bRet |= GetDoc()->Redo( aUndoIter );
 
-            if( !aUndoIter.IsNextUndo() )
-                break;
+                if( !aUndoIter.IsNextUndo() )
+                    break;
 
-            // es geht weiter, also erzeugen einen neuen Cursor wenn
-            // der alte schon eine SSelection hat
-            if( HasSelection() )
-            {
-                CreateCrsr();
-                aUndoIter.pAktPam = GetCrsr();
-            }
-        } while( TRUE );
+                // es geht weiter, also erzeugen einen neuen Cursor wenn
+                // der alte schon eine SSelection hat
+                if( HasSelection() )
+                {
+                    CreateCrsr();
+                    aUndoIter.pAktPam = GetCrsr();
+                }
+            } while( TRUE );
+        }
 
         if( aUndoIter.IsUpdateAttr() )
             UpdateAttr();
