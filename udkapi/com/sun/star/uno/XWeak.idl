@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XWeak.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 15:10:43 $
+ *  last change: $Author: mi $ $Date: 2001-11-20 10:20:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,7 @@
     </p>
     <p>The sense of weak references is to hold a reference to an object
     without affecting the lifetime of the object. That means that a weak
-    reference may become invalid at any time if the referenced object dies.
+    reference may become invalid, at any time, if the referenced object dies.
 
     </p>
     <p>The following interfaces describe one way to handle weak references
@@ -154,6 +154,9 @@ interface XWeak: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2001/03/16 15:10:43  jsc
+    remove interfaceheader with uik and remove [const] in method definitions
+
     Revision 1.4  2000/11/08 12:29:00  mi
     moved from api
 

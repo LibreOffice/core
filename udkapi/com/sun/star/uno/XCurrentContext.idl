@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XCurrentContext.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dbo $ $Date: 2001-05-04 14:22:18 $
+ *  last change: $Author: mi $ $Date: 2001-11-20 10:20:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@ interface XCurrentContext : XInterface
 {
     /** Gets a value from the context.
         You should carefully use the obtained value, because the current context
-        (value container) lives only for the running task (i.e. often the
+        (value container) lives only for the running task (i.e., often the
         executing thread) only!
 
         @param Name

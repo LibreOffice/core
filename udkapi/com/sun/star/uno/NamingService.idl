@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NamingService.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:29:00 $
+ *  last change: $Author: mi $ $Date: 2001-11-20 10:20:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,18 +74,18 @@
 
 
 
-    <p>Normally an uno application exposes its external reachable objects
+    <p>Normally a uno application exposes its external reachable objects
     through this service. It is up to the implementation, how the registered
     objects are exposed to the rest of the world. Which objects are
     reachable from the outside are implementation specific.
 
     </p>
-    <p>To extend the reachability change the naming service. To access the
-    process local naming service normally use your ServiceManager. If you are
+    <p>To extend the reachability, change the naming service. To access the
+    process local naming service normally, use your ServiceManager. If you are
     outside of UNO you can access the shared library "unonamingservice". This library
     exports a c-style function "createComponentFactory". All parameters can be set
     to null. Look at the service specification of the shared library loader.<br>
-    In Java the class name of the naming component is "com.sun.star.comp.nameservice.NameService".
+    In Java, the class name of the naming component is "com.sun.star.comp.nameservice.NameService".
     If Java is embedded in a native system this component should connect to the
     native library.
 
@@ -109,6 +109,9 @@ service NamingService
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.4  2000/11/08 12:29:00  mi
+      moved from api
+
       Revision 1.1.1.1  2000/09/18 23:36:18  hjs
       initial import
 
