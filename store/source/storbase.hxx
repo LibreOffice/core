@@ -2,9 +2,9 @@
  *
  *  $RCSfile: storbase.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mhu $ $Date: 2001-03-13 20:54:25 $
+ *  last change: $Author: mhu $ $Date: 2001-11-26 21:10:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,7 @@
  ************************************************************************/
 
 #ifndef _STORE_STORBASE_HXX_
-#define _STORE_STORBASE_HXX_ "$Revision: 1.2 $"
+#define _STORE_STORBASE_HXX_ "$Revision: 1.3 $"
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
@@ -459,7 +459,7 @@ struct OStorePageNameBlock
             return store_E_InvalidParameter;
 
         // Check name length.
-        if (!(pName->length < sizeof(sal_Char[STORE_MAXIMUM_NAMESIZE])))
+        if (!(pName->length < STORE_MAXIMUM_NAMESIZE))
             return store_E_NameTooLong;
 
         // Transform pathname into key.
