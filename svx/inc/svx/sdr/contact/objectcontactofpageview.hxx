@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objectcontactofpageview.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 10:03:42 $
+ *  last change: $Author: rt $ $Date: 2004-12-13 08:53:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,6 +148,10 @@ namespace sdr
             // Invalidate given rectangle at the window/output which is represented by
             // this ObjectContact.
             virtual void InvalidatePartOfView(const Rectangle& rRectangle) const;
+
+            // #i37394# Non-painted object was changed. Test for potentially
+            // getting visible
+            virtual void ObjectGettingPotentiallyVisible(const ViewObjectContact& rVOC) const;
 
             // Get info about the need to visualize GluePoints. The default
             // is that it is not necessary.
