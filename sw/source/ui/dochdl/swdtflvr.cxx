@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.89 $
+ *  $Revision: 1.90 $
  *
- *  last change: $Author: rt $ $Date: 2005-02-07 14:46:04 $
+ *  last change: $Author: rt $ $Date: 2005-02-09 14:50:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -979,8 +979,10 @@ int SwTransferable::Copy( BOOL bIsCut )
           AddFormat( SOT_FORMATSTR_ID_SVXB );
 
         AddFormat( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR );
-        const Graphic &rGrf = pWrtShell->GetGraphic();
-        if( rGrf.IsSupportedGraphic() )
+        // --> OD 2005-02-09 #119353# - robust
+        const Graphic* pGrf = pWrtShell->GetGraphic();
+        if( pGrf && pGrf->IsSupportedGraphic() )
+        // <--
         {
             AddFormat( FORMAT_GDIMETAFILE );
             AddFormat( FORMAT_BITMAP );
@@ -3043,8 +3045,10 @@ void SwTransferable::SetDataForDragAndDrop( const Point& rSttPos )
     if( SwWrtShell::SEL_GRF == nSelection)
     {
         AddFormat( SOT_FORMATSTR_ID_SVXB );
-        const Graphic &rGrf = pWrtShell->GetGraphic();
-        if ( rGrf.IsSupportedGraphic() )
+        // --> OD 2005-02-09 #119353# - robust
+        const Graphic* pGrf = pWrtShell->GetGraphic();
+        if ( pGrf && pGrf->IsSupportedGraphic() )
+        // <--
         {
             AddFormat( FORMAT_GDIMETAFILE );
             AddFormat( FORMAT_BITMAP );
@@ -3375,7 +3379,7 @@ int SwTransferable::PrivateDrop( SwWrtShell& rSh, const Point& rDragPt,
         // ReRead auf die Grafik
         String sGrfNm, sFltNm;
         rSrcSh.GetGrfNms( &sGrfNm, &sFltNm );
-        rSh.ReRead( sGrfNm, sFltNm, &rSrcSh.GetGraphic() );
+        rSh.ReRead( sGrfNm, sFltNm, rSrcSh.GetGraphic() );
         return 1;
     }
 
