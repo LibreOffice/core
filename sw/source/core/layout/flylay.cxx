@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flylay.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:12:19 $
+ *  last change: $Author: vg $ $Date: 2003-06-10 13:18:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -374,8 +374,7 @@ void SwFlyFreeFrm::CheckClip( const SwFmtFrmSize &rSz )
                 bWidthClipped = TRUE;
             }
 
-            if ( Lower() && Lower()->IsNoTxtFrm() &&
-                 ((SwCntntFrm*)Lower())->GetNode()->GetOLENode() )
+            if ( Lower() && Lower()->IsNoTxtFrm() && !FindFooterOrHeader() )
             {
                 //Wenn Breite und Hoehe angepasst wurden, so ist die
                 //groessere Veraenderung massgeblich.
@@ -403,16 +402,17 @@ void SwFlyFreeFrm::CheckClip( const SwFmtFrmSize &rSz )
                                     aOldSize.Height() );
                     bWidthClipped = TRUE;
                 }
-                if( bWidthClipped || bHeightClipped )
-                {
-                    SwFlyFrmFmt *pFmt = (SwFlyFrmFmt*)GetFmt();
-                    pFmt->LockModify();
-                    SwFmtFrmSize aFrmSize( rSz );
-                    aFrmSize.SetWidth( aFrmRect.Width() );
-                    aFrmSize.SetHeight( aFrmRect.Height() );
-                    pFmt->SetAttr( aFrmSize );
-                    pFmt->UnlockModify();
-                }
+
+//                if( bWidthClipped || bHeightClipped )
+//                {
+//                    SwFlyFrmFmt *pFmt = (SwFlyFrmFmt*)GetFmt();
+//                    pFmt->LockModify();
+//                    SwFmtFrmSize aFrmSize( rSz );
+//                    aFrmSize.SetWidth( aFrmRect.Width() );
+//                    aFrmSize.SetHeight( aFrmRect.Height() );
+//                    pFmt->SetAttr( aFrmSize );
+//                    pFmt->UnlockModify();
+//                }
             }
 
             //Jetzt die Einstellungen am Frm vornehmen, bei Spalten werden
