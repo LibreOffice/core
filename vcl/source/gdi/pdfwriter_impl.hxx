@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: pl $ $Date: 2002-09-11 09:55:40 $
+ *  last change: $Author: pl $ $Date: 2002-09-11 13:38:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,6 +181,17 @@ public:
         sal_Int32   m_nObject;
     };
 
+    struct JPGEmit
+    {
+        SvMemoryStream*     m_pStream;
+        Bitmap              m_aMask;
+        Size                m_aPixelSize;
+        sal_Int32           m_nObject;
+
+        JPGEmit() : m_pStream( NULL ) {}
+        ~JPGEmit() { delete m_pStream; }
+    };
+
     struct GradientEmit
     {
         Gradient    m_aGradient;
@@ -253,6 +264,10 @@ private:
     /* contains Bitmaps until they are written to the
      *  file stream as XObjects*/
     std::list< BitmapEmit >         m_aBitmaps;
+    /* contains JPG streams until written to file
+     */
+    std::list<JPGEmit>              m_aJPGs;
+
     /* contains Bitmaps for gradient functions until they are written
      *  to the file stream */
     std::list< GradientEmit >       m_aGradients;
@@ -354,6 +369,9 @@ private:
        a second for the mask
      */
     bool writeBitmapObject( BitmapEmit& rObject, bool bMask = false );
+
+    bool writeJPG( JPGEmit& rEmit );
+
     /* writes the Do operation inside the content stream */
     void drawBitmap( const Point& rDestPt, const Size& rDestSize, const BitmapEmit& rBitmap, const Color& rFillColor );
     /* write the function object for a Gradient */
@@ -520,6 +538,8 @@ public:
     void drawBitmap( const Point& rDestPoint, const Size& rDestSize, const Bitmap& rBitmap );
     void drawBitmap( const Point& rDestPoint, const Size& rDestSize, const BitmapEx& rBitmap );
     void drawMask( const Point& rDestPoint, const Size& rDestSize, const Bitmap& rBitmap, const Color& rFillColor );
+    void drawJPGBitmap( SvStream& rDCTData, const Size& rSizePixel, const Rectangle& rTargetArea, const Bitmap& rMask );
+
     void drawGradient( const Rectangle& rRect, const Gradient& rGradient );
     void drawGradient( const PolyPolygon& rPolyPoly, const Gradient& rGradient );
     void drawHatch( const PolyPolygon& rPolyPoly, const Hatch& rHatch );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-26 08:08:12 $
+ *  last change: $Author: pl $ $Date: 2002-09-11 13:38:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -392,4 +392,9 @@ void PDFWriter::SetTextLineColor( const Color& rColor )
 void PDFWriter::SetTextAlign( TextAlign eAlign )
 {
     ((PDFWriterImpl*)pImplementation)->setTextAlign( eAlign );
+}
+
+void PDFWriter::DrawJPGBitmap( SvStream& rStreamData, const Size& rSrcSizePixel, const Rectangle& rTargetArea, const Bitmap& rMask )
+{
+    ((PDFWriterImpl*)pImplementation)->drawJPGBitmap( rStreamData, rSrcSizePixel, rTargetArea, rMask );
 }

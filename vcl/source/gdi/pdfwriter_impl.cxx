@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: pl $ $Date: 2002-09-11 09:55:40 $
+ *  last change: $Author: pl $ $Date: 2002-09-11 13:38:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -805,6 +805,16 @@ void PDFWriterImpl::endPage()
             {
                 writeBitmapObject( *it );
                 it->m_aBitmap = BitmapEx();
+            }
+        }
+        for( std::list<JPGEmit>::iterator jpeg = m_aJPGs.begin(); jpeg != m_aJPGs.end(); ++jpeg )
+        {
+            if( jpeg->m_pStream )
+            {
+                writeJPG( *jpeg );
+                delete jpeg->m_pStream;
+                jpeg->m_pStream = NULL;
+                jpeg->m_aMask = Bitmap();
             }
         }
         for( std::list<TransparencyEmit>::iterator t = m_aTransparentObjects.begin();
@@ -1912,6 +1922,14 @@ sal_Int32 PDFWriterImpl::emitResources()
             aLine.append( it->m_nObject );
             aLine.append( ' ' );
             aLine.append( it->m_nObject );
+            aLine.append( " 0 R\r\n   " );
+        }
+        for( std::list<JPGEmit>::const_iterator jpeg = m_aJPGs.begin(); jpeg != m_aJPGs.end(); ++jpeg )
+        {
+            aLine.append( "/Im" );
+            aLine.append( jpeg->m_nObject );
+            aLine.append( ' ' );
+            aLine.append( jpeg->m_nObject );
             aLine.append( " 0 R\r\n   " );
         }
         for( std::list<TransparencyEmit>::const_iterator t = m_aTransparentObjects.begin();
@@ -3663,6 +3681,71 @@ bool PDFWriterImpl::writeGradientFunction( GradientEmit& rObject )
     return true;
 }
 
+bool PDFWriterImpl::writeJPG( JPGEmit& rObject )
+{
+    CHECK_RETURN( rObject.m_pStream );
+    CHECK_RETURN( updateObject( rObject.m_nObject ) );
+
+    sal_Int32 nLength = 0;
+    rObject.m_pStream->Seek( STREAM_SEEK_TO_END );
+    nLength = rObject.m_pStream->Tell();
+    rObject.m_pStream->Seek( STREAM_SEEK_TO_BEGIN );
+
+    sal_Int32 nMaskObject = 0;
+    if( !!rObject.m_aMask )
+    {
+        if( rObject.m_aMask.GetBitCount() == 1 ||
+            ( rObject.m_aMask.GetBitCount() == 8 && m_eVersion >= PDFWriter::PDF_1_4 )
+            )
+            nMaskObject = createObject();
+    }
+
+    OStringBuffer aLine(80);
+    aLine.append( rObject.m_nObject );
+    aLine.append( " 0 obj\r\n"
+                  "<< /Type /XObject\r\n"
+                  "   /Subtype /Image\r\n"
+                  "   /Width " );
+    aLine.append( (sal_Int32)rObject.m_aPixelSize.Width() );
+    aLine.append( "\r\n"
+                  "   /Height " );
+    aLine.append( (sal_Int32)rObject.m_aPixelSize.Height() );
+    aLine.append( "\r\n"
+                  "   /BitsPerComponent 8\r\n"
+                  "   /ColorSpace /DeviceRGB\r\n"
+                  "   /Filter /DCTDecode\r\n"
+                  "   /Length "
+                  );
+    aLine.append( nLength );
+    if( nMaskObject )
+    {
+        aLine.append( rObject.m_aMask.GetBitCount() == 1 ? "\r\n   /Mask " : "\r\n   /SMask " );
+        aLine.append( nMaskObject );
+        aLine.append( " 0 R" );
+    }
+    aLine.append( "\r\n>>\r\nstream\r\n" );
+    CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
+
+    CHECK_RETURN( writeBuffer( rObject.m_pStream->GetData(), nLength ) );
+
+    aLine.setLength( 0 );
+    aLine.append( "\r\nendstream\r\n\r\n" );
+    CHECK_RETURN( writeBuffer( aLine.getStr(), aLine.getLength() ) );
+
+    if( nMaskObject )
+    {
+        BitmapEmit aEmit;
+        aEmit.m_nObject = nMaskObject;
+        if( rObject.m_aMask.GetBitCount() == 1 )
+            aEmit.m_aBitmap = BitmapEx( rObject.m_aMask, rObject.m_aMask );
+        else if( rObject.m_aMask.GetBitCount() == 8 )
+            aEmit.m_aBitmap = BitmapEx( rObject.m_aMask, AlphaMask( rObject.m_aMask ) );
+        writeBitmapObject( aEmit, true );
+    }
+
+    return true;
+}
+
 bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
 {
     CHECK_RETURN( updateObject( rObject.m_nObject ) );
@@ -3894,6 +3977,33 @@ bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
     }
 
     return true;
+}
+
+void PDFWriterImpl::drawJPGBitmap( SvStream& rDCTData, const Size& rSizePixel, const Rectangle& rTargetArea, const Bitmap& rMask )
+{
+    OStringBuffer aLine( 80 );
+    updateGraphicsState();
+
+    m_aJPGs.push_front( JPGEmit() );
+    JPGEmit& rEmit = m_aJPGs.front();
+    rEmit.m_pStream = new SvMemoryStream;
+    rDCTData.Seek( 0 );
+    *rEmit.m_pStream << rDCTData;
+    rEmit.m_aPixelSize = rSizePixel;
+    if( !! rMask && rMask.GetSizePixel() == rSizePixel )
+        rEmit.m_aMask = rMask;
+    rEmit.m_nObject = createObject();
+
+    aLine.append( "q " );
+    m_aPages.back().appendMappedLength( rTargetArea.GetWidth(), aLine, false );
+    aLine.append( " 0 0 " );
+    m_aPages.back().appendMappedLength( rTargetArea.GetHeight(), aLine, true );
+    aLine.append( ' ' );
+    m_aPages.back().appendPoint( rTargetArea.BottomLeft(), aLine );
+    aLine.append( " cm\r\n  /Im" );
+    aLine.append( rEmit.m_nObject );
+    aLine.append( " Do Q\r\n" );
+    writeBuffer( aLine.getStr(), aLine.getLength() );
 }
 
 void PDFWriterImpl::drawBitmap( const Point& rDestPoint, const Size& rDestSize, const BitmapEmit& rBitmap, const Color& rFillColor )
