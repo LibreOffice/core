@@ -3,9 +3,9 @@
 #
 #   $RCSfile: build.xml,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: dfoster $ $Date: 2002-11-20 15:46:48 $
+#   last change: $Author: dfoster $ $Date: 2003-01-21 15:08:46 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,7 +82,7 @@
 
   <!-- ==================== classpath setting ============================ -->
   <path id="idlclasspath">
-    <pathelement location="${solar.jar}/unoil.jar"/>
+    <!--<pathelement location="${solar.jar}/unoil.jar"/> -->
     <pathelement location="${prj}/../unoil/${inpath}/class/unoil.jar"/>
     <pathelement location="${solar.jar}/jurt.jar"/>
     <pathelement location="${solar.jar}/jut.jar"/>
@@ -165,13 +165,13 @@
         <attribute name="RegistrationClassName" value="ScriptRuntimeComponentRegistration"/>
     </manifest>
     </jar>
-    <jar jarfile="${jardir}/${storagejarname}"
+    <!--<jar jarfile="${jardir}/${storagejarname}"
      basedir="${storageclasses}">
     <manifest>
                 <attribute name="Built-By" value="Sun Microsystems"/>
         <attribute name="RegistrationClassName" value="StorageProxy"/>
     </manifest>
-    </jar>
+    </jar>-->
   </target>
 
   <target name="idesupport.jar" depends="idesupport.compile">
