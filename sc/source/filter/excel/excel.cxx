@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excel.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-09 15:00:11 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:23:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifdef PCH
 #include "filt_pch.hxx"
 #endif
@@ -131,7 +130,7 @@ FltError ScImportExcel( SfxMedium& rMedium, ScDocument* pDocument, const EXCIMPF
     if( !pMedStrm ) return eERR_OPEN;           // should not happen
 
     SvStream* pBookStrm = 0;            // The "Book"/"Workbook" stream containing main data.
-    XclBiff eBiff = xlBiffUnknown;      // The BIFF version of the main stream.
+    XclBiff eBiff = EXC_BIFF_UNKNOWN;   // The BIFF version of the main stream.
 
     // try to open an OLE storage
     SotStorageRef xRootStrg;
@@ -148,21 +147,21 @@ FltError ScImportExcel( SfxMedium& rMedium, ScDocument* pDocument, const EXCIMPF
     {
         // try to open the "Book" stream
         SotStorageStreamRef xBookStrm5 = ScfTools::OpenStorageStreamRead( xRootStrg, EXC_STREAM_BOOK );
-        XclBiff eBookStrm5Biff = xBookStrm5.Is() ?  XclImpStream::DetectBiffVersion( *xBookStrm5 ) : xlBiffUnknown;
+        XclBiff eBookStrm5Biff = xBookStrm5.Is() ?  XclImpStream::DetectBiffVersion( *xBookStrm5 ) : EXC_BIFF_UNKNOWN;
 
         // try to open the "Workbook" stream
         SotStorageStreamRef xBookStrm8 = ScfTools::OpenStorageStreamRead( xRootStrg, EXC_STREAM_WORKBOOK );
-        XclBiff eBookStrm8Biff = xBookStrm8.Is() ?  XclImpStream::DetectBiffVersion( *xBookStrm8 ) : xlBiffUnknown;
+        XclBiff eBookStrm8Biff = xBookStrm8.Is() ?  XclImpStream::DetectBiffVersion( *xBookStrm8 ) : EXC_BIFF_UNKNOWN;
 
         // decide which stream to use
-        if( (eBookStrm8Biff != xlBiffUnknown) && ((eBookStrm5Biff == xlBiffUnknown) || (eBookStrm8Biff > eBookStrm5Biff)) )
+        if( (eBookStrm8Biff != EXC_BIFF_UNKNOWN) && ((eBookStrm5Biff == EXC_BIFF_UNKNOWN) || (eBookStrm8Biff > eBookStrm5Biff)) )
         {
             /*  Only "Workbook" stream exists; or both streams exist,
                 and "Workbook" has higher BIFF version than "Book" stream. */
             xStrgStrm = xBookStrm8;
             eBiff = eBookStrm8Biff;
         }
-        else if( eBookStrm5Biff != xlBiffUnknown )
+        else if( eBookStrm5Biff != EXC_BIFF_UNKNOWN )
         {
             /*  Only "Book" stream exists; or both streams exist,
                 and "Book" has higher BIFF version than "Workbook" stream. */
@@ -177,7 +176,7 @@ FltError ScImportExcel( SfxMedium& rMedium, ScDocument* pDocument, const EXCIMPF
     if( !pBookStrm )
     {
         eBiff = XclImpStream::DetectBiffVersion( *pMedStrm );
-        if( eBiff != xlBiffUnknown )
+        if( eBiff != EXC_BIFF_UNKNOWN )
             pBookStrm = pMedStrm;
     }
 
@@ -191,14 +190,13 @@ FltError ScImportExcel( SfxMedium& rMedium, ScDocument* pDocument, const EXCIMPF
         ::std::auto_ptr< ImportExcel > xFilter;
         switch( eBiff )
         {
-            case xlBiff2:
-            case xlBiff3:
-            case xlBiff4:
-            case xlBiff5:
-            case xlBiff7:
+            case EXC_BIFF2:
+            case EXC_BIFF3:
+            case EXC_BIFF4:
+            case EXC_BIFF5:
                 xFilter.reset( new ImportExcel( aImpData ) );
             break;
-            case xlBiff8:
+            case EXC_BIFF8:
                 xFilter.reset( new ImportExcel8( aImpData ) );
             break;
             default:    DBG_ERROR_BIFF();
@@ -259,7 +257,7 @@ FltError ScExportExcel5( SfxMedium& rMedium, ScDocument *pDocument,
     xStrgStrm->SetBufferSize( 0x8000 );     // still needed?
 
     FltError eRet = eERR_UNKN_BIFF;
-    XclExpRootData aExpData( bBiff8 ? xlBiff8 : xlBiff5, rMedium, xRootStrg, *xStrgStrm, *pDocument, eNach );
+    XclExpRootData aExpData( bBiff8 ? EXC_BIFF8 : EXC_BIFF5, rMedium, xRootStrg, *xStrgStrm, *pDocument, eNach );
     if ( bBiff8 )
     {
         ExportBiff8 aFilter( aExpData );
