@@ -2,9 +2,9 @@
  *
  *  $RCSfile: types.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mhu $ $Date: 2001-03-13 20:26:37 $
+ *  last change: $Author: jsc $ $Date: 2001-05-28 14:56:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,7 @@
  ************************************************************************/
 
 #ifndef _STORE_TYPES_H_
-#define _STORE_TYPES_H_ "$Revision: 1.2 $"
+#define _STORE_TYPES_H_ "$Revision: 1.3 $"
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
@@ -75,27 +75,27 @@ extern "C" {
 #endif
 
 /** PageSize (recommended) default.
- *  @see store_openFile().
+    @see store_openFile().
  */
 #define STORE_DEFAULT_PAGESIZE ((sal_uInt16)0x0400)
 
 
 /** PageSize (enforced) limits.
- *  @see store_openFile().
+    @see store_openFile().
  */
 #define STORE_MINIMUM_PAGESIZE ((sal_uInt16)0x0200)
 #define STORE_MAXIMUM_PAGESIZE ((sal_uInt16)0x8000)
 
 
 /** NameSize (enforced) limit.
- *  @see any param pName.
- *  @see store_E_NameTooLong
+    @see any param pName.
+    @see store_E_NameTooLong
  */
 #define STORE_MAXIMUM_NAMESIZE 256
 
 
 /** Attributes (predefined).
- *  @see store_attrib().
+    @see store_attrib().
  */
 #define STORE_ATTRIB_ISLINK  0x10000000UL
 #define STORE_ATTRIB_ISDIR   0x20000000UL
@@ -103,9 +103,9 @@ extern "C" {
 
 
 /** storeAccessMode.
- *  @see store_openFile().
- *  @see store_openDirectory().
- *  @see store_openStream().
+    @see store_openFile().
+    @see store_openDirectory().
+    @see store_openStream().
  */
 typedef enum
 {
@@ -148,29 +148,29 @@ typedef enum
 
 
 /** storeFindData.
- *  @see store_findFirst().
- *  @see store_findNext().
+    @see store_findFirst().
+    @see store_findNext().
  */
 typedef struct
 {
     /** Name.
-     *  @see m_nLength.
+        @see m_nLength.
      */
     sal_Unicode m_pszName[STORE_MAXIMUM_NAMESIZE];
 
     /** Name Length.
-     *  @see m_pszName.
+        @see m_pszName.
      */
     sal_Int32 m_nLength;
 
     /** Attributes.
-     *  @see store_attrib().
+        @see store_attrib().
      */
     sal_uInt32 m_nAttrib;
 
     /** Size.
-     *  @see store_getStreamSize().
-     *  @see store_setStreamSize().
+        @see store_getStreamSize().
+        @see store_setStreamSize().
      */
     sal_uInt32 m_nSize;
 

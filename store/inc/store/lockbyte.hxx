@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lockbyte.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mhu $ $Date: 2001-03-13 20:37:59 $
+ *  last change: $Author: jsc $ $Date: 2001-05-28 14:56:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,7 @@
  ************************************************************************/
 
 #ifndef _STORE_LOCKBYTE_HXX_
-#define _STORE_LOCKBYTE_HXX_ "$Revision: 1.2 $"
+#define _STORE_LOCKBYTE_HXX_ "$Revision: 1.3 $"
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
@@ -86,11 +86,11 @@ class ILockBytes : public rtl::IReference
 {
 public:
     /**
-     *  @param  nOffset [in]
-     *  @param  pBuffer [out]
-     *  @param  nBytes [in]
-     *  @param  rnDone [out]
-     *  @return store_E_None upon success
+        @param  nOffset [in]
+        @param  pBuffer [out]
+        @param  nBytes [in]
+        @param  rnDone [out]
+        @return store_E_None upon success
      */
     virtual storeError readAt (
         sal_uInt32  nOffset,
@@ -99,11 +99,11 @@ public:
         sal_uInt32 &rnDone) = 0;
 
     /**
-     *  @param  nOffset [in]
-     *  @param  pBuffer [in]
-     *  @param  nBytes [in]
-     *  @param  rnDone [out]
-     *  @return store_E_None upon success
+        @param  nOffset [in]
+        @param  pBuffer [in]
+        @param  nBytes [in]
+        @param  rnDone [out]
+        @return store_E_None upon success
      */
     virtual storeError writeAt (
         sal_uInt32  nOffset,
@@ -112,37 +112,37 @@ public:
         sal_uInt32 &rnDone) = 0;
 
     /**
-     *  @return store_E_None upon success
+        @return store_E_None upon success
      */
     virtual storeError flush (void) = 0;
 
     /**
-     *  @param  nSize [in]
-     *  @return store_E_None upon success
+        @param  nSize [in]
+        @return store_E_None upon success
      */
     virtual storeError setSize (sal_uInt32 nSize) = 0;
 
     /**
-     *  @param  rnSize [out]
-     *  @return store_E_None upon success
+        @param  rnSize [out]
+        @return store_E_None upon success
      */
     virtual storeError stat (sal_uInt32 &rnSize) = 0;
 
     /**
-     *  @param  nOffset [in]
-     *  @param  nBytes [in]
-     *  @return store_E_None upon success
-     *          store_E_LockingViolation
+        @param  nOffset [in]
+        @param  nBytes [in]
+        @return store_E_None upon success
+                store_E_LockingViolation
      */
     virtual storeError lockRange (
         sal_uInt32 nOffset,
         sal_uInt32 nBytes) = 0;
 
     /**
-     *  @param  nOffset [in]
-     *  @param  nBytes [in]
-     *  @return store_E_None upon success
-     *          store_E_LockingViolation
+        @param  nOffset [in]
+        @param  nBytes [in]
+        @return store_E_None upon success
+                store_E_LockingViolation
      */
     virtual storeError unlockRange (
         sal_uInt32 nOffset,
