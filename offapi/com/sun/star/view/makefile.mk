@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: ka $ $Date: 2002-08-13 11:16:03 $
+#   last change: $Author: jsc $ $Date: 2002-11-29 15:23:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,8 +84,12 @@ IDLFILES=\
     PrintSettings.idl\
     RenderDescriptor.idl\
     RenderOptions.idl\
+    ViewSettings.idl\
     XControlAccess.idl\
     XLineCursor.idl\
+    XPrintable.idl\
+    XPrintableBroadcaster.idl\
+    XPrintableListener.idl\
     XPrintPreview.idl\
     XPrintSettingsSupplier.idl\
     XRenderable.idl\
@@ -94,9 +98,6 @@ IDLFILES=\
     XSelectionSupplier.idl\
     XViewCursor.idl\
     XViewSettingsSupplier.idl\
-    XPrintableBroadcaster.idl\
-    XPrintableListener.idl\
-    XPrintable.idl
 
 # ------------------------------------------------------------------
 
