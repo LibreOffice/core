@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grafctrl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ka $ $Date: 2001-02-19 16:45:47 $
+ *  last change: $Author: vg $ $Date: 2001-07-03 15:29:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1064,7 +1064,7 @@ void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
                                                    aRBSize.Width(), aRBSize.Height() ) );
 
                 SfxSingleTabDialog  aCropDialog( SfxViewShell::Current() ? SfxViewShell::Current()->GetWindow() : NULL,
-                                                 aCropDlgAttr, 950, FALSE );
+                                                 aCropDlgAttr, 950 );
                 const String        aCropStr = SVX_RESSTR( RID_SVXSTR_GRAFCROP );
                 SfxTabPage*         pTabPage = SvxGrfCropPage::Create( &aCropDialog, aCropDlgAttr );
 
