@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testclient.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 19:07:09 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:29:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,10 @@
  *
  ************************************************************************/
 #include <string.h>
+
+#if OSL_DEBUG_LEVEL == 0
+#define NDEBUG
+#endif
 #include <assert.h>
 
 #ifndef _OSL_TIME_H_
