@@ -2,9 +2,9 @@
  *
  *  $RCSfile: breakit.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:11:54 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 08:28:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,12 +69,12 @@
 #include <tools/lang.hxx>
 #endif
 
-/*************************************************************************
- *                      class SwBreakIt
- *************************************************************************/
-
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
 #include <com/sun/star/uno/Reference.h>
+#endif
+
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_I18N_XBREAKITERATOR_HPP_
@@ -87,40 +87,75 @@
 
 class String;
 
+/*************************************************************************
+ *                      class SwBreakIt
+ *************************************************************************/
+
+namespace css = com::sun::star;
+
 class SwBreakIt
 {
-public:
-    com::sun::star::uno::Reference < com::sun::star::i18n::XBreakIterator > xBreak;
-private:
-    com::sun::star::lang::Locale* pLocale;
-    com::sun::star::i18n::ForbiddenCharacters* pForbidden;
+    css::uno::Reference< css::lang::XMultiServiceFactory > m_xMSF;
+
+    css::lang::Locale * m_pLocale;
+    css::i18n::ForbiddenCharacters * m_pForbidden;
+
     LanguageType aLast;          // language of the current locale
     LanguageType aForbiddenLang; // language of the current forbiddenChar struct
 
     void _GetLocale( const LanguageType aLang );
     void _GetForbidden( const LanguageType  aLang );
-public:
+
+    // forbidden and not implemented.
     SwBreakIt();
-    ~SwBreakIt() { delete pLocale; delete pForbidden; }
-    com::sun::star::lang::Locale& GetLocale( const LanguageType aLang )
+    SwBreakIt( const SwBreakIt &);
+    SwBreakIt & operator= ( const SwBreakIt &);
+
+    // private (see @ _Create, _Delete).
+    explicit SwBreakIt(
+        const css::uno::Reference< css::lang::XMultiServiceFactory > & rxMSF);
+    ~SwBreakIt();
+
+public:
+    // private (see @ source/core/bastyp/init.cxx).
+    static void _Create(
+        const css::uno::Reference< css::lang::XMultiServiceFactory > & rxMSF);
+    static void _Delete();
+
+public:
+    static SwBreakIt * Get();
+
+    // @@@ backward compatibility @@@
+    css::uno::Reference< css::i18n::XBreakIterator > xBreak;
+
+    const css::uno::Reference< css::i18n::XBreakIterator > & GetBreakIter()
     {
-        if( aLast != aLang )
-            _GetLocale( aLang );
-        return *pLocale;
+        return xBreak;
     }
-    com::sun::star::i18n::ForbiddenCharacters& GetForbidden( const LanguageType aLang )
+
+    const css::lang::Locale& GetLocale( const LanguageType aLang )
     {
-        if( !pForbidden || aForbiddenLang != aLang )
+        if( !m_pLocale || aLast != aLang )
+            _GetLocale( aLang );
+        return *m_pLocale;
+    }
+
+    const css::i18n::ForbiddenCharacters& GetForbidden( const LanguageType aLang )
+    {
+        if( !m_pForbidden || aForbiddenLang != aLang )
             _GetForbidden( aLang );
-        return *pForbidden;
+        return *m_pForbidden;
     }
 
     USHORT GetRealScriptOfText( const String& rTxt, xub_StrLen nPos ) const;
        USHORT GetAllScriptsOfText( const String& rTxt ) const;
 };
 
+#define SW_BREAKITER()  SwBreakIt::Get()
+#define SW_XBREAKITER() SW_BREAKITER()->GetBreakIter()
+
+// @@@ backward compatibility @@@
 extern SwBreakIt* pBreakIt;
-SwBreakIt* GetBreakIt(); //CHINA001 add for swui
 
 #endif
 
