@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OConnection.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-11 14:41:09 $
+ *  last change: $Author: rt $ $Date: 2004-01-07 16:03:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,7 +180,7 @@ SQLRETURN OConnection::OpenConnection(const ::rtl::OUString& aConnectStr,sal_Int
                       szConnStrIn,
                       (SQLSMALLINT) ::std::min((sal_Int32)2048,aConStr.getLength()),
                       szConnStrOut,
-                      (SQLSMALLINT) sizeof szConnStrOut,
+                      (SQLSMALLINT) (sizeof(szConnStrOut)/sizeof(SDB_ODBC_CHAR)) -1,
                       &cbConnStrOut,
                       SQL_DRIVER_NOPROMPT);
     if (nSQLRETURN == SQL_ERROR || nSQLRETURN == SQL_NO_DATA || SQL_SUCCESS_WITH_INFO == nSQLRETURN)
