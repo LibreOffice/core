@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.130 $
+ *  $Revision: 1.131 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-15 11:05:23 $
+ *  last change: $Author: mib $ $Date: 2001-03-21 09:55:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -223,6 +223,7 @@ XML_CONSTASCII_ACTION( sXML_annotation, "annotation" );
 XML_CONSTASCII_ACTION( sXML_annotations, "annotations" );
 XML_CONSTASCII_ACTION( sXML_annote, "annote" );
 XML_CONSTASCII_ACTION( sXML_applet, "applet");
+XML_CONSTASCII_ACTION( sXML_applet_name, "applet-name");
 XML_CONSTASCII_ACTION( sXML_application_data, "application-data");
 XML_CONSTASCII_ACTION( sXML_application_xml, "application-xml");
 XML_CONSTASCII_ACTION( sXML_apply, "apply" );
@@ -766,7 +767,12 @@ XML_CONSTASCII_ACTION( sXML_formulas, "formulas");
 XML_CONSTASCII_ACTION( sXML_fraction, "fraction" );
 XML_CONSTASCII_ACTION( sXML_frame, "frame" );
 XML_CONSTASCII_ACTION( sXML_frame_content, "frame-content" );
+XML_CONSTASCII_ACTION( sXML_frame_display_scrollbar, "frame-display-scrollbar" );
+XML_CONSTASCII_ACTION( sXML_frame_display_border, "frame-display-border" );
+XML_CONSTASCII_ACTION( sXML_frame_margin_horizontal, "frame-margin-horizontal" );
+XML_CONSTASCII_ACTION( sXML_frame_margin_vertical, "frame-margin-vertical" );
 XML_CONSTASCII_ACTION( sXML_frame_end_margin, "frame-end-margin" );
+XML_CONSTASCII_ACTION( sXML_frame_name, "frame-name" );
 XML_CONSTASCII_ACTION( sXML_frame_start_margin, "frame-start-margin" );
 XML_CONSTASCII_ACTION( sXML_freeze, "freeze" );
 XML_CONSTASCII_ACTION( sXML_freeze_position, "freeze-position" );

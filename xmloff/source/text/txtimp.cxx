@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-20 14:04:22 $
+ *  last change: $Author: mib $ $Date: 2001-03-21 10:01:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -475,6 +475,8 @@ static __FAR_DATA SvXMLTokenMapEntry aTextFrameAttrTokenMap[] =
     { XML_NAMESPACE_DRAW,   sXML_archive,       XML_TOK_TEXT_FRAME_ARCHIVE },
     { XML_NAMESPACE_DRAW,   sXML_may_script,    XML_TOK_TEXT_FRAME_MAY_SCRIPT },
     { XML_NAMESPACE_DRAW,   sXML_mime_type,     XML_TOK_TEXT_FRAME_MIME_TYPE },
+    { XML_NAMESPACE_DRAW, sXML_applet_name, XML_TOK_TEXT_FRAME_APPLET_NAME },
+    { XML_NAMESPACE_DRAW, sXML_frame_name, XML_TOK_TEXT_FRAME_FRAME_NAME },
     XML_TOKEN_MAP_END
 };
 
@@ -1792,7 +1794,6 @@ sal_Bool XMLTextImportHelper::IsInHeaderFooter() const
 Reference< XPropertySet> XMLTextImportHelper::createAndInsertOLEObject(
                                         SvXMLImport& rImport,
                                         const OUString& rHRef,
-                                          const OUString& rClassId,
                                         sal_Int32 nWidth, sal_Int32 nHeight )
 {
     Reference< XPropertySet> xPropSet;
@@ -1800,7 +1801,7 @@ Reference< XPropertySet> XMLTextImportHelper::createAndInsertOLEObject(
 }
 
 
-Reference< XPropertySet> XMLTextImportHelper::createApplet(
+Reference< XPropertySet> XMLTextImportHelper::createAndInsertApplet(
                                         const OUString& rCode,
                                           const OUString& rName,
                                           sal_Bool bMayScript,
@@ -1810,7 +1811,7 @@ Reference< XPropertySet> XMLTextImportHelper::createApplet(
     Reference< XPropertySet> xPropSet;
     return xPropSet;
 }
-Reference< XPropertySet> XMLTextImportHelper::createPlugin(
+Reference< XPropertySet> XMLTextImportHelper::createAndInsertPlugin(
                                           const OUString& rMimeType,
                                           const OUString& rHRef,
                                         sal_Int32 nWidth, sal_Int32 nHeight )
@@ -1818,8 +1819,10 @@ Reference< XPropertySet> XMLTextImportHelper::createPlugin(
     Reference< XPropertySet> xPropSet;
     return xPropSet;
 }
-Reference< XPropertySet> XMLTextImportHelper::createFloatingFrame(
+Reference< XPropertySet> XMLTextImportHelper::createAndInsertFloatingFrame(
+                                          const OUString& rName,
                                           const OUString& rHRef,
+                                          const OUString& rStyleName,
                                         sal_Int32 nWidth, sal_Int32 nHeight )
 {
     Reference< XPropertySet> xPropSet;

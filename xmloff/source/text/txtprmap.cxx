@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprmap.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: dvo $ $Date: 2001-03-20 11:33:56 $
+ *  last change: $Author: mib $ $Date: 2001-03-21 10:01:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -618,6 +618,11 @@ XMLPropertyMapEntry aXMLFramePropMap[] =
     { "Transparency",   XML_NAMESPACE_DRAW, sXML_transparency,      XML_TYPE_PERCENT16, 0 },
     // RES_GRFATR_DRAWMODE
     { "GraphicColorMode", XML_NAMESPACE_DRAW, sXML_color_mode,          XML_TYPE_COLOR_MODE, 0 },
+    // special entries for floating frames
+    M_E( "",            DRAW,   frame_display_scrollbar,    XML_TYPE_BOOL|MID_FLAG_NO_PROPERTY, CTF_FRAME_DISPLAY_SCROLLBAR ),
+    M_E( "",            DRAW,   frame_display_border,   XML_TYPE_BOOL|MID_FLAG_NO_PROPERTY, CTF_FRAME_DISPLAY_BORDER ),
+    M_E( "",            DRAW,   frame_margin_horizontal,    XML_TYPE_MEASURE_PX|MID_FLAG_NO_PROPERTY,   CTF_FRAME_MARGIN_HORI ),
+    M_E( "",            DRAW,   frame_margin_vertical,  XML_TYPE_MEASURE_PX|MID_FLAG_NO_PROPERTY,   CTF_FRAME_MARGIN_VERT ),
     M_E( "UserDefinedAttributes", TEXT, xmlns, XML_TYPE_ATTRIBUTE_CONTAINER | MID_FLAG_SPECIAL_ITEM, 0 ),
     { 0, 0, 0, 0 }
 };

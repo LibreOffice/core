@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlbahdl.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mib $ $Date: 2000-11-23 11:51:54 $
+ *  last change: $Author: mib $ $Date: 2001-03-21 09:57:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,20 @@ class XMLPercentPropHdl : public XMLPropertyHandler
 public:
     XMLPercentPropHdl( sal_Int8 nB=4 ) : nBytes( nB ) {}
     virtual ~XMLPercentPropHdl();
+
+    virtual sal_Bool importXML( const ::rtl::OUString& rStrImpValue, ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
+    virtual sal_Bool exportXML( ::rtl::OUString& rStrExpValue, const ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
+};
+
+/**
+    PropertyHandler for the XML-data-type: XML_TYPE_PERCENT
+*/
+class XMLMeasurePxPropHdl : public XMLPropertyHandler
+{
+    sal_Int8 nBytes;
+public:
+    XMLMeasurePxPropHdl( sal_Int8 nB=4 ) : nBytes( nB ) {}
+    virtual ~XMLMeasurePxPropHdl();
 
     virtual sal_Bool importXML( const ::rtl::OUString& rStrImpValue, ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;
     virtual sal_Bool exportXML( ::rtl::OUString& rStrExpValue, const ::com::sun::star::uno::Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const;

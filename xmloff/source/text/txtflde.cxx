@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtflde.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-19 09:41:43 $
+ *  last change: $Author: mib $ $Date: 2001-03-21 10:01:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -929,9 +929,10 @@ void XMLTextFieldExport::ExportFieldAutoStyle(
         // export text style with the addition of the combined characters
         DBG_ASSERT(NULL != pCombinedCharactersPropertyState,
                    "need proper PropertyState for combined characters");
+        const XMLPropertyState *aStates[] = { pCombinedCharactersPropertyState, 0 };
         GetExport().GetTextParagraphExport()->Add(
             XML_STYLE_FAMILY_TEXT_TEXT, xRangePropSet,
-            pCombinedCharactersPropertyState);
+            aStates);
         break;
     }
 
@@ -1671,10 +1672,11 @@ void XMLTextFieldExport::ExportFieldHelper(
     case FIELD_ID_COMBINED_CHARACTERS:
     {
         // get style name for current style + combine letters and export a span
+        const XMLPropertyState *aStates[] = { pCombinedCharactersPropertyState, 0 };
         ProcessString(sXML_style_name,
                       GetExport().GetTextParagraphExport()->Find(
                           XML_STYLE_FAMILY_TEXT_TEXT, rRangePropSet,
-                          sEmpty, pCombinedCharactersPropertyState) );
+                          sEmpty, aStates) );
         ExportElement(sXML_span, sPresentation);
         break;
     }

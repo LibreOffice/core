@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-16 12:49:19 $
+ *  last change: $Author: mib $ $Date: 2001-03-21 10:01:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -261,7 +261,7 @@ SV_IMPL_OP_PTRARR_SORT( OUStringsSort_Impl, OUStringPtr )
 
 void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
                                   const Reference < XPropertySet > & rPropSet,
-                                  const XMLPropertyState* pAddState)
+                                  const XMLPropertyState** ppAddStates)
 {
     sal_Bool bCache = sal_False;
     UniReference < SvXMLExportPropertyMapper > xPropMapper;
@@ -288,8 +288,14 @@ void XMLTextParagraphExport::Add( sal_uInt16 nFamily,
 
     vector< XMLPropertyState > xPropStates =
             xPropMapper->Filter( rPropSet );
-    if (NULL != pAddState)
-        xPropStates.push_back(*pAddState);
+    if( ppAddStates )
+    {
+        while( *ppAddStates )
+        {
+            xPropStates.push_back( **ppAddStates );
+            ppAddStates++;
+        }
+    }
 
     if( xPropStates.size() > 0L || bCache )
     {
@@ -379,7 +385,7 @@ OUString XMLTextParagraphExport::Find(
         sal_uInt16 nFamily,
            const Reference < XPropertySet > & rPropSet,
         const OUString& rParent,
-        const XMLPropertyState* pAddState) const
+        const XMLPropertyState** ppAddStates) const
 {
     sal_Bool bCache = sal_False;
     OUString sName( rParent );
@@ -415,8 +421,14 @@ OUString XMLTextParagraphExport::Find(
     DBG_ASSERT( xPropMapper.is(), "There is the property mapper?" );
     vector< XMLPropertyState > xPropStates =
             xPropMapper->Filter( rPropSet );
-    if (NULL != pAddState)
-        xPropStates.push_back(*pAddState);
+    if( ppAddStates )
+    {
+        while( *ppAddStates )
+        {
+            xPropStates.push_back( **ppAddStates );
+            ppAddStates++;
+        }
+    }
 
     if( xPropStates.size() > 0L )
         sName = GetAutoStylePool().Find( nFamily, sName, xPropStates );
@@ -2069,6 +2081,12 @@ void XMLTextParagraphExport::exportShape(
     }
 }
 
+void XMLTextParagraphExport::_collectTextEmbeddedAutoStyles(
+        const Reference < XPropertySet > & rPropSet )
+{
+    Add( XML_STYLE_FAMILY_TEXT_FRAME, rPropSet );
+}
+
 void XMLTextParagraphExport::_exportTextEmbedded(
         const Reference < XPropertySet > & rPropSet,
         const Reference < XPropertySetInfo > & rPropSetInfo )
@@ -2148,7 +2166,7 @@ void XMLTextParagraphExport::exportTextEmbedded(
 
     if( bAutoStyles )
     {
-        Add( XML_STYLE_FAMILY_TEXT_FRAME, xPropSet );
+        _collectTextEmbeddedAutoStyles( xPropSet );
     }
     else
     {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlbahdl.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: aw $ $Date: 2001-02-26 10:28:52 $
+ *  last change: $Author: mib $ $Date: 2001-03-21 09:57:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -380,6 +380,44 @@ sal_Bool XMLPercentPropHdl::exportXML( OUString& rStrExpValue, const Any& rValue
     if( lcl_xmloff_getAny( rValue, nValue, nBytes ) )
     {
          rUnitConverter.convertPercent( aOut, nValue );
+        rStrExpValue = aOut.makeStringAndClear();
+
+        bRet = sal_True;
+    }
+
+    return bRet;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// class XMLMeasurePxPropHdl
+//
+
+XMLMeasurePxPropHdl::~XMLMeasurePxPropHdl()
+{
+    // nothing to do
+}
+
+sal_Bool XMLMeasurePxPropHdl::importXML( const OUString& rStrImpValue, Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+{
+    sal_Bool bRet = sal_False;
+
+    sal_Int32 nValue;
+    bRet = rUnitConverter.convertMeasurePx( nValue, rStrImpValue );
+    lcl_xmloff_setAny( rValue, nValue, nBytes );
+
+    return bRet;
+}
+
+sal_Bool XMLMeasurePxPropHdl::exportXML( OUString& rStrExpValue, const Any& rValue, const SvXMLUnitConverter& rUnitConverter ) const
+{
+    sal_Bool bRet = sal_False;
+    sal_Int32 nValue;
+      OUStringBuffer aOut;
+
+    if( lcl_xmloff_getAny( rValue, nValue, nBytes ) )
+    {
+         rUnitConverter.convertMeasurePx( aOut, nValue );
         rStrExpValue = aOut.makeStringAndClear();
 
         bRet = sal_True;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextFrameContext.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-16 12:49:19 $
+ *  last change: $Author: mib $ $Date: 2001-03-21 10:01:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -386,18 +386,20 @@ XMLTextFrameContext::XMLTextFrameContext(
     OUString    sCode;
     OUString    sObject;
     OUString    sArchive;
-    sal_Bool    bMayScript = sal_False;
     OUString    sMimeType;
+    OUString    sFrameName;
+    OUString    sAppletName;
 
     sal_Int32   nX = 0;
     sal_Int32   nY = 0;
     sal_Int32   nWidth = 0;
     sal_Int32   nHeight = 0;
-    sal_Int8    nRelWidth = 0;
-    sal_Int8    nRelHeight = 0;
     sal_Int32   nZIndex = -1;
     sal_Int16   nPage = 0;
     sal_Int16   nRotation = 0;
+    sal_Int8    nRelWidth = 0;
+    sal_Int8    nRelHeight = 0;
+    sal_Bool    bMayScript = sal_False;
 
     TextContentAnchorType   eAnchorType = eATyp;
 
@@ -426,6 +428,12 @@ XMLTextFrameContext::XMLTextFrameContext(
             break;
         case XML_TOK_TEXT_FRAME_NAME:
             sName = rValue;
+            break;
+        case XML_TOK_TEXT_FRAME_FRAME_NAME:
+            sFrameName = rValue;
+            break;
+        case XML_TOK_TEXT_FRAME_APPLET_NAME:
+            sAppletName = rValue;
             break;
         case XML_TOK_TEXT_FRAME_ANCHOR_TYPE:
             if( TextContentAnchorType_AT_PARAGRAPH == eAnchorType ||
@@ -597,33 +605,36 @@ XMLTextFrameContext::XMLTextFrameContext(
         case XML_TEXT_FRAME_OBJECT:
         case XML_TEXT_FRAME_OBJECT_OLE:
         {
-            OUString sClassId;
-            OUString sURL( GetImport().ResolveEmbeddedObjectURL( sHRef, sClassId ) );
+            OUString sURL( GetImport().ResolveEmbeddedObjectURL( sHRef, OUString() ) );
 
             if( sURL.getLength() )
-                xPropSet = GetImport().GetTextImport()->createAndInsertOLEObject(
-                                                            GetImport(), sURL,
-                                                            sClassId, nWidth,
-                                                            nHeight );
+                xPropSet = GetImport().GetTextImport()
+                        ->createAndInsertOLEObject( GetImport(), sURL,
+                                                    nWidth, nHeight );
             break;
         }
         case XML_TEXT_FRAME_APPLET:
         {
-            xPropSet = GetImport().GetTextImport()->createApplet(
-                                    sCode, sName, bMayScript, sHRef, nWidth, nHeight);
+            xPropSet = GetImport().GetTextImport()
+                            ->createAndInsertApplet( sAppletName, sCode,
+                                                     bMayScript, sHRef,
+                                                     nWidth, nHeight);
             break;
         }
         case XML_TEXT_FRAME_PLUGIN:
         {
-            xPropSet = GetImport().GetTextImport()->createPlugin(
-                                    sMimeType, sHRef, nWidth, nHeight);
+            xPropSet = GetImport().GetTextImport()
+                            ->createAndInsertPlugin( sMimeType, sHRef,
+                                                         nWidth, nHeight);
 
             break;
         }
         case XML_TEXT_FRAME_FLOATING_FRAME:
         {
-            xPropSet = GetImport().GetTextImport()->createFloatingFrame(
-                                    sHRef, nWidth, nHeight);
+            xPropSet = GetImport().GetTextImport()
+                            ->createAndInsertFloatingFrame( sFrameName, sHRef,
+                                                            sStyleName,
+                                                            nWidth, nHeight);
             break;
         }
         default:
@@ -652,10 +663,12 @@ XMLTextFrameContext::XMLTextFrameContext(
     Reference< XPropertySetInfo > xPropSetInfo = xPropSet->getPropertySetInfo();
 
     // set name
-    if( sName.getLength() )
+    Reference < XNamed > xNamed( xPropSet, UNO_QUERY );
+    if( xNamed.is() )
     {
-        Reference < XNamed > xNamed( xPropSet, UNO_QUERY );
-        if( xNamed.is() )
+        OUString sOrigName( xNamed->getName() );
+        if( !sOrigName.getLength() ||
+            (sName.getLength() && sOrigName != sName) )
         {
             OUString sOldName( sName );
             sal_Int32 i = 0;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmluconv.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-19 09:38:48 $
+ *  last change: $Author: mib $ $Date: 2001-03-21 09:57:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -296,6 +296,15 @@ sal_Bool SvXMLUnitConverter::convertMeasure( sal_Int32& rValue,
             if( sal_Unicode('%') != rString[nPos] )
                 return sal_False;
         }
+        else if( MAP_PIXEL == eDstUnit )
+        {
+            if( nPos + 1 >= nLen ||
+                (sal_Unicode('p') != rString[nPos] &&
+                 sal_Unicode('P') != rString[nPos])||
+                (sal_Unicode('x') != rString[nPos+1] &&
+                 sal_Unicode('X') != rString[nPos+1]) )
+                return sal_False;
+        }
         else
         {
             DBG_ASSERT( MAP_TWIP == eDstUnit || MAP_POINT ||
@@ -504,6 +513,22 @@ void SvXMLUnitConverter::convertPercent( OUStringBuffer& rBuffer,
 {
     rBuffer.append( nValue );
     rBuffer.append( sal_Unicode('%' ) );
+}
+
+/** convert string to pixel measure */
+sal_Bool SvXMLUnitConverter::convertMeasurePx( sal_Int32& rPixel,
+                                         const OUString& rString )
+{
+    return convertMeasure( rPixel, rString, MAP_PIXEL );
+}
+
+/** convert pixel measure to string */
+void SvXMLUnitConverter::convertMeasurePx( OUStringBuffer& rBuffer,
+                                         sal_Int32 nValue )
+{
+    rBuffer.append( nValue );
+    rBuffer.append( sal_Unicode('p' ) );
+    rBuffer.append( sal_Unicode('x' ) );
 }
 
 /** convert string to enum using given enum map, if the enum is
