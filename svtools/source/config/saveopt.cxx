@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saveopt.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: terence.tse $ $Date: 2000-09-22 22:09:34 $
+ *  last change: $Author: mba $ $Date: 2000-09-25 11:30:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,17 +89,16 @@ class SvtSaveOptions_Impl : public utl::ConfigItem
 {
     sal_Int32               nAutoSaveTime;
     sal_Int32               nSaveGraphics;
-    BOOL                    bUseUserData:1,
-                            bBackup:1,
-                            bAutoSave:1,
-                            bAutoSavePrompt:1,
-                            bDocInfSave:1,
-                            bSaveWorkingSet:1,
-                            bSaveDocWins:1,
-                            bSaveDocView:1,
-                            bSaveRelINet:1,
-                            bSaveRelFSys:1,
-                            bIndepGrfFmt:1;
+    sal_Bool                bUseUserData,
+                            bBackup,
+                            bAutoSave,
+                            bAutoSavePrompt,
+                            bDocInfSave,
+                            bSaveWorkingSet,
+                            bSaveDocWins,
+                            bSaveDocView,
+                            bSaveRelINet,
+                            bSaveRelFSys;
 public:
                             SvtSaveOptions_Impl();
 
@@ -130,40 +129,37 @@ public:
     BOOL                    IsSaveRelINet() const               { return bSaveRelINet; }
     void                    SetSaveRelFSys( BOOL b )            { bSaveRelFSys = b; SetModified();}
     BOOL                    IsSaveRelFSys() const               { return bSaveRelFSys; }
-    void                    SetIndepGrfFmt(BOOL b)              { bIndepGrfFmt = b; SetModified();}
-    BOOL                    IsIndepGrfFmt() const               { return bIndepGrfFmt; }
 };
 
-#define TIMEINTERVALL 0
-#define FORMAT 1
+#define FORMAT 0
+#define TIMEINTERVALL 1
 #define USEUSERDATA 2
 #define CREATEBACKUP 3
 #define AUTOSAVE 4
 #define PROMPT 5
 #define EDITPROPERTY 6
-#define SAVEWORKINGSET 7
-#define SAVEDOCWINS 8
-#define SAVEDOCVIEW 9
-#define FILESYSTEM 10
-#define INTERNET 11
+#define SAVEDOCWINS 7
+#define SAVEVIEWINFO 8
+#define FILESYSTEM 9
+#define INTERNET 10
+#define SAVEWORKINGSET 11
 
 Sequence< OUString > GetPropertyNames()
 {
     static const char* aPropNames[] =
     {
-        "Document/TimeIntervall",
-        "Graphic/Format"
+        "Graphic/Format",
+        "Document/AutoSaveTimeIntervall",
         "Document/UseUserData",
         "Document/CreateBackup",
         "Document/AutoSave",
-        "Document/Prompt",
+        "Document/AutoSavePrompt",
         "Document/EditProperty",
-        "WorkingSet",
-        "DocumentWins",
-        "ViewInfo",
+        "Document/DocumentWindows",
+        "Document/ViewInfo",
         "URL/FileSystem",
         "URL/Internet",
-        "IndepGraph"                    // not supported anymore
+        "WorkingSet"
     };
 
     const int nCount = sizeof( aPropNames ) / sizeof( const char* );
@@ -178,7 +174,7 @@ Sequence< OUString > GetPropertyNames()
 // -----------------------------------------------------------------------
 
 SvtSaveOptions_Impl::SvtSaveOptions_Impl()
-    : ConfigItem( OUString::createFromAscii("Common/Save") )
+    : ConfigItem( OUString::createFromAscii("Office.Common/Save") )
     , nAutoSaveTime( 0 )
     , nSaveGraphics( 0 )
     , bUseUserData( sal_False )
@@ -191,7 +187,6 @@ SvtSaveOptions_Impl::SvtSaveOptions_Impl()
     , bSaveDocView( sal_False )
     , bSaveRelINet( sal_False )
     , bSaveRelFSys( sal_False )
-    , bIndepGrfFmt( sal_False )
 {
     Sequence< OUString > aNames = GetPropertyNames();
     Sequence< Any > aValues = GetProperties( aNames );
@@ -250,7 +245,7 @@ SvtSaveOptions_Impl::SvtSaveOptions_Impl()
                                 case SAVEDOCWINS :
                                     bSaveDocWins = bTemp;
                                     break;
-                                case SAVEDOCVIEW :
+                                case SAVEVIEWINFO :
                                     bSaveDocView = bTemp;
                                     break;
                                 case FILESYSTEM :
@@ -291,74 +286,34 @@ void SvtSaveOptions_Impl::Commit()
                 pValues[nProp] <<= nSaveGraphics;
                 break;
             case USEUSERDATA :
-#ifdef UNX
-                pValues[nProp] <<= (sal_uInt8)bUseUserData;
-#else
                 pValues[nProp] <<= bUseUserData;
-#endif
                 break;
             case CREATEBACKUP :
-#ifdef UNX
-                pValues[nProp] <<= (sal_uInt8)bUseUserData;
-#else
                 pValues[nProp] <<= bUseUserData;
-#endif
                 break;
             case AUTOSAVE :
-#ifdef UNX
-                pValues[nProp] <<= (sal_uInt8)bAutoSave;
-#else
                 pValues[nProp] <<= bAutoSave;
-#endif
                 break;
             case PROMPT :
-#ifdef UNX
-                pValues[nProp] <<= (sal_uInt8)bAutoSavePrompt;
-#else
                 pValues[nProp] <<= bAutoSavePrompt;
-#endif
                 break;
             case EDITPROPERTY :
-#ifdef UNX
-                pValues[nProp] <<= (sal_uInt8)bDocInfSave;
-#else
                 pValues[nProp] <<= bDocInfSave;
-#endif
                 break;
             case SAVEWORKINGSET :
-#ifdef UNX
-                pValues[nProp] <<= (sal_uInt8)bSaveWorkingSet;
-#else
                 pValues[nProp] <<= bSaveWorkingSet;
-#endif
                 break;
             case SAVEDOCWINS :
-#ifdef UNX
-                pValues[nProp] <<= (sal_uInt8)bSaveDocWins;
-#else
                 pValues[nProp] <<= bSaveDocWins;
-#endif
                 break;
-            case SAVEDOCVIEW :
-#ifdef UNX
-                pValues[nProp] <<= (sal_uInt8)bSaveDocView;
-#else
+            case SAVEVIEWINFO :
                 pValues[nProp] <<= bSaveDocView;
-#endif
                 break;
             case FILESYSTEM :
-#ifdef UNX
-                pValues[nProp] <<= (sal_uInt8)bSaveRelFSys;
-#else
                 pValues[nProp] <<= bSaveRelFSys;
-#endif
                 break;
             case INTERNET :
-#ifdef UNX
-                pValues[nProp] <<= (sal_uInt8)bSaveRelINet;
-#else
                 pValues[nProp] <<= bSaveRelINet;
-#endif
                 break;
             default:
                 DBG_ERRORFILE( "invalid index to save a path" );
@@ -514,18 +469,3 @@ sal_Bool SvtSaveOptions::IsSaveRelFSys() const
 {
     return pImp->IsSaveRelFSys();
 }
-
-void SvtSaveOptions::SetIndepGrfFmt(sal_Bool b)
-{
-    pImp->SetIndepGrfFmt( b );
-}
-
-sal_Bool SvtSaveOptions::IsIndepGrfFmt() const
-{
-    return pImp->IsIndepGrfFmt();
-}
-
-
-
-
-
