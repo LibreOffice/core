@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdoole2.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: ka $ $Date: 2001-09-18 11:45:28 $
+ *  last change: $Author: ka $ $Date: 2001-09-18 11:47:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1124,6 +1124,7 @@ BOOL SdrOle2Obj::Unload()
 
 void SdrOle2Obj::CreatePersistName( SvPersist* pPers )
 {
+#ifndef SVX_LIGHT
     mpImpl->aPersistName = OUString::createFromAscii( "Object " );
     String aStr( mpImpl->aPersistName );
     USHORT i = 1;
@@ -1134,6 +1135,7 @@ void SdrOle2Obj::CreatePersistName( SvPersist* pPers )
         aStr += String::CreateFromInt32(++i);
     }
     mpImpl->aPersistName = aStr;
+#endif
 }
 
 // -----------------------------------------------------------------------------
