@@ -35,9 +35,6 @@
         com.sun.star.ucb.PropertiesManager
     </service-dependency>
     <service-dependency>
-        com.sun.star.ucb.RemoteContentProviderAcceptor
-    </service-dependency>
-    <service-dependency>
     com.sun.star.ucb.Store
     </service-dependency>
     <service-dependency>
@@ -52,14 +49,11 @@
     <type> com.sun.star.beans.XPropertyContainer               </type>
     <type> com.sun.star.beans.XPropertySetInfo                 </type>
     <type> com.sun.star.beans.XPropertySetInfoChangeNotifier   </type>
-    <type> com.sun.star.connection.XConnection                 </type>
-    <type> com.sun.star.connection.XConnectionBroadcaster      </type>
     <type> com.sun.star.container.XChild                       </type>
     <type> com.sun.star.container.XHierarchicalNameAccess      </type>
     <type> com.sun.star.container.XNameAccess                  </type>
     <type> com.sun.star.container.XNamed                       </type>
     <type> com.sun.star.io.XActiveDataSink                     </type>
-    <type> com.sun.star.io.XStreamListener                     </type>
     <type> com.sun.star.lang.XMultiServiceFactory              </type>
     <type> com.sun.star.lang.XSingleServiceFactory             </type>
     <type> com.sun.star.lang.XServiceInfo                      </type>
@@ -114,7 +108,6 @@
     <type> com.sun.star.ucb.XInteractionSupplyName             </type>
     <type> com.sun.star.ucb.XParameterizedContentProvider      </type>
     <type> com.sun.star.ucb.XPropertySetRegistryFactory        </type>
-    <type> com.sun.star.ucb.XRemoteContentProviderDoneListener </type>
     <type> com.sun.star.ucb.XSourceInitialization              </type>
     <type> com.sun.star.uno.RuntimeException                   </type>
     <type> com.sun.star.uno.XWeak                              </type>
