@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoifac2.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-01 16:57:13 $
+ *  last change: $Author: rt $ $Date: 2001-05-04 19:06:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,7 @@ Menu RID_CONTEXTMENU
             Text[ korean ] = "¿­±â(~O)";
             Text[ turkish ] = "Aç";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "~Abrir";
         };
         MenuItem
         {
@@ -125,6 +126,7 @@ Menu RID_CONTEXTMENU
             Text[ korean ] = "»õ Ã¢¿¡¼­ ¿­±â(~W)";
             Text[ turkish ] = "Yeni bir pencerede aç";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Abrir en ~ventana nueva";
         };
         MenuItem
         {
@@ -153,6 +155,7 @@ Menu RID_CONTEXTMENU
             Text[ korean ] = "´Ù¿î·Îµå(~D)...";
             Text[ turkish ] = "Ýndir...";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "~Descargar...";
         };
         MenuItem
         {
@@ -185,6 +188,7 @@ Menu RID_CONTEXTMENU
             Text[ korean ] = "¿¬°á  Ãß°¡(~L)";
             Text[ turkish ] = "Baðlantýyý ekle";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "~Añadir vínculo";
         };
         MenuItem
         {
@@ -217,6 +221,7 @@ Menu RID_CONTEXTMENU
             Text[ korean ] = "¸µÅ© º¹»ç(~Y)";
             Text[ turkish ] = "Baðlantýyý kopyala";
             Text[ language_user1 ] = " ";
+            Text[ catalan ] = "Copiar ~vínculo";
         };
     };
 };
