@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8graf2.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: cmc $ $Date: 2002-08-22 12:26:39 $
+ *  last change: $Author: cmc $ $Date: 2002-08-22 13:20:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -840,10 +840,6 @@ SwFrmFmt* SwWW8ImplReader::ImportGraf(SdrTextObj* pTextObj,
                         {
                             WW8FlySet aFlySet( *this, pPaM, aPic, aPD.nWidth,
                                 aPD.nHeight );
-
-                            SwFmtAnchor aAnchor(pSFlyPara->eAnchor);
-                            aAnchor.SetAnchor(pPaM->GetPoint());
-                            aFlySet.Put(aAnchor);
 
                             aAttrSet.Put(aFlySet);
                         }
