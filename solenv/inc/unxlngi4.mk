@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxlngi4.mk,v $
 #
-#   $Revision: 1.32 $
+#   $Revision: 1.33 $
 #
-#   last change: $Author: hr $ $Date: 2005-02-11 15:28:42 $
+#   last change: $Author: vg $ $Date: 2005-02-24 14:43:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -59,7 +59,6 @@
 #
 #
 #*************************************************************************
-
 # mk file for unxlngi4
 ASM=
 AFLAGS=
@@ -210,13 +209,8 @@ STDSHLCUIST=-ldl -lm
 
 LIBSALCPPRT*=-Wl,--whole-archive -lsalcpprt -Wl,--no-whole-archive
 
-.IF "$(USE_SYSTEM_STL)"=="YES"
-LIBSTLPORT=$(DYNAMIC) -lstdc++
-LIBSTLPORTST=$(STATIC) $(DYNAMIC)
-.ELSE
 LIBSTLPORT=$(DYNAMIC) -lstlport_gcc -lstdc++
 LIBSTLPORTST=$(STATIC) -lstlport_gcc $(DYNAMIC)
-.ENDIF
 
 #FILLUPARC=$(STATIC) -lsupc++ $(DYNAMIC)
 
