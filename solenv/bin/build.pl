@@ -5,9 +5,9 @@ eval 'exec perl -S $0 ${1+"$@"}'
 #
 #   $RCSfile: build.pl,v $
 #
-#   $Revision: 1.87 $
+#   $Revision: 1.88 $
 #
-#   last change: $Author: vg $ $Date: 2003-09-05 13:20:18 $
+#   last change: $Author: vg $ $Date: 2003-09-09 13:28:25 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,7 +84,7 @@ if (defined $ENV{CWS_WORK_STAMP}) {
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.87 $ ';
+$id_str = ' $Revision: 1.88 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -148,7 +148,8 @@ $ignore = '';
 @ignored_errors = ();
 %incompartibles = ();
 %force_deliver = ();
-
+$only_platform = ''; # the only platform to prepare
+$only_common = ''; # the only common output tree to delete when preparing
 &get_options;
 %deliver_env = ();
 if ($prepare) {
@@ -672,12 +673,12 @@ sub FindIndepPrj {
             return $Prj if ($#PrjDeps == -1);
         };
         # If there are only dependent projects in hash - generate error
-        return '' if ($BuildAllParents);
+        return '' if ($BuildAllParents && $chidren);
         if ($children) {
             $only_dependent = 1;
             return '';
         };
-        print STDERR "\nError: projects";
+        print STDERR "\nFatal error:";
         foreach $Prj (keys %$Dependencies) {
             if (&IsHashNative($Prj)) {
                 next;
@@ -761,14 +762,14 @@ sub print_error {
 
 sub usage {
     print STDERR "\nbuild\n";
-    print STDERR "Syntax:   build    [--all|-a[:prj_name]]|[--from|-f prj_name1[:prj_name2]|[--since|-c prj_name] [--with_branches|-b]|[--prepare|-p]] [--deliver|-d [--dlv_switch deliver_switch]]] [-P processes] [--show|-s] [--help|-h] [--file|-F] [--ignore|-i] [--version|-V] [-- dmake_options] \n";
+    print STDERR "Syntax:   build    [--all|-a[:prj_name]]|[--from|-f prj_name1[:prj_name2]|[--since|-c prj_name] [--with_branches|-b]|[--prepare|-p][:platform]] [--deliver|-d [--dlv_switch deliver_switch]]] [-P processes] [--show|-s] [--help|-h] [--file|-F] [--ignore|-i] [--version|-V] [-- dmake_options] \n";
     print STDERR "Example:  build --from sfx2\n";
     print STDERR "              - build projects including current one from sfx2\n";
     print STDERR "Example:  build --all:sfx2\n";
     print STDERR "              - the same as --all, but skip all projects that have been already built when using \"--all\" switch before sfx2\n";
     print STDERR "Keys:     --all       - build all projects from very beginning till current one\n";
     print STDERR "      --from      - build all projects dependent from the specified (including it) till current one\n";
-    print STDERR "      --prepare- clear all projects for incompartible build from prj_name till current one (cws version)\n";
+    print STDERR "      --prepare- clear all projects for incompartible build from prj_name till current one [for platform] (cws version)\n";
     print STDERR "      --with_branches- build all projects in neighbour branches and current branch starting from actual project\n";
     print STDERR "      --since     - build all projects beginning from the specified till current one (the same as \"--all:prj_name\", but skipping prj_name)\n";
     print STDERR "      --show      - show what is going to be built\n";
@@ -816,6 +817,8 @@ sub get_options {
         };
         $arg =~ /^--prepare$/   and $prepare = 1 and next;
         $arg =~ /^-p$/          and $prepare = 1 and next;
+        $arg =~ /^--prepare:/   and $prepare = 1 and $only_platform = $' and next;
+        $arg =~ /^-p:/          and $prepare = 1 and $only_platform = $' and next;
         $arg =~ /^--since$/     and $BuildAllParents = 1
                                 and $build_since = shift @ARGV      and next;
         $arg =~ /^-c$/      and $BuildAllParents = 1
@@ -854,6 +857,10 @@ sub get_options {
 #        print "Ignored...";
 #        $incompartible = '';
 #    };
+    if ($only_platform) {
+        $only_common = 'common';
+        $only_common .= '.pro' if ($only_platform =~ /\.pro$/);
+    };
     @ARGV = @dmake_args;
 };
 
@@ -1341,9 +1348,13 @@ sub is_output_tree {
     my $dir = shift;
     $dir =~ /([\w\d\.]+)$/;
     $_ = $1;
-    return '1' if (/^common$/);
-    return '1' if (/^common\.pro$/);
     return '1' if (defined $platforms{$_});
+    if ($only_common) {
+        return '1' if ($_ eq $only_common);
+    } else {
+        return '1' if (/^common$/);
+        return '1' if (/^common\.pro$/);
+    };
     return '';
 };
 
@@ -1493,9 +1504,11 @@ sub get_platforms {
     }
     foreach (@platforms_conf) {
         s/\s//g;
+        next if ($only_platform && ($only_platform ne $_));
         my $s_path = $solver . '/' .  $_;
         $platforms{$_}++ if (-e $s_path);
-    }
+    };
+    &print_error("There is no platform found!!") if (!scalar keys %platforms);
     return %platforms;
 };
 
