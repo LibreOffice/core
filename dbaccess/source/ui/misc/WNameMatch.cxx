@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WNameMatch.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-03 11:27:30 $
+ *  last change: $Author: obo $ $Date: 2004-06-01 10:13:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,8 +233,8 @@ sal_Bool OWizNameMatching::LeavePage()
             for(;aDestIter != pDestColumns->end() && (*aDestIter)->second != pDestField;++aDestIter)
                 ;
 
-            m_pParent->m_vColumnPos[nPos].first = ::std::distance(pDestColumns->begin(),aDestIter) + 1;
-            m_pParent->m_vColumnPos[nPos].second = ++nParamPos;
+            m_pParent->m_vColumnPos[nPos].first = ++nParamPos;
+            m_pParent->m_vColumnPos[nPos].second = ::std::distance(pDestColumns->begin(),aDestIter) + 1;
             sal_Bool bNotConvert = sal_True;
             TOTypeInfoSP pTypeInfo = m_pParent->convertType((*aDestIter)->second->getTypeInfo(),bNotConvert);
             sal_Int32 nType = ::com::sun::star::sdbc::DataType::VARCHAR;
@@ -243,7 +243,10 @@ sal_Bool OWizNameMatching::LeavePage()
             m_pParent->m_vColumnTypes[nPos] = nType;
         }
         else
+        {
             m_pParent->m_vColumnPos[nPos].first = CONTAINER_ENTRY_NOTFOUND;
+            m_pParent->m_vColumnPos[nPos].second = CONTAINER_ENTRY_NOTFOUND;
+        }
 
         pLeftEntry = m_CTRL_LEFT.GetModel()->Next(pLeftEntry);
         pRightEntry = m_CTRL_RIGHT.GetModel()->Next(pRightEntry);
