@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prov.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sb $ $Date: 2000-12-15 08:29:59 $
+ *  last change: $Author: abi $ $Date: 2001-06-22 11:21:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,8 +68,14 @@
 #ifndef _VOS_MUTEX_HXX_
 #include <vos/mutex.hxx>
 #endif
+#ifndef _UCBHELPER_MACROS_HXX
+#include <ucbhelper/macros.hxx>
+#endif
 #ifndef _COM_SUN_STAR_UNO_XINTERFACE_HPP_
 #include <com/sun/star/uno/XInterface.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XTYPEPROVIDER_HPP_
+#include <com/sun/star/lang/XTypeProvider.hpp>
 #endif
 #ifndef _COM_SUN_STAR_LANG_XSINGLESERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
@@ -107,6 +113,7 @@ namespace fileaccess {
     class FileProvider:
         public cppu::OWeakObject,
         public com::sun::star::lang::XServiceInfo,
+        public com::sun::star::lang::XTypeProvider,
         public com::sun::star::ucb::XContentProvider,
         public com::sun::star::ucb::XContentIdentifierFactory,
         public com::sun::star::beans::XPropertySet,
@@ -164,12 +171,18 @@ namespace fileaccess {
         CreateInstance(
             const com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >& xMultiServiceFactory );
 #endif
+
+        // XTypeProvider
+
+        XTYPEPROVIDER_DECL()
+
+
         // XContentProvider
         virtual com::sun::star::uno::Reference< com::sun::star::ucb::XContent > SAL_CALL
         queryContent(
             const com::sun::star::uno::Reference< com::sun::star::ucb::XContentIdentifier >& Identifier )
             throw( com::sun::star::ucb::IllegalIdentifierException,
-                   com::sun::star::uno::RuntimeException);
+                   com::sun::star::uno::RuntimeException );
 
         // XContentIdentifierFactory
 

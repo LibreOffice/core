@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prov.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: abi $ $Date: 2001-06-22 10:52:45 $
+ *  last change: $Author: abi $ $Date: 2001-06-22 11:21:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,24 +101,28 @@
 #include "prov.hxx"
 #endif
 
+
 using namespace fileaccess;
 using namespace com::sun::star;
+using namespace com::sun::star::uno;
+using namespace com::sun::star::lang;
 using namespace com::sun::star::ucb;
+
 
 //=========================================================================
 static sal_Bool writeInfo( void * pRegistryKey,
                            const rtl::OUString & rImplementationName,
-                              uno::Sequence< rtl::OUString > const & rServiceNames )
+                              Sequence< rtl::OUString > const & rServiceNames )
 {
     rtl::OUString aKeyName( rtl::OUString::createFromAscii( "/" ) );
     aKeyName += rImplementationName;
     aKeyName += rtl::OUString::createFromAscii( "/UNO/SERVICES" );
 
-    uno::Reference< registry::XRegistryKey > xKey;
+    Reference< registry::XRegistryKey > xKey;
     try
     {
         xKey = static_cast< registry::XRegistryKey * >(
-                                    pRegistryKey )->createKey( aKeyName );
+            pRegistryKey )->createKey( aKeyName );
     }
     catch ( registry::InvalidRegistryException const & )
     {
@@ -172,9 +176,9 @@ extern "C" void * SAL_CALL component_getFactory(
 {
     void * pRet = 0;
 
-    uno::Reference< lang::XMultiServiceFactory > xSMgr(
-            reinterpret_cast< lang::XMultiServiceFactory * >( pServiceManager ) );
-    uno::Reference< lang::XSingleServiceFactory > xFactory;
+    Reference< XMultiServiceFactory > xSMgr(
+            reinterpret_cast< XMultiServiceFactory * >( pServiceManager ) );
+    Reference< XSingleServiceFactory > xFactory;
 
     //////////////////////////////////////////////////////////////////////
     // File Content Provider.
@@ -223,7 +227,7 @@ static bool moreLength( const shell::MountPoint& m1, const shell::MountPoint& m2
     return m1.m_aDirectory.getLength() > m2.m_aDirectory.getLength();
 }
 
-FileProvider::FileProvider( const uno::Reference< lang::XMultiServiceFactory >& xMultiServiceFactory )
+FileProvider::FileProvider( const Reference< XMultiServiceFactory >& xMultiServiceFactory )
     : m_xMultiServiceFactory( xMultiServiceFactory ),
       m_pMyShell( 0 )
 {
@@ -239,49 +243,49 @@ FileProvider::FileProvider( const uno::Reference< lang::XMultiServiceFactory >& 
 
         // New access to configuration with locally cached components
         rtl::OUString plugin = rtl::OUString::createFromAscii( "plugin" );
-        uno::Any aAny;
+        Any aAny;
         aAny <<= plugin;
         beans::PropertyValue aProp( rtl::OUString::createFromAscii( "servertype" ),
                                     -1,
                                     aAny,
                                     beans::PropertyState_DIRECT_VALUE );
 
-        uno::Sequence< uno::Any > seq(1);
+        Sequence< Any > seq(1);
         seq[0] <<= aProp;
 
-        uno::Reference< lang::XMultiServiceFactory >
+        Reference< XMultiServiceFactory >
             sProvider(
                 m_xMultiServiceFactory->createInstanceWithArguments( sProviderService,seq ),
-                uno::UNO_QUERY );
+                UNO_QUERY );
 
 
         /*
           // Old access to configuration without locally cached components
-          uno::Reference< lang::XMultiServiceFactory >
+          Reference< XMultiServiceFactory >
           sProvider(
           m_xMultiServiceFactory->createInstance( sProviderService ),
-          uno::UNO_QUERY );
+          UNO_QUERY );
         */
 
         rtl::OUString sReaderService =
             rtl::OUString::createFromAscii( "com.sun.star.configuration.ConfigurationAccess" );
 
-        uno::Sequence< uno::Any > aArguments( 1 );
+        Sequence< Any > aArguments( 1 );
 #if SUPD > 636
         aArguments[0] <<=
-          rtl::OUString::createFromAscii( "org.openoffice.Webtop.Security" );
+            rtl::OUString::createFromAscii( "org.openoffice.Webtop.Security" );
 #elsif SUPD > 604
         aArguments[0] <<=
-          rtl::OUString::createFromAscii( "org.openoffice.Security" );
+            rtl::OUString::createFromAscii( "org.openoffice.Security" );
 #else
         aArguments[0] <<=
-          rtl::OUString::createFromAscii( "com.sun.star.Security" );
+            rtl::OUString::createFromAscii( "com.sun.star.Security" );
 #endif
-        uno::Reference< container::XHierarchicalNameAccess > xHierAccess(
+        Reference< container::XHierarchicalNameAccess > xHierAccess(
             sProvider->createInstanceWithArguments( sReaderService,aArguments ),
-            uno::UNO_QUERY );
+            UNO_QUERY );
 
-        uno::Reference< container::XNameAccess > xSubNode( xHierAccess,uno::UNO_QUERY );
+        Reference< container::XNameAccess > xSubNode( xHierAccess,UNO_QUERY );
 
         rtl::OUString d = rtl::OUString::createFromAscii( "Directory" );
         rtl::OUString a = rtl::OUString::createFromAscii( "AliasName" );
@@ -289,29 +293,29 @@ FileProvider::FileProvider( const uno::Reference< lang::XMultiServiceFactory >& 
         rtl::OUString aRootDirectory;
         if( xSubNode.is() )
         {
-            uno::Reference< frame::XConfigManager > xCfgMgr(
+            Reference< frame::XConfigManager > xCfgMgr(
                 m_xMultiServiceFactory->createInstance(
                     rtl::OUString::createFromAscii(
                                "com.sun.star.config.SpecialConfigManager" ) ),
-                uno::UNO_QUERY );
+                UNO_QUERY );
 
-            uno::Any aAny = xSubNode->getByName( rtl::OUString::createFromAscii("MountPoints" ) );
-            uno::Reference< container::XNameAccess > xSubSubNode;
+            Any aAny = xSubNode->getByName( rtl::OUString::createFromAscii("MountPoints" ) );
+            Reference< container::XNameAccess > xSubSubNode;
             aAny >>= xSubSubNode;
 
-            uno::Sequence< rtl::OUString > seqNames =
+            Sequence< rtl::OUString > seqNames =
                 xSubSubNode->getElementNames();
             for( sal_Int32 k = 0; k < seqNames.getLength(); ++k )
             {
-                uno::Any nocheinany = xSubSubNode->getByName( seqNames[k] );
-                uno::Reference< container::XNameAccess > xAuaAuaAuaNode;
+                Any nocheinany = xSubSubNode->getByName( seqNames[k] );
+                Reference< container::XNameAccess > xAuaAuaAuaNode;
                 nocheinany >>= xAuaAuaAuaNode;
 
-                uno::Any vorletztesany = xAuaAuaAuaNode->getByName( d );
+                Any vorletztesany = xAuaAuaAuaNode->getByName( d );
                 rtl::OUString aDirectory;
                 vorletztesany >>= aDirectory;
 
-                uno::Any letztesany    = xAuaAuaAuaNode->getByName( a );
+                Any letztesany    = xAuaAuaAuaNode->getByName( a );
                 rtl::OUString aAliasName;
                 letztesany >>= aAliasName;
 
@@ -420,7 +424,7 @@ FileProvider::~FileProvider()
 void SAL_CALL
 FileProvider::acquire(
     void )
-    throw( uno::RuntimeException )
+    throw( RuntimeException )
 {
   OWeakObject::acquire();
 }
@@ -429,26 +433,38 @@ FileProvider::acquire(
 void SAL_CALL
 FileProvider::release(
               void )
-  throw( uno::RuntimeException )
+  throw( RuntimeException )
 {
   OWeakObject::release();
 }
 
 
-uno::Any SAL_CALL
+Any SAL_CALL
 FileProvider::queryInterface(
-    const uno::Type& rType )
-    throw( uno::RuntimeException )
+    const Type& rType )
+    throw( RuntimeException )
 {
-    uno::Any aRet = cppu::queryInterface( rType,
+    Any aRet = cppu::queryInterface( rType,
                                           SAL_STATIC_CAST( XContentProvider*, this ),
                                           SAL_STATIC_CAST( XContentIdentifierFactory*, this ),
-                                          SAL_STATIC_CAST( lang::XServiceInfo*,     this ),
+                                          SAL_STATIC_CAST( XServiceInfo*,     this ),
                                           SAL_STATIC_CAST( XFileIdentifierConverter*,this ),
                                           SAL_STATIC_CAST( beans::XPropertySet*, this ) );
     return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
 }
 
+
+////////////////////////////////////////////////////////////////////////////////
+//
+// XTypeProvider methods.
+
+XTYPEPROVIDER_IMPL_6( FileProvider,
+                         XTypeProvider,
+                         XServiceInfo,
+                      XContentIdentifierFactory,
+                      beans::XPropertySet,
+                      XFileIdentifierConverter,
+                         XContentProvider )
 
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -456,7 +472,7 @@ FileProvider::queryInterface(
 
 rtl::OUString SAL_CALL
 FileProvider::getImplementationName()
-    throw( uno::RuntimeException )
+    throw( RuntimeException )
 {
     return fileaccess::shell::getImplementationName_static();
 }
@@ -465,25 +481,25 @@ FileProvider::getImplementationName()
 sal_Bool SAL_CALL
 FileProvider::supportsService(
                   const rtl::OUString& ServiceName )
-  throw( uno::RuntimeException )
+  throw( RuntimeException )
 {
   return ServiceName == rtl::OUString::createFromAscii( "com.sun.star.ucb.FileContentProvider" );
 }
 
 
-uno::Sequence< rtl::OUString > SAL_CALL
+Sequence< rtl::OUString > SAL_CALL
 FileProvider::getSupportedServiceNames(
                        void )
-  throw( uno::RuntimeException )
+  throw( RuntimeException )
 {
     return fileaccess::shell::getSupportedServiceNames_static();
 }
 
 
 
-uno::Reference< lang::XSingleServiceFactory > SAL_CALL
+Reference< XSingleServiceFactory > SAL_CALL
 FileProvider::createServiceFactory(
-                   const uno::Reference< lang::XMultiServiceFactory >& rxServiceMgr )
+                   const Reference< XMultiServiceFactory >& rxServiceMgr )
 {
   /**
    * Create a single service factory.<BR>
@@ -499,29 +515,29 @@ FileProvider::createServiceFactory(
    * @see createOneInstanceFactory
    */
   /*
-   *  Reference< ::com::sun::star::lang::XSingleServiceFactory > createSingleFactory
+   *  Reference< ::com::sun::star::XSingleServiceFactory > createSingleFactory
    *  (
-   *  const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > & rServiceManager,
+   *  const ::com::sun::star::Reference< ::com::sun::star::XMultiServiceFactory > & rServiceManager,
    *  const ::rtl::OUString & rImplementationName,
    *  ComponentInstantiation pCreateFunction,
 
-   *  const ::com::sun::star::uno::Sequence< ::rtl::OUString > & rServiceNames
+   *  const ::com::sun::star::Sequence< ::rtl::OUString > & rServiceNames
    *  );
    */
 
-    return uno::Reference< lang::XSingleServiceFactory > ( cppu::createSingleFactory(
+    return Reference< XSingleServiceFactory > ( cppu::createSingleFactory(
         rxServiceMgr,
         fileaccess::shell::getImplementationName_static(),
         FileProvider::CreateInstance,
         fileaccess::shell::getSupportedServiceNames_static() ) );
 }
 
-uno::Reference< uno::XInterface > SAL_CALL
+Reference< XInterface > SAL_CALL
 FileProvider::CreateInstance(
-    const uno::Reference< lang::XMultiServiceFactory >& xMultiServiceFactory )
+    const Reference< XMultiServiceFactory >& xMultiServiceFactory )
 {
-    lang::XServiceInfo* xP = (lang::XServiceInfo*) new FileProvider( xMultiServiceFactory );
-    return uno::Reference< uno::XInterface >::query( xP );
+    XServiceInfo* xP = (XServiceInfo*) new FileProvider( xMultiServiceFactory );
+    return Reference< XInterface >::query( xP );
 }
 
 
@@ -531,11 +547,11 @@ FileProvider::CreateInstance(
 ////////////////////////////////////////////////////////////////////////////////
 
 
-uno::Reference< XContent > SAL_CALL
+Reference< XContent > SAL_CALL
 FileProvider::queryContent(
-    const uno::Reference< XContentIdentifier >& xIdentifier )
+    const Reference< XContentIdentifier >& xIdentifier )
     throw( IllegalIdentifierException,
-           uno::RuntimeException)
+           RuntimeException)
 {
     rtl::OUString aUnc;
     sal_Bool err = m_pMyShell->getUnqFromUrl( xIdentifier->getContentIdentifier(),
@@ -552,16 +568,16 @@ FileProvider::queryContent(
     if( mounted )
         pBaseContent = new BaseContent( m_pMyShell,xIdentifier,aRedirectedPath );
 
-    return uno::Reference< XContent >( pBaseContent );
+    return Reference< XContent >( pBaseContent );
 }
 
 
 
 sal_Int32 SAL_CALL
 FileProvider::compareContentIds(
-                const uno::Reference< XContentIdentifier >& Id1,
-                const uno::Reference< XContentIdentifier >& Id2 )
-  throw( uno::RuntimeException )
+                const Reference< XContentIdentifier >& Id1,
+                const Reference< XContentIdentifier >& Id2 )
+  throw( RuntimeException )
 {
     rtl::OUString aUrl1 = Id1->getContentIdentifier();
     rtl::OUString aUrl2 = Id2->getContentIdentifier();
@@ -612,13 +628,13 @@ FileProvider::compareContentIds(
 
 
 
-uno::Reference< XContentIdentifier > SAL_CALL
+Reference< XContentIdentifier > SAL_CALL
 FileProvider::createContentIdentifier(
                       const rtl::OUString& ContentId )
-  throw( uno::RuntimeException )
+  throw( RuntimeException )
 {
     FileContentIdentifier* p = new FileContentIdentifier( m_pMyShell,ContentId,false );
-    return uno::Reference< XContentIdentifier >( p );
+    return Reference< XContentIdentifier >( p );
 }
 
 
@@ -634,40 +650,40 @@ public:
     ~XPropertySetInfoImpl2();
 
     // XInterface
-    virtual uno::Any SAL_CALL
+    virtual Any SAL_CALL
     queryInterface(
-        const uno::Type& aType )
-        throw( uno::RuntimeException);
+        const Type& aType )
+        throw( RuntimeException);
 
     virtual void SAL_CALL
     acquire(
         void )
-        throw( uno::RuntimeException);
+        throw( RuntimeException);
 
     virtual void SAL_CALL
     release(
         void )
-        throw( uno::RuntimeException );
+        throw( RuntimeException );
 
 
-    virtual uno::Sequence< beans::Property > SAL_CALL
+    virtual Sequence< beans::Property > SAL_CALL
     getProperties(
         void )
-        throw( uno::RuntimeException );
+        throw( RuntimeException );
 
     virtual beans::Property SAL_CALL
     getPropertyByName(
         const rtl::OUString& aName )
         throw( beans::UnknownPropertyException,
-               uno::RuntimeException);
+               RuntimeException);
 
     virtual sal_Bool SAL_CALL
     hasPropertyByName( const rtl::OUString& Name )
-        throw( uno::RuntimeException );
+        throw( RuntimeException );
 
 
 private:
-    uno::Sequence< beans::Property > m_seq;
+    Sequence< beans::Property > m_seq;
 };
 
 
@@ -695,7 +711,7 @@ XPropertySetInfoImpl2::~XPropertySetInfoImpl2()
 void SAL_CALL
 XPropertySetInfoImpl2::acquire(
     void )
-    throw( uno::RuntimeException )
+    throw( RuntimeException )
 {
     OWeakObject::acquire();
 }
@@ -704,18 +720,18 @@ XPropertySetInfoImpl2::acquire(
 void SAL_CALL
 XPropertySetInfoImpl2::release(
     void )
-    throw( uno::RuntimeException )
+    throw( RuntimeException )
 {
     OWeakObject::release();
 }
 
 
-uno::Any SAL_CALL
+Any SAL_CALL
 XPropertySetInfoImpl2::queryInterface(
-    const uno::Type& rType )
-    throw( uno::RuntimeException )
+    const Type& rType )
+    throw( RuntimeException )
 {
-    uno::Any aRet = cppu::queryInterface( rType,
+    Any aRet = cppu::queryInterface( rType,
                                           SAL_STATIC_CAST( beans::XPropertySetInfo*,this) );
     return aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType );
 }
@@ -725,7 +741,7 @@ beans::Property SAL_CALL
 XPropertySetInfoImpl2::getPropertyByName(
     const rtl::OUString& aName )
     throw( beans::UnknownPropertyException,
-           uno::RuntimeException)
+           RuntimeException)
 {
     for( sal_Int32 i = 0; i < m_seq.getLength(); ++i )
         if( m_seq[i].Name == aName )
@@ -736,10 +752,10 @@ XPropertySetInfoImpl2::getPropertyByName(
 
 
 
-uno::Sequence< beans::Property > SAL_CALL
+Sequence< beans::Property > SAL_CALL
 XPropertySetInfoImpl2::getProperties(
     void )
-    throw( uno::RuntimeException )
+    throw( RuntimeException )
 {
     return m_seq;
 }
@@ -748,7 +764,7 @@ XPropertySetInfoImpl2::getProperties(
 sal_Bool SAL_CALL
 XPropertySetInfoImpl2::hasPropertyByName(
     const rtl::OUString& aName )
-    throw( uno::RuntimeException )
+    throw( RuntimeException )
 {
     for( sal_Int32 i = 0; i < m_seq.getLength(); ++i )
         if( m_seq[i].Name == aName )
@@ -780,16 +796,16 @@ void SAL_CALL FileProvider::initProperties( void )
         // static const sal_Int32 MAC_NOTATION = (sal_Int32)3;
 
         XPropertySetInfoImpl2* p = new XPropertySetInfoImpl2();
-        m_xPropertySetInfo = uno::Reference< beans::XPropertySetInfo >( p );
+        m_xPropertySetInfo = Reference< beans::XPropertySetInfo >( p );
     }
 }
 
 
 // XPropertySet
 
-uno::Reference< beans::XPropertySetInfo > SAL_CALL
+Reference< beans::XPropertySetInfo > SAL_CALL
 FileProvider::getPropertySetInfo(  )
-    throw( uno::RuntimeException )
+    throw( RuntimeException )
 {
     initProperties();
     return m_xPropertySetInfo;
@@ -798,12 +814,12 @@ FileProvider::getPropertySetInfo(  )
 
 void SAL_CALL
 FileProvider::setPropertyValue( const rtl::OUString& aPropertyName,
-                                const uno::Any& aValue )
+                                const Any& aValue )
     throw( beans::UnknownPropertyException,
            beans::PropertyVetoException,
-           lang::IllegalArgumentException,
-           lang::WrappedTargetException,
-           uno::RuntimeException )
+           IllegalArgumentException,
+           WrappedTargetException,
+           RuntimeException )
 {
     if( aPropertyName.compareToAscii( "FileSystemNotation" ) == 0 ||
         aPropertyName.compareToAscii( "HostName" ) == 0 )
@@ -814,23 +830,23 @@ FileProvider::setPropertyValue( const rtl::OUString& aPropertyName,
 
 
 
-uno::Any SAL_CALL
+Any SAL_CALL
 FileProvider::getPropertyValue(
     const rtl::OUString& aPropertyName )
     throw( beans::UnknownPropertyException,
-           lang::WrappedTargetException,
-           uno::RuntimeException )
+           WrappedTargetException,
+           RuntimeException )
 {
     initProperties();
     if( aPropertyName.compareToAscii( "FileSystemNotation" ) == 0 )
     {
-        uno::Any aAny;
+        Any aAny;
         aAny <<= m_FileSystemNotation;
         return aAny;
     }
     else if( aPropertyName.compareToAscii( "HostName" ) == 0 )
     {
-        uno::Any aAny;
+        Any aAny;
         aAny <<= m_HostName;
         return aAny;
     }
@@ -842,10 +858,10 @@ FileProvider::getPropertyValue(
 void SAL_CALL
 FileProvider::addPropertyChangeListener(
     const rtl::OUString& aPropertyName,
-    const uno::Reference< beans::XPropertyChangeListener >& xListener )
+    const Reference< beans::XPropertyChangeListener >& xListener )
     throw( beans::UnknownPropertyException,
-           lang::WrappedTargetException,
-           uno::RuntimeException)
+           WrappedTargetException,
+           RuntimeException)
 {
     return;
 }
@@ -854,10 +870,10 @@ FileProvider::addPropertyChangeListener(
 void SAL_CALL
 FileProvider::removePropertyChangeListener(
     const rtl::OUString& aPropertyName,
-    const uno::Reference< beans::XPropertyChangeListener >& aListener )
+    const Reference< beans::XPropertyChangeListener >& aListener )
     throw( beans::UnknownPropertyException,
-           lang::WrappedTargetException,
-           uno::RuntimeException )
+           WrappedTargetException,
+           RuntimeException )
 {
     return;
 }
@@ -865,10 +881,10 @@ FileProvider::removePropertyChangeListener(
 void SAL_CALL
 FileProvider::addVetoableChangeListener(
     const rtl::OUString& PropertyName,
-    const uno::Reference< beans::XVetoableChangeListener >& aListener )
+    const Reference< beans::XVetoableChangeListener >& aListener )
     throw( beans::UnknownPropertyException,
-           lang::WrappedTargetException,
-           uno::RuntimeException )
+           WrappedTargetException,
+           RuntimeException )
 {
     return;
 }
@@ -877,10 +893,10 @@ FileProvider::addVetoableChangeListener(
 void SAL_CALL
 FileProvider::removeVetoableChangeListener(
     const rtl::OUString& PropertyName,
-    const uno::Reference< beans::XVetoableChangeListener >& aListener )
+    const Reference< beans::XVetoableChangeListener >& aListener )
     throw( beans::UnknownPropertyException,
-           lang::WrappedTargetException,
-           uno::RuntimeException)
+           WrappedTargetException,
+           RuntimeException)
 {
     return;
 }
@@ -891,7 +907,7 @@ FileProvider::removeVetoableChangeListener(
 
 sal_Int32 SAL_CALL
 FileProvider::getFileProviderLocality( const rtl::OUString& BaseURL )
-    throw( uno::RuntimeException )
+    throw( RuntimeException )
 {
     // If the base URL is a 'file' URL, return 10 (very 'local'), otherwise
     // return -1 (missmatch).  What is missing is a fast comparison to ASCII,
@@ -907,7 +923,7 @@ FileProvider::getFileProviderLocality( const rtl::OUString& BaseURL )
 
 rtl::OUString SAL_CALL FileProvider::getFileURLFromSystemPath( const rtl::OUString& BaseURL,
                                                                const rtl::OUString& SystemPath )
-    throw( uno::RuntimeException )
+    throw( RuntimeException )
 {
     rtl::OUString aNormalizedPath;
 #ifdef TF_FILEURL
@@ -936,7 +952,7 @@ rtl::OUString SAL_CALL FileProvider::getFileURLFromSystemPath( const rtl::OUStri
 }
 
 rtl::OUString SAL_CALL FileProvider::getSystemPathFromFileURL( const rtl::OUString& URL )
-    throw( uno::RuntimeException )
+    throw( RuntimeException )
 {
     rtl::OUString aUnq;
 
