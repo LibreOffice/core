@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfexport.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: sj $ $Date: 2002-11-15 12:44:46 $
+ *  last change: $Author: rt $ $Date: 2002-12-03 11:04:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,7 +170,7 @@ sal_Bool PDFExport::Export( const OUString& rFile, const Sequence< PropertyValue
                 break;
             }
 
-            PDFWriter*      pPDFWriter = new PDFWriter( aURL.GetMainURL(), PDFWriter::PDF_1_4, eCompressMode );
+            PDFWriter*      pPDFWriter = new PDFWriter( aURL.GetMainURL(INetURLObject::DECODE_TO_IURI), PDFWriter::PDF_1_4, eCompressMode );
             OutputDevice*   pOut = pPDFWriter->GetReferenceDevice();
 
             DBG_ASSERT( pOut, "PDFExport::Export: no reference device" );
