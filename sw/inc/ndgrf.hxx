@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndgrf.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-08 21:17:20 $
+ *  last change: $Author: jp $ $Date: 2001-07-09 11:34:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,7 @@
 class SwGrfFmtColl;
 class SwDoc;
 class GraphicAttr;
+class SvStorage;
 
 // --------------------
 // SwGrfNode
