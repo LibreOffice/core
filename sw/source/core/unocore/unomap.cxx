@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.156 $
+ *  $Revision: 1.157 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 18:26:32 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 15:35:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -320,6 +320,7 @@ void SwUnoPropertyMapProvider::Sort( sal_uInt16 nId )
         { SW_PROP_NMID(UNO_NAME_CHAR_ESCAPEMENT_HEIGHT), RES_CHRATR_ESCAPEMENT,     CPPU_E2T(CPPUTYPE_INT8)  ,          PropertyAttribute::MAYBEVOID, MID_ESC_HEIGHT},                                               \
         { SW_PROP_NMID(UNO_NAME_CHAR_AUTO_ESCAPEMENT), RES_CHRATR_ESCAPEMENT,  CPPU_E2T(CPPUTYPE_BOOLEAN)  ,            PropertyAttribute::MAYBEVOID, MID_AUTO_ESC  },                                                \
         { SW_PROP_NMID(UNO_NAME_CHAR_FLASH), RES_CHRATR_BLINK   ,   CPPU_E2T(CPPUTYPE_BOOLEAN)  ,       PropertyAttribute::MAYBEVOID,     0},                                                                 \
+        { SW_PROP_NMID(UNO_NAME_CHAR_HIDDEN), RES_CHRATR_HIDDEN, CPPU_E2T(CPPUTYPE_BOOLEAN)  ,       PropertyAttribute::MAYBEVOID,     0},\
         { SW_PROP_NMID(UNO_NAME_CHAR_UNDERLINE), RES_CHRATR_UNDERLINE ,  CPPU_E2T(CPPUTYPE_INT16),              PropertyAttribute::MAYBEVOID, MID_UNDERLINE},                                                \
         { SW_PROP_NMID(UNO_NAME_CHAR_UNDERLINE_COLOR), RES_CHRATR_UNDERLINE ,  CPPU_E2T(CPPUTYPE_INT32),            PropertyAttribute::MAYBEVOID, MID_UL_COLOR},                                                \
         { SW_PROP_NMID(UNO_NAME_CHAR_UNDERLINE_HAS_COLOR), RES_CHRATR_UNDERLINE ,  CPPU_E2T(CPPUTYPE_BOOLEAN),              PropertyAttribute::MAYBEVOID, MID_UL_HASCOLOR},                                                \
@@ -552,6 +553,7 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     { SW_PROP_NMID(UNO_NAME_CHAR_ESCAPEMENT), RES_CHRATR_ESCAPEMENT,  CPPU_E2T(CPPUTYPE_INT16),             PROPERTY_NONE, MID_ESC          },
                     { SW_PROP_NMID(UNO_NAME_CHAR_ESCAPEMENT_HEIGHT), RES_CHRATR_ESCAPEMENT,     CPPU_E2T(CPPUTYPE_INT8)  ,          PROPERTY_NONE, MID_ESC_HEIGHT},
                     { SW_PROP_NMID(UNO_NAME_CHAR_FLASH), RES_CHRATR_BLINK   ,   CPPU_E2T(CPPUTYPE_BOOLEAN)  ,       PROPERTY_NONE,     0},
+                    { SW_PROP_NMID(UNO_NAME_CHAR_HIDDEN), RES_CHRATR_HIDDEN, CPPU_E2T(CPPUTYPE_BOOLEAN)  ,       PROPERTY_NONE,     0},
                     _STANDARD_FONT_PROPERTIES
                     _CJK_FONT_PROPERTIES
                     _CTL_FONT_PROPERTIES
@@ -602,6 +604,7 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                     { SW_PROP_NMID(UNO_NAME_CHAR_ESCAPEMENT), RES_CHRATR_ESCAPEMENT,  CPPU_E2T(CPPUTYPE_INT16),             PROPERTY_NONE, MID_ESC          },
                     { SW_PROP_NMID(UNO_NAME_CHAR_ESCAPEMENT_HEIGHT), RES_CHRATR_ESCAPEMENT,     CPPU_E2T(CPPUTYPE_INT8)  ,          PROPERTY_NONE, MID_ESC_HEIGHT},
                     { SW_PROP_NMID(UNO_NAME_CHAR_FLASH), RES_CHRATR_BLINK   ,   CPPU_E2T(CPPUTYPE_BOOLEAN)  ,       PROPERTY_NONE,     0},
+                    { SW_PROP_NMID(UNO_NAME_CHAR_HIDDEN), RES_CHRATR_HIDDEN, CPPU_E2T(CPPUTYPE_BOOLEAN)  ,       PROPERTY_NONE,     0},
                     _STANDARD_FONT_PROPERTIES
                     _CJK_FONT_PROPERTIES
                     _CTL_FONT_PROPERTIES
