@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xpool.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-03 11:10:08 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 15:45:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,7 +115,7 @@ XOutdevItemPool::XOutdevItemPool(
     const Bitmap aNullBmp;
     const XPolygon aNullPol;
     const Color aNullLineCol(RGB_Color(COL_BLACK));
-    const Color aNullFillCol(Color(0,184,255));  // "Blau 7"
+    const Color aNullFillCol(RGB_Color(COL_DEFAULT_SHAPE_FILLING));  // "Blue 8"
     const Color aNullShadowCol(RGB_Color(COL_LIGHTGRAY));
     const XDash aNullDash;
     const XGradient aNullGrad(aNullLineCol, RGB_Color(COL_WHITE));
