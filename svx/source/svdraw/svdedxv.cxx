@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdedxv.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-11 13:02:34 $
+ *  last change: $Author: vg $ $Date: 2005-03-07 17:33:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1476,7 +1476,16 @@ BOOL SdrObjEditView::SetAttributes(const SfxItemSet& rSet, BOOL bReplaceAll)
             ImpTakeDescriptionStr(STR_EditSetAttributes,aStr);
             BegUndo(aStr);
             AddUndo(new SdrUndoGeoObj(*pTextEditObj));
-            AddUndo(new SdrUndoAttrObj(*pTextEditObj,FALSE,!bNoEEItems));
+
+            // #i43537#
+            // If this is a text object also rescue the OutlinerParaObject since
+            // applying attributes to the object may change text layout when
+            // multiple portions exist with multiple formats. If a OutlinerParaObject
+            // really exists and needs to be rescued is evaluated in the undo
+            // implementation itself.
+            sal_Bool bRescueText(pTextEditObj->ISA(SdrTextObj));
+
+            AddUndo(new SdrUndoAttrObj(*pTextEditObj,FALSE,!bNoEEItems || bRescueText));
             EndUndo();
 
             //pTextEditObj->SetItemSetAndBroadcast(*pSet, bReplaceAll);
