@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ToolPanel.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-29 16:15:01 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 16:59:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,7 @@
 #include "TitledControl.hxx"
 #include "ControlContainer.hxx"
 #include "TaskPaneViewShell.hxx"
+#include "taskpane/TaskPaneControlFactory.hxx"
 
 #ifndef _SV_DECOVIEW_HXX
 #include <vcl/decoview.hxx>
@@ -106,13 +107,13 @@ ToolPanel::~ToolPanel (void)
 
 
 sal_uInt32 ToolPanel::AddControl (
-    ::std::auto_ptr<TreeNode> pControl,
+    ::std::auto_ptr<ControlFactory> pControlFactory,
     const String& rTitle,
     ULONG nHelpId)
 {
     TitledControl* pTitledControl = new TitledControl (
         this,
-        pControl,
+        pControlFactory,
         rTitle,
         TitleBar::TBT_CONTROL_TITLE);
     ::std::auto_ptr<TreeNode> pChild (pTitledControl);
