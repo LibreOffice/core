@@ -2,9 +2,9 @@
  *
  *  $RCSfile: color.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:03:07 $
+ *  last change: $Author: ssa $ $Date: 2002-03-05 09:09:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,6 +152,20 @@ void Color::Invert()
     SetRed( ~COLORDATA_RED( mnColor ) );
     SetGreen( ~COLORDATA_GREEN( mnColor ) );
     SetBlue( ~COLORDATA_BLUE( mnColor ) );
+}
+
+// -----------------------------------------------------------------------
+
+BOOL Color::IsDark() const
+{
+    return GetLuminance() <= 50;
+}
+
+// -----------------------------------------------------------------------
+
+BOOL Color::IsBright() const
+{
+    return GetLuminance() >= 200;
 }
 
 // -----------------------------------------------------------------------
