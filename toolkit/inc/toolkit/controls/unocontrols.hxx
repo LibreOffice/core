@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocontrols.hxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 15:54:27 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 14:05:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,10 @@
 
 #ifndef _TOOLKIT_HELPER_UNOCONTROLS_HXX_
 #define _TOOLKIT_HELPER_UNOCONTROLS_HXX_
+
+#ifndef TOOLKIT_DLLAPI_H
+#include <toolkit/dllapi.h>
+#endif
 
 #ifndef _COM_SUN_STAR_AWT_XTEXTCOMPONENT_HPP_
 #include <com/sun/star/awt/XTextComponent.hpp>
@@ -187,8 +191,8 @@ typedef ::cppu::ImplHelper4  <   ::com::sun::star::awt::XTextComponent
                              ,   ::com::sun::star::awt::XLayoutConstrains
                              ,   ::com::sun::star::awt::XTextLayoutConstrains
                              >   UnoEditControl_Base;
-class UnoEditControl    :public UnoControlBase
-                        ,public UnoEditControl_Base
+class TOOLKIT_DLLPUBLIC UnoEditControl    :public UnoControlBase
+                                            ,public UnoEditControl_Base
 {
 private:
     TextListenerMultiplexer maTextListeners;
