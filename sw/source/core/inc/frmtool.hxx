@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmtool.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:40:11 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 10:11:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -170,6 +170,11 @@ SwFrm* GetFrmOfModify( SwModify&, USHORT nFrmType, const Point* = 0,
 
 //Sollen ExtraDaten (Reline-Strich, Zeilennummern) gepaintet werden?
 FASTBOOL IsExtraData( const SwDoc *pDoc );
+
+// OD 14.03.2003 #i11760# - method declaration <CalcCntnt(..)>
+void CalcCntnt( SwLayoutFrm *pLay,
+                bool bNoColl = false,
+                bool bNoCalcFollow = false );
 
 
 //Die Notify-Klassen merken sich im CTor die aktuellen Groessen und fuehren
