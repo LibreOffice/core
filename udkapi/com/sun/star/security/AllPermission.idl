@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AllPermission.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:36:54 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 09:32:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,8 @@ module com {  module sun {  module star {  module security {
     permission to code.  This permission should be used only during testing,
     or in extremely rare cases where an application is completely trusted and
     adding the necessary permissions to the policy is prohibitively cumbersome.
+
+    @since #107627#
 */
 struct AllPermission
 {
