@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuinsfil.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dl $ $Date: 2000-12-14 12:02:47 $
+ *  last change: $Author: ka $ $Date: 2001-01-24 12:17:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -344,19 +344,18 @@ FuInsertFile::FuInsertFile(SdViewShell*    pViewSh,
         {
             aFilterName = pFilter->GetFilterName();
 
-            if (aFilterName.SearchAscii( "Text" ) != STRING_NOTFOUND ||
-                aFilterName.EqualsAscii("Rich Text Format")          ||
-                aFilterName.EqualsAscii("HTML"))
+            if( ( aFilterName.SearchAscii( "Text" ) != STRING_NOTFOUND ) ||
+                ( aFilterName.SearchAscii( "Rich Text Format" ) != STRING_NOTFOUND ) ||
+                ( aFilterName.SearchAscii( "HTML" ) != STRING_NOTFOUND ) )
             {
-                if (bDrawMode)
+                if( bDrawMode )
                     InsTextOrRTFinDrMode(pMedium);
                 else
                     InsTextOrRTFinOlMode(pMedium);
             }
             else
             {
-                ErrorBox aErrorBox( pWindow, (WinBits)WB_OK,
-                          String(SdResId(STR_READ_DATA_ERROR)));
+                ErrorBox aErrorBox( pWindow, (WinBits)WB_OK, String(SdResId(STR_READ_DATA_ERROR)));
                 aErrorBox.Execute();
             }
         }
@@ -569,9 +568,10 @@ void FuInsertFile::InsTextOrRTFinDrMode(SfxMedium* pMedium)
 
         // gewaehltes Dateiformat: Text oder RTF oder HTML (Default ist Text)
         USHORT nFormat = EE_FORMAT_TEXT;
-        if (aFilterName.EqualsAscii("Rich Text Format"))
+
+        if( aFilterName.SearchAscii( "Rich Text Format") != STRING_NOTFOUND )
             nFormat = EE_FORMAT_RTF;
-        else if (aFilterName.EqualsAscii("HTML"))
+        else if( aFilterName.SearchAscii( "HTML" ) != STRING_NOTFOUND )
             nFormat = EE_FORMAT_HTML;
 
         // einen eigenen Outliner erzeugen, denn:
@@ -696,9 +696,10 @@ void FuInsertFile::InsTextOrRTFinOlMode(SfxMedium* pMedium)
 {
     // gewaehltes Dateiformat: Text oder RTF oder HTML (Default ist Text)
     USHORT nFormat = EE_FORMAT_TEXT;
-    if( aFilterName.EqualsAscii("Rich Text Format"))
+
+    if( aFilterName.SearchAscii( "Rich Text Format") != STRING_NOTFOUND )
         nFormat = EE_FORMAT_RTF;
-    else if (aFilterName.EqualsAscii("HTML"))
+    else if( aFilterName.SearchAscii( "HTML" ) != STRING_NOTFOUND )
         nFormat = EE_FORMAT_HTML;
 
     Outliner*      pDocliner = ((SdOutlineView*)pView)->GetOutliner();
