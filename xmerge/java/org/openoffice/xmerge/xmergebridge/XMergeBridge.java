@@ -453,7 +453,7 @@ public class XMergeBridge {
            first=first.concat("&lt;");
            tmp=tmp.concat(first);
            str=str.substring(index+1,str.length());
-           index=str.indexOf("&");
+           index=str.indexOf("<");
            if(index==-1) {
                tmp=tmp.concat(str);
            }
@@ -471,7 +471,7 @@ public class XMergeBridge {
            first=first.concat("&gt;");
            tmp=tmp.concat(first);
            str=str.substring(index+1,str.length());
-           index=str.indexOf("&");
+           index=str.indexOf(">");
            if(index==-1) {
                tmp=tmp.concat(str);
            }
