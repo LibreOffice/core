@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlrowi.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-16 14:16:31 $
+ *  last change: $Author: sab $ $Date: 2002-06-05 09:18:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,7 @@ class ScXMLTableRowContext : public SvXMLImportContext
     rtl::OUString sStyleName;
     rtl::OUString sVisibility;
     sal_Int32 nRepeatedRows;
+    sal_Bool bHasCell;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
@@ -103,9 +104,9 @@ class ScXMLTableRowsContext : public SvXMLImportContext
     sal_Int32 nHeaderEndRow;
     sal_Int32 nGroupStartRow;
     sal_Int32 nGroupEndRow;
-    sal_Bool bHeader : 1;
-    sal_Bool bGroup : 1;
-    sal_Bool bGroupDisplay : 1;
+    sal_Bool bHeader;
+    sal_Bool bGroup;
+    sal_Bool bGroupDisplay;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }

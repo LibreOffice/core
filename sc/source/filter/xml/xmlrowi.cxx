@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlrowi.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: sab $ $Date: 2001-10-18 12:15:26 $
+ *  last change: $Author: sab $ $Date: 2002-06-05 09:18:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,7 +117,8 @@ ScXMLTableRowContext::ScXMLTableRowContext( ScXMLImport& rImport,
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList ) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
     sVisibility(GetXMLToken(XML_VISIBLE)),
-    nRepeatedRows(1)
+    nRepeatedRows(1),
+    bHasCell(sal_False)
 {
     rtl::OUString sCellStyleName;
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
@@ -180,17 +181,23 @@ SvXMLImportContext *ScXMLTableRowContext::CreateChildContext( USHORT nPrefix,
     {
     case XML_TOK_TABLE_ROW_CELL:
 //      if( IsInsertCellPossible() )
+        {
+            bHasCell = sal_True;
             pContext = new ScXMLTableRowCellContext( GetScImport(), nPrefix,
                                                       rLName, xAttrList, sal_False, nRepeatedRows
                                                       //this
                                                       );
+        }
         break;
     case XML_TOK_TABLE_ROW_COVERED_CELL:
 //      if( IsInsertCellPossible() )
+        {
+            bHasCell = sal_True;
             pContext = new ScXMLTableRowCellContext( GetScImport(), nPrefix,
                                                       rLName, xAttrList, sal_True, nRepeatedRows
                                                       //this
                                                       );
+        }
         break;
     }
 
@@ -203,6 +210,12 @@ SvXMLImportContext *ScXMLTableRowContext::CreateChildContext( USHORT nPrefix,
 void ScXMLTableRowContext::EndElement()
 {
     ScXMLImport& rXMLImport = GetScImport();
+    if (!bHasCell && nRepeatedRows > 1)
+    {
+        for (sal_Int32 i = 0; i < nRepeatedRows - 1; ++i) //one row is always added
+            GetScImport().GetTables().AddRow();
+        DBG_ERRORFILE("it seems here is a nonvalid file; possible missing of table:table-cell element");
+    }
     sal_Int32 nCurrentRow = rXMLImport.GetTables().GetCurrentRow();
     uno::Reference<sheet::XSpreadsheet> xSheet = rXMLImport.GetTables().GetCurrentXSheet();
     if(xSheet.is())
