@@ -10804,3 +10804,12 @@ _TI2?AVIllegalAccessibleComponentStateException@accessibility@star@sun@com@draft
 ?lcl_MoveControl@?%O:\SRX642\src\svtools\source\filepicker\iodlg.cxx1038113558@@YAXPAVControl@@JJAAJ@Z
 ?lcl_getHomeDirectory@?%O:\SRX642\src\svtools\source\filepicker\iodlg.cxx1038113558@@YAEABVString@@AAV2@@Z
 ?lcl_DecoratedFilter@?%O:\SRX642\src\svtools\source\filepicker\iodlgimp.cxx80792080@@YA?AVString@@ABV2@@Z
+?MoveTo@WinMtfOutput@@QAEXABVPoint@@E@Z
+?DbgName_SvTreeList@@YAPAUDbgDataType@@XZ
+??RFilterTitleMatch@?%O:\SRC651\src\svtools\source\filepicker\filepicker.cxx727424985@@QAE_NABUFilterEntry@@@Z
+?GetFsysExtension_Impl@?%O:\SRC651\src\svtools\source\filepicker\iodlg.cxx37730985@@YA?AVString@@ABV2@@Z
+?IsFileURL@?%O:\SRC651\src\svtools\source\filepicker\iodlg.cxx37730985@@YAEABVString@@@Z
+?SetFsysExtension_Impl@?%O:\SRC651\src\svtools\source\filepicker\iodlg.cxx37730985@@YAXAAVString@@ABV2@@Z
+?lcl_MoveControl@?%O:\SRC651\src\svtools\source\filepicker\iodlg.cxx37730985@@YAXPAVControl@@JJAAJ@Z
+?lcl_getHomeDirectory@?%O:\SRC651\src\svtools\source\filepicker\iodlg.cxx37730985@@YAEABVString@@AAV2@@Z
+?lcl_DecoratedFilter@?%O:\SRC651\src\svtools\source\filepicker\iodlgimp.cxx116815226@@YA?AVString@@ABV2@@Z
