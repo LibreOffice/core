@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSAXEventKeeperStatusChangeBroadcaster.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-31 10:03:48 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:41:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@ interface XSAXEventKeeperStatusChangeBroadcaster : com::sun::star::uno::XInterfa
      *
      * @param listener         the listener to be added
      */
-    void addXSAXEventKeeperStatusChangeListener(
+    void addSAXEventKeeperStatusChangeListener(
         [in] XSAXEventKeeperStatusChangeListener listener);
 
     /**
@@ -99,7 +99,7 @@ interface XSAXEventKeeperStatusChangeBroadcaster : com::sun::star::uno::XInterfa
      *
      * @param listener         the listener to be removed
      */
-    void removeXSAXEventKeeperStatusChangeListener(
+    void removeSAXEventKeeperStatusChangeListener(
         [in] XSAXEventKeeperStatusChangeListener listener);
 };
 
