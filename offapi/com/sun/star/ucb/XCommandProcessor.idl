@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XCommandProcessor.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:48 $
+ *  last change: $Author: sb $ $Date: 2001-08-20 15:32:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,11 @@ module com { module sun { module star { module ucb {
 
     @version  1.0
     @author   Kai Sommerfeld
+
+    @deprecated
+    @see com::sun::star::ucb::XCommandProcessor2
+    for the improved version of this interface.
+
     @see      Command
     @see      XCommandEnvironment
     @see      XContent
@@ -103,7 +108,18 @@ interface XCommandProcessor : com::sun::star::uno::XInterface
         executed synchronously. So the id for a command is valid again after a
         command previously associated with this id has finished. In fact you
         only should get one identifier per thread and assign it to every
-        command executed by that thread.
+        command executed by that thread.</p>
+
+        <p>Also, after a call to <method>abort</method>, an identifier should
+        not be used any longer (and instead be released by a call to
+        <method scope="com::sun::star::ucb::XCommandProcessor2">releaseCommandIdentifier</method>),
+        because it may well abort <em>all</em> further calls to
+        <method>execute</method>.</p>
+
+        <p>To avoid ever-increasing resource consumption, the identifier
+        should be released via
+        <method scope="com::sun::star::ucb::XCommandProcessor2">releaseCommandIdentifier</method>
+        when it is no longer used.</p>
 
         @returns
         a command identifier.
