@@ -2,9 +2,9 @@
  *
  *  $RCSfile: difexp.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:04:25 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:40:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,8 @@
 FltError ScExportDif( SvStream& rStream, ScDocument* pDoc,
     const ScAddress& rOutPos, const CharSet eNach, UINT32 nDifOption )
 {
-    UINT16      nEndCol, nEndRow;
+    SCCOL       nEndCol;
+    SCROW       nEndRow;
     pDoc->GetTableArea( rOutPos.Tab(), nEndCol, nEndRow );
     ScAddress   aEnd( nEndCol, nEndRow, rOutPos.Tab() );
     ScAddress   aStart( rOutPos );
@@ -144,11 +145,11 @@ FltError ScExportDif( SvStream& rOut, ScDocument* pDoc,
     FltError            eRet = eERR_OK;
     String              aOS;
     String              aString;
-    UINT16              nEndCol = rRange.aEnd.Col();
-    UINT16              nEndRow = rRange.aEnd.Row();
-    UINT16              nNumCols = nEndCol - rRange.aStart.Col() + 1;
-    UINT16              nNumRows = nEndRow - rRange.aStart.Row() + 1;
-    UINT16              nTab = rRange.aStart.Tab();
+    SCCOL               nEndCol = rRange.aEnd.Col();
+    SCROW               nEndRow = rRange.aEnd.Row();
+    SCCOL               nNumCols = nEndCol - rRange.aStart.Col() + 1;
+    SCROW               nNumRows = nEndRow - rRange.aStart.Row() + 1;
+    SCTAB               nTab = rRange.aStart.Tab();
 
     double              fVal;
 
@@ -191,7 +192,8 @@ FltError ScExportDif( SvStream& rOut, ScDocument* pDoc,
     aOS.AppendAscii( p2DoubleQuotes_LF );
     rOut.WriteUnicodeOrByteText( aOS );
 
-    UINT16              nColCnt, nRowCnt;
+    SCCOL               nColCnt;
+    SCROW               nRowCnt;
     ScBaseCell*         pAkt;
 
     for( nRowCnt = rRange.aStart.Row() ; nRowCnt <= nEndRow ; nRowCnt++ )
