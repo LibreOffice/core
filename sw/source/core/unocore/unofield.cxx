@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: ama $ $Date: 2001-07-05 10:34:53 $
+ *  last change: $Author: os $ $Date: 2001-07-12 11:05:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1349,19 +1349,18 @@ uno::Any SwXFieldMaster::getPropertyValue(const OUString& rPropertyName)
     vos::OGuard  aGuard(Application::GetSolarMutex());
     uno::Any aRet;
     SwFieldType* pType = GetFldType(sal_True);
-    if(pType)
+    if( rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_INSTANCE_NAME)) )
+    {
+        String sName;
+        if(pType)
+            SwXTextFieldMasters::getInstanceName(*pType, sName);
+        aRet <<= (OUString)sName;
+    }
+    else if(pType)
     {
         if(rPropertyName.equalsAsciiL( MAP_CHAR_LEN("Name")))
         {
             aRet <<= OUString(SwXFieldMaster::GetProgrammaticName(*pType, *GetDoc()));
-        }
-        else if( rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_INSTANCE_NAME)) )
-        {
-            String sName;
-            if (SwXTextFieldMasters::getInstanceName(*pType, sName))
-            {
-                aRet <<= OUString(sName);
-            }
         }
         else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DEPENDENT_TEXT_FIELDS)) )
         {
@@ -1412,6 +1411,11 @@ uno::Any SwXFieldMaster::getPropertyValue(const OUString& rPropertyName)
     {
         if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_COMMAND_TYPE)) )
             aRet <<= nParam2;
+        else if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DEPENDENT_TEXT_FIELDS)) )
+        {
+            Sequence<Reference <XDependentTextField> > aRetSeq(0);
+            aRet <<= aRetSeq;
+        }
         else if(nResTypeId == RES_USERFLD)
         {
             if(rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_CONTENT)) )
