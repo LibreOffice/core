@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseForm.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-16 17:49:57 $
+ *  last change: $Author: vg $ $Date: 2005-02-17 10:41:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2839,16 +2839,21 @@ sal_Bool ODatabaseForm::implEnsureConnection()
         {
             // do we have a connection in the hierarchy than take that connection
             // this overwrites all the other connnections
-            Reference< XConnection >  xConnection = calcConnection(
+            Reference< XConnection >  xConnection = connectRowset(
                 Reference<XRowSet> (m_xAggregate, UNO_QUERY),
-                m_xServiceFactory
-            );      // will set a calculated connection implicitly
+                m_xServiceFactory,
+                sal_True    // set a calculated connection as ActiveConnection
+            );
             return xConnection.is();
         }
     }
     catch(SQLException& eDB)
     {
         onError(eDB, FRM_RES_STRING(RID_STR_CONNECTERROR));
+    }
+    catch( Exception )
+    {
+        DBG_ERROR( "ODatabaseForm::implEnsureConnection: caught an exception which I cannot handle!" );
     }
 
     return sal_False;
