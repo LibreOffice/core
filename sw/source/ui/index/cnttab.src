@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.src,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: os $ $Date: 2002-01-10 14:14:27 $
+ *  last change: $Author: os $ $Date: 2002-01-11 09:56:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -764,7 +764,7 @@ TabPage TP_TOX_SELECT
     CheckBox        CB_READONLY
     {
         Pos = MAP_APPFONT ( 51 , 46 ) ;
-        Size = MAP_APPFONT ( 120 , 10 ) ;
+        Size = MAP_APPFONT ( 200 , 10 ) ;
         Text = "G~eschützt vor manuellen Änderungen" ;
         Text [ ENGLISH ] = "Protected against manual changes" ;
         Check = TRUE;
@@ -1565,7 +1565,7 @@ TabPage TP_TOX_SELECT
     CheckBox        CB_KEYASENTRY
     {
         Pos = MAP_APPFONT ( 136, 111 ) ;
-        Size = MAP_APPFONT ( 100 , 10 ) ;
+        Size = MAP_APPFONT ( 115 , 10 ) ;
         Text = "~Schlüssel als eigener Eintrag" ;
         Text [ ENGLISH ] = "Keys as separate entries" ;
         Text[ english_us ] = "Keys as separate entries";
@@ -1592,7 +1592,7 @@ TabPage TP_TOX_SELECT
     CheckBox    CB_FROMFILE
     {
         Pos = MAP_APPFONT ( 136 , 124 ) ;
-        Size = MAP_APPFONT ( 60 , 10 ) ;
+        Size = MAP_APPFONT ( 63 , 10 ) ;
         Text = "Konko~rdanzdatei" ;
         Text [ ENGLISH ] = "...file??" ;
         Text[ english_us ] = "~Concordance file";
