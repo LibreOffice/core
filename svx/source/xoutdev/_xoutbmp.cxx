@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _xoutbmp.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sj $ $Date: 2002-06-21 14:12:44 $
+ *  last change: $Author: sj $ $Date: 2002-07-16 09:35:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -524,6 +524,8 @@ USHORT XOutBitmap::WriteGraphic( const Graphic& rGraphic, String& rFileName,
 #pragma optimize ( "", off )
 #endif
 
+// SJ: bIgnoreOptions is not used anymore
+
 USHORT XOutBitmap::ExportGraphic( const Graphic& rGraphic, const INetURLObject& rURL,
                                   GraphicFilter& rFilter, const USHORT nFormat,
                                   BOOL bIgnoreOptions,
@@ -540,47 +542,8 @@ USHORT XOutBitmap::ExportGraphic( const Graphic& rGraphic, const INetURLObject& 
     {
         pGrfFilter = &rFilter;
 
-        if( bIgnoreOptions )
-            nRet = rFilter.ExportGraphic( rGraphic, rURL.GetMainURL( INetURLObject::NO_DECODE ),
-                        *pOStm, nFormat, bIgnoreOptions, pFilterData );
-        else
-        {
-            Graphic aGraphic;
-            const String aFormat( rFilter.GetExportFormatShortName( nFormat ).ToLowerAscii() );
-
-            // Optionen fuer die einzelnen Format beruecksichtigen
-            if( aFormat == FORMAT_BMP )
-            {
-                FilterConfigItem aConfigItem( String( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/Filter/Graphic/Export/BMP" ) ) );
-                sal_Int32 nColorRes = aConfigItem.ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "Colors" ) ), 0 );
-                if( !nColorRes || ( nColorRes > (USHORT) BMP_CONVERSION_24BIT ) )
-                    aGraphic = rGraphic;
-                else
-                {
-                    Bitmap aTmp( rGraphic.GetBitmap() );
-
-                    if( aTmp.Convert( (BmpConversion) nColorRes ) )
-                        aGraphic = aTmp;
-                    else
-                        aGraphic = rGraphic;
-                }
-            }
-            else if( aFormat == FORMAT_JPG )
-            {
-                FilterConfigItem aConfigItem( String( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/Filter/Graphic/Export/JPG" ) ) );
-                const sal_Bool bGreys = aConfigItem.ReadInt32( String( RTL_CONSTASCII_USTRINGPARAM( "ColorMode" ) ), 0 ) != 0;
-                Bitmap aTmp( rGraphic.GetBitmap() );
-                const BmpConversion eConv = bGreys ? BMP_CONVERSION_8BIT_GREYS : BMP_CONVERSION_24BIT;
-                if( aTmp.Convert( eConv ) )
-                    aGraphic = aTmp;
-                else
-                    aGraphic = rGraphic;
-            }
-            else
-                aGraphic = rGraphic;
-            nRet = rFilter.ExportGraphic( aGraphic, rURL.GetMainURL( INetURLObject::NO_DECODE ),
-                            *pOStm, nFormat, sal_False, pFilterData );
-        }
+        nRet = rFilter.ExportGraphic( rGraphic, rURL.GetMainURL( INetURLObject::NO_DECODE ),
+                    *pOStm, nFormat, sal_True, pFilterData );
 
         pGrfFilter = NULL;
         aMedium.Commit();
