@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbfunc.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2002-11-20 14:34:34 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:59:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,11 +118,11 @@ void ScDBFunc::GotoDBArea( const String& rDBName )
 
         if ( pData )
         {
-            USHORT nTab = 0;
-            USHORT nStartCol = 0;
-            USHORT nStartRow = 0;
-            USHORT nEndCol = 0;
-            USHORT nEndRow = 0;
+            SCTAB nTab = 0;
+            SCCOL nStartCol = 0;
+            SCROW nStartRow = 0;
+            SCCOL nEndCol = 0;
+            SCROW nEndRow = 0;
 
             pData->GetArea( nTab, nStartCol, nStartRow, nEndCol, nEndRow );
             SetTabNo( nTab );
@@ -222,7 +222,7 @@ void ScDBFunc::UISort( const ScSortParam& rSortParam, BOOL bRecord )
 {
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
     ScDocument* pDoc = pDocSh->GetDocument();
-    USHORT nTab = GetViewData()->GetTabNo();
+    SCTAB nTab = GetViewData()->GetTabNo();
     ScDBData* pDBData = pDoc->GetDBAtArea( nTab, rSortParam.nCol1, rSortParam.nRow1,
                                                     rSortParam.nCol2, rSortParam.nRow2 );
     if (!pDBData)
@@ -250,7 +250,7 @@ void ScDBFunc::UISort( const ScSortParam& rSortParam, BOOL bRecord )
 void ScDBFunc::Sort( const ScSortParam& rSortParam, BOOL bRecord, BOOL bPaint )
 {
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
-    USHORT nTab = GetViewData()->GetTabNo();
+    SCTAB nTab = GetViewData()->GetTabNo();
     ScDBDocFunc aDBDocFunc( *pDocSh );
     BOOL bSuccess = aDBDocFunc.Sort( nTab, rSortParam, bRecord, bPaint, FALSE );
     if ( bSuccess && !rSortParam.bInplace )
@@ -269,7 +269,7 @@ void ScDBFunc::Sort( const ScSortParam& rSortParam, BOOL bRecord, BOOL bPaint )
 void ScDBFunc::Query( const ScQueryParam& rQueryParam, const ScRange* pAdvSource, BOOL bRecord )
 {
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
-    USHORT nTab = GetViewData()->GetTabNo();
+    SCTAB nTab = GetViewData()->GetTabNo();
     ScDBDocFunc aDBDocFunc( *pDocSh );
     BOOL bSuccess = aDBDocFunc.Query( nTab, rQueryParam, pAdvSource, bRecord, FALSE );
 
@@ -312,9 +312,9 @@ void ScDBFunc::ToggleAutoFilter()
     pDBData->GetQueryParam( aParam );
 
 
-    USHORT  nCol;
-    USHORT  nRow = aParam.nRow1;
-    USHORT  nTab = GetViewData()->GetTabNo();
+    SCCOL  nCol;
+    SCROW  nRow = aParam.nRow1;
+    SCTAB  nTab = GetViewData()->GetTabNo();
     INT16   nFlag;
     BOOL    bHasAuto = TRUE;
     BOOL    bHeader  = pDBData->HasHeader();
@@ -346,8 +346,8 @@ void ScDBFunc::ToggleAutoFilter()
 
         //  Filter aufheben (incl. Paint / Undo)
 
-        USHORT nEC = aParam.GetEntryCount();
-        for (USHORT i=0; i<nEC; i++)
+        SCSIZE nEC = aParam.GetEntryCount();
+        for (SCSIZE i=0; i<nEC; i++)
             aParam.GetEntry(i).bDoQuery = FALSE;
         aParam.bDuplicate = TRUE;
         Query( aParam, NULL, TRUE );
@@ -412,10 +412,12 @@ void ScDBFunc::HideAutoFilter()
     ScQueryParam aParam;
     ScDBData* pDBData = GetDBData( FALSE );
 
-    USHORT nTab, nCol1, nRow1, nCol2, nRow2;
+    SCTAB nTab;
+    SCCOL nCol1, nCol2;
+    SCROW nRow1, nRow2;
     pDBData->GetArea(nTab, nCol1, nRow1, nCol2, nRow2);
 
-    for (USHORT nCol=nCol1; nCol<=nCol2; nCol++)
+    for (SCCOL nCol=nCol1; nCol<=nCol2; nCol++)
     {
         INT16 nFlag = ((ScMergeFlagAttr*) pDoc->
                                 GetAttr( nCol, nRow1, nTab, ATTR_MERGE_FLAG ))->GetValue();
