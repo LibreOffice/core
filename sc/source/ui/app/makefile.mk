@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: nn $ $Date: 2001-10-02 18:25:14 $
+#   last change: $Author: hjs $ $Date: 2002-06-13 14:49:03 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -114,18 +114,10 @@ $(SLO)$/sclib.obj :	$(INCCOM)$/scdll0.hxx
 $(OBJ)$/sclib.obj :	$(INCCOM)$/scdll0.hxx
 
 $(INCCOM)$/scdll0.hxx: makefile.mk
-.IF "$(GUI)"=="OS2"
-    echo #define DLL_NAME "sc$(UPD)$(DLLPOSTFIX)" >$@
-.ELSE
-.IF "$(GUI)"=="MAC"
-    echo "$(HASHMARK)define DLL_NAME ¶"sc$(UPD)$(DLLPOSTFIX).dll¶"" > $@
-.ELSE
-.IF "$(GUI)"=="UNX"
+.IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
     echo #define DLL_NAME \"libsc$(UPD)$(DLLPOSTFIX)$(DLLPOST)\" >$@
 .ELSE
     echo #define DLL_NAME "sc$(UPD)$(DLLPOSTFIX)$(DLLPOST)" >$@
-.ENDIF
-.ENDIF
 .ENDIF
 
 $(SRS)$/app.srs: $(SOLARINCDIR)$/svx$/globlmn.hrc
