@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.27 $
+#   $Revision: 1.28 $
 #
-#   last change: $Author: rt $ $Date: 2004-11-26 13:02:40 $
+#   last change: $Author: obo $ $Date: 2004-11-29 13:02:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -193,7 +193,6 @@ SLOFILES =	\
         $(SLO)$/shadwhdl.obj	\
         $(SLO)$/shdwdhdl.obj	\
         $(SLO)$/styleexp.obj	\
-        $(SLO)$/splithdl.obj	\
         $(SLO)$/tabsthdl.obj	\
         $(SLO)$/undlihdl.obj	\
         $(SLO)$/uniref.obj		\
