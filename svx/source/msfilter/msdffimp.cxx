@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-06 11:05:28 $
+ *  last change: $Author: sj $ $Date: 2003-06-06 14:55:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4994,8 +4994,8 @@ const SvInPlaceObjectRef SvxMSDffManager::CheckForConvertToSOObj( UINT32 nConver
                             {   // SJ: force the object to recalc its visarea
                                 xIPObj->OnDocumentPrinterChanged( NULL );
                             }
-                            xDoc->DoSaveAs( xObjStor );
-                            xDoc->DoSaveCompleted( xObjStor );
+                            xObjShell->DoSaveAs( xObjStor );
+                            xObjShell->DoSaveCompleted( xObjStor );
                             pMed = 0;
                         }
                     }
