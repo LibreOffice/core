@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OutlineViewShell.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-17 09:42:18 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 13:57:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,13 +195,6 @@ public:
 
     virtual DrawController* GetController (void);
 
-protected:
-    virtual Size GetOptimalSizePixel() const;
-
-    // Methoden, die fuer die Preview gebraucht werden
-    BOOL          UpdateTitleObject( SdPage* pPage, Paragraph* pPara );
-    BOOL          UpdateLayoutObject( SdPage* pPage, Paragraph* pPara );
-
     /** Make the given page the new current page.  This method
         notifies the controller and adapts the selection of the
         model.
@@ -209,6 +202,13 @@ protected:
             The new current page.  Pass NULL when there is no current page.
     */
     void SetCurrentPage (SdPage* pPage);
+
+protected:
+    virtual Size GetOptimalSizePixel() const;
+
+    // Methoden, die fuer die Preview gebraucht werden
+    BOOL          UpdateTitleObject( SdPage* pPage, Paragraph* pPara );
+    BOOL          UpdateLayoutObject( SdPage* pPage, Paragraph* pPara );
 
 private:
     OutlineView* pOlView;
