@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 12:49:10 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 13:00:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4215,7 +4215,7 @@ sal_Bool SwEntryBrowseBox::SaveModified()
     if(nCol < ITEM_CASE)
     {
         pController = xController;
-        sNew = ((::svt::EditCellController*)pController)->GetEditWindow().GetText();
+        sNew = ((::svt::EditCellController*)pController)->GetEditImplementation()->GetText( LINEEND_LF );
     }
     else
     {
@@ -4257,7 +4257,7 @@ void    SwEntryBrowseBox::InitController(
     {
         rController = xController;
         ::svt::CellController* pController = xController;
-        ((::svt::EditCellController*)pController)->GetEditWindow().SetText( rTxt );
+        ((::svt::EditCellController*)pController)->GetEditImplementation()->SetText( rTxt );
     }
     else
     {
