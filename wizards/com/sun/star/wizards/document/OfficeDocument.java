@@ -2,9 +2,9 @@
 *
 *  $RCSfile: OfficeDocument.java,v $
 *
-*  $Revision: 1.2 $
+*  $Revision: 1.3 $
 *
-*  last change: $Author: kz $ $Date: 2004-05-19 12:41:59 $
+*  last change: $Author: obo $ $Date: 2004-09-08 14:02:13 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -64,6 +64,7 @@ import com.sun.star.lang.IndexOutOfBoundsException;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.container.XNameAccess;
+import com.sun.star.document.XDocumentInfoSupplier;
 import com.sun.star.document.XEventsSupplier;
 import com.sun.star.document.XTypeDetection;
 import com.sun.star.drawing.XDrawPagesSupplier;
@@ -123,22 +124,38 @@ public class OfficeDocument {
         exception.printStackTrace(System.out);
     }}
 
-    public static Object createNewDocument(XDesktop xDesktop, String sDocumentType) {
-        //        XComponent xComponent = null;
+    /**
+     * Create a new office document, attached to the given frame.
+     * @param desktop
+     * @param frame
+     * @param sDocumentType e.g. swriter, scalc, ( simpress, scalc : not tested)
+     * @return the document Component (implements XComponent) object ( XTextDocument, or XSpreadsheedDocument )
+     */
+    public static Object createNewDocument(XFrame frame, String sDocumentType, boolean preview, boolean readonly) {
+
+        PropertyValue[] loadValues = new PropertyValue[2];
+        loadValues[0] = new PropertyValue();
+        loadValues[0].Name = "ReadOnly";
+        loadValues[0].Value = readonly ? Boolean.TRUE : Boolean.FALSE;
+        loadValues[1] = new PropertyValue();
+        loadValues[1].Name = "Preview";
+        loadValues[1].Value = preview ? Boolean.TRUE : Boolean.FALSE;
+
         Object oDocument = null;
-        PropertyValue xValues[] = new PropertyValue[1];
         com.sun.star.frame.XComponentLoader xComponentLoader = null;
         XInterface xInterface = null;
+        String sURL = "private:factory/" + sDocumentType;
+
         try {
-            String sURL = "private:factory/" + sDocumentType;
-            PropertyValue[] xEmptyArgs = new PropertyValue[0];
-            xComponentLoader = (XComponentLoader) UnoRuntime.queryInterface(XComponentLoader.class, xDesktop);
-            com.sun.star.lang.XComponent xComponent = xComponentLoader.loadComponentFromURL(sURL, "_default", 0, xEmptyArgs);
+            xComponentLoader = (XComponentLoader) UnoRuntime.queryInterface(XComponentLoader.class, frame);
+            /*if (frame.getName() == null || frame.getName().equals(""));
+                frame.setName("T" + System.currentTimeMillis());*/
+            XComponent xComponent = xComponentLoader.loadComponentFromURL(sURL, "_self" ,0 , loadValues);
+
             if (sDocumentType == "swriter")
                 oDocument = (XTextDocument) UnoRuntime.queryInterface(XTextDocument.class, xComponent);
             else if (sDocumentType == "scalc")
                 oDocument = (XSpreadsheetDocument) UnoRuntime.queryInterface(XSpreadsheetDocument.class, xComponent);
-
             //TODO:
             //                else if (sDocumentType == "simpress")
             //                else if (sDocumentType == "sdraw")
@@ -281,6 +298,11 @@ public class OfficeDocument {
     public static int getSlideCount(Object model) {
         XDrawPagesSupplier xDrawPagesSupplier = (XDrawPagesSupplier) UnoRuntime.queryInterface(XDrawPagesSupplier.class,model);
         return xDrawPagesSupplier.getDrawPages().getCount();
+    }
+
+    public static Object getDocumentInfo(Object document) {
+        XDocumentInfoSupplier xDocumentInfoSupplier = (XDocumentInfoSupplier)UnoRuntime.queryInterface(XDocumentInfoSupplier.class,document);
+        return xDocumentInfoSupplier.getDocumentInfo();
     }
 
 }
