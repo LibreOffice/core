@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ExportFilter.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 02:22:28 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 16:52:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,7 +80,7 @@ module com { module sun { module star { module xml {
    a <type scope="com::sun::star::xml::sax">SAXException</type> in the
    <type scope="com::sun::star::xml::sax">XDocumentHandler</type> calls.
 
-    @since #107627#
+    @since OOo 1.1.2
  */
 published service ExportFilter
 {
