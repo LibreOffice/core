@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabview.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 16:37:55 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:51:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifndef SC_TABVIEW_HXX
 #define SC_TABVIEW_HXX
 
@@ -210,6 +209,8 @@ private:
     SCCOL               nOldCurX;
     SCROW               nOldCurY;
 
+    double              mfPendingTabBarWidth;       // Tab bar width relative to frame window width.
+
     SvxZoomType         eZoomType;
     BOOL                bMinimized;
     BOOL                bInUpdateHeader;
@@ -274,8 +275,20 @@ public:
 
 
     DECL_LINK(      TabBarResize, void* );
+    /** Sets an absolute tab bar width (in pixels). */
     void            SetTabBarWidth( long nNewWidth );
-    long            GetTabBarWidth();
+    /** Sets a relative tab bar width.
+        @param fRelTabBarWidth  Tab bar width relative to frame window width (0.0 ... 1.0). */
+    void            SetRelTabBarWidth( double fRelTabBarWidth );
+    /** Sets a relative tab bar width. Tab bar is resized again in next DoResize().
+        @param fRelTabBarWidth  Tab bar width relative to frame window width (0.0 ... 1.0). */
+    void            SetPendingRelTabBarWidth( double fRelTabBarWidth );
+    /** Returns the current tab bar width in pixels. */
+    long            GetTabBarWidth() const;
+    /** Returns the current tab bar width relative to the frame window width (0.0 ... 1.0). */
+    double          GetRelTabBarWidth() const;
+    /** Returns the pending tab bar width relative to the frame window width (0.0 ... 1.0). */
+    double          GetPendingRelTabBarWidth() const;
 
     void            DoResize( const Point& rOffset, const Size& rSize, BOOL bInner = FALSE );
     void            RepeatResize( BOOL bUpdateFix = TRUE );
