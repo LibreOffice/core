@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.cxx,v $
  *
- *  $Revision: 1.49 $
+ *  $Revision: 1.50 $
  *
- *  last change: $Author: cl $ $Date: 2002-01-18 15:36:06 $
+ *  last change: $Author: ka $ $Date: 2002-02-20 11:04:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,11 +124,11 @@
 #ifndef _SVDITER_HXX //autogen
 #include <svx/svditer.hxx>
 #endif
-#ifndef _SFXITEMPOOL_HXX //autogen wg. SfxItemPool
-#include <svtools/itempool.hxx>
-#endif
 #ifndef _UNO_LINGU_HXX
 #include <svx/unolingu.hxx>
+#endif
+#ifndef _SFXITEMPOOL_HXX //autogen wg. SfxItemPool
+#include <svtools/itempool.hxx>
 #endif
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -136,9 +136,6 @@
 #include <svx/xtable.hxx>
 #ifndef _COM_SUN_STAR_LINGUISTIC2_XHYPHENATOR_HPP_
 #include <com/sun/star/linguistic2/XHyphenator.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LINGUISTIC2_XLINGUSERVICEMANAGER_HPP_
-#include <com/sun/star/linguistic2/XLinguServiceManager.hpp>
 #endif
 #ifndef _COM_SUN_STAR_LINGUISTIC2_XSPELLCHECKER1_HPP_
 #include <com/sun/star/linguistic2/XSpellChecker1.hpp>
@@ -156,9 +153,6 @@
 #ifndef _XCEPTION_HXX_
 #include <vos/xception.hxx>
 #endif
-
-#include "eetext.hxx"
-
 #ifndef _ISOLANG_HXX
 #include <tools/isolang.hxx>
 #endif
@@ -166,8 +160,17 @@
 #ifndef _COMPHELPER_PROCESSFACTORY_HXX_
 #include <comphelper/processfactory.hxx>
 #endif
+#ifndef _SVTOOLS_PATHOPTIONS_HXX_
 #include <svtools/pathoptions.hxx>
+#endif
+#ifndef _SVTOOLS_LINGUCFG_HXX_
+#include <svtools/lingucfg.hxx>
+#endif
+#ifndef _SVTOOLS_LINGUPROPS_HXX_
+#include <svtools/linguprops.hxx>
+#endif
 
+#include "eetext.hxx"
 #include "drawdoc.hxx"
 #include "sdpage.hxx"
 #include "pglink.hxx"
@@ -216,13 +219,6 @@ using namespace ::com::sun::star::linguistic2;
 TYPEINIT1( SdDrawDocument, FmFormModel );
 
 SdDrawDocument* SdDrawDocument::pDocLockedInsertingLinks = NULL;
-
-#define LINGUPROP_DEFLOCALE         "DefaultLocale"
-#define LINGUPROP_CJKLOCALE         "DefaultLocale_CJK"
-#define LINGUPROP_CTLLOCALE         "DefaultLocale_CTL"
-#define LINGUPROP_AUTOSPELL         "IsSpellAuto"
-#define LINGUPROP_HIDEAUTO          "IsSpellHide"
-
 
 /*************************************************************************
 |*
@@ -325,35 +321,27 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh) :
 #ifndef SVX_LIGHT
     TRY
     {
-        uno::Reference< beans::XPropertySet > xProp( SvxGetLinguPropertySet() );
-        if ( xProp.is() )
-        {
-            uno::Any aAny;
-            lang::Locale aLocale;
+        const SvtLinguConfig    aLinguConfig;
+        uno::Any                aAny;
+        lang::Locale            aLocale;
 
-            aAny = xProp->getPropertyValue(
-                rtl::OUString::createFromAscii( LINGUPROP_DEFLOCALE ) );
-            aAny >>= aLocale;
-            SetLanguage( ConvertIsoNamesToLanguage( aLocale.Language, aLocale.Country ), EE_CHAR_LANGUAGE );
+        aAny = aLinguConfig.GetProperty( rtl::OUString::createFromAscii( UPN_DEFAULT_LOCALE ) );
+        aAny >>= aLocale;
+        SetLanguage( ConvertIsoNamesToLanguage( aLocale.Language, aLocale.Country ), EE_CHAR_LANGUAGE );
 
-            aAny = xProp->getPropertyValue(
-                rtl::OUString::createFromAscii( LINGUPROP_CJKLOCALE ) );
-            aAny >>= aLocale;
-            SetLanguage( ConvertIsoNamesToLanguage( aLocale.Language, aLocale.Country ), EE_CHAR_LANGUAGE_CJK );
+        aAny = aLinguConfig.GetProperty( rtl::OUString::createFromAscii( UPN_DEFAULT_LOCALE_CJK ) );
+        aAny >>= aLocale;
+        SetLanguage( ConvertIsoNamesToLanguage( aLocale.Language, aLocale.Country ), EE_CHAR_LANGUAGE_CJK );
 
-            aAny = xProp->getPropertyValue(
-                rtl::OUString::createFromAscii( LINGUPROP_CTLLOCALE ) );
-            aAny >>= aLocale;
-            SetLanguage( ConvertIsoNamesToLanguage( aLocale.Language, aLocale.Country ), EE_CHAR_LANGUAGE_CTL );
+        aAny = aLinguConfig.GetProperty( rtl::OUString::createFromAscii( UPN_DEFAULT_LOCALE_CTL ) );
+        aAny >>= aLocale;
+        SetLanguage( ConvertIsoNamesToLanguage( aLocale.Language, aLocale.Country ), EE_CHAR_LANGUAGE_CTL );
 
-            aAny = xProp->getPropertyValue(
-                rtl::OUString::createFromAscii( LINGUPROP_AUTOSPELL ) );
-            aAny >>= bOnlineSpell;
+        aAny = aLinguConfig.GetProperty( rtl::OUString::createFromAscii( UPN_IS_SPELL_AUTO ) );
+        aAny >>= bOnlineSpell;
 
-            aAny = xProp->getPropertyValue(
-                rtl::OUString::createFromAscii( LINGUPROP_HIDEAUTO ) );
-            aAny >>= bHideSpell;
-        }
+        aAny = aLinguConfig.GetProperty( rtl::OUString::createFromAscii( UPN_IS_SPELL_HIDE ) );
+        aAny >>= bHideSpell;
     }
     CATCH_ALL()
     {
@@ -375,23 +363,15 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh) :
 
     TRY
     {
-        Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
-        Reference< XLinguServiceManager > xLinguServiceManager( xMgr->createInstance(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.linguistic2.LinguServiceManager" ))),
-                                                            uno::UNO_QUERY );
+        Reference< XSpellChecker1 > xSpellChecker( LinguMgr::GetSpellChecker() );
+        if ( xSpellChecker.is() )
+            rOutliner.SetSpeller( xSpellChecker );
 
-        if( xLinguServiceManager.is() )
-        {
-            Reference< XSpellChecker1 > xSpellChecker( xLinguServiceManager->getSpellChecker(), UNO_QUERY );
-            if ( xSpellChecker.is() )
-                rOutliner.SetSpeller( xSpellChecker );
+        Reference< XHyphenator > xHyphenator( LinguMgr::GetHyphenator() );
+        if( xHyphenator.is() )
+            rOutliner.SetHyphenator( xHyphenator );
 
-            Reference< XHyphenator > xHyphenator( xLinguServiceManager->getHyphenator(), UNO_QUERY );
-            if( xHyphenator.is() )
-                rOutliner.SetHyphenator( xHyphenator );
-        }
-
-        SetForbiddenCharsTable( new SvxForbiddenCharactersTable( xMgr ) );
+        SetForbiddenCharsTable( new SvxForbiddenCharactersTable( ::comphelper::getProcessServiceFactory() ) );
     }
     CATCH_ALL()
     {
@@ -459,21 +439,13 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh) :
 
     TRY
     {
-        Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
-        Reference< XLinguServiceManager > xLinguServiceManager( xMgr->createInstance(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.linguistic2.LinguServiceManager" ))),
-                                                            uno::UNO_QUERY );
+        Reference< XSpellChecker1 > xSpellChecker( LinguMgr::GetSpellChecker() );
+        if ( xSpellChecker.is() )
+            pHitTestOutliner->SetSpeller( xSpellChecker );
 
-        if ( xLinguServiceManager.is() )
-        {
-            Reference< XSpellChecker1 > xSpellChecker( xLinguServiceManager->getSpellChecker(), UNO_QUERY );
-            if ( xSpellChecker.is() )
-                pHitTestOutliner->SetSpeller( xSpellChecker );
-
-            Reference< XHyphenator > xHyphenator( xLinguServiceManager->getHyphenator(), UNO_QUERY );
-            if( xHyphenator.is() )
-                pHitTestOutliner->SetHyphenator( xHyphenator );
-        }
+        Reference< XHyphenator > xHyphenator( LinguMgr::GetHyphenator() );
+        if( xHyphenator.is() )
+            pHitTestOutliner->SetHyphenator( xHyphenator );
     }
     CATCH_ALL()
     {

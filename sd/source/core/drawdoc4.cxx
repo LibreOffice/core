@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc4.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: cl $ $Date: 2002-01-22 16:25:23 $
+ *  last change: $Author: ka $ $Date: 2002-02-20 11:04:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -221,9 +221,6 @@
 #endif
 #ifndef _COM_SUN_STAR_LINGUISTIC2_XHYPHENATOR_HPP_
 #include <com/sun/star/linguistic2/XHyphenator.hpp>
-#endif
-#ifndef _COM_SUN_STAR_LINGUISTIC2_XLINGUSERVICEMANAGER_HPP_
-#include <com/sun/star/linguistic2/XLinguServiceManager.hpp>
 #endif
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -736,21 +733,13 @@ void SdDrawDocument::StartOnlineSpelling(BOOL bForceSpelling)
 
         SdOutliner* pOutl = GetInternalOutliner(TRUE);
 
-        Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
-        Reference< XLinguServiceManager > xLinguServiceManager( xMgr->createInstance(
-            OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.linguistic2.LinguServiceManager" ))),
-                                                            uno::UNO_QUERY );
+        Reference< XSpellChecker1 > xSpellChecker( LinguMgr::GetSpellChecker() );
+        if ( xSpellChecker.is() )
+            pOutl->SetSpeller( xSpellChecker );
 
-        if ( xLinguServiceManager.is() )
-        {
-            Reference< XSpellChecker1 > xSpellChecker( xLinguServiceManager->getSpellChecker(), UNO_QUERY );
-            if ( xSpellChecker.is() )
-                pOutl->SetSpeller( xSpellChecker );
-
-            Reference< XHyphenator > xHyphenator( xLinguServiceManager->getHyphenator(), UNO_QUERY );
-            if( xHyphenator.is() )
-                pOutl->SetHyphenator( xHyphenator );
-        }
+        Reference< XHyphenator > xHyphenator( LinguMgr::GetHyphenator() );
+        if( xHyphenator.is() )
+            pOutl->SetHyphenator( xHyphenator );
 
         pOutl->SetDefaultLanguage( eLanguage );
 
