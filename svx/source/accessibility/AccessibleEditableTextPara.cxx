@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleEditableTextPara.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: thb $ $Date: 2002-08-23 17:50:50 $
+ *  last change: $Author: thb $ $Date: 2002-09-13 14:11:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1277,6 +1277,26 @@ namespace accessibility
                     return ::rtl::OUString();
             }
 
+            case AccessibleTextType::LINE:
+            {
+                SvxTextForwarder&   rCacheTF = GetTextForwarder();
+                sal_Int32           nParaIndex = GetParagraphIndex();
+                sal_Int32 nTextLen = rCacheTF.GetTextLen( static_cast< USHORT >( nParaIndex ) );
+
+                CheckPosition(nIndex);
+
+                USHORT nLine, nLineCount=rCacheTF.GetLineCount( static_cast< USHORT >( nParaIndex ) );
+                sal_Int32 nCurIndex;
+                for( nLine=0, nCurIndex=0; nLine<nLineCount; ++nLine )
+                {
+                    nCurIndex += rCacheTF.GetLineLen( static_cast< USHORT >( nParaIndex ), nLine);
+
+                    if( nCurIndex > nIndex )
+                        return GetTextRange( nCurIndex - rCacheTF.GetLineLen(static_cast< USHORT >( nParaIndex ), nLine), nCurIndex );
+                }
+                break;
+            }
+
             default:
                 return OCommonAccessibleText::getTextAtIndex( nIndex, aTextType );
         } /* end of switch( aTextType ) */
@@ -1307,6 +1327,32 @@ namespace accessibility
                 return ::rtl::OUString();
             }
 
+            case AccessibleTextType::LINE:
+            {
+                SvxTextForwarder&   rCacheTF = GetTextForwarder();
+                sal_Int32           nParaIndex = GetParagraphIndex();
+                sal_Int32 nTextLen = rCacheTF.GetTextLen( static_cast< USHORT >( nParaIndex ) );
+
+                CheckPosition(nIndex);
+
+                USHORT nLine, nLineCount=rCacheTF.GetLineCount( static_cast< USHORT >( nParaIndex ) );
+                sal_Int32 nCurIndex, nLastIndex, nCurLineLen;
+                // get the line before the line the index points into
+                for( nLine=0, nCurIndex=0, nLastIndex=0; nLine<nLineCount; ++nLine )
+                {
+                    nLastIndex = nCurIndex;
+                    nCurLineLen = rCacheTF.GetLineLen(static_cast< USHORT >( nParaIndex ), nLine);
+                    nCurIndex += nCurLineLen;
+
+                    if( nCurIndex > nIndex &&
+                        nLastIndex > nCurLineLen )
+                    {
+                        return GetTextRange( nLastIndex - nCurLineLen, static_cast< USHORT >( nLastIndex ) );
+                    }
+                }
+                break;
+            }
+
             default:
                 return OCommonAccessibleText::getTextBeforeIndex( nIndex, aTextType );
         } /* end of switch( aTextType ) */
@@ -1335,6 +1381,30 @@ namespace accessibility
                     }
                 }
                 return ::rtl::OUString();
+            }
+
+            case AccessibleTextType::LINE:
+            {
+                SvxTextForwarder&   rCacheTF = GetTextForwarder();
+                sal_Int32           nParaIndex = GetParagraphIndex();
+                sal_Int32 nTextLen = rCacheTF.GetTextLen( static_cast< USHORT >( nParaIndex ) );
+
+                CheckPosition(nIndex);
+
+                USHORT nLine, nLineCount=rCacheTF.GetLineCount( static_cast< USHORT >( nParaIndex ) );
+                sal_Int32 nCurIndex;
+                // get the line after the line the index points into
+                for( nLine=0, nCurIndex=0; nLine<nLineCount; ++nLine )
+                {
+                    nCurIndex += rCacheTF.GetLineLen(static_cast< USHORT >( nParaIndex ), nLine);
+
+                    if( nCurIndex > nIndex &&
+                        nLine < nLineCount-1 )
+                    {
+                        return GetTextRange( nCurIndex, nCurIndex + rCacheTF.GetLineLen(static_cast< USHORT >( nParaIndex ), nLine+1) );
+                    }
+                }
+                break;
             }
 
             default:
