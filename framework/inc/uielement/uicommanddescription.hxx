@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uicommanddescription.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 16:54:01 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:31:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,8 +113,8 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_FRAME_XMODULEMANAGER_HPP_
-#include <drafts/com/sun/star/frame/XModuleManager.hpp>
+#ifndef _COM_SUN_STAR_FRAME_XMODULEMANAGER_HPP_
+#include <com/sun/star/frame/XModuleManager.hpp>
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -181,7 +181,7 @@ class UICommandDescription :  public com::sun::star::lang::XTypeProvider    ,
         ModuleToCommandFileMap                                                              m_aModuleToCommandFileMap;
         UICommandsHashMap                                                                   m_aUICommandsHashMap;
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >        m_xGenericUICommands;
-        ::com::sun::star::uno::Reference< ::drafts::com::sun::star::frame::XModuleManager > m_xModuleManager;
+        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModuleManager > m_xModuleManager;
 };
 
 } // namespace framework
