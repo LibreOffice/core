@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-26 19:20:15 $
+ *  last change: $Author: sab $ $Date: 2001-04-05 15:43:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1313,7 +1313,7 @@ public:
     BOOL            GetNoSetDirty() const { return bNoSetDirty; }
     void            SetInsertingFromOtherDoc( BOOL bVal ) { bInsertingFromOtherDoc = bVal; }
     BOOL            IsInsertingFromOtherDoc() const { return bInsertingFromOtherDoc; }
-    void            SetImportingXML( BOOL bVal ) { bImportingXML = bVal; }
+    void            SetImportingXML( BOOL bVal );
     BOOL            IsImportingXML() const { return bImportingXML; }
     void            SetCalcingAfterLoad( BOOL bVal ) { bCalcingAfterLoad = bVal; }
     BOOL            IsCalcingAfterLoad() const { return bCalcingAfterLoad; }
