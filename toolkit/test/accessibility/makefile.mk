@@ -26,40 +26,55 @@ JAR_FILES =		\
     juh.jar		\
     java_uno.jar
 
-JAVA_FILES = \
-    AccTreeNode.java			\
-    AccessibilityTree.java		\
-    AccessibilityTreeModel.java \
-    AccessibilityWorkBench.java	\
-    AccessibleActionHandler.java	\
-    AccessibleActionNode.java	\
-    AccessibleCellHandler.java	\
-    AccessibleComponentHandler.java	\
-    AccessibleContextHandler.java	\
-    AccessibleEditableTextHandler.java	\
+JAVA_FILES = 								\
+    AccTreeNode.java						\
+    AccessibilityTree.java					\
+    AccessibilityTreeModel.java 			\
+    AccessibilityTreeModelBase.java 		\
+    AccessibilityWorkBench.java				\
+    AccessibleActionHandler.java			\
+    AccessibleActionNode.java				\
+    AccessibleCellHandler.java				\
+    AccessibleComponentHandler.java			\
+    AccessibleContextHandler.java			\
+    AccessibleEditableTextHandler.java		\
     AccessibleExtendedComponentHandler.java	\
-    AccessibleHyperlinkHandler.java	\
-    AccessibleHypertextHandler.java	\
-    AccessibleImageHandler.java	\
-    AccessibleObject.java		\
-    AccessibleRelationHandler.java	\
-    AccessibleSelectionHandler.java	\
-    AccessibleTableHandler.java	\
-    AccessibleTextHandler.java	\
-    AccessibleTreeCellRenderer.java		\
-    AccessibleTreeHandler.java	\
-    AccessibleTreeNode.java		\
-    AccessibleUNOHandler.java		\
-    Canvas.java					\
-    FrameActionListener.java	\
-    InformationWriter.java		\
-    MessageInterface.java		\
-    NodeHandler.java			\
-    OfficeConnection.java		\
-    Print.java					\
-    SimpleOffice.java			\
-    StringNode.java				\
-    TopWindowListener.java		\
+    AccessibleHyperlinkHandler.java			\
+    AccessibleHypertextHandler.java			\
+    AccessibleImageHandler.java				\
+    AccessibleObject.java					\
+    AccessibleRelationHandler.java			\
+    AccessibleSelectionHandler.java			\
+    AccessibleTableHandler.java				\
+    AccessibleTextHandler.java				\
+    AccessibleTreeCellRenderer.java			\
+    AccessibleTreeHandler.java				\
+    AccessibleTreeNode.java					\
+    AccessibleUNOHandler.java				\
+    Canvas.java								\
+    ChildEventHandler.java					\
+    ContextEventHandler.java				\
+    EventHandler.java						\
+    EventListener.java						\
+    EventLogger.java						\
+    EventQueue.java							\
+    FrameActionListener.java				\
+    GeometryEventHandler.java				\
+    InformationWriter.java					\
+    MessageArea.java						\
+    NameProvider.java						\
+    NodeFactory.java						\
+    NodeHandler.java						\
+    NodeMap.java							\
+    OfficeConnection.java					\
+    QueuedListener.java						\
+    QueuedTopWindowListener.java			\
+    SimpleOffice.java						\
+    StringNode.java							\
+    TableEventHandler.java					\
+    TextLogger.java							\
+    TextUpdateListener.java					\
+    TopWindowListener.java					\
     VectorNode.java
 
 
@@ -85,6 +100,6 @@ AccessibilityWorkBench.jar: $(JAVA_FILES:b:+".class") jawb.mf
     +jar -cfm AccessibilityWorkBench.jar jawb.mf *.class
 
 # Example of how to run the work bench.
-run:
+run: all
     +$(JAVA) -classpath $(CLASSPATH) AccessibilityWorkBench -p $(PORT_NUMBER)
 

@@ -36,14 +36,19 @@ import javax.swing.*;
 import javax.swing.tree.*;
 import java.io.*;
 
+/** This class manages the GUI of the work bench.
+    @see AccessibilityTreeModel
+        for the implementation of the tree view on the left side which also
+        manages the registration of accessibility listeners.
+    @see Canvas
+        for the graphical view of the accessible objects.
+*/
 public class AccessibilityWorkBench
     extends JFrame
     implements ActionListener,
-        Print,
-        MessageInterface,
         XTerminateListener
 {
-    public static final String msVersion = "v1.6";
+    public static final String msVersion = "v1.7";
     public String msFileName;
     public String msOptionsFileName = ".AWBrc";
 
@@ -98,13 +103,15 @@ public class AccessibilityWorkBench
         msFileName = sFileName;
 
         Layout ();
+        //        EventLogger.Instance();
 
-        println (System.getProperty ("os.name") + " / "
+        MessageArea.println (System.getProperty ("os.name") + " / "
             + System.getProperty ("os.arch") + " / "
             + System.getProperty ("os.version"));
-        println ("Using port " + nPortNumber + " and document file name " + msFileName);
-        office = new SimpleOffice (this, nPortNumber);
-        info = new InformationWriter (this);
+        MessageArea.println ("Using port " + nPortNumber
+            + " and document file name " + msFileName);
+        office = new SimpleOffice (nPortNumber);
+        info = new InformationWriter ();
 
         addWindowListener (new WindowAdapter ()
             { public void windowClosing (WindowEvent e)
@@ -129,81 +136,47 @@ public class AccessibilityWorkBench
         getContentPane().setLayout (aLayout);
 
         //  Accessible Tree.
-        maTree = new AccessibilityTree ((MessageInterface)this, (Print)this);
-        aScrollPane = new JScrollPane(maTree,
-            JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+        maTree = new AccessibilityTree ();
+        maTree.setMinimumSize (new Dimension (250,300));
+        //        maTree.setPreferredSize (new Dimension (300,500));
+        JScrollPane aTreeScrollPane = new JScrollPane(maTree,
+            JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
             JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-        constraints = new GridBagConstraints ();
-        constraints.gridx = 0;
-        constraints.gridy = 0;
-        constraints.gridwidth = 1;
-        constraints.gridheight = 2;
-        constraints.weightx = 2;
-        constraints.weighty = 1;
-        constraints.fill = GridBagConstraints.BOTH;
-        getContentPane().add (aScrollPane, constraints);
 
         //  Canvas.
-        maCanvas = new Canvas (this);
+        maCanvas = new Canvas ();
         maCanvas.setTree (maTree);
         maTree.SetCanvas (maCanvas);
-        maCanvas.setPreferredSize (new Dimension (1000,800));
-        aScrollPane = new JScrollPane(maCanvas,
-            JScrollPane.VERTICAL_SCROLLBAR_ALWAYS/*AS_NEEDED*/,
-            JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS/*AS_NEEDED*/);
-        constraints = new GridBagConstraints ();
-        constraints.gridx = 1;
-        constraints.gridy = 0;
-        constraints.gridwidth = 1;
-        constraints.gridheight = 1;
-        constraints.weightx = 3;
-        constraints.weighty = 3;
-        constraints.fill = GridBagConstraints.BOTH;
-        getContentPane().add (aScrollPane, constraints);
+        maCanvas.setPreferredSize (new Dimension (1000,1000));
+
+        // Split pane for tree view and canvas.
+        JSplitPane aViewSplitPane = new JSplitPane (JSplitPane.HORIZONTAL_SPLIT,
+                                                    aTreeScrollPane, maCanvas);
+        aViewSplitPane.setOneTouchExpandable(true);
+        aViewSplitPane.setDividerLocation (aTreeScrollPane.getPreferredSize().width);
 
         //  Text output area.
-        maOutputArea = new JTextArea (5,50);
-        maScrollPane = new JScrollPane(maOutputArea,
-            JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
-            JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        constraints = new GridBagConstraints ();
-        constraints.gridx = 1;
-        constraints.gridy = 1;
-        constraints.gridwidth = 1;
-        constraints.gridheight = 1;
-        constraints.weightx = 3;
-        constraints.weighty = 1;
-        constraints.fill = GridBagConstraints.BOTH;
-        getContentPane().add (maScrollPane, constraints);
+        maMessageArea = MessageArea.Instance ();
+        maMessageArea.setMinimumSize (new Dimension (50,50));
+        maMessageArea.setPreferredSize (new Dimension (300,100));
 
-        //  Message output area.
-        maMessageArea = new JTextArea (5,20);
-        constraints = new GridBagConstraints ();
-        constraints.gridx = 0;
-        constraints.gridy = 2;
-        constraints.gridwidth = 2;
-        constraints.gridheight = 1;
-        constraints.weightx = 3;
-        constraints.weighty = 0;
-        constraints.fill = GridBagConstraints.HORIZONTAL;
-        getContentPane().add (maMessageArea, constraints);
+        // Split pane for the two views and the message area.
+        JSplitPane aSplitPane = new JSplitPane (JSplitPane.VERTICAL_SPLIT,
+            aViewSplitPane, maMessageArea);
+        aSplitPane.setOneTouchExpandable(true);
+        addGridElement (aSplitPane, 0,0, 2,1, 3,3,
+            GridBagConstraints.CENTER, GridBagConstraints.BOTH);
+
 
         // Button bar.
         maButtonBar = new JPanel();
         GridBagLayout aButtonLayout = new GridBagLayout ();
         maButtonBar.setLayout (new FlowLayout());
-        constraints = new GridBagConstraints ();
-        constraints.gridx = 0;
-        constraints.gridy = 3;
-        constraints.gridwidth = 2;
-        constraints.weightx = 1;
-        constraints.anchor = GridBagConstraints.WEST;
-        constraints.fill = GridBagConstraints.BOTH;
-        getContentPane().add (maButtonBar, constraints);
+        addGridElement (maButtonBar, 0,3, 2,1, 1,0,
+            GridBagConstraints.WEST, GridBagConstraints.HORIZONTAL);
 
         //  Buttons.
         aConnectButton = createButton ("Connect", "connect");
-        aLoadButton = createButton ("Load", "load");
         aUpdateButton = createButton ("Update", "update");
         aShapesButton = createButton ("Expand Shapes", "shapes");
         aExpandButton = createButton ("Expand All", "expand");
@@ -213,40 +186,38 @@ public class AccessibilityWorkBench
 
         LoadOptions();
 
-        // Menu bar.
-        maMenuBar = new MenuBar ();
-        setMenuBar (maMenuBar);
-
-        // File menu.
-        Menu aFileMenu = new Menu ("File");
-        maMenuBar.add (aFileMenu);
-        MenuItem aItem;
-        aItem = new MenuItem ("Quit");
-        aFileMenu.add (aItem);
-        aItem.addActionListener (this);
-
-        // Options menu.
-        Menu aOptionsMenu = new Menu ("Options");
-        maMenuBar.add (aOptionsMenu);
-        CheckboxMenuItem aCBItem;
-        aCBItem = new CheckboxMenuItem ("Show Descriptions", maCanvas.getShowDescriptions());
-        aOptionsMenu.add (aCBItem);
-        aCBItem.addActionListener (this);
-
-        aCBItem = new CheckboxMenuItem ("Show Names", maCanvas.getShowNames());
-        aOptionsMenu.add (aCBItem);
-        aCBItem.addActionListener (this);
-
-        aCBItem = new CheckboxMenuItem ("Antialiased Rendering", maCanvas.getAntialiasing());
-        aOptionsMenu.add (aCBItem);
-        aCBItem.addActionListener (this);
+        setJMenuBar (CreateMenuBar ());
 
         setTitle("Accessibility Workbench " + msVersion);
 
         pack ();
         setVisible (true);
+        validate ();
         repaint();
     }
+
+
+
+
+    /** Shortcut method for adding an object to a GridBagLayout.
+    */
+    void addGridElement (JComponent object,
+        int x, int y, int width, int height, int weightx, int weighty,
+        int anchor, int fill)
+    {
+        GridBagConstraints constraints = new GridBagConstraints ();
+        constraints.gridx = x;
+        constraints.gridy = y;
+        constraints.gridwidth = width;
+        constraints.gridheight = height;
+        constraints.weightx = weightx;
+        constraints.weighty = weighty;
+        constraints.anchor = anchor;
+        constraints.fill = fill;
+        getContentPane().add (object, constraints);
+    }
+
+
 
 
     /** Create a new button and place at the right most position into the
@@ -262,6 +233,48 @@ public class AccessibilityWorkBench
         maButtonBar.add (aButton);
         return aButton;
     }
+
+
+
+
+    /** Create a menu bar for the application.
+        @return
+            Returns the new menu bar.  The returned reference is also
+            remembered in the data member <member>maMenuBar</member>.
+    */
+    JMenuBar CreateMenuBar ()
+    {
+        // Menu bar.
+        maMenuBar = new JMenuBar ();
+
+        // File menu.
+        JMenu aFileMenu = new JMenu ("File");
+        maMenuBar.add (aFileMenu);
+        JMenuItem aItem;
+        aItem = new JMenuItem ("Quit");
+        aFileMenu.add (aItem);
+        aItem.addActionListener (this);
+
+        // Options menu.
+        JMenu aOptionsMenu = new JMenu ("Options");
+        maMenuBar.add (aOptionsMenu);
+        JCheckBoxMenuItem aCBItem;
+        aCBItem = new JCheckBoxMenuItem ("Show Descriptions", maCanvas.getShowDescriptions());
+        aOptionsMenu.add (aCBItem);
+        aCBItem.addActionListener (this);
+
+        aCBItem = new JCheckBoxMenuItem ("Show Names", maCanvas.getShowNames());
+        aOptionsMenu.add (aCBItem);
+        aCBItem.addActionListener (this);
+
+        aCBItem = new JCheckBoxMenuItem ("Antialiased Rendering", maCanvas.getAntialiasing());
+        aOptionsMenu.add (aCBItem);
+        aCBItem.addActionListener (this);
+
+        return maMenuBar;
+    }
+
+
 
 
     protected void LoadOptions ()
@@ -331,6 +344,8 @@ public class AccessibilityWorkBench
 
             }
         }
+        catch (java.io.FileNotFoundException e)
+            {}
         catch (Exception e)
         {
             System.out.println ("caught exception while loading options file : " + e);
@@ -370,10 +385,11 @@ public class AccessibilityWorkBench
         maCanvas.clear();
 
         AccessibilityTreeModel aModel = null;
-        System.out.println ("creating new tree model");
-        aModel = new AccessibilityTreeModel (createTreeModelRoot(), this, this);
+        aModel = new AccessibilityTreeModel (createTreeModelRoot());
+
         aModel.setCanvas (maCanvas);
         maTree.setModel (aModel);
+
 
         if (office != null)
         {
@@ -384,13 +400,14 @@ public class AccessibilityWorkBench
             XExtendedToolkit xToolkit = office.getExtendedToolkit();
             // Remove old top window listener.
             if (maTopWindowListener != null)
-                xToolkit.removeTopWindowListener (maTopWindowListener);
+                xToolkit.removeTopWindowListener (maQueuedTopWindowListener);
             // Add top window listener.
             if (xToolkit != null)
             {
-                println ("registering at extended toolkit");
+                MessageArea.println ("registering at extended toolkit");
                 maTopWindowListener = new TopWindowListener (aModel, office);
-                xToolkit.addTopWindowListener (maTopWindowListener);
+                maQueuedTopWindowListener = new QueuedTopWindowListener (maTopWindowListener);
+                xToolkit.addTopWindowListener (maQueuedTopWindowListener);
                 maTopWindowListener.Initialize ();
             }
             else
@@ -411,12 +428,13 @@ public class AccessibilityWorkBench
     {
         aConnectButton.setEnabled (mbInitialized);
         aQuitButton.setEnabled (mbInitialized);
-        aLoadButton.setEnabled (mbInitialized);
         aUpdateButton.setEnabled (mbInitialized);
         aExpandButton.setEnabled (mbInitialized);
         aShapesButton.setEnabled (mbInitialized);
         aTextButton.setEnabled (mbInitialized);
     }
+
+
 
 
     /** Callback for GUI actions from the buttons.
@@ -433,18 +451,6 @@ public class AccessibilityWorkBench
             AccessibilityTreeModel aModel = (AccessibilityTreeModel)maTree.getModel();
             aModel.clear();
             System.exit (0);
-        }
-        else if (e.getActionCommand().equals("load"))
-        {
-            print ("Loading file " + msFileName);
-            mxModel = office.loadDocument (msFileName);
-            if (mxModel == null)
-                println (": could not be loaded");
-            else
-            {
-                println (".");
-                initialize();
-            }
         }
         else if (e.getActionCommand().equals("update"))
         {
@@ -525,58 +531,22 @@ public class AccessibilityWorkBench
             System.out.println("controller disposed");
     }
 
+
+
+
     // XTerminateListener
     public void queryTermination (final com.sun.star.lang.EventObject aEvent) throws RuntimeException
     {
         System.out.println ("Terminate Event : " + aEvent);
     }
 
+
+
+
     // XTerminateListener
     public void notifyTermination (final com.sun.star.lang.EventObject aEvent) throws RuntimeException
     {
         System.out.println ("Notifiy Termination Event : " + aEvent);
-    }
-
-
-    /** Write message into message area.
-    */
-    public void message (String message)
-    {
-        msMessage = message;
-        maMessageArea.setText (msMessage);
-        //        System.out.println (message);
-
-        // Show the new message string immediately.
-        maMessageArea.paintImmediately (maMessageArea.getVisibleRect());
-    }
-
-
-
-
-    public void message_append (String message)
-    {
-        msMessage += message;
-        message (msMessage);
-    }
-
-
-
-
-    public  void print (String text)
-    {
-        maOutputArea.append (text);
-        maOutputArea.paintImmediately (maOutputArea.getVisibleRect());
-    }
-
-
-
-
-    public  void println (String text)
-    {
-        maOutputArea.append (text + "\n");
-        JScrollBar aBar = maScrollPane.getVerticalScrollBar();
-        aBar.setValue (aBar.getMaximum());
-        maOutputArea.paintImmediately (maOutputArea.getVisibleRect());
     }
 
 
@@ -597,18 +567,16 @@ public class AccessibilityWorkBench
         maTree;
     private JScrollPane
         maScrollPane;
-    private JTextArea
-        maOutputArea,
+    private MessageArea
         maMessageArea;
     private JButton
         aConnectButton,
         aQuitButton,
-        aLoadButton,
         aUpdateButton,
         aExpandButton,
         aShapesButton,
         aTextButton;
-    private MenuBar
+    private JMenuBar
         maMenuBar;
     private String
         msMessage;
@@ -616,4 +584,6 @@ public class AccessibilityWorkBench
         mbInitialized;
     private TopWindowListener
         maTopWindowListener;
+    private QueuedTopWindowListener
+        maQueuedTopWindowListener;
 }

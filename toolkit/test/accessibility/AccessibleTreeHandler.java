@@ -52,7 +52,7 @@ class AccessibleTreeHandler
                 try
                 {
                     XAccessible xChild = mxContext.getAccessibleChild (nIndex);
-                    aChild = AccessibilityTreeModel.createDefaultNode (
+                    aChild = NodeFactory.Instance().createDefaultNode (
                         xChild, aParent);
                 }
                 catch( IndexOutOfBoundsException e )
@@ -78,7 +78,7 @@ class AccessibleTreeHandler
         int nIndex = xContext.getAccessibleIndexInParent() + 1;
         if ((nIndex >= 0) || (nIndex <= maChildList.size()))
         {
-            aChild = AccessibilityTreeModel.createDefaultNode (xChild, aParent);
+            aChild = NodeFactory.Instance().createDefaultNode (xChild, aParent);
             maChildList.insertElementAt (aChild, nIndex);
         }
         return aChild;

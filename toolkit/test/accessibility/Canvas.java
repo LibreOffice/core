@@ -20,15 +20,15 @@ import drafts.com.sun.star.accessibility.XAccessibleComponent;
 */
 class Canvas
     extends JPanel
-    implements MouseListener, MouseMotionListener, TreeSelectionListener
+    implements MouseListener, MouseMotionListener, TreeSelectionListener, Scrollable
 {
     public MessageInterface maMessageDisplay;
-    public final int nMaximumWidth = 1000;
-    public final int nMaximumHeight = 1000;
+    public final int nMaximumWidth = 800;
+    public final int nMaximumHeight = 800;
 
     public static boolean bPaintText = false;
 
-    public Canvas (MessageInterface aMessageDisplay)
+    public Canvas ()
     {
         super (true);
         maObjects = new java.util.HashMap ();
@@ -38,13 +38,12 @@ class Canvas
         addMouseListener (this);
         addMouseMotionListener (this);
         maBoundingBox = new Rectangle (0,0,100,100);
-        setPreferredSize (maBoundingBox.getSize());
-        setSize (nMaximumWidth,nMaximumHeight);
-        maMessageDisplay = aMessageDisplay;
+        //        setPreferredSize (new Dimension (nMaximumWidth,nMaximumHeight));
+        //        setSize (nMaximumWidth,nMaximumHeight);
         maTree = null;
-        mnXOffset = 0;
-        mnYOffset = 0;
-        mnScaleFactor = 1;
+        mnHOffset = 0;
+        mnVOffset = 0;
+        mnScale = 1;
     }
 
     public void setTree (JTree aTree)
@@ -96,6 +95,7 @@ class Canvas
     public void updateNode (AccTreeNode aNode)
     {
         int i = maNodes.indexOf (aNode);
+        System.out.println ("updating node " + i);
         if (i != -1)
             ((AccessibleObject)maObjects.get(aNode)).update();
     }
@@ -145,6 +145,8 @@ class Canvas
 
     public void paintComponent (Graphics g)
     {
+        super.paintComponent (g);
+
         Graphics2D g2 = (Graphics2D)g;
         if (mbAntialiasing)
             g2.setRenderingHint (RenderingHints.KEY_ANTIALIASING,
@@ -153,57 +155,93 @@ class Canvas
             g2.setRenderingHint (RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_OFF);
 
-        Rectangle r = g.getClipBounds();
-        g.clearRect (r.x,r.y,r.width,r.height);
+        setupTransformation ();
 
-        // Recalculate scale and offset so that all accessible objects fit
-        // into the area specified by nMaximum(Width,Height)
-        double nXScale = 1,
-            nYScale = 1;
-        int nWidth = (int)maBoundingBox.getWidth() + 50,
-            nHeight = (int)maBoundingBox.getWidth() + 50;
-        mnXOffset = (int)-maBoundingBox.getX() + 25;
-        mnYOffset = (int)-maBoundingBox.getY() + 25;
-        if (nWidth > nMaximumWidth)
-            nXScale = 1.0 * nMaximumWidth / nWidth;
-        if (nHeight > nMaximumHeight)
-            nYScale = 1.0 * nMaximumHeight / nHeight;
-        if (nXScale < nYScale)
-            mnScaleFactor = nXScale;
-        else
-            mnScaleFactor = nYScale;
+        // Draw the screen representation to give a hint of the location of the
+        // accessible object on the screen.
+        Dimension aScreenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        // Fill the screen rectangle.
+        g.setColor (new Color (250,240,230));
+        g.fillRect (
+            (int)(mnHOffset+0.5),
+            (int)(mnVOffset+0.5),
+            (int)(mnScale*aScreenSize.getWidth()),
+            (int)(mnScale*aScreenSize.getHeight()));
+        // Draw a frame arround the screen rectangle to increase its visibility.
+        g.setColor (Color.BLACK);
+        g.drawRect (
+            (int)(mnHOffset+0.5),
+            (int)(mnVOffset+0.5),
+            (int)(mnScale*aScreenSize.getWidth()),
+            (int)(mnScale*aScreenSize.getHeight()));
 
-        //        synchronized (maObjectList)
-        //        {
+        synchronized (maObjectList)
+        {
             int nCount = maObjectList.size();
             for (int i=0; i<nCount; i++)
             {
                 AccessibleObject aAccessibleObject = (AccessibleObject)maObjectList.elementAt(i);
                 aAccessibleObject.paint (
-                    g,
-                    mnXOffset, mnYOffset, mnScaleFactor,
+                    g2,
+                    mnHOffset, mnVOffset, mnScale,
                     mbShowDescriptions, mbShowNames);
             }
-            //        }
+        }
 
         // Paint highlighted frame around active object as the last thing.
         if (maActiveObject != null)
             maActiveObject.paint_highlight (
                 g,
-                mnXOffset, mnYOffset, mnScaleFactor);
+                mnHOffset, mnVOffset, mnScale);
     }
+
+    /** Set up the transformation so that the graphical display can show a
+        centered representation of the whole screen.
+    */
+    private void setupTransformation ()
+    {
+        Dimension aScreenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        Dimension aWidgetSize = getSize();
+        if ((aScreenSize.getWidth() > 0) && (aScreenSize.getHeight() > 0))
+        {
+            // Calculate the scales that would map the screen onto the
+            // widget in both of the coordinate axes and select the smaller
+            // of the two: it maps the screen onto the widget in both axes
+            // at the same time.
+            double nHScale = (aWidgetSize.getWidth() - 10) / aScreenSize.getWidth();
+            double nVScale = (aWidgetSize.getHeight() - 10) / aScreenSize.getHeight();
+            if (nHScale < nVScale)
+                mnScale = nHScale;
+            else
+                mnScale = nVScale;
+
+            // Calculate offsets that center the scaled screen inside the widget.
+            mnHOffset = (aWidgetSize.getWidth() - mnScale*aScreenSize.getWidth()) / 2.0;
+            mnVOffset = (aWidgetSize.getHeight() - mnScale*aScreenSize.getHeight()) / 2.0;
+        }
+        else
+        {
+            // In case of a degenerate (not yet initialized?) screen size
+            // use some meaningless default values.
+            mnScale = 1;
+            mnHOffset = 0;
+            mnVOffset = 0;
+        }
+    }
+
+
 
     /**  Call getAccessibleAt to determine accessible object under mouse.
     */
     public void mouseClicked (MouseEvent e)
     {
-        FindAccessibleObjectUnderMouse (e);
+        /*        FindAccessibleObjectUnderMouse (e);
         // Because we have no access (at the moment) to the root node of the
         // accessibility tree we use the first accessible object inserted
         // into the canvas instead.
         com.sun.star.awt.Point aPosition = new com.sun.star.awt.Point (
-            (int)((e.getX() + mnXOffset) / mnScaleFactor),
-                    (int)((e.getY() + mnYOffset) / mnScaleFactor));
+            (int)((e.getX() + mnHOffset) / mnScale),
+                    (int)((e.getY() + mnVOffset) / mnScale));
         if (maObjects.size() > 0 && maActiveObject != null)
         {
             // Get component interface of object which is to be queried
@@ -225,11 +263,17 @@ class Canvas
         }
         maMessageDisplay.message ("no object found at"
             + aPosition.X + "," + aPosition.Y);
+        */
     }
 
     public void mousePressed (MouseEvent e)
     {
-        FindAccessibleObjectUnderMouse (e);
+        AccessibleObject aObjectUnderMouse = FindAccessibleObjectUnderMouse (e);
+        highlightObject (aObjectUnderMouse);
+        if ((e.getModifiers() & InputEvent.CTRL_MASK) != 0)
+        {
+            maTree.expandPath (aObjectUnderMouse.getPath());
+        }
     }
 
     public void mouseReleased (MouseEvent e)
@@ -258,13 +302,13 @@ class Canvas
     public void mouseMoved (MouseEvent e)
     {
         if ((e.getModifiers() & InputEvent.SHIFT_MASK) != 0)
-            FindAccessibleObjectUnderMouse (e);
+            highlightObject (FindAccessibleObjectUnderMouse (e));
     }
 
-    protected void FindAccessibleObjectUnderMouse (MouseEvent e)
+    protected AccessibleObject FindAccessibleObjectUnderMouse (MouseEvent e)
     {
         int nObjects = maObjects.size();
-        AccessibleObject aNewActiveObject = null;
+        AccessibleObject aObjectUnderMouse = null;
         int nCount = maObjectList.size();
         for (int i=nCount-1; i>=0; --i)
         {
@@ -272,21 +316,11 @@ class Canvas
             if (aObject != null)
                 if (aObject.contains (e.getX(),e.getY()))
                 {
-                    aNewActiveObject = aObject;
+                    aObjectUnderMouse = aObject;
                     break;
                 }
         }
-        if (highlightObject (aNewActiveObject))
-        {
-            if (maActiveObject != null && maTree != null)
-            {
-                maTree.scrollPathToVisible (maActiveObject.getPath());
-                maTree.setSelectionPath (maActiveObject.getPath());
-                maTree.repaint ();
-            }
-
-            repaint ();
-        }
+        return aObjectUnderMouse;
     }
 
     protected boolean highlightObject (AccessibleObject aNewActiveObject)
@@ -299,7 +333,14 @@ class Canvas
             maActiveObject = aNewActiveObject;
             if (maActiveObject != null)
             {
+                if (maTree != null)
+                {
+                    maTree.scrollPathToVisible (maActiveObject.getPath());
+                    maTree.setSelectionPath (maActiveObject.getPath());
+                    maTree.repaint ();
+                }
                 maActiveObject.highlight ();
+                repaint ();
             }
             return true;
         }
@@ -322,14 +363,40 @@ class Canvas
         }
     }
 
+
+    public Dimension getPreferredScrollableViewportSize ()
+    {
+        return new Dimension (nMaximumWidth,nMaximumHeight);
+    }
+
+    public int getScrollableBlockIncrement (Rectangle visibleRect, int orientation, int direction)
+    {
+        return 25;
+    }
+
+    public boolean getScrollableTracksViewportHeight ()
+    {
+        return false;
+    }
+
+    public boolean getScrollableTracksViewportWidth ()
+    {
+        return false;
+    }
+
+    public int getScrollableUnitIncrement(Rectangle visibleRect, int orientation, int direction)
+    {
+        return 1;
+    }
+
     protected int
         mnXAnchor,
         mnYAnchor,
-        maResizeFlag,
-        mnXOffset,
-        mnYOffset;
-    protected double
-        mnScaleFactor;
+        maResizeFlag;
+    private double
+        mnHOffset,
+        mnVOffset,
+        mnScale;
     protected AccessibleObject
         maActiveObject;
     protected java.util.HashMap

@@ -1,4 +1,3 @@
-import com.sun.star.awt.XTopWindowListener;
 import com.sun.star.awt.XWindow;
 import drafts.com.sun.star.awt.XExtendedToolkit;
 import drafts.com.sun.star.accessibility.XAccessible;
@@ -10,7 +9,6 @@ import javax.swing.event.TreeModelEvent;
     model accordingly.
 */
 class TopWindowListener
-    implements XTopWindowListener
 {
     TopWindowListener (AccessibilityTreeModel aModel, SimpleOffice aOffice)
     {
@@ -44,7 +42,8 @@ class TopWindowListener
                 }
                 catch (Exception e)
                 {
-                    System.out.println ("caught exception; " + e);
+                    System.out.println ("caught exception: " + e);
+                    e.printStackTrace();
                 }
             }
             maModel.unlock ((AccessibleTreeNode)maModel.getRoot());
@@ -61,13 +60,13 @@ class TopWindowListener
     private void AddTopLevelNode (XAccessible xNewTopLevelObject)
     {
         Object aObject = maModel.getRoot();
-        System.out.println ("adding node to " + aObject);
+        if ((xNewTopLevelObject != null) && xNewTopLevelObject.getAccessibleContext()== null)
+            System.out.println ("top level window not accessible");
         if (aObject instanceof VectorNode && xNewTopLevelObject != null)
         {
-            System.out.println ("adding node for " + xNewTopLevelObject);
             VectorNode aRoot = (VectorNode) aObject;
             AccessibleTreeNode aNode =
-                AccessibilityTreeModel.createDefaultNode (xNewTopLevelObject, aRoot);
+                NodeFactory.Instance().createDefaultNode (xNewTopLevelObject, aRoot);
             aRoot.addChild (aNode);
             maModel.fireTreeNodesInserted (maModel.createEvent (aRoot, aNode));
         }
@@ -87,11 +86,14 @@ class TopWindowListener
         {
             System.out.println ("removing node " + xTopLevelObject);
             VectorNode aRoot = (VectorNode) aObject;
+            maModel.removeNode (xTopLevelObject.getAccessibleContext());
+            /*
             AccessibleTreeNode aNode = maModel.getNode (xTopLevelObject);
             TreeModelEvent aEvent = maModel.createEvent (aRoot, aNode);
             maModel.removeChild (aNode);
             System.out.println (aNode);
             maModel.fireTreeNodesRemoved (aEvent);
+            */
         }
     }
 
@@ -126,7 +128,8 @@ class TopWindowListener
 
 
     // XTopWindowListener
-    public void windowOpened (final com.sun.star.lang.EventObject aEvent) throws RuntimeException
+    public void windowOpened (final com.sun.star.lang.EventObject aEvent)
+        throws RuntimeException
     {
         System.out.println ("Top window opened: " + aEvent.Source);
         if (maModel != null)
@@ -141,7 +144,7 @@ class TopWindowListener
                 if (xAccessible == null)
                     System.out.println ("event source is no XAccessible");
                 else
-                AddTopLevelNode (xAccessible);
+                    AddTopLevelNode (xAccessible);
             }
         }
     }
@@ -149,15 +152,8 @@ class TopWindowListener
 
 
 
-    public void windowClosing (final com.sun.star.lang.EventObject aEvent) throws RuntimeException
-    {
-        System.out.println ("Top window closing: " + aEvent);
-    }
-
-
-
-
-    public void windowClosed (final com.sun.star.lang.EventObject aEvent) throws RuntimeException
+    public void windowClosed (final com.sun.star.lang.EventObject aEvent)
+        throws RuntimeException
     {
         System.out.println ("Top window closed: " + aEvent);
         if (maModel != null)
@@ -177,31 +173,13 @@ class TopWindowListener
         }
     }
 
-
-
-
-    public void windowMinimized (final com.sun.star.lang.EventObject aEvent) throws RuntimeException
+    public void disposing (final com.sun.star.lang.EventObject aEvent)
     {
-        System.out.println ("Top window minimized: " + aEvent);
-    }
-    public void windowNormalized (final com.sun.star.lang.EventObject aEvent) throws RuntimeException
-    {
-        System.out.println ("Top window normalized: " + aEvent);
-    }
-    public void windowActivated (final com.sun.star.lang.EventObject aEvent) throws RuntimeException
-    {
-        System.out.println ("Top window actived: " + aEvent);
-    }
-    public void windowDeactivated (final com.sun.star.lang.EventObject aEvent) throws RuntimeException
-    {
-        System.out.println ("Top window deactived: " + aEvent);
+        System.out.println ("Top window disposed: " + aEvent);
     }
 
-    // XEventListener
-    public void disposing (com.sun.star.lang.EventObject aEvent)
-    {
-        System.out.println ("broadcaster disposed");
-    }
+
+
 
     private AccessibilityTreeModel
         maModel;

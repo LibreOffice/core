@@ -55,6 +55,11 @@ abstract class NodeHandler
         return aChild;
     }
 
+    public AccessibleTreeNode getChildNoCreate (AccessibleTreeNode aParent, int nIndex)
+    {
+        return (AccessibleTreeNode)maChildList.get(nIndex);
+    }
+
     /** Remove the specified child from the list of children.
     */
     public boolean removeChild (AccessibleTreeNode aNode, int nIndex)

@@ -48,24 +48,21 @@ import drafts.com.sun.star.awt.XExtendedToolkit;
     getting various objects.
 */
 public class SimpleOffice
-    implements Print
 {
     XDesktop mxDesktop = null;
-    Print maPrinter;
     OfficeConnection aConnection;
     int mnPortNumber;
 
-    public SimpleOffice (Print aPrinter, int nPortNumber)
+    public SimpleOffice (int nPortNumber)
     {
         mnPortNumber = nPortNumber;
-        maPrinter = aPrinter;
         connect ();
         getDesktop ();
     }
 
     public void connect ()
     {
-        aConnection = new OfficeConnection (maPrinter, mnPortNumber);
+        aConnection = new OfficeConnection (mnPortNumber);
         mxDesktop = null;
         getDesktop ();
     }
@@ -92,12 +89,12 @@ public class SimpleOffice
         }
         catch (java.lang.NullPointerException e)
         {
-            println ("caught exception while loading "
+            MessageArea.println ("caught exception while loading "
                 + URL + " : " + e);
         }
         catch (Exception e)
         {
-            println ("caught exception while loading "
+            MessageArea.println ("caught exception while loading "
                 + URL + " : " + e);
         }
         return xModel;
@@ -120,12 +117,12 @@ public class SimpleOffice
             {
                 XTask xTask = (XTask) UnoRuntime.queryInterface(
                     XTask.class, xE.nextElement());
-                print (xTask.getName());
+                MessageArea.print (xTask.getName());
             }
         }
         catch (Exception e)
         {
-            println ("caught exception while getting Model " + name
+            MessageArea.println ("caught exception while getting Model " + name
                 + ": " + e);
         }
         return xModel;
@@ -140,7 +137,7 @@ public class SimpleOffice
             return xController.getModel();
         else
         {
-            println ("can't cast view to controller");
+            MessageArea.println ("can't cast view to controller");
             return null;
         }
     }
@@ -155,11 +152,11 @@ public class SimpleOffice
             XMultiServiceFactory xMSF = aConnection.getServiceManager ();
             if (xMSF == null)
             {
-                println ("can't connect to office");
+                MessageArea.println ("can't connect to office");
                 return null;
             }
             else
-                println ("Connected successfully.");
+                MessageArea.println ("Connected successfully.");
 
             //  Create a new desktop.
             mxDesktop = (XDesktop) UnoRuntime.queryInterface(
@@ -169,7 +166,7 @@ public class SimpleOffice
         }
         catch (Exception e)
         {
-            println ("caught exception while creating desktop: "
+            MessageArea.println ("caught exception while creating desktop: "
                 + e);
         }
 
@@ -197,7 +194,7 @@ public class SimpleOffice
         }
         catch (Exception e)
         {
-            println ("caught exception while creating extended toolkit: " + e);
+            MessageArea.println ("caught exception while creating extended toolkit: " + e);
         }
 
         return xToolkit;
@@ -215,7 +212,7 @@ public class SimpleOffice
         }
         catch (Exception e)
         {
-            println (
+            MessageArea.println (
                 "caught exception while getting accessible object" + e);
             e.printStackTrace();
         }
@@ -241,7 +238,7 @@ public class SimpleOffice
         }
         catch (Exception e)
         {
-            println (
+            MessageArea.println (
                 "caught exception while getting accessible root" + e);
             e.printStackTrace();
         }
@@ -270,20 +267,20 @@ public class SimpleOffice
         try
         {
             if (xModel == null)
-                println ("invalid model (==null)");
+                MessageArea.println ("invalid model (==null)");
             XController xController = xModel.getCurrentController();
             if (xController == null)
-                println ("can't get controller from model");
+                MessageArea.println ("can't get controller from model");
             XFrame xFrame = xController.getFrame();
             if (xFrame == null)
-                println ("can't get frame from controller");
+                MessageArea.println ("can't get frame from controller");
             xWindow = xFrame.getComponentWindow ();
             if (xWindow == null)
-                println ("can't get window from frame");
+                MessageArea.println ("can't get window from frame");
         }
         catch (Exception e)
         {
-            println ("caught exception while getting current window" + e);
+            MessageArea.println ("caught exception while getting current window" + e);
         }
 
         return xWindow;
@@ -307,13 +304,13 @@ public class SimpleOffice
         try
         {
             if (xView == null)
-                println ("can't get current draw page from null view");
+                MessageArea.println ("can't get current draw page from null view");
             else
                 xPage = xView.getCurrentPage();
         }
         catch (Exception e)
         {
-            println ("caught exception while getting current draw page : " + e);
+            MessageArea.println ("caught exception while getting current draw page : " + e);
         }
 
         return xPage;
@@ -332,31 +329,31 @@ public class SimpleOffice
     public XDrawView getCurrentView (XDesktop xDesktop)
     {
         if (xDesktop == null)
-            println ("can't get desktop to retrieve current view");
+            MessageArea.println ("can't get desktop to retrieve current view");
 
         XDrawView xView = null;
         try
         {
             XComponent xComponent = xDesktop.getCurrentComponent();
             if (xComponent == null)
-                println ("can't get component to retrieve current view");
+                MessageArea.println ("can't get component to retrieve current view");
 
             XFrame xFrame = xDesktop.getCurrentFrame();
             if (xFrame == null)
-                println ("can't get frame to retrieve current view");
+                MessageArea.println ("can't get frame to retrieve current view");
 
             XController xController = xFrame.getController();
             if (xController == null)
-                println ("can't get controller to retrieve current view");
+                MessageArea.println ("can't get controller to retrieve current view");
 
             xView = (XDrawView) UnoRuntime.queryInterface(
                 XDrawView.class, xController);
             if (xView == null)
-                println ("could not cast controller into view");
+                MessageArea.println ("could not cast controller into view");
         }
         catch (Exception e)
         {
-            println ("caught exception while getting current view : " + e);
+            MessageArea.println ("caught exception while getting current view : " + e);
         }
 
         return xView;
@@ -388,18 +385,5 @@ public class SimpleOffice
         }
         else
             return null;
-    }
-
-
-
-
-    public  void    print (String text)
-    {
-        maPrinter.print (text);
-    }
-
-    public  void    println (String text)
-    {
-        maPrinter.println (text);
     }
 }

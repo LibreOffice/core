@@ -18,10 +18,9 @@ import com.sun.star.uno.RuntimeException;
  */
 public class OfficeConnection
 {
-    public OfficeConnection (Print p, int nPortNumber)
+    public OfficeConnection (int nPortNumber)
     {
         mnDefaultPort = nPortNumber;
-        print = p;
         connect ();
     }
 
@@ -86,9 +85,9 @@ public class OfficeConnection
 
         catch (Exception e)
         {
-            print.println ("Could not connect with " + sConnectString + " : " + e);
-            print.println ("Please start OpenOffice/StarOffice with "
-                                + "\"-accept=socket,host=localhost,port=5678;urp;\"");
+            MessageArea.println ("Could not connect with " + sConnectString + " : " + e);
+            MessageArea.println ("Please start OpenOffice/StarOffice with "
+                + "\"-accept=socket,host=localhost,port=5678;urp;\"");
         }
     }
 
@@ -100,6 +99,4 @@ public class OfficeConnection
         not that that has been successfull.
     */
     private boolean mbInitialized = false;
-
-    private Print print;
 }

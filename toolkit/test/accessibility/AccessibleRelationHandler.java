@@ -13,9 +13,14 @@ class AccessibleRelationHandler
 {
     public NodeHandler createHandler( XAccessibleContext xContext )
     {
-        XAccessibleRelationSet xRelation = xContext.getAccessibleRelationSet();
-        return (xRelation == null) ? null :
-            new AccessibleRelationHandler(xContext);
+        AccessibleRelationHandler aHandler = null;
+        if (xContext != null)
+        {
+            XAccessibleRelationSet xRelation = xContext.getAccessibleRelationSet();
+            if (xRelation != null)
+                aHandler = new AccessibleRelationHandler(xContext);
+        }
+        return aHandler;
     }
 
     public AccessibleRelationHandler()

@@ -44,6 +44,12 @@ class AccessibleTreeNode
         throw new IndexOutOfBoundsException();
     }
 
+    public AccessibleTreeNode getChildNoCreate (int nIndex)
+        throws IndexOutOfBoundsException
+    {
+        throw new IndexOutOfBoundsException();
+    }
+
     public boolean removeChild (int nIndex)
         throws IndexOutOfBoundsException
     {
