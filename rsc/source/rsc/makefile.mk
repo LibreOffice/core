@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:42:56 $
+#   last change: $Author: vg $ $Date: 2003-07-02 14:51:51 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -70,6 +70,10 @@ TARGET=rscrsc
 .INCLUDE :  svpre.mk
 .INCLUDE :  settings.mk
 .INCLUDE :  sv.mk
+
+.IF "$(OS)"=="IRIX"
+NOOPTFILES=  $(OBJ)$/rsc.obj
+.ENDIF
 
 OBJFILES=	 $(OBJ)$/rsc.obj              \
                  $(OBJ)$/rscinst.obj
