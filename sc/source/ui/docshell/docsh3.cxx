@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh3.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: sab $ $Date: 2001-09-28 17:16:55 $
+ *  last change: $Author: er $ $Date: 2002-01-21 16:27:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -889,7 +889,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc )
                             ((const ScChangeActionContent*)pSourceAction)->GetNewString( aValue );
                             BYTE eMatrix = MM_NONE;
                             const ScBaseCell* pCell = ((const ScChangeActionContent*)pSourceAction)->GetNewCell();
-                            if ( pCell->GetCellType() == CELLTYPE_FORMULA )
+                            if ( pCell && pCell->GetCellType() == CELLTYPE_FORMULA )
                                 eMatrix = ((const ScFormulaCell*)pCell)->GetMatrixFlag();
                             switch ( eMatrix )
                             {
