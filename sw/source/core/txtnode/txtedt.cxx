@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtedt.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: fme $ $Date: 2001-11-08 08:34:21 $
+ *  last change: $Author: fme $ $Date: 2001-11-20 08:25:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -696,15 +696,30 @@ USHORT SwTxtNode::Spell(SwSpellArgs* pArgs)
                 }
             }
 
-            // get next language in order to find next word
-            xub_StrLen nNextBegin = aScanner.GetBegin() + rWord.Len();
+            // get next language in order to find next or previous word
+            xub_StrLen nNextBegin;
+            short nInc;
+
+            if ( bReverse )
+            {
+                nNextBegin = aScanner.GetBegin() ? aScanner.GetBegin() - 1 : 0;
+                nInc = -1;
+            }
+            else
+            {
+                nNextBegin = aScanner.GetBegin() + rWord.Len();
+                nInc = 1;
+            }
+
             // first we have to skip some whitespace characters
-            while ( nNextBegin < aText.Len() &&
+            while ( ( bReverse ? nNextBegin : ( nNextBegin < aText.Len() ) ) &&
                     ( 0x3000 == aText.GetChar( nNextBegin ) ||
                       ' ' == aText.GetChar( nNextBegin ) ||
                       '\t' == aText.GetChar( nNextBegin ) ||
                       0x0a == aText.GetChar( nNextBegin ) ) )
-                nNextBegin++;
+            {
+                nNextBegin += nInc;
+            }
 
             if ( nNextBegin < aText.Len() )
                 eActLang = GetLang( nNextBegin );
