@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsrch.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-27 21:43:57 $
+ *  last change: $Author: jp $ $Date: 2001-09-13 15:27:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -716,11 +716,12 @@ ULONG SwView::FUNC_Search( const SwSearchOptions& rOptions )
     else if( pSrchItem->GetPattern() )
     {
         // Suchen (und ersetzen) von Vorlagen
+        const String sRplStr( pSrchItem->GetReplaceString() );
         nFound = pWrtShell->SearchTempl( pSrchItem->GetSearchString(),
             rOptions.eStart,
             rOptions.eEnd,
             FindRanges(eRanges),
-            bDoReplace ? &pSrchItem->GetReplaceString() : 0 );
+            bDoReplace ? &sRplStr : 0 );
     }
     else
     {
@@ -833,6 +834,9 @@ void SwView::StateSearch(SfxItemSet &rSet)
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.6  2001/03/27 21:43:57  jp
+    optimize SeachOption initialisation
+
     Revision 1.5  2001/03/19 16:00:48  tl
     use TransliterationModules_IGNORE_CASE now
 
