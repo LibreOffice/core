@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excobj.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-11 08:59:32 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 15:32:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -387,8 +387,8 @@ void ImportExcel::ChartSelection( void )
                     nCol2 &= 0x3FFF;
                 }
 
-                SCTAB nScTab1 = static_cast<SCTAB>(nTab1);
-                SCTAB nScTab2 = static_cast<SCTAB>(nTab2);
+                SCTAB nScTab1 = 0;
+                SCTAB nScTab2 = 0;
                 if( pExcRoot->pIR->GetLinkManager().GetScTabRange( nScTab1, nScTab2, nIxti ) )
                     bValues = TRUE;
                 nTab1 = static_cast<UINT16>(nScTab1);
