@@ -1,8 +1,8 @@
 /*************************************************************************
  *
- *  $RCSfile: AccessController.idl,v $
+ *  $RCSfile: Policy.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.1 $
  *
  *  last change: $Author: dbo $ $Date: 2002-01-07 16:08:18 $
  *
@@ -58,31 +58,21 @@
  *
  *
  ************************************************************************/
-#ifndef __com_sun_star_security_AccessController_idl__
-#define __com_sun_star_security_AccessController_idl__
+#ifndef __com_sun_star_security_Policy_idl__
+#define __com_sun_star_security_Policy_idl__
 
-#ifndef __com_sun_star_security_XAccessController_idl__
-#include <com/sun/star/security/XAccessController.idl>
+#ifndef __com_sun_star_security_XPolicy_idl__
+#include <com/sun/star/security/XPolicy.idl>
 #endif
 
 
-//=============================================================================
-
 module com {  module sun {  module star {  module security {
 
-//=============================================================================
-
-/** This service supports the XAccessController interface for checking security
-    permissions.
-    <p>
-    It obviously has also to be ensured that the object is process-local to assure
-    that permission checks are not corrupted via insecure inter-process
-    communication.
-    </p>
+/** Service for getting permissions collections.
 */
-service AccessController
+service Policy
 {
-    interface XAccessController;
+    interface XPolicy;
 };
 
 }; }; }; };
