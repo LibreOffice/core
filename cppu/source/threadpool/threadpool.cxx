@@ -2,9 +2,9 @@
  *
  *  $RCSfile: threadpool.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dbo $ $Date: 2000-12-21 14:39:23 $
+ *  last change: $Author: jbu $ $Date: 2001-02-20 14:44:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -179,21 +179,38 @@ namespace cppu_threadpool
 
     void ThreadPool::dispose( sal_Int64 nDisposeId )
     {
-        DisposedCallerAdmin::getInstance()->dispose( nDisposeId );
-
-        MutexGuard guard( m_mutex );
-        for( ThreadIdHashMap::iterator ii = m_mapQueue.begin() ;
-             ii != m_mapQueue.end();
-             ++ii)
+        if( nDisposeId )
         {
-            if( (*ii).second.first )
+            DisposedCallerAdmin::getInstance()->dispose( nDisposeId );
+
+            MutexGuard guard( m_mutex );
+            for( ThreadIdHashMap::iterator ii = m_mapQueue.begin() ;
+                 ii != m_mapQueue.end();
+                 ++ii)
             {
-                (*ii).second.first->dispose( nDisposeId );
+                if( (*ii).second.first )
+                {
+                    (*ii).second.first->dispose( nDisposeId );
+                }
+                if( (*ii).second.second )
+                {
+                    (*ii).second.second->dispose( nDisposeId );
+                }
             }
-            if( (*ii).second.second )
+        }
+        else
+        {
             {
-                (*ii).second.second->dispose( nDisposeId );
+                MutexGuard guard( m_mutexWaitingThreadList );
+                for( WaitingThreadList::iterator ii = m_lstThreads.begin() ;
+                     ii != m_lstThreads.end() ;
+                     ++ ii )
+                {
+                    // wake the threads up
+                    osl_setCondition( (*ii)->condition );
+                }
             }
+            ThreadAdmin::getInstance()->join();
         }
     }
 
