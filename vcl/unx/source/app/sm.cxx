@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sm.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: pl $ $Date: 2002-10-16 13:51:12 $
+ *  last change: $Author: vg $ $Date: 2003-04-11 17:32:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,8 +69,12 @@
 #endif
 #include <stdio.h>
 
-#include <vos/process.hxx>
-#include <vos/security.hxx>
+#include <osl/process.h>
+#include <osl/security.h>
+
+#include <prex.h>
+#include <X11/Xatom.h>
+#include <postx.h>
 
 #ifndef _VCL_SM_HXX
 #include <sm.hxx>
@@ -160,10 +164,15 @@ static void BuildSmPropertyList()
         pSmProps[ 2 ].vals[1].length    = aRestartOption.Len()+1;
         pSmProps[ 2 ].vals[1].value     = strdup( aRestartOption.GetBuffer() );
 
-        NAMESPACE_VOS(OSecurity) aSecurity;
-        ::rtl::OUString aUserName;
-        aSecurity.getUserName( aUserName );
-        ::rtl::OString aUser( ::rtl::OUStringToOString( aUserName, osl_getThreadTextEncoding() ) );
+        rtl::OUString aUserName;
+        rtl::OString aUser;
+        oslSecurity aSec = osl_getCurrentSecurity();
+        if( aSec )
+        {
+            osl_getUserName( aSec, &aUserName.pData );
+            aUser = rtl::OUStringToOString( aUserName, osl_getThreadTextEncoding() );
+            osl_freeSecurityHandle( aSec );
+        }
 
         pSmProps[ 3 ].name      = SmUserID;
         pSmProps[ 3 ].type      = SmARRAY8;
@@ -302,9 +311,23 @@ void SessionManagerClient::open()
         free( pClientID );
         pClientID = NULL;
         ICEConnectionObserver::unlock();
+
+        SalDisplay* pDisp = GetSalData()->GetDefDisp();
+        if( pDisp->GetDrawable() && aClientID.Len() )
+        {
+            XChangeProperty( pDisp->GetDisplay(),
+                             pDisp->GetDrawable(),
+                             XInternAtom( pDisp->GetDisplay(), "SM_CLIENT_ID", False ),
+                             XA_STRING,
+                             8,
+                             PropModeReplace,
+                             (unsigned char*)aClientID.GetBuffer(),
+                             aClientID.Len()
+                             );
+        }
     }
 #ifdef DEBUG
-    else
+    else if( aSmcConnection )
         fprintf( stderr, "no SESSION_MANAGER\n" );
 #endif
 #endif
@@ -328,13 +351,11 @@ void SessionManagerClient::close()
 
 String SessionManagerClient::getExecName()
 {
-    static NAMESPACE_VOS( OStartupInfo ) aStartupInfo;
-
-    ::rtl::OUString aExec, aSysExec;
-    aStartupInfo.getExecutableFile( aExec );
+    rtl::OUString aExec, aSysExec;
+    osl_getExecutableFile( &aExec.pData );
     osl_getSystemPathFromFileURL( aExec.pData, &aSysExec.pData );
 
-    int nPos = aSysExec.indexOf( ::rtl::OUString::createFromAscii( ".bin" ) );
+    int nPos = aSysExec.indexOf( rtl::OUString::createFromAscii( ".bin" ) );
     if( nPos != -1 )
         aSysExec = aSysExec.copy( 0, nPos );
     return aSysExec;
