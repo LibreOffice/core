@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Component.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 15:24:39 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 18:49:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,7 @@ import javax.accessibility.AccessibleContext;
 import javax.accessibility.AccessibleState;
 
 import com.sun.star.uno.*;
-import drafts.com.sun.star.accessibility.*;
+import com.sun.star.accessibility.*;
 
 public abstract class Component extends java.awt.Component {
     public static final Type RectangleType = new Type(com.sun.star.awt.Rectangle.class);
@@ -355,40 +355,40 @@ public abstract class Component extends java.awt.Component {
         /** Called by OpenOffice process to notify property changes */
         public void notifyEvent(AccessibleEventObject event) {
             switch (event.EventId) {
-                case AccessibleEventId.ACCESSIBLE_ACTION_EVENT:
+                case AccessibleEventId.ACTION_CHANGED:
                     firePropertyChange(accessibleContext.ACCESSIBLE_ACTION_PROPERTY,
                         toNumber(event.OldValue), toNumber(event.NewValue));
                     break;
-                case AccessibleEventId.ACCESSIBLE_NAME_EVENT:
+                case AccessibleEventId.NAME_CHANGED:
                     // Set the accessible name for the corresponding context, which will fire a property
                     // change event itself
                     handleNameChangedEvent(event.NewValue);
                     break;
-                case AccessibleEventId.ACCESSIBLE_DESCRIPTION_EVENT:
+                case AccessibleEventId.DESCRIPTION_CHANGED:
                     // Set the accessible description for the corresponding context, which will fire a property
                     // change event itself - so do not set propertyName !
                     handleDescriptionChangedEvent(event.NewValue);
                     break;
-                case AccessibleEventId.ACCESSIBLE_CHILD_EVENT:
+                case AccessibleEventId.CHILD:
                     if (Build.DEBUG) {
                         System.out.println("Unexpected child event for object of role " + getAccessibleContext().getAccessibleRole());
                     }
                     break;
-                case AccessibleEventId.ACCESSIBLE_STATE_EVENT:
+                case AccessibleEventId.STATE_CHANGED:
                     // Update the internal state set and fire the appropriate PropertyChangedEvent
                     handleStateChangedEvent(event.OldValue, event.NewValue);
                     break;
-                case AccessibleEventId.ACCESSIBLE_VISIBLE_DATA_EVENT:
-                case AccessibleEventId.ACCESSIBLE_BOUNDRECT_EVENT:
+                case AccessibleEventId.VISIBLE_DATA_CHANGED:
+                case AccessibleEventId.BOUNDRECT_CHANGED:
                     firePropertyChange(AccessibleContext.ACCESSIBLE_VISIBLE_DATA_PROPERTY, null, null);
                     break;
-                case AccessibleEventId.ACCESSIBLE_TEXT_EVENT:
+                case AccessibleEventId.TEXT_CHANGED:
                     handleTextChangedEvent(event.OldValue, event.NewValue);
                     break;
-                case AccessibleEventId.ACCESSIBLE_CARET_EVENT:
+                case AccessibleEventId.CARET_CHANGED:
                     firePropertyChange(accessibleContext.ACCESSIBLE_CARET_PROPERTY, toNumber(event.OldValue), toNumber(event.NewValue));
                     break;
-                case AccessibleEventId.ACCESSIBLE_VALUE_EVENT:
+                case AccessibleEventId.VALUE_CHANGED:
                     firePropertyChange(accessibleContext.ACCESSIBLE_VALUE_PROPERTY, toNumber(event.OldValue), toNumber(event.NewValue));
                 default:
                     // Warn about unhandled events
@@ -681,7 +681,7 @@ public abstract class Component extends java.awt.Component {
 
         public boolean contains(java.awt.Point p) {
             try {
-                return unoAccessibleComponent.contains(new com.sun.star.awt.Point(p.x, p.y));
+                return unoAccessibleComponent.containsPoint(new com.sun.star.awt.Point(p.x, p.y));
             } catch (com.sun.star.uno.RuntimeException e) {
                 return false;
             }
