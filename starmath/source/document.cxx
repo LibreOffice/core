@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: tl $ $Date: 2002-07-12 07:26:02 $
+ *  last change: $Author: tl $ $Date: 2002-07-24 10:49:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -731,7 +731,7 @@ void SmDocShell::Resize()
     SetVisAreaSize( aVisSize );
     SmViewShell *pViewSh = SmGetActiveView();
     if (pViewSh)
-        pViewSh->GetViewFrame()->GetBindings().Invalidate(SID_GRAPHIC);
+        pViewSh->GetGraphicWindow().Invalidate();
 
     if ( bIsEnabled )
         EnableSetModified( bIsEnabled );
