@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-07 09:57:45 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 16:09:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,17 +100,14 @@
 #include "appdata.hxx"
 #include "msg.hxx"
 #include "msgpool.hxx"
-#include "stbmgr.hxx"
 #include "sfxresid.hxx"
 #include "macrconf.hxx"
 #include "minfitem.hxx"
-#include "cfgmgr.hxx"
 #include "sfxresid.hxx"
 #include "objsh.hxx"
 #include "dispatch.hxx"
 #include "sfxtypes.hxx"
 #include "eventdlg.hxx"
-#include "tbxopdlg.hxx"
 #include "minfitem.hxx"
 #include "viewfrm.hxx"
 #include "workwin.hxx"
@@ -313,7 +310,7 @@ struct SfxStatBarInfo_Impl
 */
 //DECL_PTRARRAY(SfxStbInfoArr_Impl, SfxStatBarInfo_Impl*, 20, 4);
 SV_IMPL_PTRARR(SfxGroupInfoArr_Impl, SfxGroupInfoPtr);
-
+/*
 SfxMenuConfigEntry::SfxMenuConfigEntry( USHORT nInitId, const String& rInitStr,
                                     const String& rHelpText, BOOL bPopup )
     : nId( nInitId )
@@ -359,13 +356,8 @@ SfxMenuConfigEntry::~SfxMenuConfigEntry()
     if ( SfxMacroConfig::IsMacroSlot( nId ) )
         SFX_APP()->GetMacroConfig()->ReleaseSlotId( nId );
 }
-
-SfxConfigFunctionListBox_Impl::SfxConfigFunctionListBox_Impl( Window* pParent, const ResId& rResId)
-/*  Beschreibung
-    Diese Listbox arbeiteitet mit der Grouplistbox zusammen und zeigt die zur Konfigurierung verf"ugbaren
-    Funktionen bzw. Macros an, die zur selektierten Gruppe bzw. zum selektierten Modul in der Grouplistbox
-    geh"oren.
 */
+SfxConfigFunctionListBox_Impl::SfxConfigFunctionListBox_Impl( Window* pParent, const ResId& rResId)
     : SvTreeListBox( pParent, rResId )
     , pCurEntry( 0 )
     , pStylesInfo( 0 )
@@ -385,11 +377,6 @@ SfxConfigFunctionListBox_Impl::~SfxConfigFunctionListBox_Impl()
 }
 
 void SfxConfigFunctionListBox_Impl::MouseMove( const MouseEvent& rMEvt )
-/*  Beschreibung
-    Virtuelle Methode, die gerufen wird, wenn der Mauszeiger "uber der TreeListBox bewegt wurde.
-    Wenn die Position des Mauszeigers "uber dem aktuell selektierten Entry liegt, wird ein Timer
-    aufgesetzt, um ggf. einen Hilfetext einzublenden.
-*/
 {
     /* --> PB 2004-12-01 #i37000# - no own help text needed any longer
     Point aMousePos = rMEvt.GetPosPixel();
@@ -1842,7 +1829,7 @@ void SfxConfigGroupListBox_Impl::SelectMacro( const String& rBasic,
         pEntry = NextSibling( pEntry );
     }
 }
-
+/*
 void SfxConfigDialog::ActivateToolBoxConfig( USHORT nId )
 {
     SetCurPageId( TP_CONFIG_OBJECTBAR );
@@ -1913,7 +1900,7 @@ SfxTabPage *CreateStatusBarConfigPage( Window *pParent, const SfxItemSet& rSet )
 {
     return new SfxStatusBarConfigPage( pParent, rSet );
 }
-*/
+
 SfxTabPage *CreateObjectBarConfigPage( Window *pParent, const SfxItemSet& rSet )
 {
     return NULL;
@@ -1953,7 +1940,7 @@ short SfxConfigDialog::Ok()
 }
 
 // SfxStatusBarConfigPage::Ctor() **********************************************
-/*
+
 SfxStatusBarConfigPage::SfxStatusBarConfigPage( Window *pParent, const SfxItemSet& rSet ) :
 
     SfxTabPage( pParent, SfxResId( TP_CONFIG_STATBAR ), rSet ),
@@ -2394,7 +2381,7 @@ void SfxStatusBarConfigPage::Reset( const SfxItemSet& )
         Init();
     }
 }
-*/
+
 String SfxConfigDialog::FileDialog_Impl( Window *pParent, WinBits nBits, const String& rTitle )
 {
     BOOL bSave = ( ( nBits & WB_SAVEAS ) == WB_SAVEAS );
@@ -2410,4 +2397,4 @@ String SfxConfigDialog::FileDialog_Impl( Window *pParent, WinBits nBits, const S
     else
         return String();
 }
-
+*/
