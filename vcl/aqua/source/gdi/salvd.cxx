@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salvd.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: bmahbod $ $Date: 2001-02-14 19:39:49 $
+ *  last change: $Author: pluby $ $Date: 2001-02-20 22:01:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ static BOOL InitVirtualDeviceGWorld ( SalVirDevDataPtr rSalVirDevData )
         GWorldPtr    pGWorld     = NULL;
         CTabHandle   hCTable     = NULL;
         GDHandle     hGDevice    = NULL;
-        GWorldFlags  nFlags      = noErr;
+        GWorldFlags  nFlags      = noNewDevice;
         OSStatus     nOSStatus   = noErr;
 
         // Set the dimensions of the GWorldPtr
@@ -110,6 +110,20 @@ static BOOL InitVirtualDeviceGWorld ( SalVirDevDataPtr rSalVirDevData )
                                 hGDevice,
                                 nFlags
                              );
+
+        // If NewGWorld failed, try again with different flags
+
+        if ( nOSStatus != noErr )
+        {
+            nFlags = noErr;
+            nOSStatus = NewGWorld( &pGWorld,
+                                    nPixelDepth,
+                                   &aBoundsRect,
+                                    hCTable,
+                                    hGDevice,
+                                    nFlags
+                                 );
+        } // if
 
         if (    ( nOSStatus == noErr )
              && ( pGWorld   != NULL  )
@@ -216,9 +230,13 @@ SalGraphics* SalVirtualDevice::GetGraphics()
         maVirDevData.mpGraphics = new SalGraphics;
 
         maVirDevData.mbGraphics = InitVirtualDeviceGWorld( &maVirDevData );
-    } // if
 
-    maVirDevData.mbGraphics = TRUE;
+        if ( !maVirDevData.mbGraphics )
+        {
+            delete maVirDevData.mpGraphics;
+            maVirDevData.mpGraphics = NULL;
+        } // if
+    } // if
 
     return maVirDevData.mpGraphics;
 } // SalVirtualDevice::GetGraphics
