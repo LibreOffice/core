@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabletree.src,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: kz $ $Date: 2002-09-13 14:36:24 $
+ *  last change: $Author: kz $ $Date: 2002-11-25 15:12:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -175,7 +175,7 @@ String STR_COULDNOTCREATE_DRIVERMANAGER
     Text[ greek ] = "Δεν ήταν δυνατόν να γίνει η σύνδεση με το πρόγραμμα διαχείρισης των προγραμμάτων οδήγησης SDBC (#servicename#).";
     Text[ dutch ] = "Kan de verbinding met de SDBC-driver manager (#servicename#) niet tot stand brengen.";
     Text[ french ] = "Impossible d'ιtablir une connexion au gestionnaire de pilotes SDBC (#servicename#) !";
-    Text[ spanish ] = "No se pudo establecer una conexiσn al administrador de controladores SDBC (#servicename#).";
+    Text[ spanish ] = "No se pudo establecer ninguna conexiσn al administrador de controladores SDBC (#servicename#).";
     Text[ italian ] = "Non θ possibile stabilire il collegamento al driver SDBC Manager (#servicename#).";
     Text[ danish ] = "Det var ikke muligt at oprette en forbindelse til SDBC driver manageren (#servicename#).";
     Text[ swedish ] = "Det gick inte att ansluta till SDBC-drivrutinshanteraren (#servicename#).";
@@ -202,7 +202,7 @@ String STR_NOREGISTEREDDRIVER
     Text[ greek ] = "Δεν υπάρχει δηλωμένο πρόγραμμα οδήγησης για το URL #connurl#";
     Text[ dutch ] = "Geen driver voor URL #connurl# geregistreerd.";
     Text[ french ] = "Aucun pilote n'est inscrit pour l'URL #connurl# !";
-    Text[ spanish ] = "No existe un controlador registrado para la URL #connurl#";
+    Text[ spanish ] = "No existe ningϊn controlador registrado para la URL #connurl#";
     Text[ italian ] = "Non esiste alcun driver registrato per l'URL #connurl#";
     Text[ danish ] = "Der er ikke registeret en driver for URL'en #connurl#!";
     Text[ swedish ] = "Det har inte registrerats nεgon drivrutin fφr URL:en #connurl#.";
@@ -281,7 +281,7 @@ String STR_NOTABLEINFO
     Text[ greek ] = "Η σύνδεση πέτυχε αλλά δεν ήταν δυνατόν να προσδιοριστούν πληροφορίες σχετικά με πίνακες στη βάση δεδομένων.";
     Text[ dutch ] = "Verbinding werd tot stand gebracht, echter geen gegevens over tabellen in de database gevonden.";
     Text[ french ] = "Connexion ιtablie, mais aucune information concernant les tables et/ou vues n'a pu κtre dιtectιe.";
-    Text[ spanish ] = "Se ha realizado una conexiσn satisfactoriamente, pero no se ha conseguido ninguna informaciσn sobre tablas en la base de datos.";
+    Text[ spanish ] = "La conexiσn se ha realizado. Sin embargo no se ha conseguido ninguna informaciσn relativa a las tablas de las bases de datos.";
     Text[ italian ] = "Il collegamento θ stato realizzato tuttavia non θ stato possibile trasmettere le informazioni relative alle tabelle nel database.";
     Text[ danish ] = "Forbindelsen er blevet oprettet; men det var ikke muligt at hente informationer om tabeller i databasen.";
     Text[ swedish ] = "Fφrbindelsen upprδttades men det gick inte att fε fram nεgon information om tabeller i databasen.";
@@ -379,6 +379,9 @@ String STR_ALL_TABLES_AND_VIEWS
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.30  2002/09/13 14:36:24  kz
+ *  Merge SRX643: 13.09.02 - 16:32:34
+ *
  *  Revision 1.29  2002/09/13 08:43:51  kz
  *  Merge SRX643: 13.09.02 - 10:40:24
  *
