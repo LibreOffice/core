@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: tl $ $Date: 2002-08-20 09:01:58 $
+ *  last change: $Author: tl $ $Date: 2002-08-20 14:05:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1767,6 +1767,8 @@ sal_Bool SwXTextTableCursor::mergeRange(void) throw( uno::RuntimeException )
 sal_Bool SwXTextTableCursor::splitRange(sal_Int16 Count, sal_Bool Horizontal) throw( uno::RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
+    if (Count <= 0)
+        throw RuntimeException( OUString( RTL_CONSTASCII_USTRINGPARAM( "Illegal first argument: needs to be > 0" ) ), static_cast < cppu::OWeakObject * > ( this ) );
     sal_Bool bRet = sal_False;
     SwUnoCrsr* pUnoCrsr = GetCrsr();
     if(pUnoCrsr)
