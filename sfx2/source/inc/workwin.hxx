@@ -2,9 +2,9 @@
  *
  *  $RCSfile: workwin.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2001-09-12 16:57:57 $
+ *  last change: $Author: mba $ $Date: 2001-09-13 12:22:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -249,6 +249,7 @@ protected:
     SfxObjectBar_Impl       aObjBars[SFX_OBJECTBAR_MAX];
     SfxObjectBarList_Impl   aObjBarLists[SFX_OBJECTBAR_MAX];
     Rectangle               aClientArea;
+    Rectangle               aUpperClientArea;
     SfxWorkWindow*          pParent;
     SfxSplitWindow*         pSplit[SFX_SPLITWINDOWS_MAX];
     SfxChildList_Impl*      pChilds;
@@ -274,7 +275,7 @@ protected:
     SfxChild_Impl*          FindChild_Impl( const Window& rWindow ) const;
     virtual BOOL            RequestTopToolSpacePixel_Impl( SvBorder aBorder );
     virtual Rectangle       GetTopRect_Impl();
-    SvBorder                Arrange_Impl( Rectangle & rRect);
+    SvBorder                Arrange_Impl();
     virtual void            SaveStatus_Impl(SfxChildWindow*, const SfxChildWinInfo&);
 
 public:
