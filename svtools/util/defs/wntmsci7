@@ -7012,3 +7012,6 @@ _real@8@4008fa00000000000000
 ?DbgName_SvLBoxContextBmp@@YAPAUDbgDataType@@XZ
 ?DbgName_SvLBoxString@@YAPAUDbgDataType@@XZ
 ?DbgName_SvTreeListBox@@YAPAUDbgDataType@@XZ
+?StripNewCurrencyDelimiters@SvNumberformat@@SA?AVString@@ABV2@E@Z
+?SwitchToGregorianCalendar@SvNumberformat@@AAEXABVString@@N@Z
+?sGregorian@SvNumberformat@@0VOUString@rtl@@A
