@@ -2,9 +2,9 @@
  *
  *  $RCSfile: contentinfo.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:03:37 $
+ *  last change: $Author: kso $ $Date: 2001-03-27 13:59:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 #ifndef _COM_SUN_STAR_UCB_XCOMMANDINFO_HPP_
 #include <com/sun/star/ucb/XCommandInfo.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UCB_XCOMMANDENVIRONMENT_HPP_
+#include <com/sun/star/ucb/XCommandEnvironment.hpp>
+#endif
 #ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
@@ -107,6 +110,8 @@ class PropertySetInfo :
 {
     com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >
                                 m_xSMgr;
+    com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >
+                                m_xEnv;
     com::sun::star::uno::Sequence< com::sun::star::beans::Property >*
                                 m_pProps;
     vos::OMutex                 m_aMutex;
@@ -119,6 +124,8 @@ private:
 public:
     PropertySetInfo( const com::sun::star::uno::Reference<
                         com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
+                     const com::sun::star::uno::Reference<
+                        com::sun::star::ucb::XCommandEnvironment >& rxEnv,
                      ContentImplHelper* pContent );
     virtual ~PropertySetInfo();
 
@@ -163,6 +170,8 @@ class CommandProcessorInfo :
 {
     com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory >
                                 m_xSMgr;
+    com::sun::star::uno::Reference< com::sun::star::ucb::XCommandEnvironment >
+                                m_xEnv;
     com::sun::star::uno::Sequence< com::sun::star::ucb::CommandInfo >*
                                 m_pCommands;
     vos::OMutex                 m_aMutex;
@@ -176,8 +185,10 @@ private:
 
 public:
     CommandProcessorInfo( const com::sun::star::uno::Reference<
-                    com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
-                 ContentImplHelper* pContent );
+                            com::sun::star::lang::XMultiServiceFactory >& rxSMgr,
+                           const com::sun::star::uno::Reference<
+                            com::sun::star::ucb::XCommandEnvironment >& rxEnv,
+                         ContentImplHelper* pContent );
     virtual ~CommandProcessorInfo();
 
     // XInterface

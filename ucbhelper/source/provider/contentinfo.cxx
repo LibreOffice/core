@@ -2,9 +2,9 @@
  *
  *  $RCSfile: contentinfo.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:03:37 $
+ *  last change: $Author: kso $ $Date: 2001-03-27 14:02:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,8 +99,10 @@ using namespace ucb;
 
 PropertySetInfo::PropertySetInfo(
                         const Reference< XMultiServiceFactory >& rxSMgr,
+                        const Reference< XCommandEnvironment >& rxEnv,
                         ContentImplHelper* pContent )
 : m_xSMgr( rxSMgr ),
+  m_xEnv( rxEnv ),
   m_pProps( 0 ),
   m_pContent( pContent )
 {
@@ -143,73 +145,46 @@ XTYPEPROVIDER_IMPL_2( PropertySetInfo,
 Sequence< Property > SAL_CALL PropertySetInfo::getProperties()
     throw( RuntimeException )
 {
-    vos::OGuard aGuard( m_aMutex );
-
     if ( !m_pProps )
     {
-        m_pProps = new Sequence< Property >( 128 );
-        Property* pProps = m_pProps->getArray();
-        sal_Int32 nPos  = 0;
-        sal_Int32 nSize = m_pProps->getLength();
-
-        //////////////////////////////////////////////////////////////////
-        // Get info for core ( native) properties.
-        //////////////////////////////////////////////////////////////////
-
-        const ::ucb::PropertyInfoTableEntry& rCoreProps
-                                    = m_pContent->getPropertyInfoTable();
-        const ::ucb::PropertyInfoTableEntry* pCurr = &rCoreProps;
-        while ( pCurr->pName )
+        vos::OGuard aGuard( m_aMutex );
+        if ( !m_pProps )
         {
-            if ( nSize <= nPos )
-            {
-                m_pProps->realloc( 128 );
-                nSize += 128;
-            }
+            //////////////////////////////////////////////////////////////
+            // Get info for core ( native) properties.
+            //////////////////////////////////////////////////////////////
 
-            Property& rProp = pProps[ nPos ];
+            Sequence< Property > aProps = m_pContent->getProperties( m_xEnv );
+            m_pProps = new Sequence< Property >( aProps );
 
-            VOS_ENSURE( pCurr->pType,
-                        "PropertySetInfo::getProperties - No type!" );
+            //////////////////////////////////////////////////////////////
+            // Get info for additional properties.
+            //////////////////////////////////////////////////////////////
 
-            rProp.Name       = OUString::createFromAscii( pCurr->pName );
-            rProp.Handle     = pCurr->nHandle;
-            rProp.Type       = *pCurr->pType;
-            rProp.Attributes = pCurr->nAttributes;
-
-            nPos++;
-            pCurr++;
-        }
-
-        if ( nPos > 0 )
-        {
-            m_pProps->realloc( nPos );
-            nSize = m_pProps->getLength();
-        }
-
-        //////////////////////////////////////////////////////////////////
-        // Get info for additional properties.
-        //////////////////////////////////////////////////////////////////
-
-        Reference< XPersistentPropertySet > xSet (
+            Reference< XPersistentPropertySet > xSet (
                         m_pContent->getAdditionalPropertySet( sal_False ) );
 
-        if ( xSet.is() )
-        {
-            // Get property set info.
-            Reference< XPropertySetInfo > xInfo( xSet->getPropertySetInfo() );
-            if ( xInfo.is() )
+            if ( xSet.is() )
             {
-                const Sequence< Property >& rAddProps = xInfo->getProperties();
-                sal_Int32 nAddProps = rAddProps.getLength();
-                if ( nAddProps > 0 )
+                // Get property set info.
+                Reference< XPropertySetInfo > xInfo(
+                                        xSet->getPropertySetInfo() );
+                if ( xInfo.is() )
                 {
-                    m_pProps->realloc( nSize + nAddProps );
-                    pProps = m_pProps->getArray();
+                    const Sequence< Property >& rAddProps
+                        = xInfo->getProperties();
+                    sal_Int32 nAddProps = rAddProps.getLength();
+                    if ( nAddProps > 0 )
+                    {
+                        sal_Int32 nPos = m_pProps->getLength();
+                        m_pProps->realloc( nPos + nAddProps );
 
-                    const Property* pAddProps = rAddProps.getConstArray();
-                    for ( sal_Int32 n = 0; n < nAddProps; ++n, ++nPos )
-                        pProps[ nPos ] = pAddProps[ n ];
+                        Property* pProps = m_pProps->getArray();
+                        const Property* pAddProps = rAddProps.getConstArray();
+
+                        for ( sal_Int32 n = 0; n < nAddProps; ++n, ++nPos )
+                            pProps[ nPos ] = pAddProps[ n ];
+                    }
                 }
             }
         }
@@ -284,8 +259,10 @@ sal_Bool PropertySetInfo::queryProperty(
 
 CommandProcessorInfo::CommandProcessorInfo(
                         const Reference< XMultiServiceFactory >& rxSMgr,
+                        const Reference< XCommandEnvironment >& rxEnv,
                         ContentImplHelper* pContent )
 : m_xSMgr( rxSMgr ),
+  m_xEnv( rxEnv ),
   m_pCommands( 0 ),
   m_pContent( pContent )
 {
@@ -328,43 +305,18 @@ XTYPEPROVIDER_IMPL_2( CommandProcessorInfo,
 Sequence< CommandInfo > SAL_CALL CommandProcessorInfo::getCommands()
     throw( RuntimeException )
 {
-    vos::OGuard aGuard( m_aMutex );
-
     if ( !m_pCommands )
     {
-        m_pCommands = new Sequence< CommandInfo >( 128 );
-        CommandInfo* pCommands = m_pCommands->getArray();
-        sal_Int32 nPos  = 0;
-        sal_Int32 nSize = m_pCommands->getLength();
-
-        //////////////////////////////////////////////////////////////////
-        // Get info for commands.
-        //////////////////////////////////////////////////////////////////
-
-        const ::ucb::CommandInfoTableEntry& rCommands
-                                    = m_pContent->getCommandInfoTable();
-        const ::ucb::CommandInfoTableEntry* pCurr = &rCommands;
-        while ( pCurr->pName )
+        vos::OGuard aGuard( m_aMutex );
+        if ( !m_pCommands )
         {
-            if ( nSize <= nPos )
-            {
-                m_pCommands->realloc( 128 );
-                nSize += 128;
-            }
+            //////////////////////////////////////////////////////////////
+            // Get info for commands.
+            //////////////////////////////////////////////////////////////
 
-            CommandInfo& rCommand = pCommands[ nPos ];
-
-            rCommand.Name   = OUString::createFromAscii( pCurr->pName );
-            rCommand.Handle = pCurr->nHandle;
-            if ( pCurr->pArgType )
-                rCommand.ArgType = *pCurr->pArgType;
-
-            nPos++;
-            pCurr++;
+            Sequence< CommandInfo > aCmds = m_pContent->getCommands( m_xEnv );
+            m_pCommands = new Sequence< CommandInfo >( aCmds );
         }
-
-        if ( nPos > 0 )
-            m_pCommands->realloc( nPos );
     }
     return *m_pCommands;
 }
