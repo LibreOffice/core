@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgdlg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 13:32:33 $
+ *  last change: $Author: hr $ $Date: 2004-05-11 11:47:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -477,32 +477,29 @@ OfaViewTabPage::OfaViewTabPage(Window* pParent, const SfxItemSet& rSet ) :
 
     SfxTabPage( pParent, ResId( OFA_TP_VIEW, DIALOG_MGR() ), rSet ),
 
-    aAppearanceGB       ( this, ResId( GB_APPEARANCE ) ),
-    aAppearanceFT       ( this, ResId( FT_APPEARANCE ) ),
-    aAppearanceLB       ( this, ResId( LB_APPEARANCE ) ),
-    aScalingFT          ( this, ResId( FT_SCALING ) ),
-    aScalingMF          ( this, ResId( MF_SCALING ) ),
-    aStyleCB            ( this, ResId( CB_STYLE ) ),
-    aMenuIconsCB        ( this, ResId( CB_MENU_ICONS )),
-    aBigFT              ( this, ResId( FT_BIG ) ),
-    aBigLB              ( this, ResId( LB_BIG ) ),
+    aUserInterfaceFL    ( this, ResId( FL_USERINTERFACE ) ),
+    aWindowSizeFT       ( this, ResId( FT_WINDOWSIZE ) ),
+    aWindowSizeMF       ( this, ResId( MF_WINDOWSIZE ) ),
+    aIconSizeFT              ( this, ResId( FT_ICONSIZE ) ),
+    aIconSizeLB              ( this, ResId( LB_ICONSIZE ) ),
 #if defined( UNX ) || defined ( FS_PRIV_DEBUG )
     aFontAntiAliasing   ( this, ResId( CB_FONTANTIALIASING )),
     aAAPointLimitLabel  ( this, ResId( FT_POINTLIMIT_LABEL )),
     aAAPointLimit       ( this, ResId( NF_AA_POINTLIMIT )),
     aAAPointLimitUnits  ( this, ResId( FT_POINTLIMIT_UNIT )),
 #endif
+    aMenuFL             ( this, ResId( FL_MENU ) ),
+    aMenuIconsCB        ( this, ResId( CB_MENU_ICONS )),
+    aShowInactiveItemsCB( this, ResId( CB_SHOW_INACTIVE ) ),
+    aFontListsFL        ( this, ResId( FL_FONTLISTS) ),
+    aFontShowCB         ( this, ResId( CB_FONT_SHOW ) ),
+    aFontHistoryCB      ( this, ResId( CB_FONT_HISTORY ) ),
+
     aMouseFL            ( this, ResId( FL_MOUSE ) ),
     aMousePosFT         ( this, ResId( FT_MOUSEPOS ) ),
     aMousePosLB         ( this, ResId( LB_MOUSEPOS ) ),
     aMouseMiddleFT      ( this, ResId( FT_MOUSEMIDDLE ) ),
     aMouseMiddleLB      ( this, ResId( LB_MOUSEMIDDLE ) ),
-    aMouseFollowCB      ( this, ResId( CB_MOUSE_FOLLOW ) ),
-    aFlatTabCtrlCB      ( this, ResId( CB_FLAT_TAB_CTRL ) ),
-    aColorTabCtrlCB     ( this, ResId( CB_COLOR_TAB_CTRL ) ),
-    aFontShowCB         ( this, ResId( CB_FONT_SHOW ) ),
-    aShowInactiveItemsCB( this, ResId( CB_SHOW_INACTIVE ) ),
-    aFontHistoryCB      ( this, ResId( CB_FONT_HISTORY ) ),
     a3DGB               ( this, ResId( GB_3D ) ),
     a3DOpenGLCB         ( this, ResId( CB_3D_OPENGL ) ),
     a3DOpenGLFasterCB   ( this, ResId( CB_3D_OPENGL_FASTER ) ),
@@ -551,13 +548,13 @@ OfaViewTabPage::OfaViewTabPage(Window* pParent, const SfxItemSet& rSet ) :
     // (in the resource, the coordinates are calculated for the AA options beeing present)
     Control* pMiscOptions[] =
     {
-        &aMouseFollowCB, &aFlatTabCtrlCB, &aColorTabCtrlCB, &aFontShowCB, &aShowInactiveItemsCB, &aFontHistoryCB,
-        &aMenuIconsCB
+        &aMenuFL, &aFontShowCB, &aShowInactiveItemsCB,
+        &aFontListsFL, &aFontHistoryCB, &aMenuIconsCB
     };
 
     // temporaryly create the checkbox for the anti aliasing (we need to to determine it's pos)
     CheckBox* pFontAntiAliasing = new CheckBox( this, ResId( CB_FONTANTIALIASING ) );
-    sal_Int32 nMoveUp = aMouseFollowCB.GetPosPixel().Y() - pFontAntiAliasing->GetPosPixel().Y();
+    sal_Int32 nMoveUp = aMenuFL.GetPosPixel().Y() - pFontAntiAliasing->GetPosPixel().Y();
     DELETEZ( pFontAntiAliasing );
 
     Point aPos;
@@ -613,12 +610,7 @@ BOOL OfaViewTabPage::FillItemSet( SfxItemSet& rSet )
     BOOL bMenuOptModified = FALSE;
 
     SvtMiscOptions aMiscOptions;
-    if ( (aMiscOptions.GetToolboxStyle() != TOOLBOX_STYLE_FLAT) == aStyleCB.IsChecked() )
-    {
-        aMiscOptions.SetToolboxStyle( aStyleCB.IsChecked() ? TOOLBOX_STYLE_FLAT : 0);
-    }
-
-    UINT16 nBigLB_NewSelection = aBigLB.GetSelectEntryPos();
+    UINT16 nBigLB_NewSelection = aIconSizeLB.GetSelectEntryPos();
     if( nBigLB_InitialSelection != nBigLB_NewSelection )
     {
         // from now on it's modified, even if via auto setting the same size was set as now selected in the LB
@@ -637,24 +629,6 @@ BOOL OfaViewTabPage::FillItemSet( SfxItemSet& rSet )
     SvtTabAppearanceCfg aAppearanceCfg;
     BOOL bAppearanceChanged = FALSE;
 
-    // Look & Feel Group
-    SystemLook eOldLook = (SystemLook)aAppearanceCfg.GetLookNFeel();
-    SystemLook eNewLook;
-
-    switch (aAppearanceLB.GetSelectEntryPos())
-    {
-        case 1: eNewLook = LookMacintosh;       break;
-        case 2: eNewLook = LookMotif;           break;
-        case 3: eNewLook = LookOSTwo;           break;
-        case 0:
-        default:eNewLook = LookStardivision;    break;
-    }
-
-    if ( eNewLook != eOldLook )
-    {
-        aAppearanceCfg.SetLookNFeel( eNewLook );
-        bAppearanceChanged = TRUE;
-    }
 
     // Screen Scaling
     UINT16 nOldScale = aAppearanceCfg.GetScaleFactor();
@@ -704,23 +678,7 @@ BOOL OfaViewTabPage::FillItemSet( SfxItemSet& rSet )
     }
 #endif
 
-    if ( aMouseFollowCB.IsChecked() != aMouseFollowCB.GetSavedValue() )
-    {
-        aAppearanceCfg.SetMenuMouseFollow( aMouseFollowCB.IsChecked() );
-        bAppearanceChanged = TRUE;
-    }
-    if ( aFlatTabCtrlCB.IsChecked() != aFlatTabCtrlCB.GetSavedValue() )
-    {
-        aAppearanceCfg.SetSingleLineTabCtrl(aFlatTabCtrlCB.IsChecked() );
-        bAppearanceChanged = TRUE;
-    }
-
-    if ( aColorTabCtrlCB.IsChecked() != aColorTabCtrlCB.GetSavedValue() )
-    {
-        aAppearanceCfg.SetColoredTabCtrl(aColorTabCtrlCB.IsChecked() );
-        bAppearanceChanged = TRUE;
-    }
-
+>>>>>>> 1.4.16.3
     if ( aFontShowCB.IsChecked() != aFontShowCB.GetSavedValue() )
     {
         aFontOpt.EnableFontWYSIWYG( aFontShowCB.IsChecked() );
@@ -817,32 +775,14 @@ void OfaViewTabPage::Reset( const SfxItemSet& rSet )
     a3DShowFullCB.Check( a3DOpt.IsShowFull() );
 
     SvtMiscOptions aMiscOptions;
-    aStyleCB.Check( aMiscOptions.GetToolboxStyle() == TOOLBOX_STYLE_FLAT );
 
-    sal_Int16 nSelect = 0;
     if( aMiscOptions.GetSymbolSet() != SFX_SYMBOLS_AUTO )
-        nSelect = ( SfxImageManager::GetCurrentSymbolSet() == SFX_SYMBOLS_LARGE )? 2 : 1;
-    aBigLB.SelectEntryPos( nSelect );
-    aBigLB.SaveValue();
-
-    // Look & Feel
-    SvtTabAppearanceCfg aAppearanceCfg;
-    sal_uInt16 nPos;
-    switch(aAppearanceCfg.GetLookNFeel())
-    {
-        case LookMacintosh:     nPos = 1;   break;
-        case LookMotif:         nPos = 2;   break;
-        case LookOSTwo:         nPos = 3;   break;
-        case LookStardivision:
-        default:                nPos = 0;   break;
-    }
-    aAppearanceLB.SelectEntryPos(nPos);
-    aAppearanceLB.SaveValue();
+        nBigLB_InitialSelection = ( SfxImageManager::GetCurrentSymbolSet() == SFX_SYMBOLS_LARGE )? 2 : 1;
+    aIconSizeLB.SelectEntryPos( nBigLB_InitialSelection );
+    aIconSizeLB.SaveValue();
 
     // Screen Scaling
-    aScalingMF.SetValue ( aAppearanceCfg.GetScaleFactor() );
-    aScalingMF.SaveValue();
-
+    aWindowSizeMF.SetValue ( aAppearanceCfg.GetScaleFactor() );
     // Mouse Snap
     aMousePosLB.SelectEntryPos(aAppearanceCfg.GetSnapMode());
     aMousePosLB.SaveValue();
@@ -855,15 +795,6 @@ void OfaViewTabPage::Reset( const SfxItemSet& rSet )
     aFontAntiAliasing.Check( aAppearanceCfg.IsFontAntiAliasing() );
     aAAPointLimit.SetValue( aAppearanceCfg.GetFontAntialiasingMinPixelHeight() );
 #endif
-
-    AllSettings   hAppSettings = Application::GetSettings();
-    MouseSettings hMouseSettings = hAppSettings.GetMouseSettings();
-    sal_uInt32 nFollow = hMouseSettings.GetFollow();
-    sal_uInt16 nTabStyle = hAppSettings.GetStyleSettings().GetTabControlStyle();
-
-    aMouseFollowCB.Check( 0 != (nFollow&MOUSE_FOLLOW_MENU) );
-    aFlatTabCtrlCB.Check( 0 !=(nTabStyle&STYLE_TABCONTROL_SINGLELINE) );
-    aColorTabCtrlCB.Check(0 !=(nTabStyle&STYLE_TABCONTROL_COLOR) );
 
     // WorkingSet
     SvtSaveOptions aSaveOptions;
@@ -886,9 +817,6 @@ void OfaViewTabPage::Reset( const SfxItemSet& rSet )
     aFontAntiAliasing.SaveValue();
     aAAPointLimit.SaveValue();
 #endif
-    aMouseFollowCB.SaveValue();
-    aFlatTabCtrlCB.SaveValue();
-    aColorTabCtrlCB.SaveValue();
     aFontShowCB.SaveValue();
     aShowInactiveItemsCB.SaveValue();
     aFontHistoryCB.SaveValue();
