@@ -2,9 +2,9 @@
  *
  *  $RCSfile: t_cipher.c,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:17:30 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 09:10:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,13 +206,58 @@ static sal_uInt8 cfb_ok[] =
     0x51, 0x9D, 0x57, 0xA6, 0xC3
 };
 
+static sal_uInt8 arcfour_key[6][30] =
+{
+    { 8, 0x01, 0x23, 0x45, 0x67, 0x89, 0xab, 0xcd, 0xef },
+    { 8, 0x01, 0x23, 0x45, 0x67, 0x89, 0xab, 0xcd, 0xef },
+    { 8, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 },
+    { 4, 0xef, 0x01, 0x23, 0x45 },
+    { 8, 0x01, 0x23, 0x45, 0x67, 0x89, 0xab, 0xcd, 0xef },
+    { 4, 0xef, 0x01, 0x23, 0x45 }
+};
+static sal_uInt8 arcfour_data_len[6] =
+{
+    8, 8, 8, 20, 28, 10
+};
+static sal_uInt8 arcfour_data[6][30] =
+{
+    { 0x01, 0x23, 0x45, 0x67, 0x89, 0xab, 0xcd, 0xef, 0xff },
+    { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff },
+    { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff },
+    { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+      0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+      0x00, 0x00, 0x00, 0x00, 0xff },
+    { 0x12, 0x34, 0x56, 0x78, 0x9A, 0xBC, 0xDE, 0xF0,
+      0x12, 0x34, 0x56, 0x78, 0x9A, 0xBC, 0xDE, 0xF0,
+      0x12, 0x34, 0x56, 0x78, 0x9A, 0xBC, 0xDE, 0xF0,
+      0x12, 0x34, 0x56, 0x78, 0xff },
+    { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+      0x00, 0x00, 0xff }
+};
+static sal_uInt8 arcfour_ok[6][30] =
+{
+    { 0x75, 0xb7, 0x87, 0x80, 0x99, 0xe0, 0xc5, 0x96, 0x00},
+    { 0x74, 0x94, 0xc2, 0xe7, 0x10, 0x4b, 0x08, 0x79, 0x00},
+    { 0xde, 0x18, 0x89, 0x41, 0xa3, 0x37, 0x5d, 0x3a, 0x00},
+    { 0xd6, 0xa1, 0x41, 0xa7, 0xec, 0x3c, 0x38, 0xdf,
+      0xbd, 0x61, 0x5a, 0x11, 0x62, 0xe1, 0xc7, 0xba,
+      0x36, 0xb6, 0x78, 0x58, 0x00 },
+    { 0x66, 0xa0, 0x94, 0x9f, 0x8a, 0xf7, 0xd6, 0x89,
+      0x1f, 0x7f, 0x83, 0x2b, 0xa8, 0x33, 0xc0, 0x0c,
+      0x89, 0x2e, 0xbe, 0x30, 0x14, 0x3c, 0xe2, 0x87,
+      0x40, 0x01, 0x1e, 0xcf, 0x00 },
+    { 0xd6, 0xa1, 0x41, 0xa7, 0xec, 0x3c, 0x38, 0xdf,
+      0xbd, 0x61, 0x00}
+};
+
 int SAL_CALL main (int argc, char *argv)
 {
     rtlCipher cipher;
 
     /* ECB */
     cipher = rtl_cipher_create (rtl_Cipher_AlgorithmBF, rtl_Cipher_ModeECB);
-    if (cipher)
+    OSL_ASSERT(cipher != 0);
+    if (cipher != 0)
     {
         rtlCipherError result;
         sal_uInt8      ecb_in[40], ecb_out[40];
@@ -240,7 +285,8 @@ int SAL_CALL main (int argc, char *argv)
 
     /* CBC */
     cipher = rtl_cipher_create (rtl_Cipher_AlgorithmBF, rtl_Cipher_ModeCBC);
-    if (cipher)
+    OSL_ASSERT(cipher != 0);
+    if (cipher != 0)
     {
         rtlCipherError result;
         sal_uInt8      cbc_in[40], cbc_out[40];
@@ -273,7 +319,8 @@ int SAL_CALL main (int argc, char *argv)
 
     /* CFB */
     cipher = rtl_cipher_create (rtl_Cipher_AlgorithmBF, rtl_Cipher_ModeStream);
-    if (cipher)
+    OSL_ASSERT(cipher != 0);
+    if (cipher != 0)
     {
         rtlCipherError result;
         sal_uInt8      cfb_in[40], cfb_out[40];
@@ -300,6 +347,80 @@ int SAL_CALL main (int argc, char *argv)
             cipher, cfb_out, length, cfb_in, sizeof(cfb_in));
         OSL_ASSERT(result == rtl_Cipher_E_None);
         OSL_ASSERT(memcmp (cfb_in, cbc_data, length) == 0);
+
+        rtl_cipher_destroy (cipher);
+    }
+
+    /* ARCFOUR */
+    cipher = rtl_cipher_create (rtl_Cipher_AlgorithmARCFOUR, rtl_Cipher_ModeStream);
+    OSL_ASSERT(cipher != 0);
+    if (cipher != 0)
+    {
+        rtlCipherError result;
+        sal_uInt8      arcfour_out[40];
+        sal_Size       length;
+        int            i, n;
+
+        n = sizeof(arcfour_data_len) / sizeof(arcfour_data_len[0]);
+        for (i = 0; i < n; i++)
+        {
+            length = arcfour_data_len[i];
+
+            result = rtl_cipher_init (
+                cipher, rtl_Cipher_DirectionBoth,
+                &(arcfour_key[i][1]), arcfour_key[i][0], 0, 0);
+            OSL_ASSERT(result == rtl_Cipher_E_None);
+
+            memset (arcfour_out, 0, sizeof(arcfour_out));
+            result = rtl_cipher_encode (
+                cipher, &(arcfour_data[i][0]), length,
+                arcfour_out, sizeof(arcfour_out));
+            OSL_ASSERT(result == rtl_Cipher_E_None);
+            OSL_ASSERT(memcmp (arcfour_out, arcfour_ok[i], length) == 0);
+        }
+
+        n = arcfour_data_len[3];
+        for (i = 1; i < n; i++)
+        {
+            length = i;
+
+            result = rtl_cipher_init (
+                cipher, rtl_Cipher_DirectionBoth,
+                &(arcfour_key[3][1]), arcfour_key[3][0], 0, 0);
+            OSL_ASSERT(result == rtl_Cipher_E_None);
+
+            memset (arcfour_out, 0, sizeof(arcfour_out));
+            result = rtl_cipher_encode (
+                cipher, &(arcfour_data[3][0]), length,
+                arcfour_out, sizeof(arcfour_out));
+            OSL_ASSERT(result == rtl_Cipher_E_None);
+            OSL_ASSERT(memcmp (arcfour_out, arcfour_ok[3], length) == 0);
+            OSL_ASSERT(arcfour_out[length] == 0);
+        }
+
+        n = arcfour_data_len[3];
+        for (i = 1; i < n; i++)
+        {
+            length = i;
+
+            result = rtl_cipher_init (
+                cipher, rtl_Cipher_DirectionBoth,
+                &(arcfour_key[3][1]), arcfour_key[3][0], 0, 0);
+            OSL_ASSERT(result == rtl_Cipher_E_None);
+
+            memset (arcfour_out, 0, sizeof(arcfour_out));
+            result = rtl_cipher_encode (
+                cipher, &(arcfour_data[3][0]), length,
+                &(arcfour_out[0]), sizeof(arcfour_out));
+            OSL_ASSERT(result == rtl_Cipher_E_None);
+
+            result = rtl_cipher_encode (
+                cipher, &(arcfour_data[3][length]), n - length,
+                &(arcfour_out[length]), sizeof(arcfour_out) - length);
+            OSL_ASSERT(result == rtl_Cipher_E_None);
+
+            OSL_ASSERT(memcmp (arcfour_out, arcfour_ok[3], length) == 0);
+        }
 
         rtl_cipher_destroy (cipher);
     }
