@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sjapplet_impl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kr $ $Date: 2001-08-08 14:03:32 $
+ *  last change: $Author: kr $ $Date: 2001-08-08 16:33:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,9 @@ static void testJavaException(JNIEnv * pEnv)  throw(com::sun::star::uno::Runtime
 {
     jthrowable jtThrowable = pEnv->ExceptionOccurred();
     if(jtThrowable) { // is it a java exception ?
+#ifdef DEBUG
+        pEnv->ExceptionDescribe();
+#endif
         pEnv->ExceptionClear();
 
           jclass jcThrowable = pEnv->FindClass("java/lang/Throwable");
@@ -334,6 +337,9 @@ void SjApplet2_Impl::init(Window * pParentWin,
     // Java URL erzeugen
     OUString url = rDocBase.GetMainURL();
 
+    if(!url.getLength())
+        url = OUString(RTL_CONSTASCII_USTRINGPARAM("file:///"));
+
     if (url.getLength()) {
         //WorkAround, weil Java mit dem | nicht zurecht kommt
         if(rDocBase.GetProtocol() == INET_PROT_FILE && url.pData->buffer[9] == INET_ENC_DELIM_TOKEN) {
@@ -344,6 +350,12 @@ void SjApplet2_Impl::init(Window * pParentWin,
             url = tmp;
         }
     }
+
+
+#ifdef DEBUG
+    OString tmp = OUStringToOString(url, RTL_TEXTENCODING_ASCII_US);
+    OSL_TRACE("SjApplet2_Impl::init - mainUrl: %s\n", tmp.getStr());
+#endif
 
     _xJavaVM = Reference<XJavaVM>(smgr->createInstance(OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.java.JavaVirtualMachine"))), UNO_QUERY);
     _xJavaThreadRegister_11 = Reference<XJavaThreadRegister_11>(_xJavaVM, UNO_QUERY);
