@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salnativewidgets-gtk.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 15:12:32 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 16:10:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,6 +147,7 @@ static void NWConvertVCLStateToGTKState( ControlState nVCLState, GtkStateType* n
 static void NWAddWidgetToCacheWindow( GtkWidget* widget );
 static void NWSetWidgetState( GtkWidget* widget, ControlState nState, GtkStateType nGtkState );
 
+static void NWCalcArrowRect( const Rectangle& rButton, Rectangle& rArrow );
 
 /*
  * Individual helper functions
@@ -183,6 +184,9 @@ static Rectangle NWGetListBoxButtonRect( ControlType nType, ControlPart nPart, R
 
 static Rectangle NWGetListBoxIndicatorRect( ControlType nType, ControlPart nPart, Rectangle aAreaRect, ControlState nState,
                             const ImplControlValue& aValue, SalControlHandle& rControlHandle, OUString aCaption );
+//---
+
+static Rectangle NWGetScrollButtonRect( ControlPart nPart, Rectangle aAreaRect );
 //---
 
 /*********************************************************
@@ -373,7 +377,8 @@ BOOL GtkSalGraphics::IsNativeControlSupported( ControlType nType, ControlPart nP
         ((nType==CTRL_SCROLLBAR) &&
                 (  (nPart==PART_DRAW_BACKGROUND_HORZ)
                 || (nPart==PART_DRAW_BACKGROUND_VERT)
-                || (nPart==PART_ENTIRE_CONTROL) )               )   ||
+                || (nPart==PART_ENTIRE_CONTROL)
+                || (nPart==HAS_THREE_BUTTONS) )                 )   ||
         ((nType==CTRL_EDITBOX) &&
                 (  (nPart==PART_ENTIRE_CONTROL)
                 || (nPart==HAS_BACKGROUND_TEXTURE) )            )   ||
@@ -418,6 +423,85 @@ BOOL GtkSalGraphics::hitTestNativeControl( ControlType      nType,
                                 SalControlHandle&   rControlHandle,
                                 BOOL&           rIsInside )
 {
+    if ( ( nType == CTRL_SCROLLBAR ) &&
+         ( ( nPart == PART_BUTTON_UP ) ||
+           ( nPart == PART_BUTTON_DOWN ) ||
+           ( nPart == PART_BUTTON_LEFT ) ||
+           ( nPart == PART_BUTTON_RIGHT ) ) )
+    {
+        NWEnsureGTKScrollbars();
+
+        // Grab some button style attributes
+        gboolean has_forward;
+        gboolean has_forward2;
+        gboolean has_backward;
+        gboolean has_backward2;
+
+        gtk_widget_style_get( gScrollHorizWidget, "has-forward-stepper", &has_forward,
+                                        "has-secondary-forward-stepper", &has_forward2,
+                                        "has-backward-stepper", &has_backward,
+                                           "has-secondary-backward-stepper", &has_backward2, NULL );
+        Rectangle aForward;
+        Rectangle aBackward;
+
+        rIsInside = FALSE;
+
+        ControlPart nCounterPart;
+        if ( nPart == PART_BUTTON_UP )
+            nCounterPart = PART_BUTTON_DOWN;
+        else if ( nPart == PART_BUTTON_DOWN )
+            nCounterPart = PART_BUTTON_UP;
+        else if ( nPart == PART_BUTTON_LEFT )
+            nCounterPart = PART_BUTTON_RIGHT;
+        else if ( nPart == PART_BUTTON_RIGHT )
+            nCounterPart = PART_BUTTON_LEFT;
+
+        aBackward = NWGetScrollButtonRect( nPart, rControlRegion.GetBoundRect() );
+        aForward = NWGetScrollButtonRect( nCounterPart, rControlRegion.GetBoundRect() );
+
+        if ( has_backward && has_forward2 )
+        {
+            if ( ( nPart == PART_BUTTON_UP ) || ( nPart == PART_BUTTON_DOWN ) )
+                aBackward.setHeight( aBackward.getHeight() / 2 );
+            else
+                aBackward.setWidth( aBackward.getWidth() / 2 );
+
+            if ( nPart == PART_BUTTON_DOWN )
+                aBackward.Move( 0, aBackward.getHeight() / 2 );
+            else if ( nPart == PART_BUTTON_RIGHT )
+                aBackward.Move( aBackward.getWidth() / 2, 0 );
+        }
+
+        if ( has_backward2 && has_forward )
+        {
+            if ( ( nPart == PART_BUTTON_UP ) || ( nPart == PART_BUTTON_DOWN ) )
+                aForward.setHeight( aForward.getHeight() / 2 );
+            else
+                aForward.setWidth( aForward.getWidth() / 2 );
+
+            if ( nPart == PART_BUTTON_DOWN )
+                aForward.Move( 0, aForward.getHeight() / 2 );
+            else if ( nPart == PART_BUTTON_RIGHT )
+                aForward.Move( aForward.getWidth() / 2, 0 );
+        }
+
+        if ( ( nPart == PART_BUTTON_UP ) || ( nPart == PART_BUTTON_LEFT ) )
+        {
+            if ( has_backward )
+                rIsInside |= aBackward.IsInside( aPos );
+            if ( has_backward2 )
+                rIsInside |= aForward.IsInside( aPos );
+        }
+        else
+        {
+            if ( has_forward )
+                rIsInside |= aBackward.IsInside( aPos );
+            if ( has_forward2 )
+                rIsInside |= aForward.IsInside( aPos );
+        }
+        return ( TRUE );
+    }
+
     if( IsNativeControlSupported(nType, nPart) )
     {
         rIsInside = rControlRegion.IsInside( aPos );
@@ -606,6 +690,14 @@ BOOL GtkSalGraphics::getNativeControlRegion(  ControlType nType,
         {
             rNativeBoundingRegion = NWGetListBoxButtonRect( nType, nPart, rControlRegion.GetBoundRect(), nState,
                                         aValue, rControlHandle, aCaption );
+            rNativeContentRegion = rNativeBoundingRegion;
+
+            returnVal = TRUE;
+        }
+        if ( (nType==CTRL_SCROLLBAR) && ((nPart==PART_BUTTON_LEFT) || (nPart==PART_BUTTON_RIGHT) ||
+                                         (nPart==PART_BUTTON_UP) || (nPart==PART_BUTTON_DOWN)  ) )
+        {
+            rNativeBoundingRegion = NWGetScrollButtonRect( nPart, rControlRegion.GetBoundRect() );
             rNativeContentRegion = rNativeBoundingRegion;
 
             returnVal = TRUE;
@@ -998,6 +1090,15 @@ BOOL GtkSalGraphics::NWPaintGTKCheck( ControlType nType, ControlPart nPart,
 }
 
 //-------------------------------------
+static void NWCalcArrowRect( const Rectangle& rButton, Rectangle& rArrow )
+{
+    // Size the arrow appropriately
+    rArrow.setWidth ( rButton.getWidth()  / 2 );
+    rArrow.setHeight( rButton.getHeight() / 2 );
+
+    rArrow.setX( rButton.getX() + ( rButton.getWidth()  - rArrow.getWidth()  ) / 2 );
+    rArrow.setY( rButton.getY() + ( rButton.getHeight() - rArrow.getHeight() ) / 2 );
+}
 
 BOOL GtkSalGraphics::NWPaintGTKScrollbar( ControlType nType, ControlPart nPart,
                                           const Region& rControlRegion, ControlState nState,
@@ -1015,12 +1116,12 @@ BOOL GtkSalGraphics::NWPaintGTKScrollbar( ControlType nType, ControlPart nPart,
     GtkAdjustment* scrollbarValues = NULL;
     GtkOrientation  scrollbarOrientation;
     Rectangle       thumbRect = pScrollbarVal->maThumbRect;
-    Rectangle       button1BoundRect = pScrollbarVal->maButton1Rect;
-    Rectangle       button2BoundRect = pScrollbarVal->maButton2Rect;
-    GtkArrowType    button1Type;
-    GtkArrowType    button2Type;
-    gint            nButton1Extra = 0;
-    gint            nButton2Extra = 0;
+    Rectangle       button11BoundRect = pScrollbarVal->maButton1Rect;   // backward
+    Rectangle       button22BoundRect = pScrollbarVal->maButton2Rect;   // forward
+    Rectangle       button12BoundRect = pScrollbarVal->maButton1Rect;   // secondary forward
+    Rectangle       button21BoundRect = pScrollbarVal->maButton2Rect;   // secondary backward
+    GtkArrowType    button1Type;                                        // backward
+    GtkArrowType    button2Type;                                        // forward
     gchar *     scrollbarTagH = (gchar *) "hscrollbar";
     gchar *     scrollbarTagV = (gchar *) "vscrollbar";
     gchar *     scrollbarTag = NULL;
@@ -1049,6 +1150,7 @@ BOOL GtkSalGraphics::NWPaintGTKScrollbar( ControlType nType, ControlPart nPart,
     pixmapRect.setWidth( pixmapRect.getWidth() + 1 );
     pixmapRect.setHeight( pixmapRect.getHeight() + 1 );
     scrollbarRect = pixmapRect;
+
     if ( (scrollbarRect.getWidth() <= 1) || (scrollbarRect.getHeight() <= 1) )
         return( TRUE );
 
@@ -1058,10 +1160,24 @@ BOOL GtkSalGraphics::NWPaintGTKScrollbar( ControlType nType, ControlPart nPart,
                                       "trough_border", &trough_border,
                                       "stepper_spacing", &stepper_spacing,
                                       "min_slider_length", &min_slider_length, NULL );
+    gboolean has_forward;
+    gboolean has_forward2;
+    gboolean has_backward;
+    gboolean has_backward2;
+
+    gtk_widget_style_get( gScrollHorizWidget, "has-forward-stepper", &has_forward,
+                                      "has-secondary-forward-stepper", &has_forward2,
+                                      "has-backward-stepper", &has_backward,
+                                         "has-secondary-backward-stepper", &has_backward2, NULL );
+    gint magic = trough_border ? 1 : 0;
+    gint nFirst = 0;
+
+    if ( has_backward )  nFirst  += 1;
+    if ( has_forward2 )  nFirst  += 1;
 
     if ( nPart == PART_DRAW_BACKGROUND_HORZ )
     {
-        unsigned int    sliderHeight = slider_width + (trough_border * 2);
+        unsigned int sliderHeight = slider_width + (trough_border * 2);
         vShim = (pixmapRect.getHeight() - sliderHeight) / 2;
 
         if ( sliderHeight < scrollbarRect.getHeight() );
@@ -1076,18 +1192,32 @@ BOOL GtkSalGraphics::NWPaintGTKScrollbar( ControlType nType, ControlPart nPart,
         button1Type = GTK_ARROW_LEFT;
         button2Type = GTK_ARROW_RIGHT;
 
-        button1BoundRect.setX( (button1BoundRect.getWidth()-stepper_size) / 2 );
-        button1BoundRect.setY( ((button1BoundRect.getHeight()-vShim)-slider_width) / 2 );
-        button1BoundRect.setHeight( slider_width );
-        button1BoundRect.setWidth( stepper_size );
-        nButton1Extra = (pScrollbarVal->maButton1Rect.getX() + pScrollbarVal->maButton1Rect.getWidth()) -
-                (button1BoundRect.getX() + button1BoundRect.getWidth());
+        if ( has_backward )
+        {
+            button12BoundRect.Move( stepper_size - trough_border,
+                                    (scrollbarRect.getHeight() - slider_width) / 2 );
+        }
 
-        button2BoundRect.setX( scrollbarRect.getWidth() - button2BoundRect.getWidth() + ((button2BoundRect.getWidth()-stepper_size) / 2) );
-        button2BoundRect.setY( ((button2BoundRect.getHeight()-vShim)-slider_width) / 2 );
-        button2BoundRect.setHeight( slider_width );
-        button2BoundRect.setWidth( stepper_size );
-        nButton2Extra =  button2BoundRect.getX() - pScrollbarVal->maButton2Rect.getX();
+        button11BoundRect.Move( trough_border, (scrollbarRect.getHeight() - slider_width) / 2 );
+        button11BoundRect.setHeight( slider_width );
+        button11BoundRect.setWidth( stepper_size );
+        button12BoundRect.setHeight( slider_width );
+        button12BoundRect.setWidth( stepper_size );
+
+        if ( has_backward2 )
+        {
+            button22BoundRect.Move( stepper_size+(trough_border+1)/2, (scrollbarRect.getHeight() - slider_width) / 2 );
+            button21BoundRect.Move( (trough_border+1)/2, (scrollbarRect.getHeight() - slider_width) / 2 );
+        }
+        else
+        {
+            button22BoundRect.Move( (trough_border+1)/2, (scrollbarRect.getHeight() - slider_width) / 2 );
+        }
+
+        button21BoundRect.setHeight( slider_width );
+        button21BoundRect.setWidth( stepper_size );
+        button22BoundRect.setHeight( slider_width );
+        button22BoundRect.setWidth( stepper_size );
 
         thumbRect.setHeight( slider_width );
         // Make sure the thumb is at least the default width (so we don't get tiny thumbs),
@@ -1099,18 +1229,13 @@ BOOL GtkSalGraphics::NWPaintGTKScrollbar( ControlType nType, ControlPart nPart,
             thumbRect.setWidth( min_slider_length );
 #endif
 
+        thumbRect.setWidth( thumbRect.getWidth() + magic );
         // Center vertically in the track
         thumbRect.Move( 0, (scrollbarRect.getHeight() - slider_width) / 2 );
-
-        // Themes may have a different idea of what the scrollbar stepper button
-        // size should be, so we have to adjust the Thumbs rectangle to account
-        // for the difference between OOo's idea and the theme's
-        thumbRect.Move( -nButton1Extra, 0 );
-        thumbRect.setWidth( thumbRect.getWidth() + nButton1Extra + nButton2Extra );
     }
     else
     {
-        unsigned int    sliderWidth = slider_width + (trough_border * 2);
+        unsigned int sliderWidth = slider_width + (trough_border * 2);
         hShim = (pixmapRect.getWidth() - sliderWidth) / 2;
 
         if ( sliderWidth < scrollbarRect.getWidth() );
@@ -1125,18 +1250,31 @@ BOOL GtkSalGraphics::NWPaintGTKScrollbar( ControlType nType, ControlPart nPart,
         button1Type = GTK_ARROW_UP;
         button2Type = GTK_ARROW_DOWN;
 
-        button1BoundRect.setX( ((button1BoundRect.getWidth()-hShim)-slider_width) / 2 );
-        button1BoundRect.setY( (button1BoundRect.getHeight()-stepper_size) / 2 );
-        button1BoundRect.setHeight( stepper_size );
-        button1BoundRect.setWidth( slider_width );
-        nButton1Extra = (pScrollbarVal->maButton1Rect.getY() + pScrollbarVal->maButton1Rect.getHeight()) -
-                (button1BoundRect.getY() + button1BoundRect.getHeight());
+        if ( has_backward )
+        {
+            button12BoundRect.Move( (scrollbarRect.getWidth() - slider_width) / 2,
+                                    stepper_size + trough_border );
+        }
+        button11BoundRect.Move( (scrollbarRect.getWidth() - slider_width) / 2, trough_border );
+        button11BoundRect.setHeight( stepper_size );
+        button11BoundRect.setWidth( slider_width );
+        button12BoundRect.setHeight( stepper_size );
+        button12BoundRect.setWidth( slider_width );
 
-        button2BoundRect.setX( ((button2BoundRect.getWidth()-hShim)-slider_width) / 2 );
-        button2BoundRect.setY( scrollbarRect.getHeight() - button2BoundRect.getHeight() + ((button2BoundRect.getHeight()-stepper_size) / 2) );
-        button2BoundRect.setHeight( stepper_size );
-        button2BoundRect.setWidth( slider_width );
-        nButton2Extra =  button2BoundRect.getY() - pScrollbarVal->maButton2Rect.getY();
+        if ( has_backward2 )
+        {
+            button22BoundRect.Move( (scrollbarRect.getWidth() - slider_width) / 2, stepper_size+(trough_border+1)/2 );
+            button21BoundRect.Move( (scrollbarRect.getWidth() - slider_width) / 2, (trough_border+1)/2 );
+        }
+        else
+        {
+            button22BoundRect.Move( (scrollbarRect.getWidth() - slider_width) / 2, (trough_border+1)/2 );
+        }
+
+        button21BoundRect.setHeight( stepper_size );
+        button21BoundRect.setWidth( slider_width );
+        button22BoundRect.setHeight( stepper_size );
+        button22BoundRect.setWidth( slider_width );
 
         thumbRect.setWidth( slider_width );
 #if 0
@@ -1148,15 +1286,12 @@ BOOL GtkSalGraphics::NWPaintGTKScrollbar( ControlType nType, ControlPart nPart,
             thumbRect.setHeight( min_slider_length );
 #endif
 
+        thumbRect.setHeight( thumbRect.getHeight() + magic );
         // Center horizontally in the track
         thumbRect.Move( (scrollbarRect.getWidth() - slider_width) / 2, 0 );
-
-        // Themes may have a different idea of what the scrollbar stepper button
-        // size should be, so we have to adjust the Thumbs rectangle to account
-        // for the difference between OOo's idea and the theme's
-        thumbRect.Move( 0, -nButton1Extra );
-        thumbRect.setHeight( thumbRect.getHeight() + nButton1Extra + nButton2Extra );
     }
+
+    BOOL has_slider = ! ( thumbRect.IsEmpty() );
 
     scrollbarValues = gtk_range_get_adjustment( GTK_RANGE(scrollbarWidget) );
     if ( scrollbarValues == NULL )
@@ -1176,17 +1311,6 @@ BOOL GtkSalGraphics::NWPaintGTKScrollbar( ControlType nType, ControlPart nPart,
         scrollbarValues->page_size = scrollbarRect.getHeight() / 2;
     }
     gtk_adjustment_changed( scrollbarValues );
-
-    // Size the arrow appropriately
-    arrow1Rect.setWidth ( button1BoundRect.getWidth()  / 2 );
-    arrow1Rect.setHeight( button1BoundRect.getHeight() / 2 );
-    arrow2Rect.setWidth ( button2BoundRect.getWidth()  / 2 );
-    arrow2Rect.setHeight( button2BoundRect.getHeight() / 2 );
-
-    arrow1Rect.setX( button1BoundRect.getX() + (button1BoundRect.getWidth()  - arrow1Rect.getWidth() ) / 2 );
-    arrow1Rect.setY( button1BoundRect.getY() + (button1BoundRect.getHeight() - arrow1Rect.getHeight()) / 2 );
-    arrow2Rect.setX( button2BoundRect.getX() + (button2BoundRect.getWidth()  - arrow2Rect.getWidth() ) / 2 );
-    arrow2Rect.setY( button2BoundRect.getY() + (button2BoundRect.getHeight() - arrow2Rect.getHeight()) / 2 );
 
     if( !bUseWindow )
     {
@@ -1234,38 +1358,77 @@ BOOL GtkSalGraphics::NWPaintGTKScrollbar( ControlType nType, ControlPart nPart,
     }
 
     // ----------------- THUMB
-    NWConvertVCLStateToGTKState( pScrollbarVal->mnThumbState, &stateType, &shadowType );
-    if ( pScrollbarVal->mnThumbState & CTRL_STATE_PRESSED )  stateType = GTK_STATE_PRELIGHT;
-    gtk_paint_slider( style, gdkDrawable, stateType, GTK_SHADOW_OUT,
-                      gdkRect, GTK_WIDGET(scrollbarWidget), "slider",
-                      x+hShim+thumbRect.getX(), y+vShim+thumbRect.getY(),
-                      thumbRect.getWidth(), thumbRect.getHeight(), scrollbarOrientation );
-
-    // ----------------- BUTTON 1
-    NWConvertVCLStateToGTKState( pScrollbarVal->mnButton1State, &stateType, &shadowType );
-    if ( stateType == GTK_STATE_INSENSITIVE )   stateType = GTK_STATE_NORMAL;
-    gtk_paint_box( style, gdkDrawable, stateType, shadowType,
-                   gdkRect, GTK_WIDGET(scrollbarWidget), "stepper",
-                   x+hShim+button1BoundRect.getX(), y+vShim+button1BoundRect.getY(),
-                   button1BoundRect.getWidth(), button1BoundRect.getHeight() );
-    // ----------------- ARROW 1
-    gtk_paint_arrow( style, gdkDrawable, stateType, shadowType,
-                     gdkRect, GTK_WIDGET(scrollbarWidget), scrollbarTag, button1Type, TRUE,
-                     x+hShim+arrow1Rect.getX(), y+vShim+arrow1Rect.getY(),
-                     arrow1Rect.getWidth(), arrow1Rect.getHeight() );
-
+    if ( has_slider )
+    {
+        NWConvertVCLStateToGTKState( pScrollbarVal->mnThumbState, &stateType, &shadowType );
+        if ( pScrollbarVal->mnThumbState & CTRL_STATE_PRESSED )  stateType = GTK_STATE_PRELIGHT;
+        gtk_paint_slider( style, gdkDrawable, stateType, GTK_SHADOW_OUT,
+                        gdkRect, GTK_WIDGET(scrollbarWidget), "slider",
+                        x+hShim+thumbRect.getX(), y+vShim+thumbRect.getY(),
+                        thumbRect.getWidth(), thumbRect.getHeight(), scrollbarOrientation );
+    }
+    // ----------------- BUTTON 1 //
+    if ( has_backward )
+    {
+        NWConvertVCLStateToGTKState( pScrollbarVal->mnButton1State, &stateType, &shadowType );
+        if ( stateType == GTK_STATE_INSENSITIVE )   stateType = GTK_STATE_NORMAL;
+        gtk_paint_box( style, gdkDrawable, stateType, shadowType,
+                       gdkRect, GTK_WIDGET(scrollbarWidget), "stepper",
+                       x+hShim+button11BoundRect.getX(), y+vShim+button11BoundRect.getY(),
+                       button11BoundRect.getWidth(), button11BoundRect.getHeight() );
+        // ----------------- ARROW 1
+        NWCalcArrowRect( button11BoundRect, arrowRect );
+        gtk_paint_arrow( style, gdkDrawable, stateType, shadowType,
+                         gdkRect, GTK_WIDGET(scrollbarWidget), scrollbarTag, button1Type, TRUE,
+                         x+hShim+arrowRect.getX(), y+vShim+arrowRect.getY(),
+                         arrowRect.getWidth(), arrowRect.getHeight() );
+    }
+    if ( has_forward2 )
+    {
+        NWConvertVCLStateToGTKState( pScrollbarVal->mnButton2State, &stateType, &shadowType );
+        if ( stateType == GTK_STATE_INSENSITIVE )   stateType = GTK_STATE_NORMAL;
+        gtk_paint_box( style, gdkDrawable, stateType, shadowType,
+                       gdkRect, GTK_WIDGET(scrollbarWidget), "stepper",
+                       x+hShim+button12BoundRect.getX(), y+vShim+button12BoundRect.getY(),
+                       button12BoundRect.getWidth(), button12BoundRect.getHeight() );
+        // ----------------- ARROW 1
+        NWCalcArrowRect( button12BoundRect, arrowRect );
+        gtk_paint_arrow( style, gdkDrawable, stateType, shadowType,
+                         gdkRect, GTK_WIDGET(scrollbarWidget), scrollbarTag, button2Type, TRUE,
+                         x+hShim+arrowRect.getX(), y+vShim+arrowRect.getY(),
+                         arrowRect.getWidth(), arrowRect.getHeight() );
+    }
     // ----------------- BUTTON 2
-    NWConvertVCLStateToGTKState( pScrollbarVal->mnButton2State, &stateType, &shadowType );
-    if ( stateType == GTK_STATE_INSENSITIVE )   stateType = GTK_STATE_NORMAL;
-    gtk_paint_box( style, gdkDrawable, stateType, shadowType, gdkRect,
-                   GTK_WIDGET(scrollbarWidget), "stepper",
-                   x+hShim+button2BoundRect.getX(), y+vShim+button2BoundRect.getY(),
-                   button2BoundRect.getWidth(), button2BoundRect.getHeight() );
-    // ----------------- ARROW 2
-    gtk_paint_arrow( style, gdkDrawable, stateType, shadowType,
-                     gdkRect, GTK_WIDGET(scrollbarWidget), scrollbarTag, button2Type, TRUE,
-                     x+hShim+arrow2Rect.getX(), y+vShim+arrow2Rect.getY(),
-                     arrow2Rect.getWidth(), arrow2Rect.getHeight() );
+    if ( has_backward2 )
+    {
+        NWConvertVCLStateToGTKState( pScrollbarVal->mnButton1State, &stateType, &shadowType );
+        if ( stateType == GTK_STATE_INSENSITIVE )   stateType = GTK_STATE_NORMAL;
+        gtk_paint_box( style, gdkDrawable, stateType, shadowType, gdkRect,
+                       GTK_WIDGET(scrollbarWidget), "stepper",
+                       x+hShim+button21BoundRect.getX(), y+vShim+button21BoundRect.getY(),
+                       button21BoundRect.getWidth(), button21BoundRect.getHeight() );
+        // ----------------- ARROW 2
+        NWCalcArrowRect( button21BoundRect, arrowRect );
+        gtk_paint_arrow( style, gdkDrawable, stateType, shadowType,
+                         gdkRect, GTK_WIDGET(scrollbarWidget), scrollbarTag, button1Type, TRUE,
+                         x+hShim+arrowRect.getX(), y+vShim+arrowRect.getY(),
+                         arrowRect.getWidth(), arrowRect.getHeight() );
+    }
+    if ( has_forward )
+    {
+        NWConvertVCLStateToGTKState( pScrollbarVal->mnButton2State, &stateType, &shadowType );
+        if ( stateType == GTK_STATE_INSENSITIVE )   stateType = GTK_STATE_NORMAL;
+        gtk_paint_box( style, gdkDrawable, stateType, shadowType, gdkRect,
+                       GTK_WIDGET(scrollbarWidget), "stepper",
+                       x+hShim+button22BoundRect.getX(), y+vShim+button22BoundRect.getY(),
+                       button22BoundRect.getWidth(), button22BoundRect.getHeight() );
+        // ----------------- ARROW 2
+        NWCalcArrowRect( button22BoundRect, arrowRect );
+        gtk_paint_arrow( style, gdkDrawable, stateType, shadowType,
+                         gdkRect, GTK_WIDGET(scrollbarWidget), scrollbarTag, button2Type, TRUE,
+                         x+hShim+arrowRect.getX(), y+vShim+arrowRect.getY(),
+                         arrowRect.getWidth(), arrowRect.getHeight() );
+    }
 
     if( !bUseWindow )
     {
@@ -1277,6 +1440,88 @@ BOOL GtkSalGraphics::NWPaintGTKScrollbar( ControlType nType, ControlPart nPart,
         g_object_unref( pixmap );
     }
     return( TRUE );
+}
+
+//---
+
+static Rectangle NWGetScrollButtonRect( ControlPart nPart, Rectangle aAreaRect )
+{
+    gint slider_width;
+    gint stepper_size;
+    gint stepper_spacing;
+    gint trough_border;
+
+    NWEnsureGTKScrollbars();
+
+    // Grab some button style attributes
+    gtk_widget_style_get( gScrollHorizWidget, "slider-width", &slider_width,
+                                      "stepper-size", &stepper_size,
+                                      "trough-border", &trough_border,
+                                         "stepper-spacing", &stepper_spacing, NULL );
+
+    gboolean has_forward;
+    gboolean has_forward2;
+    gboolean has_backward;
+    gboolean has_backward2;
+
+    gtk_widget_style_get( gScrollHorizWidget, "has-forward-stepper", &has_forward,
+                                      "has-secondary-forward-stepper", &has_forward2,
+                                      "has-backward-stepper", &has_backward,
+                                         "has-secondary-backward-stepper", &has_backward2, NULL );
+    gint       buttonWidth;
+    gint       buttonHeight;
+    Rectangle  buttonRect;
+
+    gint nFirst = 0;
+    gint nSecond = 0;
+
+    if ( has_forward )   nSecond += 1;
+    if ( has_forward2 )  nFirst  += 1;
+    if ( has_backward )  nFirst  += 1;
+    if ( has_backward2 ) nSecond += 1;
+
+    if ( ( nPart == PART_BUTTON_UP ) || ( nPart == PART_BUTTON_DOWN ) )
+    {
+        buttonWidth = slider_width + 2 * trough_border;
+        buttonHeight = stepper_size + trough_border + stepper_spacing;
+    }
+    else
+    {
+        buttonWidth = stepper_size + trough_border + stepper_spacing;
+        buttonHeight = slider_width + 2 * trough_border;
+    }
+
+    if ( nPart == PART_BUTTON_UP )
+    {
+        buttonHeight *= nFirst;
+        buttonHeight -= 1;
+        buttonRect.setX( aAreaRect.getX() );
+        buttonRect.setY( aAreaRect.getY() );
+    }
+    else if ( nPart == PART_BUTTON_LEFT )
+    {
+        buttonWidth *= nFirst;
+        buttonWidth -= 1;
+        buttonRect.setX( aAreaRect.getX() );
+        buttonRect.setY( aAreaRect.getY() );
+    }
+    else if ( nPart == PART_BUTTON_DOWN )
+    {
+        buttonHeight *= nSecond;
+        buttonRect.setX( aAreaRect.getX() );
+        buttonRect.setY( aAreaRect.getY() + aAreaRect.getHeight() - buttonHeight );
+    }
+    else if ( nPart == PART_BUTTON_RIGHT )
+    {
+        buttonWidth *= nSecond;
+        buttonRect.setX( aAreaRect.getX() + aAreaRect.getWidth() - buttonWidth );
+        buttonRect.setY( aAreaRect.getY() );
+    }
+
+    buttonRect.setWidth( buttonWidth );
+    buttonRect.setHeight( buttonHeight );
+
+    return( buttonRect );
 }
 
 //-------------------------------------
@@ -1374,6 +1619,8 @@ static void NWPaintOneEditBox(  GdkWindow * gdkDrawable,
     NWEnsureGTKSpinButton();
     NWEnsureGTKCombo();
     NWConvertVCLStateToGTKState( nState, &stateType, &shadowType );
+
+    shadowType = GTK_SHADOW_IN;
 
     switch ( nType )
     {
