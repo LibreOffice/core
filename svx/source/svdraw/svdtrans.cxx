@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdtrans.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dl $ $Date: 2000-09-29 08:57:32 $
+ *  last change: $Author: aw $ $Date: 2001-02-16 12:05:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -734,8 +734,12 @@ long BigMulDiv(long nVal, long nMul, long nDiv)
     } else {
         aVal+=nDiv/2; // fuer korrektes Runden
     }
-    aVal/=nDiv;
-    return long(aVal);
+    if(nDiv)
+    {
+        aVal/=nDiv;
+        return long(aVal);
+    }
+    return 0x7fffffff;
 }
 
 void Kuerzen(Fraction& rF, unsigned nDigits)
