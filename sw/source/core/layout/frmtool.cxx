@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmtool.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 18:21:53 $
+ *  last change: $Author: obo $ $Date: 2004-02-16 11:58:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,9 @@
 #endif
 #ifndef _FMTFSIZE_HXX //autogen
 #include <fmtfsize.hxx>
+#endif
+#ifndef _FMTSRND_HXX //autogen
+#include <fmtsrnd.hxx>
 #endif
 #ifndef _DOCARY_HXX
 #include <docary.hxx>
@@ -739,7 +742,7 @@ SwFlyNotify::~SwFlyNotify()
         {
             //Wenn in der LayAction das IsAgain gesetzt ist kann es sein,
             //dass die alte Seite inzwischen vernichtet wurde!
-            ::Notify( pFly, pOldPage, aFrmAndSpace );
+            ::Notify( pFly, pOldPage, aFrmAndSpace, &aPrt );
         }
         pFly->ResetNotifyBack();
     }
@@ -748,7 +751,8 @@ SwFlyNotify::~SwFlyNotify()
     //das wissen.
     SWRECTFN( pFly )
     const BOOL bPosChgd = POS_DIFF( aFrm, pFly->Frm() );
-    if ( bPosChgd || pFly->Frm().SSize() != aFrm.SSize() )
+    const BOOL bPrtChgd = aPrt != pFly->Prt();
+    if ( bPosChgd || pFly->Frm().SSize() != aFrm.SSize() || bPrtChgd )
     {
         pFly->NotifyDrawObj();
     }
@@ -2776,7 +2780,8 @@ void RegistFlys( SwPageFrm *pPage, const SwLayoutFrm *pLay )
 |*
 |*************************************************************************/
 
-void Notify( SwFlyFrm *pFly, SwPageFrm *pOld, const SwRect &rOld )
+void Notify( SwFlyFrm *pFly, SwPageFrm *pOld, const SwRect &rOld,
+             const SwRect* pOldPrt )
 {
     const SwRect aFrm( pFly->AddSpacesToFrm() );
     if ( rOld.Pos() != aFrm.Pos() )
@@ -2830,6 +2835,12 @@ void Notify( SwFlyFrm *pFly, SwPageFrm *pOld, const SwRect &rOld )
             aTmp.Bottom( Max(nNew, nOld) );
             pFly->NotifyBackground( pOld, aTmp, PREP_FLY_CHGD );
         }
+    }
+    else if ( pOldPrt && *pOldPrt != pFly->Prt() &&
+              pFly->GetFmt()->GetSurround().IsContour() )
+    {
+        // #i24097#
+        pFly->NotifyBackground( pFly->FindPageFrm(), aFrm, PREP_FLY_ARRIVE );
     }
 }
 
