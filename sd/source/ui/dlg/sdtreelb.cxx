@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdtreelb.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 20:04:15 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:10:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1020,10 +1020,9 @@ void SdPageObjsTLB::DoDrag()
     if( pDropNavWin )
     {
         ::sd::DrawDocShell* pDocShell = pDoc->GetDocSh();
-        String              aURL( pDocShell->GetMedium()->GetPhysicalName() );
+        String aURL = INetURLObject( pDocShell->GetMedium()->GetPhysicalName(), INET_PROT_FILE ).GetMainURL( INetURLObject::NO_DECODE );
         NavigatorDragType   eDragType = pDropNavWin->GetNavigatorDragType();
 
-        aURL = ::URIHelper::SmartRelToAbs( aURL, FALSE, INetURLObject::WAS_ENCODED, INetURLObject::DECODE_UNAMBIGUOUS );
         aURL.Append( '#' );
         aURL.Append( GetSelectEntry() );
 
