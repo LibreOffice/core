@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLExport.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:03 $
+ *  last change: $Author: bm $ $Date: 2000-09-27 15:15:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -161,7 +161,7 @@ SchXMLExportHelper::SchXMLExportHelper(
         mrAutoStylePool( rASPool ),
         mnColCount( 0 ),
         mnRowCount( 0 ),
-        mnDomainAxes( 0 ),                      // CHECKME: Is this correct?
+        mnDomainAxes( 0 ),
         mbHasRowDescriptions( sal_False ),
         mbHasColumnDescriptions( sal_False )
 {
