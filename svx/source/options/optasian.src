@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optasian.src,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:42:22 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 12:23:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ czech ] = "Kerning";
         Text[ hebrew ] = "‮קירוב תווים‬";
         Text[ hindi ] = "केर्निंग";
+        Text[ slovak ] = "Kerning";
     };
     RadioButton RB_CHAR_KERNING
     {
@@ -134,6 +135,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ czech ] = "Pouze západní znaky";
         Text[ hebrew ] = "‮תווים מערביים בלבד‬";
         Text[ hindi ] = "केवल ~पाश्चात्य अक्षर";
+        Text[ slovak ] = "Iba ~západné znaky";
     };
     RadioButton RB_CHAR_PUNCT
     {
@@ -165,6 +167,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ czech ] = "Západní text a asijská interpunkce";
         Text[ hebrew ] = "‮טקסט מערבי וסימן פיסוק של מזרח הרחוק‬";
         Text[ hindi ] = "पाश्चात्य ~टेक्स्ट् और ऐशियन विराम-चिह्न";
+        Text[ slovak ] = "Západný ~text a ázijská interpunkcia";
     };
     FixedLine GB_CHAR_DIST
     {
@@ -196,6 +199,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ czech ] = "Rozestup znaků";
         Text[ hebrew ] = "‮ריווח תוים‬";
         Text[ hindi ] = "अक्षर का अंतर देना";
+        Text[ slovak ] = "Rozostup znakov";
     };
     RadioButton RB_NO_COMP
     {
@@ -227,6 +231,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ czech ] = "Bez komprese";
         Text[ hebrew ] = "‮ללא דחיסה‬";
         Text[ hindi ] = "कोई दबाव ~नहीं";
+        Text[ slovak ] = "~Bez kompresie";
     };
     RadioButton RB_PUNCT_COMP
     {
@@ -258,6 +263,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ czech ] = "Komprimovat pouze interpunkci";
         Text[ hebrew ] = "‮דחיסת סימני פיסוק בלבד‬";
         Text[ hindi ] = "केवल विराम-चिह्न को ~दबाओ";
+        Text[ slovak ] = "~Komprimovať iba interpunkciu";
     };
     RadioButton RB_PUNCT_KANA_COMP
     {
@@ -289,6 +295,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ czech ] = "Komprimovat interpunkci a japonskou Kana";
         Text[ hebrew ] = "‮דחיסת סימני פיסוק וקנא יפנית‬";
         Text[ hindi ] = "~विराम-चिह्न और जपानीस काना को दबाओ";
+        Text[ slovak ] = "Komprimovať ~interpunkciu a japonskú Kana";
     };
     FixedLine GB_START_END
     {
@@ -320,6 +327,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ czech ] = "První a poslední znaky";
         Text[ hebrew ] = "‮אותיות ראשונות ואחרונות‬";
         Text[ hindi ] = "प्रारंभ और अंत का अक्षरें";
+        Text[ slovak ] = "Prvé a posledné znaky";
     };
     FixedText FT_LANGUAGE
     {
@@ -351,6 +359,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ czech ] = "Jazyk";
         Text[ hebrew ] = "‮שפה‬";
         Text[ hindi ] = "~भाषा";
+        Text[ slovak ] = "~Jazyk";
     };
     ListBox LB_LANGUAGE
     {
@@ -389,6 +398,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ czech ] = "Výchozí";
         Text[ hebrew ] = "‮ברירת מחדל‬";
         Text[ hindi ] = "~अनुपस्थिति";
+        Text[ slovak ] = "Výcho~dzí";
     };
     FixedText FT_START
     {
@@ -421,6 +431,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ czech ] = "Ne na začátku řádku:";
         Text[ hebrew ] = "‮לא בתחילת שורה: ‬";
         Text[ hindi ] = "रेखा की प्रारंभ में नहीं:";
+        Text[ slovak ] = "Nie na začiatku riadku:";
     };
     Edit ED_START
     {
@@ -459,6 +470,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ czech ] = "Ne na konci řádku:";
         Text[ hebrew ] = "‮לא בסוף שורה:‬";
         Text[ hindi ] = "रेखा की अंत में नहीं:";
+        Text[ slovak ] = "Nie na konci riadku:";
     };
     Edit ED_END
     {
@@ -496,6 +508,7 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
         Text[ czech ] = "Bez uživatelem definovaných symbolů pro zalomení řádku";
         Text[ hebrew ] = "‮ללא סימני שבירת שורה מוגדרים בידי המשתמש‬";
         Text[ hindi ] = "उपभोक्ता से परिभाषा किया हुआ रेखा खण्डन संकेत रहित";
+        Text[ slovak ] = "Bez užívateľom definovaných symbolov pre zalomenie riadku";
     };
     Text[ english_us ] = "Proxy";
     Text[ portuguese ] = "Proxy";
@@ -521,7 +534,10 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
     Text[ czech ] = "Proxy";
     Text[ hebrew ] = "‮פרוקסי‬";
     Text[ hindi ] = "प्रॉक्सी";
+    Text[ slovak ] = "Proxy";
 };
+
+
 
 
 
