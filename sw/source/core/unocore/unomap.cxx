@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.140 $
+ *  $Revision: 1.141 $
  *
- *  last change: $Author: tl $ $Date: 2002-10-16 09:03:52 $
+ *  last change: $Author: tl $ $Date: 2002-10-18 10:16:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -298,6 +298,13 @@ void SwUnoPropertyMapProvider::Sort( sal_uInt16 nId )
         { SW_PROP_NMID(UNO_NAME_PARA_CONDITIONAL_STYLE_NAME), FN_UNO_PARA_CONDITIONAL_STYLE_NAME, CPPU_E2T(CPPUTYPE_OUSTRING),      PropertyAttribute::READONLY, 0},                                                     \
         { SW_PROP_NMID(UNO_NAME_PARA_IS_NUMBERING_RESTART), FN_NUMBER_NEWSTART,     CPPU_E2T(CPPUTYPE_BOOLEAN),     PropertyAttribute::MAYBEVOID, 0 },
 
+#define COMMON_HYPERLINK_PROPERTIES \
+        { SW_PROP_NMID(UNO_NAME_HYPER_LINK_U_R_L), RES_TXTATR_INETFMT,          CPPU_E2T(CPPUTYPE_OUSTRING), PropertyAttribute::MAYBEVOID ,MID_URL_URL},                \
+        { SW_PROP_NMID(UNO_NAME_HYPER_LINK_TARGET), RES_TXTATR_INETFMT,         CPPU_E2T(CPPUTYPE_OUSTRING), PropertyAttribute::MAYBEVOID ,MID_URL_TARGET},             \
+        { SW_PROP_NMID(UNO_NAME_HYPER_LINK_NAME), RES_TXTATR_INETFMT,           CPPU_E2T(CPPUTYPE_OUSTRING), PropertyAttribute::MAYBEVOID ,MID_URL_HYPERLINKNAME  },    \
+        { SW_PROP_NMID(UNO_NAME_UNVISITED_CHAR_STYLE_NAME), RES_TXTATR_INETFMT, CPPU_E2T(CPPUTYPE_OUSTRING), PropertyAttribute::MAYBEVOID ,MID_URL_UNVISITED_FMT   },   \
+        { SW_PROP_NMID(UNO_NAME_VISITED_CHAR_STYLE_NAME), RES_TXTATR_INETFMT,   CPPU_E2T(CPPUTYPE_OUSTRING), PropertyAttribute::MAYBEVOID ,MID_URL_VISITED_FMT  },
+
 #define COMMON_CRSR_PARA_PROPERTIES_WITHOUT_FN \
         { SW_PROP_NMID(UNO_NAME_PARA_IS_HYPHENATION), RES_PARATR_HYPHENZONE,        CPPU_E2T(CPPUTYPE_BOOLEAN),     PropertyAttribute::MAYBEVOID, MID_IS_HYPHEN         },                                        \
         { SW_PROP_NMID(UNO_NAME_PARA_HYPHENATION_MAX_LEADING_CHARS), RES_PARATR_HYPHENZONE,         CPPU_E2T(CPPUTYPE_INT16),   PropertyAttribute::MAYBEVOID, MID_HYPHEN_MIN_LEAD   },                              \
@@ -331,7 +338,6 @@ void SwUnoPropertyMapProvider::Sort( sal_uInt16 nId )
         { SW_PROP_NMID(UNO_NAME_CHAR_KERNING), RES_CHRATR_KERNING    ,  CPPU_E2T(CPPUTYPE_INT16)  ,         PropertyAttribute::MAYBEVOID,   CONVERT_TWIPS},                                                           \
         { SW_PROP_NMID(UNO_NAME_CHAR_NO_HYPHENATION), RES_CHRATR_NOHYPHEN   ,   CPPU_E2T(CPPUTYPE_BOOLEAN)  ,       PropertyAttribute::MAYBEVOID,     0},                                                                 \
         { SW_PROP_NMID(UNO_NAME_CHAR_SHADOWED), RES_CHRATR_SHADOWED  ,  CPPU_E2T(CPPUTYPE_BOOLEAN)  ,       PropertyAttribute::MAYBEVOID, 0},                                                                     \
-        { SW_PROP_NMID(UNO_NAME_CHAR_STYLE_NAME), RES_TXTATR_CHARFMT,     CPPU_E2T(CPPUTYPE_OUSTRING),         PropertyAttribute::MAYBEVOID,     0},                                                         \
         { SW_PROP_NMID(UNO_NAME_CHAR_CONTOURED), RES_CHRATR_CONTOUR,    CPPU_E2T(CPPUTYPE_BOOLEAN)  ,       PropertyAttribute::MAYBEVOID, 0},                                                                 \
         { SW_PROP_NMID(UNO_NAME_DROP_CAP_FORMAT), RES_PARATR_DROP,        CPPU_E2T(CPPUTYPE_DROPCAPFMT)  , PropertyAttribute::MAYBEVOID, MID_DROPCAP_FORMAT|CONVERT_TWIPS},                        \
         { SW_PROP_NMID(UNO_NAME_DROP_CAP_WHOLE_WORD), RES_PARATR_DROP,        CPPU_E2T(CPPUTYPE_BOOLEAN)  ,         PropertyAttribute::MAYBEVOID, MID_DROPCAP_WHOLE_WORD },                                               \
@@ -364,11 +370,6 @@ void SwUnoPropertyMapProvider::Sort( sal_uInt16 nId )
         { SW_PROP_NMID(UNO_NAME_RIGHT_BORDER_DISTANCE), RES_BOX,                CPPU_E2T(CPPUTYPE_INT32),        PropertyAttribute::MAYBEVOID, RIGHT_BORDER_DISTANCE |CONVERT_TWIPS },                                                            \
         { SW_PROP_NMID(UNO_NAME_TOP_BORDER_DISTANCE), RES_BOX,                CPPU_E2T(CPPUTYPE_INT32),    PropertyAttribute::MAYBEVOID, TOP_BORDER_DISTANCE   |CONVERT_TWIPS },                                                        \
         { SW_PROP_NMID(UNO_NAME_BOTTOM_BORDER_DISTANCE), RES_BOX,                CPPU_E2T(CPPUTYPE_INT32),    PropertyAttribute::MAYBEVOID, BOTTOM_BORDER_DISTANCE|CONVERT_TWIPS },                                                        \
-        { SW_PROP_NMID(UNO_NAME_HYPER_LINK_U_R_L), RES_TXTATR_INETFMT,     CPPU_E2T(CPPUTYPE_OUSTRING),      PropertyAttribute::MAYBEVOID ,MID_URL_URL},                                                                 \
-        { SW_PROP_NMID(UNO_NAME_HYPER_LINK_TARGET), RES_TXTATR_INETFMT,     CPPU_E2T(CPPUTYPE_OUSTRING),      PropertyAttribute::MAYBEVOID ,MID_URL_TARGET},                                                              \
-        { SW_PROP_NMID(UNO_NAME_HYPER_LINK_NAME), RES_TXTATR_INETFMT,     CPPU_E2T(CPPUTYPE_OUSTRING),         PropertyAttribute::MAYBEVOID ,MID_URL_HYPERLINKNAME  },                                                      \
-        { SW_PROP_NMID(UNO_NAME_UNVISITED_CHAR_STYLE_NAME), RES_TXTATR_INETFMT,     CPPU_E2T(CPPUTYPE_OUSTRING),       PropertyAttribute::MAYBEVOID ,MID_URL_UNVISITED_FMT   },                                                       \
-        { SW_PROP_NMID(UNO_NAME_VISITED_CHAR_STYLE_NAME), RES_TXTATR_INETFMT,     CPPU_E2T(CPPUTYPE_OUSTRING),        PropertyAttribute::MAYBEVOID ,MID_URL_VISITED_FMT  },                                                     \
         { SW_PROP_NMID(UNO_NAME_PARA_USER_DEFINED_ATTRIBUTES), RES_UNKNOWNATR_CONTAINER, CPPU_E2T(CPPUTYPE_REFNAMECNT), PropertyAttribute::MAYBEVOID, 0 },                                   \
         { SW_PROP_NMID(UNO_NAME_TEXT_USER_DEFINED_ATTRIBUTES), RES_TXTATR_UNKNOWN_CONTAINER, CPPU_E2T(CPPUTYPE_REFNAMECNT), PropertyAttribute::MAYBEVOID, 0 },                               \
         { SW_PROP_NMID(UNO_NAME_PARA_SHADOW_FORMAT), RES_SHADOW,            CPPU_E2T(CPPUTYPE_SHADOWFMT),   PROPERTY_NONE, CONVERT_TWIPS}, \
@@ -396,8 +397,14 @@ void SwUnoPropertyMapProvider::Sort( sal_uInt16 nId )
 
 #define COMMON_CRSR_PARA_PROPERTIES \
         COMMON_CRSR_PARA_PROPERTIES_FN_ONLY \
-        COMMON_CRSR_PARA_PROPERTIES_WITHOUT_FN
+        COMMON_CRSR_PARA_PROPERTIES_WITHOUT_FN \
+        COMMON_HYPERLINK_PROPERTIES \
+        { SW_PROP_NMID(UNO_NAME_CHAR_STYLE_NAME), RES_TXTATR_CHARFMT,     CPPU_E2T(CPPUTYPE_OUSTRING),         PropertyAttribute::MAYBEVOID,     0},
 
+
+#define COMMON_CRSR_PARA_PROPERTIES_2 \
+        COMMON_CRSR_PARA_PROPERTIES_FN_ONLY \
+        COMMON_CRSR_PARA_PROPERTIES_WITHOUT_FN
 
 #define  COMPLETE_TEXT_CURSOR_MAP\
         COMMON_CRSR_PARA_PROPERTIES\
@@ -517,7 +524,7 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
             {
                 static SfxItemPropertyMap aParagraphMap_Impl[] =
                 {
-                    COMMON_CRSR_PARA_PROPERTIES
+                    COMMON_CRSR_PARA_PROPERTIES_2
                     TABSTOPS_MAP_ENTRY
                     COMMON_TEXT_CONTENT_PROPERTIES
                     {0,0,0,0,0}
@@ -1712,6 +1719,8 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                 {
                     { SW_PROP_NMID(UNO_NAME_TAB_STOP_DISTANCE), RES_PARATR_TABSTOP,     CPPU_E2T(CPPUTYPE_INT32),   PROPERTY_NONE, MID_STD_TAB | CONVERT_TWIPS},
                     COMMON_CRSR_PARA_PROPERTIES_WITHOUT_FN
+                    COMMON_HYPERLINK_PROPERTIES
+                    { SW_PROP_NMID(UNO_NAME_CHAR_STYLE_NAME), RES_TXTATR_CHARFMT,     CPPU_E2T(CPPUTYPE_OUSTRING),         PropertyAttribute::MAYBEVOID,     0},
                     {0,0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aTextDefaultMap_Impl;
