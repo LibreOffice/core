@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hfedtdlg.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2000-11-09 12:41:09 $
+ *  last change: $Author: kz $ $Date: 2000-11-15 21:21:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -843,6 +843,7 @@ TabPage RID_HFBASE
         QuickHelpText[ greek ] = "Ιδιότητες κειμένου";
         QuickHelpText[ korean ] = "Text Attributes";
         QuickHelpText[ language_user1 ] = " ";
+        QuickHelpText[ turkish ] = "Textattribute";
     };
     ImageButton BTN_FILE
     {
@@ -880,6 +881,7 @@ TabPage RID_HFBASE
         QuickHelpText[ greek ] = "Όνομα αρχείου";
         QuickHelpText[ korean ] = "File name";
         QuickHelpText[ language_user1 ] = " ";
+        QuickHelpText[ turkish ] = "Dateiname";
     };
 
     Menu RID_POPUP_FCOMMAND
@@ -1011,6 +1013,7 @@ TabPage RID_HFBASE
         QuickHelpText[ greek ] = "Όνομα πίνακα";
         QuickHelpText[ korean ] = "Sheet Name";
         QuickHelpText[ language_user1 ] = " ";
+        QuickHelpText[ turkish ] = "Tabellenname";
     };
     ImageButton BTN_PAGE
     {
@@ -1048,6 +1051,7 @@ TabPage RID_HFBASE
         QuickHelpText[ greek ] = "Σελίδα";
         QuickHelpText[ korean ] = "Sheet";
         QuickHelpText[ language_user1 ] = " ";
+        QuickHelpText[ turkish ] = "Seite";
     };
     ImageButton BTN_PAGES
     {
@@ -1085,6 +1089,7 @@ TabPage RID_HFBASE
         QuickHelpText[ greek ] = "Σελίδες";
         QuickHelpText[ korean ] = "Number of Pages";
         QuickHelpText[ language_user1 ] = " ";
+        QuickHelpText[ turkish ] = "Seiten";
     };
     ImageButton BTN_DATE
     {
@@ -1122,6 +1127,7 @@ TabPage RID_HFBASE
         QuickHelpText[ greek ] = "Ημερομηνία";
         QuickHelpText[ korean ] = "Date";
         QuickHelpText[ language_user1 ] = " ";
+        QuickHelpText[ turkish ] = "Datum";
     };
     ImageButton BTN_TIME
     {
@@ -1159,6 +1165,7 @@ TabPage RID_HFBASE
         QuickHelpText[ greek ] = "Ώρα";
         QuickHelpText[ korean ] = "Time";
         QuickHelpText[ language_user1 ] = " ";
+        QuickHelpText[ turkish ] = "Uhrzeit";
     };
     /* fuer DesignEd
     BitmapButton 1 {
