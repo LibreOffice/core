@@ -2,9 +2,9 @@
 #
 #   $RCSfile: NOTES,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: bm $ $Date: 2003-10-06 09:58:21 $
+#   last change: $Author: bm $ $Date: 2004-01-19 11:05:20 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  either of the following licenses
@@ -61,20 +61,68 @@
 NOTES
 =====
 
-Installation
-------------
+Activate the New Chart
+----------------------
 
-in workbench/officeintegration you find a perl script 'install.pl' for doing all
-necessary changes to enable the chart in an office.
+After installation of an Office, you will still get the old chart
+implementation.  In order to get the new implementation you have to activate it
+via the configuration.
 
-Note:
-* Start a freshly installed Office at least once before you call this script.
-* the TypeDetection.xcu of your user-registry is simply overwritten.
-* the libraries are linked on Unix machines, on Windows they are just copied, so
-  keep them updated.
-* Start the new chart with 'soffice private:factory/chart' or by entering
-  'private:factory/chart' in the URL field of an application.
+Set the boolean Config-Item Office.Common/Internal:DevelopmentChart to true.
 
+HOW-TO:
+
+* Open the file Common.xcu of the Registry.
+
+Location on Unix:
+$HOME/StarOffice7/user/registry/data/org/openoffice/Office/Common.xcu 
+
+Location on Windows:
+"%UserProfile%\Application Data\StarOffice7\user\registry\data\org\openoffice\Office\Common.xcu"
+
+* Under the configuration-node "Internal" (see <node oor:name="Internal"> tag)
+  you have to add the property "DevelopmentChart" and set this to "true":
+
+* Add the following after the "Internal"-node:
+
+  <prop oor:name="DevelopmentChart" oor:type="xs:boolean">
+   <value>true</value>
+  </prop>
+
+After that, your Common.xcu may look like this:
+
+,----[ Common.xcu example ]
+| <?xml version="1.0" encoding="UTF-8"?>
+| <oor:component-data xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" oor:name="Common" oor:package="org.openoffice.Office">
+|  <node oor:name="Internal">
+|   <prop oor:name="DevelopmentChart" oor:type="xs:boolean">
+|    <value>true</value>
+|   </prop>
+|   <prop oor:name="CurrentTempURL" oor:type="xs:string">
+|    <value/>
+|   </prop>
+|  </node>
+|  <node oor:name="Help">
+|   <node oor:name="Registration">
+|    <prop oor:name="ReminderDate" oor:type="xs:string">
+|     <value xsi:nil="true"/>
+|    </prop>
+|    <prop oor:name="RequestDialog" oor:type="xs:int">
+|     <value>0</value>
+|    </prop>
+|   </node>
+|  </node>
+|  <node oor:name="Misc">
+|   <prop oor:name="FirstRun" oor:type="xs:boolean">
+|    <value>false</value>
+|   </prop>
+|  </node>
+| </oor:component-data>
+`----
+
+* To switch back, you can either replace the "true" by a "false", or you can
+  delete the complete "DevelopmentChart" property (the three lines) you
+  inserted.
 
 FileDataSource
 --------------
@@ -88,15 +136,18 @@ You can find sample data in workbench/sampledata
 Testing
 -------
 
-To create a chart using the abovementioned file for data, Call the menu item
-'File/Save all'.  To rebuild the chart call 'File/Save'.
+* To create a chart using the abovementioned file for data, Call the menu item
+  'File/Save all'.  To rebuild the chart call 'File/Save'.
 
-You can also create a chart from spreadsheet data.
+* You can also create a chart from spreadsheet data.
+
+* To run a test for the old API run "dmake" in the qa subdirectory.
 
 ToDo
 ----
 
-The following things should be done before going "online" at
-OpenOffice.org.
+* Remove "drafts" from *every* UNO-IDL object.
 
-* the drafts namespace should vanish from the UNO types when they are finalized
+* Split API into public part (used by other applications) and a private part
+  that remains in the chart2 project.  The public part has to go to the offapi
+  project.
