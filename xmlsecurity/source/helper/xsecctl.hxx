@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xsecctl.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 14:56:51 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 18:08:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -515,6 +515,12 @@ public:
 
     void setX509Certificate(
         sal_Int32 nSecurityId,
+        const rtl::OUString& ouX509IssuerName,
+        const rtl::OUString& ouX509SerialNumber);
+
+    void setX509Certificate(
+        sal_Int32 nSecurityId,
+        const sal_Int32 nSecurityEnvironmentIndex,
         const rtl::OUString& ouX509IssuerName,
         const rtl::OUString& ouX509SerialNumber);
 
