@@ -2,9 +2,9 @@
  *
  *  $RCSfile: properties.h,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-06 16:48:46 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:28:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,17 +75,28 @@
 namespace framework{
 
 //_______________________________________________
+/** properties for "StatusIndicatorFactory" class */
+
+#define STATUSINDICATORFACTORY_PROPNAME_ASCII_FRAME     "Frame"
+#define STATUSINDICATORFACTORY_PROPNAME_ASCII_WINDOW    "Window"
+
+#define STATUSINDICATORFACTORY_PROPNAME_FRAME           DECLARE_ASCII(STATUSINDICATORFACTORY_PROPNAME_ASCII_FRAME )
+#define STATUSINDICATORFACTORY_PROPNAME_WINDOW          DECLARE_ASCII(STATUSINDICATORFACTORY_PROPNAME_ASCII_WINDOW)
+
+//_______________________________________________
 /** properties for "Frame" class */
 
 #define FRAME_PROPNAME_ASCII_DISPATCHRECORDERSUPPLIER   "DispatchRecorderSupplier"
 #define FRAME_PROPNAME_ASCII_ISHIDDEN                   "IsHidden"
 #define FRAME_PROPNAME_ASCII_LAYOUTMANAGER              "LayoutManager"
 #define FRAME_PROPNAME_ASCII_TITLE                      "Title"
+#define FRAME_PROPNAME_ASCII_INDICATORINTERCEPTION      "IndicatorInterception"
 
 #define FRAME_PROPNAME_DISPATCHRECORDERSUPPLIER         DECLARE_ASCII(FRAME_PROPNAME_ASCII_DISPATCHRECORDERSUPPLIER)
 #define FRAME_PROPNAME_ISHIDDEN                         DECLARE_ASCII(FRAME_PROPNAME_ASCII_ISHIDDEN                )
 #define FRAME_PROPNAME_LAYOUTMANAGER                    DECLARE_ASCII(FRAME_PROPNAME_ASCII_LAYOUTMANAGER           )
 #define FRAME_PROPNAME_TITLE                            DECLARE_ASCII(FRAME_PROPNAME_ASCII_TITLE                   )
+#define FRAME_PROPNAME_INDICATORINTERCEPTION            DECLARE_ASCII(FRAME_PROPNAME_ASCII_INDICATORINTERCEPTION   )
 
 // Please add new entries alphabetical sorted and correct all other handles!
 // Start counting with 0, so it can be used as direct index into an array too.
@@ -94,8 +105,9 @@ namespace framework{
 #define FRAME_PROPHANDLE_ISHIDDEN                       1
 #define FRAME_PROPHANDLE_LAYOUTMANAGER                  2
 #define FRAME_PROPHANDLE_TITLE                          3
+#define FRAME_PROPHANDLE_INDICATORINTERCEPTION          4
 
-#define FRAME_PROPCOUNT                                 4
+#define FRAME_PROPCOUNT                                 5
 
 //_______________________________________________
 /** properties for "Desktop" class */
@@ -222,6 +234,20 @@ namespace framework{
 #define UICOMMANDDESCRIPTION_NAMEACCESS_COMMANDIMAGELIST        "private:resource/image/commandimagelist"
 #define UICOMMANDDESCRIPTION_NAMEACCESS_COMMANDROTATEIMAGELIST  "private:resource/image/commandrotateimagelist"
 #define UICOMMANDDESCRIPTION_NAMEACCESS_COMMANDMIRRORIMAGELIST  "private:resource/image/commandmirrorimagelist"
+
+//_______________________________________________
+/** properties for "AutoRecovery" class */
+
+#define AUTORECOVERY_PROPNAME_ASCII_EXISTS_RECOVERYDATA "ExistsRecoveryData"
+#define AUTORECOVERY_PROPNAME_ASCII_CRASHED             "Crashed"
+
+#define AUTORECOVERY_PROPNAME_EXISTS_RECOVERYDATA       ::rtl::OUString::createFromAscii( AUTORECOVERY_PROPNAME_ASCII_EXISTS_RECOVERYDATA )
+#define AUTORECOVERY_PROPNAME_CRASHED                   ::rtl::OUString::createFromAscii( AUTORECOVERY_PROPNAME_ASCII_CRASHED )
+
+#define AUTORECOVERY_PROPHANDLE_EXISTS_RECOVERYDATA     0
+#define AUTORECOVERY_PROPHANDLE_CRASHED                 1
+
+#define AUTORECOVERY_PROPCOUNT                          2
 
 //_______________________________________________
 /** provides some helper methods to implement property sets. */
