@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: cd $ $Date: 2001-11-29 07:32:15 $
+#   last change: $Author: rt $ $Date: 2004-09-20 09:56:11 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,6 +79,8 @@ IDLFILES=\
     ActionTriggerSeparatorType.idl  \
     ContextMenuExecuteEvent.idl     \
     ContextMenuInterceptorAction.idl\
+    GlobalAcceleratorConfiguration.idl \
+    XAcceleratorConfiguration.idl   \
     XContextMenuInterception.idl    \
     XContextMenuInterceptor.idl
 
