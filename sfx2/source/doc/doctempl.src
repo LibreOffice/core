@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctempl.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 05:26:04 $
+ *  last change: $Author: kz $ $Date: 2001-05-16 15:05:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -240,7 +240,7 @@ StringArray TEMPLATE_LONG_NAMES_ARY
     };
     ItemList[ polish ] =
     {
-        < "Domyœlnie" ; > ;
+        < "Domy?lnie" ; > ;
         < "Korespondencja s³u¿bowa" ; > ;
         < "Pozosta³e dokumenty s³u¿bowe" ; > ;
         < "Korespondecja i dokumenty prywatne" ; > ;
@@ -253,15 +253,15 @@ StringArray TEMPLATE_LONG_NAMES_ARY
     };
     ItemList[ portuguese_brazilian ] =
     {
-        < "Padrão" ; > ;
-        < "Correspondência comercial" ; > ;
-        < "Correspondência comercial diversa" ; > ;
-        < "Correspondência e documentos particulares" ; > ;
-        < "Formulários e contratos" ; > ;
-        < "Finanças" ; > ;
-        < "Educação/Formação" ; > ;
-        < "Planos de fundo para apresentações" ; > ;
-        < "Apresentações" ; > ;
+        < "Padr?o" ; > ;
+        < "Correspond?ncia comercial" ; > ;
+        < "Correspond?ncia comercial diversa" ; > ;
+        < "Correspond?ncia e documentos particulares" ; > ;
+        < "Formul?rios e contratos" ; > ;
+        < "Finan?as" ; > ;
+        < "Educa??o/Forma??o" ; > ;
+        < "Planos de fundo para apresenta??s" ; > ;
+        < "Apresenta??s" ; > ;
         < "Diversos" ; > ;
     };
     ItemList[ japanese ] =
@@ -349,7 +349,7 @@ ItemList [ language_user1 ] =
         < "Geschäftliche Korrespondenz" ; > ;
         < "Sonstige geschäftliche Dokumente" ; > ;
         < "Private Korrespondenz und Dokumente" ; > ;
-        < "Formulare und Verträge" ; > ;
+        < "Formulare und Vertr?ge" ; > ;
         < "Finanzen" ; > ;
         < "Bildung" ; > ;
         < "Präsentationshintergründe" ; > ;
