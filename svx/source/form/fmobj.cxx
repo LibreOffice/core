@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmobj.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-18 08:10:01 $
+ *  last change: $Author: oj $ $Date: 2002-10-31 13:06:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,21 +140,23 @@ using namespace ::svxform;
 TYPEINIT1(FmFormObj, SdrUnoObj);
 DBG_NAME(FmFormObj);
 //------------------------------------------------------------------
-FmFormObj::FmFormObj(const ::rtl::OUString& rModelName)
+FmFormObj::FmFormObj(const ::rtl::OUString& rModelName,sal_Int32 _nType)
           :SdrUnoObj(rModelName, sal_False)
           ,pTempView(0)
           ,nEvent(0)
           ,nPos(-1)
+          ,m_nType(_nType)
 {
     DBG_CTOR(FmFormObj, NULL);
 }
 
 //------------------------------------------------------------------
-FmFormObj::FmFormObj()
+FmFormObj::FmFormObj(sal_Int32 _nType)
           :SdrUnoObj(String(), sal_False)
           ,nEvent(0)
           ,pTempView(0)
           ,nPos(-1)
+          ,m_nType(_nType)
 {
     DBG_CTOR(FmFormObj, NULL);
 }
@@ -659,6 +661,12 @@ IMPL_LINK(FmFormObj, OnCreate, void*, EMPTYTAG)
         pTempView->ObjectCreated(this);
     return 0;
 }
+// -----------------------------------------------------------------------------
+sal_Int32 FmFormObj::getType() const
+{
+    return m_nType;
+}
+// -----------------------------------------------------------------------------
 
 
 
