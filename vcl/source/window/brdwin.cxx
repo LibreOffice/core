@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brdwin.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 16:14:00 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 16:21:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -325,6 +325,12 @@ USHORT ImplBorderWindowView::ImplHitTest( ImplBorderFrameData* pData, const Poin
         long nSizeWidth = pData->mnNoTitleTop+pData->mnTitleHeight;
         if ( nSizeWidth < 16 )
             nSizeWidth = 16;
+
+        // no corner resize for floating toolbars, which would lead to jumps while formatting
+        // setting nSizeWidth = 0 will only return pure left,top,right,bottom
+        if( pBorderWindow->GetStyle() & WB_OWNERDRAWDECORATION )
+            nSizeWidth = 0;
+
         if ( rPos.X() < pData->mnLeftBorder )
         {
             if ( rPos.Y() < nSizeWidth )
