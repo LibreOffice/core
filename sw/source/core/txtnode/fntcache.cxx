@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fntcache.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: fme $ $Date: 2002-06-20 09:44:17 $
+ *  last change: $Author: fme $ $Date: 2002-06-20 10:14:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2270,48 +2270,28 @@ sal_Bool SwDrawTextInfo::ApplyAutoColor( Font* pFnt )
                     pCol = NULL;
             }
 
-            // !!! EINSCHUB BEGIN
             if ( ! pCol )
-                pCol = &aGlobalRetoucheColor;
-
-            sal_Bool bDarkBack = DARK_COLOR > pCol->GetRed() +
-                                              pCol->GetGreen() +
-                                              pCol->GetBlue();
-
-            if( GetShell() && GetShell()->GetWin() )
             {
-                const StyleSettings& rS = GetShell()->GetWin()->
-                                          GetSettings().GetStyleSettings();
-                nNewColor = bDarkBack ?
-                            COL_WHITE :
-                            rS.GetWindowTextColor().GetColor();
+                // no user defined color at paragraph or font background
+                if( GetShell() && GetShell()->GetWin() )
+                {
+                    // we take the window text color for painting
+                    nNewColor = GetShell()->GetWin()->GetSettings().
+                                GetStyleSettings().GetWindowTextColor().
+                                GetColor();
+                }
+                else
+                    pCol = &aGlobalRetoucheColor;
             }
-            else
-                nNewColor = bDarkBack ? COL_WHITE : COL_BLACK;
-            /// !!! EINSCHUB END
 
-//            if ( ! pCol )
-//            {
-//                // no user defined color at paragraph or font background
-//                if( GetShell() && GetShell()->GetWin() )
-//                {
-//                    // we take the window text color for painting
-//                    nNewColor = GetShell()->GetWin()->GetSettings().
-//                                GetStyleSettings().GetWindowTextColor().
-//                                GetColor();
-//                }
-//                else
-//                    pCol = &aGlobalRetoucheColor;
-//            }
-
-//            if ( pCol )
-//            {
-//                // we invert the color set at the background
-//                nNewColor = ( DARK_COLOR > pCol->GetRed() +
-//                                           pCol->GetGreen() +
-//                                           pCol->GetBlue() ) ?
-//                                           COL_WHITE : COL_BLACK;
-//            }
+            if ( pCol )
+            {
+                // we invert the color set at the background
+                nNewColor = ( DARK_COLOR > pCol->GetRed() +
+                                           pCol->GetGreen() +
+                                           pCol->GetBlue() ) ?
+                                           COL_WHITE : COL_BLACK;
+            }
         }
     }
 
