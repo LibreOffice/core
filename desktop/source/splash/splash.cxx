@@ -2,9 +2,9 @@
  *
  *  $RCSfile: splash.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 12:53:44 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 10:31:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,7 +96,7 @@ SplashScreen::SplashScreen(const Reference< XMultiServiceFactory >& rSMgr)
     , _bPaintProgress(sal_False)
     , _xoffset(12)
     , _yoffset(18)
-    , _barheight(6)
+    , _barheight(8)
     , _barspace(2)
 {
     _rFactory = rSMgr;
@@ -107,9 +107,25 @@ SplashScreen::SplashScreen(const Reference< XMultiServiceFactory >& rSMgr)
     _vdev.SetOutputSizePixel( aSize );
     _height = aSize.Height();
     _width = aSize.Width();
-    _tlx = _xoffset;              // top-left x
-    _tly = _height - _yoffset; // top-left y
-    _barwidth  = _width - (2*_yoffset);
+    if (_width > 500)
+    {
+        /* --> PB 2004-11-17 #118510# new branding
+        absolute values,
+        see: http://so-doc.germany.sun.com/Teams/StarOffice_Applications/Extras/Design/Splash_About/splash_progressbar.html
+        */
+        Point xtopleft(212,216);
+        _tlx = xtopleft.X();    // top-left x
+        _tly = xtopleft.Y();    // top-left y
+        _barwidth = 263;
+        // <--
+    }
+    else
+    {
+        _barheight = 6;
+        _barwidth  = _width - (2 * _yoffset);
+        _tlx = _xoffset;           // top-left x
+        _tly = _height - _yoffset; // top-left y
+    }
     Application::AddEventListener(
         LINK( this, SplashScreen, AppEventListenerHdl ) );
 }
@@ -268,6 +284,8 @@ void SplashScreen::Paint( const Rectangle& r)
         // draw progress...
         long length = (_iProgress * _barwidth / _iMax) - (2 * _barspace);
         if (length < 0) length = 0;
+        // --> PB 2004-11-17 #118510# new branding (now in green)
+        const Color cGreen(157,202,18); // light green
         const Color cBlue(COL_BLUE);
         const Color cGray(COL_LIGHTGRAY);
 
@@ -277,8 +295,11 @@ void SplashScreen::Paint( const Rectangle& r)
         _vdev.DrawRect(Rectangle(_tlx, _tly, _tlx+_barwidth,
             _tly+_barheight));
 
-        // progress bar
-        _vdev.SetFillColor(cBlue);
+        // progress bar, new color only for big bitmap format
+        if (_width > 500 )
+            _vdev.SetFillColor(cGreen);
+        else
+            _vdev.SetFillColor(cBlue);
         _vdev.SetLineColor();
         _vdev.DrawRect(Rectangle(_tlx+_barspace, _tly+_barspace,
             _tlx+_barspace+length, _tly+_barheight-_barspace));
