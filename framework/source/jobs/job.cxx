@@ -2,9 +2,9 @@
  *
  *  $RCSfile: job.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-11 17:44:42 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 12:56:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -309,19 +309,20 @@ void Job::execute( /*IN*/ const css::uno::Sequence< css::beans::NamedValue >& lD
     css::uno::Reference< css::task::XJob >       xSJob;
     css::uno::Sequence< css::beans::NamedValue > lJobArgs = impl_generateJobArgs(lDynamicArgs);
 
-    // create the job
-    // We must check for the supported interface on demand!
-    // But we preferr the synchronous one ...
-    m_xJob = m_xSMGR->createInstance(m_aJobCfg.getService());
-    xSJob  = css::uno::Reference< css::task::XJob >(m_xJob, css::uno::UNO_QUERY);
-    if (!xSJob.is())
-        xAJob = css::uno::Reference< css::task::XAsyncJob >(m_xJob, css::uno::UNO_QUERY);
-
     // It's neccessary to hold us self alive!
     // Otherwhise we might die by ref count ...
     css::uno::Reference< css::task::XJobListener > xThis(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY);
+
     try
     {
+        // create the job
+        // We must check for the supported interface on demand!
+        // But we preferr the synchronous one ...
+        m_xJob = m_xSMGR->createInstance(m_aJobCfg.getService());
+        xSJob  = css::uno::Reference< css::task::XJob >(m_xJob, css::uno::UNO_QUERY);
+        if (!xSJob.is())
+            xAJob = css::uno::Reference< css::task::XAsyncJob >(m_xJob, css::uno::UNO_QUERY);
+
         // execute it asynchron
         if (xAJob.is())
         {
@@ -347,10 +348,19 @@ void Job::execute( /*IN*/ const css::uno::Sequence< css::beans::NamedValue >& lD
             impl_reactForJobResult(aResult);
         }
     }
-    catch(const css::uno::Exception&)
+    #ifdef OSL_DEBUG_LEVEL > 0
+    catch(const css::uno::Exception& ex)
     {
-        LOG_WARNING("Job::execute()", "exception on job execute!")
+        ::rtl::OUStringBuffer sMsg(256);
+        sMsg.appendAscii("Got exception during job execution. Original Message was:\n\"");
+        sMsg.append     (ex.Message);
+        sMsg.appendAscii("\"");
+        LOG_WARNING("Job::execute()", U2B(sMsg.makeStringAndClear()).getStr())
     }
+    #else
+    catch(const css::uno::Exception&)
+        {}
+    #endif
 
     // deinitialize the environment and mark this job as finished ...
     // but don't overwrite any informations about STOPPED or might DISPOSED jobs!
