@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DTable.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-12 11:46:05 $
+ *  last change: $Author: hr $ $Date: 2001-10-12 15:21:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,6 +138,8 @@
 #ifndef _CONNECTIVITY_SDBCX_COLUMN_HXX_
 #include "connectivity/PColumn.hxx"
 #endif
+
+#include <algorithm>
 
 using namespace ::comphelper;
 using namespace connectivity;
@@ -1583,7 +1585,7 @@ BOOL ODbaseTable::UpdateBuffer(OValueVector& rRow, OValueRow pOrgRow,const Refer
                     memset(pData,' ',nLen); // Zuruecksetzen auf NULL
                     ByteString aStr(rRow[nPos].getString().getStr(),getConnection()->getTextEncoding());
                     // Zeichen kopieren:
-                    memcpy(pData, aStr.GetBuffer(), min(nLen,(sal_Int32)aStr.Len()));
+                    memcpy(pData, aStr.GetBuffer(), std::min(nLen,(sal_Int32)aStr.Len()));
                 }   break;
             }
         }
