@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swmodule.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 16:35:11 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 15:55:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -309,9 +309,6 @@
 #ifndef _SYNCBTN_HXX
 #include <syncbtn.hxx>
 #endif
-#ifndef _HDFTCTRL_HXX
-#include <hdftctrl.hxx>
-#endif
 #ifndef _MODOPT_HXX //autogen
 #include <modcfg.hxx>
 #endif
@@ -584,13 +581,6 @@ void SwDLL::RegisterControls()
     SwTemplateControl::RegisterControl(FN_STAT_TEMPLATE, pMod );
 
     SwTableOptimizeCtrl::RegisterControl(FN_OPTIMIZE_TABLE, pMod);
-
-    SfxMenuControl::RegisterControl(FN_FRAME_ALIGN_VERT_TOP, pMod );
-    SfxMenuControl::RegisterControl(FN_FRAME_ALIGN_VERT_BOTTOM, pMod );
-    SfxMenuControl::RegisterControl(FN_FRAME_ALIGN_VERT_CENTER, pMod );
-
-    SwHeadFootMenuControl::RegisterControl( FN_INSERT_PAGEHEADER, pMod );
-    SwHeadFootMenuControl::RegisterControl( FN_INSERT_PAGEFOOTER, pMod );
 
     SvxIMapDlgChildWindow::RegisterChildWindow( sal_False, pMod );
     SvxSearchDialogWrapper::RegisterChildWindow( sal_False, pMod );
