@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flylay.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 15:56:32 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 12:49:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1224,6 +1224,12 @@ BOOL CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, BOOL bMove )
                     (rRect.*fnRect->fnSetBottom)(
                                     (pTab->GetUpper()->*fnRect->fnGetPrtBottom)() );
                 }
+            }
+            else if ( pUp->GetUpper()->IsPageFrm() )
+            {
+                // #111909# Objects anchored as character may exceed right margin
+                // of body frame:
+                (rRect.*fnRect->fnSetRight)( (pUp->GetUpper()->Frm().*fnRect->fnGetRight)() );
             }
             long nHeight = (9*(rRect.*fnRect->fnGetHeight)())/10;
             long nTop;
