@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NeonPropFindRequest.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kso $ $Date: 2001-02-15 11:04:48 $
+ *  last change: $Author: kso $ $Date: 2001-02-20 16:20:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -252,8 +252,7 @@ NeonPropFindRequest::NeonPropFindRequest( HttpSession *             inSession,
 // -------------------------------------------------------------------
 NeonPropFindRequest::~NeonPropFindRequest( )
 {
-// Crash in neon -> hip_xml_destroy(...) is buggy!
-//  dav_propfind_destroy( mPropFindHandler );
+    dav_propfind_destroy( mPropFindHandler );
 }
 
 #ifdef OLD_NEON_PROPFIND_INTERFACE
@@ -266,12 +265,11 @@ NeonPropFindRequest::~NeonPropFindRequest( )
 void * NeonPropFindRequest::StartResource( void *       inUserData,
                                            const char * inHref )
 {
-    DAVResource * theResource = new DAVResource(
-                    OStringToOUString( inHref, RTL_TEXTENCODING_UTF8 ),
-                    false );
+    DAVResource theResource(
+                    OStringToOUString( inHref, RTL_TEXTENCODING_UTF8 ) );
     //theResource->uri = OStringToOUString( inHref, RTL_TEXTENCODING_UTF8 );
     vector< DAVResource > * theResources = (vector< DAVResource > * )inUserData;
-    theResources->push_back( *theResource );
+    theResources->push_back( theResource );
     return theResources;
 }
 
@@ -297,8 +295,7 @@ void * NeonPropFindRequest::CreatePrivate( void *       userdata,
                                            const char * uri )
 {
     DAVResource theResource(
-                    OStringToOUString( uri, RTL_TEXTENCODING_UTF8 ),
-                    false );
+                    OStringToOUString( uri, RTL_TEXTENCODING_UTF8 ) );
     vector< DAVResource > * theResources = (vector< DAVResource > * )userdata;
     theResources->push_back( theResource );
     return theResources;
@@ -329,23 +326,23 @@ int NeonPropFindRequest::EndElement( void *                         inUserData,
     if ( inXmlElem->id != ELM_resourcetype )
     {
         // Create & set the PropertyValue
-        PropertyValue *thePropertyValue = new PropertyValue;
+        PropertyValue thePropertyValue;
         // Warning: What should Handle be?
-        thePropertyValue->Handle    = 0;
-        thePropertyValue->State = PropertyState_DIRECT_VALUE;
+        thePropertyValue.Handle = -1;
+        thePropertyValue.State = PropertyState_DIRECT_VALUE;
 
         if ( inXmlElem->id == ELM_collection )
         {
-            thePropertyValue->Name  = OStringToOUString( "resourcetype",
+            thePropertyValue.Name   = OStringToOUString( "resourcetype",
                                                 RTL_TEXTENCODING_UTF8 );
-            thePropertyValue->Value <<= OStringToOUString( "collection",
+            thePropertyValue.Value <<= OStringToOUString( "collection",
                                                 RTL_TEXTENCODING_UTF8 );
         }
         else
         {
-            thePropertyValue->Name  = OStringToOUString( inXmlElem->name,
+            thePropertyValue.Name  = OStringToOUString( inXmlElem->name,
                                                 RTL_TEXTENCODING_UTF8 );
-            thePropertyValue->Value <<= OStringToOUString( inCdata,
+            thePropertyValue.Value  <<= OStringToOUString( inCdata,
                                                 RTL_TEXTENCODING_UTF8 );
         }
 

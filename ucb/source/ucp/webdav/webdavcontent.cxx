@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavcontent.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kso $ $Date: 2001-02-15 11:11:45 $
+ *  last change: $Author: kso $ $Date: 2001-02-20 16:20:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -230,60 +230,60 @@ void ContentProperties::setValues(DAVResource& resource)
   bIsDocument  =  sal_True;
   bIsFolder  =  sal_False;
 
-  std::vector< com::sun::star::beans::PropertyValue* >::iterator it;
+  std::vector< com::sun::star::beans::PropertyValue >::iterator it;
   for ( it=resource.properties.begin(); it!=resource.properties.end(); ++it) {
-    if ( (*it) == 0 ) {
-      continue;
-    }
+//    if ( (*it) == 0 ) {
+//      continue;
+//    }
 
-    if ( (*it)->Name.equals(DAVProperties::CREATIONDATE) )  {
-      (*it)->Value >>= creationdate;
+    if ( (*it).Name.equals(DAVProperties::CREATIONDATE) )  {
+      (*it).Value >>= creationdate;
 
       // Map the DAV:creationdate to UCP:DateCreated
       //
       DateTimeHelper::convert (creationdate, dateCreated);
     }
-    else if ( (*it)->Name.equals(DAVProperties::DISPLAYNAME) ) {
-      (*it)->Value >>= displayname;
+    else if ( (*it).Name.equals(DAVProperties::DISPLAYNAME) ) {
+      (*it).Value >>= displayname;
     }
-    else if ( (*it)->Name.equals(DAVProperties::GETCONTENTLANGUAGE) ) {
-      (*it)->Value >>= getcontentlanguage;
+    else if ( (*it).Name.equals(DAVProperties::GETCONTENTLANGUAGE) ) {
+      (*it).Value >>= getcontentlanguage;
     }
-    else if ( (*it)->Name.equals(DAVProperties::GETCONTENTLENGTH) ) {
-      (*it)->Value >>= getcontentlength;
+    else if ( (*it).Name.equals(DAVProperties::GETCONTENTLENGTH) ) {
+      (*it).Value >>= getcontentlength;
 
       // Map the DAV:getcontentlength to UCP:Size
       //
       size = getcontentlength.toInt64 ();
     }
-    else if ( (*it)->Name.equals(DAVProperties::GETCONTENTTYPE) ) {
-      (*it)->Value >>= getcontenttype;
+    else if ( (*it).Name.equals(DAVProperties::GETCONTENTTYPE) ) {
+      (*it).Value >>= getcontenttype;
     }
-    else if ( (*it)->Name.equals(DAVProperties::GETETAG) ) {
-      (*it)->Value >>= getetag;
+    else if ( (*it).Name.equals(DAVProperties::GETETAG) ) {
+      (*it).Value >>= getetag;
     }
-    else if ( (*it)->Name.equals(DAVProperties::GETLASTMODIFIED) ) {
-      (*it)->Value >>= getlastmodified;
+    else if ( (*it).Name.equals(DAVProperties::GETLASTMODIFIED) ) {
+      (*it).Value >>= getlastmodified;
 
       // Map the DAV:getlastmodified to UCP:DateModified
       //
       DateTimeHelper::convert (getlastmodified, dateModified);
     }
-    else if ( (*it)->Name.equals(DAVProperties::LOCKDISCOVERY) ) {
-      (*it)->Value >>= lockdiscovery;
+    else if ( (*it).Name.equals(DAVProperties::LOCKDISCOVERY) ) {
+      (*it).Value >>= lockdiscovery;
     }
-    else if ( (*it)->Name.equals(DAVProperties::RESOURCETYPE) ) {
-      (*it)->Value >>= resourcetype;
+    else if ( (*it).Name.equals(DAVProperties::RESOURCETYPE) ) {
+      (*it).Value >>= resourcetype;
       if (resourcetype.getLength()>0) {
         bIsDocument =  sal_False;
         bIsFolder   =  sal_True;
       }
     }
-    else if ( (*it)->Name.equals(DAVProperties::SOURCE) ) {
-      (*it)->Value >>= source;
+    else if ( (*it).Name.equals(DAVProperties::SOURCE) ) {
+      (*it).Value >>= source;
     }
-    else if ( (*it)->Name.equals(DAVProperties::SUPPORTEDLOCK) ) {
-      (*it)->Value >>= supportedlock;
+    else if ( (*it).Name.equals(DAVProperties::SUPPORTEDLOCK) ) {
+      (*it).Value >>= supportedlock;
     }
   }
 }

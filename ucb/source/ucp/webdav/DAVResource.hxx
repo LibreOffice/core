@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DAVResource.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-16 14:55:20 $
+ *  last change: $Author: kso $ $Date: 2001-02-20 16:20:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,19 +70,12 @@ namespace webdav_ucp
 
 class DAVResource
 {
-    private:
-        bool canDelete;
-
     public:
         ::rtl::OUString uri;
-        std::vector < com::sun::star::beans::PropertyValue* > properties;
+        std::vector < com::sun::star::beans::PropertyValue > properties;
 
     public:
-        DAVResource(const DAVResource & inDAVResource);
-        DAVResource(const ::rtl::OUString & inUri, bool incanDelete = true );
-
-        void deletePropertyValues( void );
-        void operator=( const DAVResource & inDAVResource );
+        DAVResource(const ::rtl::OUString & inUri );
 };
 
 }; // namespace webdav_ucp
