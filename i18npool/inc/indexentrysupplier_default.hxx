@@ -2,9 +2,9 @@
  *
  *  $RCSfile: indexentrysupplier_default.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: khong $ $Date: 2002-06-18 22:34:57 $
+ *  last change: $Author: obo $ $Date: 2004-05-28 16:32:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,20 +58,19 @@
  *
  *
  ************************************************************************/
+#ifndef _I18N_INDEXENTRYSUPPLIER_DEFAULT_HXX_
+#define _I18N_INDEXENTRYSUPPLIER_DEFAULT_HXX_
 
-#ifndef _I18N_INDEXENTRYSUPPLIER_UNICODE_HXX_
-#define _I18N_INDEXENTRYSUPPLIER_UNICODE_HXX_
-
-#include <indexentrysupplier.hxx>
-#include <collatorImpl.hxx>
+#include <indexentrysupplier_common.hxx>
 
 namespace com { namespace sun { namespace star { namespace i18n {
+
+class Index;
 
 //  ----------------------------------------------------
 //  class IndexEntrySupplier_Unicode
 //  ----------------------------------------------------
-
-class IndexEntrySupplier_Unicode : public IndexEntrySupplier {
+class IndexEntrySupplier_Unicode : public IndexEntrySupplier_Common {
 public:
     IndexEntrySupplier_Unicode( const com::sun::star::uno::Reference < com::sun::star::lang::XMultiServiceFactory >& rxMSF );
     ~IndexEntrySupplier_Unicode();
@@ -95,19 +94,51 @@ public:
         const com::sun::star::lang::Locale& rLocale, const rtl::OUString& rSortAlgorithm )
         throw (com::sun::star::uno::RuntimeException);
 
-protected:
-    sal_Bool usePhonetic;
-    CollatorImpl *collator;
-    virtual const rtl::OUString& SAL_CALL getEntry( const rtl::OUString& IndexEntry,
-        const rtl::OUString& PhoneticEntry, const com::sun::star::lang::Locale& rLocale )
-        throw (com::sun::star::uno::RuntimeException);
+private:
+    Index *index;
+};
 
-    virtual sal_Int16 SAL_CALL compareIndexKey( const rtl::OUString& IndexEntry1,
-        const rtl::OUString& PhoneticEntry1, const com::sun::star::lang::Locale& rLocale1,
-        const rtl::OUString& IndexEntry2, const ::rtl::OUString& PhoneticEntry2,
-        const com::sun::star::lang::Locale& rLocale2 )
-        throw (com::sun::star::uno::RuntimeException);
+struct IndexKey {
+    sal_Unicode key;
+    sal_Unicode* desc;
+    sal_Int16 desc_leng;
+};
+
+class IndexTable
+{
+public:
+    IndexTable();
+    ~IndexTable();
+
+    void init(sal_Unicode start_, sal_Unicode end_, IndexKey* keys, sal_Int16 key_count, Index *index);
+
+    sal_Unicode start;
+    sal_Unicode end;
+    sal_uInt8 *table;
+};
+
+#define MAX_KEYS 0xff
+#define MAX_TABLES 20
+
+class Index
+{
+public:
+    Index(CollatorImpl *col);
+
+    void init(const com::sun::star::lang::Locale& rLocale, const rtl::OUString& algorithm) throw (com::sun::star::uno::RuntimeException);
+
+    void makeIndexKeys(const com::sun::star::lang::Locale &rLocale, const rtl::OUString &algorithm) throw (com::sun::star::uno::RuntimeException);
+    sal_Int16 getIndexWeight(const rtl::OUString& rIndexEntry);
+    rtl::OUString getIndexDescription(const rtl::OUString& rIndexEntry);
+
+    IndexTable tables[MAX_TABLES];
+    sal_Int16 table_count;
+    IndexKey keys[MAX_KEYS];
+    sal_Int16 key_count;
+    CollatorImpl *collator;
+    sal_Int16 compare(sal_Unicode c1, sal_Unicode c2);
 };
 
 } } } }
+
 #endif
