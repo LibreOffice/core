@@ -12,15 +12,3 @@ mkdir: %COMMON_DEST%\bin%_EXT%\hid
 mkdir: %_DEST%\inc%_EXT%\chart2
 
 hedabu: ..\inc\DevChartConfig.hxx %_DEST%\inc%_EXT%\chart2\DevChartConfig.hxx
-
-mkdir: %_DEST%\inc%_EXT%\drafts
-mkdir: %_DEST%\inc%_EXT%\drafts\com
-mkdir: %_DEST%\inc%_EXT%\drafts\com\sun
-mkdir: %_DEST%\inc%_EXT%\drafts\com\sun\star
-mkdir: %_DEST%\inc%_EXT%\drafts\com\sun\star\chart2
-mkdir: %_DEST%\inc%_EXT%\drafts\com\sun\star\layout
-
-..\%__SRC%\inc\drafts\com\sun\star\chart2\*.hdl %_DEST%\inc%_EXT%\drafts\com\sun\star\chart2\*.hdl
-..\%__SRC%\inc\drafts\com\sun\star\chart2\*.hpp %_DEST%\inc%_EXT%\drafts\com\sun\star\chart2\*.hpp
-..\%__SRC%\inc\drafts\com\sun\star\layout\*.hdl %_DEST%\inc%_EXT%\drafts\com\sun\star\layout\*.hdl
-..\%__SRC%\inc\drafts\com\sun\star\layout\*.hpp %_DEST%\inc%_EXT%\drafts\com\sun\star\layout\*.hpp
