@@ -2,9 +2,9 @@
  *
  *  $RCSfile: invalidatetree.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jb $ $Date: 2001-09-28 12:44:34 $
+ *  last change: $Author: jb $ $Date: 2001-11-09 12:07:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -264,7 +264,7 @@ void concatSubtreeWithChanges(ISubtree* _pSubtree, TreeChangeList &_aChangeList)
 
 auto_ptr<ISubtree> TreeManager::loadNodeFromSession( IConfigSession *_pSession, AbsolutePath const& _aAbsoluteSubtreePath,
                                                      const vos::ORef < OOptions >& _xOptions,
-                                                     sal_Int16 _nMinLevels)  throw (uno::Exception)
+                                                     sal_Int16 _nMinLevels)  CFG_UNO_THROW_ALL()
 {
     TreeInfo* pInfo = this->requestTreeInfo(_xOptions,true /*create TreeInfo*/);
 
@@ -321,7 +321,7 @@ public:
 };
 
 // -----------------------------------------------------------------------------
-void TreeManager::invalidateTreeAsync(const AbsolutePath &_aAbsoluteSubtreePath, const vos::ORef<OOptions>& _rOptions) throw (uno::Exception)
+void TreeManager::invalidateTreeAsync(const AbsolutePath &_aAbsoluteSubtreePath, const vos::ORef<OOptions>& _rOptions) CFG_UNO_THROW_ALL()
 {
     if (m_bDisposeMode == false)
     {
@@ -339,7 +339,7 @@ void TreeManager::invalidateTreeAsync(const AbsolutePath &_aAbsoluteSubtreePath,
 
 // -----------------------------------------------------------------------------
 
-void TreeManager::refreshSubtree(const AbsolutePath &_aAbsoluteSubtreePath, const vos::ORef<OOptions>& _aOptions) throw (uno::Exception)
+void TreeManager::refreshSubtree(const AbsolutePath &_aAbsoluteSubtreePath, const vos::ORef<OOptions>& _aOptions) CFG_UNO_THROW_ALL()
 {
     // load the Node direct from the session, without using the cache
     auto_ptr<ISubtree> aLoadedSubtree( this->loadNodeFromSession(m_pSession, _aAbsoluteSubtreePath, _aOptions, -1) );

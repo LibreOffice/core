@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cachewritescheduler.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: lla $ $Date: 2001-04-11 11:40:47 $
+ *  last change: $Author: jb $ $Date: 2001-11-09 12:07:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,7 +148,7 @@ namespace configmgr
             return aBaseTime + aDelay;
         }
     //-------- Control of execution  ------------------------------------------
-        void scheduleWrite(vos::ORef< OOptions > const& _xOptions, bool _bASync = false) throw ( lang::WrappedTargetException, uno::RuntimeException);
+        void scheduleWrite(vos::ORef< OOptions > const& _xOptions, bool _bASync = false) CFG_UNO_THROW_ALL(  );
 
         /// stop pending activities for one set of options (do not discard them)
         bool clearTasks(vos::ORef< OOptions > const& _xOptions);
@@ -165,7 +165,7 @@ namespace configmgr
 
         void runWriter();
         void implStartBefore(TimeStamp const& _aTime);
-        void writeOneTreeFoundByOption(vos::ORef< OOptions > const& _xOption) throw (lang::WrappedTargetException, uno::RuntimeException);
+        void writeOneTreeFoundByOption(vos::ORef< OOptions > const& _xOption) CFG_UNO_THROW_ALL(  );
     };
 } // namespace configmgr
 

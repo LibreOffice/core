@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cachewritescheduler.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: lla $ $Date: 2001-04-11 11:40:47 $
+ *  last change: $Author: jb $ $Date: 2001-11-09 12:07:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,9 +139,9 @@ void OCacheWriteScheduler::runWriter()
             {
                 writeOneTreeFoundByOption(xTaskOption);
             }
-            catch (uno::Exception&)
+            catch (uno::Exception& e)
             {
-                CFG_TRACE_ERROR("TreeCacheWriteScheduler: Attempt to write data failed - error is (currently ignored)");
+                CFG_TRACE_ERROR("TreeCacheWriteScheduler: Attempt to write data failed - error is '%s' (currently ignored)",OUSTRING2ASCII(e.Message));
             }
         }
         else
@@ -156,7 +156,7 @@ void OCacheWriteScheduler::runWriter()
 }
 
 // -----------------------------------------------------------------------------
-void OCacheWriteScheduler::writeOneTreeFoundByOption(vos::ORef< OOptions > const& _xOptions) throw (lang::WrappedTargetException, uno::RuntimeException)
+void OCacheWriteScheduler::writeOneTreeFoundByOption(vos::ORef< OOptions > const& _xOptions) CFG_UNO_THROW_ALL(  )
 {
     // PRE: m_aUpdateMutex of TreeMgr must be acuired
     if (TreeInfo* pInfo = m_rTreeManager.requestTreeInfo(_xOptions,false))
@@ -210,7 +210,7 @@ void OCacheWriteScheduler::implStartBefore(TimeStamp const& _aTime)
 }
 
 // -----------------------------------------------------------------------------
-void OCacheWriteScheduler::scheduleWrite(vos::ORef< OOptions > const& _xOptions, bool _bAsync)  throw (lang::WrappedTargetException, uno::RuntimeException)
+void OCacheWriteScheduler::scheduleWrite(vos::ORef< OOptions > const& _xOptions, bool _bAsync)  CFG_UNO_THROW_ALL(  )
 {
     // PRE: m_aUpdateMutex of TreeMgr must be acuired
     OSL_ASSERT(_xOptions.isValid());
