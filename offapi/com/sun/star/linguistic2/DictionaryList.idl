@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DictionaryList.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:06:01 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 20:58:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@
 
 module com { module sun { module star { module linguistic2 {
 
-interface XSearchableDictionaryList;
+ published interface XSearchableDictionaryList;
 
 //=============================================================================
 /** is the list of personal dictionaries.
@@ -84,7 +84,7 @@ interface XSearchableDictionaryList;
     @see <type scope="com::sun::star::linguistic2">XDictionaryList</type>
     @see <type scope="com::sun::star::linguistic2">XSearchableDictionaryList</type>
 */
-service DictionaryList
+published service DictionaryList
 {
     interface com::sun::star::linguistic2::XSearchableDictionaryList;
     interface com::sun::star::lang::XComponent;
