@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldlg.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: vg $ $Date: 2001-10-22 06:05:38 $
+ *  last change: $Author: kz $ $Date: 2001-10-25 20:39:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -409,7 +409,7 @@ TabPage RID_TP_LIBS
         Text[ swedish ] = "Till�mpning/d~okument";
         Text[ polish ] = "Aplikacja/D~okument";
         Text[ portuguese_brazilian ] = "Application/D~ocument";
-        Text[ japanese ] = "Application/D~ocument";
+        Text[ japanese ] = "ｱﾌﾟﾘｹｰｼｮﾝとﾄﾞｷｭﾒﾝﾄ";
         Text[ korean ] = "Application/D~ocument";
         Text[ chinese_simplified ] = "应用程序/文档(~O)";
         Text[ chinese_traditional ] = "應用程式/文件(~O)";
@@ -895,6 +895,7 @@ ModalDialog RID_DLG_NEWLIB
         Text[ finnish ] = "~Luo erillinen tiedosto";
     };
 };
+
 
 
 
