@@ -2,9 +2,9 @@
  *
  *  $RCSfile: access.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:43:05 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:15:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,52 +66,58 @@ String STR_ACCESS_DOC_NAME
     Text = "Dokument-Ansicht" ;
     Text [ English ] = "Document View";
     Text[ english_us ] = "Document view";
-    Text[ portuguese ] = "Document View";
-    Text[ russian ] = "Document View";
-    Text[ greek ] = "Document View";
-    Text[ dutch ] = "Document View";
+    Text[ portuguese ] = "Document view";
+    Text[ russian ] = "Document view";
+    Text[ greek ] = "Document view";
+    Text[ dutch ] = "Document view";
     Text[ french ] = "Affichage du document";
     Text[ spanish ] = "Visualizaci�n del documento";
-    Text[ finnish ] = "Document View";
+    Text[ finnish ] = "Document view";
     Text[ italian ] = "Vista documento";
-    Text[ danish ] = "Document View";
+    Text[ danish ] = "Document view";
     Text[ swedish ] = "Dokumentvy";
-    Text[ polish ] = "Document View";
-    Text[ portuguese_brazilian ] = "Document View";
+    Text[ polish ] = "Document view";
+    Text[ portuguese_brazilian ] = "Document view";
     Text[ japanese ] = "ドキュメントの表示";
     Text[ korean ] = "문서 보기";
     Text[ chinese_simplified ] = "文档视图";
     Text[ chinese_traditional ] = "文件檢視";
-    Text[ turkish ] = "Document View";
-    Text[ arabic ] = "Document View";
-    Text[ catalan ] = "Document View";
-    Text[ thai ] = "Document View";
+    Text[ turkish ] = "Belge g�ster";
+    Text[ arabic ] = "Document view";
+    Text[ catalan ] = "Document view";
+    Text[ thai ] = "Document view";
+    Text[ czech ] = "Pohled na dokument";
+    Text[ hebrew ] = "Dokument-Ansicht";
+    Text[ hindi ] = "Document view";
 };
 String STR_ACCESS_DOC_DESC
 {
     Text = "Dokument-Ansicht" ;
     Text [ English ] = "Document View";
     Text[ english_us ] = "Document view";
-    Text[ portuguese ] = "Document View";
-    Text[ russian ] = "Document View";
-    Text[ greek ] = "Document View";
-    Text[ dutch ] = "Document View";
+    Text[ portuguese ] = "Document view";
+    Text[ russian ] = "Document view";
+    Text[ greek ] = "Document view";
+    Text[ dutch ] = "Document view";
     Text[ french ] = "Affichage du document";
     Text[ spanish ] = "Visualizaci�n del documento";
-    Text[ finnish ] = "Document View";
+    Text[ finnish ] = "Document view";
     Text[ italian ] = "Vista documento";
-    Text[ danish ] = "Document View";
+    Text[ danish ] = "Document view";
     Text[ swedish ] = "Dokumentvy";
-    Text[ polish ] = "Document View";
-    Text[ portuguese_brazilian ] = "Document View";
+    Text[ polish ] = "Document view";
+    Text[ portuguese_brazilian ] = "Document view";
     Text[ japanese ] = "ドキュメントの表示";
     Text[ korean ] = "문서 보기";
     Text[ chinese_simplified ] = "文档视图";
     Text[ chinese_traditional ] = "文件檢視";
-    Text[ turkish ] = "Document View";
-    Text[ arabic ] = "Document View";
-    Text[ catalan ] = "Document View";
-    Text[ thai ] = "Document View";
+    Text[ turkish ] = "Belge g�ster";
+    Text[ arabic ] = "Document view";
+    Text[ catalan ] = "Document view";
+    Text[ thai ] = "Document view";
+    Text[ czech ] = "Pohled na dokument";
+    Text[ hebrew ] = "Dokument-Ansicht";
+    Text[ hindi ] = "Document view";
 };
 String STR_ACCESS_PARAGRAPH_NAME
 {
@@ -134,10 +140,13 @@ String STR_ACCESS_PARAGRAPH_NAME
     Text[ korean ] = "단락 $(ARG1)";
     Text[ chinese_simplified ] = "段落 $(ARG1)";
     Text[ chinese_traditional ] = "段落 $(ARG1)";
-    Text[ turkish ] = "Paragraph $(ARG1)";
+    Text[ turkish ] = "Paragraf $(ARG1)";
     Text[ arabic ] = "Paragraph $(ARG1)";
     Text[ catalan ] = "Paragraph $(ARG1)";
     Text[ thai ] = "Paragraph $(ARG1)";
+    Text[ czech ] = "Odstavec $(ARG1)";
+    Text[ hebrew ] = "Absatz $(ARG1)";
+    Text[ hindi ] = "Paragraph $(ARG1)";
 };
 String STR_ACCESS_PARAGRAPH_DESC
 {
@@ -155,15 +164,18 @@ String STR_ACCESS_PARAGRAPH_DESC
     Text[ danish ] = "Paragraph: $(ARG1)";
     Text[ swedish ] = "Stycke: $(ARG1) ";
     Text[ polish ] = "Paragraph: $(ARG1)";
-    Text[ portuguese_brazilian ] = "Paragraph: $(ARG1)";
+    Text[ portuguese_brazilian ] = "Paragraph: $(ARG1) ";
     Text[ japanese ] = "段落: $(ARG1)";
     Text[ korean ] = "단락: $(ARG1)";
     Text[ chinese_simplified ] = "段落：$(ARG1)";
     Text[ chinese_traditional ] = "段落：$(ARG1)";
-    Text[ turkish ] = "Paragraph: $(ARG1)";
+    Text[ turkish ] = "Paragraf: $(ARG1)";
     Text[ arabic ] = "Paragraph: $(ARG1)";
-    Text[ catalan ] = "Paragraph: $(ARG1)";
-    Text[ thai ] = "Paragraph: $(ARG1)";
+    Text[ catalan ] = "Paragraph: $(ARG1) ";
+    Text[ thai ] = "Paragraph: $(ARG1) ";
+    Text[ czech ] = "Odstavec: $(ARG1) ";
+    Text[ hebrew ] = "Absatz: $(ARG1)";
+    Text[ hindi ] = "Paragraph: $(ARG1) ";
 };
 String STR_ACCESS_HEADING_NAME
 {
@@ -185,11 +197,14 @@ String STR_ACCESS_HEADING_NAME
     Text[ japanese ] = "見出し $(ARG1)";
     Text[ korean ] = "제목 $(ARG1)";
     Text[ chinese_simplified ] = "大标题 $(ARG1)";
-    Text[ chinese_traditional ] = "大標題 $(ARG1)";
-    Text[ turkish ] = "Heading $(ARG1)";
+    Text[ chinese_traditional ] = "標頭 $(ARG1)";
+    Text[ turkish ] = "Ba�l�k $(ARG1)";
     Text[ arabic ] = "Heading $(ARG1)";
     Text[ catalan ] = "Heading $(ARG1)";
     Text[ thai ] = "Heading $(ARG1)";
+    Text[ czech ] = "Nadpis $(ARG1)";
+    Text[ hebrew ] = "Überschrift $(ARG1)";
+    Text[ hindi ] = "Heading $(ARG1)";
 };
 String STR_ACCESS_HEADING_DESC
 {
@@ -211,11 +226,14 @@ String STR_ACCESS_HEADING_DESC
     Text[ japanese ] = "見出し: $(ARG1)";
     Text[ korean ] = "제목: $(ARG1)";
     Text[ chinese_simplified ] = "大标题：$(ARG1)";
-    Text[ chinese_traditional ] = "大標題：$(ARG1)";
-    Text[ turkish ] = "Heading: $(ARG1)";
+    Text[ chinese_traditional ] = "標頭：$(ARG1)";
+    Text[ turkish ] = "Ba�l�k: $(ARG1)";
     Text[ arabic ] = "Heading: $(ARG1)";
     Text[ catalan ] = "Heading: $(ARG1)";
     Text[ thai ] = "Heading: $(ARG1)";
+    Text[ czech ] = "Nadpis: $(ARG1)";
+    Text[ hebrew ] = "Überschrift: $(ARG1)";
+    Text[ hindi ] = "Heading: $(ARG1)";
 };
 String STR_ACCESS_HEADING_WITH_NUM_DESC
 {
@@ -237,11 +255,14 @@ String STR_ACCESS_HEADING_WITH_NUM_DESC
     Text[ japanese ] = "見出し番号 $(ARG2): $(ARG1)";
     Text[ korean ] = "제목 번호 $(ARG2): $(ARG1)";
     Text[ chinese_simplified ] = "大标题的编号 $(ARG2): $(ARG1)";
-    Text[ chinese_traditional ] = "大標題編號 $(ARG2): $(ARG1)";
-    Text[ turkish ] = "Heading number $(ARG2): $(ARG1)";
+    Text[ chinese_traditional ] = "標頭編號 $(ARG2): $(ARG1)";
+    Text[ turkish ] = "Ba�l�k numaras� $(ARG2): $(ARG1)";
     Text[ arabic ] = "Heading number $(ARG2): $(ARG1)";
     Text[ catalan ] = "Heading number $(ARG2): $(ARG1)";
     Text[ thai ] = "Heading number $(ARG2): $(ARG1)";
+    Text[ czech ] = "Číslo nadpisu $(ARG2): $(ARG1)";
+    Text[ hebrew ] = "Überschrift Nummer $(ARG2): $(ARG1)";
+    Text[ hindi ] = "Heading number $(ARG2): $(ARG1)";
 };
 String STR_ACCESS_HEADER_NAME
 {
@@ -264,10 +285,13 @@ String STR_ACCESS_HEADER_NAME
     Text[ korean ] = "머리글 $(ARG1)";
     Text[ chinese_simplified ] = "页眉 $(ARG1)";
     Text[ chinese_traditional ] = "頁首 $(ARG1)";
-    Text[ turkish ] = "Header $(ARG1)";
+    Text[ turkish ] = "Ba�l�k $(ARG1)";
     Text[ arabic ] = "Header $(ARG1)";
     Text[ catalan ] = "Header $(ARG1)";
     Text[ thai ] = "Header $(ARG1)";
+    Text[ czech ] = "Záhlaví $(ARG1)";
+    Text[ hebrew ] = "Kopfzeile $(ARG1)";
+    Text[ hindi ] = "Header $(ARG1)";
 };
 String STR_ACCESS_HEADER_DESC
 {
@@ -290,10 +314,13 @@ String STR_ACCESS_HEADER_DESC
     Text[ korean ] = "머리글 페이지 $(ARG1)";
     Text[ chinese_simplified ] = "页眉页面 $(ARG1)";
     Text[ chinese_traditional ] = "頁首頁面 $(ARG1)";
-    Text[ turkish ] = "Header page $(ARG1)";
+    Text[ turkish ] = "Ba�l�k sayfas� $(ARG1)";
     Text[ arabic ] = "Header page $(ARG1)";
     Text[ catalan ] = "Header page $(ARG1)";
     Text[ thai ] = "Header page $(ARG1)";
+    Text[ czech ] = "Záhlaví stránky $(ARG1)";
+    Text[ hebrew ] = "Kopfzeile Seite $(ARG1)";
+    Text[ hindi ] = "Header page $(ARG1)";
 };
 String STR_ACCESS_FOOTER_NAME
 {
@@ -316,10 +343,13 @@ String STR_ACCESS_FOOTER_NAME
     Text[ korean ] = "바닥글 $(ARG1)";
     Text[ chinese_simplified ] = "页尾 $(ARG1)";
     Text[ chinese_traditional ] = "頁尾 $(ARG1)";
-    Text[ turkish ] = "Footer $(ARG1)";
+    Text[ turkish ] = "Alt $(ARG1)";
     Text[ arabic ] = "Footer $(ARG1)";
     Text[ catalan ] = "Footer $(ARG1)";
     Text[ thai ] = "Footer $(ARG1)";
+    Text[ czech ] = "Zápatí $(ARG1)";
+    Text[ hebrew ] = "Fußzeile $(ARG1)";
+    Text[ hindi ] = "Footer $(ARG1)";
 };
 String STR_ACCESS_FOOTER_DESC
 {
@@ -342,10 +372,13 @@ String STR_ACCESS_FOOTER_DESC
     Text[ korean ] = "바닥글 페이지 $(ARG1)";
     Text[ chinese_simplified ] = "页尾页面 $(ARG1)";
     Text[ chinese_traditional ] = "頁尾頁面 $(ARG1)";
-    Text[ turkish ] = "Footer page $(ARG1)";
+    Text[ turkish ] = "Dipnot sayfas�";
     Text[ arabic ] = "Footer page $(ARG1)";
     Text[ catalan ] = "Footer page $(ARG1)";
     Text[ thai ] = "Footer page $(ARG1)";
+    Text[ czech ] = "Zápatí stránky $(ARG1)";
+    Text[ hebrew ] = "Fußzeile Seite $(ARG1)";
+    Text[ hindi ] = "Footer page $(ARG1)";
 };
 String STR_ACCESS_FOOTNOTE_NAME
 {
@@ -368,10 +401,13 @@ String STR_ACCESS_FOOTNOTE_NAME
     Text[ korean ] = "각주 $(ARG1)";
     Text[ chinese_simplified ] = "注脚 $(ARG1)";
     Text[ chinese_traditional ] = "註腳 $(ARG1)";
-    Text[ turkish ] = "Footnote $(ARG1)";
+    Text[ turkish ] = "Dipnot $(ARG1)";
     Text[ arabic ] = "Footnote $(ARG1)";
     Text[ catalan ] = "Footnote $(ARG1)";
     Text[ thai ] = "Footnote $(ARG1)";
+    Text[ czech ] = "Poznámka pod čarou $(ARG1)";
+    Text[ hebrew ] = "Fußnote $(ARG1)";
+    Text[ hindi ] = "Footnote $(ARG1)";
 };
 String STR_ACCESS_FOOTNOTE_DESC
 {
@@ -394,10 +430,13 @@ String STR_ACCESS_FOOTNOTE_DESC
     Text[ korean ] = "각주 $(ARG1)";
     Text[ chinese_simplified ] = "注脚 $(ARG1)";
     Text[ chinese_traditional ] = "註腳 $(ARG1)";
-    Text[ turkish ] = "Footnote $(ARG1)";
+    Text[ turkish ] = "Dipnot $(ARG1)";
     Text[ arabic ] = "Footnote $(ARG1)";
     Text[ catalan ] = "Footnote $(ARG1)";
     Text[ thai ] = "Footnote $(ARG1)";
+    Text[ czech ] = "Poznámka pod čarou $(ARG1)";
+    Text[ hebrew ] = "Fußnote $(ARG1)";
+    Text[ hindi ] = "Footnote $(ARG1)";
 };
 String STR_ACCESS_ENDNOTE_NAME
 {
@@ -420,10 +459,13 @@ String STR_ACCESS_ENDNOTE_NAME
     Text[ korean ] = "미주 $(ARG1)";
     Text[ chinese_simplified ] = "尾注 $(ARG1)";
     Text[ chinese_traditional ] = "尾註 $(ARG1)";
-    Text[ turkish ] = "Endnote $(ARG1)";
+    Text[ turkish ] = "Sonnot $(ARG1)";
     Text[ arabic ] = "Endnote $(ARG1)";
     Text[ catalan ] = "Endnote $(ARG1)";
     Text[ thai ] = "Endnote $(ARG1)";
+    Text[ czech ] = "Vysvětlivka $(ARG1)";
+    Text[ hebrew ] = "Endnote $(ARG1)";
+    Text[ hindi ] = "Endnote $(ARG1)";
 };
 String STR_ACCESS_ENDNOTE_DESC
 {
@@ -446,10 +488,13 @@ String STR_ACCESS_ENDNOTE_DESC
     Text[ korean ] = "미주 $(ARG1)";
     Text[ chinese_simplified ] = "尾注 $(ARG1)";
     Text[ chinese_traditional ] = "尾註 $(ARG1)";
-    Text[ turkish ] = "Endnote $(ARG1)";
+    Text[ turkish ] = "Sonnot $(ARG1)";
     Text[ arabic ] = "Endnote $(ARG1)";
     Text[ catalan ] = "Endnote $(ARG1)";
     Text[ thai ] = "Endnote $(ARG1)";
+    Text[ czech ] = "Vysvětlivka $(ARG1)";
+    Text[ hebrew ] = "Endnote $(ARG1)";
+    Text[ hindi ] = "Endnote $(ARG1)";
 };
 String STR_ACCESS_TABLE_DESC
 {
@@ -472,10 +517,13 @@ String STR_ACCESS_TABLE_DESC
     Text[ korean ] = "$(ARG2) 페이지의 $(ARG1)";
     Text[ chinese_simplified ] = "$(ARG1) 在页 $(ARG2) 上";
     Text[ chinese_traditional ] = "$(ARG1) 在頁 $(ARG2) 上";
-    Text[ turkish ] = "$(ARG1) on page $(ARG2)";
+    Text[ turkish ] = "$(ARG2) sayfas� �zerinde $(ARG1)";
     Text[ arabic ] = "$(ARG1) on page $(ARG2)";
     Text[ catalan ] = "$(ARG1) on page $(ARG2)";
     Text[ thai ] = "$(ARG1) on page $(ARG2)";
+    Text[ czech ] = "$(ARG1) na stránce $(ARG2)";
+    Text[ hebrew ] = "$(ARG1) auf Seite $(ARG2)";
+    Text[ hindi ] = "$(ARG1) on page $(ARG2)";
 };
 String STR_ACCESS_PAGE_NAME
 {
@@ -497,8 +545,14 @@ String STR_ACCESS_PAGE_NAME
     Text[ korean ] = "$(ARG1) 페이지";
     Text[ chinese_simplified ] = "页 $(ARG1)";
     Text[ chinese_traditional ] = "頁 $(ARG1)";
-    Text[ turkish ] = "Page $(ARG1)";
+    Text[ turkish ] = "Sayfa $(ARG1)";
     Text[ arabic ] = "Page $(ARG1)";
+    Text[ czech ] = "Stránka $(ARG1)";
+    Text[ hebrew ] = "Seite $(ARG1)";
+    Text[ catalan ] = "Page $(ARG1)";
+    Text[ portuguese_brazilian ] = "Page $(ARG1)";
+    Text[ thai ] = "Page $(ARG1)";
+    Text[ hindi ] = "Page $(ARG1)";
 };
 String STR_ACCESS_PAGE_DESC
 {
@@ -520,8 +574,23 @@ String STR_ACCESS_PAGE_DESC
     Text[ korean ] = "페이지: $(ARG1)";
     Text[ chinese_simplified ] = "页：$(ARG1)";
     Text[ chinese_traditional ] = "頁：$(ARG1)";
-    Text[ turkish ] = "Page: $(ARG1)";
+    Text[ turkish ] = "Sayfa: $(ARG1)";
     Text[ arabic ] = "Page: $(ARG1)";
+    Text[ czech ] = "Stránka: $(ARG1)";
+    Text[ hebrew ] = "Seite: $(ARG1)";
+    Text[ catalan ] = "Page: $(ARG1)";
+    Text[ portuguese_brazilian ] = "Page: $(ARG1)";
+    Text[ thai ] = "Page: $(ARG1)";
+    Text[ hindi ] = "Page: $(ARG1)";
 };
+
+
+
+
+
+
+
+
+
 
 
