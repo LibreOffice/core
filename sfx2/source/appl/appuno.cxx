@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: cd $ $Date: 2002-08-29 13:43:59 $
+ *  last change: $Author: mba $ $Date: 2002-09-06 12:43:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -462,7 +462,9 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
             else
             {
                 // complex argument; collect sub items from argument arry and reconstruct complex item
-                BOOL bRet = TRUE;
+                // only put item if at least one member was found and had the correct type
+                // (is this a good idea?! Should we ask for *all* members?)
+                BOOL bRet = FALSE;
                 for ( sal_uInt16 n=0; n<nCount; n++ )
                 {
                     const ::com::sun::star::beans::PropertyValue& rProp = pPropsVal[n];
@@ -475,6 +477,8 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                         const char* pName = aStr.GetBuffer();
                         if ( rProp.Name.compareToAscii( pName ) == COMPARE_EQUAL )
                         {
+                            // at least one member found ...
+                            bRet = TRUE;
 #ifdef DBG_UTIL
                             ++nFoundArgs;
 #endif
@@ -482,6 +486,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
                             if ( bConvertTwips )
                                 nSubId |= CONVERT_TWIPS;
                             if (!pItem->PutValue( rProp.Value, nSubId ) )
+                                // ... but it was not convertable
                                 bRet = FALSE;
                             break;
                         }
