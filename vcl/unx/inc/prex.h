@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prex.h,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-24 16:32:21 $
+ *  last change: $Author: vg $ $Date: 2003-06-12 10:25:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 //                                                                            //
 // (C) 1997 Star Division GmbH, Hamburg, Germany                              //
 //                                                                            //
-// $Revision: 1.8 $  $Author: pl $  $Date: 2001-10-24 16:32:21 $    //
+// $Revision: 1.9 $  $Author: vg $  $Date: 2003-06-12 10:25:34 $    //
 //                                                                            //
 // $Workfile:   prex.h  $                                                     //
 //  $Modtime:   08 Aug 1997 10:13:54  $                                       //
@@ -98,7 +98,7 @@
 struct _XDisplay;
 #endif
 
-#if defined __cplusplus && ! defined LINUX
+#if defined __cplusplus
 extern "C" {
 #endif
 #include <X11/X.h>
