@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: nf $ $Date: 2002-02-28 17:17:11 $
+ *  last change: $Author: nf $ $Date: 2002-02-28 17:19:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -406,7 +406,7 @@ ModalDialog DLG_DOCTEMPLATE
     Text[ polish ] = "Szablony i dokumenty";
     Text[ portuguese_brazilian ] = "Templates and Documents";
     Text[ japanese ] = "テンプレートとドキュメント";
-    Text[ korean ] = "템플릿과 문서";
+    Text[ korean ] = "스타일과 문서";
     Text[ chinese_simplified ] = "样式和文档";
     Text[ chinese_traditional ] = "樣式和文件";
     Text[ turkish ] = "Templates and Documents";
