@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageStream.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 14:13:49 $
+ *  last change: $Author: hr $ $Date: 2003-07-16 17:37:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@ using namespace rtl;
 
 Sequence < sal_Int8 > ZipPackageStream::aImplementationId = Sequence < sal_Int8 > ();
 
-#ifdef MACOSX
+#if defined( MACOSX ) && ( __GNUC__ < 3 )
 #include <cppuhelper/typeprovider.hxx>
 static ::cppu::OImplementationId * pId = 0;
 #endif
@@ -113,7 +113,7 @@ ZipPackageStream::ZipPackageStream (ZipPackage & rNewPackage )
 
     if ( !aImplementationId.getLength() )
         {
-#ifdef MACOSX
+#if defined( MACOSX ) && ( __GNUC__ < 3 )
             if (! pId)
             {
                     ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
@@ -149,7 +149,7 @@ void ZipPackageStream::setZipEntry( const ZipEntry &rInEntry)
     aEntry.nExtraLen = rInEntry.nExtraLen;
 }
 
-#ifdef MACOSX
+#if defined( MACOSX ) && ( __GNUC__ < 3 )
     //XInterface
 Any SAL_CALL ZipPackageStream::queryInterface( const Type& rType )
     throw(RuntimeException)
