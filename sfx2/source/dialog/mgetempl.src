@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mgetempl.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2001-10-17 08:00:37 $
+ *  last change: $Author: rt $ $Date: 2001-10-17 20:11:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -222,7 +222,7 @@ TabPage TP_MANAGE_STYLES
         Text [ finnish ] = "~Luokka" ;
         Text [ danish ] = "Område" ;
         Text [ french ] = "~Catégorie" ;
-        Text [ swedish ] = "~Kategori" ;
+        Text [ swedish ] = "~Område" ;
         Text [ dutch ] = "~Bereik" ;
         Text [ spanish ] = "~Área" ;
         Text [ english_us ] = "~Category" ;
@@ -289,6 +289,7 @@ TabPage TP_MANAGE_STYLES
     };
 };
  // ********************************************************************** EOF
+
 
 
 
