@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futext.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2000-10-30 11:36:53 $
+ *  last change: $Author: nn $ $Date: 2001-03-02 21:09:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -312,6 +312,7 @@
 
 #include <svx/svddef.hxx>
 #include <svx/svdoutl.hxx>
+#include <svx/outlobj.hxx>
 #include <svx/sdtaaitm.hxx>
 #include <svx/sdtacitm.hxx>
 #include <svx/svdotext.hxx>
@@ -354,6 +355,8 @@ void lcl_InvalidateAttribs( SfxBindings& rBindings )
     rBindings.Invalidate( SID_SET_SUPER_SCRIPT );
     rBindings.Invalidate( SID_SET_SUB_SCRIPT );
     rBindings.Invalidate( SID_HYPERLINK_GETLINK );
+    rBindings.Invalidate( SID_TEXTDIRECTION_LEFT_TO_RIGHT );
+    rBindings.Invalidate( SID_TEXTDIRECTION_TOP_TO_BOTTOM );
 }
 
 /*************************************************************************
@@ -446,6 +449,22 @@ BOOL __EXPORT FuText::MouseButtonDown(const MouseEvent& rMEvt)
                 pView->PickObj(aMDPos, pObj, pPV, SDRSEARCH_PICKTEXTEDIT) )
             {
                 SdrOutliner* pO = MakeOutliner();
+
+                //  vertical flag:
+                //  deduced from slot ids only if text object has no content
+
+                USHORT nSlotID = aSfxRequest.GetSlot();
+                BOOL bVertical = ( nSlotID == SID_DRAW_TEXT_VERTICAL );
+                OutlinerParaObject* pOPO = pObj->GetOutlinerParaObject();
+                if ( pOPO )
+                {
+                    if ( nSlotID == SID_DRAW_NOTEEDIT )
+                        pOPO->SetVertical( FALSE );         // notes are always horizontal
+                    else
+                        bVertical = pOPO->IsVertical();     // content wins
+                }
+                pO->SetVertical( bVertical );
+
                 //!??   ohne uebergebenen Outliner stimmen die Defaults nicht ???!?
                 if ( pView->BegTextEdit(pObj, pPV, pWindow, (FASTBOOL)TRUE, pO) )
                 {
@@ -968,6 +987,22 @@ void FuText::SetInEditMode(SdrObject* pObj, const Point* pMousePixel)
             if ( pObj->HasTextEdit() )
             {
                 SdrOutliner* pO = MakeOutliner();
+
+                //  vertical flag:
+                //  deduced from slot ids only if text object has no content
+
+                USHORT nSlotID = aSfxRequest.GetSlot();
+                BOOL bVertical = ( nSlotID == SID_DRAW_TEXT_VERTICAL );
+                OutlinerParaObject* pOPO = pObj->GetOutlinerParaObject();
+                if ( pOPO )
+                {
+                    if ( nSlotID == SID_DRAW_NOTEEDIT )
+                        pOPO->SetVertical( FALSE );         // notes are always horizontal
+                    else
+                        bVertical = pOPO->IsVertical();     // content wins
+                }
+                pO->SetVertical( bVertical );
+
                 //!??   ohne uebergebenen Outliner stimmen die Defaults nicht ???!?
                 if ( pView->BegTextEdit(pObj, pPV, pWindow, (FASTBOOL)TRUE, pO) )
                 {

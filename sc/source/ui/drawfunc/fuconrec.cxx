@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuconrec.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:56 $
+ *  last change: $Author: nn $ $Date: 2001-03-02 21:09:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -247,6 +247,7 @@
 
 #include <svx/svdview.hxx>
 #include <svx/svdobj.hxx>
+#include <svx/outlobj.hxx>
 
 #include "fuconrec.hxx"
 #include "tabvwsh.hxx"
@@ -333,6 +334,24 @@ BOOL __EXPORT FuConstRectangle::MouseButtonUp(const MouseEvent& rMEvt)
     {
         Point aPnt( pWindow->PixelToLogic( rMEvt.GetPosPixel() ) );
         pView->EndCreateObj(SDRCREATE_FORCEEND);
+
+        if (aSfxRequest.GetSlot() == SID_DRAW_CAPTION_VERTICAL)
+        {
+            //  set vertical flag for caption object
+
+            //! object is empty, OutlinerParaObject not there
+            //! how can vertical flag be set?
+
+            const SdrMarkList& rMarkList = pView->GetMarkList();
+            if (rMarkList.GetMark(0))
+            {
+                SdrObject* pObj = rMarkList.GetMark(0)->GetObj();
+                OutlinerParaObject* pOPO = pObj->GetOutlinerParaObject();
+                if( pOPO && !pOPO->IsVertical() )
+                    pOPO->SetVertical( TRUE );
+            }
+        }
+
         bReturn = TRUE;
     }
     return (FuConstruct::MouseButtonUp(rMEvt) || bReturn);
@@ -381,6 +400,7 @@ void FuConstRectangle::Activate()
             break;
 
         case SID_DRAW_CAPTION:
+        case SID_DRAW_CAPTION_VERTICAL:
             aNewPointer = Pointer( POINTER_DRAW_CAPTION );
             aObjKind = OBJ_CAPTION;
             break;

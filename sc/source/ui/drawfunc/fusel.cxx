@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fusel.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-22 18:53:19 $
+ *  last change: $Author: nn $ $Date: 2001-03-02 21:09:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,7 @@
 #include <svx/svdview.hxx>
 #include <svx/svdouno.hxx>
 #include <svx/svdpagv.hxx>
+#include <svx/outlobj.hxx>
 
 
 
@@ -410,12 +411,16 @@ BOOL __EXPORT FuSelection::MouseButtonUp(const MouseEvent& rMEvt)
                     //
                     else if ( pObj->ISA(SdrTextObj) && !pObj->ISA(SdrUnoObj) )
                     {
+                        OutlinerParaObject* pOPO = pObj->GetOutlinerParaObject();
+                        BOOL bVertical = ( pOPO && pOPO->IsVertical() );
+                        USHORT nTextSlotId = bVertical ? SID_DRAW_TEXT_VERTICAL : SID_DRAW_TEXT;
+
                         pViewShell->GetViewData()->GetDispatcher().
-                            Execute(SID_DRAW_TEXT, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD);
+                            Execute(nTextSlotId, SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD);
 
                         // jetzt den erzeugten FuText holen und in den EditModus setzen
                         FuPoor* pPoor = pViewShell->GetViewData()->GetView()->GetDrawFuncPtr();
-                        if ( pPoor && pPoor->GetSlotID() == SID_DRAW_TEXT )  // hat keine RTTI
+                        if ( pPoor && pPoor->GetSlotID() == nTextSlotId )    // hat keine RTTI
                         {
                             FuText* pText = (FuText*)pPoor;
                             Point aMousePixel = rMEvt.GetPosPixel();
