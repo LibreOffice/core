@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docholder.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mav $ $Date: 2003-11-18 12:47:07 $
+ *  last change: $Author: mav $ $Date: 2003-12-01 10:16:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,6 +142,8 @@ DocumentHolder::DocumentHolder( const uno::Reference< lang::XMultiServiceFactory
 
 DocumentHolder::~DocumentHolder()
 {
+    m_refCount++; // to allow deregistration as a listener
+
     if( m_xFrame.is() )
         CloseFrame();
 
