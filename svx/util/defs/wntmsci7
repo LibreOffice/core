@@ -19473,3 +19473,5 @@ _real@8@40088000000000000000
 ?s_pType_com_sun_star_beans_UnknownPropertyException@?1??getCppuType@@YAABVType@uno@star@sun@com@@PBVUnknownPropertyException@beans@456@@Z@4PAU_typelib_TypeDescriptionReference@@A
 _TI2?AVWrappedTargetException@lang@star@sun@com@@
 ?createTextField@SvxUnoDrawMSFactory@@SA?AV?$Reference@VXInterface@uno@star@sun@com@@@uno@star@sun@com@@ABVOUString@rtl@@@Z
+?ImpGetResStr@@YAABVString@@G@Z
+??0?$Reference@VXInteractionHandler@task@star@sun@com@@@uno@star@sun@com@@QAE@ABV01234@@Z
