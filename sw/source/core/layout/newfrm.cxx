@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newfrm.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: mib $ $Date: 2002-05-03 12:36:42 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 14:14:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,9 +59,6 @@
  *
  ************************************************************************/
 
-#ifdef PRECOMPILED
-#include "core_pch.hxx"
-#endif
 
 #pragma hdrstop
 
