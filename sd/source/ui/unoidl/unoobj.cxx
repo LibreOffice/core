@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoobj.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-15 12:16:27 $
+ *  last change: $Author: cl $ $Date: 2001-03-15 12:47:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,11 +92,14 @@
 #ifndef _SFXSTYLE_HXX
 #include <svtools/style.hxx>
 #endif
+
+#if SUPD>=626
 #ifndef _SVTOOLS_UNOIMAP_HXX
 #include <svtools/unoimap.hxx>
 #endif
 #ifndef _SVTOOLS_UNOEVENT_HXX_
 #include <svtools/unoevent.hxx>
+#endif
 #endif
 
 #ifndef _SFX_BINDINGS_HXX
@@ -189,10 +192,16 @@ using namespace ::com::sun::star;
 
 const SfxItemPropertyMap* ImplGetShapePropertyMap( sal_Bool bImpress, sal_Bool bGraphicObj )
 {
+#if SUPD<626
+    bGraphicObj = sal_False;
+#endif
+
     // Achtung: Der erste Parameter MUSS sortiert vorliegen !!!
     static const SfxItemPropertyMap aImpress_SdXShapePropertyMap_Impl[] =
     {
+#if SUPD>=626
         { MAP_CHAR_LEN("ImageMap"),             WID_IMAGEMAP,        &::getCppuType((const uno::Reference< container::XIndexContainer >*)0),    0, 0 },
+#endif
         { MAP_CHAR_LEN(UNO_NAME_OBJ_ANIMATIONPATH), WID_ANIMPATH,        &ITYPE(drawing::XShape),                                   0, 0},
         { MAP_CHAR_LEN(UNO_NAME_OBJ_BOOKMARK),      WID_BOOKMARK,        &::getCppuType((const OUString*)0),                        0, 0},
         { MAP_CHAR_LEN(UNO_NAME_OBJ_DIMCOLOR),      WID_DIMCOLOR,        &::getCppuType((const sal_Int32*)0),                       0, 0},
@@ -217,7 +226,9 @@ const SfxItemPropertyMap* ImplGetShapePropertyMap( sal_Bool bImpress, sal_Bool b
 
     static const SfxItemPropertyMap aDraw_SdXShapePropertyMap_Impl[] =
     {
+#if SUPD>=626
         { MAP_CHAR_LEN("ImageMap"),             WID_IMAGEMAP,        &ITYPE(container::XIndexContainer),    0, 0 },
+#endif
         { MAP_CHAR_LEN(UNO_NAME_OBJ_BOOKMARK),      WID_BOOKMARK,       &::getCppuType((const OUString*)0),                 0, 0},
         { MAP_CHAR_LEN(UNO_NAME_OBJ_CLICKACTION),   WID_CLICKACTION,    &::getCppuType((const presentation::ClickAction*)0),0, 0},
         { MAP_CHAR_LEN(UNO_NAME_OBJ_STYLE),         WID_STYLE,          &ITYPE(style::XStyle),                              ::com::sun::star::beans::PropertyAttribute::MAYBEVOID, 0},
@@ -235,7 +246,7 @@ SfxItemPropertyMap aEmpty_SdXShapePropertyMap_Impl[] =
     { 0,0,0,0,0}
 };
 
-
+#if SUPD>=626
 const SvEventDescription* ImplGetSupportedMacroItems()
 {
     static const SvEventDescription aMacroDescriptionsImpl[] =
@@ -247,6 +258,7 @@ const SvEventDescription* ImplGetSupportedMacroItems()
 
     return aMacroDescriptionsImpl;
 }
+#endif
 
 /*************************************************************************
 |*
@@ -656,6 +668,7 @@ void SAL_CALL SdXShape::setPropertyValue( const ::rtl::OUString& aPropertyName, 
 
                     break;
                 }
+#if SUPD>=626
                 case WID_IMAGEMAP:
                 {
                     SdDrawDocument* pDoc = mpModel?mpModel->GetDoc():NULL;
@@ -681,6 +694,7 @@ void SAL_CALL SdXShape::setPropertyValue( const ::rtl::OUString& aPropertyName, 
                         }
                     }
                 }
+#endif
             }
         }
     }
@@ -817,6 +831,7 @@ void SAL_CALL SdXShape::setPropertyValue( const ::rtl::OUString& aPropertyName, 
             if( pInfo && pInfo->pPathObj )
                 aRet <<= pInfo->pPathObj->getUnoShape();
             break;
+#if SUPD>=626
         case WID_IMAGEMAP:
             {
                 uno::Reference< uno::XInterface > xImageMap;
@@ -840,6 +855,7 @@ void SAL_CALL SdXShape::setPropertyValue( const ::rtl::OUString& aPropertyName, 
                 aRet <<= uno::Reference< container::XIndexContainer >::query( xImageMap );
                 break;
             }
+#endif
         }
     }
     else
