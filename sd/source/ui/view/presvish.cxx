@@ -2,9 +2,9 @@
  *
  *  $RCSfile: presvish.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cl $ $Date: 2001-08-13 14:36:02 $
+ *  last change: $Author: ka $ $Date: 2001-09-05 12:04:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,6 +110,8 @@ TYPEINIT1( SdPresViewShell, SdDrawViewShell );
 SdPresViewShell::SdPresViewShell( SfxViewFrame* pFrame, SfxViewShell *pOldShell ) :
     SdDrawViewShell( pFrame, pOldShell )
 {
+    if( pDocSh && pDocSh->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
+        maOldVisArea = pDocSh->GetVisArea( ASPECT_CONTENT );
 }
 
 // -----------------------------------------------------------------------------
@@ -117,12 +119,17 @@ SdPresViewShell::SdPresViewShell( SfxViewFrame* pFrame, SfxViewShell *pOldShell 
 SdPresViewShell::SdPresViewShell( SfxViewFrame* pFrame, const SdDrawViewShell& rShell ) :
     SdDrawViewShell( pFrame, rShell )
 {
+    if( pDocSh && pDocSh->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED )
+        maOldVisArea = pDocSh->GetVisArea( ASPECT_CONTENT );
 }
 
 // -----------------------------------------------------------------------------
 
 SdPresViewShell::~SdPresViewShell()
 {
+    if( pDocSh && pDocSh->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED && !maOldVisArea.IsEmpty() )
+        pDocSh->SetVisArea( maOldVisArea );
+
     if( GetViewFrame() && GetViewFrame()->GetTopFrame() )
     {
         WorkWindow* pWorkWindow = (WorkWindow*) GetViewFrame()->GetTopFrame()->GetWindow().GetParent();
