@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotext.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: vg $ $Date: 2001-10-17 09:49:07 $
+ *  last change: $Author: cl $ $Date: 2001-10-26 14:19:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -437,7 +437,7 @@ void SAL_CALL SvxUnoTextRangeBase::setString(const OUString& aString)
 uno::Reference< beans::XPropertySetInfo > SAL_CALL SvxUnoTextRangeBase::getPropertySetInfo(void)
     throw( uno::RuntimeException )
 {
-    return new SfxItemPropertySetInfo( aPropSet.getPropertyMap() );
+    return aPropSet.getPropertySetInfo();
 }
 
 void SAL_CALL SvxUnoTextRangeBase::setPropertyValue(const OUString& PropertyName, const uno::Any& aValue)
@@ -793,9 +793,11 @@ void SAL_CALL SvxUnoTextRangeBase::_setPropertyValues( const uno::Sequence< ::rt
         SfxItemSet* pOldParaSet = NULL;
         SfxItemSet* pNewParaSet = NULL;
 
+        const SfxItemPropertyMap* pMap = aPropSet.getPropertyMap();
+
         for( ; nCount; nCount--, pPropertyNames++, pValues++ )
         {
-            const SfxItemPropertyMap* pMap = SfxItemPropertyMap::GetByName(aPropSet.getPropertyMap(), *pPropertyNames );
+            pMap = SfxItemPropertyMap::GetByName(pMap, *pPropertyNames );
             if( NULL == pMap )
             {
                 bUnknownProperty = sal_True;
@@ -845,6 +847,11 @@ void SAL_CALL SvxUnoTextRangeBase::_setPropertyValues( const uno::Sequence< ::rt
                 }
 
             }
+
+            if (pMap)
+                pMap++;
+            else
+                pMap = aPropSet.getPropertyMap();
         }
 
         if( !bUnknownProperty )
@@ -920,13 +927,20 @@ uno::Sequence< uno::Any > SAL_CALL SvxUnoTextRangeBase::_getPropertyValues( cons
         const OUString* pPropertyNames = aPropertyNames.getConstArray();
         uno::Any* pValues = aValues.getArray();
 
+        const SfxItemPropertyMap* pMap = aPropSet.getPropertyMap();
+
         for( ; nCount; nCount--, pPropertyNames++, pValues++ )
         {
-            const SfxItemPropertyMap* pMap = SfxItemPropertyMap::GetByName(aPropSet.getPropertyMap(), *pPropertyNames );
+            pMap = SfxItemPropertyMap::GetByName(pMap, *pPropertyNames );
             if( NULL == pMap )
                 throw beans::UnknownPropertyException();
 
             getPropertyValue( pMap, *pValues, *pAttribs );
+
+            if (pMap)
+                pMap++;
+            else
+                pMap = aPropSet.getPropertyMap();
         }
 
         delete pAttribs;
@@ -1088,9 +1102,10 @@ uno::Sequence< beans::PropertyState > SvxUnoTextRangeBase::_getPropertyStates(co
         }
 
         sal_Bool bUnknownPropertyFound = sal_False;
+        const SfxItemPropertyMap* pMap = aPropSet.getPropertyMap();
         for( sal_Int32 nIdx = 0; nIdx < nCount; nIdx++ )
         {
-            const SfxItemPropertyMap* pMap = SfxItemPropertyMap::GetByName(aPropSet.getPropertyMap(), *pNames++ );
+            pMap = SfxItemPropertyMap::GetByName(pMap, *pNames++ );
             if( NULL == pMap )
             {
                 bUnknownPropertyFound = sal_True;
@@ -1172,6 +1187,11 @@ uno::Sequence< beans::PropertyState > SvxUnoTextRangeBase::_getPropertyStates(co
                     default:
                         *pState++ = beans::PropertyState_AMBIGUOUS_VALUE;
             }
+
+            if (pMap)
+                pMap++;
+            else
+                pMap = aPropSet.getPropertyMap();
         }
 
         delete pSet;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotext2.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2001-10-17 09:49:07 $
+ *  last change: $Author: cl $ $Date: 2001-10-26 14:19:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -453,7 +453,6 @@ uno::Any SAL_CALL SvxUnoTextRangeEnumeration::nextElement()
     uno::Reference< text::XTextRange > xRange;
 
     SvxTextForwarder* pForwarder = rParentText.GetEditSource()->GetTextForwarder();
-    SfxItemSet aSet = pForwarder->GetAttribs( aSel );
 
     SvxUnoTextRange* pRange = new SvxUnoTextRange( rParentText, sal_True );
     xRange = pRange;
