@@ -1,7 +1,7 @@
 %{
 //--------------------------------------------------------------------------
 //
-// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlbison.y,v 1.6 2000-11-09 08:48:25 oj Exp $
+// $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/connectivity/source/parse/sqlbison.y,v 1.7 2000-11-09 10:29:49 oj Exp $
 //
 // Copyright 2000 Sun Microsystems, Inc. All Rights Reserved.
 //
@@ -9,7 +9,7 @@
 //	OJ
 //
 // Last change:
-//	$Author: oj $ $Date: 2000-11-09 08:48:25 $ $Revision: 1.6 $
+//	$Author: oj $ $Date: 2000-11-09 10:29:49 $ $Revision: 1.7 $
 //
 // Description:
 //
@@ -3704,7 +3704,7 @@ sal_Int16 OSQLParser::buildNode_Date(const double& fValue, sal_Int16 nType, OSQL
 		case DataType::DATE:
 		{
 			Date aDate = DBTypeConversion::toDate(fValue,DBTypeConversion::getNULLDate(m_xFormatter->getNumberFormatsSupplier()));
-			::rtl::OUString aString = ToDateString(aDate);
+			::rtl::OUString aString = DBTypeConversion::toDateString(aDate);
 			pDateNode->append(new OSQLInternalNode(aEmptyString, SQL_NODE_KEYWORD, SQL_TOKEN_D));
 			pDateNode->append(new OSQLInternalNode(aString, SQL_NODE_STRING));
 			break;
@@ -3712,7 +3712,7 @@ sal_Int16 OSQLParser::buildNode_Date(const double& fValue, sal_Int16 nType, OSQL
 		case DataType::TIME:
 		{
 			Time aTime = DBTypeConversion::toTime(fValue);
-			::rtl::OUString aString = ToTimeString(aTime);
+			::rtl::OUString aString = DBTypeConversion::toTimeString(aTime);
 			pDateNode->append(new OSQLInternalNode(aEmptyString, SQL_NODE_KEYWORD, SQL_TOKEN_T));
 			pDateNode->append(new OSQLInternalNode(aString, SQL_NODE_STRING));
 			break;
@@ -3722,7 +3722,7 @@ sal_Int16 OSQLParser::buildNode_Date(const double& fValue, sal_Int16 nType, OSQL
 			DateTime aDateTime = DBTypeConversion::toDateTime(fValue,DBTypeConversion::getNULLDate(m_xFormatter->getNumberFormatsSupplier()));
 			if (aDateTime.Seconds && aDateTime.Minutes && aDateTime.Hours)
 			{
-				::rtl::OUString aString = ToDateTimeString(aDateTime);
+				::rtl::OUString aString = DBTypeConversion::toDateTimeString(aDateTime);
 				pDateNode->append(new OSQLInternalNode(aEmptyString, SQL_NODE_KEYWORD, SQL_TOKEN_TS));
 				pDateNode->append(new OSQLInternalNode(aString, SQL_NODE_STRING));
 			}
@@ -3730,7 +3730,7 @@ sal_Int16 OSQLParser::buildNode_Date(const double& fValue, sal_Int16 nType, OSQL
 			{
 				Date aDate(aDateTime.Day,aDateTime.Month,aDateTime.Year);
 				pDateNode->append(new OSQLInternalNode(aEmptyString, SQL_NODE_KEYWORD, SQL_TOKEN_D));
-				pDateNode->append(new OSQLInternalNode(ToDateString(aDate), SQL_NODE_STRING));
+				pDateNode->append(new OSQLInternalNode(DBTypeConversion::toDateString(aDate), SQL_NODE_STRING));
 			}
 			break;
 		}
