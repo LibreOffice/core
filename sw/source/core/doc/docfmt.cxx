@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfmt.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: os $ $Date: 2004-09-16 15:32:32 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:03:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,13 +75,6 @@
 #endif
 #ifndef _SFXITEMITER_HXX //autogen
 #include <svtools/itemiter.hxx>
-#endif
-#ifndef _SO2REF_HXX //autogen
-#include <so3/so2ref.hxx>
-#endif
-#ifndef SO2_DECL_SVLINKNAME_DEFINED
-#define SO2_DECL_SVLINKNAME_DEFINED
-SO2_DECL_REF(SvLinkName)
 #endif
 #ifndef _SFXAPP_HXX
 #include <sfx2/app.hxx>
