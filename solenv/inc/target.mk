@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.24 $
+#   $Revision: 1.25 $
 #
-#   last change: $Author: hjs $ $Date: 2000-12-19 18:01:27 $
+#   last change: $Author: hjs $ $Date: 2000-12-22 10:58:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -2143,7 +2143,7 @@ $(LOCALDOCDBTARGET) : $(URDDOCFILES)
 .IF "$(UNOIDLDBTARGET)"!=""
 $(UNOIDLDBTARGET) : $(UNOIDLDBFILES)
     +-$(RM) $@
-    +regmerge $@ / @$(mktmp $(UNOIDLDBFILES))
+    +regmerge $@ / @$(mktmp $(UNOIDLDBFILES) $(UNOIDLDBREGS))
 .IF "$(LOCALREGDB)"!=""
     +regmerge $(LOCALREGDB) / $@
 .ENDIF
@@ -2831,6 +2831,22 @@ $(MISC)$/$(TARGET).dpr : $(SRCFILES) $(SRC1FILES) $(SRC2FILES) $(SRC3FILES)
 
 .IF "$(make_zip_deps)"==""
 $(MISC)$/$(TARGET).dpz : $(ZIP1TARGETN) $(ZIP2TARGETN) $(ZIP3TARGETN) $(ZIP4TARGETN) $(ZIP5TARGETN) $(ZIP6TARGETN) $(ZIP7TARGETN) $(ZIP8TARGETN) $(ZIP9TARGETN)
+.ENDIF
+
+$(INCCOM)$/_version.h : $(SOLARVERSION)$/$(UPD)minor.mk
+.IF "$(GUI)"=="UNX"
+        @+echo "#define" _BUILD \"$(BUILD)\"	> $@
+        @+echo "#define" _UPD \"$(UPD)\"		>> $@
+        @+echo "#define" _LAST_MINOR \'$(LAST_MINOR)\'	>> $@
+        @+echo '#define _RSCREVISION "$(RSCREVISION)"' >> $@
+        @+echo "#define" _INPATH \"$(INPATH)\"	>> $@
+.ELSE
+        @+echo #define _BUILD "$(BUILD)"	> $@
+        @+echo #define _UPD "$(UPD)"		>> $@
+        @+echo #define _LAST_MINOR '$(LAST_MINOR)'	>> $@
+        @+echo #define _DLL_POSTFIX "$(DLL_POSTFIX)">> $@
+        @+echo #define _RSCREVISION "$(RSCREVISION)">> $@
+        @+echo #define _INPATH "$(INPATH)"	>> $@
 .ENDIF
 
 .IF "$(MAKEFILERC)"==""
