@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hjs $ $Date: 2001-05-12 06:13:15 $
+ *  last change: $Author: kz $ $Date: 2001-05-16 15:01:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@ QueryBox MSG_CONFIRM_FILTER
     Message [ English ] = "Saving in foreign formats might have caused\nlossage of information. Close anyway?" ;
     Message [ norwegian ] = "Lagring i ukjent format kan forårsake\ntap av informasjon." ;
     Message [ italian ] = "Salvare in formati estranei può causare\nla perdita di informazioni. Chiudere lo stesso?" ;
-    Message [ portuguese_brazilian ] = "Gravar em formatos estrangeiros poder  provocar \na perda de Informações." ;
+    Message [ portuguese_brazilian ] = "Gravar em formatos estrangeiros poder  provocar \na perda de Informa??s." ;
     Message [ portuguese ] = "Ao guardar em formatos estranhos poderá provocar \na perda de informações. Mesmo assim, guardar?" ;
     Message [ finnish ] = "Tallennus ulkoiseen muotoon on saattanut\naiheuttaa tietojen katoamista. Haluatko silti sulkea?" ;
     Message [ danish ] = "Lagring i fremmedformater kan have forårsaget\ninformationstab. Vil du lukke alligevel?" ;
@@ -84,7 +84,7 @@ QueryBox MSG_CONFIRM_FILTER
     Message [ english_us ] = "Saving in external formats may have caused\n information loss. Do you still want to close?" ;
     Message[ chinese_simplified ] = "ÔÚÎÄ¼ş´æÅÌ³ÉÒ»¸öÍâÀ´µÄ¸ñÊ½Ê±\n¿ÉÄÜ»áÒÅÊ§ĞÅÏ¢¡£\nÄú»¹ÊÇÒª¹Ø±ÕÕâ¸öÎÄ¼ş£¿";
     Message[ russian ] = "Ïğè ñîõğàíåíèè â ÷óæèõ ôîğìàòàõ ìîæåò\nïğîèçîéòè ïîòåğÿ èíôîğìàöèè. Âñå ğàâíî çàêğûòü?";
-    Message[ polish ] = "Podczas zapisu w obcych formatach n\nmo¿e dojœæ do utraty informacji. Mimo to zamkn¹æ?";
+    Message[ polish ] = "Podczas zapisu w obcych formatach n\nmo¿e doj?æ do utraty informacji. Mimo to zamkn¹æ?";
     Message[ japanese ] = "ŠO•”‘®‚Å•Û‘¶‚·‚é‚Æ\nî•ñ‚ª¸‚í‚ê‚é‰Â”\\«‚ª‚ ‚è‚Ü‚·B•Â‚¶‚Ä‚à‚æ‚ë‚µ‚¢‚Å‚·‚©?";
     Message[ chinese_traditional ] = "¦b¤å¥óÀx¦s¦¨¤@­Ó¥~¨Óªº®æ¦¡®É\n¥¼¯à°T®§¥i¯à·|¬y¥¢¡C\nÁÙ¬O­nÃö³¬³o­Ó¤å¥ó¡H";
     Message[ arabic ] = "ãä ÇáãÍÊãá Ãä ÇáÍİÙ ÈÊäÓíŞÇÊ ÛÑíÈÉ ŞÏ ÃÏì Åáì\nÖíÇÚ ÈÚÖ ÇáãÚáæãÇÊ. åá ÊÑíÏ ÇáÅÛáÇŞ Úáì ÇáÑÛã ãä Ğáß¿";
@@ -104,7 +104,7 @@ QueryBox MSG_CONFIRM_OVERWRITE_TEMPLATE
     Message [ English ] = "Name already in use.\nOverride document template?" ;
     Message [ norwegian ] = "Navnet er allerede i bruk.\nIgnorer dokumentmal?" ;
     Message [ italian ] = "Nome già in uso.\nSovrascrivere il modello di documento?" ;
-    Message [ portuguese_brazilian ] = "Nome já em uso.\nSobregravar o modelo do documento?" ;
+    Message [ portuguese_brazilian ] = "Nome j? em uso.\nSobregravar o modelo do documento?" ;
     Message [ portuguese ] = "Já existe um modelo com este nome.\nSobregravar o modelo do documento?" ;
     Message [ finnish ] = "Nimi on jo käytössä.\nHaluatko korvata asiakirjan mallipohjan?" ;
     Message [ danish ] = "Der eksisterer allerede et dokument med dette navn.\nSkal det erstattes?" ;
@@ -223,7 +223,7 @@ QueryBox MSG_REGION_NOTEMPTY
     Message [ English ] = "Region not empty.\nDelete anyway?" ;
     Message [ norwegian ] = "Området er ikke tomt.\nSlett likevel?" ;
     Message [ italian ] = "L'area non è vuota.\nVolete eliminarla lo stesso?" ;
-    Message [ portuguese_brazilian ] = "Regiao não está vazia.\nApagar de qualquer modo?" ;
+    Message [ portuguese_brazilian ] = "Regiao n?o est? vazia.\nApagar de qualquer modo?" ;
     Message [ portuguese ] = "A categoria não está vazia.\nMesmo assim, eliminar?" ;
     Message [ finnish ] = "Luokka ei ole tyhjä.\nPoistetaanko luokka?" ;
     Message [ danish ] = "Området er ikke tomt.\nVil du slette alligevel?" ;
@@ -252,7 +252,7 @@ String STR_QUERY_SAVE_DOCUMENT
     Text [ English ] = "The Document \"$(DOC)\" has been modified.\nDo you want to save your changes?" ;
     Text [ norwegian ] = "Dokumentet \"$(DOC)\" har blitt endret.\nVil du lagre endringene dine?" ;
     Text [ italian ] = "Il documento \"$(DOC)\" è stato modificato.\nVolete salvare le modifiche?" ;
-    Text [ portuguese_brazilian ] = "O documento '$(DOC)' foi modificado.\nDeseja gravar as modificações?" ;
+    Text [ portuguese_brazilian ] = "O documento '$(DOC)' foi modificado.\nDeseja gravar as modifica??s?" ;
     Text [ portuguese ] = "O documento \"$(DOC)\" foi modificado.\nGuardar modificações?" ;
     Text [ finnish ] = "Asiakirjaa $(DOC) on muokattu.\nHaluatko tallentaa muutokset?" ;
     Text [ danish ] = "Dokumentet \"$(DOC)\" er blevet ændret.\nSkal ændringerne gemmes?" ;
@@ -340,7 +340,7 @@ String STR_CONFIG
     Text [ English ] = "Configuration" ;
     Text [ norwegian ] = "Konfigurasjon" ;
     Text [ italian ] = "Configurazione" ;
-    Text [ portuguese_brazilian ] = "Configuração" ;
+    Text [ portuguese_brazilian ] = "Configura??o" ;
     Text [ portuguese ] = "Configuração" ;
     Text [ finnish ] = "Kokoonpano" ;
     Text [ danish ] = "Konfiguration" ;
@@ -398,7 +398,7 @@ String STR_PRINT_STYLES
     Text [ English ] = "Printing styles" ;
     Text [ norwegian ] = "Utskriftsstil" ;
     Text [ italian ] = "Stampa modelli" ;
-    Text [ portuguese_brazilian ] = "Estilos de impressão" ;
+    Text [ portuguese_brazilian ] = "Estilos de impress?o" ;
     Text [ portuguese ] = "Estilos de impressão" ;
     Text [ finnish ] = "Tulostustyylit" ;
     Text [ danish ] = "Udskriver formattypografier" ;
@@ -433,7 +433,7 @@ ErrorBox MSG_PRINT_ERROR
     Message [ ENGLISH ] = "The print job couldn't be started." ;
     Message [ norwegian ] = "Utskriftsjobben kunne ikke startes." ;
     Message [ italian ] = "Non è stato possibile avviare il lavoro di stampa." ;
-    Message [ portuguese_brazilian ] = "O serviço de impressão não pode ser iniciado." ;
+    Message [ portuguese_brazilian ] = "O servi?o de impress?o n?o pode ser iniciado." ;
     Message [ portuguese ] = "Impossível iniciar a impressão." ;
     Message [ finnish ] = "Tulostustyön aloittaminen ei onnistu" ;
     Message [ danish ] = "Det var ikke muligt at starte udskrivningen." ;
@@ -491,7 +491,7 @@ WarningBox MSG_WARNING_BACKUP
     Message [ English ] = "Couldn't create backup copy." ;
     Message [ norwegian ] = "Kan ikke lage sikkerhetskopi." ;
     Message [ italian ] = "Impossibile creare copia di backup." ;
-    Message [ portuguese_brazilian ] = "Não pude criar cópia em backup." ;
+    Message [ portuguese_brazilian ] = "N?o pude criar c?ia em backup." ;
     Message [ portuguese ] = "Impossível criar cópia de segurança." ;
     Message [ finnish ] = "Varmistuskopion luominen ei onnistunut." ;
     Message [ danish ] = "Det var ikke muligt at oprette sikkerhedskopi." ;
@@ -522,7 +522,7 @@ InfoBox MSG_CANT_OPEN_TEMPLATE
     Message [ ENGLISH ] = "The document template could not be opened." ;
     Message [ norwegian ] = "Dokumentmalen kan ikke åpnes." ;
     Message [ italian ] = "Impossibile aprire il modello." ;
-    Message [ portuguese_brazilian ] = "O modelo do documento não pode ser aberto." ;
+    Message [ portuguese_brazilian ] = "O modelo do documento n?o pode ser aberto." ;
     Message [ portuguese ] = "Não é possível abrir o modelo do documento." ;
     Message [ finnish ] = "Mallipohjaa ei voitu avata." ;
     Message [ danish ] = "Det er ikke muligt at åbne dokumentskabelonen." ;
@@ -553,7 +553,7 @@ InfoBox MSG_VIEW_OPEN_CANT_SAVE
     MESSAGE [ English ] = "This document is already opened." ;
     MESSAGE [ norwegian ] = "Dette dokumentet er allerede åpent." ;
     MESSAGE [ italian ] = "Questo documento è già aperto." ;
-    MESSAGE [ portuguese_brazilian ] = "Este documento já está aberto." ;
+    MESSAGE [ portuguese_brazilian ] = "Este documento j? est? aberto." ;
     MESSAGE [ portuguese ] = "Este documento já está aberto para editar." ;
     MESSAGE [ finnish ] = "Asiakirja on jo avattu muokattavaksi." ;
     MESSAGE [ danish ] = "Dette dokument er allerede åbnet til redigering." ;
@@ -668,7 +668,7 @@ String STR_ERROR_DELETE_TEMPLATE
     Text = "Die Vorlage \"$1\" kann nicht gelöscht werden." ;
     Text [ English ] = "The template \"$1\" can't by deleted." ;
     Text [ english_us ] = "The template \"$1\" can not be deleted." ;
-    Text [ portuguese_brazilian ] = "Die Vorlage $1 kann nicht gelöscht werden." ;
+    Text [ portuguese_brazilian ] = "Die Vorlage $1 kann nicht gel?cht werden." ;
     Text [ swedish ] = "Mallen \"$1\" kan inte raderas." ;
     Text [ danish ] = "Det er ikke muligt at slette skabelonen \"$1\"." ;
     Text [ italian ] = "Impossibile eliminare il modello $1." ;
@@ -728,7 +728,7 @@ ErrorBox MSG_ERROR_RESCAN
     Message [ ENGLISH ] = "The updates could not be saved." ;
     Message [ norwegian ] = "Oppdateringene kan ikke lagres." ;
     Message [ italian ] = "Impossibile salvare gli aggiornamenti." ;
-    Message [ portuguese_brazilian ] = "As atualizações não puderam ser gravadas." ;
+    Message [ portuguese_brazilian ] = "As atualiza??s n?o puderam ser gravadas." ;
     Message [ portuguese ] = "As actualizações não puderam ser guardadas." ;
     Message [ finnish ] = "Päivityksiä ei voitu tallentaa." ;
     Message [ danish ] = "Det var ikke muligt at gemme opdateringen." ;
@@ -850,7 +850,7 @@ ErrorBox MSG_ERROR_EMPTY_NAME
     Message [ ENGLISH ] = "You must specify a name." ;
     Message [ norwegian ] = "Du må angi et navn." ;
     Message [ italian ] = "È necessario specificare un nome." ;
-    Message [ portuguese_brazilian ] = "É preciso especificar um nome." ;
+    Message [ portuguese_brazilian ] = "? preciso especificar um nome." ;
     Message [ portuguese ] = "É necessário especificar um nome." ;
     Message [ finnish ] = "Määritä nimi." ;
     Message [ danish ] = "Du skal angive et navn." ;
@@ -881,7 +881,7 @@ ErrorBox MSG_ERROR_UNIQ_NAME
     Message [ ENGLISH ] = "You must specify an uniq name.\nUpper and lower letters are the same." ;
     Message [ norwegian ] = "Du må angi et unikt navn .\nOver- og underbokstaver er like." ;
     Message [ italian ] = "È necessario specificare un nome univoco.\nÈ possibile utilizzare lettere maiuscole o minuscole." ;
-    Message [ portuguese_brazilian ] = "é preciso especificar um nome exclusivo.\nLetras maiúsculas ou minúsculas podem ser usadas." ;
+    Message [ portuguese_brazilian ] = "? preciso especificar um nome exclusivo.\nLetras mai?culas ou min?culas podem ser usadas." ;
     Message [ portuguese ] = "É necessário especificar um nome unívoco.\nNão há distinção entre maiúsculas e minúsculas." ;
     Message [ finnish ] = "Määritä yksilöllinen nimi.\nMerkintöjen kirjainkokoa ei eritellä." ;
     Message [ danish ] = "Du skal angive et entydigt navn.\nDer gøres ingen forskel mellem store og små bogstaver." ;
@@ -921,7 +921,7 @@ String STR_QUERY_DEFAULT_TEMPLATE
     TEXT [ english_us ] = "Should the template \"$(TEXT)\" become the default template?" ;
     TEXT[ chinese_simplified ] = "ÄúÒª½«ÑùÊ½¡°$(TEXT)¡±Éè¶¨³É±ê×¼ÑùÊ½Âğ£¿";
     TEXT[ russian ] = "Âû õîòèòå, ÷òîáû øàáëîí \"$(TEXT)\" ñòàë ñòàíäàğòíûì?";
-    TEXT[ polish ] = "Czy przekszta³ciæ \"$(TEXT)\" na szablon domyœlny?";
+    TEXT[ polish ] = "Czy przekszta³ciæ \"$(TEXT)\" na szablon domy?lny?";
     TEXT[ japanese ] = "ÃİÌßÚ°Ä\"$(TEXT)\"‚ğ•W€½À²Ù‚É‚µ‚Ü‚·‚©?";
     TEXT[ chinese_traditional ] = "­n±N³o­Ó¼Ë¦¡$(TEXT)³]©w¦¨¼Ğ·Ç¼Ë¦¡¡H";
     TEXT[ arabic ] = "åá ÊÑíÏ ÌÚá ÇáŞÇáÈ \"$(TEXT)\" ŞÇáÈÇğ ÇİÊÑÇÖíÇğ¿";
@@ -941,7 +941,7 @@ QueryBox MSG_QUERY_RESET_DEFAULT_TEMPLATE
     Message [ English ] = "Do you want to reset the default template?" ;
     Message [ norwegian ] = "Vil  du stille standardmalen inn på nytt?" ;
     Message [ italian ] = "Reimpostare il modello predefinito?" ;
-    Message [ portuguese_brazilian ] = "Deseja redefinir o modelo padrão?" ;
+    Message [ portuguese_brazilian ] = "Deseja redefinir o modelo padr?o?" ;
     Message [ portuguese ] = "Deseja redefinir o modelo padrão?" ;
     Message [ finnish ] = "Haluatko palauttaa oletusmallipohjat?" ;
     Message [ danish ] = "Vil du nulstille standardskabelonen?" ;
@@ -952,7 +952,7 @@ QueryBox MSG_QUERY_RESET_DEFAULT_TEMPLATE
     Message [ english_us ] = "Do you want to reset the default template?" ;
     Message[ chinese_simplified ] = "ÄúÒªÖØÉè±ê×¼ÑùÊ½ÎÄ¼şÂğ£¿";
     Message[ russian ] = "Âû õîòèòå âîññòàíîâèòü ñòàíäàğòíûé øàáëîí?";
-    Message[ polish ] = "Czy chcesz zresetowaæ szablon domyœlny?";
+    Message[ polish ] = "Czy chcesz zresetowaæ szablon domy?lny?";
     Message[ japanese ] = "•W€½À²Ù‚ğØ¾¯Ä‚µ‚Ü‚·‚©?";
     Message[ chinese_traditional ] = "±z­n­«³]¼Ğ·Ç¼Ë¦¡ÀÉ®×¡H";
     Message[ arabic ] = "åá ÊÑíÏ ÅÚÇÏÉ ÊÚííä ÇáŞÇáÈ ÇáÇİÊÑÇÖí¿";
@@ -970,7 +970,7 @@ InfoBox MSG_TEMPLATE_DIR_NOT_EXIST
     Message [ ENGLISH ] = "The template directory\n$(DIR)\ndoen't exist." ;
     Message [ norwegian ] = "Malkatalogen\n$(DIR)\nfinnes ikke." ;
     Message [ italian ] = "La cartella dei modelli\n$(DIR)\nnon esiste." ;
-    Message [ portuguese_brazilian ] = "O diretório modelo\n$(DIR)\nnão existe." ;
+    Message [ portuguese_brazilian ] = "O diret?io modelo\n$(DIR)\nn?o existe." ;
     Message [ portuguese ] = "O directório dos modelos\n$(DIR)\nnão existe." ;
     Message [ finnish ] = "Mallipohjahakemistoa \n$(DIR)\nei ole." ;
     Message [ danish ] = "Skabelonbiblioteket\n$(DIR)\neksisterer ikke." ;
@@ -1005,10 +1005,10 @@ InfoBox MSG_DOCINFO_CANTREAD
     Message [ swedish ] = "Dokumentegenskaperna kan inte läsas." ;
     Message [ danish ] = "Det er ikke muligt at læse dokumentegenskaberne." ;
     Message [ portuguese ] = "Não é possível ler as propriedades do documento." ;
-    Message [ portuguese_brazilian ] = "Die Dokumenteigenschaften können nicht gelesen werden." ;
+    Message [ portuguese_brazilian ] = "Die Dokumenteigenschaften k?nen nicht gelesen werden." ;
     Message[ chinese_simplified ] = "ÎŞ·¨¶ÁÈ¡ÎÄµµÊôĞÔ¡£";
     Message[ russian ] = "Íå óäàåòñÿ ïğî÷èòàòü ñâîéñòâà äîêóìåíòà";
-    Message[ polish ] = "W³aœciwoœci dokumentu nie mo¿na odczytaæ.";
+    Message[ polish ] = "W³a?ciwo?ci dokumentu nie mo¿na odczytaæ.";
     Message[ japanese ] = "ÄŞ·­ÒİÄ‚Ì‘®«‚Í“Ç‚İæ‚ê‚Ü‚¹‚ñ‚Å‚µ‚½B";
     Message[ chinese_traditional ] = "µLªkÅª¨ú¤å¥óÄİ©Ê¡C";
     Message[ arabic ] = "áÇ íãßä ŞÑÇÁÉ ÎÕÇÆÕ ÇáãÓÊäÏ.";
@@ -1064,16 +1064,16 @@ String STR_QUERY_SAVEOWNFORMAT
     Text [ swedish ] = "Detta dokument kan innehålla formateringar och information\nsom inte kan sparas i $(FORMAT)format.\nSkall ändringarna sparas i \n$(OWNFORMAT) format?" ;
     Text [ danish ] = "Dette dokument kan indeholde formateringer og informationer\nsom ikke kan gemmes i $(FORMAT) format.\nVil du gemme ændringerne i $(OWNFORMAT) format?" ;
     Text [ portuguese ] = "Este documento poderá conter atributos e informações que não podem ser guardados no\nformato $(FORMAT). Guardar as modificações no\nformato $(OWNFORMAT)?" ;
-    Text [ portuguese_brazilian ] = "Dieses Dokument kann Formatierungen und Informationen\nenthalten, die nicht im $(FORMAT) Format gespeichert\nwerden können. Möchten Sie die Änderungen im\n$(OWNFORMAT) Format speichern?" ;
+    Text [ portuguese_brazilian ] = "Dieses Dokument kann Formatierungen und Informationen\nenthalten, die nicht im $(FORMAT) Format gespeichert\nwerden k?nen. M?hten Sie die ?nderungen im\n$(OWNFORMAT) Format speichern?" ;
     Text[ chinese_simplified ] = "Õâ¸öÎÄµµ¿ÉÄÜº¬ÓĞÒ»Ğ©ÎŞ·¨ÓÃ $(FORMAT) ¸ñÊ½´æÅÌµÄ¸ñÊ½ºÍĞÅÏ¢¡£\nÄúÒªÊ¹ÓÃ $(OWNFORMAT) ¸ñÊ½´æÅÌÎÄµµµÄ¸ü¸ÄÂğ£¿";
-    Text[ russian ] = "Âîçìîæíî, ÷òî â ıòîì äîêóìåíòå ñîäåğæàòñÿ ôîğìàòèğîâàíèÿ è èíôîğìàöèÿ, êîòîğûå íåâîçìîæíî ñîõğàíèòü â ôîğìàòå $(FORMAT). Âû õîòèòå ñîõğàíèòü èçìåíåíèÿ â ôîğìàòå $(OWNFORMAT)?";
+    Text[ russian ] = "Âîçìîæíî, ÷òî â ıòîì äîêóìåíòå ñîäåğæàòñÿ ôîğìàòèğîâàíèÿ è èíôîğìàöèÿ, êîòîğûå íåâîçìîæíî ñîõğàíèòü â ôîğìàòå $(FORMAT). Âû õîòèòå ñîõğàíèòü è?";
     Text[ polish ] = "Dokument ten mo¿e zawieraæ formatowania\ni informacje, których nie bêdzie mo¿na zapisaæ\nw formacie $(FORMAT). Czy chcesz zapisaæ\nzmiany w formacie $(OWNFORMAT)?";
     Text[ japanese ] = "‚±‚ÌÄŞ·­ÒİÄ‚Í $(FORMAT) ‘®‚Å•Û‘¶‚Å‚«‚È‚¢‘®İ’è‚Æî•ñ‚ğ\nŠÜ‚ñ‚Å‚¢‚Ü‚·B•ÏX‚ğ\n$(OWNFORMAT) ‘®‚É•Û‘¶‚µ‚Ü‚·‚©B";
     Text[ chinese_traditional ] = "³o­Ó¤å¥ó¥i¯à§t¦³¤@¨ÇµLªk¥Î $(FORMAT) ®æ¦¡Àx¦sªº®æ¦¡¡C\n±z­n¨Ï¥Î $(OWNFORMAT) ®æ¦¡Àx¦s¤å¥óªºÅÜ§ó¡H";
     Text[ arabic ] = "ãä Çáããßä Ãä ÇáÊäÓíŞÇÊ æÇáãÚáæãÇÊ¡ ÇáÊí íÍÊæí ÚáíåÇ åĞÇ ÇáãÓÊäÏ¡\nÛíÑ ŞÇÈáÉ ááÍİÙ ÈÇáÊäÓíŞ $(FORMAT). åá ÊÑíÏ ÍİÙ ÇáÊÛííÑÇÊ\nÈÇáÊäÓíŞ $(OWNFORMAT)¿";
     Text[ dutch ] = "Dit document kan opmaakattributen en gegevens \nbevatten die niet in $(FORMAT) formaat opgeslagen\nkunnen worden. Wilt u deze wijzigingen in\n$(OWNFORMAT) formaat opslaan?";
     Text[ chinese_simplified ] = "Õâ¸öÎÄµµ¿ÉÄÜº¬ÓĞÒ»Ğ©ÎŞ·¨ÓÃ $(FORMAT) ¸ñÊ½´æÅÌµÄ¸ñÊ½ºÍĞÅÏ¢¡£\nÄúÒªÊ¹ÓÃ $(OWNFORMAT) ¸ñÊ½´æÅÌÎÄµµµÄ¸ü¸ÄÂğ£¿";
-    Text[ greek ] = "Ğéèáíüí ôï İããñáöï áõôü íå ğåñéİ÷åé ìïñöİò êáé ğëçñïöïñßåò\nïé ïğïßåò äåí åßíáé äõíáôüí íá áğïèçêåõôïıí ìå ôç \nìïñöŞ $(FORMAT). Èİëåôå íá áğïèçêåõôïıí ïé áëëáãİò ìå ôç ìïñöŞ\n$(OWNFORMAT);";
+    Text[ greek ] = "Ğéèáíüí ôï İããñáöï áõôü íå ğåñéİ÷åé ìïñöİò êáé ğëçñïöïñßåò\nïé ïğïßåò äåí åßíáé äõíáôüí íá áğïèçêåõôïıí ìå ôç \nìïñöŞ $(FORMAT). Èİëåôå íá áğïèçê";
     Text[ korean ] = "ÀÌ ¹®¼­¿¡´Â $(FORMAT) ¼­½Ä¿¡ ÀúÀåÇÒ ¼ö ¾ø´Â Æ÷¸Ë°ú Á¤º¸°¡ \nÆ÷ÇÔµÇ¾î¡¡ÀÖÀ»¼ö ÀÖ½À´Ï´Ù. º¯°æ»çÇ×À» \n$(OWNFORMAT) ¼­½Ä¿¡ ÀúÀåÇÏ½Ã°Ú½À´Ï±î?";
     Text[ turkish ] = "Bu belgede, $(FORMAT) formatında kaydedilemeyen\n formatlamalar ve bilgiler bulunabilir. Değişiklikleri \n$(OWNFORMAT) formatında kaydetmek istiyor musunuz?";
     Text[ language_user1 ] = " ";
@@ -1091,7 +1091,7 @@ String STR_QUERY_MUSTOWNFORMAT
     Text [ dutch ] = "Documenten kunnen niet in $(FORMAT) formaat worden \nopgeslagen. Wilt u het document in $(OWNFORMAT) formaat\nopslaan?" ;
     Text [ swedish ] = "Dokument kan inte sparas i $(FORMAT)-format.\nSkall dokumentet sparas i $(OWNFORMAT)-format?" ;
     Text [ danish ] = "Det er ikke muligt at gemmme dokumenter i $(FORMAT) format.\nVil du gemme dokumentet i $(OWNFORMAT) format?" ;
-    Text [ portuguese_brazilian ] = "Dokumente können nicht im $(FORMAT) Format gespeichert\nwerden. Möchten Sie das Dokument im $(OWNFORMAT) Format\nspeichern?" ;
+    Text [ portuguese_brazilian ] = "Dokumente k?nen nicht im $(FORMAT) Format gespeichert\nwerden. M?hten Sie das Dokument im $(OWNFORMAT) Format\nspeichern?" ;
     Text [ portuguese ] = "Impossível guardar documentos no formato $(FORMAT).\nDeseja guardar o documento no formato $(OWNFORMAT)?" ;
     Text[ chinese_simplified ] = "ÎŞ·¨ÓÃ $(FORMAT) ¸ñÊ½´æÅÌÎÄµµ¡£\nÄúÒªÊ¹ÓÃ $(OWNFORMAT) ¸ñÊ½´æÅÌÂğ£¿";
     Text[ russian ] = "Ñîõğàíèòü äîêóìåíòû â ôîğìàòå $(FORMAT) íå óäàåòñÿ.\nÂû õîòèòå ñîõğàíèòü ıòîò äîêóìåíò â\nôîğìàòå $(OWNFORMAT)?";
@@ -1230,7 +1230,7 @@ String STR_CLOSEDOC
     Text [ french ] = "~Fermer" ;
     Text [ swedish ] = "St~äng" ;
     Text [ danish ] = "Luk" ;
-    Text [ portuguese_brazilian ] = "S~chließen" ;
+    Text [ portuguese_brazilian ] = "S~chlie?en" ;
     Text [ portuguese ] = "~Fechar" ;
     Text[ chinese_simplified ] = "¹Ø±Õ(~C)";
     Text[ russian ] = "~Çàêğûòü";
@@ -1260,7 +1260,7 @@ String STR_CLOSEDOC_ANDRETURN
     Text [ dutch ] = "S~luiten en terug naar  " ;
     Text [ swedish ] = "St~äng och tillbaka till  " ;
     Text [ danish ] = "Luk og gå tilbage til " ;
-    Text [ portuguese_brazilian ] = "S~chließen & zurück zu " ;
+    Text [ portuguese_brazilian ] = "S~chlie?en & zur?k zu " ;
     Text [ portuguese ] = "~Fechar & Regressar a " ;
     Text[ chinese_simplified ] = "¹Ø±ÕºÍ·µ»Ø(~C)";
     Text[ russian ] = "Çàêğûòü & íàçàä ê  ";
@@ -1434,7 +1434,7 @@ Resource RID_DLSTATUS
         Text [ portuguese ] = "Ligação com: $(HOST). Esperando resposta..." ;
         Text[ chinese_simplified ] = "Á¬½Óµ½£º$(HOST)¡£ÕıÔÚµÈºò´ğ¸´...";
         Text[ russian ] = "Ïîäêëş÷åíèå ê: $(HOST). Æäèòå îòâåòà...";
-        Text[ polish ] = "Po³¹czenie z: $(HOST). Czekanie na odpowiedŸ...";
+        Text[ polish ] = "Po³¹czenie z: $(HOST). Czekanie na odpowied?...";
         Text[ japanese ] = "Ú‘±:$(HOST)B‰“š‚ğ‘Ò‚Á‚Ä‚¢‚Ü‚·...";
         Text[ chinese_traditional ] = "³s½u¨ì$(HOST)¡C¥¿¦bµ¥­Ôµª´_...";
         Text[ arabic ] = "ÇáÇÊÕÇá ÈÜ: $(HOST). İí ÇäÊÙÇÑ ÇáÑÏ...";
@@ -1458,7 +1458,7 @@ Resource RID_DLSTATUS
         Text [ french ] = "Ouvrir : $(TARGET) à $(HOST)" ;
         Text [ swedish ] = "$(TARGET) öppnas på $(HOST)" ;
         Text [ danish ] = "Åbner: $(TARGET) på $(HOST)" ;
-        Text [ portuguese_brazilian ] = "Geöffnet wird: $(TARGET) auf $(HOST)" ;
+        Text [ portuguese_brazilian ] = "Ge?fnet wird: $(TARGET) auf $(HOST)" ;
         Text [ portuguese ] = "Abrir: $(TARGET) em $(HOST)" ;
         Text[ chinese_simplified ] = "´ò¿ª£º$(HOST)ÉÏµÄ$(TARGET)";
         Text[ russian ] = "$(TARGET) áóäåò îòêğûò â $(HOST)";
@@ -1486,7 +1486,7 @@ Resource RID_DLSTATUS
         Text [ dutch ] = "Geladen wordt: $(TARGET) van $(HOST). Gelezen: $(BYTE)" ;
         Text [ swedish ] = "$(TARGET) överförs från $(HOST). Läst: $(BYTE)" ;
         Text [ danish ] = "Overfører: $(TARGET) fra$(HOST). Indlæst: $(BYTE)" ;
-        Text [ portuguese_brazilian ] = "Übertragen wird: $(TARGET) von $(HOST). Gelesen: $(BYTE)" ;
+        Text [ portuguese_brazilian ] = "?bertragen wird: $(TARGET) von $(HOST). Gelesen: $(BYTE)" ;
         Text [ portuguese ] = "Transferir: $(TARGET) de $(HOST). Lidos: $(BYTE)" ;
         Text[ chinese_simplified ] = "´«µİ£º$(HOST)µÄ$(TARGET)¡£ÒÑ¾­ÔÄ¶Á£º$(BYTE)";
         Text[ russian ] = "Ïåğåäàåòñÿ: $(TARGET) èç $(HOST). Ïğî÷èòàíî: $(BYTE)";
@@ -1540,7 +1540,7 @@ QueryBox MSG_OPEN_READONLY
     MESSAGE [ English ] = "The Document can't be opened for writing.\nDo you want to open it read-only?" ;
     MESSAGE [ norwegian ] = "Dokumentet kan ikke åpnes for skriving.\nVil du åpne det som skrivebeskyttet?" ;
     MESSAGE [ italian ] = "Impossibile aprire il documento per la scrittura.\nAprirlo in sola lettura?" ;
-    MESSAGE [ portuguese_brazilian ] = "O documento não pode ser aberto para gravação.\nDeseja abri-lo como só leitura?" ;
+    MESSAGE [ portuguese_brazilian ] = "O documento n?o pode ser aberto para grava??o.\nDeseja abri-lo como s?leitura?" ;
     MESSAGE [ portuguese ] = "Impossível abrir documento para editar.\n Abri-lo apenas para leitura?" ;
     MESSAGE [ finnish ] = "Asiakirjaa ei voida avata muokattavaksi.\nHaluatko tallentaa sen vain luku -muodossa?" ;
     MESSAGE [ danish ] = "Det er ikke muligt at åbne dokumentet til redigering.\nVil du åbne det i skrivebeskyttet tilstand?" ;
@@ -1646,7 +1646,7 @@ String STR_FRAMEOBJECT_PROPERTIES
     Text [ portuguese ] = "~Propriedades ..." ;
     Text[ chinese_simplified ] = "ÊôĞÔ(~I)...";
     Text[ russian ] = "Ñâîéñòâà ...";
-    Text[ polish ] = "W³aœciwoœci ...";
+    Text[ polish ] = "W³a?ciwo?ci ...";
     Text[ japanese ] = "ÌßÛÊßÃ¨(~I)...";
     Text[ chinese_traditional ] = "Äİ©Ê(~I)...";
     Text[ arabic ] = "...ÎÕÇÆÕ";
@@ -1721,7 +1721,7 @@ String STR_TEMPL_MOVED
     Text = "Die Vorlage \"$(TEMPLATE)\" wurde nicht an ihrem ursprünglichem Ort gefunden. Eine Vorlage gleichen Namens existiert an der Stelle \"$(FOUND)\". Soll diese Vorlage in Zukunft zum Abgleichen benutzt werden?" ;
     Text [ ENGLISH ] = "Die Vorlage \"$(TEMPLATE)\" wurde nicht an ihrem ursprünglichem Ort gefunden. Eine Vorlage gleichen Namens existiert an der Stelle \"$(FOUND)\". Soll diese Vorlage in Zukunft zum Abgleichen benutzt werden?" ;
     Text [ english_us ] = "The template \"$(TEMPLATE)\" was not found at the original location. A template with the same name exists at \"$(FOUND)\". Should this template be used in the future when comparing?" ;
-    Text [ portuguese_brazilian ] = "Die Vorlage $(TEMPLATE) wurde nicht an ihrem ursprünglichem Ort gefunden. Eine Vorlage gleichen Namens existiert an der Stelle $(FOUND). Soll diese Vorlage in Zukunft zum Abgleichen benutzt werden?" ;
+    Text [ portuguese_brazilian ] = "Die Vorlage $(TEMPLATE) wurde nicht an ihrem urspr?glichem Ort gefunden. Eine Vorlage gleichen Namens existiert an der Stelle $(FOUND). Soll diese Vorlage in Zukunft zum Abgleichen benutzt werden?" ;
     Text [ swedish ] = "Mallen \"$(TEMPLATE)\" hittades inte på sin ursprungliga plats. En mall med samma namn finns på \"$(FOUND)\". Skall denna mall fortsättningsvis användas vid synkronisering?" ;
     Text [ danish ] = "Skabelonen \"$(TEMPLATE)\" blev ikke fundet på det oprindelige sted. En skabelon med samme navn findes på stedet \"$(FOUND)\". Skal denne skabelon fremover bruges til synkronisering?" ;
     Text [ italian ] = "Il modello $(TEMPLATE) non è stato trovato al suo posto originario. Un modello con lo stesso nome esiste in $(FOUND). Volete usare in futuro questo modello per l'aggiornamento?" ;
@@ -1731,13 +1731,13 @@ String STR_TEMPL_MOVED
     Text [ portuguese ] = "O modelo \"$(TEMPLATE)\" não foi encontrado no seu lugar original. Já existe um modelo com o mesmo nome em \"$(FOUND)\". Deseja usar este modelo para actualizações futuras?" ;
     Text[ chinese_simplified ] = "Ã»ÓĞÔÚÔ­À´Î»ÖÃÕÒµ½ÑùÊ½¡°$(TEMPLATE)¡±¡£ÓĞÒ»¸öÍ¬ÃûµÄÑùÊ½ÔÚ¡°$(FOUND)¡±´¦¡£½ñºóÄúÒªÊ¹ÓÃÕâ¸öÑùÊ½½øĞĞµ÷ÕûÂğ£¿";
     Text[ russian ] = "Øàáëîí \"$(TEMPLATE)\" íå íàéäåí â èñõîäíîì ìåñòå. Øàáëîí ñ òàêèì æå èìåíåì íàõîäèòñÿ â \"$(FOUND)\". Èñïîëüçîâàòü ıòîò øàáëîí â áóäóùåì äëÿ ñèíõğîíèçàöèè?";
-    Text[ polish ] = "Szablonu \"$(TEMPLATE)\" nie znaleziono na jego pierwotnym miejscu. Szablon o tej samej nazwie istnieje w \"$(FOUND)\". Czy u¿yæ w przysz³oœci tego szablonu do aktualizacji?";
+    Text[ polish ] = "Szablonu \"$(TEMPLATE)\" nie znaleziono na jego pierwotnym miejscu. Szablon o tej samej nazwie istnieje w \"$(FOUND)\". Czy u¿yæ w przysz³o?ci tego szablonu do aktualizacji?";
     Text[ japanese ] = "ÃİÌßÚ°Ä\"$(TEMPLATE)\"‚Í Œ³‚ÌêŠ‚ÉŒ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½B“¯‚¶–¼‘O‚ÌÃİÌßÚ°Ä‚ª \"$(FOUND)\"‚É‚ ‚è‚Ü‚·B‚±‚ÌÃİÌßÚ°Ä‚ğ¡Œã ¼İ¸Û‚Ég‚¢‚Ü‚·‚©?";
     Text[ chinese_traditional ] = "¨S¦³¦b­ì¨Óªº¦ì¸m§ä¨ì³o­Ó¼Ë¦¡$(TEMPLATE)¡C¦³¤@­Ó¦P¦Wªº¼Ë¦¡¦b $(FOUND) ¡C¤µ«á±z­n¤ñ¸û³o­Ó¼Ë¦¡¡H";
     Text[ arabic ] = "ÊÚĞÑ ÇáÚËæÑ Úáì ÇáŞÇáÈ \"$(TEMPLATE)\" İí ãæÖÚå ÇáÃÕáí. íæÌÏ ŞÇáÈ ÈäİÓ ÇáÇÓã İí ÇáãæÖÚ \"$(FOUND)\". åá ÊÑíÏ ÇÓÊÎÏÇã åĞÇ ÇáŞÇáÈ ááÊÍÏíË İí ÇáãÓÊŞÈá¿";
     Text[ dutch ] = "Sjabloon \"$(TEMPLATE)\" werd niet op de oorspronkelijke plaats gevonden. Een sjabloon met dezelfde naam bevindt zich op \"$(FOUND)\". Wilt u deze sjabloon in de toekomst voor het synchroniseren gebruiken?";
     Text[ chinese_simplified ] = "Ã»ÓĞÔÚÔ­À´Î»ÖÃÕÒµ½ÑùÊ½¡°$(TEMPLATE)¡±¡£ÓĞÒ»¸öÍ¬ÃûµÄÑùÊ½ÔÚ¡°$(FOUND)¡±´¦¡£½ñºóÄúÒªÊ¹ÓÃÕâ¸öÑùÊ½½øĞĞµ÷ÕûÂğ£¿";
-    Text[ greek ] = "Ôï ğñüôõğï $(TEMPLATE) äåí âñİèçêå óôïí áñ÷éêŞ ôïõ èİóç. ÕğÜñ÷åé İíá ïìüíõìï ğñüôõğï óôç èİóç $(FOUND). Èİëåôå íá ÷ñçóéìïğïéçèåß óôï ìİëëïí áõôü ôï ğñüôõğï ãéá ôçí åíçìİñùóç;";
+    Text[ greek ] = "Ôï ğñüôõğï $(TEMPLATE) äåí âñİèçêå óôïí áñ÷éêŞ ôïõ èİóç. ÕğÜñ÷åé İíá ïìüíõìï ğñüôõğï óôç èİóç $(FOUND). Èİëåôå íá ÷ñçóéìïğïéçèåß óôï ìİëëïí áõôü ôï ğ?";
     Text[ korean ] = "¼­½ÄÆÄÀÏ$(TEMPLATE)À» ¿ø·¡ À§Ä¡¿¡¼­ Ã£Áö ¸øÇß½À´Ï´Ù. ÀÌ¸§ÀÌ °°Àº ¼­½ÄÆÄÀÏÀÌ $(FOUND)¿¡ ÀÖ½À´Ï´Ù. ¾ÕÀ¸·Î ÀÌ ÆÄÀÏÀ» µ¿±âÈ­¿¡ ÀÌ¿ëÇÏ½Ã°Ú½À´Ï±î?";
     Text[ turkish ] = "\"$(TEMPLATE)\" şablonu asıl yerinde bulunamadı. Aynı adlı şablonun bulunduğu yerin adı: \"$(FOUND)\". Bu şablon gelecekte karşılaştırma için kullanılsın mı?";
     Text[ language_user1 ] = " ";
@@ -1971,7 +1971,7 @@ String STR_DOCTYPENAME_MESSAGE
     Text[ italian ] = "Messaggio";
     Text[ danish ] = "Meddelelse";
     Text[ swedish ] = "Meddelande";
-    Text[ polish ] = "Wiadomoœæ";
+    Text[ polish ] = "Wiadomo?æ";
     Text[ portuguese_brazilian ] = "Mail";
     Text[ japanese ] = "Ò¯¾°¼Ş";
     Text[ korean ] = "¸Ş½ÃÁö";
@@ -2026,7 +2026,7 @@ String STR_PACKNGO_NOACCESS
     Text[ italian ] = "Non è stato possibile accedere al supporto dati attuale.";
     Text[ danish ] = "Det var ikke muligt at få adgang til det aktuelle datamedie.";
     Text[ swedish ] = "Det gick inte att få tillgång till det aktuella datamediet.";
-    Text[ polish ] = "Nie mo¿na by³o dostaæ siê do aktualnego noœnika danych.";
+    Text[ polish ] = "Nie mo¿na by³o dostaæ siê do aktualnego no?nika danych.";
     Text[ portuguese_brazilian ] = "It was not posiible to access the media.";
     Text[ japanese ] = "ÄŞ×²ÌŞ‚É±¸¾½‚Å‚«‚Ü‚¹‚ñ";
     Text[ korean ] = "ÇöÀç µ¥ÀÌÅÍ ¸ÅÃ¼¿¡ Á¢±ÙÀÌ ºÒ°¡´ÉÇÕ´Ï´Ù.";
@@ -2052,7 +2052,7 @@ String STR_PACKNGO_NEWMEDIUM
     Text[ italian ] = "Inserite il supporto dati successivo, quindi confermate con OK.";
     Text[ danish ] = "Indsæt det næste datamedie og tryk på OK.";
     Text[ swedish ] = "Lägg in nästa datamedium och tryck OK.";
-    Text[ polish ] = "Wsuñ nastêpny noœnik danych i naciœnij przycisk OK.";
+    Text[ polish ] = "Wsuñ nastêpny no?nik danych i naci?nij przycisk OK.";
     Text[ portuguese_brazilian ] = "Insert the next media and press OK.";
     Text[ japanese ] = "Ÿ‚Ì”}‘Ì‚ğ“ü‚ê‚ÄmOKnÎŞÀİ‚ğ¸Ø¯¸‚µ‚Ü‚·B";
     Text[ korean ] = "´ÙÀ½ µ¥ÀÌÅÍ ¸ÅÃ¼¸¦ »ğÀÔÇÑ´ÙÀ½£Ï£Ë ¹öÆ°À» ´©¸£½Ê½Ã¿À.";
