@@ -1,4 +1,4 @@
-/* RCS  $Id: config.h,v 1.1.1.1 2000-09-22 15:33:36 hr Exp $
+/* RCS  $Id: config.h,v 1.2 2002-10-08 09:21:53 waratah Exp $
 --
 -- SYNOPSIS
 --      Configurarion include file.
@@ -39,7 +39,8 @@
 #define coreleft() 0L
 
 /* MSC Version 4.0 doesn't understand SIGTERM, later versions do. */
-#ifndef SIGTERM
+/* config.h is included before signal.h therefore test MSC version */
+#if _MSC_VER < 500
 #   define SIGTERM SIGINT
 #endif
 
@@ -65,6 +66,11 @@
 
 /* MSC doesn't seem to care about CONST */
 #define CONST
+
+/* MSC has sys/types.h and sys/stat.h (this is tested only with MSVC++ 6.0) */
+#define HAVE_SYS_TYPES_H 1
+#define HAVE_SYS_STAT_H 1
+
 
 #ifndef MSDOS
 #   define MSDOS 1
