@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fetab.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ama $ $Date: 2002-06-12 07:46:42 $
+ *  last change: $Author: os $ $Date: 2002-08-22 10:40:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1762,4 +1762,14 @@ BOOL SwFEShell::GetAutoSum( String& rFml ) const
 
     return TRUE;
 }
+/* -----------------------------22.08.2002 12:37------------------------------
 
+ ---------------------------------------------------------------------------*/
+BOOL SwFEShell::IsTableRightToLeft() const
+{
+    SwFrm *pFrm = GetCurrFrm();
+    if( !pFrm->IsInTab() )
+        return FALSE;
+
+    return pFrm->ImplFindTabFrm()->IsRightToLeft();
+}
