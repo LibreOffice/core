@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridwin4.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 12:01:48 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 17:05:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,6 +108,7 @@
 #include "invmerge.hxx"
 #include "editutil.hxx"
 #include "inputopt.hxx"
+#include "fillinfo.hxx"
 
 //#include "tabvwsh.hxx"            //! Test !!!!
 
@@ -526,8 +527,8 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
 
         // Datenblock
 
-    RowInfo* pRowInfo = new RowInfo[ROWINFO_MAX];
-    SCSIZE nArrCount = pDoc->FillInfo( pRowInfo, nX1, nY1, nX2, nY2, nTab,
+    ScTableInfo aTabInfo;
+    pDoc->FillInfo( aTabInfo, nX1, nY1, nX2, nY2, nTab,
                                         nPPTX, nPPTY, FALSE, bFormulaMode,
                                         &pViewData->GetMarkData() );
 
@@ -535,7 +536,7 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
 
     Fraction aZoomX = pViewData->GetZoomX();
     Fraction aZoomY = pViewData->GetZoomY();
-    ScOutputData aOutputData( this, OUTTYPE_WINDOW, pRowInfo, nArrCount, pDoc, nTab,
+    ScOutputData aOutputData( this, OUTTYPE_WINDOW, aTabInfo, pDoc, nTab,
                                 nScrX, nScrY, nX1, nY1, nX2, nY2, nPPTX, nPPTY,
                                 &aZoomX, &aZoomY );
 
@@ -650,7 +651,7 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
 
         // Autofilter- und Pivot-Buttons
 
-    DrawButtons( nX1, nY1, nX2, nY2, pRowInfo, nArrCount );         // Pixel
+    DrawButtons( nX1, nY1, nX2, nY2, aTabInfo );          // Pixel
 
         // Notiz-Anzeiger
 
@@ -870,10 +871,6 @@ void ScGridWindow::Draw( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2, ScUpdateMod
 
     if (bCurVis)
         ShowCursor();
-
-    for (SCSIZE i=0; i<nArrCount; i++)
-        delete[] pRowInfo[i].pCellInfo;
-    delete[] pRowInfo;
 
     if (pViewData->HasEditView(eWhich))
         SetMapMode(pViewData->GetLogicMode());
@@ -1173,7 +1170,7 @@ void ScGridWindow::DrawRefMark( SCCOL nRefStartX, SCROW nRefStartY,
 }
 
 void ScGridWindow::DrawButtons( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
-                                    RowInfo* pRowInfo, SCSIZE nArrCount )
+                                    ScTableInfo& rTabInfo )
 {
     SCCOL nCol;
     SCROW nRow;
@@ -1183,6 +1180,9 @@ void ScGridWindow::DrawButtons( SCCOL nX1, SCROW nY1, SCCOL nX2, SCROW nY2,
     ScDocument*     pDoc = pViewData->GetDocument();
     ScDBData*       pDBData = NULL;
     ScQueryParam*   pQueryParam = NULL;
+
+    RowInfo*        pRowInfo = rTabInfo.mpRowInfo;
+    USHORT          nArrCount = rTabInfo.mnArrCount;
 
     BOOL bLayoutRTL = pDoc->IsLayoutRTL( nTab );
 
