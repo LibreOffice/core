@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlwrap.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: nn $ $Date: 2000-12-06 08:37:34 $
+ *  last change: $Author: cl $ $Date: 2001-01-12 16:39:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,7 +196,7 @@ sal_Bool ScXMLImportWrapper::Import()
     if ( pObjSh )
     {
         SvXMLGraphicHelper* pGraphicHelper;
-        uno::Reference< container::XIndexContainer > xGrfContainer;
+        uno::Reference< document::XGraphicObjectResolver > xGrfContainer;
         uno::Reference<frame::XModel> xModel = pObjSh->GetModel();
 
         if( !xSource.is() )
@@ -290,7 +290,7 @@ sal_Bool ScXMLImportWrapper::Export()
         pObjSh->UpdateDocInfoForSave();     // update information
 
         uno::Reference<frame::XModel> xModel = pObjSh->GetModel();
-        uno::Reference< container::XIndexContainer > xGrfContainer;
+        uno::Reference< document::XGraphicObjectResolver > xGrfContainer;
         SvXMLGraphicHelper* pGraphicHelper;
 
         if( pStorage )
@@ -300,13 +300,14 @@ sal_Bool ScXMLImportWrapper::Export()
         }
 
         ScXMLExport *pExp = new ScXMLExport( xModel, sFileName, xHandler, xGrfContainer, sal_False );
+        uno::Reference< document::XExporter > xExporter( pExp );
 
         sal_Bool bRet = (0 == pExp->exportDoc( sXML_spreadsheet ));
 
         if( pStorage )
             SvXMLGraphicHelper::Destroy( pGraphicHelper );
 
-        delete pExp;
+//      delete pExp;
 
         return bRet;
     }

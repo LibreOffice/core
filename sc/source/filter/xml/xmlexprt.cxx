@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexprt.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: sab $ $Date: 2001-01-11 06:57:04 $
+ *  last change: $Author: cl $ $Date: 2001-01-12 16:39:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -294,7 +294,7 @@ sal_Int16 ScXMLExport::GetFieldUnit()
 
 ScXMLExport::ScXMLExport( const uno::Reference <frame::XModel>& xTempModel, const NAMESPACE_RTL(OUString)& rFileName,
                         const uno::Reference<xml::sax::XDocumentHandler>& rHandler,
-                        const uno::Reference<container::XIndexContainer >& rGrfContainer,
+                        const uno::Reference<document::XGraphicObjectResolver >& rGrfContainer,
                         sal_Bool bShowProgr ) :
 SvXMLExport( rFileName, rHandler, xTempModel, rGrfContainer,
              GetFieldUnit() ), xModel(xTempModel),

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: sab $ $Date: 2000-12-21 17:37:20 $
+ *  last change: $Author: cl $ $Date: 2001-01-12 16:39:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1236,7 +1236,7 @@ SvXMLImportContext *ScXMLImport::CreateContext( USHORT nPrefix,
 }
 
 ScXMLImport::ScXMLImport(   com::sun::star::uno::Reference <com::sun::star::frame::XModel> xTempModel,
-                            com::sun::star::uno::Reference< com::sun::star::container::XIndexContainer >& rGrfContainer,
+                            com::sun::star::uno::Reference< com::sun::star::document::XGraphicObjectResolver >& rGrfContainer,
                             sal_Bool bLDoc, sal_uInt16 nStyleFamMask ) :
     SvXMLImport( xTempModel, rGrfContainer ),
     pDoc( NULL ),
