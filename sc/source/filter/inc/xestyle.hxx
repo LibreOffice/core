@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xestyle.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-16 08:19:16 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 13:41:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -415,8 +415,6 @@ private:
     void                        WriteFormatRecord( XclExpStream& rStrm, sal_uInt16 nXclIx, const String& rFormatStr );
     /** Writes the FORMAT record represented by rFormat. */
     void                        WriteFormatRecord( XclExpStream& rStrm, const XclExpNumFmt& rFormat );
-    /** Writes default formats occuring in each Excel file. */
-    void                        WriteDefaultFormats( XclExpStream& rStrm );
 
 private:
     typedef ::std::auto_ptr< SvNumberFormatter >    SvNumberFormatterPtr;
