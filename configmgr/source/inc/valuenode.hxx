@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valuenode.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: avy $ $Date: 2001-08-08 11:23:02 $
+ *  last change: $Author: jb $ $Date: 2001-09-25 16:02:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,9 @@ namespace configmgr
 
         bool isLocalized() const {return m_aAttributes.bLocalized;}
         bool isReplacing() const {return m_aAttributes.bReplacing;}
+
+        void forceWritableToFinalized(); /// make non-writable nodes writable but finalized
+
         void setName(const rtl::OUString& _rNewName) { m_aName = _rNewName; }
             // to be used with caution. If the node is referenced from somewhere else under it's old name,
             // you may have problems with this inconsistence

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: options.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: jb $ $Date: 2001-06-07 08:07:48 $
+ *  last change: $Author: jb $ $Date: 2001-09-25 16:02:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,11 +99,13 @@ namespace configmgr
         rtl::OUString   m_sDefaultUser;                         // user key used (could be empty)
         sal_Int32       m_nCacheID;                             // set if data should not be fetched from the cache, but reloaded
         bool            m_bLazyWrite;                           // true, if tree use lazy writing
+        bool            m_bForceWritable;                       // true, if write-protection should be ignored
     public:
         OOptions(const uno::Reference< script::XTypeConverter >& _xConverter)
             :m_xConverter(_xConverter)
             ,m_nCacheID(0)
             ,m_bLazyWrite(true)
+            ,m_bForceWritable(false)
         {}
 
         OOptions(const OOptions& _rOptions)
@@ -112,8 +114,9 @@ namespace configmgr
             ,m_sDefaultUser(_rOptions.getDefaultUser())
             ,m_sLocale(_rOptions.m_sLocale)
             ,m_sUser(_rOptions.m_sUser)
-            ,m_nCacheID(0),                      // cache identity is not copied
-            m_bLazyWrite(_rOptions.m_bLazyWrite)
+            ,m_nCacheID(0)                       // cache identity is not copied
+            ,m_bLazyWrite(_rOptions.m_bLazyWrite)
+            ,m_bForceWritable(_rOptions.m_bForceWritable)
         {
             if (!_rOptions.canUseCache()) this->setNoCache();
         }
@@ -121,6 +124,9 @@ namespace configmgr
         uno::Reference< script::XTypeConverter > getTypeConverter() const {return m_xConverter;}
 
         bool canUseCache() const { return m_nCacheID == 0; }
+        bool getLazyWrite() const {return m_bLazyWrite;}
+        bool isForcingWritable() const {return m_bForceWritable;}
+
 
         rtl::OUString getLocale() const {return m_sLocale.getLength() ? m_sLocale : m_sDefaultLocale;}
         const rtl::OUString& getDefaultLocale() const {return m_sDefaultLocale;}
@@ -137,8 +143,8 @@ namespace configmgr
         void setDefaultLocale(const rtl::OUString& _rLocale) {m_sDefaultLocale = _rLocale;}
         void setMultiLocaleMode() { localehelper::getAnyLocale(m_sLocale);}
         void setMultiLocaleDefault() {  localehelper::getAnyLocale(m_sDefaultLocale);}
-        void setLazyWrite(bool _bLazyWrite = false) {m_bLazyWrite = _bLazyWrite;}
-        bool getLazyWrite() {return m_bLazyWrite;}
+        void setLazyWrite(bool _bLazyWrite) {m_bLazyWrite = _bLazyWrite;}
+        void setForceWritable(bool _bForce) { m_bForceWritable = _bForce;}
 
         friend sal_Int32 compareCacheIdentity(OOptions const& lhs, OOptions const& rhs)
         { return rhs.m_nCacheID - lhs.m_nCacheID; }

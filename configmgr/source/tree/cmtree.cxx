@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmtree.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: jb $ $Date: 2001-07-05 17:05:50 $
+ *  last change: $Author: jb $ $Date: 2001-09-25 16:05:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,6 +147,15 @@ namespace configmgr
     ValueNode*       INode::asValueNode() {return NULL;}
     ValueNode const* INode::asValueNode() const {return NULL;}
 
+
+      void INode::forceWritableToFinalized()
+      {
+        if (!m_aAttributes.bWritable)
+        {
+            m_aAttributes.bFinalized = true;
+            m_aAttributes.bWritable = false;
+        }
+    }
 
 // ------------------------- SearchNode implementation -------------------------
     SearchNode::SearchNode():INode(configuration::Attributes()){}
