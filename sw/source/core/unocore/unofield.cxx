@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: os $ $Date: 2001-02-21 12:40:25 $
+ *  last change: $Author: os $ $Date: 2001-03-01 12:19:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1326,7 +1326,56 @@ uno::Any SwXFieldMaster::getPropertyValue(const OUString& rPropertyName)
         }
     }
     else
-        throw uno::RuntimeException();
+    {
+        if(COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_DATA_COMMAND_TYPE))
+            aRet <<= nParam2;
+        else if(nResTypeId == RES_USERFLD)
+        {
+            if(COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_CONTENT))
+                aRet <<= (OUString)sParam1;
+            else if(COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_VALUE ))
+                aRet <<= fParam1;
+            else if(COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_IS_EXPRESSION ))
+                aRet.setValue(&bParam1, ::getBooleanCppuType());
+        }
+        else if(RES_DBFLD == nResTypeId)
+        {
+            if(COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_DATA_BASE_NAME))
+                aRet <<= (OUString)sParam1;
+            if(COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_DATA_TABLE_NAME))
+                aRet <<= (OUString)sParam2;
+            if(COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_DATA_COLUMN_NAME))
+                aRet <<= (OUString)sParam3;
+        }
+        else if(RES_SETEXPFLD == nResTypeId)
+        {
+            if(COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_NUMBERING_SEPARATOR))
+            {
+                aRet <<= (OUString)sParam1;
+            }
+            else if(COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_CHAPTER_NUMBERING_LEVEL))
+            {
+                aRet <<= nParam1;
+            }
+        }
+        else if(RES_SETEXPFLD == nResTypeId)
+        {
+            USHORT nPart = COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_DDE_COMMAND_TYPE)  ? 0 :
+                COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_DDE_COMMAND_FILE)  ? 1 :
+                    COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_DDE_COMMAND_ELEMENT)  ? 2 :
+                    COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_IS_AUTOMATIC_UPDATE) ? 3 : USHRT_MAX;
+            if(nPart  < 3 )
+            {
+                aRet <<= (OUString)sParam1.GetToken(nPart, cTokenSeperator);
+            }
+            else if(3 == nPart)
+            {
+                aRet.setValue(&bParam1, ::getBooleanCppuType());
+            }
+        }
+        else
+            throw UnknownPropertyException();
+    }
     return aRet;
 }
 /*-- 14.12.98 11:08:36---------------------------------------------------
