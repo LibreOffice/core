@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmexpl.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 14:22:11 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 16:06:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -435,6 +435,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
         {
             Identifier = SID_FM_CONVERTTO_EDIT ;
             HelpID = SID_FM_CONVERTTO_EDIT ;
+            Command = ".uno:ConvertToEdit" ;
             Text = "~Textfeld" ;
             Text [ ENGLISH ] = "~TextField" ;
             Text[ english_us ] = "~Text Box";
@@ -470,6 +471,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
         {
             Identifier = SID_FM_CONVERTTO_BUTTON ;
             HelpID = SID_FM_CONVERTTO_BUTTON ;
+            Command = ".uno:ConvertToButton" ;
             Text = "~Schältfläche" ;
             Text [ ENGLISH ] = "~Button" ;
             Text[ english_us ] = "~Button";
@@ -504,6 +506,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
         {
             Identifier = SID_FM_CONVERTTO_FIXEDTEXT ;
             HelpID = SID_FM_CONVERTTO_FIXEDTEXT ;
+            Command = ".uno:ConvertToFixed" ;
             Text = "~Beschriftungsfeld" ;
             Text [ ENGLISH ] = "~Label" ;
             Text[ english_us ] = "La~bel field";
@@ -539,6 +542,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
         {
             Identifier = SID_FM_CONVERTTO_GROUPBOX ;
             HelpID = SID_FM_CONVERTTO_GROUPBOX ;
+            Command = ".uno:ConvertToGroup" ;
             Text = "~Gruppierungsrahmen" ;
             Text [ ENGLISH ] = "F~rameControl" ;
             Text[ english_us ] = "G~roup Box";
@@ -573,6 +577,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
         {
             Identifier = SID_FM_CONVERTTO_LISTBOX ;
             HelpID = SID_FM_CONVERTTO_LISTBOX ;
+            Command = ".uno:ConvertToList" ;
             Text = "~Listenfeld" ;
             Text [ ENGLISH ] = "L~ist Box" ;
             Text[ english_us ] = "L~ist Box";
@@ -608,6 +613,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
         {
             Identifier = SID_FM_CONVERTTO_CHECKBOX ;
             HelpID = SID_FM_CONVERTTO_CHECKBOX ;
+            Command = ".uno:ConvertToCheckBox" ;
             Text = "~Markierfeld" ;
             Text [ ENGLISH ] = "~Check Box" ;
             Text[ english_us ] = "~Check Box";
@@ -642,6 +648,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
         {
             Identifier = SID_FM_CONVERTTO_RADIOBUTTON ;
             HelpID = SID_FM_CONVERTTO_RADIOBUTTON ;
+            Command = ".uno:ConvertToRadio" ;
             Text = "~Optionsfeld" ;
             Text [ ENGLISH ] = "~Option Button" ;
             Text[ english_us ] = "~Radio Button";
@@ -677,6 +684,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
         {
             Identifier = SID_FM_CONVERTTO_COMBOBOX ;
             HelpID = SID_FM_CONVERTTO_COMBOBOX ;
+            Command = ".uno:ConvertToCombo" ;
             Text = "~Kombinationsfeld" ;
             Text [ ENGLISH ] = "Combo Bo~x" ;
             Text[ english_us ] = "Combo Bo~x";
@@ -711,6 +719,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
         {
             Identifier = SID_FM_CONVERTTO_IMAGEBUTTON ;
             HelpID = SID_FM_CONVERTTO_IMAGEBUTTON ;
+            Command = ".uno:ConvertToImageBtn" ;
             Text = "~Grafische Schaltfläche" ;
             Text [ ENGLISH ] = "I~mage Button" ;
             Text[ english_us ] = "I~mage Button";
@@ -745,6 +754,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
         {
             Identifier = SID_FM_CONVERTTO_FILECONTROL ;
             HelpID = SID_FM_CONVERTTO_FILECONTROL ;
+            Command = ".uno:ConvertToFileControl" ;
             Text = "~Dateiauswahl" ;
             Text [ ENGLISH ] = "~File Selection" ;
             Text[ english_us ] = "~File Selection";
@@ -780,6 +790,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
         {
             Identifier = SID_FM_CONVERTTO_DATE ;
             HelpID = SID_FM_CONVERTTO_DATE ;
+            Command = ".uno:ConvertToDate" ;
             Text = "D~atumsfeld" ;
             Text [ ENGLISH ] = "~Date Field" ;
             Text[ english_us ] = "~Date Field";
@@ -815,6 +826,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
         {
             Identifier = SID_FM_CONVERTTO_TIME ;
             HelpID = SID_FM_CONVERTTO_TIME ;
+            Command = ".uno:ConvertToTime" ;
             Text = "~Zeitfeld" ;
             Text [ ENGLISH ] = "Tim~e Field" ;
             Text[ english_us ] = "Tim~e Field";
@@ -850,6 +862,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
         {
             Identifier = SID_FM_CONVERTTO_NUMERIC ;
             HelpID = SID_FM_CONVERTTO_NUMERIC ;
+            Command = ".uno:ConvertToNumeric" ;
             Text = "~Numerisches Feld" ;
             Text [ ENGLISH ] = "~Numerical Field" ;
             Text[ english_us ] = "~Numerical Field";
@@ -885,6 +898,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
         {
             Identifier = SID_FM_CONVERTTO_CURRENCY ;
             HelpID = SID_FM_CONVERTTO_CURRENCY ;
+            Command = ".uno:ConvertToCurrency" ;
             Text = "~Währungsfeld" ;
             Text [ ENGLISH ] = "C~urrency Field" ;
             Text[ english_us ] = "C~urrency Field";
@@ -919,6 +933,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
         {
             Identifier = SID_FM_CONVERTTO_PATTERN ;
             HelpID = SID_FM_CONVERTTO_PATTERN ;
+            Command = ".uno:ConvertToPattern" ;
             Text = "Mask~iertes Feld" ;
             Text [ ENGLISH ] = "~Pattern Field" ;
             Text[ english_us ] = "~Pattern Field";
@@ -953,6 +968,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
         {
             Identifier = SID_FM_CONVERTTO_IMAGECONTROL ;
             HelpID = SID_FM_CONVERTTO_IMAGECONTROL ;
+            Command = ".uno:ConvertToImageControl" ;
             Text = "G~rafisches Kontrollfeld" ;
             Text [ ENGLISH ] = "Ima~ge Control" ;
             Text[ english_us ] = "Ima~ge Control";
@@ -987,6 +1003,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
         {
             Identifier = SID_FM_CONVERTTO_FORMATTED ;
             HelpID = SID_FM_CONVERTTO_FORMATTED ;
+            Command = ".uno:ConvertToFormatted" ;
             Text = "~Formatiertes Feld" ;
             Text [ ENGLISH ] = "Fo~rmatted Field" ;
             Text[ english_us ] = "Fo~rmatted Field";
@@ -1022,6 +1039,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
         {
             Identifier = SID_FM_CONVERTTO_SCROLLBAR ;
             HelpID = SID_FM_CONVERTTO_SCROLLBAR ;
+            Command = ".uno:ConvertToScrollBar" ;
             Text = "Bildlaufleiste" ;
             Text [ english ] = "Scroll bar" ;
             Text [ english_us ] = "Scroll bar";
@@ -1030,6 +1048,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
         {
             Identifier = SID_FM_CONVERTTO_SPINBUTTON;
             HelpID = SID_FM_CONVERTTO_SPINBUTTON;
+            Command = ".uno:ConvertToSpinButton" ;
             Text = "Drehfeld" ;
             Text [ english ] = "Spin Button" ;
             Text [ english_us ] = "Spin Button";
@@ -1048,7 +1067,6 @@ Menu RID_FMSHELL_CONVERSIONMENU
         RID_SVXIMG_EDIT ; \
         RID_SVXIMG_LISTBOX ; \
         RID_SVXIMG_COMBOBOX ; \
-        RID_SVXIMG_URLBUTTON ; \
         RID_SVXIMG_CONTROL ; \
         RID_SVXIMG_FORM ; \
         RID_SVXIMG_FORMS ; \
@@ -1071,7 +1089,7 @@ Menu RID_FMSHELL_CONVERSIONMENU
         RID_SVXIMG_SCROLLBAR; \
         RID_SVXIMG_SPINBUTTON; \
     }; \
-    IdCount = 30
+    IdCount = 29
 
 ImageList RID_SVXIMGLIST_FMEXPL
 {
