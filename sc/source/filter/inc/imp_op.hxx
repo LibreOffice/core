@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imp_op.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: er $ $Date: 2001-02-21 18:38:34 $
+ *  last change: $Author: dr $ $Date: 2001-04-12 08:44:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,6 @@ class FontBuffer;
 class XF_Buffer;
 class ValueFormBuffer;
 class ExcelToSc;
-class AutoFilterBuffer;
 
 
 class ImportTyp
@@ -183,8 +182,6 @@ protected:
 
     BOOL                    bTabTruncated;      // wenn Bereichsueberschreitung zum
                                                 //  Abschneiden von Zellen fuehrt
-
-    AutoFilterBuffer*       pAutoFilter;        // ranges for autofilter and advanced filter
 
     // Record-Funktionen
     void                    Dimensions( void );             // 0x00
