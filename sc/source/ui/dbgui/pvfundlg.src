@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pvfundlg.src,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:05:53 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 17:05:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@ ModalDialog RID_SCDLG_PIVOTSUBT
     Text [ ENGLISH ] = "Data Field" ;
     Text [ norwegian ] = "Data Field" ;
     Text [ italian ] = "Campo di dati" ;
-    Text [ portuguese_brazilian ] = "Data Field" ;
+    Text [ portuguese_brazilian ] = "Campo de Dados" ;
     Text [ portuguese ] = "Campo de dados" ;
     Text [ english_us ] = "Data Field" ;
     Moveable = TRUE ;
@@ -96,7 +96,7 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "无(~N)";
         Text[ russian ] = "���";
-        Text[ polish ] = "Brak";
+        Text[ polish ] = "~Brak";
         Text[ japanese ] = "なし(~N)";
         Text[ chinese_traditional ] = "無(~N)";
         Text[ arabic ] = "����";
@@ -106,6 +106,9 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Cap";
         Text[ thai ] = "ไ~ม่มี";
+        Text[ czech ] = "Žádný";
+        Text[ hebrew ] = "‮ללא‬";
+        Text[ hindi ] = "~कोई नहीं";
     };
     RadioButton BTN_AUTO
     {
@@ -115,7 +118,7 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         Text [ ENGLISH ] = "~Auto" ;
         Text [ norwegian ] = "~Auto" ;
         Text [ italian ] = "Automatico" ;
-        Text [ portuguese_brazilian ] = "~Auto" ;
+        Text [ portuguese_brazilian ] = "~Autom�tico" ;
         Text [ portuguese ] = "~Automaticamente" ;
         Text [ finnish ] = "~Automaattinen" ;
         Text [ danish ] = "Automatisk" ;
@@ -127,7 +130,7 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "自动(~A)";
         Text[ russian ] = "�������������";
-        Text[ polish ] = "Automatycznie";
+        Text[ polish ] = "~Automatycznie";
         Text[ japanese ] = "自動(~A)";
         Text[ chinese_traditional ] = "自動(~A)";
         Text[ arabic ] = "������";
@@ -137,6 +140,9 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Autom�tic";
         Text[ thai ] = "~อัตโนมัติ";
+        Text[ czech ] = "Automaticky";
+        Text[ hebrew ] = "‮אוטומטי‬";
+        Text[ hindi ] = "~स्वचालित";
     };
     RadioButton BTN_USER
     {
@@ -146,7 +152,7 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         Text [ ENGLISH ] = "~Userdefined" ;
         Text [ norwegian ] = "~Brukerdefinert " ;
         Text [ italian ] = "Definito dall'utente" ;
-        Text [ portuguese_brazilian ] = "~Definido pelo usu?rio" ;
+        Text [ portuguese_brazilian ] = "Definido pelo ~usu�rio" ;
         Text [ portuguese ] = "Definido pelo ~utilizador" ;
         Text [ finnish ] = "~K�ytt�j�n m��ritt�m�t" ;
         Text [ danish ] = "Brugerdefineret" ;
@@ -158,16 +164,19 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         TabStop = TRUE ;
         Text[ chinese_simplified ] = "使用者自设(~U)";
         Text[ russian ] = "������������ �������������";
-        Text[ polish ] = "Ustawienia indywidualne";
+        Text[ polish ] = "Definiowane przez ~u�ytkownika";
         Text[ japanese ] = "ユーザー定義(~U)";
         Text[ chinese_traditional ] = "使用者自訂(~U)";
         Text[ arabic ] = "���� �� ��� ��������";
         Text[ greek ] = "��������� ��� ��� ������";
         Text[ korean ] = "사용자 정의(~U)";
-        Text[ turkish ] = "~Kullan�c� tan�ml�";
+        Text[ turkish ] = "~Kullan�c�~tan�ml�";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Definit per l'~usuari";
         Text[ thai ] = "ระบุ~ผู้ใช้";
+        Text[ czech ] = "Uživatelem definované";
+        Text[ hebrew ] = "~Benutzerdefiniert";
+        Text[ hindi ] = "~उपभोक्ता से परिभाषा किया हुआ";
     };
     MultiListBox LB_FUNC
     {
@@ -237,17 +246,17 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         };
         StringList [ portuguese_brazilian ] =
         {
-            < "Summe" ; Default ; > ;
-            < "Anzahl" ; Default ; > ;
-            < "Mittelwert" ; Default ; > ;
-            < "Max" ; Default ; > ;
-            < "Min" ; Default ; > ;
-            < "Produkt" ; Default ; > ;
-            < "Anzahl2 (nur Zahlen)" ; Default ; > ;
-            < "StAbw (Stichprobe)" ; Default ; > ;
-            < "StAbwN(Grundgesamtheit)" ; Default ; > ;
-            < "Varianz (Stichprobe)" ; Default ; > ;
-            < "VarP" ; Default ; > ;
+            < "Soma" ; Default ; > ;
+            < "Contagem" ; Default ; > ;
+            < "M�dia" ; Default ; > ;
+            < "M�x" ; Default ; > ;
+            < "M�n" ; Default ; > ;
+            < "Produto" ; Default ; > ;
+            < "Contar (somente N�meros)" ; Default ; > ;
+            < "DesvPad (Amostra)" ; Default ; > ;
+            < "DesvPadN (Popula��o)" ; Default ; > ;
+            < "Vari�ncia (Amostra)" ; Default ; > ;
+            < "VarP (Popula��o) " ; Default ; > ;
         };
         StringList [ portuguese ] =
         {
@@ -393,16 +402,16 @@ ModalDialog RID_SCDLG_PIVOTSUBT
     StringList [ polish ] =
     {
             < "Suma" ; Default ; > ;
-        < "Ilo��" ; Default ; > ;
-        < "�rednia warto��" ; Default ; > ;
-        < "Max" ; Default ; > ;
+        < "Liczba" ; Default ; > ;
+        < "�rednia" ; Default ; > ;
+        < "Maks" ; Default ; > ;
         < "Min" ; Default ; > ;
         < "Iloczyn" ; Default ; > ;
-        < "Ilo�� (tylko liczby)" ; Default ; > ;
+        < "Liczba (tylko liczby)" ; Default ; > ;
         < "Odchylenie standardowe (Pr�bka)" ; Default ; > ;
         < "Odch.stdc (populacja)" ; Default ; > ;
         < "Wariancja (Pr�bka)" ; Default ; > ;
-        < "Wariancja (Zbiorowo�� generalna)" ; Default ; > ;
+        < "Wariancja (populacja)" ; Default ; > ;
     };
     StringList [ japanese ] =
     {
@@ -477,16 +486,16 @@ ModalDialog RID_SCDLG_PIVOTSUBT
     StringList [ turkish ] =
     {
             < "Toplam" ; Default ; > ;
-        < "Count" ; Default ; > ;
-        < "Ortalama de�er" ; Default ; > ;
+        < "Say" ; Default ; > ;
+        < "Ortalama " ; Default ; > ;
         < "Max" ; Default ; > ;
         < "Min" ; Default ; > ;
         < "�arp�m" ; Default ; > ;
-        < "Count (yaln�zca say�)" ; Default ; > ;
-        < "StDev (sample)" ; Default ; > ;
-        < "StAbwN (population)" ; Default ; > ;
-        < "Var (sample)" ; Default ; > ;
-        < "VarP (population)" ; Default ; > ;
+        < "Say (yaln�zca say�lar)" ; Default ; > ;
+        < "StSapma (�rnek)" ; Default ; > ;
+        < "StSapmaP (pop�lasyon)" ; Default ; > ;
+        < "De�i�ken (�rnek)" ; Default ; > ;
+        < "De�i�kenP (Pop�lasyon)" ; Default ; > ;
     };
     StringList [ language_user1 ] =
     {
@@ -530,6 +539,48 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         < "Var (ตัวอย่าง)" ; Default ; > ;
         < "VarP (ประชากร)" ; Default ; > ;
     };
+    StringList [ czech ] =
+    {
+         < "Součet" ; Default ; > ;
+        < "Počet" ; Default ; > ;
+        < "Průměr" ; Default ; > ;
+        < "Max" ; Default ; > ;
+        < "Min" ; Default ; > ;
+        < "Produkt" ; Default ; > ;
+        < "Počet (pouze čísla)" ; Default ; > ;
+        < "StDev (výběr)" ; Default ; > ;
+        < "StDevP (Populace)" ; Default ; > ;
+        < "Var (výběr)" ; Default ; > ;
+        < "VarP (základní soubor)" ; Default ; > ;
+    };
+    StringList [ hebrew ] =
+    {
+         < "‮סכום‬" ; Default ; > ;
+        < "Anzahl" ; Default ; > ;
+        < "Mittelwert" ; Default ; > ;
+        < "Max" ; Default ; > ;
+        < "Min" ; Default ; > ;
+        < "Produkt" ; Default ; > ;
+        < "Anzahl (nur Zahlen)" ; Default ; > ;
+        < "StAbw (Stichprobe)" ; Default ; > ;
+        < "StAbwN (Grundgesamtheit)" ; Default ; > ;
+        < "Varianz (Stichprobe)" ; Default ; > ;
+        < "Varianzen (Grundgesamtheit)" ; Default ; > ;
+    };
+    StringList [ hindi ] =
+    {
+         < "जोड" ; Default ; > ;
+        < "गिनती" ; Default ; > ;
+        < "माध्य" ; Default ; > ;
+        < "अधिकतम" ; Default ; > ;
+        < "न्यूनतम" ; Default ; > ;
+        < "गुणन" ; Default ; > ;
+        < "गिनती (केवल संख्या)" ; Default ; > ;
+        < "StDev (नमूना)" ; Default ; > ;
+        < "StDevP (जनसंख्या)" ; Default ; > ;
+        < "Var (नमूना)" ; Default ; > ;
+        < "VarP (जनसंख्या)" ; Default ; > ;
+    };
     };
     FixedLine FL_FUNC
     {
@@ -553,8 +604,8 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         Text[ italian ] = "Mostra ~elementi senza dati";
         Text[ danish ] = "Vis elementer uden data";
         Text[ swedish ] = "Visa objekt utan data";
-        Text[ polish ] = "Poka� elementy bez danych";
-        Text[ portuguese_brazilian ] = "Show elements without data";
+        Text[ polish ] = "Poka� ~elementy bez danych";
+        Text[ portuguese_brazilian ] = "Mostrar ~elementos sem dados";
         Text[ japanese ] = "データのない要素を表示する(~E)";
         Text[ korean ] = "데이터 없이 요소 보기(~E)";
         Text[ chinese_simplified ] = "显示不含数据的条目(~E)";
@@ -565,6 +616,9 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         Text[ catalan ] = "Mostra els ~elements sense dades";
         Text[ finnish ] = "N�yt� ~elementit ilman tietoja";
         Text[ thai ] = "แสดง~องค์ประกอบที่ไม่มีข้อมูล";
+        Text[ czech ] = "Zobrazit prvky bez dat";
+        Text[ hebrew ] = "~Elemente ohne Daten anzeigen";
+        Text[ hindi ] = "ड़ॉटा के बिना ~ऐलिमेन्ट् को दिखाओ";
     };
     FixedText FT_NAMELABEL
     {
@@ -595,6 +649,9 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Nom:";
         Text[ thai ] = "ชื่อ:";
+        Text[ czech ] = "Jméno:";
+        Text[ hebrew ] = "Name:";
+        Text[ hindi ] = "नाम:";
     };
     FixedText FT_NAME
     {
@@ -626,7 +683,7 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         Text [ ENGLISH ] = "Sub Totals" ;
         Text [ norwegian ] = "Sum" ;
         Text [ italian ] = "Subtotali" ;
-        Text [ portuguese_brazilian ] = "Sub Totais" ;
+        Text [ portuguese_brazilian ] = "Sub-totais" ;
         Text [ portuguese ] = "Subtotais" ;
         Text [ finnish ] = "V�lisummat" ;
         Text [ danish ] = "Subtotaler" ;
@@ -637,16 +694,19 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         Text [ english_us ] = "Subtotals" ;
         Text[ chinese_simplified ] = "分类汇总";
         Text[ russian ] = "������������� �����";
-        Text[ polish ] = "Sumy po�rednie";
+        Text[ polish ] = "Sumy cz�ciowe";
         Text[ japanese ] = "小計";
         Text[ chinese_traditional ] = "小計";
         Text[ arabic ] = "Subtotals";
         Text[ greek ] = "������ ����������";
         Text[ korean ] = "부분합";
-        Text[ turkish ] = "Ara toplam";
+        Text[ turkish ] = "Alttoplamlar";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Subtotals";
         Text[ thai ] = "ผลรวมย่อย";
+        Text[ czech ] = "Mezisoučty";
+        Text[ hebrew ] = "Teilergebnisse";
+        Text[ hindi ] = "आधा कुलजोड";
     };
     String STR_DATAFUNC
     {
@@ -654,7 +714,7 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         Text [ ENGLISH ] = "Function" ;
         Text [ norwegian ] = "Funksjon" ;
         Text [ italian ] = "Funzione" ;
-        Text [ portuguese_brazilian ] = "Fun??o" ;
+        Text [ portuguese_brazilian ] = "Fun��o" ;
         Text [ portuguese ] = "Fun��o" ;
         Text [ finnish ] = "Funktio" ;
         Text [ danish ] = "Funktion" ;
@@ -675,6 +735,9 @@ ModalDialog RID_SCDLG_PIVOTSUBT
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Funci�";
         Text[ thai ] = "ฟังก์ชั่น";
+        Text[ czech ] = "Funkce";
+        Text[ hebrew ] = "Funktion";
+        Text[ hindi ] = "फंक्शन्";
     };
     Text [ spanish ] = "Campo de datos" ;
     Text [ french ] = "Champ de donn�es" ;
@@ -694,7 +757,23 @@ ModalDialog RID_SCDLG_PIVOTSUBT
     Text[ catalan ] = "Camp de dades";
     Text[ finnish ] = "Tietokentt�";
     Text[ thai ] = "เขตข้อมูลของข้อมูล";
+    Text[ czech ] = "Datové pole";
+    Text[ hebrew ] = "Datenfeld";
+    Text[ hindi ] = "ड़ॉटा क्षेत्र";
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
