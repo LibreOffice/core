@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dllcomponentloader.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dbo $ $Date: 2002-06-14 13:26:29 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:13:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
 #include <stdio.h>
 #endif
 #include <stdlib.h>
@@ -86,7 +86,7 @@
 #ifndef _RTL_URI_HXX_
 #include <rtl/uri.hxx>
 #endif
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
 #include <rtl/ustrbuf.hxx>
 #endif
 
@@ -304,7 +304,7 @@ OUString DllComponentLoader::expand_url( OUString const & url )
         macro = Uri::decode( macro, rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8 );
         // expand macro string
         OUString ret( m_xMacroExpander->expandMacros( macro ) );
-#ifdef _DEBUG
+#if OSL_DEBUG_LEVEL > 0
         OUStringBuffer buf( 128 );
         buf.appendAscii( RTL_CONSTASCII_STRINGPARAM("DllComponentLoader::expand_url(): ") );
         buf.append( url );
