@@ -2,9 +2,9 @@
  *
  *  $RCSfile: portxt.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: fme $ $Date: 2002-03-21 09:17:02 $
+ *  last change: $Author: fme $ $Date: 2002-03-26 08:10:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,7 +114,6 @@ const sal_Char *GetLangName( const MSHORT nLang );
 #endif
 
 #ifdef VERTICAL_LAYOUT
-using namespace ::com::sun::star::i18n::ScriptType;
 
 /*************************************************************************
  *                          lcl_AddSpace
@@ -156,7 +155,7 @@ USHORT lcl_AddSpace( const SwTxtSizeInfo &rInf, const XubString* pStr,
     // Now we check the language. Note: rInf.GetIdx() can differ from nPos,
     // e.g., when rPor is a field portion. nPos referes to the string passed
     // to the function, rInf.GetIdx() referes to the original string.
-    if ( nEnd > nPos && ASIAN == nScript &&
+    if ( nEnd > nPos && ::com::sun::star::i18n::ScriptType::ASIAN == nScript &&
          ( LANGUAGE_KOREAN !=
            rInf.GetTxtFrm()->GetTxtNode()->GetLang( rInf.GetIdx(), 1, nScript ) ) )
     {
@@ -171,6 +170,36 @@ USHORT lcl_AddSpace( const SwTxtSizeInfo &rInf, const XubString* pStr,
 
         return nCnt;
     }
+
+#ifdef BIDI
+    // Now we check for kashida justification
+    if ( nEnd > nPos && ::com::sun::star::i18n::ScriptType::COMPLEX == nScript )
+    {
+        for ( ; nPos < nEnd; ++nPos )
+        {
+            xub_Unicode nCh = pStr->GetChar( nPos );
+
+            // Seen and Sad
+            if ( 0x633 == nCh || 0x634 == nCh )
+            {
+                ++nCnt;
+                break;
+            }
+
+            // Taa Marbutah, Haa, Dal, Alef, Tah Lam, Caf
+            if ( 0x629 == nCh || 0x62D == nCh || 0x62F == nCh ||
+                 0x627 == nCh || 0x644 == nCh || 0x643 == nCh )
+            {
+                if ( pStr->Len() > nPos + 1 &&
+                     CH_BLANK == pStr->GetChar( nPos + 1 ) )
+                {
+                    ++nCnt;
+                    break;
+                }
+            }
+        }
+    }
+#endif
 
     // now we search for ordinary blanks
     for ( ; nPos < nEnd; ++nPos )
@@ -210,7 +239,7 @@ USHORT lcl_AddSpace( const SwTxtSizeInfo &rInf, const XubString* pStr,
         else
             nNextScript = (BYTE)pBreakIt->xBreak->getScriptType( rInf.GetTxt(), nPos );
 
-        if( ASIAN == nNextScript &&
+        if( ::com::sun::star::i18n::ScriptType::ASIAN == nNextScript &&
             ( LANGUAGE_KOREAN !=
             rInf.GetTxtFrm()->GetTxtNode()->GetLang( nPos, 1, nNextScript ) ) )
             ++nCnt;
