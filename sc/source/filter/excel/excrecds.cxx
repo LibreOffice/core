@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.cxx,v $
  *
- *  $Revision: 1.76 $
+ *  $Revision: 1.77 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-09 15:01:04 $
+ *  last change: $Author: kz $ $Date: 2005-01-14 12:00:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,6 +135,9 @@
 #endif
 #ifndef SC_XELINK_HXX
 #include "xelink.hxx"
+#endif
+#ifndef SC_XENAME_HXX
+#include "xename.hxx"
 #endif
 #ifndef SC_XECONTENT_HXX
 #include "xecontent.hxx"
@@ -478,8 +481,7 @@ UINT16 ExcBundlesheetBase::GetNum( void ) const
 ExcBundlesheet::ExcBundlesheet( RootData& rRootData, SCTAB nTab ) :
     ExcBundlesheetBase( rRootData, nTab )
 {
-    String sTabName;
-    rRootData.pDoc->GetName( nTab, sTabName );
+    String sTabName = rRootData.pER->GetTabInfo().GetScTabName( nTab );
     DBG_ASSERT( sTabName.Len() < 256, "ExcBundlesheet::ExcBundlesheet - table name too long" );
     aName = ByteString( sTabName, *rRootData.pCharset );
 }
@@ -527,602 +529,22 @@ void XclExpCountry::WriteBody( XclExpStream& rStrm )
     rStrm << mnUICountry << mnDocCountry;
 }
 
-
-//---------------------------------------------------- class ExcNameListEntry -
-
-ExcNameListEntry::ExcNameListEntry() :
-    mxTokArr( new XclExpTokenArray ),
-    nTabNum( 0 ),
-    nBuiltInKey( EXC_BUILTIN_UNKNOWN ),
-    bDummy( FALSE )
-{
-}
-
-
-ExcNameListEntry::ExcNameListEntry( RootData& rRootData, SCTAB nScTab, UINT8 nKey ) :
-    mxTokArr( new XclExpTokenArray ),
-    nTabNum( rRootData.pER->GetTabInfo().GetXclTab( nScTab ) + 1 ),
-    nBuiltInKey( nKey ),
-    bDummy( FALSE )
-{
-}
-
-
-ExcNameListEntry::~ExcNameListEntry()
-{
-}
-
-
-void ExcNameListEntry::SaveCont( XclExpStream& rStrm )
-{
-    if(rStrm.GetRoot().GetBiff() < xlBiff8)
-    {
-        rStrm   << (UINT16) EXC_NAME_BUILTIN    // grbit (built in only)
-            << (UINT8)  0x00                // chKey (keyboard shortcut)
-            << (UINT8)  0x01                // cch (string len)
-            << mxTokArr->GetSize()          // cce (formula len)
-            << nTabNum                      // set ixals = itab
-            << nTabNum                      // itab (table index, 1-based)
-            << (UINT32) 0x00000000          // cch
-            << nBuiltInKey;                 // string
-    }
-    else
-    {
-        rStrm   << (UINT16) EXC_NAME_BUILTIN    // grbit (built in only)
-            << (UINT8)  0x00                // chKey (keyboard shortcut)
-            << (UINT8)  0x01                // cch (string len)
-            << mxTokArr->GetSize()          // cce (formula len)
-            << (UINT16) 0x0000              // ixals
-            << nTabNum                      // itab (table index, 1-based)
-            << (UINT32) 0x00000000          // cch
-            << (UINT8)  0x00                // string grbit
-            << nBuiltInKey;                 // string
-    }
-    mxTokArr->WriteArray( rStrm );
-}
-
-
-UINT16 ExcNameListEntry::GetNum() const
-{
-    return 0x0018;
-}
-
-
-ULONG ExcNameListEntry::GetLen() const
-{
-    return 16 + mxTokArr->GetSize();
-}
-
-const String& ExcNameListEntry::GetName() const
-{
-    return EMPTY_STRING;
-}
-
-
-//------------------------------------------------------------- class ExcName -
-
-void ExcName::Init( BOOL bHid, BOOL bBIn, BOOL bBMacro )
-{
-    eBiff = pExcRoot->eDateiTyp;
-    bHidden = bHid;
-    bBuiltIn = bBIn;
-    bMacro = bBMacro;
-}
-
-
-void ExcName::BuildFormula( const ScRange& rRange )
-{
-    mxTokArr = pExcRoot->pER->GetFormulaCompiler().CreateRangeRefFormula( rRange, true );
-}
-
-
-ExcName::ExcName( RootData& rRootData, ScRangeData* pRange ) :
-        ExcRoot( &rRootData )
-{
-    Init();
-
-    String aRangeName;
-    pRange->GetName( aRangeName );
-
-    // no PrintRanges, no PrintTitles
-    if( SetBuiltInName( aRangeName, EXC_BUILTIN_PRINTAREA ) ||
-        SetBuiltInName( aRangeName, EXC_BUILTIN_PRINTTITLES ) )
-        return;
-
-    SetName( aRangeName );
-    const ScTokenArray* pTokArray = pRange->GetCode();
-    if( pTokArray && pTokArray->GetLen() )
-        mxTokArr = pExcRoot->pER->GetFormulaCompiler().CreateNameFormula( *pTokArray );
-}
-
-
-ExcName::ExcName( RootData& rRootData, ScDBData* pArea ) :
-        ExcRoot( &rRootData )
-{
-    Init();
-
-    String aRangeName;
-    pArea->GetName( aRangeName );
-
-    if( IsBuiltInAFName( aRangeName, EXC_BUILTIN_AUTOFILTER ))
-        return;
-
-    SetUniqueName( aRangeName );
-
-    ScRange aRange;
-    pArea->GetArea( aRange );
-    BuildFormula( aRange );
-}
-
-
-ExcName::ExcName( RootData& rRootData, const ScRange& rRange, const String& rName ) :
-        ExcRoot( &rRootData )
-{
-    Init();
-    SetUniqueName( rName );
-    BuildFormula( rRange );
-}
-
-
-ExcName::ExcName( RootData& rRootData, const ScRange& rRange, UINT8 nKey, BOOL bHid ) :
-        ExcNameListEntry( rRootData, rRange.aStart.Tab(), nKey ),
-        ExcRoot( &rRootData )
-{
-    Init( bHid, TRUE, FALSE );
-    aName = sal_Unicode( nKey );
-    BuildFormula( rRange );
-}
-
-ExcName::ExcName( RootData& rRootData, const String& rName ) :
-        ExcRoot( &rRootData )
-{
-    Init();
-    bMacro = TRUE;
-    aName = rName;
-}
-
-
-void ExcName::SetName( const String& rRangeName )
-{
-    DBG_ASSERT( pExcRoot->pScNameList, "ExcName::SetName - missing name list" );
-    ScRangeName& rNameList = *pExcRoot->pScNameList;
-    aName = rRangeName;
-
-    // insert dummy range name
-    ScRangeData* pRangeData = new ScRangeData( pExcRoot->pDoc, aName, ScTokenArray() );
-    if( !rNameList.Insert( pRangeData ) )
-        delete pRangeData;
-}
-
-
-void ExcName::SetUniqueName( const String& rRangeName )
-{
-    DBG_ASSERT( pExcRoot->pScNameList, "ExcName::SetUniqueName - missing name list" );
-    ScRangeName& rNameList = *pExcRoot->pScNameList;
-
-    USHORT nPos;
-    if( rNameList.SearchName( rRangeName, nPos ) )
-    {
-        String aNewName;
-        sal_Int32 nAppendValue = 1;
-        do
-        {
-            aNewName = rRangeName;
-            aNewName += '_';
-            aNewName += String::CreateFromInt32( nAppendValue++ );
-        }
-        while( rNameList.SearchName( aNewName, nPos ) );
-        SetName( aNewName );
-    }
-    else
-        SetName( rRangeName );
-}
-
-
-BOOL ExcName::SetBuiltInName( const String& rName, UINT8 nKey )
-{
-    if( XclTools::IsBuiltInDefName( nTabNum, rName, nKey ) )
-    {
-        nBuiltInKey = nKey;
-        bDummy = TRUE;
-        return TRUE;
-    }
-    return FALSE;
-}
-
-BOOL ExcName::IsBuiltInAFName( const String& rName, UINT8 nKey )
-{
-    if( XclTools::IsBuiltInDefName( nTabNum, rName, nKey ) ||
-        (rName == ScGlobal::GetRscString( STR_DB_NONAME )))
-    {
-        bDummy = TRUE;
-        return TRUE;
-    }
-    return FALSE;
-}
-
-void ExcName::SaveCont( XclExpStream& rStrm )
-{
-    UINT8   nNameLen = (UINT8) Min( aName.Len(), (xub_StrLen)255 );
-    UINT16  nGrbit = (bHidden ? EXC_NAME_HIDDEN : 0) | (bBuiltIn ? EXC_NAME_BUILTIN : 0);
-    if( mxTokArr->Empty() || bMacro )
-        nGrbit |= EXC_NAME_FUNC | EXC_NAME_VB | EXC_NAME_PROC;
-
-    rStrm   << nGrbit                   // grbit
-            << (BYTE) 0x00              // chKey
-            << nNameLen                 // cch
-            << mxTokArr->GetSize()      // cce
-            << (UINT16) 0x0000          // ixals
-            << nTabNum                  // itab
-            << (UINT32) 0x00000000;     // cch...
-
-    if ( eBiff < Biff8 )
-        rStrm.WriteByteStringBuffer( ByteString( aName, *pExcRoot->pCharset ), nNameLen );
-    else
-    {
-        XclExpString aUni( aName, EXC_STR_8BITLENGTH );
-        aUni.WriteFlagField( rStrm );
-        aUni.WriteBuffer( rStrm );
-    }
-
-    mxTokArr->WriteArray( rStrm );
-}
-
-
-ULONG ExcName::GetLen() const
-{   // only a guess for Biff8 (8bit/16bit unknown)
-    return 14 + mxTokArr->GetSize() + (eBiff < Biff8 ? 0 : 1) + Min( aName.Len(), (xub_StrLen)255 );
-}
-
-
-
-// ---- class XclBuildInName -----------------------------------------
-
-XclBuildInName::XclBuildInName( RootData& rRootData, SCTAB nScTab, UINT8 nKey ) :
-    ExcNameListEntry( rRootData, nScTab, nKey )
-{
-}
-
-
-void XclBuildInName::CreateFormula( RootData& rRootData )
-{
-    mxTokArr = rRootData.pER->GetFormulaCompiler().CreateRangeListFormula( aRL, true );
-    bDummy = !mxTokArr;
-}
-
-
-// ---- class XclPrintRange, class XclTitleRange ---------------------
-
-XclPrintRange::XclPrintRange( RootData& rRootData, SCTAB nScTab ) :
-        XclBuildInName( rRootData, nScTab, EXC_BUILTIN_PRINTAREA )
-{
-    if( rRootData.pDoc->HasPrintRange() )
-    {
-        UINT16 nCount = rRootData.pDoc->GetPrintRangeCount( nScTab );
-        for( UINT16 nIx = 0 ; nIx < nCount ; nIx++ )
-        {
-            ScRange aRange( *rRootData.pDoc->GetPrintRange( nScTab, nIx ) );
-            // ScDocument does not care about sheet index in print ranges
-            aRange.aStart.SetTab( nScTab );
-            aRange.aEnd.SetTab( nScTab );
-            Append( aRange );
-        }
-    }
-    CreateFormula( rRootData );
-}
-
-
-
-
-XclPrintTitles::XclPrintTitles( RootData& rRootData, SCTAB nScTab ) :
-        XclBuildInName( rRootData, nScTab, EXC_BUILTIN_PRINTTITLES )
-{
-    UINT16 nXclTab = rRootData.pER->GetTabInfo().GetXclTab( nScTab );
-    const ScRange* pRange = rRootData.pDoc->GetRepeatColRange( nScTab );
-    if( pRange )
-        Append( ScRange( pRange->aStart.Col(), 0, static_cast<SCTAB>(nXclTab),
-            pRange->aEnd.Col(), rRootData.nRowMax, static_cast<SCTAB>(nXclTab) ) );
-    pRange = rRootData.pDoc->GetRepeatRowRange( nScTab );
-    if( pRange )
-        Append( ScRange( 0, pRange->aStart.Row(), static_cast<SCTAB>(nXclTab),
-            rRootData.nColMax, pRange->aEnd.Row(), static_cast<SCTAB>(nXclTab) ) );
-    CreateFormula( rRootData );
-}
-
-
-
-//--------------------------------------------------------- class ExcNameList -
-
-ExcNameList::ExcNameList( RootData& rRootData ) :
-    nFirstPrintRangeIx( 0 ),
-    nFirstPrintTitleIx( 0 ),
-    nFirstOtherNameIx( 0 )
-{
-    ScDocument&         rDoc = *rRootData.pDoc;
-    XclExpTabInfo&      rTabInfo = rRootData.pER->GetTabInfo();
-    USHORT              nCount, nIndex;
-    SCTAB               nScTab, nTab;
-    UINT16              nExpIx;
-
-    // print ranges and print titles, insert in table name sort order
-    SCTAB nScTabCount = rTabInfo.GetScTabCount();
-    for( nTab = 0; nTab < nScTabCount; ++nTab )
-    {
-        nScTab = rTabInfo.GetRealScTab( nTab ); // sorted -> real
-        if( rTabInfo.IsExportTab( nScTab ) )
-            Append( new XclPrintRange( rRootData, nScTab ) );
-    }
-    nFirstPrintTitleIx = List::Count();
-    for( nTab = 0; nTab < nScTabCount; ++nTab )
-    {
-        nScTab = rTabInfo.GetRealScTab( nTab ); // sorted -> real
-        if( rTabInfo.IsExportTab( nScTab ) )
-            Append( new XclPrintTitles( rRootData, nScTab ) );
-    }
-    nFirstOtherNameIx = List::Count();
-
-    // named ranges
-    ScRangeName* pRangeNames = rDoc.GetRangeName();
-    DBG_ASSERT( pRangeNames, "ExcNameList::ExcNameList - missing range name list" );
-    nCount = pRangeNames->GetCount();
-    for( nIndex = 0; nIndex < nCount; nIndex++ )
-    {
-        ScRangeData* pData = (*pRangeNames)[ nIndex ];
-        DBG_ASSERT( pData, "ExcNameList::ExcNameList - missing range name" );
-
-        if ( !pData->HasType( RT_SHARED ) )
-        {
-            ExcName* pExcName = new ExcName( rRootData, pData );
-            if( pExcName->IsDummy() )
-            {
-                nExpIx = GetBuiltInIx( pExcName );
-                delete pExcName;
-            }
-            else
-                nExpIx = Append( pExcName );
-            pData->SetExportIndex( nExpIx );
-        }
-    }
-
-    // data base ranges
-    ScDBCollection* pDBAreas = rDoc.GetDBCollection();
-    DBG_ASSERT( pDBAreas, "ExcNameList::ExcNameList - missing db area list" );
-    nCount = pDBAreas->GetCount();
-    for( nIndex = 0; nIndex < nCount; nIndex++ )
-    {
-        ScDBData* pData = (*pDBAreas)[ nIndex ];
-        DBG_ASSERT( pData, "ExcNameList::ExcNameList - missing db area" );
-
-        ExcName* pExcName = new ExcName( rRootData, pData );
-        if( pExcName->IsDummy() )
-        {
-            delete pExcName;
-        }
-        else
-        {
-            nExpIx = Append( pExcName );
-            pData->SetExportIndex( nExpIx );
-        }
-    }
-
-    maNextInsVec.resize( nScTabCount, Count() );
-}
-
-
-ExcNameList::~ExcNameList()
-{
-    for( ExcNameListEntry* pName = _First(); pName; pName = _Next() )
-        delete pName;
-}
-
-
-UINT16 ExcNameList::Append( ExcNameListEntry* pName )
-{
-    DBG_ASSERT( pName, "ExcNameList::Append - missing ExcName" );
-
-    BOOL bDelete = (pName->IsDummy() || (List::Count() >= 0xFFFE));
-    if( bDelete )
-        delete pName;
-    else
-        List::Insert( pName, LIST_APPEND );
-    return bDelete ? 0xFFFF : (UINT16) List::Count();
-}
-
-
-void ExcNameList::InsertSorted( RootData& rRootData, ExcNameListEntry* pName, SCTAB nScTab )
-{
-    // real -> sorted
-    SCTAB nSortedScTab = rRootData.pER->GetTabInfo().GetSortedScTab( nScTab );
-    List::Insert( pName, maNextInsVec[ nSortedScTab ] );
-    for( SCTAB nCount = static_cast< SCTAB >( maNextInsVec.size() ); nSortedScTab < nCount; ++nSortedScTab )
-        ++maNextInsVec[ nSortedScTab ];
-}
-
-UINT16 ExcNameList::GetBuiltInIx( const ExcNameListEntry* pName )
-{
-    DBG_ASSERT( pName, "ExcNameList::GetBuiltInIx - missing ExcName" );
-
-    ULONG nFirstIx = 0;
-    ULONG nLastIx = 0;
-
-    switch( pName->GetBuiltInKey() )
-    {
-        case EXC_BUILTIN_PRINTAREA:
-            nFirstIx = nFirstPrintRangeIx; nLastIx = nFirstPrintTitleIx;
-        break;
-        case EXC_BUILTIN_PRINTTITLES:
-            nFirstIx = nFirstPrintTitleIx; nLastIx = nFirstOtherNameIx;
-        break;
-        default:
-            return 0xFFFF;
-    }
-
-    for( ULONG nIndex = nFirstIx; nIndex < nLastIx; nIndex++ )
-    {
-        ExcNameListEntry* pEntry = _Get( nIndex );
-        if( pEntry && (pEntry->GetTabIndex() == pName->GetTabIndex()) )
-        {
-            DBG_ASSERT( pEntry->GetBuiltInKey() == pName->GetBuiltInKey(),
-                        "ExcNameList::GetBuiltInIx - builtin key mismatch" );
-            return (UINT16)(nIndex + 1);
-        }
-    }
-    return 0xFFFF;
-}
-
-UINT16 ExcNameList::GetMacroIdx( RootData& rRootData, const String &rName )
-{
-    for( USHORT nIndex = 0; nIndex < List::Count(); nIndex++ )
-    {
-        ExcNameListEntry* pName = _Get( nIndex );
-        if(pName && pName->GetName().Equals(rName))
-            return nIndex+1;
-    }
-    return Append( new ExcName( rRootData, rName ) );
-}
-
-void ExcNameList::Save( XclExpStream& rStrm )
-{
-    for( ExcNameListEntry* pName = _First(); pName; pName = _Next() )
-        pName->Save( rStrm );
-}
-
-
-// ============================================================================
-
-ExcExterncount::ExcExterncount( RootData* pRD, const BOOL bTableNew ) :
-    ExcRoot( pRD ),
-    bTable( bTableNew )
-{
-}
-
-
-void ExcExterncount::SaveCont( XclExpStream& rStrm )
-{
-    UINT16  nNumTabs = pExcRoot->pER->GetTabInfo().GetXclTabCount();
-
-    if( nNumTabs && bTable )
-        nNumTabs--;
-
-    rStrm << nNumTabs;
-}
-
-
-UINT16 ExcExterncount::GetNum( void ) const
-{
-    return 0x0016;
-}
-
-
-ULONG ExcExterncount::GetLen( void ) const
-{
-    return 2;
-}
-
-
-
-//------------------------------------------------------ class ExcExternsheet -
-
-ExcExternsheet::ExcExternsheet( RootData* pExcRoot, const SCTAB nNewTabNum ) : ExcRoot( pExcRoot )
-{
-    DBG_ASSERT( pExcRoot->pDoc->HasTable( nNewTabNum ),
-        "*ExcExternsheet::ExcExternsheet(): table not found" );
-
-    pExcRoot->pDoc->GetName( nNewTabNum, aTabName );
-    DBG_ASSERT( aTabName.Len() < 255,
-        "*ExcExternsheet::ExcExternsheet(): table name too long" );
-}
-
-
-void ExcExternsheet::SaveCont( XclExpStream& rStrm )
-{
-    rStrm << ( UINT8 ) Min( (xub_StrLen)(aTabName.Len() ), (xub_StrLen) 255 ) << ( UINT8 ) 0x03;
-    rStrm.WriteByteStringBuffer(
-        ByteString( aTabName, *pExcRoot->pCharset ), 254 );     // max 254 chars (leading 0x03!)
-}
-
-
-UINT16 ExcExternsheet::GetNum( void ) const
-{
-    return 0x0017;
-}
-
-
-ULONG ExcExternsheet::GetLen( void ) const
-{
-    return 2 + Min( aTabName.Len(), (xub_StrLen) 254 );
-}
-
-
-
-//-------------------------------------------------- class ExcExternsheetList -
-
-ExcExternsheetList::~ExcExternsheetList()
-{
-    for( ExcExternsheet* pSheet = _First(); pSheet; pSheet = _Next() )
-        delete pSheet;
-}
-
-
-void ExcExternsheetList::Save( XclExpStream& rStrm )
-{
-    for( ExcExternsheet* pSheet = _First(); pSheet; pSheet = _Next() )
-        pSheet->Save( rStrm );
-}
-
-
-
-//-------------------------------------------------------- class ExcExternDup -
-
-ExcExternDup::ExcExternDup( ExcExterncount& rC, ExcExternsheetList& rL ) :
-    rExtCnt( rC ), rExtSheetList( rL )
-{
-}
-
-
-ExcExternDup::ExcExternDup( const ExcExternDup& r ) :
-    rExtCnt( r.rExtCnt ), rExtSheetList( r.rExtSheetList )
-{
-}
-
-
-void ExcExternDup::Save( XclExpStream& rStrm )
-{
-    rExtCnt.Save( rStrm );
-    rExtSheetList.Save( rStrm );
-}
-
-
-
 //---------------------------------------------------------- class ExcWindow2 -
 
-ExcWindow2::ExcWindow2( UINT16 nTab ) : nTable( nTab )
+XclExpWindow2::XclExpWindow2( const XclExpRoot& rRoot, SCTAB nScTab ) :
+    XclExpRecord( 0x023E, 10 ),
+    mnFlags( 0x00B6 )
 {
+    const XclExpTabInfo& rTabInfo = rRoot.GetTabInfo();
+    ::set_flag( mnFlags, (sal_uInt16)EXC_WIN2_SELECTED,  rTabInfo.IsSelectedTab( nScTab ) );
+    ::set_flag( mnFlags, (sal_uInt16)EXC_WIN2_DISPLAYED, rTabInfo.IsActiveTab( nScTab ) );
 }
 
-
-void ExcWindow2::SaveCont( XclExpStream& rStrm )
+void XclExpWindow2::WriteBody( XclExpStream& rStrm )
 {
-    BYTE pData[] = { 0xb6, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
-    DBG_ASSERT( sizeof(pData) == GetLen(), "ExcWindow2::SaveCont: length mismatch" );
-    if ( GetTable() == 0 )
-        pData[1] |= 0x06;       // displayed and selected
-    rStrm.Write( pData, GetLen() );
+    rStrm << mnFlags;
+    rStrm.WriteZeroBytes( 8 );
 }
-
-
-UINT16 ExcWindow2::GetNum( void ) const
-{
-    return 0x023E;
-}
-
-
-ULONG ExcWindow2::GetLen( void ) const
-{
-    return 10;
-}
-
-
 
 //-------------------------------------------------------- class ExcSelection -
 
@@ -1174,42 +596,21 @@ XclExpDocProtection::XclExpDocProtection(bool bValue) :
 }
 
 // ============================================================================
-//---------------------------------------------------------------- AutoFilter -
 
-UINT16 ExcFilterMode::GetNum() const
-{
-    return 0x009B;
-}
-
-ULONG ExcFilterMode::GetLen() const
-{
-    return 0;
-}
-
-
-
-
-ExcAutoFilterInfo::~ExcAutoFilterInfo()
+XclExpFiltermode::XclExpFiltermode() :
+    XclExpEmptyRecord( EXC_ID_FILTERMODE )
 {
 }
 
-void ExcAutoFilterInfo::SaveCont( XclExpStream& rStrm )
+// ----------------------------------------------------------------------------
+
+XclExpAutofilterinfo::XclExpAutofilterinfo( const ScAddress& rStartPos, SCCOL nScCol ) :
+    XclExpUInt16Record( EXC_ID_AUTOFILTERINFO, static_cast< sal_uInt16 >( nScCol ) ),
+    maStartPos( rStartPos )
 {
-    rStrm << nCount;
 }
 
-UINT16 ExcAutoFilterInfo::GetNum() const
-{
-    return 0x009D;
-}
-
-ULONG ExcAutoFilterInfo::GetLen() const
-{
-    return 2;
-}
-
-
-
+// ----------------------------------------------------------------------------
 
 ExcFilterCondition::ExcFilterCondition() :
         nType( EXC_AFTYPE_NOTUSED ),
@@ -1270,16 +671,17 @@ void ExcFilterCondition::SaveText( XclExpStream& rStrm )
     }
 }
 
+// ----------------------------------------------------------------------------
 
-
-
-ExcAutoFilter::ExcAutoFilter( UINT16 nC ) :
-        nCol( nC ),
-        nFlags( 0 )
+XclExpAutofilter::XclExpAutofilter( const XclExpRoot& rRoot, UINT16 nC ) :
+    XclExpRecord( EXC_ID_AUTOFILTER, 24 ),
+    XclExpRoot( rRoot ),
+    nCol( nC ),
+    nFlags( 0 )
 {
 }
 
-BOOL ExcAutoFilter::AddCondition( ScQueryConnect eConn, UINT8 nType, UINT8 nOp,
+BOOL XclExpAutofilter::AddCondition( ScQueryConnect eConn, UINT8 nType, UINT8 nOp,
                                     double fVal, String* pText, BOOL bSimple )
 {
     if( !aCond[ 1 ].IsEmpty() )
@@ -1293,10 +695,13 @@ BOOL ExcAutoFilter::AddCondition( ScQueryConnect eConn, UINT8 nType, UINT8 nOp,
         nFlags |= (nInd == 0) ? EXC_AFFLAG_SIMPLE1 : EXC_AFFLAG_SIMPLE2;
 
     aCond[ nInd ].SetCondition( nType, nOp, fVal, pText );
+
+    AddRecSize( aCond[ nInd ].GetTextBytes() );
+
     return TRUE;
 }
 
-BOOL ExcAutoFilter::AddEntry( RootData& rRoot, const ScQueryEntry& rEntry )
+BOOL XclExpAutofilter::AddEntry( const ScQueryEntry& rEntry )
 {
     BOOL    bConflict = FALSE;
     String  sText;
@@ -1316,7 +721,7 @@ BOOL ExcAutoFilter::AddEntry( RootData& rRoot, const ScQueryEntry& rEntry )
     {
         double  fVal    = 0.0;
         ULONG   nIndex  = 0;
-        BOOL    bIsNum  = bLen ? rRoot.pDoc->GetFormatTable()->IsNumberFormat( sText, nIndex, fVal ) : TRUE;
+        BOOL    bIsNum  = bLen ? GetFormatter().IsNumberFormat( sText, nIndex, fVal ) : TRUE;
         String* pText   = bIsNum ? NULL : &sText;
 
         // top10 flags
@@ -1369,7 +774,7 @@ BOOL ExcAutoFilter::AddEntry( RootData& rRoot, const ScQueryEntry& rEntry )
     return bConflict;
 }
 
-void ExcAutoFilter::SaveCont( XclExpStream& rStrm )
+void XclExpAutofilter::WriteBody( XclExpStream& rStrm )
 {
     rStrm << nCol << nFlags;
     aCond[ 0 ].Save( rStrm );
@@ -1378,24 +783,15 @@ void ExcAutoFilter::SaveCont( XclExpStream& rStrm )
     aCond[ 1 ].SaveText( rStrm );
 }
 
-UINT16 ExcAutoFilter::GetNum() const
+// ----------------------------------------------------------------------------
+
+ExcAutoFilterRecs::ExcAutoFilterRecs( const XclExpRoot& rRoot, SCTAB nTab ) :
+    XclExpRoot( rRoot ),
+    pFilterMode( NULL ),
+    pFilterInfo( NULL )
 {
-    return 0x009E;
-}
-
-ULONG ExcAutoFilter::GetLen() const
-{
-    return 24 + aCond[ 0 ].GetTextBytes() + aCond[ 1 ].GetTextBytes();
-}
-
-
-
-
-ExcAutoFilterRecs::ExcAutoFilterRecs( RootData& rRoot, SCTAB nTab ) :
-        pFilterMode( NULL ),
-        pFilterInfo( NULL )
-{
-    ScDBCollection& rDBColl = *rRoot.pDoc->GetDBCollection();
+    ScDBCollection& rDBColl = GetDatabaseRanges();
+    XclExpNameManager& rNameMgr = GetNameManager();
 
     // search for first DB-range with filter
     UINT16      nIndex  = 0;
@@ -1427,15 +823,15 @@ ExcAutoFilterRecs::ExcAutoFilterRecs( RootData& rRoot, SCTAB nTab ) :
                         aParam.nCol2, aParam.nRow2, aParam.nTab );
         SCCOL   nColCnt = aParam.nCol2 - aParam.nCol1 + 1;
 
-        rRoot.pNameList->InsertSorted( rRoot, new ExcName( rRoot, aRange, EXC_BUILTIN_AUTOFILTER, TRUE ), nTab );
+        // #i2394# #100489# built-in defined names must be sorted by containing sheet name
+        rNameMgr.InsertBuiltInName( EXC_BUILTIN_FILTERDATABASE, aRange );
 
         // advanced filter
         if( bAdvanced )
         {
             // filter criteria, excel allows only same table
             if( aAdvRange.aStart.Tab() == nTab )
-                rRoot.pNameList->InsertSorted( rRoot,
-                    new ExcName( rRoot, aAdvRange, EXC_BUILTIN_CRITERIA ), nTab );
+                rNameMgr.InsertBuiltInName( EXC_BUILTIN_CRITERIA, aAdvRange );
 
             // filter destination range, excel allows only same table
             if( !aParam.bInplace )
@@ -1443,11 +839,10 @@ ExcAutoFilterRecs::ExcAutoFilterRecs( RootData& rRoot, SCTAB nTab ) :
                 ScRange aDestRange( aParam.nDestCol, aParam.nDestRow, aParam.nDestTab );
                 aDestRange.aEnd.IncCol( nColCnt - 1 );
                 if( aDestRange.aStart.Tab() == nTab )
-                    rRoot.pNameList->InsertSorted( rRoot,
-                        new ExcName( rRoot, aDestRange, EXC_BUILTIN_EXTRACT ), nTab );
+                    rNameMgr.InsertBuiltInName( EXC_BUILTIN_EXTRACT, aDestRange );
             }
 
-            pFilterMode = new ExcFilterMode;
+            pFilterMode = new XclExpFiltermode;
         }
         // AutoFilter
         else
@@ -1465,7 +860,7 @@ ExcAutoFilterRecs::ExcAutoFilterRecs( RootData& rRoot, SCTAB nTab ) :
                 bContLoop = rEntry.bDoQuery;
                 if( bContLoop )
                 {
-                    ExcAutoFilter* pFilter = GetByCol( static_cast<SCCOL>(rEntry.nField) - aRange.aStart.Col() );
+                    XclExpAutofilter* pFilter = GetByCol( static_cast<SCCOL>(rEntry.nField) - aRange.aStart.Col() );
 
                     if( nEntry > 0 )
                         bHasOr |= (rEntry.eConnect == SC_OR);
@@ -1475,69 +870,66 @@ ExcAutoFilterRecs::ExcAutoFilterRecs( RootData& rRoot, SCTAB nTab ) :
                         bConflict = (nEntry == 1) && (rEntry.eConnect == SC_OR) &&
                                     (nFirstField != rEntry.nField);
                     if( !bConflict )
-                        bConflict = pFilter->AddEntry( rRoot, rEntry );
+                        bConflict = pFilter->AddEntry( rEntry );
                 }
             }
 
             // additional tests for conflicts
-            for( ExcAutoFilter* pFilter = _First(); !bConflict && pFilter; pFilter = _Next() )
-                bConflict = pFilter->HasCondition() && pFilter->HasTop10();
+            for( size_t nPos = 0, nSize = maFilterList.Size(); !bConflict && (nPos < nSize); ++nPos )
+            {
+                XclExpAutofilterRef xFilter = maFilterList.GetRecord( nPos );
+                bConflict = xFilter->HasCondition() && xFilter->HasTop10();
+            }
 
             if( bConflict )
-                DeleteList();
+                maFilterList.RemoveAllRecords();
 
-            if( List::Count() )
-                pFilterMode = new ExcFilterMode;
-            pFilterInfo = new ExcAutoFilterInfo( nColCnt );
-            AddObjRecs( rRoot, aRange.aStart, nColCnt );
+            if( !maFilterList.Empty() )
+                pFilterMode = new XclExpFiltermode;
+            pFilterInfo = new XclExpAutofilterinfo( aRange.aStart, nColCnt );
         }
     }
 }
 
 ExcAutoFilterRecs::~ExcAutoFilterRecs()
 {
-    if( pFilterMode )
-        delete pFilterMode;
-    if( pFilterInfo )
-        delete pFilterInfo;
-    DeleteList();
+    delete pFilterMode;
+    delete pFilterInfo;
 }
 
-void ExcAutoFilterRecs::DeleteList()
+XclExpAutofilter* ExcAutoFilterRecs::GetByCol( SCCOL nCol )
 {
-    for( ExcAutoFilter* pFilter = _First(); pFilter; pFilter = _Next() )
-        delete pFilter;
-    List::Clear();
-}
-
-ExcAutoFilter* ExcAutoFilterRecs::GetByCol( SCCOL nCol )
-{
-    ExcAutoFilter* pFilter;
-    for( pFilter = _First(); pFilter; pFilter = _Next() )
-        if( pFilter->GetCol() == static_cast<sal_uInt16>(nCol) )
-            return pFilter;
-    pFilter = new ExcAutoFilter( static_cast<sal_uInt16>(nCol) );
-    Append( pFilter );
-    return pFilter;
+    XclExpAutofilterRef xFilter;
+    for( size_t nPos = 0, nSize = maFilterList.Size(); nPos < nSize; ++nPos )
+    {
+        xFilter = maFilterList.GetRecord( nPos );
+        if( xFilter->GetCol() == static_cast<sal_uInt16>(nCol) )
+            return xFilter.get();
+    }
+    xFilter.reset( new XclExpAutofilter( GetRoot(), static_cast<sal_uInt16>(nCol) ) );
+    maFilterList.AppendRecord( xFilter );
+    return xFilter.get();
 }
 
 BOOL ExcAutoFilterRecs::IsFiltered( SCCOL nCol )
 {
-    ExcAutoFilter* pFilter;
-    for( pFilter = _First(); pFilter; pFilter = _Next() )
-        if( pFilter->GetCol() == static_cast<sal_uInt16>(nCol) )
+    for( size_t nPos = 0, nSize = maFilterList.Size(); nPos < nSize; ++nPos )
+        if( maFilterList.GetRecord( nPos )->GetCol() == static_cast<sal_uInt16>(nCol) )
             return TRUE;
     return FALSE;
 }
 
-void ExcAutoFilterRecs::AddObjRecs( RootData& rRoot, const ScAddress& rPos, SCCOL nCols )
+void ExcAutoFilterRecs::AddObjRecs()
 {
-    ScAddress aAddr( rPos );
-    for( SCCOL nObj = 0; nObj < nCols; nObj++ )
+    if( pFilterInfo )
     {
-        XclObjDropDown* pObj = new XclObjDropDown( *rRoot.pER, aAddr, IsFiltered( nObj ) );
-        rRoot.pObjRecs->Add( pObj );
-        aAddr.IncCol( 1 );
+        ScAddress aAddr( pFilterInfo->GetStartPos() );
+        for( SCCOL nObj = 0, nCount = pFilterInfo->GetColCount(); nObj < nCount; nObj++ )
+        {
+            XclObjDropDown* pObj = new XclObjDropDown( GetRoot(), aAddr, IsFiltered( nObj ) );
+            mpRD->pObjRecs->Add( pObj );
+            aAddr.IncCol( 1 );
+        }
     }
 }
 
@@ -1547,7 +939,32 @@ void ExcAutoFilterRecs::Save( XclExpStream& rStrm )
         pFilterMode->Save( rStrm );
     if( pFilterInfo )
         pFilterInfo->Save( rStrm );
-    for( ExcAutoFilter* pFilter = _First(); pFilter; pFilter = _Next() )
-        pFilter->Save( rStrm );
+    maFilterList.Save( rStrm );
 }
+
+// ----------------------------------------------------------------------------
+
+XclExpFilterManager::XclExpFilterManager( const XclExpRoot& rRoot ) :
+    XclExpRoot( rRoot )
+{
+}
+
+void XclExpFilterManager::InitTabFilter( SCTAB nScTab )
+{
+    maFilterMap[ nScTab ].reset( new ExcAutoFilterRecs( GetRoot(), nScTab ) );
+}
+
+XclExpRecordRef XclExpFilterManager::CreateRecord( SCTAB nScTab )
+{
+    XclExpTabFilterRef xRec;
+    XclExpTabFilterMap::iterator aIt = maFilterMap.find( nScTab );
+    if( aIt != maFilterMap.end() )
+    {
+        xRec = aIt->second;
+        xRec->AddObjRecs();
+    }
+    return xRec;
+}
+
+// ============================================================================
 
