@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colwd.src,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 06:52:57 $
+ *  last change: $Author: rt $ $Date: 2001-05-04 20:58:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,6 +131,7 @@ ModalDialog DLG_COL_WIDTH
         Text[ korean ] = "³Êºñ(~W)";
         Text[ turkish ] = "~Geniþlik";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "A~ncho";
     };
     MetricField ED_WIDTH
     {
@@ -177,6 +178,7 @@ ModalDialog DLG_COL_WIDTH
         Text[ korean ] = "³Êºñ";
         Text[ turkish ] = "Geniþlik";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Ancho";
     };
     FixedText FT_COL
     {
@@ -206,6 +208,7 @@ ModalDialog DLG_COL_WIDTH
         Text[ korean ] = "´Ü(~C)";
         Text[ turkish ] = "~Sütun";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Colu~mna";
     };
     NumericField ED_COL
     {
@@ -229,4 +232,5 @@ ModalDialog DLG_COL_WIDTH
     Text[ korean ] = "´Ü ³Êºñ";
     Text[ turkish ] = "Sütun geniþliði";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Ancho de columna";
 };
