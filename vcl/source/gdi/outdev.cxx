@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mt $ $Date: 2001-03-15 11:33:48 $
+ *  last change: $Author: hdu $ $Date: 2002-02-15 17:17:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -313,6 +313,9 @@ OutputDevice::OutputDevice() :
     mnEmphasisAscent    = 0;
     mnEmphasisDescent   = 0;
     mnDrawMode          = 0;
+#ifdef ENABLE_CTL
+    mnLayoutMode            = 0;
+#endif // ENABLE_CTL
     meOutDevType        = OUTDEV_DONTKNOW;
     mbMap               = FALSE;
     mbClipRegion        = FALSE;
