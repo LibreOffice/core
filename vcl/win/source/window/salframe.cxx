@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: ssa $ $Date: 2002-07-12 15:55:36 $
+ *  last change: $Author: ssa $ $Date: 2002-07-16 09:01:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1082,7 +1082,7 @@ HWND ImplGetParentHwnd( HWND hWnd )
 
 // -----------------------------------------------------------------------
 
-static void ImplSalShow( HWND hWnd, BOOL bVisible )
+static void ImplSalShow( HWND hWnd, BOOL bVisible, BOOL bNoActivate )
 {
     SalFrame* pFrame = GetWindowPtr( hWnd );
     if ( !pFrame )
@@ -1093,7 +1093,10 @@ static void ImplSalShow( HWND hWnd, BOOL bVisible )
         pFrame->maFrameData.mbDefPos = FALSE;
         pFrame->maFrameData.mbOverwriteState = TRUE;
         pFrame->maFrameData.mbInShow = TRUE;
-        ShowWindow( hWnd, pFrame->maFrameData.mnShowState );
+        if( bNoActivate )
+            ShowWindow( hWnd, SW_SHOWNOACTIVATE );
+        else
+            ShowWindow( hWnd, pFrame->maFrameData.mnShowState );
         Window *pClientWin = ((Window*)pFrame->maFrameData.mpInst)->ImplGetClientWindow();
         if ( pFrame->maFrameData.mbFloatWin || ( pClientWin && (pClientWin->GetStyle() & WB_SYSTEMFLOATWIN) ) )
             pFrame->maFrameData.mnShowState = SW_SHOWNOACTIVATE;
@@ -1156,15 +1159,15 @@ static void ImplSalShow( HWND hWnd, BOOL bVisible )
 
 // -----------------------------------------------------------------------
 
-void SalFrame::Show( BOOL bVisible )
+void SalFrame::Show( BOOL bVisible, BOOL bNoActivate )
 {
     // Post this Message to the window, because this only works
     // in the thread of the window, which has create this window.
     // We post this message to avoid deadlocks
     if ( GetSalData()->mnAppThreadId != GetCurrentThreadId() )
-        ImplPostMessage( maFrameData.mhWnd, SAL_MSG_SHOW, bVisible, 0 );
+        ImplPostMessage( maFrameData.mhWnd, SAL_MSG_SHOW, bVisible, bNoActivate );
     else
-        ImplSalShow( maFrameData.mhWnd, bVisible );
+        ImplSalShow( maFrameData.mhWnd, bVisible, bNoActivate );
 }
 
 // -----------------------------------------------------------------------
@@ -4778,7 +4781,7 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
             rDef = FALSE;
             break;
         case SAL_MSG_SHOW:
-            ImplSalShow( hWnd, (BOOL)wParam );
+            ImplSalShow( hWnd, (BOOL)wParam, (BOOL)lParam );
             rDef = FALSE;
             break;
         case SAL_MSG_SETINPUTCONTEXT:

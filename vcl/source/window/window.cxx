@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.113 $
+ *  $Revision: 1.114 $
  *
- *  last change: $Author: vg $ $Date: 2002-07-15 15:07:10 $
+ *  last change: $Author: ssa $ $Date: 2002-07-16 08:58:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5839,7 +5839,8 @@ void Window::Show( BOOL bVisible, USHORT nFlags )
             mbSuppressAccessibilityEvents = FALSE;
 
             mbPaintFrame = TRUE;
-            mpFrame->Show( TRUE );
+            BOOL bNoActivate = nFlags & (SHOW_NOACTIVATE|SHOW_NOFOCUSCHANGE);
+            mpFrame->Show( TRUE, bNoActivate );
 
             // Query the correct size of the window, if we are waiting for
             // a system resize

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.139 $
+ *  $Revision: 1.140 $
  *
- *  last change: $Author: ssa $ $Date: 2002-07-11 07:58:29 $
+ *  last change: $Author: ssa $ $Date: 2002-07-16 09:04:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -920,7 +920,7 @@ void SalFrame::SetMinClientSize( long nWidth, long nHeight )
 
 // Show + Pos (x,y,z) + Size (width,height)
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-void SalFrame::Show( BOOL bVisible )
+void SalFrame::Show( BOOL bVisible, BOOL /*bNoActivate*/ )
 {
     if( ( bVisible && maFrameData.bMapped_ )
         || ( !bVisible && !maFrameData.bMapped_ ) )
