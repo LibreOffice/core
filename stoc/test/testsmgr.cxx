@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testsmgr.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-12 17:19:49 $
+ *  last change: $Author: jl $ $Date: 2001-03-12 17:30:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,9 +62,7 @@
 //#ifndef _VOS_MODULE_HXX_
 //#include <vos/module.hxx>
 //#endif
-#ifndef _VOS_DIAGNOSE_HXX_
-#include <vos/diagnose.hxx>
-#endif
+
 #ifndef _VOS_PROCESS_HXX_
 #include <vos/process.hxx>
 #endif
