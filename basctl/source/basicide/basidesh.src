@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basidesh.src,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: tbe $ $Date: 2001-10-22 15:33:31 $
+ *  last change: $Author: kz $ $Date: 2001-10-25 20:41:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2800,6 +2800,26 @@ Menu RID_POPUP_DLGED
             HelpId = SID_SHOW_BROWSER ;
             Text = "Eigenschaften..." ;
             Text [ ENGLISH ] = "Properties..." ;
+            Text[ english_us ] = "Properties...";
+            Text[ portuguese ] = "Properties...";
+            Text[ russian ] = "Ñâîéñòâà...";
+            Text[ greek ] = "Properties...";
+            Text[ dutch ] = "Properties...";
+            Text[ french ] = "Propriétés...";
+            Text[ spanish ] = "Propiedades...";
+            Text[ finnish ] = "Properties...";
+            Text[ italian ] = "Properties...";
+            Text[ danish ] = "Properties...";
+            Text[ swedish ] = "Egenskaper...";
+            Text[ polish ] = "W³aœciwoœci...";
+            Text[ portuguese_brazilian ] = "Properties...";
+            Text[ japanese ] = "ï¾Œï¾Ÿï¾›ï¾Šï¾Ÿï¾ƒï½¨...";
+            Text[ korean ] = "Properties...";
+            Text[ chinese_simplified ] = "å±žæ€§...";
+            Text[ chinese_traditional ] = "å±¬æ€§...";
+            Text[ turkish ] = "Properties...";
+            Text[ arabic ] = "Properties...";
+            Text[ catalan ] = "Properties...";
         };
     };
 };
@@ -2842,6 +2862,7 @@ Image RID_IMG_LOCKED
     ImageBitmap = Bitmap { File = "locked.bmp" ; };
     MaskColor = Color { Red = 0xFFFF ; Green = 0xFFFF ; Blue = 0xFFFF ; };
 };
+
 
 
 
