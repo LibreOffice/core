@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-17 14:27:46 $
+#   last change: $Author: obo $ $Date: 2003-10-20 16:51:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,52 +79,7 @@ INCEXT=s:\solar\inc\hm
 CDEFS+=-Dmydebug
 .ENDIF
 
-.IF "$(GUI)$(COM)" == "WINMSC"
-LIBFLAGS=/NOI /NOE /PAGE:512
-.ENDIF
-
 # --- Files --------------------------------------------------------
-
-CXXFILES = \
-                atrstck.cxx \
-                frmcrsr.cxx \
-        frmform.cxx \
-        frminf.cxx \
-        frmpaint.cxx \
-        guess.cxx \
-        inftxt.cxx \
-        itradj.cxx \
-        itratr.cxx \
-        itrcrsr.cxx \
-        itrform2.cxx \
-        itrpaint.cxx \
-        itrtxt.cxx \
-        porexp.cxx \
-        porfld.cxx \
-        porfly.cxx \
-        porglue.cxx \
-        porlay.cxx \
-        porlin.cxx \
-        pormulti.cxx \
-        porref.cxx \
-        porrst.cxx \
-        portox.cxx \
-        portxt.cxx \
-        redlnitr.cxx \
-        txtcache.cxx \
-        txtdrop.cxx \
-        txtfld.cxx \
-        txtfly.cxx \
-        txtfrm.cxx \
-        txtftn.cxx \
-        txthyph.cxx \
-        txtinit.cxx \
-        txtpaint.cxx \
-        txttab.cxx \
-        widorp.cxx \
-        blink.cxx \
-        noteurl.cxx \
-        wrong.cxx
 
 .IF "$(product)$(cap)" == ""
 CXXFILES += \
