@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: mib $ $Date: 2002-02-14 10:53:31 $
+#   last change: $Author: vg $ $Date: 2002-02-19 11:38:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -317,6 +317,10 @@ view .SETDIR=view:
         @echo $@
         @$(MAKECMD) -d $(MFLAGS) $(dbutilx) $(CALLMACROS)
 
+access .SETDIR=access:
+        @echo $@
+        @$(MAKECMD) -d $(MFLAGS) $(dbutilx) $(CALLMACROS)
+
 .ENDIF
 .ELSE
 core_1st:
@@ -349,3 +353,4 @@ txtnode  : core_1st
 unocore  : core_1st
 undo  : core_1st
 view : core_1st
+access : core_1st
