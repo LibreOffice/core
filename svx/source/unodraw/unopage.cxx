@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unopage.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: cl $ $Date: 2001-09-28 14:56:09 $
+ *  last change: $Author: cl $ $Date: 2001-10-05 08:58:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -678,27 +678,33 @@ SvxShape* SvxDrawPage::CreateShapeByTypeAndInventor( sal_uInt16 nType, sal_uInt3
                         {
                             SvPersist *pPersist = pPage->GetSdrPage()->GetModel()->GetPersist();
                             const SvInfoObject *pInfo = pPersist->Find( static_cast< SdrOle2Obj* >( pObj )->GetPersistName() );
+
                             DBG_ASSERT( pInfo, "no info object for OLE object found" );
 
-                            const SvGlobalName aClassId( pInfo->GetClassName() );
-                            const SvGlobalName aAppletClassId( SO3_APPLET_CLASSID );
-                            const SvGlobalName aPluginClassId( SO3_PLUGIN_CLASSID );
-                            const SvGlobalName aIFrameClassId( SO3_IFRAME_CLASSID );
+                            // CL->KA: Why is this not working anymore?
+                            if( pInfo )
+                            {
 
-                            if( aPluginClassId == aClassId )
-                            {
-                                pRet = new SvxPluginShape( pObj );
-                                nType = OBJ_OLE2_PLUGIN;
-                            }
-                            else if( aAppletClassId == aClassId )
-                            {
-                                pRet = new SvxAppletShape( pObj );
-                                nType = OBJ_OLE2_APPLET;
-                            }
-                            else if( aIFrameClassId == aClassId )
-                            {
-                                pRet = new SvxFrameShape( pObj );
-                                nType = OBJ_FRAME;
+                                const SvGlobalName aClassId( pInfo->GetClassName() );
+                                const SvGlobalName aAppletClassId( SO3_APPLET_CLASSID );
+                                const SvGlobalName aPluginClassId( SO3_PLUGIN_CLASSID );
+                                const SvGlobalName aIFrameClassId( SO3_IFRAME_CLASSID );
+
+                                if( aPluginClassId == aClassId )
+                                {
+                                    pRet = new SvxPluginShape( pObj );
+                                    nType = OBJ_OLE2_PLUGIN;
+                                }
+                                else if( aAppletClassId == aClassId )
+                                {
+                                    pRet = new SvxAppletShape( pObj );
+                                    nType = OBJ_OLE2_APPLET;
+                                }
+                                else if( aIFrameClassId == aClassId )
+                                {
+                                    pRet = new SvxFrameShape( pObj );
+                                    nType = OBJ_FRAME;
+                                }
                             }
                         }
 #endif
