@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsuno.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-21 08:50:39 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:54:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -671,6 +671,7 @@ const SfxItemPropertyMap* lcl_GetSheetPropertyMap()
     static SfxItemPropertyMap aSheetPropertyMap_Impl[] =
     {
         {MAP_CHAR_LEN(SC_UNONAME_ASIANVERT),ATTR_VERTICAL_ASIAN,&getBooleanCppuType(),                  0, 0 },
+        {MAP_CHAR_LEN(SC_UNONAME_AUTOPRINT),SC_WID_UNO_AUTOPRINT,&getBooleanCppuType(),                 0, 0 },
         {MAP_CHAR_LEN(SC_UNONAME_BOTTBORDER),ATTR_BORDER,       &::getCppuType((const table::BorderLine*)0), 0, BOTTOM_BORDER | CONVERT_TWIPS },
         {MAP_CHAR_LEN(SC_UNONAME_CELLBACK), ATTR_BACKGROUND,    &getCppuType((sal_Int32*)0),            0, MID_BACK_COLOR },
         {MAP_CHAR_LEN(SC_UNONAME_CELLPRO),  ATTR_PROTECTION,    &getCppuType((util::CellProtection*)0), 0, 0 },
@@ -1756,7 +1757,7 @@ void SAL_CALL ScCellRangesBase::clearContents( sal_Int32 nContentFlags ) throw(u
     if ( aRanges.Count() )
     {
         // only for clearContents: EDITATTR is only used if no contents are deleted
-        USHORT nDelFlags = nContentFlags & IDF_ALL;
+        USHORT nDelFlags = static_cast< USHORT >( nContentFlags & IDF_ALL );
         if ( ( nContentFlags & IDF_EDITATTR ) && ( nContentFlags & IDF_CONTENTS ) == 0 )
             nDelFlags |= IDF_EDITATTR;
 
@@ -5090,22 +5091,22 @@ void SAL_CALL ScCellRangeObj::fillAuto( sheet::FillDirection nFillDirection,
         switch (nFillDirection)
         {
             case sheet::FillDirection_TO_BOTTOM:
-                aSourceRange.aEnd.SetRow( aSourceRange.aStart.Row() + nSourceCount - 1 );
+                aSourceRange.aEnd.SetRow( static_cast< USHORT>( aSourceRange.aStart.Row() + nSourceCount - 1 ) );
                 nCount = aRange.aEnd.Row() - aSourceRange.aEnd.Row();
                 eDir = FILL_TO_BOTTOM;
                 break;
             case sheet::FillDirection_TO_RIGHT:
-                aSourceRange.aEnd.SetCol( aSourceRange.aStart.Col() + nSourceCount - 1 );
+                aSourceRange.aEnd.SetCol( static_cast< USHORT>( aSourceRange.aStart.Col() + nSourceCount - 1 ) );
                 nCount = aRange.aEnd.Col() - aSourceRange.aEnd.Col();
                 eDir = FILL_TO_RIGHT;
                 break;
             case sheet::FillDirection_TO_TOP:
-                aSourceRange.aStart.SetRow( aSourceRange.aEnd.Row() - nSourceCount + 1 );
+                aSourceRange.aStart.SetRow( static_cast< USHORT>( aSourceRange.aEnd.Row() - nSourceCount + 1 ) );
                 nCount = aSourceRange.aStart.Row() - aRange.aStart.Row();
                 eDir = FILL_TO_TOP;
                 break;
             case sheet::FillDirection_TO_LEFT:
-                aSourceRange.aStart.SetCol( aSourceRange.aEnd.Col() - nSourceCount + 1 );
+                aSourceRange.aStart.SetCol( static_cast< USHORT>( aSourceRange.aEnd.Col() - nSourceCount + 1 ) );
                 nCount = aSourceRange.aStart.Col() - aRange.aStart.Col();
                 eDir = FILL_TO_LEFT;
                 break;
@@ -6906,6 +6907,7 @@ uno::Sequence<table::CellRangeAddress> SAL_CALL ScTableSheetObj::getPrintAreas()
             if (pRange)
             {
                 ScUnoConversion::FillApiRange( aRangeAddress, *pRange );
+                aRangeAddress.Sheet = nTab; // core does not care about sheet index
                 pAry[i] = aRangeAddress;
             }
         }
@@ -6928,7 +6930,7 @@ void SAL_CALL ScTableSheetObj::setPrintAreas(
         ScPrintRangeSaver* pOldRanges = pDoc->CreatePrintRangeSaver();
 
         USHORT nCount = (USHORT) aPrintAreas.getLength();
-        pDoc->SetPrintRangeCount( nTab, nCount );
+        pDoc->ClearPrintRanges( nTab );
         if (nCount)
         {
             ScRange aRange;
@@ -6936,7 +6938,7 @@ void SAL_CALL ScTableSheetObj::setPrintAreas(
             for (USHORT i=0; i<nCount; i++)
             {
                 ScUnoConversion::FillScRange( aRange, pAry[i] );
-                pDoc->SetPrintRange( nTab, i, aRange );
+                pDoc->AddPrintRange( nTab, aRange );
             }
         }
 
@@ -6997,7 +6999,10 @@ table::CellRangeAddress SAL_CALL ScTableSheetObj::getTitleColumns() throw(uno::R
         USHORT nTab = GetTab_Impl();
         const ScRange* pRange = pDoc->GetRepeatColRange(nTab);
         if (pRange)
+        {
             ScUnoConversion::FillApiRange( aRet, *pRange );
+            aRet.Sheet = nTab; // core does not care about sheet index
+        }
     }
     return aRet;
 }
@@ -7075,7 +7080,10 @@ table::CellRangeAddress SAL_CALL ScTableSheetObj::getTitleRows() throw(uno::Runt
         USHORT nTab = GetTab_Impl();
         const ScRange* pRange = pDoc->GetRepeatRowRange(nTab);
         if (pRange)
+        {
             ScUnoConversion::FillApiRange( aRet, *pRange );
+            aRet.Sheet = nTab; // core does not care about sheet index
+        }
     }
     return aRet;
 }
@@ -7664,6 +7672,17 @@ void ScTableSheetObj::SetOnePropertyValue( const SfxItemPropertyMap* pMap, const
             BOOL bVis = ScUnoHelpFunctions::GetBoolFromAny( aValue );
             aFunc.SetTableVisible( nTab, bVis, TRUE );
         }
+        else if ( pMap->nWID == SC_WID_UNO_AUTOPRINT )
+        {
+            BOOL bAutoPrint = ScUnoHelpFunctions::GetBoolFromAny( aValue );
+            if (bAutoPrint)
+                pDoc->SetPrintEntireSheet( nTab ); // clears all print ranges
+            else
+            {
+                if (pDoc->IsPrintEntireSheet( nTab ))
+                    pDoc->ClearPrintRanges( nTab ); // if this flag is true, there are no PrintRanges, so Clear clears only the flag.
+            }
+        }
         else
             ScCellRangeObj::SetOnePropertyValue(pMap, aValue);      // base class, no Item WID
     }
@@ -7701,6 +7720,11 @@ void ScTableSheetObj::GetOnePropertyValue( const SfxItemPropertyMap* pMap,
         {
             //  LinkDisplayName for hyperlink dialog
             rAny <<= getName();     // sheet name
+        }
+        else if ( pMap->nWID == SC_WID_UNO_AUTOPRINT )
+        {
+            BOOL bAutoPrint = pDoc->IsPrintEntireSheet( nTab );
+            ScUnoHelpFunctions::SetBoolInAny( rAny, bAutoPrint );
         }
         else
             ScCellRangeObj::GetOnePropertyValue(pMap, rAny);
