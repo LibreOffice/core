@@ -1525,9 +1525,7 @@ sub EventListListener()
     endif
 
     if ( binding &gt; 1 ) then
-    	if ( selectedScript &lt;&gt; &quot;&quot; ) then
-	       	bindingDialog.Model.Delete.enabled = true
-	    endif	
+       	bindingDialog.Model.Delete.enabled = true
     else
        	bindingDialog.Model.Delete.enabled = false
     end if
