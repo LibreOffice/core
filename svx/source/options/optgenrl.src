@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgenrl.src,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 11:30:09 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 14:29:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,7 +103,7 @@ TabPage RID_SFXPAGE_GENERAL
         Text [ portuguese_brazilian ] = "~Empresa" ;
         Text [ portuguese ] = "~Empresa" ;
         Text [ finnish ] = "~Yritys" ;
-        Text [ danish ] = "Firma" ;
+        Text [ danish ] = "~Firma" ;
         Text [ french ] = "~Soci�t�" ;
         Text [ swedish ] = "~F�retag" ;
         Text [ dutch ] = "~Bedrijf" ;
@@ -125,6 +125,8 @@ TabPage RID_SFXPAGE_GENERAL
         Text[ hebrew ] = "‮חברה‬";
         Text[ hindi ] = "~संस्था";
         Text[ slovak ] = "~Spoločnosť";
+        Text[ hungarian ] = "~Szervezet";
+        Text[ slovenian ] = "Po~djetje";
     };
     Edit ED_COMPANY
     {
@@ -166,6 +168,8 @@ TabPage RID_SFXPAGE_GENERAL
         Text[ hebrew ] = "‮שם פרטי\\שם משפחה\\ראשי תיבות‬";
         Text[ hindi ] = "पहिला/अंतिम ~नाम/इनिश्यल्";
         Text[ slovak ] = "~Meno/Priezvisko/Iniciály";
+        Text[ hungarian ] = "Utónév, vezeték~név, monogr.";
+        Text[ slovenian ] = "~Ime/Priimek/Začetnice";
     };
     FixedText FT_NAME_RUSS
     {
@@ -200,6 +204,8 @@ TabPage RID_SFXPAGE_GENERAL
         Text[ polish ] = " ";
         Text[ hindi ] = " ";
         Text[ slovak ] = " ";
+        Text[ hungarian ] = "_";
+        Text[ slovenian ] = " ";
     };
     Edit ED_FATHERNAME
     {
@@ -260,6 +266,8 @@ TabPage RID_SFXPAGE_GENERAL
         Text[ hebrew ] = "‮רחוב‬";
         Text[ hindi ] = "~सड़क";
         Text[ slovak ] = "~Ulica";
+        Text[ hungarian ] = "~Utca";
+        Text[ slovenian ] = "~Ulica";
     };
     FixedText FT_STREET_RUSS
     {
@@ -294,6 +302,8 @@ TabPage RID_SFXPAGE_GENERAL
         Text[ polish ] = " ";
         Text[ hindi ] = " ";
         Text[ slovak ] = " ";
+        Text[ hungarian ] = "_";
+        Text[ slovenian ] = " ";
     };
     Edit ED_STREET
     {
@@ -341,6 +351,8 @@ TabPage RID_SFXPAGE_GENERAL
         Text[ hebrew ] = "‮מיקוד\\עיר‬";
         Text[ hindi ] = "Zip/नगर";
         Text[ slovak ] = "PSČ/Mesto";
+        Text[ hungarian ] = "Irányítószám, város";
+        Text[ slovenian ] = "Pošta/Kraj";
     };
     Edit ED_PLZ
     {
@@ -386,7 +398,7 @@ TabPage RID_SFXPAGE_GENERAL
         Text[ french ] = "Pays/R�gion";
         Text[ spanish ] = "~Pa�s/Regi�n";
         Text[ italian ] = "Paese/Regione";
-        Text[ danish ] = "~Land/Omr�de";
+        Text[ danish ] = "Land/Omr�de";
         Text[ swedish ] = "~Land/Region";
         Text[ polish ] = "Kraj/region";
         Text[ portuguese_brazilian ] = "Pa�s / Estado";
@@ -405,6 +417,8 @@ TabPage RID_SFXPAGE_GENERAL
         Text[ hebrew ] = "‮מדינה\\מחוז‬";
         Text[ hindi ] = "देश";
         Text[ slovak ] = "Krajina/región";
+        Text[ hungarian ] = "Ország/régió";
+        Text[ slovenian ] = "Država/Regija";
     };
     Edit ED_COUNTRY
     {
@@ -445,6 +459,8 @@ TabPage RID_SFXPAGE_GENERAL
         Text[ hebrew ] = "‮תואר\\משרה‬";
         Text[ hindi ] = "~शीर्षक/स्थान";
         Text[ slovak ] = "~Titul/Pozícia";
+        Text[ hungarian ] = "~Megszólítás, beosztás";
+        Text[ slovenian ] = "Naziv/mes~to";
     };
     Edit ED_TITLE
     {
@@ -469,7 +485,7 @@ TabPage RID_SFXPAGE_GENERAL
         Text [ portuguese_brazilian ] = "Tel. (Res./ Com.)" ;
         Text [ portuguese ] = "Tel. (~part./emprego)" ;
         Text [ finnish ] = "Puh. (koti/ty�)" ;
-        Text [ danish ] = "Tlf. (p~riv./arb.)" ;
+        Text [ danish ] = "Tlf. (privat/arbejde)" ;
         Text [ french ] = "T�l. (domicile/bureau)" ;
         Text [ swedish ] = "Tfn (~priv./arb.)" ;
         Text [ dutch ] = "Tel. (Priv/~Za)" ;
@@ -492,6 +508,8 @@ TabPage RID_SFXPAGE_GENERAL
         Text[ hebrew ] = "‮טלפון (בית\\עבודה)‬";
         Text[ hindi ] = "दूरभाष (घर/काम)";
         Text[ slovak ] = "Tel. (domov/do práce)";
+        Text[ hungarian ] = "Tel. (otthoni, munkahelyi)";
+        Text[ slovenian ] = "Tel. (doma/služba)";
     };
     Edit ED_TELPRIVAT
     {
@@ -539,6 +557,8 @@ TabPage RID_SFXPAGE_GENERAL
         Text[ hebrew ] = "‮פקס\\דואר א'‬";
         Text[ hindi ] = "फ़ॉ~क्स / इ-मेइल";
         Text[ slovak ] = "Fa~x / E-mail";
+        Text[ hungarian ] = "Fa~x és e-mail";
+        Text[ slovenian ] = "Fa~ks / E-pošta";
     };
     Edit ED_FAX
     {
@@ -563,7 +583,7 @@ TabPage RID_SFXPAGE_GENERAL
         Text [ portuguese_brazilian ] = "Endere�o " ;
         Text [ portuguese ] = "Endere�o" ;
         Text [ finnish ] = "Osoite " ;
-        Text [ danish ] = " Adresse " ;
+        Text [ danish ] = "Adresse " ;
         Text [ french ] = " Adresse " ;
         Text [ swedish ] = "Adress " ;
         Text [ dutch ] = "Adres" ;
@@ -585,6 +605,8 @@ TabPage RID_SFXPAGE_GENERAL
         Text[ hebrew ] = "‮כתובת ‬";
         Text[ hindi ] = "पता ";
         Text[ slovak ] = "Adresa ";
+        Text[ hungarian ] = "Cím";
+        Text[ slovenian ] = "Naslov";
     };
     CheckBox CB_USEDATA
     {
@@ -619,6 +641,8 @@ TabPage RID_SFXPAGE_GENERAL
         Text[ hebrew ] = "‮העברה אוטומטית של הפרטים למאפיינים של מסמכי המשתמש‬";
         Text[ hindi ] = "लेखपत्र स्वभावों केलिए ड़ॉटा का उपयोग करो";
         Text[ slovak ] = "Použiť údaje pre vlastnosti súboru";
+        Text[ hungarian ] = "Dokumentum tulajdonságainak adatai";
+        Text[ slovenian ] = "Uporabi podatke za lastnosti dokumenta";
     };
 
      // extra Resourcen f"ur die amerikanische Postadresse
@@ -633,7 +657,7 @@ TabPage RID_SFXPAGE_GENERAL
         Text[ french ] = "Ville/�tat/C.P.";
         Text[ spanish ] = "~Ciudad/Provincia/C.P.";
         Text[ italian ] = "Locali�/Provincia/C.A.P.";
-        Text[ danish ] = "By/Land/Postnummer";
+        Text[ danish ] = "By/Delstat/Postnummer";
         Text[ swedish ] = "~Ort/Land/Postnr";
         Text[ polish ] = "Miejscowo��/wojew�dztwo/kod pocztowy";
         Text[ portuguese_brazilian ] = "Cidade / Estado / CEP";
@@ -652,6 +676,8 @@ TabPage RID_SFXPAGE_GENERAL
         Text[ hebrew ] = "‮עיר\\מחוז\\מיקוד‬";
         Text[ hindi ] = "नगर/राज्य/Zip";
         Text[ slovak ] = "Obec/Štát/PSČ";
+        Text[ hungarian ] = "Város, megye/állam, irányítószám";
+        Text[ slovenian ] = "Kraj/Zvezna država/Pošta";
     };
     String STR_QUERY_REG
     {
@@ -664,7 +690,7 @@ TabPage RID_SFXPAGE_GENERAL
         Text[ french ] = "Notez que le code d'enregistrement est g�n�r� � partir de vos donn�es d'utilisateur telles que rue, code postal et ville. Tant que l'enregistrement n'aura pas eu lieu, il sera impossible de modifier ces donn�es. Voulez-vous effectuer une derni�re modification avant de poursuivre ?";
         Text[ spanish ] = "Tenga en cuenta que la calle, el c�digo postal y la ciudad se tendr�n en cuenta para determinar la clave de registro. Estos datos no podr�n ser modificados hasta que se registre. �Desea modificar a�n estos datos de usuario?";
         Text[ italian ] = "Vi preghiamo di osservare che il codice di registrazione si basa sull'indirizzo (via, C.A.P. e citt�) specificato. Fino alla registrazione questi dati non potranno essere cambiati. Volete cambiarli adesso?";
-        Text[ danish ] = "V�r opm�rksom p�, at gade, postnummer og by anvendes til beregning af registreringsn�glen. Indtil registreringen kan disse brugerdata ikke �ndres.  Vil du �ndre disse brugerdata?";
+        Text[ danish ] = "V�r opm�rksom p�, at gade, postnummer og by anvendes til beregning af registreringsn�glen. Indtil registreringen er gennemf�rt kan disse brugerdata ikke �ndres. Vil du �ndre disse brugerdata nu?";
         Text[ swedish ] = "Observera att gatu- och postadress anv�nds f�r ber�kningen av registreringsnyckeln. Fram till registreringen kan anv�ndardata inte �ndras. Vill du �ndra de h�r anv�ndardata nu?";
         Text[ polish ] = "Nazwa ulicy, kod pocztowy i miejscowo�� s� u�ywane do wygenerowania klucza rejestracyjnego. Danych tych nie b�dzie mo�na zmieni� a� do chwili rejestracji. Czy chcesz je zmieni� teraz?";
         Text[ portuguese_brazilian ] = "Note que a rua, CEP e cidade ser�o usados para calcular seu c�digo de registro. Estes dados n�o poder�o ser alterados at� que seja efetuado seu registro. Deseja alterar seus dados agora?";
@@ -683,6 +709,8 @@ TabPage RID_SFXPAGE_GENERAL
         Text[ hebrew ] = "‮שימו לב שרחוב, מיקוד ועיר הם ממרכיביו של מפתח ההרשמה. לא ניתן לשנות פרטים אלו עד לאחר סיום ההרשמה. האם אכן לשנות את הפרטים עכשיו?‬";
         Text[ hindi ] = "सड़क, Zip कोड् और नगर को रजिस्टरी की उत्पन्न करने केलिए उपयोग किया जाएगा । रजिस्टरी कार्य सफ़ल होने तक, उपभोक्ता का ड़ॉटा को बदल नहीं सकते है । आप अभी उपभोक्ता का ड़ॉटा को बदलना चाहते है?";
         Text[ slovak ] = "Všimnite si, že PSČ a mesto budú použité na vygenerovanie registračného kľúča. Nebudete môcť opäť zmeniť údaje o užívateľovi, pokiaľ neprebehne registrácia. Chcete zmeniť údaje o užívateľovi teraz?";
+        Text[ hungarian ] = "Az utca, az irányítószám és a város a regisztrációs kulcs előállításához szükséges. A regisztráció befejezése után nem lehet megváltoztatni a felhasználói adatokat. Módosítja most a felhasználói adatokat?";
+        Text[ slovenian ] = "Vedite, da se ulica, poštna številka in kraj uporabljajo za izdelavo registracijskega ključa. Podatkov o uporabniku ne bo več mogoče spremeniti, dokler se ne bo izvedla registracija. Ali želite zdaj spremeniti podatke o uporabniku?";
     };
     Text[ chinese_traditional ] = "使用者資料";
     Text[ arabic ] = "������ ��������";
@@ -697,6 +725,8 @@ TabPage RID_SFXPAGE_GENERAL
     Text[ hebrew ] = "‮פרטי המשתמש‬";
     Text[ hindi ] = "उपभोक्ता ड़ॉटा";
     Text[ slovak ] = "Údaje o užívateľovi";
+    Text[ hungarian ] = "Felhasználó adatai";
+    Text[ slovenian ] = "Uporabniški podatki";
 };
 
 // RID_SVXQB_CHANGEDATA ---------------------------------------------------
@@ -715,7 +745,7 @@ QueryBox RID_SVXQB_CHANGEDATA
     Message [ swedish ] = "Du har �ndrat dina anv�ndardata.\nT�nk p� att din nuvarande registrering l�per ut i och med detta.\nDu beh�ver en ny registreringsnyckel som m�ste matas in inom de n�rmaste 30 dagarna.\nRegistreringsformul�ret hittar du under menyn Hj�lp - Registrering...\nVill du verkligen �ndra dina anv�ndardata?" ;
     Message [ portuguese ] = "Modificou os dados de utilizador.\nN�o se esque�a de que o seu registo expirar�.\nPor esta raz�o necessitar� de um novo c�digo de registo dentro do prazo de 30 dias.\nEncontrar� o formul�rio de registo no menu Ajuda - Registo...\nModificar os dados de utilizador?" ;
     Message[ portuguese_brazilian ] = "Os dados do usu�rio foram alterados.\nNote que, se voc� continuar, seu c�digo de registro se tornar� inv�lido.\nNeste caso, voc� precisar� obter um novo c�digo de registro no prazo de 30 dias.\nVoc� pode encontrar o formul�rio de registro no menu Ajuda - Registro...\nDeseja realmente alterar seus dados de usu�rio?";
-    Message[ danish ] = "Du har �ndret brugerdataene.\nBem�rk venligst, at din registrering derigennem bliver ugyldig.\nDu har brug for en ny registreringsn�gle, som skal indtastes indenfor 30 dage.\nDu finder registreringsformularen i menuen Hj�lp - Registrering...\nEr du sikker p�, at du vil �ndre brugerdataene?";
+    Message[ danish ] = "Du har �ndret brugerdataene.\nBem�rk, at din registrering derved bliver ugyldig.\nDu har s�ledes brug for en ny registreringsn�gle, som skal indtastes indenfor 30 dage.\nDu finder registreringsformularen i menuen Hj�lp - Registrering...\nEr du sikker p�, at du vil �ndre brugerdataene?";
     Message[ chinese_simplified ] = "您已经更改了使用者数据。\n这样您的注册就会无效。\n您必须在今后30天之内输入一个新的注册密码。\n您能够在菜单\"帮助 - 注册...\"处找到注册表单。\n您真要更改使用者资料？";
     Message[ russian ] = "�� �������� ������ ������������.\n��-�� ����� �� �������� ������ ������������������� ������������.\n��� ����������� ����� ��������������� ����, ������� ���������� ����� ������ � ������� 30 ����.\n��������������� ����� �� ������� � ���� ������� - �����������...\n�������� ������ ������������, �������� �� ���?";
     Message[ polish ] = "Zmieniono dane u�ytkownika.\nNale�y wzi�� pod uwag�, �e (je�li operacja b�dzie kontynuowana) klucz rejestracyjny utraci wa�no��.\nB�dzie potrzebny nowy klucz rejestracyjny, kt�ry nale�y wprowadzi� w ci�gu nast�pnych 30 dni.\nFormularz rejestracyjny mo�na wywo�a� za pomoc� polecenia Rejestracja z menu Pomoc.\nCzy na pewno zmieni� dane u�ytkownika?";
@@ -733,6 +763,8 @@ QueryBox RID_SVXQB_CHANGEDATA
     Message[ hebrew ] = "‮פרטי המשתמש שונו.\nאם ממשיכים, מפתח ההרשמה לא יתאים לנתונים החדשים\nוידרש מפתח חדש לאחר שלושים יום.\nטופס ההרשמה נמצא תחת 'עזרה' > 'הרשמה'...\nהאם אכן לשנות את פרטי המשתמש?‬";
     Message[ hindi ] = "उपभोक्ता ड़ॉटा को परिवर्तन किया है । \nअगर आप जारी रखेंगे तो, रजिस्टरी की अमान्य हो जाएगा ।\nइसलिए, 30 दिनों के अंदर एक नया रजिस्टरी की चाहिए ।\nआप रजिस्टरी फ़ॉर्म् को सहायता - रजिस्टरी... में देख सकते है ।\nआप सचमुच में उपभोक्ता का ड़ॉटा को बदलना चाहते है?";
     Message[ slovak ] = "Údaje o užívateľovi boli zmenené.\nVšimnite si, že pokiaľ budete pokračovať, registrácia sa stane neplatnou.\nPreto bude potrebná nová registrácia behom nasledujúcich 30 dní.\nRegistračný formulár nájdete v menu 'Pomocník - Registrácia...'\nNaozaj chcete zmeniť svoje údaje?";
+    Message[ hungarian ] = "A felhasználói adatok megváltoztak.\nFigyelem! Ha folytatja, a regisztrációs kulcs érvénytelenné válik.\nEnnek következtében új regisztrációs kulcs szükséges 30 napon belül.\nA Segítség - Regisztráció menüben talál regisztrációs űrlapot.\nValóban meg akarja változtatni felhasználói adatait?";
+    Message[ slovenian ] = "Podatki o uporabniku so bili spremenjeni.\nČe nadaljujete, bo registracijski ključ postal neveljaven.\nZaradi tega je potreben nov registracijski ključ v 30 dneh.\nObrazec za registracijo lahko najdete v meniju Pomoč - Registracija...\nAli ste prepričani, da želite spremeniti vaše podatke o uporabniku?";
 };
 
  // RID_SVXSTR_FIELDUNIT_TABLE --------------------------------------------
@@ -1087,9 +1119,34 @@ StringArray RID_SVXSTR_FIELDUNIT_TABLE
         < "Pika" ; FUNIT_PICA ; > ;
         < "Bod" ; FUNIT_POINT ; > ;
     };
+    ItemList [ hungarian ] =
+    {
+         < "milliméter" ; FUNIT_MM ; > ;
+        < "centiméter" ; FUNIT_CM ; > ;
+        < "méter" ; FUNIT_M ; > ;
+        < "kilométer" ; FUNIT_KM ; > ;
+        < "hüvelyk" ; FUNIT_INCH ; > ;
+        < "láb" ; FUNIT_FOOT ; > ;
+        < "mérföld" ; FUNIT_MILE ; > ;
+        < "pica" ; FUNIT_PICA ; > ;
+        < "pont" ; FUNIT_POINT ; > ;
+    };
+    ItemList [ slovenian ] =
+    {
+         < "Milimeter" ; FUNIT_MM ; > ;
+        < "Centimeter" ; FUNIT_CM ; > ;
+        < "Meter" ; FUNIT_M ; > ;
+        < "Kilometer" ; FUNIT_KM ; > ;
+        < "Palec" ; FUNIT_INCH ; > ;
+        < "Čevelj" ; FUNIT_FOOT ; > ;
+        < "Milje" ; FUNIT_MILE ; > ;
+        < "Cicero" ; FUNIT_PICA ; > ;
+        < "Točka" ; FUNIT_POINT ; > ;
+    };
     };
 
  // ********************************************************************** EOF
+
 
 
 
