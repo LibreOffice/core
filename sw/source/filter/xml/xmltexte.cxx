@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltexte.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-15 17:16:59 $
+ *  last change: $Author: mib $ $Date: 2001-06-28 13:31:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -549,6 +549,11 @@ void SwXMLTextParagraphExport::_exportTextEmbedded(
             sURL += rOLEObj.GetName();
             sURL = GetExport().AddEmbeddedObject( sURL );
             lcl_addURL( rExport, sURL, sal_False );
+        }
+        if( SV_EMBEDDED_OWN == nType && pOLENd->GetChartTblName().Len() )
+        {
+            rExport.AddAttribute( XML_NAMESPACE_DRAW, XML_NOTIFY_ON_UPDATE_OF_TABLE,
+            pOLENd->GetChartTblName() );
         }
         eElementName = SV_EMBEDDED_OUTPLACE==nType ? XML_OBJECT_OLE
                                                    : XML_OBJECT;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltexti.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: mib $ $Date: 2001-05-10 10:21:45 $
+ *  last change: $Author: mib $ $Date: 2001-06-28 13:31:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,10 @@
 #ifndef _XMLOFF_TXTPRMAP_HXX
 #include <xmloff/txtprmap.hxx>
 #endif
+#ifndef _XMLOFF_I18NMAP_HXX
+#include <xmloff/i18nmap.hxx>
+#endif
+
 #ifndef _UNOCRSR_HXX
 #include "unocrsr.hxx"
 #endif
@@ -238,6 +242,7 @@ Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
            SvXMLImport& rImport,
         const OUString& rHRef,
         const OUString& rStyleName,
+        const OUString& rTblName,
         sal_Int32 nWidth, sal_Int32 nHeight )
 {
     Reference < XPropertySet > xPropSet;
@@ -306,6 +311,14 @@ Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOLEObject(
         return xPropSet;
 
     xPropSet = SwXFrames::GetObject( *pFrmFmt, FLYCNTTYPE_OLE );
+    if( rTblName.getLength() )
+    {
+        const SwFmtCntnt& rCntnt = pFrmFmt->GetCntnt();
+        const SwNodeIndex *pNdIdx = rCntnt.GetCntntIdx();
+        SwOLENode *pOLENd = pNdIdx->GetNodes()[pNdIdx->GetIndex() + 1]->GetOLENode();
+        ASSERT( pOLENd, "Where is the OLE node" );
+        pOLENd->SetChartTblName( GetRenameMap().Get( XML_TEXT_RENAME_TYPE_TABLE, rTblName ) );
+    }
 
     Rectangle aVisArea( 0, 0, nWidth, nHeight );
     sal_Int32 nDrawAspect = 0;
