@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqlmessage.src,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-02 06:18:04 $
+ *  last change: $Author: kz $ $Date: 2001-08-07 15:21:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,10 +117,10 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
         Text[ swedish ] = "Detaljer";
         Text[ polish ] = "Szczegó³y";
         Text[ portuguese_brazilian ] = "details";
-        Text[ japanese ] = "Ú×";
-        Text[ korean ] = "»ó¼¼";
-        Text[ chinese_simplified ] = "Ï¸½Ú";
-        Text[ chinese_traditional ] = "²Ó¸`";
+        Text[ japanese ] = "è©³ç´°";
+        Text[ korean ] = "ìƒì„¸";
+        Text[ chinese_simplified ] = "ç»†èŠ‚";
+        Text[ chinese_traditional ] = "ç´°ç¯€";
         Text[ arabic ] = "ÇáÊİÇÕíá";
         Text[ turkish ] = "Ayrıntılar";
         Text[ catalan ] = "Detalles";
@@ -145,10 +145,10 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
         Text[ swedish ] = "~Fellista:";
         Text[ polish ] = "~Lista b³êdów:";
         Text[ portuguese_brazilian ] = "error ~list:";
-        Text[ japanese ] = "´×°Ø½Ä(~L):";
-        Text[ korean ] = "¿À·ù ¸ñ·Ï(~L)";
-        Text[ chinese_simplified ] = "´íÎóÁĞµ¥(~L)£º";
-        Text[ chinese_traditional ] = "¿ù»~²M³æ(~L)¡G";
+        Text[ japanese ] = "ï½´ï¾—ï½°ï¾˜ï½½ï¾„(~L):";
+        Text[ korean ] = "ì˜¤ë¥˜ ëª©ë¡(~L)";
+        Text[ chinese_simplified ] = "é”™è¯¯åˆ—å•(~L)ï¼š";
+        Text[ chinese_traditional ] = "éŒ¯èª¤æ¸…å–®(~L)ï¼š";
         Text[ arabic ] = "ŞÇÆãÉ ÇáÃÎØÇÁ:";
         Text[ turkish ] = "Hata listesi:";
         Text[ catalan ] = "Lista de ~errores:";
@@ -181,10 +181,10 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
         Text[ swedish ] = "~Beskrivning:";
         Text[ polish ] = "~Opis:";
         Text[ portuguese_brazilian ] = "~description:";
-        Text[ japanese ] = "à–¾(~D):";
-        Text[ korean ] = "¼³¸í(~D):";
-        Text[ chinese_simplified ] = "ËµÃ÷(~D)£º";
-        Text[ chinese_traditional ] = "´y­z(~D)¡G";
+        Text[ japanese ] = "èª¬æ˜(~D):";
+        Text[ korean ] = "ì„¤ëª…(~D):";
+        Text[ chinese_simplified ] = "è¯´æ˜(~D)ï¼š";
+        Text[ chinese_traditional ] = "æè¿°(~D)ï¼š";
         Text[ arabic ] = "ÇáæÕİ:";
         Text[ turkish ] = "Açıklama:";
         Text[ catalan ] = "~Descripción:";
@@ -223,10 +223,10 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
         Text[ swedish ] = "Fel";
         Text[ polish ] = "B³¹d";
         Text[ portuguese_brazilian ] = "Error";
-        Text[ japanese ] = "´×°";
-        Text[ korean ] = "¿À·ù";
-        Text[ chinese_simplified ] = "´íÎó";
-        Text[ chinese_traditional ] = "¿ù»~";
+        Text[ japanese ] = "ï½´ï¾—ï½°";
+        Text[ korean ] = "ì˜¤ë¥˜";
+        Text[ chinese_simplified ] = "é”™è¯¯";
+        Text[ chinese_traditional ] = "éŒ¯èª¤";
         Text[ turkish ] = "Error";
         Text[ arabic ] = "ÎØÃ";
         Text[ catalan ] = "Error";
@@ -248,10 +248,10 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
         Text[ swedish ] = "Varning";
         Text[ polish ] = "Ostrze¿enie";
         Text[ portuguese_brazilian ] = "Warning";
-        Text[ japanese ] = "Œx";
-        Text[ korean ] = "°æ°í";
-        Text[ chinese_simplified ] = "¾¯¸æ";
-        Text[ chinese_traditional ] = "Äµ§i";
+        Text[ japanese ] = "è­¦å‘Š";
+        Text[ korean ] = "ê²½ê³ ";
+        Text[ chinese_simplified ] = "è­¦å‘Š";
+        Text[ chinese_traditional ] = "è­¦å‘Š";
         Text[ turkish ] = "Warning";
         Text[ arabic ] = "ÊÍĞíÑ";
         Text[ catalan ] = "Advertencia";
@@ -273,10 +273,10 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
         Text[ swedish ] = "Information";
         Text[ polish ] = "Informacja";
         Text[ portuguese_brazilian ] = "Information";
-        Text[ japanese ] = "î•ñ";
-        Text[ korean ] = "Á¤º¸";
-        Text[ chinese_simplified ] = "ĞÅÏ¢";
-        Text[ chinese_traditional ] = "¸ê°T";
+        Text[ japanese ] = "æƒ…å ±";
+        Text[ korean ] = "ì •ë³´";
+        Text[ chinese_simplified ] = "ä¿¡æ¯";
+        Text[ chinese_traditional ] = "è³‡è¨Š";
         Text[ turkish ] = "Bilgi";
         Text[ arabic ] = "ãÚáæãÇÊ";
         Text[ catalan ] = "Información";
@@ -298,10 +298,10 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
         Text[ swedish ] = "Detaljer";
         Text[ polish ] = "Szczegó³y";
         Text[ portuguese_brazilian ] = "Details";
-        Text[ japanese ] = "Ú×";
-        Text[ korean ] = "»ó¼¼";
-        Text[ chinese_simplified ] = "Ï¸½Ú";
-        Text[ chinese_traditional ] = "²Ó¸`";
+        Text[ japanese ] = "è©³ç´°";
+        Text[ korean ] = "ìƒì„¸";
+        Text[ chinese_simplified ] = "ç»†èŠ‚";
+        Text[ chinese_traditional ] = "ç´°ç¯€";
         Text[ turkish ] = "Ayrıntılar";
         Text[ arabic ] = "ÊİÇÕíá";
         Text[ catalan ] = "Detalles";
@@ -323,10 +323,10 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
         Text[ swedish ] = "SQL-status";
         Text[ polish ] = "Stan SQL";
         Text[ portuguese_brazilian ] = "SQL State";
-        Text[ japanese ] = "SQL ½Ã°À½";
-        Text[ korean ] = "SQL-»óÅÂ";
-        Text[ chinese_simplified ] = "SQL ×´Ì¬";
-        Text[ chinese_traditional ] = "SQL ª¬ºA";
+        Text[ japanese ] = "SQL ï½½ï¾ƒï½°ï¾€ï½½";
+        Text[ korean ] = "SQL-ìƒíƒœ";
+        Text[ chinese_simplified ] = "SQL çŠ¶æ€";
+        Text[ chinese_traditional ] = "SQL ç‹€æ…‹";
         Text[ turkish ] = "SQL State";
         Text[ arabic ] = "ÍÇáÉSQL";
         Text[ catalan ] = "Estado SQL";
@@ -348,21 +348,43 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
         Text[ swedish ] = "Felkod";
         Text[ polish ] = "Kod b³êdu";
         Text[ portuguese_brazilian ] = "Error code";
-        Text[ japanese ] = "´×°º°ÄŞ";
-        Text[ korean ] = "¿À·ù ÄÚµå";
-        Text[ chinese_simplified ] = "´íÎóÂë";
-        Text[ chinese_traditional ] = "¿ù»~½X";
+        Text[ japanese ] = "ï½´ï¾—ï½°ï½ºï½°ï¾„ï¾";
+        Text[ korean ] = "ì˜¤ë¥˜ ì½”ë“œ";
+        Text[ chinese_simplified ] = "é”™è¯¯ç ";
+        Text[ chinese_traditional ] = "éŒ¯èª¤ç¢¼";
         Text[ turkish ] = "Error code";
         Text[ arabic ] = "ÑãÒ ÇáÎØÃ";
         Text[ catalan ] = "Código de error";
         Text[ finnish ] = "Virhekoodi";
     };
+    Text[ portuguese ] = "%PRODUCTNAME Base";
+    Text[ russian ] = "%PRODUCTNAME Base";
+    Text[ greek ] = "%PRODUCTNAME Base";
+    Text[ dutch ] = "%PRODUCTNAME Base";
+    Text[ french ] = "%PRODUCTNAME Base";
+    Text[ spanish ] = "%PRODUCTNAME Base";
+    Text[ finnish ] = "%PRODUCTNAME Base";
+    Text[ italian ] = "%PRODUCTNAME Base";
+    Text[ danish ] = "%PRODUCTNAME Base";
+    Text[ swedish ] = "%PRODUCTNAME Base";
+    Text[ polish ] = "%PRODUCTNAME Base";
+    Text[ portuguese_brazilian ] = "%PRODUCTNAME Base";
+    Text[ japanese ] = "%PRODUCTNAME Base";
+    Text[ korean ] = "%PRODUCTNAME Base";
+    Text[ chinese_simplified ] = "%PRODUCTNAME Base";
+    Text[ chinese_traditional ] = "%PRODUCTNAME Base";
+    Text[ turkish ] = "%PRODUCTNAME Base";
+    Text[ arabic ] = "%PRODUCTNAME Base";
+    Text[ catalan ] = "%PRODUCTNAME Base";
 };
 
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.20  2001/08/02 06:18:04  fs
+ *  changed dialog title from 'StarBase' to ' Base'
+ *
  *  Revision 1.19  2001/07/19 20:18:49  kz
  *  Merge SRC638: 19.07.01 - 22:17:38
  *
@@ -423,6 +445,7 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
  *
  *  Revision 1.0 02.10.00 12:43:18  fs
  ************************************************************************/
+
 
 
 
