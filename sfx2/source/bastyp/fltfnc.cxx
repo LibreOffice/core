@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fltfnc.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-26 17:41:56 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:35:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -655,7 +655,7 @@ sal_uInt32 SfxFilterMatcher::DetectFilter( SfxMedium& rMedium, const SfxFilter**
 
     const SfxFilter* pFilter = pOldFilter;
 
-    sal_Bool bPreview = rMedium.IsPreview_Impl(), bInsert = sal_False;
+    sal_Bool bPreview = rMedium.IsPreview_Impl();
     SFX_ITEMSET_ARG(rMedium.GetItemSet(), pReferer, SfxStringItem, SID_REFERER, FALSE);
     if ( bPreview && rMedium.IsRemote() && ( !pReferer || pReferer->GetValue().CompareToAscii("private:searchfolder:",21 ) != COMPARE_EQUAL ) )
         return ERRCODE_ABORT;
