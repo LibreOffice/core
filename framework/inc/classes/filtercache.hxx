@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtercache.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: as $ $Date: 2001-03-20 14:44:46 $
+ *  last change: $Author: as $ $Date: 2001-04-04 13:28:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,12 +74,16 @@
 #include <macros/debug.hxx>
 #endif
 
-//_________________________________________________________________________________________________________________
-//  interface includes
-//_________________________________________________________________________________________________________________
+#ifndef __FRAMEWORK_THREADHELP_RWLOCKBASE_HXX_
+#include <threadhelp/rwlockbase.hxx>
+#endif
+
+#ifndef __FRAMEWORK_GENERAL_H_
+#include <general.h>
+#endif
 
 //_________________________________________________________________________________________________________________
-//  other includes
+//  interface includes
 //_________________________________________________________________________________________________________________
 
 #ifndef _COM_SUN_STAR_UNO_REFERENCE_H_
@@ -101,6 +105,18 @@
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
 #endif
+
+#ifndef _COM_SUN_STAR_CONTAINER_ELEMENTEXISTEXCEPTION_HPP_
+#include <com/sun/star/container/ElementExistException.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_CONTAINER_NOSUCHELEMENTEXCEPTION_HPP_
+#include <com/sun/star/container/NoSuchElementException.hpp>
+#endif
+
+//_________________________________________________________________________________________________________________
+//  other includes
+//_________________________________________________________________________________________________________________
 
 #ifndef _RTL_USTRING_
 #include <rtl/ustring>
@@ -128,17 +144,6 @@
 
 namespace framework{
 
-#define EXCEPTION                   ::com::sun::star::uno::Exception
-#define MUTEX                       ::osl::Mutex
-#define OUSTRING                    ::rtl::OUString
-#define REFERENCE                   ::com::sun::star::uno::Reference
-#define SEQUENCE                    ::com::sun::star::uno::Sequence
-#define HASH_MAP                    ::std::hash_map
-#define VECTOR                      ::std::vector
-#define XREGISTRYKEY                ::com::sun::star::registry::XRegistryKey
-#define XMULTISERVICEFACTORY        ::com::sun::star::lang::XMultiServiceFactory
-#define PROPERTYVALUE               ::com::sun::star::beans::PropertyValue
-
 //_________________________________________________________________________________________________________________
 //  exported const
 //_________________________________________________________________________________________________________________
@@ -149,156 +154,370 @@ namespace framework{
 
 //*****************************************************************************************************************
 // Hash code function for using in all hash maps of follow implementation.
-struct TStringHashFunction
+struct StringHashFunction
 {
-    size_t operator()(const OUSTRING& sString) const
+    size_t operator()(const ::rtl::OUString& sString) const
     {
         return sString.hashCode();
     }
 };
 
+//*****************************************************************************************************************
 // A generic string list to hold different string informations with a fast access to it.
-typedef VECTOR< OUSTRING > TStringList;
+// Implment new free function to clear memory realy!
+//*****************************************************************************************************************
+class StringList : public ::std::vector< ::rtl::OUString >
+{
+    public:
+        inline void push_front( const ::rtl::OUString& sElement )
+        {
+            insert( begin(), sElement );
+        }
+
+        inline void free()
+        {
+            erase( begin(), end() );
+            clear();
+        }
+};
 
 //*****************************************************************************************************************
 // These struct define a type, which present the type of a file.
 // He is used for easy filter detection without file stream detection!
 // The internal name is the keyname of an item with these structure in our hash map or our configuration set!
-struct TType
+//*****************************************************************************************************************
+struct FileType
 {
-    OUSTRING                    sUIName             ;   // empty = ""
-    SEQUENCE< PROPERTYVALUE >   lUINames            ;   // empty = {}
-    OUSTRING                    sMediaType          ;   // empty = ""
-    OUSTRING                    sClipboardFormat    ;   // empty = ""
-    TStringList                 lURLPattern         ;   // empty = {}
-    TStringList                 lExtensions         ;   // empty = {}
-    sal_Int32                   nDocumentIconID     ;   // empty = 0
+    //-------------------------------------------------------------------------------------------------------------
+    // public methods
+    //-------------------------------------------------------------------------------------------------------------
+    public:
 
-    inline void clear()
-    {
-        sUIName             = OUSTRING()                    ;
-        lUINames            = SEQUENCE< PROPERTYVALUE >()   ;
-        sMediaType          = OUSTRING()                    ;
-        sClipboardFormat    = OUSTRING()                    ;
-        nDocumentIconID     = 0                             ;
-        lURLPattern.clear();
-        lExtensions.clear();
-    }
+        inline               FileType   (                               ) { impl_clear();               }
+        inline               FileType   (   const   FileType&   rCopy   ) { impl_copy( rCopy );         }
+        inline              ~FileType   (                               ) { impl_clear();               }
+        inline FileType&    operator=   (   const   FileType&   rCopy   ) { return impl_copy( rCopy );  }
+        inline void         free        (                               ) { impl_clear();               }
+
+    //-------------------------------------------------------------------------------------------------------------
+    // private methods
+    //-------------------------------------------------------------------------------------------------------------
+    private:
+
+        inline void impl_clear()
+        {
+            bPreferred          = sal_False                                         ;
+            sName               = ::rtl::OUString()                                 ;
+            sUIName             = ::rtl::OUString()                                 ;
+            lUINames            = css::uno::Sequence< css::beans::PropertyValue >() ;
+            sMediaType          = ::rtl::OUString()                                 ;
+            sClipboardFormat    = ::rtl::OUString()                                 ;
+            nDocumentIconID     = 0                                                 ;
+            lURLPattern.free();
+            lExtensions.free();
+        }
+
+        inline FileType& impl_copy( const FileType& rCopy )
+        {
+            bPreferred          = rCopy.bPreferred      ;
+            sName               = rCopy.sName           ;
+            sUIName             = rCopy.sUIName         ;
+            lUINames            = rCopy.lUINames        ;
+            sMediaType          = rCopy.sMediaType      ;
+            sClipboardFormat    = rCopy.sClipboardFormat;
+            nDocumentIconID     = rCopy.nDocumentIconID ;
+            lURLPattern         = rCopy.lURLPattern     ;
+            lExtensions         = rCopy.lExtensions     ;
+            return (*this);
+        }
+
+    //-------------------------------------------------------------------------------------------------------------
+    // public member
+    //-------------------------------------------------------------------------------------------------------------
+    public:
+
+        sal_Bool                                        bPreferred          ;
+        ::rtl::OUString                                 sName               ;
+        ::rtl::OUString                                 sUIName             ;
+        css::uno::Sequence< css::beans::PropertyValue > lUINames            ;
+        ::rtl::OUString                                 sMediaType          ;
+        ::rtl::OUString                                 sClipboardFormat    ;
+        sal_Int32                                       nDocumentIconID     ;
+        StringList                                      lURLPattern         ;
+        StringList                                      lExtensions         ;
 };
 
 //*****************************************************************************************************************
-// These struct describe a filter wich is registered for one type.
+// These struct describe a filter which is registered for one type.
 // He hold information about services which present the document himself (like a item) and a filter service which
 // filter a file in these document.
 // The internal name is the keyname of an item with these structure in our hash map or our configuration set!
-struct TFilter
+//*****************************************************************************************************************
+struct Filter
 {
-    OUSTRING                    sType               ;   // empty not allowed!
-    OUSTRING                    sUIName             ;   // empty = ""
-    SEQUENCE< PROPERTYVALUE >   lUINames            ;   // empty = {}
-    OUSTRING                    sDocumentService    ;   // empty = ""
-    OUSTRING                    sFilterService      ;   // empty = ""
-    sal_Int32                   nFlags              ;   // empty = 0
-    TStringList                 lUserData           ;   // empty = {}
-    sal_Int32                   nFileFormatVersion  ;   // empty = 0            ... should be moved in UserData ...!?
-    OUSTRING                    sTemplateName       ;   // empty = ""           ... should be moved in UserData ...!?
+    //-------------------------------------------------------------------------------------------------------------
+    // public methods
+    //-------------------------------------------------------------------------------------------------------------
+    public:
 
-    inline void clear()
-    {
-        sType               = OUSTRING()                    ;
-        sUIName             = OUSTRING()                    ;
-        lUINames            = SEQUENCE< PROPERTYVALUE >()   ;
-        sDocumentService    = OUSTRING()                    ;
-        sFilterService      = OUSTRING()                    ;
-        nFlags              = 0                             ;
-        nFileFormatVersion  = 0                             ;
-        sTemplateName       = OUSTRING()                    ;
-        lUserData.clear();
-    }
+        inline           Filter     (                           ) { impl_clear();               }
+        inline           Filter     (   const   Filter& rCopy   ) { impl_copy( rCopy );         }
+        inline          ~Filter     (                           ) { impl_clear();               }
+        inline Filter&  operator=   (   const   Filter& rCopy   ) { return impl_copy( rCopy );  }
+        inline void     free        (                           ) { impl_clear();               }
+
+    //-------------------------------------------------------------------------------------------------------------
+    // private methods
+    //-------------------------------------------------------------------------------------------------------------
+    private:
+
+        inline void impl_clear()
+        {
+            sName               = ::rtl::OUString()                                 ;
+            sType               = ::rtl::OUString()                                 ;
+            sUIName             = ::rtl::OUString()                                 ;
+            lUINames            = css::uno::Sequence< css::beans::PropertyValue >() ;
+            sDocumentService    = ::rtl::OUString()                                 ;
+            sFilterService      = ::rtl::OUString()                                 ;
+            nFlags              = 0                                                 ;
+            nFileFormatVersion  = 0                                                 ;
+            sTemplateName       = ::rtl::OUString()                                 ;
+            lUserData.free();
+        }
+
+        inline Filter& impl_copy( const Filter& rCopy )
+        {
+            sName               = rCopy.sName               ;
+            sType               = rCopy.sType               ;
+            sUIName             = rCopy.sUIName             ;
+            lUINames            = rCopy.lUINames            ;
+            sDocumentService    = rCopy.sDocumentService    ;
+            sFilterService      = rCopy.sFilterService      ;
+            nFlags              = rCopy.nFlags              ;
+            nFileFormatVersion  = rCopy.nFileFormatVersion  ;
+            sTemplateName       = rCopy.sTemplateName       ;
+            lUserData           = rCopy.lUserData           ;
+            return (*this);
+        }
+
+    //-------------------------------------------------------------------------------------------------------------
+    // public member
+    //-------------------------------------------------------------------------------------------------------------
+    public:
+
+        ::rtl::OUString                                     sName               ;
+        ::rtl::OUString                                     sType               ;
+        ::rtl::OUString                                     sUIName             ;
+        css::uno::Sequence< css::beans::PropertyValue >     lUINames            ;
+        ::rtl::OUString                                     sDocumentService    ;
+        ::rtl::OUString                                     sFilterService      ;
+        sal_Int32                                           nFlags              ;
+        StringList                                          lUserData           ;
+        sal_Int32                                           nFileFormatVersion  ;
+        ::rtl::OUString                                     sTemplateName       ;
 };
 
 //*****************************************************************************************************************
 // Programmer can register his own services for an content detection of different types.
 // The implementation or service name of these is the keyname of an item with these structure
 // in our hash map or our configuration set!
-struct TDetector
+//*****************************************************************************************************************
+struct Detector
 {
-    TStringList     lTypes          ;   // empty not allowed! min 1 item need!
+    //-------------------------------------------------------------------------------------------------------------
+    // public methods
+    //-------------------------------------------------------------------------------------------------------------
+    public:
 
-    inline void clear()
-    {
-        lTypes.clear();
-    }
+        inline               Detector   (                               ) { impl_clear();               }
+        inline               Detector   (   const   Detector&   rCopy   ) { impl_copy( rCopy );         }
+        inline              ~Detector   (                               ) { impl_clear();               }
+        inline Detector&    operator=   (   const   Detector&   rCopy   ) { return impl_copy( rCopy );  }
+        inline void         free        (                               ) { impl_clear();               }
+
+    //-------------------------------------------------------------------------------------------------------------
+    // private methods
+    //-------------------------------------------------------------------------------------------------------------
+    private:
+
+        inline void impl_clear()
+        {
+            sName = ::rtl::OUString();
+            lTypes.free();
+        }
+
+        inline Detector& impl_copy( const Detector& rCopy )
+        {
+            sName   = rCopy.sName   ;
+            lTypes  = rCopy.lTypes  ;
+            return (*this);
+        }
+
+    //-------------------------------------------------------------------------------------------------------------
+    // public member
+    //-------------------------------------------------------------------------------------------------------------
+    public:
+
+        ::rtl::OUString     sName   ;
+        StringList          lTypes  ;
 };
 
 //*****************************************************************************************************************
 // Programmer can register his own services for loading documents in a frame.
 // The implementation or service name of these is the keyname of an item with these structure
 // in our hash map or our configuration set!
-struct TLoader
+//*****************************************************************************************************************
+struct Loader
 {
-    OUSTRING                    sUIName         ;   // empty = ""
-    SEQUENCE< PROPERTYVALUE >   lUINames        ;   // empty = {}
-    TStringList                 lTypes          ;   // empty not allowed! min 1 item need!
+    //-------------------------------------------------------------------------------------------------------------
+    // public methods
+    //-------------------------------------------------------------------------------------------------------------
+    public:
 
-    inline void clear()
-    {
-        sUIName     = OUSTRING()                    ;
-        lUINames    = SEQUENCE< PROPERTYVALUE >()   ;
-        lTypes.clear();
-    }
+        inline           Loader     (                           ) { impl_clear();               }
+        inline           Loader     (   const   Loader& rCopy   ) { impl_copy( rCopy );         }
+        inline          ~Loader     (                           ) { impl_clear();               }
+        inline Loader&  operator=   (   const   Loader& rCopy   ) { return impl_copy( rCopy );  }
+        inline void     free        (                           ) { impl_clear();               }
+
+    //-------------------------------------------------------------------------------------------------------------
+    // private methods
+    //-------------------------------------------------------------------------------------------------------------
+    private:
+
+        inline void impl_clear()
+        {
+            sName       = ::rtl::OUString()                                 ;
+            sUIName     = ::rtl::OUString()                                 ;
+            lUINames    = css::uno::Sequence< css::beans::PropertyValue >() ;
+            lTypes.free();
+        }
+
+        inline Loader& impl_copy( const Loader& rCopy )
+        {
+            sName       = rCopy.sName       ;
+            sUIName     = rCopy.sUIName     ;
+            lUINames    = rCopy.lUINames    ;
+            lTypes      = rCopy.lTypes      ;
+            return (*this);
+        }
+
+    //-------------------------------------------------------------------------------------------------------------
+    // public member
+    //-------------------------------------------------------------------------------------------------------------
+    public:
+
+        ::rtl::OUString                                 sName           ;
+        ::rtl::OUString                                 sUIName         ;
+        css::uno::Sequence< css::beans::PropertyValue > lUINames        ;
+        StringList                                      lTypes          ;
 };
 
 //*****************************************************************************************************************
 // We need different hash maps for different tables of our configuration management.
-typedef HASH_MAP<   OUSTRING                    ,                       // structure of hash:   key< internal name >{ value< TType > }
-                    TType                       ,
-                    TStringHashFunction         ,
-                    ::std::equal_to< OUSTRING > >   TTypeHash;
+// Follow maps convert <names> to <properties> of type, filter, detector, loader
+//*****************************************************************************************************************
+class FileTypeHash  :   public  ::std::hash_map<    ::rtl::OUString                     ,
+                                                    FileType                            ,
+                                                    StringHashFunction                  ,
+                                                    ::std::equal_to< ::rtl::OUString >  >
+{
+    public:
+        void free()
+        {
+            erase( begin(), end() );
+            clear();
+        }
+};
 
-typedef HASH_MAP<   OUSTRING                    ,                       // structure of hash:   key< internal name >{ value< TFilter > }
-                    TFilter                     ,
-                    TStringHashFunction         ,
-                    ::std::equal_to< OUSTRING > >   TFilterHash;
+class FilterHash    :   public  ::std::hash_map<    ::rtl::OUString                     ,
+                                                    Filter                              ,
+                                                    StringHashFunction                  ,
+                                                    ::std::equal_to< ::rtl::OUString >  >
+{
+    public:
+        void free()
+        {
+            erase( begin(), end() );
+            clear();
+        }
+};
 
-typedef HASH_MAP<   OUSTRING                    ,                       // structure of hash:   key< implmentation name >{ value< TDetector > }
-                    TDetector                   ,
-                    TStringHashFunction         ,
-                    ::std::equal_to< OUSTRING > >   TDetectorHash;
+class DetectorHash  :   public  ::std::hash_map<    ::rtl::OUString                     ,
+                                                    Detector                            ,
+                                                    StringHashFunction                  ,
+                                                    ::std::equal_to< ::rtl::OUString >  >
+{
+    public:
+        void free()
+        {
+            erase( begin(), end() );
+            clear();
+        }
+};
 
-typedef HASH_MAP<   OUSTRING                    ,                       // structure of hash:   key< implementation name >{ value< TLoader > }
-                    TLoader                     ,
-                    TStringHashFunction         ,
-                    ::std::equal_to< OUSTRING > >   TLoaderHash;
+class LoaderHash    :   public  ::std::hash_map<    ::rtl::OUString                     ,
+                                                    Loader                              ,
+                                                    StringHashFunction                  ,
+                                                    ::std::equal_to< ::rtl::OUString >  >
+{
+    public:
+        void free()
+        {
+            erase( begin(), end() );
+            clear();
+        }
+};
 
-// Use these hash to implement different table which assign types to frame loader or detect services.
-// The normaly used TLoaderHash or TDetectorHash structures assign loader/detectors to types!
-// It's an optimism!
-typedef HASH_MAP<   OUSTRING                    ,                       // structure of detector hash:  key< internal type name >{ value< list of detector names > }
-                    TStringList                 ,                       // structure of loader hash:    key< internal type name >{ value< list of loader names > }
-                    TStringHashFunction         ,
-                    ::std::equal_to< OUSTRING > >   TPerformanceHash;
+//*****************************************************************************************************************
+// Use these hashes to implement different tables which assign types to frame loader or detect services.
+// It's an optimism to find registered services faster!
+// The preferred hash maps file extensions to preferred types to find these ones faster.
+//*****************************************************************************************************************
+class PerformanceHash   :   public  ::std::hash_map<    ::rtl::OUString                     ,
+                                                        StringList                          ,
+                                                        StringHashFunction                  ,
+                                                        ::std::equal_to< ::rtl::OUString >  >
+{
+    public:
+        void free()
+        {
+            erase( begin(), end() );
+            clear();
+        }
+};
 
-typedef HASH_MAP<   OUSTRING                    ,                       // structure of hash:   key< internal name >{ value< TType > }
-                    OUSTRING                    ,
-                    TStringHashFunction         ,
-                    ::std::equal_to< OUSTRING > >   TPreferredHash;     // structure of hash:   key< extension >{ value< internal type name > }
+class PreferredHash     :   public  ::std::hash_map<    ::rtl::OUString                     ,
+                                                        ::rtl::OUString                     ,
+                                                        StringHashFunction                  ,
+                                                        ::std::equal_to< ::rtl::OUString >  >
+{
+    public:
+        void free()
+        {
+            erase( begin(), end() );
+            clear();
+        }
+};
 
 //*****************************************************************************************************************
 // Defines "pointers" to items of our hash maps.
-typedef TStringList::const_iterator                                 TConstStringIterator        ;
-typedef TTypeHash::const_iterator                                   TConstTypeIterator          ;
-typedef TFilterHash::const_iterator                                 TConstFilterIterator        ;
-typedef TDetectorHash::const_iterator                               TConstDetectorIterator      ;
-typedef TLoaderHash::const_iterator                                 TConstLoaderIterator        ;
-typedef TPerformanceHash::const_iterator                            TConstPerformanceIterator   ;
-typedef TPreferredHash::const_iterator                              TConstPreferredIterator     ;
-typedef CheckedIterator< TStringList >                              TCheckedStringListIterator  ;
-typedef CheckedIterator< TTypeHash >                                TCheckedTypeIterator        ;
+//*****************************************************************************************************************
+typedef StringList::iterator                                        StringIterator              ;
+typedef StringList::const_iterator                                  ConstStringIterator         ;
+typedef FileTypeHash::const_iterator                                ConstTypeIterator           ;
+typedef FilterHash::const_iterator                                  ConstFilterIterator         ;
+typedef DetectorHash::const_iterator                                ConstDetectorIterator       ;
+typedef LoaderHash::const_iterator                                  ConstLoaderIterator         ;
+typedef PerformanceHash::const_iterator                             ConstPerformanceIterator    ;
+typedef PreferredHash::const_iterator                               ConstPreferredIterator      ;
+typedef CheckedIterator< StringList >                               CheckedStringListIterator   ;
+typedef CheckedIterator< FileTypeHash >                             CheckedTypeIterator         ;
 
 //*****************************************************************************************************************
-// describe type of current running office
+// Describe type of current running office
 // used to create right configuration provider in impl_openConfiguration()!
+//*****************************************************************************************************************
 enum EOfficeType
 {
     E_FATOFFICE ,
@@ -307,17 +526,16 @@ enum EOfficeType
 
 /*-************************************************************************************************************//**
     @short          cache for all filter and type information
-    @descr          Fframeloader- and filterfactory need some informations about our current registered filters and types.
-                    These keys are not changed during runtime (I hope it ...). For better performance its neccessary to
-                    cache all needed values.
+    @descr          Frameloader- and filterfactory need some informations about our current registered filters and types.
+                    For better performance its neccessary to cache all needed values.
 
     @implements     -
-    @base           -
+    @base           FairRWLockBase
 
     @devstatus      ready to use
 *//*-*************************************************************************************************************/
 
-class FilterCache
+class FilterCache : private FairRWLockBase
 {
     //-------------------------------------------------------------------------------------------------------------
     //  public methods
@@ -331,7 +549,8 @@ class FilterCache
 
         /*-****************************************************************************************************//**
             @short      standard constructor
-            @descr      This will initialize the cache automaticly!
+            @descr      This will initialize the cache automaticly ... but at first call only!
+                        These class use a refcount mechanism to share cache between different ownern.
 
             @seealso    -
 
@@ -339,13 +558,14 @@ class FilterCache
             @return     -
 
             @onerror    An assertion is thrown and the cache will be empty!
+                        Method isValid() returns false then.
         *//*-*****************************************************************************************************/
 
          FilterCache();
 
         /*-****************************************************************************************************//**
             @short      standard destructor to delete instance
-            @descr      This will clear the cache.
+            @descr      This will clear the cache if last owner release it.
 
             @seealso    -
 
@@ -359,28 +579,49 @@ class FilterCache
 
         /*-****************************************************************************************************//**
             @short      get the current state of the cache
-            @descr      Call this method to get information about the state of the current cache.
+            @descr      Call this methods to get information about the state of the current cache.
 
             @seealso    -
 
             @param      -
-            @return     sal_True  ,if cache is initialzed and work correct
-            @return     sal_False ,otherwise
+            @return     -
+            @return     -
 
-            @onerror    The return value is sal_False.
+            @onerror    -
         *//*-*****************************************************************************************************/
 
-        sal_Bool isValid() const;
+        sal_Bool isValid        () const;
+        sal_Bool hasTypes       () const;
+        sal_Bool hasFilters     () const;
+        sal_Bool hasDetectors   () const;
+        sal_Bool hasLoaders     () const;
+
+        /*-****************************************************************************************************//**
+            @short      flush changed data to configuration
+            @descr      We support read AND write access on this implementation.
+                        We should support flush of changed data too. Otherwise we will write these values
+                        at end of live autiomaticly! (see dtor)
+
+            @seealso    -
+
+            @param      -
+            @return     -
+
+            @onerror    -
+        *//*-*****************************************************************************************************/
+
+        void flush();
 
         /*-****************************************************************************************************//**
             @short      search routines to find items which match given parameter
             @descr      Mostly we search for a type first and get all informations about filter, detector and loader
                         services from the other configuration tables which are registered for this type.
                         These operations support a FindFirst/Next mechanism.
-                        If you call searchFirst...() we initialize "rStartEntry" with a right value and search for
-                        the first entry. If these not return NULL you can work with these value.
-                        If found value not the right one - you can use "rStartEntry" for search...() methods again.
+                        If you call search...( ... nStartEntry=0 ... ) we search for
+                        the first entry. If these return a value different from <empty> you can work with these value.
+                        If found value isn't the right one - you can call search method again.
                         DONT'T CHANGE THE VALUE OF "rStartEntry" between two search calls!
+                        You can use returned value as parameter for getBy...Name() functions of this implementation too!
 
             @attention  returned type name is an internal name
                         returned filter name is an internal name
@@ -389,30 +630,30 @@ class FilterCache
 
             @seealso    -
 
-            @param      -
-            @return     A pointer to valid information if search was ok, NULL otherwise.
+            @param      "sResult", name of found type, filter, ...
+            @return     true, if search was successful,
+                        false, otherwise.
 
-            @onerror    NULL is returned.
+            @onerror    We return false.
         *//*-*****************************************************************************************************/
 
-        const OUSTRING*     searchFirstType (   const   OUSTRING*               pURL                ,
-                                                const   OUSTRING*               pMediaType          ,
-                                                const   OUSTRING*               pClipboardFormat    ,
-                                                        TCheckedTypeIterator&   rStartEntry         ) const;
+        sal_Bool searchType             (   const   ::rtl::OUString&            sURL                ,
+                                            const   ::rtl::OUString*            pMediaType          ,
+                                            const   ::rtl::OUString*            pClipboardFormat    ,
+                                                    CheckedTypeIterator&        aStartEntry         ,
+                                                    ::rtl::OUString&            sResult             ) const;
 
-        const OUSTRING*     searchType      (   const   OUSTRING*               pURL                ,
-                                                const   OUSTRING*               pMediaType          ,
-                                                const   OUSTRING*               pClipboardFormat    ,
-                                                        TCheckedTypeIterator&   rFollowEntry        ) const;
+        sal_Bool searchFilterForType    (   const   ::rtl::OUString&            sInternalTypeName   ,
+                                                       CheckedStringListIterator&   aStartEntry         ,
+                                                    ::rtl::OUString&            sResult             ) const;
 
-        const OUSTRING*     searchFirstFilterForType    (   const OUSTRING& sInternalTypeName,  TCheckedStringListIterator& rStartEntry ) const ;
-        const OUSTRING*     searchFilterForType         (                                       TCheckedStringListIterator& rFollowEntry) const ;
+        sal_Bool searchDetectorForType  (   const   ::rtl::OUString&            sInternalTypeName   ,
+                                                       CheckedStringListIterator&   aStartEntry         ,
+                                                    ::rtl::OUString&            sResult             ) const;
 
-        const OUSTRING*     searchFirstDetectorForType  (   const OUSTRING& sInternalTypeName,  TCheckedStringListIterator& rStartEntry ) const ;
-        const OUSTRING*     searchDetectorForType       (                                       TCheckedStringListIterator& rFollowEntry) const ;
-
-        const OUSTRING*     searchFirstLoaderForType    (   const OUSTRING& sInternalTypeName,  TCheckedStringListIterator& rStartEntry ) const ;
-        const OUSTRING*     searchLoaderForType         (                                       TCheckedStringListIterator& rFollowEntry) const ;
+        sal_Bool searchLoaderForType    (   const   ::rtl::OUString&            sInternalTypeName   ,
+                                                       CheckedStringListIterator&   aStartEntry         ,
+                                                    ::rtl::OUString&            sResult             ) const;
 
         /*-****************************************************************************************************//**
             @short      get all properties of a cache entry by given name
@@ -423,43 +664,115 @@ class FilterCache
             @seealso    -
 
             @param      "sName", name of suspected entry in cache
-            @return     A structure with valid information if item exists, an null pointer otherwise!
+            @return     A structure with valid information if item exists! An empty Any otherwise.
 
-            @onerror    A null pointer is returned.
+            @onerror    We return an empty Any.
         *//*-*****************************************************************************************************/
 
-        const SEQUENCE< OUSTRING >  getAllTypeNames     () const;
-        const SEQUENCE< OUSTRING >  getAllFilterNames   () const;
-        const SEQUENCE< OUSTRING >  getAllDetectorNames () const;
-        const SEQUENCE< OUSTRING >  getAllLoaderNames   () const;
+        css::uno::Sequence< ::rtl::OUString >               getAllTypeNames         (                                       ) const;
+        css::uno::Sequence< ::rtl::OUString >               getAllFilterNames       (                                       ) const;
+        css::uno::Sequence< ::rtl::OUString >               getAllDetectorNames     (                                       ) const;
+        css::uno::Sequence< ::rtl::OUString >               getAllLoaderNames       (                                       ) const;
 
-        const TType*                getTypeByName       ( const OUSTRING& sName ) const;
-        const TFilter*              getFilterByName     ( const OUSTRING& sName ) const;
-        const TDetector*            getDetectorByName   ( const OUSTRING& sName ) const;
-        const TLoader*              getLoaderByName     ( const OUSTRING& sName ) const;
+        css::uno::Sequence< css::beans::PropertyValue >     getTypeProperties       (   const   ::rtl::OUString&    sName   ) const;
+        css::uno::Sequence< css::beans::PropertyValue >     getFilterProperties     (   const   ::rtl::OUString&    sName   ) const;
+        css::uno::Sequence< css::beans::PropertyValue >     getDetectorProperties   (   const   ::rtl::OUString&    sName   ) const;
+        css::uno::Sequence< css::beans::PropertyValue >     getLoaderProperties     (   const   ::rtl::OUString&    sName   ) const;
 
-        sal_Bool existsType     ( const OUSTRING& sName ) const;
-        sal_Bool existsFilter   ( const OUSTRING& sName ) const;
-        sal_Bool existsDetector ( const OUSTRING& sName ) const;
-        sal_Bool existsLoader   ( const OUSTRING& sName ) const;
+        FileType                                            getType                 (   const   ::rtl::OUString&    sName   ) const;
+        Filter                                              getFilter               (   const   ::rtl::OUString&    sName   ) const;
+        Detector                                            getDetector             (   const   ::rtl::OUString&    sName   ) const;
+        Loader                                              getLoader               (   const   ::rtl::OUString&    sName   ) const;
+
+        sal_Bool                                            existsType              (   const   ::rtl::OUString&    sName   ) const;
+        sal_Bool                                            existsFilter            (   const   ::rtl::OUString&    sName   ) const;
+        sal_Bool                                            existsDetector          (   const   ::rtl::OUString&    sName   ) const;
+        sal_Bool                                            existsLoader            (   const   ::rtl::OUString&    sName   ) const;
 
         /*-****************************************************************************************************//**
-            @short      support registration of filter in current configuration
-            @descr      Use this methods to add or remove filter in our configuration files.
+            @short      support special query modes
+            @descr      Our owner services need sometimes a special mode to query for subsets of our configuration!
+                        They give us a special query string - we return right values.
+
+            @seealso    file queries.h
+            @seealso    class FilterFactory
+            @seealso    class FrameLoaderFactory
+            @seealso    class TypeDetection
+
+            @param      "sName", name of query
+            @return     A structure with valid information!
+
+            @onerror    We return an empty result set.
+        *//*-*****************************************************************************************************/
+
+        css::uno::Any queryFilters( const ::rtl::OUString& sQuery ) const;
+
+        /*-****************************************************************************************************//**
+            @short      support registration of elements in current configuration
+            @descr      Use this methods to add or remove items in our configuration files.
                         We use the globale configuration to do that ... in fat office "share/config/registry/..."!
+
+                        *** structure of type properties **********************************************************
+
+                            PropertyValue.Name                  PropertyValue.Value                 Description
+                            ---------------------------------------------------------------------------------------
+                            ...
+
+                        *** structure of filter properties ********************************************************
+
+                            PropertyValue.Name                  PropertyValue.Value                 Description
+                            ---------------------------------------------------------------------------------------
+                            "Name"                              [string]                            internal name
+                            "Type"                              [string]                            registered for these type
+                            "UIName"                            [string]                            localized name for UI (valid for current locale at runtime!)
+                            "UINames"                           [stringlist]                        assignment of all supported localized names to right locales
+                            "DocumentService"                   [string]                            uno servicename of document services
+                            "FilterService"                     [string]                            uno servicename of filter implementation
+                            "Flags"                             [long]                              describe filter
+                            "UserData"                          [stringlist]                        additional user data (format not fixed!)
+                            "FileFormatVersion"                 [long]                              version numbher of supported files
+                            "TemplateName"                      [string]                            name of template
+
+                        *** structure of detector properties ******************************************************
+
+                            PropertyValue.Name                  PropertyValue.Value                 Description
+                            ---------------------------------------------------------------------------------------
+                            ...
+
+                        *** structure of loader properties ********************************************************
+
+                            PropertyValue.Name                  PropertyValue.Value                 Description
+                            ---------------------------------------------------------------------------------------
+                            ...
 
             @seealso    -
 
-            @param      "sName"         , name of filter
-            @param      "lProperties"   , values of new filter
+            @param      "sName"         , name of type, filter ...
+            @param      "lProperties"   , values of new type, filter
             @return     state of operation as bool
 
             @onerror    We return false then.
         *//*-*****************************************************************************************************/
 
-        sal_Bool addFilter      (   const   OUSTRING&                   sName       ,
-                                    const   SEQUENCE< PROPERTYVALUE >&  lProperties );
-        sal_Bool removeFilter   (   const   OUSTRING&                   sName       );
+        void addFilter      (   const   ::rtl::OUString&                                    sName       ,
+                                const   css::uno::Sequence< css::beans::PropertyValue >&    lProperties ) throw( css::container::ElementExistException );
+
+        void replaceFilter  (   const   ::rtl::OUString&                                    sName       ,
+                                const   css::uno::Sequence< css::beans::PropertyValue >&    lProperties ) throw( css::container::NoSuchElementException );
+
+        void removeFilter   (   const   ::rtl::OUString&                                    sName       ) throw( css::container::NoSuchElementException );
+
+    //-------------------------------------------------------------------------------------------------------------
+    //  protected methods
+    //-------------------------------------------------------------------------------------------------------------
+
+    protected:
+
+    //-------------------------------------------------------------------------------------------------------------
+    //  private methods
+    //-------------------------------------------------------------------------------------------------------------
+
+    private:
 
         /*-****************************************************************************************************//**
             @short      convert between internal and external structures
@@ -475,43 +788,13 @@ class FilterCache
             @onerror    No error should occure.
         *//*-*****************************************************************************************************/
 
-        static void convertStringSequenceToVector       ( const SEQUENCE< OUSTRING >&   seqSource   , TStringList&          rDestination    );
-        static void convertStringVectorToSequence       ( const TStringList&            rSource     , SEQUENCE< OUSTRING >& seqDestination  );
-
-        static void convertTTypeToPropertySequence      ( const TType&      rSource, SEQUENCE< PROPERTYVALUE >& seqDestination );
-        static void convertTFilterToPropertySequence    ( const TFilter&    rSource, SEQUENCE< PROPERTYVALUE >& seqDestination );
-        static void convertTLoaderToPropertySequence    ( const TLoader&    rSource, SEQUENCE< PROPERTYVALUE >& seqDestination );
-        static void convertTDetectorToPropertySequence  ( const TDetector&  rSource, SEQUENCE< PROPERTYVALUE >& seqDestination );
-
-        static void convertPropertySequenceToTFilter    ( const SEQUENCE< PROPERTYVALUE >& lSource, TFilter& rDestination );
-
-    //-------------------------------------------------------------------------------------------------------------
-    //  protected methods
-    //-------------------------------------------------------------------------------------------------------------
-
-    protected:
-
-    //-------------------------------------------------------------------------------------------------------------
-    //  private methods
-    //-------------------------------------------------------------------------------------------------------------
-
-    private:
-
-        /*-****************************************************************************************************//**
-            @short      create a static global mutex to protect our static member!
-            @descr      For static member we need normal the Mutex::getGlobalMutex() ...
-                        but we use it only one time and create our own static global mutex.
-                        These is used to make these class threadsafe.
-
-            @seealso    -
-
-            @param      -
-            @return     A reference to created static mutex.
-
-            @onerror    No error should occure.
-        *//*-*****************************************************************************************************/
-
-        static MUTEX& impl_getOwnGlobalMutex();
+        static void impl_convertStringSequenceToVector      (   const   css::uno::Sequence< ::rtl::OUString >&              lSource,    StringList&                                         lDestination    );
+        static void impl_convertStringVectorToSequence      (   const   StringList&                                         lSource,    css::uno::Sequence< ::rtl::OUString >&              lDestination    );
+        static void impl_convertFileTypeToPropertySequence  (   const   FileType&                                           aSource,    css::uno::Sequence< css::beans::PropertyValue >&    lDestination    );
+        static void impl_convertFilterToPropertySequence    (   const   Filter&                                             aSource,    css::uno::Sequence< css::beans::PropertyValue >&    lDestination    );
+        static void impl_convertLoaderToPropertySequence    (   const   Loader&                                             aSource,    css::uno::Sequence< css::beans::PropertyValue >&    lDestination    );
+        static void impl_convertDetectorToPropertySequence  (   const   Detector&                                           aSource,    css::uno::Sequence< css::beans::PropertyValue >&    lDestination    );
+        static void impl_convertPropertySequenceToFilter    (   const   css::uno::Sequence< css::beans::PropertyValue >&    lSource,    Filter&                                             aDestination    );
 
         /*-****************************************************************************************************//**
             @short      extract extension from given URL
@@ -525,7 +808,7 @@ class FilterCache
             @onerror    No error should occure.
         *//*-*****************************************************************************************************/
 
-        OUSTRING impl_extractURLExtension( const OUSTRING& sURL ) const;
+        static ::rtl::OUString impl_extractURLExtension( const ::rtl::OUString& sURL );
 
         /*-****************************************************************************************************//**
             @short      eliminate "*." from every extension
@@ -544,7 +827,7 @@ class FilterCache
             @onerror    No error should occure.
         *//*-*****************************************************************************************************/
 
-        void impl_correctExtensions( TStringList& lExtensions );
+        static void impl_correctExtensions( StringList& lExtensions );
 
         /*-****************************************************************************************************//**
             @short      fill our cache with values from configuration
@@ -562,21 +845,56 @@ class FilterCache
             @onerror    If an configuration item couldn't read we ignore it and warn programmer with an assertion.
         *//*-*****************************************************************************************************/
 
-        void impl_loadConfiguration (                                                                                                   );
-        void impl_fillTypeCache     ( const REFERENCE< XREGISTRYKEY >& xRootKey, TTypeHash&     rCache                                  );
-        void impl_fillFilterCache   ( const REFERENCE< XREGISTRYKEY >& xRootKey, TFilterHash&   rCache  , TPerformanceHash& rFastCache  );
-        void impl_fillDetectorCache ( const REFERENCE< XREGISTRYKEY >& xRootKey, TDetectorHash& rCache  , TPerformanceHash& rFastCache  );
-        void impl_fillLoaderCache   ( const REFERENCE< XREGISTRYKEY >& xRootKey, TLoaderHash&   rCache  , TPerformanceHash& rFastCache  );
+        EOfficeType                                             impl_detectOfficeType   (                                           ) const;
+        css::uno::Reference< css::lang::XMultiServiceFactory >  impl_openConfiguration  (                                           ) const;
+        css::uno::Reference< css::uno::XInterface >             impl_openSet            (   const   ::rtl::OUString&    sSetName    ) const;
+        void                                                    impl_load               (                                           );
+        void                                                    impl_save               (                                           );
 
-        EOfficeType                         impl_detectOfficeType   ();
-        REFERENCE< XMULTISERVICEFACTORY >   impl_openConfiguration  ();
+        void impl_loadTypes         (   const   css::uno::Reference< css::registry::XRegistryKey >& xRootKey    );
+        void impl_loadFilters       (   const   css::uno::Reference< css::registry::XRegistryKey >& xRootKey    );
+        void impl_loadDetectors     (   const   css::uno::Reference< css::registry::XRegistryKey >& xRootKey    );
+        void impl_loadLoaders       (   const   css::uno::Reference< css::registry::XRegistryKey >& xRootKey    );
 
-        void impl_addFilterInternal     ( const OUSTRING& sName, const TFilter& aInfo );
-        void impl_removeFilterInternal  ( const OUSTRING& sName );
+        void impl_saveTypes         (   const   css::uno::Reference< css::registry::XRegistryKey >& xRootKey    );
+        void impl_saveFilters       (   const   css::uno::Reference< css::registry::XRegistryKey >& xRootKey    );
+        void impl_saveDetectors     (   const   css::uno::Reference< css::registry::XRegistryKey >& xRootKey    );
+        void impl_saveLoaders       (   const   css::uno::Reference< css::registry::XRegistryKey >& xRootKey    );
+
+        void impl_addType           (   const   FileType&           aType       );
+        void impl_replaceType       (   const   FileType&           aType       );
+        void impl_removeType        (   const   ::rtl::OUString&    sName       );
+
+        void impl_addFilter         (   const   Filter&             aFilter     );
+        void impl_replaceFilter     (   const   Filter&             aFilter     );
+        void impl_removeFilter      (   const   ::rtl::OUString&    sName       );
+
+        void impl_addDetector       (   const   Detector&           aDetector   );
+        void impl_replaceDetector   (   const   Detector&           aDetector   );
+        void impl_removeDetector    (   const   ::rtl::OUString&    sName       );
+
+        void impl_addLoader         (   const   Loader&             aLoader     );
+        void impl_replaceLoader     (   const   Loader&             aLoader     );
+        void impl_removeLoader      (   const   ::rtl::OUString&    sName       );
+
+        /*-****************************************************************************************************//**
+            @short      support query mode
+            @descr      These helper functions returns subsets of our internal cached values.
+
+            @seealso    methods query...()
+
+            @param      -
+            @return     A result set if query was successful - empty structures if not.
+
+            @onerror    We return empty structures.
+        *//*-*****************************************************************************************************/
+
+        css::uno::Sequence< ::rtl::OUString >   impl_queryFilter_ByDocumentService              (   const   ::rtl::OUString&    sService    ) const;
+        css::uno::Sequence< ::rtl::OUString >   impl_queryFilter_ByDocumentService_WithDefault  (   const   ::rtl::OUString&    sService    ) const;
+        css::uno::Sequence< ::rtl::OUString >   impl_queryFilter_ByFlags                        (           sal_Int32           nFlags      ) const;
 
     //-------------------------------------------------------------------------------------------------------------
     //  debug methods
-    //  (should be private everyway!)
     //-------------------------------------------------------------------------------------------------------------
 
         /*-****************************************************************************************************//**
@@ -597,48 +915,38 @@ class FilterCache
 
     private:
 
-        static sal_Bool impldbg_checkParameter_searchFirstType                      (   const   OUSTRING*                   pURL                ,
-                                                                                        const   OUSTRING*                   pMediaType          ,
-                                                                                        const   OUSTRING*                   pClipboardFormat    ,
-                                                                                        const   TCheckedTypeIterator&       rStartEntry         );
-        static sal_Bool impldbg_checkParameter_searchType                           (   const   OUSTRING*                   pURL                ,
-                                                                                        const   OUSTRING*                   pMediaType          ,
-                                                                                        const   OUSTRING*                   pClipboardFormat    ,
-                                                                                        const   TCheckedTypeIterator&       rFollowEntry        );
-        static sal_Bool impldbg_checkParameter_searchFirstFilterForType             (   const   OUSTRING&                   sInternalTypeName   ,
-                                                                                        const   TCheckedStringListIterator& rStartEntry         );
-        static sal_Bool impldbg_checkParameter_searchFilterForType                  (   const   TCheckedStringListIterator& rFollowEntry        );
-        static sal_Bool impldbg_checkParameter_searchFirstDetectorForType           (   const   OUSTRING&                   sInternalTypeName   ,
-                                                                                        const   TCheckedStringListIterator& rStartEntry         );
-        static sal_Bool impldbg_checkParameter_searchDetectorForType                (   const   TCheckedStringListIterator& rFollowEntry        );
-        static sal_Bool impldbg_checkParameter_searchFirstLoaderForType             (   const   OUSTRING&                   sInternalTypeName   ,
-                                                                                        const   TCheckedStringListIterator& rStartEntry         );
-        static sal_Bool impldbg_checkParameter_searchLoaderForType                  (   const   TCheckedStringListIterator& rFollowEntry        );
-        static sal_Bool impldbg_checkParameter_getTypeByName                        (   const   OUSTRING&                   sName               );
-        static sal_Bool impldbg_checkParameter_getFilterByName                      (   const   OUSTRING&                   sName               );
-        static sal_Bool impldbg_checkParameter_getDetectorByName                    (   const   OUSTRING&                   sName               );
-        static sal_Bool impldbg_checkParameter_getLoaderByName                      (   const   OUSTRING&                   sName               );
-        static sal_Bool impldbg_checkParameter_existsType                           (   const   OUSTRING&                   sName               );
-        static sal_Bool impldbg_checkParameter_existsFilter                         (   const   OUSTRING&                   sName               );
-        static sal_Bool impldbg_checkParameter_existsDetector                       (   const   OUSTRING&                   sName               );
-        static sal_Bool impldbg_checkParameter_existsLoader                         (   const   OUSTRING&                   sName               );
-        static sal_Bool impldbg_checkParameter_convertStringSequenceToVector        (   const   SEQUENCE< OUSTRING >&       seqSource           ,
-                                                                                        const   TStringList&                rDestination        );
-        static sal_Bool impldbg_checkParameter_convertStringVectorToSequence        (   const   TStringList&                rSource             ,
-                                                                                        const   SEQUENCE< OUSTRING >&       seqDestination      );
-        static sal_Bool impldbg_checkParameter_convertTTypeToPropertySequence       (   const   TType&                      rSource             ,
-                                                                                        const   SEQUENCE< PROPERTYVALUE >&  seqDestination      );
-        static sal_Bool impldbg_checkParameter_convertTFilterToPropertySequence     (   const   TFilter&                    rSource             ,
-                                                                                        const   SEQUENCE< PROPERTYVALUE >&  seqDestination      );
-        static sal_Bool impldbg_checkParameter_convertTLoaderToPropertySequence     (   const   TLoader&                    rSource             ,
-                                                                                        const   SEQUENCE< PROPERTYVALUE >&  seqDestination      );
-        static sal_Bool impldbg_checkParameter_convertTDetectorToPropertySequence   (   const   TDetector&                  rSource             ,
-                                                                                        const   SEQUENCE< PROPERTYVALUE >&  seqDestination      );
-        static sal_Bool impldbg_checkParameter_convertPropertySequenceToTFilter     (   const   SEQUENCE< PROPERTYVALUE >&  lSource             ,
-                                                                                                TFilter&                    rDestination        );
-        static sal_Bool impldbg_checkParameter_addFilter                            (   const   OUSTRING&                   sName               ,
-                                                                                        const   SEQUENCE< PROPERTYVALUE >&  lProperties         );
-        static sal_Bool impldbg_checkParameter_removeFilter                         (   const   OUSTRING&                   sName               );
+        static sal_Bool implcp_searchType                           (   const   ::rtl::OUString&                                    sURL                ,
+                                                                        const   ::rtl::OUString*                                    pMediaType          ,
+                                                                        const   ::rtl::OUString*                                    pClipboardFormat    ,
+                                                                        const   CheckedTypeIterator&                                aStartEntry         ,
+                                                                        const   ::rtl::OUString&                                    sResult             );
+        static sal_Bool implcp_searchFilterForType                  (   const   ::rtl::OUString&                                    sInternalTypeName   ,
+                                                                        const   CheckedStringListIterator&                          aStartEntry         ,
+                                                                        const   ::rtl::OUString&                                    sResult             );
+        static sal_Bool implcp_searchDetectorForType                (   const   ::rtl::OUString&                                    sInternalTypeName   ,
+                                                                        const   CheckedStringListIterator&                          aStartEntry         ,
+                                                                        const   ::rtl::OUString&                                    sResult             );
+        static sal_Bool implcp_searchLoaderForType                  (   const   ::rtl::OUString&                                    sInternalTypeName   ,
+                                                                        const   CheckedStringListIterator&                          aStartEntry         ,
+                                                                        const   ::rtl::OUString&                                    sResult             );
+        static sal_Bool implcp_getTypeProperties                    (   const   ::rtl::OUString&                                    sName               );
+        static sal_Bool implcp_getFilterProperties                  (   const   ::rtl::OUString&                                    sName               );
+        static sal_Bool implcp_getDetectorProperties                (   const   ::rtl::OUString&                                    sName               );
+        static sal_Bool implcp_getLoaderProperties                  (   const   ::rtl::OUString&                                    sName               );
+        static sal_Bool implcp_getType                              (   const   ::rtl::OUString&                                    sName               );
+        static sal_Bool implcp_getFilter                            (   const   ::rtl::OUString&                                    sName               );
+        static sal_Bool implcp_getDetector                          (   const   ::rtl::OUString&                                    sName               );
+        static sal_Bool implcp_getLoader                            (   const   ::rtl::OUString&                                    sName               );
+        static sal_Bool implcp_existsType                           (   const   ::rtl::OUString&                                    sName               );
+        static sal_Bool implcp_existsFilter                         (   const   ::rtl::OUString&                                    sName               );
+        static sal_Bool implcp_existsDetector                       (   const   ::rtl::OUString&                                    sName               );
+        static sal_Bool implcp_existsLoader                         (   const   ::rtl::OUString&                                    sName               );
+        static sal_Bool implcp_addFilter                            (   const   ::rtl::OUString&                                    sName               ,
+                                                                        const   css::uno::Sequence< css::beans::PropertyValue >&    lProperties         );
+        static sal_Bool implcp_replaceFilter                        (   const   ::rtl::OUString&                                    sName               ,
+                                                                        const   css::uno::Sequence< css::beans::PropertyValue >&    lProperties         );
+        static sal_Bool implcp_removeFilter                         (   const   ::rtl::OUString&                                    sName               );
+        static sal_Bool implcp_queryFilters                         (   const   ::rtl::OUString&                                    sQuery              );
 
     #endif  //  #ifdef ENABLE_ASSERTIONS
 
@@ -678,24 +986,21 @@ class FilterCache
 
     //-------------------------------------------------------------------------------------------------------------
     //  private variables
-    //  (should be private everyway!)
     //-------------------------------------------------------------------------------------------------------------
-
     private:
 
-        static TTypeHash*           m_pTypeCache            ;
-        static TFilterHash*         m_pFilterCache          ;
-        static TDetectorHash*       m_pDetectorCache        ;
-        static TLoaderHash*         m_pLoaderCache          ;
-        static TPerformanceHash*    m_pFastFilterCache      ;
-        static TPerformanceHash*    m_pFastDetectorCache    ;
-        static TPerformanceHash*    m_pFastLoaderCache      ;
-        static TPreferredHash*      m_pPreferredTypesCache  ;
-        static sal_Int32            m_nRefCount             ;
-        static OUSTRING*            m_pDefaultDetectorName  ;
-        static OUSTRING*            m_pGenericLoaderName    ;
-        static TDetector*           m_pDefaultDetector      ;
-        static TLoader*             m_pGenericLoader        ;
+        static sal_Int32                m_nRefCount             ;
+
+        static FileTypeHash*            m_pTypeCache            ;
+        static FilterHash*              m_pFilterCache          ;
+        static DetectorHash*            m_pDetectorCache        ;
+        static LoaderHash*              m_pLoaderCache          ;
+        static PerformanceHash*         m_pFastFilterCache      ;
+        static PerformanceHash*         m_pFastDetectorCache    ;
+        static PerformanceHash*         m_pFastLoaderCache      ;
+        static PreferredHash*           m_pPreferredTypesCache  ;
+        static Detector*                m_pDefaultDetector      ;
+        static Loader*                  m_pGenericLoader        ;
 
 };      //  class FilterCache
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fairrwlock.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2001-03-29 13:17:16 $
+ *  last change: $Author: as $ $Date: 2001-04-04 13:28:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,10 +162,10 @@ EWorkingMode SAL_CALL FairRWLock::getWorkingMode()
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
-void SAL_CALL FairRWLock::acquireReadAccess( ERefusalReason& eReason )
+void SAL_CALL FairRWLock::acquireReadAccess( ERejectReason& eReason )
 {
-    // impl-call is threadsafe himself!
-    if( impl_isCallRefused( eReason ) == sal_False )
+    // call is threadsafe himself!
+    if( isCallRejected( eReason ) == sal_False )
     {
         // Put call in "SERIALIZE"-queue!
         // After successful acquiring this mutex we are alone ...
@@ -208,10 +208,10 @@ void SAL_CALL FairRWLock::releaseReadAccess()
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
-void SAL_CALL FairRWLock::acquireWriteAccess( ERefusalReason& eReason )
+void SAL_CALL FairRWLock::acquireWriteAccess( ERejectReason& eReason )
 {
-    // impl-call is threadsafe himself!
-    if( impl_isCallRefused( eReason ) == sal_False )
+    // call is threadsafe himself!
+    if( isCallRejected( eReason ) == sal_False )
     {
         // You have to stand in our serialize-queue till all reader
         // are registered (not for releasing them!) or writer finished their work!
@@ -259,9 +259,9 @@ void SAL_CALL FairRWLock::downgradeWriteAccess()
 }
 
 //*****************************************************************************************************************
-//  private method
+//  public method
 //*****************************************************************************************************************
-sal_Bool FairRWLock::impl_isCallRefused( ERefusalReason& eReason )
+sal_Bool SAL_CALL FairRWLock::isCallRejected( ERejectReason& eReason )
 {
     // This call must safe access to internal member only.
     // Set "possible reason" for return and check reject-state then!

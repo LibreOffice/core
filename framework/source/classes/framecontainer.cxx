@@ -2,9 +2,9 @@
  *
  *  $RCSfile: framecontainer.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: as $ $Date: 2001-03-29 13:17:12 $
+ *  last change: $Author: as $ $Date: 2001-04-04 13:28:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,7 +159,7 @@ void FrameContainer::append( const Reference< XFrame >& xFrame )
 
     // Append new frame to container.
     // Make it threadsafe by using write lock - Look for refused calls => Do nothing then.
-    ERefusalReason  eReason                         ;
+    ERejectReason   eReason                         ;
     WriteGuard      aWriteLock( m_aLock, eReason )  ;
     if( eReason == E_NOREASON )
     {
@@ -182,7 +182,7 @@ void FrameContainer::remove( const Reference< XFrame >& xFrame )
     // Make it threadsafe. I think removing container elements must be "atomar".
     // We shouldn't make a copy of current container items to work on it.
     // Use write lock for whole method.
-    ERefusalReason  eReason                         ;
+    ERejectReason   eReason                         ;
     WriteGuard      aWriteLock( m_aLock, eReason )  ;
     if( eReason == E_NOREASON )
     {
@@ -223,7 +223,7 @@ sal_Bool FrameContainer::exist( const Reference< XFrame >& xFrame ) const
     // Search for frame.
     // Make it threadsafe by using readlock. Declare default return value for refused calls!
     sal_Bool        bExist      = sal_False         ;
-    ERefusalReason  eReason                         ;
+    ERejectReason   eReason                         ;
     ReadGuard       aReadLock   ( m_aLock, eReason );
     if( eReason == E_NOREASON )
     {
@@ -242,7 +242,7 @@ sal_Bool FrameContainer::exist( const Reference< XFrame >& xFrame ) const
 void FrameContainer::clear()
 {
     // We need write access to our member.
-    ERefusalReason  eReason                         ;
+    ERejectReason   eReason                         ;
     WriteGuard      aWriteLock  ( m_aLock, eReason );
     if( eReason == E_NOREASON )
     {
@@ -258,7 +258,7 @@ sal_uInt32 FrameContainer::getCount() const
     // We need read access to our member.
     // Declare default return value for refused calls.
     sal_uInt32      nCount      = 0                 ;
-    ERefusalReason  eReason                         ;
+    ERejectReason   eReason                         ;
     ReadGuard       aReadLock   ( m_aLock, eReason );
     if( eReason == E_NOREASON )
     {
@@ -278,7 +278,7 @@ Reference< XFrame > FrameContainer::operator[]( sal_uInt32 nIndex ) const
 
     // Use read lock to make it threadsafe. Declare default return value for refused calls!
     Reference< XFrame > xFrame                          ;
-    ERefusalReason      eReason                         ;
+    ERejectReason       eReason                         ;
     ReadGuard           aReadLock   ( m_aLock, eReason );
     if( eReason == E_NOREASON )
     {
@@ -305,7 +305,7 @@ Sequence< Reference< XFrame > > FrameContainer::getAllElements() const
 {
     // Use read lock. Declare default return value if call is refused.
     Sequence< Reference< XFrame > > lElements                       ;
-    ERefusalReason                  eReason                         ;
+    ERejectReason                   eReason                         ;
     ReadGuard                       aReadLock   ( m_aLock, eReason );
     if( eReason == E_NOREASON )
     {
@@ -327,7 +327,7 @@ sal_Bool FrameContainer::hasElements() const
 {
     // Use read lock. Declare default return value if call is refused.
     sal_Bool        bHasElements=   sal_False       ;
-    ERefusalReason  eReason                         ;
+    ERejectReason   eReason                         ;
     ReadGuard       aReadLock   ( m_aLock, eReason );
     if( eReason == E_NOREASON )
     {
@@ -347,7 +347,7 @@ void FrameContainer::setActive( const Reference< XFrame >& xFrame )
     LOG_ASSERT2( implcp_setActive( xFrame )                         , "FrameContainer::setActive()", "Invalid parameter detected!"                                                      )
     LOG_ASSERT2( xFrame.is()==sal_True && exist(xFrame)==sal_False  , "FrameContainer::setActive()", "The new active frame is not a member of current container!You cant activate it."  )
 
-    ERefusalReason  eReason                         ;
+    ERejectReason   eReason                         ;
     WriteGuard      aWriteLock( m_aLock, eReason )  ;
     if( eReason == E_NOREASON )
     {
@@ -362,7 +362,7 @@ Reference< XFrame > FrameContainer::getActive() const
 {
     // Use read lock. Declare default return value if call is refused.
     Reference< XFrame > xActive                         ;
-    ERefusalReason      eReason                         ;
+    ERejectReason       eReason                         ;
     ReadGuard           aReadLock( m_aLock, eReason )   ;
     if( eReason == E_NOREASON )
     {
@@ -377,7 +377,7 @@ Reference< XFrame > FrameContainer::getActive() const
 void FrameContainer::enableQuitTimer( const Reference< XDesktop >& xDesktop )
 {
     // If no current timer exist - create a new one.
-    ERefusalReason  eReason                         ;
+    ERejectReason   eReason                         ;
     WriteGuard      aWriteLock( m_aLock, eReason )  ;
     if( eReason == E_NOREASON )
     {
@@ -395,7 +395,7 @@ void FrameContainer::disableQuitTimer()
 {
     // Delete current quit timer.
     // If user wish to create it again he must do it with "enableQuitTimer()".
-    ERefusalReason  eReason                         ;
+    ERejectReason   eReason                         ;
     WriteGuard      aWriteLock( m_aLock, eReason )  ;
     if( eReason == E_NOREASON )
     {
@@ -414,7 +414,7 @@ Reference< XFrame > FrameContainer::searchDeepDown( const OUString& sName ) cons
     // Use read lock to make it threadsafe.
     // Declare default return value for refused calls.
     Reference< XFrame > xSearchedFrame                  ;
-    ERefusalReason      eReason                         ;
+    ERejectReason       eReason                         ;
     ReadGuard           aReadLock( m_aLock, eReason )   ;
     if( eReason == E_NOREASON )
     {
@@ -451,7 +451,7 @@ Reference< XFrame > FrameContainer::searchFlatDown( const OUString& sName ) cons
     // Use read lock to make it threadsafe.
     // Declare default return value for refused calls.
     Reference< XFrame > xSearchedFrame                  ;
-    ERefusalReason      eReason                         ;
+    ERejectReason       eReason                         ;
     ReadGuard           aReadLock( m_aLock, eReason )   ;
     if( eReason == E_NOREASON )
     {
@@ -492,7 +492,7 @@ Reference< XFrame > FrameContainer::searchDirectChildren( const OUString& sName 
     // Use read lock to make it threadsafe.
     // Declare default return value for refused calls.
     Reference< XFrame > xSearchedFrame                  ;
-    ERefusalReason      eReason                         ;
+    ERejectReason       eReason                         ;
     ReadGuard           aReadLock( m_aLock, eReason )   ;
     if( eReason == E_NOREASON )
     {

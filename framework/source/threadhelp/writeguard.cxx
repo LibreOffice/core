@@ -2,9 +2,9 @@
  *
  *  $RCSfile: writeguard.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2001-03-29 13:17:16 $
+ *  last change: $Author: as $ $Date: 2001-04-04 13:28:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,7 @@ namespace framework{
 //  constructor
 //*****************************************************************************************************************
 WriteGuard::WriteGuard( IRWLock*        pLock   ,
-                        ERefusalReason& eReason )
+                        ERejectReason&  eReason )
     :   m_pLock ( pLock     )
     ,   m_eMode ( E_NOLOCK  )
 {
@@ -116,7 +116,7 @@ WriteGuard::WriteGuard( IRWLock*        pLock   ,
 //  constructor
 //*****************************************************************************************************************
 WriteGuard::WriteGuard( IRWLock&        rLock   ,
-                        ERefusalReason& eReason )
+                        ERejectReason&  eReason )
     :   m_pLock ( &rLock    )
     ,   m_eMode ( E_NOLOCK  )
 {
@@ -134,7 +134,7 @@ WriteGuard::~WriteGuard()
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
-void WriteGuard::lock( ERefusalReason& eReason )
+void WriteGuard::lock( ERejectReason& eReason )
 {
     switch( m_eMode )
     {

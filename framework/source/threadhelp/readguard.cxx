@@ -2,9 +2,9 @@
  *
  *  $RCSfile: readguard.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2001-03-29 13:17:16 $
+ *  last change: $Author: as $ $Date: 2001-04-04 13:28:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -101,7 +101,7 @@ namespace framework{
 //  constructor
 //*****************************************************************************************************************
 ReadGuard::ReadGuard(   IRWLock*        pLock   ,
-                        ERefusalReason& eReason )
+                        ERejectReason&  eReason )
     :   m_pLock     ( pLock     )
     ,   m_bLocked   ( sal_False )
 {
@@ -112,7 +112,7 @@ ReadGuard::ReadGuard(   IRWLock*        pLock   ,
 //  constructor
 //*****************************************************************************************************************
 ReadGuard::ReadGuard(   IRWLock&        rLock   ,
-                        ERefusalReason& eReason )
+                        ERejectReason&  eReason )
     :   m_pLock     ( &rLock    )
     ,   m_bLocked   ( sal_False )
 {
@@ -130,7 +130,7 @@ ReadGuard::~ReadGuard()
 //*****************************************************************************************************************
 //  public method
 //*****************************************************************************************************************
-void ReadGuard::lock( ERefusalReason& eReason )
+void ReadGuard::lock( ERejectReason& eReason )
 {
     if( m_bLocked == sal_False )
     {

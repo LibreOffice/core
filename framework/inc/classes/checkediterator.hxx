@@ -2,9 +2,9 @@
  *
  *  $RCSfile: checkediterator.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: as $ $Date: 2001-03-29 13:17:09 $
+ *  last change: $Author: as $ $Date: 2001-04-04 13:28:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,8 +133,9 @@ class CheckedIterator
 
         /*-****************************************************************************************************//**
             @short      standard constructor
-            @descr      Set default values on members. A normal constructed object stand AFTEREND always!
-                        Use initialize() to change that.
+            @descr      Set default values on members.
+                        We set it internal to E_UNKNOWN to detect uninitialized instances of this class.
+                        If we found one - we know: "We must call initialize first!"
 
             @seealso    -
 
@@ -145,8 +146,8 @@ class CheckedIterator
         *//*-*****************************************************************************************************/
 
         inline CheckedIterator()
+                :   m_eEndState( E_UNKNOWN )
         {
-            setAfterEnd();
         }
 
         //---------------------------------------------------------------------------------------------------------
@@ -170,14 +171,18 @@ class CheckedIterator
         inline void initialize( const TContainer* pContainer, sal_Bool bReverse = sal_False )
         {
             // Check incoming parameter. We don't accept all!
-            LOG_ASSERT( !(pContainer==NULL), "CheckedIterator::initialize()\nInvalid parameter detected!\n" )
+            LOG_ASSERT2( pContainer ==NULL      , "CheckedIterator::initialize()", "Invalid parameter detected!"                        )
+            LOG_ASSERT2( m_eEndState!=E_UNKNOWN , "CheckedIterator::initialize()", "Instance already initialized! Don't do it again."   )
 
-            // Set new container and actualize other member.
-            m_pContainer        = pContainer                ;
-            m_bReverse          = bReverse                  ;
-            m_eEndState         = E_BEFOREEND               ;
-            m_nForward          = 0                         ;
-            m_nBackward         = m_pContainer->size()-1    ;// -1 .. because first index is 0!
+            if( m_eEndState == E_UNKNOWN )
+            {
+                // Set new container and actualize other member.
+                m_pContainer        = pContainer                ;
+                m_bReverse          = bReverse                  ;
+                m_eEndState         = E_BEFOREEND               ;
+                m_nForward          = 0                         ;
+                m_nBackward         = m_pContainer->size()-1    ;// -1 .. because first index is 0!
+            }
         }
 
         /*-****************************************************************************************************//**
@@ -247,6 +252,23 @@ class CheckedIterator
         }
 
         /*-****************************************************************************************************//**
+            @short      return true if internal iterator was not initialized before
+            @descr      These will be true, if use start a new search by using these iterator mechanism!
+
+            @seealso    class FilterCache
+
+            @param      -
+            @return     True if internalk state E_UNKNOWN - false otherwise.
+
+            @onerror    -
+        *//*-*****************************************************************************************************/
+
+        inline sal_Bool isUninitialized()
+        {
+            return  ( m_eEndState == E_UNKNOWN );
+        }
+
+        /*-****************************************************************************************************//**
             @short      return true if internal iterator reached end of container
             @descr      These will be true if you step to the end of internal container.
 
@@ -305,7 +327,7 @@ class CheckedIterator
             LOG_ASSERT( !(m_eEndState!=E_BEFOREEND) , "CheckedIterator::getEntry()\nWrong using of class detected!\n"   )
 
             typename TContainer::const_iterator pEntry = m_pContainer->begin();
-            if( m_bReverse == sal_True )
+             if( m_bReverse == sal_True )
             {
                 for( sal_Int32 i=0; i<m_nBackward; ++i )
                 {
@@ -319,7 +341,6 @@ class CheckedIterator
                     ++pEntry;
                 }
             }
-
             return pEntry;
         }
 
@@ -329,7 +350,14 @@ class CheckedIterator
 
     private:
 
-        enum EEndState{ E_BEFOREEND, E_END, E_AFTEREND };   // These enum defines our three states for an iterator position in curent container.
+        // These enum defines our four states for an iterator position in curent container.
+        enum EEndState
+        {
+            E_UNKNOWN   ,
+            E_BEFOREEND ,
+            E_END       ,
+            E_AFTEREND
+        };
 
         const TContainer*                   m_pContainer    ;               // pointer to current container
         sal_Int32                           m_nForward      ;               // current position in container for forward orientation

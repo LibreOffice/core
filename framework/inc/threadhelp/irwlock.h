@@ -2,9 +2,9 @@
  *
  *  $RCSfile: irwlock.h,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2001-03-29 13:17:11 $
+ *  last change: $Author: as $ $Date: 2001-04-04 13:28:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,7 +115,7 @@ enum EWorkingMode
                     use can check the reason.
 *//*-*************************************************************************************************************/
 
-enum ERefusalReason
+enum ERejectReason
 {
     E_NOREASON      ,
     E_UNINITIALIZED ,
@@ -149,11 +149,12 @@ class IRWLock
 
         virtual void            SAL_CALL setWorkingMode         ( EWorkingMode      eMode   ) = 0;
         virtual EWorkingMode    SAL_CALL getWorkingMode         (                           ) = 0;
-        virtual void            SAL_CALL acquireReadAccess      ( ERefusalReason&   eReason ) = 0;
+        virtual void            SAL_CALL acquireReadAccess      ( ERejectReason&    eReason ) = 0;
         virtual void            SAL_CALL releaseReadAccess      (                           ) = 0;
-        virtual void            SAL_CALL acquireWriteAccess     ( ERefusalReason&   eReason ) = 0;
+        virtual void            SAL_CALL acquireWriteAccess     ( ERejectReason&    eReason ) = 0;
         virtual void            SAL_CALL releaseWriteAccess     (                           ) = 0;
         virtual void            SAL_CALL downgradeWriteAccess   (                           ) = 0;
+        virtual sal_Bool        SAL_CALL isCallRejected         ( ERejectReason&    eReason ) = 0;
 
 };      //  class IRWLock
 

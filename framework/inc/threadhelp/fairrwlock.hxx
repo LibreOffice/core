@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fairrwlock.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2001-03-29 13:17:11 $
+ *  last change: $Author: as $ $Date: 2001-04-04 13:28:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -230,7 +230,7 @@ class FairRWLock    :   private INonCopyAble
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual void SAL_CALL acquireReadAccess( ERefusalReason& eReason );
+        virtual void SAL_CALL acquireReadAccess( ERejectReason& eReason );
 
         /*-****************************************************************************************************//**
             @short      reset lock for reading
@@ -264,7 +264,7 @@ class FairRWLock    :   private INonCopyAble
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        virtual void SAL_CALL acquireWriteAccess( ERefusalReason& eReason );
+        virtual void SAL_CALL acquireWriteAccess( ERejectReason& eReason );
 
         /*-****************************************************************************************************//**
             @short      reset lock for writing
@@ -300,25 +300,21 @@ class FairRWLock    :   private INonCopyAble
 
         virtual void SAL_CALL downgradeWriteAccess();
 
-    //-------------------------------------------------------------------------------------------------------------
-    //  private methods
-    //-------------------------------------------------------------------------------------------------------------
-    private:
-
         /*-****************************************************************************************************//**
-            @short      used to check if calls must be refused
-            @descr      If our internal state isn't E_WORK we must refuse all requests!
+            @short      look for rejected calls without using a lock
+            @descr      Sometimes user need a possibility to get information about rejected calls
+                        without setting a read- or write lock!
+                        e.g. All member are threadsafe by himself ... but we will look for already disposed objects!
 
-            @seealso    acquire methods
+            @seealso    -
 
-            @param      "eReason", is used to give you the reason for refused calls
-            @return     true , if call must refused
-                        false, otherwise
+            @param      "eReason" returns reason of a rejected call
+            @return     true if call was rejected, false otherwise
 
-            @onerror    No error can occure.
+            @onerror    We return false.
         *//*-*****************************************************************************************************/
 
-        sal_Bool impl_isCallRefused( ERefusalReason& eReason );
+        virtual sal_Bool SAL_CALL isCallRejected( ERejectReason& eReason );
 
     //-------------------------------------------------------------------------------------------------------------
     //  private member

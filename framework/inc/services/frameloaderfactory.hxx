@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frameloaderfactory.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: as $ $Date: 2001-03-29 13:17:10 $
+ *  last change: $Author: as $ $Date: 2001-04-04 13:28:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -420,7 +420,7 @@ class FrameLoaderFactory    :   public css::lang::XTypeProvider             ,
             @onerror    No error should occure.
         *//*-*****************************************************************************************************/
 
-        void impl_initializeLoader( css::uno::Reference< css::uno::XInterface >& xLoader, const TLoader* pLoaderInfo );
+        void impl_initializeLoader( css::uno::Reference< css::uno::XInterface >& xLoader, const Loader& pLoaderInfo );
 
     //-------------------------------------------------------------------------------------------------------------
     //  debug methods

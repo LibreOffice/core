@@ -2,9 +2,9 @@
  *
  *  $RCSfile: readguard.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2001-03-29 13:17:11 $
+ *  last change: $Author: as $ $Date: 2001-04-04 13:28:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,9 +138,9 @@ class ReadGuard : private INonCopyAble
         *//*-*****************************************************************************************************/
 
         ReadGuard(  IRWLock*        pLock   ,
-                    ERefusalReason& eReason );
+                    ERejectReason&  eReason );
         ReadGuard(  IRWLock&        rLock   ,
-                    ERefusalReason& eReason );
+                    ERejectReason&  eReason );
 
         /*-****************************************************************************************************//**
             @short      dtor
@@ -170,7 +170,7 @@ class ReadGuard : private INonCopyAble
             @onerror    -
         *//*-*****************************************************************************************************/
 
-        void lock( ERefusalReason& eReason );
+        void lock( ERejectReason& eReason );
 
         /*-****************************************************************************************************//**
             @short      unset read lock
