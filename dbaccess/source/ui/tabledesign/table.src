@@ -2,9 +2,9 @@
  *
  *  $RCSfile: table.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-27 15:32:36 $
+ *  last change: $Author: fs $ $Date: 2001-03-29 14:21:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1493,7 +1493,7 @@ String STR_TABLEDESIGN_DUPLICATE_NAME
 };
 String STR_TBL_COLUMN_IS_KEYCOLUMN
 {
-    Text = "Die Spalten \"$column$\" gehцrt zum Primдrschlьssel. Falls sie gelцscht wird, wird auch der Pirmдrschlьssel gelцscht.Wollen Sie sie wirklich lцschen?";
+    Text = "Die Spalten \"$column$\" gehцrt zum Primдrschlьssel. Falls sie gelцscht wird, wird auch der Primдrschlьssel gelцscht.Wollen Sie sie fortfahren?";
     Text [ english_us ] = "The column \"$column$\" belongs to the primary key. If the column is deleted, the primary key will also be deleted. Do you really want to delete the column?";
     Text[ portuguese ] = "A coluna \"$column$\" pertence а chave primбria. Se a eliminar, a chave primбria tambйm serб eliminada. Mesmo assim, eliminar?";
     Text[ russian ] = "Колонка \"$column$\" относится к первичному ключу. Удалив ее, Вы удалите первичный ключ. Вы действительно хотите удалить эту колонку?";

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: query.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-22 11:00:41 $
+ *  last change: $Author: fs $ $Date: 2001-03-29 14:21:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -295,7 +295,7 @@ String STR_QUERY_UNDO_TABFIELDCREATE
 };
 String RID_STR_TABLE_DOESNT_EXIST
 {
-    Text = "Der Ausdruck ist ungueltig, da keine Tabelle '$name$' existiert !";
+    Text = "Der Ausdruck ist ungültig, da keine Tabelle '$name$' existiert !";
     Text [ ENGLISH ] = "The expression is invalid because table '$name$' doesn't exist !";
     Text[ english_us ] = "Invalid expression, table '$name$' does not exist!";
     Text[ portuguese ] = "A expressão não é válida; a tabela '$name$' não existe!";
@@ -322,7 +322,7 @@ String RID_STR_TABLE_DOESNT_EXIST
 
 String RID_STR_FIELD_DOESNT_EXIST
 {
-    Text = "Der Ausdruck ist ungueltig, da der Feldname '$name$' nicht zugeordnet werden kann!";
+    Text = "Der Ausdruck ist ungültig, da der Feldname '$name$' nicht zugeordnet werden kann!";
     Text [ ENGLISH ] = "The expression is invalid because the field name '$name$' could not be assigned!";
     Text[ english_us ] = "Invalid expression, field name '$name$' does not exist.";
     Text[ portuguese ] = "A expressão não é válida; é impossível atribuir o nome de campo '$name$'!";
