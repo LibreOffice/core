@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchxtra.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: pb $ $Date: 2001-11-01 08:57:00 $
+ *  last change: $Author: kz $ $Date: 2001-11-01 22:25:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,10 +103,10 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text[ swedish ] = "Teckensnitt";
                 Text[ polish ] = "Czcionka";
                 Text[ portuguese_brazilian ] = "Font";
-                Text[ japanese ] = "Ì«İÄ";
-                Text[ korean ] = "±Û²Ã";
-                Text[ chinese_simplified ] = "×ÖÌå";
-                Text[ chinese_traditional ] = "¦r«¬";
+                Text[ japanese ] = "ï¾Œï½«ï¾ï¾„";
+                Text[ korean ] = "ê¸€ê¼´";
+                Text[ chinese_simplified ] = "å­—ä½“";
+                Text[ chinese_traditional ] = "å­—å‹";
                 Text[ turkish ] = "Font";
                 Text[ arabic ] = "ÇÇáÎØ";
                 Text[ catalan ] = "Fuente";
@@ -128,10 +128,10 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text[ swedish ] = "Teckeneffekt";
                 Text[ polish ] = "Efekty czcionki";
                 Text[ portuguese_brazilian ] = "Font Effects";
-                Text[ japanese ] = "Ì«İÄŒø‰Ê";
-                Text[ korean ] = "±Û²Ã È¿°ú";
-                Text[ chinese_simplified ] = "×ÖÌåĞ§¹û";
-                Text[ chinese_traditional ] = "¦r«¬®ÄªG";
+                Text[ japanese ] = "ï¾Œï½«ï¾ï¾„åŠ¹æœ";
+                Text[ korean ] = "ê¸€ê¼´ íš¨ê³¼";
+                Text[ chinese_simplified ] = "å­—ä½“æ•ˆæœ";
+                Text[ chinese_traditional ] = "å­—å‹æ•ˆæœ";
                 Text[ turkish ] = "Font Effects";
                 Text[ arabic ] = "ÊÃËíÑÇÊ ÇáÎØæØ";
                 Text[ catalan ] = "Efectos de fuente";
@@ -153,10 +153,10 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text[ swedish ] = "Position";
                 Text[ polish ] = "Pozycja";
                 Text[ portuguese_brazilian ] = "Position";
-                Text[ japanese ] = "ˆÊ’u";
-                Text[ korean ] = "À§Ä¡";
-                Text[ chinese_simplified ] = "Î»ÖÃ";
-                Text[ chinese_traditional ] = "¦ì¸m";
+                Text[ japanese ] = "ä½ç½®";
+                Text[ korean ] = "ìœ„ì¹˜";
+                Text[ chinese_simplified ] = "ä½ç½®";
+                Text[ chinese_traditional ] = "ä½ç½®";
                 Text[ turkish ] = "Pozisyon";
                 Text[ arabic ] = "ÇáãæÖÚ";
                 Text[ catalan ] = "Posición";
@@ -178,10 +178,10 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text[ swedish ] = "Asiatisk layout";
                 Text[ polish ] = "Uk³ad azjatycki";
                 Text[ portuguese_brazilian ] = "Asian Layout";
-                Text[ japanese ] = "“ú–{ŒêÚ²±³Ä";
-                Text[ korean ] = "¾Æ½Ã¾Æ ·¹ÀÌ¾Æ¿ô";
-                Text[ chinese_simplified ] = "ÖĞÈÕº«°æÊ½";
-                Text[ chinese_traditional ] = "¤¤¤éÁúª©¦¡";
+                Text[ japanese ] = "æ—¥æœ¬èªï¾šï½²ï½±ï½³ï¾„";
+                Text[ korean ] = "ì•„ì‹œì•„ ë ˆì´ì•„ì›ƒ";
+                Text[ chinese_simplified ] = "ä¸­æ—¥éŸ©ç‰ˆå¼";
+                Text[ chinese_traditional ] = "ä¸­æ—¥éŸ“ç‰ˆå¼";
                 Text[ turkish ] = "Asian Layout";
                 Text[ arabic ] = "ÊÎØíØ ÂÓíæí";
                 Text[ catalan ] = "Diseño asiático";
@@ -196,21 +196,21 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text [ italian ] = "Rientri e distanze" ;
                 Text [ portuguese_brazilian ] = "Par?grafo" ;
                 Text [ portuguese ] = "Avanços e espaçamento" ;
-                Text [ finnish ] = "Sisennys ja välit" ;
+                Text [ finnish ] = "Sisennykset ja v?lit" ;
                 Text [ danish ] = "Indrykning og mellemrum" ;
                 Text [ french ] = "Retraits et écarts" ;
                 Text [ swedish ] = "Indrag och avstånd" ;
                 Text [ dutch ] = "Inspringingen en afstanden" ;
                 Text [ spanish ] = "Sangrías y espacios" ;
                 Text [ english_us ] = "Indents & Spacing" ;
-                Text[ chinese_simplified ] = "Ëõ½øºÍ¼ä¸ô";
-                Text[ russian ] = "Îòñóïû è èíòåğâàëû";
+                Text[ chinese_simplified ] = "ç¼©è¿›å’Œé—´éš”";
+                Text[ russian ] = "Îòñòóïû è èíòåğâàëû";
                 Text[ polish ] = "Wciêcia i odstêpy";
-                Text[ japanese ] = "²İÃŞ¯¸½‚ÆŠÔŠu";
-                Text[ chinese_traditional ] = "ÁY±Æ©M¶¡¹j";
+                Text[ japanese ] = "ï½²ï¾ï¾ƒï¾ï½¯ï½¸ï½½ã¨é–“éš”";
+                Text[ chinese_traditional ] = "ç¸®æ’å’Œé–“éš”";
                 Text[ arabic ] = "ÇáÅÒÇÍÉ æÇáÊÈÇÚÏ";
                 Text[ greek ] = "Åóï÷İò êáé áğïóôÜóåéò";
-                Text[ korean ] = "µé¿© ¾²±â¿Í °£°İ";
+                Text[ korean ] = "ë“¤ì—¬ ì“°ê¸°ì™€ ê°„ê²©";
                 Text[ turkish ] = "Girinti ve Aralıklar";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Sangrías y espacios";
@@ -229,14 +229,14 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text [ spanish ] = "Alineación" ;
                 Text [ french ] = "Alignement" ;
                 Text [ dutch ] = "Uitlijning" ;
-                Text[ chinese_simplified ] = "¶ÔÆë";
+                Text[ chinese_simplified ] = "å¯¹é½";
                 Text[ russian ] = "Âûğàâíèâàíèå";
                 Text[ polish ] = "Wyrównanie";
-                Text[ japanese ] = "”z’u";
-                Text[ chinese_traditional ] = "¹ï»ô";
+                Text[ japanese ] = "é…ç½®";
+                Text[ chinese_traditional ] = "å°é½Š";
                 Text[ arabic ] = "ÇáãÍÇĞÇÉ";
                 Text[ greek ] = "Óôïß÷éóç";
-                Text[ korean ] = "¸ÂÃã";
+                Text[ korean ] = "ë§ì¶¤";
                 Text[ turkish ] = "Hizalama";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Alineación";
@@ -258,14 +258,14 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text [ dutch ] = "Tekstverloop" ;
                 Text [ spanish ] = "Flujo del texto" ;
                 Text [ english_us ] = "Text Flow" ;
-                Text[ chinese_simplified ] = "»»ĞĞºÍ·ÖÒ³";
+                Text[ chinese_simplified ] = "æ¢è¡Œå’Œåˆ†é¡µ";
                 Text[ russian ] = "Ïîëîæåíèå íà ñòğàíèöå";
                 Text[ polish ] = "Tekst";
-                Text[ japanese ] = "‘ÌÙ";
-                Text[ chinese_traditional ] = "´«¦æ©M¤À­¶";
+                Text[ japanese ] = "ä½“è£";
+                Text[ chinese_traditional ] = "æ›è¡Œå’Œåˆ†é ";
                 Text[ arabic ] = "ÇäÓíÇÈ ÇáäÕ";
                 Text[ greek ] = "ÑïŞ êåéìİíïõ";
-                Text[ korean ] = "ÅØ½ºÆ® Èå¸§";
+                Text[ korean ] = "í…ìŠ¤íŠ¸ íë¦„";
                 Text[ turkish ] = "Metin akışı";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Flujo del texto";
@@ -287,10 +287,10 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text[ swedish ] = "Asiatisk typografi";
                 Text[ polish ] = "Typografia azjatycka";
                 Text[ portuguese_brazilian ] = "Asian typography";
-                Text[ japanese ] = "“ú–{Œê•¶‚Ì‘ÌÙ";
-                Text[ korean ] = "¾Æ½Ã¾Æ Å¸ÀÌÆ÷±×·¡ÇÇ";
-                Text[ chinese_simplified ] = "ÖĞÈÕº«ÎÄ×Ö";
-                Text[ chinese_traditional ] = "¤¤¤éÁú¤å¦r";
+                Text[ japanese ] = "æ—¥æœ¬èªæ–‡ã®ä½“è£";
+                Text[ korean ] = "ì•„ì‹œì•„ íƒ€ì´í¬ê·¸ë˜í”¼";
+                Text[ chinese_simplified ] = "ä¸­æ—¥éŸ©æ–‡å­—";
+                Text[ chinese_traditional ] = "ä¸­æ—¥éŸ“æ–‡å­—";
                 Text[ turkish ] = "Asian typography";
                 Text[ arabic ] = "ÃÓáæÈ ÇáØÈÇÚÉ ÇáÂÓíæíÉ";
                 Text[ catalan ] = "Tipografía asiática";
@@ -312,28 +312,28 @@ TabDialog RID_SVXDLG_SEARCHFORMAT
                 Text [ dutch ] = "Achtergrond" ;
                 Text [ spanish ] = "Fondo" ;
                 Text [ english_us ] = "Background" ;
-                Text[ chinese_simplified ] = "±³¾°";
+                Text[ chinese_simplified ] = "èƒŒæ™¯";
                 Text[ russian ] = "Ôîí";
                 Text[ polish ] = "T³o";
-                Text[ japanese ] = "”wŒi";
-                Text[ chinese_traditional ] = "­I´º";
+                Text[ japanese ] = "èƒŒæ™¯";
+                Text[ chinese_traditional ] = "èƒŒæ™¯";
                 Text[ arabic ] = "ÇáÎáİíÉ";
                 Text[ greek ] = "Öüíôï";
-                Text[ korean ] = "¹è°æ";
+                Text[ korean ] = "ë°°ê²½";
                 Text[ turkish ] = "Artalan";
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Fondo";
             };
         };
     };
-    Text[ chinese_simplified ] = "ÎÄ×ÖÊôĞÔ";
+    Text[ chinese_simplified ] = "æ–‡å­—å±æ€§";
     Text[ russian ] = "Àòğèáóòû òåêñòà";
     Text[ polish ] = "Atrybuty tekstu";
-    Text[ japanese ] = "Ã·½Ä‚Ì‘®«";
-    Text[ chinese_traditional ] = "¤å¦r®æ¦¡";
+    Text[ japanese ] = "ï¾ƒï½·ï½½ï¾„ã®å±æ€§";
+    Text[ chinese_traditional ] = "æ–‡å­—æ ¼å¼";
     Text[ arabic ] = "ÓãÇÊ ÇáäÕ";
     Text[ greek ] = "Éäéüôçôåò êåéìİíïõ";
-    Text[ korean ] = "ÅØ½ºÆ® ¼Ó¼º";
+    Text[ korean ] = "í…ìŠ¤íŠ¸ ì†ì„±";
     Text[ turkish ] = "Metin öznitelikleri";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Atributos de texto ";
@@ -351,7 +351,7 @@ ModalDialog RID_SVXDLG_SEARCHATTR
     Text [ italian ] = "Attributi" ;
     Text [ portuguese_brazilian ] = "Atributos" ;
     Text [ portuguese ] = "Atributos" ;
-    Text [ finnish ] = "Määritteet" ;
+    Text [ finnish ] = "M??ritteet" ;
     Text [ danish ] = "Attributter" ;
     Text [ french ] = "Attributs" ;
     Text [ swedish ] = "Attribut" ;
@@ -384,14 +384,14 @@ ModalDialog RID_SVXDLG_SEARCHATTR
         Text [ dutch ] = "Selectie" ;
         Text [ spanish ] = "Selección" ;
         Text [ english_us ] = "Options" ;
-        Text[ chinese_simplified ] = "Ñ¡Ôñ";
+        Text[ chinese_simplified ] = "é€‰æ‹©";
         Text[ russian ] = "Âûáîğ";
         Text[ polish ] = "Wybór";
-        Text[ japanese ] = "‘I‘ğ";
-        Text[ chinese_traditional ] = "¿ï¨ú";
+        Text[ japanese ] = "é¸æŠ";
+        Text[ chinese_traditional ] = "é¸å–";
         Text[ arabic ] = "ÇÎÊíÇÑ";
         Text[ greek ] = "ÅğéëïãŞ";
-        Text[ korean ] = "¼±ÅÃ";
+        Text[ korean ] = "ì„ íƒ";
         Text[ turkish ] = "Seçenekler";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Selección";
@@ -412,14 +412,14 @@ ModalDialog RID_SVXDLG_SEARCHATTR
         Pos = MAP_APPFONT ( 136 , 43 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
     };
-    Text[ chinese_simplified ] = "ÊôĞÔ";
+    Text[ chinese_simplified ] = "å±æ€§";
     Text[ russian ] = "Àòğèáóòû";
     Text[ polish ] = "Atrybuty";
-    Text[ japanese ] = "‘®«";
-    Text[ chinese_traditional ] = "Äİ©Ê";
+    Text[ japanese ] = "å±æ€§";
+    Text[ chinese_traditional ] = "å±¬æ€§";
     Text[ arabic ] = "ÇáÓãÇÊ";
     Text[ greek ] = "Éäéüôçôåò";
-    Text[ korean ] = "¼Ó¼º";
+    Text[ korean ] = "ì†ì„±";
     Text[ turkish ] = "Öznitelikler";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Atributos";
@@ -454,14 +454,14 @@ ModalDialog RID_SVXDLG_SEARCHSIMILARITY
         Text [ danish ] = "Udskift tegn" ;
         Text [ portuguese_brazilian ] = "~Zeichen tauschen" ;
         Text [ portuguese ] = "~Substituir caracteres" ;
-        Text[ chinese_simplified ] = "¸üÌæ×Ö·û(~E)";
+        Text[ chinese_simplified ] = "æ›¿æ¢å­—ç¬¦(~E)";
         Text[ russian ] = "Ïîìåíÿòü çíàêè";
         Text[ polish ] = "Wymieñ znaki";
-        Text[ japanese ] = "“ü‚ê‘ã‚è‹–‰Â‚Ì•¶š”(~E)";
-        Text[ chinese_traditional ] = "´À¥N¦r¤¸(~E)";
+        Text[ japanese ] = "å…¥ã‚Œä»£ã‚Šè¨±å¯ã®æ–‡å­—æ•°(~E)";
+        Text[ chinese_traditional ] = "æ›¿ä»£å­—å…ƒ(~E)";
         Text[ arabic ] = "ÇÓÊÈÏÇá ÃÍÑİ";
         Text[ greek ] = "ÁëëáãŞ ÷áñáêôŞñùí";
-        Text[ korean ] = "¹®ÀÚ ±³È¯(~E)";
+        Text[ korean ] = "ë¬¸ì ë°”ê¾¸ê¸°(~E)";
         Text[ turkish ] = "Ka~rakter değiştir";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Cambiar caracteres";
@@ -497,18 +497,18 @@ ModalDialog RID_SVXDLG_SEARCHSIMILARITY
         Text [ danish ] = "Tilføj tegn" ;
         Text [ portuguese_brazilian ] = "Z~eichen hinzuf?en" ;
         Text [ portuguese ] = "Inserir ~caracteres" ;
-        Text[ chinese_simplified ] = "ĞÂÔö×Ö·û(~A)";
+        Text[ chinese_simplified ] = "æ–°å¢å­—ç¬¦(~A)";
         Text[ russian ] = "Äîáàâèòü çíàêè";
         Text[ polish ] = "Dodaj znaki";
-        Text[ japanese ] = "’Ç‰Á‹–‰Â‚Ì•¶š”(~A)";
-        Text[ chinese_traditional ] = "·s¼W¦r¤¸(~A)";
+        Text[ japanese ] = "è¿½åŠ è¨±å¯ã®æ–‡å­—æ•°(~A)";
+        Text[ chinese_traditional ] = "æ–°å¢å­—å…ƒ(~A)";
         Text[ arabic ] = "ÅÖÇİÉ ÃÍÑİ";
         Text[ greek ] = "ĞñïóèŞêç ÷áñáêôŞñùí";
-        Text[ korean ] = "¹®ÀÚ Ãß°¡(~A)";
+        Text[ korean ] = "ë¬¸ì ì¶”ê°€(~A)";
         Text[ turkish ] = "~Karakter ekle";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Añadir caracteres";
-        Text[ finnish ] = "~Lisää merkkejä";
+        Text[ finnish ] = "~Lis?? merkkej?";
     };
     NumericField NF_LONGER
     {
@@ -540,14 +540,14 @@ ModalDialog RID_SVXDLG_SEARCHSIMILARITY
         Text [ danish ] = "Fjern tegn" ;
         Text [ portuguese_brazilian ] = "Ze~ichen entfernen" ;
         Text [ portuguese ] = "Elimina~r caracteres" ;
-        Text[ chinese_simplified ] = "É¾³ı×Ö·û(~R)";
+        Text[ chinese_simplified ] = "åˆ é™¤å­—ç¬¦(~R)";
         Text[ russian ] = "Óáğàòü çíàêè";
         Text[ polish ] = "Usuñ znaki";
-        Text[ japanese ] = "íœ‹–‰Â‚Ì•¶š”(~R)";
-        Text[ chinese_traditional ] = "§R°£¦r¤¸(~R)";
+        Text[ japanese ] = "å‰Šé™¤è¨±å¯ã®æ–‡å­—æ•°(~R)";
+        Text[ chinese_traditional ] = "åˆªé™¤å­—å…ƒ(~R)";
         Text[ arabic ] = "ÅÒÇáÉ ÃÍÑİ";
         Text[ greek ] = "ÄéáãñáöŞ ÷áñáêôŞñùí";
-        Text[ korean ] = "¹®ÀÚ Á¦°Å(~R)";
+        Text[ korean ] = "ë¬¸ì ì œê±°(~R)";
         Text[ turkish ] = "Kar~akter kaldır";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Eliminar caracteres";
@@ -584,18 +584,18 @@ ModalDialog RID_SVXDLG_SEARCHSIMILARITY
         Text [ danish ] = "Kombiner" ;
         Text [ portuguese_brazilian ] = "~Kombinieren" ;
         Text [ portuguese ] = "~Combinar" ;
-        Text[ chinese_simplified ] = "ºÏ²¢(~C)";
+        Text[ chinese_simplified ] = "åˆå¹¶(~C)";
         Text[ russian ] = "Êîìáèíèğîâàòü";
         Text[ polish ] = "Kombinuj";
-        Text[ japanese ] = "‘g‚İ‡‚í‚¹(~C)";
-        Text[ chinese_traditional ] = "²Õ¦X(~C)";
+        Text[ japanese ] = "çµ„ã¿åˆã‚ã›(~C)";
+        Text[ chinese_traditional ] = "çµ„åˆ(~C)";
         Text[ arabic ] = "Öã";
         Text[ greek ] = "Óõíäõáóìüò";
-        Text[ korean ] = "Á¶ÇÕ(~C)";
+        Text[ korean ] = "ì¡°í•©(~C)";
         Text[ turkish ] = "~Birleştir";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Co~mbinar";
-        Text[ finnish ] = "~Yhdistä";
+        Text[ finnish ] = "~Yhdist?";
     };
     FixedLine FL_SIMILARITY
     {
@@ -612,14 +612,14 @@ ModalDialog RID_SVXDLG_SEARCHSIMILARITY
         Text [ danish ] = "Indstillinger" ;
         Text [ portuguese_brazilian ] = "Einstellungen" ;
         Text [ portuguese ] = "Definições" ;
-        Text[ chinese_simplified ] = "Éè¶¨";
+        Text[ chinese_simplified ] = "è®¾å®š";
         Text[ russian ] = "Íàñòğîéêè";
         Text[ polish ] = "Ustawienia";
-        Text[ japanese ] = "İ’è";
-        Text[ chinese_traditional ] = "³]©w";
+        Text[ japanese ] = "è¨­å®š";
+        Text[ chinese_traditional ] = "è¨­å®š";
         Text[ arabic ] = "ÅÚÏÇÏÇÊ";
         Text[ greek ] = "Ñõèìßóåéò";
-        Text[ korean ] = "¼³Á¤";
+        Text[ korean ] = "ì„¤ì •";
         Text[ turkish ] = "Ayarlar";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Configuración";
@@ -647,20 +647,21 @@ ModalDialog RID_SVXDLG_SEARCHSIMILARITY
     Text [ danish ] = "Søg lignende" ;
     Text [ portuguese ] = "Procura por semelhança" ;
     Text [ portuguese_brazilian ] = "?hnlichkeitssuche" ;
-    Text[ chinese_simplified ] = "ÀàËÆËÑÑ°";
+    Text[ chinese_simplified ] = "ç±»ä¼¼æœå¯»";
     Text[ russian ] = "Ïîèñê ïîõîæèõ";
     Text[ polish ] = "Szukaj podobnych";
-    Text[ japanese ] = "—Ş—½ÍßÙ‚ÌŒŸõ";
-    Text[ chinese_traditional ] = "¬Û¦ü¦r·j´M";
+    Text[ japanese ] = "é¡ä¼¼ï½½ï¾ï¾Ÿï¾™ã®æ¤œç´¢";
+    Text[ chinese_traditional ] = "ç›¸ä¼¼å­—æœå°‹";
     Text[ arabic ] = "ÇáÈÍË Úä ßáãÇÊ ãÊÔÇÈåÉ";
     Text[ greek ] = "ÁíáæŞôçóç ïìïéüôçôáò";
-    Text[ korean ] = "À¯»ç¼º Ã£±â";
+    Text[ korean ] = "ìœ ì‚¬ì„± ì°¾ê¸°";
     Text[ turkish ] = "Benzerleri ara";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Búsqueda por semejanza";
     Text[ finnish ] = "Vastaavuushaku";
 };
  // ********************************************************************** EOF
+
 
 
 
