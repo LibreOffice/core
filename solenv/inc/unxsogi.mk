@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxsogi.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: kz $ $Date: 2005-03-03 17:37:30 $
+#   last change: $Author: obo $ $Date: 2005-03-15 09:57:50 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -107,7 +107,9 @@ CFLAGSOUTOBJ=-o
 STATIC		= -Wl,-Bstatic
 DYNAMIC		= -Wl,-Bdynamic
 
-LINK=gcc
+LINK*=$(CXX)
+LINKC*=$(CC)
+
 LINKFLAGS=
 LINKFLAGSAPPGUI=-Wl,-export-dynamic
 LINKFLAGSSHLGUI=-shared
@@ -135,15 +137,15 @@ STDSLOGUI=
 STDOBJCUI=
 STDSLOCUI=
 
-STDLIBGUIST=$(DYNAMIC) -lstdc++ -lm
-STDLIBCUIST=$(DYNAMIC) -lstdc++ -lm
-STDLIBGUIMT=$(DYNAMIC) -lpthread -lthread -lstdc++ -lm
-STDLIBCUIMT=$(DYNAMIC) -lpthread -lthread -lstdc++ -lm
+STDLIBGUIST=$(DYNAMIC) -lm
+STDLIBCUIST=$(DYNAMIC) -lm
+STDLIBGUIMT=$(DYNAMIC) -lpthread -lthread -lm
+STDLIBCUIMT=$(DYNAMIC) -lpthread -lthread -lm
 # libraries for linking shared libraries
-STDSHLGUIST=$(DYNAMIC) -lstdc++ -lm
-STDSHLCUIST=$(DYNAMIC) -lstdc++ -lm
-STDSHLGUIMT=$(DYNAMIC) -lpthread -lthread -lstdc++ -lm
-STDSHLCUIMT=$(DYNAMIC) -lpthread -lthread -lstdc++ -lm
+STDSHLGUIST=$(DYNAMIC) -lm
+STDSHLCUIST=$(DYNAMIC) -lm
+STDSHLGUIMT=$(DYNAMIC) -lpthread -lthread -lm
+STDSHLCUIMT=$(DYNAMIC) -lpthread -lthread -lm
 
 STDLIBGUIST+=-lX11
 STDLIBGUIMT+=-lX11
