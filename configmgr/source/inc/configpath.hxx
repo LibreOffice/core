@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configpath.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-26 14:54:08 $
+ *  last change: $Author: fs $ $Date: 2001-01-26 16:11:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,10 +152,6 @@ namespace configmgr
             bool bDefaultable   : 1;
 
             Attributes():bWritable(true), bNullable(true), bNotified(true), bConstrained(false), bReplacing(false), bLocalized(false), bDefaultable(false){}
-                // TODO:
-                // setting bNullable is a temporary hack. The nullable attribute of the XML stream is not correctly
-                // evaluated, at the moment. As this causes a lot of trouble we've chosen this temporary, ehm,
-                // 'solution'
         };
 
         //--------------------------------------------------------------------
