@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WCPage.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2001-12-07 13:12:28 $
+ *  last change: $Author: oj $ $Date: 2002-03-21 07:08:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,9 @@
 #ifndef _DBHELPER_DBEXCEPTION_HXX_
 #include <connectivity/dbexception.hxx>
 #endif
+#ifndef _CONNECTIVITY_DBTOOLS_HXX_
+#include <connectivity/dbtools.hxx>
+#endif
 #ifndef DBAUI_TOOLS_HXX
 #include "UITools.hxx"
 #endif
@@ -129,6 +132,8 @@ OCopyTable::OCopyTable( Window * pParent, EImportMode atWhat, sal_Bool bIsQuery,
     m_bIsViewAllowed(bIsQuery)
 {
     DBG_CTOR(OCopyTable,NULL);
+
+    m_edTableName.SetMaxTextLen( EDIT_NOLIMIT );
 
     if(m_pParent->m_xConnection.is())
     {
@@ -282,6 +287,24 @@ sal_Bool OCopyTable::LeavePage()
             aNameInfoBox.Execute();
             return sal_False;
         }
+        else // we have to check the length of the table name
+        {
+            Reference<XDatabaseMetaData> xMeta = m_pParent->m_xConnection->getMetaData();
+            ::rtl::OUString sCatalog;
+            ::rtl::OUString sSchema;
+            ::rtl::OUString sTable;
+            ::dbtools::qualifiedNameComponents( xMeta,
+                                                m_edTableName.GetText(),
+                                                sCatalog,
+                                                sSchema,
+                                                sTable);
+            sal_Int32 nMaxLength = xMeta->getMaxTableNameLength();
+            if ( nMaxLength && sTable.getLength() > nMaxLength )
+            {
+                ErrorBox(this, ModuleRes(ERROR_INVALID_TABLE_NAME_LENGTH)).Execute();
+                return sal_False;
+            }
+        }
     }
 
     if(!m_edTableName.GetSavedValue().Equals(m_edTableName.GetText()))
@@ -331,13 +354,8 @@ sal_Bool OCopyTable::LeavePage()
 //------------------------------------------------------------------------
 void OCopyTable::ActivatePage()
 {
+    m_pParent->GetOKButton().Enable( TRUE );
     m_eOldStyle = m_pParent->getCreateStyle();
-    //////////////////////////////////////////////////////////////////////////
-    // set max name length
-    sal_Int32 nLen = 0;
-    if(m_pParent->m_xConnection.is())
-        nLen = m_pParent->m_xConnection->getMetaData()->getMaxTableNameLength();
-    m_edTableName.SetMaxTextLen(nLen ? (xub_StrLen)nLen : EDIT_NOLIMIT);
     m_edTableName.GrabFocus();
 }
 //------------------------------------------------------------------------
@@ -347,20 +365,7 @@ void OCopyTable::Reset()
 {
     m_bFirstTime = sal_False;
 
-    sal_Int32 nLen = 0;
-    if(m_pParent->m_xConnection.is())
-        nLen = m_pParent->m_xConnection->getMetaData()->getMaxTableNameLength();
-
-    m_edTableName.SetMaxTextLen(nLen ? (xub_StrLen)nLen : EDIT_NOLIMIT);
-    String aTableName = m_pParent->m_sName;
-
-    if(nLen && nLen < aTableName.Len())
-    {
-        aTableName.Erase(aTableName.Len()-2);
-        aTableName += String::CreateFromInt32(1);
-    }
-
-    m_edTableName.SetText(aTableName);
+    m_edTableName.SetText( m_pParent->m_sName );
     m_edTableName.SaveValue();
 }
 //------------------------------------------------------------------------

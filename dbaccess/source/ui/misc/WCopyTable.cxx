@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WCopyTable.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: oj $ $Date: 2002-01-22 07:21:12 $
+ *  last change: $Author: oj $ $Date: 2002-03-21 07:08:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -394,6 +394,13 @@ IMPL_LINK( OCopyTableWizard, ImplOKHdl, OKButton*, EMPTYARG )
             case WIZARD_DEF_DATA:
             case WIZARD_DEF:
             {
+                if( GetCurLevel() == 0 )
+                {
+                    // we came from the first page so we have to clear
+                    // all column information already collected
+                    clearDestColumns();
+                    m_mNameMapping.clear();
+                }
                 CheckColumns();
                 break;
             }
