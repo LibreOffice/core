@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XJavaVM.idl,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 13:18:06 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 15:54:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ module com {  module sun {  module star {  module java {
     not part of the public C++ UNO runtime API).  This should probably be
     replaced by an appropriate C/C++ API.
  */
-interface XJavaVM: com::sun::star::uno::XInterface
+published interface XJavaVM: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
