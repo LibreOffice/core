@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: os $ $Date: 2001-06-15 14:27:58 $
+ *  last change: $Author: mib $ $Date: 2001-06-26 09:56:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -712,10 +712,11 @@ sal_Bool    SwGraphicProperties_Impl::AnyToItemSet(
     uno::Any* pAny;
     for(sal_Int16 nIndex = 0; nIDs[nIndex]; nIndex++)
     {
-        if(GetProperty(nIDs[nIndex], CONVERT_TWIPS, pAny ))
+        BYTE nMId = RES_GRFATR_CROPGRF == nIDs[nIndex] ? CONVERT_TWIPS : 0;
+        if(GetProperty(nIDs[nIndex], nMId, pAny ))
         {
             SfxPoolItem* pItem = ::GetDfltAttr( nIDs[nIndex] )->Clone();
-            bRet &= pItem->PutValue(*pAny, RES_GRFATR_CROPGRF == nIDs[nIndex] ? CONVERT_TWIPS : 0);
+            bRet &= pItem->PutValue(*pAny, nMId );
             rGrSet.Put(*pItem);
             delete pItem;
         }
