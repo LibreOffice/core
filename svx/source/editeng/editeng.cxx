@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editeng.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: mt $ $Date: 2002-06-06 12:13:58 $
+ *  last change: $Author: mt $ $Date: 2002-06-10 16:45:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -853,6 +853,9 @@ sal_Bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditVie
                         eFunc = KEYFUNC_DONTKNOW;
         }
     }
+
+    pImpEditEngine->EnterBlockNotifications();
+
     if ( eFunc == KEYFUNC_DONTKNOW )
     {
         switch ( nCode )
@@ -1110,6 +1113,8 @@ sal_Bool EditEngine::PostKeyEvent( const KeyEvent& rKeyEvent, EditView* pEditVie
     }
 
 #endif
+
+    pImpEditEngine->LeaveBlockNotifications();
 
     return bDone;
 }
