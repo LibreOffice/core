@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svapp.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 17:08:44 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 09:42:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,18 +178,18 @@ namespace
         {
             static ImplReservedKey ImplReservedKeys[] =
             {
-                ImplReservedKey(KeyCode(KEY_F1,0), SV_SHORTCUT_HELP),
-                ImplReservedKey(KeyCode(KEY_F1,KEY_SHIFT), SV_SHORTCUT_ACTIVEHELP),
-                ImplReservedKey(KeyCode(KEY_F1,KEY_MOD1), SV_SHORTCUT_CONTEXTHELP),
-                ImplReservedKey(KeyCode(KEY_F2,KEY_SHIFT), SV_SHORTCUT_CONTEXTHELP),
-                ImplReservedKey(KeyCode(KEY_F4,KEY_MOD1), SV_SHORTCUT_DOCKUNDOCK),
-                ImplReservedKey(KeyCode(KEY_F4,KEY_MOD2), SV_SHORTCUT_DOCKUNDOCK),
-                ImplReservedKey(KeyCode(KEY_F4,KEY_MOD1|KEY_MOD2), SV_SHORTCUT_DOCKUNDOCK),
-                ImplReservedKey(KeyCode(KEY_F6,0), SV_SHORTCUT_NEXTSUBWINDOW),
-                ImplReservedKey(KeyCode(KEY_F6,KEY_MOD1), SV_SHORTCUT_TODOCUMENT),
-                ImplReservedKey(KeyCode(KEY_F6,KEY_SHIFT), SV_SHORTCUT_PREVSUBWINDOW),
-                ImplReservedKey(KeyCode(KEY_F6,KEY_MOD1|KEY_SHIFT), 0),         // activate splitter (string is missing!)
-                ImplReservedKey(KeyCode(KEY_F10,0), SV_SHORTCUT_MENUBAR)
+                ImplReservedKey(KeyCode(KEY_F1,0),                  SV_SHORTCUT_HELP),
+                ImplReservedKey(KeyCode(KEY_F1,KEY_SHIFT),          SV_SHORTCUT_ACTIVEHELP),
+                ImplReservedKey(KeyCode(KEY_F1,KEY_MOD1),           SV_SHORTCUT_CONTEXTHELP),
+                ImplReservedKey(KeyCode(KEY_F2,KEY_SHIFT),          SV_SHORTCUT_CONTEXTHELP),
+                ImplReservedKey(KeyCode(KEY_F4,KEY_MOD1),           SV_SHORTCUT_DOCKUNDOCK),
+                ImplReservedKey(KeyCode(KEY_F4,KEY_MOD2),           SV_SHORTCUT_DOCKUNDOCK),
+                ImplReservedKey(KeyCode(KEY_F4,KEY_MOD1|KEY_MOD2),  SV_SHORTCUT_DOCKUNDOCK),
+                ImplReservedKey(KeyCode(KEY_F6,0),                  SV_SHORTCUT_NEXTSUBWINDOW),
+                ImplReservedKey(KeyCode(KEY_F6,KEY_MOD1),           SV_SHORTCUT_TODOCUMENT),
+                ImplReservedKey(KeyCode(KEY_F6,KEY_SHIFT),          SV_SHORTCUT_PREVSUBWINDOW),
+                ImplReservedKey(KeyCode(KEY_F6,KEY_MOD1|KEY_SHIFT), SV_SHORTCUT_SPLITTER),
+                ImplReservedKey(KeyCode(KEY_F10,0),                 SV_SHORTCUT_MENUBAR)
 #ifdef UNX
                 ,
                 ImplReservedKey(KeyCode(KEY_1,KEY_SHIFT|KEY_MOD1), 0),
@@ -699,6 +699,19 @@ void Application::MergeSystemSettings( AllSettings& rSettings )
     }
     pWindow->ImplGetFrame()->UpdateSettings( rSettings );
     pWindow->ImplUpdateGlobalSettings( rSettings, FALSE );
+}
+
+// -----------------------------------------------------------------------
+
+bool Application::ValidateSystemFont()
+{
+    Window* pWindow = ImplGetSVData()->maWinData.mpFirstFrame;
+    if( ! pWindow )
+        pWindow = ImplGetDefaultWindow();
+
+    AllSettings aSettings;
+    pWindow->ImplGetFrame()->UpdateSettings( aSettings );
+    return pWindow->ImplCheckUIFont( aSettings.GetStyleSettings().GetAppFont() );
 }
 
 // -----------------------------------------------------------------------
