@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docnew.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 08:11:32 $
+ *  last change: $Author: hr $ $Date: 2004-11-26 23:05:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -406,7 +406,7 @@ SwDoc::SwDoc() :
      * Builds and sets the virtual device
      */
     pVirDev = new VirtualDevice( 1 );
-    pVirDev->SetReferenceDevice(VirtualDevice::REFDEV_MODE96);
+    pVirDev->SetReferenceDevice(VirtualDevice::REFDEV_MODE_MSO1);
     MapMode aMapMode( pVirDev->GetMapMode() );
     aMapMode.SetMapUnit( MAP_TWIP );
     pVirDev->SetMapMode( aMapMode );
@@ -786,7 +786,7 @@ OutputDevice* SwDoc::_GetRefDev() const
 VirtualDevice& SwDoc::_GetVirDev() const
 {
     VirtualDevice* pNewVir = new VirtualDevice( 1 );
-    pNewVir->SetReferenceDevice(VirtualDevice::REFDEV_MODE96);
+    pNewVir->SetReferenceDevice(VirtualDevice::REFDEV_MODE_MSO1);
     MapMode aMapMode( pNewVir->GetMapMode() );
     aMapMode.SetMapUnit( MAP_TWIP );
     pNewVir->SetMapMode( aMapMode );
