@@ -2,9 +2,9 @@
 *
 *  $RCSfile: JavaTools.java,v $
 *
-*  $Revision: 1.3 $
+*  $Revision: 1.4 $
 *
-*  last change: $Author: pjunck $ $Date: 2004-10-27 13:29:06 $
+*  last change: $Author: vg $ $Date: 2005-02-21 13:51:23 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -57,7 +57,6 @@
 *  Contributor(s): Berend Cornelius
 *
 */
-
 package com.sun.star.wizards.common;
 
 import com.sun.star.util.DateTime;
@@ -120,6 +119,48 @@ public class JavaTools {
             LocintArray[i] = nValue;
         return LocintArray;
     }
+
+
+    /**converts a list of Integer values included in an Integer vector to a list of int values
+     *
+     *
+     * @param _aIntegerVector
+     * @return
+     */
+    public static int[] IntegerTointList(Vector _aIntegerVector){
+        try {
+            Integer[] nIntegerValues = new Integer[_aIntegerVector.size()];
+            int[] nintValues = new int[_aIntegerVector.size()];
+            _aIntegerVector.toArray(nIntegerValues);
+            for (int i = 0; i < nIntegerValues.length; i++)
+                nintValues[i] = nIntegerValues[i].intValue();
+            return nintValues;
+        } catch (RuntimeException e) {
+            e.printStackTrace(System.out);
+            return null;
+        }}
+
+
+    /**converts a list of Boolean values included in a Boolean vector to a list of boolean values
+     *
+     *
+     * @param _aBooleanVector
+     * @return
+     */
+    public static boolean[] BooleanTobooleanList(Vector _aBooleanVector){
+    try {
+        Boolean[] bBooleanValues = new Boolean[_aBooleanVector.size()];
+        boolean[] bbooleanValues = new boolean[_aBooleanVector.size()];
+        _aBooleanVector.toArray(bBooleanValues);
+        for (int i = 0; i < bBooleanValues.length; i++)
+            bbooleanValues[i] = bBooleanValues[i].booleanValue();
+        return bbooleanValues;
+    } catch (RuntimeException e) {
+        e.printStackTrace(System.out);
+        return null;
+    }}
+
+
 
 
     public static String[] multiDimListToArray(String[][] multidimlist) {
@@ -220,15 +261,20 @@ public class JavaTools {
     }
 
 
-    public static int FieldInIntTable(int[] SearchList, int SearchValue) {
+    public static int FieldInIntTable(int[] SearchList, int SearchValue, int _startindex) {
         int retvalue = -1;
-        for (int i = 0; i < SearchList.length; i++) {
+        for (int i = _startindex; i < SearchList.length; i++) {
             if (SearchList[i] == SearchValue) {
                 retvalue = i;
                 break;
             }
         }
         return retvalue;
+    }
+
+
+    public static int FieldInIntTable(int[] SearchList, int SearchValue) {
+        return FieldInIntTable(SearchList, SearchValue, 0);
     }
 
 
@@ -392,10 +438,11 @@ public class JavaTools {
         String[] retarray = new String[] {};
         if ((baselist != null) && (_complist != null)) {
             Vector retvector = new Vector();
-            String[] orderedcomplist = new String[_complist.length];
-            System.arraycopy(_complist, 0, orderedcomplist, 0, _complist.length);
+//          String[] orderedcomplist = new String[_complist.length];
+//          System.arraycopy(_complist, 0, orderedcomplist, 0, _complist.length);
             for (int i = 0; i < baselist.length; i++)
-                if (Arrays.binarySearch(orderedcomplist, baselist[i]) != -1)
+//              if (Arrays.binarySearch(orderedcomplist, baselist[i]) != -1)
+                if (FieldInList(_complist, baselist[i]) > -1)
                     retvector.add(baselist[i]);
             //          else
             // here you could call the method of a defined interface to notify the calling method
@@ -562,5 +609,15 @@ public class JavaTools {
     }
 
 
+    public static String[] removefromList(String[] _sbaselist, String[] _sdellist){
+        Vector tempbaselist = new Vector();
+        for (int i = 0; i < _sbaselist.length; i++){
+            if (FieldInList(_sdellist, _sbaselist[i]) == -1)
+                tempbaselist.add(_sbaselist[i]);
+        }
+        String[] sretlist = new String[tempbaselist.size()];
+        tempbaselist.toArray(sretlist);
+        return sretlist;
+    }
 
 }
