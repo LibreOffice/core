@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSQLErrorBroadcaster.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:55:10 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 21:47:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@
     <type scope="com::sun::star::sdbc">SQLException</type>
     s posted by any database object.
  */
-interface XSQLErrorBroadcaster: com::sun::star::uno::XInterface
+published interface XSQLErrorBroadcaster: com::sun::star::uno::XInterface
 {
 
     // DocMerge from xml: method com::sun::star::sdb::XSQLErrorBroadcaster::addSQLErrorListener
