@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iahndl.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-04 17:06:15 $
+ *  last change: $Author: hr $ $Date: 2003-08-07 14:33:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -701,47 +701,6 @@ UUIInteractionHandler::handle(
             if (aAnyRequest >>= aAugmentedIoException)
                 aRequestArguments = aAugmentedIoException.Arguments;
 
-            //TODO! remove this backwards compatibility?
-            bool bArgUri = false;
-            bool bArgFolder = false;
-            bool bArgVolumes = false;
-            rtl::OUString aArgUri;
-            rtl::OUString aArgFolder;
-            rtl::OUString aArgVolume;
-            rtl::OUString aArgOtherVolume;
-            switch (aIoException.Code)
-            {
-            case star::ucb::IOErrorCode_CANT_CREATE:
-                if (aRequestArguments.getLength() == 2
-                    && (aRequestArguments[0] >>= aArgUri)
-                    && (aRequestArguments[1] >>= aArgFolder))
-                {
-                    bArgUri = true;
-                    bArgFolder = true;
-                    aRequestArguments.realloc(0);
-                }
-                break;
-
-            case star::ucb::IOErrorCode_DIFFERENT_DEVICES:
-                if (aRequestArguments.getLength() == 2
-                    && (aRequestArguments[0] >>= aArgVolume)
-                    && (aRequestArguments[1] >>= aArgOtherVolume))
-                {
-                    bArgVolumes = true;
-                    aRequestArguments.realloc(0);
-                }
-                break;
-
-            default:
-                if (aRequestArguments.getLength() == 1
-                    && (aRequestArguments[0] >>= aArgUri))
-                {
-                    bArgUri = true;
-                    aRequestArguments.realloc(0);
-                }
-                break;
-            }
-
             ErrCode nErrorCode;
             std::vector< rtl::OUString > aArguments;
             static ErrCode const
@@ -817,123 +776,133 @@ UUIInteractionHandler::handle(
             switch (aIoException.Code)
             {
             case star::ucb::IOErrorCode_CANT_CREATE:
-                if (bArgFolder
-                    || getStringRequestArgument(
-                           aRequestArguments,
-                           rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                             "Folder")),
-                           &aArgFolder))
-                    if (bArgUri
-                        || getResourceNameRequestArgument(aRequestArguments,
-                                                          &aArgUri))
+                {
+                    rtl::OUString aArgFolder;
+                    if (getStringRequestArgument(
+                            aRequestArguments,
+                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                              "Folder")),
+                            &aArgFolder))
                     {
-                        nErrorCode = ERRCODE_UUI_IO_CANTCREATE;
-                        aArguments.reserve(2);
-                        aArguments.push_back(aArgUri);
-                        aArguments.push_back(aArgFolder);
+                        rtl::OUString aArgUri;
+                        if (getResourceNameRequestArgument(aRequestArguments,
+                                                           &aArgUri))
+                        {
+                            nErrorCode = ERRCODE_UUI_IO_CANTCREATE;
+                            aArguments.reserve(2);
+                            aArguments.push_back(aArgUri);
+                            aArguments.push_back(aArgFolder);
+                        }
+                        else
+                        {
+                            nErrorCode = ERRCODE_UUI_IO_CANTCREATE_NONAME;
+                            aArguments.push_back(aArgFolder);
+                        }
                     }
                     else
-                    {
-                        nErrorCode = ERRCODE_UUI_IO_CANTCREATE_NONAME;
-                        aArguments.push_back(aArgFolder);
-                    }
-                else
-                    nErrorCode = aErrorCode[aIoException.Code][0];
-                break;
+                        nErrorCode = aErrorCode[aIoException.Code][0];
+                    break;
+                }
 
             case star::ucb::IOErrorCode_DEVICE_NOT_READY:
-                if (bArgUri
-                    || getResourceNameRequestArgument(aRequestArguments,
-                                                      &aArgUri))
                 {
-                    rtl::OUString aResourceType;
-                    getStringRequestArgument(aRequestArguments,
-                                             rtl::OUString(
-                                                 RTL_CONSTASCII_USTRINGPARAM(
-                                                     "ResourceType")),
-                                             &aResourceType);
-                    bool bRemovable = false;
-                    getBoolRequestArgument(aRequestArguments,
-                                           rtl::OUString(
-                                               RTL_CONSTASCII_USTRINGPARAM(
-                                                   "Removable")),
-                                           &bRemovable);
-                    nErrorCode
-                        = aResourceType.
-                                  equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(
-                                                   "volume")) ?
-                              bRemovable ?
-                                  ERRCODE_UUI_IO_NOTREADY_VOLUME_REMOVABLE :
-                                  ERRCODE_UUI_IO_NOTREADY_VOLUME :
-                              bRemovable ?
-                                  ERRCODE_UUI_IO_NOTREADY_REMOVABLE :
-                                  ERRCODE_UUI_IO_NOTREADY;
-                    aArguments.push_back(aArgUri);
+                    rtl::OUString aArgUri;
+                    if (getResourceNameRequestArgument(aRequestArguments,
+                                                       &aArgUri))
+                    {
+                        rtl::OUString aResourceType;
+                        getStringRequestArgument(
+                            aRequestArguments,
+                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                              "ResourceType")),
+                            &aResourceType);
+                        bool bRemovable = false;
+                        getBoolRequestArgument(aRequestArguments,
+                                               rtl::OUString(
+                                                   RTL_CONSTASCII_USTRINGPARAM(
+                                                       "Removable")),
+                                               &bRemovable);
+                        nErrorCode
+                            = aResourceType.equalsAsciiL(
+                                RTL_CONSTASCII_STRINGPARAM("volume"))
+                            ? (bRemovable
+                               ? ERRCODE_UUI_IO_NOTREADY_VOLUME_REMOVABLE
+                               : ERRCODE_UUI_IO_NOTREADY_VOLUME)
+                            : (bRemovable
+                               ? ERRCODE_UUI_IO_NOTREADY_REMOVABLE
+                               : ERRCODE_UUI_IO_NOTREADY);
+                        aArguments.push_back(aArgUri);
+                    }
+                    else
+                        nErrorCode = aErrorCode[aIoException.Code][0];
+                    break;
                 }
-                else
-                    nErrorCode = aErrorCode[aIoException.Code][0];
-                break;
 
             case star::ucb::IOErrorCode_DIFFERENT_DEVICES:
-                if (bArgVolumes
-                    || getStringRequestArgument(
-                           aRequestArguments,
-                           rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                             "Volume")),
-                           &aArgVolume)
-                       && getStringRequestArgument(
-                              aRequestArguments,
-                              rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                                                "OtherVolume")),
-                              &aArgOtherVolume))
                 {
-                    nErrorCode = aErrorCode[aIoException.Code][1];
-                    aArguments.reserve(2);
-                    aArguments.push_back(aArgVolume);
-                    aArguments.push_back(aArgOtherVolume);
+                    rtl::OUString aArgVolume;
+                    rtl::OUString aArgOtherVolume;
+                    if (getStringRequestArgument(
+                            aRequestArguments,
+                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                              "Volume")),
+                            &aArgVolume)
+                        && getStringRequestArgument(
+                            aRequestArguments,
+                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                              "OtherVolume")),
+                            &aArgOtherVolume))
+                    {
+                        nErrorCode = aErrorCode[aIoException.Code][1];
+                        aArguments.reserve(2);
+                        aArguments.push_back(aArgVolume);
+                        aArguments.push_back(aArgOtherVolume);
+                    }
+                    else
+                        nErrorCode = aErrorCode[aIoException.Code][0];
+                    break;
                 }
-                else
-                    nErrorCode = aErrorCode[aIoException.Code][0];
-                break;
 
             case star::ucb::IOErrorCode_NOT_EXISTING:
-                if (bArgUri
-                    || getResourceNameRequestArgument(aRequestArguments,
-                                                      &aArgUri))
                 {
-                    rtl::OUString aResourceType;
-                    getStringRequestArgument(aRequestArguments,
-                                             rtl::OUString(
-                                                 RTL_CONSTASCII_USTRINGPARAM(
-                                                     "ResourceType")),
-                                             &aResourceType);
-                    nErrorCode
-                        = aResourceType.
-                                  equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(
-                                                   "volume")) ?
-                              ERRCODE_UUI_IO_NOTEXISTS_VOLUME :
-                          aResourceType.
-                                  equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(
-                                                   "folder")) ?
-                              ERRCODE_UUI_IO_NOTEXISTS_FOLDER :
-                              ERRCODE_UUI_IO_NOTEXISTS;
-                    aArguments.push_back(aArgUri);
+                    rtl::OUString aArgUri;
+                    if (getResourceNameRequestArgument(aRequestArguments,
+                                                       &aArgUri))
+                    {
+                        rtl::OUString aResourceType;
+                        getStringRequestArgument(
+                            aRequestArguments,
+                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                              "ResourceType")),
+                            &aResourceType);
+                        nErrorCode
+                            = aResourceType.equalsAsciiL(
+                                RTL_CONSTASCII_STRINGPARAM("volume"))
+                            ? ERRCODE_UUI_IO_NOTEXISTS_VOLUME
+                            : (aResourceType.equalsAsciiL(
+                                   RTL_CONSTASCII_STRINGPARAM("folder"))
+                               ? ERRCODE_UUI_IO_NOTEXISTS_FOLDER
+                               : ERRCODE_UUI_IO_NOTEXISTS);
+                        aArguments.push_back(aArgUri);
+                    }
+                    else
+                        nErrorCode = aErrorCode[aIoException.Code][0];
+                    break;
                 }
-                else
-                    nErrorCode = aErrorCode[aIoException.Code][0];
-                break;
 
             default:
-                if (bArgUri
-                    || getResourceNameRequestArgument(aRequestArguments,
-                                                      &aArgUri))
                 {
-                    nErrorCode = aErrorCode[aIoException.Code][1];
-                    aArguments.push_back(aArgUri);
+                    rtl::OUString aArgUri;
+                    if (getResourceNameRequestArgument(aRequestArguments,
+                                                       &aArgUri))
+                    {
+                        nErrorCode = aErrorCode[aIoException.Code][1];
+                        aArguments.push_back(aArgUri);
+                    }
+                    else
+                        nErrorCode = aErrorCode[aIoException.Code][0];
+                    break;
                 }
-                else
-                    nErrorCode = aErrorCode[aIoException.Code][0];
-                break;
             }
 
             handleErrorRequest(aIoException.Classification,
