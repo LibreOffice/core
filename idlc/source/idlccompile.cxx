@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idlccompile.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 12:11:08 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:47:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,16 +213,16 @@ OString makeTempName(const OString& prefix, const OString& postfix)
     return OString(tmpFilePattern);
 }
 
-sal_Bool copyFile(const OString& sourceFile, const OString& targetFile)
+sal_Bool copyFile(const OString* source, const OString& target)
 {
     sal_Bool bRet = sal_True;
 
-    FILE* pSource = fopen(sourceFile.getStr(), "rb");
+    FILE* pSource = source == 0 ? stdin : fopen(source->getStr(), "rb");
 
     if ( !pSource )
         return sal_False;
 
-    FILE* pTarget = fopen(targetFile.getStr(), "wb");
+    FILE* pTarget = fopen(target.getStr(), "wb");
 
     if ( !pTarget )
     {
@@ -241,14 +241,18 @@ sal_Bool copyFile(const OString& sourceFile, const OString& targetFile)
         {
             if ( (writeSize = fwrite(pBuffer, 1, readSize, pTarget)) != readSize || ferror(pTarget) )
             {
-                fclose(pSource);
+                if (source != 0) {
+                    fclose(pSource);
+                }
                 fclose(pTarget);
                 return sal_False;
             }
         }
     }
 
-    fclose(pSource);
+    if (source != 0) {
+        fclose(pSource);
+    }
     if ( fflush(pTarget) )
         bRet = sal_False;
     fclose(pTarget);
@@ -256,16 +260,25 @@ sal_Bool copyFile(const OString& sourceFile, const OString& targetFile)
     return bRet;
 }
 
-sal_Int32 SAL_CALL compileFile(const OString& fileName)
+sal_Int32 compileFile(const OString * pathname)
 {
     // preporcess input file
     OString tmpFile = makeTempName(OString("idli_"), OString(".idl"));
     OString preprocFile = makeTempName(OString("idlf_"), OString(".idl"));
 
-    if ( !copyFile(fileName, tmpFile) )
+    OString fileName;
+    if (pathname == 0) {
+        fileName = "stdin";
+    } else {
+        fileName = *pathname;
+    }
+
+    if ( !copyFile(pathname, tmpFile) )
     {
-          fprintf(stderr, "%s: couldn't copy file '%s' to '%s'\n",
-            idlc()->getOptions()->getProgramName().getStr(), fileName.getStr(), tmpFile.getStr());
+          fprintf(stderr, "%s: could not copy %s%s to %s\n",
+                idlc()->getOptions()->getProgramName().getStr(),
+                pathname == 0 ? "" : "file ", fileName.getStr(),
+                tmpFile.getStr());
           exit(99);
     }
 
@@ -278,7 +291,7 @@ sal_Int32 SAL_CALL compileFile(const OString& fileName)
     Options* pOptions = idlc()->getOptions();
 
     OString filePath;
-    sal_uInt32 index = fileName.lastIndexOf(SEPARATOR);
+    sal_Int32 index = fileName.lastIndexOf(SEPARATOR);
 
     if ( index > 0)
     {
@@ -349,7 +362,9 @@ sal_Int32 SAL_CALL compileFile(const OString& fileName)
         if ( procError != osl_Process_E_None )
             fprintf(stderr, "%s: starting preprocessor failed\n", pOptions->getProgramName().getStr());
         else
-            fprintf(stderr, "%s: preprocessing \"%s\" failed\n", pOptions->getProgramName().getStr(), fileName.getStr());
+            fprintf(stderr, "%s: preprocessing %s%s failed\n",
+                    pOptions->getProgramName().getStr(),
+                    pathname == 0 ? "" : "file ", fileName.getStr());
 
         unlink(tmpFile.getStr());
         unlink(preprocFile.getStr());
