@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 20:39:10 $
+ *  last change: $Author: os $ $Date: 2001-03-12 14:58:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3884,126 +3884,20 @@ TabPage RID_SVXPAGE_CHAR_EFFECTS
         DropDown = TRUE;
         StringList =
         {
+            < "(keins)" ; default ; > ;
+            < "Punkt" ; default ; > ;
+            < "Kreis" ; default ; > ;
+            < "Scheibe" ; default ; > ;
+            < "Akzent" ; default ; > ;
+        };
+        StringList [English] =
+        {
             < "(None)" ; default ; > ;
             < "Dot" ; default ; > ;
             < "Circle" ; default ; > ;
             < "Disc" ; default ; > ;
             < "Accent" ; default ; > ;
         };
-    StringList [ language_user1 ] =
-    {
-            < "(Ohne)" ; default ; > ;
-        < "Dot" ; default ; > ;
-            < "Circle" ; default ; > ;
-        };
-    StringList [ english_us ] =
-    {
-            < "(None)" ; default ; > ;
-        < "Dot" ; default ; > ;
-        < "Circle" ; default ; > ;
-    };
-    StringList [ portuguese ] =
-    {
-            < "(sem)" ; default ; > ;
-        < "Ponto" ; default ; > ;
-        < "Círculo" ; default ; > ;
-    };
-    StringList [ russian ] =
-    {
-            < "(Áåç)" ; default ; > ;
-        < "Òî÷êà" ; default ; > ;
-        < "Êðóæîê" ; default ; > ;
-    };
-    StringList [ greek ] =
-    {
-            < "(ÊáíÝíá)" ; default ; > ;
-        < "Êïõêêßäá" ; default ; > ;
-        < "Êýêëïò" ; default ; > ;
-    };
-    StringList [ dutch ] =
-    {
-            < "(Zonder)" ; default ; > ;
-        < "Punt" ; default ; > ;
-        < "Cirkel" ; default ; > ;
-    };
-    StringList [ french ] =
-    {
-            < "(Sans)" ; default ; > ;
-        < "Point" ; default ; > ;
-        < "Cercle" ; default ; > ;
-    };
-    StringList [ spanish ] =
-    {
-            < "(Sin)" ; default ; > ;
-        < "Dot" ; default ; > ;
-        < "Círculo" ; default ; > ;
-    };
-    StringList [ italian ] =
-    {
-            < "(senza)" ; default ; > ;
-        < "dot" ; default ; > ;
-        < "cerchio" ; default ; > ;
-    };
-    StringList [ danish ] =
-    {
-            < "(Ohne)" ; default ; > ;
-        < "°" ; default ; > ;
-        < "." ; default ; > ;
-    };
-    StringList [ swedish ] =
-    {
-            < "(Ingen)" ; default ; > ;
-        < "Punkt" ; default ; > ;
-        < "Cirkel" ; default ; > ;
-    };
-    StringList [ polish ] =
-    {
-            < "(Brak)" ; default ; > ;
-        < "Kropka" ; default ; > ;
-        < "Kó³ko" ; default ; > ;
-    };
-    StringList [ portuguese_brazilian ] =
-    {
-            < "(Ohne)" ; default ; > ;
-        < "°" ; default ; > ;
-        < "." ; default ; > ;
-    };
-    StringList [ japanese ] =
-    {
-            < "(‚È‚µ)" ; default ; > ;
-        < "ÄÞ¯Ä" ; default ; > ;
-        < "´Ý°õ" ; default ; > ;
-    };
-    StringList [ korean ] =
-    {
-            < "(¾øÀÌ)" ; default ; > ;
-        < "?" ; default ; > ;
-        < "." ; default ; > ;
-    };
-    StringList [ chinese_simplified ] =
-    {
-            < "(ÎÞ)" ; default ; > ;
-        < "µã" ; default ; > ;
-        < "Ô²" ; default ; > ;
-    };
-    StringList [ chinese_traditional ] =
-    {
-            < "(µL)" ; default ; > ;
-        < "ÂI" ; default ; > ;
-        < "¶ê" ; default ; > ;
-    };
-    StringList [ turkish ] =
-    {
-            < "(Ohne)" ; default ; > ;
-        < "°" ; default ; > ;
-        < "." ; default ; > ;
-    };
-    StringList [ arabic ] =
-    {
-            < "(ÈÏæä)" ; default ; > ;
-        < "äÞØÉ" ; default ; > ;
-        < "ÏÇÆÑÉ" ; default ; > ;
-    };
     };
     FixedText FT_POSITION
     {
