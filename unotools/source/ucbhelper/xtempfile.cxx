@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xtempfile.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mtg $ $Date: 2001-08-14 17:35:24 $
+ *  last change: $Author: mh $ $Date: 2001-08-23 11:51:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,9 +73,6 @@
 #endif
 #ifndef _OSL_FILE_HXX_
 #include <osl/file.hxx>
-#endif
-#ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
-#include <svtools/pathoptions.hxx>
 #endif
 #ifndef _UTL_CONFIGMGR_HXX_
 #include <unotools/configmgr.hxx>
