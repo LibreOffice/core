@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hi_factory.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:31:16 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 09:02:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,8 @@ HtmlFactory_Idl::produce_ShortDoc( Xml::Element &   o_screen,
     HF_IdlShortDocu
         aLinkDoc(Env(), rDetailsRowCell);
     aLinkDoc.Produce_byData( i_ce );
+
+    rDetailsRowCell << new Xml::XmlCode("&nbsp;");
 }
 
 // KORR MI: Does not belong here (implementation inheritance)!
