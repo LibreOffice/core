@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implreg.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: dbo $ $Date: 2002-07-30 12:53:09 $
+ *  last change: $Author: dbo $ $Date: 2002-08-08 11:27:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1547,13 +1547,11 @@ Sequence< OUString > ImplementationRegistration::getImplementations(
                             }
 
                             xImpl->closeKey();
-                            xReg->destroy();
                             return seqImpl;
                         }
                     }
 
                     xImpl->closeKey();
-                    xReg->destroy();
                 }
                 catch(MergeConflictException&)
                 {
@@ -1673,16 +1671,11 @@ void ImplementationRegistration::doRegister(
             // Cleanup Source registry.
             if ( xSourceKey->isValid() )
                 xSourceKey->closeKey();
-            if ( xReg->isValid() )
-                xReg->destroy();
         }
         catch(CannotRegisterImplementationException&)
         {
-            // destroy temp registry
             if ( xSourceKey->isValid() )
                 xSourceKey->closeKey();
-            if ( xReg->isValid() )
-                xReg->destroy();
             // and throw again
             throw;
         }
