@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscicpx.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 15:50:46 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 16:42:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,8 @@
 #include <stdio.h>
 
 #include <tools/rc.h>
-#include <tools/vclrsc.hxx>
+
+#include <vclrsc.hxx>
 
 #ifndef _RSCMGR_HXX
 #include <rscmgr.hxx>
@@ -2192,10 +2193,10 @@ RscTop * RscTypCont::InitClassToolBox( RscTop * pSuper,
         aBaseLst.Insert(
             pEnum = new RscEnum( pHS->Insert( "EnumToolBoxAlign" ),
                                  RSC_NOTYPE ), LIST_APPEND );
-        SETCONST( pEnum, "BOXALIGN_TOP",                BOXALIGN_TOP );
-        SETCONST( pEnum, "BOXALIGN_LEFT",               BOXALIGN_LEFT );
-        SETCONST( pEnum, "BOXALIGN_RIGHT",              BOXALIGN_RIGHT );
-        SETCONST( pEnum, "BOXALIGN_BOTTOM",             BOXALIGN_BOTTOM );
+        SETCONST( pEnum, "BOXALIGN_TOP",                WINDOWALIGN_TOP );
+        SETCONST( pEnum, "BOXALIGN_LEFT",               WINDOWALIGN_LEFT );
+        SETCONST( pEnum, "BOXALIGN_RIGHT",              WINDOWALIGN_RIGHT );
+        SETCONST( pEnum, "BOXALIGN_BOTTOM",             WINDOWALIGN_BOTTOM );
 
         // Variable einfuegen
         nId = aNmTb.Put( "Align", VARNAME );
