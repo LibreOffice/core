@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtftn.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:10:05 $
+ *  last change: $Author: kz $ $Date: 2003-12-11 10:23:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -251,16 +251,11 @@ SwTwips SwTxtFrm::GetFtnLine( const SwTxtFtn *pFtn, sal_Bool bLocked ) const
 
     if( !HasPara() )
     {
-        // Es sieht ein wenig gehackt aus, aber man riskiert einen Haufen
-        // Aerger, wenn man versucht, per pThis->GetFormatted() doch
-        // noch an den richtigen Wert heranzukommen. Durch das PREP_ADJUST
-        // stellen wir sicher, dass wir noch einmal drankommen, dann aber
-        // von der Ref aus!
-        // Trotzdem wollen wir nichts unversucht lassen und geben die
-        // Unterkante des Frames zurueck.
-        if( !bLocked )
-            pThis->Prepare( PREP_ADJUST_FRM );
-        return IsVertical() ? Frm().Left() : Frm().Bottom();
+        // #109071# GetFormatted() does not work here, bacause most probably
+        // the frame is currently locked. We return the previous value.
+        return pThis->mnFtnLine > 0 ?
+               pThis->mnFtnLine :
+               IsVertical() ? Frm().Left() : Frm().Bottom();
     }
 
     SWAP_IF_NOT_SWAPPED( this )
@@ -276,6 +271,7 @@ SwTwips SwTxtFrm::GetFtnLine( const SwTxtFtn *pFtn, sal_Bool bLocked ) const
 
     UNDO_SWAP( this )
 
+    pThis->mnFtnLine = nRet;
     return nRet;
 }
 
@@ -615,12 +611,18 @@ void SwTxtFrm::RemoveFtn( const xub_StrLen nStart, const xub_StrLen nLen )
 
 void SwTxtFrm::ConnectFtn( SwTxtFtn *pFtn, const SwTwips nDeadLine )
 {
-    ASSERT( ! IsVertical() || ! IsSwapped(),
+    ASSERT( !IsVertical() || !IsSwapped(),
             "SwTxtFrm::ConnectFtn with swapped frame" );
 
     bFtn = sal_True;
     bInFtnConnect = sal_True;   //Bloss zuruecksetzen!
     sal_Bool bEnd = pFtn->GetFtn().IsEndNote();
+
+    //
+    // We want to store this value, because it is needed as a fallback
+    // in GetFtnLine(), if there is no paragraph information available
+    //
+    mnFtnLine = nDeadLine;
 
     // Wir brauchen immer einen Boss (Spalte/Seite)
     SwSectionFrm *pSect;
