@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optspell.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 22:24:10 $
+ *  last change: $Author: kz $ $Date: 2001-07-02 23:54:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,7 @@ TabPage RID_SFXPAGE_SPELL
         Text [ portuguese ] = "~Editar..." ;
         Text [ finnish ] = "~Muokkaa" ;
         Text [ danish ] = "Rediger..." ;
-        Text [ french ] = "~Modifier..." ;
+        Text [ french ] = "Éditer..." ;
         Text [ swedish ] = "~Redigera..." ;
         Text [ dutch ] = "Be~werken..." ;
         Text [ spanish ] = "~Editar..." ;
@@ -292,5 +292,6 @@ TabPage RID_SFXPAGE_SPELL
     Text[ catalan ] = "Ortografía";
 };
  // ********************************************************************** EOF
+
 
 
