@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-17 15:12:43 $
+#   last change: $Author: kz $ $Date: 2003-08-25 14:54:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,8 +65,6 @@ PRJ=..$/..$/..
 PRJNAME=sw
 TARGET=app
 
-AUTOSEG=true
-
 LIBTARGET=NO
 
 # future: DEMO\...
@@ -85,7 +83,8 @@ BMP_IN=$(PRJ)$/win/imglst
 
 # --- Files --------------------------------------------------------
 
-SRCFILES =\
+SRS1NAME=$(TARGET)
+SRC1FILES =\
         acc.src     \
         app.src     \
         mn.src      \
