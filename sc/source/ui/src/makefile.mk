@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 15:21:25 $
+#   last change: $Author: kz $ $Date: 2004-05-19 03:24:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -72,8 +72,6 @@ TARGET=ui
 .INCLUDE :  settings.mk
 .INCLUDE :  sc.mk
 
-IMGLST_SRS=$(SRS)$/ui.srs
-BMP_IN=$(PRJ)$/res/imglst/apptbx
 # --- Update-Version -----------------------------------------------
 
 .INCLUDE :  $(UPD)minor.mk
