@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataPilotField.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:07:45 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 12:35:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,10 @@
 #include <com/sun/star/beans/XPropertySet.idl>
 #endif
 
+#ifndef __com_sun_star_sheet_XDataPilotField_idl__
+#include <com/sun/star/sheet/XDataPilotField.idl>
+#endif
+
 #ifndef __com_sun_star_sheet_DataPilotFieldOrientation_idl__
 #include <com/sun/star/sheet/DataPilotFieldOrientation.idl>
 #endif
@@ -105,6 +109,10 @@ service DataPilotField
      */
     interface com::sun::star::beans::XPropertySet;
 
+    //-------------------------------------------------------------------------
+
+    [optional] interface com::sun::star::sheet::XDataPilotField;
+
     //=========================================================================
 
     /** specifies the orientation of the field.
@@ -122,6 +130,19 @@ service DataPilotField
      */
     [property] com::sun::star::sheet::GeneralFunction Function;
 
+
+    //-------------------------------------------------------------------------
+
+    /** specifies the selected page which is used to filter the data pilot.
+     */
+    [property,optional] string SelectedPage;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies whether to use the selected page to filter the data pilot or
+        show all.
+     */
+    [property,optional] boolean UseSelectedPage;
 };
 
 //=============================================================================
