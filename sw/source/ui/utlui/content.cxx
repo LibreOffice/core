@@ -2,9 +2,9 @@
  *
  *  $RCSfile: content.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: os $ $Date: 2002-08-02 14:15:51 $
+ *  last change: $Author: os $ $Date: 2002-08-15 09:56:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1226,7 +1226,17 @@ void  SwContentTree::Command( const CommandEvent& rCEvt )
             aSubPop2.SetSelectHdl(aSelLk);
             aSubPop3.SetSelectHdl(aSelLk);
 
-            aPop.Execute( this, rCEvt.GetMousePosPixel() );
+            //determine the position to execute the PopupMenu
+            Point   aPopupPos;
+            if( rCEvt.IsMouseEvent() )
+                aPopupPos = rCEvt.GetMousePosPixel();
+            else if(FirstSelected())
+            {
+                SvLBoxEntry*  pSelected = FirstSelected();
+                MakeVisible( pSelected );
+                aPopupPos = GetFocusRect( pSelected, GetEntryPos( pSelected ).Y() ).Center();
+            }
+            aPop.Execute( this, aPopupPos );
         }
         break;
         default: bParent = sal_True;

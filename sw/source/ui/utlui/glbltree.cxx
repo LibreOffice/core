@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glbltree.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fs $ $Date: 2002-07-19 15:36:15 $
+ *  last change: $Author: os $ $Date: 2002-08-15 09:56:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -510,7 +510,17 @@ void     SwGlobalTree::Command( const CommandEvent& rCEvt )
                 aSubPop1.SetSelectHdl(aLk);
                 aSubPop2.SetSelectHdl(aLk);
 
-                aPop.Execute( this, rCEvt.GetMousePosPixel());
+                //determine the position to execute the PopupMenu
+                Point   aPopupPos;
+                if( rCEvt.IsMouseEvent() )
+                    aPopupPos = rCEvt.GetMousePosPixel();
+                else if(FirstSelected())
+                {
+                    SvLBoxEntry*  pSelected = FirstSelected();
+                    MakeVisible( pSelected );
+                    aPopupPos = GetFocusRect( pSelected, GetEntryPos( pSelected ).Y() ).Center();
+                }
+                aPop.Execute( this, aPopupPos );
             }
         }
         break;
