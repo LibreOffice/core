@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerfactory.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: jb $ $Date: 2001-11-02 12:22:35 $
+ *  last change: $Author: jb $ $Date: 2001-11-09 12:03:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,16 +59,9 @@
  *
  ************************************************************************/
 #include <stdio.h>
-#ifndef _CONFIGMGR_PROVIDER_FACTORY_HXX_
-#include "providerfactory.hxx"
-#endif
 
-#ifndef _UNO_LBNAMES_H_
-#include <uno/lbnames.h>
-#endif
-#ifndef _OSL_DIAGNOSE_H_
-#include <osl/diagnose.h>
-#endif
+#include "providerfactory.hxx"
+
 #ifndef CONFIGMGR_API_FACTORY_HXX_
 #include "confapifactory.hxx"
 #endif
@@ -79,11 +72,22 @@
 #include "bootstrap.hxx"
 #endif
 
-// #include <com/sun/star/lang/XEventListener.hpp>
+#ifndef _COM_SUN_STAR_LANG_XCOMPONENT_HPP_
 #include <com/sun/star/lang/XComponent.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONFIGURATION_CANNOTLOADCONFIGURATIONEXCEPTION_HPP_
+#include <com/sun/star/configuration/CannotLoadConfigurationException.hpp>
+#endif
+
+#ifndef _UNO_LBNAMES_H_
+#include <uno/lbnames.h>
+#endif
 
 #define THISREF() static_cast< ::cppu::OWeakObject* >(this)
 
+#ifndef _OSL_DIAGNOSE_H_
+#include <osl/diagnose.h>
+#endif
 #ifndef _RTL_LOGFILE_HXX_
 #include <rtl/logfile.hxx>
 #endif
@@ -96,6 +100,7 @@ namespace configmgr
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::lang;
     using namespace ::com::sun::star::beans;
+    namespace csscfg = ::com::sun::star::configuration;
     using namespace ::cppu;
     using namespace ::osl;
 
@@ -212,7 +217,7 @@ namespace configmgr
                 OSL_ENSURE(false, "Object creator could not create provider, but returned NULL instead of throwing an exception");
                 sal_Char const sCannotCreate[] = "Cannot create ConfigurationProvider. Unknown backend or factory error.";
                 // should become CannotLoadConfigurationException
-                throw uno::Exception( OUString::createFromAscii(sCannotCreate), *this );
+                throw csscfg::CannotLoadConfigurationException( OUString::createFromAscii(sCannotCreate), *this );
             }
 
             // remember it for later usage
@@ -423,6 +428,9 @@ namespace configmgr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.14  2001/11/02 12:22:35  jb
+ *  #91782# Adjusted to change in BootstrapSettings
+ *
  *  Revision 1.13  2001/08/06 16:06:35  jb
  *  #85017#,#81412# Moved common bootstrap code to unotools (utl::Bootstrap)
  *
