@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regionsw.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-16 21:47:13 $
+ *  last change: $Author: os $ $Date: 2001-07-04 09:02:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -419,7 +419,7 @@ ModalDialog MD_EDIT_REGION
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 68 , 12 ) ;
+        Size = MAP_APPFONT ( 71 , 12 ) ;
         TabStop = TRUE ;
         Disable = TRUE ;
     };
@@ -427,15 +427,8 @@ ModalDialog MD_EDIT_REGION
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , 29 ) ;
-        Size = MAP_APPFONT ( 68 , 150 ) ;
+        Size = MAP_APPFONT ( 71 , 150 ) ;
         TabStop = TRUE ;
-    };
-    FixedLine FL_SEP
-    {
-        OutputSize = TRUE ;
-        Pos = MAP_APPFONT ( 87 , 14 ) ;
-        Size = MAP_APPFONT ( 4 , 168 ) ;
-        Vert = TRUE;
     };
     FixedLine FL_LINK
     {
@@ -497,8 +490,8 @@ ModalDialog MD_EDIT_REGION
     };
     ComboBox LB_SUBREG
     {
-        Pos = MAP_APPFONT ( 185 , 57 ) ;
-        Size = MAP_APPFONT ( 48 , 50 ) ;
+        Pos = MAP_APPFONT ( 165 , 57 ) ;
+        Size = MAP_APPFONT ( 68 , 50 ) ;
         Disable = TRUE ;
         TabStop = TRUE ;
         Sort = TRUE ;
@@ -544,7 +537,7 @@ ModalDialog MD_EDIT_REGION
     };
     CheckBox CB_PASSWD
     {
-        Pos = MAP_APPFONT ( 104 , 100 ) ;
+        Pos = MAP_APPFONT ( 107 , 100 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         TabStop = TRUE ;
         CB_PASSWD_TEXT
@@ -1046,17 +1039,10 @@ TabPage TP_INSERT_SECTION
     ComboBox ED_RNAME
     {
         Pos = MAP_APPFONT ( 12 , 14 ) ;
-        Size = MAP_APPFONT ( 66 , 140 ) ;
+        Size = MAP_APPFONT ( 69 , 140 ) ;
         TabStop = TRUE ;
         AutoHScroll = TRUE ;
         SORT = TRUE ;
-    };
-    FixedLine FL_SEP
-    {
-        OutputSize = TRUE ;
-        Pos = MAP_APPFONT ( 84 , 14 ) ;
-        Size = MAP_APPFONT ( 4 , 140 ) ;
-        Vert = TRUE;
     };
     FixedLine FL_LINK
     {
@@ -1118,8 +1104,8 @@ TabPage TP_INSERT_SECTION
     };
     ComboBox LB_SUBREG
     {
-        Pos = MAP_APPFONT ( 182 , 58 ) ;
-        Size = MAP_APPFONT ( 53 , 50 ) ;
+        Pos = MAP_APPFONT ( 160 , 58 ) ;
+        Size = MAP_APPFONT ( 76 , 50 ) ;
         DropDown = TRUE ;
         Disable = TRUE ;
         TabStop = TRUE ;
@@ -1163,7 +1149,7 @@ TabPage TP_INSERT_SECTION
     };
     CheckBox CB_PASSWD
     {
-        Pos = MAP_APPFONT ( 102 , 101 ) ;
+        Pos = MAP_APPFONT ( 105 , 101 ) ;
         Size = MAP_APPFONT ( 100 , 10 ) ;
         TabStop = TRUE ;
         CB_PASSWD_TEXT

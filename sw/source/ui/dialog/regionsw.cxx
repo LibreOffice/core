@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regionsw.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: os $ $Date: 2001-06-20 11:20:01 $
+ *  last change: $Author: os $ $Date: 2001-07-04 09:02:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -358,7 +358,6 @@ SwEditRegionDlg::SwEditRegionDlg( Window* pParent, SwWrtShell& rWrtSh )
     aNameFL             ( this, SW_RES( FL_NAME ) ),
     aCurName            ( this, SW_RES( ED_RANAME ) ),
     aTree               ( this, SW_RES( TLB_SECTION )),
-    aSepFL              ( this, SW_RES( FL_SEP ) ),
     aLinkFL             ( this, SW_RES( FL_LINK ) ),
     aFileCB             ( this, SW_RES( CB_FILE ) ),
 #ifdef DDE_AVAILABLE
@@ -1688,7 +1687,6 @@ SwInsertSectionTabPage::SwInsertSectionTabPage(
     SfxTabPage( pParent, SW_RES(TP_INSERT_SECTION), rAttrSet ),
     aNameFL       ( this, SW_RES( FL_NAME ) ),
     aCurName            ( this, SW_RES( ED_RNAME ) ),
-    aSepFL              ( this, SW_RES( FL_SEP ) ),
     aLinkFL             ( this, SW_RES( FL_LINK ) ),
     aFileCB             ( this, SW_RES( CB_FILE ) ),
 #ifdef DDE_AVAILABLE
@@ -2366,6 +2364,9 @@ void SwSectionPropertyTabDialog::PageCreated( USHORT nId, SfxTabPage &rPage )
 
 /*-------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.12  2001/06/20 11:20:01  os
+    #87139# use default font for tree
+
     Revision 1.11  2001/06/03 14:04:38  fme
     Fix #86988#: Redesign of dialogs
 

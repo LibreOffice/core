@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regionsw.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2001-04-27 12:10:08 $
+ *  last change: $Author: os $ $Date: 2001-07-04 09:02:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,7 +204,6 @@ class SwEditRegionDlg : public SfxModalDialog
     FixedLine       aNameFL;
     Edit            aCurName;
     SvTreeListBox   aTree;
-    FixedLine       aSepFL;
 
     FixedLine       aLinkFL;
     TriStateBox     aFileCB;
@@ -293,8 +292,6 @@ class SwInsertSectionTabPage : public SfxTabPage
 {
     FixedLine       aNameFL;
     ComboBox        aCurName;
-
-    FixedLine       aSepFL;
 
     FixedLine       aLinkFL;
     CheckBox        aFileCB;
