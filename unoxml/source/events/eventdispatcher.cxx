@@ -40,15 +40,14 @@ namespace DOM { namespace events {
             ListenerMap *pMap = tIter->second;
             // find listeners of specied type for specified node
             ListenerMap::iterator iter = pMap->find(pNode);
-            ListenerMap::const_iterator ibound = pMap->upper_bound(pNode);
-            while (iter != ibound)
+            while (iter != pMap->end() && iter->first == pNode)
             {
                 // erase all references to specified listener
-                if((iter->second).is() && (iter->second) == aListener)
+                if ((iter->second).is() && iter->second == aListener)
                 {
-                    ListenerMap::iterator i2 = iter;
+                    ListenerMap::iterator tmp_iter = iter;
                     iter++;
-                    pMap->erase(i2);
+                    pMap->erase(tmp_iter);
                 }
                 else
                     iter++;
@@ -65,18 +64,12 @@ namespace DOM { namespace events {
         TypeListenerMap::const_iterator tIter = pTMap->find(aType);
         if (tIter != pTMap->end()) {
             ListenerMap *pMap = tIter->second;
-            ListenerMap::const_iterator iter = pMap->find(pNode);
-            if( iter == pMap->end() ) return;
+            ListenerMap::const_iterator iter = pMap->lower_bound(pNode);
             ListenerMap::const_iterator ibound = pMap->upper_bound(pNode);
-            // ListenerPairVector lv(iter, ibound);
-            // ListenerPairVector::const_iterator liter = lv.begin();
-            while (iter->first < ibound->first)
+            for( ; iter != ibound; iter++ )
             {
                 if((iter->second).is())
-                {
                     (iter->second)->handleEvent(xEvent);
-                }
-                iter++;
             }
         }
     }
