@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OnewayExecutor.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:35:40 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 16:39:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -37,8 +37,6 @@
  *  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  *************************************************************************/
-
-package OfficeDev.samples.DesktopEnvironment;
 
 import java.util.Vector;
 
@@ -80,7 +78,8 @@ class OnewayExecutor extends Thread
 
     /**
      * @member  m_rLink     the object, which wish to be called back by this thread
-     * @member  m_nRequest  describes the type of the original request (means the called oneyway method)
+     * @member  m_nRequest  describes the type of the original request (means the
+     *                      called oneyway method)
      * @member  m_lParams   list of parameters of the original request
      */
     private IOnewayLink m_rLink     ;
@@ -98,13 +97,16 @@ class OnewayExecutor extends Thread
      * @param nRequest
      *          The two user of this callback can define an unique number,
      *          which identify the type of original interface method.
-     *          So the called interface object can decide, which action will be neccessary.
+     *          So the called interface object can decide, which action will be
+     *          neccessary.
      *
      * @param lParams
-     *          If the original method used parameters, they will be coded here
-     *          in a generic way. Only the called interface object know (it depends from
-     *          the original request - see nRequest too), how this list must be interpreted.
-     *          Note: Atomic types (e.g. int, long) will be transported as objects too (Integer, Long)!
+     *          If the original method used parameters, they will be coded here in
+     *          a generic way. Only the called interface object know (it depends
+     *          from the original request - see nRequest too), how this list must
+     *          be interpreted.
+     *          Note: Atomic types (e.g. int, long) will be transported as objects
+     *          too (Integer, Long)!
      */
     public OnewayExecutor( IOnewayLink rLink    ,
                            int         nRequest ,
@@ -147,7 +149,9 @@ class OnewayExecutor extends Thread
      * one easier - you can use this helper methods. They know how suchlist
      * must be coded. It's not a must to use it - but you can ...
      */
-    public static void codeFrameAction(boolean bEncode, /*INOUT*/Vector[] lParams, /*INOUT*/com.sun.star.frame.FrameActionEvent[] aAction)
+    public static void codeFrameAction(
+        boolean bEncode, Vector[] lParams,
+        com.sun.star.frame.FrameActionEvent[] aAction)
     {
         if (bEncode)
         {
@@ -156,13 +160,16 @@ class OnewayExecutor extends Thread
         }
         else
         {
-            aAction[0] = (com.sun.star.frame.FrameActionEvent)(lParams[0].elementAt(0));
+            aAction[0] = (com.sun.star.frame.FrameActionEvent)
+                (lParams[0].elementAt(0));
         }
     }
 
     // _______________________________
 
-    public static void codeStatusChanged(boolean bEncode, /*INOUT*/Vector[] lParams, /*INOUT*/com.sun.star.frame.FeatureStateEvent[] aStatus)
+    public static void codeStatusChanged(
+        boolean bEncode, Vector[] lParams,
+        com.sun.star.frame.FeatureStateEvent[] aStatus)
     {
         if (bEncode)
         {
@@ -171,13 +178,17 @@ class OnewayExecutor extends Thread
         }
         else
         {
-            aStatus[0] = (com.sun.star.frame.FeatureStateEvent)(lParams[0].elementAt(0));
+            aStatus[0] = (com.sun.star.frame.FeatureStateEvent)
+                (lParams[0].elementAt(0));
         }
     }
 
     // _______________________________
 
-    public static void codeAddOrRemoveStatusListener(boolean bEncode, /*INOUT*/Vector[] lParams, /*INOUT*/com.sun.star.frame.XStatusListener[] xListener, /*INOUT*/com.sun.star.util.URL[] aURL)
+    public static void codeAddOrRemoveStatusListener(
+        boolean bEncode, Vector[] lParams,
+        com.sun.star.frame.XStatusListener[] xListener,
+        com.sun.star.util.URL[] aURL)
     {
         if (bEncode)
         {
@@ -187,14 +198,18 @@ class OnewayExecutor extends Thread
         }
         else
         {
-            xListener[0] = (com.sun.star.frame.XStatusListener)(lParams[0].elementAt(0));
-            aURL[0]      = (com.sun.star.util.URL)(lParams[0].elementAt(1));
+            xListener[0] = (com.sun.star.frame.XStatusListener)
+                (lParams[0].elementAt(0));
+            aURL[0] = (com.sun.star.util.URL)(lParams[0].elementAt(1));
         }
     }
 
     // _______________________________
 
-    public static void codeDispatch(boolean bEncode, /*INOUT*/Vector[] lParams, /*INOUT*/com.sun.star.util.URL[] aURL, /*INOUT*/com.sun.star.beans.PropertyValue[][] lArgs)
+    public static void codeDispatch(
+        boolean bEncode, Vector[] lParams,
+        com.sun.star.util.URL[] aURL,
+        com.sun.star.beans.PropertyValue[][] lArgs)
     {
         if (bEncode)
         {
@@ -222,7 +237,8 @@ class OnewayExecutor extends Thread
 
             while (nPos<nLength)
             {
-                lArgs[0][nPos] = (com.sun.star.beans.PropertyValue)(lParams[0].elementAt(nPos+1));
+                lArgs[0][nPos] = (com.sun.star.beans.PropertyValue)
+                    (lParams[0].elementAt(nPos+1));
                 ++nPos;
             }
         }

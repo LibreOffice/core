@@ -2,9 +2,9 @@
  *
  *  $RCSfile: StatusListener.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:35:50 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 16:40:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -38,25 +38,10 @@
  *
  *************************************************************************/
 
-package OfficeDev.samples.DesktopEnvironment;
-
 // __________ Imports __________
 
-// uno interfaces
-import com.sun.star.frame.XFrame;
-import com.sun.star.frame.XDispatch;
-import com.sun.star.frame.XStatusListener;
-import com.sun.star.frame.XFrameActionListener;
-
-// uno events
-import com.sun.star.frame.FeatureStateEvent;
-import com.sun.star.frame.FrameActionEvent;
-import com.sun.star.lang.EventObject;
-
-// uno helper
 import com.sun.star.uno.UnoRuntime;
 
-// others
 import java.lang.String;
 import java.awt.Component;
 import javax.swing.JCheckBox;
