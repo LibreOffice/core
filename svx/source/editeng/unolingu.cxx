@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unolingu.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: tl $ $Date: 2001-06-18 11:24:13 $
+ *  last change: $Author: tl $ $Date: 2002-02-19 13:25:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,8 @@
 
 #include <unolingu.hxx>
 
+#include <cppuhelper/implbase1.hxx> // helper for implementations
+
 #ifndef _LANG_HXX
 #include <tools/lang.hxx>
 #endif
@@ -93,6 +95,9 @@
 #ifndef _ISOLANG_HXX
 #include <tools/isolang.hxx>
 #endif
+#ifndef _SVTOOLS_LINGUCFG_HXX_
+#include <svtools/lingucfg.hxx>
+#endif
 #ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
 #endif
@@ -114,6 +119,155 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::linguistic2;
+
+///////////////////////////////////////////////////////////////////////////
+
+
+static Reference< XLinguServiceManager > GetLngSvcMgr_Impl()
+{
+    Reference< XLinguServiceManager > xRes;
+    Reference< XMultiServiceFactory >  xMgr = getProcessServiceFactory();
+    if (xMgr.is())
+    {
+        xRes = Reference< XLinguServiceManager > ( xMgr->createInstance(
+                OUString( RTL_CONSTASCII_USTRINGPARAM (
+                    "com.sun.star.linguistic2.LinguServiceManager" ) ) ), UNO_QUERY ) ;
+    }
+    return xRes;
+}
+
+
+///////////////////////////////////////////////////////////////////////////
+
+
+//! Dummy implementation in order to avoid loading of lingu DLL
+//! when only the XSupportedLocales interface is used.
+//! The dummy accesses the real implementation (and thus loading the DLL)
+//! when "real" work needs to be done only.
+class ThesDummy_Impl :
+    public cppu::WeakImplHelper1
+    <
+        ::com::sun::star::linguistic2::XThesaurus
+    >
+{
+    Reference< XThesaurus >     xThes;      // the real one...
+    Sequence< Locale >         *pLocaleSeq;
+
+    void GetCfgLocales();
+    void ClearLocales()
+    {
+        delete pLocaleSeq;    pLocaleSeq = 0;
+    }
+
+public:
+    ThesDummy_Impl() : pLocaleSeq(0)  {}
+    ~ThesDummy_Impl();
+
+    // XSupportedLocales
+    virtual ::com::sun::star::uno::Sequence<
+            ::com::sun::star::lang::Locale > SAL_CALL
+        getLocales()
+            throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL
+        hasLocale( const ::com::sun::star::lang::Locale& rLocale )
+            throw(::com::sun::star::uno::RuntimeException);
+
+    // XThesaurus
+    virtual ::com::sun::star::uno::Sequence<
+            ::com::sun::star::uno::Reference<
+                ::com::sun::star::linguistic2::XMeaning > > SAL_CALL
+        queryMeanings( const ::rtl::OUString& rTerm,
+                const ::com::sun::star::lang::Locale& rLocale,
+                const ::com::sun::star::beans::PropertyValues& rProperties )
+            throw(::com::sun::star::lang::IllegalArgumentException,
+                  ::com::sun::star::uno::RuntimeException);
+};
+
+
+ThesDummy_Impl::~ThesDummy_Impl()
+{
+    delete pLocaleSeq;
+}
+
+
+void ThesDummy_Impl::GetCfgLocales()
+{
+    if (!pLocaleSeq)
+    {
+        SvtLinguConfigItem aCfg( String::CreateFromAscii( "Office.Linguistic/ServiceManager" ) );
+        String  aNode( String::CreateFromAscii( "ThesaurusList" ) );
+        Sequence < OUString > aNodeNames( aCfg.GetNodeNames( aNode ) );
+        const OUString *pNodeNames = aNodeNames.getConstArray();
+        INT32 nLen = aNodeNames.getLength();
+        pLocaleSeq = new Sequence< Locale >( nLen );
+        Locale *pLocale = pLocaleSeq->getArray();
+        for (INT32 i = 0;  i < nLen;  ++i)
+        {
+            pLocale[i] = SvxCreateLocale(
+                            ConvertIsoStringToLanguage( pNodeNames[i] ) );
+        }
+    }
+}
+
+
+uno::Sequence< lang::Locale > SAL_CALL
+        ThesDummy_Impl::getLocales()
+            throw(uno::RuntimeException)
+{
+    if (xThes.is())
+        return xThes->getLocales();
+    else if (!pLocaleSeq)
+        GetCfgLocales();
+    return *pLocaleSeq;
+}
+
+
+sal_Bool SAL_CALL
+        ThesDummy_Impl::hasLocale( const lang::Locale& rLocale )
+            throw(uno::RuntimeException)
+{
+    if (xThes.is())
+        return xThes->hasLocale( rLocale );
+    else if (!pLocaleSeq)
+        GetCfgLocales();
+    BOOL bFound = FALSE;
+    INT32 nLen = pLocaleSeq->getLength();
+    const Locale *pLocale = pLocaleSeq->getConstArray();
+    const Locale *pEnd = pLocale + nLen;
+    for ( ;  pLocale < pEnd  &&  !bFound;  ++pLocale)
+    {
+        bFound = pLocale->Language == rLocale.Language  &&
+                 pLocale->Country  == rLocale.Country   &&
+                 pLocale->Variant  == rLocale.Variant;
+    }
+    return bFound;
+}
+
+
+uno::Sequence< uno::Reference< linguistic2::XMeaning > > SAL_CALL
+        ThesDummy_Impl::queryMeanings(
+                const rtl::OUString& rTerm,
+                const lang::Locale& rLocale,
+                const beans::PropertyValues& rProperties )
+            throw(lang::IllegalArgumentException,
+                  uno::RuntimeException)
+{
+    uno::Sequence< uno::Reference< linguistic2::XMeaning > > aRes;
+    if (!xThes.is())
+    {
+        Reference< XLinguServiceManager > xLngSvcMgr( GetLngSvcMgr_Impl() );
+        if (xLngSvcMgr.is())
+        {
+            xThes = xLngSvcMgr->getThesaurus();
+            ClearLocales();
+        }
+    }
+    DBG_ASSERT( xThes.is(), "Thesaurus missing" );
+    if (xThes.is())
+        aRes = xThes->queryMeanings( rTerm, rLocale, rProperties );
+    return aRes;
+}
+
 
 ///////////////////////////////////////////////////////////////////////////
 
@@ -214,20 +368,6 @@ Reference< XDictionaryList >    LinguMgr::xDicList      = 0;
 Reference< XPropertySet >       LinguMgr::xProp         = 0;
 Reference< XDictionary1 >       LinguMgr::xIgnoreAll    = 0;
 Reference< XDictionary1 >       LinguMgr::xChangeAll    = 0;
-
-
-static Reference< XLinguServiceManager > GetLngSvcMgr_Impl()
-{
-    Reference< XLinguServiceManager > xRes;
-    Reference< XMultiServiceFactory >  xMgr = getProcessServiceFactory();
-    if (xMgr.is())
-    {
-        xRes = Reference< XLinguServiceManager > ( xMgr->createInstance(
-                OUString( RTL_CONSTASCII_USTRINGPARAM (
-                    "com.sun.star.linguistic2.LinguServiceManager" ) ) ), UNO_QUERY ) ;
-    }
-    return xRes;
-}
 
 
 Reference< XLinguServiceManager > LinguMgr::GetLngSvcMgr()
@@ -333,6 +473,12 @@ Reference< XThesaurus > LinguMgr::GetThes()
     if (!pExitLstnr)
         pExitLstnr = new LinguMgrExitLstnr;
 
+    //! use dummy implementation in order to avoid loading of lingu DLL
+    //! when only the XSupportedLocales interface is used.
+    //! The dummy accesses the real implementation (and thus loading the DLL)
+    //! when "real" work needs to be done only.
+    xThes = new ThesDummy_Impl;
+/*
     if (!xLngSvcMgr.is())
         xLngSvcMgr = GetLngSvcMgr_Impl();
 
@@ -340,6 +486,7 @@ Reference< XThesaurus > LinguMgr::GetThes()
     {
         xThes = xLngSvcMgr->getThesaurus();
     }
+*/
     return xThes;
 }
 
