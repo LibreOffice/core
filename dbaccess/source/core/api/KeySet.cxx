@@ -2,9 +2,9 @@
  *
  *  $RCSfile: KeySet.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: oj $ $Date: 2001-12-05 14:56:24 $
+ *  last change: $Author: oj $ $Date: 2001-12-11 09:09:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,7 +197,7 @@ void OKeySet::construct(const Reference< XResultSet>& _xDriverSet)
     OColumnNamePos::const_iterator aIter;
     for(aIter = (*m_pKeyColumnNames).begin();aIter != (*m_pKeyColumnNames).end();)
     {
-        aFilter += m_aComposedTableName;
+        aFilter += ::dbtools::quoteName( aQuote,m_sUpdateTableName);
         aFilter += ::rtl::OUString::createFromAscii(".");
         aFilter += ::dbtools::quoteName( aQuote,aIter->first);
         aFilter += ::rtl::OUString::createFromAscii(" = ?");
@@ -1345,6 +1345,9 @@ namespace dbaccess
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.29  2001/12/05 14:56:24  oj
+    #95610# fetch autoincrement values after insert with max
+
     Revision 1.28  2001/11/29 16:35:26  oj
     #95225# changes for bookmarkable resultset
 
