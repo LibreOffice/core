@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basesh.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: os $ $Date: 2002-08-28 14:55:08 $
+ *  last change: $Author: os $ $Date: 2002-09-03 11:13:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1933,17 +1933,17 @@ void SwBaseShell::ExecTxtCtrl( SfxRequest& rReq )
     {
         SwWrtShell &rSh = GetShell();
         SvxScriptSetItem* pSSetItem = 0;
-        USHORT nWhich = rReq.GetSlot();
-        switch( nWhich )
+        USHORT nSlot = rReq.GetSlot();
+        SfxItemPool& rPool = rSh.GetAttrPool();
+        USHORT nWhich = rPool.GetWhich( nSlot );
+        switch( nSlot )
         {
         case SID_ATTR_CHAR_FONT:
         case SID_ATTR_CHAR_FONTHEIGHT:
         case SID_ATTR_CHAR_POSTURE:
         case SID_ATTR_CHAR_WEIGHT:
             {
-                SfxItemPool& rPool = rSh.GetAttrPool();
-                pSSetItem = new SvxScriptSetItem( nWhich, rPool );
-                nWhich = rPool.GetWhich( nWhich );
+                pSSetItem = new SvxScriptSetItem( nSlot, rPool );
                 pSSetItem->PutItemForScriptType( rSh.GetScriptType(),
                                                 pArgs->Get( nWhich ));
                 pArgs = &pSSetItem->GetItemSet();
