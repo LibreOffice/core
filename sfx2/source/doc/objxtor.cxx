@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objxtor.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: mba $ $Date: 2001-07-05 15:10:34 $
+ *  last change: $Author: ab $ $Date: 2001-07-09 16:06:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,15 +265,9 @@ SfxObjectShell::~SfxObjectShell()
     if ( pImp->pBasicMgr )
         DELETEX(pImp->pBasicMgr);
     if( pImp->pBasicLibContainer )
-    {
-        pImp->pBasicLibContainer->releaseEventSource();
         pImp->pBasicLibContainer->release();
-    }
     if( pImp->pDialogLibContainer )
-    {
-        pImp->pDialogLibContainer->releaseEventSource();
         pImp->pDialogLibContainer->release();
-    }
 
     if ( pSfxApp->GetDdeService() )
         pSfxApp->RemoveDdeTopic( this );
