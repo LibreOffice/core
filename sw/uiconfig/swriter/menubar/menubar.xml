@@ -35,6 +35,7 @@
             </menu:menu>
             <menu:menuseparator/>
             <menu:menuitem menu:id=".uno:SetDocumentProperties" menu:helpid="5535" menu:label="" />
+            <menu:menuitem menu:id=".uno:Signature" menu:helpid="5508" menu:label="" />
             <menu:menu menu:id=".uno:TemplateMenu" menu:label="" >
                 <menu:menupopup>
                     <menu:menuitem menu:id=".uno:Organizer" menu:helpid="5540" menu:label="" />
