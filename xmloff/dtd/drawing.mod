@@ -1,5 +1,5 @@
 <!--
-	$Id: drawing.mod,v 1.72 2002-01-11 11:31:41 dvo Exp $
+	$Id: drawing.mod,v 1.73 2002-01-17 13:57:01 mib Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -213,6 +213,7 @@
 <!ATTLIST draw:control draw:layer %layerName; #IMPLIED>
 
 <!ELEMENT draw:g ( office:events?, (%shapes;)* ) >
+<!ATTLIST draw:g svg:y %coordinate; #IMPLIED>
 <!ATTLIST draw:g %draw-transform; >
 <!ATTLIST draw:g %draw-style-name; >
 <!ATTLIST draw:g %zindex;>
