@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLExport.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-12 16:14:22 $
+ *  last change: $Author: bm $ $Date: 2001-01-15 09:00:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,6 +136,9 @@
 #endif
 #ifndef _COM_SUN_STAR_CHART_CHARTSERIESADDRESS_HPP_
 #include <com/sun/star/chart/ChartSeriesAddress.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CHART_X3DDISPLAY_HPP_
+#include <com/sun/star/chart/X3DDisplay.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UTIL_XSTRINGMAPPING_HPP_
 #include <com/sun/star/util/XStringMapping.hpp>
@@ -1151,6 +1154,43 @@ void SchXMLExportHelper::exportPlotArea( uno::Reference< chart::XDiagram > xDiag
         if( pSeries )
             delete pSeries;
     }
+
+    // wall element
+    // ------------
+
+    uno::Reference< chart::X3DDisplay > xWallSupplier( xDiagram, uno::UNO_QUERY );
+    if( mxExpPropMapper.is() &&
+        xWallSupplier.is())
+    {
+        // remove property states for autostyles
+        aPropertyStates.clear();
+
+        uno::Reference< beans::XPropertySet > xWallPropSet( xWallSupplier->getWall(), uno::UNO_QUERY );
+        if( xWallPropSet.is())
+        {
+            aPropertyStates = mxExpPropMapper->Filter( xWallPropSet );
+
+            if( aPropertyStates.size() > 0 )
+            {
+                // write element
+                if( bExportContent )
+                {
+                    // add style name attribute
+                    aASName = GetAutoStylePoolP().Find( nStyleFamily, aPropertyStates );
+                    if( aASName.getLength())
+                        mrExport.AddAttribute( XML_NAMESPACE_CHART, sXML_style_name, aASName );
+
+                    SvXMLElementExport aWall( mrExport, XML_NAMESPACE_CHART, sXML_wall, sal_True, sal_True );
+                }
+                else    // autostyles
+                {
+                    if( aPropertyStates.size())
+                        GetAutoStylePoolP().Add( nStyleFamily, aPropertyStates );
+                }
+            }
+        }
+    }
+
     if( pElPlotArea )
         delete pElPlotArea;
 }
