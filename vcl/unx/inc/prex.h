@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prex.h,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oisin $ $Date: 2001-01-31 14:59:28 $
+ *  last change: $Author: obr $ $Date: 2001-02-01 16:04:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 //                                                                            //
 // (C) 1997 Star Division GmbH, Hamburg, Germany                              //
 //                                                                            //
-// $Revision: 1.5 $  $Author: oisin $  $Date: 2001-01-31 14:59:28 $    //
+// $Revision: 1.6 $  $Author: obr $  $Date: 2001-02-01 16:04:03 $    //
 //                                                                            //
 // $Workfile:   prex.h  $                                                     //
 //  $Modtime:   08 Aug 1997 10:13:54  $                                       //
@@ -134,10 +134,10 @@ extern "C" {
 
 #define __Ol_OlXlibExt_h__
 
-#if !defined(_USE_PRINT_EXTENSION_)
+#if !defined(_USE_PRINT_EXTENSION_) && ! defined USE_PSPRINT
       #include <salpdecl.h>
       #include <salpmacr.h>
-#else
+#elif ! defined USE_PSPRINT
       #include <X11/X.h>
       #include <X11/Xlib.h>
       #include <X11/Xutil.h>
