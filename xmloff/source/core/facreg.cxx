@@ -2,9 +2,9 @@
  *
  *  $RCSfile: facreg.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: bm $ $Date: 2001-10-02 14:43:12 $
+ *  last change: $Author: cl $ $Date: 2002-06-18 07:29:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,6 +173,11 @@ extern uno::Sequence< OUString > SAL_CALL DrawingLayerXMLExport_getSupportedServ
 extern OUString SAL_CALL DrawingLayerXMLExport_getImplementationName() throw();
 extern uno::Reference< uno::XInterface > SAL_CALL DrawingLayerXMLExport_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception );
 
+// impress xml clipboard export
+extern uno::Sequence< OUString > SAL_CALL ImpressXMLClipboardExport_getSupportedServiceNames() throw();
+extern OUString SAL_CALL ImpressXMLClipboardExport_getImplementationName() throw();
+extern uno::Reference< uno::XInterface > SAL_CALL ImpressXMLClipboardExport_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception );
+
 // draw export.style
 extern uno::Sequence< OUString > SAL_CALL SdDrawXMLExport_Style_getSupportedServiceNames() throw();
 extern OUString SAL_CALL SdDrawXMLExport_Style_getImplementationName() throw();
@@ -313,6 +318,9 @@ sal_Bool SAL_CALL component_writeInfo( void * pServiceManager, void * pRegistryK
 
             // drawing layer
             writeInfo( pKey, DrawingLayerXMLExport_getImplementationName(), DrawingLayerXMLExport_getSupportedServiceNames() );
+
+            // impress xml clipboard
+            writeInfo( pKey, ImpressXMLClipboardExport_getImplementationName(), ImpressXMLClipboardExport_getSupportedServiceNames() );
 
             // draw.styles
             writeInfo( pKey, SdDrawXMLImport_Style_getImplementationName(), SdDrawXMLImport_Style_getSupportedServiceNames() );
@@ -487,6 +495,13 @@ void * SAL_CALL component_getFactory( const sal_Char * pImplName, void * pServic
                 DrawingLayerXMLExport_getImplementationName(),
                 DrawingLayerXMLExport_createInstance,
                 DrawingLayerXMLExport_getSupportedServiceNames() );
+        }
+        else if( ImpressXMLClipboardExport_getImplementationName().equalsAsciiL( pImplName, nImplNameLen ) )
+        {
+            xFactory = ::cppu::createSingleFactory( xMSF,
+                ImpressXMLClipboardExport_getImplementationName(),
+                ImpressXMLClipboardExport_createInstance,
+                ImpressXMLClipboardExport_getSupportedServiceNames() );
         }
         else if( SdDrawXMLExport_Style_getImplementationName().equalsAsciiL( pImplName, nImplNameLen ) )
         {
