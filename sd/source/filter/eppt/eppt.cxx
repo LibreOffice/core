@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eppt.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: sj $ $Date: 2000-12-12 17:31:58 $
+ *  last change: $Author: sj $ $Date: 2000-12-20 15:01:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1121,8 +1121,8 @@ sal_Bool PPTWriter::ImplCreateMainMaster()
         {
             if ( ImplGetPropertyValue( aXBackgroundPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "FillGradient" ) ) ) )
             {
-                mnFillColor = mpPptEscherEx->GetGradientColor( (::com::sun::star::awt::Gradient*)mAny.getValue(), 0 );
-                mnFillBackColor = mpPptEscherEx->GetGradientColor( (::com::sun::star::awt::Gradient*)mAny.getValue(), 1 );
+                mnFillColor = EscherPropertyContainer::GetGradientColor( (::com::sun::star::awt::Gradient*)mAny.getValue(), 0 );
+                mnFillBackColor = EscherPropertyContainer::GetGradientColor( (::com::sun::star::awt::Gradient*)mAny.getValue(), 1 );
             }
         }
         break;
@@ -1135,7 +1135,6 @@ sal_Bool PPTWriter::ImplCreateMainMaster()
                 mnFillBackColor = mnFillColor ^ 0xffffff;
             }
         }
-
     }
 
     mpPptEscherEx->PtReplaceOrInsert( EPP_Persist_MainMaster, mpStrm->Tell() );
