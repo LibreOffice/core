@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basmethnode.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-07-23 14:06:25 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 14:01:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,8 +72,8 @@
 #ifndef _COM_SUN_STAR_SCRIPT_XINVOCATION_HPP_
 #include <com/sun/star/script/XInvocation.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_SCRIPT_BROWSE_XBROWSENODE_HPP_
-#include <drafts/com/sun/star/script/browse/XBrowseNode.hpp>
+#ifndef _COM_SUN_STAR_SCRIPT_BROWSE_XBROWSENODE_HPP_
+#include <com/sun/star/script/browse/XBrowseNode.hpp>
 #endif
 #ifndef _COM_SUN_STAR_UNO_XCOMPONENTCONTEXT_HPP_
 #include <com/sun/star/uno/XComponentContext.hpp>
@@ -106,7 +106,7 @@ namespace basprov
     //  ----------------------------------------------------
 
     typedef ::cppu::WeakImplHelper2<
-        ::drafts::com::sun::star::script::browse::XBrowseNode,
+        ::com::sun::star::script::browse::XBrowseNode,
         ::com::sun::star::script::XInvocation > BasicMethodNodeImpl_BASE;
 
     class BasicMethodNodeImpl : public BasicMethodNodeImpl_BASE,
@@ -146,7 +146,7 @@ namespace basprov
         // XBrowseNode
         virtual ::rtl::OUString SAL_CALL getName(  )
             throw (::com::sun::star::uno::RuntimeException);
-        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::drafts::com::sun::star::script::browse::XBrowseNode > > SAL_CALL getChildNodes(  )
+        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::script::browse::XBrowseNode > > SAL_CALL getChildNodes(  )
             throw (::com::sun::star::uno::RuntimeException);
         virtual sal_Bool SAL_CALL hasChildNodes(  )
             throw (::com::sun::star::uno::RuntimeException);
