@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NeonPropFindRequest.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:27:19 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 15:56:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -268,7 +268,9 @@ NeonPropFindRequest::NeonPropFindRequest( HttpSession* inSession,
     if ( thePropCount > 0 )
     {
         NeonPropName* thePropNames = new NeonPropName[ thePropCount + 1 ];
-        for ( int theIndex = 0; theIndex < thePropCount; theIndex ++ )
+        int theIndex;
+
+        for ( theIndex = 0; theIndex < thePropCount; theIndex ++ )
         {
             // Split fullname into namespace and name!
             DAVProperties::createNeonPropName(
