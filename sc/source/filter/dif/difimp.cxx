@@ -2,9 +2,9 @@
  *
  *  $RCSfile: difimp.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 13:20:55 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:34:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -420,7 +420,7 @@ TOPIC DifParser::GetNextTopic( void )
 
                 pCur = ScanIntVal( pCur, nVector );
 
-                if( *pCur == ',' )
+                if( pCur && *pCur == ',' )
                 {
                     pCur++;
                     ScanIntVal( pCur, nVal );
@@ -569,6 +569,10 @@ DATASET DifParser::GetNextDataset( void )
 
 const sal_Unicode* DifParser::ScanIntVal( const sal_Unicode* pStart, UINT32& rRet )
 {
+    // eat leading whitespace, not specified, but seen in the wild
+    while (*pStart == ' ' || *pStart == '\t')
+        ++pStart;
+
     sal_Unicode     cAkt = *pStart;
 
     if( IsNumber( cAkt ) )
