@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MQuery.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-26 13:52:26 $
+ *  last change: $Author: dkenny $ $Date: 2001-12-12 15:32:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -231,7 +231,6 @@ namespace connectivity
         private:
             MQueryDirectory                *m_aQueryDirectory;
             MQueryHelper                   *m_aQueryHelper;
-            MNameMapper                    *m_aNameMapper;
             ::std::vector< ::rtl::OUString> m_aAttributes;
             ::rtl::OUString                 m_aAddressbook;
             sal_Int32                       m_nMaxNrOfReturns;
@@ -285,11 +284,18 @@ namespace connectivity
                                                          const rtl::OUString& aDBColumnName,
                                                          sal_Int32 nType ) const;
 
+            sal_Bool                        errorOccurred() const
+                                            { return m_aErrorOccurred; };
+
+            const ::rtl::OUString&          getErrorString() const
+                                            { return m_aErrorString; }
+
         public:
             MQuery();
             MQuery(const ::std::map< ::rtl::OUString, ::rtl::OUString> &);
             virtual ~MQuery();
             static MNameMapper* CreateNameMapper();
+            static void FreeNameMapper( MNameMapper* _ptr );
         };
     }
 }

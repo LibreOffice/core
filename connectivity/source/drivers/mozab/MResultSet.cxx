@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MResultSet.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-26 13:51:14 $
+ *  last change: $Author: dkenny $ $Date: 2001-12-12 15:32:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -392,7 +392,9 @@ sal_Bool OResultSet::fetchRow(sal_uInt32 rowIndex) throw(SQLException, RuntimeEx
             //
             // Everything in the addressbook is a string!
             //
-            m_aQuery.getRowValue( (*m_aRow)[i], rowIndex, m_aColumnNames[i-1], DataType::VARCHAR );
+            if ( !m_aQuery.getRowValue( (*m_aRow)[i], rowIndex, m_aColumnNames[i-1], DataType::VARCHAR )) {
+                ::dbtools::throwGenericSQLException( m_aQuery.getErrorString(), NULL );
+            }
         }
 #ifdef _DEBUG
         else {
@@ -1280,7 +1282,9 @@ void SAL_CALL OResultSet::executeQuery() throw( ::com::sun::star::sdbc::SQLExcep
 
                     OSL_TRACE("Query is to be sorted");
                     if( ! m_aQuery.queryComplete() )
-                        m_aQuery.waitForQueryComplete();
+                        if ( !m_aQuery.waitForQueryComplete() ) {
+                            ::dbtools::throwGenericSQLException( m_aQuery.getErrorString(), NULL );
+                        }
 
                     OSL_ENSURE( m_aQuery.queryComplete(), "Query not complete!!");
 
@@ -1462,6 +1466,9 @@ sal_Bool OResultSet::validRow( sal_uInt32 nRow )
             OSL_TRACE("validRow: waiting...");
 #endif
             m_aQuery.checkRowAvailable( nRow );
+            if ( m_aQuery.errorOccurred() ) {
+                ::dbtools::throwGenericSQLException( m_aQuery.getErrorString(), NULL );
+            }
             nNumberOfRecords = m_aQuery.getRealRowCount();
     }
 
@@ -1514,8 +1521,12 @@ sal_Bool OResultSet::seekRow( eRowPosition pos, sal_Int32 nOffset )
             nCurPos += sal_uInt32( nOffset );
             break;
     }
+
     while ( nCurPos > nNumberOfRecords && !m_aQuery.queryComplete() ) {
             m_aQuery.checkRowAvailable( nCurPos );
+            if ( m_aQuery.errorOccurred() ) {
+                ::dbtools::throwGenericSQLException( m_aQuery.getErrorString(), NULL );
+            }
             nNumberOfRecords = currentRowCount();
     }
 

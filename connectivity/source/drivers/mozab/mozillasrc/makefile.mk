@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: dkenny $ $Date: 2001-11-23 11:39:07 $
+#   last change: $Author: dkenny $ $Date: 2001-12-12 15:32:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,6 +64,8 @@ CALL_CDECL=TRUE
 #mozilla specific stuff.
 MOZ_LIB=$(SOLARVERSION)$/$(INPATH)$/lib$(UPDMINOREXT)
 MOZ_INC=$(SOLARVERSION)$/$(INPATH)$/inc$(UPDMINOREXT)$/mozilla
+#MOZ_LIB=$(PRJ)$/$(INPATH)$/lib
+#MOZ_INC=$(PRJ)$/$(INPATH)$/inc$/mozilla
 #End of mozilla specific stuff.
 
 PRJ=..$/..$/..$/..

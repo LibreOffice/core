@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MResultSet.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-26 13:51:14 $
+ *  last change: $Author: dkenny $ $Date: 2001-12-12 15:32:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -317,12 +317,7 @@ public:
             void setBindingRow(const OValueRow& _aRow)
                       { m_aRow = _aRow; }
 
-#ifdef DARREN_WORK
-            void setColumnMapping(const ::std::vector<sal_Int32>& _aColumnMapping)
-                      { m_aColMapping = _aColumnMapping; }
-#else  /* DARREN_WORK */
             void setColumnMapping(const ::std::vector<sal_Int32>& _aColumnMapping);
-#endif /* DARREN_WORK */
 
             void setOrderByColumns(const ::std::vector<sal_Int32>& _aColumnOrderBy)
                       { m_aOrderbyColumnNumber = _aColumnOrderBy; }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MConnection.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-26 13:51:14 $
+ *  last change: $Author: dkenny $ $Date: 2001-12-12 15:32:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,6 +189,12 @@ OConnection::~OConnection()
 {
     if(!isClosed())
         close();
+
+    if ( m_aNameMapper ) {
+        MQuery::FreeNameMapper( m_aNameMapper );
+        m_aNameMapper = NULL;
+    }
+
     m_pDriver->release();
     m_pDriver = NULL;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MQuery.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-26 13:52:26 $
+ *  last change: $Author: dkenny $ $Date: 2001-12-12 15:32:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,6 +149,7 @@ MQuery::~MQuery()
 void MQuery::construct()
 {
      // Set default values. (For now just as a reminder).
+    m_aErrorOccurred  = sal_False;
     m_bQuerySubDirs   = sal_True;       // LDAP Queryies require this to be set!
     m_nMaxNrOfReturns = -1; // Unlimited number of returns.
 
@@ -398,14 +399,14 @@ sal_Int32 MQuery::executeQuery(sal_Bool _bIsOutlookExpress, OConnection* _pCon)
     if ( nmap->getDir( m_aAddressbook, getter_AddRefs( directory ) ) == sal_False )
         return( -1 );
 
-    // Create a nsIAbDirectoryQuery object which eventually will execute
-    // the query by calling DoQuery().
-    nsCOMPtr< nsIAbDirectoryQueryProxy > directoryQueryProxy = do_CreateInstance( kAbDirectoryQueryProxyCID, &rv);
-
     m_aQueryDirectory->directory = do_QueryInterface(directory, &rv);
 
     if ( NS_FAILED(rv) || _bIsOutlookExpress)
     {
+        // Create a nsIAbDirectoryQuery object which eventually will execute
+        // the query by calling DoQuery().
+        nsCOMPtr< nsIAbDirectoryQueryProxy > directoryQueryProxy = do_CreateInstance( kAbDirectoryQueryProxyCID, &rv);
+
         // Need to turn this off for anything using the Query Proxy since it
         // treats Mailing Lists as directories!
         m_bQuerySubDirs = sal_False;
@@ -457,6 +458,8 @@ sal_Int32 MQuery::executeQuery(sal_Bool _bIsOutlookExpress, OConnection* _pCon)
 
     // Execute the query.
     OSL_TRACE( "****** calling DoQuery\n");
+
+    m_aErrorOccurred = sal_False;
 
     m_aQueryHelper->reset();
 
@@ -516,7 +519,7 @@ MQuery::getRealRowCount()
 sal_Bool
 MQuery::queryComplete( void )
 {
-    return( m_aQueryHelper->queryComplete() );
+    return( m_aErrorOccurred || m_aQueryHelper->queryComplete() );
 }
 
 sal_Bool
@@ -582,3 +585,9 @@ MQuery::CreateNameMapper()
     return( new MNameMapper() );
 }
 
+// -------------------------------------------------------------------------
+void
+MQuery::FreeNameMapper( MNameMapper* _ptr )
+{
+    delete _ptr;
+}

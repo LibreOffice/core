@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MQueryHelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-26 13:52:26 $
+ *  last change: $Author: dkenny $ $Date: 2001-12-12 15:32:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -118,7 +118,8 @@ static char mozPreferMailFormatTypes[3][11] = {"unknown",
 
 
 MQueryHelper::MQueryHelper()
-    : m_nIndex( 0 )
+    : mRefCnt( 0 ) // NSISUPPORTS - Initialize RefCnt to 0
+    , m_nIndex( 0 )
     , m_bHasMore( sal_True )
     , m_bQueryComplete( sal_False )
     , m_bAtEnd( sal_False )
@@ -196,7 +197,7 @@ MQueryHelper::waitForResultOrComplete( ::rtl::OUString& _rError )
         rv = m_aCondition.wait( &timeValue );
         if ( rv == ::osl::Condition::result_timeout ) {
             OSL_TRACE("waitForResultOrComplete() : Timeout!");
-            _rError = ::rtl::OUString::createFromAscii("Timeout waiting from result");
+            _rError = ::rtl::OUString::createFromAscii("Timeout waiting for result.");
             return sal_False;
         }
     }
@@ -206,6 +207,7 @@ MQueryHelper::waitForResultOrComplete( ::rtl::OUString& _rError )
         _rError = ::rtl::OUString::createFromAscii("Error found when executing query");
         return sal_False;
     }
+    _rError = ::rtl::OUString::createFromAscii("");
     OSL_TRACE("  Out : waitForResultOrComplete()");
     return sal_True;
 }
