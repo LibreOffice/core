@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localfilehelper.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hro $ $Date: 2001-05-11 13:34:09 $
+ *  last change: $Author: hro $ $Date: 2001-05-11 13:35:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,6 +178,7 @@ sal_Bool LocalFileHelper::ConvertURLToPhysicalName( const String& rName, String&
         FileBase::getNormalizedPathFromFileURL( rName, aTmp );
         FileBase::getSystemPathFromNormalizedPath( aTmp, aRet );
 
+        /* HR0: Why this ??? */
         aRet = aTmp;
 #endif
     }
