@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gtkframe.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-13 08:57:34 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 17:31:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -235,6 +235,7 @@ void GtkSalFrame::InitCommon()
     m_nKeyModifiers     = 0;
     m_bSingleAltPress   = false;
     m_bResizeable       = true;
+    m_bFullscreen       = false;
     m_bDefaultPos       = true;
     m_bDefaultSize      = ( (m_nStyle & SAL_FRAME_STYLE_SIZEABLE) && ! m_pParent );
     m_nState            = GDK_WINDOW_STATE_WITHDRAWN;
@@ -260,6 +261,9 @@ void GtkSalFrame::InitCommon()
     m_aLastKeyPress.hardware_keycode    = 0;
     m_aLastKeyPress.group               = 0;
 
+
+    m_aPrevKeyPresses.clear();
+    m_nPrevKeyPresses = 0;
 
     gtk_widget_set_app_paintable( GTK_WIDGET(m_pWindow), TRUE );
     gtk_widget_set_double_buffered( GTK_WIDGET(m_pWindow), FALSE );
@@ -709,6 +713,11 @@ void GtkSalFrame::setMinMaxSize()
  */
 #define CONTAINER_ADJUSTMENT 6
 
+    /*  #i34504# metacity (and possibly others) do not treat
+     *  _NET_WM_STATE_FULLSCREEN and max_width/heigth independently;
+     *  whether they should is undefined. So don't set the max size hint
+     *  for a full screen window.
+    */
     if( m_pWindow )
     {
         GdkGeometry aGeo;
@@ -721,7 +730,7 @@ void GtkSalFrame::setMinMaxSize()
                 aGeo.min_height = m_aMinSize.Height()+CONTAINER_ADJUSTMENT;
                 aHints |= GDK_HINT_MIN_SIZE;
             }
-            if( m_aMaxSize.Width() && m_aMaxSize.Height() )
+            if( m_aMaxSize.Width() && m_aMaxSize.Height() && ! m_bFullscreen )
             {
                 aGeo.max_width  = m_aMaxSize.Width()+CONTAINER_ADJUSTMENT;
                 aGeo.max_height = m_aMaxSize.Height()+CONTAINER_ADJUSTMENT;
@@ -730,9 +739,15 @@ void GtkSalFrame::setMinMaxSize()
         }
         else
         {
-            aGeo.min_width = aGeo.max_width = maGeometry.nWidth;
-            aGeo.min_height = aGeo.max_height = maGeometry.nHeight;
-            aHints = GDK_HINT_MAX_SIZE | GDK_HINT_MIN_SIZE;
+            aGeo.min_width = maGeometry.nWidth;
+            aGeo.min_height = maGeometry.nHeight;
+            aHints |= GDK_HINT_MIN_SIZE;
+            if( ! m_bFullscreen )
+            {
+                aGeo.max_width = maGeometry.nWidth;
+                aGeo.max_height = maGeometry.nHeight;
+                aHints |= GDK_HINT_MAX_SIZE;
+            }
         }
         if( aHints )
             gtk_window_set_geometry_hints( m_pWindow,
@@ -944,6 +959,7 @@ BOOL GtkSalFrame::GetWindowState( SalFrameState* pState )
 
 void GtkSalFrame::ShowFullScreen( BOOL bFullScreen )
 {
+    m_bFullscreen = bFullScreen;
     if( m_pWindow && ! (m_nStyle & SAL_FRAME_STYLE_CHILD) )
     {
         if( bFullScreen )
@@ -1167,13 +1183,30 @@ void GtkSalFrame::SetInputContext( SalInputContext* pContext )
                           G_CALLBACK (signalIMDeleteSurrounding), this );
 
         gtk_im_context_set_client_window( m_pIMContext, GTK_WIDGET(m_pWindow)->window );
-    }
+        gtk_im_context_focus_in( m_pIMContext );
+   }
 }
 void GtkSalFrame::EndExtTextInput( USHORT nFlags )
 {
     if( m_pIMContext )
         gtk_im_context_reset( m_pIMContext );
     m_bWasPreedit = false;
+    CallCallback( SALEVENT_ENDEXTTEXTINPUT, NULL );
+}
+
+void GtkSalFrame::updateIMSpotLocation()
+{
+    if( m_pIMContext )
+    {
+        SalExtTextInputPosEvent aPosEvent;
+        CallCallback( SALEVENT_EXTTEXTINPUTPOS, (void*)&aPosEvent );
+        GdkRectangle aArea;
+        aArea.x = aPosEvent.mnX;
+        aArea.y = aPosEvent.mnY;
+        aArea.width = aPosEvent.mnWidth;
+        aArea.height = aPosEvent.mnHeight;
+        gtk_im_context_set_cursor_location( m_pIMContext, &aArea );
+    }
 }
 
 LanguageType GtkSalFrame::GetInputLanguage()
@@ -1247,7 +1280,6 @@ void GtkSalFrame::UpdateSettings( AllSettings& rSettings )
     // text colors
     Color aTextColor = getColor( pStyle->text[GTK_STATE_NORMAL] );
     aStyleSet.SetDialogTextColor( aTextColor );
-    aStyleSet.SetMenuTextColor( aTextColor );
     aStyleSet.SetButtonTextColor( aTextColor );
     aStyleSet.SetRadioCheckTextColor( aTextColor );
     aStyleSet.SetGroupTextColor( aTextColor );
@@ -1262,8 +1294,7 @@ void GtkSalFrame::UpdateSettings( AllSettings& rSettings )
     aStyleSet.Set3DColors( aBackColor );
     aStyleSet.SetFaceColor( aBackColor );
     aStyleSet.SetDialogColor( aBackColor );
-    aStyleSet.SetMenuColor( aBackColor );
-    aStyleSet.SetMenuBarColor( aBackColor );
+    aStyleSet.SetWorkspaceColor( aBackColor );
     aStyleSet.SetFieldColor( aBackFieldColor );
     aStyleSet.SetWindowColor( aBackFieldColor );
     // ancient wisdom tells us a mystic algorithm how to set checked color
@@ -1285,11 +1316,28 @@ void GtkSalFrame::UpdateSettings( AllSettings& rSettings )
     aStyleSet.SetHighlightColor( aHighlightColor );
     aStyleSet.SetHighlightTextColor( aHighlightTextColor );
 
-    // menu highlighting
-    aHighlightColor = getColor( pStyle->bg[ GTK_STATE_SELECTED ] );
+    // menu colors
+    GtkWidget* pMenu  = gtk_menu_new();
+    GtkWidget* pMenuItem = gtk_menu_item_new_with_label( "b" );
+    gtk_menu_shell_append( GTK_MENU_SHELL( pMenu ), pMenuItem );
+    gtk_widget_ensure_style( pMenu );
+    gtk_widget_ensure_style( pMenuItem );
+    GtkStyle* pMenuStyle = gtk_widget_get_style( pMenu );
+    GtkStyle* pMenuItemStyle = gtk_rc_get_style( pMenuItem );
+    GtkStyle* pMenuTextStyle = gtk_rc_get_style( gtk_bin_get_child( GTK_BIN(pMenuItem) ) );
+
+    aBackColor = getColor( pMenuStyle->bg[GTK_STATE_NORMAL] );
+    aStyleSet.SetMenuColor( aBackColor );
+    aStyleSet.SetMenuBarColor( aBackColor );
+    aTextColor = getColor( pMenuTextStyle->text[GTK_STATE_NORMAL] );
+    aStyleSet.SetMenuTextColor( aTextColor );
+    aHighlightColor = getColor( pMenuItemStyle->bg[ GTK_STATE_SELECTED ] );
     aStyleSet.SetMenuHighlightColor( aHighlightColor );
-    aHighlightTextColor = getColor( pStyle->text[ GTK_STATE_PRELIGHT ] );
+    aHighlightTextColor = getColor( pMenuTextStyle->fg[ GTK_STATE_PRELIGHT ] );
     aStyleSet.SetMenuHighlightTextColor( aHighlightTextColor );
+
+    // clean up the menu
+    gtk_widget_destroy( pMenu );
 
     // UI font
     OString aFamily     = pango_font_description_get_family( pStyle->font_desc );
@@ -1366,6 +1414,20 @@ void GtkSalFrame::UpdateSettings( AllSettings& rSettings )
     if( aInfo.m_ePitch != psp::pitch::Unknown )
         aFont.SetPitch( PspGraphics::ToFontPitch( aInfo.m_ePitch ) );
 
+    aStyleSet.SetAppFont( aFont );
+    aStyleSet.SetHelpFont( aFont );
+    aStyleSet.SetTitleFont( aFont );
+    aStyleSet.SetFloatTitleFont( aFont );
+    aStyleSet.SetMenuFont( aFont );
+    aStyleSet.SetToolFont( aFont );
+    aStyleSet.SetLabelFont( aFont );
+    aStyleSet.SetInfoFont( aFont );
+    aStyleSet.SetRadioCheckFont( aFont );
+    aStyleSet.SetPushButtonFont( aFont );
+    aStyleSet.SetFieldFont( aFont );
+    aStyleSet.SetIconFont( aFont );
+    aStyleSet.SetGroupFont( aFont );
+
     if ( !g_gtk_frame_ScrollWidget )
     {
         g_gtk_frame_ScrollWidget = gtk_hscrollbar_new( NULL );
@@ -1396,20 +1458,6 @@ void GtkSalFrame::UpdateSettings( AllSettings& rSettings )
         aStyleSet.SetScrollBarSize( slider_width + 2*trough_border );
         aStyleSet.SetMinThumbSize( min_slider_length - magic );
     }
-
-    aStyleSet.SetAppFont( aFont );
-    aStyleSet.SetHelpFont( aFont );
-    aStyleSet.SetTitleFont( aFont );
-    aStyleSet.SetFloatTitleFont( aFont );
-    aStyleSet.SetMenuFont( aFont );
-    aStyleSet.SetToolFont( aFont );
-    aStyleSet.SetLabelFont( aFont );
-    aStyleSet.SetInfoFont( aFont );
-    aStyleSet.SetRadioCheckFont( aFont );
-    aStyleSet.SetPushButtonFont( aFont );
-    aStyleSet.SetFieldFont( aFont );
-    aStyleSet.SetIconFont( aFont );
-    aStyleSet.SetGroupFont( aFont );
 
 //  FIXME: need some way of fetching toolbar icon size.
 //  aStyleSet.SetToolbarIconSize( STYLE_TOOLBAR_ICONSIZE_SMALL );
@@ -1812,30 +1860,60 @@ gboolean GtkSalFrame::signalKey( GtkWidget* pWidget, GdkEventKey* pEvent, gpoint
 {
     GtkSalFrame* pThis = (GtkSalFrame*)frame;
 
+    vcl::DeletionListener aDel( pThis );
+
     if( pThis->m_pIMContext )
     {
         if( pEvent->type == GDK_KEY_PRESS )
-            pThis->m_aLastKeyPress = *pEvent;
-        if( gtk_im_context_filter_keypress( pThis->m_pIMContext, pEvent ) )
-            return TRUE;
-        else if( pEvent->type == GDK_KEY_PRESS )
-                pThis->m_aLastKeyPress.window = NULL;
+        {
+            // Add this key press event to the list of previous key presses
+            // to which we compare key release events.  If a later key release
+            // event has a matching key press event in this list, we swallow
+            // the key release because some GTK Input Methods don't swallow it
+            // for us.
+            pThis->m_aPrevKeyPresses.push_back( PreviousKeyPress(pEvent) );
+            pThis->m_nPrevKeyPresses++;
+
+            // Also pop off the earliest key press event if there are more than 10
+            // already.
+            while (pThis->m_nPrevKeyPresses > 10)
+            {
+                pThis->m_aPrevKeyPresses.pop_front();
+                pThis->m_nPrevKeyPresses--;
+            }
+
+            GObject* pRef = G_OBJECT( g_object_ref( G_OBJECT( pThis->m_pIMContext ) ) );
+            gboolean bResult = gtk_im_context_filter_keypress( pThis->m_pIMContext, pEvent );
+            g_object_unref( pRef );
+            if( bResult )
+                return TRUE;
+        }
     }
 
-    // swallow key release events if according keypress was filtered
-    if( pEvent->type == GDK_KEY_RELEASE                                 &&
-        pEvent->window      == pThis->m_aLastKeyPress.window            &&
-        pEvent->send_event  == pThis->m_aLastKeyPress.send_event        &&
-        pEvent->state       == pThis->m_aLastKeyPress.state             &&
-        pEvent->keyval      == pThis->m_aLastKeyPress.keyval )
-    {
-        pThis->m_aLastKeyPress.window = NULL;
+    if( aDel.isDeleted() )
         return TRUE;
+
+    // Determine if we got an earlier key press event corresponding to this key release
+    if (pEvent->type == GDK_KEY_RELEASE)
+    {
+        std::list<PreviousKeyPress>::iterator    iter     = pThis->m_aPrevKeyPresses.begin();
+        std::list<PreviousKeyPress>::iterator    iter_end = pThis->m_aPrevKeyPresses.end();
+
+        while (iter != iter_end)
+        {
+            // If we found a corresponding previous key press event, swallow the release
+            // and remove the earlier key press from our list
+            if (*iter == pEvent)
+            {
+                pThis->m_aPrevKeyPresses.erase(iter);
+                pThis->m_nPrevKeyPresses--;
+                return TRUE;
+            }
+            ++iter;
+        }
     }
 
     GTK_YIELD_GRAB();
-
-    vcl::DeletionListener aDel( pThis );
 
     // handle modifiers
     if( pEvent->keyval == GDK_Shift_L || pEvent->keyval == GDK_Shift_R ||
@@ -1956,6 +2034,9 @@ gboolean GtkSalFrame::signalKey( GtkWidget* pWidget, GdkEventKey* pEvent, gpoint
         }
     }
 
+    if( !aDel.isDeleted() )
+        pThis->updateIMSpotLocation();
+
     return TRUE;
 }
 
@@ -2037,13 +2118,16 @@ void GtkSalFrame::signalIMCommit( GtkIMContext* pContext, gchar* pText, gpointer
      *  SALEVENT_ENDEXTTEXTINPUT, either because of a regular commit
      *  or because there never was a preedit.
      */
-    if( ! pThis->m_bWasPreedit && aTextEvent.maText.Len() == 1 )
+    if( ! pThis->m_bWasPreedit
+        && aTextEvent.maText.Len() == 1
+        && ! pThis->m_aPrevKeyPresses.empty()
+        )
     {
         SalKeyEvent aEvent;
 
         aEvent.mnTime           = 0;
-        aEvent.mnCode           = GetKeyCode( pThis->m_aLastKeyPress.keyval ) |
-                                  GetModCode( pThis->m_aLastKeyPress.state );
+        aEvent.mnCode           = GetKeyCode( pThis->m_aPrevKeyPresses.back().keyval ) |
+                                  GetModCode( pThis->m_aPrevKeyPresses.back().state );
         aEvent.mnCharCode       = aTextEvent.maText.GetChar(0);
         aEvent.mnRepeat         = 0;
 
