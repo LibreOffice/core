@@ -2,9 +2,9 @@
  *
  *  $RCSfile: print2.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hdu $ $Date: 2002-02-26 15:57:28 $
+ *  last change: $Author: thb $ $Date: 2002-09-17 13:45:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -722,7 +722,11 @@ Bitmap Printer::GetPreparedBitmap( const Point& rDstPt, const Size& rDstSz,
         if( !aBmp.IsEmpty() )
         {
             // do downsampling if neccessary
-            const Size      aDstSizeTwip( PixelToLogic( LogicToPixel( rDstSz ), MAP_TWIP ) );
+            Size aDstSizeTwip( PixelToLogic( LogicToPixel( rDstSz ), MAP_TWIP ) );
+
+            // #103209# Normalize size (mirroring has to happen outside of this method)
+            aDstSizeTwip = Size( labs(aDstSizeTwip.Width()), labs(aDstSizeTwip.Height()) );
+
             const Size      aBmpSize( aBmp.GetSizePixel() );
             const double    fBmpPixelX = aBmpSize.Width();
             const double    fBmpPixelY = aBmpSize.Height();
@@ -787,7 +791,11 @@ BitmapEx Printer::GetPreparedBitmapEx( const Point& rDstPt, const Size& rDstSz,
         if( !aBmpEx.IsEmpty() )
         {
             // do downsampling if neccessary
-            const Size      aDstSizeTwip( PixelToLogic( LogicToPixel( rDstSz ), MAP_TWIP ) );
+            Size aDstSizeTwip( PixelToLogic( LogicToPixel( rDstSz ), MAP_TWIP ) );
+
+            // #103209# Normalize size (mirroring has to happen outside of this method)
+            aDstSizeTwip = Size( labs(aDstSizeTwip.Width()), labs(aDstSizeTwip.Height()) );
+
             const Size      aBmpSize( aBmpEx.GetSizePixel() );
             const double    fBmpPixelX = aBmpSize.Width();
             const double    fBmpPixelY = aBmpSize.Height();
