@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlwrap.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-10 15:19:10 $
+ *  last change: $Author: nn $ $Date: 2001-06-26 18:51:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,7 @@
 #include <unotools/streamwrap.hxx>
 #include <xmloff/xmlkywd.hxx>
 #include <svx/xmlgrhlp.hxx>
+#include <svtools/sfxecode.hxx>
 
 #include <com/sun/star/xml/sax/XErrorHandler.hpp>
 #include <com/sun/star/xml/sax/XEntityResolver.hpp>
@@ -182,6 +183,7 @@ sal_Bool ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiServ
     uno::Reference< uno::XInterface > xPipe;
     uno::Reference< io::XActiveDataSource > xSource;
 
+    sal_Bool bEncrypted = sal_False;
     if( pStorage )
     {
         if (pStorage->IsStream(sDocName))
@@ -194,6 +196,12 @@ sal_Bool ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiServ
             return sal_False;
         xDocStream->SetBufferSize( 16*1024 );
         aParserInput.aInputStream = new utl::OInputStreamWrapper( *xDocStream );
+
+        uno::Any aAny;
+        bEncrypted = xDocStream->GetProperty(
+                            OUString( RTL_CONSTASCII_USTRINGPARAM("Encrypted") ), aAny ) &&
+                        aAny.getValueType() == ::getBooleanCppuType() &&
+                        *(sal_Bool *)aAny.getValue();
     }
     else if ( pMedium )
     {
@@ -246,6 +254,7 @@ sal_Bool ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiServ
             xSourceControl->start();
     }
 
+    sal_Bool bFormatError = sal_False;
     try
     {
         xParser->parseStream( aParserInput );
@@ -253,15 +262,29 @@ sal_Bool ScXMLImportWrapper::ImportFromComponent(uno::Reference<lang::XMultiServ
     catch( xml::sax::SAXParseException e )
     {
         bRet = sal_False;
+        bFormatError = sal_True;
     }
     catch( xml::sax::SAXException e )
     {
         bRet = sal_False;
+        bFormatError = sal_True;
     }
     catch( io::IOException e )
     {
         bRet = sal_False;
     }
+
+    if ( bFormatError && bEncrypted )
+    {
+        //  any format or parse error in an encrypted document
+        //  is treated as a wrong password.
+
+        if ( pStorage )
+            pStorage->SetError( ERRCODE_SFX_WRONGPASSWORD );
+        else if ( pMedium )
+            pMedium->SetError( ERRCODE_SFX_WRONGPASSWORD );
+    }
+
     return bRet;
 }
 
