@@ -2,9 +2,9 @@
  *
  *  $RCSfile: valuenodeaccess.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2002-03-28 08:27:42 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 13:38:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@ namespace configmgr
     // -------------------------------------------------------------------------
     // -------------------------------------------------------------------------
 
-        Pointer ValueNodeAccess::check(NodeAccess const& _aNode)
+        Pointer ValueNodeAccess::check(NodeAccessRef const& _aNode)
         {
             if (sharable::Node const* pNode = _aNode.getDataPtr())
                 return _aNode.accessor().address(pNode->valueData());
@@ -220,6 +220,7 @@ void ValueNodeAccess::changeDefault(memory::UpdateAccessor & _aUpdater, NodeAddr
         }
     }
 }
+
 //-----------------------------------------------------------------------------
 /*
 void ValueNode::clearData(data::Allocator const & _aAlloc)
