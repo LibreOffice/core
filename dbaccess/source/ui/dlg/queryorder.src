@@ -2,9 +2,9 @@
  *
  *  $RCSfile: queryorder.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:55:00 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 18:02:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -288,8 +288,8 @@ ModalDialog DLG_ORDERCRIT
         };
         StringList [ portuguese_brazilian ] =
         {
-            < "ascendente" ; Default ; > ;
-            < "descesdente" ; Default ; > ;
+            < "crescente" ; Default ; > ;
+            < "decrescente" ; Default ; > ;
         };
         StringList [ portuguese ] =
         {
@@ -703,7 +703,7 @@ ModalDialog DLG_ORDERCRIT
         Text[ japanese ] = "ζΌ”η®—ε­";
         Text[ chinese_traditional ] = "ζ·εΎ‘";
         Text[ arabic ] = "ΗΡΚΘΗΨ";
-        Text[ greek ] = "Σύνδεση";
+        Text[ greek ] = "Τελεστής";
         Text[ korean ] = "μ—°μ‚°μ";
         Text[ turkish ] = "έώlemci";
         Text[ language_user1 ] = " ";
@@ -791,7 +791,7 @@ ModalDialog DLG_ORDERCRIT
         Text[ japanese ] = "δΈ¦γΉζ›Ώγ";
         Text[ chinese_traditional ] = "ζ’εΊ";
         Text[ arabic ] = "ΗαέΡÒ";
-        Text[ greek ] = "Ταξινόμηση";
+        Text[ greek ] = "Σειρά ταξινόμησης";
         Text[ korean ] = "μ •λ ¬ μμ„";
         Text[ turkish ] = "Sύralama kuralύ";
         Text[ language_user1 ] = " ";
@@ -851,6 +851,7 @@ ModalDialog DLG_ORDERCRIT
     Text[ hindi ] = "ΰ¤Έΰ¥‹ΰ¤°ΰ¥ΰ¤ ΰ¤•ΰ¥ΰ¤°ΰ¤®";
     Text[ slovak ] = "Poradie radenia";
 };
+
 
 
 
