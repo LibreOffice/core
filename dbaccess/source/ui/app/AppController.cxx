@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AppController.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 19:14:24 $
+ *  last change: $Author: vg $ $Date: 2005-03-10 16:43:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,9 @@
 #endif
 #ifndef _COM_SUN_STAR_SDBCX_XAPPEND_HPP_
 #include <com/sun/star/sdbcx/XAppend.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDB_XOFFICEDATABASEDOCUMENT_HPP_
+#include <com/sun/star/sdb/XOfficeDatabaseDocument.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SDBCX_XTABLESSUPPLIER_HPP_
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
@@ -416,41 +419,44 @@ void SAL_CALL OApplicationController::disposing()
     clearConnections();
     try
     {
+        Reference < XFrame > xFrame;
+        attachFrame( xFrame );
+
         if ( m_xDataSource.is() )
         {
-            Reference<XModel> xModel(m_xDataSource,UNO_QUERY);
-            if ( xModel.is() )
-            {
-                ::rtl::OUString sUrl = xModel->getURL();
-                if ( sUrl.getLength() )
-                {
-                    ::rtl::OUString     aFilter;
-                    INetURLObject       aURL( xModel->getURL() );
-                    const SfxFilter* pFilter = getStandardDatabaseFilter();
-                    if ( pFilter )
-                        aFilter = pFilter->GetFilterName();
-
-                    // add to svtool history options
-                    SvtHistoryOptions().AppendItem( ePICKLIST,
-                            aURL.GetURLNoPass( INetURLObject::NO_DECODE ),
-                            aFilter,
-                            getStrippedDatabaseName(),
-                            ::rtl::OUString() );
-                }
-                xModel->disconnectController( this );
-                // forces the data source to reload
-                xModel->attachResource(xModel->getURL(),xModel->getArgs());
-            }
-            Reference < XFrame > xFrame;
-            attachFrame( xFrame );
-
             m_xDataSource->removePropertyChangeListener(::rtl::OUString(), this);
-            Reference< XModifyBroadcaster >  xBroadcaster(m_xDataSource, UNO_QUERY);
-            if ( xBroadcaster.is() )
-                xBroadcaster->removeModifyListener(static_cast<XModifyListener*>(this));
-
+            // otherwise we may delete our datasource twice
+            Reference<XPropertySet> xProp = m_xDataSource;
             m_xDataSource = NULL;
         }
+
+        Reference< XModifyBroadcaster >  xBroadcaster(m_xModel, UNO_QUERY);
+        if ( xBroadcaster.is() )
+            xBroadcaster->removeModifyListener(static_cast<XModifyListener*>(this));
+
+        if ( m_xModel.is() )
+        {
+            ::rtl::OUString sUrl = m_xModel->getURL();
+            if ( sUrl.getLength() )
+            {
+                ::rtl::OUString     aFilter;
+                INetURLObject       aURL( m_xModel->getURL() );
+                const SfxFilter* pFilter = getStandardDatabaseFilter();
+                if ( pFilter )
+                    aFilter = pFilter->GetFilterName();
+
+                // add to svtool history options
+                SvtHistoryOptions().AppendItem( ePICKLIST,
+                        aURL.GetURLNoPass( INetURLObject::NO_DECODE ),
+                        aFilter,
+                        getStrippedDatabaseName(),
+                        ::rtl::OUString() );
+            }
+            m_xModel->disconnectController( this );
+            // forces the data source to reload
+        }
+
+        m_xModel = NULL;
     }
     catch(Exception)
     {
@@ -534,6 +540,14 @@ void SAL_CALL OApplicationController::disposing(const EventObject& _rSource) thr
             }
         }
     }
+    else if ( _rSource.Source == m_xModel )
+    {
+        m_xModel = NULL;
+    }
+    else if ( _rSource.Source == m_xDataSource )
+    {
+        m_xDataSource = NULL;
+    }
     else
     {
         Reference<XComponent> xComp(_rSource.Source,UNO_QUERY);
@@ -571,7 +585,7 @@ sal_Bool SAL_CALL OApplicationController::suspend(sal_Bool bSuspend) throw( Runt
         if ( bSuspend && !suspendDocuments( bSuspend ))
             return sal_False;
 
-        Reference<XModifiable> xModi(m_xDataSource,UNO_QUERY);
+        Reference<XModifiable> xModi(m_xModel,UNO_QUERY);
         if ( m_bCurrentlyModified || (xModi.is() && xModi->isModified()) )
         {
             switch (ExecuteQuerySaveDocument(getView(),getStrippedDatabaseName()))
@@ -769,11 +783,11 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
                 aReturn.bEnabled = getContainer()->getElementType() == E_TABLE && getActiveConnection().is();
                 break;
             case SID_DB_APP_DSPROPS:
-                if ( m_xDataSource.is() )
+                if ( aReturn.bEnabled = m_xDataSource.is() )
                 {
                     static ODsnTypeCollection aTypeCollection;
                     DATASOURCE_TYPE eType = aTypeCollection.getType(::comphelper::getString(m_xDataSource->getPropertyValue(PROPERTY_URL)));
-                    aReturn.bEnabled = DST_EMBEDDED != eType;
+                    aReturn.bEnabled = DST_EMBEDDED != eType && DST_MOZILLA != eType && DST_EVOLUTION != eType && DST_OUTLOOK != eType && DST_OUTLOOKEXP != eType;
                 }
                 break;
             case SID_DB_APP_DSCONNECTION_TYPE:
@@ -785,7 +799,7 @@ FeatureState OApplicationController::GetState(sal_uInt16 _nId) const
                 }
                 break;
             case SID_DB_APP_DSADVANCED_SETTINGS:
-                if ( m_xDataSource.is() )
+                if ( aReturn.bEnabled = m_xDataSource.is() )
                 {
                     DATASOURCE_TYPE eType = m_aTypeCollection.getType(::comphelper::getString(m_xDataSource->getPropertyValue(PROPERTY_URL)));
                     aReturn.bEnabled = DST_EMBEDDED != eType && DST_LDAP != eType && DST_CALC != eType && DST_MOZILLA != eType && DST_THUNDERBIRD != eType && DST_EVOLUTION != eType && DST_OUTLOOK != eType && DST_OUTLOOKEXP != eType;
@@ -1042,7 +1056,7 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
                 break;
             case ID_BROWSER_SAVEDOC:
                 {
-                    Reference<XStorable> xStore(m_xDataSource,UNO_QUERY);
+                    Reference<XStorable> xStore(m_xModel,UNO_QUERY);
                     if ( xStore.is() )
                     {
                         xStore->store();
@@ -1053,10 +1067,9 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
             case ID_BROWSER_SAVEASDOC:
                 {
                     WinBits nBits(WB_STDMODAL|WB_SAVEAS);
-                    Reference<XModel> xModel(m_xDataSource,UNO_QUERY);
                     ::rtl::OUString sUrl;
-                    if ( xModel.is() )
-                        sUrl = xModel->getURL();
+                    if ( m_xModel.is() )
+                        sUrl = m_xModel->getURL();
                     if ( !sUrl.getLength() )
                         sUrl = SvtPathOptions().GetWorkPath();
 
@@ -1072,7 +1085,7 @@ void OApplicationController::Execute(sal_uInt16 _nId, const Sequence< PropertyVa
 
                     if ( aFileDlg.Execute() == ERRCODE_NONE )
                     {
-                        Reference<XStorable> xStore(m_xDataSource,UNO_QUERY);
+                        Reference<XStorable> xStore(m_xModel,UNO_QUERY);
                         if ( xStore.is() )
                         {
                             INetURLObject aURL( aFileDlg.GetPath() );
@@ -1728,81 +1741,53 @@ void OApplicationController::newElementWithPilot( ElementType _eType )
         case E_FORM:
         {
             ::std::auto_ptr<OLinkedDocumentsAccess> aHelper = getDocumentsAccess(_eType);
-            sal_Int32 nCommandType = ( (getContainer()->getElementType() == E_QUERY)
-                                        ? CommandType::QUERY : ( (getContainer()->getElementType() == E_TABLE) ? CommandType::TABLE : -1 ));
-            Reference<XConnection> xConnection;
-
-            ::rtl::OUString sName;
-            if ( nCommandType != -1 )
+            if ( aHelper->isConnected() )
             {
-                try
+                sal_Int32 nCommandType = ( (getContainer()->getElementType() == E_QUERY)
+                                            ? CommandType::QUERY : ( (getContainer()->getElementType() == E_TABLE) ? CommandType::TABLE : -1 ));
+                Reference<XConnection> xConnection;
+
+                ::rtl::OUString sName;
+                if ( nCommandType != -1 )
                 {
-                    Reference< XDatabaseMetaData> xMetaData;
-                    if ( CommandType::TABLE == nCommandType )
+                    try
                     {
-                        ensureConnection(xConnection,sal_False);
+                        Reference< XDatabaseMetaData> xMetaData;
+                        if ( CommandType::TABLE == nCommandType )
+                        {
+                            ensureConnection(xConnection,sal_False);
 
-                        if ( xConnection.is() )
-                            xMetaData = xConnection->getMetaData();
+                            if ( xConnection.is() )
+                                xMetaData = xConnection->getMetaData();
+                        }
+
+                        sName = getContainer()->getQualifiedName(NULL,xMetaData);
+                        OSL_ENSURE( sName.getLength(), "OApplicationController::newElementWithPilot: no name given!" );
                     }
-
-                    sName = getContainer()->getQualifiedName(NULL,xMetaData);
-                    OSL_ENSURE( sName.getLength(), "OApplicationController::newElementWithPilot: no name given!" );
+                    catch(Exception)
+                    {
+                        OSL_ENSURE( 0, "OApplicationController::newElementWithPilot: Exception catched!" );
+                    }
                 }
-                catch(Exception)
-                {
-                    OSL_ENSURE( 0, "OApplicationController::newElementWithPilot: Exception catched!" );
-                }
-            }
 
-            try
-            {
-                ensureConnection(xConnection,sal_True);
-            }
-            catch(SQLContext& e) { showError(SQLExceptionInfo(e)); }
-            catch(SQLWarning& e) { showError(SQLExceptionInfo(e)); }
-            catch(SQLException& e) { showError(SQLExceptionInfo(e)); }
-
-            if ( xConnection.is() )
-            {
                 if ( E_REPORT == _eType )
-                    aHelper->newReportWithPilot(getDatabaseName(),nCommandType,sName,xConnection);
+                    aHelper->newReportWithPilot(nCommandType,sName);
                 else
-                    aHelper->newFormWithPilot(getDatabaseName(),nCommandType,sName,xConnection);
+                    aHelper->newFormWithPilot(nCommandType,sName);
             }
         }
         break;
         case E_QUERY:
-        {
-            ::std::auto_ptr<OLinkedDocumentsAccess> aHelper = getDocumentsAccess(_eType);
-            Reference<XConnection> xConnection;
-            try
-            {
-                if ( ensureConnection( xConnection, sal_True ) )
-                    aHelper->newQueryWithPilot(getDatabaseName(),-1,::rtl::OUString(),xConnection);
-            }
-            catch(SQLContext& e) { showError(SQLExceptionInfo(e)); }
-            catch(SQLWarning& e) { showError(SQLExceptionInfo(e)); }
-            catch(SQLException& e) { showError(SQLExceptionInfo(e)); }
-        }
-        break;
         case E_TABLE:
          {
              ::std::auto_ptr<OLinkedDocumentsAccess> aHelper = getDocumentsAccess(_eType);
-             Reference<XConnection> xConnection;
-             try
-             {
-                 if ( ensureConnection( xConnection, sal_True ) )
-                {
-                     if ( E_QUERY == _eType )
-                         aHelper->newQueryWithPilot( getDatabaseName(), -1, ::rtl::OUString(), xConnection );
-                     else
-                         aHelper->newTableWithPilot( getDatabaseName(), xConnection );
-                }
+            if ( aHelper->isConnected() )
+            {
+                 if ( E_QUERY == _eType )
+                     aHelper->newQueryWithPilot( );
+                 else
+                     aHelper->newTableWithPilot( );
              }
-             catch(SQLContext& e) { showError(SQLExceptionInfo(e)); }
-             catch(SQLWarning& e) { showError(SQLExceptionInfo(e)); }
-             catch(SQLException& e) { showError(SQLExceptionInfo(e)); }
          }
          break;
     }
@@ -2334,14 +2319,15 @@ sal_Int8 OApplicationController::executeDrop( const ExecuteDropEvent& _rEvt )
 // -----------------------------------------------------------------------------
 Reference< XModel >  SAL_CALL OApplicationController::getModel(void) throw( RuntimeException )
 {
-    ::osl::MutexGuard aGuard(m_aMutex);
-    return Reference< XModel >(m_xDataSource,UNO_QUERY);
+    return m_xModel;
 }
 // -----------------------------------------------------------------------------
 sal_Bool SAL_CALL OApplicationController::attachModel(const Reference< XModel > & xModel) throw( RuntimeException )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
-    m_xDataSource.set(xModel,UNO_QUERY);
+    m_xModel = xModel;
+    Reference<XOfficeDatabaseDocument> xOfficeDoc(m_xModel,UNO_QUERY);
+    m_xDataSource.set(xOfficeDoc.is() ? xOfficeDoc->getDataSource() : Reference<XDataSource>(),UNO_QUERY);
     if ( m_xDataSource.is() )
     {
         try
@@ -2357,7 +2343,7 @@ sal_Bool SAL_CALL OApplicationController::attachModel(const Reference< XModel > 
             m_xDataSource->addPropertyChangeListener(PROPERTY_TABLETYPEFILTER, this);
             m_xDataSource->addPropertyChangeListener(PROPERTY_USER, this);
             // to get the 'modified' for the data source
-            Reference< XModifyBroadcaster >  xBroadcaster(m_xDataSource, UNO_QUERY);
+            Reference< XModifyBroadcaster >  xBroadcaster(m_xModel, UNO_QUERY);
             if ( xBroadcaster.is() )
                 xBroadcaster->addModifyListener(static_cast<XModifyListener*>(this));
 
