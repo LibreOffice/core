@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.87 $
+ *  $Revision: 1.88 $
  *
- *  last change: $Author: ssa $ $Date: 2002-12-03 14:41:05 $
+ *  last change: $Author: ssa $ $Date: 2002-12-06 16:51:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1117,18 +1117,11 @@ void SalFrame::SetTitle( const XubString& rTitle )
 {
     DBG_ASSERT( sizeof( WCHAR ) == sizeof( xub_Unicode ), "SalFrame::SetTitle(): WCHAR != sal_Unicode" );
 
-    // #102847#, #102978#
-    // release solar mutex if we're calling the main thread
-    // same as for SetWindowPos
-    ULONG nCount = 0;
-    if ( GetSalData()->mnAppThreadId != GetCurrentThreadId() )
-        nCount = Application::ReleaseSolarMutex();
     if ( !SetWindowTextW( maFrameData.mhWnd, rTitle.GetBuffer() ) )
     {
         ByteString aAnsiTitle = ImplSalGetWinAnsiString( rTitle );
         SetWindowTextA( maFrameData.mhWnd, aAnsiTitle.GetBuffer() );
     }
-    Application::AcquireSolarMutex( nCount );
 }
 
 // -----------------------------------------------------------------------
@@ -1459,17 +1452,7 @@ void SalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight,
     if( !(maFrameData.mnStyle & SAL_FRAME_STYLE_FLOAT) )
         nPosFlags |= SWP_NOZORDER; // do not change z-order
 
-    // #102847#, #102978#
-    // release solar mutex if we're calling the main thread
-    // and acquire it again afterwards (SetWindowPos switches to the main thread!)
-    // otherwise the main thread could currently be blocking while it is trying
-    // to re-acquire the mutex itself
-    // see toolkit:vclxaccessiblecomponent/WindowEventListener
-    ULONG nCount = 0;
-    if ( GetSalData()->mnAppThreadId != GetCurrentThreadId() )
-        nCount = Application::ReleaseSolarMutex();
     SetWindowPos( maFrameData.mhWnd, HWND_TOP, nX, nY, (int)nWidth, (int)nHeight, nPosFlags  );
-    Application::AcquireSolarMutex( nCount );
 
     UpdateFrameGeometry( maFrameData.mhWnd, this );
 
@@ -1731,8 +1714,19 @@ void SalFrame::SetWindowState( const SalFrameState* pState )
         {
             // #96084 set a useful internal window size because
             // the window will not be maximized (and the size updated) before show()
+            POINT pt;
+            GetCursorPos( &pt );
+            RECT aRectMouse;
+            aRectMouse.left = pt.x;
+            aRectMouse.top = pt.y;
+            aRectMouse.right = pt.x+2;
+            aRectMouse.bottom = pt.y+2;
+
+            // dualmonitor support:
+            // Get screensize of the monitor whith the mouse pointer
+
             RECT aRect;
-            ImplSalGetWorkArea( maFrameData.mhWnd, &aRect, NULL );
+            ImplSalGetWorkArea( maFrameData.mhWnd, &aRect, &aRectMouse );
             AdjustWindowRectEx( &aRect, GetWindowStyle( maFrameData.mhWnd ),
                                 FALSE,     GetWindowExStyle( maFrameData.mhWnd ) );
             maGeometry.nX = aRect.left;
