@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfly.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: fme $ $Date: 2002-06-17 11:51:47 $
+ *  last change: $Author: ama $ $Date: 2002-09-12 09:26:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1324,6 +1324,9 @@ sal_Bool SwTxtFly::GetTop( const SdrObject *pNew, const sal_Bool bInFtn,
                         bEvade = sal_True; // Nicht seitengeb. weichen Rahmengeb. aus
                     else if( FLY_AT_FLY == rCurrA.GetAnchorId() )
                         return sal_False; // Rahmengebundene weichen abs.geb. nicht aus
+                    else if( bInFooterOrHeader )
+                        return sal_False;  // In header or footer no wrapping
+                                           // if both bounded at paragraph
                     else // Zwei Flies mit (auto-)absatzgebunder Verankerung ...
                     // ... entscheiden nach der Reihenfolge ihrer Anker im Dok.
                         bEvade = rNewA.GetCntntAnchor()->nNode.GetIndex() <=

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: flylay.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ama $ $Date: 2002-07-05 06:58:53 $
+ *  last change: $Author: ama $ $Date: 2002-09-12 09:22:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1011,8 +1011,8 @@ BOOL CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, BOOL bMove )
             }
             if ( pUp )
             {
-                if ( !pUp->IsFlyFrm() ||
-                     (!pUp->Lower() || !pUp->Lower()->IsColumnFrm()) )
+                if ( !pUp->IsFooterFrm() && ( !pUp->IsFlyFrm() ||
+                     (!pUp->Lower() || !pUp->Lower()->IsColumnFrm()) ) )
                     pUp->Calc();
                 if ( pUp->GetType() & FRM_BODY )
                 {
@@ -1089,7 +1089,8 @@ BOOL CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, BOOL bMove )
         else
         {
             const SwFrm *pUp = pFly->GetAnchor()->GetUpper();
-            pUp->Calc();
+            if( !pUp->IsFooterFrm() )
+                pUp->Calc();
 #ifdef VERTICAL_LAYOUT
             SWRECTFN( pFly->GetAnchor() )
 #endif
@@ -1171,7 +1172,8 @@ BOOL CalcClipRect( const SdrObject *pSdrObj, SwRect &rRect, BOOL bMove )
                 pFrm = pC->GetAnchor();
             }
             const SwFrm *pUp = pFrm->GetUpper();
-            pUp->Calc();
+            if( !pUp->IsFooterFrm() )
+                pUp->Calc();
             rRect = pUp->Prt();
             rRect += pUp->Frm().Pos();
 #ifdef VERTICAL_LAYOUT
