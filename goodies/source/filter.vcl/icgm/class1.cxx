@@ -2,9 +2,9 @@
  *
  *  $RCSfile: class1.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:30:14 $
+ *  last change: $Author: sj $ $Date: 2000-12-15 12:25:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,22 +87,14 @@ void CGM::ImplDoClass1()
         break;
         case 0x04 : ComOut( CGM_LEVEL1 | CGM_DRAWING_PLUS_CONTROL_SET, "Integer Precision" )
         {
-            if ( mnMode & CGM_IMPORT_IM )
+            nInteger = ImplGetI( pElement->nIntegerPrecision );
+            switch ( nInteger )
             {
-                nInteger = ImplGetI( 2 );                           // MEGA PATCH
-                pElement->nIntegerPrecision = 4;
-            }
-            else
-            {
-                nInteger = ImplGetI( pElement->nIntegerPrecision );
-                switch ( nInteger )
-                {
-                    case 32 :
-                    case 24 :
-                    case 16 :
-                    case 8 : pElement->nIntegerPrecision = nInteger >> 3; break;
-                    default : mbStatus = sal_False; break;
-                }
+                case 32 :
+                case 24 :
+                case 16 :
+                case 8 : pElement->nIntegerPrecision = nInteger >> 3; break;
+                default : mbStatus = sal_False; break;
             }
         }
         break;
@@ -150,64 +142,40 @@ void CGM::ImplDoClass1()
         break;
         case 0x06 : ComOut( CGM_LEVEL1 | CGM_DRAWING_PLUS_CONTROL_SET, "Index Precision" )
         {
-            if ( mnMode & CGM_IMPORT_IM )
+            nInteger = ImplGetI( pElement->nIntegerPrecision );
+            switch ( nInteger )
             {
-                nInteger = ImplGetI( 2 );                           // MEGA PATCH
-                pElement->nIndexPrecision = 4;
-            }
-            else
-            {
-                nInteger = ImplGetI( pElement->nIntegerPrecision );
-                switch ( nInteger )
-                {
-                    case 32 :
-                    case 24 :
-                    case 16 :
-                    case 8 : pElement->nIndexPrecision = nInteger >> 3; break;
-                    default : mbStatus = sal_False; break;
-                }
+                case 32 :
+                case 24 :
+                case 16 :
+                case 8 : pElement->nIndexPrecision = nInteger >> 3; break;
+                default : mbStatus = sal_False; break;
             }
         }
         break;
         case 0x07 : ComOut( CGM_LEVEL1 | CGM_DRAWING_PLUS_CONTROL_SET, "Color Precision" )
         {
-            if ( mnMode & CGM_IMPORT_IM )
+            nInteger = ImplGetI( pElement->nIntegerPrecision );
+            switch ( nInteger )
             {
-                nInteger = ImplGetI( 2 );                           // MEGA PATCH
-                pElement->nColorPrecision = 1;
-            }
-            else
-            {
-                nInteger = ImplGetI( pElement->nIntegerPrecision );
-                switch ( nInteger )
-                {
-                    case 32 :
-                    case 24 :
-                    case 16 :
-                    case 8 : pElement->nColorPrecision = nInteger >> 3; break;
-                    default : mbStatus = sal_False; break;
-                }
+                case 32 :
+                case 24 :
+                case 16 :
+                case 8 : pElement->nColorPrecision = nInteger >> 3; break;
+                default : mbStatus = sal_False; break;
             }
         }
         break;
         case 0x08 : ComOut( CGM_LEVEL1 | CGM_DRAWING_PLUS_CONTROL_SET, "Color Index Precision" )
         {
-            if ( mnMode & CGM_IMPORT_IM )
+            nInteger = ImplGetI( pElement->nIntegerPrecision );
+            switch ( nInteger )
             {
-                nInteger = ImplGetI( 2 );                           // MEGA PATCH
-                pElement->nColorIndexPrecision = 4;
-            }
-            else
-            {
-                nInteger = ImplGetI( pElement->nIntegerPrecision );
-                switch ( nInteger )
-                {
-                    case 32 :
-                    case 24 :
-                    case 16 :
-                    case 8 : pElement->nColorIndexPrecision = nInteger >> 3; break;
-                    default : mbStatus = sal_False; break;
-                }
+                case 32 :
+                case 24 :
+                case 16 :
+                case 8 : pElement->nColorIndexPrecision = nInteger >> 3; break;
+                default : mbStatus = sal_False; break;
             }
         }
         break;
@@ -229,7 +197,7 @@ void CGM::ImplDoClass1()
             }
             for ( nI0 = 0; nI0 < nI1; nI0++ )
             {
-                pElement->nColorValueExtent[ nI0 ] = (sal_Int8)ImplGetUI( pElement->nColorPrecision );
+                pElement->nColorValueExtent[ nI0 ] = (sal_uInt8)ImplGetUI( pElement->nColorPrecision );
             }
         }
         break;
@@ -254,12 +222,7 @@ void CGM::ImplDoClass1()
             while ( mnParaSize < mnElementSize )
             {
                 sal_uInt32 nSize;
-                if ( mnMode & CGM_IMPORT_IM )
-                {
-                    nSize = ImplGetUI( 4 );
-                }
-                else
-                    nSize = ImplGetUI( 1 );
+                nSize = ImplGetUI( 1 );
                 pElement->aFontList.InsertName( mpSource + mnParaSize, nSize );
                 mnParaSize += nSize;
             }
@@ -271,18 +234,8 @@ void CGM::ImplDoClass1()
             {
                 sal_uInt32 nCharSetType;
                 sal_uInt32 nSize;
-                if ( mnMode & CGM_IMPORT_IM )
-                {
-                    ALIGN2( mnParaSize );
-                    nCharSetType = ImplGetUI16();
-                    ALIGN4( mnParaSize );
-                    nSize = ImplGetUI( 4 );
-                }
-                else
-                {
-                    nCharSetType = ImplGetUI16();
-                    nSize = ImplGetUI( 1 );
-                }
+                nCharSetType = ImplGetUI16();
+                nSize = ImplGetUI( 1 );
                 pElement->aFontList.InsertCharSet( (CharSetType)nCharSetType, mpSource + mnParaSize, nSize );
                 mnParaSize += nSize;
             }

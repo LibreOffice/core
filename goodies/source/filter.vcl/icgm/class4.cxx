@@ -2,9 +2,9 @@
  *
  *  $RCSfile: class4.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:30:14 $
+ *  last change: $Author: sj $ $Date: 2000-12-15 12:26:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,13 +226,7 @@ void CGM::ImplDoClass4()
 
                 ImplGetPoint ( aFloatPoint, sal_True );
                 nType = ImplGetUI16( 4 );
-                if ( mnMode & CGM_IMPORT_IM )
-                {
-                    nSize = ImplGetUI( 4 );
-                }
-                else
-                    nSize = ImplGetUI( 1 );
-
+                nSize = ImplGetUI( 1 );
                 mpSource[ mnParaSize + nSize ] = 0;
 
                 ComOut( CGM_DESCRIPTION, (char*)mpSource + mnParaSize );
@@ -270,12 +264,7 @@ void CGM::ImplDoClass4()
 
                 ImplGetPoint ( aFloatPoint, sal_True );
                 nType = ImplGetUI16( 4 );
-                if ( mnMode & CGM_IMPORT_IM )
-                {
-                    nSize = ImplGetUI( 4 );
-                }
-                else
-                    nSize = ImplGetUI( 1 );
+                nSize = ImplGetUI( 1 );
 
                 mpSource[ mnParaSize + nSize ] = 0;
 
@@ -295,13 +284,7 @@ void CGM::ImplDoClass4()
                 sal_uInt32 nSize;
                 sal_uInt32 nType = ImplGetUI16( 4 );
 
-                if ( mnMode & CGM_IMPORT_IM )
-                {
-                    nSize = ImplGetUI( 4 );
-                }
-                else
-                    nSize = ImplGetUI( 1 );
-
+                nSize = ImplGetUI( 1 );
                 mpSource[ mnParaSize + nSize ] = 0;
 
                 ComOut( CGM_DESCRIPTION, (char*)mpSource + mnParaSize );
@@ -386,107 +369,6 @@ void CGM::ImplDoClass4()
             {
                 long    nIdentifier = ImplGetI( pElement->nIntegerPrecision );
                 sal_uInt32  nNumberOfPoints = ImplGetUI( pElement->nIntegerPrecision );
-                if ( mnMode & CGM_IMPORT_IM )
-                {
-                    switch ( nIdentifier )
-                    {
-                        case -1 : ComOut( CGM_DESCRIPTION, "POLYBEZIER" )
-                        {
-                            sal_uInt32 i;
-                            Polygon aPolygon( nNumberOfPoints );
-                            for ( i = 0; i < nNumberOfPoints; i++)
-                            {
-                                FloatPoint  aFloatPoint;
-                                ImplGetPoint( aFloatPoint, sal_True );
-                                aPolygon.SetPoint( Point ( (long)( aFloatPoint.X ), (long)( aFloatPoint.Y ) ), i );
-                            }
-                            sal_uInt32 nOrder = ImplGetI( pElement->nIntegerPrecision );
-                            if ( nOrder & 4 )
-                            {
-                                for ( i = 0; i < nNumberOfPoints; i++ )
-                                {
-                                    if ( ( i % 3 ) == 0 )
-                                        aPolygon.SetFlags( i, POLY_NORMAL );
-                                    else
-                                        aPolygon.SetFlags( i, POLY_CONTROL );
-                                }
-                            }
-                            else
-                            {
-                                for ( i = 0; i < nNumberOfPoints; i++ )
-                                {
-                                    switch ( i & 3 )
-                                    {
-                                        case 0 :
-                                        case 3 : aPolygon.SetFlags( i, POLY_NORMAL ); break;
-                                        default : aPolygon.SetFlags( i, POLY_CONTROL ); break;
-                                    }
-                                }
-                            }
-                            if ( mbFigure )
-                                mpOutAct->RegPolyLine( aPolygon );
-                            else
-                                mpOutAct->DrawPolybezier( aPolygon );
-                            mnParaSize = mnElementSize;
-                        }
-                        break;
-                        case -2 : ComOut( CGM_DESCRIPTION, "SHARP POLYBEZIER" )
-                        {
-                            if ( mbFigure )
-                                mpOutAct->CloseRegion();
-                        }
-                        break;
-                        case -3 : ComOut( CGM_DESCRIPTION, "POLYSPLINE" )
-                        {
-                            if ( mbFigure )
-                                mpOutAct->CloseRegion();
-                        }
-                        break;
-                        case -4 : ComOut( CGM_DESCRIPTION, "ROUNDED RECTANGLE" )
-                        {
-                            if ( mbFigure )
-                                mpOutAct->CloseRegion();
-                        }
-                        break;
-                        case -5 : ComOut( CGM_DESCRIPTION, "BEGIN CELL ARRAY" )
-                        {
-                            if ( mbFigure )
-                                mpOutAct->CloseRegion();
-                        }
-                        break;
-                        case -6 : ComOut( CGM_DESCRIPTION, "END CELL ARRAY" )
-                        {
-                            if ( mbFigure )
-                                mpOutAct->CloseRegion();
-                        }
-                        break;
-                        case -7 : ComOut( CGM_DESCRIPTION, "INSERT FILE" )
-                        {
-                            if ( mbFigure )
-                                mpOutAct->CloseRegion();
-                        }
-                        break;
-                        case -8 : ComOut( CGM_DESCRIPTION, "BLOCK TEXT" )
-                        {
-                            if ( mbFigure )
-                                mpOutAct->CloseRegion();
-                        }
-                        break;
-                        case -9 : ComOut( CGM_DESCRIPTION, "VARIABLE WIDTH POLYLINE" )
-                        {
-                            if ( mbFigure )
-                                mpOutAct->CloseRegion();
-                        }
-                        break;
-                        case -15: ComOut( CGM_DESCRIPTION, "HYPERLINK DEFINITION" )
-                        {
-                            if ( mbFigure )
-                                mpOutAct->CloseRegion();
-                        }
-                        break;
-                        default : ComOut( CGM_DESCRIPTION, "??????????????????????????????" ) break;
-                    }
-                }
                 mnParaSize = mnElementSize;
             }
             break;

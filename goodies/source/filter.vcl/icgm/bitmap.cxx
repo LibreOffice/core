@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bitmap.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:30:13 $
+ *  last change: $Author: sj $ $Date: 2000-12-15 12:22:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -333,43 +333,34 @@ sal_Bool CGMBitmap::ImplGetDimensions( CGMBitmapDescriptor& rDesc )
     sal_uInt32 nHeaderSize = 2 + 3 * nPrecision + 3 * mpCGM->ImplGetPointSize();
     rDesc.mnScanSize = ( ( rDesc.mnX * rDesc.mnDstBitsPerPixel + 7 ) >> 3 );
 
-    if ( ( mpCGM->mnMode & CGM_IMPORT_IM ) && ( rDesc.mnLocalColorPrecision & 0x8000 ) )
-    {                                                       // if (sal_uInt16)precision is negative the color cell
-        rDesc.mnScanSize = ( rDesc.mnScanSize + 3 ) &~3;    // array doesn't include data - instead it is just
-        rDesc.mpBuf = (sal_uInt8*)mpCGM->ImplGetUI( 4 );            // a 4 Byte pointer to the data
-        mpCGM->mnElementSize = mpCGM->mnParaSize;
-    }
-    else
+    sal_uInt32  nScanSize;
+    nScanSize = rDesc.mnScanSize;
+    if ( ( nScanSize * rDesc.mnY + nHeaderSize ) != mpCGM->mnElementSize )  // try a scansize without dw alignment
     {
-        sal_uInt32  nScanSize;
-        nScanSize = rDesc.mnScanSize;
-        if ( ( nScanSize * rDesc.mnY + nHeaderSize ) != mpCGM->mnElementSize )  // try a scansize without dw alignment
+        nScanSize = ( rDesc.mnScanSize + 1 ) & ~1;
+        if ( ( nScanSize * rDesc.mnY + nHeaderSize ) != mpCGM->mnElementSize )  // then we'll try word alignment
         {
-            nScanSize = ( rDesc.mnScanSize + 1 ) & ~1;
-            if ( ( nScanSize * rDesc.mnY + nHeaderSize ) != mpCGM->mnElementSize )  // then we'll try word alignment
+            nScanSize = ( rDesc.mnScanSize + 3 ) & ~3;
+            if ( ( nScanSize * rDesc.mnY + nHeaderSize ) != mpCGM->mnElementSize )  // and last we'll try dword alignment
             {
-                nScanSize = ( rDesc.mnScanSize + 3 ) & ~3;
-                if ( ( nScanSize * rDesc.mnY + nHeaderSize ) != mpCGM->mnElementSize )  // and last we'll try dword alignment
+                nScanSize = ( rDesc.mnScanSize + 1 ) & ~1;          // and LAST BUT NOT LEAST we'll try word alignment without aligning the last line
+                if ( ( nScanSize * ( rDesc.mnY - 1 ) + rDesc.mnScanSize + nHeaderSize ) != mpCGM->mnElementSize )
                 {
-                    nScanSize = ( rDesc.mnScanSize + 1 ) & ~1;          // and LAST BUT NOT LEAST we'll try word alignment without aligning the last line
+                    nScanSize = ( rDesc.mnScanSize + 3 ) & ~3;
                     if ( ( nScanSize * ( rDesc.mnY - 1 ) + rDesc.mnScanSize + nHeaderSize ) != mpCGM->mnElementSize )
                     {
-                        nScanSize = ( rDesc.mnScanSize + 3 ) & ~3;
-                        if ( ( nScanSize * ( rDesc.mnY - 1 ) + rDesc.mnScanSize + nHeaderSize ) != mpCGM->mnElementSize )
-                        {
-                            mpCGM->mnParaSize = 0;                              // this format is corrupt
-                            rDesc.mbStatus = sal_False;
-                        }
+                        mpCGM->mnParaSize = 0;                              // this format is corrupt
+                        rDesc.mbStatus = sal_False;
                     }
                 }
             }
         }
-        rDesc.mnScanSize = nScanSize;
-        if ( rDesc.mbStatus )
-        {
-            rDesc.mpBuf = mpCGM->mpSource + mpCGM->mnParaSize;  // mpBuf now points to the first scanline
-            mpCGM->mnParaSize += rDesc.mnScanSize * rDesc.mnY;
-        }
+    }
+    rDesc.mnScanSize = nScanSize;
+    if ( rDesc.mbStatus )
+    {
+        rDesc.mpBuf = mpCGM->mpSource + mpCGM->mnParaSize;  // mpBuf now points to the first scanline
+        mpCGM->mnParaSize += rDesc.mnScanSize * rDesc.mnY;
     }
     return rDesc.mbStatus;
 }

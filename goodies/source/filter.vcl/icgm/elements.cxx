@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elements.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:30:14 $
+ *  last change: $Author: sj $ $Date: 2000-12-15 12:27:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -195,17 +195,9 @@ CGMElements& CGMElements::operator=( CGMElements& rSource )
 void CGMElements::Init()
 {
 
-    if ( mpCGM->mnMode & CGM_IMPORT_IM )            // IMAGE MARK is device dependent !!!
-    {
-        nIntegerPrecision = nIndexPrecision = nColorIndexPrecision = 4;
-        nRealSize = nVDCRealSize = 8;
-    }
-    else
-    {
-        nIntegerPrecision = nIndexPrecision = 2;
-        nRealSize = nVDCRealSize = 4;
-        nColorIndexPrecision = 1;
-    }
+    nIntegerPrecision = nIndexPrecision = 2;
+    nRealSize = nVDCRealSize = 4;
+    nColorIndexPrecision = 1;
     nColorPrecision = 1;
     nVDCIntegerPrecision = 2;
     eRealPrecision = eVDCRealPrecision = RP_FIXED;      //RP_FLOAT;

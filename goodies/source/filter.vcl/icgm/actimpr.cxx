@@ -2,9 +2,9 @@
  *
  *  $RCSfile: actimpr.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:30:13 $
+ *  last change: $Author: sj $ $Date: 2000-12-15 12:21:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,16 +156,6 @@ CGMImpressOutAct::CGMImpressOutAct( CGM& rCGM, const uno::Reference< frame::XMod
                 maXServiceManagerSC = utl::getProcessServiceFactory();
                 if ( maXServiceManagerSC.is() )
                 {
-
-                    maXMultiServiceFactory = ::com::sun::star::uno::Reference< lang::XMultiServiceFactory >
-                            ( maXServiceManagerSC, ::com::sun::star::uno::UNO_QUERY );
-                    if ( maXMultiServiceFactory.is() )
-                    {
-                        maXDrawPage = *(uno::Reference< drawing::XDrawPage > *)maXDrawPages->getByIndex( 0 ).getValue();
-                        if ( ImplInitPage() )
-                            bStatRet = sal_True;
-                    }
-/*
                     uno::Any aAny( rModel->queryInterface( ::getCppuType((const uno::Reference< lang::XMultiServiceFactory >*)0) ));
                     if( aAny >>= maXMultiServiceFactory )
                     {
@@ -173,7 +163,6 @@ CGMImpressOutAct::CGMImpressOutAct( CGM& rCGM, const uno::Reference< frame::XMod
                         if ( ImplInitPage() )
                             bStatRet = sal_True;
                     }
-*/
                 }
             }
         }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cgm.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:30:14 $
+ *  last change: $Author: sj $ $Date: 2000-12-15 12:24:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,15 +70,10 @@
 #undef CGM_USER_BREAKPOINT
 
 #define CGM_IMPORT_CGM      0x00000001
-#define CGM_IMPORT_IM       0x00000002
 
 #define CGM_EXPORT_IMPRESS  0x00000100
 #define CGM_EXPORT_META     0x00000200
 //#define CGM_EXPORT_COMMENT    0x00000400
-
-#define CGM_NO_PAD_BYTE     0x00010000
-#define CGM_BIG_ENDIAN      0x00020000
-#define CGM_LITTLE_ENDIAN   0x00040000
 
 // ---------------------------------------------------------------
 
@@ -204,9 +199,7 @@ class CGM
                             CGM( sal_uInt32 nMode );
                             ~CGM();
 
-#ifdef CGM_EXPORT_IMPRESS
                             CGM( sal_uInt32 nMode, ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > & rModel );
-#endif
 #ifdef CGM_EXPORT_META
         VirtualDevice*      mpVirDev;
         GDIMetaFile*        mpGDIMetaFile;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: class3.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:30:14 $
+ *  last change: $Author: sj $ $Date: 2000-12-15 12:25:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,8 +83,6 @@ void CGM::ImplDoClass3()
         case 0x02 : ComOut( CGM_LEVEL1, "VDC Real Precision" )
         {
             nUInteger = ImplGetUI16();
-            if ( mnMode & CGM_IMPORT_IM )
-                ALIGN4( mnParaSize );
             nI0 = ImplGetI( pElement->nIntegerPrecision );  // exponent
             nI1 = ImplGetI( pElement->nIntegerPrecision );  // mantisse
             switch( nUInteger )
@@ -127,8 +125,6 @@ void CGM::ImplDoClass3()
         case 0x03 : ComOut( CGM_LEVEL1, "Auxiliary Colour" )
         {
             pElement->nAuxiliaryColor = ImplGetBitmapColor();
-            if ( mnMode & CGM_IMPORT_IM )                                       // PATCH
-                mnParaSize = mnElementSize;
         }
         break;
         case 0x04 : ComOut( CGM_LEVEL1, "Transparency" )

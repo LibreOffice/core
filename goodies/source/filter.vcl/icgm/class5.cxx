@@ -2,9 +2,9 @@
  *
  *  $RCSfile: class5.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:30:14 $
+ *  last change: $Author: sj $ $Date: 2000-12-15 12:26:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,8 +112,6 @@ void CGM::ImplDoClass5()
                 pElement->pLineBundle->SetColor( ImplGetBitmapColor() );
             else
                 pElement->aLineBundle.SetColor( ImplGetBitmapColor() );
-            if ( mnMode & CGM_IMPORT_IM )                                       // PATCH
-                mnParaSize = mnElementSize;
         }
         break;
         case 0x05 : ComOut( CGM_LEVEL1, "Marker Bundle Index" )
@@ -151,8 +149,6 @@ void CGM::ImplDoClass5()
                 pElement->pMarkerBundle->SetColor( ImplGetBitmapColor() );
             else
                 pElement->aMarkerBundle.SetColor( ImplGetBitmapColor() );
-            if ( mnMode & CGM_IMPORT_IM )                                       // PATCH
-                mnParaSize = mnElementSize;
         }
         break;
         case 0x09 : ComOut( CGM_LEVEL1, "Text Bundle Index" )
@@ -204,8 +200,6 @@ void CGM::ImplDoClass5()
                 pElement->pTextBundle->SetColor( ImplGetBitmapColor() );
             else
                 pElement->aTextBundle.SetColor( ImplGetBitmapColor() );
-            if ( mnMode & CGM_IMPORT_IM )                                       // PATCH
-                mnParaSize = mnElementSize;
         }
         break;
         case 0x0f : ComOut( CGM_LEVEL1, "Character Height" )
@@ -279,8 +273,6 @@ void CGM::ImplDoClass5()
                 pElement->pFillBundle->SetColor( ImplGetBitmapColor() );
             else
                 pElement->aFillBundle.SetColor( ImplGetBitmapColor() );
-            if ( mnMode & CGM_IMPORT_IM )                                       // PATCH
-                mnParaSize = mnElementSize;
         }
         break;
         case 0x18 : ComOut( CGM_LEVEL1, "Fill Hatch Index" )
@@ -335,8 +327,6 @@ void CGM::ImplDoClass5()
                 pElement->pEdgeBundle->SetColor( ImplGetBitmapColor() );
             else
                 pElement->aEdgeBundle.SetColor( ImplGetBitmapColor() );
-            if ( mnMode & CGM_IMPORT_IM )                                       // PATCH
-                mnParaSize = mnElementSize;
         }
         break;
         case 0x1e : ComOut( CGM_LEVEL1, "Edge Visibility" )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cgm.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sj $ $Date: 2000-11-10 09:33:25 $
+ *  last change: $Author: sj $ $Date: 2000-12-15 12:23:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -255,16 +255,7 @@ sal_uInt32 CGM::ImplGetUI16( sal_uInt32 nAlign )
 {
     sal_uInt8* pSource = mpSource + mnParaSize;
     mnParaSize += 2;
-    if ( nAlign && ( mnMode & CGM_IMPORT_IM ) )
-    {
-        nAlign--;
-        mnParaSize += nAlign;
-        mnParaSize &=~nAlign;
-    }
-    if ( mnMode & CGM_BIG_ENDIAN )
-        return ( pSource[ 0 ] << 8 ) +  pSource[ 1 ];
-    else
-        return ( pSource[ 1 ] << 8 ) +  pSource[ 0 ];
+    return ( pSource[ 0 ] << 8 ) +  pSource[ 1 ];
 };
 
 // ---------------------------------------------------------------
@@ -289,25 +280,16 @@ long CGM::ImplGetI( sal_uInt32 nPrecision )
 
         case 2 :
         {
-            if ( mnMode & CGM_BIG_ENDIAN )
-                return (sal_Int16)( ( pSource[ 0 ] << 8 ) | pSource[ 1 ] );
-            else
-                return (sal_Int16)( ( pSource[ 1 ] << 8 ) | pSource[ 0 ] );
+            return (sal_Int16)( ( pSource[ 0 ] << 8 ) | pSource[ 1 ] );
         }
 
         case 3 :
         {
-            if ( mnMode & CGM_BIG_ENDIAN )
-                return ( ( pSource[ 0 ] << 24 ) | ( pSource[ 1 ] << 16 ) | pSource[ 2 ] << 8 ) >> 8;
-            else
-                return ( ( pSource[ 2 ] << 24 ) | ( pSource[ 1 ] << 16 ) | pSource[ 0 ] << 8 ) >> 8;
+            return ( ( pSource[ 0 ] << 24 ) | ( pSource[ 1 ] << 16 ) | pSource[ 2 ] << 8 ) >> 8;
         }
         case 4:
         {
-            if ( mnMode & CGM_BIG_ENDIAN )
-                return (sal_Int32)( ( pSource[ 0 ] << 24 ) | ( pSource[ 1 ] << 16 ) | ( pSource[ 2 ] << 8 ) | ( pSource[ 3 ] ) );
-            else
-                return (sal_Int32)( ( pSource[ 3 ] << 24 ) | ( pSource[ 2 ] << 16 ) | ( pSource[ 1 ] << 8 ) | ( pSource[ 0 ] ) );
+            return (sal_Int32)( ( pSource[ 0 ] << 24 ) | ( pSource[ 1 ] << 16 ) | ( pSource[ 2 ] << 8 ) | ( pSource[ 3 ] ) );
         }
         default:
             mbStatus = sal_False;
@@ -327,24 +309,15 @@ sal_uInt32 CGM::ImplGetUI( sal_uInt32 nPrecision )
             return  (sal_Int8)*pSource;
         case 2 :
         {
-            if ( mnMode & CGM_BIG_ENDIAN )
-                return (sal_uInt16)( ( pSource[ 0 ] << 8 ) | pSource[ 1 ] );
-            else
-                return (sal_uInt16)( ( pSource[ 1 ] << 8 ) | pSource[ 0 ] );
+            return (sal_uInt16)( ( pSource[ 0 ] << 8 ) | pSource[ 1 ] );
         }
         case 3 :
         {
-            if ( mnMode & CGM_BIG_ENDIAN )
-                return ( pSource[ 0 ] << 16 ) | ( pSource[ 1 ] << 8 ) | pSource[ 2 ];
-            else
-                return ( pSource[ 2 ] << 16 ) | ( pSource[ 1 ] << 8 ) | pSource[ 0 ];
+            return ( pSource[ 0 ] << 16 ) | ( pSource[ 1 ] << 8 ) | pSource[ 2 ];
         }
         case 4:
         {
-            if ( mnMode & CGM_BIG_ENDIAN )
-                return (sal_uInt32)( ( pSource[ 0 ] << 24 ) | ( pSource[ 1 ] << 16 ) | ( pSource[ 2 ] << 8 ) | ( pSource[ 3 ] ) );
-            else
-                return (sal_uInt32)( ( pSource[ 3 ] << 24 ) | ( pSource[ 2 ] << 16 ) | ( pSource[ 1 ] << 8 ) | ( pSource[ 0 ] ) );
+            return (sal_uInt32)( ( pSource[ 0 ] << 24 ) | ( pSource[ 1 ] << 16 ) | ( pSource[ 2 ] << 8 ) | ( pSource[ 3 ] ) );
         }
         default:
             mbStatus = sal_False;
@@ -384,14 +357,8 @@ double CGM::ImplGetFloat( RealPrecision eRealPrecision, sal_uInt32 nRealSize )
     float   fFloatBuf;
 
 #ifdef __BIGENDIAN
-    if ( mnMode & CGM_BIG_ENDIAN )
         bCompatible = sal_True;
-    else
-        bCompatible = sal_False;
 #else
-    if ( mnMode & CGM_LITTLE_ENDIAN )
-        bCompatible = sal_True;
-    else
         bCompatible = sal_False;
 #endif
     if ( bCompatible )
@@ -456,12 +423,7 @@ sal_uInt32 CGM::ImplGetPointSize()
     if ( pElement->eVDCType == VDC_INTEGER )
         return pElement->nVDCIntegerPrecision << 1;
     else
-    {
-        if ( mnMode & CGM_IMPORT_IM )
-            return pElement->nVDCRealSize * 3;
-        else
-            return pElement->nVDCRealSize << 1;
-    }
+        return pElement->nVDCRealSize << 1;
 }
 
 // ---------------------------------------------------------------
@@ -505,8 +467,6 @@ void CGM::ImplGetPoint( FloatPoint& rFloatPoint, sal_Bool bMap )
     {
         rFloatPoint.X = ImplGetFX();
         rFloatPoint.Y = ImplGetFY();
-        if ( mnMode & CGM_IMPORT_IM )
-            mnParaSize += 8;
     }
     if ( bMap )
         ImplMapPoint( rFloatPoint );
@@ -527,12 +487,8 @@ void CGM::ImplGetRectangle( FloatRect& rFloatRect, sal_Bool bMap )
     {
         rFloatRect.Left = ImplGetFX();
         rFloatRect.Bottom = ImplGetFY();
-        if ( mnMode & CGM_IMPORT_IM )
-            mnParaSize += 8;
         rFloatRect.Right = ImplGetFX();
         rFloatRect.Top = ImplGetFY();
-        if ( mnMode & CGM_IMPORT_IM )
-            mnParaSize += 8;
     }
     if ( bMap )
     {
@@ -559,12 +515,8 @@ void CGM::ImplGetRectangleNS( FloatRect& rFloatRect )
     {
         rFloatRect.Left = ImplGetFloat( pElement->eVDCRealPrecision, pElement->nVDCRealSize );
         rFloatRect.Bottom = ImplGetFloat( pElement->eVDCRealPrecision, pElement->nVDCRealSize );
-        if ( mnMode & CGM_IMPORT_IM )
-            mnParaSize += 8;
         rFloatRect.Right = ImplGetFloat( pElement->eVDCRealPrecision, pElement->nVDCRealSize );
         rFloatRect.Top = ImplGetFloat( pElement->eVDCRealPrecision, pElement->nVDCRealSize );
-        if ( mnMode & CGM_IMPORT_IM )
-            mnParaSize += 8;
     }
 }
 
@@ -891,7 +843,7 @@ void CGM::ImplDefaultReplacement()
                 nCount += mnParaSize;
                 mnParaSize = 0;
                 mpSource = pBuf + nCount;
-                if ( (!( mnMode & CGM_NO_PAD_BYTE ) ) && ( mnElementSize & 1 ) )
+                if ( mnElementSize & 1 )
                     nCount++;
                 nCount += mnElementSize;
                 if ( ( mnElementClass != 1 ) || ( mnElementID != 0xc ) )    // rekursion hier nicht moeglich!!
@@ -932,7 +884,7 @@ sal_Bool CGM::Write( SvStream& rIStm )
     if ( mnElementSize )
         rIStm.Read( mpSource + mnParaSize, mnElementSize );
 
-    if ( (!( mnMode & CGM_NO_PAD_BYTE ) ) && ( mnElementSize & 1 ) )
+    if ( mnElementSize & 1 )
         rIStm.SeekRel( 1 );
     ImplDoClass();
 
@@ -951,28 +903,16 @@ sal_Bool CGM::Write( SvStream& rIStm )
 
 sal_Bool CGM::Write( sal_uInt8* pSource )
 {
-    if ( mnMode & CGM_IMPORT_IM )
-    {
-        mnElementID = pSource[ 0 ];
-        mnElementClass = pSource[ 1 ];
-        mnElementSize = *( (long*)pSource + 1  );
-        mpSource = pSource + 16;
-        mnParaSize = 0;
-        ImplDoClass();
-    }
-    else
-    {
-        mpSource = pSource;
-        mnEscape = ImplGetUI16();
-        mnElementClass = mnEscape >> 12;
-        mnElementID = ( mnEscape & 0x0fe0 ) >> 5;
-        mnElementSize = mnEscape & 0x1f;
-        if ( mnElementSize == 31 )
-            mnElementSize = ImplGetUI16();
-        mpSource += mnParaSize;
-        mnParaSize = 0;
-        ImplDoClass();
-    }
+    mpSource = pSource;
+    mnEscape = ImplGetUI16();
+    mnElementClass = mnEscape >> 12;
+    mnElementID = ( mnEscape & 0x0fe0 ) >> 5;
+    mnElementSize = mnEscape & 0x1f;
+    if ( mnElementSize == 31 )
+        mnElementSize = ImplGetUI16();
+    mpSource += mnParaSize;
+    mnParaSize = 0;
+    ImplDoClass();
 
 #ifdef CGM_USER_BREAKPOINT
 #ifdef WNT
