@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.h,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: bmahbod $ $Date: 2000-12-07 22:20:05 $
+ *  last change: $Author: bmahbod $ $Date: 2000-12-08 02:29:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,20 +74,6 @@
 #include <VCLWindow.h>
 #endif
 
-const short kClipRegionChanged = 0x01;
-
-enum PortDrawMode
-{
-    eDrawBits,
-    eDrawDone,
-    eDrawFill,
-    eDrawLine,
-    eDrawInvert,
-    eDrawNil,
-    eDrawSetPort,
-    eDrawText
-};
-
 // -------------------
 // - SalGraphicsData -
 // -------------------
@@ -99,10 +85,9 @@ struct SalGraphicsData
     VCLVIEW         mhDC;           // VCLVIEW
     VCLWINDOW       mhWnd;          // Window-Handle, when Window-Graphics
 
-    // QuickDraw graph port and GWorld
+    // QuickDraw graph port
 
     CGrafPtr        mpCGrafPort;        // QD color graphics port
-    GDHandle        mhGDevice;      // GWorld graphics
 
     // Regions within a current port
 
@@ -110,32 +95,26 @@ struct SalGraphicsData
         RgnHandle       mhGrowRgn;      // Grow Region Handle
     RgnHandle       mhVisiRgn;      // Visible Region Handle
 
-    // Pen, brush, and text colors
-
-        RGBColor                maPenColor;     // Pen Color
-        RGBColor                maBrushColor;       // Brush Color
-        RGBColor                maTextColor;        // Text Color
-
     // Font attributes
 
     int         mnFontID;       // Mac FontFamilyId
     int         mnFontSize;     // Mac Font Size
+        RGBColor                maFontColor;        // Text Color
     Style           mnFontStyle;        // Mac Font Style
 
     // Pen attributes and status
 
-    int         mnPenMode;      // Pen Mode
     BOOL            mbTransparentPen;   // Is pen transparent?
+    int         mnPenMode;      // Pen Mode
+        RGBColor                maPenColor;     // Pen Color
 
     // Brush attributes and status
 
-    PixPatHandle        mhDefBrush;     // Fill brush pixel pattern
     BOOL            mbTransparentBrush; // Is brush transparent?
+        RGBColor                maBrushColor;       // Brush Color
 
     // Miscellaneous status flags
 
-    unsigned short      mnCurrStatus;       // What is the current graph port status?
-    PortDrawMode        meCurrDrawMode;     // What is the current drawing mode?
     BOOL            mbPrinter;      // Is a printer available?
     BOOL            mbVirDev;       // Is a virtual device available?
     BOOL            mbWindow;       // Is a window availble?

@@ -2,8 +2,8 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.21 $
- *  last change: $Author: bmahbod $ $Date: 2000-12-07 22:20:07 $
+ *  $Revision: 1.22 $
+ *  last change: $Author: bmahbod $ $Date: 2000-12-08 02:29:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,133 +112,6 @@ static void SetBlackForeColor()
 
 // =======================================================================
 
-static BOOL CheckCurrDrawMode ( PortDrawMode        eUpdateDrawMode,
-                                SalGraphicsDataPtr  rSalGraphicsData
-                              )
-{
-    BOOL bDrawModeChecked = FALSE;
-
-    if ( rSalGraphicsData != NULL )
-    {
-        CGrafPtr  pCGrafPort = NULL;
-
-        osl_yieldThread();
-
-        if (    ( eUpdateDrawMode == eDrawFill )
-             && ( rSalGraphicsData->mbTransparentBrush == TRUE )
-           )
-        {
-            return FALSE;
-        } // if
-        else if (    ( eUpdateDrawMode == eDrawLine )
-                  && ( rSalGraphicsData->mbTransparentPen == FALSE )
-                )
-        {
-            return FALSE;
-        } // else if
-
-        GetPort( &pCGrafPort );
-
-        // Is the current graph port the same as the graph port in SalGraphics?
-        // That is to say, are they pointing to the same starting memory block?
-
-        if ( pCGrafPort != rSalGraphicsData->mpCGrafPort )
-        {
-            SetGWorld( rSalGraphicsData->mpCGrafPort,
-                       rSalGraphicsData->mhGDevice
-                     );
-        } // if
-
-        if ( eUpdateDrawMode == eDrawSetPort )
-        {
-            return TRUE;
-        } // if
-
-        if ( rSalGraphicsData->mnCurrStatus & kClipRegionChanged )
-        {
-            if ( rSalGraphicsData->mhClipRgn != NULL )
-            {
-                SetClip( rSalGraphicsData->mhClipRgn );
-            } // if
-            else
-            {
-                Rect aRect;
-
-                GetPortBounds( rSalGraphicsData->mpCGrafPort, &aRect );
-
-                ClipRect( &aRect );
-            } // else
-
-            rSalGraphicsData->mnCurrStatus &= ~kClipRegionChanged;
-        } // if
-
-        if ( rSalGraphicsData->meCurrDrawMode == eUpdateDrawMode )
-        {
-            return TRUE;
-        } // if
-
-        switch ( eUpdateDrawMode )
-        {
-            case eDrawBits:
-            {
-                PenNormal();
-
-                SetWhiteBackColor();
-                SetBlackForeColor();
-
-                break;
-            } // case eDrawBits
-
-            case eDrawFill:
-            {
-                RGBColor aBrushColor = rSalGraphicsData->maBrushColor;
-                short    nPenMode    = rSalGraphicsData->mnPenMode;
-
-                PenNormal();
-                PenMode( nPenMode );
-
-                RGBForeColor( &aBrushColor );
-
-                break;
-            } // case eDrawFill
-
-            case eDrawLine:
-            {
-                RGBColor aPenColor = rSalGraphicsData->maPenColor;
-                 short    nPenMode  = rSalGraphicsData->mnPenMode;
-
-                PenNormal();
-                PenMode( nPenMode );
-
-                RGBForeColor( &aPenColor );
-
-                break;
-            } // case eDrawLine
-
-            case eDrawText:
-            {
-                RGBColor aTextColor = rSalGraphicsData->maTextColor;
-
-                RGBForeColor( &aTextColor );
-
-                TextFont( rSalGraphicsData->mnFontID    );
-                TextFace( rSalGraphicsData->mnFontStyle );
-                TextSize( rSalGraphicsData->mnFontSize  );
-
-                break;
-            } // case eDrawText
-        } // switch
-
-        rSalGraphicsData->meCurrDrawMode = eUpdateDrawMode;
-
-        bDrawModeChecked = TRUE;
-    } // if
-
-    return bDrawModeChecked;
-} // CheckCurrDrawMode
-
-// -----------------------------------------------------------------------
-
 static void CheckRectBounds ( Rect        *rSrcRect,
                               Rect        *rDstRect,
                               const Rect  *rPortBoundsRect
@@ -309,13 +182,9 @@ static RGBColor SALColor2RGBColor ( SalColor nSalColor )
 
 // =======================================================================
 
-static void OpenQDPort ( SalGraphicsDataPtr rSalGraphicsData )
+static OSErr OpenQDPort ( SalGraphicsDataPtr rSalGraphicsData )
 {
-    // Get the current graphic device
-
-    rSalGraphicsData->mhGDevice = GetGDevice();
-
-    rSalGraphicsData->mnMacOSErr = QDError();
+    // Previous to entering this function, was there a QD error?
 
     if ( rSalGraphicsData->mnMacOSErr == noErr )
     {
@@ -329,41 +198,36 @@ static void OpenQDPort ( SalGraphicsDataPtr rSalGraphicsData )
 
             MacSetPort( rSalGraphicsData->mpCGrafPort );
 
-            // Now lock the current port pixels
+            // Was there a QD error when we set the port?
 
-            rSalGraphicsData->mnMacOSErr = LockPortBits( rSalGraphicsData->mpCGrafPort );
-
-            // Set background and foreground colors on this graph port
-
-            SetWhiteBackColor();
-            SetBlackForeColor();
+            rSalGraphicsData->mnMacOSErr = QDErr();
         } // if
     } // if
+    return rSalGraphicsData->mnMacOSErr;
 } // OpenQDPort
 
 // -----------------------------------------------------------------------
 
-static void CloseQDPort ( SalGraphicsDataPtr rSalGraphicsData )
+static OSErr CloseQDPort ( SalGraphicsDataPtr rSalGraphicsData )
 {
+    // Previous to entering this function, was there a QD error?
+
     if ( rSalGraphicsData->mnMacOSErr == noErr )
     {
-        // Unlock the current graph port bits
+        // Flush the QuickDraw buffer
 
-        rSalGraphicsData->mnMacOSErr = UnlockPortBits( rSalGraphicsData->mpCGrafPort );
+        QDFlushPortBuffer( rSalGraphicsData->mpCGrafPort, NULL );
 
-        if ( rSalGraphicsData->mnMacOSErr == noErr )
-        {
-            // Flush the QuickDraw buffer
+        // Unlock focus on the current NSView
 
-            QDFlushPortBuffer( rSalGraphicsData->mpCGrafPort, NULL );
+        VCLGraphics_UnLockFocusCGrafPort( rSalGraphicsData->mhDC );
 
-            // Unlock focus on the current NSView
+        // Was there a QD error?
 
-            VCLGraphics_UnLockFocusCGrafPort( rSalGraphicsData->mhDC );
-
-            SetQDError( rSalGraphicsData->mnMacOSErr );
-        } // if
+        rSalGraphicsData->mnMacOSErr = QDErr();
     } // if
+
+    return rSalGraphicsData->mnMacOSErr;
 } // CloseQDPort
 
 // =======================================================================
@@ -372,33 +236,27 @@ static void CloseQDPort ( SalGraphicsDataPtr rSalGraphicsData )
 
 static void InitBrush ( SalGraphicsDataPtr rSalGraphicsData )
 {
-    rSalGraphicsData->mhDefBrush         = NewPixPat();
-    rSalGraphicsData->mbTransparentBrush = FALSE;
-} // InitBrush
-
-// -----------------------------------------------------------------------
-
-static void InitColors ( SalGraphicsDataPtr rSalGraphicsData )
-{
     RGBColor aBlackColor;
-
-    // Set black color
 
     aBlackColor.red   = 0x0000;
     aBlackColor.green = 0x0000;
     aBlackColor.blue  = 0x0000;
 
-    // Set brush, pen, and text colors
-
-    rSalGraphicsData->maPenColor   = aBlackColor;
-    rSalGraphicsData->maBrushColor = aBlackColor;
-    rSalGraphicsData->maTextColor  = aBlackColor;
-} // InitColors
+    rSalGraphicsData->mbTransparentBrush = FALSE;
+    rSalGraphicsData->maBrushColor       = aBlackColor;
+} // InitBrush
 
 // -----------------------------------------------------------------------
 
 static void InitFont ( SalGraphicsDataPtr rSalGraphicsData )
 {
+    RGBColor aBlackColor;
+
+    aBlackColor.red   = 0x0000;
+    aBlackColor.green = 0x0000;
+    aBlackColor.blue  = 0x0000;
+
+    rSalGraphicsData->maFontColor = aBlackColor;
     rSalGraphicsData->mnFontID    = kFontIDGeneva;
     rSalGraphicsData->mnFontSize  = 10;
     rSalGraphicsData->mnFontStyle = normal;
@@ -408,6 +266,13 @@ static void InitFont ( SalGraphicsDataPtr rSalGraphicsData )
 
 static void InitPen ( SalGraphicsDataPtr rSalGraphicsData )
 {
+    RGBColor aBlackColor;
+
+    aBlackColor.red   = 0x0000;
+    aBlackColor.green = 0x0000;
+    aBlackColor.blue  = 0x0000;
+
+    rSalGraphicsData->maPenColor       = aBlackColor;
     rSalGraphicsData->mnPenMode        = patCopy;
     rSalGraphicsData->mbTransparentPen = FALSE;
 } // InitPen
@@ -425,13 +290,11 @@ static void InitRegions ( SalGraphicsDataPtr rSalGraphicsData )
 
 static void InitStatusFlags ( SalGraphicsDataPtr rSalGraphicsData )
 {
-    rSalGraphicsData->mnCurrStatus   = 0;
-    rSalGraphicsData->meCurrDrawMode = eDrawNil;
-    rSalGraphicsData->mbPrinter      = FALSE;
-    rSalGraphicsData->mbVirDev       = TRUE;
-    rSalGraphicsData->mbWindow       = TRUE;
-    rSalGraphicsData->mbScreen       = TRUE;
-    rSalGraphicsData->mnMacOSErr     = noErr;
+    rSalGraphicsData->mbPrinter  = FALSE;
+    rSalGraphicsData->mbVirDev   = TRUE;
+    rSalGraphicsData->mbWindow   = TRUE;
+    rSalGraphicsData->mbScreen   = TRUE;
+    rSalGraphicsData->mnMacOSErr = noErr;
 } // InitStatusFlags
 
 // =======================================================================
@@ -443,10 +306,6 @@ SalGraphics::SalGraphics()
     // Regions within a current port
 
     InitRegions( &maGraphicsData );
-
-    // Set brush, pen, and text colors
-
-    InitColors( &maGraphicsData );
 
     // Font attributes
 
@@ -464,23 +323,16 @@ SalGraphics::SalGraphics()
 
     InitStatusFlags(  &maGraphicsData );
 
-    // Get the graph port and lock focus on it
+    // Set background and foreground colors on this graph port
 
-    OpenQDPort( &maGraphicsData );
-
+    SetWhiteBackColor();
+    SetBlackForeColor();
 } // SalGraphics Class Constructor
 
 // -----------------------------------------------------------------------
 
 SalGraphics::~SalGraphics()
 {
-    CloseQDPort( &maGraphicsData );
-
-    if ( maGraphicsData.mhGDevice != NULL )
-    {
-        DisposeGDevice( maGraphicsData.mhGDevice );
-    } // if
-
     if ( maGraphicsData.mpCGrafPort != NULL )
     {
         DisposePort( maGraphicsData.mpCGrafPort );
@@ -496,14 +348,9 @@ SalGraphics::~SalGraphics()
         DisposeRgn( maGraphicsData.mhGrowRgn );
     } // if
 
-    if ( maGraphicsData.mhGrowRgn != NULL )
+    if ( maGraphicsData.mhVisiRgn != NULL )
     {
         DisposeRgn( maGraphicsData.mhVisiRgn );
-    } // if
-
-    if ( maGraphicsData.mhDefBrush != NULL )
-    {
-        DisposePixPat( maGraphicsData.mhDefBrush );
     } // if
 } // SalGraphics Class Destructor
 
@@ -608,22 +455,6 @@ void SalGraphics::SetFillColor( SalColor nSalColor )
 
     maGraphicsData.maBrushColor       = aRGBColor;
     maGraphicsData.mbTransparentBrush = FALSE;
-
-    if ( maGraphicsData.mhDefBrush != NULL )
-    {
-        DisposePixPat( maGraphicsData.mhDefBrush );
-
-        maGraphicsData.mhDefBrush = NULL;
-    }
-
-    maGraphicsData.mhDefBrush = NewPixPat();
-
-    if (    (    maGraphicsData.mhDefBrush  != NULL )
-         && (  *(maGraphicsData.mhDefBrush) != NULL )
-       )
-    {
-        MakeRGBPat( maGraphicsData.mhDefBrush, &aRGBColor );
-    } // if
 } // SalGraphics::SetFillColor
 
 // -----------------------------------------------------------------------
@@ -656,11 +487,17 @@ void SalGraphics::SetROPFillColor( SalROPColor nROPColor )
 
 void SalGraphics::DrawPixel( long nX, long nY )
 {
-    VCLVIEW hView = maGraphicsData.mhDC;
+    OSErr aQDErr = noErr;
 
-    if ( hView != NULL )
+    aQDErr = OpenQDPort( &maGraphicsData );
+
+    if ( aQDErr == noErr )
     {
-        VCLGraphics_DrawPixel ( hView, nX, nY );
+        RGBColor aPixelRGBColor =  maGraphicsData.maPenColor;
+
+        SetCPixel( nX, nY, &aPixelRGBColor );
+
+        CloseQDPort( &maGraphicsData );
     } // if
 } // SalGraphics::DrawPixel
 
@@ -668,47 +505,58 @@ void SalGraphics::DrawPixel( long nX, long nY )
 
 void SalGraphics::DrawPixel( long nX, long nY, SalColor nSalColor )
 {
-    VCLVIEW hView = maGraphicsData.mhDC;
+    OSErr aQDErr = noErr;
 
-    if ( hView != NULL )
+    aQDErr = OpenQDPort( &maGraphicsData );
+
+    if ( aQDErr == noErr )
     {
         RGBColor aPixelRGBColor;
 
         aPixelRGBColor = SALColor2RGBColor( nSalColor );
 
-        VCLGraphics_DrawColorPixel ( hView, nX, nY, &aPixelRGBColor );
+        SetCPixel( nX, nY, &aPixelRGBColor );
+
+        CloseQDPort( &maGraphicsData );
     } // if
-}
+} // SalGraphics::DrawPixel
 
 // -----------------------------------------------------------------------
 
 void SalGraphics::DrawLine( long nX1, long nY1, long nX2, long nY2 )
 {
-    VCLVIEW  hView = maGraphicsData.mhDC;
+    OSErr aQDErr = noErr;
 
-    if ( hView != NULL )
+    aQDErr = OpenQDPort( &maGraphicsData );
+
+    if ( aQDErr == noErr )
     {
+        short       nPortPenMode = 0;
+        short       nPenMode     = maGraphicsData.mnPenMode;
+        CGrafPtr    pCGraf       = maGraphicsData.mpCGrafPort;
+
+        nPortPenMode = GetPortPenMode( pCGraf );
+
+        SetPortPenMode( pCGraf, nPenMode );
+
+        MoveTo( nX1, nY1 );
+
         if ( maGraphicsData.mbTransparentPen == TRUE )
         {
-            VCLGraphics_DrawLine ( hView,
-                                   nX1,
-                                   nY1,
-                                   nX2,
-                                   nY2
-                                 );
+            SetBlackForeColor();
         } // if
         else
         {
-            RGBColor  aLineColor = maGraphicsData.maPenColor;
+            RGBColor  aPenColor = maGraphicsData.maPenColor;
 
-            VCLGraphics_DrawColorLine (  hView,
-                                         nX1,
-                                         nY1,
-                                         nX2,
-                                         nY2,
-                                        &aLineColor
-                                      );
+            RGBForeColor( &aPenColor );
         } // else
+
+        MacLineTo( nX2, nY2 );
+
+        CloseQDPort( &maGraphicsData );
+
+        SetPortPenMode( pCGraf, nPortPenMode );
     } // if
 } // SalGraphics::DrawLine
 
@@ -716,31 +564,48 @@ void SalGraphics::DrawLine( long nX1, long nY1, long nX2, long nY2 )
 
 void SalGraphics::DrawRect( long nX, long nY, long nWidth, long nHeight )
 {
-    VCLVIEW hView = maGraphicsData.mhDC;
+    OSErr aQDErr = noErr;
 
-    if ( hView != NULL )
+    aQDErr = OpenQDPort( &maGraphicsData );
+
+    if ( aQDErr == noErr )
     {
+        long      nEndX       = 0;
+        long      nEndY       = 0;
+        RGBColor  aBrushColor = maGraphicsData.maBrushColor;
+        Rect      aRect;
+
+        // Compute the second set of (nX,nY) coordinates
+
+        nEndX = nX + nWidth;
+        nEndY = nY + nHeight;
+
+        RGBForeColor( &aBrushColor );
+
+        MoveTo( nX, nY );
+
+        MacSetRect( &aRect, nX, nY, nEndX, nEndY );
+
         if ( maGraphicsData.mbTransparentBrush == TRUE )
         {
-            VCLGraphics_DrawRect ( hView,
-                                   nX,
-                           nY,
-                           nWidth,
-                           nHeight
-                         );
+            short       nPortPenMode = 0;
+            short       nPenMode     = maGraphicsData.mnPenMode;
+            CGrafPtr    pCGraf       = maGraphicsData.mpCGrafPort;
+
+            nPortPenMode = GetPortPenMode( pCGraf );
+
+            SetPortPenMode( pCGraf, nPenMode );
+
+            MacFrameRect( &aRect );
+
+            SetPortPenMode( pCGraf, nPortPenMode );
         } // if
         else
         {
-            RGBColor  aRectFillColor = maGraphicsData.maBrushColor;
-
-            VCLGraphics_DrawColorRect (  hView,
-                                         nX,
-                                         nY,
-                                         nWidth,
-                                         nHeight,
-                                        &aRectFillColor
-                                      );
+            PaintRect( &aRect );
         } // else
+
+        CloseQDPort( &maGraphicsData );
     } // if
 } // SalGraphics::DrawRect
 
@@ -750,24 +615,56 @@ void SalGraphics::DrawPolyLine( ULONG nPoints, const SalPoint *pPtAry )
 {
     if  ( ( nPoints > 1 ) && ( pPtAry != NULL ) )
     {
-        long      i;
-        long      pXPtsArray[nPoints];
-        long      pYPtsArray[nPoints];
-        VCLVIEW   hView = maGraphicsData.mhDC;
+        OSErr aQDErr = noErr;
 
-        for ( i = 0; i < nPoints; i++ )
-        {
-            pXPtsArray[i] = pPtAry[i].mnX;
-            pYPtsArray[i] = pPtAry[i].mnY;
-        } // for
+        aQDErr = OpenQDPort( &maGraphicsData );
 
-        if ( hView != NULL )
+        if ( aQDErr == noErr )
         {
-            VCLGraphics_DrawPolygon ( hView,
-                                      nPoints,
-                                      pXPtsArray,
-                                      pYPtsArray
-                                    );
+            long        nPolyEdges   = 0;
+            short       nPortPenMode = 0;
+            short       nPenMode     = maGraphicsData.mnPenMode;
+            CGrafPtr    pCGraf       = maGraphicsData.mpCGrafPort;
+            PolyHandle  hPolygon     = NULL;
+
+            nPortPenMode = GetPortPenMode( pCGraf );
+
+            SetBlackForeColor();
+
+            SetPortPenMode( pCGraf, nPenMode );
+
+            // Construct a polygon
+
+            hPolygon = OpenPoly();
+
+                if ( hPolygon != NULL )
+                {
+                    MoveTo ( pPtAry[0].mnX,  pPtAry[0].mnY );
+
+                    for ( nPolyEdges = 1; nPolyEdges < nPoints; nPolyEdges ++ )
+                    {
+                        MacLineTo( pPtAry[nPolyEdges].mnX, pPtAry[nPolyEdges].mnY );
+                    } // for
+
+                    MacLineTo( pPtAry[0].mnX,  pPtAry[0].mnY );
+                } // if
+
+            ClosePoly();
+
+            // Did a QD error occur whilst constructing a polygon?
+
+            maGraphicsData.mnMacOSErr = QDErr();
+
+            if ( ( maGraphicsData.mnMacOSErr == noErr ) && ( hPolygon != NULL )  )
+            {
+                FramePoly( hPolygon );
+
+                KillPoly( hPolygon );
+            } // if
+
+            SetPortPenMode( pCGraf, nPortPenMode );
+
+            CloseQDPort( &maGraphicsData );
         } // if
     } // if
 } // SalGraphics::DrawPolyLine
@@ -778,27 +675,57 @@ void SalGraphics::DrawPolygon( ULONG nPoints, const SalPoint* pPtAry )
 {
     if  ( ( nPoints > 1 ) && ( pPtAry != NULL ) )
     {
-        long      i;
-        long      pXPtsArray[nPoints];
-        long      pYPtsArray[nPoints];
+        OSErr aQDErr = noErr;
 
-        VCLVIEW   hView          = maGraphicsData.mhDC;
-        RGBColor  aPolyFillColor = maGraphicsData.maBrushColor;
+        aQDErr = OpenQDPort( &maGraphicsData );
 
-        for ( i = 0; i < nPoints; i++ )
+        if ( aQDErr == noErr )
         {
-            pXPtsArray[i] = pPtAry[i].mnX;
-            pYPtsArray[i] = pPtAry[i].mnY;
-        } // for
+            long        nPolyEdges   = 0;
+            short       nPortPenMode = 0;
+            short       nPenMode     = maGraphicsData.mnPenMode;
+            CGrafPtr    pCGraf       = maGraphicsData.mpCGrafPort;
+            PolyHandle  hPolygon     = NULL;
+            RGBColor    aPolyColor   = maGraphicsData.maBrushColor;
 
-        if ( hView != NULL )
-        {
-            VCLGraphics_DrawColorPolygon (  hView,
-                                            nPoints,
-                                            pXPtsArray,
-                                            pYPtsArray,
-                                           &aPolyFillColor
-                                         );
+            nPortPenMode = GetPortPenMode( pCGraf );
+
+            RGBForeColor( &aPolyColor );
+
+            SetPortPenMode( pCGraf, nPenMode );
+
+            // Construct a polygon
+
+            hPolygon = OpenPoly();
+
+                if ( hPolygon != NULL )
+                {
+                    MoveTo ( pPtAry[0].mnX,  pPtAry[0].mnY );
+
+                    for ( nPolyEdges = 1; nPolyEdges < nPoints; nPolyEdges ++ )
+                    {
+                        MacLineTo( pPtAry[nPolyEdges].mnX, pPtAry[nPolyEdges].mnY );
+                    } // for
+
+                    MacLineTo( pPtAry[0].mnX,  pPtAry[0].mnY );
+                } // if
+
+            ClosePoly();
+
+            // Did a QD error occur whilst constructing a polygon?
+
+            maGraphicsData.mnMacOSErr = QDErr();
+
+            if ( ( maGraphicsData.mnMacOSErr == noErr ) && ( hPolygon != NULL )  )
+            {
+                PaintPoly( hPolygon );
+
+                KillPoly( hPolygon );
+            } // if
+
+            SetPortPenMode( pCGraf, nPortPenMode );
+
+            CloseQDPort( &maGraphicsData );
         } // if
     } // if
 } // SalGraphics::DrawPolygon
@@ -966,7 +893,7 @@ BOOL SalGraphics::DrawEPS( long nX, long nY, long nWidth, long nHeight,
 
 void SalGraphics::SetTextColor( SalColor nSalColor )
 {
-    maGraphicsData.maTextColor = SALColor2RGBColor( nSalColor );
+    maGraphicsData.maFontColor = SALColor2RGBColor( nSalColor );
 }
 
 // -----------------------------------------------------------------------
