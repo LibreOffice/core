@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mnemonic.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: th $ $Date: 2001-06-08 13:52:07 $
+ *  last change: $Author: th $ $Date: 2001-06-11 09:56:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -279,8 +279,19 @@ BOOL ImplMnemonicGenerator::CreateMnemonic( XubString& rKey )
                     aStr += c;
                     aStr += ')';
                     nIndex = rKey.Len();
-                    if ( (rKey.GetChar( nIndex-1 ) == ':') ||
-                         (rKey.GetChar( nIndex-1 ) == 0xFF1A) )
+                    static sal_Unicode cGreaterGreater[] = { 0xFF1E, 0xFF1E };
+                    if ( rKey.EqualsAscii( ">>", nIndex-2, 2 ) ||
+                         rKey.Equals( cGreaterGreater, nIndex-2, 2 ) )
+                        nIndex -= 2;
+                    static sal_Unicode cDotDotDot[] = { 0xFF0E, 0xFF0E, 0xFF0E };
+                    if ( rKey.EqualsAscii( "...", nIndex-3, 3 ) ||
+                         rKey.Equals( cDotDotDot, nIndex-3, 3 ) )
+                        nIndex -= 3;
+                    sal_Unicode cLastChar = rKey.GetChar( nIndex-1 );
+                    if ( (cLastChar == ':') || (cLastChar == 0xFF1A) ||
+                         (cLastChar == '.') || (cLastChar == 0xFF0E) ||
+                         (cLastChar == '?') || (cLastChar == 0xFF1F) ||
+                         (cLastChar == ' ') )
                         nIndex--;
                     rKey.Insert( aStr, nIndex );
                     bChanged = TRUE;
