@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hhcwrp.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 13:30:44 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:27:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,6 +160,25 @@ static void lcl_ActivateTextShell( SwWrtShell & rWrtSh )
 
 //////////////////////////////////////////////////////////////////////
 
+class SwKeepConversionDirectionStateContext
+{
+public:
+    SwKeepConversionDirectionStateContext()
+    {
+        //!! hack to transport the current conversion direction state settings
+        //!! into the next incarnation that iterates over the drawing objets
+        //!! ( see SwHHCWrapper::~SwHHCWrapper() )
+        svx::HangulHanjaConversion::SetUseSavedConversionDirectionState( sal_True );
+    }
+
+    ~SwKeepConversionDirectionStateContext()
+    {
+        svx::HangulHanjaConversion::SetUseSavedConversionDirectionState( sal_False );
+    }
+};
+
+//////////////////////////////////////////////////////////////////////
+
 SwHHCWrapper::SwHHCWrapper(
         SwView* pSwView,
         const uno::Reference< lang::XMultiServiceFactory >& rxMSF,
@@ -213,7 +232,11 @@ SwHHCWrapper::~SwHHCWrapper()
     {
         Cursor *pSave = pView->GetWindow()->GetCursor();
         {
-            SdrHHCWrapper aSdrSpell( pView, GetSourceLanguage(), GetTargetLanguage(), GetTargetFont(), GetConversionOptions(), IsInteractive() );
+            SwKeepConversionDirectionStateContext aContext;
+
+            SdrHHCWrapper aSdrSpell( pView, GetSourceLanguage(),
+                    GetTargetLanguage(), GetTargetFont(),
+                    GetConversionOptions(), IsInteractive() );
             aSdrSpell.StartTextConversion();
         }
         pView->GetWindow()->SetCursor( pSave );
@@ -251,6 +274,10 @@ void SwHHCWrapper::SelectNewUnit_impl( sal_Int32 nUnitStart, sal_Int32 nUnitEnd 
     pCrsr->SetMark();
     rWrtShell.Right( CRSR_SKIP_CHARS, /*bExpand*/ sal_True,
                   (USHORT) (nUnitEnd - nUnitStart), sal_True );
+    // end selection now. Otherwise SHIFT+HOME (extending the selection)
+    // won't work when the dialog is closed without any replacement.
+    // (see #116346#)
+    rWrtShell.EndSelect();
 }
 
 
