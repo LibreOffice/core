@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cli_cs_testobj.cs,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-22 08:17:02 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 13:29:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,10 @@ using unoidl.test.testtools.bridgetest;
 
 namespace cs_testobj
 {
+
+class CheckFailed: System.Exception {
+    public CheckFailed(string message): base(message) {}
+}
 
 public class BridgeTestObject : WeakBase, XRecursiveCall, XBridgeTest2
 {
@@ -679,25 +683,50 @@ public class BridgeTestObject : WeakBase, XRecursiveCall, XBridgeTest2
         return new testtools.bridgetest.cli_cs.Multi();
     }
 
-    public int testMultiF1(XMulti arg)
-    {
-        return arg.f1();
+    private static void checkEqual(int value, int argument) {
+        if (argument != value) {
+            throw new CheckFailed(value + " != " + argument);
+        }
     }
 
-    public int testMultiF2(XMulti arg)
-    {
-        return ((XB)arg).f2();
+    private static void checkEqual(double value, double argument) {
+        if (argument != value) {
+            throw new CheckFailed(value + " != " + argument);
+        }
     }
 
-    public int testMultiF3(XMulti arg)
-    {
-        return arg.f3();
+    private static void checkEqual(string value, string argument) {
+        if (argument != value) {
+            throw new CheckFailed(value + " != " + argument);
+        }
     }
 
-    public int testMultiA(XMulti arg, int arg2)
+    public string testMulti(XMulti multi)
     {
-        ((XB)arg).a = arg2;
-        return ((XB)arg).a;
+        try {
+            checkEqual(0.0, multi.att1);
+            multi.att1 = 0.1;
+            checkEqual(0.1, multi.att1);
+            checkEqual(11 * 1, multi.fn11(1));
+            checkEqual("12" + "abc", multi.fn12("abc"));
+            checkEqual(21 * 2, multi.fn21(2));
+            checkEqual("22" + "de", multi.fn22("de"));
+            checkEqual(0.0, multi.att3);
+            multi.att3 = 0.3;
+            checkEqual(0.3, multi.att3);
+            checkEqual(31 * 3, multi.fn31(3));
+            checkEqual("32" + "f", multi.fn32("f"));
+            checkEqual(33, multi.fn33());
+            checkEqual(41 * 4, multi.fn41(4));
+            checkEqual(61 * 6, multi.fn61(6));
+            checkEqual("62" + "", multi.fn62(""));
+            checkEqual(71 * 7, multi.fn71(7));
+            checkEqual("72" + "g", multi.fn72("g"));
+            checkEqual(73, multi.fn73());
+        } catch (CheckFailed f) {
+            return f.Message;
+        }
+        return "";
     }
     
     public int RaiseAttr1
