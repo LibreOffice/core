@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ttmsg.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: gh $ $Date: 2001-05-08 10:56:58 $
+ *  last change: $Author: kz $ $Date: 2001-05-11 05:11:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,7 @@ String S_NAME_NOT_THERE
     Text[ arabic ] = "Name doesn't exist: #($Arg1)";
     Text[ turkish ] = "Name doesn't exist: #($Arg1)";
     Text[ catalan ] = "El nombre no existe: #($Arg1)";
+    Text[ finnish ] = "Nime‰ ei ole: ($Arg1)";
 };
 String S_DOUBLE_NAME
 {
@@ -118,6 +119,7 @@ String S_DOUBLE_NAME
     Text[ arabic ] = "Name double: ($Arg1)";
     Text[ turkish ] = "Name double: ($Arg1)";
     Text[ catalan ] = "Nombre doble: ($Arg1)";
+    Text[ finnish ] = "Kaksoisnimi: ($Arg1)";
 };
 String S_READING_FILE
 {
@@ -141,6 +143,7 @@ String S_READING_FILE
     Text[ arabic ] = "Reading the files";
     Text[ turkish ] = "Reading the files";
     Text[ catalan ] = "Leyendo los archivos";
+    Text[ finnish ] = "Luetaan tiedostoja";
 };
 String S_CANNOT_OPEN_FILE
 {
@@ -164,6 +167,7 @@ String S_CANNOT_OPEN_FILE
     Text[ arabic ] = "File cannot be opened: ($Arg1)";
     Text[ turkish ] = "File cannot be opened: ($Arg1)";
     Text[ catalan ] = "No se puede abrir el archivo: ($Arg1)";
+    Text[ finnish ] = "Tiedoston avaaminen ei onnistu: ($Arg1)";
 };
 String S_INVALID_LINE
 {
@@ -187,6 +191,7 @@ String S_INVALID_LINE
     Text[ arabic ] = "Line \"($Arg1)\" is invalid.";
     Text[ turkish ] = "Line \"($Arg1)\" is invalid.";
     Text[ catalan ] = "La lÌnea \"($Arg1)\" no es v·lida.";
+    Text[ finnish ] = "Rivi (Arg1) ei ole kelvollinen.";
 };
 String S_SHORTNAME_UNKNOWN
 {
@@ -210,6 +215,7 @@ String S_SHORTNAME_UNKNOWN
     Text[ arabic ] = "Short name unknown during copying: ($Arg1)";
     Text[ turkish ] = "Short name unknown during copying: ($Arg1)";
     Text[ catalan ] = "Abreviatura desconocida al copiar: ($Arg1)";
+    Text[ finnish ] = "Kopioitaessa havaittu tuntematon lyhyt nimi: ($Arg1)";
 };
 String S_LONGNAME_UNKNOWN
 {
@@ -233,6 +239,7 @@ String S_LONGNAME_UNKNOWN
     Text[ arabic ] = "Short name unknown during copying: ($Arg1)";
     Text[ turkish ] = "Short name unknown during copying: ($Arg1)";
     Text[ catalan ] = "Abreviatura desconocida al copiar: ($Arg1)";
+    Text[ finnish ] = "Kopioitaessa havaittu tuntematon lyhyt nimi: ($Arg1)";
 };
 String S_FIRST_SHORTNAME_REQ_ASTRX
 {
@@ -256,6 +263,7 @@ String S_FIRST_SHORTNAME_REQ_ASTRX
     Text[ arabic ] = "First short name must start with * . Leave out.";
     Text[ turkish ] = "First short name must start with * . Ignore.";
     Text[ catalan ] = "La primera abreviatura debe comenzar con *. Ignorar.";
+    Text[ finnish ] = "Ensimm‰isen lyhyen nimen ensimm‰isen merkin on oltava *. Ohita.";
 };
 String S_TIMOUT_WAITING
 {
@@ -279,6 +287,7 @@ String S_TIMOUT_WAITING
     Text[ arabic ] = "Server Timeout while waiting for answer. Sequence No: ($Arg1)";
     Text[ turkish ] = "Server Timeout while waiting for answer. Sequence No: ($Arg1)";
     Text[ catalan ] = "DesconexiÛn temporal al esperar por respuesta. Secuencia n˙m.: ($Arg1)";
+    Text[ finnish ] = "Palvelimen aikakatkaisu vastausta odotettaessa. J‰rjestysnumero: ($Arg1)";
 };
 String S_APPLICATION_RESTARTED
 {
@@ -302,6 +311,7 @@ String S_APPLICATION_RESTARTED
     Text[ arabic ] = "Application has been restarted.";
     Text[ turkish ] = "Application has been restarted.";
     Text[ catalan ] = "Se reiniciÛ la aplicaciÛn.";
+    Text[ finnish ] = "Sovellus on k‰ynnistetty uudelleen.";
 };
 String S_APPLICATION_START_FAILED
 {
@@ -325,6 +335,7 @@ String S_APPLICATION_START_FAILED
     Text[ arabic ] = "Application \"($Arg1)\" cannot be started. ";
     Text[ turkish ] = "Application \"($Arg1)\" cannot be started. ";
     Text[ catalan ] = "No se puede iniciar la aplicaciÛn \"($Arg1)\".  ";
+    Text[ finnish ] = "Sovelluksen ($Arg1) k‰ynnistys ei onnistu. ";
 };
 String S_TIMOUT_SENDING
 {
@@ -348,6 +359,7 @@ String S_TIMOUT_SENDING
     Text[ arabic ] = "Server Timeout while sending. Sequence No: ($Arg1)";
     Text[ turkish ] = "Server Timeout while sending. Sequence No: ($Arg1)";
     Text[ catalan ] = "DesconexiÛn temporal al enviar. Secuencia n˙m.: ($Arg1)";
+    Text[ finnish ] = "Palvelimen aikakatkaisu l‰hetett‰ess‰. J‰rjestysnumero: ($Arg1)";
 };
 String S_NO_CONNECTION
 {
@@ -371,6 +383,7 @@ String S_NO_CONNECTION
     Text[ arabic ] = "No connection. Sequence No: ($Arg1)";
     Text[ turkish ] = "No connection. Sequence No: ($Arg1)";
     Text[ catalan ] = "Sin conexiÛn. Secuencia n˙m.: ($Arg1)";
+    Text[ finnish ] = "Ei yhteytt‰. J‰rjestysnumero: ($Arg1)";
 };
 String S_NO_FILES_FOUND
 {
@@ -394,6 +407,7 @@ String S_NO_FILES_FOUND
     Text[ arabic ] = "No ($Arg1) files found";
     Text[ turkish ] = "No ($Arg1) files found";
     Text[ catalan ] = "No se encontrÛ ning˙n archivo ($Arg1)";
+    Text[ finnish ] = "($Arg1) tiedostoja ei lˆytynyt";
 };
 String S_ERRORS_DETECTED
 {
@@ -417,6 +431,7 @@ String S_ERRORS_DETECTED
     Text[ arabic ] = "** ($Arg1) errors occurred";
     Text[ turkish ] = "** ($Arg1) errors occurred";
     Text[ catalan ] = "** Ha ocurrido el error ($Arg1)";
+    Text[ finnish ] = "** ($Arg1) virhett‰ havaittu";
 };
 String S_NO_ERRORS_DETECTED
 {
@@ -440,6 +455,7 @@ String S_NO_ERRORS_DETECTED
     Text[ arabic ] = "** No errors have occurred";
     Text[ turkish ] = "** No errors have occurred";
     Text[ catalan ] = "** No ha ocurrido ning˙n error";
+    Text[ finnish ] = "** Virheit‰ ei ilmennyt";
 };
 String S_WARNINGS_DETECTED
 {
@@ -463,6 +479,7 @@ String S_WARNINGS_DETECTED
     Text[ arabic ] = "** ($Arg1) warnings occurred";
     Text[ turkish ] = "** ($Arg1) warnings occurred";
     Text[ catalan ] = "** Han aparecido las advertencias ($Arg1)";
+    Text[ finnish ] = "** ($Arg1) varoitusta";
 };
 String S_NO_WARNINGS_DETECTED
 {
@@ -486,6 +503,7 @@ String S_NO_WARNINGS_DETECTED
     Text[ arabic ] = "** No warnings have occurred";
     Text[ turkish ] = "** No warnings have occurred";
     Text[ catalan ] = "** No han aparecido advertencias";
+    Text[ finnish ] = "** Varoituksia ei ilmennyt";
 };
 String S_INCLUDE_FILE_WARNINGS_DETECTED
 {
@@ -509,6 +527,7 @@ String S_INCLUDE_FILE_WARNINGS_DETECTED
     Text[ arabic ] = "** ($Arg1)  Õ–Ì—«  √À‰«¡ ⁄„·Ì… «· ÂÌ∆… ÕœÀ ";
     Text[ turkish ] = "** ($Arg1) warnings occurred";
     Text[ catalan ] = "** Han aparecido las advertencias ($Arg1) durante la inicializaciÛn";
+    Text[ finnish ] = "** ($Arg1) varoitusta asennuksessa";
 };
 String S_NO_INCLUDE_FILE_WARNINGS_DETECTED
 {
@@ -532,6 +551,7 @@ String S_NO_INCLUDE_FILE_WARNINGS_DETECTED
     Text[ arabic ] = "** ·„  ÕœÀ √Ì…  Õ–Ì—«  √À‰«¡ «· ÂÌ∆…";
     Text[ turkish ] = "** No warnings have occurred";
     Text[ catalan ] = "** No han aparecido advertencias durante la inicializaciÛn";
+    Text[ finnish ] = "** Ei varoituksia asennuksessa";
 };
 String S_UNKNOWN_SLOT_CONTROL
 {
@@ -555,6 +575,7 @@ String S_UNKNOWN_SLOT_CONTROL
     Text[ arabic ] = "Slot/Control unknown :\"($Arg1)\"";
     Text[ turkish ] = "Slot/Control unknown :\"($Arg1)\"";
     Text[ catalan ] = "Slot/Control desconocido :\"($Arg1)\"";
+    Text[ finnish ] = "Tuntematon paikka/ohjain: ($Arg1)";
 };
 String S_RETURN_SEQUENCE_MISSMATCH
 {
@@ -578,6 +599,7 @@ String S_RETURN_SEQUENCE_MISSMATCH
     Text[ arabic ] = "Return Stream has wrong sequence: ($Arg1) instead of ($Arg2)";
     Text[ turkish ] = "Return Stream has wrong sequence: ($Arg1) instead of ($Arg2)";
     Text[ catalan ] = "Return Stream con secuencia falsa: ($Arg1) en vez de ($Arg2)";
+    Text[ finnish ] = "Paluuvirran j‰rjestys on v‰‰r‰: ($Arg1) eik‰ ($Arg2)";
 };
 String S_RETURNED_VALUE_ID_MISSMATCH
 {
@@ -601,6 +623,7 @@ String S_RETURNED_VALUE_ID_MISSMATCH
     Text[ arabic ] = "Return value received but different Id expected";
     Text[ turkish ] = "Return value received but different Id expected";
     Text[ catalan ] = "Recibido Valor Return, pero se esperaba otro Id";
+    Text[ finnish ] = "Palautusarvo saatu, mutta tunnus ei ole odotettu";
 };
 String S_RETURNED_VALUE_NO_RECEIVER
 {
@@ -624,6 +647,7 @@ String S_RETURNED_VALUE_NO_RECEIVER
     Text[ arabic ] = "Return value received but receiver not defined";
     Text[ turkish ] = "Return value received but receiver not defined";
     Text[ catalan ] = "Recibido valor Return sin definiciÛn de destinatario";
+    Text[ finnish ] = "Palautusarvo saatu, mutta vastaanottajaa ei ole m‰‰ritetty";
 };
 String S_UNKNOWN_METHOD
 {
@@ -647,6 +671,7 @@ String S_UNKNOWN_METHOD
     Text[ arabic ] = "Unknown method '($Arg1)' to ($Arg2)";
     Text[ turkish ] = "Unknown method on object :($Arg1).($Arg2)";
     Text[ catalan ] = "MÈtodo desconocido ($Arg1) a ($Arg2)";
+    Text[ finnish ] = "Tuntematon menetelm‰ objektissa($Arg1).($Arg2)";
 };
 /*
 String
