@@ -10576,3 +10576,14 @@ _TI3?AVSAXParseException@sax@xml@star@sun@com@@
 ??1SchXMLStockContext@@UAE@XZ
 ?StartElement@SchXMLStockContext@@UAEXABV?$Reference@VXAttributeList@sax@xml@star@sun@com@@@uno@star@sun@com@@@Z
 ??0SdXMLImExPointsElement@@QAE@PAV?$Sequence@UPoint@awt@star@sun@com@@@uno@star@sun@com@@ABVSdXMLImExViewBox@@ABUPoint@awt@345@ABUSize@8345@ABVSvXMLUnitConverter@@E@Z
+??0XMLTableFormulaImportContext@@QAE@AAVSvXMLImport@@AAVXMLTextImportHelper@@GABVOUString@rtl@@@Z
+??1XMLTableFormulaImportContext@@UAE@XZ
+??_7XMLTableFormulaImportContext@@6B@
+??_GXMLTableFormulaImportContext@@UAEPAXI@Z
+?CreateType@XMLTableFormulaImportContext@@SAPAXXZ
+?IsA@XMLTableFormulaImportContext@@UBEEP6APAXXZ@Z
+?IsOf@XMLTableFormulaImportContext@@SAEP6APAXXZ@Z
+?PrepareField@XMLTableFormulaImportContext@@MAEXABV?$Reference@VXPropertySet@beans@star@sun@com@@@uno@star@sun@com@@@Z
+?ProcessAttribute@XMLTableFormulaImportContext@@MAEXGABVOUString@rtl@@@Z
+?StaticType@XMLTableFormulaImportContext@@SAP6APAXXZXZ
+?Type@XMLTableFormulaImportContext@@UBEP6APAXXZXZ
