@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optinet2.src,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: pb $ $Date: 2001-06-07 07:33:22 $
+ *  last change: $Author: kz $ $Date: 2001-06-07 13:57:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,7 +219,7 @@ TabPage RID_SVXPAGE_INET_PROXY
     StringList [ spanish ] =
     {
              < "Ninguna" ; > ;
-        < "Automática" ; > ;
+        < "Manual" ; > ;
         < "Manual" ; > ;
     };
     StringList [ finnish ] =
@@ -249,7 +249,7 @@ TabPage RID_SVXPAGE_INET_PROXY
     StringList [ polish ] =
     {
              < "Brak" ; > ;
-        < "Automatycznie" ; > ;
+        < "Rêcznie" ; > ;
         < "Rêcznie" ; > ;
     };
     StringList [ portuguese_brazilian ] =
@@ -350,7 +350,7 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text [ french ] = "~Port" ;
         Text [ dutch ] = "~Poort" ;
         Text [ portuguese ] = "~Porta" ;
-        Text[ chinese_simplified ] = "²º(~P)";
+        Text[ chinese_simplified ] = "¶Ë¿Ú(~P)";
         Text[ russian ] = "Ïîğò";
         Text[ polish ] = "Port";
         Text[ japanese ] = "Îß°Ä(~P)";
@@ -418,7 +418,7 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text [ french ] = "P~ort" ;
         Text [ dutch ] = "P~oort" ;
         Text [ portuguese ] = "P~ort" ;
-        Text[ chinese_simplified ] = "²º(~O)";
+        Text[ chinese_simplified ] = "¶Ë¿Ú(~O)";
         Text[ russian ] = "Ïîğò";
         Text[ polish ] = "Port";
         Text[ japanese ] = "Îß°Ä(~O)";
@@ -486,7 +486,7 @@ TabPage RID_SVXPAGE_INET_PROXY
         Text [ french ] = "Po~rt" ;
         Text [ dutch ] = "Poo~rt" ;
         Text [ portuguese ] = "Po~rt" ;
-        Text[ chinese_simplified ] = "²º(~R)";
+        Text[ chinese_simplified ] = "¶Ë¿Ú(~R)";
         Text[ russian ] = "Ïîğò";
         Text[ polish ] = "Port";
         Text[ japanese ] = "Îß°Ä(~R)";
@@ -1968,7 +1968,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         {
             < "Nieograniczony" ; > ;
             < "Brak" ; > ;
-            < "Host" ; > ;
+            < "Komputer" ; > ;
         };
         StringList [ japanese ] =
         {
@@ -2033,7 +2033,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text [ English ] = "~ClassPath" ;
         Text [ english_us ] = "~Class path" ;
         Text [ italian ] = "~ClassPath" ;
-        Text [ spanish ] = "~Class path" ;
+        Text [ spanish ] = "~ClassPath" ;
         Text [ french ] = "~ClassPath" ;
         Text [ dutch ] = "~ClassPath" ;
         Text [ swedish ] = "~ClassPath" ;
@@ -2082,13 +2082,13 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text [ swedish ] = "F~rige" ;
         Text [ danish ] = "PlugIns" ;
         Text [ italian ] = "PlugIns" ;
-        Text [ spanish ] = "Plug-ins" ;
+        Text [ spanish ] = "Validar" ;
         Text [ french ] = "Plug-ins" ;
         Text [ dutch ] = "PlugIns" ;
         Text [ portuguese ] = "PlugIns" ;
         Text[ chinese_simplified ] = "¿ª·Å";
         Text[ russian ] = "Plug-Ins";
-        Text[ polish ] = "Wtyczki Plug-In";
+        Text[ polish ] = "Aktywacja";
         Text[ japanese ] = "Ìß×¸Ş²İ";
         Text[ chinese_traditional ] = "±Ò¥Î";
         Text[ arabic ] = "Plug-Ins";
@@ -2110,13 +2110,13 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text [ swedish ] = "Plug-ins" ;
         Text [ danish ] = "aktiver" ;
         Text [ italian ] = "Abilita" ;
-        Text [ spanish ] = "Va~lidar" ;
+        Text [ spanish ] = "Plug-ins" ;
         Text [ french ] = "~Valider" ;
         Text [ dutch ] = "V~rijgeven" ;
         Text [ portuguese ] = "~Activar" ;
         Text[ chinese_simplified ] = "Plug-Ins";
         Text[ russian ] = "Ğàçáëîêèğîâàòü";
-        Text[ polish ] = "Aktywacja";
+        Text[ polish ] = "Wtyczki plug-in";
         Text[ japanese ] = "g—p‚·‚é(~N)";
         Text[ chinese_traditional ] = "Plug-Ins";
         Text[ arabic ] = "ÇáÊÔÛíá";
@@ -2185,7 +2185,7 @@ ErrorBox RID_SVXERR_OPT_PROXYPORTS
     Message[ polish ] = "Nieprawid³owa wartoœæ!\n\nMaksymalny numer portu wynosi 65535.";
     Message[ portuguese_brazilian ] = "Ung?tiger Wert!\n\nDer H?hstwert einer Portnummer ist 65535.";
     Message[ japanese ] = "”’l‚ª³‚µ‚­‚ ‚è‚Ü‚¹‚ñ!\n\nÎß°Ä”Ô†‚ÌÅ‚’l‚Í65535‚Å‚·B";
-    Message[ chinese_simplified ] = "ÎŞĞ§µÄÊıÖµ£¡\n\nÒ»¸ö²ººÅÂëµÄ×î´óÖµÊÇ 65535 ¡£";
+    Message[ chinese_simplified ] = "ÎŞĞ§µÄÊıÖµ£¡\n\nÒ»¸ö¶Ë¿ÚºÅÂëµÄ×î´óÖµÊÇ 65535 ¡£";
     Message[ chinese_traditional ] = "µL®Äªº¼Æ­È¡I\n\n¤@­Ó°ğ¸¹½Xªº³Ì¤j­È¬O65535 ¡C";
     Message[ arabic ] = "ŞíãÉ ÛíÑ ÕÇáÍÉ!\n\nÇáŞíãÉ ÇáŞÕæì áÑŞã ãäİĞ åí 65535.";
     Message[ greek ] = "Ìç İãêõñç ôéìŞ!\n\nÇ ìİãéóôç ôéìŞ áñéèìïı èıñáò åßíáé 65535.";
@@ -2281,3 +2281,4 @@ ModalDialog RID_SVXDLG_OPT_JAVASCRIPT_DISABLE
 };
 
  // ******************************************************************* EOF
+
