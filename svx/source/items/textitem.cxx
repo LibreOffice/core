@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textitem.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:03:34 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 18:04:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -332,7 +332,7 @@ SfxItemPresentation SvxFontListItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
-    XubString&          rText, const IntlWrapper *
+    XubString&          rText, const IntlWrapper *pIntl
 )   const
 {
     rText.Erase();
@@ -548,7 +548,7 @@ SfxItemPresentation SvxFontItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
-    XubString&          rText, const IntlWrapper *
+    XubString&          rText, const IntlWrapper *pIntl
 )   const
 {
     switch ( ePres )
@@ -609,7 +609,7 @@ SfxItemPresentation SvxPostureItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
-    XubString&          rText, const IntlWrapper *
+    XubString&          rText, const IntlWrapper *pIntl
 )   const
 {
     switch ( ePres )
@@ -783,7 +783,7 @@ SfxItemPresentation SvxWeightItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
-    XubString&          rText, const IntlWrapper *
+    XubString&          rText, const IntlWrapper *pIntl
 )   const
 {
     switch ( ePres )
@@ -1093,7 +1093,7 @@ SfxItemPresentation SvxFontHeightItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
-    XubString&          rText, const IntlWrapper *
+    XubString&          rText, const IntlWrapper *pIntl
 )   const
 {
 #ifndef SVX_LIGHT
@@ -1115,7 +1115,7 @@ SfxItemPresentation SvxFontHeightItem::GetPresentation
             else if( 100 == nProp )
             {
                 rText = GetMetricText( (long)nHeight,
-                                        eCoreUnit, SFX_MAPUNIT_POINT );
+                                        eCoreUnit, SFX_MAPUNIT_POINT, pIntl );
                 rText += SVX_RESSTR(GetMetricId(SFX_MAPUNIT_POINT));
             }
             else
@@ -1304,7 +1304,7 @@ SfxItemPresentation SvxFontWidthItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
-    XubString&          rText, const IntlWrapper *
+    XubString&          rText, const IntlWrapper *pIntl
 )   const
 {
 #ifndef SVX_LIGHT
@@ -1319,7 +1319,7 @@ SfxItemPresentation SvxFontWidthItem::GetPresentation
             if ( 100 == nProp )
             {
                 rText = GetMetricText( (long)nWidth,
-                                        eCoreUnit, SFX_MAPUNIT_POINT );
+                                        eCoreUnit, SFX_MAPUNIT_POINT, pIntl );
                 rText += SVX_RESSTR(GetMetricId(SFX_MAPUNIT_POINT));
             }
             else
@@ -1399,7 +1399,7 @@ SfxItemPresentation SvxUnderlineItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
-    XubString&          rText, const IntlWrapper *
+    XubString&          rText, const IntlWrapper *pIntl
 )   const
 {
 #ifndef SVX_LIGHT
@@ -1569,7 +1569,7 @@ SfxItemPresentation SvxCrossedOutItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
-    XubString&          rText, const IntlWrapper *
+    XubString&          rText, const IntlWrapper *pIntl
 )   const
 {
     switch ( ePres )
@@ -1672,7 +1672,7 @@ SfxItemPresentation SvxShadowedItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
-    XubString&          rText, const IntlWrapper *
+    XubString&          rText, const IntlWrapper *pIntl
 )   const
 {
     switch ( ePres )
@@ -1732,7 +1732,7 @@ SfxItemPresentation SvxAutoKernItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
-    XubString&          rText, const IntlWrapper *
+    XubString&          rText, const IntlWrapper *pIntl
 )   const
 {
     switch ( ePres )
@@ -1793,7 +1793,7 @@ SfxItemPresentation SvxWordLineModeItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
-    XubString&          rText, const IntlWrapper *
+    XubString&          rText, const IntlWrapper *pIntl
 )   const
 {
     switch ( ePres )
@@ -1853,7 +1853,7 @@ SfxItemPresentation SvxContourItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
-    XubString&          rText, const IntlWrapper *
+    XubString&          rText, const IntlWrapper *pIntl
 )   const
 {
     switch ( ePres )
@@ -1913,7 +1913,7 @@ SfxItemPresentation SvxPropSizeItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
-    XubString&          rText, const IntlWrapper *
+    XubString&          rText, const IntlWrapper *pIntl
 )   const
 {
     rText.Erase();
@@ -2032,7 +2032,7 @@ SfxItemPresentation SvxColorItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
-    XubString&          rText, const IntlWrapper *
+    XubString&          rText, const IntlWrapper *pIntl
 )   const
 {
 #ifndef SVX_LIGHT
@@ -2113,7 +2113,7 @@ SfxItemPresentation SvxCharSetColorItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
-    XubString&          rText, const IntlWrapper *
+    XubString&          rText, const IntlWrapper *pIntl
 )   const
 {
     rText.Erase();
@@ -2173,7 +2173,7 @@ SfxItemPresentation SvxKerningItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
-    XubString&          rText, const IntlWrapper *
+    XubString&          rText, const IntlWrapper *pIntl
 )   const
 {
 #ifndef SVX_LIGHT
@@ -2183,8 +2183,8 @@ SfxItemPresentation SvxKerningItem::GetPresentation
             rText.Erase();
             return ePres;
         case SFX_ITEM_PRESENTATION_NAMELESS:
-            rText = GetMetricText( (long)GetValue(), eCoreUnit, ePresUnit );
-            rText += SVX_RESSTR(GetMetricId(ePresUnit));
+            rText = GetMetricText( (long)GetValue(), eCoreUnit, SFX_MAPUNIT_POINT, pIntl );
+            rText += SVX_RESSTR(GetMetricId(SFX_MAPUNIT_POINT));
             return ePres;
         case SFX_ITEM_PRESENTATION_COMPLETE:
         {
@@ -2198,8 +2198,8 @@ SfxItemPresentation SvxKerningItem::GetPresentation
 
             if ( nId )
                 rText += SVX_RESSTR(nId);
-            rText += GetMetricText( (long)GetValue(), eCoreUnit, ePresUnit );
-            rText += SVX_RESSTR(GetMetricId(ePresUnit));
+            rText += GetMetricText( (long)GetValue(), eCoreUnit, SFX_MAPUNIT_POINT, pIntl );
+            rText += SVX_RESSTR(GetMetricId(SFX_MAPUNIT_POINT));
             return ePres;
         }
     }
@@ -2274,7 +2274,7 @@ SfxItemPresentation SvxCaseMapItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
-    XubString&          rText, const IntlWrapper *
+    XubString&          rText, const IntlWrapper *pIntl
 )   const
 {
     switch ( ePres )
@@ -2427,7 +2427,7 @@ SfxItemPresentation SvxEscapementItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
-    XubString&          rText, const IntlWrapper *
+    XubString&          rText, const IntlWrapper *pIntl
 )   const
 {
     switch ( ePres )
@@ -2593,7 +2593,7 @@ SfxItemPresentation SvxLanguageItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
-    XubString&          rText, const IntlWrapper *
+    XubString&          rText, const IntlWrapper *pIntl
 )   const
 {
 #ifndef SVX_LIGHT
@@ -2708,7 +2708,7 @@ SfxItemPresentation SvxNoLinebreakItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
-    XubString&          rText, const IntlWrapper *
+    XubString&          rText, const IntlWrapper *pIntl
 )   const
 {
     rText.Erase();
@@ -2753,7 +2753,7 @@ SfxItemPresentation SvxNoHyphenItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
-    XubString&          rText, const IntlWrapper *
+    XubString&          rText, const IntlWrapper *pIntl
 )   const
 {
     rText.Erase();
@@ -2855,7 +2855,7 @@ SfxItemPresentation SvxBlinkItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
-    XubString&          rText, const IntlWrapper *
+    XubString&          rText, const IntlWrapper *pIntl
 )   const
 {
     switch ( ePres )
@@ -2918,7 +2918,7 @@ SfxItemPresentation SvxEmphasisMarkItem::GetPresentation
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
     XubString&          rText,
-    const IntlWrapper *
+    const IntlWrapper *pIntl
 )   const
 {
     switch ( ePres )
@@ -3454,7 +3454,7 @@ SfxItemPresentation SvxCharReliefItem::GetPresentation
     SfxItemPresentation ePres,
     SfxMapUnit          eCoreUnit,
     SfxMapUnit          ePresUnit,
-    XubString&          rText, const IntlWrapper *
+    XubString&          rText, const IntlWrapper *pIntl
 )   const
 {
     SfxItemPresentation eRet = ePres;
