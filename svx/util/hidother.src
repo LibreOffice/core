@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: os $ $Date: 2002-04-18 13:55:08 $
+ *  last change: $Author: gt $ $Date: 2002-05-17 12:28:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -387,6 +387,7 @@ hidspecial HID_GALLERY_THEMELIST                { HelpID = HID_GALLERY_THEMELIST
 hidspecial HID_GALLERY_ICONVIEW                 { HelpID = HID_GALLERY_ICONVIEW ;};
 hidspecial HID_GALLERY_LISTVIEW                 { HelpID = HID_GALLERY_LISTVIEW ;};
 hidspecial HID_OPTIONS_COLORCONFIG_SAVE_SCHEME  { HelpID = HID_OPTIONS_COLORCONFIG_SAVE_SCHEME ;};
+hidspecial HID_OPTIONS_COLORCONFIG_COLORLIST_WIN    { HelpID = HID_OPTIONS_COLORCONFIG_COLORLIST_WIN ;};
 //HID_AUTOCORR_HELP_END
 
 
