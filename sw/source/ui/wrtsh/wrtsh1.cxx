@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh1.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 15:44:42 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:08:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1157,28 +1157,37 @@ void SwWrtShell::SplitNode( BOOL bAutoFmt, BOOL bCheckTableStart )
 
 void SwWrtShell::NumOn()
 {
-    SwNumRule aNumRule( GetUniqueNumRuleName() );
+    // #115901#
+    const SwNumRule * pNumRule =
+        GetDoc()->SearchNumRule(*GetCrsr()->GetPoint(), FALSE, TRUE, FALSE, 0);
 
-    const SwNumRule* pCurRule = GetCurNumRule();
-    if( !pCurRule )
+    if (pNumRule)
+        SetCurNumRule(*pNumRule);
+    else
     {
-        // Zeichenvorlage an die Numerierung haengen
-        SwCharFmt* pChrFmt = GetCharFmtFromPool( RES_POOLCHR_NUM_LEVEL );
-        SwDocShell* pDocSh = GetView().GetDocShell();
-        BOOL bHtml = 0 != PTR_CAST(SwWebDocShell, pDocSh);
-        for( BYTE nLvl = 0; nLvl < MAXLEVEL; ++nLvl )
+        SwNumRule aNumRule(GetUniqueNumRuleName());
+
+        const SwNumRule* pCurRule = GetCurNumRule();
+        if( !pCurRule )
         {
-            SwNumFmt aFmt( aNumRule.Get( nLvl ) );
-            aFmt.SetCharFmt( pChrFmt );
-            if(bHtml && nLvl)
+            // Zeichenvorlage an die Numerierung haengen
+            SwCharFmt* pChrFmt = GetCharFmtFromPool( RES_POOLCHR_NUM_LEVEL );
+            SwDocShell* pDocSh = GetView().GetDocShell();
+            BOOL bHtml = 0 != PTR_CAST(SwWebDocShell, pDocSh);
+            for( BYTE nLvl = 0; nLvl < MAXLEVEL; ++nLvl )
             {
-                // 1/2" fuer HTML
-                aFmt.SetLSpace(720);
-                aFmt.SetAbsLSpace(nLvl * 720);
+                SwNumFmt aFmt( aNumRule.Get( nLvl ) );
+                aFmt.SetCharFmt( pChrFmt );
+                if(bHtml && nLvl)
+                {
+                    // 1/2" fuer HTML
+                    aFmt.SetLSpace(720);
+                    aFmt.SetAbsLSpace(nLvl * 720);
+                }
+                aNumRule.Set( nLvl, aFmt );
             }
-            aNumRule.Set( nLvl, aFmt );
+            SetCurNumRule( aNumRule );
         }
-        SetCurNumRule( aNumRule );
     }
 }
 
@@ -1188,29 +1197,39 @@ void SwWrtShell::NumOn()
 
 void SwWrtShell::BulletOn()
 {
-    SwNumRule aRule( GetUniqueNumRuleName() );
+    // #115901#
+    const SwNumRule * pNumRule =
+        GetDoc()->SearchNumRule(*GetCrsr()->GetPoint(),
+                                FALSE, FALSE, FALSE, 0);
 
-    SwCharFmt* pChrFmt = GetCharFmtFromPool( RES_POOLCHR_BUL_LEVEL );
-    const Font* pFnt = &SwNumRule::GetDefBulletFont();
-
-    SwDocShell* pDocSh = GetView().GetDocShell();
-    BOOL bHtml = 0 != PTR_CAST(SwWebDocShell, pDocSh);
-    for( BYTE n = 0; n < MAXLEVEL; ++n )
+    if (pNumRule)
+        SetCurNumRule(*pNumRule);
+    else
     {
-        SwNumFmt aFmt( aRule.Get( n ) );
-        aFmt.SetBulletFont( pFnt );
-        aFmt.SetBulletChar( cBulletChar );
-        aFmt.SetNumberingType(SVX_NUM_CHAR_SPECIAL);
-        aFmt.SetCharFmt( pChrFmt );
-        if(bHtml && n)
+        SwNumRule aRule( GetUniqueNumRuleName() );
+
+        SwCharFmt* pChrFmt = GetCharFmtFromPool( RES_POOLCHR_BUL_LEVEL );
+        const Font* pFnt = &SwNumRule::GetDefBulletFont();
+
+        SwDocShell* pDocSh = GetView().GetDocShell();
+        BOOL bHtml = 0 != PTR_CAST(SwWebDocShell, pDocSh);
+        for( BYTE n = 0; n < MAXLEVEL; ++n )
         {
-            // 1/2" fuer HTML
-            aFmt.SetLSpace(720);
-            aFmt.SetAbsLSpace(n * 720);
+            SwNumFmt aFmt( aRule.Get( n ) );
+            aFmt.SetBulletFont( pFnt );
+            aFmt.SetBulletChar( cBulletChar );
+            aFmt.SetNumberingType(SVX_NUM_CHAR_SPECIAL);
+            aFmt.SetCharFmt( pChrFmt );
+            if(bHtml && n)
+            {
+                // 1/2" fuer HTML
+                aFmt.SetLSpace(720);
+                aFmt.SetAbsLSpace(n * 720);
+            }
+            aRule.Set( n, aFmt );
         }
-        aRule.Set( n, aFmt );
+        SetCurNumRule( aRule );
     }
-    SetCurNumRule( aRule );
 }
 
 /*--------------------------------------------------
