@@ -1,2 +1,2 @@
-py	python	:	NULL
+py	python	:	solenv NULL
 py	python			nmake	-	all	ft_mkout NULL
