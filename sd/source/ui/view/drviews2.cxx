@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews2.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 15:51:10 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:16:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -305,7 +305,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 if(nSId == SID_ATTR_LINE_WIDTH)
                 {
                     SdrObject* pObj = NULL;
-                    const SdrMarkList& rMarkList = pDrView->GetMarkList();
+                    const SdrMarkList& rMarkList = pDrView->GetMarkedObjectList();
                     ULONG nCount = rMarkList.GetMarkCount();
 
                     INT32 nNewLineWidth = ((const XLineWidthItem&)rReq.GetArgs()->Get(XATTR_LINEWIDTH)).GetValue();
@@ -354,7 +354,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 {
                     // Ggf. werden transparente Objekte wei?gefuellt
                     SdrObject* pObj = NULL;
-                    const SdrMarkList& rMarkList = pDrView->GetMarkList();
+                    const SdrMarkList& rMarkList = pDrView->GetMarkedObjectList();
                     ULONG nCount = rMarkList.GetMarkCount();
 
                     for (ULONG i=0; i<nCount; i++)
@@ -474,8 +474,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 SdrLayerAdmin& rLayerAdmin = GetDoc()->GetLayerAdmin();
                 BYTE aBckgrnd = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), FALSE);
                 BYTE aBckgrndObj = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), FALSE);
-                USHORT nPos = 0;
-                SetOfByte aVisibleLayers = pActualPage->GetMasterPageVisibleLayers(nPos);
+                SetOfByte aVisibleLayers = pActualPage->TRG_GetMasterPageVisibleLayers();
                 BOOL bHandoutMode = FALSE;
                 SdPage* pHandoutMPage = NULL;
                 String aNewName;
@@ -689,8 +688,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                         aBckgrndObj = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), FALSE);
                         aVisibleLayers.Set(aBckgrnd, bBVisible);
                         aVisibleLayers.Set(aBckgrndObj, bBObjsVisible);
-                        nPos = 0;
-                        pActualPage->SetMasterPageVisibleLayers(aVisibleLayers, nPos);
+                        pActualPage->TRG_SetMasterPageVisibleLayers(aVisibleLayers);
                     }
                     else
                     {
@@ -1019,7 +1017,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
                 // fit rectangle of graphic-object to  mark-rect
                 Rectangle aAllMarkedRect;
-                SdrMarkList aMarkList = pDrView->GetMarkList();
+                SdrMarkList aMarkList = pDrView->GetMarkedObjectList();
                 for (int i=0; i < (int) aMarkList.GetMarkCount(); i++)
                 {
                     aAllMarkedRect.Union ( aMarkList.GetMark(i)->GetObj()->GetCurrentBoundRect() );
@@ -1027,7 +1025,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 pGraphicObj->SetLogicRect (aAllMarkedRect);
 
                 // get page-view
-                SdrPageView* pPageView = pDrView->GetMarkList().GetMark(0)->GetPageView();
+                SdrPageView* pPageView = pDrView->GetMarkedObjectList().GetMark(0)->GetPageView();
 
                 // delete marked objects
                 pDrView->DeleteMarkedObj(); // #69979# delete the objects, not only the marked area
@@ -1062,7 +1060,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             }
             else
             {
-                const SdrMarkList& rMarkList = pDrView->GetMarkList();
+                const SdrMarkList& rMarkList = pDrView->GetMarkedObjectList();
                 ULONG nCount = rMarkList.GetMarkCount();
 
                 // In diese Liste werden fuer jedes Praesentationsobjekt ein SfxItemSet
@@ -1234,8 +1232,7 @@ void DrawViewShell::CreateOrDuplicatePage (SfxRequest& rReq)
         SdrLayerAdmin& rLayerAdmin = GetDoc()->GetLayerAdmin();
         BYTE aBckgrnd = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRND)), FALSE);
         BYTE aBckgrndObj = rLayerAdmin.GetLayerID(String(SdResId(STR_LAYER_BCKGRNDOBJ)), FALSE);
-        USHORT nPos = 0;
-        SetOfByte aVisibleLayers = pActualPage->GetMasterPageVisibleLayers(nPos);
+        SetOfByte aVisibleLayers = pActualPage->TRG_GetMasterPageVisibleLayers();
 
         String aStandardPageName;
         String aNotesPageName;
