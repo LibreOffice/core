@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editview.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: kz $ $Date: 2004-11-27 13:38:09 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:58:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -544,14 +544,14 @@ void EditView::Redo()
     PIMPEE->Redo( this );
 }
 
-sal_uInt32 EditView::Read( SvStream& rInput, EETextFormat eFormat, sal_Bool bSelect, SvKeyValueIterator* pHTTPHeaderAttrs )
+sal_uInt32 EditView::Read( SvStream& rInput, const String& rBaseURL, EETextFormat eFormat, sal_Bool bSelect, SvKeyValueIterator* pHTTPHeaderAttrs )
 {
     DBG_CHKTHIS( EditView, 0 );
     DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
     EditSelection aOldSel( pImpEditView->GetEditSelection() );
     pImpEditView->DrawSelection();
     PIMPEE->UndoActionStart( EDITUNDO_READ );
-    EditPaM aEndPaM = PIMPEE->Read( rInput, eFormat, aOldSel, pHTTPHeaderAttrs );
+    EditPaM aEndPaM = PIMPEE->Read( rInput, rBaseURL, eFormat, aOldSel, pHTTPHeaderAttrs );
     PIMPEE->UndoActionEnd( EDITUNDO_READ );
     EditSelection aNewSel( aEndPaM, aEndPaM );
     if ( bSelect )
@@ -743,14 +743,14 @@ void EditView::InsertText( const EditTextObject& rTextObject )
     PIMPEE->FormatAndUpdate( this );
 }
 
-void EditView::InsertText( ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > xDataObj, BOOL bUseSpecial )
+void EditView::InsertText( ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > xDataObj, const String& rBaseURL, BOOL bUseSpecial )
 {
     DBG_CHKTHIS( EditView, 0 );
     DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
 
     PIMPEE->UndoActionStart( EDITUNDO_INSERT );
     pImpEditView->DeleteSelected();
-    EditSelection aTextSel( PIMPEE->InsertText( xDataObj, pImpEditView->GetEditSelection().Max(), bUseSpecial ) );
+    EditSelection aTextSel( PIMPEE->InsertText( xDataObj, rBaseURL, pImpEditView->GetEditSelection().Max(), bUseSpecial ) );
     PIMPEE->UndoActionEnd( EDITUNDO_INSERT );
 
     aTextSel.Min() = aTextSel.Max();    // Selektion nicht behalten.
