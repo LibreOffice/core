@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mediadescriptor.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 13:40:27 $
+ *  last change: $Author: as $ $Date: 2004-11-26 09:24:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,14 @@
 
 #ifndef __COM_SUN_STAR_TASK_XINTERACTIONABORT_HPP__
 #include <com/sun/star/task/XInteractionAbort.hpp>
+#endif
+
+#ifndef __COM_SUN_STAR_URI_XURIREFERENCEFACTORY_HPP__
+#include <com/sun/star/uri/XUriReferenceFactory.hpp>
+#endif
+
+#ifndef __COM_SUN_STAR_URI_XURIREFERENCE_HPP__
+#include <com/sun/star/uri/XUriReference.hpp>
 #endif
 
 #ifndef _UCBHELPER_INTERCEPTEDINTERACTION_HXX_
@@ -728,15 +736,37 @@ sal_Bool MediaDescriptor::impl_openStreamWithURL(const ::rtl::OUString& sURL)
 -----------------------------------------------*/
 ::rtl::OUString MediaDescriptor::impl_normalizeURL(const ::rtl::OUString& sURL)
 {
-    css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR = ::comphelper::getProcessServiceFactory();
-    css::uno::Reference< css::util::XURLTransformer > xParser(
-        xSMGR->createInstance(::rtl::OUString::createFromAscii("com.sun.star.util.URLTransformer")),
-        css::uno::UNO_QUERY_THROW);
+    /* Remove Jumpmarks (fragments) of an URL only here.
+       They are not part of any URL and as a result may be
+       no ucb content can be created then.
+       On the other side arguments must exists ... because
+       they are part of an URL.
 
-    css::util::URL aURL;
-    aURL.Complete = sURL;
-    xParser->parseStrict(aURL);
-    return aURL.Main;
+       Do not use the URLTransformer service here. Because
+       it parses the URL in another way. It's main part isnt enough
+       and it's complete part contains the jumpmark (fragment) parameter ...
+    */
+    static ::rtl::OUString SERVICENAME_URIREFERENCEFACTORY = ::rtl::OUString::createFromAscii("com.sun.star.uri.UriReferenceFactory");
+
+    try
+    {
+        css::uno::Reference< css::lang::XMultiServiceFactory > xSMGR      = ::comphelper::getProcessServiceFactory();
+        css::uno::Reference< css::uri::XUriReferenceFactory >  xUriFactory(xSMGR->createInstance(SERVICENAME_URIREFERENCEFACTORY), css::uno::UNO_QUERY_THROW);
+        css::uno::Reference< css::uri::XUriReference >         xUriRef    = xUriFactory->parse(sURL);
+        if (xUriRef.is())
+        {
+            xUriRef->clearFragment();
+            return xUriRef->getUriReference();
+        }
+    }
+    catch(const css::uno::RuntimeException& exRun)
+        { throw exRun; }
+    catch(const css::uno::Exception&)
+        {}
+
+    // If an error ocurred ... return the original URL.
+    // It's a try .-)
+    return sURL;
 }
 
 } // namespace comphelper
