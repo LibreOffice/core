@@ -2,9 +2,9 @@
  *
  *  $RCSfile: validate.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 23:01:35 $
+ *  last change: $Author: kz $ $Date: 2001-06-16 21:46:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@ TabDialog TAB_DLG_VALIDATION
                 Text[ portuguese ] = "Critérios";
                 Text[ russian ] = "Êðèòåðèè";
                 Text[ greek ] = "ÊñéôÞñéá";
-                Text[ dutch ] = "Waarden";
+                Text[ dutch ] = "Criteria";
                 Text[ french ] = "Critères";
                 Text[ spanish ] = "Criterios";
                 Text[ finnish ] = "Arvot";
@@ -1355,6 +1355,7 @@ TabPage TP_VALIDATION_ERROR
     Text[ catalan ] = "Mensaje de error";
     Text[ finnish ] = "Virhehälytys";
 };
+
 
 
 
