@@ -2,9 +2,9 @@
  *
  *  $RCSfile: storage.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mba $ $Date: 2001-03-21 13:56:30 $
+ *  last change: $Author: mba $ $Date: 2001-03-30 15:48:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -593,11 +593,15 @@ SotStorage::SotStorage( BOOL bUCBStorage, const String & rName, StreamMode nMode
 SotStorage::SotStorage( BaseStorage * pStor )
     INIT_SotStorage()
 {
-    aName = pStor->GetName(); // Namen merken
-    SignAsRoot( pStor->IsRoot() );
-    SetError( pStor->GetError() );
+    if ( pStor )
+    {
+        aName = pStor->GetName(); // Namen merken
+        SignAsRoot( pStor->IsRoot() );
+        SetError( pStor->GetError() );
+    }
+
     pOwnStg = pStor;
-    ULONG nErr = pOwnStg->GetError();
+    ULONG nErr = pOwnStg ? pOwnStg->GetError() : SVSTREAM_CANNOT_MAKE;
     SetError( nErr );
 }
 
