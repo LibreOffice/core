@@ -2,9 +2,9 @@
 *
 *  $RCSfile: UnoDialog.java,v $
 *
-*  $Revision: 1.7 $
+*  $Revision: 1.8 $
 *
-*  last change: $Author: vg $ $Date: 2005-03-08 15:46:05 $
+*  last change: $Author: kz $ $Date: 2005-03-18 16:26:35 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -96,9 +96,11 @@ public class UnoDialog implements EventNames {
     public XInterface xDialogModel;
     public XInterface xUnoDialog;
     public XPropertySet xPSetDlg;
+    public XVclWindowPeer xVclWindowPeer;
     public Hashtable ControlList;
     public Resource oResource;
     public XWindowPeer xWindowPeer = null;
+    protected PeerConfig oPeerConfig;
 
     protected AbstractListener guiEventListener;
 
@@ -120,6 +122,7 @@ public class UnoDialog implements EventNames {
             xDlgNameAccess = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, xDialogModel);
             xComponent = (XComponent) UnoRuntime.queryInterface(XComponent.class, xUnoDialog);
             xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class, xUnoDialog);
+            setPeerConfiguration();
         } catch (com.sun.star.uno.Exception exception) {
             exception.printStackTrace(System.out);
         }
@@ -140,6 +143,19 @@ public class UnoDialog implements EventNames {
         }
         return iKey;
     }
+
+
+    public void setPeerConfiguration(){
+        oPeerConfig = new PeerConfig(this);
+    }
+
+
+    public PeerConfig getPeerConfiguration(){
+        if (oPeerConfig == null)
+            setPeerConfiguration();
+        return oPeerConfig;
+    }
+
 
     public void setControlProperty(String ControlName, String PropertyName, Object PropertyValue) {
         try {
@@ -586,9 +602,9 @@ public class UnoDialog implements EventNames {
         calculateDialogPosition(FramePosSize);
         if (xWindowPeer == null)
             createWindowPeer();
-        XVclWindowPeer xVclWindowPeer = (XVclWindowPeer) UnoRuntime.queryInterface(XVclWindowPeer.class, xWindowPeer);
+        xVclWindowPeer = (XVclWindowPeer) UnoRuntime.queryInterface(XVclWindowPeer.class, xWindowPeer);
 //      xVclWindowPeer.setProperty("AutoMnemonics", new Boolean(true));
-        this.BisHighContrastModeActivated = new Boolean(this.isHighContrastModeActivated(xVclWindowPeer));
+        this.BisHighContrastModeActivated = new Boolean(this.isHighContrastModeActivated());
         xDialog = (XDialog) UnoRuntime.queryInterface(XDialog.class, xUnoDialog);
         return xDialog.execute();
     }
@@ -841,28 +857,48 @@ public class UnoDialog implements EventNames {
 
     private Boolean BisHighContrastModeActivated = null;
 
-    public boolean isHighContrastModeActivated(XVclWindowPeer xPeerPropertySet){
-        if (BisHighContrastModeActivated == null){
-            int nUIColor;
-            try {
-                nUIColor = AnyConverter.toInt(xPeerPropertySet.getProperty("DisplayBackgroundColor"));
-            } catch (IllegalArgumentException e) {
-                e.printStackTrace(System.out);
-                return false;
+    public boolean isHighContrastModeActivated(){
+        if (xVclWindowPeer != null){
+            if (BisHighContrastModeActivated == null){
+                int nUIColor;
+                try {
+                    nUIColor = AnyConverter.toInt(this.xVclWindowPeer.getProperty("DisplayBackgroundColor"));
+                } catch (IllegalArgumentException e) {
+                    e.printStackTrace(System.out);
+                    return false;
+                }
+                Color aColor = new Color(nUIColor);
+                int nRed = aColor.getRed();
+                int nGreen = aColor.getGreen();
+                int nBlue = aColor.getBlue();
+                int nLuminance = (( nBlue*28 + nGreen*151 + nRed*77 ) / 256 );
+                boolean bisactivated = (nLuminance <= 25);
+                BisHighContrastModeActivated = new Boolean(bisactivated);
+                return bisactivated;
             }
-            Color aColor = new Color(nUIColor);
-            int nRed = aColor.getRed();
-            int nGreen = aColor.getGreen();
-            int nBlue = aColor.getBlue();
-            int nLuminance = (( nBlue*28 + nGreen*151 + nRed*77 ) / 256 );
-            boolean bisactivated = (nLuminance <= 25);
-            BisHighContrastModeActivated = new Boolean(bisactivated);
-            return bisactivated;
+            else
+                return BisHighContrastModeActivated.booleanValue();
         }
         else
-            return BisHighContrastModeActivated.booleanValue();
+            return false;
     }
 
+
+    public String getWizardImageUrl(int _nResId, int _nHCResId){
+        if (isHighContrastModeActivated())
+            return "private:resource/wzi/image/" + _nHCResId;
+        else
+            return "private:resource/wzi/image/" + _nResId;
+    }
+
+
+    public String getImageUrl(String _surl, String _shcurl)
+    {
+        if (isHighContrastModeActivated())
+            return _shcurl;
+        else
+            return _surl;
+    }
 
 
 }
