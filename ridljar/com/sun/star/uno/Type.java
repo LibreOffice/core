@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Type.java,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 02:56:33 $
+ *  last change: $Author: pjunck $ $Date: 2004-11-03 08:53:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,8 +80,6 @@ import java.util.HashMap;
  * corresponds to the UNO type.  Also, a <code>Type</code> can cache a type
  * description (a <code>com.sun.star.uno.ITypeDescription</code>), which can be
  * computed and set by <code>TypeDescription.getTypeDescription</code>.
- *
- * @since UDK1.0
  */
 public class Type {
     // The following private static members and static initializer must come
@@ -205,8 +203,6 @@ public class Type {
 
     /**
      * Constructs a new <code>Type</code> which defaults to <code>VOID</code>.
-     *
-     * @since UDK3.0
      */
     public Type() {
         init(null, void.class, false, false);
@@ -235,8 +231,6 @@ public class Type {
      *
      * @param zClass the Java class of this type.  Must not be
      *     <code>null</code>.
-     *
-     * @since UDK3.0
      */
     public Type(Class zClass) {
         init(null, zClass, false, false);
@@ -290,7 +284,7 @@ public class Type {
      * @param alternative controls which UNO type to choose in case of
      *     ambiguities
      *
-     * @since UDK 3.2
+     * @since UDK 3.2.0
      */
     public Type(Class zClass, boolean alternative) {
         init(null, zClass, alternative, false);
@@ -301,8 +295,6 @@ public class Type {
      *
      * @param typeDescription a type description.  Must not be
      *     <code>null</code>.
-     *
-     * @since UDK3.0
      */
     public Type(ITypeDescription typeDescription) {
         _typeName         = typeDescription.getTypeName();
@@ -314,8 +306,6 @@ public class Type {
      * Constructs a new <code>Type</code> with the given type name.
      *
      * @param typeName the name of this type; must not be <code>null</code>.
-     *
-     * @since UDK3.0
      */
     public Type(String typeName) {
         if (typeName.startsWith("[]")) {
@@ -351,8 +341,6 @@ public class Type {
      * @throws IllegalArgumentException if the given <code>typeClass</code> is
      *     not simple (for example, a struct or an interface type).  This
      *     constructor could not find out the type name in such a case.
-     *
-     * @since UDK3.0
      */
     public Type(TypeClass typeClass) {
         if(__isTypeClassPrimitive(typeClass)) {
@@ -368,8 +356,6 @@ public class Type {
      *
      * @return the type class.  Will never be <code>null</code>, but might be
      *     <code>UNKNOWN</code>.
-     *
-     * @since UDK1.0
      */
     public TypeClass getTypeClass() {
         return _typeClass;
@@ -379,8 +365,6 @@ public class Type {
      * Gets the type name.
      *
      * @return the type name; will never be <code>null</code>
-     *
-     * @since UDK1.0
      */
     public String getTypeName() {
         return _typeName;
@@ -391,8 +375,6 @@ public class Type {
      *
      * @return the type name; may be <code>null</code> in extreme situations
      *     (inconsistent <code>TypeClass</code>, error loading a class)
-     *
-     * @since UDK1.0
      */
     public Class getZClass() {
         synchronized (this) {
@@ -407,8 +389,6 @@ public class Type {
      * Gives the type description of this type.
      *
      * @return the type description; may be <code>null</code>
-     *
-     * @since UDK3.0
      */
     public ITypeDescription getTypeDescription() {
         return _iTypeDescription;
@@ -418,8 +398,6 @@ public class Type {
      * Sets the type description for this type.
      *
      * @param typeDescription the type description
-     *
-     * @since UDK3.0
      */
     public void setTypeDescription(ITypeDescription typeDescription) {
         _iTypeDescription = typeDescription;
@@ -446,7 +424,7 @@ public class Type {
      * @param type some Type
      * @return true if this type is a supertype of the given type
      *
-     * @since OOo 2.0
+     * @since UDK 3.2.0
      */
     public boolean isSupertypeOf(Type type) {
         if (_typeClass != type._typeClass) {
