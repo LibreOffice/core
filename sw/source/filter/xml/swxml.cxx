@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swxml.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: dvo $ $Date: 2001-04-02 11:26:14 $
+ *  last change: $Author: dvo $ $Date: 2001-04-23 14:41:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -417,6 +417,9 @@ sal_uInt32 XMLReader::Read( SwDoc &rDoc, SwPaM &rPaM, const String & rName )
               beans::PropertyAttribute::MAYBEVOID, 0},
         { "ProgressCurrent", sizeof("ProgressCurrent")-1, 0,
               &::getCppuType((sal_Int32*)0),
+              beans::PropertyAttribute::MAYBEVOID, 0},
+        { "NumberStyles", sizeof("NumberStyles")-1, 0,
+              &::getCppuType( (Reference<container::XNameContainer> *) 0),
               beans::PropertyAttribute::MAYBEVOID, 0},
         { NULL, 0, 0, NULL, 0, 0 }
     };

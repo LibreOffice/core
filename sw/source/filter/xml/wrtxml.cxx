@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtxml.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: mib $ $Date: 2001-04-06 05:21:32 $
+ *  last change: $Author: dvo $ $Date: 2001-04-23 14:41:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -319,6 +319,9 @@ sal_uInt32 SwXMLWriter::_Write()
         { "ProgressCurrent", sizeof("ProgressCurrent")-1, 0,
               &::getCppuType((sal_Int32*)0),
               beans::PropertyAttribute::MAYBEVOID, 0},
+        { "WrittenNumberStyles", sizeof("WrittenNumberStyles")-1, 0,
+              &::getCppuType((uno::Sequence<sal_Int32> *)0),
+              beans::PropertyAttribute::MAYBEVOID, 0},
         { NULL, 0, 0, NULL, 0, 0 }
     };
     uno::Reference< beans::XPropertySet > xInfoSet(
@@ -490,11 +493,14 @@ void GetXMLWriter( const String& rName, WriterRef& xRet )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/xml/wrtxml.cxx,v 1.24 2001-04-06 05:21:32 mib Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/xml/wrtxml.cxx,v 1.25 2001-04-23 14:41:38 dvo Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.24  2001/04/06 05:21:32  mib
+      #85808#: Improve progress bar behaviour
+
       Revision 1.23  2001/04/02 11:26:14  dvo
       #85021# progress bar enabled (change mail from SAB)
 
