@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleShape.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: thb $ $Date: 2002-06-26 11:38:02 $
+ *  last change: $Author: af $ $Date: 2002-06-28 14:54:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -837,12 +837,23 @@ void SAL_CALL
 
 
 
-::com::sun::star::uno::Sequence< ::rtl::OUString> SAL_CALL
+uno::Sequence<OUString> SAL_CALL
     AccessibleShape::getSupportedServiceNames (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
     CheckDisposedState ();
-    return AccessibleContextBase::getSupportedServiceNames();
+    // Get list of supported service names from base class...
+    uno::Sequence<OUString> aServiceNames =
+        AccessibleContextBase::getSupportedServiceNames();
+    sal_Int32 nCount (aServiceNames.getLength());
+
+    // ...and add additional names.
+    aServiceNames.realloc (nCount + 1);
+    static const OUString sAdditionalServiceName (RTL_CONSTASCII_USTRINGPARAM(
+        "drafts.com.sun.star.drawing.AccessibleShape"));
+    aServiceNames[nCount] = sAdditionalServiceName;
+
+    return aServiceNames;
 }
 
 
@@ -871,7 +882,8 @@ uno::Sequence<uno::Type> SAL_CALL
     //      ::getCppuType((const uno::Reference<XAccessibleStateSet>*)0);
 
     // ... and merge them all into one list.
-    sal_Int32   nTypeCount (aTypeList.getLength()), nComponentTypeCount (aComponentTypeList.getLength());
+    sal_Int32   nTypeCount (aTypeList.getLength()),
+        nComponentTypeCount (aComponentTypeList.getLength());
     int         i;
 
     aTypeList.realloc (nTypeCount + nComponentTypeCount + 3);
