@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagechg.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ama $ $Date: 2002-01-30 13:34:58 $
+ *  last change: $Author: ama $ $Date: 2002-02-01 13:19:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,7 +192,7 @@ void SwBodyFrm::Format( const SwBorderAttrs *pAttrs )
 #ifdef VERTICAL_LAYOUT
     BOOL bNoGrid = TRUE;
     if( GetUpper()->IsPageFrm() && ((SwPageFrm*)GetUpper())->HasGrid() &&
-        Lower() && !Lower()->IsColumnFrm() )
+        ( !Lower() || !Lower()->IsColumnFrm() ) )
     {
         long nGrid, nRuby, nLines;
         BOOL bLower, bCell;
@@ -336,6 +336,9 @@ SwPageFrm::SwPageFrm( SwFrmFmt *pFmt, SwPageDesc *pPgDsc ) :
             const SwFmtCol aOld; //ChgColumns() verlaesst sich darauf, dass ein
                                  //Old-Wert hereingereicht wird.
             pBodyFrm->ChgColumns( aOld, rCol );
+#ifdef VERTICAL_LAYOUT
+            bHasGrid = bShowGrid = bPrintGrid = FALSE;
+#endif
         }
     }
 }
@@ -645,6 +648,16 @@ void SwPageFrm::_UpdateAttr( SfxPoolItem *pOld, SfxPoolItem *pNew,
                 SwLayoutFrm *pB = FindBodyCont();
                 ASSERT( pB, "Seite ohne Body." );
                 pB->ChgColumns( rOldCol, rNewCol );
+#ifdef VERTICAL_LAYOUT
+                if( rNewCol.GetNumCols() > 1 )
+                    bHasGrid = bShowGrid = bPrintGrid = FALSE;
+                else if( pDesc )
+                {
+                    const SwTxtFmtColl *pFmt = pDesc->GetRegisterFmtColl();
+                    if( pFmt )
+                        bHasGrid = bShowGrid = bPrintGrid = TRUE;
+                }
+#endif
             }
 
             //2. Kopf- und Fusszeilen.
@@ -692,6 +705,17 @@ void SwPageFrm::_UpdateAttr( SfxPoolItem *pOld, SfxPoolItem *pNew,
             SwLayoutFrm *pB = FindBodyCont();
             ASSERT( pB, "Seite ohne Body." );
             pB->ChgColumns( *(const SwFmtCol*)pOld, *(const SwFmtCol*)pNew );
+#ifdef VERTICAL_LAYOUT
+            if( ((const SwFmtCol*)pNew)->GetNumCols() > 1 )
+                bHasGrid = bShowGrid = bPrintGrid = FALSE;
+            else if( pDesc )
+            {
+                const SwTxtFmtColl *pFmt = pDesc->GetRegisterFmtColl();
+                if( pFmt )
+                    bHasGrid = bShowGrid = bPrintGrid = TRUE;
+            }
+
+#endif
             rInvFlags |= 0x02;
         }
         break;
