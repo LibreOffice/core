@@ -1,0 +1,29 @@
+#!/bin/sh
+
+if [ -x ${OFFICE_PATH}/share/cde/dtintegrate ]; then
+  ${OFFICE_PATH}/share/cde/dtintegrate
+fi
+
+# Add the symlink to software installation database
+installf ${PKG_INSTALL_ROOT:+'-R'} ${PKG_INSTALL_ROOT} ${PKGINST} ${CLIENT_BASEDIR}/etc/%PREFIX=${OFFICE_PATH} s
+
+# Patch the launch script to run gnome-set-default-application on first office launch for GNOME < 2.6 
+if [ "$LEGACY_GNOME" = "true" ]
+then
+  cat >> /usr/bin/%PREFIX.tmp$$ << EOF
+#!/bin/sh
+USERDIR=\`sed -n -e 's/UserInstallation=//p' /etc/%PREFIX/program/bootstraprc | sed -e "s|.SYSUSERCONFIG|\$HOME|"\`
+# Run gnome-set-default-application on first office launch
+if [ ! -d \$USERDIR ]
+then
+  /etc/%PREFIX/program/gnome-set-default-application '%PREFIX' 'application/vnd.oasis.opendocument' 'application/vnd.sun.xml' 'application/vnd.stardivision'
+fi
+EOF
+  sed -n -e '2,$ p' ${CLIENT_BASEDIR}/usr/bin/%PREFIX >> ${CLIENT_BASEDIR}/usr/bin/%PREFIX.tmp$$
+  mv -f ${CLIENT_BASEDIR}/usr/bin/%PREFIX.tmp$$ ${CLIENT_BASEDIR}/usr/bin/%PREFIX
+  chmod 0755 ${CLIENT_BASEDIR}/usr/bin/%PREFIX
+  installf ${PKG_INSTALL_ROOT:+'-R'} ${PKG_INSTALL_ROOT} ${PKGINST} ${CLIENT_BASEDIR}/usr/bin/%PREFIX f
+fi
+
+installf ${PKG_INSTALL_ROOT:+'-R'} ${PKG_INSTALL_ROOT} -f ${PKGINST}
+
