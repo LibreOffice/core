@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pptin.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 10:31:08 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:17:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -268,7 +268,7 @@ SdPPTImport::SdPPTImport( SdDrawDocument* pDocument, SvStream& rDocStream, SvSto
 #endif
 
     PowerPointImportParam aParam( rDocStream, nImportFlags, pTracer );
-    SvStream* pCurrentUserStream = rStorage.OpenStream( String( RTL_CONSTASCII_USTRINGPARAM( "Current User" ) ), STREAM_STD_READ );
+    SvStream* pCurrentUserStream = rStorage.OpenSotStream( String( RTL_CONSTASCII_USTRINGPARAM( "Current User" ) ), STREAM_STD_READ );
     if( pCurrentUserStream )
     {
         *pCurrentUserStream >> aParam.aCurrentUserAtom;
@@ -306,7 +306,7 @@ ImplSdPPTImport::ImplSdPPTImport( SdDrawDocument* pDocument, SvStorage& rStorage
         {
             ULONG nPosMerk = rStCtrl.Tell();
 
-            pStData = rStorage_.OpenStream( String( RTL_CONSTASCII_USTRINGPARAM( "Pictures" ) ), STREAM_STD_READ );
+            pStData = rStorage_.OpenSotStream( String( RTL_CONSTASCII_USTRINGPARAM( "Pictures" ) ), STREAM_STD_READ );
 
             rStCtrl.Seek( aDocHd.GetRecBegFilePos() + 8 );
             ULONG nDocLen = aDocHd.GetRecEndFilePos();
