@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editbrowsebox.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 15:47:02 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 15:21:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -980,7 +980,10 @@ namespace svt
                 return sal_False;
             }
             else
+            {
+                rWindow.EnablePaint(sal_True);
                 return sal_True;
+            }
         }
         else
             return pTHIS->CursorMoving(nNewRow, nNewColId);
