@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtedt.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-25 10:34:29 $
+ *  last change: $Author: kz $ $Date: 2003-09-11 09:40:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1111,7 +1111,6 @@ SwRect SwTxtFrm::_AutoSpell( SwCntntNode* pActNode, xub_StrLen nActPos )
                     if ( bRedlineChg )
                     {
                         XubString rNewWord( rWord );
-                        rNewWord.EraseAllChars( CH_TXTATR_INWORD );
                         rACW.InsertWord( rNewWord, *pDoc );
                     }
                     else
