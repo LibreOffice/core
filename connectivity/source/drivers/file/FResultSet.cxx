@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FResultSet.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-26 09:09:41 $
+ *  last change: $Author: oj $ $Date: 2002-12-10 10:42:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -287,17 +287,19 @@ const ORowSetValue& OResultSet::getValue(sal_Int32 columnIndex ) throw(::com::su
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
-
+    columnIndex = mapColumn(columnIndex);
     checkIndex(columnIndex );
 
-    columnIndex = mapColumn(columnIndex);
+
     m_bWasNull = (*m_aRow)[columnIndex].isNull();
     return (*m_aRow)[columnIndex];
 }
 // -----------------------------------------------------------------------------
 void OResultSet::checkIndex(sal_Int32 columnIndex ) throw(::com::sun::star::sdbc::SQLException)
 {
-    if(columnIndex <= 0 || columnIndex > (sal_Int32)m_xColumns->size())
+    if (   columnIndex <= 0
+        || columnIndex > (sal_Int32)m_xColumns->size()
+        || columnIndex >= (sal_Int32)m_aRow->size() )
         ::dbtools::throwInvalidIndexException(*this);
 }
 // -------------------------------------------------------------------------
@@ -752,8 +754,9 @@ void OResultSet::updateValue(sal_Int32 columnIndex ,const ORowSetValue& x) throw
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
-    checkIndex(columnIndex );
     columnIndex = mapColumn(columnIndex);
+    checkIndex(columnIndex );
+
     (*m_aInsertRow)[columnIndex].setBound(sal_True);
     (*m_aInsertRow)[columnIndex] = x;
 }
@@ -764,9 +767,10 @@ void SAL_CALL OResultSet::updateNull( sal_Int32 columnIndex ) throw(SQLException
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
+    columnIndex = mapColumn(columnIndex);
     checkIndex(columnIndex );
 
-    columnIndex = mapColumn(columnIndex);
+
 
     (*m_aInsertRow)[columnIndex].setBound(sal_True);
     (*m_aInsertRow)[columnIndex].setNull();
@@ -1741,6 +1745,45 @@ void OResultSet::setBoundedColumns(const OValueRow& _rRow,
         catch (Exception&)
         {
             OSL_ENSURE(sal_False, "OResultSet::OpenImpl: caught an Exception!");
+        }
+    }
+    // in this case we got more select columns as columns exist in the table
+    if ( _bSetColumnMapping && aSelectIters.size() != _rColMapping.size() )
+    {
+        Reference<XNameAccess> xNameAccess(_xNames,UNO_QUERY);
+        Sequence< ::rtl::OUString > aSelectColumns = xNameAccess->getElementNames();
+
+        for (   OSQLColumns::iterator aIter = _rxColumns->begin();
+                    aIter != _rxColumns->end();
+                    ++aIter
+                )
+        {
+            if ( aSelectIters.end() == aSelectIters.find(aIter) )
+            {
+                if ( (*aIter)->getPropertySetInfo()->hasPropertyByName(sRealName) )
+                    (*aIter)->getPropertyValue(sRealName) >>= sSelectColumnRealName;
+                else
+                    (*aIter)->getPropertyValue(sName) >>= sSelectColumnRealName;
+
+                if ( xNameAccess->hasByName( sSelectColumnRealName ) )
+                {
+                    aSelectIters.insert(IterMap::value_type(aIter,sal_True));
+                    sal_Int32 nSelectColumnPos = aIter - _rxColumns->begin() + 1;
+                    const ::rtl::OUString* pBegin = aSelectColumns.getConstArray();
+                    const ::rtl::OUString* pEnd   = pBegin + aSelectColumns.getLength();
+                    for(sal_Int32 i=0;pBegin != pEnd;++pBegin,++i)
+                    {
+                        if ( aCase(*pBegin, sSelectColumnRealName) )
+                        {
+                            // the getXXX methods are 1-based ...
+                            sal_Int32 nTableColumnPos = i + 1;
+                                // get first table column is the bookmark column ...
+                            _rColMapping[nSelectColumnPos] = nTableColumnPos;
+                            break;
+                        }
+                    }
+                }
+            }
         }
     }
 }
