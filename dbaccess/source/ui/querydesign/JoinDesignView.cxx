@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinDesignView.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-09 09:47:56 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 09:49:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,6 +143,8 @@ OJoinDesignView::OJoinDesignView(Window* _pParent, OJoinController* _pController
 // -----------------------------------------------------------------------------
 OJoinDesignView::~OJoinDesignView()
 {
+    if ( m_pController )
+        m_pController->clearAddTableDialog();
     ::std::auto_ptr<Window> aT3(m_pScrollWindow);
     m_pScrollWindow = NULL;
     ::std::auto_ptr<Window> aT2(m_pTableView);
