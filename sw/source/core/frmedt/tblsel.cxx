@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tblsel.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:07:23 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 10:05:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 
 #pragma hdrstop
 
@@ -2582,22 +2581,37 @@ void _FndBox::MakeNewFrms( SwTable &rTable, const USHORT nNumber,
             else //davor einfuegen
             {
                 USHORT i;
+
+                // We are looking for the frame that is behind the row frame
+                // that should be inserted.
                 for ( i = 0; !pSibling; ++i )
                 {
-                    SwTableLine *pLine = pLineBefore ? pLineBefore :
-                                                    rTable.GetTabLines()[i];
+                    SwTableLine* pLine = pLineBefore ? pLineBefore : rTable.GetTabLines()[i];
 
                     SwClientIter aIter( *pLine->GetFrmFmt() );
                     pSibling = (SwFrm*)aIter.First( TYPE(SwFrm) );
 
-                    while ( pSibling &&
-                            ( ((SwRowFrm*)pSibling)->GetTabLine() != pLine ||
-                              !lcl_IsLineOfTblFrm( *pTable, *pSibling ) ||
-                               pSibling->IsInSplitTableRow() ||
-                              ( ( !pLineBefore || pLine == rTable.GetTabLines()[0]) &&
-                                   pSibling->FindTabFrm() != pTable ) ) ) // Master finden!
+                    while ( pSibling && (
+                            // only consider row frames associated with pLineBefore:
+                            static_cast<SwRowFrm*>(pSibling)->GetTabLine() != pLine ||
+                            // only consider row frames that are in pTables Master-Follow chain:
+                            !lcl_IsLineOfTblFrm( *pTable, *pSibling ) ||
+                            // only consider row frames that are not repeated headlines:
+                            static_cast<SwRowFrm*>(pSibling)->IsRepeatedHeadline() ||
+                            // 1. case: pLineBefore == 0:
+                            // only consider row frames that are not follow flow rows
+                            // 2. case: pLineBefore != 0:
+                            // only consider row frames that are not split table rows
+                            // --> FME 2004-11-23 #i37476# If !pLineBefore,
+                            // check IsInFollowFlowRow instead of IsInSplitTableRow.
+                            ( ( !pLineBefore && pSibling->IsInFollowFlowRow() ) ||
+                              (  pLineBefore && pSibling->IsInSplitTableRow() ) ) ) )
+                            // <--
+                    {
                         pSibling = (SwFrm*)aIter.Next();
+                    }
                 }
+
                 pUpper = pSibling->GetUpper();
                 if ( pLineBefore )
                     pSibling = pSibling->GetNext();
