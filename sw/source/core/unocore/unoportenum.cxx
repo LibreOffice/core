@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoportenum.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: os $ $Date: 2001-06-29 11:42:29 $
+ *  last change: $Author: os $ $Date: 2001-08-07 12:30:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -813,6 +813,8 @@ void SwXTextPortionEnumeration::CreatePortions()
                             SwDepend* pCurDepend = aFrameArr.GetObject(0);
                             if(pCurDepend->GetRegisteredIn())
                             {
+                                //the previously created portion has to be inserted here
+                                aPortionArr.Insert(new Reference<XTextRange>(xRef), aPortionArr.Count());
                                 xRef = new SwXTextPortion(*pUnoCrsr, xParent,
                                     *(SwFrmFmt*)pCurDepend->GetRegisteredIn());
                             }
@@ -941,6 +943,19 @@ void SwXTextPortionEnumeration::CreatePortions()
                             aPortionArr.Insert(new Reference<XTextRange>(xRef), aPortionArr.Count());
                     }
                 }
+                while(aFrameArr.Count())
+                {
+                    SwDepend* pCurDepend = aFrameArr.GetObject(0);
+                    if(pCurDepend->GetRegisteredIn())
+                    {
+                        Reference<XTextRange> xRef = new SwXTextPortion(*pUnoCrsr, xParent,
+                            *(SwFrmFmt*)pCurDepend->GetRegisteredIn());
+                        aPortionArr.Insert(new Reference<XTextRange>(xRef), aPortionArr.Count());
+                    }
+                    delete pCurDepend;
+                    aFrameArr.Remove(0);
+                }
+
             }
         }
     }
