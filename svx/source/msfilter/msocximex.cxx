@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msocximex.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 13:04:54 $
+ *  last change: $Author: obo $ $Date: 2003-09-01 12:49:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -545,9 +545,9 @@ sal_Bool OCX_CommandButton::WriteContents(SvStorageStreamRef &rContents,
     *rContents << sal_uInt8(0x00);
 
     aTmp = rPropSet->getPropertyValue(WW8_ASCII2STR("Label"));
-    OUString *pStr = (OUString *)aTmp.getValue();
+    const OUString *pStr = (const OUString *)aTmp.getValue();
 
-    nCaptionLen = pStr->getLength();
+    nCaptionLen = pStr ? pStr->getLength() : 0;
     if (nCaptionLen)
     {
         nCaptionLen |= 0x80000000;
