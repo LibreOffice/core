@@ -3,7 +3,7 @@
  // StarCalc
  //
  // (C) 1994 StarDivision GmbH, Hamburg, Germany
- // $Author: nn $ $Date: 2001-04-20 18:49:36 $ $Revision: 1.4 $
+ // $Author: er $ $Date: 2001-07-04 17:14:41 $ $Revision: 1.5 $
  // $Logfile:   T:/sc/sdi/tabvwsh.sdv  $ $Workfile:   tabvwsh.sdi  $
  //----------------------------------------------------------------------------
 
@@ -183,6 +183,8 @@ interface TableEditView : View
     SID_GETREDOSTRINGS  [ StateMethod = GetUndoState; ]
     SID_UNDO            [ ExecMethod = ExecuteUndo; StateMethod = GetUndoState; ]
     SID_REDO            [ ExecMethod = ExecuteUndo; StateMethod = GetUndoState; ]
+
+    SID_OPT_LOCALE_CHANGED  [ ExecMethod = Execute; ]
 }
 
 
