@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xiescher.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-28 17:20:52 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:31:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,9 @@
 #ifndef _COM_SUN_STAR_AWT_SCROLLBARORIENTATION_HPP_
 #include <com/sun/star/awt/ScrollBarOrientation.hpp>
 #endif
+#ifndef _COM_SUN_STAR_STYLE_VERTICALALIGNMENT_HPP_
+#include <com/sun/star/style/VerticalAlignment.hpp>
+#endif
 #ifndef _COM_SUN_STAR_SCRIPT_SCRIPTEVENTDESCRIPTOR_HPP_
 #include <com/sun/star/script/ScriptEventDescriptor.hpp>
 #endif
@@ -130,6 +133,9 @@
 #endif
 #ifndef _SVX_WRITINGMODEITEM_HXX
 #include <svx/writingmodeitem.hxx>
+#endif
+#ifndef _SVDOEDGE_HXX
+#include <svx/svdoedge.hxx>
 #endif
 
 #ifndef _SCH_DLL_HXX
@@ -412,6 +418,15 @@ XclImpEscherDrawing::XclImpEscherDrawing( XclImpEscherObj& rSrcObj, bool bAreaOb
     XclImpEscherObj( rSrcObj )
 {
     SetAreaObj( bAreaObj );
+}
+
+void XclImpEscherDrawing::Apply( ScfProgressBar& rProgress )
+{
+    // #119010# - allow for the possibility that valid connectors
+    // may have no height or width set.
+    if( !GetIsSkip() && GetSdrObj() && GetSdrObj()->ISA(SdrEdgeObj) && !IsValidSize() )
+        SetAreaObj( false );
+    XclImpEscherObj::Apply( rProgress );
 }
 
 // ----------------------------------------------------------------------------
@@ -717,6 +732,7 @@ void XclImpEscherTbxCtrl::SetProperties( Reference< XPropertySet >& rxPropSet ) 
 
     namespace AwtVisualEffect = ::com::sun::star::awt::VisualEffect;
     namespace AwtScrollOrient = ::com::sun::star::awt::ScrollBarOrientation;
+    using ::com::sun::star::style::VerticalAlignment_MIDDLE;
 
     // control name -----------------------------------------------------------
 
@@ -777,6 +793,9 @@ void XclImpEscherTbxCtrl::SetProperties( Reference< XPropertySet >& rxPropSet ) 
 
             sal_Int16 nApiBorder = mbFlatButton ? AwtVisualEffect::FLAT : AwtVisualEffect::LOOK3D;
             ::setPropValue( rxPropSet, CREATE_OUSTRING( "VisualEffect" ), nApiBorder );
+
+            // #i40279# always centered vertically
+            ::setPropValue( rxPropSet, CREATE_OUSTRING( "VerticalAlign" ), VerticalAlignment_MIDDLE );
         }
         break;
 
@@ -1069,10 +1088,17 @@ void XclImpEscherOle::Apply( ScfProgressBar& rProgress )
         SdrOle2Obj* pOleSdrObj = PTR_CAST( SdrOle2Obj, mxSdrObj.get() );
         if( pOleSdrObj && pDocShell )
         {
-            ::rtl::OUString aName;
-            if ( pDocShell->GetEmbeddedObjectContainer().InsertEmbeddedObject( pOleSdrObj->GetObjRef(), aName ) )
-                // #95381# SetPersistName, not SetName
-                pOleSdrObj->SetPersistName( aName );
+            OUString aOldName( pOleSdrObj->GetPersistName() );
+            OUString aNewName( aOldName );
+            if( pDocShell->GetEmbeddedObjectContainer().InsertEmbeddedObject( pOleSdrObj->GetObjRef(), aNewName ) )
+            {
+                /*  #i40126# persist name already created in CreateSdrOLEFromStorage(),
+                    called from XclImpDffManager::CreateSdrOleObj(). */
+                DBG_ASSERT( aOldName == aNewName, "XclImpEscherOle::Apply - persist name changed" );
+                if( aOldName != aNewName )
+                    // #95381# SetPersistName, not SetName
+                    pOleSdrObj->SetPersistName( aNewName );
+            }
         }
         else if( mxSdrObj->ISA( SdrUnoObj ) )
         {
@@ -1093,8 +1119,8 @@ XclImpEscherChart::XclImpEscherChart( XclImpEscherObj& rSrcObj ) :
     XclImpEscherObj( rSrcObj )
 {
     SetAreaObj( true );
-    mxChart.reset( new XclImpChart( *mpRD ) );
-    mxChart->nBaseTab = static_cast<sal_uInt16>(GetScTab());
+    mxChart.reset( new XclImpChart( GetOldRoot() ) );
+    mxChart->nBaseTab = static_cast< sal_uInt16 >( GetScTab() );
 }
 
 void XclImpEscherChart::SetChartData( XclImpChart* pChart )
