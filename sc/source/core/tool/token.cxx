@@ -2,9 +2,9 @@
  *
  *  $RCSfile: token.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:40:12 $
+ *  last change: $Author: kz $ $Date: 2004-06-28 16:52:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1305,7 +1305,7 @@ ScTokenArray::ScTokenArray()
 {
     pCode = NULL; pRPN = NULL;
     nError = nLen = nIndex = nRPN = nRefs = 0;
-    bReplacedSharedFormula = FALSE;
+    bReplacedSharedFormula = bHyperLink = FALSE;
     ClearRecalcMode();
 }
 
@@ -1328,6 +1328,7 @@ void ScTokenArray::Assign( const ScTokenArray& r )
     nRefs  = r.nRefs;
     nMode  = r.nMode;
     bReplacedSharedFormula = FALSE;
+    bHyperLink = r.bHyperLink;
     pCode  = NULL;
     pRPN   = NULL;
     ScToken** pp;
@@ -1362,6 +1363,7 @@ ScTokenArray* ScTokenArray::Clone() const
     p->nRefs = nRefs;
     p->nMode = nMode;
     p->nError = nError;
+    p->bHyperLink = bHyperLink;
     ScToken** pp;
     if( nLen )
     {
@@ -1418,7 +1420,7 @@ void ScTokenArray::Clear()
     }
     pCode = NULL; pRPN = NULL;
     nError = nLen = nIndex = nRPN = nRefs = 0;
-    bReplacedSharedFormula = FALSE;
+    bReplacedSharedFormula = bHyperLink = FALSE;
     ClearRecalcMode();
 }
 
