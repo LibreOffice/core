@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.cxx,v $
  *
- *  $Revision: 1.85 $
+ *  $Revision: 1.86 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 16:28:44 $
+ *  last change: $Author: rt $ $Date: 2005-02-04 11:16:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1202,20 +1202,17 @@ void SvxCharNamePage::Reset_Impl( const SfxItemSet& rSet, LanguageGroup eLangGrp
 
     if ( pSizeBox->IsRelativeMode() )
     {
+        SfxMapUnit eUnit = rSet.GetPool()->GetMetric( nWhich );
         const SvxFontHeightItem& rItem = (SvxFontHeightItem&)rSet.Get( nWhich );
 
-        if(rItem.GetPropUnit() != SFX_MAPUNIT_ABSOLUTE) {
-
-            // relative (percentage or ptrelative)
+        if( rItem.GetProp() != 100 || SFX_MAPUNIT_RELATIVE != rItem.GetPropUnit() )
+        {
             BOOL bPtRel = SFX_MAPUNIT_POINT == rItem.GetPropUnit();
             pSizeBox->SetPtRelative( bPtRel );
             pSizeBox->SetValue( bPtRel ? ((short)rItem.GetProp()) * 10 : rItem.GetProp() );
         }
         else
         {
-            // absolute, please note that SetRelative() turns the
-            // relative mode OFF, disgusting, that is...
-            SfxMapUnit eUnit = rSet.GetPool()->GetMetric( nWhich );
             pSizeBox->SetRelative();
             pSizeBox->SetValue( (long)CalcToPoint( rItem.GetHeight(), eUnit, 10 ) );
         }
@@ -1476,10 +1473,12 @@ BOOL SvxCharNamePage::FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLangGrp
     if ( !pSizeBox->GetText().Len() )   // GetValue() gibt dann Min-Wert zurueck
         nSize = 0;
     long nSavedSize = pSizeBox->GetSavedValue().ToInt32();
+    FASTBOOL bRel = TRUE;
 
     if ( !pSizeBox->IsRelative() )
     {
         nSavedSize *= 10;
+        bRel = FALSE;
     }
 
     switch ( eLangGrp )
@@ -1501,8 +1500,9 @@ BOOL SvxCharNamePage::FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLangGrp
             bChanged = TRUE;
     }
 
-    if ( bChanged || !pOldHeight ) {
-
+    if ( bChanged || !pOldHeight ||
+         bRel != ( SFX_MAPUNIT_RELATIVE != pOldHeight->GetPropUnit() || 100 != pOldHeight->GetProp() ) )
+    {
         SfxMapUnit eUnit = rSet.GetPool()->GetMetric( nWhich );
         if ( pSizeBox->IsRelative() )
         {
