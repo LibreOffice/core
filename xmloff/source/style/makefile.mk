@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.25 $
+#   $Revision: 1.26 $
 #
-#   last change: $Author: hr $ $Date: 2003-03-27 18:20:34 $
+#   last change: $Author: rt $ $Date: 2004-07-13 08:24:12 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -156,6 +156,7 @@ CXXFILES = \
         PageMasterImportContext.cxx		\
         PagePropertySetContext.cxx		\
         PageHeaderFooterContext.cxx		\
+        StyleMap.cxx		\
         XMLBitmapRepeatOffsetPropertyHandler.cxx \
         XMLFillBitmapSizePropertyHandler.cxx \
         XMLBitmapLogicalSizePropertyHandler.cxx \
@@ -243,6 +244,7 @@ SLOFILES =	\
         $(SLO)$/PageMasterImportContext.obj		\
         $(SLO)$/PagePropertySetContext.obj		\
         $(SLO)$/PageHeaderFooterContext.obj		\
+        $(SLO)$/StyleMap.obj					\
         $(SLO)$/XMLBitmapRepeatOffsetPropertyHandler.obj \
         $(SLO)$/XMLFillBitmapSizePropertyHandler.obj	\
         $(SLO)$/XMLBitmapLogicalSizePropertyHandler.obj	\
@@ -250,81 +252,6 @@ SLOFILES =	\
         $(SLO)$/VisAreaExport.obj \
         $(SLO)$/VisAreaContext.obj \
         $(SLO)$/DrawAspectHdl.obj
-
-SVXLIGHTOBJFILES =	\
-        $(OBJ)$/XMLPercentOrMeasurePropertyHandler.obj \
-        $(OBJ)$/XMLIsPercentagePropertyHandler.obj \
-        $(OBJ)$/XMLRectangleMembersHandler.obj \
-        $(OBJ)$/adjushdl.obj	\
-        $(OBJ)$/backhdl.obj		\
-        $(OBJ)$/bordrhdl.obj	\
-        $(OBJ)$/breakhdl.obj	\
-        $(OBJ)$/cdouthdl.obj	\
-        $(OBJ)$/chrhghdl.obj	\
-        $(OBJ)$/chrlohdl.obj	\
-        $(OBJ)$/csmaphdl.obj	\
-        $(OBJ)$/escphdl.obj		\
-        $(OBJ)$/fonthdl.obj		\
-        $(OBJ)$/impastp1.obj    \
-        $(OBJ)$/impastp2.obj    \
-        $(OBJ)$/impastp3.obj    \
-        $(OBJ)$/impastp4.obj    \
-        $(OBJ)$/kernihdl.obj	\
-        $(OBJ)$/lspachdl.obj	\
-        $(OBJ)$/numehelp.obj	\
-        $(OBJ)$/opaquhdl.obj	\
-        $(OBJ)$/postuhdl.obj	\
-        $(OBJ)$/prhdlfac.obj	\
-        $(OBJ)$/prstylei.obj	\
-        $(OBJ)$/shadwhdl.obj	\
-        $(OBJ)$/shdwdhdl.obj	\
-        $(OBJ)$/splithdl.obj	\
-        $(OBJ)$/tabsthdl.obj	\
-        $(OBJ)$/undlihdl.obj	\
-        $(OBJ)$/uniref.obj		\
-        $(OBJ)$/weighhdl.obj	\
-        $(OBJ)$/xmlaustp.obj	\
-        $(OBJ)$/xmlbahdl.obj	\
-        $(OBJ)$/xmlimppr.obj	\
-        $(OBJ)$/xmlnumfi.obj	\
-        $(OBJ)$/xmlnumi.obj		\
-        $(OBJ)$/xmlprcon.obj	\
-        $(OBJ)$/xmlprhdl.obj	\
-        $(OBJ)$/xmlprmap.obj	\
-        $(OBJ)$/xmlstyle.obj	\
-        $(OBJ)$/xmltabi.obj		\
-        $(OBJ)$/DashStyle.obj					\
-        $(OBJ)$/EnumPropertyHdl.obj				\
-        $(OBJ)$/FillStyleContext.obj			\
-        $(OBJ)$/GradientStyle.obj				\
-        $(OBJ)$/HatchStyle.obj					\
-        $(OBJ)$/ImageStyle.obj					\
-        $(OBJ)$/MarkerStyle.obj					\
-        $(OBJ)$/MultiPropertySetHelper.obj		\
-        $(SLO)$/SinglePropertySetInfoCache.obj	\
-        $(OBJ)$/NamedBoolPropertyHdl.obj		\
-        $(OBJ)$/TransGradientStyle.obj			\
-        $(OBJ)$/XMLBackgroundImageContext.obj	\
-        $(OBJ)$/XMLClipPropertyHandler.obj		\
-        $(OBJ)$/XMLConstantsPropertyHandler.obj	\
-        $(OBJ)$/AttributeContainerHandler.obj	\
-        $(OBJ)$/XMLElementPropertyContext.obj	\
-        $(OBJ)$/XMLFontAutoStylePool.obj		\
-        $(OBJ)$/XMLFontStylesContext.obj		\
-        $(OBJ)$/PageMasterPropHdl.obj			\
-        $(OBJ)$/PageMasterPropHdlFactory.obj	\
-        $(OBJ)$/PageMasterStyleMap.obj			\
-        $(OBJ)$/PageMasterPropMapper.obj		\
-        $(OBJ)$/PageMasterImportPropMapper.obj	\
-        $(OBJ)$/PageMasterImportContext.obj		\
-        $(OBJ)$/PagePropertySetContext.obj		\
-        $(OBJ)$/PageHeaderFooterContext.obj		\
-        $(OBJ)$/XMLBitmapRepeatOffsetPropertyHandler.obj \
-        $(OBJ)$/XMLFillBitmapSizePropertyHandler.obj	\
-        $(OBJ)$/XMLBitmapLogicalSizePropertyHandler.obj	\
-        $(OBJ)$/durationhdl.obj	\
-        $(OBJ)$/VisAreaContext.obj \
-        $(OBJ)$/DrawAspectHdl.obj
 
 # --- Tagets -------------------------------------------------------
 
