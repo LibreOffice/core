@@ -50,6 +50,7 @@ all: ..$/misc$/deltree.txt
 .ENDIF
     +-$(MY_DELETE_RECURSIVE) $(ODKNAME)$/settings$/dk.mk
     +-$(MY_DELETE_RECURSIVE) $(ODKNAME)$/docs$/basic
+    +-$(MY_DELETE_RECURSIVE) $(ODKNAME)$/docs$/common$/man
 .IF "$(BUILD_SOSL)"!=""
 # for OpenOffice build rename to PRODUCT_NAME
     +-$(RENAME) $(ODKNAME) $(PRODUCT_NAME)
