@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotbl.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: tl $ $Date: 2002-04-30 06:58:50 $
+ *  last change: $Author: tl $ $Date: 2002-05-06 13:11:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,9 +128,9 @@ class SwXCell : public SwXCellBaseClass,
     public SwXText,
     public SwClient
 {
-    friend static void   lcl_setString( SwXCell &rCell, const rtl::OUString &rTxt );
-    friend static double lcl_getValue( SwXCell &rCell );
-    friend static void   lcl_setValue( SwXCell &rCell, double nVal );
+    friend void   lcl_setString( SwXCell &rCell, const rtl::OUString &rTxt );
+    friend double lcl_getValue( SwXCell &rCell );
+    friend void   lcl_setValue( SwXCell &rCell, double nVal );
 
 
     SfxItemPropertySet      aPropSet;

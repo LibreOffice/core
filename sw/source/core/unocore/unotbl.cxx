@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotbl.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: tl $ $Date: 2002-04-30 06:56:05 $
+ *  last change: $Author: tl $ $Date: 2002-05-06 13:08:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -680,7 +680,7 @@ void lcl_SetTblSeparators(const uno::Any& rVal, SwTable* pTable, SwTableBox* pBo
 /* -----------------30.04.02 08:00-------------------
  *
  * --------------------------------------------------*/
-static inline rtl::OUString lcl_getString( SwXCell &rCell )
+inline rtl::OUString lcl_getString( SwXCell &rCell )
 {
     // getString is a member function of the base class...
     return rCell.getString();
@@ -688,7 +688,7 @@ static inline rtl::OUString lcl_getString( SwXCell &rCell )
 /* -----------------30.04.02 08:00-------------------
  * non UNO function call to set string in SwXCell
  * --------------------------------------------------*/
-static void lcl_setString( SwXCell &rCell, const rtl::OUString &rTxt )
+void lcl_setString( SwXCell &rCell, const rtl::OUString &rTxt )
 {
     if(rCell.IsValid())
     {
@@ -703,7 +703,7 @@ static void lcl_setString( SwXCell &rCell, const rtl::OUString &rTxt )
 /* -----------------30.04.02 08:00-------------------
  * non UNO function call to get value from SwXCell
  * --------------------------------------------------*/
-static double lcl_getValue( SwXCell &rCell )
+double lcl_getValue( SwXCell &rCell )
 {
     double fRet = 0.0;
     if(rCell.IsValid())
@@ -715,7 +715,7 @@ static double lcl_getValue( SwXCell &rCell )
 /* -----------------30.04.02 08:00-------------------
  * non UNO function call to set value in SwXCell
  * --------------------------------------------------*/
-static void lcl_setValue( SwXCell &rCell, double nVal )
+void lcl_setValue( SwXCell &rCell, double nVal )
 {
     if(rCell.IsValid())
     {
