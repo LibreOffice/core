@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: obo $ $Date: 2004-09-08 14:19:28 $
+#   last change: $Author: obo $ $Date: 2005-01-25 15:32:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -68,6 +68,11 @@ PACKAGE = com$/sun$/star$/wizards$/web$/data
 # --- Settings -----------------------------------------------------
 
 .INCLUDE : settings.mk
+
+.IF "$(JDK)" == "gcj"
+all:
+        @echo This dir cannot be build with gcj because of javax.xml.parsers.ParserConfigurationException
+.ELSE
 #.INCLUDE :  $(PRJ)$/util$/makefile.pmk
 JARFILES= unoil.jar jurt.jar ridl.jar juh.jar jut.jar java_uno.jar java_uno_accessbridge commonwizards.jar
 
@@ -100,3 +105,4 @@ JAVACLASSFILES = $(foreach,i,$(JAVAFILES) $(CLASSDIR)$/$(PACKAGE)$/$(i:b).class)
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
+.ENDIF
