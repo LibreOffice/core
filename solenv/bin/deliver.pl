@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: deliver.pl,v $
 #
-#   $Revision: 1.63 $
+#   $Revision: 1.64 $
 #
-#   last change: $Author: vg $ $Date: 2004-05-24 07:38:39 $
+#   last change: $Author: vg $ $Date: 2004-05-26 14:12:05 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,7 +78,7 @@ use File::Spec;
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.63 $ ';
+$id_str = ' $Revision: 1.64 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -110,6 +110,8 @@ $is_debug           = 0;
 $module             = 0;            # module name
 $base_dir           = 0;            # path to module base directory
 $dlst_file          = 0;            # path to d.lst
+@ilst_file          = ();           # array of pathes to image lists
+$ilst_ext           = 'ilst2';      # extension of image lists
 $umask              = 22;           # default file/directory creation mask
 $dest               = 0;            # optional destination path
 $common_build       = 0;            # do we have common trees?
@@ -155,6 +157,7 @@ parse_options();
 init_globals();
 push_default_actions();
 parse_dlst();
+parse_imagelists();
 walk_action_data();
 walk_hedabu_list();
 zip_files() if $opt_zip;
@@ -424,7 +427,7 @@ sub init_globals
     # for CWS:
     $module =~ s/\.lnk$//;
 
-    print "Module=$module, Base_Diri=$base_dir, d.lst=$dlst_file\n" if $is_debug;
+    print "Module=$module, Base_Dir=$base_dir, d.lst=$dlst_file\n" if $is_debug;
 
     $umask = umask();
     if ( !defined($umask) ) {
@@ -488,6 +491,9 @@ sub init_globals
         $dest = "$solarversion/$inpath" if ( !$dest );
         $common_dest = $dest;
     }
+
+    # find image lists
+    @ilst_file = get_imagelists($common_outdir);
 
     # the following macros are obsolete, will be flagged as error
     # %__WORKSTAMP%
@@ -564,6 +570,49 @@ sub parse_dlst
         expand_macros($_, $line_cnt);
     }
     close(DLST);
+}
+
+sub get_imagelists
+{
+    my $common_outdir = shift;
+    chdir("$base_dir") or die "Cannot change into $basedir";
+    my @ilst = glob("$common_outdir/bin/*.$ilst_ext");
+    return wantarray ? @ilst : \@ilst;
+}
+
+sub parse_imagelists
+{
+    my $resdirvariable = "%MODULE%";
+    my $destdir; # where to put images and image lists
+    if ( $common_build ) {
+        $destdir =  "%COMMON_DEST%\\res%_EXT%\\img";
+    } else {
+        $destdir =  "%_DEST%\\res%_EXT%\\img";
+    }
+    if ( ! @ilst_file ) {
+        print "No image lists\n" if $is_debug;
+        return;
+    }
+    foreach my $list (@ilst_file) {
+        print "$list\n" if $is_debug;
+        # read images list
+        open(IMGLST, "<$list") or die "Error: cannot open image list $list";
+        while(<IMGLST>) {
+            chomp;
+            next if /^#/;
+            next if ! s/$resdirvariable//;
+            # d.lst syntax uses backslashes as path delimiter
+            s:\/:\\:g;
+            my $dlst_line = "$_ $destdir$_";
+            $dlst_line =~ s/^\\?$module/\.\./;
+            next if ! /^(\\.+)\\\w/;
+            push(@action_data, ['mkdir', $destdir . $1]);
+            push(@action_data, ['copy', $dlst_line]);
+        }
+        close(IMGLST);
+        push(@action_data, ['copy', "..\\%__SRC%\\$common_outdir" . "bin\\*.$ilst_ext $destdir"]);
+    }
+    return;
 }
 
 sub expand_macros
