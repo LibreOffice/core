@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propagg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 14:25:29 $
+ *  last change: $Author: fs $ $Date: 2000-11-03 15:14:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -598,28 +598,35 @@ void SAL_CALL OPropertySetAggregationHelper::setPropertyValues(
             try
             {
                 // dividing the Names and _rValues
+                // aggregate's names
                  ::com::sun::star::uno::Sequence< ::rtl::OUString > AggPropertyNames(nAggCount);
                 ::rtl::OUString* pAggNames = AggPropertyNames.getArray();
-                 ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any>  AggValues(nAggCount);
-                 ::com::sun::star::uno::Any* pAggValues = AggValues.getArray();
-                 ::com::sun::star::uno::Sequence< ::rtl::OUString > OwnPropertyNames(nLen - nAggCount);
-                ::rtl::OUString* pOwnNames = AggPropertyNames.getArray();
-                 ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any>  OwnValues(nLen - nAggCount);
-                 ::com::sun::star::uno::Any* pOwnValues = OwnValues.getArray();
+                // aggregate's values
+                com::sun::star::uno::Sequence<com::sun::star::uno::Any>  AggValues(nAggCount);
+                com::sun::star::uno::Any* pAggValues = AggValues.getArray();
+                // own names
+                com::sun::star::uno::Sequence< ::rtl::OUString > OwnPropertyNames(nLen - nAggCount);
+                ::rtl::OUString* pOwnNames = OwnPropertyNames.getArray();
+                // own values
+                com::sun::star::uno::Sequence<com::sun::star::uno::Any>  OwnValues(nLen - nAggCount);
+                com::sun::star::uno::Any* pOwnValues = OwnValues.getArray();
 
-                for (sal_Int32 i = 0, a = 0, o = 0; i < nLen; ++i)
+                for (sal_Int32 i = 0; i < nLen; ++i, ++pNames, ++pValues)
                 {
-                    if (xInfo->hasPropertyByName(pNames[i]))
+                    if (xInfo->hasPropertyByName(*pNames))
                     {
-                        pAggNames[a] = pNames[i];
-                        pAggValues[a++] = pValues[i];
+                        *pAggNames++ = *pNames;
+                        *pAggValues++ = *pValues;
                     }
                     else
                     {
-                        pOwnNames[o] = pNames[i];
-                        pOwnValues[o++] = pValues[i];
+                        *pOwnNames++ = *pNames;
+                        *pOwnValues++ = *pValues;
                     }
                 }
+
+                // reset, needed below
+                pOwnValues = OwnValues.getArray();
 
                 pHandles = new sal_Int32[ nLen - nAggCount ];
 
@@ -685,7 +692,7 @@ void SAL_CALL OPropertySetAggregationHelper::setPropertyValues(
                     m_xAggregateMultiSet->setPropertyValues(AggPropertyNames, AggValues);
 
             }
-            catch(...)
+            catch(::com::sun::star::uno::Exception&)
             {
                 delete [] pHandles;
                 delete [] pOldValues;
