@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mgetempl.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2001-05-17 12:08:38 $
+ *  last change: $Author: obo $ $Date: 2001-06-08 22:15:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,7 @@ TabPage TP_MANAGE_STYLES
         Text[ turkish ] = "~Ad";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Nombre";
+        Text[ finnish ] = "~Nimi";
     };
     Edit ED_NAME
     {
@@ -130,6 +131,7 @@ TabPage TP_MANAGE_STYLES
         Text[ turkish ] = "~Otomatik güncelleme";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Actualizar automáticamente";
+        Text[ finnish ] = "~Automaattinen päivitys";
     };
     FixedText FT_NEXT
     {
@@ -139,9 +141,9 @@ TabPage TP_MANAGE_STYLES
         Text [ ENGLISH ] = "~Next" ;
         Text [ norwegian ] = "~Neste" ;
         Text [ italian ] = "Modello ~successivo" ;
-        Text [ portuguese_brazilian ] = "~Próximo" ;
+        Text [ portuguese_brazilian ] = "~Pr?imo" ;
         Text [ portuguese ] = "~Estilo seguinte" ;
-        Text [ finnish ] = "~Seuraava" ;
+        Text [ finnish ] = "Seu~raava tyyli" ;
         Text [ danish ] = "Næste typografi" ;
         Text [ french ] = "~Style suivant" ;
         Text [ swedish ] = "Nästa ~formatmall" ;
@@ -155,7 +157,7 @@ TabPage TP_MANAGE_STYLES
         Text[ chinese_traditional ] = "¤U¤@­Ó¼Ë¦¡(~X)";
         Text[ arabic ] = "äãØ ÊÇáí";
         Text[ greek ] = "Åðüìåíï ðñüôõðï";
-        Text[ korean ] = "´ÙÀ½ ¼­½ÄÆÄÀÏ(~X)";
+        Text[ korean ] = "´ÙÀ½ ¼­½Ä ÆÄÀÏ(~X)";
         Text[ turkish ] = "Sonraki biçim";
         Text[ language_user1 ] = "\"Vorlagen\" Styles are always capitalized no matter where they show up. EM15.5.00";
         Text[ catalan ] = "~Estilo siguiente";
@@ -180,7 +182,7 @@ TabPage TP_MANAGE_STYLES
         Text [ italian ] = "~Basato su" ;
         Text [ portuguese_brazilian ] = "~Baseado em" ;
         Text [ portuguese ] = "~Baseado em" ;
-        Text [ finnish ] = "~Perustuu" ;
+        Text [ finnish ] = "~Perusta" ;
         Text [ danish ] = "Kædet med" ;
         Text [ french ] = "~Lié à" ;
         Text [ swedish ] = "~Länkad med" ;
@@ -215,9 +217,9 @@ TabPage TP_MANAGE_STYLES
         Text [ ENGLISH ] = "~Region" ;
         Text [ norwegian ] = "~Område" ;
         Text [ italian ] = "~Area" ;
-        Text [ portuguese_brazilian ] = "~Região" ;
+        Text [ portuguese_brazilian ] = "~Regi?o" ;
         Text [ portuguese ] = "~Categoria" ;
-        Text [ finnish ] = "~Alue" ;
+        Text [ finnish ] = "~Luokka" ;
         Text [ danish ] = "Område" ;
         Text [ french ] = "~Catégorie" ;
         Text [ swedish ] = "~Område" ;
@@ -287,3 +289,4 @@ TabPage TP_MANAGE_STYLES
     };
 };
  // ********************************************************************** EOF
+
