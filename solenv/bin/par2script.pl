@@ -2,9 +2,9 @@
 #
 #   $RCSfile: par2script.pl,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: obo $ $Date: 2004-11-18 08:33:08 $
+#   last change: $Author: rt $ $Date: 2005-01-31 10:44:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -94,6 +94,7 @@ par2script::undefine::undefine_gids($setupscript, $parfilecontent);
 par2script::shortcut::shift_shortcut_positions($setupscript);
 par2script::module::remove_from_modules($setupscript);
 par2script::module::add_to_root_module($setupscript);
+par2script::module::shorten_lines_at_modules($setupscript);
 
 # checking the setup script
 
@@ -104,6 +105,7 @@ par2script::check::check_directories_in_item_definitions($setupscript, "Profile"
 par2script::check::check_module_existence($setupscript);
 # par2script::check::check_registry_at_files($setupscript);
 par2script::check::check_moduleid_at_items($setupscript);
+par2script::check::check_semicolon($setupscript);
 
 # saving the script
 
