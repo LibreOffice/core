@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLIndexTemplateContext.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 16:24:31 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:33:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,7 +166,8 @@ XMLIndexTemplateContext::XMLIndexTemplateContext(
     const SvXMLEnumMapEntry* pLevelNameMap,
     enum XMLTokenEnum eLevelAttrName,
     const sal_Char** pLevelStylePropMap,
-    const sal_Bool* pAllowedTokenTypes) :
+    const sal_Bool* pAllowedTokenTypes,
+    sal_Bool bT ) :
         SvXMLImportContext(rImport, nPrfx, rLocalName),
         rPropertySet(rPropSet),
         sStyleName(),
@@ -201,7 +202,8 @@ XMLIndexTemplateContext::XMLIndexTemplateContext(
         sText(RTL_CONSTASCII_USTRINGPARAM("Text")),
         sBibliographyDataField(RTL_CONSTASCII_USTRINGPARAM(
             "BibliographyDataField")),
-        sChapterFormat(RTL_CONSTASCII_USTRINGPARAM("ChapterFormat"))
+        sChapterFormat(RTL_CONSTASCII_USTRINGPARAM("ChapterFormat")),
+        bTOC( bT )
 {
     DBG_ASSERT( ((XML_TOKEN_INVALID != eLevelAttrName) &&  (NULL != pLevelNameMap))
                 || ((XML_TOKEN_INVALID == eLevelAttrName) &&  (NULL == pLevelNameMap)),
@@ -300,7 +302,9 @@ void XMLIndexTemplateContext::EndElement()
             DBG_ASSERT(NULL != pStyleProperty, "need property name");
             if (NULL != pStyleProperty)
             {
-                aAny <<= sStyleName;
+                aAny <<= GetImport().GetStyleDisplayName(
+                        XML_STYLE_FAMILY_TEXT_PARAGRAPH,
+                        sStyleName );
                 rPropertySet->setPropertyValue(
                     OUString::createFromAscii(pStyleProperty), aAny);
             }
@@ -318,7 +322,6 @@ enum TemplateTokenType
     XML_TOK_INDEX_TYPE_TEXT,
     XML_TOK_INDEX_TYPE_PAGE_NUMBER,
     XML_TOK_INDEX_TYPE_CHAPTER,
-    XML_TOK_INDEX_TYPE_CHAPTER_NUMBER,
     XML_TOK_INDEX_TYPE_LINK_START,
     XML_TOK_INDEX_TYPE_LINK_END,
     XML_TOK_INDEX_TYPE_BIBLIOGRAPHY
@@ -327,12 +330,10 @@ enum TemplateTokenType
 
 SvXMLEnumMapEntry aTemplateTokenTypeMap[] =
 {
-    { XML_INDEX_ENTRY_CHAPTER,      XML_TOK_INDEX_TYPE_CHAPTER },
     { XML_INDEX_ENTRY_TEXT,         XML_TOK_INDEX_TYPE_ENTRY_TEXT },
     { XML_INDEX_ENTRY_TAB_STOP,     XML_TOK_INDEX_TYPE_TAB_STOP },
     { XML_INDEX_ENTRY_SPAN,         XML_TOK_INDEX_TYPE_TEXT },
     { XML_INDEX_ENTRY_PAGE_NUMBER,  XML_TOK_INDEX_TYPE_PAGE_NUMBER },
-    { XML_INDEX_ENTRY_CHAPTER_NUMBER, XML_TOK_INDEX_TYPE_CHAPTER_NUMBER },
     { XML_INDEX_ENTRY_CHAPTER,      XML_TOK_INDEX_TYPE_CHAPTER },
     { XML_INDEX_ENTRY_LINK_START,   XML_TOK_INDEX_TYPE_LINK_START },
     { XML_INDEX_ENTRY_LINK_END,     XML_TOK_INDEX_TYPE_LINK_END },
@@ -392,12 +393,6 @@ SvXMLImportContext *XMLIndexTemplateContext::CreateChildContext(
                             GetImport(), *this, nPrefix, rLocalName);
                         break;
 
-                    case XML_TOK_INDEX_TYPE_CHAPTER_NUMBER:
-                        pContext = new XMLIndexSimpleEntryContext(
-                            GetImport(), sTokenEntryNumber, *this,
-                            nPrefix, rLocalName);
-                        break;
-
                     case XML_TOK_INDEX_TYPE_BIBLIOGRAPHY:
                         pContext = new XMLIndexBibliographyEntryContext(
                             GetImport(), *this, nPrefix, rLocalName);
@@ -405,7 +400,7 @@ SvXMLImportContext *XMLIndexTemplateContext::CreateChildContext(
 
                     case XML_TOK_INDEX_TYPE_CHAPTER:
                         pContext = new XMLIndexChapterInfoEntryContext(
-                            GetImport(), *this, nPrefix, rLocalName);
+                            GetImport(), *this, nPrefix, rLocalName, bTOC );
                         break;
 
                     default:
@@ -462,8 +457,7 @@ const sal_Bool aAllowedTokenTypesTOC[] =
     sal_True,       // XML_TOK_INDEX_TYPE_TAB_STOP,
     sal_True,       // XML_TOK_INDEX_TYPE_TEXT,
     sal_True,       // XML_TOK_INDEX_TYPE_PAGE_NUMBER,
-    sal_False,      // XML_TOK_INDEX_TYPE_CHAPTER,
-    sal_True,       // XML_TOK_INDEX_TYPE_CHAPTER_NUMBER
+    sal_True,       // XML_TOK_INDEX_TYPE_CHAPTER,
     sal_True,       // XML_TOK_INDEX_TYPE_LINK_START,
     sal_True,       // XML_TOK_INDEX_TYPE_LINK_END,
     sal_False       // XML_TOK_INDEX_TYPE_BIBLIOGRAPHY
@@ -476,7 +470,6 @@ const sal_Bool aAllowedTokenTypesUser[] =
     sal_True,       // XML_TOK_INDEX_TYPE_TEXT,
     sal_True,       // XML_TOK_INDEX_TYPE_PAGE_NUMBER,
     sal_False,      // XML_TOK_INDEX_TYPE_CHAPTER,
-    sal_True,       // XML_TOK_INDEX_TYPE_CHAPTER_NUMBER
     sal_False,      // XML_TOK_INDEX_TYPE_LINK_START,
     sal_False,      // XML_TOK_INDEX_TYPE_LINK_END,
     sal_False       // XML_TOK_INDEX_TYPE_BIBLIOGRAPHY
@@ -505,7 +498,6 @@ const sal_Bool aAllowedTokenTypesAlpha[] =
     sal_True,       // XML_TOK_INDEX_TYPE_TEXT,
     sal_True,       // XML_TOK_INDEX_TYPE_PAGE_NUMBER,
     sal_True,       // XML_TOK_INDEX_TYPE_CHAPTER,
-    sal_False,      // XML_TOK_INDEX_TYPE_CHAPTER_NUMBER
     sal_False,      // XML_TOK_INDEX_TYPE_LINK_START,
     sal_False,      // XML_TOK_INDEX_TYPE_LINK_END,
     sal_False       // XML_TOK_INDEX_TYPE_BIBLIOGRAPHY
@@ -560,7 +552,6 @@ const sal_Bool aAllowedTokenTypesBibliography[] =
     sal_True,       // XML_TOK_INDEX_TYPE_TEXT,
     sal_True,       // XML_TOK_INDEX_TYPE_PAGE_NUMBER,
     sal_False,      // XML_TOK_INDEX_TYPE_CHAPTER,
-    sal_False,      // XML_TOK_INDEX_TYPE_CHAPTER_NUMBER
     sal_False,      // XML_TOK_INDEX_TYPE_LINK_START,
     sal_False,      // XML_TOK_INDEX_TYPE_LINK_END,
     sal_True        // XML_TOK_INDEX_TYPE_BIBLIOGRAPHY
@@ -582,7 +573,6 @@ const sal_Bool aAllowedTokenTypesTable[] =
     sal_True,       // XML_TOK_INDEX_TYPE_TEXT,
     sal_True,       // XML_TOK_INDEX_TYPE_PAGE_NUMBER,
     sal_True,       // XML_TOK_INDEX_TYPE_CHAPTER,
-    sal_False,      // XML_TOK_INDEX_TYPE_CHAPTER_NUMBER
     sal_False,      // XML_TOK_INDEX_TYPE_LINK_START,
     sal_False,      // XML_TOK_INDEX_TYPE_LINK_END,
     sal_False       // XML_TOK_INDEX_TYPE_BIBLIOGRAPHY
