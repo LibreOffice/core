@@ -2,9 +2,9 @@
  *
  *  $RCSfile: changedb.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 06:28:29 $
+ *  last change: $Author: rt $ $Date: 2001-05-17 08:13:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,18 +99,18 @@ ModalDialog DLG_CHANGE_DB
         Text [ dutch ] = "In deze dialoog kunt u een database waarop de databasevelden in uw document betrekking hebben vervangen door een andere database. In de linker lijst is ook een meervoudige keuze mogelijk." ;
         Text [ swedish ] = "I denna dialog kan du byta ut databaser, som du kan nå via databasfältet i ditt dokument, mot andra databaser. Du kan bara göra en ändring åt gången. I den vänstra listan går det att göra multimarkering." ;
         Text [ danish ] = "I denne dialog kan du udskifte databaser, som du har adgang til via databasefelter. Du kan kun udføre en ændring ad gangen. I listen til venstre er der mulighed for multimarkering." ;
-        Text [ portuguese_brazilian ] = "In diesem Dialog können Sie Datenbanken, auf die Sie in Ihrem Dokument über Datenbankfelder zugreifen, durch andere Datenbanken austauschen. Sie können nur eine Änderung pro Arbeitsgang durchführen. In der linken Liste ist Mehrfachselektion möglich." ;
-        Text [ portuguese ] = "Nesta caixa de diálogo poderá substituir bases de dados por outras, tendo acesso a elas no seu documento através dos campos da base de dados. É apenas possível uma alteração por cada operação. Na lista da esquerda poderá seleccionar várias opções." ;
+        Text [ portuguese_brazilian ] = "In diesem Dialog k?nen Sie Datenbanken, auf die Sie in Ihrem Dokument ?er Datenbankfelder zugreifen, durch andere Datenbanken austauschen. Sie k?nen nur eine ?nderung pro Arbeitsgang durchf?ren. In der linken Liste ist Mehrfachselektion m?lich." ;
+        Text [ portuguese ] = "Nesta caixa de diálogo poderá substituir bases de dados por outras, tendo acesso a elas no seu documento através dos campos da base de dados. É apenas possível uma alteração por cada operação. Na lista da esquerda poderá seleccionar várias opç" ;
         Text[ chinese_simplified ] = "ÔÚÕâ¸ö¶Ô»°¿òÄÚÄúÄÜ¹»Ê¹ÓÃÒ»¸öÆäËûÊı¾İ¿âÀ´´úÌæÄúµ±Ç°±à¼­µÄÎÄµµËùÊ¹ÓÃµÄÊı¾İ¿â¡£Ã¿´ÎÄúÖ»ÄÜ×öÒ»Ïî¸ü¸Ä¡£ÔÚ×ó·½µÄÁĞµ¥ÄÚÄú¿ÉÒÔ½øĞĞ¶àÖØÑ¡Ôñ¡£";
-        Text[ russian ] = "Â ıòîì äèàëîãå Âû ìîæåòå çàìåíèòü áàçû äàííûõ, äîñòóï ê êîòîğûì âîçìîæåí ïğè ïîìîùè ïîëåé áàçû äàííûõ, äğóãèìè áàçàìè äàííûõ. Çà îäíó îïåğàöèş ìîæíî ïğîèçâåñòè òîëüêî îäíî èçìåíåíèå. Â ñïèñêå ñëåâà âîçìîæíî ìíîãîêğàòíîå âûäåëåíèå.";
-        Text[ polish ] = "W tym dialogu mo¿esz wymieniæ dostêpne w twoim dokumencie poprzez pola bazy danych na inne. Mo¿esz dokonaæ tylko jednej zmiany podczas sesji roboczej. Na liœcie z lewej strony mo¿liwa jest wielokrotna selekcja.";
+        Text[ russian ] = "Â ıòîì äèàëîãå Âû ìîæåòå çàìåíèòü áàçû äàííûõ, äîñòóï ê êîòîğûì âîçìîæåí ïğè ïîìîùè ïîëåé áàçû äàííûõ, äğóãèìè áàçàìè äàííûõ. Çà îäíó îïåğàö";
+        Text[ polish ] = "W tym dialogu mo¿esz wymieniæ dostêpne w twoim dokumencie poprzez pola bazy danych na inne. Mo¿esz dokonaæ tylko jednej zmiany podczas sesji roboczej. Na li?cie z lewej strony mo¿liwa jest wielokrotna selekcja.";
         Text[ japanese ] = "‚±‚ÌÀŞ²±Û¸Ş‚Å‚ÍÃŞ°ÀÍŞ°½Ì¨°ÙÄŞ‚ğ’Ê‚µ‚ÄAÄŞ·­ÒİÄ‚É±¸¾½‚·‚éÃŞ°ÀÍŞ°½‚ğ‘¼‚ÌÃŞ°ÀÍŞ°½‚ÆŒğŠ·‚Å‚«‚Ü‚·Bˆê“x‚É1‚Â‚Ì•ÏX‚µ‚©‚Å‚«‚Ü‚¹‚ñB¶‚ÌØ½Ä‚Å‚Í•¡”‘I‘ğ‚ª‰Â”\\‚Å‚·B";
         Text[ chinese_traditional ] = "¦b³o­Ó¹ï¸Ü¤è¶ô¤º±z¯à°÷¨Ï¥Î¤@­Ó¨ä¥L¸ê®Æ®w¨Ó¥N´À±z·í«e½s¿èªº¤å¥ó©Ò¨Ï¥Îªº¸ê®Æ®w¡C±z¨C¦¸¥u¯à§@¤@¦¸ÅÜ§ó¡C±z¯à°÷¦b¥ªÄæ¤º§@¦h­«¿ï¨ú¡C";
-        Text[ arabic ] = "İí ãÑÈÚ ÇáÍæÇÑ åĞÇ¡ íãßäß ÇÓÊÈÏÇá ŞæÇÚÏ ÇáÈíÇäÇÊ¡ ÇáÊí ÊÕá ÅáíåÇ İí ãÓÊäÏß ÈæÇÓØÉ ÍŞæá ŞæÇÚÏ ÇáÈíÇäÇÊ¡ ÈÃÎÑì. áÇÍÙ Ãäå íãßäß Úãá ÊÛííÑ æÇÍÏ İŞØ ßá ãÑÉ. íãßä Úãá ÃßËÑ ãä ÊÍÏíÏ İí ÇáŞÇÆãÉ ÇáíÓÑì.";
+        Text[ arabic ] = "İí ãÑÈÚ ÇáÍæÇÑ åĞÇ¡ íãßäß ÇÓÊÈÏÇá ŞæÇÚÏ ÇáÈíÇäÇÊ¡ ÇáÊí ÊÕá ÅáíåÇ İí ãÓÊäÏß ÈæÇÓØÉ ÍŞæá ŞæÇÚÏ ÇáÈíÇäÇÊ¡ ÈÃÎÑì. áÇÍÙ Ãäå íãßäß Úãá ÊÛííÑ æÇÍÏ";
         Text[ dutch ] = "In deze dialoog kunt u een database waarop de databasevelden in uw document betrekking hebben vervangen door een andere database. In de linker lijst is ook een meervoudige keuze mogelijk.";
         Text[ chinese_simplified ] = "ÔÚÕâ¸ö¶Ô»°¿òÄÚÄúÄÜ¹»Ê¹ÓÃÒ»¸öÆäËûÊı¾İ¿âÀ´´úÌæÄúµ±Ç°±à¼­µÄÎÄµµËùÊ¹ÓÃµÄÊı¾İ¿â¡£Ã¿´ÎÄúÖ»ÄÜ×öÒ»Ïî¸ü¸Ä¡£ÔÚ×ó·½µÄÁĞµ¥ÄÚÄú¿ÉÒÔ½øĞĞ¶àÖØÑ¡Ôñ¡£";
         Text[ greek ] = "Óå áõôüí ôïí äéÜëïãï ìğïñåßôå íá áíôáëëÜîåôå ôéò âÜóåéò äåäïìİíùí, ôéò ïğïßåò ÷ñçóéìïğïéåßôå ãéá ôï İããñáöï óáò ìİóù ôùí ğåäßùí âÜóåùí äåäïìİíùí, ìå Üëëåò âÜóåéò äåäïìİíùí. Åğéôñİğåôáé ìüíï ìéá áëëáãŞ áíÜ åñãÜóéìç çìİñá. Óôï áñéóôåñü ôìŞìá ìğïñïıí íá ãßíïõí ğïëëáëİò åğéëïãİò.";
-        Text[ korean ] = "ÀÌ ´ëÈ­»óÀÚ¿¡¼­, ±ÍÇÏ´Â ¹®¼­¿¡¼­ µ¥ÀÌÅÍº£ÀÌ½º¿¡ Á¢±ÙÇÏ°Å³ª ±³È¯ÇÏ´Â µ¥ÀÌÅÍº£ÀÌ½º ÇÊµå¸¦ »ç¿ëÇÏ½Ç¼ö ÀÖ½À´Ï´Ù.ÇÑ¹ø¿¡ ÇÑ¹ø º¯°æÀÌ ¸¸µé¾î  Áı´Ï´Ù. ¿ŞÂÊÀÇ ¸®½ºÆ® »ó¿¡¼­, ´ÙÁß ¼±ÅÃÀÌ °¡´ÉÇÕ´Ï´Ù.";
+        Text[ korean ] = "ÀÌ ´ëÈ­»óÀÚ¿¡¼­, ±ÍÇÏ´Â ¹®¼­¿¡¼­ µ¥ÀÌÅÍº£ÀÌ½º¿¡ Á¢±ÙÇÏ°Å³ª ±³È¯ÇÏ´Â µ¥ÀÌÅÍº£ÀÌ½º ÇÊµå¸¦ »ç¿ëÇÏ½Ç¼ö ÀÖ½À´Ï´Ù.ÇÑ¹ø¿¡ ÇÑ¹ø º¯°æÀÌ ¸¸µé¾î  Áı´Ï´Ù. ¿ŞÂÊÀÇ ¸®½ºÆ® »ó¿¡¼­, ´ÙÁß ¼±ÅÃÀÌ ?";
         Text[ turkish ] = "Bu pencerede, belgenizdeki veritabanı alanları yoluyla eriştiğiniz veritabanlarını başkaları ile değiştirebilirsiniz. Her işlemde yalnızca tek bir değişiklik yapılabilir. Soldaki listede birden fazla seçim yapılabilir.";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "En este diálogo puede intercambiar por otras las bases de datos a las que acceda a través de los campos. Se puede realizar solo un cambio por fase de trabajo. En la lista izquierda es posible hacer una selección múltiple.";
@@ -162,7 +162,7 @@ ModalDialog DLG_CHANGE_DB
         Text [ dutch ] = "Beschikbare databases" ;
         Text [ swedish ] = "Tillgängliga databaser" ;
         Text [ danish ] = "Tilgængelige databaser" ;
-        Text [ portuguese_brazilian ] = "Verfügbare Datenbanken" ;
+        Text [ portuguese_brazilian ] = "Verf?bare Datenbanken" ;
         Text [ portuguese ] = "Bases de dados disponíveis" ;
         Text[ chinese_simplified ] = "¿ÉÊ¹ÓÃµÄÊı¾İ¿â";
         Text[ russian ] = "Äîñòóïíûå áàçû äàííûõ";
