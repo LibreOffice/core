@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.130 $
+ *  $Revision: 1.131 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 20:03:09 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 18:16:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1396,7 +1396,7 @@ void Desktop::Main()
             return;
         }
 
-        if (pCmdLineArgs->IsEmpty())
+        if (pCmdLineArgs->IsEmpty() && SvtModuleOptions().IsModuleInstalled(SvtModuleOptions::E_SSTARTMODULE))
         {
             ::desktop::Desktop::bSuppressOpenDefault = sal_True;
             RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ create BackingComponent" );
@@ -1416,7 +1416,7 @@ void Desktop::Main()
                     lArgs[0] <<= xContainerWindow;
 
                     Reference< XController > xBackingComp(
-                        xSMgr->createInstanceWithArguments(OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.sfx2.view.BackingComp") ), lArgs),
+                        xSMgr->createInstanceWithArguments(OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.StartModule") ), lArgs),
                         UNO_QUERY);
 
                     if (xBackingComp.is())
