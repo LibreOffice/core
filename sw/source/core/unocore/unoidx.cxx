@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoidx.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: os $ $Date: 2001-05-09 12:28:57 $
+ *  last change: $Author: os $ $Date: 2001-05-16 07:52:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1570,7 +1570,7 @@ Reference< XPropertySetInfo >  SwXDocumentIndexMark::getPropertySetInfo(void)
     {
         uno::Reference< beans::XPropertySetInfo >  xInfo = new SfxItemPropertySetInfo(_pMap);
         // extend PropertySetInfo!
-        const uno::Sequence<beans::Property> aPropSeq = xInfos[nPos]->getProperties();
+        const uno::Sequence<beans::Property> aPropSeq = xInfo->getProperties();
         xInfos[nPos] = new SfxExtItemPropertySetInfo(
             aSwMapProvider.GetPropertyMap(PROPERTY_MAP_PARAGRAPH_EXTENSIONS),
             aPropSeq );
