@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-26 08:08:13 $
+ *  last change: $Author: pl $ $Date: 2002-09-11 09:55:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -438,10 +438,9 @@ public:
     void setFont( const Font& rFont )
     { m_aGraphicsStack.front().m_aFont = rFont; }
 
-    void setMapMode() { m_aGraphicsStack.front().m_aMapMode = m_aMapMode; }
+    void setMapMode( const MapMode& rMapMode );
+    void setMapMode() { setMapMode( m_aMapMode ); }
 
-    void setMapMode( const MapMode& rMapMode )
-    { m_aGraphicsStack.front().m_aMapMode = rMapMode; }
 
     const MapMode& getMapMode() { return m_aGraphicsStack.front().m_aMapMode; }
 
@@ -526,7 +525,6 @@ public:
     void drawHatch( const PolyPolygon& rPolyPoly, const Hatch& rHatch );
     void drawWallpaper( const Rectangle& rRect, const Wallpaper& rWall );
     void drawTransparent( const PolyPolygon& rPolyPoly, sal_uInt32 nTransparentPercent );
-
 
     void emitComment( const rtl::OString& rComment );
 };

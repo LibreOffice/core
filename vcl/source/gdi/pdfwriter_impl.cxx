@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: pl $ $Date: 2002-09-10 17:23:32 $
+ *  last change: $Author: pl $ $Date: 2002-09-11 09:55:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4335,4 +4335,18 @@ void PDFWriterImpl::updateGraphicsState()
     m_aCurrentPDFState = m_aGraphicsStack.front();
     if( aLine.getLength() )
         writeBuffer( aLine.getStr(), aLine.getLength() );
+}
+
+void PDFWriterImpl::setMapMode( const MapMode& rMapMode )
+{
+    // there are state parameters dependent on the map mode
+    // (clip region and font) so flush them before setting the
+    // new mode
+
+    // flush clip region and font
+    updateGraphicsState();
+
+    m_aGraphicsStack.front().m_aMapMode = rMapMode;
+    getReferenceDevice()->SetMapMode( rMapMode );
+    m_aCurrentPDFState.m_aMapMode = rMapMode;
 }
