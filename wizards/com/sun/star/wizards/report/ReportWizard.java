@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ReportWizard.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: bc $ $Date: 2002-05-15 15:04:29 $
+ *  last change: $Author: bc $ $Date: 2002-05-17 15:59:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -373,7 +373,6 @@ public class ReportWizard {
 
              case SOSECSORTLST:
                 enableNextSortListBox(1);
-                break;
 
              case SOTHIRDSORTLST:
                 enableNextSortListBox(2);
@@ -411,7 +410,7 @@ public class ReportWizard {
            }
         }
         catch( Exception exception ){
-            System.err.println( exception);
+               exception.printStackTrace(System.out);
         }
      }
 
@@ -607,7 +606,7 @@ public class ReportWizard {
                        new Object[]{ new Integer(iPage - 1), WizardTitle[iPage-2]});
     }
       catch( Exception exception ){
-         System.err.println( exception);
+           exception.printStackTrace(System.out);
     }}
 
 
@@ -637,7 +636,7 @@ public class ReportWizard {
         }
     }
     catch( Exception exception ){
-        System.err.println( exception);
+       exception.printStackTrace(System.out);
     }}
 
 
@@ -821,7 +820,7 @@ public class ReportWizard {
         ShowDialog(xMSF, CurReportDocument);
     }
     catch(java.lang.Exception jexception ){
-        System.err.println( jexception);
+        jexception.printStackTrace(System.out);
     }
     }
 
@@ -1031,6 +1030,32 @@ public class ReportWizard {
         }
 
 
+   public static void connectToDatabase(XMultiServiceFactory xMSF){
+   try{
+    String MyDataSourceName = "Bibliography";
+    String MyCommand = "SELECT Author, Publisher FROM biblio";
+    Object xDatabaseContext =(Object) xMSF.createInstance("com.sun.star.sdb.DatabaseContext");
+    XNameAccess xNameAccess = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, xDatabaseContext);
+    Object oDataSource = xNameAccess.getByName(MyDataSourceName);
+    XPropertySet xPSet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, oDataSource);
+    XDataSource xDataSource = (XDataSource) UnoRuntime.queryInterface(XDataSource.class, oDataSource);
+    com.sun.star.sdbc.XConnection oDBConnection = (com.sun.star.sdbc.XConnection) xDataSource.getConnection("","");
+    XStatement xStatement = oDBConnection.createStatement();
+    XResultSet xResultSet = xStatement.executeQuery(MyCommand);
+    com.sun.star.sdbc.XRow xResultSetRow = (com.sun.star.sdbc.XRow) UnoRuntime.queryInterface(com.sun.star.sdbc.XRow.class, xResultSet);
+    int i = 1;
+    if (xResultSet.next() == true){
+        XNameAccess xblabla = null;
+        String blaString = xResultSetRow.getString(i);
+        Object blaContent = xResultSetRow.getObject(i, xblabla);
+    }
+   }
+   catch(Exception e) {
+       e.printStackTrace(System.out);
+       System.exit( 0 );
+   }}
+
+
 
     public static XMultiServiceFactory connect( String connectStr )
     throws com.sun.star.uno.Exception, com.sun.star.uno.RuntimeException, Exception {
@@ -1065,44 +1090,12 @@ public class ReportWizard {
 
         ReportFolderName = tools.getOfficePath(xMSF, "Template", "share") + "/wizard/report/";
         XInvocation xResInvoke = tools.initResources(xMSF, "ReportWizard","dbw");
-
-        sMsgWizardName = "AutoPilot Report";
-        scmdReady = "C~reate";
-        scmdCancel = "~Cancel";
-        scmdBack = "<< ~Back";
-        scmdHelp = "~Help";
-        scmdGoOn = "~Next >>";
-        slblDatabases = "Data so~urce";
-        slblTables = "Tables or queries";
-        slblFields = "Ex~isting fields";
-        slblSelFields = "Fields in form";
-        slblDataStructure = "Layout of the data structure";
-        slblPageLayout = "Layout of the page headers";
-        sOrganizeFields = "Organize fields";
-        sSortHeader = "Additional ~Sorting Criterias";
-        sNoSorting = "(none)";
-        sOrientationHeader =  "~Alignment";
-        sOrientVertical = "~Hochformat";
-        sOrientHorizontal = "~Landscape";
-        sReportTitle = "~Name of report";
-        sSortAscend = "A;Z";
-        sSortDescend = "Z;A";
-        WizardTitle = new String[4];
-        WizardTitle[0] = sMsgWizardName + " - " + "Choose Database";
-        WizardTitle[1] = sMsgWizardName + " - " + "Structure";
-        WizardTitle[2] = sMsgWizardName + " - " + "Sort Options";
-        WizardTitle[3] = sMsgWizardName + " - " + "Style Selection";
-        sWriterFilterName = "Writer 6.0";
-     }
-
-/*      ReportFolderName = tools.getOfficePath(xMSF, "Template", "share") + "/wizard/report/";
-        XInvocation xResInvoke = tools.initResources(xMSF, "ReportWizard","dbw");
         sMsgWizardName = tools.getResText(xResInvoke, RID_REPORT);
         scmdReady = tools.getResText(xResInvoke, RID_COMMON + 0);
         scmdCancel = tools.getResText(xResInvoke, RID_COMMON + 1);
         scmdBack = tools.getResText(xResInvoke, RID_COMMON + 2);
         scmdHelp = tools.getResText(xResInvoke, RID_COMMON + 20);
-        sGoOn = tools.getResText(xResInvoke, RID_COMMON + 3);
+        scmdGoOn = tools.getResText(xResInvoke, RID_COMMON + 3);
         slblDatabases = tools.getResText(xResInvoke, RID_FORM + 11);
         slblTables = tools.getResText(xResInvoke, RID_FORM + 6);
         slblFields = tools.getResText(xResInvoke, RID_FORM + 12);
@@ -1119,9 +1112,10 @@ public class ReportWizard {
         sSortAscend = tools.getResText(xResInvoke, RID_REPORT + 36);
         sSortDescend = tools.getResText(xResInvoke, RID_REPORT + 37);
         WizardTitle = new String[5];
-        WizardTitle[1] = sMsgWizardName + " - " + tools.getResText(xResInvoke, RID_FORM + 45);
-        WizardTitle[2] = sMsgWizardName + " - " + tools.getResText(xResInvoke, RID_REPORT + 11);
-        WizardTitle[3] = sMsgWizardName + " - " + tools.getResText(xResInvoke, RID_REPORT + 12);
-        WizardTitle[4] = sMsgWizardName + " - " + tools.getResText(xResInvoke, RID_FORM + 13);
-        sWriterFilterName = tools.getResText(xResInvoke, RID_FORM + 70); */
+        WizardTitle[0] = sMsgWizardName + " - " + tools.getResText(xResInvoke, RID_FORM + 45);
+        WizardTitle[1] = sMsgWizardName + " - " + tools.getResText(xResInvoke, RID_REPORT + 11);
+        WizardTitle[2] = sMsgWizardName + " - " + tools.getResText(xResInvoke, RID_REPORT + 12);
+        WizardTitle[3] = sMsgWizardName + " - " + tools.getResText(xResInvoke, RID_FORM + 13);
+        sWriterFilterName = tools.getResText(xResInvoke, RID_FORM + 70);
+    }
 }   
