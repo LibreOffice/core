@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glob.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: cl $ $Date: 2001-07-24 14:26:25 $
+ *  last change: $Author: kz $ $Date: 2001-07-26 22:32:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,14 +193,14 @@ String STR_LAYER_MEASURELINES
     Text [ french ] = "Lignes de cote" ;
     Text [ portuguese_brazilian ] = "Ma?linien" ;
     Text [ portuguese ] = "Linhas de dimensão" ;
-    Text[ chinese_simplified ] = "³ß´çÏß";
+    Text[ chinese_simplified ] = "¶¨Á¿Ïß";
     Text[ russian ] = "Ëèíèè ğàçìåğà";
     Text[ polish ] = "Linie wymiaru";
     Text[ japanese ] = "¡–@ü";
-    Text[ chinese_traditional ] = "¤Ø¤o½u";
+    Text[ chinese_traditional ] = "©w¶q½u";
     Text[ arabic ] = "ÎØæØ ŞíÇÓ";
     Text[ dutch ] = "Meetlatten";
-    Text[ chinese_simplified ] = "³ß´çÏß";
+    Text[ chinese_simplified ] = "¶¨Á¿Ïß";
     Text[ greek ] = "Ãñáììİò äéáóôáóéïëüãçóçò";
     Text[ korean ] = "Ä¡¼ö ¼±";
     Text[ turkish ] = "Ölçme çizgileri";
@@ -369,7 +369,7 @@ String STR_PRESOBJ_MPOUTLINE
     Text[ russian ] = "Äëÿ ïğàâêè ôîğìàòà òåêñòà ñòğóêòóğû ùåëêíèòå îäèí ğàç ìûøüş";
     Text[ polish ] = "Kliknij, aby edytowaæ formaty tekstu konspektu.";
     Text[ japanese ] = "±³Ä×²İÃ·½Ä‚Ì‘®‚ğ•ÒW‚·‚é‚É‚Í¸Ø¯¸‚µ‚Ü‚·B";
-    Text[ chinese_traditional ] = "½Ğ±z«öÀ»¹«¼Ğ¡A½s¿è¤jºõ¤å¦r®æ¦¡¡C";
+    Text[ chinese_traditional ] = "½Ğ«ö¹«¼Ğ¡A½s¿è¤jºõ¤å¦r®æ¦¡¡C";
     Text[ arabic ] = "ÇäŞÑ åäÇ áÊŞæã ÈÊÍÑíÑ ÊäÓíŞ äÕ ÇáÊŞÓíã";
     Text[ dutch ] = "Klik om het formaat van de overzichtstekst te bewerken";
     Text[ chinese_simplified ] = "ÇëÄú°´»÷Êó±ê£¬±à¼­´ó¸ÙÕıÎÄ¸ñÊ½¡£";
@@ -630,7 +630,7 @@ String STR_PRESOBJ_MPNOTESTITLE
     Text[ russian ] = "Äëÿ ïåğåìåùåíèÿ ñòğàíèöû ùåëêíèòå îäèí ğàç ìûøüş";
     Text[ polish ] = "Kliknij, aby przesun¹æ slajd.";
     Text[ japanese ] = "Íß°¼Ş‚ğˆÚ“®‚·‚é‚É‚Í¸Ø¯¸‚µ‚Ü‚·B";
-    Text[ chinese_traditional ] = "½Ğ«öÀ»¹«¼Ğ¡A²¾°Ê­¶­±¡C";
+    Text[ chinese_traditional ] = "½Ğ«ö¤@¤U·Æ¹«¡A²¾°Ê­¶­±¡C";
     Text[ arabic ] = "ÇäŞÑ áÅÒÇÍÉ ÇáÕİÍÉ";
     Text[ dutch ] = "Klik om de pagina te verplaatsen";
     Text[ chinese_simplified ] = "ÇëÄú°´»÷Êó±ê£¬ÒÆ¶¯Ò³Ãæ¡£";
@@ -803,7 +803,7 @@ String STR_PRESOBJ_GRAPHIC
     Text[ russian ] = "Äîáàâèòü ğèñóíîê äâîéíûì ùåë÷êîì";
     Text[ polish ] = "Dodaj grafikê przez dwukrotne klikniêcie";
     Text[ japanese ] = "ÀŞÌŞÙ¸Ø¯¸‚Å}‚Ì‘}“ü";
-    Text[ chinese_traditional ] = "ÂùÀ»·Æ¹«¥ª«ö¶s´¡¤J¹Ï§Î";
+    Text[ chinese_traditional ] = "ÂùÀ»·Æ¹«¡A´¡¤J¤@­Ó¹Ï§Î";
     Text[ arabic ] = "ÇäŞÑ äŞÑÇğ ãÒÏæÌÇğ áÅÖÇİÉ ÕæÑÉ";
     Text[ dutch ] = "Afbeelding door dubbelklikken toevoegen";
     Text[ chinese_simplified ] = "Ë«»÷Êó±ê²åÈëÍ¼ĞÎ";
@@ -832,7 +832,7 @@ String STR_PRESOBJ_OBJECT
     Text[ russian ] = "Äîáàâèòü îáúåêò äâîéíûì ùåë÷êîì";
     Text[ polish ] = "Dodaj obiekt przez dwukrotne klikniêcie";
     Text[ japanese ] = "ÀŞÌŞÙ¸Ø¯¸‚µ‚ÄµÌŞ¼Şª¸Ä‚Ì‘}“ü";
-    Text[ chinese_traditional ] = "ÂùÀ»¹«¼Ğ¥[¤Jª«¥ó";
+    Text[ chinese_traditional ] = "ÂùÀ»·Æ¹«¡A´¡¤J¤@­Óª«¥ó¡C";
     Text[ arabic ] = "ÇäŞÑ äŞÑÇğ ãÒÏæÌÇğ áÅÖÇİÉ ßÇÆä";
     Text[ dutch ] = "Dubbelklik om object toe te voegen";
     Text[ chinese_simplified ] = "Ë«»÷Êó±ê¼ÓÈë¶ÔÏó";
@@ -890,7 +890,7 @@ String STR_PRESOBJ_ORGCHART
     Text[ russian ] = "Äîáàâèòü îğãàíèçàöèîííóş äèàãğàììó äâîéíûì ùåë÷êîì ìûøè";
     Text[ polish ] = "Dodaj wykres organizacyjny przez dwukrotne klikniêcie";
     Text[ japanese ] = "ÀŞÌŞÙ¸Ø¯¸‚µ‚Ä‘gD}‚Ì‘}“ü";
-    Text[ chinese_traditional ] = "ÂùÀ»¹«¼Ğ·s¼W²ÕÂ´¹Ïªí";
+    Text[ chinese_traditional ] = "ÂùÀ»¹«¼Ğ¡A·s¼W¤@­Ó²ÕÂ´¹Ïªí";
     Text[ arabic ] = "ÇäŞÑ äŞÑÇğ ãÒÏæÌÇğ áÅÖÇİÉ ÑÓã ÈíÇäí åíßáí";
     Text[ dutch ] = "Dubbelklik om organisatiediagram toe te voegen";
     Text[ chinese_simplified ] = "Ë«»÷Êó±êĞÂÔö×éÖ¯Í¼±í";
@@ -919,7 +919,7 @@ String STR_PRESOBJ_TABLE
     Text[ russian ] = "Äîáàâèòü òàáëèöó äâîéíûì ùåë÷êîì";
     Text[ polish ] = "Dodaj arkusz kalkulacyjny przez dwukrotne klikniêcie";
     Text[ japanese ] = "ÀŞÌŞÙ¸Ø¯¸‚µ‚Ä•\\‚Ì‘}“ü";
-    Text[ chinese_traditional ] = "ÂùÀ»·Æ¹««öÁä·s¼W¤@­Ó¤u§@ªí";
+    Text[ chinese_traditional ] = "ÂùÀ»·Æ¹««öÁä¡A·s¼W¤@­Ó¤u§@ªí¡C";
     Text[ arabic ] = "ÇäŞÑ äŞÑÇğ ãÒÏæÌÇğ áÅÖÇİÉ ÌÏæá";
     Text[ dutch ] = "Dubbelklik om werkblad toe te voegen";
     Text[ chinese_simplified ] = "ÇëÄúË«»÷Êó±êĞÂÔö¹¤×÷±í";
@@ -1023,7 +1023,7 @@ String STR_PRESVIEWSHELL
     Text [ ENGLISH ] = "Presentation mode" ;
     Text [ english_us ] = "Presentation mode" ;
     Text[ portuguese ] = "Modo de apresentação";
-    Text[ russian ] = "Presentation mode";
+    Text[ russian ] = "Ğåæèì ïğåçåíòàöèè";
     Text[ greek ] = "Presentation mode";
     Text[ dutch ] = "Presentatiemodus";
     Text[ french ] = "Mode Présentation";
@@ -1057,14 +1057,14 @@ String STR_TEXTOBJECTBARSHELL
     Text [ dutch ] = "Tekstmodus" ;
     Text [ spanish ] = "Modo texto" ;
     Text [ english_us ] = "Text Mode" ;
-    Text[ chinese_simplified ] = "ÎÄ±¾Ä£Ê½";
+    Text[ chinese_simplified ] = "ÎÄ×ÖÄ£Ê½";
     Text[ russian ] = "Ğåæèì òåêñòà";
     Text[ polish ] = "Tryb tekstu";
     Text[ japanese ] = "Ã·½ÄÓ°ÄŞ";
     Text[ chinese_traditional ] = "¤å¦r¼Ò¦¡";
     Text[ arabic ] = "æÖÚ ÇáäÕ";
     Text[ dutch ] = "Tekstmodus";
-    Text[ chinese_simplified ] = "ÎÄ±¾Ä£Ê½";
+    Text[ chinese_simplified ] = "ÎÄ×ÖÄ£Ê½";
     Text[ greek ] = "ÊáôÜóôáóç êåéìİíïõ";
     Text[ korean ] = "ÅØ½ºÆ® ¸ğµå";
     Text[ turkish ] = "Metin kipi";
@@ -1412,14 +1412,14 @@ String STR_POOLSHEET_MEASURE
     Text [ french ] = "Ligne de cote" ;
     Text [ portuguese_brazilian ] = "Ma?linie" ;
     Text [ portuguese ] = "Linha de dimensão" ;
-    Text[ chinese_simplified ] = "³ß´çÏß";
+    Text[ chinese_simplified ] = "¶¨Á¿Ïß";
     Text[ russian ] = "Ëèíèÿ ğàçìåğà";
     Text[ polish ] = "Linia wymiaru";
     Text[ japanese ] = "¡–@ü";
-    Text[ chinese_traditional ] = "¤Ø¤o½u";
+    Text[ chinese_traditional ] = "©w¶q½u";
     Text[ arabic ] = "ÎØ ŞíÇÓ";
     Text[ dutch ] = "Meetlat";
-    Text[ chinese_simplified ] = "³ß´çÏß";
+    Text[ chinese_simplified ] = "¶¨Á¿Ïß";
     Text[ greek ] = "ÃñáììŞ äéáóôáóéïëüãçóçò";
     Text[ korean ] = "Ä¡¼ö ¼±";
     Text[ turkish ] = "Ölçme çizgisi";
@@ -2040,7 +2040,7 @@ String STR_GRAFOBJECTBARSHELL
     Text[ portuguese_brazilian ] = "Graphics mode";
     Text[ japanese ] = "}Ó°ÄŞ";
     Text[ korean ] = "±×·¡ÇÈ ¸ğµå";
-    Text[ chinese_simplified ] = "Í¼ĞÎ·½Ê½";
+    Text[ chinese_simplified ] = "Í¼ĞÎÄ£Ê½";
     Text[ chinese_traditional ] = "¹Ï§Î¼Ò¦¡";
     Text[ arabic ] = "æÖÚ ÇáÕæÑ";
     Text[ turkish ] = "Grafik kipi";
@@ -2093,7 +2093,7 @@ String STR_PRESOBJ_IMAGE
     Text[ russian ] = "Äîáàâèòü êàğòèíêó äâîéíûì ùåë÷êîì";
     Text[ polish ] = "Dodaj obraz przez dwukrotne klikniêcie";
     Text[ japanese ] = "ÀŞÌŞÙ¸Ø¯¸‚Å²Ò°¼Ş‚Ì‘}“ü";
-    Text[ chinese_traditional ] = "ÂùÀ»¹«¼Ğ´¡¤J¼v¹³";
+    Text[ chinese_traditional ] = "ÂùÀ»·Æ¹«¡A´¡¤J¤@­Ó¼v¹³¡C";
     Text[ arabic ] = "ÇäŞÑ äŞÑÇğ ãÒÏæÌÇğ áÅÖÇİÉ ÕæÑÉ";
     Text[ dutch ] = "Dubbelklik om afbeelding toe te voegen";
     Text[ chinese_simplified ] = "Í¨¹ıË«»÷²åÈëÍ¼Ïñ";
@@ -2189,5 +2189,6 @@ String STR_SAVE_DOC
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Guardar documento";
 };
+
 
 
