@@ -2,9 +2,9 @@
  *
  *  $RCSfile: astconstant.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-15 12:30:43 $
+ *  last change: $Author: jsc $ $Date: 2001-03-27 10:53:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,9 +97,9 @@ sal_Bool AstConstant::dumpBlob(RegistryTypeWriter& rBlob, sal_uInt16 index)
 {
     RTConstValue    aConst;
     sal_Unicode*    str = NULL;
-    sal_Bool        bRelativ = sal_False;
-    if ( getScope()->getScopeNodeType() == NT_constants )
-        bRelativ = sal_True;
+//  sal_Bool        bRelativ = sal_False;
+//  if ( getScope()->getScopeNodeType() == NT_constants )
+//      bRelativ = sal_True;
 
     AstExprValue *exprVal = getConstValue()->getExprValue();
     switch (getConstValueType())
@@ -163,9 +163,9 @@ sal_Bool AstConstant::dumpBlob(RegistryTypeWriter& rBlob, sal_uInt16 index)
             }
     }
 
-    OString name(getRelativName());
-    if ( getNodeType() == NT_enum_val || bRelativ )
-        name = getLocalName();
+//  OString name(getRelativName());
+//  if ( getNodeType() == NT_enum_val || bRelativ )
+    OString name = getLocalName();
 
     OUString type;
     OUString fileName;
