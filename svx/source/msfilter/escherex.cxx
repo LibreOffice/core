@@ -2,9 +2,9 @@
  *
  *  $RCSfile: escherex.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-03 13:19:25 $
+ *  last change: $Author: hr $ $Date: 2004-10-12 10:18:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,9 @@
 #endif
 #ifndef _COM_SUN_STAR_DRAWING_LINESTYLE_HPP_
 #include <com/sun/star/drawing/LineStyle.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_LINEJOINT_Hpp_
+#include <com/sun/star/drawing/LineJoint.hpp>
 #endif
 #ifndef _COM_SUN_STAR_DRAWING_FILLSTYLE_HPP_
 #include <com/sun/star/drawing/FillStyle.hpp>
@@ -1017,9 +1020,35 @@ void EscherPropertyContainer::CreateLineProperties(
         aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "LineWidth"  ) ), sal_False ) )
         ? *((sal_uInt32*)aAny.getValue())
         : 0;
-
     if ( nLineSize > 1 )
         AddOpt( ESCHER_Prop_lineWidth, nLineSize * 360 );       // 100TH MM -> PT , 1PT = 12700 EMU
+
+    ESCHER_LineJoin eLineJoin = ESCHER_LineJoinMiter;
+    if ( EscherPropertyValueHelper::GetPropertyValue(
+        aAny, rXPropSet, String( RTL_CONSTASCII_USTRINGPARAM( "LineJoint" ) ), sal_True ) )
+    {
+        ::com::sun::star::drawing::LineJoint eLJ;
+        if ( aAny >>= eLJ )
+        {
+            switch ( eLJ )
+            {
+                case com::sun::star::drawing::LineJoint_NONE :
+                case com::sun::star::drawing::LineJoint_MIDDLE :
+                case com::sun::star::drawing::LineJoint_BEVEL :
+                    eLineJoin = ESCHER_LineJoinBevel;
+                break;
+                default:
+                case com::sun::star::drawing::LineJoint_MITER :
+                    eLineJoin = ESCHER_LineJoinMiter;
+                break;
+                case com::sun::star::drawing::LineJoint_ROUND :
+                    eLineJoin = ESCHER_LineJoinRound;
+                break;
+            }
+        }
+    }
+    AddOpt( ESCHER_Prop_lineJoinStyle, eLineJoin );
+
     if ( bEdge == sal_False )
     {
         AddOpt( ESCHER_Prop_fFillOK, 0x1001 );
@@ -1830,15 +1859,18 @@ sal_Bool EscherPropertyContainer::CreateShadowProperties(
 {
     ::com::sun::star::uno::Any aAny;
 
-    sal_Bool    bHasShadow = sal_False; // shadow is possible only if at least a fillcolor or linecolor is set
+    sal_Bool    bHasShadow = sal_False; // shadow is possible only if at least a fillcolor, linecolor or graphic is set
     sal_uInt32  nLineFlags = 0;         // default : shape has no line
     sal_uInt32  nFillFlags = 0x10;      //           shape is filled
 
     GetOpt( ESCHER_Prop_fNoLineDrawDash, nLineFlags );
     GetOpt( ESCHER_Prop_fNoFillHitTest, nFillFlags );
 
+    sal_uInt32 nDummy;
+    sal_Bool bGraphic = GetOpt( DFF_Prop_pib, nDummy ) || GetOpt( DFF_Prop_pibName, nDummy ) || GetOpt( DFF_Prop_pibFlags, nDummy );
+
     sal_uInt32 nShadowFlags = 0x20000;
-    if ( ( nLineFlags & 8 ) || ( nFillFlags & 0x10 ) )
+    if ( ( nLineFlags & 8 ) || ( nFillFlags & 0x10 ) || bGraphic )
     {
         if ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet,
                 String( RTL_CONSTASCII_USTRINGPARAM( "Shadow" ) ), sal_True ) )
