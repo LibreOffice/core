@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontcfg.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 15:16:03 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 09:27:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -956,9 +956,9 @@ void FontSubstConfigItem::getMapName( const String& rOrgName, String& rShortName
  *  FontSubstConfigItem::getValues
  */
 
-struct StrictStringSort : public ::std::binary_function< const FontSubstConfigItem::FontNameAttr&, const FontSubstConfigItem::FontNameAttr&, bool >
+struct StrictStringSort : public ::std::binary_function< const FontNameAttr&, const FontNameAttr&, bool >
 {
-    bool operator()( const FontSubstConfigItem::FontNameAttr& rLeft, const FontSubstConfigItem::FontNameAttr& rRight )
+    bool operator()( const FontNameAttr& rLeft, const FontNameAttr& rRight )
     { return rLeft.Name.CompareTo( rRight.Name ) == COMPARE_LESS ; }
 };
 
@@ -1207,7 +1207,7 @@ void FontSubstConfigItem::getValues()
     }
 }
 
-const FontSubstConfigItem::FontNameAttr* FontSubstConfigItem::getSubstInfo( const String& rFontName, const Locale& rLocale ) const
+const FontNameAttr* FontSubstConfigItem::getSubstInfo( const String& rFontName, const Locale& rLocale ) const
 {
     if( !rFontName.Len() )
         return NULL;
