@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par.hxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: cmc $ $Date: 2002-01-11 15:14:59 $
+ *  last change: $Author: cmc $ $Date: 2002-01-14 14:46:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -290,9 +290,9 @@ class WW8ListManager
 public:
     WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_);
     ~WW8ListManager();
-    SwNumRule* GetNumRuleForActivation(USHORT nLFOPosition) const;
+    SwNumRule* GetNumRuleForActivation(USHORT nLFOPosition, BYTE nLevel) const;
     BOOL IsSimpleList(USHORT nLFOPosition) const;
-    SwNumRule* CreateNextRule();
+    SwNumRule* CreateNextRule(BOOL bSimple);
 };
 
 

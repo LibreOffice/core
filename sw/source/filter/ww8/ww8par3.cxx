@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par3.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: cmc $ $Date: 2002-01-10 14:11:05 $
+ *  last change: $Author: cmc $ $Date: 2002-01-14 14:46:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -735,7 +735,7 @@ sal_Bool WW8ListManager::ReadLVL(SwNumFmt& rNumFmt, SfxItemSet*& rpItemSet,
         sal_uInt8* pSprms1  = &aGrpprlChpx[0];
         while( 0 < nLen )
         {
-            sal_uInt16 nL1 = rReader.ImportSprm( pSprms1, nLen );
+            sal_uInt16 nL1 = rReader.ImportSprm( pSprms1 );
             nLen      -= nL1;
             pSprms1   += nL1;
         }
@@ -1023,7 +1023,7 @@ sal_Bool WW8ListManager::LFOequaltoLST(WW8LFOInfo& rLFOInfo)
     return bRes;
 }
 
-SwNumRule* WW8ListManager::CreateNextRule()
+SwNumRule* WW8ListManager::CreateNextRule(BOOL bSimple)
 {
     String aPrefix;     // wird erstmal zur Bildung des Style Namens genommen
     aPrefix  = WW8_ASCII2STR( "WW8Num" );
@@ -1032,6 +1032,7 @@ SwNumRule* WW8ListManager::CreateNextRule()
         rDoc.MakeNumRule(rDoc.GetUniqueNumRuleName( &aPrefix ));
     SwNumRule* pMyNumRule = rDoc.GetNumRuleTbl()[nRul];
     pMyNumRule->SetAutoRule( sal_False );
+    pMyNumRule->SetContinusNum( bSimple );
     return pMyNumRule;
 }
 
@@ -1086,17 +1087,36 @@ WW8ListManager::WW8ListManager(SvStream& rSt_, SwWW8ImplReader& rReader_)
                 rSt >> aLST.aIdSty[ nLevel ];
             }
 
+
             rSt >> aBits1;
+
             rSt.SeekRel( 1 );
 
             if( 0 != rSt.GetError() ) break;
 
-            if( aBits1 & 0x01 ) aLST.bSimpleList = sal_True;
-            if( aBits1 & 0x02 ) aLST.bRestartHdn = sal_True;
-            //
-            // 1.1.2 neue NumRule ins Doc einsetzen und WW8LSTInfo vermerken
-            //
-            SwNumRule* pMyNumRule = CreateNextRule();
+            if( aBits1 & 0x01 )
+                aLST.bSimpleList = sal_True;
+            if( aBits1 & 0x02 )
+                aLST.bRestartHdn = sal_True;
+
+            // 1.1.2 new NumRule inserted in Doc and  WW8LSTInfo marked
+
+            /*
+            #i1869#
+            In word 2000 microsoft got rid of creating new "simple lists" with
+            only 1 level, all new lists are created with 9 levels. To hack it
+            so that the list types formerly known as simple lists still have
+            their own tab page to themselves one of the reserved bits is used
+            to show that a given list is to be in the simple list tabpage.
+            This has now nothing to do with the actual number of list level a
+            list has, only how many will be shown in the user interface.
+
+            i.e. create a simple list in 2000 and open it in 97 and 97 will
+            claim (correctly) that it is an outline list. We can set our
+            continous flag in these lists to store this information.
+            */
+            SwNumRule* pMyNumRule = CreateNextRule(
+                aLST.bSimpleList || (aBits1 & 0x10));
 
             WW8LSTInfo* pLSTInfo = new WW8LSTInfo(pMyNumRule, aLST, nList);
             pLSTInfos->Insert( pLSTInfo );
@@ -1419,17 +1439,36 @@ WW8ListManager::~WW8ListManager()
 
 
 
-SwNumRule* WW8ListManager::GetNumRuleForActivation(sal_uInt16 nLFOPosition) const
+SwNumRule* WW8ListManager::GetNumRuleForActivation(sal_uInt16 nLFOPosition,
+    sal_uInt8 nLevel) const
 {
-    if( nLFOInfos <= nLFOPosition ) return 0;
+    if( nLFOInfos <= nLFOPosition )
+        return 0;
 
     WW8LFOInfo* pLFOInfo = pLFOInfos->GetObject( nLFOPosition );
 
-    if( !pLFOInfo )                 return 0;
+    if( !pLFOInfo )
+        return 0;
 
     pLFOInfo->bUsedInDoc = sal_True;
 
-    if( !pLFOInfo->pNumRule )       return 0;
+    if( !pLFOInfo->pNumRule )
+        return 0;
+
+    /*
+    #i1869#
+    If this list has had its bits set in word 2000 to pretend that it is a
+    simple list from the point of view of the user, then it is almost
+    certainly a simple continous list, and we will try to keep it like that.
+    Otherwise when we save again it will be shown as the true outline list
+    that it is, confusing the user that just wanted what they thought was a
+    simple list. On the otherhand it is possible that some of the other levels
+    were used by the user, in which case we will not pretend anymore that it
+    is a simple list. Something that word 2000 does anyway, that 97 didn't, to
+    my bewilderment.
+    */
+    if (nLevel && pLFOInfo->pNumRule->IsContinusNum())
+        pLFOInfo->pNumRule->SetContinusNum(FALSE);
 
     if( (!pLFOInfo->bOverride) && (!pLFOInfo->bLSTbUIDSet) )
     {
@@ -1531,7 +1570,8 @@ SwNumRule* SwWW8ImplReader::SyncStyleIndentWithList( SwWW8StyInf &rStyle,
         if (bRequired)
         {
             //new list required with these settings.
-            SwNumRule *pNewRule = pLstManager->CreateNextRule();
+            SwNumRule *pNewRule = pLstManager->CreateNextRule(
+                pRule->IsContinusNum());
 
             for (int i=0;i<MAXLEVEL;i++)
             {
@@ -1590,7 +1630,7 @@ void SwWW8ImplReader::RegisterNumFmtOnStyle(sal_uInt16 nStyle,
             }
             if( (USHRT_MAX > nLFO) && (nWW8MaxListLevel > nLevel))
             {
-                SwNumRule* pNmRule = pLstManager->GetNumRuleForActivation(nLFO);
+                SwNumRule* pNmRule = pLstManager->GetNumRuleForActivation(nLFO,nLevel);
                 if( pNmRule )
                 {
                     pNmRule = SyncStyleIndentWithList(rStyleInf,pNmRule,nLevel);
@@ -1641,7 +1681,7 @@ void SwWW8ImplReader::RegisterNumFmtOnTxtNode(sal_uInt16 nActLFO,
     if( pLstManager ) // sind die Listendeklarationen gelesen?
     {
         const SwNumRule* pRule
-            = bSetAttr ? pLstManager->GetNumRuleForActivation( nActLFO ) : 0;
+            = bSetAttr ? pLstManager->GetNumRuleForActivation( nActLFO, nActLevel) : 0;
 
         if( pRule || !bSetAttr )
         {
