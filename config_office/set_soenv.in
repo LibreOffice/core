@@ -1,0 +1,2156 @@
+#!@PERL@ -w
+#
+# Program:     set_soenv.1
+# Version:     0.1
+# Date:        07-06-2000
+# Author:      Willem van Dorp, Ross Nicholson, Oisin Boydell - Sun Microsystems, Ireland.
+#
+#---------------------------------------------------------------------------
+
+#---------------------------------------------------------------------------
+# Description:
+# set_soenv generates a file that contains all necessary 
+# environment variables for the build proces of OpenOffice
+# on Linux, NetBSD, Solaris, Windows NT and Macosx.
+# This script prompts the installer to enter:
+#   1. (if necessary) The directory where the jdk is located (JAVA_HOME).
+#   2. (if necessary) The directory where the Microsoft C/C++ compiler is located (COMPATH).
+#
+# Program steps.
+#
+# I.    Checking the command-line arguments.
+# IIa.  Declaring variables for the system commands, etc.
+# IIb.  Declaring the environment variables.
+# III.  Initialising the variables for the system commands, etc.
+# IV.   Print out some important messages etc.
+# V.    Initialising the environment variables.
+# VI.   Open the output file.
+# VII.  Writing the data to the output file.
+# VIII. Closing output file.
+# IX.   Sourcing the output file.
+# X.    Set up the build environment.
+# XI.   Moving the output file to the build home directory.
+#
+#---------------------------------------------------------------------------
+#
+use strict;                        # pragma
+use File::Basename;
+
+
+#
+#--------------------------------------------------------
+# IIa. Declaring variables for the system commands, etc.
+#--------------------------------------------------------
+#
+my ( $outfile, $bootfile, $newline, $comment, $compiler, $unsetenv, $setenv, $unset, $set, $ds, $ps, $cur_dir, 
+     $par_dir, $I, $L, $D, $buildenv, $answer, $tmp, $Solaris, $Linux, $FreeBSD, $NetBSD, $Tru64, $Irix, $Irix64, $Winnt, $Macosx, $MINGWIN32, $USE_SHELL,
+     $WScomp, $GNUcomp, $platform, $cygwinver, $machine_type, $empty, $no_jdk, $no_ant, $no_stl, $no_tcsh, $no_cl, $no_gcc, $no_gcc_home, $no_gcc_include, 
+     $no_gxx_include, $warnfile, $Warning, $result, $unsetvars, $win_format_var, $perl_os);
+#
+#-------------------------------------------------
+# IIb. Declaring environment values (constants).
+#-------------------------------------------------
+#
+# Platform independent constant values.
+my @LANGUAGES = ("ARAB", "CHINSIM", "CHINTRAD", "DAN", "DTCH", "ENUS", "FREN", "GREEK", "ITAL",
+"JAPN", "KOREAN", "POL", "PORT", "RUSS", "SPAN", "SWED", "TURK" ); 
+my ( $CALL_CDECL, $COMMON_OUTDIR, $NO_SRS_PATCH, $PROFULLSWITCH, $BIG_GOODIES, $BMP_WRITES_FLAG, 
+     $common_build, $MK_UNROLL, $NO_REC_RES, $PROEXT, $SO3, $SOLAR_JAVA, 
+     $SOLAR_PLUGIN, $TF_PACKAGES, $TF_SDBAPI, $TF_FILEURL, $UPDATER, $BUILD_DELIVER, $USE_NEWCHARSET, $USE_NEW_RSC, $VCL, 
+     $TF_CFGDATA, $TF_SVDATA, $CC, $CXX,
+     $USE_NAMESPACE, $BUILD_SOSL, $LOCAL_SOLENV, $ENABLEUNICODE, $NEW_JAR_PACK, $NO_BSYMBOLIC, 
+     $USE_XPRINT, $BUILD_SOSL_RELEASE, $RSC_ONCE );
+#
+# Platform dependent constant values.
+my ( $BIG_SVX, $COM, $CPU, $CPUNAME, $CVER, $DLLSUFFIX, $GLIBC, $GUI, $GUIBASE, $GUIENV,
+      $GVER, $GVERDIR, $OS, $OSVERSION, $OUTPATH, $INPATH, $PATH_SEPERATOR, $PROSWITCH, $XPVERSION, $BOTH,
+      $DEMO_ENV, $DYNAMIC_CRT, $SET_EXCEPTIONS, $emergency, $use_shl_versions, $CDPATHx, $JRELIBDIR,
+      $JRETOOLKITDIR, $JRETHREADDIR, $PTHREAD_CFLAGS, $PTHREAD_LIBS, $EXCEPTIONS);
+#
+#-------------------------------------------
+# IIc. Declaring the environment variables.
+#-------------------------------------------
+#
+# Help variables.
+my ( $USR, $ETC, $BIN, $LIB, $INC, $INCLUDE, $DEV, $OPT, $LOCAL, $SOLENV, $SOLVER, $CONFIG, 
+     $USR_BIN, $USR_LIB, $USR_LOCAL, $USR_CCS, $JAVA_BIN, $JAVA_LIB, $JAVA_INCLUDE,
+     $SOLARENVINC, $USR_DT, $USR_OPENWIN, $TCSH_PATH, $XLIB, $XINC, @GCC_INCLUDES,
+     @GXX_INCLUDES, $CYGWIN, $language, $ASM_PATH, $UNZIP_PATH, $ps_STLPORT_LIB, $L_STLPORT_LIB,
+     $STLPORT_stlport, $STLPORT_inc_stlport, $PERL_PATH );
+
+# Environment variables.
+my ( $oldPATH, $SRC_ROOT, $SO_HOME, $JAVA_HOME, $ANT_HOME, $SHELL, $GCC_HOME, $GCC_INCLUDE, $GXX_INCLUDE, 
+     $UPD, $SOLARUPD, $WORK_STAMP, $TF_ONE51, $TF_UCB, 
+     $URD_ONLY, $SOLARROOT, $SOLARSRC, $RSCRES, $DEVROOT, $SOLARVER, $SOLARVERSION, $SOLARENV, 
+     $STAR_INIROOT, $STAR_INIROOTOLD, $STAR_STANDLST, $STAR_SSCOMMON, $STAR_SSOLARINI, 
+     $STAR_REGISTRY, $STAR_RESOURCEPATH, $DMAKEROOT, $CLASSPATH, $XCLASSPATH, $COMPATH, $COMPATH_ROOT, 
+     $LD_LIBRARY_PATH, $PATH, $SOLARDEF, $SOLAREXTRAINC, $SOLAREXTRALIB, $SOLARINCLUDES, $SOLARLIB, 
+     $SOLARINC, $LOCALINI, $MAC_LIB, $PATHEXTRA, $FRAMEWORKSHOME, $COMEX, $MULTITHREAD_OBJ, $PERL, 
+     $COMP_ENV, $IENV, $ILIB, $WIN_INCLUDE, $JAVAHOME, $WIN_LIB, $WIN_HOME, 
+     $BISON_HAIRY, $BISON_SIMPLE, $TEMP, $COMMON_BUILD_TOOLS, $WIN_GREP, $WIN_FIND, $WIN_LS,
+     $WIN_GNUCOPY, $WIN_TOUCH, $STLPORT4, $USE_GCC3, $ENABLE_DEBUG );
+#
+#-------------------------------------------
+# IId. Declaring the aliases.
+#-------------------------------------------
+#
+my ( $dmake, $build, $nmake, $mkout, $deliver, $zipdep );
+#
+
+#-------------------------------------------------------------
+# IIIa. Initialising constants.
+#-------------------------------------------------------------
+#
+$UPD            = '@UPD@';          # the project's UPD
+$newline        = "\n";             # Perl newline character
+$unsetenv       = "unsetenv";       # c-shell command
+$setenv         = "setenv";         # c-shell command
+$unset          = "unset";          # msdos batch file command
+$set            = "set";            # msdos batch file command
+$ds             = "/";              # directory separator
+$ps             = ":";              # path separator
+$cur_dir        = ".";              # current directory
+$par_dir        = "..";             # parrent directory
+$I              = " -I";            # include search path
+$L              = " -L";            # library search path
+$D              = " -D";            # define search path
+$Solaris        = "SunOS";          # return of uname command on Solaris
+$Linux          = "Linux";          # return of uname command on Linux
+$NetBSD		= "NetBSD";	    # return of uname command on NetBSD
+$FreeBSD        = "FreeBSD";        # return of uname command on FreeBSD
+$Tru64          = "OSF1";           # return of uname command of Tru64
+$Irix           = "IRIX";           # return of uname command of Irix on a 32 bit platform
+$Irix64         = "IRIX64";         # return of uname command of Irix on a 64 bit platform
+$Winnt          = "WINNT";          # return of uname command on Windows NT
+$Macosx         = "Darwin";         # return of uname command on Macosx
+$empty          = "";               # used as argument
+$no_jdk         = "NO_JAVA_HOME";   # possible argument
+$no_ant         = "NO_ANT_HOME";    # possible argument
+$no_stl		= "NO_STLPORT4";    # possible argument
+$no_tcsh        = "NO_TCSH";        # possible argument
+$no_cl          = "NO_CL";
+$no_gcc         = "NO_GCC";
+$no_gcc_home    = "NO_GCC_HOME";
+$no_gcc_include = "NO_GCC_INCLUDE";
+$no_gxx_include = "NO_GXX_INCLUDE";
+$warnfile       = "warn";           # logfile configure warnings.
+$Warning        = "";               # container for warning messages
+$STLPORT4	= '@STLPORT4@';     # Location of STLport4
+$MINGWIN32	= '@WITH_MINGWIN@'; # use MINGWIN32
+$USE_SHELL	= '@USE_SHELL@';    # preferred shell
+$USE_GCC3	= '@USE_GCC3@';     # use gcc3 (only for unxlngi4 and unxfbsd5i at the moment)
+$CC			= '@CC@';           # C compiler
+$CXX		= '@CXX@';          # C++ compiler
+$EXCEPTIONS	= '@EXCEPTIONS@';   # Exception handling type
+$ENABLE_DEBUG	= '@ENABLE_DEBUG@';  # Enable a debug build
+
+#
+#---------------------------------------------------------------
+# IIIb. Initialising the variables for the system commands, etc.
+#---------------------------------------------------------------
+#
+# obsolete
+$WScomp   = $ds."opt".$ds."SUNWspro";         # path to the Sun workshop compiler
+# obsolete
+$GNUcomp  = $ds."usr".$ds."local".$ds."bin";  # path to the Sun workshop compiler
+#
+#--------------------------------------------------------------------
+# IV. Initialise the warning container and print a note to the user.
+#--------------------------------------------------------------------
+#
+# Add the configure (pre-requisite) warnings to the warning container
+# , $Warning.
+AddWarning( "configure", "" );
+#
+print ("Setting up the environment for building OpenOffice. $newline");
+#
+#--------------------------------------------------
+# V. Setting the environment variables/values.
+#--------------------------------------------------
+#
+# A. Checking the platform first.
+#
+$platform = `uname`;       # probing the platform
+if ( $platform =~ m/CYGWIN/g )
+{   $platform = $Winnt;
+    $cygwinver = `uname -r`;
+    if ( $cygwinver =~ m/^1/g )
+    {   $cygwinver = "1";
+    }
+    else
+    {
+ 	  $cygwinver = "b";
+    }
+}
+
+chomp( $platform );
+
+$machine_type = `uname -m`;
+chomp( $machine_type );
+# get perls idea for OS
+# needed to differentiate cygwin/native perl on windows
+$perl_os = $^O;
+
+#
+# B. Gathering information from the system.
+#
+# 1. Path
+$oldPATH = $ENV{"PATH"};
+chomp( $oldPATH );                  # cut off new line
+#
+# C. Setting the constant values.
+#
+# Setting platform independent constant values.
+print "Setting platform independent values... ";
+# NB: Language options now set at 'ToFile' stage. 
+$NO_SRS_PATCH         = "true";
+$PROFULLSWITCH        = "product=full";
+$BIG_GOODIES          = "TRUE";
+$BMP_WRITES_FLAG      = "TRUE";
+$BUILD_SOSL_RELEASE   = "TRUE";
+$RSC_ONCE             = "TRUE";
+$CALL_CDECL           = "TRUE";
+$COMMON_OUTDIR        = "";
+$common_build         = "";
+$MK_UNROLL            = "TRUE";
+$MULTITHREAD_OBJ      = "";
+$NO_REC_RES           = "TRUE";
+$PROEXT               = ".pro";
+$SO3                  = "TRUE";
+$SOLAR_JAVA           = "TRUE";
+$SOLAR_PLUGIN         = "TRUE";
+$TF_PACKAGES          = "TRUE";
+$TF_FILEURL           = "TRUE";
+$TF_CFGDATA           = "TRUE";
+$TF_SVDATA            = "TRUE";
+$TF_SDBAPI            = "ist_da";
+$TF_UCB               = "ist_da";
+$UPDATER              = "YES";
+$BUILD_DELIVER        = "true";
+$USE_NEWCHARSET       = "TRUE";
+$USE_NEW_RSC          = "TRUE";
+$VCL                  = "TRUE";
+$USE_NAMESPACE        = "TRUE"; 
+$BUILD_SOSL           = "true";
+$LOCAL_SOLENV         = "true";
+$ENABLEUNICODE        = "TRUE";
+$NEW_JAR_PACK         = "TRUE";
+$NO_BSYMBOLIC         = "TRUE";
+if ( '@USE_XPRINT@' eq "TRUE" )
+{     $USE_XPRINT     = "TRUE";
+}
+else
+{     $USE_XPRINT     = "FALSE";
+}
+print "done\n";
+# Setting platform dependent constant values.
+if ( $platform eq "$Solaris" ) 
+{     print "Setting Solaris specific values... ";
+if ($machine_type eq "i86pc")
+{     $outfile        = "SolarisIntelEnv.Set";
+      $CPU            = "I";
+      $CPUNAME        = "INTEL";
+      $DLLSUFFIX      = "si";
+      $OUTPATH        = "unxsoli3";
+	  $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386";
+	  $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386".$ds."motif21";
+	  $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386".$ds."native_threads";
+
+}
+else
+{     $outfile        = "SolarisSparcEnv.Set"; 
+      $CPU            = "S";
+      $CPUNAME        = "SPARC";
+      $DLLSUFFIX      = "ss";
+      $OUTPATH        = "unxsols3";
+	  $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."sparc";
+	  $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."sparc".$ds."motif21";
+	  $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."sparc".$ds."native_threads";
+}
+      $BIG_SVX        = "TRUE";
+      $COM            = "C52";
+      $COMPATH        = '@COMPATH@'; 
+      $CVER           = "C52";
+      $GUI            = "UNX";
+      $GUIBASE        = "unx";
+      $GUIENV         = "sal";
+      $GVER           = "VCL";
+      $INPATH         = $OUTPATH.$PROEXT;
+      $GVERDIR        = $INPATH;
+      $OS             = "SOLARIS";
+      $PATH_SEPERATOR = $ps;
+      $PROSWITCH      = "-DPRODUCT";
+}
+elsif ( $platform eq "$NetBSD" ) 
+{  print "Setting NetBSD Sparc specific values... ";
+   $outfile        = "NetBSDSparcEnv.Set"; 
+   $BIG_SVX        = "TRUE";
+   $COM            = "GCC";
+   $COMPATH        = '@COMPATH@'; 
+   $CPU            = "S";
+   $CPUNAME        = "SPARC";
+   $CVER           = "C295";
+   $DLLSUFFIX      = "bs";
+   $GUI            = "UNX";
+   $GUIBASE        = "unx";
+   $GUIENV         = "sal";
+   $GVER           = "VCL";
+   $OUTPATH        = "unxbsds";
+   $INPATH         = $OUTPATH.$PROEXT;
+   $GVERDIR        = $INPATH;
+   $OS             = "NETBSD";
+   $PATH_SEPERATOR = $ps;
+   $PROSWITCH      = "-DPRODUCT";
+   $XPVERSION      = "3";
+   $SOLAR_JAVA	   = "TRUE"; 
+   $XPVERSION      = "3";
+   $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."sparc";
+   $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."sparc".$ds."client";
+   $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."sparc".$ds."native_threads";
+} 
+elsif ( $platform eq "$FreeBSD" ) 
+{     print "Setting FreeBSD specific values... ";
+      $outfile        = "FreeBSDEnv.Set"; 
+      $BIG_SVX        = "TRUE";
+      $COM            = "GCC";
+      $COMPATH        = '@COMPATH@'; 
+      $CPU            = "I";
+      $CPUNAME        = "INTEL";
+if ($USE_GCC3 eq  "TRUE")
+   {
+      $CVER           = "C300";
+   }
+else
+   {
+      $CVER           = "C295";
+}
+      $DLLSUFFIX      = "fi";
+      $GUI            = "UNX";
+      $GUIBASE        = "unx";
+      $GUIENV         = "sal";
+      $GVER           = "VCL";
+      $OUTPATH        = "unxfbsd";
+      $INPATH         = $OUTPATH.$PROEXT;
+      $GVERDIR        = $INPATH;
+      $OS             = "FREEBSD";
+      $PATH_SEPERATOR = $ps;
+      $PROSWITCH      = "-DPRODUCT";
+      $XPVERSION      = "3";
+      $OSVERSION      = '@OSVERSION@';
+      $PTHREAD_CFLAGS = '@PTHREAD_CFLAGS@';
+      $PTHREAD_LIBS   = '@PTHREAD_LIBS@';
+      $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386";
+      $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386".$ds."client";
+      $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386".$ds."green_threads";
+} 
+elsif ( $platform eq "$Linux" ) 
+{
+#Set machine_type specific values: 
+   if (($machine_type eq "i686") or ($machine_type eq "i586"))
+   {  print "Setting Linux Intel specific values... ";
+      $outfile        = "LinuxIntelEnv.Set"; 
+      $CPU            = "I";
+      $CPUNAME        = "INTEL";
+      $DLLSUFFIX      = "li";
+      $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386";
+      $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386".$ds."client";
+      $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."i386".$ds."native_threads";
+   }
+   elsif ($machine_type eq "sparc")
+   {  print "Setting Linux Sparc specific values... ";
+      $outfile        = "LinuxSparcEnv.Set"; 
+      $CPU            = "S";
+      $CPUNAME        = "SPARC";
+      $DLLSUFFIX      = "ls";
+      $OUTPATH        = "unxlngs";
+      $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."sparc";
+      $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."sparc".$ds."client";
+      $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."sparc".$ds."native_threads";
+   }
+   elsif ($machine_type eq "ppc") 
+   {  print "Setting Linux PPC specific values... ";
+      $outfile        = "LinuxPPCEnv.Set"; 
+      $CPU            = "P";
+      $CPUNAME        = "POWERPC";
+      $DLLSUFFIX      = "lp";
+      $OUTPATH        = "unxlngppc";
+      $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ppc";
+      $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ppc".$ds."classic";
+      $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ppc".$ds."native_threads";
+   }
+   elsif ($machine_type eq "alpha") 
+   {  print "Setting Linux Alpha specific values... ";
+      $outfile        = "LinuxAlphaEnv.Set"; 
+      $CPU            = "A";
+      $CPUNAME        = "ALPHA";
+      $DLLSUFFIX      = "la";
+      $OUTPATH        = "unxlnga";
+      $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."alpha";
+      $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."alpha".$ds."client";
+      $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."alpha".$ds."native_threads";
+   }
+   elsif ($machine_type eq "armv4l") 
+   {  print "Setting Linux ARM specific values... ";
+      $outfile        = "LinuxARMEnv.Set"; 
+      $CPU            = "R";
+      $CPUNAME        = "ARM";
+      $DLLSUFFIX      = "lr";
+      $OUTPATH        = "unxlngr";
+      $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."arm";
+      $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."arm".$ds."client";
+      $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."arm".$ds."native_threads";
+   }
+#Conditional setting depending on gcc3 (on x86):
+if ($USE_GCC3 eq  "TRUE")
+   {
+      $CVER           = "C300";
+   if (($machine_type eq "i686") or ($machine_type eq "i586"))
+      {
+        $OUTPATH      = "unxlngi4"
+      }
+   }
+else
+   {
+      $CVER           = "C295";
+   if (($machine_type eq "i686") or ($machine_type eq "i586"))
+      {
+	$OUTPATH      = "unxlngi3"
+      }
+   }
+# General Linux settings:
+
+      $BIG_SVX        = "TRUE";
+      $COM            = "GCC";
+      $COMPATH        = '@COMPATH@'; 
+      $GLIBC          = "2REDHAT60";
+      $GUI            = "UNX";
+      $GUIBASE        = "unx";
+      $GUIENV         = "sal";
+      $GVER           = "VCL";
+      $INPATH         = $OUTPATH.$PROEXT;
+      $GVERDIR        = $INPATH;
+      $OS             = "LINUX";
+      $PATH_SEPERATOR = $ps;
+      $PROSWITCH      = "-DPRODUCT";
+      $XPVERSION      = "3"; 
+}
+elsif ( $platform eq "$Tru64" ) 
+{     print "Setting Tru64 specific values... ";
+      $outfile        = "Tru64AlphaEnv.Set"; 
+      $BIG_SVX        = "TRUE";
+      $COM            = "CXX";
+      $COMPATH        = '@COMPATH@'; 
+      $CPU            = "A";
+      $CPUNAME        = "ALPHA";
+      $CVER           = "C62";
+      $DLLSUFFIX      = "t64";
+      $GUI            = "UNX";
+      $GUIBASE        = "unx";
+      $GUIENV         = "sal";
+      $GVER           = "VCL";
+      $OUTPATH        = "unxt64";
+      $INPATH         = $OUTPATH.$PROEXT;
+      $GVERDIR        = $INPATH;
+      $OS             = "TRU64";
+      $PATH_SEPERATOR = $ps;
+      $PROSWITCH      = "-DPRODUCT";
+      $XPVERSION      = "3";
+      $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."alpha";
+      $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."alpha".$ds."client";
+      $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."alpha".$ds."native_threads";
+} 
+elsif ( $platform eq "$Irix" || $platform eq "$Irix64" )
+{     print "Setting Irix specific values... ";
+      $outfile        = "IrixMipsEnv.Set";
+      $BIG_SVX        = "TRUE";
+      if ($USE_GCC3 eq  "TRUE") {
+	  	$COM          = "GCC";
+        $CVER           = "C295";
+        $OUTPATH        = "unxirgm";
+      }
+      else {
+	  	$COM            = "C730";
+        $CVER           = "C730";
+        $OUTPATH        = "unxirxm3";
+      }
+      $COMPATH        = '@COMPATH@';
+      $CPU            = "M";
+      $CPUNAME        = "MIPS";
+      $DLLSUFFIX      = "im";
+      $GUI            = "UNX";
+      $GUIBASE        = "unx";
+      $GUIENV         = "sal";
+      $GVER           = "VCL";
+      $INPATH         = $OUTPATH.$PROEXT;
+      $GVERDIR        = $INPATH;
+      $OS             = "IRIX";
+      $PATH_SEPERATOR = $ps;
+      $PROSWITCH      = "-DPRODUCT";
+      $XPVERSION      = "3";
+      $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."mips";
+      $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."mips".$ds."client";
+      $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."mips".$ds."native_threads";
+}
+elsif ( $platform eq "$Winnt" ) 
+{ 
+      $COMPATH        = PosixFormat('@COMPATH@');
+      $CPUNAME        = "INTEL";
+      $CPU            = "I";
+      $GUI            = "WNT";
+      $GUIBASE        = "WIN";
+      $GUIENV         = "WNT";
+      $GVER           = "NT351";
+      $OS             = "WNT";
+      $BOTH           = "TRUE";
+      $DEMO_ENV       = "FALSE";
+      $DYNAMIC_CRT    = "TRUE";
+      $SET_EXCEPTIONS = "TRUE";
+      $emergency      = "FALSE";
+      $use_shl_versions = "TRUE";
+      $MULTITHREAD_OBJ = "TRUE";
+  if ( $MINGWIN32 eq "yes" )
+  {   print "Setting Windows NT cygwin mingwin32 specific values... ";
+      $outfile        = "winenv"; 
+      $COM            = "GCC";
+      # Change path to lower case.
+      $COMPATH        = lc $COMPATH;
+      $DLLSUFFIX      = "gi";
+      $OUTPATH        = "wntgcci";
+      $INPATH         = $OUTPATH.$PROEXT;
+      $GVERDIR        = $INPATH;
+      $PATH_SEPERATOR = ':';
+  }
+  elsif ( $USE_SHELL ne "4nt" )
+  {   print "Setting Windows NT cygwin without 4NT specific values... ";
+      $outfile        = "winenv.set"; 
+      $COM            = "MSC";
+      # Change path to lower case.
+      # not realy usefull for *sh
+#      $COMPATH        = lc $COMPATH;
+      $CVER           = "MI200";
+      $DLLSUFFIX      = "mi";
+      $OUTPATH        = "wntmsci7";
+      $INPATH         = $OUTPATH.$PROEXT;
+      $GVERDIR        = $INPATH;
+      $PATH_SEPERATOR = ':';
+      $COMEX          = 7;
+  }
+  else
+  {   print "Setting Windows NT specific values... ";
+      $outfile        = "winenv.bat"; 
+      $COM            = "MSC";
+      # Change path to lower case.
+      $COMPATH        = lc $COMPATH;
+      $CVER           = "MI200";
+      $DLLSUFFIX      = "mi";
+      $OUTPATH        = "wntmsci7";
+      $INPATH         = $OUTPATH.$PROEXT;
+      $GVERDIR        = $INPATH;
+      $PATH_SEPERATOR = ';';
+      $COMEX          = 7;
+  }
+}
+elsif ( $platform eq "$Macosx" ) 
+{     print "Setting Macosx specific values... ";
+      $outfile        = "MacosxEnv.Set"; 
+      $BIG_SVX        = "TRUE";
+      $COM            = "GCC";
+      $COMPATH        = '@COMPATH@'; 
+      $CPU            = "P";
+      $CPUNAME        = "POWERPC";
+      $CVER           = "C295";
+      $DLLSUFFIX      = "mxp";
+      $GUI            = "UNX";
+      $GUIENV         = "sal";
+      $GVER           = "VCL";
+      $OUTPATH        = "unxmacxp";
+      $INPATH         = $OUTPATH.$PROEXT;
+      $GVERDIR        = $INPATH;
+      $OS             = "MACOSX";
+      $PATH_SEPERATOR = $ps;
+      $PROSWITCH      = "-DPRODUCT";
+      $JRELIBDIR      = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ppc";
+      $JRETOOLKITDIR  = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ppc".$ds."classic";
+      $JRETHREADDIR   = '$JAVA_HOME'.$ds."jre".$ds."lib".$ds."ppc".$ds."native_threads";
+      # GUIBASE is set below; may be "aqua" or "unx".
+}
+if ($platform eq $Winnt)
+{  
+   if ( $USE_SHELL eq "4nt" ) {     # USE_SHELL equal 4nt means: use 4NT
+	$comment        = "rem";         # Windows script comment character
+   }
+   else {
+        $comment	= "#";
+   }
+}
+else
+{  $comment        = "#";           # UNIX script comment character
+}
+print "done\n";
+
+#
+# D. Gathering directory information from the user.
+#
+# If the directory does not exist ask the user to create it.
+# 1. OpenOffice build home directory.
+$SRC_ROOT  = `pwd`; 
+$SRC_ROOT =~ s/\/config_office//;
+chomp($SRC_ROOT);
+CheckPathExist( $SRC_ROOT );
+
+#-----------------------------------------------------------------------------------------------------
+# Copy top level makefile from config_office/ to $SRC_ROOT
+#-----------------------------------------------------------------------------------------------------
+if (! -e "makefile.rc")
+{  AddWarning( "set_soenv", "makefile.rc not found in config_office/. Could not copy to SRC_ROOT." );
+}
+else
+{  `cp -f makefile.rc $SRC_ROOT/makefile.mk`;
+}
+
+# 2. Java home directory.
+# Check whether autoconf found the JAVA_HOME directory.
+if ( '@JAVA_HOME@' eq $no_jdk ) 
+{  AddWarning( "set_soenv", "Autoconf did not find correct JDK, prompted for value" );
+   $JAVA_HOME = GetValue( "Please enter the Java home directory: " );
+   CheckPathExist( $JAVA_HOME );
+}
+else 
+{  # JAVA_HOME as argument from autoconf.
+   $JAVA_HOME = PosixFormat('@JAVA_HOME@') ;
+}
+# Restore white spaces in Windows pathnames.
+if ( $platform eq "$Winnt" ) {
+   $JAVA_HOME =~ s/[\s\/]+$//;	# remove trailing \n or \/ if there is any.
+}
+# 3. Tcsh path.
+# Check whether autoconf found the Tcsh path.
+if ( '@TCSH@' eq $no_tcsh and $USE_SHELL eq "tcsh" ) 
+{  AddWarning( "set_soenv", "Autoconf did not find tcsh, prompted for value" );
+   $SHELL = GetValue( "Please enter the path where tcsh is located: " );
+   CheckPathExist( $SHELL );
+   $TCSH_PATH = $SHELL;
+   $SHELL = $SHELL."\/tcsh";
+}
+elsif ($USE_SHELL eq "tcsh") 
+{  # SHELL as argument from autoconf.
+   $SHELL = '@TCSH@'."\/tcsh";
+   $TCSH_PATH = '@TCSH@';
+}
+# Microsoft C/C++ compiler path for Windows NT users.
+if ($platform eq "$Winnt" and $MINGWIN32 ne "yes")
+{  if ( '@COMPATH@' eq $no_cl) 
+   {  AddWarning( "set_soenv", "Autoconf did not find Microsoft C/C++ compiler, prompted for value" );
+      $COMPATH = GetValue( "Please enter the MS-DOS format path for the Microsoft C/C++ compiler home directory: " );
+      until ((grep / /, $COMPATH) eq 0)
+      {   printf "No spaces and names < 8 characters in MS-DOS format paths.\n"; 
+          $COMPATH = GetValue( "Please enter the MS-DOS format path for the Microsoft C/C++ compiler home directory: " );
+      }
+      CheckPathExist( $COMPATH );
+   }
+}
+if ( '@STLPORT4@' eq $no_stl )
+{  AddWarning( "set_soenv", "No path to STLport was given with the --with-stlport4-home option. The one provided with OOo will be build." );
+   $STLPORT4 = "$no_stl";
+}
+
+# ml.exe assembler path for Windows users.
+if ($platform eq "$Winnt")
+{  if ( '@ASM_HOME@' eq "NO_ASM_HOME" )
+   {  AddWarning( "set_soenv", "Autoconf did not find ml.exe assembler path, prompted for value" );
+      $ASM_PATH = GetValue( "Please enter the path where the ml.exe assembler is located: " );
+      CheckPathExist( $ASM_PATH );
+   }
+   else
+   {  $ASM_PATH = PosixFormat('@ASM_HOME@');
+   }
+}
+# unzip.exe path for Windows users.
+if ($platform eq "$Winnt")
+{  if ( '@UNZIP_HOME@' eq "NO_UNZIP_HOME" )
+   {  AddWarning( "set_soenv", "Autoconf did not find unzip.exe path, prompted for value" );
+      $UNZIP_PATH = GetValue( "Please enter the path where unzip.exe is located: " );
+      CheckPathExist( $UNZIP_PATH );
+   }
+   else
+   {  $UNZIP_PATH = PosixFormat('@UNZIP_HOME@');
+   }
+
+}
+# 4. Gcc path.
+# Check whether autoconf found the compiler path.
+if (($platform eq $Linux) or ($platform eq $NetBSD) or ($platform eq $FreeBSD) or 
+    ( ($platform eq $Irix ) or ($platform eq $Irix64) and ($compiler eq "gcc")) ) 
+{  if ( '@COMPATH@' eq $no_gcc) 
+   {  AddWarning( "set_soenv", "Autoconf did not find correct gcc compiler, prompted for value" );
+      printf "Did you build gcc 2.95.2 from source using the --prefix and --enable-shared flags (y/n)?: ";
+      my $answer = <STDIN>; 
+      chomp( $answer );
+      if ( $answer eq "y" || $answer eq "Y" ) 
+      {  $GCC_HOME = GetValue( "Please enter the gcc 2.95.2 --prefix value: " );
+         $result = CheckPathExist( $GCC_HOME );
+         if ($result eq "false") 
+         {  AddWarning( "set_soenv", "The path $GCC_HOME does not exist on your system." );
+         }
+         else 
+         {  $COMPATH = $GCC_HOME."/bin";
+            @GCC_INCLUDES = `find $GCC_HOME -name "2.95.2" -print 2> /dev/null`;
+            if ($#GCC_INCLUDES == -1) 
+            {  AddWarning( "set_soenv", "No gcc 2.95.2/include directory found, please rerun configure with correct parameters" );
+            }
+            else 
+            {  if ($#GCC_INCLUDES == 0) 
+               {  $GCC_INCLUDE = $GCC_INCLUDES[0];
+                  chomp( $GCC_INCLUDE );
+                  $GCC_INCLUDE = $GCC_INCLUDE."/include";
+               }
+               else 
+               {  AddWarning( "set_soenv", "Multiple gcc 2.95.2/include directories found, please rename so you have only one distinct." );
+               }
+            }
+            @GXX_INCLUDES = `find $GCC_HOME -name "g++-3" -print 2> /dev/null`;
+            if ($#GCC_INCLUDES == -1) 
+            {  AddWarning( "set_soenv", "No g++-3 directory found, please rerun configure with correct parameters." );
+            }
+            else 
+            {  if ($#GXX_INCLUDES == 0) 
+               {  $GXX_INCLUDE = $GXX_INCLUDES[0];
+                  chomp( $GXX_INCLUDE );
+               }
+               else 
+               {  AddWarning( "set_soenv", "Multiple g++-3 directories found, please rename so you have only one distinct." );
+               }
+            }
+         }     
+      }
+      else 
+      {  AddWarning( "set_soenv", "gcc 2.95.2 does not exist on your system." );
+      }
+   }
+   else 
+   {  # GCC_HOME is not needed.
+      $GCC_HOME = $no_gcc_home;
+
+      # 5. Gcc include directory.
+      # Check whether autoconf found the gcc 2.95.2 include directory.
+      if ( '@GCC_INCLUDE_PATH@' eq $no_gcc_include ) 
+      {  AddWarning( "set_soenv", "No 2.95.2/include directory found." );
+         $GCC_INCLUDE = GetValue( "Please enter the gcc include path (e.g. /usr/lib/gcc-lib/2.95.2/include): " );
+         $result = CheckPathExist( $GCC_INCLUDE );
+         if ($result eq "false") 
+         {  AddWarning( "set_soenv", "The path $GCC_INCLUDE does not exist on your system." );
+         }   
+      }
+      else 
+      {  # GCC_INCLUDE as argument from autoconf.
+         $GCC_INCLUDE = PosixFormat('@GCC_INCLUDE_PATH@');
+      }
+      # 6. G++ include directory.
+      # Check whether autoconf found the g++ 2.95.2 include directory.
+      print "$no_gxx_include = no_gxx_include, '@GXX_INCLUDE_PATH@' = argv(2)\n";
+      if ( '@GXX_INCLUDE_PATH@' eq $no_gxx_include ) 
+      {
+         AddWarning( "set_soenv", "No g++-3 directory found." );
+         $GXX_INCLUDE = GetValue( "Please enter the g++ include path (e.g. /usr/include/g++-3): " );
+         $result = CheckPathExist( $GXX_INCLUDE );
+         if ($result eq "false") 
+         {  AddWarning( "set_soenv", "The path $GXX_INCLUDE does not exist on your system." );
+         }   
+      }
+      else 
+      {  # GXX_INCLUDE as argument from autoconf.
+         $GXX_INCLUDE = PosixFormat('@GXX_INCLUDE_PATH@');
+      }
+   }
+}
+
+# Ant Home directory
+if ( '@ANT_HOME@' eq $no_ant )
+{  AddWarning( "set_soenv", "Ant was not found in the path.  Some Java projects will not build." );
+   $ANT_HOME = "$no_ant";
+}
+else 
+{  # ANT_HOME as argument from autoconf.
+   $ANT_HOME = '@ANT_HOME@';
+}
+
+#
+# E. Determining the envionment values based on the information
+#    that was gathered earlier on.
+#
+print "Setting the environment variables... ";
+$USR                  = $ds."usr";
+$ETC                  = $ds."etc";
+$BIN                  = $ds."bin";
+$LIB                  = $ds."lib";
+$INC                  = $ds."inc";
+$INCLUDE              = $ds."include";
+$DEV                  = $ds."dev";
+$OPT                  = $ds."opt";
+$LOCAL                = $ds."local";
+$SOLENV               = $ds."solenv";
+$SOLVER               = $ds."solver";
+$CONFIG               = $ds."config";
+$USR_BIN              = $USR.$BIN;
+$USR_LIB              = $USR.$LIB;
+$USR_LOCAL            = $USR.$ds."local";
+$USR_CCS              = $USR.$ds."ccs";
+$USR_OPENWIN          = $USR.$ds."openwin";
+$USR_DT               = $USR.$ds."dt";
+$COMMON_BUILD_TOOLS   = '$SRC_ROOT'.$ds."external".$ds."common";
+
+if ($STLPORT4 ne $no_stl) {
+	$ps_STLPORT_LIB		= $ps.'$STLPORT4'.$LIB;
+	$L_STLPORT_LIB		= $L.'$STLPORT4'.$LIB;
+	$STLPORT_stlport 	= $I.'$STLPORT4'.$ds.'stlport';
+	$STLPORT_inc_stlport	= $I.'$STLPORT4'.$ds.'include'.$ds.'stlport';
+} else {
+        $ps_STLPORT_LIB         = "";
+        $L_STLPORT_LIB          = "";
+        $STLPORT_stlport        = $I.$SRC_ROOT.$SOLVER.$ds.$UPD.$ds.$INPATH.$INC.$ds."stl";
+        $STLPORT_inc_stlport    = "";
+}
+
+
+# Windows NT only variables
+if ($platform eq "$Winnt")
+{  
+   if ( $JAVA_HOME ne "" )
+   {
+      $JAVA_LIB             = $JAVA_HOME.$LIB;
+   }
+   # Import SystemDrive enviroment variable
+   use Env qw(SYSTEMDRIVE);
+   # Change $SYSTEMDRIVE to lower case.
+   $SYSTEMDRIVE          = lc $SYSTEMDRIVE;
+   use Env qw(SYSTEMROOT);
+   $CYGWIN               = PosixFormat('@CYGWIN@'); # Windows bash path
+   $WIN_GREP             = '$CYGWIN'.$ds."grep.exe";
+   $WIN_FIND             = '$CYGWIN'.$ds."find.exe";
+   $WIN_LS               = '$CYGWIN'.$ds."ls.exe";
+   $WIN_GNUCOPY          = '$CYGWIN'.$ds."cp.exe";
+   $WIN_TOUCH            = '$CYGWIN'.$ds."touch.exe";
+}
+
+if ( $JAVA_HOME ne "" )
+{
+   $JAVA_BIN             = $JAVA_HOME.$BIN;
+   $JAVA_INCLUDE         = $JAVA_HOME.$ds."include";
+}
+$PERL                 = PosixFormat('@PERL@'); # Perl program
+$PERL_PATH            = dirname('@PERL@'); # Perl Path 
+$XLIB                 = PosixFormat('@XLIB@'); # X11 libraries
+$XINC                 = PosixFormat('@XINC@'); # X11 includes
+
+
+# Macosx only variables.
+if ( $platform eq "$Macosx" )
+{  $FRAMEWORKSHOME       = $ds."System".$ds."Library".$ds."Frameworks";
+   if ( $XLIB eq "no_x_libraries" ) {
+      $GUIBASE  = "aqua";
+   } else {
+      $GUIBASE  = "unx";
+   }
+}
+
+# Same as UPD, used in the buildproces.
+$SOLARUPD             = $UPD;
+# The project's workstamp.
+$WORK_STAMP            = "SRC".$UPD;
+#
+$TF_ONE51             = $WORK_STAMP;
+# 
+$URD_ONLY             = $WORK_STAMP;
+# Location of the build root.
+$SOLARROOT            = '$SRC_ROOT';
+# Location of the source.
+$SOLARSRC             = '$SRC_ROOT';
+# The location of the RESOURCE files.
+$RSCRES               = '$SRC_ROOT';
+#
+$DEVROOT              = '$SRC_ROOT';
+# Set solenv and solver to given or default values. 
+# Location of the solenv tree.
+if ('@LOCAL_SOLENV@' eq "DEFAULT")
+{  $SOLARENV          = $SRC_ROOT.$SOLENV;
+}
+else
+{  $SOLARENV          =  PosixFormat('@LOCAL_SOLENV@');
+}
+# Location of the solver tree.
+if ('@LOCAL_SOLVER@' eq "DEFAULT")
+{  $SOLARVER          = $SRC_ROOT.$SOLVER;
+}
+else
+{  $SOLARVER          = PosixFormat('@LOCAL_SOLVER@');
+}
+#Location of Solar version.
+$SOLARVERSION         = '$SOLARVER'.$ds.$UPD;
+
+$SOLARENVINC          = '$SOLARENV'.$INC;
+# Location of 
+$LOCALINI             = '$SOLARENV'.$CONFIG;
+# Location of 
+$STAR_INIROOT         = '$SOLARENV'.$CONFIG;
+# Location of 
+$STAR_INIROOTOLD      = '$SOLARENV'.$CONFIG;
+# Location of 
+$STAR_STANDLST        = '$SOLARENV'.$CONFIG.$ds."stand.lst";
+# Location of 
+$STAR_SSCOMMON        = '$SOLARENV'.$CONFIG.$ds."ssolar.cmn";
+# Location of 
+$STAR_SSOLARINI       = '$SOLARENV'.$CONFIG.$ds."ssolar.ini";
+# Path to the OpenOffice recourses.
+$STAR_RESOURCEPATH    = '$SOLARVER'.$ds.'$UPD'.$ds.'$INPATH'.$BIN;
+# Location of the registry file.
+$STAR_REGISTRY        = '$STAR_RESOURCEPATH'.$ds."applicat.rdb";
+# Location of dmake resource. 
+$DMAKEROOT            = '$SOLARENVINC'.$ds."startup";
+# Location of JDK classes .zip file.
+# but in jdk 1.2 it is called rt.jar and it lives in jre/lib
+$CLASSPATH            = '$JAVA_HOME'.$ds.'jre'.$LIB.$ds."rt.jar";
+# Location of the JDK supported standard classes.zip file.
+# see above for why the change
+$XCLASSPATH           = '$JAVA_HOME'.$ds.'jre'.$LIB.$ds."rt.jar";
+# Paths to run time shared libraries.
+if ($platform eq "$Solaris") 
+{  $LD_LIBRARY_PATH   = $cur_dir.
+                        $ps.$USR_DT.$LIB.
+                        $ps.$USR_OPENWIN.$LIB.
+                        $ps.$USR_LOCAL.$LIB.
+                        $ps.$par_dir.$LIB.
+                        $ps_STLPORT_LIB.
+                        $ps.$JRELIBDIR.
+                        $ps.$JRETOOLKITDIR.
+                        $ps.$JRETHREADDIR.
+                        $ps.'$SOLARVER'.$ds.'$UPD'.$ds.'$INPATH'.$LIB;
+}
+elsif (($platform eq "$Linux") || ($platform eq "$NetBSD") || ($platform eq "$Tru64"))
+{  $LD_LIBRARY_PATH   = $cur_dir.
+                        $ps.'$SOLARENV'.$ds.'$INPATH'.$LIB.
+                        $ps.$JRELIBDIR.
+                        $ps.$JRETOOLKITDIR.
+                        $ps.$JRETHREADDIR.
+                        $ps.$USR_LOCAL.$LIB.
+                        $ps.$par_dir.$LIB.
+                        $ps_STLPORT_LIB.
+                        $ps.'$SOLARVER'.$ds.'$UPD'.$ds.'$INPATH'.$LIB;
+}
+elsif ($platform eq "$FreeBSD")
+{  $LD_LIBRARY_PATH   = $cur_dir.
+                        $ps.'$SOLARENV'.$ds.'$INPATH'.$LIB.
+                        $ps.$par_dir.$LIB.
+			$ps_STLPORT_LIB.
+                        $ps.'$SOLARVER'.$ds.'$UPD'.$ds.'$INPATH'.$LIB;
+}
+elsif ($platform eq "$Irix" || $platform eq "$Irix64")
+{  $LD_LIBRARY_PATH   = $cur_dir.
+                        $ps.'$SOLARENV'.$ds.'$INPATH'.$LIB.
+                        $ps.$JRELIBDIR.
+                        $ps.$JRETOOLKITDIR.
+                        $ps.$JRETHREADDIR.
+                        $ps.$USR_LOCAL.$LIB.
+                        $ps.$par_dir.$LIB.
+                        $ps.'$SOLARVER'.$ds.'$UPD'.$ds.'$INPATH'.$LIB;
+}
+elsif ($platform eq $Macosx)
+{  $LD_LIBRARY_PATH   = '$SOLARENV'.$ds.'$INPATH'.$LIB.
+                        $ps_STLPORT_LIB.
+                        $ps.'$SOLARVER'.$ds.'$UPD'.$ds.'$INPATH'.$LIB.
+                        $ps.$JRELIBDIR.
+                        $ps.$JRETOOLKITDIR.
+                        $ps.$JRETHREADDIR;
+}
+# Compiler directives.
+if ($platform eq "$Solaris") 
+{  $SOLARDEF          = $D."UNX".
+                        $D.$COM.
+                        $D.$GVER.
+                        $D."_PTHREADS".
+			$D."NO_AUDIO".
+                        $D."SYSV".
+                        $D.$OS.
+                        $D.$CPUNAME.
+                        $D."SUN".
+                        $D."SUN4".
+                        $D."_REENTRANT".
+                        $D."_POSIX_PTHREAD_SEMANTICS".
+                        $D."SUPD=$UPD".
+                        $D."PRODUCT".
+                        $D."UPDVER=".'""'."'".'"'."'".'"'."SV$UPD".'"'."'".'"'."'".'"'.'"';
+}
+elsif (($platform eq "$Linux") || ($platform eq "$NetBSD") || ($platform eq "$FreeBSD") || ($platform eq "$Tru64") || ($platform eq "$Irix") || ($platform eq "$Irix64"))
+{  $SOLARDEF          = $D."UNX".
+                        $D.$COM.
+			$D.$CVER.
+                        $D.$GVER.
+                        $D.$OS.
+                        $D.$CPUNAME;
+if  ($platform eq "$FreeBSD")
+{  $SOLARDEF         .= $D."X86".
+                        $D."OSVERSION=$OSVERSION".
+			" ".$PTHREAD_CFLAGS;
+}
+$SOLARDEF            .= $D."_REENTRANT".
+                        $D."_POSIX_PTHREAD_SEMANTICS";
+if  (($platform ne "$Tru64") && ( $platform ne "$Irix") && ( $platform ne "$Irix64") && ( $platform ne "FreeBSD" ) && ( $platform ne "NetBSD" ))
+{  $SOLARDEF         .= $D."GLIBC=".$GLIBC;
+}
+$SOLARDEF            .= $D."SUPD=$UPD".
+                        $D."PRODUCT".
+                        $D."UPDVER=".'""'."'".'"'."'".'"'."SV$UPD".'"'."'".'"'."'".'"'.'"';
+}
+# Location used by the linker to create libraries.
+if ($platform eq "$Solaris") 
+{  $SOLAREXTRALIB     = $L.$par_dir.$LIB.
+                        $L.'$SOLARENV'.$ds.'$OUTPATH'.$ds."lib.solaris.2.6".
+                        $L.$LIB.
+                        $L.$USR.$LIB.
+                        $L.$USR.$LOCAL.$LIB.
+                        $L.$USR_DT.$LIB.
+                        $L.$USR_OPENWIN.$LIB;
+}
+elsif (($platform eq "$Linux") || ($platform eq "$NetBSD") ||  ($platform eq "$Tru64") || ($platform eq "$Irix") || ($platform eq "$Irix64"))
+{  $SOLAREXTRALIB     = $L.$par_dir.$LIB.
+                        $L.$LIB.
+                        $L.$USR.$LIB.
+                        $L.$USR.$LOCAL.$LIB;
+}
+elsif ($platform eq "$Macosx") 
+{  $SOLAREXTRALIB     = $L.$LIB.
+                        $L.$USR.$LIB;
+}
+elsif ($platform eq "$FreeBSD")
+{
+    $SOLAREXTRALIB    = $L.$par_dir.$LIB;
+}
+
+# Compiler include search directory paths.
+if (($platform eq "$Solaris") || ($platform eq "$Linux") || ($platform eq "$FreeBSD") || ($platform eq "$NetBSD") || ($platform eq "$Tru64") || ($platform eq "$Irix") || ($platform eq "$Irix64")) 
+{  $SOLARINCLUDES     = $I.'$SOLARENV'.$INC;
+}
+elsif ($platform eq "$Winnt")
+{  $SOLARINCLUDES     = $I.$SOLARVER.$INC.
+                        $I.$SOLARENV.$ds.$INPATH.$INC.
+                        $I.'$COMPATH'.$ds."include".
+                        $I.$SOLARENV.$INC;
+}
+elsif ($platform eq "$Macosx")
+{  $SOLARINCLUDES     = $I.'$SOLARVER'.$ds.'$UPD'.$ds.'$INPATH'.$INC.
+                        $I.'$SOLARENV'.$ds.'$OUTPATH'.$INC.
+                        $I.'$SOLARENV'.$INC.
+                        $I.'$SRC_ROOT'.$ds."res";
+}                        
+                        
+# Windows NT only variables
+if ($platform eq "$Winnt")
+{  $COMP_ENV          = $OUTPATH;
+
+   $JAVAHOME          = '$JAVA_HOME';
+
+   $IENV              = $cur_dir.
+                        $ps.$SOLARVER.$ds.$UPD.$ds.$INPATH.$INC.
+                        $ps.$SOLARENV.$ds.$OUTPATH.$INC.
+                        $ps.'$COMPATH'.$INCLUDE.
+                        $ps.$SOLARENV.$INC;
+    
+   $WIN_LIB             = $cur_dir.$ps_STLPORT_LIB.$ps.
+                        $ps.$SOLARVER.$ds.$UPD.$LIB.
+                        $ps.$SOLARVER.$ds.$UPD.$ds.$INPATH.$LIB.
+                        $ps.$SOLARENV.$ds.$OUTPATH.$LIB.
+                        $ps.'$COMPATH'.$LIB.
+                        $ps.$JAVA_HOME.$LIB;
+
+   if ( $JAVA_HOME ne "" )
+   {
+      $IENV .=          $ps.'$JAVA_HOME'.$INCLUDE;
+      $IENV .=          $ps.'$JAVA_HOME'.$INCLUDE.$ds."win32";
+   }
+
+   $WIN_INCLUDE       = $IENV;
+
+   $JAVAHOME          = '$JAVA_HOME';
+
+   $ILIB              = '.'.$ps_STLPORT_LIB.$ps.$WIN_LIB;
+
+   $WIN_HOME          = "   ";
+}
+     
+# The general environment path.
+if ($platform eq "$Solaris") 
+{  $PATH              = $cur_dir.
+                        $ps.'$SOLARVER'.$ds.'$UPD'.$ds.'$INPATH'.$BIN.
+                        $ps.'$SOLARENV'.$ds.'$OUTPATH'.$BIN.
+                        $ps.'$SOLARENV'.$BIN.
+                        $ps.$USR_CCS.$BIN;
+   if ( $JAVA_HOME ne "" )
+   {
+      $PATH .=          $ps.'$JAVA_HOME'.$BIN;
+   }
+
+   $PATH             .= GetCorrectPath($COMPATH.$BIN, $PERL_PATH, $TCSH_PATH, $compiler);
+
+   $PATH             .= $ps.$USR.$ds."sbin".
+                        $ps.$ETC.
+                        $ps.$USR.$BIN.$ds."X11".
+			$ps.$USR.$ds."X11".$BIN.
+                        $ps.$OPT.$ds."langtools".$BIN.
+                        $ps.$USR_OPENWIN.$BIN.
+                        $ps.$USR_DT.$BIN.
+                        $ps.$USR.$LIB.
+                        $ps.$USR_LOCAL.$BIN;
+}
+elsif (($platform eq "$Linux") or ($platform eq "$NetBSD") or ($platform eq "$Tru64") or ($platform eq "$Irix") or ($platform eq "$Irix64"))
+{  $PATH              = $cur_dir.
+                        $ps.'$SOLARVER'.$ds.'$UPD'.$ds.'$INPATH'.$BIN.
+                        $ps.'$SOLARENV'.$ds.'$OUTPATH'.$BIN.
+                        $ps.'$SOLARENV'.$BIN;
+
+   if ( $JAVA_HOME ne "" )
+   {
+      $PATH .=          $ps.'$JAVA_HOME'.$BIN;
+   }
+
+   $PATH             .= GetCorrectPath($COMPATH, $PERL_PATH, $TCSH_PATH, $compiler);
+
+   $PATH             .= $ps.$USR.$ds."sbin".
+                        $ps.$ETC.
+                        $ps.$USR.$BIN.$ds."X11".
+			$ps.$USR.$ds."X11".$BIN.
+                        $ps.$USR.$LIB;
+}
+elsif ($platform eq "$FreeBSD")
+{  $PATH              = $cur_dir.
+                        $ps.'$SOLARVER'.$ds.'$UPD'.$ds.'$INPATH'.$BIN.
+                        $ps.'$SOLARENV'.$ds.'$OUTPATH'.$BIN.
+                        $ps.'$SOLARENV'.$BIN.
+                        $ps.'$JAVA_HOME'.$BIN.
+			$ps.$USR_LOCAL.$BIN.
+			$ps.$USR_LOCAL.$ds."sbin";
+
+   $PATH             .= GetCorrectPath($COMPATH, $PERL_PATH, $TCSH_PATH, $compiler);
+
+   $PATH             .= $ps.$USR.$ds."sbin".
+                        $ps.$USR.$ds."X11R6".$ds."bin".
+                        $ps.$USR.$LIB;
+}
+
+elsif ($platform eq "$Winnt")
+{ 
+   my ( $noldPATH );
+   $noldPATH = $oldPATH;
+
+   # convert path to posix if using native NT perl
+   $noldPATH = PosixFormat($noldPATH);
+
+   $COMPATH_ROOT      = $COMPATH;
+   $COMPATH_ROOT      =~ s/\/vc98$//i;
+
+   $PATH              = $cur_dir.
+                        $ps.'$SOLARVER'.$ds.'$UPD'.$ds.'$INPATH'.$BIN.
+                        $ps.'$SOLARENV'.$ds."bin".
+                        $ps.'$SOLARENV'.$ds.'$OUTPATH'.$BIN;
+
+   if ( $JAVA_HOME ne "" )
+   {
+      # hack either "hotspot" or "client" should be used, depending on the jdk version:
+      # 1.2.x   -   no such directory, unsupported 
+      # 1.3.x   -   hotspot, client missing
+      # 1.4.x   -   client, hotspot missing
+      
+      $PATH .=          $ps.$JAVA_HOME.$BIN.
+                        $ps.$JAVA_HOME.$ds."jre".$ds."bin".$ds."hotspot".
+                        $ps.$JAVA_HOME.$ds."jre".$ds."bin".$ds."client";
+   }
+   # MSVC++ Environement sets the PATH variable, dont add $COMPATH to $PATH !
+   # anyway, add if path to compiler isn't already set in PATH
+   if ( ! ( $noldPATH =~ /(?:[:]|\A)(?:$COMPATH)(?:[:]|\Z|$ds)/ ) )
+   {   
+	$PATH .= $ps.'$COMPATH'.$BIN;
+   }
+   # for MS-Visual Studio 6.0 to find mspdb60.dll (need by CL.EXE C/C++ Compiler) 
+   # and rcdll.dll (need by RC.EXE -- 32 bit Resource Compiler) location.
+   if ( $noldPATH !~ /[^\/]*\b$COMPATH_ROOT\/Common\/MSDev98\/Bin\b[^\/]*/ )
+   {
+       $PATH .= $ps.$COMPATH_ROOT.'/Common/MSDev98/Bin';
+   }
+
+   # Check if $PERL_PATH is already set in PATH
+   if ( ! ( $noldPATH =~ /(?:[:]|\A)(?:$PERL_PATH)(?:[:]|\Z|$ds)/ ) )
+   {
+	$PATH          .= $ps.'${PERL_PATH}';
+   }
+   # Check if $TCSH_PATH is already set in PATH
+   if ( ( "$USE_SHELL" eq "tcsh" ) && ( ! $noldPATH =~ /(?:[:]|\A)(?:$TCSH_PATH)(?:[:]|\Z)/ ) )
+   {   $PATH          .= $ps.$TCSH_PATH;
+   }
+   if ($ASM_PATH ne "ASM_IN_PATH")
+   {   $PATH          .= $ps.'${ASM_PATH}';
+   } 
+   if ($UNZIP_PATH ne "UNZIP_IN_PATH")
+   {   $PATH          .= $ps.'${UNZIP_PATH}';
+   }
+   # Check if $CYGWIN is already set in PATH
+   if ( ! $noldPATH =~ /(?:[:]|\A)(?:$CYGWIN)(?:[:]|\Z)/ )
+   {
+	   $PATH      .= $ps.'$CYGWIN';
+   }
+   $PATH              .= $ps.'$SRC_ROOT'.$ds."dmake".
+                         $ps.$noldPATH.
+			 $ps_STLPORT_LIB;
+}
+
+elsif ($platform eq $Macosx)
+{  $PATH              = $cur_dir.
+                        $ps.'$SOLARVER'.$ds.'$UPD'.$ds.'$INPATH'.$BIN.
+                        $ps.'$SOLARENV'.$ds.'$OUTPATH'.$ds."UNXP".
+                        $ps.'$SOLARENV'.$ds.'$OUTPATH'.$BIN.
+                        $ps.$USR.$BIN.
+                        $ps.$ds."Local".$ds."Users".$ds."buildso".$ds."bin".$ds."powerpc-apple-macos".
+                        $ps.$ds."Local".$ds."Users".$ds."buildso".$ds."bin".
+                        $ps.$BIN.
+                        $ps.$USR.$ds."sbin".
+                        $ps.$ds."sbin".
+                        $ps.'$SOLARENV'.$BIN.
+                        $ps.$USR_LOCAL.$BIN.
+                        $ps.$USR_LOCAL.$ds."sbin";
+}
+                        
+# PATHEXTRA variable for Macosx.
+if ($platform eq $Macosx)
+{  $PATHEXTRA         = $USR_BIN.
+                        $ps.$BIN.
+                        $ps.$USR.$ds."sbin".
+                        $ps.$ds."sbin".
+                        $ps.'$SOLARENV'.$BIN;
+}
+# Linker library search directory paths. 
+if ($platform eq "$Solaris") 
+{  $SOLARLIB          = $L.$par_dir.$LIB.
+                        $L.'$SOLARENV'.$ds.'$OUTPATH'.$LIB.
+                        $L.'$SOLARVER'.$ds.'$UPD'.$ds.'$INPATH'.$LIB.
+                        $L.'$SOLARENV'.$ds.'$OUTPATH'.$LIB.
+                        $L.'$SOLARENV'.$ds.'$OUTPATH'.$LIB."solaris.2.6".
+                        $L.$LIB.
+                        $L.$USR_LIB.
+                        $L.$USR_LOCAL.$LIB.
+                        $L.$USR_DT.$LIB.
+                        $L.$USR_OPENWIN.$LIB.
+                        $L.'$JAVA_HOME'.$LIB.
+                        $L.$JRELIBDIR.
+                        $L.$JRETOOLKITDIR.
+                        $L.$JRETHREADDIR.
+                        $L_STLPORT_LIB.
+                        $L.$XLIB;
+}
+elsif (($platform eq "$Linux") || ($platform eq "$NetBSD") || ($platform eq "$Tru64") || ($platform eq "$Irix") || ($platform eq "$Irix64"))
+{  $SOLARLIB          = $L.$par_dir.$LIB.
+			$L.'$SOLARENV'.$ds.'$OUTPATH'.$LIB.
+                        $L.'$SOLARVER'.$ds.'$UPD'.$ds.'$INPATH'.$LIB.
+                        $L.'$SOLARENV'.$ds.'$OUTPATH'.$LIB.
+                        $L.$LIB.
+                        $L.$USR_LIB.
+                        $L.$USR_LOCAL.$LIB.
+                        $L.'$JAVA_HOME'.$LIB.
+                        $L.$JRELIBDIR.
+                        $L.$JRETOOLKITDIR.
+                        $L.$JRETHREADDIR.
+                        $L_STLPORT_LIB.
+                        $L.$XLIB;
+}
+elsif ($platform eq "$FreeBSD")
+{  $SOLARLIB          = $L.$par_dir.$LIB.
+			$L.'$SOLARENV'.$ds.'$OUTPATH'.$LIB.
+                        $L.'$SOLARVER'.$ds.'$UPD'.$ds.'$INPATH'.$LIB.
+                        $L.'$SOLARENV'.$ds.'$OUTPATH'.$LIB.
+                        $L.'$JAVA_HOME'.$LIB.
+			$L_STLPORT_LIB.
+                        $L.$XLIB;
+}
+elsif ($platform eq "$Winnt")
+{  $SOLARLIB          = $L.'$SOLARVER'.$ds.'$UPD'.$ds.'$INPATH'.$LIB.
+                        $L.$par_dir.$LIB.
+                        $L_STLPORT_LIB.
+                        $L.'$SOLARENV'.$ds.'$OUTPATH'.$LIB;
+} 
+elsif ($platform eq "$Macosx") 
+{  $SOLARLIB          = $L.$par_dir.$LIB.
+                        $L.'$SOLARENV'.$ds.'$OUTPATH'.$LIB.
+                        $L.'$SOLARVER'.$ds.'$UPD'.$ds.'$INPATH'.$LIB.
+                        $L.$JRELIBDIR.
+                        $L.$JRETOOLKITDIR.
+                        $L.$JRETHREADDIR.
+                        $L_STLPORT_LIB.
+                        $L.$USR_LIB;
+}
+# Location of the compiler include search directory paths.
+$SOLARINC             = $I.$cur_dir.
+                        $I.'$SOLARVER'.$ds.'$UPD'.$ds.'$INPATH'.$INC.$ds."stl".
+                        $I.'$SOLARVER'.$ds.'$UPD'.$ds.'$INPATH'.$INC.$ds."external".
+                        $I.'$SOLARVER'.$ds.'$UPD'.$ds.'$INPATH'.$INC.
+                        $I.'$SOLARENV'.$ds.'$OUTPATH'.$INC.
+                        $I.'$SOLARENV'.$INC.
+                        $I.'$SRC_ROOT'.$ds."res";
+
+if (($platform eq "$Solaris") or ($platform eq "$Linux") or ($platform eq "$Tru64") or ($platform eq "$FreeBSD") or ($platform eq "$NetBSD") or ($platform eq "$Irix") or ($platform eq "$Irix64"))
+{
+if ( ($platform ne "$Irix") and ($platform ne "$Irix64") )
+{
+	$SOLARINC            .= $I.$USR.$INCLUDE;
+}
+$SOLARINC	     .= $STLPORT_stlport;
+if ($platform eq "$Linux" || $platform eq "$FreeBSD")
+{
+# This simply adds an include path, so even cases that break the FHS work
+$SOLARINC            .= $STLPORT_inc_stlport;
+}
+if ($platform eq "$Solaris")
+{
+$SOLARINC            .= '/SC5 ';
+}
+# Platform dependent include path at the top of this list of include paths
+if ($platform eq "$Solaris") 
+{  $SOLARINC         .= $I.'$COMPATH'.$ds."include";
+}
+
+$SOLARINC            .= $I.'$SOLARENV'.$INC.$ds."Xp31".
+                        $I.'$JAVA_HOME'.$INCLUDE;
+
+#include system dependent Java include directory
+
+if ($platform eq "$Solaris")
+{  $SOLARINC          .=$I.'$JAVA_HOME'.$INCLUDE.$ds."solaris";
+}
+elsif  (($platform eq "$Linux") or ($platform eq "$Tru64"))
+{  $SOLARINC          .=$I.'$JAVA_HOME'.$INCLUDE.$ds."linux";
+}
+elsif ($platform eq "$FreeBSD")
+{  $SOLARINC          .=$I.'$JAVA_HOME'.$INCLUDE.$ds."freebsd";
+}
+elsif ($platform eq "$NetBSD")
+{  $SOLARINC          .=$I.'$JAVA_HOME'.$INCLUDE.$ds."netbsd";
+}
+elsif (($platform eq "$Irix") or ($platform eq "$Irix64"))
+{  $SOLARINC          .=$I.'$JAVA_HOME'.$INCLUDE.$ds."irix";
+}
+
+#java threads include path
+
+if ($platform eq "$FreeBSD")
+{  $SOLARINC          .=$I.'$JAVA_HOME'.$INCLUDE.$ds."green_threads".$ds."include";
+}
+else
+{  $SOLARINC          .=$I.'$JAVA_HOME'.$INCLUDE.$ds."native_threads".$ds."include";
+}
+
+#The tail, if needed
+if (($platform eq "$Linux") or  ($platform eq "$FreeBSD") or ($platform eq "$NetBSD"))
+{  $SOLARINC         .= $I.$XINC.
+                        $I.$GCC_INCLUDE.
+                        $I.$USR.$INCLUDE;
+}
+elsif ($platform eq "$Tru64") 
+{  $SOLARINC         .= $I.$XINC.
+                        $I.$USR.$INCLUDE;
+}
+elsif (($platform eq "$Irix") or ($platform eq "$Irix64"))
+{  $SOLARINC         .= $I.$GCC_INCLUDE.
+                       $I.$GXX_INCLUDE.
+                       $I.$XINC;
+}
+}
+elsif ($platform eq "$Winnt")
+{  $SOLARINC         .= $STLPORT_stlport.
+                        $I.'$COMPATH'.$ds."include".
+                        $I.'$JAVA_HOME'.$ds."include".$ds."win32".
+                        $I.'$JAVA_HOME'.$ds."include";
+}
+elsif ($platform eq "$Macosx")
+{  $SOLARINC         .= $STLPORT_stlport.
+                        $I.$FRAMEWORKSHOME.$ds."JavaVM.framework".$ds."Headers";
+}
+                        
+
+#
+print "done\n";
+#
+# F. Setting the different aliases.
+#
+print "Setting the aliases... ";
+# 1. alias for a full product make. 
+if (( $platform eq "$Winnt" ) and ( $USE_SHELL eq "4nt" ))
+{  $dmake           = '`*dmake product=full`';
+$mkout           = '`perl %SOLARENV\bin\mkout.pl`';
+$deliver         = '`perl %SOLARENV\bin\deliver.pl`';
+$build           = '`perl %SOLARENV\bin\build.pl product=full`';
+$zipdep          = '`perl %SOLARENV\bin\zipdep.pl`';
+}
+else
+{  $dmake           = '"dmake product=full"';
+	$mkout           = '"perl $SOLARENV/bin/mkout.pl"';
+	$deliver         = '"perl $SOLARENV/bin/deliver.pl"';
+	$build           = '"perl $SOLARENV/bin/build.pl product=full"';
+	$zipdep          = '"perl $SOLARENV/bin/zipdep.pl"';
+}
+# 3. alias for a full product make
+$nmake           = '"dmake product=full"';
+print "done\n";
+#
+#--------------------------
+# VI. Open the output file.
+#--------------------------
+#
+open( OUT, ">$outfile" ) ||
+   die "Cannot open $outfile: $!\n";
+#
+#------------------------------------------
+# VII. Writing the data to the output file.
+#------------------------------------------
+#
+# Write file header.
+CreateFileHeader( $UPD, $platform );
+#
+# Writing the platform independent constant values to file.
+# (c = comment, e = environment variable, a = alias )
+ToFile( "SRC_ROOT",	     $SRC_ROOT,          "e" );
+ToFile( "SHELL",             $SHELL,             "e" );
+ToFile( "JAVA_HOME",         $JAVA_HOME,         "e" );
+ToFile( "ANT_HOME",          $ANT_HOME,          "e" );
+ToFile( "JDKLIB",            $JAVA_LIB,          "e" );
+ToFile( "STLPORT4",          $STLPORT4,          "e" );
+ToFile( "ASM_PATH",          $ASM_PATH,          "e" );
+ToFile( "UNZIP_PATH",        $UNZIP_PATH,        "e" );
+ToFile( "Empty",             $empty,             "n" );
+ToFile( "BUILD_SOSL",        $BUILD_SOSL,        "e" );
+ToFile( "LOCAL_SOLENV",      $LOCAL_SOLENV,      "e" );
+ToFile( "FRAMEWORKSHOME",    $FRAMEWORKSHOME,    "e" );
+ToFile( "Empty",             $empty,             "n" );
+ToFile( "Platform independent constant values.", $empty, "c" );
+# Languages
+if ('@WITH_LANG@' =~ m/ALL,/s)
+{
+   foreach $language (@LANGUAGES)
+   {
+      ToFile( "RES_$language",     "TRUE",          "e" );
+   }
+}
+else
+{	
+   foreach $language (@LANGUAGES)
+   {   if ('@WITH_LANG@' =~ m/$language,/s)
+       {   my $val="TRUE";
+           ToFile( "RES_$language",     $val,          "e" );
+       }
+       else
+       {   my $val;
+           undef $val;
+           ToFile( "RES_$language",     $val,          "e" );
+       }
+   }
+}
+ToFile( "CALL_CDECL",        $CALL_CDECL,        "e" );
+ToFile( "COMMON_OUTDIR",     $COMMON_OUTDIR,     "e" );
+ToFile( "common_build",      $common_build,      "e" );
+ToFile( "NO_SRS_PATCH",      $NO_SRS_PATCH,      "e" );
+ToFile( "PROFULLSWITCH",     $PROFULLSWITCH,     "e" );
+ToFile( "BIG_GOODIES",       $BIG_GOODIES,       "e" );
+ToFile( "BMP_WRITES_FLAG",   $BMP_WRITES_FLAG,   "e" );
+ToFile( "BUILD_SOSL_RELEASE", $BUILD_SOSL_RELEASE, "e" );
+ToFile( "MK_UNROLL",         $MK_UNROLL,         "e" );
+ToFile( "MULTITHREAD_OBJ",   $MULTITHREAD_OBJ,   "e" );
+ToFile( "NO_REC_RES",        $NO_REC_RES,        "e" );
+ToFile( "PROEXT",            $PROEXT,            "e" );
+ToFile( "SO3",               $SO3,               "e" );
+ToFile( "SOLAR_PLUGIN",      $SOLAR_PLUGIN,      "e" );
+ToFile( "TF_PACKAGES",       $TF_PACKAGES,       "e" );
+ToFile( "TF_FILEURL",        $TF_FILEURL,        "e" );
+ToFile( "TF_CFGDATA",        $TF_CFGDATA,        "e" );
+ToFile( "TF_SVDATA",         $TF_SVDATA,         "e" );
+ToFile( "TF_SDBAPI",         $TF_SDBAPI,         "e" );
+ToFile( "TF_UCB",            $TF_UCB,            "e" );
+ToFile( "UPDATER",           $UPDATER,           "e" );
+ToFile( "build_deliver",     $BUILD_DELIVER,     "e" );
+ToFile( "USE_NEWCHARSET",    $USE_NEWCHARSET,    "e" );
+ToFile( "USE_NEW_RSC",       $USE_NEW_RSC,       "e" );
+ToFile( "VCL",               $VCL,               "e" );
+ToFile( "USE_NAMESPACE",     $USE_NAMESPACE,     "e" );
+ToFile( "ENABLEUNICODE",     $ENABLEUNICODE,     "e" );
+ToFile( "NEW_JAR_PACK",      $NEW_JAR_PACK,      "e" );
+ToFile( "NO_BSYMBOLIC",      $NO_BSYMBOLIC,      "e" );
+ToFile( "TF_FILTER",         "TRUE",             "e" );
+if ($ENABLE_DEBUG eq "TRUE") {
+ToFile( "debug",             "true",             "e" );
+}
+if ( $platform ne "$Macosx" )
+{  ToFile( "PSPRINT",           "TRUE",             "e" );
+} elsif ( $GUIBASE eq "unx" ) {
+# Mac OS X hack: avoid build errors in printing code in X11
+ToFile( "USE_XPRINT",           "TRUE",             "e" );
+}
+ToFile( "MKDEPENDSOLVER",    "TRUE",             "e" );
+#
+# Writing the platform dependent constant values to file.
+# (c = comment, e = environment variable, a = alias )
+ToFile( "Platform dependent constant values.", $empty, "c" );
+ToFile( "SOLAR_JAVA",        $SOLAR_JAVA,        "e" );
+ToFile( "BIG_SVX",           $BIG_SVX,           "e" );
+ToFile( "COM",               $COM,               "e" );
+ToFile( "COMPATH",           $COMPATH,           "e" );
+ToFile( "CPU",               $CPU,               "e" );
+ToFile( "CPUNAME",           $CPUNAME,           "e" );
+ToFile( "CVER",              $CVER,              "e" );
+ToFile( "DLLSUFFIX",         $DLLSUFFIX,         "e" );
+ToFile( "GUI",               $GUI,               "e" );
+ToFile( "GLIBC",             $GLIBC,             "e" );
+ToFile( "GUIBASE",           $GUIBASE,           "e" );
+ToFile( "GUIENV",            $GUIENV,            "e" );
+ToFile( "GVER",              $GVER,              "e" );
+ToFile( "OS",                $OS,                "e" );
+ToFile( "EXCEPTIONS",        $EXCEPTIONS,        "e" );
+ToFile( "OSVERSION",         $OSVERSION,         "e" );
+ToFile( "PTHREAD_CFLAGS",    $PTHREAD_CFLAGS,    "e" );
+ToFile( "PTHREAD_LIBS",      $PTHREAD_LIBS,      "e" );
+ToFile( "OUTPATH",           $OUTPATH,           "e" );
+ToFile( "INPATH",            $INPATH,            "e" );
+ToFile( "GVERDIR",           $GVERDIR,           "e" );
+ToFile( "PATH_SEPERATOR",    $PATH_SEPERATOR,    "e" );
+ToFile( "XPVERSION",         $XPVERSION,         "e" );
+ToFile( "COMEX",             $COMEX,             "e" );
+ToFile( "PROSWITCH",         $PROSWITCH,         "e" );
+ToFile( "BOTH",              $BOTH,              "e" );
+ToFile( "CDPATHx",           $CDPATHx,           "e" );
+ToFile( "DEMO_ENV",          $DEMO_ENV,          "e" );
+ToFile( "DYNAMIC_CRT",       $DYNAMIC_CRT,       "e" );
+ToFile( "SET_EXCEPTIONS",    $SET_EXCEPTIONS,    "e" );
+ToFile( "emergency",         $emergency,         "e" );
+ToFile( "use_shl_versions",  $use_shl_versions,  "e" );
+#
+# Writing the variables to file.
+# (c = comment, e = environment variable, a = alias, n = newline )
+ToFile( "Variable values.",  $empty,             "c" );
+if ( $platform eq "$Winnt" )
+{  ToFile( "CYGWIN",            $CYGWIN,            "e" );
+}
+ToFile( "PERL",              $PERL,              "e" );
+ToFile( "UPD",               $UPD,               "e" );
+ToFile( "SOLARUPD",          $SOLARUPD,          "e" );
+ToFile( "WORK_STAMP",        $WORK_STAMP,        "e" );
+ToFile( "TF_ONE51",          $TF_ONE51,          "e" );
+ToFile( "TF_SVDATA",          $TF_SVDATA,          "e" );
+ToFile( "TF_CFGDATA",          $TF_CFGDATA,          "e" );
+ToFile( "TF_FILEURL",        $TF_FILEURL,        "e" );
+ToFile( "URD_ONLY",          $URD_ONLY,          "e" );
+ToFile( "SOLARROOT",         $SOLARROOT,         "e" );
+ToFile( "RSCRES",            $RSCRES,            "e" );
+ToFile( "SOLARVER",          $SOLARVER,          "e" );
+ToFile( "SOLARVERSION",      $SOLARVERSION,      "e" );
+ToFile( "SOLARENV",          $SOLARENV,          "e" );
+ToFile( "SOLARENVINC",       $SOLARENVINC,       "e" );
+ToFile( "LOCALINI",          $LOCALINI,          "e" );
+ToFile( "STAR_INIROOT",      $STAR_INIROOT,      "e" );
+ToFile( "STAR_INIROOTOLD",   $STAR_INIROOTOLD,   "e" );
+ToFile( "STAR_STANDLST",     $STAR_STANDLST,     "e" );
+ToFile( "STAR_SSCOMMON",     $STAR_SSCOMMON,     "e" );
+ToFile( "STAR_SSCOMMON",     $STAR_SSCOMMON,     "e" );
+ToFile( "STAR_SSOLARINI",    $STAR_SSOLARINI,    "e" );
+ToFile( "STAR_RESOURCEPATH", $STAR_RESOURCEPATH, "e" );
+ToFile( "STAR_REGISTRY",     $STAR_REGISTRY,     "e" );
+ToFile( "DMAKEROOT",         $DMAKEROOT,         "e" );
+ToFile( "CLASSPATH",         $CLASSPATH,         "e" );
+ToFile( "XCLASSPATH",        $XCLASSPATH,        "e" );
+if ( $platform eq "$Macosx" )
+{  ToFile( "DYLD_LIBRARY_PATH", $LD_LIBRARY_PATH,   "e" );
+}
+else
+{  ToFile( "LD_LIBRARY_PATH",   $LD_LIBRARY_PATH,   "e" );
+}
+ToFile( "SOLARDEF",          $SOLARDEF,          "e" );
+ToFile( "SOLAREXTRAINC",     $SOLAREXTRAINC,     "e" );
+ToFile( "SOLAREXTRALIB",     $SOLAREXTRALIB,     "e" );
+ToFile( "SOLARINCLUDES",     $SOLARINCLUDES,     "e" );
+ToFile( "PATH",              $PATH,              "e" );
+ToFile( "PATHEXTRA",         $PATHEXTRA,         "e" );
+ToFile( "SOLARLIB",          $SOLARLIB,          "e" );
+ToFile( "SOLARINC",          $SOLARINC,          "e" );
+ToFile( "COMP_ENV",          $COMP_ENV,          "e" );
+ToFile( "JAVAHOME",          $JAVAHOME,          "e" );
+ToFile( "CC",                $CC,                "e" );
+ToFile( "CXX",               $CXX,               "e" );
+ToFile( "LINK",				 $CXX,				 "e" );
+ToFile( "BISON_HAIRY",       $BISON_HAIRY,       "e" );
+ToFile( "BISON_SIMPLE",      $BISON_SIMPLE,      "e" );
+ToFile( "COMMON_BUILD_TOOLS",$COMMON_BUILD_TOOLS,"e" );
+if ($platform ne "$Winnt")
+{  ToFile( "TEMP",              $TEMP,              "e" );
+   ToFile( "TMP",               $TEMP,              "e" );
+}
+if (( $platform eq "$Winnt" ) and ( $USE_SHELL ne "4nt" )) {
+   ToFile( "SOLARSRC",          $SOLARSRC   ,       "j" );
+} else {
+   ToFile( "SOLARSRC",          $SOLARSRC,          "e" );
+}
+if ( $platform eq "$Winnt" )
+{
+   # these variables marked with "j" are used with cygwin only
+   ToFile( "LIB",               $WIN_LIB,           "j" );
+   ToFile( "IENV",              $IENV,              "j" );
+   ToFile( "ILIB",              $ILIB,              "j" );
+   ToFile( "INCLUDE",           $WIN_INCLUDE,       "j" );
+   
+   ToFile( "GREP",              $WIN_GREP,          "e" );
+   ToFile( "FIND",              $WIN_FIND,          "e" );
+   ToFile( "LS",                $WIN_LS,            "e" );
+   ToFile( "GNUCOPY",           $WIN_GNUCOPY,       "e" );
+   ToFile( "TOUCH",             $WIN_TOUCH,         "e" );
+}
+elsif ($platform eq "$Macosx" )
+{  ToFile( "LIB",               $MAC_LIB,           "e" );
+}
+if (( $platform eq "$Winnt" ) and ( $USE_SHELL eq "4nt" )) {
+  my ($tempstring);
+  $tempstring="perl ".WinFormat(${SOLARENV}.${BIN}.${ds}."deliver.pl");
+  if ( $perl_os =~ /cygwin/ ) { $tempstring =~ s#\\#\\\\#g; }
+  ToFile( "set DELIVER=$tempstring", $empty, "x" );
+  $tempstring="perl ".WinFormat(${SOLARENV}.${BIN}.${ds}."mkout.pl");
+  if ( $perl_os =~ /cygwin/ ) { $tempstring =~ s#\\#\\\\#g; }
+  ToFile( "set MKOUT=$tempstring", $empty, "x" );
+  $tempstring="perl ".WinFormat(${SOLARENV}.${BIN}.${ds}."zipdep.pl");
+  if ( $perl_os =~ /cygwin/ ) { $tempstring =~ s#\\#\\\\#g; }
+  ToFile( "set ZIPDEP=$tempstring", $empty, "x" );
+
+  ToFile( "HOME",              $WIN_HOME,          "e" );
+} else {
+  ToFile( "DELIVER",           "deliver.pl",       "e" );
+  ToFile( "MKOUT",             "mkout.pl",         "e" );
+  ToFile( "ZIPDEP",            "zipdep.pl",         "e" );
+}
+ToFile( "USE_SHELL",         $USE_SHELL,         "e" );
+#
+# Writing the aliases to file.
+# (c = comment, e = environment variable, a = alias )
+ToFile( "Aliases.",          $empty,             "c" );
+ToFile( "alias dmake",       $dmake,             "a" );
+ToFile( "alias mkout",       $mkout,             "a" );
+ToFile( "alias deliver",     $deliver,           "a" );
+ToFile( "alias build",       $build,             "a" );
+ToFile( "alias zipdep",      $zipdep,            "a" );
+if ( $platform ne "$Winnt" )
+{  ToFile( "alias nmake",       $nmake,             "a" );
+}
+# write make command for dmake for windows
+# (x = write as is)
+
+if ( $platform eq "$Winnt" and $USE_SHELL eq "4nt" )
+{
+  ToFile( "build the dmake executable.", $empty, "c");
+  ToFile( "if not exist \%SRC_ROOT\\dmake\\dmake.exe (cd \%SRC_ROOT\\dmake \^ call make.bat win95-vpp40 \^ cd \%SRC_ROOT)", $empty, "x");
+  ToFile( "  ", $empty, "x");
+}
+if ( $platform eq "$Winnt" and $USE_SHELL eq "tcsh" )
+{
+  ToFile( "build the dmake executable.", $empty, "c");
+  ToFile( "if ( -e $SRC_ROOT/dmake/dmake.exe ) then", $empty, "x");
+  ToFile( "  echo \"Is already there!\"", $empty, "x");
+  ToFile( "else", $empty, "x");
+  ToFile( "  cd $SRC_ROOT/dmake", $empty, "x");
+  ToFile( "  ./autogen.sh", $empty, "x");
+  ToFile( "  make", $empty, "x");
+  ToFile( "  cd $SRC_ROOT", $empty, "x");
+  ToFile( "endif", $empty, "x");  
+  ToFile( " ", $empty, "x");  
+}
+#
+# Writing unset variables you might not need to file.
+# 
+print OUT $unsetvars;
+
+#
+#---------------------------
+# VIII. Closing output file.
+#---------------------------
+#
+close( OUT ) || print "Can't close $outfile: $!";
+#
+#------------------------------
+# IX. Sourcing the output file.
+#------------------------------
+#
+#---------------------------------
+# X. Set up the build environment.
+#---------------------------------
+# 
+# Check whether the build environment is set up.
+# If not, ask the user to create it.
+#
+$buildenv = CheckBuildEnv( $SRC_ROOT );
+if ( !$buildenv ) 
+{  print "Your systems build environment is not properly set up.\n";
+   print "You want to create it now? (y/n): ";
+   $answer = <STDIN>;
+   chomp( $answer );
+   if ( $answer eq "Y" || $answer eq "y" ) 
+   {  print "Creating the build environment... ";
+      CreateBuildEnv( $SRC_ROOT );
+      print "done\n";
+   }
+   else 
+   {  print "You need to create the build environment before you ";
+      print "start building OpenOffice $UPD.\n";
+      AddWarning( "set_soenv", 
+                  "No build environment set-up. Create before building OpenOffice." );
+   }
+}
+else 
+{  print "Build environment is properly set up.\n";
+}
+#
+#--------------------------------------------------------
+# XI. Moving the output file to the build home directory.
+#--------------------------------------------------------
+#
+$tmp = $SRC_ROOT.$ds.$outfile;
+if (rename( $outfile, $tmp ) ne 1)
+{  `mv -f $outfile $tmp`;
+}
+#
+#--------------------------------------------------------
+# XII. Message at the end.
+#--------------------------------------------------------
+#
+#
+print "*********************************************************".
+      "******************* $newline"."*"."$newline";
+print "* OpenOffice $UPD configuration. $newline";
+for ( $tmp = 0; $tmp < 2; $tmp++ ) 
+{  print "* $newline";
+}
+print "* Configuration part of OpenOffice $UPD build is finished. $newline* $newline";
+print "* NB! Be aware that you might not be able to build OpenOffice if you $newline".
+      "* ignore any warning message that were generated during this configuration $newline".
+      "* process. $newline* $newline" .
+      "* Any interactive values you have given have not been version checked. $newline* $newline"; 
+
+if ( $Warning ne "" ) 
+{  print "$Warning*"; 
+   print "$newline";
+}
+
+print "$newline* USAGE: $newline";
+print "* Source $outfile in order to set up the build-environment $newline".
+      "* variables. $newline";
+for ( $tmp = 0; $tmp < 2; $tmp++ ) 
+{  print "* $newline";
+}
+print "*********************************************************".
+      "******************* $newline";
+
+$bootfile = "bootstrap";
+open( OUT, ">$bootfile" ) ||
+die "Cannot open $bootfile: $!\n";
+if (( $platform ne "$Winnt" ) or ( $USE_SHELL ne "4nt" ))
+{  print OUT "#!$SHELL\n";
+}
+close( OUT ) || print "Can't close $bootfile: $!";
+open( OUT, ">>$bootfile" ) ||
+   die "Cannot open $bootfile: $!\n";
+print OUT "source $SRC_ROOT/$outfile\n"; 
+close( OUT ) || print "Can't close $bootfile: $!";
+system(`cat bootstrap.1 >> bootstrap`);
+system(`cat bootstrap.2 >> bootstrap`);
+system(`chmod +x bootstrap`);
+#
+#--------------------------------------------------------
+# Moving the bootstrap file to the build home directory.
+#--------------------------------------------------------
+#
+$tmp = $SRC_ROOT.$ds.$bootfile;
+if (rename( $bootfile, $tmp ) ne 1)
+{  `mv -f $bootfile $tmp`;
+}
+#
+#-----------------
+# XII. Functions.
+#-----------------
+#
+#------------------------------------------------------------
+# Function name: GetValue 
+# Description:   Ask the user to enter certain information 
+#                and stores that information in a variable. 
+# Arguments:     1. Path (string)
+# Return value:  Path (string)
+#------------------------------------------------------------
+sub GetValue 
+{  my $value;
+   print "$_[ 0 ]"; 
+   $value = <STDIN>; 
+   chomp( $value );                  # cut off new line
+   return( CheckPathName( $value ) ); 
+}
+#-------------------------------------------------------------
+# Function name: CheckPathName 
+# Description:   chops off the '/' character if it's the last
+#                character in a pathname. also adds the '/'
+#                character if it's not the first character
+#                in a path.
+# Arguments:     1. Path (string)
+# Return value:  Path (string)
+#-------------------------------------------------------------
+sub CheckPathName 
+{  my $retrn = $_[ 0 ];
+   if (($platform ne "$Winnt") or ( $USE_SHELL ne "4nt" ))
+   {  # Check if the first character is not a '/'.
+      if ( !( $_[ 0 ] =~ /^\// ) ) 
+      {  $retrn = $ds.$_[ 0 ];
+      }
+   }
+   # kill the last '/','\','\n' if they exists.
+   $retrn =~ s![\s/\\]+$!!;
+   # Done!
+   return( $retrn );
+}
+#-------------------------------------------------------------
+# Function name: CheckPathExist 
+# Description:   Checks whether the directory that is given
+#                as an argument exists. If not it asks the     
+#                the user to make it. 
+# Arguments:     1. Path (string)
+# Return value:  void
+#-------------------------------------------------------------
+sub CheckPathExist 
+{  my $dir = $_[ 0 ];
+   if ( !( -d $dir ) and $platform ne "$Winnt") 
+   {  printf "The directory $_[ 0 ] does not exist. Want to create it (y/n)?: ";
+      my $answer = <STDIN>; 
+      chomp( $answer );
+      if ( $answer eq "y" || $answer eq "Y" ) 
+      {  mkdir( $_[ 0 ], 0777 ) || 
+            print ( "Cannot make directory $_[ 0 ]: $!" );
+            AddWarning( "set_soenv",
+                        "Directory $_[ 0 ] does not exist on your system." );
+      }
+      else 
+      {  AddWarning( "set_soenv",
+                     "Directory $_[ 0 ] does not exist on your system." );
+      }
+      return "false";
+   }
+   else
+   {   # Don't check under "$Winnt". The path is possibly posix and you could use a native NT perl!  
+	   return "true";
+   }
+}
+#------------------------------------------------------------
+# Function name: CreateFileHeader 
+# Description:   Creates a header for the outfile.
+# Arguments:     1. UPD (string)
+#                2. Platform (string)
+# Return value:  void
+#------------------------------------------------------------
+sub CreateFileHeader 
+{  my $timestamp = `date`;
+   chomp( $timestamp );
+   print OUT "$comment #################################################################"; 
+   print OUT $newline;
+   print OUT "$comment OpenOffice $_[ 0 ] build environment file for: $_[ 1 ]. $newline"; 
+   print OUT "$comment Generated on: $timestamp $newline"; 
+   print OUT "$comment Source this file to set up the build environment. $newline"; 
+   print OUT "$comment 1. exec (t)csh $newline"; 
+   print OUT "$comment 2. source $outfile $newline"; 
+   print OUT "$comment #################################################################"; 
+   print OUT $newline;
+}
+#---------------------------------------------------------
+# Function name: ToFile 
+# Description:   Writes the environment variable in the
+#                output file. 
+# Arguments:     1. Name of environment variable (string)
+#                2. Value of environment variable (string)
+#               3. e - env. var, a - alias, c - comment
+# Return value:  void
+#---------------------------------------------------------
+sub ToFile 
+{  if ( $_[ 2 ] eq "e" ) 
+   {  # Write an environment variable to file.
+      if (defined $_[ 1 ])
+      {  printf("%-12s %-17s %-10s %-39s\n", "The variable", $_[ 0 ], "is set to:", $_[ 1 ]) ; # to stdout
+         if (( $platform ne "$Winnt" ) or ( $USE_SHELL ne "4nt" ))
+         {   print OUT "$setenv $_[ 0 ] \"$_[ 1 ]\"$newline";       # to file
+         }
+         else
+         {   $win_format_var = WinFormat( $_[ 1 ] );  #Filter for Windows
+             print OUT "IF DEFINED $_[ 0 ] $unset $_[ 0 ] $newline";
+             print OUT "$set $_[ 0 ]=$win_format_var $newline";
+         }
+      }
+      else
+      {  printf("%-12s %-17s %-10s %-39s\n", "The variable", $_[ 0 ], "is set to:", "unset") ; # to stdout
+         if (( $platform ne "$Winnt" ) or ( $USE_SHELL ne "4nt" ))
+         {  $unsetvars .= "$unsetenv $_[ 0 ] >& /dev/null$newline";            # to file
+         }
+         else
+         {  $unsetvars .= "$unset $_[ 0 ] >& NUL$newline";
+         }
+      }
+   }
+   elsif ( $_[ 2 ] eq "a" ) 
+   {  # Write an alias to file.
+      print "The $_[ 0 ] is set to: $_[ 1 ]\n";     # to stdout
+      if (( $platform ne "$Winnt" ) or ( $USE_SHELL ne "4nt" ))
+      {  print OUT "$_[ 0 ] $_[ 1 ] $newline";               # to file
+      }
+      else
+      {  print OUT "$_[ 0 ]=$_[ 1 ] $newline";
+      }
+   }
+   elsif ( $_[ 2 ] eq "c" ) 
+   {  # Write a comment to file.
+      print "$newline";
+      print "$comment $newline";
+      print "$comment $_[ 0 ] $newline"; 
+      print "$comment $newline";     
+      print OUT "$newline";
+      print OUT "$comment $newline";
+      print OUT "$comment $_[ 0 ] $newline"; 
+      print OUT "$comment $newline";     
+#      print OUT "$newline";
+   }
+   elsif ( $_[ 2 ] eq "n" ) 
+   {  #Write a newline to a file
+      print OUT "$newline";
+   }
+   elsif ( $_[ 2 ] eq "x" )
+   {
+      #Write first argument as is, and nothing else
+      print OUT "$_[ 0 ] $newline";
+   }
+   elsif ( $_[ 2 ] eq "j" )
+   {
+      if ((defined $_[ 1 ]) and ( $platform eq "$Winnt" )) 
+      {  printf("%-12s %-17s %-10s %-39s\n", "The variable", $_[ 0 ], "is set to:", $_[ 1 ]) ; # to stdout
+         if ( $USE_SHELL ne "4nt" )
+         {
+             $win_format_var = WinFormat( $_[ 1 ] );  #Filter for Windows
+             $win_format_var =~ s/\\/\\\\/g;
+             print OUT "$setenv $_[ 0 ] \"$win_format_var\" $newline";
+         }
+         else
+         {
+             $win_format_var = WinFormat( $_[ 1 ] );  #Filter for Windows
+             print OUT "IF DEFINED $_[ 0 ] $unset $_[ 0 ] $newline";
+             print OUT "$set $_[ 0 ]=$win_format_var $newline";
+         }
+      }
+      else
+      {
+          print "Type \"j\" only intended for Windows! $newline"; 
+          print "use \"e\" to set and unset variables. $newline"; 
+      }
+   }
+   else 
+   {  print "Unknown type! $newline"; 
+   }
+}
+#----------------------------------------------------------
+# Function name: PosixFormat
+# Description:   Format variables to Posix Style Format. Should only be used 
+#                with DOS-style path variables
+# Arguments:     1. Variable (string)
+# Return value:  Reformatted String
+#----------------------------------------------------------
+sub PosixFormat
+{  my ( $variable );
+   $variable = $_[ 0 ];
+   # ToDo: Do the replacement only if "Winnt" and var contains "\" and ":"
+   if ( $platform eq "$Winnt" )
+   {   $variable =~ s/(\$\w+)/$1/eeg ;         # expand the variables
+	   $variable =~ s/(\$\w+)/$1/eeg ;         # expand the variables twice!
+   	   if ( ( $variable =~ /\\/ ) and ( $variable =~ /:/ ) )
+	   {   $variable =~ s{([c-z]):}{/cygdrive/$1}gi;
+		   # Map drives to /cgydrive/drive
+		   # We do this also for old cygwins, back
+		   # replacement in winformat.
+	   }
+	   $variable =~ s!\\!/!g;
+	   $variable =~ s/;/:/g;
+   }
+   return $variable;
+}
+#----------------------------------------------------------
+# Function name: WinFormat 
+# Description:   Format variables to Windows Format.
+# Arguments:     1. Variable (string)
+# Return value:  Reformatted String
+#----------------------------------------------------------
+sub WinFormat         
+{  my ( $variable, $d1, $d1_prefix, @split_var );  
+   $variable = $_[ 0 ];
+   $variable =~ s/^"//;
+   $variable =~ s/"$//;
+   # Here should be NO "\"! If yes, PosixFormat() was forgotten before !
+   if ( $variable =~ /\\/ )
+   {
+	   die("Error! Variable contains \"\\\" : $variable PosixFormat() missing?");
+   }
+   $variable =~ s/(\$\w+)/$1/eeg ;         # expand the variables
+   $variable =~ s/(\$\w+)/$1/eeg ;         # expand the variables twice!
+   $variable =~ s/\$\{PATH\}/%PATH/g ;     # explicit replace ${PATH}
+   $variable =~ s/:+/:/g ;                 # remove multiple ;
+
+   if ( $cygwinver eq "b" )
+   {
+	   $variable =~ s/(\$\w+)/$1/eeg ;         # expand the variables
+	   $variable =~ s/(\$\w+)/$1/eeg ;         # expand the variables twice!
+	   $variable =~ s/\$\{PATH\}/%PATH/g ;     # explicit replace ${PATH}
+	   $variable =~ s/:/;/g;                         # Change path-separator
+	   $variable =~ s{//([c-z])/}{$1:\\}gi;          # drives from cgywin-b20 (just in case ...)
+	   $variable =~ s{/cygdrive/([c-z])/}{$1:\\}gi;  # more drives for cgywin-b20
+       $variable =~ s!([;]|\A|-[iIlL])/!$1$SYSTEMDRIVE/!g; # get back the hidden drives
+	   $variable =~ s!/!\\!g;                        # Rest is windows stuff 
+   }
+   else  # New cygwin
+   {
+       $variable =~ s/:/;/g;
+#       $variable =~ s/([;]|\A|-[iIlL])(\w);/$1$2:/g; # get back the drives
+	   $variable =~ s{/cygdrive/([c-z])/}{$1:\\}gi;  # more drives cgywin style
+       # Search for posix path entry and replace with cygpath -w entry
+       if ( $variable =~ /^\s+-\w/ )
+       {
+           # Include paths
+           @split_var = split(/ /,$variable);
+           foreach $d1 ( @split_var )
+           {
+               if ( $d1 =~ /^(-\w)(?:(?:\/[\w\.~]+)+)/ )
+               {
+                   $d1_prefix = $1;
+                   $d1 =~ s/^-\w//;
+                   chomp( $d1 = qx{cygpath -w "$d1"} );
+                   $d1 = $d1_prefix.$d1;
+               }
+           }
+           $variable = join(' ',@split_var);
+       }
+       elsif ( $variable eq ";" ) {}
+       else
+       {
+           # Normal paths
+           @split_var = split(/;/,$variable);
+           foreach $d1 ( @split_var )
+           {
+               if ( $d1 =~ /(?:^\/[\w\.~]+)+/ )
+               {
+                   chomp( $d1 = qx{cygpath -w "$d1"} ) ;
+               }
+           }
+           $variable = join(';',@split_var);
+       }
+       $variable =~ s/\//\\/g; # Remaining \ come from e.g.: ../foo/baa
+   }
+   return $variable;
+}
+#----------------------------------------------------------
+# Function name: CheckBuildEnv 
+# Description:   Checks whether the build environment 
+#                exists on the system.
+# Arguments:     1. $SO_HOME: Build home directory (string)
+# Return value:  0 - Failure
+#                1 - Success
+#----------------------------------------------------------
+sub CheckBuildEnv 
+{  my ( $src_root );
+   $src_root  = $_[ 0 ];
+   if ( !( -d $src_root ) and $platform ne "$Winnt") 
+   {  return 0;
+   }
+   return 1;
+}
+#--------------------------------------------------------
+# Function name: CreateBuildEnv 
+# Description:   Creates the build environment. 
+# Arguments:     1. $SO_HOME: Build home directory.
+#                2. $UPD:     UPD.
+# Return value:  void
+#--------------------------------------------------------
+sub CreateBuildEnv 
+{  my ( $src_root );
+   $src_root  = $_[ 0 ];
+   # 1. Create the SRC_ROOT directory.
+   mkdir( $src_root, 0777 ) || 
+      print ( "Cannot create directory $src_root \n");
+}
+#--------------------------------------------------------
+# Function name: GetCorrectPath
+# Description:   Creates the build environment. 
+# Arguments:     1. $COMPATH:     Compiler Path.
+#                2. $PERL_PATH:   Perl executable Path.
+#                2. $TCSH_PATH:   Tcsh executable Path.
+# Return value:  String - Correct Path
+#--------------------------------------------------------
+sub GetCorrectPath 
+{  my ( $compath, $perl_path, $tcsh_path, $compiler, $perl_compath, $compath_perl, $correct_path );
+   $compath  = $_[ 0 ];
+   $perl_path = $_[ 1 ];
+   $tcsh_path = $_[ 2 ];
+   $compiler = $_[ 3 ];
+   if ($compath ne $perl_path) 
+   {  $perl_compath .= $compath.$ds."perl";
+      if ( !( -f $perl_compath ) ) 
+      {  $correct_path = $ps.$compath.
+                         $ps.$perl_path;
+      }
+      else 
+      {  $compath_perl .= $perl_path.$ds.$compiler;
+         if ( !( -f $compath_perl ) ) 
+         {  $correct_path = $ps.$perl_path.
+                         $ps.$compath;
+         }
+         else
+         {  AddWarning( "set_soenv", "Compiler path and Perl Path conflict, fix and run ./configure again" );
+            $correct_path = "";
+         }
+      }
+   }
+   else 
+   {  $correct_path = $ps.$compath;
+   }
+   if (($tcsh_path ne $compath) && ($tcsh_path ne $perl_path) && 
+       ($tcsh_path ne $USR.$BIN) && ($tcsh_path ne $BIN)) 
+   {  $correct_path .= $ps.$tcsh_path;
+   }
+   if (($compath ne $USR.$BIN) && ($perl_path ne $USR.$BIN) && ($tcsh_path ne $USR.$BIN)) 
+   {  $correct_path .= $ps.$USR.$BIN;
+   }
+   if (($compath ne $BIN) && ($perl_path ne $BIN)) 
+   {  $correct_path .= $ps.$BIN;
+   } 
+   return $correct_path;
+}
+#------------------------------------------------------------
+# Function name: AddWarning 
+# Description:   Adds any kind of warning for the user.
+#                The warning will be shown at the end
+#                of this script.
+# Arguments:     1. Add the configure warnings or the set_soenv
+#                   warning (string).
+#                2. Warning (string).
+# Return value:  void
+#------------------------------------------------------------
+sub AddWarning 
+{  if ( $_[ 0 ] eq "configure" ) 
+   {  open( IN, $warnfile );
+      while ( <IN> ) 
+      {  $Warning = $Warning."* - ".$_;
+      }
+      close( IN );
+      # Remove the temporary warning file.
+      # unlink ( $warnfile );
+   }
+   elsif ( $_[ 0 ] eq "set_soenv" ) 
+   {  my ( $arg1 );
+      $arg1 = $_[ 1 ];
+      chomp( $arg1 );                            # cut off new line      
+      $Warning = $Warning."* - set_soenv: warning: $arg1 $newline";  # add the warning  
+   }
+}
+#-------------------
+# That's all folks!
+#-------------------
