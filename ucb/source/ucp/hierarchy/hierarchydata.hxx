@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hierarchydata.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kso $ $Date: 2002-09-27 15:12:24 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 14:23:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,9 +72,14 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #endif
 
-namespace com { namespace sun { namespace star { namespace container {
-    class XHierarchicalNameAccess;
-} } } }
+namespace com { namespace sun { namespace star {
+    namespace container {
+        class XHierarchicalNameAccess;
+    }
+    namespace util {
+        class XOfficeInstallationDirectories;
+    }
+} } }
 
 namespace hierarchy_ucp
 {
@@ -130,6 +135,9 @@ class HierarchyEntry
     ::com::sun::star::uno::Reference<
             ::com::sun::star::container::XHierarchicalNameAccess >
                                                            m_xRootReadAccess;
+    ::com::sun::star::uno::Reference<
+            ::com::sun::star::util::XOfficeInstallationDirectories >
+                                                           m_xOfficeInstDirs;
     sal_Bool m_bTriedToGetRootReadAccess;  // #82494#
 
 private:
