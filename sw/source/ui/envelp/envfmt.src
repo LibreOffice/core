@@ -2,9 +2,9 @@
  *
  *  $RCSfile: envfmt.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 16:04:21 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 11:53:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -808,6 +808,10 @@ Menu MNU_EDIT
         };
     };
 };
+
+
+
+
 
 
 
