@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoframe.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: os $ $Date: 2000-12-11 08:15:23 $
+ *  last change: $Author: os $ $Date: 2000-12-14 09:48:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,6 +145,9 @@
 #endif
 #ifndef _COM_SUN_STAR_DRAWING_POINTSEQUENCE_HPP_
 #include <com/sun/star/drawing/PointSequence.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DRAWING_COLORMODE_HPP_
+#include <com/sun/star/drawing/ColorMode.hpp>
 #endif
 #ifndef _SV_POLY_HXX //autogen
 #include <vcl/poly.hxx>
@@ -368,13 +371,23 @@ const SfxItemPropertyMap* GetGraphicDescMap()
         { SW_PROP_NAME(UNO_NAME_RIGHT_BORDER_DISTANCE), RES_BOX,                &::getCppuType((const sal_Int32*)0),    0, RIGHT_BORDER_DISTANCE |CONVERT_TWIPS },
         { SW_PROP_NAME(UNO_NAME_TOP_BORDER_DISTANCE),       RES_BOX,                &::getCppuType((const sal_Int32*)0),    0, TOP_BORDER_DISTANCE   |CONVERT_TWIPS },
         { SW_PROP_NAME(UNO_NAME_BOTTOM_BORDER_DISTANCE),    RES_BOX,                &::getCppuType((const sal_Int32*)0),    0, BOTTOM_BORDER_DISTANCE|CONVERT_TWIPS },
-        { SW_PROP_NAME(UNO_NAME_GRAPHIC_URL),               0,                      &::getCppuType((const OUString*)0), 0, 0 },
+        { SW_PROP_NAME(UNO_NAME_GRAPHIC_BLUE),          RES_GRFATR_CHANNELB,     &::getCppuType((sal_Int16*)0), 0,   0},
+        { SW_PROP_NAME(UNO_NAME_GRAPHIC_COLOR_MODE),    RES_GRFATR_DRAWMODE,     &::getCppuType((drawing::ColorMode*)0),        0,   0},
+        { SW_PROP_NAME(UNO_NAME_GRAPHIC_CONTRAST),      RES_GRFATR_CONTRAST,     &::getCppuType((sal_Int16*)0), 0,   0},
         { SW_PROP_NAME(UNO_NAME_GRAPHIC_FILTER),            0,                      &::getCppuType((const OUString*)0), 0, 0 },
+        { SW_PROP_NAME(UNO_NAME_GRAPHIC_GAMMA),         RES_GRFATR_GAMMA,        &::getCppuType((double*)0),        0,   0},
+        { SW_PROP_NAME(UNO_NAME_GRAPHIC_GREEN),         RES_GRFATR_CHANNELG,     &::getCppuType((sal_Int16*)0), 0,   0},
+        { SW_PROP_NAME(UNO_NAME_GRAPHIC_INVERSION),     RES_GRFATR_INVERT,       &::getBooleanCppuType(),   0,   0},
+        { SW_PROP_NAME(UNO_NAME_GRAPHIC_LUMINANCE),     RES_GRFATR_LUMINANCE,    &::getCppuType((sal_Int16*)0), 0,   0},
+        { SW_PROP_NAME(UNO_NAME_GRAPHIC_RED),           RES_GRFATR_CHANNELR,     &::getCppuType((sal_Int16*)0), 0,   0},
+        { SW_PROP_NAME(UNO_NAME_GRAPHIC_ROTATION),      RES_GRFATR_ROTATION,     &::getCppuType((sal_Int16*)0), 0,   0},
+        { SW_PROP_NAME(UNO_NAME_GRAPHIC_TRANSPARENCY),  RES_GRFATR_TRANSPARENCY, &::getCppuType((sal_Int8*)0),  0,   0},
+        { SW_PROP_NAME(UNO_NAME_GRAPHIC_URL),               0,                      &::getCppuType((const OUString*)0), 0, 0 },
         { SW_PROP_NAME(UNO_NAME_CONTOUR_POLY_POLYGON), FN_PARAM_COUNTOUR_PP, &::getCppuType((PointSequenceSequence*)0), PropertyAttribute::MAYBEVOID, 0 },
         { SW_PROP_NAME(UNO_NAME_Z_ORDER),               FN_UNO_Z_ORDER,         &::getCppuType((const sal_Int32*)0),        PROPERTY_NONE, 0},
         {0,0,0,0}
     };
-    #define GRPH_PROP_COUNT 59
+    #define GRPH_PROP_COUNT 69
     return aGraphicDescPropertyMap_Impl;
 }
 
@@ -799,6 +812,7 @@ public:
 
     virtual sal_Bool        SetProperty(const String& rName, uno::Any aVal);
     virtual sal_Bool        GetProperty(const String& rName, uno::Any*& pAny );
+    sal_Bool                GetSingleProperty(const USHORT nWhich, uno::Any*& pAny);
 
     virtual sal_Bool                AnyToItemSet(SfxItemSet& rFrmSet, SfxItemSet& rSet);
 };
@@ -859,6 +873,25 @@ sal_Bool SwGraphicProperties_Impl::GetProperty(const String& rName, uno::Any*& p
         pAny = pAnyArr[nPos];
     return pAny &&nPos < nArrLen;
 }
+/* -----------------------------13.12.00 14:45--------------------------------
+
+ ---------------------------------------------------------------------------*/
+sal_Bool SwGraphicProperties_Impl::GetSingleProperty(const USHORT nWhich, uno::Any*& pAny)
+{
+    sal_uInt16 nPos = 0;
+    const SfxItemPropertyMap* pTemp = GetMap();
+    while( pTemp->pName )
+    {
+        if( nWhich == pTemp->nWID )
+            break;
+        ++nPos;
+        ++pTemp;
+    }
+    if(nPos < nArrLen)
+        pAny = pAnyArr[nPos];
+    return pAny &&nPos < nArrLen;
+}
+
 /* -----------------27.06.98 14:40-------------------
  *
  * --------------------------------------------------*/
@@ -886,13 +919,34 @@ sal_Bool    SwGraphicProperties_Impl::AnyToItemSet(
             bRet &= ((SfxPoolItem&)aMirror).PutValue(*pVMirror, MID_MIRROR_VERT);
         rGrSet.Put(aMirror);
     }
-    uno::Any* pCrop;
-    if(GetProperty(C2S(UNO_NAME_GRAPHIC_CROP), pCrop ))
+
+    static const USHORT nIDs[] =
     {
-        SwCropGrf aCrop;
-        bRet &= ((SfxPoolItem&)aCrop).PutValue(*pCrop, CONVERT_TWIPS);
-        rGrSet.Put(aCrop);
+        RES_GRFATR_CROPGRF,
+        RES_GRFATR_ROTATION,
+        RES_GRFATR_LUMINANCE,
+        RES_GRFATR_CONTRAST,
+        RES_GRFATR_CHANNELR,
+        RES_GRFATR_CHANNELG,
+        RES_GRFATR_CHANNELB,
+        RES_GRFATR_GAMMA,
+        RES_GRFATR_INVERT,
+        RES_GRFATR_TRANSPARENCY,
+        RES_GRFATR_DRAWMODE,
+        0
+    };
+    uno::Any* pAny;
+    for(sal_Int16 nIndex = 0; nIDs[nIndex]; nIndex++)
+    {
+        if(GetSingleProperty(nIDs[nIndex], pAny ))
+        {
+            SfxPoolItem* pItem = ::GetDfltAttr( nIDs[nIndex] )->Clone();
+            bRet &= pItem->PutValue(*pAny, CONVERT_TWIPS);
+            rGrSet.Put(*pItem);
+            delete pItem;
+        }
     }
+
     return bRet;
 }
 
@@ -1120,8 +1174,8 @@ void SwXFrame::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
         if( eType == FLYCNTTYPE_GRF &&
                     (COMPARE_EQUAL == rPropertyName.compareToAscii(UNO_NAME_ALTERNATIVE_TEXT)||
                     (pCur &&
-                    (pCur->nWID == RES_GRFATR_CROPGRF ||
-                        pCur->nWID == RES_GRFATR_MIRRORGRF ||
+                    ((pCur->nWID >=  RES_GRFATR_MIRRORGRF &&
+                        pCur->nWID <= RES_GRFATR_DRAWMODE )||
                             pCur->nWID == FN_PARAM_COUNTOUR_PP))))
         {
             const SwNodeIndex* pIdx = pFmt->GetCntnt().GetCntntIdx();
@@ -1342,8 +1396,8 @@ uno::Any SwXFrame::getPropertyValue(const OUString& rPropertyName)
             throw UnknownPropertyException();
         if(eType == FLYCNTTYPE_GRF &&
                 pCur &&
-                (pCur->nWID == RES_GRFATR_CROPGRF ||
-                    pCur->nWID == RES_GRFATR_MIRRORGRF ||
+                ((pCur->nWID >=  RES_GRFATR_MIRRORGRF &&
+                    pCur->nWID <= RES_GRFATR_DRAWMODE )||
                         pCur->nWID == FN_PARAM_COUNTOUR_PP ))
         {
             const SwNodeIndex* pIdx = pFmt->GetCntnt().GetCntntIdx();
