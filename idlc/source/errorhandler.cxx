@@ -2,9 +2,9 @@
  *
  *  $RCSfile: errorhandler.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:46:43 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 15:10:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,6 +176,26 @@ static sal_Char* errorCodeToMessage(ErrorCode eCode)
         return "a rest parameter may not be used on an interface method";
     case EIDL_READONLY_ATTRIBUTE_SET_EXCEPTIONS:
         return "a readonly attribute may not have a setter raises clause";
+    case EIDL_WRONG_NUMBER_OF_TYPE_ARGUMENTS:
+        return
+            "the number of given type arguments does not match the expected"
+            " number of type parameters";
+    case EIDL_INSTANTIATED_STRUCT_TYPE_TYPEDEF:
+        return
+            "an instantiated polymorphic struct type cannot be used in a"
+            " typedef";
+    case EIDL_IDENTICAL_TYPE_PARAMETERS:
+        return "two type parameters have the same name";
+    case EIDL_STRUCT_TYPE_TEMPLATE_WITH_BASE:
+        return "a polymorphic struct type template may not have a base type";
+    case EIDL_PUBLISHED_FORWARD:
+        return
+            "a published forward declaration of an interface type cannot be"
+            " followed by an unpublished declaration of that type";
+    case EIDL_PUBLISHED_USES_UNPUBLISHED:
+        return
+            "an unpublished entity cannot be used in the declaration of a"
+            " published entity: ";
     }
     return "unknown errror";
 }
@@ -725,4 +745,13 @@ void ErrorHandler::enumValLookupFailure(AstUnion* pUnion, AstEnum* pEnum, const 
             pUnion->getLocalName().getStr(),
             pEnum->getLocalName().getStr(), name.getStr());
     idlc()->incErrorCount();
+}
+
+bool ErrorHandler::checkPublished(AstDeclaration const * decl) {
+    if (idlc()->isPublished() && !decl->isPublished()) {
+        error1(EIDL_PUBLISHED_USES_UNPUBLISHED, decl);
+        return false;
+    } else {
+        return true;
+    }
 }
