@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmvwimp.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fs $ $Date: 2002-05-22 17:13:02 $
+ *  last change: $Author: fs $ $Date: 2002-07-29 14:50:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -222,6 +222,9 @@ protected:
     void    stopMarkListWatching();
     void    startMarkListWatching();
 
+    void    notifyViewDying( );
+        // notifies this impl class that the anti-impl instance (m_pView) is going to die
+
 public:
     // UNO Anbindung
 
@@ -267,6 +270,9 @@ private:
     ) const;
 
     void ObjectRemovedInAliveMode(const SdrObject* pObject);
+
+    // cancels all pending async events
+    void cancelEvents();
 
     /// the the auto focus to the first (in terms of the tab order) control
     void AutoFocus( sal_Bool _bSync = sal_False );

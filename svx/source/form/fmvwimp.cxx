@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmvwimp.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: fs $ $Date: 2002-05-22 17:15:05 $
+ *  last change: $Author: fs $ $Date: 2002-07-29 14:52:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -490,15 +490,41 @@ void FmXPageViewWinRec::updateTabOrder( const ::com::sun::star::uno::Reference< 
 }
 
 //------------------------------------------------------------------------
+void FmXFormView::cancelEvents()
+{
+    if ( m_nEvent )
+    {
+        Application::RemoveUserEvent( m_nEvent );
+        m_nEvent = 0;
+    }
+
+    if ( m_nErrorMessageEvent )
+    {
+        Application::RemoveUserEvent( m_nErrorMessageEvent );
+        m_nErrorMessageEvent = 0;
+    }
+
+    if ( m_nAutoFocusEvent )
+    {
+        Application::RemoveUserEvent( m_nAutoFocusEvent );
+        m_nAutoFocusEvent = 0;
+    }
+}
+
+//------------------------------------------------------------------------
+void FmXFormView::notifyViewDying( )
+{
+    DBG_ASSERT( m_pView, "FmXFormView::notifyViewDying: my view already died!" );
+    m_pView = NULL;
+    cancelEvents();
+}
+
+//------------------------------------------------------------------------
 FmXFormView::~FmXFormView()
 {
     DBG_ASSERT(m_aWinList.size() == 0, "Liste nicht leer");
-    if (m_nEvent)
-        Application::RemoveUserEvent(m_nEvent);
-    if (m_nErrorMessageEvent)
-        Application::RemoveUserEvent(m_nErrorMessageEvent);
-    if (m_nAutoFocusEvent)
-        Application::RemoveUserEvent(m_nAutoFocusEvent);
+
+    cancelEvents();
 
     delete m_pWatchStoredList;
     m_pWatchStoredList = NULL;
@@ -650,6 +676,12 @@ IMPL_LINK(FmXFormView, OnDelayedErrorMessage, void*, EMPTYTAG)
 IMPL_LINK(FmXFormView, OnActivate, void*, EMPTYTAG)
 {
     m_nEvent = 0;
+
+    if ( !m_pView )
+    {
+        DBG_ERROR( "FmXFormView::OnActivate: well .... seems we have a timing problem (the view already died)!" );
+        return 0;
+    }
 
     if (m_pPageViewForActivation)
     {
