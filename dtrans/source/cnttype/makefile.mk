@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: tra $ $Date: 2001-02-13 13:03:48 $
+#   last change: $Author: tra $ $Date: 2001-03-02 06:57:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -94,7 +94,6 @@ SHL1STDLIBS= \
         $(CPPULIB) 	\
         $(CPPUHELPERLIB)
 
-#SHL1DEPN+= makefile.mk $(TARGET).xml
 SHL1IMPLIB=i$(SHL1TARGET) 
 
 #--- comment -----------------

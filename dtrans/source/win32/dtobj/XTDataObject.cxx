@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XTDataObject.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: tra $ $Date: 2001-03-01 15:39:15 $
+ *  last change: $Author: tra $ $Date: 2001-03-02 06:57:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,6 +193,7 @@ STDMETHODIMP CXTDataObject::GetData( LPFORMATETC pFormatetc, LPSTGMEDIUM pmedium
 
     try
     {
+        // prepare data transfer
         invalidateStgMedium( *pmedium );
         validateFormatEtc( pFormatetc );
 
@@ -265,29 +266,25 @@ STDMETHODIMP CXTDataObject::GetData( LPFORMATETC pFormatetc, LPSTGMEDIUM pmedium
 //------------------------------------------------------------------------
 
 // inline
-void SAL_CALL CXTDataObject::transferDataToStorageAndSetupStgMedium( const sal_Int8* lpStorage,
-                                                                         const FORMATETC& fetc,
-                                                                        sal_uInt32 nInitStgSize,
-                                                                        sal_uInt32 nBytesToTransfer,
-                                                                        STGMEDIUM& stgmedium )
+void SAL_CALL CXTDataObject::transferDataToStorageAndSetupStgMedium(
+    const sal_Int8* lpStorage, const FORMATETC& fetc, sal_uInt32 nInitStgSize,
+    sal_uInt32 nBytesToTransfer, STGMEDIUM& stgmedium )
 {
     OSL_PRECOND( !nInitStgSize || nInitStgSize && (nInitStgSize >= nBytesToTransfer),
                  "Memory size less than number of bytes to transfer" );
 
     // if the client wants the data only via IStream we setup the storage transfer
     // helper so that the stream will not be released on destruction
-    sal_Bool bShouldReleaseStream = ((fetc.tymed & TYMED_HGLOBAL) || !(fetc.tymed & TYMED_ISTREAM));
-    CStgTransferHelper stgTransfHelper( AUTO_INIT,
-                                        NULL,
-                                        sal_False,
-                                        bShouldReleaseStream );
+    sal_Bool bShouldReleaseStream =
+        ((fetc.tymed & TYMED_HGLOBAL) || !(fetc.tymed & TYMED_ISTREAM));
+
+    CStgTransferHelper stgTransfHelper(
+        AUTO_INIT, NULL, sal_False, bShouldReleaseStream );
 
     // setup storage size
     if ( nInitStgSize > 0 )
-        stgTransfHelper.init( nInitStgSize,
-                              GMEM_MOVEABLE | GMEM_ZEROINIT,
-                              sal_False,
-                              bShouldReleaseStream );
+        stgTransfHelper.init(
+            nInitStgSize, GMEM_MOVEABLE | GMEM_ZEROINIT, sal_False, bShouldReleaseStream );
 
     stgTransfHelper.write( lpStorage, nBytesToTransfer );
 
@@ -299,7 +296,8 @@ void SAL_CALL CXTDataObject::transferDataToStorageAndSetupStgMedium( const sal_I
 //------------------------------------------------------------------------
 
 //inline
-void SAL_CALL CXTDataObject::transferLocaleToClipbAndSetupStgMedium( FORMATETC& fetc, STGMEDIUM& stgmedium )
+void SAL_CALL CXTDataObject::transferLocaleToClipbAndSetupStgMedium(
+    FORMATETC& fetc, STGMEDIUM& stgmedium )
 {
     if ( m_FormatRegistrar.hasSynthesizedLocale( ) )
     {
@@ -320,7 +318,8 @@ void SAL_CALL CXTDataObject::transferLocaleToClipbAndSetupStgMedium( FORMATETC& 
 //------------------------------------------------------------------------
 
 //inline
-void SAL_CALL CXTDataObject::transferUnicodeToClipbAndSetupStgMedium( FORMATETC& fetc, STGMEDIUM& stgmedium )
+void SAL_CALL CXTDataObject::transferUnicodeToClipbAndSetupStgMedium(
+    FORMATETC& fetc, STGMEDIUM& stgmedium )
 {
     DataFlavor aFlavor = formatEtcToDataFlavor( fetc );
 
@@ -328,6 +327,8 @@ void SAL_CALL CXTDataObject::transferUnicodeToClipbAndSetupStgMedium( FORMATETC&
     m_XTransferable->getTransferData( aFlavor ) >>= aText;
 
     sal_uInt32 nBytesToTransfer = aText.getLength( ) * sizeof( sal_Unicode );
+
+    // to be sure there is an ending 0
     sal_uInt32 nRequiredMemSize = nBytesToTransfer + 1;
 
     transferDataToStorageAndSetupStgMedium(
@@ -343,7 +344,8 @@ void SAL_CALL CXTDataObject::transferUnicodeToClipbAndSetupStgMedium( FORMATETC&
 //------------------------------------------------------------------------
 
 //inline
-void SAL_CALL CXTDataObject::transferAnyDataToClipbAndSetupStgMedium( FORMATETC& fetc, STGMEDIUM& stgmedium )
+void SAL_CALL CXTDataObject::transferAnyDataToClipbAndSetupStgMedium(
+    FORMATETC& fetc, STGMEDIUM& stgmedium )
 {
     DataFlavor aFlavor = formatEtcToDataFlavor( fetc );
 
@@ -358,6 +360,7 @@ void SAL_CALL CXTDataObject::transferAnyDataToClipbAndSetupStgMedium( FORMATETC&
     if ( CF_DIB == fetc.cfFormat )
         clipDataStream = OOBmpToWinDIB( clipDataStream );
 
+    // transfer data
     if ( CF_METAFILEPICT == fetc.cfFormat )
     {
         HMETAFILE hMfPict = OOMFPictToWinMFPict( clipDataStream );
@@ -381,8 +384,8 @@ void SAL_CALL CXTDataObject::transferAnyDataToClipbAndSetupStgMedium( FORMATETC&
 // IDataObject->EnumFormatEtc
 //------------------------------------------------------------------------
 
-STDMETHODIMP CXTDataObject::EnumFormatEtc( DWORD dwDirection,
-                                           IEnumFORMATETC** ppenumFormatetc )
+STDMETHODIMP CXTDataObject::EnumFormatEtc(
+    DWORD dwDirection, IEnumFORMATETC** ppenumFormatetc )
 {
     if ( ( NULL == ppenumFormatetc ) || ( DATADIR_SET == dwDirection ) )
         return E_INVALIDARG;
@@ -405,10 +408,12 @@ STDMETHODIMP CXTDataObject::EnumFormatEtc( DWORD dwDirection,
 
 STDMETHODIMP CXTDataObject::QueryGetData( LPFORMATETC pFormatetc )
 {
-    if ( NULL == pFormatetc )
-        return E_INVALIDARG;
+    HRESULT hr = E_INVALIDARG;
 
-    return m_FormatEtcContainer.hasFormatEtc( *pFormatetc ) ? S_OK : S_FALSE;
+    if ( NULL != pFormatetc )
+        hr = m_FormatEtcContainer.hasFormatEtc( *pFormatetc ) ? S_OK : S_FALSE;
+
+    return hr;
 }
 
 //------------------------------------------------------------------------
