@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasecontroller.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-03 16:38:26 $
+ *  last change: $Author: as $ $Date: 2002-07-08 12:00:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -730,7 +730,19 @@ REFERENCE< XDISPATCH > SAL_CALL SfxBaseController::queryDispatch(   const   UNOU
 
 SEQUENCE< REFERENCE< XDISPATCH > > SAL_CALL SfxBaseController::queryDispatches( const SEQUENCE< DISPATCHDESCRIPTOR >& seqDescripts ) throw( ::com::sun::star::uno::RuntimeException )
 {
-    return SEQUENCE< REFERENCE< XDISPATCH > >() ;
+    // Create return list - which must have same size then the given descriptor
+    // It's not allowed to pack it!
+    sal_Int32 nCount = seqDescripts.getLength();
+    SEQUENCE< REFERENCE< XDISPATCH > > lDispatcher( nCount );
+
+    for( sal_Int32 i=0; i<nCount; ++i )
+    {
+        lDispatcher[i] = queryDispatch( seqDescripts[i].FeatureURL  ,
+                                        seqDescripts[i].FrameName   ,
+                                        seqDescripts[i].SearchFlags );
+    }
+
+    return lDispatcher;
 }
 
 //________________________________________________________________________________________________________
