@@ -2,9 +2,9 @@
  *
  *  $RCSfile: floatwin.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:40 $
+ *  last change: $Author: th $ $Date: 2001-07-06 16:05:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@
 #endif
 #ifndef _SV_BRDWIN_HXX
 #include <brdwin.hxx>
+#endif
+#ifndef _SV_EVENT_HXX
+#include <event.hxx>
 #endif
 #ifndef _SV_TOOLBOX_HXX
 #include <toolbox.hxx>

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: graph.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obr $ $Date: 2001-02-14 08:25:24 $
+ *  last change: $Author: th $ $Date: 2001-07-06 16:02:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,24 +61,11 @@
 
 #define _SV_GRAPH_CXX
 
-#ifndef TF_SVDATA
-#ifndef _SV_CLIP_HXX
-#include <clip.hxx>
-#endif
-#endif
 #ifndef _SV_IMPGRAPH_HXX
 #include <impgraph.hxx>
 #endif
 #ifndef _SV_OUTDEV_HXX
 #include <outdev.hxx>
-#endif
-#ifndef TF_SVDATA
-#ifndef _SV_CLIP_HXX
-#include <clip.hxx>
-#endif
-#ifndef _SV_DRAG_HXX
-#include <drag.hxx>
-#endif
 #endif
 #include <graph.hxx>
 
@@ -763,79 +750,3 @@ SvStream& operator<<( SvStream& rOStream, const Graphic& rGraphic )
 {
     return rOStream << *rGraphic.mpImpGraphic;
 }
-
-// ------------------------------------------------------------------------
-
-#ifndef TF_SVDATA
-
-ULONG Graphic::RegisterClipboardFormatName()
-{
-     static ULONG nFormat = 0;
-
-     if ( !nFormat )
-         nFormat = Clipboard::RegisterFormatName( XubString( RTL_CONSTASCII_USTRINGPARAM( "SVXB (StarView Bitmap/Animation)" ) ) );
-
-     return nFormat;
-}
-
-// ------------------------------------------------------------------------
-
-BOOL Graphic::ClipboardHasFormat()
-{
-    return Clipboard::HasFormat( RegisterClipboardFormatName() )
-           || Clipboard::HasFormat( FORMAT_GDIMETAFILE )
-           || Clipboard::HasFormat( FORMAT_BITMAP );
-}
-
-// ------------------------------------------------------------------------
-
-BOOL Graphic::DragServerHasFormat( USHORT nItem )
-{
-    return DragServer::HasFormat( nItem, RegisterClipboardFormatName() )
-           || DragServer::HasFormat( nItem, FORMAT_GDIMETAFILE )
-           || DragServer::HasFormat( nItem, FORMAT_BITMAP );
-}
-
-// ------------------------------------------------------------------------
-
-BOOL Graphic::Copy() const
-{
-    SotDataMemberObjectRef  aDataObject = new SotDataMemberObject;
-    SvData*                 pData = new SvData( RegisterClipboardFormatName() );
-
-    pData->SetData( (SvDataCopyStream*) this, TRANSFER_COPY );
-    aDataObject->Append( pData );
-    VclClipboard::Copy( aDataObject );
-
-    return TRUE;
-}
-
-// ------------------------------------------------------------------------
-
-BOOL Graphic::Paste()
-{
-    const ULONG nFormat = RegisterClipboardFormatName();
-    BOOL        bRet = FALSE;
-
-    if( VclClipboard::HasFormat( nFormat ) )
-    {
-        SotDataObjectRef aDataObject = VclClipboard::Paste();
-        SvData           aData( nFormat );
-
-        if( aDataObject.Is() && aDataObject->GetData( &aData ) )
-        {
-            Graphic* pGraphic = NULL;
-
-            if( aData.GetData( (SvDataCopyStream**) &pGraphic, StaticType(), TRANSFER_MOVE ) )
-                *this = *pGraphic;
-
-            delete pGraphic;
-            bRet = TRUE;
-        }
-    }
-
-    return bRet;
-}
-
-#endif
-

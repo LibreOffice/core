@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dockwin.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obr $ $Date: 2001-02-14 08:29:04 $
+ *  last change: $Author: th $ $Date: 2001-07-06 16:05:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,9 +124,6 @@ ImplDockFloatWin::ImplDockFloatWin( Window* pParent, WinBits nWinBits,
         EnableInput( pDockingWin->IsInputEnabled(), FALSE );
         AlwaysEnableInput( pDockingWin->IsAlwaysEnableInput(), FALSE );
         EnableAlwaysOnTop( pDockingWin->IsAlwaysOnTopEnabled() );
-#ifndef TF_SVDATA
-        EnableDrop( pDockingWin->IsDropEnabled() );
-#endif
         SetActivateMode( pDockingWin->GetActivateMode() );
     }
 
