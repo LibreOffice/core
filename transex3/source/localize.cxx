@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localize.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 13:52:51 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:25:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -998,9 +998,9 @@ int _cdecl main( int argc, char *argv[] )
     aIter.SetLanguageRestriction( sLanguages );
      aIter.SetIsoCode99( sIsoCode );
     if ( bExport ){
-        if( bQuiet2 ){ printf("[");fflush( stdout );}
+        if( bQuiet2 ){ printf("");fflush( stdout );}
         aIter.Extract( sFileName );
-        if( bQuiet2 ){ printf("]\n    %d files found!\n",aIter.GetFileCnt());}
+        if( bQuiet2 ){ printf("\n    %d files found!\n",aIter.GetFileCnt());}
     }
     else {
 
