@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:23:36 $
+ *  last change: $Author: vg $ $Date: 2003-06-04 12:37:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,7 @@ class ScJobSetup;
 class ScChangeAction;
 class VirtualDevice;
 class ScImportOptions;
+class ScDocShellModificator;
 
 //==================================================================
 
@@ -155,6 +156,8 @@ class ScDocShell: public SfxObjectShell, public SfxInPlaceObject, public SfxList
     ScJobSetup*         pOldJobSetup;
 
     VirtualDevice*      pVirtualDevice_100th_mm;
+
+    ScDocShellModificator* pModificator; // #109979#; is used to load XML (created in BeforeXMLLoading and destroyed in AfterXMLLoading)
 
     void            InitItems();
     void            DoEnterHandler();
@@ -409,6 +412,8 @@ public:
 
     DECL_LINK( RefreshDBDataHdl, ScDBData* );
 
+    void            BeforeXMLLoading();
+    void            AfterXMLLoading(sal_Bool bRet);
 };
 
 SO2_DECL_REF(ScDocShell)
