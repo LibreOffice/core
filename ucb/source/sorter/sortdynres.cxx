@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sortdynres.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dv $ $Date: 2001-02-08 12:35:05 $
+ *  last change: $Author: dv $ $Date: 2001-02-14 08:42:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,9 +134,9 @@ SortedDynamicResultSet::SortedDynamicResultSet(
     mpOne = NULL;
     mpTwo = NULL;
 
-    mbGotWelcome    = FALSE;
-    mbUseOne        = TRUE;
-    mbStatic        = FALSE;
+    mbGotWelcome    = sal_False;
+    mbUseOne        = sal_True;
+    mbStatic        = sal_False;
 }
 
 //--------------------------------------------------------------------------
@@ -204,7 +204,7 @@ void SAL_CALL SortedDynamicResultSet::dispose()
 
     mpOne = NULL;
     mpTwo = NULL;
-    mbUseOne = TRUE;
+    mbUseOne = sal_True;
 }
 
 //--------------------------------------------------------------------------
@@ -244,7 +244,7 @@ SortedDynamicResultSet::getStaticResultSet()
     if ( mxListener.is() )
         throw ListenerAlreadySetException();
 
-    mbStatic = TRUE;
+    mbStatic = sal_True;
 
     if ( mxOriginal.is() )
     {
@@ -347,8 +347,8 @@ SortedDynamicResultSet::impl_notify( const ListEvent& Changes )
 {
     osl::Guard< osl::Mutex > aGuard( maMutex );
 
-    BOOL bHasNew = FALSE;
-    BOOL bHasModified = FALSE;
+    sal_Bool bHasNew = sal_False;
+    sal_Bool bHasModified = sal_False;
 
     SortedResultSet *pCurSet = NULL;
 
@@ -358,13 +358,13 @@ SortedDynamicResultSet::impl_notify( const ListEvent& Changes )
     {
         if ( mbUseOne )
         {
-            mbUseOne = FALSE;
+            mbUseOne = sal_False;
             mpTwo->CopyData( mpOne );
             pCurSet = mpTwo;
         }
         else
         {
-            mbUseOne = TRUE;
+            mbUseOne = sal_True;
             mpOne->CopyData( mpTwo );
             pCurSet = mpOne;
         }
@@ -379,7 +379,7 @@ SortedDynamicResultSet::impl_notify( const ListEvent& Changes )
     catch ( WrappedTargetException ) {}
 
     long nOldCount = pCurSet->GetCount();
-    BOOL bWasFinal;
+    sal_Bool bWasFinal;
 
     aRet >>= bWasFinal;
 
@@ -399,8 +399,8 @@ SortedDynamicResultSet::impl_notify( const ListEvent& Changes )
                         mpOne = new SortedResultSet( aWelcome.New );
                         mxOne = mpOne;
                         mpOne->Initialize( maOptions, mxCompFac );
-                        mbGotWelcome = TRUE;
-                        mbUseOne = TRUE;
+                        mbGotWelcome = sal_True;
+                        mbUseOne = sal_True;
                         pCurSet = mpOne;
 
                         aWelcome.Old = mxTwo;
@@ -423,7 +423,7 @@ SortedDynamicResultSet::impl_notify( const ListEvent& Changes )
             case ListActionType::INSERTED:
                 {
                     pCurSet->InsertNew( aAction.Position, aAction.Count );
-                    bHasNew = TRUE;
+                    bHasNew = sal_True;
                     break;
                 }
             case ListActionType::REMOVED:
@@ -447,7 +447,7 @@ SortedDynamicResultSet::impl_notify( const ListEvent& Changes )
             case ListActionType::PROPERTIES_CHANGED:
                 {
                     pCurSet->SetChanged( aAction.Position, aAction.Count );
-                    bHasModified = TRUE;
+                    bHasModified = sal_True;
                     break;
                 }
             default: break;
@@ -575,27 +575,15 @@ SortedDynamicResultSetFactory::createSortedDynamicResultSet(
 //
 //=========================================================================
 
-EventList::EventList()
-{}
-
-//--------------------------------------------------------------------------
-EventList::~EventList()
-{
-    Clear();
-}
-
-//--------------------------------------------------------------------------
 void EventList::Clear()
 {
-    ListAction *pData = (ListAction*) List::First();
-
-    while ( pData )
+    for ( std::deque< LISTACTION* >::size_type i = 0;
+          i < maData.size(); ++i )
     {
-        delete pData;
-        pData = (ListAction*) List::Next();
+        delete maData[i];
     }
 
-    List::Clear();
+    maData.clear();
 }
 
 //--------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sortresult.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dv $ $Date: 2001-02-08 12:33:44 $
+ *  last change: $Author: dv $ $Date: 2001-02-14 08:42:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,8 +113,7 @@
 #include <osl/mutex.hxx>
 #endif
 
-
-#include <tools/list.hxx>
+#include <deque>
 
 #ifndef _UCBHELPER_MACROS_HXX
 #include <ucbhelper/macros.hxx>
@@ -131,13 +130,15 @@ class   SRSPropertySetInfo;
 class   PropertyChangeListeners_Impl;
 
 //-----------------------------------------------------------------------------
-class SortedEntryList : protected List
+class SortedEntryList
 {
-public:
-                        SortedEntryList();
-                        ~SortedEntryList();
+    std::deque < SortListData* > maData;
 
-                        List::Count;
+public:
+                         SortedEntryList(){}
+                        ~SortedEntryList(){ Clear(); }
+
+    sal_uInt32          Count() const { return (sal_uInt32) maData.size(); }
 
     void                Clear();
     void                Insert( SortListData *pEntry, long nPos );
@@ -150,18 +151,43 @@ public:
 //-----------------------------------------------------------------------------
 #define LISTACTION  com::sun::star::ucb::ListAction
 
-class EventList : protected List
+class EventList
 {
-public:
-                    EventList();
-                    ~EventList();
+    std::deque < LISTACTION* > maData;
 
-                    List::Count;
+public:
+                     EventList(){}
+                    ~EventList(){ Clear(); }
+
+    sal_uInt32      Count() { return (sal_uInt32) maData.size(); }
 
     void            AddEvent( long nType, long nPos, long nCount );
-    void            Insert( LISTACTION *pAction ) { List::Insert( pAction, LIST_APPEND ); }
+    void            Insert( LISTACTION *pAction ) { maData.push_back( pAction ); }
     void            Clear();
-    LISTACTION*     GetAction( long nIndex ) { return (LISTACTION*) GetObject( nIndex ); }
+    LISTACTION*     GetAction( long nIndex ) { return maData[ nIndex ]; }
+};
+
+//-----------------------------------------------------------------------------
+
+class SimpleList
+{
+    std::deque < void* > maData;
+
+public:
+                     SimpleList(){}
+                    ~SimpleList(){ Clear(); }
+
+    sal_uInt32      Count() { return (sal_uInt32) maData.size(); }
+    void            Clear() { maData.clear(); }
+
+    void            Remove( sal_uInt32 nPos );
+    void            Remove( void* pData );
+
+    void            Append( void* pData )
+                        { maData.push_back( pData ); }
+    void            Insert( void* pData, sal_uInt32 nPos );
+    void*           GetObject( sal_uInt32 nPos ) const;
+    void            Replace( void* pData, sal_uInt32 nPos );
 };
 
 //-----------------------------------------------------------------------------
@@ -204,12 +230,12 @@ class SortedResultSet:
     SortInfo*           mpSortInfo;
     osl::Mutex          maMutex;
     SortedEntryList     maS2O;          // maps the sorted entries to the original ones
-    List                maO2S;          // maps the original Entries to the sorted ones
-    List                maModList;      // keeps track of modified entries
+    SimpleList          maO2S;          // maps the original Entries to the sorted ones
+    SimpleList          maModList;      // keeps track of modified entries
     long                mnLastSort;     // index of the last sorted entry;
     long                mnCurEntry;     // index of the current entry
     long                mnCount;        // total count of the elements
-    BOOL                mbIsCopy;
+    sal_Bool            mbIsCopy;
 
 
 private:
@@ -238,7 +264,7 @@ public:
                         ~SortedResultSet();
 
     const SortedEntryList*      GetS2OList() const { return &maS2O; }
-    const List*                 GetO2SList() const { return &maO2S; }
+    const SimpleList*           GetO2SList() const { return &maO2S; }
     REFERENCE < XRESULTSET >    GetResultSet() const { return mxOriginal; }
     SortInfo*                   GetSortInfo() const { return mpSortInfo; }
     long                        GetCount() const { return mnCount; }
@@ -246,7 +272,7 @@ public:
     void                CopyData( SortedResultSet* pSource );
     void                Initialize( const SEQUENCE < NUMBERED_SORTINGINFO > &xSortInfo,
                                     const REFERENCE< XANYCOMPAREFACTORY > &xCompFac );
-    void                CheckProperties( long nOldCount, BOOL bWasFinal );
+    void                CheckProperties( long nOldCount, sal_Bool bWasFinal );
 
     void                InsertNew( long nPos, long nCount );
     void                SetChanged( long nPos, long nCount );

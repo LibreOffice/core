@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sortdynres.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kso $ $Date: 2000-10-17 11:50:06 $
+ *  last change: $Author: dv $ $Date: 2001-02-14 08:42:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,9 +159,9 @@ class SortedDynamicResultSet:
 
     EventList                           maActions;
     osl::Mutex                          maMutex;
-    BOOL                                mbGotWelcome    :1;
-    BOOL                                mbUseOne        :1;
-    BOOL                                mbStatic        :1;
+    sal_Bool                            mbGotWelcome    :1;
+    sal_Bool                            mbUseOne        :1;
+    sal_Bool                            mbStatic        :1;
 
 private:
 
