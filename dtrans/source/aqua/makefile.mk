@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: pluby $ $Date: 2001-03-16 16:50:18 $
+#   last change: $Author: rt $ $Date: 2001-04-10 12:04:38 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,8 +66,10 @@ PRJNAME=dtrans
 TARGET=dtransaqua
 ENABLE_EXCEPTIONS=TRUE
 LIBTARGET=NO
+.IF "$(OS)"=="MACOSX"
 COMP1TYPELIST=$(TARGET)
 COMPRDB=$(SOLARBINDIR)$/applicat.rdb
+.ENDIF "$(OS)"=="MACOSX"
 USE_BOUNDCHK=
 
 # --- Settings -----------------------------------------------------
@@ -118,7 +120,9 @@ APP1STDLIBS= \
 # --- Targets ------------------------------------------------------
 
 #.IF "$(depend)" == ""
-ALL : ALLTAR  
+ALL : ALLTAR
+    +deliver
     +regcomp -register -r $(BIN)$/$(COMP1TYPELIST).rdb -c $(SHL1TARGET)
 
 .INCLUDE :	target.mk
+
