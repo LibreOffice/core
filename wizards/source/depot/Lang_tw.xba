@@ -16,7 +16,7 @@ Sub LoadChineseTradLanguage()
 	sMsgNoName = sInsertStockname
 	sMsgNoQuantity = &quot;請輸入大於0的交易股數&quot;
 	sMsgNoDividend = &quot;請輸入每股股息金額或股息總額&quot;
-	sMsgNoExchangeRate = &quot;請您輸入正确的換算比率(舊股票 -&gt; 新股票)。&quot;
+	sMsgNoExchangeRate = &quot;請鍵入正確的換算比率(舊股票 -&gt; 新股票)。&quot;
 	sMsgNoValidExchangeDate = &quot;請輸入股票分割的日期。&quot;
 	sMsgWrongExchangeDate = &quot;無法分割股票，因為分割日期之後已經買進或賣出股票。&quot;
 	sMsgSellTooMuch = &quot;最多能出售的股票數： &quot;
