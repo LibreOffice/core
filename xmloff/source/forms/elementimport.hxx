@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementimport.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-25 13:32:38 $
+ *  last change: $Author: fs $ $Date: 2001-11-05 15:24:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -408,13 +408,15 @@ namespace xmloff
         ::com::sun::star::uno::Sequence< ::rtl::OUString >
                         m_aValueList;
 
-        sal_Int32       m_nEmptyListItems;
-        sal_Int32       m_nEmptyValueItems;
-
         ::com::sun::star::uno::Sequence< sal_Int16 >
                         m_aSelectedSeq;
         ::com::sun::star::uno::Sequence< sal_Int16 >
                         m_aDefaultSelectedSeq;
+
+        sal_Int32       m_nEmptyListItems;
+        sal_Int32       m_nEmptyValueItems;
+
+        sal_Bool        m_bEncounteredLSAttrib;
 
     public:
         OListAndComboImport(
@@ -637,6 +639,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.13  2001/06/25 13:32:38  fs
+ *  #88691# TargetURL property value must be saved relative to own document
+ *
  *  Revision 1.12  2001/05/21 13:33:48  fs
  *  #85388# +m_nEmptyXXXItems/+implEmptyXXXFound
  *
