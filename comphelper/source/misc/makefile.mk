@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.24 $
+#   $Revision: 1.25 $
 #
-#   last change: $Author: rt $ $Date: 2004-05-07 16:28:17 $
+#   last change: $Author: kz $ $Date: 2004-06-10 16:51:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -96,8 +96,9 @@ SLOFILES=	\
             $(SLO)$/proxyaggregation.obj    \
             $(SLO)$/anytostring.obj		\
             $(SLO)$/sequenceashashmap.obj \
-            $(SLO)$/mediadescriptor.obj
-
+            $(SLO)$/listenernotification.obj \
+            $(SLO)$/mediadescriptor.obj \
+            $(SLO)$/locale.obj
 
 # --- Targets ----------------------------------
 
