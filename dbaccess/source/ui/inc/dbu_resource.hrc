@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbu_resource.hrc,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-30 08:26:51 $
+ *  last change: $Author: oj $ $Date: 2001-02-05 09:14:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,7 @@
 #define RID_TOOLBOX_START               RID_DBACCESS_START
 #define RID_BITMAP_START                RID_DBACCESS_START
 #define RID_IMAGE_START                 RID_DBACCESS_START
+#define RID_IMAGELIST_START             RID_DBACCESS_START
 #define RID_MENU_START                  RID_DBACCESS_START
 #define RID_STRING_START                RID_DBACCESS_START
 #define RID_UNTYPED_START               RID_DBACCESS_START
@@ -94,6 +95,8 @@
 #define DLG_SAVE_AS                     RID_DIALOG_START + 11
 #define DLG_ERROR                       RID_DIALOG_START + 12
 #define DLG_TEXT                        RID_DIALOG_START + 13
+#define DLG_JOIN_TABADD                 RID_DIALOG_START + 14
+#define DLG_QRY_JOIN                    RID_DIALOG_START + 15
 
 //========================================================================
 // tab pages
@@ -113,6 +116,19 @@
 
 #define ERR_NOREGISTEREDDATASOURCES     RID_ERRORBOX_START +  0
 #define ERR_COULDNOTRESTOREDS           RID_ERRORBOX_START +  1
+#define ERR_QRY_TOO_MANY_COLUMNS        RID_ERRORBOX_START +  2
+#define ERR_QRY_CRITERIA_ON_ASTERISK    RID_ERRORBOX_START +  3
+#define ERR_QRY_TOO_LONG_STATEMENT      RID_ERRORBOX_START +  4
+#define ERR_QRY_TOOCOMPLEX              RID_ERRORBOX_START +  5
+#define ERR_QRY_NOSELECT                RID_ERRORBOX_START +  6
+#define ERR_QRY_TOOMANYCOND             RID_ERRORBOX_START +  7
+#define ERR_QRY_SYNTAX                  RID_ERRORBOX_START +  8
+#define ERR_QRY_ORDERBY_ON_ASTERISK     RID_ERRORBOX_START +  9
+#define ERR_QRY_TOO_MANY_TABLES         RID_ERRORBOX_START + 10
+#define ERR_QRY_AMB_FIELD               RID_ERRORBOX_START + 11
+#define ERR_QRY_ILLEGAL_JOIN            RID_ERRORBOX_START + 12
+#define WARN_QRY_NATIVE                 RID_QUERYBOX_START + 13
+
 
 //========================================================================
 // query boxes
@@ -161,7 +177,7 @@
 
 //========================================================================
 // image lists
-
+#define IMG_JOINS                       RID_IMAGELIST_START + 0
 //========================================================================
 // menues
 
@@ -170,6 +186,8 @@
 #define RID_SBA_GRID_COLCTXMENU         RID_MENU_START +  2
 #define RID_SBA_GRID_ROWCTXMENU         RID_MENU_START +  3
 #define MENU_BROWSERTREE_CONTEXT        RID_MENU_START +  4
+#define RID_QUERYCOLPOPUPMENU           RID_MENU_START +  5
+#define RID_QUERYFUNCTION_POPUPMENU     RID_MENU_START +  6
 
 //========================================================================
 // strings
@@ -213,9 +231,24 @@
 #define RID_STR_QUERIES_CONTAINER           RID_STRING_START + 36
 #define RID_STR_TABLES_CONTAINER            RID_STRING_START + 37
 #define STR_OBJECT_ALREADY_EXSISTS          RID_STRING_START + 38
-#define STR_ALL_TABLES                      RID_STRING_START + 39
-#define STR_ALL_VIEWS                       RID_STRING_START + 40
-#define STR_ALL_TABLES_AND_VIEWS            RID_STRING_START + 41
+
+#define STR_QUERY_INNER_JOIN                RID_STRING_START + 39
+#define STR_QUERY_LEFTRIGHT_JOIN            RID_STRING_START + 40
+#define STR_QUERY_FULL_JOIN                 RID_STRING_START + 41
+
+#define STR_QUERY_SORTTEXT                  RID_STRING_START + 42
+#define STR_QUERY_FUNCTIONS                 RID_STRING_START + 43
+#define STR_QUERY_NOTABLE                   RID_STRING_START + 44
+#define STR_QRY_ORDERBY_UNRELATED           RID_STRING_START + 45
+#define STR_QUERY_HANDLETEXT                RID_STRING_START + 46
+#define STR_QUERY_FALSE                     RID_STRING_START + 47
+#define STR_QUERY_TRUE                      RID_STRING_START + 48
+
+
+#define STR_ALL_TABLES                      RID_STRING_START + 49
+#define STR_ALL_VIEWS                       RID_STRING_START + 50
+#define STR_ALL_TABLES_AND_VIEWS            RID_STRING_START + 51
+
 
 //========================================================================
 // untyped resources
@@ -228,6 +261,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.20  2001/01/30 08:26:51  fs
+ *  +STR_ALL_*
+ *
  *  Revision 1.19  2001/01/26 06:56:59  fs
  *  +PAGE_QUERYADMINISTRATION
  *
