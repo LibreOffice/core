@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtercachedata.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: as $ $Date: 2001-06-05 10:19:00 $
+ *  last change: $Author: as $ $Date: 2001-06-15 12:36:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,7 +139,7 @@ namespace framework{
 //_________________________________________________________________________________________________________________
 
 #define PACKAGENAME_TYPEDETECTION_STANDARD          DECLARE_ASCII("Office.TypeDetection"                            )
-#define PACKAGENAME_TYPEDETECTION_ADDITIONAL        DECLARE_ASCII("Office.TypeDetection"                            )
+#define PACKAGENAME_TYPEDETECTION_ADDITIONAL        DECLARE_ASCII("Office.TypeDetectionAdditional"                  )
 #define PATHSEPERATOR                               DECLARE_ASCII("/"                                               )
 #define PROPERTY_SEPERATOR                          sal_Unicode(',')
 #define LIST_SEPERATOR                              sal_Unicode(';')
@@ -197,9 +197,10 @@ namespace framework{
 #define PROPERTY_FILEFORMATVERSION                  DECLARE_ASCII("FileFormatVersion"                               )
 #define PROPERTY_TEMPLATENAME                       DECLARE_ASCII("TemplateName"                                    )
 #define PROPERTY_TYPES                              DECLARE_ASCII("Types"                                           )
+#define PROPERTY_ORDER                              DECLARE_ASCII("Order"                                           )
 
 #define PROPCOUNT_TYPE                              8
-#define PROPCOUNT_FILTER                            9
+#define PROPCOUNT_FILTER                            10
 #define PROPCOUNT_DETECTOR                          1
 #define PROPCOUNT_LOADER                            3
 
@@ -232,6 +233,12 @@ enum EModifyState
     E_ADDED     ,
     E_CHANGED   ,
     E_REMOVED
+};
+
+enum EFilterPackage
+{
+    E_STANDARD  ,
+    E_ADDITIONAL
 };
 
 //*****************************************************************************************************************
@@ -703,12 +710,6 @@ class DataContainer
 // After successfuly calling of read(), we can use filled container directly or merge it with an existing one.
 // After successfuly calling of write() all values of given data container are flushed to our configuration.
 //*****************************************************************************************************************
-enum EConfigType
-{
-    E_STANDARD  ,
-    E_ADDITIONAL
-};
-
 #ifdef ENABLE_TIMEMEASURE
 //_________________________________________________________________________________________________________________
 class FilterCFGAccess   :   private DBGTimeMeasureBase // We need some informations about calling of baseclass "ConfigItem"! :-)
@@ -747,8 +748,8 @@ class FilterCFGAccess   :   public  ::utl::ConfigItem
         void     impl_saveLoaders   ( DataContainer& rData );
 
     private:
-        EConfigType m_eConfigType ; // obsolete? ...
-        sal_Int32   m_nVersion    ; // file format version of configuration! (neccessary for "xml2xcd" transformation!)
+        EFilterPackage  m_ePackage  ; // obsolete? ...
+        sal_Int32       m_nVersion  ; // file format version of configuration! (neccessary for "xml2xcd" transformation!)
 };
 
 }       //  namespace framework
