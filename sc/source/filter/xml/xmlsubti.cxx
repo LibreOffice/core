@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlsubti.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-27 10:38:01 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:53:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,11 +132,13 @@ ScMyTableData::ScMyTableData(sal_Int16 nSheet, sal_Int32 nCol, sal_Int32 nRow)
         nRealRows(nDefaultRowCount + 1, 0),
         nChangedCols()
 {
+    sal_Int32 i;
+
     aTableCellPos.Sheet = nSheet;
     aTableCellPos.Column = nCol;
     aTableCellPos.Row = nRow;
 
-    for (sal_Int32 i = 0; i < 3; i++)
+    for ( i = 0; i < 3; i++)
         nRealCols[i] = i;
     for (i = 0; i < 3; i++)
         nRealRows[i] = i;
