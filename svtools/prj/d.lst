@@ -272,3 +272,4 @@ hedabu: ..\inc\securityoptions.hxx %_DEST%\inc%_EXT%\svtools\securityoptions.hxx
 hedabu: ..\inc\localisationoptions.hxx %_DEST%\inc%_EXT%\svtools\localisationoptions.hxx
 hedabu: ..\inc\workingsetoptions.hxx %_DEST%\inc%_EXT%\svtools\workingsetoptions.hxx
 hedabu: ..\inc\dialogoptions.hxx %_DEST%\inc%_EXT%\svtools\dialogoptions.hxx
+hedabu: ..\inc\internaloptions.hxx %_DEST%\inc%_EXT%\svtools\internaloptions.hxx
