@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctempl.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: dv $ $Date: 2000-12-15 14:08:56 $
+ *  last change: $Author: dv $ $Date: 2000-12-15 15:14:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -815,8 +815,10 @@ String SfxDocumentTemplates::GetTemplatePath
     else if ( pRegion )
     {
         INetURLObject aURLObj( pRegion->GetTargetURL() );
-        aURLObj.insertName( rLongName );
-        return aURLObj.getExternalURL();
+        aURLObj.insertName( rLongName, false,
+                     INetURLObject::LAST_SEGMENT, true,
+                     INetURLObject::ENCODE_ALL );
+        return aURLObj.GetMainURL();
     }
     else
         return String();
@@ -843,7 +845,8 @@ String SfxDocumentTemplates::GetDefaultTemplatePath
     DBG_ASSERT( pImp, "not initialized" );
     DBG_ASSERT( aDirs.GetTokenCount( cDelim ), "Keine Bereiche" );
 
-    String           aPath( aDirs.GetToken( 0, cDelim ) );
+    USHORT  nCount = aDirs.GetTokenCount(cDelim);
+    String           aPath( aDirs.GetToken( nCount-1, cDelim ) );
     EntryData_Impl  *pEntry = NULL;
     RegionData_Impl *pRegion = pImp->GetRegion( aPath );
 
@@ -855,8 +858,10 @@ String SfxDocumentTemplates::GetDefaultTemplatePath
     else if ( pRegion )
     {
         INetURLObject aURLObj( pRegion->GetTargetURL() );
-        aURLObj.insertName( rLongName );
-        return aURLObj.getExternalURL();
+        aURLObj.insertName( rLongName, false,
+                     INetURLObject::LAST_SEGMENT, true,
+                     INetURLObject::ENCODE_ALL );
+        return aURLObj.GetMainURL();
     }
     else
         return String();
