@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SpellChecker.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:15:55 $
+ *  last change:$Date: 2003-05-27 12:54:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,7 @@ public class SpellChecker extends TestCase {
      */
     protected TestEnvironment createTestEnvironment
             (TestParameters tParam, PrintWriter log) {
-        XMultiServiceFactory xMSF = tParam.getMSF();
+        XMultiServiceFactory xMSF = (XMultiServiceFactory)tParam.getMSF();
         XInterface oObj = null;
 
         try {
