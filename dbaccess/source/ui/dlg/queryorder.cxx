@@ -2,9 +2,9 @@
  *
  *  $RCSfile: queryorder.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2004-10-22 09:05:25 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 12:35:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,9 +72,6 @@
 #ifndef _COM_SUN_STAR_SDB_XSINGLESELECTQUERYCOMPOSER_HPP_
 #include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
 #endif
-#ifndef _COM_SUN_STAR_SDB_XSINGLESELECTQUERYANALYZER_HPP_
-#include <com/sun/star/sdb/XSingleSelectQueryAnalyzer.hpp>
-#endif
 #ifndef _COM_SUN_STAR_SDBC_COLUMNSEARCH_HPP_
 #include <com/sun/star/sdbc/ColumnSearch.hpp>
 #endif
@@ -117,7 +114,7 @@ DBG_NAME(DlgOrderCrit);
 //------------------------------------------------------------------------------
 DlgOrderCrit::DlgOrderCrit( Window * pParent,
                             const Reference< XConnection>& _rxConnection,
-                            const Reference< XSingleSelectQueryAnalyzer>& _rxQueryAnalyzer,
+                            const Reference< XSingleSelectQueryComposer >& _rxComposer,
                             const Reference< XNameAccess>& _rxCols)
              :ModalDialog( pParent, ModuleRes(DLG_ORDERCRIT) )
             ,aLB_ORDERFIELD1(   this, ResId( LB_ORDERFIELD1 ) )
@@ -136,7 +133,7 @@ DlgOrderCrit::DlgOrderCrit( Window * pParent,
             ,aBT_HELP(          this, ResId( BT_HELP ) )
             ,aFL_ORDER(         this, ResId( FL_ORDER ) )
             ,aSTR_NOENTRY(      ResId( STR_NOENTRY ) )
-            ,m_xQueryAnalyzer(_rxQueryAnalyzer)
+            ,m_xQueryComposer( _rxComposer )
             ,m_xColumns(_rxCols)
             ,m_xConnection(_rxConnection)
 {
@@ -169,7 +166,6 @@ DlgOrderCrit::DlgOrderCrit( Window * pParent,
     }
     try
     {
-        m_xQueryComposer.set(m_xQueryAnalyzer,UNO_QUERY);
         // ... sowie auch die restlichen Felder
         Sequence< ::rtl::OUString> aNames = m_xColumns->getElementNames();
         const ::rtl::OUString* pIter = aNames.getConstArray();
@@ -194,7 +190,7 @@ DlgOrderCrit::DlgOrderCrit( Window * pParent,
             }
         }
 
-        m_sOrgOrder = m_xQueryAnalyzer->getOrder();
+        m_sOrgOrder = m_xQueryComposer->getOrder();
 
         SetOrderList( m_sOrgOrder );
     }
@@ -324,7 +320,7 @@ void DlgOrderCrit::SetOrderList( const String& _rOrderList )
     static const ::rtl::OUString sDESC = ::rtl::OUString::createFromAscii(" DESC ");
     static const ::rtl::OUString sASC  = ::rtl::OUString::createFromAscii(" ASC ");
 
-    Reference< XNameAccess> xColumns = Reference< XColumnsSupplier >(m_xQueryAnalyzer,UNO_QUERY)->getColumns();
+    Reference< XNameAccess> xColumns = Reference< XColumnsSupplier >(m_xQueryComposer,UNO_QUERY)->getColumns();
 
     ::rtl::OUString sOrder;
     for( sal_uInt16 i=0 ; i<DOG_ROWS; i++ )
