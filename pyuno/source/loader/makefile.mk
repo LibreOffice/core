@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: vg $ $Date: 2003-12-17 18:45:43 $
+#   last change: $Author: kz $ $Date: 2004-03-26 10:16:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -117,7 +117,7 @@ SLOFILES=       $(SLO)$/pyuno_loader.obj
 COMPONENTS= \
     typeconverter.uno	\
     invocation.uno		\
-    corereflection.uno	\
+    reflection.uno	\
     introspection.uno	\
     invocadapt.uno		\
     proxyfac.uno 		\
