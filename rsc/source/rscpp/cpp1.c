@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cpp1.c,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-02 14:52:27 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 19:12:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -416,13 +416,14 @@ nRunde++;
             cierror("Inside #ifdef block at end of input, depth = %d", i);
 #endif
         }
-/* alt:        fclose(stdout); */
-
 #if OSL_DEBUG_LEVEL > 1
-        fclose( pDefOut );
+        if( pDefOut != stdout && pDefOut != stderr )
+            fclose( pDefOut );
 #endif
-        fclose( pCppOut );
-        fclose( pCppIn  );
+        if( pCppOut != stdout && pCppOut != stderr )
+            fclose( pCppOut );
+        if( pCppIn != stdin )
+            fclose( pCppIn  );
 
 
         if (errors > 0) {
