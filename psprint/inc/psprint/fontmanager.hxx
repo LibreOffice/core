@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontmanager.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: pl $ $Date: 2001-11-09 15:44:33 $
+ *  last change: $Author: hdu $ $Date: 2001-11-30 12:24:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -269,6 +269,7 @@ class PrintFontManager
         int                                         m_nAscend;
         int                                         m_nDescend;
         int                                         m_nLeading;
+        bool                                        m_bHaveVerticalSubstitutedGlyphs;
 
         PrintFont( fonttype::type eType );
         virtual ~PrintFont();
@@ -476,6 +477,9 @@ public:
 
     // get a specific fonts leading
     int getFontLeading( fontID nFontID ) const;
+
+    // info whether there are vertical substitutions
+    bool hasVerticalSubstitutions( fontID nFontID ) const;
 
     // get the XLFD for a font that originated from the X fontpath
     // note: this may not be the original line that was in the fonts.dir

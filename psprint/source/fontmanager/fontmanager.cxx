@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontmanager.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: pl $ $Date: 2001-11-16 15:19:55 $
+ *  last change: $Author: hdu $ $Date: 2001-11-30 12:22:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -246,7 +246,8 @@ PrintFontManager::PrintFont::PrintFont( fonttype::type eType ) :
         m_pMetrics( NULL ),
         m_nAscend( 0 ),
         m_nDescend( 0 ),
-        m_nLeading( 0 )
+        m_nLeading( 0 ),
+        m_bHaveVerticalSubstitutedGlyphs( false )
 {
 }
 
@@ -1392,13 +1393,16 @@ bool PrintFontManager::analyzeTrueTypeFile( PrintFont* pFont ) const
             pFont->m_nLeading = 15 * (pFont->m_nAscend+pFont->m_nDescend) / 100;
 
         if( pFont->m_nAscend )
-            pFont->m_aGlobalMetricX.height = pFont->m_aGlobalMetricY.height = pFont->m_nAscend;
+            pFont->m_aGlobalMetricX.height = pFont->m_aGlobalMetricY.height = pFont->m_nAscend + pFont->m_nDescend;
 
         // get type flags
         pTTFontFile->m_nTypeFlags = (unsigned int)aInfo.typeFlags;
 #ifdef DEBUG
         fprintf( stderr, "font %s has style flags %x\n", aFile.GetBuffer(), pTTFontFile->m_nTypeFlags );
 #endif
+
+        // get vertical substitutions flag
+        pFont->m_bHaveVerticalSubstitutedGlyphs = DoesVerticalSubstitution( pTTFont, 1 );
 
         CloseTTFont( pTTFont );
         bSuccess = true;
@@ -2197,6 +2201,20 @@ int PrintFontManager::getFontLeading( fontID nFontID ) const
             analyzeTrueTypeFile( pFont );
     }
     return pFont->m_nLeading;
+}
+
+// -------------------------------------------------------------------------
+
+bool PrintFontManager::hasVerticalSubstitutions( fontID nFontID ) const
+{
+    PrintFont* pFont = getFont( nFontID );
+    if( pFont->m_nAscend == 0 && pFont->m_nDescend == 0 )
+    {
+        // might be a truetype font not yet analyzed
+        if( pFont->m_eType == fonttype::TrueType )
+            analyzeTrueTypeFile( pFont );
+    }
+    return pFont->m_bHaveVerticalSubstitutedGlyphs;
 }
 
 // -------------------------------------------------------------------------
