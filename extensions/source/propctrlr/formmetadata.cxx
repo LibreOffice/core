@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formmetadata.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 16:23:34 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 16:47:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -274,7 +274,7 @@ namespace pcr
         DEF_INFO_3( STRINGITEMLIST,    STRINGITEMLIST,     STRINGITEMLIST,    FORM_VISIBLE, DIALOG_VISIBLE, ACTUATING ),
         DEF_INFO_1( DEFAULT_TEXT,      DEFAULTTEXT,        DEFAULTVALUE,      FORM_VISIBLE ),
         DEF_INFO_2( FONT_NAME,         FONT,               FONT,              FORM_VISIBLE, DIALOG_VISIBLE ),
-        DEF_INFO_2( VISUALEFFECT,      VISUALEFFECT,       VISUALEFFECT,      FORM_VISIBLE, ENUM_ONE ),
+        DEF_INFO_3( VISUALEFFECT,      VISUALEFFECT,       VISUALEFFECT,      FORM_VISIBLE, DIALOG_VISIBLE, ENUM_ONE ),
         DEF_INFO_3( ALIGN,             ALIGN,              ALIGN,             FORM_VISIBLE, DIALOG_VISIBLE, ENUM ),
         DEF_INFO_1( ROWHEIGHT,         ROWHEIGHT,          ROWHEIGHT,         FORM_VISIBLE ),
         DEF_INFO_2( BACKGROUNDCOLOR,   BACKGROUNDCOLOR,    BACKGROUNDCOLOR,   FORM_VISIBLE, DIALOG_VISIBLE ),
