@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbar.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: th $ $Date: 2001-05-11 10:26:36 $
+ *  last change: $Author: os $ $Date: 2001-05-31 11:18:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -317,10 +317,13 @@ void BibToolBar::InitListener()
         for(sal_uInt16 nPos=0;nPos<nCount;nPos++)
         {
             sal_uInt16 nId=GetItemId(nPos);
-            if(nId==TBC_FT_SOURCE || nId==TBC_FT_QUERY) continue;
+            if(!nId || nId==TBC_FT_SOURCE || nId==TBC_FT_QUERY)
+                continue;
 
             util::URL aURL;
             aURL.Complete = GetItemCommand(nId);
+            if(!aURL.Complete.getLength())
+                continue;
 
             xTrans->parseStrict( aURL );
 
