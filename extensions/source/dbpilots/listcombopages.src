@@ -2,9 +2,9 @@
  *
  *  $RCSfile: listcombopages.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: vg $ $Date: 2001-10-11 20:17:04 $
+ *  last change: $Author: kz $ $Date: 2001-10-22 20:19:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,7 +132,7 @@ TabPage RID_PAGE_LCW_CONTENTSELECTION_TABLE
             "Please choose the table, whichs data should be the base for the list content:";
         Text [ english_us ]= "On the right side, you see all the tables from the data source of the form.\n\n\nChoose the table from which the data should be used as basis for the list content:";
         Text[ portuguese ] = "O lado direito mostra-lhe todas as tabelas da fonte de dados do formulбrio.\n\n\nSeleccione a tabela com os dados que vгo servir de base ao conteъdo da lista.";
-        Text[ russian ] = "—права показаны все таблицы из источника данных формул€ра.\n\n\n¬ыберите таблицу, данные которой должны послужить основой дл€ содержимого списка:";
+        Text[ russian ] = "—права показаны все таблицы из исходных данных формул€ра.\n\n\n¬ыберите таблицу, данные которой должны послужить основой дл€ содержимого списка:";
         Text[ greek ] = "”фзн деой№ рлехс№ рспв№ллпнфбй ьлпй пй рянбкет брь фпн рсппсйумь фщн дедпмЁнщн фзт цьсмбт.\n\n\n≈рйлЁофе фпн рянбкб фпх прпяпх фб дедпмЁнб иб ";
         Text[ dutch ] = "Aan de rechterkant ziet u alle tabellen uit de gegevensbron van het formulier.\n\n\nKies de tabel waarvan de gegevens de basis moeten vormen voor de inhoud van de lijst:";
         Text[ french ] = "Toutes les tables de la source de donnйes du formulaire sont mentionnйes а droite.\n\n\nSйlectionnez les tables dont les donnйes devront servir de base au contenu de la liste :";
@@ -515,6 +515,9 @@ String RID_STR_COMBOWIZ_DBFIELD
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.28  2001/10/11 20:17:04  vg
+ *  Merge SRC638: 11.10.01 - 22:16:24
+ *
  *  Revision 1.27  2001/09/26 20:33:53  kz
  *  Merge SRC638: 26.09.01 - 22:33:07
  *
@@ -560,6 +563,7 @@ String RID_STR_COMBOWIZ_DBFIELD
  *
  *  Revision 1.0 21.02.01 16:16:18  fs
  ************************************************************************/
+
 
 
 
