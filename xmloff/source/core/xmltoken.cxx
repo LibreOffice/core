@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltoken.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 17:19:21 $
+ *  last change: $Author: hr $ $Date: 2004-08-03 12:32:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2533,8 +2533,20 @@ namespace xmloff { namespace token {
 
         TOKEN( "show-filter-button"),               // XML_SHOW_FILTER_BUTTON,
         TOKEN( "drill-down-on-double-click"),       // XML_DRILL_DOWN_ON_DOUBLE_CLICK,
+        TOKEN( "group-part"),                       // XML_GROUP_PART
+        TOKEN( "days"),                             // XML_DAYS
+        TOKEN( "months"),                           // XML_MONTHS
+        TOKEN( "quarters"),                         // XML_QUARTERS
+        TOKEN( "years"),                            // XML_YEARS
+        TOKEN( "date-start"),                       // XML_DATE_START
+        TOKEN( "date-end"),                         // XML_DATE_END
+        TOKEN( "step"),                             // XML_STEP
+        TOKEN( "is-group-field"),                   // XML_IS_GROUP_FIELD
+        TOKEN( "data-pilot-groups"),                // XML_DATA_PILOT_GROUPS
+        TOKEN( "data-pilot-group"),                 // XML_DATA_PILOT_GROUP
+        TOKEN( "group-source-field-name"),          // XML_GROUP_SOURCE_FIELD_NAME
 
-        { 0, NULL, NULL }                       // XML_TOKEN_END
+        { 0, NULL, NULL }                      // XML_TOKEN_END
     };
 
 
