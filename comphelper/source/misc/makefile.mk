@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: fs $ $Date: 2002-04-17 08:39:47 $
+#   last change: $Author: fs $ $Date: 2002-04-23 11:11:06 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -72,15 +72,18 @@ ENABLE_EXCEPTIONS=TRUE
 
 # --- Files -------------------------------------
 
-SLOFILES=	$(SLO)$/interaction.obj \
+SLOFILES=	\
+            $(SLO)$/accessiblecomponenthelper.obj \
+            $(SLO)$/accessiblecontexthelper.obj \
+            $(SLO)$/accimplaccess.obj \
+            $(SLO)$/interaction.obj \
             $(SLO)$/types.obj \
             $(SLO)$/datetime.obj \
             $(SLO)$/numbers.obj \
             $(SLO)$/sequence.obj \
             $(SLO)$/querydeep.obj \
             $(SLO)$/regpathhelper.obj \
-            $(SLO)$/facreg.obj	\
-            $(SLO)$/accimplaccess.obj
+            $(SLO)$/facreg.obj
 
 # --- Targets ----------------------------------
 
