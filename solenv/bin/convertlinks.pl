@@ -24,8 +24,13 @@ if($#ARGV == 1)
 find(\&wanted, "$ARGV[0]");
 
 $return = 1;
+
 foreach $i (@files)
 {
+    next if( $i->{directory} =~ /.*common((\/|\\)ref(.*))/ ||
+         $i->{directory} =~ /.*cpp((\/|\\)ref(.*))/ ||
+         $i->{directory} =~ /.*java((\/|\\)ref(.*))/ );
+
     open ( FILEIN, $i->{filename} ) || die "could not open $i->{filename} for reading";
 
     $relPath = ".";
@@ -61,10 +66,10 @@ foreach $i (@files)
     close FILEOUT;
     chmod 0666, $i->{filename};
     rename "$i->{filename}.tmp", $i->{filename} || die "could not rename $i->{filename}.tmp to $i->{filename}";
-    chmod 0444, $i->{filename};
     $return = 0;
 }
 
+print "ref = $reffiles,  docu = $docufiles\n";
 exit $return;
 
 sub wanted {
