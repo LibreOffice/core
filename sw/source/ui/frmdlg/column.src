@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:37 $
+ *  last change: $Author: nf $ $Date: 2000-09-27 21:25:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -940,7 +940,7 @@ ModalDialog DLG_COLUMN
         Text[ danish ] = "Anvend på:";
         Text[ polish ] = "Zastosuj w";
         Text[ portuguese_brazilian ] = "~Apply to:";
-        Text[ japanese ] = "İ’è‘ÎÛ:(~A)";
+        Text[ japanese ] = "İ’è‘ÎÛ(~A):";
         Text[ korean ] = "Àû¿ë:(~A)";
         Text[ chinese_simplified ] = "ÔËÓÃÔÚ£º(~A)";
         Text[ chinese_traditional ] = "®M¥Î¨ì¡G(~A)";
