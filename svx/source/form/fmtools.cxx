@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtools.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 13:14:34 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 12:21:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1195,25 +1195,36 @@ void FmXDispatchInterceptorImpl::disposing()
 //==============================================================================
 
 //------------------------------------------------------------------------------
-sal_Bool isLoadable(const Reference< XInterface >& xLoad)
+sal_Bool isLoadable( const Reference< XInterface >& _rxLoadable )
 {
     // determines whether a form should be loaded or not
     // if there is no datasource or connection there is no reason to load a form
-    Reference< ::com::sun::star::beans::XPropertySet> xSet(xLoad, UNO_QUERY);
-    if (xSet.is())
+    Reference< XPropertySet > xSet( _rxLoadable, UNO_QUERY );
+    if ( xSet.is() )
     {
         try
         {
+            Reference< XConnection > xConn;
+            if ( OStaticDataAccessTools().isEmbeddedInDatabase( _rxLoadable.get(), xConn ) )
+                return sal_True;
+
             // is there already a active connection
-            Reference< XInterface > xConn;
             xSet->getPropertyValue(FM_PROP_ACTIVE_CONNECTION) >>= xConn;
-            return (xConn.is() ||
-                    ::comphelper::getString(xSet->getPropertyValue(FM_PROP_DATASOURCE)).getLength() ||
-                    ::comphelper::getString(xSet->getPropertyValue(FM_PROP_URL)).getLength());
+            if ( xConn.is() )
+                return sal_True;
+
+            ::rtl::OUString sPropertyValue;
+            OSL_VERIFY( xSet->getPropertyValue( FM_PROP_DATASOURCE ) >>= sPropertyValue );
+            if ( sPropertyValue.getLength() )
+                return sal_True;
+
+            OSL_VERIFY( xSet->getPropertyValue( FM_PROP_URL ) >>= sPropertyValue );
+            if ( sPropertyValue.getLength() )
+                return sal_True;
         }
         catch(Exception&)
         {
-            DBG_ERROR("isLoadable Exception occured!");
+            DBG_ERROR( "isLoadable: caught an exception!" );
         }
 
     }
