@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ddefld.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:25 $
+ *  last change: $Author: jp $ $Date: 2001-03-08 21:17:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@ class SwDDEFieldType : public SwFieldType
     String aName;
     String aExpansion;
 
-    SvBaseLinkRef refLink;
+    ::so3::SvBaseLinkRef refLink;
     SwDoc* pDoc;
 
     USHORT nRefCnt;
@@ -109,11 +109,12 @@ public:
     BOOL IsDeleted() const          { return bDeleted; }
     void SetDeleted( BOOL b )       { bDeleted = b; }
 
-    BOOL IsConnected() const        { return 0 != refLink->GetObject(); }
+    BOOL IsConnected() const        { return 0 != refLink->GetObj(); }
     void UpdateNow()                { refLink->Update(); }
     void Disconnect()               { refLink->Disconnect(); }
 
-    const SvBaseLink& GetBaseLink() const   { return *refLink; }
+    const ::so3::SvBaseLink& GetBaseLink() const    { return *refLink; }
+          ::so3::SvBaseLink& GetBaseLink()          { return *refLink; }
 
     const SwDoc* GetDoc() const     { return pDoc; }
           SwDoc* GetDoc()           { return pDoc; }

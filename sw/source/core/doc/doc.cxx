@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2001-02-21 12:40:22 $
+ *  last change: $Author: jp $ $Date: 2001-03-08 21:19:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,9 +74,6 @@
 #endif
 #ifndef _SV_POLY_HXX //autogen
 #include <vcl/poly.hxx>
-#endif
-#ifndef _PSEUDO_HXX //autogen
-#include <so3/pseudo.hxx>
 #endif
 #ifndef _IPOBJ_HXX //autogen
 #include <so3/ipobj.hxx>
@@ -222,6 +219,9 @@
 #endif
 #ifndef _FLDUPDE_HXX
 #include <fldupde.hxx>
+#endif
+#ifndef _SWBASLNK_HXX
+#include <swbaslnk.hxx>
 #endif
 
 #ifndef _STATSTR_HRC
@@ -1143,17 +1143,12 @@ BOOL SwDoc::RemoveInvisibleContent()
     return bRet;
 }
 
-struct ImplCastStruct : public SvAdviseSink
-{
-    void CallClose() { Closed(); }
-};
-
     // embedded alle lokalen Links (Bereiche/Grafiken)
 BOOL SwDoc::EmbedAllLinks()
 {
     BOOL bRet = FALSE;
     SvxLinkManager& rLnkMgr = GetLinkManager();
-    const SvBaseLinks& rLnks = rLnkMgr.GetLinks();
+    const ::so3::SvBaseLinks& rLnks = rLnkMgr.GetLinks();
     if( rLnks.Count() )
     {
         BOOL bDoesUndo = DoesUndo();
@@ -1161,28 +1156,28 @@ BOOL SwDoc::EmbedAllLinks()
 
         for( USHORT n = 0; n < rLnks.Count(); ++n )
         {
-            SvBaseLink* pLnk = &(*rLnks[ n ]);
+            ::so3::SvBaseLink* pLnk = &(*rLnks[ n ]);
             if( pLnk &&
                 ( OBJECT_CLIENT_GRF == pLnk->GetObjType() ||
                   OBJECT_CLIENT_FILE == pLnk->GetObjType() ) &&
                 pLnk->ISA( SwBaseLink ) )
             {
-                SvBaseLinkRef xLink = pLnk;
+                ::so3::SvBaseLinkRef xLink = pLnk;
                 USHORT nCount = rLnks.Count();
 
                 String sFName;
-                rLnkMgr.GetDisplayNames( *xLink, 0, &sFName, 0, 0 );
+                rLnkMgr.GetDisplayNames( xLink, 0, &sFName, 0, 0 );
 
                 INetURLObject aURL( sFName );
                 if( INET_PROT_FILE == aURL.GetProtocol() ||
                     INET_PROT_CID == aURL.GetProtocol() )
                 {
                     // dem Link sagen, das er aufgeloest wird!
-                    ((ImplCastStruct*)&xLink)->CallClose();
+                    xLink->Closed();
 
                     // falls einer vergessen hat sich auszutragen
                     if( xLink.Is() )
-                        rLnkMgr.Remove( *xLink );
+                        rLnkMgr.Remove( xLink );
 
                     if( nCount != rLnks.Count() + 1 )
                         n = 0;      // wieder von vorne anfangen, es wurden

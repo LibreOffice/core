@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-02 17:51:49 $
+ *  last change: $Author: jp $ $Date: 2001-03-08 21:22:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,11 +64,14 @@
 #ifndef _TRANSFER_HXX
 #include <svtools/transfer.hxx>
 #endif
-#ifndef _EMBOBJ_HXX //autogen
+#ifndef _EMBOBJ_HXX
 #include <so3/embobj.hxx>
 #endif
-#ifndef _SV_GRAPH_HXX //autogen
+#ifndef _SV_GRAPH_HXX
 #include <vcl/graph.hxx>
+#endif
+#ifndef _LNKBASE_HXX
+#include <so3/lnkbase.hxx>
 #endif
 
 
@@ -110,7 +113,7 @@ class SwTransferable : public TransferableHelper
     TransferBufferType eBufferType;
     SwDocFac        *pClpDocFac;
     Graphic         *pClpGraphic, *pClpBitmap, *pOrigGrf;
-    SvAdviseSinkRef refDdeLink;
+    ::so3::SvBaseLinkRef    refDdeLink;
     INetBookmark    *pBkmk;     // URL und Beschreibung!
     ImageMap        *pImageMap;
     INetImage       *pTargetURL;

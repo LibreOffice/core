@@ -2,9 +2,9 @@
  *
  *  $RCSfile: section.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-02 14:35:07 $
+ *  last change: $Author: jp $ $Date: 2001-03-08 21:17:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,11 +72,11 @@
 #ifndef _RTTI_HXX
 #include <tools/rtti.hxx>
 #endif
+#ifndef _TOOLS_REF_HXX
+#include <tools/ref.hxx>
+#endif
 #ifndef _SVARRAY_HXX
 #include <svtools/svarray.hxx>
-#endif
-#ifndef _SO2REF_HXX
-#include <so3/so2ref.hxx>
 #endif
 #ifndef _FRMFMT_HXX
 #include <frmfmt.hxx>
@@ -90,8 +90,7 @@ class SwTOXBase;
 
 #ifndef SW_DECL_SWSERVEROBJECT_DEFINED
 #define SW_DECL_SWSERVEROBJECT_DEFINED
-class SvPseudoObject;
-SO2_DECL_REF( SwServerObject )
+SV_DECL_REF( SwServerObject )
 #endif
 
 SV_DECL_PTRARR( SwSections, SwSection*, 0, 4 )
@@ -131,7 +130,7 @@ class SwSection : public SwClient
     ::com::sun::star::uno::Sequence <sal_Int8> aPasswd;
 
     SwServerObjectRef refObj;   // falls DataServer -> Pointer gesetzt
-    SvBaseLinkRef refLink;
+    ::so3::SvBaseLinkRef refLink;
 
     SectionType eType;
 
@@ -210,7 +209,7 @@ public:
                                             { aPasswd = rNew; }
 
     // Daten Server-Methoden
-    void SetRefObject( SvPseudoObject* pObj );
+    void SetRefObject( SwServerObject* pObj );
     const SwServerObject* GetObject() const     {  return &refObj; }
           SwServerObject* GetObject()           {  return &refObj; }
     BOOL IsServer() const                       {  return refObj.Is(); }
@@ -223,7 +222,8 @@ public:
     void UpdateNow()                { refLink->Update(); }
     void Disconnect()               { refLink->Disconnect(); }
 
-    const SvBaseLink& GetBaseLink() const   { return *refLink; }
+    const ::so3::SvBaseLink& GetBaseLink() const    { return *refLink; }
+          ::so3::SvBaseLink& GetBaseLink()          { return *refLink; }
 
     void CreateLink( LinkCreateType eType );
 
@@ -324,6 +324,9 @@ inline SwSection* SwSectionFmt::GetParentSection() const
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.3  2001/03/02 14:35:07  jp
+      password change: use sequence instead of string
+
       Revision 1.2  2001/02/27 18:46:19  jp
       new: Password for single section
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: section.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-05 14:41:59 $
+ *  last change: $Author: jp $ $Date: 2001-03-08 21:18:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,9 +85,6 @@
 #endif
 #ifndef _SVX_PROTITEM_HXX //autogen
 #include <svx/protitem.hxx>
-#endif
-#ifndef _LINKNAME_HXX //autogen
-#include <so3/linkname.hxx>
 #endif
 #ifndef _SVXLINKMGR_HXX
 #include <svx/linkmgr.hxx>
@@ -173,6 +170,8 @@
 #include <swerror.h>
 #endif
 
+SV_IMPL_REF( SwServerObject )
+
 //static const char __FAR_DATA sSectionFmtNm[] = "Section";
 #define sSectionFmtNm aEmptyStr
 
@@ -186,7 +185,8 @@ public:
     {}
 
     virtual void Closed();
-    virtual void DataChanged( SvData& );
+    virtual void DataChanged( const String& rMimeType,
+                                const ::com::sun::star::uno::Any & rValue );
 
     virtual const SwNode* GetAnchor() const;
     virtual BOOL IsInRange( ULONG nSttNd, ULONG nEndNd, xub_StrLen nStt = 0,
@@ -196,10 +196,6 @@ public:
 
 TYPEINIT1(SwSectionFmt,SwFrmFmt );
 TYPEINIT1(SwSection,SwClient );
-
-
-SO2_IMPL_REF( SwServerObject )
-
 
 typedef SwSection* SwSectionPtr;
 
@@ -253,7 +249,7 @@ SwSection::~SwSection()
         pFmt->Remove( this );               // austragen,
 
         if( CONTENT_SECTION != eType )      // den Link austragen
-            pDoc->GetLinkManager().Remove( *refLink );
+            pDoc->GetLinkManager().Remove( refLink );
 
         if( refObj.Is() )                   // als Server austragen
             pDoc->GetLinkManager().RemoveServer( &refObj );
@@ -486,7 +482,7 @@ void SwSection::Modify( SfxPoolItem* pOld, SfxPoolItem* pNew )
     SwClient::Modify( pOld, pNew );
 }
 
-void SwSection::SetRefObject( SvPseudoObject* pObj )
+void SwSection::SetRefObject( SwServerObject* pObj )
 {
     refObj = pObj;
 }
@@ -511,11 +507,7 @@ const String& SwSection::GetLinkFileName() const
         switch( eType )
         {
         case DDE_LINK_SECTION:
-            {
-                const SvLinkName* pLNm = refLink->GetLinkSourceName();
-                if( pLNm )
-                    sTmp = pLNm->GetName();
-            }
+            sTmp = refLink->GetLinkSourceName();
             break;
 
         case FILE_LINK_SECTION:
@@ -523,7 +515,7 @@ const String& SwSection::GetLinkFileName() const
                 String sRange, sFilter;
                 if( refLink->GetLinkManager() &&
                     refLink->GetLinkManager()->GetDisplayNames(
-                        *refLink, 0, &sTmp, &sRange, &sFilter ) )
+                        refLink, 0, &sTmp, &sRange, &sFilter ) )
                 {
                     ( sTmp += cTokenSeperator ) += sFilter;
                     ( sTmp += cTokenSeperator ) += sRange;
@@ -547,7 +539,7 @@ const String& SwSection::GetLinkFileName() const
 void SwSection::SetLinkFileName( const String& rNew, const String* pPassWd )
 {
     if( refLink.Is() )
-        refLink->SetLinkSourceName( new SvLinkName( rNew ));
+        refLink->SetLinkSourceName( rNew );
     else
         sLinkFileName = rNew;
     if( pPassWd )
@@ -559,10 +551,10 @@ void SwSection::SetLinkFileName( const String& rNew, const String* pPassWd )
 void SwSection::MakeChildLinksVisible( const SwSectionNode& rSectNd )
 {
     const SwNode* pNd;
-    const SvBaseLinks& rLnks = rSectNd.GetDoc()->GetLinkManager().GetLinks();
+    const ::so3::SvBaseLinks& rLnks = rSectNd.GetDoc()->GetLinkManager().GetLinks();
     for( USHORT n = rLnks.Count(); n; )
     {
-        SvBaseLink* pBLnk = &(*rLnks[ --n ]);
+        ::so3::SvBaseLink* pBLnk = &(*rLnks[ --n ]);
         if( pBLnk && !pBLnk->IsVisible() &&
             pBLnk->ISA( SwBaseLink ) &&
             0 != ( pNd = ((SwBaseLink*)pBLnk)->GetAnchor() ) )
@@ -1059,13 +1051,14 @@ void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
 
     String sName( pDShell->GetMedium()->GetName() );
     SwBaseLink* pBLink;
-    SvData aEmptyData( FORMAT_FILE );
-    aEmptyData.SetData( sName );        // beliebiger Name
+    String sMimeType( SotExchange::GetFormatMimeType( FORMAT_FILE ));
+    ::com::sun::star::uno::Any aValue;
+    aValue <<= ::rtl::OUString( sName );                        // beliebiger Name
 
-    const SvBaseLinks& rLnks = pDoc->GetLinkManager().GetLinks();
+    const ::so3::SvBaseLinks& rLnks = pDoc->GetLinkManager().GetLinks();
     for( USHORT n = rLnks.Count(); n; )
     {
-        SvBaseLink* pLnk = &(*rLnks[ --n ]);
+        ::so3::SvBaseLink* pLnk = &(*rLnks[ --n ]);
         if( pLnk && pLnk != &rUpdLnk &&
             OBJECT_CLIENT_FILE == pLnk->GetObjType() &&
             pLnk->ISA( SwBaseLink ) &&
@@ -1075,10 +1068,10 @@ void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
             // liegt in dem Bereich: also updaten. Aber nur wenns nicht
             // im gleichen File liegt
             String sFName;
-            pDoc->GetLinkManager().GetDisplayNames( *pBLink, 0, &sFName, 0, 0 );
+            pDoc->GetLinkManager().GetDisplayNames( pBLink, 0, &sFName, 0, 0 );
             if( sFName != sName )
             {
-                pBLink->DataChanged( aEmptyData );
+                pBLink->DataChanged( sMimeType, aValue );
 
                 // ggfs. neu den Link-Pointer wieder suchen, damit nicht einer
                 // ausgelassen oder doppelt gerufen wird.
@@ -1201,18 +1194,18 @@ int lcl_FindDocShell( SfxObjectShellRef& xDocSh,
 }
 
 
-void SwIntrnlSectRefLink::DataChanged( SvData& rData )
+void SwIntrnlSectRefLink::DataChanged( const String& rMimeType,
+                                const ::com::sun::star::uno::Any & rValue )
 {
     SwSectionNode* pSectNd = rSectFmt.GetSectionNode( FALSE );
     SwDoc* pDoc = rSectFmt.GetDoc();
 
-    ULONG nDataFormat = rData.GetFormat();
+    ULONG nDataFormat = SotExchange::GetFormatIdFromMimeType( rMimeType );
 
     if( !pSectNd || !pDoc || pDoc->IsInDtor() || ChkNoDataFlag() ||
         SvxLinkManager::RegisterStatusInfoId() == nDataFormat )
     {
         // sollten wir schon wieder im Undo stehen?
-
         return ;
     }
 
@@ -1256,7 +1249,7 @@ void SwIntrnlSectRefLink::DataChanged( SvData& rData )
     SwSection& rSection = pSectNd->GetSection();
     rSection.SetConnectFlag( FALSE );
 
-    String sFileName;
+    ::rtl::OUString sNewFileName;
     Reader* pRead = 0;
     switch( nDataFormat )
     {
@@ -1269,10 +1262,10 @@ void SwIntrnlSectRefLink::DataChanged( SvData& rData )
         break;
 
     case FORMAT_FILE:
-        if( rData.GetData( sFileName ) )
+        if( rValue.hasValue() && ( rValue >>= sNewFileName ) )
         {
-            String sFilter, sRange;
-            pDoc->GetLinkManager().GetDisplayNames( *this, 0, &sFileName,
+            String sFilter, sRange, sFileName( sNewFileName );
+            pDoc->GetLinkManager().GetDisplayNames( this, 0, &sFileName,
                                                     &sRange, &sFilter );
 
             SwRedlineMode eOldRedlineMode = REDLINE_NONE;
@@ -1321,7 +1314,8 @@ void SwIntrnlSectRefLink::DataChanged( SvData& rData )
                     BOOL bRecursion = FALSE;
                     if( pSrcDoc == pDoc )
                     {
-                        SwServerObjectRef refObj( pDoc->CreateHotLink( sRange ));
+                        SwServerObjectRef refObj( (SwServerObject*)
+                                        pDoc->CreateLinkSource( sRange ));
                         if( refObj.Is() )
                         {
                             bRecursion = refObj->IsLinkInServer( this ) ||
@@ -1395,15 +1389,19 @@ void SwIntrnlSectRefLink::DataChanged( SvData& rData )
         break;
     }
 
-    if( pESh && pRead )     // !!!! DDE nur updaten wenn Shell vorhanden ist??
+    // !!!! DDE nur updaten wenn Shell vorhanden ist??
+    ::com::sun::star::uno::Sequence< sal_Int8 > aSeq;
+    if( pESh && pRead && rValue.hasValue() && ( rValue >>= aSeq ) )
     {
         pESh->Push();
         *pESh->GetCrsr()->GetPoint() = *pPam->GetPoint();
         delete pPam, pPam = 0;
 
-        SvStorageStreamRef aStrm( new SvStorageStream( aEmptyStr ));
-        rData.GetData( aStrm, TRANSFER_REFERENCE );
-        SwReader aTmpReader( *aStrm, aEmptyStr, *pESh->GetCrsr() );
+        SvMemoryStream aStrm( (void*)aSeq.getConstArray(), aSeq.getLength(),
+                                STREAM_READ );
+        aStrm.Seek( 0 );
+
+        SwReader aTmpReader( aStrm, aEmptyStr, *pESh->GetCrsr() );
 
         if( IsError( aTmpReader.Read( *pRead ) ))
         {
@@ -1493,7 +1491,7 @@ void SwSection::CreateLink( LinkCreateType eCreateType )
         refLink = new SwIntrnlSectRefLink( *pFmt, nUpdateType, FORMAT_RTF );
     else
         // sonst aus dem Linkmanager entfernen
-        pFmt->GetDoc()->GetLinkManager().Remove( *refLink );
+        pFmt->GetDoc()->GetLinkManager().Remove( refLink );
 
     SwIntrnlSectRefLink* pLnk = (SwIntrnlSectRefLink*)&refLink;
 
@@ -1508,8 +1506,8 @@ void SwSection::CreateLink( LinkCreateType eCreateType )
     switch( eType )
     {
     case DDE_LINK_SECTION:
-        pLnk->SetLinkSourceName( new SvLinkName( sCmd ) );
-        pFmt->GetDoc()->GetLinkManager().InsertDDELink( *pLnk );
+        pLnk->SetLinkSourceName( sCmd );
+        pFmt->GetDoc()->GetLinkManager().InsertDDELink( pLnk );
         break;
     case FILE_LINK_SECTION:
         {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndsect.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-02 14:35:37 $
+ *  last change: $Author: jp $ $Date: 2001-03-08 21:18:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -158,8 +158,6 @@
 #ifndef _COMCORE_HRC
 #include <comcore.hrc>
 #endif
-
-SO2_IMPL_REF( SwServerObject )
 
 int lcl_IsInSameTblBox( SwNodes& rNds, const SwNode& rNd,
                             const SwNodeIndex& rIdx2 )
@@ -711,7 +709,7 @@ void SwDoc::ChgSection( USHORT nPos, const SwSection& rSect,
     else if( !pSection->IsLinkType() && pSection->IsConnected() )
     {
         pSection->Disconnect();
-        GetLinkManager().Remove( pSection->GetBaseLink() );
+        GetLinkManager().Remove( &pSection->GetBaseLink() );
     }
 
     SetModified();
@@ -1330,7 +1328,7 @@ void SwSectionNode::NodesArrChgd()
         else
         {
             if( CONTENT_SECTION != pSection->GetType() )        // den Link austragen
-                pDoc->GetLinkManager().Remove( pSection->GetBaseLink() );
+                pDoc->GetLinkManager().Remove( &pSection->GetBaseLink() );
 
             if( pSection->IsServer() )                  // als Server austragen
                 pDoc->GetLinkManager().RemoveServer( pSection->GetObject() );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndole.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jp $ $Date: 2000-12-18 11:16:07 $
+ *  last change: $Author: jp $ $Date: 2001-03-08 21:20:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -187,12 +187,7 @@ SwCntntNode *SwOLENode::SplitNode( const SwPosition & )
 
 BOOL SwOLENode::RestorePersistentData()
 {
-    if( aOLEObj.IsOLELink() )
-    {
-        aOLEObj.GetLink()->SetVisible( GetDoc()->IsVisibleLinks() );
-        GetDoc()->GetLinkManager().InsertSoLink( *aOLEObj.GetLink() );
-    }
-    else if( aOLEObj.pOLERef && aOLEObj.pOLERef->Is() )
+    if( aOLEObj.pOLERef && aOLEObj.pOLERef->Is() )
     {
         SvPersist* p = GetDoc()->GetPersist();
         if( p )     // muss da sein
@@ -213,11 +208,7 @@ BOOL SwOLENode::RestorePersistentData()
 
 BOOL SwOLENode::SavePersistentData()
 {
-    if( aOLEObj.IsOLELink() )
-    {
-        GetDoc()->GetLinkManager().Remove( *aOLEObj.GetLink() );
-    }
-    else if( aOLEObj.pOLERef && aOLEObj.pOLERef->Is() )
+    if( aOLEObj.pOLERef && aOLEObj.pOLERef->Is() )
     {
         SvPersist* p = GetDoc()->GetPersist();
         if( p )     // muss da sein
@@ -336,19 +327,6 @@ SwCntntNode* SwOLENode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
                                     (SwGrfFmtColl*)pDoc->GetDfltGrfFmtColl(),
                                     (SwAttrSet*)GetpSwAttrSet() );
 
-    if( aOLEObj.refLink.Is() )      // sollte es ein OLE-Link sein?
-    {
-        pOLENd->aOLEObj.refLink = new SwOLELink( *pOLENd,
-                                        pOLENd->aOLEObj.GetOleRef() );
-        // bei UNDO nie in den LinkManager uebernehmen
-        if( pOLENd->GetNodes().IsDocNodes() )
-        {
-            pOLENd->aOLEObj.GetLink()->SetVisible( pDoc->IsVisibleLinks() );
-            pDoc->GetLinkManager().InsertSoLink( *pOLENd->aOLEObj.refLink );
-// JP 19.01.96: warum Updaten??
-//          pOLENd->aOLEObj.refLink->Update();
-        }
-    }
     pOLENd->SetChartTblName( GetChartTblName() );
     pOLENd->SetAlternateText( GetAlternateText() );
     pOLENd->SetContour( HasContour() );
@@ -398,7 +376,7 @@ BOOL SwOLENode::IsInGlobalDocSection() const
 BOOL SwOLENode::IsOLEObjectDeleted() const
 {
     BOOL bRet = FALSE;
-    if( !aOLEObj.IsOLELink() && aOLEObj.pOLERef && aOLEObj.pOLERef->Is() )
+    if( aOLEObj.pOLERef && aOLEObj.pOLERef->Is() )
     {
         SvPersist* p = GetDoc()->GetPersist();
         if( p )     // muss da sein
@@ -481,16 +459,6 @@ void SwOLEObj::SetNode( SwOLENode* pNode )
 
         if ( !p->Move( refObj, aName ) ) // Eigentuemer Uebergang!
             refObj.Clear();
-        else if( (*pOLERef)->IsLink() )
-        {
-            refLink = new SwOLELink( *pNode, &(*pOLERef) );
-            if( pNode->GetNodes().IsDocNodes() )
-            {
-                refLink->SetVisible( pDoc->IsVisibleLinks() );
-                pDoc->GetLinkManager().InsertSoLink( *refLink );
-                refLink->Update();
-            }
-        }
         ASSERT( refObj.Is(), "InsertObject failed" );
     }
 }
@@ -555,15 +523,6 @@ SvInPlaceObjectRef SwOLEObj::GetOleRef()
     return *pOLERef;
 }
 
-
-void SwOLEObj::ReleaseLink()
-{
-    if( refLink.Is() )
-    {
-        ((SwOLENode*)pOLENd)->GetDoc()->GetLinkManager().Remove( *refLink );
-        refLink.Clear();
-    }
-}
 
 void SwOLEObj::Unload()
 {

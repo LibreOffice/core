@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-02 14:35:07 $
+ *  last change: $Author: jp $ $Date: 2001-03-08 21:17:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,7 +121,6 @@ class SvData;
 class SvEmbeddedObjectRef;
 class SvNumberFormatter;
 class SvPersist;
-class SvPseudoObject;
 class SvStorage;
 class SvStrings;
 class SvStringsSort;
@@ -236,6 +235,9 @@ namespace uno {
 
 namespace utl {
     class TransliterationWrapper;
+};
+namespace so3 {
+    class SvLinkSource;
 };
 
 //PageDescriptor-Schnittstelle, Array hier wegen inlines.
@@ -1566,9 +1568,11 @@ public:
     void SetInLoadAsynchron( sal_Bool bFlag )       { bInLoadAsynchron = bFlag; }
 
     // SS fuers Linken von Dokumentteilen
-    sal_Bool GetData( const String& rItem, SvData& rData ) const;
-    sal_Bool ChangeData( const String& rItem, const SvData& rData );
-    SvPseudoObject* CreateHotLink( const String& rItem );
+    sal_Bool GetData( const String& rItem, const String& rMimeType,
+                      ::com::sun::star::uno::Any & rValue ) const;
+    sal_Bool SetData( const String& rItem, const String& rMimeType,
+                         const ::com::sun::star::uno::Any & rValue );
+    ::so3::SvLinkSource* CreateLinkSource( const String& rItem );
     // erzeuge um das zu Servende Object eine Selektion
     sal_Bool SelectServerObj( const String& rStr, SwPaM*& rpPam,
                             SwNodeRange*& rpRange ) const;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-06 11:07:24 $
+ *  last change: $Author: jp $ $Date: 2001-03-08 21:21:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1305,18 +1305,18 @@ void SwDocShell::StartLoadFinishedTimer()
                   : SW_MOD()->GetUsrPref(TRUE)->IsGraphic() )
     {
         const SvxLinkManager& rLnkMgr = pDoc->GetLinkManager();
-        const SvBaseLinks& rLnks = rLnkMgr.GetLinks();
+        const ::so3::SvBaseLinks& rLnks = rLnkMgr.GetLinks();
         for( USHORT n = 0; n < rLnks.Count(); ++n )
         {
-            SvBaseLink* pLnk = &(*rLnks[ n ]);
+            ::so3::SvBaseLink* pLnk = &(*rLnks[ n ]);
             if( pLnk && OBJECT_CLIENT_GRF == pLnk->GetObjType() &&
                 pLnk->ISA( SwBaseLink ) )
             {
-                SvPseudoObject* pLnkObj = pLnk->GetObj();
+                ::so3::SvLinkSource* pLnkObj = pLnk->GetObj();
                 if( !pLnkObj )
                 {
                     String sFileNm;
-                    if( rLnkMgr.GetDisplayNames( *pLnk, 0, &sFileNm, 0, 0 ))
+                    if( rLnkMgr.GetDisplayNames( pLnk, 0, &sFileNm, 0, 0 ))
                     {
                         INetURLObject aURL( sFileNm );
                         switch( aURL.GetProtocol() )
@@ -1338,8 +1338,10 @@ void SwDocShell::StartLoadFinishedTimer()
                 }
                 else
                 {
-                    ULONG nState = pLnkObj->GetUpToDateStatus();
-                    if( ERRCODE_SO_FALSE == nState )
+                    BOOL bSendState = FALSE;
+                    if( pLnkObj->IsPending() )
+                        bSttTimer = TRUE;       // Pending?
+                    else if( !pLnkObj->IsDataComplete() )
                     {
                         // falls aber nicht angetickert werden muss (liegt
                         // im QuickdrawCache)
@@ -1350,25 +1352,25 @@ void SwDocShell::StartLoadFinishedTimer()
                             bSttTimer = TRUE;
                         }
                         else
-                        {
                             // dann muss aber auf jedenfall der Status
                             // an die Handler verschickt werden!
-                            SvData aData( SvxLinkManager::RegisterStatusInfoId() );
-                            aData.SetData( String::CreateFromInt32(STATE_LOAD_OK ));
-                            pLnkObj->DataChanged( aData );
-                        }
+                            bSendState = TRUE;
                     }
-                    else if( ERRCODE_NONE != nState )
-                        bSttTimer = TRUE;       // Pending?
                     else if( ((SwBaseLink*)pLnk)->IsShowQuickDrawBmp() )
-                    {
                         // Wenn die Grafik aus dem QuickDrawCache kommt,
                         // wird sie nie angefordert!
                         // Dann muss aber auf jedenfall der Status
                         // an die Handler verschickt werden!
-                        SvData aData( SvxLinkManager::RegisterStatusInfoId() );
-                        aData.SetData( String::CreateFromInt32(STATE_LOAD_OK) );
-                        pLnkObj->DataChanged( aData );
+                        bSendState = TRUE;
+
+                    if( bSendState )
+                    {
+                        ::com::sun::star::uno::Any aValue;
+                        aValue <<= ::rtl::OUString::valueOf(
+                                            (sal_Int32)STATE_LOAD_OK );
+                        String sMimeType( SotExchange::GetFormatMimeType(
+                            SvxLinkManager::RegisterStatusInfoId() ));
+                        pLnkObj->DataChanged( sMimeType, aValue );
                     }
                 }
             }
@@ -1402,15 +1404,15 @@ IMPL_STATIC_LINK( SwDocShell, IsLoadFinished, void*, EMPTYARG )
     if( !pThis->IsAbortingImport() )
     {
         const SvxLinkManager& rLnkMgr = pThis->pDoc->GetLinkManager();
-        const SvBaseLinks& rLnks = rLnkMgr.GetLinks();
+        const ::so3::SvBaseLinks& rLnks = rLnkMgr.GetLinks();
         for( USHORT n = rLnks.Count(); n; )
         {
-            SvBaseLink* pLnk = &(*rLnks[ --n ]);
+            ::so3::SvBaseLink* pLnk = &(*rLnks[ --n ]);
             if( pLnk && OBJECT_CLIENT_GRF == pLnk->GetObjType() &&
                 pLnk->ISA( SwBaseLink ) )
             {
-                SvPseudoObject* pLnkObj = pLnk->GetObj();
-                if( pLnkObj && ERRCODE_SO_PENDING == pLnkObj->GetUpToDateStatus() &&
+                ::so3::SvLinkSource* pLnkObj = pLnk->GetObj();
+                if( pLnkObj && pLnkObj->IsPending() &&
                     !((SwBaseLink*)pLnk)->IsShowQuickDrawBmp() )
                 {
                     bSttTimer = TRUE;
@@ -1467,8 +1469,7 @@ void SwDocShell::RemoveOLEObjects()
     {
         SwOLENode* pOLENd = pNd->GetOLENode();
         if( pOLENd && ( pOLENd->IsOLEObjectDeleted() ||
-                        ( !pOLENd->GetOLEObj().IsOLELink() &&
-                            pOLENd->IsInGlobalDocSection() )))
+                        pOLENd->IsInGlobalDocSection() ) )
         {
             SvInfoObjectRef aRef( pPersist->Find(
                                     pOLENd->GetOLEObj().GetName() ) );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndgrf.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: mib $ $Date: 2001-03-06 11:51:17 $
+ *  last change: $Author: jp $ $Date: 2001-03-08 21:24:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,12 +85,6 @@
 #ifndef _FILTER_HXX //autogen
 #include <svtools/filter.hxx>
 #endif
-#ifndef _LINKNAME_HXX //autogen
-#include <so3/linkname.hxx>
-#endif
-#ifndef _BINDCTX_HXX //autogen
-#include <so3/bindctx.hxx>
-#endif
 #ifndef _SVSTOR_HXX //autogen
 #include <so3/svstor.hxx>
 #endif
@@ -114,7 +108,7 @@
 #ifndef _FMTURL_HXX //autogen
 #include <fmturl.hxx>
 #endif
-#ifndef _FRMFMT_HXX //autogen
+#ifndef _FRMFMT_HXX
 #include <frmfmt.hxx>
 #endif
 #ifndef _DOC_HXX
@@ -244,18 +238,18 @@ BOOL SwGrfNode::ReRead( const String& rGrfName, const String& rFltName,
                     nNewType = OBJECT_CLIENT_GRF;
                 }
 
-                if( nNewType != refLink->GetObjectType() )
+                if( nNewType != refLink->GetObjType() )
                 {
                     refLink->Disconnect();
                     ((SwBaseLink*)&refLink)->SetObjType( nNewType );
                 }
             }
 
-            refLink->SetLinkSourceName( new SvLinkName( sCmd ) );
+            refLink->SetLinkSourceName( sCmd );
         }
         else        // kein Name mehr, Link aufheben
         {
-            GetDoc()->GetLinkManager().Remove( *refLink );
+            GetDoc()->GetLinkManager().Remove( refLink );
             refLink.Clear();
         }
 
@@ -377,7 +371,7 @@ SwGrfNode::~SwGrfNode()
     if( refLink.Is() )
     {
         ASSERT( !bInSwapIn, "DTOR: stehe noch im SwapIn" );
-        pDoc->GetLinkManager().Remove( *refLink );
+        pDoc->GetLinkManager().Remove( refLink );
         refLink->Disconnect();
     }
     else
@@ -462,7 +456,7 @@ short SwGrfNode::SwapIn( BOOL bWaitForData )
 
     short nRet = 0;
     bInSwapIn = TRUE;
-    SwBaseLink* pLink = (SwBaseLink*)(SvBaseLink*) refLink;
+    SwBaseLink* pLink = (SwBaseLink*)(::so3::SvBaseLink*) refLink;
     if( pLink )
     {
         if( GRAPHIC_NONE == aGrfObj.GetType() ||
@@ -783,12 +777,12 @@ BOOL SwGrfNode::GetFileFilterNms( String* pFileNm, String* pFilterNm ) const
         USHORT nType = refLink->GetObjType();
         if( OBJECT_CLIENT_GRF == nType )
             bRet = refLink->GetLinkManager()->GetDisplayNames(
-                    *refLink, 0, pFileNm, 0, pFilterNm );
+                    refLink, 0, pFileNm, 0, pFilterNm );
         else if( OBJECT_CLIENT_DDE == nType && pFileNm && pFilterNm )
         {
             String sApp, sTopic, sItem;
             if( refLink->GetLinkManager()->GetDisplayNames(
-                    *refLink, &sApp, &sTopic, &sItem ) )
+                    refLink, &sApp, &sTopic, &sItem ) )
             {
                 ( *pFileNm = sApp ) += cTokenSeperator;
                 ( *pFileNm += sTopic ) += cTokenSeperator;
@@ -817,7 +811,7 @@ BOOL SwGrfNode::SavePersistentData()
     if( refLink.Is() )
     {
         ASSERT( !bInSwapIn, "SavePersistentData: stehe noch im SwapIn" );
-        GetDoc()->GetLinkManager().Remove( *refLink );
+        GetDoc()->GetLinkManager().Remove( refLink );
         return TRUE;
     }
 
@@ -838,7 +832,7 @@ BOOL SwGrfNode::RestorePersistentData()
     if( refLink.Is() )
     {
         refLink->SetVisible( GetDoc()->IsVisibleLinks() );
-        GetDoc()->GetLinkManager().InsertDDELink( *refLink );
+        GetDoc()->GetLinkManager().InsertDDELink( refLink );
         if( GetDoc()->GetRootFrm() )
             refLink->Update();
     }
@@ -860,7 +854,7 @@ void SwGrfNode::InsertLink( const String& rGrfName, const String& rFltName )
             sApp = rGrfName.GetToken( 0, cTokenSeperator, nTmp );
             sTopic = rGrfName.GetToken( 0, cTokenSeperator, nTmp );
             sItem = rGrfName.Copy( nTmp );
-            pDoc->GetLinkManager().InsertDDELink( *refLink,
+            pDoc->GetLinkManager().InsertDDELink( refLink,
                                             sApp, sTopic, sItem );
         }
         else
@@ -886,11 +880,11 @@ void SwGrfNode::ReleaseLink()
 //      if( aGraphic.IsSwapOut() || !refLink->IsSynchron() )
         {
             bInSwapIn = TRUE;
-            SwBaseLink* pLink = (SwBaseLink*)(SvBaseLink*) refLink;
+            SwBaseLink* pLink = (SwBaseLink*)(::so3::SvBaseLink*) refLink;
             pLink->SwapIn( TRUE, TRUE );
             bInSwapIn = FALSE;
         }
-        GetDoc()->GetLinkManager().Remove( *refLink );
+        GetDoc()->GetLinkManager().Remove( refLink );
         refLink.Clear();
         aGrfObj.SetLink();
     }
@@ -1052,7 +1046,7 @@ SwCntntNode* SwGrfNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
     SwGrfNode* pThis = (SwGrfNode*)this;
 
     Graphic aTmpGrf;
-    SwBaseLink* pLink = (SwBaseLink*)(SvBaseLink*) refLink;
+    SwBaseLink* pLink = (SwBaseLink*)(::so3::SvBaseLink*) refLink;
     if( !pLink && HasStreamName() )
     {
         SvStorageRef refRoot = pThis->GetDoc()->GetDocStorage();
@@ -1088,14 +1082,14 @@ SwCntntNode* SwGrfNode::MakeCopy( SwDoc* pDoc, const SwNodeIndex& rIdx ) const
         aTmpGrf = aGrfObj.GetGraphic();
     }
 
-    const SvLinkManager& rMgr = GetDoc()->GetLinkManager();
+    const so3::SvLinkManager& rMgr = GetDoc()->GetLinkManager();
     String sFile, sFilter;
     if( IsLinkedFile() )
-        rMgr.GetDisplayNames( *refLink, 0, &sFile, 0, &sFilter );
+        rMgr.GetDisplayNames( refLink, 0, &sFile, 0, &sFilter );
     else if( IsLinkedDDE() )
     {
         String sTmp1, sTmp2;
-        rMgr.GetDisplayNames( *refLink, &sTmp1, &sTmp2, &sFilter );
+        rMgr.GetDisplayNames( refLink, &sTmp1, &sTmp2, &sFilter );
         ::MakeLnkName( sFile, &sTmp1, sTmp2, sFilter );
         sFilter.AssignAscii( RTL_CONSTASCII_STRINGPARAM( "DDE" ));
     }
@@ -1204,14 +1198,14 @@ void DelAllGrfCacheEntries( SwDoc* pDoc )
     {
         // alle Graphic-Links mit dem Namen aus dem Cache loeschen
         const SvxLinkManager& rLnkMgr = pDoc->GetLinkManager();
-        const SvBaseLinks& rLnks = rLnkMgr.GetLinks();
+        const ::so3::SvBaseLinks& rLnks = rLnkMgr.GetLinks();
         SwGrfNode* pGrfNd;
         String sFileNm;
         for( USHORT n = rLnks.Count(); n; )
         {
-            SvBaseLink* pLnk = &(*rLnks[ --n ]);
+            ::so3::SvBaseLink* pLnk = &(*rLnks[ --n ]);
             if( pLnk && OBJECT_CLIENT_GRF == pLnk->GetObjType() &&
-                rLnkMgr.GetDisplayNames( *pLnk, 0, &sFileNm ) &&
+                rLnkMgr.GetDisplayNames( pLnk, 0, &sFileNm ) &&
                 pLnk->ISA( SwBaseLink ) && 0 != ( pGrfNd =
                 ((SwBaseLink*)pLnk)->GetCntntNode()->GetGrfNode()) )
             {

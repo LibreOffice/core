@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textfld.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-14 09:57:20 $
+ *  last change: $Author: jp $ $Date: 2001-03-08 21:22:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -241,9 +241,9 @@ void SwTextShell::ExecField(SfxRequest &rReq)
 #if !defined(DDE_AVAILABLE)
                         return;
 #endif
-                        SvBaseLinksDialog aDlg( pMDI,
+                        ::so3::SvBaseLinksDialog aDlg( pMDI,
                                         &rSh.GetLinkManager() );
-                        aDlg.SetActLink( ((SwDDEFieldType*)pFld->GetTyp())->
+                        aDlg.SetActLink( &((SwDDEFieldType*)pFld->GetTyp())->
                                                 GetBaseLink() );
                         aDlg.Execute();
                         break;

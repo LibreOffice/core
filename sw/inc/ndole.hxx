@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndole.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:27 $
+ *  last change: $Author: jp $ $Date: 2001-03-08 21:17:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,9 +61,6 @@
 #ifndef _NDOLE_HXX
 #define _NDOLE_HXX
 
-#ifndef _SWBASLNK_HXX
-#include <swbaslnk.hxx>     // fuer SwBaseLink
-#endif
 #ifndef _NDNOTXT_HXX
 #include <ndnotxt.hxx>
 #endif
@@ -84,7 +81,6 @@ class SwOLEObj
     static SwOLELRUCache* pOLELRU_Cache;
 
     const SwOLENode* pOLENd;
-    SvBaseLinkRef refLink;      // falls Object nur als Link, dann Pointer gesetzt
 
     //Entweder Ref oder Name sind bekannt, wenn nur der Name bekannt ist, wird
     //dir Ref bei Anforderung durch GetOleRef() vom Sfx besorgt.
@@ -110,12 +106,6 @@ public:
     const String &GetName() const { return aName; }
 
     BOOL IsOleRef() const;  //Damit das Objekt nicht unnoetig geladen werden muss.
-
-    BOOL IsOLELink() const              { return refLink.Is(); }
-    inline SwOLELink* GetLink() const;
-    inline void SetLink( SwOLELink* pLink );
-    void ReleaseLink();
-
 #endif
 };
 
@@ -177,27 +167,6 @@ public:
 #endif
 };
 
-// --------------------
-// SwOLELink
-// --------------------
-
-class SwOLELink : public SwBaseLink
-{
-    friend class Sw3IoImp;
-    void SetCacheObj( SvEmbeddedObject * pObj )
-        {   SvBaseLink::SetCacheObj( pObj ); }
-
-public:
-    SwOLELink( SwOLENode& rNode, SvPseudoObject* pObj )
-        : SwBaseLink( aEmptyStr, OBJECT_CLIENT_OLE_CACHE, pObj, &rNode )
-        {}
-
-    SwOLELink( SwOLENode& rNode )
-        : SwBaseLink( 0, 0, &rNode )
-        {}
-};
-
-
 // Inline Metoden aus Node.hxx - erst hier ist der TxtNode bekannt !!
 inline SwOLENode *SwNode::GetOLENode()
 {
@@ -208,10 +177,6 @@ inline const SwOLENode *SwNode::GetOLENode() const
      return ND_OLENODE == nNodeType ? (const SwOLENode*)this : 0;
 }
 
-#ifndef _FESHVIEW_ONLY_INLINE_NEEDED
-inline SwOLELink* SwOLEObj::GetLink() const       { return (SwOLELink*)&refLink; }
-inline void SwOLEObj::SetLink( SwOLELink* pLink ) { refLink = pLink; }
-#endif
 
 #endif  // _NDOLE_HXX
 

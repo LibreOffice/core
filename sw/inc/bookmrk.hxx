@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bookmrk.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-01-10 13:40:27 $
+ *  last change: $Author: jp $ $Date: 2001-03-08 21:17:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,19 +70,20 @@
 #ifndef _KEYCOD_HXX //autogen
 #include <vcl/keycod.hxx>
 #endif
-#ifndef _SO2REF_HXX //autogen
-#include <so3/so2ref.hxx>
-#endif
-#ifndef _BKMRKE_HXX //autogen
-#include <bkmrke.hxx>
+#ifndef _TOOLS_REF_HXX
+#include <tools/ref.hxx>
 #endif
 
-#include "calbck.hxx"
+#ifndef _BKMRKE_HXX
+#include <bkmrke.hxx>
+#endif
+#ifndef _CALBCK_HXX
+#include <calbck.hxx>
+#endif
 
 #ifndef SW_DECL_SWSERVEROBJECT_DEFINED
 #define SW_DECL_SWSERVEROBJECT_DEFINED
-class SvPseudoObject;
-SO2_DECL_REF( SwServerObject )
+SV_DECL_REF( SwServerObject )
 #endif
 
 
@@ -112,7 +113,7 @@ public:
         const KeyCode& rCode,
         const String& rName, const String& rShortName);
     // Beim Loeschen von Text werden Bookmarks mitgeloescht!
-    ~SwBookmark();
+    virtual ~SwBookmark();
 
     const SwPosition& GetPos() const { return *pPos1; }
     const SwPosition* GetOtherPos() const { return pPos2; }
@@ -146,7 +147,7 @@ public:
     const SvxMacro& GetEndMacro()               { return aEndMacro; }
 
         // Daten Server-Methoden
-    void SetRefObject( SvPseudoObject* pObj );
+    void SetRefObject( SwServerObject* pObj );
     const SwServerObject* GetObject() const     {  return &refObj; }
           SwServerObject* GetObject()           {  return &refObj; }
     BOOL IsServer() const                       {  return refObj.Is(); }

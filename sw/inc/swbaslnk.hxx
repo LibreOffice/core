@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swbaslnk.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:28 $
+ *  last change: $Author: jp $ $Date: 2001-03-08 21:17:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@ class SwNode;
 class SwCntntNode;
 class SwNodeIndex;
 
-class SwBaseLink : public SvBaseLink
+class SwBaseLink : public ::so3::SvBaseLink
 {
     SwCntntNode* pCntntNode;
     BOOL bSwapIn : 1;
@@ -80,9 +80,9 @@ class SwBaseLink : public SvBaseLink
 protected:
     SwBaseLink() {}
 
-    SwBaseLink( const String& rNm, USHORT nObjectType, SvPseudoObject* pObj,
+    SwBaseLink( const String& rNm, USHORT nObjectType, ::so3::SvLinkSource* pObj,
                  SwCntntNode* pNode = 0 )
-        : SvBaseLink( rNm, nObjectType, pObj ), pCntntNode( pNode ),
+        : ::so3::SvBaseLink( rNm, nObjectType, pObj ), pCntntNode( pNode ),
         bSwapIn( FALSE ), bNoDataFlag( FALSE ), bIgnoreDataChanged( FALSE )
     {}
 
@@ -90,12 +90,14 @@ public:
     TYPEINFO();
 
     SwBaseLink( USHORT nMode, USHORT nFormat, SwCntntNode* pNode = 0 )
-        : SvBaseLink( nMode, nFormat ), pCntntNode( pNode ),
+        : ::so3::SvBaseLink( nMode, nFormat ), pCntntNode( pNode ),
         bSwapIn( FALSE ), bNoDataFlag( FALSE ), bIgnoreDataChanged( FALSE )
     {}
     virtual ~SwBaseLink();
 
-    virtual void DataChanged( SvData& rData );
+    virtual void DataChanged( const String& rMimeType,
+                                const ::com::sun::star::uno::Any & rValue );
+
     virtual void Closed();
 
     virtual const SwNode* GetAnchor() const;
@@ -108,7 +110,6 @@ public:
     FASTBOOL IsShowQuickDrawBmp() const;                // nur fuer Grafiken
 
     FASTBOOL Connect() { return 0 != SvBaseLink::GetRealObject(); }
-    SvLinkName* GetCacheName() const { return SvBaseLink::GetCacheName(); }
 
     // nur fuer Grafik-Links ( zum Umschalten zwischen DDE / Grf-Link)
     void SetObjType( USHORT nType ) { SvBaseLink::SetObjType( nType ); }

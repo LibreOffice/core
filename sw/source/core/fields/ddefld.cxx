@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ddefld.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dvo $ $Date: 2000-12-08 13:31:08 $
+ *  last change: $Author: jp $ $Date: 2001-03-08 21:19:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,9 +65,6 @@
 
 #pragma hdrstop
 
-#ifndef _LINKNAME_HXX //autogen
-#include <so3/linkname.hxx>
-#endif
 #ifndef _SVXLINKMGR_HXX
 #include <svx/linkmgr.hxx>
 #endif
@@ -110,6 +107,13 @@
 #endif
 
 using namespace rtl;
+
+#ifdef PM2
+#define DDE_TXT_ENCODING    RTL_TEXTENCODING_IBM_850
+#else
+#define DDE_TXT_ENCODING    RTL_TEXTENCODING_MS_1252
+#endif
+
 /*--------------------------------------------------------------------
     Beschreibung: Globale Variablen
  --------------------------------------------------------------------*/
@@ -124,7 +128,8 @@ public:
     {}
 
     virtual void Closed();
-    virtual void DataChanged( SvData& );
+    virtual void DataChanged( const String& rMimeType,
+                                const ::com::sun::star::uno::Any & rValue );
 
     virtual const SwNode* GetAnchor() const;
     virtual BOOL IsInRange( ULONG nSttNd, ULONG nEndNd, xub_StrLen nStt = 0,
@@ -132,17 +137,21 @@ public:
 };
 
 
-void SwIntrnlRefLink::DataChanged( SvData& rData )
+void SwIntrnlRefLink::DataChanged( const String& rMimeType,
+                                const ::com::sun::star::uno::Any & rValue )
 {
-    switch( rData.GetFormat() )
+    switch( SotExchange::GetFormatIdFromMimeType( rMimeType ) )
     {
     case FORMAT_STRING:
         if( !IsNoDataFlag() )
         {
-            String sStr;
-            rData.GetData( sStr );
+            ::com::sun::star::uno::Sequence< sal_Int8 > aSeq;
+            rValue >>= aSeq;
+            String sStr( (sal_Char*)aSeq.getConstArray(), aSeq.getLength(),
+                               DDE_TXT_ENCODING  );
+
             // CR-LF am Ende entfernen, ist ueberfluessig!
-            USHORT n = sStr.Len();
+            xub_StrLen n = sStr.Len();
             if( n && 0x0a == sStr.GetChar( n-1 ) )
                 --n;
             if( n && 0x0d == sStr.GetChar( n-1 ) )
@@ -313,7 +322,7 @@ SwDDEFieldType::SwDDEFieldType(const String& rName,
 SwDDEFieldType::~SwDDEFieldType()
 {
     if( pDoc && !pDoc->IsInDtor() )
-        pDoc->GetLinkManager().Remove( *refLink );
+        pDoc->GetLinkManager().Remove( refLink );
     refLink->Disconnect();
 }
 
@@ -339,15 +348,12 @@ void SwDDEFieldType::SetCmd( const String& rStr )
     xub_StrLen nPos;
     while( STRING_NOTFOUND != (nPos = sCmd.SearchAscii( "  " )) )
         sCmd.Erase( nPos, 1 );
-    refLink->SetLinkSourceName( new SvLinkName( sCmd ) );
+    refLink->SetLinkSourceName( sCmd );
 }
 
 String SwDDEFieldType::GetCmd() const
 {
-    SvLinkName* pLNm = refLink->GetLinkSourceName();
-    if( pLNm )
-        return pLNm->GetName();
-    return aEmptyStr;
+    return refLink->GetLinkSourceName();
 }
 
 void SwDDEFieldType::SetDoc( SwDoc* pNewDoc )
@@ -358,14 +364,14 @@ void SwDDEFieldType::SetDoc( SwDoc* pNewDoc )
     if( pDoc && refLink.Is() )
     {
         ASSERT( !nRefCnt, "wie kommen die Referenzen rueber?" );
-        pDoc->GetLinkManager().Remove( *refLink );
+        pDoc->GetLinkManager().Remove( refLink );
     }
 
     pDoc = pNewDoc;
     if( pDoc && nRefCnt )
     {
         refLink->SetVisible( pDoc->IsVisibleLinks() );
-        pDoc->GetLinkManager().InsertDDELink( *refLink );
+        pDoc->GetLinkManager().InsertDDELink( refLink );
     }
 }
 
@@ -375,14 +381,14 @@ void SwDDEFieldType::_RefCntChgd()
     if( nRefCnt )
     {
         refLink->SetVisible( pDoc->IsVisibleLinks() );
-        pDoc->GetLinkManager().InsertDDELink( *refLink );
+        pDoc->GetLinkManager().InsertDDELink( refLink );
         if( pDoc->GetRootFrm() )
             UpdateNow();
     }
     else
     {
         Disconnect();
-        pDoc->GetLinkManager().Remove( *refLink );
+        pDoc->GetLinkManager().Remove( refLink );
     }
 }
 /* -----------------------------28.08.00 16:23--------------------------------

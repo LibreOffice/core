@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: os $ $Date: 2001-02-13 14:58:22 $
+ *  last change: $Author: jp $ $Date: 2001-03-08 21:17:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -261,9 +261,11 @@ public:
     // und Streams
     Sw3Io* GetIoSystem() { return pIo; }
 
-    virtual long DdeGetData( const String& rItem, SvData& rData );
-    virtual long DdeSetData( const String& rItem, const SvData& rData );
-    virtual SvPseudoObject* DdeCreateHotLink( const String& rItem );
+    virtual long DdeGetData( const String& rItem, const String& rMimeType,
+                             ::com::sun::star::uno::Any & rValue );
+    virtual long DdeSetData( const String& rItem, const String& rMimeType,
+                                const ::com::sun::star::uno::Any & rValue );
+    virtual ::so3::SvLinkSource* DdeCreateLinkSource( const String& rItem );
     virtual void        FillClass( SvGlobalName * pClassName,
                                    ULONG * pClipFormat,
                                    String * pAppName,

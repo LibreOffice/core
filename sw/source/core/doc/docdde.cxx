@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docdde.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-10-20 13:43:53 $
+ *  last change: $Author: jp $ $Date: 2001-03-08 21:19:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,25 +67,19 @@
 
 #include <stdlib.h>
 
-#ifndef _INTN_HXX //autogen
+#ifndef _INTN_HXX
 #include <tools/intn.hxx>
 #endif
-#ifndef _APP_HXX //autogen
+#ifndef _APP_HXX
 #include <vcl/svapp.hxx>
 #endif
 #ifndef _URLOBJ_HXX
 #include <tools/urlobj.hxx>
 #endif
 
-#ifndef _LINKNAME_HXX //autogen
-#include <so3/linkname.hxx>
-#endif
-#ifndef SO2_DECL_SVLINKNAME_DEFINED
-#define SO2_DECL_SVLINKNAME_DEFINED
-SO2_DECL_REF(SvLinkName)
-#endif
 #define _SVSTDARR_STRINGS
 #include <svtools/svstdarr.hxx>
+
 #ifndef _SVXLINKMGR_HXX
 #include <svx/linkmgr.hxx>          // LinkManager
 #endif
@@ -124,7 +118,6 @@ SO2_DECL_REF(SvLinkName)
 #include <docary.hxx>
 #endif
 
-SO2_IMPL_REF( SwServerObject )
 
 struct _FindItem
 {
@@ -215,7 +208,8 @@ BOOL lcl_FindTable( const SwFrmFmtPtr& rpTableFmt, void* pArgs )
 
 
 
-BOOL SwDoc::GetData( const String& rItem, SvData& rData ) const
+BOOL SwDoc::GetData( const String& rItem, const String& rMimeType,
+                     ::com::sun::star::uno::Any & rValue ) const
 {
     // haben wir ueberhaupt das Item vorraetig?
     String sItem( GetAppCharClass().lower( rItem ));
@@ -225,7 +219,7 @@ BOOL SwDoc::GetData( const String& rItem, SvData& rData ) const
     if( aPara.pBkmk )
     {
         // gefunden, als erfrage die Daten
-        return SwServerObject( *aPara.pBkmk ).GetData( &rData );
+        return SwServerObject( *aPara.pBkmk ).GetData( rValue, rMimeType );
     }
 
     ((SwSectionFmts&)*pSectionFmtTbl).ForEach( 0, pSectionFmtTbl->Count(),
@@ -233,14 +227,14 @@ BOOL SwDoc::GetData( const String& rItem, SvData& rData ) const
     if( aPara.pSectNd )
     {
         // gefunden, als erfrage die Daten
-        return SwServerObject( *aPara.pSectNd ).GetData( &rData );
+        return SwServerObject( *aPara.pSectNd ).GetData( rValue, rMimeType );
     }
 
     ((SwFrmFmts*)pTblFrmFmtTbl)->ForEach( 0, pTblFrmFmtTbl->Count(),
                                             lcl_FindTable, &aPara );
     if( aPara.pTblNd )
     {
-        return SwServerObject( *aPara.pTblNd ).GetData( &rData );
+        return SwServerObject( *aPara.pTblNd ).GetData( rValue, rMimeType );
     }
 
     return FALSE;
@@ -248,7 +242,8 @@ BOOL SwDoc::GetData( const String& rItem, SvData& rData ) const
 
 
 
-BOOL SwDoc::ChangeData( const String& rItem, const SvData& rData )
+BOOL SwDoc::SetData( const String& rItem, const String& rMimeType,
+                     const ::com::sun::star::uno::Any & rValue )
 {
     // haben wir ueberhaupt das Item vorraetig?
     String sItem( GetAppCharClass().lower( rItem ));
@@ -257,20 +252,20 @@ BOOL SwDoc::ChangeData( const String& rItem, const SvData& rData )
     if( aPara.pBkmk )
     {
         // gefunden, als erfrage die Daten
-        return SwServerObject( *aPara.pBkmk ).ChangeData( (SvData&)rData );
+        return SwServerObject( *aPara.pBkmk ).SetData( rMimeType, rValue );
     }
 
     pSectionFmtTbl->ForEach( 0, pSectionFmtTbl->Count(), lcl_FindSection, &aPara );
     if( aPara.pSectNd )
     {
         // gefunden, als erfrage die Daten
-        return SwServerObject( *aPara.pSectNd ).ChangeData( (SvData&)rData );
+        return SwServerObject( *aPara.pSectNd ).SetData( rMimeType, rValue );
     }
 
     pTblFrmFmtTbl->ForEach( 0, pTblFrmFmtTbl->Count(), lcl_FindTable, &aPara );
     if( aPara.pTblNd )
     {
-        return SwServerObject( *aPara.pTblNd ).ChangeData( (SvData&)rData );
+        return SwServerObject( *aPara.pTblNd ).SetData( rMimeType, rValue );
     }
 
     return FALSE;
@@ -278,7 +273,7 @@ BOOL SwDoc::ChangeData( const String& rItem, const SvData& rData )
 
 
 
-SvPseudoObject* SwDoc::CreateHotLink( const String& rItem )
+::so3::SvLinkSource* SwDoc::CreateLinkSource( const String& rItem )
 {
     // haben wir ueberhaupt das Item vorraetig?
     String sItem( GetAppCharClass().lower( rItem ));
@@ -298,7 +293,7 @@ SvPseudoObject* SwDoc::CreateHotLink( const String& rItem )
                 pObj = new SwServerObject( *aPara.pBkmk );
                 aPara.pBkmk->SetRefObject( pObj );
             }
-            else if( pObj->GetSelectorCount() )
+            else if( pObj->HasDataLinks() )
                 return pObj;
             break;
         }
@@ -314,7 +309,7 @@ SvPseudoObject* SwDoc::CreateHotLink( const String& rItem )
                 pObj = new SwServerObject( *aPara.pSectNd );
                 aPara.pSectNd->GetSection().SetRefObject( pObj );
             }
-            else if( pObj->GetSelectorCount() )
+            else if( pObj->HasDataLinks() )
                 return pObj;
             break;
         }
@@ -330,7 +325,7 @@ SvPseudoObject* SwDoc::CreateHotLink( const String& rItem )
                 pObj = new SwServerObject( *aPara.pTblNd );
                 aPara.pTblNd->GetTable().SetRefObject( pObj );
             }
-            else if( pObj->GetSelectorCount() )
+            else if( pObj->HasDataLinks() )
                 return pObj;
             break;
         }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docnew.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2001-01-19 16:45:11 $
+ *  last change: $Author: jp $ $Date: 2001-03-08 21:19:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -462,7 +462,7 @@ SwDoc::~SwDoc()
     // die BaseLinks freigeben.
     {
         for( USHORT n = pLinkMgr->GetServers().Count(); n; )
-            ((SvPseudoObject*)pLinkMgr->GetServers()[ --n ])->Closed();
+            pLinkMgr->GetServers()[ --n ]->Closed();
 
         if( pLinkMgr->GetLinks().Count() )
             pLinkMgr->Remove( 0, pLinkMgr->GetLinks().Count() );
@@ -692,7 +692,7 @@ void SwDoc::SetDocShell( SwDocShell* pDSh )
     if( pDocShell != pDSh )
     {
         pDocShell = pDSh;
-        pLinkMgr->SetCacheContainer( pDocShell );
+        pLinkMgr->SetPersist( pDocShell );
         //JP 27.08.98: Bug 55570 - DocShell Pointer auch am DrawModel setzen
         if( pDrawModel )
             ((SwDrawDocument*)pDrawModel)->SetObjectShell( pDocShell );
@@ -709,8 +709,8 @@ SvStorage* SwDoc::GetDocStorage()
 {
     if( pDocShell )
         return pDocShell->GetStorage();
-    if( pLinkMgr->GetCacheContainer() )
-        return pLinkMgr->GetCacheContainer()->GetStorage();
+    if( pLinkMgr->GetPersist() )
+        return pLinkMgr->GetPersist()->GetStorage();
     return NULL;
 }
 
@@ -718,7 +718,7 @@ SvStorage* SwDoc::GetDocStorage()
 
 SvPersist* SwDoc::GetPersist() const
 {
-    return pDocShell ? pDocShell : pLinkMgr->GetCacheContainer();
+    return pDocShell ? pDocShell : pLinkMgr->GetPersist();
 }
 
 
@@ -727,10 +727,10 @@ void SwDoc::SetPersist( SvPersist* pPersist )
 {
     if( !pDocShell )
     {
-        ASSERT( ( !pPersist && pLinkMgr->GetCacheContainer() ) ||
-                ( pPersist && !pLinkMgr->GetCacheContainer() ),
+        ASSERT( ( !pPersist && pLinkMgr->GetPersist() ) ||
+                ( pPersist && !pLinkMgr->GetPersist() ),
                 "doppeltes setzen von Persist-Pointer?" )
-        pLinkMgr->SetCacheContainer( pPersist );
+        pLinkMgr->SetPersist( pPersist );
     }
 #ifndef PRODUCT
     else

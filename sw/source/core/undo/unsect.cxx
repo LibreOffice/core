@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unsect.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-02 14:36:12 $
+ *  last change: $Author: jp $ $Date: 2001-03-08 21:20:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -476,7 +476,7 @@ void SwUndoChgSection::Undo( SwUndoIter& rUndoIter )
         else if( CONTENT_SECTION == rNdSect.GetType() && rNdSect.IsConnected() )
         {
             rNdSect.Disconnect();
-            rDoc.GetLinkManager().Remove( rNdSect.GetBaseLink() );
+            rDoc.GetLinkManager().Remove( &rNdSect.GetBaseLink() );
         }
     }
 }
@@ -528,11 +528,14 @@ void SwUndoChgSectPsswd::Redo( SwUndoIter& rUndoIter )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/core/undo/unsect.cxx,v 1.2 2001-03-02 14:36:12 jp Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/core/undo/unsect.cxx,v 1.3 2001-03-08 21:20:32 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.2  2001/03/02 14:36:12  jp
+      password change: use sequence instead of string
+
       Revision 1.1.1.1  2000/09/19 00:08:28  hr
       initial import
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: notxtfrm.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2001-01-23 20:16:22 $
+ *  last change: $Author: jp $ $Date: 2001-03-08 21:19:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -974,9 +974,9 @@ void SwNoTxtFrm::PaintPicture( OutputDevice* pOut, const SwRect &rGrfArea,
                 pGrfNd->IsLinkedFile() )
             {
                 Size aTmpSz;
-                SvPseudoObject* pGrfObj = pGrfNd->GetLink()->GetObj();
+                ::so3::SvLinkSource* pGrfObj = pGrfNd->GetLink()->GetObj();
                 if( !pGrfObj ||
-                    ERRCODE_SO_FALSE == pGrfObj->GetUpToDateStatus() ||
+                    !pGrfObj->IsDataComplete() ||
                     !(aTmpSz = pGrfNd->GetTwipSize()).Width() ||
                     !aTmpSz.Height() || !pGrfNd->GetAutoFmtLvl() )
                 {

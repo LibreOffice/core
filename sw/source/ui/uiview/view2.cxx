@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view2.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-28 13:23:05 $
+ *  last change: $Author: jp $ $Date: 2001-03-08 21:22:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1095,11 +1095,8 @@ void SwView::InsFrmMode(USHORT nCols)
 void SwView::EditLinkDlg()
 {
     BOOL bWeb = 0 != PTR_CAST(SwWebView, this);
-    SvBaseLinksDialog aSvBaseLinksDialog( &GetViewFrame()->GetWindow(), &GetWrtShell().GetLinkManager()
-#if SUPD>355
-,bWeb
-#endif
-     );
+    ::so3::SvBaseLinksDialog aSvBaseLinksDialog( &GetViewFrame()->GetWindow(),
+                                    &GetWrtShell().GetLinkManager(), bWeb );
     aSvBaseLinksDialog.Execute();
 /*
     SwLinkDlg* pDlg = new SwLinkDlg(GetFrameWindow());

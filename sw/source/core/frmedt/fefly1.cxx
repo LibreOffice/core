@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fefly1.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-01 12:23:37 $
+ *  last change: $Author: jp $ $Date: 2001-03-08 21:23:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1699,8 +1699,8 @@ const Graphic *SwFEShell::GetGrfAtPos( const Point &rPt,
                 if ( pNd->IsGrfLink() )
                 {
                     //Halbfertige Grafik?
-                    SvPseudoObject* pLnkObj = pNd->GetLink()->GetObj();
-                    if ( pLnkObj && ERRCODE_SO_PENDING == pLnkObj->GetUpToDateStatus() )
+                    ::so3::SvLinkSource* pLnkObj = pNd->GetLink()->GetObj();
+                    if( pLnkObj && pLnkObj->IsPending() )
                         return 0;
                     rbLink = sal_True;
                 }

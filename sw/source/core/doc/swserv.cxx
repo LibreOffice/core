@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swserv.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:16 $
+ *  last change: $Author: jp $ $Date: 2001-03-08 21:19:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,9 @@
 #ifndef _SVXLINKMGR_HXX
 #include <svx/linkmgr.hxx>
 #endif
+#ifndef _COM_SUN_STAR_UNO_SEQUENCE_H_
+#include <com/sun/star/uno/Sequence.h>
+#endif
 
 #ifndef _DOC_HXX
 #include <doc.hxx>
@@ -104,20 +107,19 @@
 #include <swerror.h>
 #endif
 
-
-SO2_IMPL_REF( SwServerObject )
-
+SV_IMPL_REF( SwServerObject )
 
 SwServerObject::~SwServerObject()
 {
 }
 
 
-BOOL SwServerObject::GetData( SvData* pData )
+BOOL SwServerObject::GetData( ::com::sun::star::uno::Any & rData,
+                                 const String & rMimeType, BOOL )
 {
     BOOL bRet = FALSE;
     WriterRef xWrt;
-    switch( pData->GetFormat() )
+    switch( SotExchange::GetFormatIdFromMimeType( rMimeType ) )
     {
     case FORMAT_STRING:
         ::GetASCWriter( aEmptyStr, xWrt );
@@ -128,59 +130,59 @@ BOOL SwServerObject::GetData( SvData* pData )
         break;
     }
 
-    if( !xWrt.Is() )
-        return FALSE;
-
-    SwPaM* pPam = 0;
-    switch( eType )
+    if( xWrt.Is() )
     {
-    case BOOKMARK_SERVER:
-        if( CNTNT_TYPE.pBkmk->GetOtherPos() )
+        SwPaM* pPam = 0;
+        switch( eType )
         {
-            // Bereich aufspannen
-            pPam = new SwPaM( CNTNT_TYPE.pBkmk->GetPos(),
-                            *CNTNT_TYPE.pBkmk->GetOtherPos() );
-        }
-        break;
+        case BOOKMARK_SERVER:
+            if( CNTNT_TYPE.pBkmk->GetOtherPos() )
+            {
+                // Bereich aufspannen
+                pPam = new SwPaM( CNTNT_TYPE.pBkmk->GetPos(),
+                                *CNTNT_TYPE.pBkmk->GetOtherPos() );
+            }
+            break;
 
-    case TABLE_SERVER:
-        pPam = new SwPaM( *CNTNT_TYPE.pTblNd,
-                         *CNTNT_TYPE.pTblNd->EndOfSectionNode() );
-        break;
+        case TABLE_SERVER:
+            pPam = new SwPaM( *CNTNT_TYPE.pTblNd,
+                             *CNTNT_TYPE.pTblNd->EndOfSectionNode() );
+            break;
 
-    case SECTION_SERVER:
-        {
+        case SECTION_SERVER:
             pPam = new SwPaM( SwPosition( *CNTNT_TYPE.pSectNd ) );
             pPam->Move( fnMoveForward );
             pPam->SetMark();
             pPam->GetPoint()->nNode = *CNTNT_TYPE.pSectNd->EndOfSectionNode();
             pPam->Move( fnMoveBackward );
+            break;
         }
-        break;
-    }
 
-    if( pPam )
-    {
-        // Stream anlegen
-        SvStorageStreamRef aStrm = new SvStorageStream( aEmptyStr );
-        SwWriter aWrt( *aStrm, *pPam, FALSE );
-        if( !IsError( aWrt.Write( xWrt )) )
+        if( pPam )
         {
-            *aStrm << '\0';     // fuers SvData bei mit 0 terminieren
-            aStrm->Seek( STREAM_SEEK_TO_BEGIN );
-            pData->SetData( aStrm );
-            bRet = TRUE;
-        }
+            // Stream anlegen
+            SvMemoryStream aMemStm( 65535, 65535 );
+            SwWriter aWrt( aMemStm, *pPam, FALSE );
+            if( !IsError( aWrt.Write( xWrt )) )
+            {
+                aMemStm << '\0';        // append a zero char
+                rData <<= ::com::sun::star::uno::Sequence< sal_Int8 >(
+                                        (sal_Int8*)aMemStm.GetData(),
+                                        aMemStm.Seek( STREAM_SEEK_TO_END ) );
+                bRet = TRUE;
+            }
 
-        delete pPam;
+            delete pPam;
+        }
     }
     return bRet;
 }
 
 
-BOOL SwServerObject::ChangeData( SvData& rData )        // neue Daten setzen
+BOOL SwServerObject::SetData( const String & rMimeType,
+                    const ::com::sun::star::uno::Any& rData )
 {
-    // erstmal gibst nichts
+    // set new data into the "server" -> at first nothing to do
     return FALSE;
 }
 
@@ -188,7 +190,7 @@ BOOL SwServerObject::ChangeData( SvData& rData )        // neue Daten setzen
 void SwServerObject::SendDataChanged( const SwPosition& rPos )
 {
     // ist an unseren Aenderungen jemand interessiert ?
-    if( GetSelectorCount() )
+    if( HasDataLinks() )
     {
         int bCall = FALSE;
         const SwStartNode* pNd = 0;
@@ -217,8 +219,7 @@ void SwServerObject::SendDataChanged( const SwPosition& rPos )
         {
             // Recursionen erkennen und flaggen
             IsLinkInServer( 0 );
-            SvData aSvData;
-            DataChanged( aSvData );
+            SvLinkSource::NotifyDataChanged();
         }
     }
     // sonst melden wir uns ab !!
@@ -231,7 +232,7 @@ void SwServerObject::SendDataChanged( const SwPosition& rPos )
 void SwServerObject::SendDataChanged( const SwPaM& rRange )
 {
     // ist an unseren Aenderungen jemand interessiert ?
-    if( GetSelectorCount() )
+    if( HasDataLinks() )
     {
         int bCall = FALSE;
         const SwStartNode* pNd = 0;
@@ -268,8 +269,7 @@ void SwServerObject::SendDataChanged( const SwPaM& rRange )
         {
             // Recursionen erkennen und flaggen
             IsLinkInServer( 0 );
-            SvData aSvData;
-            DataChanged( aSvData );
+            SvLinkSource::NotifyDataChanged();
         }
     }
     // sonst melden wir uns ab !!
@@ -327,7 +327,7 @@ BOOL SwServerObject::IsLinkInServer( const SwBaseLink* pChkLnk ) const
     if( nSttNd && nEndNd )
     {
         // LinkManager besorgen:
-        const SvBaseLinks& rLnks = pNds->GetDoc()->GetLinkManager().GetLinks();
+        const ::so3::SvBaseLinks& rLnks = pNds->GetDoc()->GetLinkManager().GetLinks();
 
 // um Rekursionen zu Verhindern: ServerType umsetzen!
 SwServerObject::ServerModes eSave = eType;
@@ -339,7 +339,7 @@ if( !pChkLnk )
     ((SwServerObject*)this)->eType = NONE_SERVER;
         for( USHORT n = rLnks.Count(); n; )
         {
-            const SvBaseLink* pLnk = &(*rLnks[ --n ]);
+            const ::so3::SvBaseLink* pLnk = &(*rLnks[ --n ]);
             if( pLnk && OBJECT_CLIENT_GRF != pLnk->GetObjType() &&
                 pLnk->ISA( SwBaseLink ) &&
                 !((SwBaseLink*)pLnk)->IsNoDataFlag() &&
@@ -388,22 +388,23 @@ SwDataChanged::~SwDataChanged()
     //              Eingabe)
     if( pDoc->GetRootFrm() )
     {
-        const SvPseudoObjects& rServers = pDoc->GetLinkManager().GetServers();
+        const ::so3::SvLinkSources& rServers = pDoc->GetLinkManager().GetServers();
 
         for( USHORT nCnt = rServers.Count(); nCnt; )
         {
-            SwServerObjectRef refObj( (SwServerObject*)rServers[ --nCnt ] );
+            ::so3::SvLinkSourceRef refObj( rServers[ --nCnt ] );
             // noch jemand am Object interessiert ?
-            if( refObj->GetSelectorCount() )
+            if( refObj->HasDataLinks() && refObj->ISA( SwServerObject ))
             {
+                SwServerObject& rObj = *(SwServerObject*)&refObj;
                 if( pPos )
-                    refObj->SendDataChanged( *pPos );
+                    rObj.SendDataChanged( *pPos );
                 else
-                    refObj->SendDataChanged( *pPam );
+                    rObj.SendDataChanged( *pPam );
             }
 
             // sollte jetzt gar keine Verbindung mehr bestehen
-            if( !refObj->GetSelectorCount() )
+            if( !refObj->HasDataLinks() )
             {
                 // dann raus aus der Liste (Object bleibt aber bestehen!)
                 // falls es noch da ist !!

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bookmrk.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:16 $
+ *  last change: $Author: jp $ $Date: 2001-03-08 21:18:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,18 +65,27 @@
 
 #pragma hdrstop
 
-#include "swtypes.hxx"
-#include "doc.hxx"
-#include "pam.hxx"
-
-#include "bookmrk.hxx"
-#include "swserv.hxx"
+#ifndef _SWTYPES_HXX
+#include <swtypes.hxx>
+#endif
+#ifndef _DOC_HXX
+#include <doc.hxx>
+#endif
+#ifndef _PAM_HXX
+#include <pam.hxx>
+#endif
+#ifndef _BOOKMRK_HXX
+#include <bookmrk.hxx>
+#endif
+#ifndef _SWSERV_HXX
+#include <swserv.hxx>
+#endif
 
 #ifndef _ERRHDL_HXX //autogen
 #include <errhdl.hxx>
 #endif
 
-SO2_IMPL_REF( SwServerObject )
+SV_IMPL_REF( SwServerObject )
 
 TYPEINIT1( SwBookmark, SwModify );  //rtti
 
@@ -116,11 +125,8 @@ SwBookmark::~SwBookmark()
     // ausgeloest.
     if( refObj.Is() )
     {
-        if( DDE_BOOKMARK == eMarkType && refObj->GetSelectorCount() )
-        {
-            SvData aSvData;
-            refObj->DataChanged( aSvData );
-        }
+        if( DDE_BOOKMARK == eMarkType && refObj->HasDataLinks() )
+            refObj->SvLinkSource::SendDataChanged();
         refObj->SetNoServer();
     }
 
@@ -154,7 +160,7 @@ BOOL SwBookmark::IsEqualPos( const SwBookmark &rBM ) const
     return *pThisPos == *pBMPos;
 }
 
-void SwBookmark::SetRefObject( SvPseudoObject* pObj )
+void SwBookmark::SetRefObject( SwServerObject* pObj )
 {
     refObj = pObj;
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swbaslnk.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-09-27 17:35:00 $
+ *  last change: $Author: jp $ $Date: 2001-03-08 21:18:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,9 +71,6 @@
 
 #ifndef _LNKBASE_HXX //autogen
 #include <so3/lnkbase.hxx>
-#endif
-#ifndef _SOT_DTRANS_HXX //autogen
-#include <sot/dtrans.hxx>
 #endif
 #ifndef _LINKMGR_HXX
 #include <so3/linkmgr.hxx>
@@ -148,15 +145,16 @@
 
 BOOL SetGrfFlySize( const Size& rGrfSz, SwGrfNode* pGrfNd );
 
-TYPEINIT1(SwBaseLink,SvBaseLink);
+TYPEINIT1( SwBaseLink, ::so3::SvBaseLink );
 
-SO2_IMPL_REF( SwServerObject )
+SV_IMPL_REF( SwServerObject )
 
 SwBaseLink::~SwBaseLink()
 {
 }
 
-void SwBaseLink::DataChanged( SvData& rData )
+void SwBaseLink::DataChanged( const String& rMimeType,
+                            const ::com::sun::star::uno::Any & rValue )
 {
     if( !pCntntNode )
     {
@@ -171,15 +169,17 @@ void SwBaseLink::DataChanged( SvData& rData )
         return ;
     }
 
+    ULONG nFmt = SotExchange::GetFormatIdFromMimeType( rMimeType );
+
     if( pCntntNode->IsNoTxtNode() &&
-        rData.GetFormat() == SvxLinkManager::RegisterStatusInfoId() )
+        nFmt == SvxLinkManager::RegisterStatusInfoId() )
     {
         // nur eine Statusaenderung - Events bedienen ?
-        String sState;
-        if( rData.GetData( sState ))
+        ::rtl::OUString sState;
+        if( rValue.hasValue() && ( rValue >>= sState ))
         {
             USHORT nEvent = 0;
-            switch( sState.ToInt32() )
+            switch( sState.toInt32() )
             {
             case STATE_LOAD_OK:     nEvent = SVX_EVENT_IMAGE_LOAD;  break;
             case STATE_LOAD_ERROR:  nEvent = SVX_EVENT_IMAGE_ERROR; break;
@@ -209,84 +209,44 @@ void SwBaseLink::DataChanged( SvData& rData )
 
         bDontNotify = ((SwGrfNode*)pCntntNode)->IsFrameInPaint();
 
-        ULONG nUpDateState = GetObj()->GetUpToDateStatus();
-        ((SwGrfNode*)pCntntNode)->SetGrafikArrived( ERRCODE_NONE == nUpDateState );
+        bGraphicArrived = GetObj()->IsDataComplete();
+        bGraphicPieceArrived = GetObj()->IsPending();
+        ((SwGrfNode*)pCntntNode)->SetGrafikArrived( bGraphicArrived );
 
-        bGraphicArrived = ERRCODE_NONE == nUpDateState;
-        bGraphicPieceArrived = ERRCODE_SO_PENDING == nUpDateState;
-
-        switch( rData.GetFormat() )
+        Graphic aGrf;
+        if( SvxLinkManager::GetGraphicFromAny( rMimeType, rValue, aGrf ) &&
+            ( GRAPHIC_DEFAULT != aGrf.GetType() ||
+              GRAPHIC_DEFAULT != rGrfObj.GetType() ) )
         {
-        case FORMAT_GDIMETAFILE:
+            aGrfSz = ::GetGraphicSizeTwip( aGrf, 0 );
+            Size aSz( ((SwGrfNode*)pCntntNode)->GetTwipSize() );
+
+            if( bGraphicPieceArrived && GRAPHIC_DEFAULT != aGrf.GetType() &&
+                ( !aSz.Width() || !aSz.Height() ) )
             {
-                GDIMetaFile *pMetaFile;
-                if( rData.GetData( &pMetaFile, TRANSFER_REFERENCE ) )
-                {
-                    rGrfObj.SetGraphic( *pMetaFile, rGrfObj.GetLink() );
-                    bUpdate = TRUE;
-                }
+                // wenn nur ein Teil ankommt, aber die Groesse nicht
+                // gesetzt ist, dann muss "unten" der Teil von
+                // bGraphicArrived durchlaufen werden!
+                // (ansonten wird die Grafik in deft. Size gepaintet)
+                bGraphicArrived = TRUE;
+                bGraphicPieceArrived = FALSE;
             }
-            break;
 
-        case FORMAT_BITMAP:
+            rGrfObj.SetGraphic( aGrf, rGrfObj.GetLink() );
+            bUpdate = TRUE;
+
+            // Bug 33999: damit der Node den Transparent-Status
+            //      richtig gesetzt hat, ohne auf die Grafik
+            //      zugreifen zu muessen (sonst erfolgt ein SwapIn!).
+            if( bGraphicArrived )
             {
-                Bitmap *pBmp;
-                if( rData.GetData( &pBmp, TRANSFER_REFERENCE ) )
-                {
-                    Graphic aEmptyGrf;
-                    if( aEmptyGrf.GetBitmap() != *pBmp )
-                        aEmptyGrf = *pBmp;
-                    rGrfObj.SetGraphic( aEmptyGrf, rGrfObj.GetLink() );
-
-                    bUpdate = TRUE;
-                }
+                // Bug #34735#: immer mit der korrekten Grafik-Size
+                //              arbeiten
+                if( aGrfSz.Height() && aGrfSz.Width() &&
+                    aSz.Height() && aSz.Width() &&
+                    aGrfSz != aSz )
+                    ((SwGrfNode*)pCntntNode)->SetTwipSize( aGrfSz );
             }
-            break;
-
-        default:
-            if( rData.GetFormat() == Graphic::RegisterClipboardFormatName() ||
-                FORMAT_PRIVATE == rData.GetFormat() )
-            {
-                Graphic* pGrf;
-                if( rData.GetData( (SvDataCopyStream **)&pGrf,
-                                    Graphic::StaticType(),
-                                    TRANSFER_REFERENCE ) &&
-                    ( GRAPHIC_DEFAULT != pGrf->GetType() ||
-                      GRAPHIC_DEFAULT != rGrfObj.GetType() ) )
-                {
-                    aGrfSz = ::GetGraphicSizeTwip( *pGrf, 0 );
-                    Size aSz( ((SwGrfNode*)pCntntNode)->GetTwipSize() );
-
-                    if( bGraphicPieceArrived &&
-                        GRAPHIC_DEFAULT != pGrf->GetType() &&
-                        ( !aSz.Width() || !aSz.Height() ) )
-                    {
-                        // wenn nur ein Teil ankommt, aber die Groesse nicht
-                        // gesetzt ist, dann muss "unten" der Teil von
-                        // bGraphicArrived durchlaufen werden!
-                        // (ansonten wird die Grafik in deft. Size gepaintet)
-                        bGraphicArrived = TRUE;
-                        bGraphicPieceArrived = FALSE;
-                    }
-                    rGrfObj.SetGraphic( *pGrf, rGrfObj.GetLink() );
-
-                    bUpdate = TRUE;
-
-                    // Bug 33999: damit der Node den Transparent-Status
-                    //      richtig gesetzt hat, ohne auf die Grafik
-                    //      zugreifen zu muessen (sonst erfolgt ein SwapIn!).
-                    if( bGraphicArrived )
-                    {
-                        // Bug #34735#: immer mit der korrekten Grafik-Size
-                        //              arbeiten
-                        if( aGrfSz.Height() && aGrfSz.Width() &&
-                            aSz.Height() && aSz.Width() &&
-                            aGrfSz != aSz )
-                            ((SwGrfNode*)pCntntNode)->SetTwipSize( aGrfSz );
-                    }
-                }
-            }
-            break;
         }
         if ( bUpdate && !bGraphicArrived && !bGraphicPieceArrived )
             ((SwGrfNode*)pCntntNode)->SetTwipSize( Size(0,0) );
@@ -332,10 +292,10 @@ void SwBaseLink::DataChanged( SvData& rData )
             //Alle benachrichtigen, die am gleichen Link horchen.
             bInNotifyLinks = TRUE;
 
-            const SvBaseLinks& rLnks = pDoc->GetLinkManager().GetLinks();
+            const ::so3::SvBaseLinks& rLnks = pDoc->GetLinkManager().GetLinks();
             for( USHORT n = rLnks.Count(); n; )
             {
-                SvBaseLink* pLnk = &(*rLnks[ --n ]);
+                ::so3::SvBaseLink* pLnk = &(*rLnks[ --n ]);
                 if( pLnk && OBJECT_CLIENT_GRF == pLnk->GetObjType() &&
                     pLnk->ISA( SwBaseLink ) && pLnk->GetObj() == GetObj() )
                 {
@@ -347,7 +307,7 @@ void SwBaseLink::DataChanged( SvData& rData )
                             GRAPHIC_DEFAULT == pGrfNd->GetGrfObj().GetType()))
                     {
                         pBLink->bIgnoreDataChanged = FALSE;
-                        pBLink->DataChanged( rData );
+                        pBLink->DataChanged( rMimeType, rValue );
                         pBLink->bIgnoreDataChanged = TRUE;
 
                         pGrfNd->SetGrafikArrived( ((SwGrfNode*)pCntntNode)->
@@ -497,31 +457,34 @@ FASTBOOL SwBaseLink::SwapIn( BOOL bWaitForData, BOOL bNativFormat )
 #ifdef DEBUG
     {
         String sGrfNm;
-        GetLinkManager()->GetDisplayNames( *this, 0, &sGrfNm, 0, 0 );
+        GetLinkManager()->GetDisplayNames( this, 0, &sGrfNm, 0, 0 );
         int x = 0;
     }
 #endif
 
     if( GetObj() )
     {
-        SvData aData( GetContentType() );
-        if( !IsSynchron() && bWaitForData )
-            aData.SetAspect( ASPECT_DOCPRINT );
-        if( bNativFormat )
-            aData.SetAspect( aData.GetAspect() | ASPECT_ICON );
-        GetObj()->GetData( &aData );
+        String aMimeType( SotExchange::GetFormatMimeType( GetContentType() ));
+
+//!! ??? what have we here to do ????
+//!!        if( bNativFormat )
+//!!            aData.SetAspect( aData.GetAspect() | ASPECT_ICON );
+
+        ::com::sun::star::uno::Any aValue;
+        GetObj()->GetData( aValue, aMimeType, !IsSynchron() && bWaitForData );
+
         if( bWaitForData && !GetObj() )
         {
             ASSERT( !this, "das SvxFileObject wurde in einem GetData geloescht!" );
             bRes = FALSE;
         }
-        else if( 0 != ( bRes = aData.HasData() ) )
+        else if( 0 != ( bRes = aValue.hasValue() ) )
         {
             //JP 14.04.99: Bug 64820 - das Flag muss beim SwapIn natuerlich
             //              zurueckgesetzt werden. Die Daten sollen ja neu
             //              uebernommen werden
             bIgnoreDataChanged = FALSE;
-            DataChanged( aData );
+            DataChanged( aMimeType, aValue );
         }
     }
     else if( !IsSynchron() && bWaitForData )
@@ -544,8 +507,6 @@ void SwBaseLink::Closed()
         // wir heben die Verbindung auf
         if( pCntntNode->IsGrfNode() )
             ((SwGrfNode*)pCntntNode)->ReleaseLink();
-        else if( pCntntNode->IsOLENode() )
-            ((SwOLENode*)pCntntNode)->GetOLEObj().ReleaseLink();
     }
     SvBaseLink::Closed();
 }
@@ -572,7 +533,7 @@ const SwNode* SwBaseLink::GetAnchor() const
 
 BOOL SwBaseLink::IsRecursion( const SwBaseLink* pChkLnk ) const
 {
-    SwServerObjectRef aRef( GetObj() );
+    SwServerObjectRef aRef( (SwServerObject*)GetObj() );
     if( aRef.Is() )
     {
         // es ist ein ServerObject, also frage nach allen darin

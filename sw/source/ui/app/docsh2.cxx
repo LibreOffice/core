@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh2.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mib $ $Date: 2001-02-26 07:56:31 $
+ *  last change: $Author: jp $ $Date: 2001-03-08 21:21:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1270,9 +1270,10 @@ void SwDocShell::Execute(SfxRequest& rReq)
     Beschreibung:
  --------------------------------------------------------------------*/
 
-long SwDocShell::DdeGetData( const String& rItem, SvData& rData )
+long SwDocShell::DdeGetData( const String& rItem, const String& rMimeType,
+                                ::com::sun::star::uno::Any & rValue )
 {
-    return pDoc->GetData( rItem, rData );
+    return pDoc->GetData( rItem, rMimeType, rValue );
 }
 
 
@@ -1280,9 +1281,10 @@ long SwDocShell::DdeGetData( const String& rItem, SvData& rData )
     Beschreibung:
  --------------------------------------------------------------------*/
 
-long SwDocShell::DdeSetData( const String& rItem, const SvData& rData )
+long SwDocShell::DdeSetData( const String& rItem, const String& rMimeType,
+                            const ::com::sun::star::uno::Any & rValue )
 {
-    return pDoc->ChangeData( rItem, rData );
+    return pDoc->SetData( rItem, rMimeType, rValue );
 }
 
 
@@ -1290,9 +1292,9 @@ long SwDocShell::DdeSetData( const String& rItem, const SvData& rData )
     Beschreibung:
  --------------------------------------------------------------------*/
 
-SvPseudoObject* SwDocShell::DdeCreateHotLink( const String& rItem )
+::so3::SvLinkSource* SwDocShell::DdeCreateLinkSource( const String& rItem )
 {
-    return pDoc->CreateHotLink( rItem );
+    return pDoc->CreateLinkSource( rItem );
 }
 
 
@@ -1699,6 +1701,9 @@ ULONG SwDocShell::LoadStylesFromFile( const String& rURL,
 
 /*------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.15  2001/02/26 07:56:31  mib
+    xml filters for templates and global docs
+
     Revision 1.14  2001/02/09 13:17:15  mib
     FillClass corrected
 

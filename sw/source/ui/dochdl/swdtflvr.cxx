@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-28 15:47:04 $
+ *  last change: $Author: jp $ $Date: 2001-03-08 21:22:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,10 +71,7 @@
 #ifndef _LINKMGR_HXX
 #include <so3/linkmgr.hxx>
 #endif
-#ifndef _DTRANS_HXX
-#include <so3/dtrans.hxx>
-#endif
-#ifndef _INTN_HXX //autog
+#ifndef _INTN_HXX
 #include <tools/intn.hxx>
 #endif
 #ifndef _CLIP_HXX
@@ -154,6 +151,9 @@
 #endif
 #ifndef _FILELIST_HXX
 #include <so3/filelist.hxx>
+#endif
+#ifndef _LINKSRC_HXX
+#include <so3/linksrc.hxx>
 #endif
 #ifndef _GOODIES_IMAPOBJ_HXX
 #include <svtools/imapobj.hxx>
@@ -279,24 +279,15 @@ extern BOOL bExecuteDrag;
 #define DDE_TXT_ENCODING    RTL_TEXTENCODING_MS_1252
 #endif
 
-class SwTrnsfrDdeLink : public SvAdviseSink
+class SwTrnsfrDdeLink : public ::so3::SvBaseLink
 {
     String sName;
-    SvPseudoObjectRef refObj;
+    ::so3::SvLinkSourceRef refObj;
     SwTransferable& rTrnsfr;
     SwDocShell* pDocShell;
     ULONG nOldTimeOut;
     BOOL bDelBookmrk : 1;
     BOOL bInDisconnect : 1;
-
-    class SwCastPseudoObj : public SvPseudoObject
-    {
-    public:
-        void SetUpdateTimeout( ULONG nTimeout )
-            { SvPseudoObject::SetUpdateTimeout( nTimeout ); }
-        ULONG GetUpdateTimeout() const
-            { return SvPseudoObject::GetUpdateTimeout(); }
-    };
 
     BOOL FindDocShell();
 
@@ -306,7 +297,8 @@ protected:
 public:
     SwTrnsfrDdeLink( SwTransferable& rTrans, SwWrtShell& rSh );
 
-    virtual void DataChanged( SvData& );
+    virtual void DataChanged( const String& rMimeType,
+                              const ::com::sun::star::uno::Any & rValue );
     virtual void Closed();
 
     BOOL WriteData( SvStream& rStrm );
@@ -697,8 +689,11 @@ sal_Bool SwTransferable::WriteObject( SotStorageStreamRef& xStream,
                 bRet = ERRCODE_NONE == xStream->GetError();
             }
             else
+            {
                 // then we need the link anymore
-                pDdeLnk->DataChanged( *(SvData*)0 );
+                ::com::sun::star::uno::Any aValue;
+                pDdeLnk->DataChanged( aEmptyStr, aValue );
+            }
         }
 #endif
         break;
@@ -2615,14 +2610,16 @@ SwTrnsfrDdeLink::SwTrnsfrDdeLink( SwTransferable& rTrans, SwWrtShell& rSh )
     {
         // dann erzeugen wir uns mal unseren "Server" und connecten uns
         // zu diesem
-        refObj = pDocShell->DdeCreateHotLink( sName );
+        refObj = pDocShell->DdeCreateLinkSource( sName );
         if( refObj.Is() )
         {
-            refObj->AddConnectAdvise( this, ADVISE_CLOSED );
-            refObj->AddDataAdvise( this, SvDataType(),
-                                ADVISEMODE_NODATA | ADVISEMODE_ONLYONCE );
-            nOldTimeOut = ((SwCastPseudoObj*)&refObj)->GetUpdateTimeout();
-            ((SwCastPseudoObj*)&refObj)->SetUpdateTimeout( 0 );
+            refObj->AddConnectAdvise( this );
+            refObj->AddDataAdvise( this,
+//                          SotExchange::GetFormatMimeType( FORMAT_RTF ),
+                            aEmptyStr,
+                            ADVISEMODE_NODATA | ADVISEMODE_ONLYONCE );
+            nOldTimeOut = refObj->GetUpdateTimeout();
+            refObj->SetUpdateTimeout( 0 );
         }
     }
 }
@@ -2637,7 +2634,8 @@ SwTrnsfrDdeLink::~SwTrnsfrDdeLink()
 
 // -----------------------------------------------------------------------
 
-void SwTrnsfrDdeLink::DataChanged( SvData& )
+void SwTrnsfrDdeLink::DataChanged( const String& ,
+                                    const ::com::sun::star::uno::Any& )
 {
     // tja das wars dann mit dem Link
     if( !bInDisconnect )
@@ -2725,14 +2723,14 @@ void SwTrnsfrDdeLink::Disconnect( BOOL bRemoveDataAdvise )
 
     if( refObj.Is() )
     {
-        ((SwCastPseudoObj*)&refObj)->SetUpdateTimeout( nOldTimeOut );
-        refObj->RemoveConnectAdvise( this, ADVISE_CLOSED );
+        refObj->SetUpdateTimeout( nOldTimeOut );
+        refObj->RemoveConnectAdvise( this );
         if( bRemoveDataAdvise )
             // in einem DataChanged darf das SelectionObject NIE geloescht
             // werden; wird schon von der Basisklasse erledigt
             // (ADVISEMODE_ONLYONCE!!!!)
             // Im normalen Disconnet aber schon!
-            refObj->RemoveDataAdvise( this );
+            refObj->RemoveAllDataAdvise( this );
         refObj.Clear();
     }
     bInDisconnect = bOldDisconnect;
@@ -2765,8 +2763,8 @@ void SwTrnsfrDdeLink::Closed()
 {
     if( !bInDisconnect && refObj.Is() )
     {
-        refObj->RemoveDataAdvise( this );
-        refObj->RemoveConnectAdvise( this, ADVISE_CLOSED );
+        refObj->RemoveAllDataAdvise( this );
+        refObj->RemoveConnectAdvise( this );
         refObj.Clear();
     }
 }

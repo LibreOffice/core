@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swtable.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:28 $
+ *  last change: $Author: jp $ $Date: 2001-03-08 21:17:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,8 +64,8 @@
 #ifndef _SVMEMPOOL_HXX //autogen
 #include <tools/mempool.hxx>
 #endif
-#ifndef _SO2REF_HXX //autogen
-#include <so3/so2ref.hxx>
+#ifndef _TOOLS_REF_HXX
+#include <tools/ref.hxx>
 #endif
 #ifndef _SVARRAY_HXX //autogen
 #include <svtools/svarray.hxx>
@@ -116,8 +116,7 @@ class SwUndoTblCpyTbl;
 
 #ifndef SW_DECL_SWSERVEROBJECT_DEFINED
 #define SW_DECL_SWSERVEROBJECT_DEFINED
-class SvPseudoObject;
-SO2_DECL_REF( SwServerObject )
+SV_DECL_REF( SwServerObject )
 #endif
 
 SV_DECL_PTRARR_DEL(SwTableLines, SwTableLine*, 10, 20);
@@ -249,7 +248,7 @@ public:
     SwTableNode* GetTableNode() const;
 
         // Daten Server-Methoden
-    void SetRefObject( SvPseudoObject* );
+    void SetRefObject( SwServerObject* );
     const SwServerObject* GetObject() const     {  return &refObj; }
           SwServerObject* GetObject()           {  return &refObj; }
     BOOL IsServer() const                       {  return refObj.Is(); }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swserv.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:14:28 $
+ *  last change: $Author: jp $ $Date: 2001-03-08 21:17:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,8 +62,8 @@
 #ifndef _SWSERV_HXX
 #define _SWSERV_HXX
 
-#ifndef _PSEUDO_HXX //autogen
-#include <so3/pseudo.hxx>
+#ifndef _LINKSRC_HXX
+#include <so3/linksrc.hxx>
 #endif
 
 class SwBookmark;
@@ -73,7 +73,7 @@ class SwTableNode;
 struct SwPosition;
 class SwPaM;
 
-class SwServerObject : public SvPseudoObject
+class SwServerObject : public ::so3::SvLinkSource
 {
 protected:
     enum ServerModes { BOOKMARK_SERVER, TABLE_SERVER, SECTION_SERVER, NONE_SERVER } eType;
@@ -103,11 +103,12 @@ public:
     }
     virtual ~SwServerObject();
 
-    virtual BOOL GetData( SvData* );
-    virtual BOOL ChangeData( SvData& );
+    virtual BOOL GetData( ::com::sun::star::uno::Any & rData,
+                             const String & rMimeType,
+                             BOOL bSynchron = FALSE );
 
-    ULONG GetSelectorCount() const
-        { return SvPseudoObject::GetSelectorCount(); }
+    BOOL SetData( const String & rMimeType,
+                    const ::com::sun::star::uno::Any& rData );
 
     virtual void SendDataChanged( const SwPosition& rPos );
     virtual void SendDataChanged( const SwPaM& rRange );
@@ -120,10 +121,8 @@ public:
 
 #ifndef SW_DECL_SWSERVEROBJECT_DEFINED
 #define SW_DECL_SWSERVEROBJECT_DEFINED
-class SvPseudoObject;
-SO2_DECL_REF( SwServerObject )
+SV_DECL_REF( SwServerObject )
 #endif
-
 
 #endif  // _SWSERV_HXX
 
