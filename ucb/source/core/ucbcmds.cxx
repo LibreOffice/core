@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbcmds.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: kso $ $Date: 2001-02-02 08:18:49 $
+ *  last change: $Author: kso $ $Date: 2001-02-12 13:17:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,10 @@
 #endif
 #ifndef _COM_SUN_STAR_UCB_XDYNAMICRESULTSET_HPP_
 #include <com/sun/star/ucb/XDynamicResultSet.hpp>
+#endif
+
+#ifndef _UCBHELPER_COMMANDENVIRONMENTPROXY_HXX
+#include <ucbhelper/commandenvironmentproxy.hxx>
 #endif
 
 #ifndef _UCBCMDS_HXX
@@ -905,6 +909,11 @@ void UniversalContentBroker::globalTransfer(
                          const uno::Reference< XCommandEnvironment > & xEnv )
     throw( uno::Exception )
 {
+    // Remote optimization: Supply own task environment, which caches (remote)
+    // interfaces (progress handler, interaction handler, ...) locally.
+    uno::Reference< XCommandEnvironment > xLocalEnv(
+                                new ::ucb::CommandEnvironmentProxy( xEnv ) );
+
     //////////////////////////////////////////////////////////////////////
     //
     // (1) Try to transfer the content using 'transfer' command.
@@ -947,7 +956,7 @@ void UniversalContentBroker::globalTransfer(
                 -1,                                           // Handle
                 uno::makeAny( aTransferArg ) );               // Argument
 
-            xCommandProcessor->execute( aCommand, 0, xEnv );
+            xCommandProcessor->execute( aCommand, 0, xLocalEnv );
 
             // Command succeeded. We're done.
             return;
@@ -1010,13 +1019,14 @@ void UniversalContentBroker::globalTransfer(
                 uno::makeAny( aProps ) );
 
     uno::Reference< sdbc::XRow > xRow;
-    xCommandProcessor->execute( aGetPropsCommand, 0, xEnv ) >>= xRow;
+    xCommandProcessor->execute( aGetPropsCommand, 0, xLocalEnv ) >>= xRow;
 
     if ( !xRow.is() )
         ucb_commands::abort( "Unable to get properties from source object!" );
 
     // Do it!
-    ucb_commands::globalTransfer( m_xSMgr, xSource, xTarget, rArg, xRow, xEnv );
+    ucb_commands::globalTransfer(
+                        m_xSMgr, xSource, xTarget, rArg, xRow, xLocalEnv );
 
     //////////////////////////////////////////////////////////////////////
     //
@@ -1033,7 +1043,7 @@ void UniversalContentBroker::globalTransfer(
                 -1,                                         // Handle
                 uno::makeAny( sal_Bool( sal_True ) ) );     // Argument
 
-            xCommandProcessor->execute( aCommand, 0, xEnv );
+            xCommandProcessor->execute( aCommand, 0, xLocalEnv );
         }
         catch ( uno::Exception const & )
         {
