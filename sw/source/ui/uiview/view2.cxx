@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view2.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 16:39:05 $
+ *  last change: $Author: obo $ $Date: 2004-06-01 07:46:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -979,7 +979,12 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
             {
                 String sStr;
                 if( rShell.IsCrsrInTbl() )
-                    sStr = rShell.GetBoxNms();
+                {
+                    // table name + cell coordinate
+                    sStr = rShell.GetTableFmt()->GetName();
+                    sStr += ':';
+                    sStr += rShell.GetBoxNms();
+                }
                 else
                 {
                     const SwSection* pCurrSect = rShell.GetCurrSection();
@@ -1023,7 +1028,7 @@ void SwView::StateStatusLine(SfxItemSet &rSet)
                             SfxItemSet aSet(GetPool(),
                                     RES_PARATR_NUMRULE, RES_PARATR_NUMRULE);
                             rShell.GetAttr(aSet);
-                            const SfxPoolItem* pItem;
+                            /* const SfxPoolItem* pItem; */
                             if(SFX_ITEM_AVAILABLE <=
                                aSet.GetItemState(RES_PARATR_NUMRULE, TRUE
                                                  /*, &pItem */ ))
@@ -1205,8 +1210,8 @@ void SwView::ExecuteStatusLine(SfxRequest &rReq)
                     nId = SID_ATTR_TRANSFORM;
             }
             if( nId )
-                GetViewFrame()->GetDispatcher()->Execute( nId, SFX_CALLMODE_SYNCHRON |
-                                               SFX_CALLMODE_RECORD );
+                GetViewFrame()->GetDispatcher()->Execute(
+                    static_cast< USHORT >( nId ), SFX_CALLMODE_SYNCHRON | SFX_CALLMODE_RECORD );
         }
         break;
 
