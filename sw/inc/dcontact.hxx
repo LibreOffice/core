@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dcontact.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fme $ $Date: 2002-10-29 08:57:32 $
+ *  last change: $Author: vg $ $Date: 2003-05-22 09:41:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,7 @@ class SwRect;
 SwFrmFmt *FindFrmFmt( SdrObject *pObj );
 inline const SwFrmFmt *FindFrmFmt( const SdrObject *pObj )
 {   return ::FindFrmFmt( (SdrObject*)pObj ); }
+sal_Bool HasWrap( const SdrObject* pObj );
 
 //Bei Aenderungen das Objekt aus dem ContourCache entfernen.
 //Implementierung in TxtFly.Cxx
