@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqlmessage.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-02-05 09:56:55 $
+ *  last change: $Author: avy $ $Date: 2001-03-09 20:49:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,7 +197,7 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
         Text[ polish ] = "SzczegÛ≥y";
         Text[ portuguese_brazilian ] = "details";
         Text[ japanese ] = "è⁄ç◊";
-        Text[ korean ] = "ºº∫ŒªÁ«◊";
+        Text[ korean ] = "ªÛºº";
         Text[ chinese_simplified ] = "œ∏Ω⁄";
         Text[ chinese_traditional ] = "≤”∏`";
         Text[ arabic ] = "«· ›«’Ì·";
@@ -366,7 +366,7 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
         Text[ polish ] = "SzczegÛ≥y";
         Text[ portuguese_brazilian ] = "Details";
         Text[ japanese ] = "è⁄ç◊";
-        Text[ korean ] = "¿⁄ºº»˜";
+        Text[ korean ] = "ªÛºº";
         Text[ chinese_simplified ] = "œ∏Ω⁄";
         Text[ chinese_traditional ] = "≤”∏`";
         Text[ turkish ] = "Details";
@@ -389,7 +389,7 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
         Text[ polish ] = "Stan SQL";
         Text[ portuguese_brazilian ] = "SQL State";
         Text[ japanese ] = "SQL Ω√∞¿Ω";
-        Text[ korean ] = "SQL State";
+        Text[ korean ] = "SQL Ω∫≈◊¿Ã≈ÕΩ∫";
         Text[ chinese_simplified ] = "SQL ◊¥Ã¨";
         Text[ chinese_traditional ] = "SQL ™¨∫A";
         Text[ turkish ] = "SQL State";
@@ -424,6 +424,9 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.7  2001/02/05 09:56:55  fs
+ *  #83327# help ids
+ *
  *  Revision 1.6  2000/12/05 12:49:42  fs
  *  #80539# forgot to include the helpid declarations
  *
