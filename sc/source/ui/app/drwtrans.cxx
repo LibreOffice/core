@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwtrans.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-03 13:27:53 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:12:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,18 +67,32 @@
 
 #pragma hdrstop
 
+#ifndef _COM_SUN_STAR_EMBED_XTRANSACTEDOBJECT_HPP_
+#include <com/sun/star/embed/XTransactedObject.hpp>
+#endif
+#ifndef _COM_SUN_STAR_EMBED_XEMBEDPERSIST_HPP_
+#include <com/sun/star/embed/XEmbedPersist.hpp>
+#endif
+#ifndef _COM_SUN_STAR_UNO_EXCEPTION_HPP_
+#include <com/sun/star/uno/Exception.hpp>
+#endif
+
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include <com/sun/star/form/FormButtonType.hpp>
+#include <toolkit/helper/vclunohelper.hxx>
 
 #ifndef _UTL_STREAM_WRAPPER_HXX_
 #include <unotools/streamwrap.hxx>
 #endif
 
 #include <svx/unomodel.hxx>
+#include <unotools/tempfile.hxx>
+#include <unotools/ucbstreamhelper.hxx>
+#include <comphelper/storagehelper.hxx>
 
+#include <svtools/embedtransfer.hxx>
 #include <sot/storage.hxx>
-#include <so3/svstor.hxx>
 #include <vcl/virdev.hxx>
 #include <svx/fmglob.hxx>
 #include <svx/svditer.hxx>
@@ -119,6 +133,7 @@ using namespace com::sun::star;
 
 #define SCDRAWTRANS_TYPE_EMBOBJ         1
 #define SCDRAWTRANS_TYPE_DRAWMODEL      2
+#define SCDRAWTRANS_TYPE_DOCUMENT       3
 
 // -----------------------------------------------------------------------
 
@@ -358,9 +373,9 @@ void ScDrawTransferObj::AddSupportedFormats()
 
         if ( !aOleData.GetTransferable().is() )
         {
-            SvInPlaceObjectRef xIPObj = GetSingleObject();
-            if ( xIPObj.Is() )
-                aOleData = TransferableDataHelper( xIPObj->CreateTransferableSnapshot() );
+            uno::Reference < embed::XEmbeddedObject > xObj = GetSingleObject();
+            if ( xObj.is() )
+                aOleData = TransferableDataHelper( new SvEmbedTransferHelper( xObj ) ) ;
         }
         if ( aOleData.GetTransferable().is() )
         {
@@ -400,9 +415,9 @@ sal_Bool ScDrawTransferObj::GetData( const ::com::sun::star::datatransfer::DataF
     {
         if ( !aOleData.GetTransferable().is() )
         {
-            SvInPlaceObjectRef xIPObj = GetSingleObject();
-            if ( xIPObj.Is() )
-                aOleData = TransferableDataHelper( xIPObj->CreateTransferableSnapshot() );
+            uno::Reference < embed::XEmbeddedObject > xObj = GetSingleObject();
+            if ( xObj.is() )
+                aOleData = TransferableDataHelper( new SvEmbedTransferHelper( xObj ) );
         }
 
         if( aOleData.GetTransferable().is() && aOleData.HasFormat( rFlavor ) )
@@ -431,9 +446,9 @@ sal_Bool ScDrawTransferObj::GetData( const ::com::sun::star::datatransfer::DataF
         {
             if ( bOleObj )              // single OLE object
             {
-                SvInPlaceObjectRef xIPObj = GetSingleObject();
-                if ( xIPObj.Is() )
-                    xIPObj->FillTransferableObjectDescriptor( aObjDesc );
+                uno::Reference < embed::XEmbeddedObject > xObj = GetSingleObject();
+                if ( xObj.is() )
+                    SvEmbedTransferHelper::FillTransferableObjectDescriptor( aObjDesc, xObj );
             }
 
             bOK = SetTransferableObjectDescriptor( aObjDesc, rFlavor );
@@ -474,19 +489,19 @@ sal_Bool ScDrawTransferObj::GetData( const ::com::sun::star::datatransfer::DataF
         {
             if ( bOleObj )              // single OLE object
             {
-                SvInPlaceObjectRef xIPObj = GetSingleObject();
-                if ( xIPObj.Is() )
+                uno::Reference < embed::XEmbeddedObject > xObj = GetSingleObject();
+                if ( xObj.is() )
                 {
-                    SvEmbeddedObject* pEmbObj = xIPObj;
-                    bOK = SetObject( pEmbObj, SCDRAWTRANS_TYPE_EMBOBJ, rFlavor );
+                    bOK = SetObject( xObj.get(), SCDRAWTRANS_TYPE_EMBOBJ, rFlavor );
                 }
             }
             else                        // create object from contents
             {
+                //TODO/LATER: needs new Format, because now single OLE and "this" are different
                 InitDocShell();         // set aDocShellRef
 
-                SvEmbeddedObject* pEmbObj = aDocShellRef;
-                bOK = SetObject( pEmbObj, SCDRAWTRANS_TYPE_EMBOBJ, rFlavor );
+                SfxObjectShell* pEmbObj = aDocShellRef;
+                bOK = SetObject( pEmbObj, SCDRAWTRANS_TYPE_DOCUMENT, rFlavor );
             }
         }
         else if( pBookmark )
@@ -549,17 +564,85 @@ sal_Bool ScDrawTransferObj::WriteObject( SotStorageStreamRef& rxOStm, void* pUse
 
         case SCDRAWTRANS_TYPE_EMBOBJ:
             {
-                SvEmbeddedObject* pEmbObj = (SvEmbeddedObject*)pUserObject;
+                // impl. for "single OLE"
+                embed::XEmbeddedObject* pEmbObj = (embed::XEmbeddedObject*) pUserObject;
 
-                SvStorageRef xWorkStore( new SvStorage( TRUE, *rxOStm ) );
-                rxOStm->SetBufferSize( 0xff00 );
+                ::utl::TempFile     aTempFile;
+                aTempFile.EnableKillingFile();
+                uno::Reference< embed::XStorage > xWorkStore =
+                    ::comphelper::OStorageHelper::GetStorageFromURL( aTempFile.GetURL(), embed::ElementModes::READWRITE );
 
-                // write document storage
-                pEmbObj->SetupStorage( xWorkStore );
-                bRet = pEmbObj->DoSaveAs( xWorkStore );
-                pEmbObj->DoSaveCompleted();
-                xWorkStore->Commit();
-                rxOStm->Commit();
+                uno::Reference < embed::XEmbedPersist > xPers( (embed::XVisualObject*)pEmbObj, uno::UNO_QUERY );
+                if ( xPers.is() )
+                {
+                    try
+                    {
+                        uno::Sequence < beans::PropertyValue > aSeq;
+                        ::rtl::OUString aDummyName = ::rtl::OUString::createFromAscii("Dummy");
+                        xPers->storeToEntry( xWorkStore, aDummyName, aSeq, aSeq );
+                        if ( xWorkStore->isStreamElement( aDummyName ) )
+                        {
+                            uno::Reference < io::XOutputStream > xDocOut( new utl::OOutputStreamWrapper( *rxOStm ) );
+                            uno::Reference < io::XStream > xNewStream = xWorkStore->openStreamElement( aDummyName, embed::ElementModes::READ );
+                            ::comphelper::OStorageHelper::CopyInputToOutput( xNewStream->getInputStream(), xDocOut );
+                        }
+                        else
+                        {
+                            uno::Reference < io::XStream > xDocStr( new utl::OStreamWrapper( *rxOStm ) );
+                            uno::Reference< embed::XStorage > xDocStg = ::comphelper::OStorageHelper::GetStorageFromStream( xDocStr );
+                            uno::Reference < embed::XStorage > xNewStg = xWorkStore->openStorageElement( aDummyName, embed::ElementModes::READ );
+                            xNewStg->copyToStorage( xDocStg );
+                            uno::Reference < embed::XTransactedObject > xTrans( xDocStg, uno::UNO_QUERY );
+                            if ( xTrans.is() )
+                                xTrans->commit();
+                        }
+
+                        rxOStm->Commit();
+                    }
+                    catch ( uno::Exception& )
+                    {
+                    }
+                }
+
+                break;
+            }
+        case SCDRAWTRANS_TYPE_DOCUMENT:
+            {
+                // impl. for "DocShell"
+                SfxObjectShell*   pEmbObj = (SfxObjectShell*) pUserObject;
+
+                try
+                {
+                    ::utl::TempFile     aTempFile;
+                    aTempFile.EnableKillingFile();
+                    uno::Reference< embed::XStorage > xWorkStore =
+                        ::comphelper::OStorageHelper::GetStorageFromURL( aTempFile.GetURL(), embed::ElementModes::READWRITE );
+
+                    // write document storage
+                    pEmbObj->SetupStorage( xWorkStore, SOFFICE_FILEFORMAT_CURRENT );
+                    bRet = pEmbObj->DoSaveAs( xWorkStore );
+                    pEmbObj->DoSaveCompleted();
+
+                    uno::Reference< embed::XTransactedObject > xTransact( xWorkStore, uno::UNO_QUERY );
+                    if ( xTransact.is() )
+                        xTransact->commit();
+
+                    SvStream* pSrcStm = ::utl::UcbStreamHelper::CreateStream( aTempFile.GetURL(), STREAM_READ );
+                    if( pSrcStm )
+                    {
+                        rxOStm->SetBufferSize( 0xff00 );
+                        *rxOStm << *pSrcStm;
+                        delete pSrcStm;
+                    }
+
+                    bRet = TRUE;
+
+                    xWorkStore->dispose();
+                    xWorkStore = uno::Reference < embed::XStorage >();
+                    rxOStm->Commit();
+                }
+                catch ( uno::Exception& )
+                {}
 
                 bRet = ( rxOStm->GetError() == ERRCODE_NONE );
             }
@@ -599,7 +682,7 @@ void ScDrawTransferObj::DragFinished( sal_Int8 nDropAction )
     TransferableHelper::DragFinished( nDropAction );
 }
 
-void ScDrawTransferObj::SetDrawPersist( const SvEmbeddedObjectRef& rRef )
+void ScDrawTransferObj::SetDrawPersist( const SfxObjectShellRef& rRef )
 {
     aDrawPersistRef = rRef;
 }
@@ -651,7 +734,7 @@ void ScDrawTransferObj::SetDragWasInternal()
     bDragWasInternal = TRUE;
 }
 
-SvInPlaceObjectRef ScDrawTransferObj::GetSingleObject()
+uno::Reference < embed::XEmbeddedObject > ScDrawTransferObj::GetSingleObject()
 {
     //  if single OLE object was copied, get its object
 
@@ -667,7 +750,7 @@ SvInPlaceObjectRef ScDrawTransferObj::GetSingleObject()
         }
     }
 
-    return SvInPlaceObjectRef();
+    return uno::Reference < embed::XEmbeddedObject >();
 }
 
 //
