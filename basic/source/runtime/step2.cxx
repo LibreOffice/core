@@ -2,9 +2,9 @@
  *
  *  $RCSfile: step2.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-15 16:38:03 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 16:10:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -462,65 +462,74 @@ SbxVariable* SbiRuntime::CheckArray( SbxVariable* pElem )
     {
         // Ist es ein Uno-Objekt?
         SbxBaseRef pObj = (SbxBase*)pElem->GetObject();
-        if( pObj && pObj->ISA(SbUnoObject) )
+        if( pObj )
         {
-            SbUnoObject* pUnoObj = (SbUnoObject*)(SbxBase*)pObj;
-            Any aAny = pUnoObj->getUnoAny();
-
-            if( aAny.getValueType().getTypeClass() == TypeClass_INTERFACE )
+            if( pObj->ISA(SbUnoObject) )
             {
-                Reference< XInterface > x = *(Reference< XInterface >*)aAny.getValue();
-                Reference< XIndexAccess > xIndexAccess( x, UNO_QUERY );
+                SbUnoObject* pUnoObj = (SbUnoObject*)(SbxBase*)pObj;
+                Any aAny = pUnoObj->getUnoAny();
 
-                // Haben wir Index-Access?
-                if( xIndexAccess.is() )
+                if( aAny.getValueType().getTypeClass() == TypeClass_INTERFACE )
                 {
-                    UINT32 nParamCount = (UINT32)pPar->Count() - 1;
-                    if( nParamCount != 1 )
-                    {
-                        StarBASIC::Error( SbERR_BAD_ARGUMENT );
-                        return pElem;
-                    }
+                    Reference< XInterface > x = *(Reference< XInterface >*)aAny.getValue();
+                    Reference< XIndexAccess > xIndexAccess( x, UNO_QUERY );
 
-                    // Index holen
-                    INT32 nIndex = pPar->Get( 1 )->GetLong();
-                    Reference< XInterface > xRet;
-                    try
+                    // Haben wir Index-Access?
+                    if( xIndexAccess.is() )
                     {
-                        Any aAny = xIndexAccess->getByIndex( nIndex );
-                        TypeClass eType = aAny.getValueType().getTypeClass();
-                        if( eType == TypeClass_INTERFACE )
-                            xRet = *(Reference< XInterface >*)aAny.getValue();
-                    }
-                    catch (IndexOutOfBoundsException& e1)
-                    {
-                        // Bei Exception erstmal immer von Konvertierungs-Problem ausgehen
-                        StarBASIC::Error( SbERR_OUT_OF_RANGE );
-                    }
+                        UINT32 nParamCount = (UINT32)pPar->Count() - 1;
+                        if( nParamCount != 1 )
+                        {
+                            StarBASIC::Error( SbERR_BAD_ARGUMENT );
+                            return pElem;
+                        }
 
-                    // #57847 Immer neue Variable anlegen, sonst Fehler
-                    // durch PutObject(NULL) bei ReadOnly-Properties.
-                    pElem = new SbxVariable( SbxVARIANT );
-                    if( xRet.is() )
-                    {
-                        aAny <<= xRet;
+                        // Index holen
+                        INT32 nIndex = pPar->Get( 1 )->GetLong();
+                        Reference< XInterface > xRet;
+                        try
+                        {
+                            Any aAny = xIndexAccess->getByIndex( nIndex );
+                            TypeClass eType = aAny.getValueType().getTypeClass();
+                            if( eType == TypeClass_INTERFACE )
+                                xRet = *(Reference< XInterface >*)aAny.getValue();
+                        }
+                        catch (IndexOutOfBoundsException& e1)
+                        {
+                            // Bei Exception erstmal immer von Konvertierungs-Problem ausgehen
+                            StarBASIC::Error( SbERR_OUT_OF_RANGE );
+                        }
 
-                        // #67173 Kein Namen angeben, damit echter Klassen-Namen eintragen wird
-                        String aName;
-                        SbxObjectRef xWrapper = (SbxObject*)new SbUnoObject( aName, aAny );
-                        pElem->PutObject( xWrapper );
-                    }
-                    else
-                    {
-                        pElem->PutObject( NULL );
+                        // #57847 Immer neue Variable anlegen, sonst Fehler
+                        // durch PutObject(NULL) bei ReadOnly-Properties.
+                        pElem = new SbxVariable( SbxVARIANT );
+                        if( xRet.is() )
+                        {
+                            aAny <<= xRet;
+
+                            // #67173 Kein Namen angeben, damit echter Klassen-Namen eintragen wird
+                            String aName;
+                            SbxObjectRef xWrapper = (SbxObject*)new SbUnoObject( aName, aAny );
+                            pElem->PutObject( xWrapper );
+                        }
+                        else
+                        {
+                            pElem->PutObject( NULL );
+                        }
                     }
                 }
+
+                // #42940, 0.Parameter zu NULL setzen, damit sich Var nicht selbst haelt
+                pPar->Put( NULL, 0 );
+            }
+            else if( pObj->ISA(BasicCollection) )
+            {
+                BasicCollection* pCol = (BasicCollection*)(SbxBase*)pObj;
+                pElem = new SbxVariable( SbxVARIANT );
+                pPar->Put( pElem, 0 );
+                pCol->CollItem( pPar );
             }
         }
-
-        // #42940, 0.Parameter zu NULL setzen, damit sich Var nicht selbst haelt
-        if( pPar )
-            pPar->Put( NULL, 0 );
     }
 
     return pElem;
@@ -617,9 +626,10 @@ void SbiRuntime::StepPARAM( USHORT nOp1, USHORT nOp2 )
             if( pParam && ( (pParam->nFlags & SBX_OPTIONAL) != 0 ) )
             {
                 // Default value?
-                if( pParam->nUserData > 0 )
+                USHORT nDefaultId = (pParam->nUserData & 0xffff );
+                if( nDefaultId > 0 )
                 {
-                    String aDefaultStr = pImg->GetString( pParam->nUserData );
+                    String aDefaultStr = pImg->GetString( nDefaultId );
                     p = new SbxVariable();
                     p->PutString( aDefaultStr );
                     refParams->Put( p, i );
