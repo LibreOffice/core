@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforlist.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: er $ $Date: 2001-07-06 16:19:26 $
+ *  last change: $Author: er $ $Date: 2001-07-16 17:25:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -942,6 +942,14 @@ String SvNumberFormatter::GetKeyword( LanguageType eLnge, USHORT nIndex )
     DBG_ERROR("GetKeyword: invalid index");
     return String();
 }
+
+
+String SvNumberFormatter::GetStandardName( LanguageType eLnge )
+{
+    ChangeIntl( eLnge );
+    return pFormatScanner->GetStandardName();
+}
+
 
 ULONG SvNumberFormatter::ImpGetCLOffset(LanguageType eLnge) const
 {
