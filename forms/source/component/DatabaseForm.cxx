@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseForm.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-27 10:45:55 $
+ *  last change: $Author: fs $ $Date: 2001-05-31 14:08:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -779,11 +779,6 @@ ODatabaseForm::ODatabaseForm(const Reference<XMultiServiceFactory>& _rxFactory)
         setAggregation(m_xAggregate);
     }
 
-    if (m_xAggregate.is())
-    {
-        m_xAggregate->setDelegator(static_cast<XWeak*>(this));
-    }
-
     // listen for the properties, important for Parameters
     if (m_xAggregateSet.is())
     {
@@ -792,6 +787,11 @@ ODatabaseForm::ODatabaseForm(const Reference<XMultiServiceFactory>& _rxFactory)
         pMultiplexer->addProperty(PROPERTY_FILTER_CRITERIA);
         pMultiplexer->addProperty(PROPERTY_APPLYFILTER);
         pMultiplexer->addProperty(PROPERTY_ACTIVE_CONNECTION);
+    }
+
+    if (m_xAggregate.is())
+    {
+        m_xAggregate->setDelegator(static_cast<XWeak*>(this));
     }
 
     decrement(m_refCount);
