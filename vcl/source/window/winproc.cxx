@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winproc.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: ssa $ $Date: 2001-07-18 12:06:56 $
+ *  last change: $Author: ssa $ $Date: 2001-07-25 17:33:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1253,6 +1253,8 @@ static void ImplHandleExtTextInputPos( Window* pWindow,
                     aSize.Width() = pChild->GetSettings().GetStyleSettings().GetCursorSize();
                 rRect = Rectangle( aPos, aSize );
             }
+            else
+                rRect = Rectangle( Point( pChild->mnOutOffX, pChild->mnOutOffY ), Size() );
         }
         rInputWidth = pChild->ImplLogicWidthToDevicePixel( pChild->GetCursorExtTextInputWidth() );
         if ( !rInputWidth )
@@ -1952,6 +1954,8 @@ void ImplUpdateCursorRect( Window *pWindow )
     RmFrameWindow *pFrame;
     if( pWindow && ( ( pFrame = pWindow->ImplGetFrame() ) != NULL ) )
     {
+        if( pFrame->IsInEvtHandler() )
+            return;     // we'll update later
         Rectangle rRect;
         long rWidth;
         ImplHandleExtTextInputPos( pWindow, rRect, rWidth );
@@ -1962,6 +1966,15 @@ void ImplUpdateCursorRect( Window *pWindow )
 void ImplRemoteWindowFrameProc( ExtRmEvent* pEvent )
 {
     DBG_TESTSOLARMUTEX();
+
+    ImplDelData aDelData;
+    Window *pWindow = pEvent->GetWindow();
+    if( pWindow && pWindow->ImplGetFrame() )
+    {
+        pWindow->ImplAddDel( &aDelData );
+        // disable updates like remote CursorRect
+        pWindow->ImplGetFrame()->IsInEvtHandler( true );
+    }
 
     ULONG nId = pEvent->GetId();
     switch ( nId )
@@ -2083,7 +2096,14 @@ void ImplRemoteWindowFrameProc( ExtRmEvent* pEvent )
         }
         break;
     }
-}
 
+    if( pWindow && !aDelData.IsDelete() )   // window not deleted ?
+    {
+        pWindow->ImplRemoveDel( &aDelData );
+        // enable updates like remote CursorRect
+        pWindow->ImplGetFrame()->IsInEvtHandler( false );
+        ImplUpdateCursorRect( pWindow );
+    }
+}
 
 #endif
