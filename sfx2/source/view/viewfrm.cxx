@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewfrm.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: obo $ $Date: 2004-05-28 15:13:59 $
+ *  last change: $Author: kz $ $Date: 2004-06-11 17:58:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3653,7 +3653,7 @@ void SfxViewFrame::MiscState_Impl(SfxItemSet &rSet)
                         utl::LocalFileHelper::ConvertPhysicalNameToURL( aResourceStr, aTmp );
 
                         sal_Int32 nIndex = aTmp.SearchBackward( sal_Unicode( '/' ));
-                        if (( nIndex != STRING_NOTFOUND ) && (( nIndex+1 ) < aResourceStr.Len() ))
+                        if (( nIndex != STRING_NOTFOUND ) && (( nIndex+1 ) < aTmp.Len() ))
                         {
                             aTmp.Erase( 0, nIndex+1 );
                             nIndex = aTmp.SearchBackward( sal_Unicode( '.' ));
