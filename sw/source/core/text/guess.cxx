@@ -2,9 +2,9 @@
  *
  *  $RCSfile: guess.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: fme $ $Date: 2001-07-24 07:56:42 $
+ *  last change: $Author: fme $ $Date: 2001-08-14 09:15:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -331,7 +331,27 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
             // found hyphenation position within line
             // nBreakPos is set to the hyphenation position
             xHyphWord = aResult.rHyphenatedWord;
-            nBreakPos += xHyphWord->getHyphenPos() + 1;
+
+#ifdef DEBUG
+            // e.g., Schif-fahrt, referes to our string
+            const String aWord = xHyphWord->getWord();
+            // e.g., Schiff-fahrt, referes to the word after hyphenation
+            const String aHyphenatedWord = xHyphWord->getHyphenatedWord();
+            // e.g., Schif-fahrt: 5, referes to our string
+            const USHORT nHyphenationPos = xHyphWord->getHyphenationPos();
+            // e.g., Schiff-fahrt: 6, referes to the word after hyphenation
+            const USHORT nHyphenPos = xHyphWord->getHyphenPos();
+#endif
+
+            nBreakPos += xHyphWord->getHyphenationPos() + 1;
+
+            // Check, if break position is soft hyphen or if current position
+            // is behind a softhyphen. In both cases an underflow
+            // has to be triggered
+            if( nBreakPos > rInf.GetLineStart() &&
+                ( CHAR_SOFTHYPHEN == rInf.GetTxt().GetChar( nBreakPos ) ) )
+                nBreakPos = rInf.GetIdx() - 1;
+
             if( nBreakPos >= rInf.GetIdx() )
             {
                 nPorLen = nBreakPos - rInf.GetIdx();
@@ -343,14 +363,13 @@ sal_Bool SwTxtGuess::Guess( const SwTxtPortion& rPor, SwTxtFormatInfo &rInf,
         {
             // found break position within line
             xHyphWord = NULL;
-            // check, if break position is soft hyphen
+
+            // check, if break position is soft hyphen and an underflow
+            // has to be triggered
             if( nBreakPos > rInf.GetLineStart() &&
                 CHAR_SOFTHYPHEN == rInf.GetTxt().GetChar( nBreakPos - 1 ) )
-            {
-                // soft hyphen found, we make sure, that an underflow is
-                // triggered by setting nBreakPos to index - 1
                 nBreakPos = rInf.GetIdx() - 1;
-            }
+
             xub_StrLen nX = nBreakPos;
             while( nX > rInf.GetLineStart() && CH_BLANK == rInf.GetChar(--nX) )
                 nBreakPos = nX;
