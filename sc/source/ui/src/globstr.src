@@ -2,9 +2,9 @@
  *
  *  $RCSfile: globstr.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-12 07:03:50 $
+ *  last change: $Author: kz $ $Date: 2001-05-17 08:02:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,7 +193,7 @@ Resource RID_GLOBSTR
         Text [ english_us ] = "Drag and Drop" ;
         Text[ chinese_simplified ] = "ÍÏ·Å";
         Text[ russian ] = "Ïåğåòàñêèâàíèå";
-        Text[ polish ] = "Przeci¹gnij&Upuœæ";
+        Text[ polish ] = "Przeci¹gnij&Upu?æ";
         Text[ japanese ] = "ÄŞ×¯¸Ş•ÄŞÛ¯Ìß";
         Text[ chinese_traditional ] = "©ì¦²";
         Text[ arabic ] = "ÓÍÈ æ ÅÓŞÇØ";
@@ -356,7 +356,7 @@ Resource RID_GLOBSTR
         Text [ english_us ] = "Column Width" ;
         Text[ chinese_simplified ] = "ÁĞ¿í";
         Text[ russian ] = "Øèğèíà ñòîëáöîâ";
-        Text[ polish ] = "Szerokoœæ kolumny";
+        Text[ polish ] = "Szeroko?æ kolumny";
         Text[ japanese ] = "—ñ•";
         Text[ chinese_traditional ] = "Äæ¼e";
         Text[ arabic ] = "ÚÑÖ ÇáÃÚãÏÉ";
@@ -383,7 +383,7 @@ Resource RID_GLOBSTR
         Text [ english_us ] = "Optimal Column Width" ;
         Text[ chinese_simplified ] = "×î¼ÑÁĞ¿í";
         Text[ russian ] = "Îïòèìàëüíàÿ øèğèíà êîëîíêè";
-        Text[ polish ] = "Optymalna szerokoœæ kolumny";
+        Text[ polish ] = "Optymalna szeroko?æ kolumny";
         Text[ japanese ] = "Å“K‚È—ñ•";
         Text[ chinese_traditional ] = "³Ì¾AÄæ¼e";
         Text[ arabic ] = "ÇáÚÑÖ ÇáÃãËá ááÚãæÏ";
@@ -411,7 +411,7 @@ Resource RID_GLOBSTR
         Text [ english_us ] = "Row height" ;
         Text[ chinese_simplified ] = "ĞĞ¸ß";
         Text[ russian ] = "Âûñîòà ñòğîê";
-        Text[ polish ] = "Wysokoœæ wierszy";
+        Text[ polish ] = "Wysoko?æ wierszy";
         Text[ japanese ] = "s‚Ì‚‚³";
         Text[ chinese_traditional ] = "¦C°ª";
         Text[ arabic ] = "ÇÑÊİÇÚ ÇáÕİ";
@@ -439,7 +439,7 @@ Resource RID_GLOBSTR
         Text [ english_us ] = "Optimal Row Height" ;
         Text[ chinese_simplified ] = "×î¼ÑĞĞ¸ß";
         Text[ russian ] = "Îïòèìàëüíàÿ âûñîòà ñòğîê";
-        Text[ polish ] = "Optymalna wysokoœæ wierszy";
+        Text[ polish ] = "Optymalna wysoko?æ wierszy";
         Text[ japanese ] = "Å“K‚Ès‚Ì‚‚³";
         Text[ chinese_traditional ] = "³Ì¾A¦C°ª";
         Text[ arabic ] = "ÇáÇÑÊİÇÚ ÇáÃãËá ááÕİ";
@@ -456,7 +456,7 @@ Resource RID_GLOBSTR
         Text [ ENGLISH ] = "Autofill" ;
         Text [ norwegian ] = "Autofill" ;
         Text [ italian ] = "Riempimento" ;
-        Text [ portuguese_brazilian ] = "Preenchimento automático" ;
+        Text [ portuguese_brazilian ] = "Preenchimento autom?tico" ;
         Text [ portuguese ] = "Preencher" ;
         Text [ finnish ] = "Täytä" ;
         Text [ danish ] = "Fyld" ;
@@ -538,7 +538,7 @@ Resource RID_GLOBSTR
         Text [ ENGLISH ] = "AutoFormat" ;
         Text [ norwegian ] = "AutoFormat" ;
         Text [ italian ] = "Formattazione automatica" ;
-        Text [ portuguese_brazilian ] = "Auto Formatação" ;
+        Text [ portuguese_brazilian ] = "Auto Formata??o" ;
         Text [ portuguese ] = "AutoFormato" ;
         Text [ finnish ] = "Automaattinen muotoilu" ;
         Text [ danish ] = "AutoFormat" ;
@@ -619,7 +619,7 @@ Resource RID_GLOBSTR
         Text [ ENGLISH ] = "Input" ;
         Text [ norwegian ] = "Input" ;
         Text [ italian ] = "Digitazione" ;
-        Text [ portuguese_brazilian ] = "Inserção" ;
+        Text [ portuguese_brazilian ] = "Inser??o" ;
         Text [ portuguese ] = "Entrada" ;
         Text [ finnish ] = "Syötä" ;
         Text [ danish ] = "Input" ;
@@ -758,7 +758,7 @@ Resource RID_GLOBSTR
         Text [ ENGLISH ] = "Open Outline" ;
         Text [ norwegian ] = "Open Outline" ;
         Text [ italian ] = "Mostra dettaglio" ;
-        Text [ portuguese_brazilian ] = "Abrir Esboço" ;
+        Text [ portuguese_brazilian ] = "Abrir Esbo?o" ;
         Text [ portuguese ] = "Mostrar detalhe" ;
         Text [ finnish ] = "Näytä tiedot" ;
         Text [ danish ] = "Vis detaljer" ;
@@ -785,7 +785,7 @@ Resource RID_GLOBSTR
         Text [ ENGLISH ] = "Close Outline" ;
         Text [ norwegian ] = "Close Outline" ;
         Text [ italian ] = "Nascondi dettaglio" ;
-        Text [ portuguese_brazilian ] = "Fechar Esboço" ;
+        Text [ portuguese_brazilian ] = "Fechar Esbo?o" ;
         Text [ portuguese ] = "Ocultar detalhes" ;
         Text [ finnish ] = "Piilota tiedot" ;
         Text [ danish ] = "Skjul detaljer" ;
@@ -812,7 +812,7 @@ Resource RID_GLOBSTR
         Text [ ENGLISH ] = "Make Outline" ;
         Text [ norwegian ] = "Make Outline" ;
         Text [ italian ] = "Raggruppa" ;
-        Text [ portuguese_brazilian ] = "Criar Esboço" ;
+        Text [ portuguese_brazilian ] = "Criar Esbo?o" ;
         Text [ portuguese ] = "Agrupar" ;
         Text [ finnish ] = "Ryhmä" ;
         Text [ danish ] = "Gruppering" ;
@@ -839,7 +839,7 @@ Resource RID_GLOBSTR
         Text [ ENGLISH ] = "Delete Outline" ;
         Text [ norwegian ] = "Delete Outline" ;
         Text [ italian ] = "Elimina struttura" ;
-        Text [ portuguese_brazilian ] = "Apagar Esboço" ;
+        Text [ portuguese_brazilian ] = "Apagar Esbo?o" ;
         Text [ portuguese ] = "Desagrupar" ;
         Text [ finnish ] = "Pura ryhmä" ;
         Text [ danish ] = "Ophæv gruppering" ;
@@ -867,7 +867,7 @@ Resource RID_GLOBSTR
         Text [ ENGLISH ] = "Select Outline Level" ;
         Text [ norwegian ] = "Select Outline Level" ;
         Text [ italian ] = "Seleziona livello struttura" ;
-        Text [ portuguese_brazilian ] = "Selecionar Nível de Esboço" ;
+        Text [ portuguese_brazilian ] = "Selecionar N?vel de Esbo?o" ;
         Text [ portuguese ] = "Seleccionar nível de esquema" ;
         Text [ finnish ] = "Valitse jäsennystaso" ;
         Text [ danish ] = "Marker dispositionsniveau" ;
@@ -894,7 +894,7 @@ Resource RID_GLOBSTR
         Text [ ENGLISH ] = "Open Outline" ;
         Text [ norwegian ] = "Open Outline" ;
         Text [ italian ] = "Mostra dettaglio" ;
-        Text [ portuguese_brazilian ] = "Abrir Esboço" ;
+        Text [ portuguese_brazilian ] = "Abrir Esbo?o" ;
         Text [ portuguese ] = "Mostrar detalhe" ;
         Text [ finnish ] = "Näytä tiedot" ;
         Text [ danish ] = "Vis detaljer" ;
@@ -921,7 +921,7 @@ Resource RID_GLOBSTR
         Text [ ENGLISH ] = "Close Outline" ;
         Text [ norwegian ] = "Close Outline" ;
         Text [ italian ] = "Nascondi dettaglio" ;
-        Text [ portuguese_brazilian ] = "Fechar Esboço" ;
+        Text [ portuguese_brazilian ] = "Fechar Esbo?o" ;
         Text [ portuguese ] = "Ocultar detalhes" ;
         Text [ finnish ] = "Piilota tiedot" ;
         Text [ danish ] = "Skjul detaljer" ;
@@ -959,7 +959,7 @@ Resource RID_GLOBSTR
         Text [ english_us ] = "Clear Outline" ;
         Text[ chinese_simplified ] = "È¡Ïû´ó¸ÙÏÔÊ¾";
         Text[ russian ] = "Óäàëèòü ñòğóêòóğó";
-        Text[ polish ] = "Wyczyœæ konspekt";
+        Text[ polish ] = "Wyczy?æ konspekt";
         Text[ japanese ] = "±³Ä×²İ‚Ìíœ";
         Text[ chinese_traditional ] = "¨ú®ø¤jºõÅã¥Ü";
         Text[ arabic ] = "ÅÒÇáÉ ÇáÊŞÓíã";
@@ -976,7 +976,7 @@ Resource RID_GLOBSTR
         Text [ ENGLISH ] = "Auto Outline" ;
         Text [ norwegian ] = "Auto Outline" ;
         Text [ italian ] = "Struttura automatica" ;
-        Text [ portuguese_brazilian ] = "Auto Esboço" ;
+        Text [ portuguese_brazilian ] = "Auto Esbo?o" ;
         Text [ portuguese ] = "AutoEsquema" ;
         Text [ finnish ] = "Automaattinen rajaus" ;
         Text [ danish ] = "AutoDisposition" ;
@@ -1014,7 +1014,7 @@ Resource RID_GLOBSTR
         Text [ english_us ] = "Subtotals" ;
         Text[ chinese_simplified ] = "·ÖÀà»ã×Ü";
         Text[ russian ] = "Ïğîìåæóòî÷íûå èòîãè";
-        Text[ polish ] = "Sumy poœrednie";
+        Text[ polish ] = "Sumy po?rednie";
         Text[ japanese ] = "¬Œv";
         Text[ chinese_traditional ] = "¤p­p";
         Text[ arabic ] = "ÇáãÌÇãíÚ ÇáİÑÚíÉ";
@@ -1085,7 +1085,7 @@ Resource RID_GLOBSTR
         Text [ ENGLISH ] = "Modify Database Arrea" ;
         Text [ norwegian ] = "Modify Database Arrea" ;
         Text [ italian ] = "Modifica aree database" ;
-        Text [ portuguese_brazilian ] = "Modificar Área da Base de Dados" ;
+        Text [ portuguese_brazilian ] = "Modificar ?rea da Base de Dados" ;
         Text [ portuguese ] = "Modificar área da base de dados" ;
         Text [ finnish ] = "Muuta tietokanta-aluetta" ;
         Text [ danish ] = "Modificer databaseområde" ;
@@ -1276,7 +1276,7 @@ Resource RID_GLOBSTR
         Text [ swedish ] = "Radera Datapilottabell" ;
         Text [ danish ] = "Slet DataPilot-tabel" ;
         Text [ portuguese ] = "Eliminar tabela do Piloto de Dados" ;
-        Text [ portuguese_brazilian ] = "Datenpilot-Tabelle löschen" ;
+        Text [ portuguese_brazilian ] = "Datenpilot-Tabelle l?chen" ;
         Text[ chinese_simplified ] = "É¾³ıÊı¾İÖúÀí-¹¤×÷±í";
         Text[ russian ] = "Óäàëèòü ñâîäíóş òàáëèöó";
         Text[ polish ] = "Usuñ tabelê Pilota danych";
@@ -1508,10 +1508,10 @@ Resource RID_GLOBSTR
         Text [ swedish ] = "Spår till överordnade" ;
         Text [ danish ] = "Spor overordnede" ;
         Text [ portuguese ] = "Analisar precedentes" ;
-        Text [ portuguese_brazilian ] = "Spur zum Vorgänger" ;
+        Text [ portuguese_brazilian ] = "Spur zum Vorg?nger" ;
         Text[ chinese_simplified ] = "ÏòÇ°µÄ×·×Ù¼ıÍ·";
         Text[ russian ] = "Âëèÿşùèå ÿ÷åéêè";
-        Text[ polish ] = "ŒledŸ poprzedniki";
+        Text[ polish ] = "?led? poprzedniki";
         Text[ japanese ] = "QÆŒ³ÄÚ°½";
         Text[ chinese_traditional ] = "¤W¤@­ÓÀx¦s®æ°lÂÜ½b¸¹";
         Text[ arabic ] = "ÊÊÈÚ ÇáÓÇÈŞÇÊ";
@@ -1535,7 +1535,7 @@ Resource RID_GLOBSTR
         Text [ swedish ] = "Ta bort spår till överordnade" ;
         Text [ danish ] = "Fjern spor til overordnede" ;
         Text [ portuguese ] = "Remover precedentes" ;
-        Text [ portuguese_brazilian ] = "Spur zum Vorgänger entfernen" ;
+        Text [ portuguese_brazilian ] = "Spur zum Vorg?nger entfernen" ;
         Text[ chinese_simplified ] = "É¾³ıÏòÇ°µÄ×·×Ù¼ıÍ·";
         Text[ russian ] = "Óáğàòü ñòğåëêè ê âëèÿşùèì ÿ÷åéêàì";
         Text[ polish ] = "Usuñ strza³ki poprzedników";
@@ -1564,7 +1564,7 @@ Resource RID_GLOBSTR
         Text [ portuguese_brazilian ] = "Spur zum Nachfolger" ;
         Text[ chinese_simplified ] = "ÏòºóµÄ×·×Ù¼ıÍ·";
         Text[ russian ] = "Çàâèñèìûå ÿ÷åéêè";
-        Text[ polish ] = "ŒledŸ zale¿noœci";
+        Text[ polish ] = "?led? zale¿no?ci";
         Text[ japanese ] = "QÆæÄÚ°½";
         Text[ chinese_traditional ] = "¤U¤@­ÓÀx¦s®æ°lÂÜ½b¸¹";
         Text[ arabic ] = "ÊÊÈÚ ÇáÊæÇÈÚ";
@@ -1590,7 +1590,7 @@ Resource RID_GLOBSTR
         Text [ portuguese_brazilian ] = "Spur zum Nachfolger entfernen" ;
         Text[ chinese_simplified ] = "É¾³ıÏòºóµÄ×·×Ù¼ıÍ·";
         Text[ russian ] = "Óáğàòü ñòğåëêè ê çàâèñèìûì ÿ÷åéêàì";
-        Text[ polish ] = "Usuñ zale¿noœci";
+        Text[ polish ] = "Usuñ zale¿no?ci";
         Text[ japanese ] = "QÆŒ³ÄÚ°½‚Ìíœ";
         Text[ chinese_traditional ] = "§R°£¤U¤@­ÓÀx¦s®æ°lÂÜ½b¸¹";
         Text[ arabic ] = "ÅÒÇáÉ ÇáÊæÇÈÚ";
@@ -1616,7 +1616,7 @@ Resource RID_GLOBSTR
         Text [ portuguese_brazilian ] = "Spur zum Fehler" ;
         Text[ chinese_simplified ] = "Ö¸Ïò´íÎóµÄ×·×Ù¼ıÍ·";
         Text[ russian ] = "Èñòî÷íèê îøèáêè";
-        Text[ polish ] = "ŒledŸ b³êdy";
+        Text[ polish ] = "?led? b³êdy";
         Text[ japanese ] = "´×°‚ÌÄÚ°½";
         Text[ chinese_traditional ] = "°lÂÜ¿ù»~";
         Text[ arabic ] = "ÊÊÈÚ ÇáÎØÃ";
@@ -1666,7 +1666,7 @@ Resource RID_GLOBSTR
         Text [ swedish ] = "Markera ogiltiga data" ;
         Text [ danish ] = "Marker ugyldige data" ;
         Text [ portuguese ] = "Marcar dados não válidos" ;
-        Text [ portuguese_brazilian ] = "Ungültige Daten einkreisen" ;
+        Text [ portuguese_brazilian ] = "Ung?tige Daten einkreisen" ;
         Text[ chinese_simplified ] = "±ê¼ÇÎŞĞ§µÄÊı¾İ";
         Text[ russian ] = "Îáâåñòè íåâåğíûå äàííûå";
         Text[ polish ] = "Zaznacz kó³kiem nieprawid³owe dane";
@@ -1695,7 +1695,7 @@ Resource RID_GLOBSTR
         Text [ dutch ] = "Sporen actualiseren" ;
         Text[ chinese_simplified ] = "¸üĞÂ×·×Ù¼ıÍ·";
         Text[ russian ] = "Îáíîâèòü ñòğåëêè";
-        Text[ polish ] = "Aktualizuj œlady";
+        Text[ polish ] = "Aktualizuj ?lady";
         Text[ japanese ] = "ÄÚ°½‚ÌXV";
         Text[ chinese_traditional ] = "§ó·s°lÂÜ½b¸¹";
         Text[ arabic ] = "ÊÍÏíË ÇáÂËÇÑ";
@@ -1719,7 +1719,7 @@ Resource RID_GLOBSTR
         Text [ swedish ] = "Ändra diagramets dataområde" ;
         Text [ danish ] = "Modificer diagrammets dataområde" ;
         Text [ portuguese ] = "Alterar área de dados do gráfico" ;
-        Text [ portuguese_brazilian ] = "Datenbereich von Diagramm ändern" ;
+        Text [ portuguese_brazilian ] = "Datenbereich von Diagramm ?ndern" ;
         Text[ chinese_simplified ] = "¸ü¸ÄÍ¼±íÊı¾İÇøÓò";
         Text[ russian ] = "Èçìåíèòü îáëàñòü äàííûõ äèàãğàììû";
         Text[ polish ] = "Modyfikuj obszar danych w diagramie";
@@ -1774,7 +1774,7 @@ Resource RID_GLOBSTR
         Text [ swedish ] = "Uppdatera länk" ;
         Text [ danish ] = "Opdater kæde" ;
         Text [ portuguese ] = "Actualizar ligação" ;
-        Text [ portuguese_brazilian ] = "Verknüpfung aktualisieren" ;
+        Text [ portuguese_brazilian ] = "Verkn?fung aktualisieren" ;
         Text[ chinese_simplified ] = "¸üĞÂÁ´½Ó";
         Text[ russian ] = "Îáíîâèòü ññûëêó";
         Text[ polish ] = "Aktualizuj ³¹cza";
@@ -1801,7 +1801,7 @@ Resource RID_GLOBSTR
         Text [ swedish ] = "Upphäv länk" ;
         Text [ danish ] = "Ophæv kæde" ;
         Text [ portuguese ] = "Remover ligação" ;
-        Text [ portuguese_brazilian ] = "Verknüpfung aufheben" ;
+        Text [ portuguese_brazilian ] = "Verkn?fung aufheben" ;
         Text[ chinese_simplified ] = "È¡ÏûÁ´½Ó";
         Text[ russian ] = "Óáğàòü ññûëêó";
         Text[ polish ] = "Usuñ ³¹cze";
@@ -1828,7 +1828,7 @@ Resource RID_GLOBSTR
         Text [ swedish ] = "Infoga länk" ;
         Text [ danish ] = "Indsæt kæde" ;
         Text [ portuguese ] = "Inserir ligação" ;
-        Text [ portuguese_brazilian ] = "Verknüpfung einfügen" ;
+        Text [ portuguese_brazilian ] = "Verkn?fung einf?en" ;
         Text[ chinese_simplified ] = "²åÈëÁ´½Ó";
         Text[ russian ] = "Âñòàâèòü ññûëêó";
         Text[ polish ] = "Wstaw ³¹cze";
@@ -1855,7 +1855,7 @@ Resource RID_GLOBSTR
         Text [ swedish ] = "Infoga matrixformel" ;
         Text [ danish ] = "Indsæt matrixformel" ;
         Text [ portuguese ] = "Inserir fórmula matriz" ;
-        Text [ portuguese_brazilian ] = "Matrixformel einfügen" ;
+        Text [ portuguese_brazilian ] = "Matrixformel einf?en" ;
         Text[ chinese_simplified ] = "²åÈë¾ØÕó¹«Ê½";
         Text[ russian ] = "Âñòàâèòü ôîğìóëó ìàññèâà";
         Text[ polish ] = "Wstaw formu³ê macierzy";
@@ -1986,7 +1986,7 @@ Resource RID_GLOBSTR
         Text [ spanish ] = "Aumentar sangría" ;
         Text [ french ] = "Augmenter le retrait" ;
         Text [ portuguese ] = "Aumentar avanço " ;
-        Text [ portuguese_brazilian ] = "Einzug erhöhen" ;
+        Text [ portuguese_brazilian ] = "Einzug erh?en" ;
         Text[ chinese_simplified ] = "Ôö´óËõ½ø";
         Text[ russian ] = "Óâåëè÷èòü îòñòóï";
         Text[ polish ] = "Zwiêksz wciêcie";
@@ -2007,7 +2007,7 @@ Resource RID_GLOBSTR
         Text [ ENGLISH ] = "Protect Table" ;
         Text [ portuguese ] = "Proteger folha" ;
         Text [ english_us ] = "Protect sheet" ;
-        Text [ portuguese_brazilian ] = "Tabelle schützen" ;
+        Text [ portuguese_brazilian ] = "Tabelle sch?zen" ;
         Text [ swedish ] = "Skydda tabell" ;
         Text [ danish ] = "Beskyt ark" ;
         Text [ italian ] = "proteggi tabella" ;
@@ -2060,7 +2060,7 @@ Resource RID_GLOBSTR
         Text [ ENGLISH ] = "Protect Document" ;
         Text [ portuguese ] = "Proteger documento" ;
         Text [ english_us ] = "Protect document" ;
-        Text [ portuguese_brazilian ] = "Dokument schützen" ;
+        Text [ portuguese_brazilian ] = "Dokument sch?zen" ;
         Text [ swedish ] = "Skydda dokument" ;
         Text [ danish ] = "Beskyt dokument" ;
         Text [ italian ] = "Proteggi documento" ;
@@ -2139,7 +2139,7 @@ Resource RID_GLOBSTR
         Text [ ENGLISH ] = "Delete Page Breaks" ;
         Text [ portuguese ] = "Eliminar quebras de página" ;
         Text [ english_us ] = "Delete Page Breaks" ;
-        Text [ portuguese_brazilian ] = "Seitenumbrüche löschen" ;
+        Text [ portuguese_brazilian ] = "Seitenumbr?he l?chen" ;
         Text [ swedish ] = "Radera sidbrytningar" ;
         Text [ danish ] = "Slet sideskift" ;
         Text [ italian ] = "Elimina interruzioni pagina" ;
@@ -2166,7 +2166,7 @@ Resource RID_GLOBSTR
         Text [ ENGLISH ] = "Change Print Scale" ;
         Text [ portuguese ] = "Alterar escala" ;
         Text [ english_us ] = "Change Scale" ;
-        Text [ portuguese_brazilian ] = "Skalierung ändern" ;
+        Text [ portuguese_brazilian ] = "Skalierung ?ndern" ;
         Text [ swedish ] = "Ändra skalning" ;
         Text [ danish ] = "Modificer skalering" ;
         Text [ italian ] = "Modifica scala" ;
@@ -2379,7 +2379,7 @@ Resource RID_GLOBSTR
         Text [ ENGLISH ] = "Unable to insert line" ;
         Text [ norwegian ] = "Unable to insert line" ;
         Text [ italian ] = "Impossibile inserire riga" ;
-        Text [ portuguese_brazilian ] = "Não consigo inserir a linha" ;
+        Text [ portuguese_brazilian ] = "N?o consigo inserir a linha" ;
         Text [ portuguese ] = "Impossível inserir linhas" ;
         Text [ finnish ] = "Rivien lisääminen ei onnistu" ;
         Text [ danish ] = "Kan ikke indsætte rækker" ;
@@ -2435,7 +2435,7 @@ Resource RID_GLOBSTR
         Text [ ENGLISH ] = "This area does not contain column headers.\nUse the first line as column headers?" ;
         Text [ norwegian ] = "This area does not contain column headers.\nUse the first line as column headers?" ;
         Text [ italian ] = "L' area non contiene intestazioni per le colonne.\nUsare la prima riga come intestazione colonna?" ;
-        Text [ portuguese_brazilian ] = "Esta área não contém cabeçalhos de colunas.\nUsar a primeira linha como cabeçalhos de colunas?" ;
+        Text [ portuguese_brazilian ] = "Esta ?rea n?o cont?m cabe?alhos de colunas.\nUsar a primeira linha como cabe?alhos de colunas?" ;
         Text [ portuguese ] = "Esta área não contém cabeçalhos de colunas.\nUtilizar a primeira linha como cabeçalho de coluna?" ;
         Text [ finnish ] = "Alue ei sisällä sarakeotsikoita.\nHaluatko ensimmäistä riviä käytettävän sarakeotsikkona?" ;
         Text [ danish ] = "Dette område indeholder ikke kolonneoverskrifter.\nSkal den første række bruges som kolonneoverskrift?" ;
@@ -2489,7 +2489,7 @@ Resource RID_GLOBSTR
         Text [ ENGLISH ] = "The database '#' could not be opened." ;
         Text [ portuguese ] = "Foi impossível abrir a base de dados ''#''." ;
         Text [ english_us ] = "The database '#' could not be opened." ;
-        Text [ portuguese_brazilian ] = "Die Datenbank ''#'' konnte nicht geöffnet werden." ;
+        Text [ portuguese_brazilian ] = "Die Datenbank ''#'' konnte nicht ge?fnet werden." ;
         Text [ swedish ] = "Databasen '#' kunde inte öppnas." ;
         Text [ danish ] = "Det var ikke muligt at åbne databasen ''#''." ;
         Text [ italian ] = "Impossibile aprire il database ''#''." ;
@@ -2515,7 +2515,7 @@ Resource RID_GLOBSTR
         Text [ ENGLISH ] = "The query '#' could not be opened." ;
         Text [ portuguese ] = "Foi impossível abrir a consulta '#'." ;
         Text [ english_us ] = "The query '#' could not be opened." ;
-        Text [ portuguese_brazilian ] = "Die Abfrage '#' konnte nicht geöffnet werden." ;
+        Text [ portuguese_brazilian ] = "Die Abfrage '#' konnte nicht ge?fnet werden." ;
         Text [ swedish ] = "Sökningen '#' kunde inte öppnas." ;
         Text [ danish ] = "Det var ikke muligt at åbne forespørgslen '#'." ;
         Text [ italian ] = "Non è stato possibile aprire la ricerca '#'." ;
@@ -2568,7 +2568,7 @@ Resource RID_GLOBSTR
         Text [ ENGLISH ] = "# records read..." ;
         Text [ portuguese ] = "# de registos importados..." ;
         Text [ english_us ] = "# records imported..." ;
-        Text [ portuguese_brazilian ] = "# Datensätze importiert..." ;
+        Text [ portuguese_brazilian ] = "# Datens?tze importiert..." ;
         Text [ swedish ] = "# dataposter importerade..." ;
         Text [ danish ] = "# dataposter importeret..." ;
         Text [ italian ] = "# Record di dati importati..." ;
@@ -2595,7 +2595,7 @@ Resource RID_GLOBSTR
         Text [ ENGLISH ] = "Grouping not possible" ;
         Text [ norwegian ] = "Grouping not possible" ;
         Text [ italian ] = "Impossibile raggruppare" ;
-        Text [ portuguese_brazilian ] = "Agrupamento impossível" ;
+        Text [ portuguese_brazilian ] = "Agrupamento imposs?vel" ;
         Text [ portuguese ] = "Impossível agrupar." ;
         Text [ finnish ] = "Ryhmittely ei onnistu" ;
         Text [ danish ] = "Gruppering er ikke mulig" ;
@@ -2623,7 +2623,7 @@ Resource RID_GLOBSTR
         Text [ ENGLISH ] = "Ungrouping not possible" ;
         Text [ norwegian ] = "Ungrouping not possible" ;
         Text [ italian ] = "Impossibile separare" ;
-        Text [ portuguese_brazilian ] = "Desagrupamento impossível" ;
+        Text [ portuguese_brazilian ] = "Desagrupamento imposs?vel" ;
         Text [ portuguese ] = "Impossível desfazer grupo" ;
         Text [ finnish ] = "Ryhmän purkaminen ei onnistu" ;
         Text [ danish ] = "Det er ikke muligt at ophæve" ;
@@ -2651,7 +2651,7 @@ Resource RID_GLOBSTR
         Text [ ENGLISH ] = "Insert in multi selection not possible" ;
         Text [ norwegian ] = "Insert in multi selection not possible" ;
         Text [ italian ] = "Impossibile inserire da selezione multipla" ;
-        Text [ portuguese_brazilian ] = "Inserção em multi seleção impossível" ;
+        Text [ portuguese_brazilian ] = "Inser??o em multi sele??o imposs?vel" ;
         Text [ portuguese ] = "Inserção em multiselecção impossível" ;
         Text [ finnish ] = "Lisääminen monivalintaan ei onnistu" ;
         Text [ danish ] = "Det er ikke muligt at indsætte i multimarkeringer" ;
@@ -2678,7 +2678,7 @@ Resource RID_GLOBSTR
         Text [ ENGLISH ] = "Inserting merged cells into merged cells missmatched!" ;
         Text [ norwegian ] = "Inserting merged cells into merged cells missmatched!" ;
         Text [ italian ] = "Non inserire celle in celle raggruppate!" ;
-        Text [ portuguese_brazilian ] = "Inserção de células mescladas em células mescladas desencontradas!" ;
+        Text [ portuguese_brazilian ] = "Inser??o de c?lulas mescladas em c?lulas mescladas desencontradas!" ;
         Text [ portuguese ] = "Não é permitido inserir células em células intercaladas!" ;
         Text [ finnish ] = "Solujen yhdistäminen ei onnistu, jos solut on jo yhdistetty." ;
         Text [ danish ] = "Det er ikke tilladt at overlappe flettede celler!" ;
@@ -2705,7 +2705,7 @@ Resource RID_GLOBSTR
         Text [ ENGLISH ] = "Inserting merged cells into merged cells missmatched!" ;
         Text [ norwegian ] = "Inserting merged cells into merged cells missmatched!" ;
         Text [ italian ] = "Non inserire celle in celle raggruppate!" ;
-        Text [ portuguese_brazilian ] = "Inserção de células mescladas em células mescladas desencontradas!" ;
+        Text [ portuguese_brazilian ] = "Inser??o de c?lulas mescladas em c?lulas mescladas desencontradas!" ;
         Text [ portuguese ] = "Não é permitido inserir células em células intercaladas!" ;
         Text [ finnish ] = "Solujen yhdistäminen ei onnistu, jos solut on jo yhdistetty." ;
         Text [ danish ] = "Det er ikke tilladt at overlappe flettede celler!" ;
@@ -2732,7 +2732,7 @@ Resource RID_GLOBSTR
         Text [ ENGLISH ] = "Border not with multi selection" ;
         Text [ norwegian ] = "Border not with multi selection" ;
         Text [ italian ] = "Bordo non su selezione multipla" ;
-        Text [ portuguese_brazilian ] = "Borda sem multi seleção" ;
+        Text [ portuguese_brazilian ] = "Borda sem multi sele??o" ;
         Text [ portuguese ] = "Contorno incompatível com a multiselecção." ;
         Text [ finnish ] = "Reunojen lisääminen monivalintaan ei onnistu" ;
         Text [ danish ] = "Ramme ikke på multimarkering" ;
@@ -2760,7 +2760,7 @@ Resource RID_GLOBSTR
         Text [ ENGLISH ] = "Can not insert into merged ranges" ;
         Text [ norwegian ] = "Can not insert into merged ranges" ;
         Text [ italian ] = "Impossibile inserire nelle aree unite" ;
-        Text [ portuguese_brazilian ] = "Não é possível inserir em faixas mescladas" ;
+        Text [ portuguese_brazilian ] = "N?o ? poss?vel inserir em faixas mescladas" ;
         Text [ portuguese ] = "Impossível inserir em áreas intercaladas." ;
         Text [ finnish ] = "Yhdistettyihin alueisiin liittäminen ei ole mahdollista" ;
         Text [ danish ] = "Kan ikke indsætte i flettede områder" ;
@@ -2788,7 +2788,7 @@ Resource RID_GLOBSTR
         Text [ ENGLISH ] = "Can not delete in merged ranges" ;
         Text [ norwegian ] = "Can not delete in merged ranges" ;
         Text [ italian ] = "Impossibile cancellare nelle aree unite" ;
-        Text [ portuguese_brazilian ] = "Não é possível apagar em faixas mescladas" ;
+        Text [ portuguese_brazilian ] = "N?o ? poss?vel apagar em faixas mescladas" ;
         Text [ portuguese ] = "Impossível eliminar em áreas intercaladas" ;
         Text [ finnish ] = "Yhdistetyistä alueista poistaminen ei ole mahdollista" ;
         Text [ danish ] = "Kan ikke slette i flettede områder" ;
@@ -2815,7 +2815,7 @@ Resource RID_GLOBSTR
         Text [ ENGLISH ] = "Inserting cells into merged cells missmatched!" ;
         Text [ norwegian ] = "Inserting cells into merged cells missmatched!" ;
         Text [ italian ] = "Non inserire celle raggruppate in celle raggruppate!" ;
-        Text [ portuguese_brazilian ] = "Inserção de células em células mescladas desencontrada!" ;
+        Text [ portuguese_brazilian ] = "Inser??o de c?lulas em c?lulas mescladas desencontrada!" ;
         Text [ portuguese ] = "Não é permitido inserir células em células intercaladas!" ;
         Text [ finnish ] = "Solujen yhdistäminen ei onnistu, jos solut on jo yhdistetty" ;
         Text [ danish ] = "Det er ikke tilladt at overlappe flettede celler!" ;
@@ -2843,7 +2843,7 @@ Resource RID_GLOBSTR
         Text [ ENGLISH ] = "Areas containig merged cells can only be sorted without including formats." ;
         Text [ portuguese ] = "As áreas contendo células unidas só podem ser ordenadas sem formato." ;
         Text [ english_us ] = "Ranges containing merged cells can only be sorted without formats." ;
-        Text [ portuguese_brazilian ] = "Bereiche mit zusammengefaßten Zellen können nur ohne Formate sortiert werden." ;
+        Text [ portuguese_brazilian ] = "Bereiche mit zusammengefa?ten Zellen k?nen nur ohne Formate sortiert werden." ;
         Text [ swedish ] = "Områden med sammanslagna celler kan bara sorteras utan format." ;
         Text [ danish ] = "Områder med flettede celler kan kun sorteres uden formater." ;
         Text [ italian ] = "Le aree con celle raggruppate possono essere ordinate solo senza formati." ;
@@ -2906,7 +2906,7 @@ Resource RID_GLOBSTR
         Text [ english_us ] = "Goal Seek successful.\n" ;
         Text[ chinese_simplified ] = "ÒÑ¾­Íê³Éµ¥±äÁ¿Çó½â¡£\n";
         Text[ russian ] = "Ïîäáîğ ïàğàìåòğà áûë óäà÷íûì.\n";
-        Text[ polish ] = "Szukanie wyniku by³o pomyœlne.\n";
+        Text[ polish ] = "Szukanie wyniku by³o pomy?lne.\n";
         Text[ japanese ] = "ºŞ°Ù¼°¸‚ÌŠ®—¹B\n";
         Text[ chinese_traditional ] = "¤w¸g§¹¦¨¥Ø¼Ğ·j´M¡C\n";
         Text[ arabic ] = "ÊãÊ ÚãáíÉ ÇáÈÍË Úä ÇáŞíãÉ ÇáåÏİ ÈäÌÇÍ.\n";
@@ -2950,7 +2950,7 @@ Resource RID_GLOBSTR
         Text [ ENGLISH ] = ") in current cell?" ;
         Text [ norwegian ] = ") in current cell?" ;
         Text [ italian ] = ") nella cella corrente?" ;
-        Text [ portuguese_brazilian ] = ") na célula atual?" ;
+        Text [ portuguese_brazilian ] = ") na c?lula atual?" ;
         Text [ portuguese ] = ") na célula activa?" ;
         Text [ finnish ] = ") nykyiseen soluun?" ;
         Text [ danish ] = ") indsættes i den aktuelle celle?" ;
@@ -2988,7 +2988,7 @@ Resource RID_GLOBSTR
         Text [ english_us ] = "Goal Seek not successful.\n" ;
         Text[ chinese_simplified ] = "µ¥±äÁ¿Çó½âÊ§°Ü¡£\n";
         Text[ russian ] = "Ïîäáîğ ïàğàìåòğà áûë íåóäà÷íûì.\n";
-        Text[ polish ] = "Szukanie wyniku by³o niepomyœlne.\n";
+        Text[ polish ] = "Szukanie wyniku by³o niepomy?lne.\n";
         Text[ japanese ] = "ºŞ°Ù¼°¸‚Í‚¤‚Ü‚­‚¢‚«‚Ü‚¹‚ñ‚Å‚µ‚½B\n";
         Text[ chinese_traditional ] = "¥Ø¼Ğ·j´M¨S¦³¦¨¥\\¡C\n";
         Text[ arabic ] = "áã ÊäÌÍ ÚãáíÉ ÇáÈÍË Úä ÇáŞíãÉ ÇáåÏİ.\n";
@@ -3015,7 +3015,7 @@ Resource RID_GLOBSTR
         Text [ english_us ] = "No exact value found. \n" ;
         Text[ chinese_simplified ] = "Ã»ÓĞÕÒµ½¾«È·µÄÊıÖµ¡£\n";
         Text[ russian ] = "Íå óäàåòñÿ íàéòè òî÷íîå çíà÷åíèå.\n";
-        Text[ polish ] = "Nie mo¿na by³o znaleŸæ dok³adnej wartoœci.\n";
+        Text[ polish ] = "Nie mo¿na by³o znale?æ dok³adnej warto?ci.\n";
         Text[ japanese ] = "Š®‘S‚É“¯ˆê‚Ì’l‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½B\n";
         Text[ chinese_traditional ] = "¨S¦³§ä¨ìºë½Tªº¼Æ­È¡C\n";
         Text[ arabic ] = "ÊÚĞÑ ÇáÚËæÑ Úáì ŞíãÉ ãÖÈæØÉ ÊãÇãÇğ.\n";
@@ -3032,7 +3032,7 @@ Resource RID_GLOBSTR
         Text [ ENGLISH ] = "Insert closest value (" ;
         Text [ norwegian ] = "Insert closest value (" ;
         Text [ italian ] = "Digitate il valore più vicino (" ;
-        Text [ portuguese_brazilian ] = "Inserir valor mais próximo (" ;
+        Text [ portuguese_brazilian ] = "Inserir valor mais pr?imo (" ;
         Text [ portuguese ] = "Introduzir valor mais próximo (" ;
         Text [ finnish ] = "Lisätäänkö lähin arvo (" ;
         Text [ danish ] = "Skal den nærmeste værdi (" ;
@@ -3043,7 +3043,7 @@ Resource RID_GLOBSTR
         Text [ english_us ] = "Insert closest value (" ;
         Text[ chinese_simplified ] = "ÄúÒªÊ¹ÓÃÕâ¸ö×î½üËÆµÄÊıÖµ(";
         Text[ russian ] = "Âñòàâèòü íàèáîëåå ïğèáëèæåííîå çíà÷åíèå (";
-        Text[ polish ] = "Czy najbli¿sza wartoœæ (";
+        Text[ polish ] = "Czy najbli¿sza warto?æ (";
         Text[ japanese ] = "Å‚à‚»‚ê‚É—Ş—‚µ‚½’l(";
         Text[ chinese_traditional ] = "­n¨Ï¥Î³o­Ó³Ìªñ¦üªº¼Æ­È(";
         Text[ arabic ] = "åá ÊÑíÏ ÅÏÑÇÌ ÃŞÑÈ ŞíãÉ (";
@@ -3248,7 +3248,7 @@ Resource RID_GLOBSTR
         Text [ ENGLISH ] = "- move to last position -" ;
         Text [ norwegian ] = "- move to last position -" ;
         Text [ italian ] = "- spostare all'ultima posizione -" ;
-        Text [ portuguese_brazilian ] = "- mova para última posição -" ;
+        Text [ portuguese_brazilian ] = "- mova para ?tima posi??o -" ;
         Text [ portuguese ] = "- mover para última posição -" ;
         Text [ finnish ] = "- siirrä loppusijaintiin -" ;
         Text [ danish ] = "- flyt til slutningen -" ;
@@ -3259,7 +3259,7 @@ Resource RID_GLOBSTR
         Text [ english_us ] = "- move to end position -" ;
         Text[ chinese_simplified ] = "- ÖÃÓÚÎ²¶Ë -";
         Text[ russian ] = "- ïîìåñòèòü â êîíöå -";
-        Text[ polish ] = "- przenieœ na koñcow¹ pozycjê -";
+        Text[ polish ] = "- przenie? na koñcow¹ pozycjê -";
         Text[ japanese ] = "- ––”ö‚É‘}“ü -";
         Text[ chinese_traditional ] = "- ²¾°Ê¨ì§Àºİ -";
         Text[ arabic ] = "- ÊÍÑíß Åáì ÇáäåÇíÉ -";
@@ -3275,7 +3275,7 @@ Resource RID_GLOBSTR
         Text [ ENGLISH ] = "Not implemented in this build!" ;
         Text [ norwegian ] = "Not implemented in this build!" ;
         Text [ italian ] = "Non implementato in questa build!" ;
-        Text [ portuguese_brazilian ] = "Não implementado nesta estrutura!" ;
+        Text [ portuguese_brazilian ] = "N?o implementado nesta estrutura!" ;
         Text [ portuguese ] = "Não implementado nesta estrutura!" ;
         Text [ finnish ] = "Ei käytössä tässä koontiversiossa." ;
         Text [ danish ] = "Ikke implementeret i denne version." ;
@@ -3330,7 +3330,7 @@ Resource RID_GLOBSTR
         Text [ ENGLISH ] = "Invalid data area (at least one data row required)." ;
         Text [ norwegian ] = "Invalid data area (at least one data row required)." ;
         Text [ italian ] = "L'area dati deve contenere almeno una fila di dati." ;
-        Text [ portuguese_brazilian ] = "Área de dados inválida (pelo menos uma fileira de dados necessária)." ;
+        Text [ portuguese_brazilian ] = "?rea de dados inv?lida (pelo menos uma fileira de dados necess?ria)." ;
         Text [ portuguese ] = "O intervalo de dados deve ter pelo menos uma linha de dados." ;
         Text [ finnish ] = "Tietoalueella on oltava vähintään yksi rivi." ;
         Text [ danish ] = "Dataområdet skal mindst indeholde en datarække." ;
@@ -3386,7 +3386,7 @@ Resource RID_GLOBSTR
         Text [ ENGLISH ] = "The data area cannot be deleted." ;
         Text [ norwegian ] = "The data area cannot be deleted." ;
         Text [ italian ] = "Impossibile eliminare quest'area dati." ;
-        Text [ portuguese_brazilian ] = "A área de dados não pode ser apagada." ;
+        Text [ portuguese_brazilian ] = "A ?rea de dados n?o pode ser apagada." ;
         Text [ portuguese ] = "A área de dados não pode ser apagada." ;
         Text [ finnish ] = "Tietoaluetta ei voi poistaa." ;
         Text [ danish ] = "Det er ikke muligt at slette dataområdet." ;
@@ -3440,7 +3440,7 @@ Resource RID_GLOBSTR
         Text [ ENGLISH ] = "Data Pilot Tables cannot overlap." ;
         Text [ portuguese ] = "Não é possível sobrepor tabelas do Piloto de Dados " ;
         Text [ english_us ] = "DataPilot tables can not overlap." ;
-        Text [ portuguese_brazilian ] = "Datenpilot-Tabellen dürfen sich nicht überlappen." ;
+        Text [ portuguese_brazilian ] = "Datenpilot-Tabellen d?fen sich nicht ?erlappen." ;
         Text [ swedish ] = "Datapilottabellerna får inte överlappa varandra." ;
         Text [ danish ] = "DataPilot-tabeller må ikke overlappe." ;
         Text [ italian ] = "Le tabelle del DataPilot non devono sovrapporsi." ;
@@ -3467,7 +3467,7 @@ Resource RID_GLOBSTR
         Text [ ENGLISH ] = "The destination area is not empty. Replace contents?" ;
         Text [ portuguese ] = "A área de destino não está vazia. Sobregravar?" ;
         Text [ english_us ] = "The destination range is not empty. Overwrite existing contents?" ;
-        Text [ portuguese_brazilian ] = "Der Zielbereich ist nicht leer. Soll er überschrieben werden?" ;
+        Text [ portuguese_brazilian ] = "Der Zielbereich ist nicht leer. Soll er ?erschrieben werden?" ;
         Text [ swedish ] = "Målområdet är inte tomt. Skall det skrivas över?" ;
         Text [ danish ] = "Målområdet er ikke tomt. Skal det overskrives?" ;
         Text [ italian ] = "L'area di destinazione non è vuota. Volete sovrascriverla?" ;
@@ -3501,7 +3501,7 @@ Resource RID_GLOBSTR
         Text[ italian ] = "L'area sorgente contiene risultati parziali che possono falsificare il risultato. Volete usarla comunque?";
         Text[ danish ] = "The source range contains subtotals which may distort the results. Use it anyway?";
         Text[ swedish ] = "Källområdet innehåller delresultat som kan förvanska resultatet. Ska det ändå användas";
-        Text[ polish ] = "Obszar Ÿród³owy zawiera sumy poœrednie, które mog¹ sfa³szowaæ wynik. Czy u¿yæ go pomimo tego?";
+        Text[ polish ] = "Obszar ?ród³owy zawiera sumy po?rednie, które mog¹ sfa³szowaæ wynik. Czy u¿yæ go pomimo tego?";
         Text[ portuguese_brazilian ] = "The source range contains subtotals which may distort the results. Use it anyway?";
         Text[ japanese ] = "‚±‚Ì¿°½”ÍˆÍ‚É‚ÍA³‚µ‚­‚È‚¢‡Œv‚ğo‚·‰Â”\\«‚Ì‚ ‚é¬Œv‚ªŠÜ‚Ü‚ê‚Ä‚¢‚Ü‚·Bg—p‚µ‚Ä‚à‚©‚Ü‚¢‚Ü‚¹‚ñ‚©B";
         Text[ korean ] = "¼Ò½º ¹üÀ§¿¡´Â Æ²¸° °á°ú¸¦ ÃÊ·¡ÇÒ ¼ö ÀÖ´Â ¼Ò°è°¡ Æ÷ÇÔµÇ¾î ÀÖ½À´Ï´Ù. ±×·¡µµ »ç¿ëÇÏ½Ã°Ú½À´Ï±î?";
@@ -3636,7 +3636,7 @@ Resource RID_GLOBSTR
         Text [ english_us ] = "COUNT" ;
         Text[ chinese_simplified ] = "ÊıÄ¿";
         Text[ russian ] = "ÊÎËÈ×ÅÑÒÂÎ";
-        Text[ polish ] = "ILOŒÆ";
+        Text[ polish ] = "ILO?Æ";
         Text[ japanese ] = "COUNT";
         Text[ chinese_traditional ] = "¼Æ¥Ø";
         Text[ arabic ] = "ÇáÚÏÏ";
@@ -3652,7 +3652,7 @@ Resource RID_GLOBSTR
         Text [ ENGLISH ] = "AVERAGE" ;
         Text [ norwegian ] = "AVERAGE" ;
         Text [ italian ] = "MEDIA" ;
-        Text [ portuguese_brazilian ] = "MÉDIA" ;
+        Text [ portuguese_brazilian ] = "M?DIA" ;
         Text [ portuguese ] = "MÉDIA" ;
         Text [ finnish ] = "AVERAGE" ;
         Text [ danish ] = "MIDDEL" ;
@@ -3663,7 +3663,7 @@ Resource RID_GLOBSTR
         Text [ english_us ] = "AVERAGE" ;
         Text[ chinese_simplified ] = "Æ½¾ùÖµ";
         Text[ russian ] = "ÑĞÇÍÀ×";
-        Text[ polish ] = "ŒREDNIA WARTOŒÆ";
+        Text[ polish ] = "?REDNIA WARTO?Æ";
         Text[ japanese ] = "AVERAGE";
         Text[ chinese_traditional ] = "¥­§¡­È";
         Text[ arabic ] = "AVERAGE";
@@ -3771,7 +3771,7 @@ Resource RID_GLOBSTR
         Text [ english_us ] = "COUNTA" ;
         Text[ chinese_simplified ] = "ÊıÄ¿ 2";
         Text[ russian ] = "ÊÎËÈ×ÅÑÒÂÎ2";
-        Text[ polish ] = "ILOŒÆ2";
+        Text[ polish ] = "ILO?Æ2";
         Text[ japanese ] = "COUNT2";
         Text[ chinese_traditional ] = "¼Æ¥Ø 2";
         Text[ arabic ] = "ÇáÚÏÏ2";
@@ -3976,7 +3976,7 @@ Resource RID_GLOBSTR
         Text [ ENGLISH ] = "Page" ;
         Text [ norwegian ] = "Page" ;
         Text [ italian ] = "Pagina" ;
-        Text [ portuguese_brazilian ] = "Página" ;
+        Text [ portuguese_brazilian ] = "P?gina" ;
         Text [ portuguese ] = "Página" ;
         Text [ finnish ] = "Sivu" ;
         Text [ danish ] = "Side" ;
@@ -4057,7 +4057,7 @@ Resource RID_GLOBSTR
         Text [ ENGLISH ] = "<unknown table reference>" ;
         Text [ norwegian ] = "<unknown table reference>" ;
         Text [ italian ] = "<riferimento tabella sconosciuto>" ;
-        Text [ portuguese_brazilian ] = "<referência de tabela desconhecida>" ;
+        Text [ portuguese_brazilian ] = "<refer?ncia de tabela desconhecida>" ;
         Text [ portuguese ] = "<referência de tabela desconhecida>" ;
         Text [ finnish ] = "<tuntematon taulukkoviite>" ;
         Text [ danish ] = "<ukendt tabelreference>" ;
@@ -4085,7 +4085,7 @@ Resource RID_GLOBSTR
         Text [ ENGLISH ] = "This area already has been inserted." ;
         Text [ norwegian ] = "This area already has been inserted." ;
         Text [ italian ] = "Ques'area è già stata inserita." ;
-        Text [ portuguese_brazilian ] = "Esta área já foi inserida." ;
+        Text [ portuguese_brazilian ] = "Esta ?rea j? foi inserida." ;
         Text [ portuguese ] = "Esta área já foi inserida." ;
         Text [ finnish ] = "Tämä alue on jo lisätty." ;
         Text [ danish ] = "Dette område er allerede blevet indsat." ;
@@ -4113,7 +4113,7 @@ Resource RID_GLOBSTR
         Text [ ENGLISH ] = "Invalid table reference." ;
         Text [ norwegian ] = "Invalid table reference." ;
         Text [ italian ] = "Riferimento tabella non valido." ;
-        Text [ portuguese_brazilian ] = "Referência de tabela inválida." ;
+        Text [ portuguese_brazilian ] = "Refer?ncia de tabela inv?lida." ;
         Text [ portuguese ] = "Referência de folha incorrecta." ;
         Text [ finnish ] = "Virheellinen lomakeviite." ;
         Text [ danish ] = "Ugyldig arkreference." ;
@@ -4124,7 +4124,7 @@ Resource RID_GLOBSTR
         Text [ english_us ] = "Invalid sheet reference." ;
         Text[ chinese_simplified ] = "¹¤×÷±íÒıÓÃÎŞĞ§¡£";
         Text[ russian ] = "Íåäîïóñòèìàÿ ññûëêà ëèñòà.";
-        Text[ polish ] = "Nieprawid³owy odnoœnik arkusza.";
+        Text[ polish ] = "Nieprawid³owy odno?nik arkusza.";
         Text[ japanese ] = "“\\‚è•t‚¯æ‚ªw’è‚³‚ê‚Ä‚¢‚Ü‚¹‚ñB";
         Text[ chinese_traditional ] = "¤u§@ªí¤Ş¥ÎµL®Ä¡C";
         Text[ arabic ] = "ãÑÌÚ ÇáÌÏæá ÛíÑ ÕÇáÍ.";
@@ -4141,7 +4141,7 @@ Resource RID_GLOBSTR
         Text [ ENGLISH ] = "No valid query found in this area." ;
         Text [ norwegian ] = "No valid query found in this area." ;
         Text [ italian ] = "Ricerca non valida trovata in quest'area." ;
-        Text [ portuguese_brazilian ] = "Nenhuma consulta válida encontrada nesta área." ;
+        Text [ portuguese_brazilian ] = "Nenhuma consulta v?lida encontrada nesta ?rea." ;
         Text [ portuguese ] = "Esta área não contém nenhuma consulta válida." ;
         Text [ finnish ] = "Tämä alue ei sisällä kelvollista kyselyä." ;
         Text [ danish ] = "Dette område indeholder ingen gyldig forespørgsel." ;
@@ -4169,7 +4169,7 @@ Resource RID_GLOBSTR
         Text [ ENGLISH ] = "No imported data found in this area." ;
         Text [ norwegian ] = "No imported data found in this area." ;
         Text [ italian ] = "Quest'area non contiene dati importati." ;
-        Text [ portuguese_brazilian ] = "Nenhum dado importado encontrado nesta área." ;
+        Text [ portuguese_brazilian ] = "Nenhum dado importado encontrado nesta ?rea." ;
         Text [ portuguese ] = "Esta área não contém dados importados." ;
         Text [ finnish ] = "Tämä alue ei sisällä tuotuja tietoja." ;
         Text [ danish ] = "Dette område indeholder ingen importerede data." ;
@@ -4197,7 +4197,7 @@ Resource RID_GLOBSTR
         Text [ ENGLISH ] = "This function does not work with multiple selections." ;
         Text [ norwegian ] = "This function does not work with multiple selections." ;
         Text [ italian ] = "Questa funzione non funziona con selezioni multiple." ;
-        Text [ portuguese_brazilian ] = "Esta função não funciona com seleções multíplas." ;
+        Text [ portuguese_brazilian ] = "Esta fun??o n?o funciona com sele??s mult?plas." ;
         Text [ portuguese ] = "Esta função não pode ser usada com selecções múltiplas." ;
         Text [ finnish ] = "Tätä toimintoa ei voi käyttää useita osia sisältäviin valintoihin." ;
         Text [ danish ] = "Det er ikke muligt at anvende denne funktion på multimarkeringer." ;
@@ -4225,7 +4225,7 @@ Resource RID_GLOBSTR
         Text [ ENGLISH ] = "Fill Series..." ;
         Text [ norwegian ] = "Fill Series..." ;
         Text [ italian ] = "Riempire serie..." ;
-        Text [ portuguese_brazilian ] = "Séries de Preenchimento..." ;
+        Text [ portuguese_brazilian ] = "S?ries de Preenchimento..." ;
         Text [ portuguese ] = "Preencher série..." ;
         Text [ finnish ] = "Täytä rivi" ;
         Text [ danish ] = "Fyld serie..." ;
@@ -4371,7 +4371,7 @@ Resource RID_GLOBSTR
         Text [ english_us ] = "#VALUE!" ;
         Text[ chinese_simplified ] = "#VALUE!";
         Text[ russian ] = "#ÇÍÀ×ÅÍ!";
-        Text[ polish ] = "#WARTOŒÆ!";
+        Text[ polish ] = "#WARTO?Æ!";
         Text[ japanese ] = "#VALUE!";
         Text[ chinese_traditional ] = "#VALUE!";
         Text[ arabic ] = "#VALUE!";
@@ -4387,7 +4387,7 @@ Resource RID_GLOBSTR
         Text [ ENGLISH ] = "Add selected areas to current scenario?" ;
         Text [ norwegian ] = "Add selected areas to current scenario?" ;
         Text [ italian ] = "Aggiungere aree selezionate allo scenario?" ;
-        Text [ portuguese_brazilian ] = "Acrescentar áreas selecionadas ao cenário atual?" ;
+        Text [ portuguese_brazilian ] = "Acrescentar ?reas selecionadas ao cen?rio atual?" ;
         Text [ portuguese ] = "Adicionar áreas seleccionadas ao cenário activo?" ;
         Text [ finnish ] = "Lisätäänkö valinnat nykyiseen skenaarioon?" ;
         Text [ danish ] = "Tilføje markerede områder til scenariet?" ;
@@ -4415,7 +4415,7 @@ Resource RID_GLOBSTR
         Text [ ENGLISH ] = "To create a new scenario you'll have to select the desired scenario areas" ;
         Text [ norwegian ] = "To create a new scenario you'll have to select the desired scenario areas" ;
         Text [ italian ] = "Per creare un nuovo scenario si dovranno selezionare le aree di scenario desiderate." ;
-        Text [ portuguese_brazilian ] = "Para criar um novo cenário é precisoselecionar as áreas de cenário desejadas" ;
+        Text [ portuguese_brazilian ] = "Para criar um novo cen?rio ? precisoselecionar as ?reas de cen?rio desejadas" ;
         Text [ portuguese ] = "Para criar um cenário é necessário seleccionar as áreas de cenário desejadas." ;
         Text [ finnish ] = "Skenaarioalueet on valittava, jotta voitaisiin luoda uusi skenaario." ;
         Text [ danish ] = "For at oprette et nyt scenario skal du markere scenarieområderne." ;
@@ -4442,7 +4442,7 @@ Resource RID_GLOBSTR
         Text [ ENGLISH ] = "No areas selected." ;
         Text [ norwegian ] = "No areas selected." ;
         Text [ italian ] = "Nessun'area selezionata." ;
-        Text [ portuguese_brazilian ] = "Nenhuma área selecionada." ;
+        Text [ portuguese_brazilian ] = "Nenhuma ?rea selecionada." ;
         Text [ portuguese ] = "Nenhuma área seleccionada." ;
         Text [ finnish ] = "Aluetta ei ole valittu." ;
         Text [ danish ] = "Ingen områder er markeret." ;
@@ -4469,7 +4469,7 @@ Resource RID_GLOBSTR
         Text [ ENGLISH ] = "Table name already exists." ;
         Text [ norwegian ] = "Table name already exists." ;
         Text [ italian ] = "Nome tabella già esistente." ;
-        Text [ portuguese_brazilian ] = "O nome da tabela já existe." ;
+        Text [ portuguese_brazilian ] = "O nome da tabela j? existe." ;
         Text [ portuguese ] = "Este nome já existe." ;
         Text [ finnish ] = "Tämä nimi on jo käytössä." ;
         Text [ danish ] = "Dette arknavn eksisterer allerede." ;
@@ -4497,7 +4497,7 @@ Resource RID_GLOBSTR
         Text [ ENGLISH ] = "Invalid table name." ;
         Text [ norwegian ] = "Invalid table name." ;
         Text [ italian ] = "Nome tabella non valido." ;
-        Text [ portuguese_brazilian ] = "Nome de tabela inválido." ;
+        Text [ portuguese_brazilian ] = "Nome de tabela inv?lido." ;
         Text [ portuguese ] = "Nome da folha incorrecto." ;
         Text [ finnish ] = "Virheellinen lomakkeen nimi." ;
         Text [ danish ] = "Ugyldigt arknavn." ;
@@ -4524,7 +4524,7 @@ Resource RID_GLOBSTR
         Text [ ENGLISH ] = "Scenario" ;
         Text [ norwegian ] = "Scenario" ;
         Text [ italian ] = "Scenario" ;
-        Text [ portuguese_brazilian ] = "Cenário" ;
+        Text [ portuguese_brazilian ] = "Cen?rio" ;
         Text [ portuguese ] = "Cenário" ;
         Text [ finnish ] = "Skenaario" ;
         Text [ danish ] = "Scenario" ;
@@ -4659,7 +4659,7 @@ Resource RID_GLOBSTR
         Text [ ENGLISH ] = "Average" ;
         Text [ norwegian ] = "Gjennomsnitt" ;
         Text [ italian ] = "Media" ;
-        Text [ portuguese_brazilian ] = "Média" ;
+        Text [ portuguese_brazilian ] = "M?dia" ;
         Text [ portuguese ] = "Média" ;
         Text [ finnish ] = "Keskiarvo" ;
         Text [ danish ] = "Middel" ;
@@ -4670,7 +4670,7 @@ Resource RID_GLOBSTR
         Text [ english_us ] = "Average" ;
         Text[ chinese_simplified ] = "Æ½¾ùÖµ";
         Text[ russian ] = "Ñğåäíåå çíà÷åíèå";
-        Text[ polish ] = "Œrednia wartoœæ";
+        Text[ polish ] = "?rednia warto?æ";
         Text[ japanese ] = "•½‹Ï’l";
         Text[ chinese_traditional ] = "¥­§¡­È";
         Text[ arabic ] = "ÇáãÚÏá";
@@ -4838,7 +4838,7 @@ Resource RID_GLOBSTR
         Text [ ENGLISH ] = "No chart at this position." ;
         Text [ norwegian ] = "No chart at this position." ;
         Text [ italian ] = "Non è stato trovato nessun diagramma in questa posizione." ;
-        Text [ portuguese_brazilian ] = "Nenhum gráfico nesta posição." ;
+        Text [ portuguese_brazilian ] = "Nenhum gr?fico nesta posi??o." ;
         Text [ portuguese ] = "Nenhum gráfico encontrado nesta posição." ;
         Text [ finnish ] = "Tästä sijainnista ei löytynyt kaaviota." ;
         Text [ danish ] = "Der blev ikke fundet et diagram på denne position.." ;
@@ -4959,7 +4959,7 @@ Resource RID_GLOBSTR
         Text [ english_us ] = "#REF!" ;
         Text[ chinese_simplified ] = "#REF!";
         Text[ russian ] = "#ÑÑÛË!";
-        Text[ polish ] = "#ODNOŒNIK!";
+        Text[ polish ] = "#ODNO?NIK!";
         Text[ japanese ] = "#REF!";
         Text[ chinese_traditional ] = "#REF!";
         Text[ arabic ] = "#REF!";
@@ -5003,7 +5003,7 @@ Resource RID_GLOBSTR
         Text [ ENGLISH ] = "Invalid print area" ;
         Text [ norwegian ] = "Invalid print area" ;
         Text [ italian ] = "Area di stampa non valida" ;
-        Text [ portuguese_brazilian ] = "Área de impressão inválida" ;
+        Text [ portuguese_brazilian ] = "?rea de impress?o inv?lida" ;
         Text [ portuguese ] = "Área de impressão não válida" ;
         Text [ finnish ] = "Virheellinen tulostusalue" ;
         Text [ danish ] = "Ugyldigt udskriftsområde" ;
@@ -5030,7 +5030,7 @@ Resource RID_GLOBSTR
         Text [ ENGLISH ] = "Page Style" ;
         Text [ norwegian ] = "Page Style" ;
         Text [ italian ] = "Modello di pagina" ;
-        Text [ portuguese_brazilian ] = "Estilo da Página" ;
+        Text [ portuguese_brazilian ] = "Estilo da P?gina" ;
         Text [ portuguese ] = "Estilo de página" ;
         Text [ finnish ] = "Sivun tyyli" ;
         Text [ danish ] = "Sidetypografi" ;
@@ -5057,7 +5057,7 @@ Resource RID_GLOBSTR
         Text [ ENGLISH ] = "Header" ;
         Text [ norwegian ] = "Header" ;
         Text [ italian ] = "Riga d'intestazione" ;
-        Text [ portuguese_brazilian ] = "Cabeçalho" ;
+        Text [ portuguese_brazilian ] = "Cabe?alho" ;
         Text [ portuguese ] = "Cabeçalho" ;
         Text [ finnish ] = "Yläotsikko" ;
         Text [ danish ] = "Sidehoved" ;
@@ -5085,7 +5085,7 @@ Resource RID_GLOBSTR
         Text [ ENGLISH ] = "Footer" ;
         Text [ norwegian ] = "Footer" ;
         Text [ italian ] = "Piè di pagina" ;
-        Text [ portuguese_brazilian ] = "Rodapé" ;
+        Text [ portuguese_brazilian ] = "Rodap?" ;
         Text [ portuguese ] = "Rodapé" ;
         Text [ finnish ] = "Alaselite" ;
         Text [ danish ] = "Sidefod" ;
@@ -5329,7 +5329,7 @@ Resource RID_GLOBSTR
         Text [ ENGLISH ] = "Protected cells cannot be modified." ;
         Text [ norwegian ] = "Protected cells cannot be modified." ;
         Text [ italian ] = "Impossibile modificare le celle protette." ;
-        Text [ portuguese_brazilian ] = "Células protegidas não podem ser modificadas." ;
+        Text [ portuguese_brazilian ] = "C?lulas protegidas n?o podem ser modificadas." ;
         Text [ portuguese ] = "Células protegidas não podem ser modificadas." ;
         Text [ finnish ] = "Suojattuja soluja ei voi muokata." ;
         Text [ danish ] = "Låste celler kan ikke ændres." ;
@@ -5355,7 +5355,7 @@ Resource RID_GLOBSTR
         Text = "Dokument ist nur zum Lesen geöffnet." ;
         Text [ ENGLISH ] = "Document is readonly." ;
             Text[ italian ] = "Il documento è aperto a sola lettura.";
-        Text[ portuguese_brazilian ] = "Dokument ist nur zum Lesen geöffnet.";
+        Text[ portuguese_brazilian ] = "Dokument ist nur zum Lesen ge?fnet.";
         Text[ portuguese ] = "Documento aberto no modo só leitura";
         Text[ danish ] = "Dokument er åbnet i en skrivebeskyttet tilstand.";
         Text[ french ] = "Document ouvert en lecture seule.";
@@ -5399,10 +5399,10 @@ Resource RID_GLOBSTR
         Text [ swedish ] = "En del av en matris kan inte ändras." ;
         Text [ danish ] = "Det er ikke muligt at ændre en del af en matrix." ;
         Text [ portuguese ] = "Impossível alterar uma parte da matriz." ;
-        Text [ portuguese_brazilian ] = "Teil einer Matrix kann nicht geändert werden." ;
+        Text [ portuguese_brazilian ] = "Teil einer Matrix kann nicht ge?ndert werden." ;
         Text[ chinese_simplified ] = "¾ØÕóµÄÒ»²¿·ÖÎŞ·¨±»¸ü¸Ä¡£";
         Text[ russian ] = "Íå óäàåòñÿ èçìåíèòü ÷àñòü ìàññèâà.";
-        Text[ polish ] = "Czêœæ macierzy nie mo¿e byæ zmodyfikowana.";
+        Text[ polish ] = "Czê?æ macierzy nie mo¿e byæ zmodyfikowana.";
         Text[ japanese ] = "ÏÄØ¸½‚Ì•”•ª•ÏX‚Í‚Å‚«‚Ü‚¹‚ñB";
         Text[ chinese_traditional ] = "µLªkÅÜ§ó¯x°}ªº¤@³¡¥÷¡C";
         Text[ arabic ] = "áÇ íãßä ÊÚÏíá ÌÒÁ ãä Õİíİ.";
@@ -5419,7 +5419,7 @@ Resource RID_GLOBSTR
         Text [ ENGLISH ] = "Page Header" ;
         Text [ norwegian ] = "Page Header" ;
         Text [ italian ] = "Riga d'intestazione" ;
-        Text [ portuguese_brazilian ] = "Cabeçalho da Página" ;
+        Text [ portuguese_brazilian ] = "Cabe?alho da P?gina" ;
         Text [ portuguese ] = "Cabeçalho" ;
         Text [ finnish ] = "Yläotsikko" ;
         Text [ danish ] = "Sidehoved" ;
@@ -5447,7 +5447,7 @@ Resource RID_GLOBSTR
         Text [ ENGLISH ] = "Page Footer" ;
         Text [ norwegian ] = "Page Footer" ;
         Text [ italian ] = "Piè di pagina" ;
-        Text [ portuguese_brazilian ] = "Rodapé da Página" ;
+        Text [ portuguese_brazilian ] = "Rodap? da P?gina" ;
         Text [ portuguese ] = "Linha de rodapé" ;
         Text [ finnish ] = "Alaselite" ;
         Text [ danish ] = "Sidefod" ;
@@ -5502,7 +5502,7 @@ Resource RID_GLOBSTR
         Text [ ENGLISH ] = "Error in parameterlist" ;
         Text [ norwegian ] = "Error in parameterlist" ;
         Text [ italian ] = "Errore nell'elenco parametri" ;
-        Text [ portuguese_brazilian ] = "Erro na lista de parâmetros" ;
+        Text [ portuguese_brazilian ] = "Erro na lista de par?metros" ;
         Text [ portuguese ] = "Erro na lista de parâmetros" ;
         Text [ finnish ] = "Virhe parametriluettelossa" ;
         Text [ danish ] = "Fejl i parameterlisten" ;
@@ -5513,7 +5513,7 @@ Resource RID_GLOBSTR
         Text [ english_us ] = "Error in parameter list" ;
         Text[ chinese_simplified ] = "²ÎÊıÁĞ±íÄÚÓĞ´íÎó";
         Text[ russian ] = "Îøèáêà â ñïèñêå ïàğàìåòğîâ";
-        Text[ polish ] = "B³¹d w liœcie parametrów";
+        Text[ polish ] = "B³¹d w li?cie parametrów";
         Text[ japanese ] = "Êß×Ò°ÀØ½Ä‚É´×°";
         Text[ chinese_traditional ] = "°Ñ¼Æ²M³æ¦³¿ù»~";
         Text[ arabic ] = "ÍÏË ÎØÃ İí ŞÇÆãÉ ÇáãÚáãÇÊ";
@@ -5530,7 +5530,7 @@ Resource RID_GLOBSTR
         Text [ ENGLISH ] = "Error: Illegal floating point operation" ;
         Text [ norwegian ] = "Error: Illegal floating point operation" ;
         Text [ italian ] = "Errore: operazione a virgola mobile non ammessa" ;
-        Text [ portuguese_brazilian ] = "Erro: operação de ponto flutuante ilegal" ;
+        Text [ portuguese_brazilian ] = "Erro: opera??o de ponto flutuante ilegal" ;
         Text [ portuguese ] = "Erro: operação da vírgula flutuante incorrecta" ;
         Text [ finnish ] = "Virhe: virheellinen irrallisen pisteen toiminto" ;
         Text [ danish ] = "Fejl: ugyldig flydende kommaoperation" ;
@@ -5586,7 +5586,7 @@ Resource RID_GLOBSTR
         Text [ ENGLISH ] = "Error: Illegal semicolon" ;
         Text [ norwegian ] = "Error: Illegal semicolon" ;
         Text [ italian ] = "Errore: punto e virgola non ammesso" ;
-        Text [ portuguese_brazilian ] = "Erro: ponto-e-vírgula ilegal" ;
+        Text [ portuguese_brazilian ] = "Erro: ponto-e-v?rgula ilegal" ;
         Text [ portuguese ] = "Erro: ponto e vírgula incorrectos" ;
         Text [ finnish ] = "Virhe: virheellinen puolipiste" ;
         Text [ danish ] = "Fejl: ugyldigt semikolon" ;
@@ -5597,7 +5597,7 @@ Resource RID_GLOBSTR
         Text [ english_us ] = "Error: Invalid semicolon" ;
         Text[ chinese_simplified ] = "´íÎó£ºÎŞĞ§µÄ·ÖºÅ";
         Text[ russian ] = "Îøèáêà: íåäîïóñòèìàÿ òî÷êà ñ çàïÿòîé";
-        Text[ polish ] = "B³¹d: Nieprawid³owy myœlnik";
+        Text[ polish ] = "B³¹d: Nieprawid³owy my?lnik";
         Text[ japanese ] = "´×°: –³Œø‚È¾ĞºÛİ‚ªg‚í‚ê‚Ä‚¢‚Ü‚·";
         Text[ chinese_traditional ] = "¿ù»~¡GµL®Äªº¤À¸¹";
         Text[ arabic ] = "ÎØÃ: İÇÕáÉ ãäŞæØÉ ÛíÑ ÕÇáÍÉ";
@@ -5694,7 +5694,7 @@ Resource RID_GLOBSTR
         Text [ ENGLISH ] = "Error: Formula overflow" ;
         Text [ norwegian ] = "Error: Formula overflow" ;
         Text [ italian ] = "Errore: formula troppo lunga" ;
-        Text [ portuguese_brazilian ] = "Erro: transbordo de fórmula" ;
+        Text [ portuguese_brazilian ] = "Erro: transbordo de f?mula" ;
         Text [ portuguese ] = "Erro: fórmula grande demais" ;
         Text [ finnish ] = "Virhe: liian pitkä kaava" ;
         Text [ danish ] = "Fejl: for lang formel" ;
@@ -5804,7 +5804,7 @@ Resource RID_GLOBSTR
         Text [ ENGLISH ] = "Error: Circular reference" ;
         Text [ norwegian ] = "Error: Circular reference" ;
         Text [ italian ] = "Errore: riferimento circolare" ;
-        Text [ portuguese_brazilian ] = "Erro: referência circular" ;
+        Text [ portuguese_brazilian ] = "Erro: refer?ncia circular" ;
         Text [ portuguese ] = "Erro: referência circular" ;
         Text [ finnish ] = "Virhe: takaisin viittaava viite" ;
         Text [ danish ] = "Fejl: circulær reference" ;
@@ -5878,10 +5878,10 @@ Resource RID_GLOBSTR
         Text [ swedish ] = "Fel: ogiltig referens" ;
         Text [ danish ] = "Fejl: ugyldig reference" ;
         Text [ portuguese ] = "Erro: referência incorrecta" ;
-        Text [ portuguese_brazilian ] = "Fehler: Ungültiger Bezug" ;
+        Text [ portuguese_brazilian ] = "Fehler: Ung?tiger Bezug" ;
         Text[ chinese_simplified ] = "´íÎó£ºÎŞĞ§µÄÒıÓÃ";
         Text[ russian ] = "Îøèáêà: íåäîïóñòèìàÿ ññûëêà";
-        Text[ polish ] = "B³¹d: Nieprawid³owy odnoœnik";
+        Text[ polish ] = "B³¹d: Nieprawid³owy odno?nik";
         Text[ japanese ] = "´×°: –³Œø‚ÈQÆ‚Å‚·";
         Text[ chinese_traditional ] = "¿ù»~¡GµL®Äªº¤Ş¥Î";
         Text[ arabic ] = "ÎØÃ: ãÑÌÚ ÛíÑ ÕÇáÍ";
@@ -5898,7 +5898,7 @@ Resource RID_GLOBSTR
         Text [ ENGLISH ] = "Error: Computation does not converge" ;
         Text [ norwegian ] = "Error: Computation does not converge" ;
         Text [ italian ] = "Errore: il calcolo non converge" ;
-        Text [ portuguese_brazilian ] = "Erro: a computação não converge" ;
+        Text [ portuguese_brazilian ] = "Erro: a computa??o n?o converge" ;
         Text [ portuguese ] = "Erro: o processo de cálculo não converge" ;
         Text [ finnish ] = "Virhe: lasku ei suppene" ;
         Text [ danish ] = "Fejl: beregningen konvergerer ikke" ;
@@ -5953,7 +5953,7 @@ Resource RID_GLOBSTR
         Text [ ENGLISH ] = "Error: Value not available" ;
         Text [ norwegian ] = "Error: Value not available" ;
         Text [ italian ] = "Errore: valore non disponibile" ;
-        Text [ portuguese_brazilian ] = "Erro: Valor não disponível" ;
+        Text [ portuguese_brazilian ] = "Erro: Valor n?o dispon?vel" ;
         Text [ portuguese ] = "Erro: valor não disponível" ;
         Text [ finnish ] = "Virhe: arvo ei ole käytettävissä" ;
         Text [ danish ] = "Fejl: værdi er ikke tilgængelig" ;
@@ -5964,7 +5964,7 @@ Resource RID_GLOBSTR
         Text [ english_us ] = "Error: Value not available" ;
         Text[ chinese_simplified ] = "´íÎó£ºÊıÖµ²»´æÔÚ";
         Text[ russian ] = "Îøèáêà: çíà÷åíèå íå äîñòóïíî";
-        Text[ polish ] = "B³¹d: Wartoœæ niedostêpna";
+        Text[ polish ] = "B³¹d: Warto?æ niedostêpna";
         Text[ japanese ] = "´×°: ”’l‚Í‚ ‚è‚Ü‚¹‚ñ";
         Text[ chinese_traditional ] = "¿ù»~¡G¼Æ­È¤£¦s¦b";
         Text[ arabic ] = "ÎØÃ: ÇáŞíãÉ ÛíÑ ãÊæİÑÉ";
@@ -6045,7 +6045,7 @@ Resource RID_GLOBSTR
         Text [ english_us ] = "Should the contents of the hidden cells be moved into the first cell?" ;
         Text[ chinese_simplified ] = "ÄúÒª½«±ê¼ÇµÄµ¥Ôª¸ñÄÚÈİÒÆÈëµ½µÚÒ»¸öµ¥Ôª¸ñÄÚÂğ£¿";
         Text[ russian ] = "Ïåğåìåñòèòü ñîäåğæèìîå ñïğÿòàííûõ ÿ÷ååê â ïåğâóş ÿ÷åéêó?";
-        Text[ polish ] = "Czy zawartoœæ ukrytych komórek ma byæ przeniesiona do pierwszej komórki?";
+        Text[ polish ] = "Czy zawarto?æ ukrytych komórek ma byæ przeniesiona do pierwszej komórki?";
         Text[ japanese ] = "‰B‚µ¾Ù‚Ì“à—e‚ğÅ‰‚Ì¾Ù‚ÉˆÚ“®‚µ‚Ü‚·‚©B";
         Text[ chinese_traditional ] = "±z­n±NÁô¤JªºÀx¦s®æ¤º®e²¾¤J²Ä¤@­ÓÀx¦s®æ¤º¡H";
         Text[ arabic ] = "åá ÊÑíÏ ÊÍÑíß ãÍÊæíÇÊ ÇáÎáÇíÇ ÇáãÎİíÉ Åáì ÇáÎáíÉ ÇáÃæáì¿";
@@ -6227,7 +6227,7 @@ Resource RID_GLOBSTR
         Text [ ENGLISH ] = "Area" ;
         Text [ norwegian ] = "Område" ;
         Text [ italian ] = "Area" ;
-        Text [ portuguese_brazilian ] = "Área" ;
+        Text [ portuguese_brazilian ] = "?rea" ;
         Text [ portuguese ] = "Área" ;
         Text [ french ] = "Plage" ;
         Text [ dutch ] = "Bereik" ;
@@ -6281,7 +6281,7 @@ Resource RID_GLOBSTR
         Text [ ENGLISH ] = "No" ;
         Text [ norwegian ] = "No" ;
         Text [ italian ] = "No" ;
-        Text [ portuguese_brazilian ] = "Não" ;
+        Text [ portuguese_brazilian ] = "N?o" ;
         Text [ portuguese ] = "Não" ;
         Text [ french ] = "Non" ;
         Text [ dutch ] = "Nee" ;
@@ -6308,7 +6308,7 @@ Resource RID_GLOBSTR
         Text [ ENGLISH ] = "Protection" ;
         Text [ norwegian ] = "Protection" ;
         Text [ italian ] = "Protezione" ;
-        Text [ portuguese_brazilian ] = "Proteção" ;
+        Text [ portuguese_brazilian ] = "Prote??o" ;
         Text [ portuguese ] = "Protecção" ;
         Text [ french ] = "Protection" ;
         Text [ dutch ] = "Beveiliging" ;
@@ -6528,7 +6528,7 @@ Resource RID_GLOBSTR
         Text [ ENGLISH ] = "invalid" ;
         Text [ norwegian ] = "invalid" ;
         Text [ italian ] = "non valido" ;
-        Text [ portuguese_brazilian ] = "inválido" ;
+        Text [ portuguese_brazilian ] = "inv?lido" ;
         Text [ portuguese ] = "incorrecto" ;
         Text [ finnish ] = "virheellinen" ;
         Text [ danish ] = "ugyldig" ;
@@ -6616,7 +6616,7 @@ Resource RID_GLOBSTR
         Text [ swedish ] = "Vill Du verkligen radera de utvalda tabellerna?" ;
         Text [ danish ] = "Vil du slette de markerede ark?" ;
         Text [ portuguese ] = "Deseja eliminar as folhas seleccionadas?" ;
-        Text [ portuguese_brazilian ] = "Wollen Sie die aktuelle Tabelle endgültig löschen?" ;
+        Text [ portuguese_brazilian ] = "Wollen Sie die aktuelle Tabelle endg?tig l?chen?" ;
         Text[ chinese_simplified ] = "ÄúÕæµÄÒªÉ¾³ıÕâ¸öÑ¡ÖĞµÄ¹¤×÷±íÂğ£¿";
         Text[ russian ] = "Âû õîòèòå óäàëèòü âûäåëåííóş òàáëèöó?";
         Text[ polish ] = "Chcesz na pewno usun¹æ aktualne arkusze?";
@@ -6636,7 +6636,7 @@ Resource RID_GLOBSTR
         Text [ ENGLISH ] = "Are you sure you want to delete the selected scenario?" ;
         Text [ portuguese ] = "Deseja realmente apagar o cenário seleccionado?" ;
         Text [ english_us ] = "Are you sure you want to delete the selected scenario?" ;
-        Text [ portuguese_brazilian ] = "Wollen Sie das ausgewählte Szenario löschen?" ;
+        Text [ portuguese_brazilian ] = "Wollen Sie das ausgew?hlte Szenario l?chen?" ;
         Text [ swedish ] = "Vill Du radera det utvalda scenariot?" ;
         Text [ danish ] = "Vil du slette det markerede scenario?" ;
         Text [ italian ] = "Cancellare lo scenario scelto?" ;
@@ -6669,7 +6669,7 @@ Resource RID_GLOBSTR
         Text [ swedish ] = "Synonymordlistan är inte tillgänglig" ;
         Text [ danish ] = "Synonymordbogen er ikke tilgængelig" ;
         Text [ portuguese ] = "O dicionário de sinónimos não está disponível" ;
-        Text [ portuguese_brazilian ] = "Der Thesaurus ist nicht verfügbar" ;
+        Text [ portuguese_brazilian ] = "Der Thesaurus ist nicht verf?bar" ;
         Text[ chinese_simplified ] = "´Êµä²»´æÔÚ";
         Text[ russian ] = "Òåçàóğóñ íå äîñòóïåí";
         Text[ polish ] = "Tezaurus jest niedostêpny";
@@ -6696,7 +6696,7 @@ Resource RID_GLOBSTR
         Text [ swedish ] = "Rättstavningskontrollen är inte tillgänglig" ;
         Text [ danish ] = "Stavekontrollen er ikke tilgængelig" ;
         Text [ portuguese ] = "A verificação ortográfica não está disponível" ;
-        Text [ portuguese_brazilian ] = "Die Rechtschreibprüfung ist nicht verfügbar" ;
+        Text [ portuguese_brazilian ] = "Die Rechtschreibpr?ung ist nicht verf?bar" ;
         Text[ chinese_simplified ] = "²»Ìá¹©Õâ¸öÆ´Ğ´¼ì²é¹¦ÄÜ";
         Text[ russian ] = "Ïğîâåğêà ïğàâîïèñàíèÿ íå äîñòóïíà";
         Text[ polish ] = "Sprawdzanie pisowni jest niemo¿liwe";
@@ -6903,10 +6903,10 @@ Resource RID_GLOBSTR
         Text [ swedish ] = "Standard" ;
         Text [ danish ] = "Standard" ;
         Text [ portuguese ] = "Padrão" ;
-        Text [ portuguese_brazilian ] = "Padrão" ;
+        Text [ portuguese_brazilian ] = "Padr?o" ;
         Text[ chinese_simplified ] = "±ê×¼";
         Text[ russian ] = "Ñòàíäàğò";
-        Text[ polish ] = "Domyœlnie";
+        Text[ polish ] = "Domy?lnie";
         Text[ japanese ] = "•W€";
         Text[ chinese_traditional ] = "¼Ğ·Ç";
         Text[ arabic ] = "ÇİÊÑÇÖí";
@@ -6984,7 +6984,7 @@ Resource RID_GLOBSTR
         Text [ swedish ] = "Rubrik" ;
         Text [ danish ] = "Overskrift" ;
         Text [ portuguese ] = "Título" ;
-        Text [ portuguese_brazilian ] = "Überschrift" ;
+        Text [ portuguese_brazilian ] = "?berschrift" ;
         Text[ chinese_simplified ] = "±êÌâ";
         Text[ russian ] = "Çàãîëîâîê";
         Text[ polish ] = "Tytu³";
@@ -7011,7 +7011,7 @@ Resource RID_GLOBSTR
         Text [ swedish ] = "Överskrift1" ;
         Text [ danish ] = "Overskrift1" ;
         Text [ portuguese ] = "Título1" ;
-        Text [ portuguese_brazilian ] = "Überschrift1" ;
+        Text [ portuguese_brazilian ] = "?berschrift1" ;
         Text[ chinese_simplified ] = "±êÌâ 1";
         Text[ russian ] = "Çàãîëîâîê1";
         Text[ polish ] = "Tytu³1";
@@ -7090,10 +7090,10 @@ Resource RID_GLOBSTR
         Text [ swedish ] = "står inte till förfogande för stavningskontrollen.\nKontrollera Din installation och installera\neventuellt det önskade språket." ;
         Text [ danish ] = "står ikke til rådighed for stavekontrollen.\nKontroller venligst din installation og installer\ni givet fald det ønskede sprog" ;
         Text [ portuguese ] = "não está disponível para a verificação ortográfica. \nControle a sua instalação e, se necessário,\ninstale a língua desejada" ;
-        Text [ portuguese_brazilian ] = "ist für die Prüfung nicht verfügbar. \nÜberprüfen Sie bitte Ihre Installation und installieren Sie \ngegebenenfalls die gewünschte Sprache" ;
+        Text [ portuguese_brazilian ] = "ist f? die Pr?ung nicht verf?bar. \n?berpr?en Sie bitte Ihre Installation und installieren Sie \ngegebenenfalls die gew?schte Sprache" ;
         Text[ chinese_simplified ] = "Ã»ÓĞ¼ì²éÆ´Ğ´µÄ¹¦ÄÜ¡£\nÇë¼ì²éÄúµÄ°²×°£¬ÈçÓĞ±ØÒªÇë°²×°ËùÒªÊ¹ÓÃµÄÓïÑÔ°æ±¾";
         Text[ russian ] = "äëÿ ïğîâåğêè íåäîñòóïåí. \nÏğîâåğüòå, ïîæàëóéñòà, èíñòàëëÿöèş è â ñëó÷àå íåîáõîäèìîñòè èíñòàëëèğóéòå \níåîáõîäèìûé Âàì ÿçûê";
-        Text[ polish ] = "jest niedostêpny dla sprawdzania pisowni. \nSprawdŸ proszê instalacjê i zainstaluj \newentualnie potrzebny jêzyk.";
+        Text[ polish ] = "jest niedostêpny dla sprawdzania pisowni. \nSprawd? proszê instalacjê i zainstaluj \newentualnie potrzebny jêzyk.";
         Text[ japanese ] = " ½ÍßÙ Áª¯¸‹@”\\‚Í‚ ‚è‚Ü‚¹‚ñB\n³‚µ‚­²İ½Ä°Ù‚³‚ê‚Ä‚¢‚é‚©Áª¯¸‚µ‚Ä‚­‚¾‚³‚¢B\n•K—v‚È‚çAg‚¤Œ¾Œê‚à²İ½Ä°Ù‚µ‚Ü‚·B";
         Text[ chinese_traditional ] = " ¨S¦³«÷¼gÀË¬dªº¥\\¯à¡C\n½ĞÀË¬d¦w¸Ë¡A­Y¦³¥²­n½Ğ¦w¸Ë©Ò­n¨Ï¥Îªº»y¨¥ª©¥»";
         Text[ arabic ] = "ÛíÑ ãÊæİÑ ááÊÏŞíŞ ÇáÅãáÇÆí. \nÇáÑÌÇÁ İÍÕ ÇáÊËÈíÊ ÇáÎÇÕ Èß¡ æÊËÈíÊ ÇááÛÉ ÇáãØáæÈÉ¡ ÅĞÇ áÒã ÇáÃãÑ";
@@ -7117,7 +7117,7 @@ Resource RID_GLOBSTR
         Text [ swedish ] = "Synonymordlistan kan bara användas i textceller!" ;
         Text [ danish ] = "Det er kun muligt at bruge synonymordbogen i tekstceller!" ;
         Text [ portuguese ] = "A procura de sinónimos só é possível em células de texto!" ;
-        Text [ portuguese_brazilian ] = "Thesaurus nur in Textzellen möglich!" ;
+        Text [ portuguese_brazilian ] = "Thesaurus nur in Textzellen m?lich!" ;
         Text[ chinese_simplified ] = "´ÊµäÖ»ÄÜÊÊÓÃÓÚÎÄ×Öµ¥Ôª¸ñ£¡";
         Text[ russian ] = "Èñïîëüçîâàíèå òåçàóğóñà âîçìîæíî òîëüêî â òåêñòîâûõ ÿ÷åéêàõ!";
         Text[ polish ] = "Tezaurus mo¿liwy tylko w komórkach tekstu!";
@@ -7144,7 +7144,7 @@ Resource RID_GLOBSTR
         Text [ swedish ] = "Ska rättstavningskontrollen forsättas i början av tabellen?" ;
         Text [ danish ] = "Skal stavekontrollen fortsættes fra arkets begyndelse?" ;
         Text [ portuguese ] = "Continuar a verificação ortográfica no princípio da folha?" ;
-        Text [ portuguese_brazilian ] = "Soll die Rechtschreibprüfung am Tabellenanfang fortgesetzt werden?" ;
+        Text [ portuguese_brazilian ] = "Soll die Rechtschreibpr?ung am Tabellenanfang fortgesetzt werden?" ;
         Text[ chinese_simplified ] = "ÄúÒª´Ó¹¤×÷±íÊ×¶Ë¿ªÊ¼¼ÌĞø½øĞĞÆ´Ğ´¼ì²éÂğ£¿";
         Text[ russian ] = "Ïğîäîëæèòü ïğîâåğêó ïğàâîïèñàíèÿ â íà÷àëå òàáëèöû?";
         Text[ polish ] = "Czy sprawdzanie pisowni ma byæ kontynuowane na pocz¹tku arkusza?";
@@ -7171,14 +7171,14 @@ Resource RID_GLOBSTR
         Text [ swedish ] = "står inte till förfogande för synonymordslistan. \nKontrollera Din installation och installera\n i förekommande fall det önskade språket." ;
         Text [ danish ] = "står ikke til rådighed for synonymordbogen. \nKontroller venligst din installation og installer\ni givet fald det ønskede sprog" ;
         Text [ portuguese ] = "não está disponível para o dicionário de sinónimos. \nControle a sua instalação e, se necessário, instale \na língua desejada." ;
-        Text [ portuguese_brazilian ] = "ist für den Thesaurus nicht verfügbar. \nÜberprüfen Sie bitte Ihre Installation und installieren Sie \ngegebenenfalls die gewünschte Sprache" ;
+        Text [ portuguese_brazilian ] = "ist f? den Thesaurus nicht verf?bar. \n?berpr?en Sie bitte Ihre Installation und installieren Sie \ngegebenenfalls die gew?schte Sprache" ;
         Text[ chinese_simplified ] = "´Êµä²»ÄÜÊ¹ÓÃ¡£\nÇë¼ì²éÄúµÄ°²×°³ÌĞò£¬ÔÚ±ØÒªÊ±Çë°²×°ÒªÊ¹ÓÃµÄÓïÑÔ°æ±¾¡£";
         Text[ russian ] = "äëÿ òåçàóğóñà íåäîñòóïåí. \nÏğîâåğüòå, ïîæàëóéñòà,Âàøó èíñòàëëÿöèş è èíñòàëëèğóéòå \n â ñëó÷àå íåîáõîäèìîñòè íóæíûé ÿçûê";
         Text[ polish ] = "jest niedostêpny dla Tezaurusa. \nProszê sprawdziæ instalacjê i zainstalowaæ \newentualnie potrzebny jêzyk.";
         Text[ japanese ] = " ‚±‚ê‚Í—Ş‹`Œê«“T‚Åg‚¦‚Ü‚¹‚ñB\n²İ½Ä°Ù‚ğÁª¯¸‚µ‚Ä‚­‚¾‚³‚¢B\ng—p‚·‚éŒ¾Œê‚ğ²İ½Ä°Ù‚·‚é•K—v‚ª‚ ‚é‚©‚à‚µ‚ê‚Ü‚¹‚ñB";
         Text[ chinese_traditional ] = "µü¨åµLªk¨Ï¥Î¡C\n½ĞÀË¬d±zªº¦w¸Ëµ{§Ç¡A­Y¦³¥²­n¡A½Ğ¦w¸Ë­n¨Ï¥Îªº»y¨¥ª©¥»¡C";
         Text[ arabic ] = "ÛíÑ ãÊæİÑ áŞÇãæÓ ÇáãÑÇÏİÇÊ. \nÇáÑÌÇÁ İÍÕ ÇáÊËÈíÊ ÇáÎÇÕ Èß¡ æÊËÈíÊ ÇááÛÉ ÇáãØáæÈÉ¡ ÅĞÇ áÒã ÇáÃãÑ";
-        Text[ greek ] = "äåí åßíáé äéáèİóéìï ãéá ôïí èçóáõñü ëİîåùí.\nĞáñáêáëş åëİãîôå ôçí åãêáôÜóôáóç êáé áí ÷ñåéáóôåß, íá \nãßíåé åãêáôÜóôáóç ôçò ãëşóóáò ğïõ åğéèõìåßôå";
+        Text[ greek ] = "äåí åßíáé äéáèİóéìï ãéá ôïí èçóáõñü ëİîåùí.\nĞáñáêáëş åëİãîôå ôçí åãêáôÜóôáóç êáé áí ÷ñåéáóôåß, íá \nãßíåé åãêáôÜóôáóç ôçò ãëşóóáò ğïõ åğéèõ";
         Text[ korean ] = " µ¿ÀÇ¾î »çÀüÀÇ »ç¿ëÀÌ ºÒ°¡´ÉÇÕ´Ï´Ù.\n»ç¿ëÀÚÀÇ¼³Ä¡¸¦ È®ÀÎÇÏ½Ã°í \nÇÊ¿äÇÏ´Ù¸é ¿ä±¸µÈ ¾ğ¾î¸¦ ¼³Ä¡ÇÏ½Ê½Ã¿À.";
         Text[ turkish ] = "eşanlamlılar sözlüğü için mevcut değil. \nKurulumu kontrol edip  \ngerekirse istenilen dili yükleyin.";
         Text[ language_user1 ] = " ";
@@ -7198,7 +7198,7 @@ Resource RID_GLOBSTR
         Text [ swedish ] = "Rättstavningskontrollen av denna tabell är avslutad." ;
         Text [ danish ] = "Stavekontrollen er afsluttet for dette ark!" ;
         Text [ portuguese ] = "A verificação ortográfica está concluída!" ;
-        Text [ portuguese_brazilian ] = "Die Rechtschreibprüfung dieser Tabelle ist abgeschlossen!" ;
+        Text [ portuguese_brazilian ] = "Die Rechtschreibpr?ung dieser Tabelle ist abgeschlossen!" ;
         Text[ chinese_simplified ] = "ÒÑ¾­Íê³ÉÕâ¸ö¹¤×÷±íµÄÆ´Ğ´¼ì²é£¡";
         Text[ russian ] = "Ïğîâåğêà îğôîãğàôèè ıòîãî ëèñòà çàêîí÷åíà!";
         Text[ polish ] = "Sprawdzanie pisowni w tym arkuszu zosta³o zakoñczone!";
@@ -7251,7 +7251,7 @@ Resource RID_GLOBSTR
         Text [ swedish ] = "Infoga tabeller" ;
         Text [ danish ] = "Indsæt ark" ;
         Text [ portuguese ] = "Inserir folha" ;
-        Text [ portuguese_brazilian ] = "Tabelle einfügen" ;
+        Text [ portuguese_brazilian ] = "Tabelle einf?en" ;
         Text[ chinese_simplified ] = "²åÈë¹¤×÷±í";
         Text[ russian ] = "Âñòàâèòü ëèñò";
         Text[ polish ] = "Wstaw arkusz";
@@ -7278,7 +7278,7 @@ Resource RID_GLOBSTR
         Text [ swedish ] = "Radera tabeller" ;
         Text [ danish ] = "Slet ark" ;
         Text [ portuguese ] = "Eliminar folha" ;
-        Text [ portuguese_brazilian ] = "Tabelle löschen" ;
+        Text [ portuguese_brazilian ] = "Tabelle l?chen" ;
         Text[ chinese_simplified ] = "É¾³ı¹¤×÷±í";
         Text[ russian ] = "Óäàëèòü ëèñò";
         Text[ polish ] = "Usuñ arkusz";
@@ -7333,7 +7333,7 @@ Resource RID_GLOBSTR
         Text [ portuguese_brazilian ] = "Tabelle verschieben" ;
         Text[ chinese_simplified ] = "ÒÆ¶¯¹¤×÷±í";
         Text[ russian ] = "Ïåğåìåñòèòü ëèñòû";
-        Text[ polish ] = "Przenieœ arkusz";
+        Text[ polish ] = "Przenie? arkusz";
         Text[ japanese ] = "•\\‚ÌˆÚ“®";
         Text[ chinese_traditional ] = "²¾°Ê¤u§@ªí";
         Text[ arabic ] = "ÊÍÑíß ÌÏÇæá";
@@ -7383,7 +7383,7 @@ Resource RID_GLOBSTR
         Text [ swedish ] = "Tillfoga tabell" ;
         Text [ danish ] = "Vedhæft ark" ;
         Text [ portuguese ] = "Anexar folha" ;
-        Text [ portuguese_brazilian ] = "Tabelle anhängen" ;
+        Text [ portuguese_brazilian ] = "Tabelle anh?ngen" ;
         Text[ chinese_simplified ] = "¸½¼Ó¹¤×÷±í";
         Text[ russian ] = "Äîáàâèòü ëèñò";
         Text[ polish ] = "Do³¹cz arkusz";
@@ -7591,7 +7591,7 @@ Resource RID_GLOBSTR
         Text [ dutch ] = "De nieuwe tabel bevat absolute verwijzingen naar andere tabellen, die niet meer hoeven overeen te stemmen" ;
         Text [ swedish ] = "Den nya tabellen innehåller absoluta referenser till andra tabeller, som möjligtvis inte längre stämmer!" ;
         Text [ danish ] = "Den ny tabel indeholder absolute referencer til andre tabeller, som muligvis ikke mere er korrekte!" ;
-        Text [ portuguese_brazilian ] = "Die neue Tabelle enthält absolute Referenzen auf andere Tabellen, die nicht mehr stimmen müssen!" ;
+        Text [ portuguese_brazilian ] = "Die neue Tabelle enth?lt absolute Referenzen auf andere Tabellen, die nicht mehr stimmen m?sen!" ;
         Text [ portuguese ] = "A nova tabela contém referências absolutas a outras tabelas que poderão estar incorrectas!" ;
         Text[ chinese_simplified ] = "ĞÂµÄ¹¤×÷±íº¬ÓĞ¾ø¶ÔµÄÖ¸ÏòÆäËü¹¤×÷±íµÄÒıÓÃ£¬ÕâĞ©ÆäËüµÄ¹¤×÷±í¿ÉÄÜ²»ÕıÈ·£¡";
         Text[ russian ] = "Íîâàÿ òàáëèöà ñîäåğæèò àáñîëşòíûå ññûëêè íà äğóãèå òàáëèöû, êîòîğûå ñêîğåå âñåãî íåïğàâèëüíû!";
@@ -7619,7 +7619,7 @@ Resource RID_GLOBSTR
         Text [ swedish ] = "På grund av identiska namn blev ett kategorinamn i måldokumentet ändrat!" ;
         Text [ danish ] = "På grund af identiske navne blev et eksisterende områdenavn i destinationsdokumentet ændret!" ;
         Text [ portuguese ] = "Devido a nomes idênticos foi modificado o nome de uma área no documento de destino!" ;
-        Text [ portuguese_brazilian ] = "Wegen einer Namensgleichheit wurde im Zieldokument ein bestehender Bereichsname verändert!" ;
+        Text [ portuguese_brazilian ] = "Wegen einer Namensgleichheit wurde im Zieldokument ein bestehender Bereichsname ver?ndert!" ;
         Text[ chinese_simplified ] = "ÒòÎªÃû³ÆÏàÍ¬£¬Ä¿±êÎÄµµÄÚµÄÇøÓòÃû³ÆÒÑ¾­±»¸ü¸Ä£¡";
         Text[ russian ] = "Èç-çà èäåíòè÷íîñòè èìåí èçìåíåíî ñóùåñòâóşùåå èìÿ îáëàñòè êîíå÷íîãî äîêóìåíòà!";
         Text[ polish ] = "Ze wzglêdu na identyczne nazwy zosta³a zmieniona nazwa obszaru w dokumencie docelowym!";
@@ -7646,7 +7646,7 @@ Resource RID_GLOBSTR
         Text [ swedish ] = "AutoFilter omöjligt" ;
         Text [ danish ] = "AutoFilter ikke mulig" ;
         Text [ portuguese ] = "Impossível AutoFiltro." ;
-        Text [ portuguese_brazilian ] = "AutoFilter nicht möglich" ;
+        Text [ portuguese_brazilian ] = "AutoFilter nicht m?lich" ;
         Text[ chinese_simplified ] = "ÎŞ·¨Ê¹ÓÃ×Ô¶¯É¸Ñ¡";
         Text[ russian ] = "Àâòîôèëüòğ íå âîçìîæåí";
         Text[ polish ] = "Autofiltr niemo¿liwy";
@@ -7673,7 +7673,7 @@ Resource RID_GLOBSTR
         Text [ swedish ] = "%PRODUCTNAME Calc har sökt till början av tabellen.Vill Du att sökningen skall fortsätta vid tabellens slut?" ;
         Text [ danish ] = "%PRODUCTNAME Calc har søgt til begyndelsen af arket. Vil du fortsætte søgningen fra arkets slutning?" ;
         Text [ portuguese ] = "O %PRODUCTNAME Calc procurou até ao princípio da folha. Deseja continuar a procura no fim?" ;
-        Text [ portuguese_brazilian ] = "%PRODUCTNAME Calc hat bis zum Anfang der Tabelle gesucht. Möchten Sie die Suche am Tabellenende fortsetzen?" ;
+        Text [ portuguese_brazilian ] = "%PRODUCTNAME Calc hat bis zum Anfang der Tabelle gesucht. M?hten Sie die Suche am Tabellenende fortsetzen?" ;
         Text[ chinese_simplified ] = "%PRODUCTNAME Calc ÒÑ¾­ËÑÑ°µ½¹¤×÷±íÊ×¶Ë¡£Òª×Ô¹¤×÷±íÎ²¶Ë¼ÌĞøËÑÑ°Âğ£¿";
         Text[ russian ] = "%PRODUCTNAME Calc îñóùåñòâèë ïîèñê â íà÷àëå ëèñòà. Ïğîäîëæèòü ïîèñê â êîíöå ëèñòà?";
         Text[ polish ] = "%PRODUCTNAME Calc przeszuka³ arkusz do pocz¹tku. Czy kontynuowaæ wyszukiwanie od koñca arkusza?";
@@ -7700,7 +7700,7 @@ Resource RID_GLOBSTR
         Text [ swedish ] = "%PRODUCTNAME Calc har sökt till slutet av tabellen.Vill Du att sökningen skall fortsätta i tabellens början?" ;
         Text [ danish ] = "%PRODUCTNAME Calc har søgt til slutningen af arket. Vil du fortsætte søgningen fra arkets begyndelse?" ;
         Text [ portuguese ] = "O %PRODUCTNAME Calc procurou até ao fim da folha. Deseja continuar a procura no princípio?" ;
-        Text [ portuguese_brazilian ] = "%PRODUCTNAME Calc hat bis zum Ende der Tabelle gesucht. Möchten Sie die Suche am Tabellenanfang fortsetzen?" ;
+        Text [ portuguese_brazilian ] = "%PRODUCTNAME Calc hat bis zum Ende der Tabelle gesucht. M?hten Sie die Suche am Tabellenanfang fortsetzen?" ;
         Text[ chinese_simplified ] = "%PRODUCTNAME Calc ÒÑ¾­ËÑÑ°µ½¹¤×÷±íµÄÎ²¶Ë¡£Òª×Ô¹¤×÷±íÊ×¶Ë¼ÌĞøËÑÑ°Âğ£¿";
         Text[ russian ] = "%PRODUCTNAME Calc îñóùåñòâèë ïîèñê â êîíöå ëèñòà. Ïğîäîëæèòü ïîèñê â íà÷àëå ëèñòà?";
         Text[ polish ] = "%PRODUCTNAME Calc przeszuka³ arkusz do koñca. Czy kontynuowaæ wyszukiwanie od pocz¹tku arkusza?";
@@ -7729,7 +7729,7 @@ Resource RID_GLOBSTR
         Text [ portuguese_brazilian ] = "Suchen & Ersetzen" ;
         Text[ chinese_simplified ] = "ËÑÑ°ºÍ¸üÌæ";
         Text[ russian ] = "Íàéòè è Çàìåíèòü";
-        Text[ polish ] = "ZnajdŸ i zamieñ";
+        Text[ polish ] = "Znajd? i zamieñ";
         Text[ japanese ] = "ŒŸõ‚Æ’uŠ·";
         Text[ chinese_traditional ] = "·j´M©M¥N´À";
         Text[ arabic ] = "ÇáÈÍË æÇáÇÓÊÈÏÇá";
@@ -7746,7 +7746,7 @@ Resource RID_GLOBSTR
         Text [ english ] = "StarCalc has searched to the beginning of the document. Do you want to continue at the end?" ;
         Text [ portuguese ] = "O %PRODUCTNAME Calc procurou até ao início do documento. Deseja continuar no final do documento?" ;
         Text [ english_us ] = "%PRODUCTNAME Calc has searched to the beginning of the document. Do you want to continue at the end?" ;
-        Text [ portuguese_brazilian ] = "%PRODUCTNAME Calc hat bis zum Anfang des Dokuments gesucht. Möchten Sie die Suche am Dokumentende fortsetzen?" ;
+        Text [ portuguese_brazilian ] = "%PRODUCTNAME Calc hat bis zum Anfang des Dokuments gesucht. M?hten Sie die Suche am Dokumentende fortsetzen?" ;
         Text [ swedish ] = "%PRODUCTNAME Calc har sökt till början på dokumentet. Vill Du att sökningen skall fortsätta i slutet på dokumentet?" ;
         Text [ danish ] = "%PRODUCTNAME Calc har søgt til begyndelsen af dokumentet. Vil du fortsætte søgningen fra dokumentets slutning?" ;
         Text [ italian ] = "La ricerca effettuata da %PRODUCTNAME Calc ha raggiunto l'inizio. Volete proseguire la ricerca dalla fine del documento?" ;
@@ -7772,7 +7772,7 @@ Resource RID_GLOBSTR
         Text [ english ] = "StarCalc has searched to the end of the document. Do you want to continue at the beginning?" ;
         Text [ portuguese ] = "O %PRODUCTNAME Calc procurou até ao final do documento. Deseja continuar no início?" ;
         Text [ english_us ] = "%PRODUCTNAME Calc has searched to the end of the document. Do you want to continue at the beginning?" ;
-        Text [ portuguese_brazilian ] = "%PRODUCTNAME Calc hat bis zum Ende des Dokuments gesucht. Möchten Sie die Suche am Dokumentanfang fortsetzen?" ;
+        Text [ portuguese_brazilian ] = "%PRODUCTNAME Calc hat bis zum Ende des Dokuments gesucht. M?hten Sie die Suche am Dokumentanfang fortsetzen?" ;
         Text [ swedish ] = "%PRODUCTNAME Calc har sökt till slutet på dokumentet. Vill Du att sökningen skall fortsätta i början på dokumentet?" ;
         Text [ danish ] = "%PRODUCTNAME Calc har søgt til slutningen af dokumentet. Vil du fortsætte søgningen fra dokumentets begyndelse?" ;
         Text [ italian ] = "La ricerca effettuata da %PRODUCTNAME Calc ha raggiunto la fine. Volete proseguire la ricerca dall'inizio del documento?" ;
@@ -7831,7 +7831,7 @@ Resource RID_GLOBSTR
         Text [ swedish ] = "Fel markering för områdesnamn" ;
         Text [ danish ] = "Forkerte markeringer for områdenavne." ;
         Text [ portuguese ] = "Selecção incorrecta para os nomes da área." ;
-        Text [ portuguese_brazilian ] = "Falsche Markierung für Bereichsnamen" ;
+        Text [ portuguese_brazilian ] = "Falsche Markierung f? Bereichsnamen" ;
         Text[ chinese_simplified ] = "ÇøÓòÃû³ÆµÄ´íÎóÑ¡Ôñ";
         Text[ russian ] = "Íåïğàâèëüíîå âûäåëåíèå äëÿ èìåí îáëàñòè";
         Text[ polish ] = "Nieprawid³owe oznaczenia dla nazw obszaru";
@@ -7858,10 +7858,10 @@ Resource RID_GLOBSTR
         Text [ swedish ] = "Förbindelser kan inte infogas ovanför källdata." ;
         Text [ danish ] = "Forbindelser kan ikke indsættes ovenfor kildedata." ;
         Text [ portuguese ] = "Impossível inserir referências acima dos dados-fonte." ;
-        Text [ portuguese_brazilian ] = "Verbindungen können nicht oberhalb der Quelldaten eingefügt werden." ;
+        Text [ portuguese_brazilian ] = "Verbindungen k?nen nicht oberhalb der Quelldaten eingef?t werden." ;
         Text[ chinese_simplified ] = "ÎŞ·¨ÔÚÔ´Êı¾İÖ®ÉÏ¼ÓÈëÁ´½Ó¡£";
         Text[ russian ] = "Âñòàâèòü ñâÿçü íàä èñõîäíûìè äàííûìè íåâîçìîæíî.";
-        Text[ polish ] = "Adresów nie mo¿na wpisaæ powy¿ej danych Ÿród³owych.";
+        Text[ polish ] = "Adresów nie mo¿na wpisaæ powy¿ej danych ?ród³owych.";
         Text[ japanese ] = "¿°½ÃŞ°À‚Ìã‚ÉQÆ‚ğ‘}“ü‚Å‚«‚Ü‚¹‚ñB";
         Text[ chinese_traditional ] = "µLªk¦b·½¸ê®Æ¤§¤W¥[¤J±¶®|¡C";
         Text[ arabic ] = "áÇ íãßä ÅÏÑÇÌ ÇáÇÊÕÇáÇÊ İæŞ ÈíÇäÇÊ ÇáãÕÏÑ.";
@@ -7911,7 +7911,7 @@ Resource RID_GLOBSTR
         Text [ swedish ] = "Vill Du verkligen radera #?" ;
         Text [ danish ] = "Er du sikker på at du vil slette element #?" ;
         Text [ portuguese ] = "Deseja realmente eliminar a entrada #?" ;
-        Text [ portuguese_brazilian ] = "Wollen Sie den Eintrag # wirklich löschen?" ;
+        Text [ portuguese_brazilian ] = "Wollen Sie den Eintrag # wirklich l?chen?" ;
         Text[ chinese_simplified ] = "ÄúÕæµÄÒªÉ¾³ıÕâ¸öÌõÄ¿ # Âğ£¿";
         Text[ russian ] = "Âû äåéñòâèòåëüíî õîòèòå óäàëèòü ıëåìåíò #?";
         Text[ polish ] = "Chcesz naprawdê usun¹æ has³o #?";
@@ -8198,7 +8198,7 @@ Resource RID_GLOBSTR
         Text [ swedish ] = "Rad- och kolumnhuvuden" ;
         Text [ danish ] = "Række- og kolonneoverskrifter" ;
         Text [ portuguese ] = "Cabeçalhos das linhas e colunas" ;
-        Text [ portuguese_brazilian ] = "Zeilen- & Spaltenköpfe" ;
+        Text [ portuguese_brazilian ] = "Zeilen- & Spaltenk?fe" ;
         Text[ chinese_simplified ] = "ĞĞ±êÌâºÍÁĞ±êÌâ";
         Text[ russian ] = "Çàãîëîâêè ñòğîê & ñòîëáöîâ";
         Text[ polish ] = "Nag³. wierszy & kolumn";
@@ -8253,7 +8253,7 @@ Resource RID_GLOBSTR
         Text [ portuguese_brazilian ] = "Nullwerte" ;
         Text[ chinese_simplified ] = "ÁãÖµ";
         Text[ russian ] = "Íóëåâûå çíà÷åíèÿ";
-        Text[ polish ] = "Wartoœci zerowe";
+        Text[ polish ] = "Warto?ci zerowe";
         Text[ japanese ] = "¾ŞÛ’l";
         Text[ chinese_traditional ] = "¹s­È";
         Text[ arabic ] = "Şíã ÇáÕİÑ";
@@ -8373,7 +8373,7 @@ Resource RID_GLOBSTR
         TEXT [ English ] = "Statistics" ;
         TEXT [ norwegian ] = "Statistics" ;
         TEXT [ italian ] = "Statistiche" ;
-        TEXT [ portuguese_brazilian ] = "Estatİstica" ;
+        TEXT [ portuguese_brazilian ] = "Estat?stica" ;
         TEXT [ portuguese ] = "Estatística" ;
         TEXT [ finnish ] = "Tiedot" ;
         TEXT [ danish ] = "Statistik" ;
@@ -8407,7 +8407,7 @@ Resource RID_GLOBSTR
         Text [ swedish ] = "Länken kunde inte uppdateras." ;
         Text [ danish ] = "Det var ikke muligt at opdatere kæden." ;
         Text [ portuguese ] = "Impossível actualizar a ligação." ;
-        Text [ portuguese_brazilian ] = "Die Verknüpfung konnte nicht aktualisiert werden." ;
+        Text [ portuguese_brazilian ] = "Die Verkn?fung konnte nicht aktualisiert werden." ;
         Text[ chinese_simplified ] = "ÎŞ·¨¸üĞÂÁ´½Ó¡£";
         Text[ russian ] = "Îáíîâèòü ññûëêó íåâîçìîæíî.";
         Text[ polish ] = "£¹cze nie mog³o zostaæ zaktualizowane.";
@@ -8486,7 +8486,7 @@ Resource RID_GLOBSTR
         Text [ swedish ] = "Översikt" ;
         Text [ danish ] = "Oversigt" ;
         Text [ portuguese ] = "Vista geral" ;
-        Text [ portuguese_brazilian ] = "Übersicht" ;
+        Text [ portuguese_brazilian ] = "?bersicht" ;
         Text[ chinese_simplified ] = "ÕªÒª";
         Text[ russian ] = "Îáçîğ";
         Text[ polish ] = "Przegl¹d";
@@ -8565,7 +8565,7 @@ Resource RID_GLOBSTR
         Text [ swedish ] = "Förändrad" ;
         Text [ danish ] = "Ændret" ;
         Text [ portuguese ] = "Modificado" ;
-        Text [ portuguese_brazilian ] = "Verändert" ;
+        Text [ portuguese_brazilian ] = "Ver?ndert" ;
         Text[ chinese_simplified ] = "ÒÑ¾­ĞŞ¸Ä";
         Text[ russian ] = "Èçìåíåí";
         Text[ polish ] = "Zmodyfikowany";
@@ -8644,7 +8644,7 @@ Resource RID_GLOBSTR
         Text [ swedish ] = "Nyckelord" ;
         Text [ danish ] = "Nøgleord" ;
         Text [ portuguese ] = "Palavras-chave" ;
-        Text [ portuguese_brazilian ] = "Schlüsselworte" ;
+        Text [ portuguese_brazilian ] = "Schl?selworte" ;
         Text[ chinese_simplified ] = "¹Ø¼ü×Ö";
         Text[ russian ] = "Êëş÷åâûå ñëîâà";
         Text[ polish ] = "S³owa kluczowe";
@@ -8750,7 +8750,7 @@ Resource RID_GLOBSTR
         Text [ swedish ] = "Den här filen innehåller länkar till andra filer.\nSkall de uppdateras?" ;
         Text [ danish ] = "Denne fil indeholder kæder til andre filer.\nSkal de opdateres?" ;
         Text [ portuguese ] = "Este ficheiro contém ligações a outros ficheiros.\nActualizar?" ;
-        Text [ portuguese_brazilian ] = "Diese Datei enthält Verknüpfungen zu anderen Dateien.\nSollen diese aktualisiert werden?" ;
+        Text [ portuguese_brazilian ] = "Diese Datei enth?lt Verkn?fungen zu anderen Dateien.\nSollen diese aktualisiert werden?" ;
         Text[ chinese_simplified ] = "´ËÎÄ¼şÄÚº¬ÓĞÖ¸ÏòÆäËûÎÄ¼şµÄÁ´½Ó¡£\nÒª¸üĞÂÕâĞ©Á´½ÓÂğ£¿";
         Text[ russian ] = "İòîò ôàéë ñîäåğæèò ññûëêè íà äğóãèå ôàéëû.\nÎáíîâèòü ıòè ññûëêè?";
         Text[ polish ] = "Ten plik zawiera ³¹cza do innych plików.\nCzy maj¹ one byæ aktualizowane?";
@@ -8771,7 +8771,7 @@ Resource RID_GLOBSTR
         Text [ ENGLISH ] = "This file contains Queries for which the results were not saved.\nShould they be refreshed?" ;
         Text [ portuguese ] = "Este ficheiro contém consultas com resultados não guardados.\nRepeti-las?" ;
         Text [ english_us ] = "This file contains queries. The results of these queries were not saved.\nDo you want these queries to be repeated?" ;
-        Text [ portuguese_brazilian ] = "Diese Datei enthält Abfragen, deren Ergebnisse nicht mitgespeichert wurden.\nSollen diese Abfragen wiederholt werden?" ;
+        Text [ portuguese_brazilian ] = "Diese Datei enth?lt Abfragen, deren Ergebnisse nicht mitgespeichert wurden.\nSollen diese Abfragen wiederholt werden?" ;
         Text [ swedish ] = "Den här filen innehåller sökningar vars resultat inte har sparats.\nSkall dessa sökningar upprepas?" ;
         Text [ danish ] = "Denne fil indeholder forespørgsler, resultaterne er ikke blevet gemt.\nSkal denne forespørgsel gentages?" ;
         Text [ italian ] = "Questo file contiene ricerche i cui risultati non sono stati salvati.\nRipetere le ricerche?" ;
@@ -8780,7 +8780,7 @@ Resource RID_GLOBSTR
         Text [ dutch ] = "Dit bestand bevat query's waarvan de resultaten niet werden opgeslagen.\nWilt u dat deze query's worden herhaald?" ;
         Text[ chinese_simplified ] = "Õâ¸öÎÄ¼şº¬ÓĞÒ»Ğ©²éÑ¯£¬ËüÃÇµÄ½á¹ûÎŞ·¨±»´æÅÌµÄ¡£\nÒªÖØ¸´Ö´ĞĞÕâ¸ö²éÑ¯Âğ£¿";
         Text[ russian ] = "İòîò ôàéë ñîäåğæèò çàïğîñû, ğåçóëüòàòû êîòîğûõ ñîõğàíåíû íå áóäóò.\nÏîâòîğèòü ıòè çàïğîñû?";
-        Text[ polish ] = "Plik zawiera kwerendy, wyniki których nie zosta³y zapisane.\nCzy odœwie¿yæ te kwerendy?";
+        Text[ polish ] = "Plik zawiera kwerendy, wyniki których nie zosta³y zapisane.\nCzy od?wie¿yæ te kwerendy?";
         Text[ japanese ] = "‚±‚ÌÌ§²Ù‚É‚ÍŒ‹‰Ê‚ª•Û‘¶‚³‚ê‚È‚©‚Á‚½¸´Ø°‚ª‚ ‚è‚Ü‚·B\n‚±‚Ì¸´Ø°‚ğ‚â‚è’¼‚µ‚Ü‚·‚©B";
         Text[ chinese_traditional ] = "³o­ÓÀÉ®×§t¦³¤@¨Ç¬d¸ß¡A¥¦­Ìªºµ²ªGµLªk³QÀx¦s¡C\n­n­«½Æ°õ¦æ³o­Ó¬d¸ß¡H";
         Text[ arabic ] = "íÍÊæí åĞÇ Çáãáİ Úáì ÇÓÊİÓÇÑÇÊ áã íÊã ÍİÙ äÊÇÆÌåÇ.\nåá ÊÑíÏ ÊßÑÇÑ åĞå ÇáÇÓÊİÓÇÑÇÊ¿";
@@ -8830,7 +8830,7 @@ Resource RID_GLOBSTR
         Text [ swedish ] = "Utfyllda celler kan inte förskjutas\növer sidranden." ;
         Text [ danish ] = "Fyldte celler kan ikke flyttes\nud over arkets rand." ;
         Text [ portuguese ] = "Impossível mover células \npreenchidas fora da folha." ;
-        Text [ portuguese_brazilian ] = "Ausgefüllte Zellen können nicht über\ndas Blatt hinaus verschoben werden." ;
+        Text [ portuguese_brazilian ] = "Ausgef?lte Zellen k?nen nicht ?er\ndas Blatt hinaus verschoben werden." ;
         Text[ chinese_simplified ] = "Ìî³äµÄµ¥Ôª¸ñ²»ÄÜ±»\nÒÆ³ö¹¤×÷±í¡£";
         Text[ russian ] = "Ïåğåìåùàòü çàïîëíåííûå ÿ÷åéêè çà\nïğåäåëû ëèñòà íåâîçìîæíî.";
         Text[ polish ] = "Wype³nione komórki nie mog¹ byæ przesuniête poza \nobszar arkusza.";
@@ -8857,7 +8857,7 @@ Resource RID_GLOBSTR
         Text [ swedish ] = "Tabellen kunde inte infogas." ;
         Text [ danish ] = "Det var ikke muligt at indsætte tabellen." ;
         Text [ portuguese ] = "Impossível inserir tabela." ;
-        Text [ portuguese_brazilian ] = "Die Tabelle konnte nicht eingefügt werden." ;
+        Text [ portuguese_brazilian ] = "Die Tabelle konnte nicht eingef?t werden." ;
         Text[ chinese_simplified ] = "ÎŞ·¨ÊäÈëÕâ¸ö¹¤×÷±í¡£";
         Text[ russian ] = "Âñòàâèòü òàáëèöó íåâîçìîæíî.";
         Text[ polish ] = "Tabela nie mog³a zostaæ wstawiona.";
@@ -8877,7 +8877,7 @@ Resource RID_GLOBSTR
         Text [ ENGLISH ] = "The tables could not be removed." ;
         Text [ portuguese ] = "Impossível eliminar folhas de cálculo." ;
         Text [ english_us ] = "The sheets could not be deleted." ;
-        Text [ portuguese_brazilian ] = "Die Tabellen konnten nicht gelöscht werden." ;
+        Text [ portuguese_brazilian ] = "Die Tabellen konnten nicht gel?cht werden." ;
         Text [ swedish ] = "Tabellerna kunde inte raderas." ;
         Text [ danish ] = "Det var ikke muligt at slette arkene." ;
         Text [ italian ] = "Impossibile cancellare le tabelle." ;
@@ -8910,10 +8910,10 @@ Resource RID_GLOBSTR
         Text [ swedish ] = "Urklippsinnehållet kunde inte infogas." ;
         Text [ danish ] = "Det var ikke muligt at indsætte udklipsholderens indhold." ;
         Text [ portuguese ] = "Impossível inserir o conteúdo da área de transferência." ;
-        Text [ portuguese_brazilian ] = "Der Inhalt der Zwischenablage konnte nicht eingefügt werden." ;
+        Text [ portuguese_brazilian ] = "Der Inhalt der Zwischenablage konnte nicht eingef?t werden." ;
         Text[ chinese_simplified ] = "ÎŞ·¨²åÈë¼ôÌù°åµÄÄÚÈİ¡£";
         Text[ russian ] = "Íå óäàåòñÿ âñòàâèòü ñîäåğæèìîå áóôåğà îáìåíà.";
-        Text[ polish ] = "Nie mo¿na wstawiæ zawartoœci schowka.";
+        Text[ polish ] = "Nie mo¿na wstawiæ zawarto?ci schowka.";
         Text[ japanese ] = "¸Ø¯ÌßÎŞ°ÄŞ‚Ì“à—e‚Í‘}“ü‚Å‚«‚Ü‚¹‚ñ‚Å‚µ‚½B";
         Text[ chinese_traditional ] = "µLªk´¡¤J°Å¶KÃ¯ªº¤º®e¡C";
         Text[ arabic ] = "ÊÚĞÑ ÅÏÑÇÌ ãÍÊæíÇÊ ÇáÍÇİÙÉ.";
@@ -8937,7 +8937,7 @@ Resource RID_GLOBSTR
         Text [ swedish ] = "Du kan inte klistra in utanför arkets kant." ;
         Text [ danish ] = "Det er ikke muligt at indsætte ud over arkets rand." ;
         Text [ portuguese ] = "Espaço insuficiente para inserir." ;
-        Text [ portuguese_brazilian ] = "Es kann nicht über das Blatt hinaus eingefügt werden." ;
+        Text [ portuguese_brazilian ] = "Es kann nicht ?er das Blatt hinaus eingef?t werden." ;
         Text[ chinese_simplified ] = "¿Õ¼ä²»¹»£¬ÎŞ·¨²åÈë¡£";
         Text[ russian ] = "Âñòàâêà çà ïğåäåëàìè ëèñòà íåâîçìîæíà.";
         Text[ polish ] = "Nie mo¿na wstawiæ poza obrêbem strony.";
@@ -8966,7 +8966,7 @@ Resource RID_GLOBSTR
         Text[ english_us ] = "The content of the clipboard is bigger than the range selected.\nDo you want to insert it anyway?";
         Text[ chinese_simplified ] = "¼ôÌù°åµÄÄÚÈİ´óÓÚÑ¡ÖĞµÄÇøÓò¡£\nÄú»¹ÊÇÒª²åÈëËü£¿";
         Text[ russian ] = "Ñîäåğæèìîå áóôåğà îáìåíà áîëüøå, ÷åì âûäåëåííàÿ îáëàñòü.\nÂñå ğàâíî âñòàâèòü?";
-        Text[ polish ] = "Zawartoœæ schowka jest wiêksza ni¿ zaznaczony obszar.\nChcesz mimo tego wstawiæ?";
+        Text[ polish ] = "Zawarto?æ schowka jest wiêksza ni¿ zaznaczony obszar.\nChcesz mimo tego wstawiæ?";
         Text[ japanese ] = "¸Ø¯ÌßÎŞ°ÄŞ‚Ì“à—e‚ª‘I‘ğ‚µ‚½”ÍˆÍ‚ğ’´‚¦‚Ä‚¢‚Ü‚·B\n‚»‚ê‚Å‚à‘}“ü‚µ‚Ü‚·‚©B";
         Text[ chinese_traditional ] = "°Å¶KÃ¯ªº¤º®e¤j©ó¿ï¨úªº°Ï°ì¡C\n±zÁÙ¬O­n´¡¤J¡H";
         Text[ arabic ] = "ãÍÊæíÇÊ ÇáÍÇİÙÉ ÊİæŞ ÇáäØÇŞ¡ ÇáĞí ŞãÊ ÈÇÎÊíÇÑå¡ ÍÌãÇğ.\nåá ÊÑíÏ ÇáÅÏÑÇÌ ÈÇáÑÛã ãä Ğáß¿";
@@ -9016,10 +9016,10 @@ Resource RID_GLOBSTR
         Text [ swedish ] = "Käll- och målområde får inte överlappa varandra." ;
         Text [ danish ] = "Kilde- og destinationsområde må ikke overlappe." ;
         Text [ portuguese ] = "Fonte e destino não se devem sobrepor." ;
-        Text [ portuguese_brazilian ] = "Quell- und Zielbereich dürfen sich nicht überlappen." ;
+        Text [ portuguese_brazilian ] = "Quell- und Zielbereich d?fen sich nicht ?erlappen." ;
         Text[ chinese_simplified ] = "Ô´ÇøÓòºÍÄ¿±êÇøÓò²»¿ÉÒÔÏà»¥ÖØµş¡£";
         Text[ russian ] = "Èñõîäíàÿ è êîíå÷íàÿ îáëàñòü íå äîëæíû ïåğåñåêàòüñÿ.";
-        Text[ polish ] = "Obszar Ÿród³owy i docelowy nie mog¹ zachodziæ na siebie.";
+        Text[ polish ] = "Obszar ?ród³owy i docelowy nie mog¹ zachodziæ na siebie.";
         Text[ japanese ] = "¿°½‚ÆÀ°¹Ş¯Ä‚ª”ÍˆÍ‚Åd‚È‚Á‚Ä‚Í‚¢‚¯‚Ü‚¹‚ñB";
         Text[ chinese_traditional ] = "·½°Ï°ì©M¥Ø¼Ğ°Ï°ì¤£¥i¥H¬Û¤¬­«Å|¡C";
         Text[ arabic ] = "íÌÈ ÃáÇ íÊÏÇÎá ÇáäØÇŞ ÇáãÕÏÑ æÇáäØÇŞ ÇáåÏİ.";
@@ -9069,7 +9069,7 @@ Resource RID_GLOBSTR
         Text [ swedish ] = "Ogiltigt namn." ;
         Text [ danish ] = "Ugyldigt navn." ;
         Text [ portuguese ] = "Nome não válido." ;
-        Text [ portuguese_brazilian ] = "Ungültiger Name." ;
+        Text [ portuguese_brazilian ] = "Ung?tiger Name." ;
         Text[ chinese_simplified ] = "ÎŞĞ§µÄÃû³Æ¡£";
         Text[ russian ] = "Íåäîïóñòèìîå èìÿ.";
         Text[ polish ] = "Nieprawid³owa nazwa.";
@@ -9122,10 +9122,10 @@ Resource RID_GLOBSTR
         Text [ swedish ] = "Det inmatade värdet är ogilitigt." ;
         Text [ danish ] = "Den indtastede værdi er ugyldig." ;
         Text [ portuguese ] = "O valor é incorrecto." ;
-        Text [ portuguese_brazilian ] = "Der eingegebene Wert ist ungültig." ;
+        Text [ portuguese_brazilian ] = "Der eingegebene Wert ist ung?tig." ;
         Text[ chinese_simplified ] = "Õâ¸öÊäÈëµÄÊıÖµÎŞĞ§¡£";
         Text[ russian ] = "Ââåäåííîå çíà÷åíèå íåâåğíî.";
-        Text[ polish ] = "Wpisana wartoœæ jest nieprawid³owa.";
+        Text[ polish ] = "Wpisana warto?æ jest nieprawid³owa.";
         Text[ japanese ] = "“ü—Í‚µ‚½’l‚Í–³Œø‚Å‚·B";
         Text[ chinese_traditional ] = "³o­Ó¿é¤Jªº¼Æ­ÈµL®Ä¡C";
         Text[ arabic ] = "ÇáŞíãÉ ÇáãÏÎáÉ ÛíÑ ÕÇáÍÉ.";
@@ -9195,7 +9195,7 @@ Resource RID_GLOBSTR
         Text [ ENGLISH ] = "adjusting row heights" ;
         Text [ portuguese ] = "Ajustar altura das linhas" ;
         Text [ english_us ] = "Adapt row height" ;
-        Text [ portuguese_brazilian ] = "Zeilenhöhen anpassen" ;
+        Text [ portuguese_brazilian ] = "Zeilenh?en anpassen" ;
         Text [ swedish ] = "Anpassa radhöjder" ;
         Text [ danish ] = "Tilpas rækkehøjde" ;
         Text [ italian ] = "Adatta altezza riga" ;
@@ -9204,7 +9204,7 @@ Resource RID_GLOBSTR
         Text [ dutch ] = "Rijhoogte aanpassen" ;
         Text[ chinese_simplified ] = "µ÷ÕûĞĞ¸ß";
         Text[ russian ] = "Ïîäáîğ âûñîòû ñòğîêè";
-        Text[ polish ] = "Dostosuj wysokoœæ wierszy";
+        Text[ polish ] = "Dostosuj wysoko?æ wierszy";
         Text[ japanese ] = "s‚Ì‚‚³‚ğ“K‡";
         Text[ chinese_traditional ] = "½Õ¾ãÄæ°ª";
         Text[ arabic ] = "ãáÇÁãÉ ÇÑÊİÇÚ ÇáÕİæİ";
@@ -9254,10 +9254,10 @@ Resource RID_GLOBSTR
         Text [ spanish ] = "El número máximo de celdas no válidas se ha excedido.\nNo se marcaron todas las celdas no válidas." ;
         Text [ french ] = "Le nombre maximal de cellules non valides a été dépassé.\nToutes les cellules invalides n'ont pas été marquées." ;
         Text [ portuguese ] = "O número máximo de células incorrectas foi ultrapassado.\nNem todas as células incorrectas foram marcadas." ;
-        Text [ portuguese_brazilian ] = "Die maximale Anzahl ungültiger Zellen wurde überschritten.\nEs wurden nicht alle ungültigen Zellen markiert." ;
+        Text [ portuguese_brazilian ] = "Die maximale Anzahl ung?tiger Zellen wurde ?erschritten.\nEs wurden nicht alle ung?tigen Zellen markiert." ;
         Text[ chinese_simplified ] = "ÒÑ¾­³¬¹ı×î¶àÎŞĞ§µ¥Ôª¸ñµÄÊıÄ¿¡£\nÃ»ÓĞÑ¡ÖĞÈ«²¿ÎŞĞ§µÄµ¥Ôª¸ñ¡£";
         Text[ russian ] = "Ìàêñèìàëüíîå ÷èñëî íåäåéñòâèòåëüíûõ ÿ÷ååê ïğåâûøåíî.\nÂûäåëåíû íå âñå íåäåéñòâèòåëüíûå ÿ÷åéêè.";
-        Text[ polish ] = "Maksymalna iloœæ nieprawid³owych komórek zosta³a przekroczona.\nNie wszystkie nieprawid³owe komórki zosta³y zaznaczone.";
+        Text[ polish ] = "Maksymalna ilo?æ nieprawid³owych komórek zosta³a przekroczona.\nNie wszystkie nieprawid³owe komórki zosta³y zaznaczone.";
         Text[ japanese ] = "–³Œø‚È¾Ù‚ÌÅ‘å”‚ğ’´‚¦‚Ä‚¢‚Ü‚·B\n‘I‘ğ‚³‚ê‚Ä‚¢‚È‚¢–³Œø‚È¾Ù‚ª‚ ‚è‚Ü‚·B";
         Text[ chinese_traditional ] = "¤w¸g¶W¹L³Ì¦hµL®ÄÀx¦s®æªº¼Æ¥Ø¡C\n¨S¦³¿ï¨ú¥ş³¡µL®ÄªºÀx¦s®æ¡C";
         Text[ arabic ] = "Êã ÊÌÇæÒ ÇáÚÏÏ ÇáÃŞÕì ááÎáÇíÇ ÇáÛíÑ ÕÇáÍÉ.\náã íÊã ÊÍÏíÏ ßá ÇáÎáÇíÇ ÇáÛíÑ ÕÇáÍÉ.";
@@ -9275,7 +9275,7 @@ Resource RID_GLOBSTR
         Text [ ENGLISH ] = "Delete contents" ;
         Text [ portuguese ] = "Apagar conteúdos" ;
         Text [ english_us ] = "Delete contents" ;
-        Text [ portuguese_brazilian ] = "Inhalte löschen" ;
+        Text [ portuguese_brazilian ] = "Inhalte l?chen" ;
         Text [ swedish ] = "Radera innehåll" ;
         Text [ danish ] = "Slet indhold" ;
         Text [ italian ] = "Elimina contenuti" ;
@@ -9284,7 +9284,7 @@ Resource RID_GLOBSTR
         Text [ dutch ] = "Inhoud verwijderen" ;
         Text[ chinese_simplified ] = "É¾³ıÄÚÈİ";
         Text[ russian ] = "Óäàëèòü ñîäåğæèìîå";
-        Text[ polish ] = "Usuñ zawartoœci";
+        Text[ polish ] = "Usuñ zawarto?ci";
         Text[ japanese ] = "“à—e‚Ìíœ";
         Text[ chinese_traditional ] = "§R°£¤º®e";
         Text[ arabic ] = "ÍĞİ ãÍÊæíÇÊ";
@@ -9354,7 +9354,7 @@ Resource RID_GLOBSTR
         Text [ ENGLISH ] = "Invalid Area" ;
         Text [ portuguese ] = "Área não válida." ;
         Text [ english_us ] = "Invalid range" ;
-        Text [ portuguese_brazilian ] = "Ungültiger Bereich" ;
+        Text [ portuguese_brazilian ] = "Ung?tiger Bereich" ;
         Text [ swedish ] = "Ogiltigt område" ;
         Text [ danish ] = "Ugyldigt område" ;
         Text [ italian ] = "Area non valida" ;
@@ -9390,7 +9390,7 @@ Resource RID_GLOBSTR
         Text [ dutch ] = "DataPiloot Waarde" ;
         Text[ chinese_simplified ] = "Êı¾İÖúÀí-¹¤×÷±í ÊıÖµ";
         Text[ russian ] = "Çíà÷åíèå ñâîäíîé òàáëèöû";
-        Text[ polish ] = "Wartoœæ Pilota danych";
+        Text[ polish ] = "Warto?æ Pilota danych";
         Text[ japanese ] = "ÃŞ°ÀÊß²Û¯Ä‚Ì”’l";
         Text[ chinese_traditional ] = "¸ê®Æ§U²z¤u§@ªí¼Æ­È";
         Text[ arabic ] = "ŞíãÉ ãÑÔÏ ÇáÈíÇäÇÊ";
@@ -9598,7 +9598,7 @@ Resource RID_GLOBSTR
         Text [ dutch ] = "Subtotalen" ;
         Text[ chinese_simplified ] = "·ÖÀà»ã×Ü";
         Text[ russian ] = "Ïğîìåæóòî÷íûå èòîãè";
-        Text[ polish ] = "Sumy poœrednie";
+        Text[ polish ] = "Sumy po?rednie";
         Text[ japanese ] = "¬Œv";
         Text[ chinese_traditional ] = "¤p­p";
         Text[ arabic ] = "ÇáãÌÇãíÚ ÇáİÑÚíÉ";
@@ -9650,7 +9650,7 @@ Resource RID_GLOBSTR
         Text [ dutch ] = "Wilt u de inhoud van # vervangen?" ;
         Text[ chinese_simplified ] = "ÄúÒª¸üÌæ # µÄÄÚÈİ£¿";
         Text[ russian ] = "Âû õîòèòå çàìåíèòü ñîäåğæèìîå #?";
-        Text[ polish ] = "Chcesz zamieniæ zawartoœæ #?";
+        Text[ polish ] = "Chcesz zamieniæ zawarto?æ #?";
         Text[ japanese ] = "# ‚Ì“à—e‚ğ’uŠ·‚µ‚Ü‚·‚©B";
         Text[ chinese_traditional ] = "±z­n¥N´À # ªº¤º®e¡H";
         Text[ arabic ] = "åá ÊÑíÏ ÇÓÊÈÏÇá ãÍÊæíÇÊ #¿";
@@ -9676,7 +9676,7 @@ Resource RID_GLOBSTR
         Text [ dutch ] = "Breedte:" ;
         Text[ chinese_simplified ] = "¿í:";
         Text[ russian ] = "Øèğèíà:";
-        Text[ polish ] = "Szerokoœæ:";
+        Text[ polish ] = "Szeroko?æ:";
         Text[ japanese ] = "•:";
         Text[ chinese_traditional ] = "¼e¡G";
         Text[ arabic ] = "ÇáÚÑÖ:";
@@ -9694,7 +9694,7 @@ Resource RID_GLOBSTR
         Text [ ENGLISH ] = "Height:" ;
         Text [ portuguese ] = "Altura:" ;
         Text [ english_us ] = "Height:" ;
-        Text [ portuguese_brazilian ] = "Höhe:" ;
+        Text [ portuguese_brazilian ] = "H?e:" ;
         Text [ swedish ] = "Höjd:" ;
         Text [ danish ] = "Højde:" ;
         Text [ italian ] = "Altezza:" ;
@@ -9746,7 +9746,7 @@ Resource RID_GLOBSTR
         Text [ ENGLISH ] = "The object could not be inserted." ;
         Text [ portuguese ] = "Foi impossível inserir o objecto." ;
         Text [ english_us ] = "The object could not be inserted." ;
-        Text [ portuguese_brazilian ] = "Das Objekt konnte nicht eingefügt werden." ;
+        Text [ portuguese_brazilian ] = "Das Objekt konnte nicht eingef?t werden." ;
         Text [ swedish ] = "Objektet kunde inte infogas." ;
         Text [ danish ] = "Det var ikke muligt at indsætte objektet." ;
         Text [ italian ] = "Non è stato possibile inserire l'oggetto." ;
@@ -9798,7 +9798,7 @@ Resource RID_GLOBSTR
         Text [ ENGLISH ] = "Changed cell #1 from '#2' to '#3'" ;
         Text [ ENGLISH_US ] = "Cell #1 changed from '#2' to '#3'" ;
         Text [ portuguese ] = "Célula #1 modificada de '#2' para '#3'" ;
-        Text [ portuguese_brazilian ] = "Zelle #1 von '#2' zu '#3' geändert" ;
+        Text [ portuguese_brazilian ] = "Zelle #1 von '#2' zu '#3' ge?ndert" ;
         Text [ swedish ] = "Cell #1 har ändrats från '#2' till '#3'" ;
         Text [ danish ] = "Celle #1 blev ændret fra '#2' til '#3'" ;
         Text [ italian ] = "Riga #1 di '#2' modificata in '#3'" ;
@@ -9824,7 +9824,7 @@ Resource RID_GLOBSTR
         Text [ ENGLISH ] = "Inserted #1" ;
         Text [ ENGLISH_US ] = "#1 inserted" ;
         Text [ portuguese ] = "#1 inserido" ;
-        Text [ portuguese_brazilian ] = "#1 eingefügt" ;
+        Text [ portuguese_brazilian ] = "#1 eingef?t" ;
         Text [ swedish ] = "#1 infogad" ;
         Text [ danish ] = "#1 indsat" ;
         Text [ italian ] = "#1 inserito" ;
@@ -9850,7 +9850,7 @@ Resource RID_GLOBSTR
         Text [ ENGLISH ] = "Deleted #1" ;
         Text [ ENGLISH_US ] = "#1deleted" ;
         Text [ portuguese ] = "#1 eliminado" ;
-        Text [ portuguese_brazilian ] = "#1 gelöscht" ;
+        Text [ portuguese_brazilian ] = "#1 gel?cht" ;
         Text [ swedish ] = "#1 raderad" ;
         Text [ danish ] = "#1 slettet" ;
         Text [ italian ] = "#1 cancellato" ;
@@ -9928,7 +9928,7 @@ Resource RID_GLOBSTR
         Text [ ENGLISH ] = "This Action will remove the change history.\nThe information about changes will be lost.\n\n Remove the change history." ;
         Text [ portuguese ] = "Com esta acção será cancelado o registo das modificações.\nAs informações sobre modificações prévias desaparecerão.\n\nCancelar?\n\n" ;
         Text [ english_us ] = "This action will exit record changes.\nAny information about changes will be lost.\n\nExit record changes?\n\n" ;
-        Text [ portuguese_brazilian ] = "Mit dieser Aktion wird die Aufzeichnung von Änderungen beendet.\nDie Information über Änderungen geht hierdurch verloren.\n\nAufzeichnung beenden?\n\n" ;
+        Text [ portuguese_brazilian ] = "Mit dieser Aktion wird die Aufzeichnung von ?nderungen beendet.\nDie Information ?er ?nderungen geht hierdurch verloren.\n\nAufzeichnung beenden?\n\n" ;
         Text [ swedish ] = "Den här åtgärden avslutar registreringen av ändringar.\nInformationen om ändringar går då förlorad.\n\nAvsluta inspelningen?" ;
         Text [ danish ] = "Denne handling afslutter registreringen af ændringer.\nAlle informationer om ændringer vil herigennem gå tabt.\nVil du afslutte registreringen?" ;
         Text [ italian ] = "Con questa operazione si termina la registrazione delle modifiche.\nL'informazione relativa alle modifiche andrà persa.\n\nTerminare la registrazione?\n\n" ;
@@ -9936,12 +9936,12 @@ Resource RID_GLOBSTR
         Text [ french ] = "Cette opération met fin à l'enregistrement des modifications.\nToute information concernant les modifications sera perdue.\n\nQuitter l'enregistrement ?\n\n" ;
         Text [ dutch ] = "Door deze activiteit wordt het noteren  van wijzigingen beëindigd.\\ nDe informatie over wijzigingen gaat hierdoor verloren.\n\nNoteren beëindigen?\n\n" ;
         Text[ chinese_simplified ] = "Õâ¸ö²Ù×÷»áÖĞ¶Ï¸ü¸Ä¼ÇÂ¼¡£\n¸ü¸ÄÄÚÈİ¾Í»áÒÅÊ§¡£\n\nÄú»¹ÊÇÒªÖĞ¶Ï¼ÇÂ¼Âğ£¿\n\n";
-        Text[ russian ] = "İòèì äåéñòâèåì çàêîí÷èòñÿ çàïèñü èñïğàâëåíèé.\nËşáàÿ èíôîğìàöèÿ î ïğåäûäóùèõ èñïğàâëåíèÿõ áóäåò óòåğÿíà.\n\nÇàêîí÷èòü çàïèñü èñïğàâëåíèé?\n\n";
+        Text[ russian ] = "İòèì äåéñòâèåì çàêîí÷èòñÿ çàïèñü èñïğàâëåíèé.\nËşáàÿ èíôîğìàöèÿ î ïğåäûäóùèõ èñïğàâëåíèÿõ áóäåò óòåğÿíà.\n\nÇàêîí÷èòü çàïèñü èñïğàâëåíèé?\n";
         Text[ polish ] = "Akcja ta koñczy nagrywanie zmian.\nInformacje o zmianach zostan¹ usuniête.\n\nZakoñczyæ nagrywanie?\n\n";
         Text[ japanese ] = "•ÏX‚Ì‹L˜^‚ğ‚±‚Ì±¸¼®İ‚ÅI—¹‚µ‚Ü‚·B\n“¯‚É•ÏX‚µ‚½î•ñ‚àŠ®‘S‚É¸‚í‚ê‚Ü‚·B\n\n‹L˜^‚ğI—¹‚µ‚Ü‚·‚©B\n\n";
         Text[ chinese_traditional ] = "³o­Ó°Ê§@·|µ²§ô­×§ï¡C\n­×§ï¤º®e´N·|¬y¥¢¡C\n\n±zÁÙ¬O­nÄ~Äò¡H\n\n";
         Text[ arabic ] = "åĞÇ ÇáÅÌÑÇÁ Óæİ íÄÏí Åáì ÅäåÇÁ ÚãáíÉ ÊÓÌíá ÇáÊÛííÑÇÊ.\nÓæİ íÄÏí åĞÇ ÈÏæÑå Åáì ÖíÇÚ ÇáãÚáæãÇÊ ÇáÎÇÕÉ ÈÇáÊÛííÑÇÊ.\n\nåá ÊÑíÏ ÅäåÇÁ ÇáÊÓÌíá¿\n\n";
-        Text[ greek ] = "Ìå áõôŞ ôçí åíİñãåéá ôåñìáôßæåôáé ç êáôáãñáöŞ áëëáãşí. Ç \nğëçñïöïñßåò ó÷åôéêÜ ìå ôéò áëëáãİò ğñüêåéôáé íá ÷áèïıí.\n\nÍá ôåñìáôéóôåß ç åããñáöŞ;\n\n";
+        Text[ greek ] = "Ìå áõôŞ ôçí åíİñãåéá ôåñìáôßæåôáé ç êáôáãñáöŞ áëëáãşí. Ç \nğëçñïöïñßåò ó÷åôéêÜ ìå ôéò áëëáãİò ğñüêåéôáé íá ÷áèïıí.\n\nÍá ôåñìáôéóôåß ç åããñáö";
         Text[ korean ] = "ÀÌ¡¡µ¿ÀÛ°ú¡¡´õºÒ¾î¡¡º¯°æ¡¡±â·ÏÀº¡¡Á¾·áµË´Ï´Ù.\nÀÌ¿Í¡¡´õºÒ¾î¡¡ÀÌÀü º¯°æ¿¡´ëÇÑ  Á¤º¸´Â »ó½Ç µÉ°ÍÀÔ´Ï´Ù .\n\n±â·ÏÀ»¡¡Á¾·áÇÏ½Ã°Ú½À´Ï±î?\n\n";
         Text[ turkish ] = "Bu işlem ile değişikliklerin izlenmesi sona erdirilecek.\nDaha önceki değişiklikler ile ilgili tüm bilgiler kaybolacak.\n\nKayıt durdurulsun mu?\n\n";
         Text[ language_user1 ] = " ";
@@ -9954,7 +9954,7 @@ Resource RID_GLOBSTR
         Text [ ENGLISH ] = "The document cannot be closed while a link is being updated." ;
         Text [ portuguese ] = "Impossível fechar o documento enquanto a ligação estiver a ser actualizada. " ;
         Text [ english_us ] = "The document can not be closed while a link is being updated." ;
-        Text [ portuguese_brazilian ] = "Das Dokument kann nicht geschlossen werden, während eine Verknüpfung aktualisiert wird." ;
+        Text [ portuguese_brazilian ] = "Das Dokument kann nicht geschlossen werden, w?hrend eine Verkn?fung aktualisiert wird." ;
         Text [ swedish ] = "Dokumentet kan inte stängas medan en länk uppdateras." ;
         Text [ danish ] = "Det er ikke muligt at lukke dokumentet, mens en kæde opdateres." ;
         Text [ italian ] = "Impossibile chiudere il documento durante l'aggiornamento di un collegamento." ;
