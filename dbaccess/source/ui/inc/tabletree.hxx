@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabletree.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 17:52:43 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:03:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,9 +72,6 @@
 #ifndef _COM_SUN_STAR_CONTAINER_XNAMEACCESS_HPP_
 #include <com/sun/star/container/XNameAccess.hpp>
 #endif
-#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#endif
 #ifndef _COM_SUN_STAR_SDBC_XDATABASEMETADATA_HPP_
 #include <com/sun/star/sdbc/XDatabaseMetaData.hpp>
 #endif
@@ -99,16 +96,15 @@ protected:
     Image           m_aTableImage;
     Image           m_aViewImage;
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >    m_xORB;
     sal_Bool        m_bVirtualRoot; // should the first entry be visible
 
 public:
-    OTableTreeListBox( Window* pParent, sal_Bool _bHiContrast,WinBits nWinStyle = NULL,sal_Bool _bVirtualRoot=sal_True );
-    OTableTreeListBox( Window* pParent, const ResId& rResId,sal_Bool _bHiContrast,sal_Bool _bVirtualRoot=sal_True );
-
-    void setServiceFactory(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > _rxORB)
-        { m_xORB = _rxORB; }
-
+    OTableTreeListBox( Window* pParent
+                        ,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB
+                        ,sal_Bool _bHiContrast,WinBits nWinStyle = NULL,sal_Bool _bVirtualRoot=sal_True );
+    OTableTreeListBox( Window* pParent
+                        ,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB
+                        , const ResId& rResId,sal_Bool _bHiContrast,sal_Bool _bVirtualRoot=sal_True );
     /** call when HiContrast change.
     */
     virtual void notifyHiContrastChanged();
@@ -150,7 +146,7 @@ public:
 
     /** to be used if a foreign instance added a table
     */
-    void    addedTable(
+    SvLBoxEntry* addedTable(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConn,
                 const ::rtl::OUString& _rName,
                 const ::com::sun::star::uno::Any& _rObject
@@ -159,6 +155,11 @@ public:
     /** to be used if a foreign instance removed a table
     */
     void    removedTable(
+                const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConn,
+                const ::rtl::OUString& _rName
+            );
+
+    SvLBoxEntry*    getEntryByQualifiedName(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxConn,
                 const ::rtl::OUString& _rName
             );
@@ -180,18 +181,17 @@ public:
 protected:
     virtual void InitEntry(SvLBoxEntry* _pEntry, const XubString& _rString, const Image& _rCollapsedBitmap, const Image& _rExpandedBitmap);
 
-    virtual void Command( const CommandEvent& rEvt );
-
     virtual void checkedButton_noBroadcast(SvLBoxEntry* _pEntry);
 
     void implEmphasize(SvLBoxEntry* _pEntry, sal_Bool _bChecked, sal_Bool _bUpdateDescendants = sal_True, sal_Bool _bUpdateAncestors = sal_True);
 
-    void implAddEntry(
+    SvLBoxEntry* implAddEntry(
             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rxConnMetaData,
             const ::rtl::OUString& _rTableName,
             const Image& _rImage,
             SvLBoxEntry* _pParentEntry,
-            sal_Int32 _nType
+            sal_Int32 _nType,
+            sal_Bool _bCheckName = sal_True
         );
 
     sal_Bool haveVirtualRoot() const { return m_bVirtualRoot; }
