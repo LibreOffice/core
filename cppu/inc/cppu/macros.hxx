@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macros.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dbo $ $Date: 2001-10-26 07:42:42 $
+ *  last change: $Author: dbo $ $Date: 2001-10-29 15:25:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,9 @@
 #ifndef _CPPU_MACROS_HXX_
 #define _CPPU_MACROS_HXX_
 
+#ifndef _SAL_TYPES_H_
+#include <sal/types.h>
+#endif
 #ifndef _UNO_LBNAMES_H_
 #include <uno/lbnames.h>
 #endif
