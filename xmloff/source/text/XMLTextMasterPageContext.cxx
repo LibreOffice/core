@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextMasterPageContext.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mib $ $Date: 2002-05-30 14:47:10 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:38:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,7 +143,7 @@ XMLTextMasterPageContext::XMLTextMasterPageContext( SvXMLImport& rImport,
     bHeaderLeftInserted( sal_False ),
     bFooterLeftInserted( sal_False )
 {
-    OUString sName;
+    OUString sName, sDisplayName;
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
@@ -156,18 +156,32 @@ XMLTextMasterPageContext::XMLTextMasterPageContext( SvXMLImport& rImport,
             {
                 sName = xAttrList->getValueByIndex( i );
             }
+            else if( IsXMLToken( aLocalName, XML_DISPLAY_NAME ) )
+            {
+                sDisplayName = xAttrList->getValueByIndex( i );
+            }
             else if( IsXMLToken( aLocalName, XML_NEXT_STYLE_NAME ) )
             {
                 sFollow = xAttrList->getValueByIndex( i );
             }
-            else if( IsXMLToken( aLocalName, XML_PAGE_MASTER_NAME ) )
+            else if( IsXMLToken( aLocalName, XML_PAGE_LAYOUT_NAME ) )
             {
                 sPageMasterName = xAttrList->getValueByIndex( i );
             }
         }
     }
 
-    if( 0 == sName.getLength() )
+    if( sDisplayName.getLength() )
+    {
+        rImport.AddStyleDisplayName( XML_STYLE_FAMILY_MASTER_PAGE, sName,
+                                     sDisplayName );
+    }
+    else
+    {
+        sDisplayName = sName;
+    }
+
+    if( 0 == sDisplayName.getLength() )
         return;
 
     Reference < XNameContainer > xPageStyles =
@@ -177,9 +191,9 @@ XMLTextMasterPageContext::XMLTextMasterPageContext( SvXMLImport& rImport,
 
     Any aAny;
     sal_Bool bNew = sal_False;
-    if( xPageStyles->hasByName( sName ) )
+    if( xPageStyles->hasByName( sDisplayName ) )
     {
-        aAny = xPageStyles->getByName( sName );
+        aAny = xPageStyles->getByName( sDisplayName );
         aAny >>= xStyle;
     }
     else
@@ -189,7 +203,7 @@ XMLTextMasterPageContext::XMLTextMasterPageContext( SvXMLImport& rImport,
             return;
 
         aAny <<= xStyle;
-        xPageStyles->insertByName( sName, aAny );
+        xPageStyles->insertByName( sDisplayName, aAny );
         bNew = sal_True;
     }
 
@@ -315,12 +329,15 @@ void XMLTextMasterPageContext::Finish( sal_Bool bOverwrite )
             xPropSet->getPropertySetInfo();
         if( xPropSetInfo->hasPropertyByName( sFollowStyle ) )
         {
+            OUString sDisplayFollow(
+                GetImport().GetStyleDisplayName(
+                        XML_STYLE_FAMILY_MASTER_PAGE, sFollow ) );
             Any aAny = xPropSet->getPropertyValue( sFollowStyle );
             OUString sCurrFollow;
             aAny >>= sCurrFollow;
-            if( sCurrFollow != sFollow )
+            if( sCurrFollow != sDisplayFollow )
             {
-                aAny <<= sFollow;
+                aAny <<= sDisplayFollow;
                 xPropSet->setPropertyValue( sFollowStyle, aAny );
             }
         }
