@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basmgr.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: ab $ $Date: 2001-11-22 13:36:33 $
+ *  last change: $Author: ab $ $Date: 2001-11-23 17:35:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1328,7 +1328,7 @@ void BasicManager::Store( SotStorage& rStorage, BOOL bStoreLibs )
     }
 
     // #91626
-    if( !bModified && bStoreLibs )
+    if( !bModified && bStoreLibs && mpImpl->mpManagerStream )
     {
         // Store saved streams
         SotStorageStreamRef xManagerStream = rStorage.OpenSotStream(
