@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bootstrap.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dbo $ $Date: 2001-11-09 13:49:15 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 10:54:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,7 +105,7 @@ sal_Bool SAL_CALL installTypeDescriptionManager(
       - registry typedescription provider, typedescription manager (also installs it into cppu core)
 
     @param xRegistry registry for service manager and singleton objects of context (may be null)
-    @rBootstrapPath optional bootstrap path for initial components
+    @param rBootstrapPath optional bootstrap path for initial components
     @return component context
 */
 ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext > SAL_CALL
