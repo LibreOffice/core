@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tphfedit.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dr $ $Date: 2001-05-14 09:20:20 $
+ *  last change: $Author: sab $ $Date: 2002-07-24 16:10:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,12 @@
 #include <popmenu.hxx>
 #endif
 
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLE_HPP_
+#include <drafts/com/sun/star/accessibility/XAccessible.hpp>
+#endif
+#ifndef _CPPUHELPER_WEAKREF_HXX_
+#include <cppuhelper/weakref.hxx>
+#endif
 
 //===================================================================
 
@@ -102,6 +108,7 @@ class ScPatternAttr;
 class EditView;
 class EditTextObject;
 class SvxFieldItem;
+class ScAccessibleEditObject;
 
 class ScEditWindow : public Control
 {
@@ -118,6 +125,8 @@ public:
 
     void            SetNumType(SvxNumType eNumType);
 
+    virtual ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > CreateAccessible();
+
 protected:
     virtual void    Paint( const Rectangle& rRec );
     virtual void    MouseMove( const MouseEvent& rMEvt );
@@ -126,10 +135,14 @@ protected:
     virtual void    KeyInput( const KeyEvent& rKEvt );
     virtual void    Command( const CommandEvent& rCEvt );
     virtual void    GetFocus();
+    virtual void    LoseFocus();
 
 private:
     ScHeaderEditEngine* pEdEngine;
     EditView*           pEdView;
+
+    com::sun::star::uno::WeakReference< ::drafts::com::sun::star::accessibility::XAccessible > xAcc;
+    ScAccessibleEditObject* pAcc;
 };
 
 //===================================================================

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tphfedit.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dr $ $Date: 2002-05-31 12:47:06 $
+ *  last change: $Author: sab $ $Date: 2002-07-24 16:11:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,6 +94,10 @@
 #include "prevwsh.hxx"
 #include "hfedtdlg.hrc"
 #include "textdlgs.hxx"
+
+#ifndef _SC_ACCESSIBLEEDITOBJECT_HXX
+#include "AccessibleEditObject.hxx"
+#endif
 
 
 // STATIC DATA -----------------------------------------------------------
@@ -422,7 +426,8 @@ void lcl_GetFieldData( ScHeaderFieldData& rData )
 //========================================================================
 
 ScEditWindow::ScEditWindow( Window* pParent, const ResId& rResId )
-    :   Control( pParent, rResId )
+    :   Control( pParent, rResId ),
+    pAcc(NULL)
 {
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
     Color aBgColor = rStyleSettings.GetWindowColor();
@@ -456,6 +461,13 @@ ScEditWindow::ScEditWindow( Window* pParent, const ResId& rResId )
 
 __EXPORT ScEditWindow::~ScEditWindow()
 {
+    // delete Accessible object before deleting EditEngine and EditView
+    if (pAcc)
+    {
+        ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > xTemp = xAcc;
+        if (xTemp.is())
+            pAcc->dispose();
+    }
     delete pEdEngine;
     delete pEdView;
 }
@@ -614,7 +626,37 @@ void ScEditWindow::Command( const CommandEvent& rCEvt )
 void __EXPORT ScEditWindow::GetFocus()
 {
     pActiveEdWnd = this;
+
+    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > xTemp = xAcc;
+    if (xTemp.is() && pAcc)
+    {
+        pAcc->GotFocus();
+    }
+    else
+        pAcc = NULL;
 }
+
+void __EXPORT ScEditWindow::LoseFocus()
+{
+    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > xTemp = xAcc;
+    if (xTemp.is() && pAcc)
+    {
+        pAcc->LostFocus();
+    }
+    else
+        pAcc = NULL;
+}
+
+// -----------------------------------------------------------------------
+
+::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > ScEditWindow::CreateAccessible()
+{
+    pAcc = new ScAccessibleEditObject(GetAccessibleParentWindow()->GetAccessible(), pEdView, this, sal_True);
+    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > xAccessible = pAcc;
+    xAcc = xAccessible;
+    return pAcc;
+}
+
 /*
 class ScExtIButton : public ImageButton
 {
