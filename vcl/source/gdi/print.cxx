@@ -2,9 +2,9 @@
  *
  *  $RCSfile: print.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ssa $ $Date: 2001-05-18 09:26:12 $
+ *  last change: $Author: hr $ $Date: 2001-09-27 17:48:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -675,7 +675,8 @@ void Printer::ImplInit( SalPrinterQueueInfo* pInfo )
         if( rxPrinter.is() )
         {
             mpGraphics = new ImplServerGraphics( pSVData->mpRemotePrinterList->GetServerAtoms( aPrintServerName ) );
-            mpGraphics->SetInterface( REF( NMSP_CLIENT::XRmOutputDevice )( rxPrinter, NMSP_UNO::UNO_QUERY ) );
+        REF( NMSP_CLIENT::XRmOutputDevice ) aTmp( rxPrinter, NMSP_UNO::UNO_QUERY );
+            mpGraphics->SetInterface( aTmp );
         }
 
         if( !mpGraphics->GetInterface().is() )
@@ -924,8 +925,10 @@ Printer::~Printer()
 #else
     if ( mpInfoPrinter )
     {
-        if( mpGraphics )
-            mpGraphics->SetInterface( REF( NMSP_CLIENT::XRmOutputDevice )() );
+        if( mpGraphics ) {
+           REF( NMSP_CLIENT::XRmOutputDevice ) aTmp;
+            mpGraphics->SetInterface( aTmp );
+        }
 
         ImplReleaseServerGraphics();
 
@@ -1172,8 +1175,10 @@ BOOL Printer::SetPrinterProps( const Printer* pPrinter )
 #else
             if ( mpInfoPrinter )
             {
-                if( mpGraphics )
-                    mpGraphics->SetInterface( REF( NMSP_CLIENT::XRmOutputDevice )() );
+                if( mpGraphics ) {
+                    REF( NMSP_CLIENT::XRmOutputDevice ) aTmp;
+                    mpGraphics->SetInterface( aTmp );
+                }
 
                 ImplReleaseServerGraphics();
                 delete mpGraphics, mpGraphics = NULL;
@@ -1225,8 +1230,10 @@ BOOL Printer::SetPrinterProps( const Printer* pPrinter )
 #else
             if ( mpInfoPrinter )
             {
-                if( mpGraphics )
-                    mpGraphics->SetInterface( REF( NMSP_CLIENT::XRmOutputDevice )() );
+                if( mpGraphics ) {
+                    REF( NMSP_CLIENT::XRmOutputDevice ) aTmp;
+                    mpGraphics->SetInterface( aTmp );
+                }
 
                 ImplReleaseServerGraphics();
                 delete mpGraphics, mpGraphics = NULL;

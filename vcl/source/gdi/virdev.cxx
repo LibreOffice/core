@@ -2,9 +2,9 @@
  *
  *  $RCSfile: virdev.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hdu $ $Date: 2001-05-23 12:00:28 $
+ *  last change: $Author: hr $ $Date: 2001-09-27 17:48:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -316,7 +316,8 @@ VirtualDevice::~VirtualDevice()
         }
     }
 
-    mpGraphics->SetInterface( REF( NMSP_CLIENT::XRmOutputDevice )() );
+    REF( NMSP_CLIENT::XRmOutputDevice ) aTmp;
+    mpGraphics->SetInterface( aTmp );
     ImplReleaseServerGraphics();
     delete mpVirDev;
     delete mpGraphics;
