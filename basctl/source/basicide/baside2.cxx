@@ -2,9 +2,9 @@
  *
  *  $RCSfile: baside2.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2003-11-05 12:38:01 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 17:11:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -290,12 +290,6 @@ void ModulWindow::DoInit()
 
 void __EXPORT ModulWindow::Paint( const Rectangle& )
 {
-    DBG_CHKTHIS( ModulWindow, 0 );
-#if OSL_DEBUG_LEVEL > 1
-//  SetFillInBrush( Brush( Color( COL_GREEN ) ) );
-//  Size aSz = GetOutputSize();
-//  DrawRect( Rectangle( Point( 0, 0 ), aSz ) );
-#endif
 }
 
 void __EXPORT ModulWindow::Resize()
@@ -322,7 +316,9 @@ void ModulWindow::CheckCompileBasic()
         if ( !bRunning && bModified )
         {
             BOOL bDone = FALSE;
-            Application::EnterWait();
+
+            BasicIDEShell* pIDEShell = IDE_DLL()->GetShell();
+            pIDEShell->GetViewFrame()->GetWindow().EnterWait();
 
             if( bModified )
             {
@@ -341,7 +337,7 @@ void ModulWindow::CheckCompileBasic()
                 GetBreakPoints().SetBreakPointsInBasic( xModule );
             }
 
-            Application::LeaveWait();
+            pIDEShell->GetViewFrame()->GetWindow().LeaveWait();
 
             //BasicIDE::MarkDocShellModified( GetBasic() );
 
@@ -555,11 +551,11 @@ BOOL ModulWindow::SaveBasicSource()
         SvStream* pStream = aMedium.GetOutStream();
         if ( pStream )
         {
-            Application::EnterWait();
+            EnterWait();
             AssertValidEditEngine();
             GetEditEngine()->Write( *pStream );
             aMedium.Commit();
-            Application::LeaveWait();
+            LeaveWait();
             ULONG nError = aMedium.GetError();
             if ( nError )
                 ErrorHandler::HandleError( nError );
@@ -772,7 +768,7 @@ long __EXPORT ModulWindow::BasicBreakHdl( StarBASIC* pBasic )
     // #80085 removed
     //if( BasicIDE::GetBasicDialogCount() )
     //{
-        //Application::GetDefModalDialogParent()->EnableInput( TRUE, TRUE );
+        //Application::GetDefDialogParent()->EnableInput( TRUE, TRUE );
     //}
 
     BasicIDE::InvalidateDebuggerSlots();
@@ -783,7 +779,7 @@ long __EXPORT ModulWindow::BasicBreakHdl( StarBASIC* pBasic )
     // #80085 removed
     //if( BasicIDE::GetBasicDialogCount() )
     //{
-        //Application::GetDefModalDialogParent()->EnableInput( FALSE, TRUE );
+        //Application::GetDefDialogParent()->EnableInput( FALSE, TRUE );
     //}
 
     aStatus.bIsInReschedule = FALSE;
