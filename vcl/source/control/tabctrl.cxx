@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabctrl.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2004-02-20 08:50:49 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 15:48:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,8 +97,6 @@
 #include <hash_map>
 #include <vector>
 
-
-
 // =======================================================================
 
 struct ImplTabCtrlData
@@ -171,6 +169,9 @@ void TabControl::ImplInit( Window* pParent, WinBits nStyle )
     if ( !(nStyle & WB_NODIALOGCONTROL) )
         nStyle |= WB_DIALOGCONTROL;
 
+    // no single line tabs since NWF
+    nStyle &= ~WB_SINGLELINE;
+
     Control::ImplInit( pParent, nStyle, NULL );
 
     mpItemList                  = new ImplTabItemList( 8, 8 );
@@ -194,11 +195,13 @@ void TabControl::ImplInit( Window* pParent, WinBits nStyle )
     mpTabCtrlData->mpLeftBtn    = NULL;
     mpTabCtrlData->mpRightBtn   = NULL;
 
-    if ( (GetSettings().GetStyleSettings().GetTabControlStyle() & STYLE_TABCONTROL_SINGLELINE) ||
-         (nStyle & WB_SINGLELINE) )
-        mbSingleLine = TRUE;
 
     ImplInitSettings( TRUE, TRUE, TRUE );
+
+    // if the tabcontrol is drawn (ie filled) by a native widget, make sure all contols will have transparent background
+    // otherwise they will paint with a wrong background
+    if( IsNativeControlSupported(CTRL_TAB_PANE, PART_ENTIRE_CONTROL) )
+        EnableChildTransparentMode( TRUE );
 }
 
 // -----------------------------------------------------------------------
@@ -230,8 +233,13 @@ void TabControl::ImplInitSettings( BOOL bFont,
     if ( bBackground )
     {
         Window* pParent = GetParent();
-        if ( pParent->IsChildTransparentModeEnabled() && !IsControlBackground() )
+        if ( (pParent->IsChildTransparentModeEnabled() && !IsControlBackground() )
+            || IsNativeControlSupported(CTRL_TAB_PANE, PART_ENTIRE_CONTROL)
+            || IsNativeControlSupported(CTRL_TAB_ITEM, PART_ENTIRE_CONTROL) )
+
         {
+            // set transparent mode for NWF tabcontrols to have
+            // the background always cleared properly
             EnableChildTransparentMode( TRUE );
             SetParentClipMode( PARENTCLIPMODE_NOCLIP );
             SetPaintTransparent( TRUE );
@@ -250,8 +258,6 @@ void TabControl::ImplInitSettings( BOOL bFont,
         }
     }
 
-    // Sollen TabReiter farbig dargestellt werden
-    mbColored =  (rStyleSettings.GetTabControlStyle() & STYLE_TABCONTROL_COLOR) != 0;
     ImplScrollBtnsColor();
 }
 
@@ -360,17 +366,8 @@ void TabControl::ImplScrollBtnsColor()
 {
     if ( mpTabCtrlData && mpTabCtrlData->mpLeftBtn )
     {
-        if ( mbColored )
-        {
-            Color aScrollBtnColor( COL_LIGHTBLUE );
-            mpTabCtrlData->mpLeftBtn->SetControlForeground( aScrollBtnColor );
-            mpTabCtrlData->mpRightBtn->SetControlForeground( aScrollBtnColor );
-        }
-        else
-        {
-            mpTabCtrlData->mpLeftBtn->SetControlForeground();
-            mpTabCtrlData->mpRightBtn->SetControlForeground();
-        }
+        mpTabCtrlData->mpLeftBtn->SetControlForeground();
+        mpTabCtrlData->mpRightBtn->SetControlForeground();
     }
 }
 
@@ -488,15 +485,11 @@ Rectangle TabControl::ImplGetTabRect( USHORT nPos, long nWidth, long nHeight )
     if ( nPos == TAB_PAGERECT )
     {
         USHORT nLastPos;
-        if ( mbSingleLine )
-            nLastPos = mnFirstPagePos;
+        if ( mnCurPageId )
+            nLastPos = GetPagePos( mnCurPageId );
         else
-        {
-            if ( mnCurPageId )
-                nLastPos = GetPagePos( mnCurPageId );
-            else
-                nLastPos = 0;
-        }
+            nLastPos = 0;
+
         Rectangle aRect = ImplGetTabRect( nLastPos, nWidth, nHeight );
         aRect = Rectangle( Point( TAB_OFFSET, aRect.Bottom()+TAB_OFFSET ),
                            Size( nWidth-TAB_OFFSET*2,
@@ -540,86 +533,7 @@ Rectangle TabControl::ImplGetTabRect( USHORT nPos, long nWidth, long nHeight )
             nMaxWidth = mnMaxPageWidth;
 
         mbScroll = FALSE;
-        if ( mbSingleLine )
-        {
-            // Zuerst ermitteln wir, ob wir scrollen muessen
-            pItem = mpItemList->First();
-            while ( pItem )
-            {
-                aSize = ImplGetItemSize( pItem, nMaxWidth );
-                pItem->maRect = Rectangle( Point( nX, nY ), aSize );
-                pItem->mnLine = 1;
-                pItem->mbFullVisible = TRUE;
-                nX += aSize.Width();
-
-                if ( (nX > nWidth-2) && (nWidth > 4) )
-                    mbScroll = TRUE;
-
-                pItem = mpItemList->Next();
-            }
-
-            // Wenn wir Scrollen muessen, dann muessen die Reiter
-            // entsprechend angeordnet werden
-            if ( mbScroll )
-            {
-                // Zuerst ermitteln wir den letzten TabReiter, bei dem
-                // die restlichen noch sichtbar bleiben und passen
-                // gegebenenfalls den ersten sichtbaren Writer an
-                mnBtnSize = GetTextHeight()+(TAB_TABOFFSET_Y*2);
-                long    nMaxWidth = nWidth-(mnBtnSize*2);
-                long    nTempWidth = 0;
-                USHORT  nPageCount = GetPageCount();
-                mnLastFirstPagePos = nPageCount;
-                pItem = mpItemList->Last();
-                while ( pItem )
-                {
-                    nTempWidth += pItem->maRect.GetSize().Width();
-                    if ( nTempWidth > nMaxWidth )
-                        break;
-
-                    mnLastFirstPagePos--;
-                    pItem = mpItemList->Prev();
-                }
-                if ( mnLastFirstPagePos > nPageCount-1 )
-                    mnLastFirstPagePos = nPageCount-1;
-                if ( mnFirstPagePos > mnLastFirstPagePos )
-                   mnFirstPagePos = mnLastFirstPagePos;
-
-                // Jetzt die TabReiter anordnen und die Reiter ausblenden,
-                // die nicht zu sehen sind
-                nPos = 0;
-                nX = 2;
-                pItem = mpItemList->First();
-                while ( pItem )
-                {
-                    if ( (nPos < mnFirstPagePos) ||
-                         ((nX > nWidth-2) && (nWidth > 4)) )
-                    {
-                        pItem->mbFullVisible = FALSE;
-                        pItem->maRect.SetEmpty();
-                        mbSmallInvalidate = FALSE;
-                    }
-                    else
-                    {
-                        aSize = pItem->maRect.GetSize();
-                        Rectangle aNewRect( Point( nX, nY ), aSize );
-                        if ( mbSmallInvalidate && (pItem->maRect != aNewRect) )
-                            mbSmallInvalidate = FALSE;
-                        pItem->maRect = aNewRect;
-                        nX += aSize.Width();
-                    }
-
-                    if ( nX > nMaxWidth )
-                        pItem->mbFullVisible = FALSE;
-
-                    pItem = mpItemList->Next();
-                    nPos++;
-                }
-            }
-            else
-                mnFirstPagePos = 0;
-        }
-        else
+        if( 1 )
         {
             USHORT          nLines = 0;
             USHORT          nCurLine = 0;
@@ -815,6 +729,17 @@ void TabControl::ImplChangeTabPage( USHORT nId, USHORT nOldId )
     if ( pOldPage )
         pOldPage->Hide();
 
+    // Invalidate the same region that will be send to NWF
+    // to always allow for bitmap caching
+    // see Window::DrawNativeControl()
+    if( IsNativeControlSupported( CTRL_TAB_PANE, PART_ENTIRE_CONTROL ) )
+    {
+        aRect.Left()   -= TAB_OFFSET;
+        aRect.Top()    -= TAB_OFFSET;
+        aRect.Right()  += TAB_OFFSET;
+        aRect.Bottom() += TAB_OFFSET;
+    }
+
     Invalidate( aRect );
 }
 
@@ -857,32 +782,7 @@ void TabControl::ImplActivateTabPage( BOOL bNext )
 
 void TabControl::ImplSetFirstPagePos( USHORT nPagePos )
 {
-    if ( !mbSingleLine )
-        return;
-
-    ImplFreeLayoutData();
-
-    if ( mbFormat )
-        mnFirstPagePos = nPagePos;
-    else
-    {
-        if ( nPagePos > mnLastFirstPagePos )
-            nPagePos = mnLastFirstPagePos;
-
-        if ( nPagePos != mnFirstPagePos )
-        {
-            // Neu auszugebene Rechteck berechnen
-            Rectangle aRect = ImplGetTabRect( TAB_PAGERECT );
-            aRect.Bottom()  = aRect.Top();
-            aRect.Left()    = 0;
-            aRect.Top()     = 0;
-            aRect.Right()   = Control::GetOutputSizePixel().Width();
-
-            mbFormat = TRUE;
-            mnFirstPagePos = nPagePos;
-            Invalidate( aRect, INVALIDATE_NOCHILDREN );
-        }
-    }
+    return; // was only required for single line
 }
 
 // -----------------------------------------------------------------------
@@ -914,7 +814,7 @@ void TabControl::ImplShowFocus()
 
 // -----------------------------------------------------------------------
 
-void TabControl::ImplDrawItem( ImplTabItem* pItem, const Rectangle& rCurRect, bool bLayout )
+void TabControl::ImplDrawItem( ImplTabItem* pItem, const Rectangle& rCurRect, bool bLayout, bool bFirstInGroup, bool bLastInGroup, bool bIsCurrentItem )
 {
     if ( pItem->maRect.IsEmpty() )
         return;
@@ -937,6 +837,7 @@ void TabControl::ImplDrawItem( ImplTabItem* pItem, const Rectangle& rCurRect, bo
     BOOL                    bLeftBorder = TRUE;
     BOOL                    bRightBorder = TRUE;
     USHORT                  nOff;
+    BOOL                    bNativeOK = FALSE;
 
     USHORT nOff2 = 0;
     USHORT nOff3 = 0;
@@ -974,36 +875,59 @@ void TabControl::ImplDrawItem( ImplTabItem* pItem, const Rectangle& rCurRect, bo
         }
     }
 
-    if( ! bLayout )
+    if( !bLayout && (bNativeOK = IsNativeControlSupported(CTRL_TAB_ITEM, PART_ENTIRE_CONTROL)) == TRUE )
+    {
+        ImplControlValue        aControlValue;
+        Region              aCtrlRegion( pItem->maRect );
+        ControlState        nState = 0;
+
+        if( pItem->mnId == mnCurPageId )
+            nState |= CTRL_STATE_SELECTED;
+        if ( HasFocus() )
+            nState |= CTRL_STATE_FOCUSED;
+        if ( IsEnabled() )
+            nState |= CTRL_STATE_ENABLED;
+        if( IsMouseOver() && pItem->maRect.IsInside( GetPointerPosPixel() ) )
+        {
+            nState |= CTRL_STATE_ROLLOVER;
+            ImplTabItem* pI;
+            int idx=0;
+            while( (pI = mpItemList->GetObject(idx++)) )
+                if( (pI != pItem) && (pI->maRect.IsInside( GetPointerPosPixel() ) ) )
+                {
+                    nState &= ~CTRL_STATE_ROLLOVER; // avoid multiple highlighted tabs
+                    break;
+                }
+        }
+
+        TabitemValue tiValue;
+        if(pItem->maRect.Left() < 5)
+            tiValue.mnAlignment |= TABITEM_LEFTALIGNED;
+        if(pItem->maRect.Right() > mnLastWidth - 5)
+            tiValue.mnAlignment |= TABITEM_RIGHTALIGNED;
+        if ( bFirstInGroup )
+            tiValue.mnAlignment |= TABITEM_FIRST_IN_GROUP;
+        if ( bLastInGroup )
+            tiValue.mnAlignment |= TABITEM_LAST_IN_GROUP;
+        aControlValue.setOptionalVal( (void *)(&tiValue) );
+
+        bNativeOK = DrawNativeControl( CTRL_TAB_ITEM, PART_ENTIRE_CONTROL, aCtrlRegion, nState,
+                    aControlValue, rtl::OUString() );
+    }
+
+    if( ! bLayout && !bNativeOK )
     {
         if ( !(rStyleSettings.GetOptions() & STYLE_OPTION_MONO) )
         {
-            if ( mbColored )
-            {
-                USHORT  nPos = (USHORT)mpItemList->GetPos( pItem );
-                Color   aOldFillColor = GetFillColor();
-                SetLineColor();
-                SetFillColor( aImplTabColorAry[nPos%TABCOLORCOUNT] );
-                Rectangle aColorRect;
-                aColorRect.Left()   = aRect.Left()-nOff2+1;
-                aColorRect.Top()    = aRect.Top()-nOff2+1;
-                aColorRect.Right()  = aRect.Right()+nOff2-3;
-                aColorRect.Bottom() = nLeftBottom;
-                if ( pItem->mnId != mnCurPageId )
-                    aColorRect.Bottom()--;
-                DrawRect( aColorRect );
-                SetFillColor( aOldFillColor );
-            }
-
             SetLineColor( rStyleSettings.GetLightColor() );
-            DrawPixel( Point( aRect.Left()+1-nOff2, aRect.Top()+1-nOff2 ) );
+            DrawPixel( Point( aRect.Left()+1-nOff2, aRect.Top()+1-nOff2 ) );    // diagonally indented top-left pixel
             if ( bLeftBorder )
             {
                 DrawLine( Point( aRect.Left()-nOff2, aRect.Top()+2-nOff2 ),
                           Point( aRect.Left()-nOff2, nLeftBottom-1 ) );
             }
-            DrawLine( Point( aRect.Left()+2-nOff2, aRect.Top()-nOff2 ),
-                      Point( aRect.Right()+nOff2-3, aRect.Top()-nOff2 ) );
+            DrawLine( Point( aRect.Left()+2-nOff2, aRect.Top()-nOff2 ),         // top line starting 2px from left border
+                      Point( aRect.Right()+nOff2-3, aRect.Top()-nOff2 ) );      // ending 3px from right border
 
             if ( bRightBorder )
             {
@@ -1045,6 +969,13 @@ void TabControl::ImplDrawItem( ImplTabItem* pItem, const Rectangle& rCurRect, bo
         mpTabCtrlData->maTabRectangles.push_back( aRect );
     }
 
+    // set font accordingly, current item is painted bold
+    // we set the font attributes always before drawing to be re-entrant (DrawNativeControl may trigger additional paints)
+    Font aFont( GetFont() );
+    aFont.SetTransparent( TRUE );
+    aFont.SetWeight( bIsCurrentItem ? WEIGHT_BOLD : WEIGHT_LIGHT );
+    SetFont( aFont );
+
     Size aTabSize = aRect.GetSize();
     long nTextHeight = GetTextHeight();
     long nTextWidth = GetCtrlTextWidth( pItem->maFormatText );
@@ -1061,10 +992,6 @@ void TabControl::ImplDrawItem( ImplTabItem* pItem, const Rectangle& rCurRect, bo
 
 IMPL_LINK( TabControl, ImplScrollBtnHdl, PushButton*, pBtn )
 {
-    if ( pBtn == mpTabCtrlData->mpRightBtn )
-        ImplSetFirstPagePos( mnFirstPagePos+1 );
-    else
-        ImplSetFirstPagePos( mnFirstPagePos-1 );
     ImplSetScrollBtnsState();
     return 0;
 }
@@ -1113,15 +1040,8 @@ void TabControl::ImplPaint( const Rectangle& rRect, bool bLayout )
     // Hier wird gegebenenfalls auch neu formatiert
     Rectangle aRect = ImplGetTabRect( TAB_PAGERECT );
 
-    // Fonts entsprechend setzen
-    Font aFont( GetFont() );
-    Font aLightFont = aFont;
-    aFont.SetTransparent( TRUE );
-    aFont.SetWeight( WEIGHT_BOLD );
-    aLightFont.SetTransparent( TRUE );
-    aLightFont.SetWeight( WEIGHT_LIGHT );
-
-    // Aktuelles Item ermitteln
+    // find current item
+    ImplTabItem* pPrevCurItem = NULL;
     ImplTabItem* pCurItem = NULL;
     ImplTabItem* pItem = mpItemList->First();
     pItem = mpItemList->First();
@@ -1136,7 +1056,7 @@ void TabControl::ImplPaint( const Rectangle& rRect, bool bLayout )
         pItem = mpItemList->Next();
     }
 
-    // Border um TabPage zeichnen
+    // Draw the TabPage border
     const StyleSettings&    rStyleSettings  = GetSettings().GetStyleSettings();
     Rectangle               aCurRect;
     long                    nTopOff = 1;
@@ -1144,65 +1064,127 @@ void TabControl::ImplPaint( const Rectangle& rRect, bool bLayout )
     aRect.Top()    -= TAB_OFFSET;
     aRect.Right()  += TAB_OFFSET;
     aRect.Bottom() += TAB_OFFSET;
-    if ( !(rStyleSettings.GetOptions() & STYLE_OPTION_MONO) )
-        SetLineColor( rStyleSettings.GetLightColor() );
-    else
-        SetLineColor( Color( COL_BLACK ) );
-    if ( pCurItem && !pCurItem->maRect.IsEmpty() )
+
+    BOOL bNativeOK = FALSE;
+    if( (bNativeOK = IsNativeControlSupported( CTRL_TAB_PANE, PART_ENTIRE_CONTROL) ) == TRUE )
     {
-        aCurRect = pCurItem->maRect;
-        if( ! bLayout )
-            DrawLine( aRect.TopLeft(), Point( aCurRect.Left()-2, aRect.Top() ) );
-        if ( aCurRect.Right()+1 < aRect.Right() )
-        {
-            if( ! bLayout )
-                DrawLine( Point( aCurRect.Right(), aRect.Top() ), aRect.TopRight() );
-        }
-        else
-            nTopOff = 0;
+        const ImplControlValue aControlValue( BUTTONVALUE_DONTKNOW, rtl::OUString(), 0 );
+
+        ControlState nState = CTRL_STATE_ENABLED;
+        int part = PART_ENTIRE_CONTROL;
+        if ( !IsEnabled() )
+            nState &= ~CTRL_STATE_ENABLED;
+        if ( HasFocus() )
+            nState |= CTRL_STATE_FOCUSED;
+
+        Region aClipRgn( GetActiveClipRegion() );
+        aClipRgn.Intersect( aRect );
+        if( !rRect.IsEmpty() )
+            aClipRgn.Intersect( rRect );
+
+        Region aCtrlRegion( aRect );
+        Rectangle aClipRect( aClipRgn.GetBoundRect() );
+        if( !aClipRgn.IsEmpty() ) //&& aClipRect.getHeight() && aClipRect.getWidth() )
+            bNativeOK = DrawNativeControl( CTRL_TAB_PANE, part, aCtrlRegion, nState,
+                aControlValue, rtl::OUString() );
     }
     else
-        if( ! bLayout )
-            DrawLine( aRect.TopLeft(), aRect.TopRight() );
-
-    if( ! bLayout )
     {
-        DrawLine( aRect.TopLeft(), aRect.BottomLeft() );
-
         if ( !(rStyleSettings.GetOptions() & STYLE_OPTION_MONO) )
+            SetLineColor( rStyleSettings.GetLightColor() );
+        else
+            SetLineColor( Color( COL_BLACK ) );
+        if ( pCurItem && !pCurItem->maRect.IsEmpty() )
         {
-            SetLineColor( rStyleSettings.GetShadowColor() );
-            DrawLine( Point( 1, aRect.Bottom()-1 ),
-                      Point( aRect.Right()-1, aRect.Bottom()-1 ) );
-            DrawLine( Point( aRect.Right()-1, aRect.Top()+nTopOff ),
-                      Point( aRect.Right()-1, aRect.Bottom()-1 ) );
-            SetLineColor( rStyleSettings.GetDarkShadowColor() );
-            DrawLine( Point( 0, aRect.Bottom() ),
-                      Point( aRect.Right(), aRect.Bottom() ) );
-            DrawLine( Point( aRect.Right(), aRect.Top()+nTopOff ),
-                      Point( aRect.Right(), aRect.Bottom() ) );
+            aCurRect = pCurItem->maRect;
+            if( ! bLayout )
+                DrawLine( aRect.TopLeft(), Point( aCurRect.Left()-2, aRect.Top() ) );
+            if ( aCurRect.Right()+1 < aRect.Right() )
+            {
+                if( ! bLayout )
+                    DrawLine( Point( aCurRect.Right(), aRect.Top() ), aRect.TopRight() );
+            }
+            else
+                nTopOff = 0;
         }
         else
+            if( ! bLayout )
+                DrawLine( aRect.TopLeft(), aRect.TopRight() );
+
+        if( ! bLayout )
         {
-            DrawLine( aRect.TopRight(), aRect.BottomRight() );
-            DrawLine( aRect.BottomLeft(), aRect.BottomRight() );
+            DrawLine( aRect.TopLeft(), aRect.BottomLeft() );
+
+            if ( !(rStyleSettings.GetOptions() & STYLE_OPTION_MONO) )
+            {
+                SetLineColor( rStyleSettings.GetShadowColor() );
+                DrawLine( Point( 1, aRect.Bottom()-1 ),
+                        Point( aRect.Right()-1, aRect.Bottom()-1 ) );
+                DrawLine( Point( aRect.Right()-1, aRect.Top()+nTopOff ),
+                        Point( aRect.Right()-1, aRect.Bottom()-1 ) );
+                SetLineColor( rStyleSettings.GetDarkShadowColor() );
+                DrawLine( Point( 0, aRect.Bottom() ),
+                        Point( aRect.Right(), aRect.Bottom() ) );
+                DrawLine( Point( aRect.Right(), aRect.Top()+nTopOff ),
+                        Point( aRect.Right(), aRect.Bottom() ) );
+            }
+            else
+            {
+                DrawLine( aRect.TopRight(), aRect.BottomRight() );
+                DrawLine( aRect.BottomLeft(), aRect.BottomRight() );
+            }
         }
     }
 
-    // Alle Items bis auf das aktuelle Zeichnen (nicht fett)
-    SetFont( aLightFont );
-    pItem = mpItemList->First();
-    while ( pItem )
+    // Some native toolkits (GTK+) draw tabs right-to-left, with an
+    // overlap between adjacent tabs
+    bool            bDrawTabsRTL = IsNativeControlSupported( CTRL_TAB_ITEM, PART_TABS_DRAW_RTL );
+    ImplTabItem *   pFirstTab = NULL;
+    ImplTabItem *   pLastTab = NULL;
+    unsigned idx;
+
+    // Event though there is a tab overlap with GTK+, the first tab is not
+    // overlapped on the left side.  Other tookits ignore this option.
+    if ( bDrawTabsRTL )
+    {
+        pFirstTab = mpItemList->First();
+        pLastTab = mpItemList->Last();
+        idx = mpItemList->Count()-1;
+    }
+    else
+    {
+        pLastTab = mpItemList->Last();
+        pFirstTab = mpItemList->First();
+        idx = 0;
+    }
+
+    while ( (pItem = mpItemList->GetObject(idx)) != NULL )
     {
         if ( pItem != pCurItem )
-            ImplDrawItem( pItem, aCurRect, bLayout );
-        pItem = mpItemList->Next();
+        {
+            Region aClipRgn( GetActiveClipRegion() );
+            aClipRgn.Intersect( pItem->maRect );
+            if( !rRect.IsEmpty() )
+                aClipRgn.Intersect( rRect );
+            if( bLayout || !aClipRgn.IsEmpty() )
+                ImplDrawItem( pItem, aCurRect, bLayout, (pItem==pFirstTab), (pItem==pLastTab), FALSE );
+        }
+
+        if ( bDrawTabsRTL )
+            idx--;
+        else
+            idx++;
     }
 
-    // aktuelles Item zeichnen wir fett
-    SetFont( aFont );
     if ( pCurItem )
-        ImplDrawItem( pCurItem, aCurRect, bLayout );
+    {
+        Region aClipRgn( GetActiveClipRegion() );
+        aClipRgn.Intersect( pCurItem->maRect );
+        if( !rRect.IsEmpty() )
+            aClipRgn.Intersect( rRect );
+        if( bLayout || !aClipRgn.IsEmpty() )
+            ImplDrawItem( pCurItem, aCurRect, bLayout, (pCurItem==pFirstTab), (pItem==pLastTab), TRUE );
+    }
 
     if ( !bLayout && HasFocus() )
         ImplShowFocus();
@@ -1257,6 +1239,7 @@ void TabControl::Resize()
             Invalidate( aRect, INVALIDATE_NOCHILDREN );
         else
             Invalidate( aRect );
+
     }
     else
     {
@@ -1442,9 +1425,72 @@ void TabControl::DataChanged( const DataChangedEvent& rDCEvt )
 
 // -----------------------------------------------------------------------
 
+Rectangle* TabControl::ImplFindPartRect( const Point& rPt )
+{
+    ImplTabItem* pItem = mpItemList->First();
+    ImplTabItem* pFoundItem = NULL;
+    int nFound = 0;
+    while ( pItem )
+    {
+        if ( pItem->maRect.IsInside( rPt ) )
+        {
+            // assure that only one tab is highlighted at a time
+            nFound++;
+            pFoundItem = pItem;
+        }
+        pItem = mpItemList->Next();
+    }
+    // assure that only one tab is highlighted at a time
+    return nFound == 1 ? &pFoundItem->maRect : NULL;
+}
+
 long TabControl::PreNotify( NotifyEvent& rNEvt )
 {
-    return Control::PreNotify( rNEvt );
+    long nDone = 0;
+    const MouseEvent* pMouseEvt = NULL;
+
+    if( (rNEvt.GetType() == EVENT_MOUSEMOVE) && (pMouseEvt = rNEvt.GetMouseEvent()) )
+    {
+        if( !pMouseEvt->GetButtons() && !pMouseEvt->IsSynthetic() && !pMouseEvt->IsModifierChanged() )
+        {
+            // trigger redraw if mouse over state has changed
+            if( IsNativeControlSupported(CTRL_TAB_ITEM, PART_ENTIRE_CONTROL) )
+            {
+                Rectangle* pRect = ImplFindPartRect( GetPointerPosPixel() );
+                Rectangle* pLastRect = ImplFindPartRect( GetLastPointerPosPixel() );
+                if( pRect != pLastRect || (pMouseEvt->IsLeaveWindow() || pMouseEvt->IsEnterWindow()) )
+                {
+                    Region aClipRgn;
+                    if( pLastRect )
+                    {
+                        // allow for slightly bigger tabitems
+                        // as used by gtk
+                        // TODO: query for the correct sizes
+                        Rectangle aRect(*pLastRect);
+                        aRect.nLeft-=2;
+                        aRect.nRight+=2;
+                        aRect.nTop-=3;
+                        aClipRgn.Union( aRect );
+                    }
+                    if( pRect )
+                    {
+                        // allow for slightly bigger tabitems
+                        // as used by gtk
+                        // TODO: query for the correct sizes
+                        Rectangle aRect(*pRect);
+                        aRect.nLeft-=2;
+                        aRect.nRight+=2;
+                        aRect.nTop-=3;
+                        aClipRgn.Union( aRect );
+                    }
+                    if( !aClipRgn.IsEmpty() )
+                        Invalidate( aClipRgn );
+                }
+            }
+        }
+    }
+
+    return nDone ? nDone : Control::PreNotify(rNEvt);
 }
 
 // -----------------------------------------------------------------------
@@ -1578,7 +1624,7 @@ void TabControl::InsertPage( USHORT nPageId, const XubString& rText,
 
     ImplFreeLayoutData();
 
-    ImplCallEventListeners( VCLEVENT_TABPAGE_INSERTED, (void*) nPageId );
+    ImplCallEventListeners( VCLEVENT_TABPAGE_INSERTED, (void*) (ULONG)nPageId );
 }
 
 // -----------------------------------------------------------------------
@@ -1618,7 +1664,7 @@ void TabControl::RemovePage( USHORT nPageId )
 
         ImplFreeLayoutData();
 
-        ImplCallEventListeners( VCLEVENT_TABPAGE_REMOVED, (void*) nPageId );
+        ImplCallEventListeners( VCLEVENT_TABPAGE_REMOVED, (void*) (ULONG) nPageId );
     }
 }
 
@@ -1715,8 +1761,6 @@ void TabControl::SetCurPageId( USHORT nPageId )
             mnActPageId = nPageId;
         else
         {
-            if ( pItem->maRect.IsEmpty() || !pItem->mbFullVisible )
-                SetFirstPageId( nPageId );
             mbFormat = TRUE;
             USHORT nOldId = mnCurPageId;
             mnCurPageId = nPageId;
@@ -1739,9 +1783,7 @@ USHORT TabControl::GetCurPageId() const
 
 void TabControl::SetFirstPageId( USHORT nPageId )
 {
-    USHORT nPos = GetPagePos( nPageId );
-    if ( (nPos != TAB_PAGE_NOTFOUND) && (nPos != mnFirstPagePos) )
-        ImplSetFirstPagePos( nPos );
+    return; // was only required for single line
 }
 
 // -----------------------------------------------------------------------
@@ -1752,7 +1794,7 @@ void TabControl::SelectTabPage( USHORT nPageId )
     {
         ImplFreeLayoutData();
 
-        ImplCallEventListeners( VCLEVENT_TABPAGE_DEACTIVATE, (void*) mnCurPageId );
+        ImplCallEventListeners( VCLEVENT_TABPAGE_DEACTIVATE, (void*) (ULONG) mnCurPageId );
         if ( DeactivatePage() )
         {
             mnActPageId = nPageId;
@@ -1761,7 +1803,7 @@ void TabControl::SelectTabPage( USHORT nPageId )
             nPageId = mnActPageId;
             mnActPageId = 0;
             SetCurPageId( nPageId );
-            ImplCallEventListeners( VCLEVENT_TABPAGE_ACTIVATE, (void*) nPageId );
+            ImplCallEventListeners( VCLEVENT_TABPAGE_ACTIVATE, (void*) (ULONG) nPageId );
         }
     }
 }
@@ -1828,7 +1870,7 @@ void TabControl::SetPageText( USHORT nPageId, const XubString& rText )
         if ( IsUpdateMode() )
             Invalidate();
         ImplFreeLayoutData();
-        ImplCallEventListeners( VCLEVENT_TABPAGE_PAGETEXTCHANGED, (void*) nPageId );
+        ImplCallEventListeners( VCLEVENT_TABPAGE_PAGETEXTCHANGED, (void*) (ULONG) nPageId );
     }
 }
 
