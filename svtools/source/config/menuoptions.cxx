@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menuoptions.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2000-11-06 09:46:14 $
+ *  last change: $Author: pb $ $Date: 2000-12-06 09:08:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -363,6 +363,7 @@ sal_Bool SvtMenuOptions_Impl::IsFollowMouseEnabled() const
 void SvtMenuOptions_Impl::SetEntryHidingState( sal_Bool bState )
 {
     m_bDontHideDisabledEntries = bState;
+    SetModified();
 }
 
 //*****************************************************************************************************************
@@ -371,6 +372,7 @@ void SvtMenuOptions_Impl::SetEntryHidingState( sal_Bool bState )
 void SvtMenuOptions_Impl::SetFollowMouseState( sal_Bool bState )
 {
     m_bFollowMouse = bState ;
+    SetModified();
 }
 
 //*****************************************************************************************************************
