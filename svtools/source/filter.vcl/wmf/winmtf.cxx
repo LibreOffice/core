@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winmtf.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: sj $ $Date: 2002-02-15 16:38:58 $
+ *  last change: $Author: sj $ $Date: 2002-04-16 15:47:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1749,7 +1749,7 @@ void WinMtfOutput::ModifyWorldTransform( const XForm& rXForm, UINT32 nMode )
 
 //-----------------------------------------------------------------------------------
 
-void WinMtfOutput::Push( sal_Bool bExtSet )     // !! to be able to access the original ClipRegion it
+void WinMtfOutput::Push()                       // !! to be able to access the original ClipRegion it
 {                                               // is not allowed to use the MetaPushAction()
     UpdateClipRegion();                         // (the original clip region is on top of the stack) (SJ)
     SaveStruct* pSave = new SaveStruct;
@@ -1764,21 +1764,18 @@ void WinMtfOutput::Push( sal_Bool bExtSet )     // !! to be able to access the o
     pSave->aBkColor = maBkColor;
 
     pSave->aActPos = maActPos;
-    pSave->bWinExtSet = bExtSet;
     pSave->aXForm = maXForm;
     pSave->eRasterOp = meRasterOp;
 
-    if ( bExtSet )
-    {
-        pSave->nWinOrgX = mnWinOrgX;
-        pSave->nWinOrgY = mnWinOrgY;
-        pSave->nWinExtX = mnWinExtX;
-        pSave->nWinExtY = mnWinExtY;
-        pSave->nDevOrgX = mnDevOrgX;
-        pSave->nDevOrgY = mnDevOrgY;
-        pSave->nDevWidth = mnDevWidth;
-        pSave->nDevHeight = mnDevHeight;
-    }
+    pSave->nWinOrgX = mnWinOrgX;
+    pSave->nWinOrgY = mnWinOrgY;
+    pSave->nWinExtX = mnWinExtX;
+    pSave->nWinExtY = mnWinExtY;
+    pSave->nDevOrgX = mnDevOrgX;
+    pSave->nDevOrgY = mnDevOrgY;
+    pSave->nDevWidth = mnDevWidth;
+    pSave->nDevHeight = mnDevHeight;
+
     pSave->aPathObj = aPathObj;
     pSave->aClipPath = aClipPath;
     maSaveStack.Push( pSave );
@@ -1807,17 +1804,15 @@ void WinMtfOutput::Pop()
         maXForm = pSave->aXForm;
         meRasterOp = pSave->eRasterOp;
 
-        if ( pSave->bWinExtSet )
-        {
-            mnWinOrgX = pSave->nWinOrgX;
-            mnWinOrgY = pSave->nWinOrgY;
-            mnWinExtX = pSave->nWinExtX;
-            mnWinExtY = pSave->nWinExtY;
-            mnDevOrgX = pSave->nDevOrgX;
-            mnDevOrgY = pSave->nDevOrgY;
-            mnDevWidth = pSave->nDevWidth;
-            mnDevHeight = pSave->nDevHeight;
-        }
+        mnWinOrgX = pSave->nWinOrgX;
+        mnWinOrgY = pSave->nWinOrgY;
+        mnWinExtX = pSave->nWinExtX;
+        mnWinExtY = pSave->nWinExtY;
+        mnDevOrgX = pSave->nDevOrgX;
+        mnDevOrgY = pSave->nDevOrgY;
+        mnDevWidth = pSave->nDevWidth;
+        mnDevHeight = pSave->nDevHeight;
+
         aPathObj = pSave->aPathObj;
         if ( ! ( aClipPath == pSave->aClipPath ) )
         {

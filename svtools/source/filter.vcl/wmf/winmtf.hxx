@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winmtf.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: sj $ $Date: 2002-02-15 16:38:58 $
+ *  last change: $Author: sj $ $Date: 2002-04-16 15:47:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -470,7 +470,6 @@ struct XForm
 struct SaveStruct
 {
     sal_uInt32          nBkMode;
-    sal_Bool            bWinExtSet;
     long                nWinOrgX, nWinOrgY, nWinExtX, nWinExtY;
     long                nDevOrgX, nDevOrgY, nDevWidth, nDevHeight;
     WinMtfLineStyle     aLineStyle;
@@ -622,7 +621,7 @@ class WinMtfOutput
         void                SetWorldTransform( const XForm& rXForm );
         void                ModifyWorldTransform( const XForm& rXForm, UINT32 nMode );
 
-        void                Push( BOOL bWinExtSet = TRUE );
+        void                Push();
         void                Pop();
 
         UINT32              SetRasterOp( UINT32 nRasterOp );
@@ -726,7 +725,6 @@ class WMFReader : public WinMtf
 {
 private:
 
-    BOOL            bWinExtSet;
     UINT16          nUnitsPerInch;
 
     // Liesst den Kopf der WMF-Datei
@@ -739,7 +737,7 @@ private:
     Point           ReadYX();                   // Liesst und konvertiert einen Punkt (erst Y dann X)
     Rectangle       ReadRectangle();            // Liesst und konvertiert ein Rechteck
     Size            ReadYXExt();
-    void            ImplSetWMFSize( const Size& rSize );
+    sal_Bool        GetPlaceableBound( Rectangle& rSize, SvStream* pStrm );
 
 public:
 

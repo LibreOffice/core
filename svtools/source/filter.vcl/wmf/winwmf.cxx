@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winwmf.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: sj $ $Date: 2002-02-08 17:43:40 $
+ *  last change: $Author: sj $ $Date: 2002-04-16 15:47:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -239,7 +239,7 @@ void WMFReader::ReadRecordParams( USHORT nFunction )
         {
             short nWidth, nHeight;
             *pWMF >> nHeight >> nWidth;
-            ImplSetWMFSize( Size( nWidth, nHeight ) );
+            pOut->SetWinExt( Size( nWidth, nHeight ) );
         }
         break;
 
@@ -391,7 +391,7 @@ void WMFReader::ReadRecordParams( USHORT nFunction )
 
         case W_META_SAVEDC:
         {
-            pOut->Push( bWinExtSet );
+            pOut->Push();
         }
         break;
 
@@ -551,8 +551,6 @@ void WMFReader::ReadRecordParams( USHORT nFunction )
                 Size aDestSize( ReadYXExt() );
                 if ( aDestSize.Width() && aDestSize.Height() )  // #92623# do not try to read buggy bitmaps
                 {
-                    if ( !bWinExtSet )              // sj, this is also possible: a wmf consisting of
-                        aDestSize = Size( 1, 1 );   // only one STRETCHDIB action (92115)
                     Rectangle aDestRect( ReadYX(), aDestSize );
                     if ( nWinROP != PATCOPY )
                         aBmp.Read( *pWMF, FALSE );
@@ -788,11 +786,12 @@ void WMFReader::ReadRecordParams( USHORT nFunction )
 BOOL WMFReader::ReadHeader()
 {
     Rectangle   aPlaceableBound;
-    ULONG       nl;
+    sal_uInt32  nl, nStrmPos = pWMF->Tell();
 
     // Einlesen des METAFILEHEADER, falls vorhanden
     *pWMF >> nl;
 
+    Size aWMFSize;
     if ( nl == 0x9ac6cdd7L )
     {
         INT16 nVal;
@@ -817,10 +816,25 @@ BOOL WMFReader::ReadHeader()
     }
     else
     {
-        // Unit wird bei den alten MTF's als MM_TEXT angenommen
         nUnitsPerInch = 96;
-        pWMF->SeekRel( -4 ); // zurueck zum Anfang
+        pWMF->Seek( nStrmPos + 18 );    // set the streampos to the start of the the metaactions
+        GetPlaceableBound( aPlaceableBound, pWMF );
+        pWMF->Seek( nStrmPos );
     }
+
+    pOut->SetWinOrg( aPlaceableBound.TopLeft() );
+    aWMFSize = Size( labs( aPlaceableBound.GetWidth() ), labs( aPlaceableBound.GetHeight() ) );
+    pOut->SetWinExt( aWMFSize );
+
+    if( ( labs( aWMFSize.Width() ) > 1 ) && ( labs( aWMFSize.Height() ) > 1 ) )
+    {
+        const Fraction  aFrac( 1, nUnitsPerInch );
+        MapMode         aWMFMap( MAP_INCH, Point(), aFrac, aFrac );
+        Size            aSize100( OutputDevice::LogicToLogic( aWMFSize, aWMFMap, MAP_100TH_MM ) );
+        pOut->SetDevExt( Size( labs( aSize100.Width() ), labs( aSize100.Height() ) ) );
+    }
+    else
+        pOut->SetDevExt( Size( 10000, 10000 ) );
 
     // Einlesen des METAHEADER
     *pWMF >> nl; // Typ und Headergroesse
@@ -837,34 +851,8 @@ BOOL WMFReader::ReadHeader()
     pWMF->SeekRel( 4 ); // MaxRecord (Groesse des groessten Records in Words)
     pWMF->SeekRel( 2 ); // NoParameters (Unused
 
-    if ( !aPlaceableBound.IsEmpty() )
-    {
-        pOut->SetWinOrg( aPlaceableBound.TopLeft() );
-
-        Size aWMFSize( labs( aPlaceableBound.GetWidth() ), labs( aPlaceableBound.GetHeight() ) );
-        ImplSetWMFSize( aWMFSize );
-    }
     return TRUE;
 }
-
-// ------------------------------------------------------------------------
-
-void WMFReader::ImplSetWMFSize( const Size& rSize )
-{
-    pOut->SetWinExt( rSize );
-
-    // try to calculate size of WMF
-    if( !bWinExtSet && ( labs( rSize.Width() ) > 1 ) && ( labs( rSize.Height() ) > 1 ) )
-    {
-        const Fraction  aFrac( 1, nUnitsPerInch );
-        MapMode         aWMFMap( MAP_INCH, Point(), aFrac, aFrac );
-        Size            aSize100( OutputDevice::LogicToLogic( rSize, aWMFMap, MAP_100TH_MM ) );
-        pOut->SetDevExt( Size( labs( aSize100.Width() ), labs( aSize100.Height() ) ) );
-        bWinExtSet = TRUE;
-    }
-}
-
-// ------------------------------------------------------------------------
 
 void WMFReader::ReadWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMetaFile, PFilterCallback pcallback, void * pcallerdata)
 {
@@ -875,7 +863,6 @@ void WMFReader::ReadWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMetaFile, 
     pOut->SetWinOrg( Point() );
     pOut->SetWinExt( Size( 1, 1 ) );
     pOut->SetDevExt( Size( 10000, 10000 ) );
-    bWinExtSet = FALSE;
 
     nEndPos=pWMF->Seek( STREAM_SEEK_TO_END );
     pWMF->Seek( nStartPos );
@@ -931,5 +918,229 @@ void WMFReader::ReadWMF() // SvStream & rStreamWMF, GDIMetaFile & rGDIMetaFile, 
     }
     if ( pWMF->GetError() )
         pWMF->Seek( nStartPos );
+}
+
+// ------------------------------------------------------------------------
+
+const static void GetWinExtMax( const Point& rSource, Rectangle& rPlaceableBound )
+{
+    if ( rSource.X() < rPlaceableBound.Left() )
+        rPlaceableBound.Left() = rSource.X();
+    if ( rSource.X() > rPlaceableBound.Right() )
+        rPlaceableBound.Right() = rSource.X();
+    if ( rSource.Y() < rPlaceableBound.Top() )
+        rPlaceableBound.Top() = rSource.Y();
+    if ( rSource.Y() > rPlaceableBound.Bottom() )
+        rPlaceableBound.Bottom() = rSource.Y();
+}
+
+const static void GetWinExtMax( const Rectangle& rSource, Rectangle& rPlaceableBound )
+{
+    GetWinExtMax( rSource.TopLeft(), rPlaceableBound );
+    GetWinExtMax( rSource.BottomRight(), rPlaceableBound );
+}
+
+sal_Bool WMFReader::GetPlaceableBound( Rectangle& rPlaceableBound, SvStream* pWMF )
+{
+    sal_Bool bRet = sal_True;
+
+    rPlaceableBound.Left()   = (sal_Int32)0x7fffffff;
+    rPlaceableBound.Top()    = (sal_Int32)0x7fffffff;
+    rPlaceableBound.Right()  = (sal_Int32)0x80000000;
+    rPlaceableBound.Bottom() = (sal_Int32)0x80000000;
+
+    sal_uInt16 nFunction;
+    sal_uInt32 nRecSize;
+    sal_uInt32 nStartPos = pWMF->Tell();
+    sal_uInt32 nEndPos = pWMF->Seek( STREAM_SEEK_TO_END );
+
+    pWMF->Seek( nStartPos );
+
+    if( nEndPos - nStartPos )
+    {
+        while( bRet )
+        {
+            *pWMF >> nRecSize >> nFunction;
+
+            if( pWMF->GetError() || ( nRecSize < 3 ) || ( nRecSize==3 && nFunction==0 ) || pWMF->IsEof() )
+            {
+                if( pWMF->IsEof() )
+                {
+                    pWMF->SetError( SVSTREAM_FILEFORMAT_ERROR );
+                    bRet = sal_False;
+                }
+                break;
+            }
+            switch( nFunction )
+            {
+                case W_META_SETWINDOWEXT:
+                {
+                    Point aPos0( 0, 0 );
+                    sal_Int16 nWidth, nHeight;
+                    *pWMF >> nHeight >> nWidth;
+                    rPlaceableBound = Rectangle( aPos0, Size( nWidth, nHeight ) );
+                }
+                break;
+
+                case W_META_MOVETO:
+                case W_META_LINETO:
+                    GetWinExtMax( ReadYX(), rPlaceableBound );
+                break;
+
+                case W_META_RECTANGLE:
+                case W_META_INTERSECTCLIPRECT:
+                case W_META_EXCLUDECLIPRECT :
+                case W_META_ELLIPSE:
+                    GetWinExtMax( ReadRectangle(), rPlaceableBound );
+                break;
+
+                case W_META_ROUNDRECT:
+                {
+                    Size aSize( ReadYXExt() );
+                    GetWinExtMax( ReadRectangle(), rPlaceableBound );
+                }
+                break;
+
+                case W_META_ARC:
+                case W_META_PIE:
+                case W_META_CHORD:
+                {
+                    Point aEnd( ReadYX() );
+                    Point aStart( ReadYX() );
+                    GetWinExtMax( ReadRectangle(), rPlaceableBound );
+                }
+                break;
+
+                case W_META_POLYGON:
+                {
+                    USHORT i,nPoints;
+                    *pWMF >> nPoints;
+                    for( i = 0; i < nPoints; i++ )
+                        GetWinExtMax( ReadPoint(), rPlaceableBound );
+                }
+                break;
+
+                case W_META_POLYPOLYGON:
+                {
+                    USHORT  i, nPoly, nPoints = 0;
+                    *pWMF >> nPoly;
+                    for( i = 0; i < nPoly; i++ )
+                    {
+                        sal_uInt16 nP;
+                        *pWMF >> nP;
+                        nPoints += nP;
+                    }
+                    for ( i = 0; i < nPoints; i++ )
+                        GetWinExtMax( ReadPoint(), rPlaceableBound );
+                }
+                break;
+
+                case W_META_POLYLINE:
+                {
+                    USHORT i,nPoints;
+                    *pWMF >> nPoints;
+                    for( i = 0; i < nPoints; i++ )
+                        GetWinExtMax( ReadPoint(), rPlaceableBound );
+                }
+                break;
+
+                case W_META_SETPIXEL:
+                {
+                    const Color aColor = ReadColor();
+                    GetWinExtMax( ReadYX(), rPlaceableBound );
+                }
+                break;
+
+                case W_META_TEXTOUT:
+                {
+                    USHORT nLength;
+                    *pWMF >> nLength;
+                    // todo: we also have to take care of the text width
+                    if ( nLength )
+                    {
+                        pWMF->SeekRel( ( nLength + 1 ) &~ 1 );
+                        GetWinExtMax( ReadYX(), rPlaceableBound );
+                    }
+                }
+                break;
+
+                case W_META_EXTTEXTOUT:
+                {
+                    sal_uInt16  nLen, nOptions;
+                    sal_Int32   nRecordPos, nRecordSize;
+                    Point       aPosition;
+                    Rectangle   aRect;
+                    sal_Int32*  pDXAry = NULL;
+
+                    pWMF->SeekRel(-6);
+                    nRecordPos = pWMF->Tell();
+                    *pWMF >> nRecordSize;
+                    pWMF->SeekRel(2);
+                    aPosition = ReadYX();
+                    *pWMF >> nLen >> nOptions;
+                    // todo: we also have to take care of the text width
+                    if( nLen )
+                        GetWinExtMax( aPosition, rPlaceableBound );
+                }
+                break;
+                case W_META_BITBLT:
+                case W_META_STRETCHBLT:
+                case W_META_DIBBITBLT:
+                case W_META_DIBSTRETCHBLT:
+                case W_META_STRETCHDIB:
+                {
+                    sal_Int32   nWinROP;
+                    sal_uInt16  nSx, nSy, nSxe, nSye, nUsage;
+                    *pWMF >> nWinROP;
+
+                    if( nFunction == W_META_STRETCHDIB )
+                        *pWMF >> nUsage;
+
+                    // nSye and nSxe is the number of pixels that has to been used
+                    if( nFunction == W_META_STRETCHDIB || nFunction == W_META_STRETCHBLT || nFunction == W_META_DIBSTRETCHBLT )
+                        *pWMF >> nSye >> nSxe;
+                    else
+                        nSye = nSxe = 0;    // set this to zero as indicator not to scale the bitmap later
+
+                    // nSy and nx is the offset of the first pixel
+                    *pWMF >> nSy >> nSx;
+
+                    if( nFunction == W_META_STRETCHDIB || nFunction == W_META_DIBBITBLT || nFunction == W_META_DIBSTRETCHBLT )
+                    {
+                        if ( nWinROP == PATCOPY )
+                            *pWMF >> nUsage;    // i don't know anything of this parameter, so its called nUsage
+                                                // pOut->DrawRect( Rectangle( ReadYX(), aDestSize ), FALSE );
+
+                        Size aDestSize( ReadYXExt() );
+                        if ( aDestSize.Width() && aDestSize.Height() )  // #92623# do not try to read buggy bitmaps
+                        {
+                            Rectangle aDestRect( ReadYX(), aDestSize );
+                            GetWinExtMax( aDestRect, rPlaceableBound );
+                        }
+                    }
+                }
+                break;
+
+                case W_META_PATBLT:
+                {
+                    UINT32 nROP;
+                    *pWMF >> nROP;
+                    Size aSize = ReadYXExt();
+                    GetWinExtMax( Rectangle( ReadYX(), aSize ), rPlaceableBound );
+                }
+                break;
+            }
+            if ( nFunction == W_META_SETWINDOWEXT )
+                break;
+            pWMF->Seek( nStartPos += nRecSize * 2 );
+        }
+    }
+    else
+    {
+        pWMF->SetError( SVSTREAM_GENERALERROR );
+        bRet = sal_False;
+    }
+    pWMF->Seek( nStartPos );
+    return bRet;
 }
 
