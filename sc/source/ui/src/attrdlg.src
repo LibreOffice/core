@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attrdlg.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 20:50:42 $
+ *  last change: $Author: rt $ $Date: 2001-03-21 20:34:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,7 +160,7 @@ TabDialog RID_SCDLG_ATTR
                 Text[ greek ] = "Åöİ ãñáììáôïóåéñÜò";
                 Text[ dutch ] = "Schrifteffect";
                 Text[ french ] = "Effets de caractères";
-                Text[ spanish ] = "Efecto de fuente";
+                Text[ spanish ] = "Efectos de fuente";
                 Text[ italian ] = "Effetto carattere";
                 Text[ danish ] = "Character Extension";
                 Text[ swedish ] = "Teckensnittseffekt";
@@ -219,7 +219,7 @@ TabDialog RID_SCDLG_ATTR
                 Text[ swedish ] = "Asiatisk typografi";
                 Text[ polish ] = "Typografia azjatycka";
                 Text[ portuguese_brazilian ] = "Asian typography";
-                Text[ japanese ] = "˜a•¶ˆóü‚Ì‘ÌÙ";
+                Text[ japanese ] = "“ú–{Œê•¶‚Ì‘ÌÙ";
                 Text[ korean ] = "¾Æ½Ã¾Æ Å¸ÀÌÆ÷±×·¡ÇÇ";
                 Text[ chinese_simplified ] = "ÖĞÈÕº«ÎÄ×Ö";
                 Text[ chinese_traditional ] = "¤¤¤éÁú¤å¦r";
@@ -507,7 +507,7 @@ TabPage RID_SCPAGE_PROTECTION
         Text[ russian ] = "Ñêğûòü äëÿ ïå÷àòè";
         Text[ polish ] = "U~kryj przy wydruku";
         Text[ japanese ] = "ˆóü‚µ‚È‚¢(~H)";
-        Text[ chinese_traditional ] = "¥´¦L®ÉÁô¤J(~H)";
+        Text[ chinese_traditional ] = "¥´¦L®ÉÁô¤J(~W)";
         Text[ arabic ] = "ÅÎİÇÁ ÚäÏ ÇáØÈÇÚÉ";
         Text[ greek ] = "Áğüêñõøç êáôÜ ôçí åêôığùóç";
         Text[ korean ] = "ÀÎ¼â½Ã¿¡ ¼û±â±â";
