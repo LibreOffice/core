@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: rt $ $Date: 2004-09-09 09:42:34 $
+#   last change: $Author: obo $ $Date: 2004-11-17 14:48:26 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,6 +82,7 @@ SRC1FILES =	\
 # ... exception files .........................
 
 EXCEPTIONSFILES=\
+        $(SLO)$/statusbarontroller.obj	\
         $(SLO)$/RelationControl.obj		\
         $(SLO)$/toolboxcontroller.obj	\
         $(SLO)$/tabletree.obj			\
