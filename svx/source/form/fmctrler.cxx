@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmctrler.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: fs $ $Date: 2001-10-16 14:03:05 $
+ *  last change: $Author: fs $ $Date: 2002-03-19 13:12:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2444,6 +2444,12 @@ void FmXFormController::startFiltering()
         return;
     }
 
+    Reference< XConnection >  xConnection( getRowsetConnection( Reference< XRowSet >( m_xModelAsIndex, UNO_QUERY ) ) );
+    if ( !xConnection.is() )
+        // nothing to do - can't filter a form which is not connected
+        // 98023 - 19.03.2002 - fs@openoffice.org
+        return;
+
     // stop listening for controls
     if (isListeningForChanges())
         stopListening();
@@ -2461,7 +2467,6 @@ void FmXFormController::startFiltering()
 
     // the control we have to activate after replacement
     Reference< ::com::sun::star::awt::XControl >  xNewActiveControl;
-    Reference< ::com::sun::star::sdbc::XConnection >  xConnection(getRowsetConnection(Reference< ::com::sun::star::sdbc::XRowSet > (m_xModelAsIndex, UNO_QUERY)));
     Reference< ::com::sun::star::sdbc::XDatabaseMetaData >  xMetaData(xConnection->getMetaData());
     Reference< ::com::sun::star::util::XNumberFormatsSupplier >  xFormatSupplier = OStaticDataAccessTools().getNumberFormats(xConnection, sal_True);
     Reference< ::com::sun::star::util::XNumberFormatter >  xFormatter(m_xORB
@@ -2612,6 +2617,11 @@ void FmXFormController::stopFiltering()
     if (!m_pView)
     {
         DBG_ERROR("FmXFormController::startFiltering : you can't filter if you created me as service !");
+        return;
+    }
+
+    if ( !m_bFiltering )
+    {   // nothing to do
         return;
     }
 
