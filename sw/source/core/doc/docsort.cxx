@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsort.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 13:51:40 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 16:35:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -420,8 +420,9 @@ BOOL SwDoc::SortText(const SwPaM& rPaM, const SwSortOptions& rOpt)
     SwFrmFmt* pFmt;
     const SwFmtAnchor* pAnchor;
     const SwPosition* pAPos;
+    USHORT n;
 
-    for( USHORT n = 0; n < GetSpzFrmFmts()->Count(); ++n )
+    for( n = 0; n < GetSpzFrmFmts()->Count(); ++n )
     {
         pFmt = (SwFrmFmt*)(*GetSpzFrmFmts())[n];
         pAnchor = &pFmt->GetAnchor();
@@ -665,8 +666,9 @@ BOOL SwDoc::SortTbl(const SwSelBoxes& rBoxes, const SwSortOptions& rOpt)
 
     // wenn die HeaderLine wiederholt wird und die
     // Zeilen sortiert werden 1.Zeile nicht mitsortieren
+    USHORT i;
 
-    for(USHORT i=nStart; i < nCount; ++i)
+    for( i = nStart; i < nCount; ++i)
     {
         SwSortBoxElement* pEle = new SwSortBoxElement( i );
         aSortList.Insert(pEle);
