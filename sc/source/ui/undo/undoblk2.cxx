@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undoblk2.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:51:02 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 13:56:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,11 +58,6 @@
  *
  *
  ************************************************************************/
-#define _MACRODLG_HXX
-#define _BIGINT_HXX
-#define _SVDXOUT_HXX
-#define _SVDATTR_HXX
-#define _SVDSURO_HXX
 
 // System - Includes -----------------------------------------------------
 
