@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.3 $
+#  $Revision: 1.4 $
 #
-#  last change: $Author: hr $ $Date: 2003-06-30 15:37:40 $
+#  last change: $Author: rt $ $Date: 2004-05-18 13:25:39 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -56,11 +56,7 @@ JAVAFILES  = \
 
 CLASSFILES = $(patsubst %.java,$(OUT_COMP_CLASS)/%.class,$(JAVAFILES))
 
-SDK_CLASSPATH = $(subst $(EMPTYSTRING) $(PATH_SEPARATOR),$(PATH_SEPARATOR),$(OFFICE_CLASSES_DIR)/jurt.jar\
-		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)/unoil.jar\
-		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)/ridl.jar\
-		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)/sandbox.jar\
-		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)/juh.jar\
+SDK_CLASSPATH = $(subst $(EMPTYSTRING) $(PATH_SEPARATOR),$(PATH_SEPARATOR),$(CLASSPATH)\
 		$(PATH_SEPARATOR)$(OUT_COMP_CLASS))
 
 
@@ -74,7 +70,7 @@ $(OUT_COMP_CLASS) : $(OUT)
 	$(MKDIR) $(subst /,$(PS),$@)
 
 $(CLASSFILES) : $(OUT_COMP_CLASS) $(JAVAFILES)
-	javac -classpath "$(SDK_CLASSPATH)" -d $(OUT_COMP_CLASS) $(JAVAFILES) 
+	$(SDK_JAVAC) -classpath "$(SDK_CLASSPATH)" -d $(OUT_COMP_CLASS) $(JAVAFILES) 
 
 OfficeDevDisableCommandsTest : $(CLASSFILES)
 	@echo --------------------------------------------------------------------------------
@@ -84,7 +80,7 @@ OfficeDevDisableCommandsTest : $(CLASSFILES)
 	@echo --------------------------------------------------------------------------------
 
 %.run: $(OUT_COMP_CLASS)/%.class
-	java -classpath "$(SDK_CLASSPATH)" $(basename $@)
+	$(SDK_JAVA) -classpath "$(SDK_CLASSPATH)" $(basename $@)
 
 .PHONY: clean
 clean :

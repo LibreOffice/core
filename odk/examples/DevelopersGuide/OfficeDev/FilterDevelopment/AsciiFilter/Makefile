@@ -2,9 +2,9 @@
 #
 #  $RCSfile: Makefile,v $
 #
-#  $Revision: 1.3 $
+#  $Revision: 1.4 $
 #
-#  last change: $Author: hr $ $Date: 2003-06-30 15:38:22 $
+#  last change: $Author: rt $ $Date: 2004-05-18 13:25:54 $
 #
 #  The Contents of this file are made available subject to the terms of
 #  the BSD license.
@@ -50,12 +50,12 @@ include $(SETTINGS)/dk.mk
 # Define non-platform/compiler specific settings
 OUT_COMP_CLASS = $(OUT_CLASS)/OfficeDevFilterExample
 
-COMPONENT1_NAME=SampleFilter
-COMPONENT1_PACKAGE = $(OUT_BIN)/$(COMPONENT1_NAME).uno.zip
-COMPONENT1_PACKAGE_URL = $(subst \\,\,"$(COMPONENT_PACKAGE_DIR)$(PS)$(COMPONENT1_NAME).uno.zip")
-COMPONENT1_JAR_NAME = $(COMPONENT1_NAME).uno.jar
-COMPONENT1_JAR = $(OUT_CLASS)/$(COMPONENT1_JAR_NAME)
-COMPONENT1_MANIFESTFILE = $(OUT_COMP_CLASS)/$(COMPONENT1_NAME).uno.Manifest
+COMPONENT_NAME=SampleFilter
+COMPONENT_PACKAGE = $(OUT_BIN)/$(COMPONENT_NAME).uno.zip
+COMPONENT_PACKAGE_URL = $(subst \\,\,"$(COMPONENT_PACKAGE_DIR)$(PS)$(COMPONENT_NAME).uno.zip")
+COMPONENT_JAR_NAME = $(COMPONENT_NAME).uno.jar
+COMPONENT_JAR = $(OUT_CLASS)/$(COMPONENT_JAR_NAME)
+COMPONENT_MANIFESTFILE = $(OUT_COMP_CLASS)/$(COMPONENT_NAME).uno.Manifest
 
 REGISTERFLAG = $(OUT_MISC)/devguide_basicanddialogs_creatingdialogs_register_component.flag
 
@@ -70,11 +70,7 @@ JAVAFILES  = \
 
 CLASSFILES = $(patsubst %.java,$(OUT_COMP_CLASS)/$(PACKAGE)/%.class,$(JAVAFILES))
 
-SDK_CLASSPATH = $(subst $(EMPTYSTRING) $(PATH_SEPARATOR),$(PATH_SEPARATOR),$(OFFICE_CLASSES_DIR)/jurt.jar\
-		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)/unoil.jar\
-		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)/ridl.jar\
-		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)/sandbox.jar\
-		$(PATH_SEPARATOR)$(OFFICE_CLASSES_DIR)/juh.jar\
+SDK_CLASSPATH = $(subst $(EMPTYSTRING) $(PATH_SEPARATOR),$(PATH_SEPARATOR),$(CLASSPATH)\
 		$(PATH_SEPARATOR)$(OUT_COMP_CLASS))
 
 
@@ -90,22 +86,22 @@ $(OUT_COMP_CLASS)/%.Manifest :
 
 $(CLASSFILES) : $(JAVAFILES)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	javac $(JAVAC_FLAGS) -classpath "$(SDK_CLASSPATH)" -d $(OUT_COMP_CLASS) $(JAVAFILES) 
+	$(SDK_JAVAC) $(JAVAC_FLAGS) -classpath "$(SDK_CLASSPATH)" -d $(OUT_COMP_CLASS) $(JAVAFILES) 
 
-$(OUT_CLASS)/%.jar : $(OUT_COMP_CLASS)/%.Manifest $(CLASSFILES)
+$(COMPONENT_JAR) : $(COMPONENT_MANIFESTFILE) $(CLASSFILES)
 	-$(MKDIR) $(subst /,$(PS),$(@D))
-	jar cvfm $@ $< -C $(OUT_COMP_CLASS) .
+	$(SDK_JAR) cvfm $@ $< -C $(OUT_COMP_CLASS) .
 
-$(OUT_BIN)/%.zip : $(OUT_CLASS)/%.jar TypeDetection.xcu
+$(COMPONENT_PACKAGE) : $(COMPONENT_JAR) TypeDetection.xcu
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	$(COPY) TypeDetection.xcu $(subst /,$(PS),$(OUT_CLASS))
-	jar cvfM $@ -C $(OUT_CLASS) $(<F) TypeDetection.xcu
+	$(SDK_JAR) cvfM $@ -C $(OUT_CLASS) $(<F) TypeDetection.xcu
 
-$(REGISTERFLAG) : $(COMPONENT1_PACKAGE)
-ifneq "$(SDK_AUTO_DEPLOYMENT)" ""
+$(REGISTERFLAG) : $(COMPONENT_PACKAGE)
+ifeq "$(SDK_AUTO_DEPLOYMENT)" "YES"
 	-$(MKDIR) $(subst /,$(PS),$(@D))
 	-$(DEL) $(subst /,$(PS),$@)
-	$(DEPLOYTOOL) $(COMPONENT1_PACKAGE_URL)
+	$(DEPLOYTOOL) $(COMPONENT_PACKAGE_URL)
 	@echo flagged > $(subst /,$(PS),$@)
 else
 	@echo --------------------------------------------------------------------------------
@@ -125,6 +121,6 @@ OfficeDevFilterExample : $(REGISTERFLAG)
 .PHONY: clean
 clean :
 	-$(DELRECURSIVE) $(subst /,$(PS),$(OUT_COMP_CLASS))
-	-$(DEL) $(subst /,$(PS),$(COMPONENT1_PACKAGE_URL))
-	-$(DEL) $(subst /,$(PS),$(COMPONENT1_JAR))
-	-$(DEL) $(subst /,$(PS),$(REGISTERFLAG))
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMPONENT_PACKAGE_URL)))
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(COMPONENT_JAR)))
+	-$(DEL) $(subst \\,\,$(subst /,$(PS),$(REGISTERFLAG)))
