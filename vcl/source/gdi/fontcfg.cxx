@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontcfg.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 15:48:23 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 12:16:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -867,7 +867,7 @@ static BOOL ImplFindAndErase( String& rName, const char* pStr )
 // =======================================================================
 
 void FontSubstConfigItem::getMapName( const String& rOrgName, String& rShortName,
-    String& rFamilyName, FontWeight& rWeight, FontWidth& rWidth, unsigned long& rType )
+    String& rFamilyName, FontWeight& rWeight, FontWidth& rWidth, ULONG& rType )
 {
     rShortName = rOrgName;
 
