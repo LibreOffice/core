@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eppt.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sj $ $Date: 2000-11-10 08:21:31 $
+ *  last change: $Author: sj $ $Date: 2000-11-14 17:05:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -837,7 +837,7 @@ sal_Bool PPTWriter::ImplCreateDocument()
                 sal_Int16   nStartSlide = 0;
                 sal_Int16   nEndSlide = 0;
                 sal_uInt32  nFlags = 0;             // Bit 0:   Auto advance
-                                                    // Bit 1    Skip builds
+                                                    // Bit 1    Skip builds ( do not allow slide effects )
                                                     // Bit 2    Use slide range
                                                     // Bit 3    Use named show
                                                     // Bit 4    Browse mode on
@@ -845,13 +845,6 @@ sal_Bool PPTWriter::ImplCreateDocument()
                                                     // Bit 7    loop continously
                                                     // Bit ?    show scrollbar
 
-                if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "AllowAnimations" ) ) ) )
-                {
-                    sal_Bool bBool;
-                    mAny >>= bBool;
-                    if ( !bBool )
-                        nFlags |= 2;
-                }
                 if ( ImplGetPropertyValue( String( RTL_CONSTASCII_USTRINGPARAM( "CustomShow" ) ) ) )
                 {
                     aCustomShow = ( *(::rtl::OUString*)mAny.getValue() );
