@@ -2,9 +2,9 @@
  *
  *  $RCSfile: verifydemo.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-10 18:15:58 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:28:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <unotools/streamhelper.hxx>
+
 //CP : added by CP
 #include <rtl/locale.h>
 #include <osl/nlsupport.h>
