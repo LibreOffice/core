@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-	$Id: dialog.dtd,v 1.8 2001-03-14 16:42:17 dbo Exp $
+	$Id: dialog.dtd,v 1.9 2001-03-15 09:22:02 dbo Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -97,7 +97,7 @@
 		     dlg:title CDATA #IMPLIED
 		     dlg:page %numeric; #IMPLIED
 		     dlg:tag CDATA #IMPLIED
-		     xmlns:dlg CDATA #FIXED "http://openoffice.org/2000/dlg"
+		     xmlns:dlg CDATA #FIXED "http://openoffice.org/2000/dialog"
 		     >
 
 <!ELEMENT dlg:styles (dlg:style+)>
