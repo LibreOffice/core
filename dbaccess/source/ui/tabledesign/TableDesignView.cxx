@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TableDesignView.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: oj $ $Date: 2002-05-31 09:54:42 $
+ *  last change: $Author: fs $ $Date: 2002-06-05 07:06:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -235,14 +235,14 @@ void OTableBorderWindow::ImplInitSettings( sal_Bool bFont, sal_Bool bForeground,
 // -----------------------------------------------------------------------
 void OTableBorderWindow::DataChanged( const DataChangedEvent& rDCEvt )
 {
+    Window::DataChanged( rDCEvt );
+
     if ( (rDCEvt.GetType() == DATACHANGED_SETTINGS) &&
          (rDCEvt.GetFlags() & SETTINGS_STYLE) )
     {
         ImplInitSettings( sal_True, sal_True, sal_True );
         Invalidate();
     }
-    else
-        Window::DataChanged( rDCEvt );
 }
 // -----------------------------------------------------------------------------
 void OTableBorderWindow::GetFocus()
