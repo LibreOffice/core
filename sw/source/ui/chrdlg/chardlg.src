@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.src,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: obo $ $Date: 2001-11-16 23:00:34 $
+ *  last change: $Author: os $ $Date: 2001-12-18 14:03:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,7 @@ TabDialog DLG_CHAR
                 Text[ chinese_simplified ] = "å­—ä½“";
                 Text[ russian ] = "Øğèôò";
                 Text[ polish ] = "Czcionka";
-                Text[ japanese ] = "ï¾Œï½«ï¾ï¾„";
+                Text[ japanese ] = "ãƒ•ã‚©ãƒ³ãƒˆ";
                 Text[ chinese_traditional ] = "å­—å‹";
                 Text[ arabic ] = "ÇáÎØ";
                 Text[ dutch ] = "Lettertype";
@@ -137,7 +137,7 @@ TabDialog DLG_CHAR
                 Text[ chinese_simplified ] = "å­—ä½“æ•ˆæœ";
                 Text[ russian ] = "İôôåêòû øğèôòà";
                 Text[ polish ] = "Efekty czcionek";
-                Text[ japanese ] = "ï¾Œï½«ï¾ï¾„åŠ¹æœ";
+                Text[ japanese ] = "ãƒ•ã‚©ãƒ³ãƒˆåŠ¹æœ";
                 Text[ chinese_traditional ] = "å­—å‹æ•ˆæœ";
                 Text[ arabic ] = "ÊÃËíÑÇÊ ÇáÎØæØ";
                 Text[ dutch ] = "Schrifteffecten";
@@ -192,7 +192,7 @@ TabDialog DLG_CHAR
                 Text[ swedish ] = "Asiatisk layout";
                 Text[ polish ] = "Uk³ad azjatycki";
                 Text[ portuguese_brazilian ] = "Asian layout";
-                Text[ japanese ] = "æ—¥æœ¬èªï¾šï½²ï½±ï½³ï¾„";
+                Text[ japanese ] = "æ—¥æœ¬èªãƒ¬ã‚¤ã‚¢ã‚¦ãƒˆ";
                 Text[ korean ] = "ì•„ì‹œì•„ ë ˆì´ì•„ì›ƒ";
                 Text[ chinese_simplified ] = "ä¸­æ—¥éŸ©ç‰ˆå¼";
                 Text[ chinese_traditional ] = "ä¸­æ—¥éŸ“ç‰ˆå¼";
@@ -218,7 +218,7 @@ TabDialog DLG_CHAR
                 Text[ chinese_simplified ] = "è¶…é“¾æ¥";
                 Text[ russian ] = "Ãèïåğññûëêà";
                 Text[ polish ] = "Hiper³¹cze";
-                Text[ japanese ] = "ï¾Šï½²ï¾Šï¾Ÿï½°ï¾˜ï¾ï½¸";
+                Text[ japanese ] = "ãƒã‚¤ãƒ‘ãƒ¼ãƒªãƒ³ã‚¯";
                 Text[ chinese_traditional ] = "è¶…é€£çµ";
                 Text[ arabic ] = "ÇÑÊÈÇØ ÊÔÚÈí";
                 Text[ dutch ] = "Hyperlink";
@@ -319,7 +319,7 @@ TabDialog DLG_DRAWCHAR
                 Text[ chinese_simplified ] = "å­—ä½“";
                 Text[ russian ] = "Øğèôò";
                 Text[ polish ] = "Czcionka";
-                Text[ japanese ] = "ï¾Œï½«ï¾ï¾„";
+                Text[ japanese ] = "ãƒ•ã‚©ãƒ³ãƒˆ";
                 Text[ chinese_traditional ] = "å­—å‹";
                 Text[ arabic ] = "ÇáÎØ";
                 Text[ dutch ] = "Lettertype";
@@ -334,7 +334,7 @@ TabDialog DLG_DRAWCHAR
     Text[ chinese_simplified ] = "å­—ä½“";
     Text[ russian ] = "Øğèôò";
     Text[ polish ] = "Czcionka";
-    Text[ japanese ] = "ï¾Œï½«ï¾ï¾„";
+    Text[ japanese ] = "ãƒ•ã‚©ãƒ³ãƒˆ";
     Text[ chinese_traditional ] = "å­—å‹";
     Text[ arabic ] = "ÇáÎØ";
     Text[ dutch ] = "Lettertype";
@@ -368,7 +368,7 @@ TabPage TP_CHAR_URL
         Text[ chinese_simplified ] = "è¶…é“¾æ¥";
         Text[ russian ] = "Ãèïåğññûëêà";
         Text[ polish ] = "Hiper³¹cze";
-        Text[ japanese ] = "ï¾Šï½²ï¾Šï¾Ÿï½°ï¾˜ï¾ï½¸";
+        Text[ japanese ] = "ãƒã‚¤ãƒ‘ãƒ¼ãƒªãƒ³ã‚¯";
         Text[ chinese_traditional ] = "è¶…é€£çµ";
         Text[ arabic ] = "ÇÑÊÈÇØ ÊÔÚÈí";
         Text[ dutch ] = "Hyperlink";
@@ -382,7 +382,7 @@ TabPage TP_CHAR_URL
     FixedText FT_URL
     {
         Pos = MAP_APPFONT ( 12 , 17 ) ;
-        Size = MAP_APPFONT ( 63 , 8 ) ;
+        Size = MAP_APPFONT ( 73 , 8 ) ;
         Text = "U~RL" ;
         Text [ English ] = "U~RL" ;
         Text [ english_us ] = "~URL" ;
@@ -410,15 +410,15 @@ TabPage TP_CHAR_URL
     };
     Edit ED_URL
     {
-        Pos = MAP_APPFONT ( 78 , 15 ) ;
+        Pos = MAP_APPFONT ( 88 , 15 ) ;
         Size = MAP_APPFONT ( 104 , 12 ) ;
         Border = TRUE ;
         TabStop = TRUE ;
     };
     PushButton PB_URL
     {
-        Pos = MAP_APPFONT ( 188 , 14 ) ;
-        Size = MAP_APPFONT ( 60 , 14 ) ;
+        Pos = MAP_APPFONT ( 198 , 14 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
         Text = "~Auswählen..." ;
         Text [ English ] = "~Browse..." ;
         TabStop = TRUE ;
@@ -440,7 +440,7 @@ TabPage TP_CHAR_URL
         Text[ dutch ] = "~Selecteren...";
         Text[ chinese_simplified ] = "é€‰æ‹©(~B)...";
         Text[ greek ] = "~ÅğéëïãŞ...";
-        Text[ korean ] = "ì„ íƒí•˜ê¸°(~B)...";
+        Text[ korean ] = "ì„ íƒ(~B)...";
         Text[ turkish ] = "A~raştır...";
         Text[ catalan ] = "~Seleccionar...";
         Text[ finnish ] = "~Selaa";
@@ -448,7 +448,7 @@ TabPage TP_CHAR_URL
     FixedText FT_TEXT
     {
         Pos = MAP_APPFONT ( 12 , 33 ) ;
-        Size = MAP_APPFONT ( 63 , 8 ) ;
+        Size = MAP_APPFONT ( 73 , 8 ) ;
         Text = "Te~xt" ;
         Text [ English ] = "Text" ;
         Text[ english_us ] = "Te~xt";
@@ -474,7 +474,7 @@ TabPage TP_CHAR_URL
     };
     Edit ED_TEXT
     {
-        Pos = MAP_APPFONT ( 78 , 31 ) ;
+        Pos = MAP_APPFONT ( 88 , 31 ) ;
         Size = MAP_APPFONT ( 104 , 12 ) ;
         Border = TRUE ;
         TabStop = TRUE ;
@@ -483,7 +483,7 @@ TabPage TP_CHAR_URL
     FixedText FT_NAME
     {
         Pos = MAP_APPFONT ( 12 , 49 ) ;
-        Size = MAP_APPFONT ( 63 , 8 ) ;
+        Size = MAP_APPFONT ( 73 , 8 ) ;
         Text = "~Name" ;
         Text [ English ] = "~Name" ;
         Text [ english_us ] = "~Name" ;
@@ -511,7 +511,7 @@ TabPage TP_CHAR_URL
     };
     Edit ED_NAME
     {
-        Pos = MAP_APPFONT ( 78 , 47 ) ;
+        Pos = MAP_APPFONT ( 88 , 47 ) ;
         Size = MAP_APPFONT ( 104 , 12 ) ;
         Border = TRUE ;
         TabStop = TRUE ;
@@ -520,7 +520,7 @@ TabPage TP_CHAR_URL
     FixedText FT_TARGET
     {
         Pos = MAP_APPFONT ( 12 , 65 ) ;
-        Size = MAP_APPFONT ( 63 , 10 ) ;
+        Size = MAP_APPFONT ( 73 , 10 ) ;
         Text = "~Frame" ;
         Text [ English ] = "Frame" ;
         Text [ english_us ] = "~Target frame" ;
@@ -535,7 +535,7 @@ TabPage TP_CHAR_URL
         Text[ chinese_simplified ] = "æ¡†å¯¹è±¡(~T)";
         Text[ russian ] = "~Êàäğ";
         Text[ polish ] = "Frame";
-        Text[ japanese ] = "ï¾Œï¾šï½°ï¾‘(~T)";
+        Text[ japanese ] = "ãƒ•ãƒ¬ãƒ¼ãƒ (~T)";
         Text[ chinese_traditional ] = "è¨Šæ¡†(~T)";
         Text[ arabic ] = "ÅØÇÑ";
         Text[ dutch ] = "~Frame";
@@ -548,7 +548,7 @@ TabPage TP_CHAR_URL
     };
     ComboBox LB_TARGET
     {
-        Pos = MAP_APPFONT ( 78 , 63 ) ;
+        Pos = MAP_APPFONT ( 88 , 63 ) ;
         Size = MAP_APPFONT ( 104 , 60 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
@@ -558,7 +558,7 @@ TabPage TP_CHAR_URL
     PushButton PB_EVENT
     {
         Pos = MAP_APPFONT ( 12 , 79 ) ;
-        Size = MAP_APPFONT ( 60 , 14 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
         Text = "~Ereignisse..." ;
         Text [ English ] = "Events..." ;
@@ -574,7 +574,7 @@ TabPage TP_CHAR_URL
         Text[ chinese_simplified ] = "äº‹ä»¶(~E)...";
         Text[ russian ] = "Ñîáûòèÿ...";
         Text[ polish ] = "Wy~darzenia...";
-        Text[ japanese ] = "ï½²ï¾ï¾ï¾ï¾„(~E)...";
+        Text[ japanese ] = "ã‚¤ãƒ™ãƒ³ãƒˆ(~E)...";
         Text[ chinese_traditional ] = "å‹•ä½œ(~E)...";
         Text[ arabic ] = "ÃÍÏÇË...";
         Text[ dutch ] = "~Gebeurtenissen";
@@ -603,21 +603,21 @@ TabPage TP_CHAR_URL
         Text[ chinese_simplified ] = "å­—ç¬¦æ ·å¼";
         Text[ russian ] = "Ñòèëè çíàêîâ";
         Text[ polish ] = "Style znaku";
-        Text[ japanese ] = "æ–‡å­—ï½½ï¾€ï½²ï¾™";
+        Text[ japanese ] = "æ–‡å­—ã‚¹ã‚¿ã‚¤ãƒ«";
         Text[ chinese_traditional ] = "å­—å…ƒæ¨£å¼";
         Text[ arabic ] = "ÃäãÇØ ÃÍÑİ";
         Text[ dutch ] = "Tekenopmaakprofielen";
         Text[ chinese_simplified ] = "å­—ç¬¦æ ·å¼";
         Text[ greek ] = "Óôõë ÷áñáêôŞñùí";
-        Text[ korean ] = "ë¬¸ì ìœ í˜•";
+        Text[ korean ] = "ë¬¸ì í…œí”Œë¦¿";
         Text[ turkish ] = "Karakter biçimi";
         Text[ catalan ] = "Estilos de caracteres";
-        Text[ finnish ] = "Merkistöjen tyylit";
+        Text[ finnish ] = "Merkkityylit";
     };
     FixedText FT_VISITED
     {
         Pos = MAP_APPFONT ( 12 , 116 ) ;
-        Size = MAP_APPFONT ( 63 , 8 ) ;
+        Size = MAP_APPFONT ( 73 , 8 ) ;
         Text = "~Besuchter Link" ;
         Text [ English ] = "Visited link" ;
         Text [ dutch ] = "B~ezochte Link" ;
@@ -632,7 +632,7 @@ TabPage TP_CHAR_URL
         Text[ chinese_simplified ] = "å·²ç»è®¿é—®è¿‡çš„é“¾æ¥(~V)";
         Text[ russian ] = "Ïîñåùåííûå ññûëêè";
         Text[ polish ] = "Odwiedzone ³¹cze";
-        Text[ japanese ] = "é–‹ã„ãŸã“ã¨ã®ã‚ã‚‹ï¾˜ï¾ï½¸(~V)";
+        Text[ japanese ] = "é–‹ã„ãŸã“ã¨ã®ã‚ã‚‹ãƒªãƒ³ã‚¯(~V)";
         Text[ chinese_traditional ] = "è¨ªå•éçš„æ·å¾‘(~V)";
         Text[ arabic ] = "ÇÑÊÈÇØ ÓÈŞ ÒíÇÑÊå";
         Text[ dutch ] = "B~ezochte Link";
@@ -645,7 +645,7 @@ TabPage TP_CHAR_URL
     };
     ListBox LB_VISITED
     {
-        Pos = MAP_APPFONT ( 78 , 113 ) ;
+        Pos = MAP_APPFONT ( 88 , 113 ) ;
         Size = MAP_APPFONT ( 104 , 60 ) ;
         Border = TRUE ;
         TabStop = TRUE ;
@@ -656,7 +656,7 @@ TabPage TP_CHAR_URL
     FixedText FT_NOT_VISITED
     {
         Pos = MAP_APPFONT ( 12 , 131 ) ;
-        Size = MAP_APPFONT ( 63 , 10 ) ;
+        Size = MAP_APPFONT ( 73 , 10 ) ;
         Text = "~Unbesuchter Link" ;
         Text [ English ] = "Unvisited link" ;
         Text [ english_us ] = "Unvisited ~links" ;
@@ -671,7 +671,7 @@ TabPage TP_CHAR_URL
         Text[ chinese_simplified ] = "å°šæœªè®¿é—®è¿‡çš„é“¾æ¥(~L)";
         Text[ russian ] = "Íåïîñåùåííûå ññûëêè";
         Text[ polish ] = "Nieodwiedzone ³¹cze";
-        Text[ japanese ] = "é–‹ã„ãŸã“ã¨ã®ãªã„ï¾˜ï¾ï½¸(~L)";
+        Text[ japanese ] = "é–‹ã„ãŸã“ã¨ã®ãªã„ãƒªãƒ³ã‚¯(~L)";
         Text[ chinese_traditional ] = "æœªè¨ªå•éçš„æ·å¾‘(~L)";
         Text[ arabic ] = "ÇÑÊÈÇØ áã íÓÈŞ ÒíÇÑÊå";
         Text[ dutch ] = "N~iet-bezochte Link";
@@ -684,7 +684,7 @@ TabPage TP_CHAR_URL
     };
     ListBox LB_NOT_VISITED
     {
-        Pos = MAP_APPFONT ( 78 , 129 ) ;
+        Pos = MAP_APPFONT ( 88 , 129 ) ;
         Size = MAP_APPFONT ( 104 , 60 ) ;
         Border = TRUE ;
         TabStop = TRUE ;
@@ -693,19 +693,5 @@ TabPage TP_CHAR_URL
         Group = TRUE ;
     };
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
