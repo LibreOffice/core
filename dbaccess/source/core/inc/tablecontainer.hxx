@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablecontainer.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-14 15:03:35 $
+ *  last change: $Author: fs $ $Date: 2001-03-02 17:02:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,12 @@
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDBC_SQLWARNING_HPP_
+#include <com/sun/star/sdbc/SQLWarning.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDB_SQLCONTEXT_HPP_
+#include <com/sun/star/sdb/SQLContext.hpp>
+#endif
 #ifndef _COM_SUN_STAR_UTIL_XFLUSHABLE_HPP_
 #include <com/sun/star/util/XFlushable.hpp>
 #endif
@@ -113,6 +119,15 @@ namespace dbaccess
 {
     typedef ::cppu::ImplHelper1< ::com::sun::star::util::XFlushable > OTableContainer_Base;
 
+    //==========================================================================
+    //= IWarningsContainer
+    //==========================================================================
+    class IWarningsContainer
+    {
+    public:
+        virtual void appendWarning(const ::com::sun::star::sdbc::SQLWarning& _rWarning) = 0;
+        virtual void appendWarning(const ::com::sun::star::sdb::SQLContext& _rContext) = 0;
+    };
 
     //==========================================================================
     //= OTableContainer
@@ -126,6 +141,7 @@ namespace dbaccess
 
         OConfigurationTreeRoot  m_aCommitLocation; // need to commit new table nodes
         OConfigurationNode      m_aTablesConfig;
+        IWarningsContainer*     m_pWarningsContainer;
 
         // holds the original tables which where set in construct but they can be null
         ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    m_xMasterTables;
@@ -156,7 +172,8 @@ namespace dbaccess
         OTableContainer( const OConfigurationNode& _rTablesConfig,const OConfigurationTreeRoot& _rCommitLocation,
             ::cppu::OWeakObject& _rParent,
             ::osl::Mutex& _rMutex,
-            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xCon
+            const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xCon,
+            IWarningsContainer* _pWarningsContainer = NULL
             );
         ~OTableContainer();
 
