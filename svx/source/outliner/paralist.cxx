@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paralist.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:23 $
+ *  last change: $Author: mt $ $Date: 2001-05-30 17:23:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,7 @@
 
 #include <paralist.hxx>
 #include <outliner.hxx>     // nur wegen Paragraph, muss geaendert werden!
+#include <numdef.hxx>
 
 DBG_NAME(Paragraph);
 
@@ -70,6 +71,8 @@ Paragraph::Paragraph( USHORT nDDepth )
     : aBulSize( -1, -1)
 {
     DBG_CTOR( Paragraph, 0 );
+
+    DBG_ASSERT( nDDepth < SVX_MAX_NUM, "Paragraph-CTOR: nDepth invalid!" );
 
     nDepth = nDDepth;
     nFlags = 0;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outliner.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: mt $ $Date: 2001-04-11 13:12:05 $
+ *  last change: $Author: mt $ $Date: 2001-05-30 17:23:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,6 +162,14 @@ SvxLRSpaceItem lcl_ImplGetDefLRSpaceItem( USHORT nDepth, MapUnit eMapUnit )
 // ----------------------------------------------------------------------
 DBG_NAME(Outliner);
 
+void Outliner::ImplCheckDepth( USHORT& rnDepth ) const
+{
+    if( rnDepth < nMinDepth )
+        rnDepth = nMinDepth;
+    else if( rnDepth > nMaxDepth )
+        rnDepth = nMaxDepth;
+}
+
 Paragraph* Outliner::Insert(const XubString& rText, ULONG nAbsPos, USHORT nDepth)
 {
     DBG_CHKTHIS(Outliner,0);
@@ -169,10 +177,7 @@ Paragraph* Outliner::Insert(const XubString& rText, ULONG nAbsPos, USHORT nDepth
 
     Paragraph* pPara;
 
-    if( nDepth < nMinDepth )
-        nDepth = nMinDepth;
-    else if( nDepth > nMaxDepth )
-        nDepth = nMaxDepth;
+    ImplCheckDepth( nDepth );
 
     ULONG nParagraphCount = pParaList->GetParagraphCount();
     if( nAbsPos > nParagraphCount )
@@ -388,10 +393,7 @@ void Outliner::SetDepth( Paragraph* pPara, USHORT nNewDepth )
 {
     DBG_CHKTHIS(Outliner,0);
 
-    if ( nNewDepth < nMinDepth )
-        nNewDepth = nMinDepth;
-    else if ( nNewDepth > nMaxDepth )
-        nNewDepth = nMaxDepth;
+    ImplCheckDepth( nNewDepth );
 
     if ( nNewDepth != pPara->GetDepth() )
     {
@@ -483,8 +485,7 @@ void Outliner::SetText( const XubString& rText, Paragraph* pPara )
                 if( !(pPara->nFlags & PARAFLAG_HOLDDEPTH) )
                 {
                     nCurDepth = nTabs;
-                    if( nCurDepth < nMinDepth )
-                        nCurDepth = nMinDepth;
+                    ImplCheckDepth( nCurDepth );
                     pPara->SetDepth( nCurDepth );
                     pPara->nFlags &= (~PARAFLAG_HOLDDEPTH);
                 }
@@ -640,7 +641,9 @@ void Outliner::SetText( const OutlinerParaObject& rPObj )
     pParaList->Clear( TRUE );
     for( USHORT nCurPara = 0; nCurPara < rPObj.nCount; nCurPara++ )
     {
-        Paragraph* pPara = new Paragraph( rPObj.pDepthArr[ nCurPara ] );
+        USHORT nDepth = rPObj.pDepthArr[ nCurPara ];
+        ImplCheckDepth( nDepth );
+        Paragraph* pPara = new Paragraph( nDepth );
         pParaList->Insert( pPara, LIST_APPEND );
         ImplCheckNumBulletItem( nCurPara );
     }
@@ -836,6 +839,8 @@ void Outliner::ImplSetLevelDependendStyleSheet( USHORT nPara )
 void Outliner::ImplInitDepth( USHORT nPara, USHORT nDepth, BOOL bCreateUndo, BOOL bUndoAction )
 {
     DBG_CHKTHIS(Outliner,0);
+
+    DBG_ASSERT( ( nDepth >= nMinDepth ) && ( nDepth <= nMaxDepth ), "ImplInitDepth - Depth is invalid!" );
 
     Paragraph* pPara = pParaList->GetParagraph( nPara );
     USHORT nOldDepth = pPara->GetDepth();
