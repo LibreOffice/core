@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr1.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 16:35:15 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 17:20:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -578,9 +578,10 @@ bool ScInterpreter::JumpMatrix( short nStackLevel )
 double ScInterpreter::CompareFunc( const ScCompare& rComp )
 {
     // Keep DoubleError if encountered
-    if ( rComp.bVal[0] && !::rtl::math::isFinite( rComp.nVal[0]))
+    // #i40539# if bEmpty is set, bVal/nVal are uninitialized
+    if ( !rComp.bEmpty[0] && rComp.bVal[0] && !::rtl::math::isFinite( rComp.nVal[0]))
         return rComp.nVal[0];
-    if ( rComp.bVal[1] && !::rtl::math::isFinite( rComp.nVal[1]))
+    if ( !rComp.bEmpty[1] && rComp.bVal[1] && !::rtl::math::isFinite( rComp.nVal[1]))
         return rComp.nVal[1];
 
     double fRes = 0;
