@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msdffimp.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: sj $ $Date: 2000-11-16 14:47:06 $
+ *  last change: $Author: sj $ $Date: 2000-11-16 16:09:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1248,7 +1248,8 @@ void DffPropertyReader::ApplyAttributes( SvStream& rIn, SfxItemSet& rSet, SdrObj
                 case mso_fillShadeShape :
                 {
                     eGrad = XGRAD_RECT;
-                    nFocus = 50;
+                    nFocusY = nFocusX = 50;
+                    bChgColors = !bChgColors;
                 }
                 break;
                 case mso_fillShadeCenter :
