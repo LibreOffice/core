@@ -2,9 +2,9 @@
  *
  *  $RCSfile: elementimpl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-16 18:11:30 $
+ *  last change: $Author: jb $ $Date: 2001-02-13 17:14:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -568,7 +568,7 @@ uno::Sequence< css::util::ElementChange > implGetPendingChanges( TreeElement& rE
                 it != stop;
                 ++it)
             {
-                configuration::ExtendedNodeChangeInfo aInfo;
+                configuration::NodeChangeInformation aInfo;
                 if (it->getChangeInfo(aInfo))
                 {
                     ElementChange aChange;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodechange.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2001-02-07 16:26:28 $
+ *  last change: $Author: jb $ $Date: 2001-02-13 17:17:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,18 +140,24 @@ bool NodeChange::isChange() const
 }
 //-----------------------------------------------------------------------------
 
-bool NodeChange::getChangeInfo(NodeChangeInfo& rInfo) const
+bool NodeChange::getChangeInfo(NodeChangeInformation& rInfo) const
 {
-    rInfo.type = NodeChangeInfo::eNoChange;
+    rInfo.change.type = NodeChangeData::eNoChange;
     if (m_pImpl)
-        m_pImpl->fillChange(rInfo);
+        m_pImpl->fillChangeInfo(rInfo);
     else
-        OSL_ASSERT(rInfo.isEmpty());
+        OSL_ASSERT(rInfo.isEmptyChange());
 
-    return !rInfo.isEmpty();
+    return !rInfo.isEmptyChange();
 }
 //-----------------------------------------------------------------------------
 
+bool NodeChange::getChangeLocation(NodeChangeLocation& rLoc) const
+{
+    return m_pImpl && m_pImpl->fillChangeLocation(rLoc);
+}
+//-----------------------------------------------------------------------------
+/*
 bool NodeChange::getChangeInfo(ExtendedNodeChangeInfo& rInfo) const
 {
     if (this->getChangeInfo( rInfo.change))
@@ -166,6 +172,7 @@ bool NodeChange::getChangeInfo(ExtendedNodeChangeInfo& rInfo) const
         return false;
     }
 }
+*/
 //-----------------------------------------------------------------------------
 
 Tree NodeChange::getBaseTree() const
@@ -334,7 +341,7 @@ void NodeChanges::reset(Node const& aNode)
 }
 */
 
-bool NodeChanges::getChangesInfo(std::vector<NodeChangeInfo>& rInfos) const
+bool NodeChanges::getChangesInfo(NodeChangesInformation& rInfos) const
 {
     if (isEmpty()) return false;
 
@@ -343,25 +350,7 @@ bool NodeChanges::getChangesInfo(std::vector<NodeChangeInfo>& rInfos) const
 
     for (Iterator it = begin(); it != end(); ++it)
     {
-        NodeChangeInfo aInfo;
-        if ( it->getChangeInfo(aInfo) )
-            rInfos.push_back(aInfo);
-    }
-
-    return !rInfos.empty();
-}
-//-----------------------------------------------------------------------------
-
-bool NodeChanges::getChangesInfo(std::vector<ExtendedNodeChangeInfo>& rInfos) const
-{
-    if (isEmpty()) return false;
-
-    rInfos.clear();
-    rInfos.reserve(getCount());
-
-    for (Iterator it = begin(); it != end(); ++it)
-    {
-        ExtendedNodeChangeInfo aInfo;
+        NodeChangeInformation aInfo;
         if ( it->getChangeInfo(aInfo) )
             rInfos.push_back(aInfo);
     }

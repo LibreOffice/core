@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodechangeinfo.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2000-11-14 10:53:36 $
+ *  last change: $Author: jb $ $Date: 2001-02-13 17:21:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,62 +70,60 @@ namespace configmgr
     {
 //-----------------------------------------------------------------------------
 
-NodeChangeInfo::NodeChangeInfo()
+NodeChangeData::NodeChangeData()
 : type(eNoChange)
-, oldValue()
-, newValue()
-, oldElement()
-, newElement()
+, unoData()
+, element()
 {
 }
 //-----------------------------------------------------------------------------
 
-NodeChangeInfo::NodeChangeInfo(NodeChangeInfo const& aOther)
+NodeChangeData::NodeChangeData(NodeChangeData const& aOther)
 : type(aOther.type)
-, oldValue(aOther.oldValue)
-, newValue(aOther.newValue)
-, oldElement(aOther.oldElement)
-, newElement(aOther.newElement)
+, unoData(aOther.unoData)
+, element(aOther.element)
 {
 }
 //-----------------------------------------------------------------------------
 
-NodeChangeInfo& NodeChangeInfo::operator=(NodeChangeInfo const& aOther)
+NodeChangeData& NodeChangeData::operator=(NodeChangeData const& aOther)
 {
     type        = aOther.type;
-    oldValue    = aOther.oldValue;
-    newValue    = aOther.newValue;
-    oldElement  = aOther.oldElement;
-    newElement  = aOther.newElement;
+    unoData     = aOther.unoData;
+    element     = aOther.element;
     return *this;
 }
 //-----------------------------------------------------------------------------
 
-NodeChangeInfo::~NodeChangeInfo()
+NodeChangeData::~NodeChangeData()
 {
 }
 //-----------------------------------------------------------------------------
 
-bool NodeChangeInfo::isChange() const
+bool NodeChangeData::isDataChange() const
 {
-    return !isEmpty() && (isSetChange() ? oldElement != newElement : oldValue != newValue);
+    if (isSetChange() && element.isDataChange())
+        return true;
+
+    return unoData.isDataChange();
 }
 //-----------------------------------------------------------------------------
 
-Tree NodeChangeInfo::getNewElementTree() const
+Tree NodeChangeData::getNewElementTree() const
 {
-    return Tree( newElement.getBodyPtr() );
+    return Tree( element.newValue.getBodyPtr() );
 }
 //-----------------------------------------------------------------------------
 
-Tree NodeChangeInfo::getOldElementTree() const
+Tree NodeChangeData::getOldElementTree() const
 {
-    return Tree( oldElement.getBodyPtr() );
+    return Tree( element.oldValue.getBodyPtr() );
 }
 //-----------------------------------------------------------------------------
 
-NodeRef NodeChangeInfo::getNewElementNodeRef() const
+NodeRef NodeChangeData::getNewElementNodeRef() const
 {
+    ElementTreeHolder newElement = this->element.newValue;
     if ( newElement.isValid() &&  newElement->nodeCount() > 0)
     {
         NodeOffset n = newElement->root();
@@ -136,8 +134,9 @@ NodeRef NodeChangeInfo::getNewElementNodeRef() const
 }
 //-----------------------------------------------------------------------------
 
-NodeRef NodeChangeInfo::getOldElementNodeRef() const
+NodeRef NodeChangeData::getOldElementNodeRef() const
 {
+    ElementTreeHolder oldElement = this->element.oldValue;
     if ( oldElement.isValid() &&  oldElement->nodeCount() > 0)
     {
         NodeOffset n = oldElement->root();
@@ -148,8 +147,9 @@ NodeRef NodeChangeInfo::getOldElementNodeRef() const
 }
 //-----------------------------------------------------------------------------
 
-NodeID NodeChangeInfo::getNewElementNodeID() const
+NodeID NodeChangeData::getNewElementNodeID() const
 {
+    ElementTreeHolder newElement = this->element.newValue;
     if ( newElement.isValid() &&  newElement->nodeCount() > 0)
     {
         return NodeID( newElement.getBodyPtr(), newElement->root() );
@@ -159,8 +159,9 @@ NodeID NodeChangeInfo::getNewElementNodeID() const
 }
 //-----------------------------------------------------------------------------
 
-NodeID NodeChangeInfo::getOldElementNodeID() const
+NodeID NodeChangeData::getOldElementNodeID() const
 {
+    ElementTreeHolder oldElement = this->element.oldValue;
     if ( oldElement.isValid() &&  oldElement->nodeCount() > 0)
     {
         return NodeID( oldElement.getBodyPtr(), oldElement->root() );
@@ -170,14 +171,97 @@ NodeID NodeChangeInfo::getOldElementNodeID() const
 }
 //-----------------------------------------------------------------------------
 
-ExtendedNodeChangeInfo::ExtendedNodeChangeInfo()
-: change()
-, baseTree(0)
-, baseNode()
-, accessor()
+NodeChangeLocation::NodeChangeLocation()
+: m_path()
+, m_base(0,0)
+, m_target(0,0)
+, m_changed(0,0)
 {
 }
+//-----------------------------------------------------------------------------
 
+bool NodeChangeLocation::isValidLocation() const
+{
+    // TODO: Validate that base,target and accessor relate correctly (?)
+    return   m_base.isValidNode() &&
+            (m_target.isEmpty()
+                ?   m_changed.isEmpty()
+                :   ( m_target.isValidNode() &&
+                      (m_changed.isEmpty() || m_changed.isValidNode()) ) );
+}
+//-----------------------------------------------------------------------------
+
+void NodeChangeLocation::setAccessor(RelativePath const& aAccessor)
+{
+    m_path = aAccessor;
+}
+//-----------------------------------------------------------------------------
+
+void NodeChangeLocation::setBase(NodeID const& aBaseNode)
+{
+    m_base = aBaseNode;
+}
+//-----------------------------------------------------------------------------
+
+void NodeChangeLocation::setTarget(NodeID const& aTargetNode)
+{
+    m_target = aTargetNode;
+
+    if (m_base.isEmpty())
+        setBase(aTargetNode);
+}
+//-----------------------------------------------------------------------------
+
+void NodeChangeLocation::setChanging(NodeID const& aChangedNode)
+{
+    m_changed = aChangedNode;
+
+    if (m_target.isEmpty())
+        setTarget(aChangedNode);
+}
+//-----------------------------------------------------------------------------
+
+Tree NodeChangeLocation::getBaseTree() const
+{
+    OSL_ENSURE(m_base.isValidNode(), "Invalid base location set in NodeChangeLocation");
+    return Tree( TreeImplHelper::tree(m_base) );
+}
+//-----------------------------------------------------------------------------
+
+NodeRef NodeChangeLocation::getBaseNode() const
+{
+    OSL_ENSURE(m_base.isValidNode(), "Invalid base location set in NodeChangeLocation");
+    return TreeImplHelper::makeNode(m_base);
+    return TreeImplHelper::makeNode(m_base);
+}
+//-----------------------------------------------------------------------------
+
+Tree NodeChangeLocation::getAffectedTree() const
+{
+    NodeID aAffected = this->getAffectedNodeID();
+    return Tree( TreeImplHelper::tree(aAffected) );
+}
+//-----------------------------------------------------------------------------
+
+NodeRef NodeChangeLocation::getAffectedNode() const
+{
+    NodeID aAffected = this->getAffectedNodeID();
+    return TreeImplHelper::makeNode(aAffected);
+}
+//-----------------------------------------------------------------------------
+
+NodeID NodeChangeLocation::getAffectedNodeID() const
+{
+    OSL_ENSURE(m_target.isEmpty() || m_target.isValidNode(), "Invalid target location set in NodeChangeLocation");
+    return m_target;
+}
+//-----------------------------------------------------------------------------
+
+NodeID NodeChangeLocation::getChangedNodeID() const
+{
+    OSL_ENSURE(m_changed.isEmpty() || m_changed.isValidNode(), "Invalid change location set in NodeChangeLocation");
+    return m_changed;
+}
 //-----------------------------------------------------------------------------
     }
 }

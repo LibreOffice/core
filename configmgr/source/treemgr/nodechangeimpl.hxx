@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodechangeimpl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2001-02-07 16:26:28 $
+ *  last change: $Author: jb $ $Date: 2001-02-13 17:17:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,9 @@ namespace configmgr
         class ValueNodeImpl;
         class SetNodeImpl;
 //-----------------------------------------------------------------------------
-        struct NodeChangeInfo;
+        class NodeChangeData;
+        class NodeChangeLocation;
+        class NodeChangeInformation;
 
 
         /// represents a node position in some tree
@@ -131,8 +133,14 @@ namespace configmgr
             /// checks, if this represents an actual change - with or without requiring a preceding test
             bool isChange(bool bAllowUntested) const;
 
-            /// fills in pre- and post-change values, returns wether they differ
-            bool fillChange(NodeChangeInfo& rChange) const;
+            /// fills in pre- and post-change values, returns whether they may differ
+            bool fillChangeData(NodeChangeData& rChange) const;
+
+            /// fills in change location, returns whether it is set
+            bool fillChangeLocation(NodeChangeLocation& rChange) const;
+
+            /// fills in change location and values, returns whether data may be changed
+            bool fillChangeInfo(NodeChangeInformation& rChange) const;
 
         /// test whether this really is a change to the stored 'changing' node
             void test();
@@ -174,7 +182,7 @@ namespace configmgr
             virtual bool doIsChange(bool bBefore) const = 0;
 
             /// fills in pre- and post-change values, returns wether they differ
-            virtual bool doFillChange(NodeChangeInfo& rChange) const = 0;
+            virtual bool doFillChange(NodeChangeData& rChange) const = 0;
 
             /// dry-check whether this is a change
             virtual void doTest( Node& rTarget) = 0;
@@ -226,7 +234,7 @@ namespace configmgr
             virtual bool doIsChange(bool bBefore) const;
 
             /// fills in pre- and post-change values, returns wether they differ
-            virtual bool doFillChange(NodeChangeInfo& rChange) const = 0;
+            virtual bool doFillChange(NodeChangeData& rChange) const = 0;
 
         protected:
         // override apply functionality
@@ -259,7 +267,7 @@ namespace configmgr
             virtual void doApplyChange( ValueNodeImpl& rNode);
 
             /// fills in pre- and post-change values, returns wether they differ
-            virtual bool doFillChange(NodeChangeInfo& rChange) const;
+            virtual bool doFillChange(NodeChangeData& rChange) const;
 
 //          friend class SetReplaceValueImpl;
         };
@@ -281,7 +289,7 @@ namespace configmgr
             virtual void doApplyChange( ValueNodeImpl& rNode);
 
             /// fills in pre- and post-change values, returns wether they differ
-            virtual bool doFillChange(NodeChangeInfo& rChange) const;
+            virtual bool doFillChange(NodeChangeData& rChange) const;
         };
 //-----------------------------------------------------------------------------
 
@@ -362,7 +370,7 @@ namespace configmgr
             /// checks, if this represents an actual change (given whether the change has been applied or not)
             virtual bool doIsChange(bool bBefore) const;
             /// fills in pre- and post-change values, returns wether they differ
-            virtual bool doFillChange(NodeChangeInfo& rChange) const;
+            virtual bool doFillChange(NodeChangeData& rChange) const;
 
             /// new overridable: retrieve the old value from a properly typed node
             virtual void doTestElement(SetNodeImpl& rNode, Name const& aName);
@@ -385,7 +393,7 @@ namespace configmgr
             /// checks, if this represents an actual change (given whether the change has been applied or not)
             virtual bool doIsChange(bool bBefore) const;
             /// fills in pre- and post-change values, returns wether they differ
-            virtual bool doFillChange(NodeChangeInfo& rChange) const;
+            virtual bool doFillChange(NodeChangeData& rChange) const;
 
             /// new overridable: retrieve the old value from a properly typed node
             virtual void doTestElement(SetNodeImpl& rNode, Name const& aName);
@@ -407,7 +415,7 @@ namespace configmgr
             /// checks, if this represents an actual change (given whether the change has been applied or not)
             virtual bool doIsChange(bool bBefore) const;
             /// fills in pre- and post-change values, returns wether they differ
-            virtual bool doFillChange(NodeChangeInfo& rChange) const;
+            virtual bool doFillChange(NodeChangeData& rChange) const;
 
             /// new overridable: retrieve the old value from a properly typed node
             virtual void doTestElement(SetNodeImpl& rNode, Name const& aName);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: nodechangeimpl.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jb $ $Date: 2001-02-12 10:33:51 $
+ *  last change: $Author: jb $ $Date: 2001-02-13 17:17:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,10 +194,28 @@ bool NodeChangeImpl::isChange(bool bAllowUntested) const
 }
 //-----------------------------------------------------------------------------
 
-bool NodeChangeImpl::fillChange(NodeChangeInfo& rChange) const
+bool NodeChangeImpl::fillChangeData(NodeChangeData& rChange) const
 {
     OSL_ENSURE(m_nState & eTestedChange, "WARNING: Configuration: Change was not tested  - fillChange is partially meaningless");
-    return doFillChange(rChange) || rChange.isChange(); // force true if the data is signaling change
+    return doFillChange(rChange) || rChange.isDataChange(); // force true if the data is signaling change
+}
+//-----------------------------------------------------------------------------
+
+bool NodeChangeImpl::fillChangeLocation(NodeChangeLocation& rChange) const
+{
+    if (!m_aTargetTree.isValid()) return false;
+
+    rChange.setBase( NodeID(this->getBaseTree().getBodyPtr(), this->getBaseNode()) );
+    rChange.setAccessor(this->getPathToChangingNode());
+    rChange.setTarget( NodeID(this->getAffectedTree().getBodyPtr(), this->getAffectedNode()) );
+
+    return true;
+}
+//-----------------------------------------------------------------------------
+
+bool NodeChangeImpl::fillChangeInfo(NodeChangeInformation& rChange) const
+{
+    return fillChangeLocation(rChange.location) & fillChangeData(rChange.change);
 }
 //-----------------------------------------------------------------------------
 
@@ -372,11 +390,11 @@ bool ValueChangeImpl::doIsChange(bool ) const
 }
 //-----------------------------------------------------------------------------
 
-bool ValueChangeImpl::doFillChange(NodeChangeInfo& rChange) const
+bool ValueChangeImpl::doFillChange(NodeChangeData& rChange) const
 {
-    rChange.newValue = getNewValue();
-    rChange.oldValue = getOldValue();
-    return rChange.isChange();
+    rChange.unoData.newValue = getNewValue();
+    rChange.unoData.oldValue = getOldValue();
+    return rChange.unoData.isDataChange();
 }
 //-----------------------------------------------------------------------------
 
@@ -437,9 +455,9 @@ void ValueReplaceImpl::doApplyChange( ValueNodeImpl& rNode)
 }
 //-----------------------------------------------------------------------------
 
-bool ValueReplaceImpl::doFillChange( NodeChangeInfo& rChange) const
+bool ValueReplaceImpl::doFillChange( NodeChangeData& rChange) const
 {
-    rChange.type = NodeChangeInfo::eSetValue;
+    rChange.type = NodeChangeData::eSetValue;
     return ValueChangeImpl::doFillChange(rChange);
 }
 
@@ -465,11 +483,11 @@ void ValueResetImpl::doApplyChange( ValueNodeImpl& rNode)
 }
 //-----------------------------------------------------------------------------
 
-bool ValueResetImpl::doFillChange( NodeChangeInfo& rChange) const
+bool ValueResetImpl::doFillChange( NodeChangeData& rChange) const
 {
-    rChange.type = NodeChangeInfo::eSetDefault;
+    rChange.type = NodeChangeData::eSetDefault;
     ValueChangeImpl::doFillChange(rChange);
-    return rChange.isChange();
+    return !rChange.isEmptyChange(); // do it defensively here - default (= 'new') may be unknown still
 }
 //-----------------------------------------------------------------------------
 
@@ -606,11 +624,11 @@ bool SetInsertTreeImpl::doIsChange(bool ) const
 }
 //-----------------------------------------------------------------------------
 
-bool SetInsertTreeImpl::doFillChange(NodeChangeInfo& rChange) const
+bool SetInsertTreeImpl::doFillChange(NodeChangeData& rChange) const
 {
-    rChange.type = NodeChangeInfo::eInsertElement;
+    rChange.type = NodeChangeData::eInsertElement;
     if (m_aNewTree.isValid())
-        rChange.newElement = m_aNewTree;
+        rChange.element.newValue = m_aNewTree;
 
     return isChange(true);
 }
@@ -660,14 +678,14 @@ bool SetReplaceTreeImpl::doIsChange(bool) const
 //-----------------------------------------------------------------------------
 
 /// fills in pre- and post-change values, returns wether they differ
-bool SetReplaceTreeImpl::doFillChange(NodeChangeInfo& rChange) const
+bool SetReplaceTreeImpl::doFillChange(NodeChangeData& rChange) const
 {
-    rChange.type = NodeChangeInfo::eReplaceElement;
+    rChange.type = NodeChangeData::eReplaceElement;
     if (m_aNewTree.isValid())
-        rChange.newElement =  m_aNewTree;
+        rChange.element.newValue =  m_aNewTree;
 
     if (m_aOldTree.isValid())
-        rChange.oldElement = m_aOldTree;
+        rChange.element.oldValue = m_aOldTree;
 
     return isChange(true);
 }
@@ -728,11 +746,11 @@ bool SetRemoveTreeImpl::doIsChange(bool) const
 //-----------------------------------------------------------------------------
 
 /// fills in pre- and post-change values, returns wether they differ
-bool SetRemoveTreeImpl::doFillChange(NodeChangeInfo& rChange) const
+bool SetRemoveTreeImpl::doFillChange(NodeChangeData& rChange) const
 {
-    rChange.type = NodeChangeInfo::eRemoveElement;
+    rChange.type = NodeChangeData::eRemoveElement;
     if (m_aOldTree.isValid())
-        rChange.oldElement = m_aOldTree;
+        rChange.element.oldValue = m_aOldTree;
 
     return isChange(true);
 }
