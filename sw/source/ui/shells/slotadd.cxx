@@ -2,9 +2,9 @@
  *
  *  $RCSfile: slotadd.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tl $ $Date: 2001-04-09 07:28:09 $
+ *  last change: $Author: os $ $Date: 2002-04-25 14:56:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,9 @@
 #include "uiparam.hxx"
 #include "cmdid.h"
 
+#ifndef _SVT_IMAGEITM_HXX
+#include <svtools/imageitm.hxx>
+#endif
 #ifndef _AEITEM_HXX //autogen
 #include <svtools/aeitem.hxx>
 #endif
@@ -321,6 +324,9 @@
 
 /*-------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.7  2001/04/09 07:28:09  tl
+    include for SfxStringListItem added
+
     Revision 1.6  2001/03/30 14:56:18  tl
     include for clipfmtitem.hxx added
 
