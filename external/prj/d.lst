@@ -79,6 +79,9 @@ mkdir: %_DEST%\pck%_EXT%
 ..\msvcp70\msvcp70.dll %_DEST%\bin%_EXT%\msvcp70.dll
 ..\msvcp70\msvcr70.dll %_DEST%\bin%_EXT%\msvcr70.dll
 
+..\msvcp71\msvcp71.dll %_DEST%\bin%_EXT%\msvcp71.dll
+..\msvcp71\msvcr71.dll %_DEST%\bin%_EXT%\msvcr71.dll
+
 ..\unicows\unicows.dll %_DEST%\bin%_EXT%\unicows.dll
 
 ..\X11\extensions\*.h %_DEST%\inc%_EXT%\X11\extensions\*.h
