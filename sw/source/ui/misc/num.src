@@ -2,9 +2,9 @@
  *
  *  $RCSfile: num.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-27 08:33:51 $
+ *  last change: $Author: kz $ $Date: 2000-11-29 11:02:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -586,7 +586,7 @@ TabDialog DLG_SVXTEST_NUM_BULLET
                 Text[ chinese_traditional ] = "½s¸¹Ãþ«¬";
                 Text[ arabic ] = "ØÑíÞÉ ÇáÊÑÞíã";
                 Text[ greek ] = "Óôõë áñßèìçóçò";
-                Text[ korean ] = "¹øÈ£ ¸Å±â±âÀ¯Çü";
+                Text[ korean ] = "¹øÈ£ ¸Å±â±â À¯Çü";
                 Text[ turkish ] = "Numaralama türü";
                 Text[ language_user1 ] = "Avoid use of \"style\" whenever possible if it could be confused with Styles. EM15.5.00";
             };
@@ -687,7 +687,7 @@ TabDialog DLG_SVXTEST_NUM_BULLET
                 Text[ chinese_traditional ] = "¿ï¶µ";
                 Text[ arabic ] = "ÎíÇÑÇÊ";
                 Text[ greek ] = "ÅðéëïãÝò";
-                Text[ korean ] = "»ç¿ëÀÚ È¯°æ ¼³Á¤";
+                Text[ korean ] = "¿É¼Ç";
                 Text[ turkish ] = "Seçenekler";
                 Text[ language_user1 ] = "KW had called this \"Customize\" which leads to unnecessary confusion in translation. EM";
             };
