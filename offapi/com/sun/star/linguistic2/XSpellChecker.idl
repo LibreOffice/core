@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSpellChecker.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:27 $
+ *  last change: $Author: arellano $ $Date: 2001-04-04 17:29:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@ module com { module sun { module star { module linguistic2 {
 //=============================================================================
 /** This interface allows for spellchecking.
 
-    <P>It is possible to simply check if a word in a specified language
+    <P>It is possible to simply check if a word, in a specified language,
     is correct or additionally, if it was misspelled, some proposals
     how it might be written.</P>
 
@@ -98,10 +98,10 @@ module com { module sun { module star { module linguistic2 {
 interface XSpellChecker : com::sun::star::linguistic2::XSupportedLocales
 {
     //-------------------------------------------------------------------------
-    /** checks if a word is spelled correct in a given language.
+    /** checks if a word is spelled correctly in a given language.
 
         @returns
-            <TRUE/> if the word is spelled correct using
+            <TRUE/> if the word is spelled correctly using
              the specified language, <FALSE/> otherwise.
 
         @param  aWord
@@ -109,8 +109,8 @@ interface XSpellChecker : com::sun::star::linguistic2::XSupportedLocales
 
         @param aLocale
             the Locale (language) to be used.
-            If the Local is empty the word is spelled correct by
-            definition!
+            If the Locale is empty, the word is spelled correctly by
+            definition.
 
             <P>If <var>aLocale</var> is not supported an
             IllegalArgumentException exception is raised.</P>
@@ -130,13 +130,13 @@ interface XSpellChecker : com::sun::star::linguistic2::XSupportedLocales
         raises( com::sun::star::lang::IllegalArgumentException );
 
     //-------------------------------------------------------------------------
-    /** This method checks if a word is spelled correct in a given
+    /** This method checks if a word is spelled correctly in a given
         language.
 
         @returns
-            <NULL/> if <var>aWord</var> is spelled correct using
-             <var>aLocale</var>. Otherwise an XSpellAlternatives
-             object with information about the reason of failure and (maybe)
+            <NULL/> if <var>aWord</var> is spelled correctly using
+             <var>aLocale</var>. Otherwise, an XSpellAlternatives
+             object with information about the reason of failure and, if available,
              proposals for spelling alternatives will be returned.
 
         @param  aWord
@@ -145,7 +145,7 @@ interface XSpellChecker : com::sun::star::linguistic2::XSupportedLocales
         @param aLocale
             the language to be used.
 
-            <P>If the language is not supported an IllegalArgumentException
+            <P>If the language is not supported an IllegalArgumentException exception is raised.
 
         @param aProperties
             provides property values to be used for this function call only.
