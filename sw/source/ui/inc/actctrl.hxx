@@ -2,9 +2,9 @@
  *
  *  $RCSfile: actctrl.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-27 11:55:59 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 17:00:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,7 +130,7 @@ public:
     ~ReturnActionEdit();
     virtual void KeyInput( const KeyEvent& );
 
-    void SetReturnActionLink(Link& rLink)
+    void SetReturnActionLink(const Link& rLink)
             { aReturnActionLink = rLink;}
 };
 
