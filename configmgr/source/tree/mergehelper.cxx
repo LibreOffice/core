@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mergehelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-19 16:19:38 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 13:37:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,7 +204,7 @@ namespace
 //==========================================================================
 static inline bool isFinal(node::Attributes const& _aAttributes)
 {
-    return _aAttributes.bFinalized || !_aAttributes.bWritable;
+    return _aAttributes.isFinalized() || _aAttributes.isReadonly();
 }
 //==========================================================================
 bool OCleanupLayerAction::impl_cleanup(SubtreeChange& _aUpdateTree)
@@ -388,7 +388,7 @@ void MergeLayerToTree::mergeAttributes(INode& _rNode, node::Attributes const& _a
     OSL_ENSURE(_aChangeAttributes.state() == node::isMerged,"Layer merge: Found unexpected state for change being merged");
 
     _rNode.modifyState(node::isMerged);
-    _rNode.modifyAccess(_aChangeAttributes.bWritable,_aChangeAttributes.bFinalized);
+    _rNode.modifyAccess(_aChangeAttributes.getAccess());
 }
 //--------------------------------------------------------------------------
 
@@ -489,8 +489,8 @@ void AttributeSetter::setNodeAttributes(INode& _rNode)
     node::Attributes const aOldAttributes = _rNode.getAttributes();
 
     _rNode.modifyState(m_state);
-    if (m_bPromoteFinalized)
-        _rNode.modifyAccess(!isFinal(aOldAttributes),false);
+    if (m_bPromoteFinalized && isFinal(aOldAttributes))
+        _rNode.modifyAccess(node::accessReadonly);
 }
 // -----------------------------------------------------------------------------
 
