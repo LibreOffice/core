@@ -1,6 +1,3 @@
-import AccessibleObject;
-import MessageInterface;
-
 import drafts.com.sun.star.accessibility.XAccessible;
 import drafts.com.sun.star.accessibility.XAccessibleContext;
 import drafts.com.sun.star.accessibility.XAccessibleComponent;
@@ -9,8 +6,12 @@ import drafts.com.sun.star.accessibility.XAccessibleAction;
 import drafts.com.sun.star.accessibility.XAccessibleImage;
 import drafts.com.sun.star.accessibility.XAccessibleRelationSet;
 import drafts.com.sun.star.accessibility.XAccessibleStateSet;
+import drafts.com.sun.star.accessibility.XAccessibleText;
+import drafts.com.sun.star.accessibility.XAccessibleEditableText;
+import drafts.com.sun.star.accessibility.AccessibleTextType;
 
 import com.sun.star.lang.XServiceInfo;
+import com.sun.star.lang.IndexOutOfBoundsException;
 import com.sun.star.uno.UnoRuntime;
 
 import java.util.Vector;
@@ -26,10 +27,11 @@ import javax.swing.event.*;
 */
 public class AccessibilityTree extends JTree
 {
-    public static void main (String args[])
-    {
-        new AccessibilityWorkBench ();
-    }
+//     public static void main (String args[])
+//     {
+//         // doesn't work any more; constructor has changed
+//         new AccessibilityWorkBench ();
+//     }
 
 
 
@@ -84,6 +86,9 @@ public class AccessibilityTree extends JTree
                 }
             };
         addMouseListener (ml);
+
+        // allow editing of XAccessibleText interfaces
+        maTreeModel.addTreeModelListener( new TextUpdateListener() );
     }
 
 
@@ -281,6 +286,14 @@ public class AccessibilityTree extends JTree
                             new DefaultMutableTreeNode (
                                 "Image description: " + xImage.getAccessibleImageDescription()));
                     }
+
+                    XAccessibleText xText =
+                        (XAccessibleText) UnoRuntime.queryInterface (
+                            XAccessibleText.class, xContext);
+                    if (xText != null)
+                    {
+                        aNode.add( newTextTreeNode( xText ) );
+                    }
                 }
             }
 
@@ -303,7 +316,119 @@ public class AccessibilityTree extends JTree
         return aNode;
     }
 
+    /** Create a node for an XAccessibleText interface. */
+    private DefaultMutableTreeNode newTextTreeNode( XAccessibleText xText )
+    {
+        // construct XAccessibleText node with (editable) text
+        DefaultMutableTreeNode aNode = new DefaultMutableTreeNode( xText );
+        aNode.add( new DefaultMutableTreeNode( xText.getText() ) );
 
+        // other methods
+        int nChars = xText.getCharacterCount();
+        aNode.add( new DefaultMutableTreeNode( "# chars: " + nChars ) );
+
+        // getCharacter (as array)
+        if( nChars > 30 )
+            nChars = 30;
+        StringBuffer aChars = new StringBuffer();
+        try
+        {
+            aChars.append( "[" );
+            for( int i = 0; i < nChars; i++)
+            {
+                aChars.append( xText.getCharacter(i) );
+                aChars.append( "," );
+            }
+            if( nChars > 0)
+            {
+                if( nChars == xText.getCharacterCount() )
+                    aChars.deleteCharAt( aChars.length() - 1 );
+                else
+                    aChars.append( "..." );
+            }
+            aChars.append( "]" );
+        }
+        catch( IndexOutOfBoundsException e )
+        {
+            aChars.append( "   ERROR   " );
+        }
+        aNode.add( new DefaultMutableTreeNode("getCharacters: " + aChars));
+
+        // selection + caret
+        aNode.add( new DefaultMutableTreeNode(
+            "selection: " + "[" + xText.getSelectionStart() + "," +
+            xText.getSelectionStart() + "] \"" + xText.getSelectedText() +
+            "\"" ) );
+
+        aNode.add( new DefaultMutableTreeNode(
+            "getCaretPosition: " + xText.getCaretPosition() ) );
+
+        // now do all the TextTypes
+        aNode.add( newTextAtIndexTreeNode(
+            xText, "Character", AccessibleTextType.CHARACTER ) );
+        aNode.add( newTextAtIndexTreeNode(
+            xText, "Word", AccessibleTextType.WORD ) );
+        aNode.add( newTextAtIndexTreeNode(
+            xText, "Sentence", AccessibleTextType.SENTENCE ) );
+        aNode.add( newTextAtIndexTreeNode(
+            xText, "Paragraph", AccessibleTextType.PARAGRAPH ) );
+        aNode.add( newTextAtIndexTreeNode(
+            xText, "Line", AccessibleTextType.LINE ) );
+
+        return aNode;
+    }
+
+    /** Create a text node that lists all strings of a particular text type
+     */
+    private DefaultMutableTreeNode newTextAtIndexTreeNode(
+        XAccessibleText xText, String sName, short nTextType)
+    {
+        DefaultMutableTreeNode aNode =
+            new DefaultMutableTreeNode( "TextType: " + sName );
+
+        // get word at all positions;
+        // for nicer display, compare current word to previous one and
+        // make a new node for every interval, not for every word
+        int nLength = xText.getCharacterCount();
+        if( nLength > 0 )
+        {
+            try
+            {
+                // sWord + nStart mark the current word
+                // make a node as soon as a new one is found; close the last
+                // one at the end
+                String sWord = xText.getTextAtIndex(0, nTextType);
+                int nStart = 0;
+                for(int i = 1; i < nLength; i++)
+                {
+                    String sTmp = xText.getTextAtIndex(i, nTextType);
+                    if( ! sTmp.equals( sWord ) )
+                    {
+                        aNode.add( new DefaultMutableTreeNode(
+                            "[" + nStart + "," + (i-1) + "] \"" +
+                            sWord + "\"" ) );
+                        sWord = sTmp;
+                        nStart = i;
+                    }
+
+                    // don't generate more than 50 children.
+                    if( aNode.getChildCount() > 50 )
+                    {
+                        sWord = "...";
+                        break;
+                    }
+                }
+                aNode.add( new DefaultMutableTreeNode(
+                    "[" + nStart + "," + nLength + "] \"" + sWord + "\"" ) );
+            }
+            catch( IndexOutOfBoundsException e )
+            {
+                aNode.add( new DefaultMutableTreeNode( e.toString() ) );
+            }
+        }
+
+        return aNode;
+    }
 
 
     /** Expand all nodes and their subtrees that represent shapes.  Call
@@ -411,4 +536,132 @@ public class AccessibilityTree extends JTree
         maCanvas;
     private boolean
         mbFirstShapeSeen;
+
+
+
+
+    /** listen to tree model changes in order to update XAccessibleText objects
+     */
+    class TextUpdateListener implements TreeModelListener
+    {
+        public void treeNodesChanged(TreeModelEvent e)
+        {
+            // if the change is to the first child of a DefaultMutableTreeNode
+            // with an XAccessibleText child, then we call updateText
+            int[] aIndices = e.getChildIndices();
+            if( (aIndices != null) &&
+                (aIndices.length > 0) &&
+                (aIndices[0] == 0) )
+            {
+                // so there is a first child, check for XAccessibleText then
+                DefaultMutableTreeNode aParent = (DefaultMutableTreeNode)
+                    (e.getTreePath().getLastPathComponent());
+                DefaultMutableTreeNode aNode = (DefaultMutableTreeNode)
+                    (aParent.getChildAt(0));
+
+                if( aParent.getUserObject() instanceof XAccessibleText)
+                {
+                    // joy! Call updateText with the data
+                    XAccessibleText xText =
+                        (XAccessibleText)aParent.getUserObject();
+                    updateText( xText, aNode.toString() );
+
+//                     // and update the tree (by deleting the old children)
+//                     // (this is a work-around for the currently missing
+//                     //  notifications)
+//                     updateNode( xText, aParent );
+                }
+            }
+        }
+
+        // don't care:
+        public void treeNodesInserted(TreeModelEvent e) { ; }
+        public void treeNodesRemoved(TreeModelEvent e) { ; }
+        public void treeStructureChanged(TreeModelEvent e) { ; }
+
+        /** update the text */
+        boolean updateText( XAccessibleText xText, String sNew )
+        {
+            // is this text editable? if not, fudge you and return
+            XAccessibleEditableText xEdit =
+                (XAccessibleEditableText) UnoRuntime.queryInterface (
+                            XAccessibleEditableText.class, xText);
+            if (xEdit == null)
+                return false;
+
+            String sOld = xText.getText();
+
+            // false alarm? Early out if no change was done!
+            if( sOld.equals( sNew ) )
+                return false;
+
+            // get the minimum length of both strings
+            int nMinLength = sOld.length();
+            if( sNew.length() < nMinLength )
+                nMinLength = sNew.length();
+
+            // count equal characters from front and end
+            int nFront = 0;
+            while( (nFront < nMinLength) &&
+                   (sNew.charAt(nFront) == sOld.charAt(nFront)) )
+                nFront++;
+            int nBack = 0;
+            while( (nBack < nMinLength) &&
+                   ( sNew.charAt(sNew.length()-nBack-1) ==
+                     sOld.charAt(sOld.length()-nBack-1)    ) )
+                nBack++;
+            if( nFront + nBack > nMinLength )
+                nBack = nMinLength - nFront;
+
+            // so... the first nFront and the last nBack characters
+            // are the same. Change the others!
+            String sDel = sOld.substring( nFront, sOld.length() - nBack );
+            String sIns = sNew.substring( nFront, sNew.length() - nBack );
+
+            System.out.println("edit text: " +
+                               sOld.substring(0, nFront) +
+                               " [ " + sDel + " -> " + sIns + " ] " +
+                               sOld.substring(sOld.length() - nBack) );
+
+            boolean bRet = false;
+            try
+            {
+                // edit the text, and use
+                // (set|insert|delete|replace)Text as needed
+                if( nFront+nBack == 0 )
+                    bRet = xEdit.setText( sIns );
+                else if( sDel.length() == 0 )
+                    bRet = xEdit.insertText( sIns, nFront );
+                else if( sIns.length() == 0 )
+                    bRet = xEdit.deleteText( nFront, sOld.length()-nBack );
+                else
+                    bRet = xEdit.replaceText(nFront, sOld.length()-nBack,sIns);
+            }
+            catch( IndexOutOfBoundsException e )
+            {
+                bRet = false;
+            }
+
+            return bRet;
+        }
+
+//         /** replace the given node with a new xText node */
+//         void updateNode( XAccessibleText xText,
+//                          DefaultMutableTreeNode aNode )
+//         {
+//             // create a new node
+//             DefaultMutableTreeNode aNew = newTextTreeNode( xText );
+//
+//             // get parent (must be DefaultMutableTreeNode)
+//             DefaultMutableTreeNode aParent =
+//                 (DefaultMutableTreeNode)aNode.getParent();
+//             if( aParent != null )
+//             {
+//                 // remove old sub-tree, and insert new one
+//                 int nIndex = aParent.getIndex( aNode );
+//                 aParent.remove( nIndex );
+//                 aParent.insert( aNew, nIndex );
+//             }
+//         }
+    }
 }
