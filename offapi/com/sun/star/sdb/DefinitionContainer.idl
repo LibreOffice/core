@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DefinitionContainer.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:55:00 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 21:37:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,17 +62,17 @@
 #define __com_sun_star_sdb_DefinitionContainer_idl__
 
  module com {  module sun {  module star {  module container {
-interface XNameAccess;
-interface XNameContainer;
-interface XIndexAccess;
-interface XEnumerationAccess;
+ published interface XNameAccess;
+ published interface XNameContainer;
+ published interface XIndexAccess;
+ published interface XEnumerationAccess;
 };};};};
 
  module com {  module sun {  module star {  module util {
-interface XRefreshable;
+ published interface XRefreshable;
 };};};};
  module com {  module sun {  module star {  module lang {
-interface XSingleServiceFactory;
+ published interface XSingleServiceFactory;
 };};};};
 
  module com {  module sun {  module star {  module sdb {
@@ -94,7 +94,7 @@ interface XSingleServiceFactory;
     needs to be supported.
     </p>
  */
-service DefinitionContainer
+published service DefinitionContainer
 {
     // gives access to the elements by name.
     interface com::sun::star::container::XNameAccess;
