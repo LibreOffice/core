@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbamultiplex.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2001-09-13 14:14:47 $
+ *  last change: $Author: hr $ $Date: 2001-10-26 12:33:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,8 +151,8 @@ namespace dbaui
     public:
         OSbaWeakSubObject(::cppu::OWeakObject& rParent) : m_rParent(rParent) { }
 
-        virtual void SAL_CALL acquire() throw(::com::sun::star::uno::RuntimeException) { m_rParent.acquire(); }
-        virtual void SAL_CALL release() throw(::com::sun::star::uno::RuntimeException) { m_rParent.release(); }
+        virtual void SAL_CALL acquire() throw() { m_rParent.acquire(); }
+        virtual void SAL_CALL release() throw() { m_rParent.release(); }
     };
 
     //------------------------------------------------------------------
