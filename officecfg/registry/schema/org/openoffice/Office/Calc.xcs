@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Calc.xcs,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tpf $ $Date: 2002-10-18 13:06:39 $
+ *  last change: $Author: tpf $ $Date: 2002-10-25 17:16:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,9 +60,9 @@
  *
  ************************************************************************ -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
-<oor:component-schema oor:name="Calc" oor:package="org.openoffice.Office" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xml:lang="en-US">
-	<!-- Responsible: NN -->
+<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Calc" oor:package="org.openoffice.Office" xml:lang="en-US">
 	<info>
+		<author>NN</author>
 		<desc xml:lang="en-US">Contains settings for the spreadsheet application.</desc>
 	</info>
 	<templates>
@@ -111,15 +111,12 @@
 		</group>
 	</templates>
 	<component>
-		<info>
-			<desc xml:lang="en-US">Contains settings for the spreadsheet application.</desc>
-		</info>
 		<set oor:name="UnitConversion" oor:node-type="ConversionRule">
 			<!-- OldPath: UnitConversion -->
 			<!-- OldLocation: convert.ini -->
-			<!-- Responsible: NN/ER -->
 			<!-- UIHints: function CONVERT -->
 			<info>
+				<author>NN/ER</author>
 				<desc xml:lang="en-US">Specifies the Euro currency conversion rates and possibly other unit conversion rules for the CONVERT function.</desc>
 			</info>
 		</set>
@@ -134,76 +131,75 @@
 				<prop oor:name="Formula" oor:type="xs:boolean">
 					<!-- OldPath: Calc/Contents/Display -->
 					<!-- OldLocation: Soffice.cfg -->
-					<!-- Responsible: NN -->
 					<!-- UIHints: Tools - Options -Spreadsheets - Contents - [Section] Display -->
-					<value>false</value>
 					<info>
+						<author>NN</author>
 						<desc xml:lang="en-US">Indicates whether formulas instead of results are displayed in the cells.</desc>
 						<label xml:lang="en-US">Formulas</label>
 					</info>
+					<value>false</value>
 				</prop>
 				<prop oor:name="ZeroValue" oor:type="xs:boolean">
 					<!-- OldPath: Calc/Contents/Display -->
 					<!-- OldLocation: Soffice.cfg -->
-					<!-- Responsible: NN -->
 					<!-- UIHints: Tools - Options -Spreadsheets - Contents - [Section] Display -->
-					<value>true</value>
 					<info>
+						<author>NN</author>
 						<desc xml:lang="en-US">Indicates whether numbers containing the 0 value are shown.</desc>
 						<label xml:lang="en-US">Zero values</label>
 					</info>
+					<value>true</value>
 				</prop>
 				<prop oor:name="NoteTag" oor:type="xs:boolean">
 					<!-- OldPath: Calc/Contents/Display -->
 					<!-- OldLocation: Soffice.cfg -->
-					<!-- Responsible: NN -->
 					<!-- UIHints: Tools - Options -Spreadsheets - Contents - [Section] Display -->
-					<value>true</value>
 					<info>
+						<author>NN</author>
 						<desc xml:lang="en-US">Indicates whether notes are marked.</desc>
 						<label xml:lang="en-US">Note tags</label>
 					</info>
+					<value>true</value>
 				</prop>
 				<prop oor:name="ValueHighlighting" oor:type="xs:boolean">
 					<!-- OldPath: Calc/Contents/Display -->
 					<!-- OldLocation: Soffice.cfg -->
-					<!-- Responsible: NN -->
 					<!-- UIHints: Tools - Options -Spreadsheets - Contents - [Section] Display -->
-					<value>false</value>
 					<info>
+						<author>NN</author>
 						<desc xml:lang="en-US">Indicates whether all values are highlighted in the sheet (text black, numbers blue, others green).</desc>
 						<label xml:lang="en-US">Value highlighting</label>
 					</info>
+					<value>false</value>
 				</prop>
 				<prop oor:name="Anchor" oor:type="xs:boolean">
 					<!-- OldPath: Calc/Contents/Display -->
 					<!-- OldLocation: Soffice.cfg -->
-					<!-- Responsible: NN -->
 					<!-- UIHints: Tools - Options -Spreadsheets - Contents - [Section] Display -->
-					<value>true</value>
 					<info>
+						<author>NN</author>
 						<desc xml:lang="en-US">Indicates whether anchor icons are displayed next to selected graphics in the document.</desc>
 						<label xml:lang="en-US">Anchor</label>
 					</info>
+					<value>true</value>
 				</prop>
 				<prop oor:name="TextOverflow" oor:type="xs:boolean">
 					<!-- OldPath: Calc/Contents/Display -->
 					<!-- OldLocation: Soffice.cfg -->
-					<!-- Responsible: NN -->
 					<!-- UIHints: Tools - Options -Spreadsheets - Contents - [Section] Display -->
-					<value>true</value>
 					<info>
+						<author>NN</author>
 						<desc xml:lang="en-US">Indicates whether text overflow is marked via a small triangle.</desc>
 						<label xml:lang="en-US">Text overflow</label>
 					</info>
+					<value>true</value>
 				</prop>
 				<prop oor:name="ObjectGraphic" oor:type="xs:int">
 					<!-- OldPath: Calc/Contents/Objects -->
 					<!-- OldLocation: Soffice.cfg -->
-					<!-- Responsible: NN -->
 					<!-- UIHints: Tools - Options -Spreadsheets - Contents - [Section] Objects -->
-					<value>0</value>
 					<info>
+						<author>NN</author>
 						<desc xml:lang="en-US">Indicates whether objects and graphics are shown, hidden or replaced by a placeholder.</desc>
 						<label xml:lang="en-US">Objects and Graphics</label>
 					</info>
@@ -224,14 +220,14 @@
 							</info>
 						</enumeration>
 					</constraints>
+					<value>0</value>
 				</prop>
 				<prop oor:name="Chart" oor:type="xs:int">
 					<!-- OldPath: Calc/Contents/Objects -->
 					<!-- OldLocation: Soffice.cfg -->
-					<!-- Responsible: NN -->
 					<!-- UIHints: Tools - Options -Spreadsheets - Contents - [Section] Objects -->
-					<value>0</value>
 					<info>
+						<author>NN</author>
 						<desc xml:lang="en-US">Indicates whether charts are shown, hidden or replaced by a placeholder.</desc>
 						<label xml:lang="en-US">Charts</label>
 					</info>
@@ -252,14 +248,14 @@
 							</info>
 						</enumeration>
 					</constraints>
+					<value>0</value>
 				</prop>
 				<prop oor:name="DrawingObject" oor:type="xs:int">
 					<!-- OldPath: Calc/Contents/Objects -->
 					<!-- OldLocation: Soffice.cfg -->
-					<!-- Responsible: NN -->
 					<!-- UIHints: Tools - Options -Spreadsheets - Contents - [Section] Objects -->
-					<value>0</value>
 					<info>
+						<author>NN</author>
 						<desc xml:lang="en-US">Indicates whether drawing objects are shown, hidden or replaced by a placeholder.</desc>
 						<label xml:lang="en-US">Drawing objects</label>
 					</info>
@@ -280,6 +276,7 @@
 							</info>
 						</enumeration>
 					</constraints>
+					<value>0</value>
 				</prop>
 			</group>
 			<group oor:name="Update">
@@ -289,10 +286,9 @@
 				<prop oor:name="Link" oor:type="xs:int">
 					<!-- OldPath: Calc/Other/Update -->
 					<!-- OldLocation: Soffice.cfg -->
-					<!-- Responsible: NN -->
 					<!-- UIHints: Tools - Options - Spreadsheet  Other  [Section] Updating -->
-					<value>2</value>
 					<info>
+						<author>NN</author>
 						<desc xml:lang="en-US">Specifies if and how links are updated when loading a document.</desc>
 						<label xml:lang="en-US">Update Links</label>
 					</info>
@@ -313,6 +309,7 @@
 							</info>
 						</enumeration>
 					</constraints>
+					<value>2</value>
 				</prop>
 			</group>
 		</group>
@@ -327,69 +324,69 @@
 				<prop oor:name="GridLine" oor:type="xs:boolean">
 					<!-- OldPath: Calc/Layout/Lines -->
 					<!-- OldLocation: Soffice.cfg -->
-					<!-- Responsible: NN -->
 					<!-- UIHints: Tools - Options -Spreadsheets - Layout - [Section] Lines -->
-					<value>true</value>
 					<info>
+						<author>NN</author>
 						<desc xml:lang="en-US">Specifies whether grid lines are displayed.</desc>
 						<label xml:lang="en-US">Grid lines</label>
 					</info>
+					<value>true</value>
 				</prop>
 				<prop oor:name="GridLineColor" oor:type="xs:int">
 					<!-- OldPath: Calc/Layout/Lines -->
 					<!-- OldLocation: Soffice.cfg -->
-					<!-- Responsible: NN -->
 					<!-- UIHints: Tools - Options -Spreadsheets - Layout - [Section] Lines -->
 					<!--Default 12632256 = LightGray-->
-					<value>12632256</value>
 					<info>
+						<author>NN</author>
 						<desc xml:lang="en-US">Specifies the color of the grid lines.</desc>
 						<label xml:lang="en-US">Color</label>
 					</info>
+					<value>12632256</value>
 				</prop>
 				<prop oor:name="PageBreak" oor:type="xs:boolean">
 					<!-- OldPath: Calc/Layout/Lines -->
 					<!-- OldLocation: Soffice.cfg -->
-					<!-- Responsible: NN -->
 					<!-- UIHints: Tools - Options -Spreadsheets - Layout - [Section] Lines -->
-					<value>true</value>
 					<info>
+						<author>NN</author>
 						<desc xml:lang="en-US">Specifies whether page breaks are displayed.</desc>
 						<label xml:lang="en-US">Page breaks</label>
 					</info>
+					<value>true</value>
 				</prop>
 				<prop oor:name="Guide" oor:type="xs:boolean">
 					<!-- OldPath: Calc/Layout/Lines -->
 					<!-- OldLocation: Soffice.cfg -->
-					<!-- Responsible: NN -->
 					<!-- UIHints: Tools - Options -Spreadsheets - Layout - [Section] Lines -->
-					<value>false</value>
 					<info>
+						<author>NN</author>
 						<desc xml:lang="en-US">Specifies whether guides are displayed when moving objects.</desc>
 						<label xml:lang="en-US">Guides</label>
 					</info>
+					<value>false</value>
 				</prop>
 				<prop oor:name="SimpleControlPoint" oor:type="xs:boolean">
 					<!-- OldPath: Calc/Layout/Lines -->
 					<!-- OldLocation: Soffice.cfg -->
-					<!-- Responsible: NN -->
 					<!-- UIHints: Tools - Options -Spreadsheets - Layout - [Section] Lines -->
-					<value>false</value>
 					<info>
+						<author>NN</author>
 						<desc xml:lang="en-US">Specifies whether control points are displayed as simple squares without 3D effect.</desc>
 						<label xml:lang="en-US">Simple control points</label>
 					</info>
+					<value>false</value>
 				</prop>
 				<prop oor:name="LargeControlPoint" oor:type="xs:boolean">
 					<!-- OldPath: Calc/Layout/Lines -->
 					<!-- OldLocation: Soffice.cfg -->
-					<!-- Responsible: NN -->
 					<!-- UIHints: Tools - Options -Spreadsheets - Layout - [Section] Lines -->
-					<value>false</value>
 					<info>
+						<author>NN</author>
 						<desc xml:lang="en-US">Specifies whether control points are displayed as larger than the default size.</desc>
 						<label xml:lang="en-US">Large control points</label>
 					</info>
+					<value>false</value>
 				</prop>
 			</group>
 			<group oor:name="Window">
@@ -399,57 +396,57 @@
 				<prop oor:name="ColumnRowHeader" oor:type="xs:boolean">
 					<!-- OldPath: Calc/Layout/Window -->
 					<!-- OldLocation: Soffice.cfg -->
-					<!-- Responsible: NN -->
 					<!-- UIHints: Tools - Options -Spreadsheets - Layout - [Section] Window -->
-					<value>true</value>
 					<info>
+						<author>NN</author>
 						<desc xml:lang="en-US">Specifies whether row and column headers are displayed.</desc>
 						<label xml:lang="en-US">Column/Row headers</label>
 					</info>
+					<value>true</value>
 				</prop>
 				<prop oor:name="HorizontalScroll" oor:type="xs:boolean">
 					<!-- OldPath: Calc/Layout/Window -->
 					<!-- OldLocation: Soffice.cfg -->
-					<!-- Responsible: NN -->
 					<!-- UIHints: Tools - Options -Spreadsheets - Layout - [Section] Window -->
-					<value>true</value>
 					<info>
+						<author>NN</author>
 						<desc xml:lang="en-US">Specifies whether a horizontal scroll bar is displayed.</desc>
 						<label xml:lang="en-US">Horizontal scroll</label>
 					</info>
+					<value>true</value>
 				</prop>
 				<prop oor:name="VerticalScroll" oor:type="xs:boolean">
 					<!-- OldPath: Calc/Layout/Window -->
 					<!-- OldLocation: Soffice.cfg -->
-					<!-- Responsible: NN -->
 					<!-- UIHints: Tools - Options -Spreadsheets - Layout - [Section] Window -->
-					<value>true</value>
 					<info>
+						<author>NN</author>
 						<desc xml:lang="en-US">Specifies whether a vertical scroll bar is displayed.</desc>
 						<label xml:lang="en-US">Vertical Scroll</label>
 					</info>
+					<value>true</value>
 				</prop>
 				<prop oor:name="SheetTab" oor:type="xs:boolean">
 					<!-- OldPath: Calc/Layout/Window -->
 					<!-- OldLocation: Soffice.cfg -->
-					<!-- Responsible: NN -->
 					<!-- UIHints: Tools - Options -Spreadsheets - Layout - [Section] Window -->
-					<value>true</value>
 					<info>
+						<author>NN</author>
 						<desc xml:lang="en-US">Specifies whether sheet tabs are displayed.</desc>
 						<label xml:lang="en-US">Sheet tabs</label>
 					</info>
+					<value>true</value>
 				</prop>
 				<prop oor:name="OutlineSymbol" oor:type="xs:boolean">
 					<!-- OldPath: Calc/Layout/Window -->
 					<!-- OldLocation: Soffice.cfg -->
-					<!-- Responsible: NN -->
 					<!-- UIHints: Tools - Options -Spreadsheets - Layout - [Section] Window -->
-					<value>true</value>
 					<info>
+						<author>NN</author>
 						<desc xml:lang="en-US">Specifies whether outline symbols are displayed.</desc>
 						<label xml:lang="en-US">Outline symbols</label>
 					</info>
+					<value>true</value>
 				</prop>
 			</group>
 			<group oor:name="Other">
@@ -459,10 +456,9 @@
 				<prop oor:name="StatusbarFunction" oor:type="xs:int">
 					<!-- OldPath: Calc/Layout -->
 					<!-- OldLocation: Soffice.cfg -->
-					<!-- Responsible: NN -->
 					<!-- UIHints: (Status Bar) -->
-					<value>9</value>
 					<info>
+						<author>NN</author>
 						<desc xml:lang="en-US">Selects a function that is calculated for the selected cells, and which shows the result in the status bar.</desc>
 						<label xml:lang="en-US">Statusbar Function</label>
 					</info>
@@ -503,41 +499,45 @@
 							</info>
 						</enumeration>
 					</constraints>
+					<value>9</value>
 				</prop>
 				<group oor:name="TabStop">
 					<!-- OldPath: Calc/Layout -->
 					<!-- OldLocation: Soffice.cfg -->
-					<!-- Responsible: NN -->
 					<!-- UIHints: Tools - Options -Spreadsheets - Layout - [Section] Tab stops -->
+					<info>
+						<author>NN</author>
+						<desc xml:lang="en-US">Specifies the distance between tabulator stops in 1/100th millimeters.</desc>
+						<label xml:lang="en-US">Tab stops</label>
+					</info>
 					<prop oor:name="Metric" oor:type="xs:int">
-						<value>1250</value>
 						<info>
 							<desc xml:lang="en-US">Specifies the tabulator distance with locales that use the metric system.</desc>
 							<label xml:lang="en-US"/>
 						</info>
+						<value>1250</value>
 					</prop>
 					<prop oor:name="NonMetric" oor:type="xs:int">
-						<value>1270</value>
 						<info>
 							<desc xml:lang="en-US">Specifies the tabulator distance with locales that don't use the metric system.</desc>
 							<label xml:lang="en-US"/>
 						</info>
+						<value>1270</value>
 					</prop>
-					<info>
-						<desc xml:lang="en-US">Specifies the distance between tabulator stops in 1/100th millimeters.</desc>
-						<label xml:lang="en-US">Tab stops</label>
-					</info>
 				</group>
 				<group oor:name="MeasureUnit">
 					<!-- OldPath: Calc/Layout -->
 					<!-- OldLocation: Soffice.cfg -->
-					<!-- Responsible: NN -->
 					<!-- UIHints: Tools - Options -Spreadsheets - Layout - [Section] Measurement unit -->
+					<info>
+						<author>NN</author>
+						<desc xml:lang="en-US">Specifies the measurement unit to be used in the user interface.</desc>
+						<label xml:lang="en-US">Measurement unit</label>
+					</info>
 					<prop oor:name="Metric" oor:type="xs:int">
 						<info>
 							<desc xml:lang="en-US">Specifies the measurement unit that is used with locales that use the metric system.</desc>
 						</info>
-						<value>2</value>
 						<constraints>
 							<enumeration oor:value="1">
 								<info>
@@ -565,12 +565,12 @@
 								</info>
 							</enumeration>
 						</constraints>
+						<value>2</value>
 					</prop>
 					<prop oor:name="NonMetric" oor:type="xs:int">
 						<info>
 							<desc xml:lang="en-US">Specifies the measurement unit that is used with locales that don't use the metric system.</desc>
 						</info>
-						<value>8</value>
 						<constraints>
 							<enumeration oor:value="1">
 								<info>
@@ -598,11 +598,8 @@
 								</info>
 							</enumeration>
 						</constraints>
+						<value>8</value>
 					</prop>
-					<info>
-						<desc xml:lang="en-US">Specifies the measurement unit to be used in the user interface.</desc>
-						<label xml:lang="en-US">Measurement unit</label>
-					</info>
 				</group>
 			</group>
 			<group oor:name="Zoom">
@@ -612,10 +609,9 @@
 				<prop oor:name="Type" oor:type="xs:int">
 					<!-- OldPath: Calc/Layout -->
 					<!-- OldLocation: Soffice.cfg -->
-					<!-- Responsible: NN -->
 					<!-- UIHints: (Status Bar) -->
-					<value>0</value>
 					<info>
+						<author>NN</author>
 						<desc xml:lang="en-US">Specifies the zoom type.</desc>
 						<label xml:lang="en-US">Zoom Type</label>
 					</info>
@@ -636,17 +632,18 @@
 							</info>
 						</enumeration>
 					</constraints>
+					<value>0</value>
 				</prop>
 				<prop oor:name="Value" oor:type="xs:int">
 					<!-- OldPath: Calc/Layout -->
 					<!-- OldLocation: Soffice.cfg -->
-					<!-- Responsible: NN -->
 					<!-- UIHints: (Status Bar) -->
-					<value>100</value>
 					<info>
+						<author>NN</author>
 						<desc xml:lang="en-US">Specifies the percentage value to which the view is scaled.</desc>
 						<label xml:lang="en-US">Zoom Value</label>
 					</info>
+					<value>100</value>
 				</prop>
 			</group>
 		</group>
@@ -657,21 +654,20 @@
 			<prop oor:name="MoveSelection" oor:type="xs:boolean">
 				<!-- OldPath: Calc/Input -->
 				<!-- OldLocation: Soffice.cfg -->
-				<!-- Responsible: NN -->
 				<!-- UIHints: Tools - Options -Spreadsheets - Input - [Section] Input -->
-				<value>true</value>
 				<info>
+					<author>NN</author>
 					<desc xml:lang="en-US">Specifies whether pressing the Enter key should move the selection.</desc>
 					<label xml:lang="en-US">Press Enter to move selection</label>
 				</info>
+				<value>true</value>
 			</prop>
 			<prop oor:name="MoveSelectionDirection" oor:type="xs:int">
 				<!-- OldPath: Calc/Input -->
 				<!-- OldLocation: Soffice.cfg -->
-				<!-- Responsible: NN -->
 				<!-- UIHints: Tools - Options -Spreadsheets - Input - [Section] Input -->
-				<value>0</value>
 				<info>
+					<author>NN</author>
 					<desc xml:lang="en-US">Specifies the direction where the selection is moved when pressing Enter, if moving is enabled.</desc>
 					<label xml:lang="en-US">Direction to move selection</label>
 				</info>
@@ -697,98 +693,97 @@
 						</info>
 					</enumeration>
 				</constraints>
+				<value>0</value>
 			</prop>
 			<prop oor:name="SwitchToEditMode" oor:type="xs:boolean">
 				<!-- OldPath: Calc/Input -->
 				<!-- OldLocation: Soffice.cfg -->
-				<!-- Responsible: NN -->
 				<!-- UIHints: Tools - Options -Spreadsheets - Input - [Section] Input -->
-				<value>false</value>
 				<info>
+					<author>NN</author>
 					<desc xml:lang="en-US">Specifies whether the selected cell can be edited immediately after pressing the Enter key.</desc>
 					<label xml:lang="en-US">Press Enter to switch to edit mode</label>
 				</info>
+				<value>false</value>
 			</prop>
 			<prop oor:name="ExpandFormatting" oor:type="xs:boolean">
 				<!-- OldPath: Calc/Input -->
 				<!-- OldLocation: Soffice.cfg -->
-				<!-- Responsible: NN -->
 				<!-- UIHints: Tools - Options -Spreadsheets - Input - [Section] Input -->
-				<value>false</value>
 				<info>
+					<author>NN</author>
 					<desc xml:lang="en-US">Specifies whether formatting a cell also affects subsequently entered cells.</desc>
 					<label xml:lang="en-US">Expand formatting</label>
 				</info>
+				<value>false</value>
 			</prop>
 			<prop oor:name="ShowReference" oor:type="xs:boolean">
 				<!-- OldPath: Calc/Input -->
 				<!-- OldLocation: Soffice.cfg -->
-				<!-- Responsible: NN -->
 				<!-- UIHints: Tools - Options -Spreadsheets - Input - [Section] Input -->
-				<value>true</value>
 				<info>
+					<author>NN</author>
 					<desc xml:lang="en-US">Specifies whether formula references from the input line are highlighted in color in the cell.</desc>
 					<label xml:lang="en-US">Show references in color</label>
 				</info>
+				<value>true</value>
 			</prop>
 			<prop oor:name="ExpandReference" oor:type="xs:boolean">
 				<!-- OldPath: Calc/Input -->
 				<!-- OldLocation: Soffice.cfg -->
-				<!-- Responsible: NN -->
 				<!-- UIHints: Tools - Options -Spreadsheets - Input - [Section] Input -->
-				<value>false</value>
 				<info>
+					<author>NN</author>
 					<desc xml:lang="en-US">Specifies whether references are expanded when inserting columns or rows next to, above or below the reference range.</desc>
 					<label xml:lang="en-US">Expand references if new columns/rows are inserted</label>
 				</info>
+				<value>false</value>
 			</prop>
 			<prop oor:name="HighlightSelection" oor:type="xs:boolean">
 				<!-- OldPath: Calc/Input -->
 				<!-- OldLocation: Soffice.cfg -->
-				<!-- Responsible: NN -->
 				<!-- UIHints: Tools - Options -Spreadsheets - Input - [Section] Input -->
-				<value>true</value>
 				<info>
+					<author>NN</author>
 					<desc xml:lang="en-US">Specifies whether column and row headers are highlighted in the selected columns or rows.</desc>
 					<label xml:lang="en-US">Highlight selection in column/row headings</label>
 				</info>
+				<value>true</value>
 			</prop>
 			<prop oor:name="UseTabCol" oor:type="xs:boolean">
 				<!-- OldPath: Calc/Input -->
 				<!-- OldLocation: Soffice.cfg -->
-				<!-- Responsible: NN -->
 				<!-- UIHints: only API (see UseTabCol) -->
-				<value>false</value>
 				<info>
+					<author>NN</author>
 					<desc xml:lang="en-US">Specifies whether pressing Enter will move the cursor to the column where it was before the Tab key was used to change columns.</desc>
 					<label xml:lang="en-US">Use Tab Column</label>
 				</info>
+				<value>false</value>
 			</prop>
 			<prop oor:name="UsePrinterMetrics" oor:type="xs:boolean">
-				<!-- Responsible: NN -->
 				<!-- UIHints: Tools - Options - Spreadsheet - General - [Section] Input settings -->
-				<value>true</value>
 				<info>
+					<author>NN</author>
 					<desc xml:lang="en-US">Specifies whether text metrics from the printer will be used to format text on the screen.</desc>
 					<label xml:lang="en-US">Use printer metrics for text formatting</label>
 				</info>
+				<value>true</value>
 			</prop>
 			<prop oor:name="ReplaceCellsWarning" oor:type="xs:boolean">
-				<!-- Responsible: NN -->
 				<!-- UIHints: Tools - Options - Spreadsheet - General - [Section] Input settings -->
-				<value>true</value>
 				<info>
+					<author>NN</author>
 					<desc xml:lang="en-US">Specifies whether a warning box will appear when existing cells are replaced (i.e. pasting from clipboard).</desc>
 					<label xml:lang="en-US">Warn before replacing cells</label>
 				</info>
+				<value>true</value>
 			</prop>
 			<prop oor:name="LastFunctions" oor:type="oor:int-list">
 				<!-- OldPath: Calc/Input -->
 				<!-- OldLocation: Soffice.cfg -->
-				<!-- Responsible: NN -->
-				<!-- UIHints: - -->
-				<value>224 226 222 223 5</value>
 				<info>
+					<author>NN</author>
 					<desc xml:lang="en-US">Specifies the functions last used.</desc>
 					<label xml:lang="en-US">Last Used Functions</label>
 				</info>
@@ -819,28 +814,29 @@
 						</info>
 					</enumeration>
 				</constraints>
+				<value>224 226 222 223 5</value>
 			</prop>
 			<prop oor:name="AutoInput" oor:type="xs:boolean">
 				<!-- OldPath: Calc/Input -->
 				<!-- OldLocation: Soffice.cfg -->
-				<!-- Responsible: NN -->
 				<!-- UIHints: Tools  Cell Contents  AutoInput -->
-				<value>true</value>
 				<info>
+					<author>NN</author>
 					<desc xml:lang="en-US">Specifies whether the AutoInput function is active.</desc>
 					<label xml:lang="en-US">Auto Input</label>
 				</info>
+				<value>true</value>
 			</prop>
 			<prop oor:name="DetectiveAuto" oor:type="xs:boolean">
 				<!-- OldPath: Calc/Input -->
 				<!-- OldLocation: Soffice.cfg -->
-				<!-- Responsible: NN -->
 				<!-- UIHints: Tools  Detective  AutoRefresh -->
-				<value>true</value>
 				<info>
+					<author>NN</author>
 					<desc xml:lang="en-US">Specifies whether all the Detective traces in the sheet are automatically refreshed when modifying a formula.</desc>
 					<label xml:lang="en-US">Detective Auto Refresh</label>
 				</info>
+				<value>true</value>
 			</prop>
 		</group>
 		<group oor:name="Grid">
@@ -854,96 +850,96 @@
 				<prop oor:name="SnapToGrid" oor:type="xs:boolean">
 					<!-- OldPath: Calc/Grid/Options -->
 					<!-- OldLocation: Soffice.cfg -->
-					<!-- Responsible: NN -->
 					<!-- UIHints: Tools - Options  Spreadsheet  Grid - [Section] Options -->
-					<value>false</value>
 					<info>
+						<author>NN</author>
 						<desc xml:lang="en-US">Specifies whether frames, drawing elements and form functions are only movable between grid points.</desc>
 						<label xml:lang="en-US">Snap to grid</label>
 					</info>
+					<value>false</value>
 				</prop>
 				<prop oor:name="SizeToGrid" oor:type="xs:boolean">
 					<!-- OldPath: Calc/Grid/Options -->
 					<!-- OldLocation: Soffice.cfg -->
-					<!-- Responsible: NN -->
 					<!-- UIHints: Tools  Options  Spreadsheet  Grid - [Section] Snap grid -->
-					<value>true</value>
 					<info>
+						<author>NN</author>
 						<desc xml:lang="en-US">Specifies whether the snap grid is matched with the main grid.</desc>
 						<label xml:lang="en-US">Size to grid</label>
 					</info>
+					<value>true</value>
 				</prop>
 				<prop oor:name="VisibleGrid" oor:type="xs:boolean">
 					<!-- OldPath: Calc/Grid/Options -->
 					<!-- OldLocation: Soffice.cfg -->
-					<!-- Responsible: NN -->
 					<!-- UIHints: Tools - Options  Spreadsheet  Grid - [Section] Options -->
-					<value>false</value>
 					<info>
+						<author>NN</author>
 						<desc xml:lang="en-US">Specifies whether the grid is displayed.</desc>
 						<label xml:lang="en-US">Visible grid</label>
 					</info>
+					<value>false</value>
 				</prop>
 				<prop oor:name="Synchronize" oor:type="xs:boolean">
 					<!-- OldPath: Calc/Grid/Options -->
 					<!-- OldLocation: Soffice.cfg -->
-					<!-- Responsible: NN -->
 					<!-- UIHints: Tools - Options  Spreadsheet  Grid - [Section] Options -->
-					<value>true</value>
 					<info>
+						<author>NN</author>
 						<desc xml:lang="en-US">Specifies whether the current grid settings are changed symmetrically. The resolution and subdivision for the X/Y axes will remain the same.</desc>
 						<label xml:lang="en-US">Synchronize axes</label>
 					</info>
+					<value>true</value>
 				</prop>
 				<group oor:name="XAxis">
 					<!-- OldPath: Calc/Grid/Options -->
 					<!-- OldLocation: Soffice.cfg -->
-					<!-- Responsible: NN -->
 					<!-- UIHints: Tools  Options  Spreadsheet  Grid - [Section] Snap grid -->
 					<!-- Notice: Default-value in  (nonmetric: 1270 1/100 mm)-->
+					<info>
+						<author>NN</author>
+						<desc xml:lang="en-US">Defines the horizontal distance between the single grid points in 1/100th millimeters.</desc>
+						<label xml:lang="en-US">X axis</label>
+					</info>
 					<prop oor:name="Metric" oor:type="xs:int">
-						<value>1000</value>
 						<info>
 							<desc xml:lang="en-US">Specifies the distance that is used with locales that use the metric system.</desc>
 							<label xml:lang="en-US"/>
 						</info>
+						<value>1000</value>
 					</prop>
 					<prop oor:name="NonMetric" oor:type="xs:int">
-						<value>1270</value>
 						<info>
 							<desc xml:lang="en-US">Specifies the distance that is used with locales that don't use the metric system.</desc>
 							<label xml:lang="en-US"/>
 						</info>
+						<value>1270</value>
 					</prop>
-					<info>
-						<desc xml:lang="en-US">Defines the horizontal distance between the single grid points in 1/100th millimeters.</desc>
-						<label xml:lang="en-US">X axis</label>
-					</info>
 				</group>
 				<group oor:name="YAxis">
 					<!-- OldPath: Calc/Grid/Options -->
 					<!-- OldLocation: Soffice.cfg -->
-					<!-- Responsible: NN -->
 					<!-- UIHints: Tools  Options  Spreadsheet  Grid - [Section] Snap grid -->
 					<!-- Notice: Default-value in nonmetric: 1270 1/100 mm-->
+					<info>
+						<author>NN</author>
+						<desc xml:lang="en-US">Defines the vertical distance between the single grid points in 1/100th millimeters.</desc>
+						<label xml:lang="en-US">Y axis</label>
+					</info>
 					<prop oor:name="Metric" oor:type="xs:int">
-						<value>1000</value>
 						<info>
 							<desc xml:lang="en-US">Specifies the distance that is used with locales that use the metric system.</desc>
 							<label xml:lang="en-US"/>
 						</info>
+						<value>1000</value>
 					</prop>
 					<prop oor:name="NonMetric" oor:type="xs:int">
-						<value>1270</value>
 						<info>
 							<desc xml:lang="en-US">Specifies the distance that is used with locales that don't use the metric system.</desc>
 							<label xml:lang="en-US"/>
 						</info>
+						<value>1270</value>
 					</prop>
-					<info>
-						<desc xml:lang="en-US">Defines the vertical distance between the single grid points in 1/100th millimeters.</desc>
-						<label xml:lang="en-US">Y axis</label>
-					</info>
 				</group>
 			</group>
 			<group oor:name="Resolution">
@@ -953,52 +949,52 @@
 				<group oor:name="XAxis">
 					<!-- OldPath: Calc/Grid/Resolution -->
 					<!-- OldLocation: Soffice.cfg -->
-					<!-- Responsible: NN -->
 					<!-- UIHints: Tools - Options  Spreadsheet  Grid - [Section] Grid -->
 					<!-- Notice: Default-value nonmetric 1270 1/100 mm) -->
+					<info>
+						<author>NN</author>
+						<desc xml:lang="en-US">Defines the distance between grid points on the X axis in 1/100th millimeters.</desc>
+						<label xml:lang="en-US">X Axis Resolution</label>
+					</info>
 					<prop oor:name="Metric" oor:type="xs:int">
-						<value>1000</value>
 						<info>
 							<desc xml:lang="en-US">Specifies the distance that is used with locales that use the metric system.</desc>
 							<label xml:lang="en-US"/>
 						</info>
+						<value>1000</value>
 					</prop>
 					<prop oor:name="NonMetric" oor:type="xs:int">
-						<value>1270</value>
 						<info>
 							<desc xml:lang="en-US">Specifies the distance that is used with locales that don't use the metric system.</desc>
 							<label xml:lang="en-US"/>
 						</info>
+						<value>1270</value>
 					</prop>
-					<info>
-						<desc xml:lang="en-US">Defines the distance between grid points on the X axis in 1/100th millimeters.</desc>
-						<label xml:lang="en-US">X Axis Resolution</label>
-					</info>
 				</group>
 				<group oor:name="YAxis">
 					<!-- OldPath: Calc/Grid/Resolution -->
 					<!-- OldLocation: Soffice.cfg -->
-					<!-- Responsible: NN -->
 					<!-- UIHints: Tools - Options  Spreadsheet  Grid - [Section] Grid -->
 					<!-- Notice: Default-value  nonmetric 1270 1/100 mm) -->
+					<info>
+						<author>NN</author>
+						<desc xml:lang="en-US">Defines the distance between grid points on the Y axis in 1/100th millimeters.</desc>
+						<label xml:lang="en-US">Y Axis Resolution</label>
+					</info>
 					<prop oor:name="Metric" oor:type="xs:int">
-						<value>1000</value>
 						<info>
 							<desc xml:lang="en-US">Specifies the distance that is used with locales that use the metric system.</desc>
 							<label xml:lang="en-US"/>
 						</info>
+						<value>1000</value>
 					</prop>
 					<prop oor:name="NonMetric" oor:type="xs:int">
-						<value>1270</value>
 						<info>
 							<desc xml:lang="en-US">Specifies the distance that is used with locales that don't use the metric system.</desc>
 							<label xml:lang="en-US"/>
 						</info>
+						<value>1270</value>
 					</prop>
-					<info>
-						<desc xml:lang="en-US">Defines the distance between grid points on the Y axis in 1/100th millimeters.</desc>
-						<label xml:lang="en-US">Y Axis Resolution</label>
-					</info>
 				</group>
 			</group>
 			<group oor:name="Subdivision">
@@ -1008,24 +1004,24 @@
 				<prop oor:name="XAxis" oor:type="xs:int">
 					<!-- OldPath: Calc/Grid/Subdivision -->
 					<!-- OldLocation: Soffice.cfg -->
-					<!-- Responsible: NN -->
 					<!-- UIHints: Tools - Options  Spreadsheet  Grid - [Section] Grid -->
-					<value>1</value>
 					<info>
+						<author>NN</author>
 						<desc xml:lang="en-US">Specifies the number of intervals between two grid points on the X axis.</desc>
 						<label xml:lang="en-US">X Axis Subdivision</label>
 					</info>
+					<value>1</value>
 				</prop>
 				<prop oor:name="YAxis" oor:type="xs:int">
 					<!-- OldPath: Calc/Grid/Subdivision -->
 					<!-- OldLocation: Soffice.cfg -->
-					<!-- Responsible: NN -->
 					<!-- UIHints: Tools - Options  Spreadsheet  Grid - [Section] Grid -->
-					<value>1</value>
 					<info>
+						<author>NN</author>
 						<desc xml:lang="en-US">Specifies the number of intervals between two grid points on the Y axis.</desc>
 						<label xml:lang="en-US">Y Axis Subdivision</label>
 					</info>
+					<value>1</value>
 				</prop>
 			</group>
 		</group>
@@ -1036,14 +1032,14 @@
 			<prop oor:name="List" oor:type="oor:string-list">
 				<!-- OldPath: Calc/Sort_Lists -->
 				<!-- OldLocation: Soffice.cfg -->
-				<!-- Responsible: NN -->
 				<!-- UIHints: Tools - Options  Spreadsheet  Sort lists  [List box] Lists -->
 				<!-- Notice: Defaults: Week and month names from system language -->
-				<value>NULL</value>
 				<info>
+					<author>NN</author>
 					<desc xml:lang="en-US">Specifies the available lists.</desc>
 					<label xml:lang="en-US">Lists</label>
 				</info>
+				<value>NULL</value>
 			</prop>
 		</group>
 		<group oor:name="Calculate">
@@ -1057,35 +1053,35 @@
 				<prop oor:name="Iteration" oor:type="xs:boolean">
 					<!-- OldPath: Calc/Calculate/Iterative_References -->
 					<!-- OldLocation: Soffice.cfg -->
-					<!-- Responsible: NN -->
 					<!-- UIHints: Tools - Options  Spreadsheet  Calculate  [Section] Iterative references -->
-					<value>false</value>
 					<info>
+						<author>NN</author>
 						<desc xml:lang="en-US">Specifies whether iterative calculation is used for formulas with circular references.</desc>
 						<label xml:lang="en-US">Iterations</label>
 					</info>
+					<value>false</value>
 				</prop>
 				<prop oor:name="Steps" oor:type="xs:int">
 					<!-- OldPath: Calc/Calculate/Iterative_References -->
 					<!-- OldLocation: Soffice.cfg -->
-					<!-- Responsible: NN -->
 					<!-- UIHints: Tools - Options  Spreadsheet  Calculate  [Section] Iterative references -->
-					<value>100</value>
 					<info>
+						<author>NN</author>
 						<desc xml:lang="en-US">Specifies the maximum number of iteration steps.</desc>
 						<label xml:lang="en-US">Steps</label>
 					</info>
+					<value>100</value>
 				</prop>
 				<prop oor:name="MinimumChange" oor:type="xs:double">
 					<!-- OldPath: Calc/Calculate/Iterative_References -->
 					<!-- OldLocation: Soffice.cfg -->
-					<!-- Responsible: NN -->
 					<!-- UIHints: Tools - Options  Spreadsheet  Calculate  [Section] Iterative references -->
-					<value>0.001</value>
 					<info>
+						<author>NN</author>
 						<desc xml:lang="en-US">Specifies the result change value below which iteration is stopped.</desc>
 						<label xml:lang="en-US">Minimum Change</label>
 					</info>
+					<value>0.001</value>
 				</prop>
 			</group>
 			<group oor:name="Other">
@@ -1095,66 +1091,66 @@
 				<prop oor:name="CaseSensitive" oor:type="xs:boolean">
 					<!-- OldPath: Calc/Calculate -->
 					<!-- OldLocation: Soffice.cfg -->
-					<!-- Responsible: NN -->
 					<!-- UIHints: Tools - Options  Spreadsheet  Calculate  [Check box] Case sensitive -->
-					<value>true</value>
 					<info>
+						<author>NN</author>
 						<desc xml:lang="en-US">Specifies whether upper and lower case in texts are distinguished when comparing cell contents.</desc>
 						<label xml:lang="en-US">Case sensitive</label>
 					</info>
+					<value>true</value>
 				</prop>
 				<prop oor:name="Precision" oor:type="xs:boolean">
 					<!-- OldPath: Calc/Calculate -->
 					<!-- OldLocation: Soffice.cfg -->
-					<!-- Responsible: NN -->
 					<!-- UIHints: Tools - Options  Spreadsheet  Calculate  [Check box] Precision as shown -->
-					<value>false</value>
 					<info>
+						<author>NN</author>
 						<desc xml:lang="en-US">Specifies whether the calculation uses the rounded values displayed in the sheet.</desc>
 						<label xml:lang="en-US">Precision as shown</label>
 					</info>
+					<value>false</value>
 				</prop>
 				<prop oor:name="SearchCriteria" oor:type="xs:boolean">
 					<!-- OldPath: Calc/Calculate -->
 					<!-- OldLocation: Soffice.cfg -->
-					<!-- Responsible: NN -->
 					<!-- UIHints: Tools - Options  Spreadsheet  Calculate  [Check box] Search criteria = and &lt;&amp;gt; must apply to whole cells -->
-					<value>true</value>
 					<info>
+						<author>NN</author>
 						<desc xml:lang="en-US">Specifies whether search criteria in formulas must match the whole of the cell contents.</desc>
 						<label xml:lang="en-US">Search criteria = and &lt;&amp;gt; must apply to whole cells</label>
 					</info>
+					<value>true</value>
 				</prop>
 				<prop oor:name="FindLabel" oor:type="xs:boolean">
 					<!-- OldPath: Calc/Calculate -->
 					<!-- OldLocation: Soffice.cfg -->
-					<!-- Responsible: NN -->
 					<!-- UIHints: Tools - Options  Spreadsheet  Calculate  [Check box] Automatically find column and row labels -->
-					<value>true</value>
 					<info>
+						<author>NN</author>
 						<desc xml:lang="en-US">Specifies whether column and row labels are used to refer to the column area beneath the text cell or to the row area at the right of the text cell while running a search.</desc>
 						<label xml:lang="en-US">Automatically find column and row labels</label>
 					</info>
+					<value>true</value>
 				</prop>
 				<prop oor:name="DecimalPlaces" oor:type="xs:int">
 					<!-- OldPath: Calc/Calculate -->
 					<!-- OldLocation: Soffice.cfg -->
-					<!-- Responsible: NN -->
 					<!-- UIHints: Tools - Options  Spreadsheet  Calculate  [Combo box] Decimal places -->
-					<value>2</value>
 					<info>
+						<author>NN</author>
 						<desc xml:lang="en-US">Specifies the number of decimals to be displayed for the Standard number format.</desc>
 						<label xml:lang="en-US">Decimal places</label>
 					</info>
+					<value>2</value>
 				</prop>
 				<prop oor:name="RegularExpressions" oor:type="xs:boolean">
-					<!-- Responsible: NN -->
 					<!-- UIHints: Tools - Options  Spreadsheet  Calculate  [Check box] Enable regular expressions in formulas -->
-					<value>true</value>
 					<info>
+						<author>NN</author>
 						<desc xml:lang="en-US">Specifies whether the calculation uses regular expressions in formulas, e.g. for functions which look up sheet contents.</desc>
 						<label xml:lang="en-US">Enable regular expressions in formulas</label>
 					</info>
+					<value>true</value>
 				</prop>
 				<node-ref oor:name="Date" oor:node-type="Date">
 					<info>
@@ -1174,50 +1170,50 @@
 				<prop oor:name="Change" oor:type="xs:int">
 					<!-- OldPath: Calc/Changes/Colors -->
 					<!-- OldLocation: Soffice.cfg -->
-					<!-- Responsible: NN -->
 					<!-- UIHints: Tools - Options - Spreadsheet  Changes  [Section] Colors for changes -->
 					<!--Default -1 = Transparent-->
-					<value>-1</value>
 					<info>
+						<author>NN</author>
 						<desc xml:lang="en-US">Specifies the modification color for changes of cell contents.</desc>
 						<label xml:lang="en-US">Changes</label>
 					</info>
+					<value>-1</value>
 				</prop>
 				<prop oor:name="Deletion" oor:type="xs:int">
 					<!-- OldPath: Calc/Changes/Colors -->
 					<!-- OldLocation: Soffice.cfg -->
-					<!-- Responsible: NN -->
 					<!-- UIHints: Tools - Options - Spreadsheet  Changes  [Section] Colors for changes -->
 					<!--Default -1 = Transparent-->
-					<value>-1</value>
 					<info>
+						<author>NN</author>
 						<desc xml:lang="en-US">Specifies the color to highlight deletions.</desc>
 						<label xml:lang="en-US">Deletions</label>
 					</info>
+					<value>-1</value>
 				</prop>
 				<prop oor:name="Insertion" oor:type="xs:int">
 					<!-- OldPath: Calc/Changes/Colors -->
 					<!-- OldLocation: Soffice.cfg -->
-					<!-- Responsible: NN -->
 					<!-- UIHints: Tools - Options - Spreadsheet  Changes  [Section] Colors for changes -->
 					<!--Default -1 = Transparent-->
-					<value>-1</value>
 					<info>
+						<author>NN</author>
 						<desc xml:lang="en-US">Specifies the color to highlight insertions.</desc>
 						<label xml:lang="en-US">Insertions</label>
 					</info>
+					<value>-1</value>
 				</prop>
 				<prop oor:name="MovedEntry" oor:type="xs:int">
 					<!-- OldPath: Calc/Changes/Colors -->
 					<!-- OldLocation: Soffice.cfg -->
-					<!-- Responsible: NN -->
 					<!-- UIHints: Tools - Options - Spreadsheet  Changes  [Section] Colors for changes -->
 					<!--Default -1 = Transparent-->
-					<value>-1</value>
 					<info>
+						<author>NN</author>
 						<desc xml:lang="en-US">Specifies the color to highlight moved contents.</desc>
 						<label xml:lang="en-US">Moved entries</label>
 					</info>
+					<value>-1</value>
 				</prop>
 			</group>
 		</group>
@@ -1236,24 +1232,24 @@
 					<prop oor:name="Load" oor:type="xs:boolean">
 						<!-- OldPath: Filter/MS_Office/Basic/Excel -->
 						<!-- OldLocation: soffice.cfg -->
-						<!-- Responsible: NN -->
 						<!-- UIHints: Tools  Options - Filter Settings  Microsoft Office  [Section] Microsoft Excel 97/2000 -->
-						<value>true</value>
 						<info>
+							<author>NN</author>
 							<desc xml:lang="en-US">Indicates whether VBA macros are imported as comments.</desc>
 							<label xml:lang="en-US">Load Basic Code to edit</label>
 						</info>
+						<value>true</value>
 					</prop>
 					<prop oor:name="Save" oor:type="xs:boolean">
 						<!-- OldPath: Filter/MS_Office/Basic/Excel -->
 						<!-- OldLocation: soffice.cfg -->
-						<!-- Responsible: NN -->
 						<!-- UIHints: Tools  Options - Filter Settings  Microsoft Office  [Section] Microsoft Excel 97/2000 -->
-						<value>true</value>
 						<info>
+							<author>NN</author>
 							<desc xml:lang="en-US">Indicates whether the original VBA storage is preserved while editing.</desc>
 							<label xml:lang="en-US">Save Original Basic Code again</label>
 						</info>
+						<value>true</value>
 					</prop>
 				</group>
 				<group oor:name="Lotus123">
@@ -1263,12 +1259,12 @@
 					<prop oor:name="WK3" oor:type="xs:boolean">
 						<!-- OldPath: Common -->
 						<!-- OldLocation: soffice.ini -->
-						<!-- Responsible: NN -->
-						<value>false</value>
 						<info>
+							<author>NN</author>
 							<desc xml:lang="en-US">Indicates whether the import of Lotus wk3 files is enabled.</desc>
 							<label xml:lang="en-US">Enable WK3 Filter</label>
 						</info>
+						<value>false</value>
 					</prop>
 				</group>
 				<group oor:name="MS_Excel">
@@ -1278,9 +1274,8 @@
 					<prop oor:name="ColScale" oor:type="xs:double">
 						<!-- OldPath: Common -->
 						<!-- OldLocation: soffice.ini -->
-						<!-- Responsible: NN -->
-						<value>1.0</value>
 						<info>
+							<author>NN</author>
 							<desc xml:lang="en-US">Specifies the factor for multiplying the column width when importing Excel documents from Biff 5 format.</desc>
 							<label xml:lang="en-US">Excel Column Width Scale</label>
 						</info>
@@ -1291,13 +1286,13 @@
 								</info>
 							</minExclusive>
 						</constraints>
+						<value>1.0</value>
 					</prop>
 					<prop oor:name="RowScale" oor:type="xs:double">
 						<!-- OldPath: Common -->
 						<!-- OldLocation: soffice.ini -->
-						<!-- Responsible: NN -->
-						<value>1.0</value>
 						<info>
+							<author>NN</author>
 							<desc xml:lang="en-US">Specifies the factor for multiplying the row height when importing Excel documents from Biff 5 format.</desc>
 							<label xml:lang="en-US">Excel Row Height Scale</label>
 						</info>
@@ -1308,13 +1303,14 @@
 								</info>
 							</minExclusive>
 						</constraints>
+						<value>1.0</value>
 					</prop>
 				</group>
 			</group>
 		</group>
 		<group oor:name="Print">
-			<!-- Responsible: NN -->
 			<info>
+				<author>NN</author>
 				<desc xml:lang="en-US">Contains settings that affect printing.</desc>
 			</info>
 			<group oor:name="Page">
@@ -1322,11 +1318,11 @@
 					<desc xml:lang="en-US">Contains settings that affect which pages are printed.</desc>
 				</info>
 				<prop oor:name="EmptyPages" oor:type="xs:boolean">
-					<value>true</value>
 					<info>
 						<desc xml:lang="en-US">Specifies whether empty pages are printed.</desc>
 						<label xml:lang="en-US">Printing Empty Pages</label>
 					</info>
+					<value>true</value>
 				</prop>
 			</group>
 			<group oor:name="Other">
@@ -1334,11 +1330,11 @@
 					<desc xml:lang="en-US">Contains other print settings.</desc>
 				</info>
 				<prop oor:name="AllSheets" oor:type="xs:boolean">
-					<value>true</value>
 					<info>
 						<desc xml:lang="en-US">Specifies whether all sheets are printed instead of only the selected sheets.</desc>
 						<label xml:lang="en-US">Print all Sheets</label>
 					</info>
+					<value>true</value>
 				</prop>
 			</group>
 		</group>
@@ -1347,26 +1343,25 @@
 				<desc xml:lang="en-US">Contains miscellaneous settings.</desc>
 			</info>
 			<group oor:name="DefaultObjectSize">
-				<!-- Responsible: NN -->
-				<!-- UIHints: Default size for newly created objects when using CTRL-Return or CTRL-Klick -->
+				<info>
+					<author>NN</author>
+					<desc xml:lang="en-US">Defines the default size of newly created objects using CTRL-Return or CTRL-Klick at an object creating Button.</desc>
+					<label xml:lang="en-US">Default Object Size</label>
+				</info>
 				<prop oor:name="Width" oor:type="xs:int">
-					<value>8000</value>
 					<info>
 						<desc xml:lang="en-US">Specifies the default width in 1/100th millimeters.</desc>
 						<label xml:lang="en-US"/>
 					</info>
+					<value>8000</value>
 				</prop>
 				<prop oor:name="Height" oor:type="xs:int">
-					<value>5000</value>
 					<info>
 						<desc xml:lang="en-US">Specifies the default height in 1/100th millimeters.</desc>
 						<label xml:lang="en-US"/>
 					</info>
+					<value>5000</value>
 				</prop>
-				<info>
-					<desc xml:lang="en-US">Defines the default size of newly created objects using CTRL-Return or CTRL-Klick at an object creating Button.</desc>
-					<label xml:lang="en-US">Default Object Size</label>
-				</info>
 			</group>
 		</group>
 	</component>

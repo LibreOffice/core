@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Java.xcs,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tpf $ $Date: 2002-10-18 13:06:52 $
+ *  last change: $Author: tpf $ $Date: 2002-10-25 17:16:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,312 +60,310 @@
  *
  ************************************************************************ -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
-<oor:component-schema oor:name="Java" oor:package="org.openoffice.Office" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xml:lang="en-US">
-  <!-- Responsible: JL -->    
-  <component>
-    <group oor:name="VirtualMachine">
-      <info>
-        <desc xml:lang="en-US">Provides information used to initialize a Java Virtual Machine. </desc>
-      </info>
-      <prop oor:name="Home" oor:type="xs:string">
-        <!-- OldPath: Java -->
-        <!-- OldLocation: java.ini -->
-        <!-- Notice: Default: depends on Java installation path -->
-        <value>NULL</value>
-        <info>
-          <desc xml:lang="en-US">Specifies the path of the Java installation</desc>
-          <label xml:lang="en-US">Java Home</label>
-        </info>
-      </prop>
-      <prop oor:name="Version" oor:type="xs:string">
-        <!-- OldPath: Java -->
-        <!-- OldLocation: java.ini -->
-        <!-- Notice: Default: depends on version used -->
-        <value>NULL</value>
-        <info>
-          <desc xml:lang="en-US">Specifies the  version of the Java installation that is used.</desc>
-          <label xml:lang="en-US">Java Version</label>
-        </info>
-      </prop>
-      <prop oor:name="RunTimeLib" oor:type="xs:string">
-        <!-- OldPath: Java -->
-        <!-- OldLocation: java.ini -->
-        <info>
-          <desc xml:lang="en-US">Specifies the JVM shared library that is used.</desc>
-        </info>
-      </prop>
-      <prop oor:name="SystemClassPath" oor:type="xs:string">
-        <!-- OldPath: Java -->
-        <!-- OldLocation: java.ini -->
-        <info>
-          <desc xml:lang="en-US">Contains jars of the Office intallation and may also contain other jars or folders.</desc>
-        </info>
-      </prop>
-      <prop oor:name="Enable" oor:type="xs:boolean">
-        <!-- OldPath: Java -->
-        <!-- OldLocation: java.ini -->
-        <value>true</value>
-        <info>
-          <desc xml:lang="en-US">Determines if the com.sun.star.java.JavaVirtualMachine service instantiates a JVM.</desc>
-          <label xml:lang="en-US">Enable JVM</label>
-        </info>
-      </prop>
-      <prop oor:name="Security" oor:type="xs:boolean">
-        <!-- OldPath: Java -->
-        <!-- OldLocation: java.ini -->
-        <!-- UIHints: Tools  Options  StarOffice Security  [Section] Java -->
-        <value>true</value>
-        <info>
-          <desc xml:lang="en-US">Determines if security checks are performed for applets.</desc>
-          <label xml:lang="en-US">Enable security checks</label>
-        </info>
-      </prop>
-      <prop oor:name="NetAccess" oor:type="xs:int">
-        <!-- OldPath: Java -->
-        <!-- OldLocation: java.ini -->
-        <!-- UIHints: Tools  Options  StarOffice  Security  [Section] Java -->
-        <info>
-          <desc xml:lang="en-US">Determines if and to what extent java applets are allowed to access the network.</desc>
-          <label xml:lang="en-US">Net access</label>
-        </info>
-        <constraints>
-          <enumeration oor:value="0">
-            <info>
-              <desc xml:lang="en-US">Host - the applet may connect to the computer where it originated from.</desc>
-            </info>
-          </enumeration>
-          <enumeration oor:value="1">
-            <info>
-              <desc xml:lang="en-US">Unrestricted - the applet may connect to other computers on the network.</desc>
-            </info>
-          </enumeration>
-          <enumeration oor:value="3">
-            <info>
-              <desc xml:lang="en-US">None - the applet cannot connect to other computers.</desc>
-            </info>
-          </enumeration>
-        </constraints>
-      </prop>
-      <prop oor:name="UserClassPath" oor:type="xs:string">
-        <!-- OldPath: Java -->
-        <!-- OldLocation: java.ini -->
-        <!-- UIHints: Tools  Options  StarOffice Security  [Section] Java -->
-        <info>
-          <desc xml:lang="en-US">Specifies additional java classes or jars which are contained in the classpath 
-	  of the JVM  (java.class.path system property).</desc>
-          <label xml:lang="en-US">Classpath</label>
-        </info>
-      </prop>
-      <prop oor:name="Debug" oor:type="xs:boolean">
-        <!-- OldPath: Java -->
-        <!-- OldLocation: java.ini -->
-        <info>
-          <desc xml:lang="en-US">Deprecated.</desc>
-        </info>
-      </prop>
-      <prop oor:name="DebugPort" oor:type="xs:int">
-        <!-- OldPath: Java -->
-        <!-- OldLocation: java.ini -->
-        <info>
-          <desc xml:lang="en-US">Deprecated.</desc>
-        </info>
-      </prop>
-      <prop oor:name="EnableVerboseGC" oor:type="xs:boolean">
-        <!-- OldPath: Java -->
-        <!-- OldLocation: java.ini -->
-        <info>
-          <desc xml:lang="en-US">Deprecated.</desc>
-        </info>
-      </prop>
-      <prop oor:name="Verbose" oor:type="xs:boolean">
-        <!-- OldPath: Java -->
-        <!-- OldLocation: java.ini -->
-        <info>
-          <desc xml:lang="en-US"> Deprecated.</desc>
-        </info>
-      </prop>
-      <prop oor:name="NativeStackSize" oor:type="xs:int">
-        <!-- OldPath: Java -->
-        <!-- OldLocation: java.ini -->
-        <info>
-          <desc xml:lang="en-US">Deprecated.</desc>
-        </info>
-      </prop>
-      <prop oor:name="JavaStackSize" oor:type="xs:int">
-        <!-- OldPath: Java -->
-        <!-- OldLocation: java.ini -->
-        <info>
-          <desc xml:lang="en-US">Deprecated.</desc>
-        </info>
-      </prop>
-      <prop oor:name="VerifyMode" oor:type="xs:int">
-        <!-- OldPath: Java -->
-        <!-- OldLocation: java.ini -->
-        <info>
-          <desc xml:lang="en-US">Deprecated.</desc>
-        </info>
-        <constraints>
-          <enumeration oor:value="0">
-            <info>
-              <desc xml:lang="en-US">Deprecated.</desc>
-            </info>
-          </enumeration>
-          <enumeration oor:value="1">
-            <info>
-              <desc xml:lang="en-US">Deprecated.</desc>
-            </info>
-          </enumeration>
-          <enumeration oor:value="2">
-            <info>
-              <desc xml:lang="en-US">Deprecated.</desc>
-            </info>
-          </enumeration>
-        </constraints>
-      </prop>
-      <prop oor:name="MinHeapSize" oor:type="xs:int">
-        <!-- OldPath: Java -->
-        <!-- OldLocation: java.ini -->
-        <info>
-          <desc xml:lang="en-US">Deprecated.</desc>
-        </info>
-      </prop>
-      <prop oor:name="MaxHeapSize" oor:type="xs:int">
-        <!-- OldPath: Java -->
-        <!-- OldLocation: java.ini -->
-        <info>
-          <desc xml:lang="en-US">Deprecated</desc>
-        </info>
-      </prop>
-      <prop oor:name="DisableAsyncGC" oor:type="xs:boolean">
-        <!-- OldPath: Java -->
-        <!-- OldLocation: java.ini -->
-        <info>
-          <desc xml:lang="en-US">Deprecated.</desc>
-        </info>
-      </prop>
-      <prop oor:name="EnableClassGC" oor:type="xs:boolean">
-        <!-- OldPath: Java -->
-        <!-- OldLocation: java.ini -->
-        <info>
-          <desc xml:lang="en-US">Deprecated.</desc>
-        </info>
-      </prop>
-      <prop oor:name="VMType" oor:type="xs:string">
-        <!-- OldPath: Java -->
-        <!-- OldLocation: java.ini -->
-        <info>
-          <desc xml:lang="en-US">Deprecated.</desc>
-        </info>
-        <constraints>
-          <enumeration oor:value="Classic"/>
-          <enumeration oor:value="Hotspot"/>
-        </constraints>
-      </prop>
-      <prop oor:name="EnvironmentType" oor:type="xs:string">
-        <!-- OldPath: Java -->
-        <!-- OldLocation: java.ini -->
-        <info>
-          <desc xml:lang="en-US">Indicates if a JRE or SDK is used.</desc>
-        </info>
-        <constraints>
-          <enumeration oor:value="JDK">
-            <info>
-              <desc xml:lang="en-US">The Virtual Machine comes from a JDKxxx or j2sdkxxx installation. </desc>
-            </info>
-	  </enumeration>
-          <enumeration oor:value="JRE">
-            <info>
-              <desc xml:lang="en-US">The Virtual Machine comes from a JRExxx installation. </desc>
-            </info>
-          </enumeration>
-        </constraints>
-      </prop>
-      <prop oor:name="JavaLibPath" oor:type="xs:string">
-        <!-- Platform: UNIX -->
-        <!-- OldPath: Java -->
-        <!-- OldLocation: java.ini -->
-        <info>
-          <desc xml:lang="en-US">Contains directories which contain shared libraries which are used by the
-	  Java runtime library.</desc>
-        </info>
-      </prop>
-      <prop oor:name="Properties" oor:type="oor:string-list">
-        <!-- OldPath: Java -->
-        <!-- OldLocation: java.ini -->
-        <info>
-          <desc xml:lang="en-US">Deprecated</desc>
-        </info>
-      </prop>
-    </group>
-    <group oor:name="Install">
-      <info>
-        <desc xml:lang="en-US">Provides information which are used by jvmsetup. </desc>
-      </info>
-      <prop oor:name="PackageInstallationDirectory" oor:type="xs:string">
-        <!-- OldPath: Install -->
-        <!-- OldLocation: java.ini -->
-        <info>
-          <desc xml:lang="en-US">Specifies the name of the folder that will contain the JRE installation (depends on the JRE package).</desc>
-        </info>
-      </prop>
-      <prop oor:name="VerifiedVersion" oor:type="xs:string">
-        <!-- OldPath: Install -->
-        <!-- OldLocation: java.ini -->
-        <info>
-          <desc xml:lang="en-US">Contains a space separated list of verified Java versions.</desc>
-        </info>
-      </prop>
-      <prop oor:name="Version" oor:type="xs:string">
-        <!-- OldPath: Install -->
-        <!-- OldLocation: java.ini -->
-        <info>
-          <desc xml:lang="en-US">Specifies the version of the JRE which is provided by the setup.</desc>
-        </info>
-      </prop>
-      <prop oor:name="Vendor" oor:type="xs:string">
-        <!-- OldPath: Install -->
-        <!-- OldLocation: java.ini -->
-        <info>
-          <desc xml:lang="en-US">Specifies the vendor of the JRE package.</desc>
-        </info>
-      </prop>
-      <prop oor:name="RequiredVersion" oor:type="xs:string">
-        <!-- OldPath: Install -->
-        <!-- OldLocation: java.ini -->
-        <info>
-          <desc xml:lang="en-US">Specifies that all Java installations with a lower version will be 
-	  ignored by the Java setup  (jvmsetup.exe).</desc>
-        </info>
-      </prop>
-      <prop oor:name="InstallationPackage" oor:type="xs:string">
-        <!-- OldPath: Install -->
-        <!-- OldLocation: java.ini -->
-        <info>
-          <desc xml:lang="en-US">Specifies the JRE package which can be installed during the Java setup.</desc>
-        </info>
-      </prop>
-      <prop oor:name="ExcludeVersion" oor:type="xs:string">
-        <!-- OldPath: Install -->
-        <!-- OldLocation: java.ini -->
-        <info>
-          <desc xml:lang="en-US">Contains a  space separated list of Java versions which should
-	   be ignored by the Java setup (jvmsetup.exe).</desc>
-        </info>
-      </prop>
-      <prop oor:name="AdditionalSearchPath" oor:type="xs:string">
-        <!-- OldPath: Install -->
-        <!-- OldLocation: java.ini -->
-        <info>
-          <desc xml:lang="en-US">Deprecated.</desc>
-        </info>
-      </prop>
-      <prop oor:name="AdditionalClasspath" oor:type="xs:string">
-        <!-- OldPath: Install -->
-        <!-- OldLocation: java.ini -->
-        <info>
-          <desc xml:lang="en-US">Contains the Office's jar files. The Java setup uses it to form the SystemClasspath.</desc>
-        </info>
-      </prop>
-    </group>
-  </component>
+<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Java" oor:package="org.openoffice.Office" xml:lang="en-US">
+	<info>
+		<author>JL</author>
+	</info>
+	<component>
+		<group oor:name="VirtualMachine">
+			<info>
+				<desc xml:lang="en-US">Provides information used to initialize a Java Virtual Machine. </desc>
+			</info>
+			<prop oor:name="Home" oor:type="xs:string">
+				<!-- OldPath: Java -->
+				<!-- OldLocation: java.ini -->
+				<!-- Notice: Default: depends on Java installation path -->
+				<info>
+					<desc xml:lang="en-US">Specifies the path of the Java installation</desc>
+					<label xml:lang="en-US">Java Home</label>
+				</info>
+				<value>NULL</value>
+			</prop>
+			<prop oor:name="Version" oor:type="xs:string">
+				<!-- OldPath: Java -->
+				<!-- OldLocation: java.ini -->
+				<!-- Notice: Default: depends on version used -->
+				<info>
+					<desc xml:lang="en-US">Specifies the  version of the Java installation that is used.</desc>
+					<label xml:lang="en-US">Java Version</label>
+				</info>
+				<value>NULL</value>
+			</prop>
+			<prop oor:name="RunTimeLib" oor:type="xs:string">
+				<!-- OldPath: Java -->
+				<!-- OldLocation: java.ini -->
+				<info>
+					<desc xml:lang="en-US">Specifies the JVM shared library that is used.</desc>
+				</info>
+			</prop>
+			<prop oor:name="SystemClassPath" oor:type="xs:string">
+				<!-- OldPath: Java -->
+				<!-- OldLocation: java.ini -->
+				<info>
+					<desc xml:lang="en-US">Contains jars of the Office intallation and may also contain other jars or folders.</desc>
+				</info>
+			</prop>
+			<prop oor:name="Enable" oor:type="xs:boolean">
+				<!-- OldPath: Java -->
+				<!-- OldLocation: java.ini -->
+				<info>
+					<desc xml:lang="en-US">Determines if the com.sun.star.java.JavaVirtualMachine service instantiates a JVM.</desc>
+					<label xml:lang="en-US">Enable JVM</label>
+				</info>
+				<value>true</value>
+			</prop>
+			<prop oor:name="Security" oor:type="xs:boolean">
+				<!-- OldPath: Java -->
+				<!-- OldLocation: java.ini -->
+				<!-- UIHints: Tools  Options  StarOffice Security  [Section] Java -->
+				<info>
+					<desc xml:lang="en-US">Determines if security checks are performed for applets.</desc>
+					<label xml:lang="en-US">Enable security checks</label>
+				</info>
+				<value>true</value>
+			</prop>
+			<prop oor:name="NetAccess" oor:type="xs:int">
+				<!-- OldPath: Java -->
+				<!-- OldLocation: java.ini -->
+				<!-- UIHints: Tools  Options  StarOffice  Security  [Section] Java -->
+				<info>
+					<desc xml:lang="en-US">Determines if and to what extent java applets are allowed to access the network.</desc>
+					<label xml:lang="en-US">Net access</label>
+				</info>
+				<constraints>
+					<enumeration oor:value="0">
+						<info>
+							<desc xml:lang="en-US">Host - the applet may connect to the computer where it originated from.</desc>
+						</info>
+					</enumeration>
+					<enumeration oor:value="1">
+						<info>
+							<desc xml:lang="en-US">Unrestricted - the applet may connect to other computers on the network.</desc>
+						</info>
+					</enumeration>
+					<enumeration oor:value="3">
+						<info>
+							<desc xml:lang="en-US">None - the applet cannot connect to other computers.</desc>
+						</info>
+					</enumeration>
+				</constraints>
+			</prop>
+			<prop oor:name="UserClassPath" oor:type="xs:string">
+				<!-- OldPath: Java -->
+				<!-- OldLocation: java.ini -->
+				<!-- UIHints: Tools  Options  StarOffice Security  [Section] Java -->
+				<info>
+					<desc xml:lang="en-US">Specifies additional java classes or jars which are contained in the classpath of the JVM  (java.class.path system property).</desc>
+					<label xml:lang="en-US">Classpath</label>
+				</info>
+			</prop>
+			<prop oor:name="Debug" oor:type="xs:boolean">
+				<!-- OldPath: Java -->
+				<!-- OldLocation: java.ini -->
+				<info>
+					<deprecated/>
+				</info>
+			</prop>
+			<prop oor:name="DebugPort" oor:type="xs:int">
+				<!-- OldPath: Java -->
+				<!-- OldLocation: java.ini -->
+				<info>
+					<deprecated/>
+				</info>
+			</prop>
+			<prop oor:name="EnableVerboseGC" oor:type="xs:boolean">
+				<!-- OldPath: Java -->
+				<!-- OldLocation: java.ini -->
+				<info>
+					<deprecated/>
+				</info>
+			</prop>
+			<prop oor:name="Verbose" oor:type="xs:boolean">
+				<!-- OldPath: Java -->
+				<!-- OldLocation: java.ini -->
+				<info>
+					<deprecated/>
+				</info>
+			</prop>
+			<prop oor:name="NativeStackSize" oor:type="xs:int">
+				<!-- OldPath: Java -->
+				<!-- OldLocation: java.ini -->
+				<info>
+					<deprecated/>
+				</info>
+			</prop>
+			<prop oor:name="JavaStackSize" oor:type="xs:int">
+				<!-- OldPath: Java -->
+				<!-- OldLocation: java.ini -->
+				<info>
+					<deprecated/>
+				</info>
+			</prop>
+			<prop oor:name="VerifyMode" oor:type="xs:int">
+				<!-- OldPath: Java -->
+				<!-- OldLocation: java.ini -->
+				<info>
+					<deprecated/>
+				</info>
+				<constraints>
+					<enumeration oor:value="0">
+						<info>
+        					<deprecated/>
+						</info>
+					</enumeration>
+					<enumeration oor:value="1">
+						<info>
+        					<deprecated/>
+						</info>
+					</enumeration>
+					<enumeration oor:value="2">
+						<info>
+        					<deprecated/>
+						</info>
+					</enumeration>
+				</constraints>
+			</prop>
+			<prop oor:name="MinHeapSize" oor:type="xs:int">
+				<!-- OldPath: Java -->
+				<!-- OldLocation: java.ini -->
+				<info>
+                    <deprecated/>
+				</info>
+			</prop>
+			<prop oor:name="MaxHeapSize" oor:type="xs:int">
+				<!-- OldPath: Java -->
+				<!-- OldLocation: java.ini -->
+				<info>
+        			<deprecated/>
+				</info>
+			</prop>
+			<prop oor:name="DisableAsyncGC" oor:type="xs:boolean">
+				<!-- OldPath: Java -->
+				<!-- OldLocation: java.ini -->
+				<info>
+   					<deprecated/>
+				</info>
+			</prop>
+			<prop oor:name="EnableClassGC" oor:type="xs:boolean">
+				<!-- OldPath: Java -->
+				<!-- OldLocation: java.ini -->
+				<info>
+   					<deprecated/>
+				</info>
+			</prop>
+			<prop oor:name="VMType" oor:type="xs:string">
+				<!-- OldPath: Java -->
+				<!-- OldLocation: java.ini -->
+				<info>
+   					<deprecated/>
+				</info>
+				<constraints>
+					<enumeration oor:value="Classic"/>
+					<enumeration oor:value="Hotspot"/>
+				</constraints>
+			</prop>
+			<prop oor:name="EnvironmentType" oor:type="xs:string">
+				<!-- OldPath: Java -->
+				<!-- OldLocation: java.ini -->
+				<info>
+					<desc xml:lang="en-US">Indicates if a JRE or SDK is used.</desc>
+				</info>
+				<constraints>
+					<enumeration oor:value="JDK">
+						<info>
+							<desc xml:lang="en-US">The Virtual Machine comes from a JDKxxx or j2sdkxxx installation. </desc>
+						</info>
+					</enumeration>
+					<enumeration oor:value="JRE">
+						<info>
+							<desc xml:lang="en-US">The Virtual Machine comes from a JRExxx installation. </desc>
+						</info>
+					</enumeration>
+				</constraints>
+			</prop>
+			<prop oor:name="JavaLibPath" oor:type="xs:string">
+				<!-- Platform: UNIX -->
+				<!-- OldPath: Java -->
+				<!-- OldLocation: java.ini -->
+				<info>
+					<desc xml:lang="en-US">Contains directories which contain shared libraries which are used by the Java runtime library.</desc>
+				</info>
+			</prop>
+			<prop oor:name="Properties" oor:type="oor:string-list">
+				<!-- OldPath: Java -->
+				<!-- OldLocation: java.ini -->
+				<info>
+   					<deprecated/>
+				</info>
+			</prop>
+		</group>
+		<group oor:name="Install">
+			<info>
+				<desc xml:lang="en-US">Provides information which are used by jvmsetup. </desc>
+			</info>
+			<prop oor:name="PackageInstallationDirectory" oor:type="xs:string">
+				<!-- OldPath: Install -->
+				<!-- OldLocation: java.ini -->
+				<info>
+					<desc xml:lang="en-US">Specifies the name of the folder that will contain the JRE installation (depends on the JRE package).</desc>
+				</info>
+			</prop>
+			<prop oor:name="VerifiedVersion" oor:type="xs:string">
+				<!-- OldPath: Install -->
+				<!-- OldLocation: java.ini -->
+				<info>
+					<desc xml:lang="en-US">Contains a space separated list of verified Java versions.</desc>
+				</info>
+			</prop>
+			<prop oor:name="Version" oor:type="xs:string">
+				<!-- OldPath: Install -->
+				<!-- OldLocation: java.ini -->
+				<info>
+					<desc xml:lang="en-US">Specifies the version of the JRE which is provided by the setup.</desc>
+				</info>
+			</prop>
+			<prop oor:name="Vendor" oor:type="xs:string">
+				<!-- OldPath: Install -->
+				<!-- OldLocation: java.ini -->
+				<info>
+					<desc xml:lang="en-US">Specifies the vendor of the JRE package.</desc>
+				</info>
+			</prop>
+			<prop oor:name="RequiredVersion" oor:type="xs:string">
+				<!-- OldPath: Install -->
+				<!-- OldLocation: java.ini -->
+				<info>
+					<desc xml:lang="en-US">Specifies that all Java installations with a lower version will be ignored by the Java setup  (jvmsetup.exe).</desc>
+				</info>
+			</prop>
+			<prop oor:name="InstallationPackage" oor:type="xs:string">
+				<!-- OldPath: Install -->
+				<!-- OldLocation: java.ini -->
+				<info>
+					<desc xml:lang="en-US">Specifies the JRE package which can be installed during the Java setup.</desc>
+				</info>
+			</prop>
+			<prop oor:name="ExcludeVersion" oor:type="xs:string">
+				<!-- OldPath: Install -->
+				<!-- OldLocation: java.ini -->
+				<info>
+					<desc xml:lang="en-US">Contains a  space separated list of Java versions which should be ignored by the Java setup (jvmsetup.exe).</desc>
+				</info>
+			</prop>
+			<prop oor:name="AdditionalSearchPath" oor:type="xs:string">
+				<!-- OldPath: Install -->
+				<!-- OldLocation: java.ini -->
+				<info>
+   					<deprecated/>
+				</info>
+			</prop>
+			<prop oor:name="AdditionalClasspath" oor:type="xs:string">
+				<!-- OldPath: Install -->
+				<!-- OldLocation: java.ini -->
+				<info>
+					<desc xml:lang="en-US">Contains the Office's jar files. The Java setup uses it to form the SystemClasspath.</desc>
+				</info>
+			</prop>
+		</group>
+	</component>
 </oor:component-schema>

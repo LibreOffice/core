@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Setup.xcs,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: tpf $ $Date: 2002-10-18 13:01:49 $
+ *  last change: $Author: tpf $ $Date: 2002-10-25 17:15:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,15 +60,16 @@
  *
  ************************************************************************ -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../component-schema.dtd">
-<oor:component-schema oor:name="Setup" oor:package="org.openoffice" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xml:lang="en-US">
-	<!-- Responsible: DG -->
-	<info><desc xml:lang="en-US">Contains Setup preferences, such as the installed UI locales or the available modules.</desc></info>
+<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Setup" oor:package="org.openoffice" xml:lang="en-US">
+	<info>
+		<author>DG</author>
+		<desc xml:lang="en-US">Contains Setup preferences, such as the installed UI locales or the available modules.</desc>
+	</info>
 	<templates>
 		<group oor:name="Factory">
-            <info>
-                <desc xml:lang="en-US">Describes an application module (a document factory, such as Writer).</desc>
-            </info>
-			<!-- Responsible: AS-->
+			<info>
+				<desc xml:lang="en-US">Describes an application module (a document factory, such as Writer).</desc>
+			</info>
 			<!--The default must be written by the setup.-->
 			<prop oor:name="ooSetupFactoryShortName" oor:type="xs:string">
 				<!-- UIHints: setup -->
@@ -104,7 +105,9 @@
 	</templates>
 	<component>
 		<group oor:name="Product">
-			<!-- Responsible: MBA-->
+			<info>
+				<author>MBA</author>
+			</info>
 			<!--The default must be written by the setup.-->
 			<prop oor:name="ooName" oor:type="xs:string">
 				<info>
@@ -124,41 +127,43 @@
 		</group>
 		<group oor:name="Office">
 			<!--The default must be written by the setup.-->
-			<!-- Responsible: DG -->
-			<info><desc xml:lang="en-US">Specifies the installation location, locales and the available factories for creating documents.</desc></info>
+			<info>
+				<author>DG</author>
+				<desc xml:lang="en-US">Specifies the installation location, locales and the available factories for creating documents.</desc>
+			</info>
 			<prop oor:name="ooSetupInstallPath" oor:type="xs:string">
 				<!-- OldPath: Service User/[username] -->
 				<!-- OldLocation: userdb.ini -->
-				<!-- Responsible: AS/BEI -->
-				<!-- Deprecated -->
 				<info>
+					<deprecated/>
+					<author>AS/BEI</author>
 					<desc xml:lang="en-US">Specifies the path to where the user data is installed. User data can only be installed in a valid directory.</desc>
 				</info>
 			</prop>
 			<prop oor:name="ooSetupInstallURL" oor:type="xs:string">
 				<!-- OldPath: Service User/[username] -->
 				<!-- OldLocation: userdb.ini -->
-				<!-- Responsible: AS/BEI -->
-				<!-- Deprecated -->
 				<info>
+					<deprecated/>
+					<author>AS/BEI</author>
 					<desc xml:lang="en-US">Specifies the user install path as a URL. The path must match the UCB configuration.</desc>
 				</info>
 			</prop>
 			<prop oor:name="ooSetupInstCompleted" oor:type="xs:boolean">
 				<!-- OldPath: Service User/[username] -->
 				<!-- OldLocation: userdb.ini -->
-				<!-- Responsible: IS/BEI -->
-				<!-- Deprecated -->
 				<info>
+					<deprecated/>
+					<author>IS/BEI</author>
 					<desc xml:lang="en-US">Indicates if the user data is copied successfully.</desc>
 				</info>
 			</prop>
 			<prop oor:name="ooSetupLocales" oor:type="oor:string-list">
 				<!-- OldLocation: setup.inf-->
-				<!-- Responsible: PB / IS-->
 				<!-- UIHints: setup -->
 				<!--The default list must be deleted, as soon as the setup writes the values (#79254).-->
 				<info>
+					<author>PB / IS</author>
 					<desc xml:lang="en-US">Specifies the application language offered by the setup, if a multilingual version is used.</desc>
 				</info>
 				<constraints>
@@ -177,52 +182,54 @@
 			<prop oor:name="ooSetupShowIntro" oor:type="xs:boolean">
 				<!-- OldPath: Common/Show-Intro -->
 				<!-- OldLocation: soffice.ini -->
-				<!-- Responsible: CD -->
 				<!-- UIHints: Tools - Options - General - View -->
 				<info>
-					<desc xml:lang="en-US">Deprecated. This feature is controlled by an entry in the soffice.ini or the -nologo command line parameter.</desc>
+					<deprecated>This feature is controlled by an entry in the soffice.ini or the -nologo command line parameter.</deprecated>
+					<author>CD</author>
 				</info>
 			</prop>
 			<prop oor:name="ooSetupConnectionURL" oor:type="xs:string">
 				<!-- OldPath: Common-->
 				<!-- OldLocation: soffice.ini -->
-				<!-- Responsible: CD-->
 				<info>
+					<author>CD</author>
 					<desc xml:lang="en-US">Specifies the URL for an UNO connection that can be used to script the office from outside.</desc>
 				</info>
 			</prop>
 			<set oor:name="Factories" oor:node-type="Factory">
-				<!-- Responsible: MBA -->
 				<info>
+					<author>MBA</author>
 					<desc xml:lang="en-US">Contains all of the document factories that were installed during setup.</desc>
 				</info>
 			</set>
 		</group>
 		<group oor:name="L10N">
-			<!-- Responsible: PB-->
+			<info>
+				<author>PB</author>
+			</info>
 			<!--The default must be written by the setup.-->
 			<prop oor:name="ooLocale" oor:type="xs:string">
 				<!-- OldPath: User/Language -->
 				<!-- OldLocation: soffice.ini -->
-				<!-- Responsible: PB -->
 				<!-- UIHints: Tools - Options - General - Other -->
 				<!--The initial default should be written by the setup.-->
 				<info>
+					<author>PB</author>
 					<desc xml:lang="en-US">Indicates the Office language selected by the user.</desc>
 					<label xml:lang="en-US">Locale</label>
 				</info>
 			</prop>
 			<prop oor:name="ooSetupSystemLocale" oor:type="xs:string">
-				<!-- Responsible: ER -->
 				<!-- UIHints: Tools - Options - Language Settings - Languages - Language of - Locale setting -->
 				<info>
+					<author>ER</author>
 					<desc xml:lang="en-US">Indicates the locale setting defined by the user. By default, this label is empty and the system locale is used.</desc>
 				</info>
 			</prop>
 			<prop oor:name="ooSetupCurrency" oor:type="xs:string">
-				<!-- Responsible: ER -->
 				<!-- UIHints: Tools - Options - Language Settings - Languages - Language of - Default currency -->
 				<info>
+					<author>ER</author>
 					<desc xml:lang="en-US">Indicates the currency settings defined by the user. By default, this label is empty and the currency defined in the ooSetupSystemLocale is used.</desc>
 				</info>
 			</prop>

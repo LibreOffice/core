@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Commands.xcs,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tpf $ $Date: 2002-10-18 13:06:43 $
+ *  last change: $Author: tpf $ $Date: 2002-10-25 17:16:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,39 +60,33 @@
  *
  ************************************************************************ -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
-<oor:component-schema oor:name="Commands" oor:package="org.openoffice.Office" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xml:lang="en-US">
-  <!-- Responsible: CD-->
-  <info>
-    <desc xml:lang="en-US">Contains general information about ~ and rules, and about actions based on office commands.</desc>
-  </info>
-  <templates>
-      <info>
-        <desc xml:lang="en-US">Neccessary templates for this package.</desc>
-      </info>
-    <group oor:name="CommandType">
-	  <info>
-	    <desc xml:lang="en-US">Describes a command.</desc>
-	  </info>
-      <prop oor:name="Command" oor:type="xs:string">
-        <info>
-          <desc xml:lang="en-US">Is the command name for dispatching without a protocol part.</desc>
-        </info>
-      </prop>
-    </group>
-  </templates>
-  <component>
-      <info>
-        <desc xml:lang="en-US">Instances of used templates.</desc>
-      </info>
-    <group oor:name="Execute">
-	  <info>
-		<desc xml:lang="en-US">Contains information about the execute status.</desc>
-	  </info>
-      <set oor:name="Disabled" oor:node-type="CommandType">
-        <info>
-          <desc xml:lang="en-US">Contains commands that are disabled in the Office user interface.</desc>
-        </info>
-      </set>
-    </group>
-  </component>
+<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Commands" oor:package="org.openoffice.Office" xml:lang="en-US">
+	<info>
+		<author>CD</author>
+		<desc xml:lang="en-US">Contains general information about ~ and rules, and about actions based on office commands.</desc>
+	</info>
+	<templates>
+		<group oor:name="CommandType">
+			<info>
+				<desc xml:lang="en-US">Describes a command.</desc>
+			</info>
+			<prop oor:name="Command" oor:type="xs:string">
+				<info>
+					<desc xml:lang="en-US">Is the command name for dispatching without a protocol part.</desc>
+				</info>
+			</prop>
+		</group>
+	</templates>
+	<component>
+		<group oor:name="Execute">
+			<info>
+				<desc xml:lang="en-US">Contains information about the execute status.</desc>
+			</info>
+			<set oor:name="Disabled" oor:node-type="CommandType">
+				<info>
+					<desc xml:lang="en-US">Contains commands that are disabled in the Office user interface.</desc>
+				</info>
+			</set>
+		</group>
+	</component>
 </oor:component-schema>

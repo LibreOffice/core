@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Chart.xcs,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: tpf $ $Date: 2002-10-18 13:06:41 $
+ *  last change: $Author: tpf $ $Date: 2002-10-25 17:16:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,31 +60,24 @@
  *
  ************************************************************************ -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
-<oor:component-schema oor:name="Chart" oor:package="org.openoffice.Office" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xml:lang="en-US">
-  <import oor:component="org.openoffice.Office.Common"/>
-  <component>
-    <group oor:name="DefaultColor">
-      <info>
-        <desc xml:lang="en-US">Comprises settings for colors being used when creating new charts.</desc>
-      </info>
-      <prop oor:name="Series" oor:type="oor:long-list">
-        <!-- OldPath: Chart/Default_Colors -->
-        <!-- OldLocation: Soffice.cfg -->
-        <!-- Responsible: BM -->
-        <!-- UIHints: Tools - Options  Chart  Default colors  [Section] Chart colors -->
-        <value>0x9999ff 0x993366 0xffffcc 0xccffff 
-0x660066 0xff8080 0x0066cc 0xccccff 0x000080 0xff00ff 0x00ffff 0xffff00
-        </value>
-        <info>
-          <desc xml:lang="en-US">Specifies a list of color values to be used for
-		  the first n series, where n is the size of the list. For i &gt; n the color
-		  used is equal to entry number i modulo n in the list.  You should keep
-		  the size of the list at 12.  Also note that the values are
-		  interpreted as unsigned 32bit values, although it is possible to get negative
-		  (signed) numbers in this list when being displayed in decimal.</desc>
-          <label xml:lang="en-US">Chart colors</label>
-        </info>
-      </prop>
-    </group>
-  </component>
+<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Chart" oor:package="org.openoffice.Office" xml:lang="en-US">
+	<import oor:component="org.openoffice.Office.Common"/>
+	<component>
+		<group oor:name="DefaultColor">
+			<info>
+				<desc xml:lang="en-US">Comprises settings for colors being used when creating new charts.</desc>
+			</info>
+			<prop oor:name="Series" oor:type="oor:long-list">
+				<!-- OldPath: Chart/Default_Colors -->
+				<!-- OldLocation: Soffice.cfg -->
+				<!-- UIHints: Tools - Options  Chart  Default colors  [Section] Chart colors -->
+				<info>
+					<author>BM</author>
+					<desc xml:lang="en-US">Specifies a list of color values to be used for the first n series, where n is the size of the list. For i &gt; n the color used is equal to entry number i modulo n in the list.  You should keep the size of the list at 12.  Also note that the values are interpreted as unsigned 32bit values, although it is possible to get negative (signed) numbers in this list when being displayed in decimal.</desc>
+					<label xml:lang="en-US">Chart colors</label>
+				</info>
+				<value>0x9999ff 0x993366 0xffffcc 0xccffff 0x660066 0xff8080 0x0066cc 0xccccff 0x000080 0xff00ff 0x00ffff 0xffff00</value>
+			</prop>
+		</group>
+	</component>
 </oor:component-schema>

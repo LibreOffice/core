@@ -1,11 +1,11 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--***********************************************************************
  *
  *  $RCSfile: Addons.xcs,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: cd $ $Date: 2002-10-11 13:45:13 $
+ *  last change: $Author: tpf $ $Date: 2002-10-25 17:16:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,56 +60,82 @@
  *
  ************************************************************************ -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
-<oor:component-schema oor:name="Addons" oor:package="org.openoffice.Office" xml:lang="en-US" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <!-- Responsible: CD-->
-  <info><desc xml:lang="en-US">Contains general structures used to integrate external components into the Office user interface.</desc></info>
-  <templates>
-	<info><desc xml:lang="en-US">General templates for this package.</desc></info>
-    <group oor:name="MenuType">
-      <info><desc xml:lang="en-US">Describes a menu item representing a function of of an external component. The name of the name must be unique and should be written using a package-scheme like org.openoffice.external.applicationexecuter to minimize name clashes.</desc></info>
-      <prop oor:name="URL" oor:type="xs:string">
-        <info><desc xml:lang="en-US">A command URL which represents the function to execute. This property can be empty if menu item is the root of a sub menu.</desc></info>
-      </prop>
-      <prop oor:name="Title" oor:type="xs:string" oor:localized="true">
-		<info><desc xml:lang="en-US">A localized string used to as the menu item title.</desc></info>
-      </prop>
-      <prop oor:name="Target" oor:type="xs:string">
-		<info><desc xml:lang="en-US">An URL used to reference an optional menu image. It is allowed to use path variables to reference images relative to the office installation or user installation path.</desc></info>
-      </prop>
-      <prop oor:name="ImageIdentifier" oor:type="xs:string">
-		<info><desc xml:lang="en-US">A private URL used to reference an optional internal menu image. Example: private:image/3216 addresses the internal Office image with id=3216.</desc></info>
-      </prop>
-      <group oor:name="Images">
-		<info><desc xml:lang="en-US">A group of optional menu item images for toolbars and menus.</desc></info>
-        <prop oor:name="ImageSmall" oor:type="xs:hexbinary">
-          <value xsi:nil="true"/>
-          <info><desc xml:lang="en-US">Binary bitmap data used for menu images and small toolbox buttons. Standard size of a small image is 16x16 pixel.</desc></info>
-        </prop>
-        <prop oor:name="ImageBig" oor:type="xs:hexbinary">
-          <value xsi:nil="true" />
-          <info><desc xml:lang="en-US">Binary bitmap data used for big toolbox buttons. Standard size of a big image is 26x26 pixel.</desc></info>
-        </prop>
-        <prop oor:name="ImageSmallHC" oor:type="xs:hexbinary">
-          <value xsi:nil="true"/>
-		  <info><desc xml:lang="en-US">Binary bitmap data used for high contrast displays. Standard size of a small image is 16x16 pixel.</desc></info>
-        </prop>
-        <prop oor:name="ImageBigHC" oor:type="xs:hexbinary">
-          <value xsi:nil="true"/>
-		  <info><desc xml:lang="en-US">Binary bitmap data used for high contrast displays. Standard size of a big image is 26x26 pixel.</desc></info>
-        </prop>
-      </group>
-	  <set oor:name="Submenu" oor:node-type="MenuType">
-		<info><desc xml:lang="en-US">An optional set to allow sub menus.</desc></info>
-	  </set>
-    </group>
-  </templates>
-  <component>
-    <info><desc xml:lang="en-US">Instances of used templates.</desc></info>
-    <group oor:name="AddonUI">
-	  <info><desc xml:lang="en-US">Contains information about the structure of addon user interface.</desc></info>
-	  <set oor:name="AddonMenu" oor:node-type="MenuType">
-        <info><desc xml:lang="en-US">Contains the structure of the addon menu used by the Office. It provide functions of external components to the user.</desc></info>
-      </set>
-	</group>
-  </component>
+<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Addons" oor:package="org.openoffice.Office" xml:lang="en-US">
+	<info>
+		<author>CD</author>
+		<desc xml:lang="en-US">Contains general structures used to integrate external components into the Office user interface.</desc>
+	</info>
+	<templates>
+		<group oor:name="MenuType">
+			<info>
+				<desc xml:lang="en-US">Describes a menu item representing a function of of an external component. The name of the name must be unique and should be written using a package-scheme like org.openoffice.external.applicationexecuter to minimize name clashes.</desc>
+			</info>
+			<prop oor:name="URL" oor:type="xs:string">
+				<info>
+					<desc xml:lang="en-US">A command URL which represents the function to execute. This property can be empty if menu item is the root of a sub menu.</desc>
+				</info>
+			</prop>
+			<prop oor:name="Title" oor:type="xs:string" oor:localized="true">
+				<info>
+					<desc xml:lang="en-US">A localized string used to as the menu item title.</desc>
+				</info>
+			</prop>
+			<prop oor:name="Target" oor:type="xs:string">
+				<info>
+					<desc xml:lang="en-US">An URL used to reference an optional menu image. It is allowed to use path variables to reference images relative to the office installation or user installation path.</desc>
+				</info>
+			</prop>
+			<prop oor:name="ImageIdentifier" oor:type="xs:string">
+				<info>
+					<desc xml:lang="en-US">A private URL used to reference an optional internal menu image. Example: private:image/3216 addresses the internal Office image with id=3216.</desc>
+				</info>
+			</prop>
+			<group oor:name="Images">
+				<info>
+					<desc xml:lang="en-US">A group of optional menu item images for toolbars and menus.</desc>
+				</info>
+				<prop oor:name="ImageSmall" oor:type="xs:hexBinary">
+					<info>
+						<desc xml:lang="en-US">Binary bitmap data used for menu images and small toolbox buttons. Standard size of a small image is 16x16 pixel.</desc>
+					</info>
+					<value xsi:nil="true"/>
+				</prop>
+				<prop oor:name="ImageBig" oor:type="xs:hexBinary">
+					<info>
+						<desc xml:lang="en-US">Binary bitmap data used for big toolbox buttons. Standard size of a big image is 26x26 pixel.</desc>
+					</info>
+					<value xsi:nil="true"/>
+				</prop>
+				<prop oor:name="ImageSmallHC" oor:type="xs:hexBinary">
+					<info>
+						<desc xml:lang="en-US">Binary bitmap data used for high contrast displays. Standard size of a small image is 16x16 pixel.</desc>
+					</info>
+					<value xsi:nil="true"/>
+				</prop>
+				<prop oor:name="ImageBigHC" oor:type="xs:hexBinary">
+					<info>
+						<desc xml:lang="en-US">Binary bitmap data used for high contrast displays. Standard size of a big image is 26x26 pixel.</desc>
+					</info>
+					<value xsi:nil="true"/>
+				</prop>
+			</group>
+			<set oor:name="Submenu" oor:node-type="MenuType">
+				<info>
+					<desc xml:lang="en-US">An optional set to allow sub menus.</desc>
+				</info>
+			</set>
+		</group>
+	</templates>
+	<component>
+		<group oor:name="AddonUI">
+			<info>
+				<desc xml:lang="en-US">Contains information about the structure of addon user interface.</desc>
+			</info>
+			<set oor:name="AddonMenu" oor:node-type="MenuType">
+				<info>
+					<desc xml:lang="en-US">Contains the structure of the addon menu used by the Office. It provide functions of external components to the user.</desc>
+				</info>
+			</set>
+		</group>
+	</component>
 </oor:component-schema>

@@ -3,9 +3,9 @@
  *
  *  $RCSfile: SFX.xcs,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: tpf $ $Date: 2002-10-18 13:07:07 $
+ *  last change: $Author: tpf $ $Date: 2002-10-25 17:16:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,26 +60,23 @@
  *
  ************************************************************************ -->
 <!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
-<oor:component-schema oor:name="SFX" oor:package="org.openoffice.Office" xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xml:lang="en-US">
-  <!-- Responsible: MBA-->
-  <info>
-    <desc xml:lang="en-US">Contains the component-schema for the framework module.</desc>
-  </info>
-  <component>
+<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="SFX" oor:package="org.openoffice.Office" xml:lang="en-US">
 	<info>
-	  <desc xml:lang="en-US">Contains general settings for the framework module.</desc>
+		<author>MBA</author>
+		<desc xml:lang="en-US">Contains the component-schema for the framework module.</desc>
 	</info>
-    <group oor:name="Help">
-	  <info>
-	    <desc xml:lang="en-US">Contains settings which specifies how the help in Office should work.</desc>
-	  </info>
-      <prop oor:name="HelpAgentStarterList" oor:type="xs:string" oor:localized="true">
-        <!-- OldLocation: hlpagent.ini -->
-        <!-- Responsible: PB-->
-        <info>
-          <desc xml:lang="en-US">Lists IDs used by SFX to start the help agent.</desc>
-        </info>
-      </prop>
-    </group>
-  </component>
+	<component>
+		<group oor:name="Help">
+			<info>
+				<desc xml:lang="en-US">Contains settings which specifies how the help in Office should work.</desc>
+			</info>
+			<prop oor:name="HelpAgentStarterList" oor:type="xs:string" oor:localized="true">
+				<!-- OldLocation: hlpagent.ini -->
+				<info>
+					<author>PB</author>
+					<desc xml:lang="en-US">Lists IDs used by SFX to start the help agent.</desc>
+				</info>
+			</prop>
+		</group>
+	</component>
 </oor:component-schema>

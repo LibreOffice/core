@@ -1,29 +1,97 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<oor:component-schema oor:name="Security" oor:package="org.openoffice.Office" 
-     xsi:schemaLocation="http://openoffice.org/2001/registry component-schema.xsd" 
-     xmlns:xs="http://www.w3.org/2001/XMLSchema" 
-     xmlns:oor="http://openoffice.org/2001/registry" 
-     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"   
-     xml:lang='en-US'>
-	<!--Responsible: CD-->
-	<info><desc xml:lang="en-US">Stores security related settings.</desc></info>
+<!--***********************************************************************
+ *
+ *  $RCSfile: Security.xcs,v $
+ *
+ *  $Revision: 1.3 $
+ *
+ *  last change: $Author: tpf $ $Date: 2002-10-25 17:16:41 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRUNTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRUNTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc..
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************ -->
+<!DOCTYPE oor:component-schema SYSTEM "../../../../component-schema.dtd">
+<oor:component-schema xmlns:oor="http://openoffice.org/2001/registry" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" oor:name="Security" oor:package="org.openoffice.Office" xml:lang="en-US">
+	<info>
+		<author>CD</author>
+		<desc xml:lang="en-US">Stores security related settings.</desc>
+	</info>
 	<templates>
 		<group oor:name="SecureExtension">
+			<info>
+				<desc xml:lang="en-US">Provides secure file extensions. Opening a secure file does not pose any risk.</desc>
+			</info>
 			<prop oor:name="Extension" oor:type="xs:string">
-				<info><desc xml:lang="en-US">Provides a file extension that is not case-sensitive.</desc></info>
+				<info>
+					<desc xml:lang="en-US">Provides a file extension that is not case-sensitive.</desc>
+				</info>
 			</prop>
-			<info><desc xml:lang="en-US">Provides secure file extensions. Opening a secure file does not pose any risk.</desc></info>
 		</group>
 	</templates>
 	<component>
 		<set oor:name="SecureExtensions" oor:node-type="SecureExtension">
-			<info><desc xml:lang="en-US">Provides a list of secure file extensions. Opening a secure file does not pose any risk.</desc></info>
+			<info>
+				<desc xml:lang="en-US">Provides a list of secure file extensions. Opening a secure file does not pose any risk.</desc>
+			</info>
 		</set>
 		<group oor:name="Hyperlinks">
+			<info>
+				<desc xml:lang="en-US">Specifies how secure hyperlinks are processed.</desc>
+			</info>
 			<prop oor:name="Open" oor:type="xs:int">
-				<info><desc xml:lang="en-US">Specifies how a hyperlink is opened ( 0 = Never, 1 = with security checks, 2 = always open).</desc></info>
+				<info>
+					<desc xml:lang="en-US">Specifies how a hyperlink is opened ( 0 = Never, 1 = with security checks, 2 = always open).</desc>
+				</info>
 			</prop>
-			<info><desc xml:lang="en-US">Specifies how secure hyperlinks are processed.</desc></info>
 		</group>
 	</component>
 </oor:component-schema>
