@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excobj.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 20:07:05 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 13:24:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,7 +167,7 @@ void ImportExcel::Obj()
     XclEscherAnchor aAnchor( nScTab );
 
     aIn >> nObj >> nType >> nId >> nFlags >> aAnchor >> nMacroLen;
-    BOOL bBiff5 = BOOL( pExcRoot->eHauptDateiTyp == Biff5 );
+    bool bBiff5 = GetBiff() == EXC_BIFF5;
     short nReserved = bBiff5 ? 6 : 2;
     aIn.Ignore( nReserved );
 
@@ -332,7 +332,7 @@ void ImportExcel::ChartSelection( void )
 
         aIn >> nOp;
 
-        if( pExcRoot->eHauptDateiTyp == Biff5 )
+        if( GetBiff() == EXC_BIFF5 )
         {
             aIn >> nLink;
 
@@ -369,7 +369,7 @@ void ImportExcel::ChartSelection( void )
         {
             UINT16              nIxti;
 
-            DBG_ASSERT( pExcRoot->eHauptDateiTyp == Biff8,
+            DBG_ASSERT( GetBiff() == EXC_BIFF8,
                 "*ImportExcel::ChartSelection(): Den kenn' ich nicht!" );
 
             if( nOp == 0x3A || nOp == 0x3B )
