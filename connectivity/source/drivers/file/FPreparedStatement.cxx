@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FPreparedStatement.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: oj $ $Date: 2002-05-03 10:00:41 $
+ *  last change: $Author: oj $ $Date: 2002-05-23 07:03:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -435,7 +435,7 @@ Reference<XResultSet> OPreparedStatement::initResultSet()
 //  }
 
     if ( m_aParameterRow.isValid() && ( m_aParameterRow->size() -1 ) < m_xParamColumns->size() )
-        throw SQLException(::rtl::OUString::createFromAscii("Invalid count of parameters supllied!")
+        throw SQLException(::rtl::OUString::createFromAscii("Invalid count of parameters supplied!")
                             ,*this
                             ,::rtl::OUString::createFromAscii("S1000")
                             ,1000
