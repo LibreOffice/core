@@ -2,9 +2,9 @@
  *
  *  $RCSfile: expr.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 08:54:08 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 11:50:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,7 @@ enum SbiNodeType {
     SbxNUMVAL,                      // nVal = Wert
     SbxSTRVAL,                      // nStringId = Wert
     SbxVARVAL,                      // aVar = Wert
+    SbxTYPEOF,                      // TypeOf ObjExpr Is Type
     SbxNODE                         // Node
 };
 
@@ -125,7 +126,10 @@ class SbiExprNode {                  // Operatoren (und Operanden)
     BOOL  bError;                   // TRUE: Fehlerhaft
     void  FoldConstants();          // Constant Folding durchfuehren
     void  CollectBits();            // Umwandeln von Zahlen in Strings
-    BOOL  IsOperand();              // TRUE, wenn Operand
+    BOOL  IsOperand()               // TRUE, wenn Operand
+        { return BOOL( eNodeType != SbxNODE && eNodeType != SbxTYPEOF ); }
+    BOOL  IsTypeOf()
+        { return BOOL( eNodeType == SbxTYPEOF ); }
     BOOL  IsNumber();               // TRUE bei Zahlen
     BOOL  IsString();               // TRUE bei Strings
     BOOL  IsLvalue();               // TRUE, falls als Lvalue verwendbar
@@ -136,10 +140,12 @@ public:
     SbiExprNode( SbiParser*, const String& );
     SbiExprNode( SbiParser*, const SbiSymDef&, SbxDataType, SbiExprList* = NULL );
     SbiExprNode( SbiParser*, SbiExprNode*, SbiToken, SbiExprNode* );
+    SbiExprNode( SbiParser*, SbiExprNode*, USHORT );    // #120061 TypeOf
     virtual ~SbiExprNode();
 
     BOOL IsValid()                  { return BOOL( !bError ); }
-    BOOL IsConstant();              // TRUE bei konstantem Operanden
+    BOOL IsConstant()               // TRUE bei konstantem Operanden
+        { return BOOL( eNodeType == SbxSTRVAL || eNodeType == SbxNUMVAL ); }
     BOOL IsIntConst();              // TRUE bei Integer-Konstanten
     BOOL IsVariable();              // TRUE, wenn Variable
 
