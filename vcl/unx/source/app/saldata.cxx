@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldata.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: cp $ $Date: 2001-08-29 16:14:51 $
+ *  last change: $Author: pl $ $Date: 2001-08-30 09:54:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -368,6 +368,10 @@ SalData::SalData()
 SalData::~SalData()
 {
     delete pXLib_;
+    pDefDisp_ = NULL;
+    pCurDisp_ = NULL;
+    while( SalDisplays_.Count() )
+        delete SalDisplays_.Remove( (ULONG)0 );
 }
 
 long SalData::Close() const
