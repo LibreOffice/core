@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuconbez.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 10:58:05 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 15:10:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -362,17 +362,14 @@ void FuConstructBezierPolygon::SelectionHasChanged()
 {
     FuDraw::SelectionHasChanged();
 
-    /**************************************************************************
-    * ObjectBar einschalten
-    **************************************************************************/
-    USHORT nObjBarId = RID_DRAW_OBJ_TOOLBOX;
+    // Depending on the context of the view we activate the bezier tool bar
+    // or switch back to the default tool bar.
+    ShellId nObjectBarId (pViewShell->GetObjectBarManager().GetDefaultObjectBarId());
 
     if (pView->GetContext() == SDRCONTEXT_POINTEDIT)
-    {
-        nObjBarId = RID_BEZIER_TOOLBOX;
-    }
+        nObjectBarId = RID_BEZIER_TOOLBOX;
 
-    pViewShell->GetObjectBarManager().SwitchObjectBar (nObjBarId);
+    pViewShell->GetObjectBarManager().SwitchObjectBar (nObjectBarId);
 }
 
 
