@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BTable.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-03 07:14:11 $
+ *  last change: $Author: oj $ $Date: 2001-05-04 09:58:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,9 @@
 #ifndef _COMPHELPER_EXTRACT_HXX_
 #include <comphelper/extract.hxx>
 #endif
+#ifndef _COMPHELPER_TYPES_HXX_
+#include <comphelper/types.hxx>
+#endif
 
 using namespace connectivity::adabas;
 using namespace ::com::sun::star::uno;
@@ -152,8 +155,9 @@ void OAdabasTable::refreshColumns()
     }
 
     if(m_pColumns)
-        delete m_pColumns;
-    m_pColumns  = new OColumns(this,m_aMutex,aVector);
+        m_pColumns->reFill(aVector);
+    else
+        m_pColumns  = new OColumns(this,m_aMutex,aVector);
 }
 // -------------------------------------------------------------------------
 void OAdabasTable::refreshPrimaryKeys(std::vector< ::rtl::OUString>& _rKeys)
@@ -446,52 +450,63 @@ void SAL_CALL OAdabasTable::alterColumnByName( const ::rtl::OUString& colName, c
         )
         throw DisposedException();
 
+    if(m_pColumns && !m_pColumns->hasByName(colName))
+        throw NoSuchElementException(colName,*this);
+
+
     if(!isNew())
     {
-        ::rtl::OUString aSql = ::rtl::OUString::createFromAscii("ALTER TABLE ");
-        ::rtl::OUString aQuote = m_pConnection->getMetaData()->getIdentifierQuoteString(  );
-        ::rtl::OUString aDot = ::rtl::OUString::createFromAscii(".");
+        if(getString(descriptor->getPropertyValue(PROPERTY_NAME)) != colName)
+            throw SQLException(::rtl::OUString::createFromAscii("Not supported by this driver!"),*this,::rtl::OUString::createFromAscii("S1000"),0,Any() );
 
-        aSql += aQuote + m_SchemaName + aQuote + aDot + aQuote + m_Name + aQuote
-                    + ::rtl::OUString::createFromAscii(" COLUMN ")
-                    + aQuote + colName + aQuote
-                    + ::rtl::OUString::createFromAscii(" ALTER ");
+        Reference< XStatement > xStmt = m_pConnection->createStatement();
+        xStmt->execute(::rtl::OUString::createFromAscii("SUBTRANS BEGIN") );
 
-        aSql += aQuote + getString(descriptor->getPropertyValue(PROPERTY_NAME)) + aQuote
-                    + getString(descriptor->getPropertyValue(PROPERTY_TYPENAME));
-
-        switch(getINT32(descriptor->getPropertyValue(PROPERTY_TYPE)))
+        try
         {
-            case DataType::CHAR:
-            case DataType::VARCHAR:
-                aSql += ::rtl::OUString::createFromAscii("(")
-                            + ::rtl::OUString::valueOf(getINT32(descriptor->getPropertyValue(PROPERTY_TYPE)))
-                            + ::rtl::OUString::createFromAscii(")");
-                break;
+            // first we have to check what should be altered
+            Reference<XPropertySet> xProp;
+            m_pColumns->getByName(colName) >>= xProp;
+            // first check the types
+            sal_Int32 nOldType = 0,nNewType = 0;
+            xProp->getPropertyValue(PROPERTY_TYPE)      >>= nOldType;
+            descriptor->getPropertyValue(PROPERTY_TYPE) >>= nNewType;
+            if(nOldType != nNewType)
+                alterColumnType(nNewType,colName,descriptor);
 
-            case DataType::DECIMAL:
-            case DataType::NUMERIC:
-                aSql += ::rtl::OUString::createFromAscii("(")
-                            + ::rtl::OUString::valueOf(getINT32(descriptor->getPropertyValue(PROPERTY_TYPE)))
-                            + ::rtl::OUString::createFromAscii(",")
-                            + ::rtl::OUString::valueOf(getINT32(descriptor->getPropertyValue(PROPERTY_SCALE)))
-                            + ::rtl::OUString::createFromAscii(")");
-                break;
+            // second: check the "is nullable" value
+            sal_Int32 nOldNullable = 0,nNewNullable = 0;
+            xProp->getPropertyValue(PROPERTY_ISNULLABLE)        >>= nOldNullable;
+            descriptor->getPropertyValue(PROPERTY_ISNULLABLE)   >>= nNewNullable;
+            if(nNewNullable != nOldNullable)
+                alterNotNullValue(nNewNullable,colName);
+
+            // third: check the default values
+            ::rtl::OUString sNewDefault,sOldDefault;
+            xProp->getPropertyValue(PROPERTY_DEFAULTVALUE)      >>= sOldDefault;
+            descriptor->getPropertyValue(PROPERTY_DEFAULTVALUE) >>= sNewDefault;
+
+            if(sOldDefault.getLength())
+            {
+                if(sNewDefault.getLength() && sOldDefault != sNewDefault)
+                    alterDefaultValue(sNewDefault,colName);
+                else if(!sNewDefault.getLength())
+                    dropDefaultValue(colName);
+            }
+            else if(!sOldDefault.getLength() && sNewDefault.getLength())
+                addDefaultValue(sNewDefault,colName);
+
+            m_pColumns->refresh();
         }
-        ::rtl::OUString aDefault = getString(descriptor->getPropertyValue(PROPERTY_DEFAULTVALUE));
-                if(getINT32(descriptor->getPropertyValue(PROPERTY_ISNULLABLE)) == ColumnValue::NO_NULLS)
+        catch(const SQLException& e)
         {
-            aSql += ::rtl::OUString::createFromAscii(" NOT NULL");
-            if(aDefault.getLength())
-                aSql += ::rtl::OUString::createFromAscii(" WITH DEFAULT");
+            xStmt->execute(::rtl::OUString::createFromAscii("SUBTRANS ROLLBACK") );
+            ::comphelper::disposeComponent(xStmt);
+            throw;
         }
-        else if(aDefault.getLength())
-            aSql += ::rtl::OUString::createFromAscii(" DEFAULT ") + aDefault;
+        xStmt->execute(::rtl::OUString::createFromAscii("SUBTRANS END") );
+        ::comphelper::disposeComponent(xStmt);
 
-                Reference< XStatement > xStmt = m_pConnection->createStatement(  );
-        xStmt->execute(aSql);
-
-        refreshColumns();
     }
     else
     {
@@ -587,7 +602,10 @@ void SAL_CALL OAdabasTable::alterColumnByIndex( sal_Int32 index, const Reference
 // -------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OAdabasTable::getName() throw(::com::sun::star::uno::RuntimeException)
 {
-    return m_SchemaName + '.' + m_Name;
+    ::rtl::OUString sName = m_SchemaName;
+    sName += ::rtl::OUString::createFromAscii(".");
+    sName += m_Name;
+    return sName;
 }
 // -----------------------------------------------------------------------------
 void SAL_CALL OAdabasTable::acquire() throw(::com::sun::star::uno::RuntimeException)
@@ -598,6 +616,113 @@ void SAL_CALL OAdabasTable::acquire() throw(::com::sun::star::uno::RuntimeExcept
 void SAL_CALL OAdabasTable::release() throw(::com::sun::star::uno::RuntimeException)
 {
     OTable_TYPEDEF::release();
+}
+// -----------------------------------------------------------------------------
+void OAdabasTable::alterColumnType(sal_Int32 nNewType,const ::rtl::OUString& _rColName, const Reference<XPropertySet>& _xDescriptor)
+{
+    ::rtl::OUString aSql = ::rtl::OUString::createFromAscii("ALTER TABLE ");
+    ::rtl::OUString aQuote = m_pConnection->getMetaData()->getIdentifierQuoteString(  );
+    ::rtl::OUString aDot = ::rtl::OUString::createFromAscii(".");
+
+    aSql += aQuote + m_SchemaName + aQuote + aDot + aQuote + m_Name + aQuote
+                    + ::rtl::OUString::createFromAscii(" COLUMN ")
+                    + aQuote + _rColName + aQuote;
+    aSql += ::rtl::OUString::createFromAscii(" ")
+            + getString(_xDescriptor->getPropertyValue(PROPERTY_TYPENAME));
+
+    switch(nNewType)
+    {
+        case DataType::CHAR:
+        case DataType::VARCHAR:
+            aSql += ::rtl::OUString::createFromAscii("(")
+                        + ::rtl::OUString::valueOf(getINT32(_xDescriptor->getPropertyValue(PROPERTY_TYPE)))
+                        + ::rtl::OUString::createFromAscii(")");
+            break;
+
+        case DataType::DECIMAL:
+        case DataType::NUMERIC:
+            aSql += ::rtl::OUString::createFromAscii("(")
+                        + ::rtl::OUString::valueOf(getINT32(_xDescriptor->getPropertyValue(PROPERTY_TYPE)))
+                        + ::rtl::OUString::createFromAscii(",")
+                        + ::rtl::OUString::valueOf(getINT32(_xDescriptor->getPropertyValue(PROPERTY_SCALE)))
+                        + ::rtl::OUString::createFromAscii(")");
+            break;
+    }
+
+    Reference< XStatement > xStmt = m_pConnection->createStatement(  );
+    xStmt->execute(aSql);
+    ::comphelper::disposeComponent(xStmt);
+}
+// -----------------------------------------------------------------------------
+void OAdabasTable::alterNotNullValue(sal_Int32 _nNewNullable,const ::rtl::OUString& _rColName)
+{
+    ::rtl::OUString aSql = ::rtl::OUString::createFromAscii("ALTER TABLE ");
+    ::rtl::OUString aQuote = m_pConnection->getMetaData()->getIdentifierQuoteString(  );
+    ::rtl::OUString aDot = ::rtl::OUString::createFromAscii(".");
+
+    aSql += aQuote + m_SchemaName + aQuote + aDot + aQuote + m_Name + aQuote
+                    + ::rtl::OUString::createFromAscii(" COLUMN ")
+                    + aQuote + _rColName + aQuote;
+    if(_nNewNullable == ColumnValue::NO_NULLS)
+    {
+        aSql += ::rtl::OUString::createFromAscii(" NOT NULL");
+    }
+    else
+    {
+        aSql += ::rtl::OUString::createFromAscii(" DEFAULT NULL");
+    }
+
+    Reference< XStatement > xStmt = m_pConnection->createStatement();
+    xStmt->execute(aSql);
+    ::comphelper::disposeComponent(xStmt);
+}
+// -----------------------------------------------------------------------------
+void OAdabasTable::alterDefaultValue(const ::rtl::OUString& _sNewDefault,const ::rtl::OUString& _rColName)
+{
+    ::rtl::OUString aSql = ::rtl::OUString::createFromAscii("ALTER TABLE ");
+    ::rtl::OUString aQuote = m_pConnection->getMetaData()->getIdentifierQuoteString(  );
+    ::rtl::OUString aDot = ::rtl::OUString::createFromAscii(".");
+
+    aSql += aQuote + m_SchemaName + aQuote + aDot + aQuote + m_Name + aQuote
+                    + ::rtl::OUString::createFromAscii(" COLUMN ")
+                    + aQuote + _rColName + aQuote;
+    aSql += ::rtl::OUString::createFromAscii(" ALTER ") + _sNewDefault;
+
+    Reference< XStatement > xStmt = m_pConnection->createStatement();
+    xStmt->execute(aSql);
+    ::comphelper::disposeComponent(xStmt);
+}
+// -----------------------------------------------------------------------------
+void OAdabasTable::dropDefaultValue(const ::rtl::OUString& _rColName)
+{
+    ::rtl::OUString aSql = ::rtl::OUString::createFromAscii("ALTER TABLE ");
+    ::rtl::OUString aQuote = m_pConnection->getMetaData()->getIdentifierQuoteString(  );
+    ::rtl::OUString aDot = ::rtl::OUString::createFromAscii(".");
+
+    aSql += aQuote + m_SchemaName + aQuote + aDot + aQuote + m_Name + aQuote
+                    + ::rtl::OUString::createFromAscii(" COLUMN ")
+                    + aQuote + _rColName + aQuote;
+    aSql += ::rtl::OUString::createFromAscii(" DROP DEFAULT");
+
+    Reference< XStatement > xStmt = m_pConnection->createStatement();
+    xStmt->execute(aSql);
+    ::comphelper::disposeComponent(xStmt);
+}
+// -----------------------------------------------------------------------------
+void OAdabasTable::addDefaultValue(const ::rtl::OUString& _sNewDefault,const ::rtl::OUString& _rColName)
+{
+    ::rtl::OUString aSql = ::rtl::OUString::createFromAscii("ALTER TABLE ");
+    ::rtl::OUString aQuote = m_pConnection->getMetaData()->getIdentifierQuoteString(  );
+    ::rtl::OUString aDot = ::rtl::OUString::createFromAscii(".");
+
+    aSql += aQuote + m_SchemaName + aQuote + aDot + aQuote + m_Name + aQuote
+                    + ::rtl::OUString::createFromAscii(" COLUMN ")
+                    + aQuote + _rColName + aQuote;
+    aSql += ::rtl::OUString::createFromAscii(" ADD ") + _sNewDefault;
+
+    Reference< XStatement > xStmt = m_pConnection->createStatement();
+    xStmt->execute(aSql);
+    ::comphelper::disposeComponent(xStmt);
 }
 // -----------------------------------------------------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BTable.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-30 10:09:05 $
+ *  last change: $Author: oj $ $Date: 2001-05-04 09:58:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,12 @@ namespace connectivity
             void refreshPrimaryKeys(std::vector< ::rtl::OUString>& _rKeys);
             void refreshForgeinKeys(std::vector< ::rtl::OUString>& _rKeys);
 
+            void alterColumnType(sal_Int32 nNewType,const ::rtl::OUString& _rColName,const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _xDescriptor);
+            void alterNotNullValue(sal_Int32 _nNewNullable,const ::rtl::OUString& _rColName);
+            void alterDefaultValue(const ::rtl::OUString& _sNewDefault,const ::rtl::OUString& _rColName);
+            void dropDefaultValue(const ::rtl::OUString& _sNewDefault);
+            void addDefaultValue(const ::rtl::OUString& _sNewDefault,const ::rtl::OUString& _rColName);
+
         public:
             virtual void refreshColumns();
             virtual void refreshKeys();
@@ -124,6 +130,7 @@ namespace connectivity
             virtual ::rtl::OUString SAL_CALL getName() throw(::com::sun::star::uno::RuntimeException);
             //
             sal_Bool create() throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+
         };
     }
 }

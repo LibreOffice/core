@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BUser.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-02 12:57:36 $
+ *  last change: $Author: oj $ $Date: 2001-05-04 09:58:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,8 +129,9 @@ void OAdabasUser::refreshGroups()
     }
 
     if(m_pGroups)
-        delete m_pGroups;
-    m_pGroups = new OGroups(*this,m_aMutex,aVector,m_pConnection,this);
+        m_pGroups->reFill(aVector);
+    else
+        m_pGroups = new OGroups(*this,m_aMutex,aVector,m_pConnection,this);
 }
 // -------------------------------------------------------------------------
 OUserExtend::OUserExtend(   OAdabasConnection* _pConnection) : OAdabasUser(_pConnection)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BGroup.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-02 12:57:36 $
+ *  last change: $Author: oj $ $Date: 2001-05-04 09:58:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,8 +125,9 @@ void OAdabasGroup::refreshUsers()
             aVector.push_back(xRow->getString(1));
     }
     if(m_pUsers)
-        delete m_pUsers;
-    m_pUsers = new OUsers(*this,m_aMutex,aVector,m_pConnection,this);
+        m_pUsers->reFill(aVector);
+    else
+        m_pUsers = new OUsers(*this,m_aMutex,aVector,m_pConnection,this);
 }
 
 

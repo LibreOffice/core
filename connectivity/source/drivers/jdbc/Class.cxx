@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Class.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-20 17:03:16 $
+ *  last change: $Author: oj $ $Date: 2001-05-04 09:58:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,9 @@
 #ifndef _CONNECTIVITY_JAVA_TOOLS_HXX_
 #include "java/tools.hxx"
 #endif
+#ifndef _RTL_USTRING_HXX_
+#include <rtl/ustring.hxx>
+#endif
 
 using namespace connectivity;
 //**************************************************************
@@ -112,6 +115,8 @@ java_lang_Class * java_lang_Class::forName( const ::rtl::OUString& _par0 )
         jmethodID mID = t.pEnv->GetStaticMethodID( getMyClass(), cMethodName, cSignature );
         if( mID ){
             out = t.pEnv->CallStaticObjectMethod( getMyClass(), mID, args[0].l );
+            if(!out)
+                out = t.pEnv->FindClass(::rtl::OUStringToOString(_par0, RTL_TEXTENCODING_ASCII_US));
             ThrowSQLException(t.pEnv,0);
             // und aufraeumen
         } //mID

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ATable.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-02 12:57:36 $
+ *  last change: $Author: oj $ $Date: 2001-05-04 09:58:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -292,7 +292,7 @@ void SAL_CALL OAdoTable::alterColumnByName( const ::rtl::OUString& colName, cons
             throw SQLException(::rtl::OUString::createFromAscii("Could not alter column by name!"),*this,SQLSTATE_GENERAL,1000,Any());
     }
 
-    refreshColumns();
+    m_pColumns->refresh();
 
 }
 // -------------------------------------------------------------------------
@@ -314,6 +314,7 @@ void SAL_CALL OAdoTable::alterColumnByIndex( sal_Int32 index, const Reference< X
         else
             throw SQLException(::rtl::OUString::createFromAscii("Could not alter column by index!"),*this,SQLSTATE_GENERAL,1000,Any());
     }
+    m_pColumns->refresh();
 }
 // -------------------------------------------------------------------------
 void OAdoTable::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& rValue)throw (Exception)

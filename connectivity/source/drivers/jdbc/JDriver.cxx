@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JDriver.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-20 17:03:17 $
+ *  last change: $Author: oj $ $Date: 2001-05-04 09:58:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -243,14 +243,7 @@ sal_Bool SAL_CALL java_sql_Driver::acceptsURL( const ::rtl::OUString& url ) thro
 {
     // don't ask the real driver for the url
     // I feel responsible for all jdbc url's
-    if(!url.compareTo(::rtl::OUString::createFromAscii("jdbc:"),5) && url.getLength() > 5)
-    {
-        SDBThreadAttach t(getORB()); OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
-        if(!object)
-            object = java_sql_DriverManager::getDriver(url);
-        return object != NULL;
-    }
-    return sal_False;
+    return (!url.compareTo(::rtl::OUString::createFromAscii("jdbc:"),5) && url.getLength() > 5);
 }
 // -------------------------------------------------------------------------
 Sequence< DriverPropertyInfo > SAL_CALL java_sql_Driver::getPropertyInfo( const ::rtl::OUString& url,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BConnection.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-27 10:08:07 $
+ *  last change: $Author: oj $ $Date: 2001-05-04 09:58:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,6 +160,7 @@ SQLRETURN OAdabasConnection::Construct( const ::rtl::OUString& url,const Sequenc
                 m_nTextEncoding = osl_getThreadTextEncoding();
         }
     }
+    m_sUser = aUID;
 
     SQLRETURN nSQLRETURN = OpenConnection(aDSN,nTimeout, aUID,aPWD);
 

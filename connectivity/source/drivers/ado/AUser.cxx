@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AUser.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-02 12:54:58 $
+ *  last change: $Author: oj $ $Date: 2001-05-04 09:58:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,8 +156,9 @@ void OAdoUser::refreshGroups()
     }
 
     if(m_pGroups)
-        delete m_pGroups;
-    m_pGroups = new OGroups(*this,m_aMutex,aVector,pGroups,isCaseSensitive());
+        m_pGroups->reFill(aVector);
+    else
+        m_pGroups = new OGroups(*this,m_aMutex,aVector,pGroups,isCaseSensitive());
 }
 //--------------------------------------------------------------------------
 Sequence< sal_Int8 > OAdoUser::getUnoTunnelImplementationId()

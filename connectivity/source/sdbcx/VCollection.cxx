@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VCollection.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-02 12:52:23 $
+ *  last change: $Author: oj $ $Date: 2001-05-04 09:58:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,7 +205,7 @@ void SAL_CALL OCollection::refresh(  ) throw(RuntimeException)
 // -----------------------------------------------------------------------------
 void OCollection::reFill(const TStringVector &_rVector)
 {
-    OSL_ENSURE(m_aNameMap.size(),"OCollection::reFill: collection isn't empty");
+    OSL_ENSURE(!m_aNameMap.size(),"OCollection::reFill: collection isn't empty");
     for(TStringVector::const_iterator i=_rVector.begin(); i != _rVector.end();++i)
         m_aElements.push_back(m_aNameMap.insert(m_aNameMap.begin(), ObjectMap::value_type(*i,::com::sun::star::uno::WeakReference< ::com::sun::star::container::XNamed >())));
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OTools.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-20 16:54:34 $
+ *  last change: $Author: oj $ $Date: 2001-05-04 09:58:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -314,7 +314,7 @@ Sequence<sal_Int8> OTools::getBytesValue(SQLHANDLE _aStatementHandle,sal_Int32 c
 void OTools::GetInfo(SQLHANDLE _aConnectionHandle,SQLUSMALLINT _nInfo,::rtl::OUString &_rValue,const Reference< XInterface >& _xInterface,rtl_TextEncoding _nTextEncoding) throw(SQLException, RuntimeException)
 {
     char aValue[512];
-    SQLSMALLINT nValueLen;
+    SQLSMALLINT nValueLen=0;
     OTools::ThrowException(
         N3SQLGetInfo(_aConnectionHandle,_nInfo,aValue,sizeof aValue,&nValueLen),
         _aConnectionHandle,SQL_HANDLE_DBC,_xInterface);

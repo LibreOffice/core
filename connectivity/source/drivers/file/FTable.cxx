@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FTable.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-02 12:54:56 $
+ *  last change: $Author: oj $ $Date: 2001-05-04 09:58:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,8 +143,9 @@ void OFileTable::refreshColumns()
     }
 
     if(m_pColumns)
-        delete m_pColumns;
-    m_pColumns  = new OColumns(this,m_aMutex,aVector);
+        m_pColumns->reFill(aVector);
+    else
+        m_pColumns  = new OColumns(this,m_aMutex,aVector);
 }
 // -------------------------------------------------------------------------
 void OFileTable::refreshKeys()

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OConnection.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-27 10:08:10 $
+ *  last change: $Author: oj $ $Date: 2001-05-04 09:58:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -265,6 +265,7 @@ SQLRETURN OConnection::Construct(const ::rtl::OUString& url,const Sequence< Prop
 
         }
     }
+    m_sUser = aUID;
 
     SQLRETURN nSQLRETURN = OpenConnection(aDSN,nTimeout, bSilent);
     if (nSQLRETURN == SQL_ERROR || nSQLRETURN == SQL_NO_DATA)

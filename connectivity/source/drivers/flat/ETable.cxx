@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ETable.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-03 07:14:12 $
+ *  last change: $Author: oj $ $Date: 2001-05-04 09:58:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -588,8 +588,9 @@ void OFlatTable::refreshColumns()
         aVector.push_back(Reference< XNamed>(*aIter,UNO_QUERY)->getName());
 
     if(m_pColumns)
-        delete m_pColumns;
-    m_pColumns  = new OFlatColumns(this,m_aMutex,aVector);
+        m_pColumns->reFill(aVector);
+    else
+        m_pColumns  = new OFlatColumns(this,m_aMutex,aVector);
 }
 // -------------------------------------------------------------------------
 void OFlatTable::refreshIndexes()
