@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cnttab.src,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: obo $ $Date: 2001-11-23 23:06:17 $
+ *  last change: $Author: rt $ $Date: 2001-12-04 18:48:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2504,7 +2504,7 @@ TabPage TP_TOX_ENTRY
             Text[ japanese ] = "T";
             Text[ korean ] = "T";
             Text[ chinese_simplified ] = "制表符";
-            Text[ chinese_traditional ] = "製表符";
+            Text[ chinese_traditional ] = "定位鍵";
             Text[ arabic ] = "T";
             Text[ turkish ] = "T";
             Text[ catalan ] = "T";
@@ -2714,7 +2714,7 @@ TabPage TP_TOX_ENTRY
             Text[ japanese ] = "ﾀﾌﾞ";
             Text[ korean ] = "탭 위치";
             Text[ chinese_simplified ] = "制表符";
-            Text[ chinese_traditional ] = "製表符";
+            Text[ chinese_traditional ] = "定位鍵";
             Text[ arabic ] = "����� �����";
             Text[ turkish ] = "Sekme";
             Text[ language_user1 ] = " ";
@@ -3063,7 +3063,7 @@ TabPage TP_TOX_ENTRY
         Text[ japanese ] = "ﾀﾌﾞ";
         Text[ korean ] = "탭";
         Text[ chinese_simplified ] = "制表符";
-        Text[ chinese_traditional ] = "製表符";
+        Text[ chinese_traditional ] = "定位鍵";
         Text[ arabic ] = "����� �����";
         Text[ turkish ] = "Sekme";
         Text[ language_user1 ] = " ";
@@ -3454,7 +3454,7 @@ TabPage TP_TOX_ENTRY
         Text[ japanese ] = "ﾀﾌﾞ位置";
         Text[ korean ] = "탭 위치";
         Text[ chinese_simplified ] = "制表符位置";
-        Text[ chinese_traditional ] = "製表符位置";
+        Text[ chinese_traditional ] = "定位鍵位置";
         Text[ arabic ] = "���� ����� �������";
         Text[ turkish ] = "Sekme konumu";
         Text[ language_user1 ] = " ";
@@ -3556,7 +3556,7 @@ TabPage TP_TOX_ENTRY
         Text[ japanese ] = "ﾀﾌﾞ位置は段落ｽﾀｲﾙのｲﾝﾃﾞﾝﾄから(~V)";
         Text[ korean ] = "단락 템플릿의 첫 문장 들여쓰기에 관련된 탭 위치(~V)";
         Text[ chinese_simplified ] = "调整制表符和段落样式缩进的位置(~V)";
-        Text[ chinese_traditional ] = "製表符位置和段落樣式的縮排保持相對位置(~V)";
+        Text[ chinese_traditional ] = "定位鍵位置和段落樣式的縮排保持相對位置(~V)";
         Text[ arabic ] = "���� ������ ������� ���� ������ ��� ������";
         Text[ turkish ] = "Paragraf bi�imi girintisine g�re orant�l� sekme konumu";
         Text[ language_user1 ] = " ";
@@ -4784,6 +4784,7 @@ ModalDialog DLG_CREATE_AUTOMARK
     Text[ catalan ] = "Editar archivo de concordancia";
     Text[ finnish ] = "Muokkaa vastaavuustiedostoa";
 };
+
 
 
 
