@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlaccelcfg.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mba $ $Date: 2001-05-10 07:56:31 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 17:52:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,9 @@
 #include "xmlaccelcfg.hxx"
 
 #include <vector>
+#if OSL_DEBUG_LEVEL == 0
+#define NDEBUG
+#endif
 #include <assert.h>
 
 #ifndef _COM_SUN_STAR_XML_SAX_XATTRIBUTELIST_HPP_
