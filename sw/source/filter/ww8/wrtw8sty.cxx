@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtw8sty.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cmc $ $Date: 2001-04-23 11:16:22 $
+ *  last change: $Author: jp $ $Date: 2001-07-03 17:33:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,9 @@
 #include <hintids.hxx>
 #endif
 
+#ifndef _SV_FONTCVT_HXX
+#include <vcl/fontcvt.hxx>
+#endif
 #ifndef _SVX_BOXITEM_HXX //autogen
 #include <svx/boxitem.hxx>
 #endif
@@ -681,13 +684,21 @@ USHORT SwWW8Writer::GetId( const Font& rFont ) const
 
 static void _OutFont( SwWW8Writer& rWrt, const SvxFontItem& rFont )
 {
+    String sFamilyNm( ::GetFontToken( rFont.GetFamilyName(), 0 ));
+/*  if( sFamilyNm.Len() != rFont.GetFamilyName().Len() )
+    {
+        String sTmp( ::GetSubsFontName( sFamilyNm,
+                                        SUBSFONT_MS | SUBSFONT_ONLYONE ));
+        if( sTmp.Len() )
+            sFamilyNm = sTmp;
+    }
+*/
     BYTE aWW8_FFN[ 6 ];
     memset( aWW8_FFN, 0, 6 );                       // 6 == len of fixed Part
     if( rWrt.bWrtWW8 )
-        aWW8_FFN[0] = (BYTE)( 6 - 1 + 0x22 + ( 2 *
-                                    ( 1 + rFont.GetFamilyName().Len() ) ));
+        aWW8_FFN[0] = (BYTE)( 6 - 1 + 0x22 + ( 2 * ( 1 + sFamilyNm.Len() ) ));
     else
-        aWW8_FFN[0] = (BYTE)( 6 - 1 + 1 + rFont.GetFamilyName().Len() );
+        aWW8_FFN[0] = (BYTE)( 6 - 1 + 1 + sFamilyNm.Len() );
 
     BYTE aB = 0;
     switch( rFont.GetPitch() )
@@ -724,11 +735,10 @@ static void _OutFont( SwWW8Writer& rWrt, const SvxFontItem& rFont )
         //char  panose[ 10 ];       //  0x6   PANOSE
         //char  fs[ 24     ];       //  0x10  FONTSIGNATURE
         SwWW8Writer::FillCount( *rWrt.pTableStrm, 0x22 );
-        SwWW8Writer::WriteString16( *rWrt.pTableStrm, rFont.GetFamilyName(),
-                                    TRUE );
+        SwWW8Writer::WriteString16( *rWrt.pTableStrm, sFamilyNm, TRUE );
     }
     else
-        SwWW8Writer::WriteString8( *rWrt.pTableStrm, rFont.GetFamilyName(),
+        SwWW8Writer::WriteString8( *rWrt.pTableStrm, sFamilyNm,
                                     TRUE, RTL_TEXTENCODING_MS_1252 );
 }
 
@@ -1883,11 +1893,14 @@ const SvULongs* WW8_WrPlcSubDoc::GetShapeIdArr() const
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtw8sty.cxx,v 1.5 2001-04-23 11:16:22 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/wrtw8sty.cxx,v 1.6 2001-07-03 17:33:34 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.5  2001/04/23 11:16:22  cmc
+      Enable automatic text foreground color {im|ex}port
+
       Revision 1.4  2001/02/23 12:45:26  os
       Complete use of DefaultNumbering component
 
