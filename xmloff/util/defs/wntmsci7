@@ -7931,3 +7931,4 @@ _real@8@bffdf1a9fbe76c8b4000
 ?__query@?$Reference@VXAttributeList@sax@xml@star@sun@com@@@uno@star@sun@com@@CAPAVXAttributeList@sax@xml@345@PAVXInterface@2345@@Z
 ?__query@?$Reference@VXCloneable@util@star@sun@com@@@uno@star@sun@com@@CAPAVXCloneable@util@345@PAVXInterface@2345@@Z
 ?__query@?$Reference@VXGridColumnFactory@form@star@sun@com@@@uno@star@sun@com@@CAPAVXGridColumnFactory@form@345@PAVXInterface@2345@@Z
+?_M_destroy_nodes@?$_Deque_base@V?$Reference@VXIndexAccess@container@star@sun@com@@@uno@star@sun@com@@V?$allocator@V?$Reference@VXIndexAccess@container@star@sun@com@@@uno@star@sun@com@@@_STL@@@_STL@@IAEXPAPAV?$Reference@VXIndexAccess@container@star@sun@com@@@uno@star@sun@com@@0@Z
