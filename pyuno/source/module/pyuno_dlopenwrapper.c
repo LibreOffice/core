@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pyuno_dlopenwrapper.c,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jbu $ $Date: 2003-03-23 12:12:56 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 19:29:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,11 +59,12 @@
  *
  ************************************************************************/
 #include <dlfcn.h>
+#include <sal/config.h>
 
 void initpyuno ()
 {
     void (*func)(void);
-    void* h = dlopen ("libpyuno.so", RTLD_NOW | RTLD_GLOBAL);
+    void* h = dlopen (SAL_DLLPREFIX "pyuno" SAL_DLLEXTENSION , RTLD_NOW | RTLD_GLOBAL);
     if( h )
     {
         func = (void (*)())dlsym (h, "initpyuno");
