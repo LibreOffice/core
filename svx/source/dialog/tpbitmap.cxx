@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpbitmap.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ka $ $Date: 2001-07-30 14:47:55 $
+ *  last change: $Author: ka $ $Date: 2001-09-04 15:18:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -789,13 +789,8 @@ IMPL_LINK( SvxBitmapTabPage, ClickImportHdl_Impl, void *, EMPTYARG )
 
             // convert file URL to UI name
             String          aName;
-            INetURLObject   aURL;
-
-            aURL.SetURL(aDlg.GetPath());
-            ::utl::LocalFileHelper::ConvertURLToPhysicalName( aURL.GetMainURL(INetURLObject::NO_DECODE), aName );
-
-            SvxNameDialog* pDlg =
-                new SvxNameDialog( DLGWIN, aName, aDesc );
+            INetURLObject   aURL( aDlg.GetPath() );
+            SvxNameDialog*  pDlg = new SvxNameDialog( DLGWIN, aURL.GetName().GetToken( 0, '.' ), aDesc );
             nError = RID_SVXSTR_WARN_NAME_DUPLICATE;
 
             while( pDlg->Execute() == RET_OK )
