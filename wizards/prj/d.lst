@@ -1,3 +1,5 @@
+mkdir: %_DEST%\pck%_EXT%
+..\%__SRC%\bin\*.zip %_DEST%\pck%_EXT%\*.zip
 ..\%__SRC%\sbl\createre.sbl %_DEST%\bin%_EXT%\createre.sbl
 ..\%__SRC%\sbl\combowiz.sbl %_DEST%\bin%_EXT%\combowiz.sbl
 ..\%__SRC%\sbl\dbhandle.sbl %_DEST%\bin%_EXT%\dbhandle.sbl
