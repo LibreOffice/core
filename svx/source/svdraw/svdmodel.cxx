@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdmodel.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 14:13:02 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 14:32:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -544,7 +544,10 @@ SdrModel::~SdrModel()
     }
 #endif
     if (pAktUndoGroup!=NULL) delete pAktUndoGroup;
-    Clear();
+
+    // #116168#
+    ClearModel(sal_True);
+
     delete pLayerAdmin;
 
     // Den DrawOutliner erst nach dem ItemPool loeschen, da
@@ -846,9 +849,13 @@ void SdrModel::ImpCreateTables()
 #endif
 }
 
-void SdrModel::Clear()
+// #116168#
+void SdrModel::ClearModel(sal_Bool bCalledFromDestructor)
 {
-    mbInDestruction = true;
+    if(bCalledFromDestructor)
+    {
+        mbInDestruction = true;
+    }
 
     sal_Int32 i;
     // delete all drawing pages
@@ -2400,7 +2407,10 @@ SvStream& operator>>(SvStream& rIn, SdrModel& rMod)
     rMod.nProgressOfs=rIn.Tell();
     rMod.nProgressMax=0xFFFFFFFF; // Vorlaeufiger Wert
     rMod.DoProgress(0);
-    rMod.Clear();
+
+    // #116168#
+    rMod.ClearModel(sal_False);
+
     SdrIOHeader aHead(rIn,STREAM_READ);
     rMod.nLoadVersion=aHead.GetVersion();
     if (!aHead.IsMagic()) {
