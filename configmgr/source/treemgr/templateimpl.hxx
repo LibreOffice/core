@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templateimpl.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: armin $ $Date: 2001-03-08 09:06:32 $
+ *  last change: $Author: jb $ $Date: 2001-03-12 14:59:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,15 @@ namespace configmgr
             {}
             //-----------------------------------------------------------------
 
+            /// compose the path where the template is located
+            RelativePath makePath() const
+            {
+                Path::Components aPath;
+                if (!aModule.isEmpty()) aPath.push_back(aModule);
+                aPath.push_back(aName);
+                return RelativePath( aPath  );
+            }
+            //-----------------------------------------------------------------
             bool isEmpty() const
             {
                 return aName.isEmpty();
@@ -139,7 +148,9 @@ namespace configmgr
             }
 
             //-----------------------------------------------------------------
-            static TemplateName parseTemplatePath(OUString const& sName);
+            // static TemplateName parseTemplatePath(OUString const& sName);
+            //-----------------------------------------------------------------
+            static TemplateName parseTemplateNames(OUString const& sName, OUString const& sModule);
             //-----------------------------------------------------------------
             static Name makeSimpleTypeName(UnoType const& aType);
             //-----------------------------------------------------------------

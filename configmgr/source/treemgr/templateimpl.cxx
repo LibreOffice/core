@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templateimpl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: armin $ $Date: 2001-03-08 09:06:00 $
+ *  last change: $Author: jb $ $Date: 2001-03-12 14:59:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@ Name TemplateName::makeSimpleTypeModuleName()
     return Name(aModuleName, Name::NoValidate());
 }
 //-----------------------------------------------------------------------------
-
+#if 0
 TemplateName TemplateName::parseTemplatePath(OUString const& sName)
 {
     Path::Components aPath = Path::parse(sName);
@@ -115,6 +115,13 @@ TemplateName TemplateName::parseTemplatePath(OUString const& sName)
             break;
     }
     return aNames;
+}
+#endif
+//-----------------------------------------------------------------------------
+
+TemplateName TemplateName::parseTemplateNames(OUString const& sName,OUString const& sModule)
+{
+    return TemplateName( sName, sModule );
 }
 //-----------------------------------------------------------------------------
 // class TemplateImplHelper
@@ -320,7 +327,11 @@ TemplateHolder TemplateProvider_Impl::makeElementTemplateWithType(TemplateName c
             std::auto_ptr<INode> pTemplateInstance;
             if (m_pProvider)
             {
-                OUString sPath = aSet.getChildTemplateName(); // could also be taken from aNames
+                OSL_ASSERT(aNames.aName.toString() == aSet.getElementTemplateName());
+                OSL_ASSERT(aNames.aModule.toString() == aSet.getElementTemplateModule());
+
+                OUString sPath = aNames.makePath().toString(); // could also be extracted from aSet
+
                 pTemplateInstance = m_pProvider->createInstance(sPath);
             }
 

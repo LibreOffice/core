@@ -2,9 +2,9 @@
  *
  *  $RCSfile: template.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dg $ $Date: 2000-11-30 08:20:25 $
+ *  last change: $Author: jb $ $Date: 2001-03-12 14:59:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,16 +132,22 @@ UnoType Template::getInstanceType() const
 /// get the path where the template is located
 RelativePath Template::getPath() const
 {
-    Path::Components aPath;
-    aPath.push_back(m_aModule);
-    aPath.push_back(m_aName);
-    return RelativePath( aPath  );
+    TemplateName aNames(m_aName,m_aModule);
+    return aNames.makePath( );
 }
 //-----------------------------------------------------------------------------
 
-TemplateHolder Template::fromPath(OUString const& sName, TemplateProvider const& aProvider)
+#if 0
+TemplateHolder Template::fromPath(OUString const& sPath, TemplateProvider const& aProvider)
 {
-    TemplateName aNames( TemplateName::parseTemplatePath(sName) );
+    TemplateName aNames( TemplateName::parseTemplatePath(sPath) );
+    return TemplateImplHelper::findTemplate(aNames, aProvider );
+}
+#endif
+//-----------------------------------------------------------------------------
+TemplateHolder Template::fromNames(OUString const& sName, OUString const& sModule, TemplateProvider const& aProvider)
+{
+    TemplateName aNames( TemplateName::parseTemplateNames(sName,sModule) );
     return TemplateImplHelper::findTemplate(aNames, aProvider );
 }
 //-----------------------------------------------------------------------------
@@ -158,17 +164,25 @@ TemplateHolder makeSimpleTemplate(UnoType const& aType, Attributes const& aAttrs
     return TemplateImplHelper::makeTemplate( aNames, aProvider, aType, aAttrs);
 }
 //-----------------------------------------------------------------------------
-
-TemplateHolder makeTreeTemplate(OUString const& sName, TemplateProvider const& aProvider)
+#if 0
+TemplateHolder makeTreeTemplate(OUString const& sPath, OUString const& sModule, TemplateProvider const& aProvider)
 {
     TemplateName aNames( TemplateName::parseTemplatePath(sName) );
+    return TemplateImplHelper::makeTemplate( aNames,aProvider, TemplateImplHelper::getUnoInterfaceType(), Attributes());
+}
+#endif
+//-----------------------------------------------------------------------------
+
+TemplateHolder makeTreeTemplate(OUString const& sName, OUString const& sModule, TemplateProvider const& aProvider)
+{
+    TemplateName aNames( TemplateName::parseTemplateNames(sName,sModule) );
     return TemplateImplHelper::makeTemplate( aNames,aProvider, TemplateImplHelper::getUnoInterfaceType(), Attributes());
 }
 //-----------------------------------------------------------------------------
 
 TemplateHolder makeSetElementTemplate(ISubtree const& aSet, TemplateProvider const& aProvider)
 {
-    TemplateName aNames( TemplateName::parseTemplatePath( aSet.getChildTemplateName() ) );
+    TemplateName aNames( TemplateName::parseTemplateNames( aSet.getElementTemplateName(), aSet.getElementTemplateModule() ) );
     return TemplateImplHelper::makeElementTemplateWithType(aNames, aProvider, aSet);
 }
 //-----------------------------------------------------------------------------
