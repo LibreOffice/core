@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtools.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-09 13:09:21 $
+ *  last change: $Author: oj $ $Date: 2001-01-30 15:35:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -515,7 +515,9 @@ SQLContext prependContextInfo(SQLException& _rException, const Reference< XInter
 //------------------------------------------------------------------------------
 ::rtl::OUString quoteName(const ::rtl::OUString& _rQuote, const ::rtl::OUString& _rName)
 {
-    return _rQuote + _rName + _rQuote;
+    if(_rQuote.getLength() && _rQuote.toChar() != ' ')
+        return _rQuote + _rName + _rQuote;
+    return _rName;
 }
 
 //------------------------------------------------------------------------------
@@ -1071,7 +1073,7 @@ void composeTableName(  const Reference< XDatabaseMetaData >& _rxMetaData,
     OSL_ENSHURE(_rName.getLength(), "composeTableName : at least the name should be non-empty !");
 
     ::rtl::OUString sQuoteString = _rxMetaData->getIdentifierQuoteString();
-#define QUOTE(s) if (_bQuote) s += sQuoteString
+#define QUOTE(s,s2) if (_bQuote) s += quoteName(sQuoteString,s2); else s += s2
 
     static ::rtl::OUString sEmpty;
     static ::rtl::OUString sSeparator = ::rtl::OUString::createFromAscii(".");
@@ -1079,35 +1081,25 @@ void composeTableName(  const Reference< XDatabaseMetaData >& _rxMetaData,
 
     if (_rCatalog.getLength() && _rxMetaData->isCatalogAtStart() && !_rxMetaData->usesLocalFiles())
     {
-        QUOTE(_rComposedName);
-        _rComposedName += _rCatalog;
-        QUOTE(_rComposedName);
+        QUOTE(_rComposedName,_rCatalog);
         _rComposedName += _rxMetaData->getCatalogSeparator();
     }
 
     if (_rSchema.getLength())
     {
-        QUOTE(_rComposedName);
-        _rComposedName += _rSchema;
-        QUOTE(_rComposedName);
+        QUOTE(_rComposedName,_rSchema);
         _rComposedName += sSeparator;
-        QUOTE(_rComposedName);
-        _rComposedName += _rName;
-        QUOTE(_rComposedName);
+        QUOTE(_rComposedName,_rName);
     }
     else
     {
-        QUOTE(_rComposedName);
-        _rComposedName += _rName;
-        QUOTE(_rComposedName);
+        QUOTE(_rComposedName,_rName);
     }
 
     if (_rCatalog.getLength() && !_rxMetaData->isCatalogAtStart() && !_rxMetaData->usesLocalFiles())
     {
         _rComposedName += _rxMetaData->getCatalogSeparator();
-        QUOTE(_rComposedName);
-        _rComposedName += _rCatalog;
-        QUOTE(_rComposedName);
+        QUOTE(_rComposedName,_rCatalog);
     }
 }
 // -----------------------------------------------------------------------------
@@ -1139,6 +1131,9 @@ sal_Int32 getSearchColumnFlag( const Reference< XConnection>& _rxConn,sal_Int32 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.12  2001/01/09 13:09:21  oj
+ *  catch SQLException separated
+ *
  *  Revision 1.11  2000/11/22 14:27:17  oj
  *  dispose old connection when new is set
  *
