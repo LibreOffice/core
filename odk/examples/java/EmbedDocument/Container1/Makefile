@@ -36,7 +36,7 @@ JavaStorageTestExample : $(CLASSFILES)
 	@echo --------------------------------------------------------------------------------
 	@echo Please use following command to execute the example!
 	@echo ------
-	@echo make EmbedContFrame.run
+	@echo $(MAKE) EmbedContFrame.run
 	@echo --------------------------------------------------------------------------------
 
 %.run: $(OUT_COMP_CLASS)/%.class
