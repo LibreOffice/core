@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextMasterPageExport.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:22 $
+ *  last change: $Author: dvo $ $Date: 2001-10-09 18:19:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,11 +124,11 @@ void XMLTextMasterPageExport::exportHeaderFooterContent(
                                                                bAutoStyles);
     if( bAutoStyles )
         GetExport().GetTextParagraphExport()
-                ->collectTextAutoStyles( rText, sal_False, bExportParagraph );
+                ->collectTextAutoStyles( rText, sal_True, bExportParagraph );
     else
     {
         GetExport().GetTextParagraphExport()->exportTextDeclarations( rText );
-        GetExport().GetTextParagraphExport()->exportText( rText, sal_False, bExportParagraph );
+        GetExport().GetTextParagraphExport()->exportText( rText, sal_True, bExportParagraph );
     }
 
     // tracked changes (end of XText)
