@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuinsfil.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pw $ $Date: 2000-10-17 14:46:23 $
+ *  last change: $Author: dl $ $Date: 2000-12-14 12:02:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,25 +181,39 @@ FuInsertFile::FuInsertFile(SdViewShell*    pViewSh,
 
         SfxFilterMatcher& rMatcher = SFX_APP()->GetFilterMatcher();
         SfxFilterContainer* pCont = NULL;
+        SfxFilterContainer* pSecondCont = NULL;
         const SfxFilter* pFilter = NULL;
 
         if( pDoc->GetDocumentType() == DOCUMENT_TYPE_IMPRESS )
         {
             pCont = rMatcher.GetContainer( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "simpress" ) ) );
-            pFilter = pCont->GetFilter4ClipBoardId( SOT_FORMATSTR_ID_STARIMPRESS_50 );
         }
         else
         {
             pCont = rMatcher.GetContainer( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "sdraw" ) ) );
-            pFilter = pCont->GetFilter4ClipBoardId( SOT_FORMATSTR_ID_STARDRAW_50 );
         }
 
+        pFilter = pCont->GetFilter( 0 );
+        if( pFilter )
+        {
+            // Get filter for current format
+            aFileDialog.AddFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
+            aFileDialog.SetCurFilter( pFilter->GetUIName() ); // set default-filter
+        }
+
+        // Get Draw filter for Impress and Impress filter for Draw as secondary
+        String aExt( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( ".sxi" ) ) );
+        if( pDoc->GetDocumentType() == DOCUMENT_TYPE_IMPRESS )
+            aExt = UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( ".sxd" ) );
+
+        pFilter = pCont->GetFilter4Extension( aExt );
         if( pFilter )
             aFileDialog.AddFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
 
-        // set default-filter
-        aFileDialog.SetCurFilter( pFilter->GetUIName() );
-
+        // Get other filters
+        pFilter = pCont->GetFilter4ClipBoardId( SOT_FORMATSTR_ID_STARIMPRESS_50 );
+        if( pFilter )
+            aFileDialog.AddFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
         pFilter = pCont->GetFilter4ClipBoardId( SOT_FORMATSTR_ID_STARIMPRESS_50, SFX_FILTER_TEMPLATEPATH );
         if( pFilter )
             aFileDialog.AddFilter( pFilter->GetUIName(), pFilter->GetDefaultExtension() );
