@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BTables.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-18 08:48:06 $
+ *  last change: $Author: oj $ $Date: 2001-06-01 09:49:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,9 @@
 
 #ifndef _CONNECTIVITY_ADABAS_TABLES_HXX_
 #include "adabas/BTables.hxx"
+#endif
+#ifndef _CONNECTIVITY_ADABAS_VIEWS_HXX_
+#include "adabas/BViews.hxx"
 #endif
 #ifndef _CONNECTIVITY_ADABAS_TABLE_HXX_
 #include "adabas/BTable.hxx"
@@ -251,7 +254,8 @@ void SAL_CALL OTables::dropByName( const ::rtl::OUString& elementName ) throw(SQ
         aName   = elementName.copy(nLen+1);
         ::rtl::OUString aSql = ::rtl::OUString::createFromAscii("DROP ");
         Reference<XPropertySet> xProp(xTunnel,UNO_QUERY);
-        if(xProp.is() && ::comphelper::getString(xProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))) == ::rtl::OUString::createFromAscii("VIEW")) // here we have a view
+        sal_Bool bIsView;
+        if(bIsView = (xProp.is() && ::comphelper::getString(xProp->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPE))) == ::rtl::OUString::createFromAscii("VIEW"))) // here we have a view
             aSql += ::rtl::OUString::createFromAscii("VIEW ");
         else
             aSql += ::rtl::OUString::createFromAscii("TABLE ");
@@ -260,6 +264,13 @@ void SAL_CALL OTables::dropByName( const ::rtl::OUString& elementName ) throw(SQ
         aSql = aSql + ::rtl::OUString::createFromAscii(".");
         aSql = aSql + m_xMetaData->getIdentifierQuoteString(  ) + aName + m_xMetaData->getIdentifierQuoteString(  );
         xStmt->execute(aSql);
+        // if no exception was thrown we must delete it from the views
+        if(bIsView)
+        {
+            OViews* pViews = static_cast<OViews*>(static_cast<OAdabasCatalog&>(m_rParent).getPrivateViews());
+            if(pViews && pViews->hasByName(elementName))
+                pViews->dropByNameImpl(elementName);
+        }
     }
 
     OCollection_TYPE::dropByName(elementName);

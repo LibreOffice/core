@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BViews.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-18 08:48:06 $
+ *  last change: $Author: oj $ $Date: 2001-06-01 09:49:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,12 @@
  *
  ************************************************************************/
 
+#ifndef _CONNECTIVITY_ADABAS_VIEWS_HXX_
 #include "adabas/BViews.hxx"
+#endif
+#ifndef _CONNECTIVITY_ADABAS_TABLES_HXX_
+#include "adabas/BTables.hxx"
+#endif
 #ifndef _COM_SUN_STAR_SDBC_XROW_HPP_
 #include <com/sun/star/sdbc/XRow.hpp>
 #endif
@@ -229,6 +234,11 @@ void SAL_CALL OViews::dropByName( const ::rtl::OUString& elementName ) throw(SQL
 
     OCollection_TYPE::dropByName(elementName);
 }
+// -----------------------------------------------------------------------------
+void OViews::dropByNameImpl(const ::rtl::OUString& elementName)
+{
+    OCollection_TYPE::dropByName(elementName);
+}
 // -------------------------------------------------------------------------
 void SAL_CALL OViews::dropByIndex( sal_Int32 index ) throw(SQLException, IndexOutOfBoundsException, RuntimeException)
 {
@@ -261,7 +271,7 @@ void OViews::createView( const Reference< XPropertySet >& descriptor )
     xStmt->execute(aSql);
 
     // insert the new view also in the tables collection
-    OViews* pTables = static_cast<OViews*>(static_cast<OAdabasCatalog&>(m_rParent).getPrivateTables());
+    OTables* pTables = static_cast<OTables*>(static_cast<OAdabasCatalog&>(m_rParent).getPrivateTables());
     if(pTables)
     {
         ::rtl::OUString sName = sSchema;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BViews.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-02 12:54:54 $
+ *  last change: $Author: oj $ $Date: 2001-06-01 09:51:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,7 @@ namespace connectivity
             virtual void SAL_CALL dropByName( const ::rtl::OUString& elementName ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException);
             virtual void SAL_CALL dropByIndex( sal_Int32 index ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
             void appendNew(const ::rtl::OUString& _rsNewTable);
+            void dropByNameImpl(const ::rtl::OUString& elementName);
         };
     }
 }
