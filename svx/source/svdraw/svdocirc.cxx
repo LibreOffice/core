@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdocirc.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: aw $ $Date: 2000-11-07 12:58:28 $
+ *  last change: $Author: aw $ $Date: 2000-11-08 17:31:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1315,8 +1315,6 @@ void __EXPORT SdrCircObj::SFX_NOTIFY(SfxBroadcaster& rBC, const TypeId& rBCType,
 
 void SdrCircObj::ForceDefaultAttr()
 {
-    SdrRectObj::ForceDefaultAttr();
-
 //-/    if(pPool)
 //-/    {
     SdrCircKind eKindA = SDRCIRC_FULL;
@@ -1338,6 +1336,13 @@ void SdrCircObj::ForceDefaultAttr()
         if(nEndWink != 36000)
             SetItem(SdrCircEndAngleItem(nEndWink));
     }
+
+    // call parent, after SetItem(SdrCircKindItem())
+    // because ForceDefaultAttr() will call
+    // ImpSetAttrToCircInfo() which needs a correct
+    // SdrCircKindItem
+    SdrRectObj::ForceDefaultAttr();
+
 //-/    }
 //-/    if (pPool!=NULL) {
 //-/        if (pCircAttr==NULL) {
