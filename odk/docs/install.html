@@ -66,9 +66,10 @@
             </p>
             <dl>
               <dt><b>StarOffice&#153 or OpenOffice.org installation</b>
-              <dd>The SDK works on top of an existing office installation and uses the same libraries as the office.  
+              <dd>The SDK works on top of an existing office installation and uses the same libraries as the office.
               <dt><b>JDK (1.3.1_02 or higher)</b>
-              <dd>A JDK is necessary for developing Java components or applications
+              <dd>A JDK is necessary for developing Java components or applications. An appropriate Java SDK can be 
+              found on <a target="_blank" href="http://java.sun.com/products">http://java.sun.com/products</a>.
               <dt><b>C++ compiler</b>
               <dd>A C++ compler is necessary for developing C++ components or applications. UNO depends
                   on a compiler dependent language binding so that we use the appropriate compiler where a 
@@ -77,7 +78,12 @@
                   Linux, GNU C++ compiler, gcc vwersion 3.0.1<br>
                   Windows, Microsoft C++ Compiler, Microsoft Developer Studio 6.0 (cl, version 12.00.8168)<br> 
               <dt><b>GNU make (3.79.1 or higher)</b>
-              <dd>GNU make is used to build the examples of the SDK.
+              <dd>GNU make is used to build the examples of the SDK. GNU make is available from 
+                  <a target="_blank" href="http://www.gnu.org">http://www.gnu.org</a>, it can be ftped via 
+                  <a target="_blank" href="ftp://ftp.gnu.org/gnu/make">ftp://ftp.gnu.org/gnu/make</a><br> 
+                  NOTE: Windows user can find an executable of gnu make under 
+                  <a href="http://www.nextgeneration.dk/gnu/make.zip">http://www.nextgeneration.dk/gnu/make.zip</a>.
+                  It is not recommendable to use the Cygwin make because it don't work.
             </dl>
             <p>The SDK provides a shell script (Windows and UNIX) to set the necessary environment variables 
                for using the SDK and the required tools.
@@ -87,7 +93,7 @@
               <li><a href="../setsdkenv_windows.bat">setsdkenv_windows.bat</a>
             </ul>
             <p>The first time you use the script you have have to prepare it for your environment. Edit the script
-               and set the following variabels:
+               and set the following variables:
             </p>
             <p> 
                <table width="100%" border=1 cellpadding=4 cellspacing=0>
@@ -137,7 +143,7 @@
                  </tr>
                  <tr> 
                    <td widht=35%>PATH</td>
-                   <td widht=65%><b>=<i>$PATH:$SDK_HOM/solsparc/bin:$SDK_MAKE:$SDK_CPP_HOME:$SDK_JAVA_HOME/bin</i></b><br>
+                   <td widht=65%><b>=<i>$PATH:$SDK_HOME/solsparc/bin:$SDK_MAKE:$SDK_CPP_HOME:$SDK_JAVA_HOME/bin</i></b><br>
                        The PATH variable will be extended by the pathes for the SDK development tools, the compiler,
                        the JDK, GNU make.
                    </td>
@@ -174,7 +180,7 @@
                  <tr> 
                    <td colspan="2">Additionally to setting these environment varibales the script calls the 
                       "vcvar32.bat" batch file which is provided by the Microsoft Develper Studio to set the 
-                      necessary environment varibales for the compiler.</td>
+                      necessary environment variables for the compiler.</td>
                  </tr>
                </table>    
             </p>
