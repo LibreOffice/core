@@ -2,9 +2,9 @@
  *
  *  $RCSfile: extrusionbar.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-07 09:24:59 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:46:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -656,6 +656,11 @@ void ExtrusionBar::execute( SdrView* pSdrView, SfxRequest& rReq, SfxBindings& rB
                     pObj->SetMergedItem( aGeometryItem );
                     pObj->BroadcastObjectChange();
                     pSdrView->EndUndo();
+
+                    // simulate a context change:
+                    // force SelectionHasChanged() being called
+                    // so that extrusion bar will be visible/hidden
+                    pSdrView->MarkListHasChanged();
                 }
             }
         }
