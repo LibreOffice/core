@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfnum.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:59:53 $
+ *  last change: $Author: obo $ $Date: 2003-09-01 12:37:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1195,7 +1195,7 @@ void SwRTFWriter::OutRTFListTab()
             }
             OutLong( nVal ) << sRTF_LEVELSTARTAT;
             OutLong( rFmt.GetStart() )
-                << sRTF_LEVELFOLLOW << "2{" << sRTF_LEVELTEXT << ' ';
+                << sRTF_LEVELFOLLOW << "0{" << sRTF_LEVELTEXT << ' ';
 
             BOOL bWriteBulletFont = FALSE;
             memset( aNumLvlPos, 0, MAXLEVEL );
@@ -1401,7 +1401,7 @@ BOOL SwRTFWriter::OutListNum( const SwTxtNode& rNd )
         if( bValidNum )
         {
             aLR.SetTxtFirstLineOfst( pFmt->GetFirstLineOffset() );
-            if( bExportNumRule )
+            if (bExportNumRule)
                 Strm() << '{' << sRTF_LISTTEXT << sRTF_PARD << sRTF_PLAIN << ' ';
         }
         aSet.Put( aLR );
@@ -1425,14 +1425,17 @@ BOOL SwRTFWriter::OutListNum( const SwTxtNode& rNd )
                 bOutFmtAttr = FALSE;
             }
 
-            if( sTxt.Len() )
-                RTFOutFuncs::Out_String( Strm(), sTxt, DEF_ENCODING, bWriteHelpFmt);
+            if (sTxt.Len())
+            {
+                RTFOutFuncs::Out_String(Strm(), sTxt, DEF_ENCODING,
+                    bWriteHelpFmt);
+            }
 
             if( bExportNumRule )
             {
                 if( OUTLINE_RULE != pRule->GetRuleType() )
                 {
-                    Strm() /*<< sRTF_TAB*/ << '}' << sRTF_ILVL;
+                    Strm() << sRTF_TAB << '}' << sRTF_ILVL;
                     if( nLvl > 8 )          // RTF-kennt nur 9 Ebenen
                     {
                         OutULong( 8 );
@@ -1444,7 +1447,7 @@ BOOL SwRTFWriter::OutListNum( const SwTxtNode& rNd )
                     Strm()  << ' ';
                 }
                 else
-                    Strm() /*<< sRTF_TAB*/ << '}';
+                    Strm() << sRTF_TAB << '}';
             }
             else if( sTxt.Len() )
                 Strm() << sRTF_TAB;
@@ -1453,5 +1456,3 @@ BOOL SwRTFWriter::OutListNum( const SwTxtNode& rNd )
     }
     return bRet;
 }
-
-
