@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldpimp.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: sab $ $Date: 2001-09-25 10:37:31 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 12:29:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -284,6 +284,9 @@ void ScXMLDataPilotTableContext::SetButtons()
             }
         }
     }
+
+    if ( pDPObject )
+        pDPObject->RefreshAfterLoad();
 }
 
 void ScXMLDataPilotTableContext::AddDimension(ScDPSaveDimension* pDim)
@@ -702,13 +705,14 @@ ScXMLDataPilotFieldContext::ScXMLDataPilotFieldContext( ScXMLImport& rImport,
                                       ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
                                         ScXMLDataPilotTableContext* pTempDataPilotTable) :
     SvXMLImportContext( rImport, nPrfx, rLName ),
-    pDim(NULL)
+    pDataPilotTable(pTempDataPilotTable),
+    pDim(NULL),
+    nUsedHierarchy(1),
+    bSelectedPage(sal_False)
 {
-    pDataPilotTable = pTempDataPilotTable;
     rtl::OUString sName;
     sal_Bool bHasName(sal_False);
     sal_Bool bDataLayout(sal_False);
-    nUsedHierarchy = 1;
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     const SvXMLTokenMap& rAttrTokenMap = GetScImport().GetDataPilotFieldAttrTokenMap();
     for( sal_Int16 i=0; i < nAttrCount; i++ )
@@ -740,6 +744,12 @@ ScXMLDataPilotFieldContext::ScXMLDataPilotFieldContext( ScXMLImport& rImport,
             case XML_TOK_DATA_PILOT_FIELD_ATTR_ORIENTATION :
             {
                 nOrientation = (sal_Int16) ScXMLConverter::GetOrientationFromString( sValue );
+            }
+            break;
+            case XML_TOK_DATA_PILOT_FIELD_ATTR_SELECTED_PAGE :
+            {
+                sSelectedPage = sValue;
+                bSelectedPage = sal_True;
             }
             break;
             case XML_TOK_DATA_PILOT_FIELD_ATTR_USED_HIERARCHY :
@@ -785,6 +795,11 @@ void ScXMLDataPilotFieldContext::EndElement()
         pDim->SetUsedHierarchy(nUsedHierarchy);
         pDim->SetFunction(nFunction);
         pDim->SetOrientation(nOrientation);
+        if (bSelectedPage)
+        {
+            String sPage(sSelectedPage);
+            pDim->SetCurrentPage(&sPage);
+        }
         pDataPilotTable->AddDimension(pDim);
     }
 }
