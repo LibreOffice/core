@@ -2,9 +2,9 @@
  *
  *  $RCSfile: syswin.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-08 15:09:27 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 16:22:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,10 +110,34 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 
 // =======================================================================
+class SystemWindow::ImplData
+{
+public:
+    ImplData();
+    ~ImplData();
+
+    TaskPaneList*   mpTaskPaneList;
+    Size            maMaxOutSize;
+};
+
+SystemWindow::ImplData::ImplData()
+{
+    mpTaskPaneList = NULL;
+    maMaxOutSize = Size( SHRT_MAX, SHRT_MAX );
+}
+
+SystemWindow::ImplData::~ImplData()
+{
+    if( mpTaskPaneList )
+        delete mpTaskPaneList;
+}
+
+// =======================================================================
 
 SystemWindow::SystemWindow( WindowType nType ) :
     Window( nType )
 {
+    mpImplData          = new ImplData;
     mbSysWin            = TRUE;
     mnActivateMode      = ACTIVATE_MODE_GRABFOCUS;
 
@@ -126,7 +150,12 @@ SystemWindow::SystemWindow( WindowType nType ) :
     mbSysChild          = FALSE;
     mnMenuBarMode       = MENUBAR_MODE_NORMAL;
     mnIcon              = 0;
-    mpTaskPaneList      = NULL;
+    mpImplData->mpTaskPaneList      = NULL;
+}
+
+SystemWindow::~SystemWindow()
+{
+    delete mpImplData;
 }
 
 // -----------------------------------------------------------------------
@@ -167,12 +196,12 @@ long SystemWindow::PreNotify( NotifyEvent& rNEvt )
         }
         else
         {
-            TaskPaneList *pTList = mpTaskPaneList;
+            TaskPaneList *pTList = mpImplData->mpTaskPaneList;
             if( !pTList && ( GetType() == WINDOW_FLOATINGWINDOW ) )
             {
                 Window* pWin = ImplGetFrameWindow()->ImplGetWindow();
                 if( pWin && pWin->IsSystemWindow() )
-                    pTList = ((SystemWindow*)pWin)->mpTaskPaneList;
+                    pTList = ((SystemWindow*)pWin)->mpImplData->mpTaskPaneList;
             }
             if( !pTList )
             {
@@ -185,7 +214,7 @@ long SystemWindow::PreNotify( NotifyEvent& rNEvt )
                     if( pWin && pWin->IsSystemWindow() )
                         pSysWin = (SystemWindow*) pWin;
                 }
-                pTList = pSysWin->mpTaskPaneList;
+                pTList = pSysWin->mpImplData->mpTaskPaneList;
             }
             if( pTList && pTList->HandleKeyEvent( *rNEvt.GetKeyEvent() ) )
                 return TRUE;
@@ -198,11 +227,11 @@ long SystemWindow::PreNotify( NotifyEvent& rNEvt )
 
 TaskPaneList* SystemWindow::GetTaskPaneList()
 {
-    if( mpTaskPaneList )
-        return mpTaskPaneList ;
+    if( mpImplData->mpTaskPaneList )
+        return mpImplData->mpTaskPaneList ;
     else
     {
-        mpTaskPaneList = new TaskPaneList();
+        mpImplData->mpTaskPaneList = new TaskPaneList();
         MenuBar* pMBar = mpMenuBar;
         if ( !pMBar && ( GetType() == WINDOW_FLOATINGWINDOW ) )
         {
@@ -211,8 +240,8 @@ TaskPaneList* SystemWindow::GetTaskPaneList()
                 pMBar = ((SystemWindow*)pWin)->GetMenuBar();
         }
         if( pMBar )
-            mpTaskPaneList->AddWindow( pMBar->ImplGetWindow() );
-        return mpTaskPaneList;
+            mpImplData->mpTaskPaneList->AddWindow( pMBar->ImplGetWindow() );
+        return mpImplData->mpTaskPaneList;
     }
 }
 
@@ -376,7 +405,7 @@ void SystemWindow::ShowTitleButton( USHORT nButton, BOOL bVisible )
                 ((ImplBorderWindow*)mpBorderWindow)->SetDockButton( bVisible );
         }
     }
-    else /* if ( nButton == TITLE_BUTTON_HIDE ) */
+    else if ( nButton == TITLE_BUTTON_HIDE )
     {
         if ( mbHideBtn != bVisible )
         {
@@ -385,6 +414,13 @@ void SystemWindow::ShowTitleButton( USHORT nButton, BOOL bVisible )
                 ((ImplBorderWindow*)mpBorderWindow)->SetHideButton( bVisible );
         }
     }
+    else if ( nButton == TITLE_BUTTON_MENU )
+    {
+        if ( mpBorderWindow )
+            ((ImplBorderWindow*)mpBorderWindow)->SetMenuButton( bVisible );
+    }
+    else
+        return;
 }
 
 // -----------------------------------------------------------------------
@@ -458,6 +494,31 @@ void SystemWindow::SetMinOutputSizePixel( const Size& rSize )
         mpFrame->SetMinClientSize( rSize.Width(), rSize.Height() );
 }
 
+// -----------------------------------------------------------------------
+
+void SystemWindow::SetMaxOutputSizePixel( const Size& rSize )
+{
+    Size aSize( rSize );
+    if( aSize.Width() > SHRT_MAX || aSize.Width() <= 0 )
+        aSize.Width() = SHRT_MAX;
+    if( aSize.Height() > SHRT_MAX || aSize.Height() <= 0 )
+        aSize.Height() = SHRT_MAX;
+
+    mpImplData->maMaxOutSize = aSize;
+    if ( mpBorderWindow )
+    {
+        ((ImplBorderWindow*)mpBorderWindow)->SetMaxOutputSize( aSize.Width(), aSize.Height() );
+        if ( mpBorderWindow->mbFrame )
+            mpBorderWindow->mpFrame->SetMaxClientSize( aSize.Width(), aSize.Height() );
+    }
+    else if ( mbFrame )
+        mpFrame->SetMaxClientSize( aSize.Width(), aSize.Height() );
+}
+
+const Size& SystemWindow::GetMaxOutputSizePixel() const
+{
+    return mpImplData->maMaxOutSize;
+}
 // -----------------------------------------------------------------------
 
 Size SystemWindow::GetResizeOutputSizePixel() const
@@ -815,12 +876,12 @@ void SystemWindow::SetMenuBar( MenuBar* pMenuBar )
         }
 
         // update taskpane list to make menubar accessible
-        if( mpTaskPaneList )
+        if( mpImplData->mpTaskPaneList )
         {
             if( pOldWindow )
-                mpTaskPaneList->RemoveWindow( pOldWindow );
+                mpImplData->mpTaskPaneList->RemoveWindow( pOldWindow );
             if( pNewWindow )
-                mpTaskPaneList->AddWindow( pNewWindow );
+                mpImplData->mpTaskPaneList->AddWindow( pNewWindow );
         }
     }
 }
