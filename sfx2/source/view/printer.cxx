@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printer.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 13:37:14 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 13:20:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,9 @@
 #endif
 #include <vector>
 
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #include "printer.hxx"
 #include "printopt.hxx"
