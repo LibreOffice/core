@@ -241,6 +241,7 @@ public class TestCaseOldAPI extends ComplexTestCase {
             assure( "No y-axis found", xProp != null );
 
             double nNewMax = 12.3;
+            double nNewOrigin = 2.7;
 
             xProp.setPropertyValue( "Max", new Double( nNewMax ));
             assure( "AutoMax is on", ! AnyConverter.toBoolean( xProp.getPropertyValue( "AutoMax" )) );
@@ -257,6 +258,21 @@ public class TestCaseOldAPI extends ComplexTestCase {
 //             Object oMin = xProp.getPropertyValue( "Min" );
 //             assure( "No Minimum set", AnyConverter.isDouble( oMin ));
 //             log.println( "Minimum retrieved: " + AnyConverter.toDouble( oMin ));
+
+            xProp.setPropertyValue( "Origin", new Double( nNewOrigin ));
+            assure( "Origin invalid",
+                    approxEqual(
+                        AnyConverter.toDouble( xProp.getPropertyValue( "Origin" )),
+                        nNewOrigin ));
+            xProp.setPropertyValue( "AutoOrigin", new Boolean( true ));
+            assure( "AutoOrigin is off", AnyConverter.toBoolean( xProp.getPropertyValue( "AutoOrigin" )) );
+
+            xProp.setPropertyValue( "Logarithmic", new Boolean( true ));
+            assure( "Scaling is not logarithmic",
+                    AnyConverter.toBoolean( xProp.getPropertyValue( "Logarithmic" )) );
+            xProp.setPropertyValue( "Logarithmic", new Boolean( false ));
+            assure( "Scaling is not logarithmic",
+                    ! AnyConverter.toBoolean( xProp.getPropertyValue( "Logarithmic" )) );
         }
         catch( Exception ex )
         {
