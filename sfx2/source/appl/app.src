@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 20:22:53 $
+ *  last change: $Author: kz $ $Date: 2001-03-19 11:17:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -426,7 +426,7 @@ WarningBox STR_RECOVER_PREPARED
     Message[ russian ] = "Ïğîèçîøëà íåóñòğàíèìàÿ îøèáêà.\n\nÂñå èçìåíåííûå ôàéëû áóäóò ñîõğàíåíû\nè èõ ìîæíî áóäåò âîññòàíîâèòü ïğè ñëåäóşùåì\nçàïóñêå ïğîãğàììû.";
     Message[ polish ] = "Wyst¹pi³ nieodwracalny b³¹d.\n\nWszystkie zmodyfikowane pliki zosta³y jednak\nzabezpieczone i zostan¹ prawdopodobnie przywrócone przy nastêpnym rozpoczêciu programu.\n.";
     Message[ japanese ] = "œ‹‚Å‚«‚È‚¢´×°‚ª”­¶‚µ‚Ü‚µ‚½B\n\n•ÏX‚µ‚½‚·‚×‚Ä‚ÌÌ§²Ù‚Í•Û‘¶‚³‚ê‚Ä‚¢‚Ü‚·‚Ì‚Å\nŸ‰ñ‚ÌÌßÛ¸Ş×ÑŠJn‚É•œŒ³‚³‚ê‚éŒ©‚İ‚Å‚·B";
-    Message[ chinese_traditional ] = "¯u¬O«D±`©êºp¡M±zªº¾Ş§@¤Şµo¤F¤@­ÓµLªk±Æ°£ªº¿ù»~¡C\n±z¥ı«e­×§ï¹LªºÀÉ®×¤w¸gÀx¦s¡C\n¦b¤U¤@¦¸±Ò°Êµ{¦¡®É«Ü¥i¯à­«·s«ì´_³o¨ÇÀÉ®×¡C";
+    Message[ chinese_traditional ] = "¯u¬O«D±`©êºp¡M±zªº°Ê§@¤Şµo¤F¤@­ÓµLªk±Æ°£ªº¿ù»~¡C\n¥ı«e­×§ï¹LªºÀÉ®×¤w¸gÀx¦s¡C\n¦b¤U¤@¦¸±Ò°Êµ{¦¡®É«Ü¥i¯à­«·s«ì´_³o¨ÇÀÉ®×¡C";
     Message[ arabic ] = "ÍÏË ÎØÃ ÛíÑ ŞÇÈá ááÅÕáÇÍ.\n\nÊã ÍİÙ ßÇİÉ ÇáãáİÇÊ ÇáÊí Êã ÊÚÏíáåÇ¡ \nÈÍíË íãßä ÇÓÊÚÇÏÊåÇ ÚäÏ ÅÚÇÏÉ\n ÊÔÛíá ÇáÈÑäÇãÌ.";
     Message[ dutch ] = "Er is een niet-corrigeerbare fout opgetreden.\n\nAlle gemodificeerde bestanden werden echter\nopgeslagen en kunnen waarschijnlijk bij de volgende\nprogrammastart opnieuw gemaakt worden.";
     Message[ chinese_simplified ] = "ÕæÊÇ·Ç³£±§Ç¸£¬ÄúµÄ²Ù×÷Òı·¢ÁËÒ»¸öÎŞ·¨ÅÅ³ıµÄ´íÎó¡£\nÄú¸Õ²ÅĞŞ¸Ä¹ıµÄÎÄ¼şÒÑ¾­±»±£´æ¡£\nÔÚÏÂÒ»´ÎÆô¶¯³ÌĞòÊ±ºÜ¿ÉÄÜÖØĞÂ»Ö¸´ÕâĞ©ÎÄ¼ş¡£";
@@ -927,7 +927,7 @@ String GID_GRAPHIC
     Text[ chinese_simplified ] = "Í¼ĞÎ";
     Text[ russian ] = "Ãğàôèêà";
     Text[ polish ] = "Grafika";
-    Text[ japanese ] = "¸Ş×Ì¨¯¸½";
+    Text[ japanese ] = "}";
     Text[ chinese_traditional ] = "¹Ï§Î";
     Text[ arabic ] = "ÕæÑÉ";
     Text[ dutch ] = "Afbeelding";
