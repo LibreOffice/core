@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: kso $ $Date: 2002-10-28 16:05:21 $
+#   last change: $Author: svesik $ $Date: 2004-04-21 12:34:54 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,7 +84,9 @@ SLOFILES=\
         $(SLO)$/commandenvironment.obj	\
         $(SLO)$/fileidentifierconverter.obj \
         $(SLO)$/activedatasink.obj \
-        $(SLO)$/proxydecider.obj
+        $(SLO)$/activedatastreamer.obj \
+        $(SLO)$/proxydecider.obj \
+        $(SLO)$/interceptedinteraction.obj
 
 .ENDIF
 
