@@ -2,8 +2,8 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.15 $
- *  last change: $Author: bmahbod $ $Date: 2000-12-04 23:00:52 $
+ *  $Revision: 1.16 $
+ *  last change: $Author: bmahbod $ $Date: 2000-12-05 01:57:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,17 +89,25 @@ SalGraphics::SalGraphics()
     maGraphicsData.mhDefBrush         = NULL;
     maGraphicsData.mbTransparentBrush = FALSE;
 
+    // White color
+
     aRGBBackColor.red   = 0xffff;
     aRGBBackColor.green = 0xffff;
     aRGBBackColor.blue  = 0xffff;
+
+    // Black color
 
     aRGBForeColor.red   = 0x0000;
     aRGBForeColor.green = 0x0000;
     aRGBForeColor.blue  = 0x0000;
 
+    // Set pen and text colors
+
     maGraphicsData.maPenColor   = aRGBForeColor;
     maGraphicsData.maBrushColor = aRGBForeColor;
     maGraphicsData.maTextColor  = aRGBForeColor;
+
+    // Set background and foreground colors
 
     RGBBackColor( &aRGBBackColor );
     RGBForeColor( &aRGBForeColor );
@@ -129,20 +137,46 @@ SalGraphics::~SalGraphics()
 
 // =======================================================================
 
+static void CheckRects ( Rect *rSrcRect, Rect *rDstRect, const Rect *rPortBoundsRect )
+
+{
+    if ( rSrcRect->top < rPortBoundsRect->top )
+    {
+
+        rDstRect->top += (rPortBoundsRect->top - rSrcRect->top);
+        rSrcRect->top  = rPortBoundsRect->top;
+    } // if
+
+    if ( rSrcRect->left < rPortBoundsRect->left )
+    {
+        rDstRect->left += (rPortBoundsRect->left - rSrcRect->left);
+        rSrcRect->left  = rPortBoundsRect->left;
+    } // if
+
+    if ( rSrcRect->bottom > rPortBoundsRect->bottom )
+    {
+
+        rDstRect->bottom += (rPortBoundsRect->bottom - rSrcRect->bottom);
+        rSrcRect->bottom  = rPortBoundsRect->bottom;
+    } // if
+
+    if ( rSrcRect->right > rPortBoundsRect->right )
+    {
+        rDstRect->right += (rPortBoundsRect->right - rSrcRect->right);
+        rSrcRect->right  = rPortBoundsRect->right;
+    } // if
+}
+
+// -----------------------------------------------------------------------
+
 static RGBColor SALColor2RGBColor ( SalColor nSalColor )
 {
     const unsigned long aRGBMask[3] = { 0x00FF0000, 0x0000FF00, 0x000000FF };
 
     RGBColor aRGBColor;
 
-    // Converting from their SAL color scheme causes only colors that are close to black
-    // to be displayed on-screen.
-
-    /*
-    aRGBColor.red   = (unsigned short)( ( nSalColor & aRGBMask[0] ) >> 16 );
-    aRGBColor.green = (unsigned short)( ( nSalColor & aRGBMask[1] ) >> 8  );
-    aRGBColor.blue  = (unsigned short)(   nSalColor & aRGBMask[2]         );
-    */
+    // Converting from their SAL color scheme causes only colors that are
+    // close to black to be displayed on-screen.
 
     // Temp:  for now, just give me shades of green
 
@@ -473,6 +507,7 @@ void SalGraphics::CopyBits( const SalTwoRect* pPosAry,
             {
                 Rect   aSrcRect;
                 Rect   aDstRect;
+                Rect   aPortBoundsRect;
                 short  nMode;
 
                 SetRect( &aSrcRect,
@@ -489,7 +524,9 @@ void SalGraphics::CopyBits( const SalTwoRect* pPosAry,
                           pPosAry->mnDestY + pPosAry->mnDestHeight
                        );
 
-                // NOTE: it is a good practice to check rectangle bounds before proceeding
+                GetPortBounds( pSrcGraphics->maGraphicsData.mpCGrafPort, &aPortBoundsRect );
+
+                CheckRects( &aSrcRect, &aDstRect, &aPortBoundsRect );
 
                 if ( maGraphicsData.mnPenMode == patCopy )
                 {
@@ -570,7 +607,7 @@ void SalGraphics::DrawMask( const SalTwoRect* pPosAry,
                             const SalBitmap& rSalBitmap,
                             SalColor nMaskColor )
 {
-}
+} // SalGraphics::DrawMask
 
 // -----------------------------------------------------------------------
 
