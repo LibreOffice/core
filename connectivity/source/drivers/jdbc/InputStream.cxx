@@ -2,9 +2,9 @@
  *
  *  $RCSfile: InputStream.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-31 08:29:15 $
+ *  last change: $Author: oj $ $Date: 2002-03-18 14:21:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,6 +160,8 @@ void SAL_CALL java_io_InputStream::closeInput(  ) throw(::com::sun::star::io::No
 // -----------------------------------------------------
 sal_Int32 SAL_CALL java_io_InputStream::readBytes( ::com::sun::star::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead ) throw(::com::sun::star::io::NotConnectedException, ::com::sun::star::io::BufferSizeExceededException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException)
 {
+    if ( aData.getLength() < nBytesToRead )
+        throw ::com::sun::star::io::BufferSizeExceededException();
     jint out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment gelöscht worden!");
     if( t.pEnv )
