@@ -396,7 +396,7 @@ End
 File gid_File_Share_Xdg_Printeradmin
     TXT_FILE_BODY;
     Dir = gid_Dir_Share_Xdg;
-    Styles = (PACKED);
+    Styles = (PACKED,SCPZIP_REPLACE);
     Name = "printeradmin.desktop";
 End
 
@@ -527,7 +527,7 @@ End
 File gid_File_Share_Xdg_Base
     TXT_FILE_BODY;
     Dir = gid_Dir_Share_Xdg;
-    Styles = (PACKED);
+    Styles = (PACKED,SCPZIP_REPLACE);
     Name = "base.desktop";
 End
 
