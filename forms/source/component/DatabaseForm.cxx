@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseForm.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-31 16:03:14 $
+ *  last change: $Author: fs $ $Date: 2000-11-06 11:22:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,9 +83,6 @@
 #endif
 #ifndef _COM_SUN_STAR_UTIL_XCANCELLABLE_HPP_
 #include <com/sun/star/util/XCancellable.hpp>
-#endif
-#ifndef _COM_SUN_STAR_DATA_DATABASECURSORTYPE_HPP_
-#include <com/sun/star/data/DatabaseCursorType.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SDBC_RESULTSETTYPE_HPP_
 #include <com/sun/star/sdbc/ResultSetType.hpp>
@@ -233,6 +230,25 @@
 #ifndef _RTL_TENCINFO_H
 #include <rtl/tencinfo.h>
 #endif
+
+// compatiblity: DatabaseCursorType is dead, but for compatiblity reasons we still have to write it ...
+namespace com {
+namespace sun {
+namespace star {
+namespace data {
+
+enum DatabaseCursorType
+{
+    DatabaseCursorType_FORWARD = 0,
+    DatabaseCursorType_SNAPSHOT = 1,
+    DatabaseCursorType_KEYSET = 2,
+    DatabaseCursorType_DYNAMIC = 3,
+    DatabaseCursorType_MAKE_FIXED_SIZE = SAL_MAX_ENUM
+};
+
+} } } }
+
+
 #ifndef _COMPHELPER_INTERACTION_HXX_
 #include <comphelper/interaction.hxx>
 #endif
