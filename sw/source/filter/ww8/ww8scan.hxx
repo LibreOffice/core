@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: cmc $ $Date: 2001-07-13 14:08:12 $
+ *  last change: $Author: cmc $ $Date: 2001-08-07 10:54:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -700,6 +700,7 @@ struct WW8PLCFxDesc
     long nStartPos;
     long nEndPos;
 
+    long nOrigStartPos;
     long nOrigEndPos;   // The ending character position of a paragraph is
                         // always one before the end reported in the FKP,
                         // also a character run that ends on the same location
@@ -1596,12 +1597,15 @@ public:
 /*************************************************************************
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8scan.hxx,v 1.15 2001-07-13 14:08:12 cmc Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/ww8/ww8scan.hxx,v 1.16 2001-08-07 10:54:27 cmc Exp $
 
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.15  2001/07/13 14:08:12  cmc
+      #89125# WW6 Redline authorname table import fix ( + new undocumented sprms)
+
       Revision 1.14  2001/07/10 09:31:26  cmc
       #89439# calculate style's even-byte offset relative to style start, not absolute
 

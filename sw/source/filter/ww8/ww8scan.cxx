@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8scan.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: jp $ $Date: 2001-08-07 10:21:30 $
+ *  last change: $Author: cmc $ $Date: 2001-08-07 10:54:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3305,6 +3305,7 @@ void WW8PLCFMan::AdjustEnds( WW8PLCFxDesc& rDesc )
     //Store old end position for supercool new property finder that uses
     //cp instead of fc's as nature intended
     rDesc.nOrigEndPos = rDesc.nEndPos;
+    rDesc.nOrigStartPos = rDesc.nStartPos;
     if (GetDoingDrawTextBox())
         return;
 
@@ -4077,7 +4078,7 @@ void WW8PLCFxDesc::Save( WW8PLCFxSave1& rSave ) const
         if( pPLCFx->IsSprm() )
         {
             WW8PLCFxDesc aD;
-            aD.nStartPos = nStartPos;
+            aD.nStartPos = nOrigStartPos;
             pPLCFx->GetSprms( &aD );
             rSave.nStartCp = aD.nStartPos;
             rSave.nPLCFxMemOfs = pMemPos - aD.pMemPos;
