@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testconv.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-23 16:15:23 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 18:59:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,7 @@
  *
  ************************************************************************/
 
+#include <sal/main.h>
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 #include <cppuhelper/servicefactory.hxx>
@@ -471,7 +472,7 @@ static sal_Int32 initBlocks( ConvBlock * pTestBlocks )
     aVal <<= (sal_Int32)( 0xffffffff ); // is -1
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 0, 0, 0 );
                                          // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
-    aVal <<= (sal_Int32)( -(sal_Int32)0x80000000 );
+    aVal <<= (sal_Int32)( -0x80000000 );
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0 );
                                          // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
     aVal <<= (sal_Int32)( 0x7fffffff );
@@ -553,7 +554,7 @@ static sal_Int32 initBlocks( ConvBlock * pTestBlocks )
     aVal <<= OUString::createFromAscii( "0x100000000" );
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 );
 #ifndef OS2
-    aVal <<= (double)( 0x100000000 );
+    aVal <<= (double)( SAL_CONST_INT64(0x100000000) );
     pTestBlocks[nElems++] = ConvBlock( aVal, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0 );
 #endif
                                          // st,do,fl,u3,i3,u1,i1,by,bo,ch,tc,si,sa
@@ -691,20 +692,19 @@ static void test_Conversion( const Reference< XMultiServiceFactory > & xMgr )
                                   ::getCppuType( (const Reference< XServiceInfo > *)0 ) );
     aRet = xConverter->convertTo( aRet, ::getCppuType( (const Reference< XMultiServiceFactory > *)0 ) );
     aRet = xConverter->convertTo( aRet, ::getCppuType( (const Reference< XServiceInfo > *)0 ) );
-    aRet <<= (sal_Int64)0x7fffffffffffffff;
+    aRet <<= SAL_CONST_INT64(0x7fffffffffffffff);
     aRet = xConverter->convertTo( aRet, ::getCppuType( (const sal_uInt64 *)0 ) );
-    OSL_ASSERT( *(const sal_uInt64 *)aRet.getValue() == (sal_uInt64)0x7fffffffffffffff );
-    aRet <<= (sal_uInt64)0xffffffffffffffff;
+    OSL_ASSERT( *(const sal_uInt64 *)aRet.getValue() == SAL_CONST_UINT64(0x7fffffffffffffff) );
+    aRet <<= SAL_CONST_UINT64(0xffffffffffffffff);
     aRet = xConverter->convertTo( aRet, ::getCppuType( (const sal_uInt64 *)0 ) );
-    OSL_ASSERT( *(const sal_uInt64 *)aRet.getValue() == (sal_uInt64)0xffffffffffffffff );
-    aRet <<= (sal_Int64)0xffffffffffffffff;
+    OSL_ASSERT( *(const sal_uInt64 *)aRet.getValue() == SAL_CONST_UINT64(0xffffffffffffffff) );
+    aRet <<= SAL_CONST_INT64(-1);
     aRet = xConverter->convertTo( aRet, ::getCppuType( (const sal_Int8 *)0 ) );
     OSL_ASSERT( *(const sal_Int8 *)aRet.getValue() == (-1) );
     printf( "test_Conversion(): end.\n" );
 }
 
-
-int SAL_CALL main( int argc, char * argv[] )
+SAL_IMPLEMENT_MAIN()
 {
     Reference< XMultiServiceFactory > xMgr( createRegistryServiceFactory( OUString::createFromAscii("stoctest.rdb") ) );
 
