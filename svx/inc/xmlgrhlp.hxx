@@ -2,7 +2,7 @@
  *
  *  $RCSfile: xmlgrhlp.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
  *  last change: $Author: ka $
  *
@@ -62,8 +62,8 @@
 #ifndef _XMLGRHLP_HXX
 #define _XMLGRHLP_HXX
 
-#ifndef _CPPUHELPER_COMPBASE1_HXX_
-#include <cppuhelper/compbase1.hxx>
+#ifndef _CPPUHELPER_COMPBASE2_HXX_
+#include <cppuhelper/compbase2.hxx>
 #endif
 #ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
@@ -90,6 +90,9 @@
 #ifndef _COM_SUN_STAR_DOCUMENT_XGRAPHICOBJECTRESOLVER_HPP_
 #include <com/sun/star/document/XGraphicObjectResolver.hpp>
 #endif
+#ifndef _COM_SUN_STAR_DOCUMENT_XBINARYSTREAMRESOLVER_HPP_
+#include <com/sun/star/document/XBinaryStreamResolver.hpp>
+#endif
 
 // ----------------------
 // - SvXMLGraphicHelper -
@@ -107,14 +110,16 @@ enum SvXMLGraphicHelperMode
 
 class SotStorage;
 
-class SvXMLGraphicHelper : public ::cppu::WeakComponentImplHelper1< ::com::sun::star::document::XGraphicObjectResolver >
+class SvXMLGraphicHelper : public ::cppu::WeakComponentImplHelper2< ::com::sun::star::document::XGraphicObjectResolver,
+                                                                    ::com::sun::star::document::XBinaryStreamResolver >
 {
 private:
 
-    typedef ::_STL::pair< ::rtl::OUString, ::rtl::OUString >    URLPair;
-    typedef ::_STL::vector< URLPair >                           URLPairVector;
-    typedef ::_STL::vector< GraphicObject >                     GraphicObjectVector;
-    typedef ::_STL::set< ::rtl::OUString >                      URLSet;
+    typedef ::std::pair< ::rtl::OUString, ::rtl::OUString >                                             URLPair;
+    typedef ::std::vector< URLPair >                                                                    URLPairVector;
+    typedef ::std::vector< GraphicObject >                                                              GraphicObjectVector;
+    typedef ::std::set< ::rtl::OUString >                                                               URLSet;
+    typedef ::std::vector< ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > >    GraphicOutputStreamVector;
 
     ::osl::Mutex                maMutex;
     SotStorage*                 mpRootStorage;
@@ -122,11 +127,10 @@ private:
     ::rtl::OUString             maCurStorageName;
     URLPairVector               maGrfURLs;
     GraphicObjectVector         maGrfObjs;
+    GraphicOutputStreamVector   maGrfStms;
     URLSet                      maURLSet;
     SvXMLGraphicHelperMode      meCreateMode;
-    void*                       mpDummy1;
-    void*                       mpDummy2;
-    BOOL                        mbDirect : 1;
+    sal_Bool                    mbDirect;
 
     sal_Bool                    ImplGetStreamNames( const ::rtl::OUString& rURLStr,
                                                     ::rtl::OUString& rPictureStorageName,
@@ -165,6 +169,11 @@ public:
 
     // XGraphicObjectResolver
     virtual ::rtl::OUString SAL_CALL resolveGraphicObjectURL( const ::rtl::OUString& aURL ) throw(::com::sun::star::uno::RuntimeException);
+
+    // XBinaryStreamResolver
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream > SAL_CALL getInputStream( const ::rtl::OUString& rURL ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream > SAL_CALL createOutputStream(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL resolveOutputStream( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XOutputStream >& rxBinaryStream ) throw (::com::sun::star::uno::RuntimeException);
 };
 
 #endif

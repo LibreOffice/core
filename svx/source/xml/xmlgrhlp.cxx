@@ -2,7 +2,7 @@
  *
  *  $RCSfile: xmlgrhlp.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
  *  last change: $Author: ka $
  *
@@ -59,15 +59,12 @@
  *
  ************************************************************************/
 
-#ifndef _DEBUG_HXX
+#include <unotools/ucbstreamhelper.hxx>
+#include <unotools/streamwrap.hxx>
+#include <unotools/tempfile.hxx>
 #include <tools/debug.hxx>
-#endif
-#ifndef _SV_CVTGRF_HXX
 #include <vcl/cvtgrf.hxx>
-#endif
-#ifndef _SV_GFXLINK_HXX
 #include <vcl/gfxlink.hxx>
-#endif
 
 #include "impgrf.hxx"
 #include "xmlgrhlp.hxx"
@@ -78,17 +75,282 @@
 
 using namespace rtl;
 using namespace com::sun::star;
+using namespace com::sun::star::uno;
+using namespace com::sun::star::io;
 
 #define XML_GRAPHICSTORAGE_NAME     "Pictures"
 #define XML_PACKAGE_URL_BASE        "vnd.sun.star.Package:"
 #define XML_GRAPHICOBJECT_URL_BASE  "vnd.sun.star.GraphicObject:"
+
+// ---------------------------
+// - SvXMLGraphicInputStream -
+// ---------------------------
+
+class SvXMLGraphicInputStream : public::cppu::WeakImplHelper1< XInputStream >
+{
+private:
+
+    virtual sal_Int32   SAL_CALL    readBytes( Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead) throw(NotConnectedException, BufferSizeExceededException, RuntimeException);
+    virtual sal_Int32   SAL_CALL    readSomeBytes(Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead) throw(NotConnectedException, BufferSizeExceededException, RuntimeException);
+    virtual void        SAL_CALL    skipBytes(sal_Int32 nBytesToSkip) throw(NotConnectedException, BufferSizeExceededException, RuntimeException);
+    virtual sal_Int32   SAL_CALL    available() throw(NotConnectedException, RuntimeException);
+    virtual void        SAL_CALL    closeInput() throw(NotConnectedException, RuntimeException);
+
+private:
+
+    ::utl::TempFile                 maTmp;
+    Reference< XInputStream >       mxStmWrapper;
+
+                                    // not available
+                                    SvXMLGraphicInputStream();
+                                    SvXMLGraphicInputStream( const SvXMLGraphicInputStream& );
+    SvXMLGraphicInputStream&        operator==( SvXMLGraphicInputStream& );
+
+public:
+
+                                    SvXMLGraphicInputStream( const OUString& rGraphicId );
+    virtual                         ~SvXMLGraphicInputStream();
+
+    sal_Bool                        Exists() const { return mxStmWrapper.is(); }
+};
+
+// -----------------------------------------------------------------------------
+
+SvXMLGraphicInputStream::SvXMLGraphicInputStream( const OUString& rGraphicId )
+{
+    String          aGraphicId( rGraphicId );
+    GraphicObject   aGrfObject( ByteString( aGraphicId, RTL_TEXTENCODING_ASCII_US ) );
+
+    maTmp.EnableKillingFile();
+
+    if( aGrfObject.GetType() != GRAPHIC_NONE )
+    {
+        SvStream* pStm = ::utl::UcbStreamHelper::CreateStream( maTmp.GetURL(), STREAM_WRITE | STREAM_TRUNC );
+
+        if( pStm )
+        {
+            Graphic         aGraphic( (Graphic&) aGrfObject.GetGraphic() );
+            const GfxLink   aGfxLink( aGraphic.GetLink() );
+            sal_Bool        bRet = sal_False;
+
+            if( aGfxLink.GetDataSize() )
+            {
+                pStm->Write( aGfxLink.GetData(), aGfxLink.GetDataSize() );
+                bRet = ( pStm->GetError() == 0 );
+            }
+            else
+            {
+                if( aGraphic.GetType() == GRAPHIC_BITMAP )
+                {
+                    GraphicFilter*  pFilter = GetGrfFilter();
+                    String          aFormat;
+
+                    if( aGraphic.IsAnimated() )
+                        aFormat = String( RTL_CONSTASCII_USTRINGPARAM( "gif" ) );
+                    else
+                        aFormat = String( RTL_CONSTASCII_USTRINGPARAM( "png" ) );
+
+                    bRet = ( pFilter->ExportGraphic( aGraphic, String(), *pStm, pFilter->GetExportFormatNumberForShortName( aFormat ) ) == 0 );
+                }
+                else if( aGraphic.GetType() == GRAPHIC_GDIMETAFILE )
+                {
+                    ( (GDIMetaFile&) aGraphic.GetGDIMetaFile() ).Write( *pStm );
+                    bRet = ( pStm->GetError() == 0 );
+                }
+            }
+
+            if( bRet )
+            {
+                pStm->Seek( 0 );
+                mxStmWrapper = new ::utl::OInputStreamWrapper( pStm, sal_True );
+            }
+            else
+                delete pStm;
+        }
+    }
+}
+
+// -----------------------------------------------------------------------------
+
+SvXMLGraphicInputStream::~SvXMLGraphicInputStream()
+{
+}
+
+// -----------------------------------------------------------------------------
+
+sal_Int32 SAL_CALL SvXMLGraphicInputStream::readBytes( Sequence< sal_Int8 >& rData, sal_Int32 nBytesToRead )
+    throw( NotConnectedException, BufferSizeExceededException, RuntimeException )
+{
+    if( !mxStmWrapper.is() )
+        throw( NotConnectedException() );
+
+    return mxStmWrapper->readBytes( rData, nBytesToRead );
+}
+
+// -----------------------------------------------------------------------------
+
+sal_Int32 SAL_CALL SvXMLGraphicInputStream::readSomeBytes( Sequence< sal_Int8 >& rData, sal_Int32 nMaxBytesToRead )
+    throw( NotConnectedException, BufferSizeExceededException, RuntimeException )
+{
+    if( !mxStmWrapper.is() )
+        throw( NotConnectedException() );
+
+    return mxStmWrapper->readSomeBytes( rData, nMaxBytesToRead );
+}
+
+// -----------------------------------------------------------------------------
+
+void SAL_CALL SvXMLGraphicInputStream::skipBytes( sal_Int32 nBytesToSkip )
+    throw( NotConnectedException, BufferSizeExceededException, RuntimeException )
+{
+    if( !mxStmWrapper.is() )
+        throw( NotConnectedException() );
+
+    mxStmWrapper->skipBytes( nBytesToSkip );
+}
+
+// -----------------------------------------------------------------------------
+
+sal_Int32 SAL_CALL SvXMLGraphicInputStream::available() throw( NotConnectedException, RuntimeException )
+{
+    if( !mxStmWrapper.is() )
+        throw( NotConnectedException() );
+
+    return mxStmWrapper->available();
+}
+
+// -----------------------------------------------------------------------------
+
+void SAL_CALL SvXMLGraphicInputStream::closeInput() throw( NotConnectedException, RuntimeException )
+{
+    if( !mxStmWrapper.is() )
+        throw( NotConnectedException() );
+
+    mxStmWrapper->closeInput();
+}
+
+// ----------------------------
+// - SvXMLGraphicOutputStream -
+// ----------------------------
+
+class SvXMLGraphicOutputStream : public::cppu::WeakImplHelper1< XOutputStream >
+{
+private:
+
+    // XOutputStream
+    virtual void SAL_CALL           writeBytes( const Sequence< sal_Int8 >& rData ) throw( NotConnectedException, BufferSizeExceededException, IOException, RuntimeException );
+    virtual void SAL_CALL           flush() throw( NotConnectedException, BufferSizeExceededException, IOException, RuntimeException );
+    virtual void SAL_CALL           closeOutput() throw( NotConnectedException, BufferSizeExceededException, IOException, RuntimeException );
+
+private:
+
+    ::utl::TempFile*                mpTmp;
+    SvStream*                       mpOStm;
+    Reference< XOutputStream >      mxStmWrapper;
+    GraphicObject                   maGrfObj;
+    sal_Bool                        mbClosed;
+
+                                    // not available
+                                    SvXMLGraphicOutputStream( const SvXMLGraphicOutputStream& );
+    SvXMLGraphicOutputStream&       operator==( SvXMLGraphicOutputStream& );
+
+public:
+
+                                    SvXMLGraphicOutputStream();
+    virtual                         ~SvXMLGraphicOutputStream();
+
+    sal_Bool                        Exists() const { return mxStmWrapper.is(); }
+    const GraphicObject&            GetGraphicObject();
+};
+
+// -----------------------------------------------------------------------------
+
+SvXMLGraphicOutputStream::SvXMLGraphicOutputStream() :
+    mpTmp( new ::utl::TempFile ),
+    mbClosed( sal_False )
+{
+    mpTmp->EnableKillingFile();
+
+    mpOStm = ::utl::UcbStreamHelper::CreateStream( mpTmp->GetURL(), STREAM_WRITE | STREAM_TRUNC );
+
+    if( mpOStm )
+        mxStmWrapper = new ::utl::OOutputStreamWrapper( *mpOStm );
+}
+
+// -----------------------------------------------------------------------------
+
+SvXMLGraphicOutputStream::~SvXMLGraphicOutputStream()
+{
+    delete mpTmp;
+    delete mpOStm;
+}
+
+// -----------------------------------------------------------------------------
+
+void SAL_CALL SvXMLGraphicOutputStream::writeBytes( const Sequence< sal_Int8 >& rData )
+    throw( NotConnectedException, BufferSizeExceededException, IOException, RuntimeException )
+{
+    if( !mxStmWrapper.is() )
+        throw( NotConnectedException() );
+
+    mxStmWrapper->writeBytes( rData );
+}
+
+// -----------------------------------------------------------------------------
+
+void SAL_CALL SvXMLGraphicOutputStream::flush()
+    throw( NotConnectedException, BufferSizeExceededException, IOException, RuntimeException )
+{
+    if( !mxStmWrapper.is() )
+        throw( NotConnectedException() );
+
+    mxStmWrapper->flush();
+}
+
+// -----------------------------------------------------------------------------
+
+void SAL_CALL SvXMLGraphicOutputStream::closeOutput()
+    throw( NotConnectedException, BufferSizeExceededException, IOException, RuntimeException )
+{
+    if( !mxStmWrapper.is() )
+        throw( NotConnectedException() );
+
+    mxStmWrapper->closeOutput();
+    mxStmWrapper = Reference< XOutputStream >();
+
+    mbClosed = sal_True;
+}
+
+// ------------------------------------------------------------------------------
+
+const GraphicObject& SvXMLGraphicOutputStream::GetGraphicObject()
+{
+    if( mbClosed && ( maGrfObj.GetType() == GRAPHIC_NONE ) && mpOStm )
+    {
+        Graphic aGraphic;
+
+        mpOStm->Seek( 0 );
+        GetGrfFilter()->ImportGraphic( aGraphic, String(), *mpOStm );
+
+        maGrfObj = aGraphic;
+
+        if( maGrfObj.GetType() != GRAPHIC_NONE )
+        {
+            delete mpOStm, mpOStm = NULL;
+            delete mpTmp, mpTmp = NULL;
+        }
+    }
+
+    return maGrfObj;
+}
 
 // ----------------------
 // - SvXMLGraphicHelper -
 // ----------------------
 
 SvXMLGraphicHelper::SvXMLGraphicHelper() :
-    ::cppu::WeakComponentImplHelper1< ::com::sun::star::document::XGraphicObjectResolver >( maMutex )
+    ::cppu::WeakComponentImplHelper2< ::com::sun::star::document::XGraphicObjectResolver,
+                                      ::com::sun::star::document::XBinaryStreamResolver >( maMutex )
 {
 }
 
@@ -463,13 +725,91 @@ void SvXMLGraphicHelper::Flush()
 
 }
 
+// -----------------------------------------------------------------------------
+
 // XGraphicObjectResolver
 OUString SAL_CALL SvXMLGraphicHelper::resolveGraphicObjectURL( const OUString& aURL )
     throw(uno::RuntimeException)
 {
-    ::osl::MutexGuard           aGuard( maMutex );
-    const sal_Int32 nIndex = maGrfURLs.size();
+    ::osl::MutexGuard   aGuard( maMutex );
+    const sal_Int32     nIndex = maGrfURLs.size();
+
     maGrfURLs.push_back( ::_STL::make_pair( aURL, ::rtl::OUString() ) );
     ImplInsertGraphicURL( aURL, nIndex );
+
     return maGrfURLs[ nIndex ].second;
+}
+
+// -----------------------------------------------------------------------------
+
+// XBinaryStreamResolver
+Reference< XInputStream > SAL_CALL SvXMLGraphicHelper::getInputStream( const OUString& rURL )
+    throw( RuntimeException )
+{
+    Reference< XInputStream >   xRet;
+    OUString                    aPictureStorageName, aGraphicId;
+
+
+    if( ( GRAPHICHELPER_MODE_WRITE == meCreateMode ) &&
+        ImplGetStreamNames( rURL, aPictureStorageName, aGraphicId ) )
+    {
+        SvXMLGraphicInputStream* pInputStream = new SvXMLGraphicInputStream( aGraphicId );
+
+        if( pInputStream->Exists() )
+            xRet = pInputStream;
+        else
+            delete pInputStream;
+    }
+
+    return xRet;
+}
+
+// -----------------------------------------------------------------------------
+
+Reference< XOutputStream > SAL_CALL SvXMLGraphicHelper::createOutputStream()
+    throw( RuntimeException )
+{
+    Reference< XOutputStream > xRet;
+
+    if( GRAPHICHELPER_MODE_READ == meCreateMode )
+    {
+        SvXMLGraphicOutputStream* pOutputStream = new SvXMLGraphicOutputStream;
+
+        if( pOutputStream->Exists() )
+            maGrfStms.push_back( xRet = pOutputStream );
+        else
+            delete pOutputStream;
+    }
+
+    return xRet;
+}
+
+// -----------------------------------------------------------------------------
+
+OUString SAL_CALL SvXMLGraphicHelper::resolveOutputStream( const Reference< XOutputStream >& rxBinaryStream )
+    throw( RuntimeException )
+{
+    OUString aRet;
+
+    if( ( GRAPHICHELPER_MODE_READ == meCreateMode ) && rxBinaryStream.is() )
+    {
+        if( ::std::find( maGrfStms.begin(), maGrfStms.end(), rxBinaryStream ) != maGrfStms.end() )
+        {
+            SvXMLGraphicOutputStream* pOStm = static_cast< SvXMLGraphicOutputStream* >( rxBinaryStream.get() );
+
+            if( pOStm )
+            {
+                const GraphicObject&    rGrfObj = pOStm->GetGraphicObject();
+                const OUString          aId( OUString::createFromAscii( rGrfObj.GetUniqueID().GetBuffer() ) );
+
+                if( aId.getLength() )
+                {
+                    aRet = OUString::createFromAscii( XML_GRAPHICOBJECT_URL_BASE );
+                    aRet += aId;
+                }
+            }
+        }
+    }
+
+    return aRet;
 }
