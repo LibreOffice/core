@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configpath.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mh $ $Date: 2001-02-02 18:06:26 $
+ *  last change: $Author: jb $ $Date: 2001-02-13 16:09:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,6 +181,9 @@ namespace configmgr
             /// build the path that results from appending <var>aRelativePath</var> to this
             PathRep compose(PathRep const& aRelativePath) const;
 
+            /// construct a path by appending <var>aName</var>
+            PathRep child(Name const& aName) const;
+
             /// build the path that results from dropping the last component off this
             PathRep parent() const;
 
@@ -260,6 +263,9 @@ namespace configmgr
             /// build the Path that results from appending <var>aPath</var> to this
             RelativePath compose(RelativePath const& aPath) const;
 
+            /// construct a path to the child of this path named by <var>aName</var>
+            RelativePath child(Name const& aName) const;
+
             /// build the path that results from dropping the last component off this
             RelativePath parent() const;
 
@@ -338,6 +344,9 @@ namespace configmgr
 
             /// build the absolute path that results from appending <var>aPath</var> to this
             AbsolutePath compose(RelativePath const& aPath) const;
+
+            /// construct a path to the child of this path named by <var>aName</var>
+            AbsolutePath child(Name const& aName) const;
 
             /// build the path that results from dropping the last component off this
             AbsolutePath parent() const;
@@ -426,6 +435,9 @@ namespace configmgr
 
             /// build the path (of the same type as this) that results from appending <var>aPath</var> to this
             Path compose(RelativePath const& aPath) const;
+
+            /// construct a path to the child of this path named by <var>aName</var>
+            Path child(Name const& aName) const;
 
             /// build the path that results from dropping the last component off this
             Path parent() const;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configpath.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-24 10:14:25 $
+ *  last change: $Author: jb $ $Date: 2001-02-13 16:09:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,7 +234,7 @@ PathRep PathRep::compose(PathRep const& aRelativePath) const
 {
     Components aResult( components() );
     aResult.insert(aResult.end(), aRelativePath.begin(), aRelativePath.end());
-    return (PathRep) aResult;
+    return PathRep( aResult );
 }
 //-----------------------------------------------------------------------------
 
@@ -247,6 +247,15 @@ Name PathRep::getLocalName() const
 }
 
 //-----------------------------------------------------------------------------
+
+PathRep PathRep::child(Name const& aChild) const
+{
+    Components aResult( components() );
+    aResult.push_back(aChild);
+    return PathRep( aResult );
+}
+//-----------------------------------------------------------------------------
+
 PathRep PathRep::parent() const
 {
     Components aResult( components() );
@@ -255,7 +264,7 @@ PathRep PathRep::parent() const
         throw InvalidName(OUString(RTL_CONSTASCII_USTRINGPARAM("<empty>")), " - is empty. Cannot construct parent path");
 
     aResult.pop_back();
-    return (PathRep) aResult;
+    return PathRep( aResult );
 }
 //-----------------------------------------------------------------------------
 
@@ -400,6 +409,12 @@ RelativePath RelativePath::compose(RelativePath const& aPath) const
 }
 //-----------------------------------------------------------------------------
 
+RelativePath RelativePath::child(Name const& aChild) const
+{
+    return RelativePath( m_aRep.child(aChild) );
+}
+//-----------------------------------------------------------------------------
+
 RelativePath RelativePath::parent() const
 {
     return RelativePath( m_aRep.parent() );
@@ -450,6 +465,12 @@ AbsolutePath AbsolutePath::detachedRoot()
 AbsolutePath AbsolutePath::compose(RelativePath const& aPath) const
 {
     return AbsolutePath( m_aRep.compose(aPath.rep()));
+}
+//-----------------------------------------------------------------------------
+
+AbsolutePath AbsolutePath::child(Name const& aChild) const
+{
+    return AbsolutePath( m_aRep.child(aChild) );
 }
 //-----------------------------------------------------------------------------
 
@@ -539,6 +560,12 @@ Path::Path(RelativePath const& aPath)
 Path Path::compose(RelativePath const& aPath) const
 {
     return Path( m_aRep.compose(aPath.rep()), m_eType);
+}
+//-----------------------------------------------------------------------------
+
+Path Path::child(Name const& aChild) const
+{
+    return Path( m_aRep.child(aChild), m_eType );
 }
 //-----------------------------------------------------------------------------
 
