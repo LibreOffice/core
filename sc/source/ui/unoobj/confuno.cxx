@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confuno.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-04 10:20:40 $
+ *  last change: $Author: sab $ $Date: 2001-05-11 18:58:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,10 +234,8 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
                 if ( aValue >>= aSequence )
                 {
                     sal_uInt32 nSize = aSequence.getLength();
-                    SvMemoryStream aStream;
-                    aStream.Write ( aSequence.getArray(), nSize );
-                    aStream.Flush();
-                    aStream.Seek(STREAM_SEEK_TO_BEGIN);
+                    SvMemoryStream aStream (aSequence.getArray(), nSize, STREAM_READ );
+                    aStream.Seek ( STREAM_SEEK_TO_BEGIN );
                     SfxItemSet* pSet = new SfxItemSet( *pDoc->GetPool(),
                             SID_PRINTER_NOTFOUND_WARN, SID_PRINTER_NOTFOUND_WARN,
                             SID_PRINTER_CHANGESTODOC,  SID_PRINTER_CHANGESTODOC,
@@ -333,9 +331,11 @@ uno::Any SAL_CALL ScDocumentConfiguration::getPropertyValue( const rtl::OUString
                 {
                     SvMemoryStream aStream;
                     pPrinter->Store( aStream );
-                    sal_uInt32 nSize = aStream.GetSize();
-                    uno::Sequence < sal_Int8 > aSequence ( nSize );
-                    memcpy ( aSequence.getArray(), aStream.GetData(), nSize );
+                    aStream.Seek ( STREAM_SEEK_TO_END );
+                    sal_uInt32 nSize = aStream.Tell();
+                    aStream.Seek ( STREAM_SEEK_TO_BEGIN );
+                    uno::Sequence < sal_Int8 > aSequence( nSize );
+                    aStream.Read ( aSequence.getArray(), nSize );
                     aRet <<= aSequence;
                 }
             }
