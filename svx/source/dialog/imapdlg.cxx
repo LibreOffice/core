@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imapdlg.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ka $ $Date: 2002-03-20 11:31:18 $
+ *  last change: $Author: cl $ $Date: 2002-04-09 07:21:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,9 +96,6 @@
 #endif
 #ifndef INCLUDED_SVTOOLS_PATHOPTIONS_HXX
 #include <svtools/pathoptions.hxx>
-#endif
-#ifndef _SVTOOLS_INETTBC_HXX
-#include <svtools/inettbc.hxx>
 #endif
 #ifndef _SFXDISPATCH_HXX
 #include <sfx2/dispatch.hxx>
@@ -250,41 +247,32 @@ SvxIMapDlg::SvxIMapDlg( SfxBindings *pBindings, SfxChildWindow *pCW,
         SfxFloatingWindow   ( pBindings, pCW, pParent, rResId ),
         aIMapItem           ( SID_IMAP_EXEC, *this, *pBindings ),
         pOwnData            ( new IMapOwnData( this ) ),
+
         aTbxIMapDlg1        ( this, SVX_RES( TBX_IMAPDLG1 ) ),
         aStbStatus          ( this, WB_BORDER | WB_3DLOOK | WB_LEFT ),
         pIMapWnd            ( new IMapWindow( this, SVX_RES( RID_SVXCTL_IMAP ) ) ),
         pCheckObj           ( NULL ),
         aFtURL              ( this, SVX_RES( FT_URL ) ),
         aFtText             ( this, SVX_RES( FT_TEXT ) ),
-        aCbbURL             ( this, SVX_RES( CBB_URL ) ),
-        aEdtText            ( this, SVX_RES( EDT_TEXT ) )
+        maURLBox            ( this, SVX_RES( CBB_URL ), INET_PROT_NOT_VALID ),
+        aEdtText            ( this, SVX_RES( EDT_TEXT ) ),
+        maFtTarget          ( this, SVX_RES( RID_SVXCTL_FT_TARGET ) ),
+        maCbbTarget         ( this, SVX_RES( RID_SVXCTL_CBB_TARGET ) )
 {
     FreeResource();
 
-    // nur temporaer bis Vollupdate
-    pOwnData->pURLBox = new SvtURLBox( this );
-    pOwnData->pURLBox->SetPosSizePixel( aCbbURL.GetPosPixel(), aCbbURL.GetSizePixel() );
-    aCbbURL.Hide();
-    pOwnData->pURLBox->Show();
-
-    // nur temporaer bis Vollupdate
-    pOwnData->pFtTarget = new FixedText( this, SVX_RES( RID_SVXCTL_FT_TARGET ) );
-    pOwnData->pFtTarget->Show();
-
-    // nur temporaer bis Vollupdate
-    pOwnData->pCbbTarget = new ComboBox( this, SVX_RES( RID_SVXCTL_CBB_TARGET ) );
-    pOwnData->pCbbTarget->Show();
+    maURLBox.DisableHistory();
 
     pIMapWnd->SetInfoLink( LINK( this, SvxIMapDlg, InfoHdl ) );
     pIMapWnd->SetMousePosLink( LINK( this, SvxIMapDlg, MousePosHdl ) );
     pIMapWnd->SetGraphSizeLink( LINK( this, SvxIMapDlg, GraphSizeHdl ) );
     pIMapWnd->SetUpdateLink( LINK( this, SvxIMapDlg, StateHdl ) );
 
-    pOwnData->pURLBox->SetModifyHdl( LINK( this, SvxIMapDlg, URLModifyHdl ) );
-    pOwnData->pURLBox->SetSelectHdl( LINK( this, SvxIMapDlg, URLModifyHdl ) );
-    pOwnData->pURLBox->SetLoseFocusHdl( LINK( this, SvxIMapDlg, URLLoseFocusHdl ) );
+    maURLBox.SetModifyHdl( LINK( this, SvxIMapDlg, URLModifyHdl ) );
+    maURLBox.SetSelectHdl( LINK( this, SvxIMapDlg, URLModifyHdl ) );
+    maURLBox.SetLoseFocusHdl( LINK( this, SvxIMapDlg, URLLoseFocusHdl ) );
     aEdtText.SetModifyHdl( LINK( this, SvxIMapDlg, URLModifyHdl ) );
-    pOwnData->pCbbTarget->SetLoseFocusHdl( LINK( this, SvxIMapDlg, URLLoseFocusHdl ) );
+    maCbbTarget.SetLoseFocusHdl( LINK( this, SvxIMapDlg, URLLoseFocusHdl ) );
 
     aTbxIMapDlg1.SetSizePixel( aTbxIMapDlg1.CalcWindowSizePixel() );
     aTbxIMapDlg1.SetSelectHdl( LINK( this, SvxIMapDlg, TbxClickHdl ) );
@@ -298,11 +286,11 @@ SvxIMapDlg::SvxIMapDlg( SfxBindings *pBindings, SfxChildWindow *pCW,
     aStbStatus.InsertItem( 3, 10 + GetTextWidth( DEFINE_CONST_UNICODE( " 9999,99 cm x 9999,99 cm ") ), SIB_CENTER | SIB_IN );
 
     aFtURL.Disable();
-    pOwnData->pURLBox->Disable();
+    maURLBox.Disable();
     aFtText.Disable();
     aEdtText.Disable();
-    pOwnData->pFtTarget->Disable();
-    pOwnData->pCbbTarget->Disable();
+    maFtTarget.Disable();
+    maCbbTarget.Disable();
     pOwnData->bExecState = FALSE;
 
     Resize();
@@ -325,9 +313,6 @@ SvxIMapDlg::SvxIMapDlg( SfxBindings *pBindings, SfxChildWindow *pCW,
 SvxIMapDlg::~SvxIMapDlg()
 {
     // URL-Liste loeschen
-    delete pOwnData->pURLBox;
-    delete pOwnData->pCbbTarget;
-    delete pOwnData->pFtTarget;
     delete pIMapWnd;
     delete pOwnData;
 }
@@ -466,10 +451,10 @@ void SvxIMapDlg::SetTargetList( const TargetList& rTargetList )
 
     pIMapWnd->SetTargetList( aNewList );
 
-    pOwnData->pCbbTarget->Clear();
+    maCbbTarget.Clear();
 
     for( String* pStr = aNewList.First(); pStr; pStr = aNewList.Next() )
-        pOwnData->pCbbTarget->InsertEntry( *pStr );
+        maCbbTarget.InsertEntry( *pStr );
 }
 
 
@@ -526,6 +511,11 @@ void SvxIMapDlg::Update( const Graphic& rGraphic, const ImageMap* pImageMap,
 }
 
 
+void SvxIMapDlg::KeyInput( const KeyEvent& rKEvt )
+{
+        SfxFloatingWindow::KeyInput( rKEvt );
+}
+
 /*************************************************************************
 |*
 |* Click-Hdl fuer ToolBox
@@ -558,6 +548,8 @@ IMPL_LINK( SvxIMapDlg, TbxClickHdl, ToolBox*, pTbx )
         {
             pTbx->CheckItem( nNewItemId, TRUE );
             pIMapWnd->SetEditMode( TRUE );
+            if( pTbx->IsKeyEvent() && ((pTbx->GetKeyModifier() & KEY_MOD1) != 0) )
+                pIMapWnd->SelectFirstObject();
         }
         break;
 
@@ -565,6 +557,8 @@ IMPL_LINK( SvxIMapDlg, TbxClickHdl, ToolBox*, pTbx )
         {
             pTbx->CheckItem( nNewItemId, TRUE );
             pIMapWnd->SetObjKind( OBJ_RECT );
+            if( pTbx->IsKeyEvent() && ((pTbx->GetKeyModifier() & KEY_MOD1) != 0) )
+                pIMapWnd->CreateDefaultObject();
         }
         break;
 
@@ -572,6 +566,8 @@ IMPL_LINK( SvxIMapDlg, TbxClickHdl, ToolBox*, pTbx )
         {
             pTbx->CheckItem( nNewItemId, TRUE );
             pIMapWnd->SetObjKind( OBJ_CIRC );
+            if( pTbx->IsKeyEvent() && ((pTbx->GetKeyModifier() & KEY_MOD1) != 0) )
+                pIMapWnd->CreateDefaultObject();
         }
         break;
 
@@ -579,6 +575,8 @@ IMPL_LINK( SvxIMapDlg, TbxClickHdl, ToolBox*, pTbx )
         {
             pTbx->CheckItem( nNewItemId, TRUE );
             pIMapWnd->SetObjKind( OBJ_POLY );
+            if( pTbx->IsKeyEvent() && ((pTbx->GetKeyModifier() & KEY_MOD1) != 0) )
+                pIMapWnd->CreateDefaultObject();
         }
         break;
 
@@ -586,6 +584,8 @@ IMPL_LINK( SvxIMapDlg, TbxClickHdl, ToolBox*, pTbx )
         {
             pTbx->CheckItem( nNewItemId, TRUE );
             pIMapWnd->SetObjKind( OBJ_FREEFILL );
+            if( pTbx->IsKeyEvent() && ((pTbx->GetKeyModifier() & KEY_MOD1) != 0) )
+                pIMapWnd->CreateDefaultObject();
         }
         break;
 
@@ -608,6 +608,8 @@ IMPL_LINK( SvxIMapDlg, TbxClickHdl, ToolBox*, pTbx )
 
         case( TBI_POLYEDIT ):
             pIMapWnd->SetPolyEditMode( pTbx->IsItemChecked( TBI_POLYEDIT ) ? SID_BEZIER_MOVE : 0 );
+            if( pTbx->IsKeyEvent() && ((pTbx->GetKeyModifier() & KEY_MOD1) != 0) )
+                pIMapWnd->SelectFirstObject();
         break;
 
         case( TBI_POLYMOVE ):
@@ -781,16 +783,16 @@ IMPL_LINK( SvxIMapDlg, InfoHdl, IMapWindow*, pWnd )
 
     if ( rInfo.bNewObj )
     {
-        if( rInfo.aMarkURL.Len() && ( pOwnData->pURLBox->GetEntryPos( rInfo.aMarkURL ) == LISTBOX_ENTRY_NOTFOUND ) )
-            pOwnData->pURLBox->InsertEntry( rInfo.aMarkURL );
+        if( rInfo.aMarkURL.Len() && ( maURLBox.GetEntryPos( rInfo.aMarkURL ) == LISTBOX_ENTRY_NOTFOUND ) )
+            maURLBox.InsertEntry( rInfo.aMarkURL );
 
-        pOwnData->pURLBox->SetText( rInfo.aMarkURL );
+        maURLBox.SetText( rInfo.aMarkURL );
         aEdtText.SetText( rInfo.aMarkDescription );
 
         if ( !rInfo.aMarkTarget.Len() )
-            pOwnData->pCbbTarget->SetText( DEFINE_CONST_UNICODE( SELF_TARGET ) );
+            maCbbTarget.SetText( DEFINE_CONST_UNICODE( SELF_TARGET ) );
         else
-            pOwnData->pCbbTarget->SetText( rInfo.aMarkTarget );
+            maCbbTarget.SetText( rInfo.aMarkTarget );
     }
 
     if ( !rInfo.bOneMarked )
@@ -802,13 +804,13 @@ IMPL_LINK( SvxIMapDlg, InfoHdl, IMapWindow*, pWnd )
         aStbStatus.SetItemText( 1, aStr );
 
         aFtURL.Disable();
-        pOwnData->pURLBox->Disable();
+        maURLBox.Disable();
         aFtText.Disable();
         aEdtText.Disable();
-        pOwnData->pFtTarget->Disable();
-        pOwnData->pCbbTarget->Disable();
+        maFtTarget.Disable();
+        maCbbTarget.Disable();
 
-        pOwnData->pURLBox->SetText( String() );
+        maURLBox.SetText( String() );
         aEdtText.SetText( String() );
     }
     else
@@ -819,24 +821,24 @@ IMPL_LINK( SvxIMapDlg, InfoHdl, IMapWindow*, pWnd )
         aTbxIMapDlg1.EnableItem( TBI_PROPERTY, TRUE );
 
         aFtURL.Enable();
-        pOwnData->pURLBox->Enable();
+        maURLBox.Enable();
         aFtText.Enable();
         aEdtText.Enable();
-        pOwnData->pFtTarget->Enable();
-        pOwnData->pCbbTarget->Enable();
+        maFtTarget.Enable();
+        maCbbTarget.Enable();
 
         aStbStatus.SetItemText( 1, rInfo.aMarkURL );
 
-        if ( pOwnData->pURLBox->GetText() != rInfo.aMarkURL )
-            pOwnData->pURLBox->SetText( rInfo.aMarkURL );
+        if ( maURLBox.GetText() != rInfo.aMarkURL )
+            maURLBox.SetText( rInfo.aMarkURL );
 
         if ( aEdtText.GetText() != rInfo.aMarkDescription )
             aEdtText.SetText( rInfo.aMarkDescription );
 
         if ( !rInfo.aMarkTarget.Len() )
-            pOwnData->pCbbTarget->SetText( DEFINE_CONST_UNICODE( SELF_TARGET ) );
+            maCbbTarget.SetText( DEFINE_CONST_UNICODE( SELF_TARGET ) );
         else
-            pOwnData->pCbbTarget->SetText(  rInfo.aMarkTarget );
+            maCbbTarget.SetText(  rInfo.aMarkTarget );
     }
 
     return 0;
@@ -898,9 +900,9 @@ IMPL_LINK( SvxIMapDlg, URLModifyHdl, void*, p )
 {
     NotifyInfo  aNewInfo;
 
-    aNewInfo.aMarkURL = pOwnData->pURLBox->GetText();
+    aNewInfo.aMarkURL = maURLBox.GetText();
     aNewInfo.aMarkDescription = aEdtText.GetText();
-    aNewInfo.aMarkTarget = pOwnData->pCbbTarget->GetText();
+    aNewInfo.aMarkTarget = maCbbTarget.GetText();
 
     pIMapWnd->ReplaceActualIMapInfo( aNewInfo );
 
@@ -917,8 +919,8 @@ IMPL_LINK( SvxIMapDlg, URLModifyHdl, void*, p )
 IMPL_LINK( SvxIMapDlg, URLLoseFocusHdl, void*, p )
 {
     NotifyInfo      aNewInfo;
-    const String    aURLText( pOwnData->pURLBox->GetText() );
-    const String    aTargetText( pOwnData->pCbbTarget->GetText() );
+    const String    aURLText( maURLBox.GetText() );
+    const String    aTargetText( maCbbTarget.GetText() );
 
     if ( aURLText.Len() )
     {

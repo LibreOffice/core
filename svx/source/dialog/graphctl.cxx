@@ -2,9 +2,9 @@
  *
  *  $RCSfile: graphctl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: er $ $Date: 2002-01-08 12:23:08 $
+ *  last change: $Author: cl $ $Date: 2002-04-09 07:17:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,10 @@
 #ifndef _SFXITEMPOOL_HXX //autogen
 #include <svtools/itempool.hxx>
 #endif
-#pragma hdrstop
+
+#ifndef _SV_DIALOG_HXX
+#include <vcl/dialog.hxx>
+#endif
 
 #ifndef _SV_WRKWIN_HXX
 #include <vcl/wrkwin.hxx>
@@ -83,7 +86,7 @@
 #endif
 
 #include "graphctl.hxx"
-
+#include "GraphCtlAccessibleContext.hxx"
 #include "xoutbmp.hxx"
 #include "svxids.hrc"
 #include "svdpage.hxx"
@@ -127,7 +130,8 @@ GraphCtrl::GraphCtrl( Window* pParent, const WinBits nWinBits ) :
             eObjKind        ( OBJ_NONE ),
             nPolyEdit       ( 0 ),
             bEditMode       ( FALSE ),
-            bSdrMode        ( FALSE )
+            bSdrMode        ( FALSE ),
+            mpAccContext    ( NULL )
 {
     pUserCall = new GraphCtrlUserCall( *this );
     aUpdateTimer.SetTimeout( 200 );
@@ -154,7 +158,8 @@ GraphCtrl::GraphCtrl( Window* pParent, const ResId& rResId ) :
             bEditMode       ( FALSE ),
             bSdrMode        ( FALSE ),
             bAnim           ( FALSE ),
-            nWinStyle       ( 0 )
+            nWinStyle       ( 0 ),
+            mpAccContext    ( NULL )
 {
     pUserCall = new GraphCtrlUserCall( *this );
     aUpdateTimer.SetTimeout( 500 );
@@ -171,6 +176,11 @@ GraphCtrl::GraphCtrl( Window* pParent, const ResId& rResId ) :
 
 GraphCtrl::~GraphCtrl()
 {
+    if( mpAccContext )
+    {
+        mpAccContext->disposing();
+        mpAccContext->release();
+    }
     delete pView;
     delete pModel;
     delete pUserCall;
@@ -403,21 +413,6 @@ void GraphCtrl::KeyInput( const KeyEvent& rKEvt )
 
     switch ( aCode.GetCode() )
     {
-        case KEY_ESCAPE:
-        {
-            if ( bSdrMode )
-            {
-                if ( pView->IsAction() )
-                {
-                    pView->BrkAction();
-                    bProc = TRUE;
-                }
-                else
-                    pView->UnmarkAll();
-            }
-        }
-        break;
-
         case KEY_DELETE:
         case KEY_BACKSPACE:
         {
@@ -429,16 +424,295 @@ void GraphCtrl::KeyInput( const KeyEvent& rKEvt )
         }
         break;
 
-        case KEY_TAB:
+        case KEY_ESCAPE:
         {
-            if ( !aCode.IsMod1() && !aCode.IsMod2() )
+            if ( bSdrMode )
             {
-                // Wechsel zum naechten Objekt
-                if ( bSdrMode )
+                if ( pView->IsAction() )
                 {
-                    pView->MarkNextObj( !aCode.IsShift() );
+                    pView->BrkAction();
                     bProc = TRUE;
                 }
+                else if ( pView->HasMarkedObj() )
+                {
+                    const SdrHdlList& rHdlList = pView->GetHdlList();
+                    SdrHdl* pHdl = rHdlList.GetFocusHdl();
+
+                    if(pHdl)
+                    {
+                        ((SdrHdlList&)rHdlList).ResetFocusHdl();
+                    }
+                    else
+                    {
+                        pView->UnmarkAll();
+                        ((Dialog*)GetParent())->GrabFocusToFirstControl();
+                    }
+
+                    bProc = true;
+                }
+            }
+        }
+        break;
+
+        case KEY_F11:
+        case KEY_TAB:
+        {
+            if( bSdrMode )
+            {
+                if( !aCode.IsMod1() && !aCode.IsMod2() )
+                {
+                    bool bForward = !aCode.IsShift();
+                    // select next object
+                    if( !pView->MarkNextObj( bForward ) )
+                    {
+                        // if we can't select the next object, we give
+                        // the focus to the next or previous ctrl
+
+                        Window* pParent = GetParent();          // this is our parent dialog
+                        Window* pWindow;                        // used for iterations
+                        Window* pFocusWindow = NULL;            // this window will get the focus
+
+                        int nCount = (int)pParent->GetChildCount();
+                        int nChild;
+
+                        // iterate over our parents children to find our own index
+                        for( nChild = 0; nChild < nCount; nChild ++ )
+                        {
+                            pWindow = pParent->GetChild(nChild);
+                            if( pWindow == this || pWindow->IsChild( this ) )
+                                break;
+                        }
+
+                        DBG_ASSERT( nChild < nCount, "Fatal: GraphCtrl is not child of its parent?" );
+
+                        if( nChild < nCount )
+                        {
+                            if( bForward )
+                            {
+                                while( true )
+                                {
+                                    nChild++;
+
+                                    // if where at the end, skip to the first control
+                                    if( nChild >= nCount )
+                                        nChild = 0;
+
+                                    pWindow = pParent->GetChild( nChild );
+
+                                    // since we may skip at the end, we break if we found us again
+                                    if( pWindow == this || pWindow->IsChild( this ) )
+                                        break;
+
+                                    if ( pWindow->IsEnabled() && ((pWindow->GetStyle() & WB_TABSTOP) != 0) )
+                                    {
+                                        pFocusWindow = pWindow;
+                                        break;
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                while( true )
+                                {
+                                    nChild--;
+
+                                    // if where at the begin, skip to the last control
+                                    if( nChild < 0 )
+                                        nChild = nCount - 1;
+
+                                    pWindow = pParent->GetChild( nChild );
+
+                                    // since we may skip at the begin, we break if we found us again
+                                    if( pWindow == this || pWindow->IsChild( this ) )
+                                        break;
+
+                                    if ( pWindow->IsEnabled() && ((pWindow->GetStyle() & WB_TABSTOP) != 0) )
+                                    {
+                                        pFocusWindow = pWindow;
+                                        break;
+                                    }
+                                }
+                            }
+
+                            if( pFocusWindow )
+                            {
+                                        pFocusWindow->GrabFocus();
+                            }
+                        }
+
+                    }
+                    bProc = TRUE;
+                }
+                else if(aCode.IsMod1())
+                {
+                    // select next handle
+                    const SdrHdlList& rHdlList = pView->GetHdlList();
+                    sal_Bool bForward(!aCode.IsShift());
+
+                    ((SdrHdlList&)rHdlList).TravelFocusHdl(bForward);
+
+                    bProc = true;
+                }
+            }
+        }
+        break;
+
+        case KEY_END:
+        {
+
+            if ( aCode.IsMod1() )
+            {
+                // #97016# mark last object
+                pView->UnmarkAllObj();
+                pView->MarkNextObj(FALSE);
+
+                bProc = true;
+            }
+        }
+        break;
+
+        case KEY_HOME:
+        {
+            if ( aCode.IsMod1() )
+            {
+                pView->UnmarkAllObj();
+                pView->MarkNextObj(TRUE);
+
+                bProc = true;
+            }
+        }
+        break;
+
+        case KEY_UP:
+        case KEY_DOWN:
+        case KEY_LEFT:
+        case KEY_RIGHT:
+        {
+            long nX = 0;
+            long nY = 0;
+
+            if (aCode.GetCode() == KEY_UP)
+            {
+                // Scroll nach oben
+                nX = 0;
+                nY =-1;
+            }
+            else if (aCode.GetCode() == KEY_DOWN)
+            {
+                // Scroll nach unten
+                nX = 0;
+                nY = 1;
+            }
+            else if (aCode.GetCode() == KEY_LEFT)
+            {
+                // Scroll nach links
+                nX =-1;
+                nY = 0;
+            }
+            else if (aCode.GetCode() == KEY_RIGHT)
+            {
+                // Scroll nach rechts
+                nX = 1;
+                nY = 0;
+            }
+
+            if (pView->HasMarkedObj() && !aCode.IsMod1() )
+            {
+                if(aCode.IsMod2())
+                {
+                    // #97016# move in 1 pixel distance
+                    Size aLogicSizeOnePixel = PixelToLogic(Size(1,1));
+                    nX *= aLogicSizeOnePixel.Width();
+                    nY *= aLogicSizeOnePixel.Height();
+                }
+                else
+                {
+                    // old, fixed move distance
+                    nX *= 100;
+                    nY *= 100;
+                }
+
+                // #97016# II
+                const SdrHdlList& rHdlList = pView->GetHdlList();
+                SdrHdl* pHdl = rHdlList.GetFocusHdl();
+
+                if(0L == pHdl)
+                {
+                    // #90129# restrict movement to WorkArea
+                    const Rectangle& rWorkArea = pView->GetWorkArea();
+
+                    if(!rWorkArea.IsEmpty())
+                    {
+                        Rectangle aMarkRect(pView->GetMarkedObjRect());
+                        aMarkRect.Move(nX, nY);
+
+                        if(!aMarkRect.IsInside(rWorkArea))
+                        {
+                            if(aMarkRect.Left() < rWorkArea.Left())
+                            {
+                                nX += rWorkArea.Left() - aMarkRect.Left();
+                            }
+
+                            if(aMarkRect.Right() > rWorkArea.Right())
+                            {
+                                nX -= aMarkRect.Right() - rWorkArea.Right();
+                            }
+
+                            if(aMarkRect.Top() < rWorkArea.Top())
+                            {
+                                nY += rWorkArea.Top() - aMarkRect.Top();
+                            }
+
+                            if(aMarkRect.Bottom() > rWorkArea.Bottom())
+                            {
+                                nY -= aMarkRect.Bottom() - rWorkArea.Bottom();
+                            }
+                        }
+                    }
+
+                    // no handle selected
+                    if(0 != nX || 0 != nY)
+                    {
+                        pView->MoveAllMarked(Size(nX, nY));
+                    }
+                }
+                else
+                {
+                    // move handle with index nHandleIndex
+                    if(pHdl && (nX || nY))
+                    {
+                        // now move the Handle (nX, nY)
+                        Point aStartPoint(pHdl->GetPos());
+                        Point aEndPoint(pHdl->GetPos() + Point(nX, nY));
+                        const SdrDragStat& rDragStat = pView->GetDragStat();
+
+                        // start dragging
+                        pView->BegDragObj(aStartPoint, 0, pHdl, 0);
+
+                        if(pView->IsDragObj())
+                        {
+                            FASTBOOL bWasNoSnap = rDragStat.IsNoSnap();
+                            BOOL bWasSnapEnabled = pView->IsSnapEnabled();
+
+                            // switch snapping off
+                            if(!bWasNoSnap)
+                                ((SdrDragStat&)rDragStat).SetNoSnap(TRUE);
+                            if(bWasSnapEnabled)
+                                pView->SetSnapEnabled(FALSE);
+
+                            pView->MovAction(aEndPoint);
+                            pView->EndDragObj();
+
+                            // restore snap
+                            if(!bWasNoSnap)
+                                ((SdrDragStat&)rDragStat).SetNoSnap(bWasNoSnap);
+                            if(bWasSnapEnabled)
+                                pView->SetSnapEnabled(bWasSnapEnabled);
+                        }
+                    }
+                }
+
+                bProc = true;
             }
         }
         break;
@@ -669,3 +943,25 @@ IMPL_LINK( GraphCtrl, UpdateHdl, Timer*, pTimer )
 }
 
 
+::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > GraphCtrl::CreateAccessible()
+{
+    if( mpAccContext == NULL )
+    {
+        Window* pParent = GetParent();
+
+        DBG_ASSERT( pParent, "-GraphCtrl::CreateAccessible(): No Parent!" );
+
+        if( pParent )
+        {
+            ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessible > xAccParent( pParent->GetAccessible() );
+
+            if( xAccParent.is() )
+            {
+                mpAccContext = new SvxGraphCtrlAccessibleContext( xAccParent, *this );
+                mpAccContext->acquire();
+            }
+        }
+    }
+
+    return mpAccContext;
+}

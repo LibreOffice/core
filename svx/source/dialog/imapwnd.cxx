@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imapwnd.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ka $ $Date: 2002-03-20 11:31:18 $
+ *  last change: $Author: cl $ $Date: 2002-04-09 07:27:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,7 @@
 #include "svdocirc.hxx"
 #include "svdopath.hxx"
 #include "xfltrit.hxx"
+#include "svdpagv.hxx"
 
 #ifndef SVTOOLS_URIHELPER_HXX
 #include <svtools/urihelper.hxx>
@@ -1046,4 +1047,86 @@ IMPL_LINK( IMapWindow, MenuSelectHdl, Menu*, pMenu )
     return 0;
 }
 
+void IMapWindow::CreateDefaultObject()
+{
+    SdrPageView* pPageView = pView->GetPageViewPvNum(0);
 
+    if(pPageView)
+    {
+        // calc position and size
+        Point aPagePos = pPageView->GetOffset();
+        Size aPageSize = pPageView->GetPage()->GetSize();
+        sal_uInt32 nDefaultObjectSizeWidth = aPageSize.Width() / 4;
+        sal_uInt32 nDefaultObjectSizeHeight = aPageSize.Height() / 4;
+        aPagePos.X() += (aPageSize.Width() / 2) - (nDefaultObjectSizeWidth / 2);
+        aPagePos.Y() += (aPageSize.Height() / 2) - (nDefaultObjectSizeHeight / 2);
+        Rectangle aNewObjectRectangle(aPagePos, Size(nDefaultObjectSizeWidth, nDefaultObjectSizeHeight));
+
+        SdrObject* pObj = SdrObjFactory::MakeNewObject( pView->GetCurrentObjInventor(), pView->GetCurrentObjIdentifier(), 0L, pModel);
+        pObj->SetLogicRect(aNewObjectRectangle);
+
+        switch( pObj->GetObjIdentifier() )
+        {
+        case OBJ_POLY:
+        case OBJ_PATHPOLY:
+            {
+                XPolyPolygon aPoly;
+
+                XPolygon aInnerPoly;
+                aInnerPoly[0] = aNewObjectRectangle.BottomLeft();
+                aInnerPoly[1] = aNewObjectRectangle.TopLeft();
+                aInnerPoly[2] = aNewObjectRectangle.TopCenter();
+                aInnerPoly[3] = aNewObjectRectangle.Center();
+                aInnerPoly[4] = aNewObjectRectangle.RightCenter();
+                aInnerPoly[5] = aNewObjectRectangle.BottomRight();
+
+                aPoly.Insert(aInnerPoly);
+                ((SdrPathObj*)pObj)->SetPathPoly(aPoly);
+                break;
+            }
+        case OBJ_FREEFILL:
+        case OBJ_PATHFILL:
+            {
+                XPolyPolygon aPoly;
+
+                sal_Int32 nWdt(aNewObjectRectangle.GetWidth() / 2);
+                sal_Int32 nHgt(aNewObjectRectangle.GetHeight() / 2);
+
+                XPolygon aInnerPoly(aNewObjectRectangle.Center(), nWdt, nHgt);
+
+                aPoly.Insert(aInnerPoly);
+                ((SdrPathObj*)pObj)->SetPathPoly(aPoly);
+                break;
+            }
+
+        }
+
+        pView->InsertObject(pObj, *pPageView, 0);
+        SdrObjCreated( *pObj );
+        SetCurrentObjState( true );
+    }
+}
+
+void IMapWindow::KeyInput( const KeyEvent& rKEvt )
+{
+    KeyCode aCode = rKEvt.GetKeyCode();
+
+/*
+    switch(aCode.GetCode())
+    {
+
+    }
+*/
+    GraphCtrl::KeyInput( rKEvt );
+}
+
+void IMapWindow::SelectFirstObject()
+{
+    SdrPage*    pPage = (SdrPage*) pModel->GetPage( 0 );
+    if( pPage->GetObjCount() != 0 )
+    {
+        GrabFocus();
+        pView->UnmarkAllObj();
+        pView->MarkNextObj(TRUE);
+    }
+}

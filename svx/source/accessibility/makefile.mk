@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: af $ $Date: 2002-03-18 10:21:02 $
+#   last change: $Author: cl $ $Date: 2002-04-09 07:31:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,8 +76,10 @@ ENABLE_EXCEPTIONS=TRUE
 # --- Files --------------------------------------------------------
 
 CXXFILES =								\
-    ChildrenManager.cxx					\
+    svxrectctaccessiblecontext.cxx		\
     DescriptionGenerator.cxx			\
+    GraphCtlAccessibleContext.cxx		\
+    ChildrenManager.cxx					\
     AccessibleShape.cxx					\
     AccessibleGraphicShape.cxx			\
     AccessibleOLEShape.cxx				\
@@ -85,12 +87,13 @@ CXXFILES =								\
     AccessibleComponentBase.cxx			\
     AccessibleShapeTreeInfo.cxx			\
     ShapeTypeHandler.cxx				\
-    SvxShapeTypes.cxx					\
-    svxrectctaccessiblecontext.cxx
+    SvxShapeTypes.cxx
 
-SLOFILES =										\
+SLOFILES =	\
+    $(SLO)$/svxrectctaccessiblecontext.obj		\
+    $(SLO)$/DescriptionGenerator.obj			\
+    $(SLO)$/GraphCtlAccessibleContext.obj		\
     $(SLO)$/ChildrenManager.obj 				\
-    $(SLO)$/DescriptionGenerator.obj 			\
     $(SLO)$/AccessibleContextBase.obj			\
     $(SLO)$/AccessibleComponentBase.obj			\
     $(SLO)$/AccessibleShape.obj					\
@@ -98,8 +101,7 @@ SLOFILES =										\
     $(SLO)$/AccessibleOLEShape.obj				\
     $(SLO)$/AccessibleShapeTreeInfo.obj			\
     $(SLO)$/ShapeTypeHandler.obj				\
-    $(SLO)$/SvxShapeTypes.obj					\
-    $(SLO)$/svxrectctaccessiblecontext.obj
+    $(SLO)$/SvxShapeTypes.obj
 
 SRS2NAME = accessibility
 SRC2FILES = accessibility.src
