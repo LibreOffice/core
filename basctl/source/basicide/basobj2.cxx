@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basobj2.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mh $ $Date: 2000-09-29 11:02:36 $
+ *  last change: $Author: hr $ $Date: 2000-11-14 14:13:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,7 @@
 #ifndef _SBXCLASS_HXX //autogen
 #include <svtools/sbx.hxx>
 #endif
+#include <svtools/moduleoptions.hxx>
 #include <basobj.hxx>
 #include <iderdll.hxx>
 #include <iderdll2.hxx>
@@ -107,7 +108,7 @@ SbMethod* BasicIDE::ChooseMacro( BOOL bExecute, BOOL bChooseOnly )
     Window* pParent = Application::GetDefDialogParent();
 
     MacroChooser* pChooser = new MacroChooser( pParent, TRUE );
-    if ( bChooseOnly || !SFX_APP()->HasFeature( SFX_FEATURE_BASIC_IDE ) )
+    if ( bChooseOnly || !SvtModuleOptions().IsBasicIDE() )
         pChooser->SetMode( MACROCHOOSER_CHOOSEONLY );
 
     short nRetValue = pChooser->Execute();
