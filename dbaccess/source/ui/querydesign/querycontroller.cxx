@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: fs $ $Date: 2002-01-24 17:42:34 $
+ *  last change: $Author: fs $ $Date: 2002-02-04 13:46:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1163,7 +1163,7 @@ void OQueryController::doSaveAsDoc(sal_Bool _bSaveAs)
         try
         {
             ::rtl::OUString aErrorMsg;
-            ::connectivity::OSQLParseNode* pNode = m_pSqlParser->parseTree(aErrorMsg,m_sStatement,sal_False);
+            ::connectivity::OSQLParseNode* pNode = m_pSqlParser->parseTree( aErrorMsg, m_sStatement, m_bDesign );
             //  m_pParseNode = pNode;
             if(pNode)
             {
