@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optasian.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: obo $ $Date: 2001-11-13 22:56:30 $
+ *  last change: $Author: obo $ $Date: 2001-11-23 22:57:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -463,9 +463,10 @@ TabPage RID_SVXPAGE_ASIAN_LAYOUT
     Text[ chinese_traditional ] = "代理伺服器";
     Text[ turkish ] = "Proxy";
     Text[ arabic ] = "Proxy";
-    Text[ catalan ] = "Proxy";
+    Text[ catalan ] = "Servidor intermediari";
     Text[ finnish ] = "V�lityspalvelin";
 };
+
 
 
 
