@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewdraw.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:13:12 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:53:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -381,7 +381,7 @@ void SwView::ExecDraw(SfxRequest& rReq)
                 LeaveDrawCreate();
                 pWrtShell->EnterStdMode();
                 SdrView *pSdrView = pWrtShell->GetDrawView();
-                const SdrMarkList& rMarkList = pSdrView->GetMarkList();
+                const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
                 sal_uInt32 nCount = rMarkList.GetMarkCount();
                 if(rMarkList.GetMarkCount() == 1 &&
                         (SID_DRAW_TEXT == nSlotId || SID_DRAW_TEXT_VERTICAL == nSlotId ||
@@ -692,7 +692,7 @@ sal_Bool SwView::AreOnlyFormsSelected() const
 
     SdrView* pSdrView = GetWrtShell().GetDrawView();
 
-    const SdrMarkList& rMarkList = pSdrView->GetMarkList();
+    const SdrMarkList& rMarkList = pSdrView->GetMarkedObjectList();
     sal_uInt32 nCount = rMarkList.GetMarkCount();
 
     if (nCount)
