@@ -2,9 +2,9 @@
  *
  *  $RCSfile: subtotal.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:50 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 11:42:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,22 +66,6 @@
 #include "global.hxx"
 #endif
 
-#ifndef MSC
-    #include <setjmp.h>
-#else
-    extern "C"
-    {
-    #define _JBLEN  9  /* bp, di, si, sp, ret addr, ds */
-    typedef  int  jmp_buf[_JBLEN];
-    #define _JMP_BUF_DEFINED
-    #define setjmp  _setjmp
-    int  __cdecl _setjmp(jmp_buf);
-    void __cdecl longjmp(jmp_buf, int);
-    };
-#endif
-
-
-
 class SubTotal
 {
 private:
@@ -99,7 +83,6 @@ private:
 
 public:
     USHORT  nIndex;         // Test
-    static jmp_buf aGlobalJumpBuf;
 
 public:
             SubTotal();
