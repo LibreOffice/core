@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpropls.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 15:04:22 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 16:06:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -392,7 +392,8 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
     // control attributes (border exists one mor time for the text additions of shapes)
     MAP( "ControlForeground",               XML_NAMESPACE_FO,   XML_COLOR,                  XML_TYPE_COLOR, 0 ),
     MAP( "ControlBackground",               XML_NAMESPACE_FO,   XML_BACKGROUND_COLOR,       XML_TYPE_COLOR|MID_FLAG_MULTI_PROPERTY, 0 ),
-    MAP( "ControlBorder",                   XML_NAMESPACE_FO,   XML_BORDER,                 XML_SD_TYPE_CONTROL_BORDER|MID_FLAG_MULTI_PROPERTY, 0 ),
+    MAP( "ControlBorder",                   XML_NAMESPACE_FO,   XML_BORDER,                 XML_SD_TYPE_CONTROL_BORDER|MID_FLAG_MULTI_PROPERTY|MID_FLAG_MERGE_ATTRIBUTE, 0 ),
+    MAP( "ControlBorderColor",              XML_NAMESPACE_FO,   XML_BORDER,                 XML_SD_TYPE_CONTROL_BORDER_COLOR|MID_FLAG_MULTI_PROPERTY|MID_FLAG_MERGE_ATTRIBUTE, 0 ),
     MAP( "ControlDataStyle",                XML_NAMESPACE_STYLE,XML_DATA_STYLE_NAME,        XML_TYPE_STRING|MID_FLAG_NO_PROPERTY_EXPORT|MID_FLAG_SPECIAL_ITEM, CTF_SD_CONTROL_SHAPE_DATA_STYLE ),
     MAP( "ControlTextEmphasis",         XML_NAMESPACE_STYLE,XML_TEXT_EMPHASIZE,         XML_TYPE_CONTROL_TEXT_EMPHASIZE, 0 ),
 
@@ -852,7 +853,7 @@ XMLSdPropHdlFactory::~XMLSdPropHdlFactory()
 
 const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nType ) const
 {
-    XMLPropertyHandler* pHdl = (XMLPropertyHandler*)XMLPropertyHandlerFactory::GetPropertyHandler( nType );
+    const XMLPropertyHandler* pHdl = XMLPropertyHandlerFactory::GetPropertyHandler( nType );
     if(!pHdl)
     {
         switch(nType)
@@ -1055,7 +1056,10 @@ const XMLPropertyHandler* XMLSdPropHdlFactory::GetPropertyHandler( sal_Int32 nTy
                 break;
 
             case XML_SD_TYPE_CONTROL_BORDER:
-                pHdl = new xmloff::OControlBorderHandler;
+                pHdl = xmloff::OControlBorderHandlerFactory::createBorderHandler();
+                break;
+            case XML_SD_TYPE_CONTROL_BORDER_COLOR:
+                pHdl = xmloff::OControlBorderHandlerFactory::createBorderColorHandler();
                 break;
             case XML_TYPE_CONTROL_TEXT_EMPHASIZE:
                 pHdl = new ::xmloff::OControlTextEmphasisHandler;
