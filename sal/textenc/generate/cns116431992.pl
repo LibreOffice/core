@@ -3,9 +3,9 @@
 #
 #   $RCSfile: cns116431992.pl,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: sb $ $Date: 2001-10-12 09:44:51 $
+#   last change: $Author: sb $ $Date: 2001-10-12 10:00:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -417,10 +417,7 @@ if (defined($uni_plane_used[0]) && defined($uni_page_used[0][0]))
     }
 }
 
-$filename = lc($id) . ".dat";
-open OUT, ("> " . $filename) or die "Cannot write " . $filename;
-
-$filename = lc($id) . ".dat";
+$filename = lc($id) . ".tab";
 open OUT, ("> " . $filename) or die "Cannot write " . $filename;
 
 {

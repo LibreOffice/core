@@ -3,9 +3,9 @@
 #
 #   $RCSfile: gb180302000.pl,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: sb $ $Date: 2001-10-12 09:44:51 $
+#   last change: $Author: sb $ $Date: 2001-10-12 10:00:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -226,7 +226,7 @@ for ($gb_code = 0; $gb_code < $gb_map_4_max; ++$gb_code)
 }
 ($range_index == $range_count) or die "Bad input";
 
-$filename = lc($id) . ".dat";
+$filename = lc($id) . ".tab";
 open OUT, ("> " . $filename) or die "Cannot write " . $filename;
 
 {
