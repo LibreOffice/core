@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: svesik $ $Date: 2001-02-02 19:16:27 $
+#   last change: $Author: pluby $ $Date: 2001-03-02 07:12:46 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,11 +77,6 @@ SLOFILES=		$(SLO)$/multiplexer.obj				\
                 $(SLO)$/basecontrol.obj				\
                 $(SLO)$/basecontainercontrol.obj	\
                 $(SLO)$/registercontrols.obj
-
-# SCO and MACOSX: the linker does know about weak symbols, but we can't ignore multiple defined symbols
-.IF "$(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC" || "$(OS)"=="MACOSX"
-SLOFILES+=$(SLO)$/staticmbbase.obj
-.ENDIF
 
 #LIB1TARGET= 	$(SLB)$/$(TARGET).lib
 #LIB1OBJFILES=	$(SLOFILES)

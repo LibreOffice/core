@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: svesik $ $Date: 2001-02-02 18:55:15 $
+#   last change: $Author: pluby $ $Date: 2001-03-02 07:14:30 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,11 +79,6 @@ NO_BSYMBOLIC=TRUE
 SLOFILES=	$(SLO)$/resource.obj
 
 EXCEPTIONSFILES=	$(SLO)$/resource.obj
-
-# SCO and MACOSX: the linker does know about weak symbols, but we can't ignore m ultiple defined symbols
-.IF "$(OS)"=="SCO" || "$(OS)$(COM)"=="OS2GCC" || "$(OS)"=="MACOSX"
-EXCEPTIONSFILES+=$(SLO)$/staticmbresource.obj
-.ENDIF
 
 LIB1TARGET= 	$(SLB)$/$(TARGET).lib
 LIB1OBJFILES=	$(EXCEPTIONSFILES)
