@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fcomp.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-25 08:25:13 $
+ *  last change: $Author: oj $ $Date: 2001-02-12 10:49:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -417,7 +417,10 @@ OOperand* OPredicateCompiler::execute_Operand(OSQLParseNode* pPredicateNode) thr
         else if (pPredicateNode->count() == 3)
         {
             ::rtl::OUString aTableName = pPredicateNode->getChild(0)->getTokenValue();
-            aColumnName = pPredicateNode->getChild(2)->getTokenValue();
+            if(SQL_ISRULE(pPredicateNode->getChild(2),column_val))
+                aColumnName = pPredicateNode->getChild(2)->getChild(0)->getTokenValue();
+            else
+                aColumnName = pPredicateNode->getChild(2)->getTokenValue();
         }
 
         ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet> xCol;
