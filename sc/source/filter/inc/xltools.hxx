@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xltools.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:01:51 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 16:25:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,21 +81,8 @@
 
 // BIFF versions ==============================================================
 
-/** An enumeration for all Excel file format types (BIFF types). */
-enum XclBiff
-{
-    xlBiff2 = 0,                /// MS Excel 2.1
-    xlBiff3,                    /// MS Excel 3.x
-    xlBiff4,                    /// MS Excel 4.x
-    xlBiff5,                    /// MS Excel 5.x
-    xlBiff7,                    /// MS Excel 7.x (95)
-    xlBiff8,                    /// MS Excel 8.x (97), 9.x (2000), 10.x (XP)
-    xlBiffUnknown               /// Unknown BIFF version.
-};
-
 #define DBG_ERROR_BIFF()        DBG_ERRORFILE( "Unknown BIFF type!" )
 #define DBG_ASSERT_BIFF( c )    DBG_ASSERT( c, "Unknown BIFF type!" )
-
 
 // Enumerations ===============================================================
 
