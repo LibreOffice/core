@@ -2,9 +2,9 @@
  *
  *  $RCSfile: matchlocale.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jb $ $Date: 2001-11-05 10:42:40 $
+ *  last change: $Author: jb $ $Date: 2002-04-25 15:44:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,8 +86,13 @@ namespace configmgr
 
     // -------------------------------------------------------------------------
         extern char const * const c_sAnyLanguage;
+        extern char const * const c_sDefLanguage;
 
-        extern void getAnyLocale(OUString& _rsString); // also declared in options.hxx
+        extern bool isAnyLocale(OUString const & _sLocale);
+        extern bool isDefaultLocale(OUString const & _sLocale);
+
+        extern OUString getAnyLocale();
+        extern OUString getDefaultLocale();
 
     // -------------------------------------------------------------------------
     /// Type for storing a Locale. May in future be upgraded to a struct

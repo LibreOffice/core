@@ -2,9 +2,9 @@
  *
  *  $RCSfile: matchlocale.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jb $ $Date: 2001-11-05 10:42:40 $
+ *  last change: $Author: jb $ $Date: 2002-04-25 15:44:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,8 @@ namespace configmgr
         String aCountry;
     };
 
-    StaticLocale::String const c_sAnyLanguage = "*";    // exported !
+    StaticLocale::String const c_sAnyLanguage = "*";            // exported !
+    StaticLocale::String const c_sDefLanguage = "x-default";    // exported !
 
     StaticLocale::String const c_sNoCountry = "";
 
@@ -97,10 +98,29 @@ namespace configmgr
     SequencePos const c_nFallbackLocales = ARRAYSIZE(c_aFallbackLocales);
 
 // -----------------------------------------------------------------------------
-    void getAnyLocale(OUString& _rsString)
+    bool isAnyLocale(OUString const & _sLocale)
+    {
+        return !!_sLocale.equalsAscii(c_sAnyLanguage);
+    }
+
+// -----------------------------------------------------------------------------
+    bool isDefaultLocale(OUString const & _sLocale)
+    {
+        return !!_sLocale.equalsAscii(c_sDefLanguage);
+    }
+
+// -----------------------------------------------------------------------------
+    OUString getAnyLocale()
     {
         static OUString const sAnyLocale = OUString::createFromAscii( c_sAnyLanguage );
-        _rsString = sAnyLocale;
+        return sAnyLocale;
+    }
+
+// -----------------------------------------------------------------------------
+    OUString getDefaultLocale()
+    {
+        static OUString const sDefLocale = OUString::createFromAscii( c_sDefLanguage );
+        return sDefLocale;
     }
 
 // -----------------------------------------------------------------------------
