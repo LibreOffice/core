@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-05 10:37:52 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 14:36:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,9 +77,7 @@
 #ifndef _XTEXTEDT_HXX
 #include "xtextedt.hxx"
 #endif
-#ifndef _TXTATTR_HXX
-#include "txtattr.hxx"
-#endif
+
 #ifndef _INETTYPE_HXX
 #include "inettype.hxx"
 #endif
@@ -95,7 +93,9 @@
 #ifndef _SVTOOLS_IMGDEF_HXX
 #include "imgdef.hxx"
 #endif
-
+#ifndef _TXTATTR_HXX
+#include "txtattr.hxx"
+#endif
 #ifndef _SVTOOLS_HRC
 #include "svtools.hrc"
 #endif
@@ -209,6 +209,7 @@
 #ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
 #endif
+#include "DocumentInfoPreview.hxx"
 #ifndef _SV_MNEMONIC_HXX
 #include <vcl/mnemonic.hxx>
 #endif
@@ -221,6 +222,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::view;
+using namespace svtools;
 
 extern ::rtl::OUString CreateExactSizeText_Impl( sal_Int64 nSize ); // fileview.cxx
 
@@ -284,6 +286,136 @@ static SvtDocInfoMapping_Impl __READONLY_DATA DocInfoMap_Impl[] =
         {"Theme",       DI_THEME,           STRING_TYPE},
         {NULL,          0,                  STRING_TYPE}
 };
+
+
+ODocumentInfoPreview::ODocumentInfoPreview( Window* pParent ,WinBits _nBits) : Window(pParent,WB_DIALOGCONTROL)
+{
+    m_pEditWin = new SvtExtendedMultiLineEdit_Impl(this,_nBits);
+    m_pEditWin->Show();
+    m_pEditWin->EnableCursor( FALSE );
+    m_pInfoTable = new SvtDocInfoTable_Impl();
+    // detect application language
+    m_aLocale = SvtPathOptions().GetLocale();
+}
+// -----------------------------------------------------------------------------
+ODocumentInfoPreview::~ODocumentInfoPreview()
+{
+    delete m_pEditWin;
+    delete m_pInfoTable;
+}
+// -----------------------------------------------------------------------------
+void ODocumentInfoPreview::Resize()
+{
+    Size aOutputSize( GetOutputSize() );
+    m_pEditWin->SetPosSizePixel( Point(0,0),aOutputSize);
+}
+// -----------------------------------------------------------------------------
+void ODocumentInfoPreview::Clear()
+{
+    m_pEditWin->Clear();
+}
+// -----------------------------------------------------------------------------
+void ODocumentInfoPreview::fill(const Reference< XPropertySet>& _xDocInfo,const String& rURL)
+{
+    Reference< XPropertySet > aPropSet( _xDocInfo, UNO_QUERY );
+
+    Reference< XMultiPropertySet > aMultiSet( _xDocInfo, UNO_QUERY );
+    if ( aMultiSet.is() )
+    {
+        String aText;
+        Reference< XPropertySetInfo > aInfoSet = aMultiSet->getPropertySetInfo();
+        if ( aInfoSet.is() )
+        {
+            Sequence< Property > aProps = aInfoSet->getProperties();
+            const Property* pProps  = aProps.getConstArray();
+            sal_uInt32 nCount = aProps.getLength();
+
+            for ( sal_uInt32 i = 0; i < nCount; ++i )
+            {
+                aText += String( pProps[i].Name );
+                aText += '\n';
+            }
+        }
+    }
+
+    if ( aPropSet.is() )
+    {
+        m_pEditWin->SetAutoScroll( FALSE );
+        USHORT nIndex = 0;
+        rtl::OUString aStringValue;
+        ::com::sun::star::util::DateTime aDateValue;
+        while ( DocInfoMap_Impl[ nIndex ]._pPropName )
+        {
+            SvtDocInfoType eInfoType = DocInfoMap_Impl[ nIndex ]._eType;
+            Any aValue;
+            if ( eInfoType != SIZE_TYPE )
+                aValue = aPropSet->getPropertyValue( ::rtl::OUString::createFromAscii( DocInfoMap_Impl[ nIndex ]._pPropName ) );
+
+            switch ( eInfoType )
+            {
+                case STRING_TYPE :
+                {
+                    if ( ( aValue >>= aStringValue ) && aStringValue.getLength() > 0 )
+                    {
+                        String aValueStr;
+                        if ( DI_MIMETYPE == DocInfoMap_Impl[ nIndex ]._nStringId )
+                        {
+                            INetContentType eTypeID = INetContentTypes::GetContentTypeFromURL( rURL );
+                            if ( eTypeID != CONTENT_TYPE_APP_OCTSTREAM )
+                                aValueStr = INetContentTypes::GetPresentation( eTypeID, m_aLocale );
+                            else
+                                aValueStr = SvFileInformationManager::GetDescription( rURL );
+                            if ( aValueStr.Len() == 0 )
+                                aValueStr = String( aStringValue );
+                        }
+                        else
+                            aValueStr = String( aStringValue );
+                        m_pEditWin->InsertEntry( m_pInfoTable->GetString( DocInfoMap_Impl[ nIndex ]._nStringId ), aValueStr );
+                    }
+                    break;
+                }
+
+                case DATE_TYPE :
+                {
+                    if ( aValue >>= aDateValue )
+                    {
+                        DateTime aToolsDT =
+                            DateTime( Date( aDateValue.Day, aDateValue.Month, aDateValue.Year ),
+                            Time( aDateValue.Hours, aDateValue.Minutes, aDateValue.Seconds, aDateValue.HundredthSeconds ) );
+                        if ( aToolsDT.IsValid() )
+                        {
+                            LocaleDataWrapper aLocaleWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() );
+                            String aDateStr = aLocaleWrapper.getDate( aToolsDT );
+                            aDateStr += String( RTL_CONSTASCII_STRINGPARAM(", ") );
+                            aDateStr += aLocaleWrapper.getTime( aToolsDT );
+                            m_pEditWin->InsertEntry( m_pInfoTable->GetString( DocInfoMap_Impl[ nIndex ]._nStringId ), aDateStr );
+                        }
+                    }
+                    break;
+                }
+
+                case SIZE_TYPE :
+                {
+                    // size
+                    ULONG nDocSize = ::utl::UCBContentHelper::GetSize( rURL );
+                    m_pEditWin->InsertEntry( m_pInfoTable->GetString( DocInfoMap_Impl[ nIndex ]._nStringId ), CreateExactSizeText_Impl( nDocSize ) );
+                    break;
+                }
+            }
+
+            ++nIndex;
+        }
+
+        m_pEditWin->SetSelection( Selection( 0, 0 ) );
+        m_pEditWin->SetAutoScroll( TRUE );
+    }
+}
+// -----------------------------------------------------------------------------
+void ODocumentInfoPreview::InsertEntry( const String& rTitle, const String& rValue )
+{
+    m_pEditWin->InsertEntry( rTitle, rValue);
+}
+// -----------------------------------------------------------------------------
 
 // class SvtDummyHeaderBar_Impl ------------------------------------------
 
@@ -751,34 +883,16 @@ SvtDocInfoTable_Impl::SvtDocInfoTable_Impl() :
 
 {
 }
+// -----------------------------------------------------------------------------
+// class SvtExtendedMultiLineEdit_Impl --------------------------------------------
+SvtExtendedMultiLineEdit_Impl::SvtExtendedMultiLineEdit_Impl( Window* pParent,WinBits _nBits ) :
 
-// -----------------------------------------------------------------------
-
-const String& SvtDocInfoTable_Impl::GetString( long nId ) const
-{
-    USHORT nPos = FindIndex( nId );
-
-    if ( RESARRAY_INDEX_NOTFOUND != nPos )
-        return ResStringArray::GetString( nPos );
-    else
-        return aEmptyString;
-}
-
-// class SvtExtendedMultiLineEdit ----------------------------------------
-
-SvtExtendedMultiLineEdit_Impl::SvtExtendedMultiLineEdit_Impl( Window* pParent ) :
-
-    ExtMultiLineEdit( pParent, WB_LEFT | WB_VSCROLL | WB_READONLY | WB_BORDER | WB_3DLOOK )
+    ExtMultiLineEdit( pParent, _nBits )
 
 {
     SetLeftMargin( 10 );
 }
-
-void SvtExtendedMultiLineEdit_Impl::Resize()
-{
-    ExtMultiLineEdit::Resize();
-}
-
+// -----------------------------------------------------------------------------
 void SvtExtendedMultiLineEdit_Impl::InsertEntry( const String& rTitle, const String& rValue )
 {
     String aText( '\n' );
@@ -796,6 +910,19 @@ void SvtExtendedMultiLineEdit_Impl::InsertEntry( const String& rTitle, const Str
 
     InsertText( String( '\n' ) );
 }
+// -----------------------------------------------------------------------------
+
+// -----------------------------------------------------------------------
+
+const String& SvtDocInfoTable_Impl::GetString( long nId ) const
+{
+    USHORT nPos = FindIndex( nId );
+
+    if ( RESARRAY_INDEX_NOTFOUND != nPos )
+        return ResStringArray::GetString( nPos );
+    else
+        return aEmptyString;
+}
 
 // class SvtFrameWindow_Impl ---------------------------------------------
 
@@ -808,8 +935,7 @@ SvtFrameWindow_Impl::SvtFrameWindow_Impl( Window* pParent ) :
     aLocale= SvtPathOptions().GetLocale();
 
     // create windows and frame
-    pEditWin = new SvtExtendedMultiLineEdit_Impl( this );
-    pEditWin->EnableCursor( FALSE );
+    pEditWin = new ODocumentInfoPreview( this ,WB_LEFT | WB_VSCROLL | WB_READONLY | WB_BORDER | WB_3DLOOK);
     pTextWin = new Window( this );
     xFrame = Reference < XFrame > ( ::comphelper::getProcessServiceFactory()->
         createInstance( ASCII_STR("com.sun.star.frame.Frame") ), UNO_QUERY );
@@ -867,98 +993,6 @@ void SvtFrameWindow_Impl::ShowDocInfo( const String& rURL )
     try
     {
         xDocInfo->read( rURL );
-        Reference< XPropertySet > aPropSet( xDocInfo, UNO_QUERY );
-
-        Reference< XMultiPropertySet > aMultiSet( xDocInfo, UNO_QUERY );
-        if ( aMultiSet.is() )
-        {
-            String aText;
-            Reference< XPropertySetInfo > aInfoSet = aMultiSet->getPropertySetInfo();
-            if ( aInfoSet.is() )
-            {
-                Sequence< Property > aProps = aInfoSet->getProperties();
-                const Property* pProps  = aProps.getConstArray();
-                sal_uInt32 nCount = aProps.getLength();
-
-                for ( sal_uInt32 i = 0; i < nCount; ++i )
-                {
-                    aText += String( pProps[i].Name );
-                    aText += '\n';
-                }
-            }
-        }
-
-        if ( aPropSet.is() )
-        {
-            pEditWin->SetAutoScroll( FALSE );
-            USHORT nIndex = 0;
-            rtl::OUString aStringValue;
-            ::com::sun::star::util::DateTime aDateValue;
-            while ( DocInfoMap_Impl[ nIndex ]._pPropName )
-            {
-                SvtDocInfoType eInfoType = DocInfoMap_Impl[ nIndex ]._eType;
-                Any aValue;
-                if ( eInfoType != SIZE_TYPE )
-                    aValue = aPropSet->getPropertyValue( ::rtl::OUString::createFromAscii( DocInfoMap_Impl[ nIndex ]._pPropName ) );
-
-                switch ( eInfoType )
-                {
-                    case STRING_TYPE :
-                    {
-                        if ( ( aValue >>= aStringValue ) && aStringValue.getLength() > 0 )
-                        {
-                            String aValueStr;
-                            if ( DI_MIMETYPE == DocInfoMap_Impl[ nIndex ]._nStringId )
-                            {
-                                INetContentType eTypeID = INetContentTypes::GetContentTypeFromURL( rURL );
-                                if ( eTypeID != CONTENT_TYPE_APP_OCTSTREAM )
-                                    aValueStr = INetContentTypes::GetPresentation( eTypeID, aLocale );
-                                else
-                                    aValueStr = SvFileInformationManager::GetDescription( rURL );
-                                if ( aValueStr.Len() == 0 )
-                                    aValueStr = String( aStringValue );
-                            }
-                            else
-                                aValueStr = String( aStringValue );
-                            pEditWin->InsertEntry( aInfoTable.GetString( DocInfoMap_Impl[ nIndex ]._nStringId ), aValueStr );
-                        }
-                        break;
-                    }
-
-                    case DATE_TYPE :
-                    {
-                        if ( aValue >>= aDateValue )
-                        {
-                            DateTime aToolsDT =
-                                DateTime( Date( aDateValue.Day, aDateValue.Month, aDateValue.Year ),
-                                Time( aDateValue.Hours, aDateValue.Minutes, aDateValue.Seconds, aDateValue.HundredthSeconds ) );
-                            if ( aToolsDT.IsValid() )
-                            {
-                                LocaleDataWrapper aLocaleWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() );
-                                String aDateStr = aLocaleWrapper.getDate( aToolsDT );
-                                aDateStr += String( RTL_CONSTASCII_STRINGPARAM(", ") );
-                                aDateStr += aLocaleWrapper.getTime( aToolsDT );
-                                pEditWin->InsertEntry( aInfoTable.GetString( DocInfoMap_Impl[ nIndex ]._nStringId ), aDateStr );
-                            }
-                        }
-                        break;
-                    }
-
-                    case SIZE_TYPE :
-                    {
-                        // size
-                        ULONG nDocSize = ::utl::UCBContentHelper::GetSize( rURL );
-                        pEditWin->InsertEntry( aInfoTable.GetString( DocInfoMap_Impl[ nIndex ]._nStringId ), CreateExactSizeText_Impl( nDocSize ) );
-                        break;
-                    }
-                }
-
-                ++nIndex;
-            }
-
-            pEditWin->SetSelection( Selection( 0, 0 ) );
-            pEditWin->SetAutoScroll( TRUE );
-        }
 
         // info fields
         Reference< XNameContainer > aNameCnt( xDocInfo, UNO_QUERY );
