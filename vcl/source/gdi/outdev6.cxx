@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev6.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-08 15:35:51 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 17:33:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,7 +182,7 @@ void OutputDevice::DrawGrid( const Rectangle& rRect, const Size& rDist, ULONG nF
 
 #ifndef REMOTE_APPSERVER
     const BOOL bOldMap = mbMap;
-    mbMap = FALSE;
+    EnableMapMode( FALSE );
 
     if( nFlags & GRID_DOTS )
     {
@@ -211,12 +211,15 @@ void OutputDevice::DrawGrid( const Rectangle& rRect, const Size& rDist, ULONG nF
         }
     }
 
-    mbMap = bOldMap;
+    EnableMapMode( bOldMap );
 #else // REMOTE_APPSERVER
     aHorzBuf.realloc( nHorzCount );
     aVertBuf.realloc( nVertCount );
     pGraphics->DrawGrid( nStartX, nEndX, aHorzBuf, nStartY, nEndY, aVertBuf, nFlags );
 #endif // REMOTE_APPSERVER
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->DrawGrid( rRect, rDist, nFlags );
 }
 
 // ------------------------------------------------------------------------
@@ -240,6 +243,13 @@ void OutputDevice::DrawTransparent( const PolyPolygon& rPolyPoly,
     {
         if( mpMetaFile )
             mpMetaFile->AddAction( new MetaTransparentAction( rPolyPoly, nTransparencePercent ) );
+
+        VirtualDevice* pOldAlphaVDev = mpAlphaVDev;
+
+        // #110958# Disable alpha VDev, we perform the necessary
+        // operation explicitely further below.
+        if( mpAlphaVDev )
+            mpAlphaVDev = NULL;
 
         if( !IsDeviceOutputNecessary() || ( !mbLineColor && !mbFillColor ) || ImplIsRecordLayout() )
             return;
@@ -272,7 +282,7 @@ void OutputDevice::DrawTransparent( const PolyPolygon& rPolyPoly,
             Rectangle aRect( aPolyRect.TopLeft(), Size( aPolyRect.GetWidth(), nBaseExtent ) );
 
             const BOOL bOldMap = mbMap;
-            mbMap = FALSE;
+            EnableMapMode( FALSE );
 
             while( aRect.Top() <= aPolyRect.Bottom() )
             {
@@ -287,7 +297,7 @@ void OutputDevice::DrawTransparent( const PolyPolygon& rPolyPoly,
                 aRect.Move( nMove, 0 );
             }
 
-            mbMap = bOldMap;
+            EnableMapMode( bOldMap );
             Pop();
         }
         else
@@ -321,7 +331,7 @@ void OutputDevice::DrawTransparent( const PolyPolygon& rPolyPoly,
                 {
                     const BOOL bOldMap = mbMap;
 
-                    mbMap = FALSE;
+                    EnableMapMode( FALSE );
 
                     aVDev.SetLineColor( COL_BLACK );
                     aVDev.SetFillColor( COL_BLACK );
@@ -438,7 +448,7 @@ void OutputDevice::DrawTransparent( const PolyPolygon& rPolyPoly,
 
                         DrawBitmap( aDstRect.TopLeft(), aPaint );
 
-                        mbMap = bOldMap;
+                        EnableMapMode( bOldMap );
 
                         if( mbLineColor )
                         {
@@ -466,6 +476,22 @@ void OutputDevice::DrawTransparent( const PolyPolygon& rPolyPoly,
         }
 
         mpMetaFile = pOldMetaFile;
+
+        // #110958# Restore disabled alpha VDev
+        mpAlphaVDev = pOldAlphaVDev;
+
+        // #110958# Apply alpha value also to VDev alpha channel
+        if( mpAlphaVDev )
+        {
+            const Color aFillCol( mpAlphaVDev->GetFillColor() );
+            mpAlphaVDev->SetFillColor( Color(255*nTransparencePercent/100,
+                                             255*nTransparencePercent/100,
+                                             255*nTransparencePercent/100) );
+
+            mpAlphaVDev->DrawTransparent( rPolyPoly, nTransparencePercent );
+
+            mpAlphaVDev->SetFillColor( aFillCol );
+        }
     }
 }
 
@@ -561,9 +587,9 @@ void OutputDevice::DrawTransparent( const GDIMetaFile& rMtf, const Point& rPos,
 
                 delete pVDev;
 
-                mbMap = FALSE;
+                EnableMapMode( FALSE );
                 DrawBitmapEx( aDstRect.TopLeft(), BitmapEx( aPaint, aAlpha ) );
-                mbMap = bOldMap;
+                EnableMapMode( bOldMap );
             }
             else
                 delete pVDev;
@@ -699,7 +725,7 @@ void OutputDevice::ImplDrawBitmapWallpaper( long nX, long nY,
     }
 
     mpMetaFile = NULL;
-    mbMap = FALSE;
+    EnableMapMode( FALSE );
     Push( PUSH_CLIPREGION );
     IntersectClipRegion( Rectangle( Point( nX, nY ), Size( nWidth, nHeight ) ) );
 
@@ -862,7 +888,7 @@ void OutputDevice::ImplDrawBitmapWallpaper( long nX, long nY,
     rWallpaper.ImplGetImpWallpaper()->ImplSetCachedBitmap( aBmpEx );
 
     Pop();
-    mbMap = bOldMap;
+    EnableMapMode( bOldMap );
     mpMetaFile = pOldMetaFile;
 }
 
@@ -884,14 +910,14 @@ void OutputDevice::ImplDrawGradientWallpaper( long nX, long nY,
         aBound = Rectangle( Point( nX, nY ), Size( nWidth, nHeight ) );
 
     mpMetaFile = NULL;
-    mbMap = FALSE;
+    EnableMapMode( FALSE );
     Push( PUSH_CLIPREGION );
     IntersectClipRegion( Rectangle( Point( nX, nY ), Size( nWidth, nHeight ) ) );
 
     DrawGradient( aBound, rWallpaper.GetGradient() );
 
     Pop();
-    mbMap = bOldMap;
+    EnableMapMode( bOldMap );
     mpMetaFile = pOldMetaFile;
 }
 
@@ -931,6 +957,9 @@ void OutputDevice::DrawWallpaper( const Rectangle& rRect,
                                rWallpaper );
         }
     }
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->DrawWallpaper( rRect, rWallpaper );
 }
 
 // -----------------------------------------------------------------------
@@ -949,6 +978,9 @@ void OutputDevice::Erase()
         if ( eRasterOp != ROP_OVERPAINT )
             SetRasterOp( eRasterOp );
     }
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->Erase();
 }
 
 // -----------------------------------------------------------------------
@@ -1046,4 +1078,7 @@ void OutputDevice::DrawEPS( const Point& rPoint, const Size& rSize,
             mpMetaFile = pOldMetaFile;
         }
     }
+
+    if( mpAlphaVDev )
+        mpAlphaVDev->DrawEPS( rPoint, rSize, rGfxLink, pSubst );
 }
