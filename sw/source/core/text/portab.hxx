@@ -2,9 +2,9 @@
  *
  *  $RCSfile: portab.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fme $ $Date: 2002-02-28 12:42:19 $
+ *  last change: $Author: kz $ $Date: 2004-03-25 12:53:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,6 +143,22 @@ public:
     inline xub_Unicode GetTabDecimal() const { return cTab; }
     OUTPUT_OPERATOR
 };
+
+
+/*************************************************************************
+ *                  class SwAutoTabDecimalPortion
+ *************************************************************************/
+
+class SwAutoTabDecimalPortion : public SwTabDecimalPortion
+{
+public:
+    inline SwAutoTabDecimalPortion( const KSHORT nTabPos, const xub_Unicode cTab,
+                                    const xub_Unicode cFill = '\0' )
+         : SwTabDecimalPortion( nTabPos, cTab, cFill )
+    { SetLen( 0 ); }
+    virtual void Paint( const SwTxtPaintInfo &rInf ) const;
+};
+
 
 CLASSIO( SwTabPortion )
 CLASSIO( SwTabLeftPortion )
