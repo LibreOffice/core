@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsrc.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: sab $ $Date: 2002-03-04 14:49:36 $
+ *  last change: $Author: sab $ $Date: 2002-03-21 06:32:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -348,8 +348,8 @@ void ScSimpleEditSource::UpdateData()
 
 //------------------------------------------------------------------------
 
-ScAccessibilityEditSource::ScAccessibilityEditSource( ::std::auto_ptr < ScAccessibleCellTextData > pAccessibleCellTextData )
-    : mpAccessibleCellTextData(pAccessibleCellTextData)
+ScAccessibilityEditSource::ScAccessibilityEditSource( ::std::auto_ptr < ScAccessibleTextData > pAccessibleCellTextData )
+    : mpAccessibleTextData(pAccessibleCellTextData)
 {
 }
 
@@ -359,41 +359,41 @@ ScAccessibilityEditSource::~ScAccessibilityEditSource()
 
 SvxEditSource* ScAccessibilityEditSource::Clone() const
 {
-    return new ScAccessibilityEditSource(::std::auto_ptr < ScAccessibleCellTextData > (mpAccessibleCellTextData->Clone()));
+    return new ScAccessibilityEditSource(::std::auto_ptr < ScAccessibleTextData > (mpAccessibleTextData->Clone()));
 }
 
 SvxTextForwarder* ScAccessibilityEditSource::GetTextForwarder()
 {
-    return mpAccessibleCellTextData->GetTextForwarder();
+    return mpAccessibleTextData->GetTextForwarder();
 }
 
 SvxViewForwarder* ScAccessibilityEditSource::GetViewForwarder()
 {
-    return mpAccessibleCellTextData->GetViewForwarder();
+    return mpAccessibleTextData->GetViewForwarder();
 }
 
 SvxEditViewForwarder* ScAccessibilityEditSource::GetEditViewForwarder( sal_Bool bCreate )
 {
-    return mpAccessibleCellTextData->GetEditViewForwarder(bCreate);
+    return mpAccessibleTextData->GetEditViewForwarder(bCreate);
 }
 
 void ScAccessibilityEditSource::UpdateData()
 {
-    mpAccessibleCellTextData->UpdateData();
+    mpAccessibleTextData->UpdateData();
 }
 
 SfxBroadcaster& ScAccessibilityEditSource::GetBroadcaster() const
 {
-    return mpAccessibleCellTextData->GetBroadcaster();
+    return mpAccessibleTextData->GetBroadcaster();
 }
 
 void ScAccessibilityEditSource::SetDoUpdateData(sal_Bool bValue)
 {
-    mpAccessibleCellTextData->SetDoUpdate(bValue);
+    mpAccessibleTextData->SetDoUpdate(bValue);
 }
 
 sal_Bool ScAccessibilityEditSource::IsDirty() const
 {
-    return mpAccessibleCellTextData->IsDirty();
+    return mpAccessibleTextData->IsDirty();
 }
 
