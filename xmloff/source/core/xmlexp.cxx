@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-17 18:59:48 $
+ *  last change: $Author: mib $ $Date: 2000-11-20 10:14:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -647,7 +647,6 @@ SchXMLExportHelper* SvXMLExport::CreateChartExport()
     return new SchXMLExportHelper(*this,*GetAutoStylePool().get());
 }
 
-=======
 XMLFontAutoStylePool* SvXMLExport::CreateFontAutoStylePool()
 {
     return new XMLFontAutoStylePool( *this );
