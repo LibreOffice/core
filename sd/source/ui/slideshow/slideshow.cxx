@@ -2,9 +2,9 @@
  *
  *  $RCSfile: slideshow.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 20:20:15 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 16:34:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,7 +58,6 @@
  *
  *
  ************************************************************************/
-
 #ifndef _SD_SLIDESHOW_HXX
 #include "slideshow.hxx"
 #endif
@@ -82,17 +81,17 @@ Slideshow::~Slideshow()
     mpImpl->release();
 }
 
-void Slideshow::startShow( PresentationSettings* pPresSettings )
+bool Slideshow::startShow( PresentationSettings* pPresSettings )
 {
-    mpImpl->startShow( pPresSettings );
+    return mpImpl->startShow( pPresSettings );
 }
 
-void Slideshow::startPreview(
+bool Slideshow::startPreview(
         const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& xDrawPage,
         const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& xAnimationNode,
         ::Window* pParent )
 {
-    mpImpl->startPreview( xDrawPage, xAnimationNode, pParent );
+    return mpImpl->startPreview( xDrawPage, xAnimationNode, pParent );
 }
 
 void Slideshow::paint( const Rectangle& rRect )
@@ -142,6 +141,11 @@ sal_Int32 Slideshow::getCurrentPageIndex()
 
 void Slideshow::jumpToBookmark( const String& sBookmark )
 {
+}
+
+void Slideshow::setRehearseTimings( bool bRehearseTimings )
+{
+    mpImpl->mbRehearseTimings = bRehearseTimings;
 }
 
 bool Slideshow::isFullScreen()
