@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerimpl.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-11 19:29:21 $
+ *  last change: $Author: jb $ $Date: 2001-05-18 16:20:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,6 +143,7 @@ namespace configmgr
                   :m_pNewProviders(0)
                   ,m_pProvider(_pProvider)
                   ,m_pSession(NULL)
+                  ,m_pTreeMgr(NULL)
     {
         uno::Reference< script::XTypeConverter > xConverter(
             _xServiceFactory->createInstance( OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.script.Converter" ))), uno::UNO_QUERY);
@@ -254,8 +255,11 @@ namespace configmgr
     //-----------------------------------------------------------------------------
     OProviderImpl::~OProviderImpl()
     {
-        m_pTreeMgr->release();
-        m_pTreeMgr = NULL;
+        if (m_pTreeMgr)
+        {
+            m_pTreeMgr->release();
+            m_pTreeMgr = NULL;
+        }
         delete m_pNewProviders;
         delete m_pSession;
     }
