@@ -266,7 +266,7 @@ public class IdeVersion extends javax.swing.JPanel implements ActionListener, Ta
     //private static final String [] versions = {"StarOffice 6.0", "OpenOffice.org 1.0","OpenOffice.org 1.0.1","OpenOffice.org 642","OpenOffice.org 643","StarOffice 6.1"};
     //private static final String [] versions = {"OpenOffice.org 643"};
 
-    private static final String [] versions = {"NetBeans 3.4", "jEdit 4.0.3"};
+    private static final String [] versions = {"NetBeans 3.4", "jEdit 4.0.3", "jEdit 4.1pre5" };
     // End of variables declaration//GEN-END:variables
 
   }
