@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formres.src,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 12:02:51 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 11:23:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -263,8 +263,9 @@ ModalDialog RID_DLG_SELECTLABELCONTROL
         RID_SVXIMG_EXPANDEDNODE; \
         RID_SVXIMG_SCROLLBAR; \
         RID_SVXIMG_SPINBUTTON; \
+        RID_SVXIMG_NAVIGATIONBAR; \
     }; \
-    IdCount = 28
+    IdCount = 29
 
 ImageList RID_IL_FORMEXPLORER
 {
@@ -1469,36 +1470,10 @@ String RID_STR_TAG
 String RID_STR_ECHO_CHAR
 {
     Text = "Zeichen für Passwörter" ;
-    Text [ English ] = "Password char" ;
-    Text [ portuguese ] = "Caracteres para senhas" ;
-    Text [ english_us ] = "Password characters" ;
-    Text [ portuguese_brazilian ] = "Caracteres para senhas" ;
-    Text [ swedish ] = "Tecken för lösenord" ;
-    Text [ danish ] = "Tegn til adgangskoder" ;
-    Text [ italian ] = "Caratteri per le password" ;
-    Text [ spanish ] = "Caracteres para contraseñas" ;
-    Text [ french ] = "Caractères pour mots de passe" ;
-    Text [ dutch ] = "Tekens voor wachtwoorden" ;
-    Text[ chinese_simplified ] = "å¯†ç å­—ç¬¦";
-    Text[ russian ] = "Ñèìâîëû ïàğîëÿ";
-    Text[ polish ] = "Znaki hase³";
-    Text[ japanese ] = "ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ç”¨ã®è¨˜å·";
-    Text[ chinese_traditional ] = "å¯†ç¢¼å­—å…ƒ";
-    Text[ greek ] = "×áñáêôŞñåò ãéá êùäéêïıò ğñüóâáóçò";
-    Text[ korean ] = "ì•”í˜¸ìš© ë¬¸ì";
-    Text[ arabic ] = "ÃÍÑİ ßáãÇÊ ÇáÓÑ";
-    Text[ turkish ] = "Parola karakterleri";
-    Text[ language_user1 ] = " ";
-    Text[ finnish ] = "Salasanan merkit";
-    Text[ catalan ] = "Caràcters de la contrasenya";
-    Text[ thai ] = "à¸•à¸±à¸§à¸­à¸±à¸à¸‚à¸£à¸°à¸£à¸«à¸±à¸ªà¸œà¹ˆà¸²à¸™";
-    Text[ czech ] = "Znaky hesla";
-    Text[ hebrew ] = "Zeichen fÃ¼r PasswÃ¶rter";
-    Text[ hindi ] = "à¤•à¥‚à¤Ÿà¤¶à¤¬à¥à¤¦ à¤…à¤•à¥à¤·à¤°à¥‡à¤‚";
-    Text[ slovak ] = "Znaky hesla";
-    Text[ hungarian ] = "JelszÃ³karakterek";
-    Text[ slovenian ] = "Skriti znaki";
+    Text [ english ] = "Password character" ;
+    Text [ english_us ] = "Password character" ;
 };
+
 String RID_STR_TRISTATE
 {
     Text = "Dreifacher Status" ;
@@ -1899,6 +1874,42 @@ String RID_STR_BORDER
     Text[ slovak ] = "Okraj";
     Text[ hungarian ] = "SzegÃ©ly";
     Text[ slovenian ] = "Obroba";
+};
+String RID_STR_ICONSIZE
+{
+    Text = "Symbolgröße" ;
+    Text [ english ] = "Icon size" ;
+    Text [ english_us ] = "Icon size" ;
+};
+String RID_STR_ICONSIZE_TYPE
+{
+    Text = "Klein;Groß" ;
+    Text [ english ] = "Small;Large" ;
+    Text [ english_us ] = "Small;Large" ;
+};
+String RID_STR_SHOW_POSITION
+{
+    Text = "Positionierung";
+    Text [ english ] = "Positioning";
+    Text [ english_us ] = "Positioning";
+};
+String RID_STR_SHOW_NAVIGATION
+{
+    Text = "Navigation";
+    Text [ english ] = "Navigation";
+    Text [ english_us ] = "Navigation";
+};
+String RID_STR_SHOW_RECORDACTIONS
+{
+    Text = "Datensatzaktionen";
+    Text [ english ] = "Record actions";
+    Text [ english_us ] = "Record actions";
+};
+String RID_STR_SHOW_FILTERSORT
+{
+    Text = "Filter / Sortierung";
+    Text [ english ] = "Filtering / Sorting";
+    Text [ english_us ] = "Filtering / Sorting";
 };
 String RID_STR_HSCROLL
 {
@@ -3500,36 +3511,9 @@ String RID_STR_STRINGITEMLIST
 };
 String RID_STR_BUTTONTYPE
 {
-    Text = "Art der Schaltfläche" ;
-    Text [ English ] = "Button type" ;
-    Text [ portuguese ] = "Tipo de botão" ;
-    Text [ english_us ] = "Button type" ;
-    Text [ portuguese_brazilian ] = "Tipo de botão" ;
-    Text [ swedish ] = "Typ av kommandoknapp" ;
-    Text [ danish ] = "Knaptype" ;
-    Text [ italian ] = "Tipo di pulsante" ;
-    Text [ spanish ] = "Tipo de botón" ;
-    Text [ french ] = "Type de bouton" ;
-    Text [ dutch ] = "Soort knop" ;
-    Text[ chinese_simplified ] = "æŒ‰é’®ç±»å‹";
-    Text[ russian ] = "Òèï êíîïêè";
-    Text[ polish ] = "Rodzaj przycisku";
-    Text[ japanese ] = "ãƒœã‚¿ãƒ³ã®ç¨®é¡";
-    Text[ chinese_traditional ] = "æŒ‰éˆ•é¡å‹";
-    Text[ greek ] = "Ôığïò ğåäßïõ åğéëïãŞò";
-    Text[ korean ] = "ë²„íŠ¼ ìœ í˜•";
-    Text[ arabic ] = "äæÚ ÇáãİÊÇÍ";
-    Text[ turkish ] = "Düğme türü";
-    Text[ language_user1 ] = " ";
-    Text[ finnish ] = "Painikkeen tyyppi";
-    Text[ catalan ] = "Tipus de botó";
-    Text[ thai ] = "à¸Šà¸™à¸´à¸”à¸‚à¸­à¸‡à¸›à¸¸à¹ˆà¸¡";
-    Text[ czech ] = "Typ tlaÄÃ­tka";
-    Text[ hebrew ] = "Art der SchaltflÃ¤che";
-    Text[ hindi ] = "à¤¬à¤Ÿà¤¨ à¤µà¤°à¥à¤—";
-    Text[ slovak ] = "Typ klÃ¡vesy";
-    Text[ hungarian ] = "Gomb tÃ­pusa";
-    Text[ slovenian ] = "Vrsta gumba";
+    Text = "Aktion" ;
+    Text [ ENGLISH ] = "Action" ;
+    Text [ english_us ] = "Action";
 };
 String RID_STR_SUBMIT_ACTION
 {
@@ -3879,36 +3863,9 @@ String RID_STR_ENUM_SIDE_ALIGN
 };
 String RID_STR_ENUM_BUTTONTYPE
 {
-    Text = "Push;Submit;Reset;Url" ;
-    Text [ English ] = "Push;Submit;Reset;Url" ;
-    Text [ portuguese ] = "Push;Submit;Reset;Url" ;
-    Text [ english_us ] = "Push;Submit;Reset;Url" ;
-    Text [ portuguese_brazilian ] = "Pressionar;Submeter;Restaurar;URL" ;
-    Text [ swedish ] = "Push;Submit;Reset;Url" ;
-    Text [ danish ] = "Tryk;Send;Nulstil;Url" ;
-    Text [ italian ] = "Push;Submit;Reset;Url" ;
-    Text [ spanish ] = "Push;Submit;Reset;Url" ;
-    Text [ french ] = "Push;Submit;Reset;Url" ;
-    Text [ dutch ] = "Push;Submit;Reset;Url" ;
-    Text[ chinese_simplified ] = "Push;Submit;Reset;Url";
-    Text[ russian ] = "Íàæàòü;Ïîäòâåğäèòü;Ñáğîñèòü;Url";
-    Text[ polish ] = "Naciœnij;Przeœlij;Resetuj;URL";
-    Text[ japanese ] = "Push;Submit;Reset;Url";
-    Text[ chinese_traditional ] = "Push;Submit;Reset;Url";
-    Text[ greek ] = "Push;Submit;Reset;Url";
-    Text[ korean ] = "ë°€ì–´ë„£ê¸°;ì „ì†¡;ì›ë˜ëŒ€ë¡œ;Url";
-    Text[ arabic ] = "Push;Submit;Reset;Url";
-    Text[ turkish ] = "Bas;Teslim;Temizle;Url";
-    Text[ language_user1 ] = " ";
-    Text[ finnish ] = "Tavallinen;Lähetä;Tyhjennä;Url-osoite";
-    Text[ catalan ] = "Empeny;Trament;Reinicia;URL";
-    Text[ thai ] = "à¸œà¸¥à¸±à¸;à¸ªà¹ˆà¸‡;à¸•à¸±à¹‰à¸‡à¹ƒà¸«à¸¡à¹ˆ;Url";
-    Text[ czech ] = "Stisknout;Odeslat;Obnovit;URL";
-    Text[ hebrew ] = "Push;Submit;Reset;Url";
-    Text[ hindi ] = "à¤¦à¤¬à¤¾à¤“;à¤®à¤¾à¤¨ à¤²à¥‡à¤¨à¤¾;à¤°à¤¿à¤¸à¥‡à¤Ÿà¥à¤Ÿ;Url";
-    Text[ slovak ] = "StlaÄiÅ¥;PoslaÅ¥;ObnoviÅ¥;URL";
-    Text[ hungarian ] = "Push;Submit;Reset;Url";
-    Text[ slovenian ] = "Pritisni;PoÅ¡lji;Ponastavi;Url";
+    Text = "Keine;Formular übertragen;Formular zurücksetzen;Dokument/Webseite öffnen;Erster Datensatz;Vorheriger Datensatz;Nächster Datensatz;Letzter Datensatz;Datensatz speichern;Rückgängig: Dateneingabe;Neuer Datensatz;Datensatz löschen;Formular aktualisieren";
+    Text [ english ] = "None;Submit form;Reset form;Open document/web page;First record;Previous record;Next record;Last record;Save record;Undo data entry;New record;Delete record;Refresh form";
+    Text [ english_us ] = "None;Submit form;Reset form;Open document/web page;First record;Previous record;Next record;Last record;Save record;Undo data entry;New record;Delete record;Refresh form";
 };
 String RID_STR_ENUM_SUBMIT_METHOD
 {
