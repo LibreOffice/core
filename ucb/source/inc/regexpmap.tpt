@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regexpmap.tpt,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 12:22:44 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 15:27:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,7 +192,7 @@ RegexpMapIterImpl< Val >::RegexpMapIterImpl(RegexpMapImpl< Val > * pTheMap,
 	if (bBegin)
 	{
 		m_nList = -1;
-		m_aIndex = List< Val >::iterator();
+		m_aIndex = typename List< Val >::iterator();
 		if (!m_pMap->m_pDefault)
 			next();
 	}
@@ -343,7 +343,7 @@ RegexpMapIter< Val >::RegexpMapIter(RegexpMapIterImpl< Val > * pTheImpl):
 template< typename Val >
 RegexpMapIter< Val > & RegexpMapIter< Val >::operator ++()
 {
-	m_pImpl->next();
+	this->m_pImpl->next();
 	return *this;
 }
 
@@ -352,7 +352,7 @@ template< typename Val >
 RegexpMapIter< Val > RegexpMapIter< Val >::operator ++(int)
 {
 	RegexpMapIter aTemp(*this);
-	m_pImpl->next();
+	this->m_pImpl->next();
 	return aTemp;
 }
 
@@ -360,28 +360,28 @@ RegexpMapIter< Val > RegexpMapIter< Val >::operator ++(int)
 template< typename Val >
 RegexpMapEntry< Val > & RegexpMapIter< Val >::operator *()
 {
-	return m_pImpl->get();
+	return this->m_pImpl->get();
 }
 
 //============================================================================
 template< typename Val >
 RegexpMapEntry< Val > const & RegexpMapIter< Val >::operator *() const
 {
-	return m_pImpl->get();
+	return this->m_pImpl->get();
 }
 
 //============================================================================
 template< typename Val >
 RegexpMapEntry< Val > * RegexpMapIter< Val >::operator ->()
 {
-	return &m_pImpl->get();
+	return &this->m_pImpl->get();
 }
 
 //============================================================================
 template< typename Val >
 RegexpMapEntry< Val > const * RegexpMapIter< Val >::operator ->() const
 {
-	return &m_pImpl->get();
+	return &this->m_pImpl->get();
 }
 
 //============================================================================
