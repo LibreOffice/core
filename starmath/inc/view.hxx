@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:58:12 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:21:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,7 +183,7 @@ protected:
 
 public:
     SmEditController(SmEditWindow &, USHORT, SfxBindings  & );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     virtual ~SmEditController();
 #endif
 
@@ -249,7 +249,7 @@ protected:
                     SfxBindings     *pBindings,
                     SfxChildWinInfo *pInfo);
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     virtual ~SmCmdBoxWrapper();
 #endif
 
