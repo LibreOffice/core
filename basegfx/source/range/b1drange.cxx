@@ -2,9 +2,9 @@
  *
  *  $RCSfile: b1drange.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: aw $ $Date: 2003-11-28 11:18:11 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 18:39:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,9 +62,27 @@
 #ifndef _BGFX_RANGE_B1DRANGE_HXX
 #include <basegfx/range/b1drange.hxx>
 #endif
+#ifndef _BGFX_RANGE_B1IRANGE_HXX
+#include <basegfx/range/b1irange.hxx>
+#endif
+#ifndef _BGFX_NUMERIC_FTOOLS_HXX
+#include <basegfx/numeric/ftools.hxx>
+#endif
 
 namespace basegfx
 {
+    B1DRange::B1DRange( const B1IRange& rRange ) :
+        maRange(rRange.getMinimum())
+    {
+        expand(rRange.getMaximum());
+    }
+
+    B1IRange fround(const B1DRange& rRange)
+    {
+        return B1IRange( fround( rRange.getMinimum()),
+                         fround( rRange.getMaximum()) );
+    }
+
 } // end of namespace basegfx
 
 // eof
