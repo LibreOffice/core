@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.6 $
+#   $Revision: 1.7 $
 #
-#   last change: $Author: kz $ $Date: 2003-12-11 12:30:01 $
+#   last change: $Author: obo $ $Date: 2004-03-19 11:54:25 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -109,6 +109,8 @@ CXXFILES=	Grid.cxx	\
             entrylisthelper.cxx \
             scrollbar.cxx \
             spinbutton.cxx \
+            formparameters.cxx \
+            formfiltermanager.cxx \
 
 .IF "$(COM)"=="GCC"
 NOOPTFILES= $(SLO)$/EventThread.obj
@@ -148,6 +150,8 @@ SLOFILES=	$(SLO)$/Grid.obj \
             $(SLO)$/entrylisthelper.obj \
             $(SLO)$/scrollbar.obj \
             $(SLO)$/spinbutton.obj \
+            $(SLO)$/formparameters.obj \
+            $(SLO)$/formfiltermanager.obj \
 
 # --- Targets ----------------------------------
 
