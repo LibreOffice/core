@@ -2,9 +2,9 @@
  *
  *  $RCSfile: versdlg.src,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 19:54:26 $
+ *  last change: $Author: obo $ $Date: 2001-05-10 05:54:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,7 @@ ModalDialog DLG_VERSIONS
         Text[ turkish ] = "Yeni sürümler";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Nuevas versiones";
+        Text[ finnish ] = "Uudet versiot";
     };
     PushButton PB_SAVE
     {
@@ -123,6 +124,7 @@ ModalDialog DLG_VERSIONS
         Text[ turkish ] = "~Yeni sürümü kaydet";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Guardar versión nueva";
+        Text[ finnish ] = "Tallenna ~uusi versio";
     };
     CheckBox CB_SAVEONCLOSE
     {
@@ -151,6 +153,7 @@ ModalDialog DLG_VERSIONS
         Text[ turkish ] = "~Kapatýrken daima sürümü kaydet";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Guardar ~versión siempre al cerrar";
+        Text[ finnish ] = "~Tallenna versio aina suljettaessa";
     };
     GroupBox GB_OLDVERSIONS
     {
@@ -178,6 +181,7 @@ ModalDialog DLG_VERSIONS
         Text[ turkish ] = "Mevcut sürümler";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Versiones existentes";
+        Text[ finnish ] = "Nykyiset versiot";
     };
     FixedText FT_DATETIME
     {
@@ -205,6 +209,7 @@ ModalDialog DLG_VERSIONS
         Text[ turkish ] = "Tarih ve saat";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Fecha y hora";
+        Text[ finnish ] = "Päivämäärä ja aika";
     };
     FixedText FT_SAVEDBY
     {
@@ -232,6 +237,7 @@ ModalDialog DLG_VERSIONS
         Text[ turkish ] = "Kaydeden";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Guardado por";
+        Text[ finnish ] = "Tallentanut";
     };
     FixedText FT_COMMENTS
     {
@@ -259,6 +265,7 @@ ModalDialog DLG_VERSIONS
         Text[ turkish ] = "Açýklama";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Comentario";
+        Text[ finnish ] = "Huomautukset";
     };
     Control TLB_VERSIONS
     {
@@ -294,6 +301,7 @@ ModalDialog DLG_VERSIONS
         Text[ turkish ] = "Kapat";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Cerrar";
+        Text[ finnish ] = "~Sulje";
     };
     PushButton PB_OPEN
     {
@@ -322,6 +330,7 @@ ModalDialog DLG_VERSIONS
         Text[ turkish ] = "Aç";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Abrir";
+        Text[ finnish ] = "Avaa";
     };
     PushButton PB_VIEW
     {
@@ -351,6 +360,7 @@ ModalDialog DLG_VERSIONS
         Text[ turkish ] = "~Görüntüle...";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Mostrar...";
+        Text[ finnish ] = "~Näytä";
     };
     PushButton PB_DELETE
     {
@@ -379,6 +389,7 @@ ModalDialog DLG_VERSIONS
         Text[ turkish ] = "~Sil";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Eliminar";
+        Text[ finnish ] = "~Poista";
     };
     PushButton PB_COMPARE
     {
@@ -407,6 +418,7 @@ ModalDialog DLG_VERSIONS
         Text[ turkish ] = "Karþýlaþtýr";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Comparar";
+        Text[ finnish ] = "Vertaa";
     };
     HelpButton PB_HELP
     {
@@ -434,6 +446,7 @@ ModalDialog DLG_VERSIONS
     Text[ korean ] = "¹öÀü";
     Text[ turkish ] = "Mevcut sürümler:";
     Text[ catalan ] = "Versiones en";
+    Text[ finnish ] = "Versiot";
 };
 ModalDialog DLG_COMMENTS
 {
@@ -469,6 +482,7 @@ ModalDialog DLG_COMMENTS
         Text[ turkish ] = "Tarih ve saat : ";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Fecha y hora:  ";
+        Text[ finnish ] = "Päivämäärä ja aika: ";
     };
     FixedText FT_SAVEDBY
     {
@@ -496,6 +510,7 @@ ModalDialog DLG_COMMENTS
         Text[ turkish ] = "Kaydeden ";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "guardado por  ";
+        Text[ finnish ] = "Tallentanut";
     };
     MultiLineEdit ME_VERSIONS
     {
@@ -544,6 +559,7 @@ ModalDialog DLG_COMMENTS
         Text[ turkish ] = "~Kapat";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Cerrar";
+        Text[ finnish ] = "~Sulje";
     };
     HelpButton PB_HELP
     {
@@ -571,6 +587,7 @@ ModalDialog DLG_COMMENTS
     Text[ turkish ] = "Sürüm açýklamasý ekle";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Escribir comentario sobre la versión";
+    Text[ finnish ] = "Lisää versiohuomautus";
 };
 String DLG_COMMENTS
 {
@@ -596,4 +613,5 @@ String DLG_COMMENTS
     Text[ turkish ] = "Sürüm açýklamasý";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Comentario sobre la versión";
+    Text[ finnish ] = "Versiohuomautus";
 };
