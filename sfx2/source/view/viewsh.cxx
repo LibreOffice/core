@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 13:38:31 $
+ *  last change: $Author: obo $ $Date: 2004-11-17 15:35:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
