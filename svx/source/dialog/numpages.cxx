@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numpages.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: jp $ $Date: 2001-07-20 19:27:51 $
+ *  last change: $Author: os $ $Date: 2001-10-11 11:26:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -512,6 +512,8 @@ IMPL_LINK(SvxSingleNumPickTabPage, NumSelectHdl_Impl, ValueSet*, EMPTYARG)
                 else
                     aFmt.SetSuffix(pSet->sSuffix);
                 aFmt.SetCharFmtName(sNumCharFmtName);
+                // #62069# // #92724#
+                aFmt.SetBulletRelSize(100);
                 pActNum->SetLevel(i, aFmt);
             }
             nMask <<= 1 ;
@@ -693,8 +695,8 @@ IMPL_LINK(SvxBulletPickTabPage, NumSelectHdl_Impl, ValueSet*, EMPTYARG)
                 aFmt.SetBulletFont(&rActBulletFont);
                 aFmt.SetBulletChar(cChar );
                 aFmt.SetCharFmtName(sBulletCharFmtName);
-                // #62069#
-                aFmt.SetBulletRelSize(75);
+                // #62069# // #92724#
+                aFmt.SetBulletRelSize(45);
                 pActNum->SetLevel(i, aFmt);
             }
             nMask <<= 1;
@@ -957,11 +959,15 @@ IMPL_LINK(SvxNumPickTabPage, NumSelectHdl_Impl, ValueSet*, EMPTYARG)
                                         ? pLevelSettings->sBulletChar.getStr()[0]
                                         : 0 );
                 aFmt.SetCharFmtName( sBulletCharFmtName );
+                // #62069# // #92724#
+                aFmt.SetBulletRelSize(45);
             }
             else
             {
                 aFmt.SetIncludeUpperLevels(0 != nUpperLevelOrChar ? pActNum->GetLevelCount() : 0);
                 aFmt.SetCharFmtName(sNumCharFmtName);
+                // #62069# // #92724#
+                aFmt.SetBulletRelSize(100);
             }
             aFmt.SetPrefix(pLevelSettings->sPrefix);
             aFmt.SetSuffix(pLevelSettings->sSuffix);
