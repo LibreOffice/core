@@ -22996,3 +22996,5 @@ _TI2?AVPropertyVetoException@beans@star@sun@com@@
 ?release@AccessibleControlShape@accessibility@@WGA@AAXXZ
 ?release@AccessibleControlShape@accessibility@@WJA@AAXXZ
 ?release@AccessibleControlShape@accessibility@@WJE@AAXXZ
+?PutValue@SvxCharScaleWidthItem@@UAEEABVAny@uno@star@sun@com@@E@Z
+?QueryValue@SvxCharScaleWidthItem@@UBEEAAVAny@uno@star@sun@com@@E@Z
