@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DAVResourceAccess.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kso $ $Date: 2002-08-29 09:00:12 $
+ *  last change: $Author: kso $ $Date: 2002-08-30 13:24:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -613,29 +613,29 @@ void DAVResourceAccess::initialize()
         if ( m_aPath.getLength() == 0 )
         {
             NeonUri aURI( m_aURL );
-            m_aPath = aURI.GetPath();
-            if ( !m_aPath.getLength() )
+            rtl::OUString aPath( aURI.GetPath() );
+            if ( !aPath.getLength() )
                 throw DAVException( DAVException::DAV_INVALID_ARG );
 
             if ( !m_xSession.is() || !m_xSession->CanUse( m_aURL ) )
             {
+                m_xSession = 0;
+
                 // create new webdav session
-                try
-                {
-                    m_xSession
-                        = m_xSessionFactory->createDAVSession( m_aURL,
-                                                               m_xSMgr );
-                    m_xSession->setServerAuthListener( &webdavAuthListener );
-                }
-                catch ( DAVException const & )
-                {
-                    m_aPath = rtl::OUString();
-                    throw;
-                }
+                m_xSession
+                    = m_xSessionFactory->createDAVSession( m_aURL, m_xSMgr );
+
+                if ( !m_xSession.is() )
+                    return;
+
+                m_xSession->setServerAuthListener( &webdavAuthListener );
             }
 
             // Own URI is needed for redirect cycle detection.
             m_aRedirectURIs.push_back( aURI );
+
+            // Success.
+            m_aPath = aPath;
         }
     }
 }
