@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews6.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-12 15:18:09 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 14:55:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,6 +130,9 @@
 #endif
 #ifndef SD_EFFECT_CHILD_WINDOW_HXX
 #include "EffectChildWindow.hxx"
+#endif
+#ifndef SD_LAYER_DIALOG_CHILD_WINDOW_HXX
+#include "LayerDialogChildWindow.hxx"
 #endif
 #ifndef SD_SLIDE_CHANGE_CHILD_WINDOW_HXX
 #include "SlideChangeChildWindow.hxx"
@@ -443,6 +446,11 @@ void DrawViewShell::SetChildWindowState( SfxItemSet& rSet )
         USHORT nId = EffectChildWindow::GetChildWindowId();
         rSet.Put( SfxBoolItem( SID_EFFECT_WIN, GetViewFrame()->HasChildWindow( nId ) ) );
     }
+    if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_LAYER_DIALOG_WIN ) )
+    {
+        USHORT nId = LayerDialogChildWindow::GetChildWindowId();
+        rSet.Put( SfxBoolItem( SID_LAYER_DIALOG_WIN, GetViewFrame()->HasChildWindow( nId ) ) );
+    }
     if( SFX_ITEM_AVAILABLE == rSet.GetItemState( SID_SLIDE_CHANGE_WIN ) )
     {
         USHORT nId = SlideChangeChildWindow::GetChildWindowId();
@@ -488,7 +496,7 @@ void DrawViewShell::ExecBmpMask( SfxRequest& rReq )
 
                 if( pNewObj->IsLinkedGraphic() )
                 {
-                    QueryBox aQBox( (Window*) pWindow, WB_YES_NO | WB_DEF_YES,
+                    QueryBox aQBox( (Window*) GetActiveWindow(), WB_YES_NO | WB_DEF_YES,
                                     String( SdResId( STR_RELEASE_GRAPHICLINK ) ) );
 
                     if( RET_YES == aQBox.Execute() )
@@ -781,33 +789,33 @@ void DrawViewShell::FuTemp04(SfxRequest& rReq)
             // ohne Benutzereingriff ein gekippter Rotationskoerper mit einer Achse links neben dem
             // Umschliessenden Rechteck der slektierten Objekte gezeichnet.
             pDrView->EndTextEdit();
-            if(pWindow)
-                pWindow->EnterWait();
+            if(GetActiveWindow())
+                GetActiveWindow()->EnterWait();
             pDrView->End3DCreation(TRUE);
             Cancel();
             rReq.Ignore();
-            if(pWindow)
-                pWindow->LeaveWait();
+            if(GetActiveWindow())
+                GetActiveWindow()->LeaveWait();
         }
         break;
 
         case SID_PRESENTATION_DLG:
         {
-            pFuActual = new FuSlideShowDlg( this, pWindow, pDrView, GetDoc(), rReq );
+            pFuActual = new FuSlideShowDlg( this, GetActiveWindow(), pDrView, GetDoc(), rReq );
             Cancel();
         }
         break;
 
         case SID_CUSTOMSHOW_DLG:
         {
-            pFuActual = new FuCustomShowDlg( this, pWindow, pDrView, GetDoc(), rReq );
+            pFuActual = new FuCustomShowDlg( this, GetActiveWindow(), pDrView, GetDoc(), rReq );
             Cancel();
         }
         break;
 
         case SID_EXPAND_PAGE:
         {
-            pFuActual = new FuExpandPage( this, pWindow, pDrView, GetDoc(), rReq );
+            pFuActual = new FuExpandPage( this, GetActiveWindow(), pDrView, GetDoc(), rReq );
             Cancel();
         }
         break;
@@ -815,8 +823,29 @@ void DrawViewShell::FuTemp04(SfxRequest& rReq)
         case SID_SUMMARY_PAGE:
         {
             pDrView->EndTextEdit();
-            pFuActual = new FuSummaryPage( this, pWindow, pDrView, GetDoc(), rReq );
+            pFuActual = new FuSummaryPage( this, GetActiveWindow(), pDrView, GetDoc(), rReq );
             Cancel();
+        }
+        break;
+
+        case SID_LAYER_DIALOG_WIN:
+        {
+            if ( rReq.GetArgs() )
+            {
+                GetViewFrame()->SetChildWindow(
+                    LayerDialogChildWindow::GetChildWindowId(),
+                    ((const SfxBoolItem&) (rReq.GetArgs()->
+                        Get(SID_LAYER_DIALOG_WIN))).GetValue());
+            }
+            else
+            {
+                GetViewFrame()->ToggleChildWindow(
+                    LayerDialogChildWindow::GetChildWindowId());
+            }
+
+            GetViewFrame()->GetBindings().Invalidate(SID_LAYER_DIALOG_WIN);
+            Cancel();
+            rReq.Ignore ();
         }
         break;
 
