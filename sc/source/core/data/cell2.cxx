@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cell2.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: er $ $Date: 2001-02-06 17:56:35 $
+ *  last change: $Author: er $ $Date: 2001-02-09 11:28:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -596,6 +596,71 @@ void ScFormulaCell::UpdateReference(UpdateRefMode eUpdateRefMode,
                                     short nDx, short nDy, short nDz,
                                     ScDocument* pUndoDoc )
 {
+    USHORT nCol1 = r.aStart.Col();
+    USHORT nRow1 = r.aStart.Row();
+    USHORT nTab1 = r.aStart.Tab();
+    USHORT nCol2 = r.aEnd.Col();
+    USHORT nRow2 = r.aEnd.Row();
+    USHORT nTab2 = r.aEnd.Tab();
+    USHORT nCol = aPos.Col();
+    USHORT nRow = aPos.Row();
+    USHORT nTab = aPos.Tab();
+    ScAddress aOldPos( aPos );
+//  BOOL bPosChanged = FALSE;           // ob diese Zelle bewegt wurde
+    BOOL bIsInsert = FALSE;
+    if (eUpdateRefMode == URM_INSDEL)
+    {
+        bIsInsert = (nDx >= 0 && nDy >= 0 && nDz >= 0);
+        if ( nDx && nRow >= nRow1 && nRow <= nRow2 &&
+            nTab >= nTab1 && nTab <= nTab2 )
+        {
+            if (nCol >= nCol1)
+            {
+                nCol += nDx;
+                if ((short) nCol < 0)
+                    nCol = 0;
+                else if ( nCol > MAXCOL )
+                    nCol = MAXCOL;
+                aPos.SetCol( nCol );
+//              bPosChanged = TRUE;
+            }
+        }
+        if ( nDy && nCol >= nCol1 && nCol <= nCol2 &&
+            nTab >= nTab1 && nTab <= nTab2 )
+        {
+            if (nRow >= nRow1)
+            {
+                nRow += nDy;
+                if ((short) nRow < 0)
+                    nRow = 0;
+                else if ( nRow > MAXROW )
+                    nRow = MAXROW;
+                aPos.SetRow( nRow );
+//              bPosChanged = TRUE;
+            }
+        }
+        if ( nDz && nCol >= nCol1 && nCol <= nCol2 &&
+            nRow >= nRow1 && nRow <= nRow2 )
+        {
+            if (nTab >= nTab1)
+            {
+                USHORT nMaxTab = pDocument->GetTableCount() - 1;
+                nTab += nDz;
+                if ((short) nTab < 0)
+                    nTab = 0;
+                else if ( nTab > nMaxTab )
+                    nTab = nMaxTab;
+                aPos.SetTab( nTab );
+//              bPosChanged = TRUE;
+            }
+        }
+    }
+    else if ( r.In( aPos ) )
+    {
+        aOldPos.Set( nCol - nDx, nRow - nDy, nTab - nDz );
+//      bPosChanged = TRUE;
+    }
+
     BOOL bHasRefs = FALSE;
     BOOL bOnRefMove = FALSE;
     if ( !pDocument->IsClipOrUndo() )
@@ -611,72 +676,7 @@ void ScFormulaCell::UpdateReference(UpdateRefMode eUpdateRefMode,
     }
     if( bHasRefs || bOnRefMove )
     {
-        USHORT nCol1 = r.aStart.Col();
-        USHORT nRow1 = r.aStart.Row();
-        USHORT nTab1 = r.aStart.Tab();
-        USHORT nCol2 = r.aEnd.Col();
-        USHORT nRow2 = r.aEnd.Row();
-        USHORT nTab2 = r.aEnd.Tab();
-        USHORT nCol = aPos.Col();
-        USHORT nRow = aPos.Row();
-        USHORT nTab = aPos.Tab();
-        ScAddress aOldPos( aPos );
-//      BOOL bPosChanged = FALSE;           // ob diese Zelle bewegt wurde
         ScTokenArray* pOld = pUndoDoc ? pCode->Clone() : NULL;
-        BOOL bIsInsert = FALSE;
-        if (eUpdateRefMode == URM_INSDEL)
-        {
-            bIsInsert = (nDx >= 0 && nDy >= 0 && nDz >= 0);
-            if ( nDx && nRow >= nRow1 && nRow <= nRow2 &&
-                nTab >= nTab1 && nTab <= nTab2 )
-            {
-                if (nCol >= nCol1)
-                {
-                    nCol += nDx;
-                    if ((short) nCol < 0)
-                        nCol = 0;
-                    else if ( nCol > MAXCOL )
-                        nCol = MAXCOL;
-                    aPos.SetCol( nCol );
-//                  bPosChanged = TRUE;
-                }
-            }
-            if ( nDy && nCol >= nCol1 && nCol <= nCol2 &&
-                nTab >= nTab1 && nTab <= nTab2 )
-            {
-                if (nRow >= nRow1)
-                {
-                    nRow += nDy;
-                    if ((short) nRow < 0)
-                        nRow = 0;
-                    else if ( nRow > MAXROW )
-                        nRow = MAXROW;
-                    aPos.SetRow( nRow );
-//                  bPosChanged = TRUE;
-                }
-            }
-            if ( nDz && nCol >= nCol1 && nCol <= nCol2 &&
-                nRow >= nRow1 && nRow <= nRow2 )
-            {
-                if (nTab >= nTab1)
-                {
-                    USHORT nMaxTab = pDocument->GetTableCount() - 1;
-                    nTab += nDz;
-                    if ((short) nTab < 0)
-                        nTab = 0;
-                    else if ( nTab > nMaxTab )
-                        nTab = nMaxTab;
-                    aPos.SetTab( nTab );
-//                  bPosChanged = TRUE;
-                }
-            }
-        }
-        else if ( r.In( aPos ) )
-        {
-            aOldPos.Set( nCol - nDx, nRow - nDy, nTab - nDz );
-//          bPosChanged = TRUE;
-        }
-
         BOOL bValChanged;
         ScRangeData* pRangeData;
         BOOL bRangeModified;            // beliebiger Range (nicht nur shared Formula)
