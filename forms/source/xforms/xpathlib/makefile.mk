@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: obo $ $Date: 2004-11-16 11:02:09 $
+#   last change: $Author: rt $ $Date: 2004-12-16 11:36:23 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -72,6 +72,10 @@ ENABLE_EXCEPTIONS=TRUE
 .INCLUDE :  settings.mk
 
 INCPRE+=$(PRJ)$/source$/inc
+
+.IF "$(SYSTEM_LIBXML)" == "YES"
+CFLAGS+=-DSYSTEM_LIBXML $(LIBXML_CFLAGS)
+.ENDIF
 
 # --- Files --------------------------------------------------------
 
