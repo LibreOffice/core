@@ -557,8 +557,8 @@ $(DESTDIRCLASSES)$/officebean.jar : $(OUT)$/class$/officebean.jar
 $(DESTDIRCLASSES)$/oosupport.nbm : $(OUT)$/class$/oosupport.nbm
     $(GNUCOPY) -p $? $@
 
-$(DESTDIRBIN)$/applicat.rdb : $(BINOUT)$/applicat.rdb 
-    $(GNUCOPY) -p $(BINOUT)$/applicat.rdb $@
+$(DESTDIRBIN)$/types.rdb : $(BINOUT)$/types.rdb 
+    $(GNUCOPY) -p $(BINOUT)$/types.rdb $@
 
 $(DESTDIRDLL)$/$(MY_DLLPREFIX)officebean$(MY_DLLPOSTFIX) : $(MY_DLLOUT)$/$(MY_DLLPREFIX)officebean$(MY_DLLPOSTFIX)
     $(GNUCOPY) -p $? $@
@@ -573,9 +573,9 @@ $(DESTDIR)$/settings$/dk.mk : $(PRJ)$/util$/dk.mk
     echo DKNAME=${PRODUCT_NAME} >> $@    
 .ENDIF
 .IF "$(GUI)"=="UNX"
-    echo 'DKREGISTRYNAME=$$(OFFICE_PROGRAM_PATH)$$(PS)applicat.rdb' >> $@
+    echo 'DKREGISTRYNAME=$$(OFFICE_PROGRAM_PATH)$$(PS)types.rdb' >> $@
 .ELSE
-    echo DKREGISTRYNAME=$$(OFFICE_PROGRAM_PATH)$$(PS)applicat.rdb >> $@
+    echo DKREGISTRYNAME=$$(OFFICE_PROGRAM_PATH)$$(PS)types.rdb >> $@
 .ENDIF
 
 .IF "$(BUILD_SOSL)"==""
