@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PageMasterImportPropMapper.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 08:20:25 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 14:59:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,9 +174,10 @@ void PageMasterImportPropertyMapper::finished(::std::vector< XMLPropertyState >&
     XMLPropertyState* pFooterDynamic = NULL;
     sal_uInt16 i;  // for the "for" loop
 
-    ::std::vector< XMLPropertyState >::iterator property = rProperties.begin();
-    for (property; property != rProperties.end(); property++)
+    ::std::vector< XMLPropertyState >::iterator aEnd = rProperties.end();
+    for (::std::vector< XMLPropertyState >::iterator aIter = rProperties.begin(); aIter != aEnd; ++aIter)
     {
+        XMLPropertyState *property = &(*aIter);
         sal_Int16 nContextID = getPropertySetMapper()->GetEntryContextId(property->mnIndex);
         if (property->mnIndex >= nStartIndex && property->mnIndex < nEndIndex)
         {
