@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Chart3DBarProperties.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:53:17 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 17:50:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,7 +74,7 @@
 /** Specifies all the properties for the graphic object of a data point in a
     three-dimensional bar diagram.@see BarDiagram
  */
-service Chart3DBarProperties
+published service Chart3DBarProperties
 {
     interface com::sun::star::beans::XPropertySet;
 
