@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: hro $ $Date: 2002-08-15 10:49:09 $
+#   last change: $Author: hro $ $Date: 2002-08-26 13:58:54 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -87,8 +87,7 @@ SHL1STDLIBS= \
 
 .IF "$(GUI)"=="WNT"
 SHL1STDLIBS+= \
-        uwinapi.lib \
-        unicows.lib
+        uwinapi.lib
 .ENDIF
 
 
@@ -116,7 +115,6 @@ SHL2STDLIBS= \
         $(CPPULIB) 	\
         $(CPPUHELPERLIB)\
         uwinapi.lib\
-        unicows.lib\
         advapi32.lib\
         ole32.lib\
         gdi32.lib
@@ -142,7 +140,6 @@ SHL3STDLIBS= \
         $(CPPULIB) 	\
         $(CPPUHELPERLIB)\
         uwinapi.lib\
-        unicows.lib\
         advapi32.lib\
         ole32.lib\
         comsupp.lib\
@@ -170,7 +167,6 @@ SHL4STDLIBS= \
         $(CPPULIB) 	\
         $(CPPUHELPERLIB) \
         uwinapi.lib\
-        unicows.lib\
         advapi32.lib\
         ole32.lib\
         comsupp.lib\

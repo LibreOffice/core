@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: hro $ $Date: 2002-08-14 14:53:43 $
+#   last change: $Author: hro $ $Date: 2002-08-26 13:57:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -124,7 +124,6 @@ APP1STDLIBS= \
     $(CPPUHELPERLIB) \
     $(CPPULIB)		\
     uwinapi.lib \
-    unicows.lib\
     user32.lib		\
     ole32.lib		\
     comsupp.lib		\
