@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tablespage.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-29 09:59:39 $
+ *  last change: $Author: fs $ $Date: 2001-07-31 16:01:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -471,6 +471,26 @@ namespace dbaui
                     DBG_ERROR("OTableSubscriptionPage::ActivatePage : could not retrieve the qualifier separator for the used connection !");
                 }
             }
+        }
+
+        // if we're (resp. the dialog) is in a mode where only editing of a single data source is allowed ...
+        const sal_Bool bAnySingleEditMode = ( ODbAdminDialog::omFull != m_pAdminDialog->getMode() );
+        const sal_Bool bPreviouslySingleEditMode = !m_aActions.IsVisible();
+        if ( bAnySingleEditMode != bPreviouslySingleEditMode )
+        {
+            // ... we don't offer the toolbox to the user
+            m_aActions.Show( !bAnySingleEditMode );
+
+            // resize the listbox (below the toolbox) accordingly
+            Size aSize = m_aTablesList.GetSizePixel();
+            Point aPos = m_aTablesList.GetPosPixel();
+
+            sal_Int32 nResizeY = m_aTablesList.GetPosPixel().Y() - m_aActions.GetPosPixel().Y();
+
+            aPos.Y() -= nResizeY;
+            aSize.Height() += nResizeY;
+
+            m_aTablesList.SetPosSizePixel( aPos, aSize );
         }
 
         OGenericAdministrationPage::ActivatePage(_rSet);
@@ -1130,6 +1150,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.1  2001/05/29 09:59:39  fs
+ *  initial checkin - outsourced the class from commonpages
+ *
  *
  *  Revision 1.0 29.05.01 11:10:11  fs
  ************************************************************************/

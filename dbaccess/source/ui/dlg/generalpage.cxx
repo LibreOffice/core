@@ -2,9 +2,9 @@
  *
  *  $RCSfile: generalpage.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-23 13:13:38 $
+ *  last change: $Author: fs $ $Date: 2001-07-31 16:01:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,6 +132,9 @@
 #ifndef _DBAUI_DETAILPAGES_HXX_
 #include "detailpages.hxx"
 #endif
+#ifndef _SV_WAITOBJ_HXX
+#include <vcl/waitobj.hxx>
+#endif
 #ifndef _DBAUI_SQLMESSAGE_HXX_
 #include "sqlmessage.hxx"
 #endif
@@ -251,9 +254,14 @@ namespace dbaui
         DBG_ASSERT(m_xORB.is(), "OGeneralPage::initializeTypeList: have no service factory!");
         if (m_xORB.is())
         {
-            xDriverManager = Reference< XDriverAccess >(m_xORB->createInstance(SERVICE_SDBC_CONNECTIONPOOL), UNO_QUERY);
-            if (!xDriverManager.is())
-                xDriverManager = Reference< XDriverAccess >(m_xORB->createInstance(SERVICE_SDBC_DRIVERMANAGER), UNO_QUERY);
+            {
+                // if the connection pool (resp. driver manager) may be expensive to load if it is accessed the first time,
+                // so display a wait cursor
+                WaitObject aWaitCursor(GetParent());
+                xDriverManager = Reference< XDriverAccess >(m_xORB->createInstance(SERVICE_SDBC_CONNECTIONPOOL), UNO_QUERY);
+                if (!xDriverManager.is())
+                    xDriverManager = Reference< XDriverAccess >(m_xORB->createInstance(SERVICE_SDBC_DRIVERMANAGER), UNO_QUERY);
+            }
             if (!xDriverManager.is())
                 ShowServiceNotAvailableError(GetParent(), String(SERVICE_SDBC_DRIVERMANAGER), sal_True);
         }
@@ -483,6 +491,14 @@ namespace dbaui
         if (eOldSelection != m_eCurrentSelection)
             onTypeSelected(m_eCurrentSelection);
 
+        // are we allowed to change the data source type?
+        sal_Bool bSingleTypeEdit = ODbAdminDialog::omSingleEditFixedType == m_pAdminDialog->getMode();
+        // is the current data source type LDAP?
+        sal_Bool bEditingLDAP = (DST_ADDRESSBOOK == m_eCurrentSelection) && (ABT_LDAP == AddressBookTypes::getAddressType(sConnectURL));
+
+        // don't allow sub-type changes in case of LDAP
+        m_aBrowseConnection.Enable( !( bSingleTypeEdit && bEditingLDAP) );
+
         m_aConnection.SetText(sConnectURL);
         if (_bSaveValue)
         {
@@ -515,6 +531,17 @@ namespace dbaui
 
         // there are some things which depend on the current name
         LINK(this, OGeneralPage, OnNameModified).Call(&m_aName);
+    }
+
+    //-------------------------------------------------------------------------
+    void OGeneralPage::ActivatePage(const SfxItemSet& _rSet)
+    {
+        OGenericAdministrationPage::ActivatePage( _rSet );
+
+        // if the dialog is in a mode where only a single data source is beeing edited, and no type change
+        // is allowed, disable the type selection
+        sal_Bool bSingleTypeEdit = ODbAdminDialog::omSingleEditFixedType == m_pAdminDialog->getMode();
+        m_aDatasourceType.Enable( !bSingleTypeEdit );
     }
 
     //-------------------------------------------------------------------------
@@ -1042,12 +1069,12 @@ namespace dbaui
             break;
             case DST_ADDRESSBOOK:
             {
-                static ::rtl::OUString sAddressBookTypes[]=
+                ::rtl::OUString sAddressBookTypes[]=
                 {
-                    ::rtl::OUString::createFromAscii("sdbc:address:outlook"),
-                    ::rtl::OUString::createFromAscii("sdbc:address:outlookexp"),
-                    ::rtl::OUString::createFromAscii("sdbc:address:ldap"),
-                    ::rtl::OUString::createFromAscii("sdbc:address:mozilla")
+                    AddressBookTypes::getAddressURL( ABT_OUTLOOK ),
+                    AddressBookTypes::getAddressURL( ABT_OE ),
+                    AddressBookTypes::getAddressURL( ABT_LDAP ),
+                    AddressBookTypes::getAddressURL( ABT_MORK )
                 };
                 static String sAddressBookTypesTrans[]=
                 {
@@ -1211,6 +1238,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.16  2001/07/23 13:13:38  oj
+ *  #90074# check if calc doc exists
+ *
  *  Revision 1.15  2001/07/17 07:35:00  oj
  *  #89533# GetMainURL changed
  *

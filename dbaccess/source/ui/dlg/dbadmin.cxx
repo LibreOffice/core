@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.cxx,v $
  *
- *  $Revision: 1.67 $
+ *  $Revision: 1.68 $
  *
- *  last change: $Author: fs $ $Date: 2001-07-30 11:31:52 $
+ *  last change: $Author: fs $ $Date: 2001-07-31 16:01:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -190,6 +190,7 @@ ODbAdminDialog::ODbAdminDialog(Window* _pParent, SfxItemSet* _pItems, const Refe
     ,m_xORB(_rxORB)
     ,m_nPostApplyPage(0)
     ,m_pPostApplyPageSettings(NULL)
+    ,m_eMode(omFull)
 {
     // add the initial tab pages
     AddTabPage(PAGE_GENERAL, String(ResId(STR_PAGETITLE_GENERAL)), OGeneralPage::Create, NULL);
@@ -371,7 +372,7 @@ Reference<XConnection> ODbAdminDialog::createConnection()
 short ODbAdminDialog::Execute()
 {
     // in "single edit" mode ...
-    if (omSingleEdit == getMode())
+    if (omFull != getMode())
         // ... we initially show the detail page for convenience
         PostUserEvent( LINK( this, ODbAdminDialog, OnAsyncSelectDetailsPage ) );
 
@@ -403,11 +404,10 @@ void ODbAdminDialog::setMode(const OperationMode _eMode)
 
     m_eMode = _eMode;
 
-    // if we're in a "edit the current data source only" mode, we disable the selection listbox and the new
-    // button only
-    // TODO: it would be nicer to remove all other data sources from the list and disable the "new" button,
-    // the approach with disabling the selector has been choosen due to time pressure ....
-    m_aSelector.Enable( omFull == m_eMode );
+    // if we're in a "edit the current data source only" mode, we hide the selection listbox and the new
+    // button
+    m_aSelector.Show( omFull == m_eMode );
+    AdjustLayout();
 }
 
 //-------------------------------------------------------------------------
@@ -831,7 +831,7 @@ IMPL_LINK(ODbAdminDialog, OnNameModified, OGeneralPage*, _pTabPage)
 
         // the user is not allowed to leave the current data source (or to commit the dialog) as long
         // as the name is invalid
-        m_aSelector.Enable( bValid && m_aDatasources.isValid() && ( omFull == m_eMode ) );
+        m_aSelector.Enable( bValid && m_aDatasources.isValid() && ( omFull == getMode() ) );
         GetOKButton().Enable(bValid);
         GetApplyButton()->Enable(bValid);
 
@@ -930,7 +930,7 @@ IMPL_LINK(ODbAdminDialog, OnTypeSelected, OGeneralPage*, _pTabPage)
                 String sConnectionURL;
                 SFX_ITEMSET_GET(*GetExampleSet(), pUrlItem, SfxStringItem, DSID_CONNECTURL, sal_True);
                 sConnectionURL = pUrlItem->GetValue();
-                if (0 == sConnectionURL.CompareToAscii("sdbc:address:ldap"))
+                if ( ABT_LDAP == AddressBookTypes::getAddressType( sConnectionURL ) )
                     addDetailPage(PAGE_LDAP,STR_PAGETITLE_LDAP,OLDAPDetailsPage::Create);
             }
             _pTabPage->disableConnectionURL();
@@ -1056,12 +1056,15 @@ void ODbAdminDialog::resetPages(const Reference< XPropertySet >& _rxDatasource, 
     pExampleSet = new SfxItemSet(*GetInputSetImpl());
 
     // and again, add the non-details tab pages
-    if ( !_bDeleted && ( omSingleEdit != getMode() ) )
+    if ( !_bDeleted )
     {
         OLocalResourceAccess aDummy(DLG_DATABASE_ADMINISTRATION, RSC_TABDIALOG);
         AddTabPage(PAGE_TABLESUBSCRIPTION, String(ResId(STR_PAGETITLE_TABLESUBSCRIPTION)), OTableSubscriptionPage::Create, NULL);
-        AddTabPage(PAGE_QUERYADMINISTRATION, String(ResId(STR_PAGETITLE_QUERIES)), OQueryAdministrationPage::Create, NULL);
-        AddTabPage(PAGE_DOCUMENTLINKS, String(ResId(STR_PAGETITLE_DOCUMENTS)), ODocumentLinksPage::Create, NULL);
+        if ( omFull == getMode() )
+        {
+            AddTabPage(PAGE_QUERYADMINISTRATION, String(ResId(STR_PAGETITLE_QUERIES)), OQueryAdministrationPage::Create, NULL);
+            AddTabPage(PAGE_DOCUMENTLINKS, String(ResId(STR_PAGETITLE_DOCUMENTS)), ODocumentLinksPage::Create, NULL);
+        }
     }
 
     m_bResetting = sal_True;
@@ -1386,7 +1389,7 @@ const sal_Int32* ODbAdminDialog::getRelevantItems(const SfxItemSet& _rSet) const
                 String sConnectionURL;
                 SFX_ITEMSET_GET(*GetExampleSet(), pUrlItem, SfxStringItem, DSID_CONNECTURL, sal_True);
                 sConnectionURL = pUrlItem->GetValue();
-                if(String::CreateFromAscii("sdbc:address:ldap") == sConnectionURL)
+                if ( ABT_LDAP == AddressBookTypes::getAddressType( sConnectionURL ) )
                     pRelevantItems = OLDAPDetailsPage::getDetailIds();
                 else
                 {
@@ -2009,6 +2012,9 @@ IMPL_LINK(ODbAdminDialog, OnApplyChanges, PushButton*, EMPTYARG)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.67  2001/07/30 11:31:52  fs
+ *  #88530# changes to allow operating the dialog in a 'edit one single data source only' mode
+ *
  *  Revision 1.66  2001/07/25 14:05:44  oj
  *  #90201# check ldap name
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoadmin.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fs $ $Date: 2001-07-30 11:32:08 $
+ *  last change: $Author: fs $ $Date: 2001-07-31 16:02:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,6 +248,8 @@ void ODatabaseAdministrationDialog::implSetOperationMode(ODbAdminDialog* _pDialo
     ODbAdminDialog::OperationMode eMode = ODbAdminDialog::omFull;
     if (0 == m_sOperationMode.compareToAscii("SingleEdit"))
         eMode = ODbAdminDialog::omSingleEdit;
+    else if (0 == m_sOperationMode.compareToAscii("SingleEditFixedType"))
+        eMode = ODbAdminDialog::omSingleEditFixedType;
 #ifdef DBG_UTIL
     else if ((0 != m_sOperationMode.compareToAscii("AdministrateAll")) && (0 != m_sOperationMode.getLength()))
         DBG_ERROR("ODatabaseAdministrationDialog::implSetOperationMode: unsupported (unknown) mode!");
@@ -294,6 +296,9 @@ void ODatabaseAdministrationDialog::implInitialize(const Any& _rValue)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.10  2001/07/30 11:32:08  fs
+ *  #88530# changes to allow operating the dialog in a 'edit one single data source only' mode
+ *
  *  Revision 1.9  2001/06/18 12:35:37  fs
  *  #88389# OGenericUnoDialog moved to svtools
  *

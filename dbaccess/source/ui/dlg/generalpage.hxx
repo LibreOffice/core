@@ -2,9 +2,9 @@
  *
  *  $RCSfile: generalpage.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-07-23 13:13:38 $
+ *  last change: $Author: fs $ $Date: 2001-07-31 16:01:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,6 +151,7 @@ namespace dbaui
         // SfxTabPage overridables
         virtual BOOL FillItemSet(SfxItemSet& _rCoreAttrs);
         virtual void Reset(const SfxItemSet& _rCoreAttrs);
+        virtual void ActivatePage(const SfxItemSet& _rSet);
 
         virtual void implInitControls(const SfxItemSet& _rSet, sal_Bool _bSaveValue);
         virtual sal_Bool checkItems();
@@ -191,6 +192,9 @@ namespace dbaui
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.3  2001/07/23 13:13:38  oj
+ *  #90074# check if calc doc exists
+ *
  *  Revision 1.2  2001/05/29 13:33:12  oj
  *  #87149# addressbook ui impl
  *
