@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ImageControl.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 10:48:04 $
+ *  last change: $Author: obo $ $Date: 2003-10-21 08:58:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,23 +100,14 @@ class OImageControlModel
                 :public OImageControlModel_Base
                 ,public ::comphelper::OAggregationArrayUsageHelper<OImageControlModel>
                 ,public OBoundControlModel
-                ,public OPropertyChangeListener
 {
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XImageProducer>    m_xImageProducer;
     ImageProducer*                                  m_pImageProducer;
     sal_Bool                                        m_bReadOnly;
 
-    OPropertyChangeMultiplexer* m_pAggregatePropertyMultiplexer;
-
-    // Helper functions
-    void UpdateFromField();
-
 protected:
     // UNO Anbindung
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> _getTypes();
-    virtual void _onValueChanged();
-
-    virtual sal_Bool        _approve(sal_Int32 _nColumnType);
 
     inline ImageProducer* GetImageProducer() { return m_pImageProducer; }
 
@@ -132,10 +123,6 @@ public:
     // UNO Anbindung
     DECLARE_UNO3_AGG_DEFAULTS(OImageControlModel, OBoundControlModel);
     virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation(const ::com::sun::star::uno::Type& _rType) throw(::com::sun::star::uno::RuntimeException);
-
-// ::com::sun::star::form::XBoundComponent
-    virtual ::com::sun::star::uno::Any _getControlValue() const;
-    virtual void _reset();
 
 // ::com::sun::star::lang::XServiceInfo
     IMPLEMENTATION_NAME(OImageControlModel);
@@ -172,9 +159,37 @@ public:
     IMPLEMENT_INFO_SERVICE()
 
 protected:
+    // OBoundControlModel overridables
+    virtual ::com::sun::star::uno::Any
+                            translateDbColumnToControlValue( );
+    virtual sal_Bool        commitControlValueToDbColumn( bool _bPostReset );
+
+    virtual void            setControlValue( const ::com::sun::star::uno::Any& _rValue );
+
+    virtual sal_Bool        approveDbColumnType(sal_Int32 _nColumnType);
+
+    virtual void            resetNoBroadcast();
+
+protected:
     DECLARE_XCLONEABLE();
 
     void implConstruct();
+
+    /** updates the database column we're bound to with the given stream
+
+        <p>If the stream is <NULL/>, then XColumnUpdate::updateNull will be called for the
+        column.</p>
+
+        @precond
+            m_xColumnUpdate is not <NULL/>
+    */
+    void        updateColumnWithStream( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& _rxStream );
+
+    /** displays the image described by the given URL
+        @precond
+            our own mutex is locked
+    */
+    sal_Bool    handleNewImageURL( const ::rtl::OUString& _rURL );
 };
 
 //==================================================================
