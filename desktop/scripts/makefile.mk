@@ -70,6 +70,7 @@ TARGET=scripts
 UNIXTEXT= \
     $(MISC)$/fromTemplate.sh \
     $(MISC)$/sagenda.sh \
+    $(MISC)$/sbase.sh \
     $(MISC)$/soffice.sh \
     $(MISC)$/scalc.sh \
     $(MISC)$/sdraw.sh \
