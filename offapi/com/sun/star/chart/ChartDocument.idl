@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ChartDocument.idl,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2004-02-11 09:32:38 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 17:56:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@
         @see ChartTitle
         @see ChartDataArray
  */
-service ChartDocument
+published service ChartDocument
 {
     /** If a <type>ChartDocument</type> may be stored as XML file,
         this service should be supported in order to preserve unparsed
