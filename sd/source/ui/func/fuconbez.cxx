@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuconbez.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 17:11:52 $
+ *  last change: $Author: obo $ $Date: 2004-01-20 10:58:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,6 +59,8 @@
  *
  ************************************************************************/
 
+#include "fuconbez.hxx"
+
 #ifndef _AEITEM_HXX //autogen
 #include <svtools/aeitem.hxx>
 #endif
@@ -93,14 +95,24 @@
 #endif
 
 #include "app.hrc"
-#include "viewshel.hxx"
-#include "sdview.hxx"
-#include "sdwindow.hxx"
+#ifndef SD_VIEW_SHELL_HXX
+#include "ViewShell.hxx"
+#endif
+#ifndef SD_VIEW_HXX
+#include "View.hxx"
+#endif
+#ifndef SD_WINDOW_HXX
+#include "Window.hxx"
+#endif
+#ifndef SD_OBJECT_BAR_MANAGER_HXX
+#include "ObjectBarManager.hxx"
+#endif
 #include "drawdoc.hxx"
-#include "fuconbez.hxx"
 #include "res_bmp.hrc"
 
-TYPEINIT1( FuConstBezPoly, FuConstruct );
+namespace sd {
+
+TYPEINIT1( FuConstructBezierPolygon, FuConstruct );
 
 
 /*************************************************************************
@@ -109,11 +121,14 @@ TYPEINIT1( FuConstBezPoly, FuConstruct );
 |*
 \************************************************************************/
 
-FuConstBezPoly::FuConstBezPoly(SdViewShell* pViewSh, SdWindow* pWin,
-                               SdView* pView, SdDrawDocument* pDoc,
-                               SfxRequest& rReq)
+FuConstructBezierPolygon::FuConstructBezierPolygon (
+    ViewShell* pViewSh,
+    ::sd::Window* pWin,
+    ::sd::View* pView,
+    SdDrawDocument* pDoc,
+    SfxRequest& rReq)
     : FuConstruct(pViewSh, pWin, pView, pDoc, rReq),
-    nEditMode(SID_BEZIER_MOVE)
+      nEditMode(SID_BEZIER_MOVE)
 {
 }
 
@@ -123,7 +138,7 @@ FuConstBezPoly::FuConstBezPoly(SdViewShell* pViewSh, SdWindow* pWin,
 |*
 \************************************************************************/
 
-FuConstBezPoly::~FuConstBezPoly()
+FuConstructBezierPolygon::~FuConstructBezierPolygon()
 {
 }
 
@@ -133,7 +148,7 @@ FuConstBezPoly::~FuConstBezPoly()
 |*
 \************************************************************************/
 
-BOOL FuConstBezPoly::MouseButtonDown(const MouseEvent& rMEvt)
+BOOL FuConstructBezierPolygon::MouseButtonDown(const MouseEvent& rMEvt)
 {
     BOOL bReturn = FuConstruct::MouseButtonDown(rMEvt);
 
@@ -190,7 +205,7 @@ BOOL FuConstBezPoly::MouseButtonDown(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-BOOL FuConstBezPoly::MouseMove(const MouseEvent& rMEvt)
+BOOL FuConstructBezierPolygon::MouseMove(const MouseEvent& rMEvt)
 {
     BOOL bReturn = FuConstruct::MouseMove(rMEvt);
     return(bReturn);
@@ -202,7 +217,7 @@ BOOL FuConstBezPoly::MouseMove(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-BOOL FuConstBezPoly::MouseButtonUp(const MouseEvent& rMEvt)
+BOOL FuConstructBezierPolygon::MouseButtonUp(const MouseEvent& rMEvt)
 {
     BOOL bReturn = FALSE;
     BOOL bCreated = FALSE;
@@ -252,7 +267,7 @@ BOOL FuConstBezPoly::MouseButtonUp(const MouseEvent& rMEvt)
 |*
 \************************************************************************/
 
-BOOL FuConstBezPoly::KeyInput(const KeyEvent& rKEvt)
+BOOL FuConstructBezierPolygon::KeyInput(const KeyEvent& rKEvt)
 {
     BOOL bReturn = FuConstruct::KeyInput(rKEvt);
 
@@ -265,7 +280,7 @@ BOOL FuConstBezPoly::KeyInput(const KeyEvent& rKEvt)
 |*
 \************************************************************************/
 
-void FuConstBezPoly::Activate()
+void FuConstructBezierPolygon::Activate()
 {
     pView->EnableExtendedMouseEventDispatcher(TRUE);
 
@@ -329,7 +344,7 @@ void FuConstBezPoly::Activate()
 |*
 \************************************************************************/
 
-void FuConstBezPoly::Deactivate()
+void FuConstructBezierPolygon::Deactivate()
 {
     pView->EnableExtendedMouseEventDispatcher(FALSE);
 
@@ -343,7 +358,7 @@ void FuConstBezPoly::Deactivate()
 |*
 \************************************************************************/
 
-void FuConstBezPoly::SelectionHasChanged()
+void FuConstructBezierPolygon::SelectionHasChanged()
 {
     FuDraw::SelectionHasChanged();
 
@@ -357,7 +372,7 @@ void FuConstBezPoly::SelectionHasChanged()
         nObjBarId = RID_BEZIER_TOOLBOX;
     }
 
-    pViewShell->SwitchObjectBar(nObjBarId);
+    pViewShell->GetObjectBarManager().SwitchObjectBar (nObjBarId);
 }
 
 
@@ -368,7 +383,7 @@ void FuConstBezPoly::SelectionHasChanged()
 |*
 \************************************************************************/
 
-void FuConstBezPoly::SetEditMode(USHORT nMode)
+void FuConstructBezierPolygon::SetEditMode(USHORT nMode)
 {
     nEditMode = nMode;
     ForcePointer();
@@ -379,7 +394,7 @@ void FuConstBezPoly::SetEditMode(USHORT nMode)
 }
 
 // #97016#
-SdrObject* FuConstBezPoly::CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle)
+SdrObject* FuConstructBezierPolygon::CreateDefaultObject(const sal_uInt16 nID, const Rectangle& rRectangle)
 {
     // case SID_DRAW_POLYGON:
     // case SID_DRAW_POLYGON_NOFILL:
@@ -516,3 +531,4 @@ SdrObject* FuConstBezPoly::CreateDefaultObject(const sal_uInt16 nID, const Recta
     return pObj;
 }
 
+} // end of namespace sd
