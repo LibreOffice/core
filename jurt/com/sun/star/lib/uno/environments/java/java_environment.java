@@ -2,9 +2,9 @@
  *
  *  $RCSfile: java_environment.java,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dbo $ $Date: 2002-10-29 09:17:05 $
+ *  last change: $Author: sb $ $Date: 2002-10-30 15:32:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,7 @@ import com.sun.star.lib.sandbox.generic.Dispatcher;
 import com.sun.star.lib.sandbox.generic.DispatcherAdapterBase;
 import com.sun.star.lib.sandbox.generic.DispatcherAdapterFactory;
 
+import com.sun.star.lib.uno.TypedProxy;
 import com.sun.star.lib.uno.typedesc.TypeDescription;
 
 import com.sun.star.uno.IEnvironment;
@@ -91,7 +92,7 @@ import com.sun.star.uno.XInterface;
  * interface defined in the uno runtime.
  * <p>
  * <p>
- * @version     $Revision: 1.9 $ $ $Date: 2002-10-29 09:17:05 $
+ * @version     $Revision: 1.10 $ $ $Date: 2002-10-30 15:32:05 $
  * @author      Kay Ramme
  * @see         com.sun.star.uno.UnoRuntime
  * @see         com.sun.star.uno.IEnvironment
@@ -107,7 +108,9 @@ public class java_environment implements IEnvironment, Disposable {
     /*
     ** This is the holder proxy, which one gets while trying to get a registered object
     */
-    static public class HolderProxy extends DispatcherAdapterBase implements Dispatcher, XInterface, IQueryInterface {
+    static public class HolderProxy extends DispatcherAdapterBase
+        implements Dispatcher, XInterface, IQueryInterface, TypedProxy
+    {
         static private Hashtable __methodss = new Hashtable();
 
         /**
@@ -199,6 +202,11 @@ public class java_environment implements IEnvironment, Disposable {
 
         public String getOid() {
             return UnoRuntime.generateOid(object);
+        }
+
+        // @see com.sun.star.lib.uno.TypedProxy#getType
+        public Type getType() {
+            return _type;
         }
 
         public void finalize() {
