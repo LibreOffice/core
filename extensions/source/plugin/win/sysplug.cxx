@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sysplug.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dbo $ $Date: 2001-12-07 11:10:41 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:18:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@ extern NPNetscapeFuncs aNPNFuncs;
 
 using namespace rtl;
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 void TRACE( char const * s );
 void TRACEN( char const * s, long n );
 #else
