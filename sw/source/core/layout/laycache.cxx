@@ -2,9 +2,9 @@
  *
  *  $RCSfile: laycache.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 14:10:26 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 13:47:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -888,6 +888,9 @@ BOOL SwLayHelper::CheckInsert( ULONG nNodeIndex )
                         if( rpFrm->IsTabFrm() )
                         {
                             SwTabFrm* pTab = (SwTabFrm*)rpFrm;
+                            // --> OD 2004-09-23 #i33629#, #i29955#
+                            ::RegistFlys( pTab->FindPageFrm(), pTab );
+                            // <--
                             SwFrm *pRow = pTab->Lower();
                             SwTabFrm *pFoll = new SwTabFrm( *pTab );
 
