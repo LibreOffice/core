@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: kz $ $Date: 2003-08-25 15:21:13 $
+#   last change: $Author: hr $ $Date: 2004-05-10 16:05:03 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,7 +64,7 @@ PRJ=..$/..$/..
 
 PRJNAME=sc
 TARGET=pagedlg
-
+LIBTARGET=no
 PROJECTPCH4DLL=TRUE
 PROJECTPCH=ui_pch
 PDBTARGET=ui_pch
@@ -95,7 +95,8 @@ SLOFILES = \
     $(SLO)$/hfedtdlg.obj	\
         $(SLO)$/tptable.obj	\
         $(SLO)$/tphf.obj		\
-        $(SLO)$/tphfedit.obj
+        $(SLO)$/tphfedit.obj	\
+        $(SLO)$/scuitphfedit.obj
 
 
 SRS1NAME=$(TARGET)
@@ -103,6 +104,11 @@ SRC1FILES =  pagedlg.src     	\
             hfedtdlg.src    	\
             tphf.src
 
+LIB1TARGET = $(SLB)$/$(TARGET).lib
+
+LIB1OBJFILES = \
+        $(SLO)$/areasdlg.obj	\
+    $(SLO)$/tphfedit.obj
 # --- Tagets -------------------------------------------------------
 
 .INCLUDE :  target.mk
