@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewstat.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tl $ $Date: 2000-10-27 12:28:49 $
+ *  last change: $Author: os $ $Date: 2000-10-31 16:10:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -367,21 +367,21 @@ void SwView::GetState(SfxItemSet &rSet)
                 }
             }
             break;
-        case SID_MAIL_SCROLLBODY_PAGEDOWN:
-            {
-                long nBottom = pWrtShell->GetDocSize().Height() + DOCUMENTBORDER;
-                long nAct = GetVisArea().Bottom();
-                rSet.Put(SfxBoolItem(SID_MAIL_SCROLLBODY_PAGEDOWN, nAct < nBottom ));
-            }
-            break;
+            case SID_MAIL_SCROLLBODY_PAGEDOWN:
+                {
+                    long nBottom = pWrtShell->GetDocSize().Height() + DOCUMENTBORDER;
+                    long nAct = GetVisArea().Bottom();
+                    rSet.Put(SfxBoolItem(SID_MAIL_SCROLLBODY_PAGEDOWN, nAct < nBottom ));
+                }
+                break;
 
-        case SID_DOCUMENT_COMPARE:
-        case SID_DOCUMENT_MERGE:
-            if( GetDocShell()->IsA( SwGlobalDocShell::StaticType() ) ||
-                pWrtShell->IsAnySectionInDoc( sal_True, sal_True, sal_True ))
-                rSet.DisableItem(nWhich);
+            case SID_DOCUMENT_COMPARE:
+            case SID_DOCUMENT_MERGE:
+                if( GetDocShell()->IsA( SwGlobalDocShell::StaticType() ) ||
+                    pWrtShell->IsAnySectionInDoc( sal_True, sal_True, sal_True ))
+                    rSet.DisableItem(nWhich);
+            break;
         }
-        break;
         nWhich = aIter.NextWhich();
     }
 }
