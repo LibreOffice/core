@@ -2,9 +2,9 @@
  *
  *  $RCSfile: porfld.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: fme $ $Date: 2001-07-24 07:56:42 $
+ *  last change: $Author: fme $ $Date: 2001-08-01 10:57:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -668,7 +668,12 @@ void SwNumberPortion::FormatEOL( SwTxtFormatInfo &rInf )
  *  nicht mit auf die Zeile passte. Damit die Numerierung mitwandert,
  *  wird diese NumberPortion verborgen.
  */
-    SetHide( sal_True );
+
+    // This caused trouble with flys anchored as characters.
+    // If one of these is numbered but does not fit to the line,
+    // it calls this function, causing a loop because both the number
+    // portion and the fly portion go to the next line
+//    SetHide( sal_True );
 }
 
 /*************************************************************************
