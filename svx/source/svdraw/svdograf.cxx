@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdograf.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: ka $ $Date: 2001-05-17 15:28:23 $
+ *  last change: $Author: ka $ $Date: 2001-06-18 13:21:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -333,7 +333,7 @@ Graphic SdrGrafObj::GetTransformedGraphic( ULONG nTransformFlags ) const
         }
 
         if( ( nTransformFlags & SDRGRAFOBJ_TRANSFORMATTR_ROTATE ) &&
-            ( aGeo.nDrehWink && aGeo.nDrehWink != 18000 ) && ( GRAPHIC_BITMAP == eType ) && !IsAnimated() )
+            ( aGeo.nDrehWink && aGeo.nDrehWink != 18000 ) && ( GRAPHIC_NONE != eType ) && !IsAnimated() )
         {
             aActAttr.SetRotation( aGeo.nDrehWink / 10 );
         }
@@ -549,17 +549,17 @@ void SdrGrafObj::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 {
     FASTBOOL bTrans = pGraphic->IsTransparent();
     FASTBOOL bAnim = pGraphic->IsAnimated();
-    FASTBOOL bNoPresBmp = ( pGraphic->GetType() == GRAPHIC_BITMAP ) && !bEmptyPresObj;
+    FASTBOOL bNoPresGrf = ( pGraphic->GetType() != GRAPHIC_NONE ) && !bEmptyPresObj;
 
     rInfo.bResizeFreeAllowed = aGeo.nDrehWink % 9000 == 0 ||
                                aGeo.nDrehWink % 18000 == 0 ||
                                aGeo.nDrehWink % 27000 == 0;
 
     rInfo.bResizePropAllowed = TRUE;
-    rInfo.bRotateFreeAllowed = bNoPresBmp && !bAnim;
-    rInfo.bRotate90Allowed = bNoPresBmp && !bAnim;
-    rInfo.bMirrorFreeAllowed = bNoPresBmp && !bAnim;
-    rInfo.bMirror45Allowed = bNoPresBmp && !bAnim;
+    rInfo.bRotateFreeAllowed = bNoPresGrf && !bAnim;
+    rInfo.bRotate90Allowed = bNoPresGrf && !bAnim;
+    rInfo.bMirrorFreeAllowed = bNoPresGrf && !bAnim;
+    rInfo.bMirror45Allowed = bNoPresGrf && !bAnim;
     rInfo.bMirror90Allowed = !bEmptyPresObj;
     rInfo.bTransparenceAllowed = FALSE;
     rInfo.bGradientAllowed = FALSE;
@@ -941,6 +941,9 @@ FASTBOOL SdrGrafObj::Paint( ExtOutputDevice& rOut, const SdrPaintInfoRec& rInfoR
                 nNewDrawMode &= ~( DRAWMODE_BLACKLINE | DRAWMODE_BLACKFILL | DRAWMODE_WHITEFILL | DRAWMODE_NOFILL );
                 pOutDev->SetDrawMode( nNewDrawMode |= DRAWMODE_GRAYLINE | DRAWMODE_GRAYFILL  );
             }
+
+            if( bRotate && !bRota180 )
+                aAttr.SetRotation( nDrehWink / 10 );
 
             pGraphic->Draw( pOutDev, aLogPos, aLogSize, &aAttr );
             pOutDev->SetDrawMode( nOldDrawMode );
