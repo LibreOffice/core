@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numrule.hxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-11 15:21:07 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:04:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,8 +199,6 @@ public:
     String MakeNumString( const SwNodeNum&, BOOL bInclStrings = TRUE,
                             BOOL bOnlyArabic = FALSE ) const;
 
-    sal_Unicode GetBulletChar( const SwNodeNum& ) const;
-    const Font* GetBulletFont( const SwNodeNum& ) const;
     static const Font& GetDefBulletFont();
 
     static char* GetOutlineRuleName() { return pDefOutlineName; }
@@ -221,8 +219,10 @@ public:
     // die gegebenfalls
     void CheckCharFmts( SwDoc* pDoc );
 
+#ifndef NUM_RELSPACE
     // test ob der Einzug von dieser Numerierung kommt.
     BOOL IsRuleLSpace( SwTxtNode& rNd ) const;
+#endif
 
     const String& GetName() const       { return sName; }
     void SetName( const String& rNm )   { sName = rNm; }
