@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: vg $ $Date: 2003-05-26 08:05:19 $
+#   last change: $Author: rt $ $Date: 2004-03-30 14:54:50 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -99,7 +99,11 @@ SLOFILES=\
     $(SLO)$/binaryreader.obj \
     $(SLO)$/binarywritehandler.obj \
     $(SLO)$/binaryreadhandler.obj	\
-    $(SLO)$/binarycache.obj
+    $(SLO)$/binarycache.obj	\
+    $(SLO)$/backendnotifier.obj     \
+    $(SLO)$/backendstratalistener.obj		\
+    $(SLO)$/multistratumbackend.obj	\
+    
 
 # --- Targets ---
 
