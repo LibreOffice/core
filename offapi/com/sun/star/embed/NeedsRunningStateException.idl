@@ -2,9 +2,9 @@
  *
  *  $RCSfile: NeedsRunningStateException.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-01-06 08:50:29 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 18:01:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,24 +66,26 @@
 #endif
 
 
-//=============================================================================
+//============================================================================
 
  module com {  module sun {  module star {  module embed {
 
-//=============================================================================
+//============================================================================
 
-// DocMerge from xml: exception com::sun::star::embed::NeedsRunningStateException
-/** This exception can be thrown in case a list of accepted verbs of states is requested
-    and the object is in loaded state and this information can be retrieved only when
-    the object is in running state. This exception means that the object supports
-    at least running state in addition to the current loaded state. Other states and
-    possible verbs can be detected only after object is switched to runnin state.
+/** This exception can be thrown in case a list of accepted verbs of states is
+    requested and the object is in loaded state and this information can be
+    retrieved only when the object is in running state.
+
+    <p>
+    This exception means that the object supports at least running state in
+    addition to the loaded state. Other states and possible verbs can be
+    detected only after object is switched to running state.
  */
-exception NeedsRunningStateException: com::sun::star::embed::WrongStateException
+exception NeedsRunningStateException: WrongStateException
 {
 };
 
-//=============================================================================
+//============================================================================
 
 }; }; }; };
 
