@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmui.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 20:53:42 $
+ *  last change: $Author: rt $ $Date: 2001-05-10 06:38:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@ String STR_TOP
     TEXT [ italian ] = "Alto" ;
     TEXT [ portuguese_brazilian ] = "Topo" ;
     TEXT [ portuguese ] = "Em cima" ;
-    TEXT [ finnish ] = "Ylä" ;
+    TEXT [ finnish ] = "~Yläosa" ;
     TEXT [ danish ] = "Foroven" ;
     TEXT [ french ] = "~En haut" ;
     TEXT [ swedish ] = "~Överst" ;
@@ -98,7 +98,7 @@ String STR_BOTTOM
     TEXT [ italian ] = "Basso" ;
     TEXT [ portuguese_brazilian ] = "Base" ;
     TEXT [ portuguese ] = "~Base" ;
-    TEXT [ finnish ] = "Ala" ;
+    TEXT [ finnish ] = "~Alaosa" ;
     TEXT [ danish ] = "Forneden" ;
     TEXT [ french ] = "En ~bas" ;
     TEXT [ swedish ] = "Nederst" ;
@@ -125,7 +125,7 @@ String STR_CENTER_HORI
     TEXT [ italian ] = "Centrato" ;
     TEXT [ portuguese_brazilian ] = "Centralizado" ;
     TEXT [ portuguese ] = "Centrado" ;
-    TEXT [ finnish ] = "Keski" ;
+    TEXT [ finnish ] = "~Keskitetty" ;
     TEXT [ danish ] = "Centreret" ;
     TEXT [ french ] = "~Centré" ;
     TEXT [ swedish ] = "~Centrerad" ;
@@ -195,6 +195,7 @@ String STR_FROMBOTTOM
     Text[ turkish ] = "Alttan";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Desde abajo";
+    Text[ finnish ] = "Pohjalta";
 };
 String STR_BELOW
 {
@@ -220,6 +221,7 @@ String STR_BELOW
     Text[ turkish ] = "Altta";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Debajo";
+    Text[ finnish ] = "Alhaalla";
 };
 /*-----------------------------------------------------------------------
     Beschreibung: H-Align
@@ -275,6 +277,7 @@ String STR_MIR_LEFT
     Text[ turkish ] = "Ýç";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Interior";
+    Text[ finnish ] = "Sisällä";
 };
 String STR_RIGHT
 {
@@ -311,7 +314,7 @@ String STR_MIR_RIGHT
     TEXT [ italian ] = "Esterno" ;
     TEXT [ portuguese_brazilian ] = "Fora" ;
     TEXT [ portuguese ] = "Exterior" ;
-    TEXT [ finnish ] = "Ulkopuoli" ;
+    TEXT [ finnish ] = "Ulkopuolella" ;
     TEXT [ danish ] = "Ydersiden" ;
     TEXT [ french ] = "Extérieur" ;
     TEXT [ swedish ] = "Utsida" ;
@@ -354,6 +357,7 @@ String STR_CENTER_VERT
     Text[ turkish ] = "O~rta";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "~Centro";
+    Text[ finnish ] = "~Keskitä";
 };
 String STR_FROMLEFT
 {
@@ -406,6 +410,7 @@ String STR_MIR_FROMLEFT
     Text[ turkish ] = "Ýçerden";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Desde el interior";
+    Text[ finnish ] = "Sisältä";
 };
 /*-----------------------------------------------------------------------
     Beschreibung: V-Rel
@@ -434,6 +439,7 @@ String STR_REL_BORDER
     Text[ turkish ] = "Kenar";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Margen";
+    Text[ finnish ] = "Marginaali";
 };
 String STR_REL_PRTAREA
 {
@@ -459,6 +465,7 @@ String STR_REL_PRTAREA
     Text[ turkish ] = "Metin alaný";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Área de texto ";
+    Text[ finnish ] = "Tekstialue";
 };
 String STR_TOPPRT
 {
@@ -468,7 +475,7 @@ String STR_TOPPRT
     TEXT [ italian ] = "Bordo superiore" ;
     TEXT [ portuguese_brazilian ] = "Topo da margem" ;
     TEXT [ portuguese ] = "Margem superior" ;
-    TEXT [ finnish ] = "Yläreunaviiva" ;
+    TEXT [ finnish ] = "Ylämarginaali" ;
     TEXT [ danish ] = "Topmargen" ;
     TEXT [ french ] = "Marge supérieure" ;
     TEXT [ swedish ] = "Övre marginal" ;
@@ -514,6 +521,7 @@ String STR_FLY_REL_PG_LEFT
     Text[ turkish ] = "Sol çerçeve kenarý";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Borde izquierdo del marco";
+    Text[ finnish ] = "Vasemman kehyksen reuna";
 };
 String STR_FLY_MIR_REL_PG_LEFT
 {
@@ -539,6 +547,7 @@ String STR_FLY_MIR_REL_PG_LEFT
     Text[ turkish ] = "Ýç çerçeve kenarý";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Borde interior del marco";
+    Text[ finnish ] = "Sisempi kehysreuna";
 };
 String STR_FLY_REL_PG_RIGHT
 {
@@ -564,6 +573,7 @@ String STR_FLY_REL_PG_RIGHT
     Text[ turkish ] = "Sað çerçeve kenarý";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Borde derecho del marco";
+    Text[ finnish ] = "Kehyksen oikea reuna";
 };
 String STR_FLY_MIR_REL_PG_RIGHT
 {
@@ -589,6 +599,7 @@ String STR_FLY_MIR_REL_PG_RIGHT
     Text[ turkish ] = "Dýþ çerçeve kenarý";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Borde exterior del marco";
+    Text[ finnish ] = "Ulompi kehysreuna";
 };
 String STR_FLY_REL_PG_FRAME
 {
@@ -614,6 +625,7 @@ String STR_FLY_REL_PG_FRAME
     Text[ turkish ] = "Çerçevenin tümü";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Marco entero";
+    Text[ finnish ] = "Koko kehys";
 };
 String STR_FLY_REL_PG_PRTAREA
 {
@@ -639,6 +651,7 @@ String STR_FLY_REL_PG_PRTAREA
     Text[ turkish ] = "Çerçeve metin alaný";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Área de texto del marco";
+    Text[ finnish ] = "Kehyksen tekstialue";
 };
 String STR_FRAME
 {
@@ -664,6 +677,7 @@ String STR_FRAME
     Text[ turkish ] = "Paragraf bölümü";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Área de párrafo";
+    Text[ finnish ] = "Kappaleen alue";
 };
 String STR_PRTAREA
 {
@@ -689,6 +703,7 @@ String STR_PRTAREA
     Text[ turkish ] = "Paragraf metin alaný";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Área de texto del párrafo";
+    Text[ finnish ] = "Kappaleen tekstialue";
 };
 String STR_REL_PG_LEFT
 {
@@ -714,6 +729,7 @@ String STR_REL_PG_LEFT
     Text[ turkish ] = "Sol sayfa kenarý";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Margen izquierdo de la página";
+    Text[ finnish ] = "Vasen sivuraja";
 };
 String STR_MIR_REL_PG_LEFT
 {
@@ -739,6 +755,7 @@ String STR_MIR_REL_PG_LEFT
     Text[ turkish ] = "Sayfa kenarý (iç)";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Margen interior de la página";
+    Text[ finnish ] = "Sisempi sivureuna";
 };
 String STR_REL_PG_RIGHT
 {
@@ -764,6 +781,7 @@ String STR_REL_PG_RIGHT
     Text[ turkish ] = "Sað sayfa kenarý";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Margen derecho de la página";
+    Text[ finnish ] = "Oikea sivuraja";
 };
 String STR_MIR_REL_PG_RIGHT
 {
@@ -789,6 +807,7 @@ String STR_MIR_REL_PG_RIGHT
     Text[ turkish ] = "Sayfa kenarý (dýþ)";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Margen exterior de la página";
+    Text[ finnish ] = "Ulompi sivureuna";
 };
 String STR_REL_FRM_LEFT
 {
@@ -814,6 +833,7 @@ String STR_REL_FRM_LEFT
     Text[ turkish ] = "Paragraf kenarý (sol)";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Margen izquierdo del párrafo";
+    Text[ finnish ] = "Kappaleen vasen reuna";
 };
 String STR_MIR_REL_FRM_LEFT
 {
@@ -839,6 +859,7 @@ String STR_MIR_REL_FRM_LEFT
     Text[ turkish ] = "Paragraf kenarý (iç)";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Margen interior del párrafo";
+    Text[ finnish ] = "Sisempi kappaleraja";
 };
 String STR_REL_FRM_RIGHT
 {
@@ -864,6 +885,7 @@ String STR_REL_FRM_RIGHT
     Text[ turkish ] = "Paragraf kenarý (sað)";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Margen derecho del párrafo";
+    Text[ finnish ] = "Kappaleen oikea reuna";
 };
 String STR_MIR_REL_FRM_RIGHT
 {
@@ -889,6 +911,7 @@ String STR_MIR_REL_FRM_RIGHT
     Text[ turkish ] = "Paragraf kenarý (dýþ)";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Margen exterior del párrafo";
+    Text[ finnish ] = "Ulompi kappalereuna";
 };
 String STR_REL_PG_FRAME
 {
@@ -914,6 +937,7 @@ String STR_REL_PG_FRAME
     Text[ turkish ] = "Sayfanýn tümü";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Página entera";
+    Text[ finnish ] = "Koko sivu";
 };
 String STR_REL_PG_PRTAREA
 {
@@ -939,6 +963,7 @@ String STR_REL_PG_PRTAREA
     Text[ turkish ] = "Sayfa metin alaný";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Área de texto de la página";
+    Text[ finnish ] = "Sivun tekstialue";
 };
 /*-----------------------------------------------------------------------
     Beschreibung: V-Rel Zeichenausrichtungen
@@ -967,6 +992,7 @@ String STR_REL_BASE
     Text[ turkish ] = "Taban çizgisi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Línea de base";
+    Text[ finnish ] = "Perusviiva";
 };
 String STR_REL_CHAR
 {
@@ -992,6 +1018,7 @@ String STR_REL_CHAR
     Text[ turkish ] = "Karakter";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Caracteres";
+    Text[ finnish ] = "Merkki";
 };
 String STR_REL_ROW
 {
@@ -1017,6 +1044,7 @@ String STR_REL_ROW
     Text[ turkish ] = "Satýr";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Fila";
+    Text[ finnish ] = "Rivi";
 };
 /*-----------------------------------------------------------------------
     Beschreibung: Zeichenausrichtungen fuer frmsh.cxx - Kontextmenue
@@ -1045,6 +1073,7 @@ String STR_TOP_BASE
     Text[ turkish ] = "Taban çizgisi ~üstü";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Línea de base ~encima";
+    Text[ finnish ] = "~Perusviiva ylhäällä";
 };
 String STR_BOTTOM_BASE
 {
@@ -1070,6 +1099,7 @@ String STR_BOTTOM_BASE
     Text[ turkish ] = "Alt ~taban çizgisi";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Base a~bajo";
+    Text[ finnish ] = "~Perusviiva alhaalla";
 };
 String STR_CENTER_BASE
 {
@@ -1095,6 +1125,7 @@ String STR_CENTER_BASE
     Text[ turkish ] = "Taban çizgisini ~ortala";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Base ~centro";
+    Text[ finnish ] = "~Keskitetty perusviiva";
 };
 String STR_LINE_TOP
 {
@@ -1120,6 +1151,7 @@ String STR_LINE_TOP
     Text[ turkish ] = "Satýr üstü";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Línea superior";
+    Text[ finnish ] = "Rivin yläosa";
 };
 String STR_LINE_BOTTOM
 {
@@ -1145,6 +1177,7 @@ String STR_LINE_BOTTOM
     Text[ turkish ] = "Satýr altý";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Línea inferior";
+    Text[ finnish ] = "Viivan alaosa";
 };
 String STR_LINE_CENTER
 {
@@ -1170,6 +1203,7 @@ String STR_LINE_CENTER
     Text[ turkish ] = "Satýrý ortala";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Línea centrada";
+    Text[ finnish ] = "Rivin keskipiste";
 };
 String STR_CHAR_TOP
 {
@@ -1195,6 +1229,7 @@ String STR_CHAR_TOP
     Text[ turkish ] = "Karakter üstü";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Carácter arriba";
+    Text[ finnish ] = "Merkin yläosa";
 };
 String STR_CHAR_BOTTOM
 {
@@ -1220,6 +1255,7 @@ String STR_CHAR_BOTTOM
     Text[ turkish ] = "Karakter altý";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Carácter abajo";
+    Text[ finnish ] = "Merkin alaosa";
 };
 String STR_CHAR_CENTER
 {
@@ -1245,6 +1281,7 @@ String STR_CHAR_CENTER
     Text[ turkish ] = "Karakteri ortala";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Carácter centrado";
+    Text[ finnish ] = "Merkin keskipiste";
 };
 String STR_OLE_INSERT
 {
@@ -1309,7 +1346,7 @@ String STR_COLL_HEADER
     TEXT [ italian ] = "(Modello: " ;
     TEXT [ portuguese_brazilian ] = "(Modelo: " ;
     TEXT [ portuguese ] = "(Modelo: " ;
-    TEXT [ finnish ] = " (Malli: " ;
+    TEXT [ finnish ] = " (Mallipohja: " ;
     TEXT [ danish ] = "(Skabelon: " ;
     TEXT [ french ] = "(modèle : " ;
     TEXT [ swedish ] = "(Mall: " ;
@@ -1336,7 +1373,7 @@ String STR_FRMUI_BORDER
     Text [ italian ] = "Bordo" ;
     Text [ portuguese_brazilian ] = "Borda" ;
     Text [ portuguese ] = "Contornos" ;
-    Text [ finnish ] = "Reunaviiva" ;
+    Text [ finnish ] = "Reunat" ;
     Text [ danish ] = "Ramme" ;
     Text [ french ] = "Bordure" ;
     Text [ swedish ] = "Inramning" ;
@@ -1390,7 +1427,7 @@ String STR_FRMUI_WRAP
     Text [ italian ] = "Scorrimento" ;
     Text [ portuguese_brazilian ] = "Circundamento" ;
     Text [ portuguese ] = "Ajuste" ;
-    Text [ finnish ] = "Kierrätys" ;
+    Text [ finnish ] = "Rivitä" ;
     Text [ danish ] = "Ombrydning" ;
     Text [ french ] = "Adaptation du texte" ;
     Text [ swedish ] = "Textanpassning" ;
@@ -1420,7 +1457,7 @@ InfoBox MSG_COLUMN_ERR_BOUNDWIDTH
     MESSAGE [ italian ] = "La distanza tra le colonne supera la larghezza delle colonne" ;
     MESSAGE [ portuguese_brazilian ] = "Largura do guter excede largura da coluna." ;
     MESSAGE [ portuguese ] = "O espaço entre as colunas é grande demais para a largura das colunas." ;
-    MESSAGE [ finnish ] = "Palstojen väli on palstojen leveyttä suurempi." ;
+    MESSAGE [ finnish ] = "Sarakkeiden välit ovat suurempia kuin sarakkeen leveys." ;
     MESSAGE [ danish ] = "Kolonneafstanden er for stor til kolonnebredden." ;
     MESSAGE [ french ] = "Écart entre les colonnes excède largeur de colonne." ;
     MESSAGE [ swedish ] = "Fästmarginalens bredd är för stor för kolumnbredden." ;
