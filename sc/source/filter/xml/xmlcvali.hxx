@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcvali.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-12 08:18:09 $
+ *  last change: $Author: sab $ $Date: 2001-01-15 15:04:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@
 #endif
 #ifndef _COM_SUN_STAR_SHEET_CONDITIONOPERATOR_HPP_
 #include <com/sun/star/sheet/ConditionOperator.hpp>
+#endif
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
 #endif
 
 class ScXMLImport;
@@ -149,7 +152,7 @@ public:
 class ScXMLHelpMessageContext : public SvXMLImportContext
 {
     rtl::OUString   sTitle;
-    rtl::OUString   sMessage;
+    rtl::OUStringBuffer sMessage;
     sal_Int32       nParagraphCount;
     sal_Bool        bDisplay;
 
@@ -179,7 +182,7 @@ public:
 class ScXMLErrorMessageContext : public SvXMLImportContext
 {
     rtl::OUString   sTitle;
-    rtl::OUString   sMessage;
+    rtl::OUStringBuffer sMessage;
     rtl::OUString   sMessageType;
     sal_Int32       nParagraphCount;
     sal_Bool        bDisplay;

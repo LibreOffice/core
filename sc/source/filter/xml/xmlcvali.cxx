@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcvali.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: sab $ $Date: 2000-12-19 18:32:39 $
+ *  last change: $Author: sab $ $Date: 2001-01-15 15:04:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -466,7 +466,7 @@ SvXMLImportContext *ScXMLHelpMessageContext::CreateChildContext( USHORT nPrefix,
         case XML_TOK_P:
         {
             if(nParagraphCount)
-                sMessage += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\n"));
+                sMessage.append(static_cast<sal_Unicode>('\n'));
             nParagraphCount++;
             pContext = new ScXMLContentContext( GetScImport(), nPrefix, rLName, xAttrList, sMessage);
         }
@@ -481,7 +481,7 @@ SvXMLImportContext *ScXMLHelpMessageContext::CreateChildContext( USHORT nPrefix,
 
 void ScXMLHelpMessageContext::EndElement()
 {
-    pValidationContext->SetHelpMessage(sTitle, sMessage, bDisplay);
+    pValidationContext->SetHelpMessage(sTitle, sMessage.makeStringAndClear(), bDisplay);
 }
 
 ScXMLErrorMessageContext::ScXMLErrorMessageContext( ScXMLImport& rImport,
@@ -542,7 +542,7 @@ SvXMLImportContext *ScXMLErrorMessageContext::CreateChildContext( USHORT nPrefix
         case XML_TOK_P:
         {
             if(nParagraphCount)
-                sMessage += rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\n"));
+                sMessage.append(static_cast<sal_Unicode>('\n'));
             nParagraphCount++;
             pContext = new ScXMLContentContext( GetScImport(), nPrefix, rLName, xAttrList, sMessage);
         }
@@ -557,7 +557,7 @@ SvXMLImportContext *ScXMLErrorMessageContext::CreateChildContext( USHORT nPrefix
 
 void ScXMLErrorMessageContext::EndElement()
 {
-    pValidationContext->SetErrorMessage(sTitle, sMessage, sMessageType, bDisplay);
+    pValidationContext->SetErrorMessage(sTitle, sMessage.makeStringAndClear(), sMessageType, bDisplay);
 }
 
 ScXMLErrorMacroContext::ScXMLErrorMacroContext( ScXMLImport& rImport,
