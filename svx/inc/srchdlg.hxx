@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srchdlg.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 15:20:21 $
+ *  last change: $Author: vg $ $Date: 2005-02-25 13:05:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -222,57 +222,48 @@ private:
     ComboBox        aSearchLB;
     ListBox         aSearchTmplLB;
     FixedInfo       aSearchAttrText;
-#if SUPD < 641 || defined( GT_DEBUG )
-    MultiLineEdit   aSearchFormatsED;
-#endif
 
     FixedText       aReplaceText;
     ComboBox        aReplaceLB;
     ListBox         aReplaceTmplLB;
     FixedInfo       aReplaceAttrText;
-#if SUPD < 641 || defined( GT_DEBUG )
-    MultiLineEdit   aReplaceFormatsED;
-#endif
 
-    PushButton      aSearchAllBtn;
     PushButton      aSearchBtn;
-    PushButton      aReplaceAllBtn;
+    PushButton      aSearchAllBtn;
+    FixedLine       aSearchCmdLine;
     PushButton      aReplaceBtn;
-    PushButton      aAttributeBtn;
-    CancelButton    aCloseBtn;
-    PushButton      aFormatBtn;
-    HelpButton      aHelpBtn;
-    PushButton      aNoFormatBtn;
-    MoreButton*     pMoreBtn;
+    PushButton      aReplaceAllBtn;
 
-    CheckBox        aWordBtn;
     CheckBox        aMatchCaseCB;
-    CheckBox        aBackwardsBtn;
+    CheckBox        aWordBtn;
+
+    FixedLine       aButtonsFL;
+    MoreButton*     pMoreBtn;
+    HelpButton      aHelpBtn;
+    CancelButton    aCloseBtn;
+
+    FixedLine       aOptionsFL;
     CheckBox        aSelectionBtn;
+    CheckBox        aBackwardsBtn;
     CheckBox        aRegExpBtn;
-    CheckBox        aLayoutBtn;
-                    // "Ahnlichkeitssuche
     CheckBox        aSimilarityBox;
     PushButton      aSimilarityBtn;
+    CheckBox        aLayoutBtn;
     CheckBox        aJapMatchFullHalfWidthCB;
     CheckBox        aJapOptionsCB;
     PushButton      aJapOptionsBtn;
-    FixedLine       aOptionsFL;
 
-                    // nur f"ur Calc
-    RadioButton     aFormulasBtn;
-    RadioButton     aValuesBtn;
-    RadioButton     aNotesBtn;
-    FixedLine       aSearchFL;
-    FixedLine       aSearchVertFL;
+    PushButton      aAttributeBtn;
+    PushButton      aFormatBtn;
+    PushButton      aNoFormatBtn;
 
+    FixedLine       aCalcFL;
+    FixedText       aCalcSearchInFT;
+    ListBox         aCalcSearchInLB;
+    FixedText       aCalcSearchDirFT;
     RadioButton     aRowsBtn;
     RadioButton     aColumnsBtn;
-    FixedLine       aSearchDirFL;
-    FixedLine       aSearchDirVertFL;
-
-    CheckBox        aAllTablesCB;
-    FixedLine       aCalcExtrasFL;
+    CheckBox        aAllSheetsCB;
 
     SfxBindings&    rBindings;
     BOOL            bWriter;
@@ -305,7 +296,7 @@ private:
 
 #ifdef _SVX_SRCHDLG_CXX
     DECL_LINK( ModifyHdl_Impl, ComboBox* pEdit );
-    DECL_LINK( FlagHdl_Impl, Button* pBtn );
+    DECL_LINK( FlagHdl_Impl, Control* pCtrl );
     DECL_LINK( CommandHdl_Impl, Button* pBtn );
     DECL_LINK( TemplateHdl_Impl, Button* );
     DECL_LINK( FocusHdl_Impl, Control* );
@@ -317,6 +308,7 @@ private:
 
     void            Construct_Impl();
     void            InitControls_Impl();
+    void            CalculateDelta_Impl();
     void            Init_Impl( int bHasItemSet );
     void            InitAttrList_Impl( const SfxItemSet* pSSet,
                                        const SfxItemSet* pRSet );
