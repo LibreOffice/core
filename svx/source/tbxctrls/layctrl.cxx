@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layctrl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:26 $
+ *  last change: $Author: os $ $Date: 2001-07-06 05:59:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,9 +105,10 @@ private:
     long            nMX;
     long            nMY;
     long            nTextHeight;
+    ToolBox&        rTbx;
 
 public:
-                            TableWindow( USHORT nId, SfxBindings& rBind );
+                            TableWindow( USHORT nId, SfxBindings& rBind, ToolBox& rParentTbx );
 
     virtual void            MouseMove( const MouseEvent& rMEvt );
     virtual void            MouseButtonDown( const MouseEvent& rMEvt );
@@ -122,9 +123,10 @@ public:
 
 // -----------------------------------------------------------------------
 
-TableWindow::TableWindow( USHORT nId, SfxBindings& rBind ) :
+TableWindow::TableWindow( USHORT nId, SfxBindings& rBind, ToolBox& rParentTbx ) :
 
-    SfxPopupWindow( nId, (WinBits)0, rBind )
+    SfxPopupWindow( nId, (WinBits)0, rBind ),
+    rTbx(rParentTbx)
 
 {
     const StyleSettings& rStyles = Application::GetSettings().GetStyleSettings();
@@ -155,7 +157,7 @@ TableWindow::TableWindow( USHORT nId, SfxBindings& rBind ) :
 
 SfxPopupWindow* TableWindow::Clone() const
 {
-    return new TableWindow( GetId(), (SfxBindings&)GetBindings() );
+    return new TableWindow( GetId(), (SfxBindings&)GetBindings(), rTbx );
 }
 
 // -----------------------------------------------------------------------
@@ -358,6 +360,9 @@ void TableWindow::PopupModeEnd()
 {
     if ( !IsPopupModeCanceled() && nCol && nLine )
     {
+        Window* pParent = rTbx.GetParent();
+        USHORT nId = GetId();
+        pParent->UserEvent(SVX_EVENT_COLUM_WINDOW_EXECUTE, (void*)nId);
         SfxUInt16Item aCol( SID_ATTR_TABLE_COLUMN, (UINT16)nCol );
         SfxUInt16Item aRow( SID_ATTR_TABLE_ROW, (UINT16)nLine );
         GetBindings().GetDispatcher()->Execute(
@@ -381,9 +386,10 @@ private:
     long            nWidth;
     long            nMX;
     long            nTextHeight;
+    ToolBox&        rTbx;
 
 public:
-                            ColumnsWindow( USHORT nId, SfxBindings& rBind );
+                            ColumnsWindow( USHORT nId, SfxBindings& rBind, ToolBox& rParentTbx );
 
     virtual void            MouseMove( const MouseEvent& rMEvt );
     virtual void            MouseButtonDown( const MouseEvent& rMEvt );
@@ -397,9 +403,11 @@ public:
 
 // -----------------------------------------------------------------------
 
-ColumnsWindow::ColumnsWindow( USHORT nId, SfxBindings& rBind ) :
+ColumnsWindow::ColumnsWindow( USHORT nId, SfxBindings& rBind,
+                            ToolBox& rParentTbx ) :
 
-    SfxPopupWindow( nId, (WinBits)0, rBind )
+    SfxPopupWindow( nId, (WinBits)0, rBind ),
+    rTbx(rParentTbx)
 
 {
     const StyleSettings& rStyles = Application::GetSettings().GetStyleSettings();
@@ -427,7 +435,7 @@ ColumnsWindow::ColumnsWindow( USHORT nId, SfxBindings& rBind ) :
 
 SfxPopupWindow* ColumnsWindow::Clone() const
 {
-    return new ColumnsWindow( GetId(), (SfxBindings&)GetBindings() );
+    return new ColumnsWindow( GetId(), (SfxBindings&)GetBindings(), rTbx );
 }
 
 // -----------------------------------------------------------------------
@@ -591,9 +599,13 @@ void ColumnsWindow::PopupModeEnd()
 {
     if ( !IsPopupModeCanceled() && nCol )
     {
+        USHORT nId = GetId();
+        Window* pParent = rTbx.GetParent();
+        pParent->UserEvent(SVX_EVENT_COLUM_WINDOW_EXECUTE, (void*)nId);
+
         SfxUInt16Item aCol( SID_ATTR_COLUMNS, (UINT16)nCol );
         GetBindings().GetDispatcher()->Execute(
-            GetId(), SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aCol, 0L );
+            nId, SFX_CALLMODE_ASYNCHRON | SFX_CALLMODE_RECORD, &aCol, 0L );
     }
     else if ( IsPopupModeCanceled() )
         ReleaseMouse();
@@ -631,8 +643,9 @@ SfxPopupWindow* SvxTableToolBoxControl::CreatePopupWindow()
 {
     if ( bEnabled )
     {
-        TableWindow* pWin = new TableWindow( GetId(), GetBindings() );
-        pWin->StartPopupMode( &GetToolBox(), FALSE );
+        ToolBox& rTbx = GetToolBox();
+        TableWindow* pWin = new TableWindow( GetId(), GetBindings(), rTbx );
+        pWin->StartPopupMode( &rTbx, FALSE );
         return pWin;
     }
     return 0;
@@ -643,7 +656,7 @@ SfxPopupWindow* SvxTableToolBoxControl::CreatePopupWindow()
 SfxPopupWindow* SvxTableToolBoxControl::CreatePopupWindowCascading()
 {
     if ( bEnabled )
-        return new TableWindow( GetId(), GetBindings() );
+        return new TableWindow( GetId(), GetBindings(), GetToolBox() );
     return 0;
 }
 
@@ -696,7 +709,7 @@ SfxPopupWindow* SvxColumnsToolBoxControl::CreatePopupWindow()
     ColumnsWindow* pWin = 0;
     if(bEnabled)
     {
-        pWin = new ColumnsWindow( GetId(), GetBindings() );
+        pWin = new ColumnsWindow( GetId(), GetBindings(), GetToolBox() );
         pWin->StartPopupMode( &GetToolBox(), FALSE );
     }
     return pWin;
@@ -709,7 +722,7 @@ SfxPopupWindow* SvxColumnsToolBoxControl::CreatePopupWindowCascading()
     ColumnsWindow* pWin = 0;
     if(bEnabled)
     {
-        pWin = new ColumnsWindow( GetId(), GetBindings() );
+        pWin = new ColumnsWindow( GetId(), GetBindings(), GetToolBox() );
     }
     return pWin;
 }

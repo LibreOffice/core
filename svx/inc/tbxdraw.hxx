@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbxdraw.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:03 $
+ *  last change: $Author: os $ $Date: 2001-07-06 05:59:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,9 @@ public:
 
     void                        StartSelection();
     inline SfxToolBoxManager&   GetTbxMgr() { return aTbx; }
+
+    // toolbox click or execute may chage the default selection in the tools toolbox
+    virtual void                UserEvent( ULONG nEvent, void* pEventData );
 };
 
 
