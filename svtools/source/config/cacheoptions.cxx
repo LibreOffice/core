@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cacheoptions.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: ka $ $Date: 2001-04-12 14:59:15 $
+ *  last change: $Author: ka $ $Date: 2001-04-19 12:15:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,29 +196,29 @@ SvtCacheOptions_Impl::SvtCacheOptions_Impl() :
         {
             case PROPERTYHANDLE_WRITEROLE:
             {
-                DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_LONG), "SvtCacheOptions_Impl::SvtCacheOptions_Impl()\nWho has changed the value type of \"Office.Common\\Cache\\Writer\\OLE_Objects\"?" );
-                seqValues[nProperty] >>= mnWriterOLE;
+                if( seqValues[ nProperty ].getValueTypeClass() == TypeClass_LONG )
+                    seqValues[nProperty] >>= mnWriterOLE;
             }
             break;
 
             case PROPERTYHANDLE_DRAWINGOLE:
             {
-                DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_LONG), "SvtCacheOptions_Impl::SvtCacheOptions_Impl()\nWho has changed the value type of \"Office.Common\\Cache\\DrawingEngine\\OLE_Objects\"?" );
-                seqValues[nProperty] >>= mnDrawingOLE;
+                if( seqValues[ nProperty ].getValueTypeClass() == TypeClass_LONG )
+                    seqValues[nProperty] >>= mnDrawingOLE;
             }
             break;
 
             case PROPERTYHANDLE_GRFMGR_TOTALSIZE:
             {
-                DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_LONG), "SvtCacheOptions_Impl::SvtCacheOptions_Impl()\nWho has changed the value type of \"Office.Common\\Cache\\GraphicManager\\TotalCacheSize\"?" );
-                seqValues[nProperty] >>= mnGrfMgrTotalSize;
+                if( seqValues[ nProperty ].getValueTypeClass() == TypeClass_LONG )
+                    seqValues[nProperty] >>= mnGrfMgrTotalSize;
             }
             break;
 
             case PROPERTYHANDLE_GRFMGR_OBJECTSIZE:
             {
-                DBG_ASSERT(!(seqValues[nProperty].getValueTypeClass()!=TypeClass_LONG), "SvtCacheOptions_Impl::SvtCacheOptions_Impl()\nWho has changed the value type of \"Office.Common\\Cache\\GraphicManager\\ObjectCacheSize\"?" );
-                seqValues[nProperty] >>= mnGrfMgrObjectSize;
+                if( seqValues[ nProperty ].getValueTypeClass() == TypeClass_LONG )
+                    seqValues[nProperty] >>= mnGrfMgrObjectSize;
             }
             break;
         }
