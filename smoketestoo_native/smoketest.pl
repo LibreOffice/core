@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: smoketest.pl,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: kz $ $Date: 2004-08-16 16:36:39 $
+#   last change: $Author: kz $ $Date: 2004-08-17 13:50:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -272,7 +272,7 @@ if ( $ARGV[0] ) {
 
 ( $script_name = $0 ) =~ s/^.*\b(\w+)\.pl$/$1/;
 
-$id_str = ' $Revision: 1.3 $ ';
+$id_str = ' $Revision: 1.4 $ ';
 $id_str =~ /Revision:\s+(\S+)\s+\$/
   ? ($script_rev = $1) : ($script_rev = "-");
 
@@ -488,7 +488,7 @@ sub doTest {
 
 sub doInstall {
     my ($installsetpath, $dest_installdir) = @_;
-    my ($DirArray, $mask, $file, $Command, $optdir, $rpmdir, $system, $mach, $basedir, $output);
+    my ($DirArray, $mask, $file, $Command, $optdir, $rpmdir, $system, $mach, $basedir, $output_ref, $olddir, $newdir);
     if (($gui eq "WNT") or ($gui eq $cygwin)) {
         $mask = "\\.msi\$";
         getSubFiles ("$installsetpath", \@DirArray, $mask);
@@ -530,10 +530,20 @@ sub doInstall {
                             print_error ("Installationset in $installsetpath is incomplete", 2);
             }
             foreach $file (@DirArray) {
-                if ( ($file =~ /-menus-/) or ($file =~ /^adabas/) or () ) {
+                if ( ($file =~ /-menus-/) or ($file =~ /^adabas/) or (/^j2re-/) ) {
                     next;
                 }
-                $Command = "rpm --install --nodeps -vh --relocate /opt=$optdir --dbpath $rpmdir $installsetpath$file";
+                $olddir = "/opt";
+                $newdir = $optdir;
+                $Command = "rpm -qlp $installsetpath$file";
+                $output_ref = execute_Command ($Command, $error_setup, $show_Message, $command_withoutOutput);
+                if (($#{@$output_ref} > -1) and ($$output_ref[0] ne "") ) {
+                    $olddir = $$output_ref[0];
+                    $newdir = $dest_installdir . $$output_ref[0];
+                    $newdir =~ s/\/\//\//;
+                    createPath ($newdir, $error_setup);
+                }
+                $Command = "rpm --install --nodeps -vh --relocate $olddir=$newdir --dbpath $rpmdir $installsetpath$file";
                 execute_Command ($Command, $error_setup, $show_Message, $command_withoutErrorcheck);
             }
         }
@@ -554,14 +564,13 @@ sub doInstall {
                             print_error ("Installationset in $installsetpath is incomplete", 2);
             }
             foreach $file (@DirArray) {
-                if ( ($file =~ /-gnome/) or ($file =~ /-cde/) or () ) {
+                if ( ($file =~ /-gnome/) or ($file =~ /-cde/) or ($file =~ /adabas/) or ($file =~ /j3/) ) {
                     next;
                 }
                 $Command = "pkgparam -d $installsetpath $file BASEDIR";
-                $output = execute_Command ($Command, $error_setup, $show_Message, $command_withoutOutput);
-                chomp $output;
-                if ($output ne "") {
-                    createPath ("$dest_installdir$output", $error_setup);
+                $output_ref = execute_Command ($Command, $error_setup, $show_Message, $command_withoutOutput);
+                if (($#{@$output_ref} > -1) and ($$output_ref[0] ne "") ) {
+                    createPath ("$dest_installdir$$output[0]", $error_setup);
                 }
                 $Command = "pkgadd -a $solarisdata" . "admin -d $installsetpath -R $dest_installdir $file";
                 execute_Command ($Command, $error_setup, $show_Message, $command_withoutErrorcheck);
@@ -888,13 +897,13 @@ sub setInstallpath {
 
 sub execute_Command {
     my ($Command, $Errorcode, $showMessage, $command_action) = @_;
-    my ($Returncode, $output);
+    my ($Returncode, $output_ref);
     if (!$is_debug) {
-        print "$Command\n" if $is_command_infos;
         if ( ($command_action and $command_withoutOutput) == $command_withoutOutput) {
-            ($Returncode, $output) = execute_system ("$Command");
+            ($Returncode, $output_ref) = execute_system ("$Command");
         }
         else {
+            print "$Command\n" if $is_command_infos;
             $Returncode = system ("$Command");
         }
         if ($Returncode) {
@@ -916,21 +925,22 @@ sub execute_Command {
     else {
         print "$Command\n";
     }
-    return $output;
+    return $output_ref;
 }
 
 sub execute_system {
     my ($command) = shift;
-    my ($output, $line);
+    my (@output_array, $line);
     if ( $is_command_infos ) {
         print STDERR "TRACE_SYSTEM: $command\n";
     }
     open( COMMAND, "$command 2>&1 |");
     while ($line = <COMMAND>) {
-        $output .= $line;
+        chomp $line;
+        push (@output_array, $line);
     }
     close(COMMAND);
-    return $?, $output;
+    return $?, \@output_array;
 }
 
 sub print_warning
