@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hdrcont.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-10 06:28:28 $
+ *  last change: $Author: kz $ $Date: 2001-05-17 08:03:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,7 +168,7 @@
         /* ### ACHTUNG: Neuer Text in Resource? Den Inhalt der Zwischenablage einfügen : Den Inhalt der Zwischenablage einf³gen */\
         Text [ italian ] = "~Incolla" ; \
         Text [ portuguese ] = "Colar" ; \
-        Text [ portuguese_brazilian ] = "Einfügen" ; \
+        Text [ portuguese_brazilian ] = "Einf?en" ; \
         Text[ chinese_simplified ] = "²åÈë(~P)";\
         Text[ russian ] = "Âñò~àâèòü";\
         Text[ polish ] = "~Wklej";\
@@ -209,10 +209,10 @@ Menu RID_POPUP_ROWHEADER
             /* ### ACHTUNG: Neuer Text in Resource? Zeilenhöhe ändern : Zeilenh÷he õndern */
             Text [ italian ] = "Altezza riga..." ;
             Text [ portuguese ] = "Altu~ra da linha..." ;
-            Text [ portuguese_brazilian ] = "Zeilenhöhe..." ;
+            Text [ portuguese_brazilian ] = "Zeilenh?e..." ;
             Text[ chinese_simplified ] = "¸ß(~H)...";
             Text[ russian ] = "Âûñîòà ñòğîêè...";
-            Text[ polish ] = "Wysokoœæ linii...";
+            Text[ polish ] = "Wysoko?æ linii...";
             Text[ japanese ] = "s‚Ì‚‚³(~H)...";
             Text[ chinese_traditional ] = "¦C°ª(~H)...";
             Text[ arabic ] = "ÇÑÊİÇÚ ÇáÕİ...";
@@ -239,10 +239,10 @@ Menu RID_POPUP_ROWHEADER
             /* ### ACHTUNG: Neuer Text in Resource? Optimale Zeilenhöhe einstellen : Optimale Zeilenh÷he einstellen */
             Text [ italian ] = "Altezza ottimale righe..." ;
             Text [ portuguese ] = "~Optimizar altura da linha..." ;
-            Text [ portuguese_brazilian ] = "Optimale Zeilenhöhe..." ;
+            Text [ portuguese_brazilian ] = "Optimale Zeilenh?e..." ;
             Text[ chinese_simplified ] = "×î¼Ñ¸ß¶È(~R)...";
             Text[ russian ] = "Îïòèìàëüíàÿ âûñîòà ñòğîêè...";
-            Text[ polish ] = "Optymalna wysokoœæ wierszy...";
+            Text[ polish ] = "Optymalna wysoko?æ wierszy...";
             Text[ japanese ] = "Å“K‚Ès‚Ì‚‚³(~R)...";
             Text[ chinese_traditional ] = "³Ì¾A¦C°ª(~R)...";
             Text[ arabic ] = "...ÇáÇÑÊİÇÚ ÇáÃãËá ááÕİ";
@@ -272,7 +272,7 @@ Menu RID_POPUP_ROWHEADER
             /* ### ACHTUNG: Neuer Text in Resource? Ganze Zeilen einfügen : Ganze Zeilen einf³gen */
             Text [ italian ] = "Inserisci righe" ;
             Text [ portuguese ] = "~Inserir linhas" ;
-            Text [ portuguese_brazilian ] = "Zeilen einfügen" ;
+            Text [ portuguese_brazilian ] = "Zeilen einf?en" ;
             Text[ chinese_simplified ] = "²åÈëĞĞ(~I)";
             Text[ russian ] = "Âñòàâèòü ñòğîêè";
             Text[ polish ] = "Wstaw wiersze";
@@ -301,7 +301,7 @@ Menu RID_POPUP_ROWHEADER
             Text [ swedish ] = "Radera ra~der" ;
             Text [ danish ] = "Slet rækker" ;
             Text [ portuguese ] = "E~liminar linhas" ;
-            Text [ portuguese_brazilian ] = "Zeilen löschen" ;
+            Text [ portuguese_brazilian ] = "Zeilen l?chen" ;
             Text[ chinese_simplified ] = "É¾³ıĞĞ(~D)";
             Text[ russian ] = "Óäàëèòü ñòğîêè";
             Text[ polish ] = "Usuñ linie";
@@ -336,7 +336,7 @@ Menu RID_POPUP_ROWHEADER
             /* ### ACHTUNG: Neuer Text in Resource? Ausgewählte Inhalte löschen (Formeln, Formate etc.) : Ausgewõhlte Inhalte l÷schen (Formeln, Formate etc.) */
             Text[ chinese_simplified ] = "É¾³ıÄÚÈİ(~L)...";
             Text[ russian ] = "Óäàëèòü ñîäåğæèìîå...";
-            Text[ polish ] = "Usuñ zawartoœæ...";
+            Text[ polish ] = "Usuñ zawarto?æ...";
             Text[ japanese ] = "“à—e‚Ìíœ(~L)...";
             Text[ chinese_traditional ] = "§R°£¤º®e(~L)...";
             Text[ arabic ] = "...ÍĞİ ãÍÊæíÇÊ";
@@ -428,7 +428,7 @@ Menu RID_POPUP_ROWHEADER
             Text [ spanish ] = "Peg~ado especial..." ;
             Text [ english_us ] = "Paste ~Special..." ;
             Text[ russian ] = "~Ñïåöèàëüíàÿ âñòàâêà...";
-            Text[ polish ] = "~Wklej zawartoœæ...";
+            Text[ polish ] = "~Wklej zawarto?æ...";
             Text[ japanese ] = "Œ`®‚ğ‘I‘ğ‚µ‚Ä“\\‚è•t‚¯(~S)...";
             Text[ chinese_traditional ] = "´¡¤J¤º®e(~S)...";
             Text[ arabic ] = "áÕŞ ÎÇÕ...";
@@ -470,7 +470,7 @@ Menu RID_POPUP_COLHEADER
             Text [ portuguese_brazilian ] = "Spaltenbreite..." ;
             Text[ chinese_simplified ] = "ÁĞ¿í(~U)...";
             Text[ russian ] = "Øèğèíà ñòîëáöîâ...";
-            Text[ polish ] = "Szerokoœæ kolumny...";
+            Text[ polish ] = "Szeroko?æ kolumny...";
             Text[ japanese ] = "—ñ•(~U)...";
             Text[ chinese_traditional ] = "Äæ¼e(~U)...";
             Text[ arabic ] = "ÚÑÖ ÇáÃÚãÏÉ...";
@@ -498,7 +498,7 @@ Menu RID_POPUP_COLHEADER
             Text [ portuguese_brazilian ] = "Optimale Spaltenbreite..." ;
             Text[ chinese_simplified ] = "×î¼ÑÁĞ¿í(~P)...";
             Text[ russian ] = "Îïòèìàëüíàÿ øèğèíà êîëîíêè...";
-            Text[ polish ] = "Optymalna szerokoœæ kolumny...";
+            Text[ polish ] = "Optymalna szeroko?æ kolumny...";
             Text[ japanese ] = "Å“K‚È—ñ•(~P)...";
             Text[ chinese_traditional ] = "³Ì¾AÄæ¼e(~P)...";
             Text[ arabic ] = "ÇáÚÑÖ ÇáÃãËá ááÚãæÏ...";
@@ -528,7 +528,7 @@ Menu RID_POPUP_COLHEADER
             /* ### ACHTUNG: Neuer Text in Resource? Ganze Spalten einfügen : Ganze Spalten einf³gen */
             Text [ italian ] = "Inserisci colonne" ;
             Text [ portuguese ] = "~Inserir colunas" ;
-            Text [ portuguese_brazilian ] = "Spalten einfügen" ;
+            Text [ portuguese_brazilian ] = "Spalten einf?en" ;
             Text[ chinese_simplified ] = "²åÈëÁĞ(~I)";
             Text[ russian ] = "Âñòàâèòü ñòîëáöû";
             Text[ polish ] = "Wstaw kolumny";
@@ -557,7 +557,7 @@ Menu RID_POPUP_COLHEADER
             Text [ swedish ] = "Radera ko~lumner" ;
             Text [ danish ] = "Slet kolonner" ;
             Text [ portuguese ] = "Eliminar ~colunas" ;
-            Text [ portuguese_brazilian ] = "Spalten löschen" ;
+            Text [ portuguese_brazilian ] = "Spalten l?chen" ;
             Text[ chinese_simplified ] = "É¾³ıÁĞ(~D)";
             Text[ russian ] = "Óäàëèòü ñòîëáöû";
             Text[ polish ] = "Usuñ kolumny";
@@ -592,7 +592,7 @@ Menu RID_POPUP_COLHEADER
             /* ### ACHTUNG: Neuer Text in Resource? Ausgewählte Inhalte löschen (Formeln, Formate etc.) : Ausgewõhlte Inhalte l÷schen (Formeln, Formate etc.) */
             Text[ chinese_simplified ] = "É¾³ıÄÚÈİ(~E)...";
             Text[ russian ] = "Óäàëèòü ñîäåğæèìîå...";
-            Text[ polish ] = "Usuñ zawartoœæ...";
+            Text[ polish ] = "Usuñ zawarto?æ...";
             Text[ japanese ] = "“à—e‚Ìíœ(~E)...";
             Text[ chinese_traditional ] = "§R°£¤º®e(~E)...";
             Text[ arabic ] = "ÍĞİ ãÍÊæíÇÊ...";
@@ -684,7 +684,7 @@ Menu RID_POPUP_COLHEADER
             Text [ spanish ] = "Peg~ado especial..." ;
             Text [ english_us ] = "Paste ~Special..." ;
             Text[ russian ] = "~Ñïåöèàëüíàÿ âñòàâêà...";
-            Text[ polish ] = "~Wklej zawartoœæ...";
+            Text[ polish ] = "~Wklej zawarto?æ...";
             Text[ japanese ] = "Œ`®‚ğ‘I‘ğ‚µ‚Ä“\\‚è•t‚¯(~S)...";
             Text[ chinese_traditional ] = "´¡¤J¤º®e(~S)...";
             Text[ arabic ] = "áÕŞ ÎÇÕ...";
