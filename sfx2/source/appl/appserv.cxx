@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appserv.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-07 10:42:48 $
+ *  last change: $Author: pb $ $Date: 2000-12-08 10:19:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,9 @@
 #endif
 #ifndef _EHDL_HXX
 #include <svtools/ehdl.hxx>
+#endif
+#ifndef _SV_HELP_HXX
+#include <vcl/help.hxx>
 #endif
 
 #include <svtools/pathoptions.hxx>
@@ -792,104 +795,17 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             break;
         }
 
-        case SID_HELPINDEX:
-        {
-            SfxViewFrame::Current()->SetChildWindow( SID_HELP_PI, TRUE );
-            break;
-        }
-
-/*! (pb) what about help?
+        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         case SID_HELPINDEX:
         {
             Help* pHelp = Application::GetHelp();
             if ( pHelp )
             {
-                pHelp->Start( HELP_INDEX );
+                pHelp->Start( 0 ); // show start page
                 bDone = TRUE;
             }
             break;
         }
-
-        case SID_EXTENDEDHELP:
-        {
-            // Parameter auswerten
-            SFX_REQUEST_ARG(rReq, pOnItem, SfxBoolItem, SID_EXTENDEDHELP, FALSE);
-            FASTBOOL bOn = pOnItem
-                            ? ((SfxBoolItem*)pOnItem)->GetValue()
-                            : !Help::IsExtHelpActive();
-
-            // ausf"uhren
-            if ( bOn )
-                Help::StartExtHelp();
-            else
-                Help::EndExtHelp();
-            bDone = TRUE;
-
-            // ggf. recorden
-            if ( !rReq.IsAPI() )
-                rReq.AppendItem( SfxBoolItem( SID_EXTENDEDHELP, bOn) );
-            break;
-        }
-
-        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-        case SID_HELPBALLOONS:
-        {
-            // Parameter auswerten
-            SFX_REQUEST_ARG(rReq, pOnItem, SfxBoolItem, SID_HELPBALLOONS, FALSE);
-            FASTBOOL bOn = pOnItem
-                            ? ((SfxBoolItem*)pOnItem)->GetValue()
-                            : !Help::IsBalloonHelpEnabled();
-
-            // ausf"uhren
-            if ( bOn )
-                Help::EnableBalloonHelp();
-            else
-                Help::DisableBalloonHelp();
-            SvtHelpOptions().SetHelpBalloons(bOn);
-            bDone = TRUE;
-
-            // ggf. recorden
-            if ( !rReq.IsAPI() )
-                rReq.AppendItem( SfxBoolItem( SID_HELPBALLOONS, bOn) );
-            break;
-        }
-
-        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-        case SID_HELPTIPS:
-        {
-            // Parameter aus werten
-            SFX_REQUEST_ARG(rReq, pOnItem, SfxBoolItem, SID_HELPTIPS, FALSE);
-            FASTBOOL bOn = pOnItem
-                            ? ((SfxBoolItem*)pOnItem)->GetValue()
-                            : !Help::IsQuickHelpEnabled();
-
-            // ausf"uhren
-            if ( bOn )
-                Help::EnableQuickHelp();
-            else
-                Help::DisableQuickHelp();
-            SvtHelpOptions().SetHelpTips(bOn);
-            Invalidate(SID_HELPTIPS);
-            bDone = TRUE;
-
-            // ggf. recorden
-            if ( !rReq.IsAPI() )
-                rReq.AppendItem( SfxBoolItem( SID_HELPTIPS, bOn) );
-            break;
-        }
-
-        // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-        case SID_HELPONHELP:
-        {
-            Help* pHelp = Application::GetHelp();
-            if ( pHelp )
-            {
-                pHelp->Start( HELP_HELPONHELP );
-                bDone = TRUE;
-            }
-            break;
-        }
-(pb) what about help? */
 
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
         case SID_ABOUT:
