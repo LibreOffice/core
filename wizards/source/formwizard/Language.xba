@@ -17,7 +17,6 @@ Public DialogModel as Object
 
 Dim sMsgWizardName as String
 Dim sMsgErrMsg as String
-Dim sMsgErrFormOpen as String
 Dim sMsgErrNoDatabase as String
 Dim sMsgErrNoTableInDatabase as String
 Dim sMsgErrTitleSuggestedExist as String
@@ -43,7 +42,6 @@ Public sSelectDBTable as String
 Sub LoadLanguage ()
 	sMsgWizardName = GetResText(RID_FORM + 0)
 	sMsgErrMsg = GetResText(RID_COMMON + 6)
-	sMsgErrFormOpen = GetResText(RID_COMMON + 7)
 	sMsgErrNoDatabase = GetResText(RID_COMMON + 8)
 	sMsgErrNoTableInDatabase = GetResText(RID_COMMON + 9)
 	sMsgErrTitleSuggestedExist = GetResText(RID_COMMON + 10)
