@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cjkoptions.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-25 10:35:25 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 17:23:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,9 @@
 #ifndef _OSL_MUTEX_HXX_
 #include <osl/mutex.hxx>
 #endif
+#ifndef INCLUDED_RTL_INSTANCE_HXX
+#include <rtl/instance.hxx>
+#endif
 
 using namespace ::com::sun::star::uno;
 using namespace ::rtl;
@@ -95,8 +98,6 @@ using namespace ::rtl;
  ---------------------------------------------------------------------------*/
 class SvtCJKOptions_Impl : public utl::ConfigItem
 {
-    static Sequence<OUString> aPropertyNames;
-
     sal_Bool        bIsLoaded;
     sal_Bool        bCJKFont;
     sal_Bool        bVerticalText;
@@ -122,7 +123,7 @@ public:
     SvtCJKOptions_Impl();
     ~SvtCJKOptions_Impl();
 
-    virtual void    Notify( const com::sun::star::uno::Sequence< rtl::OUString >& aPropertyNames );
+    virtual void    Notify( const com::sun::star::uno::Sequence< rtl::OUString >& rPropertyNames );
     virtual void    Commit();
     void            Load();
 
@@ -147,7 +148,11 @@ public:
 /*-- 10.04.01 12:41:57---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-Sequence<OUString> SvtCJKOptions_Impl::aPropertyNames;
+namespace
+{
+    struct PropertyNames
+        : public rtl::Static< Sequence<OUString>, PropertyNames > {};
+}
 
 SvtCJKOptions_Impl::SvtCJKOptions_Impl() :
     utl::ConfigItem(C2U("Office.Common/I18N/CJK")),
@@ -215,10 +220,11 @@ void    SvtCJKOptions_Impl::SetAll(sal_Bool bSet)
   -----------------------------------------------------------------------*/
 void SvtCJKOptions_Impl::Load()
 {
-    if(!aPropertyNames.getLength())
+    Sequence<OUString> &rPropertyNames = PropertyNames::get();
+    if(!rPropertyNames.getLength())
     {
-        aPropertyNames.realloc(9);
-        OUString* pNames = aPropertyNames.getArray();
+        rPropertyNames.realloc(9);
+        OUString* pNames = rPropertyNames.getArray();
 
         pNames[0] = C2U("CJKFont");
         pNames[1] = C2U("VerticalText");
@@ -230,17 +236,17 @@ void SvtCJKOptions_Impl::Load()
         pNames[7] = C2U("EmphasisMarks");
         pNames[8] = C2U("VerticalCallOut");
 
-        EnableNotification( aPropertyNames );
+        EnableNotification( rPropertyNames );
     }
-    Sequence< Any > aValues = GetProperties(aPropertyNames);
-    Sequence< sal_Bool > aROStates = GetReadOnlyStates(aPropertyNames);
+    Sequence< Any > aValues = GetProperties(rPropertyNames);
+    Sequence< sal_Bool > aROStates = GetReadOnlyStates(rPropertyNames);
     const Any* pValues = aValues.getConstArray();
     const sal_Bool* pROStates = aROStates.getConstArray();
-    DBG_ASSERT( aValues.getLength() == aPropertyNames.getLength(), "GetProperties failed" );
-    DBG_ASSERT( aROStates.getLength() == aPropertyNames.getLength(), "GetReadOnlyStates failed" );
-    if ( aValues.getLength() == aPropertyNames.getLength() && aROStates.getLength() == aPropertyNames.getLength() )
+    DBG_ASSERT( aValues.getLength() == rPropertyNames.getLength(), "GetProperties failed" );
+    DBG_ASSERT( aROStates.getLength() == rPropertyNames.getLength(), "GetReadOnlyStates failed" );
+    if ( aValues.getLength() == rPropertyNames.getLength() && aROStates.getLength() == rPropertyNames.getLength() )
     {
-        for ( int nProp = 0; nProp < aPropertyNames.getLength(); nProp++ )
+        for ( int nProp = 0; nProp < rPropertyNames.getLength(); nProp++ )
         {
             if( pValues[nProp].hasValue() )
             {
@@ -271,7 +277,7 @@ void SvtCJKOptions_Impl::Load()
 /*-- 10.04.01 12:41:57---------------------------------------------------
 
   -----------------------------------------------------------------------*/
-void    SvtCJKOptions_Impl::Notify( const Sequence< OUString >& aPropertyNames )
+void    SvtCJKOptions_Impl::Notify( const Sequence< OUString >& rPropertyNames )
 {
     Load();
 }
@@ -280,8 +286,9 @@ void    SvtCJKOptions_Impl::Notify( const Sequence< OUString >& aPropertyNames )
   -----------------------------------------------------------------------*/
 void    SvtCJKOptions_Impl::Commit()
 {
-    OUString* pOrgNames = aPropertyNames.getArray();
-    sal_Int32 nOrgCount = aPropertyNames.getLength();
+    Sequence<OUString> &rPropertyNames = PropertyNames::get();
+    OUString* pOrgNames = rPropertyNames.getArray();
+    sal_Int32 nOrgCount = rPropertyNames.getLength();
 
     Sequence< OUString > aNames(nOrgCount);
     Sequence< Any > aValues(nOrgCount);
@@ -427,14 +434,15 @@ sal_Bool SvtCJKOptions_Impl::IsReadOnly(SvtCJKOptions::EOption eOption) const
 
 static SvtCJKOptions_Impl*  pCJKOptions = NULL;
 static sal_Int32            nCJKRefCount = 0;
-static ::osl::Mutex         aCJKMutex;
+namespace { struct CJKMutex : public rtl::Static< ::osl::Mutex , CJKMutex >{}; }
+
 
 // class SvtCJKOptions --------------------------------------------------
 
 SvtCJKOptions::SvtCJKOptions(sal_Bool bDontLoad)
 {
     // Global access, must be guarded (multithreading)
-    ::osl::MutexGuard aGuard( aCJKMutex );
+    ::osl::MutexGuard aGuard( CJKMutex::get() );
     if ( !pCJKOptions )
         pCJKOptions = new SvtCJKOptions_Impl;
     if( !bDontLoad && !pCJKOptions->IsLoaded())
@@ -449,7 +457,7 @@ SvtCJKOptions::SvtCJKOptions(sal_Bool bDontLoad)
 SvtCJKOptions::~SvtCJKOptions()
 {
     // Global access, must be guarded (multithreading)
-    ::osl::MutexGuard aGuard( aCJKMutex );
+    ::osl::MutexGuard aGuard( CJKMutex::get() );
     if ( !--nCJKRefCount )
         DELETEZ( pCJKOptions );
 }
