@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.94 $
+ *  $Revision: 1.95 $
  *
- *  last change: $Author: dvo $ $Date: 2002-09-18 18:07:31 $
+ *  last change: $Author: dvo $ $Date: 2002-09-19 10:04:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1247,7 +1247,8 @@ void XMLTextImportHelper::SetOutlineStyle(
 void XMLTextImportHelper::SetOutlineStyles()
 {
     if( pOutlineStyles &&
-        xChapterNumbering.is() )
+        xChapterNumbering.is() &&
+        !( IsInsertMode() || IsStylesOnlyMode() ) )
     {
         sal_Int32 nCount = xChapterNumbering->getCount();
         for( sal_Int32 i=0; i < nCount; i++ )

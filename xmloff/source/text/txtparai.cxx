@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparai.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: dvo $ $Date: 2002-09-18 18:07:33 $
+ *  last change: $Author: dvo $ $Date: 2002-09-19 10:04:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1943,8 +1943,7 @@ XMLParaContext::~XMLParaContext()
     // set style and hard attributes at the previous paragraph
     sStyleName = xTxtImport->SetStyleAndAttrs( xAttrCursor, sStyleName, sal_True );
 
-    if( bHeading && !( xTxtImport->IsInsertMode() ||
-                       xTxtImport->IsStylesOnlyMode() ))
+    if( bHeading )
         xTxtImport->SetOutlineStyle( nOutlineLevel, sStyleName );
 
     if( pHints && pHints->Count() )
