@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basidesh.src,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-04 21:19:30 $
+ *  last change: $Author: rt $ $Date: 2001-05-10 07:06:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@ String RID_STR_FILTER_ALLFILES
     TEXT [ italian ] = "<tutto>" ;
     TEXT [ portuguese_brazilian ] = "<Tudo>" ;
     TEXT [ portuguese ] = "<Todos>" ;
-    TEXT [ finnish ] = "<All>" ;
+    TEXT [ finnish ] = "<Kaikki>" ;
     TEXT [ danish ] = "<Alle>" ;
     TEXT [ french ] = "<Tous>" ;
     TEXT [ swedish ] = "<Alla>" ;
@@ -118,6 +118,7 @@ String RID_STR_NOMODULE
     Text[ korean ] = "< ¸ðµâ ¾øÀ½ >";
     Text[ turkish ] = "< Modül yok >";
     Text[ catalan ] = "< ningún módulo >";
+    Text[ finnish ] = "< Ei moduulia >";
 };
 String RID_STR_WRONGPASSWORD
 {
@@ -128,7 +129,7 @@ String RID_STR_WRONGPASSWORD
     Text [ italian ] = "La password non corrisponde." ;
     Text [ portuguese_brazilian ] = "A senha não combina." ;
     Text [ portuguese ] = "Senha incorrecta." ;
-    Text [ finnish ] = "Salasana ei kelpaa." ;
+    Text [ finnish ] = "Väärä salasana." ;
     Text [ danish ] = "Forkert adgangskode." ;
     Text [ french ] = "Mot de passe incorrect." ;
     Text [ swedish ] = "Felaktigt lösenord." ;
@@ -184,7 +185,7 @@ String RID_STR_SAVE
     Text [ italian ] = "Salva" ;
     Text [ portuguese_brazilian ] = "Gravar" ;
     Text [ portuguese ] = "Guardar" ;
-    Text [ finnish ] = "Tallennus" ;
+    Text [ finnish ] = "Tallenna" ;
     Text [ danish ] = "Gem" ;
     Text [ french ] = "Enregistrer" ;
     Text [ swedish ] = "Spara" ;
@@ -230,6 +231,7 @@ String RID_STR_SOURCETOBIG
     Text[ korean ] = "¼Ò½ºÅØ½ºÆ®°¡ ³Ê¹« Ä¿¼­ ÀúÀå ¶Ç´Â ÄÄÆÄÀÏÀÌ ºÒ°¡´ÉÇÕ´Ï´Ù. \n ÀÏºÎ ÁÖ¼®À» »èÁ¦ÇÏ°Å³ª, ¸î¸î ¸Þ¼Òµå¸¦ ´Ù¸¥ ¸ðµâ·Î ¿Å±â½Ê½Ã¿À.";
     Text[ turkish ] = "Kaynak metin uzunluðu nedeniyle kaydedilemiyor ve derlenemiyor.\nBazý açýklamalarý silin ya da bazý yöntemleri baþka bir modüle aktarýn.";
     Text[ catalan ] = "El texto fuente es demasiado grande por lo que no se puede guardar o compilar.\nElimine algunos comentarios o transfiera algunos métodos a otro módulo.";
+    Text[ finnish ] = "Lähdeteksti on liian pitkä eikä sitä voida koota tai tallentaa.\nPoista huomautuksia tai siirrä joitakin menetelmiä toiseen moduuliin.";
 };
 String RID_STR_ERROROPENSTORAGE
 {
@@ -257,6 +259,7 @@ String RID_STR_ERROROPENSTORAGE
     Text[ korean ] = "ÆÄÀÏ ¿­±â½Ã¿¡ ¿À·ù";
     Text[ turkish ] = "Dosyayý açma sýrasýnda hata";
     Text[ catalan ] = "Error al abrir el archivo";
+    Text[ finnish ] = "Tiedoston avaamisessa on ilmennyt virhe";
 };
 String RID_STR_ERROROPENLIB
 {
@@ -283,6 +286,7 @@ String RID_STR_ERROROPENLIB
     Text[ korean ] = "¶óÀÌºê·¯¸® ·Îµå¿¡ ¿À·ù";
     Text[ turkish ] = "Kitaplýðý yükleme sýrasýnda hata";
     Text[ catalan ] = "Error al cargar la biblioteca";
+    Text[ finnish ] = "Kirjaston lataamisessa on ilmennyt virhe";
 };
 String RID_STR_NOLIBINSTORAGE
 {
@@ -310,6 +314,7 @@ String RID_STR_NOLIBINSTORAGE
     Text[ korean ] = "ÆÄÀÏ¿¡´Â ¾î¶² BASIC ¶óÀÌºê·¯¸®µµ Æ÷ÇÔµÇ¾î ÀÖÁö ¾Ê½À´Ï´Ù";
     Text[ turkish ] = "Dosya BASIC kitaplýklarý içermiyor";
     Text[ catalan ] = "El archivo no contiene bibliotecas BASIC";
+    Text[ finnish ] = "Tiedostossa ei ole BASIC-kirjastoja";
 };
 String RID_STR_BADSBXNAME
 {
@@ -325,7 +330,7 @@ String RID_STR_BADSBXNAME
     Text [ spanish ] = "Nombre no válido" ;
     Text [ danish ] = "Ugyldigt navn" ;
     Text [ swedish ] = "Ogiltigt namn" ;
-    Text [ finnish ] = "Invalid Name" ;
+    Text [ finnish ] = "Virheellinen nimi" ;
     Text [ english_us ] = "Invalid Name" ;
     Text[ chinese_simplified ] = "ÎÞÐ§µÄÃû³Æ";
     Text[ russian ] = "Íåïðàâèëüíîå èìÿ";
@@ -363,6 +368,7 @@ String RID_STR_LIBNAMETOLONG
     Text[ arabic ] = "íÌÈ ÃáÇ íÒíÏ ÇÓã ÇáãßÊÈÉ Úä 30 ÍÑÝÇð.";
     Text[ turkish ] = "Kitaplýk adý en fazla 30 karakter uzunluðunda olmalý.";
     Text[ catalan ] = "El nombre de la biblioteca no debe contener más de 30 caracteres.";
+    Text[ finnish ] = "Kirjaston nimessä voi olla 30 merkkiä.";
 };
 String RID_STR_SBXNAMEALLREADYUSED
 {
@@ -377,7 +383,7 @@ String RID_STR_SBXNAMEALLREADYUSED
     Text [ spanish ] = "El nombre ya existe" ;
     Text [ danish ] = "Dette navn findes allerede" ;
     Text [ swedish ] = "Namnet finns redan" ;
-    Text [ finnish ] = "Name allready used" ;
+    Text [ finnish ] = "Nimi on jo olemassa" ;
     Text [ english_us ] = "Name already exists" ;
     Text[ chinese_simplified ] = "Ãû³ÆÒÑ¾­´æÔÚ¡£";
     Text[ russian ] = "Èìÿ óæå ïðèñâîåíî";
@@ -405,7 +411,7 @@ String RID_STR_SBXNAMEALLREADYUSED2
     Text [ spanish ] = "Ya existe un objeto con el mismo nombre" ;
     Text [ danish ] = "Der findes allerede et objekt med dette navn" ;
     Text [ swedish ] = "Objekt med detta namn existerar redan" ;
-    Text [ finnish ] = "Object with same name allready exist" ;
+    Text [ finnish ] = "Samanniminen objekti on olemassa." ;
     Text [ english_us ] = "Object with same name already exists" ;
     Text[ chinese_simplified ] = "¶ÔÏóÒÑ¾­´æÔÚ¡£";
     Text[ russian ] = "Îáúåêò ñ òàêèì èìåíåì óæå ñóùåñòâóåò";
@@ -446,6 +452,7 @@ String RID_STR_FILEEXISTS
     Text[ korean ] = "ÆÄÀÏ'XX' Àº (´Â) ÀÌ¹Ì Á¸ÀçÇÕ´Ï´Ù";
     Text[ turkish ] = "Dosya 'XX' mevcut durumda";
     Text[ catalan ] = "El archivo 'XX' ya existe";
+    Text[ finnish ] = "Tiedosto XX on jo olemassa.";
 };
 String RID_STR_COMPILEERROR
 {
@@ -456,7 +463,7 @@ String RID_STR_COMPILEERROR
     Text [ italian ] = "Errore di compilazione: " ;
     Text [ portuguese_brazilian ] = "Erro-Compilação: " ;
     Text [ portuguese ] = "Erro de compilação:  " ;
-    Text [ finnish ] = "Käännösaikanen virhe: " ;
+    Text [ finnish ] = "Koontivirhe: " ;
     Text [ danish ] = "Kompileringsfejl: " ;
     Text [ french ] = "Erreur de compilation : " ;
     Text [ swedish ] = "Kompileringsfel:  " ;
@@ -484,7 +491,7 @@ String RID_STR_RUNTIMEERROR
     Text [ italian ] = "Errore di Runtime: #" ;
     Text [ portuguese_brazilian ] = "Erro-Execução: #" ;
     Text [ portuguese ] = "Erro de execução: #" ;
-    Text [ finnish ] = "Ajonaikainen virhe: #" ;
+    Text [ finnish ] = "Suoritusvirhe: " ;
     Text [ danish ] = "Runtimefejl: #" ;
     Text [ french ] = "Runtime error : #" ;
     Text [ swedish ] = "Runtimefel: #" ;
@@ -512,7 +519,7 @@ String RID_STR_SEARCHNOTFOUND
     Text [ italian ] = "Termine non trovato" ;
     Text [ portuguese_brazilian ] = "Search pattern not found" ;
     Text [ portuguese ] = "Impossível encontrar expressão procurada." ;
-    Text [ finnish ] = "Hakumallia ei löydy" ;
+    Text [ finnish ] = "Hakuavainta ei löytynyt" ;
     Text [ danish ] = "Søgningen gav intet resultat" ;
     Text [ french ] = "Terme recherché introuvable !" ;
     Text [ swedish ] = "Sökord hittades inte" ;
@@ -558,6 +565,7 @@ String RID_STR_SEARCHFROMSTART
     Text[ korean ] = "¸¶Áö¸· ¸ðµâ±îÁö Ã£¾Ò½À´Ï´Ù. Ã³À½ ¸ðµâ¿¡¼­ Ã£±â¸¦ °è¼ÓÇÏ½Ã°Ú½À´Ï±î?";
     Text[ turkish ] = "Son modüle kadar arama tamamlandý? Aramaya ilk modülden devam etmek istiyor musunuz?";
     Text[ catalan ] = "Se buscó hasta el último módulo. ¿Desea continuar la búsqueda en el primer módulo?";
+    Text[ finnish ] = "Haku viimeisestä moduulista on valmis. Jatketaanko ensimmäisestä moduulista?";
 };
 String RID_STR_SEARCHREPLACES
 {
@@ -567,7 +575,7 @@ String RID_STR_SEARCHREPLACES
     Text [ italian ] = "Termine sostituito XX volte" ;
     Text [ portuguese_brazilian ] = "Search pattern replaced XX times" ;
     Text [ portuguese ] = "Expressão procurada substituída XX vezes" ;
-    Text [ finnish ] = "Hakumalli on korvattu XX kertaa" ;
+    Text [ finnish ] = "Hakuavain korvattu XX kertaa" ;
     Text [ danish ] = "Søgeord erstattet XX gange" ;
     Text [ french ] = "Le terme recherché a été remplacé XX fois." ;
     Text [ swedish ] = "Sökord ersatt XX gånger" ;
@@ -612,6 +620,7 @@ String RID_STR_COULDNTREAD
     Text[ korean ] = "ÆÄÀÏÀ» ÀÐÁö ¸øÇß½À´Ï´Ù";
     Text[ turkish ] = "Dosya okunamadý";
     Text[ catalan ] = "No se pudo leer el archivo";
+    Text[ finnish ] = "Tiedoston lukeminen ei onnistunut.";
 };
 String RID_STR_COULDNTWRITE
 {
@@ -638,6 +647,7 @@ String RID_STR_COULDNTWRITE
     Text[ korean ] = "ÆÄÀÏÀ» ÀúÀåÇÏÁö ¸øÇß½À´Ï´Ù";
     Text[ turkish ] = "Dosya kaydedilemedi";
     Text[ catalan ] = "No se pudo guardar el archivo";
+    Text[ finnish ] = "Tiedoston tallentaminen ei onnistunut";
 };
 String RID_STR_CANNOTCHANGENAMESTDLIB
 {
@@ -665,6 +675,7 @@ String RID_STR_CANNOTCHANGENAMESTDLIB
     Text[ korean ] = "±âº» ¶óÀÌºê·¯¸®ÀÇ ÀÌ¸§Àº º¯°æÇÒ ¼ö ¾ø½À´Ï´Ù.";
     Text[ turkish ] = "Standart kitaplýðýn adý deðiþtirilemez.";
     Text[ catalan ] = "No se puede modificar el nombre de la biblioteca estándar";
+    Text[ finnish ] = "Oletuskirjaston nimeä ei voi muuttaa.";
 };
 String RID_STR_CANNOTCHANGENAMEREFLIB
 {
@@ -692,6 +703,7 @@ String RID_STR_CANNOTCHANGENAMEREFLIB
     Text[ korean ] = "ÂüÁ¶µÈ ¶óÀÌºê·¯¸®ÀÇ ÀÌ¸§Àº º¯°æÇÒ ¼ö ¾ø½À´Ï´Ù.";
     Text[ turkish ] = "Referans alýnan bir kitaplýðýn adý deðiþtirilemez.";
     Text[ catalan ] = "No se puede modificar el nombre de una biblioteca referenciada";
+    Text[ finnish ] = "Viitekirjaston nimeä ei voi muuttaa.";
 };
 String RID_STR_CANNOTUNLOADSTDLIB
 {
@@ -718,6 +730,7 @@ String RID_STR_CANNOTUNLOADSTDLIB
     Text[ korean ] = "±âº» ¶óÀÌºê·¯¸®´Â ºñÈ°¼ºÈ­ÇÒ ¼ö ¾ø½À´Ï´Ù.";
     Text[ turkish ] = "Standart kitaplýðýn etkinliði kaldýrýlýmaz.";
     Text[ catalan ] = "No se puede desactivar la biblioteca estándar";
+    Text[ finnish ] = "Oletuskirjaston käytöstä poisto ei onnistu";
 };
 String RID_STR_GENERATESOURCE
 {
@@ -744,6 +757,7 @@ String RID_STR_GENERATESOURCE
     Text[ korean ] = "¼Ò½ºÅØ½ºÆ®  »ý¼º";
     Text[ turkish ] = "Kaynak kod oluþturuluyor";
     Text[ catalan ] = "Creando un texto fuente";
+    Text[ finnish ] = "Luodaan lähde";
 };
 String RID_STR_FILENAME
 {
@@ -770,6 +784,7 @@ String RID_STR_FILENAME
     Text[ korean ] = "ÆÄÀÏ ÀÌ¸§: ";
     Text[ turkish ] = "Dosya adý: ";
     Text[ catalan ] = "Nombre del archivo:  ";
+    Text[ finnish ] = "Tiedoston nimi:";
 };
 String RID_STR_APPENDLIBS
 {
@@ -797,6 +812,7 @@ String RID_STR_APPENDLIBS
     Text[ korean ] = "¶óÀÌºê·¯¸® Ãß°¡";
     Text[ turkish ] = "Kitaplýk ekle";
     Text[ catalan ] = "Añadir bibliotecas";
+    Text[ finnish ] = "Liitä kirjastot";
 };
 String RID_STR_QUERYDELMACRO
 {
@@ -824,6 +840,7 @@ String RID_STR_QUERYDELMACRO
     Text[ korean ] = "¸ÅÅ©·ÎXXÀ»£¨¸¦£©»èÁ¦ÇÏ½Ã°Ú½À´Ï±î?";
     Text[ turkish ] = "XX makrosunu silmek istiyor musunuz?";
     Text[ catalan ] = "¿Desea eliminar la macro XX?";
+    Text[ finnish ] = "Haluatko poistaa makron XX?";
 };
 String RID_STR_QUERYDELDIALOG
 {
@@ -851,6 +868,7 @@ String RID_STR_QUERYDELDIALOG
     Text[ korean ] = "´ëÈ­»óÀÚXXÀ»£¨¸¦£©»èÁ¦ÇÏ½Ã°Ú½À´Ï±î?";
     Text[ turkish ] = "XX diyaloðunu silmek istiyor musunuz?";
     Text[ catalan ] = "¿Desea eliminar el diálogo XX?";
+    Text[ finnish ] = "Haluatko poistaa valintaikkunan XX?";
 };
 String RID_STR_QUERYDELLIB
 {
@@ -878,6 +896,7 @@ String RID_STR_QUERYDELLIB
     Text[ korean ] = "¶óÀÌºê·¯¸®XXÀ»£¨¸¦£© »èÁ¦ÇÏ½Ã°Ú½À´Ï±î ?";
     Text[ turkish ] = "XX kitaplýðýný silmek istiyor musunuz?";
     Text[ catalan ] = "¿Desea eliminar la biblioteca XX?";
+    Text[ finnish ] = "Haluatko poistaa kirjaston XX?";
 };
 String RID_STR_QUERYDELLIBREF
 {
@@ -905,6 +924,7 @@ String RID_STR_QUERYDELLIBREF
     Text[ korean ] = "¶óÀÌºê·¯¸®XX¿¡ ÀÖ´Â ÂüÁ¶¸¦ »èÁ¦ÇÏ½Ã°Ú½À´Ï±î?";
     Text[ turkish ] = "XX kitaplýðýna iliþkin referansý silmek istiyor musunuz?";
     Text[ catalan ] = "¿Desea eliminar la referencia a la biblioteca XX?";
+    Text[ finnish ] = "Haluatko poistaa viittauksen kirjastoon XX?";
 };
 String RID_STR_QUERYDELMODULE
 {
@@ -932,6 +952,7 @@ String RID_STR_QUERYDELMODULE
     Text[ korean ] = "¸ðµâXXÀ»(¸¦) »èÁ¦ÇÏ½Ã°Ú½À´Ï±î ?";
     Text[ turkish ] = "XX modülünü silmek istiyor musunuz?";
     Text[ catalan ] = "¿Desea eliminar el módulo XX?";
+    Text[ finnish ] = "Haluatko poistaa moduulin XX?";
 };
 String RID_STR_OBJNOTFOUND
 {
@@ -958,6 +979,7 @@ String RID_STR_OBJNOTFOUND
     Text[ korean ] = "°³Ã¼ ¶Ç´Â ¸Þ¼Òµå¸¦ Ã£Áö ¸øÇß½À´Ï´Ù";
     Text[ turkish ] = "Nesne ya da yöntem bulunamadý";
     Text[ catalan ] = "No se ha encontrado el objeto o método";
+    Text[ finnish ] = "Objektia tai menetelmää ei löytynyt";
 };
 String RID_STR_BASIC
 {
@@ -984,6 +1006,7 @@ String RID_STR_BASIC
     Text[ korean ] = "BASIC";
     Text[ turkish ] = "BASIC";
     Text[ catalan ] = "BASIC";
+    Text[ finnish ] = "BASIC";
 };
 String RID_STR_LINE
 {
@@ -1012,6 +1035,7 @@ String RID_STR_LINE
     Text[ turkish ] = "Sa.";
     Text[ language_user1 ] = "TSM: 11/9/00 This entry denotes Zeile - Zl";
     Text[ catalan ] = "Li";
+    Text[ finnish ] = "Rv";
 };
 String RID_STR_COLUMN
 {
@@ -1039,6 +1063,7 @@ String RID_STR_COLUMN
     Text[ korean ] = "¿­";
     Text[ turkish ] = "Sü.";
     Text[ catalan ] = "Col";
+    Text[ finnish ] = "Sar";
 };
 String RID_STR_DOC
 {
@@ -1065,6 +1090,7 @@ String RID_STR_DOC
     Text[ korean ] = "¹®¼­";
     Text[ turkish ] = "Belge";
     Text[ catalan ] = "Documento";
+    Text[ finnish ] = "Asiakirja";
 };
 Bitmap RID_BMP_BRKPNT0
 {
@@ -1082,7 +1108,7 @@ String RID_BASICIDE_OBJECTBAR
     Text [ italian ] = "Barra delle macro" ;
     Text [ portuguese_brazilian ] = "Barra-Macro" ;
     Text [ portuguese ] = "Barra de macros" ;
-    Text [ finnish ] = "Makrorivi" ;
+    Text [ finnish ] = "Makropalkki" ;
     Text [ danish ] = "Makrolinje" ;
     Text [ french ] = "Barre de macros" ;
     Text [ swedish ] = "Makrolist" ;
@@ -1111,7 +1137,7 @@ String RID_STR_CANNOTCLOSE
     Text [ italian ] = "La finestra non può essere chiusa mentre\n il programma BASIC è in esecuzione." ;
     Text [ portuguese_brazilian ] = "A janela não pode ser fechada enquanto o BASIC estiver rodando" ;
     Text [ portuguese ] = "A janela não pode ser fechada enquanto o \nBASIC estiver a ser executado." ;
-    Text [ finnish ] = "Ikkunaa ei voi sulkea, kun BASIC on käynnissä" ;
+    Text [ finnish ] = "Ikkunaa ei voi sulkea, kun BASIC on käynnissä." ;
     Text [ danish ] = "Vinduet kan ikke lukkes \nmens du kører BASIC." ;
     Text [ french ] = "Impossible de fermer la fenêtre\nlorsque BASIC est en cours d'exécution !" ;
     Text [ swedish ] = "Fönstret kan inte stängas\nnär BASIC-programmet körs." ;
@@ -1156,6 +1182,7 @@ String RID_STR_REPLACESTDLIB
     Text[ korean ] = "±âº» ¶óÀÌºê·¯¸®´Â ´ëÃ¼ÇÒ ¼ö ¾ø½À´Ï´Ù.";
     Text[ turkish ] = "Standart kitaplýk deðiþtirilemez.";
     Text[ catalan ] = "No se puede substituir la biblioteca estándar.";
+    Text[ finnish ] = "Oletuskirjaston korvaaminen ei onnistu";
 };
 String RID_STR_REFNOTPOSSIBLE
 {
@@ -1184,6 +1211,7 @@ String RID_STR_REFNOTPOSSIBLE
     Text[ korean ] = "'XX'¿¡ ´ëÇÑ ÂüÁ¶ ºÒ°¡´É";
     Text[ turkish ] = "'XX' referans alýnamaz.";
     Text[ catalan ] = "No es posible la referencia a 'XX' .";
+    Text[ finnish ] = "Viite kohteeseen XX ei ole mahdollinen.";
 };
 String RID_STR_WATCHNAME
 {
@@ -1193,7 +1221,7 @@ String RID_STR_WATCHNAME
     Text [ italian ] = "Controllo" ;
     Text [ portuguese_brazilian ] = "Vis es" ;
     Text [ portuguese ] = "Observador" ;
-    Text [ finnish ] = "Vahdit" ;
+    Text [ finnish ] = "Kello" ;
     Text [ danish ] = "Observatør" ;
     Text [ french ] = "Témoin" ;
     Text [ swedish ] = "Bevakare" ;
@@ -1221,7 +1249,7 @@ String RID_STR_STACKNAME
     Text [ italian ] = "Stack" ;
     Text [ portuguese_brazilian ] = "Pilha" ;
     Text [ portuguese ] = "Empilhar" ;
-    Text [ finnish ] = "Pino" ;
+    Text [ finnish ] = "Kutsupino" ;
     Text [ danish ] = "Kommandostak" ;
     Text [ french ] = "Pile" ;
     Text [ swedish ] = "Kommandostack" ;
@@ -1249,7 +1277,7 @@ String RID_STR_INITIDE
     Text [ italian ] = "Inizializza BASIC" ;
     Text [ portuguese_brazilian ] = "Iniciar BASIC" ;
     Text [ portuguese ] = "Iniciar BASIC" ;
-    Text [ finnish ] = "Alusta BASIC" ;
+    Text [ finnish ] = "BASIC-alustus" ;
     Text [ danish ] = "BASIC initialisiering" ;
     Text [ french ] = "Initialisation de BASIC" ;
     Text [ swedish ] = "Initiering BASIC" ;
@@ -1338,7 +1366,7 @@ String RID_STR_STDLIBNAME
     Text [ spanish ] = "Biblioteca" ;
     Text [ danish ] = "Bibliotek" ;
     Text [ swedish ] = "Bibliotek" ;
-    Text [ finnish ] = "Libary" ;
+    Text [ finnish ] = "Kirjasto" ;
     Text [ english_us ] = "Library" ;
     Text[ chinese_simplified ] = "³ÌÐò¿â";
     Text[ russian ] = "Áèáëèîòåêà";
@@ -1378,6 +1406,7 @@ String RID_STR_NEWLIB
     Text[ korean ] = "»õ ¶óÀÌºê·¯¸®";
     Text[ turkish ] = "Yeni kitaplýk";
     Text[ catalan ] = "Nueva biblioteca";
+    Text[ finnish ] = "Uusi kirjasto";
 };
 String RID_STR_NEWMOD
 {
@@ -1404,6 +1433,7 @@ String RID_STR_NEWMOD
     Text[ korean ] = "»õ ¸ðµâ";
     Text[ turkish ] = "Yeni modül";
     Text[ catalan ] = "Nuevo módulo";
+    Text[ finnish ] = "Uusi moduuli";
 };
 String RID_STR_NEWDLG
 {
@@ -1430,6 +1460,7 @@ String RID_STR_NEWDLG
     Text[ korean ] = "»õ ´ëÈ­»óÀÚ";
     Text[ turkish ] = "Yeni diyalog";
     Text[ catalan ] = "Nuevo diálogo";
+    Text[ finnish ] = "Uusi valintaikkuna";
 };
 String RID_STR_ALL
 {
@@ -1468,7 +1499,7 @@ String RID_STR_PAGE
     Text [ portuguese_brazilian ] = "Página" ;
     Text [ portuguese ] = "Página" ;
     Text [ english_us ] = "Page" ;
-    Text [ finnish ] = "Sivu" ;
+    Text [ finnish ] = "Sivu " ;
     Text [ danish ] = "Side" ;
     Text [ french ] = "Page" ;
     Text [ swedish ] = "Sida" ;
@@ -1513,6 +1544,7 @@ String RID_STR_MACRONAMEREQ
     Text[ korean ] = "ÀÌ¸§À» ÀÔ·ÂÇØ¾ß ÇÕ´Ï´Ù.";
     Text[ turkish ] = "Bir ad girilmesi gerekir.";
     Text[ catalan ] = "Se debe introducir un nombre.";
+    Text[ finnish ] = "Nimi on määritettävä.";
 };
 String RID_STR_WILLSTOPPRG
 {
@@ -1540,6 +1572,7 @@ String RID_STR_WILLSTOPPRG
     Text[ korean ] = "ÀÌ º¯°æ ÈÄ,  »ç¿ëÀÚÀÇ ÇÁ·Î±×·¥À» ´Ù½Ã ½ÃÀÛÇØ¾ß ÇÕ´Ï´Ù.\n°è¼ÓÇÏ½Ã°Ú½À´Ï±î?";
     Text[ turkish ] = "Bu deðiþiklikten sonra programý yeniden baþlatmanýz gerekir.\nDevam etmek istiyor musunuz?";
     Text[ catalan ] = "Tendrá que volver a iniciar el programa después de estas modificaciones.\n¿Continuar?";
+    Text[ finnish ] = "Ohjelma on käynnistettävä uudelleen tämän muutoksen jälkeen.\nJatketaanko?";
 };
 String RID_STR_SEARCHALLMODULES
 {
@@ -1566,6 +1599,7 @@ String RID_STR_SEARCHALLMODULES
     Text[ korean ] = "È°¼ºÈ­µÈ ¸ðµç ¸ðµâÀÇ ÅØ½ºÆ®¸¦ ´ëÃ¼ÇÏ½Ã°Ú½À´Ï±î?";
     Text[ turkish ] = "Bu metin tüm etkin modüllerde deðiþtirilsin mi?";
     Text[ catalan ] = "¿Desea substituir el texto en todos los módulos activos?";
+    Text[ finnish ] = "Haluatko korvata tekstin kaikissa aktiivissa moduuleissa?";
 };
 Edit RID_EDT_WATCHEDIT
 {
@@ -1605,6 +1639,7 @@ ImageButton RID_IMGBTN_REMOVEWATCH
     QuickHelpText[ korean ] = "°¨½ÃÀÚ¡¡Á¦°Å!";
     QuickHelpText[ turkish ] = "Remove Watch";
     QuickHelpText[ catalan ] = "Eliminar observador";
+    QuickHelpText[ finnish ] = "Poista kello!";
 };
 ImageButton RID_IMGBTN_GOTOCALL
 {
@@ -1620,7 +1655,7 @@ String RID_STR_REMOVEWATCH
     Text [ italian ] = "Controllo: " ;
     Text [ portuguese_brazilian ] = "Vis o: " ;
     Text [ portuguese ] = "Observador:  " ;
-    Text [ finnish ] = "Vahti: " ;
+    Text [ finnish ] = "Kello:" ;
     Text [ danish ] = "Observatør: " ;
     Text [ french ] = "Témoin : " ;
     Text [ swedish ] = "Bevakare: " ;
@@ -1665,6 +1700,7 @@ String RID_STR_STACK
     Text[ korean ] = "È£Ãâ: ";
     Text[ turkish ] = "Çaðrýlar: ";
     Text[ catalan ] = "Llamadas: ";
+    Text[ finnish ] = "Kutsut: ";
 };
 /*
 String RID_STR_INSERTMODE
@@ -1827,7 +1863,7 @@ ToolBox RID_BASICIDE_OBJECTBAR
             Text [ italian ] = "LIbrary" ;
             Text [ portuguese_brazilian ] = "Library" ;
             Text [ portuguese ] = "Biblioteca" ;
-            Text [ finnish ] = "Libary" ;
+            Text [ finnish ] = "Kirjasto" ;
             Text [ danish ] = "Bibliotek" ;
             Text [ french ] = "Bibliothèque" ;
             Text [ swedish ] = "Bibliotek" ;
@@ -1861,7 +1897,7 @@ ToolBox RID_BASICIDE_OBJECTBAR
             Text [ italian ] = "Compila" ;
             Text [ portuguese_brazilian ] = "Compilar" ;
             Text [ portuguese ] = "Compilar" ;
-            Text [ finnish ] = "Käännä" ;
+            Text [ finnish ] = "Kokoa" ;
             Text [ danish ] = "Kompiler" ;
             Text [ french ] = "Compiler" ;
             Text [ swedish ] = "Översätt" ;
@@ -1920,7 +1956,7 @@ ToolBox RID_BASICIDE_OBJECTBAR
             Text [ italian ] = "Arresta" ;
             Text [ portuguese_brazilian ] = "Parar" ;
             Text [ portuguese ] = "Parar" ;
-            Text [ finnish ] = "Pysäytä" ;
+            Text [ finnish ] = "Seis" ;
             Text [ danish ] = "Stop" ;
             Text [ french ] = "Arrêter" ;
             Text [ swedish ] = "Stoppa" ;
@@ -1970,6 +2006,7 @@ ToolBox RID_BASICIDE_OBJECTBAR
             Text[ korean ] = "Ã³¸® ´Ü°è";
             Text[ turkish ] = "Yordam adýmý";
             Text[ catalan ] = "Paso a paso";
+            Text[ finnish ] = "Toiminnon vaihe";
         };
         ToolBoxItem
         {
@@ -1997,6 +2034,7 @@ ToolBox RID_BASICIDE_OBJECTBAR
             Text[ korean ] = "°¢°¢ÀÇ ´Ü°è";
             Text[ turkish ] = "Tek adým";
             Text[ catalan ] = "Paso único";
+            Text[ finnish ] = "Yksittäinen vaihe";
         };
         ToolBoxItem
         {
@@ -2025,6 +2063,7 @@ ToolBox RID_BASICIDE_OBJECTBAR
             Text[ korean ] = "µÚ·Î °Ç³Ê¶Ù±â";
             Text[ turkish ] = "Geri adým";
             Text[ catalan ] = "Salto atrás";
+            Text[ finnish ] = "Edellinen vaihe";
         };
         ToolBoxItem
         {
@@ -2035,7 +2074,7 @@ ToolBox RID_BASICIDE_OBJECTBAR
             Text [ italian ] = "Punto di interruzione" ;
             Text [ portuguese_brazilian ] = "Ponto de interrupção" ;
             Text [ portuguese ] = "Ponto de interrupção" ;
-            Text [ finnish ] = "Keskeytyskohta" ;
+            Text [ finnish ] = "Keskeytyspiste" ;
             Text [ danish ] = "Pausepunkt" ;
             Text [ french ] = "Point d'arrêt" ;
             Text [ swedish ] = "Brytpunkt" ;
@@ -2081,6 +2120,7 @@ ToolBox RID_BASICIDE_OBJECTBAR
             Text[ korean ] = "°¨½ÃÀÚ¡¡º¸ÀÌ±â";
             Text[ turkish ] = "Ýzleyici ekle";
             Text[ catalan ] = "Mostrar observador";
+            Text[ finnish ] = "Lisää kello";
         };
         ToolBoxItem
         {
@@ -2186,7 +2226,7 @@ ToolBox RID_BASICIDE_OBJECTBAR
             Text [ italian ] = "Abbina parentesi" ;
             Text [ portuguese_brazilian ] = "Match Bracket" ;
             Text [ portuguese ] = "Localizar parênteses" ;
-            Text [ finnish ] = "Match Bracket" ;
+            Text [ finnish ] = "Etsi sulkeet" ;
             Text [ danish ] = "Søg parentes" ;
             Text [ french ] = "Rechercher les parenthèses" ;
             Text [ swedish ] = "Sök parentes" ;
@@ -2215,7 +2255,7 @@ ToolBox RID_BASICIDE_OBJECTBAR
             Text [ italian ] = "Campi di controllo" ;
             Text [ portuguese_brazilian ] = "Controles" ;
             Text [ portuguese ] = "Controlos" ;
-            Text [ finnish ] = "Ohjausobjektit" ;
+            Text [ finnish ] = "Ohjaimet" ;
             Text [ danish ] = "Kontrolelementer" ;
             Text [ french ] = "Champs de contrôle" ;
             Text [ swedish ] = "Kontrollfält" ;
@@ -2266,6 +2306,7 @@ ToolBox RID_BASICIDE_OBJECTBAR
             Text[ korean ] = "¼Ò½ºÅØ½ºÆ® »ðÀÔ";
             Text[ turkish ] = "Kaynak metin ekle";
             Text[ catalan ] = "Insertar texto fuente";
+            Text[ finnish ] = "Lisää lähdeteksti";
         };
         ToolBoxItem
         {
@@ -2276,7 +2317,7 @@ ToolBox RID_BASICIDE_OBJECTBAR
             Text [ italian ] = "Salva origine con nome..." ;
             Text [ portuguese_brazilian ] = "Gravar origem como..." ;
             Text [ portuguese ] = "Guardar texto fonte como..." ;
-            Text [ finnish ] = "Tallenna lähde nimellä..." ;
+            Text [ finnish ] = "Tallenna lähde nimellä" ;
             Text [ danish ] = "Gem kildetekst som..." ;
             Text [ french ] = "Enregistrer le texte source sous..." ;
             Text [ swedish ] = "Spara källtext som..." ;
@@ -2372,7 +2413,7 @@ Menu RID_POPUP_BRKPROPS
             Text [ italian ] = "Proprietà..." ;
             Text [ portuguese_brazilian ] = "Propriedades..." ;
             Text [ portuguese ] = "Propriedades..." ;
-            Text [ finnish ] = "Ominaisuudet..." ;
+            Text [ finnish ] = "Ominaisuudet" ;
             Text [ danish ] = "Egenskaber..." ;
             Text [ french ] = "Propriétés..." ;
             Text [ swedish ] = "Egenskaper..." ;
@@ -2415,7 +2456,7 @@ Menu RID_POPUP_BRKDLG
     Text [ italian ] = "Punti di interruzione" ;
     Text [ portuguese_brazilian ] = "Pontos de interrupção" ;
     Text [ portuguese ] = "Pontos de interrupção" ;
-    Text [ finnish ] = "Keskeytyskohdat" ;
+    Text [ finnish ] = "Keskeytyspisteet" ;
     Text [ danish ] = "Pausepunkter" ;
     Text [ french ] = "Points d'arrêt" ;
     Text [ swedish ] = "Brytpunkter" ;
@@ -2434,7 +2475,7 @@ Menu RID_POPUP_BRKDLG
             Text [ italian ] = "Punti di interruzione..." ;
             Text [ portuguese_brazilian ] = "Pontos de interrupção..." ;
             Text [ portuguese ] = "Pontos de interrupção..." ;
-            Text [ finnish ] = "Keskeytyskohdat..." ;
+            Text [ finnish ] = "Keskeytyspisteet" ;
             Text [ danish ] = "Pausepunkter..." ;
             Text [ french ] = "Points d'arrêt..." ;
             Text [ swedish ] = "Brytpunkter..." ;
@@ -2521,6 +2562,7 @@ Menu RID_POPUP_TABBAR
                         Text[ korean ] = "BASIC ¸ðµâ";
                         Text[ turkish ] = "BASIC modülü";
                         Text[ catalan ] = "Módulo BASIC";
+                        Text[ finnish ] = "BASIC-moduuli";
                     };
                     MenuItem
                     {
@@ -2549,6 +2591,7 @@ Menu RID_POPUP_TABBAR
                         Text[ korean ] = "BASIC ´ëÈ­»óÀÚ";
                         Text[ turkish ] = "BASIC diyaloðu";
                         Text[ catalan ] = "Diálogo BASIC";
+                        Text[ finnish ] = "BASIC-valintaikkuna";
                     };
                 };
             };
@@ -2608,7 +2651,7 @@ Menu RID_POPUP_TABBAR
             Text [ italian ] = "Rinomina" ;
             Text [ portuguese_brazilian ] = "Renomear" ;
             Text [ portuguese ] = "Mudar nome" ;
-            Text [ finnish ] = "Nimeä" ;
+            Text [ finnish ] = "Nimeä uudelleen" ;
             Text [ danish ] = "Omdøb" ;
             Text [ french ] = "Renommer" ;
             Text [ swedish ] = "Byt namn" ;
@@ -2672,7 +2715,7 @@ Menu RID_POPUP_TABBAR
             Text [ italian ] = "Moduli..." ;
             Text [ portuguese_brazilian ] = "Módulos..." ;
             Text [ portuguese ] = "Módulos..." ;
-            Text [ finnish ] = "Moduulit..." ;
+            Text [ finnish ] = "Moduulit" ;
             Text [ danish ] = "Moduler..." ;
             Text [ french ] = "Modules..." ;
             Text [ swedish ] = "Moduler..." ;
