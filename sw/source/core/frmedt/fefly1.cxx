@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fefly1.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 16:20:24 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 10:31:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1026,6 +1026,15 @@ void SwFEShell::Insert(  SdrObject& rDrawObj,
             FOREACHPAM_END()
         EndAllAction();
     }
+
+    // --> OD 2005-01-07 #i40085# - follow-up of #i35635#
+    // move object to visible layer
+    SwContact* pContact = static_cast<SwContact*>(rDrawObj.GetUserCall());
+    if ( pContact )
+    {
+        pContact->MoveObjToVisibleLayer( &rDrawObj );
+    }
+    // <--
 
     if( pFmt )
         // das DrawObject selektieren
