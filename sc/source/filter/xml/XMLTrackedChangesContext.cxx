@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTrackedChangesContext.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: sab $ $Date: 2001-07-26 06:51:19 $
+ *  last change: $Author: nn $ $Date: 2001-08-27 19:37:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -819,6 +819,7 @@ SvXMLImportContext *ScXMLChangeCellContext::CreateChildContext( USHORT nPrefix,
 void ScXMLChangeCellContext::CreateTextPContext(sal_Bool bIsNewParagraph)
 {
     pEditTextObj = new ScEditEngineTextObj();
+    pEditTextObj->acquire();
     pEditTextObj->GetEditEngine()->SetEditTextObjectPool(GetScImport().GetDocument()->GetEditPool());
     uno::Reference <text::XText> xText = pEditTextObj;
     if (xText.is())
@@ -855,7 +856,8 @@ void ScXMLChangeCellContext::EndElement()
             }
             rOldCell = new ScEditCell(pEditTextObj->CreateTextObject(), GetScImport().GetDocument(), GetScImport().GetDocument()->GetEditPool());
             GetScImport().GetTextImport()->ResetCursor();
-            delete pEditTextObj;
+            // delete pEditTextObj;
+            pEditTextObj->release();
         }
         else
         {
