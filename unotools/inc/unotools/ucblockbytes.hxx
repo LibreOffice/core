@@ -79,7 +79,6 @@ SV_DECL_IMPL_REF( UcbLockBytesHandler )
 #define NS_BEANS ::com::sun::star::beans
 #define NS_TASK ::com::sun::star::task
 
-class CommandThread_Impl;
 class UcbLockBytes : public virtual SvLockBytes
 {
     vos::OCondition         m_aInitialized;
@@ -93,7 +92,7 @@ class UcbLockBytes : public virtual SvLockBytes
     NS_UNO::Reference < NS_IO::XInputStream >  m_xInputStream;
     NS_UNO::Reference < NS_IO::XOutputStream > m_xOutputStream;
     NS_UNO::Reference < NS_IO::XSeekable >     m_xSeekable;
-    CommandThread_Impl*     m_pCommandThread;
+    void*                   m_pCommandThread; // is alive only for compatibility reasons
     UcbLockBytesHandlerRef  m_xHandler;
 
     sal_uInt32              m_nRead;
@@ -141,7 +140,7 @@ public:
     ErrCode                 GetError() const
                             { return m_nError; }
 
-    void                    Cancel();
+    void                    Cancel(); // is alive only for compatibility reasons
 
     // the following properties are available when and after the first DataAvailable callback has been executed
     String                  GetContentType() const;
@@ -180,9 +179,6 @@ public:
                                 vos::OGuard aGuard( SAL_CONST_CAST(UcbLockBytes*, this)->m_aMutex );
                                 return m_xInputStream.is();
                             }
-
-    void                    setCommandThread_Impl( CommandThread_Impl* pThread )
-                            { m_pCommandThread = pThread; }
 
     void                    setDontClose_Impl()
                             { m_bDontClose = sal_True; }
