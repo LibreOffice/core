@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-02-09 20:06:09 $
+ *  last change: $Author: kz $ $Date: 2001-03-01 16:52:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -261,7 +261,7 @@ Menu SV_RESID_MENU_EDIT
             Text [ English ] = "insert ~symbol...";
                     TEXT[ italian ] = "Inserisci caratteri speciali...";
             TEXT[ portuguese_brazilian ] = "~Sonderzeichen einfügen...";
-            TEXT[ portuguese ] = "~Inserir carácter especial...";
+            TEXT[ portuguese ] = "~Inserir caracteres especiais...";
             TEXT[ danish ] = "Indsæt ~specialtegn...";
             TEXT[ french ] = "~Insérer des caractères spéciaux...";
             TEXT[ swedish ] = "Infoga ~specialtecken...";
