@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerimpl.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2004-03-23 10:23:02 $
+ *  last change: $Author: hr $ $Date: 2004-06-18 15:46:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,6 +144,7 @@ namespace configmgr
     class OProviderImpl : public ITreeManager, public IDefaultableTreeManager, public IInterface
     {
         friend class OProvider;
+        friend class OConfigurationProvider;
     public:
         //==========================================================================
         //= FactoryArguments
@@ -162,6 +163,7 @@ namespace configmgr
                 ARG_ASYNC_DEPRECATED,   // lasy write data - deprecated version
                 ARG_ASYNC,              // lazy write data
                 ARG_ENTITY,             // name of the entity to be manipulated - only for admin
+                ARG_REFRESH,            // force refresh of data into cache
 
                 _arg_count,
                 ARG_NOT_FOUND = _arg_count
@@ -214,6 +216,7 @@ namespace configmgr
         configapi::ApiProviderInstances*    m_pNewProviders;
         mutable osl::Mutex                  m_aTreeManagerMutex;
         TreeManager*                        m_pTreeManager;     /// the tree cache. Will hold a reference to us as long as it life
+        sal_Bool                            m_bEnableAsync;
 
         rtl::Reference< TreeManager > maybeGetTreeManager() const CFG_NOTHROW();
         rtl::Reference< TreeManager > getTreeManager() const CFG_UNO_THROW_RTE();
@@ -234,6 +237,11 @@ namespace configmgr
         virtual void saveAndNotifyUpdate(memory::Accessor const& _aChangedDataAccessor, TreeChangeList const& aChanges) CFG_UNO_THROW_ALL(  );
         virtual void disposeData(const RequestOptions& _aOptions) CFG_NOTHROW();
         virtual void fetchSubtree(AbsolutePath const& aSubtreePath, const RequestOptions& _aOptions) CFG_NOTHROW();
+
+        virtual void refreshAll() CFG_UNO_THROW_ALL(  );
+        virtual void flushAll() CFG_NOTHROW();
+        virtual void enableAsync(const sal_Bool& bEnableAsync) CFG_NOTHROW();
+
         /// IDefaultableTreeManager
         virtual sal_Bool fetchDefaultData(  memory::UpdateAccessor& _aAccessToken,
                                             AbsolutePath const& aSubtreePath, const RequestOptions& _aOptions
