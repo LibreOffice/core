@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salprnpsp.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: pl $ $Date: 2002-11-13 20:24:06 $
+ *  last change: $Author: pl $ $Date: 2002-11-19 18:08:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,9 +169,9 @@ static void getPaLib()
     }
 }
 
-inline PtTo10Mu( int nPoints ) { return (int)(((double)nPoints)*35.27777778); }
+inline PtTo10Mu( int nPoints ) { return (int)((((double)nPoints)*35.27777778)+0.5); }
 
-inline TenMuToPt( int nUnits ) { return (int)(((double)nUnits)/35.27777778); }
+inline TenMuToPt( int nUnits ) { return (int)((((double)nUnits)/35.27777778)+0.5); }
 
 static struct
 {
@@ -506,6 +506,7 @@ String SalInstance::GetDefaultPrinter()
 SalInfoPrinter::SalInfoPrinter()
 {
     maPrinterData.m_pGraphics = NULL;
+    m_bPapersInit = false;
 }
 
 // -----------------------------------------------------------------------
@@ -517,6 +518,43 @@ SalInfoPrinter::~SalInfoPrinter()
         delete maPrinterData.m_pGraphics;
         maPrinterData.m_pGraphics = NULL;
     }
+}
+
+// -----------------------------------------------------------------------
+
+void SalInfoPrinter::InitPaperFormats()
+{
+    m_aPaperFormats.clear();
+    m_bPapersInit = true;
+
+    if( maPrinterData.m_aJobData.m_pParser )
+    {
+        const PPDKey* pKey = maPrinterData.m_aJobData.m_pParser->getKey( String( RTL_CONSTASCII_USTRINGPARAM( "PageSize" ) ) );
+        if( pKey )
+        {
+            int nValues = pKey->countValues();
+            for( int i = 0; i < nValues; i++ )
+            {
+                const PPDValue* pValue = pKey->getValue( i );
+                vcl::PaperInfo aInfo;
+                aInfo.m_aPaperName = pValue->m_aOptionTranslation;
+                if( ! aInfo.m_aPaperName.Len() )
+                    aInfo.m_aPaperName = pValue->m_aOption;
+                int nWidth = 0, nHeight = 0;
+                maPrinterData.m_aJobData.m_pParser->getPaperDimension( pValue->m_aOption, nWidth, nHeight );
+                aInfo.m_nPaperWidth = (unsigned long)((PtTo10Mu( nWidth )+50)/100);
+                aInfo.m_nPaperHeight = (unsigned long)((PtTo10Mu( nHeight )+50)/100);
+                m_aPaperFormats.push_back( aInfo );
+            }
+        }
+    }
+}
+
+// -----------------------------------------------------------------------
+
+int SalInfoPrinter::GetLandscapeAngle()
+{
+    return -900;
 }
 
 // -----------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: print.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: ssa $ $Date: 2002-08-22 07:52:54 $
+ *  last change: $Author: pl $ $Date: 2002-11-19 18:08:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1438,6 +1438,88 @@ BOOL Printer::SetPaperSizeUser( const Size& rSize )
     }
 
     return TRUE;
+}
+
+// -----------------------------------------------------------------------
+
+static const vcl::PaperInfo& ImplGetEmptyPaper()
+{
+    static vcl::PaperInfo aInfo;
+    return aInfo;
+}
+
+// -----------------------------------------------------------------------
+
+int Printer::GetPaperInfoCount() const
+{
+    if( ! mpInfoPrinter )
+        return 0;
+    if( ! mpInfoPrinter->m_bPapersInit )
+        mpInfoPrinter->InitPaperFormats();
+    return mpInfoPrinter->m_aPaperFormats.size();
+}
+
+// -----------------------------------------------------------------------
+
+const vcl::PaperInfo& Printer::GetPaperInfo( int nPaper ) const
+{
+    if( ! mpInfoPrinter )
+        return ImplGetEmptyPaper();
+    if( ! mpInfoPrinter->m_bPapersInit )
+        mpInfoPrinter->InitPaperFormats();
+    if( mpInfoPrinter->m_aPaperFormats.empty() || nPaper < 0 || nPaper >= mpInfoPrinter->m_aPaperFormats.size() )
+        return ImplGetEmptyPaper();
+    return mpInfoPrinter->m_aPaperFormats[nPaper];
+}
+
+// -----------------------------------------------------------------------
+
+BOOL Printer::SetPaperFromInfo( const vcl::PaperInfo& rInfo )
+{
+    MapMode aMap( MAP_MM );
+    Size aSize( rInfo.m_nPaperWidth, rInfo.m_nPaperHeight );
+    aSize = LogicToPixel( aSize, aMap );
+    aSize = PixelToLogic( aSize );
+    return SetPaperSizeUser( aSize );
+}
+
+// -----------------------------------------------------------------------
+
+int Printer::GetLandscapeAngle() const
+{
+    return mpInfoPrinter ? mpInfoPrinter->GetLandscapeAngle() : 900;
+}
+
+// -----------------------------------------------------------------------
+
+const vcl::PaperInfo& Printer::GetCurrentPaperInfo() const
+{
+    if( ! mpInfoPrinter )
+        return ImplGetEmptyPaper();
+    if( ! mpInfoPrinter->m_bPapersInit )
+        mpInfoPrinter->InitPaperFormats();
+    if( mpInfoPrinter->m_aPaperFormats.empty() )
+        return ImplGetEmptyPaper();
+
+    MapMode aMap( MAP_MM );
+    Size aSize = PixelToLogic( GetPaperSizePixel(), aMap );
+    int nMatch = -1;
+    long nDelta = 0;
+    for( int i = 0; i < mpInfoPrinter->m_aPaperFormats.size(); i++ )
+    {
+        unsigned long nW = mpInfoPrinter->m_aPaperFormats[i].m_nPaperWidth;
+        unsigned long nH = mpInfoPrinter->m_aPaperFormats[i].m_nPaperHeight;
+        if( nW >= (aSize.Width()-1) && nH >= (aSize.Height()-1) )
+        {
+            long nCurDelta = (nW - aSize.Width())*(nW - aSize.Width()) + (nH - aSize.Height() )*(nH - aSize.Height() );
+            if( nMatch == -1 || nCurDelta < nDelta )
+            {
+                nMatch = i;
+                nDelta = nCurDelta;
+            }
+        }
+    }
+    return nMatch != -1 ? mpInfoPrinter->m_aPaperFormats[nMatch] : ImplGetEmptyPaper();
 }
 
 // -----------------------------------------------------------------------

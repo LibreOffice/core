@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salprn.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ssa $ $Date: 2002-06-19 11:38:00 $
+ *  last change: $Author: pl $ $Date: 2002-11-19 18:08:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -893,6 +893,21 @@ SalInfoPrinter::~SalInfoPrinter()
         DeleteDC( maPrinterData.mpGraphics->maGraphicsData.mhDC );
         delete maPrinterData.mpGraphics;
     }
+}
+
+// -----------------------------------------------------------------------
+
+void SalInfoPrinter::InitPaperFormats()
+{
+    m_aPaperFormats.clear();
+    m_bPapersInit = true;
+}
+
+// -----------------------------------------------------------------------
+
+int SalInfoPrinter::GetLandscapeAngle()
+{
+    return 900;
 }
 
 // -----------------------------------------------------------------------
