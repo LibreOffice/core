@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-26 11:20:06 $
+ *  last change: $Author: oj $ $Date: 2001-05-02 12:47:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1920,7 +1920,7 @@ void ORowSet::execute_NoApprove_NoNewConn(ClearableMutexGuard& _rClearForNotific
                         }
                     }
 
-                    ORowSetDataColumns_COLLECTION aColumns;
+                    ::vos::ORef< ::connectivity::OSQLColumns> aColumns = new ::connectivity::OSQLColumns();
                     ::std::vector< ::rtl::OUString> aNames;
                     ::rtl::OUString aDescription;
                     sal_Int32 nFormatKey = 0;
@@ -1945,7 +1945,7 @@ void ORowSet::execute_NoApprove_NoNewConn(ClearableMutexGuard& _rClearForNotific
                                                                                     aDescription,
                                                                                     m_aCurrentRow,
                                                                                     m_pCache->getEnd());
-                                aColumns.push_back(pColumn);
+                                aColumns->push_back(pColumn);
                                 pColumn->setName(aName);
                                 aNames.push_back(aName);
 
@@ -1996,7 +1996,7 @@ void ORowSet::execute_NoApprove_NoNewConn(ClearableMutexGuard& _rClearForNotific
                                                                                 aDescription,
                                                                                 m_aCurrentRow,
                                                                                 m_pCache->getEnd());
-                            aColumns.push_back(pColumn);
+                            aColumns->push_back(pColumn);
                             pColumn->setName(sName);
                             aNames.push_back(sName);
 
@@ -2765,7 +2765,7 @@ ORowSetClone::ORowSetClone(ORowSet& rParent,::osl::Mutex& _rMutex)
     m_aCurrentRow           = m_pCache->createIterator();
     m_xNumberFormatTypes    = rParent.m_xNumberFormatTypes;
 
-    ORowSetDataColumns_COLLECTION aColumns;
+    ::vos::ORef< ::connectivity::OSQLColumns> aColumns = new ::connectivity::OSQLColumns();
     ::std::vector< ::rtl::OUString> aNames;
 
     ::rtl::OUString aDescription;
@@ -2779,7 +2779,7 @@ ORowSetClone::ORowSetClone(ORowSet& rParent,::osl::Mutex& _rMutex)
     for(sal_Int32 i=1;pBegin != pEnd ;++pBegin,++i)
     {
         Reference<XPropertySet> xColumn;
-        ::cppu::extractInterface(xColumn,rParent.m_pColumns->getByName(*pBegin));
+        rParent.m_pColumns->getByName(*pBegin) >>= xColumn;
         if(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_DESCRIPTION))
             aDescription = comphelper::getString(xColumn->getPropertyValue(PROPERTY_DESCRIPTION));
 
@@ -2789,7 +2789,7 @@ ORowSetClone::ORowSetClone(ORowSet& rParent,::osl::Mutex& _rMutex)
                                                             aDescription,
                                                             m_aCurrentRow,
                                                             m_pCache->getEnd());
-        aColumns.push_back(pColumn);
+        aColumns->push_back(pColumn);
         pColumn->setName(*pBegin);
         aNames.push_back(*pBegin);
 

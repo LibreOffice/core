@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycomposer.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-30 10:15:35 $
+ *  last change: $Author: oj $ $Date: 2001-05-02 12:47:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -162,7 +162,7 @@ namespace dbaccess
     typedef connectivity::sdbcx::OCollection OPrivateColumns_Base;
     class OPrivateColumns : public OPrivateColumns_Base
     {
-        OSQLColumns m_aColumns;
+        ::vos::ORef< ::connectivity::OSQLColumns>   m_aColumns;
     protected:
         virtual Reference< XNamed > createObject(const ::rtl::OUString& _rName);
         virtual void impl_refresh() throw(RuntimeException) {}
@@ -171,7 +171,7 @@ namespace dbaccess
             return NULL;
         }
     public:
-        OPrivateColumns(const OSQLColumns& _rColumns,
+        OPrivateColumns(const ::vos::ORef< ::connectivity::OSQLColumns>& _rColumns,
                         sal_Bool _bCase,
                         ::cppu::OWeakObject& _rParent,
                         ::osl::Mutex& _rMutex,
@@ -191,7 +191,10 @@ namespace dbaccess
     // -------------------------------------------------------------------------
     Reference< XNamed > OPrivateColumns::createObject(const ::rtl::OUString& _rName)
     {
-        return Reference< XNamed >(*find(m_aColumns.begin(),m_aColumns.end(),_rName,isCaseSensitive()),UNO_QUERY);
+        ::connectivity::OSQLColumns::const_iterator aIter = find(m_aColumns->begin(),m_aColumns->end(),_rName,isCaseSensitive());
+        if(aIter != m_aColumns->end())
+            return Reference< XNamed >(*aIter,UNO_QUERY);
+        return NULL;
     }
     typedef connectivity::sdbcx::OCollection OPrivateTables_BASE;
 
@@ -437,7 +440,7 @@ void SAL_CALL OQueryComposer::setQuery( const ::rtl::OUString& command ) throw(S
     Reference<XStatement> xStmt = m_xConnection->createStatement();
 
     ::std::vector< ::rtl::OUString> aNames;
-    const ::vos::ORef< OSQLColumns>& aCols = m_aSqlIterator.getSelectColumns();
+    ::vos::ORef< OSQLColumns> aCols = m_aSqlIterator.getSelectColumns();
     if(xStmt.is())
     {
         ::rtl::OUString sSql = m_aWorkSql;
@@ -470,7 +473,7 @@ void SAL_CALL OQueryComposer::setQuery( const ::rtl::OUString& command ) throw(S
         for(OSQLColumns::const_iterator aIter = aCols->begin(); aIter != aCols->end();++aIter)
             aNames.push_back(getString((*aIter)->getPropertyValue(PROPERTY_NAME)));
     }
-    m_pColumns = new OPrivateColumns(*aCols,m_xConnection->getMetaData()->storesMixedCaseQuotedIdentifiers(),*this,m_aMutex,aNames);
+    m_pColumns = new OPrivateColumns(aCols,m_xConnection->getMetaData()->storesMixedCaseQuotedIdentifiers(),*this,m_aMutex,aNames);
 
     getTables();
     getParameters();
@@ -1229,11 +1232,11 @@ Reference< XIndexAccess > SAL_CALL OQueryComposer::getParameters(  ) throw(Runti
     // now set the Parameters
     if(!m_pParameters)
     {
-        const ::vos::ORef< OSQLColumns>& aCols = m_aSqlIterator.getParameters();
+        ::vos::ORef< OSQLColumns> aCols = m_aSqlIterator.getParameters();
         ::std::vector< ::rtl::OUString> aNames;
         for(OSQLColumns::const_iterator aIter = aCols->begin(); aIter != aCols->end();++aIter)
             aNames.push_back(getString((*aIter)->getPropertyValue(PROPERTY_NAME)));
-        m_pParameters = new OPrivateColumns(*aCols,m_xConnection->getMetaData()->storesMixedCaseQuotedIdentifiers(),*this,m_aMutex,aNames);
+        m_pParameters = new OPrivateColumns(aCols,m_xConnection->getMetaData()->storesMixedCaseQuotedIdentifiers(),*this,m_aMutex,aNames);
     }
 
     return m_pParameters;

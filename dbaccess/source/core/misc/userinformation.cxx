@@ -2,9 +2,9 @@
  *
  *  $RCSfile: userinformation.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2000-11-09 13:14:32 $
+ *  last change: $Author: oj $ $Date: 2001-05-02 12:47:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,8 +78,8 @@
 #ifndef _UTL_CONFIGMGR_HXX_
 #include <unotools/configmgr.hxx>
 #endif
-#ifndef _CONNECTIVITY_COMMONTOOLS_HXX_
-#include <connectivity/CommonTools.hxx>
+#ifndef _COMPHELPER_TYPES_HXX_
+#include <comphelper/types.hxx>
 #endif
 
 using namespace ::utl;
@@ -91,7 +91,7 @@ using namespace ::com::sun::star::registry;
 UserInformation::UserInformation()
 {
     Any aValue = ConfigManager::GetDirectConfigProperty(ConfigManager::LOCALE);
-    LanguageType eLanguage = ConvertIsoStringToLanguage(connectivity::getString(aValue),'-');
+    LanguageType eLanguage = ConvertIsoStringToLanguage(comphelper::getString(aValue),'-');
     UniString sLanguage, sCountry;
     ConvertLanguageToIsoNames(eLanguage, sLanguage, sCountry);
     m_aUserLocale = Locale(sLanguage,sCountry,::rtl::OUString());

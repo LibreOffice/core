@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-23 10:07:41 $
+ *  last change: $Author: oj $ $Date: 2001-05-02 12:47:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,21 +205,15 @@ namespace dbaccess
         virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames(  ) throw(::com::sun::star::uno::RuntimeException);
 
         // XNamed
-        virtual ::rtl::OUString SAL_CALL getName(  ) throw(::com::sun::star::uno::RuntimeException)
-        {
-            return m_sName;
-        }
-        virtual void SAL_CALL setName( const ::rtl::OUString& _rName ) throw(::com::sun::star::uno::RuntimeException)
-        {
-            m_sName = _rName;
-        }
+        virtual ::rtl::OUString SAL_CALL getName(  ) throw(::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL setName( const ::rtl::OUString& _rName ) throw(::com::sun::star::uno::RuntimeException);
 
         /** return a pointer to the object which holds the UI-settings for this column, if any.
             @see    OColumnSettings
             @see    OColumns::loadSettings
         */
-        virtual OColumnSettings*    getSettings() { return NULL; }
-        virtual void fireValueChange(const ::com::sun::star::uno::Any& _rOldValue){}
+        virtual OColumnSettings*    getSettings();
+        virtual void fireValueChange(const ::com::sun::star::uno::Any& _rOldValue);
     };
 
     //************************************************************

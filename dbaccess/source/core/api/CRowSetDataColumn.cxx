@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CRowSetDataColumn.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-20 11:44:05 $
+ *  last change: $Author: oj $ $Date: 2001-05-02 12:47:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,7 +172,7 @@ void SAL_CALL ORowSetDataColumn::getFastPropertyValue( Any& rValue, sal_Int32 nH
             if(!m_aColumnValue.isNull() && m_aColumnValue != m_rEnd && m_aColumnValue->isValid())
             {
                 ORowSetRow aRow = *m_aColumnValue;
-                OSL_ENSURE(aRow->size() > m_nPos,"Pos is greater than size of vector");
+                OSL_ENSURE((sal_Int32)aRow->size() > m_nPos,"Pos is greater than size of vector");
                 rValue = (*(*m_aColumnValue))[m_nPos].makeAny();
             }
             break;
@@ -263,8 +263,8 @@ Reference< ::com::sun::star::container::XNamed > ORowSetDataColumns::createObjec
 {
     Reference< ::com::sun::star::container::XNamed > xNamed;
 
-    ORowSetDataColumns_COLLECTION::const_iterator first = m_aColumns.begin();
-    ORowSetDataColumns_COLLECTION::const_iterator last  = m_aColumns.end();
+    ::connectivity::OSQLColumns::const_iterator first = m_aColumns->begin();
+    ::connectivity::OSQLColumns::const_iterator last  = m_aColumns->end();
 
     ::comphelper::UStringMixEqual aCase(isCaseSensitive());
 
@@ -279,12 +279,12 @@ Reference< ::com::sun::star::container::XNamed > ORowSetDataColumns::createObjec
 void SAL_CALL ORowSetDataColumns::disposing(void)
 {
     //  clear_NoDispose();
-    m_aColumns.clear();
+    m_aColumns->clear();
     ORowSetDataColumns_BASE::disposing();
     //  m_aColumns.clear();
 }
 // -----------------------------------------------------------------------------
-void ORowSetDataColumns::assign(const ORowSetDataColumns_COLLECTION& _rColumns,const ::std::vector< ::rtl::OUString> &_rVector)
+void ORowSetDataColumns::assign(const ::vos::ORef< ::connectivity::OSQLColumns>& _rColumns,const ::std::vector< ::rtl::OUString> &_rVector)
 {
     m_aColumns = _rColumns;
     for(::std::vector< ::rtl::OUString>::const_iterator i=_rVector.begin(); i != _rVector.end();++i)

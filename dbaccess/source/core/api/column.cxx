@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-24 14:40:19 $
+ *  last change: $Author: oj $ $Date: 2001-05-02 12:47:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -301,7 +301,26 @@ sal_Int64 OColumn::getSomething( const Sequence< sal_Int8 > & rId ) throw (Runti
 
     return 0;
 }
-
+// -----------------------------------------------------------------------------
+::rtl::OUString SAL_CALL OColumn::getName(  ) throw(::com::sun::star::uno::RuntimeException)
+{
+    return m_sName;
+}
+// -----------------------------------------------------------------------------
+void SAL_CALL OColumn::setName( const ::rtl::OUString& _rName ) throw(::com::sun::star::uno::RuntimeException)
+{
+    m_sName = _rName;
+}
+// -----------------------------------------------------------------------------
+OColumnSettings*    OColumn::getSettings()
+{
+    return NULL;
+}
+// -----------------------------------------------------------------------------
+void OColumn::fireValueChange(const ::com::sun::star::uno::Any& _rOldValue)
+{
+}
+// -----------------------------------------------------------------------------
 //============================================================
 //= OColumnSettings
 //============================================================
