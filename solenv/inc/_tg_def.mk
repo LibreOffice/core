@@ -24,9 +24,27 @@ $(DEF1EXPORTFILE) : $(SHL1VERSIONMAP)
 .ENDIF			# "$(DEF1EXPORTFILE)"==""
 .ENDIF			# "$(SHL1VERSIONMAP)"!=""
 
+.IF "$(GUI)"=="WNT"
+
+.IF "$(BUILD_SOSL)"==""
+.IF "$(UPDATER)"!=""
+.IF "$(DEFLIB1NAME)"!=""
+
 DEF1UNIQE:=$(mktmp $(GUI))
 
-.IF "$(GUI)"=="WNT"
+# %_disk is a 4nt special; don't exppect it to work in any other shell
+BUILD_DRIVE1:=$(shell +echo %_disk)
+#BUILD_DRIVE1:=O
+
+.IF "$(BUILD_DRIVE1)"=="O"
+# in case of RE build, protect against failed lock
+EXPORT1_PROTECT=$(TMP)$/$(DEF1UNIQE:b).bat && 
+.ENDIF			# "$(BUILD_DRIVE1)"=="O"
+
+.ENDIF			# "$(DEFLIB1NAME)"!=""
+.ENDIF			# "$(UPDATER)"!=""
+.ENDIF			# "$(BUILD_SOSL)"==""
+
 .IF "$(APP1HEAP)"==""
 .IF "$(UPDATER)"=="" || "$(solarlang)"!="deut" || "$(link_always)"==""
 $(DEF1TARGETN) : \
@@ -37,16 +55,15 @@ $(DEF1TARGETN) .PHONY : \
         $(DEF1DEPN) \
         $(DEF1EXPORTFILE)
 .ENDIF			# "$(UPDATER)"=="" || "$(solarlang)"!="deut" || "$(link_always)"==""
-# %_disk is a 4nt special; don't exppect it to work in any other shell
 .IF "$(BUILD_SOSL)"==""
 .IF "$(UPDATER)"!=""
 .IF "$(DEFLIB1NAME)"!=""
-.IF "$(shell +echo %_disk)"=="O"
+.IF "$(BUILD_DRIVE1)"=="O"
 #
 # don't forget to have the right DEFSTAG set!
 #
     +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl -u$(DEF1UNIQE:b) update $(DEFSTAG)
-.ENDIF			# "$(shell +echo %_disk)"=="O"
+.ENDIF			# "$(BUILD_DRIVE1)"=="O"
 .ENDIF				# "$(DEFLIB1NAME)"!=""
 .ENDIF			# "$(UPDATER)"!=""
 .ENDIF			# "$(BUILD_SOSL)"==""
@@ -64,28 +81,27 @@ $(DEF1TARGETN) .PHONY : \
     @echo component_getDescriptionFunc	>>$@
 .ENDIF			# "$(NO_SHL1DESCRIPTION)"==""
 .IF "$(DEFLIB1NAME)"!=""
-    @+$(TMP)$/$(DEF1UNIQE:b).bat && $(LIBMGR) -EXTRACT:/ /OUT:$(SHL1TARGET).exp $(SLB)$/$(DEFLIB1NAME).lib
+    @+$(EXPORT1_PROTECT) $(LIBMGR) -EXTRACT:/ /OUT:$(SHL1TARGET).exp $(SLB)$/$(DEFLIB1NAME).lib
 .IF "$(USE_LDUMP2)"=!""
 .IF "$(DEF1CEXP)"!=""
-    @+$(TMP)$/$(DEF1UNIQE:b).bat && $(LDUMP2) -A $(DEF1CEXP) -E 20 -F $(MISC)$/$(SHL1TARGET).flt $(SHL1TARGET).exp			   >>$@
+    @+$(EXPORT1_PROTECT) $(LDUMP2) -A $(DEF1CEXP) -E 20 -F $(MISC)$/$(SHL1TARGET).flt $(SHL1TARGET).exp			   >>$@
 .ELSE
-    @+$(TMP)$/$(DEF1UNIQE:b).bat && $(LDUMP2) -E 20 -F $(MISC)$/$(SHL1TARGET).flt $(SHL1TARGET).exp			   >>$@
+    @+$(EXPORT1_PROTECT) $(LDUMP2) -E 20 -F $(MISC)$/$(SHL1TARGET).flt $(SHL1TARGET).exp			   >>$@
 .ENDIF
 .ELSE				# "$(USE_LDUMP2)"=!""
-    @+$(TMP)$/$(DEF1UNIQE:b).bat && $(LDUMP) -E 20 -F$(MISC)$/$(SHL1TARGET).flt $(SHL1TARGET).exp			   >>$@
+    @+$(EXPORT1_PROTECT) $(LDUMP) -E 20 -F$(MISC)$/$(SHL1TARGET).flt $(SHL1TARGET).exp			   >>$@
 .ENDIF				# "$(USE_LDUMP2)"=!""
-    @+$(TMP)$/$(DEF1UNIQE:b).bat && +-$(RM) $(SHL1TARGET).exp
+    +$(EXPORT1_PROTECT) $(RM) $(SHL1TARGET).exp
 # now *\defs\$(OUTPATH)	exists, commit it
-# %_disk is a 4nt special; don't exppect it to work in any other shell
 .IF "$(BUILD_SOSL)"==""
 .IF "$(UPDATER)"!=""
-.IF "$(shell +echo %_disk)"=="O"
+.IF "$(BUILD_DRIVE1)"=="O"
 #
 # don't forget to have the right DEFSTAG set!
 #
     +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl -u$(DEF1UNIQE:b) commit
     +$(TMP)$/$(DEF1UNIQE:b).bat && $(RM) $(TMP)$/$(DEF1UNIQE:b).bat
-.ENDIF			# "$(shell +echo %_disk)"=="O"
+.ENDIF			# "$(BUILD_DRIVE1)"=="O"
 .ENDIF			# "$(UPDATER)"!=""
 .ENDIF			# "$(BUILD_SOSL)"==""
 .ENDIF				# "$(DEFLIB1NAME)"!=""
@@ -203,9 +219,27 @@ $(DEF2EXPORTFILE) : $(SHL2VERSIONMAP)
 .ENDIF			# "$(DEF2EXPORTFILE)"==""
 .ENDIF			# "$(SHL2VERSIONMAP)"!=""
 
+.IF "$(GUI)"=="WNT"
+
+.IF "$(BUILD_SOSL)"==""
+.IF "$(UPDATER)"!=""
+.IF "$(DEFLIB2NAME)"!=""
+
 DEF2UNIQE:=$(mktmp $(GUI))
 
-.IF "$(GUI)"=="WNT"
+# %_disk is a 4nt special; don't exppect it to work in any other shell
+BUILD_DRIVE2:=$(shell +echo %_disk)
+#BUILD_DRIVE2:=O
+
+.IF "$(BUILD_DRIVE2)"=="O"
+# in case of RE build, protect against failed lock
+EXPORT2_PROTECT=$(TMP)$/$(DEF2UNIQE:b).bat && 
+.ENDIF			# "$(BUILD_DRIVE2)"=="O"
+
+.ENDIF			# "$(DEFLIB2NAME)"!=""
+.ENDIF			# "$(UPDATER)"!=""
+.ENDIF			# "$(BUILD_SOSL)"==""
+
 .IF "$(APP2HEAP)"==""
 .IF "$(UPDATER)"=="" || "$(solarlang)"!="deut" || "$(link_always)"==""
 $(DEF2TARGETN) : \
@@ -216,16 +250,15 @@ $(DEF2TARGETN) .PHONY : \
         $(DEF2DEPN) \
         $(DEF2EXPORTFILE)
 .ENDIF			# "$(UPDATER)"=="" || "$(solarlang)"!="deut" || "$(link_always)"==""
-# %_disk is a 4nt special; don't exppect it to work in any other shell
 .IF "$(BUILD_SOSL)"==""
 .IF "$(UPDATER)"!=""
 .IF "$(DEFLIB2NAME)"!=""
-.IF "$(shell +echo %_disk)"=="O"
+.IF "$(BUILD_DRIVE2)"=="O"
 #
 # don't forget to have the right DEFSTAG set!
 #
     +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl -u$(DEF2UNIQE:b) update $(DEFSTAG)
-.ENDIF			# "$(shell +echo %_disk)"=="O"
+.ENDIF			# "$(BUILD_DRIVE2)"=="O"
 .ENDIF				# "$(DEFLIB2NAME)"!=""
 .ENDIF			# "$(UPDATER)"!=""
 .ENDIF			# "$(BUILD_SOSL)"==""
@@ -243,28 +276,27 @@ $(DEF2TARGETN) .PHONY : \
     @echo component_getDescriptionFunc	>>$@
 .ENDIF			# "$(NO_SHL2DESCRIPTION)"==""
 .IF "$(DEFLIB2NAME)"!=""
-    @+$(TMP)$/$(DEF2UNIQE:b).bat && $(LIBMGR) -EXTRACT:/ /OUT:$(SHL2TARGET).exp $(SLB)$/$(DEFLIB2NAME).lib
+    @+$(EXPORT2_PROTECT) $(LIBMGR) -EXTRACT:/ /OUT:$(SHL2TARGET).exp $(SLB)$/$(DEFLIB2NAME).lib
 .IF "$(USE_LDUMP2)"=!""
 .IF "$(DEF2CEXP)"!=""
-    @+$(TMP)$/$(DEF2UNIQE:b).bat && $(LDUMP2) -A $(DEF2CEXP) -E 20 -F $(MISC)$/$(SHL2TARGET).flt $(SHL2TARGET).exp			   >>$@
+    @+$(EXPORT2_PROTECT) $(LDUMP2) -A $(DEF2CEXP) -E 20 -F $(MISC)$/$(SHL2TARGET).flt $(SHL2TARGET).exp			   >>$@
 .ELSE
-    @+$(TMP)$/$(DEF2UNIQE:b).bat && $(LDUMP2) -E 20 -F $(MISC)$/$(SHL2TARGET).flt $(SHL2TARGET).exp			   >>$@
+    @+$(EXPORT2_PROTECT) $(LDUMP2) -E 20 -F $(MISC)$/$(SHL2TARGET).flt $(SHL2TARGET).exp			   >>$@
 .ENDIF
 .ELSE				# "$(USE_LDUMP2)"=!""
-    @+$(TMP)$/$(DEF2UNIQE:b).bat && $(LDUMP) -E 20 -F$(MISC)$/$(SHL2TARGET).flt $(SHL2TARGET).exp			   >>$@
+    @+$(EXPORT2_PROTECT) $(LDUMP) -E 20 -F$(MISC)$/$(SHL2TARGET).flt $(SHL2TARGET).exp			   >>$@
 .ENDIF				# "$(USE_LDUMP2)"=!""
-    @+$(TMP)$/$(DEF2UNIQE:b).bat && +-$(RM) $(SHL2TARGET).exp
+    +$(EXPORT2_PROTECT) $(RM) $(SHL2TARGET).exp
 # now *\defs\$(OUTPATH)	exists, commit it
-# %_disk is a 4nt special; don't exppect it to work in any other shell
 .IF "$(BUILD_SOSL)"==""
 .IF "$(UPDATER)"!=""
-.IF "$(shell +echo %_disk)"=="O"
+.IF "$(BUILD_DRIVE2)"=="O"
 #
 # don't forget to have the right DEFSTAG set!
 #
     +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl -u$(DEF2UNIQE:b) commit
     +$(TMP)$/$(DEF2UNIQE:b).bat && $(RM) $(TMP)$/$(DEF2UNIQE:b).bat
-.ENDIF			# "$(shell +echo %_disk)"=="O"
+.ENDIF			# "$(BUILD_DRIVE2)"=="O"
 .ENDIF			# "$(UPDATER)"!=""
 .ENDIF			# "$(BUILD_SOSL)"==""
 .ENDIF				# "$(DEFLIB2NAME)"!=""
@@ -382,9 +414,27 @@ $(DEF3EXPORTFILE) : $(SHL3VERSIONMAP)
 .ENDIF			# "$(DEF3EXPORTFILE)"==""
 .ENDIF			# "$(SHL3VERSIONMAP)"!=""
 
+.IF "$(GUI)"=="WNT"
+
+.IF "$(BUILD_SOSL)"==""
+.IF "$(UPDATER)"!=""
+.IF "$(DEFLIB3NAME)"!=""
+
 DEF3UNIQE:=$(mktmp $(GUI))
 
-.IF "$(GUI)"=="WNT"
+# %_disk is a 4nt special; don't exppect it to work in any other shell
+BUILD_DRIVE3:=$(shell +echo %_disk)
+#BUILD_DRIVE3:=O
+
+.IF "$(BUILD_DRIVE3)"=="O"
+# in case of RE build, protect against failed lock
+EXPORT3_PROTECT=$(TMP)$/$(DEF3UNIQE:b).bat && 
+.ENDIF			# "$(BUILD_DRIVE3)"=="O"
+
+.ENDIF			# "$(DEFLIB3NAME)"!=""
+.ENDIF			# "$(UPDATER)"!=""
+.ENDIF			# "$(BUILD_SOSL)"==""
+
 .IF "$(APP3HEAP)"==""
 .IF "$(UPDATER)"=="" || "$(solarlang)"!="deut" || "$(link_always)"==""
 $(DEF3TARGETN) : \
@@ -395,16 +445,15 @@ $(DEF3TARGETN) .PHONY : \
         $(DEF3DEPN) \
         $(DEF3EXPORTFILE)
 .ENDIF			# "$(UPDATER)"=="" || "$(solarlang)"!="deut" || "$(link_always)"==""
-# %_disk is a 4nt special; don't exppect it to work in any other shell
 .IF "$(BUILD_SOSL)"==""
 .IF "$(UPDATER)"!=""
 .IF "$(DEFLIB3NAME)"!=""
-.IF "$(shell +echo %_disk)"=="O"
+.IF "$(BUILD_DRIVE3)"=="O"
 #
 # don't forget to have the right DEFSTAG set!
 #
     +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl -u$(DEF3UNIQE:b) update $(DEFSTAG)
-.ENDIF			# "$(shell +echo %_disk)"=="O"
+.ENDIF			# "$(BUILD_DRIVE3)"=="O"
 .ENDIF				# "$(DEFLIB3NAME)"!=""
 .ENDIF			# "$(UPDATER)"!=""
 .ENDIF			# "$(BUILD_SOSL)"==""
@@ -422,28 +471,27 @@ $(DEF3TARGETN) .PHONY : \
     @echo component_getDescriptionFunc	>>$@
 .ENDIF			# "$(NO_SHL3DESCRIPTION)"==""
 .IF "$(DEFLIB3NAME)"!=""
-    @+$(TMP)$/$(DEF3UNIQE:b).bat && $(LIBMGR) -EXTRACT:/ /OUT:$(SHL3TARGET).exp $(SLB)$/$(DEFLIB3NAME).lib
+    @+$(EXPORT3_PROTECT) $(LIBMGR) -EXTRACT:/ /OUT:$(SHL3TARGET).exp $(SLB)$/$(DEFLIB3NAME).lib
 .IF "$(USE_LDUMP2)"=!""
 .IF "$(DEF3CEXP)"!=""
-    @+$(TMP)$/$(DEF3UNIQE:b).bat && $(LDUMP2) -A $(DEF3CEXP) -E 20 -F $(MISC)$/$(SHL3TARGET).flt $(SHL3TARGET).exp			   >>$@
+    @+$(EXPORT3_PROTECT) $(LDUMP2) -A $(DEF3CEXP) -E 20 -F $(MISC)$/$(SHL3TARGET).flt $(SHL3TARGET).exp			   >>$@
 .ELSE
-    @+$(TMP)$/$(DEF3UNIQE:b).bat && $(LDUMP2) -E 20 -F $(MISC)$/$(SHL3TARGET).flt $(SHL3TARGET).exp			   >>$@
+    @+$(EXPORT3_PROTECT) $(LDUMP2) -E 20 -F $(MISC)$/$(SHL3TARGET).flt $(SHL3TARGET).exp			   >>$@
 .ENDIF
 .ELSE				# "$(USE_LDUMP2)"=!""
-    @+$(TMP)$/$(DEF3UNIQE:b).bat && $(LDUMP) -E 20 -F$(MISC)$/$(SHL3TARGET).flt $(SHL3TARGET).exp			   >>$@
+    @+$(EXPORT3_PROTECT) $(LDUMP) -E 20 -F$(MISC)$/$(SHL3TARGET).flt $(SHL3TARGET).exp			   >>$@
 .ENDIF				# "$(USE_LDUMP2)"=!""
-    @+$(TMP)$/$(DEF3UNIQE:b).bat && +-$(RM) $(SHL3TARGET).exp
+    +$(EXPORT3_PROTECT) $(RM) $(SHL3TARGET).exp
 # now *\defs\$(OUTPATH)	exists, commit it
-# %_disk is a 4nt special; don't exppect it to work in any other shell
 .IF "$(BUILD_SOSL)"==""
 .IF "$(UPDATER)"!=""
-.IF "$(shell +echo %_disk)"=="O"
+.IF "$(BUILD_DRIVE3)"=="O"
 #
 # don't forget to have the right DEFSTAG set!
 #
     +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl -u$(DEF3UNIQE:b) commit
     +$(TMP)$/$(DEF3UNIQE:b).bat && $(RM) $(TMP)$/$(DEF3UNIQE:b).bat
-.ENDIF			# "$(shell +echo %_disk)"=="O"
+.ENDIF			# "$(BUILD_DRIVE3)"=="O"
 .ENDIF			# "$(UPDATER)"!=""
 .ENDIF			# "$(BUILD_SOSL)"==""
 .ENDIF				# "$(DEFLIB3NAME)"!=""
@@ -561,9 +609,27 @@ $(DEF4EXPORTFILE) : $(SHL4VERSIONMAP)
 .ENDIF			# "$(DEF4EXPORTFILE)"==""
 .ENDIF			# "$(SHL4VERSIONMAP)"!=""
 
+.IF "$(GUI)"=="WNT"
+
+.IF "$(BUILD_SOSL)"==""
+.IF "$(UPDATER)"!=""
+.IF "$(DEFLIB4NAME)"!=""
+
 DEF4UNIQE:=$(mktmp $(GUI))
 
-.IF "$(GUI)"=="WNT"
+# %_disk is a 4nt special; don't exppect it to work in any other shell
+BUILD_DRIVE4:=$(shell +echo %_disk)
+#BUILD_DRIVE4:=O
+
+.IF "$(BUILD_DRIVE4)"=="O"
+# in case of RE build, protect against failed lock
+EXPORT4_PROTECT=$(TMP)$/$(DEF4UNIQE:b).bat && 
+.ENDIF			# "$(BUILD_DRIVE4)"=="O"
+
+.ENDIF			# "$(DEFLIB4NAME)"!=""
+.ENDIF			# "$(UPDATER)"!=""
+.ENDIF			# "$(BUILD_SOSL)"==""
+
 .IF "$(APP4HEAP)"==""
 .IF "$(UPDATER)"=="" || "$(solarlang)"!="deut" || "$(link_always)"==""
 $(DEF4TARGETN) : \
@@ -574,16 +640,15 @@ $(DEF4TARGETN) .PHONY : \
         $(DEF4DEPN) \
         $(DEF4EXPORTFILE)
 .ENDIF			# "$(UPDATER)"=="" || "$(solarlang)"!="deut" || "$(link_always)"==""
-# %_disk is a 4nt special; don't exppect it to work in any other shell
 .IF "$(BUILD_SOSL)"==""
 .IF "$(UPDATER)"!=""
 .IF "$(DEFLIB4NAME)"!=""
-.IF "$(shell +echo %_disk)"=="O"
+.IF "$(BUILD_DRIVE4)"=="O"
 #
 # don't forget to have the right DEFSTAG set!
 #
     +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl -u$(DEF4UNIQE:b) update $(DEFSTAG)
-.ENDIF			# "$(shell +echo %_disk)"=="O"
+.ENDIF			# "$(BUILD_DRIVE4)"=="O"
 .ENDIF				# "$(DEFLIB4NAME)"!=""
 .ENDIF			# "$(UPDATER)"!=""
 .ENDIF			# "$(BUILD_SOSL)"==""
@@ -601,28 +666,27 @@ $(DEF4TARGETN) .PHONY : \
     @echo component_getDescriptionFunc	>>$@
 .ENDIF			# "$(NO_SHL4DESCRIPTION)"==""
 .IF "$(DEFLIB4NAME)"!=""
-    @+$(TMP)$/$(DEF4UNIQE:b).bat && $(LIBMGR) -EXTRACT:/ /OUT:$(SHL4TARGET).exp $(SLB)$/$(DEFLIB4NAME).lib
+    @+$(EXPORT4_PROTECT) $(LIBMGR) -EXTRACT:/ /OUT:$(SHL4TARGET).exp $(SLB)$/$(DEFLIB4NAME).lib
 .IF "$(USE_LDUMP2)"=!""
 .IF "$(DEF4CEXP)"!=""
-    @+$(TMP)$/$(DEF4UNIQE:b).bat && $(LDUMP2) -A $(DEF4CEXP) -E 20 -F $(MISC)$/$(SHL4TARGET).flt $(SHL4TARGET).exp			   >>$@
+    @+$(EXPORT4_PROTECT) $(LDUMP2) -A $(DEF4CEXP) -E 20 -F $(MISC)$/$(SHL4TARGET).flt $(SHL4TARGET).exp			   >>$@
 .ELSE
-    @+$(TMP)$/$(DEF4UNIQE:b).bat && $(LDUMP2) -E 20 -F $(MISC)$/$(SHL4TARGET).flt $(SHL4TARGET).exp			   >>$@
+    @+$(EXPORT4_PROTECT) $(LDUMP2) -E 20 -F $(MISC)$/$(SHL4TARGET).flt $(SHL4TARGET).exp			   >>$@
 .ENDIF
 .ELSE				# "$(USE_LDUMP2)"=!""
-    @+$(TMP)$/$(DEF4UNIQE:b).bat && $(LDUMP) -E 20 -F$(MISC)$/$(SHL4TARGET).flt $(SHL4TARGET).exp			   >>$@
+    @+$(EXPORT4_PROTECT) $(LDUMP) -E 20 -F$(MISC)$/$(SHL4TARGET).flt $(SHL4TARGET).exp			   >>$@
 .ENDIF				# "$(USE_LDUMP2)"=!""
-    @+$(TMP)$/$(DEF4UNIQE:b).bat && +-$(RM) $(SHL4TARGET).exp
+    +$(EXPORT4_PROTECT) $(RM) $(SHL4TARGET).exp
 # now *\defs\$(OUTPATH)	exists, commit it
-# %_disk is a 4nt special; don't exppect it to work in any other shell
 .IF "$(BUILD_SOSL)"==""
 .IF "$(UPDATER)"!=""
-.IF "$(shell +echo %_disk)"=="O"
+.IF "$(BUILD_DRIVE4)"=="O"
 #
 # don't forget to have the right DEFSTAG set!
 #
     +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl -u$(DEF4UNIQE:b) commit
     +$(TMP)$/$(DEF4UNIQE:b).bat && $(RM) $(TMP)$/$(DEF4UNIQE:b).bat
-.ENDIF			# "$(shell +echo %_disk)"=="O"
+.ENDIF			# "$(BUILD_DRIVE4)"=="O"
 .ENDIF			# "$(UPDATER)"!=""
 .ENDIF			# "$(BUILD_SOSL)"==""
 .ENDIF				# "$(DEFLIB4NAME)"!=""
@@ -740,9 +804,27 @@ $(DEF5EXPORTFILE) : $(SHL5VERSIONMAP)
 .ENDIF			# "$(DEF5EXPORTFILE)"==""
 .ENDIF			# "$(SHL5VERSIONMAP)"!=""
 
+.IF "$(GUI)"=="WNT"
+
+.IF "$(BUILD_SOSL)"==""
+.IF "$(UPDATER)"!=""
+.IF "$(DEFLIB5NAME)"!=""
+
 DEF5UNIQE:=$(mktmp $(GUI))
 
-.IF "$(GUI)"=="WNT"
+# %_disk is a 4nt special; don't exppect it to work in any other shell
+BUILD_DRIVE5:=$(shell +echo %_disk)
+#BUILD_DRIVE5:=O
+
+.IF "$(BUILD_DRIVE5)"=="O"
+# in case of RE build, protect against failed lock
+EXPORT5_PROTECT=$(TMP)$/$(DEF5UNIQE:b).bat && 
+.ENDIF			# "$(BUILD_DRIVE5)"=="O"
+
+.ENDIF			# "$(DEFLIB5NAME)"!=""
+.ENDIF			# "$(UPDATER)"!=""
+.ENDIF			# "$(BUILD_SOSL)"==""
+
 .IF "$(APP5HEAP)"==""
 .IF "$(UPDATER)"=="" || "$(solarlang)"!="deut" || "$(link_always)"==""
 $(DEF5TARGETN) : \
@@ -753,16 +835,15 @@ $(DEF5TARGETN) .PHONY : \
         $(DEF5DEPN) \
         $(DEF5EXPORTFILE)
 .ENDIF			# "$(UPDATER)"=="" || "$(solarlang)"!="deut" || "$(link_always)"==""
-# %_disk is a 4nt special; don't exppect it to work in any other shell
 .IF "$(BUILD_SOSL)"==""
 .IF "$(UPDATER)"!=""
 .IF "$(DEFLIB5NAME)"!=""
-.IF "$(shell +echo %_disk)"=="O"
+.IF "$(BUILD_DRIVE5)"=="O"
 #
 # don't forget to have the right DEFSTAG set!
 #
     +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl -u$(DEF5UNIQE:b) update $(DEFSTAG)
-.ENDIF			# "$(shell +echo %_disk)"=="O"
+.ENDIF			# "$(BUILD_DRIVE5)"=="O"
 .ENDIF				# "$(DEFLIB5NAME)"!=""
 .ENDIF			# "$(UPDATER)"!=""
 .ENDIF			# "$(BUILD_SOSL)"==""
@@ -780,28 +861,27 @@ $(DEF5TARGETN) .PHONY : \
     @echo component_getDescriptionFunc	>>$@
 .ENDIF			# "$(NO_SHL5DESCRIPTION)"==""
 .IF "$(DEFLIB5NAME)"!=""
-    @+$(TMP)$/$(DEF5UNIQE:b).bat && $(LIBMGR) -EXTRACT:/ /OUT:$(SHL5TARGET).exp $(SLB)$/$(DEFLIB5NAME).lib
+    @+$(EXPORT5_PROTECT) $(LIBMGR) -EXTRACT:/ /OUT:$(SHL5TARGET).exp $(SLB)$/$(DEFLIB5NAME).lib
 .IF "$(USE_LDUMP2)"=!""
 .IF "$(DEF5CEXP)"!=""
-    @+$(TMP)$/$(DEF5UNIQE:b).bat && $(LDUMP2) -A $(DEF5CEXP) -E 20 -F $(MISC)$/$(SHL5TARGET).flt $(SHL5TARGET).exp			   >>$@
+    @+$(EXPORT5_PROTECT) $(LDUMP2) -A $(DEF5CEXP) -E 20 -F $(MISC)$/$(SHL5TARGET).flt $(SHL5TARGET).exp			   >>$@
 .ELSE
-    @+$(TMP)$/$(DEF5UNIQE:b).bat && $(LDUMP2) -E 20 -F $(MISC)$/$(SHL5TARGET).flt $(SHL5TARGET).exp			   >>$@
+    @+$(EXPORT5_PROTECT) $(LDUMP2) -E 20 -F $(MISC)$/$(SHL5TARGET).flt $(SHL5TARGET).exp			   >>$@
 .ENDIF
 .ELSE				# "$(USE_LDUMP2)"=!""
-    @+$(TMP)$/$(DEF5UNIQE:b).bat && $(LDUMP) -E 20 -F$(MISC)$/$(SHL5TARGET).flt $(SHL5TARGET).exp			   >>$@
+    @+$(EXPORT5_PROTECT) $(LDUMP) -E 20 -F$(MISC)$/$(SHL5TARGET).flt $(SHL5TARGET).exp			   >>$@
 .ENDIF				# "$(USE_LDUMP2)"=!""
-    @+$(TMP)$/$(DEF5UNIQE:b).bat && +-$(RM) $(SHL5TARGET).exp
+    +$(EXPORT5_PROTECT) $(RM) $(SHL5TARGET).exp
 # now *\defs\$(OUTPATH)	exists, commit it
-# %_disk is a 4nt special; don't exppect it to work in any other shell
 .IF "$(BUILD_SOSL)"==""
 .IF "$(UPDATER)"!=""
-.IF "$(shell +echo %_disk)"=="O"
+.IF "$(BUILD_DRIVE5)"=="O"
 #
 # don't forget to have the right DEFSTAG set!
 #
     +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl -u$(DEF5UNIQE:b) commit
     +$(TMP)$/$(DEF5UNIQE:b).bat && $(RM) $(TMP)$/$(DEF5UNIQE:b).bat
-.ENDIF			# "$(shell +echo %_disk)"=="O"
+.ENDIF			# "$(BUILD_DRIVE5)"=="O"
 .ENDIF			# "$(UPDATER)"!=""
 .ENDIF			# "$(BUILD_SOSL)"==""
 .ENDIF				# "$(DEFLIB5NAME)"!=""
@@ -919,9 +999,27 @@ $(DEF6EXPORTFILE) : $(SHL6VERSIONMAP)
 .ENDIF			# "$(DEF6EXPORTFILE)"==""
 .ENDIF			# "$(SHL6VERSIONMAP)"!=""
 
+.IF "$(GUI)"=="WNT"
+
+.IF "$(BUILD_SOSL)"==""
+.IF "$(UPDATER)"!=""
+.IF "$(DEFLIB6NAME)"!=""
+
 DEF6UNIQE:=$(mktmp $(GUI))
 
-.IF "$(GUI)"=="WNT"
+# %_disk is a 4nt special; don't exppect it to work in any other shell
+BUILD_DRIVE6:=$(shell +echo %_disk)
+#BUILD_DRIVE6:=O
+
+.IF "$(BUILD_DRIVE6)"=="O"
+# in case of RE build, protect against failed lock
+EXPORT6_PROTECT=$(TMP)$/$(DEF6UNIQE:b).bat && 
+.ENDIF			# "$(BUILD_DRIVE6)"=="O"
+
+.ENDIF			# "$(DEFLIB6NAME)"!=""
+.ENDIF			# "$(UPDATER)"!=""
+.ENDIF			# "$(BUILD_SOSL)"==""
+
 .IF "$(APP6HEAP)"==""
 .IF "$(UPDATER)"=="" || "$(solarlang)"!="deut" || "$(link_always)"==""
 $(DEF6TARGETN) : \
@@ -932,16 +1030,15 @@ $(DEF6TARGETN) .PHONY : \
         $(DEF6DEPN) \
         $(DEF6EXPORTFILE)
 .ENDIF			# "$(UPDATER)"=="" || "$(solarlang)"!="deut" || "$(link_always)"==""
-# %_disk is a 4nt special; don't exppect it to work in any other shell
 .IF "$(BUILD_SOSL)"==""
 .IF "$(UPDATER)"!=""
 .IF "$(DEFLIB6NAME)"!=""
-.IF "$(shell +echo %_disk)"=="O"
+.IF "$(BUILD_DRIVE6)"=="O"
 #
 # don't forget to have the right DEFSTAG set!
 #
     +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl -u$(DEF6UNIQE:b) update $(DEFSTAG)
-.ENDIF			# "$(shell +echo %_disk)"=="O"
+.ENDIF			# "$(BUILD_DRIVE6)"=="O"
 .ENDIF				# "$(DEFLIB6NAME)"!=""
 .ENDIF			# "$(UPDATER)"!=""
 .ENDIF			# "$(BUILD_SOSL)"==""
@@ -959,28 +1056,27 @@ $(DEF6TARGETN) .PHONY : \
     @echo component_getDescriptionFunc	>>$@
 .ENDIF			# "$(NO_SHL6DESCRIPTION)"==""
 .IF "$(DEFLIB6NAME)"!=""
-    @+$(TMP)$/$(DEF6UNIQE:b).bat && $(LIBMGR) -EXTRACT:/ /OUT:$(SHL6TARGET).exp $(SLB)$/$(DEFLIB6NAME).lib
+    @+$(EXPORT6_PROTECT) $(LIBMGR) -EXTRACT:/ /OUT:$(SHL6TARGET).exp $(SLB)$/$(DEFLIB6NAME).lib
 .IF "$(USE_LDUMP2)"=!""
 .IF "$(DEF6CEXP)"!=""
-    @+$(TMP)$/$(DEF6UNIQE:b).bat && $(LDUMP2) -A $(DEF6CEXP) -E 20 -F $(MISC)$/$(SHL6TARGET).flt $(SHL6TARGET).exp			   >>$@
+    @+$(EXPORT6_PROTECT) $(LDUMP2) -A $(DEF6CEXP) -E 20 -F $(MISC)$/$(SHL6TARGET).flt $(SHL6TARGET).exp			   >>$@
 .ELSE
-    @+$(TMP)$/$(DEF6UNIQE:b).bat && $(LDUMP2) -E 20 -F $(MISC)$/$(SHL6TARGET).flt $(SHL6TARGET).exp			   >>$@
+    @+$(EXPORT6_PROTECT) $(LDUMP2) -E 20 -F $(MISC)$/$(SHL6TARGET).flt $(SHL6TARGET).exp			   >>$@
 .ENDIF
 .ELSE				# "$(USE_LDUMP2)"=!""
-    @+$(TMP)$/$(DEF6UNIQE:b).bat && $(LDUMP) -E 20 -F$(MISC)$/$(SHL6TARGET).flt $(SHL6TARGET).exp			   >>$@
+    @+$(EXPORT6_PROTECT) $(LDUMP) -E 20 -F$(MISC)$/$(SHL6TARGET).flt $(SHL6TARGET).exp			   >>$@
 .ENDIF				# "$(USE_LDUMP2)"=!""
-    @+$(TMP)$/$(DEF6UNIQE:b).bat && +-$(RM) $(SHL6TARGET).exp
+    +$(EXPORT6_PROTECT) $(RM) $(SHL6TARGET).exp
 # now *\defs\$(OUTPATH)	exists, commit it
-# %_disk is a 4nt special; don't exppect it to work in any other shell
 .IF "$(BUILD_SOSL)"==""
 .IF "$(UPDATER)"!=""
-.IF "$(shell +echo %_disk)"=="O"
+.IF "$(BUILD_DRIVE6)"=="O"
 #
 # don't forget to have the right DEFSTAG set!
 #
     +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl -u$(DEF6UNIQE:b) commit
     +$(TMP)$/$(DEF6UNIQE:b).bat && $(RM) $(TMP)$/$(DEF6UNIQE:b).bat
-.ENDIF			# "$(shell +echo %_disk)"=="O"
+.ENDIF			# "$(BUILD_DRIVE6)"=="O"
 .ENDIF			# "$(UPDATER)"!=""
 .ENDIF			# "$(BUILD_SOSL)"==""
 .ENDIF				# "$(DEFLIB6NAME)"!=""
@@ -1098,9 +1194,27 @@ $(DEF7EXPORTFILE) : $(SHL7VERSIONMAP)
 .ENDIF			# "$(DEF7EXPORTFILE)"==""
 .ENDIF			# "$(SHL7VERSIONMAP)"!=""
 
+.IF "$(GUI)"=="WNT"
+
+.IF "$(BUILD_SOSL)"==""
+.IF "$(UPDATER)"!=""
+.IF "$(DEFLIB7NAME)"!=""
+
 DEF7UNIQE:=$(mktmp $(GUI))
 
-.IF "$(GUI)"=="WNT"
+# %_disk is a 4nt special; don't exppect it to work in any other shell
+BUILD_DRIVE7:=$(shell +echo %_disk)
+#BUILD_DRIVE7:=O
+
+.IF "$(BUILD_DRIVE7)"=="O"
+# in case of RE build, protect against failed lock
+EXPORT7_PROTECT=$(TMP)$/$(DEF7UNIQE:b).bat && 
+.ENDIF			# "$(BUILD_DRIVE7)"=="O"
+
+.ENDIF			# "$(DEFLIB7NAME)"!=""
+.ENDIF			# "$(UPDATER)"!=""
+.ENDIF			# "$(BUILD_SOSL)"==""
+
 .IF "$(APP7HEAP)"==""
 .IF "$(UPDATER)"=="" || "$(solarlang)"!="deut" || "$(link_always)"==""
 $(DEF7TARGETN) : \
@@ -1111,16 +1225,15 @@ $(DEF7TARGETN) .PHONY : \
         $(DEF7DEPN) \
         $(DEF7EXPORTFILE)
 .ENDIF			# "$(UPDATER)"=="" || "$(solarlang)"!="deut" || "$(link_always)"==""
-# %_disk is a 4nt special; don't exppect it to work in any other shell
 .IF "$(BUILD_SOSL)"==""
 .IF "$(UPDATER)"!=""
 .IF "$(DEFLIB7NAME)"!=""
-.IF "$(shell +echo %_disk)"=="O"
+.IF "$(BUILD_DRIVE7)"=="O"
 #
 # don't forget to have the right DEFSTAG set!
 #
     +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl -u$(DEF7UNIQE:b) update $(DEFSTAG)
-.ENDIF			# "$(shell +echo %_disk)"=="O"
+.ENDIF			# "$(BUILD_DRIVE7)"=="O"
 .ENDIF				# "$(DEFLIB7NAME)"!=""
 .ENDIF			# "$(UPDATER)"!=""
 .ENDIF			# "$(BUILD_SOSL)"==""
@@ -1138,28 +1251,27 @@ $(DEF7TARGETN) .PHONY : \
     @echo component_getDescriptionFunc	>>$@
 .ENDIF			# "$(NO_SHL7DESCRIPTION)"==""
 .IF "$(DEFLIB7NAME)"!=""
-    @+$(TMP)$/$(DEF7UNIQE:b).bat && $(LIBMGR) -EXTRACT:/ /OUT:$(SHL7TARGET).exp $(SLB)$/$(DEFLIB7NAME).lib
+    @+$(EXPORT7_PROTECT) $(LIBMGR) -EXTRACT:/ /OUT:$(SHL7TARGET).exp $(SLB)$/$(DEFLIB7NAME).lib
 .IF "$(USE_LDUMP2)"=!""
 .IF "$(DEF7CEXP)"!=""
-    @+$(TMP)$/$(DEF7UNIQE:b).bat && $(LDUMP2) -A $(DEF7CEXP) -E 20 -F $(MISC)$/$(SHL7TARGET).flt $(SHL7TARGET).exp			   >>$@
+    @+$(EXPORT7_PROTECT) $(LDUMP2) -A $(DEF7CEXP) -E 20 -F $(MISC)$/$(SHL7TARGET).flt $(SHL7TARGET).exp			   >>$@
 .ELSE
-    @+$(TMP)$/$(DEF7UNIQE:b).bat && $(LDUMP2) -E 20 -F $(MISC)$/$(SHL7TARGET).flt $(SHL7TARGET).exp			   >>$@
+    @+$(EXPORT7_PROTECT) $(LDUMP2) -E 20 -F $(MISC)$/$(SHL7TARGET).flt $(SHL7TARGET).exp			   >>$@
 .ENDIF
 .ELSE				# "$(USE_LDUMP2)"=!""
-    @+$(TMP)$/$(DEF7UNIQE:b).bat && $(LDUMP) -E 20 -F$(MISC)$/$(SHL7TARGET).flt $(SHL7TARGET).exp			   >>$@
+    @+$(EXPORT7_PROTECT) $(LDUMP) -E 20 -F$(MISC)$/$(SHL7TARGET).flt $(SHL7TARGET).exp			   >>$@
 .ENDIF				# "$(USE_LDUMP2)"=!""
-    @+$(TMP)$/$(DEF7UNIQE:b).bat && +-$(RM) $(SHL7TARGET).exp
+    +$(EXPORT7_PROTECT) $(RM) $(SHL7TARGET).exp
 # now *\defs\$(OUTPATH)	exists, commit it
-# %_disk is a 4nt special; don't exppect it to work in any other shell
 .IF "$(BUILD_SOSL)"==""
 .IF "$(UPDATER)"!=""
-.IF "$(shell +echo %_disk)"=="O"
+.IF "$(BUILD_DRIVE7)"=="O"
 #
 # don't forget to have the right DEFSTAG set!
 #
     +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl -u$(DEF7UNIQE:b) commit
     +$(TMP)$/$(DEF7UNIQE:b).bat && $(RM) $(TMP)$/$(DEF7UNIQE:b).bat
-.ENDIF			# "$(shell +echo %_disk)"=="O"
+.ENDIF			# "$(BUILD_DRIVE7)"=="O"
 .ENDIF			# "$(UPDATER)"!=""
 .ENDIF			# "$(BUILD_SOSL)"==""
 .ENDIF				# "$(DEFLIB7NAME)"!=""
@@ -1277,9 +1389,27 @@ $(DEF8EXPORTFILE) : $(SHL8VERSIONMAP)
 .ENDIF			# "$(DEF8EXPORTFILE)"==""
 .ENDIF			# "$(SHL8VERSIONMAP)"!=""
 
+.IF "$(GUI)"=="WNT"
+
+.IF "$(BUILD_SOSL)"==""
+.IF "$(UPDATER)"!=""
+.IF "$(DEFLIB8NAME)"!=""
+
 DEF8UNIQE:=$(mktmp $(GUI))
 
-.IF "$(GUI)"=="WNT"
+# %_disk is a 4nt special; don't exppect it to work in any other shell
+BUILD_DRIVE8:=$(shell +echo %_disk)
+#BUILD_DRIVE8:=O
+
+.IF "$(BUILD_DRIVE8)"=="O"
+# in case of RE build, protect against failed lock
+EXPORT8_PROTECT=$(TMP)$/$(DEF8UNIQE:b).bat && 
+.ENDIF			# "$(BUILD_DRIVE8)"=="O"
+
+.ENDIF			# "$(DEFLIB8NAME)"!=""
+.ENDIF			# "$(UPDATER)"!=""
+.ENDIF			# "$(BUILD_SOSL)"==""
+
 .IF "$(APP8HEAP)"==""
 .IF "$(UPDATER)"=="" || "$(solarlang)"!="deut" || "$(link_always)"==""
 $(DEF8TARGETN) : \
@@ -1290,16 +1420,15 @@ $(DEF8TARGETN) .PHONY : \
         $(DEF8DEPN) \
         $(DEF8EXPORTFILE)
 .ENDIF			# "$(UPDATER)"=="" || "$(solarlang)"!="deut" || "$(link_always)"==""
-# %_disk is a 4nt special; don't exppect it to work in any other shell
 .IF "$(BUILD_SOSL)"==""
 .IF "$(UPDATER)"!=""
 .IF "$(DEFLIB8NAME)"!=""
-.IF "$(shell +echo %_disk)"=="O"
+.IF "$(BUILD_DRIVE8)"=="O"
 #
 # don't forget to have the right DEFSTAG set!
 #
     +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl -u$(DEF8UNIQE:b) update $(DEFSTAG)
-.ENDIF			# "$(shell +echo %_disk)"=="O"
+.ENDIF			# "$(BUILD_DRIVE8)"=="O"
 .ENDIF				# "$(DEFLIB8NAME)"!=""
 .ENDIF			# "$(UPDATER)"!=""
 .ENDIF			# "$(BUILD_SOSL)"==""
@@ -1317,28 +1446,27 @@ $(DEF8TARGETN) .PHONY : \
     @echo component_getDescriptionFunc	>>$@
 .ENDIF			# "$(NO_SHL8DESCRIPTION)"==""
 .IF "$(DEFLIB8NAME)"!=""
-    @+$(TMP)$/$(DEF8UNIQE:b).bat && $(LIBMGR) -EXTRACT:/ /OUT:$(SHL8TARGET).exp $(SLB)$/$(DEFLIB8NAME).lib
+    @+$(EXPORT8_PROTECT) $(LIBMGR) -EXTRACT:/ /OUT:$(SHL8TARGET).exp $(SLB)$/$(DEFLIB8NAME).lib
 .IF "$(USE_LDUMP2)"=!""
 .IF "$(DEF8CEXP)"!=""
-    @+$(TMP)$/$(DEF8UNIQE:b).bat && $(LDUMP2) -A $(DEF8CEXP) -E 20 -F $(MISC)$/$(SHL8TARGET).flt $(SHL8TARGET).exp			   >>$@
+    @+$(EXPORT8_PROTECT) $(LDUMP2) -A $(DEF8CEXP) -E 20 -F $(MISC)$/$(SHL8TARGET).flt $(SHL8TARGET).exp			   >>$@
 .ELSE
-    @+$(TMP)$/$(DEF8UNIQE:b).bat && $(LDUMP2) -E 20 -F $(MISC)$/$(SHL8TARGET).flt $(SHL8TARGET).exp			   >>$@
+    @+$(EXPORT8_PROTECT) $(LDUMP2) -E 20 -F $(MISC)$/$(SHL8TARGET).flt $(SHL8TARGET).exp			   >>$@
 .ENDIF
 .ELSE				# "$(USE_LDUMP2)"=!""
-    @+$(TMP)$/$(DEF8UNIQE:b).bat && $(LDUMP) -E 20 -F$(MISC)$/$(SHL8TARGET).flt $(SHL8TARGET).exp			   >>$@
+    @+$(EXPORT8_PROTECT) $(LDUMP) -E 20 -F$(MISC)$/$(SHL8TARGET).flt $(SHL8TARGET).exp			   >>$@
 .ENDIF				# "$(USE_LDUMP2)"=!""
-    @+$(TMP)$/$(DEF8UNIQE:b).bat && +-$(RM) $(SHL8TARGET).exp
+    +$(EXPORT8_PROTECT) $(RM) $(SHL8TARGET).exp
 # now *\defs\$(OUTPATH)	exists, commit it
-# %_disk is a 4nt special; don't exppect it to work in any other shell
 .IF "$(BUILD_SOSL)"==""
 .IF "$(UPDATER)"!=""
-.IF "$(shell +echo %_disk)"=="O"
+.IF "$(BUILD_DRIVE8)"=="O"
 #
 # don't forget to have the right DEFSTAG set!
 #
     +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl -u$(DEF8UNIQE:b) commit
     +$(TMP)$/$(DEF8UNIQE:b).bat && $(RM) $(TMP)$/$(DEF8UNIQE:b).bat
-.ENDIF			# "$(shell +echo %_disk)"=="O"
+.ENDIF			# "$(BUILD_DRIVE8)"=="O"
 .ENDIF			# "$(UPDATER)"!=""
 .ENDIF			# "$(BUILD_SOSL)"==""
 .ENDIF				# "$(DEFLIB8NAME)"!=""
@@ -1456,9 +1584,27 @@ $(DEF9EXPORTFILE) : $(SHL9VERSIONMAP)
 .ENDIF			# "$(DEF9EXPORTFILE)"==""
 .ENDIF			# "$(SHL9VERSIONMAP)"!=""
 
+.IF "$(GUI)"=="WNT"
+
+.IF "$(BUILD_SOSL)"==""
+.IF "$(UPDATER)"!=""
+.IF "$(DEFLIB9NAME)"!=""
+
 DEF9UNIQE:=$(mktmp $(GUI))
 
-.IF "$(GUI)"=="WNT"
+# %_disk is a 4nt special; don't exppect it to work in any other shell
+BUILD_DRIVE9:=$(shell +echo %_disk)
+#BUILD_DRIVE9:=O
+
+.IF "$(BUILD_DRIVE9)"=="O"
+# in case of RE build, protect against failed lock
+EXPORT9_PROTECT=$(TMP)$/$(DEF9UNIQE:b).bat && 
+.ENDIF			# "$(BUILD_DRIVE9)"=="O"
+
+.ENDIF			# "$(DEFLIB9NAME)"!=""
+.ENDIF			# "$(UPDATER)"!=""
+.ENDIF			# "$(BUILD_SOSL)"==""
+
 .IF "$(APP9HEAP)"==""
 .IF "$(UPDATER)"=="" || "$(solarlang)"!="deut" || "$(link_always)"==""
 $(DEF9TARGETN) : \
@@ -1469,16 +1615,15 @@ $(DEF9TARGETN) .PHONY : \
         $(DEF9DEPN) \
         $(DEF9EXPORTFILE)
 .ENDIF			# "$(UPDATER)"=="" || "$(solarlang)"!="deut" || "$(link_always)"==""
-# %_disk is a 4nt special; don't exppect it to work in any other shell
 .IF "$(BUILD_SOSL)"==""
 .IF "$(UPDATER)"!=""
 .IF "$(DEFLIB9NAME)"!=""
-.IF "$(shell +echo %_disk)"=="O"
+.IF "$(BUILD_DRIVE9)"=="O"
 #
 # don't forget to have the right DEFSTAG set!
 #
     +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl -u$(DEF9UNIQE:b) update $(DEFSTAG)
-.ENDIF			# "$(shell +echo %_disk)"=="O"
+.ENDIF			# "$(BUILD_DRIVE9)"=="O"
 .ENDIF				# "$(DEFLIB9NAME)"!=""
 .ENDIF			# "$(UPDATER)"!=""
 .ENDIF			# "$(BUILD_SOSL)"==""
@@ -1496,28 +1641,27 @@ $(DEF9TARGETN) .PHONY : \
     @echo component_getDescriptionFunc	>>$@
 .ENDIF			# "$(NO_SHL9DESCRIPTION)"==""
 .IF "$(DEFLIB9NAME)"!=""
-    @+$(TMP)$/$(DEF9UNIQE:b).bat && $(LIBMGR) -EXTRACT:/ /OUT:$(SHL9TARGET).exp $(SLB)$/$(DEFLIB9NAME).lib
+    @+$(EXPORT9_PROTECT) $(LIBMGR) -EXTRACT:/ /OUT:$(SHL9TARGET).exp $(SLB)$/$(DEFLIB9NAME).lib
 .IF "$(USE_LDUMP2)"=!""
 .IF "$(DEF9CEXP)"!=""
-    @+$(TMP)$/$(DEF9UNIQE:b).bat && $(LDUMP2) -A $(DEF9CEXP) -E 20 -F $(MISC)$/$(SHL9TARGET).flt $(SHL9TARGET).exp			   >>$@
+    @+$(EXPORT9_PROTECT) $(LDUMP2) -A $(DEF9CEXP) -E 20 -F $(MISC)$/$(SHL9TARGET).flt $(SHL9TARGET).exp			   >>$@
 .ELSE
-    @+$(TMP)$/$(DEF9UNIQE:b).bat && $(LDUMP2) -E 20 -F $(MISC)$/$(SHL9TARGET).flt $(SHL9TARGET).exp			   >>$@
+    @+$(EXPORT9_PROTECT) $(LDUMP2) -E 20 -F $(MISC)$/$(SHL9TARGET).flt $(SHL9TARGET).exp			   >>$@
 .ENDIF
 .ELSE				# "$(USE_LDUMP2)"=!""
-    @+$(TMP)$/$(DEF9UNIQE:b).bat && $(LDUMP) -E 20 -F$(MISC)$/$(SHL9TARGET).flt $(SHL9TARGET).exp			   >>$@
+    @+$(EXPORT9_PROTECT) $(LDUMP) -E 20 -F$(MISC)$/$(SHL9TARGET).flt $(SHL9TARGET).exp			   >>$@
 .ENDIF				# "$(USE_LDUMP2)"=!""
-    @+$(TMP)$/$(DEF9UNIQE:b).bat && +-$(RM) $(SHL9TARGET).exp
+    +$(EXPORT9_PROTECT) $(RM) $(SHL9TARGET).exp
 # now *\defs\$(OUTPATH)	exists, commit it
-# %_disk is a 4nt special; don't exppect it to work in any other shell
 .IF "$(BUILD_SOSL)"==""
 .IF "$(UPDATER)"!=""
-.IF "$(shell +echo %_disk)"=="O"
+.IF "$(BUILD_DRIVE9)"=="O"
 #
 # don't forget to have the right DEFSTAG set!
 #
     +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl -u$(DEF9UNIQE:b) commit
     +$(TMP)$/$(DEF9UNIQE:b).bat && $(RM) $(TMP)$/$(DEF9UNIQE:b).bat
-.ENDIF			# "$(shell +echo %_disk)"=="O"
+.ENDIF			# "$(BUILD_DRIVE9)"=="O"
 .ENDIF			# "$(UPDATER)"!=""
 .ENDIF			# "$(BUILD_SOSL)"==""
 .ENDIF				# "$(DEFLIB9NAME)"!=""
@@ -1635,9 +1779,27 @@ $(DEF10EXPORTFILE) : $(SHL10VERSIONMAP)
 .ENDIF			# "$(DEF10EXPORTFILE)"==""
 .ENDIF			# "$(SHL10VERSIONMAP)"!=""
 
+.IF "$(GUI)"=="WNT"
+
+.IF "$(BUILD_SOSL)"==""
+.IF "$(UPDATER)"!=""
+.IF "$(DEFLIB10NAME)"!=""
+
 DEF10UNIQE:=$(mktmp $(GUI))
 
-.IF "$(GUI)"=="WNT"
+# %_disk is a 4nt special; don't exppect it to work in any other shell
+BUILD_DRIVE10:=$(shell +echo %_disk)
+#BUILD_DRIVE10:=O
+
+.IF "$(BUILD_DRIVE10)"=="O"
+# in case of RE build, protect against failed lock
+EXPORT10_PROTECT=$(TMP)$/$(DEF10UNIQE:b).bat && 
+.ENDIF			# "$(BUILD_DRIVE10)"=="O"
+
+.ENDIF			# "$(DEFLIB10NAME)"!=""
+.ENDIF			# "$(UPDATER)"!=""
+.ENDIF			# "$(BUILD_SOSL)"==""
+
 .IF "$(APP10HEAP)"==""
 .IF "$(UPDATER)"=="" || "$(solarlang)"!="deut" || "$(link_always)"==""
 $(DEF10TARGETN) : \
@@ -1648,16 +1810,15 @@ $(DEF10TARGETN) .PHONY : \
         $(DEF10DEPN) \
         $(DEF10EXPORTFILE)
 .ENDIF			# "$(UPDATER)"=="" || "$(solarlang)"!="deut" || "$(link_always)"==""
-# %_disk is a 4nt special; don't exppect it to work in any other shell
 .IF "$(BUILD_SOSL)"==""
 .IF "$(UPDATER)"!=""
 .IF "$(DEFLIB10NAME)"!=""
-.IF "$(shell +echo %_disk)"=="O"
+.IF "$(BUILD_DRIVE10)"=="O"
 #
 # don't forget to have the right DEFSTAG set!
 #
     +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl -u$(DEF10UNIQE:b) update $(DEFSTAG)
-.ENDIF			# "$(shell +echo %_disk)"=="O"
+.ENDIF			# "$(BUILD_DRIVE10)"=="O"
 .ENDIF				# "$(DEFLIB10NAME)"!=""
 .ENDIF			# "$(UPDATER)"!=""
 .ENDIF			# "$(BUILD_SOSL)"==""
@@ -1675,28 +1836,27 @@ $(DEF10TARGETN) .PHONY : \
     @echo component_getDescriptionFunc	>>$@
 .ENDIF			# "$(NO_SHL10DESCRIPTION)"==""
 .IF "$(DEFLIB10NAME)"!=""
-    @+$(TMP)$/$(DEF10UNIQE:b).bat && $(LIBMGR) -EXTRACT:/ /OUT:$(SHL10TARGET).exp $(SLB)$/$(DEFLIB10NAME).lib
+    @+$(EXPORT10_PROTECT) $(LIBMGR) -EXTRACT:/ /OUT:$(SHL10TARGET).exp $(SLB)$/$(DEFLIB10NAME).lib
 .IF "$(USE_LDUMP2)"=!""
 .IF "$(DEF10CEXP)"!=""
-    @+$(TMP)$/$(DEF10UNIQE:b).bat && $(LDUMP2) -A $(DEF10CEXP) -E 20 -F $(MISC)$/$(SHL10TARGET).flt $(SHL10TARGET).exp			   >>$@
+    @+$(EXPORT10_PROTECT) $(LDUMP2) -A $(DEF10CEXP) -E 20 -F $(MISC)$/$(SHL10TARGET).flt $(SHL10TARGET).exp			   >>$@
 .ELSE
-    @+$(TMP)$/$(DEF10UNIQE:b).bat && $(LDUMP2) -E 20 -F $(MISC)$/$(SHL10TARGET).flt $(SHL10TARGET).exp			   >>$@
+    @+$(EXPORT10_PROTECT) $(LDUMP2) -E 20 -F $(MISC)$/$(SHL10TARGET).flt $(SHL10TARGET).exp			   >>$@
 .ENDIF
 .ELSE				# "$(USE_LDUMP2)"=!""
-    @+$(TMP)$/$(DEF10UNIQE:b).bat && $(LDUMP) -E 20 -F$(MISC)$/$(SHL10TARGET).flt $(SHL10TARGET).exp			   >>$@
+    @+$(EXPORT10_PROTECT) $(LDUMP) -E 20 -F$(MISC)$/$(SHL10TARGET).flt $(SHL10TARGET).exp			   >>$@
 .ENDIF				# "$(USE_LDUMP2)"=!""
-    @+$(TMP)$/$(DEF10UNIQE:b).bat && +-$(RM) $(SHL10TARGET).exp
+    +$(EXPORT10_PROTECT) $(RM) $(SHL10TARGET).exp
 # now *\defs\$(OUTPATH)	exists, commit it
-# %_disk is a 4nt special; don't exppect it to work in any other shell
 .IF "$(BUILD_SOSL)"==""
 .IF "$(UPDATER)"!=""
-.IF "$(shell +echo %_disk)"=="O"
+.IF "$(BUILD_DRIVE10)"=="O"
 #
 # don't forget to have the right DEFSTAG set!
 #
     +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl -u$(DEF10UNIQE:b) commit
     +$(TMP)$/$(DEF10UNIQE:b).bat && $(RM) $(TMP)$/$(DEF10UNIQE:b).bat
-.ENDIF			# "$(shell +echo %_disk)"=="O"
+.ENDIF			# "$(BUILD_DRIVE10)"=="O"
 .ENDIF			# "$(UPDATER)"!=""
 .ENDIF			# "$(BUILD_SOSL)"==""
 .ENDIF				# "$(DEFLIB10NAME)"!=""

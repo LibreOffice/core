@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_def.mk,v $
 #
-#   $Revision: 1.20 $
+#   $Revision: 1.21 $
 #
-#   last change: $Author: hjs $ $Date: 2002-08-12 15:30:10 $
+#   last change: $Author: hjs $ $Date: 2002-08-15 15:42:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -127,9 +127,27 @@ $(DEF$(TNR)EXPORTFILE) : $(SHL$(TNR)VERSIONMAP)
 .ENDIF			# "$(DEF$(TNR)EXPORTFILE)"==""
 .ENDIF			# "$(SHL$(TNR)VERSIONMAP)"!=""
 
+.IF "$(GUI)"=="WNT"
+
+.IF "$(BUILD_SOSL)"==""
+.IF "$(UPDATER)"!=""
+.IF "$(DEFLIB$(TNR)NAME)"!=""
+
 DEF$(TNR)UNIQE:=$(mktmp $(GUI))
 
-.IF "$(GUI)"=="WNT"
+# %_disk is a 4nt special; don't exppect it to work in any other shell
+BUILD_DRIVE$(TNR):=$(shell +echo %_disk)
+#BUILD_DRIVE$(TNR):=O
+
+.IF "$(BUILD_DRIVE$(TNR))"=="O"
+# in case of RE build, protect against failed lock
+EXPORT$(TNR)_PROTECT=$(TMP)$/$(DEF$(TNR)UNIQE:b).bat && 
+.ENDIF			# "$(BUILD_DRIVE$(TNR))"=="O"
+
+.ENDIF			# "$(DEFLIB$(TNR)NAME)"!=""
+.ENDIF			# "$(UPDATER)"!=""
+.ENDIF			# "$(BUILD_SOSL)"==""
+
 .IF "$(APP$(TNR)HEAP)"==""
 .IF "$(UPDATER)"=="" || "$(solarlang)"!="deut" || "$(link_always)"==""
 $(DEF$(TNR)TARGETN) : \
@@ -140,16 +158,15 @@ $(DEF$(TNR)TARGETN) .PHONY : \
         $(DEF$(TNR)DEPN) \
         $(DEF$(TNR)EXPORTFILE)
 .ENDIF			# "$(UPDATER)"=="" || "$(solarlang)"!="deut" || "$(link_always)"==""
-# %_disk is a 4nt special; don't exppect it to work in any other shell
 .IF "$(BUILD_SOSL)"==""
 .IF "$(UPDATER)"!=""
 .IF "$(DEFLIB$(TNR)NAME)"!=""
-.IF "$(shell +echo %_disk)"=="O"
+.IF "$(BUILD_DRIVE$(TNR))"=="O"
 #
 # don't forget to have the right DEFSTAG set!
 #
     +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl -u$(DEF$(TNR)UNIQE:b) update $(DEFSTAG)
-.ENDIF			# "$(shell +echo %_disk)"=="O"
+.ENDIF			# "$(BUILD_DRIVE$(TNR))"=="O"
 .ENDIF				# "$(DEFLIB$(TNR)NAME)"!=""
 .ENDIF			# "$(UPDATER)"!=""
 .ENDIF			# "$(BUILD_SOSL)"==""
@@ -167,28 +184,27 @@ $(DEF$(TNR)TARGETN) .PHONY : \
     @echo component_getDescriptionFunc	>>$@
 .ENDIF			# "$(NO_SHL$(TNR)DESCRIPTION)"==""
 .IF "$(DEFLIB$(TNR)NAME)"!=""
-    @+$(TMP)$/$(DEF$(TNR)UNIQE:b).bat && $(LIBMGR) -EXTRACT:/ /OUT:$(SHL$(TNR)TARGET).exp $(SLB)$/$(DEFLIB$(TNR)NAME).lib
+    @+$(EXPORT$(TNR)_PROTECT) $(LIBMGR) -EXTRACT:/ /OUT:$(SHL$(TNR)TARGET).exp $(SLB)$/$(DEFLIB$(TNR)NAME).lib
 .IF "$(USE_LDUMP2)"=!""
 .IF "$(DEF$(TNR)CEXP)"!=""
-    @+$(TMP)$/$(DEF$(TNR)UNIQE:b).bat && $(LDUMP2) -A $(DEF$(TNR)CEXP) -E 20 -F $(MISC)$/$(SHL$(TNR)TARGET).flt $(SHL$(TNR)TARGET).exp			   >>$@
+    @+$(EXPORT$(TNR)_PROTECT) $(LDUMP2) -A $(DEF$(TNR)CEXP) -E 20 -F $(MISC)$/$(SHL$(TNR)TARGET).flt $(SHL$(TNR)TARGET).exp			   >>$@
 .ELSE
-    @+$(TMP)$/$(DEF$(TNR)UNIQE:b).bat && $(LDUMP2) -E 20 -F $(MISC)$/$(SHL$(TNR)TARGET).flt $(SHL$(TNR)TARGET).exp			   >>$@
+    @+$(EXPORT$(TNR)_PROTECT) $(LDUMP2) -E 20 -F $(MISC)$/$(SHL$(TNR)TARGET).flt $(SHL$(TNR)TARGET).exp			   >>$@
 .ENDIF
 .ELSE				# "$(USE_LDUMP2)"=!""
-    @+$(TMP)$/$(DEF$(TNR)UNIQE:b).bat && $(LDUMP) -E 20 -F$(MISC)$/$(SHL$(TNR)TARGET).flt $(SHL$(TNR)TARGET).exp			   >>$@
+    @+$(EXPORT$(TNR)_PROTECT) $(LDUMP) -E 20 -F$(MISC)$/$(SHL$(TNR)TARGET).flt $(SHL$(TNR)TARGET).exp			   >>$@
 .ENDIF				# "$(USE_LDUMP2)"=!""
-    @+$(TMP)$/$(DEF$(TNR)UNIQE:b).bat && +-$(RM) $(SHL$(TNR)TARGET).exp
+    +$(EXPORT$(TNR)_PROTECT) $(RM) $(SHL$(TNR)TARGET).exp
 # now *\defs\$(OUTPATH)	exists, commit it
-# %_disk is a 4nt special; don't exppect it to work in any other shell
 .IF "$(BUILD_SOSL)"==""
 .IF "$(UPDATER)"!=""
-.IF "$(shell +echo %_disk)"=="O"
+.IF "$(BUILD_DRIVE$(TNR))"=="O"
 #
 # don't forget to have the right DEFSTAG set!
 #
     +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl -u$(DEF$(TNR)UNIQE:b) commit
     +$(TMP)$/$(DEF$(TNR)UNIQE:b).bat && $(RM) $(TMP)$/$(DEF$(TNR)UNIQE:b).bat
-.ENDIF			# "$(shell +echo %_disk)"=="O"
+.ENDIF			# "$(BUILD_DRIVE$(TNR))"=="O"
 .ENDIF			# "$(UPDATER)"!=""
 .ENDIF			# "$(BUILD_SOSL)"==""
 .ENDIF				# "$(DEFLIB$(TNR)NAME)"!=""
