@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urlbmk.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:58:54 $
+ *  last change: $Author: hro $ $Date: 2001-07-03 16:35:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,8 +67,12 @@
 #include <tools/string.hxx>
 #endif
 
+#ifndef TF_SVDATA
+
 class SvData;
 class SotDataObject;
+
+#endif
 
 //=========================================================================
 
@@ -88,8 +92,10 @@ class INetBookmark
     String          aDescr;
 
 protected:
+#ifndef TF_SVDATA
     String          CopyExchange() const;
     void            PasteExchange( String aString );
+#endif
 
     void            SetURL( const String& rS )          { aUrl = rS; }
     void            SetDescription( const String& rS )  { aDescr = rS; }
@@ -104,6 +110,7 @@ public:
     const String&   GetURL() const          { return aUrl; }
     const String&   GetDescription() const  { return aDescr; }
 
+#ifndef TF_SVDATA
     static BOOL     ClipboardHasFormat();
     static BOOL     DragServerHasFormat( USHORT nItem );
 
@@ -125,7 +132,7 @@ public:
                         {   return INetBookmark::Copy( rObj ); }
     BOOL            _Paste( SotDataObject& rObj, ULONG nFormat )
                         {   return INetBookmark::Paste( rObj, nFormat ); }
-
+#endif
 };
 
 
