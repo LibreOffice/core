@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EventMultiplexer.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 20:27:03 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 15:42:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,6 +177,8 @@ private:
     bool mbListeningToController;
     /// Remember whether we are listening to the frame.
     bool mbListeningToFrame;
+    /// Remember when the pane manger becomes unavailable.
+    bool mbPaneManagerAvailable;
 
     ::com::sun::star::uno::WeakReference<
         ::com::sun::star::beans::XPropertySet> mxControllerPropertySetWeak;
@@ -284,6 +286,7 @@ EventMultiplexer::Implementation::Implementation (ViewShellBase& rBase)
       mrBase (rBase),
       mbListeningToController (false),
       mbListeningToFrame (false),
+      mbPaneManagerAvailable(true),
       mxControllerPropertySetWeak(NULL),
       mxFrameWeak(NULL),
       mxSlideSorterSelectionWeak(NULL)
@@ -309,8 +312,9 @@ EventMultiplexer::Implementation::Implementation (ViewShellBase& rBase)
     StartListening (*mrBase.GetDocument());
 
     // Listen for view switches.
-    mrBase.GetPaneManager().AddEventListener (
-        LINK(this,EventMultiplexer::Implementation, PaneManagerEventListener));
+    if (mbPaneManagerAvailable)
+        mrBase.GetPaneManager().AddEventListener (
+            LINK(this,EventMultiplexer::Implementation, PaneManagerEventListener));
 }
 
 
@@ -344,8 +348,9 @@ void EventMultiplexer::Implementation::ReleaseListeners (void)
     EndListening (*mrBase.GetDocument());
 
     // Stop listening for view switches.
-    mrBase.GetPaneManager().RemoveEventListener (
-        LINK(this,EventMultiplexer::Implementation, PaneManagerEventListener));
+    if (mbPaneManagerAvailable)
+        mrBase.GetPaneManager().RemoveEventListener (
+            LINK(this,EventMultiplexer::Implementation, PaneManagerEventListener));
 }
 
 
@@ -651,6 +656,9 @@ void EventMultiplexer::Implementation::CallListeners (
     CallListeners( eType, aEvent );
 }
 
+
+
+
 void EventMultiplexer::Implementation::CallListeners (
     EventType eType,
     EventMultiplexerEvent& rEvent)
@@ -663,6 +671,8 @@ void EventMultiplexer::Implementation::CallListeners (
             iListener->first.Call(&rEvent);
     }
 }
+
+
 
 
 IMPL_LINK(EventMultiplexer::Implementation, PaneManagerEventListener,
@@ -713,6 +723,13 @@ IMPL_LINK(EventMultiplexer::Implementation, PaneManagerEventListener,
                             EventMultiplexer::Implementation,
                             SlideSorterSelectionChangeListener));
             }
+            break;
+
+        case PaneManagerEvent::EID_PANE_MANAGER_DYING:
+            // Stop listening for view switches.
+            mrBase.GetPaneManager().RemoveEventListener (
+                LINK(this,EventMultiplexer::Implementation, PaneManagerEventListener));
+            mbPaneManagerAvailable = false;
             break;
     }
 
