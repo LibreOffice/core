@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Oasis2OOo.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-27 11:11:16 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 11:28:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -465,6 +465,14 @@ static XMLTransformerActionInit aActionTable[] =
                 OASIS_TEXT_STYLE_REF_ACTIONS ), /* generated entry */
     ENTRY1( DRAW, MASTER_PAGE, XML_ETACTION_PROC_ATTRS,
                 OASIS_MASTER_PAGE_REF_ACTIONS ), /* generated entry */
+    // --> OD 2005-01-10 #i40011#, #i40015#
+    // - conversion of attribute <table:style-name> for <table:table-row> and
+    //   <table:table-column>
+    ENTRY1( TABLE, TABLE_ROW, XML_ETACTION_PROC_ATTRS,
+                OASIS_TABLE_STYLE_REF_ACTIONS ),
+    ENTRY1( TABLE, TABLE_COLUMN, XML_ETACTION_PROC_ATTRS,
+                OASIS_TABLE_STYLE_REF_ACTIONS ),
+    // <--
 
     // rename office:value-* to *:value-*
     ENTRY1( TEXT, VARIABLE_DECL, XML_ETACTION_PROC_ATTRS,
@@ -761,6 +769,16 @@ static XMLTransformerActionInit aMapStyleRefActionTable[] =
                 XML_FAMILY_TYPE_END ),
     ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
 };
+
+// --> OD 2005-01-10 #i40011#, #i40015#
+// action table for OASIS_TABLE_STYLE_REF_ACTIONS
+static XMLTransformerActionInit aTableStyleRefActionTable[] =
+{
+    ENTRY1( TABLE, STYLE_NAME, XML_ATACTION_DECODE_STYLE_NAME_REF,
+                XML_FAMILY_TYPE_END ),
+    ENTRY0( OFFICE, TOKEN_INVALID, XML_ATACTION_EOT )
+};
+// <--
 
 
 static XMLTransformerActionInit aFontFaceActionTable[] =
@@ -1231,6 +1249,9 @@ void XMLTableTransformerContext_Impl::StartElement(
 {
     Reference< XAttributeList > xAttrList( rAttrList );
 
+    XMLMutableAttributeList *pMutableAttrList = 0;
+    // <--
+
     sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for( sal_Int16 i=0; i < nAttrCount; i++ )
     {
@@ -1239,21 +1260,44 @@ void XMLTableTransformerContext_Impl::StartElement(
         sal_uInt16 nPrefix =
             GetTransformer().GetNamespaceMap().GetKeyByAttrName( rAttrName,
                                                                  &aLocalName );
-        if( XML_NAMESPACE_TABLE == nPrefix &&
-            IsXMLToken( aLocalName, XML_IS_SUB_TABLE ) )
+        if( XML_NAMESPACE_TABLE == nPrefix )
         {
-            const OUString& rValue = xAttrList->getValueByIndex( i );
-            if( IsXMLToken( rValue, XML_TRUE ) )
+            if ( IsXMLToken( aLocalName, XML_IS_SUB_TABLE ) )
             {
-                m_aElemQName = GetTransformer().GetNamespaceMap().GetQNameByKey(
-                            XML_NAMESPACE_TABLE,
-                            ::xmloff::token::GetXMLToken( XML_SUB_TABLE ) );
-                XMLMutableAttributeList *pMutableAttrList =
-                    new XMLMutableAttributeList( xAttrList );
-                xAttrList = pMutableAttrList;
-                pMutableAttrList->RemoveAttributeByIndex( i );
+                const OUString& rValue = xAttrList->getValueByIndex( i );
+                if( IsXMLToken( rValue, XML_TRUE ) )
+                {
+                    m_aElemQName = GetTransformer().GetNamespaceMap().GetQNameByKey(
+                                XML_NAMESPACE_TABLE,
+                                ::xmloff::token::GetXMLToken( XML_SUB_TABLE ) );
+                    if ( !pMutableAttrList )
+                    {
+                        pMutableAttrList =
+                            new XMLMutableAttributeList( xAttrList );
+                        xAttrList = pMutableAttrList;
+                    }
+                    pMutableAttrList->RemoveAttributeByIndex( i );
+                }
+                break;
             }
-            break;
+            // --> OD 2005-01-10 #i40011#, #i40015#
+            // - convert attribute table:style-name for <table:table>
+            else if ( IsXMLToken( aLocalName, XML_STYLE_NAME ) )
+            {
+                const OUString& rValue = xAttrList->getValueByIndex( i );
+                OUString aAttrValue( rValue );
+                if( GetTransformer().DecodeStyleName(aAttrValue) )
+                {
+                    if ( !pMutableAttrList )
+                    {
+                        pMutableAttrList =
+                            new XMLMutableAttributeList( xAttrList );
+                        xAttrList = pMutableAttrList;
+                    }
+                    pMutableAttrList->SetValueByIndex( i, aAttrValue );
+                }
+            }
+            // <--
         }
     }
 
@@ -1919,6 +1963,12 @@ XMLTransformerActions *Oasis2OOoTransformer::GetUserDefinedActions(
                 m_aActions[OASIS_DATETIME_ACTIONS] =
                     new XMLTransformerActions( aDateTimeActionTable );
                 break;
+            // --> OD 2005-01-10 #i40011#, #i40015#
+            case OASIS_TABLE_STYLE_REF_ACTIONS:
+                m_aActions[OASIS_TABLE_STYLE_REF_ACTIONS] =
+                    new XMLTransformerActions( aTableStyleRefActionTable );
+                break;
+            // <--
             }
         }
         pActions = m_aActions[n];
