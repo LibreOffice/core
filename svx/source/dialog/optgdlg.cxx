@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optgdlg.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 18:08:20 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 13:29:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,7 +203,12 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/util/XChangesBatch.hpp>
 #include <com/sun/star/uno/Any.hxx>
-
+#ifndef  _COM_SUN_STAR_CONTAINER_XCONTENTENUMERATIONACCESS_HPP_
+#include <com/sun/star/container/XContentEnumerationAccess.hpp>
+#endif
+#ifndef  _COM_SUN_STAR_CONTAINER_XSET_HPP_
+#include <com/sun/star/container/XSet.hpp>
+#endif
 
 #include "optgdlg.hrc"
 #include "optgdlg.hxx"
@@ -235,6 +240,52 @@ int OfaMiscTabPage::DeactivatePage( SfxItemSet* pSet )
     return LEAVE_PAGE;
 }
 
+#   ifdef ENABLE_GTK
+namespace
+{
+        ::rtl::OUString impl_SystemFileOpenServiceName()
+        {
+            const ::rtl::OUString &rDesktopEnvironment =
+                Application::GetDesktopEnvironment();
+
+            if ( rDesktopEnvironment.equalsIgnoreAsciiCaseAscii( "gnome" ) )
+            {
+                return ::rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.GtkFilePicker" );
+            }
+            else if ( rDesktopEnvironment.equalsIgnoreAsciiCaseAscii( "kde" ) )
+            {
+                return ::rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.KDEFilePicker" );
+            }
+            return ::rtl::OUString::createFromAscii( "com.sun.star.ui.dialogs.SystemFilePicker" );
+        }
+
+        sal_Bool lcl_HasSystemFilePicker()
+        {
+            Reference< XMultiServiceFactory > xFactory = comphelper::getProcessServiceFactory();
+            sal_Bool bRet = sal_False;
+
+            Reference< XContentEnumerationAccess > xEnumAccess( xFactory, UNO_QUERY );
+            Reference< XSet > xSet( xFactory, UNO_QUERY );
+
+            if ( ! xEnumAccess.is() || ! xSet.is() )
+                return bRet;
+
+            try
+            {
+                ::rtl::OUString aFileService = impl_SystemFileOpenServiceName();
+                Reference< XEnumeration > xEnum = xEnumAccess->createContentEnumeration( aFileService );
+                if ( xEnum.is() && xEnum->hasMoreElements() )
+                    bRet = sal_True;
+            }
+
+            catch( IllegalArgumentException ) {}
+            catch( ElementExistException ) {}
+            return bRet;
+        }
+}
+
+#endif
+
 // -----------------------------------------------------------------------
 
 OfaMiscTabPage::OfaMiscTabPage(Window* pParent, const SfxItemSet& rSet ) :
@@ -265,6 +316,14 @@ OfaMiscTabPage::OfaMiscTabPage(Window* pParent, const SfxItemSet& rSet ) :
 #if !defined( WNT ) && !defined( ENABLE_GTK )
     aFileDlgFL.Hide();
     aFileDlgCB.Hide();
+#else
+#   ifdef ENABLE_GTK
+    if (!lcl_HasSystemFilePicker())
+    {
+            aFileDlgFL.Hide();
+            aFileDlgCB.Hide();
+    }
+#   endif
 #endif
 
     // at least the button is as wide as its text
