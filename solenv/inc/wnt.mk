@@ -2,9 +2,9 @@
 #
 #   $RCSfile: wnt.mk,v $
 #
-#   $Revision: 1.52 $
+#   $Revision: 1.53 $
 #
-#   last change: $Author: vg $ $Date: 2003-06-12 10:03:04 $
+#   last change: $Author: hjs $ $Date: 2003-08-18 14:50:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -188,8 +188,8 @@ CFLAGS+= -Ob1
 .ENDIF
 .ENDIF
 
-# flags required for crashdump feature
-CFLAGSCRASHDUMP=-Zi -Fd$(MISC)\_ooo_st_$(TARGET).PDB
+# flags to enable build with symbols; required for crashdump feature
+CFLAGSENABLESYMBOLS=-Zi -Fd$(MISC)$/_ooo_st_$(TARGET).PDB
 
 .IF "$(bndchk)" != ""
 .IF "$(debug)" == ""
