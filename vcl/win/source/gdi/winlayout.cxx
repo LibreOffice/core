@@ -1,10 +1,11 @@
+#include <cstdio>
 /*************************************************************************
  *
  *  $RCSfile: winlayout.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: hdu $ $Date: 2002-05-31 14:07:33 $
+ *  last change: $Author: hdu $ $Date: 2002-06-07 11:43:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,7 +104,7 @@ public:
 class SimpleWinLayout : public WinLayout
 {
 public:
-                    SimpleWinLayout( HDC hDC, const ImplLayoutArgs& );
+                    SimpleWinLayout( HDC hDC, const ImplLayoutArgs&, bool bEnableGlyphs );
     virtual         ~SimpleWinLayout();
 
     virtual bool    LayoutText( const ImplLayoutArgs& );
@@ -120,6 +121,7 @@ protected:
 
 private:
     HDC             mhDC;
+    bool            mbEnableGlyphs;
 
     int             mnGlyphCount;
     WCHAR*          mpOutGlyphs;
@@ -129,9 +131,11 @@ private:
 
 // -----------------------------------------------------------------------
 
-SimpleWinLayout::SimpleWinLayout( HDC hDC, const ImplLayoutArgs& rArgs )
+SimpleWinLayout::SimpleWinLayout( HDC hDC, const ImplLayoutArgs& rArgs,
+    bool bEnableGlyphs )
 :   WinLayout( rArgs ),
     mhDC( hDC ),
+    mbEnableGlyphs( bEnableGlyphs ),
     mnGlyphCount( 0 ),
     mpOutGlyphs( NULL ),
     mpGlyphAdvances( NULL ),
@@ -151,9 +155,10 @@ SimpleWinLayout::~SimpleWinLayout()
 bool SimpleWinLayout::LayoutText( const ImplLayoutArgs& rArgs )
 {
     // layout text
-    mnGlyphCount = rArgs.mnEndCharIndex - rArgs.mnFirstCharIndex;
-    mpOutGlyphs     = new WCHAR[ mnGlyphCount ];
-    mpGlyphAdvances = new int[ mnGlyphCount ];
+    int nMaxGlyphCount = rArgs.mnEndCharIndex - rArgs.mnFirstCharIndex;
+    mpOutGlyphs     = new WCHAR[ nMaxGlyphCount ];
+    mpGlyphAdvances = new int[ nMaxGlyphCount ];
+    mnGlyphCount    = 0;
 
     GCP_RESULTSW aGCP;
     aGCP.lStructSize    = sizeof(aGCP);
@@ -163,7 +168,7 @@ bool SimpleWinLayout::LayoutText( const ImplLayoutArgs& rArgs )
     aGCP.lpCaretPos     = NULL;
     aGCP.lpClass        = NULL;
     aGCP.lpGlyphs       = mpOutGlyphs;
-    aGCP.nGlyphs        = mnGlyphCount;
+    aGCP.nGlyphs        = nMaxGlyphCount;
     aGCP.nMaxFit        = 0;
 
     DWORD nGcpOption = GCP_DISPLAYZWG;
@@ -183,41 +188,46 @@ bool SimpleWinLayout::LayoutText( const ImplLayoutArgs& rArgs )
     if( aSalShlData.mbWNT )
     {
         nRC = ::GetCharacterPlacementW( mhDC, rArgs.mpStr + rArgs.mnFirstCharIndex,
-                    mnGlyphCount, rArgs.mnLayoutWidth, &aGCP, nGcpOption );
+                    nMaxGlyphCount, rArgs.mnLayoutWidth, &aGCP, nGcpOption );
         // try again if it didn't fit
-        if( aGCP.nMaxFit < mnGlyphCount )
+        if( aGCP.nMaxFit < nMaxGlyphCount )
         {
             nGcpOption &= ~(GCP_JUSTIFY | GCP_MAXEXTENT);
-            aGCP.nGlyphs = mnGlyphCount;
+            aGCP.nGlyphs = nMaxGlyphCount;
             nRC = ::GetCharacterPlacementW( mhDC, rArgs.mpStr + rArgs.mnFirstCharIndex,
-                    mnGlyphCount, 0, &aGCP, nGcpOption );
+                    nMaxGlyphCount, 0, &aGCP, nGcpOption );
         }
     }
     else
     {
         // convert into ANSI code page
-        int nMBLen = WideCharToMultiByte( CP_ACP, 0, rArgs.mpStr + rArgs.mnFirstCharIndex,
-            mnGlyphCount, NULL, 0, NULL, NULL );
-        if( (nMBLen <= 0) || (nMBLen >= 8 * mnGlyphCount) )
+        UINT nACP = GetACP();
+        int nMBLen = WideCharToMultiByte( nACP, 0, rArgs.mpStr + rArgs.mnFirstCharIndex,
+            nMaxGlyphCount, NULL, 0, NULL, NULL );
+        if( (nMBLen <= 0) || (nMBLen >= 8 * nMaxGlyphCount) )
             return false;
-        char* pMBStr = (char*)alloca( nMBLen );
-        WideCharToMultiByte( CP_ACP, 0, rArgs.mpStr + rArgs.mnFirstCharIndex,
-            mnGlyphCount, pMBStr, nMBLen, NULL, NULL );
+        char* pMBStr = (char*)alloca( nMBLen+1 );
+        WideCharToMultiByte( nACP, 0, rArgs.mpStr + rArgs.mnFirstCharIndex,
+            nMaxGlyphCount, pMBStr, nMBLen, NULL, NULL );
         // note: because aGCP.lpOutString==NULL GCP_RESULTSA is compatible with GCP_RESULTSW
         nRC = ::GetCharacterPlacementA( mhDC, pMBStr, nMBLen,
                     rArgs.mnLayoutWidth, (GCP_RESULTSA*)&aGCP, nGcpOption );
         // try again if it didn't fit
-        if( aGCP.nMaxFit < mnGlyphCount )
+        if( aGCP.nMaxFit < nMaxGlyphCount )
         {
             nGcpOption &= ~(GCP_JUSTIFY | GCP_MAXEXTENT);
-            aGCP.nGlyphs = mnGlyphCount;
+            aGCP.nGlyphs = nMaxGlyphCount;
             nRC = ::GetCharacterPlacementA( mhDC, pMBStr, nMBLen,
                     0, (GCP_RESULTSA*)&aGCP, nGcpOption );
         }
     }
 
     // cache essential layout properties
+    mnGlyphCount = aGCP.nMaxFit;
     mnWidth = nRC & 0xFFFF; // TODO: check API docs for clarification
+
+    if( !nRC )
+        return false;
 
     // adjust positions if requested
     if( rArgs.mpDXArray )
@@ -254,7 +264,7 @@ bool SimpleWinLayout::LayoutText( const ImplLayoutArgs& rArgs )
         }
     }
 
-    return (nRC != 0);
+    return true;
 }
 
 // -----------------------------------------------------------------------
@@ -264,16 +274,9 @@ void SimpleWinLayout::Draw() const
     if( mnGlyphCount <= 0 )
         return;
 
-    // #99019# don't use glyph indices for non-TT fonts
-    // TODO: use a cached value
-    UINT nOptions = 0;
-    TEXTMETRICW aTextMetricW;
-    GetTextMetricsW( mhDC, &aTextMetricW );
-    if( aTextMetricW.tmPitchAndFamily & TMPF_TRUETYPE )
-        nOptions = ETO_GLYPH_INDEX;
-
     const Point aPos = GetDrawPosition();
-    ::ExtTextOutW( mhDC, aPos.X(), aPos.Y(), nOptions, NULL,
+    UINT mnDrawOptions = mbEnableGlyphs ? ETO_GLYPH_INDEX : 0;
+    ::ExtTextOutW( mhDC, aPos.X(), aPos.Y(), mnDrawOptions, NULL,
         mpOutGlyphs, mnGlyphCount, mpGlyphAdvances );
 }
 
@@ -1100,7 +1103,14 @@ SalLayout* SalGraphics::LayoutText( const ImplLayoutArgs& rArgs )
         pWinLayout = new UniscribeLayout( maGraphicsData.mhDC, rArgs );
     else
 #endif // USE_UNISCRIBE
-        pWinLayout = new SimpleWinLayout( maGraphicsData.mhDC, rArgs );
+    {
+        // #99019# don't use glyph indices for non-TT fonts
+        // TODO: use a cached value from SetFont
+        TEXTMETRICA aTextMetric;
+        ::GetTextMetricsA( maGraphicsData.mhDC, &aTextMetric );
+        bool bEnableGlyphs = ((aTextMetric.tmPitchAndFamily & TMPF_TRUETYPE) != 0);
+        pWinLayout = new SimpleWinLayout( maGraphicsData.mhDC, rArgs, bEnableGlyphs );
+    }
 
     pWinLayout->LayoutText( rArgs );
 
