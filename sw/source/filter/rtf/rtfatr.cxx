@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfatr.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 14:19:57 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 12:50:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2567,16 +2567,6 @@ static Writer& OutRTF_SwContour( Writer& rWrt, const SfxPoolItem& rHt )
     return rWrt;
 }
 
-
-
-#ifdef USED
-static Writer& OutRTF_SwKerning( Writer& rWrt, const SfxPoolItem& )
-{
-    return rWrt;
-}
-#endif
-
-
 static Writer& OutRTF_SwCrossedOut( Writer& rWrt, const SfxPoolItem& rHt )
 {
     SwRTFWriter& rRTFWrt = (SwRTFWriter&)rWrt;
@@ -3078,23 +3068,6 @@ static Writer& OutRTF_SwFlyCntnt( Writer& rWrt, const SfxPoolItem& rHt )
     return rWrt;
 }
 
-
-
-#ifdef USED
-static Writer& OutRTF_SwTOXMark( Writer& rWrt, const SfxPoolItem& )
-{
-    return rWrt;
-}
-#endif
-
-#ifdef USED
-static Writer& OutRTF_SwNoHyphen( Writer& rWrt, const SfxPoolItem& )
-{
-    return rWrt;
-}
-#endif
-
-
 static Writer& OutRTF_SwFtn( Writer& rWrt, const SfxPoolItem& rHt )
 {
     const SwFmtFtn& rFtn = (const SwFmtFtn&)rHt;
@@ -3149,21 +3122,6 @@ static Writer& OutRTF_SwHardBlank( Writer& rWrt, const SfxPoolItem& rHt)
         ((SwRTFWriter&)rWrt).bWriteHelpFmt);
     return rWrt;
 }
-
-#ifdef USED
-static Writer& OutRTF_SwRefMark( Writer& rWrt, const SfxPoolItem& )
-{
-    return rWrt;
-}
-#endif
-
-
-#ifdef USED
-static Writer& OutRTF_SwNoLinebreakHere( Writer& rWrt, const SfxPoolItem& )
-{
-    return rWrt;
-}
-#endif
 
 static Writer& OutRTF_SwTxtCharFmt( Writer& rWrt, const SfxPoolItem& rHt )
 {
@@ -3318,25 +3276,6 @@ static Writer& OutRTF_SwFrmSize( Writer& rWrt, const SfxPoolItem& rHt )
     }
     return rWrt;
 }
-
-
-
-#ifdef USED
-static Writer& OutRTF_SwFillOrder( Writer& rWrt, const SfxPoolItem& )
-{
-    return rWrt;
-}
-#endif
-
-
-#ifdef USED
-static Writer& OutRTF_SwFmtPaperBin( Writer& rWrt, const SfxPoolItem& )
-{
-    return rWrt;
-}
-#endif
-
-
 
 static Writer& OutRTF_SwFmtLRSpace( Writer& rWrt, const SfxPoolItem& rHt )
 {
@@ -3984,14 +3923,6 @@ RTF kennt keine Rahmen Umrandung!
     return rWrt;
 }
 
-
-#ifdef USED
-static Writer& OutRTF_SwFmtFrmMacro( Writer& rWrt, const SfxPoolItem& )
-{
-    return rWrt;
-}
-#endif
-
 static Writer& OutRTF_SwFmtCol( Writer& rWrt, const SfxPoolItem& rHt )
 {
     SwRTFWriter& rRTFWrt = ((SwRTFWriter&)rWrt);
@@ -4178,23 +4109,6 @@ static Writer& OutRTF_SvxFmtSplit( Writer& rWrt, const SfxPoolItem& rHt )
     }
     return rWrt;
 }
-
-
-#ifdef USED
-static Writer& OutRTF_SwWidows( Writer& rWrt, const SfxPoolItem& )
-{
-    return rWrt;
-}
-#endif
-
-#ifdef USED
-static Writer& OutRTF_SwOrphans( Writer& rWrt, const SfxPoolItem& )
-{
-    return rWrt;
-}
-#endif
-
-
 
 static Writer& OutRTF_SwTabStop( Writer& rWrt, const SfxPoolItem& rHt )
 {
