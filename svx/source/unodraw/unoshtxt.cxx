@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshtxt.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-10 07:57:47 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 15:28:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -602,7 +602,7 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetBackgroundTextForwarder()
         mbForwarderIsEditMode = sal_False;
     }
 
-    if( mpObject && !mbDataValid )
+    if( mpObject && !mbDataValid && mpObject->IsInserted() && mpObject->GetPage() )
     {
         mpTextForwarder->flushCache();
 
