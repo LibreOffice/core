@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formres.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 22:40:43 $
+ *  last change: $Author: kz $ $Date: 2001-06-21 21:44:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3213,11 +3213,11 @@ String RID_STR_DATEFORMAT_LIST
     Text [ french ] = "Standard (court);Standard (court AA);Standard (court AAAA);Standard (long);JJ.MM.AA;MM.JJ.AA;AA.MM.JJ;JJ.MM.AAAA;MM.JJ.AAAA;.AAAA.MM.JJ;AA-MM-JJ (DIN5008);AAAA-MM-JJ (DIN5008)" ;
     Text [ dutch ] = "Standaard (kort);Standaard (kort JJ);Standaard (kort JJJJ);Standaard (lang);TT.MM.JJ;MM.TT.JJ;JJ.MM.TT;TT.MM.JJJJ;MM.TT.JJJJ;JJJJ.MM.TT;JJ-MM-TT;JJJJ-MM-TT" ;
     Text[ chinese_simplified ] = "±κΧΌ(ΛυΠ΄);±κΧΌ(ΛυΠ΄ JJ);±κΧΌ(ΛυΠ΄ JJJJ);±κΧΌ (ΝκΥϋ);TT.MM.JJ;MM.TT.JJ;JJ.MM.TT;TT.MM.JJJJ;MM.TT.JJJJ;JJJJ.MM.TT;JJ-MM-TT (DIN5008);JJJJ-MM-TT (DIN5008)";
-    Text[ russian ] = "Ρςΰνδΰπς (κπΰςκθι);Ρςΰνδΰπς (κπΰςκθι ΓΓ); (κπΰςκθι ΓΓΓΓ);Ρςΰνδΰπς (οξλνϋι);ΔΔ.MM.ΓΓ;MM.ΔΔ.ΓΓ;ΓΓ.MM.ΔΔ;ΔΔ.ΜΜ.ΓΓΓΓ;ΓΓΓΓ.ΜΜ.ΔΔ;ΓΓ-ΜΜ-ΔΔ (DIN5008);ΓΓΓΓ-MM-ΔΔ (DIN5008)";
+    Text[ russian ] = "Ρςΰνδΰπς (κπΰςκθι);Ρςΰνδΰπς (κπΰςκθι ΓΓ); (κπΰςκθι ΓΓΓΓ);Ρςΰνδΰπς (οξλνϋι);ΔΔ.MM.ΓΓ;MM.ΔΔ.ΓΓ;ΓΓ.MM.ΔΔ;ΔΔ.ΜΜ.ΓΓΓΓ;ΓΓΓΓ.ΜΜ.ΔΔ;ΓΓ-ΜΜ-ΔΔ (DIN5008);ΓΓΓΓ-MM-ΔΔ (D";
     Text[ polish ] = "Standard (krσtko);Standard (krσtko RR);Standard (krσtko RRRR);Standard (d³ugo);DD.MM.RR;MM.DD.RR;RR.MM.DD;DD.MM.RRRR;MM.DD.RRRR;RRRR.MM.DD;RR-MM-DD (DIN5008);RRRR-MM-DD (DIN5008)";
     Text[ japanese ] = "•W€(’Z‚Ά`®);•W€(’Z‚Ά`® YY);•W€(’Z‚Ά`® YYYY);•W€(’·‚Ά`®j;DD.MM.YY;MM.DD.YY;YY.MM.DD;DD.MM.YYYY;MM.DD.YYYY;YYYY.MM.DD;YY-MM-DD (DIN5008);YYYY-MM-DD (DIN5008)";
     Text[ chinese_traditional ] = "ΌΠ·Η(ΑYΌg);ΌΠ·Η(ΑYΌg JJ);ΌΠ·Η(ΑYΌg JJJJ);ΌΠ·Η(§ΉΎγ);TT.MM.JJ;MM.TT.JJ;JJ.MM.TT;TT.MM.JJJJ;MM.TT.JJJJ;JJJJ.MM.TT;JJ-MM-TT (DIN5008);JJJJ-MM-TT (DIN5008)";
-    Text[ greek ] = "Προεπιλογή (σύντομο);Προεπιλογή (σύντομο YY);Προεπιλογή (σύντομο YYYY);Προεπιλογή (μακρύ);DD.MM.YY;MM.DD.YY;YY.MM.DD;DD.MM.YYYY;MM.DD.YYYY;YYYY.MM.DD;YY-MM-DD (DIN5008);YYYY-MM-DD (DIN5008) ";
+    Text[ greek ] = "Προεπιλογή (σύντομο);Προεπιλογή (σύντομο YY);Προεπιλογή (σύντομο YYYY);Προεπιλογή (μακρύ);DD.MM.YY;MM.DD.YY;YY.MM.DD;DD.MM.YYYY;MM.DD.YYYY;YYYY.MM.DD;YY-MM-DD (DIN5008);YYYY-MM-DD (DIN500";
     Text[ korean ] = "Η¥ΑΨ(Βª°Τ);Η¥ΑΨ(Βª°ΤYY);Η¥ΑΨ(Βª°ΤYYYY);Η¥ΑΨ(±ζ°Τ);DD.MM.YY;MM.DD.YY;YY.MM.DD;DD.MM.YYYY;MM.DD.YYYY;YYYY.MM.DD;YY-MM-DD (DIN5008);YYYY-MM-DD (DIN5008)";
     Text[ arabic ] = "ήνΗΣν (ήΥνΡ)ΊήνΗΣν (ήΥνΡ YY)ΊήνΗΣν (ήΥνΡ YYY)ΊήνΗΣν (Ψζνα)ΊDD.MM.YYΊMM.DD.YYΊYY.MM.DDΊDD.MM.YYYYΊMM.DD.YYYYΊYYYY.MM.DDΊYY-MM-DD (DIN5008)ΊYYYY-MM-DD (DIN5008)";
     Text[ turkish ] = "Standart (kύsa);Standart (kύsa YY);Standart (kύsa YYYY);Standart (uzun);GG.AA.YY;AA.GG.YY;YY.AA.GG;GG.AA.YYYY;AA.GG.YYYY;YYYY.AA.GG;YY-AA-GG (DIN5008);YYYY-AA-GG (DIN5008)";
@@ -4659,6 +4659,9 @@ String RID_STR_ENUM_ORIENTATION
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.22  2001/06/13 22:40:43  kz
+ *  Merge SRC633: 14.06.01 - 00:40:24
+ *
  *  Revision 1.21  2001/06/08 22:22:11  kz
  *  Merge SRC633: 09.06.01 - 00:22:44
  *
@@ -4725,5 +4728,6 @@ String RID_STR_ENUM_ORIENTATION
  *
  *  Revision 1.0 08.01.01 14:53:11  fs
  ************************************************************************/
+
 
 
