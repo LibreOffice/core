@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pagefrm.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-17 16:16:13 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 14:06:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,12 @@ class SwDrawContact;
 class SwAttrSetChg;
 class SvPtrarr;
 
-SV_DECL_PTRARR_SORT(SwSortDrawObjs,SdrObjectPtr,1,2);
+// OD 2004-05-07 #i28701# - replaced by class <SwSortedObjs>
+//SV_DECL_PTRARR_SORT(SwSortDrawObjs,SdrObjectPtr,1,2);
+class SwSortedObjs;
+// --> OD 2004-07-02 #i28701#
+class SwAnchoredObject;
+// <--
 
 enum SwPageChg
 {
@@ -98,11 +103,8 @@ class SwPageFrm: public SwFtnBossFrm
 {
     friend class SwFrm;
 
-    //Array fuer die Draw-Objekte auf der Seite.
-    //Das Sortierte Array ist nach den Pointeraddressen sortiert.
-    //Die Objs in dem Array haben ihren Anker nicht notwendigerweise auf
-    //der Seite.
-    SwSortDrawObjs *pSortedObjs;
+    // OD 2004-05-07 #i28701# - use <SwSortedObjs>
+    SwSortedObjs *pSortedObjs;
 
     SwPageDesc *pDesc;      //PageDesc der die Seite beschreibt.
 
@@ -118,9 +120,11 @@ class SwPageFrm: public SwFtnBossFrm
     BOOL bInvalidSpelling   :1; //Das Online-Spelling ist gefordert
     BOOL bEndNotePage       :1; //'Fussnotenseite' fuer Endnoten
     BOOL bInvalidAutoCmplWrds :1; //Auto-Complete Wordliste aktualisieren
-#ifdef VERTICAL_LAYOUT
     BOOL bHasGrid           :1; // Grid for Asian layout
-#endif
+
+    // OD 2004-05-17 #i28701# - boolean, indicating that layout of page frame
+    // is in progress.
+    bool mbLayoutInProgress;
 
     // OD 12.02.2003 #i9719#, #105645#
     static const sal_Int8 mnBorderPxWidth;
@@ -219,19 +223,16 @@ public:
     void PrepareHeader();   //Kopf-/Fusszeilen anlegen/entfernen.
     void PrepareFooter();
 
-    const SwSortDrawObjs  *GetSortedObjs() const  { return pSortedObjs; }
-          SwSortDrawObjs  *GetSortedObjs()        { return pSortedObjs; }
+    const SwSortedObjs  *GetSortedObjs() const  { return pSortedObjs; }
+          SwSortedObjs  *GetSortedObjs()          { return pSortedObjs; }
 
-    void AppendDrawObj( SwDrawContact *pNew );
-    void RemoveDrawObj( SwDrawContact *pToRemove );
-    // OD 20.05.2003 #108784# - <AppendDrawObj>/<RemoveDrawObj> for virtual drawing objects
-    void AppendVirtDrawObj( SwDrawContact* _pDrawContact,
-                            SwDrawVirtObj* _pDrawVirtObj );
-    void RemoveVirtDrawObj( SwDrawContact* _pDrawContact,
-                            SwDrawVirtObj* _pDrawVirtObj );
+    // --> OD 2004-07-02 #i28701# - new methods to append/remove drawing objects
+    void AppendDrawObjToPage( SwAnchoredObject& _rNewObj );
+    void RemoveDrawObjFromPage( SwAnchoredObject& _rToRemoveObj );
+    // <--
 
-    void AppendFly( SwFlyFrm *pNew );
-    void RemoveFly( SwFlyFrm *pToRemove );
+    void AppendFlyToPage( SwFlyFrm *pNew );
+    void RemoveFlyFromPage( SwFlyFrm *pToRemove );
     void MoveFly( SwFlyFrm *pToMove, SwPageFrm *pDest );//optimiertes Remove/Append
 
     void  SetPageDesc( SwPageDesc *, SwFrmFmt * );
@@ -405,6 +406,17 @@ public:
 
     // OD 22.09.2003 #110978#
     const SwRect PrtWithoutHeaderAndFooter() const;
+
+    // OD 2004-05-17 #i28701#
+    inline bool IsLayoutInProgress() const
+    {
+        return mbLayoutInProgress;
+    }
+    inline void SetLayoutInProgress( const bool _bLayoutInProgress )
+    {
+        mbLayoutInProgress = _bLayoutInProgress;
+    }
+
 };
 
 inline SwCntntFrm *SwPageFrm::FindFirstBodyCntnt()
