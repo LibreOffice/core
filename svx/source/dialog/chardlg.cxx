@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: pb $ $Date: 2001-02-22 10:32:53 $
+ *  last change: $Author: tl $ $Date: 2001-03-05 08:41:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,7 @@
 #ifndef _SV_MSGBOX_HXX
 #include <vcl/msgbox.hxx>
 #endif
+
 #pragma hdrstop
 
 #define _SVX_CHARDLG_CXX
@@ -119,6 +120,8 @@
 #define ITEMID_BRUSH            SID_ATTR_BRUSH
 #define ITEMID_EMPHASISMARK     SID_ATTR_CHAR_EMPHASISMARK
 #define ITEMID_TWOLINES         SID_ATTR_CHAR_TWO_LINES
+#define ITEMID_CHARROTATE       SID_ATTR_CHAR_ROTATED
+#define ITEMID_CHARSCALE_W      SID_ATTR_CHAR_SCALEWIDTH
 
 #include "xtable.hxx"       // XColorTable
 #include "chardlg.hxx"
@@ -149,6 +152,13 @@
 #include "chardlg.h"
 #include "emphitem.hxx"
 #include "twolinesitem.hxx"
+
+#ifndef _SVX_CHARSCALEITEM_HXX
+#include <charscaleitem.hxx>
+#endif
+#ifndef _SVX_CHARROTATEITEM_HXX
+#include <charrotateitem.hxx>
+#endif
 
 using namespace ::com::sun::star;
 
@@ -4598,9 +4608,16 @@ SvxCharPositionPage::SvxCharPositionPage( Window* pParent, const SfxItemSet& rIn
     m_aLowPosBtn        ( this, ResId( RB_LOWPOS ) ),
     m_aHighLowFT        ( this, ResId( FT_HIGHLOW ) ),
     m_aHighLowEdit      ( this, ResId( ED_HIGHLOW ) ),
+    m_aHighLowRB        ( this, ResId( CB_HIGHLOW ) ),
     m_aFontSizeFT       ( this, ResId( FT_FONTSIZE ) ),
     m_aFontSizeEdit     ( this, ResId( ED_FONTSIZE ) ),
-    m_aFontSizeBtn      ( this, ResId( CB_FONTSIZE ) ),
+    m_aRotationScalingFL( this, ResId( FL_ROTATION_SCALING ) ),
+    m_a0degRB           ( this, ResId( RB_0_DEG ) ),
+    m_a90degRB          ( this, ResId( RB_90_DEG ) ),
+    m_a270degRB         ( this, ResId( RB_270_DEG ) ),
+    m_aFitToLineCB      ( this, ResId( CB_FIT_TO_LINE ) ),
+    m_aScaleWidthFT     ( this, ResId( FT_SCALE_WIDTH ) ),
+    m_aScaleWidthMF     ( this, ResId( MF_SCALE_WIDTH ) ),
 
     m_aKerningLine      ( this, ResId( FL_KERNING2 ) ),
     m_aKerningLB        ( this, ResId( LB_KERNING2 ) ),
@@ -4614,9 +4631,9 @@ SvxCharPositionPage::SvxCharPositionPage( Window* pParent, const SfxItemSet& rIn
 
     m_nSuperEsc         ( (short)DFLT_ESC_SUPER ),
     m_nSubEsc           ( (short)DFLT_ESC_SUB ),
+    m_nScaleWidthItemSetVal ( (UINT16) 100 ),
     m_nSuperProp        ( (BYTE)DFLT_ESC_PROP ),
     m_nSubProp          ( (BYTE)DFLT_ESC_PROP )
-
 {
     FreeResource();
     Initialize();
@@ -4645,7 +4662,8 @@ void SvxCharPositionPage::Initialize()
     m_aHighLowEdit.SetModifyHdl( aLink );
     m_aFontSizeEdit.SetModifyHdl( aLink );
 
-    m_aFontSizeBtn.SetClickHdl( LINK( this, SvxCharPositionPage, AutoPositionHdl_Impl ) );
+    m_aHighLowRB.SetClickHdl( LINK( this, SvxCharPositionPage, AutoPositionHdl_Impl ) );
+    m_aFitToLineCB.SetClickHdl( LINK( this, SvxCharPositionPage, FitToLineHdl_Impl ) );
     m_aKerningLB.SetSelectHdl( LINK( this, SvxCharPositionPage, KerningSelectHdl_Impl ) );
     m_aKerningEdit.SetModifyHdl( LINK( this, SvxCharPositionPage, KerningModifyHdl_Impl ) );
     m_aPairKerningBtn.SetClickHdl( LINK( this, SvxCharPositionPage, PairKerningHdl_Impl ) );
@@ -4690,21 +4708,21 @@ void SvxCharPositionPage::SetEscapement_Impl( USHORT nEsc )
         m_aHighLowEdit.Disable();
         m_aFontSizeFT.Disable();
         m_aFontSizeEdit.Disable();
-        m_aFontSizeBtn.Disable();
+        m_aHighLowRB.Disable();
     }
     else
     {
         m_aFontSizeFT.Enable();
         m_aFontSizeEdit.Enable();
-        m_aFontSizeBtn.Enable();
+        m_aHighLowRB.Enable();
 
-        if ( !m_aFontSizeBtn.IsChecked() )
+        if ( !m_aHighLowRB.IsChecked() )
         {
             m_aHighLowFT.Enable();
             m_aHighLowEdit.Enable();
         }
         else
-            AutoPositionHdl_Impl( &m_aFontSizeBtn );
+            AutoPositionHdl_Impl( &m_aHighLowRB );
     }
 
     UpdatePreview_Impl( 100, aEscItm.GetProp(), aEscItm.GetEsc() );
@@ -4749,6 +4767,20 @@ IMPL_LINK( SvxCharPositionPage, AutoPositionHdl_Impl, CheckBox*, pBox )
         PositionHdl_Impl( m_aHighPosBtn.IsChecked() ? &m_aHighPosBtn
                                                       : m_aLowPosBtn.IsChecked() ? &m_aLowPosBtn
                                                                                    : &m_aNormalPosBtn );
+    return 0;
+}
+
+// -----------------------------------------------------------------------
+
+IMPL_LINK( SvxCharPositionPage, FitToLineHdl_Impl, CheckBox*, pBox )
+{
+    if ( &m_aFitToLineCB == pBox)
+    {
+        if (m_aFitToLineCB.IsChecked())
+            m_aScaleWidthMF.SetValue( m_nScaleWidthItemSetVal );
+        else
+            m_aScaleWidthMF.SetValue( 100 );
+    }
     return 0;
 }
 
@@ -5009,7 +5041,7 @@ void SvxCharPositionPage::Reset( const SfxItemSet& rSet )
                 m_aHighPosBtn.Check( TRUE );
                 if ( nEsc == DFLT_ESC_AUTO_SUPER )
                 {
-                    m_aFontSizeBtn.Check( TRUE );
+                    m_aHighLowRB.Check( TRUE );
                     nEsc = DFLT_ESC_SUPER;
                 }
             }
@@ -5019,12 +5051,12 @@ void SvxCharPositionPage::Reset( const SfxItemSet& rSet )
                 m_aLowPosBtn.Check( TRUE );
                 if ( nEsc == DFLT_ESC_AUTO_SUB )
                 {
-                    m_aFontSizeBtn.Check(TRUE);
+                    m_aHighLowRB.Check(TRUE);
                     nEsc = DFLT_ESC_SUB;
                 }
             }
 
-            if ( m_aFontSizeBtn.IsChecked() )
+            if ( m_aHighLowRB.IsChecked() )
             {
                 m_aHighLowFT.Disable();
                 m_aHighLowEdit.Disable();
@@ -5035,7 +5067,7 @@ void SvxCharPositionPage::Reset( const SfxItemSet& rSet )
         else
         {
             m_aNormalPosBtn.Check( TRUE );
-            m_aFontSizeBtn.Check( TRUE );
+            m_aHighLowRB.Check( TRUE );
             PositionHdl_Impl( NULL );
         }
     }
@@ -5107,6 +5139,53 @@ void SvxCharPositionPage::Reset( const SfxItemSet& rSet )
     }
     else
         m_aPairKerningBtn.Check( FALSE );
+
+    // Scale Width
+    nWhich = GetWhich( SID_ATTR_CHAR_SCALEWIDTH );
+    if ( rSet.GetItemState( nWhich ) >= SFX_ITEM_DEFAULT )
+    {
+        const SvxCharScaleWidthItem& rItem =
+                (SvxCharScaleWidthItem&) rSet.Get( nWhich );
+        m_nScaleWidthItemSetVal = rItem.GetValue();
+        m_aScaleWidthMF.SetValue( 100 );
+    }
+    else
+        m_aScaleWidthMF.SetValue( 100 );
+
+    // Rotation
+    nWhich = GetWhich( SID_ATTR_CHAR_ROTATED );
+    if ( rSet.GetItemState( nWhich ) >= SFX_ITEM_DEFAULT )
+    {
+        const SvxCharRotateItem& rItem =
+                (SvxCharRotateItem&) rSet.Get( nWhich );
+        if (rItem.IsBottomToTop())
+            m_a90degRB.Check( TRUE );
+        else if (rItem.IsTopToBotton())
+            m_a270degRB.Check( TRUE );
+        else
+        {
+            DBG_ASSERT( 0 == rItem.GetValue(), "incorrect value" );
+            m_a0degRB.Check( TRUE );
+        }
+        m_aFitToLineCB.Check( rItem.IsFitToLine() );
+    }
+    else
+    {
+        m_a0degRB.Check( TRUE );
+        m_aFitToLineCB.Check( FALSE );
+    }
+
+    m_aHighPosBtn.SaveValue();
+    m_aNormalPosBtn.SaveValue();
+    m_aLowPosBtn.SaveValue();
+    m_a0degRB.SaveValue();
+    m_a90degRB.SaveValue();
+    m_a270degRB.SaveValue();
+    m_aFitToLineCB.SaveValue();
+    m_aScaleWidthMF.SaveValue();
+    m_aKerningLB.SaveValue();
+    m_aKerningEdit.SaveValue();
+    m_aPairKerningBtn.SaveValue();
 }
 
 // -----------------------------------------------------------------------
@@ -5124,7 +5203,7 @@ BOOL SvxCharPositionPage::FillItemSet( SfxItemSet& rSet )
 
     if ( bHigh || m_aLowPosBtn.IsChecked() )
     {
-        if ( m_aFontSizeBtn.IsChecked() )
+        if ( m_aHighLowRB.IsChecked() )
             nEsc = bHigh ? DFLT_ESC_AUTO_SUPER : DFLT_ESC_AUTO_SUB;
         else
         {
@@ -5206,6 +5285,35 @@ BOOL SvxCharPositionPage::FillItemSet( SfxItemSet& rSet )
     if ( m_aPairKerningBtn.IsChecked() != m_aPairKerningBtn.GetSavedValue() )
     {
         rSet.Put( SvxAutoKernItem( m_aPairKerningBtn.IsChecked(), nWhich ) );
+        bModified |= TRUE;
+    }
+    else if ( SFX_ITEM_DEFAULT == rOldSet.GetItemState( nWhich, FALSE ) )
+        rSet.ClearItem( nWhich );
+
+    // Scale Width
+    nWhich = GetWhich( SID_ATTR_CHAR_SCALEWIDTH );
+    if ( m_aScaleWidthMF.GetText() != m_aScaleWidthMF.GetSavedValue() )
+    {
+        rSet.Put( SvxCharScaleWidthItem( m_aScaleWidthMF.GetValue() ) );
+        bModified |= TRUE;
+    }
+    else if ( SFX_ITEM_DEFAULT == rOldSet.GetItemState( nWhich, FALSE ) )
+        rSet.ClearItem( nWhich );
+
+    // Rotation
+    nWhich = GetWhich( SID_ATTR_CHAR_ROTATED );
+    if ( m_a0degRB     .IsChecked() != m_a0degRB     .GetSavedValue()  ||
+         m_a90degRB    .IsChecked() != m_a90degRB    .GetSavedValue()  ||
+         m_a270degRB   .IsChecked() != m_a270degRB   .GetSavedValue()  ||
+         m_aFitToLineCB.IsChecked() != m_aFitToLineCB.GetSavedValue() )
+    {
+        SvxCharRotateItem aItem( 0, m_aFitToLineCB.IsChecked() );
+        sal_uInt16 nVal = 0;
+        if (m_a90degRB.IsChecked())
+            aItem.SetBottomToTop();
+        else if (m_a270degRB.IsChecked())
+            aItem.SetTopToBotton();
+        rSet.Put( aItem );
         bModified |= TRUE;
     }
     else if ( SFX_ITEM_DEFAULT == rOldSet.GetItemState( nWhich, FALSE ) )

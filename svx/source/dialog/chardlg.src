@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.src,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: af $ $Date: 2001-02-07 10:09:57 $
+ *  last change: $Author: tl $ $Date: 2001-03-05 08:41:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4674,7 +4674,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
     };
     RadioButton RB_HIGHPOS
     {
-        Pos = MAP_APPFONT ( 7 , 14  );
+        Pos = MAP_APPFONT ( 6 , 14  );
         Size = MAP_APPFONT ( 57 , 10 );
         Text = "H~och";
         Text [ english_us ] = "Super" ;
@@ -4699,7 +4699,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
     };
     RadioButton RB_NORMALPOS
     {
-        Pos = MAP_APPFONT ( 7 , 30  );
+        Pos = MAP_APPFONT ( 6 , 28  );
         Size = MAP_APPFONT ( 57 , 10 );
         Text = "~Normal";
         Text [ english_us ] = "Normal" ;
@@ -4724,7 +4724,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
     };
     RadioButton RB_LOWPOS
     {
-        Pos = MAP_APPFONT ( 7 , 44  );
+        Pos = MAP_APPFONT ( 6 , 42  );
         Size = MAP_APPFONT ( 57 , 10 );
         Text = "~Tief";
         Text [ english_us ] = "Sub" ;
@@ -4787,10 +4787,35 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Last = 100 ;
         SpinSize = 1 ;
     };
+    CheckBox CB_HIGHLOW
+    {
+        Pos = MAP_APPFONT ( 162 , 14  );
+        Size = MAP_APPFONT ( 92 , 10 );
+        Text = "A~utomatisch";
+        Text [ english_us ] = "A~utomatic" ;
+        TabStop = TRUE;
+        Text[ portuguese ] = "A~utom·tico";
+        Text[ russian ] = "¿‚ÚÓÏ‡ÚË˜ÂÒÍË";
+        Text[ greek ] = "¡~ıÙ¸Ï·Ù·";
+        Text[ dutch ] = "A~utomatisch";
+        Text[ french ] = "~Automatique";
+        Text[ spanish ] = "Autom·tico";
+        Text[ italian ] = "Automatico";
+        Text[ danish ] = "Automatic";
+        Text[ swedish ] = "A~utomatiskt";
+        Text[ polish ] = "Automatycznie";
+        Text[ portuguese_brazilian ] = "Automatic";
+        Text[ japanese ] = "é©ìÆ";
+        Text[ korean ] = "¿⁄µø";
+        Text[ chinese_simplified ] = "◊‘∂Ø";
+        Text[ chinese_traditional ] = "¶€∞ ";
+        Text[ turkish ] = "Automatic";
+        Text[ arabic ] = " ·ﬁ«∆Ì";
+    };
     FixedText FT_FONTSIZE
     {
-        Pos = MAP_APPFONT ( 68 , 30  );
-        Size = MAP_APPFONT ( 57 , 10 );
+        Pos = MAP_APPFONT ( 68 , 42  );
+        Size = MAP_APPFONT ( 57 , 8 );
         Text = "~Schriftgrˆﬂe rel.";
         Text [ english_us ] = "Relative font size" ;
         Text[ portuguese ] = "Ta~manho relativo";
@@ -4814,7 +4839,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
     MetricField ED_FONTSIZE
     {
         Border = TRUE;
-        Pos = MAP_APPFONT ( 129 , 29  );
+        Pos = MAP_APPFONT ( 129 , 40  );
         Size = MAP_APPFONT ( 27 , 12 );
         TabStop = TRUE;
         Repeat = TRUE ;
@@ -4827,34 +4852,71 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Last = 100 ;
         SpinSize = 1 ;
     };
-    CheckBox CB_FONTSIZE
+    FixedLine FL_ROTATION_SCALING
     {
-        Pos = MAP_APPFONT ( 162 , 30  );
-        Size = MAP_APPFONT ( 92 , 10 );
-        Text = "A~utomatisch";
-        Text [ english_us ] = "A~utomatic" ;
+        Pos = MAP_APPFONT ( 4 , 57  );
+        Size = MAP_APPFONT ( 252 , 8 );
+        Text = "Rotation / Skalierung";
+        Text [ english_us ] = "Rotation / scaling" ;
+    };
+    RadioButton RB_0_DEG
+    {
+        Pos = MAP_APPFONT ( 6 , 68  );
+        Size = MAP_APPFONT ( 36 , 10 );
         TabStop = TRUE;
-        Text[ portuguese ] = "A~utom·tico";
-        Text[ russian ] = "¿‚ÚÓÏ‡ÚË˜ÂÒÍË";
-        Text[ greek ] = "¡~ıÙ¸Ï·Ù·";
-        Text[ dutch ] = "A~utomatisch";
-        Text[ french ] = "~Automatique";
-        Text[ spanish ] = "Autom·tico";
-        Text[ italian ] = "Automatico";
-        Text[ danish ] = "Automatic";
-        Text[ swedish ] = "A~utomatiskt";
-        Text[ polish ] = "Automatycznie";
-        Text[ portuguese_brazilian ] = "Automatic";
-        Text[ japanese ] = "é©ìÆ";
-        Text[ korean ] = "¿⁄µø";
-        Text[ chinese_simplified ] = "◊‘∂Ø";
-        Text[ chinese_traditional ] = "¶€∞ ";
-        Text[ turkish ] = "Automatic";
-        Text[ arabic ] = " ·ﬁ«∆Ì";
+        Text = "0 Grad";
+        Text [ english_us ] = "0 degree" ;
+    };
+    RadioButton RB_90_DEG
+    {
+        Pos = MAP_APPFONT ( 46 , 68  );
+        Size = MAP_APPFONT ( 36 , 10 );
+        TabStop = TRUE;
+        Text = "90 Grad";
+        Text [ english_us ] = "90 degree" ;
+    };
+    RadioButton RB_270_DEG
+    {
+        Pos = MAP_APPFONT ( 94 , 68  );
+        Size = MAP_APPFONT ( 36 , 10 );
+        TabStop = TRUE;
+        Text = "270 Grad";
+        Text [ english_us ] = "270 degree" ;
+    };
+    CheckBox CB_FIT_TO_LINE
+    {
+        Pos = MAP_APPFONT ( 160 , 68  );
+        Size = MAP_APPFONT ( 60 , 10 );
+        TabStop = TRUE;
+        Text = "An Zeile anpassen";
+        Text [ english_us ] = "Fit to line" ;
+    };
+    FixedText FT_SCALE_WIDTH
+    {
+        Pos = MAP_APPFONT ( 6 , 84  );
+        Size = MAP_APPFONT ( 50 , 8 );
+        Text = "Breite skalieren";
+        Text [ english_us ] = "Scale width" ;
+    };
+    MetricField MF_SCALE_WIDTH
+    {
+        Border = TRUE;
+        Pos = MAP_APPFONT ( 70 , 82  );
+        Size = MAP_APPFONT ( 27 , 12 );
+        TabStop = TRUE;
+        Repeat = TRUE ;
+        Spin = TRUE ;
+        Minimum = 1 ;
+        Maximum = 999 ;
+        Unit = FUNIT_CUSTOM ;
+        CustomUnitText = "%" ;
+        First = 50 ;
+        Last = 200 ;
+        SpinSize = 1 ;
     };
     FixedLine FL_KERNING2
     {
-        Pos = MAP_APPFONT ( 4 , 61  );
+        Pos = MAP_APPFONT ( 4 , 98  );
         Size = MAP_APPFONT ( 252 , 8 );
         Text = "Laufweite";
         Text [ english_us ] = "Spacing" ;
@@ -4879,7 +4941,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
     ListBox LB_KERNING2
     {
         Border = TRUE;
-        Pos = MAP_APPFONT ( 6 , 72  );
+        Pos = MAP_APPFONT ( 6 , 108  );
         Size = MAP_APPFONT ( 72 , 48 ) ;
         DropDown = TRUE ;
         StringList =
@@ -4894,118 +4956,118 @@ TabPage RID_SVXPAGE_CHAR_POSITION
             < "Expanded" ; Default ; > ;
             < "Condensed" ; Default ; > ;
         };
-    StringList [ language_user1 ] =
-    {
-            < "Standard" ; Default ; > ;
-        < "Gesperrt" ; Default ; > ;
-        < "Schmal" ; Default ; > ;
-    };
-    StringList [ portuguese ] =
-    {
-            < "Padr„o" ; Default ; > ;
-        < "Expandido" ; Default ; > ;
-        < "Condensado" ; Default ; > ;
-    };
-    StringList [ russian ] =
-    {
-            < "—Ú‡Ì‰‡Ú" ; Default ; > ;
-        < "–‡ÁÂÊÂÌÌ˚È" ; Default ; > ;
-        < "”ÔÎÓÚÌÂÌÌ˚È" ; Default ; > ;
-    };
-    StringList [ greek ] =
-    {
-            < "–ÒÔÂÈÎÔ„ﬁ" ; Default ; > ;
-        < "≈ÍÙÂÙ·Ï›Ì·" ; Default ; > ;
-        < "”ıÏıÍÌ˘Ï›Ì·" ; Default ; > ;
-    };
-    StringList [ dutch ] =
-    {
-            < "Standaard" ; Default ; > ;
-        < "Verbreed" ; Default ; > ;
-        < "Versmald" ; Default ; > ;
-    };
-    StringList [ french ] =
-    {
-            < "Standard" ; Default ; > ;
-        < "…tendu" ; Default ; > ;
-        < "CondensÈ" ; Default ; > ;
-    };
-    StringList [ spanish ] =
-    {
-            < "Est·ndar" ; Default ; > ;
-        < "Expandido" ; Default ; > ;
-        < "Condensado" ; Default ; > ;
-    };
-    StringList [ italian ] =
-    {
-            < "Normale" ; Default ; > ;
-        < "Espansa" ; Default ; > ;
-        < "Ridotta" ; Default ; > ;
-    };
-    StringList [ danish ] =
-    {
-            < "Standard" ; Default ; > ;
-        < "Gesperrt" ; Default ; > ;
-        < "Schmal" ; Default ; > ;
-    };
-    StringList [ swedish ] =
-    {
-            < "Standard" ; Default ; > ;
-        < "Sp‰rrat" ; Default ; > ;
-        < "Smalt" ; Default ; > ;
-    };
-    StringList [ polish ] =
-    {
-            < "Domyúlnie" ; Default ; > ;
-        < "Szerokie" ; Default ; > ;
-        < "Wπskie" ; Default ; > ;
-    };
-    StringList [ portuguese_brazilian ] =
-    {
-            < "Standard" ; Default ; > ;
-        < "Gesperrt" ; Default ; > ;
-        < "Schmal" ; Default ; > ;
-    };
-    StringList [ japanese ] =
-    {
-            < "ïWèÄ" ; Default ; > ;
-        < "çLÇ≠Ç∑ÇÈ" ; Default ; > ;
-        < "ã∑Ç≠Ç∑ÇÈ" ; Default ; > ;
-    };
-    StringList [ korean ] =
-    {
-            < "±‚∫ª" ; Default ; > ;
-        < "≥–∞‘" ; Default ; > ;
-        < "¡º∞‘" ; Default ; > ;
-    };
-    StringList [ chinese_simplified ] =
-    {
-            < "±Í◊º" ; Default ; > ;
-        < "À¯∂®µƒ" ; Default ; > ;
-        < "œ¡’≠" ; Default ; > ;
-    };
-    StringList [ chinese_traditional ] =
-    {
-            < "º–∑«" ; Default ; > ;
-        < "¬Í©w" ; Default ; > ;
-        < "ØUØ∂" ; Default ; > ;
-    };
-    StringList [ turkish ] =
-    {
-            < "Standard" ; Default ; > ;
-        < "Gesperrt" ; Default ; > ;
-        < "Schmal" ; Default ; > ;
-    };
-    StringList [ arabic ] =
-    {
-            < "ﬁÌ«”Ì" ; Default ; > ;
-        < "„Ê”⁄" ; Default ; > ;
-        < "„ﬂÀ›" ; Default ; > ;
-    };
+        StringList [ language_user1 ] =
+        {
+                < "Standard" ; Default ; > ;
+            < "Gesperrt" ; Default ; > ;
+            < "Schmal" ; Default ; > ;
+        };
+        StringList [ portuguese ] =
+        {
+                < "Padr„o" ; Default ; > ;
+            < "Expandido" ; Default ; > ;
+            < "Condensado" ; Default ; > ;
+        };
+        StringList [ russian ] =
+        {
+                < "—Ú‡Ì‰‡Ú" ; Default ; > ;
+            < "–‡ÁÂÊÂÌÌ˚È" ; Default ; > ;
+            < "”ÔÎÓÚÌÂÌÌ˚È" ; Default ; > ;
+        };
+        StringList [ greek ] =
+        {
+                < "–ÒÔÂÈÎÔ„ﬁ" ; Default ; > ;
+            < "≈ÍÙÂÙ·Ï›Ì·" ; Default ; > ;
+            < "”ıÏıÍÌ˘Ï›Ì·" ; Default ; > ;
+        };
+        StringList [ dutch ] =
+        {
+                < "Standaard" ; Default ; > ;
+            < "Verbreed" ; Default ; > ;
+            < "Versmald" ; Default ; > ;
+        };
+        StringList [ french ] =
+        {
+                < "Standard" ; Default ; > ;
+            < "…tendu" ; Default ; > ;
+            < "CondensÈ" ; Default ; > ;
+        };
+        StringList [ spanish ] =
+        {
+                < "Est·ndar" ; Default ; > ;
+            < "Expandido" ; Default ; > ;
+            < "Condensado" ; Default ; > ;
+        };
+        StringList [ italian ] =
+        {
+                < "Normale" ; Default ; > ;
+            < "Espansa" ; Default ; > ;
+            < "Ridotta" ; Default ; > ;
+        };
+        StringList [ danish ] =
+        {
+                < "Standard" ; Default ; > ;
+            < "Gesperrt" ; Default ; > ;
+            < "Schmal" ; Default ; > ;
+        };
+        StringList [ swedish ] =
+        {
+                < "Standard" ; Default ; > ;
+            < "Sp‰rrat" ; Default ; > ;
+            < "Smalt" ; Default ; > ;
+        };
+        StringList [ polish ] =
+        {
+                < "Domyúlnie" ; Default ; > ;
+            < "Szerokie" ; Default ; > ;
+            < "Wπskie" ; Default ; > ;
+        };
+        StringList [ portuguese_brazilian ] =
+        {
+                < "Standard" ; Default ; > ;
+            < "Gesperrt" ; Default ; > ;
+            < "Schmal" ; Default ; > ;
+        };
+        StringList [ japanese ] =
+        {
+                < "ïWèÄ" ; Default ; > ;
+            < "çLÇ≠Ç∑ÇÈ" ; Default ; > ;
+            < "ã∑Ç≠Ç∑ÇÈ" ; Default ; > ;
+        };
+        StringList [ korean ] =
+        {
+                < "±‚∫ª" ; Default ; > ;
+            < "≥–∞‘" ; Default ; > ;
+            < "¡º∞‘" ; Default ; > ;
+        };
+        StringList [ chinese_simplified ] =
+        {
+                < "±Í◊º" ; Default ; > ;
+            < "À¯∂®µƒ" ; Default ; > ;
+            < "œ¡’≠" ; Default ; > ;
+        };
+        StringList [ chinese_traditional ] =
+        {
+                < "º–∑«" ; Default ; > ;
+            < "¬Í©w" ; Default ; > ;
+            < "ØUØ∂" ; Default ; > ;
+        };
+        StringList [ turkish ] =
+        {
+                < "Standard" ; Default ; > ;
+            < "Gesperrt" ; Default ; > ;
+            < "Schmal" ; Default ; > ;
+        };
+        StringList [ arabic ] =
+        {
+                < "ﬁÌ«”Ì" ; Default ; > ;
+            < "„Ê”⁄" ; Default ; > ;
+            < "„ﬂÀ›" ; Default ; > ;
+        };
     };
     FixedText FT_KERNING2
     {
-        Pos = MAP_APPFONT ( 81 , 73  );
+        Pos = MAP_APPFONT ( 81 , 109  );
         Size = MAP_APPFONT ( 30 , 10 );
         Text = "u~m";
         Text [ english_us ] = "by" ;
@@ -5030,7 +5092,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
     MetricField ED_KERNING2
     {
         Border = TRUE;
-        Pos = MAP_APPFONT ( 114 , 72  );
+        Pos = MAP_APPFONT ( 114 , 108  );
         Size = MAP_APPFONT ( 42 , 12 );
         TabStop = TRUE;
         Repeat = TRUE ;
@@ -5042,7 +5104,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
     };
     CheckBox CB_PAIRKERNING
     {
-        Pos = MAP_APPFONT ( 162 , 73  );
+        Pos = MAP_APPFONT ( 162 , 109  );
         Size = MAP_APPFONT ( 92 , 10 );
         Text = "~Paarweises Kerning";
         Text [ english_us ] = "~Pair kerning" ;
@@ -5067,7 +5129,7 @@ TabPage RID_SVXPAGE_CHAR_POSITION
     };
     FixedLine FL_POS_PREVIEW
     {
-        Pos = MAP_APPFONT ( 4 , 97  );
+        Pos = MAP_APPFONT ( 4 , 126  );
         Size = MAP_APPFONT ( 252 , 8 );
         Text = "Vorschau";
         Text [ english_us ] = "Preview" ;
@@ -5094,8 +5156,8 @@ TabPage RID_SVXPAGE_CHAR_POSITION
         Text = "Beispiel" ;
         Text [ english_us ] = "Example" ;
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 7 , 108  ) ;
-        Size = MAP_APPFONT ( 246 , 55 ) ;
+        Pos = MAP_APPFONT ( 6 , 137  ) ;
+        Size = MAP_APPFONT ( 248 , 30 ) ;
         Text[ portuguese ] = "Exemplo";
         Text[ russian ] = "œËÏÂ";
         Text[ greek ] = "–·Ò‹‰ÂÈ„Ï·";
@@ -5116,8 +5178,8 @@ TabPage RID_SVXPAGE_CHAR_POSITION
     };
     FixedText FT_POS_FONTTYPE
     {
-        Pos = MAP_APPFONT ( 7 , 169  ) ;
-        Size = MAP_APPFONT ( 246 , 10 ) ;
+        Pos = MAP_APPFONT ( 6 , 171  ) ;
+        Size = MAP_APPFONT ( 248 , 8 ) ;
     };
 };
 
