@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.34 $
+#   $Revision: 1.35 $
 #
-#   last change: $Author: nf $ $Date: 2001-04-20 08:36:49 $
+#   last change: $Author: nf $ $Date: 2001-04-20 10:24:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -618,14 +618,14 @@ common_build_sign_jar=true
 # --- generate output tree -----------------------------------------
 
 %world.mk :
-    @+mkout $(OUT)
+    @+$(MKOUT) $(OUT)
 .IF "$(GUI)"=="UNX"
     @+echo \# > $(OUT)$/inc$/myworld.mk
 .ELSE			# "$(GUI)"=="UNX"
     @+echo # > $(OUT)$/inc$/myworld.mk
 .ENDIF			# "$(GUI)"=="UNX"
 .IF "$(common_build)"!=""
-    @+mkout $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(OUT))
+    @+$(MKOUT) $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(OUT))
 .IF "$(GUI)"=="UNX"
     @+echo \# > {$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(OUT))}$/inc$/myworld.mk
 .ELSE			# "$(GUI)"=="UNX"
@@ -642,10 +642,10 @@ common_build_sign_jar=true
 .IF "$(remote)"!=""
 
 %worldremote.mk :
-    @+mkout -r
+    @+$(MKOUT) -r
     @+echo # > $(OUT)$/inc$/myworldremote.mk
 .IF "$(common_build)"!=""
-    @+mkout -r $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(OUT))
+    @+$(MKOUT) -r $(subst,$(OUTPATH),$(COMMON_OUTDIR) $(OUT))
     @+echo # > {$(subst,$(OUTPATH),$(COMMON_OUTDIR) $(OUT))}$/inc$/myworldremote.mk
 .ENDIF			# "$(common_build)"!=""
 
