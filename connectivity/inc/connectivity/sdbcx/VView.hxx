@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VView.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-17 08:35:02 $
+ *  last change: $Author: oj $ $Date: 2000-11-03 13:19:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,7 @@ namespace connectivity
         class OView :   public OViewHelper,
                         public OView_BASE,
                         public ::com::sun::star::container::XNamed,
-                                                public ::com::sun::star::lang::XServiceInfo,
+                        public ::com::sun::star::lang::XServiceInfo,
                         public ::comphelper::OPropertyArrayUsageHelper<OView>,
                         public ODescriptor
         {
@@ -143,17 +143,17 @@ namespace connectivity
             // ::cppu::OComponentHelper
             virtual void SAL_CALL disposing(void);
             // XInterface
-                        virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
+            virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
             //XTypeProvider
-                        virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException);
+            virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException);
             // XPropertySet
-                        virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException)
+            virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException)
             {
                 return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
             }
 
             // XNamed
-                        virtual ::rtl::OUString SAL_CALL getName(  ) throw(::com::sun::star::uno::RuntimeException)
+            virtual ::rtl::OUString SAL_CALL getName(  ) throw(::com::sun::star::uno::RuntimeException)
             {
                 return m_Name;
             }

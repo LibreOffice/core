@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VKeyColumn.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-30 07:21:14 $
+ *  last change: $Author: oj $ $Date: 2000-11-03 13:19:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,14 +71,14 @@ namespace connectivity
     namespace sdbcx
     {
         class OKeyColumn;
-        typedef ::comphelper::OPropertyArrayUsageHelper<OKeyColumn> OKeyColumn_PROP;
+        typedef ::comphelper::OIdPropertyArrayUsageHelper<OKeyColumn> OKeyColumn_PROP;
 
         class OKeyColumn :  public OColumn,
                             public OKeyColumn_PROP
         {
         protected:
             ::rtl::OUString m_ReferencedColumn;
-            DECLARE_CTY_PROPERTY(OKeyColumn_PROP,OColumn)
+            DECLARE_CTY_PROPERTY(OKeyColumn_PROP,OKeyColumn)
         public:
             OKeyColumn(sal_Bool _bCase);
             OKeyColumn( const ::rtl::OUString& _ReferencedColumn,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PColumn.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-30 07:17:34 $
+ *  last change: $Author: oj $ $Date: 2000-11-03 13:17:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@ namespace connectivity
         class OParseColumn;
 
         typedef sdbcx::OColumn OParseColumn_BASE;
-        typedef ::comphelper::OPropertyArrayUsageHelper<OParseColumn> OParseColumn_PROP;
+        typedef ::comphelper::OIdPropertyArrayUsageHelper<OParseColumn> OParseColumn_PROP;
 
         class OParseColumn :    public OParseColumn_BASE,
                                 public OParseColumn_PROP
@@ -80,8 +80,7 @@ namespace connectivity
             sal_Bool        m_bFunction;
             sal_Bool        m_bDbasePrecisionChanged;
         protected:
-            DECLARE_CTY_PROPERTY(OParseColumn_PROP,OParseColumn_BASE)
-
+            DECLARE_CTY_PROPERTY(OParseColumn_PROP,OParseColumn)
         public:
             OParseColumn(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& _xColumn,sal_Bool _bCase);
             OParseColumn(const ::rtl::OUString& _Name,

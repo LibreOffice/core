@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VTable.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-30 07:21:14 $
+ *  last change: $Author: oj $ $Date: 2000-11-03 13:19:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,11 +74,35 @@
 #ifndef _COM_SUN_STAR_SDBCX_XALTERTABLE_HPP_
 #include <com/sun/star/sdbcx/XAlterTable.hpp>
 #endif
+#ifndef _COM_SUN_STAR_SDBCX_XCOLUMNSSUPPLIER_HPP_
+#include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDBCX_XKEYSSUPPLIER_HPP_
+#include <com/sun/star/sdbcx/XKeysSupplier.hpp>
+#endif
+#ifndef COMPHELPER_IDPROPERTYARRAYUSAGEHELPER_HXX
+#include <comphelper/IdPropArrayHelper.hxx>
+#endif
+#ifndef _CPPUHELPER_COMPBASE4_HXX_
+#include <cppuhelper/compbase4.hxx>
+#endif
 #ifndef _CPPUHELPER_IMPLBASE4_HXX_
 #include <cppuhelper/implbase4.hxx>
 #endif
-#ifndef _CONNECTIVITY_SDBCX_TABLEDESCRIPTOR_HXX_
-#include "connectivity/sdbcx/VTableDescriptor.hxx"
+#ifndef _COMPHELPER_BROADCASTHELPER_HXX_
+#include <comphelper/broadcasthelper.hxx>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMED_HPP_
+#include <com/sun/star/container/XNamed.hpp>
+#endif
+#ifndef _CONNECTIVITY_SDBCX_IREFRESHABLE_HXX_
+#include "connectivity/sdbcx/IRefreshable.hxx"
+#endif
+#ifndef _CONNECTIVITY_SDBCX_DESCRIPTOR_HXX_
+#include "connectivity/sdbcx/VDescriptor.hxx"
+#endif
+#ifndef _CONNECTIVITY_COMMONTOOLS_HXX_
+#include "connectivity/CommonTools.hxx"
 #endif
 
 namespace connectivity
@@ -87,28 +111,46 @@ namespace connectivity
     {
 
         class OTable;
-        typedef ::cppu::ImplHelper4<    ::com::sun::star::sdbcx::XDataDescriptorFactory,
-                                        ::com::sun::star::sdbcx::XIndexesSupplier,
-                                        ::com::sun::star::sdbcx::XRename,
-                                        ::com::sun::star::sdbcx::XAlterTable > OTable_BASE;
+        class OCollection;
 
-        typedef ::comphelper::OPropertyArrayUsageHelper<OTable> OTable_PROP;
+        typedef ::cppu::WeakComponentImplHelper4<   ::com::sun::star::sdbcx::XColumnsSupplier,
+                                                    ::com::sun::star::sdbcx::XKeysSupplier,
+                                                    ::com::sun::star::container::XNamed,
+                                                    ::com::sun::star::lang::XServiceInfo> OTableDescriptor_BASE;
 
-        class OTable :  public OTableDescriptor,
-                        public OTable_BASE,
-                        public ::comphelper::OPropertyArrayUsageHelper<OTable>
+        typedef ::cppu::ImplHelper4<                ::com::sun::star::sdbcx::XDataDescriptorFactory,
+                                                    ::com::sun::star::sdbcx::XIndexesSupplier,
+                                                    ::com::sun::star::sdbcx::XRename,
+                                                    ::com::sun::star::sdbcx::XAlterTable > OTable_BASE;
+
+        typedef ::comphelper::OIdPropertyArrayUsageHelper<OTable> OTable_PROP;
+
+
+        class OTable :           public comphelper::OBaseMutex,
+                                 public OTable_BASE,
+                                 public OTableDescriptor_BASE,
+                                 public IRefreshableColumns,
+                                 public OTable_PROP,
+                                 public ODescriptor
         {
         protected:
+            ::rtl::OUString m_CatalogName;
+            ::rtl::OUString m_SchemaName;
+            ::rtl::OUString m_Description;
+            ::rtl::OUString m_Type;
+
+            OCollection*    m_pKeys;
+            OCollection*    m_pColumns;
             OCollection*    m_pIndexes;
 
-            //  DECLARE_CTY_PROPERTY(OTable_PROP,OTable)
+            using OTableDescriptor_BASE::rBHelper;
+
             // OPropertyArrayUsageHelper
-            virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const;
+            virtual ::cppu::IPropertyArrayHelper* createArrayHelper(sal_Int32 _nId ) const;
             // OPropertySetHelper
             virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper();
         public:
-            DECLARE_CTY_DEFAULTS( OTableDescriptor);
-            OTable( sal_Bool _bCase);
+            OTable(sal_Bool _bCase);
             OTable( sal_Bool _bCase,
                     const ::rtl::OUString& _Name,
                     const ::rtl::OUString& _Type,
@@ -120,15 +162,39 @@ namespace connectivity
 
             DECLARE_SERVICE_INFO();
             //XInterface
+            virtual void    SAL_CALL acquire() throw(::com::sun::star::uno::RuntimeException);
+            virtual void    SAL_CALL release() throw(::com::sun::star::uno::RuntimeException);
             virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
             //XTypeProvider
             virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException);
 
-            virtual void refreshIndexes()   = 0;
+            // ODescriptor
+            virtual void construct();
+            virtual void refreshColumns(){}
+            virtual void refreshKeys(){}
+            virtual void refreshIndexes(){}
 
             // ::cppu::OComponentHelper
             virtual void SAL_CALL disposing(void);
-
+            // XPropertySet
+            virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException)
+            {
+                return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
+            }
+            // XColumnsSupplier
+            virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > SAL_CALL getColumns(  ) throw(::com::sun::star::uno::RuntimeException);
+            // XKeysSupplier
+            virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess > SAL_CALL getKeys(  ) throw(::com::sun::star::uno::RuntimeException);
+            // XNamed
+            virtual ::rtl::OUString SAL_CALL getName() throw(::com::sun::star::uno::RuntimeException)
+            {
+                // this is only correct for tables who haven't a schema or catalog name
+                OSL_ENSHURE(!m_CatalogName.getLength(),"getName(): forgot to overload getName()!");
+                OSL_ENSHURE(!m_SchemaName.getLength(),"getName(): forgot to overload getName()!");
+                return m_Name;
+            }
+            virtual void SAL_CALL setName( const ::rtl::OUString& aName ) throw(::com::sun::star::uno::RuntimeException)
+            {}
             // XDataDescriptorFactory
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > SAL_CALL createDataDescriptor( void ) throw(::com::sun::star::uno::RuntimeException);
             // XIndexesSupplier

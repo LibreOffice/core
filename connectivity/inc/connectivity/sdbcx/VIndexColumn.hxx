@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VIndexColumn.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-30 07:21:14 $
+ *  last change: $Author: oj $ $Date: 2000-11-03 13:19:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,15 +71,16 @@ namespace connectivity
     namespace sdbcx
     {
         class OIndexColumn;
-        typedef ::comphelper::OPropertyArrayUsageHelper<OIndexColumn> OIndexColumn_PROP;
+        typedef ::comphelper::OIdPropertyArrayUsageHelper<OIndexColumn> OIndexColumn_PROP;
 
         class OIndexColumn :    public OColumn,
                                 public OIndexColumn_PROP
         {
         protected:
             sal_Bool    m_IsAscending;
-            DECLARE_CTY_PROPERTY(OIndexColumn_PROP,OColumn)
+            DECLARE_CTY_PROPERTY(OIndexColumn_PROP,OIndexColumn)
         public:
+            OIndexColumn(   sal_Bool _bCase);
             OIndexColumn(   sal_Bool _IsAscending,
                             const ::rtl::OUString& _Name,
                             const ::rtl::OUString& _TypeName,

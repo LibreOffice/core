@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VColumn.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-30 07:21:14 $
+ *  last change: $Author: oj $ $Date: 2000-11-03 13:19:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,8 +64,32 @@
 #ifndef _COM_SUN_STAR_SDBCX_XDATADESCRIPTORFACTORY_HPP_
 #include <com/sun/star/sdbcx/XDataDescriptorFactory.hpp>
 #endif
-#ifndef _CONNECTIVITY_SDBCX_COLUMNDECRIPTOR_HXX_
-#include "connectivity/sdbcx/VColumnDescriptor.hxx"
+//#ifndef _OSL_DIAGNOSE_H_
+//#include <osl/diagnose.h>
+//#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMED_HPP_
+#include <com/sun/star/container/XNamed.hpp>
+#endif
+#ifndef COMPHELPER_IDPROPERTYARRAYUSAGEHELPER_HXX
+#include <comphelper/IdPropArrayHelper.hxx>
+#endif
+#ifndef _CPPUHELPER_COMPBASE2_HXX_
+#include <cppuhelper/compbase2.hxx>
+#endif
+#ifndef _CPPUHELPER_IMPLBASE1_HXX_
+#include <cppuhelper/implbase1.hxx>
+#endif
+#ifndef _CONNECTIVITY_COMMONTOOLS_HXX_
+#include "connectivity/CommonTools.hxx"
+#endif
+#ifndef _COMPHELPER_BROADCASTHELPER_HXX_
+#include <comphelper/broadcasthelper.hxx>
+#endif
+#ifndef _CONNECTIVITY_SDBCX_DESCRIPTOR_HXX_
+#include "connectivity/sdbcx/VDescriptor.hxx"
+#endif
+#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
 
 namespace connectivity
@@ -73,34 +97,78 @@ namespace connectivity
     namespace sdbcx
     {
         class OColumn;
-        typedef ::comphelper::OPropertyArrayUsageHelper<OColumn> OColumn_PROP;
+        typedef ::comphelper::OIdPropertyArrayUsageHelper<OColumn> OColumn_PROP;
 
-        class OColumn : public OColumnDescriptor,
-                        public ::com::sun::star::sdbcx::XDataDescriptorFactory,
-                        public OColumn_PROP
+        typedef ::cppu::WeakComponentImplHelper2< ::com::sun::star::container::XNamed,
+                                                  ::com::sun::star::lang::XServiceInfo> OColumnDescriptor_BASE;
+        typedef ::cppu::ImplHelper1< ::com::sun::star::sdbcx::XDataDescriptorFactory > OColumn_BASE;
+
+
+        class OColumn            :  public comphelper::OBaseMutex,
+                                    public OColumn_BASE,
+                                    public OColumnDescriptor_BASE,
+                                    public OColumn_PROP,
+                                    public ODescriptor
         {
         protected:
+            ::rtl::OUString m_TypeName;
+            ::rtl::OUString m_Description;
+            ::rtl::OUString m_DefaultValue;
+
+            sal_Int32       m_IsNullable;
+            sal_Int32       m_Precision;
+            sal_Int32       m_Scale;
+            sal_Int32       m_Type;
+
+            sal_Bool        m_IsAutoIncrement;
+            sal_Bool        m_IsRowVersion;
+            sal_Bool        m_IsCurrency;
+
+            using OColumnDescriptor_BASE::rBHelper;
             DECLARE_CTY_PROPERTY(OColumn_PROP,OColumn)
         public:
-            OColumn(const ::rtl::OUString& _Name,
-                    const ::rtl::OUString& _TypeName,
-                    const ::rtl::OUString& _DefaultValue,
-                    sal_Int32       _IsNullable,
-                    sal_Int32       _Precision,
-                    sal_Int32       _Scale,
-                    sal_Int32       _Type,
-                    sal_Bool        _IsAutoIncrement,
-                    sal_Bool        _IsRowVersion,
-                    sal_Bool        _IsCurrency,
-                    sal_Bool        _bCase);
-            ~OColumn();
+            virtual void    SAL_CALL acquire() throw(::com::sun::star::uno::RuntimeException);
+            virtual void    SAL_CALL release() throw(::com::sun::star::uno::RuntimeException);
 
-            DECLARE_CTY_DEFAULTS(OColumnDescriptor);
+            OColumn(    sal_Bool _bCase);
+            OColumn(    const ::rtl::OUString& _Name,
+                                const ::rtl::OUString& _TypeName,
+                                const ::rtl::OUString& _DefaultValue,
+                                sal_Int32       _IsNullable,
+                                sal_Int32       _Precision,
+                                sal_Int32       _Scale,
+                                sal_Int32       _Type,
+                                sal_Bool        _IsAutoIncrement,
+                                sal_Bool        _IsRowVersion,
+                                sal_Bool        _IsCurrency,
+                                sal_Bool        _bCase);
+
+            virtual ~OColumn();
+
             DECLARE_SERVICE_INFO();
             //XInterface
             virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
             //XTypeProvider
             virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException);
+            // ODescriptor
+            virtual void construct();
+            // ::cppu::OComponentHelper
+            virtual void SAL_CALL disposing(void);
+            // XPropertySet
+            virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException)
+            {
+                return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
+            }
+
+            // XNamed
+            virtual ::rtl::OUString SAL_CALL getName(  ) throw(::com::sun::star::uno::RuntimeException)
+            {
+                return m_Name;
+            }
+            virtual void SAL_CALL setName( const ::rtl::OUString& aName ) throw(::com::sun::star::uno::RuntimeException)
+            {
+                m_Name = aName;
+            }
             // XDataDescriptorFactory
             virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > SAL_CALL createDataDescriptor(  ) throw(::com::sun::star::uno::RuntimeException);
         };

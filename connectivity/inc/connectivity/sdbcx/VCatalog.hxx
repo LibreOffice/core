@@ -2,9 +2,9 @@
  *
  *  $RCSfile: VCatalog.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-09 12:09:06 $
+ *  last change: $Author: oj $ $Date: 2000-11-03 13:19:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,30 +90,6 @@
 #ifndef _CONNECTIVITY_COMMONTOOLS_HXX_
 #include "connectivity/CommonTools.hxx"
 #endif
-#ifndef _CONNECTIVITY_SDBCX_COLLECTION_HXX_
-#include "connectivity/sdbcx/VCollection.hxx"
-#endif
-#ifndef _CONNECTIVITY_SDBCX_TABLE_HXX_
-#include "connectivity/sdbcx/VTable.hxx"
-#endif
-#ifndef _CONNECTIVITY_SDBCX_VIEW_HXX_
-#include "connectivity/sdbcx/VView.hxx"
-#endif
-#ifndef _CONNECTIVITY_SDBCX_GROUP_HXX_
-#include "connectivity/sdbcx/VGroup.hxx"
-#endif
-#ifndef _CONNECTIVITY_SDBCX_USER_HXX_
-#include "connectivity/sdbcx/VUser.hxx"
-#endif
-#ifndef _CONNECTIVITY_SDBCX_COLUMN_HXX_
-#include "connectivity/sdbcx/VColumn.hxx"
-#endif
-#ifndef _CONNECTIVITY_SDBCX_KEY_HXX_
-#include "connectivity/sdbcx/VKey.hxx"
-#endif
-#ifndef _CONNECTIVITY_SDBCX_INDEX_HXX_
-#include "connectivity/sdbcx/VIndex.hxx"
-#endif
 #ifndef _CONNECTIVITY_OSUBCOMPONENT_HXX_
 #include "OSubComponent.hxx"
 #endif
@@ -126,6 +102,7 @@ namespace connectivity
     namespace sdbcx
     {
 
+        class OCollection;
         // OCatalog is a general catalog class
         // other drivers can be derived their catalog from this class when they want to support sdbcx
         // it holds already tables, views, groups and users
