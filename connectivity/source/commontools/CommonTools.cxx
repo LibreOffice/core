@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CommonTools.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-23 09:15:42 $
+ *  last change: $Author: oj $ $Date: 2001-10-18 13:16:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -308,11 +308,8 @@ sal_Bool isValidSQLName(const ::rtl::OUString& rName,const ::rtl::OUString& _rSp
 sal_Bool isCharOk(char c,const ::rtl::OUString& _rSpecials)
 {
 
-    if ( ((c >= 97) && (c <= 122)) || ((c >= 65) && (c <=  90)) || ((c >= 48) && (c <=  57)) ||
-          c == '_' || _rSpecials.indexOf(c) != -1)
-          return sal_True;
-    else
-        return sal_False;
+    return ( ((c >= 97) && (c <= 122)) || ((c >= 65) && (c <=  90)) || ((c >= 48) && (c <=  57)) ||
+          c == '_' || _rSpecials.indexOf(c) != -1);
 }
 //------------------------------------------------------------------
 // Erzeugt einen neuen Namen falls noetig
@@ -322,10 +319,14 @@ sal_Bool isCharOk(char c,const ::rtl::OUString& _rSpecials)
         return rName;
     ::rtl::OUString aNewName(rName);
     const sal_Unicode* pStr = rName.getStr();
+    sal_Int32 nLength = rName.getLength();
     sal_Bool bValid(!isdigit(*pStr));
-    for (; bValid && *pStr; pStr++ )
+    for (sal_Int32 i=0; bValid && i < nLength; ++pStr,++i )
         if(!isCharOk(*pStr,_rSpecials))
-            aNewName.replace(*pStr,'_');
+        {
+            aNewName = aNewName.replace(*pStr,'_');
+            pStr = aNewName.getStr() + i;
+        }
 
     return aNewName;
 }
