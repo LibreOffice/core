@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servicemanager.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dbo $ $Date: 2001-05-10 14:38:04 $
+ *  last change: $Author: pl $ $Date: 2001-05-11 11:34:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,21 +135,21 @@ namespace stoc_smgr
 *****************************************************************************/
 OUString Point2Slash(const OUString& s)
 {
-    static OUString slash( RTL_CONSTASCII_USTRINGPARAM("/") );
+    OUStringBuffer ret;
 
-    OUString ret;
-
-    sal_Int32 tokenCount = s.getTokenCount(L'.');
-
-    for (sal_Int32 i = 0; i < tokenCount; i++)
+    sal_Int32 nIndex = 0;
+    do
     {
-        OUString token = s.getToken(i, L'.');
+        OUString token( s.getToken(0, '.', nIndex) );
 
-        if (token.len())
-            ret = ret + slash + token;
-    }
+        if (token.getLength())
+        {
+            ret.append( (sal_Unicode)'/' );
+            ret.append( token );
+        }
+    } while( nIndex != -1 );
 
-    return ret;
+    return ret.makeStringAndClear();
 }
 
 /*****************************************************************************
@@ -838,7 +838,7 @@ void OServiceManager::insert( const Any & Element )
     if( xInfo.is() )
     {
         OUString aImplName = xInfo->getImplementationName();
-        if( aImplName.len() )
+        if( aImplName.getLength() )
             m_ImplementationNameMap[ aImplName ] = xEle;
     }
 
@@ -902,7 +902,7 @@ void OServiceManager::remove( const Any & Element )
     if( xInfo.is() )
     {
         OUString aImplName = xInfo->getImplementationName();
-        if( aImplName.len() )
+        if( aImplName.getLength() )
             m_ImplementationNameMap.erase( aImplName );
     }
 
@@ -1190,7 +1190,7 @@ void ORegistryServiceManager::fillAllNamesFromRegistry( HashSet_OWString & rSet 
         // root + /Services + /
         if( xServicesKey.is() )
         {
-            sal_Int32 nPrefix = xServicesKey->getKeyName().len() +1;
+            sal_Int32 nPrefix = xServicesKey->getKeyName().getLength() +1;
             Sequence<Reference<XRegistryKey > > aKeys = xServicesKey->openKeys();
             for( sal_Int32 i = 0; i < aKeys.getLength(); i++ )
                 rSet.insert( aKeys.getConstArray()[i]->getKeyName().copy( nPrefix ) );

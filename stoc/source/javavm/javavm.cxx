@@ -2,9 +2,9 @@
  *
  *  $RCSfile: javavm.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kr $ $Date: 2001-05-09 09:35:40 $
+ *  last change: $Author: pl $ $Date: 2001-05-11 11:37:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -466,7 +466,7 @@ namespace stoc_javavm {
         for(sal_Int32 i=0; i < nCount; ++ i) {
             OUString entryValue = (xJavaSection->openKey(pSectionEntry[i]))->getStringValue();
 
-            if(entryValue.len()) {
+            if(entryValue.getLength()) {
                 pSectionEntry[i] += OUString(RTL_CONSTASCII_USTRINGPARAM("="));
                 pSectionEntry[i] += entryValue;
             }

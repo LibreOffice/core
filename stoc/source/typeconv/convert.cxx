@@ -2,9 +2,9 @@
  *
  *  $RCSfile: convert.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dbo $ $Date: 2001-03-19 12:04:36 $
+ *  last change: $Author: pl $ $Date: 2001-05-11 11:33:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -657,7 +657,7 @@ Any SAL_CALL TypeConverter_Impl::convertTo( const Any& rVal, const Type& aDestTy
         {
             for ( nPos = ((typelib_EnumTypeDescription *)aEnumTD.get())->nEnumValues; nPos--; )
             {
-                if (((const OUString *)rVal.getValue())->equalsIgnoreCase( ((typelib_EnumTypeDescription *)aEnumTD.get())->ppEnumNames[nPos] ))
+                if (((const OUString *)rVal.getValue())->equalsIgnoreAsciiCase( ((typelib_EnumTypeDescription *)aEnumTD.get())->ppEnumNames[nPos] ))
                     break;
             }
         }
@@ -762,13 +762,13 @@ Any TypeConverter_Impl::convertToSimpleType( const Any& rVal, TypeClass aDestina
         {
             const OUString & aStr = *(const OUString *)rVal.getValue();
             if (aStr.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("0") ) ||
-                aStr.equalsIgnoreCase( OUString( RTL_CONSTASCII_USTRINGPARAM("false") ) ))
+                aStr.equalsIgnoreAsciiCase( OUString( RTL_CONSTASCII_USTRINGPARAM("false") ) ))
             {
                 sal_Bool bFalse = sal_False;
                 aRet.setValue( &bFalse, getCppuBooleanType() );
             }
             else if (aStr.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("1") ) ||
-                     aStr.equalsIgnoreCase( OUString( RTL_CONSTASCII_USTRINGPARAM("true") ) ))
+                     aStr.equalsIgnoreAsciiCase( OUString( RTL_CONSTASCII_USTRINGPARAM("true") ) ))
             {
                 sal_Bool bTrue = sal_True;
                 aRet.setValue( &bTrue, getCppuBooleanType() );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implreg.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jsc $ $Date: 2001-04-02 14:06:21 $
+ *  last change: $Author: pl $ $Date: 2001-05-11 11:30:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,7 +228,7 @@ static void deleteAllLinkReferences(const Reference < XSimpleRegistry >& xReg,
 
                     aLinkParent = aLinkName.copy(0, sEnd);
 
-                    while(aLinkParent.len())
+                    while(aLinkParent.getLength())
                     {
                         xLinkParent = xReg->getRootKey()->openKey(aLinkParent);
 
@@ -530,7 +530,7 @@ static sal_Bool prepareUserLink(const Reference < XSimpleRegistry >& xDest,
         {
             OUString oldImplName(searchImplForLink(xRootKey, linkName, implName));
 
-            if (oldImplName.len())
+            if (oldImplName.getLength())
             {
                 createUniqueSubEntry(xDest->getRootKey()->createKey(
                     linkName + OUString( RTL_CONSTASCII_USTRINGPARAM(":old") ) ), oldImplName);
@@ -571,9 +571,9 @@ static void deletePathIfPossible(const Reference < XRegistryKey >& xRootKey,
             xRootKey->deleteKey(path);
 
             OUString tmpPath(path);
-            OUString newPath = tmpPath.copy(0, tmpPath.lastIndexOf('/')).getStr();
+            OUString newPath = tmpPath.copy(0, tmpPath.lastIndexOf('/'));
 
-            if (newPath.len() > 1)
+            if (newPath.getLength() > 1)
                 deletePathIfPossible(xRootKey, newPath);
         }
     }
@@ -663,7 +663,7 @@ static sal_Bool deleteUserLink(const Reference < XRegistryKey >& xRootKey,
                     }
 
                     OUString oldTarget = searchLinkTargetForImpl(xRootKey, linkName, oldImpl);
-                    if (oldTarget.len())
+                    if (oldTarget.getLength())
                     {
                         xRootKey->createLink(linkName, oldTarget);
                     }
@@ -685,7 +685,7 @@ static sal_Bool deleteUserLink(const Reference < XRegistryKey >& xRootKey,
         if (bClean)
         {
             OUString tmpName(linkName);
-            OUString path = tmpName.copy(0, tmpName.lastIndexOf('/')).getStr();
+            OUString path = tmpName.copy(0, tmpName.lastIndexOf('/'));
             deletePathIfPossible(xRootKey, path);
         }
     }
@@ -714,7 +714,7 @@ static sal_Bool prepareUserKeys(const Reference < XSimpleRegistry >& xDest,
 
         OUString relativKey;
         if (keyNames.getLength())
-            relativKey = keyNames.getConstArray()[0].copy(xKey->getKeyName().len()+1);
+            relativKey = keyNames.getConstArray()[0].copy(xKey->getKeyName().getLength()+1);
 
         if (keyNames.getLength() == 1 &&
             xKey->getKeyType(relativKey) == RegistryKeyType_LINK)
@@ -722,7 +722,7 @@ static sal_Bool prepareUserKeys(const Reference < XSimpleRegistry >& xDest,
             hasSubKeys = sal_True;
 
             OUString linkTarget = xKey->getLinkTarget(relativKey);
-            OUString linkName(xKey->getKeyName().copy(xUnoKey->getKeyName().len()));
+            OUString linkName(xKey->getKeyName().copy(xUnoKey->getKeyName().getLength()));
 
             linkName = linkName + OUString( RTL_CONSTASCII_USTRINGPARAM("/") ) + relativKey;
 
@@ -760,7 +760,7 @@ static sal_Bool prepareUserKeys(const Reference < XSimpleRegistry >& xDest,
             return ret;
         }
 
-        OUString keyName(xKey->getKeyName().copy(xUnoKey->getKeyName().len()));
+        OUString keyName(xKey->getKeyName().copy(xUnoKey->getKeyName().getLength()));
 
         Reference < XRegistryKey > xRootKey = xDest->getRootKey();
         if (bRegister)
@@ -773,7 +773,7 @@ static sal_Bool prepareUserKeys(const Reference < XSimpleRegistry >& xDest,
                 xRootKey->deleteKey(keyName);
 
                 OUString tmpName(keyName);
-                OUString path = tmpName.copy(0, tmpName.lastIndexOf('/')).getStr();
+                OUString path = tmpName.copy(0, tmpName.lastIndexOf('/'));
                 deletePathIfPossible(xRootKey, path);
             }
         }
@@ -816,7 +816,7 @@ static void deleteAllImplementations(   const Reference < XSimpleRegistry >& xRe
                         hasLocationUrl = sal_True;
 
                         OUString implName(xImplKey->getKeyName().getStr() + 1);
-                        sal_Int32 firstDot = implName.search(L'/');
+                        sal_Int32 firstDot = implName.indexOf('/');
 
                         if (firstDot >= 0)
                             implName = implName.copy(firstDot + 1);
@@ -997,12 +997,12 @@ static sal_Bool prepareRegistry(const Reference < XSimpleRegistry >& xDest,
                     const Reference < XRegistryKey > * pServiceKeys = serviceKeys.getConstArray();
 
                     implName = OUString(xImplKey->getKeyName().getStr() + 1);
-                    sal_Int32 firstDot = implName.search(L'/');
+                    sal_Int32 firstDot = implName.indexOf('/');
 
                     if (firstDot >= 0)
                         implName = implName.copy(firstDot + 1);
 
-                    sal_Int32 offset = xKey->getKeyName().len() + 1;
+                    sal_Int32 offset = xKey->getKeyName().getLength() + 1;
 
                     for (sal_Int32 i = 0; i < serviceKeys.getLength(); i++)
                     {
@@ -1102,8 +1102,8 @@ static void findImplementations(    const Reference < XRegistryKey > & xSource,
         {
             isImplKey = sal_True;
 
-            OUString implName = OUString(xSource->getKeyName().getStr() + 1).replace(L'/', L'.').getStr();
-            sal_Int32 firstDot = implName.search(L'.');
+            OUString implName = OUString(xSource->getKeyName().getStr() + 1).replace('/', '.').getStr();
+            sal_Int32 firstDot = implName.indexOf('.');
 
             if (firstDot >= 0)
                 implName = implName.copy(firstDot + 1);
@@ -1353,10 +1353,11 @@ void ImplementationRegistration::registerImplementation(
     OUString implLoaderUrl(implementationLoaderUrl);
     OUString activatorName;
 
-    if (implementationLoaderUrl.len() > 0)
+    if (implementationLoaderUrl.getLength() > 0)
     {
-        OUString tmpActivator(implementationLoaderUrl.getStr());
-        activatorName = tmpActivator.getToken(0, L':').getStr();
+        OUString tmpActivator(implementationLoaderUrl);
+        sal_Int32 nIndex = 0;
+        activatorName = tmpActivator.getToken(0, ':', nIndex );
     } else
     {
         // check locationUrl to find out what kind of loader is needed
@@ -1442,10 +1443,11 @@ Sequence< OUString > ImplementationRegistration::getImplementations(
     OUString implLoaderUrl(implementationLoaderUrl);
     OUString activatorName;
 
-    if (implementationLoaderUrl.len() > 0)
+    if (implementationLoaderUrl.getLength() > 0)
     {
-        OUString tmpActivator(implementationLoaderUrl.getStr());
-        activatorName = tmpActivator.getToken(0, L':').getStr();
+        OUString tmpActivator(implementationLoaderUrl);
+        sal_Int32 nIndex = 0;
+        activatorName = tmpActivator.getToken(0, ':', nIndex );
     } else
     {
         // check locationUrl to find out what kind of loader is needed

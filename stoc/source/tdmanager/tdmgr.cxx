@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tdmgr.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dbo $ $Date: 2001-05-10 14:35:25 $
+ *  last change: $Author: pl $ $Date: 2001-05-11 11:31:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -743,7 +743,9 @@ Any ManagerImpl::getByHierarchicalName( const OUString & rName )
         }
         else if (rName[rName.getLength()-1] == ']') // test for array
         {
-            sal_Int32 nDims = rName.getTokenCount('[') - 1;
+            sal_Int32 nIndex = 0, nTokens = 0;
+            do { rName.getToken( 0, '[', nIndex ); nTokens++; } while( nIndex != -1 );
+            sal_Int32 nDims = nTokens - 1;
             sal_Int32 dimOffset = rName.indexOf('[');
             Reference< XTypeDescription > xElemType;
             if (getByHierarchicalName( rName.copy( 0, dimOffset ) ) >>= xElemType)
