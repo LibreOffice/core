@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforscan.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: er $ $Date: 2002-10-29 18:20:14 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 19:33:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,8 +70,8 @@
 #ifndef _LANG_HXX //autogen
 #include <tools/lang.hxx>
 #endif
-#ifndef _COLOR_HXX //autogen
-#include <vcl/color.hxx>
+#ifndef _TOOLS_COLOR_HXX
+#include <tools/color.hxx>
 #endif
 
 #ifndef INCLUDED_SVTOOLS_NFKEYTAB_HXX
