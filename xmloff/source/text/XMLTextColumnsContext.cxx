@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTextColumnsContext.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-15 17:13:32 $
+ *  last change: $Author: dvo $ $Date: 2001-06-21 17:03:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -297,7 +297,7 @@ XMLTextColumnSepContext_Impl::XMLTextColumnSepContext_Impl(
                 Color aColor;
                 if( GetImport().GetMM100UnitConverter().
                                             convertColor( aColor, rValue ) )
-                    nColor = nVal;
+                    nColor = (sal_Int32)aColor.GetColor();
             }
             break;
         case XML_TOK_COLUMN_SEP_ALIGN:
