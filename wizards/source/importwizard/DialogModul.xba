@@ -369,6 +369,39 @@ Sub	SetupMSConfiguration()
 End Sub
 
 
+
+&apos; This is an extract from &quot;http://util.openoffice.org/source/browse/util/sot/source/base/exchange.cxx?rev=1.25&amp;content-type=text/x-cvsweb-markup&quot;
+&apos; about the listed defined mimetypes that are required to define binary StarOffice templates that have for all applications the same extension &quot;.vor&quot;
+
+&apos; 26 SOT_FORMATSTR_ID_STARWRITER_30*/			{ &quot;application/x-openoffice-starwriter-30;windows_formatname=\&quot;StarWriter 3.0\&quot;&quot;, &quot;StarWriter 3.0&quot;, &amp;::getCppuType( (const Sequence&lt; sal_Int8 &gt;*) 0 ) },
+&apos; 27 SOT_FORMATSTR_ID_STARWRITER_40*/			{ &quot;application/x-openoffice-starwriter-40;windows_formatname=\&quot;StarWriter 4.0\&quot;&quot;, &quot;StarWriter 4.0&quot;, &amp;::getCppuType( (const Sequence&lt; sal_Int8 &gt;*) 0 ) },
+&apos; 28 SOT_FORMATSTR_ID_STARWRITER_50*/			{ &quot;application/x-openoffice-starwriter-50;windows_formatname=\&quot;StarWriter 5.0\&quot;&quot;, &quot;StarWriter 5.0&quot;, &amp;::getCppuType( (const Sequence&lt; sal_Int8 &gt;*) 0 ) },
+
+&apos; 29 SOT_FORMATSTR_ID_STARWRITERWEB_40*/		{ &quot;application/x-openoffice-starwriterweb-40;windows_formatname=\&quot;StarWriter/Web 4.0\&quot;&quot;, &quot;StarWriter/Web 4.0&quot;, &amp;::getCppuType( (const Sequence&lt; sal_Int8 &gt;*) 0 ) },
+&apos; 30 SOT_FORMATSTR_ID_STARWRITERWEB_50*/		{ &quot;application/x-openoffice-starwriterweb-50;windows_formatname=\&quot;StarWriter/Web 5.0\&quot;&quot;, &quot;StarWriter/Web 5.0&quot;, &amp;::getCppuType( (const Sequence&lt; sal_Int8 &gt;*) 0 ) },
+
+&apos; 31 SOT_FORMATSTR_ID_STARWRITERGLOB_40*/		{ &quot;application/x-openoffice-starwriterglob-40;windows_formatname=\&quot;StarWriter/Global 4.0\&quot;&quot;, &quot;StarWriter/Global 4.0&quot;, &amp;::getCppuType( (const Sequence&lt; sal_Int8 &gt;*) 0 ) },
+&apos; 32 SOT_FORMATSTR_ID_STARWRITERGLOB_50*/		{ &quot;application/x-openoffice-starwriterglob-50;windows_formatname=\&quot;StarWriter/Global 5.0\&quot;&quot;, &quot;StarWriter/Global 5.0&quot;, &amp;::getCppuType( (const Sequence&lt; sal_Int8 &gt;*) 0 ) },
+
+&apos; 33 SOT_FORMATSTR_ID_STARDRAW*/				{ &quot;application/x-openoffice-stardraw;windows_formatname=\&quot;StarDrawDocument\&quot;&quot;, &quot;StarDrawDocument&quot;, &amp;::getCppuType( (const Sequence&lt; sal_Int8 &gt;*) 0 ) },
+&apos; 34 SOT_FORMATSTR_ID_STARDRAW_40*/				{ &quot;application/x-openoffice-stardraw-40;windows_formatname=\&quot;StarDrawDocument 4.0\&quot;&quot;, &quot;StarDrawDocument 4.0&quot;, &amp;::getCppuType( (const Sequence&lt; sal_Int8 &gt;*) 0 ) },
+&apos; 36 SOT_FORMATSTR_ID_STARDRAW_50*/				{ &quot;application/x-openoffice-stardraw-50;windows_formatname=\&quot;StarDraw 5.0\&quot;&quot;, &quot;StarDraw 5.0&quot;, &amp;::getCppuType( (const Sequence&lt; sal_Int8 &gt;*) 0 ) },
+
+&apos; 35 SOT_FORMATSTR_ID_STARIMPRESS_50*/			{ &quot;application/x-openoffice-starimpress-50;windows_formatname=\&quot;StarImpress 5.0\&quot;&quot;, &quot;StarImpress 5.0&quot;, &amp;::getCppuType( (const Sequence&lt; sal_Int8 &gt;*) 0 ) },
+
+&apos; 37 SOT_FORMATSTR_ID_STARCALC*/				{ &quot;application/x-openoffice-starcalc;windows_formatname=\&quot;StarCalcDocument\&quot;&quot;, &quot;StarCalcDocument&quot;, &amp;::getCppuType( (const Sequence&lt; sal_Int8 &gt;*) 0 ) },
+&apos; 38 SOT_FORMATSTR_ID_STARCALC_40*/				{ &quot;application/x-openoffice-starcalc-40;windows_formatname=\&quot;StarCalc 4.0\&quot;&quot;, &quot;StarCalc 4.0&quot;, &amp;::getCppuType( (const Sequence&lt; sal_Int8 &gt;*) 0 ) },
+&apos; 39 SOT_FORMATSTR_ID_STARCALC_50*/				{ &quot;application/x-openoffice-starcalc-50;windows_formatname=\&quot;StarCalc 5.0\&quot;&quot;, &quot;StarCalc 5.0&quot;, &amp;::getCppuType( (const Sequence&lt; sal_Int8 &gt;*) 0 ) },
+
+&apos; 40 SOT_FORMATSTR_ID_STARCHART*/				{ &quot;application/x-openoffice-starchart;windows_formatname=\&quot;StarChartDocument\&quot;&quot;, &quot;StarChartDocument&quot;, &amp;::getCppuType( (const Sequence&lt; sal_Int8 &gt;*) 0 ) },
+&apos; 41 SOT_FORMATSTR_ID_STARCHART_40*/			{ &quot;application/x-openoffice-starchart-40;windows_formatname=\&quot;StarChartDocument 4.0\&quot;&quot;, &quot;StarChartDocument 4.0&quot;, &amp;::getCppuType( (const Sequence&lt; sal_Int8 &gt;*) 0 ) },
+&apos; 42 SOT_FORMATSTR_ID_STARCHART_50*/			{ &quot;application/x-openoffice-starchart-50;windows_formatname=\&quot;StarChart 5.0\&quot;&quot;, &quot;StarChart 5.0&quot;, &amp;::getCppuType( (const Sequence&lt; sal_Int8 &gt;*) 0 ) },
+
+&apos; 46 SOT_FORMATSTR_ID_STARMATH*/				{ &quot;application/x-openoffice-starmath;windows_formatname=\&quot;StarMath\&quot;&quot;, &quot;StarMath&quot;, &amp;::getCppuType( (const Sequence&lt; sal_Int8 &gt;*) 0 ) },
+&apos; 47 SOT_FORMATSTR_ID_STARMATH_40*/				{ &quot;application/x-openoffice-starmath-40;windows_formatname=\&quot;StarMathDocument 4.0\&quot;&quot;, &quot;StarMathDocument 4.0&quot;, &amp;::getCppuType( (const Sequence&lt; sal_Int8 &gt;*) 0 ) },
+&apos; 48 SOT_FORMATSTR_ID_STARMATH_50*/				{ &quot;application/x-openoffice-starmath-50;windows_formatname=\&quot;StarMath 5.0\&quot;&quot;, &quot;StarMath 5.0&quot;, &amp;::getCppuType( (const Sequence&lt; sal_Int8 &gt;*) 0 ) },
+
+
 Sub SetupXMLConfiguration()
 	iApplSection = 1000
 	Wizardmode = SBXMLMODE
@@ -391,15 +424,15 @@ Sub SetupXMLConfiguration()
 	XMLFilterName(3,1) = &quot;StarOffice XML (Math)&quot;
 	XMLFilterName(3,2) = &quot;sxm&quot;
 
-	XMLFilterName(4,0) = &quot;application/vnd.stardivision.writer;application/x-starwriter|application/vnd.stardivision.writer/web&quot;
+	XMLFilterName(4,0) = &quot;application/x-openoffice-starwriter|application/vnd.stardivision.writer/web&quot;
 	XMLFilterName(4,1) = &quot;writer_StarOffice_XML_Writer_Template|writer_web_StarOffice_XML_Writer_Web_Template&quot;
 	XMLFilterName(4,2) = &quot;stw|stw&quot;
 
-	XMLFilterName(5,0) = &quot;application/vnd.stardivision.calc;application/x-starcalc&quot;
+	XMLFilterName(5,0) = &quot;application/x-openoffice-starcalc&quot;
 	XMLFilterName(5,1) = &quot;calc_StarOffice_XML_Calc_Template&quot;
 	XMLFilterName(5,2) = &quot;stc&quot;
 
-	XMLFilterName(6,0) = &quot;application/vnd.stardivision.impress;application/x-starimpress|application/vnd.stardivision.draw;application/x-stardraw&quot;
+	XMLFilterName(6,0) = &quot;application/x-openoffice-starimpress|application/x-openoffice-stardraw&quot;
 	XMLFilterName(6,1) = &quot;impress_StarOffice_XML_Impress_Template|draw_StarOffice_XML_Draw_Template&quot;
 	XMLFilterName(6,2) = &quot;sti|std&quot;
 
