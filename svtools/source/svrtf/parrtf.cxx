@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parrtf.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 15:12:00 $
+ *  last change: $Author: obo $ $Date: 2004-01-13 17:46:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -659,16 +659,12 @@ NEXTTOKEN:
 
 void SvRTFParser::SetEncoding( rtl_TextEncoding eEnc )
 {
-    switch( eEnc )
-    {
-    case RTL_TEXTENCODING_DONTKNOW:
-    case RTL_TEXTENCODING_SYMBOL:
+    if (eEnc == RTL_TEXTENCODING_DONTKNOW)
         eEnc = GetCodeSet();
-        break;
-    }
-    if( aParserStates.Count() )
-        aParserStates[ aParserStates.Count() - 1 ].eCodeSet = eEnc;
-    SetSrcEncoding( eEnc );
+
+    if (aParserStates.Count())
+        aParserStates[aParserStates.Count() - 1].eCodeSet = eEnc;
+    SetSrcEncoding(eEnc);
 }
 
 #ifdef USED
