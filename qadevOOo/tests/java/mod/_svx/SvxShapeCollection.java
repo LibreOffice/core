@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SvxShapeCollection.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change:$Date: 2003-01-27 18:18:09 $
+ *  last change:$Date: 2003-05-27 13:36:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,7 @@ package mod._svx;
 import com.sun.star.drawing.XShape;
 import com.sun.star.drawing.XShapes;
 import com.sun.star.lang.XComponent;
+import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import java.io.PrintWriter;
@@ -95,7 +96,7 @@ public class SvxShapeCollection extends TestCase {
 
         try {
             log.println( "creating a drawdoc" );
-            xDrawDoc = DrawTools.createDrawDoc(tParam.getMSF());
+            xDrawDoc = DrawTools.createDrawDoc((XMultiServiceFactory)tParam.getMSF());
         } catch ( Exception e ) {
             // Some exception occures.FAILED
             e.printStackTrace( log );
@@ -143,8 +144,8 @@ public class SvxShapeCollection extends TestCase {
 
         try {
             // adding some shapes for testing.
-            SOfficeFactory SOF = SOfficeFactory.getFactory( tParam.getMSF());
-            Object col = tParam.getMSF().createInstance
+            SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)tParam.getMSF());
+            Object col = ((XMultiServiceFactory)tParam.getMSF()).createInstance
                 ("com.sun.star.drawing.ShapeCollection");
             XShapes shapes = (XShapes) UnoRuntime.queryInterface
                 (XShapes.class,col);
