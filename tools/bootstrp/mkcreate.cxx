@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mkcreate.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mh $ $Date: 2001-03-16 09:43:22 $
+ *  last change: $Author: nf $ $Date: 2001-04-20 11:53:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -800,9 +800,9 @@ BOOL SourceDirectory::CreateRecursiveMakefile( BOOL bAllChilds )
         "#\n"
         "#   $RCSfile: mkcreate.cxx,v $\n"
         "#\n"
-        "#   $Revision: 1.6 $\n"
+        "#   $Revision: 1.7 $\n"
         "#\n"
-        "#   last change: $Author: mh $ $Date: 2001-03-16 09:43:22 $\n"
+        "#   last change: $Author: nf $ $Date: 2001-04-20 11:53:35 $\n"
         "#\n"
         "#   The Contents of this file are made available subject to the terms of\n"
         "#   either of the following licenses\n"
@@ -960,7 +960,7 @@ BOOL SourceDirectory::CreateRecursiveMakefile( BOOL bAllChilds )
             "# project dependencies\n"
             "# \n\n"
             "TG_DELIVER : $(RC_SUBDIRS)\n"
-            "\tdeliver\n"
+            "\t$(DELIVER)\n"
         );
         aMakefile.WriteLine( sDeliverTarget );
     }
