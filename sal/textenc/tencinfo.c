@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tencinfo.c,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: hr $ $Date: 2003-08-07 14:59:01 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 11:42:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,7 +86,8 @@
 sal_Bool SAL_CALL rtl_isOctetTextEncoding(rtl_TextEncoding nEncoding)
 {
     return nEncoding > RTL_TEXTENCODING_DONTKNOW
-           && nEncoding <= RTL_TEXTENCODING_JAVA_UTF8 /* always update this! */
+           && nEncoding <= RTL_TEXTENCODING_ADOBE_SYMBOL
+               /* always update this! */
            && nEncoding != 9; /* RTL_TEXTENCODING_SYSTEM */
 }
 
@@ -794,7 +795,7 @@ rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromMimeCharset( const sal_Char* pM
         { "ansix34", RTL_TEXTENCODING_ASCII_US },
         { "ibm367", RTL_TEXTENCODING_ASCII_US },
         { "cp367", RTL_TEXTENCODING_ASCII_US },
-        { "csASCII", RTL_TEXTENCODING_ASCII_US },
+        { "csascii", RTL_TEXTENCODING_ASCII_US },
         { "ibm775", RTL_TEXTENCODING_IBM_775 },
         { "cp775", RTL_TEXTENCODING_IBM_775 },
         { "cspc775baltic", RTL_TEXTENCODING_IBM_775 },
@@ -916,6 +917,10 @@ rtl_TextEncoding SAL_CALL rtl_getTextEncodingFromMimeCharset( const sal_Char* pM
                this character set identifier seems to be prominently used by MS
                to stand for KS C 5601 plus MS-949 extensions */
         { "latin9", RTL_TEXTENCODING_ISO_8859_15 },
+        { "adobestandardencoding", RTL_TEXTENCODING_ADOBE_STANDARD },
+        { "csadobestandardencoding", RTL_TEXTENCODING_ADOBE_STANDARD },
+        { "adobesymbolencoding", RTL_TEXTENCODING_ADOBE_SYMBOL },
+        { "cshppsmath", RTL_TEXTENCODING_ADOBE_SYMBOL },
         { NULL, RTL_TEXTENCODING_DONTKNOW }
     };
 
