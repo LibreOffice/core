@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: rt $ $Date: 2003-09-19 08:25:21 $
+#   last change: $Author: obo $ $Date: 2003-10-21 08:51:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -117,7 +117,11 @@ SLO1FILES =  \
         $(SLO)$/unoguard.obj \
         $(SLO)$/confuno.obj \
         $(SLO)$/filtuno.obj \
-        $(SLO)$/unodoc.obj
+        $(SLO)$/unodoc.obj \
+        $(SLO)$/addruno.obj \
+        $(SLO)$/listenercalls.obj \
+        $(SLO)$/cellvaluebinding.obj \
+        $(SLO)$/celllistsource.obj
 
 SLO2FILES = \
     $(SLO)$/scdetect.obj								\
