@@ -2,9 +2,9 @@
  *
  *  $RCSfile: selglos.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-15 21:59:57 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 21:57:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,7 +115,7 @@ ModalDialog DLG_SEL_GLOS
         Text [ norwegian ] = "Entries for Short Name " ;
         Text [ italian ] = "Testo automatico per la sigla " ;
         Text [ portuguese_brazilian ] = "Entadas para Abrevia??s " ;
-        Text [ portuguese ] = "AutoTexto para abreviatura  " ;
+        Text [ portuguese ] = "AutoTexto para abreviatura" ;
         Text [ finnish ] = "Automaattiset tekstit pikavalinnalle " ;
         Text [ danish ] = "AutoTekst til genvej " ;
         Text [ french ] = "AutoTextes pour raccourci " ;
@@ -155,6 +155,7 @@ ModalDialog DLG_SEL_GLOS
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Insertar AutoTexto";
 };
+
 
 
 
