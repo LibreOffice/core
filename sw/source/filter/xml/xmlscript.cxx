@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlscript.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: ab $ $Date: 2000-11-28 11:41:25 $
+ *  last change: $Author: ab $ $Date: 2000-12-05 09:34:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -110,31 +110,6 @@ using namespace ::com::sun::star::uno;
 
 // ---------------------------------------------------------------------
 
-/*
-#if 0
-class SwXMLMetaContext_Impl : public SfxXMLMetaContext
-{
-public:
-    SwXMLMetaContext_Impl( SwXMLImport& rImport, sal_uInt16 nPrfx,
-            const OUString& rLName,
-            const Reference< document::XDocumentInfo > & rInfo ) :
-        SfxXMLMetaContext( rImport, nPrfx, rLName, rInfo )
-    {}
-
-    virtual void SetDocLanguage( LanguageType eLang );
-};
-
-void SwXMLMetaContext_Impl::SetDocLanguage( LanguageType eLang )
-{
-    SwDoc& rDoc = ((SwXMLImport&)GetImport()).GetDoc();
-
-    rDoc.SetDefault( SvxLanguageItem( eLang, RES_CHRATR_LANGUAGE ) );
-}
-#endif
-*/
-
-// ---------------------------------------------------------------------
-
 SvXMLImportContext *SwXMLImport::CreateScriptContext(
                                        const OUString& rLocalName )
 {
@@ -145,21 +120,6 @@ SvXMLImportContext *SwXMLImport::CreateScriptContext(
         pContext = new XMLScriptContext( *this,
                                     XML_NAMESPACE_OFFICE, rLocalName,
                                     GetModel() );
-/*
-#if 0
-        SfxObjectShell* pObjSh = pDoc->GetDocShell();
-        if( pObjSh )
-        {
-            Reference< frame::XModel >  xModel = pObjSh->GetBaseModel();
-            Reference< document::XDocumentInfoSupplier > xSupp( xModel,
-                                                                UNO_QUERY );
-            if( xSupp.is() )
-                pContext = new SwXMLMetaContext_Impl( *this,
-                                    XML_NAMESPACE_OFFICE, rLocalName,
-                                    xSupp->getDocumentInfo() );
-        }
-#endif
-*/
     }
 
     if( !pContext )
@@ -168,69 +128,4 @@ SvXMLImportContext *SwXMLImport::CreateScriptContext(
 
     return pContext;
 }
-
-// ---------------------------------------------------------------------
-
-/*
-#if 0
-void SwXMLExport::_ExportMeta()
-{
-    SfxObjectShell* pObjSh = pDoc->GetDocShell();
-    if( pObjSh )
-    {
-        pObjSh->UpdateDocInfoForSave();     // update information
-
-        LanguageType eDocLang = ((const SvxLanguageItem&)
-                pDoc->GetDefault(RES_CHRATR_LANGUAGE)).GetLanguage();
-
-        Reference< frame::XModel >  xModel = pObjSh->GetBaseModel();
-        Reference< document::XDocumentInfoSupplier >  xSupp( xModel,
-                                                            UNO_QUERY );
-        if( xSupp.is() )
-        {
-            SfxXMLMetaExport aMeta( GetDocHandler(), xSupp->getDocumentInfo(),
-                                    eDocLang );
-            aMeta.Export( GetNamespaceMap() );
-        }
-    }
-}
-#endif
-*/
-
-
-/*************************************************************************
-
-      Source Code Control chaos::System - Header
-
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/filter/xml/xmlscript.cxx,v 1.1 2000-11-28 11:41:25 ab Exp $
-
-      Source Code Control chaos::System - Update
-
-      $Log: not supported by cvs2svn $
-      Revision 1.1.1.1  2000/09/18 17:15:00  hr
-      initial import
-
-      Revision 1.7  2000/09/18 16:05:07  willem.vandorp
-      OpenOffice header added.
-
-      Revision 1.6  2000/08/02 14:52:39  mib
-      text export continued
-
-      Revision 1.5  2000/06/08 09:45:54  aw
-      changed to use functionality from xmloff project now
-
-      Revision 1.4  2000/05/03 12:08:05  mib
-      unicode
-
-      Revision 1.3  2000/03/13 14:33:44  mib
-      UNO3
-
-      Revision 1.2  2000/02/11 14:42:04  hr
-      #70473# changes for unicode ( patched by automated patchtool )
-
-      Revision 1.1  2000/01/06 15:03:49  mib
-      #70271#:separation of text/layout, cond. styles, adaptions to wd-xlink-19991229
-
-
-*************************************************************************/
 
