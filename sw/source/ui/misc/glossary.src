@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glossary.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-11 18:39:17 $
+ *  last change: $Author: kz $ $Date: 2001-04-26 20:22:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,7 +133,7 @@ ModalDialog DLG_GLOSSARY
         Text[ swedish ] = "Visa förhandsvisning";
         Text[ polish ] = "Wyœwietl podgl¹d";
         Text[ portuguese_brazilian ] = "Show ~preview";
-        Text[ japanese ] = "ÌßÚËŞ­°•\\¦(~W)";
+        Text[ japanese ] = "ÌßÚËŞ­°‚Ì•\\¦(~W)";
         Text[ korean ] = "¹Ì¸®º¸±â º¸ÀÌ±â(~W)";
         Text[ chinese_simplified ] = "ÏÔÊ¾Ô¤ÀÀ(~W)";
         Text[ chinese_traditional ] = "±Ä¥Î¹wÄı(~W)";
@@ -160,7 +160,7 @@ ModalDialog DLG_GLOSSARY
         Text[ chinese_simplified ] = "×Ô¶¯ÏÔÊ¾ÊäÈëÎÄÌáÊ¾(~D)";
         Text[ russian ] = "Ïğè ââîäå ïîêàçûâàòü âåñü àâòîòåêñò êàê ïîäñêàçêó";
         Text[ polish ] = "Wyœwietl pozosta³¹ czêœæ nazwy przy wprowadzaniu jako wskazówkê";
-        Text[ japanese ] = "“ü—Í’†‚É€–Ú–¼‚ğƒqƒ“ƒg•\\¦‚·‚é(~D)";
+        Text[ japanese ] = "“ü—Í’†‚ÉÃ·½ÄÌŞÛ¯¸–¼‚ğƒqƒ“ƒg•\\¦‚·‚é(~D)";
         Text[ chinese_traditional ] = "¦Û°Ê§¹¦¨Åã¥Ü(~D)";
         Text[ arabic ] = "ÚÑÖ ÈŞíÉ ÅÏÎÇá ÇáäÕ ÇáÊáŞÇÆí ÃËäÇÁ ÇáßÊÇÈÉ Úáì Ôßá ÊáãíÍ";
         Text[ greek ] = "ÅìöÜíéóç ôïõ õğüëïéğïõ ôìŞìáôïò ôïõ ïíüìáôïò ùò óõìâïõëŞ êáôÜ ôçí åéóáãùãŞ";
@@ -190,7 +190,7 @@ ModalDialog DLG_GLOSSARY
         Text[ chinese_simplified ] = "Ãû³Æ(~N)";
         Text[ russian ] = "Àâòîòåêñò";
         Text[ polish ] = "Nazwa";
-        Text[ japanese ] = "€–Ú–¼(~N)";
+        Text[ japanese ] = "ÌŞÛ¯¸–¼(~N)";
         Text[ chinese_traditional ] = "¦WºÙ(~N)";
         Text[ arabic ] = "ÇáÇÓã";
         Text[ greek ] = "¼íïìá";
@@ -325,7 +325,7 @@ ModalDialog DLG_GLOSSARY
         Text[ chinese_simplified ] = "ÔÚÎÄ¼şÏµÍ³ÄÚ(~F)";
         Text[ russian ] = "Â ñèñòåìå ôàéëîâ";
         Text[ polish ] = "W systemie plików";
-        Text[ japanese ] = "Ì§²Ù¼½ÃÑ‚É(~F)";
+        Text[ japanese ] = "Ì§²Ù¼½ÃÑ“à(~F)";
         Text[ chinese_traditional ] = "ÀÉ®×¨t²Î(~F)";
         Text[ arabic ] = "İí äÙÇã Çáãáİ";
         Text[ greek ] = "óôï óıóôçìá áñ÷åßùí";
@@ -351,7 +351,7 @@ ModalDialog DLG_GLOSSARY
         Text[ chinese_simplified ] = "ÔÚ¹ú¼Ê»¥ÁªÍøÄÚ(~R)";
         Text[ russian ] = "Â Èíòåğíåòå";
         Text[ polish ] = "W Int~ernecie";
-        Text[ japanese ] = "²İÀ°È¯Ä(~R)";
+        Text[ japanese ] = "²İÀ°È¯Ä“à(~R)";
         Text[ chinese_traditional ] = "Inte~rnet";
         Text[ arabic ] = "İí ÇáÅäÊÑäÊ";
         Text[ greek ] = "Óôï Internet";
@@ -379,7 +379,7 @@ ModalDialog DLG_GLOSSARY
         Text[ russian ] = "Ñîõğàíèòü ññûëêè îòíîñ.";
         Text[ greek ] = "Ó÷åôéêŞ áğïèŞêåõóç óõíäİóåùí";
         Text[ polish ] = "Zapisz ³¹cza wzglêdnie";
-        Text[ japanese ] = "Øİ¸‚ÌŠî€‘ÎÛ‚ğ•Û‘¶";
+        Text[ japanese ] = "Øİ¸‚Ì‘Š‘Î•Û‘¶";
         Text[ korean ] = "¿¡°üÇÑ ¿¬°á ÀúÀå";
         Text[ arabic ] = "ÍİÙ ÇáÇÑÊÈÇØÇÊ ÍİÙÇğ äÓÈíÇğ";
         Text[ turkish ] = "Bağlantıları göreceli kaydet";
@@ -689,7 +689,7 @@ ModalDialog DLG_GLOSSARY
                 Text [ italian ] = "Sostituisci (solo testo)" ;
                 Text [ spanish ] = "Reemplazar (sólo texto)" ;
                 Text [ french ] = "~Remplacer (texte seulement)" ;
-                Text [ dutch ] = "Vervangen (alleen tekst)" ;
+                Text [ dutch ] = "~Vervangen (alleen tekst)" ;
                 Text [ portuguese ] = "Substituir(só texto)" ;
                 Text[ chinese_simplified ] = "¸üÌæ(½öÎÄ×Ö)(~L)";
                 Text[ russian ] = "Çàìåíèòü (òîëüêî òåêñò)";
