@@ -1,0 +1,447 @@
+/*************************************************************************
+ *
+ *  $RCSfile: DocGenerator.cxx,v $
+ *
+ *  $Revision: 1.1 $
+ *
+ *  last change: $Author: abi $ $Date: 2001-05-08 12:02:45 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef _XMLSEARCH_QE_DOCGENERATOR_HXX_
+#include <qe/DocGenerator.hxx>
+#endif
+#ifndef _XMLSEARCH_QE_QUERY_HXX_
+#include <qe/Query.hxx>
+#endif
+
+
+using namespace xmlsearch;
+using namespace xmlsearch::qe;
+
+
+const sal_Int32 NonnegativeIntegerGenerator::END = -1;
+const sal_Int32 ConceptGroupGenerator::NConceptsInGroup = 16;
+const sal_Int32 ConceptGroupGenerator::BitsInLabel = 4;
+
+
+RoleFiller RoleFiller::roleFiller_;
+
+
+RoleFiller::RoleFiller( sal_Int32 nColumns,
+                        ConceptData* first,
+                        sal_Int32 role,
+                        sal_Int32 pos,
+                        sal_Int32 parentContext,
+                        sal_Int32 limit )
+    : next_( 0 ),
+      conceptData_( first ),
+      fixedRole_( sal_Int8( role) )                    // primary/constitutive concept/role
+{
+    // cout << "RoleFiller constructed" << nColumns << ' ' << role << ' ' << pos << endl;
+    filled_ = sal_Int16( 1 << fixedRole_ );
+    begin_ = pos;       // offset in file
+    //    _end = _begin + first.getConceptLength();
+    end_ = begin_ + 1;
+    limit_ = limit;
+    parentContext_ = parentContext;
+    next_ = 0;
+    fillers_ = new RoleFiller*[ fillersL_ = nColumns ];
+    for( int i = 0; i < fillersL_; ++i )
+        fillers_[i] = 0;
+    fillers_[ role ] = this;
+}
+
+
+RoleFiller::~RoleFiller()
+{
+    for( int i = 0; i < fillersL_; ++i )
+        delete fillers_[i];
+    delete[] fillers_;
+}
+
+
+void RoleFiller::scoreList( Query* query,sal_Int32 document )
+{
+    sal_Int32 nColumns = query->getNColumns();
+    RoleFiller* candidateHit = this;         // function called for the head of list
+    RoleFiller* next;                        // lookahead: if overlap, if so, is it better
+
+    // 'candidateHit' always points at the current candidate to be converted to a QueryHit
+    // 'penalty' is its penalty
+    // 'next' is used to explore earlier overlapping fillers
+    // the decision to emit a QueryHit is made when either there's no next
+    // or next doesn't overlap the current candidate
+    // the loop's logic makes sure that at emit time there's no better/earlier filler
+    // to overlap with the candidate
+
+    double penalty = candidateHit->penalty( query,nColumns );
+
+    for( next = candidateHit->next_; next; next = next->next_ )
+        if( next->end_ < candidateHit->begin_ )
+        { // no overlap
+            candidateHit->makeQueryHit( query,document,penalty );
+            candidateHit = next;
+            penalty = candidateHit->penalty( query,nColumns );
+        }
+        else
+        { // !!! can be computed in two steps
+            double penalty2 = next->penalty( query,nColumns );
+            if( penalty2 <= penalty )
+            { // prefer next, disregard candidateHit
+                penalty = penalty2;
+                candidateHit = next;
+            }
+        }
+    candidateHit->makeQueryHit(query,document,penalty);
+}
+
+
+
+
+void RoleFiller::makeQueryHit( Query* query,sal_Int32 doc,double penalty )
+{
+    QueryHit* hit = query->maybeCreateQueryHit( penalty,doc,
+                                                begin_,end_,parentContext_ );
+    if( hit )
+    {
+        sal_Int32 N;
+        sal_Int32* matches = hit->getMatches( N );
+        N /= 2;
+
+        for( sal_Int32 i = 0,j = 0; i < N; ++i )
+            if( filled_ & 1 << i )
+            {
+                matches[ j++ ] = fillers_[ i ]->getConcept();
+                matches[ j++ ] = fillers_[ i ]->begin_;
+            }
+            else
+                j += 2;
+    }
+}
+
+
+
+sal_Int32 RoleFiller::getConcept()
+{
+    return conceptData_->getConcept();
+}
+
+
+
+void RoleFiller::use( std::vector< RoleFiller*>& place,sal_Int32 query )
+{
+    RoleFiller* rf;
+    if( rf = place[ query ] )
+    {
+        place[ query ] = this;  // put at the head of list
+        next_ = rf;
+        while( rf->limit_ >= begin_ )
+        {
+            // check if we can grow/improve a hit
+            // we don't ever replace filler's fixed role
+            if( fixedRole_ != rf->fixedRole_ &&
+                // in same parent context eg. PARA
+                rf->parentContext_ == parentContext_ )
+            {
+                if( ( rf->filled_ & ( 1 << fixedRole_ ) ) == 0 )
+                {
+                    // not filled yet
+                    rf->filled_ |= 1 << fixedRole_;
+                    rf->fillers_[ fixedRole_ ] = this;
+                    rf->end_ = end_;
+                }
+                else
+                    rf->considerReplacementWith( this );
+            }
+
+            if( rf->next_ )
+                rf = rf->next_;
+            else
+                return;
+        }
+    }
+    else
+        place[query] = this;
+}
+
+
+void RoleFiller::considerReplacementWith( RoleFiller* replacement )
+{
+    // !!! simplistic for now
+    // needs gap and out of order
+    sal_Int32 role = replacement->fixedRole_;
+    if( replacement->getScore() > fillers_[role]->getScore() )
+        fillers_[ role ] = replacement;
+}
+
+
+
+double RoleFiller::penalty( Query* query,sal_Int32 nColumns )
+{
+    sal_Int32 length = end_ - begin_ + 1;
+    double penalty = query->lookupPenalty( filled_ );
+    // !!! here is a chance to check against query
+    // if hit worth scoring further
+    // might not be if query already has lots of good hits
+    for( sal_Int32 i = 0; i < nColumns; ++i )
+        if( filled_ & ( 1 << i ) )
+        {
+            penalty += fillers_[i]->conceptData_->getPenalty();
+            //length -= _fillers[i]._conceptData.getConceptLength() + 1;
+            length -= 2;        // !!! ??? c.length is not used ?
+            if( filled_ >> (i + 1) )
+                for( sal_Int32 j = i + 1; j < nColumns; ++j )
+                    if( ( filled_ & 1 << j ) && fillers_[j]->begin_ < begin_ )
+                        penalty += query->getOutOufOrderPenalty();
+        }
+    double result = penalty + length * query->getGapPenalty();
+    return result < 0.0 ? 0.0 : result; // !!! quick fix
+}
+
+
+
+
+
+void NextDocGeneratorHeap::heapify( sal_Int32 i )
+{
+    NextDocGenerator* temp;
+    for( sal_Int32 r,l,smallest; ; )
+    {
+        r = ( i + 1 ) << 1;
+        l = r - 1;
+        smallest = ( l < heapSize_ && heap_[l]->smallerThan( heap_[i] ) ) ? l : i;
+        if( r < heapSize_ && heap_[r]->smallerThan( heap_[ smallest ] ) )
+            smallest = r;
+        if( smallest != i )
+        {
+            temp = heap_[ smallest ];
+            heap_[ smallest ] = heap_[ i ];
+            heap_[i] = temp;
+            i = smallest;
+        }
+        else
+            break;
+    }
+}
+
+
+void NextDocGeneratorHeap::step() throw( excep::XmlSearchException )
+{
+    if( heap_[0]->next() != NonnegativeIntegerGenerator::END )
+        heapify(0);
+    else if ( heapSize_ > 1 )
+    {
+        heap_[0] = heap_[--heapSize_];
+        heapify(0);
+    }
+    else
+        nonEmpty_ = false;
+}
+
+
+bool NextDocGeneratorHeap::atDocument( sal_Int32 document )
+{
+    return nonEmpty_ && heap_[0]->getDocument() == document;
+}
+
+
+ConceptGroupGenerator::ConceptGroupGenerator( sal_Int32 dataL,sal_Int8* data,sal_Int32 index,sal_Int32 k )
+    : last_( 0 ),
+      k1_( k ),
+      k2_( BitsInLabel ),
+      bits_( new util::ByteArrayDecompressor( dataL,data,index ) ),
+      table_( NConceptsInGroup )
+{
+    for( sal_Int32 i = 0; i < NConceptsInGroup; ++i )
+        table_[i] = 0;
+}
+
+
+
+ConceptGroupGenerator::ConceptGroupGenerator()
+    : last_( 0 ),
+      k1_( 0 ),
+      k2_( BitsInLabel ),
+      bits_( 0 ),
+      table_( NConceptsInGroup )
+{
+}
+
+
+ConceptGroupGenerator::~ConceptGroupGenerator()
+{
+    delete bits_;
+}
+
+
+void ConceptGroupGenerator::generateFillers( std::vector< RoleFiller* >& array )
+{
+    cData_->generateFillers( array,last_ );
+}
+
+
+bool ConceptGroupGenerator::next() throw( excep::XmlSearchException )
+{
+    while( bits_->readNext( k1_,this ) )
+    {
+        sal_Int32 bla = bits_->read( k2_ );
+//      cout << bla << endl;
+        if( cData_ = table_[ bla ] )
+            return true;
+    }
+    return false;
+}
+
+
+sal_Int32 ConceptGroupGenerator::decodeConcepts( sal_Int32 k,
+                                                 sal_Int32 shift,
+                                                 sal_Int32 *concepts )
+    throw( excep::XmlSearchException )
+{
+    return bits_->ascendingDecode( k,shift,concepts );
+}
+
+
+
+void ConceptGroupGenerator::init( sal_Int32 bytesL,sal_Int8* bytes,sal_Int32 index,sal_Int32 k )
+{
+    k1_ = k;
+    delete bits_;
+    bits_ = new util::ByteArrayDecompressor( bytesL,bytes,index );
+    last_ = 0;
+    for( sal_Int32 i = 0;i < NConceptsInGroup; i++ )
+    {
+        delete table_[i];
+        table_[i] = 0;
+    }
+}
+
+
+
+bool GeneratorHeap::start( std::vector< RoleFiller* >& array ) throw( xmlsearch::excep::XmlSearchException )
+{
+    if( ( heapSize_ = heap_.size() ) > 0 )
+    {
+        for( sal_Int32 i = 0; i < heapSize_; ++i )
+            heap_[i]->next();
+
+        buildHeap();
+        heap_[0]->generateFillers( array );
+        return true;
+    }
+    else
+        return false;
+}
+
+
+bool GeneratorHeap::next( std::vector< RoleFiller* >& array ) throw( xmlsearch::excep::XmlSearchException )
+{
+    if( heapSize_ > 0 )
+    {
+        if( ! heap_[0]->next() ) // no more
+            if( heapSize_ > 1)
+                heap_[0] = heap_[--heapSize_];
+            else
+            {
+                heapSize_ = 0;
+                return false;
+            }
+        heapify(0);
+        heap_[0]->generateFillers( array );
+        return true;
+    }
+    else
+        return false;
+}
+
+
+
+void GeneratorHeap::reset()
+{
+    for( sal_uInt32 i = 0; i < heap_.size(); ++i )
+        delete heap_[i];
+    heap_.clear();
+    heapSize_ = 0;
+}
+
+
+
+void GeneratorHeap::buildHeap()
+{
+    for( sal_Int32 i = heapSize_/2; i >= 0; i-- )
+        heapify(i);
+}
+
+
+void GeneratorHeap::heapify( sal_Int32 root )
+{
+    for( sal_Int32 smallest = 0; ; )
+    {
+        sal_Int32 right = ( root + 1 ) << 1;
+        sal_Int32 left = right - 1;
+        smallest = ( left < heapSize_ && heap_[left]->position() < heap_[ root ]->position() ) ? left : root;
+        if( right< heapSize_ && heap_[right]->position() < heap_[smallest]->position() )
+            smallest = right;
+        if( smallest != root )
+        {
+            ConceptGroupGenerator* temp = heap_[smallest];
+            heap_[smallest] = heap_[root];
+            heap_[root] = temp;
+            root = smallest;
+        }
+        else
+            break;
+    }
+}
+
