@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: as $ $Date: 2001-10-26 09:45:29 $
+ *  last change: $Author: as $ $Date: 2001-11-02 07:54:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,8 +130,8 @@
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #endif
 
-#ifndef _COM_SUN_STAR_FRAME_XDISPATCHINFORMATIONPROVIDER_HPP_
-#include <com/sun/star/frame/XDispatchInformationProvider.hpp>
+#ifndef _DRAFTS_COM_SUN_STAR_FRAME_XDISPATCHINFORMATIONPROVIDER_HPP_
+#include <drafts/com/sun/star/frame/XDispatchInformationProvider.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_FRAME_XDISPATCHPROVIDERINTERCEPTION_HPP_
@@ -297,7 +297,7 @@ class Frame :   // interfaces
                 public  css::lang::XServiceInfo                     ,
                 public  css::frame::XFramesSupplier                 ,   // => XFrame => XComponent
                 public  css::frame::XDispatchProvider               ,
-                public  css::frame::XDispatchInformationProvider    ,
+                public  dcss::frame::XDispatchInformationProvider   ,
                 public  css::frame::XDispatchProviderInterception   ,
                 public  css::task::XStatusIndicatorFactory          ,
                 public  css::awt::XWindowListener                   ,   // => XEventListener
@@ -427,7 +427,7 @@ class Frame :   // interfaces
         virtual ::rtl::OUString                                       SAL_CALL queryDescription                  ( const ::rtl::OUString&                       sURL          ) throw( css::uno::RuntimeException );
         virtual void                                                  SAL_CALL queryDescriptions                 ( const css::uno::Sequence< ::rtl::OUString >& lURLs         ,
                                                                                                                          css::uno::Sequence< ::rtl::OUString >& lDescriptions ) throw( css::uno::RuntimeException );
-        virtual css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL getConfigurableDispatchInformation(                                                            ) throw( css::uno::RuntimeException );
+        virtual css::uno::Sequence< dcss::frame::DispatchInformation > SAL_CALL getConfigurableDispatchInformation(                                                            ) throw( css::uno::RuntimeException );
 
         //---------------------------------------------------------------------------------------------------------
         //  XActionLockable

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasecontroller.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-10 14:38:29 $
+ *  last change: $Author: as $ $Date: 2001-11-02 07:56:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -381,9 +381,7 @@ ANY SAL_CALL SfxBaseController::queryInterface( const UNOTYPE& rType ) throw( RU
                                                static_cast< XTYPEPROVIDER*      > ( this )  ,
                                                static_cast< XCONTROLLER*        > ( this )  ,
                                             static_cast< XSTATUSINDICATORSUPPLIER* > ( this )  ,
-#if SUPD>630
                                             static_cast< XDISPATCHINFORMATIONPROVIDER* > ( this ) ,
-#endif
                                                static_cast< XDISPATCHPROVIDER*  > ( this )  ) ) ;
 
     // If searched interface supported by this class ...
@@ -448,9 +446,7 @@ SEQUENCE< UNOTYPE > SAL_CALL SfxBaseController::getTypes() throw( RUNTIMEEXCEPTI
             static OTYPECOLLECTION aTypeCollection( ::getCppuType(( const REFERENCE< XTYPEPROVIDER      >*)NULL ) ,
                                                     ::getCppuType(( const REFERENCE< XSTATUSINDICATORSUPPLIER >*)NULL ) ,
                                                       ::getCppuType(( const REFERENCE< XCONTROLLER      >*)NULL ) ,
-#if SUPD>630
                                                     ::getCppuType(( const REFERENCE< XDISPATCHINFORMATIONPROVIDER  >*)NULL ) ,
-#endif
                                                       ::getCppuType(( const REFERENCE< XDISPATCHPROVIDER    >*)NULL ) ) ;
             // ... and set his address to static pointer!
             pTypeCollection = &aTypeCollection ;

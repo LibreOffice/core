@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: as $ $Date: 2001-10-26 09:46:09 $
+ *  last change: $Author: as $ $Date: 2001-11-02 07:54:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -273,7 +273,7 @@ DEFINE_XINTERFACE_17                (   Frame                                   
                                         DIRECT_INTERFACE(css::lang::XComponent                                  ),
                                         DIRECT_INTERFACE(css::task::XStatusIndicatorFactory                     ),
                                         DIRECT_INTERFACE(css::frame::XDispatchProvider                          ),
-                                        DIRECT_INTERFACE(css::frame::XDispatchInformationProvider               ),
+                                        DIRECT_INTERFACE(dcss::frame::XDispatchInformationProvider              ),
                                         DIRECT_INTERFACE(css::frame::XDispatchProviderInterception              ),
                                         DIRECT_INTERFACE(css::beans::XMultiPropertySet                          ),
                                         DIRECT_INTERFACE(css::beans::XFastPropertySet                           ),
@@ -296,7 +296,7 @@ DEFINE_XTYPEPROVIDER_17             (   Frame                                   
                                         css::beans::XFastPropertySet                                            ,
                                         css::beans::XPropertySet                                                ,
                                         css::frame::XDispatchProvider                                           ,
-                                        css::frame::XDispatchInformationProvider                                ,
+                                        dcss::frame::XDispatchInformationProvider                               ,
                                         css::frame::XDispatchProviderInterception                               ,
                                         css::awt::XWindowListener                                               ,
                                         css::awt::XTopWindowListener                                            ,
@@ -1567,7 +1567,7 @@ css::uno::Reference< css::task::XStatusIndicator > SAL_CALL Frame::createStatusI
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     ReadGuard aReadLock( m_aLock );
-    css::uno::Reference< css::frame::XDispatchInformationProvider > xProvider( m_xController, css::uno::UNO_QUERY );
+    css::uno::Reference< dcss::frame::XDispatchInformationProvider > xProvider( m_xController, css::uno::UNO_QUERY );
     aReadLock.unlock();
     /* UNSAFE AREA ----------------------------------------------------------------------------------------- */
 
@@ -1588,7 +1588,7 @@ void SAL_CALL Frame::queryDescriptions( const css::uno::Sequence< ::rtl::OUStrin
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     ReadGuard aReadLock( m_aLock );
-    css::uno::Reference< css::frame::XDispatchInformationProvider > xProvider( m_xController, css::uno::UNO_QUERY );
+    css::uno::Reference< dcss::frame::XDispatchInformationProvider > xProvider( m_xController, css::uno::UNO_QUERY );
     aReadLock.unlock();
     /* UNSAFE AREA ----------------------------------------------------------------------------------------- */
 
@@ -1599,7 +1599,7 @@ void SAL_CALL Frame::queryDescriptions( const css::uno::Sequence< ::rtl::OUStrin
 }
 
 //*****************************************************************************************************************
-css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL Frame::getConfigurableDispatchInformation() throw( css::uno::RuntimeException )
+css::uno::Sequence< dcss::frame::DispatchInformation > SAL_CALL Frame::getConfigurableDispatchInformation() throw( css::uno::RuntimeException )
 {
     /* UNSAFE AREA ----------------------------------------------------------------------------------------- */
     // Look for rejected calls!
@@ -1607,11 +1607,11 @@ css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL Frame::getConfigu
 
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     ReadGuard aReadLock( m_aLock );
-    css::uno::Reference< css::frame::XDispatchInformationProvider > xProvider( m_xController, css::uno::UNO_QUERY );
+    css::uno::Reference< dcss::frame::XDispatchInformationProvider > xProvider( m_xController, css::uno::UNO_QUERY );
     aReadLock.unlock();
     /* UNSAFE AREA ----------------------------------------------------------------------------------------- */
 
-    css::uno::Sequence< css::frame::DispatchInformation > lInfos;
+    css::uno::Sequence< dcss::frame::DispatchInformation > lInfos;
     if( xProvider.is() == sal_True )
     {
         lInfos = xProvider->getConfigurableDispatchInformation();
