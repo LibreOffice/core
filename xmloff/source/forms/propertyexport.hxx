@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyexport.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-22 07:36:10 $
+ *  last change: $Author: fs $ $Date: 2002-10-25 08:01:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,7 +180,8 @@ namespace xmloff
         void exportStringPropertyAttribute(
             const sal_uInt16 _nNamespaceKey,
             const sal_Char* _pAttributeName,
-            const sal_Char* _pPropertyName);
+            const ::rtl::OUString& _rPropertyName
+        );
 
         /** add an attribute which is represented by a boolean property to the export context
 
@@ -197,7 +198,7 @@ namespace xmloff
         void exportBooleanPropertyAttribute(
             const sal_uInt16 _nNamespaceKey,
             const sal_Char* _pAttributeName,
-            const sal_Char* _pPropertyName,
+            const ::rtl::OUString& _rPropertyName,
             const sal_Int8 _nBooleanAttributeFlags);
 
         /** add an attribute which is represented by a sal_Int16 property to the export context
@@ -216,7 +217,7 @@ namespace xmloff
         void exportInt16PropertyAttribute(
             const sal_uInt16 _nNamespaceKey,
             const sal_Char* _pAttributeName,
-            const sal_Char* _pPropertyName,
+            const ::rtl::OUString& _rPropertyName,
             const sal_Int16 _nDefault);
 
         /** add an attribute which is represented by a enum property to the export context
@@ -330,7 +331,7 @@ namespace xmloff
         void exportStringSequenceAttribute(
             const sal_uInt16 _nAttributeNamespaceKey,
             const sal_Char* _pAttributeName,
-            const sal_Char* _pPropertyName,
+            const ::rtl::OUString& _rPropertyName,
             const sal_Unicode _aQuoteCharacter = '"',
             const sal_Unicode _aListSeparator = ',');
 
@@ -394,12 +395,12 @@ namespace xmloff
             const ::rtl::OUString& _rPropertyName,
             const ::com::sun::star::uno::Type* _pType);
 
-        void dbg_implCheckProperty(
-            const sal_Char* _rPropertyName,
-            const ::com::sun::star::uno::Type* _pType)
-        {
-            dbg_implCheckProperty(::rtl::OUString::createFromAscii(_rPropertyName), _pType);
-        }
+//      void dbg_implCheckProperty(
+//          const sal_Char* _rPropertyName,
+//          const ::com::sun::star::uno::Type* _pType)
+//      {
+//          dbg_implCheckProperty(::rtl::OUString::createFromAscii(_rPropertyName), _pType);
+//      }
 #endif
     };
 
@@ -409,11 +410,19 @@ namespace xmloff
 #ifdef DBG_UTIL
     #define DBG_CHECK_PROPERTY(name, type)  \
         dbg_implCheckProperty(name, &::getCppuType(static_cast< type* >(NULL)))
+
     #define DBG_CHECK_PROPERTY_NO_TYPE(name)    \
         dbg_implCheckProperty(name, NULL)
+
+    #define DBG_CHECK_PROPERTY_ASCII( name, type ) \
+        dbg_implCheckProperty( ::rtl::OUString::createFromAscii( name ), &::getCppuType(static_cast< type* >(NULL)))
+
+    #define DBG_CHECK_PROPERTY_ASCII_NO_TYPE( name ) \
+        dbg_implCheckProperty( ::rtl::OUString::createFromAscii( name ), NULL )
 #else
     #define DBG_CHECK_PROPERTY(name, type)
     #define DBG_CHECK_PROPERTY_NO_TYPE(name)
+    #define DBG_CHECK_PROPERTY_ASCII_NO_TYPE( name )
 #endif
 
 //.........................................................................
@@ -425,6 +434,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.14  2002/08/22 07:36:10  oj
+ *  #99721# now save image url relative
+ *
  *  Revision 1.13  2001/06/25 13:32:38  fs
  *  #88691# TargetURL property value must be saved relative to own document
  *

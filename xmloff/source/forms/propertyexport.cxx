@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyexport.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-22 07:36:10 $
+ *  last change: $Author: fs $ $Date: 2002-10-25 08:01:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -389,34 +389,33 @@ namespace xmloff
     }
 
     //---------------------------------------------------------------------
-    void OPropertyExport::exportStringPropertyAttribute(const sal_uInt16 _nNamespaceKey, const sal_Char* _pAttributeName,
-            const sal_Char* _pPropertyName)
+    void OPropertyExport::exportStringPropertyAttribute( const sal_uInt16 _nNamespaceKey, const sal_Char* _pAttributeName,
+            const ::rtl::OUString& _rPropertyName )
     {
-        DBG_CHECK_PROPERTY(_pPropertyName, ::rtl::OUString);
+        DBG_CHECK_PROPERTY( _rPropertyName, ::rtl::OUString );
 
         // no try-catch here, this would be to expensive. The outer scope has to handle exceptions (which should not
         // happen if we're used correctly :)
 
         // this is way simple, as we don't need to convert anything (the property already is a string)
 
-        ::rtl::OUString sPropertyName(::rtl::OUString::createFromAscii(_pPropertyName));
         // get the string
         ::rtl::OUString sPropValue;
-        m_xProps->getPropertyValue(sPropertyName) >>= sPropValue;
+        m_xProps->getPropertyValue( _rPropertyName ) >>= sPropValue;
 
         // add the attribute
-        if (sPropValue.getLength())
-            AddAttribute(_nNamespaceKey, _pAttributeName, sPropValue);
+        if ( sPropValue.getLength() )
+            AddAttribute( _nNamespaceKey, _pAttributeName, sPropValue );
 
         // the property does not need to be handled anymore
-        exportedProperty(sPropertyName);
+        exportedProperty( _rPropertyName );
     }
 
     //---------------------------------------------------------------------
     void OPropertyExport::exportBooleanPropertyAttribute(const sal_uInt16 _nNamespaceKey, const sal_Char* _pAttributeName,
-            const sal_Char* _pPropertyName, const sal_Int8 _nBooleanAttributeFlags)
+            const ::rtl::OUString& _rPropertyName, const sal_Int8 _nBooleanAttributeFlags)
     {
-        DBG_CHECK_PROPERTY_NO_TYPE(_pPropertyName);
+        DBG_CHECK_PROPERTY_NO_TYPE( _rPropertyName );
         // no check of the property value type: this method is allowed to be called with any interger properties
         // (e.g. sal_Int32, sal_uInt16 etc)
 
@@ -425,8 +424,7 @@ namespace xmloff
 
         // get the value
         sal_Bool bCurrentValue = bDefault;
-        ::rtl::OUString sPropertyName(::rtl::OUString::createFromAscii(_pPropertyName));
-        Any aCurrentValue = m_xProps->getPropertyValue(sPropertyName);
+        Any aCurrentValue = m_xProps->getPropertyValue( _rPropertyName );
         if (aCurrentValue.hasValue())
         {
             bCurrentValue = ::cppu::any2bool(aCurrentValue);
@@ -449,19 +447,18 @@ namespace xmloff
                 AddAttribute(_nNamespaceKey, _pAttributeName, bCurrentValue ? m_sValueTrue : m_sValueFalse);
 
         // the property does not need to be handled anymore
-        exportedProperty(sPropertyName);
+        exportedProperty( _rPropertyName );
     }
 
     //---------------------------------------------------------------------
     void OPropertyExport::exportInt16PropertyAttribute(const sal_uInt16 _nNamespaceKey, const sal_Char* _pAttributeName,
-            const sal_Char* _pPropertyName, const sal_Int16 _nDefault)
+        const ::rtl::OUString& _rPropertyName, const sal_Int16 _nDefault)
     {
-        DBG_CHECK_PROPERTY(_pPropertyName, sal_Int16);
+        DBG_CHECK_PROPERTY( _rPropertyName, sal_Int16 );
 
         // get the value
         sal_Int16 nCurrentValue(_nDefault);
-        ::rtl::OUString sPropertyName(::rtl::OUString::createFromAscii(_pPropertyName));
-        m_xProps->getPropertyValue(sPropertyName) >>= nCurrentValue;
+        m_xProps->getPropertyValue( _rPropertyName ) >>= nCurrentValue;
 
         // add the attribute
         if (_nDefault != nCurrentValue)
@@ -474,7 +471,7 @@ namespace xmloff
         }
 
         // the property does not need to be handled anymore
-        exportedProperty(sPropertyName);
+        exportedProperty( _rPropertyName );
     }
 
     //---------------------------------------------------------------------
@@ -516,7 +513,7 @@ namespace xmloff
     //---------------------------------------------------------------------
     void OPropertyExport::exportTargetFrameAttribute()
     {
-        DBG_CHECK_PROPERTY((const sal_Char*)PROPERTY_TARGETFRAME, ::rtl::OUString);
+        DBG_CHECK_PROPERTY( PROPERTY_TARGETFRAME, ::rtl::OUString );
 
         ::rtl::OUString sTargetFrame = comphelper::getString(m_xProps->getPropertyValue(PROPERTY_TARGETFRAME));
         if (0 != sTargetFrame.compareToAscii("_blank"))
@@ -530,7 +527,7 @@ namespace xmloff
     //---------------------------------------------------------------------
     void OPropertyExport::exportRelativeTargetLocation(const ConstAsciiString& _sPropertyName,sal_Int32 _nProperty)
     {
-        DBG_CHECK_PROPERTY((const sal_Char*)_sPropertyName, ::rtl::OUString);
+        DBG_CHECK_PROPERTY( _sPropertyName, ::rtl::OUString );
 
         ::rtl::OUString sTargetLocation = comphelper::getString(m_xProps->getPropertyValue(_sPropertyName));
         sTargetLocation = m_rContext.getGlobalContext().GetRelativeReference(sTargetLocation);
@@ -560,7 +557,7 @@ namespace xmloff
     void OPropertyExport::exportGenericPropertyAttribute(
             const sal_uInt16 _nAttributeNamespaceKey, const sal_Char* _pAttributeName, const sal_Char* _pPropertyName)
     {
-        DBG_CHECK_PROPERTY_NO_TYPE(_pPropertyName);
+        DBG_CHECK_PROPERTY_ASCII_NO_TYPE( _pPropertyName );
 
         ::rtl::OUString sPropertyName = ::rtl::OUString::createFromAscii(_pPropertyName);
         exportedProperty(sPropertyName);
@@ -587,15 +584,14 @@ namespace xmloff
 
     //---------------------------------------------------------------------
     void OPropertyExport::exportStringSequenceAttribute(const sal_uInt16 _nAttributeNamespaceKey, const sal_Char* _pAttributeName,
-        const sal_Char* _pPropertyName,
+        const ::rtl::OUString& _rPropertyName,
         const sal_Unicode _aQuoteCharacter, const sal_Unicode _aListSeparator)
     {
-        DBG_CHECK_PROPERTY(_pPropertyName, Sequence< ::rtl::OUString >);
+        DBG_CHECK_PROPERTY( _rPropertyName, Sequence< ::rtl::OUString > );
         OSL_ENSURE(_aListSeparator != 0, "OPropertyExport::exportStringSequenceAttribute: invalid separator character!");
 
-        ::rtl::OUString sPropertyName(::rtl::OUString::createFromAscii(_pPropertyName));
         Sequence< ::rtl::OUString > aItems;
-        m_xProps->getPropertyValue(sPropertyName) >>= aItems;
+        m_xProps->getPropertyValue( _rPropertyName ) >>= aItems;
 
         ::rtl::OUString sFinalList;
 
@@ -631,7 +627,7 @@ namespace xmloff
         if (sFinalList.getLength())
             AddAttribute(_nAttributeNamespaceKey, _pAttributeName, sFinalList);
 
-        exportedProperty(sPropertyName);
+        exportedProperty( _rPropertyName );
     }
 
     //---------------------------------------------------------------------
@@ -807,6 +803,9 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.19  2002/08/22 07:36:10  oj
+ *  #99721# now save image url relative
+ *
  *  Revision 1.18  2001/06/25 13:32:38  fs
  *  #88691# TargetURL property value must be saved relative to own document
  *
