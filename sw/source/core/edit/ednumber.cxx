@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ednumber.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-14 10:01:09 $
+ *  last change: $Author: kz $ $Date: 2004-06-11 15:21:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,6 +226,37 @@ BOOL SwEditShell::NoNum()
 }
 // Loeschen, Splitten der Aufzaehlungsliste
 
+// -> #i29560#
+BOOL SwEditShell::HasNumber() const
+{
+    BOOL bResult = FALSE;
+
+    const SwTxtNode * pTxtNd =
+        GetCrsr()->GetPoint()->nNode.GetNode().GetTxtNode();
+
+    if (pTxtNd)
+    {
+        bResult = pTxtNd->HasNumber();
+    }
+
+    return bResult;
+}
+
+BOOL SwEditShell::HasBullet() const
+{
+    BOOL bResult = FALSE;
+
+    const SwTxtNode * pTxtNd =
+        GetCrsr()->GetPoint()->nNode.GetNode().GetTxtNode();
+
+    if (pTxtNd)
+    {
+        bResult = pTxtNd->HasBullet();
+    }
+
+    return bResult;
+}
+// <- #i29560#
 
 BOOL SwEditShell::DelNumRules()
 {
@@ -591,7 +622,7 @@ BOOL SwEditShell::NumOrNoNum( BOOL bNumOn, BOOL bChkStart ) // #115901#
     {
         StartAllAction();       // Klammern fuers Updaten !!
         // #115901#
-        bRet = GetDoc()->NumOrNoNum( pCrsr->GetPoint()->nNode, bNumOn );
+        bRet = GetDoc()->NumOrNoNum( pCrsr->GetPoint()->nNode, !bNumOn ); // #i29560#
         EndAllAction();
     }
     return bRet;
