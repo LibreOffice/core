@@ -2,9 +2,9 @@
  *
  *  $RCSfile: uitool.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 13:14:01 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:45:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -739,7 +739,7 @@ BOOL GetFileFilterNameDlg( Window& rParent, String& rFileName,
         if( pFilterName )
             *pFilterName = pMed->GetFilter()->GetFilterName();
 
-        rFileName = URIHelper::SmartRelToAbs( pMed->GetName() );
+        rFileName = pMed->GetURLObject().GetMainURL( INetURLObject::NO_DECODE );
         if( pPassword )
         {
             const SfxPoolItem* pItem;
