@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipEnumeration.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mtg $ $Date: 2000-11-29 03:14:55 $
+ *  last change: $Author: obo $ $Date: 2000-12-04 16:04:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,7 @@ uno::Any SAL_CALL ZipEnumeration::nextElement() throw (uno::RuntimeException)
 {
     uno::Any aAny;
     if (aIterator == rEntryHash.end())
-        throw (container::NoSuchElementException());
+        throw container::NoSuchElementException();
     aAny <<= (*aIterator).second;
     aIterator++;
     return aAny;
