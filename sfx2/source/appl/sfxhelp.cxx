@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxhelp.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-18 10:04:31 $
+ *  last change: $Author: pb $ $Date: 2001-06-18 11:51:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -209,7 +209,7 @@ String SfxHelpDB_Impl::GetHelpText( ULONG nHelpId, const String& rModule )
 
     if ( bOpenDB )
     {
-        ByteString aKeyStr = ByteString::CreateFromInt32( nHelpId );
+        ByteString aKeyStr = ByteString::CreateFromInt64( nHelpId );
         Dbt aKey( (void*)aKeyStr.GetBuffer(), aKeyStr.Len() );
         Dbt aData;
         aData.set_flags( DB_DBT_MALLOC );
@@ -414,13 +414,13 @@ XubString SfxHelp::GetHelpText( ULONG nHelpId, const Window* pWindow )
         aHelpText += DEFINE_CONST_UNICODE("\n\n");
         aHelpText += aModuleName;
         aHelpText += DEFINE_CONST_UNICODE(" - ");
-        aHelpText += String::CreateFromInt32( nHelpId );
+        aHelpText += String::CreateFromInt64( nHelpId );
     }
 
     return aHelpText;
 }
 
-String SfxHelp::CreateHelpURL( sal_Int32 nHelpId, const String& rModuleName )
+String SfxHelp::CreateHelpURL( ULONG nHelpId, const String& rModuleName )
 {
     // build up the help URL
     String aHelpURL;
@@ -437,7 +437,7 @@ String SfxHelp::CreateHelpURL( sal_Int32 nHelpId, const String& rModuleName )
         else
         {
             aHelpURL += DEFINE_CONST_UNICODE("&HELP_ContextID=-");
-            aHelpURL += String::CreateFromInt32( nHelpId );
+            aHelpURL += String::CreateFromInt64( nHelpId );
         }
 
         aHelpURL += DEFINE_CONST_UNICODE("&HELP_ProgramID=");
@@ -466,7 +466,7 @@ String SfxHelp::CreateHelpURL( sal_Int32 nHelpId, const String& rModuleName )
         else
         {
             aHelpURL += '/';
-            aHelpURL += String::CreateFromInt32( nHelpId );
+            aHelpURL += String::CreateFromInt64( nHelpId );
         }
 
         AppendConfigToken_Impl( aHelpURL, sal_True );
