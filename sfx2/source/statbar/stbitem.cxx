@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stbitem.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mba $ $Date: 2001-09-06 08:47:59 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:45:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,9 @@
 #ifndef _SFXSTRITEM_HXX //autogen
 #include <svtools/stritem.hxx>
 #endif
+#ifndef GCC
 #pragma hdrstop
+#endif
 
 #include "stbitem.hxx"
 #include "sfxtypes.hxx"
@@ -329,7 +331,7 @@ SfxStatusBarControl* SfxStatusBarControl::CreateControl
     TypeId aSlotType = pSlotPool->GetSlotType(nId);
     if ( aSlotType )
     {
-        SfxDispatcher *pDisp = rBindings.GetDispatcher_Impl();
+        rBindings.GetDispatcher_Impl();
         if ( pMod )
         {
             SfxStbCtrlFactArr_Impl *pFactories = pMod->GetStbCtrlFactories_Impl();
