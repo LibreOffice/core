@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: rt $ $Date: 2004-09-08 17:07:58 $
+#   last change: $Author: vg $ $Date: 2004-12-23 09:45:37 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -59,7 +59,6 @@
 #
 #
 #*************************************************************************
-
 PRJ=.
 
 PRJNAME=so_curl
@@ -77,14 +76,16 @@ all:
 
 # --- Files --------------------------------------------------------
 
-TARFILE_NAME=curl-7.9.8
+TARFILE_NAME=curl-7.12.2
+PATCH_FILE_NAME=curl-7.12.2.patch
+CONVERTFILES= \
+    lib$/Makefile.vc6
 
 .IF "$(GUI)"=="UNX"
-PATCH_FILE_NAME=unx1-curl-7.9.8.patch
 CONFIGURE_DIR=.$/
 #relative to CONFIGURE_DIR
 CONFIGURE_ACTION=.$/configure
-CONFIGURE_FLAGS= --without-ssl --enable-ftp --enable-ipv6 --disable-http --disable-gopher --disable-file --disable-ldap --disable-telnet --disable-dict 
+CONFIGURE_FLAGS= --without-ssl --enable-ftp --enable-ipv6 --disable-http --disable-gopher --disable-file --disable-ldap --disable-telnet --disable-dict
 
 BUILD_DIR=$(CONFIGURE_DIR)$/lib
 .IF "$(OS)"=="IRIX"
@@ -93,17 +94,20 @@ BUILD_ACTION=gmake
 BUILD_ACTION=make
 .ENDIF
 
-OUT2LIB=$(BUILD_DIR)$/.libs$/libcurl*$(DLLPOST)
+OUT2LIB=$(BUILD_DIR)$/.libs$/libcurl*$(DLLPOST)*
 .ENDIF			# "$(GUI)"=="UNX"
 
 
 .IF "$(GUI)"=="WNT"
-PATCH_FILE_NAME=curl-7.9.8.patch
 # make use of stlport headerfiles
 EXT_USE_STLPORT=TRUE
 
 BUILD_DIR=.$/lib
+.IF "$(debug)"==""
 BUILD_ACTION=nmake -f Makefile.vc6 cfg=release-dll
+.ELSE
+BUILD_ACTION=nmake -f Makefile.vc6 cfg=debug-dll
+.ENDIF
 
 OUT2BIN=$(BUILD_DIR)$/libcurl.dll
 OUT2LIB=$(BUILD_DIR)$/libcurl.lib
@@ -115,6 +119,7 @@ OUT2INC= \
     include$/curl$/easy.h  			\
     include$/curl$/multi.h  		\
     include$/curl$/curl.h  			\
+    include$/curl$/curlver.h  		\
     include$/curl$/types.h  		\
     include$/curl$/stdcheaders.h  	\
     include$/curl$/mprintf.h
