@@ -2,9 +2,9 @@
  *
  *  $RCSfile: present.src,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-26 20:28:14 $
+ *  last change: $Author: rt $ $Date: 2001-05-04 21:20:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,6 +137,7 @@ ModalDialog DLG_START_PRESENTATION
         Text[ korean ] = "¹üÀ§";
         Text[ turkish ] = "Kapsam";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Volumen";
     };
     RadioButton RBT_ALL
     {
@@ -166,6 +167,7 @@ ModalDialog DLG_START_PRESENTATION
         Text[ korean ] = "¸ðµç ½½¶óÀÌµå(~S)";
         Text[ turkish ] = "Tüm slaytlar";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Todas las diapositivas";
     };
     RadioButton RBT_AT_DIA
     {
@@ -195,6 +197,7 @@ ModalDialog DLG_START_PRESENTATION
         Text[ korean ] = "½½¶óÀÌµå ºÎÅÍ(~F):";
         Text[ turkish ] = "Baþlangýç:";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "A pa~rtir de:";
     };
     ListBox LB_DIAS
     {
@@ -231,6 +234,7 @@ ModalDialog DLG_START_PRESENTATION
         Text[ korean ] = "°³ÀÎÀû ½½¶óÀÌµå ¼î(~C)";
         Text[ turkish ] = "Özel ekran sunusu";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Presentación personalizada";
     };
     ListBox LB_CUSTOMSHOW
     {
@@ -266,6 +270,7 @@ ModalDialog DLG_START_PRESENTATION
         Text[ korean ] = "Á¾·ù";
         Text[ turkish ] = "Tür";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Tipo";
     };
     RadioButton RBT_STANDARD
     {
@@ -293,6 +298,7 @@ ModalDialog DLG_START_PRESENTATION
         Text[ korean ] = "±âº»(~D)";
         Text[ turkish ] = "Standart";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Predeterminado";
     };
     RadioButton RBT_WINDOW
     {
@@ -320,6 +326,7 @@ ModalDialog DLG_START_PRESENTATION
         Text[ korean ] = "Ã¢(~W)";
         Text[ turkish ] = "Pencere";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Ventana";
     };
     RadioButton RBT_AUTO
     {
@@ -347,6 +354,7 @@ ModalDialog DLG_START_PRESENTATION
         Text[ korean ] = "ÀÚµ¿(~U)";
         Text[ turkish ] = "Otomatik";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "~Auto";
     };
 /*
     FixedText FT_PAUSE
@@ -403,6 +411,7 @@ ModalDialog DLG_START_PRESENTATION
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ language_user1 ] = " ";
         QuickHelpText[ turkish ] = "Pausendauer";
+        QuickHelpText[ catalan ] = "Duración de pausa";
     };
     CheckBox CBX_AUTOLOGO
     {
@@ -430,6 +439,7 @@ ModalDialog DLG_START_PRESENTATION
         Text[ korean ] = "·Î°í ³ªÅ¸³»±â(~L)";
         Text[ turkish ] = "Logo görüntüle";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Mostrar ~logotipo";
     };
 
     GroupBox GRP_OPTIONS
@@ -459,6 +469,7 @@ ModalDialog DLG_START_PRESENTATION
         Text[ korean ] = "¿É¼Ç";
         Text[ turkish ] = "Seçenekler";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Opciones";
     };
     CheckBox CBX_MANUEL
     {
@@ -488,6 +499,7 @@ ModalDialog DLG_START_PRESENTATION
         Text[ korean ] = "¼öµ¿À¸·Î ½½¶óÀÌµå ÀüÈ¯(~C)";
         Text[ turkish ] = "Manüel slayt geçiþi";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Avan~ce manual de diapositivas";
     };
     CheckBox CBX_MOUSEPOINTER
     {
@@ -517,6 +529,7 @@ ModalDialog DLG_START_PRESENTATION
         Text[ korean ] = "¸¶¿ì½º Æ÷ÀÎÅÍ º¸ÀÌ°Ô(~V)";
         Text[ turkish ] = "Fare okunu görüntüle";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Puntero del ratón vi~sible";
     };
     CheckBox CBX_PEN
     {
@@ -546,6 +559,7 @@ ModalDialog DLG_START_PRESENTATION
         Text[ korean ] = "¸¶¿ì½º Æ÷ÀÎÅÍ¸¦ ÆæÀ¸·Î(~P)";
         Text[ turkish ] = "Kalem biçiminde fare oku";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Puntero del ratón como p~luma";
     };
     CheckBox CBX_NAVIGATOR
     {
@@ -573,6 +587,7 @@ ModalDialog DLG_START_PRESENTATION
         Text[ korean ] = "³×ºñ°ÔÀÌÅÍ º¸ÀÌ±â(~N)";
         Text[ turkish ] = "Navigatörü görüntüle";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Ver ~Navegador";
     };
     CheckBox CBX_ANIMATION_ALLOWED
     {
@@ -600,6 +615,7 @@ ModalDialog DLG_START_PRESENTATION
         Text[ korean ] = "¾Ö´Ï¸ÞÀÌ¼Ç Çã¿ë(~A)";
         Text[ turkish ] = "Canlandýrmaya izin ver";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Permitir animaci~ones";
     };
     CheckBox CBX_CHANGE_PAGE
     {
@@ -627,6 +643,7 @@ ModalDialog DLG_START_PRESENTATION
         Text[ korean ] = "¹è°æ¿¡ Å¬¸¯ÇØ¼­ ½½¶óÀÌµå ÀüÈ¯(~K)";
         Text[ turkish ] = "Artalana týklayýnca slayt deðiþtir";
         Text[ language_user1 ] = "RB: bitte auf die Länge des Textes achten. Der Text soll nicht die Länge des deutschen Textes überschreiten.";
+        Text[ catalan ] = "Transición de dia. pulsando en ~fondo";
     };
     CheckBox CBX_ALWAYS_ON_TOP
     {
@@ -655,6 +672,7 @@ ModalDialog DLG_START_PRESENTATION
         Text[ korean ] = "ÇÁ¸®Á¨Å×ÀÌ¼ÇÀ» Ç×»ó Àü¸é¿¡(~O)";
         Text[ turkish ] = "Ekran sunusunu hep önde göster";
         Text[ language_user1 ] = " ";
+        Text[ catalan ] = "Prese~ntación siempre en primer plano";
     };
     Text[ chinese_traditional ] = "©ñ¬MÂ²³ø§ë¼v¤ù";
     Text[ arabic ] = "ÇáÚÑÖ Úáì ÇáÔÇÔÉ";
@@ -662,4 +680,5 @@ ModalDialog DLG_START_PRESENTATION
     Text[ korean ] = "½½¶óÀÌµå ¼î";
     Text[ turkish ] = "Ekran sunusu";
     Text[ language_user1 ] = " ";
+    Text[ catalan ] = "Iniciar presentación";
 };
