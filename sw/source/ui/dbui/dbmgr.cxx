@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.74 $
+ *  $Revision: 1.75 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 17:32:27 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 16:37:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,9 +140,6 @@
 #endif
 #ifndef _SFXDISPATCH_HXX //autogen
 #include <sfx2/dispatch.hxx>
-#endif
-#ifndef _OFF_APP_HXX //autogen
-#include <offmgr/app.hxx>
 #endif
 #ifndef _MAILENUM_HXX //autogen
 #include <goodies/mailenum.hxx>
@@ -1150,7 +1147,7 @@ BOOL SwNewDBMgr::MergeMailing(SwWrtShell* pSh)
             if (!IsMergeSilent())
                 aPrtMonDlg.Show();
 
-            OfficeApplication* pOffApp = OFF_APP();
+            SfxApplication* pOffApp = SFX_APP();
             SfxRequest aReq( SID_OPENDOC, SFX_CALLMODE_SYNCHRON, pOffApp->GetPool() );
             aReq.AppendItem( SfxStringItem( SID_FILE_NAME, sTmpName ));
             if(pSfxFlt)
@@ -2332,9 +2329,9 @@ void SwNewDBMgr::ExecuteFormLetter( SwWrtShell& rSh,
         if(xResSet.is())
             aDescriptor[daCursor] <<= xResSet;
 
-        OFF_APP()->NotifyEvent(SfxEventHint(SW_EVENT_MAIL_MERGE, rSh.GetView().GetViewFrame()->GetObjectShell()));
+        SFX_APP()->NotifyEvent(SfxEventHint(SW_EVENT_MAIL_MERGE, rSh.GetView().GetViewFrame()->GetObjectShell()));
         MergeNew(pImpl->pMergeDialog->GetMergeType(), rSh, aDescriptor);
-        OFF_APP()->NotifyEvent(SfxEventHint(SW_EVENT_MAIL_MERGE_END, rSh.GetView().GetViewFrame()->GetObjectShell()));
+        SFX_APP()->NotifyEvent(SfxEventHint(SW_EVENT_MAIL_MERGE_END, rSh.GetView().GetViewFrame()->GetObjectShell()));
 
         // reset the cursor inside
         xResSet = NULL;
