@@ -2,9 +2,9 @@
  *
  *  $RCSfile: assign.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dbo $ $Date: 2002-08-21 09:19:22 $
+ *  last change: $Author: jbu $ $Date: 2002-10-02 13:54:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,7 +137,6 @@ inline sal_Bool _queryAndAssignInterface(
                     // tweaky... avoiding acquire/ release pair
                     ::typelib_typedescriptionreference_release( aRet.pType );
                     pSource = *(void **)aRet.pData; // serving acquired interface
-                    ::rtl_freeMemory( aRet.pData );
                 }
                 else
                 {
