@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtxt.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:38:39 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 17:48:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,8 +86,9 @@ class SwAttrSet;
 class SwUndoTransliterate;
 
 
-struct SwSpellArgs;     // fuer Spell()
-class SwInterHyphInfo;  // Hyphenate(), splargs.hxx
+struct SwSpellArgs;             // for Spell(), splargs.hxx
+struct SwConversionArgs;        // for Convert(), splargs.hxx
+class SwInterHyphInfo;          // for Hyphenate(), splargs.hxx
 class SwWrongList;      // fuer OnlineSpelling
 class SwNodeNum;
 class OutputDevice;
@@ -261,6 +262,7 @@ public:
     // Aktuelles Wort zurueckliefern
     XubString GetCurWord(xub_StrLen);
     USHORT Spell(SwSpellArgs*);
+    USHORT Convert( SwConversionArgs & );
 
     inline SwTxtFmtColl *GetTxtColl() const;
     virtual SwFmtColl *ChgFmtColl( SwFmtColl* );
