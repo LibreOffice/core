@@ -2,9 +2,9 @@
  *
  *  $RCSfile: prstylei.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hbrinkm $ $Date: 2002-11-06 16:26:02 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:24:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,8 +157,33 @@ SvXMLImportContext *XMLPropStyleContext::CreateChildContext(
 {
     SvXMLImportContext *pContext = 0;
 
-    if( XML_NAMESPACE_STYLE == nPrefix &&
-        IsXMLToken( rLocalName, XML_PROPERTIES ) )
+    sal_uInt32 nFamily = 0;
+    if( XML_NAMESPACE_STYLE == nPrefix )
+    {
+        if( IsXMLToken( rLocalName, XML_GRAPHIC_PROPERTIES ) )
+            nFamily = XML_TYPE_PROP_GRAPHIC;
+        else if( IsXMLToken( rLocalName, XML_DRAWING_PAGE_PROPERTIES )  )
+            nFamily = XML_TYPE_PROP_DRAWING_PAGE;
+        else if( IsXMLToken( rLocalName, XML_TEXT_PROPERTIES )  )
+            nFamily = XML_TYPE_PROP_TEXT;
+        else if( IsXMLToken( rLocalName, XML_PARAGRAPH_PROPERTIES )  )
+            nFamily = XML_TYPE_PROP_PARAGRAPH;
+        else if( IsXMLToken( rLocalName, XML_RUBY_PROPERTIES )  )
+            nFamily = XML_TYPE_PROP_RUBY;
+        else if( IsXMLToken( rLocalName, XML_SECTION_PROPERTIES )  )
+            nFamily = XML_TYPE_PROP_SECTION;
+        else if( IsXMLToken( rLocalName, XML_TABLE_PROPERTIES )  )
+            nFamily = XML_TYPE_PROP_TABLE;
+        else if( IsXMLToken( rLocalName, XML_TABLE_COLUMN_PROPERTIES )  )
+            nFamily = XML_TYPE_PROP_TABLE_COLUMN;
+        else if( IsXMLToken( rLocalName, XML_TABLE_ROW_PROPERTIES )  )
+            nFamily = XML_TYPE_PROP_TABLE_ROW;
+        else if( IsXMLToken( rLocalName, XML_TABLE_CELL_PROPERTIES )  )
+            nFamily = XML_TYPE_PROP_TABLE_CELL;
+        else if( IsXMLToken( rLocalName, XML_CHART_PROPERTIES ) )
+            nFamily = XML_TYPE_PROP_CHART;
+    }
+    if( nFamily )
     {
         UniReference < SvXMLImportPropertyMapper > xImpPrMap =
             ((SvXMLStylesContext *)&xStyles)->GetImportPropertyMapper(
@@ -166,6 +191,7 @@ SvXMLImportContext *XMLPropStyleContext::CreateChildContext(
         if( xImpPrMap.is() )
             pContext = new SvXMLPropertySetContext( GetImport(), nPrefix,
                                                     rLocalName, xAttrList,
+                                                    nFamily,
                                                     aProperties,
                                                     xImpPrMap );
     }
@@ -218,7 +244,7 @@ typedef ::std::set < OUString, ::comphelper::UStringLess > PropertyNameSet;
 
 void XMLPropStyleContext::CreateAndInsert( sal_Bool bOverwrite )
 {
-    const OUString& rName = GetName();
+    const OUString& rName = GetDisplayName();
     if( 0 == rName.getLength() || IsDefaultStyle() )
         return;
 
@@ -254,6 +280,8 @@ void XMLPropStyleContext::CreateAndInsert( sal_Bool bOverwrite )
         bNew = !*(sal_Bool *)aAny.getValue();
     }
     SetNew( bNew );
+    if( rName != GetName() )
+        GetImport().AddStyleDisplayName( GetFamily(), GetName(), rName );
 
     if( bOverwrite || bNew )
     {
@@ -330,6 +358,8 @@ void XMLPropStyleContext::Finish( sal_Bool bOverwrite )
 
         // connect parent
         OUString sParent( GetParent() );
+        if( sParent.getLength() )
+            sParent = GetImport().GetStyleDisplayName( GetFamily(), sParent );
         if( sParent.getLength() && !xFamilies->hasByName( sParent ) )
             sParent = OUString();
 
@@ -366,6 +396,8 @@ void XMLPropStyleContext::Finish( sal_Bool bOverwrite )
 
         // connect follow
         OUString sFollow( GetFollow() );
+        if( sFollow.getLength() )
+            sFollow = GetImport().GetStyleDisplayName( GetFamily(), sFollow );
         if( !sFollow.getLength() || !xFamilies->hasByName( sFollow ) )
             sFollow = xStyle->getName();
 
