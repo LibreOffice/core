@@ -2,9 +2,9 @@
  *
  *  $RCSfile: linkmgr.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:26 $
+ *  last change: $Author: kz $ $Date: 2001-01-26 20:35:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,7 +163,7 @@ String RID_SVXSTR_GRFLINKPROGRESS
     Text[ russian ] = "Èìïîğò ãğàôèêè...";
     Text[ polish ] = "Importuj grafikê...";
     Text[ japanese ] = "¸Ş×Ì¨¯¸‚ğ²İÎß°Ä‚·‚é...";
-    Text[ chinese_traditional ] = "¿é¤J¹Ï§Î...";
+    Text[ chinese_traditional ] = "¶×¤J¹Ï¤ù...";
     Text[ arabic ] = "ÇÓÊíÑÇÏ ÑÓæãÇÊ...";
     Text[ dutch ] = "Bezig met het importeren van afbeelding...";
     Text[ chinese_simplified ] = "ÊäÈëÍ¼ĞÎ...";
