@@ -2,9 +2,9 @@
  *
  *  $RCSfile: extrusionbar.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 15:09:40 $
+ *  last change: $Author: rt $ $Date: 2005-01-07 09:24:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -419,6 +419,7 @@ static void impl_execute( SdrView* pSdrView, SfxRequest& rReq, SdrCustomShapeGeo
             {
                 pObj->SetMergedItem( XSecondaryFillColorItem( String(), aColor ) );
             }
+            pObj->BroadcastObjectChange();
         }
     }
     break;
@@ -653,6 +654,7 @@ void ExtrusionBar::execute( SdrView* pSdrView, SfxRequest& rReq, SfxBindings& rB
                     SdrCustomShapeGeometryItem aGeometryItem( (SdrCustomShapeGeometryItem&)pObj->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
                     impl_execute( pSdrView, rReq, aGeometryItem, pObj );
                     pObj->SetMergedItem( aGeometryItem );
+                    pObj->BroadcastObjectChange();
                     pSdrView->EndUndo();
                 }
             }
