@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printdlg.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-03 21:43:02 $
+ *  last change: $Author: pl $ $Date: 2001-07-04 13:07:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -678,6 +678,11 @@ ModalDialog DLG_SVT_PRNDLG_PRINTDLG
     {
         Pos = MAP_APPFONT ( 204 , 149 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
+    };
+    String STR_ALLFILTER
+    {
+        Text = "<Alle>";
+        Text [ english ] = "<All>";
     };
     Text[ chinese_simplified ] = "´òÓ¡";
     Text[ russian ] = "Ïå÷àòü";

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printdlg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: pl $ $Date: 2001-06-12 08:25:00 $
+ *  last change: $Author: pl $ $Date: 2001-07-04 13:07:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,33 @@
 #include <printdlg.hxx>
 #include <svtdata.hxx>
 
+#ifndef  _COM_SUN_STAR_UI_DIALOGS_TEMPLATEDESCRIPTION_HPP_
+#include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
+#endif
+#ifndef  _COM_SUN_STAR_UI_DIALOGS_EXECUTABLEDIALOGRESULTS_HPP_
+#include <com/sun/star/ui/dialogs/ExecutableDialogResults.hpp>
+#endif
+#ifndef  _COM_SUN_STAR_UI_DIALOGS_XFILEPICKER_HPP_
+#include <com/sun/star/ui/dialogs/XFilePicker.hpp>
+#endif
+#ifndef  _COM_SUN_STAR_UI_DIALOGS_XFILTERMANAGER_HPP_
+#include <com/sun/star/ui/dialogs/XFilterManager.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+#ifndef  _COM_SUN_STAR_LANG_XINITIALIZATION_HPP_
+#include <com/sun/star/lang/XInitialization.hpp>
+#endif
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
+
+using namespace com::sun::star::uno;
+using namespace com::sun::star::lang;
+using namespace com::sun::star::ui::dialogs;
+using namespace rtl;
+
 // =======================================================================
 
 PrintDialog::PrintDialog( Window* pWindow ) :
@@ -125,7 +152,8 @@ PrintDialog::PrintDialog( Window* pWindow ) :
     maFiFaxNo       ( this, SvtResId( FI_FAXNO ) ),
     maEdtFaxNo      ( this, SvtResId( EDT_FAXNO ) ),
     maFlSepCopiesRange( this, SvtResId( FL_SEPCOPIESRANGE ) ),
-    maFlSepButtonLine( this, SvtResId( FL_SEPBUTTONLINE ) )
+    maFlSepButtonLine( this, SvtResId( FL_SEPBUTTONLINE ) ),
+    maAllFilterStr  ( SvtResId( STR_ALLFILTER ) )
 {
     FreeResource();
 
@@ -361,6 +389,55 @@ IMPL_LINK( PrintDialog, ImplChangePrinterHdl, void*, EMPTYARG )
 
 IMPL_LINK( PrintDialog, ImplBrowseHdl, void*, EMPTYARG )
 {
+    Reference< XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
+    if( xFactory.is() )
+    {
+        Reference< XFilePicker > xFilePicker( xFactory->createInstance( OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.ui.dialogs.FilePicker" ) ) ), UNO_QUERY );
+        DBG_ASSERT( xFilePicker.is(), "could not get FilePicker service" );
+
+        Reference< XInitialization > xInit( xFilePicker, UNO_QUERY );
+        Reference< XFilterManager > xFilterMgr( xFilePicker, UNO_QUERY );
+        if( xInit.is() && xFilePicker.is() && xFilterMgr.is() )
+        {
+            Sequence< Any > aServiceType( 1 );
+            aServiceType[0] <<= TemplateDescription::FILESAVE_SIMPLE;
+            xInit->initialize( aServiceType );
+
+#ifdef UNX
+            // add PostScript and PDF
+            try
+            {
+                xFilterMgr->appendFilter( OUString( RTL_CONSTASCII_USTRINGPARAM( "PostScript" ) ), OUString( RTL_CONSTASCII_USTRINGPARAM( "*.ps" ) ) );
+                xFilterMgr->appendFilter( OUString( RTL_CONSTASCII_USTRINGPARAM( "PDF" ) ), OUString( RTL_CONSTASCII_USTRINGPARAM( "*.pdf" ) ) );
+            }
+            catch( IllegalArgumentException& rExc )
+            {
+                DBG_ASSERT( 0, "caught IllegalArgumentException when registering filter\n" );
+            }
+#endif
+
+            // add arbitrary files
+            try
+            {
+                xFilterMgr->appendFilter( maAllFilterStr, OUString( RTL_CONSTASCII_USTRINGPARAM( "*.*" ) ) );
+            }
+            catch( IllegalArgumentException& rExc )
+            {
+                DBG_ASSERT( 0, "caught IllegalArgumentException when registering filter\n" );
+            }
+
+            if( xFilePicker->execute() == ExecutableDialogResults::OK )
+            {
+                Sequence< OUString > aPathSeq( xFilePicker->getFiles() );
+                INetURLObject aObj( aPathSeq[0] );
+                maFiPrintFile.SetText( aObj.PathToFileName() );
+            }
+
+            return 0;
+        }
+    }
+
+    // fall back to old style dialogues if service is not available
     VclFileDialog* pVclFileDlg = GetpApp()->CreateFileDialog( this, WB_SAVEAS );
     if ( pVclFileDlg )
     {
@@ -395,7 +472,6 @@ IMPL_LINK( PrintDialog, ImplBrowseHdl, void*, EMPTYARG )
 
         delete pFileDlg;
     }
-
     return 0;
 }
 
