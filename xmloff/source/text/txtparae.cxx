@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.83 $
+ *  $Revision: 1.84 $
  *
- *  last change: $Author: mib $ $Date: 2001-06-19 15:01:30 $
+ *  last change: $Author: mib $ $Date: 2001-06-26 11:48:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -637,6 +637,13 @@ void XMLTextParagraphExport::exportListChange(
 
         // <text:list-item>
         GetExport().CheckAttrList();
+        if( rNextInfo.HasStartValue() )
+        {
+            OUStringBuffer aBuffer;
+            aBuffer.append( (sal_Int32)rNextInfo.GetStartValue() );
+            GetExport().AddAttribute( XML_NAMESPACE_TEXT, sXML_start_value,
+                              aBuffer.makeStringAndClear() );
+        }
         pElem = new OUString( GetExport().GetNamespaceMap().GetQNameByKey(
                                 XML_NAMESPACE_TEXT,
                                 OUString::createFromAscii(sXML_list_item) ) );
