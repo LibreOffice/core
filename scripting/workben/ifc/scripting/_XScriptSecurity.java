@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XScriptSecurity.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change:$Date: 2003-02-27 15:59:09 $
+ *  last change:$Date: 2003-03-25 11:26:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -120,6 +120,10 @@ public class _XScriptSecurity extends MultiMethodTest {
             result = false;
         }
 
+        // set security to always without confirmation dialog and empty path
+        // list so other tests can run without dialog popping up
+        setSecurity(2, "false", "false", null);
+
         tRes.tested("checkPermission()", result);
     }
 
@@ -150,6 +154,8 @@ public class _XScriptSecurity extends MultiMethodTest {
 
         String output = null;
 
+        log.println(description);
+
         // get the officeBasic setting
         int officeBasic = 0;
         if( runmacro.equals("never") )
@@ -171,10 +177,6 @@ public class _XScriptSecurity extends MultiMethodTest {
         {
             String uri = util.utils.getFullTestURL(location);
             secureURLs = uri.substring(0,  uri.lastIndexOf('/'));
-        }
-        else if ( pathlist.equals("false") )
-        {
-            secureURLs = "";
         }
 
         if ( !setSecurity( officeBasic, confirm, warning, secureURLs ) )
@@ -207,6 +209,14 @@ public class _XScriptSecurity extends MultiMethodTest {
                 output = "false";
             }
         }
+        catch (com.sun.star.security.AccessControlException ace) {
+            log.println("Couldn't invoke script:" + ace);
+            output = "com.sun.star.security.AccessControlException";
+        }
+        catch (com.sun.star.lang.IllegalArgumentException iae) {
+            log.println("Couldn't invoke script:" + iae);
+            output = "com.sun.star.lang.IllegalArgumentException";
+        }
         catch (com.sun.star.uno.RuntimeException re) {
             log.println("Couldn't invoke script:" + re);
             output = "com.sun.star.uno.RuntimeException";
@@ -218,7 +228,7 @@ public class _XScriptSecurity extends MultiMethodTest {
             if( checkpath.equals("true") )
             {
                 String setPath  = getPathList();
-                String expectedPath = "";
+                String expectedPath = "empty";
                 if( checkBoxStr.equals( "true" ) )
                 {
                     String uri = util.utils.getFullTestURL(location);
@@ -267,10 +277,16 @@ public class _XScriptSecurity extends MultiMethodTest {
             aArgs );
         XPropertySet xPropertySet = (XPropertySet)UnoRuntime.queryInterface(
                 XPropertySet.class, oConfigUpdate );
-        result = (String) xPropertySet.getPropertyValue( "SecureURL" );
+
+        String[] paths = (String[])xPropertySet.getPropertyValue("SecureURL");
+        if (paths == null || paths.length == 0)
+            result = "empty";
+        else
+            result = paths[0];
+
         } catch (Exception e)
         {
-            result = "Exception getting list of secure URLs";
+            result = e.getClass().getName() + " getting list of secure URLs";
         }
         return result;
     }
@@ -306,12 +322,18 @@ public class _XScriptSecurity extends MultiMethodTest {
         XChangesBatch xChangesBatch = (XChangesBatch)UnoRuntime.queryInterface(
                 XChangesBatch.class, oConfigUpdate );
 
-        Object[] aSecureURLs = new Object[1];
-        aSecureURLs[0]=secureURLs;
-        log.println("settting SecureURL");
+        Object[] aSecureURLs;
+        if (secureURLs == null) {
+            aSecureURLs = new Object[0];
+        }
+        else {
+            aSecureURLs = new Object[1];
+            aSecureURLs[0] = secureURLs;
+        }
+        log.println("setting SecureURL");
         xNameReplace.replaceByName( "SecureURL", aSecureURLs );
 
-        log.println("settting OfficeBasic");
+        log.println("setting OfficeBasic");
         xNameReplace.replaceByName( "OfficeBasic", new Integer(officeBasic) );
 
         Boolean bConfirm = null;
@@ -323,7 +345,7 @@ public class _XScriptSecurity extends MultiMethodTest {
         {
             bConfirm = new Boolean( false );
         }
-        log.println("settting Confirmation");
+        log.println("setting Confirmation");
         xNameReplace.replaceByName( "Confirmation", bConfirm );
 
         Boolean bWarning = null;
@@ -335,7 +357,7 @@ public class _XScriptSecurity extends MultiMethodTest {
         {
             bWarning = new Boolean( false );
         }
-        log.println("settting Warning");
+        log.println("setting Warning");
         xNameReplace.replaceByName( "Warning", bWarning );
 
         // and now commit the changes

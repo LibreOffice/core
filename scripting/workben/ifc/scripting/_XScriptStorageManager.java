@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XScriptStorageManager.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2002-12-10 14:12:06 $
+ *  last change:$Date: 2003-03-25 11:26:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -252,6 +252,7 @@ public class _XScriptStorageManager extends MultiMethodTest {
 
             try {
                 String uri = util.utils.getFullTestURL(location);
+                log.println("calling refreshScriptStorage with URI: " + uri);
                 oObj.refreshScriptStorage(uri);
                 output = "success";
             }

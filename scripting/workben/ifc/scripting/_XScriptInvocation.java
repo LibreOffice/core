@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XScriptInvocation.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change:$Date: 2003-03-05 15:29:36 $
+ *  last change:$Date: 2003-03-25 11:26:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-package ifc.script.framework;
+package ifc.script.framework.runtime;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -149,7 +149,9 @@ public class _XScriptInvocation extends MultiMethodTest {
         log.println(description + ": " + logicalname);
 
         try {
-            oObj.invoke(logicalname, params, args, num, result);
+            Object ret = oObj.invoke(logicalname, params, args, num, result);
+            log.println("return type is: " + ret.getClass().getName() +
+                ", value is: " + ret.toString());
             output = "success";
         }
         catch (com.sun.star.lang.IllegalArgumentException iae) {

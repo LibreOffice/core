@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SecurityDialogUtil.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-02-26 09:56:36 $
+ *  last change:$Date: 2003-03-25 11:26:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,7 +124,7 @@ public void run()
     // wait for the message box to appear
     try
     {
-        Thread.currentThread().sleep(2000) ;
+        Thread.currentThread().sleep(4000) ;
     }
     catch (InterruptedException e)
     {
@@ -157,21 +157,21 @@ public void run()
     XInterface oObj = null;
     try
     {
-        System.err.println("Name of the AccessibleContext:\n\t"+
-                                        xCon.getAccessibleName());
+        /* System.err.println("Name of the AccessibleContext:\n\t"+
+                                        xCon.getAccessibleName()); */
         int count = xCon.getAccessibleChildCount();
-        System.err.println("Number of children: "+count);
+        // System.err.println("Number of children: "+count);
         for (int i=0; i<count; i++) {
             XAccessible xAcc = xCon.getAccessibleChild(i);
             String name =
                     xAcc.getAccessibleContext().getAccessibleName();
-            System.out.println("Child "+i+": "+ name);
+            // System.out.println("Child "+i+": "+ name);
             // check for button
             if ( name.equals( btnName ) && ( UnoRuntime.queryInterface(
                                     XButton.class, xAcc ) != null ) )
             {
+                // System.out.println("Child "+i+": "+ name);
                 oObj = xAcc.getAccessibleContext();
-                break;
             }
             // check for checkbox
             if ( checkBox &&  ( UnoRuntime.queryInterface( XCheckBox.class, xAcc ) != null ) )
@@ -182,8 +182,8 @@ public void run()
                         (XAccessibleAction)UnoRuntime.queryInterface(
                         XAccessibleAction.class, xAcc.getAccessibleContext());
                 xAction.doAccessibleAction(0);
+
                 // might be worth using oObj2 to double check the new state??
-                break;
             }
         }
         if (oObj == null) {

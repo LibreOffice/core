@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XScriptNameResolver.java,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change:$Date: 2003-03-05 15:29:36 $
+ *  last change:$Date: 2003-03-25 11:26:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-package ifc.script.framework;
+package ifc.script.framework.runtime;
 
 import java.util.HashMap;
 import java.util.Iterator;

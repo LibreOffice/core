@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptRuntimeManager.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2002-12-10 14:12:41 $
+ *  last change:$Date: 2003-03-25 11:26:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@ public class ScriptRuntimeManager extends TestCase {
 
         try {
             oObj = (XInterface) Param.getMSF().createInstance
-                ("drafts.com.sun.star.script.framework.ScriptRuntimeManager");
+                ("drafts.com.sun.star.script.framework.runtime.ScriptRuntimeManager");
         } catch (com.sun.star.uno.Exception e) {
             throw new StatusException("Can't create object environment", e) ;
         }
