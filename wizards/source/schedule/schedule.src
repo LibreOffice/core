@@ -2,9 +2,9 @@
  *
  *  $RCSfile: schedule.src,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 14:06:15 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:50:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -279,7 +279,7 @@ Text[ portuguese ] = "Cancelar";
 Text[ dutch ] = "Annuleren";
 Text[ swedish ] = "Avbryt";
     Text[ russian ] = "Ξςμενθςό";
-    Text[ greek ] = "Ακύρωση";
+    Text[ greek ] = "Άκυρο";
     Text[ danish ] = "Annuller";
     Text[ polish ] = "Anuluj";
     Text[ portuguese_brazilian ] = "Cancelar";
@@ -570,6 +570,7 @@ Text[ swedish ] = "-";
     Text[ japanese ] = "-";
     Text[ chinese_simplified ] = "-";
     Text[ hebrew ] = "β€®Χ—Χ’ Χ™Χ©Χ¨ΧΧΧ™β€¬";
+    Text[ portuguese_brazilian ] = "Feriados locais";
 };
 
 String  dlgCalOwnData
@@ -677,7 +678,7 @@ Text[ portuguese ] = "Novo evento";
 Text[ dutch ] = "Nieuwe gebeurtenis";
 Text[ swedish ] = "Ny hδndelse";
     Text[ russian ] = "Ρξηδΰςό ρξαϋςθε";
-    Text[ greek ] = "Νέο γεγονός";
+    Text[ greek ] = "Νέο συμβάν";
     Text[ danish ] = "Ny begivenhed";
     Text[ polish ] = "Nowe zdarzenie";
     Text[ portuguese_brazilian ] = "Novo evento";
@@ -708,7 +709,7 @@ Text[ portuguese ] = "Evento";
 Text[ dutch ] = "Gebeurtenis";
 Text[ swedish ] = "Hδndelse";
     Text[ russian ] = "Ρξαϋςθε";
-    Text[ greek ] = "Γεγονός";
+    Text[ greek ] = "Συμβάν";
     Text[ danish ] = "Begivenhed";
     Text[ polish ] = "Wydarzenie";
     Text[ portuguese_brazilian ] = "Evento";
@@ -859,7 +860,7 @@ Text[ swedish ] = "Εr";
 String dlgBitmapFile
 {
 Text = "germany.wmf";
-Text[ language_user1 ] = "Only for Germany we will use a '.wmf' file. For other localizations only bitmaps. The name of the resource refers to the bitmap 'share/template/wizard/bitmap";
+Text[ language_user1 ] = "; Only for Germany we will use a '.wmf' file. For other localizations only bitmaps. The name of the resource refers to the bitmap 'share/template/wizard/bitmap";
 Text[ English ] = "britain.bmp";
 Text[ English_us ] = "usa.bmp";
 Text[ french ] = "france.bmp";
@@ -869,7 +870,7 @@ Text[ portuguese ] = "portugal.bmp";
 Text[ dutch ] = "netherlands.bmp";
 Text[ swedish ] = "sweden.bmp";
     Text[ russian ] = "russia.bmp";
-    Text[ greek ] = "greece.bmp";
+    Text[ greek ] = "usa.bmp";
     Text[ danish ] = "germany.wmf";
     Text[ polish ] = "polska.bmp";
     Text[ portuguese_brazilian ] = "brasil.bmp";
@@ -881,7 +882,7 @@ Text[ swedish ] = "sweden.bmp";
     Text[ turkish ] = "abd.bmp";
     Text[ catalan ] = "usa.bmp";
     Text[ finnish ] = "usa.bmp";
-    Text[ language_user1 ] = "Only for Germany we will use a '.wmf' file. For other localizations only bitmaps. The name of the resource refers to the bitmap 'share/template/wizard/bitmap";
+    Text[ language_user1 ] = "; Only for Germany we will use a '.wmf' file. For other localizations only bitmaps. The name of the resource refers to the bitmap 'share/template/wizard/bitmap";
 
     Text[ thai ] = "thailand.bmp";
     Text[ czech ] = "usa.bmp";
@@ -1062,7 +1063,7 @@ Text[ portuguese ] = "Maio";
 Text[ dutch ] = "Mei";
 Text[ swedish ] = "Maj";
     Text[ russian ] = "Μΰι";
-    Text[ greek ] = "Μαίου";
+    Text[ greek ] = "Μαΐου";
     Text[ danish ] = "Maj";
     Text[ polish ] = "Maj";
     Text[ portuguese_brazilian ] = "Maio";
@@ -1374,7 +1375,7 @@ Text[ portuguese ] = "Eliminar eventos";
 Text[ dutch ] = "Gebeurtenisgegevens wissen";
 Text[ swedish ] = "Ta bort hδndelseposter";
     Text[ russian ] = "Σδΰλθςό ηΰοθρθ ρξαϋςθι";
-    Text[ greek ] = "Διαγραφή εγγραφών γεγονότων";
+    Text[ greek ] = "Διαγραφή εγγραφών συμβάντων";
     Text[ danish ] = "Fjern begivenhedselementer";
     Text[ polish ] = "Usuρ wpisy wydarzeρ";
     Text[ portuguese_brazilian ] = "Excluir eventos";
@@ -1558,10 +1559,10 @@ Text[ swedish ] = "Mεnad";
     Text[ chinese_traditional ] = "ζ";
     Text[ arabic ] = "ΤεΡ";
     Text[ turkish ] = "Ay";
-    Text[ language_user1 ] = "This Resource is the prefix for a sheet name eg. in the form like 'Month February'.";
+    Text[ language_user1 ] = "; This Resource is the prefix for a sheet name eg. in the form like 'Month February'.";
     Text[ catalan ] = "Mes";
     Text[ finnish ] = "Kuukausi";
-    Text[ language_user1 ] = "This Resource is the prefix for a sheet name eg. in the form like 'Month February'.";
+    Text[ language_user1 ] = "; This Resource is the prefix for a sheet name eg. in the form like 'Month February'.";
     Text[ thai ] = "ΰΉ€ΰΈ”ΰΈ·ΰΈ­ΰΈ™";
     Text[ czech ] = "MΔ›sΓ­c";
     Text[ hebrew ] = "β€®Χ—Χ•Χ“Χ©β€¬";
@@ -1601,6 +1602,7 @@ Text[ English_us ] = "Progress:";
     Text[ hindi ] = "ΰ¤ªΰ¥ΰ¤°ΰ¤Έΰ¥ΰ¤¥ΰ¤Ύΰ¤¨:";
     Text[ slovak ] = "Priebeh:";
 };
+
 
 
 
