@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtffld.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jp $ $Date: 2001-11-28 20:17:17 $
+ *  last change: $Author: cmc $ $Date: 2002-11-22 14:37:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -458,11 +458,27 @@ int SwRTFParser::MakeFieldInst( String& rFieldStr )
     // sicher den Original-String fuer die FeldNamen (User/Datenbank)
     String aSaveStr( rFieldStr );
     SwFieldType * pFldType;
-    xub_StrLen nPos = 0;
     USHORT nSubType;
-    int nRet;
+    int nRet = _WhichFld(rFieldStr, aSaveStr);
 
-    switch( nRet = _WhichFld( rFieldStr, aSaveStr ) )
+    //Strip Mergeformat from fields
+    xub_StrLen nPos=0;
+    while (STRING_NOTFOUND != ( nPos = aSaveStr.SearchAscii("\\*", nPos)))
+    {
+        xub_StrLen nStartDel = nPos;
+        nPos += 2;
+        while (aSaveStr.GetChar(nPos) == ' ')
+            ++nPos;
+        if (aSaveStr.EqualsIgnoreCaseAscii("MERGEFORMAT", nPos, 11))
+        {
+            xub_StrLen nNoDel = (nPos + 11 ) - nStartDel;
+            aSaveStr.Erase(nStartDel, nNoDel);
+            nPos -= (nStartDel - nPos);
+        }
+    }
+
+    nPos = 0;
+    switch (nRet)
     {
     case RTFFLD_IMPORT:
         {
