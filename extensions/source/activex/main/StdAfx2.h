@@ -18,6 +18,9 @@
 
 #define min(a, b)  (((a) < (b)) ? (a) : (b))
 
+#if defined(_MSC_VER) && (_MSC_VER >= 1300)
+#undef _DEBUG
+#endif
 #include <atlbase.h>
 //You may derive a class from CComModule and use it if you want to override
 //something, but do not change the name of _Module
