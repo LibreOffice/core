@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formats.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:47:55 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:40:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1415,7 +1415,7 @@ static USHORT GetTransferableAction_Impl(
             const SotAction_Impl*   pArrayStart = pArray;
             ULONG                   nId = pArray->nFormatId;
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 // used for testing a specific format - change in the debugger the value
     static ULONG nChkFormat = 0;
     if( nChkFormat )
