@@ -2,9 +2,9 @@
  *
  *  $RCSfile: diagnose.c,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hro $ $Date: 2002-06-25 08:32:16 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 13:26:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@ pfunc_osl_printDebugMessage SAL_CALL osl_setDebugMessageFunc( pfunc_osl_printDeb
  Trace output
 */
 
-void SAL_CALL osl_breakDebug()
+void SAL_CALL osl_breakDebug(void)
 {
     DebugBreak();
 }
@@ -178,6 +178,8 @@ sal_Int32 SAL_CALL osl_reportError(sal_uInt32 nType, const sal_Char* pszMessage)
     HWND hWndParent = GetActiveWindow();
     if (hWndParent != NULL)
         hWndParent = GetLastActivePopup(hWndParent);
+
+    nType = nType; /* avoid warnings */
 
     /* set message box flags */
     nFlags = MB_TASKMODAL | MB_ICONERROR | MB_YESNOCANCEL | MB_DEFBUTTON2 | MB_SETFOREGROUND;
