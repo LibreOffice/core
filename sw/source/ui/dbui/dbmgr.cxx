@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: jp $ $Date: 2001-08-31 14:07:46 $
+ *  last change: $Author: os $ $Date: 2001-09-04 12:40:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -291,7 +291,6 @@
 #include <vcl/msgbox.hxx>
 #endif
 
-using namespace rtl;
 using namespace ::com::sun::star;
 using namespace com::sun::star::uno;
 using namespace com::sun::star::container;
@@ -697,8 +696,8 @@ void SwNewDBMgr::ImportDBEntry(SwWrtShell* pSh)
         else
         {
             String sStr;
-            Sequence<OUString> aColNames = xCols->getElementNames();
-            const OUString* pColNames = aColNames.getConstArray();
+            Sequence<rtl::OUString> aColNames = xCols->getElementNames();
+            const rtl::OUString* pColNames = aColNames.getConstArray();
             long nLength = aColNames.getLength();
             for(long i = 0; i < nLength; i++)
             {
@@ -735,8 +734,8 @@ BOOL SwNewDBMgr::GetTableNames(ListBox* pListBox, const String& rDBName)
         if(xTSupplier.is())
         {
             Reference<XNameAccess> xTbls = xTSupplier->getTables();
-            Sequence<OUString> aTbls = xTbls->getElementNames();
-            const OUString* pTbls = aTbls.getConstArray();
+            Sequence<rtl::OUString> aTbls = xTbls->getElementNames();
+            const rtl::OUString* pTbls = aTbls.getConstArray();
             for(long i = 0; i < aTbls.getLength(); i++)
             {
                 USHORT nEntry = pListBox->InsertEntry(pTbls[i]);
@@ -747,8 +746,8 @@ BOOL SwNewDBMgr::GetTableNames(ListBox* pListBox, const String& rDBName)
         if(xQSupplier.is())
         {
             Reference<XNameAccess> xQueries = xQSupplier->getQueries();
-            Sequence<OUString> aQueries = xQueries->getElementNames();
-            const OUString* pQueries = aQueries.getConstArray();
+            Sequence<rtl::OUString> aQueries = xQueries->getElementNames();
+            const rtl::OUString* pQueries = aQueries.getConstArray();
             for(long i = 0; i < aQueries.getLength(); i++)
             {
                 USHORT nEntry = pListBox->InsertEntry(pQueries[i]);
@@ -781,8 +780,8 @@ BOOL SwNewDBMgr::GetColumnNames(ListBox* pListBox,
     if(xColsSupp.is())
     {
         Reference <XNameAccess> xCols = xColsSupp->getColumns();
-        const Sequence<OUString> aColNames = xCols->getElementNames();
-        const OUString* pColNames = aColNames.getConstArray();
+        const Sequence<rtl::OUString> aColNames = xCols->getElementNames();
+        const rtl::OUString* pColNames = aColNames.getConstArray();
         for(int nCol = 0; nCol < aColNames.getLength(); nCol++)
         {
             pListBox->InsertEntry(pColNames[nCol]);
@@ -803,8 +802,8 @@ BOOL SwNewDBMgr::GetColumnNames(ListBox* pListBox,
     if(xColsSupp.is())
     {
         Reference <XNameAccess> xCols = xColsSupp->getColumns();
-        const Sequence<OUString> aColNames = xCols->getElementNames();
-        const OUString* pColNames = aColNames.getConstArray();
+        const Sequence<rtl::OUString> aColNames = xCols->getElementNames();
+        const rtl::OUString* pColNames = aColNames.getConstArray();
         for(int nCol = 0; nCol < aColNames.getLength(); nCol++)
         {
             pListBox->InsertEntry(pColNames[nCol]);
@@ -1382,7 +1381,7 @@ ULONG SwNewDBMgr::GetColumnFmt( Reference< XDataSource> xSource,
                     Reference<XPropertySet> xNumProps = xNumberFormats->getByKey( nFmt );
                     Any aFormat = xNumProps->getPropertyValue(C2U("FormatString"));
                     Any aLocale = xNumProps->getPropertyValue(C2U("Locale"));
-                    OUString sFormat;
+                    rtl::OUString sFormat;
                     aFormat >>= sFormat;
                     com::sun::star::lang::Locale aLoc;
                     aLocale >>= aLoc;
@@ -1834,8 +1833,8 @@ BOOL SwNewDBMgr::OpenDataSource(const String& rDataSource, const String& rTableO
             pFound->bScrollable = xMetaData
                         ->supportsResultSetType((sal_Int32)ResultSetType::SCROLL_INSENSITIVE);
             pFound->xStatement = pFound->xConnection->createStatement();
-            OUString aQuoteChar = xMetaData->getIdentifierQuoteString();
-            OUString sStatement(C2U("SELECT * FROM "));
+            rtl::OUString aQuoteChar = xMetaData->getIdentifierQuoteString();
+            rtl::OUString sStatement(C2U("SELECT * FROM "));
             sStatement = C2U("SELECT * FROM ");
             sStatement += aQuoteChar;
             sStatement += rTableOrQuery;
@@ -1860,7 +1859,7 @@ BOOL SwNewDBMgr::OpenDataSource(const String& rDataSource, const String& rTableO
 /* -----------------------------14.08.2001 10:26------------------------------
 
  ---------------------------------------------------------------------------*/
-Reference< XConnection> SwNewDBMgr::RegisterConnection(OUString& rDataSource)
+Reference< XConnection> SwNewDBMgr::RegisterConnection(rtl::OUString& rDataSource)
 {
     SwDSParam* pFound = SwNewDBMgr::FindDSConnection(rDataSource, TRUE);
     Reference< XDataSource> xSource;
@@ -1947,7 +1946,7 @@ SwDSParam* SwNewDBMgr::FindDSData(const SwDBData& rData, BOOL bCreate)
 /* -----------------------------14.08.2001 10:27------------------------------
 
  ---------------------------------------------------------------------------*/
-SwDSParam*  SwNewDBMgr::FindDSConnection(const OUString& rDataSource, BOOL bCreate)
+SwDSParam*  SwNewDBMgr::FindDSConnection(const rtl::OUString& rDataSource, BOOL bCreate)
 {
     SwDSParam* pFound = 0;
     for(USHORT nPos = 0; nPos < aDataSourceParams.Count(); nPos++)
@@ -2017,7 +2016,7 @@ const SwDBData& SwNewDBMgr::GetAddressDBName()
 /* -----------------------------18.07.00 13:13--------------------------------
 
  ---------------------------------------------------------------------------*/
-Sequence<OUString> SwNewDBMgr::GetExistingDatabaseNames()
+Sequence<rtl::OUString> SwNewDBMgr::GetExistingDatabaseNames()
 {
     Reference<XNameAccess> xDBContext;
     Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
@@ -2030,7 +2029,7 @@ Sequence<OUString> SwNewDBMgr::GetExistingDatabaseNames()
     {
         return xDBContext->getElementNames();
     }
-    return Sequence<OUString>();
+    return Sequence<rtl::OUString>();
 }
 /* -----------------------------10.11.00 17:10--------------------------------
 
@@ -2041,7 +2040,7 @@ void SwNewDBMgr::ExecuteFormLetter( SwWrtShell& rSh,
     //prevent second call
     if(pImpl->pMergeDialog)
         return ;
-    OUString sDataSource, sDataTableOrQuery;
+    rtl::OUString sDataSource, sDataTableOrQuery;
     Sequence<Any> aSelection;
     BOOL bHasSelectionProperty = FALSE;
     sal_Int32 nSelectionPos = 0;
@@ -2127,7 +2126,7 @@ void SwNewDBMgr::ExecuteFormLetter( SwWrtShell& rSh,
 void SwNewDBMgr::InsertText(SwWrtShell& rSh,
                         const Sequence< PropertyValue>& rProperties)
 {
-    OUString sDataSource, sDataTableOrQuery;
+    rtl::OUString sDataSource, sDataTableOrQuery;
     Reference<XResultSet>  xResSet;
     Sequence<Any> aSelection;
     BOOL bHasSelectionProperty = FALSE;
@@ -2179,7 +2178,7 @@ void SwNewDBMgr::InsertText(SwWrtShell& rSh,
             aDBData );
     if( RET_OK == pDlg->Execute() )
     {
-        OUString sDummy;
+        rtl::OUString sDummy;
         if(!xConnection.is())
             xConnection = xSource->getConnection(sDummy, sDummy);
         try
