@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: th $ $Date: 2000-11-03 14:15:39 $
+ *  last change: $Author: th $ $Date: 2000-11-24 18:53:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,11 +89,13 @@ public:
     int                     mnShowState;            // show state
     long                    mnWidth;                // client width in pixeln
     long                    mnHeight;               // client height in pixeln
+    int                     mnMinWidth;             // min. client width in pixeln
+    int                     mnMinHeight;            // min. client height in pixeln
     RECT                    maFullScreenRect;       // fullscreen rect
     int                     mnFullScreenShowState;  // fullscreen restore show state
     UINT                    mnInputLang;            // current Input Language
     UINT                    mnInputCodePage;        // current Input CodePage
-    USHORT                  mnStyle;                // style
+    ULONG                   mnStyle;                // style
     BOOL                    mbGraphics;             // is Graphics used
     BOOL                    mbCaption;              // has window a caption
     BOOL                    mbBorder;               // has window a border
