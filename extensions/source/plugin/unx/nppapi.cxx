@@ -2,7 +2,7 @@
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/extensions/source/plugin/unx/nppapi.cxx,v 1.2 2003-03-25 16:03:42 hr Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/extensions/source/plugin/unx/nppapi.cxx,v 1.3 2003-05-28 12:38:39 vg Exp $
 
 *************************************************************************/
 
@@ -65,8 +65,8 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, pMediator )
                 NPError aRet = NPN_GetURL( instance, pUrl, pWindow );
                 Respond( pMessage->m_nID,
                          (char*)(&aRet), sizeof( NPError ), NULL );
-                delete pUrl;
-                delete pWindow;
+                delete [] pUrl;
+                delete [] pWindow;
             }
             break;
             case eNPN_GetURLNotify:
@@ -80,9 +80,9 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, pMediator )
                                                  *pNotifyData );
                 Respond( pMessage->m_nID,
                          (char*)(&aRet), sizeof( NPError ), NULL );
-                delete pUrl;
-                delete pWindow;
-                delete pNotifyData;
+                delete [] pUrl;
+                delete [] pWindow;
+                delete [] pNotifyData;
             }
             break;
             case eNPN_DestroyStream:
@@ -112,8 +112,8 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, pMediator )
                 Respond( pMessage->m_nID,
                          (char*)(&aRet), sizeof( NPError ), NULL );
 
-                delete pUrl;
-                delete pReason;
+                delete [] pUrl;
+                delete [] pReason;
             }
             break;
             case eNPN_NewStream:
@@ -143,8 +143,8 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, pMediator )
                          &pStream->lastmodified, sizeof(UINT32),
                          NULL );
 
-                delete pTarget;
-                delete pType;
+                delete [] pTarget;
+                delete [] pType;
             }
             break;
             case eNPN_PostURLNotify:
@@ -160,11 +160,11 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, pMediator )
                 NPError aRet =
                     NPN_PostURLNotify( instance, pUrl, pTarget, nLen, pBuf, *pFile, *pNData );
                 Respond( pMessage->m_nID, (char*)&aRet, sizeof( aRet ), NULL );
-                delete pUrl;
-                delete pTarget;
-                delete pBuf;
-                delete pFile;
-                delete pNData;
+                delete [] pUrl;
+                delete [] pTarget;
+                delete [] pBuf;
+                delete [] pFile;
+                delete [] pNData;
             }
             break;
             case eNPN_PostURL:
@@ -179,10 +179,10 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, pMediator )
                 NPError aRet =
                     NPN_PostURL( instance, pUrl, pWindow, nLen, pBuf, *pFile );
                 Respond( pMessage->m_nID, (char*)&aRet, sizeof( aRet ), NULL );
-                delete pUrl;
-                delete pWindow;
-                delete pBuf;
-                delete pFile;
+                delete [] pUrl;
+                delete [] pWindow;
+                delete [] pBuf;
+                delete [] pFile;
             }
             break;
             case eNPN_RequestRead:
@@ -209,7 +209,7 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, pMediator )
                     delete pFirst;
                     pFirst = pRun;
                 }
-                delete pArray;
+                delete [] pArray;
             }
             break;
             case eNPN_Status:
@@ -218,7 +218,7 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, pMediator )
                 NPP instance        = m_aInstances.GetObject( nInstance )->instance;
                 char* pString   = pMessage->GetString();
                 NPN_Status( instance, pString );
-                delete pString;
+                delete [] pString;
             }
             break;
             case eNPN_Version:
@@ -245,7 +245,7 @@ IMPL_LINK( PluginConnector, WorkOnNewMessageHdl, Mediator*, pMediator )
                 Respond( pMessage->m_nID,
                          (char*)&nRet, sizeof( nRet ),
                          NULL );
-                delete pBuffer;
+                delete [] pBuffer;
                 delete instance;
             }
             break;
@@ -391,8 +391,8 @@ NPError UnxPluginComm::NPP_New( NPMIMEType pluginType, NPP instance, uint16 mode
                       pArgvBuf, nArgvLen,
                       "0000", 4,
                       NULL );
-    delete pArgnBuf;
-    delete pArgvBuf;
+    delete [] pArgnBuf;
+    delete [] pArgvBuf;
     if( ! pMes )
         return NPERR_GENERIC_ERROR;
 
@@ -424,7 +424,7 @@ NPError UnxPluginComm::NPP_NewStream( NPP instance, NPMIMEType type, NPStream* s
     aRet = GetNPError( pMes );
     uint16* pSType = (uint16*)pMes->GetBytes();
     *stype = *pSType;
-    delete pSType;
+    delete [] pSType;
     delete pMes;
     return aRet;
 }
@@ -527,7 +527,7 @@ char* UnxPluginComm::NPP_GetMIMEDescription()
         return "";
 
     if( pDesc )
-        delete pDesc;
+        delete [] pDesc;
     pDesc = pMes->GetString();
     delete pMes;
     return pDesc;
