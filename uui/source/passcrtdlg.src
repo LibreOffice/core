@@ -2,9 +2,9 @@
  *
  *  $RCSfile: passcrtdlg.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2001-10-19 20:55:59 $
+ *  last change: $Author: kz $ $Date: 2001-10-24 20:23:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,7 @@ ModalDialog DLG_UUI_PASSWORD_CRT
         Text[ portuguese ] = "Senha principal";
         Text[ russian ] = "Îñíîâíîé ïàðîëü";
         Text[ greek ] = "Master ~password";
-        Text[ dutch ] = "Hoofd~wachtwoord";
+        Text[ dutch ] = "Hoofdwachtwoord";
         Text[ french ] = "Mot de passe principal";
         Text[ spanish ] = "Contraseña principal";
         Text[ finnish ] = "Master ~password";
@@ -210,6 +210,7 @@ String STR_ERROR_PASSWORDS_NOT_IDENTICAL
     Text[ arabic ] = "Passwords are different, please enter again!";
     Text[ catalan ] = "Passwords are different, please enter again!";
 };
+
 
 
 
