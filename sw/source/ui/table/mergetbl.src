@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mergetbl.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2000-10-27 17:59:22 $
+ *  last change: $Author: kz $ $Date: 2000-11-09 13:09:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,7 +134,7 @@ ModalDialog DLG_MERGE_TABLE
         Text[ italian ] = "Unisci alla tabella precedente";
         Text[ danish ] = "flet med forrige tabel";
         Text[ swedish ] = "förbind med den ~föregående tabellen";
-        Text[ polish ] = "Sprzêgaj z poprzedni¹ tabel¹";
+        Text[ polish ] = "Po³¹cz z poprzedni¹ tabel¹";
         Text[ portuguese_brazilian ] = "Join with ~previous table";
         Text[ japanese ] = "‘O‚Ì•\\‚ÆŒ‹‡(~P)";
         Text[ chinese_simplified ] = "ºÍÉÏÒ»¸ö±í¸ñºÏ²¢(~P)";
@@ -160,7 +160,7 @@ ModalDialog DLG_MERGE_TABLE
         Text[ italian ] = "Unisci alla tabella successiva";
         Text[ danish ] = "flet med efterfølgende tabel";
         Text[ swedish ] = "förbind med den ~efterföljande tabellen";
-        Text[ polish ] = "Sprzêgaj z nastêpn¹ tabel¹";
+        Text[ polish ] = "Po³¹cz z nastêpn¹ tabel¹";
         Text[ portuguese_brazilian ] = "Join with ~next table";
         Text[ japanese ] = "Ÿ‚Ì•\\‚ÆŒ‹‡(~N)";
         Text[ chinese_simplified ] = "ºÍÏÂÒ»¸ö±í¸ñºÏ²¢(~N)";
