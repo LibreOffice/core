@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuhhconv.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 13:51:33 $
+ *  last change: $Author: rt $ $Date: 2004-09-17 13:24:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,7 +135,8 @@ FuHangulHanjaConversion::~FuHangulHanjaConversion()
 |*
 \************************************************************************/
 
-void FuHangulHanjaConversion::StartConversion( INT16 nLanguage )
+void FuHangulHanjaConversion::StartConversion( INT16 nSourceLanguage, INT16 nTargetLanguage,
+        const Font *pTargetFont, INT32 nOptions, BOOL bIsInteractive )
 {
 
     String aString( SdResId(STR_UNDO_HANGULHANJACONVERSION) );
@@ -166,7 +167,7 @@ void FuHangulHanjaConversion::StartConversion( INT16 nLanguage )
         }
 
         if (pSdOutliner)
-            pSdOutliner->StartTextConversion(nLanguage);
+            pSdOutliner->StartConversion(nSourceLanguage, nTargetLanguage, pTargetFont, nOptions, bIsInteractive );
     }
 
     pView->EndUndo();
