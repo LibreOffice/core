@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: kz $ $Date: 2001-05-22 09:08:25 $
+#   last change: $Author: hro $ $Date: 2001-09-19 15:13:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -90,7 +90,7 @@ UNIXVERSIONNAMES=UDK
 LIB1TARGET=$(SLB)$/$(TARGET).lib
 LIB1FILES=$(SLB)$/cpposl.lib $(SLB)$/oslall.lib $(SLB)$/cpprtl.lib
 .IF "$(GUI)"=="WNT"
-LIB1FILES+=$(LB)$/advapi9x.lib $(LB)$/shell9x.lib $(LB)$/kernel9x.lib $(LB)$/user9x.lib $(LB)$/tools32.lib $(LB)$/comdlg9x.lib 
+LIB1FILES+=$(LB)$/advapi9x.lib $(LB)$/shell9x.lib $(LB)$/kernel9x.lib $(LB)$/user9x.lib $(LB)$/tools32.lib $(LB)$/comdlg9x.lib $(LB)$/mpr9x.lib
 .ENDIF
 
 .IF "$(GUI)"!="WIN"
@@ -101,7 +101,7 @@ LIB3TARGET=$(LB)$/a$(TARGET).lib
 LIB3ARCHIV=$(LB)$/lib$(TARGET)$(DLLPOSTFIX).a
 LIB3FILES=$(LB)$/cpposl.lib $(LB)$/oslall.lib $(LB)$/cpprtl.lib
 .IF "$(GUI)"=="WNT"
-LIB3FILES+=$(LB)$/advapi9x.lib $(LB)$/shell9x.lib $(LB)$/kernel9x.lib $(LB)$/user9x.lib $(LB)$/comdlg9x.lib $(LB)$/tools32.lib
+LIB3FILES+=$(LB)$/advapi9x.lib $(LB)$/shell9x.lib $(LB)$/kernel9x.lib $(LB)$/user9x.lib $(LB)$/comdlg9x.lib $(LB)$/tools32.lib $(LB)$/mpr9x.lib
 .ENDIF
 
 .IF "$(UPDATER)"!=""
