@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontmanager.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: pl $ $Date: 2002-10-25 15:13:05 $
+ *  last change: $Author: pl $ $Date: 2002-11-15 16:15:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3140,8 +3140,9 @@ bool PrintFontManager::createFontSubset(
     sal_uInt16 pGID[256];
     sal_uInt8  pOldIndex[256];
 
-    pEnc[ 0 ] = 0;
-    pGID[ 0 ] = 0;
+    memset( pEnc, 0, sizeof( pEnc ) );
+    memset( pGID, 0, sizeof( pGID ) );
+    memset( pOldIndex, 0, sizeof( pOldIndex ) );
     int nChar = 1;
     for( int i = 0; i < nGlyphs; i++ )
     {
@@ -3151,9 +3152,12 @@ bool PrintFontManager::createFontSubset(
         }
         else
         {
-            pEnc[ nChar ] = nChar;
-            pGID[ nChar ] = (sal_uInt16)pGlyphIDs[ i ];
-            pOldIndex[ nChar ] = i;
+            DBG_ASSERT( !(pGlyphIDs[i] & 0xffff0000), "overlong glyph id" );
+            DBG_ASSERT( (int)pNewEncoding[i] < nGlyphs, "encoding wrong" );
+            DBG_ASSERT( pEnc[pNewEncoding[i]] == 0 && pGID[pNewEncoding[i]] == 0, "duplicate encoded glyph" );
+            pEnc[ pNewEncoding[i] ] = pNewEncoding[i];
+            pGID[ pNewEncoding[i] ] = (sal_uInt16)pGlyphIDs[ i ];
+            pOldIndex[ pNewEncoding[i] ] = i;
             nChar++;
         }
     }
@@ -3166,7 +3170,6 @@ bool PrintFontManager::createFontSubset(
     TrueTypeFontFile* pTTFontFile = static_cast< TrueTypeFontFile* >(pFont);
     if( OpenTTFont( aFromFile.GetBuffer(), pTTFontFile->m_nCollectionEntry < 0 ? 0 : pTTFontFile->m_nCollectionEntry, &pTTFont ) != SF_OK )
         return false;
-
 
     TTSimpleGlyphMetrics* pMetrics = GetTTSimpleGlyphMetrics( pTTFont,
                                                               pGID,

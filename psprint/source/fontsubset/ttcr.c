@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ttcr.c,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2002-08-02 12:11:24 $
+ *  last change: $Author: pl $ $Date: 2002-11-15 16:15:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,7 @@
  *
  ************************************************************************/
 
-/* $Id: ttcr.c,v 1.2 2002-08-02 12:11:24 pl Exp $ */
+/* $Id: ttcr.c,v 1.3 2002-11-15 16:15:06 pl Exp $ */
 
 /*
  * TrueTypeCreator method implementation
@@ -769,11 +769,41 @@ static sal_uInt8 *PackCmapType0(CmapSubTable *s, sal_uInt32 *length)
     return ptr;
 }
 
+static sal_uInt8 *PackCmapType6(CmapSubTable *s, sal_uInt32 *length)
+{
+    sal_uInt8 *ptr = smalloc(s->n*2 + 10);
+    sal_uInt8 *p = ptr + 10;
+    sal_uInt32 i, j;
+    sal_uInt16 g;
+
+    PutUInt16(6, ptr, 0, 1);
+    PutUInt16(s->n*2+10, ptr, 2, 1);
+    PutUInt16(0, ptr, 4, 1);
+    PutUInt16(0, ptr, 6, 1);
+    PutUInt16(s->n, ptr, 8, 1 );
+
+    for (i = 0; i < s->n; i++) {
+        g = 0;
+        for (j = 0; j < s->n; j++) {
+            if (s->xc[j] == i) {
+                g = (sal_uInt16) s->xg[j];
+            }
+        }
+        PutUInt16( g, p, 2*i, 1 );
+    }
+    *length = s->n*2+10;
+    return ptr;
+}
+
+
 
 /* XXX it only handles Format 0 encoding tables */
 static sal_uInt8 *PackCmap(CmapSubTable *s, sal_uInt32 *length)
 {
-    return PackCmapType0(s, length);
+    if( s->xg[s->n-1] > 0xff )
+        return PackCmapType6(s, length);
+    else
+        return PackCmapType0(s, length);
 }
 
 static int GetRawData_cmap(TrueTypeTable *_this, sal_uInt8 **ptr, sal_uInt32 *len, sal_uInt32 *tag)
