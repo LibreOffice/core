@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WinClipboard.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: tra $ $Date: 2001-07-24 07:53:23 $
+ *  last change: $Author: rt $ $Date: 2003-10-06 14:38:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
