@@ -2,9 +2,9 @@
  *
  *  $RCSfile: futext3.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 13:54:53 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 18:00:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -317,6 +317,9 @@
 #include <svx/svdview.hxx>
 #include <vcl/cursor.hxx>
 #include <sfx2/objsh.hxx>
+#ifndef _SVX_WRITINGMODEITEM_HXX
+#include <svx/writingmodeitem.hxx>
+#endif
 
 #include "global.hxx"
 #include "drwlayer.hxx"
@@ -333,12 +336,14 @@
 //  Editieren von Notiz-Legendenobjekten muss immer ueber StopEditMode beendet werden,
 //  damit die Aenderungen ins Dokument uebernommen werden!
 //  (Fontwork-Execute in drawsh und drtxtob passiert nicht fuer Legendenobjekte)
+//  bTextDirection=TRUE means that this function is called from SID_TEXTDIRECTION_XXX(drtxtob.cxx).
 // ------------------------------------------------------------------------------------
 
-void FuText::StopEditMode()
+void FuText::StopEditMode(BOOL bTextDirection)
 {
     BOOL bComment = FALSE;
     ScAddress aTabPos;
+    SvxWritingModeItem aWriteMode(com::sun::star::text::WritingMode_LR_TB);
 
     SdrObject* pObject = pView->GetTextEditObject();
     if ( pObject && pObject->GetLayer()==SC_LAYER_INTERN && pObject->ISA(SdrCaptionObj) )
@@ -349,6 +354,8 @@ void FuText::StopEditMode()
             aTabPos = ScAddress( pData->aStt);
             bComment = TRUE;
         }
+        const SfxItemSet& rSet = pObject->GetMergedItemSet();
+        aWriteMode = static_cast<const SvxWritingModeItem&> (rSet.Get (SDRATTR_TEXTDIRECTION));
     }
 
     ScDocument* pDoc = pViewShell->GetViewData()->GetDocument();
@@ -360,7 +367,7 @@ void FuText::StopEditMode()
         pUndoMan = pObjSh->GetUndoManager();
     if ( bComment && bUndo)
     {
-        //  einblenden, editieren, ausblenden, Notiz aendern zusammen in eine ListAction
+        // fade in, edit, fade out, note change together into a ListAction
 
         String aUndoStr = ScGlobal::GetRscString( STR_UNDO_EDITNOTE );
         pUndoMan->EnterListAction( aUndoStr, aUndoStr );
@@ -372,7 +379,7 @@ void FuText::StopEditMode()
     }
 
     SdrEndTextEditKind eResult = pView->EndTextEdit();
-    pViewShell->SetDrawTextUndo(NULL);  // oder ScEndTextEdit (mit drawview.hxx)
+    pViewShell->SetDrawTextUndo(NULL);  // or ScEndTextEdit (with drawview.hxx)
 
     Cursor* pCur = pWindow->GetCursor();
     if (pCur && pCur->IsVisible())
@@ -382,11 +389,15 @@ void FuText::StopEditMode()
     {
         ScPostIt aNote(pDoc);
         BOOL bWas = pDoc->GetNote( aTabPos.Col(), aTabPos.Row(), aTabPos.Tab(), aNote );
+        if(bTextDirection)    // Note must be visible to do this.
+            aNote.SetShown(TRUE);
 
-        //  ignorieren nur, wenn Text unveraendert und Notiz dauerhaft angezeigt
-        //  wenn nicht angezeigt, muss mindestens das Objekt weg (#43155#)
+        //  Ignore if text unchanged and note not visibly indicated.
+        //  If not visible, the note must be new.
+        //  If called from a change in TextDirection mode then
+        //  always enter as we need to store the new ItemSet.
 
-        if ( eResult != SDRENDTEXTEDIT_UNCHANGED || !bWas || !aNote.IsShown() )
+        if ( eResult != SDRENDTEXTEDIT_UNCHANGED || !bWas || !aNote.IsShown() || bTextDirection)
         {
             ::std::auto_ptr<EditTextObject> pEditText ;
             if ( eResult != SDRENDTEXTEDIT_DELETED )
@@ -409,18 +420,21 @@ void FuText::StopEditMode()
                     aNote.SetRectangle(aNewRect);
             }
             aNote.SetEditTextObject(pEditText.get());    // if pEditText is NULL, then aNote.mpEditObj will be reset().
+            aNote.AutoStamp();
+            pCaption->SetMergedItem( SvxWritingModeItem(aWriteMode));
             aNote.SetItemSet(pCaption->GetMergedItemSet());
 
-
-            BOOL bRemove = ( !aNote.IsShown() || aNote.IsEmpty() || !bWas );
+            // Keep Notes visible if called from TextDirection.
+            BOOL bRemove = ((!aNote.IsShown() || aNote.IsEmpty() || !bWas ) && !bTextDirection);
             if ( bRemove )
                 aNote.SetShown( FALSE );
-            pViewShell->SetNote( aTabPos.Col(), aTabPos.Row(), aTabPos.Tab(), aNote );  // mit Undo
+            pViewShell->SetNote( aTabPos.Col(), aTabPos.Row(), aTabPos.Tab(), aNote );  // with Undo
 
-            if ( bRemove && eResult != SDRENDTEXTEDIT_DELETED )     // Legenden-Objekt loeschen ?
+            // But always remove if Note is empty regardless of text Direction.
+            if ( (bRemove && eResult != SDRENDTEXTEDIT_DELETED ) || aNote.IsEmpty())        // Object Delete ?
             {
                 SdrPage* pPage = pDrDoc->GetPage( static_cast<sal_uInt16>(aTabPos.Tab()) );
-// ER 28.04.97 19:12 laut JOE ist hier RecalcObjOrdNums unnoetig
+                // ER 28.04.97 19:12 laut JOE ist hier RecalcObjOrdNums unnoetig
 //              pPage->RecalcObjOrdNums();
                 pDrDoc->AddUndo( new SdrUndoRemoveObj( *pObject ) );
                 pPage->RemoveObject( pObject->GetOrdNum() );
@@ -465,12 +479,22 @@ void FuText::StopDragMode(SdrObject* pObject)
                 if(pCaption && aOldRect != aNewRect)
                 {
                     aNote.SetRectangle(aNewRect);
-                    // The new height is honoured if property item is reset.
-                    if(aNewRect.Bottom() - aNewRect.Top() > aOldRect.Bottom() - aOldRect.Top())
+                    OutlinerParaObject* pPObj = pCaption->GetOutlinerParaObject();
+                    bool bVertical = (pPObj && pPObj->IsVertical());
+                    // The new height/width is honoured if property item is reset.
+                    if(!bVertical && aNewRect.Bottom() - aNewRect.Top() > aOldRect.Bottom() - aOldRect.Top())
                     {
-                        if(pCaption->IsAutoGrowHeight())
+                        if(pCaption->IsAutoGrowHeight() && !bVertical)
                         {
                             pCaption->SetMergedItem( SdrTextAutoGrowHeightItem( false ) );
+                            aNote.SetItemSet(pCaption->GetMergedItemSet());
+                        }
+                    }
+                    else if(bVertical && aNewRect.Right() - aNewRect.Left() > aOldRect.Right() - aOldRect.Left())
+                    {
+                        if(pCaption->IsAutoGrowWidth() && bVertical)
+                        {
+                            pCaption->SetMergedItem( SdrTextAutoGrowWidthItem( false ) );
                             aNote.SetItemSet(pCaption->GetMergedItemSet());
                         }
                     }
