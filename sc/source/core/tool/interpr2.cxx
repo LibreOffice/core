@@ -2,9 +2,9 @@
  *
  *  $RCSfile: interpr2.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 11:48:04 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 12:35:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -321,6 +321,31 @@ void ScInterpreter::ScGetDiffDate()
 
 void ScInterpreter::ScGetDiffDate360()
 {
+    /* Implementation follows
+     * http://www.bondmarkets.com/eCommerce/SMD_Fields_030802.pdf
+     * Appendix B: Day-Count Bases, there are 7 different ways to calculate the
+     * 30-days count. That document also claims that Excel implements the "PSA
+     * 30" or "NASD 30" method (funny enough they also state that Excel is the
+     * only tool that does so).
+     *
+     * Note that the definiton given in
+     * http://msdn.microsoft.com/library/en-us/office97/html/SEB7C.asp
+     * is _not_ the way how it is actually calculated by Excel (that would not
+     * even match any of the 7 methods mentioned above) and would result in the
+     * following test cases producing wrong results according to that appendix B:
+     *
+     * 28-Feb-95  31-Aug-95  181 instead of 180
+     * 29-Feb-96  31-Aug-96  181 instead of 180
+     * 30-Jan-96  31-Mar-96   61 instead of  60
+     * 31-Jan-96  31-Mar-96   61 instead of  60
+     *
+     * Still, there is a difference between OOoCalc and Excel:
+     * In Excel:
+     * 02-Feb-99 31-Mar-00 results in  419
+     * 31-Mar-00 02-Feb-99 results in -418
+     * In Calc the result is 419 respectively -419. I consider the -418 a bug in Excel.
+     */
+
     BYTE nParamCount = GetByte();
     if ( MustHaveParamCount( nParamCount, 2, 3 ) )
     {
@@ -367,10 +392,13 @@ void ScInterpreter::ScGetDiffDate360()
             }
             if (aDate2.GetDay() == 31)
             {
-                if (!bFlag && aDate1.GetDay() != 30)
-                        aDate2 += (ULONG) 1;            // -> 1.
-                    else
-                        aDate2.SetDay(30);
+                if (!bFlag )
+                {
+                    if (aDate1.GetDay() == 30)
+                        aDate2 -= (ULONG) 1;
+                }
+                else
+                    aDate2.SetDay(30);
             }
             PushDouble( fSign * (double)
                 (  (double) aDate2.GetDay() + (double) aDate2.GetMonth() * 30.0 +
