@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldvar.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:43:25 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:18:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@ TabPage TP_FLD_VAR
         Text [ ENGLISH ] = "Type" ;
         Text [ norwegian ] = "Type" ;
         Text [ italian ] = "~Tipo di campo" ;
-        Text [ portuguese_brazilian ] = "Tipo" ;
+        Text [ portuguese_brazilian ] = "~Tipo" ;
         Text [ portuguese ] = "Tipo de ~campo" ;
         Text [ finnish ] = "~Tyyppi" ;
         Text [ danish ] = "Felttype" ;
@@ -91,7 +91,7 @@ TabPage TP_FLD_VAR
         Left = TRUE ;
         Text[ chinese_simplified ] = "字段类型(~T)";
         Text[ russian ] = "��� ����";
-        Text[ polish ] = "Typ pola";
+        Text[ polish ] = "~Typ pola";
         Text[ japanese ] = "フィールドタイプ(~T)";
         Text[ chinese_traditional ] = "欄位類型(~T)";
         Text[ arabic ] = "��� �����";
@@ -101,6 +101,9 @@ TabPage TP_FLD_VAR
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Tipus";
         Text[ thai ] = "~ชนิด";
+        Text[ czech ] = "Typ";
+        Text[ hebrew ] = "‮סוג‬";
+        Text[ hindi ] = "~वर्ग";
     };
     ListBox LB_VARTYPE
     {
@@ -119,7 +122,7 @@ TabPage TP_FLD_VAR
         Text [ ENGLISH ] = "S~election" ;
         Left = TRUE ;
         Text [ english_us ] = "S~election" ;
-        Text [ portuguese_brazilian ] = "~Auswahl" ;
+        Text [ portuguese_brazilian ] = "~Sele��o" ;
         Text [ swedish ] = "Urv~al" ;
         Text [ danish ] = "Udvalg" ;
         Text [ italian ] = "~Selezione" ;
@@ -129,7 +132,7 @@ TabPage TP_FLD_VAR
         Text [ portuguese ] = "~Selec��o" ;
         Text[ chinese_simplified ] = "选择(~E)";
         Text[ russian ] = "�����";
-        Text[ polish ] = "~Wyb�r";
+        Text[ polish ] = "Wy~b�r";
         Text[ japanese ] = "選択(~E)";
         Text[ chinese_traditional ] = "選取(~E)";
         Text[ arabic ] = "�������";
@@ -140,6 +143,9 @@ TabPage TP_FLD_VAR
         Text[ catalan ] = "~Selecci�";
         Text[ finnish ] = "~Valinta";
         Text[ thai ] = "เลื~อก";
+        Text[ czech ] = "Výběr";
+        Text[ hebrew ] = "‮בחירה‬";
+        Text[ hindi ] = "चु~नाव";
     };
     ListBox LB_VARSELECTION
     {
@@ -157,7 +163,7 @@ TabPage TP_FLD_VAR
         TEXT [ English ] = "Format" ;
         Left = TRUE ;
         Text [ english_us ] = "Format" ;
-        Text [ portuguese_brazilian ] = "F~ormat" ;
+        Text [ portuguese_brazilian ] = "Formato" ;
         Text [ swedish ] = "F~ormat" ;
         Text [ danish ] = "Format" ;
         Text [ italian ] = "F~ormato" ;
@@ -178,6 +184,9 @@ TabPage TP_FLD_VAR
         Text[ catalan ] = "Formata";
         Text[ finnish ] = "Muotoilu";
         Text[ thai ] = "รูปแบบ";
+        Text[ czech ] = "Formát";
+        Text[ hebrew ] = "‮עיצוב‬";
+        Text[ hindi ] = "रचना";
     };
     ListBox LB_VARFORMAT
     {
@@ -203,7 +212,7 @@ TabPage TP_FLD_VAR
         TEXT [ English ] = "Invisible" ;
         TEXT [ norwegian ] = "Usynlig" ;
         TEXT [ italian ] = "Nascosto" ;
-        TEXT [ portuguese_brazilian ] = "Invis?vel" ;
+        TEXT [ portuguese_brazilian ] = "In~vis�vel" ;
         TEXT [ portuguese ] = "~Invis�vel" ;
         TEXT [ finnish ] = "~N�kym�t�n" ;
         TEXT [ danish ] = "Usynlig" ;
@@ -225,6 +234,9 @@ TabPage TP_FLD_VAR
         TEXT[ language_user1 ] = " ";
         TEXT[ catalan ] = "invisi~ble";
         TEXT[ thai ] = "มองไม่เ~ห็น";
+        TEXT[ czech ] = "Neviditelný";
+        TEXT[ hebrew ] = "~Unsichtbar";
+        TEXT[ hindi ] = "अ~गोचर";
     };
     FixedText FT_VARCHAPTERHEADER
     {
@@ -234,7 +246,7 @@ TabPage TP_FLD_VAR
         TEXT = "Kapitelweise Nummerierung" ;
         TEXT [ English ] = "Chapter numbering" ;
         Text [ english_us ] = "Numbering by chapter" ;
-        Text [ portuguese_brazilian ] = "Kapitelweise Numerierung" ;
+        Text [ portuguese_brazilian ] = "Numera��o por cap�tulo" ;
         Text [ swedish ] = "Numrering kapitelvis" ;
         Text [ danish ] = "Kapitelvis nummerering" ;
         Text [ italian ] = "Numerazione a capitoli" ;
@@ -255,6 +267,9 @@ TabPage TP_FLD_VAR
         Text[ catalan ] = "Numeraci� de cap�tols";
         Text[ finnish ] = "Numerointi luvuittain";
         Text[ thai ] = "ลำดับตัวเลขโดยบท";
+        Text[ czech ] = "Číslování podle kapitol";
+        Text[ hebrew ] = "Kapitelweise Nummerierung";
+        Text[ hindi ] = "अध्याय के अनुसार संख्या देना ";
     };
     FixedText FT_VARCHAPTERLEVEL
     {
@@ -264,7 +279,7 @@ TabPage TP_FLD_VAR
         TEXT = "E~bene" ;
         TEXT [ English ] = "Level" ;
         Text [ english_us ] = "~Level" ;
-        Text [ portuguese_brazilian ] = "E~bene" ;
+        Text [ portuguese_brazilian ] = "~N�vel" ;
         Text [ swedish ] = "~Niv�" ;
         Text [ danish ] = "Niveau" ;
         Text [ italian ] = "Li~vello" ;
@@ -274,7 +289,7 @@ TabPage TP_FLD_VAR
         Text [ portuguese ] = "~N�vel" ;
         Text[ chinese_simplified ] = "级(~L)";
         Text[ russian ] = "�������";
-        Text[ polish ] = "Poziom";
+        Text[ polish ] = "P~oziom";
         Text[ japanese ] = "レベル(~L)";
         Text[ chinese_traditional ] = "級(~L)";
         Text[ arabic ] = "�������";
@@ -285,6 +300,9 @@ TabPage TP_FLD_VAR
         Text[ catalan ] = "~Nivell";
         Text[ finnish ] = "~Taso";
         Text[ thai ] = "~ระดับ";
+        Text[ czech ] = "Úroveň";
+        Text[ hebrew ] = "E~bene";
+        Text[ hindi ] = "~स्तर";
     };
     ListBox LB_VARCHAPTERLEVEL
     {
@@ -308,7 +326,7 @@ TabPage TP_FLD_VAR
         };
         stringlist [ portuguese_brazilian ] =
         {
-            < "Keine" ; > ;
+            < "Nenhum" ; > ;
         };
         stringlist [ swedish ] =
         {
@@ -390,6 +408,18 @@ TabPage TP_FLD_VAR
     {
          < "ไม่มี" ; > ;
     };
+    StringList [ czech ] =
+    {
+         < "Nic" ; > ;
+    };
+    StringList [ hebrew ] =
+    {
+         < "‮ללא‬" ; > ;
+    };
+    StringList [ hindi ] =
+    {
+         < "कोई नहीं" ; > ;
+    };
     };
     FixedText FT_VARSEPARATOR
     {
@@ -399,7 +429,7 @@ TabPage TP_FLD_VAR
         TEXT = "~Trenner" ;
         TEXT [ English ] = "Separator" ;
         Text [ english_us ] = "~Separator" ;
-        Text [ portuguese_brazilian ] = "~Trenner" ;
+        Text [ portuguese_brazilian ] = "~Separador" ;
         Text [ swedish ] = "Skilje~tecken" ;
         Text [ danish ] = "Separator" ;
         Text [ italian ] = "~Separatore" ;
@@ -409,7 +439,7 @@ TabPage TP_FLD_VAR
         Text [ portuguese ] = "~Separador" ;
         Text[ chinese_simplified ] = "分隔符(~S)";
         Text[ russian ] = "��������.";
-        Text[ polish ] = "Separator";
+        Text[ polish ] = "S~eparator";
         Text[ japanese ] = "区切り記号(~S)";
         Text[ chinese_traditional ] = "連接符(~S)";
         Text[ arabic ] = "����";
@@ -420,6 +450,9 @@ TabPage TP_FLD_VAR
         Text[ catalan ] = "~Separador";
         Text[ finnish ] = "~Erotin";
         Text[ thai ] = "~ตัวแยก";
+        Text[ czech ] = "Oddělovač";
+        Text[ hebrew ] = "~Trenner";
+        Text[ hindi ] = "~अलगानेवाला";
     };
     Edit ED_VARSEPARATOR
     {
@@ -438,7 +471,7 @@ TabPage TP_FLD_VAR
         TEXT [ English ] = "Na~me" ;
         Left = TRUE ;
         Text [ english_us ] = "Na~me" ;
-        Text [ portuguese_brazilian ] = "Na~me" ;
+        Text [ portuguese_brazilian ] = "~Nome" ;
         Text [ swedish ] = "Na~mn" ;
         Text [ danish ] = "Navn" ;
         Text [ italian ] = "No~me" ;
@@ -448,7 +481,7 @@ TabPage TP_FLD_VAR
         Text [ portuguese ] = "No~me" ;
         Text[ chinese_simplified ] = "名称(~M)";
         Text[ russian ] = "���";
-        Text[ polish ] = "Nazwa";
+        Text[ polish ] = "~Nazwa";
         Text[ japanese ] = "名前(~M)";
         Text[ chinese_traditional ] = "名稱(~M)";
         Text[ arabic ] = "�����";
@@ -459,6 +492,9 @@ TabPage TP_FLD_VAR
         Text[ catalan ] = "No~m";
         Text[ finnish ] = "~Nimi";
         Text[ thai ] = "ชื่~อ";
+        Text[ czech ] = "Název";
+        Text[ hebrew ] = "Na~me";
+        Text[ hindi ] = "ना~म";
     };
     Edit ED_VARNAME
     {
@@ -476,7 +512,7 @@ TabPage TP_FLD_VAR
         Text [ ENGLISH ] = "Value" ;
         Text [ norwegian ] = "Verdi" ;
         Text [ italian ] = "~Valore" ;
-        Text [ portuguese_brazilian ] = "Valor" ;
+        Text [ portuguese_brazilian ] = "~Valor" ;
         Text [ portuguese ] = "~Valor" ;
         Text [ finnish ] = "~Arvo" ;
         Text [ danish ] = "V�rdi" ;
@@ -488,7 +524,7 @@ TabPage TP_FLD_VAR
         Left = TRUE ;
         Text[ chinese_simplified ] = "数值(~V)";
         Text[ russian ] = "��������";
-        Text[ polish ] = "Warto��";
+        Text[ polish ] = "W~arto��";
         Text[ japanese ] = "値(~V)";
         Text[ chinese_traditional ] = "數值(~V)";
         Text[ arabic ] = "����";
@@ -498,6 +534,9 @@ TabPage TP_FLD_VAR
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Valor";
         Text[ thai ] = "~ค่า";
+        Text[ czech ] = "Hodnota";
+        Text[ hebrew ] = "~Wert";
+        Text[ hindi ] = "~मूल्य";
     };
     Edit ED_VARVALUE
     {
@@ -548,6 +587,9 @@ TabPage TP_FLD_VAR
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Aplica";
                 Text[ thai ] = "ใช้";
+                Text[ czech ] = "Použít";
+                Text[ hebrew ] = "‮יישום‬";
+                Text[ hindi ] = "लागू करो";
             };
             ToolBoxItem
             {
@@ -562,7 +604,7 @@ TabPage TP_FLD_VAR
                 Text [ ENGLISH ] = "Delete" ;
                 Text [ norwegian ] = "Slett" ;
                 Text [ italian ] = "Elimina" ;
-                Text [ portuguese_brazilian ] = "Apagar" ;
+                Text [ portuguese_brazilian ] = "Excluir" ;
                 Text [ portuguese ] = "Eliminar" ;
                 Text [ finnish ] = "Poista" ;
                 Text [ danish ] = "Slet" ;
@@ -583,11 +625,14 @@ TabPage TP_FLD_VAR
                 Text[ language_user1 ] = " ";
                 Text[ catalan ] = "Suprimeix";
                 Text[ thai ] = "ลบ";
+                Text[ czech ] = "Smazat";
+                Text[ hebrew ] = "‮מחיקה‬";
+                Text[ hindi ] = "मिटाओ";
             };
         };
     };
     Text [ english_us ] = "Variables" ;
-    Text [ portuguese_brazilian ] = "Variablen" ;
+    Text [ portuguese_brazilian ] = "Vari�veis" ;
     Text [ swedish ] = "Variabler" ;
     Text [ danish ] = "Variabler" ;
     Text [ italian ] = "Variabili" ;
@@ -608,7 +653,19 @@ TabPage TP_FLD_VAR
     Text[ catalan ] = "Variables";
     Text[ finnish ] = "Muuttujat";
     Text[ thai ] = "ตัวแปร";
+    Text[ czech ] = "Proměnné";
+    Text[ hebrew ] = "Variablen";
+    Text[ hindi ] = "वेरिऐबल";
 };
+
+
+
+
+
+
+
+
+
 
 
 
