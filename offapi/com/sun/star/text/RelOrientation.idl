@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RelOrientation.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:56:51 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 14:11:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,6 +139,12 @@ constants RelOrientation
 <!-- JRH: does not make sense -->
      */
     const short PAGE_PRINT_AREA = 8;
+
+        /** at the top of the text line, only sensible for vertical orientation.
+
+            @since #i22341#
+         */
+        const short TEXT_LINE = 9;
 
 };
 
