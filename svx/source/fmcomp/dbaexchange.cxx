@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbaexchange.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-02 15:23:27 $
+ *  last change: $Author: fs $ $Date: 2001-08-07 08:57:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -382,6 +382,26 @@ namespace svx
         return sal_True;
     }
 
+    //--------------------------------------------------------------------
+    void OColumnTransferable::addDataToContainer( TransferDataContainer* _pContainer )
+    {
+        OSL_ENSURE( _pContainer, "OColumnTransferable::addDataToContainer: invalid container!" );
+        if ( _pContainer )
+        {
+            if ( m_nFormatFlags & CTF_FIELD_DESCRIPTOR )
+                _pContainer->CopyAny( SOT_FORMATSTR_ID_SBA_FIELDDATAEXCHANGE, makeAny( m_sCompatibleFormat ) );
+
+            if ( m_nFormatFlags & CTF_CONTROL_EXCHANGE )
+                _pContainer->CopyAny( SOT_FORMATSTR_ID_SBA_CTRLDATAEXCHANGE, makeAny( m_sCompatibleFormat ) );
+
+            if ( m_nFormatFlags & CTF_COLUMN_DESCRIPTOR )
+            {
+                Any aContent = makeAny( m_aDescriptor.createPropertyValueSequence() );
+                _pContainer->CopyAny( getDescriptorFormatId(), aContent );
+            }
+        }
+    }
+
     //====================================================================
     //= ODataAccessObjectTransferable
     //====================================================================
@@ -660,6 +680,9 @@ namespace svx
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.6  2001/08/02 15:23:27  fs
+ *  #90525# +ODataAccessObjectTransferable
+ *
  *  Revision 1.5  2001/04/27 09:22:38  fs
  *  #86303# use another content type for the own clipboard format
  *
