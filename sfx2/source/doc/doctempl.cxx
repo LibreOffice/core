@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doctempl.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: dv $ $Date: 2001-04-02 09:16:11 $
+ *  last change: $Author: dv $ $Date: 2001-04-06 14:12:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -232,6 +232,8 @@ using namespace ucb;
 
 class RegionData_Impl;
 
+namespace DocTempl {
+
 class EntryData_Impl
 {
     RegionData_Impl*    mpParent;
@@ -263,6 +265,10 @@ public:
     SfxObjectShellRef   CreateObjectShell();
     BOOL                DeleteObjectShell();
 };
+
+};
+
+using namespace ::DocTempl;
 
 DECLARE_LIST( EntryList_Impl, EntryData_Impl* );
 
@@ -1725,13 +1731,15 @@ SfxObjectShellRef EntryData_Impl::CreateObjectShell()
         mbIsOwner = FALSE;
         BOOL bDum = FALSE;
         SfxApplication *pSfxApp = SFX_APP();
-        mxObjShell = pSfxApp->DocAlreadyLoaded( maTargetURL, TRUE, bDum );
+        String          aTargetURL = GetTargetURL();
+
+        mxObjShell = pSfxApp->DocAlreadyLoaded( aTargetURL, TRUE, bDum );
 
         if( ! mxObjShell.Is() )
         {
             mbIsOwner = TRUE;
             SfxMedium *pMed=new SfxMedium(
-                maTargetURL,(STREAM_READ | STREAM_SHARE_DENYWRITE), FALSE, 0 );
+                aTargetURL,(STREAM_READ | STREAM_SHARE_DENYWRITE),  FALSE, 0 );
             const SfxFilter* pFilter = NULL;
             if( pSfxApp->GetFilterMatcher().GuessFilter(
                 *pMed, &pFilter, SFX_FILTER_TEMPLATE, 0 ) ||
@@ -1739,13 +1747,13 @@ SfxObjectShellRef EntryData_Impl::CreateObjectShell()
                 pFilter && !pFilter->UsesStorage() )
             {
                 SfxErrorContext aEc( ERRCTX_SFX_LOADTEMPLATE,
-                                     maTargetURL );
+                                     aTargetURL );
                 delete pMed;
                 mbDidConvert=TRUE;
                 ULONG lErr;
                 if ( mxObjShell.Is() )
                     if(lErr=(pSfxApp->LoadTemplate(
-                        mxObjShell,maTargetURL)!=ERRCODE_NONE))
+                        mxObjShell,aTargetURL)!=ERRCODE_NONE))
                         ErrorHandler::HandleError(lErr);
 
             }
@@ -1757,7 +1765,7 @@ SfxObjectShellRef EntryData_Impl::CreateObjectShell()
                 delete pMed;
                 mbDidConvert=FALSE;
                 mxStor = new SvStorage(
-                    maTargetURL,
+                    aTargetURL,
                     STREAM_READWRITE | STREAM_NOCREATE |
                     STREAM_SHARE_DENYALL, STORAGE_TRANSACTED);
                 if ( pFilter )
@@ -1800,7 +1808,7 @@ BOOL EntryData_Impl::DeleteObjectShell()
                 if( mbDidConvert )
                 {
                     bRet=mxObjShell->PreDoSaveAs_Impl(
-                        maTargetURL,
+                        GetTargetURL(),
                         mxObjShell->GetFactory().GetFilter(0)->GetName(),0 );
                 }
                 else
