@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleDocumentViewBase.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: af $ $Date: 2002-06-07 15:00:38 $
+ *  last change: $Author: af $ $Date: 2002-06-12 12:41:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,7 +59,6 @@
  *
  ************************************************************************/
 
-
 #ifndef _SD_ACCESSIBILITY_ACCESSIBLE_DOCUMENT_VIEW_BASE_HXX
 #define _SD_ACCESSIBILITY_ACCESSIBLE_DOCUMENT_VIEW_BASE_HXX
 
@@ -109,14 +108,14 @@ class VclSimpleEvent;
 namespace accessibility {
 
 
-/** @descr
-        Base class for the various document views of the Draw and
-        Impress applications.
-    The different view modes of the Draw and Impress applications
+/** Base class for the various document views of the Draw and
+    Impress applications.
+
+    <p>The different view modes of the Draw and Impress applications
     are made accessible by derived classes.  When the view mode is
     changed than the object representing the document view is
-    deleted and replaced by a new instance of the then appropriate
-    derived class.
+    disposed and replaced by a new instance of the then appropriate
+    derived class.</p>
 
     <p>This base class also manages an optionally active accessible OLE
     object.  If you overwrite the <member>getAccessibleChildCount</member>
@@ -126,6 +125,19 @@ namespace accessibility {
     time.  This class does not listen for disposing calls at the moment
     because it does not use the accessible OLE object directly and trusts on
     getting informed through VCL window events.</p>
+
+    <p>This class implements three kinds of listeners:
+    <ol><li>The property change listener is not used directly but exists as
+    convenience for derived classes.  May be moved to those classes
+    instead.</li>
+    <li>As window listener it waits for changes of the window geometry and
+    forwards those as view forwarder changes.</li>
+    <li>As top window listener it waits for activation and deactivation of
+    the top window containing the document view to give this class and
+    derived classes the oportunity to set and remove the focus to/from
+    shapes.</li>
+    </ol>
+    </p>
 */
 class AccessibleDocumentViewBase
     :   public AccessibleContextBase,
@@ -133,7 +145,6 @@ class AccessibleDocumentViewBase
         public AccessibleSelectionBase,
         public IAccessibleViewForwarderListener,
         public ::com::sun::star::beans::XPropertyChangeListener,
-        public ::com::sun::star::frame::XFrameActionListener,
         public ::com::sun::star::awt::XWindowListener,
         public ::com::sun::star::awt::XTopWindowListener
 {
@@ -260,13 +271,6 @@ public:
 
     virtual void SAL_CALL
         disposing (const ::com::sun::star::lang::EventObject& rEventObject)
-        throw (::com::sun::star::uno::RuntimeException);
-
-
-    //=====  XFrameActionListener  ============================================
-
-    virtual void SAL_CALL
-        frameAction (const ::com::sun::star::frame::FrameActionEvent& rEventObject)
         throw (::com::sun::star::uno::RuntimeException);
 
 
