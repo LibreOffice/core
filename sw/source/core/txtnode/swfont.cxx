@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfont.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: fme $ $Date: 2001-04-09 10:44:17 $
+ *  last change: $Author: ama $ $Date: 2001-04-10 14:24:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,6 +147,9 @@
 #endif
 #ifndef _SVX_TWOLINESITEM_HXX
 #include <svx/twolinesitem.hxx>
+#endif
+#ifndef _DOC_HXX
+#include <doc.hxx>
 #endif
 
 #ifndef _CHARATR_HXX
@@ -359,8 +362,13 @@ void SwFont::SetFnt( const SwAttrHandler& rAttrHandler )
             rAttrHandler.GetDefault( RES_CHRATR_SHADOWED ) ).GetValue() );
     SetRelief( (FontRelief)( (SvxCharReliefItem&)
             rAttrHandler.GetDefault( RES_CHRATR_RELIEF ) ).GetValue() );
-    SetAutoKern( ( (SvxAutoKernItem&)
-            rAttrHandler.GetDefault( RES_CHRATR_AUTOKERN ) ).GetValue() );
+    if( ((SvxAutoKernItem&)
+            rAttrHandler.GetDefault( RES_CHRATR_AUTOKERN ) ).GetValue() )
+        SetAutoKern( ( !rAttrHandler.GetDoc() ||
+                       !rAttrHandler.GetDoc()->IsKernAsianPunctuation() ) ?
+                       KERNING_FONTSPECIFIC : KERNING_ASIAN );
+    else
+        SetAutoKern( 0 );
     SetWordLineMode( ( (SvxWordLineModeItem&)
             rAttrHandler.GetDefault( RES_CHRATR_WORDLINEMODE ) ).GetValue() );
     const SvxEscapementItem &rEsc =
@@ -396,7 +404,7 @@ void SwFont::SetFnt( const SwAttrHandler& rAttrHandler )
  *                      SwFont::SetDiffFnt()
  *************************************************************************/
 
-void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet )
+void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet, const SwDoc *pDoc )
 {
     if( pAttrSet )
     {
@@ -529,7 +537,13 @@ void SwFont::SetDiffFnt( const SfxItemSet *pAttrSet )
             SetPropWidth(((SvxShadowedItem*)pItem)->GetValue() ? 50 : 100 );
         if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_AUTOKERN,
             TRUE, &pItem ))
-            SetAutoKern( ((SvxAutoKernItem*)pItem)->GetValue() );
+        {
+            if( ((SvxAutoKernItem*)pItem)->GetValue() )
+                SetAutoKern( ( !pDoc || !pDoc->IsKernAsianPunctuation() ) ?
+                         KERNING_FONTSPECIFIC : KERNING_ASIAN );
+            else
+                SetAutoKern( 0 );
+        }
         if( SFX_ITEM_SET == pAttrSet->GetItemState( RES_CHRATR_WORDLINEMODE,
             TRUE, &pItem ))
             SetWordLineMode( ((SvxWordLineModeItem*)pItem)->GetValue() );
@@ -598,7 +612,7 @@ SwFont::SwFont( const SwFont &rFont )
     bBlink = rFont.bBlink;
 }
 
-SwFont::SwFont( const SwAttrSet* pAttrSet )
+SwFont::SwFont( const SwAttrSet* pAttrSet, const SwDoc *pDoc )
 {
     nActual = SW_LATIN;
     nToxCnt = nRefCnt = 0;
@@ -671,7 +685,11 @@ SwFont::SwFont( const SwAttrSet* pAttrSet )
     SetOutline( pAttrSet->GetContour().GetValue() );
     SetShadow( pAttrSet->GetShadowed().GetValue() );
     SetRelief( (FontRelief)pAttrSet->GetCharRelief().GetValue() );
-    SetAutoKern( pAttrSet->GetAutoKern().GetValue() );
+    if( pAttrSet->GetAutoKern().GetValue() )
+        SetAutoKern( ( !pDoc || !pDoc->IsKernAsianPunctuation() ) ?
+                     KERNING_FONTSPECIFIC : KERNING_ASIAN );
+    else
+        SetAutoKern( 0 );
     SetWordLineMode( pAttrSet->GetWordLineMode().GetValue() );
     const SvxEscapementItem &rEsc = pAttrSet->GetEscapement();
     SetEscapement( rEsc.GetEsc() );
@@ -790,8 +808,13 @@ SwFont::SwFont( const SwAttrHandler& rAttrHandler )
             rAttrHandler.GetDefault( RES_CHRATR_SHADOWED ) ).GetValue() );
     SetRelief( (FontRelief)( (SvxCharReliefItem&)
             rAttrHandler.GetDefault( RES_CHRATR_RELIEF ) ).GetValue() );
-    SetAutoKern( ( (SvxAutoKernItem&)
-            rAttrHandler.GetDefault( RES_CHRATR_AUTOKERN ) ).GetValue() );
+    if( ((SvxAutoKernItem&)
+            rAttrHandler.GetDefault( RES_CHRATR_AUTOKERN ) ).GetValue() )
+        SetAutoKern( ( !rAttrHandler.GetDoc() ||
+                       !rAttrHandler.GetDoc()->IsKernAsianPunctuation() ) ?
+                       KERNING_FONTSPECIFIC : KERNING_ASIAN );
+    else
+        SetAutoKern( 0 );
     SetWordLineMode( ( (SvxWordLineModeItem&)
             rAttrHandler.GetDefault( RES_CHRATR_WORDLINEMODE ) ).GetValue() );
     const SvxEscapementItem &rEsc =

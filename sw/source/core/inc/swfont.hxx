@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swfont.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: fme $ $Date: 2001-04-09 10:42:55 $
+ *  last change: $Author: ama $ $Date: 2001-04-10 14:23:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,6 +84,7 @@ class SwDrawTextInfo;   // _DrawText
 class SwScriptInfo;     // _GetTxtSize
 class ViewShell;
 class SwAttrHandler;
+class SwDoc;
 
 const xub_Unicode CH_BLANK = ' ';   // ' ' Leerzeichen
 const xub_Unicode CH_BREAK = 0x0A;  //
@@ -156,7 +157,7 @@ class SwSubFont : public SvxFont
     inline void SetOutline( const BOOL bOutline );
     inline void SetVertical( const USHORT nDir );
     inline void SetShadow( const BOOL bShadow );
-    inline void SetAutoKern( const BOOL bAutoKern );
+    inline void SetAutoKern( const BYTE nAutoKern );
     inline void SetWordLineMode( const BOOL bWordLineMode );
     inline void SetEmphasisMark( const FontEmphasisMark eValue );
     inline void SetRelief( const FontRelief eNew );
@@ -211,7 +212,7 @@ protected:
     inline SwFont() { pBackColor = NULL; nActual = SW_LATIN; }
 
 public:
-    SwFont( const SwAttrSet* pSet );
+    SwFont( const SwAttrSet* pSet, const SwDoc *pDoc );
     SwFont( const SwAttrHandler& rAttrHandler );
     SwFont( const SwFont& rFont );
 
@@ -261,7 +262,7 @@ public:
     inline void SetOutline( const BOOL bOutline );
     inline void SetVertical( const USHORT nDir );
     inline void SetShadow( const BOOL bShadow );
-    inline void SetAutoKern( const BOOL bAutoKern );
+    inline void SetAutoKern( BYTE nAutoKern );
     inline void SetTransparent( const BOOL bTrans );
     inline void SetWordLineMode( const BOOL bWordLineMode );
     inline void SetFixKerning( const short nNewKern );
@@ -309,7 +310,7 @@ public:
     inline BOOL IsPaintWrong() const { return bPaintWrong; }
 
     // Setzen der Basisklasse Font fuer SwTxtCharFmt
-           void SetDiffFnt( const SfxItemSet* pSet );
+           void SetDiffFnt( const SfxItemSet* pSet, const SwDoc *pDoc );
     inline void SetFnt( const SvxFont &rFont, const BYTE nWhich )
         { bFntChg = bOrgChg = TRUE; aSub[nWhich].SetFnt( rFont ); }
 
@@ -631,18 +632,20 @@ inline void SwFont::SetShadow( const BOOL bShadow )
 }
 
 // gekapselte SV-Font-Methode
-inline void SwSubFont::SetAutoKern( const BOOL bAutoKern )
+inline void SwSubFont::SetAutoKern( const BYTE nAutoKern )
 {
     pMagic = 0;
-    Font::SetKerning( bAutoKern );
+    Font::SetKerning( nAutoKern );
 }
 
-inline void SwFont::SetAutoKern( const BOOL bAutoKern )
+inline void SwFont::SetAutoKern( BYTE nAutoKern )
 {
     bFntChg = TRUE;
-    aSub[0].SetAutoKern( bAutoKern );
-    aSub[1].SetAutoKern( bAutoKern );
-    aSub[2].SetAutoKern( bAutoKern );
+    aSub[1].SetAutoKern( nAutoKern );
+    if( nAutoKern )
+        nAutoKern = KERNING_FONTSPECIFIC;
+    aSub[0].SetAutoKern( nAutoKern );
+    aSub[2].SetAutoKern( nAutoKern );
 }
 
 inline void SwFont::SetTransparent( const BOOL bTrans )
