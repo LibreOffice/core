@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimpit.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 11:25:09 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 14:58:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -989,7 +989,7 @@ sal_Bool SvXMLImportItemMapper::PutXMLValue(
                             nValue = USHRT_MAX;
 
                         pFrmSize->SetWidth( (sal_uInt16)nValue );
-                        pFrmSize->SetSizeType( ATT_VAR_SIZE );
+                        pFrmSize->SetHeightSizeType( ATT_VAR_SIZE );
                         bOk = sal_True;
                     }
                 }
@@ -1008,7 +1008,7 @@ sal_Bool SvXMLImportItemMapper::PutXMLValue(
                     if( bSetHeight )
                         pFrmSize->SetHeight( (sal_uInt16)nValue );
                     if( bSetSizeType )
-                        pFrmSize->SetSizeType( eSizeType );
+                        pFrmSize->SetHeightSizeType( eSizeType );
                 }
             }
         }
