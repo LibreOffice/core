@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod2.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 13:48:17 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-28 13:25:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -436,17 +436,9 @@ IMPL_LINK(SdModule, CalcFieldValueHdl, EditFieldInfo*, pInfo)
             String aRepresentation;
 
             sd::ViewShell* pViewSh = pDocShell ? pDocShell->GetViewShell() : NULL;
-            /*af: We now have more than one view shell and documents that
-                are not connected to a view shell.  Using the current view
-                shell is not the right thing to do.
-            if( !pViewSh )
-                pViewSh = PTR_CAST( sd::ViewShell, SfxViewShell::Current() );
-            */
-
             bool bMasterView = false;
             SdPage* pPage = NULL;
-            if (pViewSh != NULL)
-                pPage = GetCurrentPage( pViewSh, pInfo, bMasterView );
+            pPage = GetCurrentPage( pViewSh, pInfo, bMasterView );
 
             if( (pPage == NULL) || bMasterView )
             {
