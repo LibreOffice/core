@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datman.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-05-16 15:45:25 $
+ *  last change: $Author: vg $ $Date: 2001-05-30 19:48:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,7 @@
 //
 //
 //
-// $Author: kz $ $Date: 2001-05-16 15:45:25 $ $Revision: 1.11 $
+// $Author: vg $ $Date: 2001-05-30 19:48:21 $ $Revision: 1.12 $
 // $Logfile:   T:/sc/inc/scresid.hxv  $ $Workfile:   scresid.hxx  $
 //------------------------------------------------------------------
 
@@ -1202,7 +1202,7 @@ ModalDialog RID_DLG_MAPPING
     Text[ polish ] = "Przyporz¹dkowanie kolumn tabeli %1";
     Text[ portuguese_brazilian ] = "Column assignment for table %1";
     Text[ japanese ] = "%1 Ã°ÌÞÙ‚Ì—ñ•ª—Þ";
-    Text[ korean ] = "Ç¥ %1ÀÇ¡¡¿­¡¡·¹ÀÌ¾Æ¿ô";
+    Text[ korean ] = "Å×ÀÌºí %1ÀÇ ¿­ ·¹ÀÌ¾Æ¿ô";
     Text[ chinese_simplified ] = "Îª±í¸ñ %1 ±àÅÅÉè¼ÆÁÐ";
     Text[ chinese_traditional ] = "½s±Æ %1 ªí®æªºÄæ";
     Text[ arabic ] = "ÊÚííä ÇáÃÚãÏÉ ááÌÏæá %1";
@@ -1337,7 +1337,7 @@ ModalDialog RID_DLG_DBCHANGE
     Text[ italian ] = "Selezione della sorgente dati";
     Text[ danish ] = "Vælg datakilde";
     Text[ swedish ] = "Urval av datakälla";
-    Text[ polish ] = "Wybór ?ród³a danych";
+    Text[ polish ] = "Wybór Ÿród³a danych";
     Text[ portuguese_brazilian ] = "Select data source";
     Text[ japanese ] = "ÃÞ°À¿°½‚Ì‘I‘ð";
     Text[ korean ] = "µ¥ÀÌÅÍ ¼Ò½º ¼±ÅÃ";
