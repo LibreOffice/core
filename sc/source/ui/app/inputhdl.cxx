@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputhdl.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: nn $ $Date: 2001-07-11 19:18:47 $
+ *  last change: $Author: nn $ $Date: 2001-07-12 09:29:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1882,7 +1882,6 @@ void ScInputHandler::EnterHandler( BYTE nBlockMode )
     EditTextObject* pObject     = NULL;
     ScPatternAttr*  pCellAttrs  = NULL;
     BOOL            bAttrib     = FALSE;    // Formatierung vorhanden ?
-    BOOL            bCellAttr   = FALSE;    // alles gleich formatiert ?
     BOOL            bForget     = FALSE;    // wegen Gueltigkeit streichen ?
 
     String aString = GetEditText(pEngine);
@@ -1938,22 +1937,51 @@ void ScInputHandler::EnterHandler( BYTE nBlockMode )
 
     if ( bModified && !bForget )            // was wird eingeben (Text/Objekt) ?
     {
-        //! find common (cell) attributes before RemoveAdjust?
+        USHORT nParCnt = pEngine->GetParagraphCount();
+        if ( nParCnt == 0 )
+            nParCnt = 1;
+        ESelection aSel( 0, 0, nParCnt-1, pEngine->GetTextLen(nParCnt-1) );
+        SfxItemSet aOldAttribs = pEngine->GetAttribs( aSel );
+        const SfxPoolItem* pItem = NULL;
 
-        RemoveAdjust();     // clear adjustment ParaAttribs
+        //  find common (cell) attributes before RemoveAdjust
 
-        if ( bSpellErrors || pEngine->GetParagraphCount() > 1 )
+        if ( pActiveViewSh )
+        {
+            SfxItemSet* pCommonAttrs = NULL;
+            for (USHORT nId = EE_CHAR_START; nId <= EE_CHAR_END; nId++)
+            {
+                SfxItemState eState = aOldAttribs.GetItemState( nId, FALSE, &pItem );
+                if ( eState == SFX_ITEM_SET && nId != EE_CHAR_ESCAPEMENT && *pItem != pEditDefaults->Get(nId) )
+                {
+                    if ( !pCommonAttrs )
+                        pCommonAttrs = new SfxItemSet( pEngine->GetEmptyItemSet() );
+                    pCommonAttrs->Put( *pItem );
+                }
+            }
+
+            if ( pCommonAttrs )
+            {
+                ScDocument* pDoc = pActiveViewSh->GetViewData()->GetDocument();
+                pCellAttrs = new ScPatternAttr( pDoc->GetPool() );
+                pCellAttrs->GetFromEditItemSet( pCommonAttrs );
+                delete pCommonAttrs;
+            }
+        }
+
+        //  clear ParaAttribs (including adjustment)
+
+        RemoveAdjust();
+
+        //  check if EditObject is needed
+
+        if ( bSpellErrors || nParCnt > 1 )
             bAttrib = TRUE;
         else
         {
-            //  auch bei einzelnem Zeichen, um Zell-Attribute zu finden
-
-            SfxItemSet aSet = pEngine->GetAttribs( ESelection(0,0,0,aString.Len()) );
-
-            const SfxPoolItem* pItem = NULL;
             for (USHORT nId = EE_CHAR_START; nId <= EE_CHAR_END && !bAttrib; nId++)
             {
-                SfxItemState eState = aSet.GetItemState( nId, FALSE, &pItem );
+                SfxItemState eState = aOldAttribs.GetItemState( nId, FALSE, &pItem );
                 if (eState == SFX_ITEM_DONTCARE)
                     bAttrib = TRUE;
                 else if (eState == SFX_ITEM_SET)
@@ -1964,22 +1992,18 @@ void ScInputHandler::EnterHandler( BYTE nBlockMode )
                                 != SVX_ESCAPEMENT_OFF )
                             bAttrib = TRUE;
                     }
-                    else
-                        if (!bCellAttr)
-                            if ( *pItem != pEditDefaults->Get(nId) )
-                                bCellAttr = TRUE;
                 }
             }
 
             //  Feldbefehle enthalten?
 
-            SfxItemState eFieldState = aSet.GetItemState( EE_FEATURE_FIELD, FALSE );
+            SfxItemState eFieldState = aOldAttribs.GetItemState( EE_FEATURE_FIELD, FALSE );
             if ( eFieldState == SFX_ITEM_DONTCARE || eFieldState == SFX_ITEM_SET )
                 bAttrib = TRUE;
 
             //  not converted characters?
 
-            SfxItemState eConvState = aSet.GetItemState( EE_FEATURE_NOTCONV, FALSE );
+            SfxItemState eConvState = aOldAttribs.GetItemState( EE_FEATURE_NOTCONV, FALSE );
             if ( eConvState == SFX_ITEM_DONTCARE || eConvState == SFX_ITEM_SET )
                 bAttrib = TRUE;
 
@@ -1988,13 +2012,6 @@ void ScInputHandler::EnterHandler( BYTE nBlockMode )
 
             if ( bAttrib && bFormulaMode )
                 bAttrib = FALSE;
-
-            if (bCellAttr && !bAttrib && !bMatrix && pActiveViewSh)
-            {
-                ScDocument* pDoc = pActiveViewSh->GetViewData()->GetDocument();
-                pCellAttrs = new ScPatternAttr( pDoc->GetPool() );
-                pCellAttrs->GetFromEditItemSet( &aSet );
-            }
         }
 
         if (bMatrix)
