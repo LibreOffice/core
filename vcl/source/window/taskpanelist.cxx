@@ -2,9 +2,9 @@
  *
  *  $RCSfile: taskpanelist.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: ssa $ $Date: 2002-03-14 13:41:59 $
+ *  last change: $Author: ssa $ $Date: 2002-03-15 13:51:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,20 +72,31 @@
 #include <functional>
 #include <algorithm>
 
+static Point ImplGetPos( const Window *w )
+{
+    Point pos;
+    if( w->ImplIsDockingWindow() )
+    {
+        pos = ((DockingWindow*)w)->GetPosPixel();
+        Window *pF = ((DockingWindow*)w)->GetFloatingWindow();
+        if( pF )
+            pos = pF->OutputToAbsoluteScreenPixel( pF->ScreenToOutputPixel( pos ) );
+        else
+            pos = w->OutputToAbsoluteScreenPixel( pos );
+    }
+    else
+        pos = w->OutputToAbsoluteScreenPixel( w->GetPosPixel() );
+
+    return pos;
+}
+
 // compares window pos left-to-right
 struct LTRSort : public ::std::binary_function< const Window*, const Window*, bool >
 {
     bool operator()( const Window* w1, const Window* w2 ) const
     {
-        Point pos1, pos2;
-        if( w1->GetType() == RSC_DOCKINGWINDOW )
-            pos1 = ((DockingWindow*)w1)->GetPosPixel();
-        else
-            pos1 = w1->GetPosPixel();
-        if( w2->GetType() == RSC_DOCKINGWINDOW )
-            pos2 = ((DockingWindow*)w2)->GetPosPixel();
-        else
-            pos2 = w2->GetPosPixel();
+        Point pos1(ImplGetPos( w1 ));
+        Point pos2(ImplGetPos( w2 ));
 
         if( pos1.X() == pos2.X() )
             return ( pos1.Y() < pos2.Y() );
@@ -95,22 +106,15 @@ struct LTRSort : public ::std::binary_function< const Window*, const Window*, bo
 };
 struct LTRSortBackward : public ::std::binary_function< const Window*, const Window*, bool >
 {
-    bool operator()( const Window* w1, const Window* w2 ) const
+    bool operator()( const Window* w2, const Window* w1 ) const
     {
-        Point pos1, pos2;
-        if( w1->GetType() == RSC_DOCKINGWINDOW )
-            pos1 = ((DockingWindow*)w1)->GetPosPixel();
-        else
-            pos1 = w1->GetPosPixel();
-        if( w2->GetType() == RSC_DOCKINGWINDOW )
-            pos2 = ((DockingWindow*)w2)->GetPosPixel();
-        else
-            pos2 = w2->GetPosPixel();
+        Point pos1(ImplGetPos( w1 ));
+        Point pos2(ImplGetPos( w2 ));
 
         if( pos1.X() == pos2.X() )
-            return ( pos1.Y() > pos2.Y() );
+            return ( pos1.Y() < pos2.Y() );
         else
-            return ( pos1.X() > pos2.X() );
+            return ( pos1.X() < pos2.X() );
     }
 };
 
@@ -139,7 +143,7 @@ void TaskPaneList::AddWindow( Window *pWindow )
             bDockingWindow = true;
         else if( pWindow->GetType() == RSC_TOOLBOX )
             bToolbox = true;
-        else if( pWindow->GetType() == RSC_DIALOG || pWindow->GetType() == RSC_MODELESSDIALOG || pWindow->GetType() == RSC_MODALDIALOG )
+        else if( pWindow->IsDialog() )
             bDialog = true;
         else
             bUnknown = true;
@@ -184,7 +188,7 @@ BOOL TaskPaneList::HandleKeyEvent( KeyEvent aKeyEvent )
             if( (*p)->HasChildPathFocus( TRUE ) )
             {
                 // F6 works only in floaters
-                if( bFloatsOnly && (*p)->GetType() != RSC_DOCKINGWINDOW && (*p)->GetType() != RSC_MODELESSDIALOG )
+                if( bFloatsOnly && (*p)->GetType() != RSC_DOCKINGWINDOW && !(*p)->IsDialog() )
                     return FALSE;
 
                 bFocusInList = TRUE;
@@ -275,14 +279,6 @@ Window* TaskPaneList::FindNextFloat( Window *pWindow, BOOL bForward )
         ::std::stable_sort( mTaskPanes.begin(), mTaskPanes.end(), LTRSortBackward() );
 
     ::std::vector< Window* >::iterator p = mTaskPanes.begin();
-
-    while( p != mTaskPanes.end() )
-    {
-        Window *pWin = *p;
-        ++p;
-    }
-
-    p = mTaskPanes.begin();
     while( p != mTaskPanes.end() )
     {
         if( !pWindow || *p == pWindow )
@@ -293,7 +289,7 @@ Window* TaskPaneList::FindNextFloat( Window *pWindow, BOOL bForward )
                     ++p;
                 if( p == mTaskPanes.end() )
                     return pWindow; // do not wrap, send focus back to document at end of list
-                if( (*p)->IsVisible() && ( (*p)->GetType() == RSC_DOCKINGWINDOW || (*p)->GetType() == RSC_MODELESSDIALOG ) )
+                if( (*p)->IsVisible() && ( (*p)->GetType() == RSC_DOCKINGWINDOW || (*p)->IsDialog() ) )
                     return *p;
                 if( !pWindow )  // increment after test, otherwise first element is skipped
                     ++p;
