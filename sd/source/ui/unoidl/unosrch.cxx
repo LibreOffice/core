@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unosrch.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: thb $ $Date: 2001-05-29 16:10:19 $
+ *  last change: $Author: cl $ $Date: 2001-08-17 12:10:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,8 +131,7 @@ public:
         mnIndex++;
         if( mxShapes.is() && mxShapes->getCount() > mnIndex )
         {
-            uno::Any aAny( mxShapes->getByIndex( mnIndex ) );
-            ::cppu::extractInterface( xShape, aAny );
+            mxShapes->getByIndex( mnIndex ) >>= xShape;
         }
         return xShape;
     }
@@ -183,9 +182,9 @@ sal_Int32 SAL_CALL SdUnoSearchReplaceShape::replaceAll( const uno::Reference< ut
     {
         uno::Reference< drawing::XDrawPage > xPage( mpPage );
 
-        uno::Any aAny( xPage->queryInterface( ITYPE( drawing::XShapes ) ) );
+        xPage->queryInterface( ITYPE( drawing::XShapes ) ) >>= xShapes;
 
-        if( (aAny >>= xShapes) && (xShapes->getCount() > 0) )
+        if( xShapes.is() && (xShapes->getCount() > 0) )
         {
             pContext = new SearchContext_impl( xShapes );
             xShape = pContext->firstShape();
@@ -286,9 +285,9 @@ uno::Reference< ::com::sun::star::container::XIndexAccess > SAL_CALL SdUnoSearch
     if(mpPage)
     {
         uno::Reference< drawing::XDrawPage >  xPage( mpPage );
-        uno::Any aAny( xPage->queryInterface( ITYPE( drawing::XShapes ) ) );
+        xPage->queryInterface( ITYPE( drawing::XShapes ) ) >>= xShapes;
 
-        if( ( aAny >>= xShapes ) && xShapes->getCount() > 0 )
+        if( xShapes.is() && xShapes->getCount() > 0 )
         {
             pContext = new SearchContext_impl( xShapes );
             xShape = pContext->firstShape();
@@ -393,8 +392,7 @@ uno::Reference< drawing::XShape >  SdUnoSearchReplaceShape::GetCurrentShape() co
         {
             if(xShapes->getCount() > 0)
             {
-                uno::Any aAny( xShapes->getByIndex(0) );
-                ::cppu::extractInterface( xShape, aAny );
+                xShapes->getByIndex(0) >>= xShape;
             }
         }
     }
@@ -445,8 +443,8 @@ uno::Reference< ::com::sun::star::uno::XInterface > SAL_CALL SdUnoSearchReplaceS
                         else
                             xCurrentShape = NULL;
 
-                        uno::Any aAny( xCurrentShape->queryInterface( ITYPE( text::XTextRange )));
-                        if(!(xCurrentShape.is() && ( aAny >>= xRange)))
+                        xCurrentShape->queryInterface( ITYPE( text::XTextRange ) ) >>= xRange;
+                        if(!(xCurrentShape.is() && (xRange.is())))
                             xRange = NULL;
                     }
                 }
@@ -477,10 +475,10 @@ uno::Reference< drawing::XShape >  SdUnoSearchReplaceShape::GetNextShape( uno::R
         const sal_Int32 nCount = xShapes->getCount();
         for( sal_Int32 i = 0; i < nCount; i++ )
         {
-            uno::Any aAny( xShapes->getByIndex(i) );
             uno::Reference< drawing::XShape > xSearchShape;
+            xShapes->getByIndex(i) >>= xSearchShape;
 
-            if( ::cppu::extractInterface( xSearchShape, aAny ) )
+            if( xSearchShape.is() )
             {
                 uno::Reference< container::XIndexAccess > xGroup( xSearchShape, uno::UNO_QUERY );
 
@@ -488,18 +486,16 @@ uno::Reference< drawing::XShape >  SdUnoSearchReplaceShape::GetNextShape( uno::R
                 {
                     if( xGroup.is() && xGroup->getCount() > 0 )
                     {
-                        aAny = xGroup->getByIndex( 0 );
+                        xGroup->getByIndex( 0 ) >>= xFound;
                     }
                     else
                     {
                         i++;
                         if( i < nCount )
-                            aAny = xShapes->getByIndex( i );
+                            xShapes->getByIndex( i ) >>= xFound;
                         else
-                            aAny <<= xCurrentShape;
+                            xFound = xCurrentShape;
                     }
-
-                    ::cppu::extractInterface( xFound, aAny );
 
                     break;
                 }
@@ -514,8 +510,7 @@ uno::Reference< drawing::XShape >  SdUnoSearchReplaceShape::GetNextShape( uno::R
                             i++;
                             if( i < nCount )
                             {
-                                aAny = xShapes->getByIndex(i);
-                                ::cppu::extractInterface( xFound, aAny );
+                                xShapes->getByIndex(i) >>= xFound;
                             }
                         }
                         break;
@@ -558,6 +553,8 @@ uno::Reference< text::XTextRange >  SdUnoSearchReplaceShape::Search( uno::Refere
 
     uno::Reference< container::XEnumerationAccess > xEnumAccess( xParent, uno::UNO_QUERY );
 
+    // first we fill the arrys with the position and paragraph for every character
+    // inside the text
     if( xEnumAccess.is() )
     {
         uno::Reference< container::XEnumeration >  xParaEnum( xEnumAccess->createEnumeration() );
@@ -566,11 +563,10 @@ uno::Reference< text::XTextRange >  SdUnoSearchReplaceShape::Search( uno::Refere
         {
             uno::Reference< text::XTextContent >  xParagraph;
 
-            uno::Any aAny( xParaEnum->nextElement() );
-            if( ::cppu::extractInterface( xParagraph, aAny ) )
+            xParaEnum->nextElement() >>= xParagraph;
+            if( xParagraph.is() )
             {
-                aAny = xParagraph->queryInterface( ITYPE( container::XEnumerationAccess ));
-                aAny >>= xEnumAccess;
+                xParagraph->queryInterface( ITYPE( container::XEnumerationAccess )) >>= xEnumAccess;
             }
 
             if( xEnumAccess.is() )
@@ -584,8 +580,8 @@ uno::Reference< text::XTextRange >  SdUnoSearchReplaceShape::Search( uno::Refere
                     {
                         uno::Reference< text::XTextRange >  xPortion;
 
-                        uno::Any aAny( xParagraph->nextElement() );
-                        if( ::cppu::extractInterface( xPortion, aAny ) )
+                        xParagraph->nextElement() >>= xPortion;
+                        if( xPortion.is() )
                         {
                             const OUString aPortion( xPortion->getString() );
                             const sal_Int32 nLen = aPortion.getLength();
@@ -593,7 +589,8 @@ uno::Reference< text::XTextRange >  SdUnoSearchReplaceShape::Search( uno::Refere
                             ESelection aStartSel( GetSelection( xPortion->getStart() ) );
                             ESelection aEndSel( GetSelection( xPortion->getEnd() ) );
 
-                            if( aStartSel.nStartPos == aEndSel.nStartPos )
+                            // special case for empty portions with content or length one portions with content (fields)
+                            if( (aStartSel.nStartPos == aEndSel.nStartPos) || ( (aStartSel.nStartPos == (aEndSel.nStartPos - 1)) && (nLen > 1) ) )
                             {
                                 for( sal_Int32 i = 0; i < nLen; i++ )
                                 {
@@ -613,6 +610,7 @@ uno::Reference< text::XTextRange >  SdUnoSearchReplaceShape::Search( uno::Refere
 
                                 nLastPos = aStartSel.nStartPos;
                             }
+                            // normal case
                             else
                             {
                                 for( sal_Int32 i = 0; i < nLen; i++ )
@@ -678,7 +676,7 @@ uno::Reference< text::XTextRange >  SdUnoSearchReplaceShape::Search( uno::Refere
                              pConvertPara[nEndPos], pConvertPos[nEndPos] );
             SvxUnoTextRange *pRange;
 
-            SvxUnoText* pParent = SvxUnoText::getImplementation( xParent );
+            SvxUnoTextBase* pParent = SvxUnoTextBase::getImplementation( xParent );
 
             if(pParent)
             {
@@ -757,10 +755,10 @@ uno::Reference< drawing::XShape >  SdUnoSearchReplaceShape::GetShape( uno::Refer
         {
             do
             {
-                uno::Any aAny( xText->queryInterface( ITYPE( drawing::XShape )));
-                if(!(aAny >>= xShape))
+                xText->queryInterface( ITYPE( drawing::XShape )) >>= xShape;
+                if(!xShape.is())
                 {
-                    uno::Reference< text::XText >  xParent( xText->getText() );
+                    uno::Reference< text::XText > xParent( xText->getText() );
                     if(!xParent.is() || xText.get() == xParent.get())
                         return xShape;
 
@@ -837,20 +835,25 @@ void SAL_CALL SdUnoSearchReplaceDescriptor::setPropertyValue( const ::rtl::OUStr
 
     const SfxItemPropertyMap* pMap = mpPropSet->getPropertyMapEntry(aPropertyName);
 
+    sal_Bool bOk = sal_False;
+
     switch( pMap ? pMap->nWID : -1 )
     {
     case WID_SEARCH_BACKWARDS:
-        mbBackwards = ::cppu::any2bool( aValue );
+        bOk = (aValue >>= mbBackwards);
         break;
     case WID_SEARCH_CASE:
-        mbCaseSensitive = ::cppu::any2bool( aValue );
+        bOk = (aValue >>= mbCaseSensitive);
         break;
     case WID_SEARCH_WORDS:
-        mbWords = ::cppu::any2bool( aValue );
+        bOk = (aValue >>= mbWords);
         break;
     default:
         throw beans::UnknownPropertyException();
     }
+
+    if( !bOk )
+        throw lang::IllegalArgumentException();
 }
 
 uno::Any SAL_CALL SdUnoSearchReplaceDescriptor::getPropertyValue( const ::rtl::OUString& PropertyName )
@@ -865,13 +868,13 @@ uno::Any SAL_CALL SdUnoSearchReplaceDescriptor::getPropertyValue( const ::rtl::O
     switch( pMap ? pMap->nWID : -1 )
     {
     case WID_SEARCH_BACKWARDS:
-        aAny = ::cppu::bool2any(mbBackwards);
+        aAny <<= (sal_Bool)mbBackwards;
         break;
     case WID_SEARCH_CASE:
-        aAny = ::cppu::bool2any(mbCaseSensitive);
+        aAny <<= (sal_Bool)mbCaseSensitive;
         break;
     case WID_SEARCH_WORDS:
-        aAny = ::cppu::bool2any(mbWords);
+        aAny <<= (sal_Bool)mbWords;
         break;
     default:
         throw beans::UnknownPropertyException();
