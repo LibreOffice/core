@@ -2,9 +2,9 @@
  *
  *  $RCSfile: global.hxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 09:30:54 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 11:41:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1208,10 +1208,10 @@ public:
                 ScFunctionMgr();
                 ~ScFunctionMgr();
 
-    ScFuncDesc*     Get( const String& rFName );
-    ScFuncDesc*     Get( USHORT nFIndex );
-    ScFuncDesc*     First( USHORT nCategory = 0 );
-    ScFuncDesc*     Next();
+    const ScFuncDesc*   Get( const String& rFName );
+    const ScFuncDesc*   Get( USHORT nFIndex );
+    const ScFuncDesc*   First( USHORT nCategory = 0 );
+    const ScFuncDesc*   Next() const;
 
 private:
     ScFunctionList* pFuncList;
@@ -1230,8 +1230,14 @@ public:
     ULONG           GetCount() const
                     { return aFunctionList.Count(); }
 
-    ScFuncDesc*     GetFunction( ULONG nIndex ) const
-                    { return (ScFuncDesc*)aFunctionList.GetObject( nIndex ); }
+    const ScFuncDesc*   First()
+                        { return (const ScFuncDesc*) aFunctionList.First(); }
+
+    const ScFuncDesc*   Next()
+                        { return (const ScFuncDesc*) aFunctionList.Next(); }
+
+    const ScFuncDesc*   GetFunction( ULONG nIndex ) const
+                    { return (const ScFuncDesc*) aFunctionList.GetObject( nIndex ); }
 
     xub_StrLen      GetMaxFuncNameLen() const
                     { return nMaxFuncNameLen; }
@@ -1252,7 +1258,7 @@ public:
                                              BOOL           bBack,
                                              xub_StrLen&    rFStart, // Ein- und Ausgabe
                                              xub_StrLen*    pFEnd = NULL,
-                                             ScFuncDesc**   ppFDesc = NULL,
+                                             const ScFuncDesc** ppFDesc = NULL,
                                              String***      pppArgs = NULL );
 
     static const ScFuncDesc*    GetDefaultFuncDesc();
