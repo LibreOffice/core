@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.33 $
- *  last change: $Author: pl $ $Date: 2001-04-27 14:38:31 $
+ *  $Revision: 1.34 $
+ *  last change: $Author: hdu $ $Date: 2001-05-09 10:02:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,7 @@
 #include <osl/file.hxx>
 #include <poly.hxx>
 
-#define FT20b8 true /* VERSION_MINOR in freetype.h is too coarse */
+//#define FT20b8 true /* VERSION_MINOR in freetype.h is too coarse */
 #include "freetype/freetype.h"
 #include "freetype/ftglyph.h"
 #include "freetype/ftoutln.h"
