@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryDesignView.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-06 09:31:46 $
+ *  last change: $Author: oj $ $Date: 2001-02-06 09:46:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,11 +181,6 @@ OQueryDesignView::OQueryDesignView(Window* _pParent, OQueryController* _pControl
     m_pSelectionBox->SetNoneVisbleRow(getController()->getVisibleRows());
     m_pSelectionBox->Show();
     // Splitter einrichten
-    if(getController()->getSplitPos() != -1)
-    {
-        m_aSplitter.SetPosPixel( Point( m_aSplitter.GetPosPixel().X(),getController()->getSplitPos() ) );
-        m_aSplitter.SetSplitPosPixel(getController()->getSplitPos());
-    }
     m_aSplitter.SetSplitHdl(LINK(this, OQueryDesignView,SplitHdl));
     m_aSplitter.Show();
 
@@ -223,6 +218,11 @@ void OQueryDesignView::Construct(const Reference< ::com::sun::star::awt::XContro
 // -----------------------------------------------------------------------------
 void OQueryDesignView::initialize()
 {
+    if(getController()->getSplitPos() != -1)
+    {
+        m_aSplitter.SetPosPixel( Point( m_aSplitter.GetPosPixel().X(),getController()->getSplitPos() ) );
+        m_aSplitter.SetSplitPosPixel(getController()->getSplitPos());
+    }
     m_pSelectionBox->initialize();
     m_pSelectionBox->ClearAll();
     m_pSelectionBox->SetReadOnly(getController()->isReadOnly());
