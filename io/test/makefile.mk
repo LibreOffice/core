@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: jbu $ $Date: 2000-12-08 11:07:30 $
+#   last change: $Author: jbu $ $Date: 2001-01-08 13:27:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,8 +66,8 @@ PRJNAME=extensions
 TARGET=workben
 LIBTARGET=NO
 
-TESTAPP=testcomponent
-#TESTAPP=testconnection
+#TESTAPP=testcomponent
+TESTAPP=testconnection
 
 TARGETTYPE=CUI
 ENABLE_EXCEPTIONS=TRUE
@@ -89,7 +89,13 @@ UNOUCRRDB=$(SOLARBINDIR)$/udkapi.rdb
 UNOUCROUT=$(OUT)$/inc
 
 UNOTYPES =	com.sun.star.connection.XConnector \
-        com.sun.star.connection.XAcceptor 
+        com.sun.star.connection.XAcceptor  \
+        com.sun.star.registry.XImplementationRegistration \
+        com.sun.star.lang.XComponent \
+        com.sun.star.lang.XSingleServiceFactory \
+        com.sun.star.lang.XMultiServiceFactory \
+        com.sun.star.test.XSimpleTest 
+
 
 #
 # std testcomponent

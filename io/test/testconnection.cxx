@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testconnection.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jbu $ $Date: 2000-12-08 11:07:30 $
+ *  last change: $Author: jbu $ $Date: 2001-01-08 13:27:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,8 +92,8 @@ public:
         {}
     virtual void SAL_CALL run();
 
-private:
     Reference < XAcceptor > m_rAcceptor;
+private:
     Reference < XConnection > m_rConnection;
     OUString m_sConnectionDescription;
 };
@@ -128,10 +128,10 @@ void MyThread::run()
     {
         m_rConnection = m_rAcceptor->accept( m_sConnectionDescription );
     }
-    catch ( ... )
+    catch ( Exception &e)
     {
-        printf( "Exception was thrown by acceptor thread\n" );
-        throw;
+        OString tmp= OUStringToOString( e.Message , RTL_TEXTENCODING_ASCII_US );
+        printf( "Exception was thrown by acceptor thread: %s\n", tmp.getStr() );
     }
 
     if( m_rConnection.is() )
@@ -238,17 +238,13 @@ int __cdecl main( int argc, char * argv[] )
 
     OUString aLibName = OUString::createFromAscii( REG_PREFIX );
     aLibName += OUString::createFromAscii("connectr");
-#ifndef OS2
     aLibName += OUString::createFromAscii(DLL_POSTFIX);
-#endif
     xImplReg->registerImplementation(
         OUString::createFromAscii("com.sun.star.loader.SharedLibrary"), aLibName, Reference< XSimpleRegistry >() );
 
     aLibName = OUString::createFromAscii( REG_PREFIX );
     aLibName += OUString::createFromAscii("acceptor");
-#ifndef OS2
     aLibName += OUString::createFromAscii(DLL_POSTFIX);
-#endif
     xImplReg->registerImplementation(
         OUString::createFromAscii("com.sun.star.loader.SharedLibrary"), aLibName, Reference< XSimpleRegistry >() );
 
@@ -274,6 +270,61 @@ int __cdecl main( int argc, char * argv[] )
     testConnection( OUString::createFromAscii("pipe,name=bla") , rAcceptorPipe , rConnector );
     printf( " Done\n" );
 
+    // check, if errornous strings make any problem
+    rAcceptor = Reference< XAcceptor > (
+        xMgr->createInstance( OUString::createFromAscii( "com.sun.star.connection.Acceptor" ) ),
+        UNO_QUERY );
+
+    try
+    {
+        rAcceptor->accept( OUString() );
+        OSL_ENSURE( 0 , "empty connection string" );
+    }
+    catch( IllegalArgumentException & )
+    {
+        // everything is fine
+    }
+    catch( ... )
+    {
+        OSL_ENSURE( 0, "unexpected akexception with empty connection string" );
+    }
+
+    try
+    {
+        rConnector->connect( OUString() );
+        OSL_ENSURE( 0 , "empty connection string" );
+    }
+    catch( ConnectionSetupException & )
+    {
+        // everything is fine
+    }
+    catch( ... )
+    {
+        OSL_ENSURE( 0, "unexpected exception with empty connection string" );
+    }
+
+
+    MyThread thread( rAcceptor , OUString::createFromAscii("socket,host=localhost,port=2001") );
+    thread.create();
+
+    TimeValue value = {0,1};
+    osl_waitThread( &value );
+    try
+    {
+        rAcceptor->accept( OUString::createFromAscii("socket,host=localhost,port=2001") );
+        OSL_ENSURE( 0 , "already existing exception expected" );
+    }
+    catch( AlreadyAcceptingException & e)
+    {
+        // everything is fine
+    }
+    catch( ... )
+    {
+        OSL_ENSURE( 0, "unknown exception, already existing existing expected" );
+    }
+
+    rAcceptor->stopAccepting();
+    thread.join();
 
     Reference < XComponent > rComp( xMgr , UNO_QUERY );
     if( rComp.is() )
