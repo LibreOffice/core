@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: kz $ $Date: 2004-02-25 16:55:58 $
+#   last change: $Author: hr $ $Date: 2004-05-10 18:09:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -45,8 +45,7 @@
 #   WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
 #   WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
 #   MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
-#   See the License for the specific p	XTypeDetection.idl\
-rovisions governing your rights and
+#   See the License for the specific provisions governing your rights and
 #   obligations concerning the Software.
 #
 #   The Initial Developer of the Original Code is: Sun Microsystems, Inc.
@@ -80,6 +79,7 @@ IDLFILES=\
     EmbedStates.idl\
     EmbedVerbs.idl\
     EmbedMisc.idl\
+    EmbedMapModes.idl\
     EmbedUpdateModes.idl\
     EmbeddedObjectDescriptor.idl\
     EntryInitModes.idl\
@@ -87,8 +87,7 @@ IDLFILES=\
     StorageStream.idl\
     StorageFactory.idl\
     VerbAttributes.idl\
-    VerbDescr.idl\
-    VerbFlags.idl\
+    VerbDescriptor.idl\
     XPersistanceHolder.idl\
     XEmbeddedObject.idl\
     XVisualObject.idl\
@@ -103,15 +102,18 @@ IDLFILES=\
     XLinkFactory.idl\
     XEncryptionProtectedSource.idl\
     XInplaceClient.idl\
-    XInplaceUIWindow.idl\
-    XIPMainContainerWindow.idl\
     XWindowSupplier.idl\
     XTransactedObject.idl\
     XTransactionBroadcaster.idl\
     XTransactionListener.idl\
+    XStateChangeBroadcaster.idl\
+    XStateChangeListener.idl\
     XTransferableSupplier.idl\
     XComponentSupplier.idl\
     XStorage.idl\
+    XHatchWindowController.idl\
+    XHatchWindowFactory.idl\
+    XHatchWindow.idl\
     XPackageStructureCreator.idl\
     UnreachableStateException.idl\
     WrongStateException.idl\
@@ -119,7 +121,7 @@ IDLFILES=\
     InvalidStorageException.idl\
     LinkageMisuseException.idl\
     NeedsRunningStateException.idl\
-    StorageWTException.idl\
+    StorageWrappedTargetException.idl\
 
 # ------------------------------------------------------------------
 
