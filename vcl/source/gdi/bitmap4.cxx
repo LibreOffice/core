@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bitmap4.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-21 13:30:46 $
+ *  last change: $Author: hjs $ $Date: 2003-08-18 15:13:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -508,7 +508,7 @@ BOOL Bitmap::ImplSobelGrey( const BmpFilterParam* pFilterParam, const Link* pPro
                         nSum1 += nMask331 * nGrey33;
                         nSum2 += nMask332 * nGrey33;
 
-                        nSum1 = (long) sqrt( ( nSum1 * nSum1 + nSum2 * nSum2 ) );
+                        nSum1 = (long) sqrt( (double)( nSum1 * nSum1 + nSum2 * nSum2 ) );
                         aGrey.SetIndex( ~(BYTE) VOS_BOUND( nSum1, 0, 255 ) );
                         pWriteAcc->SetPixel( nY, nX, aGrey );
 
