@@ -130,6 +130,7 @@ hedabu: ..\inc\cntids.hrc %_DEST%\inc%_EXT%\sfx2\cntids.hrc
 hedabu: ..\inc\basmgr.hxx %_DEST%\inc%_EXT%\sfx2\basmgr.hxx
 hedabu: ..\inc\imagemgr.hxx %_DEST%\inc%_EXT%\sfx2\imagemgr.hxx
 hedabu: ..\inc\accelinfo.hxx %_DEST%\inc%_EXT%\sfx2\accelinfo.hxx
+hedabu: ..\inc\itemconnect.hxx %_DEST%\inc%_EXT%\sfx2\itemconnect.hxx
 
 ..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib%_EXT%\lib*static*.dylib
 ..\%__SRC%\misc\*staticdatamembers.cxx %_DEST%\inc%_EXT%\*staticdatamembers.cxx
