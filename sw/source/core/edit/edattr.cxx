@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edattr.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: jp $ $Date: 2001-09-21 08:28:47 $
+ *  last change: $Author: jp $ $Date: 2001-09-21 09:49:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -470,7 +470,8 @@ inline USHORT lcl_SetScriptFlags( USHORT nType )
     return nRet;
 }
 
-BOOL lcl_GetIsFldAtPos( const SwTxtNode& rTNd, xub_StrLen nPos, USHORT &rScrpt )
+BOOL lcl_GetIsFldAtPos( const SwTxtNode& rTNd, xub_StrLen nPos,
+                        USHORT &rScrpt, BOOL bInSelection )
 {
     BOOL bRet = FALSE;
     const String& rTxt = rTNd.GetTxt();
@@ -486,8 +487,20 @@ BOOL lcl_GetIsFldAtPos( const SwTxtNode& rTNd, xub_StrLen nPos, USHORT &rScrpt )
             0 != (pFld = pTFld->GetFld().GetFld() ) &&
             (sExp = pFld->Expand()).Len() )
         {
-            rScrpt |= lcl_SetScriptFlags( pBreakIt->xBreak->
-                                getScriptType( sExp, sExp.Len()-1 ));
+            xub_StrLen n, nEnd = sExp.Len();
+            if( bInSelection )
+            {
+                USHORT nScript;
+                for( n = 0; n < nEnd;
+                    n = pBreakIt->xBreak->endOfScript( sExp, n, nScript ))
+                {
+                    nScript = pBreakIt->xBreak->getScriptType( sExp, n );
+                    rScrpt |= nScript;
+                }
+            }
+            else
+                rScrpt |= lcl_SetScriptFlags( pBreakIt->xBreak->
+                                            getScriptType( sExp, nEnd-1 ));
         }
     }
     return bRet;
@@ -520,7 +533,7 @@ USHORT SwEditShell::GetScriptType() const
                             nPos = aIdx.GetIndex();
                     }
 
-                    if( !lcl_GetIsFldAtPos( *pTNd, nPos, nRet ))
+                    if( !lcl_GetIsFldAtPos( *pTNd, nPos, nRet, FALSE ))
                         nRet |= lcl_SetScriptFlags( pBreakIt->xBreak->
                                     getScriptType( pTNd->GetTxt(), nPos ));
                 }
@@ -563,7 +576,7 @@ USHORT SwEditShell::GetScriptType() const
                                 nScript = pBreakIt->xBreak->getScriptType(
                                                                 rTxt, nChg );
 
-                            if( !lcl_GetIsFldAtPos( *pTNd, nChg, nRet ))
+                            if( !lcl_GetIsFldAtPos( *pTNd, nChg, nRet, TRUE ))
                                 nRet |= lcl_SetScriptFlags( nScript );
 
                             if( (SCRIPTTYPE_LATIN | SCRIPTTYPE_ASIAN |
