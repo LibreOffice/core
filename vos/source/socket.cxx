@@ -2,9 +2,9 @@
  *
  *  $RCSfile: socket.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: jbu $ $Date: 2001-03-14 16:39:07 $
+ *  last change: $Author: jbu $ $Date: 2001-03-15 10:42:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1306,7 +1306,7 @@ OSocket::TResult OAcceptorSocket::acceptConnection(OStreamSocket& connection)
 OSocket::TResult OAcceptorSocket::acceptConnection(OStreamSocket& connection,
                                                    OSocketAddr& sa)
 {
-    oslSocketAddr PeerAddr;
+    oslSocketAddr PeerAddr = 0;
     oslSocket     Socket = 0;
 
     if (m_pRecvTimeout && ! isRecvReady(m_pRecvTimeout))
