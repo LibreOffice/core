@@ -9,7 +9,7 @@
         <loader-name>com.sun.star.loader.SharedLibrary</loader-name>
         <language>c++</language>
         <status value="final"/>
-        <supported-service>com.sun.star.sheet.AccessibleSpreadsheetPageView</supported-service>
+        <supported-service>drafts.com.sun.star.sheet.AccessibleSpreadsheetPageView</supported-service>
         <type>drafts.com.sun.star.accessibility.XAccessibleContext</type>
         <type>drafts.com.sun.star.accessibility.XAccessibleComponent</type>
     </component-description>
