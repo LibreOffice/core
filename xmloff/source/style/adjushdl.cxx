@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adjushdl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:04 $
+ *  last change: $Author: mib $ $Date: 2001-01-30 08:50:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,8 +79,8 @@
 #include <rtl/ustrbuf.hxx>
 #endif
 
-#ifndef _COM_SUN_STAR_DRAWING_TEXTADJUST_HPP_
-#include <com/sun/star/drawing/TextAdjust.hpp>
+#ifndef _COM_SUN_STAR_STYLE_PARAGRAPHADJUST_HPP_
+#include <com/sun/star/style/ParagraphAdjust.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_UNO_ANY_HXX_
@@ -96,20 +96,20 @@ using namespace ::rtl;
 
 SvXMLEnumMapEntry __READONLY_DATA pXML_Para_Adjust_Enum[] =
 {
-    { sXML_start,       drawing::TextAdjust_LEFT },
-    { sXML_end,         drawing::TextAdjust_RIGHT },
-    { sXML_center,      drawing::TextAdjust_CENTER },
-    { sXML_justify,     drawing::TextAdjust_BLOCK },
-    { sXML_justified,   drawing::TextAdjust_BLOCK },    // obsolete
+    { sXML_start,       style::ParagraphAdjust_LEFT },
+    { sXML_end,         style::ParagraphAdjust_RIGHT },
+    { sXML_center,      style::ParagraphAdjust_CENTER },
+    { sXML_justify,     style::ParagraphAdjust_BLOCK },
+    { sXML_justified,   style::ParagraphAdjust_BLOCK }, // obsolete
     { 0, 0 }
 };
 
 SvXMLEnumMapEntry __READONLY_DATA pXML_Para_Align_Last_Enum[] =
 {
-    { sXML_start,       drawing::TextAdjust_LEFT },
-    { sXML_center,      drawing::TextAdjust_CENTER },
-    { sXML_justify,     drawing::TextAdjust_BLOCK },
-    { sXML_justified,   drawing::TextAdjust_BLOCK },    // obsolete
+    { sXML_start,       style::ParagraphAdjust_LEFT },
+    { sXML_center,      style::ParagraphAdjust_CENTER },
+    { sXML_justify,     style::ParagraphAdjust_BLOCK },
+    { sXML_justified,   style::ParagraphAdjust_BLOCK }, // obsolete
     { 0, 0 }
 };
 
@@ -177,7 +177,7 @@ sal_Bool XMLLastLineAdjustPropHdl::exportXML( OUString& rStrExpValue, const uno:
 
     rValue >>= nVal;
 
-    if( nVal != drawing::TextAdjust_LEFT )
+    if( nVal != style::ParagraphAdjust_LEFT )
         bRet = rUnitConverter.convertEnum( aOut, nVal, pXML_Para_Align_Last_Enum, sXML_start );
 
     rStrExpValue = aOut.makeStringAndClear();
