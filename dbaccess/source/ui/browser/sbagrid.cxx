@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbagrid.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-30 08:10:09 $
+ *  last change: $Author: oj $ $Date: 2001-04-02 12:17:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1165,7 +1165,7 @@ void SbaGridControl::SetRowHeight()
         }
         catch(Exception&)
         {
-            OSL_ENSHURE(0,"setPropertyValue: PROPERTY_ROW_HEIGHT throws a exception");
+            OSL_ENSURE(0,"setPropertyValue: PROPERTY_ROW_HEIGHT throws a exception");
         }
     }
 }
