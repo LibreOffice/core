@@ -394,7 +394,8 @@ double lcl_getErrorBarLogicLength(
                                              ? C2U("PositiveError")
                                              : C2U("NegativeError")) >>= fPercent )
                 {
-                    if( ! ::rtl::math::isNan( rData[nIndex] ) &&
+                    if( nIndex >=0 && nIndex < rData.getLength() &&
+                        ! ::rtl::math::isNan( rData[nIndex] ) &&
                         ! ::rtl::math::isNan( fPercent ))
                     {
                         fResult = rData[nIndex] * fPercent / 100.0;
@@ -604,6 +605,27 @@ void VSeriesPlotter::createErrorBar(
         ASSERT_EXCEPTION( e );
     }
 
+}
+
+// virtual
+void VSeriesPlotter::createErrorBar_Y( const drawing::Position3D& rUnscaledLogicPosition
+                            , VDataSeries& rVDataSeries, sal_Int32 nPointIndex
+                            , const uno::Reference< drawing::XShapes >& xTarget )
+{
+    // error bars
+    uno::Reference< beans::XPropertySet > xPointProp( rVDataSeries.getPropertiesOfPoint( nPointIndex ));
+    uno::Reference< beans::XPropertySet > xErrorBarProp;
+    if( xPointProp.is() && ( xPointProp->getPropertyValue( C2U( "ErrorBarY" )) >>= xErrorBarProp ) &&
+        xErrorBarProp.is())
+    {
+        uno::Reference< drawing::XShapes > xErrorBarsGroup_Shapes(
+            getErrorBarsGroupShape(&rVDataSeries, xTarget) );
+
+        createErrorBar( xErrorBarsGroup_Shapes
+            , rUnscaledLogicPosition, xErrorBarProp
+            , rVDataSeries.getAllY(), nPointIndex
+            , true /* bVertical */ );
+    }
 }
 
 void VSeriesPlotter::createRegressionCurvesShapes( const VDataSeries& rVDataSeries
