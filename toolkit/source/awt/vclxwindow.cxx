@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindow.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-05 16:49:41 $
+ *  last change: $Author: mt $ $Date: 2001-01-24 16:13:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -514,6 +514,7 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
             break;
             case BASEPROPERTY_TEXT:
             case BASEPROPERTY_LABEL:
+            case BASEPROPERTY_TITLE:
             {
                 ::rtl::OUString aText;
                 if ( Value >>= aText )
@@ -696,6 +697,7 @@ void VCLXWindow::setProperty( const ::rtl::OUString& PropertyName, const ::com::
             break;
             case BASEPROPERTY_TEXT:
             case BASEPROPERTY_LABEL:
+            case BASEPROPERTY_TITLE:
             {
                 ::rtl::OUString aText = GetWindow()->GetText();
                 aProp <<= aText;
