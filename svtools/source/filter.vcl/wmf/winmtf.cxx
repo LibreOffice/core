@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winmtf.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-17 16:05:44 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 10:19:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -335,9 +335,9 @@ const void WinMtfAssertHandler( const sal_Char* pAction, sal_uInt32 nFlags )
 
 WinMtf::WinMtf( WinMtfOutput* pWinMtfOutput, SvStream& rStreamWMF, PFilterCallback pcallback, void * pcallerdata ) :
     pOut                ( pWinMtfOutput ),
+    pWMF                ( &rStreamWMF ),
     pCallback           ( pcallback ),
-    pCallerData         ( pcallerdata ),
-    pWMF                ( &rStreamWMF )
+    pCallerData         ( pcallerdata )
 {
 #ifdef WIN_MTF_ASSERT
     // we want to assert not implemented features, but we do this
@@ -658,6 +658,8 @@ void WinMtfOutput::SelectObject( INT32 nIndex )
             case GDI_FONT :
                 maFont = ((WinMtfFontStyle*)pGDIObj->pStyle)->aFont;
             break;
+            default:
+            break;  //  -Wall many options not handled.
         }
     }
     if ( nIndex & ENHMETA_STOCK_OBJECT )
@@ -870,16 +872,12 @@ void WinMtfOutput::SetClipPath( const PolyPolygon& rPolyPolygon, sal_Int32 nClip
 //-----------------------------------------------------------------------------------
 
 WinMtfOutput::WinMtfOutput( GDIMetaFile& rGDIMetaFile ) :
-    mpGDIMetaFile       ( &rGDIMetaFile ),
-    mnTextAlign         ( TA_LEFT | TA_TOP | TA_NOUPDATECP ),
-    mnLatestTextAlign   ( 0 ),
     mnBkMode            ( OPAQUE ),
-    mnLatestBkMode      ( 0 ),
     maBkColor           ( COL_WHITE ),
     maLatestBkColor     ( 0x12345678 ),
-    mbNopMode           ( sal_False ),
     maActPos            ( Point() ),
     meRasterOp          ( ROP_OVERPAINT ),
+    mbNopMode           ( sal_False ),
     meLatestRasterOp    ( ROP_INVERT ),
     mnEntrys            ( 16 ),
     mnGfxMode           ( GM_COMPATIBLE ),
@@ -959,6 +957,8 @@ void WinMtfOutput::UpdateClipRegion()
                 mpGDIMetaFile->AddAction( new MetaISectRectClipRegionAction( aClipRect ) );
             }
             break;
+            case EMPTY:
+            break;  // -Wall not handled.
         }
     }
 }
