@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: dbo $ $Date: 2000-12-21 16:08:20 $
+#   last change: $Author: dbo $ $Date: 2000-12-21 16:16:13 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -160,6 +160,7 @@ TYPES:=		-Ttest.XLanguageBindingTest \
         -Tcom.sun.star.uno.XAggregation \
         -Tcom.sun.star.uno.XWeak \
         -Tcom.sun.star.reflection.XIdlClassProvider
+
 # 		-Tcom.sun.star.uno.XCurrentContext \
 
 $(BIN)$/testcppu.rdb: $(ALLIDLFILES)
@@ -169,6 +170,9 @@ $(BIN)$/testcppu.rdb: $(ALLIDLFILES)
     +regcomp -register -r $@ -c javaloader.dll
     +regcomp -register -r $@ -c jen.dll
     touch $@
+
+# 	+regcomp -register -r $@ -c javaloader.dll
+# 	+regcomp -register -r $@ -c jen.dll
     
 unoheader: $(BIN)$/testcppu.rdb
     +cppumaker $(CPPUMAKERFLAGS) -BUCR -O$(UNOUCROUT) $(TYPES) $(BIN)$/testcppu.rdb
