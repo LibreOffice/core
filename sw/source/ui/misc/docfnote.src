@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfnote.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-08 22:57:47 $
+ *  last change: $Author: fme $ $Date: 2001-06-15 11:41:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,7 +225,7 @@ TabPage TP_FOOTNOTEOPTION
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 65 , 14 ) ;
-        Size = MAP_APPFONT ( 59 , 50 ) ;
+        Size = MAP_APPFONT ( 59 , 72 ) ;
         TabStop = TRUE ;
         Group = TRUE ;
         DropDown = TRUE ;
@@ -273,7 +273,7 @@ TabPage TP_FOOTNOTEOPTION
     };
     FixedText FT_NUMCOUNT
     {
-        Pos = MAP_APPFONT ( 12 , 30 ) ;
+        Pos = MAP_APPFONT ( 12 , 31 ) ;
         Size = MAP_APPFONT ( 51 , 8 ) ;
         Text = "~Zählung" ;
         Text [ ENGLISH ] = "Counting" ;
@@ -301,7 +301,7 @@ TabPage TP_FOOTNOTEOPTION
     ListBox LB_NUMCOUNT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 65 , 28 ) ;
+        Pos = MAP_APPFONT ( 65 , 29 ) ;
         Size = MAP_APPFONT ( 59 , 50 ) ;
         TabStop = TRUE ;
         Group = TRUE ;
@@ -454,7 +454,7 @@ TabPage TP_FOOTNOTEOPTION
     };
     FixedText FT_PREFIX
     {
-        Pos = MAP_APPFONT ( 12 , 44 ) ;
+        Pos = MAP_APPFONT ( 12 , 46 ) ;
         Size = MAP_APPFONT ( 48 , 8 ) ;
         Text = "~Davor" ;
         Text [ ENGLISH ] = "Before" ;
@@ -485,7 +485,7 @@ TabPage TP_FOOTNOTEOPTION
     Edit ED_PREFIX
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 65 , 42 ) ;
+        Pos = MAP_APPFONT ( 65 , 44 ) ;
         Size = MAP_APPFONT ( 59 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -493,8 +493,8 @@ TabPage TP_FOOTNOTEOPTION
     };
     FixedText FT_SUFFIX
     {
-        Pos = MAP_APPFONT ( 130 , 44 ) ;
-        Size = MAP_APPFONT ( 48 , 10 ) ;
+        Pos = MAP_APPFONT ( 130 , 46 ) ;
+        Size = MAP_APPFONT ( 48 , 8 ) ;
         Text = "Dahin~ter" ;
         Text [ ENGLISH ] = "Behind" ;
         Text [ norwegian ] = "Bak" ;
@@ -524,7 +524,7 @@ TabPage TP_FOOTNOTEOPTION
     Edit ED_SUFFIX
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 189 , 42 ) ;
+        Pos = MAP_APPFONT ( 189 , 44 ) ;
         Size = MAP_APPFONT ( 59 , 12 ) ;
         TabStop = TRUE ;
         Left = TRUE ;
@@ -532,7 +532,7 @@ TabPage TP_FOOTNOTEOPTION
     };
     FixedText FT_POS
     {
-        Pos = MAP_APPFONT ( 12 , 59 ) ;
+        Pos = MAP_APPFONT ( 12 , 63 ) ;
         Size = MAP_APPFONT ( 36 , 8 ) ;
         Text = "Position" ;
         Text [ English ] = "Position" ;
@@ -560,7 +560,7 @@ TabPage TP_FOOTNOTEOPTION
     };
     RadioButton RB_POS_PAGE
     {
-        Pos = MAP_APPFONT ( 65 , 59 ) ;
+        Pos = MAP_APPFONT ( 65 , 62 ) ;
         Size = MAP_APPFONT ( 150 , 10 ) ;
         Text = "Seiten~ende" ;
         Text [ ENGLISH ] = "End of ~page" ;
@@ -591,7 +591,7 @@ TabPage TP_FOOTNOTEOPTION
     };
     RadioButton RB_POS_CHAPTER
     {
-        Pos = MAP_APPFONT ( 65 , 73 ) ;
+        Pos = MAP_APPFONT ( 65 , 75 ) ;
         Size = MAP_APPFONT ( 150 , 10 ) ;
         Text = "Do~kumentende" ;
         Text [ ENGLISH ] = "End of ~doc." ;
@@ -787,7 +787,7 @@ TabPage TP_FOOTNOTEOPTION
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 186 , 100 ) ;
-        Size = MAP_APPFONT ( 65 , 54 ) ;
+        Size = MAP_APPFONT ( 65 , 72 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
         Sort = TRUE ;
@@ -825,7 +825,7 @@ TabPage TP_FOOTNOTEOPTION
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 186 , 116 ) ;
-        Size = MAP_APPFONT ( 65 , 54 ) ;
+        Size = MAP_APPFONT ( 65 , 72 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
         Sort = TRUE ;
@@ -1006,7 +1006,7 @@ TabPage TP_ENDNOTEOPTION
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 65 , 14 ) ;
-        Size = MAP_APPFONT ( 59 , 50 ) ;
+        Size = MAP_APPFONT ( 59 , 72 ) ;
         TabStop = TRUE ;
         Group = TRUE ;
         DropDown = TRUE ;
@@ -1073,12 +1073,12 @@ TabPage TP_ENDNOTEOPTION
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 12 , 27 ) ;
-        Size = MAP_APPFONT ( 62 , 50 ) ;
+        Size = MAP_APPFONT ( 62 , 72 ) ;
         Hide = TRUE;
     };
     FixedText FT_PREFIX
     {
-        Pos = MAP_APPFONT ( 12 , 28 ) ;
+        Pos = MAP_APPFONT ( 12 , 32 ) ;
         Size = MAP_APPFONT ( 48 , 8 ) ;
 
         Text = "~Davor" ;
@@ -1109,7 +1109,7 @@ TabPage TP_ENDNOTEOPTION
     };
     Edit ED_PREFIX
     {
-        Pos = MAP_APPFONT ( 65 , 26 ) ;
+        Pos = MAP_APPFONT ( 65 , 30 ) ;
         Size = MAP_APPFONT ( 59 , 12 ) ;
         Border = TRUE ;
         TabStop = TRUE ;
@@ -1118,8 +1118,8 @@ TabPage TP_ENDNOTEOPTION
     };
     FixedText FT_SUFFIX
     {
-        Pos = MAP_APPFONT ( 130 , 28 ) ;
-        Size = MAP_APPFONT ( 48 , 10 ) ;
+        Pos = MAP_APPFONT ( 130 , 32 ) ;
+        Size = MAP_APPFONT ( 48 , 8 ) ;
         Text = "Dahin~ter" ;
         Text [ ENGLISH ] = "Behind" ;
         Text [ norwegian ] = "Bak" ;
@@ -1148,7 +1148,7 @@ TabPage TP_ENDNOTEOPTION
     };
     Edit ED_SUFFIX
     {
-        Pos = MAP_APPFONT ( 189 , 26 ) ;
+        Pos = MAP_APPFONT ( 189 , 30 ) ;
         Size = MAP_APPFONT ( 59 , 12 ) ;
         Border = TRUE ;
         TabStop = TRUE ;
@@ -1284,7 +1284,7 @@ TabPage TP_ENDNOTEOPTION
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 51 , 56 ) ;
-        Size = MAP_APPFONT ( 67 , 54 ) ;
+        Size = MAP_APPFONT ( 67 , 72 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
         CurPos = 0 ;
@@ -1292,7 +1292,7 @@ TabPage TP_ENDNOTEOPTION
     };
     FixedText FT_PAGE_TEMPL
     {
-        Pos = MAP_APPFONT ( 12 , 73 ) ;
+        Pos = MAP_APPFONT ( 12 , 74 ) ;
         Size = MAP_APPFONT ( 38 , 8 ) ;
         Text = "~Seite" ;
         Text [ ENGLISH ] = "~Page" ;
@@ -1323,8 +1323,8 @@ TabPage TP_ENDNOTEOPTION
     ListBox LB_PAGE_TEMPL
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 51 , 71 ) ;
-        Size = MAP_APPFONT ( 67 , 54 ) ;
+        Pos = MAP_APPFONT ( 51 , 72 ) ;
+        Size = MAP_APPFONT ( 67 , 72 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
     };
@@ -1388,14 +1388,14 @@ TabPage TP_ENDNOTEOPTION
     {
         Border = TRUE ;
         Pos = MAP_APPFONT ( 186 , 56 ) ;
-        Size = MAP_APPFONT ( 65 , 54 ) ;
+        Size = MAP_APPFONT ( 65 , 72 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
         Sort = TRUE ;
     };
     FixedText FT_TEXT_CHARFMT
     {
-        Pos = MAP_APPFONT ( 129 , 73 ) ;
+        Pos = MAP_APPFONT ( 129 , 74 ) ;
         Size = MAP_APPFONT ( 55 , 8 ) ;
         Text = "E~ndnotenbereich" ;
         Text [ ENGLISH ] = "Endnote text" ;
@@ -1424,8 +1424,8 @@ TabPage TP_ENDNOTEOPTION
     ListBox LB_TEXT_CHARFMT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 186 , 71 ) ;
-        Size = MAP_APPFONT ( 65 , 54 ) ;
+        Pos = MAP_APPFONT ( 186 , 72 ) ;
+        Size = MAP_APPFONT ( 65 , 72 ) ;
         TabStop = TRUE ;
         DropDown = TRUE ;
         Sort = TRUE ;
