@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldata.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:41 $
+ *  last change: $Author: obr $ $Date: 2001-02-09 14:46:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,9 @@
 #endif
 #ifndef _SV_SALWTYPE_HXX
 #include <salwtype.hxx>
+#endif
+#ifndef _SV_SALINST_HXX
+#include <salinst.hxx>
 #endif
 
 // -=-= forwards -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -176,5 +179,43 @@ inline void SalData::Remove( SalDisplay *pDisplay )
 inline void SalData::XError( Display *pDisplay, XErrorEvent *pEvent ) const
 { pXLib_->XError( pDisplay, pEvent ); }
 #endif
+
+class YieldMutexReleaser
+{
+    ULONG               m_nYieldCount;
+    SalYieldMutex*      m_pSalInstYieldMutex;
+public:
+    inline YieldMutexReleaser();
+    inline ~YieldMutexReleaser();
+};
+
+inline YieldMutexReleaser::YieldMutexReleaser()
+{
+    SalData *pSalData       = GetSalData();
+    m_pSalInstYieldMutex    =
+        pSalData->pFirstInstance_->maInstData.mpSalYieldMutex;
+
+    ULONG i;
+    if ( m_pSalInstYieldMutex->GetThreadId() ==
+         NAMESPACE_VOS(OThread)::getCurrentIdentifier() )
+    {
+        m_nYieldCount = m_pSalInstYieldMutex->GetAcquireCount();
+        for ( i = 0; i < m_nYieldCount; i++ )
+            m_pSalInstYieldMutex->release();
+    }
+    else
+        m_nYieldCount = 0;
+}
+
+inline YieldMutexReleaser::~YieldMutexReleaser()
+{
+    // Yield-Semaphore wieder holen
+    while ( m_nYieldCount )
+    {
+        m_pSalInstYieldMutex->acquire();
+        m_nYieldCount--;
+    }
+}
+
 #endif // _SV_SALDATA_HXX
 
