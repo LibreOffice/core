@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inputwin.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: os $ $Date: 2002-08-15 07:53:06 $
+ *  last change: $Author: os $ $Date: 2002-08-30 11:46:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -407,7 +407,7 @@ void  SwInputWindow::ApplyFormula()
     const SfxPoolItem* aArgs[2];
     aArgs[0] = &aParam;
     aArgs[1] = 0;
-    pView->GetViewFrame()->GetBindings().Execute( FN_EDIT_FORMULA, aArgs );
+    pView->GetViewFrame()->GetBindings().Execute( FN_EDIT_FORMULA, aArgs, 0, SFX_CALLMODE_ASYNCHRON );
 }
 
 //==================================================================
