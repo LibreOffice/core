@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shutdownicon.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 19:54:38 $
+ *  last change: $Author: kz $ $Date: 2004-06-11 17:58:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -565,5 +565,14 @@ void SAL_CALL ShutdownIcon::initialize( const ::com::sun::star::uno::Sequence< :
             {
             }
         }
+    }
+    if ( aArguments.getLength() > 1 )
+    {
+            sal_Bool bAutostart = sal_False;
+            bAutostart = ::cppu::any2bool( aArguments[1] );
+            if (bAutostart && !GetAutostart())
+                SetAutostart( sal_True );
+            if (!bAutostart && GetAutostart())
+                SetAutostart( sal_False );
     }
 }
