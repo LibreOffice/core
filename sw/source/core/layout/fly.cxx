@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fly.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ama $ $Date: 2001-10-19 10:19:36 $
+ *  last change: $Author: ama $ $Date: 2001-11-07 13:21:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -592,6 +592,11 @@ SwFrm *SwFlyFrm::FindLastLower()
 |*  Letzte Aenderung    MA 24. Jul. 96
 |*
 |*************************************************************************/
+
+#ifndef VERTICAL_LAYOUT
+#define BFIXHEIGHT bFixHeight
+#define PHEIGHT ,pHeight
+#endif
 
 BOOL SwFlyFrm::FrmSizeChg( const SwFmtFrmSize &rFrmSize )
 {
@@ -2196,7 +2201,8 @@ void SwLayoutFrm::NotifyFlys()
                 // Bei Header/Footer keine Abkuerzung, denn hier muesste die
                 // die PrtArea geprueft werden, die zu diesem Zeitpunkt
                 // (ShrinkFrm) noch nicht angepasst ist.
-                if ( !bHeadFoot && Frm().IsInside( pFly->Frm() ) && !pFly->IsClipped() )
+                if( ( !bHeadFoot && Frm().IsInside( pFly->Frm() )
+                      && !pFly->IsClipped() ) || pFly->IsAnLower( this ) )
                     continue;
 
                 const BOOL bLow = pFly->IsLowerOf( this );
