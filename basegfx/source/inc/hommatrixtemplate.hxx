@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hommatrixtemplate.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: aw $ $Date: 2003-04-28 12:10:38 $
+ *  last change: $Author: thb $ $Date: 2003-08-20 13:54:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,10 @@
 
 #ifndef _SAL_TYPES_H_
 #include <sal/types.h>
+#endif
+
+#ifndef _FTOOLS_HXX
+#include <ftools.hxx>
 #endif
 
 #include <math.h>
