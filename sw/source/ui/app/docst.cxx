@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docst.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:12:06 $
+ *  last change: $Author: vg $ $Date: 2003-05-26 08:14:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1166,9 +1166,18 @@ USHORT SwDocShell::MakeByExample( const String &rName, USHORT nFamily,
     return nFamily;
 }
 
-
-
 void  SwDocShell::LoadStyles( SfxObjectShell& rSource )
+{
+    _LoadStyles(rSource, FALSE);
+}
+/* -----------------16.05.2003 15:45-----------------
+    bPreserveCurrentDocument determines whether SetFixFields() is called
+    This call modifies the source document. This mustn't happen when the source
+    is a document the user is working on.
+    Calls of ::LoadStyles() normally use files especially loaded for the purpose
+    of importing styles.
+ --------------------------------------------------*/
+void SwDocShell::_LoadStyles( SfxObjectShell& rSource, BOOL bPreserveCurrentDocument )
 {
 /*  [Beschreibung]
 
@@ -1187,7 +1196,8 @@ void  SwDocShell::LoadStyles( SfxObjectShell& rSource )
         //JP 28.05.99: damit die Kopf-/Fusszeilen nicht den fixen Inhalt
         //              der Vorlage erhalten, einmal alle FixFelder der
         //              Source aktualisieren
-        ((SwDocShell&)rSource).pDoc->SetFixFields();
+        if(!bPreserveCurrentDocument)
+            ((SwDocShell&)rSource).pDoc->SetFixFields();
         if( pWrtShell )
         {
             pWrtShell->StartAllAction();
