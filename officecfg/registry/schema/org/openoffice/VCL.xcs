@@ -3,9 +3,9 @@
  *
  *  $RCSfile: VCL.xcs,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 18:26:11 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 14:28:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -483,6 +483,7 @@
 		</set>
 	</component>
 </oor:component-schema>
+
 
 
 
