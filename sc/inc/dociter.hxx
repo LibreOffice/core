@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dociter.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: er $ $Date: 2001-09-05 09:39:59 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:07:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,10 @@
 #ifndef SC_DOCITER_HXX
 #define SC_DOCITER_HXX
 
+#ifndef SC_ADDRESS_HXX
+#include "address.hxx"
+#endif
+
 #ifndef _SOLAR_H
 #include <tools/solar.h>
 #endif
@@ -75,31 +79,32 @@ class ScBaseCell;
 class ScPatternAttr;
 class ScAttrArray;
 class ScAttrIterator;
+class ScRange;
 
 class ScDocumentIterator                // alle nichtleeren Zellen durchgehen
 {
 private:
     ScDocument*             pDoc;
-    USHORT                  nStartTab;
-    USHORT                  nEndTab;
+    SCTAB                   nStartTab;
+    SCTAB                   nEndTab;
 
     const ScPatternAttr*    pDefPattern;
 
-    USHORT                  nCol;
-    USHORT                  nRow;
-    USHORT                  nTab;
+    SCCOL                   nCol;
+    SCROW                   nRow;
+    SCTAB                   nTab;
     ScBaseCell*             pCell;
     const ScPatternAttr*    pPattern;
 
 
-    USHORT                  nColPos;
-    USHORT                  nAttrPos;
+    SCSIZE                  nColPos;
+    SCSIZE                  nAttrPos;
 
     BOOL                    GetThis();
     BOOL                    GetThisCol();
 
 public:
-            ScDocumentIterator( ScDocument* pDocument, USHORT nStartTable, USHORT nEndTable );
+            ScDocumentIterator( ScDocument* pDocument, SCTAB nStartTable, SCTAB nEndTable );
             ~ScDocumentIterator();
 
     BOOL                    GetFirst();
@@ -107,7 +112,7 @@ public:
 
     ScBaseCell*             GetCell();
     const ScPatternAttr*    GetPattern();
-    void                    GetPos( USHORT& rCol, USHORT& rRow, USHORT& rTab );
+    void                    GetPos( SCCOL& rCol, SCROW& rRow, SCTAB& rTab );
 };
 
 class ScValueIterator            // alle Zahlenwerte in einem Bereich durchgehen
@@ -118,18 +123,18 @@ private:
     const ScAttrArray*  pAttrArray;
     ULONG           nNumFormat;     // fuer CalcAsShown
     ULONG           nNumFmtIndex;
-    USHORT          nStartCol;
-    USHORT          nStartRow;
-    USHORT          nStartTab;
-    USHORT          nEndCol;
-    USHORT          nEndRow;
-    USHORT          nEndTab;
-    USHORT          nCol;
-    USHORT          nRow;
-    USHORT          nTab;
-    USHORT          nColRow;
-    USHORT          nNextRow;
-    USHORT          nAttrEndRow;
+    SCCOL           nStartCol;
+    SCROW           nStartRow;
+    SCTAB           nStartTab;
+    SCCOL           nEndCol;
+    SCROW           nEndRow;
+    SCTAB           nEndTab;
+    SCCOL           nCol;
+    SCROW           nRow;
+    SCTAB           nTab;
+    SCSIZE          nColRow;
+    SCROW           nNextRow;
+    SCROW           nAttrEndRow;
     short           nNumFmtType;
     BOOL            bNumValid;
     BOOL            bSubTotal;
@@ -140,8 +145,8 @@ private:
     BOOL            GetThis(double& rValue, USHORT& rErr);
 public:
                     ScValueIterator(ScDocument* pDocument,
-                                    USHORT nSCol, USHORT nSRow, USHORT nSTab,
-                                    USHORT nECol, USHORT nERow, USHORT nETab,
+                                    SCCOL nSCol, SCROW nSRow, SCTAB nSTab,
+                                    SCCOL nECol, SCROW nERow, SCTAB nETab,
                                     BOOL bSTotal = FALSE, BOOL bTextAsZero = FALSE);
                     ScValueIterator(ScDocument* pDocument,
                                     const ScRange& rRange, BOOL bSTotal = FALSE,
@@ -165,17 +170,17 @@ private:
     ScAttrArray*    pAttrArray;
     ULONG           nNumFormat;     // fuer CalcAsShown
     ULONG           nNumFmtIndex;
-    USHORT          nCol;
-    USHORT          nRow;
-    USHORT          nColRow;
-    USHORT          nAttrEndRow;
-    USHORT          nTab;
+    SCCOL           nCol;
+    SCROW           nRow;
+    SCSIZE          nColRow;
+    SCROW           nAttrEndRow;
+    SCTAB           nTab;
     short           nNumFmtType;
     BOOL            bCalcAsShown;
 
     BOOL            GetThis(double& rValue, USHORT& rErr);
 public:
-                    ScQueryValueIterator(ScDocument* pDocument, USHORT nTable,
+                    ScQueryValueIterator(ScDocument* pDocument, SCTAB nTable,
                                          const ScQueryParam& aParam);
     BOOL            GetFirst(double& rValue, USHORT& rErr);
     BOOL            GetNext(double& rValue, USHORT& rErr);
@@ -187,31 +192,31 @@ class ScCellIterator            // alle Zellen in einem Bereich durchgehen
 {                               // bei SubTotal aber keine ausgeblendeten und
 private:                        // SubTotalZeilen
     ScDocument*     pDoc;
-    USHORT          nStartCol;
-    USHORT          nStartRow;
-    USHORT          nStartTab;
-    USHORT          nEndCol;
-    USHORT          nEndRow;
-    USHORT          nEndTab;
-    USHORT          nCol;
-    USHORT          nRow;
-    USHORT          nTab;
-    USHORT          nColRow;
+    SCCOL           nStartCol;
+    SCROW           nStartRow;
+    SCTAB           nStartTab;
+    SCCOL           nEndCol;
+    SCROW           nEndRow;
+    SCTAB           nEndTab;
+    SCCOL           nCol;
+    SCROW           nRow;
+    SCTAB           nTab;
+    SCSIZE          nColRow;
     BOOL            bSubTotal;
 
     ScBaseCell*     GetThis();
 public:
                     ScCellIterator(ScDocument* pDocument,
-                                   USHORT nSCol, USHORT nSRow, USHORT nSTab,
-                                   USHORT nECol, USHORT nERow, USHORT nETab,
+                                   SCCOL nSCol, SCROW nSRow, SCTAB nSTab,
+                                   SCCOL nECol, SCROW nERow, SCTAB nETab,
                                    BOOL bSTotal = FALSE);
                     ScCellIterator(ScDocument* pDocument,
                                    const ScRange& rRange, BOOL bSTotal = FALSE);
     ScBaseCell*     GetFirst();
     ScBaseCell*     GetNext();
-    USHORT          GetCol() { return nCol; }
-    USHORT          GetRow() { return nRow; }
-    USHORT          GetTab() { return nTab; }
+    SCCOL          GetCol() { return nCol; }
+    SCROW          GetRow() { return nRow; }
+    SCTAB          GetTab() { return nTab; }
 };
 
 class ScQueryCellIterator           // alle nichtleeren Zellen in einem Bereich
@@ -237,25 +242,25 @@ private:
     ScDocument*     pDoc;
     ScAttrArray*    pAttrArray;
     ULONG           nNumFormat;
-    USHORT          nTab;
-    USHORT          nCol;
-    USHORT          nRow;
-    USHORT          nColRow;
-    USHORT          nAttrEndRow;
+    SCTAB           nTab;
+    SCCOL           nCol;
+    SCROW           nRow;
+    SCSIZE          nColRow;
+    SCROW           nAttrEndRow;
     BYTE            nStopOnMismatch;
     BYTE            nTestEqualCondition;
     BOOL            bAdvanceQuery;
 
     ScBaseCell*     GetThis();
 public:
-                    ScQueryCellIterator(ScDocument* pDocument, USHORT nTable,
+                    ScQueryCellIterator(ScDocument* pDocument, SCTAB nTable,
                                         const ScQueryParam& aParam, BOOL bMod = TRUE);
                                         // fuer bMod = FALSE muss der QueryParam
                                         // weiter aufgefuellt sein (bIsString)
     ScBaseCell*     GetFirst();
     ScBaseCell*     GetNext();
-    USHORT          GetCol() { return nCol; }
-    USHORT          GetRow() { return nRow; }
+    SCCOL          GetCol() { return nCol; }
+    SCROW          GetRow() { return nRow; }
     ULONG           GetNumberFormat();
 
                     // setzt alle Entry.nField einen weiter, wenn Spalte
@@ -307,70 +312,70 @@ public:
                         @ATTENTION! StopOnMismatch, TestEqualCondition and
                         the internal query params are in an undefined state
                         upon return! */
-    BOOL            FindEqualOrSortedLastInRange( USHORT& nFoundCol, USHORT& nFoundRow );
+    BOOL            FindEqualOrSortedLastInRange( SCCOL& nFoundCol, SCROW& nFoundRow );
 };
 
 class ScDocAttrIterator             // alle Attribut-Bereiche
 {
 private:
     ScDocument*     pDoc;
-    USHORT          nTab;
-    USHORT          nEndCol;
-    USHORT          nStartRow;
-    USHORT          nEndRow;
-    USHORT          nCol;
+    SCTAB           nTab;
+    SCCOL           nEndCol;
+    SCROW           nStartRow;
+    SCROW           nEndRow;
+    SCCOL           nCol;
     ScAttrIterator* pColIter;
 
 public:
-                    ScDocAttrIterator(ScDocument* pDocument, USHORT nTable,
-                                    USHORT nCol1, USHORT nRow1, USHORT nCol2, USHORT nRow2);
+                    ScDocAttrIterator(ScDocument* pDocument, SCTAB nTable,
+                                    SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2);
                     ~ScDocAttrIterator();
 
-    const ScPatternAttr*    GetNext( USHORT& rCol, USHORT& rRow1, USHORT& rRow2 );
+    const ScPatternAttr*    GetNext( SCCOL& rCol, SCROW& rRow1, SCROW& rRow2 );
 };
 
 class ScAttrRectIterator            // alle Attribut-Bereiche, auch Bereiche ueber mehrere Spalten
 {
 private:
     ScDocument*     pDoc;
-    USHORT          nTab;
-    USHORT          nEndCol;
-    USHORT          nStartRow;
-    USHORT          nEndRow;
-    USHORT          nIterStartCol;
-    USHORT          nIterEndCol;
+    SCTAB           nTab;
+    SCCOL           nEndCol;
+    SCROW           nStartRow;
+    SCROW           nEndRow;
+    SCCOL           nIterStartCol;
+    SCCOL           nIterEndCol;
     ScAttrIterator* pColIter;
 
 public:
-                    ScAttrRectIterator(ScDocument* pDocument, USHORT nTable,
-                                    USHORT nCol1, USHORT nRow1, USHORT nCol2, USHORT nRow2);
+                    ScAttrRectIterator(ScDocument* pDocument, SCTAB nTable,
+                                    SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2);
                     ~ScAttrRectIterator();
 
     void                    DataChanged();
-    const ScPatternAttr*    GetNext( USHORT& rCol1, USHORT& rCol2, USHORT& rRow1, USHORT& rRow2 );
+    const ScPatternAttr*    GetNext( SCCOL& rCol1, SCCOL& rCol2, SCROW& rRow1, SCROW& rRow2 );
 };
 
 class ScHorizontalCellIterator      // alle nichtleeren Zellen in einem Bereich
 {                                   // zeilenweise durchgehen
 private:
     ScDocument*     pDoc;
-    USHORT          nTab;
-    USHORT          nStartCol;
-    USHORT          nEndCol;
-    USHORT          nEndRow;
-    USHORT*         pNextRows;
-    USHORT*         pNextIndices;
-    USHORT          nCol;
-    USHORT          nRow;
+    SCTAB           nTab;
+    SCCOL           nStartCol;
+    SCCOL           nEndCol;
+    SCROW           nEndRow;
+    SCROW*          pNextRows;
+    SCSIZE*         pNextIndices;
+    SCCOL           nCol;
+    SCROW           nRow;
     BOOL            bMore;
 
 public:
-                    ScHorizontalCellIterator(ScDocument* pDocument, USHORT nTable,
-                                    USHORT nCol1, USHORT nRow1, USHORT nCol2, USHORT nRow2);
+                    ScHorizontalCellIterator(ScDocument* pDocument, SCTAB nTable,
+                                    SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2);
                     ~ScHorizontalCellIterator();
 
-    ScBaseCell*     GetNext( USHORT& rCol, USHORT& rRow );
-    BOOL            ReturnNext( USHORT& rCol, USHORT& rRow );
+    ScBaseCell*     GetNext( SCCOL& rCol, SCROW& rRow );
+    BOOL            ReturnNext( SCCOL& rCol, SCROW& rRow );
 
 private:
     void            Advance();
@@ -385,25 +390,25 @@ class ScHorizontalAttrIterator
 {
 private:
     ScDocument*             pDoc;
-    USHORT                  nTab;
-    USHORT                  nStartCol;
-    USHORT                  nStartRow;
-    USHORT                  nEndCol;
-    USHORT                  nEndRow;
+    SCTAB                   nTab;
+    SCCOL                   nStartCol;
+    SCROW                   nStartRow;
+    SCCOL                   nEndCol;
+    SCROW                   nEndRow;
 
-    USHORT*                 pNextEnd;
-    USHORT*                 pIndices;
+    SCROW*                  pNextEnd;
+    SCSIZE*                 pIndices;
     const ScPatternAttr**   ppPatterns;
-    USHORT                  nCol;
-    USHORT                  nRow;
+    SCCOL                   nCol;
+    SCROW                   nRow;
     BOOL                    bRowEmpty;
 
 public:
-            ScHorizontalAttrIterator( ScDocument* pDocument, USHORT nTable,
-                                    USHORT nCol1, USHORT nRow1, USHORT nCol2, USHORT nRow2 );
+            ScHorizontalAttrIterator( ScDocument* pDocument, SCTAB nTable,
+                                    SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 );
             ~ScHorizontalAttrIterator();
 
-    const ScPatternAttr*    GetNext( USHORT& rCol1, USHORT& rCol2, USHORT& rRow );
+    const ScPatternAttr*    GetNext( SCCOL& rCol1, SCCOL& rCol2, SCROW& rRow );
 };
 
 //
@@ -416,33 +421,33 @@ private:
     ScHorizontalCellIterator    aCellIter;
     ScHorizontalAttrIterator    aAttrIter;
 
-    USHORT                  nNextCol;
-    USHORT                  nNextRow;
+    SCCOL                   nNextCol;
+    SCROW                   nNextRow;
 
-    USHORT                  nCellCol;
-    USHORT                  nCellRow;
+    SCCOL                   nCellCol;
+    SCROW                   nCellRow;
     const ScBaseCell*       pCell;
-    USHORT                  nAttrCol1;
-    USHORT                  nAttrCol2;
-    USHORT                  nAttrRow;
+    SCCOL                   nAttrCol1;
+    SCCOL                   nAttrCol2;
+    SCROW                   nAttrRow;
     const ScPatternAttr*    pPattern;
 
-    USHORT                  nFoundStartCol;         // Ergebnisse nach GetNext
-    USHORT                  nFoundEndCol;
-    USHORT                  nFoundRow;
+    SCCOL                   nFoundStartCol;         // Ergebnisse nach GetNext
+    SCCOL                   nFoundEndCol;
+    SCROW                   nFoundRow;
     const ScPatternAttr*    pFoundPattern;
     const ScBaseCell*       pFoundCell;
 
 public:
-            ScUsedAreaIterator( ScDocument* pDocument, USHORT nTable,
-                                USHORT nCol1, USHORT nRow1, USHORT nCol2, USHORT nRow2 );
+            ScUsedAreaIterator( ScDocument* pDocument, SCTAB nTable,
+                                SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 );
             ~ScUsedAreaIterator();
 
     BOOL    GetNext();
 
-    USHORT                  GetStartCol() const     { return nFoundStartCol; }
-    USHORT                  GetEndCol() const       { return nFoundEndCol; }
-    USHORT                  GetRow() const          { return nFoundRow; }
+    SCCOL                   GetStartCol() const     { return nFoundStartCol; }
+    SCCOL                   GetEndCol() const       { return nFoundEndCol; }
+    SCROW                   GetRow() const          { return nFoundRow; }
     const ScPatternAttr*    GetPattern() const      { return pFoundPattern; }
     const ScBaseCell*       GetCell() const         { return pFoundCell; }
 };
