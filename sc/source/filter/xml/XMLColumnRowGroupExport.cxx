@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLColumnRowGroupExport.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: nn $ $Date: 2002-09-17 16:35:00 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 12:46:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,7 +132,7 @@ sal_Bool ScMyOpenCloseColumnRowGroup::IsGroupStart(const sal_Int32 nField)
     sal_Bool bGroupStart(sal_False);
     if (!aTableStart.empty())
     {
-        ScMyColumnRowGroupVec::iterator aItr = aTableStart.begin();
+        ScMyColumnRowGroupVec::iterator aItr(aTableStart.begin());
         sal_Int32 nItrField = aItr->nField;
         if ( nItrField < nField )
         {
@@ -140,10 +140,10 @@ sal_Bool ScMyOpenCloseColumnRowGroup::IsGroupStart(const sal_Int32 nField)
             //  aTableStart may contain entries before nField. They must be skipped here
             //  (they will be used for OpenGroups later in the right order).
 
-            ScMyColumnRowGroupVec::iterator aEnd = aTableStart.end();
+            ScMyColumnRowGroupVec::iterator aEnd(aTableStart.end());
             while ( aItr != aEnd && nItrField < nField )
             {
-                aItr++;
+                ++aItr;
                 if ( aItr != aEnd )
                     nItrField = aItr->nField;
             }
@@ -164,9 +164,10 @@ void ScMyOpenCloseColumnRowGroup::OpenGroup(const ScMyColumnRowGroup& rGroup)
 
 void ScMyOpenCloseColumnRowGroup::OpenGroups(const sal_Int32 nField)
 {
-    ScMyColumnRowGroupVec::iterator aItr = aTableStart.begin();
+    ScMyColumnRowGroupVec::iterator aItr(aTableStart.begin());
+    ScMyColumnRowGroupVec::iterator aEndItr(aTableStart.end());
     sal_Bool bReady(sal_False);
-    while(!bReady && aItr != aTableStart.end())
+    while(!bReady && aItr != aEndItr)
     {
         if (aItr->nField == nField)
         {
@@ -196,9 +197,10 @@ void ScMyOpenCloseColumnRowGroup::CloseGroup()
 
 void ScMyOpenCloseColumnRowGroup::CloseGroups(const sal_Int32 nField)
 {
-    ScMyFieldGroupVec::iterator aItr = aTableEnd.begin();
+    ScMyFieldGroupVec::iterator aItr(aTableEnd.begin());
+    ScMyFieldGroupVec::iterator aEndItr(aTableEnd.end());
     sal_Bool bReady(sal_False);
-    while(!bReady && aItr != aTableEnd.end())
+    while(!bReady && aItr != aEndItr)
     {
         if (*aItr == nField)
         {
@@ -213,9 +215,14 @@ void ScMyOpenCloseColumnRowGroup::CloseGroups(const sal_Int32 nField)
 sal_Int32 ScMyOpenCloseColumnRowGroup::GetLast()
 {
     sal_Int32 maximum(-1);
-    for (ScMyFieldGroupVec::iterator i = aTableEnd.begin(); i != aTableEnd.end(); i++)
+    ScMyFieldGroupVec::iterator i(aTableEnd.begin());
+    ScMyFieldGroupVec::iterator endi(aTableEnd.end());
+    while (i != endi)
+    {
         if (*i > maximum)
             maximum = *i;
+        ++i;
+    }
     return maximum;
 }
 
