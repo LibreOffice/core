@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXMLTextBlocks.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 19:11:36 $
+ *  last change: $Author: os $ $Date: 2004-10-08 09:37:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,10 +159,29 @@ SwXMLTextBlocks::SwXMLTextBlocks( const String& rFile )
     pDoc->SetOle2Link( Link() );
     pDoc->DoUndo( FALSE );      // always FALSE
     pDoc->AddLink();
-
+    uno::Reference< embed::XStorage > refStg;
     if( !aDateModified.GetDate() || !aTimeModified.GetTime() )
         Touch();        // falls neu angelegt -> neuen ZeitStempel besorgen
-    uno::Reference < embed::XStorage > refStg  = comphelper::OStorageHelper::GetStorageFromURL( rFile, embed::ElementModes::READWRITE );
+    try
+    {
+            refStg  = comphelper::OStorageHelper::GetStorageFromURL( rFile, embed::ElementModes::READWRITE );
+    }
+    catch( const uno::Exception& rEx)
+    {
+        //couldn't open the file - maybe it's readonly
+        rEx; // make the compiler happy
+    }
+    if( !refStg.is())
+    {
+        try
+        {
+            refStg = comphelper::OStorageHelper::GetStorageFromURL( rFile, embed::ElementModes::READ );
+        }
+        catch( const uno::Exception& )
+        {
+            DBG_ERROR("exception while creating AutoText storage")
+        }
+    }
     InitBlockMode ( refStg );
     ReadInfo();
     ResetBlockMode ();
