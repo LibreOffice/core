@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltbli.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: dvo $ $Date: 2002-06-07 13:00:01 $
+ *  last change: $Author: mib $ $Date: 2002-10-16 13:42:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1738,7 +1738,7 @@ void SwXMLTableContext::InsertRepRows( sal_uInt32 nCount )
             {
                 const SwXMLTableCell_Impl *pSrcCell =
                     GetCell( nCurRow-1, nCurCol );
-                InsertCell( aStyleName, 1U, pSrcCell->GetColSpan(),
+                InsertCell( pSrcCell->GetStyleName(), 1U, pSrcCell->GetColSpan(),
                             InsertTableSection(), 0, pSrcCell->IsProtected(),
                             &pSrcCell->GetFormula(),
                             pSrcCell->HasValue(), pSrcCell->GetValue() );
