@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-19 18:38:06 $
+ *  last change: $Author: dvo $ $Date: 2001-01-19 19:19:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1292,7 +1292,6 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
             }
             else if (sType.equals(sRedline))
             {
-                // disable change tracking until implemented properly:
                 pRedlineExport->ExportChange(xPropSet, bAutoStyles);
             }
             else
@@ -2299,7 +2298,6 @@ void XMLTextParagraphExport::exportTextDeclarations()
 
 void XMLTextParagraphExport::exportTrackedChanges(sal_Bool bAutoStyles)
 {
-    // disable change tracking until implemented properly:
     pRedlineExport->ExportChangesList( bAutoStyles );
 }
 

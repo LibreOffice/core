@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLSectionImportContext.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-19 18:38:06 $
+ *  last change: $Author: dvo $ $Date: 2001-01-19 19:19:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
