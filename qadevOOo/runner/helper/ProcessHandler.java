@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ProcessHandler.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Date: 2004-12-10 17:00:25 $
+ *  last change: $Date: 2005-02-02 13:56:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -501,6 +501,12 @@ public class ProcessHandler {
      * -1 if not.
      */
     public int getExitCode() {
+        try {
+            exitValue = proc.exitValue();
+        } catch (Exception e) {
+            //System.out.println("No ExitValue available");
+        }
+
         return exitValue ;
     }
 }
