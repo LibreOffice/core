@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbstorage.cxx,v $
  *
- *  $Revision: 1.80 $
+ *  $Revision: 1.81 $
  *
- *  last change: $Author: kz $ $Date: 2003-11-18 16:52:52 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 18:07:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,6 +201,7 @@ FileStreamWrapper_Impl::FileStreamWrapper_Impl( const String& rName )
     : m_pSvStream(0)
     , m_aURL( rName )
 {
+    // if no URL is provided the stream is empty
 }
 
 //------------------------------------------------------------------
@@ -222,6 +223,12 @@ FileStreamWrapper_Impl::~FileStreamWrapper_Impl()
 sal_Int32 SAL_CALL FileStreamWrapper_Impl::readBytes(Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead)
                 throw( NotConnectedException, BufferSizeExceededException, RuntimeException )
 {
+    if ( !m_aURL.Len() )
+    {
+        aData.realloc( 0 );
+        return 0;
+    }
+
     checkConnected();
 
     if (nBytesToRead < 0)
@@ -244,6 +251,12 @@ sal_Int32 SAL_CALL FileStreamWrapper_Impl::readBytes(Sequence< sal_Int8 >& aData
 //------------------------------------------------------------------------------
 sal_Int32 SAL_CALL FileStreamWrapper_Impl::readSomeBytes(Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead) throw( NotConnectedException, BufferSizeExceededException, RuntimeException )
 {
+    if ( !m_aURL.Len() )
+    {
+        aData.realloc( 0 );
+        return 0;
+    }
+
     checkError();
 
     if (nMaxBytesToRead < 0)
@@ -261,6 +274,9 @@ sal_Int32 SAL_CALL FileStreamWrapper_Impl::readSomeBytes(Sequence< sal_Int8 >& a
 //------------------------------------------------------------------------------
 void SAL_CALL FileStreamWrapper_Impl::skipBytes(sal_Int32 nBytesToSkip) throw( NotConnectedException, BufferSizeExceededException, RuntimeException )
 {
+    if ( !m_aURL.Len() )
+        return;
+
     ::osl::MutexGuard aGuard( m_aMutex );
     checkError();
 
@@ -279,6 +295,9 @@ void SAL_CALL FileStreamWrapper_Impl::skipBytes(sal_Int32 nBytesToSkip) throw( N
 //------------------------------------------------------------------------------
 sal_Int32 SAL_CALL FileStreamWrapper_Impl::available() throw( NotConnectedException, RuntimeException )
 {
+    if ( !m_aURL.Len() )
+        return 0;
+
     ::osl::MutexGuard aGuard( m_aMutex );
     checkConnected();
 
@@ -298,6 +317,9 @@ sal_Int32 SAL_CALL FileStreamWrapper_Impl::available() throw( NotConnectedExcept
 //------------------------------------------------------------------------------
 void SAL_CALL FileStreamWrapper_Impl::closeInput() throw( NotConnectedException, RuntimeException )
 {
+    if ( !m_aURL.Len() )
+        return;
+
     ::osl::MutexGuard aGuard( m_aMutex );
     checkConnected();
     DELETEZ( m_pSvStream );
@@ -311,6 +333,9 @@ void SAL_CALL FileStreamWrapper_Impl::closeInput() throw( NotConnectedException,
 //------------------------------------------------------------------------------
 void SAL_CALL FileStreamWrapper_Impl::seek( sal_Int64 _nLocation ) throw (IllegalArgumentException, IOException, RuntimeException)
 {
+    if ( !m_aURL.Len() )
+        return;
+
     ::osl::MutexGuard aGuard( m_aMutex );
     checkConnected();
 
@@ -321,6 +346,9 @@ void SAL_CALL FileStreamWrapper_Impl::seek( sal_Int64 _nLocation ) throw (Illega
 //------------------------------------------------------------------------------
 sal_Int64 SAL_CALL FileStreamWrapper_Impl::getPosition(  ) throw (IOException, RuntimeException)
 {
+    if ( !m_aURL.Len() )
+        return 0;
+
     ::osl::MutexGuard aGuard( m_aMutex );
     checkConnected();
 
@@ -332,6 +360,9 @@ sal_Int64 SAL_CALL FileStreamWrapper_Impl::getPosition(  ) throw (IOException, R
 //------------------------------------------------------------------------------
 sal_Int64 SAL_CALL FileStreamWrapper_Impl::getLength(  ) throw (IOException, RuntimeException)
 {
+    if ( !m_aURL.Len() )
+        return 0;
+
     ::osl::MutexGuard aGuard( m_aMutex );
     checkConnected();
 
@@ -1236,8 +1267,12 @@ sal_Int16 UCBStorageStream_Impl::Commit()
                 // release all stream handles
                 Free();
 
+                // the temporary file does not exist only for truncated streams
+                DBG_ASSERT( m_aTempURL.Len() || ( m_nMode & STREAM_TRUNC ), "No temporary file to read from!");
+                if ( !m_aTempURL.Len() && !( m_nMode & STREAM_TRUNC ) )
+                    throw RuntimeException();
+
                 // create wrapper to stream that is only used while reading inside package component
-                DBG_ASSERT( m_aTempURL.Len(), "No temporary file to read from!");
                 Reference < XInputStream > xStream = new FileStreamWrapper_Impl( m_aTempURL );
 
                 Any aAny;
@@ -1441,7 +1476,7 @@ ULONG UCBStorageStream::Write( const void* pData, ULONG nSize )
         return 0;
     }
 */
-    pImp->m_bModified = TRUE;
+    // pImp->m_bModified = TRUE;
     //return pImp->m_pStream->Write( pData, nSize );
     return pImp->PutData( pData, nSize );
 }
@@ -1474,7 +1509,7 @@ BOOL UCBStorageStream::SetSize( ULONG nNewSize )
         return FALSE;
     }
 */
-    pImp->m_bModified = TRUE;
+    // pImp->m_bModified = TRUE;
     //return pImp->m_pStream->SetStreamSize( nNewSize );
     pImp->SetSize( nNewSize );
     return !pImp->GetError();
@@ -1789,6 +1824,8 @@ UCBStorage_Impl::UCBStorage_Impl( const String& rName, StreamMode nMode, UCBStor
     {
         // substorages are opened like streams: the URL is a "child URL" of the root package URL
         m_aURL = rName;
+        if ( m_aURL.CompareToAscii( "vnd.sun.star.pkg://", 19 ) != 0 )
+            m_bIsLinked = TRUE;
     }
 }
 
@@ -1897,10 +1934,17 @@ void UCBStorage_Impl::Init()
         else
         {
             // get the manifest information from the package
-            Any aAny = m_pContent->getPropertyValue( ::rtl::OUString::createFromAscii( "MediaType" ) );
-            rtl::OUString aTmp;
-            if ( ( aAny >>= aTmp ) && aTmp.getLength() )
-                m_aContentType = m_aOriginalContentType = aTmp;
+            try {
+                Any aAny = m_pContent->getPropertyValue( ::rtl::OUString::createFromAscii( "MediaType" ) );
+                rtl::OUString aTmp;
+                if ( ( aAny >>= aTmp ) && aTmp.getLength() )
+                    m_aContentType = m_aOriginalContentType = aTmp;
+            }
+            catch( Exception& )
+            {
+                DBG_ASSERT( sal_False,
+                            "getPropertyValue has thrown an exception! Please let developers know the scenario!" );
+            }
         }
     }
 
@@ -2515,7 +2559,8 @@ sal_Int16 UCBStorage_Impl::Commit()
                         if ( m_pSource != 0 )
                         {
                             SvStream* pStream = ::utl::UcbStreamHelper::CreateStream( m_pTempFile->GetURL(), STREAM_STD_READ );
-                            m_pSource->Seek(0);
+                            m_pSource->SetStreamSize(0);
+                            // m_pSource->Seek(0);
                             *pStream >> *m_pSource;
                             DELETEZ( pStream );
                             m_pSource->Seek(0);
@@ -3122,11 +3167,11 @@ UCBStorage_Impl* UCBStorage_Impl::OpenStorage( UCBStorageElement_Impl* pElement,
     else
     {
         pRet = new UCBStorage_Impl( aName, nMode, NULL, bDirect, FALSE, m_bRepairPackage, m_xProgressHandler );
-        pRet->m_bIsLinked = m_bIsLinked;
     }
 
     if ( pRet )
     {
+        pRet->m_bIsLinked = m_bIsLinked;
         pRet->m_bIsRoot = FALSE;
 
         // if name has been changed before creating the stream: set name!
