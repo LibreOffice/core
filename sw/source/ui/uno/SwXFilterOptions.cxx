@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXFilterOptions.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 08:48:03 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 16:39:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,9 +74,9 @@
 #ifndef _UNOPRNMS_HXX
 #include <unoprnms.hxx>
 #endif
-#ifndef _ASCFLDLG_HXX
-#include <ascfldlg.hxx>
-#endif
+//CHINA001 #ifndef _ASCFLDLG_HXX
+//CHINA001 #include <ascfldlg.hxx>
+//CHINA001 #endif
 
 #ifndef _VOS_MUTEX_HXX_ //autogen
 #include <vos/mutex.hxx>
@@ -103,6 +103,9 @@
 #ifndef _UNOTXDOC_HXX //autogen
 #include <unotxdoc.hxx>
 #endif
+
+#include "swabstdlg.hxx" //CHINA001
+#include "dialog.hrc" //CHINA001
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::ui::dialogs;
@@ -202,16 +205,22 @@ sal_Int16 SwXFilterOptions::execute() throw (uno::RuntimeException)
     }
     if(pDocShell)
     {
-        SwAsciiFilterDlg aAsciiDlg( NULL, *pDocShell, pInStream );
-        if(RET_OK == aAsciiDlg.Execute())
+        //CHINA001 SwAsciiFilterDlg aAsciiDlg( NULL, *pDocShell, pInStream );
+        SwAbstractDialogFactory* pFact = SwAbstractDialogFactory::Create();//CHINA001
+        DBG_ASSERT(pFact, "SwAbstractDialogFactory fail!");//CHINA001
+
+        AbstractSwAsciiFilterDlg* pAsciiDlg = pFact->CreateSwAsciiFilterDlg( NULL, *pDocShell,pInStream, ResId( DLG_ASCII_FILTER ));
+        DBG_ASSERT(pAsciiDlg, "Dialogdiet fail!");//CHINA001
+        if(RET_OK == pAsciiDlg->Execute()) //CHINA001 if(RET_OK == aAsciiDlg.Execute())
         {
             SwAsciiOptions aOptions;
-            aAsciiDlg.FillOptions( aOptions );
+            pAsciiDlg->FillOptions( aOptions );//CHINA001 aAsciiDlg.FillOptions( aOptions );
             String sTmp;
             aOptions.WriteUserData(sTmp);
             sFilterOptions = sTmp;
             nRet = ui::dialogs::ExecutableDialogResults::OK;
         }
+        delete pAsciiDlg;
     }
 
     if( pInStream )
