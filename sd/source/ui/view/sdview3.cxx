@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdview3.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: aw $ $Date: 2002-09-13 08:39:49 $
+ *  last change: $Author: aw $ $Date: 2002-09-20 15:47:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -208,7 +208,7 @@ void ImpCheckInsertPos(Point& rPos, const Size& rSize, const Rectangle& rWorkAre
 {
     if(!rWorkArea.IsEmpty())
     {
-        Rectangle aMarkRect(rPos, rSize);
+        Rectangle aMarkRect(Point(rPos.X() - (rSize.Width() / 2), rPos.Y() - (rSize.Height() / 2)), rSize);
 
         if(!aMarkRect.IsInside(rWorkArea))
         {
@@ -962,7 +962,9 @@ BOOL SdView::InsertData( const TransferableDataHelper& rDataHelper,
             }
 
             // #90129# restrict movement to WorkArea
-            Size aImageMapSize(aGraphic.GetPrefSize());
+            Size aImageMapSize = OutputDevice::LogicToLogic(aGraphic.GetPrefSize(),
+                aGraphic.GetPrefMapMode(), MapMode(MAP_100TH_MM));
+
             ImpCheckInsertPos(aInsertPos, aImageMapSize, GetWorkArea());
 
             InsertGraphic( aGraphic, nAction, aInsertPos, NULL, pImageMap );
