@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbadmin.cxx,v $
  *
- *  $Revision: 1.75 $
+ *  $Revision: 1.76 $
  *
- *  last change: $Author: fs $ $Date: 2001-09-18 15:07:35 $
+ *  last change: $Author: fs $ $Date: 2001-10-24 10:31:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1164,53 +1164,135 @@ void ODbAdminDialog::implTranslateProperty(const Reference< XPropertySet >& _rxS
 }
 
 //-------------------------------------------------------------------------
-void ODbAdminDialog::implTranslateProperty(SfxItemSet& _rSet, sal_Int32  _nId, const Any& _rValue)
+namespace
 {
+    sal_Bool implCheckItemType( SfxItemSet& _rSet, const USHORT _nId, const TypeId _nExpectedItemType )
+    {
+        sal_Bool bCorrectType = sal_False;
+
+        SfxItemPool* pPool = _rSet.GetPool();
+        DBG_ASSERT( pPool, "implCheckItemType: invalid item pool!" );
+        if ( pPool )
+        {
+            const SfxPoolItem& rDefItem = pPool->GetDefaultItem( _nId );
+            bCorrectType = rDefItem.IsA( _nExpectedItemType );
+        }
+        return bCorrectType;
+    }
+
+}
+
+#ifdef DBG_UTIL
+//-------------------------------------------------------------------------
+::rtl::OString ODbAdminDialog::translatePropertyId( sal_Int32 _nId )
+{
+    ::rtl::OUString aString;
+
+    MapInt2String::const_iterator aPos = m_aDirectPropTranslator.find( _nId );
+    if ( m_aDirectPropTranslator.end() != aPos )
+    {
+        aString = aPos->second;
+    }
+    else
+    {
+        MapInt2String::const_iterator aPos = m_aIndirectPropTranslator.find( _nId );
+        if ( m_aIndirectPropTranslator.end() != aPos )
+            aString = aPos->second;
+    }
+
+    ::rtl::OString aReturn( aString.getStr(), aString.getLength(), RTL_TEXTENCODING_ASCII_US );
+    return aReturn;
+}
+#endif
+
+//-------------------------------------------------------------------------
+void ODbAdminDialog::implTranslateProperty( SfxItemSet& _rSet, sal_Int32  _nId, const Any& _rValue )
+{
+    USHORT nId = (USHORT)_nId;
     switch (_rValue.getValueType().getTypeClass())
     {
         case TypeClass_STRING:
-        {
-            ::rtl::OUString sValue;
-            _rValue >>= sValue;
-            _rSet.Put(SfxStringItem((USHORT)_nId, sValue.getStr()));
-        }
-        break;
-        case TypeClass_BOOLEAN:
-            _rSet.Put(SfxBoolItem((USHORT)_nId, ::cppu::any2bool(_rValue)));
+            if ( implCheckItemType( _rSet, nId, SfxStringItem::StaticType() ) )
+            {
+                ::rtl::OUString sValue;
+                _rValue >>= sValue;
+                _rSet.Put(SfxStringItem(nId, sValue.getStr()));
+            }
+            else
+                DBG_ERROR(
+                    (   ::rtl::OString( "ODbAdminDialog::implTranslateProperty: invalid property value (" )
+                    +=  ::rtl::OString( translatePropertyId( _nId ) )
+                    +=  ::rtl::OString( " should be no string)!" )
+                    ).getStr()
+                );
             break;
+
+        case TypeClass_BOOLEAN:
+            if ( implCheckItemType( _rSet, nId, SfxBoolItem::StaticType() ) )
+            {
+                _rSet.Put(SfxBoolItem(nId, ::cppu::any2bool(_rValue)));
+            }
+            else
+                DBG_ERROR(
+                    (   ::rtl::OString( "ODbAdminDialog::implTranslateProperty: invalid property value (" )
+                    +=  ::rtl::OString( translatePropertyId( _nId ) )
+                    +=  ::rtl::OString( " should be no boolean)!" )
+                    ).getStr()
+                );
+            break;
+
         case TypeClass_LONG:
+            if ( implCheckItemType( _rSet, nId, SfxInt32Item::StaticType() ) )
             {
                 sal_Int32 nValue = 0;
                 _rValue >>= nValue;
-                _rSet.Put(SfxInt32Item((USHORT)_nId, nValue));
+                _rSet.Put( SfxInt32Item( nId, nValue ) );
             }
+            else
+                DBG_ERROR(
+                    (   ::rtl::OString( "ODbAdminDialog::implTranslateProperty: invalid property value (" )
+                    +=  ::rtl::OString( translatePropertyId( _nId ) )
+                    +=  ::rtl::OString( " should be no int)!" )
+                    ).getStr()
+                );
             break;
-        case TypeClass_SEQUENCE:
-        {
-            // determine the element type
-            TypeDescription aTD(_rValue.getValueType());
-            typelib_IndirectTypeDescription* pSequenceTD =
-                reinterpret_cast< typelib_IndirectTypeDescription* >(aTD.get());
-            DBG_ASSERT(pSequenceTD && pSequenceTD->pType, "ODbAdminDialog::implTranslateProperty: invalid sequence type!");
 
-            Type aElementType(pSequenceTD->pType);
-            switch (aElementType.getTypeClass())
+        case TypeClass_SEQUENCE:
+            if ( implCheckItemType( _rSet, nId, OStringListItem::StaticType() ) )
             {
-                case TypeClass_STRING:
+                // determine the element type
+                TypeDescription aTD(_rValue.getValueType());
+                typelib_IndirectTypeDescription* pSequenceTD =
+                    reinterpret_cast< typelib_IndirectTypeDescription* >(aTD.get());
+                DBG_ASSERT(pSequenceTD && pSequenceTD->pType, "ODbAdminDialog::implTranslateProperty: invalid sequence type!");
+
+                Type aElementType(pSequenceTD->pType);
+                switch (aElementType.getTypeClass())
                 {
-                    Sequence< ::rtl::OUString > aStringList;
-                    _rValue >>= aStringList;
-                    _rSet.Put(OStringListItem((USHORT)_nId, aStringList));
+                    case TypeClass_STRING:
+                    {
+                        Sequence< ::rtl::OUString > aStringList;
+                        _rValue >>= aStringList;
+                        _rSet.Put(OStringListItem(nId, aStringList));
+                    }
+                    break;
+                    default:
+                        DBG_ERROR("ODbAdminDialog::implTranslateProperty: unsupported property value type!");
                 }
-                break;
-                default:
-                    DBG_ERROR("ODbAdminDialog::implTranslateProperty: unsupported property value type!");
             }
-        }
-        break;
-        case TypeClass_VOID:
-            _rSet.ClearItem((USHORT)_nId);
+            else
+                DBG_ERROR(
+                    (   ::rtl::OString( "ODbAdminDialog::implTranslateProperty: invalid property value (" )
+                    +=  ::rtl::OString( translatePropertyId( _nId ) )
+                    +=  ::rtl::OString( " should be no string sequence)!" )
+                    ).getStr()
+                );
             break;
+
+        case TypeClass_VOID:
+            _rSet.ClearItem(nId);
+            break;
+
         default:
             DBG_ERROR("ODbAdminDialog::implTranslateProperty: unsupported property value type!");
     }
@@ -2040,6 +2122,9 @@ IMPL_LINK(ODbAdminDialog, OnApplyChanges, PushButton*, EMPTYARG)
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.75  2001/09/18 15:07:35  fs
+ *  #65293# syntax for SOLS
+ *
  *  Revision 1.74  2001/09/11 15:08:33  fs
  *  #91304# disableUI before applying the changes in OK
  *
