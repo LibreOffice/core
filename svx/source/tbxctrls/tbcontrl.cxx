@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbcontrl.cxx,v $
  *
- *  $Revision: 1.59 $
+ *  $Revision: 1.60 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 15:32:53 $
+ *  last change: $Author: obo $ $Date: 2005-01-27 10:45:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,15 +228,17 @@ public:
     ~SvxStyleBox_Impl();
 
     void            SetFamily( SfxStyleFamily eNewFamily );
-    BOOL            IsVisible() { return bVisible; }
+    inline BOOL     IsVisible() { return bVisible; }
 
     virtual long    PreNotify( NotifyEvent& rNEvt );
     virtual long    Notify( NotifyEvent& rNEvt );
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
     virtual void    StateChanged( StateChangedType nStateChange );
 
-    void            SetVisibilityListener( const Link& aVisListener ) { aVisibilityListener = aVisListener; }
-    void            RemoveVisibilityListener() { aVisibilityListener = Link(); }
+    inline void     SetVisibilityListener( const Link& aVisListener ) { aVisibilityListener = aVisListener; }
+    inline void     RemoveVisibilityListener() { aVisibilityListener = Link(); }
+
+    DECL_STATIC_LINK( SvxStyleBox_Impl, FocusHdl_Impl, Control* );
 
 protected:
     virtual void    Select();
@@ -519,8 +521,10 @@ void SvxStyleBox_Impl::Select()
                 SfxChildWindow* pChildWin = pViewFrm->GetChildWindow( SID_STYLE_DESIGNER );
                 if ( pChildWin && pChildWin->GetWindow() )
                 {
-                    static_cast<SfxTemplateDialog*>(pChildWin->GetWindow())->AutoShow(sal_True);
-                    pChildWin->GetWindow()->GrabFocus();
+                    static_cast< SfxTemplateDialogWrapper* >( pChildWin )->SetParagraphFamily();
+                    static_cast< SfxDockingWindow* >( pChildWin->GetWindow() )->AutoShow( sal_True );
+                    Application::PostUserEvent(
+                        STATIC_LINK( 0, SvxStyleBox_Impl, FocusHdl_Impl ), pChildWin->GetWindow() );
                 }
                 bDoIt = false;
             }
@@ -647,6 +651,14 @@ void SvxStyleBox_Impl::StateChanged( StateChangedType nStateChange )
     }
 }
 
+//--------------------------------------------------------------------
+
+IMPL_STATIC_LINK( SvxStyleBox_Impl, FocusHdl_Impl, Control*, _pCtrl )
+{
+    if ( _pCtrl )
+        _pCtrl->GrabFocus();
+    return 0;
+}
 
 // -----------------------------------------------------------------------
 
@@ -2328,7 +2340,7 @@ void SvxStyleToolBoxControl::FillStyleBox()
 
             {
                 USHORT  i;
-                USHORT  nCnt = pImpl->aDefaultStyleArray.Count();
+                USHORT  nCnt = static_cast< USHORT >( pImpl->aDefaultStyleArray.Count() );
                 USHORT  nPos = 1;
                 long    nType = pImpl->bSpecModeWriter? 0 : 1;
                 bool    bInsert;
@@ -2369,17 +2381,9 @@ void SvxStyleToolBoxControl::FillStyleBox()
 
             if( pImpl->bSpecModeWriter || pImpl->bSpecModeCalc )
             {
-                // disable sort to preserve special order
-                WinBits nWinBits = pBox->GetStyle();
-                nWinBits &= ~WB_SORT;
-                pBox->SetStyle( nWinBits );
-
-                pBox->InsertEntry( pImpl->aClearForm, 0 );
-                pBox->SetSeparatorPos( 0 );
-
                 // insert default styles
                 USHORT  i;
-                USHORT  nCnt = pImpl->aDefaultStyleArray.Count();
+                USHORT  nCnt = static_cast< USHORT >( pImpl->aDefaultStyleArray.Count() );
                 USHORT  nPos = 1;
                 long    nType = pImpl->bSpecModeWriter? 0 : 1;
                 for( i = 0 ; i < nCnt ; ++i )
@@ -2390,6 +2394,14 @@ void SvxStyleToolBoxControl::FillStyleBox()
                         ++nPos;
                     }
                 }
+
+                // disable sort to preserve special order
+                WinBits nWinBits = pBox->GetStyle();
+                nWinBits &= ~WB_SORT;
+                pBox->SetStyle( nWinBits );
+
+                pBox->InsertEntry( pImpl->aClearForm, 0 );
+                pBox->SetSeparatorPos( 0 );
 
                 pBox->InsertEntry( pImpl->aMore );
 
