@@ -2,9 +2,9 @@
  *
  *  $RCSfile: implbase1.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-16 17:49:49 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 23:11:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,23 +60,6 @@
  ************************************************************************/
 #ifndef _CPPUHELPER_IMPLBASE1_HXX_
 #define _CPPUHELPER_IMPLBASE1_HXX_
-
-#if defined( MACOSX ) && ( __GNUC__ < 3 )
-/* use old impl helpers for macosx */
-
-#define __IFC1 Ifc1
-#define __CLASS_IFC1 class Ifc1
-#define __PUBLIC_IFC1 public Ifc1
-
-#ifndef _CPPUHELPER_IMPLBASE_HXX_
-#include <cppuhelper/implbase.hxx>
-#endif
-
-__DEF_IMPLHELPER_PRE( 1 )
-    __IFC_WRITEOFFSET( 1 )
-__DEF_IMPLHELPER_POST( 1 )
-
-#else /* ! MACOSX */
 
 #ifndef _CPPUHELPER_IMPLBASE_EX_HXX_
 #include <cppuhelper/implbase_ex.hxx>
@@ -317,7 +300,5 @@ namespace cppu
         }
     };
 }
-
-#endif /* MACOSX */
 
 #endif
