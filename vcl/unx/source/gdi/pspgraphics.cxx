@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pspgraphics.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:57:52 $
+ *  last change: $Author: hr $ $Date: 2004-10-13 08:59:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -520,88 +520,6 @@ void PspGraphics::invert(
                          SalInvert  nFlags )
 {
     DBG_ERROR ("Warning: PrinterGfx::Invert() not implemented");
-}
-
-/*
- *  returns:
- *  true: cut out positions rStart to rStop from output because fax number was swallowed
- *  false: do nothing
- */
-
-String PspGraphics::FaxPhoneComment( const String& rOrig, xub_StrLen nIndex, xub_StrLen& rLen, xub_StrLen& rCutStart, xub_StrLen& rCutStop ) const
-{
-    rCutStop = rCutStart = STRING_NOTFOUND;
-
-    if( ! m_pPhoneNr )
-        return String( rOrig );
-
-#define FAX_PHONE_TOKEN          "@@#"
-#define FAX_PHONE_TOKEN_LENGTH   3
-#define FAX_END_TOKEN            "@@"
-#define FAX_END_TOKEN_LENGTH     2
-
-    bool bRet = false;
-    bool bStarted = false;
-    bool bStopped = false;
-    USHORT nPos;
-    USHORT nStart = 0;
-    USHORT nStop = rLen;
-    String aPhone = rOrig.Copy( nIndex, rLen );
-
-    static String aPhoneNumber;
-    static bool bIsCollecting = false;
-
-    if( ! bIsCollecting )
-    {
-        if( ( nPos = aPhone.SearchAscii( FAX_PHONE_TOKEN ) ) != STRING_NOTFOUND )
-        {
-            nStart = nPos;
-            bIsCollecting = true;
-            aPhoneNumber.Erase();
-            bRet = true;
-            bStarted = true;
-        }
-    }
-    if( bIsCollecting )
-    {
-        bRet = true;
-        nPos = bStarted ? nStart + FAX_PHONE_TOKEN_LENGTH : 0;
-        if( ( nPos = aPhone.SearchAscii( FAX_END_TOKEN, nPos ) ) != STRING_NOTFOUND )
-        {
-            bIsCollecting = false;
-            nStop = nPos + FAX_END_TOKEN_LENGTH;
-            bStopped = true;
-        }
-        int nTokenStart = nStart + (bStarted ? FAX_PHONE_TOKEN_LENGTH : 0);
-        int nTokenStop = nStop - (bStopped ? FAX_END_TOKEN_LENGTH : 0);
-        aPhoneNumber += aPhone.Copy( nTokenStart, nTokenStop - nTokenStart );
-        if( ! bIsCollecting )
-        {
-            *m_pPhoneNr = aPhoneNumber;
-            aPhoneNumber.Erase();
-        }
-    }
-    if( aPhoneNumber.Len() > 1024 )
-    {
-        bIsCollecting = false;
-        aPhoneNumber.Erase();
-        bRet = false;
-    }
-
-    String aRet;
-    if( bRet && m_bSwallowFaxNo )
-    {
-        rLen -= nStop - nStart;
-        rCutStart = nStart+nIndex;
-        rCutStop = nStop+nIndex;
-        if( rCutStart )
-            aRet = rOrig.Copy( 0, rCutStart );
-        aRet += rOrig.Copy( rCutStop );
-    }
-    else
-        aRet = rOrig;
-
-    return aRet;
 }
 
 //==========================================================================
@@ -1492,7 +1410,9 @@ bool PspGraphics::filterText( const String& rOrig, String& rNewText, xub_StrLen 
         m_aPhoneCollection += aPhone.Copy( nTokenStart, nTokenStop - nTokenStart );
         if( ! m_bPhoneCollectionActive )
         {
-            *m_pPhoneNr = m_aPhoneCollection;
+            m_pPhoneNr->AppendAscii( "<Fax#>" );
+            m_pPhoneNr->Append( m_aPhoneCollection );
+            m_pPhoneNr->AppendAscii( "</Fax#>" );
             m_aPhoneCollection.Erase();
         }
     }
