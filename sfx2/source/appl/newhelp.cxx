@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: pb $ $Date: 2001-10-17 11:07:10 $
+ *  last change: $Author: pb $ $Date: 2001-10-25 07:52:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -555,8 +555,11 @@ IndexTabPage_Impl::IndexTabPage_Impl( Window* pParent ) :
     FreeResource();
 
     aOpenBtn.SetClickHdl( LINK( this, IndexTabPage_Impl, OpenHdl ) );
-    aFactoryTimer.SetTimeoutHdl( LINK( this, IndexTabPage_Impl, FactoryHdl ) );
-    aFactoryTimer.SetTimeout( 1000 );
+    Link aTimeoutLink = LINK( this, IndexTabPage_Impl, TimeoutHdl );
+    aFactoryTimer.SetTimeoutHdl( aTimeoutLink );
+    aFactoryTimer.SetTimeout( 300 );
+    aKeywordTimer.SetTimeoutHdl( aTimeoutLink );
+    aFactoryTimer.SetTimeout( 300 );
 
     nMinWidth = aOpenBtn.GetSizePixel().Width();
 }
@@ -627,8 +630,7 @@ void IndexTabPage_Impl::InitializeIndex()
     try
     {
         ::rtl::OUString aURL = HELP_URL;
-        ::rtl::OUString _aFactory( aFactory );
-        aURL += _aFactory;
+        aURL += ::rtl::OUString( sFactory );
 
         String aTemp = aURL;
         AppendConfigToken_Impl( aTemp, sal_True );
@@ -715,6 +717,9 @@ void IndexTabPage_Impl::InitializeIndex()
     }
 
     aIndexCB.SetUpdateMode( TRUE );
+
+    if ( sKeyword.Len() > 0 )
+        aKeywordLink.Call( this );
 }
 
 #undef INSERT_DATA
@@ -741,9 +746,12 @@ IMPL_LINK( IndexTabPage_Impl, OpenHdl, PushButton*, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( IndexTabPage_Impl, FactoryHdl, Timer*, EMPTYARG )
+IMPL_LINK( IndexTabPage_Impl, TimeoutHdl, Timer*, pTimer )
 {
-    InitializeIndex();
+    if ( &aFactoryTimer == pTimer )
+        InitializeIndex();
+    else if ( &aKeywordTimer == pTimer && sKeyword.Len() > 0 )
+        aKeywordLink.Call( this );
     return 0;
 }
 
@@ -804,9 +812,9 @@ void IndexTabPage_Impl::SetFactory( const String& rFactory )
 {
     DBG_ASSERT( rFactory.Len() > 0, "empty factory" );
 
-    if ( rFactory != aFactory )
+    if ( rFactory != sFactory )
     {
-        aFactory = rFactory;
+        sFactory = rFactory;
         ClearIndex();
         if ( bIsActivated )
             aFactoryTimer.Start();
@@ -822,6 +830,44 @@ String IndexTabPage_Impl::GetSelectEntry() const
     if ( pEntry )
         aRet = pEntry->m_aURL;
     return aRet;
+}
+
+// -----------------------------------------------------------------------
+
+void IndexTabPage_Impl::SetKeyword( const String& rKeyword )
+{
+    sKeyword = rKeyword;
+
+    if ( aIndexCB.GetEntryCount() > 0 )
+        aKeywordTimer.Start();
+    else if ( !bIsActivated )
+        aFactoryTimer.Start();
+}
+
+// -----------------------------------------------------------------------
+
+sal_Bool IndexTabPage_Impl::HasKeyword() const
+{
+    sal_Bool bRet = sal_False;
+    if ( sKeyword.Len() > 0 )
+    {
+        USHORT nPos = aIndexCB.GetEntryPos( sKeyword );
+        bRet = ( nPos != LISTBOX_ENTRY_NOTFOUND );
+    }
+
+    return bRet;
+}
+
+// -----------------------------------------------------------------------
+
+void IndexTabPage_Impl::OpenKeyword()
+{
+    if ( sKeyword.Len() > 0 )
+    {
+        aIndexCB.SetText( sKeyword );
+        aIndexCB.GetDoubleClickHdl().Call( NULL );
+        sKeyword.Erase();
+    }
 }
 
 // class SearchBox_Impl --------------------------------------------------
@@ -1120,9 +1166,29 @@ void SearchTabPage_Impl::ClearPage()
     aSearchED.SetText( String() );
 }
 
+// -----------------------------------------------------------------------
+
 void SearchTabPage_Impl::ActivatePage()
 {
     aSearchED.GrabFocus();
+}
+
+// -----------------------------------------------------------------------
+
+sal_Bool SearchTabPage_Impl::OpenKeyword( const String& rKeyword )
+{
+    sal_Bool bRet = sal_False;
+    aSearchED.SetText( rKeyword );
+    SearchHdl( NULL );
+    if ( aResultsLB.GetEntryCount() > 0 )
+    {
+        // found keyword -> open it
+        aResultsLB.SelectEntryPos(0);
+        OpenHdl( NULL );
+        bRet = sal_True;
+    }
+
+    return bRet;
 }
 
 // class BookmarksTabPage_Impl -------------------------------------------
@@ -1372,13 +1438,15 @@ void BookmarksTabPage_Impl::ActivatePage()
 
 // class SfxHelpIndexWindow_Impl -----------------------------------------
 
-SfxHelpIndexWindow_Impl::SfxHelpIndexWindow_Impl( Window* pParent ) :
+SfxHelpIndexWindow_Impl::SfxHelpIndexWindow_Impl( SfxHelpWindow_Impl* _pParent ) :
 
-    Window( pParent, SfxResId( WIN_HELP_INDEX ) ),
+    Window( _pParent, SfxResId( WIN_HELP_INDEX ) ),
 
     aActiveLB   ( this, ResId( LB_ACTIVE ) ),
     aActiveLine ( this, ResId( FL_ACTIVE ) ),
     aTabCtrl    ( this, ResId( TC_INDEX ) ),
+
+    pParentWin  ( _pParent ),
 
     pCPage      ( NULL ),
     pIPage      ( NULL ),
@@ -1399,6 +1467,10 @@ SfxHelpIndexWindow_Impl::SfxHelpIndexWindow_Impl( Window* pParent ) :
     ActivatePageHdl( &aTabCtrl );
     aActiveLB.SetSelectHdl( LINK( this, SfxHelpIndexWindow_Impl, SelectHdl ) );
     nMinWidth = ( aActiveLB.GetSizePixel().Width() / 2 );
+
+    if ( !pIPage )
+        pIPage = new IndexTabPage_Impl( &aTabCtrl );
+    pIPage->SetKeywordHdl( LINK( this, SfxHelpIndexWindow_Impl, KeywordHdl ) );
 
     aInitTimer.SetTimeoutHdl( LINK( this, SfxHelpIndexWindow_Impl, InitHdl ) );
     aInitTimer.SetTimeout( 200 );
@@ -1543,6 +1615,29 @@ IMPL_LINK( SfxHelpIndexWindow_Impl, InitHdl, Timer *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
+IMPL_LINK( SfxHelpIndexWindow_Impl, KeywordHdl, IndexTabPage_Impl *, EMPTYARG )
+{
+    // keyword found on index?
+    sal_Bool bIndex = pIPage->HasKeyword();
+    // then set index or search page as current.
+    USHORT nPageId = ( bIndex ) ? HELP_INDEX_PAGE_INDEX :  HELP_INDEX_PAGE_SEARCH;
+    if ( nPageId != aTabCtrl.GetCurPageId() )
+    {
+        aTabCtrl.SetCurPageId( nPageId );
+        ActivatePageHdl( &aTabCtrl );
+    }
+
+    // at last we open the keyword
+    if ( bIndex )
+        pIPage->OpenKeyword();
+    else if ( !pSPage->OpenKeyword( sKeyword ) )
+        pParentWin->ShowStartPage();
+
+    return 0;
+}
+
+// -----------------------------------------------------------------------
+
 void SfxHelpIndexWindow_Impl::Resize()
 {
     Size aSize = GetOutputSizePixel();
@@ -1604,28 +1699,28 @@ void SfxHelpIndexWindow_Impl::SetFactory( const String& rFactory, sal_Bool bActi
 
 String SfxHelpIndexWindow_Impl::GetSelectEntry() const
 {
-    String aRet;
+    String sRet;
 
     switch ( aTabCtrl.GetCurPageId() )
     {
         case HELP_INDEX_PAGE_CONTENTS:
-            aRet = pCPage->GetSelectEntry();
+            sRet = pCPage->GetSelectEntry();
             break;
 
         case HELP_INDEX_PAGE_INDEX:
-            aRet = pIPage->GetSelectEntry();
+            sRet = pIPage->GetSelectEntry();
             break;
 
         case HELP_INDEX_PAGE_SEARCH:
-            aRet = pSPage->GetSelectEntry();
+            sRet = pSPage->GetSelectEntry();
             break;
 
         case HELP_INDEX_PAGE_BOOKMARKS:
-            aRet = pBPage->GetSelectEntry();
+            sRet = pBPage->GetSelectEntry();
             break;
     }
 
-    return aRet;
+    return sRet;
 }
 
 // -----------------------------------------------------------------------
@@ -1679,6 +1774,15 @@ String SfxHelpIndexWindow_Impl::GetSearchText() const
     if ( aTabCtrl.GetCurPageId() == HELP_INDEX_PAGE_SEARCH && pSPage )
         sRet = pSPage->GetSearchText();
     return sRet;
+}
+
+// -----------------------------------------------------------------------
+
+void SfxHelpIndexWindow_Impl::OpenKeyword( const String& rKeyword )
+{
+    sKeyword = rKeyword;
+    DBG_ASSERT( pIPage, "invalid index page" );
+    pIPage->SetKeyword( sKeyword );
 }
 
 // class TextWin_Impl ----------------------------------------------------
@@ -2205,6 +2309,7 @@ IMPL_LINK( SfxHelpWindow_Impl, SelectHdl, ToolBox* , pToolBox )
 IMPL_LINK( SfxHelpWindow_Impl, OpenHdl, SfxHelpIndexWindow_Impl* , EMPTYARG )
 {
     String aEntry = pIndexWin->GetSelectEntry();
+
     if ( aEntry.Len() > 0 )
     {
         INetURLObject aObj( aEntry );
@@ -2250,7 +2355,7 @@ IMPL_LINK( SfxHelpWindow_Impl, OpenHdl, SfxHelpIndexWindow_Impl* , EMPTYARG )
 
 IMPL_LINK( SfxHelpWindow_Impl, SelectFactoryHdl, SfxHelpIndexWindow_Impl* , pWin )
 {
-    String aNewTitle = aTitle;
+    String aNewTitle = sTitle;
     aNewTitle += DEFINE_CONST_UNICODE(" - ");
     aNewTitle += pIndexWin->GetActiveFactoryTitle();
     GetParent()->SetText( aNewTitle );
@@ -2274,8 +2379,9 @@ IMPL_LINK( SfxHelpWindow_Impl, ChangeHdl, HelpListener_Impl*, pListener )
 
 IMPL_LINK( SfxHelpWindow_Impl, OpenDoneHdl, OpenStatusListener_Impl*, pListener )
 {
-    String aModuleName = pListener->GetURL().GetToken( 2, '/' );
-    SetFactory( aModuleName );
+    INetURLObject aObj( pListener->GetURL() );
+    if ( aObj.GetProtocol() == INET_PROT_VND_SUN_STAR_HELP )
+        SetFactory( aObj.GetHost() );
     if ( IsWait() )
         LeaveWait();
     pIndexWin->GrabFocusBack();
@@ -2328,7 +2434,7 @@ SfxHelpWindow_Impl::SfxHelpWindow_Impl(
     nIndexSize      ( 40 ),
     nTextSize       ( 60 ),
     bIndex          ( sal_True ),
-    aTitle          ( pParent->GetText() )
+    sTitle          ( pParent->GetText() )
 
 {
     SetHelpId( HID_HELP_WINDOW );
@@ -2407,7 +2513,8 @@ void SfxHelpWindow_Impl::SetFactory( const String& rFactory )
 void SfxHelpWindow_Impl::SetHelpURL( const String& rURL )
 {
     INetURLObject aObj( rURL );
-    SetFactory( aObj.GetHost() );
+    if ( aObj.GetProtocol() == INET_PROT_VND_SUN_STAR_HELP )
+        SetFactory( aObj.GetHost() );
 }
 
 // -----------------------------------------------------------------------

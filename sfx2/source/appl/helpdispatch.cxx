@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpdispatch.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pb $ $Date: 2001-10-19 09:28:41 $
+ *  last change: $Author: pb $ $Date: 2001-10-25 07:52:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,9 @@ void SAL_CALL HelpDispatch_Impl::dispatch(
 {
     DBG_ASSERT( m_xRealDispatch.is(), "invalid dispatch" );
 
+    // search for a keyword (dispatch from the basic ide)
+    sal_Bool bHasKeyword = sal_False;
+    String sKeyword;
     const PropertyValue* pBegin = aArgs.getConstArray();
     const PropertyValue* pEnd   = pBegin + aArgs.getLength();
     for ( ; pBegin != pEnd; ++pBegin )
@@ -112,14 +115,24 @@ void SAL_CALL HelpDispatch_Impl::dispatch(
             rtl::OUString sHelpKeyword;
             if ( ( ( *pBegin ).Value >>= sHelpKeyword ) && sHelpKeyword.getLength() > 0 )
             {
-                // ...
+                sKeyword = String( sHelpKeyword );
+                bHasKeyword = ( sKeyword.Len() > 0 );
+                break;
             }
         }
     }
 
+    // save url to history
     m_rInterceptor.addURL( aURL.Complete );
+    // add a listener
     m_rInterceptor.GetHelpWindow()->AddURLListener( aURL, m_xRealDispatch );
-    m_xRealDispatch->dispatch( aURL, aArgs );
+    // then dispatch
+    if ( !bHasKeyword ||
+         INetURLObject( aURL.Complete ).GetHost() != m_rInterceptor.GetHelpWindow()->GetFactory() )
+        m_xRealDispatch->dispatch( aURL, aArgs );
+    // if a keyword was found, then open it
+    if ( bHasKeyword )
+        m_rInterceptor.GetHelpWindow()->OpenKeyword( sKeyword );
 }
 
 // -----------------------------------------------------------------------

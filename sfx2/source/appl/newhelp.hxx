@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newhelp.hxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: pb $ $Date: 2001-10-17 11:05:43 $
+ *  last change: $Author: pb $ $Date: 2001-10-25 07:52:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -180,17 +180,22 @@ private:
     FixedText           aExpressionFT;
     IndexBox_Impl       aIndexCB;
     PushButton          aOpenBtn;
+
     Timer               aFactoryTimer;
+    Timer               aKeywordTimer;
+    Link                aKeywordLink;
+
+    String              sFactory;
+    String              sKeyword;
 
     long                nMinWidth;
     sal_Bool            bIsActivated;
-    String              aFactory;
 
     void                InitializeIndex();
     void                ClearIndex();
 
     DECL_LINK(          OpenHdl, PushButton* );
-    DECL_LINK(          FactoryHdl, Timer* );
+    DECL_LINK(          TimeoutHdl, Timer* );
 
 public:
     IndexTabPage_Impl( Window* pParent );
@@ -201,10 +206,15 @@ public:
 
     void                SetDoubleClickHdl( const Link& rLink );
     void                SetFactory( const String& rFactory );
-    String              GetFactory() const { return aFactory; }
+    String              GetFactory() const { return sFactory; }
     String              GetSelectEntry() const;
     void                SetFocusOnBox() { aIndexCB.GrabFocus(); }
     sal_Bool            HasFocusOnEdit() const { return aIndexCB.HasChildPathFocus(); }
+
+    void                SetKeywordHdl( const Link& rLink ) { aKeywordLink = rLink; }
+    void                SetKeyword( const String& rKeyword );
+    sal_Bool            HasKeyword() const;
+    void                OpenKeyword();
 };
 
 // class SearchTabPage_Impl ----------------------------------------------
@@ -266,6 +276,7 @@ public:
     sal_Bool            HasFocusOnEdit() const { return aSearchED.HasChildPathFocus(); }
     virtual void        ActivatePage();
     String              GetSearchText() const { return aSearchED.GetText(); }
+    sal_Bool            OpenKeyword( const String& rKeyword );
 };
 
 // class BookmarksTabPage_Impl -------------------------------------------
@@ -307,6 +318,8 @@ public:
 
 // class SfxHelpIndexWindow_Impl -----------------------------------------
 
+class SfxHelpWindow_Impl;
+
 class SfxHelpIndexWindow_Impl : public Window
 {
 private:
@@ -317,6 +330,9 @@ private:
     Timer               aInitTimer;
 
     Link                aSelectFactoryLink;
+    String              sKeyword;
+
+    SfxHelpWindow_Impl*     pParentWin;
 
     ContentTabPage_Impl*    pCPage;
     IndexTabPage_Impl*      pIPage;
@@ -331,9 +347,10 @@ private:
     DECL_LINK(          ActivatePageHdl, TabControl* );
     DECL_LINK(          SelectHdl, ListBox* );
     DECL_LINK(          InitHdl, Timer* );
+    DECL_LINK(          KeywordHdl, IndexTabPage_Impl* );
 
 public:
-    SfxHelpIndexWindow_Impl( Window* pParent );
+    SfxHelpIndexWindow_Impl( SfxHelpWindow_Impl* pParent );
     ~SfxHelpIndexWindow_Impl();
 
     virtual void        Resize();
@@ -350,6 +367,7 @@ public:
     void                GrabFocusBack();
     sal_Bool            HasFocusOnEdit() const;
     String              GetSearchText() const;
+    void                OpenKeyword( const String& rKeyword );
 };
 
 // class TextWin_Impl ----------------------------------------------------
@@ -416,6 +434,8 @@ class HelpListener_Impl;
 class SfxHelpWindow_Impl : public SplitWindow
 {
 private:
+friend class SfxHelpIndexWindow_Impl;
+
     ::com::sun::star::uno::Reference < ::com::sun::star::awt::XWindow >
                                 xWindow;
     ::com::sun::star::uno::Reference < ::com::sun::star::frame::XStatusListener >
@@ -433,7 +453,8 @@ private:
     long                nTextSize;
     sal_Bool            bIndex;
 
-    String              aTitle;
+    String              sTitle;
+    String              sKeyword;
 
     virtual void        Resize();
     virtual void        Split();
@@ -469,6 +490,8 @@ public:
     void                UpdateToolbox();
     void                AddURLListener( const ::com::sun::star::util::URL& aURL,
                                         ::com::sun::star::uno::Reference < ::com::sun::star::frame::XDispatch > xDisp );
+    void                OpenKeyword( const String& rKeyword ) { pIndexWin->OpenKeyword( rKeyword ); }
+    String              GetFactory() const { return pIndexWin->GetFactory(); }
 };
 
 class SfxAddHelpBookmarkDialog_Impl : public ModalDialog
