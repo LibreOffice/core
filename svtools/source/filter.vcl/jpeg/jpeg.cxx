@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jpeg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sj $ $Date: 2001-03-07 19:59:25 $
+ *  last change: $Author: sj $ $Date: 2001-07-03 16:00:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,12 +132,9 @@ extern "C" long StreamWrite( void* pOStm, void* pBuffer, long nBufferSize )
 
 // ------------------------------------------------------------------------
 
-extern "C" void* CreateBitmap( void* pJPEGReader, long nWidth, long nHeight, long bGray,
-                               long* pAlignedWidth, long* pTopDown )
-
+extern "C" void* CreateBitmap( void* pJPEGReader, void* pJPEGCreateBitmapParam )
 {
-    return ( (JPEGReader*) pJPEGReader )->CreateBitmap( Size( nWidth, nHeight ), (BOOL) bGray,
-                                                        *pAlignedWidth, *pTopDown );
+    return ( (JPEGReader*) pJPEGReader )->CreateBitmap( pJPEGCreateBitmapParam );
 }
 
 // ------------------------------------------------------------------------
@@ -196,9 +193,12 @@ JPEGReader::~JPEGReader()
 
 // ------------------------------------------------------------------------
 
-void* JPEGReader::CreateBitmap( const Size& rSize, BOOL bGray,
-                                long& rAlignedWidth, long& rTopDown )
+void* JPEGReader::CreateBitmap( void* pParam )
 {
+    Size        aSize( ((JPEGCreateBitmapParam*)pParam)->nWidth,
+                        ((JPEGCreateBitmapParam*)pParam)->nHeight );
+    sal_Bool    bGray = ((JPEGCreateBitmapParam*)pParam)->bGray != 0;
+
     void* pBmpBuf = NULL;
 
     if( pAcc )
@@ -214,30 +214,45 @@ void* JPEGReader::CreateBitmap( const Size& rSize, BOOL bGray,
             aGrayPal[ n ] = BitmapColor( cGray, cGray, cGray );
         }
 
-        aBmp = Bitmap( rSize, 8, &aGrayPal );
+        aBmp = Bitmap( aSize, 8, &aGrayPal );
     }
     else
-        aBmp = Bitmap( rSize, 24 );
+        aBmp = Bitmap( aSize, 24 );
 
+    unsigned long nUnit = ((JPEGCreateBitmapParam*)pParam)->density_unit;
+    if ( ( nUnit == 1 ) || ( nUnit == 2 ) )
+    {
+        Point       aEmptyPoint;
+        Fraction    aFractX( 1, ((JPEGCreateBitmapParam*)pParam)->X_density );
+        Fraction    aFractY( 1, ((JPEGCreateBitmapParam*)pParam)->Y_density );
+        MapMode     aMapMode( nUnit == 1 ? MAP_INCH : MAP_CM, aEmptyPoint, aFractX, aFractY );
+        Size        aPrefSize = OutputDevice::LogicToLogic( aSize, aMapMode, MAP_100TH_MM );
+
+        aBmp.SetPrefSize( aPrefSize );
+        aBmp.SetPrefMapMode( MapMode( MAP_100TH_MM ) );
+    }
     pAcc = aBmp.AcquireWriteAccess();
 
     if( pAcc )
     {
+        long nAlignedWidth;
+
         const ULONG nFormat = pAcc->GetScanlineFormat();
 
         if( ( bGray && ( BMP_FORMAT_8BIT_PAL == nFormat ) ) ||
             ( !bGray && ( BMP_FORMAT_24BIT_TC_BGR == nFormat ) ) )
         {
             pBmpBuf = pAcc->GetBuffer();
-            rAlignedWidth = pAcc->GetScanlineSize();
-            rTopDown = pAcc->IsTopDown();
+            nAlignedWidth = pAcc->GetScanlineSize();
+            ((JPEGCreateBitmapParam*)pParam)->bTopDown = pAcc->IsTopDown();
         }
         else
         {
-            rAlignedWidth = AlignedWidth4Bytes( rSize.Width() * ( bGray ? 8 : 24 ) );
-            rTopDown = TRUE;
-            pBmpBuf = pBuffer = SvMemAlloc( rAlignedWidth * rSize.Height() );
+            nAlignedWidth = AlignedWidth4Bytes( aSize.Width() * ( bGray ? 8 : 24 ) );
+            ((JPEGCreateBitmapParam*)pParam)->bTopDown = TRUE;
+            pBmpBuf = pBuffer = SvMemAlloc( nAlignedWidth * aSize.Height() );
         }
+        ((JPEGCreateBitmapParam*)pParam)->nAlignedWidth = nAlignedWidth;
     }
 
     return pBmpBuf;

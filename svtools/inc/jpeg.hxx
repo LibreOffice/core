@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jpeg.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sj $ $Date: 2001-03-07 19:53:37 $
+ *  last change: $Author: sj $ $Date: 2001-07-03 16:01:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,7 +121,7 @@ class JPEGReader : public GraphicReader
 
 public:
 
-    void*               CreateBitmap( const Size& rSize, BOOL bGray, long& rAlignedWidth, long& rTopDown );
+    void*               CreateBitmap( void* JPEGCreateBitmapParam );
 
 public:
 
