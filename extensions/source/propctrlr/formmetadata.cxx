@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formmetadata.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: tbe $ $Date: 2001-03-07 14:34:44 $
+ *  last change: $Author: tbe $ $Date: 2001-04-26 09:15:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -197,6 +197,10 @@ namespace pcr
                 OPropertyInfoImpl(PROPERTY_EFFECTIVE_MAX,       PROPERTY_ID_EFFECTIVE_MAX,      sal_False, String(ModuleRes(RID_STR_VALUEMAX)),         nPos++, HID_PROP_EFFECTIVEMAX),
                 OPropertyInfoImpl(PROPERTY_EFFECTIVE_DEFAULT,   PROPERTY_ID_EFFECTIVE_DEFAULT,  sal_False, String(ModuleRes(RID_STR_DEFAULTVALUE)),     nPos++, HID_PROP_EFFECTIVEDEFAULT),
                 OPropertyInfoImpl(PROPERTY_FORMATKEY,           PROPERTY_ID_FORMATKEY,          sal_True,  String(ModuleRes(RID_STR_FORMATKEY)),        nPos++, HID_PROP_FORMATKEY),
+
+                OPropertyInfoImpl(PROPERTY_PROGRESSVALUE,       PROPERTY_ID_PROGRESSVALUE,      sal_True,  String(ModuleRes(RID_STR_PROGRESSVALUE)),    nPos++, 0),
+                OPropertyInfoImpl(PROPERTY_PROGRESSVALUE_MIN,   PROPERTY_ID_PROGRESSVALUE_MIN,  sal_True,  String(ModuleRes(RID_STR_PROGRESSVALUE_MIN)),nPos++, 0),
+                OPropertyInfoImpl(PROPERTY_PROGRESSVALUE_MAX,   PROPERTY_ID_PROGRESSVALUE_MAX,  sal_True,  String(ModuleRes(RID_STR_PROGRESSVALUE_MAX)),nPos++, 0),
 
                 OPropertyInfoImpl(PROPERTY_CLASSID,             PROPERTY_ID_CLASSID,            sal_False, String(ModuleRes(RID_STR_CLASSID)),          nPos++, HID_PROP_CLASSID),
                 OPropertyInfoImpl(PROPERTY_HEIGHT,              PROPERTY_ID_HEIGHT,             sal_True,  String(ModuleRes(RID_STR_HEIGHT)),           nPos++, HID_PROP_HEIGHT),
@@ -475,6 +479,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.8  2001/03/07 14:34:44  tbe
+ *  added step property
+ *
  *  Revision 1.7  2001/03/06 16:01:24  fs
  *  changed relative position of Command and CommandType
  *

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formmetadata.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tbe $ $Date: 2001-03-07 14:35:42 $
+ *  last change: $Author: tbe $ $Date: 2001-04-26 09:15:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,6 +233,9 @@ namespace pcr
     #define PROPERTY_ID_POSITIONY            100
     #define PROPERTY_ID_TITLE                101
     #define PROPERTY_ID_STEP                 102
+    #define PROPERTY_ID_PROGRESSVALUE        103
+    #define PROPERTY_ID_PROGRESSVALUE_MIN    104
+    #define PROPERTY_ID_PROGRESSVALUE_MAX    105
 
 //............................................................................
 } // namespace pcr
@@ -243,6 +246,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.6  2001/03/07 14:35:42  tbe
+ *  added step property
+ *
  *  Revision 1.5  2001/03/02 16:28:16  tbe
  *  added title property
  *

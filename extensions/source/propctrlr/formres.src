@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formres.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-17 10:06:29 $
+ *  last change: $Author: tbe $ $Date: 2001-04-26 09:16:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3942,8 +3942,8 @@ String RID_STR_TITLE
 };
 String RID_STR_STEP
 {
-    Text = "Step" ;
-    Text [ ENGLISH ] = "Step" ;
+    Text = "Seite (Step)" ;
+    Text [ ENGLISH ] = "Page (Step)" ;
     Text[ english_us ] = "Step";
     Text[ portuguese ] = "Step";
     Text[ russian ] = "ÿ‡„";
@@ -3963,7 +3963,6 @@ String RID_STR_STEP
     Text[ turkish ] = "Step";
     Text[ arabic ] = "ŒÿÊ…";
 };
-
 TabDialog RID_TABDLG_FONTDIALOG
 {
     OutputSize = TRUE ;
@@ -4057,9 +4056,27 @@ TabDialog RID_TABDLG_FONTDIALOG
     Text[ turkish ] = "Character";
     Text[ arabic ] = "«·Œÿ";
 };
+String RID_STR_PROGRESSVALUE
+{
+    Text = "Fortschrittswert" ;
+    Text [ ENGLISH ] = "Progress value" ;
+};
+String RID_STR_PROGRESSVALUE_MIN
+{
+    Text = "Min. Fortschrittswert" ;
+    Text [ ENGLISH ] = "Progress value min." ;
+};
+String RID_STR_PROGRESSVALUE_MAX
+{
+    Text = "Max. Fortschrittswert" ;
+    Text [ ENGLISH ] = "Progress value max." ;
+};
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.14  2001/04/17 10:06:29  fs
+ *  grammar
+ *
  *  Revision 1.13  2001/04/12 07:24:54  kz
  *  Merge SRC627: 12.04.01 - 10:24:48
  *

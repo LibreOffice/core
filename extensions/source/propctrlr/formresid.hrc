@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formresid.hrc,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-21 15:38:39 $
+ *  last change: $Author: tbe $ $Date: 2001-04-26 09:16:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -230,6 +230,9 @@
 #define RID_STR_POSITIONY                   ( RID_FORMBROWSER_START + 168 )
 #define RID_STR_TITLE                       ( RID_FORMBROWSER_START + 169 )
 #define RID_STR_STEP                        ( RID_FORMBROWSER_START + 170 )
+#define RID_STR_PROGRESSVALUE               ( RID_FORMBROWSER_START + 171 )
+#define RID_STR_PROGRESSVALUE_MIN           ( RID_FORMBROWSER_START + 172 )
+#define RID_STR_PROGRESSVALUE_MAX           ( RID_FORMBROWSER_START + 173 )
 
 
 // -----------------------------------------------------------------------
@@ -274,6 +277,9 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.7  2001/03/21 15:38:39  fs
+ *  #82696# new font dialog
+ *
  *  Revision 1.6  2001/03/07 14:36:55  tbe
  *  added step property
  *
