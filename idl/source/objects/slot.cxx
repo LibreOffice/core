@@ -2,9 +2,9 @@
  *
  *  $RCSfile: slot.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mba $ $Date: 2002-06-03 11:49:52 $
+ *  last change: $Author: rt $ $Date: 2002-06-14 12:22:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1104,21 +1104,21 @@ void SvMetaSlot::Insert( SvSlotElementList& rList, const ByteString & rPrefix,
                 bFound = TRUE;
         }
 
-        DBG_ASSERT(!bFound, "SlotId ist doppelt !");
+        DBG_ASSERT(!bFound, "Duplicate SlotId!");
         nPos = bFound ? nMid : nLow;
     }
 
     DBG_ASSERT( nPos <= nListCount,
-        "nPos zu groá" );
+        "nPos too large" );
     DBG_ASSERT( nPos == nListCount || nId <=
         (USHORT) rList.GetObject(nPos)->xSlot->GetSlotId().GetValue(),
-        "Nachfolger hat kleinere SlotId" );
+        "Successor has lower SlotId" );
     DBG_ASSERT( nPos == 0 || nId >
         (USHORT) rList.GetObject(nPos-1)->xSlot->GetSlotId().GetValue(),
-        "Vorg„nger hat gr”áere SlotId" );
+        "Predecessor has higher SlotId" );
     DBG_ASSERT( nPos+1 >= nListCount || nId <
         (USHORT) rList.GetObject(nPos+1)->xSlot->GetSlotId().GetValue(),
-        "Nachfolger hat kleinere SlotId" );
+        "Successor has lower SlotId" );
 
     rList.Insert( new SvSlotElement( this, rPrefix ), nPos );
 
