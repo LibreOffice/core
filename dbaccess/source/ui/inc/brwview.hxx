@@ -2,9 +2,9 @@
  *
  *  $RCSfile: brwview.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-01-09 16:03:40 $
+ *  last change: $Author: oj $ $Date: 2001-03-19 12:43:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,7 @@ namespace dbaui
         void setSplitter(Splitter* _pSplitter);
         void setTreeView(DBTreeView* _pTreeView);
 
+        virtual long PreNotify( NotifyEvent& rNEvt );
     protected:
         virtual void GetFocus();
         virtual void resizeControl(Rectangle& rRect);

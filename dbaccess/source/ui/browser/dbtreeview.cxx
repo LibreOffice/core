@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtreeview.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-10 16:12:01 $
+ *  last change: $Author: oj $ $Date: 2001-03-19 12:39:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,8 +167,18 @@ void DBTreeView::setSelectHdl(const Link& _rHdl)
 {
     m_pTreeListBox->SetSelectHdl(_rHdl);
 }
+// -----------------------------------------------------------------------------
+long DBTreeView::PreNotify( NotifyEvent& rNEvt )
+{
+    long nDone = 0L;
+    if(rNEvt.GetType() == EVENT_GETFOCUS && m_pTreeListBox)
+    {
+        m_pTreeListBox->GrabFocus();
+        nDone = 1L;
+    }
+    return nDone ? nDone : Window::PreNotify(rNEvt);
+}
 
-// -------------------------------------------------------------------------
 
 // .........................................................................
 }   // namespace dbaui

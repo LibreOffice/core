@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtreeview.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2000-12-10 16:12:01 $
+ *  last change: $Author: oj $ $Date: 2001-03-19 12:39:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,8 @@ namespace dbaui
         void                setSelectHdl(const Link& _rHdl);
 
         DBTreeListBox*      getListBox() const;
+
+        virtual long PreNotify( NotifyEvent& rNEvt );
     };
 }
 
