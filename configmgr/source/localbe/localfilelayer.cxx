@@ -2,9 +2,9 @@
  *
  *  $RCSfile: localfilelayer.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-07-05 13:23:19 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 12:55:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -83,6 +83,9 @@
 #endif
 #ifndef _COM_SUN_STAR_CONFIGURATION_BACKEND_BACKENDACCESSEXCEPTION_HPP_
 #include <com/sun/star/configuration/backend/BackendAccessException.hpp>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYATTRIBUTE_HPP_
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 #endif
 
 namespace configmgr { namespace localbe {
@@ -600,6 +603,63 @@ uno::Reference<backend::XUpdatableLayer> createUpdatableLocalFileLayer(
     return xResult;
 }
 //------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
+enum
+{
+    LAYER_PROPERTY_URL = 1
+};
+
+#define PROPNAME( name ) rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( name ) )
+#define PROPTYPE( type ) getCppuType( static_cast< type const *>( 0 ) )
+
+// cppu::OPropertySetHelper
+cppu::IPropertyArrayHelper * SAL_CALL LayerPropertyHelper::newInfoHelper()
+{
+    using com::sun::star::beans::Property;
+    using namespace com::sun::star::beans::PropertyAttribute;
+
+    Property properties[] =
+    {
+        Property(PROPNAME("URL"), LAYER_PROPERTY_URL, PROPTYPE(rtl::OUString), READONLY)
+    };
+
+    return new cppu::OPropertyArrayHelper(properties, sizeof(properties)/sizeof(properties[0]));
+}
+
+#define MESSAGE( text ) rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ERROR: Layer Properties: " text ) )
+
+void SAL_CALL LayerPropertyHelper::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const uno::Any& /*rValue*/ )
+            throw (uno::Exception)
+{
+    namespace beans = com::sun::star::beans;
+
+    switch (nHandle)
+    {
+    case LAYER_PROPERTY_URL:
+        OSL_ENSURE(false, "Error: trying to set a READONLY property");
+        throw beans::PropertyVetoException(MESSAGE("Property 'URL' is read-only"),*this);
+
+    default:
+        OSL_ENSURE(false, "Error: trying to set an UNKNOWN property");
+        throw beans::UnknownPropertyException(MESSAGE("Trying to set an unknown property"),*this);
+    }
+}
+
+void SAL_CALL LayerPropertyHelper::getFastPropertyValue( uno::Any& rValue, sal_Int32 nHandle ) const
+{
+    switch (nHandle)
+    {
+    case LAYER_PROPERTY_URL:
+        rValue = uno::makeAny( this->getLayerUrl() );
+        break;
+
+    default:
+        OSL_ENSURE(false, "Error: trying to get an UNKNOWN property");
+        break;
+    }
+}
+
+//------------------------------------------------------------------------------
 } } // configmgr.localbe
 
