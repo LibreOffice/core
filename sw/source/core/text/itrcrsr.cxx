@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrcrsr.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: fme $ $Date: 2002-01-31 14:29:52 $
+ *  last change: $Author: fme $ $Date: 2002-02-05 16:49:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,6 +88,19 @@
 #ifndef _FRMATR_HXX
 #include <frmatr.hxx>
 #endif
+
+#ifdef VERTICAL_LAYOUT
+#ifndef _PAGEFRM_HXX
+#include <pagefrm.hxx>
+#endif
+#ifndef _PAGEDESC_HXX
+#include <pagedesc.hxx> // SwPageDesc
+#endif
+#ifndef SW_TGRDITEM_HXX
+#include <tgrditem.hxx>
+#endif
+#endif
+
 #include "txtcfg.hxx"
 #include "itrtxt.hxx"
 
@@ -547,10 +560,10 @@ void SwTxtCursor::_GetCharRect( SwRect* pOrig, const xub_StrLen nOfst,
                         if( ((SwMultiPortion*)pPor)->IsDouble() )
                             SetPropFont( 50 );
 #ifdef VERTICAL_LAYOUT
-                        const sal_Bool bHasGrid =
-                            GetTxtFrm()->GetGridValue( GRID_ON );
-                        const USHORT nRubyHeight =
-                            GetTxtFrm()->GetGridValue( RUBY_HEIGHT );
+                        GETGRID( GetTxtFrm()->FindPageFrm() )
+                        const sal_Bool bHasGrid = ( 0 != pGrid );
+                        const USHORT nRubyHeight = bHasGrid ?
+                                                   pGrid->GetRubyHeight() : 0;
 
                         if( nStart + pCurr->GetLen() <= nOfst && GetNext() &&
                             ( ! ((SwMultiPortion*)pPor)->IsRuby() ||

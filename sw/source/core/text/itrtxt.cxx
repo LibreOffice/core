@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrtxt.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: fme $ $Date: 2002-02-01 08:08:25 $
+ *  last change: $Author: fme $ $Date: 2002-02-05 16:49:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,15 @@
 
 #ifdef VERTICAL_LAYOUT
 #include "pormulti.hxx"
+#ifndef _PAGEFRM_HXX
+#include <pagefrm.hxx>
+#endif
+#ifndef _PAGEDESC_HXX
+#include <pagedesc.hxx> // SwPageDesc
+#endif
+#ifndef SW_TGRDITEM_HXX
+#include <tgrditem.hxx>
+#endif
 #endif
 
 #include "txtcfg.hxx"
@@ -171,11 +180,12 @@ void SwTxtIter::CalcRealHeight( sal_Bool bNewLine )
     pCurr->SetClipping( sal_False );
 
 #ifdef VERTICAL_LAYOUT
-    if ( pFrm->GetGridValue( GRID_ON ) )
+    GETGRID( pFrm->FindPageFrm() )
+    if ( pGrid )
     {
-        const USHORT nGridWidth = pFrm->GetGridValue( GRID_HEIGHT );
-        const USHORT nRubyHeight = pFrm->GetGridValue( RUBY_HEIGHT );
-        const sal_Bool bRubyTop = pFrm->GetGridValue( RUBY_TOP );
+        const USHORT nGridWidth = pGrid->GetBaseHeight();
+        const USHORT nRubyHeight = pGrid->GetRubyHeight();
+        const sal_Bool bRubyTop = ! pGrid->GetRubyTextBelow();
 
         USHORT nLineHeight = nGridWidth + nRubyHeight;
         USHORT nLineDist = nLineHeight;
@@ -510,13 +520,14 @@ USHORT SwTxtCursor::AdjustBaseLine( const SwLineLayout& rLine,
 
     USHORT nOfst = rLine.GetRealHeight() - rLine.Height();
 
-    const sal_Bool bHasGrid = pFrm->GetGridValue( GRID_ON );
+    GETGRID( pFrm->FindPageFrm() )
+    const sal_Bool bHasGrid = ( 0 != pGrid );
 
     if ( bHasGrid )
     {
-        const USHORT nGridWidth = pFrm->GetGridValue( GRID_HEIGHT );
-        const USHORT nRubyHeight = pFrm->GetGridValue( RUBY_HEIGHT );
-        const sal_Bool bRubyTop = pFrm->GetGridValue( RUBY_TOP );
+        const USHORT nGridWidth = pGrid->GetBaseHeight();
+        const USHORT nRubyHeight = pGrid->GetRubyHeight();
+        const sal_Bool bRubyTop = ! pGrid->GetRubyTextBelow();
 
         if ( GetInfo().IsMulti() )
             // we are inside the GetCharRect recursion for multi portions

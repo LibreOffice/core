@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: fme $ $Date: 2002-01-31 14:29:52 $
+ *  last change: $Author: fme $ $Date: 2002-02-05 16:49:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,12 +130,6 @@
 #endif
 #ifndef _FRMTOOL_HXX
 #include <frmtool.hxx>
-#endif
-
-#ifdef VERTICAL_LAYOUT
-#ifndef _PAGEDESC_HXX
-#include <pagedesc.hxx> // SwPageDesc
-#endif
 #endif
 
 #ifndef _DBG_LAY_HXX
@@ -332,39 +326,6 @@ long SwTxtFrm::SwitchVerticalToHorizontal( long nLimit ) const
     Point aTmp( nLimit, 0 );
     SwitchVerticalToHorizontal( aTmp );
     return aTmp.Y();
-}
-
-USHORT SwTxtFrm::GetGridValue( BYTE nWhich ) const
-{
-    const SwPageFrm* pPageFrm = FindPageFrm();
-
-    if ( GRID_ON == nWhich )
-        return bGridMode && pPageFrm->HasGrid();
-
-    long nGrid, nRuby, nLines;
-    BOOL bLower, bCell;
-    pPageFrm->GetGrid( nGrid, nRuby, nLines, bLower, bCell );
-
-    switch ( nWhich )
-    {
-    case GRID_HEIGHT :
-        return nGrid;
-        break;
-    case RUBY_HEIGHT :
-        return nRuby;
-        break;
-    case RUBY_TOP :
-        return ! bLower;
-        break;
-    case GRID_CELLS :
-        return bCell;
-        break;
-    default :
-        ASSERT( sal_False, "Unknown grid value" )
-        break;
-    }
-
-    return 0;
 }
 
 SwFrmSwapper::SwFrmSwapper( const SwTxtFrm* pTxtFrm, sal_Bool bSwapIfNotSwapped )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pormulti.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: fme $ $Date: 2002-02-05 16:20:01 $
+ *  last change: $Author: fme $ $Date: 2002-02-05 16:49:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,6 +125,15 @@
 #endif
 #ifndef _PAGEFRM_HXX
 #include <pagefrm.hxx>
+#endif
+
+#ifdef VERTICAL_LAYOUT
+#ifndef _PAGEDESC_HXX
+#include <pagedesc.hxx> // SwPageDesc
+#endif
+#ifndef SW_TGRDITEM_HXX
+#include <tgrditem.hxx>
+#endif
 #endif
 
 using namespace ::com::sun::star;
@@ -1315,10 +1324,18 @@ void SwTxtPainter::PaintMultiPortion( const SwRect &rPaint,
     SwMultiPortion& rMulti )
 {
 #ifdef VERTICAL_LAYOUT
-    const sal_Bool bHasGrid = pFrm->GetGridValue( GRID_ON );
-    const USHORT nGridWidth = pFrm->GetGridValue( GRID_HEIGHT );
-    const USHORT nRubyHeight = pFrm->GetGridValue( RUBY_HEIGHT );
-    const sal_Bool bRubyTop = pFrm->GetGridValue( RUBY_TOP );
+    GETGRID( pFrm->FindPageFrm() )
+    const sal_Bool bHasGrid = ( 0 != pGrid );
+    USHORT nGridWidth = 0;
+    USHORT nRubyHeight = 0;
+    sal_Bool bRubyTop = sal_False;
+
+    if ( bHasGrid )
+    {
+        nGridWidth = pGrid->GetBaseHeight();
+        nRubyHeight = pGrid->GetRubyHeight();
+        bRubyTop = ! pGrid->GetRubyTextBelow();
+    }
 
     // do not allow grid mode for first line in ruby portion
     const sal_Bool bRubyInGrid = bHasGrid && rMulti.IsRuby();
@@ -1737,10 +1754,18 @@ BOOL SwTxtFormatter::BuildMultiPortion( SwTxtFormatInfo &rInf,
     BOOL bRet = FALSE;
 
 #ifdef VERTICAL_LAYOUT
-    const sal_Bool bHasGrid = pFrm->GetGridValue( GRID_ON );
-    const USHORT nGridWidth = pFrm->GetGridValue( GRID_HEIGHT );
-    const USHORT nRubyHeight = pFrm->GetGridValue( RUBY_HEIGHT );
-    const sal_Bool bRubyTop = pFrm->GetGridValue( RUBY_TOP );
+    GETGRID( pFrm->FindPageFrm() )
+    const sal_Bool bHasGrid = ( 0 != pGrid );
+    USHORT nGridWidth = 0;
+    USHORT nRubyHeight = 0;
+    sal_Bool bRubyTop = sal_False;
+
+    if ( bHasGrid )
+    {
+        nGridWidth = pGrid->GetBaseHeight();
+        nRubyHeight = pGrid->GetRubyHeight();
+        bRubyTop = ! pGrid->GetRubyTextBelow();
+    }
 #endif
 
     do
@@ -2127,9 +2152,10 @@ SwLinePortion* SwTxtFormatter::MakeRestPortion( const SwLineLayout* pLine,
         {
             sal_Bool bRubyTop;
             sal_Bool* pRubyPos = 0;
-            if ( pFrm->GetGridValue( GRID_ON ) )
+            GETGRID( pFrm->FindPageFrm() )
+            if ( pGrid )
             {
-                bRubyTop = pFrm->GetGridValue( RUBY_TOP );
+                bRubyTop = ! pGrid->GetRubyTextBelow();
                 pRubyPos = &bRubyTop;
             }
 

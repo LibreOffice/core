@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfly.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: fme $ $Date: 2002-01-31 14:29:52 $
+ *  last change: $Author: fme $ $Date: 2002-02-05 16:49:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,6 +131,19 @@
 #ifndef _POLY_HXX //autogen
 #include <vcl/poly.hxx>
 #endif
+
+#ifdef VERTICAL_LAYOUT
+#ifndef _PAGEFRM_HXX
+#include <pagefrm.hxx>
+#endif
+#ifndef _PAGEDESC_HXX
+#include <pagedesc.hxx> // SwPageDesc
+#endif
+#ifndef SW_TGRDITEM_HXX
+#include <tgrditem.hxx>
+#endif
+#endif
+
 #include "txtfrm.hxx"     // SwTxtFrm
 #include "itrform2.hxx"   // SwTxtFormatter
 #include "porfly.hxx"     // NewFlyCntPortion
@@ -721,7 +734,8 @@ void SwTxtFormatter::CalcFlyWidth( SwTxtFormatInfo &rInf )
             rInf.Width( pFly->Fix() );
 
 #ifdef VERTICAL_LAYOUT
-        if ( pFrm->GetGridValue( GRID_ON ) )
+        GETGRID( pFrm->FindPageFrm() )
+        if ( pGrid )
         {
             const SwPageFrm* pPageFrm = pFrm->FindPageFrm();
             const SwLayoutFrm* pBody = pPageFrm->FindBodyCont();
@@ -732,7 +746,7 @@ void SwTxtFormatter::CalcFlyWidth( SwTxtFormatInfo &rInf )
                                     (pBody->*fnRect->fnGetPrtLeft)() :
                                     (pPageFrm->*fnRect->fnGetPrtLeft)();
 
-            const USHORT nGridWidth = pFrm->GetGridValue( GRID_HEIGHT );
+            const USHORT nGridWidth = pGrid->GetBaseHeight();
 
             SwTwips nStartX = GetLeftMargin();
             if ( bVert )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrpaint.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: fme $ $Date: 2002-02-01 12:35:24 $
+ *  last change: $Author: fme $ $Date: 2002-02-05 16:49:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,9 +114,16 @@
 #ifndef _ROOTFRM_HXX
 #include <rootfrm.hxx>
 #endif
+
 #ifdef VERTICAL_LAYOUT
 #ifndef _PAGEFRM_HXX
 #include <pagefrm.hxx>
+#endif
+#ifndef _PAGEDESC_HXX
+#include <pagedesc.hxx> // SwPageDesc
+#endif
+#ifndef SW_TGRDITEM_HXX
+#include <tgrditem.hxx>
 #endif
 #endif
 
@@ -356,7 +363,8 @@ void SwTxtPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
     // if no special vertical alignment is used,
     // we calculate Y value for the whole line
 #ifdef VERTICAL_LAYOUT
-    const sal_Bool bHasGrid = GetTxtFrm()->GetGridValue( GRID_ON );
+    GETGRID( GetTxtFrm()->FindPageFrm() )
+    const sal_Bool bHasGrid = ( 0 != pGrid );
     sal_Bool bAdjustBaseLine = GetLineInfo().HasSpecialAlign() || bHasGrid;
     if ( ! bAdjustBaseLine )
 #else

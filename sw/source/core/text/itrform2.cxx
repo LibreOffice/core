@@ -2,9 +2,9 @@
  *
  *  $RCSfile: itrform2.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: fme $ $Date: 2002-02-01 12:35:15 $
+ *  last change: $Author: fme $ $Date: 2002-02-05 16:49:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,7 +140,13 @@
 
 #ifdef VERTICAL_LAYOUT
 #ifndef _PAGEFRM_HXX
-#include <pagefrm.hxx>  // InvalidateSpelling
+#include <pagefrm.hxx>
+#endif
+#ifndef _PAGEDESC_HXX
+#include <pagedesc.hxx> // SwPageDesc
+#endif
+#ifndef SW_TGRDITEM_HXX
+#include <tgrditem.hxx>
 #endif
 #endif
 
@@ -491,10 +497,10 @@ void SwTxtFormatter::BuildPortions( SwTxtFormatInfo &rInf )
     SwLinePortion *pPor = NewPortion( rInf );
 
 #ifdef VERTICAL_LAYOUT
-    const sal_Bool bHasGrid =
-        pFrm->GetGridValue( GRID_ON ) && pFrm->GetGridValue( GRID_CELLS );
-    const USHORT nGridWidth =
-        pFrm->GetGridValue( GRID_HEIGHT );
+    GETGRID( pFrm->FindPageFrm() )
+    const sal_Bool bHasGrid = ( 0 != pGrid );
+    const USHORT nGridWidth = bHasGrid ?
+                              pGrid->GetBaseHeight() : 0;
 
     // used for grid mode only:
     // the pointer is stored, because after formatting of non-asian text,
@@ -1087,8 +1093,8 @@ SwLinePortion *SwTxtFormatter::WhichFirstPortion(SwTxtFormatInfo &rInf)
 #ifdef VERTICAL_LAYOUT
         if ( ! pPor && ! pCurr->GetPortion() )
         {
-            if ( GetTxtFrm()->GetGridValue( GRID_ON ) &&
-                 GetTxtFrm()->GetGridValue( GRID_CELLS ) )
+            GETGRID( GetTxtFrm()->FindPageFrm() )
+            if ( pGrid && GRID_LINES_CHARS == pGrid->GetGridType() )
                 pPor = new SwKernPortion( *pCurr );
         }
 #endif
@@ -1144,8 +1150,8 @@ SwLinePortion *SwTxtFormatter::WhichFirstPortion(SwTxtFormatInfo &rInf)
 #ifdef VERTICAL_LAYOUT
         if ( ! pPor && ! pCurr->GetPortion() )
         {
-            if ( GetTxtFrm()->GetGridValue( GRID_ON ) &&
-                 GetTxtFrm()->GetGridValue( GRID_CELLS ) )
+            GETGRID( GetTxtFrm()->FindPageFrm() )
+            if ( pGrid && GRID_LINES_CHARS == pGrid->GetGridType() )
                 pPor = new SwKernPortion( *pCurr );
         }
 #endif
@@ -1267,9 +1273,10 @@ SwLinePortion *SwTxtFormatter::NewPortion( SwTxtFormatInfo &rInf )
 #ifdef VERTICAL_LAYOUT
                     sal_Bool bRubyTop;
                     sal_Bool* pRubyPos = 0;
-                    if ( pFrm->GetGridValue( GRID_ON ) )
+                    GETGRID( GetTxtFrm()->FindPageFrm() )
+                    if ( pGrid )
                     {
-                        bRubyTop = pFrm->GetGridValue( RUBY_TOP );
+                        bRubyTop = ! pGrid->GetRubyTextBelow();
                         pRubyPos = &bRubyTop;
                     }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfrm.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: fme $ $Date: 2002-01-31 14:28:50 $
+ *  last change: $Author: fme $ $Date: 2002-02-05 16:50:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -497,9 +497,6 @@ public:
     // Calculates the a limit value when switching from
     // vertical to horizontal layout.
     long SwitchVerticalToHorizontal( long nLimit ) const;
-
-    // returns the size of a grid cell
-    USHORT GetGridValue( BYTE nWhich ) const;
 #endif
 };
 

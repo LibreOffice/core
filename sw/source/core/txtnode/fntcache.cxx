@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fntcache.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: fme $ $Date: 2002-02-01 12:37:41 $
+ *  last change: $Author: fme $ $Date: 2002-02-05 16:49:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,6 +107,15 @@
 #ifdef VERTICAL_LAYOUT
 #ifndef _TXTFRM_HXX
 #include <txtfrm.hxx>       // SwTxtFrm
+#endif
+#ifndef _PAGEFRM_HXX
+#include <pagefrm.hxx>
+#endif
+#ifndef _PAGEDESC_HXX
+#include <pagedesc.hxx> // SwPageDesc
+#endif
+#ifndef SW_TGRDITEM_HXX
+#include <tgrditem.hxx>
 #endif
 #endif
 
@@ -799,11 +808,12 @@ static sal_Char __READONLY_DATA sDoubleSpace[] = "  ";
         rInf.SetLen( rInf.GetText().Len() );
 
 #ifdef VERTICAL_LAYOUT
-    if ( rInf.GetFrm() && rInf.GetFrm()->GetGridValue( GRID_ON ) &&
-            rInf.GetFrm()->GetGridValue( GRID_CELLS ) && rInf.GetFont() &&
-            SW_CJK == rInf.GetFont()->GetActual() )
+    ASSERT( rInf.GetFrm(), "No frame today, now I am away" )
+    GETGRID( rInf.GetFrm()->FindPageFrm() )
+    if ( pGrid && GRID_LINES_CHARS == pGrid->GetGridType() &&
+         rInf.GetFont() && SW_CJK == rInf.GetFont()->GetActual() )
     {
-        const USHORT nGridWidth = rInf.GetFrm()->GetGridValue( GRID_HEIGHT );
+        const USHORT nGridWidth = pGrid->GetBaseHeight();
         long* pKernArray = new long[rInf.GetLen()];
 
         if ( pPrinter )
@@ -1450,11 +1460,12 @@ Size SwFntObj::GetTextSize( SwDrawTextInfo& rInf )
                            rInf.GetText().Len();
 
 #ifdef VERTICAL_LAYOUT
-    if ( rInf.GetFrm() && nLn && rInf.GetFrm()->GetGridValue( GRID_ON ) &&
-            rInf.GetFrm()->GetGridValue( GRID_CELLS ) && rInf.GetFont() &&
-            SW_CJK == rInf.GetFont()->GetActual() )
+    ASSERT( rInf.GetFrm(), "No frame today, now I am away" )
+    GETGRID( rInf.GetFrm()->FindPageFrm() )
+    if ( pGrid && GRID_LINES_CHARS == pGrid->GetGridType() && nLn &&
+         rInf.GetFont() && SW_CJK == rInf.GetFont()->GetActual() )
     {
-        const USHORT nGridWidth = rInf.GetFrm()->GetGridValue( GRID_HEIGHT );
+        const USHORT nGridWidth = pGrid->GetBaseHeight();
 
         OutputDevice* pOutDev;
 
@@ -1616,12 +1627,12 @@ xub_StrLen SwFntObj::GetCrsrOfst( SwDrawTextInfo &rInf )
     long nKernSum = 0;
 
 #ifdef VERTICAL_LAYOUT
-    if ( rInf.GetFrm() && rInf.GetLen() &&
-            rInf.GetFrm()->GetGridValue( GRID_ON ) &&
-            rInf.GetFrm()->GetGridValue( GRID_CELLS ) && rInf.GetFont() &&
-            SW_CJK == rInf.GetFont()->GetActual() )
+    ASSERT( rInf.GetFrm(), "No frame today, now I am away" )
+    GETGRID( rInf.GetFrm()->FindPageFrm() )
+    if ( pGrid && GRID_LINES_CHARS == pGrid->GetGridType() && rInf.GetLen() &&
+         rInf.GetFont() && SW_CJK == rInf.GetFont()->GetActual() )
     {
-        const USHORT nGridWidth = rInf.GetFrm()->GetGridValue( GRID_HEIGHT );
+        const USHORT nGridWidth = pGrid->GetBaseHeight();
 
         long nWidthPerChar = pKernArray[ rInf.GetLen() - 1 ] / rInf.GetLen();
 
@@ -1801,16 +1812,16 @@ xub_StrLen SwFont::GetTxtBreak( SwDrawTextInfo& rInf, long nTextWidth )
                                                : rInf.GetLen() );
 
 #ifdef VERTICAL_LAYOUT
-    if ( rInf.GetFrm() && rInf.GetFrm()->GetGridValue( GRID_ON ) &&
-            rInf.GetFrm()->GetGridValue( GRID_CELLS ) && rInf.GetFont() &&
-            SW_CJK == rInf.GetFont()->GetActual() )
+    ASSERT( rInf.GetFrm(), "No frame today, now I am away" )
+    GETGRID( rInf.GetFrm()->FindPageFrm() )
+    if ( pGrid && GRID_LINES_CHARS == pGrid->GetGridType() && nLn &&
+         rInf.GetFont() && SW_CJK == rInf.GetFont()->GetActual() )
     {
-        const USHORT nGridWidth = rInf.GetFrm()->GetGridValue( GRID_HEIGHT );
+        const USHORT nGridWidth = pGrid->GetBaseHeight();
 
         long* pKernArray = new long[rInf.GetLen()];
         rInf.GetOut().GetTextArray( rInf.GetText(), pKernArray,
                                     rInf.GetIdx(), rInf.GetLen() );
-
 
         long nWidthPerChar = pKernArray[ rInf.GetLen() - 1 ] / rInf.GetLen();
 
