@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paramdialog.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 15:16:44 $
+ *  last change: $Author: hjs $ $Date: 2004-06-26 17:31:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,42 +78,15 @@ ModalDialog DLG_PARAMETERS
     Size = MAP_APPFONT ( 6 + LIST_WIDTH + 3 + 6 + BUTTON_WIDTH + 6, 98 ) ;
     Moveable = TRUE ;
     Closeable = TRUE ;
-    Text = "Parameter-Eingabe" ;
+    Text [ de ] = "Parameter-Eingabe" ;
 
     FixedLine FL_PARAMS
     {
         Pos = MAP_APPFONT ( 4 , 3 ) ;
         Size = MAP_APPFONT ( 3 + LIST_WIDTH + 3 , 8 ) ;
-        Text = "~Parameter";
-        Text [ ENGLISH ] = "~Parameters";
-        Text[ english_us ] = "~Parameters";
-        Text[ portuguese ] = "~Parâmetros";
-        Text[ russian ] = "~Ïàğàìåòğû";
-        Text[ greek ] = "~ĞáñÜìåôñïé";
-        Text[ dutch ] = "~Parameter";
-        Text[ french ] = "Paramètres";
-        Text[ spanish ] = "~Parámetros";
-        Text[ italian ] = "~Parametri";
-        Text[ danish ] = "~Parametre";
-        Text[ swedish ] = "~Parametrar";
-        Text[ polish ] = "~Parametry";
-        Text[ portuguese_brazilian ] = "~Parâmetros";
-        Text[ japanese ] = "ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿(~P)";
-        Text[ korean ] = "ë§¤ê°œ ë³€ìˆ˜(~P)";
-        Text[ chinese_simplified ] = "å‚æ•°(~P)";
-        Text[ chinese_traditional ] = "åƒæ•¸(~P)";
-        Text[ arabic ] = "ÇáãÚáãÇÊ";
-        Text[ turkish ] = "Parametreler";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Paràmetres";
-        Text[ finnish ] = "~Parametrit";
-        Text[ thai ] = "~à¸à¸²à¸£à¸²à¸¡à¸´à¹€à¸•à¸­à¸£à¹Œ";
-        Text[ czech ] = "Parametry";
-        Text[ hebrew ] = "~Parameter";
-        Text[ hindi ] = "~à¤ªà¥ˆà¤°à¤¾à¤®à¥€à¤Ÿà¤°";
-        Text[ slovak ] = "~Parametre";
-        Text[ hungarian ] = "~ParamÃ©terek";
-        Text[ slovenian ] = "~Parametri";
+        Text [ de ] = "~Parameter";
+        Text [ en-US ] = "~Parameters";
+        Text [ x-comment ] = " ";
     };
     ListBox LB_ALLPARAMS
     {
@@ -126,36 +99,9 @@ ModalDialog DLG_PARAMETERS
     {
         Pos = MAP_APPFONT ( 7 , 12 + LIST_HEIGHT + 4 ) ;
         Size = MAP_APPFONT ( LIST_WIDTH , 8 ) ;
-        Text = "~Wert";
-        Text [ ENGLISH ] = "~Value";
-        Text[ english_us ] = "~Value";
-        Text[ portuguese ] = "~Valor";
-        Text[ russian ] = "~Çíà÷åíèå";
-        Text[ greek ] = "~ÔéìŞ";
-        Text[ dutch ] = "~Waarde";
-        Text[ french ] = "Valeur";
-        Text[ spanish ] = "~Valor";
-        Text[ italian ] = "~Valore";
-        Text[ danish ] = "~Værdi";
-        Text[ swedish ] = "~Värde";
-        Text[ polish ] = "~Wartoœæ";
-        Text[ portuguese_brazilian ] = "~Valor";
-        Text[ japanese ] = "å€¤(~V)";
-        Text[ korean ] = "ê°’(~V)";
-        Text[ chinese_simplified ] = "æ•°å€¼(~V)";
-        Text[ chinese_traditional ] = "æ•¸å€¼(~V)";
-        Text[ arabic ] = "ÇáŞíãÉ";
-        Text[ turkish ] = "~Değer";
-        Text[ language_user1 ] = " ";
-        Text[ catalan ] = "~Valor";
-        Text[ finnish ] = "~Arvo";
-        Text[ thai ] = "~à¸„à¹ˆà¸²";
-        Text[ czech ] = "Hodnota";
-        Text[ hebrew ] = "~Wert";
-        Text[ hindi ] = "~à¤®à¥‚à¤²à¥à¤¯";
-        Text[ slovak ] = "Hodno~ta";
-        Text[ hungarian ] = "Ã‰~rtÃ©k";
-        Text[ slovenian ] = "~Vrednost";
+        Text [ de ] = "~Wert";
+        Text [ en-US ] = "~Value";
+        Text [ x-comment ] = " ";
     };
     Edit ET_PARAM
     {
@@ -168,36 +114,9 @@ ModalDialog DLG_PARAMETERS
     {
         Pos = MAP_APPFONT ( 4 + 3 + LIST_WIDTH + 3 + 6 , 12 + LIST_HEIGHT + 4 + 8 + 3 + ( 12 - BUTTON_HEIGHT ) / 2) ;
         Size = MAP_APPFONT ( BUTTON_WIDTH , BUTTON_HEIGHT ) ;
-        Text = "~nächster";
-        Text [english] = "~next";
+        Text [ de ] = "~nächster";
         TabStop = TRUE ;
-        Text[ english_us ] = "~Next";
-        Text[ portuguese ] = "~seguinte";
-        Text[ russian ] = "~Ñëåäóşùèé";
-        Text[ greek ] = "åğüìå~íï";
-        Text[ dutch ] = "~volgende";
-        Text[ french ] = "Suivant";
-        Text[ spanish ] = "~Siguiente";
-        Text[ italian ] = "Successi~vo";
-        Text[ danish ] = "~næste";
-        Text[ swedish ] = "~nästa";
-        Text[ polish ] = "~Dalej";
-        Text[ portuguese_brazilian ] = "~próximo";
-        Text[ japanese ] = "æ¬¡ã¸(~N)";
-        Text[ korean ] = "ë‹¤ìŒ(~N)";
-        Text[ chinese_simplified ] = "ä¸‹ä¸€ä¸ª(~N)";
-        Text[ chinese_traditional ] = "ä¸‹ä¸€å€‹(~N)";
-        Text[ arabic ] = "ÇáÊÇáí";
-        Text[ turkish ] = "~Sonraki";
-        Text[ catalan ] = "~Següent";
-        Text[ finnish ] = "~Seuraava";
-        Text[ thai ] = "~à¸–à¸±à¸”à¹„à¸›";
-        Text[ czech ] = "DalÅ¡Ã­";
-        Text[ hebrew ] = "â€®×”×‘×â€¬";
-        Text[ hindi ] = "~à¤†à¤—à¥‡";
-        Text[ slovak ] = "Ä~alÅ¡Ã­";
-        Text[ hungarian ] = "~KÃ¶vetkezÅ‘";
-        Text[ slovenian ] = "~Naprej";
+        Text [ en-US ] = "~Next";
     };
     OKButton BT_OK
     {
@@ -212,72 +131,25 @@ ModalDialog DLG_PARAMETERS
         Size = MAP_APPFONT ( BUTTON_WIDTH , BUTTON_HEIGHT ) ;
         TabStop = TRUE ;
     };
-    Text [ ENGLISH ] = "Parameter input" ;
-    Text [ english_us ] = "Parameter Input" ;
-    Text [ portuguese_brazilian ] = "Entrada de parâmetros" ;
-    Text [ swedish ] = "Parameterinmatning" ;
-    Text [ danish ] = "Parameter-input" ;
-    Text [ italian ] = "Specifica parametro" ;
-    Text [ spanish ] = "Entrada de parámetro" ;
-    Text [ french ] = "Saisie de paramètre" ;
-    Text [ dutch ] = "Parameter opgeven" ;
-    Text [ portuguese ] = "Entrada de parâmetros" ;
-    Text[ chinese_simplified ] = "è¾“å…¥å‚æ•°å€¼";
-    Text[ russian ] = "Ââîä ïàğàìåòğà";
-    Text[ polish ] = "Wprowadzenie parametru";
-    Text[ japanese ] = "ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿ã®å…¥åŠ›";
-    Text[ chinese_traditional ] = "è¼¸å…¥åƒæ•¸å€¼";
-    Text[ arabic ] = "ÅÏÎÇá ÇáãÚáãÉ";
-    Text[ greek ] = "ÅéóáãùãŞ ğáñáìİôñùí";
-    Text[ korean ] = "ë§¤ê°œ ë³€ìˆ˜ ì…ë ¥";
-    Text[ turkish ] = "Parametre girişi";
+    Text [ en-US ] = "Parameter Input" ;
 
     String STR_COULD_NOT_CONVERT_PARAM
     {
-        Text = "Die Eingabe konnte nicht in einen gültigen Wert für die Spalte \"$name$\" umgewandelt werden";
-        Text [ english ] = "The given input could no be converted into a valid value for column \"$value$\".";
-        Text [ english_us ] = "The entry could not be converted to a valid value for the \"$name$\"column";
-        Text[ portuguese ] = "Foi impossível converter a entrada indicada num valor válido para a coluna \"$name$\".";
-        Text[ russian ] = "Íåâîçìîæíî ïğåîáğàçîâàòü çàïèñü â äîïóñòèìîå äëÿ ñòîëáöà \"$name$\" çíà÷åíèå.";
-        Text[ greek ] = "Äåí Şôáí äõíáôüí íá ãßíåé ç ìåôáôñïğŞ ôçò åéóáãùãŞò óå ìéá İãêõñç ôéìŞ ãéá ôçí óôŞëç \"$name$\".";
-        Text[ dutch ] = "De ingevoerde gegevens kunnen niet worden geconverteerd naar een geldige waarde voor de kolom \"$name$\".";
-        Text[ french ] = "Impossible de convertir la saisie en une valeur correcte pour la colonne \"$name$\".";
-        Text[ spanish ] = "La entrada no se pudo convertir en un valor válido para la columna \"$name$\".";
-        Text[ italian ] = "Impossibile convertire la voce in un valore valido per la colonna \"$name$\".";
-        Text[ danish ] = "Indtastningen kunne ikke konverteres til en gyldig værdi for kolonnen \"$name$\"";
-        Text[ swedish ] = "Inmatningen kunde inte omvandlas till ett giltigt värde för kolumnen \"$name$\".";
-        Text[ polish ] = "Nie mo¿na przekonwertowaæ wpisu w prawid³ow¹ wartoœæ z kolumny \"$name$\".";
-        Text[ portuguese_brazilian ] = "Não foi possível converter a entrada indicada num valor válido para a coluna \"$name$\".";
-        Text[ japanese ] = "å…¥åŠ›å€¤ã¯ <$name$> åˆ—ã§æœ‰åŠ¹ãªå€¤ã«å¤‰æ›ã§ãã¾ã›ã‚“ã§ã—ãŸã€‚";
-        Text[ korean ] = "ì…ë ¥ í•­ëª©ì´ \"$name$\" ì—´ì˜ ìœ íš¨ê°’ìœ¼ë¡œ ë³€í™˜í•˜ì§€ ëª»í–ˆìŠµë‹ˆë‹¤.";
-        Text[ chinese_simplified ] = "è¾“å…¥çš„å†…å®¹æ— æ³•è½¬æ¢æˆä¸€ä¸ªç”¨äºåˆ—\"$name$\"çš„æœ‰æ•ˆæ•°å€¼ã€‚";
-        Text[ chinese_traditional ] = "é€™å€‹è¼¸å…¥å€¼ç„¡æ³•è½‰æ›æˆæ¬„<$name$>çš„æœ‰æ•ˆå€¼ã€‚";
-        Text[ arabic ] = "ÊÚĞÑ ÊÍæíá ÇáÅÏÎÇá Åáì ŞíãÉ ÕÇáÍÉ ááÚãæÏ \"$name$\".";
-        Text[ turkish ] = "Girdi, \"$name$\" sutünu için geçerli bir değere dönüştürülemiyor";
-        Text[ catalan ] = "No s'ha pogut convertir l'entrada en un valor vàlid per a la columna \"$nom$\"";
-        Text[ finnish ] = "Merkintää ei voitu muuttaa sarakkeen $name$ kelvolliseksi arvoksi";
-        Text[ thai ] = "à¹„à¸¡à¹ˆà¸ªà¸²à¸¡à¸²à¸£à¸–à¹à¸›à¸¥à¸‡à¸£à¸²à¸¢à¸à¸²à¸£à¹€à¸›à¹‡à¸™à¸„à¹ˆà¸²à¸—à¸µà¹ˆà¸–à¸¹à¸à¸•à¹‰à¸­à¸‡à¸ªà¸³à¸«à¸£à¸±à¸šà¸„à¸­à¸¥à¸±à¸¡à¸™à¹Œ \"$name$\"à¹„à¸”à¹‰";
-        Text[ czech ] = "PoloÅ¾ka nemohla bÃ½t pÅ™evedena na platnou hodnotu sloupce \"$name$\".";
-        Text[ hebrew ] = "Die Eingabe konnte nicht in einen gÃ¼ltigen Wert fÃ¼r die Spalte \"$name$\" umgewandelt werden";
-        Text[ hindi ] = "à¤ªà¥à¤°à¤µà¤¿à¤·à¥à¤Ÿà¤¿ à¤•à¥‹ \"$name$\"à¤¸à¥à¤¤à¤‚à¤­ à¤•à¥‡à¤²à¤¿à¤ à¤®à¤¾à¤¨à¥à¤¯ à¤®à¥‚à¤²à¥à¤¯ à¤®à¥‡à¤‚ à¤¬à¤¦à¤² à¤¨à¤¹à¥€à¤‚ à¤¸à¤•à¤¤à¥‡ à¤¹à¥ˆ";
-        Text[ slovak ] = "PoloÅ¾ka nemohla byÅ¥ konvertovanÃ¡ na platnÃº hodnotu v stÄºpci \"$name$\"";
-        Text[ hungarian ] = "Az elem nem alakÃ­thatÃ³ Ã¡t a(z) \"$name\" mezÅ‘ Ã©rvÃ©nyes Ã©rtÃ©kÃ©vÃ©";
-        Text[ slovenian ] = "Vnosa ni bilo mogoÄe pretvoriti v veljavno vrednost za stolpec \"$name$\"";
+        Text [ de ] = "Die Eingabe konnte nicht in einen gültigen Wert für die Spalte \"$name$\" umgewandelt werden";
+        Text [ en-US ] = "The entry could not be converted to a valid value for the \"$name$\"column";
     };
-    Text[ catalan ] = "Entrada de paràmetres";
-    Text[ finnish ] = "Parametrin syöttö";
-    Text[ thai ] = "à¹ƒà¸ªà¹ˆà¸à¸²à¸£à¸²à¸¡à¸´à¹€à¸•à¸­à¸£à¹Œ";
-    Text[ czech ] = "Vstup parametru";
-    Text[ hebrew ] = "Parameter-Eingabe";
-    Text[ hindi ] = "à¤ªà¥ˆà¤°à¤¾à¤®à¥€à¤Ÿà¤° à¤‡à¤¨à¤ªà¥à¤Ÿà¥";
-    Text[ slovak ] = "Vstup parametra";
-    Text[ hungarian ] = "ParamÃ©ter bemenete";
-    Text[ slovenian ] = "Vnos parametra";
 };
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.30.26.3  2004/04/21 05:50:06  hjs
+ *  RESYNC: (1.30-1.31); FILE MERGED
+ *
+ *  Revision 1.31  2003/12/17 15:16:44  vg
+ *  INTEGRATION: CWS geordi2q11 (1.30.72); FILE MERGED
+ *  2003/12/16 11:05:14 hr 1.30.72.1: #111934#: join CWS ooo111fix1
+ *
  *  Revision 1.30.72.1  2003/12/16 11:05:14  hr
  *  #111934#: join CWS ooo111fix1
  *
