@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxaccessiblecomponent.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mt $ $Date: 2002-03-04 15:47:16 $
+ *  last change: $Author: pb $ $Date: 2002-03-05 08:22:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,8 +68,8 @@
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLECONTEXT_HPP_
 #include <drafts/com/sun/star/accessibility/XAccessibleContext.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLECOMPONENT_HPP_
-#include <drafts/com/sun/star/accessibility/XAccessibleComponent.hpp>
+#ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLEEXTENDEDCOMPONENT_HPP_
+#include <drafts/com/sun/star/accessibility/XAccessibleExtendedComponent.hpp>
 #endif
 #ifndef _DRAFTS_COM_SUN_STAR_ACCESSIBILITY_XACCESSIBLEEVENTBROADCASTER_HPP_
 #include <drafts/com/sun/star/accessibility/XAccessibleEventBroadcaster.hpp>
@@ -103,7 +103,7 @@ protected:
 typedef cppu::WeakComponentImplHelper4<
     ::drafts::com::sun::star::accessibility::XAccessible,
     ::drafts::com::sun::star::accessibility::XAccessibleContext,
-    ::drafts::com::sun::star::accessibility::XAccessibleComponent,
+    ::drafts::com::sun::star::accessibility::XAccessibleExtendedComponent,
     ::drafts::com::sun::star::accessibility::XAccessibleEventBroadcaster
     > VCLXAccessibleComponentBase;
 
@@ -177,6 +177,15 @@ public:
     void SAL_CALL removeFocusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFocusListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
     void SAL_CALL grabFocus(  ) throw (::com::sun::star::uno::RuntimeException);
     ::com::sun::star::uno::Any SAL_CALL getAccessibleKeyBinding(  ) throw (::com::sun::star::uno::RuntimeException);
+
+    // ::drafts::com::sun::star::accessibility::XAccessibleExtendedComponent
+    virtual sal_Int32 SAL_CALL getForeground(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Int32 SAL_CALL getBackground(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFont > SAL_CALL getFont(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::awt::FontDescriptor SAL_CALL getFontMetrics( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFont >& xFont ) throw (::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL isEnabled(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getTitledBorderText(  ) throw (::com::sun::star::uno::RuntimeException);
+    virtual ::rtl::OUString SAL_CALL getToolTipText(  ) throw (::com::sun::star::uno::RuntimeException);
 };
 
 /* ----------------------------------------------------------
