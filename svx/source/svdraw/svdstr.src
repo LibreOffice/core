@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdstr.src,v $
  *
- *  $Revision: 1.79 $
+ *  $Revision: 1.80 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 14:14:14 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 11:04:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -17442,7 +17442,11 @@ String SIP_SA_XMLATTRIBUTES
 
 String SIP_SA_TEXT_USEFIXEDCELLHEIGHT
 {
-    Text = "Schriftartunabh�ngigen Zeilenabstand verwenden";   Text [ ENGLISH ] = "Use font-independent line spacing";    Text [ english_us ] = "Use font-independent line spacing";  };
+    Text = "Schriftartunabh�ngigen Zeilenabstand verwenden";
+    Text [ ENGLISH ] = "Use font-independent line spacing";
+    Text [ english_us ] = "Use font-independent line spacing";
+    Text[ chinese_simplified ] = "使用字体独立行间距";
+};
 
 String SIP_SA_WORDWRAP
 {
