@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews6.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:55:39 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 10:10:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,6 +165,15 @@
 #endif
 #ifndef SD_WINDOW_HXX
 #include "Window.hxx"
+#endif
+#ifndef SD_FU_FORMATPAINTBRUSH_HXX
+#include "fuformatpaintbrush.hxx"
+#endif
+#ifndef _SDFORMATCLIPBOARD_HXX
+#include "formatclipboard.hxx"
+#endif
+#ifndef SD_DRAW_DOC_SHELL_HXX
+#include "DrawDocShell.hxx"
 #endif
 
 namespace sd {
@@ -585,6 +594,35 @@ void DrawViewShell::FuTemp04(SfxRequest& rReq)
     USHORT nSId = rReq.GetSlot();
     switch( nSId )
     {
+        case SID_FORMATPAINTBRUSH:
+        {
+            SdFormatClipboard* pFormatClipboard = GetDocSh()->pFormatClipboard;
+            if(pFormatClipboard)
+            {
+                if( pFormatClipboard->HasContent() )
+                {
+                    pFormatClipboard->Erase();
+                    GetViewFrame()->GetBindings().Invalidate(SID_FORMATPAINTBRUSH);
+                    Cancel();
+                    rReq.Ignore ();
+                }
+                else
+                {
+                    bool bPersistentCopy = false;
+                    const SfxItemSet *pArgs = rReq.GetArgs();
+                    if( pArgs && pArgs->Count() >= 1 )
+                    {
+                        bPersistentCopy = static_cast<bool>(((SfxBoolItem &)pArgs->Get(
+                                                SID_FORMATPAINTBRUSH)).GetValue());
+                    }
+
+                    pFormatClipboard->Copy( *pDrView, bPersistentCopy );
+                    pFuActual = new FuFormatPaintBrush( this, pWindow, pDrView, GetDoc(), rReq );
+                    GetViewFrame()->GetBindings().Invalidate(SID_FORMATPAINTBRUSH);
+                }
+            }
+        }
+        break;
         case SID_FONTWORK:
         {
             if ( rReq.GetArgs() )
