@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: hr $ $Date: 2004-05-10 15:46:40 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 12:12:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -540,15 +540,15 @@ void Edit::ImplRepaint( xub_StrLen nStart, xub_StrLen nEnd, bool bLayout )
     nStart = 0;
     nEnd = aText.Len();
 
-    long    nDXBuffer[256];
-    long*   pDXBuffer = NULL;
-    long*   pDX = nDXBuffer;
+    sal_Int32   nDXBuffer[256];
+    sal_Int32*  pDXBuffer = NULL;
+    sal_Int32*  pDX = nDXBuffer;
 
     if( aText.Len() )
     {
         if( 2*aText.Len() > sizeof(nDXBuffer)/sizeof(nDXBuffer[0]) )
         {
-            pDXBuffer = new long[2*(aText.Len()+1)];
+            pDXBuffer = new sal_Int32[2*(aText.Len()+1)];
             pDX = pDXBuffer;
         }
 
@@ -987,15 +987,15 @@ void Edit::ImplShowCursor( BOOL bOnlyIfVisible )
 
     long nTextPos = 0;
 
-    long    nDXBuffer[256];
-    long*   pDXBuffer = NULL;
-    long*   pDX = nDXBuffer;
+    sal_Int32   nDXBuffer[256];
+    sal_Int32*  pDXBuffer = NULL;
+    sal_Int32*  pDX = nDXBuffer;
 
     if( aText.Len() )
     {
         if( 2*aText.Len() > sizeof(nDXBuffer)/sizeof(nDXBuffer[0]) )
         {
-            pDXBuffer = new long[2*(aText.Len()+1)];
+            pDXBuffer = new sal_Int32[2*(aText.Len()+1)];
             pDX = pDXBuffer;
         }
 
@@ -1109,12 +1109,12 @@ xub_StrLen Edit::ImplGetCharPos( const Point& rWindowPos )
     xub_StrLen nIndex = STRING_LEN;
     String aText = ImplGetText();
 
-    long    nDXBuffer[256];
-    long*   pDXBuffer = NULL;
-    long*   pDX = nDXBuffer;
+    sal_Int32   nDXBuffer[256];
+    sal_Int32*  pDXBuffer = NULL;
+    sal_Int32*  pDX = nDXBuffer;
     if( 2*aText.Len() > sizeof(nDXBuffer)/sizeof(nDXBuffer[0]) )
     {
-        pDXBuffer = new long[2*(aText.Len()+1)];
+        pDXBuffer = new sal_Int32[2*(aText.Len()+1)];
         pDX = pDXBuffer;
     }
 
