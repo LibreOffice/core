@@ -2,9 +2,9 @@
  *
  *  $RCSfile: time.c,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pluby $ $Date: 2000-10-23 18:44:24 $
+ *  last change: $Author: svesik $ $Date: 2000-12-06 11:59:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -150,7 +150,7 @@ sal_Bool SAL_CALL osl_getTimeValueFromDateTime( oslDateTime* pDateTime, TimeValu
         tzset();
 
         // timezone corrections
-#ifdef MACOSX
+#if defined(MACOSX) || defined(FREEBSD) || defined(NETBSD)
         if ( (sal_Int64) aSeconds > (aSystemTime.tm_gmtoff * -1) )
             aSeconds += aSystemTime.tm_gmtoff;
 #else
@@ -185,7 +185,7 @@ sal_Bool SAL_CALL osl_getLocalTimeFromSystemTime( TimeValue* pSystemTimeVal, Tim
     tzset();
 
     // timezone an daylight saving time
-#ifdef MACOSX
+#if defined(MACOSX) || defined(FREEBSD) || defined(NETBSD)
     pLocalTime = localtime( &atime );
     bias = pLocalTime->tm_gmtoff * -1;
 #else
@@ -221,7 +221,7 @@ sal_Bool SAL_CALL osl_getSystemTimeFromLocalTime( TimeValue* pLocalTimeVal, Time
     tzset();
 
     // timezone an daylight saving time
-#ifdef MACOSX
+#if defined(MACOSX) || defined(FREEBSD) || defined(NETBSD)
     // Convert atime, which is a local time, to it's GMT equivalent. Then, get
     // the timezone offset for the local time for the GMT equivalent time. Note
     // that we cannot directly use local time to determine the timezone offset
