@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.rc,v $
 #
-#   $Revision: 1.28 $
+#   $Revision: 1.29 $
 #
-#   last change: $Author: svesik $ $Date: 2001-05-23 09:43:42 $
+#   last change: $Author: svesik $ $Date: 2001-05-28 10:51:40 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -134,6 +134,7 @@ RC_SUBDIRS =  \
 	offmgr \
 	offuh \
 	package \
+	psprint \
 	rdbmaker \
 	readlicense \
 	registry \
@@ -252,6 +253,7 @@ offapi : udkapi
 offmgr : basctl sch starmath uui
 offuh : codemaker drafts
 package : tools unotools
+psprint : tools unotools
 rdbmaker : cppuhelper
 registry : store salhelper
 remotebridges : bridges rdbmaker
@@ -267,7 +269,7 @@ scp : scptools
 scptools : setup2
 sd : offmgr sc
 setup2 : automation basic transex3 unoil unzip
-sfx2 : idl setup2 xmloff xmlscript
+sfx2 : framework idl setup2 xmloff xmlscript
 sip : sd
 sj2 : sandbox svtools
 so3 : inet sj2
@@ -288,7 +290,7 @@ udkapi : idlc
 unoil : jurt
 unotools : comphelper cppuhelper offuh tools
 uui : svtools
-vcl : rsc sot ucbhelper unotools xprinter
+vcl : rsc sot ucbhelper unotools xprinter psprint
 vos : sal
 wizards : offmgr
 xmlhelp : external jut XmlSearch
