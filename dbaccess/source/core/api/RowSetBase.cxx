@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetBase.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-18 16:32:08 $
+ *  last change: $Author: kz $ $Date: 2000-10-24 13:17:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,10 @@
 #ifndef _COMPHELPER_SEQSTREAM_HXX
 #include <comphelper/seqstream.hxx>
 #endif
+#ifndef _SOLAR_H
+#include <tools/solar.h>
+#endif
+
 using namespace dbaccess;
 using namespace connectivity;
 using namespace comphelper;
