@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attrdesc.src,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: vg $ $Date: 2003-12-17 19:18:20 $
+ *  last change: $Author: hr $ $Date: 2004-02-02 18:43:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2734,3 +2734,14 @@ String STR_GRID_LINES_CHARS
     Text[ hungarian ] = "Rács (sorok és karakterek)";
     Text[ slovenian ] = "Mreža (črte in znaki)";
 };
+String STR_FOLLOW_TEXT_FLOW
+{
+    Text = "Follow";
+    Text[ english_us ] = "Follow";
+};
+String STR_DONT_FOLLOW_TEXT_FLOW
+{
+    Text = "Dont follow";
+    Text[ english_us ] = "Dont follow";
+};
+
