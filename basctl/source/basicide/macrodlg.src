@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrodlg.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-19 21:07:43 $
+ *  last change: $Author: kz $ $Date: 2002-02-26 14:16:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,7 +154,7 @@ ModalDialog RID_MACROCHOOSER
         Text[ chinese_traditional ] = "ε·¨ι›†η„δΎ†ζΊ(~F)";
         Text[ arabic ] = "γΗίΡζ γδ";
         Text[ greek ] = "Μακροεντολή από";
-        Text[ korean ] = "λ§¤ν¬λ΅ μ¶μ²(~F)";
+        Text[ korean ] = "λ§¤ν¬λ΅ μ„μΉ(~F)";
         Text[ turkish ] = "Makro kaynaπύ";
         Text[ catalan ] = "Macro ~des de";
     };
