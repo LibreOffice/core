@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XXPathAPI.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-03-08 14:09:53 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 11:12:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,10 @@
 #ifndef __com_sun_star_xml_xpath_XXPathObject_idl__
 #include <com/sun/star/xml/xpath/XXPathObject.idl>
 #endif
+#ifndef __com_sun_star_xml_xpath_XXPathExtension_idl__
+#include <com/sun/star/xml/xpath/XXPathExtension.idl>
+#endif
+
 
 
 module com { module sun { module star { module xml { module xpath {
@@ -89,6 +93,9 @@ interface XXPathAPI : com::sun::star::uno::XInterface
     void unregisterNS(
             [in] string prefix,
             [in] string url);
+
+    void registerExtension( [in] string serviceName );
+    void registerExtensionInstance( [in] com::sun::star::xml::xpath::XXPathExtension aExtension);
 
     /**
     Eval XPath Expression

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: hr $ $Date: 2004-03-08 14:10:23 $
+#   last change: $Author: obo $ $Date: 2004-11-16 11:12:52 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -75,7 +75,12 @@ PACKAGE=com$/sun$/star$/xml$/xpath
 IDLFILES=\
     XPathObjectType.idl \
     XXPathObject.idl \
-    XXPathAPI.idl
+    XXPathAPI.idl \
+    XXPathExtension.idl \
+    Libxml2ExtensionHandle.idl \
+    XPathExtension.idl \
+    XPathAPI.idl \
+    Libxml2ExtensionHandle.idl
 
 # ------------------------------------------------------------------
 
