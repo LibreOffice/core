@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edtab.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:02:25 $
+ *  last change: $Author: vg $ $Date: 2003-05-28 12:51:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,8 +163,13 @@ const SwTable& SwEditShell::InsertTable( USHORT nRows, USHORT nCols,
         StartUndo( UNDO_START );
         GetDoc()->SplitNode( *pPos );
     }
+
+    /* #109161# If called from a shell the adjust item is propagated
+        from pPos to the new content nodes in the table.
+     */
     const SwTable *pTable = GetDoc()->InsertTable( *pPos, nRows, nCols,
-                                                eAdj, nInsTblFlags, pTAFmt );
+                                                   eAdj, nInsTblFlags, pTAFmt,
+                                                   0, TRUE );
     if( bEndUndo )
         EndUndo( UNDO_END );
 
