@@ -2,9 +2,9 @@
  *
  *  $RCSfile: _XPersistObject.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-05-27 12:26:49 $
+ *  last change:$Date: 2003-09-08 10:44:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,11 @@
 
 package ifc.io;
 
+import lib.MultiMethodTest;
+import util.ValueComparer;
+import util.dbg;
+import util.utils;
+
 import com.sun.star.beans.Property;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.beans.XPropertySetInfo;
@@ -73,10 +78,6 @@ import com.sun.star.io.XOutputStream;
 import com.sun.star.io.XPersistObject;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
-import lib.MultiMethodTest;
-import util.ValueComparer;
-import util.dbg;
-import util.utils;
 
 
 /**
@@ -202,9 +203,6 @@ public class _XPersistObject extends MultiMethodTest {
                 XPersistObject persCopy = (XPersistObject)
                         UnoRuntime.queryInterface(XPersistObject.class, oCopy);
 
-                XPropertySet copyps = (XPropertySet)UnoRuntime.queryInterface(
-                                                    XPropertySet.class, oCopy);
-
                 persCopy.read(iStream);
 
                 bResult = ( persCopy.getServiceName().equals(sname) );
@@ -245,8 +243,6 @@ public class _XPersistObject extends MultiMethodTest {
     */
     protected void initPipe() {
         try {
-            XPersistObject xpers = (XPersistObject)UnoRuntime.queryInterface
-                (XPersistObject.class,oObj);
             Object aPipe = ((XMultiServiceFactory)tParam.getMSF()).createInstance
                 ("com.sun.star.io.Pipe");
             Object istream = ((XMultiServiceFactory)tParam.getMSF()).createInstance
