@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: jb $ $Date: 2001-08-06 16:05:34 $
+#   last change: $Author: dg $ $Date: 2001-09-05 10:34:46 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -107,6 +107,45 @@ SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
 
 DEF1NAME=	$(SHL1TARGET)
 DEF1EXPORTFILE=	exports.dxp
+
+# --- Library -----------------------------------
+.IF "$(SVXLIGHT)" != ""
+
+SHL2TARGET=	$(CFGMGR_TARGET)$(CFGMGR_MAJOR)l
+.IF "$(OS)"=="MACOSX"
+#SHL2VERSIONMAP= $(TARGET).$(DLLPOSTFIX).map
+.ELSE
+SHL2VERSIONMAP= $(TARGET).map
+.ENDIF
+SHL2OBJS=$(SLOFILES)
+SHL2STDLIBS=\
+    $(COMPHELPERLIB)			\
+    $(CPPULIB)					\
+    $(CPPUHELPERLIB)			\
+    $(VOSLIB)					\
+    $(OSLLIB)					\
+    $(SALLIB)	\
+    $(UNOTOOLSLIB)	\
+    $(CPPRTLLIB)
+
+SHL2DEPN=
+SHL2IMPLIB=	i$(SHL2TARGET)
+SHL2LIBS=	$(SLB)$/registry.lib	\
+            $(SLB)$/treecache.lib	\
+            $(SLB)$/sxl_session.lib		\
+            $(SLB)$/misc.lib		\
+            $(SLB)$/xml.lib			\
+            $(SLB)$/treemgr.lib			\
+            $(SLB)$/sxl_api2.lib			\
+            $(SLB)$/api.lib			\
+            $(SLB)$/cm.lib
+
+SHL2DEF=	$(MISC)$/$(SHL2TARGET).def
+
+DEF2NAME=	$(SHL2TARGET)
+DEF2EXPORTFILE=	exports.dxp
+
+.ENDIF
 
 # --- Targets ----------------------------------
 
