@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CellProperties.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:56:41 $
+ *  last change: $Author: hr $ $Date: 2003-11-07 15:16:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,86 +85,105 @@
 
 //=============================================================================
 
-/** service that holds all cell properties of a table cell in a text document.
+/** service that holds all cell properties of a text table cell in a text document.
+
+    @see com::sun::star::text::Cell
  */
 service CellProperties
 {
     interface com::sun::star::beans::XPropertySet;
+
     //-------------------------------------------------------------------------
     /** contains the cell name, see SwXTextTable::getCellByName for more information
      */
     [property] string CellName;
+
     //-------------------------------------------------------------------------
     /** contains the background color.
      */
     [property] long BackColor;
+
     //-------------------------------------------------------------------------
     /** contains the URL to the background graphic.
      */
     [property] string BackGraphicURL;
+
     //-------------------------------------------------------------------------
     /** contains the name of the graphic filter of the background graphic.
      */
     [property] string BackGraphicFilter;
+
     //-------------------------------------------------------------------------
     /** determins the position of the background graphic.
      */
     [property] com::sun::star::style::GraphicLocation BackGraphicLocation;
+
     //-------------------------------------------------------------------------
     /** contains the number format.
      */
     [property] long NumberFormat;
+
     //-------------------------------------------------------------------------
     /** determins whether the background is transparent.
      */
     [property] boolean BackTransparent;
+
     //-------------------------------------------------------------------------
     /** contains the left border line.
      */
     [property] com::sun::star::table::BorderLine LeftBorder;
+
     //-------------------------------------------------------------------------
     /** contains the right border line.
      */
     [property] com::sun::star::table::BorderLine RightBorder;
+
     //-------------------------------------------------------------------------
     /** contains the top border line.
      */
     [property] com::sun::star::table::BorderLine TopBorder;
+
     //-------------------------------------------------------------------------
     /** contains the bottom border line.
      */
     [property] com::sun::star::table::BorderLine BottomBorder;
+
     //-------------------------------------------------------------------------
     /** contains the distance of the left border.
      */
     [property] long LeftBorderDistance;
+
     //-------------------------------------------------------------------------
     /** contains the distance of the right border.
      */
     [property] long RightBorderDistance;
+
     //-------------------------------------------------------------------------
     /** contains the distance of the top border.
      */
     [property] long TopBorderDistance;
+
     //-------------------------------------------------------------------------
     /** contains the distance of the bottom border.
      */
     [property] long BottomBorderDistance;
+
     //-------------------------------------------------------------------------
     /** contains user defined attributes.
      */
     [property] com::sun::star::container::XNameContainer UserDefinedAttributes;
+
     //-------------------------------------------------------------------------
     /** contains the text section the text table is contained in if there is any.
      */
     [readonly, property]com::sun::star::text::XTextSection TextSection;
+
     //-------------------------------------------------------------------------
     /** determins whether the cell is write protected or not.
      */
     [property] boolean IsProtected;
 
     //-------------------------------------------------------------------------
-    // DocMerge from xml: property com::sun::star::text::TextTableRow::VertOrient
     /** the vertical orientation of the text inside of the table cells in
         this row.@see VertOrientation
      */
