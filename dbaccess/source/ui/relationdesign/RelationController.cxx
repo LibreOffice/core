@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RelationController.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-01 13:29:19 $
+ *  last change: $Author: fs $ $Date: 2001-03-06 14:30:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -337,9 +337,12 @@ void SAL_CALL ORelationController::initialize( const Sequence< Any >& aArguments
         // check if this database supports relations
         if(!m_xConnection->getMetaData()->supportsIntegrityEnhancementFacility())
         {
-            OSQLMessageBox aDlg(getView(),ModuleRes(STR_RELATIONDESIGN),ModuleRes(STR_RELATIONDESIGN_NOT_AVAILABLE));
-            aDlg.Execute();
+            {
+                OSQLMessageBox aDlg(getView(),ModuleRes(STR_RELATIONDESIGN),ModuleRes(STR_RELATIONDESIGN_NOT_AVAILABLE));
+                aDlg.Execute();
+            }
             dispose();
+            throw Exception(::rtl::OUString::createFromAscii("The data source does not support relations."), static_cast< XController* >(this));
         }
 
         Reference<XTablesSupplier> xSup(m_xConnection,UNO_QUERY);
