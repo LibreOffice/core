@@ -2,9 +2,9 @@
  *
  *  $RCSfile: datman.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-26 20:56:49 $
+ *  last change: $Author: kz $ $Date: 2001-02-02 16:25:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,7 +63,7 @@
 //
 //
 //
-// $Author: kz $ $Date: 2001-01-26 20:56:49 $ $Revision: 1.6 $
+// $Author: kz $ $Date: 2001-02-02 16:25:25 $ $Revision: 1.7 $
 // $Logfile:   T:/sc/inc/scresid.hxv  $ $Workfile:   scresid.hxx  $
 //------------------------------------------------------------------
 
@@ -129,7 +129,7 @@ ModalDialog RID_DLG_MAPPING
         Text[ english_us ] = "Identifier";
         Text[ portuguese ] = "Abreviatura";
         Text[ russian ] = "Ρξκπΰωενθε";
-        Text[ greek ] = "Συντόμευση";
+        Text[ greek ] = "Αρχικά";
         Text[ dutch ] = "Initialen";
         Text[ french ] = "Abrιviation";
         Text[ spanish ] = "Abreviatura";
