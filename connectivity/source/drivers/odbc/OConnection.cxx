@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OConnection.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-25 07:21:55 $
+ *  last change: $Author: oj $ $Date: 2002-10-25 09:07:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -235,7 +235,7 @@ SQLRETURN OConnection::OpenConnection(const ::rtl::OUString& aConnectStr,sal_Int
 SQLRETURN OConnection::Construct(const ::rtl::OUString& url,const Sequence< PropertyValue >& info)  throw(SQLException)
 {
     m_aConnectionHandle  = SQL_NULL_HANDLE;
-    m_aURL  = url;
+    m_sURL  = url;
     m_aInfo = info;
 
     // Connection allozieren
@@ -642,7 +642,7 @@ SQLHANDLE OConnection::createStatementHandle()
         {
             OConnection* pConnection = cloneConnection();
             pConnection->acquire();
-            pConnection->Construct(m_aURL,m_aInfo);
+            pConnection->Construct(m_sURL,m_aInfo);
             pConnectionTemp = pConnection;
             bNew = sal_True;
         }

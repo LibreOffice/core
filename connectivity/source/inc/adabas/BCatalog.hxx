@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BCatalog.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-02 10:41:51 $
+ *  last change: $Author: oj $ $Date: 2002-10-25 09:05:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,8 +79,14 @@ namespace connectivity
         {
             OAdabasConnection*  m_pConnection;      // used to get the metadata
             SQLHANDLE           m_aConnectionHdl;   // used for odbc specific stuff
-            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData > m_xMetaData; // just to make things easier
 
+        protected:
+            /** builds the name which should be used to access the object later on in the collection.
+                Will only be called in fillNames.
+                @param  _xRow
+                    The cuurent row from a call of XDatabaseMetaData::getTables.
+            */
+            virtual ::rtl::OUString buildName(  const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow >& _xRow);
         public:
             // implementation of the pure virtual methods
             virtual void refreshTables();

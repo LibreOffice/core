@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FCatalog.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-04 06:37:49 $
+ *  last change: $Author: oj $ $Date: 2002-10-25 09:07:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,6 @@ using namespace connectivity::file;
 // -------------------------------------------------------------------------
 OFileCatalog::OFileCatalog(OConnection* _pCon) : connectivity::sdbcx::OCatalog(_pCon)
                 ,m_pConnection(_pCon)
-                ,m_xMetaData(m_pConnection->getMetaData(  ))
 {
 }
 // -------------------------------------------------------------------------
@@ -101,6 +100,11 @@ void SAL_CALL OFileCatalog::disposing()
     m_xMetaData = NULL;
     OFileCatalog_BASE::disposing();
 }
+// -----------------------------------------------------------------------------
+::rtl::OUString OFileCatalog::buildName(const Reference< XRow >& _xRow)
+{
+    return _xRow->getString(3);
+}
 // -------------------------------------------------------------------------
 void OFileCatalog::refreshTables()
 {
@@ -108,13 +112,8 @@ void OFileCatalog::refreshTables()
     Sequence< ::rtl::OUString > aTypes;
     Reference< XResultSet > xResult = m_xMetaData->getTables(Any(),
         ::rtl::OUString::createFromAscii("%"),::rtl::OUString::createFromAscii("%"),aTypes);
+    fillNames(xResult,aVector);
 
-    if(xResult.is())
-    {
-        Reference< XRow > xRow(xResult,UNO_QUERY);
-        while(xResult->next())
-            aVector.push_back(xRow->getString(3));
-    }
     if(m_pTables)
         m_pTables->reFill(aVector);
     else

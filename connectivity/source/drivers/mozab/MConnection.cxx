@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MConnection.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jmarmion $ $Date: 2002-08-08 15:07:23 $
+ *  last change: $Author: oj $ $Date: 2002-10-25 09:07:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,7 +205,7 @@ void OConnection::construct(const ::rtl::OUString& url,const Sequence< PropertyV
 {
     OSL_TRACE("IN OConnection::construct()\n" );
     //  open file
-    m_sURL = url;
+    setURL(url);
     //
     // Skip 'sdbc:mozab: part of URL
     //

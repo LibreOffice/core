@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BCatalog.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-05 06:15:40 $
+ *  last change: $Author: oj $ $Date: 2002-10-25 09:07:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,33 +100,32 @@ using namespace ::com::sun::star::lang;
 OAdabasCatalog::OAdabasCatalog(SQLHANDLE _aConnectionHdl, OAdabasConnection* _pCon) : connectivity::sdbcx::OCatalog(_pCon)
                 ,m_pConnection(_pCon)
                 ,m_aConnectionHdl(_aConnectionHdl)
-                ,m_xMetaData(m_pConnection->getMetaData(  ))
 {
+}
+// -----------------------------------------------------------------------------
+::rtl::OUString OAdabasCatalog::buildName(const Reference< XRow >& _xRow)
+{
+    ::rtl::OUString sName;
+    sName = _xRow->getString(2);
+    sName += OAdabasCatalog::getDot();
+    sName += _xRow->getString(3);
+
+    return sName;
 }
 // -------------------------------------------------------------------------
 void OAdabasCatalog::refreshTables()
 {
     TStringVector aVector;
-    Sequence< ::rtl::OUString > aTypes(1);
-    aTypes[0] = ::rtl::OUString::createFromAscii("%");
-    Reference< XResultSet > xResult = m_xMetaData->getTables(Any(),
-        ::rtl::OUString::createFromAscii("%"),::rtl::OUString::createFromAscii("%"),aTypes);
-
-    if(xResult.is())
     {
-        Reference< XRow > xRow(xResult,UNO_QUERY);
-        ::rtl::OUString aName;
-        const ::rtl::OUString& sDot = OAdabasCatalog::getDot();
-
-        while(xResult->next())
-        {
-            aName = xRow->getString(2);
-            aName += sDot;
-            aName += xRow->getString(3);
-            aVector.push_back(aName);
-        }
-        ::comphelper::disposeComponent(xResult);
+        Sequence< ::rtl::OUString > aTypes(1);
+        aTypes[0] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("%"));
+        Reference< XResultSet > xResult = m_xMetaData->getTables(Any(),
+                                                                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("%")),
+                                                                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("%")),
+                                                                aTypes);
+        fillNames(xResult,aVector);
     }
+
     if(m_pTables)
         m_pTables->reFill(aVector);
     else
@@ -141,20 +140,7 @@ void OAdabasCatalog::refreshViews()
     Reference< XResultSet > xResult = xStmt->executeQuery(
         ::rtl::OUString::createFromAscii("SELECT DISTINCT DOMAIN.VIEWDEFS.OWNER, DOMAIN.VIEWDEFS.VIEWNAME FROM DOMAIN.VIEWDEFS"));
 
-    if(xResult.is())
-    {
-        Reference< XRow > xRow(xResult,UNO_QUERY);
-        ::rtl::OUString aName;
-        const ::rtl::OUString& sDot = OAdabasCatalog::getDot();
-        while(xResult->next())
-        {
-            aName = xRow->getString(1);
-            aName += sDot;
-            aName += xRow->getString(2);
-            aVector.push_back(aName);
-        }
-        ::comphelper::disposeComponent(xResult);
-    }
+    fillNames(xResult,aVector);
     ::comphelper::disposeComponent(xStmt);
 
     if(m_pViews)

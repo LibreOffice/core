@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BDriver.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: oj $ $Date: 2002-08-21 13:13:43 $
+ *  last change: $Author: oj $ $Date: 2002-10-25 09:07:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -302,14 +302,14 @@ Reference< XTablesSupplier > SAL_CALL ODriver::getDataDefinitionByConnection( co
 
     Reference< XTablesSupplier > xTab;
     Reference< ::com::sun::star::lang::XUnoTunnel> xTunnel(connection,UNO_QUERY);
-    if(xTunnel.is())
+    if ( xTunnel.is() )
     {
 
         OAdabasConnection* pConnection = NULL;
         OAdabasConnection* pSearchConnection = (OAdabasConnection*)xTunnel->getSomething(OAdabasConnection::getUnoTunnelImplementationId());
         for (OWeakRefArray::iterator i = m_xConnections.begin(); m_xConnections.end() != i; ++i)
         {
-            if ((OAdabasConnection*) Reference< XConnection >::query(i->get().get()).get() == pSearchConnection)
+            if ( (OAdabasConnection*) Reference< XConnection >::query(i->get().get()).get() == pSearchConnection )
             {
                 pConnection = pSearchConnection;
                 break;
@@ -317,7 +317,7 @@ Reference< XTablesSupplier > SAL_CALL ODriver::getDataDefinitionByConnection( co
         }
 
 
-        if(pConnection)
+        if ( pConnection )
             xTab = pConnection->createCatalog();
     }
     return xTab;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TConnection.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-05 07:01:38 $
+ *  last change: $Author: oj $ $Date: 2002-10-25 09:05:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,7 @@ namespace connectivity
     {
     protected:
         ::osl::Mutex        m_aMutex;
+        ::rtl::OUString     m_sURL;
         rtl_TextEncoding    m_nTextEncoding; // the encoding which is used for all text conversions
     public:
 
@@ -110,6 +111,8 @@ namespace connectivity
         OMetaConnection() : OMetaConnection_BASE(m_aMutex) ,m_nTextEncoding(RTL_TEXTENCODING_MS_1252){}
 
         inline rtl_TextEncoding getTextEncoding() const { return m_nTextEncoding; }
+        inline ::rtl::OUString  getURL() const  { return m_sURL; }
+        inline void             setURL(const ::rtl::OUString& _rsUrl) { m_sURL = _rsUrl; }
 
         //XUnoTunnel
         virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw (::com::sun::star::uno::RuntimeException);

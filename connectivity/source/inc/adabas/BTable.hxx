@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BTable.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-17 15:53:48 $
+ *  last change: $Author: oj $ $Date: 2002-10-25 09:05:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,29 +71,39 @@
 #ifndef _CONNECTIVITY_ADABAS_BCONNECTION_HXX_
 #include "adabas/BConnection.hxx"
 #endif
+#ifndef CONNECTIVITY_TABLEHELPER_HXX
+#include "connectivity/TTableHelper.hxx"
+#endif
 
 namespace connectivity
 {
     namespace adabas
     {
-        typedef connectivity::sdbcx::OTable OTable_TYPEDEF;
+        typedef connectivity::OTableHelper OTable_TYPEDEF;
 
         ::rtl::OUString getTypeString(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xColProp);
 
-        class OAdabasTable :    public OTable_TYPEDEF
+        class OAdabasTable : public OTableHelper
         {
-            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData > m_xMetaData;
             OAdabasConnection* m_pConnection;
+        protected:
+            /** creates the column collection for the table
+                @param  _rNames
+                    The column names.
+            */
+            virtual sdbcx::OCollection* createColumns(const TStringVector& _rNames);
 
-            void refreshPrimaryKeys(std::vector< ::rtl::OUString>& _rKeys);
-            void refreshForgeinKeys(std::vector< ::rtl::OUString>& _rKeys);
+            /** creates the key collection for the table
+                @param  _rNames
+                    The key names.
+            */
+            virtual sdbcx::OCollection* createKeys(const TStringVector& _rNames);
 
-
-
-        public:
-            virtual void refreshColumns();
-            virtual void refreshKeys();
-            virtual void refreshIndexes();
+            /** creates the index collection for the table
+                @param  _rNames
+                    The index names.
+            */
+            virtual sdbcx::OCollection* createIndexes(const TStringVector& _rNames);
 
         public:
             OAdabasTable(   sdbcx::OCollection* _pTables,
@@ -112,18 +122,12 @@ namespace connectivity
             ::rtl::OUString getTableName() const { return m_Name; }
             ::rtl::OUString getSchema() const { return m_SchemaName; }
 
-            virtual void SAL_CALL acquire() throw();
-            virtual void SAL_CALL release() throw();
             // com::sun::star::lang::XUnoTunnel
             virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier ) throw(::com::sun::star::uno::RuntimeException);
             static ::com::sun::star::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
 
-            // XRename
-            virtual void SAL_CALL rename( const ::rtl::OUString& newName ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::container::ElementExistException, ::com::sun::star::uno::RuntimeException);
-
             // XAlterTable
             virtual void SAL_CALL alterColumnByName( const ::rtl::OUString& colName, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::uno::RuntimeException);
-            virtual void SAL_CALL alterColumnByIndex( sal_Int32 index, const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::uno::RuntimeException);
             // XNamed
             virtual ::rtl::OUString SAL_CALL getName() throw(::com::sun::star::uno::RuntimeException);
             /**

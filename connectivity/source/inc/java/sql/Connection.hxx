@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Connection.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-25 07:19:59 $
+ *  last change: $Author: oj $ $Date: 2002-10-25 09:05:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,23 +64,14 @@
 #ifndef _CONNECTIVITY_JAVA_LANG_OBJECT_HXX_
 #include "java/lang/Object.hxx"
 #endif
-#ifndef _CPPUHELPER_COMPBASE3_HXX_
-#include <cppuhelper/compbase3.hxx>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XCONNECTION_HPP_
-#include <com/sun/star/sdbc/XConnection.hpp>
-#endif
-#ifndef _COM_SUN_STAR_SDBC_XWARNINGSSUPPLIER_HPP_
-#include <com/sun/star/sdbc/XWarningsSupplier.hpp>
+#ifndef CONNECTIVITY_CONNECTION_HXX
+#include "TConnection.hxx"
 #endif
 #ifndef _CONNECTIVITY_COMMONTOOLS_HXX_
 #include "connectivity/CommonTools.hxx"
 #endif
 #ifndef _CONNECTIVITY_OSUBCOMPONENT_HXX_
 #include "OSubComponent.hxx"
-#endif
-#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
 #ifndef _CPPUHELPER_WEAKREF_HXX_
 #include <cppuhelper/weakref.hxx>
@@ -95,9 +86,7 @@ namespace connectivity
 {
     class java_sql_Driver;
 
-    typedef ::cppu::WeakComponentImplHelper3<       ::com::sun::star::sdbc::XConnection,
-                                                    ::com::sun::star::sdbc::XWarningsSupplier,
-                                                    ::com::sun::star::lang::XServiceInfo> java_sql_Connection_BASE;
+    typedef OMetaConnection java_sql_Connection_BASE;
 
     class java_sql_Connection : public java_sql_Connection_BASE,
                                 public java_lang_Object,
@@ -106,7 +95,6 @@ namespace connectivity
     {
         friend class OSubComponent<java_sql_Connection, java_sql_Connection_BASE>;
 
-        ::osl::Mutex        m_aMutex;
             ::com::sun::star::uno::WeakReference< ::com::sun::star::sdbc::XDatabaseMetaData > m_xMetaData;
         OWeakRefArray       m_aStatements;  //  vector containing a list
                                             //  of all the Statement objects

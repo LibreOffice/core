@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FCatalog.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-05 08:07:46 $
+ *  last change: $Author: oj $ $Date: 2002-10-25 09:05:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,13 @@ namespace connectivity
         {
         protected:
             OConnection*                                        m_pConnection;
-            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData > m_xMetaData;
+
+            /** builds the name which should be used to access the object later on in the collection.
+                Will only be called in fillNames.
+                @param  _xRow
+                    The current row from the resultset given to fillNames.
+            */
+            virtual ::rtl::OUString buildName(  const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow >& _xRow);
 
         public:
             virtual void refreshTables();

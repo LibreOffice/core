@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FConnection.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-05 08:07:47 $
+ *  last change: $Author: oj $ $Date: 2002-10-25 09:05:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,7 +129,6 @@ namespace connectivity
                                                         //  of all the Statement objects
                                                         //  for this Connection
                                                         //  an operation
-            String                      m_aURL;         //  URL of connection
             String                      m_aFilenameExtension;
             OFileDriver*                m_pDriver;      //  Pointer to the owning
                                                         //  driver object
@@ -200,7 +199,6 @@ namespace connectivity
             const String&   getExtension()              const { return m_aFilenameExtension; }
             sal_Bool        isCaseSensitveExtension()   const { return m_bCaseSensitiveExtension; }
             sal_Bool        matchesExtension( const String& _rExt ) const;
-            String          getURL()                    const { return m_aURL; }
             OFileDriver*    getDriver()                 const { return m_pDriver; }
             sal_Bool        showDeleted()               const { return m_bShowDeleted; }
 

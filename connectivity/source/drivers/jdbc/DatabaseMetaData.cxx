@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: oj $ $Date: 2001-10-26 14:01:12 $
+ *  last change: $Author: oj $ $Date: 2002-10-25 09:07:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2490,24 +2490,27 @@ sal_Bool SAL_CALL java_sql_DatabaseMetaData::supportsANSI92IntermediateSQL(  ) t
 ::rtl::OUString SAL_CALL java_sql_DatabaseMetaData::getURL(  ) throw(SQLException, RuntimeException)
 {
 
-    SDBThreadAttach t;
-    ::rtl::OUString aStr;
-    if( t.pEnv ){
+    ::rtl::OUString aValue = m_pConnection->getURL();
+    if ( !aValue.getLength() )
+    {
+        SDBThreadAttach t;
+        if( t.pEnv ){
 
-        // temporaere Variable initialisieren
-        char * cSignature = "()Ljava/lang/String;";
-        char * cMethodName = "getURL";
-        // Java-Call absetzen
-        jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
-        if( mID ){
-            jstring out = (jstring)t.pEnv->CallObjectMethod( object, mID);
-            ThrowSQLException(t.pEnv,*this);
-            if(out)
-                aStr = JavaString2String(t.pEnv,out);
-        } //mID
-    } //t.pEnv
-    // ACHTUNG: der Aufrufer wird Eigentuemer des zurueckgelieferten Zeigers !!!
-    return aStr;
+            // temporaere Variable initialisieren
+            char * cSignature = "()Ljava/lang/String;";
+            char * cMethodName = "getURL";
+            // Java-Call absetzen
+            jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
+            if( mID ){
+                jstring out = (jstring)t.pEnv->CallObjectMethod( object, mID);
+                ThrowSQLException(t.pEnv,*this);
+                if ( out )
+                    aValue = JavaString2String(t.pEnv,out);
+            } //mID
+        } //t.pEnv
+        // ACHTUNG: der Aufrufer wird Eigentuemer des zurueckgelieferten Zeigers !!!
+    }
+    return aValue;
 }
 // -------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL java_sql_DatabaseMetaData::getUserName(  ) throw(SQLException, RuntimeException)

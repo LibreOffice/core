@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BTable.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: oj $ $Date: 2002-10-07 12:55:29 $
+ *  last change: $Author: oj $ $Date: 2002-10-25 09:07:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,7 +124,7 @@ using namespace ::com::sun::star::lang;
 
 OAdabasTable::OAdabasTable( sdbcx::OCollection* _pTables,
                            OAdabasConnection* _pConnection)
-    :OTable_TYPEDEF(_pTables,sal_True)
+    :OTable_TYPEDEF(_pTables,_pConnection,sal_True)
     ,m_pConnection(_pConnection)
 {
     construct();
@@ -137,130 +137,32 @@ OAdabasTable::OAdabasTable( sdbcx::OCollection* _pTables,
                     const ::rtl::OUString& _Description ,
                     const ::rtl::OUString& _SchemaName,
                     const ::rtl::OUString& _CatalogName
-                ) : OTable_TYPEDEF(_pTables,
+                ) : OTableHelper(   _pTables,
+                                    _pConnection,
                                     sal_True,
                                     _Name,
-                                  _Type,
-                                  _Description,
-                                  _SchemaName,
-                                  _CatalogName)
+                                    _Type,
+                                    _Description,
+                                    _SchemaName,
+                                    _CatalogName)
                 ,m_pConnection(_pConnection)
 {
     construct();
 }
-// -------------------------------------------------------------------------
-void OAdabasTable::refreshColumns()
+// -----------------------------------------------------------------------------
+sdbcx::OCollection* OAdabasTable::createColumns(const TStringVector& _rNames)
 {
-    TStringVector aVector;
-    if(!isNew())
-    {
-        Reference< XResultSet > xResult = m_pConnection->getMetaData()->getColumns(Any(),
-                                                        m_SchemaName,m_Name,::rtl::OUString::createFromAscii("%"));
-
-        if(xResult.is())
-        {
-            Reference< XRow > xRow(xResult,UNO_QUERY);
-            while(xResult->next())
-                aVector.push_back(xRow->getString(4));
-            ::comphelper::disposeComponent(xResult);
-        }
-    }
-
-    if(m_pColumns)
-        m_pColumns->reFill(aVector);
-    else
-        m_pColumns  = new OColumns(this,m_aMutex,aVector);
+    return new OColumns(this,m_aMutex,_rNames);
 }
-// -------------------------------------------------------------------------
-void OAdabasTable::refreshPrimaryKeys(std::vector< ::rtl::OUString>& _rKeys)
+// -----------------------------------------------------------------------------
+sdbcx::OCollection* OAdabasTable::createKeys(const TStringVector& _rNames)
 {
-    Reference< XResultSet > xResult = m_pConnection->getMetaData()->getPrimaryKeys(Any(),m_SchemaName,m_Name);
-
-    if(xResult.is())
-    {
-        Reference< XRow > xRow(xResult,UNO_QUERY);
-        if(xResult->next()) // there can be only one primary key
-        {
-            ::rtl::OUString aPkName = xRow->getString(6);
-            _rKeys.push_back(aPkName);
-        }
-        ::comphelper::disposeComponent(xResult);
-    }
+    return new OKeys(this,m_aMutex,_rNames);
 }
-// -------------------------------------------------------------------------
-void OAdabasTable::refreshForgeinKeys(std::vector< ::rtl::OUString>& _rKeys)
+// -----------------------------------------------------------------------------
+sdbcx::OCollection* OAdabasTable::createIndexes(const TStringVector& _rNames)
 {
-    Reference< XResultSet > xResult = m_pConnection->getMetaData()->getImportedKeys(Any(),m_SchemaName,m_Name);
-    Reference< XRow > xRow(xResult,UNO_QUERY);
-
-    if ( xRow.is() )
-    {
-        while( xResult->next() )
-        {
-            sal_Int32 nKeySeq = xRow->getInt(9);
-            if ( nKeySeq == 1 )
-            { // only append when the sequnce number is 1 to forbid serveral inserting the same key name
-                ::rtl::OUString sFkName = xRow->getString(12);
-                if ( !xRow->wasNull() && sFkName.getLength() )
-                    _rKeys.push_back(sFkName);
-            }
-        }
-        ::comphelper::disposeComponent(xResult);
-    }
-}
-// -------------------------------------------------------------------------
-void OAdabasTable::refreshKeys()
-{
-    TStringVector aVector;
-
-    if(!isNew())
-    {
-        refreshPrimaryKeys(aVector);
-        refreshForgeinKeys(aVector);
-    }
-    if(m_pKeys)
-        m_pKeys->reFill(aVector);
-    else
-        m_pKeys = new OKeys(this,m_aMutex,aVector);
-}
-// -------------------------------------------------------------------------
-void OAdabasTable::refreshIndexes()
-{
-    TStringVector aVector;
-    if(!isNew())
-    {
-        // fill indexes
-        Reference< XResultSet > xResult = m_pConnection->getMetaData()->getIndexInfo(Any(),
-        m_SchemaName,m_Name,sal_False,sal_False);
-
-        if(xResult.is())
-        {
-            Reference< XRow > xRow(xResult,UNO_QUERY);
-            ::rtl::OUString aName;
-            const ::rtl::OUString& sDot = OAdabasCatalog::getDot();
-            ::rtl::OUString sPreviousRoundName;
-            while(xResult->next())
-            {
-                aName = xRow->getString(5);
-                if(aName.getLength())
-                    aName += sDot;
-                aName += xRow->getString(6);
-                if(aName.getLength())
-                {
-                    // don't insert the name if the last one we inserted was the same
-                    if (sPreviousRoundName != aName)
-                        aVector.push_back(aName);
-                }
-                sPreviousRoundName = aName;
-            }
-            ::comphelper::disposeComponent(xResult);
-        }
-    }
-
-    if(m_pIndexes)
-        m_pIndexes->reFill(aVector);
-    else
-        m_pIndexes  = new OIndexes(this,m_aMutex,aVector);
+    return new OIndexes(this,m_aMutex,_rNames);
 }
 //--------------------------------------------------------------------------
 Sequence< sal_Int8 > OAdabasTable::getUnoTunnelImplementationId()
@@ -287,54 +189,6 @@ sal_Int64 OAdabasTable::getSomething( const Sequence< sal_Int8 > & rId ) throw (
             (sal_Int64)this
                 :
             OTable_TYPEDEF::getSomething(rId);
-}
-// -------------------------------------------------------------------------
-// XRename
-void SAL_CALL OAdabasTable::rename( const ::rtl::OUString& newName ) throw(SQLException, ElementExistException, RuntimeException)
-{
-    ::osl::MutexGuard aGuard(m_aMutex);
-    checkDisposed(
-#ifdef GCC
-        ::connectivity::sdbcx::OTableDescriptor_BASE::rBHelper.bDisposed
-#else
-        rBHelper.bDisposed
-#endif
-        );
-
-    Reference<XDatabaseMetaData> xMeta = m_pConnection->getMetaData();
-    OSL_ENSURE(xMeta.is(),"No Metadata!");
-    if(!isNew())
-    {
-        ::rtl::OUString sSql = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RENAME "));
-        if ( m_Type == ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VIEW")) )
-            sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" VIEW "));
-        else
-            sSql += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(" TABLE "));
-
-        ::rtl::OUString sQuote = xMeta->getIdentifierQuoteString(  );
-        const ::rtl::OUString& sDot = OAdabasCatalog::getDot();
-
-        ::rtl::OUString sNewName;
-        sal_Int32 nPos = 0;
-        if(nPos = newName.indexOf(sDot) != -1)
-            sNewName = newName.copy(nPos+1);
-        else
-            sNewName = newName;
-
-        sSql += ::dbtools::quoteName(sQuote,m_SchemaName) + sDot + ::dbtools::quoteName(sQuote,m_Name)
-                    + ::rtl::OUString::createFromAscii(" TO ")
-                    + ::dbtools::quoteName(sQuote,sNewName);
-
-        Reference< XStatement > xStmt = m_pConnection->createStatement(  );
-        if(xStmt.is())
-        {
-            xStmt->execute(sSql);
-            ::comphelper::disposeComponent(xStmt);
-        }
-        OTable_TYPEDEF::rename(newName);
-    }
-    else
-        ::dbtools::qualifiedNameComponents(xMeta,newName,m_CatalogName,m_SchemaName,m_Name,::dbtools::eInTableDefinitions);
 }
 // -------------------------------------------------------------------------
 // XAlterTable
@@ -442,23 +296,6 @@ void SAL_CALL OAdabasTable::alterColumnByName( const ::rtl::OUString& colName, c
 
 }
 // -------------------------------------------------------------------------
-void SAL_CALL OAdabasTable::alterColumnByIndex( sal_Int32 index, const Reference< XPropertySet >& descriptor ) throw(SQLException, ::com::sun::star::lang::IndexOutOfBoundsException, RuntimeException)
-{
-    ::osl::MutexGuard aGuard(m_aMutex);
-    checkDisposed(
-#ifdef GCC
-        ::connectivity::sdbcx::OTableDescriptor_BASE::rBHelper.bDisposed
-#else
-        rBHelper.bDisposed
-#endif
-        );
-
-    Reference< XPropertySet > xOld;
-    if(::cppu::extractInterface(xOld,m_pColumns->getByIndex(index)) && xOld.is())
-        alterColumnByName(getString(xOld->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME))),descriptor);
-}
-
-// -------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL OAdabasTable::getName() throw(::com::sun::star::uno::RuntimeException)
 {
     ::rtl::OUString sName = m_SchemaName;
@@ -469,16 +306,6 @@ void SAL_CALL OAdabasTable::alterColumnByIndex( sal_Int32 index, const Reference
     }
     sName += m_Name;
     return sName;
-}
-// -----------------------------------------------------------------------------
-void SAL_CALL OAdabasTable::acquire() throw()
-{
-    OTable_TYPEDEF::acquire();
-}
-// -----------------------------------------------------------------------------
-void SAL_CALL OAdabasTable::release() throw()
-{
-    OTable_TYPEDEF::release();
 }
 // -----------------------------------------------------------------------------
 void OAdabasTable::alterColumnType(sal_Int32 nNewType,const ::rtl::OUString& _rColName, const Reference<XPropertySet>& _xDescriptor)
