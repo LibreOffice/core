@@ -2,9 +2,9 @@
  *
  *  $RCSfile: asyncnotification.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-17 11:25:20 $
+ *  last change: $Author: vg $ $Date: 2005-02-18 08:46:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,10 @@
 #include <cppuhelper/implbase1.hxx>
 #endif
 
+#ifndef INCLUDED_COMPHELPERDLLAPI_H
+#include "comphelper/comphelperdllapi.h"
+#endif
+
 #include <deque>
 #include <memory>
 
@@ -111,7 +115,7 @@ namespace comphelper
         Normally, you won't use this description directly, but instead derive own
         classes which can hold more information.
     */
-    class EventDescription : ::rtl::IReference
+    class COMPHELPER_DLLPUBLIC EventDescription : ::rtl::IReference
     {
     public:
         typedef sal_uInt16  EventType;
@@ -228,7 +232,7 @@ namespace comphelper
         events in the queue. As soon as you add an event, the thread is woken up, processes the event,
         and sleeps again.
     */
-    class AsyncEventNotifier
+    class COMPHELPER_DLLPUBLIC AsyncEventNotifier
                 :public AsyncEventNotifier_TBASE
                 ,public AsyncEventNotifier_BASE
     {
