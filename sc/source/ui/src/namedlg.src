@@ -2,9 +2,9 @@
  *
  *  $RCSfile: namedlg.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-20 15:37:40 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 20:04:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,7 +112,7 @@ ModelessDialog RID_SCDLG_NAMES
         Text [ portuguese_brazilian ] = "~Adicionar" ;
         Text [ portuguese ] = "~Adicionar" ;
         Text [ finnish ] = "~Lis��" ;
-        Text [ danish ] = "Tilf�j" ;
+        Text [ danish ] = "~Tilf�j" ;
         Text [ french ] = "Ajouter" ;
         Text [ swedish ] = "~L�gg till" ;
         Text [ dutch ] = "Toe~voegen" ;
@@ -136,6 +136,8 @@ ModelessDialog RID_SCDLG_NAMES
         Text[ hebrew ] = "‮הוספה‬";
         Text[ hindi ] = "~जोड़ो";
         Text[ slovak ] = "Prid~ať";
+        Text[ hungarian ] = "~Hozzáadás";
+        Text[ slovenian ] = "~Dodaj";
     };
     PushButton BTN_REMOVE
     {
@@ -149,7 +151,7 @@ ModelessDialog RID_SCDLG_NAMES
         Text [ portuguese_brazilian ] = "~Excluir" ;
         Text [ portuguese ] = "E~liminar" ;
         Text [ finnish ] = "~Poista" ;
-        Text [ danish ] = "Slet" ;
+        Text [ danish ] = "~Slet" ;
         Text [ french ] = "Supprimer" ;
         Text [ swedish ] = "~Radera" ;
         Text [ dutch ] = "~Wissen" ;
@@ -172,6 +174,8 @@ ModelessDialog RID_SCDLG_NAMES
         Text[ hebrew ] = "‮מחיקה‬";
         Text[ hindi ] = "~मिटाओ";
         Text[ slovak ] = "~Zmazať";
+        Text[ hungarian ] = "~Törlés";
+        Text[ slovenian ] = "~Izbriši";
     };
     FixedLine FL_NAME
     {
@@ -206,6 +210,8 @@ ModelessDialog RID_SCDLG_NAMES
         Text[ hebrew ] = "Name";
         Text[ hindi ] = "नाम";
         Text[ slovak ] = "Názov";
+        Text[ hungarian ] = "Név";
+        Text[ slovenian ] = "Ime";
     };
     ComboBox ED_NAME
     {
@@ -248,6 +254,8 @@ ModelessDialog RID_SCDLG_NAMES
         Text[ hebrew ] = "Zugeordnet zu";
         Text[ hindi ] = "केलिए निर्दिष्ट किया हुआ";
         Text[ slovak ] = "Priradené k";
+        Text[ hungarian ] = "Hozzárendelve a következőhöz:";
+        Text[ slovenian ] = "Dodeljen";
     };
     Edit ED_ASSIGN
     {
@@ -289,6 +297,8 @@ ModelessDialog RID_SCDLG_NAMES
         QuickHelpText[ hebrew ] = "Verkleinern";
         QuickHelpText[ hindi ] = "सिकुडना";
         QuickHelpText[ slovak ] = "Zmenšiť";
+        QuickHelpText[ hungarian ] = "Zsugorítás";
+        QuickHelpText[ slovenian ] = "Skrči";
     };
     MoreButton BTN_MORE
     {
@@ -331,6 +341,8 @@ ModelessDialog RID_SCDLG_NAMES
         Text[ hebrew ] = "Bereichsart";
         Text[ hindi ] = "विस्तीर्ण वर्ग";
         Text[ slovak ] = "Typ oblasti";
+        Text[ hungarian ] = "Terület típusa";
+        Text[ slovenian ] = "Vrsta področja";
     };
     CheckBox BTN_PRINTAREA
     {
@@ -343,7 +355,7 @@ ModelessDialog RID_SCDLG_NAMES
         Text [ portuguese_brazilian ] = "Intervalo de i~mpress�o" ;
         Text [ portuguese ] = "~Imprimir �rea" ;
         Text [ finnish ] = "~Tulostusalue" ;
-        Text [ danish ] = "Udskriftsomr�de" ;
+        Text [ danish ] = "~Udskriv omr�de" ;
         Text [ french ] = "~Zone d'impression" ;
         Text [ swedish ] = "Uts~kriftsomr�de" ;
         Text [ dutch ] = "~Afdrukbereik" ;
@@ -366,6 +378,8 @@ ModelessDialog RID_SCDLG_NAMES
         Text[ hebrew ] = "‮טווח הדפסה‬";
         Text[ hindi ] = "~छपाई फैलाव";
         Text[ slovak ] = "~Tlačiť oblasť";
+        Text[ hungarian ] = "~Nyomtatási tartomány";
+        Text[ slovenian ] = "Obseg ~tiskanja";
     };
     CheckBox BTN_CRITERIA
     {
@@ -378,7 +392,7 @@ ModelessDialog RID_SCDLG_NAMES
         Text [ portuguese_brazilian ] = "~Filtro" ;
         Text [ portuguese ] = "~Filtro" ;
         Text [ finnish ] = "~Suodatus" ;
-        Text [ danish ] = "Filter" ;
+        Text [ danish ] = "~Filter" ;
         Text [ french ] = "~Filtre" ;
         Text [ swedish ] = "Fil~ter" ;
         Text [ dutch ] = "Fi~lter" ;
@@ -401,6 +415,8 @@ ModelessDialog RID_SCDLG_NAMES
         Text[ hebrew ] = "‮סינון‬";
         Text[ hindi ] = "~फिल्टर";
         Text[ slovak ] = "~Filter";
+        Text[ hungarian ] = "~Szűrő";
+        Text[ slovenian ] = "~Filter";
     };
     CheckBox BTN_ROWHEADER
     {
@@ -413,7 +429,7 @@ ModelessDialog RID_SCDLG_NAMES
         Text [ portuguese_brazilian ] = "~Repetir linha" ;
         Text [ portuguese ] = "Linha a ~repetir" ;
         Text [ finnish ] = "Toista ~rivi" ;
-        Text [ danish ] = "Gentagelsesr�kke" ;
+        Text [ danish ] = "Gentag r�kke" ;
         Text [ french ] = "~Ligne � r�p�ter" ;
         Text [ swedish ] = "Upprepn~ingsrad" ;
         Text [ dutch ] = "~Rij herhalen" ;
@@ -436,6 +452,8 @@ ModelessDialog RID_SCDLG_NAMES
         Text[ hebrew ] = "W~iederholungszeile";
         Text[ hindi ] = "~पंक्ति को दुहराओ";
         Text[ slovak ] = "Opakovať ~riadok";
+        Text[ hungarian ] = "Sor ~ismétlése";
+        Text[ slovenian ] = "Ponovi v~rstico";
     };
     CheckBox BTN_COLHEADER
     {
@@ -448,7 +466,7 @@ ModelessDialog RID_SCDLG_NAMES
         Text [ portuguese_brazilian ] = "Repetir ~coluna" ;
         Text [ portuguese ] = "~Coluna a repetir" ;
         Text [ finnish ] = "Toista ~sarake" ;
-        Text [ danish ] = "Gentagelseskolonne" ;
+        Text [ danish ] = "Gentag ~kolonne" ;
         Text [ french ] = "~Colonne � r�p�ter" ;
         Text [ swedish ] = "~Upprepningskolumn" ;
         Text [ dutch ] = "~Kolom herhalen" ;
@@ -471,6 +489,8 @@ ModelessDialog RID_SCDLG_NAMES
         Text[ hebrew ] = "~Wiederholungsspalte";
         Text[ hindi ] = "~स्तंभ को दुहराओ";
         Text[ slovak ] = "Opakovať stĺpe~c";
+        Text[ hungarian ] = "~Oszlop ismétlése";
+        Text[ slovenian ] = "Ponovi ~stolpec";
     };
     String STR_ADD
     {
@@ -482,7 +502,7 @@ ModelessDialog RID_SCDLG_NAMES
         Text [ portuguese_brazilian ] = "~Adicionar" ;
         Text [ portuguese ] = "~Adicionar" ;
         Text [ finnish ] = "~Lis��" ;
-        Text [ danish ] = "Tilf�j" ;
+        Text [ danish ] = "~Tilf�j" ;
         Text [ french ] = "Ajouter" ;
         Text [ swedish ] = "~L�gg till" ;
         Text [ dutch ] = "Toe~voegen" ;
@@ -504,6 +524,8 @@ ModelessDialog RID_SCDLG_NAMES
         Text[ hebrew ] = "‮הוספה‬";
         Text[ hindi ] = "~जोड़ो";
         Text[ slovak ] = "Prid~ať";
+        Text[ hungarian ] = "~Hozzáadás";
+        Text[ slovenian ] = "~Dodaj";
     };
     String STR_MODIFY
     {
@@ -515,7 +537,7 @@ ModelessDialog RID_SCDLG_NAMES
         Text [ portuguese_brazilian ] = "Modif~icar" ;
         Text [ portuguese ] = "~Modificar" ;
         Text [ finnish ] = "~Muuta" ;
-        Text [ danish ] = "Modificer" ;
+        Text [ danish ] = "~Modificer" ;
         Text [ french ] = "Modifier" ;
         Text [ swedish ] = "�n~dra" ;
         Text [ dutch ] = "Wij~zigen" ;
@@ -537,6 +559,8 @@ ModelessDialog RID_SCDLG_NAMES
         Text[ hebrew ] = "~Ändern";
         Text[ hindi ] = "सुधा~रो";
         Text[ slovak ] = "Zmen~iť";
+        Text[ hungarian ] = "~Módosítás";
+        Text[ slovenian ] = "Spr~emeni";
     };
     String STR_INVALIDSYMBOL
     {
@@ -570,6 +594,8 @@ ModelessDialog RID_SCDLG_NAMES
         Text[ hebrew ] = "Ungültiger Ausdruck";
         Text[ hindi ] = "अमान्य वर्णन";
         Text[ slovak ] = "Neplatný výraz";
+        Text[ hungarian ] = "Érvénytelen kifejezés";
+        Text[ slovenian ] = "Neveljaven izraz";
     };
     Text[ chinese_simplified ] = "定义名称";
     Text[ russian ] = "���������� �����";
@@ -587,6 +613,6 @@ ModelessDialog RID_SCDLG_NAMES
     Text[ hebrew ] = "Namen festlegen";
     Text[ hindi ] = "नामों को परिभाषा दो";
     Text[ slovak ] = "Definovať názvy";
+    Text[ hungarian ] = "Nevek megadása";
+    Text[ slovenian ] = "Določi imena";
 };
-
-
