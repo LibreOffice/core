@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toolbox.cxx,v $
  *
- *  $Revision: 1.62 $
+ *  $Revision: 1.63 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 13:41:12 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 14:19:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,11 +59,12 @@
  *
  ************************************************************************/
 
-#define _SV_TOOLBOX_CXX
-
 #include <string.h>
-
 #include <vector>
+
+#ifndef _SV_SVSYS_HXX
+#include <svsys.h>
+#endif
 
 #ifndef _LIST_HXX
 #include <tools/list.hxx>
@@ -73,7 +74,7 @@
 #endif
 
 #ifndef _SV_RC_H
-#include <rc.h>
+#include <tools/rc.h>
 #endif
 #ifndef _SV_SVDATA_HXX
 #include <svdata.hxx>
@@ -102,9 +103,6 @@
 #ifndef _SV_SPIN_H
 #include <spin.h>
 #endif
-#ifndef _SV_ACCESS_HXX
-#include <access.hxx>
-#endif
 #define private public
 #ifndef _SV_TOOLBOX_HXX
 #include <toolbox.hxx>
@@ -116,11 +114,8 @@
 #ifndef _SV_BITMAP_HXX
 #include <bitmap.hxx>
 #endif
-#ifndef _SV_POLY_HXX
-#include <poly.hxx>
-#endif
-#ifndef _SV_SVSYS_HXX
-#include <svsys.h>
+#ifndef _TL_POLY_HXX
+#include <tools/poly.hxx>
 #endif
 #ifndef _SV_SALFRAME_HXX
 #include <salframe.hxx>
@@ -379,40 +374,6 @@ static ImplTBDragMgr* ImplGetTBDragMgr()
 
 static void ImplDrawConfigFrame( ToolBox* pThis, const Rectangle& rRect )
 {
-/*
-    Color   aBlackColor( COL_BLACK );
-    Pen     aOldPen;
-    Brush   aOldBrush;
-    Pen     aNullPen( PEN_NULL );
-
-    aOldPen = pThis->GetPen();
-    pThis->SetPen( aNullPen );
-    if ( pThis->IsSVLook() )
-    {
-        Color aFaceColor( COL_3DFACE );
-        Brush aBrush( aFaceColor, aBlackColor, BRUSH_50 );
-        aOldBrush = pThis->GetFillInBrush();
-        pThis->SetFillInBrush( aBrush );
-    }
-    else
-    {
-        Color aWhiteColor( COL_WHITE );
-        Brush aBrush( aBlackColor, aWhiteColor, BRUSH_50 );
-        aOldBrush = pThis->GetFillInBrush();
-        pThis->SetFillInBrush( aBrush );
-    }
-    pThis->DrawRect( Rectangle( rRect.Left(), rRect.Top(),
-                                rRect.Right(), rRect.Top()+2 ) );
-    pThis->DrawRect( Rectangle( rRect.Left(), rRect.Top(),
-                                rRect.Left()+2, rRect.Bottom() ) );
-    pThis->DrawRect( Rectangle( rRect.Left(), rRect.Bottom()-2,
-                                rRect.Right(), rRect.Bottom() ) );
-    pThis->DrawRect( Rectangle( rRect.Right()-2, rRect.Top(),
-                                rRect.Right(), rRect.Bottom() ) );
-
-    pThis->SetPen( aOldPen );
-    pThis->SetFillInBrush( aOldBrush );
-*/
 }
 
 // -----------------------------------------------------------------------
@@ -953,38 +914,6 @@ ImplTBDragMgr::~ImplTBDragMgr()
 
 ToolBox* ImplTBDragMgr::FindToolBox( const Rectangle& rRect )
 {
-#if 0
-    // ToolBox suchen
-    Point aPos = rRect.Center();
-    ToolBox* pBox = mpBoxList->First();
-    while ( pBox )
-    {
-        if ( pBox->IsReallyVisible() )
-        {
-            Window* pWindow = pBox->ImplGetFrameWindow()->FindWindow( aPos );
-            if ( pWindow && pBox->IsWindowOrChild( pWindow ) )
-                return pBox;
-        }
-        pBox = mpBoxList->Next();
-    }
-
-    // Falls so nicht gefunden wurde, suchen wir die ToolBox ueber das Rechteck
-    pBox = mpBoxList->First();
-    while ( pBox )
-    {
-        if ( pBox->IsReallyVisible() )
-        {
-            if ( pBox->IsFloatingMode() )
-            {
-                Rectangle aTempRect( pBox->GetPosPixel(), pBox->GetSizePixel() );
-                if ( aTempRect.IsOver( rRect ) )
-                    return pBox;
-            }
-        }
-
-        pBox = mpBoxList->Next();
-    }
-#endif
     ToolBox* pBox = mpBoxList->First();
     while ( pBox )
     {
@@ -1067,7 +996,6 @@ void ImplTBDragMgr::Dragging( const Point& rPos )
     if ( mnLineMode )
     {
         ImplLineSizing( mpDragBox, rPos, maRect, mnLineMode );
-        Point aPos = mpDragBox->OutputToScreenPixel( rPos );
         Point aOff = mpDragBox->OutputToScreenPixel( Point() );
         maRect.Move( aOff.X(), aOff.Y() );
         mpDragBox->Docking( rPos, maRect );
@@ -1487,9 +1415,9 @@ void ToolBox::ImplInit( Window* pParent, WinBits nStyle )
     mbDragging        = FALSE;
     mbHideStatusText  = FALSE;
     mbMenuStrings     = FALSE;
-    mbDummy1_Shift    = FALSE;
-    mbDummy2_KeyEvt   = FALSE;
-    mbDummy3_ChangingHighlight = FALSE;
+    mbIsShift         = FALSE;
+    mbIsKeyEvent = FALSE;
+    mbChangingHighlight = FALSE;
     meButtonType      = BUTTON_SYMBOL;
     meAlign           = WINDOWALIGN_TOP;
     meLastStyle       = POINTER_ARROW;
@@ -2623,7 +2551,6 @@ static void SetToolArrowClipregion( ToolBox* pBox, long nX, long nY,
                                long nSize = 6 )
 {
     WindowAlign     eAlign = pBox->meAlign;
-    long            n = 0;
     long            nHalfSize;
     if ( bLeft )
         eAlign = WINDOWALIGN_RIGHT;
@@ -4688,13 +4615,6 @@ BOOL ToolBox::IsCustomizeMode()
 
 // -----------------------------------------------------------------------
 
-void ToolBox::GetAccessObject( AccessObjectRef& rAcc ) const
-{
-    rAcc = new AccessObject( (void*) this, ACCESS_TYPE_TOOLBOX );
-}
-
-// -----------------------------------------------------------------------
-
 void ToolBox::GetFocus()
 {
     DockingWindow::GetFocus();
@@ -4742,9 +4662,9 @@ BOOL ToolBox::ImplActivateItem( KeyCode aKeyCode )
         if( pItem && pItem->mpWindow && HasFocus() )
         {
             ImplHideFocus();
-            mbDummy3_ChangingHighlight = TRUE;  // avoid focus change due to loose focus
+            mbChangingHighlight = TRUE;  // avoid focus change due to loose focus
             pItem->mpWindow->ImplControlFocus( GETFOCUS_TAB );
-            mbDummy3_ChangingHighlight = FALSE;
+            mbChangingHighlight = FALSE;
         }
         else
         {
@@ -4766,7 +4686,7 @@ BOOL ToolBox::ImplActivateItem( KeyCode aKeyCode )
                 }
             }
             mnMouseModifier = aKeyCode.GetModifier();
-            mbDummy2_KeyEvt = TRUE;
+            mbIsKeyEvent = TRUE;
             Activate();
             Click();
 
@@ -4779,7 +4699,7 @@ BOOL ToolBox::ImplActivateItem( KeyCode aKeyCode )
             ImplRemoveDel( &aDelData );
 
             Deactivate();
-            mbDummy2_KeyEvt = FALSE;
+            mbIsKeyEvent = FALSE;
             mnMouseModifier = 0;
         }
     }
@@ -4826,14 +4746,14 @@ BOOL ToolBox::ImplOpenItem( KeyCode aKeyCode )
         ImplToolItem* pItem = ImplGetItem( mnHighItemId );
 
         mnMouseModifier = aKeyCode.GetModifier();
-        mbDummy1_Shift = TRUE;
-        mbDummy2_KeyEvt = TRUE;
+        mbIsShift = TRUE;
+        mbIsKeyEvent = TRUE;
         Activate();
         Click();
         if (pItem->mnBits & TIB_REPEAT)
             Select();
-        mbDummy2_KeyEvt = FALSE;
-        mbDummy1_Shift = FALSE;
+        mbIsKeyEvent = FALSE;
+        mbIsShift = FALSE;
         mnMouseModifier = 0;
     }
     else
@@ -5026,9 +4946,9 @@ void ToolBox::KeyInput( const KeyEvent& rKEvt )
             {
                 Window *pFocusWindow = Application::GetFocusWindow();
                 ImplHideFocus();
-                mbDummy3_ChangingHighlight = TRUE;  // avoid focus change due to loose focus
+                mbChangingHighlight = TRUE;  // avoid focus change due to loose focus
                 pItem->mpWindow->ImplControlFocus( GETFOCUS_TAB );
-                mbDummy3_ChangingHighlight = FALSE;
+                mbChangingHighlight = FALSE;
                 if( pFocusWindow != Application::GetFocusWindow() )
                     Application::GetFocusWindow()->KeyInput( rKEvt );
             }
@@ -5174,10 +5094,10 @@ static USHORT ImplFindItemPos( const ImplToolItem* pItem, const std::vector< Imp
 void ToolBox::ImplChangeHighlight( ImplToolItem* pItem, BOOL bNoGrabFocus )
 {
     // avoid recursion due to focus change
-    if( mbDummy3_ChangingHighlight )
+    if( mbChangingHighlight )
         return;
 
-    mbDummy3_ChangingHighlight = TRUE;
+    mbChangingHighlight = TRUE;
 
     ImplToolItem* pOldItem = NULL;
     USHORT        oldPos = 0;
@@ -5239,7 +5159,7 @@ void ToolBox::ImplChangeHighlight( ImplToolItem* pItem, BOOL bNoGrabFocus )
         mnCurPos = TOOLBOX_ITEM_NOTFOUND;
     }
 
-    mbDummy3_ChangingHighlight = FALSE;
+    mbChangingHighlight = FALSE;
 }
 
 // -----------------------------------------------------------------------
@@ -5286,7 +5206,6 @@ BOOL ToolBox::ImplChangeHighlightUpDn( BOOL bUp, BOOL bNoCycle )
         }
     }
 
-    ImplToolItem* pOldItem = pItem;
     if( pItem )
     {
         ULONG pos = ImplFindItemPos( pItem, mpData->m_aItems );
