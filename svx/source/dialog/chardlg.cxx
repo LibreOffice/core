@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chardlg.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-21 15:25:43 $
+ *  last change: $Author: tl $ $Date: 2001-03-22 11:06:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3015,7 +3015,7 @@ SvxCharNamePage::SvxCharNamePage( Window* pParent, const SfxItemSet& rInSet ) :
     m_aWestFontSizeFT       ( this, ResId( FT_WEST_SIZE ) ),
     m_aWestFontSizeLB       ( this, ResId( LB_WEST_SIZE ) ),
     m_aWestFontLanguageFT   ( this, ResId( FT_WEST_LANG ) ),
-    m_aWestFontLanguageLB   ( this, ResId( LB_WEST_LANG ), TRUE ),
+    m_aWestFontLanguageLB   ( this, ResId( LB_WEST_LANG )),
 
     m_aEastLine             ( this, ResId( FL_EAST ) ),
     m_aEastFontNameFT       ( this, ResId( FT_EAST_NAME ) ),
@@ -3025,7 +3025,7 @@ SvxCharNamePage::SvxCharNamePage( Window* pParent, const SfxItemSet& rInSet ) :
     m_aEastFontSizeFT       ( this, ResId( FT_EAST_SIZE ) ),
     m_aEastFontSizeLB       ( this, ResId( LB_EAST_SIZE ) ),
     m_aEastFontLanguageFT   ( this, ResId( FT_EAST_LANG ) ),
-    m_aEastFontLanguageLB   ( this, ResId( LB_EAST_LANG ), TRUE ),
+    m_aEastFontLanguageLB   ( this, ResId( LB_EAST_LANG )),
 
     m_aPreviewLine          ( this, ResId( FL_CHAR_PREVIEW ) ),
     m_aPreviewWin           ( this, ResId( WIN_CHAR_PREVIEW ) ),
@@ -3043,6 +3043,10 @@ SvxCharNamePage::SvxCharNamePage( Window* pParent, const SfxItemSet& rInSet ) :
     m_pImpl->m_aTransparentText = String( ResId( STR_CHARNAME_TRANSPARENT ) );
 
     FreeResource();
+
+    m_aWestFontLanguageLB.SetLanguageList( LANG_LIST_WESTERN, FALSE, FALSE );
+    m_aEastFontLanguageLB.SetLanguageList( LANG_LIST_CJK,     FALSE, FALSE );
+
     Initialize();
 }
 
