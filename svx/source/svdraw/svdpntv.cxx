@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdpntv.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:04:37 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 14:50:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2172,6 +2172,130 @@ void SdrPaintView::SetApplicationDocumentColor(Color aDocumentColor)
         SdrPageView* pPageView = GetPageViewPvNum(a);
         pPageView->SetApplicationDocumentColor(aDocumentColor);
     }
+}
+
+// declaration extracted from svdedxv.cxx
+#define SPOTCOUNT   5
+
+Color SdrPaintView::CalcBackgroundColor( const Rectangle& rArea,
+                                         const SetOfByte& rVisibleLayers,
+                                         const SdrPage&   rCurrPage ) const
+{
+    // code extracted from SdrObjEditView::ImpGetTextEditBackgroundColor
+    svtools::ColorConfig aColorConfig;
+    Color aBackground(aColorConfig.GetColorValue(svtools::DOCCOLOR).nColor);
+
+    // #98988# test if we are in High contrast mode; if yes, take
+    // application background color
+    // #10049# wrong, always use svtools::DOCCOLOR as default and use document settings if
+    //         not hc mode
+    const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
+
+    if(!rStyleSettings.GetHighContrastMode())
+    {
+        // Ok, dann eben die Page durchsuchen!
+        Point aSpotPos[SPOTCOUNT];
+        Color aSpotColor[SPOTCOUNT];
+        ULONG nHeight( rArea.GetSize().Height() );
+        ULONG nWidth( rArea.GetSize().Width() );
+        ULONG nWidth14  = nWidth / 4;
+        ULONG nHeight14 = nHeight / 4;
+        ULONG nWidth34  = ( 3 * nWidth ) / 4;
+        ULONG nHeight34 = ( 3 * nHeight ) / 4;
+
+        USHORT i;
+        for ( i = 0; i < SPOTCOUNT; i++ )
+        {
+            // Es wird anhand von fuenf Spots die Farbe untersucht
+            switch ( i )
+            {
+                case 0 :
+                {
+                    // Center-Spot
+                    aSpotPos[i] = rArea.Center();
+                }
+                break;
+
+                case 1 :
+                {
+                    // TopLeft-Spot
+                    aSpotPos[i] = rArea.TopLeft();
+                    aSpotPos[i].X() += nWidth14;
+                    aSpotPos[i].Y() += nHeight14;
+                }
+                break;
+
+                case 2 :
+                {
+                    // TopRight-Spot
+                    aSpotPos[i] = rArea.TopLeft();
+                    aSpotPos[i].X() += nWidth34;
+                    aSpotPos[i].Y() += nHeight14;
+                }
+                break;
+
+                case 3 :
+                {
+                    // BottomLeft-Spot
+                    aSpotPos[i] = rArea.TopLeft();
+                    aSpotPos[i].X() += nWidth14;
+                    aSpotPos[i].Y() += nHeight34;
+                }
+                break;
+
+                case 4 :
+                {
+                    // BottomRight-Spot
+                    aSpotPos[i] = rArea.TopLeft();
+                    aSpotPos[i].X() += nWidth34;
+                    aSpotPos[i].Y() += nHeight34;
+                }
+                break;
+
+            }
+
+            aSpotColor[i] = Color( COL_WHITE );
+            rCurrPage.GetFillColor(aSpotPos[i], rVisibleLayers, bLayerSortedRedraw, aSpotColor[i]);
+        }
+
+        USHORT aMatch[SPOTCOUNT];
+
+        for ( i = 0; i < SPOTCOUNT; i++ )
+        {
+            // Wurden gleiche Spot-Farben gefuden?
+            aMatch[i] = 0;
+
+            for ( USHORT j = 0; j < SPOTCOUNT; j++ )
+            {
+                if( j != i )
+                {
+                    if( aSpotColor[i] == aSpotColor[j] )
+                    {
+                        aMatch[i]++;
+                    }
+                }
+            }
+        }
+
+        // Das hoechste Gewicht hat der Spot in der Mitte
+        aBackground = aSpotColor[0];
+
+        for ( USHORT nMatchCount = SPOTCOUNT - 1; nMatchCount > 1; nMatchCount-- )
+        {
+            // Welche Spot-Farbe wurde am haeufigsten gefunden?
+            for ( USHORT i = 0; i < SPOTCOUNT; i++ )
+            {
+                if( aMatch[i] == nMatchCount )
+                {
+                    aBackground = aSpotColor[i];
+                    nMatchCount = 1;   // Abbruch auch der aeusseren for-Schleife
+                    break;
+                }
+            }
+        }
+    }
+
+    return aBackground;
 }
 
 // eof
