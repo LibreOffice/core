@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objserv.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: mba $ $Date: 2002-05-27 14:01:33 $
+ *  last change: $Author: mba $ $Date: 2002-05-29 15:00:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -343,6 +343,15 @@ sal_Bool SfxObjectShell::GUISaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
     if ( pRequest->GetArgs() )
         pParams->Put( *pRequest->GetArgs() );
 
+    SfxItemSet* pMedSet = pMedium->GetItemSet();
+    SFX_ITEMSET_ARG( pMedSet, pOptionsItem, SfxStringItem, SID_FILE_FILTEROPTIONS, sal_False );
+    if ( pOptionsItem && pParams->GetItemState(SID_FILE_FILTEROPTIONS) != SFX_ITEM_SET )
+        pParams->Put( *pOptionsItem );
+
+    SFX_ITEMSET_ARG( pMedSet, pDataItem, SfxUsrAnyItem, SID_FILTER_DATA, sal_False );
+    if ( pDataItem && pParams->GetItemState(SID_FILTER_DATA) != SFX_ITEM_SET )
+        pParams->Put( *pDataItem );
+
     sal_Bool bDialogUsed = sal_False;
     sal_Bool bUseFilterOptions = sal_False;
 
@@ -357,10 +366,11 @@ sal_Bool SfxObjectShell::GUISaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
 
     if ( !pFileNameItem )
     {
+        // we need to show the file dialog
         bDialogUsed = sal_True;
         if(! bUrl )
         {
-            // check if we have a filter which allows for filter options
+            // check if we have a filter which allows for filter options, so we need a corresponding checkbox in the dialog
             sal_Bool bAllowOptions = sal_False;
             const SfxFilter* pFilter;
             SfxFilterFlags nMust = SFX_FILTER_EXPORT | ( bSaveTo ? 0 : SFX_FILTER_IMPORT );
@@ -497,15 +507,42 @@ sal_Bool SfxObjectShell::GUISaveAs_Impl(sal_Bool bUrl, SfxRequest *pRequest)
             {
                 try
                 {
-                    if ( bIsExport )
-                        bUseFilterOptions = pFilter && ( pFilter->GetFilterFlags() & SFX_FILTER_USESOPTIONS );
-                    else
-                        if ( bAllowOptions )
-                        {
-                            Any aValue = xExtFileDlg->getValue( ExtendedFilePickerElementIds::CHECKBOX_FILTEROPTIONS, 0 );
-                            aValue >>= bUseFilterOptions;
+                    if( xFilterCFG.is() )
+                    {
+                        try {
+                            Sequence < PropertyValue > aProps;
+                            Any aAny = xFilterCFG->getByName( aFilterName );
+                               if ( aAny >>= aProps )
+                               {
+                                   ::rtl::OUString aServiceName;
+                                   sal_Int32 nPropertyCount = aProps.getLength();
+                                   for( sal_Int32 nProperty=0; nProperty < nPropertyCount; ++nProperty )
+                                       if( aProps[nProperty].Name.equals( ::rtl::OUString::createFromAscii("UIComponent")) )
+                                       {
+                                        ::rtl::OUString aServiceName;
+                                           aProps[nProperty].Value >>= aServiceName;
+                                        if( aServiceName.getLength() )
+                                            bUseFilterOptions = sal_True;
+                                    }
+                            }
                         }
-                    pParams->Put( SfxBoolItem( SID_USE_FILTEROPTIONS, bUseFilterOptions ) );
+                        catch( Exception& )
+                        {
+                        }
+                    }
+
+                    if ( !bIsExport && bUseFilterOptions )
+                    {
+                        // for exporters: always show dialog if format uses options
+                        // for save: show dialog if format uses options and no options given or if forced by user
+                        Any aValue = xExtFileDlg->getValue( ExtendedFilePickerElementIds::CHECKBOX_FILTEROPTIONS, 0 );
+                        aValue >>= bUseFilterOptions;
+                        if ( !bUseFilterOptions )
+                            bUseFilterOptions = pParams->GetItemState( SID_FILTER_DATA ) != SFX_ITEM_SET &&
+                                                pParams->GetItemState( SID_FILE_FILTEROPTIONS ) != SFX_ITEM_SET;
+                    }
+
+                    //pParams->Put( SfxBoolItem( SID_USE_FILTEROPTIONS, bUseFilterOptions ) );
                 }
                 catch( IllegalArgumentException ){}
             }
