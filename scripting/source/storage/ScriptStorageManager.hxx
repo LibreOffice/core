@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptStorageManager.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: dfoster $ $Date: 2002-10-23 14:22:03 $
+ *  last change: $Author: dfoster $ $Date: 2002-10-24 12:00:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,13 +99,13 @@ public:
     // XServiceInfo implementation
     //======================================================================
     virtual ::rtl::OUString SAL_CALL getImplementationName()
-        throw(css::uno::RuntimeException);
+        throw( css::uno::RuntimeException );
     //----------------------------------------------------------------------
     virtual sal_Bool SAL_CALL supportsService( const ::rtl::OUString& ServiceName )
-        throw(css::uno::RuntimeException);
+        throw( css::uno::RuntimeException );
     //----------------------------------------------------------------------
     virtual css::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()
-        throw(css::uno::RuntimeException);
+        throw( css::uno::RuntimeException );
     //======================================================================
 
     //XScriptStorageManager
@@ -123,7 +123,7 @@ public:
     */
     virtual sal_Int32 SAL_CALL createScriptStorage(
             const css::uno::Reference< css::ucb::XSimpleFileAccess > & xSFA )
-            throw (css::uno::RuntimeException);
+            throw ( css::uno::RuntimeException );
     //----------------------------------------------------------------------
     /**
         create a ScriptStorage using the XSimpleFileAccess, and a string URL
@@ -142,7 +142,7 @@ public:
         createScriptStorageWithURI(
             const css::uno::Reference< css::ucb::XSimpleFileAccess >& xSFA,
             const ::rtl::OUString& stringURI )
-            throw (css::uno::RuntimeException);
+            throw ( css::uno::RuntimeException );
     //----------------------------------------------------------------------
     /**
         get a ScriptStorage component using its scriptStorageID
@@ -157,18 +157,18 @@ public:
     */
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getScriptStorage(
         sal_Int32 scriptStorageID )
-        throw (css::uno::RuntimeException);
+        throw ( css::uno::RuntimeException );
     //======================================================================
 
 
     //XEventListener
     //======================================================================
     virtual void SAL_CALL disposing( const css::lang::EventObject& Source )
-        throw (css::uno::RuntimeException);
+        throw ( css::uno::RuntimeException );
 
 private:
-    ScriptStorageManager(const ScriptStorageManager & );
-    ScriptStorageManager& operator= (const ScriptStorageManager &);
+    ScriptStorageManager( const ScriptStorageManager & );
+    ScriptStorageManager& operator= ( const ScriptStorageManager & );
 
     // to obtain other services if needed
     css::uno::Reference< css::uno::XComponentContext > m_xContext;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptURI.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dfoster $ $Date: 2002-10-24 07:33:39 $
+ *  last change: $Author: dfoster $ $Date: 2002-10-24 12:00:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@ using namespace ::com::sun::star::lang;
 
 namespace scripting_impl {
 
-static const OUString schema = OUString::createFromAscii("script://");
+static const OUString schema = OUString::createFromAscii( "script://" );
 
 /**
  *  Constructor
@@ -88,14 +88,15 @@ ScriptURI::ScriptURI( const ::rtl::OUString& scriptURI )
     throw ( IllegalArgumentException ) : m_uri( scriptURI )
 {
 #ifdef _DEBUG
-    printf("received uri: %s\n",::rtl::OUStringToOString(m_uri,RTL_TEXTENCODING_ASCII_US).pData->buffer);
+    printf( "received uri: %s\n",::rtl::OUStringToOString( m_uri, RTL_TEXTENCODING_ASCII_US).pData->buffer );
 #endif
-    set_values(parseIt());
-    if(!isValid())
+    set_values( parseIt() );
+    if( !isValid() )
     {
-        OSL_TRACE("ScriptURI ctor: throwing IllegalArgException");
+        OSL_TRACE( "ScriptURI ctor: throwing IllegalArgException" );
         throw IllegalArgumentException(
-            OUSTR( "Failed to parse invalid URI: " ).concat( scriptURI ), Reference < XInterface > (), 1 );
+            OUSTR( "Failed to parse invalid URI: " ).concat( scriptURI ),
+            Reference < XInterface > (), 1 );
     }
 }
 
@@ -163,14 +164,14 @@ bool ScriptURI::isValid(  ) {
 }
 
 //Private mutex guarded method for setting the members
-void ScriptURI::set_values(scripting_impl::Uri values)
+void ScriptURI::set_values( scripting_impl::Uri values )
 {
     osl::Guard< ::osl::Mutex > aGuard( m_mutex );
-    m_valid=values.valid;
-    m_location=values.location;
-    m_language=values.language;
-    m_functionName=values.functionName;
-    m_logicalName=values.logicalName;
+    m_valid = values.valid;
+    m_location = values.location;
+    m_language = values.language;
+    m_functionName = values.functionName;
+    m_logicalName = values.logicalName;
 
 }
 /**
@@ -187,26 +188,27 @@ Uri ScriptURI::parseIt()
     //attempt to parse
     // check that it starts script://
     // better check for OBO errors here
-    if(m_uri.indexOf(schema)!=0)
+    if( m_uri.indexOf( schema ) != 0 )
     {
-        OSL_TRACE("wrong schema");
+        OSL_TRACE( "wrong schema" );
         results.valid=sal_False;
         return results;
     }
 
     // substr from here to the '?' and set the logical name
-    sal_Int32 len=m_uri.indexOf('?');
-    if(len==-1)
+    sal_Int32 len = m_uri.indexOf( '?' );
+    if( len == -1 )
     {
         // no queries so just set the logical name
-        results.logicalName=m_uri.copy(schemaLen);
-        results.valid=sal_True;
+        results.logicalName = m_uri.copy( schemaLen );
+        results.valid = sal_True;
         return results;
     }
-    results.logicalName=m_uri.copy(schemaLen,len-schemaLen);
+    results.logicalName = m_uri.copy( schemaLen, len-schemaLen );
 #ifdef _DEBUG
 
-    printf("log name: %s\n",::rtl::OUStringToOString(results.logicalName,RTL_TEXTENCODING_ASCII_US).pData->buffer);
+    printf( "log name: %s\n", ::rtl::OUStringToOString( results.logicalName,
+        RTL_TEXTENCODING_ASCII_US ).pData->buffer );
 #endif
 
     len++;
@@ -214,40 +216,44 @@ Uri ScriptURI::parseIt()
     OUString attr;
     do
     {
-        attr=m_uri.getToken(0,';',len);
+        attr = m_uri.getToken( 0, ';', len );
 #ifdef _DEBUG
 
-        printf("chunk: %s\n",::rtl::OUStringToOString(attr,RTL_TEXTENCODING_ASCII_US).pData->buffer);
+        printf( "chunk: %s\n", ::rtl::OUStringToOString( attr,
+            RTL_TEXTENCODING_ASCII_US ).pData->buffer );
 #endif
 
-        if(attr.matchAsciiL(RTL_CONSTASCII_STRINGPARAM("language"))==sal_True)
+        if( attr.matchAsciiL( RTL_CONSTASCII_STRINGPARAM( "language" ) )
+            == sal_True )
         {
-            sal_Int32 len2=attr.indexOf('=');
-            results.language=attr.copy(len2+1);
+            sal_Int32 len2 = attr.indexOf('=');
+            results.language = attr.copy( len2 + 1 );
             continue;
         }
-        else if (attr.matchAsciiL(RTL_CONSTASCII_STRINGPARAM("location"))==sal_True)
+        else if ( attr.matchAsciiL( RTL_CONSTASCII_STRINGPARAM( "location" ) )
+            == sal_True )
         {
-            sal_Int32 len2=attr.indexOf('=');
-            results.location=attr.copy(len2+1);
+            sal_Int32 len2 = attr.indexOf( '=' );
+            results.location = attr.copy( len2 + 1 );
             continue;
         }
-        else if (attr.matchAsciiL(RTL_CONSTASCII_STRINGPARAM("function"))==sal_True)
+        else if ( attr.matchAsciiL( RTL_CONSTASCII_STRINGPARAM( "function" ) )
+            == sal_True )
         {
-            sal_Int32 len2=attr.indexOf('=');
-            results.functionName=attr.copy(len2+1);
+            sal_Int32 len2 = attr.indexOf( '=' );
+            results.functionName = attr.copy( len2 + 1 );
             continue;
         }
         else
         {
 #ifdef _DEBUG
-            printf("Unknown attribute?\n");
+            printf( "Unknown attribute?\n" );
 #endif
 
         }
     }
-    while (len>=0)
-        ;
+    while ( len >= 0 );
+
     // parse is good
     return results;
 }

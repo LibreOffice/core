@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptElement.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dfoster $ $Date: 2002-10-23 14:21:59 $
+ *  last change: $Author: dfoster $ $Date: 2002-10-24 12:00:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,9 +59,7 @@
  *
  ************************************************************************/
 
-#ifndef _SCRIPT_FRAMEWORK_STORAGE_SCRIPT_ELEMENT_HXX_
 #include "ScriptElement.hxx"
-#endif
 #include <util/util.hxx>
 
 using namespace ::rtl;
@@ -83,58 +81,54 @@ namespace scripting_impl
 */
 ScriptElement::ScriptElement( ScriptData & sII ) :
         m_sII( sII ),
-        XMLElement(OUSTR("parcel"))
+        XMLElement( OUSTR( "parcel" ) )
 {
-    OSL_TRACE("ScriptElement ctor called\n");
+    OSL_TRACE( "ScriptElement ctor called\n" );
 
     {
-        XMLElement* xel = new XMLElement(OUSTR("script"));
-        xel->addAttribute(OUSTR("language"), sII.language);
-        Reference < xml::sax::XAttributeList > xal(xel);
-        addSubElement(xal);
+        XMLElement* xel = new XMLElement( OUSTR( "script" ) );
+        xel->addAttribute( OUSTR( "language" ), sII.language );
+        Reference < xml::sax::XAttributeList > xal( xel );
+        addSubElement( xal );
     }
 
     strpair_map::const_iterator mp_it = sII.locales.begin();
     strpair_map::const_iterator mp_itend = sII.locales.end();
 
-    if ( mp_it != mp_itend )
+    for( ; mp_it != mp_itend; ++mp_it )
     {
-        //Loop through the locales
-        for(; mp_it != mp_itend; ++mp_it)
+        XMLElement* xel = new XMLElement( OUSTR( "locale" ) );
+        xel->addAttribute( OUSTR( "lang" ), mp_it->first );
+
         {
-            XMLElement* xel = new XMLElement(OUSTR("locale"));
-            xel->addAttribute(OUSTR("lang"), mp_it->first);
+            XMLElement* subxel = new XMLElement( OUSTR( "displayname" ) );
+            subxel->addAttribute( OUSTR( "value" ), mp_it->second.first );
+            Reference < xml::sax::XAttributeList > subxattl( subxel );
+            xel->addSubElement( subxattl );
+        }
+        {
+            XMLElement* subxel = new XMLElement( OUSTR( "description" ),
+                                     mp_it->second.second );
+            Reference< xml::sax::XAttributeList > subxattl( subxel );
+            xel->addSubElement( subxattl );
+        }
 
-            {
-                XMLElement* subxel = new XMLElement(OUSTR("displayname"));
-                subxel->addAttribute( OUSTR("value"), mp_it->second.first);
-                Reference < xml::sax::XAttributeList > subxal(subxel);
-                xel->addSubElement(subxal);
-            }
-            {
-                XMLElement* subxel = new XMLElement(OUSTR("description"),
-                                         mp_it->second.second);
-                Reference< xml::sax::XAttributeList > subxal(subxel);
-                xel->addSubElement(subxal);
-            }
-
-            Reference < xml::sax::XAttributeList > xal(xel);
-            addSubElement(xal);
-       }
+        Reference < xml::sax::XAttributeList > xal( xel );
+        addSubElement( xal );
     }
 
     {
-        XMLElement* xel = new XMLElement(OUSTR("functionname"));
-        xel->addAttribute(OUSTR("value"), sII.functionname);
-        Reference <xml::sax::XAttributeList> xal(xel);
-        addSubElement(xal);
+        XMLElement* xel = new XMLElement( OUSTR( "functionname" ) );
+        xel->addAttribute( OUSTR( "value" ), sII.functionname );
+        Reference < xml::sax::XAttributeList > xal( xel );
+        addSubElement( xal );
     }
 
     {
-        XMLElement* xel = new XMLElement(OUSTR("logicalname"));
-        xel->addAttribute(OUSTR("value"), sII.logicalname);
-        Reference <xml::sax::XAttributeList> xal(xel);
-        addSubElement(xal);
+        XMLElement* xel = new XMLElement( OUSTR( "logicalname" ) );
+        xel->addAttribute( OUSTR( "value" ), sII.logicalname );
+        Reference < xml::sax::XAttributeList > xal( xel );
+        addSubElement( xal );
     }
 
     props_vec::const_iterator vp_it = sII.languagedepprops.begin();
@@ -142,56 +136,50 @@ ScriptElement::ScriptElement( ScriptData & sII ) :
 
     if ( vp_it != vp_itend )
     {
-        XMLElement* xel = new XMLElement(OUSTR("languagedepprops"));
+        XMLElement* xel = new XMLElement( OUSTR( "languagedepprops" ) );
 
-        for(; vp_it != vp_itend ; ++vp_it)
+        for( ; vp_it != vp_itend ; ++vp_it )
         {
-            XMLElement* subxel =  new XMLElement(OUSTR("prop"));
+            XMLElement* subxel =  new XMLElement( OUSTR( "prop" ) );
             subxel->addAttribute( OUSTR( "name" ), vp_it->first );
             subxel->addAttribute( OUSTR( "value" ), vp_it->second );
-            Reference <xml::sax::XAttributeList> subxal(subxel);
-            xel->addSubElement(subxal);
+            Reference < xml::sax::XAttributeList > subxattl( subxel );
+            xel->addSubElement( subxattl );
         }
 
-        Reference <xml::sax::XAttributeList> xal(xel);
-        addSubElement(xal);
+        Reference < xml::sax::XAttributeList > xal( xel );
+        addSubElement( xal );
     }
 
     filesets_map::const_iterator fm_it = sII.filesets.begin();
     filesets_map::const_iterator fm_itend = sII.filesets.end();
 
-    if( fm_it != fm_itend )
+    for( ; fm_it != fm_itend; ++fm_it )
     {
-        for(; fm_it != fm_itend; ++fm_it)
+        XMLElement* xel = new XMLElement( OUSTR( "fileset" ) );
+        xel->addAttribute( OUSTR( "name" ), fm_it->first );
+
+        vp_it = fm_it->second.first.begin();
+        vp_itend = fm_it->second.first.end();
+
+        for( ; vp_it != vp_itend; ++vp_it )
         {
-            XMLElement* xel = new XMLElement(OUSTR("fileset"));
-            xel->addAttribute( OUSTR("name"), fm_it->first );
+            XMLElement* subxel = new XMLElement( OUSTR( "prop" ) );
+            subxel->addAttribute( OUSTR( "name" ), vp_it->first );
+            subxel->addAttribute( OUSTR("value"), vp_it->second );
+            Reference < xml::sax::XAttributeList > subxattl( subxel );
+            xel->addSubElement( subxattl );
+       }
 
-            vp_it = fm_it->second.first.begin();
-            vp_itend = fm_it->second.first.end();
+       strpairvec_map::const_iterator sm_it = fm_it->second.second.begin();
+       strpairvec_map::const_iterator sm_itend = fm_it->second.second.end();
 
-            if( vp_it != vp_itend )
-            {
-                for(; vp_it != vp_itend; ++vp_it)
-                {
-                    XMLElement* subxel = new XMLElement(OUSTR("prop"));
-                    subxel->addAttribute( OUSTR("name"), vp_it->first);
-                    subxel->addAttribute( OUSTR("value"), vp_it->second);
-                    Reference < xml::sax::XAttributeList > subxal(subxel);
-                    xel->addSubElement(subxal);
-               }
-           }
+       if( sm_it != sm_itend )
+       {
+           XMLElement* subxel = new XMLElement( OUSTR( "file" ) );
+           xel->addAttribute( OUSTR( "name" ), sm_it->first );
 
-           strpairvec_map::const_iterator sm_it = fm_it->second.second.begin();
-           strpairvec_map::const_iterator sm_itend = fm_it->second.second.end();
-
-           if( sm_it != sm_itend )
-           {
-               XMLElement* subxel = new XMLElement(OUSTR("file"));
-               xel->addAttribute( OUSTR("name"), sm_it->first );
-
-           }
-        }
+       }
     }
 }
 
@@ -200,4 +188,4 @@ ScriptElement::~ScriptElement() SAL_THROW(())
 {
 }
 
-}
+} // namespace scripting_impl

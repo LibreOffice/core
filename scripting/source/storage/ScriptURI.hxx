@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptURI.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dfoster $ $Date: 2002-10-24 07:33:39 $
+ *  last change: $Author: dfoster $ $Date: 2002-10-24 12:00:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,7 +87,7 @@ class ScriptURI
 {
 public:
     ScriptURI( const ::rtl::OUString& scriptURI )
-        throw (css::lang::IllegalArgumentException);
+        throw ( css::lang::IllegalArgumentException );
     ~ScriptURI()  SAL_THROW ( () );
 
     /**
@@ -144,7 +144,7 @@ private:
     Uri parseIt();
     //set the members
     /** @internal */
-    void set_values(Uri);
+    void set_values( Uri );
     bool isValid();
 }
 ; // class ScriptURI

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptData.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dfoster $ $Date: 2002-10-23 14:21:58 $
+ *  last change: $Author: dfoster $ $Date: 2002-10-24 12:00:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,8 +59,8 @@
  *
  ************************************************************************/
 
-#ifndef _SCRIPTING_STORAGE_ScriptData_HXX_
-#define _SCRIPTING_STORAGE_ScriptData_HXX_
+#ifndef _SCRIPTING_STORAGE_SCRIPTDATA_HXX_
+#define _SCRIPTING_STORAGE_SCRIPTDATA_HXX_
 
 #include <vector>
 #include <map>
@@ -93,8 +93,8 @@ struct ScriptData
        , logicalname()
        , languagedepprops()
        , filesets()
-       {
-       }
+   {
+   }
 
    inline ScriptData::ScriptData( const ::rtl::OUString __parcelURI,
        const ::rtl::OUString& __language,
@@ -110,8 +110,8 @@ struct ScriptData
        , logicalname( __logicalname )
        , languagedepprops( __languagedepprops )
        , filesets( __filesets )
-       {
-       }
+   {
+   }
 
    ::rtl::OUString parcelURI;
    ::rtl::OUString language;
@@ -120,11 +120,7 @@ struct ScriptData
    ::rtl::OUString logicalname;
    props_vec languagedepprops;
    filesets_map filesets;
-
 };
-
-
 } // namespace scripting_impl
-
 #endif // _SCRIPTING_STORAGE_ScriptData_HXX_
 

@@ -2,9 +2,9 @@
 *
 *  $RCSfile: ScriptStorageManager.cxx,v $
 *
-*  $Revision: 1.9 $
+*  $Revision: 1.10 $
 *
-*  last change: $Author: dfoster $ $Date: 2002-10-24 08:44:09 $
+*  last change: $Author: dfoster $ $Date: 2002-10-24 12:00:38 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -100,18 +100,20 @@ ScriptStorageManager::ScriptStorageManager( const Reference<
     OSL_TRACE( "< ScriptStorageManager ctor called >\n" );
     s_moduleCount.modCnt.acquire( &s_moduleCount.modCnt );
 
-    validateXRef( m_xContext, "ScriptStorageManager::ScriptStorageManager : cannot get component context" );
+    validateXRef( m_xContext,
+        "ScriptStorageManager::ScriptStorageManager : cannot get component context" );
 
     m_xMgr = m_xContext->getServiceManager();
-    validateXRef( m_xMgr, "ScriptStorageManager::ScriptStorageManager : cannot get service manager" );
+    validateXRef( m_xMgr,
+        "ScriptStorageManager::ScriptStorageManager : cannot get service manager" );
 
     try
     {
         // obtain the macro expander singleton to use in determining the
         // location of the application script storage
         Any aAny = m_xContext->getValueByName( OUString::createFromAscii(
-                                                   "/singletons/com.sun.star.util.theMacroExpander" ) );
-        Reference<util::XMacroExpander> xME;
+                           "/singletons/com.sun.star.util.theMacroExpander" ) );
+        Reference< util::XMacroExpander > xME;
         if ( sal_False == ( aAny >>= xME ) )
         {
             throw RuntimeException(
@@ -121,12 +123,12 @@ ScriptStorageManager::ScriptStorageManager( const Reference<
         validateXRef( xME, "ScriptStorageManager constructor: can't get MacroExpander" );
 
         OUString base = OUString::createFromAscii(
-                            SAL_CONFIGFILE( "${$SYSBINDIR/bootstrap" ) );
+            SAL_CONFIGFILE( "${$SYSBINDIR/bootstrap" ) );
 
         setupAppStorage( xME,
-                         base.concat( OUString::createFromAscii( "::BaseInstallation}/share" ) ) );
+             base.concat( OUString::createFromAscii( "::BaseInstallation}/share" ) ) );
         setupAppStorage( xME,
-                         base.concat( OUString::createFromAscii( "::UserInstallation}/user" ) ) );
+             base.concat( OUString::createFromAscii( "::UserInstallation}/user" ) ) );
 
     }
     catch ( Exception & e )
@@ -140,17 +142,17 @@ ScriptStorageManager::ScriptStorageManager( const Reference<
 // ScriptStorageManager setupAppStorage
 void
 ScriptStorageManager::setupAppStorage(
-    const Reference<util::XMacroExpander> & xME,
+    const Reference< util::XMacroExpander > & xME,
     const OUString & storageStr )
 SAL_THROW ( ( RuntimeException ) )
 {
     try
     {
-        Reference<XInterface> xInterface =
+        Reference< XInterface > xInterface =
             m_xMgr->createInstanceWithContext(
                 OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" ), m_xContext );
         validateXRef( xInterface,
-                      "ScriptStorageManager constructor: can't get SimpleFileAccess XInterface" );
+            "ScriptStorageManager constructor: can't get SimpleFileAccess XInterface" );
         Reference<ucb::XSimpleFileAccess> xSFA( xInterface, UNO_QUERY_THROW );
 
         setupAnyStorage( xSFA, xME->expandMacros( storageStr ) );
@@ -176,8 +178,9 @@ SAL_THROW ( ( RuntimeException ) )
     try
     {
 
-        // create a ScriptingStorage using the SimpleFileAccess, the storageID          // (from the count), and the URL to the application's shared area
-        Sequence <Any> aArgs( 3 );
+        // create a ScriptingStorage using the SimpleFileAccess, the storageID
+        // (from the count), and the URL to the application's shared area
+        Sequence < Any > aArgs( 3 );
         aArgs[ 0 ] <<= xSFA;
         aArgs[ 1 ] <<= m_count;
         aArgs[ 2 ] <<= storageStr;
@@ -185,8 +188,8 @@ SAL_THROW ( ( RuntimeException ) )
 #ifdef _DEBUG
 
         fprintf( stderr, "creating storage for: %s\n",
-                 ::rtl::OUStringToOString(
-                     storageStr, RTL_TEXTENCODING_ASCII_US ).pData->buffer );
+            ::rtl::OUStringToOString( storageStr,
+                RTL_TEXTENCODING_ASCII_US ).pData->buffer );
 #endif
 
         Reference<XInterface> xInterface =
@@ -209,8 +212,8 @@ SAL_THROW ( ( RuntimeException ) )
     catch ( Exception & e )
     {
         throw RuntimeException(
-            OUSTR( "ScriptStorageManager::setupAnyStorage: " ).concat( e.Message ),
-            Reference< XInterface >() );
+            OUSTR( "ScriptStorageManager::setupAnyStorage: " ).concat(
+                e.Message ), Reference< XInterface >() );
     }
 
     return m_count -1;
@@ -235,7 +238,7 @@ throw ( RuntimeException )
 {
     OSL_TRACE( "** ==> ScriptStorageManager in createScriptingStorage\n" );
     validateXRef( xSFA,
-                  "ScriptStorageManager::createScriptStorage: XSimpleFileAccess is not valid" );
+        "ScriptStorageManager::createScriptStorage: XSimpleFileAccess is not valid" );
 
     return setupAnyStorage( xSFA, ::rtl::OUString::createFromAscii( "" ) );
 }
@@ -270,7 +273,7 @@ throw( RuntimeException )
             Reference< XInterface >() );
     }
     validateXRef( itr->second,
-                  "ScriptStorageManager::getScriptStorage: Cannot get ScriptStorage from ScriptStorageHash" );
+        "ScriptStorageManager::getScriptStorage: Cannot get ScriptStorage from ScriptStorageHash" );
     return itr->second;
 }
 
@@ -313,7 +316,8 @@ throw ( ::com::sun::star::uno::RuntimeException )
 {
     OSL_TRACE( "ScriptStorageManager::disposing started" );
     Reference< beans::XPropertySet > xScriptingContext(Source.Source, UNO_QUERY );
-    validateXRef( xScriptingContext, "ScriptStorageManager::dispjarStreamMap.osing can't get script context from EventObject" );
+    validateXRef( xScriptingContext,
+        "ScriptStorageManager::disposing can't get script context from EventObject" );
     scripting_constants::ScriptingConstantsPool& scriptingConstantsPool =
         scripting_constants::ScriptingConstantsPool::instance();
 
@@ -323,9 +327,11 @@ throw ( ::com::sun::star::uno::RuntimeException )
     OSL_TRACE( "extracting sid");
     if( sal_False == (a >>= scriptStorageID ) )
     {
-            throw RuntimeException(
-                OUSTR( "ScriptStorageManager::disposing: can't get script context" ), Reference< XInterface > ());
+        throw RuntimeException(
+            OUSTR( "ScriptStorageManager::disposing: can't get script context" ),
+            Reference< XInterface > ());
     }
+    // no need to do anything if there's no doc storage
     if( scriptStorageID == -1 )
     {
         return;
@@ -374,15 +380,15 @@ SAL_THROW( () )
     return s_implName;
 }
 //*************************************************************************
-Reference<XInterface> SAL_CALL ss_create( const Reference< XComponentContext > & xCompC );
+Reference< XInterface > SAL_CALL ss_create( const Reference< XComponentContext > & xCompC );
 //*************************************************************************
-Sequence<OUString> ss_getSupportedServiceNames( ) SAL_THROW( () );
+Sequence< OUString > ss_getSupportedServiceNames( ) SAL_THROW( () );
 //*************************************************************************
 OUString ss_getImplementationName( ) SAL_THROW( () );
 //*************************************************************************
-Reference<XInterface> SAL_CALL si_create( const Reference< XComponentContext > & xCompC );
+Reference< XInterface > SAL_CALL si_create( const Reference< XComponentContext > & xCompC );
 //*************************************************************************
-Sequence<OUString> si_getSupportedServiceNames( ) SAL_THROW( () );
+Sequence< OUString > si_getSupportedServiceNames( ) SAL_THROW( () );
 //*************************************************************************
 OUString si_getImplementationName( ) SAL_THROW( () );
 //*************************************************************************
