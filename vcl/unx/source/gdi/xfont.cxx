@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xfont.cxx,v $
  *
- *  $Revision: 1.37 $
+ *  $Revision: 1.38 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 09:39:18 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 15:13:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -559,6 +559,11 @@ ExtendedFontStruct::GetCharWidth16( sal_Unicode nFrom, sal_Unicode nTo,
             && ((pFont = pFallback->GetFontStruct(nUniIdx = '?', &nEnc)) != NULL) )
         {
             nSpacing = pFallback->GetSpacing( nEnc );
+        }
+        else
+        {
+            // TODO  What should the default value be?
+            nSpacing = PITCH_FIXED;
         }
 
         if ( pFont )
