@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FPreparedStatement.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: oj $ $Date: 2002-07-05 08:07:48 $
+ *  last change: $Author: obo $ $Date: 2003-09-04 08:28:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,7 +103,7 @@ namespace connectivity
             // Data attributes
             //====================================================================
             ::rtl::OUString                                     m_aSql;
-            OValueRow                                           m_aParameterRow;
+            OValueRefRow                                        m_aParameterRow;
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData>   m_xMetaData;
 
             OResultSet*                                         m_pResultSet;
