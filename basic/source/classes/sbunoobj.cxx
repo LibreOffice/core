@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbunoobj.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: ab $ $Date: 2001-05-31 15:14:50 $
+ *  last change: $Author: ab $ $Date: 2001-06-08 15:59:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -268,7 +268,7 @@ SbxDataType unoToSbxType( TypeClass eType )
         case TypeClass_FLOAT:           eRetType = SbxSINGLE;   break;
         case TypeClass_DOUBLE:          eRetType = SbxDOUBLE;   break;
         //case TypeClass_OCTET:                                 break;
-        case TypeClass_BYTE:            eRetType = SbxBYTE;     break;
+        case TypeClass_BYTE:            eRetType = SbxINTEGER;  break;
         //case TypeClass_INT:               eRetType = SbxINT;  break;
         case TypeClass_SHORT:           eRetType = SbxINTEGER;  break;
         case TypeClass_LONG:            eRetType = SbxLONG;     break;
@@ -440,7 +440,7 @@ void unoToSbxValue( SbxVariable* pVar, const Any& aValue )
         case TypeClass_FLOAT:           { float val; aValue >>= val; pVar->PutSingle( val ); } break;
         case TypeClass_DOUBLE:          { double val; aValue >>= val; pVar->PutDouble( val ); } break;
         //case TypeClass_OCTET:         break;
-        case TypeClass_BYTE:            { sal_Int8 val; aValue >>= val; pVar->PutByte( val ); } break;
+        case TypeClass_BYTE:            { sal_Int8 val; aValue >>= val; pVar->PutInteger( val ); } break;
         //case TypeClass_INT:           break;
         case TypeClass_SHORT:           { sal_Int16 val; aValue >>= val; pVar->PutInteger( val ); } break;
         case TypeClass_LONG:            { sal_Int32 val; aValue >>= val; pVar->PutLong( val ); } break;
@@ -476,7 +476,7 @@ Type getUnoTypeForSbxBaseType( SbxDataType eType )
         case SbxVARIANT:    aRetType = ::getCppuType( (Any*)0 ); break;
         //case SbxDATAOBJECT: break;
         case SbxCHAR:       aRetType = ::getCppuType( (sal_Unicode*)0 ); break;
-        case SbxBYTE:       aRetType = ::getCppuType( (sal_Int8*)0 ); break;
+        case SbxBYTE:       aRetType = ::getCppuType( (sal_Int16*)0 ); break;
         case SbxUSHORT:     aRetType = ::getCppuType( (sal_uInt16*)0 ); break;
         case SbxULONG:      aRetType = ::getCppuType( (sal_uInt32*)0 ); break;
         //case SbxLONG64:   break;
@@ -780,7 +780,26 @@ Any sbxToUnoValue( SbxVariable* pVar, const Reference< XIdlClass >& xIdlTargetCl
         case TypeClass_FLOAT:           aRetVal <<= pVar->GetSingle(); break;
         case TypeClass_DOUBLE:          aRetVal <<= pVar->GetDouble(); break;
         //case TypeClass_OCTET:         break;
-        case TypeClass_BYTE:            aRetVal <<= (sal_Int8)( pVar->GetByte() ); break;
+        case TypeClass_BYTE:
+        {
+            sal_Int16 nVal = pVar->GetInteger();
+            sal_Bool bOverflow = sal_False;
+            if( nVal < -128 )
+            {
+                bOverflow = sal_True;
+                nVal = -128;
+            }
+            else if( nVal > 127 )
+            {
+                bOverflow = sal_True;
+                nVal = 127;
+            }
+            if( bOverflow )
+                   StarBASIC::Error( ERRCODE_BASIC_MATH_OVERFLOW );
+
+            aRetVal <<= nVal;
+            break;
+        }
         //case TypeClass_INT:           break;
         case TypeClass_SHORT:           aRetVal <<= (sal_Int16)( pVar->GetInteger() );  break;
         case TypeClass_LONG:            aRetVal <<= (sal_Int32)( pVar->GetLong() ); break;
