@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XFocusListener.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:52:47 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 09:01:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,29 +76,26 @@
 
 //=============================================================================
 
-// DocMerge from xml: interface com::sun::star::awt::XFocusListener
 /** makes it possible to receive keyboard focus events.
 
-
-
     <p>The window which has the keyboard focus is the window which gets
-    the keyboard events.
-
-    </p>
+    the keyboard events.</p>
  */
 interface XFocusListener: com::sun::star::lang::XEventListener
 {
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XFocusListener::focusGained
-    /** gets invoked when a window gains the keyboard focus.@see XFocusListener::windowActivated
+    /** is invoked when a window gains the keyboard focus.
+
+        @see XActivateListener::windowActivated
      */
     [oneway] void focusGained( [in] com::sun::star::awt::FocusEvent e );
 
     //-------------------------------------------------------------------------
 
-    // DocMerge from xml: method com::sun::star::awt::XFocusListener::focusLost
-    /** gets invoked when a window loses the keyboard focus.@see XFocusListener::windowDeactivated
+    /** is invoked when a window loses the keyboard focus.
+
+        @see XActivateListener::windowDeactivated
      */
     [oneway] void focusLost( [in] com::sun::star::awt::FocusEvent e );
 
