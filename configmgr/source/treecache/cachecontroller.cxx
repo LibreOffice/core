@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cachecontroller.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jb $ $Date: 2002-03-28 09:06:57 $
+ *  last change: $Author: jb $ $Date: 2002-07-03 14:38:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -541,9 +541,11 @@ AbsolutePath CacheController::ensureTemplate(const Name& _rName, Name const& _rM
                     aTemplateInstance.releaseAndClear();
                     aMultiTemplates.reset(pMulti);
                 }
+                else
+                    OSL_ENSURE(false,"Requested multiple templates, got non-subtree node");
             }
             else
-                OSL_ENSURE(false,"Requested multiple templates, got non-subtree node");
+                OSL_ENSURE(false,"Requested configuration template does not exist");
 
             if (aMultiTemplates.get() != NULL)
             {
