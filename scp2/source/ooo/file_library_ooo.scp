@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_library_ooo.scp,v $
 *
-*  $Revision: 1.60 $
+*  $Revision: 1.61 $
 *
-*  last change: $Author: pjunck $ $Date: 2004-11-03 08:07:05 $
+*  last change: $Author: pjunck $ $Date: 2004-11-03 09:19:40 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -362,7 +362,7 @@ End
 File gid_File_Lib_Cppu
     TXT_FILE_BODY;
   #ifdef UNX
-    Name = STRING(CONCAT8(libcppu,UNXSUFFIX,.,UDK_MAJOR,.,UDK_MINOR,.,UDK_MICRO));
+    Name = STRING(CONCAT4(libuno_cppu,UNXSUFFIX,.,UDK_MAJOR));
   #else
     Name = STRING(CONCAT3(cppu,UDK_MAJOR,.dll));
   #endif
@@ -375,7 +375,7 @@ File gid_File_Lib_Cppuhelper
     Styles = (PACKED, SETUPZIP);
     Dir = gid_Dir_Program;
   #ifdef UNX
-    Name = STRING(CONCAT9(libcppuhelper,COMID,UNXSUFFIX,.,UDK_MAJOR,.,UDK_MINOR,.,UDK_MICRO));
+    Name = STRING(CONCAT5(libuno_cppuhelper,COMID,UNXSUFFIX,.,UDK_MAJOR));
   #else
     Name = STRING(CONCAT5(cppuhelper,UDK_MAJOR,COMID,.,dll));
   #endif
@@ -1007,7 +1007,7 @@ File gid_File_Lib_Jvmaccess
     TXT_FILE_BODY;
     Dir = gid_Dir_Program;
   #ifdef UNX
-    Name = STRING(CONCAT9(libjvmaccess,COMID,UNXSUFFIX,.,UDK_MAJOR,.,UDK_MINOR,.,UDK_MICRO));
+    Name = STRING(CONCAT5(libjvmaccess,COMID,UNXSUFFIX,.,UDK_MAJOR));
   #else
     Name = STRING(CONCAT5(jvmaccess,UDK_MAJOR,COMID,.,dll));
   #endif
@@ -1352,7 +1352,7 @@ End
 File gid_File_Lib_Reg
     TXT_FILE_BODY;
   #ifdef UNX
-    Name = STRING(CONCAT8(libreg,UNXSUFFIX,.,UDK_MAJOR,.,UDK_MINOR,.,UDK_MICRO));
+    Name = STRING(CONCAT4(libreg,UNXSUFFIX,.,UDK_MAJOR));
   #else
     Name = STRING(CONCAT3(reg,UDK_MAJOR,.dll));
   #endif
@@ -1406,7 +1406,7 @@ File gid_File_Lib_Rmcxt
     Styles = (PACKED,SETUPZIP);
     Dir = gid_Dir_Program;
   #ifdef UNX
-    Name = STRING(CONCAT8(librmcxt,UNXSUFFIX,.,UDK_MAJOR,.,UDK_MINOR,.,UDK_MICRO));
+    Name = STRING(CONCAT4(librmcxt,UNXSUFFIX,.,UDK_MAJOR));
   #else
     Name = STRING(CONCAT3(rmcxt,UDK_MAJOR,.dll));
   #endif
@@ -1415,7 +1415,7 @@ End
 File gid_File_Lib_Sal
     TXT_FILE_BODY;
   #ifdef UNX
-    Name = STRING(CONCAT8(libsal,UNXSUFFIX,.,UDK_MAJOR,.,UDK_MINOR,.,UDK_MICRO));
+    Name = STRING(CONCAT4(libuno_sal,UNXSUFFIX,.,UDK_MAJOR));
   #else
     Name = STRING(CONCAT3(sal,UDK_MAJOR,.dll));
   #endif
@@ -1439,7 +1439,7 @@ File gid_File_Lib_Salhelper
     Styles = (PACKED, SETUPZIP);
     Dir = gid_Dir_Program;
   #ifdef UNX
-    Name = STRING(CONCAT9(libsalhelper,COMID,UNXSUFFIX,.,UDK_MAJOR,.,UDK_MINOR,.,UDK_MICRO));
+    Name = STRING(CONCAT5(libuno_salhelper,COMID,UNXSUFFIX,.,UDK_MAJOR));
   #else
     Name = STRING(CONCAT5(salhelper,UDK_MAJOR,COMID,.,dll));
   #endif
@@ -1680,7 +1680,7 @@ End
 File gid_File_Lib_Store
     TXT_FILE_BODY;
   #ifdef UNX
-    Name = STRING(CONCAT8(libstore,UNXSUFFIX,.,UDK_MAJOR,.,UDK_MINOR,.,UDK_MICRO));
+    Name = STRING(CONCAT4(libstore,UNXSUFFIX,.,UDK_MAJOR));
   #else
     Name = STRING(CONCAT3(store,UDK_MAJOR,.dll));
   #endif
@@ -1965,7 +1965,7 @@ File gid_File_Lib_Jvmfwk
     TXT_FILE_BODY;
     Dir = gid_Dir_Program;
   #ifdef UNX
-    Name = STRING(CONCAT8(libjvmfwk,UNXSUFFIX,.,UDK_MAJOR,.,UDK_MINOR,.,UDK_MICRO));
+    Name = STRING(CONCAT4(libjvmfwk,UNXSUFFIX,.,UDK_MAJOR));
   #else
     Name = STRING(CONCAT3(jvmfwk,UDK_MAJOR,.dll));
   #endif
