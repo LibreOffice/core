@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tpaction.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 13:15:59 $
+ *  last change: $Author: rt $ $Date: 2004-05-19 07:43:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -610,16 +610,6 @@ void SdTPAction::Reset( const SfxItemSet& rAttrs )
     {
         aFileName = ( ( const SfxStringItem& ) rAttrs.
                     Get( ATTR_ACTION_FILENAME ) ).GetValue();
-        if( eCA == presentation::ClickAction_MACRO )
-        {
-            sal_Unicode cToken = '.';
-            String aStr( aFileName.GetToken( 2, cToken ) );
-            aStr.Append( cToken );
-            aStr.Append( aFileName.GetToken( 1, cToken ) );
-            aStr.Append( cToken );
-            aStr.Append( aFileName.GetToken( 0, cToken ) );
-            aFileName = aStr;
-        }
         SetEditText( aFileName );
     }
 
@@ -795,30 +785,11 @@ void SdTPAction::OpenFileDialog()
             Application::SetDefDialogParent( this );
 
             // choose macro dialog
-            ::rtl::OUString aScriptURL = SfxApplication::ChooseMacro(FALSE, TRUE);
-
-            // a scriptURL has the following format:
-            // vnd.sun.star.script:[name]?language=[language]&location=[location]
-            // [name] = [libname].[modulename].[macroname]
-            // [language] = Basic
-            // [location] = application | document
-            // e.g. "vnd.sun.star.script:Standard.Module1.Main?language=Basic&location=document"
-            //
-            // but for the UI we need this format:
-            // 'libname.modulename.macroname'
+            ::rtl::OUString aScriptURL = SfxApplication::ChooseScript();
 
             if ( aScriptURL.getLength() != 0 )
             {
-                // parse scriptURL
-                Reference< XMultiServiceFactory > xSMgr = ::comphelper::getProcessServiceFactory();
-                Reference< com::sun::star::uri::XUriReferenceFactory > xFactory( xSMgr->createInstance(
-                    ::rtl::OUString::createFromAscii( "com.sun.star.uri.UriReferenceFactory" ) ), UNO_QUERY );
-                if ( xFactory.is() )
-                {
-                    Reference< com::sun::star::uri::XVndSunStarScriptUrl > xUrl( xFactory->parse( aScriptURL ), UNO_QUERY );
-                    if ( xUrl.is() )
-                        SetEditText( xUrl->getName() );
-                }
+                SetEditText( aScriptURL );
             }
 
             Application::SetDefDialogParent( pOldWin );
@@ -1321,10 +1292,7 @@ void SdTPAction::SetEditText( String const & rStr )
             break;
         case presentation::ClickAction_MACRO:
         {
-            if( rStr.GetTokenCount( DOCUMENT_TOKEN ) == 2 )
-                aEdtMacro.SetText( aText.GetToken( 0, DOCUMENT_TOKEN ) );
-            else
-                aEdtMacro.SetText( aText );
+            aEdtMacro.SetText( aText );
         }
             break;
         case presentation::ClickAction_DOCUMENT:
@@ -1334,6 +1302,35 @@ void SdTPAction::SetEditText( String const & rStr )
             aEdtBookmark.SetText( aText );
             break;
     }
+}
+
+String SdTPAction::GetMacroName( const String& rMacroPath )
+{
+    String result = rMacroPath;
+
+    // try to get name by parsing the macro path
+    // using the new URI parsing services
+
+    Reference< XMultiServiceFactory > xSMgr =
+        ::comphelper::getProcessServiceFactory();
+
+    Reference< com::sun::star::uri::XUriReferenceFactory >
+        xFactory( xSMgr->createInstance(
+            ::rtl::OUString::createFromAscii(
+                "com.sun.star.uri.UriReferenceFactory" ) ), UNO_QUERY );
+
+    if ( xFactory.is() )
+    {
+        Reference< com::sun::star::uri::XVndSunStarScriptUrl >
+            xUrl( xFactory->parse( rMacroPath ), UNO_QUERY );
+
+        if ( xUrl.is() )
+        {
+            result = xUrl->getName();
+        }
+    }
+
+    return result;
 }
 
 //------------------------------------------------------------------------
@@ -1370,21 +1367,7 @@ String SdTPAction::GetEditText( BOOL bFullDocDestination )
 
         case presentation::ClickAction_MACRO:
         {
-            String aTmpStr = aEdtMacro.GetText();
-            // Currently, the macro has got following format:
-            // "Libname.Modulname.Macroname"
-            // But "aMacro" Have to be following format (because of file-format )
-            // "Macroname.Modulname.Libname.BASIC"
-            sal_Unicode cToken = '.';
-            aStr = aTmpStr.GetToken( 2, cToken );
-            aStr.Append( cToken );
-            aStr.Append( aTmpStr.GetToken( 1, cToken ) );
-            aStr.Append( cToken );
-            aStr.Append( aTmpStr.GetToken( 0, cToken ) );
-            aStr.Append( cToken );
-            aStr.AppendAscii( RTL_CONSTASCII_STRINGPARAM( "BASIC" ) );    // Name ist egal, wird nur wegen synt. Reihenfolge gebraucht
-
-            return aStr;
+            return aEdtMacro.GetText();
         }
         break;
 
