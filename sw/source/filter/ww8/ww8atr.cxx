@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8atr.cxx,v $
  *
- *  $Revision: 1.68 $
+ *  $Revision: 1.69 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-25 07:43:31 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 14:17:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -736,13 +736,13 @@ void SwWW8Writer::Out_SwFmt(const SwFmt& rFmt, bool bPapFmt, bool bChpFmt,
                     else
                     {
                         Out_SwNumLvl( nLvl );
-                        if( rNFmt.GetAbsLSpace() )
+                        if (rNFmt.GetAbsLSpace())
                         {
-                            SwNumFmt aNumFmt( rNFmt );
+                            SwNumFmt aNumFmt(rNFmt);
                             const SvxLRSpaceItem& rLR =
-                                ItemGet<SvxLRSpaceItem>(rFmt,RES_LR_SPACE);
-                            aNumFmt.SetAbsLSpace(
-                                    aNumFmt.GetAbsLSpace() + rLR.GetLeft() );
+                                ItemGet<SvxLRSpaceItem>(rFmt, RES_LR_SPACE);
+                            aNumFmt.SetAbsLSpace(writer_cast<short>(
+                                    aNumFmt.GetAbsLSpace() + rLR.GetLeft()));
                             Out_NumRuleAnld( *pDoc->GetOutlineNumRule(),
                                             aNumFmt, nLvl );
                         }
@@ -1220,7 +1220,9 @@ static Writer& OutWW8_SwEscapement( Writer& rWrt, const SfxPoolItem& rHt )
                 rWrtWW8.InsUInt16( 0x4A43 );
             else
                 rWrtWW8.pO->Insert( 99, rWrtWW8.pO->Count() );
-            rWrtWW8.InsUInt16( ( nHeight * nProp + 500 ) / 1000 );
+            rWrtWW8.InsUInt16(
+                msword_cast<sal_uInt16>((nHeight * nProp + 500 ) / 1000));
+
         }
     }
     return rWrt;
@@ -1509,6 +1511,16 @@ static void InsertSpecialChar( SwWW8Writer& rWrt, BYTE c )
         aItems.GetData());
 }
 
+String lcl_GetExpandedField(const SwField &rFld)
+{
+    String sRet(rFld.Expand());
+
+    //replace LF 0x0A with VT 0x0B
+    sRet.SearchAndReplaceAll(0x0A, 0x0B);
+
+    return sRet;
+}
+
 void SwWW8Writer::OutField(const SwField* pFld, ww::eField eFldType,
     const String& rFldCmd, BYTE nMode)
 {
@@ -1568,7 +1580,7 @@ void SwWW8Writer::OutField(const SwField* pFld, ww::eField eFldType,
     {
         String sOut;
         if( pFld )
-            sOut = pFld->Expand();
+            sOut = lcl_GetExpandedField(*pFld);
         else
             sOut = rFldCmd;
         if( sOut.Len() )
@@ -2053,7 +2065,7 @@ void OutWW8_RefField(SwWW8Writer& rWW8Wrt, const SwField &rFld,
     sStr.APPEND_CONST_ASC( "\" " );
     rWW8Wrt.OutField(&rFld, eREF, sStr, WRITEFIELD_START |
         WRITEFIELD_CMD_START | WRITEFIELD_CMD_END);
-    String sVar = rFld.Expand();
+    String sVar = lcl_GetExpandedField(rFld);
     if (sVar.Len())
     {
         if (rWW8Wrt.IsUnicode())
@@ -2455,11 +2467,12 @@ static Writer& OutWW8_SwField( Writer& rWrt, const SfxPoolItem& rHt )
 
     if (bWriteExpand)
     {
+        String sExpand(lcl_GetExpandedField(*pFld));
         if (rWW8Wrt.IsUnicode())
-            SwWW8Writer::WriteString16(rWrt.Strm(), pFld->Expand(), false);
+            SwWW8Writer::WriteString16(rWrt.Strm(), sExpand, false);
         else
         {
-            SwWW8Writer::WriteString8(rWrt.Strm(), pFld->Expand(), false,
+            SwWW8Writer::WriteString8(rWrt.Strm(), sExpand, false,
                 RTL_TEXTENCODING_MS_1252);
         }
     }
@@ -2839,10 +2852,10 @@ static Writer& OutWW8_SwNumRuleItem( Writer& rWrt, const SfxPoolItem& rHt )
                     if( pNum && NO_NUM > pNum->GetLevel() )
                         nLvl = GetRealLevel( pNum->GetLevel() );
 
-                    if (pNum && USHRT_MAX != pNum->GetSetValue() )
+                    if (pNum && (USHRT_MAX != pNum->GetSetValue() || pNum->IsStart()))
                     {
-                        nNumId = rWW8Wrt.DupNumRuleWithLvlStart(pRule,nLvl,
-                            pNum->GetSetValue());
+                        USHORT nStartWith = (USHRT_MAX != pNum->GetSetValue()) ? pNum->GetSetValue() : 1;
+                        nNumId = rWW8Wrt.DupNumRuleWithLvlStart(pRule,nLvl,nStartWith);
                         if (USHRT_MAX != nNumId)
                             ++nNumId;
                     }
@@ -4197,23 +4210,23 @@ class SwWW8WrTabu
     BYTE* pDel;                 // DelArray
     BYTE* pAddPos;              // AddPos-Array
     BYTE* pAddTyp;              // AddTyp-Array
-    USHORT nAdd;                // so viele Tabs kommen hinzu
-    USHORT nDel;                // so viele Tabs fallen weg
+    sal_uInt16 nAdd;            // so viele Tabs kommen hinzu
+    sal_uInt16 nDel;            // so viele Tabs fallen weg
 public:
-    SwWW8WrTabu(USHORT nDelMax, USHORT nAddMax);
+    SwWW8WrTabu(sal_uInt16 nDelMax, sal_uInt16 nAddMax);
     ~SwWW8WrTabu();
 
-    void Add(const SvxTabStop & rTS, USHORT nAdjustment);
-    void Del(const SvxTabStop & rTS, USHORT nAdjustment);
-    void PutAll( SwWW8Writer& rWW8Wrt );
+    void Add(const SvxTabStop &rTS, long nAdjustment);
+    void Del(const SvxTabStop &rTS, long nAdjustment);
+    void PutAll(SwWW8Writer& rWW8Wrt);
 };
 
-SwWW8WrTabu::SwWW8WrTabu(USHORT nDelMax, USHORT nAddMax)
+SwWW8WrTabu::SwWW8WrTabu(sal_uInt16 nDelMax, sal_uInt16 nAddMax)
     : nAdd(0), nDel(0)
 {
-    pDel = ( nDelMax ) ? new BYTE[ nDelMax * 2 ] : 0;
-    pAddPos = new BYTE[ nAddMax * 2 ];
-    pAddTyp = new BYTE[ nAddMax ];
+    pDel = nDelMax ? new BYTE[nDelMax * 2] : 0;
+    pAddPos = new BYTE[nAddMax * 2];
+    pAddTyp = new BYTE[nAddMax];
 }
 
 SwWW8WrTabu::~SwWW8WrTabu()
@@ -4224,10 +4237,11 @@ SwWW8WrTabu::~SwWW8WrTabu()
 }
 
 // Add( const SvxTabStop & rTS ) fuegt einen Tab in die WW-Struktur ein
-void SwWW8WrTabu::Add(const SvxTabStop & rTS, USHORT nAdjustment)
+void SwWW8WrTabu::Add(const SvxTabStop & rTS, long nAdjustment)
 {
     // Tab-Position eintragen
-    ShortToSVBT16(rTS.GetTabPos() + nAdjustment, pAddPos + (nAdd * 2));
+    ShortToSVBT16(msword_cast<sal_Int16>(rTS.GetTabPos() + nAdjustment),
+        pAddPos + (nAdd * 2));
 
     // Tab-Typ eintragen
     BYTE nPara = 0;
@@ -4266,49 +4280,46 @@ void SwWW8WrTabu::Add(const SvxTabStop & rTS, USHORT nAdjustment)
 
 // Del( const SvxTabStop & rTS ) fuegt einen zu loeschenden Tab
 // in die WW-Struktur ein
-void SwWW8WrTabu::Del(const SvxTabStop & rTS, USHORT nAdjustment)
+void SwWW8WrTabu::Del(const SvxTabStop &rTS, long nAdjustment)
 {
     // Tab-Position eintragen
-    ShortToSVBT16(rTS.GetTabPos() + nAdjustment, pDel + (nDel * 2));
+    ShortToSVBT16(msword_cast<sal_Int16>(rTS.GetTabPos() + nAdjustment),
+        pDel + (nDel * 2));
     ++nDel;
 }
 
 //  PutAll( SwWW8Writer& rWW8Wrt ) schreibt das Attribut nach rWrt.pO
-void SwWW8WrTabu::PutAll( SwWW8Writer& rWrt )
+void SwWW8WrTabu::PutAll(SwWW8Writer& rWrt)
 {
-    if( nAdd > 255 )
-    {
-        ASSERT( !this, "+ mehr als 255 Tabs dazu ?????" );
+    ASSERT(nAdd <= 255, "more than 255 added tabstops ?");
+    ASSERT(nDel <= 255, "more than 244 removed tabstops ?");
+    if (nAdd > 255)
         nAdd = 255;
-    }
-    if( nDel > 255 )
-    {
-        ASSERT( !this, "+ mehr als 255 Tabs weg ?????" );
+    if (nDel > 255)
         nDel = 255;
-    }
 
-    USHORT nSiz = 2 * nDel + 3 * nAdd + 2;
-    if( nSiz > 255 )
+    sal_uInt16 nSiz = 2 * nDel + 3 * nAdd + 2;
+    if (nSiz > 255)
         nSiz = 255;
 
-    if( rWrt.bWrtWW8 )
-        rWrt.InsUInt16( 0xC60D );
+    if (rWrt.bWrtWW8)
+        rWrt.InsUInt16(0xC60D);
     else
-        rWrt.pO->Insert( 15, rWrt.pO->Count() );
-    rWrt.pO->Insert( (BYTE)nSiz, rWrt.pO->Count() );    // cch eintragen
-
+        rWrt.pO->Insert(15, rWrt.pO->Count());
+    // cch eintragen
+    rWrt.pO->Insert(msword_cast<sal_uInt8>(nSiz), rWrt.pO->Count());
     // DelArr schreiben
-    rWrt.pO->Insert( (BYTE)nDel, rWrt.pO->Count() );    // nDel eintragen
-    rWrt.OutSprmBytes( pDel, nDel * 2 );
+    rWrt.pO->Insert(msword_cast<sal_uInt8>(nDel), rWrt.pO->Count());
+    rWrt.OutSprmBytes(pDel, nDel * 2);
     // InsArr schreiben
-    rWrt.pO->Insert( (BYTE)nAdd, rWrt.pO->Count() );    // nAdd schreiben
-    rWrt.OutSprmBytes( pAddPos, 2 * nAdd );         // AddPosArray
-    rWrt.OutSprmBytes( pAddTyp, nAdd );             // AddTypArray
+    rWrt.pO->Insert(msword_cast<sal_uInt8>(nAdd), rWrt.pO->Count());
+    rWrt.OutSprmBytes(pAddPos, 2 * nAdd);         // AddPosArray
+    rWrt.OutSprmBytes(pAddTyp, nAdd);             // AddTypArray
 }
 
 
 static void OutWW8_SwTabStopAdd(Writer& rWrt, const SvxTabStopItem& rTStops,
-    USHORT nLParaMgn)
+    long nLParaMgn)
 {
     SwWW8WrTabu aTab( 0, rTStops.Count());
 
@@ -4322,8 +4333,8 @@ static void OutWW8_SwTabStopAdd(Writer& rWrt, const SvxTabStopItem& rTStops,
     aTab.PutAll( (SwWW8Writer&)rWrt );
 }
 
-bool lcl_IsEqual(USHORT nOneLeft, const SvxTabStop &rOne,
-    USHORT nTwoLeft, const SvxTabStop &rTwo)
+bool lcl_IsEqual(long nOneLeft, const SvxTabStop &rOne,
+    long nTwoLeft, const SvxTabStop &rTwo)
 {
     return(
             nOneLeft == nTwoLeft &&
@@ -4333,8 +4344,8 @@ bool lcl_IsEqual(USHORT nOneLeft, const SvxTabStop &rOne,
           );
 }
 
-static void OutWW8_SwTabStopDelAdd( Writer& rWrt, const SvxTabStopItem& rTStyle,
-    USHORT nLStypeMgn, const SvxTabStopItem& rTNew, USHORT nLParaMgn)
+static void OutWW8_SwTabStopDelAdd(Writer& rWrt, const SvxTabStopItem& rTStyle,
+    long nLStypeMgn, const SvxTabStopItem& rTNew, long nLParaMgn)
 {
     SwWW8WrTabu aTab(rTStyle.Count(), rTNew.Count());
 
@@ -4408,12 +4419,12 @@ static void OutWW8_SwTabStopDelAdd( Writer& rWrt, const SvxTabStopItem& rTStyle,
     aTab.PutAll( (SwWW8Writer&)rWrt );
 }
 
-static Writer& OutWW8_SwTabStop( Writer& rWrt, const SfxPoolItem& rHt )
+static Writer& OutWW8_SwTabStop(Writer& rWrt, const SfxPoolItem& rHt)
 {
     SwWW8Writer& rWW8Wrt = (SwWW8Writer&)rWrt;
     const SvxTabStopItem & rTStops = (const SvxTabStopItem&)rHt;
     const SfxPoolItem* pLR = rWW8Wrt.HasItem( RES_LR_SPACE );
-    USHORT nCurrentLeft = pLR ? ((const SvxLRSpaceItem*)pLR)->GetTxtLeft() : 0;
+    long nCurrentLeft = pLR ? ((const SvxLRSpaceItem*)pLR)->GetTxtLeft() : 0;
 
     // StyleDef -> "einfach" eintragen || keine Style-Attrs -> dito
     const SvxTabStopItem* pStyleTabs = 0;
@@ -4424,12 +4435,12 @@ static Writer& OutWW8_SwTabStop( Writer& rWrt, const SfxPoolItem& rHt )
     }
 
     if (!pStyleTabs)
-        OutWW8_SwTabStopAdd( rWW8Wrt, rTStops, nCurrentLeft );
+        OutWW8_SwTabStopAdd(rWW8Wrt, rTStops, nCurrentLeft);
     else
     {
         const SvxLRSpaceItem &rStyleLR =
             ItemGet<SvxLRSpaceItem>(*rWW8Wrt.pStyAttr, RES_LR_SPACE);
-        USHORT nStyleLeft = rStyleLR.GetTxtLeft();
+        long nStyleLeft = rStyleLR.GetTxtLeft();
 
         OutWW8_SwTabStopDelAdd(rWW8Wrt, *pStyleTabs, nStyleLeft, rTStops,
             nCurrentLeft);
