@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventsupplier.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: rt $ $Date: 2003-12-01 11:59:19 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 19:59:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -542,7 +542,7 @@ void SfxEvents_Impl::BlowUpMacro( const ANY& rEvent, ANY& rRet, SfxObjectShell* 
 
         if ( aLibrary.compareToAscii("document") != 0 )
         {
-            if ( !aLibrary.getLength() || pDoc && ( String(aLibrary) == pDoc->GetTitle() || String(aLibrary) == pDoc->GetTitle(SFX_TITLE_APINAME) ) )
+            if ( !aLibrary.getLength() || pDoc && ( String(aLibrary) == pDoc->GetTitle( SFX_TITLE_APINAME ) || String(aLibrary) == pDoc->GetTitle() ) )
                 aLibrary = String::CreateFromAscii("document");
             else
                 aLibrary = String::CreateFromAscii("application");
