@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlkywd.hxx,v $
  *
- *  $Revision: 1.115 $
+ *  $Revision: 1.116 $
  *
- *  last change: $Author: sab $ $Date: 2001-02-21 10:01:36 $
+ *  last change: $Author: dv $ $Date: 2001-02-21 15:03:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,6 +138,9 @@ XML_CONSTASCII_ACTION( sXML_n_block_list, "http://openoffice.org/2001/block-list
 
 XML_CONSTASCII_ACTION( sXML_np_math, "math");
 XML_CONSTASCII_ACTION( sXML_n_math, "http://www.w3.org/1998/Math/MathML" );
+
+XML_CONSTASCII_ACTION( sXML_np_versions_list, "VL");
+XML_CONSTASCII_ACTION( sXML_n_versions_list, "http://openoffice.org/2001/versions-list" );
 
 // units
 XML_CONSTASCII_ACTION( sXML_unit_mm, "mm" );
@@ -1695,6 +1698,8 @@ XML_CONSTASCII_ACTION( sXML_varp, "varp" );
 XML_CONSTASCII_ACTION( sXML_vector, "vector" );
 XML_CONSTASCII_ACTION( sXML_verb, "verb" );
 XML_CONSTASCII_ACTION( sXML_version, "version" );
+XML_CONSTASCII_ACTION( sXML_version_entry, "version-entry" );
+XML_CONSTASCII_ACTION( sXML_version_list, "version-list" );
 XML_CONSTASCII_ACTION( sXML_vertical, "vertical" );
 XML_CONSTASCII_ACTION( sXML_vertical_align, "vertical-align" );
 XML_CONSTASCII_ACTION( sXML_vertical_lines, "vertical-lines" );
