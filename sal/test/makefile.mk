@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: sb $ $Date: 2001-04-23 09:19:29 $
+#   last change: $Author: sb $ $Date: 2001-05-09 12:51:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -86,13 +86,6 @@ OBJFILES= \
                 $(OBJ)$/test.obj
 #				$(OBJ)$/testint64.obj		\
 #				$(OBJ)$/testowstring.obj	\
-
-.IF "$(GUI)" == "WNT"
-SALLIB= isal.lib
-.ELSE
-SALLIB= -lsal2
-.ENDIF
-
 
 APP2TARGET=	test
 APP2OBJS=	$(OBJFILES)
