@@ -1,0 +1,227 @@
+/*************************************************************************
+ *
+ *  $RCSfile: XSingleSelectQueryAnalyzer.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: vg $ $Date: 2003-12-19 10:23:32 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_sdb_XSingleSelectQueryAnalyzer_idl__
+#define __com_sun_star_sdb_XSingleSelectQueryAnalyzer_idl__
+
+#ifndef __com_sun_star_beans_XPropertySet_idl__
+#include <com/sun/star/beans/XPropertySet.idl>
+#endif
+
+#ifndef __com_sun_star_beans_PropertyValue_idl__
+#include <com/sun/star/beans/PropertyValue.idl>
+#endif
+
+#ifndef __com_sun_star_sdbc_SQLException_idl__
+#include <com/sun/star/sdbc/SQLException.idl>
+#endif
+
+module com {  module sun {  module star {  module container {
+interface XIndexAccess;
+};};};};
+//=============================================================================
+
+ module com {  module sun {  module star {  module sdb {
+
+//=============================================================================
+
+/** simplifies the analyzing of single select statements.
+
+    <p>
+    The interface can be used for analyzing single SELECT statements without knowing the
+    structure of the used query.
+    </p>
+ */
+interface XSingleSelectQueryAnalyzer : com::sun::star::uno::XInterface
+{
+
+    /** returns the query.
+        @returns
+            the query
+     */
+    string getQuery();
+    //-------------------------------------------------------------------------
+
+    /** sets a new query for the composer, which may be expanded by filters, group by, having
+        and sort criteria.
+        @param command
+            the single select statement to set
+        @throws com::sun::star::sdbc::SQLException
+            if a database access error occurs
+            or the statement isn't a single select statement
+            or the statement isn't valid
+            or the statement can not be parsed.
+     */
+    void setQuery([in] string command )
+            raises (com::sun::star::sdbc::SQLException);
+    //-------------------------------------------------------------------------
+    // FILTER
+    //-------------------------------------------------------------------------
+
+    /** returns the used filter.
+        <p>
+        The filter criteria returned is part of the where condition of the
+        select command, but it does not contain the where token.
+        </p>
+        @returns
+            the filter
+     */
+    string getFilter();
+    //-------------------------------------------------------------------------
+
+    /** returns the currently used filter.
+             <p>
+             The filter criteria is split into levels. Each level represents the
+             OR criterias. Within each level, the filters are provided as an AND criteria
+             with the name of the column and the filter condition. The filter condition
+             is of type string. The operator used, is defined by <type scope="com::sun::star::sdb">SQLFilterOperator</type>.
+             </p>
+        @returns
+            the structured filter
+     */
+    sequence< sequence<com::sun::star::beans::PropertyValue> >
+        getStructuredFilter();
+
+    //-------------------------------------------------------------------------
+    // GROUP BY
+    //-------------------------------------------------------------------------
+
+    /** returns the currently used GROUP BY.
+        <p>
+        The group criteria returned is part of the GROUP BY clause of the
+        select command, but it does not contain the GROUP BY keyword .
+        </p>
+        @returns
+            the group
+     */
+    string getGroup();
+
+    //-------------------------------------------------------------------------
+    /** returns the currently used group.
+        <p>
+        The columns returned form the GROUP BY clause.
+        </p>
+        @returns
+            a collection of <type scope="com::sun::star::sdb">GroupColumn</type> which form the GROUP BY.
+     */
+    com::sun::star::container::XIndexAccess getGroupColumns();
+
+    //-------------------------------------------------------------------------
+    // HAVING
+    //-------------------------------------------------------------------------
+
+    /** returns the used HAVING filter.
+        <p>
+        The HAVING filter criteria returned is part of the HAVING condition of the
+        select command, but it does not contain the HAVING token.
+        </p>
+        @returns
+            the filter
+     */
+    string getHavingClause();
+    //-------------------------------------------------------------------------
+
+    /** returns the currently used HAVING filter.
+             <p>
+             The HAVING filter criteria is split into levels. Each level represents the
+             OR criterias. Within each level, the filters are provided as an AND criteria
+             with the name of the column and the filter condition. The filter condition
+             is of type string. The operator used, is defined by <type scope="com::sun::star::sdb">SQLFilterOperator</type>.
+             </p>
+        @returns
+            the structured HAVING filter
+     */
+    sequence< sequence<com::sun::star::beans::PropertyValue> >
+        getStructuredHavingFilter();
+
+    //-------------------------------------------------------------------------
+    // ORDER BY
+    //-------------------------------------------------------------------------
+    /** returns the currently used sort order.
+        <p>
+        The order criteria returned is part of the ORDER BY clause of the
+        select command, but it does not contain the ORDER BY keyword .
+        </p>
+        @returns
+            the order
+     */
+    string getOrder();
+
+    //-------------------------------------------------------------------------
+    /** returns the currently used sort order.
+        <p>
+        The order criteria returned is part of the ORDER BY clause of the
+        select command, but it does not contain the ORDER BY keyword .
+        </p>
+        @returns
+            a collection of <type scope="com::sun::star::sdb">OrderColumn</type> which form the ORDER BY.
+     */
+    com::sun::star::container::XIndexAccess getOrderColumns();
+};
+
+//=============================================================================
+
+}; }; }; };
+
+/*=============================================================================
+
+=============================================================================*/
+#endif
+
