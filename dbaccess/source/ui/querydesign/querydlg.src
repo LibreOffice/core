@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querydlg.src,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 12:13:34 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 10:43:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -536,6 +536,7 @@ String STR_JOIN_TYPE_HINT
     Text = "Bitte beachten Sie, da� einige Datenbanken eventuell diese Art der Verkn�pfung nicht unterst�tzen.";
     Text [ english ] = "Please note that some databases may not support this join type.";
     Text [ english_us ] = "Please note that some databases may not support this join type.";
+    Text[ chinese_simplified ] = "请注释一些数据库可能不支持此联接类型。";
 };
 
 String STR_QUERY_INNER_JOIN
