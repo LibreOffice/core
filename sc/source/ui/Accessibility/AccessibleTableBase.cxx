@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleTableBase.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 13:45:25 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:16:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,9 +205,9 @@ sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleRowExtentAt( sal_Int32 nR
 
     if (mpDoc)
     {
-        sal_uInt16 nEndRow(0);
-        sal_uInt16 nEndCol(0);
-        if (mpDoc->ExtendMerge(static_cast<sal_uInt16>(nColumn), static_cast<sal_uInt16>(nRow),
+        SCROW nEndRow(0);
+        SCCOL nEndCol(0);
+        if (mpDoc->ExtendMerge(static_cast<SCCOL>(nColumn), static_cast<SCROW>(nRow),
             nEndCol, nEndRow, maRange.aStart.Tab()))
         {
             if (nEndRow > nRow)
@@ -234,9 +234,9 @@ sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleColumnExtentAt( sal_Int32
 
     if (mpDoc)
     {
-        sal_uInt16 nEndRow(0);
-        sal_uInt16 nEndCol(0);
-        if (mpDoc->ExtendMerge(static_cast<sal_uInt16>(nColumn), static_cast<sal_uInt16>(nRow),
+        SCROW nEndRow(0);
+        SCCOL nEndCol(0);
+        if (mpDoc->ExtendMerge(static_cast<SCCOL>(nColumn), static_cast<SCROW>(nRow),
             nEndCol, nEndRow, maRange.aStart.Tab()))
         {
             if (nEndCol > nColumn)
@@ -368,7 +368,7 @@ sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleColumn( sal_Int32 nChildI
     if (nChildIndex >= getAccessibleChildCount() || nChildIndex < 0)
         throw lang::IndexOutOfBoundsException();
 
-    return nChildIndex % (maRange.aEnd.Col() - maRange.aStart.Col() + 1);
+    return nChildIndex % static_cast<sal_Int32>(maRange.aEnd.Col() - maRange.aStart.Col() + 1);
 }
 
     //=====  XAccessibleContext  ==============================================
@@ -379,7 +379,7 @@ sal_Int32 SAL_CALL
 {
     ScUnoGuard aGuard;
     IsObjectValid();
-    return (maRange.aEnd.Row() - maRange.aStart.Row() + 1) *
+    return static_cast<sal_Int32>(maRange.aEnd.Row() - maRange.aStart.Row() + 1) *
             (maRange.aEnd.Col() - maRange.aStart.Col() + 1);
 //  return 1;
 }
