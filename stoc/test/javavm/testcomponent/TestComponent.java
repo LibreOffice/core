@@ -2,6 +2,9 @@ import com.sun.star.comp.loader.FactoryHelper;
 import com.sun.star.lang.*;
 import com.sun.star.uno.*;
 import com.sun.star.registry.XRegistryKey;
+import java.io.*;
+import java.net.*;
+import com.sun.star.lib.sandbox.*;
 
 
 /** This component implements XTypeProvider for use with StarBasic.
@@ -52,6 +55,30 @@ public class TestComponent implements XServiceInfo, XTypeProvider
         prop= System.getProperty("http.nonProxyHosts");
         prop= System.getProperty("socksProxyHost");
         prop= System.getProperty("socksProxyPort");
+
+        prop= System.getProperty("stardiv.security.disableSecurity");
+        prop= System.getProperty("appletviewer.security.mode");
+
+        // Test security settings
+        File f= new File("c:/temp/javasecurity.txt");
+        try {
+            f.createNewFile();
+
+               // local connection
+        URL url= new URL("http://localhost:8080/index.html");
+        InputStream is= url.openStream();
+        // remote connection
+        url= new URL("http://www.w3.org/index.html");
+        is= url.openStream();
+        }catch( MalformedURLException mue) {
+        }catch( IOException e) {
+            String s= e.getMessage();
+            System.out.println(s);
+        }catch( SandboxSecurityException sse) {
+            String s= sse.getMessage();
+            System.out.println("s");
+        }
+
         return __serviceName;
     }
     // XServiceName
