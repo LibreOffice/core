@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imapdlg.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ka $ $Date: 2001-07-30 14:47:55 $
+ *  last change: $Author: ka $ $Date: 2001-11-22 14:26:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -693,7 +693,7 @@ void SvxIMapDlg::DoOpen()
 
 BOOL SvxIMapDlg::DoSave()
 {
-       sfx2::FileDialogHelper aDlg( FILEOPEN_SIMPLE, 0 );
+       sfx2::FileDialogHelper aDlg( FILESAVE_SIMPLE, 0 );
 
     const String    aBinFilter( DEFINE_CONST_UNICODE( IMAP_BINARY_FILTER ) );
     const String    aCERNFilter( DEFINE_CONST_UNICODE( IMAP_CERN_FILTER ) );
