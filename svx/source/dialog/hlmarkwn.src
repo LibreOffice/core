@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hlmarkwn.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-13 12:13:46 $
+ *  last change: $Author: hr $ $Date: 2003-07-03 16:35:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,7 +157,7 @@ ModalDialog RID_SVXFLOAT_HYPERLINK_MARKWND
     };
     Text[ portuguese ] = "Destino no documento";
     Text[ russian ] = "Φελό β δξκσμενςε";
-    Text[ greek ] = "Σημείο προορισμού στο έγγραφο";
+    Text[ greek ] = "Προορισμός στο έγγραφο";
     Text[ dutch ] = "Doel in document";
     Text[ french ] = "Cible dans le document";
     Text[ spanish ] = "Destino en documento";
@@ -242,6 +242,7 @@ String RID_SVXSTR_HYPDLG_ERR_LERR_DOCNOTOPEN
     Text[ hindi ] = "ΰ¤²ΰ¥‡ΰ¤–ΰ¤ªΰ¤¤ΰ¥ΰ¤° ΰ¤•ΰ¥‹ ΰ¤¨ΰ¤Ήΰ¥€ΰ¤‚ ΰ¤–ΰ¥‹ΰ¤² ΰ¤Έΰ¤•ΰ¤¤ΰ¥‡ ΰ¤Ήΰ¥ ΰ¥¤";
     Text[ slovak ] = "Nie je moΕΎnΓ© otvoriΕ¥ dokument.";
 };
+
 
 
 
