@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 16:50:54 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 11:25:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,6 +61,10 @@
 #ifndef _SFXCFG_HXX
 #define _SFXCFG_HXX
 
+#include <hash_map>
+#include <vector>
+#include <algorithm>
+
 #ifndef _SV_LSTBOX_HXX //autogen
 #include <vcl/lstbox.hxx>
 #endif
@@ -93,6 +97,9 @@
 #ifndef _DRAFTS_COM_SUN_STAR_UI_XUICONFIGURATIONMANAGER_HPP_
 #include <drafts/com/sun/star/ui/XUIConfigurationManager.hpp>
 #endif
+#ifndef _DRAFTS_COM_SUN_STAR_UI_XACCELERATORCONFIGURATION_HPP_
+#include <drafts/com/sun/star/ui/XAcceleratorConfiguration.hpp>
+#endif
 #ifndef _COM_SUN_STAR_FRAME_XFRAME_HPP_
 #include <com/sun/star/frame/XFrame.hpp>
 #endif
@@ -114,8 +121,6 @@
 #include "minarray.hxx"
 #include "tabdlg.hxx"
 
-#include <vector>
-
 class SfxMenuManager;
 class SfxAcceleratorManager;
 class SfxMacroInfoArr_Impl;
@@ -132,6 +137,68 @@ class SfxConfigManager;
 #define SFX_CFGFUNCTION_SLOT  7
 #define SFX_CFGGROUP_SCRIPTCONTAINER  8
 #define SFX_CFGFUNCTION_SCRIPT 9
+#define SFX_CFGGROUP_STYLES  10
+
+typedef ::std::hash_map< ::rtl::OUString                    ,
+                         USHORT                             ,
+                         ::rtl::OUStringHash                ,
+                         ::std::equal_to< ::rtl::OUString > > TCommand2IDMap;
+
+typedef ::std::vector< ::rtl::OUString > TID2CommandMap;
+
+struct SfxStyleInfo_Impl
+{
+    public:
+    USHORT nId;
+    ::rtl::OUString sFamily;
+    ::rtl::OUString sStyle;
+    ::rtl::OUString sCommand;
+    ::rtl::OUString sLabel;
+
+    SfxStyleInfo_Impl()
+        : nId(0)
+    {}
+
+    SfxStyleInfo_Impl(const SfxStyleInfo_Impl& rCopy)
+    {
+        nId      = rCopy.nId;
+        sFamily  = rCopy.sFamily;
+        sStyle   = rCopy.sStyle;
+        sCommand = rCopy.sCommand;
+        sLabel   = rCopy.sLabel;
+    }
+};
+
+struct SfxStylesInfo_Impl
+{
+    public:
+        static USHORT START_ID_STYLES;
+
+    private:
+
+        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel > m_xDoc;
+
+        TID2CommandMap m_lID2Commands;
+        TCommand2IDMap m_lCommand2IDs;
+        USHORT m_nIDPool;
+
+    public:
+
+        SfxStylesInfo_Impl();
+        void setModel(const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel);
+
+        // return ID of existing command or create a new ID after caching this command as new one
+        USHORT cacheStyle(const ::rtl::OUString& sCommand);
+
+        ::rtl::OUString getStyle(USHORT nID);
+        sal_Bool parseStyleCommand(const ::rtl::OUString&   sCommand,
+                                         SfxStyleInfo_Impl& aStyle  );
+
+        ::std::vector< SfxStyleInfo_Impl > getStyleFamilies();
+        ::std::vector< SfxStyleInfo_Impl > getStyles(const ::rtl::OUString& sFamily);
+
+        static ::rtl::OUString generateCommand(const ::rtl::OUString sFamily, ::rtl::OUString sStyle);
+};
 
 struct SfxGroupInfo_Impl
 {
@@ -154,6 +221,7 @@ friend class SfxConfigGroupListBox_Impl;
     Timer                           aTimer;
     SvLBoxEntry*                    pCurEntry;
     SfxGroupInfoArr_Impl            aArr;
+    SfxStylesInfo_Impl*             pStylesInfo;
 
     DECL_LINK(                      TimerHdl, Timer* );
     virtual void                    MouseMove( const MouseEvent& rMEvt );
@@ -170,6 +238,7 @@ public:
                                     { return GetId( FirstSelected() ); }
     SfxMacroInfo*                   GetMacroInfo();
     void                            FunctionSelected();
+    void                            SetStylesInfo(SfxStylesInfo_Impl* pStyles);
 };
 
 class SfxSlotPool;
@@ -182,6 +251,7 @@ class SfxConfigGroupListBox_Impl : public SvTreeListBox
     SfxSlotPool*                    pSlotPool;
     BOOL                            bShowSF; // show Scripting Framework scripts
     BOOL                            bShowBasic; // show Basic scripts
+
     Image m_hdImage;
     Image m_hdImage_hc;
     Image m_libImage;
@@ -198,6 +268,7 @@ class SfxConfigGroupListBox_Impl : public SvTreeListBox
     ::rtl::OUString xModelToDocTitle( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& xModel );
     ::rtl::OUString parseLocationName( const ::rtl::OUString& location );
 
+    SfxStylesInfo_Impl*             pStylesInfo;
 
 protected:
     virtual void                    RequestingChilds( SvLBoxEntry *pEntry);
@@ -220,6 +291,7 @@ public:
     void                            SelectMacro( const String&, const String& );
     String                          GetGroup();
     void                            SetScriptType( const String& rScriptType );
+    void                            SetStylesInfo(SfxStylesInfo_Impl* pStyles);
 };
 
 class SfxMenuConfigEntry
@@ -412,6 +484,7 @@ public:
 };
 
 // class SfxAcceleratorConfigPage ----------------------------------------
+/* TODO_ACC
 struct AccelInfo_Impl
 {
     SfxAcceleratorManager*      pMgr;
@@ -419,7 +492,7 @@ struct AccelInfo_Impl
     BOOL                        bDefault;
     BOOL                        bModified;
 };
-
+*/
 struct AccelBackup
 {
     AccelBackup( const KeyCode& rKeyCode, USHORT nSlotId ) :
@@ -451,15 +524,24 @@ private:
     PushButton                      aSaveButton;
     PushButton                      aResetButton;
     std::vector< AccelBackup >      m_aAccelBackup;
+    SfxStylesInfo_Impl              m_aStylesInfo;
+    sal_Bool                        m_bStylesInfoInitialized;
 
     USHORTArr                   aConfigCodeArr;
     USHORTArr                   aConfigAccelArr;
     USHORTArr                   aAccelArr;
     USHORTArr                   aKeyArr;
 
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >            pSMGR;
+    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::ui::XAcceleratorConfiguration > pGlobal; // name it pXXX so the old code can be used without changes ... because a -> operator is used anyway .-)
+    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::ui::XAcceleratorConfiguration > pModule;
+    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::ui::XAcceleratorConfiguration > pAct;
+
+/*TODO_ACC
     AccelInfo_Impl*             pGlobal;
     AccelInfo_Impl*             pModule;
     AccelInfo_Impl*             pAct;
+*/
 
     DECL_LINK(                  ChangeHdl, Button * );
     DECL_LINK(                  RemoveHdl, Button * );
@@ -477,11 +559,17 @@ private:
 
     String                      GetFunctionName( KeyFuncType eType )    const;
 
-    void                        Init( SfxAcceleratorManager* pAccMgr );
+    void                        Init(const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::ui::XAcceleratorConfiguration >& pAccMgr);
     void                        ResetConfig();
 
     void                        CreateCustomItems( SvLBoxEntry* pEntry, const String& aCol1, const String& aCol2 );
 
+    ::rtl::OUString             impl_ID2Command(USHORT nId, SfxSlotPool* pSlotPool);
+    USHORT                      impl_Command2ID(const ::rtl::OUString& sCommand, SfxSlotPool* pSlotPool);
+    void                        impl_appendItem(const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::ui::XAcceleratorConfiguration >& pAccMgr  ,
+                                                      USHORT                                                      nId      ,
+                                                const KeyCode&                                                    aVCLKey  ,
+                                                      SfxSlotPool*                                                pSlotPool);
 public:
                                 SfxAcceleratorConfigPage( Window *pParent, const SfxItemSet& rItemSet );
     virtual                     ~SfxAcceleratorConfigPage();
@@ -490,7 +578,7 @@ public:
     virtual void                Reset( const SfxItemSet& );
 
     void                        SelectMacro(const SfxMacroInfoItem*);
-    void                        Apply( SfxAcceleratorManager*, BOOL );
+    void                        Apply(const ::com::sun::star::uno::Reference< ::drafts::com::sun::star::ui::XAcceleratorConfiguration >& pAccMgr, BOOL );
 };
 
 class SfxConfigDialog : public SfxTabDialog
