@@ -47,6 +47,16 @@ $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
     @ls -l $@
+.IF "$(OS)"=="MACOSX"
+.IF "$(TARGETTYPE)"=="GUI"
+    @+-$(RM) -R $@.app
+    @+if ( -f $@ ) \
+    echo "Making: $@.app" ; \
+    $(MKDIRHIER) $@.app$/Contents$/MacOS ; \
+    $(COPY) $@ $@.app$/Contents/$/MacOS$/$(@:f) ; \
+    endif
+.ENDIF		# "$(TARGETTYPE)"=="GUI"
+.ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
 .IF "$(GUI)"=="MAC"
     @+-$(RM) $@ $@.xSYM $@.idb
@@ -192,6 +202,16 @@ $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
     @ls -l $@
+.IF "$(OS)"=="MACOSX"
+.IF "$(TARGETTYPE)"=="GUI"
+    @+-$(RM) -R $@.app
+    @+if ( -f $@ ) \
+    echo "Making: $@.app" ; \
+    $(MKDIRHIER) $@.app$/Contents$/MacOS ; \
+    $(COPY) $@ $@.app$/Contents/$/MacOS$/$(@:f) ; \
+    endif
+.ENDIF		# "$(TARGETTYPE)"=="GUI"
+.ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
 .IF "$(GUI)"=="MAC"
     @+-$(RM) $@ $@.xSYM $@.idb
@@ -337,6 +357,16 @@ $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
     @ls -l $@
+.IF "$(OS)"=="MACOSX"
+.IF "$(TARGETTYPE)"=="GUI"
+    @+-$(RM) -R $@.app
+    @+if ( -f $@ ) \
+    echo "Making: $@.app" ; \
+    $(MKDIRHIER) $@.app$/Contents$/MacOS ; \
+    $(COPY) $@ $@.app$/Contents/$/MacOS$/$(@:f) ; \
+    endif
+.ENDIF		# "$(TARGETTYPE)"=="GUI"
+.ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
 .IF "$(GUI)"=="MAC"
     @+-$(RM) $@ $@.xSYM $@.idb
@@ -482,6 +512,16 @@ $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
     @ls -l $@
+.IF "$(OS)"=="MACOSX"
+.IF "$(TARGETTYPE)"=="GUI"
+    @+-$(RM) -R $@.app
+    @+if ( -f $@ ) \
+    echo "Making: $@.app" ; \
+    $(MKDIRHIER) $@.app$/Contents$/MacOS ; \
+    $(COPY) $@ $@.app$/Contents/$/MacOS$/$(@:f) ; \
+    endif
+.ENDIF		# "$(TARGETTYPE)"=="GUI"
+.ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
 .IF "$(GUI)"=="MAC"
     @+-$(RM) $@ $@.xSYM $@.idb
@@ -627,6 +667,16 @@ $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
     @ls -l $@
+.IF "$(OS)"=="MACOSX"
+.IF "$(TARGETTYPE)"=="GUI"
+    @+-$(RM) -R $@.app
+    @+if ( -f $@ ) \
+    echo "Making: $@.app" ; \
+    $(MKDIRHIER) $@.app$/Contents$/MacOS ; \
+    $(COPY) $@ $@.app$/Contents/$/MacOS$/$(@:f) ; \
+    endif
+.ENDIF		# "$(TARGETTYPE)"=="GUI"
+.ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
 .IF "$(GUI)"=="MAC"
     @+-$(RM) $@ $@.xSYM $@.idb
@@ -772,6 +822,16 @@ $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
     @ls -l $@
+.IF "$(OS)"=="MACOSX"
+.IF "$(TARGETTYPE)"=="GUI"
+    @+-$(RM) -R $@.app
+    @+if ( -f $@ ) \
+    echo "Making: $@.app" ; \
+    $(MKDIRHIER) $@.app$/Contents$/MacOS ; \
+    $(COPY) $@ $@.app$/Contents/$/MacOS$/$(@:f) ; \
+    endif
+.ENDIF		# "$(TARGETTYPE)"=="GUI"
+.ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
 .IF "$(GUI)"=="MAC"
     @+-$(RM) $@ $@.xSYM $@.idb
@@ -917,6 +977,16 @@ $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
     @ls -l $@
+.IF "$(OS)"=="MACOSX"
+.IF "$(TARGETTYPE)"=="GUI"
+    @+-$(RM) -R $@.app
+    @+if ( -f $@ ) \
+    echo "Making: $@.app" ; \
+    $(MKDIRHIER) $@.app$/Contents$/MacOS ; \
+    $(COPY) $@ $@.app$/Contents/$/MacOS$/$(@:f) ; \
+    endif
+.ENDIF		# "$(TARGETTYPE)"=="GUI"
+.ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
 .IF "$(GUI)"=="MAC"
     @+-$(RM) $@ $@.xSYM $@.idb
@@ -1062,6 +1132,16 @@ $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
     @ls -l $@
+.IF "$(OS)"=="MACOSX"
+.IF "$(TARGETTYPE)"=="GUI"
+    @+-$(RM) -R $@.app
+    @+if ( -f $@ ) \
+    echo "Making: $@.app" ; \
+    $(MKDIRHIER) $@.app$/Contents$/MacOS ; \
+    $(COPY) $@ $@.app$/Contents/$/MacOS$/$(@:f) ; \
+    endif
+.ENDIF		# "$(TARGETTYPE)"=="GUI"
+.ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
 .IF "$(GUI)"=="MAC"
     @+-$(RM) $@ $@.xSYM $@.idb
@@ -1207,6 +1287,16 @@ $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
     @ls -l $@
+.IF "$(OS)"=="MACOSX"
+.IF "$(TARGETTYPE)"=="GUI"
+    @+-$(RM) -R $@.app
+    @+if ( -f $@ ) \
+    echo "Making: $@.app" ; \
+    $(MKDIRHIER) $@.app$/Contents$/MacOS ; \
+    $(COPY) $@ $@.app$/Contents/$/MacOS$/$(@:f) ; \
+    endif
+.ENDIF		# "$(TARGETTYPE)"=="GUI"
+.ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
 .IF "$(GUI)"=="MAC"
     @+-$(RM) $@ $@.xSYM $@.idb
@@ -1352,6 +1442,16 @@ $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
     @ls -l $@
+.IF "$(OS)"=="MACOSX"
+.IF "$(TARGETTYPE)"=="GUI"
+    @+-$(RM) -R $@.app
+    @+if ( -f $@ ) \
+    echo "Making: $@.app" ; \
+    $(MKDIRHIER) $@.app$/Contents$/MacOS ; \
+    $(COPY) $@ $@.app$/Contents/$/MacOS$/$(@:f) ; \
+    endif
+.ENDIF		# "$(TARGETTYPE)"=="GUI"
+.ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
 .IF "$(GUI)"=="MAC"
     @+-$(RM) $@ $@.xSYM $@.idb

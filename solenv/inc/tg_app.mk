@@ -3,8 +3,8 @@
 #*    $Workfile:   tg_app.mk  $
 #*
 #*    Ersterstellung    XX  TT.MM.JJ
-#*    Letzte Aenderung  $Author: pluby $ $Date: 2000-10-06 15:03:01 $
-#*    $Revision: 1.2 $
+#*    Letzte Aenderung  $Author: pluby $ $Date: 2000-10-09 03:01:25 $
+#*    $Revision: 1.3 $
 #*
 #*    $Logfile:   T:/solar/inc/tg_app.mkv  $
 #*
@@ -93,6 +93,16 @@ $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
     @cat $(MISC)$/$(@:b).cmd
     @source $(MISC)$/$(@:b).cmd
     @ls -l $@
+.IF "$(OS)"=="MACOSX"
+.IF "$(TARGETTYPE)"=="GUI"
+    @+-$(RM) -R $@.app
+    @+if ( -f $@ ) \
+    echo "Making: $@.app" ; \
+    $(MKDIRHIER) $@.app$/Contents$/MacOS ; \
+    $(COPY) $@ $@.app$/Contents/$/MacOS$/$(@:f) ; \
+    endif
+.ENDIF		# "$(TARGETTYPE)"=="GUI"
+.ENDIF		# "$(OS)"=="MACOSX"
 .ENDIF
 .IF "$(GUI)"=="MAC"
     @+-$(RM) $@ $@.xSYM $@.idb
