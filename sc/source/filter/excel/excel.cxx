@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excel.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-28 17:56:06 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 16:16:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,8 +97,8 @@
 #include "filter.hxx"
 #endif
 
-#ifndef SC_XLTOOLS_HXX
-#include "xltools.hxx"
+#ifndef SC_XISTREAM_HXX
+#include "xistream.hxx"
 #endif
 
 #include "scerrors.hxx"
@@ -130,8 +130,13 @@ String lcl_GetDocUrl( const SfxMedium& rMedium )
 
 FltError ScImportExcel( SvStream& rStream, ScDocument* pDocument )
 {
-    ImportExcel             aFilter( rStream, pDocument, String() );
-    return aFilter.Read();
+    XclBiff eBiff = XclImpStream::DetectBiffVersion( rStream );
+    if( eBiff <= xlBiff4 )
+    {
+        ImportExcel aFilter( rStream, eBiff, pDocument, String() );
+        return aFilter.Read();
+    }
+    return eERR_FORMAT;
 }
 
 
@@ -182,7 +187,7 @@ FltError ScImportExcel( SfxMedium& rMedium, ScDocument* pDocument, const EXCIMPF
 
         // *** find BIFF version and stream name ***
 
-        enum { xlBiffDet0, xlBiffDet5, xlBiffDet8 } eBiffDetect = xlBiffDet0;
+        XclBiff eDetectedBiff = xlBiffUnknown;
         const String* pStreamName = NULL;
 
         if( eRet == eERR_OK )
@@ -190,12 +195,12 @@ FltError ScImportExcel( SfxMedium& rMedium, ScDocument* pDocument, const EXCIMPF
             // BIFF8 is first class
             if( bHasWorkbook )
             {
-                eBiffDetect = xlBiffDet8;
+                eDetectedBiff = xlBiff8;
                 pStreamName = &aStreamName8;
             }
             else if( bHasBook )
             {
-                eBiffDetect = xlBiffDet5;
+                eDetectedBiff = xlBiff5;
                 pStreamName = &aStreamName5;
             }
             else
@@ -210,22 +215,29 @@ FltError ScImportExcel( SfxMedium& rMedium, ScDocument* pDocument, const EXCIMPF
 
             // *** special handling for wrong BIFF versions in stream ***
 
-            xStream->SeekRel( 4 );
-            sal_uInt16 nVersion;
-            (*xStream) >> nVersion;
-            xStream->Seek( 0 );
+            XclBiff eBiff = XclImpStream::DetectBiffVersion( *xStream );
 
             // look for BIFF5/7 stream in "Workbook"
-            if( bHasWorkbook && (nVersion == 0x0500) )
-                eBiffDetect = xlBiffDet5;
+            if( bHasWorkbook )
+            {
+                if( (eBiff == xlBiff5) || (eBiff == xlBiff7) )
+                    eDetectedBiff = xlBiff5;
+                else if( eBiff != xlBiff8 )
+                    eDetectedBiff = xlBiffUnknown;
+            }
             // look for BIFF8 stream in "Book"
-            else if( bHasBook && (nVersion == 0x0600) )
-                eBiffDetect = xlBiffDet8;
+            else if( bHasBook )
+            {
+                if( eBiff == xlBiff8 )
+                    eDetectedBiff = xlBiff8;
+                else if( (eBiff != xlBiff5) && (eBiff != xlBiff7) )
+                    eDetectedBiff = xlBiffUnknown;
+            }
 
             //!!! move into filter !!!
             const String aPvCchStrgNm( String::CreateFromAscii( pPivotCacheStorageName ) );
             SvStorage* pPivotCacheStorage = NULL;
-            if( eBiffDetect == xlBiffDet8 )
+            if( eDetectedBiff == xlBiff8 )
                 pPivotCacheStorage = pStorage->OpenStorage( aPvCchStrgNm, STREAM_STD_READ );
             //!!! move into filter !!!
 
@@ -235,10 +247,10 @@ FltError ScImportExcel( SfxMedium& rMedium, ScDocument* pDocument, const EXCIMPF
             {
                 ImportExcel* pFilter = NULL;
 
-                if( eBiffDetect == xlBiffDet5 )
-                    pFilter = new ImportExcel( *xStream, pDocument, lcl_GetDocUrl( rMedium ) );
-                else if( eBiffDetect == xlBiffDet8 )
-                    pFilter = new ImportExcel8( pStorage, *xStream, pDocument, lcl_GetDocUrl( rMedium ), pPivotCacheStorage );
+                if( eDetectedBiff == xlBiff5 )
+                    pFilter = new ImportExcel( *xStream, eBiff, pDocument, lcl_GetDocUrl( rMedium ) );
+                else if( eDetectedBiff == xlBiff8 )
+                    pFilter = new ImportExcel8( pStorage, *xStream, eBiff, pDocument, lcl_GetDocUrl( rMedium ), pPivotCacheStorage );
 
                 if( pFilter )
                     eRet = pFilter->Read();
@@ -263,7 +275,9 @@ FltError ScImportExcel( SfxMedium& rMedium, ScDocument* pDocument, const EXCIMPF
             pStream->Seek( 0UL );
             pStream->SetBufferSize( 32768 );
 
-            ImportExcel aFilter( *pStream, pDocument, lcl_GetDocUrl( rMedium ) );
+            XclBiff eBiff = XclImpStream::DetectBiffVersion( *pStream );
+
+            ImportExcel aFilter( *pStream, eBiff, pDocument, lcl_GetDocUrl( rMedium ) );
             eRet = aFilter.Read();
 
             pStream->SetBufferSize( 0 );
