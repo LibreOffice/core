@@ -2,9 +2,9 @@
  *
  *  $RCSfile: chartlis.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: nn $ $Date: 2002-01-22 08:25:53 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 10:03:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,8 +67,8 @@
 #include <vcl/timer.hxx>
 #endif
 
-#ifndef _SFXLSTNER_HXX //autogen
-#include <svtools/lstner.hxx>
+#ifndef _SVT_LISTENER_HXX
+#include <svtools/listener.hxx>
 #endif
 #ifndef SC_COLLECT_HXX
 #include "collect.hxx"
@@ -87,7 +87,7 @@ class ScChartUnoData;
 #include <com/sun/star/chart/XChartDataChangeEventListener.hpp>
 #endif
 
-class ScChartListener : public StrData, public SfxListener
+class ScChartListener : public StrData, public SvtListener
 {
 private:
     ScRangeListRef  aRangeListRef;
@@ -116,7 +116,7 @@ public:
 
     BOOL            IsUno() const   { return (pUnoData != NULL); }
 
-    virtual void    Notify( SfxBroadcaster& rBC, const SfxHint& rHint );
+    virtual void    Notify( SvtBroadcaster& rBC, const SfxHint& rHint );
     void            StartListeningTo();
     void            EndListeningTo();
     void            ChangeListening( const ScRangeListRef& rRangeListRef,
@@ -178,7 +178,7 @@ public:
     void            SetRangeDirty( const ScRange& rRange );     // z.B. Zeilen/Spalten
 
     void            UpdateScheduledSeriesRanges();
-    void            UpdateSeriesRangesContainingTab( USHORT nTab );
+    void            UpdateSeriesRangesContainingTab( SCTAB nTab );
 
     BOOL            operator==( const ScChartListenerCollection& );
 };
