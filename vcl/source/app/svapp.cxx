@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svapp.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: sb $ $Date: 2002-11-26 15:33:30 $
+ *  last change: $Author: ssa $ $Date: 2002-12-09 09:23:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1614,7 +1614,11 @@ Window* Application::GetDefDialogParent()
         {
             while( pWin->mpParent )
                 pWin = pWin->mpParent;
-            return pWin->mpFrameWindow->ImplGetWindow();
+            // use only decorated windows
+            if( pWin->mpFrameWindow->GetStyle() & (WB_MOVEABLE | WB_SIZEABLE) )
+                return pWin->mpFrameWindow->ImplGetWindow();
+            else
+                return NULL;
         }
         else
         {
