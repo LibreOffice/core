@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dockwin.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 11:27:58 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 13:35:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -375,6 +375,7 @@ BOOL SfxDockingWindow::Docking( const Point& rPos, Rectangle& rRect )
         return FALSE;
 
     BOOL bFloatMode = FALSE;
+
     if ( GetOuterRect().IsInside( rPos ) && !IsDockingPrevented() )
     {
         // Maus innerhalb OuterRect : Alignment und Rectangle berechnen
@@ -994,7 +995,7 @@ SfxChildAlignment SfxDockingWindow::CalcAlignment(const Point& rPos, Rectangle& 
         aDockingRect.SetSize( GetFloatingSize() );
 
         // in this mode docking is never done by keyboard, so it's OK to use the mouse position
-        aDockingRect.SetPos( pWorkWin->GetWindow()->GetPointerPosPixel() );
+        aDockingRect.SetPos( pWorkWin->GetWindow()->OutputToScreenPixel( pWorkWin->GetWindow()->GetPointerPosPixel() ) );
     }
 
     Point aPos = aDockingRect.TopLeft();
@@ -1004,8 +1005,16 @@ SfxChildAlignment SfxDockingWindow::CalcAlignment(const Point& rPos, Rectangle& 
         bBecomesFloating = TRUE;
     else
     {
-        Rectangle aIntersect = aInRect.GetIntersection( aDockingRect );
-        if ( aIntersect == aDockingRect )
+        // create a small test rect around the mouse position and use this one
+        // instead of the passed rRect to not dock too easily or by accident
+        Rectangle aSmallDockingRect;
+        aSmallDockingRect.SetSize( Size( MAX_TOGGLEAREA_WIDTH, MAX_TOGGLEAREA_HEIGHT ) );
+        Point aNewPos(rPos);
+        aNewPos.X() -= aSmallDockingRect.GetWidth()/2;
+        aNewPos.Y() -= aSmallDockingRect.GetHeight()/2;
+        aSmallDockingRect.SetPos(rPos);
+        Rectangle aIntersect = aInRect.GetIntersection( aSmallDockingRect );
+        if ( aIntersect == aSmallDockingRect )
             // docking rectangle completely inside (shrinked) inner area -> floating mode
             bBecomesFloating = TRUE;
     }
