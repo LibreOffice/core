@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptStorageManager.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jmrice $ $Date: 2002-09-27 12:16:30 $
+ *  last change: $Author: dfoster $ $Date: 2002-09-27 14:14:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@ typedef ::std::hash_map <
     ScriptStorage_hash;
 
 class ScriptStorageManager :
-public ::cppu::WeakImplHelper3<
+public ::cppu::WeakImplHelper3 <
  ::drafts::com::sun::star::script::framework::storage::XScriptStorageManager,
  ::com::sun::star::lang::XServiceInfo, ::com::sun::star::lang::XEventListener >
 {
@@ -93,8 +93,8 @@ public:
     explicit ScriptStorageManager(
         const ::com::sun::star::uno::Reference<
         ::com::sun::star::uno::XComponentContext > & xContext )
-        SAL_THROW ( (RuntimeException) );
-;
+        SAL_THROW ( ( ::com::sun::star::uno::RuntimeException ) );
+
 
     ~ScriptStorageManager() SAL_THROW ( () );
 
@@ -177,8 +177,8 @@ public:
         disposing( const ::com::sun::star::lang::EventObject& Source )
             throw (::com::sun::star::uno::RuntimeException);
 
-    static const sal_uInt16 APP_SHARE_STORAGE_ID = 0;
-    static const sal_uInt16 APP_USER_STORAGE_ID = 1;
+    static const sal_uInt16 APP_SHARE_STORAGE_ID;
+    static const sal_uInt16 APP_USER_STORAGE_ID;
 
 private:
     ScriptStorageManager(const ScriptStorageManager & );

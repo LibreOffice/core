@@ -2,9 +2,9 @@
 *
 *  $RCSfile: ScriptStorageManager.cxx,v $
 *
-*  $Revision: 1.3 $
+*  $Revision: 1.4 $
 *
-*  last change: $Author: jmrice $ $Date: 2002-09-27 12:16:30 $
+*  last change: $Author: dfoster $ $Date: 2002-09-27 14:14:13 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -87,14 +87,15 @@ static OUString s_serviceName =
     ::rtl::OUString::createFromAscii(
         "drafts.com.sun.star.script.framework.storage.ScriptStorageManager" );
 static Sequence< OUString > s_serviceNames = Sequence< OUString >( &s_serviceName, 1 );
-
+const sal_uInt16 ScriptStorageManager::APP_SHARE_STORAGE_ID = 0;
+const sal_uInt16 ScriptStorageManager::APP_USER_STORAGE_ID = 1;
 extern ::rtl_StandardModuleCount s_moduleCount = MODULE_COUNT_INIT;
 
 //*************************************************************************
 // ScriptStorageManager Constructor
-ScriptStorageManager::ScriptStorageManager( const Reference< XComponentContext > & xContext )
-        : m_xContext( xContext ), m_count( 0 )
-        SAL_THROW ( ( RuntimeException ) )
+ScriptStorageManager::ScriptStorageManager( const Reference< 
+    XComponentContext > & xContext ) SAL_THROW ( ( RuntimeException ) )
+    : m_xContext( xContext ), m_count( 0 )
 {
     OSL_TRACE( "< ScriptStorageManager ctor called >\n" );
     s_moduleCount.modCnt.acquire( &s_moduleCount.modCnt );
