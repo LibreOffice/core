@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmvwimp.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:40:24 $
+ *  last change: $Author: kz $ $Date: 2003-12-11 12:19:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -854,6 +854,8 @@ static Reference< XControl > lcl_firstFocussableControl( const Sequence< Referen
                 &&  ( FormComponentType::FIXEDTEXT != nClassId )
                 &&  ( FormComponentType::HIDDENCONTROL != nClassId )
                 &&  ( FormComponentType::IMAGECONTROL != nClassId )
+                &&  ( FormComponentType::SCROLLBAR != nClassId )
+                &&  ( FormComponentType::SPINBUTTON!= nClassId )
                 )
             {
                 xReturn = *pControls;
