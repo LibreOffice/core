@@ -2,9 +2,9 @@
  *
  *  $RCSfile: string.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: np $ $Date: 2002-11-01 12:18:50 $
+ *  last change: $Author: np $ $Date: 2002-11-18 11:49:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,9 +138,6 @@ class String
 
                         operator const char * () const;
 
-    const char &        operator[](
-                            position_type       i_nPosition ) const;
-
     bool                operator==(
                             const self &        i_rStr ) const;
     bool                operator!=(
@@ -192,6 +189,9 @@ class String
     bool                empty() const;
     size_type           size() const;
     size_type           length() const;
+
+    const char &        char_at(
+                            position_type       i_nPosition ) const;
 
     const_iterator      begin() const;
 
@@ -408,7 +408,7 @@ String::Str() const
 
 
 inline const char &
-String::operator[]( position_type i_nPosition ) const
+String::char_at( position_type i_nPosition ) const
 { if ( i_nPosition < Str().Size() )
       return Str().Data()[i_nPosition];
   return Nulch_();
