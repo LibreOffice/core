@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wizardmachine.src,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 14:38:01 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 17:39:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,17 +78,20 @@ String STR_WIZDLG_FINISH
     Text[ italian ] = "~Crea";
     Text[ danish ] = "~Udf�r";
     Text[ swedish ] = "~F�rdigst�ll";
-    Text[ polish ] = "Utw�rz";
-    Text[ portuguese_brazilian ] = "~Finish";
+    Text[ polish ] = "~Utw�rz";
+    Text[ portuguese_brazilian ] = "~Criar";
     Text[ japanese ] = "完了(~R)";
     Text[ korean ] = "만들기(~R)";
     Text[ chinese_simplified ] = "完成(~R)";
     Text[ chinese_traditional ] = "完成(~R)";
-    Text[ turkish ] = "~Finish";
+    Text[ turkish ] = "~Bitir";
     Text[ arabic ] = "�����";
     Text[ catalan ] = "~Crea";
     Text[ finnish ] = "~Luo";
     Text[ thai ] = "ส~ร้าง";
+    Text[ czech ] = "Vytvořit";
+    Text[ hebrew ] = "‮חדש‬";
+    Text[ hindi ] = "उ~त्पन्न करो";
 };
 
 String STR_WIZDLG_NEXT
@@ -106,17 +109,20 @@ String STR_WIZDLG_NEXT
     Text[ italian ] = "~Avanti >>";
     Text[ danish ] = "~N�ste >>";
     Text[ swedish ] = "~N�sta >>";
-    Text[ polish ] = "Dalej >>";
-    Text[ portuguese_brazilian ] = "~Next >>";
+    Text[ polish ] = "~Dalej >>";
+    Text[ portuguese_brazilian ] = "~Pr�ximo >>";
     Text[ japanese ] = "次へ(~N) >>";
     Text[ korean ] = "다음(~N) >>";
     Text[ chinese_simplified ] = "继续(~N) >>";
     Text[ chinese_traditional ] = "繼續(~N) >>";
-    Text[ turkish ] = "~Next >>";
+    Text[ turkish ] = "~Sonraki >>";
     Text[ arabic ] = "������ <<";
     Text[ catalan ] = "~Seg�ent >>";
     Text[ finnish ] = "~Seuraava >>";
     Text[ thai ] = "~ถัดไป >>";
+    Text[ czech ] = "Další >>";
+    Text[ hebrew ] = "‮הבא >>‬";
+    Text[ hindi ] = "~आगे >>";
 };
 
 String STR_WIZDLG_PREVIOUS
@@ -134,22 +140,37 @@ String STR_WIZDLG_PREVIOUS
     Text[ italian ] = "<<~Indietro";
     Text[ danish ] = "<< ~Tilbage";
     Text[ swedish ] = "<< T~illbaka";
-    Text[ polish ] = "<< Wstecz";
-    Text[ portuguese_brazilian ] = "<< ~Previous";
+    Text[ polish ] = "<< ~Wstecz";
+    Text[ portuguese_brazilian ] = "<< ~Anterior";
     Text[ japanese ] = "<< 戻る(~K)";
     Text[ korean ] = "<< 뒤로(~K)";
     Text[ chinese_simplified ] = "<< 返回(~K)";
     Text[ chinese_traditional ] = "<< 返回(~K)";
-    Text[ turkish ] = "<< ~Previous";
+    Text[ turkish ] = "<< ~Geri";
     Text[ arabic ] = "<< ~Previous";
     Text[ catalan ] = "<< ~Enrere";
     Text[ finnish ] = "<< ~Edellinen";
     Text[ thai ] = "<< กลั~บไป";
+    Text[ czech ] = "<< Zpět";
+    Text[ hebrew ] = "‮<< קודם‬";
+    Text[ hindi ] = "<< पी~छे";
 };
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.17.2.8.4.4.2.1.48.3  2003/04/29 08:35:06  gh
+ *  final merge for Beta2
+ *
+ *  Revision 1.17.2.8.4.4.2.1.48.2  2003/04/16 18:20:35  gh
+ *  RESYNC: (1.17.2.8.4.4.2.1-1.24); FILE MERGED
+ *
+ *  Revision 1.17.2.8.4.4.2.1.48.1  2003/04/14 15:07:24  gh
+ *  merging all languages
+ *
+ *  Revision 1.24  2003/03/27 14:38:01  hr
+ *  MWS_SRX644: migrate branch mws_srx644 -> HEAD
+ *
  *  Revision 1.17.2.8.4.4.2.1  2003/02/22 16:31:59  hr
  *  INTEGRATION: CWS mergep (1.17.2.8.4.4.66); FILE MERGED
  *  2003/02/22 10:37:47 nf 1.17.2.8.4.4.66.2: #107113# localization of StarOffice 6.1 Beta/OpenOffice.org 1.1 Beta. Represents content of translation database of 02/21/2003. Translation up to date for SUN big rules languages
@@ -251,6 +272,15 @@ String STR_WIZDLG_PREVIOUS
  *
  *  Revision 1.0 14.02.01 11:46:26  fs
  ************************************************************************/
+
+
+
+
+
+
+
+
+
 
 
 
