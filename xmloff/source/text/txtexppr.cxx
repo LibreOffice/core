@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtexppr.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: dvo $ $Date: 2001-10-25 20:57:03 $
+ *  last change: $Author: mib $ $Date: 2001-11-28 10:01:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -445,6 +445,7 @@ void XMLTextExportPropertySetMapper::ContextFilter(
 
     // vertical position and relation
     XMLPropertyState* pVertOrientState = NULL;
+    XMLPropertyState* pVertOrientAtCharState = NULL;
     XMLPropertyState* pVertOrientRelState = NULL;
     XMLPropertyState* pVertOrientRelPageState = NULL;
     XMLPropertyState* pVertOrientRelFrameState = NULL;
@@ -516,6 +517,7 @@ void XMLTextExportPropertySetMapper::ContextFilter(
         case CTF_HORIZONTALREL_FRAME:       pHoriOrientRelFrameState = propertie; bNeedsAnchor = sal_True; break;
         case CTF_HORIZONTALMIRROR:          pHoriOrientMirrorState = propertie; bNeedsAnchor = sal_True; break;
         case CTF_VERTICALPOS:           pVertOrientState = propertie; bNeedsAnchor = sal_True; break;
+        case CTF_VERTICALPOS_ATCHAR:    pVertOrientAtCharState = propertie; bNeedsAnchor = sal_True; break;
         case CTF_VERTICALREL:           pVertOrientRelState = propertie; bNeedsAnchor = sal_True; break;
         case CTF_VERTICALREL_PAGE:      pVertOrientRelPageState = propertie; bNeedsAnchor = sal_True; break;
         case CTF_VERTICALREL_FRAME:     pVertOrientRelFrameState = propertie; bNeedsAnchor = sal_True; break;
@@ -855,6 +857,10 @@ void XMLTextExportPropertySetMapper::ContextFilter(
     if( pHoriOrientRelFrameState && TextContentAnchorType_AT_FRAME != eAnchor )
         pHoriOrientRelFrameState->mnIndex = -1;;
 
+    if( pVertOrientState && TextContentAnchorType_AT_CHARACTER == eAnchor )
+        pVertOrientState->mnIndex = -1;
+    if( pVertOrientAtCharState && TextContentAnchorType_AT_CHARACTER != eAnchor )
+        pVertOrientAtCharState->mnIndex = -1;
     if( pVertOrientRelState && TextContentAnchorType_AT_PARAGRAPH != eAnchor &&
          TextContentAnchorType_AT_CHARACTER != eAnchor )
         pVertOrientRelState->mnIndex = -1;

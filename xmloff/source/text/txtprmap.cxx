@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprmap.cxx,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: mib $ $Date: 2001-11-15 15:28:21 $
+ *  last change: $Author: mib $ $Date: 2001-11-28 10:01:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -578,6 +578,7 @@ XMLPropertyMapEntry aXMLFramePropMap[] =
     M_E( "ContourOutside",          STYLE,  WRAP_CONTOUR_MODE,  XML_TYPE_TEXT_WRAP_OUTSIDE, CTF_WRAP_CONTOUR_MODE ),
     // RES_VERT_ORIENT
     M_ED( "VertOrient",             STYLE,  VERTICAL_POS,         XML_TYPE_TEXT_VERTICAL_POS, CTF_VERTICALPOS ),
+    M_ED( "VertOrient",             STYLE,  VERTICAL_POS,         XML_TYPE_TEXT_VERTICAL_POS_AT_CHAR, CTF_VERTICALPOS_ATCHAR ),
     M_ED( "VertOrient",             STYLE,  VERTICAL_REL,         XML_TYPE_TEXT_VERTICAL_REL_AS_CHAR|MID_FLAG_MULTI_PROPERTY, CTF_VERTICALREL_ASCHAR ),
     M_ED( "VertOrientRelation",     STYLE,  VERTICAL_REL,         XML_TYPE_TEXT_VERTICAL_REL, CTF_VERTICALREL ),
     M_ED( "VertOrientRelation",     STYLE,  VERTICAL_REL,         XML_TYPE_TEXT_VERTICAL_REL_PAGE|MID_FLAG_SPECIAL_ITEM_IMPORT, CTF_VERTICALREL_PAGE ),

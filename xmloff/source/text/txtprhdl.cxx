@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtprhdl.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: dvo $ $Date: 2001-06-29 21:07:22 $
+ *  last change: $Author: mib $ $Date: 2001-11-28 10:01:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,6 +226,22 @@ SvXMLEnumMapEntry __READONLY_DATA pXML_VertPos_Enum[] =
     { XML_MIDDLE,           VertOrientation::LINE_CENTER    },  // export only
     { XML_BOTTOM,           VertOrientation::BOTTOM     },
     { XML_BOTTOM,           VertOrientation::CHAR_BOTTOM    },  // export only
+    { XML_BOTTOM,           VertOrientation::LINE_BOTTOM    },  // export only
+    { XML_BELOW,            VertOrientation::CHAR_BOTTOM    },  // import only
+    { XML_TOKEN_INVALID, 0 }
+};
+
+SvXMLEnumMapEntry __READONLY_DATA pXML_VertPosAtChar_Enum[] =
+{
+    { XML_FROM_TOP,         VertOrientation::NONE       },
+    { XML_TOP,              VertOrientation::TOP        },
+    { XML_TOP,              VertOrientation::CHAR_TOP   },  // export only
+    { XML_TOP,              VertOrientation::LINE_TOP   },  // export only
+    { XML_MIDDLE,           VertOrientation::CENTER     },
+    { XML_MIDDLE,           VertOrientation::CHAR_CENTER    },  // export only
+    { XML_MIDDLE,           VertOrientation::LINE_CENTER    },  // export only
+    { XML_BOTTOM,           VertOrientation::BOTTOM     },
+    { XML_BELOW,            VertOrientation::CHAR_BOTTOM    },  // export only
     { XML_BOTTOM,           VertOrientation::LINE_BOTTOM    },  // export only
     { XML_TOKEN_INVALID, 0 }
 };
@@ -1329,6 +1345,8 @@ const XMLPropertyHandler *XMLTextPropertyHandlerFactory_Impl::GetPropertyHandler
         break;
     case XML_TYPE_TEXT_VERTICAL_POS:
         pHdl = new XMLConstantsPropertyHandler( pXML_VertPos_Enum, XML_TOKEN_INVALID );
+    case XML_TYPE_TEXT_VERTICAL_POS_AT_CHAR:
+        pHdl = new XMLConstantsPropertyHandler( pXML_VertPosAtChar_Enum, XML_TOKEN_INVALID );
         break;
     case XML_TYPE_TEXT_VERTICAL_REL:
         pHdl = new XMLConstantsPropertyHandler( pXML_VertRel_Enum, XML_TOKEN_INVALID );
