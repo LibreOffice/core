@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackageStream.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2003-09-11 10:18:07 $
+ *  last change: $Author: rt $ $Date: 2003-10-30 09:48:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -346,7 +346,15 @@ Reference< io::XInputStream > SAL_CALL ZipPackageStream::getDataStream()
     else if ( m_nStreamMode == PACKAGE_STREAM_RAW )
         return ZipFile::StaticGetDataFromRawStream( xStream, xEncryptionData );
     else
+    {
+        Reference< io::XSeekable > xSeek( xStream, UNO_QUERY );
+        if ( !xSeek.is() )
+            throw RuntimeException( OUString::createFromAscii( "The stream must support XSeekable!" ),
+                                    Reference< XInterface >() );
+
+        xSeek->seek( 0 );
         return xStream;
+    }
 }
 
 //--------------------------------------------------------------------------
