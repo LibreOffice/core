@@ -2,9 +2,9 @@
  *
  *  $RCSfile: embeddedobjectcontainer.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2004-12-09 16:01:02 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 18:22:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -624,7 +624,19 @@ sal_Bool EmbeddedObjectContainer::MoveEmbeddedObject( EmbeddedObjectContainer& r
         aName = xPersist->getEntryName();
 
     // now move the object to the new container; the returned name is the new persist name in this container
-    sal_Bool bRet = InsertEmbeddedObject( xObj, rName );
+    sal_Bool bRet;
+
+    try
+    {
+        bRet = InsertEmbeddedObject( xObj, rName );
+    }
+    catch ( uno::Exception& e )
+    {
+        (void)e;
+        OSL_ENSURE( sal_False, "Failed to insert embedded object into storage!" );
+        bRet = sal_False;
+    }
+
     if ( bRet )
     {
         // now remove the object from the former container
