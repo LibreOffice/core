@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: tl $ $Date: 2001-05-30 13:08:34 $
+ *  last change: $Author: tl $ $Date: 2001-05-30 13:45:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -884,6 +884,10 @@ BOOL SmDocShell::Save()
         return TRUE;
     }
 #endif
+
+    //! apply latest changes if necessary
+    UpdateText();
+
     if ( SfxInPlaceObject::Save() )
     {
         if( !pTree )
