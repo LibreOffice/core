@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cachedata.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2002-03-28 09:06:57 $
+ *  last change: $Author: ssmith $ $Date: 2002-12-13 10:30:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,7 +184,7 @@ namespace configmgr
             return the tree that is now pertinent and clientAcquire() it once
         */
         data::TreeAddress addTemplates( memory::UpdateAccessor& _aAccessToken,
-                                        backend::NodeInstance & _aTemplates
+                                        backend::ComponentData & _aComponentInstance
                                        ) CFG_UNO_THROW_RTE();
 
     private:
@@ -211,7 +211,7 @@ namespace configmgr
             return the tree that is now pertinent and clientAcquire() it once
         */
         data::TreeAddress addComponentData( memory::UpdateAccessor& _aAccessToken,
-                                            backend::NodeInstance const & _aNodeInstance,
+                                            backend::ComponentInstance const & _aComponentInstance,
                                             bool _bWithDefaults
                                            ) CFG_UNO_THROW_RTE();
 

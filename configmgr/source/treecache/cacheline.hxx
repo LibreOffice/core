@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cacheline.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2002-03-28 09:06:58 $
+ *  last change: $Author: ssmith $ $Date: 2002-12-13 10:30:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,7 +125,7 @@ namespace configmgr
         data::NodeAddress   getNode(memory::Accessor const & _aAccessor, Path const & _aPath) const;
 
         data::TreeAddress   setComponentData( memory::UpdateAccessor& _aAccessToken,
-                                              backend::NodeInstance const & _aNodeInstance,
+                                              backend::ComponentData const & _aComponentInstance,
                                               bool _bWithDefaults
                                            ) CFG_UNO_THROW_RTE();
 

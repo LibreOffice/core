@@ -2,9 +2,9 @@
  *
  *  $RCSfile: invalidatetree.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: jb $ $Date: 2002-03-28 09:08:05 $
+ *  last change: $Author: ssmith $ $Date: 2002-12-13 10:30:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -224,12 +224,15 @@ CacheLocation CacheController::refreshComponent(ComponentRequest const & _aReque
     ComponentRequest aForcedRequest(_aRequest);
     aForcedRequest.forceReload();
 
-    NodeResult aLoadedInstance = this->getComponentData(aForcedRequest);
+    ComponentResult aLoadedInstance = this->getComponentData(aForcedRequest);
+    AbsolutePath aRequestPath = AbsolutePath::makeModulePath(_aRequest.getComponentName(), AbsolutePath::NoValidate());
+    NodeInstance aNodeInstance(aLoadedInstance.instance().data(),aRequestPath) ;
+    NodeResult aLoadedNodeInstance(aNodeInstance) ;
 
     CacheLocation aResult;
     if (aLoadedInstance.is())
     {
-        Name aModuleName = aLoadedInstance->root().getModuleName();
+        Name aModuleName = aLoadedNodeInstance->root().getModuleName();
 
         memory::UpdateAccessor aChangingAccessor( aCache->getDataSegment(aModuleName) );
         OSL_ENSURE(aChangingAccessor.is(), "No existing cache line for tree being refreshed");
@@ -249,7 +252,7 @@ CacheLocation CacheController::refreshComponent(ComponentRequest const & _aReque
                 data::TreeAccessor aTreeAccess(aChangingAccessor.accessor(),aCachedTreeAddress);
                 data::NodeAccess aRootNode = aTreeAccess.getRootNode();
 
-                aTreeChanges = createDiffs(aRootNode, aLoadedInstance->data().get(), aLoadedInstance->root().location());
+                aTreeChanges = createDiffs(aRootNode, aLoadedNodeInstance->data().get(), aLoadedNodeInstance->root().location());
                 aRootAddress = aRootNode.address();
             }
 
@@ -261,7 +264,7 @@ CacheLocation CacheController::refreshComponent(ComponentRequest const & _aReque
                 data::Accessor aNotifyLock = aChangingAccessor.downgrade(); // keep a read lock during notification
 
                 UpdateRequest anUpdateReq(  aTreeChanges.get(),
-                                            aLoadedInstance->root().location(),
+                                            aLoadedNodeInstance->root().location(),
                                             _aRequest.getOptions()
                                           );
 

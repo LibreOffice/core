@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cacheaccess.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2002-03-28 09:06:57 $
+ *  last change: $Author: ssmith $ $Date: 2002-12-13 10:30:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,8 +75,13 @@
 #include "tracer.hxx"
 #endif
 
+#ifndef CONFIGMGR_CONFIGPATH_HXX_
+#include "configpath.hxx
+#endif
+
 namespace configmgr
 {
+    using namespace configuration;
 
 // -------------------------------------------------------------------------
 
@@ -350,20 +355,19 @@ bool CacheLoadingAccess::isEmpty()
 // -------------------------------------------------------------------------
 
 data::TreeAddress CacheLoadingAccess::addComponentData( memory::UpdateAccessor& _aAccessToken,
-                                                        backend::NodeInstance const & _aNodeInstance,
+                                                        backend::ComponentInstance const & _aComponentInstance,
                                                         bool _bIncludesDefaults
                                                        ) CFG_UNO_THROW_RTE()
 {
     osl::MutexGuard aGuard( this->m_aMutex );
-
-    CFG_TRACE_INFO("CacheLoadingAccess: Adding component data for path '%s'. %s",
-                    OUSTRING2ASCII(_aNodeInstance.root().toString()),
+    CFG_TRACE_INFO("CacheLoadingAccess: Adding component data  for module '%s'",
+                    OUSTRING2ASCII(_aComponentInstance.component().toString()),
                     _bIncludesDefaults ? "Data includes defaults." : "Data does not include defaults." );
 
-    data::TreeAddress aResult = this->m_aData.addComponentData(_aAccessToken, _aNodeInstance, _bIncludesDefaults);
+    data::TreeAddress aResult = this->m_aData.addComponentData(_aAccessToken, _aComponentInstance, _bIncludesDefaults);
     if (aResult.is())
     {
-        m_aDeadModules.erase( _aNodeInstance.root().getModuleName() );
+        m_aDeadModules.erase( _aComponentInstance.component() );
         CFG_TRACE_INFO_NI("- Data added successfully - returning Subtree");
     }
     else

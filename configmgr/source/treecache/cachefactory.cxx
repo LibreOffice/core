@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cachefactory.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2002-06-12 16:39:10 $
+ *  last change: $Author: ssmith $ $Date: 2002-12-13 10:30:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,15 +107,7 @@ namespace configmgr
 
         return buildCacheManager(xBackend);
     }
-// -------------------------------------------------------------------------
 
-    rtl::Reference<TreeManager>
-        CacheFactory::createCacheManager(IConfigSession * _pSession, TypeConverterRef const & _xTCV)
-    {
-        MergedBackendRef xBackend = backend::BackendFactory::instance().createSessionBackend(_pSession,_xTCV);
-
-        return buildCacheManager(xBackend);
-    }
 // -------------------------------------------------------------------------
 
     CacheFactory & CacheFactory::instance()

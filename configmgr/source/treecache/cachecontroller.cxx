@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cachecontroller.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jb $ $Date: 2002-10-14 14:19:28 $
+ *  last change: $Author: ssmith $ $Date: 2002-12-13 10:30:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -420,7 +420,6 @@ CacheLocation makeCacheLocation(memory::SegmentAddress const & _aSegment, memory
     return aResult;
 }
 // -------------------------------------------------------------------------
-
 CacheLocation CacheController::loadComponent(ComponentRequest const & _aRequest)
 {
     CFG_TRACE_INFO("CacheController: loading component '%s'", OUSTRING2ASCII(_aRequest.getComponentName().toString()));
@@ -435,6 +434,7 @@ CacheLocation CacheController::loadComponent(ComponentRequest const & _aRequest)
     osl::MutexGuard aCacheLineGuard(aCache->mutex());
 
     data::TreeAddress aResultAddress;
+    data::TreeAddress aTemplateResultAdddress;
 
     if (aCache->hasModule(_aRequest.getComponentName()))
     {
@@ -445,7 +445,7 @@ CacheLocation CacheController::loadComponent(ComponentRequest const & _aRequest)
     }
     else
     {
-        NodeResult aData = this->loadDirectly(_aRequest);
+        ComponentResult aData = this->loadDirectly(_aRequest);
 
         bool bWithDefaults = ! m_xBackend->isStrippingDefaults();
 
@@ -454,23 +454,34 @@ CacheLocation CacheController::loadComponent(ComponentRequest const & _aRequest)
         memory::UpdateAccessor aTargetSpace( aCache->createNewDataSegment(_aRequest.getComponentName()) );
 
         aResultAddress = aCache->addComponentData(aTargetSpace, aData.instance(), bWithDefaults);
+        if (aData.instance().templateData().get()!=NULL)
+        {
+            aTemplateResultAdddress = addTemplates(aData.instance().componentTemplateData () );
 
+            memory::Accessor aTemplatesAccessor( m_aTemplates.getDataSegment(_aRequest.getComponentName()) );
+            AbsolutePath aTemplateParent = AbsolutePath::makeModulePath(_aRequest.getComponentName(), AbsolutePath::NoValidate());
+            if (!m_aTemplates.hasNode(aTemplatesAccessor, aTemplateParent))
+            {
+                OSL_ENSURE(false,"Template not found in cache");
+            }
+        }
         // notify the new data to all clients
         m_aNotifier.notifyCreated(_aRequest);
     }
 
     return makeCacheLocation( aCache->getDataSegmentAddress(_aRequest.getComponentName()),
-                                aResultAddress.addressValue());
+                              aResultAddress.addressValue());
+
 }
 // -------------------------------------------------------------------------
 
-NodeResult CacheController::getComponentData(ComponentRequest const & _aRequest) CFG_UNO_THROW_ALL()
+ComponentResult CacheController::getComponentData(ComponentRequest const & _aRequest) CFG_UNO_THROW_ALL()
 {
     // TODO: Insert check here, if the data is in the cache already - and then clone
     RTL_LOGFILE_CONTEXT_AUTHOR(aLog, "configmgr::backend::CacheController", "jb99855", "configmgr: CacheController::getComponentData()");
     RTL_LOGFILE_CONTEXT_TRACE1(aLog, "component: %s", RTL_LOGFILE_OU2A(_aRequest.getComponentName().toString()) );
 
-    NodeResult aRet = this->loadDirectly(_aRequest);
+    ComponentResult aRet = this->loadDirectly(_aRequest);
 
     return aRet;
 }
@@ -520,94 +531,87 @@ AbsolutePath templateLoadLocation(const AbsolutePath &_rTemplateLocation)
     return AbsolutePath(aResult);
 }
 // -------------------------------------------------------------------------
-
-AbsolutePath CacheController::ensureTemplate(const Name& _rName, Name const& _rModule) CFG_UNO_THROW_ALL(  )
+std::auto_ptr<ISubtree> CacheController::loadTemplateData(TemplateRequest const & _aTemplateRequest) CFG_UNO_THROW_ALL(  )
 {
-    OSL_ENSURE(!_rName.isEmpty(), "CacheController::ensureTemplate : invalid template name !");
-
-    CFG_TRACE_INFO("CacheController: going to get a template named %s", OUSTRING2ASCII(_rName.toString()));
-
-//  OReadSynchronized aReadGuard(this);
-    osl::MutexGuard aGuard(m_aTemplatesMutex);
-
-    AbsolutePath aTemplateLocation = encodeTemplateLocation(_rName, _rModule);
-    TemplateCacheData::ModuleName aEncodedModule = aTemplateLocation.getModuleName();
-
-    memory::Accessor aTemplatesAccessor( m_aTemplates.createDataSegment(aEncodedModule) );
-
-    if (!m_aTemplates.hasNode(aTemplatesAccessor, aTemplateLocation))
+    std::auto_ptr<ISubtree> aMultiTemplates;
+    TemplateResult aTemplateInstance = m_xBackend->getTemplateData(_aTemplateRequest);
+    if (aTemplateInstance.is())
     {
-        aTemplatesAccessor.clear();
-        memory::UpdateAccessor aTemplatesUpdater( m_aTemplates.getDataSegment(aEncodedModule) );
-
-        // at the moment, the XML tree builder is not able to supply leafs, it only handles sub trees.
-        // as we don't know if the given path describes a inner node or a leaf, we have to ensure that only
-        // a tree is loaded
-        OSL_ENSURE(aTemplateLocation.getDepth() > 1, "CacheController::ensureTemplate : invalid template location !");
-        AbsolutePath aTemplateParent(aTemplateLocation.getParentPath());
-
-        if (!m_aTemplates.hasNode(aTemplatesUpdater.accessor(),aTemplateParent))
+        OSL_ASSERT(aTemplateInstance->name().isEmpty());
+        if (ISubtree * pMulti = aTemplateInstance->data()->asISubtree())
         {
-            CFG_TRACE_INFO_NI("CacheController: cache miss for that template - loading from backend");
-
-            TemplateRequest aTemplateRequest = TemplateRequest::forComponent(_rModule);
-
-            std::auto_ptr<ISubtree> aMultiTemplates;
-
-            TemplateResult aTemplateInstance = m_xBackend->getTemplateData(aTemplateRequest);
-            if (aTemplateInstance.is())
-            {
-                OSL_ASSERT(aTemplateInstance->name().isEmpty());
-                if (ISubtree * pMulti = aTemplateInstance->data()->asISubtree())
-                {
-                    aTemplateInstance.releaseAndClear();
-                    aMultiTemplates.reset(pMulti);
-                }
-                else
-                    OSL_ENSURE(false,"Requested multiple templates, got non-subtree node");
-            }
-            else
-                OSL_ENSURE(false,"Requested configuration template does not exist");
-
-            if (aMultiTemplates.get() != NULL)
-            {
-                CFG_TRACE_INFO_NI("CacheController: adding the loaded templates to the cache");
-
-                NodeInstance aTemplatesNode(aMultiTemplates, aTemplateParent);
-
-                m_aTemplates.addTemplates(aTemplatesUpdater, aTemplatesNode);
-            }
-            else
-            {
-                CFG_TRACE_ERROR_NI("CacheController: could not load the templates");
-
-                throw uno::Exception(::rtl::OUString::createFromAscii("The template description could not be loaded. The template does not exist."), NULL);
-
-            }
+            aTemplateInstance.releaseAndClear();
+            aMultiTemplates.reset(pMulti);
         }
+        else
+            OSL_ENSURE(false,"Requested multiple templates, got non-subtree node");
+    }
+    else
+        OSL_ENSURE(false,"Requested configuration template does not exist");
+
+    if (aMultiTemplates.get() == NULL)
+    {
+        CFG_TRACE_ERROR_NI("CacheController: could not load the templates");
+        throw uno::Exception(::rtl::OUString::createFromAscii("The template description could not be loaded. The template does not exist."), NULL);
     }
 
-    return aTemplateLocation;
+    return  aMultiTemplates;
 }
+// -------------------------------------------------------------------------
+data::TreeAddress CacheController::addTemplates ( backend::ComponentData & _aComponentInstance )
+{
+    OSL_PRECOND(_aComponentInstance.first.get(), "addTemplates: Data must not be NULL");
+    osl::MutexGuard aGuard(m_aTemplatesMutex);
+    TemplateCacheData::ModuleName aModuleName = _aComponentInstance.second;
+    memory::UpdateAccessor aTemplatesUpdater( m_aTemplates.createDataSegment(aModuleName) );
+    AbsolutePath aTemplateLocation = AbsolutePath::makeModulePath(_aComponentInstance.second , AbsolutePath::NoValidate());
+    data::TreeAddress aTemplateAddr;
+    if (!m_aTemplates.hasNode(aTemplatesUpdater.accessor(),aTemplateLocation ))
+    {
+        CFG_TRACE_INFO_NI("CacheController: cache miss for that template - loading from backend");
+        aTemplateAddr = m_aTemplates.addTemplates(aTemplatesUpdater, _aComponentInstance );
+    }
+    OSL_ASSERT (aTemplateAddr.is());
+    return aTemplateAddr;
+ }
 // -------------------------------------------------------------------------
 
 CacheLocation CacheController::loadTemplate(TemplateRequest const & _aRequest) CFG_UNO_THROW_ALL(  )
 {
+
+    OSL_ENSURE(!_aRequest.getTemplateName().isEmpty(), "CacheController::loadTemplate : invalid template name !");
     RTL_LOGFILE_CONTEXT_AUTHOR(aLog, "configmgr::backend::CacheController", "jb99855", "configmgr: CacheController::loadTemplate()");
     RTL_LOGFILE_CONTEXT_TRACE2(aLog, "requested template: %s/%s",
                                     RTL_LOGFILE_OU2A(_aRequest.getComponentName().toString()) ,
                                     _aRequest.isComponentRequest() ?
                                         "*" : RTL_LOGFILE_OU2A(_aRequest.getComponentName().toString()) );
 
-    AbsolutePath aTemplateLocation = ensureTemplate(_aRequest.getTemplateName(), _aRequest.getComponentName());
 
-    memory::Accessor aTemplatesAccessor( m_aTemplates.getDataSegment(aTemplateLocation.getModuleName()) );
+    AbsolutePath aTemplateLocation = encodeTemplateLocation(_aRequest.getTemplateName(), _aRequest.getComponentName());
 
-    data::TreeAddress aTemplateAddr = m_aTemplates.getTemplateTree(aTemplatesAccessor,aTemplateLocation);
+    TemplateCacheData::ModuleName aModuleName =  aTemplateLocation.getModuleName();
+    osl::MutexGuard aGuard(m_aTemplatesMutex);
+    memory::Accessor aTemplatesAccessor( m_aTemplates.getDataSegment(aModuleName) );
+    AbsolutePath aTemplateParent (aTemplateLocation.getParentPath());
+
+    //Load-if-not-there (componentwise)
+    if (!m_aTemplates.hasNode(aTemplatesAccessor, aTemplateParent))
+    {
+        aTemplatesAccessor.clear();
+        OSL_ENSURE(aTemplateLocation.getDepth() > 1, "CacheController::ensureTemplate : invalid template location !");
+        TemplateRequest aTemplateRequest = TemplateRequest::forComponent(_aRequest.getComponentName());
+
+        std::auto_ptr<ISubtree> aMultiTemplates = loadTemplateData(aTemplateRequest);
+        //add-if-not-loaded
+        addTemplates(std::make_pair(aMultiTemplates, aModuleName));
+
+    }
+    memory::Accessor aTemplateAccessor( m_aTemplates.getDataSegment(aModuleName) );
+    data::TreeAddress aTemplateAddr = m_aTemplates.getTemplateTree(aTemplateAccessor,aTemplateLocation);
     if (aTemplateAddr.isNull())
         throw uno::Exception(::rtl::OUString::createFromAscii("Unknown template. Type description could not be found in the given module."), NULL);
 
-    return makeCacheLocation( m_aTemplates.getDataSegmentAddress(aTemplateLocation.getModuleName()) ,aTemplateAddr.addressValue());
+    return makeCacheLocation( m_aTemplates.getDataSegmentAddress(aTemplateLocation.getModuleName()) , aTemplateAddr.addressValue());
 }
 // -----------------------------------------------------------------------------
 
@@ -620,7 +624,10 @@ TemplateResult CacheController::getTemplateData(TemplateRequest const & _aReques
                                     _aRequest.isComponentRequest() ?
                                         "*" : RTL_LOGFILE_OU2A(_aRequest.getComponentName().toString()) );
 
-    AbsolutePath aTemplateLocation = ensureTemplate(_aRequest.getTemplateName(), _aRequest.getComponentName());
+
+    //Remember to remove
+    AbsolutePath aTemplateLocation = AbsolutePath::makeModulePath(_aRequest.getComponentName(), AbsolutePath::NoValidate());
+    //AbsolutePath aTemplateLocation = ensureTemplate(_aRequest.getTemplateName(), _aRequest.getComponentName());
 
     memory::Segment * pTemplatesSegment = m_aTemplates.getDataSegment(aTemplateLocation.getModuleName());
 
@@ -699,17 +706,14 @@ void CacheController::flushPendingUpdates()
 }
 // -----------------------------------------------------------------------------
 
-bool CacheController::normalizeResult(NodeResult & _aResult, RequestOptions const & _aOptions)
+bool CacheController::normalizeResult(std::auto_ptr<ISubtree> &  _aResult, RequestOptions const & _aOptions)
 {
-    if (!_aResult.is()) return false;
+
+    if (_aResult.get()==NULL) return false;
 
     if (_aOptions.isForAllLocales()) return true;
 
-    AbsolutePath const aRootLocation = _aResult->root().location();
-
-    std::auto_ptr<ISubtree> aResultTree = _aResult.extractDataAndClear();;
-
-    std::auto_ptr<INode> aReduced = reduceExpandedForLocale(aResultTree, _aOptions.getLocale());
+    std::auto_ptr<INode> aReduced = reduceExpandedForLocale(_aResult, _aOptions.getLocale());
 
     std::auto_ptr<ISubtree> aReducedTree;
     if (aReduced.get())
@@ -727,15 +731,14 @@ bool CacheController::normalizeResult(NodeResult & _aResult, RequestOptions cons
     else
         OSL_ENSURE(false, "Tree unexpectedly reduced to nothing");
 
-    NodeInstance aInstance(aReducedTree,aRootLocation);
 
-    _aResult = NodeResult(aInstance);
-
-    return _aResult.is();
+    _aResult = aReducedTree;
+    bool retCode = _aResult.get()!=NULL ? true : false;
+    return retCode;
 }
 // -----------------------------------------------------------------------------
 
-NodeResult CacheController::loadDirectly(ComponentRequest const & _aRequest) CFG_UNO_THROW_ALL(  )
+ComponentResult CacheController::loadDirectly(ComponentRequest const & _aRequest) CFG_UNO_THROW_ALL(  )
 {
     CFG_TRACE_INFO("CacheController: loading data for component '%s' from the backend", OUSTRING2ASCII(_aRequest.getComponentName().toString()));
 
@@ -743,11 +746,13 @@ NodeResult CacheController::loadDirectly(ComponentRequest const & _aRequest) CFG
 
     NodeRequest aNodeRequest(aRequestPath, _aRequest.getOptions());
 
-    NodeResult aResult = m_xBackend->getNodeData(aNodeRequest);
+    ComponentResult aResult = m_xBackend->getNodeData(_aRequest);
+
+    OSL_PRECOND(aResult.mutableInstance().mutableData().get(), "loadDirectly: Data must not be NULL");
 
     CFG_TRACE_INFO_NI("- loading data completed - normalizing result");
 
-    if (!normalizeResult(aResult,_aRequest.getOptions()))
+    if (!normalizeResult( aResult.mutableInstance().mutableData(),_aRequest.getOptions()))
     {
         CFG_TRACE_ERROR_NI(" - cannot normalized result: failing");
 
@@ -772,7 +777,7 @@ NodeResult CacheController::loadDefaultsDirectly(NodeRequest const & _aRequest) 
 
     CFG_TRACE_INFO_NI("- loading defaultscompleted - normalizing result");
 
-    normalizeResult(aResult,_aRequest.getOptions());
+    normalizeResult(aResult.mutableInstance().mutableData(),_aRequest.getOptions());
 
     CFG_TRACE_INFO_NI(" - returning normalized defaults");
 

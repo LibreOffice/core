@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cachecontroller.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2002-10-24 08:36:59 $
+ *  last change: $Author: ssmith $ $Date: 2002-12-13 10:30:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,7 @@ namespace configmgr
         and provides access to the data for clients
     */
     class CacheController
+
     : public ICachedDataProvider
     , public IDirectDataProvider // Refcounted
     {
@@ -248,14 +249,14 @@ namespace configmgr
                 identifies the component to be loaded
 
             @returns
-                A valid node instance for the given component.
+                A valid component instance for the given component.
 
             @throws com::sun::star::uno::Exception
                 if the node cannot be retrieved.
                 The exact exception being thrown may depend on the underlying backend.
 
         */
-        virtual NodeResult getComponentData(ComponentRequest const & _aRequest)
+        virtual ComponentResult getComponentData(ComponentRequest const & _aRequest)
             CFG_UNO_THROW_ALL();
 
         /** loads default data for a (partial) tree and returns it as return value
@@ -311,10 +312,10 @@ namespace configmgr
         AbsolutePath ensureTemplate(Name const& _rName, Name const& _rModule) CFG_UNO_THROW_ALL(  );
 
         // adjust a node result for locale, ...
-        bool normalizeResult(NodeResult & _aResult, RequestOptions const & _aOptions);
+        bool normalizeResult(std::auto_ptr<ISubtree> &  _aResult, RequestOptions const & _aOptions);
 
         // reads data from the backend directly
-        NodeResult loadDirectly(ComponentRequest const & _aRequest) CFG_UNO_THROW_ALL(  );
+        ComponentResult loadDirectly(ComponentRequest const & _aRequest) CFG_UNO_THROW_ALL(  );
         // reads default data from the backend directly
         NodeResult loadDefaultsDirectly(NodeRequest const & _aRequest) CFG_UNO_THROW_ALL(  );
         // writes an update  to the backend directly
@@ -328,8 +329,11 @@ namespace configmgr
         // saves all pending changes from a cache access to the backend
         bool saveAllPendingChanges(CacheRef const & _aCache, RequestOptions const & _aOptions)
             CFG_UNO_THROW_RTE(  );
-
-
+        // load templates componentwise from backedn
+        std::auto_ptr<ISubtree> loadTemplateData(TemplateRequest const & _aRequest)
+            CFG_UNO_THROW_ALL(  );
+        // add templates componentwise to cache
+        data::TreeAddress addTemplates ( backend::ComponentData & _aComponentInstance );
         CacheRef getCacheAlways(RequestOptions const & _aOptions);
 
         OTreeDisposeScheduler   * createDisposer();
@@ -347,6 +351,7 @@ namespace configmgr
     private:
         typedef AutoReferenceMap<RequestOptions,Cache,lessRequestOptions>   CacheList;
         typedef TemplateCacheData TemplateCache;
+
 
         CacheChangeMulticaster  m_aNotifier;
         BackendRef              m_xBackend;

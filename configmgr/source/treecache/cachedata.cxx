@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cachedata.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2002-03-28 09:06:57 $
+ *  last change: $Author: ssmith $ $Date: 2002-12-13 10:30:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,9 +87,14 @@
 #include <osl/diagnose.h>
 #endif
 
+#ifndef CONFIGMGR_CONFIGPATH_HXX_
+#include "configpath.hxx
+#endif
+
 namespace configmgr
 {
-// ---------------------------- Client Acquire helper ----------------------------
+    using namespace configuration;
+    // ---------------------------- Client Acquire helper ----------------------------
 
     struct CacheLineClientRef
     {
@@ -182,7 +187,7 @@ namespace configmgr
     inline
     void CacheData::internalAddModule(const ModuleName& _aName, const ModuleRef & _aModule)
     {
-        OSL_PRECOND(m_aModules.find(_aName) == m_aModules.end(), "ERROR: Module already present in CacheData");
+        //OSL_PRECOND(m_aModules.find(_aName) == m_aModules.end(), "ERROR: Module already present in CacheData");
 
           m_aModules[_aName] = _aModule;
 
@@ -421,13 +426,12 @@ namespace configmgr
 // -------------------------------------------------------------------------
 
     data::TreeAddress TemplateCacheData::addTemplates(  memory::UpdateAccessor& _aUpdateToken,
-                                                        backend::NodeInstance & _aTemplatesNode) CFG_UNO_THROW_RTE(  )
+                                                        backend::ComponentData & _aComponentInstance) CFG_UNO_THROW_RTE(  )
     {
-        OSL_PRECOND(_aTemplatesNode.data().get(), "addTemplates: Data must not be NULL");
-        OSL_PRECOND(_aTemplatesNode.root().isModuleRoot(), "addTemplates: Template tree being added must be for module");
-
+        OSL_PRECOND(_aComponentInstance.first.get(), "addTemplates: Data must not be NULL");
         // we should already have the module in cache !
-        CacheLineRef xModule = internalGetModule(_aTemplatesNode.root().location());
+        ModuleName aModuleName ( _aComponentInstance.second);
+        CacheLineRef xModule = internalGetModule(aModuleName);
 
         OSL_ENSURE( xModule.is(), "ExtendedCacheData::addTemplates: No module to add the templates to - where did the data segment come from ?");
 
@@ -438,9 +442,9 @@ namespace configmgr
 
         static const OUString aDummyTemplateName(RTL_CONSTASCII_USTRINGPARAM("cfg:Template"));
         static const OUString aDummyTemplateModule(RTL_CONSTASCII_USTRINGPARAM("cfg:Templates"));
-        _aTemplatesNode.data()->makeSetNode(aDummyTemplateName,aDummyTemplateModule);
+        _aComponentInstance.first->makeSetNode(aDummyTemplateName,aDummyTemplateModule);
 
-        data::TreeAddress aResult = xModule->setComponentData(_aUpdateToken, _aTemplatesNode, true);
+        data::TreeAddress aResult = xModule->setComponentData(_aUpdateToken, _aComponentInstance, true);
 
         OSL_ASSERT(aResult.is());
 
@@ -508,14 +512,13 @@ namespace configmgr
 // -------------------------------------------------------------------------
 
     data::TreeAddress ExtendedCacheData::addComponentData(memory::UpdateAccessor& _aUpdateToken,
-                                                    backend::NodeInstance const & _aNodeInstance,
+                                                    backend::ComponentInstance const & _aComponentInstance,
                                                     bool _bWithDefaults) CFG_UNO_THROW_RTE(  )
     {
-        OSL_PRECOND(_aNodeInstance.data().get(), "addComponentData: Data must not be NULL");
-        OSL_PRECOND(_aNodeInstance.root().isModuleRoot(), "addComponentData: tree being added must be for module");
-
+        OSL_PRECOND(_aComponentInstance.data().get(), "addComponentData: Data must not be NULL");
         // we should already have the module in cache !
-        CacheLineRef xModule = internalGetModule(_aNodeInstance.root().location());
+        //CacheLineRef xModule = internalGetModule(_aNodeInstance.root().location());
+        CacheLineRef xModule = internalGetModule(_aComponentInstance.component() );
 
         OSL_ENSURE( xModule.is(), "ExtendedCacheData::addComponentData: No module to add the subtree to - where did the data segment come from ?");
 
@@ -523,7 +526,7 @@ namespace configmgr
 
         CacheLineClientRef aClientRef( xModule );
 
-        data::TreeAddress aResult = xModule->setComponentData(_aUpdateToken, _aNodeInstance, _bWithDefaults);
+        data::TreeAddress aResult = xModule->setComponentData(_aUpdateToken,_aComponentInstance.componentNodeData(), _bWithDefaults);
 
         OSL_ASSERT(aResult.is());
 
