@@ -2,9 +2,9 @@
  *
  *  $RCSfile: breakiterator_unicode.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-11 11:18:37 $
+ *  last change: $Author: vg $ $Date: 2005-02-25 10:08:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,17 +58,14 @@
  *
  *
  ************************************************************************/
-
 #include <breakiterator_unicode.hxx>
 #include <i18nutil/unicode.hxx>
 #include <unicode/locid.h>
 #include <unicode/rbbi.h>
-#include <icu/cmemory.h>
-#include <icu/rbbidata.h>
-#include <icu/ucmndata.h>
+#include <unicode/udata.h>
 
 U_CDECL_BEGIN
-extern const char dict_word_brk[], edit_word_brk[], count_word_brk[], line_brk[], dict_word_ca_brk[], dict_word_hu_brk[];
+extern const char OpenOffice_icu_dat[];
 U_CDECL_END
 
 using namespace ::com::sun::star::uno;
@@ -99,43 +96,15 @@ BreakIterator_Unicode::~BreakIterator_Unicode()
         if (lineBreak) delete lineBreak;
 }
 
-static icu::BreakIterator* loadICURuleBasedBreakIterator(const char* pRule) throw(RuntimeException)
+static icu::BreakIterator* loadICURuleBasedBreakIterator(const char* name) throw(RuntimeException)
 {
-        /* TODO: Instead of malloc'ing data for each instance it could be
-         * registered with ICU's cache using udata_setAppData(), and instances
-         * be created with udata_open() and the UDataMemory be passed to the
-         * appropriate RuleBasedBreakIterator ctor, which would also be the
-         * cleaner way to do things. Unfortunately that ctor needed is
-         * protected :-( what for, anyways? How's that supposed to work? Only
-         * the RBBIRuleBuilder uses it). Find out why and how to change, if not
-         * by patching ICU ...
-         */
-
-        // Allow the data to be optionally prepended with an alignment-forcing
-        // double value, same as in UDataMemory_normalizeDataPointer()
-        // implemented in icu/source/common/udatamem.c. However, that function
-        // isn't exported.
-        const DataHeader *pdh = (const DataHeader *)pRule;
-        if( !(pdh->dataHeader.magic1==0xda && pdh->dataHeader.magic2==0x27))
-            pdh = (const DataHeader *)((const double *)pdh+1);
-
-        // Get the RBBIDataHeader behind the DataHeader, same as in the
-        // RBBIDataWrapper ctor that takes an UDataMemory, implemented in
-        // icu/source/common/rbbidata.cpp
-        const RBBIDataHeader* pHeader = (const RBBIDataHeader*)((char *)&(pdh->info) + pdh->info.size);
-
-        // Use RBBIDataHeader to get fLength from compiled rule data to malloc
-        // RBBIDataHeader, which will be passed to contructor and released by
-        // destructor of RuleBasedBreakIterator.
-        RBBIDataHeader* pData = (RBBIDataHeader*) ((char*) uprv_malloc(pHeader->fLength));
-
-        if ( pData == NULL ) throw ERROR;
-
-        uprv_memcpy((char*) pData, (char*) pHeader, pHeader->fLength);
-
         UErrorCode status = U_ZERO_ERROR;
-        icu::BreakIterator* breakiterator = new RuleBasedBreakIterator(pData, status);
 
+        udata_setAppData("OpenOffice", OpenOffice_icu_dat, &status);
+        if ( !U_SUCCESS(status) ) throw ERROR;
+
+        status = U_ZERO_ERROR;
+        icu::BreakIterator* breakiterator = new RuleBasedBreakIterator(udata_open("OpenOffice", "brk", name, &status), status);
         if ( !U_SUCCESS(status) ) throw ERROR;
 
         return breakiterator;
@@ -158,13 +127,13 @@ icu::BreakIterator* SAL_CALL BreakIterator_Unicode::loadICUBreakIterator(const c
                 breakiterator =  icu::BreakIterator::createCharacterInstance(icuLocale, status);
                 break;
             case LOAD_WORD_BREAKITERATOR:
-                breakiterator = icu::BreakIterator::createWordInstance(icuLocale, status);
+                breakiterator =  icu::BreakIterator::createWordInstance(icuLocale, status);
                 break;
             case LOAD_SENTENCE_BREAKITERATOR:
                 breakiterator = icu::BreakIterator::createSentenceInstance(icuLocale, status);
                 break;
             case LOAD_LINE_BREAKITERATOR:
-                breakiterator = loadICURuleBasedBreakIterator(line_brk);
+                breakiterator = icu::BreakIterator::createLineInstance(icuLocale, status);
                 break;
         }
         if ( !U_SUCCESS(status) ) throw ERROR;
@@ -179,7 +148,10 @@ icu::BreakIterator* SAL_CALL BreakIterator_Unicode::loadICUWordBreakIterator(con
         if (rWordType == WordType::WORD_COUNT) {
             if (!countWordBreak) {
                 newBreak = sal_True;
-                countWordBreak = loadICURuleBasedBreakIterator(count_word_brk);
+                if (rLocale.Language.compareToAscii("th") == 0)
+                    countWordBreak = loadICUBreakIterator(rLocale, LOAD_WORD_BREAKITERATOR);
+                else
+                    countWordBreak = loadICURuleBasedBreakIterator("count_word");
             }
             if (newBreak || !countWordText.equals(Text)) {
                 countWordText = Text;
@@ -190,7 +162,10 @@ icu::BreakIterator* SAL_CALL BreakIterator_Unicode::loadICUWordBreakIterator(con
         else if (rWordType == WordType::DICTIONARY_WORD) {
             if (!dictWordBreak) {
                 newBreak = sal_True;
-                dictWordBreak = loadICURuleBasedBreakIterator(dict_word_brk);
+                if (rLocale.Language.compareToAscii("th") == 0)
+                    dictWordBreak = loadICUBreakIterator(rLocale, LOAD_WORD_BREAKITERATOR);
+                else
+                    dictWordBreak = loadICURuleBasedBreakIterator("dict_word");
             }
             if (newBreak || !dictWordText.equals(Text)) {
                 dictWordText = Text;
@@ -200,11 +175,16 @@ icu::BreakIterator* SAL_CALL BreakIterator_Unicode::loadICUWordBreakIterator(con
         } else {
             if (!editWordBreak) {
                 newBreak = sal_True;
-                editWordBreak = loadICURuleBasedBreakIterator(edit_word_brk);
+                if (rLocale.Language.compareToAscii("th") == 0)
+                    editWordBreak = loadICUBreakIterator(rLocale, LOAD_WORD_BREAKITERATOR);
+                else
+                    editWordBreak = loadICURuleBasedBreakIterator("edit_word");
             }
             if (newBreak || !editWordText.equals(Text)) {
                 editWordText = Text;
                 editWordBreak->setText(UnicodeString(Text.getStr(), Text.getLength()));
+                if (nStartPos != 0 && rLocale.Language.compareToAscii("th") == 0)
+                    editWordBreak->following(0);
             }
             return editWordBreak;
         }
@@ -217,7 +197,7 @@ icu::BreakIterator* SAL_CALL BreakIterator_ca::loadICUWordBreakIterator(const OU
         if (rWordType == WordType::DICTIONARY_WORD) {
             if (! dictWordBreak) {
                 newBreak = sal_True;
-                dictWordBreak = loadICURuleBasedBreakIterator(dict_word_ca_brk);
+                dictWordBreak = loadICURuleBasedBreakIterator("dict_word_ca");
             }
             if (newBreak || !dictWordText.equals(Text)) {
                 dictWordText = Text;
@@ -235,7 +215,7 @@ icu::BreakIterator* SAL_CALL BreakIterator_hu::loadICUWordBreakIterator(const OU
         if (rWordType == WordType::DICTIONARY_WORD) {
             if (!dictWordBreak) {
                 newBreak = sal_True;
-                dictWordBreak = loadICURuleBasedBreakIterator(dict_word_hu_brk);
+                dictWordBreak = loadICURuleBasedBreakIterator("dict_word_hu");
             }
             if (newBreak || !dictWordText.equals(Text)) {
                 dictWordText = Text;
@@ -441,7 +421,10 @@ LineBreakResults SAL_CALL BreakIterator_Unicode::getLineBreak(
         sal_Bool newBreak = sal_False;
         if (!lineBreak) {
             newBreak = sal_True;
-            lineBreak = loadICUBreakIterator(rLocale, LOAD_LINE_BREAKITERATOR);
+            if (rLocale.Language.compareToAscii("th") == 0)
+                lineBreak = loadICUBreakIterator(rLocale, LOAD_LINE_BREAKITERATOR);
+            else
+                lineBreak = loadICURuleBasedBreakIterator("line");
         }
 
         if (newBreak || !lineText.equals(Text)) {
