@@ -2,9 +2,9 @@
  *
  *  $RCSfile: officeipcthread.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: as $ $Date: 2001-09-26 09:45:06 $
+ *  last change: $Author: cd $ $Date: 2001-10-09 15:03:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,9 +84,9 @@ using namespace ::com::sun::star::frame;
 
 #define TERMINATION_SEQUENCE "InternalIPC::TerminateThread"
 #define TERMINATION_LENGTH 28
-// #90717# if you change here anything, you must this also do in setup2/other/sihelp
-#define LOOKUP_SEQUENCE "InternalIPC::Lookup"
-#define LOOKUP_LENGTH 19
+
+#define SHOW_SEQUENCE   "-show"
+#define SHOW_LENGTH     5
 
 String GetURL_Impl( const String& rName );
 
@@ -273,19 +273,26 @@ OfficeIPCThread::Status OfficeIPCThread::EnableOfficeIPCThread()
         // and self terminate
         ByteString aArguments;
         ULONG nCount = aInfo.getCommandArgCount();
-        for( ULONG i=0; i < nCount; i++ )
+        if ( nCount == 0 )
         {
-            aInfo.getCommandArg( i, aDummy );
-            // Make absolute pathes from relative ones!
-            // It's neccessary to use current working directory of THESE office instance and not of
-            // currently running once, which get these information by using pipe.
-            // Otherwhise relativ pathes are not right for his environment ...
-            if( aDummy.indexOf('-',0) != 0 )
+            aArguments += ByteString( "-show" );
+        }
+        else
+        {
+            for( ULONG i=0; i < nCount; i++ )
             {
-                aDummy = GetURL_Impl( aDummy );
+                aInfo.getCommandArg( i, aDummy );
+                // Make absolute pathes from relative ones!
+                // It's neccessary to use current working directory of THESE office instance and not of
+                // currently running once, which get these information by using pipe.
+                // Otherwhise relativ pathes are not right for his environment ...
+                if( aDummy.indexOf('-',0) != 0 )
+                {
+                    aDummy = GetURL_Impl( aDummy );
+                }
+                aArguments += ByteString( String( aDummy ), osl_getThreadTextEncoding() );
+                aArguments += '|';
             }
-            aArguments += ByteString( String( aDummy ), osl_getThreadTextEncoding() );
-            aArguments += '|';
         }
 
         pThread->maStreamPipe.write( aArguments.GetBuffer(), aArguments.Len() );
@@ -363,9 +370,8 @@ void SAL_CALL OfficeIPCThread::run()
                 } while( ! maStreamPipe.isEof() || nBytes > 0 );
                 maStreamPipe.close();
 
-                // #90717#
-                // is this a lookup message ? if so, ignore
-                if(( aArguments.CompareTo( LOOKUP_SEQUENCE, LOOKUP_LENGTH ) == COMPARE_EQUAL ))
+                // #90717# Is this a lookup message from another application? if so, ignore
+                if ( aArguments.Len() == 0 )
                     continue;
 
                 // is this a termination message ? if so, terminate
@@ -416,7 +422,8 @@ void SAL_CALL OfficeIPCThread::run()
                     ++mnPendingRequests;
                 }
 
-                if ( aPrintList.getLength() == 0 && aOpenList.getLength() == 0 )
+                if (( aArguments.CompareTo( SHOW_SEQUENCE, SHOW_LENGTH ) == COMPARE_EQUAL ) ||
+                    ( aPrintList.getLength() == 0 && aOpenList.getLength() == 0 ) )
                 {
                     // no document was send, just bring Office to front
                     ApplicationEvent* pAppEvent =
