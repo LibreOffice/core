@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accessiblestatesethelper.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2002-01-30 15:44:32 $
+ *  last change: $Author: vg $ $Date: 2002-02-05 13:09:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,9 +113,7 @@ sal_Bool AccessibleStateSetHelperImpl::Contains (sal_Int16 aState)
 void AccessibleStateSetHelperImpl::AddState(sal_Int16 aState)
     throw (uno::RuntimeException)
 {
-    std::pair< sal_Int16, sal_Bool > aStatePair;
-    aStatePair.first = aState;
-    aStatePair.second = sal_True;
+    std::pair< const sal_Int16, sal_Bool > aStatePair(aState, sal_True);
     maStates.insert(aStatePair);
 }
 
