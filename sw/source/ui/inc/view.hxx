@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.hxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 16:42:26 $
+ *  last change: $Author: vg $ $Date: 2005-02-16 17:05:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -323,7 +323,8 @@ class SW_DLLPUBLIC SwView: public SfxViewShell
                     bPasteState : 1,
                     bPasteSpecialState : 1,
                     bInMailMerge : 1,
-                    bInDtor : 1 //detect destructor to prevent creating of sub shells while closing
+                    bInDtor : 1, //detect destructor to prevent creating of sub shells while closing
+                    bOldShellWasPagePreView
                     ;
 
     // Methoden fuers Suchen
