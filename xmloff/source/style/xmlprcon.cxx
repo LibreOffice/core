@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlprcon.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-16 14:20:19 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:28:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,10 +76,12 @@ SvXMLPropertySetContext::SvXMLPropertySetContext(
     SvXMLImport& rImp, USHORT nPrfx,
     const OUString& rLName,
     const uno::Reference< xml::sax::XAttributeList >& xAttrList,
+    sal_uInt32 nFam,
     vector< XMLPropertyState > &rProps,
     const UniReference < SvXMLImportPropertyMapper >  &rMap,
     sal_Int32 nSIdx, sal_Int32 nEIdx ):
     SvXMLImportContext( rImp, nPrfx, rLName ),
+    nFamily( nFam ),
     rProperties( rProps ),
     xMapper    ( rMap ),
     nStartIdx( nSIdx ),
@@ -87,7 +89,8 @@ SvXMLPropertySetContext::SvXMLPropertySetContext(
 {
     xMapper->importXML( rProperties, xAttrList,
                         GetImport().GetMM100UnitConverter(),
-                        GetImport().GetNamespaceMap(), nStartIdx, nEndIdx );
+                        GetImport().GetNamespaceMap(), nFamily,
+                        nStartIdx, nEndIdx );
 }
 
 SvXMLPropertySetContext::~SvXMLPropertySetContext()
@@ -102,7 +105,7 @@ SvXMLImportContext *SvXMLPropertySetContext::CreateChildContext(
     UniReference< XMLPropertySetMapper > aSetMapper(
             xMapper->getPropertySetMapper() );
     sal_Int32 nEntryIndex = aSetMapper->GetEntryIndex( nPrefix, rLocalName,
-                                                       nStartIdx );
+                                                       nFamily, nStartIdx );
 
     if( ( nEntryIndex != -1 ) && (-1 == nEndIdx || nEntryIndex < nEndIdx ) &&
         ( 0 != ( aSetMapper->GetEntryFlags( nEntryIndex )
