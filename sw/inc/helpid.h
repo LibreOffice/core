@@ -2,9 +2,9 @@
  *
  *  $RCSfile: helpid.h,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 10:11:12 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:03:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -916,6 +916,44 @@
 #define HID_SECTION_INDENTS_PAGE                    (HID_BASE + 2185 )
 
 #define HID_FLD_DROPDOWN                            (HID_BASE + 2186 )
-#define HID_DLG_WORDCOUNT                           (HID_BASE + 2187 )
-
-#define HID_MEDIA_TOOLBOX                           (HID_BASE + 2188)
+#define HID_MM_DOCSELECTPAGE                        (HID_BASE + 2187 )
+#define HID_MM_OUTPUTTYPEPAGE                       (HID_BASE + 2188 )
+#define HID_MM_ADDRESSBLOCKPAGE                     (HID_BASE + 2189 )
+#define HID_MM_GREETINGSPAGE                        (HID_BASE + 2190 )
+#define HID_MM_PREPAREMERGEPAGE                     (HID_BASE + 2191 )
+#define HID_MM_MERGEPAGE                            (HID_BASE + 2192 )
+#define HID_MM_OUTPUTPAGE                           (HID_BASE + 2193 )
+#define HID_MM_ADDRESSLISTDIALOG                    (HID_BASE + 2194 )
+#define HID_MM_SELECTDBTABLEDDIALOG                 (HID_BASE + 2195 )
+#define HID_MM_SELECTDBTABLEDDIALOG_LISTBOX         (HID_BASE + 2196 )
+#define HID_MM_DBTABLEPREVIEWDIALOG                 (HID_BASE + 2197 )
+#define HID_MM_CREATEADDRESSLIST                    (HID_BASE + 2198 )
+#define HID_MM_FIND_ENTRY                           (HID_BASE + 2199 )
+#define HID_MM_ADD_RENAME_ENTRY                     (HID_BASE + 2200 )
+#define HID_MM_CUSTOMIZE_ADDRESS_LIST               (HID_BASE + 2201 )
+#define HID_MM_CUSTOMIZEADDRESSBLOCK                (HID_BASE + 2202 )
+#define HID_MM_SELECTADDRESSBLOCK                   (HID_BASE + 2203 )
+#define HID_MM_ASSIGNFIELDS                         (HID_BASE + 2204 )
+#define HID_MM_MAILNOTINSTALLED                     (HID_BASE + 2205 )
+#define HID_MM_LAYOUT_PAGE                          (HID_BASE + 2206 )
+#define HID_MM_COPYTO                               (HID_BASE + 2207 )
+#define HID_MM_ADDRESSLIST_HB                       (HID_BASE + 2208 )
+#define HID_MM_ADDRESSLIST_TLB                      (HID_BASE + 2209 )
+#define HID_TP_MAILCONFIG                           (HID_BASE + 2210 )
+#define HID_MM_TESTACCOUNTSETTINGS                  (HID_BASE + 2211 )
+#define HID_MM_TESTACCOUNTSETTINGS_TLB              (HID_BASE + 2212 )
+#define HID_MM_TESTACCOUNTSETTINGS_HB               (HID_BASE + 2213 )
+#define HID_MM_MAILBODY                             (HID_BASE + 2214 )
+#define HID_MM_SENDMAILS                            (HID_BASE + 2215 )
+#define HID_MM_SENDMAILS_STATUSLB                   (HID_BASE + 2216 )
+#define HID_MAILMERGECHILD                          (HID_BASE + 2217 )
+#define HID_MM_CUSTOMFIELDS                         (HID_BASE + 2218 )
+#define HID_DLG_WORDCOUNT                           (HID_BASE + 2219 )
+#define HID_MM_MAILSTATUS_TLB                       (HID_BASE + 2220 )
+#define HID_RETURN_TO_MAILMERGE                     (HID_BASE + 2221 )
+#define HID_MM_SAVEWARNING                          (HID_BASE + 2222 )
+#define HID_MM_QUERY                                (HID_BASE + 2223 )
+#define HID_MM_SENDWARNING                          (HID_BASE + 2224 )
+#define HID_MM_SERVERAUTHENTICATION                 (HID_BASE + 2225 )
+#define HID_DLG_WORDCOUNT                           (HID_BASE + 2226 )
+#define HID_MEDIA_TOOLBOX                           (HID_BASE + 2227)
