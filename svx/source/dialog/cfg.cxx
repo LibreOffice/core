@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cfg.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 19:07:13 $
+ *  last change: $Author: kz $ $Date: 2005-03-21 11:40:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -514,45 +514,76 @@ SvxConfigPage::CanConfig( const OUString& aModuleId )
 
 OUString GetModuleName( const OUString& aModuleId )
 {
-    if ( aModuleId.equals( OUString::createFromAscii(
-            "com.sun.star.text.TextDocument" ) ) ||
-         aModuleId.equals( OUString::createFromAscii(
-            "com.sun.star.text.GlobalDocument" ) ) )
-    {
+    if ( aModuleId.equalsAscii( "com.sun.star.text.TextDocument" ) ||
+         aModuleId.equalsAscii( "com.sun.star.text.GlobalDocument" ) )
         return OUString::createFromAscii("Writer");
-    }
-    else if ( aModuleId.equals( OUString::createFromAscii(
-            "com.sun.star.text.WebDocument" ) ) )
-    {
+    else if ( aModuleId.equalsAscii( "com.sun.star.text.WebDocument" ) )
         return OUString::createFromAscii("Writer/Web");
-    }
-    else if ( aModuleId.equals( OUString::createFromAscii(
-            "com.sun.star.drawing.DrawingDocument" ) ) )
-    {
+    else if ( aModuleId.equalsAscii( "com.sun.star.drawing.DrawingDocument" ) )
         return OUString::createFromAscii("Draw");
-    }
-    else if ( aModuleId.equals( OUString::createFromAscii(
-            "com.sun.star.presentation.PresentationDocument" ) ) )
-    {
+    else if ( aModuleId.equalsAscii( "com.sun.star.presentation.PresentationDocument" ) )
         return OUString::createFromAscii("Impress");
-    }
-    else if ( aModuleId.equals( OUString::createFromAscii(
-            "com.sun.star.sheet.SpreadsheetDocument" ) ) )
-    {
+    else if ( aModuleId.equalsAscii( "com.sun.star.sheet.SpreadsheetDocument" ) )
         return OUString::createFromAscii("Calc");
-    }
-    else if ( aModuleId.equals( OUString::createFromAscii(
-            "com.sun.star.script.BasicIDE" ) ) )
-    {
+    else if ( aModuleId.equalsAscii( "com.sun.star.script.BasicIDE" ) )
         return OUString::createFromAscii("Basic");
-    }
-    else if ( aModuleId.equals( OUString::createFromAscii(
-            "com.sun.star.formula.FormulaProperties" ) ) )
-    {
+    else if ( aModuleId.equalsAscii( "com.sun.star.formula.FormulaProperties" ) )
         return OUString::createFromAscii("Math");
-    }
-    DBG_ERROR( "GetModuleName: unknown module Id!" );
+    else if ( aModuleId.equalsAscii( "com.sun.star.sdb.RelationDesign" ) )
+        return OUString::createFromAscii("Relation Design");
+    else if ( aModuleId.equalsAscii( "com.sun.star.sdb.QueryDesign" ) )
+        return OUString::createFromAscii("Query Design");
+    else if ( aModuleId.equalsAscii( "com.sun.star.sdb.TableDesign" ) )
+        return OUString::createFromAscii("Table Design");
+    else if ( aModuleId.equalsAscii( "com.sun.star.sdb.DataSourceBrowser" ) )
+        return OUString::createFromAscii("Data Source Browser" );
+    else if ( aModuleId.equalsAscii( "com.sun.star.sdb.DatabaseDocument" ) )
+        return OUString::createFromAscii("Database" );
+
     return ::rtl::OUString();
+}
+
+OUString GetUIModuleName( const OUString& aModuleId, const uno::Reference< dcss::frame::XModuleManager >& rModuleManager )
+{
+    OUString aModuleUIName;
+
+    if ( rModuleManager.is() )
+    {
+        uno::Reference< css::container::XNameAccess > xNameAccess( rModuleManager, uno::UNO_QUERY );
+        if ( xNameAccess.is() )
+        {
+            try
+            {
+                uno::Any a = xNameAccess->getByName( aModuleId );
+                uno::Sequence< beans::PropertyValue > aSeq;
+
+                if ( a >>= aSeq )
+                {
+                    OUString aUIName;
+                    for ( sal_Int32 i = 0; i < aSeq.getLength(); i++ )
+                    {
+                        if ( aSeq[i].Name.equalsAscii( "ooSetupFactoryUIName" ))
+                        {
+                            aSeq[i].Value >>= aModuleUIName;
+                            break;
+                        }
+                    }
+                }
+            }
+            catch ( uno::RuntimeException& e )
+            {
+                throw e;
+            }
+            catch ( uno::Exception& )
+            {
+            }
+        }
+    }
+
+    if ( aModuleUIName.getLength() == 0 )
+        aModuleUIName = GetModuleName( aModuleId );
+
+    return aModuleUIName;
 }
 
 bool GetMenuItemData(
@@ -1710,7 +1741,7 @@ void SvxConfigPage::Reset( const SfxItemSet& )
             { aModuleId = ::rtl::OUString(); }
 
         // replace %MODULENAME in the label with the correct module name
-        OUString aModuleName = GetModuleName( aModuleId );
+        OUString aModuleName = GetUIModuleName( aModuleId, xModuleManager );
 
         OUString title = aTopLevelSeparator.GetText();
 
