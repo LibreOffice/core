@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ka $ $Date: 2001-03-08 11:04:21 $
+ *  last change: $Author: os $ $Date: 2001-09-18 13:58:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -389,8 +389,6 @@
             SID_CONVERT_TO_3D;\
             SID_CONVERT_TO_3D_LATHE_FAST;\
             SID_ATTR_GRAF_INVERT;\
-            SID_INSERT_SOUND;\
-            SID_INSERT_VIDEO;\
             SID_OBJECT_TRANSPARENCE;\
             SID_OBJECT_GRADIENT;\
             SID_TEXT_FITTOSIZE_VERTICAL;\
@@ -400,7 +398,7 @@
             SID_TEXTDIRECTION_TOP_TO_BOTTOM;\
     };\
     IdCount = {\
-        288;\
+        286;\
     };
 
 
