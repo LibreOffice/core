@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appuno.cxx,v $
  *
- *  $Revision: 1.98 $
+ *  $Revision: 1.99 $
  *
- *  last change: $Author: hr $ $Date: 2004-10-12 18:03:35 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 15:26:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,6 +196,8 @@
 
 #include <tools/cachestr.hxx>
 #include <osl/mutex.hxx>
+#include <comphelper/sequence.hxx>
+#include <rtl/ustrbuf.hxx>
 
 using namespace ::com::sun::star::ucb;
 using namespace ::com::sun::star::uno;
@@ -410,7 +412,7 @@ void TransformParameters( sal_uInt16 nSlotId, const ::com::sun::star::uno::Seque
             }
 
 // Comment out: Make sure we can convert incomplete items, talked with MBA
-//            if ( nFound == nSubCount )
+            if ( nFound > 0 )
                 // only use completely converted items
                 rSet.Put( *pItem );
 #ifdef DBG_UTIL
@@ -1885,7 +1887,7 @@ Reference < XDispatch > SAL_CALL SfxAppDispatchProvider::queryDispatch( const ::
 }
 
 Sequence< Reference < XDispatch > > SAL_CALL SfxAppDispatchProvider::queryDispatches( const Sequence < DispatchDescriptor >& seqDescriptor )
-                        throw( RuntimeException )
+throw( RuntimeException )
 {
     sal_Int32 nCount = seqDescriptor.getLength();
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference < ::com::sun::star::frame::XDispatch > > lDispatcher(nCount);
@@ -1895,6 +1897,88 @@ Sequence< Reference < XDispatch > > SAL_CALL SfxAppDispatchProvider::queryDispat
                                               seqDescriptor[i].SearchFlags );
     return lDispatcher;
 }
+
+Sequence< sal_Int16 > SAL_CALL SfxAppDispatchProvider::getSupportedCommandGroups()
+throw (::com::sun::star::uno::RuntimeException)
+{
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+
+    std::list< sal_Int16 > aGroupList;
+    SfxSlotPool* pAppSlotPool = &SFX_APP()->GetAppSlotPool_Impl();
+
+    const ULONG nMode( SFX_SLOT_TOOLBOXCONFIG|SFX_SLOT_ACCELCONFIG|SFX_SLOT_MENUCONFIG );
+
+    // Gruppe anw"ahlen ( Gruppe 0 ist intern )
+    for ( USHORT i=0; i<pAppSlotPool->GetGroupCount(); i++ )
+    {
+        String aName = pAppSlotPool->SeekGroup( i );
+        const SfxSlot* pSfxSlot = pAppSlotPool->FirstSlot();
+        while ( pSfxSlot )
+        {
+            if ( pSfxSlot->GetMode() & nMode )
+            {
+                sal_Int16 nCommandGroup = MapGroupIDToCommandGroup( pSfxSlot->GetGroupId() );
+                aGroupList.push_back( nCommandGroup );
+                break;
+            }
+            pSfxSlot = pAppSlotPool->NextSlot();
+        }
+    }
+
+    ::com::sun::star::uno::Sequence< sal_Int16 > aSeq =
+        comphelper::containerToSequence< std::list< sal_Int16 >, sal_Int16 >( aGroupList );
+
+    return aSeq;
+}
+
+Sequence< ::com::sun::star::frame::DispatchInformation > SAL_CALL SfxAppDispatchProvider::getConfigurableDispatchInformation( sal_Int16 nCmdGroup )
+throw (::com::sun::star::uno::RuntimeException)
+{
+    std::list< ::com::sun::star::frame::DispatchInformation > aCmdList;
+
+    ::vos::OGuard aGuard( Application::GetSolarMutex() );
+    SfxSlotPool* pAppSlotPool = &SFX_APP()->GetAppSlotPool_Impl();
+
+    if ( pAppSlotPool )
+    {
+        const ULONG   nMode( SFX_SLOT_TOOLBOXCONFIG|SFX_SLOT_ACCELCONFIG|SFX_SLOT_MENUCONFIG );
+        rtl::OUString aCmdPrefix( RTL_CONSTASCII_USTRINGPARAM( ".uno:" ));
+
+        // Gruppe anw"ahlen ( Gruppe 0 ist intern )
+        for ( USHORT i=0; i<pAppSlotPool->GetGroupCount(); i++ )
+        {
+            String aName = pAppSlotPool->SeekGroup( i );
+            const SfxSlot* pSfxSlot = pAppSlotPool->FirstSlot();
+            if ( pSfxSlot )
+            {
+                sal_Int16 nCommandGroup = MapGroupIDToCommandGroup( pSfxSlot->GetGroupId() );
+                if ( nCommandGroup == nCmdGroup )
+                {
+                    while ( pSfxSlot )
+                    {
+                        USHORT nId = pSfxSlot->GetSlotId();
+                        if ( pSfxSlot->GetMode() & nMode )
+                        {
+                            ::com::sun::star::frame::DispatchInformation aCmdInfo;
+                            ::rtl::OUStringBuffer aBuf( aCmdPrefix );
+                            aBuf.appendAscii( pSfxSlot->GetUnoName() );
+                            aCmdInfo.Command = aBuf.makeStringAndClear();
+                            aCmdInfo.GroupId = nCommandGroup;
+                            aCmdList.push_back( aCmdInfo );
+                        }
+                        pSfxSlot = pAppSlotPool->NextSlot();
+                    }
+                }
+            }
+        }
+    }
+
+    ::com::sun::star::uno::Sequence< ::com::sun::star::frame::DispatchInformation > aSeq =
+        comphelper::containerToSequence< std::list< ::com::sun::star::frame::DispatchInformation >, ::com::sun::star::frame::DispatchInformation >( aCmdList );
+
+    return aSeq;
+}
+
 #ifdef TEST_HANDLERS
 #ifndef _CPPUHELPER_IMPLBASE2_HXX_
 #include <cppuhelper/implbase2.hxx>
