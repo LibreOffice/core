@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmPropBrw.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-07 13:16:50 $
+ *  last change: $Author: oj $ $Date: 2000-11-24 07:01:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,6 +92,7 @@
 #include "fmshimp.hxx"
 #endif
 /*************************************************************************/
+using namespace ::com::sun::star::uno;
 //========================================================================
 // class FmPropBrw
 //========================================================================
@@ -109,7 +110,7 @@ const long MIN_WIN_SIZE_Y = 50;
 
 DBG_NAME(FmPropBrw);
 //------------------------------------------------------------------------
-FmPropBrw::FmPropBrw(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >&    _xORB,
+FmPropBrw::FmPropBrw(const Reference< ::com::sun::star::lang::XMultiServiceFactory >&   _xORB,
                      SfxBindings *pBindings, SfxChildWindow *pMgr, Window* pParent)
           :SfxFloatingWindow(pBindings, pMgr, pParent,WinBits(WB_STDMODELESS|WB_SIZEABLE|WB_3DLOOK|WB_ROLLABLE))
           ,SfxControllerItem(SID_FM_PROPERTY_CONTROL, *pBindings)
@@ -146,7 +147,7 @@ sal_Bool FmPropBrw::Close()
     if( m_pActiveController )
         m_pActiveController->DisconnectUI();
 
-    pMasterController->UpdateController(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > ());
+    pMasterController->UpdateController(Reference< XInterface > ());
 
     if( IsRollUp() )
         RollDown();
@@ -207,7 +208,7 @@ try
         }
 
         FmFormShell* pShell = PTR_CAST(FmFormShell,((SfxObjectItem*)pState)->GetShell());
-        ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  xObject;
+        Reference< XInterface >  xObject;
         if (pShell)
         {
             // mal schauen ob ein object selektiert ist
@@ -218,11 +219,11 @@ try
     }
     else
     {
-        pMasterController->UpdateController(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > ());
+        pMasterController->UpdateController(Reference< XInterface > ());
     }
 }
 
-catch(...)
+catch(Exception&)
 {
     DBG_ERROR("FmPropBrw::StateChanged: Exception occured!");
 }

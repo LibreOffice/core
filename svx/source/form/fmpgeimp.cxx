@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmpgeimp.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-15 14:53:28 $
+ *  last change: $Author: oj $ $Date: 2000-11-24 07:01:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -322,7 +322,7 @@ Reference< ::com::sun::star::form::XForm >  FmFormPageImpl::getDefaultForm()
         {
             xSet->setPropertyValue(FM_PROP_COMMANDTYPE, makeAny(sal_Int32(CommandType::TABLE)));
         }
-        catch(...)
+        catch(Exception&)
         {
         }
 
@@ -387,7 +387,7 @@ Reference< ::com::sun::star::form::XForm >  FmFormPageImpl::SetDefaults(const Re
             // a form should always have the command type table as default
             Reference< ::com::sun::star::beans::XPropertySet >  xSet(xForm, UNO_QUERY);
             try { xSet->setPropertyValue(FM_PROP_COMMANDTYPE, makeAny(sal_Int32(CommandType::TABLE))); }
-            catch(...) { }
+            catch(Exception&) { }
 
             if (rDBTitle.len())
                 xSet->setPropertyValue(FM_PROP_DATASOURCE,makeAny(rDBTitle));
@@ -627,7 +627,7 @@ void FmFormPageImpl::WriteData(SvStream& rOut) const
         {
             write(xOutStrm);
         }
-        catch(...)
+        catch(Exception&)
         {
             rOut.SetError( ERRCODE_CLASS_WRITE | ERRCODE_SVX_FORMS_READWRITEFAILED | ERRCODE_WARNING_MASK );
         }
@@ -679,7 +679,7 @@ void FmFormPageImpl::ReadData(const SdrIOHeader& rHead, SvStream& rIn)
         {
             read(xInStrm);
         }
-        catch(...)
+        catch(Exception&)
         {
             rIn.SetError( ERRCODE_CLASS_READ | ERRCODE_SVX_FORMS_READWRITEFAILED | ERRCODE_WARNING_MASK );
         }

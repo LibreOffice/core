@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmshell.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-16 15:57:09 $
+ *  last change: $Author: oj $ $Date: 2000-11-24 07:01:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,9 +122,15 @@
 #ifndef _COM_SUN_STAR_BEANS_XFASTPROPERTYSET_HPP_
 #include <com/sun/star/beans/XFastPropertySet.hpp>
 #endif
-
+#ifndef _COM_SUN_STAR_UI_XEXECUTABLEDIALOG_HPP_
+#include <com/sun/star/ui/XExecutableDialog.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
 #include <com/sun/star/container/XNameContainer.hpp>
+#endif
 
 #ifndef _SFXVIEWFRM_HXX
 #include <sfx2/viewfrm.hxx>
@@ -282,16 +288,16 @@
     catch(::com::sun::star::sdbc::SQLException& e)                                                  \
     {                                                                       \
         ::com::sun::star::sdb::SQLContext eExtendedInfo =                                           \
-        ::dbtools::prependContextInfo(e, ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > (), context);                \
+        ::dbtools::prependContextInfo(e, Reference< XInterface > (), context);              \
         displayException(eExtendedInfo);                                    \
     }                                                                       \
-    catch(...)                                                          \
+    catch(Exception&)                                                           \
     {                                                                       \
         DBG_ERROR(message);                                                 \
     }                                                                       \
 
 
-#define DO_SAFE_WITH_ERROR( action, message ) try { action; } catch(...) { DBG_ERROR(message); }
+#define DO_SAFE_WITH_ERROR( action, message ) try { action; } catch(Exception&) { DBG_ERROR(message); }
 
 
 extern SfxType0 aSfxVoidItem_Impl;
@@ -433,7 +439,7 @@ sal_Bool IsFormComponent( const SdrObject& rObj )
         if( !rObj.ISA(SdrUnoObj) )
             return sal_False;
 
-        ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent >  xFormComponent(((SdrUnoObj*)&rObj)->GetUnoControlModel(), ::com::sun::star::uno::UNO_QUERY);
+        Reference< ::com::sun::star::form::XFormComponent >  xFormComponent(((SdrUnoObj*)&rObj)->GetUnoControlModel(), UNO_QUERY);
         if (!xFormComponent.is())
             return sal_False;
     }
@@ -486,7 +492,7 @@ sal_Bool IsFormComponentList( const SdrObjList& rSdrObjList )
             if (!pSdrObj->ISA(SdrUnoObj))
                 return sal_False;
 
-            ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent >  xFormComponent(((SdrUnoObj*)pSdrObj)->GetUnoControlModel(), ::com::sun::star::uno::UNO_QUERY);
+            Reference< ::com::sun::star::form::XFormComponent >  xFormComponent(((SdrUnoObj*)pSdrObj)->GetUnoControlModel(), UNO_QUERY);
             if (!xFormComponent.is())
                 return sal_False;
         }
@@ -603,7 +609,7 @@ sal_uInt16 FmFormShell::PrepareClose(sal_Bool bUI, sal_Bool bForBrowsing)
         {
             // Zunaechst werden die aktuellen Inhalte der Controls gespeichert
             // Wenn alles glatt gelaufen ist, werden die modifizierten Datensaetze gespeichert
-            ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController >  xController(GetImpl()->getActiveController());
+            Reference< ::com::sun::star::form::XFormController >  xController(GetImpl()->getActiveController());
             if (xController.is() && FmXFormShell::CommitCurrent(xController))
             {
                 sal_Bool bModified = FmXFormShell::IsModified(xController);
@@ -859,7 +865,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
         case SID_FM_CONVERTTO_PATTERN       :
         case SID_FM_CONVERTTO_IMAGECONTROL  :
         case SID_FM_CONVERTTO_FORMATTED     :
-            GetImpl()->ExecuteControlConversionSlot(::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent > (GetImpl()->getCurControl(), ::com::sun::star::uno::UNO_QUERY),
+            GetImpl()->ExecuteControlConversionSlot(Reference< ::com::sun::star::form::XFormComponent > (GetImpl()->getCurControl(), UNO_QUERY),
                 nSlot);
             // nach dem Konvertieren die Selektion neu bestimmern, da sich ja das selektierte Objekt
             // geaendert hat
@@ -874,7 +880,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
         {
             SFX_REQUEST_ARG( rReq, pInterfaceItem, FmInterfaceItem, nSlot, sal_False );
             SFX_REQUEST_ARG( rReq, pShowItem, SfxBoolItem, SID_FM_SHOW_PROPERTIES, sal_False );
-            ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  xInterface;
+            Reference< XInterface >  xInterface;
             sal_Bool bShow = sal_True;
             if( pShowItem )
                 bShow = pShowItem->GetValue();
@@ -988,7 +994,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
         {
             if (GetImpl()->SaveModified(GetImpl()->getNavController()))
             {
-                ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >  xCursor(GetImpl()->getNavController()->getModel(), ::com::sun::star::uno::UNO_QUERY);
+                Reference< ::com::sun::star::sdbc::XResultSet >  xCursor(GetImpl()->getNavController()->getModel(), UNO_QUERY);
                 DO_SAFE( xCursor->first(); );
             }
             rReq.Done();
@@ -1019,10 +1025,10 @@ void FmFormShell::Execute(SfxRequest &rReq)
         {
             if (GetImpl()->SaveModified(GetImpl()->getNavController()))
             {
-                ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >  xCursor(GetImpl()->getNavController()->getModel(), ::com::sun::star::uno::UNO_QUERY);
+                Reference< ::com::sun::star::sdbc::XResultSet >  xCursor(GetImpl()->getNavController()->getModel(), UNO_QUERY);
 
                 // run in an own thread if ...
-                ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xCursorProps(xCursor, ::com::sun::star::uno::UNO_QUERY);
+                Reference< ::com::sun::star::beans::XPropertySet >  xCursorProps(xCursor, UNO_QUERY);
                 // ... the data source is thread safe ...
                 sal_Bool bAllowOwnThread = ::comphelper::hasProperty(FM_PROP_THREADSAFE, xCursorProps) && ::comphelper::getBOOL(xCursorProps->getPropertyValue(FM_PROP_THREADSAFE));
                 // ... the record count is unknown
@@ -1039,17 +1045,17 @@ void FmFormShell::Execute(SfxRequest &rReq)
         {
             if (GetImpl()->SaveModified(GetImpl()->getActiveController()))
             {
-                ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetUpdate >  xUpdateCursor(GetImpl()->getActiveForm(), ::com::sun::star::uno::UNO_QUERY);
+                Reference< ::com::sun::star::sdbc::XResultSetUpdate >  xUpdateCursor(GetImpl()->getActiveForm(), UNO_QUERY);
                 DO_SAFE( xUpdateCursor->moveToInsertRow(); );
             }
             rReq.Done();
         }   break;
         case SID_FM_RECORD_DELETE:
         {
-            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >  xCursor(GetImpl()->getActiveForm(), ::com::sun::star::uno::UNO_QUERY);
-            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetUpdate >  xUpdateCursor(xCursor, ::com::sun::star::uno::UNO_QUERY);
+            Reference< ::com::sun::star::sdbc::XResultSet >  xCursor(GetImpl()->getActiveForm(), UNO_QUERY);
+            Reference< ::com::sun::star::sdbc::XResultSetUpdate >  xUpdateCursor(xCursor, UNO_QUERY);
 
-            ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   xSet(GetImpl()->getActiveForm(), ::com::sun::star::uno::UNO_QUERY);
+            Reference< ::com::sun::star::beans::XPropertySet >  xSet(GetImpl()->getActiveForm(), UNO_QUERY);
             sal_uInt32 nCount = ::comphelper::getINT32(xSet->getPropertyValue(FM_PROP_ROWCOUNT));
 
             // naechste position festellen
@@ -1059,11 +1065,11 @@ void FmFormShell::Execute(SfxRequest &rReq)
             try
             {
                 // ask for confirmation
-                ::com::sun::star::uno::Reference< ::com::sun::star::form::XConfirmDeleteListener >  xConfirm(GetImpl()->getActiveController(),::com::sun::star::uno::UNO_QUERY);
+                Reference< ::com::sun::star::form::XConfirmDeleteListener >  xConfirm(GetImpl()->getActiveController(),UNO_QUERY);
                 if (xConfirm.is())
                 {
                     ::com::sun::star::sdb::RowChangeEvent aEvent;
-                    aEvent.Source = ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface > (xCursor, ::com::sun::star::uno::UNO_QUERY);
+                    aEvent.Source = Reference< XInterface > (xCursor, UNO_QUERY);
                     aEvent.Action = ::com::sun::star::sdb::RowChangeAction::DELETE;
                     aEvent.Rows = 1;
                     bSuccess = xConfirm->confirmDelete(aEvent);
@@ -1073,7 +1079,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
                 if (bSuccess)
                     xUpdateCursor->deleteRow();
             }
-            catch(...)
+            catch(Exception&)
             {
                 bSuccess = sal_False;
             }
@@ -1094,7 +1100,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
                             // Datensatz bewegen um Stati neu zu setzen
                             xCursor->first();
                     }
-                    catch(...)
+                    catch(Exception&)
                     {
                         DBG_ERROR("FmFormShell::Execute : couldn't position on the next record !");
                     }
@@ -1107,7 +1113,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
             const SfxItemSet* pArgs = rReq.GetArgs();
             sal_Int32 nRecord = -1;
 
-            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >  xCursor(GetImpl()->getActiveForm(), ::com::sun::star::uno::UNO_QUERY);
+            Reference< ::com::sun::star::sdbc::XResultSet >  xCursor(GetImpl()->getActiveForm(), UNO_QUERY);
 
             if ( pArgs )
             {
@@ -1129,7 +1135,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
 
             if (nRecord != -1)
             {
-                ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >      xSet    (GetImpl()->getActiveForm(), ::com::sun::star::uno::UNO_QUERY);
+                Reference< ::com::sun::star::beans::XPropertySet >     xSet    (GetImpl()->getActiveForm(), UNO_QUERY);
                 sal_Bool    bFinal      = ::comphelper::getBOOL(xSet->getPropertyValue(FM_PROP_ROWCOUNTFINAL));
                 sal_Int32  nRecordCount= ::comphelper::getINT32(xSet->getPropertyValue(FM_PROP_ROWCOUNT));
 
@@ -1153,11 +1159,11 @@ void FmFormShell::Execute(SfxRequest &rReq)
                 break;
             }
 
-            ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >   xSet(GetImpl()->getActiveForm(), ::com::sun::star::uno::UNO_QUERY);
+            Reference< ::com::sun::star::beans::XPropertySet >  xSet(GetImpl()->getActiveForm(), UNO_QUERY);
             sal_Bool bIsInserting  = ::comphelper::getBOOL(xSet->getPropertyValue(FM_PROP_ISNEW));
 
-            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >  xCursor(GetImpl()->getActiveForm(), ::com::sun::star::uno::UNO_QUERY);
-            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetUpdate >  xUpdateCursor(GetImpl()->getActiveForm(), ::com::sun::star::uno::UNO_QUERY);
+            Reference< ::com::sun::star::sdbc::XResultSet >  xCursor(GetImpl()->getActiveForm(), UNO_QUERY);
+            Reference< ::com::sun::star::sdbc::XResultSetUpdate >  xUpdateCursor(GetImpl()->getActiveForm(), UNO_QUERY);
             sal_Bool bSuccess = sal_True;
             try
             {
@@ -1166,7 +1172,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
                 else
                     xUpdateCursor->updateRow();
             }
-            catch(...)
+            catch(Exception&)
             {
                 bSuccess = sal_False;
             }
@@ -1181,15 +1187,15 @@ void FmFormShell::Execute(SfxRequest &rReq)
         }   break;
         case SID_FM_RECORD_UNDO:
         {
-            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetUpdate >  xUpdateCursor(GetImpl()->getActiveForm(), ::com::sun::star::uno::UNO_QUERY);
-            ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xSet(GetImpl()->getActiveForm(), ::com::sun::star::uno::UNO_QUERY);
+            Reference< ::com::sun::star::sdbc::XResultSetUpdate >  xUpdateCursor(GetImpl()->getActiveForm(), UNO_QUERY);
+            Reference< ::com::sun::star::beans::XPropertySet >  xSet(GetImpl()->getActiveForm(), UNO_QUERY);
             sal_Bool bInserting = ::comphelper::getBOOL(xSet->getPropertyValue(FM_PROP_ISNEW));
             if (!bInserting)
                 xUpdateCursor->cancelRowUpdates();
 
 
 //          GetImpl()->ResetCurrent(GetImpl()->getActiveController());
-            GetImpl()->ResetAll(::com::sun::star::uno::Reference< ::com::sun::star::form::XForm > (GetImpl()->getActiveController()->getModel(), ::com::sun::star::uno::UNO_QUERY));
+            GetImpl()->ResetAll(Reference< ::com::sun::star::form::XForm > (GetImpl()->getActiveController()->getModel(), UNO_QUERY));
 
             if (bInserting)                 // wieder in den EinfuegeModus
                 DO_SAFE( xUpdateCursor->moveToInsertRow(); );
@@ -1203,21 +1209,21 @@ void FmFormShell::Execute(SfxRequest &rReq)
             if (GetImpl()->SaveModified(GetImpl()->getActiveController()))
             {
                 // gleichzeitiges Zuruecksetzen der Filter- und der Sort-Eigenschaft
-                ::com::sun::star::uno::Reference< ::com::sun::star::beans::XMultiPropertySet >  xProperties(GetImpl()->getActiveForm(), ::com::sun::star::uno::UNO_QUERY);
+                Reference< ::com::sun::star::beans::XMultiPropertySet >  xProperties(GetImpl()->getActiveForm(), UNO_QUERY);
                 if (xProperties.is())
                 {
                     ::rtl::OUString ustrNames[2] = { FM_PROP_FILTER_CRITERIA, FM_PROP_SORT };
-                    ::com::sun::star::uno::Any  anyValues[2] = { ::com::sun::star::uno::makeAny(::rtl::OUString()),
-                        ::com::sun::star::uno::makeAny(::rtl::OUString()) };
-                    ::com::sun::star::uno::Sequence< ::rtl::OUString> seqNames(ustrNames, 2);
-                    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any> seqValues(anyValues, 2);
+                    Any  anyValues[2] = { makeAny(::rtl::OUString()),
+                        makeAny(::rtl::OUString()) };
+                    Sequence< ::rtl::OUString> seqNames(ustrNames, 2);
+                    Sequence< Any> seqValues(anyValues, 2);
 
                     FormShellWaitObject aWO(this);
                     xProperties->setPropertyValues(seqNames, seqValues);
 
                     try
                     {
-                        ::com::sun::star::uno::Reference< ::com::sun::star::form::XLoadable >  xReload(xProperties, ::com::sun::star::uno::UNO_QUERY);
+                        Reference< ::com::sun::star::form::XLoadable >  xReload(xProperties, UNO_QUERY);
                         xReload->reload();
                     }
                     catch(::com::sun::star::sdbc::SQLException e)
@@ -1234,20 +1240,20 @@ void FmFormShell::Execute(SfxRequest &rReq)
             bSortUp = sal_False;
         case SID_FM_SORTUP:
         {
-            ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLQueryComposer >  xParser = GetImpl()->getParser();
-            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >  xCursor(GetImpl()->getActiveForm(), ::com::sun::star::uno::UNO_QUERY);
-            ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController >  xFormCtrler = GetImpl()->getActiveController();
+            Reference< ::com::sun::star::sdb::XSQLQueryComposer >  xParser = GetImpl()->getParser();
+            Reference< ::com::sun::star::sdbc::XResultSet >  xCursor(GetImpl()->getActiveForm(), UNO_QUERY);
+            Reference< ::com::sun::star::form::XFormController >  xFormCtrler = GetImpl()->getActiveController();
 
-            ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >  xControl = xFormCtrler->getCurrentControl();
+            Reference< ::com::sun::star::awt::XControl >  xControl = xFormCtrler->getCurrentControl();
             if (GetImpl()->SaveModified(xFormCtrler) && xControl.is() && xCursor.is())
             {
-                ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xField = GetImpl()->GetBoundField(xControl, GetImpl()->getActiveForm());
+                Reference< ::com::sun::star::beans::XPropertySet >  xField = GetImpl()->GetBoundField(xControl, GetImpl()->getActiveForm());
                 if (xField.is())
                 {
-                    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xFormSet(GetImpl()->getActiveForm(), ::com::sun::star::uno::UNO_QUERY);
+                    Reference< ::com::sun::star::beans::XPropertySet >  xFormSet(GetImpl()->getActiveForm(), UNO_QUERY);
                     ::rtl::OUString sOriginalSort;
                     try { sOriginalSort = ::comphelper::getString(xFormSet->getPropertyValue(FM_PROP_SORT)); }
-                    catch(...) { }
+                    catch(Exception&) { }
 
 
                     // immer nur eine Sortierung
@@ -1264,13 +1270,13 @@ void FmFormShell::Execute(SfxRequest &rReq)
                     if (bParserSuccess)
                     {
                         FormShellWaitObject aWO(this);
-                        ::com::sun::star::uno::Reference< ::com::sun::star::form::XLoadable >  xReload(xFormSet, ::com::sun::star::uno::UNO_QUERY);
+                        Reference< ::com::sun::star::form::XLoadable >  xReload(xFormSet, UNO_QUERY);
                         try
                         {
-                            xFormSet->setPropertyValue(FM_PROP_SORT, ::com::sun::star::uno::makeAny(xParser->getOrder()));
+                            xFormSet->setPropertyValue(FM_PROP_SORT, makeAny(xParser->getOrder()));
                             xReload->reload();
                         }
-                        catch(...)
+                        catch(Exception&)
                         {
                         }
 
@@ -1280,10 +1286,10 @@ void FmFormShell::Execute(SfxRequest &rReq)
                             try
                             {
                                 xParser->setOrder(sOriginalSort);
-                                xFormSet->setPropertyValue(FM_PROP_SORT, ::com::sun::star::uno::makeAny(xParser->getOrder()));
+                                xFormSet->setPropertyValue(FM_PROP_SORT, makeAny(xParser->getOrder()));
                                 xReload->reload();
                             }
-                            catch(...)
+                            catch(Exception&)
                             {
                             }
 
@@ -1295,7 +1301,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
         }   break;
         case SID_FM_FILTER_EXECUTE:
         {
-            ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController >  xController(GetImpl()->getActiveController());
+            Reference< ::com::sun::star::form::XFormController >  xController(GetImpl()->getActiveController());
             if (xController.is() && !FmXFormShell::CommitCurrent(xController))
             {
                 rReq.Done();
@@ -1313,23 +1319,23 @@ void FmFormShell::Execute(SfxRequest &rReq)
         }   break;
         case SID_FM_ORDERCRIT:
         {
-            ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController >     xFormCtrler = GetImpl()->getActiveController();
-            ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >             xControl = xFormCtrler->getCurrentControl();
+            Reference< ::com::sun::star::form::XFormController >    xFormCtrler = GetImpl()->getActiveController();
+            Reference< ::com::sun::star::awt::XControl >            xControl = xFormCtrler->getCurrentControl();
 
-            ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLQueryComposer >        xParser = GetImpl()->getParser();
-//          ::com::sun::star::uno::Reference< ::com::sun::star::data::XDatabaseDialogs >            xDlgs(xParser, ::com::sun::star::uno::UNO_QUERY);
+            Reference< ::com::sun::star::sdb::XSQLQueryComposer >       xParser = GetImpl()->getParser();
+//          Reference< ::com::sun::star::data::XDatabaseDialogs >           xDlgs(xParser, UNO_QUERY);
 
             if (GetImpl()->SaveModified(xFormCtrler))
             {
-                ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xSet(GetImpl()->getActiveForm(), ::com::sun::star::uno::UNO_QUERY);
-                ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >  xCursor(xSet, ::com::sun::star::uno::UNO_QUERY);
+                Reference< ::com::sun::star::beans::XPropertySet >  xSet(GetImpl()->getActiveForm(), UNO_QUERY);
+                Reference< ::com::sun::star::sdbc::XResultSet >  xCursor(xSet, UNO_QUERY);
                 sal_Bool bIsDeleted = xCursor.is() && xCursor->rowDeleted();
 
-                ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed >  xField;
+                Reference< ::com::sun::star::container::XNamed >  xField;
                 if (bIsDeleted)
                 {
-                    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xSet(GetImpl()->GetBoundField(xControl,  GetImpl()->getActiveForm()), ::com::sun::star::uno::UNO_QUERY);
-                    xField = ::com::sun::star::uno::Reference< ::com::sun::star::container::XNamed > (xSet, ::com::sun::star::uno::UNO_QUERY);
+                    Reference< ::com::sun::star::beans::XPropertySet >  xSet(GetImpl()->GetBoundField(xControl, GetImpl()->getActiveForm()), UNO_QUERY);
+                    xField = Reference< ::com::sun::star::container::XNamed > (xSet, UNO_QUERY);
                     // auslesen der Searchflags
                     if (xSet.is())
                     {
@@ -1337,16 +1343,26 @@ void FmFormShell::Execute(SfxRequest &rReq)
                             xField = NULL;
                     }
                 }
+                Reference< ::com::sun::star::sdbcx::XColumnsSupplier >  xSup(xSet,UNO_QUERY);
+                OSL_ENSHURE(xSup.is(),"no columnssupplier!");
+                Sequence<Any> aInit(3);
+                aInit[0] <<= xParser;
+                aInit[1] <<= xParser;
+                aInit[2] <<= xSup->getColumns();
 
-                DBG_ERROR("FmFormShell::Execute: missing imlementation replacing the old XDatabaseDialogs!");
-//              xDlgs->executeSort(xField);
 
-                ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xFormSet(GetImpl()->getActiveForm(), ::com::sun::star::uno::UNO_QUERY);
+                Reference< com::sun::star::ui::XExecutableDialog> xDlg(
+                    ::comphelper::getProcessServiceFactory()->createInstanceWithArguments(::rtl::OUString::createFromAscii("com.sun.star.sdb.OrderDialog"),aInit),UNO_QUERY);
+
+                if(xDlg.is())
+                    xDlg->execute();
+
+                Reference< ::com::sun::star::beans::XPropertySet >  xFormSet(GetImpl()->getActiveForm(), UNO_QUERY);
                 FormShellWaitObject aWO(this);
                 try
                 {
-                    xFormSet->setPropertyValue(FM_PROP_SORT, ::com::sun::star::uno::makeAny(xParser->getOrder()));
-                    ::com::sun::star::uno::Reference< ::com::sun::star::form::XLoadable >  xReload(xFormSet, ::com::sun::star::uno::UNO_QUERY);
+                    xFormSet->setPropertyValue(FM_PROP_SORT, makeAny(xParser->getOrder()));
+                    Reference< ::com::sun::star::form::XLoadable >  xReload(xFormSet, UNO_QUERY);
                     xReload->reload();
 
                 }
@@ -1359,18 +1375,18 @@ void FmFormShell::Execute(SfxRequest &rReq)
         }   break;
         case SID_FM_AUTOFILTER:
         {
-            ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController >     xFormCtrler = GetImpl()->getActiveController();
-            ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >             xControl = xFormCtrler->getCurrentControl();
+            Reference< ::com::sun::star::form::XFormController >    xFormCtrler = GetImpl()->getActiveController();
+            Reference< ::com::sun::star::awt::XControl >            xControl = xFormCtrler->getCurrentControl();
 
-            ::com::sun::star::uno::Reference< ::com::sun::star::sdb::XSQLQueryComposer >        xParser = GetImpl()->getParser();
-            ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >                  xCursor(GetImpl()->getActiveForm(), ::com::sun::star::uno::UNO_QUERY);
+            Reference< ::com::sun::star::sdb::XSQLQueryComposer >   xParser = GetImpl()->getParser();
+            Reference< ::com::sun::star::sdbc::XResultSet >         xCursor(GetImpl()->getActiveForm(), UNO_QUERY);
 
             if (GetImpl()->SaveModified(xFormCtrler) && xControl.is() && xCursor.is())
             {
-                ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xField = GetImpl()->GetBoundField(xControl, GetImpl()->getActiveForm());
+                Reference< ::com::sun::star::beans::XPropertySet >  xField = GetImpl()->GetBoundField(xControl, GetImpl()->getActiveForm());
                 if (xField.is())
                 {
-                    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xActiveSet(GetImpl()->getActiveForm(), ::com::sun::star::uno::UNO_QUERY);
+                    Reference< ::com::sun::star::beans::XPropertySet >  xActiveSet(GetImpl()->getActiveForm(), UNO_QUERY);
                     ::rtl::OUString sOriginalFilter = ::comphelper::getString(xActiveSet->getPropertyValue(FM_PROP_FILTER_CRITERIA));
                     sal_Bool bApplied = ::comphelper::getBOOL(xActiveSet->getPropertyValue(FM_PROP_APPLYFILTER));
 
@@ -1389,17 +1405,17 @@ void FmFormShell::Execute(SfxRequest &rReq)
                     )
                     if (bParserSuccess)
                     {
-                        ::com::sun::star::uno::Reference< ::com::sun::star::form::XLoadable >  xReload(xActiveSet, ::com::sun::star::uno::UNO_QUERY);
+                        Reference< ::com::sun::star::form::XLoadable >  xReload(xActiveSet, UNO_QUERY);
                         try
                         {
                             FormShellWaitObject aWO(this);
-                            xActiveSet->setPropertyValue(FM_PROP_FILTER_CRITERIA, ::com::sun::star::uno::makeAny(xParser->getFilter()));
+                            xActiveSet->setPropertyValue(FM_PROP_FILTER_CRITERIA, makeAny(xParser->getFilter()));
                             sal_Bool bB(sal_True);
-                            xActiveSet->setPropertyValue(FM_PROP_APPLYFILTER, ::com::sun::star::uno::Any(&bB,getBooleanCppuType()));
+                            xActiveSet->setPropertyValue(FM_PROP_APPLYFILTER, Any(&bB,getBooleanCppuType()));
 
                             xReload->reload();
                         }
-                        catch(...)
+                        catch(Exception&)
                         {
                         }
 
@@ -1409,11 +1425,11 @@ void FmFormShell::Execute(SfxRequest &rReq)
                             try
                             {
                                 xParser->setOrder(sOriginalFilter);
-                                xActiveSet->setPropertyValue(FM_PROP_APPLYFILTER, ::com::sun::star::uno::Any(&bApplied,getBooleanCppuType()));
-                                xActiveSet->setPropertyValue(FM_PROP_FILTER_CRITERIA, ::com::sun::star::uno::makeAny(xParser->getFilter()));
+                                xActiveSet->setPropertyValue(FM_PROP_APPLYFILTER, Any(&bApplied,getBooleanCppuType()));
+                                xActiveSet->setPropertyValue(FM_PROP_FILTER_CRITERIA, makeAny(xParser->getFilter()));
                                 xReload->reload();
                             }
-                            catch(...)
+                            catch(Exception&)
                             {
                             }
 
@@ -1427,7 +1443,7 @@ void FmFormShell::Execute(SfxRequest &rReq)
             if (GetImpl()->SaveModified(GetImpl()->getActiveController()))
             {
                 FormShellWaitObject aWO(this);
-                ::com::sun::star::uno::Reference< ::com::sun::star::form::XLoadable >  xReload(GetImpl()->getActiveForm(), ::com::sun::star::uno::UNO_QUERY);
+                Reference< ::com::sun::star::form::XLoadable >  xReload(GetImpl()->getActiveForm(), UNO_QUERY);
                 xReload->reload();
             }
             rReq.Done();
@@ -1435,14 +1451,14 @@ void FmFormShell::Execute(SfxRequest &rReq)
         case SID_FM_FORM_FILTERED: // toggle the item
             if (GetImpl()->SaveModified(GetImpl()->getActiveController()))
             {
-                ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xActiveSet(GetImpl()->getActiveForm(), ::com::sun::star::uno::UNO_QUERY);
+                Reference< ::com::sun::star::beans::XPropertySet >  xActiveSet(GetImpl()->getActiveForm(), UNO_QUERY);
                 sal_Bool bApplied = ::comphelper::getBOOL(xActiveSet->getPropertyValue(FM_PROP_APPLYFILTER));
 
                 sal_Bool bB(!bApplied);
-                xActiveSet->setPropertyValue(FM_PROP_APPLYFILTER, ::com::sun::star::uno::Any(&bB,getBooleanCppuType()));
+                xActiveSet->setPropertyValue(FM_PROP_APPLYFILTER, Any(&bB,getBooleanCppuType()));
 
                 FormShellWaitObject aWO(this);
-                ::com::sun::star::uno::Reference< ::com::sun::star::form::XLoadable >  xReload(GetImpl()->getActiveForm(), ::com::sun::star::uno::UNO_QUERY);
+                Reference< ::com::sun::star::form::XLoadable >  xReload(GetImpl()->getActiveForm(), UNO_QUERY);
                 xReload->reload();
             }
             rReq.Done();
@@ -1581,7 +1597,7 @@ void FmFormShell::GetState(SfxItemSet &rSet)
                 else
                 {
                     // aktuelle form
-                    ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >  xForm(GetImpl()->getSelObject(), ::com::sun::star::uno::UNO_QUERY);
+                    Reference< ::com::sun::star::form::XForm >  xForm(GetImpl()->getSelObject(), UNO_QUERY);
                     sal_Bool bChecked = GetImpl()->IsPropBrwOpen() && xForm.is();
                     rSet.Put(SfxBoolItem(nWhich, bChecked));
                 }
@@ -1641,7 +1657,7 @@ void FmFormShell::GetState(SfxItemSet &rSet)
                     rSet.DisableItem( nWhich );
                 else
                 {
-                    ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormComponent >  xSelAsComp(GetImpl()->getCurControl(), ::com::sun::star::uno::UNO_QUERY);
+                    Reference< ::com::sun::star::form::XFormComponent >  xSelAsComp(GetImpl()->getCurControl(), UNO_QUERY);
                     if (!xSelAsComp.is())
                         rSet.DisableItem( nWhich );
                 }
@@ -1670,7 +1686,7 @@ void FmFormShell::GetState(SfxItemSet &rSet)
                     rSet.DisableItem( nWhich );
                 else
                 {
-                    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xSelProps(GetImpl()->getCurControl(), ::com::sun::star::uno::UNO_QUERY);
+                    Reference< ::com::sun::star::beans::XPropertySet >  xSelProps(GetImpl()->getCurControl(), UNO_QUERY);
                     if (!xSelProps.is() || !GetImpl()->IsConversionPossible(xSelProps, nWhich))
                         // it isn't a form component
                         rSet.DisableItem( nWhich );
@@ -1707,14 +1723,14 @@ void FmFormShell::GetFormState(SfxItemSet &rSet, sal_uInt16 nWhich)
                 if (GetImpl()->m_xAttachedFrame.is() && GetImpl()->getNavController().is())
                 {
                     bEnable = sal_True;
-                    sal_Bool bDisplayingCurrent = GetImpl()->getInternalForm(::com::sun::star::uno::Reference< ::com::sun::star::form::XForm > (GetImpl()->getNavController()->getModel(), ::com::sun::star::uno::UNO_QUERY)) == GetImpl()->m_xExternalDisplayedForm;
+                    sal_Bool bDisplayingCurrent = GetImpl()->getInternalForm(Reference< ::com::sun::star::form::XForm > (GetImpl()->getNavController()->getModel(), UNO_QUERY)) == GetImpl()->m_xExternalDisplayedForm;
                     rSet.Put(SfxBoolItem(nWhich, bDisplayingCurrent));
                 }
                 break;
 
             case SID_FM_SEARCH:
             {
-                ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xNavSet(GetImpl()->getActiveForm(), ::com::sun::star::uno::UNO_QUERY);
+                Reference< ::com::sun::star::beans::XPropertySet >  xNavSet(GetImpl()->getActiveForm(), UNO_QUERY);
                 sal_Int32 nCount = ::comphelper::getINT32(xNavSet->getPropertyValue(FM_PROP_ROWCOUNT));
                 bEnable = nCount != 0;
             }   break;
@@ -1730,7 +1746,7 @@ void FmFormShell::GetFormState(SfxItemSet &rSet, sal_uInt16 nWhich)
                     else if (GetImpl()->getNavController() == GetImpl()->getActiveController() &&
                              GetImpl()->getActiveForm().is())
                     {
-                        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xActiveSet(GetImpl()->getActiveForm(), ::com::sun::star::uno::UNO_QUERY);
+                        Reference< ::com::sun::star::beans::XPropertySet >  xActiveSet(GetImpl()->getActiveForm(), UNO_QUERY);
                         sal_Bool bIsNew = ::comphelper::getBOOL(xActiveSet->getPropertyValue(FM_PROP_ISNEW));
                         bEnable = bIsNew && GetImpl()->isActiveModified();
                     }
@@ -1740,8 +1756,8 @@ void FmFormShell::GetFormState(SfxItemSet &rSet, sal_uInt16 nWhich)
             {
                 if (GetImpl()->canNavigate())
                 {
-                    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xNavSet(GetImpl()->getNavController()->getModel(), ::com::sun::star::uno::UNO_QUERY);
-                    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >  xCursor(xNavSet, ::com::sun::star::uno::UNO_QUERY);
+                    Reference< ::com::sun::star::beans::XPropertySet >  xNavSet(GetImpl()->getNavController()->getModel(), UNO_QUERY);
+                    Reference< ::com::sun::star::sdbc::XResultSet >  xCursor(xNavSet, UNO_QUERY);
                     sal_Int32  nCount       = ::comphelper::getINT32(xNavSet->getPropertyValue(FM_PROP_ROWCOUNT));
                     sal_Bool bIsNew = ::comphelper::getBOOL(xNavSet->getPropertyValue(FM_PROP_ISNEW));
                     bEnable = nCount && (!xCursor->isLast() || bIsNew);
@@ -1749,7 +1765,7 @@ void FmFormShell::GetFormState(SfxItemSet &rSet, sal_uInt16 nWhich)
             }   break;
             case SID_FM_RECORD_NEW:
             {
-                ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xActiveSet(GetImpl()->getActiveForm(), ::com::sun::star::uno::UNO_QUERY);
+                Reference< ::com::sun::star::beans::XPropertySet >  xActiveSet(GetImpl()->getActiveForm(), UNO_QUERY);
                 bEnable = ::dbtools::canInsert(xActiveSet);
                 // if we are inserting we can move to the next row if the current record is modified
                 bEnable  = ::comphelper::getBOOL(xActiveSet->getPropertyValue(FM_PROP_ISNEW))
@@ -1759,11 +1775,11 @@ void FmFormShell::GetFormState(SfxItemSet &rSet, sal_uInt16 nWhich)
             case SID_FM_RECORD_DELETE:
             {
                 // already deleted ?
-                ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >  xCursor(GetImpl()->getActiveForm(), ::com::sun::star::uno::UNO_QUERY);
+                Reference< ::com::sun::star::sdbc::XResultSet >  xCursor(GetImpl()->getActiveForm(), UNO_QUERY);
                 sal_Bool bIsDeleted = !xCursor.is() || xCursor->rowDeleted();
                 if (!bIsDeleted)
                 {
-                    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xActiveSet(xCursor, ::com::sun::star::uno::UNO_QUERY);
+                    Reference< ::com::sun::star::beans::XPropertySet >  xActiveSet(xCursor, UNO_QUERY);
                     // allowed to delete the row ?
                     bEnable = !::comphelper::getBOOL(xActiveSet->getPropertyValue(FM_PROP_ISNEW)) && ::dbtools::canDelete(xActiveSet);
                 }
@@ -1774,8 +1790,8 @@ void FmFormShell::GetFormState(SfxItemSet &rSet, sal_uInt16 nWhich)
             {
                 if (GetImpl()->canNavigate())
                 {
-                    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xNavSet(GetImpl()->getNavController()->getModel(), ::com::sun::star::uno::UNO_QUERY);
-                    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >  xCursor(xNavSet, ::com::sun::star::uno::UNO_QUERY);
+                    Reference< ::com::sun::star::beans::XPropertySet >  xNavSet(GetImpl()->getNavController()->getModel(), UNO_QUERY);
+                    Reference< ::com::sun::star::sdbc::XResultSet >  xCursor(xNavSet, UNO_QUERY);
 
                     sal_Int32  nPos      = xCursor->getRow();
                     sal_Bool bIsNew     = ::comphelper::getBOOL(xNavSet->getPropertyValue(FM_PROP_ISNEW));
@@ -1818,7 +1834,7 @@ void FmFormShell::GetFormState(SfxItemSet &rSet, sal_uInt16 nWhich)
                 else
                 {
                     bEnable = sal_True;
-                    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xNavSet(GetImpl()->getNavController()->getModel(), ::com::sun::star::uno::UNO_QUERY);
+                    Reference< ::com::sun::star::beans::XPropertySet >  xNavSet(GetImpl()->getNavController()->getModel(), UNO_QUERY);
                     sal_Bool bIsNew     = ::comphelper::getBOOL(xNavSet->getPropertyValue(FM_PROP_ISNEW));
                     sal_Int32  nCount   = ::comphelper::getINT32(xNavSet->getPropertyValue(FM_PROP_ROWCOUNT));
 
@@ -1832,7 +1848,7 @@ void FmFormShell::GetFormState(SfxItemSet &rSet, sal_uInt16 nWhich)
             case SID_FM_REMOVE_FILTER_SORT:
                 if (GetImpl()->isParsable() && GetImpl()->hasFilter())
                 {
-                    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xSet(GetImpl()->getActiveForm(), ::com::sun::star::uno::UNO_QUERY);
+                    Reference< ::com::sun::star::beans::XPropertySet >  xSet(GetImpl()->getActiveForm(), UNO_QUERY);
                     bEnable = !::comphelper::getBOOL(xSet->getPropertyValue(FM_PROP_INSERTONLY));
                 }
                 break;
@@ -1841,18 +1857,18 @@ void FmFormShell::GetFormState(SfxItemSet &rSet, sal_uInt16 nWhich)
             case SID_FM_AUTOFILTER:
                 if (GetImpl()->isParsable())
                 {
-                    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xActiveSet(GetImpl()->getActiveForm(), ::com::sun::star::uno::UNO_QUERY);
+                    Reference< ::com::sun::star::beans::XPropertySet >  xActiveSet(GetImpl()->getActiveForm(), UNO_QUERY);
                     sal_Bool bInsertOnly = ::comphelper::getBOOL(xActiveSet->getPropertyValue(FM_PROP_INSERTONLY));
 
-                    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSet >  xCursor(xActiveSet, ::com::sun::star::uno::UNO_QUERY);
+                    Reference< ::com::sun::star::sdbc::XResultSet >  xCursor(xActiveSet, UNO_QUERY);
                     sal_Bool bIsDeleted = xCursor.is() && xCursor->rowDeleted();
 
                     if (!bIsDeleted && !bInsertOnly)
                     {
-                        ::com::sun::star::uno::Reference< ::com::sun::star::form::XFormController >  xFormCtrler(GetImpl()->getActiveController());
-                        ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl >  xControl(xFormCtrler->getCurrentControl());
+                        Reference< ::com::sun::star::form::XFormController >  xFormCtrler(GetImpl()->getActiveController());
+                        Reference< ::com::sun::star::awt::XControl >  xControl(xFormCtrler->getCurrentControl());
 
-                        ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xSet = GetImpl()->GetBoundField(xControl, GetImpl()->getActiveForm());
+                        Reference< ::com::sun::star::beans::XPropertySet >  xSet = GetImpl()->GetBoundField(xControl, GetImpl()->getActiveForm());
                         // auslesen der Searchflags
                         if (xSet.is())
                         {
@@ -1864,19 +1880,19 @@ void FmFormShell::GetFormState(SfxItemSet &rSet, sal_uInt16 nWhich)
             case SID_FM_FILTER_START:
                 if (GetImpl()->isParsable())
                 {
-                    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xSet(GetImpl()->getActiveForm(), ::com::sun::star::uno::UNO_QUERY);
+                    Reference< ::com::sun::star::beans::XPropertySet >  xSet(GetImpl()->getActiveForm(), UNO_QUERY);
                     bEnable = !::comphelper::getBOOL(xSet->getPropertyValue(FM_PROP_INSERTONLY));
                 }
                 break;
             case SID_FM_REFRESH:
             {
-                ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >             xRowSet(GetImpl()->getActiveForm(), ::com::sun::star::uno::UNO_QUERY);
-                ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >       xSet(GetImpl()->getActiveForm(), ::com::sun::star::uno::UNO_QUERY);
+                Reference< ::com::sun::star::sdbc::XRowSet >            xRowSet(GetImpl()->getActiveForm(), UNO_QUERY);
+                Reference< ::com::sun::star::beans::XPropertySet >      xSet(GetImpl()->getActiveForm(), UNO_QUERY);
                 bEnable = ::dbtools::getConnection(xRowSet).is() && ::comphelper::getString(xSet->getPropertyValue(FM_PROP_ACTIVECOMMAND)).len();
             }   break;
             case SID_FM_FORM_FILTERED:
             {
-                ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xActiveSet(GetImpl()->getActiveForm(), ::com::sun::star::uno::UNO_QUERY);
+                Reference< ::com::sun::star::beans::XPropertySet >  xActiveSet(GetImpl()->getActiveForm(), UNO_QUERY);
                 ::rtl::OUString aFilter = ::comphelper::getString(xActiveSet->getPropertyValue(FM_PROP_FILTER_CRITERIA));
                 if (aFilter.len())
                 {
@@ -1887,7 +1903,7 @@ void FmFormShell::GetFormState(SfxItemSet &rSet, sal_uInt16 nWhich)
             case SID_FM_RECORD_SAVE:
             case SID_FM_RECORD_UNDO:
             {
-                ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >  xActiveSet(GetImpl()->getActiveForm(), ::com::sun::star::uno::UNO_QUERY);
+                Reference< ::com::sun::star::beans::XPropertySet >  xActiveSet(GetImpl()->getActiveForm(), UNO_QUERY);
                 sal_Bool bIsModified = ::comphelper::getBOOL(xActiveSet->getPropertyValue(FM_PROP_ISMODIFIED));
                 bEnable = bIsModified || GetImpl()->isActiveModified();
             }   break;

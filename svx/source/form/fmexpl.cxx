@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmexpl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-07 13:16:50 $
+ *  last change: $Author: oj $ $Date: 2000-11-24 07:01:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1157,7 +1157,7 @@ void FmExplorerModel::FillBranch( FmFormData* pFormData )
         if (!xForms.is()) return;
         ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm >     xSubForm;
         FmFormData* pSubFormData;
-        for (sal_uInt32 i=0; i<xForms->getCount(); ++i)
+        for (sal_Int32 i=0; i<xForms->getCount(); ++i)
         {
             DBG_ASSERT(xForms->getByIndex(i).getValueType() ==
                 ::getCppuType((const ::com::sun::star::uno::Reference< ::com::sun::star::form::XForm>*)0),
@@ -1434,7 +1434,7 @@ void FmExplorerModel::BroadcastMarkedObjects(const SdrMarkList& mlMarked)
     FmExplRequestSelectHint rshRequestSelection;
     sal_Bool bIsMixedSelection = sal_False;
 
-    for (int i=0; (i<mlMarked.GetMarkCount()) && !bIsMixedSelection; i++)
+    for (ULONG i=0; (i<mlMarked.GetMarkCount()) && !bIsMixedSelection; i++)
     {
         SdrObject* pobjCurrent = mlMarked.GetMark(i)->GetObj();
         bIsMixedSelection |= !InsertFormComponent(rshRequestSelection, pobjCurrent);
@@ -2192,7 +2192,7 @@ void FmExplorer::Remove( FmEntryData* pEntryData )
 
     // beim eigentlichen Entfernen kann die ::com::sun::star::awt::Selection geaendert werden, da ich aber das SelectionHandling abgeschaltet
     // habe, muss ich mich hinterher darum kuemmern
-    int nExpectedSelectionCount = GetSelectionCount();
+    ULONG nExpectedSelectionCount = GetSelectionCount();
 
     if( pEntry )
         GetModel()->Remove( pEntry );
@@ -2346,7 +2346,7 @@ sal_Bool FmExplorer::QueryDrop( DropEvent& rDEvt )
         pLoop = GetParent(pLoop);
     }
 
-    for (int i=0; i<lstDropped.size(); i++)
+    for (size_t i=0; i<lstDropped.size(); i++)
     {
         SvLBoxEntry* pCurrent = lstDropped[i];
         SvLBoxEntry* pCurrentParent = GetParent(pCurrent);
@@ -2503,7 +2503,7 @@ sal_Bool FmExplorer::Drop( const DropEvent& rDEvt )
     LockSelectionHandling();
 
     // jetzt durch alle gedroppten Eintraege ...
-    for (int i=0; i<lstDropped.size(); ++i)
+    for (size_t i=0; i<lstDropped.size(); ++i)
     {
         // ein paar Daten zum aktuellen Element
         SvLBoxEntry* pCurrent = lstDropped[i];

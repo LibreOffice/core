@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmobj.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-07 13:16:50 $
+ *  last change: $Author: oj $ $Date: 2000-11-24 07:01:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,6 +134,7 @@
 #include <comphelper/processfactory.hxx>
 #endif
 
+using namespace ::com::sun::star::uno;
 TYPEINIT1(FmFormObj, SdrUnoObj);
 DBG_NAME(FmFormObj);
 //------------------------------------------------------------------
@@ -508,7 +509,7 @@ void FmFormObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
             aSrcCursorSourceType    = xSourceForm->getPropertyValue(FM_PROP_COMMANDTYPE);
             aSrcDataSource          = xSourceForm->getPropertyValue(FM_PROP_DATASOURCE);
         }
-        catch(...)
+        catch(Exception&)
         {
             DBG_ERROR("FmFormObj::ensureModelEnv : could not retrieve a source DSS !");
         }
@@ -537,7 +538,7 @@ void FmFormObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
                             bEqualDSS = sal_True;
                         }
                     }
-                    catch(...)
+                    catch(Exception&)
                     {
                         DBG_ERROR("FmFormObj::ensureModelEnv : exception while getting a sibling's DSS !");
                     }
@@ -568,7 +569,7 @@ void FmFormObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
                             bEqualDSS = sal_True;
                         }
                     }
-                    catch(...)
+                    catch(Exception&)
                     {
                         DBG_ERROR("FmFormObj::ensureModelEnv : exception while getting a destination DSS !");
                     }
@@ -595,7 +596,7 @@ void FmFormObj::ReadData(const SdrObjIOHeader& rHead, SvStream& rIn)
                     ++nCurrentDestIndex;
                         // like nCurrentSourceIndex, nCurrentDestIndex now points 'behind' the form it actally means
                 }
-                catch(...)
+                catch(Exception&)
                 {
                     DBG_ERROR("FmFormObj::ensureModelEnv : something went seriously wrong while creating a new form !");
                     // no more options anymore ...
