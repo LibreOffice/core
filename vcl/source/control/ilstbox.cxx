@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ilstbox.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mt $ $Date: 2001-04-20 13:56:57 $
+ *  last change: $Author: mt $ $Date: 2001-04-24 16:54:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -775,7 +775,7 @@ void ImplListBoxWindow::MouseMove( const MouseEvent& rMEvt )
         Rectangle aRect( aPoint, GetOutputSizePixel() );
         if( aRect.IsInside( rMEvt.GetPosPixel() ) )
         {
-            if ( mbMouseMoveSelect )
+//          if ( mbMouseMoveSelect )
             {
                 USHORT nSelect = (USHORT) ( ( rMEvt.GetPosPixel().Y() + mnBorder ) / mnMaxHeight ) + (USHORT) mnTop;
                 nSelect = Min( nSelect, (USHORT) ( mnTop + mnMaxVisibleEntries ) );
@@ -924,7 +924,7 @@ BOOL ImplListBoxWindow::SelectEntries( USHORT nSelect, LB_EVENT_TYPE eLET, BOOL 
                 bSelectionChanged = TRUE;
             }
             else if( ( ( eLET == LET_TRACKING ) && ( nSelect != mnCurrentPos ) ) ||
-                     ( bShift && ( ( eLET == LET_KEYMOVE ) || ( eLET == LET_MBDOWN ) ) ) )
+                     ( (bShift||mbStackMode) && ( ( eLET == LET_KEYMOVE ) || ( eLET == LET_MBDOWN ) ) ) )
             {
                 mnCurrentPos = nSelect;
                 bFocusChanged = TRUE;
