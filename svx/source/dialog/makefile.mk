@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.28 $
+#   $Revision: 1.29 $
 #
-#   last change: $Author: hjs $ $Date: 2004-06-25 11:59:16 $
+#   last change: $Author: hjs $ $Date: 2004-06-28 14:04:44 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -114,6 +114,8 @@ SRC1FILES =  \
         prtqry.src \
         ruler.src \
         rubydialog.src\
+        swframeposstrings.src \
+        swpossizetabpage.src \
         scriptdlg.src \
         selector.src \
         spldlg.src \
@@ -215,92 +217,93 @@ SLOFILES=\
     $(SLO)$/opthtml.obj					\
     $(SLO)$/optfltr.obj					\
     $(SLO)$/treeopt.obj \
-        $(SLO)$/autocdlg.obj     \
-        $(SLO)$/cuiexp.obj     \
-        $(SLO)$/dlgfact.obj     \
-        $(SLO)$/svxdlg.obj     \
-    $(SLO)$/_contdlg.obj\
-    $(SLO)$/iconcdlg.obj\
-    $(SLO)$/connect.obj \
-    $(SLO)$/connctrl.obj \
-    $(SLO)$/contwnd.obj	\
-    $(SLO)$/fontlb.obj   \
-    $(SLO)$/graphctl.obj \
-    $(SLO)$/hyperdlg.obj \
-    $(SLO)$/hyprlink.obj \
-    $(SLO)$/hlinettp.obj \
-    $(SLO)$/hlmailtp.obj \
-    $(SLO)$/hldoctp.obj \
-    $(SLO)$/imapdlg.obj \
-    $(SLO)$/imapwnd.obj \
-    $(SLO)$/measure.obj \
-    $(SLO)$/dstribut.obj \
-    $(SLO)$/measctrl.obj \
-    $(SLO)$/passwd.obj \
-    $(SLO)$/strarray.obj \
-        $(SLO)$/align.obj    \
-        $(SLO)$/backgrnd.obj \
-        $(SLO)$/bbdlg.obj    \
-        $(SLO)$/border.obj   \
-        $(SLO)$/chardlg.obj  \
-        $(SLO)$/checklbx.obj \
-        $(SLO)$/ctrdial.obj    \
-        $(SLO)$/ctredlin.obj \
-        $(SLO)$/dlgctrl.obj \
-        $(SLO)$/dlgctl3d.obj \
-        $(SLO)$/dlgname.obj \
-        $(SLO)$/dlgutil.obj  \
-        $(SLO)$/fntctrl.obj  \
-        $(SLO)$/fontwork.obj \
-    $(SLO)$/grfpage.obj \
-        $(SLO)$/hdft.obj     \
-        $(SLO)$/impgrf.obj   \
-        $(SLO)$/labdlg.obj \
-        $(SLO)$/langtab.obj \
-        $(SLO)$/langbox.obj \
-        $(SLO)$/linelink.obj \
-        $(SLO)$/nforient.obj    \
-        $(SLO)$/numfmt.obj   \
-        $(SLO)$/page.obj     \
-        $(SLO)$/pagectrl.obj \
-        $(SLO)$/paragrph.obj \
-        $(SLO)$/paraprev.obj \
-    $(SLO)$/pfiledlg.obj \
-        $(SLO)$/postdlg.obj  \
-    $(SLO)$/prtqry.obj \
-        $(SLO)$/relfld.obj   \
-        $(SLO)$/rlrcitem.obj \
-        $(SLO)$/rulritem.obj \
-    $(SLO)$/simptabl.obj \
-        $(SLO)$/srchxtra.obj \
-        $(SLO)$/srchctrl.obj \
-    $(SLO)$/srchdlg.obj  \
-        $(SLO)$/stddlg.obj   \
-        $(SLO)$/svxbox.obj   \
-        $(SLO)$/svxruler.obj \
-        $(SLO)$/tabarea.obj \
-        $(SLO)$/tabline.obj \
-        $(SLO)$/tabstpge.obj \
-        $(SLO)$/textattr.obj \
-        $(SLO)$/textanim.obj \
-        $(SLO)$/tparea.obj   \
-        $(SLO)$/tpbitmap.obj \
-        $(SLO)$/tpcolor.obj  \
-        $(SLO)$/tpgradnt.obj \
-        $(SLO)$/tphatch.obj  \
-        $(SLO)$/tpline.obj \
-        $(SLO)$/tplneend.obj \
-        $(SLO)$/tplnedef.obj \
-        $(SLO)$/tpshadow.obj   \
-        $(SLO)$/transfrm.obj \
-        $(SLO)$/worient.obj    \
-        $(SLO)$/txenctab.obj \
-        $(SLO)$/txencbox.obj \
-        $(SLO)$/zoom.obj	 \
-        $(SLO)$/grfflt.obj	\
-        $(SLO)$/frmdirlbox.obj \
-    $(SLO)$/commonlingui.obj \
-    $(SLO)$/dialmgr.obj \
+                $(SLO)$/autocdlg.obj     \
+                $(SLO)$/cuiexp.obj     \
+                $(SLO)$/dlgfact.obj     \
+                $(SLO)$/svxdlg.obj     \
+        $(SLO)$/_contdlg.obj\
+        $(SLO)$/iconcdlg.obj\
+        $(SLO)$/connect.obj \
+        $(SLO)$/connctrl.obj \
+        $(SLO)$/contwnd.obj	\
+        $(SLO)$/fontlb.obj   \
+        $(SLO)$/graphctl.obj \
+        $(SLO)$/hyperdlg.obj \
+        $(SLO)$/hyprlink.obj \
+        $(SLO)$/hlinettp.obj \
+        $(SLO)$/hlmailtp.obj \
+        $(SLO)$/hldoctp.obj \
+        $(SLO)$/imapdlg.obj \
+        $(SLO)$/imapwnd.obj \
+        $(SLO)$/measure.obj \
+        $(SLO)$/dstribut.obj \
+        $(SLO)$/measctrl.obj \
+        $(SLO)$/passwd.obj \
+        $(SLO)$/strarray.obj \
+                $(SLO)$/align.obj    \
+                $(SLO)$/backgrnd.obj \
+                $(SLO)$/bbdlg.obj    \
+                $(SLO)$/border.obj   \
+                $(SLO)$/chardlg.obj  \
+                $(SLO)$/checklbx.obj \
+                $(SLO)$/ctrdial.obj    \
+                $(SLO)$/ctredlin.obj \
+                $(SLO)$/dlgctrl.obj \
+                $(SLO)$/dlgctl3d.obj \
+                $(SLO)$/dlgname.obj \
+                $(SLO)$/dlgutil.obj  \
+                $(SLO)$/fntctrl.obj  \
+                $(SLO)$/fontwork.obj \
+        $(SLO)$/grfpage.obj \
+                $(SLO)$/hdft.obj     \
+                $(SLO)$/impgrf.obj   \
+                $(SLO)$/labdlg.obj \
+                $(SLO)$/langtab.obj \
+                $(SLO)$/langbox.obj \
+                $(SLO)$/linelink.obj \
+                $(SLO)$/nforient.obj    \
+                $(SLO)$/numfmt.obj   \
+                $(SLO)$/page.obj     \
+                $(SLO)$/pagectrl.obj \
+                $(SLO)$/paragrph.obj \
+                $(SLO)$/paraprev.obj \
+        $(SLO)$/pfiledlg.obj \
+                $(SLO)$/postdlg.obj  \
+        $(SLO)$/prtqry.obj \
+                $(SLO)$/relfld.obj   \
+                $(SLO)$/rlrcitem.obj \
+                $(SLO)$/rulritem.obj \
+        $(SLO)$/simptabl.obj \
+                $(SLO)$/srchxtra.obj \
+                $(SLO)$/srchctrl.obj \
+        $(SLO)$/srchdlg.obj  \
+                $(SLO)$/stddlg.obj   \
+                $(SLO)$/svxbox.obj   \
+                $(SLO)$/svxruler.obj \
+                $(SLO)$/swpossizetabpage.obj \
+                $(SLO)$/tabarea.obj \
+                $(SLO)$/tabline.obj \
+                $(SLO)$/tabstpge.obj \
+                $(SLO)$/textattr.obj \
+                $(SLO)$/textanim.obj \
+                $(SLO)$/tparea.obj   \
+                $(SLO)$/tpbitmap.obj \
+                $(SLO)$/tpcolor.obj  \
+                $(SLO)$/tpgradnt.obj \
+                $(SLO)$/tphatch.obj  \
+                $(SLO)$/tpline.obj \
+                $(SLO)$/tplneend.obj \
+                $(SLO)$/tplnedef.obj \
+                $(SLO)$/tpshadow.obj   \
+                $(SLO)$/transfrm.obj \
+                $(SLO)$/worient.obj    \
+                $(SLO)$/txenctab.obj \
+                $(SLO)$/txencbox.obj \
+                $(SLO)$/zoom.obj	 \
+                $(SLO)$/grfflt.obj	\
+                $(SLO)$/frmdirlbox.obj \
+        $(SLO)$/commonlingui.obj \
+        $(SLO)$/dialmgr.obj \
     $(SLO)$/cuiimapwnd.obj \
     $(SLO)$/cuisrchdlg.obj \
     $(SLO)$/cuitbxform.obj \
@@ -314,7 +317,9 @@ SLOFILES=\
     $(SLO)$/optgenrl.obj	\
     $(SLO)$/optinet2.obj	\
     $(SLO)$/optctl.obj	\
-    $(SLO)$/svxgrahicitem.obj
+    $(SLO)$/svxgrahicitem.obj \
+    $(SLO)$/swframeposstrings.obj\
+    $(SLO)$/swframeexample.obj \
 
 
 LIB1TARGET= $(SLB)$/$(TARGET).lib
@@ -381,6 +386,9 @@ LIB1OBJFILES= \
     $(SLO)$/frmdirlbox.obj \
     $(SLO)$/commonlingui.obj \
     $(SLO)$/dialmgr.obj	\
+    $(SLO)$/svxgrahicitem.obj \
+    $(SLO)$/swframeexample.obj \
+    $(SLO)$/swframeposstrings.obj
     $(SLO)$/svxbmpnumvalueset.obj	\
     $(SLO)$/svxgrahicitem.obj
 
@@ -411,6 +419,7 @@ LIB2OBJFILES= \
     $(SLO)$/cuicharmap.obj  \
     $(SLO)$/srchxtra.obj	\
     $(SLO)$/bbdlg.obj	\
+    $(SLO)$/swpossizetabpage.obj \
     $(SLO)$/transfrm.obj \
     $(SLO)$/cuisrchdlg.obj \
     $(SLO)$/cuitbxform.obj \
