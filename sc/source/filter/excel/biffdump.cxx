@@ -2,9 +2,9 @@
  *
  *  $RCSfile: biffdump.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: dr $ $Date: 2002-10-17 08:55:35 $
+ *  last change: $Author: dr $ $Date: 2002-11-06 16:12:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5189,12 +5189,11 @@ struct XclDumpFunc
     sal_uInt16                  nParam;         /// Parameter count for fixed functions.
 };
 
-// ! some of the function names are wrong
 const XclDumpFunc pFuncData[] =
 {
     { "COUNT",            0,    0 },
     { "IF",               1,    0 },
-    { "ISNV",             2,    1 },
+    { "ISNA",             2,    1 },
     { "ISERROR",          3,    1 },
     { "SUM",              4,    0 },
     { "AVERAGE",          5,    0 },
@@ -5202,15 +5201,15 @@ const XclDumpFunc pFuncData[] =
     { "MAX",              7,    0 },
     { "ROW",              8,    0 },
     { "COLUMN",           9,    0 },
-    { "NOVALUE",          10,   0 },
-    { "NBW",              11,   0 },
+    { "NA",               10,   0 },
+    { "NPV",              11,   0 },
     { "STDEV",            12,   0 },
-    { "CURRENCY",         13,   0 },
+    { "DOLLAR",           13,   0 },
     { "FIXED",            14,   0 },
     { "SIN",              15,   1 },
     { "COS",              16,   1 },
     { "TAN",              17,   1 },
-    { "ARCTAN",           18,   1 },
+    { "ATAN",             18,   1 },
     { "PI",               19,   0 },
     { "SQRT",             20,   1 },
     { "EXP",              21,   1 },
@@ -5218,7 +5217,7 @@ const XclDumpFunc pFuncData[] =
     { "LOG10",            23,   1 },
     { "ABS",              24,   1 },
     { "INT",              25,   1 },
-    { "PLUSMINUS",        26,   1 },
+    { "SIGN",             26,   1 },
     { "ROUND",            27,   2 },
     { "LOOKUP",           28,   0 },
     { "INDEX",            29,   0 },
@@ -5232,57 +5231,81 @@ const XclDumpFunc pFuncData[] =
     { "OR",               37,   0 },
     { "NOT",              38,   1 },
     { "MOD",              39,   2 },
-    { "DBCOUNT",          40,   3 },
-    { "DBSUM",            41,   3 },
-    { "DBAVERAGE",        42,   3 },
-    { "DBMIN",            43,   3 },
-    { "DBMAX",            44,   3 },
-    { "DBSTDDEV",         45,   3 },
+    { "DCOUNT",           40,   3 },
+    { "DSUM",             41,   3 },
+    { "DAVERAGE",         42,   3 },
+    { "DMIN",             43,   3 },
+    { "DMAX",             44,   3 },
+    { "DSTDEV",           45,   3 },
     { "VAR",              46,   0 },
-    { "DBVAR",            47,   3 },
+    { "DVAR",             47,   3 },
     { "TEXT",             48,   2 },
-    { "RGP",              49,   0 },
+    { "LINEST",           49,   0 },
     { "TREND",            50,   0 },
-    { "RKP",              51,   0 },
+    { "LOGEST",           51,   0 },
     { "GROWTH",           52,   0 },
-    { "BW",               56,   0 },
-    { "ZW",               57,   0 },
-    { "ZZR",              58,   0 },
-    { "RMZ",              59,   0 },
-    { "ZINS",             60,   0 },
+    { "GOTO",             53 },         // macro/internal
+    { "HALT",             54 },         // macro/internal
+    { "RETURN",           55 },         // macro/internal
+    { "PV",               56,   0 },
+    { "FV",               57,   0 },
+    { "NPER",             58,   0 },
+    { "PMT",              59,   0 },
+    { "RATE",             60,   0 },
     { "MIRR",             61,   3 },
     { "IRR",              62,   0 },
-    { "RANDOM",           63,   0 },
+    { "RAND",             63,   0 },
     { "MATCH",            64,   0 },
     { "DATE",             65,   3 },
     { "TIME",             66,   3 },
     { "DAY",              67,   1 },
     { "MONTH",            68,   1 },
     { "YEAR",             69,   1 },
-    { "DAYOFWEEK",        70,   0 },
+    { "WEEKDAY",          70,   0 },
     { "HOUR",             71,   1 },
-    { "MIN",              72,   1 },
-    { "SEC",              73,   1 },
+    { "MINUTE",           72,   1 },
+    { "SECOND",           73,   1 },
     { "NOW",              74,   0 },
     { "AREAS",            75,   1 },
     { "ROWS",             76,   1 },
     { "COLUMNS",          77,   1 },
     { "OFFSET",           78,   0 },
+    { "ABSREF",           79 },         // macro/internal
+    { "RELREF",           80 },         // macro/internal
+    { "ARGUMENT",         81 },         // macro/internal
     { "SEARCH",           82,   0 },
     { "TRANSPOSE",        83,   1 },
+    { "ERROR",            84 },         // macro/internal
+    { "STEP",             85 },         // macro/internal
     { "TYPE",             86,   1 },
-    { "ARCTAN2",          97,   2 },
-    { "ARCSIN",           98,   1 },
-    { "ARCCOS",           99,   1 },
+    { "ECHO",             87 },         // macro/internal
+    { "SET.NAME",         88 },         // macro/internal
+    { "CALLER",           89 },         // macro/internal
+    { "DEREF",            90 },         // macro/internal
+    { "WINDOWS",          91 },         // macro/internal
+    { "SERIES",           92 },         // macro/internal
+    { "DOCUMENTS",        93 },         // macro/internal
+    { "ACTIVE.CELL",      94 },         // macro/internal
+    { "SELECTION",        95 },         // macro/internal
+    { "RESULT",           96 },         // macro/internal
+    { "ATAN2",            97,   2 },
+    { "ASIN",             98,   1 },
+    { "ACOS",             99,   1 },
     { "CHOSE",            100,  0 },
     { "HLOOKUP",          101,  0 },
     { "VLOOKUP",          102,  0 },
+    { "LINKS",            103 },        // macro/internal
+    { "INPUT",            104 },        // macro/internal
     { "ISREF",            105,  1 },
+    { "GET.FORMULA",      106 },        // macro/internal
+    { "GET.NAME",         107 },        // macro/internal
+    { "SET.VALUE",        108,  2 },    // macro/internal
     { "LOG",              109,  0 },
+    { "EXEC",             110 },        // macro/internal
     { "CHAR",             111,  1 },
     { "LOWER",            112,  1 },
     { "UPPER",            113,  1 },
-    { "PROPPER",          114,  1 },
+    { "PROPER",           114,  1 },
     { "LEFT",             115,  0 },
     { "RIGHT",            116,  0 },
     { "EXACT",            117,  2 },
@@ -5290,57 +5313,153 @@ const XclDumpFunc pFuncData[] =
     { "REPLACE",          119,  4 },
     { "SUBSTITUTE",       120,  0 },
     { "CODE",             121,  1 },
+    { "NAMES",            122 },        // macro/internal
+    { "DIRECTORY",        123 },        // macro/internal
     { "FIND",             124,  0 },
     { "CELL",             125,  0 },
     { "ISERR",            126,  1 },
-    { "ISSTRING",         127,  1 },
-    { "ISVALUE",          128,  1 },
-    { "ISEMPTY",          129,  1 },
+    { "ISTEXT",           127,  1 },
+    { "ISNUMBER",         128,  1 },
+    { "ISBLANK",          129,  1 },
     { "T",                130,  1 },
     { "N",                131,  1 },
+    { "FOPEN",            132 },        // macro/internal
+    { "FCLOSE",           133 },        // macro/internal
+    { "FSIZE",            134 },        // macro/internal
+    { "FREADLN",          135 },        // macro/internal
+    { "FREAD",            136 },        // macro/internal
+    { "FWRITELN",         137 },        // macro/internal
+    { "FWRITE",           138 },        // macro/internal
+    { "FPOS",             139 },        // macro/internal
     { "DATEVALUE",        140,  1 },
     { "TIMEVALUE",        141,  1 },
-    { "LIA",              142,  3 },
-    { "DIA",              143,  4 },
-    { "GDA",              144,  0 },
+    { "SLN",              142,  3 },
+    { "SYD",              143,  4 },
+    { "DDB",              144,  0 },
+    { "GET.DEF",          145 },        // macro/internal
+    { "REFTEXT",          146 },        // macro/internal
+    { "TEXTREF",          147 },        // macro/internal
     { "INDIRECT",         148,  0 },
+    { "REGISTER",         149 },        // macro/internal
+    { "CALL",             150 },        // macro/internal
+    { "ADD.BAR",          151 },        // macro/internal
+    { "ADD.MENU",         152 },        // macro/internal
+    { "ADD.COMMAND",      153 },        // macro/internal
+    { "ENABLE.COMMAND",   154 },        // macro/internal
+    { "CHECK.COMMAND",    155 },        // macro/internal
+    { "RENAME.COMMAND",   156 },        // macro/internal
+    { "SHOW.BAR",         157 },        // macro/internal
+    { "DELETE.MENU",      158 },        // macro/internal
+    { "DELETE.COMMAND",   159 },        // macro/internal
+    { "GET.CHART.ITEM",   160 },        // macro/internal
+    { "DIALOG.BOX",       161 },        // macro/internal
     { "CLEAN",            162,  1 },
-    { "MATDET",           163,  1 },
-    { "MATINV",           164,  1 },
-    { "MATMULT",          165,  2 },
-    { "ZINSZ",            167,  0 },
-    { "KAPZ",             168,  0 },
-    { "COUNT2",           169,  0 },
+    { "MDETERM",          163,  1 },
+    { "MINVERSE",         164,  1 },
+    { "MMULT",            165,  2 },
+    { "FILES",            166 },        // macro/internal
+    { "IPMT",             167,  0 },
+    { "PPMT",             168,  0 },
+    { "COUNTA",           169,  0 },
+    { "CANCEL.KEY",       170 },        // macro/internal
+    { "FOR",              171 },        // macro/internal
+    { "WHILE",            172 },        // macro/internal
+    { "BREAK",            173 },        // macro/internal
+    { "NEXT",             174 },        // macro/internal
+    { "INITIATE",         175 },        // macro/internal
+    { "REQUEST",          176 },        // macro/internal
+    { "POKE",             177 },        // macro/internal
+    { "EXECUTE",          178 },        // macro/internal
+    { "TERMINATE",        179 },        // macro/internal
+    { "RESTART",          180 },        // macro/internal
+    { "HELP",             181 },        // macro/internal
+    { "GET.BAR",          182 },        // macro/internal
     { "PRODUCT",          183,  0 },
     { "FACT",             184,  1 },
-    { "DBPRODUCT",        189,  3 },
-    { "ISNONSTRING",      190,  1 },
+    { "GET.CELL",         185 },        // macro/internal
+    { "GET.WORKSPACE",    186 },        // macro/internal
+    { "GET.WINDOW",       187 },        // macro/internal
+    { "GET.DOCUMENT",     188 },        // macro/internal
+    { "DPRODUCT",         189,  3 },
+    { "ISNONTEXT",        190,  1 },
+    { "GET.NOTE",         191 },        // macro/internal
+    { "NOTE",             192 },        // macro/internal
     { "STDEVP",           193,  0 },
     { "VARP",             194,  0 },
-    { "DBSTDDEVP",        195,  3 },
-    { "DBVARP",           196,  3 },
+    { "DSTDDEVP",         195,  3 },
+    { "DVARP",            196,  3 },
     { "TRUNC",            197,  0 },
     { "ISLOGICAL",        198,  1 },
-    { "DBCOUNT2",         199,  3 },
+    { "DBCOUNTA",         199,  3 },
+    { "DELETE.BAR",       200 },        // macro/internal
+    { "UNREGISTER",       201 },        // macro/internal
+    { "202",              202 },        // not used
+    { "203",              203 },        // not used
+    { "USDOLLAR",         204 },        // macro/internal
+    { "FINDB",            205 },        // macro/internal
+    { "SEARCHB",          206 },        // macro/internal
+    { "REPLACEB",         207 },        // macro/internal
+    { "LEFTB",            208 },        // macro/internal
+    { "RIGHTB",           209 },        // macro/internal
+    { "MIDB",             210 },        // macro/internal
+    { "LENB",             211 },        // macro/internal
     { "ROUNDUP",          212,  2 },
     { "ROUNDDOWN",        213,  2 },
+    { "ASC",              214 },        // macro/internal
+    { "DBSC",             215 },        // macro/internal
     { "RANK",             216,  0 },
+    { "217",              217 },        // not used
+    { "218",              218 },        // not used
     { "ADDRESS",          219,  0 },
-    { "GETDIFFDATE360",   220,  0 },
+    { "DAYS360",          220,  0 },
     { "TODAY",            221,  0 },
-    { "VBD",              222,  0 },
+    { "VDB",              222,  0 },
+    { "ELSE",             223 },        // macro/internal
+    { "ELSE.IF",          224 },        // macro/internal
+    { "END.IF",           225 },        // macro/internal
+    { "FOR.CELL",         226 },        // macro/internal
     { "MEDIAN",           227,  0 },
     { "SUMPRODUCT",       228,  0 },
-    { "SINHYP",           229,  1 },
-    { "COSHYP",           230,  1 },
-    { "TANHYP",           231,  1 },
-    { "ARCSINHYP",        232,  1 },
-    { "ARCCOSHYP",        233,  1 },
-    { "ARCTANHYP",        234,  1 },
-    { "DBGET",            235,  3 },
-    { "GDA2",             247,  0 },
+    { "SINH",             229,  1 },
+    { "COSH",             230,  1 },
+    { "TANH",             231,  1 },
+    { "ASINH",            232,  1 },
+    { "ACOSH",            233,  1 },
+    { "ATANH",            234,  1 },
+    { "DGET",             235,  3 },
+    { "CREATE.OBJECT",    236 },        // macro/internal
+    { "VOLATILE",         237 },        // macro/internal
+    { "LAST.ERROR",       238 },        // macro/internal
+    { "CUSTOM.UNDO",      239 },        // macro/internal
+    { "CUSTOM.REPEAT",    240 },        // macro/internal
+    { "FORMULA.CONVERT",  241 },        // macro/internal
+    { "GET.LINK.INFO",    242 },        // macro/internal
+    { "TEXT.BOX",         243 },        // macro/internal
+    { "INFO",             244 },        // macro/internal
+    { "GROUP",            245 },        // macro/internal
+    { "GET.OBJECT",       246 },        // macro/internal
+    { "DB",               247,  0 },
+    { "PAUSE",            248 },        // macro/internal
+    { "249",              249 },        // not used
+    { "250",              250 },        // not used
+    { "RESUME",           251 },        // macro/internal
     { "FREQUENCY",        252,  2 },
-    { "ERRORTYPE",        261,  1 },
+    { "ADD.TOOLBAR",      253 },        // macro/internal
+    { "DELETE.TOOLBAR",   254 },        // macro/internal
+    { "EXTERNCALL",       255 },        // macro/internal
+    { "RESET.TOOLBAR",    256 },        // macro/internal
+    { "EVALUATE",         257 },        // macro/internal
+    { "GET.TOOLBAR",      258 },        // macro/internal
+    { "GET.TOOL",         259 },        // macro/internal
+    { "SPELLING.CHECK",   260 },        // macro/internal
+    { "ERROR.TYPE",       261,  1 },
+    { "APP.TITLE",        262 },        // macro/internal
+    { "WINDOW.TITLE",     263 },        // macro/internal
+    { "SAVE.TOOLBAR",     264 },        // macro/internal
+    { "ENABLE.TOOL",      265 },        // macro/internal
+    { "PRESS.TOOL",       266 },        // macro/internal
+    { "REGISTER.ID",      267 },        // macro/internal
+    { "GET.WORKBOOK",     268 },        // macro/internal
     { "AVEDEV",           269,  0 },
     { "BETADIST",         270,  0 },
     { "GAMMALN",          271,  1 },
@@ -5348,11 +5467,11 @@ const XclDumpFunc pFuncData[] =
     { "BINOMDIST",        273,  4 },
     { "CHIDIST",          274,  2 },
     { "CHIINV",           275,  2 },
-    { "KOMBIN",           276,  2 },
+    { "COMBIN",           276,  2 },
     { "CONFIDENCE",       277,  3 },
-    { "KRITBINOM",        278,  3 },
+    { "CRITBINOM",        278,  3 },
     { "EVEN",             279,  1 },
-    { "EXPDIST",          280,  3 },
+    { "EXPONDIST",        280,  3 },
     { "FDIST",            281,  3 },
     { "FINV",             282,  3 },
     { "FISHER",           283,  1 },
@@ -5360,24 +5479,24 @@ const XclDumpFunc pFuncData[] =
     { "FLOOR",            285,  2 },
     { "GAMMADIST",        286,  4 },
     { "GAMMAINV",         287,  3 },
-    { "CEIL",             288,  2 },
+    { "CEILING",          288,  2 },
     { "HYPGEOMDIST",      289,  4 },
     { "LOGNORMDIST",      290,  3 },
     { "LOGINV",           291,  3 },
-    { "NEGBINOMVERT",     292,  3 },
+    { "NEGBINOMDIST",     292,  3 },
     { "NORMDIST",         293,  4 },
-    { "STDNORMDIST",      294,  1 },
+    { "NORMSDIST",        294,  1 },
     { "NORMINV",          295,  3 },
-    { "SNORMINV",         296,  1 },
-    { "STANDARD",         297,  3 },
+    { "NORMSINV",         296,  1 },
+    { "STANDARDIZE",      297,  3 },
     { "ODD",              298,  1 },
-    { "VARIATIONEN",      299,  2 },
-    { "POISSONDIST",      300,  3 },
+    { "PERMUT",           299,  2 },
+    { "POISSON",          300,  3 },
     { "TDIST",            301,  3 },
     { "WEIBULL",          302,  4 },
     { "SUMXMY2",          303,  2 },
     { "SUMX2MY2",         304,  2 },
-    { "SUMX2DY2",         305,  2 },
+    { "SUMX2PY2",         305,  2 },
     { "CHITEST",          306,  2 },
     { "CORREL",           307,  2 },
     { "COVAR",            308,  2 },
@@ -5395,34 +5514,63 @@ const XclDumpFunc pFuncData[] =
     { "HARMEAN",          320,  0 },
     { "SUMSQ",            321,  0 },
     { "KURT",             322,  0 },
-    { "SCHIEFE",          323,  0 },
+    { "SKEW",             323,  0 },
     { "ZTEST",            324,  0 },
     { "LARGE",            325,  2 },
     { "SMALL",            326,  2 },
     { "QUARTILE",         327,  2 },
     { "PERCENTILE",       328,  2 },
     { "PERCENTRANK",      329,  0 },
-    { "MODALVALUE",       330,  0 },
+    { "MODE",             330,  0 },
     { "TRIMMEAN",         331,  2 },
     { "TINV",             332,  2 },
-    { "CONCAT",           336,  0 },
+    { "333",              333 },        // not used
+    { "MOVIE.COMMAND",    334 },        // macro/internal
+    { "GET.MOVIE",        335 },        // macro/internal
+    { "CONCATENATE",      336,  0 },
     { "POWER",            337,  2 },
-    { "RAD",              342,  1 },
-    { "DEG",              343,  1 },
+    { "PIVOT.ADD.DATA",   338 },        // macro/internal
+    { "GET.PIVOT.TABLE",  339 },        // macro/internal
+    { "GET.PIVOT.FIELD",  340 },        // macro/internal
+    { "GET.PIVOT.ITEM",   341 },        // macro/internal
+    { "RADIANS",          342,  1 },
+    { "DEGREES",          343,  1 },
     { "SUBTOTAL",         344,  0 },
     { "SUMIF",            345,  0 },
     { "COUNTIF",          346,  2 },
-    { "COUNTEMPTYCELLS",  347,  1 },
-    { "ROMAN",            354,  0 },
-    { "EXTERNAL",         255,  0 },
+    { "COUNTBLANK",       347,  1 },
+    { "SCENARIO.GET",     348 },        // macro/internal
+    { "OPTIONS.LISTS.GET",349 },        // macro/internal
     { "ISPMT",            350,  4 },
+    { "DATEDIF",          351 },        // macro/internal
+    { "DATESTRING",       352 },        // macro/internal
+    { "NUMBERSTRING",     353 },        // macro/internal
+    { "ROMAN",            354,  0 },
+    { "OPEN.DIALOG",      355 },        // macro/internal
+    { "SAVE.DIALOG",      356 },        // macro/internal
+    { "VIEW.GET",         357 },        // macro/internal
+    { "GETPIVOTDATA",     358,  0 },
+    { "HYPERLINK",        359,  2 },
+    { "PHONETIC",         360 },        // macro/internal
     { "AVERAGEA",         361,  0 },
     { "MAXA",             362,  0 },
     { "MINA",             363,  0 },
     { "STDEVPA",          364,  0 },
     { "VARPA",            365,  0 },
     { "STDEVA",           366,  0 },
-    { "VARA",             367,  0 }
+    { "VARA",             367,  0 },
+    { "BAHTTEXT",         368,  1 },
+    { "THAIDAYOFWEEK",    369 },        // macro/internal
+    { "THAIDIGIT",        370 },        // macro/internal
+    { "THAIMONTHOFYEAR",  371 },        // macro/internal
+    { "THAINUMSOUND",     372 },        // macro/internal
+    { "THAINUMSTRING",    373 },        // macro/internal
+    { "THAISTRINGLENGTH", 374 },        // macro/internal
+    { "ISTHAIDIGIT",      375 },        // macro/internal
+    { "ROUNDBAHTDOWN",    376 },        // macro/internal
+    { "ROUNDBAHTUP",      377 },        // macro/internal
+    { "THAIYEAR",         378 },        // macro/internal
+    { "RTD",              379 }         // macro/internal
 };
 
 const XclDumpFunc* lcl_GetFuncData( sal_uInt16 nIndex )
