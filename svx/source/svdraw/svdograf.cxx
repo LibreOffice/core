@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdograf.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: ka $ $Date: 2002-08-23 08:18:26 $
+ *  last change: $Author: ka $ $Date: 2002-08-26 15:10:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -440,7 +440,7 @@ void SdrGrafObj::SetGrafStreamURL( const String& rGraphicStreamURL )
         pGraphic->SetUserData();
         nGrafStreamPos = GRAFSTREAMPOS_INVALID;
     }
-    else if( pModel->IsSwapGraphics() && ( pModel->GetSwapGraphicsMode() & SDR_SWAPGRAPHICSMODE_DOC ) )
+    else if( pModel->IsSwapGraphics() )
     {
         pGraphic->SetUserData( rGraphicStreamURL );
         nGrafStreamPos = GRAFSTREAMPOS_INVALID;
