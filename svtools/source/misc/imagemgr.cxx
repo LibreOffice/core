@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imagemgr.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mba $ $Date: 2001-05-03 10:15:50 $
+ *  last change: $Author: pb $ $Date: 2001-05-11 08:27:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,6 +86,24 @@
 #include <svtools/extattr.hxx>
 #endif
 #endif
+
+#ifndef _UNOTOOLS_PROCESSFACTORY_HXX
+#include <comphelper/processfactory.hxx>
+#endif
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
+#include <com/sun/star/beans/PropertyValue.hpp>
+#endif
+#ifndef _COM_SUN_STAR_CONTAINER_XNAMECONTAINER_HPP_
+#include <com/sun/star/container/XNameContainer.hpp>
+#endif
+#ifndef _COM_SUN_STAR_DOCUMENT_XTYPEDETECTION_HPP_
+#include <com/sun/star/document/XTypeDetection.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_XMULTISERVICEFACTORY_HPP_
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#endif
+
+#include <com/sun/star/uno/Reference.h>
 
 #include "svtools.hrc"
 #include "imagemgr.hrc"
@@ -308,6 +326,38 @@ static SvtExtensionResIdMapping_Impl __READONLY_DATA ExtensionMap_Impl[] =
 
 //****************************************************************************
 
+String GetImageExtensionByFactory_Impl( const String& rURL )
+{
+    String aExtension;
+
+    // get the TypeDetection service to access all registered types
+    ::com::sun::star::uno::Reference < ::com::sun::star::lang::XMultiServiceFactory >  xFac = ::comphelper::getProcessServiceFactory();
+    ::com::sun::star::uno::Reference < ::com::sun::star::document::XTypeDetection > xTypeDetector(
+        xFac->createInstance( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.document.TypeDetection") ) ), ::com::sun::star::uno::UNO_QUERY );
+
+    ::rtl::OUString aInternalType = xTypeDetector->queryTypeByURL( rURL );
+    ::com::sun::star::uno::Reference < ::com::sun::star::container::XNameAccess > xAccess( xTypeDetector, ::com::sun::star::uno::UNO_QUERY );
+    ::com::sun::star::uno::Sequence < ::com::sun::star::beans::PropertyValue > aTypeProps;
+    xAccess->getByName( aInternalType ) >>= aTypeProps;
+    sal_Int32 nProps = aTypeProps.getLength();
+    for ( sal_Int32 i = 0; i < nProps; ++i )
+    {
+        const ::com::sun::star::beans::PropertyValue& rProp = aTypeProps[i];
+        if ( rProp.Name.compareToAscii("Extensions") == COMPARE_EQUAL )
+        {
+            ::com::sun::star::uno::Sequence < ::rtl::OUString > aExtensions;
+            if ( ( rProp.Value >>= aExtensions ) && aExtensions.getLength() > 0 )
+            {
+                const ::rtl::OUString* pExtensions = aExtensions.getConstArray();
+                aExtension = String( pExtensions[0] );
+                break;
+            }
+        }
+    }
+
+    return aExtension;
+}
+
 USHORT GetImageId_Impl( const String& rExtension )
 {
     USHORT nImage = IMG_FILE;
@@ -333,40 +383,60 @@ USHORT GetImageId_Impl( const String& rExtension )
 
 USHORT GetImageId_Impl( const INetURLObject& rObject )
 {
-    String aExt = rObject.getExtension();
-    if ( aExt.EqualsAscii( "vor" ) )
-    {
-        SotStorageRef aStorage = new SotStorage( rObject.GetMainURL(), STREAM_STD_READ );
-        USHORT nId = IMG_WRITERTEMPLATE;
-        if ( !aStorage->GetError() )
-        {
-            SvGlobalName aGlobalName = aStorage->GetClassName();
-            if ( aGlobalName == SvGlobalName(SO3_SC_CLASSID_50) || aGlobalName == SvGlobalName(SO3_SC_CLASSID_40) || aGlobalName == SvGlobalName(SO3_SC_CLASSID_30) )
-                nId = IMG_CALCTEMPLATE;
-            else if ( aGlobalName == SvGlobalName(SO3_SDRAW_CLASSID_50) )
-                nId = IMG_DRAWTEMPLATE;
-            else if ( aGlobalName == SvGlobalName(SO3_SIMPRESS_CLASSID_50) ||
-                    aGlobalName == SvGlobalName(SO3_SIMPRESS_CLASSID_40) || aGlobalName == SvGlobalName(SO3_SIMPRESS_CLASSID_30) )
-                nId = IMG_IMPRESSTEMPLATE;
-            else if ( aGlobalName == SvGlobalName(SO3_SM_CLASSID_50) || aGlobalName == SvGlobalName(SO3_SM_CLASSID_40) || aGlobalName == SvGlobalName(SO3_SM_CLASSID_30) )
-                nId = IMG_MATHTEMPLATE;
-        }
+    String aExt;
+    USHORT nImage = IMG_FILE;
 
-        return nId;
+    if ( rObject.GetProtocol() == INET_PROT_PRIVATE )
+    {
+        String aURLPath = rObject.GetMainURL().Erase( 0, URL_PREFIX_PRIV_SOFFICE_LEN );
+        String aType = aURLPath.GetToken( 0, INET_PATH_TOKEN );
+        if ( aType == String( RTL_CONSTASCII_STRINGPARAM("factory") ) )
+            aExt = GetImageExtensionByFactory_Impl( rObject.GetMainURL() );
+        else if ( aType == String( RTL_CONSTASCII_STRINGPARAM("image") ) )
+        {
+            nImage = (USHORT)aURLPath.GetToken( 1, INET_PATH_TOKEN ).ToInt32();
+        }
+    }
+    else
+    {
+        aExt = rObject.getExtension();
+        if ( aExt.EqualsAscii( "vor" ) )
+        {
+            SotStorageRef aStorage = new SotStorage( rObject.GetMainURL(), STREAM_STD_READ );
+            USHORT nId = IMG_WRITERTEMPLATE;
+            if ( !aStorage->GetError() )
+            {
+                SvGlobalName aGlobalName = aStorage->GetClassName();
+                if ( aGlobalName == SvGlobalName(SO3_SC_CLASSID_50) || aGlobalName == SvGlobalName(SO3_SC_CLASSID_40) || aGlobalName == SvGlobalName(SO3_SC_CLASSID_30) )
+                    nId = IMG_CALCTEMPLATE;
+                else if ( aGlobalName == SvGlobalName(SO3_SDRAW_CLASSID_50) )
+                    nId = IMG_DRAWTEMPLATE;
+                else if ( aGlobalName == SvGlobalName(SO3_SIMPRESS_CLASSID_50) ||
+                        aGlobalName == SvGlobalName(SO3_SIMPRESS_CLASSID_40) || aGlobalName == SvGlobalName(SO3_SIMPRESS_CLASSID_30) )
+                    nId = IMG_IMPRESSTEMPLATE;
+                else if ( aGlobalName == SvGlobalName(SO3_SM_CLASSID_50) || aGlobalName == SvGlobalName(SO3_SM_CLASSID_40) || aGlobalName == SvGlobalName(SO3_SM_CLASSID_30) )
+                    nId = IMG_MATHTEMPLATE;
+            }
+
+            return nId;
+        }
     }
 
-    USHORT nImage = IMG_FILE;
 #if defined( OS2 ) || defined( MAC )
-    SvEaMgr aMgr( rObject.GetMainURL() );
-    String aType;
-    if( aMgr.GetFileType( aType ) )
+    if ( nImage == IMG_FILE )
     {
-        for( USHORT nIndex = 0; Mappings[ nIndex ]._pExt; nIndex++ )
-            if ( Mappings[ nIndex ]._pExt == aType )
-                nImage = Mappings[ nIndex ]._nImgId;
+        SvEaMgr aMgr( rObject.GetMainURL() );
+        String aType;
+        if( aMgr.GetFileType( aType ) )
+        {
+            for( USHORT nIndex = 0; Mappings[ nIndex ]._pExt; nIndex++ )
+                if ( Mappings[ nIndex ]._pExt == aType )
+                    nImage = Mappings[ nIndex ]._nImgId;
+        }
     }
 #endif
-    if( nImage == IMG_FILE )
+
+    if ( nImage == IMG_FILE )
         nImage = GetImageId_Impl( aExt );
     return nImage;
 }
