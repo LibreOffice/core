@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txmsrt.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: os $ $Date: 2001-06-06 10:41:24 $
+ *  last change: $Author: jp $ $Date: 2001-06-29 13:12:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -222,7 +222,7 @@ sal_Int32 SwTOXInternational::Compare( const String& rTxt1, const String& rTxt2,
 
 String SwTOXInternational::GetIndexChar( const String& rTxt ) const
 {
-    return pIndexWrapper->GetIndexChar( rTxt );
+    return pIndexWrapper->GetIndexChar( rTxt, sSortAlgorithm );
 }
 
 String SwTOXInternational::GetFollowingText( BOOL bMorePages ) const

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toxhlp.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-14 13:35:10 $
+ *  last change: $Author: jp $ $Date: 2001-06-29 13:12:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,11 +116,12 @@ IndexEntrySupplierWrapper::~IndexEntrySupplierWrapper()
 {
 }
 
-String IndexEntrySupplierWrapper::GetIndexChar( const String& rTxt ) const
+String IndexEntrySupplierWrapper::GetIndexChar( const String& rTxt,
+                                           const String& rSortAlgorithm ) const
 {
     String sRet;
     try {
-        sRet = xIES->getIndexCharacter( rTxt, aLcl );
+        sRet = xIES->getIndexCharacter( rTxt, aLcl, rSortAlgorithm );
     }
     catch ( UNO_NMSPC::Exception& e )
     {

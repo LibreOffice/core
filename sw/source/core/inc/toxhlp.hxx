@@ -2,9 +2,9 @@
  *
  *  $RCSfile: toxhlp.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: jp $ $Date: 2001-05-14 13:34:57 $
+ *  last change: $Author: jp $ $Date: 2001-06-29 13:12:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,8 @@ public:
             STAR_REFERENCE( lang::XMultiServiceFactory )& rxMSF );
     ~IndexEntrySupplierWrapper();
 
-    String GetIndexChar( const String& rTxt ) const;
+    String GetIndexChar( const String& rTxt,
+                         const String& rSortAlgorithm ) const;
     String GetFollowingText( BOOL bMorePages ) const;
 };
 
