@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtxt.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: kz $ $Date: 2004-12-08 17:41:32 $
+ *  last change: $Author: obo $ $Date: 2005-01-05 11:47:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2549,8 +2549,21 @@ BOOL SwTxtNode::HasBullet() const
 
 XubString SwTxtNode::GetNumString() const
 {
-    const SwNodeNum* pNum;
-    const SwNumRule* pRule;
+    const SwNodeNum* pNum = GetNum(TRUE);
+
+    if (pNum)
+    {
+        const SwNumRule* pRule = GetNumRule();
+
+        if (pRule &&
+            pNum->GetLevel() < MAXLEVEL &&
+            pRule->Get(pNum->GetLevel()).IsTxtFmt())
+            return pRule->MakeNumString(*pNum);
+    }
+
+    return aEmptyStr;
+
+#if 0
     if( (( 0 != ( pNum = GetNum() ) &&
             0 != ( pRule = GetNumRule() )) ||
             ( 0 != ( pNum = GetOutlineNum() ) &&
@@ -2559,6 +2572,7 @@ XubString SwTxtNode::GetNumString() const
         pRule->Get( pNum->GetLevel() ).IsTxtFmt() )
         return pRule->MakeNumString( *pNum );
     return aEmptyStr;
+#endif
 }
 
 long SwTxtNode::GetLeftMarginWithNum( BOOL bTxtLeft ) const
@@ -3035,8 +3049,19 @@ SwPosition * SwTxtNode::GetPosition(const SwTxtAttr * pAttr)
 }
 
 // #i29363#
-const SwNodeNum * SwTxtNode::GetNum() const
+const SwNodeNum * SwTxtNode::GetNum(BOOL bUpdate) const
 {
+    SwNumRule * pRule = GetNumRule();
+
+    if (pRule)
+    {
+        if (! pNdNum)
+            pNdNum = new SwNodeNum(0);
+
+        if (bUpdate && pRule->IsInvalidRule())
+            const_cast<SwDoc *>(GetDoc())->UpdateNumRule(*pRule, 0);
+    }
+
     return pNdNum;
 }
 
@@ -3051,19 +3076,19 @@ BOOL SwTxtNode::IsOutline() const
     return bResult;
 }
 
-SwNodeNum * SwTxtNode::_GetOutlineNum() const
+SwNodeNum * SwTxtNode::_GetOutlineNum(BOOL bUpdate) const
 {
     const SwNodeNum * pResult = NULL;
 
     if (IsOutline())
-        pResult = GetNum();
+        pResult = GetNum(bUpdate);
 
-    return (SwNodeNum *) pResult;
+    return const_cast<SwNodeNum *>(pResult);
 }
 
-const SwNodeNum * SwTxtNode::GetOutlineNum() const
+const SwNodeNum * SwTxtNode::GetOutlineNum(BOOL bUpdate) const
 {
-    return _GetOutlineNum();
+    return _GetOutlineNum(bUpdate);
 }
 
 const SwNodeNum * SwTxtNode::GetNumNoOutline() const
