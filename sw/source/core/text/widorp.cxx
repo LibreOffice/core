@@ -2,9 +2,9 @@
  *
  *  $RCSfile: widorp.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-13 11:21:22 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 12:51:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -594,6 +594,12 @@ sal_Bool WidowsAndOrphans::WouldFit( SwTxtMargin &rLine, SwTwips &rMaxHeight, sa
     }
 
     // Sind nach Orphans/Initialen noch genug Zeilen fuer die Widows uebrig?
+    // #111937#: If we are currently doing a test formatting, we may not
+    // consider the widows rule for two reasons:
+    // 1. The columns may have different widths.
+    //    Widow lines would have wrong width.
+    // 2. Test formatting is only done up to the given space.
+    //    we do not have any lines for widows at all.
     if( bTst || nLineCnt - nMinLines >= GetWidowsLines() )
     {
         if( rMaxHeight >= nLineSum )
