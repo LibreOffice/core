@@ -2,9 +2,9 @@
  *
  *  $RCSfile: vclxwindow.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: fs $ $Date: 2002-08-16 09:12:34 $
+ *  last change: $Author: tbe $ $Date: 2002-08-19 16:17:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,9 @@
 #endif
 #ifndef _TOOLKIT_AWT_VCLXACCESSIBLECOMPONENT_HXX_
 #include <toolkit/awt/vclxaccessiblecomponent.hxx>
+#endif
+#ifndef _TOOLKIT_AWT_VCLXACCESSIBLETABCONTROL_HXX_
+#include <toolkit/awt/vclxaccessibletabcontrol.hxx>
 #endif
 #ifndef _TOOLKIT_HELPER_MACROS_HXX_
 #include <toolkit/helper/macros.hxx>
@@ -501,7 +504,14 @@ void VCLXWindow::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 
 ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext > VCLXWindow::CreateAccessibleContext()
 {
-    return (::drafts::com::sun::star::accessibility::XAccessibleContext*) new VCLXAccessibleComponent( this );
+    ::com::sun::star::uno::Reference< ::drafts::com::sun::star::accessibility::XAccessibleContext > xContext;
+
+    if ( GetWindow() && GetWindow()->GetType() == WINDOW_TABCONTROL )
+        xContext = (::drafts::com::sun::star::accessibility::XAccessibleContext*) new VCLXAccessibleTabControl( this );
+    else
+        xContext = (::drafts::com::sun::star::accessibility::XAccessibleContext*) new VCLXAccessibleComponent( this );
+
+    return xContext;
 }
 
 /*
