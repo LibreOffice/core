@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 14:32:31 $
+ *  last change: $Author: fs $ $Date: 2000-11-08 16:09:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -694,7 +694,7 @@ Reference< XNamed > OColumns::createObject(const ::rtl::OUString& _rName)
     {
         Reference<XPropertySet> xProp;
         m_xDrvColumns->getByName(_rName) >>= xProp;
-        Reference<XColumnLocate> xColumnLocate(xProp,UNO_QUERY);
+        Reference<XColumnLocate> xColumnLocate(m_xDrvColumns,UNO_QUERY);
         sal_Int32 nPos = -1;
         if(xColumnLocate.is())
             nPos = xColumnLocate->findColumn(_rName);
