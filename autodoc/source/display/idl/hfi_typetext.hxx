@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hfi_typetext.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 13:35:06 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 09:01:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,6 +160,17 @@ class HF_IdlTypeText : public HtmlFactory_Idl
                             const String &      i_module,
                             const String &      i_ce,
                             const String &      i_member ) const;
+    bool                is_ExternLink(
+                            const StringVector &
+                                                i_module ) const;
+    void                produce_ExternLink(
+                            const StringVector &
+                                                i_module,
+                            const String &      i_ce,
+                            const String &      i_member,
+                            int                 i_sequenceCount,
+                            ary::idl::Type_id   i_nTemplateType ) const;
+
     const ary::idl::Module *
                         referingModule() const;
     const client *      referingCe() const;
