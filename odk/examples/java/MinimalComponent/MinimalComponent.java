@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MinimalComponent.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 15:56:46 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 17:13:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  the BSD license.
@@ -38,11 +38,12 @@
  *
  *************************************************************************/
 
-import com.sun.star.comp.loader.FactoryHelper;
-import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.lang.XSingleServiceFactory;
+import com.sun.star.lib.uno.helper.Factory;
+import com.sun.star.lang.XMultiComponentFactory;
+import com.sun.star.lang.XSingleComponentFactory;
 import com.sun.star.lib.uno.helper.WeakBase;
 import com.sun.star.uno.UnoRuntime;
+import com.sun.star.uno.XComponentContext;
 import com.sun.star.registry.XRegistryKey;
 import com.sun.star.lang.XInitialization;
 import com.sun.star.lang.XTypeProvider;
@@ -50,128 +51,127 @@ import com.sun.star.lang.XServiceInfo;
 import com.sun.star.uno.Type;
 
 /** This class capsulates the class, that implements the minimal component, a
- * factory for creating the service (<CODE>__getServiceFactory</CODE>) and a
+ * factory for creating the service (<CODE>__getComponentFactory</CODE>) and a
  * method, that writes the information into the given registry key
  * (<CODE>__writeRegistryServiceInfo</CODE>).
- * @version $Date: 2003-06-30 15:56:46 $
- * @author Bertram Nolte
  */
 public class MinimalComponent {
-  /** This class implements the component. At least the interfaces XServiceInfo,
-   * XTypeProvider, and XInitialization should be provided by the service.
-   */
-  public static class MinimalComponentImplementation extends WeakBase implements XInitialization,
-  XServiceInfo {
-    /** The service name, that must be used to get an instance of this service.
+    /** This class implements the component. At least the interfaces XServiceInfo,
+     * XTypeProvider, and XInitialization should be provided by the service.
      */
-    static private final String __serviceName =
-    "org.OpenOffice.MinimalComponent";
+    public static class _MinimalComponent extends WeakBase
+        implements XInitialization, XServiceInfo {
+        /** The service name, that must be used to get an instance of this service.
+         */
+        static private final String __serviceName =
+        "org.openoffice.MinimalComponent";
 
-    /** The service manager, that gives access to all registered services.
-     */
-    private XMultiServiceFactory xmultiservicefactory;
+        /** The initial component contextr, that gives access to
+         * the service manager, supported singletons, ...
+         * It's often later used
+         */
+        private XComponentContext m_cmpCtx;
 
-    /** The constructor of the inner class has a XMultiServiceFactory parameter.
-     * @param xmultiservicefactoryInitialization A special service factory
-     * could be introduced while initializing.
-     */
-    public MinimalComponentImplementation(
-    XMultiServiceFactory xmultiservicefactoryInitialization ) {
-      xmultiservicefactory = xmultiservicefactoryInitialization;
+        /** The service manager, that gives access to all registered services.
+         * It's often later used
+         */
+        private XMultiComponentFactory m_xMCF;
+
+        /** The constructor of the inner class has a XMultiServiceFactory parameter.
+         * @param xmultiservicefactoryInitialization A special service factory
+         * could be introduced while initializing.
+         */
+        public _MinimalComponent(XComponentContext xCompContext) {
+            try {
+                m_cmpCtx = xCompContext;
+                m_xMCF = m_cmpCtx.getServiceManager();
+            }
+            catch( Exception e ) {
+                e.printStackTrace();
+            }
+        }
+
+        /** This method is a member of the interface for initializing an object
+         * directly after its creation.
+         * @param object This array of arbitrary objects will be passed to the
+         * component after its creation.
+         * @throws Exception Every exception will not be handled, but will be
+         * passed to the caller.
+         */
+        public void initialize( Object[] object )
+            throws com.sun.star.uno.Exception {
+            /* The component describes what arguments its expected and in which
+             * order!At this point you can read the objects and can intialize
+             * your component using these objects.
+             */
+        }
+
+        /** This method returns an array of all supported service names.
+         * @return Array of supported service names.
+         */
+        public String[] getSupportedServiceNames() {
+            return getServiceNames();
+        }
+
+        /** This method is a simple helper function to used in the
+         * static component initialisation functions as well as in
+         * getSupportedServiceNames.
+         */
+        public static String[] getServiceNames() {
+            String[] sSupportedServiceNames = { __serviceName };
+            return sSupportedServiceNames;
+        }
+
+        /** This method returns true, if the given service will be
+         * supported by the component.
+         * @param sServiceName Service name.
+         * @return True, if the given service name will be supported.
+         */
+        public boolean supportsService( String sServiceName ) {
+            return sServiceName.equals( __serviceName );
+        }
+
+        /** Return the class name of the component.
+         * @return Class name of the component.
+         */
+        public String getImplementationName() {
+            return  _MinimalComponent.class.getName();
+        }
     }
 
-    /** This method is a member of the interface for initializing an object
-     * directly after its creation.
-     * @param object This array of arbitrary objects will be passed to the
-     * component after its creation.
-     * @throws Exception Every exception will not be handled, but will be
-     * passed to the caller.
+
+    /**
+     * Gives a factory for creating the service.
+     * This method is called by the <code>JavaLoader</code>
+     * <p>
+     * @return  returns a <code>XSingleComponentFactory</code> for creating
+     *          the component
+     * @param   sImplName the name of the implementation for which a
+     *          service is desired
+     * @see     com.sun.star.comp.loader.JavaLoader
      */
-    public void initialize( Object[] object )
-    throws com.sun.star.uno.Exception {
-      xmultiservicefactory = ( XMultiServiceFactory ) UnoRuntime.queryInterface(
-      XMultiServiceFactory.class, object[ 0 ] );
+    public static XSingleComponentFactory __getComponentFactory(String sImplName)
+    {
+        XSingleComponentFactory xFactory = null;
+
+        if ( sImplName.equals( _MinimalComponent.class.getName() ) )
+            xFactory = Factory.createComponentFactory(_MinimalComponent.class,
+                                             _MinimalComponent.getServiceNames());
+
+        return xFactory;
     }
 
-    /** This method returns an array of all supported service names.
-     * @return Array of supported service names.
+    /**
+     * Writes the service information into the given registry key.
+     * This method is called by the <code>JavaLoader</code>
+     * <p>
+     * @return  returns true if the operation succeeded
+     * @param   regKey the registryKey
+     * @see     com.sun.star.comp.loader.JavaLoader
      */
-    public String[] getSupportedServiceNames() {
-      String []stringSupportedServiceNames = new String[ 1 ];
-
-      stringSupportedServiceNames[ 0 ] = __serviceName;
-
-      return( stringSupportedServiceNames );
+    public static boolean __writeRegistryServiceInfo(XRegistryKey regKey) {
+        return Factory.writeRegistryServiceInfo(_MinimalComponent.class.getName(),
+                                                _MinimalComponent.getServiceNames(),
+                                                regKey);
     }
-
-    /** This method returns true, if the given service will be
-     * supported by the component.
-     * @param stringService Service name.
-     * @return True, if the given service name will be supported.
-     */
-    public boolean supportsService( String stringService ) {
-      boolean booleanSupportsService = false;
-
-      if ( stringService.equals( __serviceName ) ) {
-        booleanSupportsService = true;
-      }
-
-      return( booleanSupportsService );
-    }
-
-    /** Return the class name of the component.
-     * @return Class name of the component.
-     */
-    public String getImplementationName() {
-      return( MinimalComponentImplementation.class.getName() );
-    }
-
-  }
-
-
-  /** Gives a factory for creating the service.
-   * This method is called by the <code>JavaLoader</code>
-   * <p>
-   * @return Returns a <code>XSingleServiceFactory</code> for creating the
-   * component.
-   * @see com.sun.star.comp.loader.JavaLoader#
-   * @param stringImplementationName The implementation name of the component.
-   * @param xmultiservicefactory The service manager, who gives access to every
-   * known service.
-   * @param xregistrykey Makes structural information (except regarding tree
-   * structures) of a single
-   * registry key accessible.
-   */
-  public static XSingleServiceFactory __getServiceFactory(
-  String stringImplementationName,
-  XMultiServiceFactory xmultiservicefactory,
-  XRegistryKey xregistrykey ) {
-    XSingleServiceFactory xsingleservicefactory = null;
-
-    if ( stringImplementationName.equals(
-    MinimalComponentImplementation.class.getName() ) )
-      xsingleservicefactory = FactoryHelper.getServiceFactory(
-      MinimalComponentImplementation.class,
-      MinimalComponentImplementation.__serviceName,
-      xmultiservicefactory,
-      xregistrykey );
-
-    return xsingleservicefactory;
-  }
-
-  /** Writes the service information into the given registry key.
-   * This method is called by the <code>JavaLoader</code>.
-   * @return returns true if the operation succeeded
-   * @see com.sun.star.comp.loader.JavaLoader#
-   * @param xregistrykey Makes structural information (except regarding tree
-   * structures) of a single
-   * registry key accessible.
-   */
-  public static boolean __writeRegistryServiceInfo(
-  XRegistryKey xregistrykey ) {
-    return FactoryHelper.writeRegistryServiceInfo(
-    MinimalComponentImplementation.class.getName(),
-    MinimalComponentImplementation.__serviceName,
-    xregistrykey );
-  }
 }
