@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eddel.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:00:16 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 14:02:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,7 +89,15 @@
 #ifndef _DOCARY_HXX
 #include <docary.hxx>
 #endif
-
+#ifndef _SW_REWRITER_HXX
+#include <SwRewriter.hxx>
+#endif
+#ifndef _UNOBJ_HXX
+#include <undobj.hxx>
+#endif
+#ifndef _GLOBALS_HRC
+#include <globals.hrc>
+#endif
 
 /************************************************************
  * Loeschen
@@ -171,7 +179,12 @@ long SwEditShell::Delete()
 
         BOOL bUndo = GetCrsr()->GetNext() != GetCrsr();
         if( bUndo )     // mehr als eine Selection ?
-            GetDoc()->StartUndo( UNDO_START );
+        {
+            SwRewriter aRewriter;
+            aRewriter.AddRule(UNDO_ARG1, String(SW_RES(STR_MULTISEL)));
+
+            GetDoc()->StartUndo( UNDO_DELETE, &aRewriter );
+        }
 
         FOREACHPAM_START(this)
             DeleteSel( *PCURCRSR, &bUndo );
@@ -179,7 +192,7 @@ long SwEditShell::Delete()
 
         // falls eine Undo-Klammerung, dann hier beenden
         if( bUndo )
-            GetDoc()->EndUndo( UNDO_END );
+            GetDoc()->EndUndo( UNDO_DELETE );
         EndAllAction();
         nRet = 1;
     }
