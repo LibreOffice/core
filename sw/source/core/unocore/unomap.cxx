@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.cxx,v $
  *
- *  $Revision: 1.123 $
+ *  $Revision: 1.124 $
  *
- *  last change: $Author: tl $ $Date: 2002-02-07 16:32:57 $
+ *  last change: $Author: os $ $Date: 2002-03-19 08:58:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1643,8 +1643,7 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                 static SfxItemPropertyMap aRedlineMap_Impl[] =
                 {
                     _REDLINE_PROPERTIES
-                    {SW_PROP_NMID(UNO_NAME_REDLINE_START), 0, CPPU_E2T(CPPUTYPE_REFINTERFACE),  PropertyAttribute::READONLY,    0},
-                    {SW_PROP_NMID(UNO_NAME_REDLINE_END), 0, CPPU_E2T(CPPUTYPE_REFINTERFACE),    PropertyAttribute::MAYBEVOID|PropertyAttribute::READONLY,   0},
+                    _REDLINE_NODE_PROPERTIES
                     {0,0,0,0,0}
                 };
                 aMapArr[nPropertyId] = aRedlineMap_Impl;
@@ -2241,6 +2240,15 @@ const SfxItemPropertyMap* SwUnoPropertyMapProvider::GetPropertyMap(sal_uInt16 nP
                 };
                 aMapArr[nPropertyId] = aBibliographyFieldMasterMap;
             }
+            break;
+            case PROPERTY_MAP_TEXT :
+                static SfxItemPropertyMap aTextMap[] =
+                {
+                    _REDLINE_NODE_PROPERTIES
+                    {0,0,0,0}
+                };
+                aMapArr[nPropertyId] = aTextMap;
+
             break;
         }
         Sort(nPropertyId);

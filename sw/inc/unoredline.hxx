@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoredline.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: os $ $Date: 2001-11-28 12:47:26 $
+ *  last change: $Author: os $ $Date: 2002-03-19 08:51:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,9 +136,8 @@ public:
 
  ---------------------------------------------------------------------------*/
 typedef
-cppu::WeakImplHelper2
+cppu::WeakImplHelper1
 <
-    ::com::sun::star::beans::XPropertySet,
     ::com::sun::star::container::XEnumerationAccess
 >
 SwXRedlineBaseClass;

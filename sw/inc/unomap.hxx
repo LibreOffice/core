@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomap.hxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: tl $ $Date: 2002-02-07 16:35:16 $
+ *  last change: $Author: os $ $Date: 2002-03-19 08:56:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -153,8 +153,8 @@
 #define PROPERTY_MAP_FLDTYP_BIBLIOGRAPHY                85
 #define PROPERTY_MAP_FLDMSTR_BIBLIOGRAPHY               86
 #define PROPERTY_MAP_REDLINE_PORTION                    87
-#define PROPERTY_MAP_END                                88
-
+#define PROPERTY_MAP_TEXT                               88
+#define PROPERTY_MAP_END                                89
 
 #define PROPERTY_SET_CHAR_STYLE             1
 #define PROPERTY_SET_PARA_STYLE             2
