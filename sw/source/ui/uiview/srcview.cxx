@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srcview.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: hr $ $Date: 2004-12-13 12:37:21 $
+ *  last change: $Author: rt $ $Date: 2005-01-11 12:44:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1090,21 +1090,15 @@ void SwSrcView::Load(SwDocShell* pDocShell)
     {
         utl::TempFile aTempFile;
         aTempFile.EnableKillingFile();
-        String sFileURL( aTempFile.GetURL() ),
-               sBaseURL( INetURLObject::GetBaseURL() );
+        String sFileURL( aTempFile.GetURL() );
         BOOL bIsRemote = pMedium->IsRemote();
         SvtSaveOptions aOpt;
-
-        if( bIsRemote ? aOpt.IsSaveRelINet() : aOpt.IsSaveRelFSys() )
-            INetURLObject::SetBaseURL( pMedium->GetName() );
-        else
-            INetURLObject::SetBaseURL( aEmptyStr );
 
         {
             SfxMedium aMedium( sFileURL,STREAM_READWRITE, TRUE );
             SwWriter aWriter( aMedium, *pDocShell->GetDoc() );
             WriterRef xWriter;
-            ::GetHTMLWriter(aEmptyStr, xWriter);
+            ::GetHTMLWriter(aEmptyStr, aMedium.GetBaseURL( true ), xWriter);
             String sWriteName = pDocShell->HasName() ?
                                     pMedium->GetName() :
                                         (const String&) sFileURL;
@@ -1119,7 +1113,6 @@ void SwSrcView::Load(SwDocShell* pDocShell)
             pInStream->Seek(0);
             pInStream->SetStreamCharSet( eDestEnc );
 
-            INetURLObject::SetBaseURL(sBaseURL);
 
             aEditWin.Read(*pInStream);//, EE_FORMAT_TEXT);
         }
