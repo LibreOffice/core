@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: mav $ $Date: 2002-05-13 08:06:58 $
+ *  last change: $Author: mav $ $Date: 2002-05-13 10:45:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -829,7 +829,17 @@ sal_Bool ZipPackage::writeFileIsTemp()
 
     // call saveContents (it will recursively save sub-directories
     OUString aEmptyString;
-    pRootFolder->saveContents( aEmptyString, aManList, aZipOut, aEncryptionKey, aRandomPool );
+    try {
+        pRootFolder->saveContents( aEmptyString, aManList, aZipOut, aEncryptionKey, aRandomPool );
+    }
+    catch (::com::sun::star::uno::RuntimeException & r )
+    {
+        VOS_ENSURE( 0, "Error writing ZIP file to disk" );
+        throw WrappedTargetException(
+                OUString( RTL_CONSTASCII_USTRINGPARAM ( "Error writing ZIP file to disk!" ) ),
+                static_cast < OWeakObject * > ( this ),
+                makeAny( r ) );
+    }
 
     // Clean up random pool memory
     rtl_random_destroyPool ( aRandomPool );
