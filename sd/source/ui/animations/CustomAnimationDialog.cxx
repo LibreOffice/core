@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CustomAnimationDialog.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-28 15:39:14 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 17:31:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1497,7 +1497,12 @@ CustomAnimationEffectTabPage::CustomAnimationEffectTabPage( Window* pParent, con
                 }
 
                 if( nPos == 0 )
-                    nPos = LISTBOX_ENTRY_NOTFOUND;
+                {
+                    nPos = (USHORT)maSoundList.Count()+2;
+                    maSoundList.Insert( new String( aTmp ), LIST_APPEND );
+                    INetURLObject aURL( aTmp );
+                    nPos = mpLBSound->InsertEntry( aURL.GetBase() );
+                }
             }
         }
 
