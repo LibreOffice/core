@@ -2,9 +2,9 @@
  *
  *  $RCSfile: registerservices.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-22 16:07:57 $
+ *  last change: $Author: vg $ $Date: 2003-04-24 11:34:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -351,8 +351,6 @@ IMPL_CREATEINSTANCE( NumToTextHangulCircledSyllable_ko )
 IMPL_CREATEINSTANCE( NumToTextTianGan_zh )
 IMPL_CREATEINSTANCE( NumToTextDiZi_zh )
 
-IMPL_CREATEINSTANCE_MSF( TextSearch )
-
 static const struct InstancesArray {
         const sal_Char* pServiceNm;
         const sal_Char* pImplementationNm;
@@ -697,10 +695,6 @@ static const struct InstancesArray {
     IMPL_TRANSLITERATION_ITEM (NumToTextHangulCircledSyllable_ko),
     IMPL_TRANSLITERATION_ITEM (NumToTextTianGan_zh),
     IMPL_TRANSLITERATION_ITEM (NumToTextDiZi_zh),
-
-    {   "com.sun.star.util.TextSearch",
-        "com.sun.star.util.TextSearch",
-        &TextSearch_CreateInstance },
 
 // add here new services !!
     { 0, 0, 0 }
