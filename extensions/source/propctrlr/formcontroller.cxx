@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formcontroller.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-06 10:38:55 $
+ *  last change: $Author: fs $ $Date: 2001-06-08 07:49:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1109,8 +1109,7 @@ namespace pcr
             OLineDescriptor aProperty;
             aProperty.eControlType = BCT_MEDIT;
 
-            String fCommandName = PROPERTY_COMMAND;
-            aProperty.sName = fCommandName;
+            aProperty.sName = (const ::rtl::OUString&)PROPERTY_COMMAND;
             aProperty.sTitle = m_pPropertyInfo->getPropertyTranslation(PROPERTY_ID_COMMAND);
             aProperty.pControl = NULL;
             aProperty.bHasBrowseButton = sal_False;
@@ -2910,6 +2909,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.29  2001/06/06 10:38:55  fs
+ *  #86837# +PROPERTY_IMAGEALIGN
+ *
  *  Revision 1.28  2001/06/06 08:16:55  fs
  *  #86096# ChangeFontProperty: added support for Relief, EmphasisMark, TextLineColor
  *
