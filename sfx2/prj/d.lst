@@ -40,7 +40,6 @@ touch: ..\%__SRC%\misc\sfx2.hid %_DEST%\bin%_EXT%\sfx2.hid
 ..\%__SRC%\bin\odk?????.dll %_DEST%\odk\bin%_EXT%\odk?????.dll
 ..\%__SRC%\bin\cli?????.dll %_DEST%\odk\bin%_EXT%\cli?????.dll
 
-hedabu: ..\inc\inettbc.hxx %_DEST%\inc%_EXT%\sfx2\inettbc.hxx
 hedabu: ..\inc\accmgr.hxx %_DEST%\inc%_EXT%\sfx2\accmgr.hxx
 hedabu: ..\inc\app.hxx %_DEST%\inc%_EXT%\sfx2\app.hxx
 hedabu: ..\inc\basedlgs.hxx %_DEST%\inc%_EXT%\sfx2\basedlgs.hxx
@@ -131,7 +130,6 @@ hedabu: ..\inc\tplpitem.hxx %_DEST%\inc%_EXT%\sfx2\tplpitem.hxx
 hedabu: ..\inc\viewfrm.hxx %_DEST%\inc%_EXT%\sfx2\viewfrm.hxx
 hedabu: ..\inc\viewsh.hxx %_DEST%\inc%_EXT%\sfx2\viewsh.hxx
 hedabu: ..\inc\viewfac.hxx %_DEST%\inc%_EXT%\sfx2\viewfac.hxx
-hedabu: ..\inc\iodlg.hxx %_DEST%\inc%_EXT%\sfx2\iodlg.hxx
 hedabu: ..\inc\appuno.hxx %_DEST%\inc%_EXT%\sfx2\appuno.hxx
 hedabu: ..\inc\sfxuno.hxx %_DEST%\inc%_EXT%\sfx2\sfxuno.hxx
 hedabu: ..\inc\sfxbasemodel.hxx %_DEST%\inc%_EXT%\sfx2\sfxbasemodel.hxx
