@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2001-06-07 14:42:31 $
+#   last change: $Author: mt $ $Date: 2002-09-04 10:21:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -113,6 +113,7 @@ EXCEPTIONSFILES=					\
 .ELSE
 EXCEPTIONSFILES=					\
             $(SLO)$/edit.obj		\
+            $(SLO)$/field2.obj		\
             $(SLO)$/ilstbox.obj
 .ENDIF
 
