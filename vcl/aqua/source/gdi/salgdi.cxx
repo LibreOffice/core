@@ -2,8 +2,8 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.40 $
- *  last change: $Author: bmahbod $ $Date: 2001-01-05 03:09:47 $
+ *  $Revision: 1.41 $
+ *  last change: $Author: bmahbod $ $Date: 2001-01-07 06:23:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -720,6 +720,17 @@ static OSStatus BeginGraphics ( SalGraphicsDataPtr rSalGraphicsData )
 
         if ( rSalGraphicsData->mpCGrafPort != NULL )
         {
+            // What is the current pen mode associated with this graph port?
+
+            rSalGraphicsData->mnPenModePort
+                = GetPortPenMode( rSalGraphicsData->mpCGrafPort );
+
+            // Set the port pen mode to its new value
+
+            SetPortPenMode( rSalGraphicsData->mpCGrafPort,
+                            rSalGraphicsData->mnPenMode
+                          );
+
             // Set to the current offscreen world for Mac OS X
             // only as everything is written to GWorld here
 
@@ -729,9 +740,12 @@ static OSStatus BeginGraphics ( SalGraphicsDataPtr rSalGraphicsData )
 
             rSalGraphicsData->mnMacOSStatus = QDErr();
 
-            // Set background and foreground colors on this GWorld port
+            // Set background color to white on this GWorld
 
             SetWhiteBackColor();
+
+            // Set foreground color to black on this GWorld
+
             SetBlackForeColor();
 
             // Now begin to set the clip region
@@ -766,6 +780,12 @@ static OSStatus EndGraphics ( SalGraphicsDataPtr rSalGraphicsData )
 
     if ( rSalGraphicsData->mnMacOSStatus == noErr )
     {
+        // Reset the port to its original pen mode
+
+        SetPortPenMode( rSalGraphicsData->mpCGrafPort,
+                        rSalGraphicsData->mnPenModePort
+                      );
+
         // Flush the QuickDraw buffer
 
         QDFlushPortBuffer( rSalGraphicsData->mpCGrafPort, NULL );
@@ -1217,16 +1237,6 @@ void SalGraphics::DrawLine( long nX1,
 
     if ( aQDStatus == noErr )
     {
-        short       nPortPenMode = 0;
-        short       nPenMode     = maGraphicsData.mnPenMode;
-        CGrafPtr    pCGraf       = maGraphicsData.mpCGrafPort;
-
-        // What is the current pen mode associated with this graph port?
-
-        nPortPenMode = GetPortPenMode( pCGraf );
-
-        SetPortPenMode( pCGraf, nPenMode );
-
         MoveTo( nX1, nY1 );
 
         if ( maGraphicsData.mbPenTransparent == TRUE )
@@ -1241,10 +1251,6 @@ void SalGraphics::DrawLine( long nX1,
         } // else
 
         MacLineTo( nX2, nY2 );
-
-        // Reset the port to its original pen mode
-
-        SetPortPenMode( pCGraf, nPortPenMode );
 
         EndGraphics( &maGraphicsData );
     } // if
@@ -1282,21 +1288,7 @@ void SalGraphics::DrawRect( long  nX,
 
         if ( maGraphicsData.mbBrushTransparent == TRUE )
         {
-            short       nPortPenMode = 0;
-            short       nPenMode     = maGraphicsData.mnPenMode;
-            CGrafPtr    pCGraf       = maGraphicsData.mpCGrafPort;
-
-            // What is the current pen mode associated with this graph port?
-
-            nPortPenMode = GetPortPenMode( pCGraf );
-
-            SetPortPenMode( pCGraf, nPenMode );
-
             MacFrameRect( &aRect );
-
-            // Reset the port to its original pen mode
-
-            SetPortPenMode( pCGraf, nPortPenMode );
         } // if
         else
         {
@@ -1321,19 +1313,10 @@ void SalGraphics::DrawPolyLine( ULONG           nPoints,
 
         if ( aQDStatus == noErr )
         {
-            long        nPolyEdges   = 0;
-            short       nPortPenMode = 0;
-            short       nPenMode     = maGraphicsData.mnPenMode;
-            CGrafPtr    pCGraf       = maGraphicsData.mpCGrafPort;
-            PolyHandle  hPolygon     = NULL;
-
-            // What is the current pen mode associated with this graph port?
-
-            nPortPenMode = GetPortPenMode( pCGraf );
+            long        nPolyEdges = 0;
+            PolyHandle  hPolygon   = NULL;
 
             SetBlackForeColor();
-
-            SetPortPenMode( pCGraf, nPenMode );
 
             // Construct a polygon
 
@@ -1373,10 +1356,6 @@ void SalGraphics::DrawPolyLine( ULONG           nPoints,
                 KillPoly( hPolygon );
             } // if
 
-            // Reset the port to its original pen mode
-
-            SetPortPenMode( pCGraf, nPortPenMode );
-
             EndGraphics( &maGraphicsData );
         } // if
     } // if
@@ -1396,20 +1375,11 @@ void SalGraphics::DrawPolygon( ULONG            nPoints,
 
         if ( aQDStatus == noErr )
         {
-            long        nPolyEdges   = 0;
-            short       nPortPenMode = 0;
-            short       nPenMode     = maGraphicsData.mnPenMode;
-            CGrafPtr    pCGraf       = maGraphicsData.mpCGrafPort;
-            PolyHandle  hPolygon     = NULL;
-            RGBColor    aPolyColor   = maGraphicsData.maBrushColor;
-
-            // What is the current pen mode associated with this graph port?
-
-            nPortPenMode = GetPortPenMode( pCGraf );
+            long        nPolyEdges = 0;
+            PolyHandle  hPolygon   = NULL;
+            RGBColor    aPolyColor = maGraphicsData.maBrushColor;
 
             RGBForeColor( &aPolyColor );
-
-            SetPortPenMode( pCGraf, nPenMode );
 
             // Construct a polygon
 
@@ -1449,10 +1419,6 @@ void SalGraphics::DrawPolygon( ULONG            nPoints,
                 KillPoly( hPolygon );
             } // if
 
-            // Reset the port to its original pen mode
-
-            SetPortPenMode( pCGraf, nPortPenMode );
-
             EndGraphics( &maGraphicsData );
         } // if
     } // if
@@ -1473,20 +1439,11 @@ void SalGraphics::DrawPolyPolygon( ULONG            nPoly,
 
         if ( aQDStatus == noErr )
         {
-            short       nPortPenMode = 0;
-            short       nPenMode     = maGraphicsData.mnPenMode;
-            CGrafPtr    pCGraf       = maGraphicsData.mpCGrafPort;
-            RgnHandle   hPolyRgn     = NULL;
-            RGBColor    aPolyColor   = maGraphicsData.maBrushColor;
-            OSStatus    aQDStatus    = noErr;
-
-            // What is the current pen mode associated with this graph port?
-
-            nPortPenMode = GetPortPenMode( pCGraf );
+            RgnHandle   hPolyRgn   = NULL;
+            RGBColor    aPolyColor = maGraphicsData.maBrushColor;
+            OSStatus    aQDStatus  = noErr;
 
             RGBForeColor( &aPolyColor );
-
-            SetPortPenMode( pCGraf, nPenMode );
 
             // Construct a polygon region
 
@@ -1506,10 +1463,6 @@ void SalGraphics::DrawPolyPolygon( ULONG            nPoly,
 
                 hPolyRgn = NULL;
             } // if
-
-            // Reset the port to its original pen mode
-
-            SetPortPenMode( pCGraf, nPortPenMode );
 
             maGraphicsData.mnMacOSStatus = aQDStatus;
 
