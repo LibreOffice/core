@@ -3,9 +3,9 @@
  *
  *  $RCSfile: winlayout.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: hdu $ $Date: 2002-08-07 14:50:04 $
+ *  last change: $Author: sb $ $Date: 2002-08-15 11:14:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1356,18 +1356,6 @@ void SalGraphics::DrawSalLayout( const SalLayout& rSalLayout )
     // we know the SalLayout created by this SalGraphics is a WinLayout
     const WinLayout& rWinLayout = reinterpret_cast<const WinLayout&>( rSalLayout );
     rWinLayout.Draw();
-}
-
-// -----------------------------------------------------------------------
-
-BOOL SalGraphics::GetLayoutOutline( const SalLayout& rSalLayout, PolyPolygon& rPolyPoly )
-{
-#ifdef REMOTE_APPSERVER
-    // TODO: cleanup remote case
-    return FALSE;
-#else
-    return rSalLayout.GetOutline( *this, rPolyPoly );
-#endif
 }
 
 // =======================================================================

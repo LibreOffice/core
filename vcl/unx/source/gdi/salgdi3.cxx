@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: hdu $ $Date: 2002-07-26 16:47:40 $
+ *  last change: $Author: sb $ $Date: 2002-08-15 11:14:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2326,69 +2326,6 @@ SalGraphics::GetGlyphOutline( xub_Unicode cChar,
 #endif // USE_BUILTIN_RASTERIZER
 
     return 0;
-}
-#endif // ENABLE_CTL
-
-//--------------------------------------------------------------------------
-
-#ifdef ENABLE_CTL
-BOOL SalGraphics::GetLayoutOutline( const SalLayout& rSalLayout, PolyPolygon& rPolyPoly )
-{
-    BOOL bRet = FALSE;
-    rPolyPoly.Clear();
-
-    // try to use selected font
-    GenericSalLayout* pSalLayout = NULL;
-    GenericSalLayout* pMergedLayout = (GenericSalLayout*)&rSalLayout;
-    PolyPolygon aPolyPoly;
-    long nGlyphIndex;
-    Point aPos;
-
-    ServerFont* pSF = maGraphicsData.mpServerSideFont;
-    if( pSF )
-    {
-        pSalLayout = pMergedLayout->ExtractLayout( 0, GlyphItem::FALLBACK_MASK );
-        if( pSalLayout )
-        {
-            int nStart = 0;
-            while( pSalLayout->GetNextGlyphs( 1, &nGlyphIndex, aPos, nStart ) )
-            {
-                if( !pSF->GetGlyphOutline( nGlyphIndex, aPolyPoly ) )
-                    continue;
-                bRet = TRUE;
-                aPos -= pSalLayout->GetDrawPosition();
-                aPolyPoly.Translate( aPos );
-                for( int i = 0; i < aPolyPoly.Count(); ++i )
-                    rPolyPoly.Insert( aPolyPoly[i] );
-            }
-            pSalLayout->Release();
-        }
-    }
-
-/*###
-    // if needed use fallback font
-    pSF = maGraphicsData.mpSrvFallbackFont;
-    if( pSF && pSalLayout )
-    {
-        pSalLayout = pMergedLayout->ExtractLayout( 1, GlyphItem::FALLBACK_MASK );
-        if( pSalLayout )
-        {
-            int nStart = 0;
-            while( pSalLayout->GetNextGlyphs( 1, &nGlyphIndex, aPos, nStart ) )
-            {
-                if( !pSF->GetGlyphOutline( nGlyphIndex, aPolyPoly ) )
-                    continue;
-                bRet = TRUE;
-                aPolyPoly.Translate( aPos );
-                for( int i = 0; i < aPolyPoly.Count(); ++i )
-                    rPolyPoly.Insert( aPolyPoly[i] );
-            }
-            pSalLayout->Release();
-        }
-    }
-###*/
-
-    return bRet;
 }
 #endif // ENABLE_CTL
 

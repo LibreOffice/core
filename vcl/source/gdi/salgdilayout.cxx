@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdilayout.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hdu $ $Date: 2002-07-29 12:20:19 $
+ *  last change: $Author: sb $ $Date: 2002-08-15 11:16:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,11 +218,6 @@ BOOL SalGraphicsLayout::GetGlyphBoundRect( long nIndex, bool bIsGI, Rectangle& r
 BOOL SalGraphicsLayout::GetGlyphOutline( long nIndex, bool bIsGI, PolyPolygon& rPolyPoly)
 {
     return SalGraphics::GetGlyphOutline( nIndex, bIsGI, rPolyPoly );
-}
-BOOL SalGraphicsLayout::GetLayoutOutline( const SalLayout& rStr, PolyPolygon& rPolyPoly )
-{
-    // TODO: ???
-    return SalGraphics::GetLayoutOutline( rStr, rPolyPoly );
 }
 SalLayout* SalGraphicsLayout::LayoutText( const ImplLayoutArgs& rLayoutArgs )
 {
