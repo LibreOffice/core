@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxitems.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2001-04-05 19:12:04 $
+ *  last change: $Author: kz $ $Date: 2001-04-09 23:02:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1926,7 +1926,7 @@ String RID_SVXITEMS_UL_DOUBLE
     Text [ portuguese ] = "Sublinhado duplo" ;
     Text [ finnish ] = "Kaksoisalleviivaus" ;
     Text [ danish ] = "Dobbelt understreget" ;
-    Text [ french ] = "Soulignage double" ;
+    Text [ french ] = "Soulignage : double" ;
     Text [ swedish ] = "Dubbelt understruken" ;
     Text [ dutch ] = "Dubbel onderstreept" ;
     Text [ spanish ] = "Subrayado doble" ;
@@ -2547,7 +2547,7 @@ String RID_SVXITEMS_CASEMAP_GEMEINE
     Text [ dutch ] = "Kleine letters" ;
     Text [ spanish ] = "Minϊsculas" ;
     Text [ english_us ] = "Lowercase" ;
-    Text[ chinese_simplified ] = "Π΅Π΄";
+    Text[ chinese_simplified ] = "Π΅Π΄ΧΦΔΈ";
     Text[ russian ] = "Ρςπξχνϋε";
     Text[ polish ] = "Ma³e litery";
     Text[ japanese ] = "¬•¶";
@@ -6521,7 +6521,7 @@ String RID_SVXITEMS_PAGE_NUM_ARABIC
     Text [ finnish ] = "Arabia" ;
     Text [ danish ] = "Arabisk" ;
     Text [ french ] = "Arabe" ;
-    Text [ swedish ] = "Arabiska" ;
+    Text [ swedish ] = "Arabisk" ;
     Text [ dutch ] = "Arabisch" ;
     Text [ spanish ] = "Αrabe" ;
     Text[ chinese_simplified ] = "°Άΐ­²®ΚύΧΦ";
@@ -6722,7 +6722,7 @@ String RID_SVXITEMS_LINES
     Text = " Zeilen" ;
     Text [ English ] = " Lines" ;
     Text [ norwegian ] = " Lines" ;
-    Text [ italian ] = "  righe" ;
+    Text [ italian ] = "Righe" ;
     Text [ portuguese_brazilian ] = "Lines" ;
     Text [ portuguese ] = "Linhas" ;
     Text [ english_us ] = "Lines" ;
@@ -7511,7 +7511,7 @@ String RID_SVXITEMS_CHARROTATE_OFF
 {
     Text = "keine gedrehten Zeichen";
     Text [ English ] = "no rotated character";
-    Text[ english_us ] = "no rotated characters";
+    Text[ english_us ] = "No rotated characters";
     Text[ portuguese ] = "no rotated character";
     Text[ russian ] = "αεη οεπεβεπνσςϋυ ηνΰκξβ";
     Text[ greek ] = "χωρίς περιστρεφόμενους χαρακτήρες";
@@ -7534,7 +7534,7 @@ String RID_SVXITEMS_CHARROTATE
 {
     Text = "Zeichen um $(ARG1)° gedreht";
     Text [ English ] = "character rotated by $(ARG1)°";
-    Text[ english_us ] = "character rotated by $(ARG1)°";
+    Text[ english_us ] = "Character rotated by $(ARG1)°";
     Text[ portuguese ] = "character rotated by $(ARG1)°";
     Text[ russian ] = "Οξβεπνσςό ηνΰκθ νΰ $(ARG1)°";
     Text[ greek ] = "Περιστροφή χαρακτήρων κατά $(ARG1)°";
@@ -7557,7 +7557,7 @@ String RID_SVXITEMS_CHARROTATE_FITLINE
 {
     Text = " an Zeile anpassen";
     Text [ English ] = " fit to line";
-    Text[ english_us ] = "fit to line";
+    Text[ english_us ] = "Fit to line";
     Text[ portuguese ] = " fit to line";
     Text[ russian ] = "Ρξγλΰρξβΰςό ρξ ρςπξκξι";
     Text[ greek ] = "προσαρμογή στη σειρά";
@@ -7603,7 +7603,7 @@ String RID_SVXITEMS_CHARSCALE_OFF
 {
     Text = "keine Zeichenskalierung";
     Text [ English ] = "no scaled characters";
-    Text[ english_us ] = "no scaled characters";
+    Text[ english_us ] = "No scaled characters";
     Text[ portuguese ] = "no scaled characters";
     Text[ russian ] = "Αεη μΰρψςΰαθπξβΰνθÿ ηνΰκξβ";
     Text[ greek ] = "χωρίς κλιμακώμενους χαρακτήρες";
