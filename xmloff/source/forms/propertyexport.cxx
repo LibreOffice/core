@@ -2,9 +2,9 @@
  *
  *  $RCSfile: propertyexport.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-11 12:10:15 $
+ *  last change: $Author: obo $ $Date: 2004-07-05 16:09:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -793,6 +793,15 @@ namespace xmloff
             "OPropertyExport::AddAttribute: already have such an attribute");
 
         m_rContext.getGlobalContext().AddAttribute(_nPrefix, _pName, _rValue);
+    }
+
+    //---------------------------------------------------------------------
+    void OPropertyExport::AddAttribute( sal_uInt16 _nPrefix, const ::rtl::OUString& _rName, const ::rtl::OUString& _rValue )
+    {
+        OSL_ENSURE(0 == m_rContext.getGlobalContext().GetXAttrList()->getValueByName( _rName ).getLength(),
+            "OPropertyExport::AddAttribute: already have such an attribute");
+
+        m_rContext.getGlobalContext().AddAttribute( _nPrefix, _rName, _rValue );
     }
 
     //---------------------------------------------------------------------
