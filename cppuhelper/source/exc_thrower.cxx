@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exc_thrower.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:26:10 $
+ *  last change: $Author: hr $ $Date: 2000-10-25 14:44:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -253,7 +253,7 @@ void SAL_CALL throwException( const Any & rExc )
         for ( typelib_CompoundTypeDescription * pTD = (typelib_CompoundTypeDescription *)pComp;
               pTD; pTD = pTD->pBaseTypeDescription )
         {
-            if (aExceptionName == ((typelib_TypeDescription *)pTD)->pTypeName)
+            if (aExceptionName == rtl::OUString(((typelib_TypeDescription *)pTD)->pTypeName))
             {
                 Mapping aUno2Cpp( OUString( RTL_CONSTASCII_USTRINGPARAM(UNO_LB_UNO) ),
                                   OUString( RTL_CONSTASCII_USTRINGPARAM(CPPU_CURRENT_LANGUAGE_BINDING_NAME) ) );
