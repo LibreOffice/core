@@ -2,9 +2,9 @@
  *
  *  $RCSfile: addresstemplate.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-12 16:51:45 $
+ *  last change: $Author: rt $ $Date: 2004-06-16 10:13:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -251,7 +251,6 @@ namespace svt
 
         // loop throuzh the given names
         const AliasProgrammaticPair* pFields = _rFields.getConstArray();
-        const AliasProgrammaticPair* pFieldsEnd = pFields + _rFields.getLength();
         for (;pFields != pFields; ++pFields)
         {
             StringBagIterator aKnownPos = aKnownNames.find( pFields->ProgrammaticName );
@@ -564,10 +563,10 @@ namespace svt
         // ................................................................
         AddressBookSourceDialogData( )
             :nFieldScrollPos(0)
-            ,bOddFieldNumber(sal_False)
             ,nLastVisibleListIndex(0)
-            ,pConfigData( new AssignmentPersistentData )
+            ,bOddFieldNumber(sal_False)
             ,bWorkingPersistent( sal_True )
+            ,pConfigData( new AssignmentPersistentData )
         {
         }
 
@@ -575,10 +574,10 @@ namespace svt
         AddressBookSourceDialogData( const ::rtl::OUString& _rDSName, const ::rtl::OUString& _rTableName,
             const Sequence< AliasProgrammaticPair >& _rFields )
             :nFieldScrollPos(0)
-            ,bOddFieldNumber(sal_False)
             ,nLastVisibleListIndex(0)
-            ,pConfigData( new AssigmentTransientData( _rDSName, _rTableName, _rFields ) )
+            ,bOddFieldNumber(sal_False)
             ,bWorkingPersistent( sal_False )
+            ,pConfigData( new AssigmentTransientData( _rDSName, _rTableName, _rFields ) )
         {
         }
 
