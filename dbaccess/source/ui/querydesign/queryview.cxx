@@ -2,9 +2,9 @@
  *
  *  $RCSfile: queryview.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-02-28 10:18:26 $
+ *  last change: $Author: fs $ $Date: 2001-08-23 14:39:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -86,17 +86,6 @@ OQueryView::OQueryView(Window* _pParent, OQueryController* _pController,const Re
 // -----------------------------------------------------------------------------
 OQueryView::~OQueryView()
 {
-}
-// -------------------------------------------------------------------------
-void OQueryView::Construct(const Reference< ::com::sun::star::awt::XControlModel >& xModel)
-{
-    OJoinDesignView::Construct(xModel); // initialize m_xMe
-
-}
-// -------------------------------------------------------------------------
-void OQueryView::resizeControl(Rectangle& _rRect)
-{
-    OJoinDesignView::resizeControl(_rRect);
 }
 // -----------------------------------------------------------------------------
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: querycontroller.cxx,v $
  *
- *  $Revision: 1.52 $
+ *  $Revision: 1.53 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-15 13:42:43 $
+ *  last change: $Author: fs $ $Date: 2001-08-23 14:39:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,9 @@
 #endif
 #ifndef DBACCESS_UI_BROWSER_ID_HXX
 #include "browserids.hxx"
+#endif
+#ifndef DBAUI_QUERYCONTAINERWINDOW_HXX
+#include "querycontainerwindow.hxx"
 #endif
 #ifndef DBAUI_QUERYVIEW_TEXT_HXX
 #include "QueryTextView.hxx"
@@ -303,7 +306,6 @@ void OQueryController::disposing()
     }
 
     m_pView     = NULL;
-    m_pWindow   = NULL; // don't delete this window it will be deleted by the frame
 
     ::comphelper::disposeComponent(m_xComposer);
     OJoinController::disposing();
@@ -333,13 +335,13 @@ FeatureState OQueryController::GetState(sal_uInt16 _nId)
         case SID_PRINTDOCDIRECT:
             break;
         case ID_BROWSER_CUT:
-            aReturn.bEnabled = m_bEditable && m_pWindow && m_pWindow->getView()->isCutAllowed();
+            aReturn.bEnabled = m_bEditable && getContainer() && getContainer()->isCutAllowed();
             break;
         case ID_BROWSER_COPY:
-            aReturn.bEnabled = m_pWindow && m_pWindow->getView()->isCopyAllowed();
+            aReturn.bEnabled = getContainer() && getContainer()->isCopyAllowed();
             break;
         case ID_BROWSER_PASTE:
-            aReturn.bEnabled = m_bEditable && m_pWindow && m_pWindow->getView()->isPasteAllowed();
+            aReturn.bEnabled = m_bEditable && getContainer() && getContainer()->isPasteAllowed();
             break;
         case ID_BROWSER_SQL:
             aReturn.bEnabled = m_bEsacpeProcessing && m_pSqlIterator;
@@ -351,7 +353,7 @@ FeatureState OQueryController::GetState(sal_uInt16 _nId)
         case ID_BROWSER_QUERY_VIEW_FUNCTIONS:
         case ID_BROWSER_QUERY_VIEW_TABLES:
         case ID_BROWSER_QUERY_VIEW_ALIASES:
-            aReturn.aState = ::cppu::bool2any(m_pWindow && m_pWindow->getView()->isSlotEnabled(_nId));
+            aReturn.aState = ::cppu::bool2any(getContainer() && getContainer()->isSlotEnabled(_nId));
             break;
         case ID_BROWSER_QUERY_DISTINCT_VALUES:
             aReturn.aState = ::cppu::bool2any(m_bDistinct);
@@ -376,7 +378,7 @@ void OQueryController::Execute(sal_uInt16 _nId)
             break;
         case ID_BROWSER_EDITDOC:
             m_bEditable = !m_bEditable;
-            m_pWindow->getView()->setReadOnly(!m_bEditable);
+            getContainer()->setReadOnly(!m_bEditable);
             InvalidateFeature(ID_BROWSER_PASTE);
             InvalidateFeature(ID_BROWSER_CLEAR_QUERY);
             break;
@@ -390,27 +392,27 @@ void OQueryController::Execute(sal_uInt16 _nId)
         case SID_PRINTDOCDIRECT:
             break;
         case ID_BROWSER_CUT:
-            m_pWindow->getView()->cut();
+            getContainer()->cut();
             break;
         case ID_BROWSER_COPY:
-            m_pWindow->getView()->copy();
+            getContainer()->copy();
             break;
         case ID_BROWSER_PASTE:
-            m_pWindow->getView()->paste();
+            getContainer()->paste();
             break;
         case ID_BROWSER_SQL:
             {
                 try
                 {
                     ::rtl::OUString aErrorMsg;
-                    m_sStatement = m_pWindow->getView()->getStatement();
+                    m_sStatement = getContainer()->getStatement();
                     if(!m_sStatement.getLength() && m_pSqlIterator)
                     {
                         // change the view of the data
                         delete m_pSqlIterator->getParseTree();
                         m_pSqlIterator->setParseTree(NULL);
                         m_bDesign = !m_bDesign;
-                        m_pWindow->switchView();
+                        getContainer()->switchView();
                     }
                     else
                     {
@@ -429,7 +431,7 @@ void OQueryController::Execute(sal_uInt16 _nId)
                                 const OSQLTables& xTabs = m_pSqlIterator->getTables();
                                 if( m_pSqlIterator->getStatementType() != SQL_STATEMENT_SELECT && m_pSqlIterator->getStatementType() != SQL_STATEMENT_SELECT_COUNT || xTabs.begin() == xTabs.end())
                                 {
-                                    ErrorBox aBox( getQueryView(), ModuleRes( ERR_QRY_NOSELECT ) );
+                                    ErrorBox aBox( getView(), ModuleRes( ERR_QRY_NOSELECT ) );
                                     aBox.Execute();
                                 }
                                 else
@@ -441,14 +443,14 @@ void OQueryController::Execute(sal_uInt16 _nId)
                                                             getMetaData(),
                                                             &getParser()->getContext(),
                                                             sal_True,sal_True);
-                                    m_pWindow->getView()->SaveUIConfig();
-                                    m_pWindow->switchView();
+                                    getContainer()->SaveUIConfig();
+                                    getContainer()->switchView();
                                 }
                             }
                         }
                         else
                         {
-                            ErrorBox aBox( getQueryView(), ModuleRes( ERR_QRY_SYNTAX ) );
+                            ErrorBox aBox( getView(), ModuleRes( ERR_QRY_SYNTAX ) );
                             aBox.Execute();
                         }
                     }
@@ -468,7 +470,7 @@ void OQueryController::Execute(sal_uInt16 _nId)
         case ID_BROWSER_CLEAR_QUERY:
             {
                 m_aUndoManager.EnterListAction( String( ModuleRes(STR_QUERY_UNDO_TABWINDELETE) ), String() );
-                m_pWindow->getView()->clear();
+                getContainer()->clear();
                 m_aUndoManager.LeaveListAction();
 
                 m_sStatement = ::rtl::OUString();
@@ -480,7 +482,7 @@ void OQueryController::Execute(sal_uInt16 _nId)
         case ID_BROWSER_QUERY_VIEW_FUNCTIONS:
         case ID_BROWSER_QUERY_VIEW_TABLES:
         case ID_BROWSER_QUERY_VIEW_ALIASES:
-            m_pWindow->getView()->setSlotEnabled(_nId,!m_pWindow->getView()->isSlotEnabled(_nId));
+            getContainer()->setSlotEnabled(_nId,!getContainer()->isSlotEnabled(_nId));
             break;
         case ID_BROWSER_QUERY_DISTINCT_VALUES:
             m_bDistinct = !m_bDistinct;
@@ -495,14 +497,14 @@ void OQueryController::Execute(sal_uInt16 _nId)
         case ID_QUERY_ZOOM_IN:
             {
 //              m_aZoom *= Fraction(1,10);
-//              static_cast<OQueryViewSwitch*>(getQueryView())->zoomTableView(m_aZoom);
+//              static_cast<OQueryViewSwitch*>(getView())->zoomTableView(m_aZoom);
             }
             break;
         case ID_QUERY_ZOOM_OUT:
             {
 //              if(m_aZoom != Fraction(1,1))
 //                  m_aZoom /= Fraction(1,10);
-//              static_cast<OQueryViewSwitch*>(getQueryView())->zoomTableView(m_aZoom);
+//              static_cast<OQueryViewSwitch*>(getView())->zoomTableView(m_aZoom);
             }
             break;
         default:
@@ -686,7 +688,7 @@ void SAL_CALL OQueryController::initialize( const Sequence< Any >& aArguments ) 
             }
             OSL_ENSURE(m_xFormatter.is(),"No NumberFormatter!");
         }
-        m_pWindow->getView()->initialize();
+        getContainer()->initialize();
         getUndoMgr()->Clear();
         if(m_bDesign && !m_sName.getLength())
             Execute(ID_BROWSER_ADDTABLE);
@@ -725,7 +727,7 @@ void OQueryController::setQueryComposer()
             try
             {
                 m_xComposer = xFactory->createQueryComposer();
-                m_pWindow->getView()->setStatement(m_sStatement);
+                getContainer()->setStatement(m_sStatement);
             }
             catch (Exception&)
             {
@@ -739,24 +741,21 @@ void OQueryController::setQueryComposer()
     }
 }
 // -----------------------------------------------------------------------------
-Reference< XWindow > OQueryController::getComponentWindow()
-{
-    return VCLUnoHelper::GetInterface(m_pWindow);
-}
-// -----------------------------------------------------------------------------
 sal_Bool OQueryController::Construct(Window* pParent)
 {
     // TODO: we have to check if we should create the text- or the design- view
-    m_pWindow = new OQueryContainerWindow(pParent,this,m_xMultiServiceFacatory);
-    //  OQueryTextView *pView = new OQueryTextView(pParent,this,m_xMultiServiceFacatory);
-    m_pWindow->getView()->Construct(NULL);
-    //  m_pView  = pView;
-    m_pView  = m_pWindow->getView()->getRealView();
-    OSingleDocumentController::Construct(pParent);
-    //  getView()->Show();
-    m_pWindow->Show();
-    return sal_True;
+
+    m_pView = new OQueryContainerWindow(pParent,this,m_xMultiServiceFacatory);
+
+    return OSingleDocumentController::Construct(pParent);
 }
+
+// -----------------------------------------------------------------------------
+OJoinDesignView* OQueryController::getJoinView()
+{
+    return getContainer()->getDesignView();
+}
+
 // -----------------------------------------------------------------------------
 sal_Bool SAL_CALL OQueryController::suspend(sal_Bool bSuspend) throw( RuntimeException )
 {
@@ -790,9 +789,16 @@ void OQueryController::AddSupportedFeatures()
 // -----------------------------------------------------------------------------
 ToolBox* OQueryController::CreateToolBox(Window* _pParent)
 {
-    if(m_pView)
-        return m_pView->getToolBox();
-    return new ToolBox(_pParent, ModuleRes(RID_BRW_QUERYDESIGN_TOOLBOX));
+//  if ( getContainer() && getContainer()->getDesignView() )
+//      return getContainer()->getDesignView()->getToolBox();
+//  return new ToolBox(_pParent, ModuleRes(RID_BRW_QUERYDESIGN_TOOLBOX));
+
+    ToolBox* pToolBox = new ToolBox(_pParent, ModuleRes(RID_BRW_QUERYDESIGN_TOOLBOX));
+
+//  if ( getContainer() && getContainer()->getDesignView() )
+//      getContainer()->getDesignView()->setToolBox(pToolBox);
+
+    return pToolBox;
 }
 // -----------------------------------------------------------------------------
 void OQueryController::setModified(sal_Bool _bModified)
@@ -806,15 +812,15 @@ void OQueryController::setModified(sal_Bool _bModified)
 void SAL_CALL OQueryController::disposing( const EventObject& Source ) throw(RuntimeException)
 {
     Reference< XFrame > xSource(Source.Source, UNO_QUERY);
-    if (xSource.is() && m_pWindow)
+    if (xSource.is() && getContainer())
     {
         if (xSource.get() == m_xCurrentFrame.get())
         {   // our frame is beeing disposed -> close the preview window (if we have one)
-            ::comphelper::disposeComponent(m_pWindow->getPreviewFrame());
+            ::comphelper::disposeComponent(getContainer()->getPreviewFrame());
         }
-        else if (xSource.get() == m_pWindow->getPreviewFrame().get())
+        else if (xSource.get() == getContainer()->getPreviewFrame().get())
         {
-            m_pWindow->disposingPreview();
+            getContainer()->disposingPreview();
         }
     }
 
@@ -842,7 +848,7 @@ void OQueryController::reconnect(sal_Bool _bUI)
         {
             m_bDesign = sal_False;
             // don't call Execute(SQL) because this changes the sql statement
-            m_pWindow->switchView();
+            getContainer()->switchView();
         }
         InvalidateAll();
     }
@@ -938,7 +944,7 @@ void OQueryController::executeQuery()
     {
         try
         {
-            m_pWindow->showPreview(m_xCurrentFrame);
+            getContainer()->showPreview(m_xCurrentFrame);
 
             URL aWantToDispatch;
             aWantToDispatch.Complete = ::rtl::OUString::createFromAscii(".component:DB/DataSourceBrowser");
@@ -998,7 +1004,7 @@ void OQueryController::executeQuery()
                 Reference< XComponent >  xComponent(m_xCurrentFrame->findFrame(sFrameName,nSearchFlags), UNO_QUERY);
                 if (xComponent.is())
                 {
-                    OSL_ENSURE(Reference< XFrame >(xComponent, UNO_QUERY).get() == m_pWindow->getPreviewFrame().get(),
+                    OSL_ENSURE(Reference< XFrame >(xComponent, UNO_QUERY).get() == getContainer()->getPreviewFrame().get(),
                         "OQueryController::executeQuery: oops ... which window do I have here?");
                     Reference< ::com::sun::star::lang::XEventListener> xEvtL((::cppu::OWeakObject*)this,UNO_QUERY);
                     xComponent->addEventListener(xEvtL);
@@ -1021,7 +1027,7 @@ void OQueryController::executeQuery()
 //      for(;bAllEmpty && aIter != m_vTableFieldDesc.end();++aIter)
 //          bAllEmpty = (*aIter)->IsEmpty();
 //
-//      ErrorBox aBox(getQueryView(), ModuleRes(bAllEmpty ? ERR_QRY_NOCRITERIA : ERR_QRY_NOSTATEMENT));
+//      ErrorBox aBox(getView(), ModuleRes(bAllEmpty ? ERR_QRY_NOCRITERIA : ERR_QRY_NOSTATEMENT));
 //      aBox.Execute();
 //  }
 }
@@ -1157,7 +1163,7 @@ void OQueryController::doSaveAsDoc(sal_Bool _bSaveAs)
 
                             // now we save the layout information
                             //  create the output stream
-                            m_pWindow->getView()->SaveUIConfig();
+                            getContainer()->SaveUIConfig();
                             Sequence< sal_Int8 > aOutputSeq;
                             {
                                 Reference< XOutputStream>       xOutStreamHelper = new OSequenceOutputStream(aOutputSeq);
@@ -1276,7 +1282,7 @@ void OQueryController::doSaveAsDoc(sal_Bool _bSaveAs)
 ::rtl::OUString OQueryController::translateStatement()
 {
     // now set the properties
-    m_sStatement = m_pWindow->getView()->getStatement();
+    m_sStatement = getContainer()->getStatement();
     ::rtl::OUString sTranslatedStmt;
     if(m_sStatement.getLength() && m_xComposer.is() && m_bEsacpeProcessing)
     {
@@ -1302,7 +1308,7 @@ void OQueryController::doSaveAsDoc(sal_Bool _bSaveAs)
     }
     else if(!m_sStatement.getLength())
     {
-        ErrorBox aBox( getQueryView(), ModuleRes( ERR_QRY_NOSELECT ) );
+        ErrorBox aBox( getView(), ModuleRes( ERR_QRY_NOSELECT ) );
         aBox.Execute();
     }
     else

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryTextView.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-15 13:19:03 $
+ *  last change: $Author: fs $ $Date: 2001-08-23 14:39:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,9 +58,14 @@
  *
  *
  ************************************************************************/
-#include "QueryViewSwitch.hxx"
 #ifndef DBAUI_QUERYVIEW_TEXT_HXX
 #include "QueryTextView.hxx"
+#endif
+#ifndef DBAUI_QUERYCONTAINERWINDOW_HXX
+#include "querycontainerwindow.hxx"
+#endif
+#ifndef DBAUI_QUERYVIEWSWITCH_HXX
+#include "QueryViewSwitch.hxx"
 #endif
 #ifndef _SV_TOOLBOX_HXX
 #include <vcl/toolbox.hxx>
@@ -106,176 +111,27 @@ using namespace dbaui;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::frame;
-// temporary class
-DBG_NAME(OQueryContainerWindow);
-OQueryContainerWindow::OQueryContainerWindow(Window* pParent, OQueryController* _pController,const Reference< XMultiServiceFactory >& _rFactory)
-    : Window(pParent)
-    ,m_pBeamer(NULL)
-    ,m_pView(NULL)
-{
-    DBG_CTOR(OQueryContainerWindow,NULL);
-    m_pView = new OQueryViewSwitch(this,_pController,_rFactory);
-
-    m_pSplitter = new Splitter(this,WB_VSCROLL);
-    m_pSplitter->Hide();
-    m_pSplitter->SetSplitHdl( LINK( this, OQueryContainerWindow, SplitHdl ) );
-    m_pSplitter->SetBackground( Wallpaper( Application::GetSettings().GetStyleSettings().GetDialogColor() ) );
-
-    // our UNO representation
-    m_xMe = VCLUnoHelper::CreateControlContainer(this);
-}
-// -----------------------------------------------------------------------------
-OQueryContainerWindow::~OQueryContainerWindow()
-{
-    if(m_xBeamer.is())
-        m_xBeamer->setComponent(NULL,NULL);
-    m_xBeamer   = NULL;
-    m_xMe       = NULL;
-    delete m_pBeamer;
-    delete m_pSplitter;
-    delete m_pView;
-    DBG_DTOR(OQueryContainerWindow,NULL);
-}
-// -----------------------------------------------------------------------------
-void OQueryContainerWindow::switchView()
-{
-    m_pView->switchView();
-}
-// -----------------------------------------------------------------------------
-void OQueryContainerWindow::GetFocus()
-{
-    m_pView->GetFocus();
-}
-// -----------------------------------------------------------------------------
-IMPL_LINK( OQueryContainerWindow, SplitHdl, void*, p )
-{
-    long nTest = m_pSplitter->GetPosPixel().Y();
-    m_pSplitter->SetPosPixel( Point( m_pSplitter->GetPosPixel().X(),m_pSplitter->GetSplitPosPixel() ) );
-    Resize();
-
-    return 0L;
-}
-// -----------------------------------------------------------------------------
-void OQueryContainerWindow::Resize()
-{
-    Window::Resize();
-    Size aSize = GetOutputSizePixel();
-    if(!m_pBeamer || !m_pBeamer->IsVisible())
-        m_pView->SetPosSizePixel(Point(0,0),aSize);
-    else
-    {
-        Point   aSplitPos(0,0);
-        Size    aSplitSize(0,0);
-
-        aSplitPos       = m_pSplitter->GetPosPixel();
-        aSplitSize      = m_pSplitter->GetOutputSizePixel();
-        aSplitSize.Width() = aSize.Width();
-
-        if( ( aSplitPos.Y() + aSplitSize.Height() ) > ( aSize.Height() ))
-            aSplitPos.Y() = aSize.Height() - aSplitSize.Height();
-
-        if( aSplitPos.Y() <= 0)
-            aSplitPos.Y() = LogicToPixel( Size(0,sal_Int32(aSize.Height() * 0.2) ), MAP_APPFONT ).Height();
-
-        Size aBeamer(aSize.Width(),aSplitPos.Y());
-        m_pBeamer->SetPosSizePixel(Point(0,0),aBeamer);
-        //set the size of the splitter
-        m_pSplitter->SetPosSizePixel( aSplitPos, Size( aSize.Width(), aSplitSize.Height()) );
-        m_pSplitter->SetDragRectPixel(  Rectangle( Point( 0, 0 ), aSize) );
-
-        Point aPos(0,aSplitPos.Y()+aSplitSize.Height());
-        m_pView->SetPosSizePixel(aPos,Size( aSize.Width(), aSize.Height() - aSplitSize.Height() - aSplitPos.Y() ));
-    }
-}
-// -----------------------------------------------------------------------------
-void OQueryContainerWindow::initialize(const Reference<XFrame>& _xFrame)
-{
-    // append our frame
-    Reference < XFramesSupplier > xSup(_xFrame,UNO_QUERY);
-    Reference < XFrames > xFrames = xSup->getFrames();
-    xFrames->append( m_xBeamer );
-}
-
-// -----------------------------------------------------------------------------
-void OQueryContainerWindow::disposingPreview()
-{
-    // here I know that we will be destroyed from the frame
-    m_pBeamer = NULL;
-    m_xBeamer = NULL;
-    m_pSplitter->Hide();
-    Resize();
-}
-// -----------------------------------------------------------------------------
-long OQueryContainerWindow::PreNotify( NotifyEvent& rNEvt )
-{
-    if(rNEvt.GetType() == EVENT_GETFOCUS && m_pView)
-    {
-        m_pView->getRealView()->getController()->InvalidateFeature(SID_CUT);
-        m_pView->getRealView()->getController()->InvalidateFeature(SID_COPY);
-        m_pView->getRealView()->getController()->InvalidateFeature(SID_PASTE);
-    }
-    return Window::PreNotify(rNEvt);
-}
-// -----------------------------------------------------------------------------
-void OQueryContainerWindow::showPreview(const Reference<XFrame>& _xFrame)
-{
-    if(!m_pBeamer)
-    {
-        m_pBeamer = new OBeamer(this);
-        m_xBeamer = Reference<XFrame>(m_pView->getORB()->createInstance(::rtl::OUString::createFromAscii("com.sun.star.frame.Frame")),UNO_QUERY);
-        OSL_ENSURE(m_xBeamer.is(),"No frame created!");
-        m_xBeamer->initialize( VCLUnoHelper::GetInterface ( m_pBeamer ) );
-        m_xBeamer->setName(FRAME_NAME_QUERY_PREVIEW);
-
-        // append our frame
-        Reference < XFramesSupplier > xSup(_xFrame,UNO_QUERY);
-        Reference < XFrames > xFrames = xSup->getFrames();
-        xFrames->append( m_xBeamer );
-
-        Size aSize = GetOutputSizePixel();
-        Size aBeamer(aSize.Width(),sal_Int32(aSize.Height()*0.33));
-
-        const long  nFrameHeight = LogicToPixel( Size( 0, 3 ), MAP_APPFONT ).Height();
-        Point aPos(0,aBeamer.Height()+nFrameHeight);
-
-        m_pBeamer->SetPosSizePixel(Point(0,0),aBeamer);
-        m_pBeamer->Show();
-
-        m_pSplitter->SetPosSizePixel( Point(0,aBeamer.Height()), Size(aSize.Width(),nFrameHeight) );
-        // a default pos for the splitter, so that the listbox is about 80 (logical) pixels wide
-        m_pSplitter->SetSplitPosPixel( aBeamer.Height() );
-        m_pView->SetPosSizePixel(aPos,Size(aBeamer.Width(),aSize.Height() - aBeamer.Height()-nFrameHeight));
-
-        m_pSplitter->Show();
-        Resize();
-    }
-}
 // -----------------------------------------------------------------------------
 
 // end of temp classes
 // -------------------------------------------------------------------------
 DBG_NAME(OQueryTextView);
-OQueryTextView::OQueryTextView(Window* _pParent,ToolBox*    _pToolBox)
+OQueryTextView::OQueryTextView(OQueryContainerWindow* _pParent)
     :Window(_pParent)
-    ,m_pToolBox(_pToolBox)
 {
     DBG_CTOR(OQueryTextView,NULL);
     m_pEdit = new OSqlEdit(this);
     m_pEdit->ClearModifyFlag();
     m_pEdit->SaveValue();
+    m_pEdit->SetPosPixel( Point( 0, 0 ) );
     m_pEdit->Show();
     //  m_pEdit->GrabFocus();
 }
 // -----------------------------------------------------------------------------
 OQueryTextView::~OQueryTextView()
 {
-    m_pToolBox = NULL;
     delete m_pEdit;
     DBG_DTOR(OQueryTextView,NULL);
-}
-// -------------------------------------------------------------------------
-void OQueryTextView::Construct(const Reference< ::com::sun::star::awt::XControlModel >& xModel)
-{
 }
 // -----------------------------------------------------------------------------
 void OQueryTextView::GetFocus()
@@ -287,16 +143,8 @@ void OQueryTextView::GetFocus()
 // -------------------------------------------------------------------------
 void OQueryTextView::Resize()
 {
-    Size aToolBoxSize;
-    ToolBox* pToolBox = m_pToolBox;
-    if(pToolBox)
-        aToolBoxSize = pToolBox->GetOutputSizePixel();
-
-    Size aSize = GetOutputSizePixel();
-    Point aTopLeft(0,0);
-    aTopLeft.Y() += aToolBoxSize.Height();
-    m_pEdit->SetPosSizePixel(aTopLeft,Size(aSize.Width(),aSize.Height()-aTopLeft.Y()));
-    m_pToolBox->SetPosSizePixel(Point(0,0),Size(aSize.Width(),aToolBoxSize.Height()));
+    Window::Resize();
+    m_pEdit->SetSizePixel( GetOutputSizePixel() );
 }
 // -----------------------------------------------------------------------------
 ::rtl::OUString OQueryTextView::getStatement()
@@ -311,7 +159,7 @@ void OQueryTextView::setReadOnly(sal_Bool _bReadOnly)
 // -----------------------------------------------------------------------------
 void OQueryTextView::clear()
 {
-    SfxUndoManager* pUndoMgr = static_cast<OQueryContainerWindow*>(GetParent())->getView()->getRealView()->getController()->getUndoMgr();
+    SfxUndoManager* pUndoMgr = getContainerWindow()->getDesignView()->getController()->getUndoMgr();
     OSqlEditUndoAct* pUndoAct = new OSqlEditUndoAct( m_pEdit );
 
     pUndoAct->SetOriginalText( m_pEdit->GetText() );
@@ -350,13 +198,13 @@ void OQueryTextView::cut()
 {
     if(!m_pEdit->IsInAccelAct() )
         m_pEdit->Cut();
-    static_cast<OQueryContainerWindow*>(GetParent())->getView()->getRealView()->getController()->setModified(sal_True);
+    getContainerWindow()->getDesignView()->getController()->setModified(sal_True);
 }
 // -----------------------------------------------------------------------------
 void OQueryTextView::paste()
 {
     if(!m_pEdit->IsInAccelAct() )
         m_pEdit->Paste();
-    static_cast<OQueryContainerWindow*>(GetParent())->getView()->getRealView()->getController()->setModified(sal_True);
+    getContainerWindow()->getDesignView()->getController()->setModified(sal_True);
 }
 // -----------------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryDesignView.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-15 13:41:58 $
+ *  last change: $Author: fs $ $Date: 2001-08-23 14:39:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,6 +142,9 @@
 #ifndef DBAUI_TOOLS_HXX
 #include "UITools.hxx"
 #endif
+#ifndef DBAUI_QUERYCONTAINERWINDOW_HXX
+#include "querycontainerwindow.hxx"
+#endif
 
 using namespace ::dbaui;
 using namespace ::utl;
@@ -153,7 +156,7 @@ using namespace ::com::sun::star::sdbc;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
 
-OQueryDesignView::OQueryDesignView(Window* _pParent, OQueryController* _pController,const Reference< XMultiServiceFactory >& _rFactory)
+OQueryDesignView::OQueryDesignView(OQueryContainerWindow* _pParent, OQueryController* _pController,const Reference< XMultiServiceFactory >& _rFactory)
     :OQueryView(_pParent,_pController,_rFactory)
     ,m_aSplitter( this )
     ,m_eChildFocus(NONE)
@@ -200,10 +203,10 @@ IMPL_LINK( OQueryDesignView, SplitHdl, void*, p )
     return 0L;
 }
 // -------------------------------------------------------------------------
-void OQueryDesignView::Construct(const Reference< ::com::sun::star::awt::XControlModel >& xModel)
+void OQueryDesignView::Construct()
 {
     m_pTableView    = new OQueryTableView(m_pScrollWindow,this);
-    OQueryView::Construct(xModel); // initialize m_xMe
+    OQueryView::Construct();
 }
 // -----------------------------------------------------------------------------
 void OQueryDesignView::initialize()
@@ -219,7 +222,7 @@ void OQueryDesignView::initialize()
     m_pSelectionBox->Fill();
 }
 // -------------------------------------------------------------------------
-void OQueryDesignView::resizeControl(Rectangle& _rPlayground)
+void OQueryDesignView::resizeDocumentView(Rectangle& _rPlayground)
 {
     Point aPlaygroundPos( _rPlayground.TopLeft() );
     Size aPlaygroundSize( _rPlayground.GetSize() );

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinDesignView.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-15 13:41:58 $
+ *  last change: $Author: fs $ $Date: 2001-08-23 14:39:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,7 +149,7 @@ OJoinDesignView::~OJoinDesignView()
     delete m_pScrollWindow;
 }
 // -------------------------------------------------------------------------
-void OJoinDesignView::Construct(const Reference< ::com::sun::star::awt::XControlModel >& xModel)
+void OJoinDesignView::Construct()
 {
     m_pScrollWindow->setTableView(m_pTableView);
     m_pScrollWindow->Show();
@@ -158,7 +158,7 @@ void OJoinDesignView::Construct(const Reference< ::com::sun::star::awt::XControl
     m_pAddTabDlg = new OAddTableDlg(m_pTableView);
     SetBackground( Wallpaper( Application::GetSettings().GetStyleSettings().GetFaceColor()) );
 
-    ODataView::Construct(xModel); // initialize m_xMe
+    ODataView::Construct();
 }
 // -----------------------------------------------------------------------------
 void OJoinDesignView::initialize()
@@ -166,7 +166,7 @@ void OJoinDesignView::initialize()
     getAddTableDialog()->Update();
 }
 // -------------------------------------------------------------------------
-void OJoinDesignView::resizeControl(Rectangle& _rPlayground)
+void OJoinDesignView::resizeDocumentView(Rectangle& _rPlayground)
 {
     m_pScrollWindow->SetPosSizePixel( _rPlayground.TopLeft(), _rPlayground.GetSize() );
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JoinController.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-15 13:19:03 $
+ *  last change: $Author: fs $ $Date: 2001-08-23 14:39:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,6 +201,12 @@ void SAL_CALL OJoinController::disposing( const EventObject& _rSource ) throw(Ru
 }
 
 // -----------------------------------------------------------------------------
+OJoinDesignView* OJoinController::getJoinView()
+{
+    return static_cast< OJoinDesignView* >( getView() );
+}
+
+// -----------------------------------------------------------------------------
 void OJoinController::disposing()
 {
     OJoinController_BASE::disposing();
@@ -301,7 +307,7 @@ FeatureState OJoinController::GetState(sal_uInt16 _nId)
             aReturn.bEnabled = isConnected() && m_bModified;
             break;
         case ID_BROWSER_ADDTABLE:
-            if(aReturn.bEnabled = static_cast<OJoinDesignView*>(m_pView)->getTableView()->IsAddAllowed())
+            if(aReturn.bEnabled = getJoinView()->getTableView()->IsAddAllowed())
                 aReturn.aState = ::cppu::bool2any(m_pAddTabDlg && m_pAddTabDlg->IsVisible());
             else
                 aReturn.aState = ::cppu::bool2any(sal_False);
@@ -326,7 +332,7 @@ void OJoinController::Execute(sal_uInt16 _nId)
             break;
         case ID_BROWSER_EDITDOC:
             m_bEditable = !m_bEditable;
-            static_cast<OJoinDesignView*>(m_pView)->setReadOnly(!m_bEditable);
+            getJoinView()->setReadOnly(!m_bEditable);
             break;
         case ID_BROWSER_UNDO:
             m_aUndoManager.Undo();
@@ -338,13 +344,13 @@ void OJoinController::Execute(sal_uInt16 _nId)
             break;
         case ID_BROWSER_ADDTABLE:
             if(!m_pAddTabDlg)
-                m_pAddTabDlg = static_cast<OJoinDesignView*>(m_pView)->getAddTableDialog();
+                m_pAddTabDlg = getJoinView()->getAddTableDialog();
             if(m_pAddTabDlg->IsVisible())
             {
                 m_pAddTabDlg->Show(!m_pAddTabDlg->IsVisible());
                 m_pView->GrabFocus();
             }
-            else if(static_cast<OJoinDesignView*>(m_pView)->getTableView()->IsAddAllowed())
+            else if(getJoinView()->getTableView()->IsAddAllowed())
                 m_pAddTabDlg->Show(!m_pAddTabDlg->IsVisible());
             break;
     }

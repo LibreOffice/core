@@ -2,9 +2,9 @@
  *
  *  $RCSfile: QueryViewSwitch.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-15 13:41:58 $
+ *  last change: $Author: fs $ $Date: 2001-08-23 14:39:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,9 @@
 #ifndef DBAUI_QUERYVIEW_TEXT_HXX
 #include "QueryTextView.hxx"
 #endif
+#ifndef DBAUI_QUERYCONTAINERWINDOW_HXX
+#include "querycontainerwindow.hxx"
+#endif
 #ifndef _SV_TOOLBOX_HXX
 #include <vcl/toolbox.hxx>
 #endif
@@ -88,67 +91,48 @@
 #ifndef DBAUI_SQLEDIT_HXX
 #include "sqledit.hxx"
 #endif
-
+#ifndef DBAUI_QUERYCONTAINERWINDOW_HXX
+#include "querycontainerwindow.hxx"
+#endif
 
 using namespace dbaui;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
 
 DBG_NAME(OQueryViewSwitch);
-OQueryViewSwitch::OQueryViewSwitch(Window* _pParent, OQueryController* _pController,const Reference< XMultiServiceFactory >& _rFactory)
-    //  :OQueryView(_pParent,_pController,_rFactory)
+OQueryViewSwitch::OQueryViewSwitch(OQueryContainerWindow* _pParent, OQueryController* _pController,const Reference< XMultiServiceFactory >& _rFactory)
 {
     DBG_CTOR(OQueryViewSwitch,NULL);
-    ToolBox* pToolBox = new ToolBox(_pParent, ModuleRes(RID_BRW_QUERYDESIGN_TOOLBOX));
 
-    m_pTextView     = new OQueryTextView(_pParent,pToolBox);
+    m_pTextView     = new OQueryTextView(_pParent);
     m_pDesignView   = new OQueryDesignView(_pParent,_pController,_rFactory);
 
-    m_pDesignView->setToolBox(pToolBox);
+    // initially be in SQL mode
     m_pTextView->Show();
-    pToolBox->SetParent(m_pTextView); // change owner ship
-    pToolBox->Show();
-
-    if(pToolBox && m_pTextView->IsVisible())
-    {
-        pToolBox->HideItem(ID_BROWSER_QUERY_DISTINCT_VALUES);
-        pToolBox->HideItem(ID_BROWSER_QUERY_VIEW_ALIASES);
-        pToolBox->HideItem(ID_BROWSER_QUERY_VIEW_TABLES);
-        pToolBox->HideItem(ID_BROWSER_QUERY_VIEW_FUNCTIONS);
-        pToolBox->HideItem(ID_BROWSER_ADDTABLE);
-        pToolBox->HideItem(ID_QUERY_ZOOM_IN);
-        pToolBox->HideItem(ID_QUERY_ZOOM_OUT);
-        //  ToolBoxItemType eType = pToolBox->GetItemType(pToolBox->GetItemPos(ID_BROWSER_SQL)+1);
-        //  pToolBox->HideItem(pToolBox->GetItemId(pToolBox->GetItemPos(ID_BROWSER_SQL))+1); // hide the separator
-    }
 }
 // -----------------------------------------------------------------------------
 OQueryViewSwitch::~OQueryViewSwitch()
 {
-    ToolBox* pToolBox = m_pDesignView->getToolBox();
-    pToolBox->SetParent(m_pDesignView); // change owner ship again to real owner
+    DELETEZ( m_pTextView );
+    DELETEZ( m_pDesignView );
 
-    delete m_pTextView;
-    //  delete m_pDesignView; // will be deleted by XFrame
     DBG_DTOR(OQueryViewSwitch,NULL);
 }
 // -------------------------------------------------------------------------
-void OQueryViewSwitch::Construct(const Reference< ::com::sun::star::awt::XControlModel >& xModel)
+void OQueryViewSwitch::Construct()
 {
-    m_pDesignView->Construct(xModel); // initialize the table view
-    //  OQueryView::Construct(xModel); // initialize m_xMe
-    //  m_pTextView->Construct(xModel);
+    m_pDesignView->Construct( );
 
 }
 // -----------------------------------------------------------------------------
 void OQueryViewSwitch::initialize()
 {
     m_pDesignView->initialize();
-    if(static_cast<OQueryController*>(m_pDesignView->getController())->isDesignMode())
+    if (static_cast<OQueryController*>(m_pDesignView->getController())->isDesignMode())
         switchView();
 }
 // -------------------------------------------------------------------------
-void OQueryViewSwitch::resizeControl(Rectangle& _rPlayground)
+void OQueryViewSwitch::resizeDocumentView(Rectangle& _rPlayground)
 {
     m_pTextView->SetPosSizePixel( _rPlayground.TopLeft(), _rPlayground.GetSize() );
     m_pDesignView->SetPosSizePixel( _rPlayground.TopLeft(), _rPlayground.GetSize() );
@@ -183,9 +167,9 @@ void OQueryViewSwitch::clear()
 // -----------------------------------------------------------------------------
 void OQueryViewSwitch::GetFocus()
 {
-    if(m_pTextView->IsVisible())
+    if ( m_pTextView && m_pTextView->IsVisible() )
         m_pTextView->GetFocus();
-    else
+    else if ( m_pDesignView && m_pDesignView->IsVisible() )
         m_pDesignView->GetFocus();
 }
 // -----------------------------------------------------------------------------
@@ -242,54 +226,70 @@ void OQueryViewSwitch::paste()
         m_pDesignView->paste();
 }
 // -----------------------------------------------------------------------------
+OQueryContainerWindow* OQueryViewSwitch::getContainer() const
+{
+    Window* pDesignParent = getDesignView() ? getDesignView()->GetParent() : NULL;
+    return static_cast< OQueryContainerWindow* >( pDesignParent );
+}
+
+// -----------------------------------------------------------------------------
 void OQueryViewSwitch::switchView()
 {
-    m_pTextView->Show(!static_cast<OQueryController*>(m_pDesignView->getController())->isDesignMode());
+    sal_Bool bGraphicalDesign = static_cast<OQueryController*>(m_pDesignView->getController())->isDesignMode();
 
-    ToolBox* pToolBox = m_pDesignView->getToolBox();
-    if(pToolBox && m_pTextView->IsVisible())
+    m_pTextView->Show   ( !bGraphicalDesign );
+    m_pDesignView->Show ( bGraphicalDesign );
+
+    OQueryContainerWindow* pContainer = getContainer();
+    ToolBox* pToolBox = pContainer ? pContainer->getToolBox() : NULL;
+    DBG_ASSERT( pToolBox, "OQueryViewSwitch::switchView: no toolbox!" );
+
+    if ( m_pTextView->IsVisible() )
     {
         m_pDesignView->stopTimer();
         m_pTextView->getSqlEdit()->startTimer();
-        pToolBox->SetParent(m_pTextView); // change owner ship
-        m_pDesignView->Show(FALSE);
-        pToolBox->HideItem(ID_BROWSER_QUERY_DISTINCT_VALUES);
-        pToolBox->HideItem(ID_BROWSER_QUERY_VIEW_ALIASES);
-        pToolBox->HideItem(ID_BROWSER_QUERY_VIEW_TABLES);
-        pToolBox->HideItem(ID_BROWSER_QUERY_VIEW_FUNCTIONS);
-        pToolBox->HideItem(ID_BROWSER_ADDTABLE);
-        pToolBox->HideItem(ID_QUERY_ZOOM_IN);
-        pToolBox->HideItem(ID_QUERY_ZOOM_OUT);
-        pToolBox->ShowItem(ID_BROWSER_ESACPEPROCESSING);
-        //  ToolBoxItemType eType = pToolBox->GetItemType(pToolBox->GetItemPos(ID_BROWSER_SQL)+1);
-        //  pToolBox->HideItem(pToolBox->GetItemId(pToolBox->GetItemPos(ID_BROWSER_SQL))+1); // hide the separator
+
         m_pTextView->clear();
         m_pTextView->setStatement(static_cast<OQueryController*>(m_pDesignView->getController())->getStatement());
+
+        if ( pToolBox )
+        {
+            pToolBox->HideItem(ID_BROWSER_QUERY_DISTINCT_VALUES);
+            pToolBox->HideItem(ID_BROWSER_QUERY_VIEW_ALIASES);
+            pToolBox->HideItem(ID_BROWSER_QUERY_VIEW_TABLES);
+            pToolBox->HideItem(ID_BROWSER_QUERY_VIEW_FUNCTIONS);
+            pToolBox->HideItem(ID_BROWSER_ADDTABLE);
+            pToolBox->HideItem(ID_QUERY_ZOOM_IN);
+            pToolBox->HideItem(ID_QUERY_ZOOM_OUT);
+            pToolBox->ShowItem(ID_BROWSER_ESACPEPROCESSING);
+        }
     }
-    else if(pToolBox)
+    else
     {
         // we have to stop the sqledit from our textview
-
-        pToolBox->SetParent(m_pDesignView); // change owner ship
         m_pTextView->getSqlEdit()->stopTimer();
-        //  pToolBox->ShowItem(pToolBox->GetItemId(pToolBox->GetItemPos(ID_BROWSER_ADDTABLE)-1)); // hide the separator
-        pToolBox->HideItem(ID_BROWSER_ESACPEPROCESSING);
-        pToolBox->ShowItem(ID_BROWSER_ADDTABLE);
-        pToolBox->ShowItem(ID_BROWSER_QUERY_VIEW_FUNCTIONS);
-        pToolBox->ShowItem(ID_BROWSER_QUERY_VIEW_TABLES);
-        pToolBox->ShowItem(ID_BROWSER_QUERY_VIEW_ALIASES);
-        pToolBox->ShowItem(ID_BROWSER_QUERY_DISTINCT_VALUES);
-        pToolBox->ShowItem(ID_QUERY_ZOOM_IN);
-        pToolBox->ShowItem(ID_QUERY_ZOOM_OUT);
 
-        //  m_pDesignView->clear();
+        if ( pToolBox )
+        {
+            pToolBox->HideItem(ID_BROWSER_ESACPEPROCESSING);
+            pToolBox->ShowItem(ID_BROWSER_ADDTABLE);
+            pToolBox->ShowItem(ID_BROWSER_QUERY_VIEW_FUNCTIONS);
+            pToolBox->ShowItem(ID_BROWSER_QUERY_VIEW_TABLES);
+            pToolBox->ShowItem(ID_BROWSER_QUERY_VIEW_ALIASES);
+            pToolBox->ShowItem(ID_BROWSER_QUERY_DISTINCT_VALUES);
+            pToolBox->ShowItem(ID_QUERY_ZOOM_IN);
+            pToolBox->ShowItem(ID_QUERY_ZOOM_OUT);
+        }
+
         getAddTableDialog()->Update();
         m_pDesignView->InitFromParseNode();
+
         // only show the view when the data is inserted
-        m_pDesignView->Show(static_cast<OQueryController*>(m_pDesignView->getController())->isDesignMode());
         m_pDesignView->startTimer();
     }
-    m_pDesignView->Resize();
+
+    if ( pContainer )
+        pContainer->Resize();
 
     m_pDesignView->getController()->getUndoMgr()->Clear();
     m_pDesignView->getController()->InvalidateFeature(ID_BROWSER_UNDO);
@@ -335,6 +335,7 @@ void OQueryViewSwitch::SaveUIConfig()
 void OQueryViewSwitch::SetPosSizePixel( Point _rPt,Size _rSize)
 {
     m_pDesignView->SetPosSizePixel( _rPt,_rSize);
+    m_pDesignView->Resize();
     m_pTextView->SetPosSizePixel( _rPt,_rSize);
 }
 // -----------------------------------------------------------------------------
