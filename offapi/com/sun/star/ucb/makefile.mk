@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.12 $
+#   $Revision: 1.13 $
 #
-#   last change: $Author: sb $ $Date: 2001-02-09 12:41:03 $
+#   last change: $Author: sb $ $Date: 2001-03-20 13:17:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -160,6 +160,8 @@ IDLFILES=\
     RememberAuthentication.idl\
     RemoteAccessContentProvider.idl\
     RemoteContentProviderAcceptor.idl\
+    RemoteContentProviderChangeAction.idl\
+    RemoteContentProviderChangeEvent.idl\
     RecipientInfo.idl\
     ResultSetException.idl\
     Rule.idl\
@@ -229,6 +231,9 @@ IDLFILES=\
     XRecycler.idl\
     XRemoteContentProviderAcceptor.idl\
     XRemoteContentProviderActivator.idl\
+    XRemoteContentProviderChangeListener.idl\
+    XRemoteContentProviderChangeNotifier.idl\
+    XRemoteContentProviderConnectionControl.idl\
     XRemoteContentProviderDistributor.idl\
     XRemoteContentProviderDoneListener.idl\
     XRemoteContentProviderSupplier.idl\
