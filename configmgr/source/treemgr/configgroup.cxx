@@ -2,9 +2,9 @@
  *
  *  $RCSfile: configgroup.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jb $ $Date: 2002-08-13 13:33:45 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 13:39:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -155,7 +155,7 @@ void GroupUpdateHelper::implValidateNode(Tree const& aTree, ValueRef const& aNod
     if (!aTree.isValidNode(aNode))
         throw Exception("INTERNAL ERROR: Group Member Update: changed node does not match tree");
 
-    if (!aTree.getAttributes(aNode).bWritable)
+    if (aTree.getAttributes(aNode).isReadonly())
         throw ConstraintViolation( "Group Member Update: Node is read-only !" );
 
 }
@@ -290,7 +290,7 @@ UnoAny GroupUpdater::implValidateValue(Tree const& aTree, ValueRef const& aNode,
 
     if (!aValue.hasValue())
     {
-        if (!aTree.getAttributes(aNode).bNullable)
+        if (!aTree.getAttributes(aNode).isNullable())
         {
             rtl::OString sError("Group Member Update: Node (");
             sError += OUSTRING2ASCII(aTree.getName(aNode).toString());
