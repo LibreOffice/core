@@ -2,9 +2,9 @@
  *
  *  $RCSfile: addresstemplate.src,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: fs $ $Date: 2001-07-19 07:04:44 $
+ *  last change: $Author: kz $ $Date: 2001-07-27 20:06:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -632,7 +632,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     Text[ italian ] = "Posizione";
     Text[ danish ] = "Start_ved";
     Text[ swedish ] = "Befattning";
-    Text[ polish ] = "Stanowisko";
+    Text[ polish ] = "Pozycja";
     Text[ portuguese_brazilian ] = "Position";
     Text[ japanese ] = "•”";
     Text[ korean ] = "Αχΐ§";
@@ -1105,7 +1105,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     Text[ greek ] = "Τηλέφωνο (Διάφορα)";
     Text[ dutch ] = "Telefoon andere";
     Text[ french ] = "Tιl. autre";
-    Text[ spanish ] = "Telιfono, otros";
+    Text[ spanish ] = "Telιfono (otros)";
     Text[ italian ] = "Telefono (altro)";
     Text[ danish ] = "Telephon other";
     Text[ swedish ] = "Telefon annan";
@@ -1130,7 +1130,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
     Text[ greek ] = "Ημερολόγιο";
     Text[ dutch ] = "Agenda";
     Text[ french ] = "Calendrier";
-    Text[ spanish ] = "Agenda";
+    Text[ spanish ] = "Calendario";
     Text[ italian ] = "Calendario";
     Text[ danish ] = "Calendar";
     Text[ swedish ] = "Kalender";
@@ -1171,5 +1171,6 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
             Text[ finnish ] = "Kutsu";
         };
 };
+
 
 
