@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view3d.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: thb $ $Date: 2001-07-17 07:04:30 $
+ *  last change: $Author: aw $ $Date: 2002-05-31 11:23:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1800,9 +1800,9 @@ void E3dView::ShowMirrored ()
 
 E3dView::~E3dView ()
 {
-    __DELETE(nPolyCnt) pMirrorPolygon;
-    __DELETE(nPolyCnt) pMirroredPolygon;
-    __DELETE(nPolyCnt) pMarkedObjs;
+    /*#90353#*/delete [] pMirrorPolygon;
+    /*#90353#*/delete [] pMirroredPolygon;
+    /*#90353#*/delete [] pMarkedObjs;
 }
 
 /*************************************************************************
@@ -1859,9 +1859,9 @@ void E3dView::ShowMirrorPolygons (Point aMirrorPoint1,
 
 void E3dView::ResetCreationActive ()
 {
-    __DELETE(nPolyCnt) pMirrorPolygon;
-    __DELETE(nPolyCnt) pMirroredPolygon;
-    __DELETE(nPolyCnt) pMarkedObjs;
+    /*#90353#*/delete [] pMirrorPolygon;
+    /*#90353#*/delete [] pMirroredPolygon;
+    /*#90353#*/delete [] pMarkedObjs;
 
     pMarkedObjs       = 0;
     pMirrorPolygon    =
