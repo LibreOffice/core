@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.14 $
+#   $Revision: 1.15 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-15 13:51:32 $
+#   last change: $Author: kz $ $Date: 2003-08-25 15:08:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -99,14 +99,15 @@ SLOFILES=			$(SLO)$/formcontrolcontainer.obj \
                     $(SLO)$/datman.obj	\
 
 
-SRCFILES=			bib.src	 \
+SRS1NAME=$(TARGET)
+SRC1FILES=			bib.src	 \
                     datman.src \
                     sections.src \
                     menu.src	 \
                     toolbar.src
 
 RESLIB1NAME=bib
-RESLIB1SRSFILES= $(SRS)/bib.srs
+RESLIB1SRSFILES= $(SRS)$/bib.srs
 RESLIB1DEPN= bib.src bib.hrc
 
 
