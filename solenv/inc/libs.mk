@@ -2,9 +2,9 @@
 #
 #   $RCSfile: libs.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: kz $ $Date: 2001-03-29 07:18:06 $
+#   last change: $Author: hjs $ $Date: 2001-04-11 09:10:15 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -131,6 +131,8 @@ EXPATASCII3RDLIB=$(L)$/libexpat_xmltok.x $(L)$/libascii_expat_xmlparse.x
 ZLIB3RDLIB=$(L)$/libzlib.x
 JPEG3RDLIB=$(L)$/libjpeglib.x
 NEON3RDLIB=$(L)$/libneon.x
+BERKELEYLIB=$(L)$/libdb-3.2.x
+BERKELEYCPPLIB=$(L)$/libdb_cxx-3.2.x
 SFX2LIB=$(L)$/libsfx$(UPD)$(DLLPOSTFIX).x
 SFXLIB=$(L)$/libsfx$(UPD)$(DLLPOSTFIX).x
 SFXDEBUGLIB=
@@ -259,6 +261,8 @@ EXPATASCII3RDLIB=-lascii_expat_xmlparse -lexpat_xmltok
 ZLIB3RDLIB=-lzlib
 JPEG3RDLIB=-ljpeglib
 NEON3RDLIB=-lneon
+BERKELEYLIB=-ldb-3.2
+BERKELEYCPPLIB=-ldb_cxx-3.2
 SFX2LIB=-lsfx$(UPD)$(DLLPOSTFIX)
 SFXLIB=-lsfx$(UPD)$(DLLPOSTFIX)
 SFXDEBUGLIB=
@@ -452,6 +456,8 @@ EXPATASCII3RDLIB=$(LIBPRE) expat_xmltok.lib $(LIBPRE) ascii_expat_xmlparse.lib
 ZLIB3RDLIB=$(LIBPRE) zlib.lib
 JPEG3RDLIB=$(LIBPRE) jpeglib.lib
 NEON3RDLIB=$(LIBPRE) neon.lib
+BERKELEYLIB=$(LIBPRE) libdb32.lib
+BERKELEYCPPLIB=
 .IF "$(OLD_CHAOS)"==""
 CHAOSLIB=$(LIBPRE) ichaos.lib
 .ENDIF
