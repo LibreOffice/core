@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servicemanager.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dbo $ $Date: 2001-05-11 13:43:43 $
+ *  last change: $Author: jl $ $Date: 2001-06-18 10:32:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,7 @@
 
 #include <hash_map>
 #include <hash_set>
+#include <list>
 
 #ifndef _UNO_MAPPING_HXX_
 #include <uno/mapping.hxx>
@@ -96,7 +97,9 @@
 #ifndef _CPPUHELPER_TYPEPROVIDER_HXX_
 #include <cppuhelper/typeprovider.hxx>
 #endif
-
+#ifndef _RTL_UNLOAD_H_
+#include <rtl/unload.h>
+#endif
 #include <cppuhelper/component_context.hxx>
 #include <cppuhelper/bootstrap.hxx>
 
@@ -115,6 +118,7 @@
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
+#include <com/sun/star/uno/XUnloadingPreference.hpp>
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
@@ -127,8 +131,13 @@ using namespace osl;
 using namespace rtl;
 using namespace std;
 
+
+
 namespace stoc_smgr
 {
+
+
+
 
 /*****************************************************************************
     helper functions
@@ -353,6 +362,8 @@ struct OServiceManagerMutex
     Mutex                           m_mutex;
 };
 
+extern "C" void SAL_CALL smgrUnloadingListener(void* id);
+
 class OServiceManager
     : public XMultiServiceFactory
     , public XMultiComponentFactory
@@ -363,6 +374,8 @@ class OServiceManager
     , public OComponentHelper
 {
 public:
+    friend void SAL_CALL smgrUnloadingListener(void* id);
+
     OServiceManager( Reference< XComponentContext > const & xContext );
     ~OServiceManager();
 
@@ -424,12 +437,15 @@ public:
     virtual void SAL_CALL dispose() throw(::com::sun::star::uno::RuntimeException);
 
 protected:
+
     sal_Bool haveFactoryWithThisImplementation(const OUString& aImplName);
 
     virtual Reference< XInterface > queryServiceFactory(const OUString& aServiceName);
 
     Reference< XComponentContext >  m_xContext;
+    sal_Int32 m_nUnloadingListenerId;
 private:
+
     Reference<XEventListener >      getFactoryListener();
 
 
@@ -446,6 +462,7 @@ OServiceManager::OServiceManager( Reference< XComponentContext > const & xContex
     : OComponentHelper( m_mutex )
     , m_xContext( xContext )
 {
+    m_nUnloadingListenerId= rtl_addUnloadingListener( smgrUnloadingListener, this);
 }
 
 /**
@@ -453,6 +470,7 @@ OServiceManager::OServiceManager( Reference< XComponentContext > const & xContex
  */
 OServiceManager::~OServiceManager()
 {
+    rtl_removeUnloadingListener( m_nUnloadingListenerId );
 }
 
 // OComponentHelper
@@ -1020,6 +1038,7 @@ ORegistryServiceManager::ORegistryServiceManager( Reference< XComponentContext >
     , m_init( false )
 #endif
 {
+    m_nUnloadingListenerId= rtl_addUnloadingListener( smgrUnloadingListener, this);
 }
 
 /**
@@ -1027,6 +1046,7 @@ ORegistryServiceManager::ORegistryServiceManager( Reference< XComponentContext >
  */
 ORegistryServiceManager::~ORegistryServiceManager()
 {
+    rtl_removeUnloadingListener( m_nUnloadingListenerId);
 }
 
 // OComponentHelper
@@ -1416,8 +1436,55 @@ static Reference<XInterface > SAL_CALL ORegistryServiceManager_CreateInstance(
 {
     return Reference<XInterface >( SAL_STATIC_CAST( XInterface *, SAL_STATIC_CAST( OWeakObject *, new ORegistryServiceManager( xContext ) ) ) );
 }
+/* This is the listener function used by the service manager in order
+to implement the unloading mechanism, id is the this pointer of the
+service manager instances. On notification, that is the function is being called
+by rtl_unloadUnusedModules, the cached factroies are being removed from the
+service manager.
+*/
+extern "C" void SAL_CALL smgrUnloadingListener(void* id)
+{
+      stoc_smgr::OServiceManager* pMgr= reinterpret_cast<stoc_smgr::OServiceManager*>( id);
+    Reference<XInterface> xInt( static_cast<OWeakObject*>(pMgr) );
+    Reference<XEnumerationAccess>xEnumAcc( xInt, UNO_QUERY);
+    Reference<XSet>xSet( xInt, UNO_QUERY);
+
+    if(xEnumAcc.is() && xSet.is())
+    {
+        Reference<XEnumeration> xEnum= xEnumAcc->createEnumeration();
+        if( xEnum.is())
+        {
+            try
+            {
+                while( xEnum->hasMoreElements())
+                {
+                    Any val= xEnum->nextElement();
+
+                    Reference<XInterface> xIntFactory;
+                    if( val >>= xIntFactory)
+                    {
+                        Reference<XUnloadingPreference>xUnload( xIntFactory, UNO_QUERY);
+                        if( xUnload.is())
+                            if( xUnload->releaseOnNotification())
+                                xSet->remove( val);
+                        else
+                            xSet->remove( val);
+                    }
+                }
+            }
+            catch( NoSuchElementException)
+            {
+            }
+            catch( WrappedTargetException)
+            {
+            }
+        }
+    }
+}
 
 } // namespace
+
+
 
 
 
