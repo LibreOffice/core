@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellbindinghelper.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 11:00:47 $
+ *  last change: $Author: hr $ $Date: 2004-04-13 11:22:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,6 +139,15 @@ namespace pcr
 
     namespace
     {
+#if (_MSC_VER < 1300)
+        using ::com::sun::star::uno::Reference;
+        using ::com::sun::star::uno::XInterface;
+        using ::com::sun::star::uno::UNO_QUERY;
+        using ::com::sun::star::frame::XModel;
+        using ::com::sun::star::drawing::XDrawPage;
+        using ::com::sun::star::container::XChild;
+#endif // _MSC_VER < 1300
+
         //....................................................................
 
 #if (_MSC_VER < 1300)
@@ -213,9 +222,8 @@ namespace pcr
     //= CellBindingHelper
     //========================================================================
     //------------------------------------------------------------------------
-    CellBindingHelper::CellBindingHelper( const Reference< XMultiServiceFactory >& _rxORB, const Reference< XPropertySet >& _rxControlModel )
+    CellBindingHelper::CellBindingHelper( const Reference< XPropertySet >& _rxControlModel )
         :m_xControlModel( _rxControlModel )
-        ,m_xORB( _rxORB )
     {
         OSL_ENSURE( m_xControlModel.is(), "CellBindingHelper::CellBindingHelper: invalid control model!" );
 
