@@ -26,3 +26,9 @@ mkdir: %_DEST%\inc%_EXT%\ucbhelper
 ..\inc\ucbhelper\activedatasink.hxx %_DEST%\inc%_EXT%\ucbhelper\activedatasink.hxx
 ..\inc\ucbhelper\commandenvironmentproxy.hxx %_DEST%\inc%_EXT%\ucbhelper\commandenvironmentproxy.hxx
 ..\version.mk %_DEST%\inc%_EXT%\ucbhelper\version.mk
+
+..\%__SRC%\lib\libstatic*.dylib %_DEST%\lib%_EXT%\libstatic*.dylib
+..\%__SRC%\misc\*staticdatamembers.cxx %_DEST%\inc%_EXT%\*staticdatamembers.cxx
+..\%__SRC%\misc\*staticdatamembers.hxx %_DEST%\inc%_EXT%\*staticdatamembers.hxx
+
+dos: sh -c "if test %OS% = MACOSX; then create-bundle %_DEST%\lib%_EXT%\*.dylib; fi"
