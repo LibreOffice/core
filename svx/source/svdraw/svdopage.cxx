@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdopage.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:58:05 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 14:48:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,9 +105,9 @@ sdr::contact::ViewContact* SdrPageObj::CreateObjectSpecificViewContact()
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-// #111111#
-// To make things more safe, make a PageUser from myself so that i know when the page is deleted.
-
+// this method is called form the destructor of the referenced page.
+// do all necessary action to forget the page. It is not necessary to call
+// RemovePageUser(), that is done form the destructor.
 void SdrPageObj::PageInDestruction(const SdrPage& rPage)
 {
     if(mpShownPage && mpShownPage == &rPage)
