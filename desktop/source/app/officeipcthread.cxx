@@ -2,9 +2,9 @@
  *
  *  $RCSfile: officeipcthread.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-27 10:29:34 $
+ *  last change: $Author: vg $ $Date: 2003-06-27 09:42:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,12 @@
 #endif
 #ifndef _SV_SVAPP_HXX
 #include <vcl/svapp.hxx>
+#endif
+#ifndef _SV_HELP_HXX
+#include <vcl/help.hxx>
+#endif
+#ifndef _UTL_CONFIGMGR_HXX_
+#include <unotools/configmgr.hxx>
 #endif
 #ifndef _THREAD_HXX_
 #include <osl/thread.hxx>
@@ -628,7 +634,49 @@ void SAL_CALL OfficeIPCThread::run()
                 }
             }
 
-            if ( bDocRequestSent && Desktop::CheckOEM)
+            if (!aCmdLineArgs.IsQuickstart() && Desktop::CheckOEM()) {
+                sal_Bool bShowHelp = sal_False;
+                rtl::OUStringBuffer aHelpURLBuffer;
+                if (aCmdLineArgs.IsHelpWriter()) {
+                    bShowHelp = sal_True;
+                    aHelpURLBuffer.appendAscii("vnd.sun.star.help://swriter/start");
+                } else if (aCmdLineArgs.IsHelpCalc()) {
+                    bShowHelp = sal_True;
+                    aHelpURLBuffer.appendAscii("vnd.sun.star.help://scalc/start");
+                } else if (aCmdLineArgs.IsHelpDraw()) {
+                    bShowHelp = sal_True;
+                    aHelpURLBuffer.appendAscii("vnd.sun.star.help://sdraw/start");
+                } else if (aCmdLineArgs.IsHelpImpress()) {
+                    bShowHelp = sal_True;
+                    aHelpURLBuffer.appendAscii("vnd.sun.star.help://simpress/start");
+                } else if (aCmdLineArgs.IsHelpBasic()) {
+                    bShowHelp = sal_True;
+                    aHelpURLBuffer.appendAscii("vnd.sun.star.help://sbasic/start");
+                } else if (aCmdLineArgs.IsHelpMath()) {
+                    bShowHelp = sal_True;
+                    aHelpURLBuffer.appendAscii("vnd.sun.star.help://smath/start");
+                }
+                if (bShowHelp) {
+                    Any aRet = ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::LOCALE );
+                    rtl::OUString aTmp;
+                    aRet >>= aTmp;
+                    aHelpURLBuffer.appendAscii("?Language=");
+                    aHelpURLBuffer.append(aTmp);
+#if defined UNX
+                    aHelpURLBuffer.appendAscii("&System=UNX");
+#elif defined WNT
+                    aHelpURLBuffer.appendAscii("&System=WIN");
+#elif defined MAC
+                    aHelpURLBuffer.appendAscii("&System=MAC");
+#endif
+                    ApplicationEvent* pAppEvent =
+                        new ApplicationEvent( aEmpty, aEmpty,
+                                              "OPENHELPURL", aHelpURLBuffer.makeStringAndClear());
+                    ImplPostForeignAppEvent( pAppEvent );
+                }
+            }
+
+            if ( bDocRequestSent && Desktop::CheckOEM())
              {
                 // Send requests to dispatch watcher if we have at least one. The receiver
                 // is responsible to delete the request after processing it.
