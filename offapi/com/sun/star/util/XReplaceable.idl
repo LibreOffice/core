@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XReplaceable.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:10:59 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 02:09:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -92,7 +92,7 @@ module com {  module sun {  module star {  module util {
     xFound = xDocument.replaceAll( xReplaceDescr )
     </listing>
  */
-interface XReplaceable: com::sun::star::util::XSearchable
+published interface XReplaceable: com::sun::star::util::XSearchable
 {
     //-------------------------------------------------------------------------
     /** creates a descriptor which contains properties that
