@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldlg.src,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: kz $ $Date: 2001-11-13 22:55:45 $
+ *  last change: $Author: tbe $ $Date: 2001-11-14 22:45:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -671,7 +671,7 @@ ModalDialog RID_DLG_LIBS
      // HelpId = HID_BASICIDE_LIBS_DLG ;
     OutputSize = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 168 , 145 ) ;
+    Size = MAP_APPFONT ( 168 , 132 ) ;
     Moveable = TRUE ;
     Closeable = TRUE ;
     OKButton RID_PB_OK
@@ -756,36 +756,9 @@ ModalDialog RID_DLG_LIBS
         Text[ catalan ] = "Insereix com a referθncia (nomιs de lectura)";
         Text[ finnish ] = "Lisδδ viite (vain luku)";
     };
-    CheckBox RID_CB_SEP
-    {
-        Pos = MAP_APPFONT ( 12 , 113 ) ;
-        Size = MAP_APPFONT ( 146 , 10 ) ;
-        Text = "Als separate Datei speichern" ;
-        Text [ English ] = "Als separate Datei speichern" ;
-        Text [ portuguese ] = "Guardar como ficheiro separado" ;
-        Text [ english_us ] = "Save as separate file" ;
-        Text [ portuguese_brazilian ] = "Als separate Datei speichern" ;
-        Text [ swedish ] = "Spara som separat fil" ;
-        Text [ danish ] = "Gem som separat fil" ;
-        Text [ italian ] = "Sava come file a parte" ;
-        Text [ spanish ] = "Guardar como archivo separado" ;
-        Text [ french ] = "Enregistrer comme fichier distinct" ;
-        Text [ dutch ] = "Als separaat bestand opslaan" ;
-        Text[ chinese_simplified ] = "ε¦ε­ζ–‡δ»¶";
-        Text[ russian ] = "Ρξυπΰνθςό κΰκ ξςδελόνϋι τΰιλ";
-        Text[ polish ] = "Zapisz w oddzielnym pliku";
-        Text[ japanese ] = "ε¥γ®οΎο½§ο½²οΎ™γ¨γ—γ¦δΏε­";
-        Text[ chinese_traditional ] = "ε¦ε­ζª”ζ΅";
-        Text[ arabic ] = "ΝέΩ ίγαέ γδέΥα";
-        Text[ greek ] = "Αποθήκευση ως ξεχωριστό αρχείο";
-        Text[ korean ] = "κ°λ³„ νμΌλ΅ μ €μ¥";
-        Text[ turkish ] = "Ayrύ dosya olarak kaydet";
-        Text[ catalan ] = "Desa com a fitxer independent";
-        Text[ finnish ] = "Tallenna erillisenδ tiedostona";
-    };
     CheckBox RID_CB_REPL
     {
-        Pos = MAP_APPFONT ( 12 , 126 ) ;
+        Pos = MAP_APPFONT ( 12 , 113 ) ;
         Size = MAP_APPFONT ( 146 , 10 ) ;
         Text = "Existierende Bibliotheken ersetzen" ;
         Text [ English ] = "Replace existing Libaries" ;

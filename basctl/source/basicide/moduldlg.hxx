@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldlg.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: tbe $ $Date: 2001-11-07 10:18:27 $
+ *  last change: $Author: tbe $ $Date: 2001-11-14 22:45:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -148,7 +148,7 @@ class BasicCheckBox : public SvTabListBox
 {
 private:
     USHORT              nMode;
-    //SvLBoxButtonData* pCheckButton;
+    SvLBoxButtonData*   pCheckButton;
     BasicManager*       pBasMgr;
     void                Init();
 
@@ -166,9 +166,9 @@ public:
     void            SelectEntryPos( ULONG nPos, BOOL bSelect = TRUE );
     ULONG           GetSelectEntryPos() const;
 
-    //ULONG         GetCheckedEntryCount() const;
-    //void          CheckEntryPos( ULONG nPos, BOOL bCheck = TRUE );
-    //BOOL          IsChecked( ULONG nPos ) const;
+    ULONG           GetCheckedEntryCount() const;
+    void            CheckEntryPos( ULONG nPos, BOOL bCheck = TRUE );
+    BOOL            IsChecked( ULONG nPos ) const;
 
     virtual void    InitEntry( SvLBoxEntry*, const XubString&, const Image&, const Image& );
     virtual BOOL    EditingEntry( SvLBoxEntry* pEntry, Selection& rSel );
@@ -177,11 +177,11 @@ public:
     void            SetBasicManager( BasicManager* pMgr )   { pBasMgr = pMgr; }
     BasicManager*   GetBasicManager() const                 { return pBasMgr; }
 
-    void            SetMode( USHORT n )     { nMode = n; }
+    void            SetMode( USHORT n );
     USHORT          GetMode() const         { return nMode; }
 };
 
-/*
+
 class BasicCheckBoxBitmaps : public Resource
 {
 private:
@@ -202,7 +202,7 @@ public:
     const Bitmap&   GetTriStateBmp    () const { return aTriStateBmp; }
     const Bitmap&   GetHiTriStateBmp  () const { return aHiTriStateBmp; }
 };
-*/
+
 
 class LibDialog: public ModalDialog
 {
@@ -210,19 +210,10 @@ private:
     OKButton        aOKButton;
     CancelButton    aCancelButton;
     FixedText       aStorageName;
-
     BasicCheckBox   aLibBox;
-
     FixedLine       aFixedLine;
     CheckBox        aReferenceBox;
-    CheckBox        aSepFileBox;
     CheckBox        aReplaceBox;
-
-    BOOL            bSepFileEnabled;
-
-protected:
-    DECL_LINK(      CheckBoxSelectHdl, CheckBox* );
-
 
 public:
                     LibDialog( Window* pParent );
@@ -233,11 +224,6 @@ public:
     BasicCheckBox&  GetLibBox()                 { return aLibBox; }
     BOOL            IsReference() const         { return aReferenceBox.IsChecked(); }
     BOOL            IsReplace() const           { return aReplaceBox.IsChecked(); }
-    BOOL            IsSeparateFile() const          { return aSepFileBox.IsChecked(); }
-
-    void            SetSeparateFileEnabled( BOOL b )    { bSepFileEnabled = b;
-                                                            aSepFileBox.Enable( b ); }
-    BOOL            IsSeparateFileEnabled() const       { return bSepFileEnabled; }
 };
 
 

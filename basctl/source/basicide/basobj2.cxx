@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basobj2.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: tbe $ $Date: 2001-09-25 09:12:40 $
+ *  last change: $Author: tbe $ $Date: 2001-11-14 22:43:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,9 +193,18 @@ void BasicIDE::DecBasicDialogCount()
 
 Sequence< ::rtl::OUString > BasicIDE::GetLibraryNames( SfxObjectShell* pShell )
 {
+    Reference< script::XLibraryContainer > xModLibContainer( GetModuleLibraryContainer( pShell ), UNO_QUERY );
+    Reference< script::XLibraryContainer > xDlgLibContainer( GetDialogLibraryContainer( pShell ), UNO_QUERY );
+
+    return GetMergedLibraryNames( xModLibContainer, xDlgLibContainer );
+}
+
+//----------------------------------------------------------------------------
+
+Sequence< ::rtl::OUString > BasicIDE::GetMergedLibraryNames( const Reference< script::XLibraryContainer >& xModLibContainer, const Reference< script::XLibraryContainer >& xDlgLibContainer )
+{
     // create a sorted list of module library names
     ::std::vector<String> aModLibList;
-    Reference< script::XLibraryContainer > xModLibContainer = GetModuleLibraryContainer( pShell );
     if ( xModLibContainer.is() )
     {
         Sequence< ::rtl::OUString > aModLibNames = xModLibContainer->getElementNames();
@@ -208,7 +217,6 @@ Sequence< ::rtl::OUString > BasicIDE::GetLibraryNames( SfxObjectShell* pShell )
 
     // create a sorted list of dialog library names
     ::std::vector<String> aDlgLibList;
-    Reference< script::XLibraryContainer > xDlgLibContainer = GetDialogLibraryContainer( pShell );
     if ( xDlgLibContainer.is() )
     {
         Sequence< ::rtl::OUString > aDlgLibNames = xDlgLibContainer->getElementNames();

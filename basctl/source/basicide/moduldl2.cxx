@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldl2.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: tbe $ $Date: 2001-11-09 15:41:40 $
+ *  last change: $Author: tbe $ $Date: 2001-11-14 22:43:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,7 +189,7 @@ void BasicLibLBoxString::Paint( const Point& rPos, SvLBox& rDev, USHORT, SvLBoxE
 BasicCheckBox::BasicCheckBox( Window* pParent, const ResId& rResId ) :
         SvTabListBox( pParent, rResId )
 {
-    nMode = 0;
+    nMode = LIBMODE_MANAGER;
     pBasMgr = 0;
     long aTabs[] = { 1, 12 };   // Mindestens einen braucht die TabPos...
                                 // 12 wegen der Checkbox
@@ -201,7 +201,7 @@ BasicCheckBox::BasicCheckBox( Window* pParent, const ResId& rResId ) :
 
 __EXPORT BasicCheckBox::~BasicCheckBox()
 {
-    //delete pCheckButton;
+    delete pCheckButton;
 }
 
 
@@ -231,7 +231,6 @@ void __EXPORT BasicCheckBox::CheckButtonHdl()
 
 void BasicCheckBox::Init()
 {
-    /*
     BasicCheckBoxBitmaps theBmps;
 
     pCheckButton = new SvLBoxButtonData;
@@ -241,9 +240,25 @@ void BasicCheckBox::Init()
     pCheckButton->aBmps[SV_BMP_HIUNCHECKED] = theBmps.GetHiUncheckedBmp();
     pCheckButton->aBmps[SV_BMP_TRISTATE]    = theBmps.GetTriStateBmp();
     pCheckButton->aBmps[SV_BMP_HITRISTATE]  = theBmps.GetHiTriStateBmp();
-    EnableCheckButton( pCheckButton );
-    */
+
+    if ( nMode == LIBMODE_CHOOSER )
+        EnableCheckButton( pCheckButton );
+    else
+        EnableCheckButton( 0 );
+
     SetHighlightRange();
+}
+
+//----------------------------------------------------------------------------
+
+void BasicCheckBox::SetMode( USHORT n )
+{
+    nMode = n;
+
+    if ( nMode == LIBMODE_CHOOSER )
+        EnableCheckButton( pCheckButton );
+    else
+        EnableCheckButton( 0 );
 }
 
 //----------------------------------------------------------------------------
@@ -294,7 +309,6 @@ ULONG BasicCheckBox::GetSelectEntryPos() const
 
 //----------------------------------------------------------------------------
 
-/*
 ULONG BasicCheckBox::GetCheckedEntryCount() const
 {
     ULONG   nCheckCount = 0;
@@ -308,11 +322,9 @@ ULONG BasicCheckBox::GetCheckedEntryCount() const
 
     return nCheckCount;
 }
-*/
 
 //----------------------------------------------------------------------------
 
-/*
 void BasicCheckBox::CheckEntryPos( ULONG nPos, BOOL bCheck )
 {
     if ( nPos < GetEntryCount() )
@@ -326,32 +338,32 @@ void BasicCheckBox::CheckEntryPos( ULONG nPos, BOOL bCheck )
                                     : SvButtonState(SV_BUTTON_UNCHECKED) );
     }
 }
-*/
 
 //----------------------------------------------------------------------------
 
-/*
 BOOL BasicCheckBox::IsChecked( ULONG nPos ) const
 {
     if ( nPos < GetEntryCount() )
         return (GetCheckButtonState( GetEntry( nPos ) ) == SV_BUTTON_CHECKED);
     return FALSE;
 }
-*/
 
 //----------------------------------------------------------------------------
 
 void BasicCheckBox::InitEntry( SvLBoxEntry* pEntry, const XubString& rTxt, const Image& rImg1, const Image& rImg2 )
 {
     SvTabListBox::InitEntry( pEntry, rTxt, rImg1, rImg2 );
-    USHORT nCount = pEntry->ItemCount();
 
-    // initialize all columns with own string class (column 0 == bitmap)
-    for ( USHORT nCol = 1; nCol < nCount; ++nCol )
+    if ( nMode == LIBMODE_MANAGER )
     {
-        SvLBoxString* pCol = (SvLBoxString*)pEntry->GetItem( nCol );
-        BasicLibLBoxString* pStr = new BasicLibLBoxString( pEntry, 0, pCol->GetText() );
-        pEntry->ReplaceItem( pStr, nCol );
+        // initialize all columns with own string class (column 0 == bitmap)
+        USHORT nCount = pEntry->ItemCount();
+        for ( USHORT nCol = 1; nCol < nCount; ++nCol )
+        {
+            SvLBoxString* pCol = (SvLBoxString*)pEntry->GetItem( nCol );
+            BasicLibLBoxString* pStr = new BasicLibLBoxString( pEntry, 0, pCol->GetText() );
+            pEntry->ReplaceItem( pStr, nCol );
+        }
     }
 }
 
@@ -457,7 +469,6 @@ BOOL __EXPORT BasicCheckBox::EditedEntry( SvLBoxEntry* pEntry, const String& rNe
 
 //----------------------------------------------------------------------------
 
-/*
 BasicCheckBoxBitmaps::BasicCheckBoxBitmaps() :
     Resource        ( ResId( RID_RES_CHECKBITMAPS ) ),
     aUncheckedBmp   ( ResId( CHKBTN_UNCHECKED ) ),
@@ -469,7 +480,6 @@ BasicCheckBoxBitmaps::BasicCheckBoxBitmaps() :
 {
     FreeResource();
 }
-*/
 
 
 //----------------------------------------------------------------------------
@@ -882,6 +892,7 @@ void LibPage::InsertLib()
 //  BasicManager* pBasMgr = BasicIDE::FindBasicManager( aCurBasMgr );
     BasicManager* pBasMgr = aLibBox.GetBasicManager();
     DBG_ASSERT( pBasMgr, "BasMgr?!" );
+    SfxObjectShell* pShell = BasicIDE::FindDocShell( pBasMgr );
 
     Reference< lang::XMultiServiceFactory > xMSF( ::comphelper::getProcessServiceFactory() );
     Reference < XFilePicker > xFP;
@@ -896,9 +907,11 @@ void LibPage::InsertLib()
     xFP->setTitle( String( IDEResId( RID_STR_APPENDLIBS ) ) );
 
     Reference< XFilterManager > xFltMgr(xFP, UNO_QUERY);
-    xFltMgr->appendFilter( String( IDEResId( RID_STR_BASIC ) ), String( RTL_CONSTASCII_USTRINGPARAM( "*.sbl" ) ) );
-    xFltMgr->appendFilter( String( IDEResId( RID_STR_DOC ) ), String( RTL_CONSTASCII_USTRINGPARAM( "*.sdw;*.sdc;*.sdd" ) ) );
+    //xFltMgr->appendFilter( String( IDEResId( RID_STR_BASIC ) ), String( RTL_CONSTASCII_USTRINGPARAM( "*.xlc;*.sbl" ) ) );
+    //xFltMgr->appendFilter( String( IDEResId( RID_STR_DOC ) ), String( RTL_CONSTASCII_USTRINGPARAM( "*.sdw;*.sdc;*.sdd" ) ) );
+    xFltMgr->appendFilter( String( IDEResId( RID_STR_BASIC ) ), String( RTL_CONSTASCII_USTRINGPARAM( "*.xlc;*.xlb;*.sbl;*.sxw;*.sxc;*.sxd;*.sdw;*.sdc;*.sdd" ) ) );
 
+    // TODO: setting of display directory doesn't work correctly at the moment
     String aPath( IDE_DLL()->GetExtraData()->GetAddLibPath() );
     if ( aPath.Len() )
     {
@@ -913,7 +926,7 @@ void LibPage::InsertLib()
         aFileURL.setFinalSlash();
         aPath = aFileURL.getFSysPath( INetURLObject::FSYS_DETECT );
         xFP->setDisplayDirectory( aPath );
-        xFltMgr->setCurrentFilter( String( IDEResId( RID_STR_DOC ) ) );
+        xFltMgr->setCurrentFilter( String( IDEResId( RID_STR_BASIC ) ) );
     }
 
     if( xFP->execute() == RET_OK )
@@ -924,8 +937,249 @@ void LibPage::InsertLib()
         IDE_DLL()->GetExtraData()->SetAddLibFilter( xFltMgr->getCurrentFilter() );
 
         INetURLObject aFileURL( aPath );
-        String aFullName( aFileURL.getFSysPath( INetURLObject::FSYS_DETECT ) );
+        INetURLObject aModFileURL( aFileURL );
+        INetURLObject aDlgFileURL( aFileURL );
 
+        String aModFileName = String::CreateFromAscii( "script" );
+        String aDlgFileName = String::CreateFromAscii( "dialog" );
+        String aFileName = aFileURL.getName().GetToken( 0, '.' );
+
+        if ( aFileName == aModFileName )
+        {
+            aDlgFileURL.setName( aDlgFileName );
+            aDlgFileURL.setExtension( aFileURL.getExtension() );
+        }
+        else if ( aFileName == aDlgFileName )
+        {
+            aModFileURL.setName( aModFileName );
+            aModFileURL.setExtension( aFileURL.getExtension() );
+        }
+
+        ::rtl::OUString aModStorageURL( aModFileURL.GetMainURL() );
+        ::rtl::OUString aDlgStorageURL( aDlgFileURL.GetMainURL() );
+
+        Reference< script::XLibraryContainer2 > xModLibContImport;
+        Reference< script::XLibraryContainer2 > xDlgLibContImport;
+
+        if( xMSF.is() )
+        {
+            Sequence <Any> aSeqModURL(1);
+            aSeqModURL[0] <<= aModStorageURL;
+            xModLibContImport = Reference< script::XLibraryContainer2 >( xMSF->createInstanceWithArguments(
+                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.script.ScriptLibraryContainer" ) ), aSeqModURL ), UNO_QUERY );
+
+            Sequence <Any> aSeqDlgURL(1);
+            aSeqDlgURL[0] <<= aDlgStorageURL;
+            xDlgLibContImport = Reference< script::XLibraryContainer2 >( xMSF->createInstanceWithArguments(
+                        ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.script.DialogLibraryContainer" ) ), aSeqDlgURL ), UNO_QUERY );
+        }
+
+        if ( xModLibContImport.is() || xDlgLibContImport.is() )
+        {
+            LibDialog* pLibDlg = 0;
+
+            Reference< script::XLibraryContainer > xModLibContImp( xModLibContImport, UNO_QUERY );
+            Reference< script::XLibraryContainer > xDlgLibContImp( xDlgLibContImport, UNO_QUERY );
+            Sequence< ::rtl::OUString > aLibNames = BasicIDE::GetMergedLibraryNames( xModLibContImp, xDlgLibContImp );
+            sal_Int32 nLibCount = aLibNames.getLength();
+            const ::rtl::OUString* pLibNames = aLibNames.getConstArray();
+            for ( sal_Int32 i = 0 ; i < nLibCount ; i++ )
+            {
+                if ( !pLibDlg )
+                {
+                    pLibDlg = new LibDialog( this );
+                    pLibDlg->SetStorageName( aFileURL.getName() );
+                    pLibDlg->GetLibBox().SetMode( LIBMODE_CHOOSER );
+                }
+
+                String aLibName( pLibNames[ i ] );
+                String aOULibName( aLibName );
+                if ( !( ( xModLibContImport.is() && xModLibContImport->hasByName( aOULibName ) && xModLibContImport->isLibraryLink( aOULibName ) ) ||
+                        ( xDlgLibContImport.is() && xDlgLibContImport->hasByName( aOULibName ) && xDlgLibContImport->isLibraryLink( aOULibName ) ) ) )
+                {
+                    SvLBoxEntry* pEntry = pLibDlg->GetLibBox().InsertEntry( aLibName );
+                    USHORT nPos = (USHORT) pLibDlg->GetLibBox().GetModel()->GetAbsPos( pEntry );
+                    pLibDlg->GetLibBox().CheckEntryPos( nPos, TRUE);
+                }
+            }
+
+            if ( !pLibDlg )
+                InfoBox( this, String( IDEResId( RID_STR_NOLIBINSTORAGE ) ) ).Execute();
+            else
+            {
+                BOOL bChanges = FALSE;
+                if ( pLibDlg->Execute() )
+                {
+                    ULONG nNewPos = aLibBox.GetEntryCount();
+                    BOOL bReplace = pLibDlg->IsReplace();
+                    BOOL bReference = pLibDlg->IsReference();
+                    for ( USHORT nLib = 0; nLib < pLibDlg->GetLibBox().GetEntryCount(); nLib++ )
+                    {
+                        if ( pLibDlg->GetLibBox().IsChecked( nLib ) )
+                        {
+                            SvLBoxEntry* pEntry = pLibDlg->GetLibBox().GetEntry( nLib );
+                            DBG_ASSERT( pEntry, "Entry?!" );
+                            String aLibName( pLibDlg->GetLibBox().GetEntryText( pEntry, 0 ) );
+                            ::rtl::OUString aOULibName( aLibName );
+                            Reference< script::XLibraryContainer2 > xModLibContainer( BasicIDE::GetModuleLibraryContainer( pShell ), UNO_QUERY );
+                            Reference< script::XLibraryContainer2 > xDlgLibContainer( BasicIDE::GetDialogLibraryContainer( pShell ), UNO_QUERY );
+
+                            // check, if the library is already existing
+                            if ( ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) ) ||
+                                 ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aOULibName ) ) )
+                            {
+                                if ( bReplace )
+                                {
+                                    // check, if the library is the Standard library
+                                    if ( aLibName.EqualsAscii( "Standard" ) )
+                                    {
+                                        ErrorBox( this, WB_OK | WB_DEF_OK, String( IDEResId( RID_STR_REPLACESTDLIB ) ) ).Execute();
+                                        continue;
+                                    }
+
+                                    // check, if the library is readonly and not a link
+                                    if ( ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) && xModLibContainer->isLibraryReadOnly( aOULibName ) && !xModLibContainer->isLibraryLink( aOULibName ) ) ||
+                                         ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aOULibName ) && xDlgLibContainer->isLibraryReadOnly( aOULibName ) && !xDlgLibContainer->isLibraryLink( aOULibName ) ) )
+                                    {
+                                        // TODO: error message: library is readonly?
+                                        continue;
+                                    }
+
+                                    // remove listbox entry
+                                    SvLBoxEntry* pEntry = aLibBox.FindEntry( aLibName );
+                                    if ( pEntry )
+                                        aLibBox.SvTreeListBox::GetModel()->Remove( pEntry );
+
+                                    // remove module library
+                                    if ( xModLibContainer.is() && xModLibContainer->hasByName( aOULibName ) )
+                                        xModLibContainer->removeLibrary( aOULibName );
+
+                                    // remove dialog library
+                                    if ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aOULibName ) )
+                                        xDlgLibContainer->removeLibrary( aOULibName );
+                                }
+                                else
+                                {
+                                    if ( bReference )
+                                    {
+                                        // Referenz nicht moeglich, wenn Lib mit
+                                        // Namen schon existiert, ausser bei Replace.
+                                        String aErrStr( IDEResId( RID_STR_REFNOTPOSSIBLE ) );
+                                        aErrStr.SearchAndReplace( String( RTL_CONSTASCII_USTRINGPARAM( "XX" ) ), aLibName );
+                                        aErrStr += '\n';
+                                        aErrStr += String( IDEResId( RID_STR_SBXNAMEALLREADYUSED ) );
+                                        ErrorBox( this, WB_OK | WB_DEF_OK, aErrStr ).Execute();
+                                        continue;
+                                    }
+                                    else
+                                    {
+                                        // TODO: error message: library already existing?
+                                        continue;
+                                    }
+                                }
+                            }
+
+                            // copy module library
+                            if ( xModLibContImport.is() && xModLibContImport->hasByName( aOULibName ) && xModLibContainer.is() && !xModLibContainer->hasByName( aOULibName ) )
+                            {
+                                Reference< container::XNameContainer > xModLib;
+                                if ( bReference )
+                                {
+                                    // create library link
+                                    xModLib = Reference< container::XNameContainer >( xModLibContainer->createLibraryLink( aOULibName, aModStorageURL, TRUE ), UNO_QUERY);
+                                }
+                                else
+                                {
+                                    // create library
+                                    xModLib = xModLibContainer->createLibrary( aOULibName );
+                                    if ( xModLib.is() )
+                                    {
+                                        // get import library
+                                        Reference< container::XNameContainer > xModLibImport;
+                                        Any aElement = xModLibContImport->getByName( aOULibName );
+                                        aElement >>= xModLibImport;
+
+                                        if ( xModLibImport.is() )
+                                        {
+                                            // load library
+                                            if ( !xModLibContImport->isLibraryLoaded( aOULibName ) )
+                                                xModLibContImport->loadLibrary( aOULibName );
+
+                                            // copy all modules
+                                            Sequence< ::rtl::OUString > aModNames = xModLibImport->getElementNames();
+                                            sal_Int32 nModCount = aModNames.getLength();
+                                            const ::rtl::OUString* pModNames = aModNames.getConstArray();
+                                            for ( sal_Int32 i = 0 ; i < nModCount ; i++ )
+                                            {
+                                                ::rtl::OUString aOUModName( pModNames[ i ] );
+                                                Any aElement = xModLibImport->getByName( aOUModName );
+                                                xModLib->insertByName( aOUModName, aElement );
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                            // copy dialog library
+                            if ( xDlgLibContImport.is() && xDlgLibContImport->hasByName( aOULibName ) && xDlgLibContainer.is() && !xDlgLibContainer->hasByName( aOULibName ) )
+                            {
+                                Reference< container::XNameContainer > xDlgLib;
+                                if ( bReference )
+                                {
+                                    // create library link
+                                    xDlgLib = Reference< container::XNameContainer >( xDlgLibContainer->createLibraryLink( aOULibName, aDlgStorageURL, TRUE ), UNO_QUERY);
+                                }
+                                else
+                                {
+                                    // create library
+                                    xDlgLib = xDlgLibContainer->createLibrary( aOULibName );
+                                    if ( xDlgLib.is() )
+                                    {
+                                        // get import library
+                                        Reference< container::XNameContainer > xDlgLibImport;
+                                        Any aElement = xDlgLibContImport->getByName( aOULibName );
+                                        aElement >>= xDlgLibImport;
+
+                                        if ( xDlgLibImport.is() )
+                                        {
+                                            // load library
+                                            if ( !xDlgLibContImport->isLibraryLoaded( aOULibName ) )
+                                                xDlgLibContImport->loadLibrary( aOULibName );
+
+                                            // copy all dialogs
+                                            Sequence< ::rtl::OUString > aDlgNames = xDlgLibImport->getElementNames();
+                                            sal_Int32 nDlgCount = aDlgNames.getLength();
+                                            const ::rtl::OUString* pDlgNames = aDlgNames.getConstArray();
+                                            for ( sal_Int32 i = 0 ; i < nDlgCount ; i++ )
+                                            {
+                                                ::rtl::OUString aOUDlgName( pDlgNames[ i ] );
+                                                Any aElement = xDlgLibImport->getByName( aOUDlgName );
+                                                xDlgLib->insertByName( aOUDlgName, aElement );
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                            // insert listbox entry
+                            ImpInsertLibEntry( aLibName, aLibBox.GetEntryCount() );
+                            bChanges = TRUE;
+                        }
+                    }
+
+                    SvLBoxEntry* pFirstNew = aLibBox.GetEntry( nNewPos );
+                    if ( pFirstNew )
+                        aLibBox.SetCurEntry( pFirstNew );
+                }
+
+                delete pLibDlg;
+                if ( bChanges )
+                    BasicIDE::MarkDocShellModified( pShell );
+            }
+        }
+
+
+        /*
         if ( SvStorage::IsStorageFile( aFullName ) )
         {
             SvStorageRef xStorage = new SvStorage( aFullName, STREAM_READ | STREAM_SHARE_DENYWRITE );
@@ -1047,6 +1301,8 @@ void LibPage::InsertLib()
             // Datei kommen?
             InfoBox( this, String( IDEResId( RID_STR_NOLIBINSTORAGE ) ) ).Execute();
         }
+        */
+
     }
 }
 

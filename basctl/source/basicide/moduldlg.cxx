@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldlg.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: tbe $ $Date: 2001-11-12 22:37:13 $
+ *  last change: $Author: tbe $ $Date: 2001-11-14 22:43:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1068,17 +1068,10 @@ LibDialog::LibDialog( Window* pParent )
         aLibBox(        this, IDEResId( RID_CTRL_LIBS ) ),
         aFixedLine(     this, IDEResId( RID_FL_OPTIONS ) ),
         aReferenceBox(  this, IDEResId( RID_CB_REF ) ),
-        aSepFileBox(    this, IDEResId( RID_CB_SEP ) ),
         aReplaceBox(    this, IDEResId( RID_CB_REPL ) )
 {
     SetText( String( IDEResId( RID_STR_APPENDLIBS ) ) );
     FreeResource();
-
-    aReferenceBox.SetClickHdl( LINK( this, LibDialog, CheckBoxSelectHdl ) );
-    aSepFileBox.SetClickHdl( LINK( this, LibDialog, CheckBoxSelectHdl ) );
-
-    bSepFileEnabled = FALSE;
-    aSepFileBox.Enable( FALSE );
 }
 
 
@@ -1092,20 +1085,3 @@ void LibDialog::SetStorageName( const String& rName )
     aName += rName;
     aStorageName.SetText( aName );
 }
-
-IMPL_LINK( LibDialog, CheckBoxSelectHdl, CheckBox*, EMPTYARG )
-{
-    // Referenz und separate Datei schliessen sich aus...
-    if ( aReferenceBox.IsChecked() )
-        aSepFileBox.Enable( FALSE );
-    else if ( bSepFileEnabled )
-        aSepFileBox.Enable( TRUE );
-
-    if ( aSepFileBox.IsChecked() )
-        aReferenceBox.Enable( FALSE );
-    else
-        aReferenceBox.Enable( TRUE );
-
-    return 1;
-}
-
