@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmload.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mba $ $Date: 2000-10-09 15:37:04 $
+ *  last change: $Author: mba $ $Date: 2000-10-11 14:56:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -238,6 +238,7 @@ void SAL_CALL SfxFrameLoader::load( const Reference < XFrame >& rFrame, const OU
             SfxModule* pMod = pFactory->GetModule()->Load();
             SfxRequest aReq( nSlotId, SFX_CALLMODE_SYNCHRON, pMod->GetPool() );
             aReq.AppendItem( SfxStringItem ( SID_FILE_NAME, rURL ) );
+            aReq.AppendItem( SfxFrameItem ( SID_DOCFRAME, pFrame ) );
             const SfxPoolItem* pRet = pMod->ExecuteSlot( aReq );
             if ( xListener.is() )
             {
