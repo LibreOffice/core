@@ -3,9 +3,9 @@
  *
  *  $RCSfile: GenericCommands.xcu,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-23 10:28:05 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 10:17:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2230,6 +2230,15 @@
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">Rückgängig unmöglich</value>
                     <value xml:lang="en-US">Can&apos;t Undo</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
+                </prop>
+            </node>
+            <node oor:name=".uno:FormatPaintbrush" oor:op="replace">
+                <prop oor:name="Label" oor:type="xs:string">
+                    <value xml:lang="de">Format übertragen</value>
+                    <value xml:lang="en-US">Format Paintbrush</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
