@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE toolbar:toolbar PUBLIC "-//OpenOffice.org//DTD OfficeDocument 1.0//EN" "toolbar.dtd">
+<toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
+ <toolbar:toolbaritem xlink:href=".uno:InsertObjectChart" toolbar:helpid="helpid:10140" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:InsertMath" toolbar:helpid="helpid:27106" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:InsertObjectFloatingFrame" toolbar:helpid="helpid:5563" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:InsertObject" toolbar:helpid="helpid:5561" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:InsertPlugin" toolbar:helpid="helpid:5672" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:InsertApplet" toolbar:helpid="helpid:5673" toolbar:text="" />
+ <toolbar:toolbarbreak/>
+ <toolbar:toolbaritem xlink:href=".uno:InsertSpreadsheet" toolbar:helpid="helpid:10217" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:ImportFromFile" toolbar:helpid="helpid:27015" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:InsertPage" toolbar:helpid="helpid:27014" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:InsertGraphic" toolbar:helpid="helpid:10241" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:InsertSound" toolbar:helpid="helpid:5676" toolbar:text="" />
+ <toolbar:toolbaritem xlink:href=".uno:InsertVideo" toolbar:helpid="helpid:5677" toolbar:text="" />
+</toolbar:toolbar>
