@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlmod_export.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ab $ $Date: 2001-05-22 14:16:24 $
+ *  last change: $Author: rt $ $Date: 2004-08-23 09:14:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@ namespace xmlscript
 
 //==================================================================================================
 
-SAL_DLLEXPORT void
+void
 SAL_CALL exportScriptModule(
     Reference< xml::sax::XExtendedDocumentHandler > const & xOut,
     const ModuleDescriptor& rMod )
