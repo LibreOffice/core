@@ -2,9 +2,9 @@
  *
  *  $RCSfile: res_bmp.hrc,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: os $ $Date: 2002-08-29 07:36:42 $
+ *  last change: $Author: cl $ $Date: 2002-11-18 12:59:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -539,3 +539,6 @@
 #define RID_DRAW_GLUEPOINT_POPUP            RID_APP_START+392
 #define RID_DRAW_CONTROL_POPUP              RID_APP_START+393
 #define RID_FORM_CONTROL_POPUP              RID_APP_START+394
+
+#define RID_GRAPHICSTYLEFAMILY      RID_APP_START+395
+#define RID_PRESENTATIONSTYLEFAMILY RID_APP_START+396
