@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grafctrl.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-18 11:23:34 $
+ *  last change: $Author: ka $ $Date: 2000-11-24 18:04:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,6 +104,33 @@
 // -----------
 
 #define SYMBOL_TO_FIELD_OFFSET  4
+
+// ----------------
+// - TbxImageItem -
+// ----------------
+
+TYPEINIT1( TbxImageItem, SfxUInt16Item );
+
+//---------------------------------------------------------
+
+TbxImageItem::TbxImageItem( USHORT nWhich, UINT16 nImage ) :
+    SfxUInt16Item( nWhich, nImage )
+{
+}
+
+//---------------------------------------------------------
+
+SfxPoolItem* TbxImageItem::Clone( SfxItemPool* pPool ) const
+{
+    return new TbxImageItem( *this );
+}
+
+//---------------------------------------------------------
+
+int TbxImageItem::operator==( const SfxPoolItem& rItem ) const
+{
+    return( ( (TbxImageItem&) rItem ).GetValue() == GetValue() );
+}
 
 // -----------------------
 // - ImplGrafMetricField -
@@ -587,7 +614,7 @@ IMPL_LINK( ImplGrafFilterPopup, TbxSelectHdl, void*, EMPTYARG )
 // - SvxGrafFilterToolBoxControl -
 // -------------------------------
 
-SFX_IMPL_TOOLBOX_CONTROL( SvxGrafFilterToolBoxControl, SfxEnumItem );
+SFX_IMPL_TOOLBOX_CONTROL( SvxGrafFilterToolBoxControl, TbxImageItem );
 
 // -----------------------------------------------------------------------------
 
