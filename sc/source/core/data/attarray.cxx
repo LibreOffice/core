@@ -2,9 +2,9 @@
  *
  *  $RCSfile: attarray.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 10:18:56 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:53:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1291,9 +1291,7 @@ BOOL ScAttrArray::HasAttrib( SCROW nRow1, SCROW nRow2, USHORT nMask ) const
         }
         if ( nMask & HASATTR_NEEDHEIGHT )
         {
-            SvxCellOrientation eOrient = (SvxCellOrientation)
-                ((const SvxOrientationItem&)pPattern->GetItem( ATTR_ORIENTATION )).GetValue();
-            if (eOrient != SVX_ORIENTATION_STANDARD)
+            if (pPattern->GetCellOrientation() != SVX_ORIENTATION_STANDARD)
                 bFound = TRUE;
             else if (((const SfxBoolItem&)pPattern->GetItem( ATTR_LINEBREAK )).GetValue())
                 bFound = TRUE;
