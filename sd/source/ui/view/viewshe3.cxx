@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewshe3.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-15 08:58:37 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:38:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,7 @@
 
 #include "ViewShell.hxx"
 #include "GraphicViewShell.hxx"
+#include "GraphicViewShellBase.hxx"
 
 #ifndef _COM_SUN_STAR_LANG_LOCALE_HPP_
 #include <com/sun/star/lang/Locale.hpp>
@@ -1557,7 +1558,9 @@ void ViewShell::CreateOrDuplicatePage (
         SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();//CHINA001
         DBG_ASSERT(pFact, "SdAbstractDialogFactory fail!");//CHINA001
 
-        if (nSId == SID_INSERTPAGE && !this->ISA(GraphicViewShell))
+        // Do not show the dialog for the Draw application.
+        if (nSId == SID_INSERTPAGE
+            && !GetViewShellBase().ISA(GraphicViewShellBase))
         { //add by CHINA001
             //CHINA001 pDlg = new SdNewFoilDlg(GetActiveWindow(), aAttrSet, ePageKind, GetDocSh(), FALSE);
             pDlg = pFact->CreateSdNewFoilDlg(ResId( DLG_NEW_FOIL ), GetActiveWindow(), aAttrSet, ePageKind, GetDocSh(), FALSE );
