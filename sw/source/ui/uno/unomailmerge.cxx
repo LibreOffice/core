@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomailmerge.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 12:21:07 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 14:23:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -775,7 +775,7 @@ uno::Any SAL_CALL SwXMailMerge::execute(
     }
 
     svx::ODataAccessDescriptor aDescriptor;
-    aDescriptor[ svx::daDataSource ]         <<= aCurDataSourceName;
+    aDescriptor.setDataSource(aCurDataSourceName);
     aDescriptor[ svx::daConnection ]         <<= xCurConnection;
     aDescriptor[ svx::daCommand ]            <<= aCurDataCommand;
     aDescriptor[ svx::daCommandType ]        <<= nCurDataCommandType;
