@@ -2,9 +2,9 @@
  *
  *  $RCSfile: keysymnames.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2003-08-25 13:55:20 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 14:29:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,9 +91,6 @@
 #include <deflt.h>
 #include <unistd.h>
 #include <stdlib.h>
-#ifndef KB_USB // compile with too old headers
-#define KB_USB 6
-#endif
 #endif
 
 #include <string.h>
