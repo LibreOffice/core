@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MasterPageObserver.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:44:11 $
+ *  last change: $Author: rt $ $Date: 2004-08-04 08:59:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,12 @@
 #include <set>
 #include <vector>
 #include <svtools/lstner.hxx>
+#ifndef INCLUDED_OSL_DOUBLECHECKEDLOCKING_H
+#include <osl/doublecheckedlocking.h>
+#endif
+#ifndef INCLUDED_OSL_GETGLOBALMUTEX_HXX
+#include <osl/getglobalmutex.hxx>
+#endif
 
 
 namespace sd {
@@ -76,6 +82,11 @@ class MasterPageObserver::Implementation
     : public SfxListener
 {
 public:
+    /** The single instance of this class.  It is created on demand when
+        Instance() is called for the first time.
+    */
+    static MasterPageObserver* mpInstance;
+
     /** The master page observer will listen to events of this document and
         detect changes of the use of master pages.
     */
@@ -131,26 +142,33 @@ private:
     void SendEvent (MasterPageObserverEvent& rEvent);
 };
 
+MasterPageObserver* MasterPageObserver::Implementation::mpInstance = NULL;
 
 
 
 //===== MasterPageObserver ====================================================
 
-MasterPageObserver* MasterPageObserver::mpInstance = NULL;
-::osl::Mutex MasterPageObserver::maMutex;
-
 MasterPageObserver&  MasterPageObserver::Instance (void)
 {
-    if (mpInstance == NULL)
+    if (Implementation::mpInstance == NULL)
     {
-        ::osl::MutexGuard aGuard (maMutex);
-        if (mpInstance == NULL)
+        ::osl::GetGlobalMutex aMutexFunctor;
+        ::osl::MutexGuard aGuard (aMutexFunctor());
+        if (Implementation::mpInstance == NULL)
         {
-            mpInstance = new MasterPageObserver ();
+            MasterPageObserver* pInstance = new MasterPageObserver ();
+            SdGlobalResourceContainer::Instance().AddResource (
+                ::std::auto_ptr<SdGlobalResource>(pInstance));
+            OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
+            Implementation::mpInstance = pInstance;
         }
     }
+    else
+        OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
 
-    return *mpInstance;
+    DBG_ASSERT(Implementation::mpInstance!=NULL,
+        "MasterPageObserver::Instance(): instance is NULL");
+    return *Implementation::mpInstance;
 }
 
 
@@ -191,8 +209,13 @@ void MasterPageObserver::RemoveEventListener (const Link& rEventListener)
 
 MasterPageObserver::MasterPageObserver (void)
     : mpImpl (new Implementation())
-{
-}
+{}
+
+
+
+
+MasterPageObserver::~MasterPageObserver (void)
+{}
 
 
 
