@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.90 $
+ *  $Revision: 1.91 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-25 07:44:50 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 14:18:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -321,6 +321,7 @@ public:
     SwFlyFrmFmt* pFlyFmt;
     SfxItemSet aItemSet;
     bool IsValidCell(short nCol) const;
+    bool InFirstParaInCell() const;
 
     WW8TabDesc( SwWW8ImplReader* pIoClass, WW8_CP nStartCp );
     bool Ok() const { return bOk; }
@@ -359,17 +360,26 @@ bool wwSectionManager::CurrentSectionIsVertical() const
     return false;
 }
 
-short wwSectionManager::GetPageLeft() const
+bool wwSectionManager::CurrentSectionIsProtected() const
+{
+    ASSERT(!maSegments.empty(),
+        "should not be possible, must be at least one segment");
+    if (!maSegments.empty())
+        return SectionIsProtected(maSegments.back());
+    return false;
+}
+
+sal_uInt32 wwSectionManager::GetPageLeft() const
 {
     return !maSegments.empty() ? maSegments.back().nPgLeft : 0;
 }
 
-short wwSectionManager::GetPageRight() const
+sal_uInt32 wwSectionManager::GetPageRight() const
 {
     return !maSegments.empty() ? maSegments.back().nPgRight : 0;
 }
 
-short wwSectionManager::GetPageWidth() const
+sal_uInt32 wwSectionManager::GetPageWidth() const
 {
     return !maSegments.empty() ? maSegments.back().nPgWidth : 0;
 }
@@ -597,14 +607,28 @@ ApoTestResults SwWW8ImplReader::TestApo(int nCellLevel, bool bTableRowEnd,
 
     // Is there some frame data here
     bool bNowApo = aRet.HasFrame() || pTabPos;
+    if (bNowApo)
+    {
+        if (WW8FlyPara *pTest = ConstructApo(aRet, pTabPos))
+            delete pTest;
+        else
+            bNowApo = false;
+    }
 
     bool bTestAllowed = !bTxbxFlySection && !bTableRowEnd;
     if (bTestAllowed)
     {
         if (nCellLevel == nInTable)
         {
-            bTestAllowed =
-                (!(nInTable && pTableDesc && pTableDesc->GetAktCol()));
+            //Test not allowed if there is a table, and we are in not in the
+            //first cell, or not in the first paragraph of the first cell
+            bTestAllowed = (!(
+                                nInTable && pTableDesc &&
+                                (
+                                  pTableDesc->GetAktCol() ||
+                                  !pTableDesc->InFirstParaInCell()
+                                )
+                           ));
         }
     }
 
@@ -2689,10 +2713,24 @@ bool WW8TabDesc::FindMergeGroup(short nX1, short nWidth, bool bExact,
     return ( -1 < nMGrIdx );
 }
 
-
 bool WW8TabDesc::IsValidCell(short nCol) const
 {
     return pActBand->bExist[nCol] && (USHORT)nAktRow < pTabLines->Count();
+}
+
+bool WW8TabDesc::InFirstParaInCell() const
+{
+    //e.g. #i19718#
+    if (!pTabBox || !pTabBox->GetSttNd())
+    {
+        ASSERT(false, "Problem with table");
+        return false;
+    }
+
+    if (pIo->pPaM->GetPoint()->nNode == pTabBox->GetSttIdx() + 1)
+        return true;
+
+    return false;
 }
 
 bool WW8TabDesc::SetPamInCell(short nWwCol, bool bPam)
