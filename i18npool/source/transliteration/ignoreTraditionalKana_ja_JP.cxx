@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ignoreTraditionalKana_ja_JP.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 10:54:48 $
+ *  last change: $Author: rt $ $Date: 2003-04-08 16:04:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,37 +65,35 @@
 #define TRANSLITERATION_TraditionalKana_ja_JP
 #include <transliteration_Ignore.hxx>
 
-using namespace com::sun::star::uno;
-using namespace com::sun::star::lang;
-using namespace rtl;
-
 namespace com { namespace sun { namespace star { namespace i18n {
 
 sal_Unicode
 ignoreTraditionalKana_ja_JP_translator (const sal_Unicode c)
 {
 
-  switch (c) {
-  case 0x3090:     // HIRAGANA LETTER WI
-    return 0x3044; // HIRAGANA LETTER I
+    switch (c) {
+        case 0x3090:     // HIRAGANA LETTER WI
+            return 0x3044; // HIRAGANA LETTER I
 
-  case 0x3091:     // HIRAGANA LETTER WE
-    return 0x3048; // HIRAGANA LETTER E
+        case 0x3091:     // HIRAGANA LETTER WE
+            return 0x3048; // HIRAGANA LETTER E
 
-  case 0x30F0:     // KATAKANA LETTER WI
-    return 0x30A4; // KATAKANA LETTER I
+        case 0x30F0:     // KATAKANA LETTER WI
+            return 0x30A4; // KATAKANA LETTER I
 
-  case 0x30F1:     // KATAKANA LETTER WE
-    return 0x30A8; // KATAKANA LETTER E
-  }
-  return c;
+        case 0x30F1:     // KATAKANA LETTER WE
+            return 0x30A8; // KATAKANA LETTER E
+    }
+    return c;
 }
 
-OUString SAL_CALL
-ignoreTraditionalKana_ja_JP::folding( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, Sequence< sal_Int32 >& offset )
-  throw(RuntimeException)
+ignoreTraditionalKana_ja_JP::ignoreTraditionalKana_ja_JP()
 {
-  return transliteration_Ignore::transliterate( inStr, startPos, nCount, offset, ignoreTraditionalKana_ja_JP_translator );
+        func = ignoreTraditionalKana_ja_JP_translator;
+        table = 0;
+        map = 0;
+        transliterationName = "ignoreTraditionalKana_ja_JP";
+        implementationName = "com.sun.star.i18n.Transliteration.ignoreTraditionalKana_ja_JP";
 }
 
 } } } }
