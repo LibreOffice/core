@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlsViewOverlay.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:35:48 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 15:13:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,11 +109,11 @@ ViewOverlay::ViewOverlay (SlideSorterViewShell& rViewShell)
       maMouseOverIndicatorOverlay(*this),
       maInsertionIndicatorOverlay(*this),
       maSubstitutionOverlay(*this),
-      mbHasSavedState(false),
       mbSelectionRectangleWasVisible(false),
       mbMouseOverIndicatorWasVisible(false),
       mbInsertionIndicatorWasVisible(false),
-      mbSubstitutionDisplayWasVisible(false)
+      mbSubstitutionDisplayWasVisible(false),
+      mnHideAndSaveLevel(0)
 {
 }
 
@@ -188,24 +188,26 @@ SlideSorterViewShell& ViewOverlay::GetViewShell (void)
 
 void ViewOverlay::HideAndSave (OverlayPaintType eType)
 {
-    // Remember the current state of the visiblities of the overlays.
-    mbSelectionRectangleWasVisible = maSelectionRectangleOverlay.IsShowing();
-    mbMouseOverIndicatorWasVisible = maMouseOverIndicatorOverlay.IsShowing();
-    mbInsertionIndicatorWasVisible = maInsertionIndicatorOverlay.IsShowing();
-    mbSubstitutionDisplayWasVisible = maSubstitutionOverlay.IsShowing();
-
-    // Remember that we have saved the current state.
-    mbHasSavedState = true;
-    meSavedStateType = eType;
-
-    // Hide the overlays.
-    if (eType==OPT_ALL || eType==OPT_XOR)
+    if (mnHideAndSaveLevel++ == 0)
     {
-        maSelectionRectangleOverlay.Hide();
-        maSubstitutionOverlay.Hide();
+        // Remember the current state of the visiblities of the overlays.
+        mbSelectionRectangleWasVisible = maSelectionRectangleOverlay.IsShowing();
+        mbMouseOverIndicatorWasVisible = maMouseOverIndicatorOverlay.IsShowing();
+        mbInsertionIndicatorWasVisible = maInsertionIndicatorOverlay.IsShowing();
+        mbSubstitutionDisplayWasVisible = maSubstitutionOverlay.IsShowing();
+
+        // Remember that we have saved the current state.
+        meSavedStateType = eType;
+
+        // Hide the overlays.
+        if (eType==OPT_ALL || eType==OPT_XOR)
+        {
+            maSelectionRectangleOverlay.Hide();
+            maSubstitutionOverlay.Hide();
+        }
+        if (eType==OPT_ALL || eType==OPT_PAINT)
+            maInsertionIndicatorOverlay.Hide();
     }
-    if (eType==OPT_ALL || eType==OPT_PAINT)
-        maInsertionIndicatorOverlay.Hide();
 }
 
 
@@ -213,7 +215,7 @@ void ViewOverlay::HideAndSave (OverlayPaintType eType)
 
 void ViewOverlay::Restore (void)
 {
-    if (mbHasSavedState)
+    if (--mnHideAndSaveLevel == 0)
     {
         if (meSavedStateType==OPT_ALL || meSavedStateType==OPT_PAINT)
         {
@@ -229,9 +231,6 @@ void ViewOverlay::Restore (void)
             if (mbSelectionRectangleWasVisible)
                 maSelectionRectangleOverlay.Show();
         }
-        // The state has been restored and the saved values very likely will
-        // get out of sync in a short time.
-        mbHasSavedState = false;
     }
 }
 
@@ -408,7 +407,9 @@ const Point& SubstitutionOverlay::GetPosition (void) const
 
 SelectionRectangleOverlay::SelectionRectangleOverlay (
     ViewOverlay& rViewOverlay)
-    : OverlayBase (rViewOverlay)
+    : OverlayBase (rViewOverlay),
+      maAnchor(0,0),
+      maSecondCorner(0,0)
 {
 }
 
@@ -417,7 +418,17 @@ SelectionRectangleOverlay::SelectionRectangleOverlay (
 
 void SelectionRectangleOverlay::Paint (void)
 {
-    mrViewOverlay.GetViewShell().DrawMarkRect (maSelectionRectangle);
+    //  mrViewOverlay.GetViewShell().DrawMarkRect (maSelectionRectangle);
+}
+
+
+
+
+void SelectionRectangleOverlay::Show (void)
+{
+    Start (maAnchor);
+    Update (maSecondCorner);
+    OverlayBase::Show();
 }
 
 
@@ -425,16 +436,36 @@ void SelectionRectangleOverlay::Paint (void)
 
 void SelectionRectangleOverlay::Hide (void)
 {
-    maSelectionRectangle = mrViewOverlay.GetViewShell()
-        .GetSlideSorterController().GetView().EndEncirclement();
+    mrViewOverlay.GetViewShell().GetSlideSorterController().GetView().EndEncirclement();
+    OverlayBase::Hide();
 }
 
 
 
 
-const Rectangle& SelectionRectangleOverlay::GetSelectionRectangle (void)
+Rectangle SelectionRectangleOverlay::GetSelectionRectangle (void)
 {
-    return  maSelectionRectangle;
+    return Rectangle(maAnchor, maSecondCorner);
+}
+
+
+
+
+void SelectionRectangleOverlay::Start (const Point& rAnchor)
+{
+    maAnchor = rAnchor;
+    maSecondCorner = rAnchor;
+    mrViewOverlay.GetViewShell().GetSlideSorterController().GetView().BegEncirclement(maAnchor);
+    OverlayBase::Show();
+}
+
+
+
+
+void SelectionRectangleOverlay::Update (const Point& rSecondCorner)
+{
+    maSecondCorner = rSecondCorner;
+    mrViewOverlay.GetViewShell().GetSlideSorterController().GetView().MovEncirclement(maSecondCorner);
 }
 
 
