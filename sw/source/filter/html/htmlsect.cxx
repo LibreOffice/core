@@ -2,9 +2,9 @@
  *
  *  $RCSfile: htmlsect.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 12:17:23 $
+ *  last change: $Author: rt $ $Date: 2004-05-25 15:08:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -280,7 +280,8 @@ void SwHTMLParser::NewDivision( int nToken )
             // Die Seitenvorlage aktualisieren
             for( sal_uInt16 i=0; i < pDoc->GetPageDescCnt(); i++ )
             {
-                if( RES_POOLPAGE_HTML==pDoc->GetPageDesc(i).GetPoolFmtId() )
+                if( RES_POOLPAGE_HTML==const_cast<const SwDoc *>(pDoc)
+                    ->GetPageDesc(i).GetPoolFmtId() )
                 {
                     pDoc->ChgPageDesc( i, *pPageDesc );
                     break;
