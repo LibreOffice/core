@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wdocsh.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:42:42 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 19:01:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,7 +78,7 @@ public:
 
     // aber selbst implementieren
     SFX_DECL_INTERFACE(SW_WEBDOCSHELL);
-    SFX_DECL_OBJECTFACTORY(SwWebDocShell);
+    SFX_DECL_OBJECTFACTORY();
     TYPEINFO();
 
     SwWebDocShell(SfxObjectCreateMode eMode = SFX_CREATE_MODE_EMBEDDED);
@@ -89,7 +89,7 @@ public:
                                    String * pAppName,
                                    String * pLongUserName,
                                    String * pUserName,
-                                   long nVersion = SOFFICE_FILEFORMAT_CURRENT ) const;
+                                   sal_Int32 nFileFormat ) const;
     USHORT      GetSourcePara()const
                             {return nSourcePara;}
     void        SetSourcePara(USHORT nSet)
