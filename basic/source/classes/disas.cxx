@@ -2,9 +2,9 @@
  *
  *  $RCSfile: disas.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-15 16:33:47 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 16:05:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,7 +122,8 @@ static const char* pOp1[] = {
     "ERROR",            // TOS = Fehlercode
     "LSET",             // Speichern Objekt TOS ==> TOS-1
     "RSET",             // Speichern Objekt TOS ==> TOS-1
-    "REDIMP_ERASE"
+    "REDIMP_ERASE",
+    "INITFOREACH"
 };
 
 static const char* pOp2[] = {
