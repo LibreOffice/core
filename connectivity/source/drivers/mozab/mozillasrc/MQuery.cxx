@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MQuery.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: jmarmion $ $Date: 2002-09-26 10:03:26 $
+ *  last change: $Author: jmarmion $ $Date: 2002-10-10 13:17:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -422,6 +422,44 @@ sal_Int32 MQuery::executeQuery(sal_Bool _bIsOutlookExpress, OConnection* _pCon)
     else
         OSL_TRACE("Not using a Query Proxy, Query i/f supported by directory\n");
 #endif /* DEBUG */
+
+    /*
+    // The problem here is that an LDAP Address Book may exist as
+    // a Mozilla Address Book. So we need to limit the number of
+    // records returned by the Server:
+    // 1. Determine if this is an LDAP Address Book
+    // [LDAP overrides the default operations(write|read|search) of all types with search only].
+    // 2. Determine if the limit is already set by us.
+    // 3. Use the mozilla preferences to see if this value is set.
+    // 4. Use value or else default to 100.
+    */
+    PRBool isWriteable;
+    rv = directory->GetOperations (&isWriteable);
+    NS_ENSURE_SUCCESS(rv, rv);
+    if (!(isWriteable & nsIAbDirectory::opWrite))
+    {
+        if(m_nMaxNrOfReturns == -1)
+        {
+            // Determine if the limit maxHits has been set in the mozilla preferences
+            // if set, then use the value otherwise default to 100
+            nsCOMPtr<nsIPref> prefs = do_GetService(NS_PREF_CONTRACTID, &rv);
+            NS_ENSURE_SUCCESS(rv, rv);
+
+            // create the ldap maxHits entry for the preferences file.
+            // Note: maxHits is applicable to LDAP only in mozilla.
+            nsCAutoString prefName(NS_LITERAL_CSTRING("ldap_2.servers."));
+            const char *pAddressBook = MTypeConverter::ouStringToCCharStringAscii(m_aAddressbook);
+            prefName.Append(pAddressBook);
+            prefName.Append(NS_LITERAL_CSTRING(".maxHits"));
+
+           PRInt32 maxHits;
+           rv = prefs->GetIntPref(prefName.get(), &maxHits);
+           if (NS_FAILED(rv))
+               m_nMaxNrOfReturns = 100;
+           else
+               m_nMaxNrOfReturns = maxHits;
+        }
+    }
 
     nsCOMPtr< nsIAbBooleanExpression > queryExpression = do_CreateInstance( kBooleanExpressionCID , &rv);
     NS_ENSURE_SUCCESS( rv, rv );
