@@ -2,9 +2,9 @@
  *
  *  $RCSfile: statusbarcontroller.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 17:13:16 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:50:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,8 +94,8 @@
 #include <com/sun/star/util/XURLTransformer.hpp>
 #endif
 
-#ifndef _DRAFTS_COM_SUN_STAR_FRAME_XLAYOUTMANAGER_HPP_
-#include <drafts/com/sun/star/frame/XLayoutManager.hpp>
+#ifndef _COM_SUN_STAR_FRAME_XLAYOUTMANAGER_HPP_
+#include <com/sun/star/frame/XLayoutManager.hpp>
 #endif
 
 #ifndef _CPPUHELPER_WEAK_HXX_
@@ -133,7 +133,7 @@ class StatusbarController : public ::com::sun::star::frame::XStatusListener,
 
         ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame > getFrameInterface() const;
         ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory > getServiceManager() const;
-        ::com::sun::star::uno::Reference< ::drafts::com::sun::star::frame::XLayoutManager > getLayoutManager() const;
+        ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManager > getLayoutManager() const;
         ::com::sun::star::uno::Reference< ::com::sun::star::util::XURLTransformer > getURLTransformer() const;
 
         void updateStatus( const rtl::OUString aCommandURL );
