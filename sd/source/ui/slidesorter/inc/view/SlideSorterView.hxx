@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlideSorterView.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:22:29 $
+ *  last change: $Author: rt $ $Date: 2004-07-14 16:36:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,11 +194,10 @@ public:
     void HandleModelChange (void);
 
     virtual void Resize (void);
-    virtual void InitRedraw (
+    virtual void CompleteRedraw (
         OutputDevice* pDevice,
         const Region& rPaintArea,
-        USHORT nPaintMode=0,
-        const Link* pPaintProc=NULL);
+        ::sdr::contact::ViewObjectContactRedirector* pRedirector = 0L);
     virtual void InvalidateOneWin (
         ::Window& rWindow);
     virtual void InvalidateOneWin (
@@ -206,7 +205,6 @@ public:
         const Rectangle& rPaintArea );
 
     void Layout (void);
-
     /** This tells the view that it has to re-determine the visibility of
         the page objects before painting them the next time.
     */

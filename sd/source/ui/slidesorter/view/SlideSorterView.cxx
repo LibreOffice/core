@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlideSorterView.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 14:27:04 $
+ *  last change: $Author: rt $ $Date: 2004-07-14 16:35:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -495,11 +495,10 @@ Rectangle SlideSorterView::GetPageBoundingBox (
 
 
 
-void SlideSorterView::InitRedraw (
+void SlideSorterView::CompleteRedraw (
     OutputDevice* pDevice,
     const Region& rPaintArea,
-    USHORT nPaintMode,
-    const Link* pPaintProc)
+    ::sdr::contact::ViewObjectContactRedirector* pRedirector)
 {
     if (nLockRedrawSmph == 0)
     {
@@ -513,7 +512,7 @@ void SlideSorterView::InitRedraw (
     // this call and restored afterwards so that its XOR painting works
     // properly.
     GetOverlay().HideAndSave();
-    View::InitRedraw (pDevice, rPaintArea, nPaintMode, pPaintProc);
+    View::CompleteRedraw (pDevice, rPaintArea, pRedirector);
     GetOverlay().Restore();
 }
 
