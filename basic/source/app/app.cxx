@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: gh $ $Date: 2001-08-14 13:25:16 $
+ *  last change: $Author: gh $ $Date: 2001-08-21 09:48:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -744,6 +744,15 @@ void BasicFrame::SFX_NOTIFY( SfxBroadcaster&, const TypeId&,
                         pExecutionStatus = new FloatingExecutionStatus( this );
                     pExecutionStatus->SetStatus( pStatusHint->GetExecutionStatus() );
                     pExecutionStatus->SetAdditionalInfo( pStatusHint->GetAdditionalExecutionStatus() );
+                }
+                break;
+            case TT_EXECUTION_HIDE_ACTION:
+                {
+                    if ( pExecutionStatus )
+                    {
+                        delete pExecutionStatus;
+                        pExecutionStatus = NULL;
+                    }
                 }
                 break;
         }
