@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pl $ $Date: 2002-07-20 15:54:29 $
+ *  last change: $Author: hdu $ $Date: 2002-07-22 12:53:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1400,7 +1400,7 @@ sal_Int32 PDFWriterImpl::emitFontDescriptor( ImplFontData* pFont, FontSubsetInfo
     aLine.append( ' ' );
     aLine.append( (sal_Int32)rInfo.m_aFontBBox.BottomRight().X() );
     aLine.append( ' ' );
-    aLine.append( (sal_Int32)rInfo.m_aFontBBox.BottomRight().Y()+1 );
+    aLine.append( (sal_Int32)(rInfo.m_aFontBBox.BottomRight().Y()+1) );
     aLine.append( " ]\r\n     /ItalicAngle " );
     if( pFont->meItalic == ITALIC_OBLIQUE || pFont->meItalic == ITALIC_NORMAL )
         aLine.append( "-30" );
@@ -2644,7 +2644,7 @@ bool PDFWriterImpl::writeBitmapObject( BitmapEmit& rObject, bool bMask )
         case 8:
             bTrueColor = false;
             nBitsPerComponent = aBitmap.GetBitCount();
-            DBG_ASSERT( pAccess->GetScanlineSize() == pAccess->GetBitCount()*pAccess->Width()/8, "wrong scanline size" );
+            DBG_ASSERT( pAccess->GetScanlineSize() == pAccess->GetBitCount()*pAccess->Width()/8U, "wrong scanline size" );
             break;
         default:
             bTrueColor = true;
