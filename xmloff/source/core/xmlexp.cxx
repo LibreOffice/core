@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: dvo $ $Date: 2001-03-19 16:30:27 $
+ *  last change: $Author: cl $ $Date: 2001-03-20 20:04:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -404,6 +404,10 @@ void SAL_CALL SvXMLExport::initialize( const uno::Sequence< uno::Any >& aArgumen
 
             if (xNumberFormatsSupplier.is() && pNumExport == NULL)
                 pNumExport = new SvXMLNumFmtExport(xHandler, xNumberFormatsSupplier);
+        }
+        else if( pAny->getValueType() == ::getCppuType((const uno::Reference< beans::XPropertySet >*)0))
+        {
+            *pAny >>= xExportInfo;
         }
     }
 }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpstyl.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-19 15:07:55 $
+ *  last change: $Author: cl $ $Date: 2001-03-20 20:05:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,6 +103,10 @@
 
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSTATE_HPP_
 #include <com/sun/star/beans/XPropertyState.hpp>
+#endif
+
+#ifndef _COMPHELPER_NAMECONTAINER_HXX_
+#include <comphelper/namecontainer.hxx>
 #endif
 
 #ifndef _XMLOFF_XMLPROPERTYSETCONTEXT_HXX
@@ -1215,6 +1219,17 @@ void SdXMLStylesContext::EndElement()
     {
         // Process styles list
         ImpSetGraphicStyles();
+
+        // put style infos in the info set for other components ( content import f.e. )
+        uno::Reference< beans::XPropertySet > xInfoSet( GetImport().getImportInfo() );
+        if( xInfoSet.is() )
+        {
+            uno::Reference< beans::XPropertySetInfo > xInfoSetInfo( xInfoSet->getPropertySetInfo() );
+
+            if( xInfoSetInfo->hasPropertyByName( OUString( RTL_CONSTASCII_USTRINGPARAM( "PageLayouts" ) ) ) )
+                xInfoSet->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "PageLayouts" ) ), uno::makeAny( getPageLayouts() ) );
+        }
+
     }
 }
 
@@ -1409,6 +1424,27 @@ void SdXMLStylesContext::ImpSetGraphicStyles(
             }
         }
     }
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// helper function to create the uno component that hold the mappings from
+// xml auto layout name to internal autolayout id
+
+uno::Reference< container::XNameAccess > SdXMLStylesContext::getPageLayouts() const
+{
+    uno::Reference< container::XNameContainer > xLayouts( comphelper::NameContainer_createInstance< sal_Int32 >() );
+
+    for(sal_uInt32 a(0L); a < GetStyleCount(); a++)
+    {
+        const SvXMLStyleContext* pStyle = GetStyle(a);
+        if(pStyle && pStyle->ISA(SdXMLPresentationPageLayoutContext))
+        {
+            xLayouts->insertByName( pStyle->GetName(), uno::makeAny(
+            (sal_Int32)((SdXMLPresentationPageLayoutContext*)pStyle)->GetTypeId() ) );
+        }
+    }
+
+    return uno::Reference< container::XNameAccess >::query( xLayouts );
 }
 
 ////////////////////////////////////////////////////////////////////////////////

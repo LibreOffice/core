@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpstyl.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-04 23:07:53 $
+ *  last change: $Author: cl $ $Date: 2001-03-20 20:05:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -288,6 +288,8 @@ public:
     virtual UniReference< SvXMLImportPropertyMapper > GetImportPropertyMapper(sal_uInt16 nFamily) const;
 
     void SetMasterPageStyles(SdXMLMasterPageContext& rMaster) const;
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > getPageLayouts() const;
 };
 
 //////////////////////////////////////////////////////////////////////////////

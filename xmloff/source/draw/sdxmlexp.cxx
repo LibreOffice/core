@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-20 15:12:17 $
+ *  last change: $Author: cl $ $Date: 2001-03-20 20:05:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -546,7 +546,8 @@ SdXMLExport::SdXMLExport( sal_Bool bIsDraw, sal_uInt16 nExportFlags )
     msEmptyPres( RTL_CONSTASCII_USTRINGPARAM("IsEmptyPresentationObject") ),
     msModel( RTL_CONSTASCII_USTRINGPARAM("Model") ),
     msStartShape( RTL_CONSTASCII_USTRINGPARAM("StartShape") ),
-    msEndShape( RTL_CONSTASCII_USTRINGPARAM("EndShape") )
+    msEndShape( RTL_CONSTASCII_USTRINGPARAM("EndShape") ),
+    msPageLayoutNames( RTL_CONSTASCII_USTRINGPARAM("PageLayoutNames") )
 {
 
 
@@ -637,9 +638,7 @@ void SAL_CALL SdXMLExport::setSourceDocument( const uno::Reference< lang::XCompo
             mnDocDrawPageCount = mxDocDrawPages->getCount();
             maDrawPagesStyleNames.insert( maDrawPagesStyleNames.begin(), mnDocDrawPageCount, aEmpty );
             if( !mbIsDraw )
-            {
-                maDrawPagesAutoLayoutNames.insert( maDrawPagesAutoLayoutNames.begin(), mnDocDrawPageCount, aEmpty );
-            }
+                maDrawPagesAutoLayoutNames.realloc( mnDocDrawPageCount );
         }
     }
 
@@ -1869,12 +1868,37 @@ void SdXMLExport::_ExportStyles(BOOL bUsed)
 
     // write draw:auto-layout-name for page export
     ImpWriteAutoLayoutInfos();
+
+    uno::Reference< beans::XPropertySet > xInfoSet( getExportInfo() );
+    if( xInfoSet.is() )
+    {
+        uno::Reference< beans::XPropertySetInfo > xInfoSetInfo( xInfoSet->getPropertySetInfo() );
+
+        uno::Any aAny;
+
+        if( xInfoSetInfo->hasPropertyByName( msPageLayoutNames ) )
+        {
+            aAny <<= maDrawPagesAutoLayoutNames;
+            xInfoSet->setPropertyValue( msPageLayoutNames, aAny );
+        }
+    }
 }
 
 //////////////////////////////////////////////////////////////////////////////
 
 void SdXMLExport::_ExportAutoStyles()
 {
+    uno::Reference< beans::XPropertySet > xInfoSet( getExportInfo() );
+    if( xInfoSet.is() )
+    {
+        uno::Reference< beans::XPropertySetInfo > xInfoSetInfo( xInfoSet->getPropertySetInfo() );
+
+        if( xInfoSetInfo->hasPropertyByName( msPageLayoutNames ) )
+        {
+            xInfoSet->getPropertyValue( msPageLayoutNames ) >>= maDrawPagesAutoLayoutNames;
+        }
+    }
+
     GetPropertySetMapper()->SetAutoStyles( sal_True );
 
     if( getExportFlags() & EXPORT_STYLES )

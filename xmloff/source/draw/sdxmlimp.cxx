@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlimp.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-04 16:10:26 $
+ *  last change: $Author: cl $ $Date: 2001-03-20 20:05:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -513,7 +513,8 @@ SdXMLImport::SdXMLImport( sal_Bool bIsDraw, sal_uInt16 nImportFlags )
     mnNewPageCount(0L),
     mnNewMasterPageCount(0L),
     mbLoadDoc(sal_True),
-    mbIsDraw(bIsDraw)
+    mbIsDraw(bIsDraw),
+    msPageLayouts( RTL_CONSTASCII_USTRINGPARAM( "PageLayouts" ) )
 {
     // add namespaces
     GetNamespaceMap().AddAtIndex(
@@ -558,6 +559,22 @@ void SAL_CALL SdXMLImport::setTargetDocument( const uno::Reference< lang::XCompo
     mxDocDrawPages = mxDocDrawPages.query( xDrawPagesSupplier->getDrawPages() );
     if(!mxDocDrawPages.is())
         throw lang::IllegalArgumentException();
+}
+
+// XInitialization
+void SAL_CALL SdXMLImport::initialize( const uno::Sequence< uno::Any >& aArguments )
+    throw( uno::Exception, uno::RuntimeException)
+{
+    SvXMLImport::initialize( aArguments );
+
+    uno::Reference< beans::XPropertySet > xInfoSet( getImportInfo() );
+    if( xInfoSet.is() )
+    {
+        uno::Reference< beans::XPropertySetInfo > xInfoSetInfo( xInfoSet->getPropertySetInfo() );
+
+        if( xInfoSetInfo->hasPropertyByName( msPageLayouts ) )
+            xInfoSet->getPropertyValue( msPageLayouts ) >>= mxPageLayouts;
+    }
 }
 
 //////////////////////////////////////////////////////////////////////////////

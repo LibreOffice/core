@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlimp_impl.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-01 16:31:32 $
+ *  last change: $Author: cl $ $Date: 2001-03-20 20:05:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -218,6 +218,7 @@ class SdXMLImport: public SvXMLImport
     com::sun::star::uno::Reference< com::sun::star::container::XNameAccess > mxDocStyleFamilies;
     com::sun::star::uno::Reference< com::sun::star::container::XIndexAccess > mxDocMasterPages;
     com::sun::star::uno::Reference< com::sun::star::container::XIndexAccess > mxDocDrawPages;
+    com::sun::star::uno::Reference< com::sun::star::container::XNameAccess > mxPageLayouts;
 
     // contexts for Style and AutoStyle import
     SdXMLMasterStylesContext*   mpMasterStylesContext;
@@ -247,6 +248,8 @@ class SdXMLImport: public SvXMLImport
 
     DrawPageIdMap               maDrawPageIds;
 
+    ::rtl::OUString             msPageLayouts;
+
 protected:
     // This method is called after the namespace map has been updated, but
     // before a context for the current element has been pushed.
@@ -261,6 +264,9 @@ public:
 
     // XImporter
     virtual void SAL_CALL setTargetDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& xDoc ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+
+    // XInitialization
+    virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >& aArguments ) throw(::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
 
     void SetProgress(sal_Int32 nProg);
 
@@ -308,6 +314,8 @@ public:
     void IncrementNewPageCount() { mnNewPageCount++; }
     sal_Int32 GetNewMasterPageCount() const { return mnNewMasterPageCount; }
     void IncrementNewMasterPageCount() { mnNewMasterPageCount++; }
+
+    com::sun::star::uno::Reference< com::sun::star::container::XNameAccess > getPageLayouts() const { return mxPageLayouts; }
 
     sal_Bool IsDraw() const { return mbIsDraw; }
     sal_Bool IsImpress() const { return !mbIsDraw; }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp_impl.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: aw $ $Date: 2001-03-09 13:28:06 $
+ *  last change: $Author: cl $ $Date: 2001-03-20 20:05:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,7 +143,7 @@ class SdXMLExport : public SvXMLExport
     ImpXMLEXPPageMasterList*    mpPageMaterUsageList;
     ImpXMLAutoLayoutInfoList*   mpAutoLayoutInfoList;
 
-    ::std::vector< ::rtl::OUString >        maDrawPagesAutoLayoutNames;
+    com::sun::star::uno::Sequence< ::rtl::OUString > maDrawPagesAutoLayoutNames;
     ::std::vector< ::rtl::OUString >        maDrawPagesStyleNames;
     ::std::vector< ::rtl::OUString >        maMasterPagesStyleNames;
 
@@ -160,6 +160,7 @@ class SdXMLExport : public SvXMLExport
     const rtl::OUString         msModel;
     const rtl::OUString         msStartShape;
     const rtl::OUString         msEndShape;
+    const rtl::OUString         msPageLayoutNames;
 
     virtual void _ExportViewSettings();
     virtual void _ExportStyles(BOOL bUsed);

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimp.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: mtg $ $Date: 2001-03-19 10:30:30 $
+ *  last change: $Author: cl $ $Date: 2001-03-20 20:04:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -543,6 +543,10 @@ void SAL_CALL SvXMLImport::initialize( const uno::Sequence< uno::Any >& aArgumen
         else if( pAny->getValueType() == ::getCppuType((const uno::Reference< document::XEmbeddedObjectResolver >*)0))
         {
             *pAny >>= xEmbeddedResolver;
+        }
+        else if( pAny->getValueType() == ::getCppuType((const uno::Reference< beans::XPropertySet >*)0))
+        {
+            *pAny >>= xImportInfo;
         }
     }
 }

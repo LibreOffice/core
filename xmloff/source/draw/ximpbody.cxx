@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpbody.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: cl $ $Date: 2001-02-15 17:35:27 $
+ *  last change: $Author: cl $ $Date: 2001-03-20 20:05:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -287,6 +287,8 @@ SdXMLDrawPageContext::SdXMLDrawPageContext( SdXMLImport& rImport,
     // set PresentationPageLayout?
     if(maPageLayoutName.getLength())
     {
+        sal_Int32 nType = -1;
+
         const SvXMLImportContext* pContext = GetSdImport().GetShapeImport()->GetStylesContext();
 
         if( pContext && pContext->ISA( SvXMLStyleContext ) )
@@ -294,20 +296,33 @@ SdXMLDrawPageContext::SdXMLDrawPageContext( SdXMLImport& rImport,
             const SdXMLStylesContext* pStyles = (SdXMLStylesContext*)pContext;
             if(pStyles)
             {
-                const SvXMLStyleContext* pStyle = pStyles->FindStyleChildContext(
-                    XML_STYLE_FAMILY_SD_PRESENTATIONPAGELAYOUT_ID, maPageLayoutName);
+                const SvXMLStyleContext* pStyle = pStyles->FindStyleChildContext( XML_STYLE_FAMILY_SD_PRESENTATIONPAGELAYOUT_ID, maPageLayoutName);
 
                 if(pStyle && pStyle->ISA(SdXMLPresentationPageLayoutContext))
                 {
                     SdXMLPresentationPageLayoutContext* pLayout = (SdXMLPresentationPageLayoutContext*)pStyle;
-                    uno::Reference <beans::XPropertySet> xPropSet(rShapes, uno::UNO_QUERY);
-                    if(xPropSet.is())
-                    {
-                        uno::Any aAny;
-                        aAny <<= pLayout->GetTypeId();
-                        xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("Layout")), aAny);
-                    }
+                    nType = pLayout->GetTypeId();
                 }
+            }
+
+        }
+        if( -1 == nType )
+        {
+            uno::Reference< container::XNameAccess > xPageLayouts( GetSdImport().getPageLayouts() );
+            if( xPageLayouts.is() )
+            {
+                if( xPageLayouts->hasByName( maPageLayoutName ) )
+                    xPageLayouts->getByName( maPageLayoutName ) >>= nType;
+            }
+
+        }
+
+        if( -1 != nType )
+        {
+            uno::Reference <beans::XPropertySet> xPropSet(rShapes, uno::UNO_QUERY);
+            if(xPropSet.is())
+            {
+                xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("Layout")), uno::makeAny( (sal_Int16)nType ) );
             }
         }
     }
