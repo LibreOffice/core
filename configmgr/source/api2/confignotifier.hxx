@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confignotifier.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jb $ $Date: 2001-06-20 20:28:26 $
+ *  last change: $Author: hr $ $Date: 2001-09-27 18:43:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,10 @@
 #include "configpath.hxx"
 #include <vos/ref.hxx>
 
+#ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
+#include <com/sun/star/lang/DisposedException.hpp>
+#endif
+
 namespace com { namespace sun { namespace star {
     namespace beans
     {
@@ -78,7 +82,6 @@ namespace com { namespace sun { namespace star {
     namespace lang
     {
         class XEventListener;
-        class DisposedException;
         struct EventObject;
     }
     namespace container { class XContainerListener; }

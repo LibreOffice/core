@@ -2,9 +2,9 @@
  *
  *  $RCSfile: broadcaster.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2001-02-13 17:15:37 $
+ *  last change: $Author: hr $ $Date: 2001-09-27 18:43:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,15 +62,12 @@
 #ifndef CONFIGMGR_API_BROADCASTER_HXX_
 #define CONFIGMGR_API_BROADCASTER_HXX_
 
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVETOEXCEPTION_HPP_
+#include <com/sun/star/beans/PropertyVetoException.hpp>
+#endif
+
 #include "apitypes.hxx"
 #include <vos/ref.hxx>
-
-namespace com { namespace sun { namespace star {
-    namespace beans
-    {
-        class PropertyVetoException;
-    }
-} } }
 
 namespace configmgr
 {
