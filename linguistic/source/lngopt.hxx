@@ -2,9 +2,9 @@
  *
  *  $RCSfile: lngopt.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: os $ $Date: 2000-11-28 12:21:19 $
+ *  last change: $Author: tl $ $Date: 2000-11-29 16:14:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,15 +135,32 @@ public:
     ::com::sun::star::uno::Sequence< rtl::OUString > GetPropertyNames( INT16 nCfgItem );
 
     com::sun::star::uno::Sequence< com::sun::star::uno::Any >
-        GetProperties(const ::com::sun::star::uno::Sequence< rtl::OUString >& rNames )
-            {return ConfigItem::GetProperties(rNames);}
+        GetProperties(
+            const ::com::sun::star::uno::Sequence< rtl::OUString >& rNames )
+        {
+            return ConfigItem::GetProperties(rNames);
+        }
 
     sal_Bool PutProperties(
-        const ::com::sun::star::uno::Sequence< rtl::OUString >& rNames,
-        const com::sun::star::uno::Sequence< com::sun::star::uno::Any >& rValues)
+             const ::com::sun::star::uno::Sequence< rtl::OUString >& rNames,
+            const com::sun::star::uno::Sequence< com::sun::star::uno::Any >& rValues)
         {
             return ConfigItem::PutProperties( rNames, rValues);
         }
+
+    sal_Bool SetSetProperties(
+            const rtl::OUString& rNode,
+            com::sun::star::uno::Sequence<
+                com::sun::star::beans::PropertyValue > rValues )
+        {
+            return ConfigItem::SetSetProperties( rNode, rValues );
+        }
+
+#ifdef DEBUG
+    ::com::sun::star::uno::Sequence< rtl::OUString >GetNodeNames(const rtl::OUString& rNode)
+        {return ConfigItem::GetNodeNames(rNode);}
+#endif
+
 };
 
 
