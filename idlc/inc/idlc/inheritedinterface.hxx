@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inheritedinterface.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:43:56 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 15:06:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,26 +62,32 @@
 #ifndef INCLUDED_idlc_inc_idlc_inheritedinterface_hxx
 #define INCLUDED_idlc_inc_idlc_inheritedinterface_hxx
 
+#include "idlc/idlc.hxx"
+
 #include "rtl/ustring.hxx"
 
 class AstInterface;
+class AstType;
 
 class InheritedInterface {
 public:
     InheritedInterface(
-        AstInterface const * theInterface, bool theOptional,
+        AstType const * theInterface, bool theOptional,
         rtl::OUString const & theDocumentation):
         interface(theInterface), optional(theOptional),
         documentation(theDocumentation) {}
 
-    AstInterface const * getInterface() const { return interface; }
+    AstType const * getInterface() const { return interface; }
+
+    AstInterface const * getResolved() const
+    { return resolveInterfaceTypedefs(interface); }
 
     bool isOptional() const { return optional; }
 
     rtl::OUString getDocumentation() const { return documentation; }
 
 private:
-    AstInterface const * interface;
+    AstType const * interface;
     bool optional;
     rtl::OUString documentation;
 };
