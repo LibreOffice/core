@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleContextBase.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: af $ $Date: 2002-03-06 15:57:37 $
+ *  last change: $Author: af $ $Date: 2002-03-18 10:11:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,6 +77,9 @@
 #ifndef _RTL_UUID_H_
 #include <rtl/uuid.h>
 #endif
+
+#include <vos/mutex.hxx>
+#include <vcl/svapp.hxx>
 
 using namespace ::rtl;
 using namespace ::com::sun::star;
@@ -205,21 +208,10 @@ sal_Int16 SAL_CALL
        AccessibleContextBase::getAccessibleDescription (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    if (!msDescription.getLength())
-    {
-        OUString sDescription (createAccessibleDescription());
-
-        uno::Any aOldValue, aNewValue;
-        aOldValue <<= msDescription;
-        aNewValue <<= sDescription;
-
-        msDescription = sDescription;
-
-        CommitChange (OUString::createFromAscii ("AccessibleDescription"), aNewValue, aOldValue);
-    }
+    if ( ! msDescription.getLength())
+        SetAccessibleDescription (CreateAccessibleDescription());
     return msDescription;
 }
-
 
 
 
@@ -228,17 +220,7 @@ OUString SAL_CALL
     throw (::com::sun::star::uno::RuntimeException)
 {
     if ( !msName.getLength())
-    {
-        OUString sName (createAccessibleName());
-
-        uno::Any aOldValue, aNewValue;
-        aOldValue <<= msName;
-        aNewValue <<= sName;
-
-        msName = sName;
-
-        CommitChange (OUString::createFromAscii ("AccessibleName"), aNewValue, aOldValue);
-    }
+        SetAccessibleDescription (CreateAccessibleName());
     return msName;
 }
 
@@ -298,73 +280,6 @@ lang::Locale SAL_CALL
 
 
 
-void SAL_CALL
-       AccessibleContextBase::addPropertyChangeListener (
-           const uno::Reference<beans::XPropertyChangeListener>& xListener)
-    throw (::com::sun::star::uno::RuntimeException)
-{
-    if (xListener.is())
-    {
-        //  Make sure that the given listener is not already a member of the
-        //  listener list.
-        ::vos::OGuard aGuard (maMutex);
-           mxPropertyChangeListeners.insert (xListener);
-    }
-}
-
-
-
-
-void SAL_CALL
-       AccessibleContextBase::removePropertyChangeListener (
-        const uno::Reference<beans::XPropertyChangeListener>& xListener)
-    throw (::com::sun::star::uno::RuntimeException)
-{
-    if (xListener.is())
-    {
-        ::vos::OGuard aGuard (maMutex);
-           mxPropertyChangeListeners.erase (xListener);
-
-        /*
-        //  Find the listener to remove by iterating over the whole list.
-        sal_Bool bFound(sal_False);
-           PropertyChangeListenerListType::iterator aItr = mxPropertyChangeListeners.begin();
-        while(!bFound && (aItr != mxPropertyChangeListeners.end()))
-        {
-            if (*aItr == xListener)
-            {
-                //  Remove the listener and leave the iteration loop.
-                ::vos::OGuard aGuard (maMutex);
-                mxPropertyChangeListeners.erase (aItr);
-                bFound = sal_True;
-            }
-            else
-                aItr++;
-        }
-        */
-    }
-}
-
-
-
-
-void AccessibleContextBase::fireEvent (const AccessibleEventObject& aEvent)
-{
-    EventListenerListType::iterator I;
-
-    for (I=mxEventListeners.begin(); I!=mxEventListeners.end(); I++)
-        if ((*I).is())
-        {
-            OSL_TRACE ("Fireing event.");
-            (*I)->notifyEvent (aEvent);
-        }
-        else
-            OSL_TRACE ("listener invalid.");
-}
-
-
-
-
 //=====  XAccessibleEventListener  ============================================
 
 void SAL_CALL
@@ -397,6 +312,33 @@ void SAL_CALL
     }
 }
 
+
+
+
+//=====  XComponent  ==========================================================
+
+void SAL_CALL AccessibleContextBase::dispose (void)
+    throw (::com::sun::star::uno::RuntimeException)
+{
+}
+
+
+void SAL_CALL AccessibleContextBase::addEventListener (
+    const ::com::sun::star::uno::Reference<
+    ::com::sun::star::lang::XEventListener >& xListener)
+    throw (::com::sun::star::uno::RuntimeException)
+{
+}
+
+
+
+
+void SAL_CALL AccessibleContextBase::removeEventListener (
+    const ::com::sun::star::uno::Reference<
+    ::com::sun::star::lang::XEventListener >& aListener)
+    throw (::com::sun::star::uno::RuntimeException)
+{
+}
 
 
 
@@ -433,7 +375,8 @@ uno::Sequence< ::rtl::OUString> SAL_CALL
        AccessibleContextBase::getSupportedServiceNames (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    const OUString sServiceName (RTL_CONSTASCII_USTRINGPARAM ("drafts.com.sun.star.accessibility.AccessibleContext"));
+    const OUString sServiceName (
+        RTL_CONSTASCII_USTRINGPARAM ("drafts.com.sun.star.accessibility.AccessibleContext"));
     return uno::Sequence<OUString> (&sServiceName, 1);
 }
 
@@ -491,7 +434,8 @@ uno::Sequence<sal_Int8> SAL_CALL
     AccessibleContextBase::getServiceName (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
-    return OUString(RTL_CONSTASCII_USTRINGPARAM ("drafts.com.sun.star.accessibility.AccessibleContext"));
+    return OUString(
+        RTL_CONSTASCII_USTRINGPARAM ("drafts.com.sun.star.accessibility.AccessibleContext"));
 }
 
 
@@ -499,8 +443,7 @@ uno::Sequence<sal_Int8> SAL_CALL
 
 //=====  internal  ============================================================
 
-void
-    AccessibleContextBase::setAccessibleDescription (const ::rtl::OUString& rDescription)
+void AccessibleContextBase::SetAccessibleDescription (const ::rtl::OUString& rDescription)
     throw (uno::RuntimeException)
 {
     if (msDescription != rDescription)
@@ -511,12 +454,17 @@ void
 
         msDescription = rDescription;
 
-        CommitChange(OUString::createFromAscii ("AccessibleDescription"), aNewValue, aOldValue);
+        CommitChange(
+            AccessibleEventId::ACCESSIBLE_DESCRIPTION_EVENT,
+            aNewValue,
+            aOldValue);
     }
 }
 
-void
-    AccessibleContextBase::setAccessibleName (const ::rtl::OUString& rName)
+
+
+
+void AccessibleContextBase::SetAccessibleName (const ::rtl::OUString& rName)
     throw (uno::RuntimeException)
 {
     if (msName != rName)
@@ -527,14 +475,17 @@ void
 
         msName = rName;
 
-        CommitChange(OUString::createFromAscii ("AccessibleName"), aNewValue, aOldValue);
+        CommitChange(
+            AccessibleEventId::ACCESSIBLE_NAME_EVENT,
+            aNewValue,
+            aOldValue);
     }
 }
 
 
 
 
-::rtl::OUString AccessibleContextBase::createAccessibleDescription (void)
+::rtl::OUString AccessibleContextBase::CreateAccessibleDescription (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
     return ::rtl::OUString::createFromAscii ("Empty Description");
@@ -543,7 +494,7 @@ void
 
 
 
-::rtl::OUString AccessibleContextBase::createAccessibleName (void)
+::rtl::OUString AccessibleContextBase::CreateAccessibleName (void)
     throw (::com::sun::star::uno::RuntimeException)
 {
     return ::rtl::OUString::createFromAscii ("Empty Name");
@@ -552,24 +503,57 @@ void
 
 
 
-void AccessibleContextBase::CommitChange(const rtl::OUString& rPropertyName,
-                    const uno::Any& rNewValue,
-                    const uno::Any& rOldValue)
+void AccessibleContextBase::CommitChange (
+    sal_Int16 nEventId,
+    const uno::Any& rNewValue,
+    const uno::Any& rOldValue)
 {
-    beans::PropertyChangeEvent  aEvent;
-    aEvent.PropertyName = rPropertyName;
-    aEvent.Further = sal_False;
-    aEvent.PropertyHandle = -1;
-    aEvent.OldValue = rOldValue;
-    aEvent.NewValue = rNewValue;
+    AccessibleEventObject aEvent (
+        static_cast<uno::XWeak*>(this),
+        nEventId,
+        rNewValue,
+        rOldValue);
 
-    //  Call all listeners.
-       PropertyChangeListenerListType::iterator I;
-       for (I=mxPropertyChangeListeners.begin();
-           I!=mxPropertyChangeListeners.end(); I++)
+    FireEvent (aEvent);
+}
+
+
+
+
+void AccessibleContextBase::FireEvent (const AccessibleEventObject& aEvent)
+{
+    uno::Reference<XAccessibleEventListener>* aListeners;
+    int nListenerCount;
+    EventListenerListType::iterator I;
+
     {
-        (*I)->propertyChange (aEvent);
+        // Guarded by the mutex copy list of listeners into a local list.
+        // This is necessary to be able to call the listeners outside the
+        // scope of the mutex and to not to be disturbed by outside changes
+        // to the list of listeners.
+        ::vos::OGuard aGuard (maMutex);
+        nListenerCount = mxEventListeners.size();
+        aListeners = new uno::Reference<XAccessibleEventListener>[nListenerCount];
+        int i=0;
+        for (I=mxEventListeners.begin(); I!=mxEventListeners.end(); I++)
+        {
+            aListeners[i++] = *I;
+        }
     }
+
+    // Now call the listeners.
+    for (int i=0; i<nListenerCount; i++)
+    {
+        if (aListeners[i].is())
+        {
+            OSL_TRACE ("Fireing event %d.", aEvent.EventId);
+            aListeners[i]->notifyEvent (aEvent);
+        }
+        else
+            OSL_TRACE ("listener invalid.");
+    }
+
+    delete [] aListeners;
 }
 
 
