@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XUIConfigurationListener.idl,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2005-03-01 18:30:04 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 08:25:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,13 +70,17 @@
 #include <com//sun/star/ui/ConfigurationEvent.idl>
 #endif
 
+//=============================================================================
+
+module com { module sun { module star { module ui {
+
+//=============================================================================
+
 /** supplies information about changes of a user interface
     configuration manager.
 
     @since OOo 2.0.0
 */
-
-module com { module sun { module star { module ui {
 
 interface XUIConfigurationListener : com::sun::star::lang::XEventListener
 {
