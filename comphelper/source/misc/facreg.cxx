@@ -2,9 +2,9 @@
  *
  *  $RCSfile: facreg.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jl $ $Date: 2001-03-22 13:30:49 $
+ *  last change: $Author: mav $ $Date: 2002-01-11 17:47:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,12 @@ extern uno::Sequence< OUString > SAL_CALL NamedPropertyValuesContainer_getSuppor
 extern OUString SAL_CALL NamedPropertyValuesContainer_getImplementationName() throw();
 extern uno::Reference< uno::XInterface > SAL_CALL NamedPropertyValuesContainer_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception );
 
+// NamedPropertyValuesContainer
+extern uno::Sequence< OUString > SAL_CALL AnyCompareFactory_getSupportedServiceNames() throw();
+extern OUString SAL_CALL AnyCompareFactory_getImplementationName() throw();
+extern uno::Reference< uno::XInterface > SAL_CALL AnyCompareFactory_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception );
+
+
 //
 #ifdef __cplusplus
 extern "C"
@@ -118,6 +124,7 @@ sal_Bool SAL_CALL component_writeInfo( void * pServiceManager, void * pRegistryK
             writeInfo( pKey, IndexedPropertyValuesContainer_getImplementationName(), IndexedPropertyValuesContainer_getSupportedServiceNames() );
             // NamedPropertyValuesContainer
             writeInfo( pKey, NamedPropertyValuesContainer_getImplementationName(), NamedPropertyValuesContainer_getSupportedServiceNames() );
+            writeInfo( pKey, AnyCompareFactory_getImplementationName(), AnyCompareFactory_getSupportedServiceNames() );
         }
         catch (registry::InvalidRegistryException &)
         {
@@ -151,6 +158,14 @@ void * SAL_CALL component_getFactory( const sal_Char * pImplName, void * pServic
                 NamedPropertyValuesContainer_createInstance,
                 NamedPropertyValuesContainer_getSupportedServiceNames() );
         }
+        else if( AnyCompareFactory_getImplementationName().equalsAsciiL( pImplName, nImplNameLen ) )
+        {
+            xFactory = ::cppu::createSingleFactory( xMSF,
+                AnyCompareFactory_getImplementationName(),
+                AnyCompareFactory_createInstance,
+                AnyCompareFactory_getSupportedServiceNames() );
+        }
+
         if( xFactory.is())
         {
             xFactory->acquire();

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.1 $
 #
-#   last change: $Author: mav $ $Date: 2002-01-11 17:46:39 $
+#   last change: $Author: mav $ $Date: 2002-01-11 17:48:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -60,64 +60,22 @@
 #
 #*************************************************************************
 
-PRJ=..
+PRJ=..$/..
+PRJINC=..$/..$/inc
 PRJNAME=comphelper
-TARGET=comphelper
-
-TARGETTYPE=CUI
-USE_LDUMP2=TRUE
+TARGET=compare
 
 ENABLE_EXCEPTIONS=TRUE
 
+# --- Settings ----------------------------------
+
 .INCLUDE : settings.mk
-.INCLUDE : $(PRJ)$/version.mk
 
-# --- Library -----------------------------------
+# --- Files -------------------------------------
 
-LIB1FILES=	$(SLB)$/container.lib		\
-            $(SLB)$/evtattmgr.lib		\
-            $(SLB)$/misc.lib			\
-            $(SLB)$/processfactory.lib	\
-            $(SLB)$/property.lib		\
-            $(SLB)$/streaming.lib		\
-            $(SLB)$/compare.lib
-
-LIB1TARGET=$(SLB)$/$(TARGET).lib
-
-SHL1TARGET=$(COMPHLP_TARGET)$(COMPHLP_MAJOR)
-SHL1STDLIBS=\
-    $(CPPULIB)					\
-    $(CPPUHELPERLIB)			\
-    $(VOSLIB)					\
-    $(OSLLIB)					\
-    $(SALLIB)					\
-    $(CPPRTLLIB)
-
-SHL1DEPN=
-SHL1IMPLIB=	i$(SHL1TARGET)
-
-SHL1LIBS=	$(LIB1TARGET)
-
-SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
-
-DEF1NAME=	$(SHL1TARGET)
-DEF1DEPN=	$(MISC)$/$(SHL1TARGET).flt \
-            $(LIB1TARGET)
-
-DEFLIB1NAME=$(TARGET)
-DEF1EXPORTFILE = exports.dxp
+SLOFILES=$(SLO)$/AnyCompareFactory.obj
 
 # --- Targets ----------------------------------
 
 .INCLUDE : target.mk
-
-.IF "$(depend)"==""
-
-# --- Goodies-Filter-Datei ---
-
-$(MISC)$/$(SHL1TARGET).flt: makefile.mk
-    @echo ------------------------------
-    @echo CLEAR_THE_FILE	> $@
-    @echo __CT				>>$@
-.ENDIF
 
