@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accselectionhelper.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 12:51:34 $
+ *  last change: $Author: vg $ $Date: 2004-12-23 10:02:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,6 @@
  ************************************************************************/
 #ifndef _ACCSELECTIONHELPER_HXX_
 #define _ACCSELECTIONHELPER_HXX_
-
 class SwAccessibleContext;
 class SwRootFrm;
 class SwFEShell;
@@ -109,8 +108,9 @@ public:
         sal_Int32 nSelectedChildIndex )
         throw ( ::com::sun::star::lang::IndexOutOfBoundsException,
                 ::com::sun::star::uno::RuntimeException);
+    // --> OD 2004-11-16 #111714# - index has to be treated as global child index.
     void deselectAccessibleChild(
-        sal_Int32 nSelectedChildIndex )
+        sal_Int32 nChildIndex )
         throw ( ::com::sun::star::lang::IndexOutOfBoundsException,
                 ::com::sun::star::uno::RuntimeException );
 };
