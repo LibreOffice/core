@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accportions.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dvo $ $Date: 2002-02-28 13:35:57 $
+ *  last change: $Author: dvo $ $Date: 2002-03-01 13:26:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,7 +139,7 @@ public:
     // access to the portion data
 
     /// get the text string, as presented by the layout
-    const rtl::OUString& GetAccesibleString();
+    const rtl::OUString& GetAccessibleString();
 
     /// get the start & end positions of the sentence
     void GetLineBoundary( com::sun::star::i18n::Boundary& rBound,

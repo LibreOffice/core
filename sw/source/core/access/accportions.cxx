@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accportions.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dvo $ $Date: 2002-02-28 13:35:57 $
+ *  last change: $Author: dvo $ $Date: 2002-03-01 13:26:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -236,7 +236,7 @@ void SwAccessiblePortionData::Finish()
     bFinished = sal_True;
 }
 
-const OUString& SwAccessiblePortionData::GetAccesibleString()
+const OUString& SwAccessiblePortionData::GetAccessibleString()
 {
     DBG_ASSERT( bFinished, "Shouldn't call this before we are done!" );
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accpara.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: dvo $ $Date: 2002-02-27 17:28:54 $
+ *  last change: $Author: dvo $ $Date: 2002-03-01 13:26:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -386,7 +386,7 @@ const SwTxtNode* SwAccessibleParagraph::GetTxtNode()
 
 OUString SwAccessibleParagraph::GetString()
 {
-    return GetPortionData().GetAccesibleString();
+    return GetPortionData().GetAccessibleString();
 }
 
 
@@ -502,8 +502,34 @@ Any SwAccessibleParagraph::queryInterface( const Type& rType )
 sal_Int32 SwAccessibleParagraph::getCaretPosition()
     throw (RuntimeException)
 {
-    // HACK: dummy implementation
-    return 0;
+    sal_Int32 nRet = -1;
+
+    // get the selection's point, and test whether it's in our node
+    SwPaM* pCaret = GetCrsr();  // caret is first PaM in PaM-ring
+    if( pCaret != NULL )
+    {
+        const SwTxtNode* pNode = GetTxtNode();
+
+        // get SwPosition for my node
+        ULONG nHere = pNode->GetIndex();
+
+        // check whether the point points into 'our' node
+        SwPosition* pPoint = pCaret->GetPoint();
+        if( pNode->GetIndex() == pPoint->nNode.GetIndex() )
+        {
+            // Yes, it's us!
+            nRet = GetPortionData().GetAccessiblePosition(
+                pPoint->nContent.GetIndex() );
+
+            DBG_ASSERT( nRet >= 0, "invalid cursor?" );
+            DBG_ASSERT( nRet <= GetPortionData().GetAccessibleString().
+                                              getLength(), "invalid cursor?" );
+        }
+        // else: not in this paragraph
+    }
+    // else: no cursor -> no caret
+
+    return nRet;
 }
 
 sal_Unicode SwAccessibleParagraph::getCharacter( sal_Int32 nIndex )
@@ -793,19 +819,15 @@ sal_Bool SwAccessibleParagraph::setText( const OUString& sText )
 
 
 
-
-sal_Bool SwAccessibleParagraph::GetSelection(
-    sal_Int32& nStart, sal_Int32& nEnd)
+SwPaM* SwAccessibleParagraph::GetCrsr()
 {
-    sal_Bool bRet = sal_False;
-    nStart = -1;
-    nEnd = -1;
-
     // first, get the view shell
     DBG_ASSERT( GetMap() != NULL, "no map?" );
     ViewShell* pViewShell = GetMap()->GetShell();
     DBG_ASSERT( pViewShell != NULL,
                 "No view shell? Then what are you looking at?" );
+
+    SwPaM* pCrsr = NULL;
 
     // get the cursor shell; if we don't have any, we don't have a
     // selection either
@@ -814,34 +836,59 @@ sal_Bool SwAccessibleParagraph::GetSelection(
         SwCrsrShell* pCrsrShell = static_cast<SwCrsrShell*>( pViewShell );
 
         // get the selection, and test whether it affects our text node
-        SwPaM* pCrsr = pCrsrShell->GetCrsr( FALSE /* ??? */ );
-        if( pCrsr != NULL )
-        {
-            const SwTxtNode* pNode = GetTxtNode();
-
-            // get SwPosition for my node
-            ULONG nHere = pNode->GetIndex();
-
-            // check whether nHere is 'inside' pCrsr
-            SwPosition* pStart = pCrsr->Start();
-            SwPosition* pEnd = pCrsr->End();
-            if( ( nHere >= pStart->nNode.GetIndex() ) &&
-                ( nHere <= pEnd->nNode.GetIndex() )      )
-            {
-                // Yup, we are selected!
-                bRet = sal_True;
-                nStart = static_cast<sal_Int32>(
-                    ( nHere > pStart->nNode.GetIndex() ) ? 0
-                                   : pStart->nContent.GetIndex() );
-                nEnd = static_cast<sal_Int32>(
-                    ( nHere < pEnd->nNode.GetIndex() ) ? pNode->Len()
-                                   : pEnd->nContent.GetIndex() );
-            }
-            // else: this paragraph isn't selected
-        }
-        // else: nocursor -> no selection
+        pCrsr = pCrsrShell->GetCrsr( FALSE /* ??? */ );
     }
-    // else: no cursor shell -> no selection
+
+    return pCrsr;
+}
+
+sal_Bool SwAccessibleParagraph::GetSelection(
+    sal_Int32& nStart, sal_Int32& nEnd)
+{
+    sal_Bool bRet = sal_False;
+    nStart = -1;
+    nEnd = -1;
+
+    // get the selection, and test whether it affects our text node
+    SwPaM* pCrsr = GetCrsr();
+    if( pCrsr != NULL )
+    {
+        // get SwPosition for my node
+        const SwTxtNode* pNode = GetTxtNode();
+        ULONG nHere = pNode->GetIndex();
+
+        // iterate over ring
+        SwPaM* pRingStart = pCrsr;
+        do
+        {
+            // ignore, if no mark
+            if( pCrsr->HasMark() )
+            {
+                // check whether nHere is 'inside' pCrsr
+                SwPosition* pStart = pCrsr->Start();
+                SwPosition* pEnd = pCrsr->End();
+                if( ( nHere >= pStart->nNode.GetIndex() ) &&
+                    ( nHere <= pEnd->nNode.GetIndex() )      )
+                {
+                    // Yup, we are selected!
+                    bRet = sal_True;
+                    nStart = static_cast<sal_Int32>(
+                        ( nHere > pStart->nNode.GetIndex() ) ? 0
+                        : pStart->nContent.GetIndex() );
+                    nEnd = static_cast<sal_Int32>(
+                        ( nHere < pEnd->nNode.GetIndex() ) ? pNode->Len()
+                        : pEnd->nContent.GetIndex() );
+                }
+                // else: this PaM doesn't point to this paragraph
+            }
+            // else: this PaM is collapsed and doesn't select anything
+
+            // next PaM in ring
+            pCrsr = static_cast<SwPaM*>( pCrsr->GetNext() );
+        }
+        while( !bRet && (pCrsr != pRingStart) );
+    }
+    // else: nocursor -> no selection
 
     return bRet;
 }
