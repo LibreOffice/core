@@ -2,9 +2,9 @@
  *
  *  $RCSfile: idxmrk.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:20:37 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 11:58:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,8 @@ Text[ english_us ] = "Phonetic reading";    \
     Text[ thai ] = "Phonetic reading";  \
     Text[ czech ] = "Fonetické čtení";   \
     Text[ hebrew ] = "Phonetische Lesart";  \
-    Text[ hindi ] = "Phonetic reading";
+    Text[ hindi ] = "Phonetic reading"; \
+    Text[ slovak ] = "Fonetické čítanie";
 
 #define IDX_DIALOG_WINDOW \
     Window WIN_DLG                                                  \
@@ -131,6 +132,7 @@ Text[ english_us ] = "Phonetic reading";    \
             Text[ czech ] = "Vložit";\
             Text[ hebrew ] = "‮הוספה‬";\
             Text[ hindi ] = "जोड़ो";\
+            Text[ slovak ] = "Vložiť";\
         };                                                          \
         CancelButton BT_CANCEL                                      \
         {                                                           \
@@ -163,6 +165,7 @@ Text[ english_us ] = "Phonetic reading";    \
             Text[ czech ] = "Zavřít";\
             Text[ hebrew ] = "‮סגירה‬";\
             Text[ hindi ] = "बन्द करो";\
+            Text[ slovak ] = "Zavrieť";\
         };                                                          \
         HelpButton BT_HELP                                          \
         {                                                           \
@@ -202,6 +205,7 @@ Text[ english_us ] = "Phonetic reading";    \
             Text[ czech ] = "Smazat";\
             Text[ hebrew ] = "‮מחיקה‬";\
             Text[ hindi ] = "~मिटाओ";\
+            Text[ slovak ] = "Z~mazať";\
         };                                                          \
         ListBox DCB_INDEX                                           \
         {                                                           \
@@ -240,6 +244,7 @@ Text[ english_us ] = "Phonetic reading";    \
             QuickHelpText[ czech ] = "Nový rejstřík (vytvořený uživatelem) ";\
             QuickHelpText[ hebrew ] = "Neues benutzerdefiniertes Verzeichnis";\
             QuickHelpText[ hindi ] = "नया उपभोक्ता से परिभाषित अनुक्रमणी";\
+            QuickHelpText[ slovak ] = "Nový register (vytvorený užívateľom) ";\
         };                                                          \
         ImageButton BT_PREVSAME                                     \
         {                                                           \
@@ -305,6 +310,7 @@ Text[ english_us ] = "Phonetic reading";    \
             Text[ czech ] = "Výběr";\
             Text[ hebrew ] = "‮מבחר‬";\
             Text[ hindi ] = "चुनाव";\
+            Text[ slovak ] = "Výber";\
         };                                                          \
         FixedText LBL_INDEX                                         \
         {                                                           \
@@ -339,6 +345,7 @@ Text[ english_us ] = "Phonetic reading";    \
             Text[ czech ] = "Rejstřík";\
             Text[ hebrew ] = "~Verzeichnis";\
             Text[ hindi ] = "~अनक्रमणी";\
+            Text[ slovak ] = "Re~gister";\
         };                                                          \
         Edit SL_ENTRY                                               \
         {                                                           \
@@ -381,6 +388,7 @@ Text[ english_us ] = "Phonetic reading";    \
             Text[ czech ] = "Položka";\
             Text[ hebrew ] = "‮שורה‬";\
             Text[ hindi ] = "~प्रविष्टि";\
+            Text[ slovak ] = "Po~ložka";\
         };                                                          \
         FixedText LBL_KEY                                           \
         {                                                           \
@@ -416,6 +424,7 @@ Text[ english_us ] = "Phonetic reading";    \
             Text[ czech ] = "První klíč";\
             Text[ hebrew ] = "~1. Schlüssel";\
             Text[ hindi ] = "~1st चाबी";\
+            Text[ slovak ] = "~Prvý kľúč";\
         };                                                          \
         ComboBox DCB_KEY                                            \
         {                                                           \
@@ -459,6 +468,7 @@ Text[ english_us ] = "Phonetic reading";    \
             Text[ czech ] = "Druhý klíč";\
             Text[ hebrew ] = "~2. Schlüssel";\
             Text[ hindi ] = "~2nd चाबी";\
+            Text[ slovak ] = "~Druhý kľúč";\
         };                                                          \
         ComboBox DCB_KEY2                                           \
         {                                                           \
@@ -549,6 +559,7 @@ Text[ english_us ] = "Phonetic reading";    \
             Text[ czech ] = "Úroveň";\
             Text[ hebrew ] = "St~ufe";\
             Text[ hindi ] = "~स्तर";\
+            Text[ slovak ] = "Ú~roveň";\
         };                                                          \
         NumericField SL_LEVEL                                       \
         {                                                           \
@@ -596,6 +607,7 @@ Text[ english_us ] = "Phonetic reading";    \
             Text[ czech ] = "Hlavní položka";\
             Text[ hebrew ] = "Ha~upteintrag";\
             Text[ hindi ] = "~प्रधान प्रविष्टि";\
+            Text[ slovak ] = "~Hlavná položka";\
         };                                                                      \
         CheckBox CB_APPLY_TO_ALL                                                \
         {                                                                       \
@@ -629,6 +641,7 @@ Text[ english_us ] = "Phonetic reading";    \
             Text[ czech ] = "Použít na všechny podobné texty.";\
             Text[ hebrew ] = "~Auf alle gleichen Texte anwenden.";\
             Text[ hindi ] = "~सब समान टेक्स्टों केलिए लागू करो ।";\
+            Text[ slovak ] = "~Použiť na všetky podobné texty.";\
         };                                                                      \
         CheckBox CB_CASESENSITIVE                                                \
         {                                                                       \
@@ -661,6 +674,7 @@ Text[ english_us ] = "Phonetic reading";    \
             Text[ czech ] = "Rozlišovat velikost";\
             Text[ hebrew ] = "E~xakte Suche";\
             Text[ hindi ] = "के~स तुलना";\
+            Text[ slovak ] = "~Rozlišovať veľkosť";\
         };                                                                      \
         CheckBox CB_WORDONLY                                                \
         {                                                                       \
@@ -693,6 +707,7 @@ Text[ english_us ] = "Phonetic reading";    \
             Text[ czech ] = "Pouze celá slova";\
             Text[ hebrew ] = "‮מלים שלמים בלבד‬";\
             Text[ hindi ] = "~केवल पूर्ण शब्द";\
+            Text[ slovak ] = "Len ~celé slova";\
         };                                                                      \
     };
 
@@ -704,12 +719,12 @@ ModalDialog DLG_EDIT_IDXMARK
     Sizeable = FALSE ;
     HelpID = FN_EDIT_IDX_ENTRY_DLG;
     SVLook = TRUE ;
-    #define IDX_WIN_WIDTH IDX_WIN_WIDTH_NORMAL
+    #define IDX_WIN_WIDTH IDX_WIN_WIDTH_NORMAL  
     Size = MAP_APPFONT ( IDX_WIN_WIDTH , 118 ) ;
     #define GB_HEIGHT 109
     #define DCB_INDEX_WIDTH 94
     #define PHONETIC_HIDDEN TRUE
-    #define LIST_WIDTH      94
+    #define LIST_WIDTH      94 
     #define COL_BUTTONS     IDX_COL_BUTTONS_NORMAL
     #define COL_BUTTONS_2   (COL_BUTTONS+26)
     #define WINDOW_HEIGHT   118
@@ -744,7 +759,7 @@ ModelessDialog DLG_INSIDXMARK
 //  Zoomable = TRUE ;
     HelpID = FN_INSERT_IDX_ENTRY_DLG;
     SVLook = TRUE ;
-    #define IDX_WIN_WIDTH IDX_WIN_WIDTH_NORMAL
+    #define IDX_WIN_WIDTH IDX_WIN_WIDTH_NORMAL  
     Size = MAP_APPFONT ( IDX_WIN_WIDTH , 138) ;
 //  Moveable = TRUE ;
     #define GB_HEIGHT 129
@@ -837,6 +852,7 @@ ModalDialog DLG_NEW_USER_IDX
         Text[ czech ] = "Nový rejstřík (vytvořený uživatelem)";
         Text[ hebrew ] = "Neues Benutzerverzeichnis";
         Text[ hindi ] = "नया उपभोक्ता अनुक्रमणी";
+        Text[ slovak ] = "Nový užívateľský index";
     };
     FixedText FT_NAME
     {
@@ -870,6 +886,7 @@ ModalDialog DLG_NEW_USER_IDX
         Text[ czech ] = "Název";
         Text[ hebrew ] = "~Name";
         Text[ hindi ] = "~नाम";
+        Text[ slovak ] = "~Názov";
     };
     Edit ED_NAME
     {
@@ -904,6 +921,7 @@ ModalDialog DLG_NEW_USER_IDX
     Text[ czech ] = "Vytvořit nový rejstřík (vytvořený uživatelem)";
     Text[ hebrew ] = "Neues benutzerdefiniertes  Verzeichnis anlegen";
     Text[ hindi ] = "नया उपभोक्ता से परिभाषित अनुक्रमणी को उत्पन्न करो";
+    Text[ slovak ] = "Vytvoriť nový index (vytvorený užívateľom)";
 };
 
 String STR_IDXMRK_EDIT
@@ -936,6 +954,7 @@ String STR_IDXMRK_EDIT
     Text[ czech ] = "Upravit položku rejstříku";
     Text[ hebrew ] = "Verzeichniseintrag bearbeiten";
     Text[ hindi ] = "अनुक्रमणिका प्रविष्टि संपादन";
+    Text[ slovak ] = "Upraviť položku registra";
 };
 String STR_IDXMRK_INSERT
 {
@@ -968,6 +987,7 @@ String STR_IDXMRK_INSERT
     Text[ czech ] = "Vložit položku rejstříku";
     Text[ hebrew ] = "Verzeichniseintrag einfügen";
     Text[ hindi ] = "अनुक्रमणिका प्रविष्टि जोड़ो";
+    Text[ slovak ] = "Vložiť položku obsahu";
 };
 
 #define     AUTH_DIALOG_WINDOW  \
@@ -1005,6 +1025,7 @@ String STR_IDXMRK_INSERT
             Text[ czech ] = "Ze seznamu literatury";\
             Text[ hebrew ] = "Aus Literatur~datenbank";\
             Text[ hindi ] = "ग्रन्थ-सूची ~लेखासंचय से";\
+            Text[ slovak ] = "Zo ~zoznamu literatúry";\
         };                                                          \
         RadioButton RB_FROMDOCCONTENT                               \
         {                                                           \
@@ -1036,6 +1057,7 @@ String STR_IDXMRK_INSERT
             Text[ czech ] = "Z obsahu dokumentu";\
             Text[ hebrew ] = "~Aus Dokumentinhalt";\
             Text[ hindi ] = "ले~खपत्र विषय से";\
+            Text[ slovak ] = "Z o~bsahu dokumentu";\
         };                                                          \
         FixedText FT_AUTHOR                             \
         {                                               \
@@ -1068,6 +1090,7 @@ String STR_IDXMRK_INSERT
             Text[ czech ] = "Autor";\
             Text[ hebrew ] = "‮מחבר‬";\
             Text[ hindi ] = "लेखक";\
+            Text[ slovak ] = "Autor";\
         };                                              \
         FixedText   FI_AUTHOR                           \
         {                                               \
@@ -1106,6 +1129,7 @@ String STR_IDXMRK_INSERT
             Text[ czech ] = "Titul";\
             Text[ hebrew ] = "‮כותרת‬";\
             Text[ hindi ] = "शीर्षक";\
+            Text[ slovak ] = "Titul";\
         };                                              \
         FixedText   FI_TITLE                            \
         {                                               \
@@ -1144,6 +1168,7 @@ String STR_IDXMRK_INSERT
             Text[ czech ] = "Krátký název";\
             Text[ hebrew ] = "~Kurzbezeichnung";\
             Text[ hindi ] = "छोटा ~नाम";\
+            Text[ slovak ] = "Krátky ~názov";\
         };                                              \
         Edit ED_ENTRY                                   \
         {                                               \
@@ -1192,6 +1217,7 @@ String STR_IDXMRK_INSERT
             Text[ czech ] = "Položka";\
             Text[ hebrew ] = "‮שורה‬";\
             Text[ hindi ] = "प्रविष्टि";\
+            Text[ slovak ] = "Položka";\
         };                                              \
         OKButton PB_OK                                  \
         {                                               \
@@ -1226,6 +1252,7 @@ String STR_IDXMRK_INSERT
             Text[ czech ] = "Vložit";\
             Text[ hebrew ] = "‮הוספה‬";\
             Text[ hindi ] = "जोड़ो";\
+            Text[ slovak ] = "Vložiť";\
         };                                              \
         CancelButton PB_CANCEL                          \
         {                                               \
@@ -1258,6 +1285,7 @@ String STR_IDXMRK_INSERT
             Text[ czech ] = "Zavřít";\
             Text[ hebrew ] = "‮סגירה‬";\
             Text[ hindi ] = "बन्द करो";\
+            Text[ slovak ] = "Zavrieť";\
         };                                              \
         HelpButton PB_HELP                              \
         {                                               \
@@ -1295,6 +1323,7 @@ String STR_IDXMRK_INSERT
             Text[ czech ] = "Nový";\
             Text[ hebrew ] = "‮חדש‬";\
             Text[ hindi ] = "~नया";\
+            Text[ slovak ] = "~Nový";\
         };                                              \
         PushButton PB_EDITENTRY                       \
         {                                               \
@@ -1326,6 +1355,7 @@ String STR_IDXMRK_INSERT
             Text[ czech ] = "Upravit";\
             Text[ hebrew ] = "‮עריכה‬";\
             Text[ hindi ] = "संपादन";\
+            Text[ slovak ] = "Upraviť";\
         };                                              \
         String ST_CHANGE                                \
         {                                               \
@@ -1356,6 +1386,7 @@ String STR_IDXMRK_INSERT
             Text[ czech ] = "Změnit";\
             Text[ hebrew ] = "‮שינוי‬";\
             Text[ hindi ] = "सुधारो";\
+            Text[ slovak ] = "Upraviť";\
         };                                              \
     };
 
@@ -1442,6 +1473,7 @@ ModalDialog DLG_CREATE_AUTH_ENTRY
         Text[ czech ] = "Položka";
         Text[ hebrew ] = "Eintragsdaten";
         Text[ hindi ] = "प्रविष्टि ड़ॉटा";
+        Text[ slovak ] = "Dáta položky";
     };
     Text[ english_us ] = "Define Bibliography Entry";
     Text[ portuguese ] = "Definir entrada bibliogr�fica";
@@ -1467,6 +1499,7 @@ ModalDialog DLG_CREATE_AUTH_ENTRY
     Text[ czech ] = "Definovat položku použité literatury";
     Text[ hebrew ] = "Literatureintrag definieren";
     Text[ hindi ] = "ग्रन्थ-सूची प्रविष्टि को परिभाषा दो";
+    Text[ slovak ] = "Definovať položku použitej literatúry";
 };
 String STR_AUTHMRK_EDIT
 {
@@ -1498,6 +1531,7 @@ String STR_AUTHMRK_EDIT
     Text[ czech ] = "Upravit položku použité literatury";
     Text[ hebrew ] = "Literaturverzeichniseintrag bearbeiten";
     Text[ hindi ] = "ग्रन्थ-सूची प्रविष्टि संपादन";
+    Text[ slovak ] = "Upraviť položku použitej literatúry";
 };
 String STR_AUTHMRK_INSERT
 {
@@ -1529,6 +1563,7 @@ String STR_AUTHMRK_INSERT
     Text[ czech ] = "Vložit položku použité literatury";
     Text[ hebrew ] = "Literaturverzeichniseintrag einfügen";
     Text[ hindi ] = "ग्रन्थ-सूची प्रविष्टि जोड़ो";
+    Text[ slovak ] = "Vložiť položku použitej literatúry";
 };
 QueryBox DLG_CHANGE_AUTH_ENTRY
 {
@@ -1560,7 +1595,10 @@ QueryBox DLG_CHANGE_AUTH_ENTRY
     MESSAGE[ czech ] = "Dokument již obsahuje záznam seznamu použité literatury, ale s jinými údaji. Chcete upravit existující záznamy?";
     MESSAGE[ hebrew ] = "Der Bibliographie-Eintrag ist bereits mit abweichenden Daten im Dokument enthalten. Möchten sie die bereits enthaltenen Einträge anpassen?";
     MESSAGE[ hindi ] = "लेखपत्र में पहिले से ही ग्रन्थ-सूची प्रविष्टि है, लेकिन अलग ड़ॉटा है । आप अस्तित्व में रहनेवाले प्रविष्टियों को व्यवस्था करना चाहते है?";
+    MESSAGE[ slovak ] = "Dokument už obsahuje záznam zoznamu použitej literatúry, ale s inými údajmi. Chcete upraviť existujúce záznamy?";
 };
+
+
 
 
 
