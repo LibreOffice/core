@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svtmsg.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2001-06-13 21:48:43 $
+ *  last change: $Author: kz $ $Date: 2001-06-21 21:40:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1503,7 +1503,7 @@ String S_UNO_URL_EXECUTE_FAILED_NO_DISPATCHER
     Text[ italian ] = "UNO URL \"($Arg1)\" could not be run. No dispatcher was found.";
     Text[ danish ] = "Slot ID cannot be run. No ActiveDispatcher";
     Text[ swedish ] = "UNO URL \"($Arg1)\" could not be run. No dispatcher was found";
-    Text[ polish ] = "Wykonanie UNO Url \"($Arg1)\"nie powiod≥o siÍ: Brak na pulpicie ActiveFrame.";
+    Text[ polish ] = "UNO URL \"($Arg1)\" could not be run. No dispatcher was found.";
     Text[ portuguese_brazilian ] = "Programmstart: ($Arg1); ($Arg2)";
     Text[ japanese ] = "UNO Url \"($Arg1)\" ÇÕé¿çsÇ≈Ç´Ç‹ÇπÇÒÇ≈ÇµÇΩÅF √ﬁ®Ω ﬂØ¡¨∞Ç™å©Ç¬Ç©ÇËÇ‹ÇπÇÒÅB";
     Text[ korean ] = "ΩΩ∑‘ ID∏¶ Ω««‡«œ¡ˆ ∏¯«ﬂΩ¿¥œ¥Ÿ: ¥…µø µΩ∫∆–√≥∞° æ¯Ω¿¥œ¥Ÿ.";
@@ -1527,7 +1527,7 @@ String S_UNO_URL_EXECUTE_FAILED_NO_FRAME
     Text[ italian ] = "UNO URL \"($Arg1)\" could not be run: No active frame on desktop.";
     Text[ danish ] = "Slot ID could not be run";
     Text[ swedish ] = "UNO URL \"($Arg1)\" could not be run: No active frame on desktop";
-    Text[ polish ] = "Wykonanie UNO Url \"($Arg1)\"nie powiod≥o siÍ: Brak na pulpicie ActiveFrame.";
+    Text[ polish ] = "UNO URL \"($Arg1)\" could not be run: No active frame on desktop.";
     Text[ portuguese_brazilian ] = "Programmstart: ($Arg1); ($Arg2)";
     Text[ japanese ] = "UNO Url \"($Arg1)\" ÇÕé¿çsÇ≈Ç´Ç‹ÇπÇÒÇ≈ÇµÇΩÅF √ﬁΩ∏ƒØÃﬂÇ…±∏√®ÃﬁÃ⁄∞—Ç™Ç†ÇËÇ‹ÇπÇÒÅB";
     Text[ korean ] = "ΩΩ∑‘ ID∏¶°°Ω««‡«œ¡ˆ°°∏¯«ﬂΩ¿¥œ¥Ÿ.";
@@ -1538,5 +1538,6 @@ String S_UNO_URL_EXECUTE_FAILED_NO_FRAME
     Text[ catalan ] = "No se pudo ejecutar Slot ID";
     Text[ finnish ] = "Paikkatunnusta ei voitu suorittaa";
 };
+
 
 
