@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accpara.cxx,v $
  *
- *  $Revision: 1.56 $
+ *  $Revision: 1.57 $
  *
- *  last change: $Author: rt $ $Date: 2003-06-12 08:07:34 $
+ *  last change: $Author: rt $ $Date: 2003-09-19 10:55:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,6 +165,9 @@
 #endif
 #ifndef _SFXVIEWSH_HXX
 #include <sfx2/viewsh.hxx>      // for ExecuteAtViewShell(...)
+#endif
+#ifndef _SFXVIEWFRM_HXX
+#include <sfx2/viewfrm.hxx>      // for ExecuteAtViewShell(...)
 #endif
 #ifndef _SFXDISPATCH_HXX
 #include <sfx2/dispatch.hxx>    // for ExecuteAtViewShell(...)
@@ -689,10 +692,22 @@ void SwAccessibleParagraph::ExecuteAtViewShell( UINT16 nSlot )
 
     DBG_ASSERT( pViewShell != NULL, "View shell exptected!" );
     SfxViewShell* pSfxShell = pViewShell->GetSfxViewShell();
-    if( pSfxShell != NULL )
-    {
-        pSfxShell->GetDispatcher()->Execute( nSlot );
-    }
+
+    DBG_ASSERT( pSfxShell != NULL, "SfxViewShell shell exptected!" );
+    if( !pSfxShell )
+        return;
+
+    SfxViewFrame *pFrame = pSfxShell->GetViewFrame();
+    DBG_ASSERT( pFrame != NULL, "View frame exptected!" );
+    if( !pFrame )
+        return;
+
+    SfxDispatcher *pDispatcher = pFrame->GetDispatcher();
+    DBG_ASSERT( pDispatcher != NULL, "Dispatcher exptected!" );
+    if( !pDispatcher )
+        return;
+
+    pDispatcher->Execute( nSlot );
 }
 
 SwXTextPortion* SwAccessibleParagraph::CreateUnoPortion(
@@ -817,7 +832,10 @@ sal_Bool SwAccessibleParagraph::GetLineBoundary(
     const OUString& rText,
     sal_Int32 nPos )
 {
-    GetPortionData().GetLineBoundary( rBound, nPos );
+    if( rText.getLength() == nPos )
+        GetPortionData().GetLastLineBoundary( rBound );
+    else
+        GetPortionData().GetLineBoundary( rBound, nPos );
     return sal_True;
 }
 
@@ -899,7 +917,9 @@ sal_Bool SwAccessibleParagraph::GetTextBoundary(
         RuntimeException)
 {
     // error checking
-    if( ! IsValidChar( nPos, rText.getLength() ) )
+    if( !( AccessibleTextType::LINE == nTextType
+                ? IsValidPosition( nPos, rText.getLength() )
+                : IsValidChar( nPos, rText.getLength() ) ) )
         throw IndexOutOfBoundsException();
 
     sal_Bool bRet;
@@ -1511,8 +1531,9 @@ OUString SwAccessibleParagraph::getTextRange(
     const OUString rText = GetString();
     // implement the silly specification that first position after
     // text must return an empty string, rather than throwing an
-    // IndexOutOfBoundsException
-    if( nIndex == rText.getLength() )
+    // IndexOutOfBoundsException, except for LINE, where the last
+    // line is returned
+    if( nIndex == rText.getLength() && AccessibleTextType::LINE != nTextType )
         return aResult;
 
     // with error checking
@@ -1640,6 +1661,9 @@ sal_Bool SwAccessibleParagraph::cutText( sal_Int32 nStartIndex, sal_Int32 nEndIn
     CHECK_FOR_DEFUNC( XAccessibleEditableText );
     vos::OGuard aGuard(Application::GetSolarMutex());
 
+    if( !IsEditableState() )
+        return sal_False;
+
     // select and cut (through dispatch mechanism)
     setSelection( nStartIndex, nEndIndex );
     ExecuteAtViewShell( SID_CUT );
@@ -1651,6 +1675,9 @@ sal_Bool SwAccessibleParagraph::pasteText( sal_Int32 nIndex )
 {
     CHECK_FOR_DEFUNC( XAccessibleEditableText );
     vos::OGuard aGuard(Application::GetSolarMutex());
+
+    if( !IsEditableState() )
+        return sal_False;
 
     // select and paste (through dispatch mechanism)
     setSelection( nIndex, nIndex );
@@ -1683,6 +1710,9 @@ sal_Bool SwAccessibleParagraph::replaceText(
 
     if( IsValidRange( nStartIndex, nEndIndex, rText.getLength() ) )
     {
+        if( !IsEditableState() )
+            return sal_False;
+
         SwTxtNode* pNode = const_cast<SwTxtNode*>( GetTxtNode() );
 
         // translate positions
@@ -1739,6 +1769,10 @@ sal_Bool SwAccessibleParagraph::setAttributes(
 
     if( ! IsValidRange( nStartIndex, nEndIndex, rText.getLength() ) )
         throw IndexOutOfBoundsException();
+
+    if( !IsEditableState() )
+        return sal_False;
+
 
     // create a (dummy) text portion for the sole purpose of calling
     // setPropertyValue on it
