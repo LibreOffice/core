@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paragr.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-17 12:45:04 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 19:42:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,7 +99,7 @@ TabDialog TAB_PARAGRAPH
                 Text [ portuguese_brazilian ] = "Recuo & Afastamento" ;
                 Text [ portuguese ] = "Avan�os e espa�amento" ;
                 Text [ finnish ] = "Sisennykset ja v�lit" ;
-                Text [ danish ] = "Indrykning og mellemrum" ;
+                Text [ danish ] = "Indrykning og afstand" ;
                 Text [ french ] = "Retraits et �carts" ;
                 Text [ swedish ] = "Indrag och avst�nd" ;
                 Text [ dutch ] = "Inspringingen en afstanden" ;
@@ -122,6 +122,8 @@ TabDialog TAB_PARAGRAPH
                 Text[ hebrew ] = "‮שוליים ורוחים‬";
                 Text[ hindi ] = "इन्डेन्ट्स और अंतर देना";
                 Text[ slovak ] = "Odsadenie a riadkovanie";
+                Text[ hungarian ] = "Behúzás és térköz";
+                Text[ slovenian ] = "Zamiki in razmiki";
             };
             PageItem
             {
@@ -155,6 +157,8 @@ TabDialog TAB_PARAGRAPH
                 Text[ hebrew ] = "‮ישור‬";
                 Text[ hindi ] = "पंक्तिकरण";
                 Text[ slovak ] = "Zarovnanie";
+                Text[ hungarian ] = "Igazítás";
+                Text[ slovenian ] = "Poravnava";
             };
             PageItem
             {
@@ -187,6 +191,8 @@ TabDialog TAB_PARAGRAPH
                 Text[ hebrew ] = "Asiatische Typographie";
                 Text[ hindi ] = "ऐशियन टइपोग्रफी";
                 Text[ slovak ] = "Ázijská typografia";
+                Text[ hungarian ] = "Ázsiai tipográfia";
+                Text[ slovenian ] = "Azijska tipografija";
             };
             /*
             PageItem  {
@@ -240,6 +246,8 @@ TabDialog TAB_PARAGRAPH
                 Text[ hebrew ] = "Tabulator";
                 Text[ hindi ] = "टॉब्स";
                 Text[ slovak ] = "Tabulátory";
+                Text[ hungarian ] = "Tabulátorok";
+                Text[ slovenian ] = "Tabulatorji";
             };
         };
     };
@@ -296,6 +304,8 @@ TabDialog TAB_PARAGRAPH
         Text[ hebrew ] = "Zurück";
         Text[ hindi ] = "लौटना";
         Text[ slovak ] = "Návrat";
+        Text[ hungarian ] = "Visszatérés";
+        Text[ slovenian ] = "Vrnitev";
     };
     Text[ chinese_simplified ] = "段落";
     Text[ russian ] = "�����";
@@ -313,7 +323,10 @@ TabDialog TAB_PARAGRAPH
     Text[ hebrew ] = "‮פסקאות‬";
     Text[ hindi ] = "परिच्छेद";
     Text[ slovak ] = "Odstavec";
+    Text[ hungarian ] = "Bekezdés";
+    Text[ slovenian ] = "Odstavek";
 };
+
 
 
 
