@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: mmaher $ $Date: 2000-10-10 18:03:38 $
+#   last change: $Author: csaba $ $Date: 2000-10-16 14:50:27 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -139,10 +139,7 @@ RESLIB1SRSFILES= $(SRSFILELIST)
 
 # --- Targets -------------------------------------------------------
 
-
-
 .INCLUDE :  target.mk
-
 
 
 $(MISC)$/$(SHL1TARGET).flt: makefile.mk
@@ -295,14 +292,14 @@ $(MISC)$/$(SHL1TARGET).flt: makefile.mk
     @echo _stl_prime >> $@
 .ENDIF
 
-
-
 $(SRS)$/hidother.hid: hidother.src
 .IF "$(GUI)$(CPU)"!="WNTI" || "$(product)"!="full"
     @echo nix
 .ELSE
+.IF "$(BUILD_SOSL)" == ""
     @+echo NO HIDS!!!
     +-mhids hidother.src ..\$(INPATH)$/srs $(INCLUDE) hidother
+.ENDIF
 .ENDIF
 
 

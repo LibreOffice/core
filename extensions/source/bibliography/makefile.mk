@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 16:16:45 $
+#   last change: $Author: csaba $ $Date: 2000-10-16 14:52:49 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -209,12 +209,14 @@ ALL:\
 
 $(SRS)$/hidother.hid: hidother.src
 .IF "$(GUI)" =="WNT"
+.IF "$(BUILD_SOSL)" == ""
     @+echo
     @+echo 	NO HIDS!
     @+echo
     +copy ..\..\inc\extensio.hrc .
-    +mhids hidother.src ..$/..$/$(INPATH)$/srs bib hidother
+#	+mhids hidother.src ..$/..$/$(INPATH)$/srs bib hidother
     +del extensio.hrc
+.ENDIF
 .ELSE
     @echo wnt only
 .ENDIF
