@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewobjectcontact.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:27:37 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 14:31:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,6 +91,7 @@ namespace sdr
     {
         class ObjectContact;
         class ViewContact;
+        class ViewObjectContactRedirector;
     } // end of namespace contact
     namespace animation
     {
@@ -236,6 +237,9 @@ namespace sdr
 
             // Test if this VOC has an animation state and thus is animated
             sal_Bool HasAnimationState() const;
+
+            // get the correct redirector
+            ViewObjectContactRedirector* GetRedirector() const;
         };
 
         // typedefs for a list of ViewObjectContact
