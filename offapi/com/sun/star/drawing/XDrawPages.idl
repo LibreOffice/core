@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDrawPages.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:53:45 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 19:26:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@
     <type>XDrawPagesSupplier</type> or the <type>XMasterPagesSupplier</type>
     at a model that contains <type>DrawPage</type>s or <type>MasterPage</type>s
 */
-interface XDrawPages: com::sun::star::container::XIndexAccess
+published interface XDrawPages: com::sun::star::container::XIndexAccess
 {
     //-------------------------------------------------------------------------
 
