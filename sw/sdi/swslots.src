@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swslots.src,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-12 22:08:55 $
+ *  last change: $Author: kz $ $Date: 2001-01-19 20:45:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,7 +204,7 @@ SfxSlotInfo FN_AUTOFORMAT_APPLY
     SlotName[ spanish ] = "Aplicar opciones AutoFormato";
     SlotName[ italian ] = "Applica le opzioni di AutoFormat";
     SlotName[ danish ] = "Anvend AutoFormat-indstillinger";
-    SlotName[ swedish ] = "Anv‰nd AutoFormat";
+    SlotName[ swedish ] = "Anv‰nd autoformat";
     SlotName[ polish ] = "Uøyj opcji autoformatowania";
     SlotName[ portuguese_brazilian ] = "AutoFormatApply";
     SlotName[ japanese ] = "µ∞ƒÃ´∞œØƒÇÃµÃﬂºÆ›ÇìKóp";
@@ -230,7 +230,7 @@ SfxSlotInfo FN_AUTOFORMAT_AUTO
     SlotName[ spanish ] = "AutoFormato";
     SlotName[ italian ] = "Foramttazione automatica";
     SlotName[ danish ] = "AutoFormat";
-    SlotName[ swedish ] = "AutoFormat";
+    SlotName[ swedish ] = "Autoformat";
     SlotName[ polish ] = "Autoformatowanie";
     SlotName[ japanese ] = "µ∞ƒÃ´∞œØƒ";
     SlotName[ chinese_simplified ] = "◊‘∂Ø∏Ò Ω";
@@ -255,7 +255,7 @@ SfxSlotInfo FN_AUTOFORMAT_REDLINE_APPLY
     SlotName[ spanish ] = "AutoFormato-Aplicar opciones y confirmar modificaciones";
     SlotName[ italian ] = "Applica le opzioni della Formattazione automatica e conferma le modifiche";
     SlotName[ danish ] = "Anvend AutoFormat-indstillinger og bekrÊft Êndringer";
-    SlotName[ swedish ] = "Anv‰nd AutoFormat-alternativ och bekr‰fta ‰ndringar";
+    SlotName[ swedish ] = "Anv‰nd autoformat-alternativ och bekr‰fta ‰ndringar";
     SlotName[ polish ] = "Zastosuj opcje autoformatowania i potwierdü zmiany";
     SlotName[ portuguese_brazilian ] = "AutoFormatRedlineApply";
     SlotName[ japanese ] = "µ∞ƒÃ´∞œØƒÇÃµÃﬂºÆ›ÇìKópÇµÇƒïœçXÇämîF";
