@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FilterComponent.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-27 13:41:35 $
+ *  last change: $Author: vg $ $Date: 2005-02-21 14:04:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -57,17 +57,16 @@
  *  Contributor(s): _____________________________________
  *
  */
-
 package com.sun.star.wizards.ui;
 
 import java.util.Vector;
 
+import com.sun.star.awt.ItemEvent;
 import com.sun.star.awt.TextEvent;
 import com.sun.star.awt.VclWindowPeerAttribute;
-import com.sun.star.awt.XButton;
 import com.sun.star.awt.XControl;
 import com.sun.star.awt.XListBox;
-import com.sun.star.awt.XTextComponent;
+import com.sun.star.awt.XRadioButton;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.lang.EventObject;
@@ -76,19 +75,15 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
-import com.sun.star.util.NotNumericException;
-import com.sun.star.util.XNumberFormatsSupplier;
-import com.sun.star.util.XNumberFormatter;
-import com.sun.star.wizards.common.Desktop;
+import com.sun.star.wizards.common.NumberFormatter;
 import com.sun.star.wizards.common.Helper;
 import com.sun.star.wizards.common.JavaTools;
 import com.sun.star.wizards.common.Properties;
-import com.sun.star.wizards.common.SystemDialog;
 import com.sun.star.wizards.db.FieldColumn;
 import com.sun.star.wizards.db.QueryMetaData;
 
 
-public class FilterComponent {
+public class FilterComponent{
     Integer IStep;
     int iStartPosX;
     int iStartPosY;
@@ -97,8 +92,8 @@ public class FilterComponent {
     int FilterCount;
     static String[] sLogicOperators;
     public String[] FieldNames;
-    XButton optMatchAll;
-    XButton optMatchAny;
+    XRadioButton optMatchAll;
+    XRadioButton optMatchAny;
     private String soptMatchAll;
     private String soptMatchAny;
     private String[] sHeadLines;
@@ -114,12 +109,9 @@ public class FilterComponent {
     final int SOLSTFIELDNAME = 3;
     final int SOLSTOPERATOR = 4;
     final int SOTXTVALUE = 5;
-    String OPTIONBUTTONMATCHANY_ITEM_CHANGED;
-    String TEXTFIELDVALUE_TEXT_CHANGED;
-    String LISTBOXOPERATORS_ACTION_PERFORMED;
-    String LISTBOXOPERATORS_ITEM_CHANGED;
-    String LISTBOXFIELDNAME_ACTION_PERFORMED;
-    String LISTBOXFIELDNAME_ITEM_CHANGED;
+    final int SOOPTORMODE = 100;
+    final int SOOPTANDMODE = 101;
+
     QueryMetaData oQueryMetaData;
     int iDateTimeFormat;
     int iDateFormat;
@@ -127,14 +119,18 @@ public class FilterComponent {
     PropertyValue[][] filterconditions;
     short curtabindex;
     XMultiServiceFactory xMSF;
-    XNumberFormatsSupplier xNumberFormatsSupplier;
-    XNumberFormatter xNumberFormatter;
 
     final int SOFIRSTFIELDNAME = 1;
     final int SOSECFIELDNAME = 2;
     final int SOTHIRDFIELDNAME = 3;
     final int SOFOURTHFIELDNAME = 4;
     int[] SOFIELDNAMELIST = new int[] { SOFIRSTFIELDNAME, SOSECFIELDNAME, SOTHIRDFIELDNAME, SOFOURTHFIELDNAME };
+
+    final int SOFIRSTCONDITION = 5;
+    final int SOSECCONDITION = 6;
+    final int SOTHIRDCONDITION = 7;
+    final int SOFOURTHCONDITION = 8;
+    int[] SOCONDITIONLIST = new int[] { SOFIRSTCONDITION, SOSECCONDITION, SOTHIRDCONDITION, SOFOURTHCONDITION };
 
     final int SOFIRSTTEXTFIELD = 1;
     final int SOSECTEXTFIELD = 2;
@@ -147,28 +143,44 @@ public class FilterComponent {
     int ifilterstate = SOIMATCHALL;
     int curHelpID;
 
+
     class ItemListenerImpl implements com.sun.star.awt.XItemListener {
 
         public void itemStateChanged(com.sun.star.awt.ItemEvent EventObject) {
             try {
                 int iKey = CurUnoDialog.getControlKey(EventObject.Source, CurUnoDialog.ControlList);
+                String scontrolname = "";
                 switch (iKey) {
                     //              case SOOPTQUERYMODE:
                     //                  getfilterstate();
-                    default :
-                        XControl xControl = (XControl) UnoRuntime.queryInterface(XControl.class, EventObject.Source);
-                        XPropertySet xPSet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xControl.getModel());
-                        String sName = (String) xPSet.getPropertyValue("Name");
-                        String sNameSuffix = sIncSuffix + "_" + sName.substring(sName.length() - 1, sName.length());
-                        XListBox xCurFieldListBox = (XListBox) UnoRuntime.queryInterface(XListBox.class, CurUnoDialog.xDlgContainer.getControl(sName));
+                    case SOFIRSTFIELDNAME:
+                    case SOSECFIELDNAME:
+                    case SOTHIRDFIELDNAME:
+                    case SOFOURTHFIELDNAME:
+                        scontrolname = getControlName(EventObject.Source);
+                        String scontrolnameSuffix = sIncSuffix + "_" + scontrolname.substring(scontrolname.length() - 1, scontrolname.length());
+                        XListBox xCurFieldListBox = (XListBox) UnoRuntime.queryInterface(XListBox.class, CurUnoDialog.xDlgContainer.getControl(scontrolname));
                         String CurDisplayFieldName = xCurFieldListBox.getSelectedItem();
                         FieldColumn CurFieldColumn = new FieldColumn(oQueryMetaData, CurDisplayFieldName);
-                        XControl xValueControl = CurUnoDialog.xDlgContainer.getControl("txtValue" + sNameSuffix);
+                        XControl xValueControl = CurUnoDialog.xDlgContainer.getControl("txtValue" + scontrolnameSuffix);
                         XInterface xValueModel = (XInterface) UnoDialog.getModel(xValueControl);
                         Helper.setUnoPropertyValue(xValueModel, "TreatAsNumber", new Boolean(CurFieldColumn.bIsNumberFormat));
-                        Desktop.setNumberFormat(xValueModel, oQueryMetaData.NumberFormats, CurFieldColumn.DBFormatKey);
+                        oQueryMetaData.getNumberFormatter().setNumberFormat(xValueModel, CurFieldColumn.DBFormatKey);
+                        break;
+                    case SOFIRSTCONDITION:
+                    case SOSECCONDITION:
+                    case SOTHIRDCONDITION:
+                    case SOFOURTHCONDITION:
+                        scontrolname = getControlName(EventObject.Source);
+                        break;
+                    case SOOPTORMODE:
+                    case SOOPTANDMODE:
+                        getfilterstate();
+                        return;
+                    default:
                         break;
                 }
+                togglefollowingControlRow(scontrolname);
             } catch (Exception exception) {
                 exception.printStackTrace(System.out);
             }
@@ -182,15 +194,8 @@ public class FilterComponent {
 
         public void textChanged(TextEvent EventObject) {
             try {
-                // TODO this redundancy to "itemStateChanged" shoud be removed asap
-                XControl xControl = (XControl) UnoRuntime.queryInterface(XControl.class, EventObject.Source);
-                XPropertySet xPSet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xControl.getModel());
-                String sName = (String) xPSet.getPropertyValue("Name");
-                String sNameSuffix = sIncSuffix + "_" + sName.substring(sName.length() - 1, sName.length());
-                int Index = Integer.valueOf(sName.substring(sName.length() - 1, sName.length())).intValue();
-                XTextComponent xValueTextBox = (XTextComponent) UnoRuntime.queryInterface(XTextComponent.class, CurUnoDialog.xDlgContainer.getControl(sName));
-                if (Index < oControlRows.length)
-                    oControlRows[Index].setEnabled(oControlRows[Index - 1].isComplete());
+                String sName = getControlName(EventObject.Source);
+                togglefollowingControlRow(sName);
             } catch (Exception exception) {
                 exception.printStackTrace(System.out);
             }
@@ -199,6 +204,17 @@ public class FilterComponent {
         public void disposing(EventObject EventObject) {
         }
     }
+
+
+    public void fieldconditionchanged(ItemEvent EventObject){
+        String sName = getControlName(EventObject.Source);
+        togglefollowingControlRow(sName);
+    }
+
+
+    public void disposing(com.sun.star.lang.EventObject eventObject) {
+    }
+
 
     class ActionListenerImpl implements com.sun.star.awt.XActionListener {
 
@@ -210,13 +226,32 @@ public class FilterComponent {
     }
 
 
+    private void togglefollowingControlRow(String _scurName){
+        String sNameSuffix = sIncSuffix + "_" + _scurName.substring(_scurName.length() - 1, _scurName.length());
+        int Index = Integer.valueOf(_scurName.substring(_scurName.length() - 1, _scurName.length())).intValue();
+        if (Index < oControlRows.length)
+            oControlRows[Index].setEnabled(oControlRows[Index - 1].isComplete());
+    }
+
+
+    private String getControlName(Object _oSourceevent){
+    try {
+        XControl xControl = (XControl) UnoRuntime.queryInterface(XControl.class, _oSourceevent);
+        XPropertySet xPSet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xControl.getModel());
+        return AnyConverter.toString(xPSet.getPropertyValue("Name"));
+    } catch (Exception e) {
+        e.printStackTrace(System.out);
+        return "";
+    }}
+
+
     public PropertyValue[][] getFilterConditions() {
         ControlRow CurControlRow;
         Object curValue;
         getfilterstate();
         int filtercount = getFilterCount();
         if (filtercount > 0) {
-            if (this.ifilterstate == this.SOIMATCHALL)
+            if (this.getfilterstate()== this.SOIMATCHALL)
                 filterconditions = new PropertyValue[1][filtercount];
             else
                 filterconditions = new PropertyValue[filtercount][1];
@@ -228,15 +263,15 @@ public class FilterComponent {
                         String curFieldName = CurControlRow.getSelectedFieldName();
                         int curOperator = (int) CurControlRow.getSelectedOperator() + 1;
                         FieldColumn CurFieldColumn = oQueryMetaData.getFieldColumnByDisplayName(curFieldName);
-                        if (CurFieldColumn.StandardFormatKey == oQueryMetaData.iTextFormatKey)
+                        if (CurFieldColumn.StandardFormatKey == oQueryMetaData.getNumberFormatter().getTextFormatKey())
                             curValue = "'" + CurControlRow.getValue() + "'";
 //// TODO the following code is bound to be deprecated as soon as the query composer is able to handle date/time values as numbers
-                        else if ((CurFieldColumn.StandardFormatKey == oQueryMetaData.iDateFormatKey) || (CurFieldColumn.StandardFormatKey == oQueryMetaData.iDateTimeFormatKey)){
+                        else if ((CurFieldColumn.StandardFormatKey == oQueryMetaData.getNumberFormatter().getDateFormatKey()) || (CurFieldColumn.StandardFormatKey == oQueryMetaData.getNumberFormatter().getDateTimeFormatKey())){
                             String sDate = CurControlRow.getDateTimeString(true);
                             curValue = "{D '" + sDate + "' }";  // FormatsSupplier
 
                         }
-                        else if (CurFieldColumn.StandardFormatKey == oQueryMetaData.iTimeFormatKey){
+                        else if (CurFieldColumn.StandardFormatKey == oQueryMetaData.getNumberFormatter().getTimeFormatKey()){
                             String sTime = CurControlRow.getDateTimeString(true);
                             curValue = "'{T '" + sTime + "' }";
                         }
@@ -264,6 +299,8 @@ public class FilterComponent {
                 };
             }
         }
+        else
+            filterconditions = new PropertyValue[0][0];
         return filterconditions;
     }
 
@@ -287,11 +324,14 @@ public class FilterComponent {
         }
     }
 
-    private void getfilterstate() {
-        if (CurUnoDialog.getControlProperty("optMatchAny", "State") == Boolean.TRUE)
+    private int getfilterstate() {
+        boolean bisany = true;
+        bisany = (this.optMatchAny.getState()) == true;
+        if (bisany)
             ifilterstate = SOIMATCHANY;
         else
             ifilterstate = SOIMATCHALL;
+        return ifilterstate;
     }
 
     private void addfiltercondition(int _index, String _curFieldName, Object _curValue, int _curOperator) {
@@ -299,7 +339,7 @@ public class FilterComponent {
             String ValString = String.valueOf(_curValue);
             PropertyValue oPropertyValue = Properties.createProperty(_curFieldName, ValString, _curOperator);
             getfilterstate();
-            if (this.ifilterstate == this.SOIMATCHALL) {
+            if (getfilterstate() == this.SOIMATCHALL) {
                 if (_index == 0)
                     filterconditions[0] = new PropertyValue[getFilterCount()];
                 filterconditions[0][_index] = new PropertyValue();
@@ -344,17 +384,17 @@ public class FilterComponent {
 
             sDuplicateCondition = CurUnoDialog.oResource.getResText(BaseID + 89);
 
-            optMatchAll = CurUnoDialog.insertRadioButton("optMatchAll" + sIncSuffix, SOOPTQUERYMODE, new ActionListenerImpl(),
+            optMatchAll = CurUnoDialog.insertRadioButton("optMatchAll" + sIncSuffix, SOOPTANDMODE, new ItemListenerImpl(),
                                             new String[] { "Height", "HelpURL", "Label", "PositionX", "PositionY", "State", "Step", "TabIndex", "Width" },
-                                            new Object[] { new Integer(9), "HID:" + curHelpID++, soptMatchAll, new Integer(iPosX), new Integer(iStartPosY), new Short((short) 1), IStep, new Short(curtabindex++), new Integer(103)});
-            optMatchAny = CurUnoDialog.insertRadioButton("optMatchAny" + sIncSuffix, SOOPTQUERYMODE, new ActionListenerImpl(),
+                                            new Object[] { new Integer(9), "HID:" + curHelpID++, soptMatchAll, new Integer(iPosX), new Integer(iStartPosY), new Short((short) 1), IStep, new Short(curtabindex++), new Integer(203)});
+            optMatchAny = CurUnoDialog.insertRadioButton("optMatchAny" + sIncSuffix, SOOPTORMODE, new ItemListenerImpl(),
                                             new String[] { "Height", "HelpURL", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width" },
-                                            new Object[] { new Integer(9), "HID:" + curHelpID++, soptMatchAny, new Integer(iPosX), new Integer(iStartPosY + 12), IStep, new Short(curtabindex++), new Integer(103)});
+                                            new Object[] { new Integer(9), "HID:" + curHelpID++, soptMatchAny, new Integer(iPosX), new Integer(iStartPosY + 12), IStep, new Short(curtabindex++), new Integer(203)});
             getfilterstate();
             oControlRows = new ControlRow[FilterCount];
             for (int i = 0; i < FilterCount; i++) {
                 bEnabled = (i == 0);
-                oControlRows[i] = new ControlRow(iStartPosY + 28, i, bEnabled, (this.curHelpID + (i * 3)));
+                oControlRows[i] = new ControlRow(iStartPosY + 20, i, bEnabled, (this.curHelpID + (i * 3)));
                 iStartPosY += 43;
             }
         } catch (Exception exception) {
@@ -378,22 +418,23 @@ public class FilterComponent {
                 oControlRows[a].setCondition(filterconditions[a][0]);
         while (a < oControlRows.length) {
             oControlRows[a].settovoid();
+            boolean bdoenable;
             if (a > 0)
-                oControlRows[a].setEnabled(oControlRows[a - 1].isComplete());
+                bdoenable = oControlRows[a - 1].isComplete();
+            else
+                bdoenable = true;
+            oControlRows[a].setEnabled(bdoenable);
             a++;
         }
     }
 
 
-    public void addNumberFormatsSupplier(XNumberFormatsSupplier _xNumberFormatsSupplier){
+    public void addNumberFormats(){
         try {
-            xNumberFormatsSupplier = _xNumberFormatsSupplier;
-            iDateFormat = Desktop.defineNumberFormat(xNumberFormatsSupplier.getNumberFormats(), "YYYY-MM-DD");
-            iTimeFormat = Desktop.defineNumberFormat(xNumberFormatsSupplier.getNumberFormats(), "HH:MM:SS");
-//          iDateTimeFormat = Desktop.defineNumberFormat(xNumberFormatsSupplier.getNumberFormats(), "YYYY-MM-DD HH:MM:SS");
+            iDateFormat = oQueryMetaData.getNumberFormatter().defineNumberFormat("YYYY-MM-DD");
+            iTimeFormat = oQueryMetaData.getNumberFormatter().defineNumberFormat("HH:MM:SS");
+            iDateTimeFormat = oQueryMetaData.getNumberFormatter().defineNumberFormat("YYYY-MM-DD HH:MM:SS");
 
-            xNumberFormatter = Desktop.createNumberFormatter(xMSF, xNumberFormatsSupplier);
-        } catch (NotNumericException e) {
         } catch (Exception e) {
             e.printStackTrace(System.out);
         }
@@ -412,23 +453,22 @@ public class FilterComponent {
                 this.bEnabled = _bEnabled;
                 ControlElements[0] = (XInterface) CurUnoDialog.insertLabel("lblFieldNames" + sCompSuffix,
                                         new String[] { "Enabled", "Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width" },
-                                        new Object[] { new Boolean(bEnabled), new Integer(9), slblFieldNames, new Integer(iStartPosX + 6), new Integer(iCompPosY + 13), IStep, new Short(curtabindex++), new Integer(55)});
+                                        new Object[] { new Boolean(bEnabled), new Integer(9), slblFieldNames, new Integer(iStartPosX + 10), new Integer(iCompPosY + 13), IStep, new Short(curtabindex++), new Integer(55)});
                 ControlElements[1] = (XInterface) CurUnoDialog.insertLabel("lblOperators" + sCompSuffix,
                                         new String[] { "Enabled", "Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width" },
-                                        new Object[] { new Boolean(bEnabled), new Integer(9), slblOperators, new Integer(iStartPosX + 83), new Integer(iCompPosY + 13), IStep, new Short(curtabindex++), new Integer(52)});
+                                        new Object[] { new Boolean(bEnabled), new Integer(9), slblOperators, new Integer(iStartPosX + 87), new Integer(iCompPosY + 13), IStep, new Short(curtabindex++), new Integer(52)});
                 ControlElements[2] = (XInterface) CurUnoDialog.insertLabel("lblValue" + sCompSuffix,
                                         new String[] { "Enabled", "Height", "Label", "PositionX", "PositionY", "Step", "TabIndex", "Width" },
-                                        new Object[] { new Boolean(bEnabled), new Integer(9), slblValue, new Integer(iStartPosX + 158), new Integer(iCompPosY + 13), IStep, new Short(curtabindex++), new Integer(32)});
-                ControlElements[3] = (XInterface) CurUnoDialog.insertListBox("lstFieldName" + sCompSuffix, SOFIELDNAMELIST[Index], null,
-                                        new ItemListenerImpl(), new String[] { "Enabled", "Dropdown", "Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Width" },
-                                        new Object[] { new Boolean(bEnabled), Boolean.TRUE, new Integer(13), "HID:" + _firstRowHelpID++, new Integer(iStartPosX + 6), new Integer(iCompPosY + 23), IStep, new Short(curtabindex++), new Integer(71)});
-                ControlElements[4] = (XInterface) CurUnoDialog.insertListBox("lstOperator" + sCompSuffix, LISTBOXOPERATORS_ACTION_PERFORMED,    LISTBOXOPERATORS_ITEM_CHANGED,
+                                        new Object[] { new Boolean(bEnabled), new Integer(9), slblValue, new Integer(iStartPosX + 162), new Integer(iCompPosY + 13), IStep, new Short(curtabindex++), new Integer(44)});
+                ControlElements[3] = (XInterface) CurUnoDialog.insertListBox("lstFieldName" + sCompSuffix, SOFIELDNAMELIST[Index], null, new ItemListenerImpl(),
+                                        new String[] { "Enabled", "Dropdown", "Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Width" },
+                                        new Object[] { new Boolean(bEnabled), Boolean.TRUE, new Integer(13), "HID:" + _firstRowHelpID++, new Integer(iStartPosX + 10), new Integer(iCompPosY + 23), IStep, new Short(curtabindex++), new Integer(71)});
+                ControlElements[4] = (XInterface) CurUnoDialog.insertListBox("lstOperator" + sCompSuffix, SOCONDITIONLIST[Index], null, new ItemListenerImpl(),
                                         new String[] { "Enabled", "Dropdown", "Height", "HelpURL", "LineCount", "PositionX", "PositionY", "Step", "StringItemList", "TabIndex", "Width" },
-                                        new Object[] { new Boolean(bEnabled), Boolean.TRUE, new Integer(13), "HID:" + _firstRowHelpID++, new Short((short) 7), new Integer(iStartPosX + 83), new Integer(iCompPosY + 23), IStep, sLogicOperators, new Short(curtabindex++), new Integer(70)});
-
+                                        new Object[] { new Boolean(bEnabled), Boolean.TRUE, new Integer(13), "HID:" + _firstRowHelpID++, new Short((short) 7), new Integer(iStartPosX + 87), new Integer(iCompPosY + 23), IStep, sLogicOperators, new Short(curtabindex++), new Integer(70)});
                 ControlElements[5] = (XInterface) CurUnoDialog.insertFormattedField("txtValue" + sCompSuffix, SOTEXTFIELDLIST[Index], new TextListenerImpl(),
                                         new String[] { "Enabled", "Height", "HelpURL", "PositionX", "PositionY", "Step", "TabIndex", "Width" },
-                                        new Object[] { new Boolean(bEnabled), new Integer(13), "HID:" + _firstRowHelpID++, new Integer(iStartPosX + 158), new Integer(iCompPosY + 23), IStep, new Short(curtabindex++), new Integer(43)});
+                                        new Object[] { new Boolean(bEnabled), new Integer(13), "HID:" + _firstRowHelpID++, new Integer(iStartPosX + 162), new Integer(iCompPosY + 23), IStep, new Short(curtabindex++), new Integer(44)});
             } catch (Exception exception) {
                 exception.printStackTrace(System.out);
             }}
@@ -439,7 +479,13 @@ public class FilterComponent {
                     if (SelFields.length > 0) {
                         short[] SelOperator = (short[]) AnyConverter.toArray(Helper.getUnoPropertyValue(UnoDialog.getModel(ControlElements[SOLSTOPERATOR]), "SelectedItems"));
                         if (SelOperator.length > 0) {
-                            return (!AnyConverter.isVoid(Helper.getUnoPropertyValue(UnoDialog.getModel(ControlElements[SOTXTVALUE]), "EffectiveValue")));
+                            Object oValue = Helper.getUnoPropertyValue(UnoDialog.getModel(ControlElements[SOTXTVALUE]), "EffectiveValue");
+                            if (!AnyConverter.isVoid(oValue)){
+                                String sValue = (String.valueOf(oValue));
+                                return (!sValue.equals(""));
+                            }
+//                          if (!AnyConverter.isVoid(Helper.getUnoPropertyValue(UnoDialog.getModel(ControlElements[SOTXTVALUE]), "EffectiveValue")))
+//                          return (!AnyConverter.isVoid(Helper.getUnoPropertyValue(UnoDialog.getModel(ControlElements[SOTXTVALUE]), "EffectiveValue")));
                         }
                     }
                     return false;
@@ -448,6 +494,11 @@ public class FilterComponent {
                     return false;
                 }
             }
+
+            public void fieldnamechanged(ItemEvent EventObject) {
+                int i = 0;
+            }
+
 
             protected void setCondition(PropertyValue _filtercondition) {
             try {
@@ -461,12 +512,12 @@ public class FilterComponent {
                     if (sValue.indexOf("{D '") > -1){
                         sValue = JavaTools.replaceSubString(sValue, "","{D '");
                         sValue = JavaTools.replaceSubString(sValue, "","' }");
-                        xNumberFormatter.convertStringToNumber(iDateFormat, sValue);
+                        oQueryMetaData.getNumberFormatter().convertStringToNumber(iDateFormat, sValue);
                     }
                     else if (sValue.indexOf("{T '") > -1){
                         sValue = JavaTools.replaceSubString(sValue, "","{T '");
                         sValue = JavaTools.replaceSubString(sValue, "","' }");
-                        xNumberFormatter.convertStringToNumber(iTimeFormat, sValue);
+                        oQueryMetaData.getNumberFormatter().convertStringToNumber(iTimeFormat, sValue);
                     }
                 }
                 else
@@ -495,6 +546,19 @@ public class FilterComponent {
                 for (int i = 0; i < ControlElements.length; i++)
                     Helper.setUnoPropertyValue(UnoDialog.getModel(ControlElements[i]), "Enabled", new Boolean(_bEnabled));
                 bEnabled = _bEnabled;
+                if (bEnabled){
+                    short[] iselected = new short[]{};
+                    try {
+                        iselected = (short[]) AnyConverter.toArray(Helper.getUnoPropertyValue(UnoDialog.getModel(ControlElements[SOLSTOPERATOR]), "SelectedItems"));
+                    } catch (Exception e) {
+                        e.printStackTrace(System.out);
+                    }
+                    if ((iselected.length) == 0)
+                        Helper.setUnoPropertyValue(UnoDialog.getModel(ControlElements[SOLSTOPERATOR]), "SelectedItems", new short[]{0});
+                }
+                else
+                    if (!isComplete())
+                        CurUnoDialog.deselectListBox(ControlElements[SOLSTOPERATOR]);
             }
 
             protected String getSelectedFieldName() {
@@ -531,7 +595,8 @@ public class FilterComponent {
             protected String getDateTimeString(boolean bgetDate) {
             try {
                 double dblValue = ((Double) getValue()).doubleValue();
-                return Desktop.convertNumberToString(xNumberFormatter, iDateFormat, dblValue);
+                NumberFormatter oNumberFormatter = oQueryMetaData.getNumberFormatter();
+                return oNumberFormatter.convertNumberToString(iDateTimeFormat, dblValue);
             } catch (Exception exception) {
                 exception.printStackTrace(System.out);
                 return null;
