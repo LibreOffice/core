@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: oj $ $Date: 2000-10-19 11:54:33 $
+#   last change: $Author: oj $ $Date: 2000-10-24 15:54:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -174,6 +174,7 @@ SLOFILES=\
 SLOFILES+=$(SLO)$/staticmbadabas.obj
 .ENDIF
 
+SHL1VERSIONMAP= $(ADABAS_TARGET).map
 # --- Library -----------------------------------
 
 SHL1TARGET=	$(ADABAS_TARGET)$(ADABAS_MAJOR)

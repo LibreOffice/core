@@ -2,9 +2,9 @@
  *
  *  $RCSfile: BUsers.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:14:20 $
+ *  last change: $Author: oj $ $Date: 2000-10-24 15:54:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,9 +77,24 @@
 #ifndef _CONNECTIVITY_SDBCX_IREFRESHABLE_HXX_
 #include "connectivity/sdbcx/IRefreshable.hxx"
 #endif
+#define CONNECTIVITY_PROPERTY_NAME_SPACE adabas
 #ifndef _CONNECTIVITY_PROPERTYIDS_HXX_
 #include "propertyids.hxx"
 #endif
+
+// define the properties of this lib
+// this file includes the properties for this dll
+namespace connectivity
+{
+    namespace adabas
+    {
+#ifndef CONNECTIVITY_USTRINGDESCRIPTION_IMPL_HXX
+#include "UStringDescription_Impl.hxx"
+#endif
+    }
+}
+
+
 using namespace connectivity::adabas;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
