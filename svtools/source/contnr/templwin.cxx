@@ -2,9 +2,9 @@
  *
  *  $RCSfile: templwin.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: pb $ $Date: 2001-11-12 09:45:02 $
+ *  last change: $Author: fs $ $Date: 2001-12-06 15:30:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1722,7 +1722,7 @@ IMPL_LINK ( SvtDocumentTemplateDialog, UpdateHdl_Impl, Timer*, _pEventSource )
         else
         {
             // check if we really need to do the update
-            ::sfx2::TemplateFolderCache aCache;
+            ::svt::TemplateFolderCache aCache;
             if ( aCache.needsUpdate() )
             {   // yes -> do it asynchronous (it will take a noticeable time)
 
