@@ -1,3 +1,5 @@
+package installer;
+
 /*
  * Welcome.java
  *
@@ -76,12 +78,13 @@ public class Version extends javax.swing.JPanel implements ActionListener, Table
         //JScrollPane scroll = new JScrollPane(tableVersions);
         //versionPanel.add(scroll);
         versionPanel.add(tableVersions);
-        JTextArea area = new JTextArea("\n Please select the Office version you wish to Update \n ");
+        JTextArea area = new JTextArea("Please select the Office version you wish to Update");
         area.setLineWrap(true);
         area.setEditable(false);
         add(area, BorderLayout.NORTH);
         add(versionPanel, BorderLayout.CENTER);
-        nav = new NavPanel(wizard, true, false, true, InstallWizard.WELCOME, InstallWizard.FINAL);
+        //nav = new NavPanel(wizard, true, false, true, InstallWizard.WELCOME, InstallWizard.FINAL);
+    nav = new NavPanel(wizard, true, false, true, InstallWizard.WELCOME, InstallWizard.FINAL);
         nav.setNextListener(this);
         add(nav, BorderLayout.SOUTH);    
         

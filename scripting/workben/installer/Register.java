@@ -1,3 +1,5 @@
+package installer;
+
 import java.lang.String;
 import java.io.*;
 import javax.swing.*;
@@ -79,7 +81,7 @@ public class Register{
                 System.out.println( "Windows" );
         //path = "C:\\Progra~1\\OpenOffice.org643";
         //progpath = path + "\\program\\";
-        //System.out.println("\""+progpath+"regsingleton.exe\" \""+path+File.separator+"user"+File.separator+"uno_packages"+File.separator+"cache"+File.separator+"services.rdb\" \"drafts.com.sun.star.script.framework.theScriptRuntimeForJava=drafts.com.sun.star.script.framework.ScriptRuntimeForJava\"");
+        System.out.println("\""+progpath+"regsingleton.exe\" \""+path+File.separator+"user"+File.separator+"uno_packages"+File.separator+"cache"+File.separator+"services.rdb\" \"drafts.com.sun.star.script.framework.theScriptRuntimeForJava=drafts.com.sun.star.script.framework.ScriptRuntimeForJava\"");
         p=rt.exec("\""+progpath+"regsingleton.exe\" \""+path+File.separator+"user"+File.separator+"uno_packages"+File.separator+"cache"+File.separator+"services.rdb\" \"drafts.com.sun.star.script.framework.theScriptRuntimeForJava=drafts.com.sun.star.script.framework.ScriptRuntimeForJava\"");
         }
             exitcode=p.waitFor();   
@@ -102,7 +104,7 @@ public class Register{
             }
         else {
                 //System.out.println( "Windows" );
-        //System.out.println("\""+progpath+"regsingleton.exe\" \""+path+File.separator+"user"+File.separator+"uno_packages"+File.separator+"cache"+File.separator+"services.rdb\" \"drafts.com.sun.star.script.framework.storage.theScriptStorageManager=drafts.com.sun.star.script.framework.storage.ScriptStorageManager\"");
+        System.out.println("\""+progpath+"regsingleton.exe\" \""+path+File.separator+"user"+File.separator+"uno_packages"+File.separator+"cache"+File.separator+"services.rdb\" \"drafts.com.sun.star.script.framework.storage.theScriptStorageManager=drafts.com.sun.star.script.framework.storage.ScriptStorageManager\"");
                 p=rt.exec("\""+progpath+"regsingleton.exe\" \""+path+File.separator+"user"+File.separator+"uno_packages"+File.separator+"cache"+File.separator+"services.rdb\" \"drafts.com.sun.star.script.framework.storage.theScriptStorageManager=drafts.com.sun.star.script.framework.storage.ScriptStorageManager\"");
         }
             exitcode=p.waitFor();   

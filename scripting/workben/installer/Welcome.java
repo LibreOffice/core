@@ -1,3 +1,5 @@
+package installer;
+
 /*
  * Welcome.java
  *

@@ -1,3 +1,5 @@
+package installer;
+
 import java.awt.*;
 
 public class Banner extends Canvas

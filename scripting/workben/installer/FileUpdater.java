@@ -1,3 +1,5 @@
+package installer;
+
 import java.io.*;
 
 public class FileUpdater {
@@ -157,7 +159,14 @@ public class FileUpdater {
 //<library:library library:name="Depot" xlink:href="file:///scriptdev/neil/openoffice1.0.1ScriptFrame/share/basic/Depot/script.xlb/" xlink:type="simple" library:link="true" library:readonly="false"/>
 //<library:library library:name="Standard" xlink:href="file:///scriptdev/neil/openoffice1.0.1ScriptFrame/user/basic/Standard/script.xlb/" xlink:type="simple" library:link="false"/>
                         //System.out.println(" <library:library library:name=\"ScriptBindingLibrary\" xlink:href=\"file://"+installPath+"/user/basic/ScriptBindingLibrary/script.xlb/\" xlink:type=\"simple\" library:link=\"false\"/>\n" );
-                        out.write(" <library:library library:name=\"ScriptBindingLibrary\" xlink:href=\"file://"+installPath+"/user/basic/ScriptBindingLibrary/script.xlb/\" xlink:type=\"simple\" library:link=\"false\"/>\n" );
+
+            String opSys = System.getProperty("os.name");
+            if (opSys.indexOf("Windows") != -1) {
+                out.write(" <library:library library:name=\"ScriptBindingLibrary\" library:link=\"false\"/>\n" );
+            }
+            else {
+                out.write(" <library:library library:name=\"ScriptBindingLibrary\" xlink:href=\"file://"+installPath+"/user/basic/ScriptBindingLibrary/script.xlb/\" xlink:type=\"simple\" library:link=\"false\"/>\n" );
+            }
                      }
                 }
             }
@@ -244,7 +253,13 @@ public class FileUpdater {
 //<library:library library:name="Depot" xlink:href="file:///scriptdev/neil/openoffice1.0.1ScriptFrame/share/basic/Depot/script.xlb/" xlink:type="simple" library:link="true" library:readonly="false"/>
 //<library:library library:name="Standard" xlink:href="file:///scriptdev/neil/openoffice1.0.1ScriptFrame/user/basic/Standard/script.xlb/" xlink:type="simple" library:link="false"/>
                         //System.out.println( " <library:library library:name=\"ScriptBindingLibrary\" xlink:href=\"file://"+installPath+"/user/basic/ScriptBindingLibrary/dialog.xlb/\" xlink:type=\"simple\" library:link=\"false\"/>\n" );
-                        out.write(" <library:library library:name=\"ScriptBindingLibrary\" xlink:href=\"file://"+installPath+"/user/basic/ScriptBindingLibrary/dialog.xlb/\" xlink:type=\"simple\" library:link=\"false\"/>\n" );
+            String opSys = System.getProperty("os.name");
+            if (opSys.indexOf("Windows") != -1) {
+                out.write(" <library:library library:name=\"ScriptBindingLibrary\" library:link=\"false\"/>\n" );
+            }
+            else {
+                out.write(" <library:library library:name=\"ScriptBindingLibrary\" xlink:href=\"file://"+installPath+"/user/basic/ScriptBindingLibrary/dialog.xlb/\" xlink:type=\"simple\" library:link=\"false\"/>\n" );
+            }
                      }
                 }
             }

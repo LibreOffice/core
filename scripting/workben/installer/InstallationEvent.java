@@ -1,3 +1,5 @@
+package installer;
+
 public class InstallationEvent
 {
     private Object source;

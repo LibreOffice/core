@@ -1,3 +1,5 @@
+package installer;
+
 /*
  * Welcome.java
  *
@@ -58,6 +60,7 @@ public class Final extends javax.swing.JPanel implements ActionListener, Install
     }
     
     public void actionPerformed(ActionEvent e) {
+    // navNext is "Install"
         if (e.getSource() == nav.navNext)
     {
             JProgressBar progressBar=new JProgressBar();
@@ -85,29 +88,41 @@ public class Final extends javax.swing.JPanel implements ActionListener, Install
         xud.start();
             }
         }
-    if (e.getSource() == nav.navCancel)
+    
+    // set to "Exit" at end of installation process
+    if (e.getSource() == nav.navCancel) {
+        int answer = JOptionPane.showConfirmDialog(wizard, "Are you sure you want to exit?");
+        if (answer == JOptionPane.YES_OPTION) 
         {
-            //xud.setSuspend();
-            int answer = JOptionPane.showConfirmDialog(wizard, "Are you sure you want to exit?");
-            if (answer == JOptionPane.YES_OPTION) 
-            {
-                wizard.exitForm(null);
-            } 
-            else 
-            {
-                return;
-            }
+            wizard.exitForm(null);
+        } 
+        else 
+        {
+            return;
+        }
     }
     }// actionPerformed
     
     
     public void installationComplete(InstallationEvent ev) {
         //System.out.println("Detected installation complete");
+    if( InstUtil.hasNetbeansInstallation() || InstUtil.hasJeditInstallation() ) {
+        //System.out.println("Detected installation complete (IDE(s) detected)");
         nav.removeCancelListener(this);
         nav.setCancelListener(nav);
-        nav.navCancel.setText("Exit");
+        nav.navCancel.setText("Finish");
+        nav.enableIDE(true);
         nav.enableCancel(true);
         xud = null;
+    }
+    else {
+        //System.out.println("Detected installation complete (No IDE(s) detected)");
+        nav.removeCancelListener(this);
+        nav.setCancelListener(nav);
+        nav.navCancel.setText("Finish");
+        nav.enableCancel(true);
+        xud = null;
+    }
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -117,5 +132,5 @@ public class Final extends javax.swing.JPanel implements ActionListener, Install
     private NavPanel nav;
     private XmlUpdater xud;
     // End of variables declaration//GEN-END:variables
-        
+
 }

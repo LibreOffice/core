@@ -1,3 +1,5 @@
+package installer;
+
 /*
  * InstallWizard.java
  *
@@ -65,7 +67,7 @@ public class InstallWizard extends javax.swing.JFrame implements ActionListener 
     setBackground(new Color(0,0,0));
     locations = new ArrayList();
     //Point center = GraphicsEnvironment.getLocalGraphicsEnvironment().getCenterPoint();
-    Point center = new Point( 300, 300 );
+    Point center = new Point( 400, 400 );
     int windowWidth=200;
     int windowHeight=300;
     setSize(windowWidth,windowHeight);
@@ -113,23 +115,25 @@ public class InstallWizard extends javax.swing.JFrame implements ActionListener 
         getContentPane().add(navigation, java.awt.BorderLayout.SOUTH);
         screens.setLayout(new java.awt.CardLayout());
         screens.add(WELCOME, new Welcome(this));
-        //screens.add("EULA", new EULA());
-    // ----------------
-    netbeansVersion = new NetbeansVersion(this);
-    screens.add(NETBEANSVERSIONS, netbeansVersion);
-        // ----------------
         version = new Version(this);
         screens.add(VERSIONS, version);
     _final = new Final(this);
         screens.add(FINAL, _final);
+
+    idewelcome = new IdeWelcome(this);
+        screens.add(IDEWELCOME, idewelcome);
+        ideversion = new IdeVersion(this);
+        screens.add(IDEVERSIONS, ideversion);
+    idefinal = new IdeFinal(this);
+        screens.add(IDEFINAL, idefinal);
         
         getContentPane().add(screens, java.awt.BorderLayout.CENTER);
 
     navNext.addActionListener(this);
-    navNext.addActionListener(netbeansVersion);
     navNext.addActionListener(version);
-    navNext.addActionListener(netbeansVersion);
     navNext.addActionListener(_final);
+    navNext.addActionListener(ideversion);
+    navNext.addActionListener(idefinal);    
     navCancel.addActionListener(this);
     navBack.addActionListener(this);
         
@@ -258,14 +262,18 @@ public class InstallWizard extends javax.swing.JFrame implements ActionListener 
     private javax.swing.JPanel  screens;
 
     private Version version;
-    private NetbeansVersion netbeansVersion;
     private Final _final;
+    private IdeVersion ideversion;
+    private IdeFinal idefinal;
+    private IdeWelcome idewelcome;
     private static ArrayList locations;
 
     public static String VERSIONS = "VERSIONS";
     public static String WELCOME  = "WELCOME";
     public static String FINAL    = "FINAL";
-    public static String NETBEANSVERSIONS = "NETBEANSVERSIONS";
+    public static String IDEVERSIONS = "IDEVERSIONS";
+    public static String IDEWELCOME  = "IDEWELCOME";
+    public static String IDEFINAL    = "IDEFINAL";
     
     public static int DEFWIDTH     = 480;
     public static int DEFHEIGHT    = 240;

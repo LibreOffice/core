@@ -1,3 +1,5 @@
+package installer;
+
 import java.io.*;
 import java.util.*;
 import java.util.jar.*;
@@ -174,6 +176,8 @@ public class XmlUpdater extends Thread {
         else
             System.out.println( "soffice.cfg exists" );
 
+// Robert Kinsella test 1
+
         //Adding <Office>/user/Scripts/java/
         File scriptsDir = new File( scriptsPath );
     File highlightDir = new File( scriptsPath+File.separator+"Highlight"+File.separator );
@@ -204,7 +208,12 @@ public class XmlUpdater extends Thread {
             onInstallComplete();
             return;
     }
-            if (opSys.indexOf("Windows")!=-1){
+        if (!zd.extractEntry("sframework/scripting64401.res",progpath+"resource"+File.separator, statusLabel))
+        {
+            onInstallComplete();
+            return;
+    }
+    if (opSys.indexOf("Windows")!=-1){
             if (!zd.extractEntry("windows/regsingleton.exe",progpath, statusLabel))
             {
                 onInstallComplete();
@@ -227,6 +236,7 @@ public class XmlUpdater extends Thread {
         }
 
 //--------------------------------
+// Robert Kinsella test 2
 
     // adding (JAVA) script examples
     File highlightScript = new File( scriptsPath+File.separator+"Highlight"+File.separator+"HighlightUtil.java" );
@@ -276,6 +286,7 @@ public class XmlUpdater extends Thread {
     else {
         System.out.println( "Spell script already deployed" );
         }
+
 //--------------------------------
 
     // Adding binding dialog

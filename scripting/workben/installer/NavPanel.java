@@ -1,3 +1,5 @@
+package installer;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -49,6 +51,10 @@ public class NavPanel extends JPanel implements ActionListener {
         navCancel.setEnabled(bEnable);
     }
     
+    public void enableIDE(boolean bEnable) {
+    ideDetected = bEnable;
+    }
+    
     public void actionPerformed(ActionEvent ev) {
         if ((ev.getSource() == navNext) && (next.length() != 0)) {
             wizard.show(next);
@@ -57,7 +63,13 @@ public class NavPanel extends JPanel implements ActionListener {
             wizard.show(prev);
         }
         if (ev.getSource() == navCancel) {
+        if( ideDetected ) {
+            wizard.show(InstallWizard.IDEWELCOME);
+        }
+        else {
             wizard.exitForm(null);
+        }
+        enableIDE(false);
         }
     }
     
@@ -97,4 +109,5 @@ public class NavPanel extends JPanel implements ActionListener {
     private InstallWizard wizard;
     private String next;
     private String prev;
+    private boolean ideDetected = false;
 }
