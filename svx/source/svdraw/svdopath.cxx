@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdopath.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:58:21 $
+ *  last change: $Author: kz $ $Date: 2004-06-10 11:34:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -934,7 +934,11 @@ FASTBOOL ImpPathCreateUser::CalcBezier(const Point& rP1, const Point& rP2, const
     aBezStart=rP1;
     aBezCtrl1=rP1+rDir;
     aBezCtrl2=rP2;
-    if (!bMouseDown) aBezEnd=rP2;
+
+    // #i21479#
+    // Also copy the end point when no end point is set yet
+    if (!bMouseDown || (0L == aBezEnd.X() && 0L == aBezEnd.Y())) aBezEnd=rP2;
+
     bBezier=bRet;
     return bRet;
 }
