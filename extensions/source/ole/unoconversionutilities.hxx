@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoconversionutilities.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jl $ $Date: 2000-10-05 11:03:39 $
+ *  last change: $Author: jl $ $Date: 2000-10-12 13:15:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,7 @@
 #include <com/sun/star/script/XInvocationAdapterFactory2.hpp>
 
 #include <vos/mutex.hxx>
+#include <typelib/typedescription.hxx>
 #include "ole2uno.hxx"
 
 // classes for wrapping uno objects
@@ -83,6 +84,7 @@
 
 using namespace com::sun::star::script;
 using namespace com::sun::star::beans;
+using namespace com::sun::star::uno;
 using namespace vos;
 
 namespace ole_adapter
@@ -111,7 +113,10 @@ public:
     // converts only into oleautomation types, that is there is no VT_I1, VT_UI2, VT_UI4
     // a sal_Unicode character is converted into a BSTR
     sal_Bool anyToVariant(VARIANT* pVariant, const Any& rAny);
+    sal_Bool anyToVariant(VARIANT* pVariant, const Any& rAny, VARTYPE type);
+
     SAFEARRAY*  createUnoSequenceWrapper(const Any& rSeq);
+    SAFEARRAY*  createUnoSequenceWrapper(const Any& rSeq, VARTYPE elemtype);
     IDispatch*  createUnoObjectWrapper(const Any& rObj);
 
     sal_Bool variantToAny(const VARIANT* pVariant, Any& rAny, sal_Bool bReduceValueRange = sal_True);
@@ -139,8 +144,13 @@ public:
 
 
 
-// Attributes:
 protected:
+    void getElementCountAndTypeOfSequence( const Any& rSeq, sal_Int32 dim, Sequence< sal_Int32 >& seqElementCounts, TypeDescription& typeDesc);
+    sal_Bool incrementMultidimensionalIndex(sal_Int32 dimensions, const sal_Int32 * parDimensionLength,
+                                    sal_Int32 * parMultidimensionalIndex);
+    size_t getOleElementSize( VARTYPE type);
+
+
     // This member determines what class is used to convert a UNO object
     // or struct to a COM object. It is passed along to the o2u_anyToVariant
     // function in the createBridge function implementation
@@ -359,6 +369,32 @@ sal_Bool UnoConversionUtilities<T>::variantToAny2( const VARIANTARG* pArg, Any& 
     return retVal;
 }
 
+// The function only converts Sequences to SAFEARRAYS with elements of the type
+// specified by the parameter type. Everything else is forwarded to
+// anyToVariant(VARIANT* pVariant, const Any& rAny)
+template<class T>
+sal_Bool UnoConversionUtilities<T>::anyToVariant(VARIANT* pVariant, const Any& rAny, VARTYPE type)
+{
+    sal_Bool ret= sal_False;
+    type &= 0xffff ^ VT_BYREF; // remove VT_BYREF if set
+    if( type & VT_ARRAY)
+    {
+        type ^= VT_ARRAY;
+        SAFEARRAY* ar= createUnoSequenceWrapper( rAny, type);
+        if( ar)
+        {
+            VariantClear( pVariant);
+            pVariant->vt= VT_ARRAY | type;
+            pVariant->byref= ar;
+            ret= sal_True;
+        }
+
+    }
+    else
+        ret= anyToVariant( pVariant, rAny);
+
+    return ret;
+}
 
 template<class T>
 sal_Bool UnoConversionUtilities<T>::anyToVariant(VARIANT* pVariant, const Any& rAny)
@@ -556,6 +592,277 @@ sal_Bool UnoConversionUtilities<T>::anyToVariant(VARIANT* pVariant, const Any& r
 
     return ret;
 }
+
+// Creates an SAFEARRAY of the specified element and if necessary
+// creates a SAFEARRAY whith multiple dimensions.
+// Used by sal_Bool anyToVariant(VARIANT* pVariant, const Any& rAny, VARTYPE type);
+template<class T>
+SAFEARRAY*  UnoConversionUtilities<T>::createUnoSequenceWrapper(const Any& rSeq, VARTYPE elemtype)
+{
+    if( ! (rSeq.getValueTypeClass() == TypeClass_SEQUENCE) |
+        ( elemtype == VT_NULL)  | ( elemtype == VT_EMPTY) )
+        return NULL;
+
+    SAFEARRAY*  pArray= NULL;
+    // Get the dimensions. This is done by examining the type name string
+    // The count of brackets determines the dimensions.
+    OUString sTypeName= rSeq.getValueType().getTypeName();
+    sal_Int32 dims=0;
+    for(sal_Int32 lastIndex=0;(lastIndex= sTypeName.indexOf( L'[', lastIndex)) != -1; lastIndex++,dims++);
+
+    //get the maximum number of elements per dimensions and the typedescription of the elements
+    Sequence<sal_Int32> seqElementCounts( dims);
+    TypeDescription elementTypeDesc;
+    getElementCountAndTypeOfSequence( rSeq, 1, seqElementCounts, elementTypeDesc );
+
+    if( elementTypeDesc.is() )
+    {
+        // set up the SAFEARRAY
+        SAFEARRAYBOUND* prgsabound= new SAFEARRAYBOUND[dims];
+        sal_Int32 elementCount=0; //the number of all elements in the SAFEARRAY
+        for( sal_Int32 i=0; i < dims; i++)
+        {
+            //prgsabound[0] is the right most dimension
+             prgsabound[dims - i - 1].lLbound = 0;
+            prgsabound[dims - i - 1].cElements = seqElementCounts[i];
+        }
+
+        typelib_TypeDescription* rawTypeDesc= elementTypeDesc.get();
+        sal_Int32 elementSize= rawTypeDesc->nSize;
+        size_t oleElementSize= getOleElementSize( elemtype);
+        // SafeArrayCreate clears the memory for the data itself.
+        pArray = SafeArrayCreate(elemtype, dims, prgsabound);
+
+        // convert the Sequence's elements and populate the SAFEARRAY
+        if( pArray)
+        {
+            // Iterate over every Sequence that contains the actual elements
+            void* pSAData;
+            if( SUCCEEDED( SafeArrayAccessData( pArray, &pSAData)))
+            {
+                const sal_Int32* parElementCount= seqElementCounts.getConstArray();
+                uno_Sequence * pMultiSeq= *(uno_Sequence* const*) rSeq.getValue();
+                sal_Int32 dimsSeq= dims - 1;
+
+                // arDimSeqIndizes contains the current index of a block of data.
+                // E.g. Sequence<Sequence<sal_Int32>> , the index would refer to Sequence<sal_Int32>
+                // In this case arDimSeqIndices would have the size 1. That is the elements are not counted
+                // but the Sequences that contain those elements.
+                // The indices ar 0 based
+                sal_Int32* arDimsSeqIndices= NULL;
+                if( dimsSeq > 0)
+                {
+                    arDimsSeqIndices= new sal_Int32[dimsSeq];
+                    memset( arDimsSeqIndices, 0,  sizeof( sal_Int32 ) * dimsSeq);
+                }
+
+                char* psaCurrentData= (char*)pSAData;
+
+                do
+                {
+                    // Get the Sequence at the current index , see arDimsSeqIndices
+                    uno_Sequence * pCurrentSeq= pMultiSeq;
+                    sal_Int32 curDim=1; // 1 based
+                    sal_Bool skipSeq= sal_False;
+                    while( curDim <= dimsSeq )
+                    {
+                        // get the Sequence at the index if valid
+                        if( pCurrentSeq->nElements > arDimsSeqIndices[ curDim - 1] ) // don't point to Nirvana
+                        {
+                            // size of Sequence is 4
+                            sal_Int32 offset= arDimsSeqIndices[ curDim - 1] * 4;
+                            pCurrentSeq= *(uno_Sequence**) &pCurrentSeq->elements[ offset];
+                            curDim++;
+                        }
+                        else
+                        {
+                            // There is no Sequence at this index, so skip this index
+                            skipSeq= sal_True;
+                            break;
+                        }
+                    }
+
+                    if( skipSeq)
+                        continue;
+
+                    // Calculate the current position within the datablock of the SAFEARRAY
+                    // for the next Sequence.
+                    sal_Int32 memOffset= 0;
+                    sal_Int32 dimWeight= parElementCount[ dims - 1]; // size of the rightmost dimension
+                    for(sal_Int16 idims=0; idims < dimsSeq; idims++ )
+                    {
+                        memOffset+= arDimsSeqIndices[dimsSeq - 1 - idims] * dimWeight;
+                        // now determine the weight of the dimension to the left of the current.
+                        if( dims - 2 - idims >=0)
+                            dimWeight*= parElementCount[dims - 2 - idims];
+                    }
+                    psaCurrentData= (char*)pSAData + memOffset * oleElementSize;
+                    // convert the Sequence and put the elements into the Safearray
+                    for( sal_Int32 i= 0; i < pCurrentSeq->nElements; i++)
+                    {
+                        Any unoElement( pCurrentSeq->elements + i * elementSize, rawTypeDesc );
+                        // The any is being converted into an VARIANT which value is then copied
+                        // to the SAFEARRAY's data block. When copying one has to follow the rules for
+                        // copying certain types, as are VT_DISPATCH, VT_UNKNOWN, VT_VARIANT, VT_BSTR.
+                        // To increase performance, we just do a memcpy of VARIANT::byref. This is possible
+                        // because anyToVariant has already followed the copying rules. To make this
+                        // work there must not be a VariantClear.
+                        // One Exception is VARIANT because I don't know how VariantCopy works.
+
+                        VARIANT var;
+                        VariantInit( &var);
+                        if( anyToVariant( &var, unoElement))
+                        {
+                            if( elemtype == VT_VARIANT )
+                            {
+                                VariantCopy( ( VARIANT*)psaCurrentData, &var);
+                                VariantClear( &var);
+                            }
+                            else
+                                memcpy( psaCurrentData, &var.byref, oleElementSize);
+                        }
+                        psaCurrentData+= oleElementSize;
+                    }
+                }
+                while( incrementMultidimensionalIndex( dimsSeq, parElementCount, arDimsSeqIndices));
+
+                if( arDimsSeqIndices)
+                    delete [] arDimsSeqIndices;
+
+                SafeArrayUnaccessData( pArray);
+            }
+        }
+        if( prgsabound)
+            delete [] prgsabound;
+    }
+    return pArray;
+}
+
+// Increments a multi dimensional index.
+// Returns true as long as the index has been successfully incremented, false otherwise.
+// False is also returned if an overflow of the most significant dimension occurs. E.g.
+// assume an array with the dimensions (2,2), then the lowest index is (0,0) and the highest
+// index is (1,1). If the function is being called with the index (1,1) then the overflow would
+// occur, with the result (0,0) and a sal_False as return value.
+// Param dimensions - number of dimensions
+// Param parDimensionsLength - The array contains the size of each dimension, that is the
+//                              size of the array equals the parameter dimensions.
+//                              The rightmost dimensions is the least significant one
+//                              ( parDimensionsLengths[ dimensions -1 ] ).
+// Param parMultiDimensionalIndex - The array contains the index. Each dimension index is
+//                                  0 based.
+template<class T>
+sal_Bool UnoConversionUtilities<T>::incrementMultidimensionalIndex(sal_Int32 dimensions,
+                                                                   const sal_Int32 * parDimensionLengths,
+                                                                   sal_Int32 * parMultidimensionalIndex)
+{
+    if( dimensions < 1)
+        return sal_False;
+
+    sal_Bool ret= sal_True;
+    sal_Bool carry= sal_True; // to get into the while loop
+
+    sal_Int32 currentDimension= dimensions; //most significant is 1
+    while( carry)
+    {
+        parMultidimensionalIndex[ currentDimension - 1]++;
+        // if carryover, set index to 0 and handle carry on a level above
+        if( parMultidimensionalIndex[ currentDimension - 1] > (parDimensionLengths[ currentDimension - 1] - 1))
+            parMultidimensionalIndex[ currentDimension - 1]= 0;
+        else
+            carry= sal_False;
+
+        currentDimension --;
+        // if dimensions drops below 1 and carry is set than then all indices are 0 again
+        // this is signalled by returning sal_False
+        if( currentDimension < 1 && carry)
+        {
+            carry= sal_False;
+            ret= sal_False;
+        }
+    }
+    return ret;
+}
+
+// Determines the size of a certain OLE type. The function takes
+// only those types into account which are oleautomation types and
+// can have a value ( unless VT_NULL, VT_EMPTY, VT_ARRAY, VT_BYREF).
+// Currently used in createUnoSequenceWrapper to calculate addresses
+// for data within a SAFEARRAY.
+template<class T>
+size_t UnoConversionUtilities<T>::getOleElementSize( VARTYPE type)
+{
+    size_t size;
+    switch( type)
+    {
+    case VT_BOOL: size= sizeof( VARIANT_BOOL);break;
+    case VT_UI1: size= sizeof( unsigned char);break;
+    case VT_R8: size= sizeof( double);break;
+    case VT_R4: size= sizeof( float);break;
+    case VT_I2: size= sizeof( short);break;
+    case VT_I4: size= sizeof( long);break;
+    case VT_BSTR: size= sizeof( BSTR); break;
+    case VT_ERROR: size= sizeof( SCODE); break;
+    case VT_DISPATCH:
+    case VT_UNKNOWN: size= sizeof( IUnknown*); break;
+    case VT_VARIANT: size= sizeof( VARIANT);break;
+    default: size= 0;
+    }
+    return size;
+}
+
+//If a Sequence is being converted into a SAFEARRAY then we possibly have
+// to create a SAFEARRAY with multiple dimensions. This is the case when a
+// Sequence contains Sequences ( Sequence< Sequence < XXX > > ). The leftmost
+// Sequence in the declaration is assumed to represent dimension 1. Because
+// all Sequence elements of a Sequence can have different length, we have to
+// determine the maximum length which is then the length of the respective
+// dimension.
+// getElementCountAndTypeOfSequence determines the length of each dimension and calls itself recursively
+// in the process.
+// param rSeq - an Any that has to contain a Sequence
+// param dim - the dimension for which the number of elements is being determined,
+//              must be one.
+// param seqElementCounts - countains the maximum number of elements for each
+//                          dimension. Index 0 contains the number of dimension one.
+//                          After return the Sequence contains the maximum number of
+//                          elements for each dimension.
+//                          The length of the Sequence must equal the number of dimensions.
+// param typeClass - TypeClass of the element type that is no Sequence, e.g.
+//                          Sequence< Sequence <Sequence <sal_Int32> > > - type is sal_Int32)
+template<class T>
+void  UnoConversionUtilities<T>::getElementCountAndTypeOfSequence( const Any& rSeq, sal_Int32 dim,
+                                             Sequence< sal_Int32 >& seqElementCounts, TypeDescription& typeDesc)
+{
+    sal_Int32 dimCount= (*(uno_Sequence* const *) rSeq.getValue())->nElements;
+    if( dimCount > seqElementCounts[ dim-1])
+        seqElementCounts[ dim-1]= dimCount;
+
+    // we need the element type to construct the any that is
+    // passed into getElementCountAndTypeOfSequence again
+    typelib_TypeDescription* pSeqDesc= NULL;
+    rSeq.getValueTypeDescription( &pSeqDesc);
+    typelib_TypeDescriptionReference* pElementDescRef= ((typelib_IndirectTypeDescription*)pSeqDesc)->pType;
+
+    // if the elements are Sequences than do recursion
+    if( dim < seqElementCounts.getLength() )
+    {
+        uno_Sequence* pSeq = *(uno_Sequence* const*) rSeq.getValue();
+        uno_Sequence** arSequences= (uno_Sequence**)pSeq->elements;
+        for( sal_Int32 i=0; i < dimCount; i++)
+        {
+            uno_Sequence* arElement=  arSequences[ i];
+            getElementCountAndTypeOfSequence( Any( &arElement, pElementDescRef), dim + 1 , seqElementCounts, typeDesc);
+        }
+    }
+    else
+    {
+        // determine the element type ( e.g. Sequence< Sequence <Sequence <sal_Int32> > > - type is sal_Int32)
+        typeDesc= pElementDescRef;
+    }
+    typelib_typedescription_release( pSeqDesc);
+}
+
 
 template<class T>
 SAFEARRAY*  UnoConversionUtilities<T>::createUnoSequenceWrapper(const Any& rSeq)
@@ -1513,7 +1820,7 @@ VARTYPE UnoConversionUtilities<T>::mapTypeClassToVartype( TypeClass type)
         break;
     case TypeClass_BOOLEAN: ret= VT_BOOL;
         break;
-    case TypeClass_CHAR: ret= VT_UI2;
+    case TypeClass_CHAR: ret= VT_I2;
         break;
     case TypeClass_STRING: ret= VT_BSTR;
         break;
@@ -1521,7 +1828,7 @@ VARTYPE UnoConversionUtilities<T>::mapTypeClassToVartype( TypeClass type)
         break;
     case TypeClass_DOUBLE: ret= VT_R8;
         break;
-    case TypeClass_BYTE: ret= VT_I1;
+    case TypeClass_BYTE: ret= VT_UI1;
         break;
     case TypeClass_SHORT: ret= VT_I2;
         break;
