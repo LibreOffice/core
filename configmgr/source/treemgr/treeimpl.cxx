@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeimpl.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-24 14:01:14 $
+ *  last change: $Author: kz $ $Date: 2004-03-23 10:33:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,8 +146,8 @@ public:
             rtl::Reference<view::ViewStrategy> const& _xStrategy,
             TreeImpl& rTree
          )
-        : m_aTemplateProvider(aTemplateProvider)
-        , m_xStrategy(_xStrategy)
+        : m_xStrategy(_xStrategy)
+        , m_aTemplateProvider(aTemplateProvider)
         , m_rFactory(_xStrategy->getNodeFactory())
         , m_rTree(rTree)
         , m_nParent(0)
@@ -301,8 +301,8 @@ void TreeImplBuilder::addSet(data::SetNodeAccess const& _aSet)
 
 NodeData::NodeData(NodeImplHolder const& aSpecificNode, Name const& aName, NodeOffset nParent)
 : m_pSpecificNode(aSpecificNode)
-, m_nParent(nParent)
 , m_aName_(aName)
+, m_nParent(nParent)
 {
 }
 //-----------------------------------------------------------------------------
@@ -800,8 +800,8 @@ ElementTreeImpl::ElementTreeImpl(   rtl::Reference<view::ViewStrategy> const& _x
                                     TemplateProvider const& aTemplateProvider )
 : TreeImpl()
 , m_aInstanceInfo(aTemplateInfo)
-, m_aDataAddress(_aCacheTree.address())
 , m_aElementName(_aCacheTree.getName())
+, m_aDataAddress(_aCacheTree.address())
 , m_aOwnData()
 {
     TreeImpl::build( _xStrategy, _aCacheTree.getRootNode(), nDepth, aTemplateProvider );
@@ -815,8 +815,8 @@ ElementTreeImpl::ElementTreeImpl(   rtl::Reference<view::ViewStrategy> const& _x
                                     TemplateProvider const& aTemplateProvider )
 : TreeImpl( rParentTree, nParentNode )
 , m_aInstanceInfo(aTemplateInfo)
-, m_aDataAddress(_aCacheTree.address())
 , m_aElementName(_aCacheTree.getName())
+, m_aDataAddress(_aCacheTree.address())
 , m_aOwnData()
 {
     TreeImpl::build( _xStrategy, _aCacheTree.getRootNode(), nDepth, aTemplateProvider );
@@ -828,8 +828,8 @@ ElementTreeImpl::ElementTreeImpl(   data::TreeSegment const& pNewTree,
                                     TemplateProvider const& aTemplateProvider )
 : TreeImpl()
 , m_aInstanceInfo(aTemplate)
-, m_aDataAddress(pNewTree.getBaseAddress())
 , m_aElementName(pNewTree.getName())
+, m_aDataAddress(pNewTree.getBaseAddress())
 , m_aOwnData(pNewTree)
 {
     if (!pNewTree.is())
