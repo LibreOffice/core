@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximppage.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cl $ $Date: 2001-01-25 12:48:39 $
+ *  last change: $Author: cl $ $Date: 2001-05-28 13:32:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,8 +95,19 @@ class SdXMLGenericPageContext : public SvXMLImportContext
     com::sun::star::uno::Reference< com::sun::star::drawing::XShapes > mxShapes;
 
 protected:
+    rtl::OUString               maPageLayoutName;
+
     void SetLocalShapesContext(com::sun::star::uno::Reference< com::sun::star::drawing::XShapes >& rNew)
         { mxShapes = rNew; }
+
+    /** sets the presentation layout at this page. It is used for drawing pages and for the handout master */
+    void SetLayout();
+
+    /** deletes all shapes on this drawing page */
+    void DeleteAllShapes();
+
+    const SdXMLImport& GetSdImport() const { return (const SdXMLImport&)GetImport(); }
+    SdXMLImport& GetSdImport() { return (SdXMLImport&)GetImport(); }
 
 public:
     TYPEINFO();

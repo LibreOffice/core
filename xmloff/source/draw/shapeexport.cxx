@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeexport.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: aw $ $Date: 2001-05-14 14:43:26 $
+ *  last change: $Author: cl $ $Date: 2001-05-28 13:32:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -419,17 +419,22 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
     // --------------------------
     if( IsLayerExportEnabled() )
     {
-        try
+        // check for group or scene shape and not export layer if this is one
+        uno::Reference< drawing::XShapes > xShapes( xShape, uno::UNO_QUERY );
+        if( !xShapes.is() )
         {
-            uno::Reference< beans::XPropertySet > xProps( xShape, uno::UNO_QUERY );
-            OUString aLayerName;
-            xProps->getPropertyValue( OUString::createFromAscii( "LayerName" ) ) >>= aLayerName;
-            rExport.AddAttribute(XML_NAMESPACE_DRAW, sXML_layer, aLayerName );
+            try
+            {
+                uno::Reference< beans::XPropertySet > xProps( xShape, uno::UNO_QUERY );
+                OUString aLayerName;
+                xProps->getPropertyValue( OUString::createFromAscii( "LayerName" ) ) >>= aLayerName;
+                rExport.AddAttribute(XML_NAMESPACE_DRAW, sXML_layer, aLayerName );
 
-        }
-        catch( uno::Exception e )
-        {
-            DBG_ERROR( "could not export layer name for shape!" );
+            }
+            catch( uno::Exception e )
+            {
+                DBG_ERROR( "could not export layer name for shape!" );
+            }
         }
     }
 
@@ -526,6 +531,7 @@ void XMLShapeExport::exportShape(const uno::Reference< drawing::XShape >& xShape
 
         case XmlShapeTypeDrawPageShape:
         case XmlShapeTypePresPageShape:
+        case XmlShapeTypeHandoutShape:
         {
             ImpExportPageShape(xShape, aShapeInfo.meShapeType, nFeatures, pRefPoint );
             break;
@@ -821,6 +827,7 @@ void XMLShapeExport::ImpCalcShapeType(const uno::Reference< drawing::XShape >& x
                 else if(aType.EqualsAscii("Table", 26, 5)) { eShapeType = XmlShapeTypePresTableShape;  }
                 else if(aType.EqualsAscii("OrgChart", 26, 8)) { eShapeType = XmlShapeTypePresOrgChartShape;  }
                 else if(aType.EqualsAscii("Notes", 26, 5)) { eShapeType = XmlShapeTypePresNotesShape;  }
+                else if(aType.EqualsAscii("HandoutShape", 26, 12)) { eShapeType = XmlShapeTypeHandoutShape; }
             }
         }
     }

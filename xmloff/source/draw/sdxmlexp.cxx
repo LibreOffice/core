@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-22 10:25:06 $
+ *  last change: $Author: cl $ $Date: 2001-05-28 13:32:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -123,6 +123,10 @@
 
 #ifndef _COM_SUN_STAR_DRAWING_XMASTERPAGESSUPPLIER_HPP_
 #include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_PRESENTATION_XHANDOUTMASTERSUPPLIER_HPP_
+#include <com/sun/star/presentation/XHandoutMasterSupplier.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_VIEW_PAPERORIENTATION_HPP_
@@ -645,7 +649,7 @@ void SAL_CALL SdXMLExport::setSourceDocument( const uno::Reference< lang::XCompo
             mnDocDrawPageCount = mxDocDrawPages->getCount();
             maDrawPagesStyleNames.insert( maDrawPagesStyleNames.begin(), mnDocDrawPageCount, aEmpty );
             if( !mbIsDraw )
-                maDrawPagesAutoLayoutNames.realloc( mnDocDrawPageCount );
+                maDrawPagesAutoLayoutNames.realloc( mnDocDrawPageCount + 1 );
         }
     }
 
@@ -860,6 +864,19 @@ void SdXMLExport::ImpPrepAutoLayoutInfos()
 {
     if(IsImpress())
     {
+        OUString aStr;
+
+        uno::Reference< presentation::XHandoutMasterSupplier > xHandoutSupp( GetModel(), uno::UNO_QUERY );
+        if( xHandoutSupp.is() )
+        {
+            uno::Reference< drawing::XDrawPage > xHandoutPage( xHandoutSupp->getHandoutMasterPage() );
+            if( xHandoutPage.is() )
+            {
+                if(ImpPrepAutoLayoutInfo(xHandoutPage, aStr))
+                    maDrawPagesAutoLayoutNames[0] = aStr;
+            }
+        }
+
         // prepare name creation
         for(sal_Int32 nCnt = 0L; nCnt < mnDocDrawPageCount; nCnt++)
         {
@@ -868,9 +885,8 @@ void SdXMLExport::ImpPrepAutoLayoutInfos()
 
             if((aAny >>= xDrawPage) && xDrawPage.is())
             {
-                OUString aStr;
                 if(ImpPrepAutoLayoutInfo(xDrawPage, aStr))
-                    maDrawPagesAutoLayoutNames[nCnt] = aStr;
+                    maDrawPagesAutoLayoutNames[nCnt+1] = aStr;
             }
         }
     }
@@ -1688,9 +1704,9 @@ void SdXMLExport::_ExportContent()
             }
 
             // presentation:page-layout-name
-            if( IsImpress() && maDrawPagesAutoLayoutNames[nPageInd].getLength())
+            if( IsImpress() && maDrawPagesAutoLayoutNames[nPageInd+1].getLength())
             {
-                AddAttribute(XML_NAMESPACE_PRESENTATION, sXML_presentation_page_layout_name, maDrawPagesAutoLayoutNames[nPageInd]);
+                AddAttribute(XML_NAMESPACE_PRESENTATION, sXML_presentation_page_layout_name, maDrawPagesAutoLayoutNames[nPageInd+1]);
             }
 
             // write page
@@ -2017,6 +2033,22 @@ void SdXMLExport::_ExportAutoStyles()
 
     if( getExportFlags() & EXPORT_STYLES )
     {
+        // create auto style infos for shapes on master handout page
+        if( IsImpress() )
+        {
+            uno::Reference< presentation::XHandoutMasterSupplier > xHandoutSupp( GetModel(), uno::UNO_QUERY );
+            if( xHandoutSupp.is() )
+            {
+                uno::Reference< drawing::XDrawPage > xHandoutPage( xHandoutSupp->getHandoutMasterPage() );
+                if( xHandoutPage.is() )
+                {
+                    uno::Reference< drawing::XShapes > xShapes(xHandoutPage, uno::UNO_QUERY);
+                    if(xShapes.is() && xShapes->getCount())
+                        GetShapeExport()->collectShapesAutoStyles( xShapes );
+                }
+            }
+        }
+
         // create auto style infos for objects on master pages
         for(sal_Int32 nMPageId(0L); nMPageId < mnDocMasterPageCount; nMPageId++)
         {
@@ -2142,6 +2174,32 @@ void SdXMLExport::_ExportMasterStyles()
 {
     // export layer
     SdXMLayerExporter::exportLayer( *this );
+
+    // export handout master page if impress
+    if( IsImpress() )
+    {
+        uno::Reference< presentation::XHandoutMasterSupplier > xHandoutSupp( GetModel(), uno::UNO_QUERY );
+        if( xHandoutSupp.is() )
+        {
+            uno::Reference< drawing::XDrawPage > xHandoutPage( xHandoutSupp->getHandoutMasterPage() );
+            if( xHandoutPage.is() )
+            {
+                // presentation:page-layout-name
+                if( IsImpress() && maDrawPagesAutoLayoutNames[0].getLength())
+                {
+                    AddAttribute(XML_NAMESPACE_PRESENTATION, sXML_presentation_page_layout_name, maDrawPagesAutoLayoutNames[0]);
+                }
+
+                // write masterpage
+                SvXMLElementExport aMPG(*this, XML_NAMESPACE_STYLE, sXML_handout_master, sal_True, sal_True);
+
+                // write graphic objects on this master page (if any)
+                uno::Reference< drawing::XShapes > xShapes(xHandoutPage, uno::UNO_QUERY);
+                if(xShapes.is() && xShapes->getCount())
+                    GetShapeExport()->exportShapes( xShapes );
+            }
+        }
+    }
 
     // export MasterPages in master-styles section
     for(sal_Int32 nMPageId = 0L; nMPageId < mnDocMasterPageCount; nMPageId++)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpstyl.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: cl $ $Date: 2001-03-20 20:05:50 $
+ *  last change: $Author: cl $ $Date: 2001-05-28 13:32:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,9 +154,6 @@ class SdXMLMasterPageContext: public SdXMLGenericPageContext
     rtl::OUString               msPageMasterName;
     rtl::OUString               msName;
     rtl::OUString               msStyleName;
-
-    const SdXMLImport& GetSdImport() const { return (const SdXMLImport&)GetImport(); }
-    SdXMLImport& GetSdImport() { return (SdXMLImport&)GetImport(); }
 
 public:
     TYPEINFO();

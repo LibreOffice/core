@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlimp.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-09 14:40:42 $
+ *  last change: $Author: cl $ $Date: 2001-05-28 13:32:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,9 +184,10 @@ static __FAR_DATA SvXMLTokenMapEntry aMasterPageElemTokenMap[] =
 
 static __FAR_DATA SvXMLTokenMapEntry aMasterPageAttrTokenMap[] =
 {
-    { XML_NAMESPACE_STYLE,  sXML_name,              XML_TOK_MASTERPAGE_NAME },
-    { XML_NAMESPACE_STYLE,  sXML_page_master_name,  XML_TOK_MASTERPAGE_PAGE_MASTER_NAME },
-    { XML_NAMESPACE_DRAW,   sXML_style_name,        XML_TOK_MASTERPAGE_STYLE_NAME       },
+    { XML_NAMESPACE_STYLE,  sXML_name,                      XML_TOK_MASTERPAGE_NAME },
+    { XML_NAMESPACE_STYLE,  sXML_page_master_name,          XML_TOK_MASTERPAGE_PAGE_MASTER_NAME },
+    { XML_NAMESPACE_DRAW,   sXML_style_name,                XML_TOK_MASTERPAGE_STYLE_NAME       },
+    { XML_NAMESPACE_PRESENTATION,   sXML_presentation_page_layout_name, XML_TOK_MASTERPAGE_PAGE_LAYOUT_NAME },
     XML_TOKEN_MAP_END
 };
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpbody.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: cl $ $Date: 2001-04-18 07:48:51 $
+ *  last change: $Author: cl $ $Date: 2001-05-28 13:32:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -296,63 +296,9 @@ SdXMLDrawPageContext::SdXMLDrawPageContext( SdXMLImport& rImport,
         }
     }
 
-    // set PresentationPageLayout?
-    if(GetSdImport().IsImpress() && maPageLayoutName.getLength())
-    {
-        sal_Int32 nType = -1;
+    SetLayout();
 
-        const SvXMLImportContext* pContext = GetSdImport().GetShapeImport()->GetStylesContext();
-
-        if( pContext && pContext->ISA( SvXMLStyleContext ) )
-        {
-            const SdXMLStylesContext* pStyles = (SdXMLStylesContext*)pContext;
-            if(pStyles)
-            {
-                const SvXMLStyleContext* pStyle = pStyles->FindStyleChildContext( XML_STYLE_FAMILY_SD_PRESENTATIONPAGELAYOUT_ID, maPageLayoutName);
-
-                if(pStyle && pStyle->ISA(SdXMLPresentationPageLayoutContext))
-                {
-                    SdXMLPresentationPageLayoutContext* pLayout = (SdXMLPresentationPageLayoutContext*)pStyle;
-                    nType = pLayout->GetTypeId();
-                }
-            }
-
-        }
-        if( -1 == nType )
-        {
-            uno::Reference< container::XNameAccess > xPageLayouts( GetSdImport().getPageLayouts() );
-            if( xPageLayouts.is() )
-            {
-                if( xPageLayouts->hasByName( maPageLayoutName ) )
-                    xPageLayouts->getByName( maPageLayoutName ) >>= nType;
-            }
-
-        }
-
-        if( -1 != nType )
-        {
-            uno::Reference <beans::XPropertySet> xPropSet(rShapes, uno::UNO_QUERY);
-            if(xPropSet.is())
-            {
-                xPropSet->setPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("Layout")), uno::makeAny( (sal_Int16)nType ) );
-            }
-        }
-    }
-
-    // now delete all up-to-now contained shapes; they have been created
-    // when setting the presentation page layout.
-    while(rShapes->getCount())
-    {
-        uno::Reference< drawing::XShape > xShape;
-        uno::Any aAny(rShapes->getByIndex(0L));
-
-        aAny >>= xShape;
-
-        if(xShape.is())
-        {
-            rShapes->remove(xShape);
-        }
-    }
+    DeleteAllShapes();
 }
 
 //////////////////////////////////////////////////////////////////////////////

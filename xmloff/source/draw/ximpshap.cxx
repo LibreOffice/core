@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpshap.cxx,v $
  *
- *  $Revision: 1.46 $
+ *  $Revision: 1.47 $
  *
- *  last change: $Author: aw $ $Date: 2001-05-16 10:31:58 $
+ *  last change: $Author: cl $ $Date: 2001-05-28 13:32:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,10 @@
 
 #ifndef _COM_SUN_STAR_STYLE_XSTYLEFAMILIESSUPPLIER_HPP_
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_LANG_XSERVICEINFO_HPP_
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #endif
 
 #ifndef _XEXPTRANSFORM_HXX
@@ -1595,19 +1599,29 @@ void SdXMLPageShapeContext::StartElement(const uno::Reference< xml::sax::XAttrib
     // be constructed. It's an pres shape if presentation:sXML_class == sXML_presentation_page.
     sal_Bool bIsPresentation(maPresentationClass.getLength() != 0);
 
-    if(bIsPresentation
-        && !maPresentationClass.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_presentation_page)))
-    {
-        bIsPresentation = FALSE;
-    }
+    uno::Reference< lang::XServiceInfo > xInfo( mxShapes, uno::UNO_QUERY );
+    const sal_Bool bIsOnHandoutPage = xInfo.is() && xInfo->supportsService( OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.presentation.HandoutMasterPage")) );
 
-    if(bIsPresentation)
+    if( bIsOnHandoutPage )
     {
-        AddShape("com.sun.star.presentation.PageShape");
+        AddShape("com.sun.star.presentation.HandoutShape");
     }
     else
     {
-        AddShape("com.sun.star.drawing.PageShape");
+        if(bIsPresentation
+            && !maPresentationClass.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_presentation_page)))
+        {
+            bIsPresentation = FALSE;
+        }
+
+        if(bIsPresentation)
+        {
+            AddShape("com.sun.star.presentation.PageShape");
+        }
+        else
+        {
+            AddShape("com.sun.star.drawing.PageShape");
+        }
     }
 
     if(mxShape.is())

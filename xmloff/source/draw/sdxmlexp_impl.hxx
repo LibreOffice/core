@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdxmlexp_impl.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: aw $ $Date: 2001-05-14 14:42:46 $
+ *  last change: $Author: cl $ $Date: 2001-05-28 13:32:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -145,6 +145,7 @@ class SdXMLExport : public SvXMLExport
     ImpXMLAutoLayoutInfoList*   mpAutoLayoutInfoList;
 
     com::sun::star::uno::Sequence< ::rtl::OUString > maDrawPagesAutoLayoutNames;
+
     ::std::vector< ::rtl::OUString >        maDrawPagesStyleNames;
     ::std::vector< ::rtl::OUString >        maMasterPagesStyleNames;
 

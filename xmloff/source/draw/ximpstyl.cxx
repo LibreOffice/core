@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximpstyl.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: cl $ $Date: 2001-05-09 14:40:42 $
+ *  last change: $Author: cl $ $Date: 2001-05-28 13:32:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,6 +111,10 @@
 
 #ifndef _COMPHELPER_NAMECONTAINER_HXX_
 #include <comphelper/namecontainer.hxx>
+#endif
+
+#ifndef _COM_SUN_STAR_PRESENTATION_XHANDOUTMASTERSUPPLIER_HPP_
+#include <com/sun/star/presentation/XHandoutMasterSupplier.hpp>
 #endif
 
 #ifndef _XMLOFF_XMLPROPERTYSETCONTEXT_HXX
@@ -523,16 +527,23 @@ void SdXMLPresentationPageLayoutContext::EndElement()
         SdXMLPresentationPlaceholderContext* pObj0 = maList.GetObject(0);
         if(pObj0->GetName().equals(OUString(RTL_CONSTASCII_USTRINGPARAM("handout"))))
         {
-            if(maList.Count() == 1)
+            switch( maList.Count() )
+            {
+            case 1:
                 mnTypeId = 22; // AUTOLAYOUT_HANDOUT1
-            if(maList.Count() == 2)
+                break;
+            case 2:
                 mnTypeId = 23; // AUTOLAYOUT_HANDOUT2
-            if(maList.Count() == 3)
+                break;
+            case 3:
                 mnTypeId = 24; // AUTOLAYOUT_HANDOUT3
-            if(maList.Count() == 4)
+                break;
+            case 4:
                 mnTypeId = 25; // AUTOLAYOUT_HANDOUT4
-            else
+                break;
+            default:
                 mnTypeId = 26; // AUTOLAYOUT_HANDOUT6
+            }
         }
         else
         {
@@ -774,7 +785,9 @@ SdXMLMasterPageContext::SdXMLMasterPageContext(
     uno::Reference< drawing::XShapes >& rShapes)
 :   SdXMLGenericPageContext( rImport, nPrfx, rLName, xAttrList, rShapes )
 {
-    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+    const sal_Bool bHandoutMaster = rLName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sXML_handout_master));
+
+    const sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
     for(sal_Int16 i=0; i < nAttrCount; i++)
     {
         OUString sAttrName = xAttrList->getNameByIndex( i );
@@ -800,11 +813,16 @@ SdXMLMasterPageContext::SdXMLMasterPageContext(
                 msStyleName = sValue;
                 break;
             }
+            case XML_TOK_MASTERPAGE_PAGE_LAYOUT_NAME:
+            {
+                maPageLayoutName = sValue;
+                break;
+            }
         }
     }
 
     // set page name?
-    if(msName.getLength() && GetLocalShapesContext().is())
+    if(!bHandoutMaster && msName.getLength() && GetLocalShapesContext().is())
     {
         uno::Reference < container::XNamed > xNamed(GetLocalShapesContext(), uno::UNO_QUERY);
         if(xNamed.is())
@@ -812,7 +830,7 @@ SdXMLMasterPageContext::SdXMLMasterPageContext(
     }
 
     // set page-master?
-    if(msPageMasterName.getLength() && GetSdImport().GetShapeImport()->GetStylesContext())
+    if(!bHandoutMaster && msPageMasterName.getLength() && GetSdImport().GetShapeImport()->GetStylesContext())
     {
         // look for PageMaster with this name
 
@@ -871,7 +889,7 @@ SdXMLMasterPageContext::SdXMLMasterPageContext(
     }
 
     // set PageProperties?
-    if(msStyleName.getLength())
+    if(!bHandoutMaster && msStyleName.getLength())
     {
         const SvXMLImportContext* pContext = GetSdImport().GetShapeImport()->GetAutoStylesContext();
 
@@ -934,19 +952,9 @@ SdXMLMasterPageContext::SdXMLMasterPageContext(
         }
     }
 
-    // now delete all up-to-now contained shapes.
-    while(rShapes->getCount())
-    {
-        uno::Reference< drawing::XShape > xShape;
-        uno::Any aAny(rShapes->getByIndex(0L));
+    SetLayout();
 
-        aAny >>= xShape;
-
-        if(xShape.is())
-        {
-            rShapes->remove(xShape);
-        }
-    }
+    DeleteAllShapes();
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -1536,6 +1544,20 @@ SvXMLImportContext* SdXMLMasterStylesContext::CreateChildContext(
                     pContext->AddRef();
                     maMasterPageList.Insert((SdXMLMasterPageContext*)pContext, LIST_APPEND);
                 }
+            }
+        }
+    }
+    else    if(nPrefix == XML_NAMESPACE_STYLE
+        && rLocalName.equals(OUString(RTL_CONSTASCII_USTRINGPARAM(sXML_handout_master))))
+    {
+        uno::Reference< presentation::XHandoutMasterSupplier > xHandoutSupp( GetSdImport().GetModel(), uno::UNO_QUERY );
+        if( xHandoutSupp.is() )
+        {
+            uno::Reference< drawing::XShapes > xHandoutPage( xHandoutSupp->getHandoutMasterPage(), uno::UNO_QUERY );
+            if(xHandoutPage.is() && GetSdImport().GetShapeImport()->GetStylesContext())
+            {
+                pContext = new SdXMLMasterPageContext(GetSdImport(),
+                    nPrefix, rLocalName, xAttrList, xHandoutPage);
             }
         }
     }

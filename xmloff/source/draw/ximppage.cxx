@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ximppage.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: thb $ $Date: 2001-04-26 18:04:11 $
+ *  last change: $Author: cl $ $Date: 2001-05-28 13:32:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,10 @@
 
 #include "xmlkywd.hxx"
 
+#ifndef _XMLOFF_XMLSTYLE_HXX
+#include "xmlstyle.hxx"
+#endif
+
 #ifndef _XMLOFF_XMLNMSPE_HXX
 #include "xmlnmspe.hxx"
 #endif
@@ -81,6 +85,14 @@
 
 #ifndef _XMLOFF_FORMSIMP_HXX
 #include "formsimp.hxx"
+#endif
+
+#ifndef _XMLOFF_XMLICTXT_HXX
+#include "xmlictxt.hxx"
+#endif
+
+#ifndef _XIMPSTYLE_HXX
+#include "ximpstyl.hxx"
 #endif
 
 using namespace ::rtl;
@@ -156,3 +168,71 @@ void SdXMLGenericPageContext::EndElement()
     if( GetImport().IsFormsSupported() )
         GetImport().GetFormImport()->endPage();
 }
+
+void SdXMLGenericPageContext::SetLayout()
+{
+    // set PresentationPageLayout?
+    if(GetSdImport().IsImpress() && maPageLayoutName.getLength())
+    {
+        sal_Int32 nType = -1;
+
+        const SvXMLImportContext* pContext = GetSdImport().GetShapeImport()->GetStylesContext();
+
+        if( pContext && pContext->ISA( SvXMLStyleContext ) )
+        {
+            const SdXMLStylesContext* pStyles = (SdXMLStylesContext*)pContext;
+            if(pStyles)
+            {
+                const SvXMLStyleContext* pStyle = pStyles->FindStyleChildContext( XML_STYLE_FAMILY_SD_PRESENTATIONPAGELAYOUT_ID, maPageLayoutName);
+
+                if(pStyle && pStyle->ISA(SdXMLPresentationPageLayoutContext))
+                {
+                    SdXMLPresentationPageLayoutContext* pLayout = (SdXMLPresentationPageLayoutContext*)pStyle;
+                    nType = pLayout->GetTypeId();
+                }
+            }
+
+        }
+        if( -1 == nType )
+        {
+            uno::Reference< container::XNameAccess > xPageLayouts( GetSdImport().getPageLayouts() );
+            if( xPageLayouts.is() )
+            {
+                if( xPageLayouts->hasByName( maPageLayoutName ) )
+                    xPageLayouts->getByName( maPageLayoutName ) >>= nType;
+            }
+
+        }
+
+        if( -1 != nType )
+        {
+            uno::Reference <beans::XPropertySet> xPropSet(mxShapes, uno::UNO_QUERY);
+            if(xPropSet.is())
+            {
+                OUString aPropName(RTL_CONSTASCII_USTRINGPARAM("Layout"));
+                uno::Reference< beans::XPropertySetInfo > xInfo( xPropSet->getPropertySetInfo() );
+                if( xInfo.is() && xInfo->hasPropertyByName( aPropName ) )
+                    xPropSet->setPropertyValue(aPropName, uno::makeAny( (sal_Int16)nType ) );
+            }
+        }
+    }
+}
+
+void SdXMLGenericPageContext::DeleteAllShapes()
+{
+    // now delete all up-to-now contained shapes; they have been created
+    // when setting the presentation page layout.
+    while(mxShapes->getCount())
+    {
+        uno::Reference< drawing::XShape > xShape;
+        uno::Any aAny(mxShapes->getByIndex(0L));
+
+        aAny >>= xShape;
+
+        if(xShape.is())
+        {
+            mxShapes->remove(xShape);
+        }
+    }
+}
+
