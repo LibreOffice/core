@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetBase.cxx,v $
  *
- *  $Revision: 1.45 $
+ *  $Revision: 1.46 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-10 08:11:09 $
+ *  last change: $Author: oj $ $Date: 2001-08-13 08:45:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -177,6 +177,7 @@ ORowSetBase::~ORowSetBase()
 {
     if(m_pColumns)
     {
+        TDataColumns().swap(m_aDataColumns);
         delete m_pColumns;
         m_pColumns = NULL;
     }
@@ -223,7 +224,10 @@ void SAL_CALL ORowSetBase::disposing(void)
     MutexGuard aGuard(m_rMutex);
 
     if(m_pColumns)
+    {
+        TDataColumns().swap(m_aDataColumns);
         m_pColumns->disposing();
+    }
     m_xEmptyCollection  = NULL;
     m_pCache            = NULL;
 }
@@ -1025,18 +1029,8 @@ void ORowSetBase::firePropertyChange(const ORowSetMatrix::iterator& _rOldRow)
     sal_Int32 i=0;
     try
     {
-        for(;i<m_pColumns->getCount();++i)
-        {
-            if(::cppu::extractInterface(xTunnel,m_pColumns->getByIndex(i)) && xTunnel.is())
-            {
-                OColumn* pColumn = (OColumn*)xTunnel->getSomething(OColumn::getUnoTunnelImplementationId());
-                if(pColumn)
-                {
-                    OSL_ENSURE(!aRow.isValid() || (i+1) < sal_Int32(aRow->size()),"Index is greater than vector size!");
-                    pColumn->fireValueChange(aRow.isValid() ? (*aRow)[i+1].makeAny() : Any());
-                }
-            }
-        }
+        for(TDataColumns::iterator aIter = m_aDataColumns.begin();aIter != m_aDataColumns.begin();++aIter)
+            (*aIter)->fireValueChange(aRow.isValid() ? (*aRow)[i+1].makeAny() : Any());
     }
     catch(Exception&)
     {

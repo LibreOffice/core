@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.84 $
+ *  $Revision: 1.85 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-08 10:05:57 $
+ *  last change: $Author: oj $ $Date: 2001-08-13 08:45:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -606,6 +606,7 @@ void ORowSet::freeResources()
     {
         // the columns must be disposed before the querycomposer is disposed because
         // their owner can be the composer
+        TDataColumns().swap(m_aDataColumns);// clear and resize capacity
         m_xColumns      = NULL;
         if(m_pColumns)
             m_pColumns->disposing();
@@ -1498,9 +1499,13 @@ void ORowSet::execute_NoApprove_NoNewConn(ClearableMutexGuard& _rClearForNotific
                         Reference<XResultSetMetaDataSupplier> xMetaSup(m_xStatement,UNO_QUERY);
                         Reference<XResultSetMetaData> xMetaData = xMetaSup->getMetaData();
 
+
                         try
                         {
-                            for (sal_Int32 i = 0, nCount = xMetaData->getColumnCount(); i < nCount; ++i)
+                            sal_Int32 nCount = xMetaData->getColumnCount();
+                            m_aDataColumns.reserve(nCount+1);
+                            aColumns->reserve(nCount+1);
+                            for (sal_Int32 i = 0 ; i < nCount; ++i)
                             {
                                 // retrieve the name of the column
                                 ::rtl::OUString aName = xMetaData->getColumnName(i + 1);
@@ -1515,6 +1520,7 @@ void ORowSet::execute_NoApprove_NoNewConn(ClearableMutexGuard& _rClearForNotific
                                 aColumns->push_back(pColumn);
                                 pColumn->setName(aName);
                                 aNames.push_back(aName);
+                                m_aDataColumns.push_back(pColumn);
 
                                 try
                                 {
@@ -1542,6 +1548,9 @@ void ORowSet::execute_NoApprove_NoNewConn(ClearableMutexGuard& _rClearForNotific
                         // create the rowset columns
                         Reference<XResultSetMetaData> xMeta = getMetaData();
                         sal_Int32 nCount = xMeta->getColumnCount();
+                        m_aDataColumns.reserve(nCount+1);
+                        aColumns->reserve(nCount+1);
+
                         for(sal_Int32 i=1; i<=nCount ;++i)
                         {
                             ::rtl::OUString sName = xMeta->getColumnName(i);
@@ -1581,6 +1590,7 @@ void ORowSet::execute_NoApprove_NoNewConn(ClearableMutexGuard& _rClearForNotific
                             aColumns->push_back(pColumn);
                             pColumn->setName(sName);
                             aNames.push_back(sName);
+                            m_aDataColumns.push_back(pColumn);
 
                             try
                             {
@@ -2107,15 +2117,8 @@ void SAL_CALL ORowSet::clearParameters(  ) throw(SQLException, RuntimeException)
 // -------------------------------------------------------------------------
 void ORowSet::firePropertyChange(sal_Int32 _nPos,const Any& _rOldValue)
 {
-    Reference< XUnoTunnel> xTunnel;
-    if(::cppu::extractInterface(xTunnel,m_pColumns->getByIndex(_nPos)) && xTunnel.is())
-    {
-        OColumn* pColumn = (OColumn*)xTunnel->getSomething(OColumn::getUnoTunnelImplementationId());
-        if(pColumn)
-            pColumn->fireValueChange(_rOldValue);
-        else
-            OSL_ENSURE(0,"ORowSet::firePropertyChange couldn't get the UnoTunnel Interface!");
-    }
+    OSL_ENSURE(_nPos <= m_aDataColumns.size(),"nPos is invalid!");
+    m_aDataColumns[_nPos-1]->fireValueChange(_rOldValue);
 }
 // -------------------------------------------------------------------------
 void ORowSet::checkInsert()
@@ -2181,6 +2184,7 @@ ORowSetClone::ORowSetClone(ORowSet& rParent,::osl::Mutex& _rMutex)
     Sequence< ::rtl::OUString> aSeq = rParent.m_pColumns->getElementNames();
     const ::rtl::OUString* pBegin   = aSeq.getConstArray();
     const ::rtl::OUString* pEnd     = pBegin + aSeq.getLength();
+    aColumns->reserve(aSeq.getLength()+1);
     for(sal_Int32 i=1;pBegin != pEnd ;++pBegin,++i)
     {
         Reference<XPropertySet> xColumn;
@@ -2197,6 +2201,7 @@ ORowSetClone::ORowSetClone(ORowSet& rParent,::osl::Mutex& _rMutex)
         aColumns->push_back(pColumn);
         pColumn->setName(*pBegin);
         aNames.push_back(*pBegin);
+        m_aDataColumns.push_back(pColumn);
 
         pColumn->setFastPropertyValue_NoBroadcast(PROPERTY_ID_ALIGN,xColumn->getPropertyValue(PROPERTY_ALIGN));
         sal_Int32 nFormatKey = comphelper::getINT32(xColumn->getPropertyValue(PROPERTY_NUMBERFORMAT));

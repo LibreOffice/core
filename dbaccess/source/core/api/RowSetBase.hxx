@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetBase.hxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-06 11:00:09 $
+ *  last change: $Author: oj $ $Date: 2001-08-13 08:45:02 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -144,11 +144,13 @@ namespace dbaccess
     class ORowSetCache;
     class ORowSetDataColumns;
     class ORowSetCacheIterator;
+    class ORowSetDataColumn;
     class ORowSetBase : public ORowSetBase_BASE,
                         public ::comphelper::OPropertyContainer,
                         public ::comphelper::OPropertyArrayUsageHelper<ORowSetBase> // this class hold the static property info
     {
     protected:
+        typedef ::std::vector<ORowSetDataColumn*>   TDataColumns;
         ::osl::Mutex&                           m_rMutex;
         ::osl::Mutex                            m_aRowCountMutex, // mutex for rowcount changes
                                                 // we need a extra mutex for columns to prevend deadlock when setting new values
@@ -158,6 +160,7 @@ namespace dbaccess
         ::com::sun::star::uno::Any              m_aBookmark;
         ORowSetCacheIterator                    m_aCurrentRow;      // contains the actual fetched row
         ORowSetRow                              m_aOldRow;
+        TDataColumns                            m_aDataColumns;     // holds the columns as m_pColumns but know the implementation class
         connectivity::ORowSetValue              m_aEmptyValue;      // only for error case
 
         ::cppu::OWeakObject*                    m_pMySelf;          // set by derived classes
