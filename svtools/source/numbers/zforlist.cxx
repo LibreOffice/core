@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforlist.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: er $ $Date: 2001-04-12 12:21:05 $
+ *  last change: $Author: er $ $Date: 2001-04-23 17:05:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,6 +205,7 @@ void SvNumberFormatter::ImpConstruct( LanguageType eLang )
     pCalendar = new CalendarWrapper( xServiceManager );
     pCalendar->loadDefaultCalendar( aLocale );
 
+    eLang = GetProperLanguage( eLang );
     if ( !International::IsFormatAvailable( eLang ) )
         eLang = UNKNOWN_SUBSTITUTE;
     pIntl = new International( eLang );
@@ -231,6 +232,7 @@ void SvNumberFormatter::ChangeIntl(LanguageType eLnge)
         pLocaleData->setLocale( aLocale );
         pCalendar->loadDefaultCalendar( aLocale );
 
+        eLnge = GetProperLanguage( eLnge );
         delete pIntl;
         if ( !International::IsFormatAvailable( eLnge ) )
             eLnge = UNKNOWN_SUBSTITUTE;
@@ -243,12 +245,22 @@ void SvNumberFormatter::ChangeIntl(LanguageType eLnge)
 
 
 // static
-::com::sun::star::lang::Locale SvNumberFormatter::ConvertLanguageToLocale( LanguageType eLang )
+LanguageType SvNumberFormatter::GetProperLanguage( LanguageType eLang )
 {
     if ( eLang == LANGUAGE_DONTKNOW )
         eLang = UNKNOWN_SUBSTITUTE;
+    if ( eLang == LANGUAGE_NONE )
+        eLang = Application::GetAppInternational().GetLanguage();
     if ( eLang == LANGUAGE_SYSTEM )
         eLang = International::GetRealLanguage( eLang );
+    return eLang;
+}
+
+
+// static
+::com::sun::star::lang::Locale SvNumberFormatter::ConvertLanguageToLocale( LanguageType eLang )
+{
+    eLang = GetProperLanguage( eLang );
     String aLanguage, aCountry, aVariant;
     ConvertLanguageToIsoNames( eLang, aLanguage, aCountry );
     return Locale( aLanguage, aCountry, aVariant );
