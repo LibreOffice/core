@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impop.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: hr $ $Date: 2003-08-07 15:28:57 $
+ *  last change: $Author: rt $ $Date: 2003-09-16 08:15:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,7 +192,11 @@ ImportExcel::ImportExcel( SvStream& rSvStrm, ScDocument* pDoc, const String& rDo
     aIn( maStrm ),
     bFitToPage( sal_False ),
     bHasHeader( sal_False ),
-    bHasFooter( sal_False )
+    bHasFooter( sal_False ),
+    bHasTopMargin (sal_False ),
+    bHasBottomMargin (sal_False ),
+    bHasLeftMargin (sal_False ),
+    bHasRightMargin (sal_False )
 {
     pChart = pUsedChartFirst = pUsedChartLast = NULL;
 
@@ -871,24 +875,28 @@ void ImportExcel::Defrowheight2( void )
 void ImportExcel::Leftmargin( void )
 {
     SetMarginItem( *pStyleSheetItemSet, aIn.ReadDouble(), xlLeftMargin );
+    bHasLeftMargin = sal_True;
 }
 
 
 void ImportExcel::Rightmargin( void )
 {
     SetMarginItem( *pStyleSheetItemSet, aIn.ReadDouble(), xlRightMargin );
+    bHasRightMargin = sal_True;
 }
 
 
 void ImportExcel::Topmargin( void )
 {
     SetMarginItem( *pStyleSheetItemSet, aIn.ReadDouble(), xlTopMargin );
+    bHasTopMargin = sal_True;
 }
 
 
 void ImportExcel::Bottommargin( void )
 {
     SetMarginItem( *pStyleSheetItemSet, aIn.ReadDouble(), xlBottomMargin );
+    bHasBottomMargin = sal_True;
 }
 
 
@@ -1961,6 +1969,32 @@ void ImportExcel::EndSheet( void )
     if( pExcRoot->eHauptDateiTyp < Biff8 )
         pExcRoot->pExtNameBuff->Reset();
 
+    // no top(upper)/bottom(lower) MARGIN record
+    // note zero is a legitimate value
+    if( !bHasTopMargin || !bHasBottomMargin )
+    {
+        SvxULSpaceItem aItem( (const SvxULSpaceItem&) pStyleSheetItemSet->Get( ATTR_ULSPACE ));
+        sal_uInt16 nMarginULTwips = EXC_ULMARGIN_DEFAULT_TWIPS;
+        if( !bHasTopMargin )
+            aItem.SetUpperValue( nMarginULTwips );
+        if( !bHasBottomMargin )
+            aItem.SetLowerValue( nMarginULTwips );
+        pStyleSheetItemSet->Put( aItem );
+    }
+
+    // no left/right MARGIN record
+    // note zero is a legitimate value
+    if( !bHasLeftMargin || !bHasRightMargin )
+    {
+        SvxLRSpaceItem aItem( (const SvxLRSpaceItem&) pStyleSheetItemSet->Get( ATTR_LRSPACE ));
+        sal_uInt16 nMarginLRTwips = EXC_LRMARGIN_DEFAULT_TWIPS;
+        if( !bHasLeftMargin )
+            aItem.SetLeftValue( nMarginLRTwips );
+        if( !bHasRightMargin )
+            aItem.SetRightValue( nMarginLRTwips );
+        pStyleSheetItemSet->Put( aItem );
+    }
+
     // no or empty HEADER record
     if( !bHasHeader )
     {
@@ -1997,6 +2031,10 @@ void ImportExcel::NeueTabelle( void )
     bFitToPage = sal_False;
     bHasHeader = sal_False;
     bHasFooter = sal_False;
+    bHasTopMargin    = sal_False;
+    bHasBottomMargin = sal_False;
+    bHasLeftMargin   = sal_False;
+    bHasRightMargin  = sal_False;
 
     pOutlineListBuffer->Append(new OutlineDataBuffer(*pExcRoot, nTab ));          //#94039# prevent empty rootdata
 
