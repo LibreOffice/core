@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: cd $ $Date: 2001-08-21 12:40:03 $
+ *  last change: $Author: as $ $Date: 2001-08-22 13:06:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1289,19 +1289,18 @@ void Desktop::OpenDefault()
 {
     RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) ::Desktop::OpenDefault" );
 
-    String aName;
-    if ( !aName.Len() )
+    ::rtl::OUString aName;
+    if ( !aName.getLength() )
     {
-        aName = String( DEFINE_CONST_UNICODE("private:factory/" ) );
         SvtModuleOptions aOpt;
-        if ( aOpt.IsWriter() )
-            aName += DEFINE_CONST_UNICODE("swriter");
-        else if ( aOpt.IsCalc() )
-            aName += DEFINE_CONST_UNICODE("scalc");
-        else if ( aOpt.IsImpress() )
-            aName += DEFINE_CONST_UNICODE("simpress");
-        else if ( aOpt.IsDraw() )
-            aName += DEFINE_CONST_UNICODE("sdraw");
+        if ( aOpt.IsModuleInstalled( SvtModuleOptions::E_SWRITER ) )
+            aName = aOpt.GetFactoryEmptyDocumentURL( SvtModuleOptions::E_WRITER );
+        else if ( aOpt.IsModuleInstalled( SvtModuleOptions::E_SCALC ) )
+            aName = aOpt.GetFactoryEmptyDocumentURL( SvtModuleOptions::E_CALC );
+        else if ( aOpt.IsModuleInstalled( SvtModuleOptions::E_SIMPRESS ) )
+            aName = aOpt.GetFactoryEmptyDocumentURL( SvtModuleOptions::E_IMPRESS );
+        else if ( aOpt.IsModuleInstalled( SvtModuleOptions::E_SDRAW ) )
+            aName = aOpt.GetFactoryEmptyDocumentURL( SvtModuleOptions::E_DRAW );
         else
             return;
     }

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appmisc.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: cd $ $Date: 2001-08-16 07:57:01 $
+ *  last change: $Author: as $ $Date: 2001-08-22 13:03:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -328,6 +328,7 @@ void SfxApplication::OpenClients()
     Die Basisklasse sollte nicht gerufen werden.
 */
 {
+    /*
     BOOL bLoaded = FALSE;
     if ( !( pAppData_Impl->nAppEvent & DISPATCH_SERVER ) )
     {
@@ -459,9 +460,8 @@ void SfxApplication::OpenClients()
         SfxAllItemSet aSet( GetPool() );
 
         // Dateiname
-        /*TODO:
-            (as) If feature of "StartDocument" should be reactivated - add code to read document name here!
-         */
+        //TODO:
+        //    (as) If feature of "StartDocument" should be reactivated - add code to read document name here!
         String aName;
         if ( !aName.Len() )
         {
@@ -490,6 +490,7 @@ void SfxApplication::OpenClients()
                 ::comphelper::getProcessServiceFactory()->createInstance(
                 ::rtl::OUString::createFromAscii("com.sun.star.frame.Desktop")), ::com::sun::star::uno::UNO_QUERY );
     }
+*/
 }
 
 //--------------------------------------------------------------------

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxhelp.cxx,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: pb $ $Date: 2001-08-22 10:00:23 $
+ *  last change: $Author: as $ $Date: 2001-08-22 13:03:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -378,19 +378,19 @@ String SfxHelp::CreateHelpURL_Impl( ULONG nHelpId, const String& rModuleName )
     {
         // no active module (quicklaunch?) -> detect default module
         SvtModuleOptions aModOpt;
-        if ( aModOpt.IsWriter() )
+        if ( aModOpt.IsModuleInstalled( SvtModuleOptions::E_SWRITER ) )
             aModuleName = DEFINE_CONST_UNICODE("swriter");
-        else if ( aModOpt.IsCalc() )
+        else if ( aModOpt.IsModuleInstalled( SvtModuleOptions::E_SCALC ) )
             aModuleName = DEFINE_CONST_UNICODE("scalc");
-        else if ( aModOpt.IsImpress() )
+        else if ( aModOpt.IsModuleInstalled( SvtModuleOptions::E_SIMPRESS ) )
             aModuleName = DEFINE_CONST_UNICODE("simpress");
-        else if ( aModOpt.IsDraw() )
+        else if ( aModOpt.IsModuleInstalled( SvtModuleOptions::E_SDRAW ) )
             aModuleName = DEFINE_CONST_UNICODE("sdraw");
-        else if ( aModOpt.IsMath() )
+        else if ( aModOpt.IsModuleInstalled( SvtModuleOptions::E_SMATH ) )
             aModuleName = DEFINE_CONST_UNICODE("smath");
-        else if ( aModOpt.IsChart() )
+        else if ( aModOpt.IsModuleInstalled( SvtModuleOptions::E_SCHART ) )
             aModuleName = DEFINE_CONST_UNICODE("schart");
-        else if ( aModOpt.IsBasicIDE() )
+        else if ( aModOpt.IsModuleInstalled( SvtModuleOptions::E_SBASIC ) )
             aModuleName = DEFINE_CONST_UNICODE("sbasic");
         else
         {
