@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtercache.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: as $ $Date: 2001-02-26 08:43:53 $
+ *  last change: $Author: as $ $Date: 2001-03-20 14:44:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -670,6 +670,9 @@ class FilterCache
         void impl_generateInvalidFiltersHTML    ();
         void impl_generateInvalidDetectorsHTML  ();
         void impl_generateInvalidLoadersHTML    ();
+
+        void impl_generateFilterFlagsHTML       ();
+        void impl_generateDefaultFiltersHTML    ();
 
     #endif  //  #ifdef ENABLE_FILTERCACHEDEBUG
 
