@@ -2,9 +2,9 @@
  *
  *  $RCSfile: file_math.scp,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: is $ $Date: 2004-02-05 18:09:54 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 17:26:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,3 +104,25 @@ File gid_File_Exe_Smath
 End
 
 #endif
+
+// new user interface configuration files
+File gid_File_Share_Config_Sofficecfg_Math_Menubar_Xml
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Config_Sofficecfg_Smath_Menubar;
+    Name = "/uiconfig/smath/menubar/menubar.xml";
+End
+
+File gid_File_Oo_Office_Ui_Mathcommands_Xcs
+    TXT_FILE_BODY;
+    Styles = (PACKED);
+    Dir = gid_Dir_Share_Registry_Schema_Org_Openoffice_Office_Ui;
+    Name = "/registry/schema/org/openoffice/Office/UI/MathCommands.xcs";
+End
+       
+File gid_File_Oo_Office_Ui_Mathcommands_Xcu
+   TXT_FILE_BODY;
+   Styles = (PACKED);
+   Dir = gid_Dir_Share_Registry_Data_Org_Openoffice_Office_Ui;
+   Name = "/registry/data/org/openoffice/Office/UI/MathCommands.xcu";
+End
