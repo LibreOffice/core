@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pfiltdlg.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:54 $
+ *  last change: $Author: dr $ $Date: 2001-05-21 10:10:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,7 +67,6 @@
 
 #ifndef PCH
 #include <vcl/waitobj.hxx>
-#include <segmentc.hxx>
 #endif
 
 // INCLUDE ---------------------------------------------------------------
@@ -87,10 +86,7 @@
 #include "pfiltdlg.hxx"
 #undef _PFILTDLG_CXX
 
-SEG_EOFGLOBALS()
-
 //==================================================================
-#pragma SEG_FUNCDEF(pfiltdlg_01)
 
 ScPivotFilterDlg::ScPivotFilterDlg( Window*             pParent,
                                     const SfxItemSet&   rArgSet,
@@ -98,12 +94,12 @@ ScPivotFilterDlg::ScPivotFilterDlg( Window*             pParent,
 
     :   ModalDialog ( pParent, ScResId( RID_SCDLG_PIVOTFILTER ) ),
         //
+        aFlOptions      ( this, ScResId( FL_OPTIONS ) ),
         aBtnCase        ( this, ScResId( BTN_CASE ) ),
         aBtnRegExp      ( this, ScResId( BTN_REGEXP ) ),
         aBtnUnique      ( this, ScResId( BTN_UNIQUE ) ),
         aFtDbAreaLabel  ( this, ScResId( FT_DBAREA_LABEL ) ),
         aFtDbArea       ( this, ScResId( FT_DBAREA ) ),
-        aGbOptions      ( this, ScResId( GB_OPTIONS ) ),
         aBtnOk          ( this, ScResId( BTN_OK ) ),
         aBtnCancel      ( this, ScResId( BTN_CANCEL ) ),
         aBtnHelp        ( this, ScResId( BTN_HELP ) ),
@@ -111,6 +107,7 @@ ScPivotFilterDlg::ScPivotFilterDlg( Window*             pParent,
         aStrNoName      ( ScGlobal::GetRscString(STR_DB_NONAME) ),
         aStrNone        ( ScResId( SCSTR_NONE ) ),
         aStrUndefined   ( ScResId( SCSTR_UNDEFINED ) ),
+        aFlCriteria     ( this, ScResId( FL_CRITERIA ) ),
         aFtConnect      ( this, ScResId( FT_OP ) ),
         aFtField        ( this, ScResId( FT_FIELD ) ),
         aFtCond         ( this, ScResId( FT_COND ) ),
@@ -126,7 +123,6 @@ ScPivotFilterDlg::ScPivotFilterDlg( Window*             pParent,
         aEdVal1         ( this, ScResId( ED_VAL1 ) ),
         aEdVal2         ( this, ScResId( ED_VAL2 ) ),
         aEdVal3         ( this, ScResId( ED_VAL3 ) ),
-        aGbCriteria     ( this, ScResId( GB_CRITERIA ) ),
         aStrEmpty       ( ScResId( SCSTR_EMPTY ) ),
         aStrNotEmpty    ( ScResId( SCSTR_NOTEMPTY ) ),
         aStrRow         ( ScResId( SCSTR_ROW ) ),
@@ -149,7 +145,6 @@ ScPivotFilterDlg::ScPivotFilterDlg( Window*             pParent,
 }
 
 //------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(pfiltdlg_02)
 
 __EXPORT ScPivotFilterDlg::~ScPivotFilterDlg()
 {
@@ -161,7 +156,6 @@ __EXPORT ScPivotFilterDlg::~ScPivotFilterDlg()
 }
 
 //------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(pfiltdlg_03)
 
 void __EXPORT ScPivotFilterDlg::Init( const SfxItemSet& rArgSet )
 {
@@ -181,7 +175,7 @@ void __EXPORT ScPivotFilterDlg::Init( const SfxItemSet& rArgSet )
     aBtnMore.AddWindow( &aBtnUnique );
     aBtnMore.AddWindow( &aFtDbAreaLabel );
     aBtnMore.AddWindow( &aFtDbArea );
-    aBtnMore.AddWindow( &aGbOptions );
+    aBtnMore.AddWindow( &aFlOptions );
 
     aBtnCase    .Check( theQueryData.bCaseSens );
     aBtnRegExp  .Check( theQueryData.bRegExp );
@@ -314,7 +308,6 @@ void __EXPORT ScPivotFilterDlg::Init( const SfxItemSet& rArgSet )
 }
 
 //------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(pfiltdlg_04)
 
 void ScPivotFilterDlg::FillFieldLists()
 {
@@ -360,7 +353,6 @@ void ScPivotFilterDlg::FillFieldLists()
 }
 
 //------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(pfiltdlg_05)
 
 void ScPivotFilterDlg::UpdateValueList( USHORT nList )
 {
@@ -410,7 +402,6 @@ void ScPivotFilterDlg::UpdateValueList( USHORT nList )
 }
 
 //------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(pfiltdlg_06)
 
 void ScPivotFilterDlg::ClearValueList( USHORT nList )
 {
@@ -425,7 +416,6 @@ void ScPivotFilterDlg::ClearValueList( USHORT nList )
 }
 
 //------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(pfiltdlg_07)
 
 USHORT ScPivotFilterDlg::GetFieldSelPos( USHORT nField )
 {
@@ -436,7 +426,6 @@ USHORT ScPivotFilterDlg::GetFieldSelPos( USHORT nField )
 }
 
 //------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(pfiltdlg_08)
 
 const ScQueryItem& ScPivotFilterDlg::GetOutputItem()
 {
@@ -512,7 +501,6 @@ const ScQueryItem& ScPivotFilterDlg::GetOutputItem()
 //------------------------------------------------------------------------
 // Handler:
 //------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(pfiltdlg_09)
 
 IMPL_LINK( ScPivotFilterDlg, LbSelectHdl, ListBox*, pLb )
 {
@@ -606,7 +594,6 @@ IMPL_LINK( ScPivotFilterDlg, LbSelectHdl, ListBox*, pLb )
 }
 
 //----------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(pfiltdlg_0b)
 
 IMPL_LINK( ScPivotFilterDlg, CheckBoxHdl, CheckBox*, pBox )
 {
@@ -632,7 +619,6 @@ IMPL_LINK( ScPivotFilterDlg, CheckBoxHdl, CheckBox*, pBox )
 }
 
 //------------------------------------------------------------------------
-#pragma SEG_FUNCDEF(pfiltdlg_0a)
 
 IMPL_LINK( ScPivotFilterDlg, ValModifyHdl, ComboBox*, pEd )
 {
@@ -659,124 +645,4 @@ IMPL_LINK( ScPivotFilterDlg, ValModifyHdl, ComboBox*, pEd )
     return NULL;
 }
 
-/*------------------------------------------------------------------------
-
-    $Log: not supported by cvs2svn $
-    Revision 1.20  2000/09/17 14:08:56  willem.vandorp
-    OpenOffice header added.
-
-    Revision 1.19  2000/08/31 16:38:20  willem.vandorp
-    Header and footer replaced
-
-    Revision 1.18  2000/05/25 10:20:06  er
-    NOOLDSV
-
-    Revision 1.17  2000/04/14 17:38:03  nn
-    unicode changes
-
-    Revision 1.16  2000/02/11 12:23:42  hr
-    #70473# changes for unicode ( patched by automated patchtool )
-
-    Revision 1.15  1997/12/05 18:56:52  ANK
-    Includes geaendert
-
-
-      Rev 1.14   05 Dec 1997 19:56:52   ANK
-   Includes geaendert
-
-      Rev 1.13   12 Jun 1997 13:16:54   NN
-   #40646# STR_DB_NONAME statt SCSTR_NONAME fuer DB-Bereiche
-
-      Rev 1.12   29 Nov 1996 18:57:42   NN
-   Gross-/Kleinschreibung auch in Werte-Liste
-
-      Rev 1.11   27 Nov 1996 14:18:10   NN
-   #31076# Entry-Listen pro Spalte nur einmal holen
-
-      Rev 1.10   13 Nov 1996 11:33:20   NN
-   ScQueryParam mit dynamischen Eintraegen
-
-      Rev 1.9   29 Oct 1996 14:03:36   NN
-   ueberall ScResId statt ResId
-
-      Rev 1.8   18 Jul 1996 11:21:08   NN
-   Quell-Tabelle merken
-
-      Rev 1.7   18 Jan 1996 11:44:30   MO
-   #24232# leer/nicht-leer-Behandlung, neuer Link
-
-      Rev 1.6   27 Nov 1995 13:42:12   MO
-   RangeUtil/Area/Tripel gegen Address/Range ersetzt
-
-      Rev 1.5   08 Nov 1995 13:05:48   MO
-   301-Aenderungen
-
-      Rev 1.4   14 Jul 1995 13:55:28   MO
-   3. ValueList im Init fuellen (BugId: 15364)
-
-      Rev 1.3   12 Jul 1995 17:40:30   MO
-   GetFilterEntries: mit TypedStrCollection
-
-      Rev 1.2   25 Apr 1995 11:39:56   MO
-   leer/nicht-leer Feldwerte
-
-      Rev 1.1   24 Mar 1995 13:19:06   TRI
-   Segmentierung
-
-      Rev 1.0   22 Feb 1995 19:13:08   MO
-   Initial revision.
-
-      Rev 1.14   08 Feb 1995 12:55:02   MO
-   * Dispatcher-Execute: 0L angehaengt (sonst uneindeutig)
-
-      Rev 1.13   03 Feb 1995 12:43:02   MO
-   * Ctor: Show()
-
-
-      Rev 1.12   27 Jan 1995 16:14:44   MO
-   * Umstellung aus Slot-IDs
-
-      Rev 1.11   26 Jan 1995 19:00:18   TRI
-   __EXPORT bei virtuellen Methoden eingebaut
-
-      Rev 1.10   25 Jan 1995 18:53:56   MO
-   * Auswertung der Connect-ListBoxen korrigiert
-
-      Rev 1.9   25 Jan 1995 12:39:00   MO
-   * Einzelne Zellposition als Kopierziel (SetReferenz und Ueberpruefungen)
-
-      Rev 1.8   19 Jan 1995 16:47:48   TRI
-   __EXPORT vor verschiedene LinkHandler gesetzt
-
-      Rev 1.7   18 Jan 1995 13:56:26   TRI
-   Pragmas zur Segementierung eingebaut
-
-      Rev 1.6   17 Jan 1995 11:57:34   MO
-   CheckBoxHdl fuer aBtnHeader wieder aktiviert
-
-      Rev 1.5   16 Jan 1995 14:24:54   MO
-   Fehlerbehandlung bei ungueltigen Bereichsnamen im EndDlg-Handler
-
-      Rev 1.4   13 Jan 1995 17:30:34   MO
-   Special-Dialog ausgegliedert
-
-      Rev 1.3   13 Jan 1995 10:22:14   MO
-   fuer Spezialdialog verwendbare Resource-Handler nach foptmgr verschoben
-
-      Rev 1.2   12 Jan 1995 14:49:52   MO
-   * Erkennung von DB-Bereichen
-   * Gegenseitige Aktualisierung der CopyArea-ListBox/Edit
-   * Einlesen von RangeNames mit RT_ABSAREA
-
-
-      Rev 1.1   09 Jan 1995 11:14:52   MO
-   Parameter werden jetzt per SfxItem (ScQueryItem) uebergeben,
-   bzw. mit GetOutputItemSet() zurueckgegeben.
-
-      Rev 1.0   05 Jan 1995 12:44:12   MO
-   Initial revision.
-
-------------------------------------------------------------------------*/
-
-#pragma SEG_EOFMODULE
 

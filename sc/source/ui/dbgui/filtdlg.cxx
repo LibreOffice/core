@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filtdlg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-22 18:48:02 $
+ *  last change: $Author: dr $ $Date: 2001-05-21 10:10:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -114,6 +114,7 @@ ScFilterDlg::ScFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
     :   ScAnyRefDlg ( pB, pCW, pParent, RID_SCDLG_FILTER ),
         //
         _INIT_COMMON_FILTER_RSCOBJS
+        aFlCriteria     ( this, ScResId( FL_CRITERIA ) ),
         aFtConnect      ( this, ScResId( FT_OP ) ),
         aFtField        ( this, ScResId( FT_FIELD ) ),
         aFtCond         ( this, ScResId( FT_COND ) ),
@@ -129,7 +130,6 @@ ScFilterDlg::ScFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
         aEdVal1         ( this, ScResId( ED_VAL1 ) ),
         aEdVal2         ( this, ScResId( ED_VAL2 ) ),
         aEdVal3         ( this, ScResId( ED_VAL3 ) ),
-        aGbCriteria     ( this, ScResId( GB_CRITERIA ) ),
         aStrEmpty       ( ScResId( SCSTR_EMPTY ) ),
         aStrNotEmpty    ( ScResId( SCSTR_NOTEMPTY ) ),
         aStrRow         ( ScResId( SCSTR_ROW ) ),
@@ -228,7 +228,7 @@ void __EXPORT ScFilterDlg::Init( const SfxItemSet& rArgSet )
                             aRbCopyArea,
                             aFtDbAreaLabel,
                             aFtDbArea,
-                            aGbOptions,
+                            aFlOptions,
                             aStrNoName,
                             aStrUndefined );
 

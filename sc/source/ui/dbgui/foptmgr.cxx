@@ -2,9 +2,9 @@
  *
  *  $RCSfile: foptmgr.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:44:54 $
+ *  last change: $Author: dr $ $Date: 2001-05-21 10:10:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -108,7 +108,7 @@ ScFilterOptionsMgr::ScFilterOptionsMgr(
                                 ScRefButton&        refRbCopyArea,
                                 FixedText&          refFtDbAreaLabel,
                                 FixedInfo&          refFtDbArea,
-                                GroupBox&           refGbOptions,
+                                FixedLine&          refFlOptions,
                                 const String&       refStrNoName,
                                 const String&       refStrUndefined )
 
@@ -128,7 +128,7 @@ ScFilterOptionsMgr::ScFilterOptionsMgr(
         rRbCopyPos      ( refRbCopyArea ),
         rFtDbAreaLabel  ( refFtDbAreaLabel ),
         rFtDbArea       ( refFtDbArea ),
-        rGbOptions      ( refGbOptions ),
+        rFlOptions      ( refFlOptions ),
         rStrNoName      ( refStrNoName ),
         rStrUndefined   ( refStrUndefined )
 {
@@ -171,7 +171,7 @@ void ScFilterOptionsMgr::Init()
     rBtnMore.AddWindow( &rRbCopyPos );
     rBtnMore.AddWindow( &rFtDbAreaLabel );
     rBtnMore.AddWindow( &rFtDbArea );
-    rBtnMore.AddWindow( &rGbOptions );
+    rBtnMore.AddWindow( &rFlOptions );
 
     rBtnCase    .Check( rQueryData.bCaseSens );
     rBtnHeader  .Check( rQueryData.bHasHeader );
@@ -387,6 +387,9 @@ IMPL_LINK( ScFilterOptionsMgr, BtnCopyResultHdl, CheckBox*, pBox )
 /*----------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.1.1.1  2000/09/18 16:44:54  hr
+    initial import
+
     Revision 1.24  2000/09/17 14:08:56  willem.vandorp
     OpenOffice header added.
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfiltdlg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-22 18:48:02 $
+ *  last change: $Author: dr $ $Date: 2001-05-21 10:10:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,7 +248,7 @@ void __EXPORT ScSpecialFilterDlg::Init( const SfxItemSet& rArgSet )
                             aRbCopyArea,
                             aFtDbAreaLabel,
                             aFtDbArea,
-                            aGbOptions,
+                            aFlOptions,
                             aStrNoName,
                             aStrUndefined );
 
