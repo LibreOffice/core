@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewsh.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: mba $ $Date: 2001-06-20 16:45:40 $
+ *  last change: $Author: mba $ $Date: 2001-09-19 08:03:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,8 @@
 #ifndef INCLUDED_SVTOOLS_INTERNALOPTIONS_HXX
 #include <svtools/internaloptions.hxx>
 #endif
+
+#include <svtools/javaoptions.hxx>
 
 #pragma hdrstop
 
@@ -1420,23 +1422,10 @@ void SfxViewShell::CheckIPClient_Impl( SvInPlaceClient *pIPClient,
 {
     if ( GetObjectShell()->IsInClose() )
         return;
-#if SUPD<613//MUSTINI
-    SfxIniManager* pIniMgr = SFX_INIMANAGER();
-    BOOL bApplets = pIniMgr->IsAppletsEnabled();
-#else
-    BOOL bApplets = sal_False;
-#endif
+
+    BOOL bApplets = SvtJavaOptions().IsExecuteApplets();
     BOOL bActive = pIPClient->IsInPlaceActive();
-    BOOL bPlugIn = FALSE;
-#if SUPD<613//MUSTINI
-#ifdef SOLAR_PLUGIN
-    bPlugIn = Application::IsRemoteServer() ? FALSE : (USHORT)pIniMgr->Get( SFX_KEY_INET_EXE_PLUGIN ).ToInt32();
-#endif
-#else//MUSTINI
-#ifdef SOLAR_PLUGIN
-    bPlugIn = Application::IsRemoteServer() ? FALSE : SvtMiscOptions().IsPluginsEnabled();
-#endif
-#endif//MUSTINI
+    BOOL bPlugIn = Application::IsRemoteServer() ? FALSE : SvtMiscOptions().IsPluginsEnabled();
 
     SvAppletObjectRef aAppRef = pIPClient->GetIPObj();
     SvPlugInObjectRef aPlugRef = pIPClient->GetIPObj();
