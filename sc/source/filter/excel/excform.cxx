@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excform.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-28 16:52:55 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 16:17:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,9 @@
 #include "excform.hxx"
 #include "flttools.hxx"
 
+#ifndef SC_XILINK_HXX
+#include "xilink.hxx"
+#endif
 #ifndef SC_XLTRACER_HXX
 #include "xltracer.hxx"
 #endif
@@ -564,6 +567,7 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, UINT32 nFormulaLen, 
             case 0x43:
             case 0x63:
             case 0x23: // Name                                  [318 269]
+            {
                 aIn >> nUINT16;
                 switch( pExcRoot->eHauptDateiTyp )
                 {
@@ -575,7 +579,12 @@ ConvErr ExcelToSc::Convert( const ScTokenArray*& pErgebnis, UINT32 nFormulaLen, 
                         DBG_ERROR(
                         "-ExcelToSc::Convert(): Ein wenig vergesslich, was?" );
                 }
-                aStack << aPool.Store( nUINT16 );
+                const XclImpName* pName = pExcRoot->pIR->GetNameBuffer().GetNameFromIndex(nUINT16);
+                if(pName && !pName->GetScRangeData())
+                    aStack << aPool.Store( ocMacro, pName->GetXclName() );
+                else
+                    aStack << aPool.Store( nUINT16 );
+            }
                 break;
             case 0x44:
             case 0x64:
