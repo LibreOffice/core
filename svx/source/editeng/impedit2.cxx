@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit2.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mt $ $Date: 2000-11-24 13:41:54 $
+ *  last change: $Author: mt $ $Date: 2000-11-28 15:56:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2949,7 +2949,7 @@ void ImpEditEngine::CopyData( EditSelection aSelection, ExchangeType nType ) con
     aRTFStream.Seek( 0 );
 
     SvMemoryStream aBinStream( aText.Len()*2, 512 );
-    WriteBin( aBinStream, aSelection );
+    WriteBin( aBinStream, aSelection, TRUE );
     ULONG nBinLen   = (USHORT)aBinStream.Seek( STREAM_SEEK_TO_END );
     aBinStream.Seek( 0 );
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit3.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: nn $ $Date: 2000-11-23 18:19:26 $
+ *  last change: $Author: mt $ $Date: 2000-11-28 15:56:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -478,20 +478,19 @@ void ImpEditEngine::CheckAutoPageSize()
 {
     Size aPrevPaperSize( GetPaperSize() );
     if ( GetStatus().AutoPageWidth() )
-        aPaperSize.Width() = (long)CalcTextWidth();
+        aPaperSize.Width() = (long) !IsVertical() ? CalcTextWidth() : GetTextHeight();
     if ( GetStatus().AutoPageHeight() )
-        aPaperSize.Height() = (long)GetTextHeight();
+        aPaperSize.Height() = (long) !IsVertical() ? GetTextHeight() : CalcTextWidth();
+
     SetValidPaperSize( aPaperSize );    //Min, Max beruecksichtigen
 
     if ( aPaperSize != aPrevPaperSize )
     {
-        if ( aPaperSize.Width() != aPrevPaperSize.Width() )
+        if ( ( !IsVertical() && ( aPaperSize.Width() != aPrevPaperSize.Width() ) )
+             || ( IsVertical() && ( aPaperSize.Height() != aPrevPaperSize.Height() ) ) )
         {
             // Falls davor zentriert/rechts oder Tabs...
             aStatus.GetStatusWord() |= EE_STAT_TEXTWIDTHCHANGED;
-//          sal_Bool bAutoWidth = aStatus.AutoPageWidth();
-//          if ( bAutoWidth )
-//              aStatus.TurnOffFlags( EE_CNTRL_AUTOPAGESIZEX );
             for ( sal_uInt16 nPara = 0; nPara < GetParaPortions().Count(); nPara++ )
             {
                 // Es brauchen nur Absaetze neu formatiert werden,
@@ -508,8 +507,6 @@ void ImpEditEngine::CheckAutoPageSize()
                     CreateLines( nPara, 0 );    // 0: Bei AutoPageSize kein TextRange!
                 }
             }
-//          if ( bAutoWidth )
-//              aStatus.TurnOnFlags( EE_CNTRL_AUTOPAGESIZEX );
         }
 
         Size aInvSize = aPaperSize;
@@ -518,7 +515,14 @@ void ImpEditEngine::CheckAutoPageSize()
         if ( aPaperSize.Height() < aPrevPaperSize.Height() )
             aInvSize.Height() = aPrevPaperSize.Height();
 
-        aInvalidRec = Rectangle( Point(), aInvSize );
+        Size aSz( aInvSize );
+        if ( IsVertical() )
+        {
+            aSz.Width() = aInvSize.Height();
+            aSz.Height() = aInvSize.Width();
+        }
+        aInvalidRec = Rectangle( Point(), aSz );
+
 
         for ( sal_uInt16 nView = 0; nView < aEditViews.Count(); nView++ )
         {

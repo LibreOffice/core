@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: mt $ $Date: 2000-11-27 18:00:20 $
+ *  last change: $Author: mt $ $Date: 2000-11-28 15:56:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -529,7 +529,7 @@ private:
     sal_uInt32          WriteText( SvStream& rOutput, EditSelection aSel );
     sal_uInt32          WriteRTF( SvStream& rOutput, EditSelection aSel );
     sal_uInt32          WriteHTML( SvStream& rOutput, EditSelection aSel );
-    sal_uInt32          WriteBin( SvStream& rOutput, EditSelection aSel ) const;
+    sal_uInt32          WriteBin( SvStream& rOutput, EditSelection aSel, BOOL bStoreUnicode = FALSE ) const;
 
     void                WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput, sal_uInt16 nPara, sal_uInt16 nPos,
                         SvxFontTable& rFontTable, SvxColorList& rColorList );

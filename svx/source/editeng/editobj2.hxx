@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editobj2.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mt $ $Date: 2000-11-20 11:53:50 $
+ *  last change: $Author: mt $ $Date: 2000-11-28 15:56:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,8 +196,10 @@ private:
     USHORT                  nMetric;
     USHORT                  nVersion;
     USHORT                  nUserType;
+    USHORT                  nScriptType;
 
     BOOL                    bVertical;
+    BOOL                    bStoreUnicodeStrings;
 
 protected:
     void                    DeleteContents();
@@ -221,6 +223,9 @@ public:
 
     BOOL                    IsVertical() const;
     void                    SetVertical( BOOL b );
+
+    USHORT                  GetScriptType() const;
+    void                    SetScriptType( USHORT nType );
 
     USHORT                  GetVersion() const; // Solange der Outliner keine Recordlaenge speichert
     void                    SetLRSpaceItemFlags( BOOL bOutlineMode );
@@ -277,6 +282,7 @@ public:
     void                    SetMetric( USHORT n )       { nMetric = n; }
 
     BOOL                    IsOwnerOfPool() const       { return bOwnerOfPool; }
+    void                    StoreUnicodeStrings( BOOL b ) { bStoreUnicodeStrings = b; }
 
     void                    PrepareStore( SfxStyleSheetPool* pStyleSheetPool );
     void                    FinishStore();

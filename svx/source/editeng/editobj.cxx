@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editobj.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: mt $ $Date: 2000-11-20 11:53:50 $
+ *  last change: $Author: mt $ $Date: 2000-11-28 15:56:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,9 @@
 
 #pragma hdrstop
 
+#define ENABLE_STRING_STREAM_OPERATORS
+#include <tools/stream.hxx>
+
 #include <editobj2.hxx>
 #include <editdata.hxx>
 #include <editattr.hxx>
@@ -80,7 +83,6 @@
 #include <brshitem.hxx>
 #include <vcl/graph.hxx>
 #include <svtools/intitem.hxx>
-#include <tools/stream.hxx>
 
 DBG_NAME( EE_EditTextObject );
 DBG_NAME( XEditAttribute );
@@ -432,6 +434,15 @@ BOOL EditTextObject::IsVertical() const
     return FALSE;
 }
 
+USHORT EditTextObject::GetScriptType() const
+{
+#if SUPD >= 615
+    DBG_ERROR( "V-Methode direkt vom EditTextObject!" );
+#endif
+    return ((const BinTextObject*)this)->GetScriptType();
+}
+
+
 BOOL EditTextObject::Store( SvStream& rOStream ) const
 {
     if ( rOStream.GetError() )
@@ -571,6 +582,8 @@ BinTextObject::BinTextObject( SfxItemPool* pP ) :
         bOwnerOfPool =  TRUE;
     }
     bVertical = FALSE;
+    bStoreUnicodeStrings = FALSE;
+    nScriptType = 0;
 }
 
 BinTextObject::BinTextObject( const BinTextObject& r ) :
@@ -579,7 +592,10 @@ BinTextObject::BinTextObject( const BinTextObject& r ) :
     nMetric = r.nMetric;
     nUserType = r.nUserType;
     nObjSettings = r.nObjSettings;
+    bVertical = r.bVertical;
+    nScriptType = r.nScriptType;
     pPortionInfo = NULL;    // PortionInfo nicht kopieren
+    bStoreUnicodeStrings = FALSE;
     if ( !r.bOwnerOfPool )
     {
         // Dann den Pool mitverwenden
@@ -652,6 +668,17 @@ void BinTextObject::SetVertical( BOOL b )
 {
     bVertical = b;
 }
+
+USHORT BinTextObject::GetScriptType() const
+{
+    return nScriptType;
+}
+
+void BinTextObject::SetScriptType( USHORT nType )
+{
+    nScriptType = nType;
+}
+
 
 void BinTextObject::DeleteContents()
 {
@@ -731,6 +758,10 @@ EditTextObject* BinTextObject::CreateTextObject( USHORT nPara, USHORT nParas ) c
     BinTextObject* pObj = new BinTextObject( bOwnerOfPool ? 0 : pPool );
     if ( bOwnerOfPool && pPool )
         pObj->GetPool()->SetDefaultMetric( pPool->GetMetric( DEF_METRIC ) );
+
+    // If complete text is only one ScriptType, this is valid.
+    // If text contains different ScriptTypes, this shouldn't be a problem...
+    pObj->nScriptType = nScriptType;
 
     const USHORT nEndPara = nPara+nParas-1;
     for ( USHORT nP = nPara; nP <= nEndPara; nP++ )
@@ -1032,7 +1063,7 @@ void __EXPORT BinTextObject::ChangeStyleSheetName( SfxStyleFamily eFamily,
 
 void __EXPORT BinTextObject::StoreData( SvStream& rOStream ) const
 {
-    USHORT nVer = 601;
+    USHORT nVer = 602;
     rOStream << nVer;
 
     rOStream << bOwnerOfPool;
@@ -1046,7 +1077,7 @@ void __EXPORT BinTextObject::StoreData( SvStream& rOStream ) const
 
     // Aktuelle Zeichensatz speichern...
     // GetStoreCharSet: Dateiformat fuer West-Europaeische Versionen kompatibel halten.
-    rtl_TextEncoding eEncoding = GetStoreCharSet( gsl_getSystemTextEncoding(), rOStream.GetVersion() );
+    rtl_TextEncoding eEncoding = GetStoreCharSet( gsl_getSystemTextEncoding(), (USHORT) rOStream.GetVersion() );
     rOStream << (USHORT) eEncoding;
 
     // Die Anzahl der Absaetze...
@@ -1100,6 +1131,21 @@ void __EXPORT BinTextObject::StoreData( SvStream& rOStream ) const
 
     // Ab 601
     rOStream << bVertical;
+
+    // Ab 602
+    rOStream << nScriptType;
+
+    rOStream << bStoreUnicodeStrings;
+    if ( bStoreUnicodeStrings )
+    {
+        for ( USHORT nPara = 0; nPara < nParagraphs; nPara++ )
+        {
+            ContentInfo* pC = GetContents().GetObject( nPara );
+            USHORT nL = pC->GetText().Len();
+            rOStream.WriteNumber( nL );
+            rOStream.Write( pC->GetText().GetBuffer(), nL*sizeof(sal_Unicode) );
+        }
+    }
 }
 
 void __EXPORT BinTextObject::CreateData( SvStream& rIStream )
@@ -1222,6 +1268,27 @@ void __EXPORT BinTextObject::CreateData( SvStream& rIStream )
     {
         rIStream >> bVertical;
     }
+
+    if ( nVersion >= 602 )
+    {
+        rIStream >> nScriptType;
+
+        BOOL bUnicodeStrings;
+        rIStream >> bUnicodeStrings;
+        if ( bUnicodeStrings )
+        {
+            for ( USHORT nPara = 0; nPara < nParagraphs; nPara++ )
+            {
+                ContentInfo* pC = GetContents().GetObject( nPara );
+                USHORT nL;
+                rIStream.ReadNumber( nL );
+                pC->GetText().AllocBuffer( nL );
+                rIStream.Read( pC->GetText().GetBufferAccess(), nL*sizeof(sal_Unicode) );
+                pC->GetText().ReleaseBufferAccess( nL );
+            }
+        }
+    }
+
 
     // Ab 500 werden die Tabs anders interpretiert: TabPos + LI, vorher nur TabPos.
     // Wirkt nur wenn auch Tab-Positionen eingestellt wurden, nicht beim DefTab.

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit4.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mt $ $Date: 2000-11-20 14:49:49 $
+ *  last change: $Author: mt $ $Date: 2000-11-28 15:56:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -347,13 +347,14 @@ void lcl_FindValidAttribs( ItemList& rLst, ContentNode* pNode, sal_uInt16 nIndex
     }
 }
 
-sal_uInt32 ImpEditEngine::WriteBin( SvStream& rOutput, EditSelection aSel ) const
+sal_uInt32 ImpEditEngine::WriteBin( SvStream& rOutput, EditSelection aSel, BOOL bStoreUnicodeStrings ) const
 {
     // Einfach ein temporaeres TextObject missbrauchen...
     // Hier aber nicht den globalen Pool verwenden:
     SfxItemPool* pGlblPool = pTextObjectPool;
     ((ImpEditEngine*)this)->pTextObjectPool = NULL;
     BinTextObject* pObj = (BinTextObject*)CreateBinTextObject( aSel );
+    pObj->StoreUnicodeStrings( bStoreUnicodeStrings );
     ((ImpEditEngine*)this)->pTextObjectPool = pGlblPool;
     pObj->Store( rOutput );
     delete pObj;
@@ -1114,6 +1115,8 @@ EditTextObject* ImpEditEngine::CreateBinTextObject( EditSelection aSel, sal_Bool
 
     // Vorlagen werden nicht gespeichert!
     // ( Nur Name und Familie, Vorlage selbst muss in App stehen! )
+
+    pTxtObj->SetScriptType( GetScriptType( aSel ) );
 
     // ueber die Absaetze iterieren...
     sal_uInt16 nNode;

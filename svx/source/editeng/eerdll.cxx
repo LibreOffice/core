@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eerdll.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mt $ $Date: 2000-11-24 11:30:28 $
+ *  last change: $Author: mt $ $Date: 2000-11-28 15:56:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -160,22 +160,16 @@ SfxPoolItem** GlobalEditData::GetDefItems()
         ppDefItems[25] = new SvxLanguageItem( LANGUAGE_DONTKNOW, EE_CHAR_LANGUAGE );
         ppDefItems[26] = new SvxLanguageItem( LANGUAGE_DONTKNOW, EE_CHAR_LANGUAGE_CJK );
         ppDefItems[27] = new SvxLanguageItem( LANGUAGE_DONTKNOW, EE_CHAR_LANGUAGE_CTL );
-#ifdef DEBUG
-        ppDefItems[28] = new SvxFontItem( FAMILY_DONTKNOW, String( RTL_CONSTASCII_USTRINGPARAM( "MS Mincho" ) ), String(), PITCH_DONTKNOW, RTL_TEXTENCODING_UNICODE, EE_CHAR_FONTINFO_CJK );
-        ppDefItems[29] = new SvxFontItem( FAMILY_DONTKNOW, String( RTL_CONSTASCII_USTRINGPARAM( "MS Mincho" ) ), String(), PITCH_DONTKNOW, RTL_TEXTENCODING_UNICODE, EE_CHAR_FONTINFO_CTL );
-        ppDefItems[30] = new SvxFontHeightItem( 560, 100, EE_CHAR_FONTHEIGHT_CJK );
-        ppDefItems[31] = new SvxFontHeightItem( 560, 100, EE_CHAR_FONTHEIGHT_CTL );
-#else
         ppDefItems[28] = new SvxFontItem( EE_CHAR_FONTINFO_CJK );
         ppDefItems[29] = new SvxFontItem( EE_CHAR_FONTINFO_CTL );
         ppDefItems[30] = new SvxFontHeightItem( 240, 100, EE_CHAR_FONTHEIGHT_CJK );
         ppDefItems[31] = new SvxFontHeightItem( 240, 100, EE_CHAR_FONTHEIGHT_CTL );
-#endif
         ppDefItems[32] = new SvxWeightItem( WEIGHT_NORMAL, EE_CHAR_WEIGHT_CJK );
          ppDefItems[33] = new SvxWeightItem( WEIGHT_NORMAL, EE_CHAR_WEIGHT_CTL );
         ppDefItems[34] = new SvxPostureItem( ITALIC_NONE, EE_CHAR_ITALIC_CJK );
         ppDefItems[35] = new SvxPostureItem( ITALIC_NONE, EE_CHAR_ITALIC_CTL );
         ppDefItems[36] = new SvxEmphasisMarkItem( EMPHASISMARK_NONE, EE_CHAR_EMPHASISMARK );
+//      ppDefItems[36] = new SfxVoidItem( EE_CHAR_EMPHASISMARK );
         ppDefItems[37] = new SfxVoidItem( EE_CHAR_2LINES_DUMMY );
         ppDefItems[38] = new SfxVoidItem( EE_CHAR_RUBI_DUMMY );
         ppDefItems[39] = new SfxVoidItem( EE_CHAR_ROTATION_DUMMY );
