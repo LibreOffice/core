@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh3.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 20:30:15 $
+ *  last change: $Author: rt $ $Date: 2004-05-03 13:57:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -253,10 +253,9 @@ void ScDocShell::UpdatePaintExt( USHORT& rExtFlags, USHORT nStartCol, USHORT nSt
 
 void ScDocShell::LockPaint_Impl(BOOL bDoc)
 {
-    if ( pPaintLockData )
-        pPaintLockData->IncLevel(bDoc);
-    else
+    if ( !pPaintLockData )
         pPaintLockData = new ScPaintLockData(0);    //! Modus...
+    pPaintLockData->IncLevel(bDoc);
 }
 
 void ScDocShell::UnlockPaint_Impl(BOOL bDoc)
@@ -265,7 +264,7 @@ void ScDocShell::UnlockPaint_Impl(BOOL bDoc)
     {
         if ( pPaintLockData->GetLevel(bDoc) )
             pPaintLockData->DecLevel(bDoc);
-        else if (!pPaintLockData->GetLevel(!bDoc))
+        if (!pPaintLockData->GetLevel(!bDoc) && !pPaintLockData->GetLevel(bDoc))
         {
             //      Paint jetzt ausfuehren
 
