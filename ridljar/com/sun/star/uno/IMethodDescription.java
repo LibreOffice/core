@@ -1,8 +1,8 @@
 /*************************************************************************
  *
- *  $RCSfile: Any.java,v $
+ *  $RCSfile: IMethodDescription.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.1 $
  *
  *  last change: $Author: kr $ $Date: 2001-05-08 09:34:18 $
  *
@@ -59,68 +59,72 @@
  *
  ************************************************************************/
 
-
 package com.sun.star.uno;
 
 
+import java.lang.reflect.Method;
+
+
 /**
- * The UNO IDL type any is mapped to java type <code>java.lang.Object</code>.
- * In special cases it is necessary to have an explicit any.
+ * The <code>IMethodDescription</code> allows to examine a method
+ * in detail. It gives a view to java methods from a UNO point.
  * <p>
- * @version     $Revision: 1.3 $ $ $Date: 2001-05-08 09:34:18 $
+ * @version     $Revision: 1.1 $ $ $Date: 2001-05-08 09:34:18 $
  * @author      Kay Ramme
- * @since       UDK1.0
+ * @since       UDK3.0
  */
-public class Any {
+public interface IMethodDescription extends IMemberDescription {
     /**
-     * The type of the any.
+     * Indicates if this method is <code>oneWay</code>,
+     * respectivly if this method may become executed asynchronously.
      * <p>
-     * @see #getInterface
+     * @return  true means may execute asynchronously .
      */
-    protected Type  _type;
-
-    /**
-     * The data of the any.
-     * <p>
-     * @see #getObject
-     */
-    protected Object _object;
-
+    boolean isOneway();
 
     /**
-     * Constructs a new any.
+     * Gives the relative index of this method in the declaring
+     * interface.
      * <p>
-     * @param   zInterface  the type of the any.
-     * @param   object      the data of the any.
-     * @deprecated as of UDK 2.0
+     * @return  the realtive index of this method
      */
-    public Any(Class zInterface, Object object) {
-        _type   = new Type(zInterface);
-        _object = object;
-    }
-
-    public Any(Type type, Object object) {
-        _type   = type;
-        _object = object;
-    }
+    int getIndex();
 
     /**
-     * Gets the type of the any.
+     * Indicates if this method is const.
      * <p>
-     * @return   the type of the any.
+     * @return true means it is const.
      */
-    public Type getType() {
-        return _type;
-    }
+    boolean isConst();
 
     /**
-     * Gets the data of the any.
+     * Gives any array of <code>ITypeDescription> of
+     * the [in] parameters.
      * <p>
-     * @return   the data of the any.
+     * @return  the in parameters
      */
-    public Object getObject() {
-        return _object;
-    }
+    ITypeDescription[] getInSignature();
+
+    /**
+     * Gives any array of <code>ITypeDescription> of
+     * the [out] parameters.
+     * <p>
+     * @return  the out parameters
+     */
+    ITypeDescription[] getOutSignature();
+
+    /**
+     * Gives the <code>ITypeDescription</code> of
+     * the return type.
+     * <p>
+     * @return  the return type <code>ITypeDescription</code>
+     */
+    ITypeDescription getReturnSignature();
+
+    /**
+     * Gives native java method of this method.
+     * <p>
+     * @return  the java methodd
+     */
+    Method getMethod();
 }
-
-

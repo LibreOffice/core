@@ -1,8 +1,8 @@
 /*************************************************************************
  *
- *  $RCSfile: Any.java,v $
+ *  $RCSfile: IFieldDescription.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.1 $
  *
  *  last change: $Author: kr $ $Date: 2001-05-08 09:34:18 $
  *
@@ -59,68 +59,31 @@
  *
  ************************************************************************/
 
-
 package com.sun.star.uno;
 
 
+import java.lang.reflect.Field;
+
 /**
- * The UNO IDL type any is mapped to java type <code>java.lang.Object</code>.
- * In special cases it is necessary to have an explicit any.
+ * The <code>IFieldDescription</code> describes non
+ * method members.
  * <p>
- * @version     $Revision: 1.3 $ $ $Date: 2001-05-08 09:34:18 $
+ * @version     $Revision: 1.1 $ $ $Date: 2001-05-08 09:34:18 $
  * @author      Kay Ramme
- * @since       UDK1.0
+ * @since       UDK3.0
  */
-public class Any {
+public interface IFieldDescription extends IMemberDescription {
     /**
-     * The type of the any.
+     * Gives the name of this member.
      * <p>
-     * @see #getInterface
+     * @return  the name
      */
-    protected Type  _type;
-
-    /**
-     * The data of the any.
-     * <p>
-     * @see #getObject
-     */
-    protected Object _object;
-
+    ITypeDescription getTypeDescription();
 
     /**
-     * Constructs a new any.
+     * Gives native java field of this member.
      * <p>
-     * @param   zInterface  the type of the any.
-     * @param   object      the data of the any.
-     * @deprecated as of UDK 2.0
+     * @return  the java field
      */
-    public Any(Class zInterface, Object object) {
-        _type   = new Type(zInterface);
-        _object = object;
-    }
-
-    public Any(Type type, Object object) {
-        _type   = type;
-        _object = object;
-    }
-
-    /**
-     * Gets the type of the any.
-     * <p>
-     * @return   the type of the any.
-     */
-    public Type getType() {
-        return _type;
-    }
-
-    /**
-     * Gets the data of the any.
-     * <p>
-     * @return   the data of the any.
-     */
-    public Object getObject() {
-        return _object;
-    }
+      Field getField();
 }
-
-

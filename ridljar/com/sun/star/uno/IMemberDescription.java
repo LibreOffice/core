@@ -1,8 +1,8 @@
 /*************************************************************************
  *
- *  $RCSfile: Any.java,v $
+ *  $RCSfile: IMemberDescription.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.1 $
  *
  *  last change: $Author: kr $ $Date: 2001-05-08 09:34:18 $
  *
@@ -59,68 +59,42 @@
  *
  ************************************************************************/
 
-
 package com.sun.star.uno;
 
-
 /**
- * The UNO IDL type any is mapped to java type <code>java.lang.Object</code>.
- * In special cases it is necessary to have an explicit any.
+ * The <code>IMemberDescription</code> is the base interface
+ * for members of UNO types <code>ITypeDescriptions</code>.
  * <p>
- * @version     $Revision: 1.3 $ $ $Date: 2001-05-08 09:34:18 $
+ * @version     $Revision: 1.1 $ $ $Date: 2001-05-08 09:34:18 $
  * @author      Kay Ramme
- * @since       UDK1.0
+ * @since       UDK3.0
  */
-public class Any {
+public interface IMemberDescription {
     /**
-     * The type of the any.
+     * Gives the name of this member.
      * <p>
-     * @see #getInterface
+     * @return  the name
      */
-    protected Type  _type;
-
-    /**
-     * The data of the any.
-     * <p>
-     * @see #getObject
-     */
-    protected Object _object;
-
+    String getName();
 
     /**
-     * Constructs a new any.
+     * Indicates if this member is unsigned.
      * <p>
-     * @param   zInterface  the type of the any.
-     * @param   object      the data of the any.
-     * @deprecated as of UDK 2.0
+     * @return  the unsigned state
      */
-    public Any(Class zInterface, Object object) {
-        _type   = new Type(zInterface);
-        _object = object;
-    }
-
-    public Any(Type type, Object object) {
-        _type   = type;
-        _object = object;
-    }
+    boolean isUnsigned();
 
     /**
-     * Gets the type of the any.
+     * Indicates if this member is an any.
      * <p>
-     * @return   the type of the any.
+     * @return  the any state
      */
-    public Type getType() {
-        return _type;
-    }
+    boolean isAny();
 
     /**
-     * Gets the data of the any.
+     * Indicates if this member is an interface.
      * <p>
-     * @return   the data of the any.
+     * @return  the interface state
      */
-    public Object getObject() {
-        return _object;
-    }
+    boolean isInterface();
 }
-
-

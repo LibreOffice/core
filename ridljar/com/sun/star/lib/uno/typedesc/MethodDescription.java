@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MethodDescription.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kr $ $Date: 2001-04-17 15:01:37 $
+ *  last change: $Author: kr $ $Date: 2001-05-08 09:34:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,12 +65,16 @@ package com.sun.star.lib.uno.typedesc;
 import java.lang.reflect.Method;
 
 
+import com.sun.star.uno.IMethodDescription;
+import com.sun.star.uno.ITypeDescription;
+
+
 import com.sun.star.lib.uno.typeinfo.MethodTypeInfo;
 import com.sun.star.lib.uno.typeinfo.ParameterTypeInfo;
 import com.sun.star.lib.uno.typeinfo.TypeInfo;
 
 
-public class MethodDescription extends MethodTypeInfo {
+public class MethodDescription extends MethodTypeInfo implements IMethodDescription {
     static private final TypeDescription __xInterface = TypeDescription.getTypeDescription(com.sun.star.uno.XInterface.class);
     static private TypeDescription __xInterfaceArray;
     static private TypeDescription __xInterfaceArrayArray;
@@ -132,15 +136,15 @@ public class MethodDescription extends MethodTypeInfo {
         _return_sig = TypeDescription.getTypeDescription(this, resultClass);
     }
 
-    public TypeDescription[] getInSignature() {
+    public ITypeDescription[] getInSignature() {
         return _in_sig;
     }
 
-    public TypeDescription[] getOutSignature() {
+    public ITypeDescription[] getOutSignature() {
         return _out_sig;
     }
 
-    public TypeDescription getReturnSig() {
+    public ITypeDescription getReturnSignature() {
         return _return_sig;
     }
 

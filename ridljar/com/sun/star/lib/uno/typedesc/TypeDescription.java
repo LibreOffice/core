@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TypeDescription.java,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: kr $ $Date: 2001-05-04 11:13:38 $
+ *  last change: $Author: kr $ $Date: 2001-05-08 09:34:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,6 +72,9 @@ import java.lang.reflect.Modifier;
 
 import com.sun.star.uno.Any;
 import com.sun.star.uno.Enum;
+import com.sun.star.uno.IFieldDescription;
+import com.sun.star.uno.IMethodDescription;
+import com.sun.star.uno.ITypeDescription;
 import com.sun.star.uno.Type;
 import com.sun.star.uno.TypeClass;
 import com.sun.star.uno.Union;
@@ -94,15 +97,15 @@ import com.sun.star.lib.uno.typeinfo.TypeInfo;
  * methods, which may be changed or moved in the furture, so please
  * do not use these methods.
  * <p>
- * @version     $Revision: 1.7 $ $ $Date: 2001-05-04 11:13:38 $
+ * @version     $Revision: 1.8 $ $ $Date: 2001-05-08 09:34:17 $
  * @author      Kay Ramme
  * @since       UDK2.0
  */
-public class TypeDescription {
+public class TypeDescription implements ITypeDescription {
     /**
      * When set to true, enables various debugging output.
      */
-    public static final boolean DEBUG = false;
+    private static final boolean DEBUG = false;
 
     public static final TypeDescription __void_TypeDescription    = new TypeDescription(TypeClass.VOID,           "void", "[Ljava.lang.Void;", void.class);     // VOID
     public static final TypeDescription __char_TypeDescription    = new TypeDescription(TypeClass.CHAR,           "char", "[C", char.class);     // CHAR
@@ -121,7 +124,7 @@ public class TypeDescription {
     public static final TypeDescription __any_TypeDescription     = new TypeDescription(TypeClass.ANY,            "any", "[Ljava.lang.Object;", Object.class);       // ANY
 
 
-    static private final Hashtable __classToTypeDescription = new Hashtable();
+      static private final Hashtable __classToTypeDescription = new Hashtable();
     static private final Hashtable __typeNameToTypeDescription = new Hashtable();
     static private final Hashtable __typeClassToTypeName = new Hashtable();
 
@@ -528,6 +531,25 @@ public class TypeDescription {
         return typeDescription;
     }
 
+    static public ITypeDescription getTypeDescription(Type type) throws ClassNotFoundException {
+        ITypeDescription iTypeDescription = type.getTypeDescription();
+
+        if(iTypeDescription == null) {
+            if(type.getZClass() != null)
+                iTypeDescription = getTypeDescription(type.getZClass());
+
+            else if(type.getTypeClass() != null && type.getTypeClass() != TypeClass.UNKNOWN)
+                iTypeDescription = getTypeDescription(type.getTypeClass());
+
+            else if(type.getTypeName() != null)
+                iTypeDescription = getTypeDescription(type.getTypeName());
+
+            type.setTypeDescription(iTypeDescription);
+        }
+
+        return iTypeDescription;
+    }
+
     static public TypeDescription getTypeDescription(TypeClass typeClass) {
         TypeDescription typeDescription = null;
 
@@ -548,11 +570,11 @@ public class TypeDescription {
     protected int            _offset;
     protected MethodDescription _methodDescriptionsByIndex[];
     protected Hashtable      _methodDescriptionsByName;
-    protected Hashtable      _memberTypeInfosByName;
+    protected Hashtable      _iFieldDescriptionsByName;
 
-    protected Field          _fields[];
+    protected IFieldDescription _iFieldDescriptions[];
 
-    protected TypeDescription _componentType;
+    protected ITypeDescription _componentType;
 
 
     private void _initByClass(Class zClass) {
@@ -588,7 +610,7 @@ public class TypeDescription {
             _typeClass = TypeClass.SEQUENCE;
 
             _componentType = getTypeDescription(zClass.getComponentType());
-            _typeName = "[]" + _componentType._typeName;
+            _typeName = "[]" + _componentType.getTypeName();
 
             _arrayTypeName = "[" + _class.getName();
         }
@@ -602,7 +624,6 @@ public class TypeDescription {
             if(superClass != null && superClass != Object.class)
                 _superType = getTypeDescription(superClass);
 
-            _initFields();
             _initMemberTypeInfos();
         }
         else {
@@ -615,7 +636,6 @@ public class TypeDescription {
             if(superClass != null && superClass != Object.class)
                 _superType = getTypeDescription(superClass);
 
-            _initFields();
             _initMemberTypeInfos();
         }
 
@@ -642,8 +662,8 @@ public class TypeDescription {
             _typeClass = TypeClass.SEQUENCE;
 
             _componentType = getTypeDescription(typeName.substring(2));
-            _class = Class.forName(_componentType._arrayTypeName);
-            _arrayTypeName = "[" + _componentType._arrayTypeName;
+            _class = Class.forName(_componentType.getArrayTypeName());
+            _arrayTypeName = "[" + _componentType.getArrayTypeName();
 
             __cyclicTypes.remove(typeName);
         }
@@ -651,21 +671,6 @@ public class TypeDescription {
             _initByClass(Class.forName(typeName));
         }
 
-    }
-
-    private void _initFields() {
-        Field fields[] = _class.getFields();
-
-        int size = 0;
-        for(int i = 0; i < fields.length; ++ i)
-            if((fields[i].getModifiers() & (Modifier.STATIC | Modifier.TRANSIENT)) == 0) // neither static nor transient ?
-                ++ size;
-
-        _fields = new Field[size];
-        size = 0;
-        for(int i = 0; i < fields.length; ++ i)
-            if((fields[i].getModifiers() & (Modifier.STATIC | Modifier.TRANSIENT)) == 0) // neither static nor transient ?
-                _fields[size ++] = fields[i];
     }
 
     private void _initMethodTypeInfos() {
@@ -752,96 +757,94 @@ public class TypeDescription {
 
     private void _initMemberTypeInfos() {
         TypeInfo typeInfos[] = __getTypeInfos(_class);
-        Field fields[] = getFields();
-        MemberTypeInfo memberTypeInfos[] = new MemberTypeInfo[fields.length];
+        Field fields[] = _class.getFields();
+        int index = 0;
+        IFieldDescription iFieldDescriptions[] = new IFieldDescription[fields.length];
 
-        _memberTypeInfosByName = new Hashtable();
+        _iFieldDescriptionsByName = new Hashtable();
+
 
         for(int i = 0; i < fields.length; ++ i) {
-            MemberTypeInfo memberTypeInfo = null;
+            if((fields[i].getModifiers() & (Modifier.STATIC | Modifier.TRANSIENT)) == 0) { // neither static nor transient ?
 
-            if(_superType != null)
-                memberTypeInfo = _superType.getMemberTypeInfo(fields[i].getName());
+                IFieldDescription iFieldDescription = null;
 
-            if(memberTypeInfo == null)
-                memberTypeInfo = __findMemberTypeInfo(typeInfos, fields[i].getName());
+                if(_superType != null)
+                    iFieldDescription = _superType.getFieldDescription(fields[i].getName());
 
-            if(memberTypeInfo == null)
-                memberTypeInfo = new MemberTypeInfo(fields[i].getName(), 0);
+                if(iFieldDescription == null) {
+                    MemberTypeInfo memberTypeInfo = __findMemberTypeInfo(typeInfos, fields[i].getName());
 
-            _memberTypeInfosByName.put(memberTypeInfo.getName(), memberTypeInfo);
+                    if(memberTypeInfo == null)
+                        memberTypeInfo = new MemberTypeInfo(fields[i].getName(), 0);
+
+
+                    iFieldDescription = new FieldDescription(memberTypeInfo, fields[i]);
+                }
+
+                _iFieldDescriptionsByName.put(iFieldDescription.getName(), iFieldDescription);
+                iFieldDescriptions[index ++] = iFieldDescription;
+            }
         }
+
+        _iFieldDescriptions = new IFieldDescription[index];
+        System.arraycopy(iFieldDescriptions, 0, _iFieldDescriptions, 0, index);
     }
 
-    public TypeDescription getSuperType() {
+    public ITypeDescription getSuperType() {
         return _superType;
     }
 
-    public MethodDescription []getMethodDescriptions() {
+    public IMethodDescription []getMethodDescriptions() {
         _initMethodTypeInfos();
 
-        MethodDescription methodDescriptions[] = null;
+        IMethodDescription iMethodDescriptions[] = null;
 
         if(_methodDescriptionsByIndex != null) {
-            methodDescriptions = new MethodDescription[_methodDescriptionsByIndex.length];
+            iMethodDescriptions = new IMethodDescription[_methodDescriptionsByIndex.length];
 
-            System.arraycopy(_methodDescriptionsByIndex, 0, methodDescriptions, 0, _methodDescriptionsByIndex.length);
+            System.arraycopy(_methodDescriptionsByIndex, 0, iMethodDescriptions, 0, _methodDescriptionsByIndex.length);
         }
 
-        return methodDescriptions;
+        return iMethodDescriptions;
     }
 
-    public MethodDescription getMethodDescription(int methodId) {
+    public IMethodDescription getMethodDescription(int methodId) {
         _initMethodTypeInfos();
 
-        MethodDescription methodDescription = null;
+        IMethodDescription iMethodDescription = null;
 
         int relMethodId = methodId - (_offset - _methodDescriptionsByIndex.length);
 
         if(relMethodId >= 0 && relMethodId < _methodDescriptionsByIndex.length)
-            methodDescription = _methodDescriptionsByIndex[relMethodId];
-        else if(_superType != null)
-            methodDescription = _superType.getMethodDescription(methodId);
+            iMethodDescription = _methodDescriptionsByIndex[relMethodId];
 
-        return methodDescription;
+        else if(_superType != null)
+            iMethodDescription = _superType.getMethodDescription(methodId);
+
+        return iMethodDescription;
     }
 
-    public MethodDescription getMethodDescription(String name) {
+    public IMethodDescription getMethodDescription(String name) {
         _initMethodTypeInfos();
 
-        MethodDescription methodDescription = (MethodDescription)_methodDescriptionsByName.get(name);
-        if(methodDescription == null && _superType != null)
-            methodDescription = _superType.getMethodDescription(name);
+        IMethodDescription iMethodDescription = (MethodDescription)_methodDescriptionsByName.get(name);
+        if(iMethodDescription == null && _superType != null)
+            iMethodDescription = _superType.getMethodDescription(name);
 
-        return methodDescription;
+        return iMethodDescription;
     }
 
-    public MemberTypeInfo []getMemberTypeInfos() {
-        MemberTypeInfo memberTypeInfos[] = null;
-
-        if(_memberTypeInfosByName != null) {
-            memberTypeInfos = new MemberTypeInfo[_memberTypeInfosByName.size()];
-
-            Enumeration elements = _memberTypeInfosByName.elements();
-            int i = 0;
-            while(elements.hasMoreElements()) {
-                memberTypeInfos[i ++] = (MemberTypeInfo)elements.nextElement();
-            }
-        }
-
-        return memberTypeInfos;
+    public IFieldDescription []getFieldDescriptions() {
+        return _iFieldDescriptions;
     }
 
-    public MemberTypeInfo getMemberTypeInfo(String name) {
-        MemberTypeInfo memberTypeInfo = (MemberTypeInfo)_memberTypeInfosByName.get(name);
-        if(memberTypeInfo == null && _superType != null)
-            memberTypeInfo = _superType.getMemberTypeInfo(name);
+    public IFieldDescription getFieldDescription(String name) {
+        IFieldDescription iFieldDescription = (IFieldDescription)_iFieldDescriptionsByName.get(name);
+        if(iFieldDescription == null && _superType != null)
+            iFieldDescription = _superType.getFieldDescription(name);
 
-        return memberTypeInfo;
-    }
-
-    public Field []getFields() {
-        return _fields;
+        return iFieldDescription;
     }
 
     /**
@@ -859,14 +862,14 @@ public class TypeDescription {
      * <p>
      * @return the <code>TypeDescription</code>
      */
-    public TypeDescription getComponentType() {
-        TypeDescription componentTypeDescription = null;
+    public ITypeDescription getComponentType() {
+        ITypeDescription iTypeDescription = null;
 
         Class componentClass = getZClass().getComponentType();
         if(componentClass != null)
-            componentTypeDescription = getTypeDescription(componentClass);
+            iTypeDescription = getTypeDescription(componentClass);
 
-        return componentTypeDescription;
+        return iTypeDescription;
     }
 
     /**

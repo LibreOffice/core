@@ -1,8 +1,8 @@
 /*************************************************************************
  *
- *  $RCSfile: Any.java,v $
+ *  $RCSfile: ITypeDescription.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.1 $
  *
  *  last change: $Author: kr $ $Date: 2001-05-08 09:34:18 $
  *
@@ -59,68 +59,103 @@
  *
  ************************************************************************/
 
-
 package com.sun.star.uno;
 
-
 /**
- * The UNO IDL type any is mapped to java type <code>java.lang.Object</code>.
- * In special cases it is necessary to have an explicit any.
+ * The <code>ITypeDescription</code> allows to examine a type
+ * in detail (e.g. it is used for marshaling/unmarshaling).
  * <p>
- * @version     $Revision: 1.3 $ $ $Date: 2001-05-08 09:34:18 $
+ * @version     $Revision: 1.1 $ $ $Date: 2001-05-08 09:34:18 $
  * @author      Kay Ramme
- * @since       UDK1.0
+ * @since       UDK3.0
  */
-public class Any {
+public interface ITypeDescription {
     /**
-     * The type of the any.
+     * Gets the <code>ITypeDescription</code> of the
+     * super, if it exists.
      * <p>
-     * @see #getInterface
+     * @return  the <code>ITypeDescription</code>.
      */
-    protected Type  _type;
-
-    /**
-     * The data of the any.
-     * <p>
-     * @see #getObject
-     */
-    protected Object _object;
-
+    ITypeDescription getSuperType();
 
     /**
-     * Constructs a new any.
+     * Gets the <code>IMethodDescription</code> for every
+     * method, if this type is an interface. Otherwise
+     * returns <code>null</code>.
      * <p>
-     * @param   zInterface  the type of the any.
-     * @param   object      the data of the any.
-     * @deprecated as of UDK 2.0
+     * @return  the <code>IMethodDescription[]</code>.
      */
-    public Any(Class zInterface, Object object) {
-        _type   = new Type(zInterface);
-        _object = object;
-    }
-
-    public Any(Type type, Object object) {
-        _type   = type;
-        _object = object;
-    }
+    IMethodDescription []getMethodDescriptions();
 
     /**
-     * Gets the type of the any.
+     * Gets the <code>IMethodDescription</code> for the
+     * method with index methodId, if it exists, otherwise
+     * returns <code>null</code>.
      * <p>
-     * @return   the type of the any.
+     * @return  the <code>IMethodDescription</code>.
      */
-    public Type getType() {
-        return _type;
-    }
+    IMethodDescription getMethodDescription(int methodId);
 
     /**
-     * Gets the data of the any.
+     * Gets the <code>IMethodDescription</code> for the
+     * method with the name <code>name</code>, if it exists,
+     * otherwise returns <code>null</code>.
      * <p>
-     * @return   the data of the any.
+     * @return  the <code>IMethodDescription</code>.
      */
-    public Object getObject() {
-        return _object;
-    }
+    IMethodDescription getMethodDescription(String name);
+
+    /**
+     * Gets the <code>IFieldDescription</code> for every
+     * field, if this type is an interface. Otherwise
+     * returns <code>null</code>.
+     * <p>
+     * @return  the <code>IFieldDescription[]</code>.
+     */
+      IFieldDescription []getFieldDescriptions();
+
+    /**
+     * Gets the <code>IFieldDescription</code> for the
+     * field with the name <code>name</code>, if it exists,
+     * otherwise returns <code>null</code>.
+     * <p>
+     * @return  the <code>IFieldDescription</code>.
+     */
+      IFieldDescription getFieldDescription(String name);
+
+    /**
+     * Gets the IDL <code>TypeClass</code> of the type.
+     * <p>
+     * @return  the <code>TypeClass</code>.
+     */
+    TypeClass getTypeClass();
+
+    /**
+     * Gets the component <code>ITypeDescription</code> if
+     * this is an array type, otherwise returns <code>null</code>.
+     * <p>
+     * @return the <code>ITypeDescription</code>
+     */
+    ITypeDescription getComponentType();
+
+    /**
+     * Gets the type name.
+     * <p>
+     * @return  the type name.
+     */
+    String getTypeName();
+
+    /**
+     * Gets the array type name.
+     * <p>
+     * @return  the array type name.
+     */
+    String getArrayTypeName();
+
+    /**
+     * Gets the corresponding java class for the type.
+     * <p>
+     * @return   the corresponding java class.
+     */
+    Class getZClass();
 }
-
-

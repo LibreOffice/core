@@ -1,10 +1,10 @@
 /*************************************************************************
  *
- *  $RCSfile: Any.java,v $
+ *  $RCSfile: FieldDescription.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.1 $
  *
- *  last change: $Author: kr $ $Date: 2001-05-08 09:34:18 $
+ *  last change: $Author: kr $ $Date: 2001-05-08 09:34:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -59,68 +59,36 @@
  *
  ************************************************************************/
 
-
-package com.sun.star.uno;
-
-
-/**
- * The UNO IDL type any is mapped to java type <code>java.lang.Object</code>.
- * In special cases it is necessary to have an explicit any.
- * <p>
- * @version     $Revision: 1.3 $ $ $Date: 2001-05-08 09:34:18 $
- * @author      Kay Ramme
- * @since       UDK1.0
- */
-public class Any {
-    /**
-     * The type of the any.
-     * <p>
-     * @see #getInterface
-     */
-    protected Type  _type;
-
-    /**
-     * The data of the any.
-     * <p>
-     * @see #getObject
-     */
-    protected Object _object;
+package com.sun.star.lib.uno.typedesc;
 
 
-    /**
-     * Constructs a new any.
-     * <p>
-     * @param   zInterface  the type of the any.
-     * @param   object      the data of the any.
-     * @deprecated as of UDK 2.0
-     */
-    public Any(Class zInterface, Object object) {
-        _type   = new Type(zInterface);
-        _object = object;
+import java.lang.reflect.Field;
+
+
+import com.sun.star.uno.IMethodDescription;
+import com.sun.star.uno.ITypeDescription;
+import com.sun.star.uno.IFieldDescription;
+
+import com.sun.star.lib.uno.typeinfo.MemberTypeInfo;
+
+public class FieldDescription extends MemberTypeInfo implements IFieldDescription {
+    ITypeDescription _iTypeDescription;
+    Field _field;
+
+    FieldDescription(MemberTypeInfo memberTypeInfo, Field field) {
+        super(memberTypeInfo.getName(), memberTypeInfo.getFlags());
+
+        _field = field;
     }
 
-    public Any(Type type, Object object) {
-        _type   = type;
-        _object = object;
+    public ITypeDescription getTypeDescription() {
+        if(_iTypeDescription == null)
+            _iTypeDescription = TypeDescription.getTypeDescription(this, getField().getType());
+
+        return _iTypeDescription;
     }
 
-    /**
-     * Gets the type of the any.
-     * <p>
-     * @return   the type of the any.
-     */
-    public Type getType() {
-        return _type;
-    }
-
-    /**
-     * Gets the data of the any.
-     * <p>
-     * @return   the data of the any.
-     */
-    public Object getObject() {
-        return _object;
+      public Field getField() {
+        return _field;
     }
 }
-
-
