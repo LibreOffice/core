@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: cl $ $Date: 2002-07-26 12:42:05 $
+ *  last change: $Author: cl $ $Date: 2002-11-08 14:44:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,7 +234,7 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh) :
     bPresFullScreen(TRUE),
     nPresPause(10),
     bPresShowLogo(FALSE),
-    bCustomShow(TRUE),
+    bCustomShow(false),
     nPresFirstPage(1),
     pOutliner(NULL),
     pInternalOutliner(NULL),
