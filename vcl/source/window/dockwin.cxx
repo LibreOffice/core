@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dockwin.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2005-01-03 17:41:47 $
+ *  last change: $Author: kz $ $Date: 2005-01-13 18:03:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,6 +85,9 @@
 #endif
 #ifndef _SV_TIMER_HXX
 #include <timer.hxx>
+#endif
+#ifndef _SV_WINDOW_H
+#include <window.h>
 #endif
 #include <unowrap.hxx>
 #include <salframe.hxx>
@@ -382,7 +385,7 @@ BOOL DockingWindow::ImplStartDocking( const Point& rPos )
 void DockingWindow::ImplInitData()
 {
     mpImplData              = new ImplData;
-    mbDockWin               = TRUE;
+    mpWindowImpl->mbDockWin               = TRUE;
 
     mpFloatWin              = NULL;
     mbDockCanceled          = FALSE;
@@ -559,7 +562,7 @@ void DockingWindow::Tracking( const TrackingEvent& rTEvt )
         {
             Point   aMousePos = rTEvt.GetMouseEvent().GetPosPixel();
             Point   aFrameMousePos = ImplOutputToFrame( aMousePos );
-            Size    aFrameSize = mpFrameWindow->GetOutputSizePixel();
+            Size    aFrameSize = mpWindowImpl->mpFrameWindow->GetOutputSizePixel();
             if ( aFrameMousePos.X() < 0 )
                 aFrameMousePos.X() = 0;
             if ( aFrameMousePos.Y() < 0 )
@@ -664,8 +667,8 @@ long DockingWindow::Notify( NotifyEvent& rNEvt )
                 {
                     // check if window is floating standalone (IsFloating())
                     // or only partially floating and still docked with one border
-                    // ( !mbFrame)
-                    if( ! IsFloatingMode() || ! mpFloatWin->mbFrame )
+                    // ( !mpWindowImpl->mbFrame)
+                    if( ! IsFloatingMode() || ! mpFloatWin->mpWindowImpl->mbFrame )
                     {
                         Point   aPos = pMEvt->GetPosPixel();
                         Window* pWindow = rNEvt.GetWindow();
@@ -755,7 +758,7 @@ BOOL DockingWindow::Close()
         return FALSE;
     ImplRemoveDel( &aDelData );
 
-    if ( mxWindowPeer.is() && IsCreatedWithToolkit() )
+    if ( mpWindowImpl->mxWindowPeer.is() && IsCreatedWithToolkit() )
         return FALSE;
 
     Show( FALSE, SHOW_NOFOCUSCHANGE );
@@ -877,8 +880,8 @@ void DockingWindow::SetFloatingMode( BOOL bFloatMode )
 
                 maDockPos = Window::GetPosPixel();
 
-                Window* pRealParent = mpRealParent;
-                mpOldBorderWin = mpBorderWindow;
+                Window* pRealParent = mpWindowImpl->mpRealParent;
+                mpOldBorderWin = mpWindowImpl->mpBorderWindow;
 
                 ImplDockFloatWin* pWin =
                     new ImplDockFloatWin(
@@ -886,20 +889,20 @@ void DockingWindow::SetFloatingMode( BOOL bFloatMode )
                                          mnFloatBits & ( WB_MOVEABLE | WB_SIZEABLE | WB_CLOSEABLE ) ?  mnFloatBits | WB_SYSTEMWINDOW : mnFloatBits,
                                          this );
                 mpFloatWin      = pWin;
-                mpBorderWindow  = NULL;
-                mnLeftBorder    = 0;
-                mnTopBorder     = 0;
-                mnRightBorder   = 0;
-                mnBottomBorder  = 0;
+                mpWindowImpl->mpBorderWindow  = NULL;
+                mpWindowImpl->mnLeftBorder    = 0;
+                mpWindowImpl->mnTopBorder     = 0;
+                mpWindowImpl->mnRightBorder   = 0;
+                mpWindowImpl->mnBottomBorder  = 0;
                 // Falls Parent zerstoert wird, muessen wir auch vom
                 // BorderWindow den Parent umsetzen
                 if ( mpOldBorderWin )
                     mpOldBorderWin->SetParent( pWin );
                 SetParent( pWin );
                 SetPosPixel( Point() );
-                mpBorderWindow = pWin;
-                pWin->mpClientWindow = this;
-                mpRealParent = pRealParent;
+                mpWindowImpl->mpBorderWindow = pWin;
+                pWin->mpWindowImpl->mpClientWindow = this;
+                mpWindowImpl->mpRealParent = pRealParent;
                 pWin->SetText( Window::GetText() );
                 pWin->SetOutputSizePixel( Window::GetSizePixel() );
                 pWin->SetPosPixel( maFloatPos );
@@ -934,17 +937,17 @@ void DockingWindow::SetFloatingMode( BOOL bFloatMode )
                 maMinOutSize    = mpFloatWin->GetMinOutputSizePixel();
                 mpImplData->maMaxOutSize = mpFloatWin->GetMaxOutputSizePixel();
 
-                Window* pRealParent = mpRealParent;
-                mpBorderWindow = NULL;
+                Window* pRealParent = mpWindowImpl->mpRealParent;
+                mpWindowImpl->mpBorderWindow = NULL;
                 if ( mpOldBorderWin )
                 {
                     SetParent( mpOldBorderWin );
-                    ((ImplBorderWindow*)mpOldBorderWin)->GetBorder( mnLeftBorder, mnTopBorder, mnRightBorder, mnBottomBorder );
+                    ((ImplBorderWindow*)mpOldBorderWin)->GetBorder( mpWindowImpl->mnLeftBorder, mpWindowImpl->mnTopBorder, mpWindowImpl->mnRightBorder, mpWindowImpl->mnBottomBorder );
                     mpOldBorderWin->Resize();
                 }
-                mpBorderWindow = mpOldBorderWin;
+                mpWindowImpl->mpBorderWindow = mpOldBorderWin;
                 SetParent( pRealParent );
-                mpRealParent = pRealParent;
+                mpWindowImpl->mpRealParent = pRealParent;
                 delete static_cast<ImplDockFloatWin*>(mpFloatWin);
                 mpFloatWin = NULL;
                 SetPosPixel( maDockPos );
@@ -996,7 +999,7 @@ void DockingWindow::SetTabStop()
         return;
     }
 
-    mnStyle |= WB_GROUP | WB_TABSTOP;
+    mpWindowImpl->mnStyle |= WB_GROUP | WB_TABSTOP;
 }
 
 // -----------------------------------------------------------------------
