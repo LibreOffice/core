@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numberingtypelistbox.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:22:28 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 11:59:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -417,8 +417,23 @@ Resource STRRES_NUMTYPES
         < "सुचित्र" ;                     8/*SVX_NUM_BITMAP              */; > ;
         < "कोई नहीं" ;                        5/*SVX_NUM_NUMBER_NONE         */; > ;
     };
+    ItemList [ slovak ] =
+    {
+         < "1, 2, 3, ..." ;                 4/*SVX_NUM_ARABIC              */; > ;
+        < "A, B, C, ..." ;              0/*SVX_NUM_CHARS_UPPER_LETTER  */; > ;
+        < "a, b, c, ..." ;              1/*SVX_NUM_CHARS_LOWER_LETTER  */; > ;
+        < "I, II, III, ..." ;           2/*SVX_NUM_ROMAN_UPPER         */; > ;
+        < "i, ii, iii, ..." ;           3/*SVX_NUM_ROMAN_LOWER         */; > ;
+        < "A, .., AA, .., AAA, ..." ;   9/*SVX_NUM_CHARS_UPPER_LETTER_N*/; > ;
+        < "a, .., aa, .., aaa, ..." ;  10/*SVX_NUM_CHARS_LOWER_LETTER_N*/; > ;
+        < "Odrážka" ;                     6/*SVX_NUM_CHAR_SPECIAL        */; > ;
+        < "Obrázky" ;                  8/*SVX_NUM_BITMAP              */; > ;
+        < "Žiadne" ;                       5/*SVX_NUM_NUMBER_NONE         */; > ;
+    };
     };
 };
+
+
 
 
 
