@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.8 $
+#   $Revision: 1.9 $
 #
-#   last change: $Author: ab $ $Date: 2001-03-03 14:48:09 $
+#   last change: $Author: tbe $ $Date: 2001-03-16 13:45:26 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -137,7 +137,8 @@ LIB1FILES       = \
 SRSFILELIST=\
                 $(SRS)$/vctrls.srs \
                 $(SRS)$/basicide.srs \
-                $(SRS)$/ibrw.srs
+                $(SRS)$/ibrw.srs \
+                $(SRS)$/dlged.srs
                 
 SRSFILELIST+=   $(SOLARVERSION)$/$(INPATH)$/res$(UPDMINOREXT)$/sfx.srs
 
