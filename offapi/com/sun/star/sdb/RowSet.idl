@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.idl,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-25 11:09:01 $
+ *  last change: $Author: obo $ $Date: 2003-10-20 13:17:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -271,28 +271,26 @@ service RowSet
 
     /** is the command which should be executed, the type of command depends
         on the CommandType.
+
+        <p>In case of a <member>CommandType</member> of <member>CommandType::COMMAND</member>,
+        means in case the <member>Command</member> specifies an SQL statement, the inherited
+        <member scope="com::sun::star::sdbc">RowSet::EscapeProcessing</member>
+        becomes relevant:<br/>
+        It then can be to used to specify whether the SQL statement should be analyzed on the
+        client side before sending it to the database server.<br/>
+        The default value for <member scope="com::sun::star::sdbc">RowSet::EscapeProcessing</member>
+        is <TRUE/>. By switching it to <FALSE/>, you can pass backend-specific SQL statements,
+        which are not standard SQL, to your database.</p>
+
         @see com::sun::star::sdb::CommandType
+        @see com::sun::star::sdbc::RowSet::EscapeProcessing
      */
     [property] string Command;
-
 
     /** is the type of the command.
         @see com::sun::star::sdb::CommandType
      */
     [property] long CommandType;
-
-    // note: the EscapeProcessing is not really optional, but we needed to declare it this way because
-    // the service was already frozen
-    /** specifies if the <member>Command</member> should be analyzed on the client side before sending it
-        to the database server.
-
-        <p>The default value of this property is <TRUE/>. By switching it to <FALSE/>, you can pass
-        backend-specific SQL statements, which are not standard SQL, to your database.</p>
-
-        <p>This property is evaluated if and only if <member>CommandType</member> equals <member>CommandType::COMMAND</member>.</p>
-    */
-    [optional, property] boolean EscapeProcessing;
-
 
     /** is the command which is currently used.
         @see com::sun::star::sdb::CommandType
