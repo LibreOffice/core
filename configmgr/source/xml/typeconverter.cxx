@@ -2,9 +2,9 @@
  *
  *  $RCSfile: typeconverter.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: lla $ $Date: 2000-09-22 14:29:49 $
+ *  last change: $Author: lla $ $Date: 2000-10-10 14:57:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,7 @@ namespace configmgr
         case ::staruno::TypeClass_BYTE:
         case ::staruno::TypeClass_SHORT:
         case ::staruno::TypeClass_LONG:
+        case ::staruno::TypeClass_HYPER:
         case ::staruno::TypeClass_FLOAT:
         case ::staruno::TypeClass_DOUBLE:
             if (!xTypeConverter.is())
