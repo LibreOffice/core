@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ucbstorage.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: mav $ $Date: 2002-02-21 13:00:06 $
+ *  last change: $Author: mav $ $Date: 2002-03-05 12:51:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -427,7 +427,7 @@ SvGlobalName GetClassId_Impl( sal_Int32 nFormat )
         case SOT_FORMATSTR_ID_STARMATH_60 :
             return SvGlobalName( SO3_SM_CLASSID_60 );
         default :
-            DBG_ERROR( "Unknown UCB storage format!" );
+            //DBG_ERROR( "Unknown UCB storage format!" );
             return SvGlobalName();
     }
 }
