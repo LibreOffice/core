@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh3.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 20:38:40 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 16:22:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -652,7 +652,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
                     if(pFact)
                     {
-                        AbstractSvxZoomDialog* pDlg = pFact->CreateSvxZoomDialog(GetDialogParent(), aSet, ResId(RID_SVXDLG_ZOOM));
+                        pDlg = pFact->CreateSvxZoomDialog(GetDialogParent(), aSet, ResId(RID_SVXDLG_ZOOM));
                         DBG_ASSERT(pDlg, "Dialogdiet fail!");//CHINA001
                     }
                     pDlg->SetLimits( MINZOOM, MAXZOOM );
