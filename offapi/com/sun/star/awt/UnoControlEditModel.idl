@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoControlEditModel.idl,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 15:45:15 $
+ *  last change: $Author: kz $ $Date: 2005-03-18 14:15:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,16 +61,16 @@
 #ifndef __com_sun_star_awt_UnoControlEditModel_idl__
 #define __com_sun_star_awt_UnoControlEditModel_idl__
 
+#ifndef __com_sun_star_awt_FontDescriptor_idl__
+#include <com/sun/star/awt/FontDescriptor.idl>
+#endif
+
 #ifndef __com_sun_star_awt_UnoControlModel_idl__
 #include <com/sun/star/awt/UnoControlModel.idl>
 #endif
 
 #ifndef __com_sun_star_util_Color_idl__
 #include <com/sun/star/util/Color.idl>
-#endif
-
-#ifndef __com_sun_star_awt_FontDescriptor_idl__
-#include <com/sun/star/awt/FontDescriptor.idl>
 #endif
 
 
@@ -88,7 +88,7 @@ published service UnoControlEditModel
 
     //-------------------------------------------------------------------------
 
-    /** specifies the alignment of the text in the control.
+    /** specifies the horizontal alignment of the text in the control.
 
         <pre>
         0: left
@@ -161,13 +161,6 @@ published service UnoControlEditModel
 
     //-------------------------------------------------------------------------
 
-    /** specifies if the content of the control can be scrolled in
-        the horizontal direction.
-     */
-    [property] boolean HScroll;
-
-    //-------------------------------------------------------------------------
-
     /** specifies if hard line breaks will be returned in the
         <member>XTextComponent::getText</member> method.
      */
@@ -184,6 +177,41 @@ published service UnoControlEditModel
     /** specifies the help URL of the control.
      */
     [property] string HelpURL;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies whether the selection in the control should be hidden when
+        the control is not active (focused).
+
+        @since OOo 2.0.0
+     */
+    [optional, property] boolean HideInactiveSelection;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies if the content of the control can be scrolled in
+        the horizontal direction.
+     */
+    [property] boolean HScroll;
+
+    //-------------------------------------------------------------------------
+
+    /** specifies which line end type should be used for multi line text
+
+        <p>Controls working with this model care for this setting when the user enters
+        text. Every line break entered into the control will be treated according to this
+        setting, so that the <member>Text</member> property always contains only
+        line ends in the format specified.</p>
+
+        <p>Possible values are all constants from the <type>LineEndFormat</type> group.</p>
+
+        <p>Note that this setting is usually not relevant when you set new text via the API.
+        No matter which line end format is used in this new text then, usual control implementations
+        should recognize all line end formats and display them properly.</p>
+
+        @since OOo 2.0.0
+     */
+    [optional, property] short LineEndFormat;
 
     //-------------------------------------------------------------------------
 
@@ -242,31 +270,6 @@ published service UnoControlEditModel
      */
     [property] boolean VScroll;
 
-    //-------------------------------------------------------------------------
-
-    /** specifies which line end type should be used for multi line text
-
-        <p>Controls working with this model care for this setting when the user enters
-        text. Every line break entered into the control will be treated according to this
-        setting, so that the <member>Text</member> property always contains only
-        line ends in the format specified.</p>
-
-        <p>Possible values are all constants from the <type>LineEndFormat</type> group.</p>
-
-        <p>Note that this setting is usually not relevant when you set new text via the API.
-        No matter which line end format is used in this new text then, usual control implementations
-        should recognize all line end formats and display them properly.</p>
-
-        @since OOo 2.0.0
-     */
-    [optional, property] short LineEndFormat;
-
-    //-------------------------------------------------------------------------
-
-    /** specifies whether the selection in the control should be hidden when the control is not
-        active (focused).
-    */
-    [optional, property] boolean HideInactiveSelection;
 };
 
 //=============================================================================
