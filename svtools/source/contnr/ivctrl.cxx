@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ivctrl.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: pb $ $Date: 2002-09-16 07:50:53 $
+ *  last change: $Author: pb $ $Date: 2002-09-16 09:52:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -616,7 +616,7 @@ void SvtIconChoiceCtrl::FillLayoutData() const
     SvtIconChoiceCtrl* pNonConstMe = const_cast< SvtIconChoiceCtrl* >( this );
 
     // loop through all entries
-    sal_uInt16 nCount = GetEntryCount();
+    sal_uInt16 nCount = (sal_uInt16)GetEntryCount();
     sal_uInt16 nPos = 0;
     while ( nPos < nCount )
     {
