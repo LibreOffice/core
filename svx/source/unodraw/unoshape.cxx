@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: cl $ $Date: 2000-12-14 09:43:48 $
+ *  last change: $Author: cl $ $Date: 2000-12-20 12:08:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1184,10 +1184,9 @@ void SAL_CALL SvxShape::setPropertyValue( const OUString& rPropertyName, const u
         case OWN_ATTR_MEASURE_END_POS:
         {
             SdrMeasureObj* pMeasureObj = PTR_CAST(SdrMeasureObj,pObj);
-            if(pMeasureObj)
+            awt::Point aUnoPoint;
+            if(pMeasureObj && ( rVal >>= aUnoPoint ) )
             {
-                awt::Point aUnoPoint;
-                rVal >>= aUnoPoint;
                 Point aPoint( aUnoPoint.X, aUnoPoint.Y );
 
                 pMeasureObj->NbcSetPoint( aPoint, pMap->nWID == OWN_ATTR_MEASURE_START_POS ? 0 : 1 );
@@ -1195,6 +1194,72 @@ void SAL_CALL SvxShape::setPropertyValue( const OUString& rPropertyName, const u
                 pMeasureObj->SetChanged();
                 return;
             }
+            break;
+        }
+
+        case SDRATTR_LAYERID:
+        {
+            sal_Int32 nLayerId;
+            if( rVal >>= nLayerId )
+            {
+                SdrLayer* pLayer = pModel->GetLayerAdmin().GetLayerPerID((unsigned char)nLayerId);
+                if( pLayer )
+                {
+                    pObj->SetLayer((unsigned char)nLayerId);
+                    return;
+                }
+            }
+            break;
+        }
+
+        case SDRATTR_LAYERNAME:
+        {
+            OUString aLayerName;
+            if( rVal >>= aLayerName )
+            {
+                const SdrLayer* pLayer=pModel->GetLayerAdmin().GetLayer(aLayerName, TRUE);
+                if( pLayer != NULL )
+                {
+                    pObj->SetLayer( pLayer->GetID() );
+                    return;
+                }
+            }
+            break;
+        }
+        case SDRATTR_ROTATEANGLE:
+        {
+            sal_Int32 nAngle;
+            if( rVal >>= nAngle )
+            {
+                Point aRef1(pObj->GetSnapRect().Center());
+                nAngle -= pObj->GetRotateAngle();
+                if (nAngle!=0)
+                {
+                    double nSin=sin(nAngle*nPi180);
+                    double nCos=cos(nAngle*nPi180);
+                    pObj->NbcRotate(aRef1,nAngle,nSin,nCos);
+                    return;
+                }
+            }
+
+            break;
+        }
+
+        case SDRATTR_SHEARANGLE:
+        {
+            sal_Int32 nShear;
+            if( rVal >>= nShear )
+            {
+                nShear -= pObj->GetShearAngle();
+                if(nShear != 0 )
+                {
+                    Point aRef1(pObj->GetSnapRect().Center());
+                    double nTan=tan(nShear*nPi180);
+                    pObj->NbcShear(aRef1,nShear,nTan,FALSE);
+                    return;
+                }
+            }
+
             break;
         }
 
@@ -1219,6 +1284,9 @@ void SAL_CALL SvxShape::setPropertyValue( const OUString& rPropertyName, const u
         }
         default:
         {
+            DBG_ASSERT( pMap->nWID < SDRATTR_NOTPERSIST_FIRST || pMap->nWID > SDRATTR_NOTPERSIST_LAST, "Not persist item not handled!" );
+            DBG_ASSERT( pMap->nWID < OWN_ATTR_VALUE_START || pMap->nWID > OWN_ATTR_VALUE_END, "Not item property not handled!" );
+
             SfxItemSet aSet( pModel->GetItemPool(), pMap->nWID, pMap->nWID);
 //-/                pObj->TakeAttributes( aSet, sal_False, sal_False );
             aSet.Put(pObj->GetItem(pMap->nWID));
@@ -1551,8 +1619,30 @@ uno::Any SAL_CALL SvxShape::getPropertyValue( const OUString& PropertyName )
                 }
                 break;
             }
+            case SDRATTR_LAYERID:
+                aAny <<= pObj->GetLayer();
+                break;
+            case SDRATTR_LAYERNAME:
+                {
+                    SdrLayer* pLayer = pModel->GetLayerAdmin().GetLayerPerID(pObj->GetLayer());
+                    if( pLayer )
+                    {
+                        OUString aName( pLayer->GetName() );
+                        aAny <<= aName;
+                    }
+                }
+                break;
+            case SDRATTR_ROTATEANGLE:
+                aAny <<= pObj->GetRotateAngle();
+                break;
+            case SDRATTR_SHEARANGLE:
+                aAny <<= pObj->GetShearAngle();
+                break;
             default:
             {
+                DBG_ASSERT( pMap->nWID < SDRATTR_NOTPERSIST_FIRST || pMap->nWID > SDRATTR_NOTPERSIST_LAST, "Not persist item not handled!" );
+                DBG_ASSERT( pMap->nWID < OWN_ATTR_VALUE_START || pMap->nWID > OWN_ATTR_VALUE_END, "Not item property not handled!" );
+
                 SfxItemSet aSet( pModel->GetItemPool(), pMap->nWID, pMap->nWID);
 //-/                pObj->TakeAttributes( aSet, sal_False, sal_False );
 //-/                aSet.Put(pObj->GetItemSet());
@@ -1717,7 +1807,8 @@ beans::PropertyState SAL_CALL SvxShape::getPropertyState( const OUString& Proper
     if( pObj == NULL || pMap == NULL )
         throw beans::UnknownPropertyException();
 
-    if(pMap->nWID >= OWN_ATTR_VALUE_START && pMap->nWID <= OWN_ATTR_VALUE_END)
+    if(( pMap->nWID >= OWN_ATTR_VALUE_START && pMap->nWID <= OWN_ATTR_VALUE_END ) ||
+       ( pMap->nWID >= SDRATTR_NOTPERSIST_FIRST && pMap->nWID <= SDRATTR_NOTPERSIST_LAST ))
     {
         return beans::PropertyState_DIRECT_VALUE;
     }
@@ -1766,7 +1857,8 @@ void SAL_CALL SvxShape::setPropertyToDefault( const OUString& PropertyName )
     if( pObj == NULL || pModel == NULL || pMap == NULL )
         throw beans::UnknownPropertyException();
 
-    if(pMap->nWID >= OWN_ATTR_VALUE_START && pMap->nWID <= OWN_ATTR_VALUE_END)
+    if((pMap->nWID >= OWN_ATTR_VALUE_START && pMap->nWID <= OWN_ATTR_VALUE_END ) ||
+       ( pMap->nWID >= SDRATTR_NOTPERSIST_FIRST && pMap->nWID <= SDRATTR_NOTPERSIST_LAST ))
     {
         return;
     }
@@ -1788,7 +1880,8 @@ uno::Any SAL_CALL SvxShape::getPropertyDefault( const OUString& aPropertyName )
     if( pObj == NULL || pMap == NULL )
         throw beans::UnknownPropertyException();
 
-    if(pMap->nWID >= OWN_ATTR_VALUE_START && pMap->nWID <= OWN_ATTR_VALUE_END)
+    if(( pMap->nWID >= OWN_ATTR_VALUE_START && pMap->nWID <= OWN_ATTR_VALUE_END ) ||
+       ( pMap->nWID >= SDRATTR_NOTPERSIST_FIRST && pMap->nWID <= SDRATTR_NOTPERSIST_LAST ))
     {
         return getPropertyValue( aPropertyName );
     }
