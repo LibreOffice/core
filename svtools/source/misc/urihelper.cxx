@@ -2,9 +2,9 @@
  *
  *  $RCSfile: urihelper.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sb $ $Date: 2002-07-19 15:10:50 $
+ *  last change: $Author: sb $ $Date: 2002-08-13 08:25:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -274,14 +274,6 @@ Link URIHelper::GetMaybeFileHdl()
 
 namespace unnamed_svtools_urihelper {
 
-inline xub_StrLen prevChar(UniString const & rStr, xub_StrLen nPos)
-{
-    return INetMIME::isLowSurrogate(rStr.GetChar(nPos - 1))
-           && nPos >= 2
-           && INetMIME::isHighSurrogate(rStr.GetChar(nPos - 2)) ?
-               nPos - 2 : nPos - 1;
-}
-
 inline xub_StrLen nextChar(UniString const & rStr, xub_StrLen nPos)
 {
     return INetMIME::isHighSurrogate(rStr.GetChar(nPos))
@@ -290,19 +282,66 @@ inline xub_StrLen nextChar(UniString const & rStr, xub_StrLen nPos)
                nPos + 2 : nPos + 1;
 }
 
-inline bool isWLetter(CharClass const & rCharClass,
-                      UniString const & rStr, xub_StrLen nPos)
+bool isBoundary1(CharClass const & rCharClass, UniString const & rStr,
+                 xub_StrLen nPos, xub_StrLen nEnd)
 {
-    if (rCharClass.isLetterNumeric(rStr, nPos))
+    if (nPos == nEnd)
         return true;
-    sal_Unicode c = rStr.GetChar(nPos);
-    return c == '$' || c == '%' || c == '&' || c == '-' || c == '/'
-           || c == '@' || c == '\\';
+    if (rCharClass.isLetterNumeric(rStr, nPos))
+        return false;
+    switch (rStr.GetChar(nPos))
+    {
+    case '$':
+    case '%':
+    case '&':
+    case '-':
+    case '/':
+    case '@':
+    case '\\':
+        return false;
+    default:
+        return true;
+    }
 }
 
-inline bool checkWChar(CharClass const & rCharClass, UniString const & rStr,
-                       xub_StrLen * pPos, xub_StrLen * pEnd,
-                       bool bBackslash = false, bool bPipe = false)
+bool isBoundary2(CharClass const & rCharClass, UniString const & rStr,
+                 xub_StrLen nPos, xub_StrLen nEnd)
+{
+    if (nPos == nEnd)
+        return true;
+    if (rCharClass.isLetterNumeric(rStr, nPos))
+        return false;
+    switch (rStr.GetChar(nPos))
+    {
+    case '!':
+    case '#':
+    case '$':
+    case '%':
+    case '&':
+    case '\'':
+    case '*':
+    case '+':
+    case '-':
+    case '/':
+    case '=':
+    case '?':
+    case '@':
+    case '^':
+    case '_':
+    case '`':
+    case '{':
+    case '|':
+    case '}':
+    case '~':
+        return false;
+    default:
+        return true;
+    }
+}
+
+bool checkWChar(CharClass const & rCharClass, UniString const & rStr,
+                xub_StrLen * pPos, xub_StrLen * pEnd, bool bBackslash = false,
+                bool bPipe = false)
 {
     sal_Unicode c = rStr.GetChar(*pPos);
     if (INetMIME::isUSASCII(c))
@@ -312,11 +351,11 @@ inline bool checkWChar(CharClass const & rCharClass, UniString const & rStr,
                 0, 0, 0, 0, 0, 0, 0, 0,
                 0, 0, 0, 0, 0, 0, 0, 0,
                 0, 0, 0, 0, 0, 0, 0, 0,
-                0, 1, 0, 0, 1, 1, 1, 1,   //  !"#$%&'
-                1, 1, 1, 1, 1, 1, 1, 1,   // ()*+,-./
+                0, 1, 0, 0, 4, 4, 4, 1,   //  !"#$%&'
+                1, 1, 1, 1, 1, 4, 1, 4,   // ()*+,-./
                 4, 4, 4, 4, 4, 4, 4, 4,   // 01234567
                 4, 4, 1, 1, 0, 1, 0, 1,   // 89:;<=>?
-                1, 4, 4, 4, 4, 4, 4, 4,   // @ABCDEFG
+                4, 4, 4, 4, 4, 4, 4, 4,   // @ABCDEFG
                 4, 4, 4, 4, 4, 4, 4, 4,   // HIJKLMNO
                 4, 4, 4, 4, 4, 4, 4, 4,   // PQRSTUVW
                 4, 4, 4, 1, 2, 1, 0, 1,   // XYZ[\]^_
@@ -351,7 +390,8 @@ inline bool checkWChar(CharClass const & rCharClass, UniString const & rStr,
                 else
                     return false;
 
-            case 4: // letter, ...
+            case 4: // alpha, digit, "$", "%", "&", "-", "/", "@" (see
+                    // isBoundary1)
                 *pEnd = ++(*pPos);
                 return true;
         }
@@ -365,25 +405,14 @@ inline bool checkWChar(CharClass const & rCharClass, UniString const & rStr,
         return false;
 }
 
-inline sal_uInt32
-scanDomain(UniString const & rStr, xub_StrLen * pPos, xub_StrLen nEnd)
+sal_uInt32 scanDomain(UniString const & rStr, xub_StrLen * pPos,
+                      xub_StrLen nEnd)
 {
     sal_Unicode const * pBuffer = rStr.GetBuffer();
     sal_Unicode const * p = pBuffer + *pPos;
     sal_uInt32 nLabels = INetURLObject::scanDomain(p, pBuffer + nEnd, false);
     *pPos = p - pBuffer;
     return nLabels;
-}
-
-inline bool
-scanIPv6reference(UniString const & rStr, xub_StrLen * pPos, xub_StrLen nEnd)
-{
-    sal_Unicode const * pBuffer = rStr.GetBuffer();
-    sal_Unicode const * p = pBuffer + *pPos;
-    bool bSuccess
-        = INetURLObject::scanIPv6reference(p, pBuffer + nEnd, false);
-    *pPos = p - pBuffer;
-    return bSuccess;
 }
 
 }
@@ -400,240 +429,287 @@ URIHelper::FindFirstURLInText(UniString const & rText,
     if (!(rBegin <= rEnd && rEnd <= rText.Len()))
         return UniString();
 
-    // Search for the first (longest possible) substring of [pBegin..pEnd[
-    // that matches any of the following productions (for which the
-    // appropriate style bit is set in eStyle, if applicable).  "\W" stands
-    // for a word break, i.e., the begin or end of the block of text, or a
-    // character that is neither a letter nor a digit (according to
-    // rCharClass).  The productions use the auxiliary rules
+    // Search for the first substring of [pBegin..pEnd[ that matches any of the
+    // following productions (for which the appropriate style bit is set in
+    // eStyle, if applicable).
     //
+    // 1st Production (known scheme):
+    //    \B1 <one of the known schemes, except file> ":" 1*wchar ["#" 1*wchar]
+    //        \B1
+    //
+    // 2nd Production (file):
+    //    \B1 "FILE:" 1*(wchar / "\" / "|") ["#" 1*wchar] \B1
+    //
+    // 3rd Production (ftp):
+    //    \B1 "FTP" 2*("." label) ["/" *wchar] ["#" 1*wchar] \B1
+    //
+    // 4th Production (http):
+    //    \B1 "WWW" 2*("." label) ["/" *wchar] ["#" 1*wchar] \B1
+    //
+    // 5th Production (mailto):
+    //    \B2 local-part "@" domain \B1
+    //
+    // 6th Production (UNC file):
+    //    \B1 "\\" domain "\" *(wchar / "\") \B1
+    //
+    // 7th Production (DOS file):
+    //    \B1 ALPHA ":\" *(wchar / "\") \B1
+    //
+    // 8th Production (Unix-like DOS file):
+    //    \B1 ALPHA ":/" *(wchar / "\") \B1
+    //
+    // The productions use the following auxiliary rules.
+    //
+    //    local-part = atom *("." atom)
+    //    atom = 1*(alphanum / "!" / "#" / "$" / "%" / "&" / "'" / "*" / "+"
+    //              / "-" / "/" / "=" / "?" / "^" / "_" / "`" / "{" / "|" / "}"
+    //              / "~")
     //    domain = label *("." label)
     //    label = alphanum [*(alphanum / "-") alphanum]
     //    alphanum = ALPHA / DIGIT
-    //    IPv6reference = "[" IPv6address "]"
-    //    IPv6address = hexpart [":" IPv4address]
-    //    IPv4address = 1*3DIGIT 3("." 1*3DIGIT)
-    //    hexpart = (hexseq ["::" [hexseq]]) / ("::" [hexseq])
-    //    hexseq = hex4 *(":" hex4)
-    //    hex4 = 1*4HEXDIG
     //    wchar = <any uric character (ignoring the escaped rule), or "%", or
     //             a letter or digit (according to rCharClass)>
     //
-    // 1st Production (file):
-    //    \W "file:" 1*(wchar / "\" / "|") ["#" 1*wchar] \W
+    // "\B1" (boundary 1) stands for the beginning or end of the block of text,
+    // or a character that is neither (a) a letter or digit (according to
+    // rCharClass), nor (b) any of "$", "%", "&", "-", "/", "@", or "\".
+    // (FIXME:  What was the rationale for this set of punctuation characters?)
     //
-    // 2nd Production (known scheme):
-    //    \W <one of the known schemes, ignoring case> ":" 1*wchar
-    //        ["#" 1*wchar] \W
+    // "\B2" (boundary 2) stands for the beginning or end of the block of text,
+    // or a character that is neither (a) a letter or digit (according to
+    // rCharClass), nor (b) any of "!", "#", "$", "%", "&", "'", "*", "+", "-",
+    // "/", "=", "?", "@", "^", "_", "`", "{", "|", "}", or "~" (i.e., an RFC
+    // 822 <atom> character, or "@" from \B1's set above).
     //
-    // 3rd Production (mailto):
-    //    \W domain "@" domain \W
+    // Productions 1--4, and 6--8 try to find a maximum-length match, but they
+    // stop at the first <wchar> character that is a "\B1" character which is
+    // only followed by "\B1" characters (taking "\" and "|" characters into
+    // account appropriately).  Production 5 simply tries to find a maximum-
+    // length match.
     //
-    // 4th Production (ftp):
-    //    \W "FTP" 2*("." label) ["/" *wchar] ["#" 1*wchar] \W
+    // Productions 1--4 use the given eMechanism and eCharset.  Productions 5--9
+    // use ENCODE_ALL.
     //
-    // 5th Production (http):
-    //    \W "WWW" 2*("." label) ["/" *wchar] ["#" 1*wchar] \W
-    //
-    // 6th Production (file):
-    //    \W "//" (domain / IPv6reference) ["/" *wchar] ["#" 1*wchar] \W
-    //
-    // 7th Production (Unix file; FSYS_UNX only): @@@ DISABLED @@@
-    //    \W "/" 1*wchar \W
-    //
-    // 8th Production (UNC file; FSYS_DOS only):
-    //    \W "\\" domain ["\" *(wchar / "\")] \W
-    //
-    // 9th Production (Unix-like DOS file; FSYS_DOS only):
-    //    \W ALPHA ":/" *wchar \W
-    //
-    // 10th Production (DOS file; FSYS_DOS only):
-    //    \W ALPHA ":\" *(wchar / "\") \W
+    // Productions 6--9 are only applicable if the FSYS_DOS bit is set in
+    // eStyle.
 
-    for (xub_StrLen nPos = rBegin; nPos != rEnd;)
+    bool bBoundary1 = true;
+    bool bBoundary2 = true;
+    for (xub_StrLen nPos = rBegin; nPos != rEnd; nPos = nextChar(rText, nPos))
     {
         sal_Unicode c = rText.GetChar(nPos);
-        if ((INetMIME::isAlpha(c) || c == '/' || c == '\\')
-            && (nPos == rBegin
-                || !isWLetter(rCharClass, rText, prevChar(rText, nPos))))
+        if (bBoundary1)
         {
-            xub_StrLen nURIEnd = STRING_NOTFOUND;
-
             if (INetMIME::isAlpha(c))
             {
                 xub_StrLen i = nPos;
                 INetProtocol eScheme
                     = INetURLObject::CompareProtocolScheme(UniString(rText, i,
                                                                      rEnd));
-                if (eScheme != INET_PROT_NOT_VALID) // 1st, 2nd
+                if (eScheme == INET_PROT_FILE) // 2nd
                 {
                     while (rText.GetChar(i++) != ':');
                     xub_StrLen nPrefixEnd = i;
-                    if (eScheme == INET_PROT_FILE)
-                        while (i != rEnd
-                               && checkWChar(rCharClass, rText, &i, &nURIEnd,
-                                             true, true));
-                    else
-                        while (i != rEnd
-                               && checkWChar(rCharClass, rText, &i,
-                                             &nURIEnd));
+                    xub_StrLen nUriEnd = i;
+                    while (i != rEnd
+                           && checkWChar(rCharClass, rText, &i, &nUriEnd, true,
+                                         true));
                     if (i != nPrefixEnd && rText.GetChar(i) == '#')
                     {
                         ++i;
                         while (i != rEnd
-                               && checkWChar(rCharClass, rText, &i,
-                                             &nURIEnd));
+                               && checkWChar(rCharClass, rText, &i, &nUriEnd));
+                    }
+                    if (isBoundary1(rCharClass, rText, nUriEnd, rEnd))
+                    {
+                        INetURLObject aUri(UniString(rText, nPos,
+                                                     nUriEnd - nPos),
+                                           INET_PROT_FILE, eMechanism, eCharset,
+                                           eStyle);
+                        if (!aUri.HasError())
+                        {
+                            rBegin = nPos;
+                            rEnd = nUriEnd;
+                            return aUri.GetMainURL();
+                        }
                     }
                 }
-                else if (eStyle & INetURLObject::FSYS_DOS
-                         && rEnd - i >= 3
-                         && rText.GetChar(i + 1) == ':'
-                         && rText.GetChar(i + 2) == '/') // 9th
+                else if (eScheme != INET_PROT_NOT_VALID) // 1st
                 {
-                    i += 3;
-                    nURIEnd = i;
+                    while (rText.GetChar(i++) != ':');
+                    xub_StrLen nPrefixEnd = i;
+                    xub_StrLen nUriEnd = i;
                     while (i != rEnd
-                           && checkWChar(rCharClass, rText, &i, &nURIEnd));
-                }
-                else if (eStyle & INetURLObject::FSYS_DOS
-                         && rEnd - i >= 3
-                         && rText.GetChar(i + 1) == ':'
-                         && rText.GetChar(i + 2) == '\\') // 10th
-                {
-                    i += 3;
-                    nURIEnd = i;
-                    while (i != rEnd
-                           && checkWChar(rCharClass, rText, &i, &nURIEnd,
-                                         true));
-                }
-                else
-                {
-                    sal_uInt32 nLabels = scanDomain(rText, &i, rEnd);
-                    if (nLabels > 0 && i != rEnd && rText.GetChar(i) == '@')
-                        // 3rd
+                           && checkWChar(rCharClass, rText, &i, &nUriEnd));
+                    if (i != nPrefixEnd && rText.GetChar(i) == '#')
                     {
                         ++i;
-                        if (scanDomain(rText, &i, rEnd) > 0)
-                            nURIEnd = i;
+                        while (i != rEnd
+                               && checkWChar(rCharClass, rText, &i, &nUriEnd));
                     }
-                    else if (nLabels >= 3
-                             && rText.GetChar(nPos + 3) == '.'
-                             && (((rText.GetChar(nPos) == 'w'
-                                   || rText.GetChar(nPos) == 'W')
-                                  && (rText.GetChar(nPos + 1) == 'w'
-                                      || rText.GetChar(nPos + 1) == 'W')
-                                  && (rText.GetChar(nPos + 2) == 'w'
-                                      || rText.GetChar(nPos + 2) == 'W'))
-                                 || ((rText.GetChar(nPos) == 'f'
-                                      || rText.GetChar(nPos) == 'F')
-                                     && (rText.GetChar(nPos + 1) == 't'
-                                         || rText.GetChar(nPos + 1) == 'T')
-                                     && (rText.GetChar(nPos + 2) == 'p'
-                                         || rText.GetChar(nPos + 2) == 'P'))))
-                        // 4th, 5th
-                        // (note that rText.GetChar(nPos + 3) is guaranteed to
-                        // be valid)
+                    if (isBoundary1(rCharClass, rText, nUriEnd, rEnd)
+                        || rText.GetChar(nUriEnd) == '\\')
                     {
-                        nURIEnd = i;
-                        if (i != rEnd && rText.GetChar(i) == '/')
+                        INetURLObject aUri(UniString(rText, nPos,
+                                                     nUriEnd - nPos),
+                                           INET_PROT_HTTP, eMechanism,
+                                           eCharset);
+                        if (!aUri.HasError())
                         {
-                            nURIEnd = ++i;
-                            while (i != rEnd
-                                   && checkWChar(rCharClass, rText, &i,
-                                                 &nURIEnd));
-                        }
-                        if (i != rEnd && rText.GetChar(i) == '#')
-                        {
-                            ++i;
-                            while (i != rEnd
-                                   && checkWChar(rCharClass, rText, &i,
-                                                 &nURIEnd));
+                            rBegin = nPos;
+                            rEnd = nUriEnd;
+                            return aUri.GetMainURL();
                         }
                     }
                 }
-            }
-            else if (c == '/')
-            {
-                xub_StrLen i = nPos;
-                if (rEnd - i >= 2)
-                    if (rText.GetChar(i + 1) == '/') // 6th
-                    {
-                        i += 2;
-                        if (scanDomain(rText, &i, rEnd) > 0
-                            || scanIPv6reference(rText, &i, rEnd))
-                        {
-                            nURIEnd = i;
-                            if (i != rEnd && rText.GetChar(i) == '/')
-                            {
-                                nURIEnd = ++i;
-                                while (i != rEnd
-                                       && checkWChar(rCharClass, rText, &i,
-                                                     &nURIEnd));
-                            }
-                            if (i != rEnd && rText.GetChar(i) == '#')
-                            {
-                                ++i;
-                                while (i != rEnd
-                                       && checkWChar(rCharClass, rText, &i,
-                                                     &nURIEnd));
-                            }
-                        }
-                    }
-//                  else if (eStyle & INetURLObject::FSYS_UNX) // 7th
-//                  {
-//                      ++i;
-//                      while (i != rEnd
-//                             && checkWChar(rCharClass, rText, &i,
-//                                           &nURIEnd));
-//                  }
-            }
-            else if (eStyle & INetURLObject::FSYS_DOS && c == '\\') // 8th
-            {
-                xub_StrLen i = nPos;
-                if (rEnd - i >= 2 && rText.GetChar(i + 1) == '\\')
-                {
-                    i += 2;
-                    if (scanDomain(rText, &i, rEnd) > 0)
-                    {
-                        nURIEnd = i;
-                        if (i != rEnd && rText.GetChar(i) == '\\')
-                        {
-                            nURIEnd = ++i;
-                            while (i != rEnd
-                                   && checkWChar(rCharClass, rText, &i,
-                                                 &nURIEnd, true));
-                        }
-                    }
-                }
-            }
 
-            if (nURIEnd != STRING_NOTFOUND
-                && (nURIEnd == rEnd
-                    || !isWLetter(rCharClass, rText, nURIEnd)))
-            {
-                INetURLObject aURI(UniString(rText, nPos, nURIEnd - nPos),
-                                   INET_PROT_HTTP, eMechanism, eCharset,
-                                   eStyle);
-                if (!aURI.HasError())
+                // 3rd, 4th:
+                i = nPos;
+                sal_uInt32 nLabels = scanDomain(rText, &i, rEnd);
+                if (nLabels >= 3
+                    && rText.GetChar(nPos + 3) == '.'
+                    && (((rText.GetChar(nPos) == 'w'
+                          || rText.GetChar(nPos) == 'W')
+                         && (rText.GetChar(nPos + 1) == 'w'
+                             || rText.GetChar(nPos + 1) == 'W')
+                         && (rText.GetChar(nPos + 2) == 'w'
+                             || rText.GetChar(nPos + 2) == 'W'))
+                        || ((rText.GetChar(nPos) == 'f'
+                             || rText.GetChar(nPos) == 'F')
+                            && (rText.GetChar(nPos + 1) == 't'
+                                || rText.GetChar(nPos + 1) == 'T')
+                            && (rText.GetChar(nPos + 2) == 'p'
+                                || rText.GetChar(nPos + 2) == 'P'))))
+                    // (note that rText.GetChar(nPos + 3) is guaranteed to be
+                    // valid)
                 {
-                    rBegin = nPos;
-                    rEnd = nURIEnd;
-                    return aURI.GetMainURL();
+                    xub_StrLen nUriEnd = i;
+                    if (i != rEnd && rText.GetChar(i) == '/')
+                    {
+                        nUriEnd = ++i;
+                        while (i != rEnd
+                               && checkWChar(rCharClass, rText, &i, &nUriEnd));
+                    }
+                    if (i != rEnd && rText.GetChar(i) == '#')
+                    {
+                        ++i;
+                        while (i != rEnd
+                               && checkWChar(rCharClass, rText, &i, &nUriEnd));
+                    }
+                    if (isBoundary1(rCharClass, rText, nUriEnd, rEnd)
+                        || rText.GetChar(nUriEnd) == '\\')
+                    {
+                        INetURLObject aUri(UniString(rText, nPos,
+                                                     nUriEnd - nPos),
+                                           INET_PROT_HTTP, eMechanism,
+                                           eCharset);
+                        if (!aUri.HasError())
+                        {
+                            rBegin = nPos;
+                            rEnd = nUriEnd;
+                            return aUri.GetMainURL();
+                        }
+                    }
+                }
+
+                if ((eStyle & INetURLObject::FSYS_DOS) != 0 && rEnd - nPos >= 3
+                    && rText.GetChar(nPos + 1) == ':'
+                    && (rText.GetChar(nPos + 2) == '/'
+                        || rText.GetChar(nPos + 2) == '\\')) // 7th, 8th
+                {
+                    i = nPos + 3;
+                    xub_StrLen nUriEnd = i;
+                    while (i != rEnd
+                           && checkWChar(rCharClass, rText, &i, &nUriEnd));
+                    if (isBoundary1(rCharClass, rText, nUriEnd, rEnd))
+                    {
+                        INetURLObject aUri(UniString(rText, nPos,
+                                                     nUriEnd - nPos),
+                                           INET_PROT_FILE,
+                                           INetURLObject::ENCODE_ALL,
+                                           RTL_TEXTENCODING_UTF8,
+                                           INetURLObject::FSYS_DOS);
+                        if (!aUri.HasError())
+                        {
+                            rBegin = nPos;
+                            rEnd = nUriEnd;
+                            return aUri.GetMainURL();
+                        }
+                    }
                 }
             }
-
-            ++nPos;
-            while (nPos != rEnd && isWLetter(rCharClass, rText, nPos))
-                nPos = nextChar(rText, nPos);
+            else if ((eStyle & INetURLObject::FSYS_DOS) != 0 && rEnd - nPos >= 2
+                     && rText.GetChar(nPos) == '\\'
+                     && rText.GetChar(nPos + 1) == '\\') // 6th
+            {
+                xub_StrLen i = nPos + 2;
+                sal_uInt32 nLabels = scanDomain(rText, &i, rEnd);
+                if (nLabels >= 1 && i != rEnd && rText.GetChar(i) == '\\')
+                {
+                    xub_StrLen nUriEnd = ++i;
+                    while (i != rEnd
+                           && checkWChar(rCharClass, rText, &i, &nUriEnd,
+                                         true));
+                    if (isBoundary1(rCharClass, rText, nUriEnd, rEnd))
+                    {
+                        INetURLObject aUri(UniString(rText, nPos,
+                                                     nUriEnd - nPos),
+                                           INET_PROT_FILE,
+                                           INetURLObject::ENCODE_ALL,
+                                           RTL_TEXTENCODING_UTF8,
+                                           INetURLObject::FSYS_DOS);
+                        if (!aUri.HasError())
+                        {
+                            rBegin = nPos;
+                            rEnd = nUriEnd;
+                            return aUri.GetMainURL();
+                        }
+                    }
+                }
+            }
         }
-        else
-            nPos = nextChar(rText, nPos);
+        if (bBoundary2 && INetMIME::isAtomChar(c)) // 5th
+        {
+            bool bDot = false;
+            for (xub_StrLen i = nPos + 1; i != rEnd; ++i)
+            {
+                sal_Unicode c2 = rText.GetChar(i);
+                if (INetMIME::isAtomChar(c2))
+                    bDot = false;
+                else if (bDot)
+                    break;
+                else if (c2 == '.')
+                    bDot = true;
+                else
+                {
+                    if (c2 == '@')
+                    {
+                        ++i;
+                        sal_uInt32 nLabels = scanDomain(rText, &i, rEnd);
+                        if (nLabels >= 1
+                            && isBoundary1(rCharClass, rText, i, rEnd))
+                        {
+                            INetURLObject aUri(UniString(rText, nPos, i - nPos),
+                                               INET_PROT_MAILTO,
+                                               INetURLObject::ENCODE_ALL);
+                            if (!aUri.HasError())
+                            {
+                                rBegin = nPos;
+                                rEnd = i;
+                                return aUri.GetMainURL();
+                            }
+                        }
+                    }
+                    break;
+                }
+            }
+        }
+        bBoundary1 = isBoundary1(rCharClass, rText, nPos, rEnd);
+        bBoundary2 = isBoundary2(rCharClass, rText, nPos, rEnd);
     }
-
     rBegin = rEnd;
     return UniString();
 }
-
 
 //============================================================================
 //
