@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabctrl.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: th $ $Date: 2001-07-25 11:56:11 $
+ *  last change: $Author: th $ $Date: 2001-08-13 10:54:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -147,6 +147,7 @@ static ColorData aImplTabColorAry[TABCOLORCOUNT] =
 #define TAB_OFFSET          3
 #define TAB_TABOFFSET_X     3
 #define TAB_TABOFFSET_Y     3
+#define TAB_EXTRASPACE_X    6
 #define TAB_BORDER_LEFT     1
 #define TAB_BORDER_TOP      1
 #define TAB_BORDER_RIGHT    2
@@ -185,6 +186,7 @@ void TabControl::ImplInit( Window* pParent, WinBits nStyle )
     mbScroll            = FALSE;
     mbColored           = FALSE;
     mbSmallInvalidate   = FALSE;
+    mbExtraSpace        = FALSE;
 
     if ( (GetSettings().GetStyleSettings().GetTabControlStyle() & STYLE_TABCONTROL_SINGLELINE) ||
          (nStyle & WB_SINGLELINE) )
@@ -424,6 +426,8 @@ Size TabControl::ImplGetItemSize( ImplTabItem* pItem, long nMaxWidth ) const
     Size aSize( GetCtrlTextWidth( pItem->maFormatText ), GetTextHeight() );
     aSize.Width()  += TAB_TABOFFSET_X*2;
     aSize.Height() += TAB_TABOFFSET_Y*2;
+    if ( mbExtraSpace )
+        aSize.Width() += TAB_EXTRASPACE_X;
 
     // Evt. den Text kuerzen
     if ( aSize.Width()+4 >= nMaxWidth )
@@ -487,17 +491,20 @@ Rectangle TabControl::ImplGetTabRect( USHORT nPos, long nWidth, long nHeight )
     if ( (nWidth <= 0) || (nHeight <= 0) )
         return Rectangle();
 
-    Font aFont = GetFont();
-    FontWeight eWeight = aFont.GetWeight();
-    if ( eWeight != WEIGHT_BOLD )
-        aFont.SetWeight( WEIGHT_BOLD );
-    if ( !aFont.IsTransparent() )
-        aFont.SetTransparent( TRUE );
-
     if ( mbFormat || (mnLastWidth != nWidth) || (mnLastHeight != nHeight) )
     {
-        if ( eWeight != WEIGHT_BOLD )
-            SetFont( aFont );
+        Font aFont( GetFont() );
+        Font aLightFont = aFont;
+        aFont.SetTransparent( TRUE );
+        aFont.SetWeight( WEIGHT_BOLD );
+        aLightFont.SetTransparent( TRUE );
+        aLightFont.SetWeight( WEIGHT_LIGHT );
+        XubString aTestStr( RTL_CONSTASCII_USTRINGPARAM( "Abc." ) );
+        SetFont( aLightFont );
+        long nTextWidth1 = GetTextWidth( aTestStr );
+        SetFont( aFont );
+        long nTextWidth2 = GetTextWidth( aTestStr );
+        mbExtraSpace = (nTextWidth1 == nTextWidth2);
 
         ImplTabItem*    pItem;
         Size            aSize;
