@@ -2,9 +2,9 @@
  *
  *  $RCSfile: analysis.src,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: vg $ $Date: 2002-01-14 21:17:09 $
+ *  last change: $Author: kz $ $Date: 2002-01-16 21:23:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1475,7 +1475,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ finnish ] = "Potenssin (N) lis�ys sarjassa";
             Text[ italian ] = "Incremento di n per ciascun termine della serie.";
             Text[ danish ] = "M";
-            Text[ swedish ] = "Inkrement med vilket n ska �kas i varje term i serien.";
+            Text[ swedish ] = "Steg med vilket n ska �kas i varje term i serien.";
             Text[ polish ] = "Krok, o kt�ry wzrasta n ka�dego sk�adnika w szeregu.";
             Text[ portuguese_brazilian ] = "M";
             Text[ japanese ] = "級数の各項ごとに n を増加させる増分値。";
@@ -5454,7 +5454,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ finnish ] = "Palauttaa kompleksiluvun eksponentin.";
             Text[ italian ] = "Restituisce l'esponenziale di un numero complesso.";
             Text[ danish ] = "Returns the exponential of a complex number";
-            Text[ swedish ] = "Returnerar den algebraiska formen av ett komplext tal i exponentiell visning";
+            Text[ swedish ] = "Returnerar den algebraiska formen av ett komplext tal i exponentiell visning.";
             Text[ polish ] = "Podaje warto�� wyk�adnicz� liczby zespolonej.";
             Text[ portuguese_brazilian ] = "Returns the exponential of a complex number";
             Text[ japanese ] = "複素数のべき乗を返します。";
@@ -13045,7 +13045,7 @@ Resource RID_ANALYSIS_FUNCTION_DESCRIPTIONS
             Text[ finnish ] = "Palauttaa joukkovelkakirjalainan tuoton mukaisen valtion obligaation tuoton";
             Text[ italian ] = "Calcola il rendimento equivalente ad un'obbligazione per un buono del tesoro.";
             Text[ danish ] = "Returns the bond-equivalent yield for a treasury bill";
-            Text[ swedish ] = "R�knar om f�rr�ntningen av en statsskuldsv�xel till obligationsr�nta.";
+            Text[ swedish ] = "R�knar om r�ntan p� en statsskuldsv�xel till den �rliga r�nta som obligationer brukar ha.";
             Text[ polish ] = "Podaje rentowno�� ekwiwalentu obligacji dla bonu skarbowego.";
             Text[ portuguese_brazilian ] = "Returns the bond-equivalent yield for a treasury bill";
             Text[ japanese ] = "米国財務省短期証券(TB)の債券に相当する利回りを返します。";
