@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbustrings.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-19 16:54:43 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:27:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,21 +70,30 @@ namespace dbaui
     //============================================================
     IMPLEMENT_CONSTASCII_USTRING(URL_COMPONENT_QUERYDESIGN, ".component:DB/QueryDesign");
     IMPLEMENT_CONSTASCII_USTRING(URL_COMPONENT_TABLEDESIGN, ".component:DB/TableDesign");
+    IMPLEMENT_CONSTASCII_USTRING(URL_COMPONENT_FORMGRIDVIEW, ".component:DB/FormGridView");
+    IMPLEMENT_CONSTASCII_USTRING(URL_COMPONENT_DATASOURCEBROWSER, ".component:DB/DataSourceBrowser");
     IMPLEMENT_CONSTASCII_USTRING(URL_COMPONENT_RELATIONDESIGN, ".component:DB/RelationDesign");
+    IMPLEMENT_CONSTASCII_USTRING(URL_COMPONENT_APPLICATION, ".component:DB/Application");
+
+    //============================================================
+    //= service names
+    //============================================================
+
+    IMPLEMENT_CONSTASCII_USTRING(SERVICE_SDB_APPLICATIONCONTROLLER, "org.openoffice.comp.dbu.OApplicationController");
+    IMPLEMENT_CONSTASCII_USTRING(SERVICE_SDB_DIRECTSQLDIALOG,       "org.openoffice.comp.dbu.DirectSqlDialog");
 
     //============================================================
     //= other
     //============================================================
     IMPLEMENT_CONSTASCII_USTRING(FRAME_NAME_QUERY_PREVIEW,          "QueryPreview");
-    IMPLEMENT_CONSTASCII_USTRING(PROPERTY_ENABLESQL92CHECK,         "EnableSQL92Check");
-    IMPLEMENT_CONSTASCII_USTRING(PROPERTY_ENABLETABLEALIAS,         "AppendTableAlias");
     IMPLEMENT_CONSTASCII_USTRING( PARAM_INDEPENDENT_SQL_COMMAND,    "IndependentSQLCommand");
-    IMPLEMENT_CONSTASCII_USTRING(SERVICE_CONTROLDEFAULT,        "com.sun.star.comp.dbu.OColumnControl");
+    IMPLEMENT_CONSTASCII_USTRING(SERVICE_CONTROLDEFAULT,            "com.sun.star.comp.dbu.OColumnControl");
 
     //============================================================
     //= properties
     //============================================================
-    IMPLEMENT_CONSTASCII_USTRING(PROPERTY_TRISTATE, "TriState");
+    IMPLEMENT_CONSTASCII_USTRING(PROPERTY_TRISTATE,         "TriState");
+    IMPLEMENT_CONSTASCII_USTRING(PROPERTY_ENABLEOUTERJOIN,  "EnableOuterJoinEscape");
 
     IMPLEMENT_CONSTASCII_USTRING(PROPERTY_TABSTOP, "TabStop");
     IMPLEMENT_CONSTASCII_USTRING(PROPERTY_DEFAULTCONTROL, "DefaultControl");
