@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svlbitm.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-18 11:01:06 $
+ *  last change: $Author: hr $ $Date: 2004-07-23 11:56:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,25 +78,26 @@
 
 struct SvLBoxButtonData_Impl
 {
-    SvLBoxEntry*            pEntry;
-    BOOL                    bDefaultImages;
+    SvLBoxEntry*    pEntry;
+    BOOL            bDefaultImages;
+    BOOL            bShowRadioButton;
+
+    SvLBoxButtonData_Impl() : pEntry( NULL ), bDefaultImages( FALSE ), bShowRadioButton( FALSE ) {}
 };
 
 
 DBG_NAME(SvLBoxButtonData);
 
-void SvLBoxButtonData::InitData( BOOL bImagesFromDefault, const Control* pCtrl )
+void SvLBoxButtonData::InitData( BOOL bImagesFromDefault, bool _bRadioBtn, const Control* pCtrl )
 {
     pImpl = new SvLBoxButtonData_Impl;
 
     bDataOk = FALSE;
-    pImpl->pEntry = 0;
-
     eState = SV_BUTTON_UNCHECKED;
-
     pImpl->bDefaultImages = bImagesFromDefault;
+    pImpl->bShowRadioButton = ( _bRadioBtn != false );
 
-    if( bImagesFromDefault )
+    if ( bImagesFromDefault )
         SetDefaultImages( pCtrl );
 }
 
@@ -104,14 +105,21 @@ SvLBoxButtonData::SvLBoxButtonData( const Control* pControlForSettings )
 {
     DBG_CTOR(SvLBoxButtonData,0);
 
-    InitData( TRUE, pControlForSettings );
+    InitData( TRUE, false, pControlForSettings );
+}
+
+SvLBoxButtonData::SvLBoxButtonData( const Control* pControlForSettings, bool _bRadioBtn )
+{
+    DBG_CTOR(SvLBoxButtonData,0);
+
+    InitData( TRUE, _bRadioBtn, pControlForSettings );
 }
 
 SvLBoxButtonData::SvLBoxButtonData()
 {
     DBG_CTOR(SvLBoxButtonData,0);
 
-    InitData( FALSE );
+    InitData( FALSE, false );
 }
 
 SvLBoxButtonData::~SvLBoxButtonData()
@@ -124,13 +132,11 @@ SvLBoxButtonData::~SvLBoxButtonData()
 #endif
 }
 
-
 void SvLBoxButtonData::CallLink()
 {
     DBG_CHKTHIS(SvLBoxButtonData,0);
     aLink.Call( this );
 }
-
 
 USHORT SvLBoxButtonData::GetIndex( USHORT nItemState )
 {
@@ -205,19 +211,30 @@ void SvLBoxButtonData::SetDefaultImages( const Control* pCtrl )
 {
     const AllSettings& rSettings = pCtrl? pCtrl->GetSettings() : Application::GetSettings();
 
-    aBmps[ SV_BMP_UNCHECKED ]   = CheckBox::GetCheckImage( rSettings, BUTTON_DRAW_DEFAULT );
-    aBmps[ SV_BMP_CHECKED ]     = CheckBox::GetCheckImage( rSettings, BUTTON_DRAW_CHECKED );
-    aBmps[ SV_BMP_HICHECKED ]   = CheckBox::GetCheckImage( rSettings, BUTTON_DRAW_CHECKED | BUTTON_DRAW_PRESSED );
-    aBmps[ SV_BMP_HIUNCHECKED ] = CheckBox::GetCheckImage( rSettings, BUTTON_DRAW_DEFAULT | BUTTON_DRAW_PRESSED );
-    aBmps[ SV_BMP_TRISTATE ]    = CheckBox::GetCheckImage( rSettings, BUTTON_DRAW_DONTKNOW );
-    aBmps[ SV_BMP_HITRISTATE ]  = CheckBox::GetCheckImage( rSettings, BUTTON_DRAW_DONTKNOW | BUTTON_DRAW_PRESSED );
+    if ( pImpl->bShowRadioButton )
+    {
+        aBmps[ SV_BMP_UNCHECKED ]   = RadioButton::GetRadioImage( rSettings, BUTTON_DRAW_DEFAULT );
+        aBmps[ SV_BMP_CHECKED ]     = RadioButton::GetRadioImage( rSettings, BUTTON_DRAW_CHECKED );
+        aBmps[ SV_BMP_HICHECKED ]   = RadioButton::GetRadioImage( rSettings, BUTTON_DRAW_CHECKED | BUTTON_DRAW_PRESSED );
+        aBmps[ SV_BMP_HIUNCHECKED ] = RadioButton::GetRadioImage( rSettings, BUTTON_DRAW_DEFAULT | BUTTON_DRAW_PRESSED );
+        aBmps[ SV_BMP_TRISTATE ]    = RadioButton::GetRadioImage( rSettings, BUTTON_DRAW_DONTKNOW );
+        aBmps[ SV_BMP_HITRISTATE ]  = RadioButton::GetRadioImage( rSettings, BUTTON_DRAW_DONTKNOW | BUTTON_DRAW_PRESSED );
+    }
+    else
+    {
+        aBmps[ SV_BMP_UNCHECKED ]   = CheckBox::GetCheckImage( rSettings, BUTTON_DRAW_DEFAULT );
+        aBmps[ SV_BMP_CHECKED ]     = CheckBox::GetCheckImage( rSettings, BUTTON_DRAW_CHECKED );
+        aBmps[ SV_BMP_HICHECKED ]   = CheckBox::GetCheckImage( rSettings, BUTTON_DRAW_CHECKED | BUTTON_DRAW_PRESSED );
+        aBmps[ SV_BMP_HIUNCHECKED ] = CheckBox::GetCheckImage( rSettings, BUTTON_DRAW_DEFAULT | BUTTON_DRAW_PRESSED );
+        aBmps[ SV_BMP_TRISTATE ]    = CheckBox::GetCheckImage( rSettings, BUTTON_DRAW_DONTKNOW );
+        aBmps[ SV_BMP_HITRISTATE ]  = CheckBox::GetCheckImage( rSettings, BUTTON_DRAW_DONTKNOW | BUTTON_DRAW_PRESSED );
+    }
 }
 
 BOOL SvLBoxButtonData::HasDefaultImages( void ) const
 {
     return pImpl->bDefaultImages;
 }
-
 
 // ***************************************************************
 // class SvLBoxString
