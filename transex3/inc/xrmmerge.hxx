@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xrmmerge.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: nf $ $Date: 2001-08-23 11:45:29 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 12:40:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,7 @@ private:
     ByteString sCurrentOpenTag;
     ByteString sCurrentCloseTag;
     ByteString sCurrentText;
+    std::vector<ByteString> aLanguages;
 
 protected:
     ByteString GetAttribute( const ByteString &rToken, const ByteString &rAttribute );
@@ -117,6 +118,8 @@ public:
 
 class XRMResOutputParser : public XRMResParser
 {
+private:
+    std::vector<ByteString> aLanguages;
 protected:
     SvFileStream *pOutputStream;
 public:
@@ -134,6 +137,7 @@ private:
     ResData *pResData;
     ByteString sPrj;
     ByteString sPath;
+    std::vector<ByteString> aLanguages;
 
 protected:
     virtual void WorkOnText(
@@ -163,6 +167,7 @@ class XRMResMerge : public XRMResOutputParser
 private:
     MergeDataFile *pMergeDataFile;
     ResData *pResData;
+    std::vector<ByteString> aLanguages;
 
 protected:
     virtual void WorkOnText(
