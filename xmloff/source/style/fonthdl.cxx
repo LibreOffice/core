@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fonthdl.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:07:04 $
+ *  last change: $Author: mib $ $Date: 2000-10-12 11:20:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -185,8 +185,21 @@ sal_Bool XMLFontFamilyNamePropHdl::exportXML( OUString& rStrExpValue, const uno:
             sal_Int32 nFirst = nPos;
             nPos = aStrFamilyName.indexOf( sal_Unicode(';'), nPos );
             sal_Int32 nLast = (-1L == nPos ? aStrFamilyName.getLength() : nPos);
-            if( nLast > 0L )
-                nLast--;
+
+            // Set position to the character behind the ';', so we won't
+            // forget this.
+            if( -1L != nPos )
+                nPos++;
+
+            // If the property value was empty, we stop now.
+            // If there is a ';' at the first position, the empty name
+            // at the start will be removed.
+            if( 0L == nLast )
+                continue;
+
+            // nFirst and nLast now denote the first and last character of
+            // one font name.
+            nLast--;
 
             // skip trailing blanks
             while( sal_Unicode(' ') == aStrFamilyName[nLast] && nLast > nFirst )
@@ -221,9 +234,6 @@ sal_Bool XMLFontFamilyNamePropHdl::exportXML( OUString& rStrExpValue, const uno:
                 if( bQuote )
                     sValue.append( sal_Unicode('\'') );
             }
-
-            if( -1L != nPos )
-                nPos++;
         }
         while( -1L != nPos );
 
