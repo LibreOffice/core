@@ -71,14 +71,6 @@ TARGET=solaris
 
 # --- Files --------------------------------------------------------
 
-LAUNCHERLIST = writer calc draw impress math base printeradmin
-LAUNCHERDEPN = ../menus/{$(LAUNCHERLIST)}.desktop
-LAUNCHERDIR  = $(shell cd $(MISC)$/$(TARGET); pwd)
-
-LAUNCHERFLAGFILES = \
-    $(MISC)/$(TARGET)/usr/share/applications.flag \
-    $(MISC)/$(TARGET)/usr/share/applnk-$(TARGET)/Office.flag
-
 MIMELIST = \
     text \
     text-template \
@@ -109,17 +101,24 @@ GNOMEMIMEDEPN = ../mimetypes/{$(MIMELIST)}.keys
 
 PKGFLAGFILE = $(MISC)$/$(TARGET).flag 
 PKGDEPN = \
-    $(MISC)/$(TARGET)/usr/share/applications.flag \
-    $(MISC)/$(TARGET)/usr/share/gnome/application-registry/$(UNIXFILENAME).applications \
-    $(MISC)/$(TARGET)/usr/share/gnome/mime-info/$(UNIXFILENAME).mime \
-    $(MISC)/$(TARGET)/usr/share/gnome/mime-info/$(UNIXFILENAME).keys
-        
+    $(MISC)/$(TARGET)/openoffice.applications \
+    $(MISC)/$(TARGET)/openoffice.mime \
+    $(MISC)/$(TARGET)/openoffice.keys \
+    $(MISC)/$(TARGET)/printeradmin.sh \
+    $(MISC)/$(TARGET)/openoffice.sh \
+    $(MISC)/$(TARGET)/space \
+    $(MISC)/$(TARGET)/pkginfo \
+    $(MISC)/$(TARGET)/mailcap \
+    $(MISC)/$(TARGET)/postinstall \
+    $(MISC)/$(TARGET)/prototype \
+    $(MISC)/$(TARGET)/checkinstall	
+
 PKGDIR  = $(shell cd $(BIN); pwd)
 
-PKGNAME = `sed -n -e 's/PKG=//p' pkginfo`
-PKGFLAGFILE = $(MISC)$/$(TARGET)pkg.flag
+PKGNAME = $(shell sed -n -e s/PKG=//p pkginfo)
+PKGFILE = $(BIN)/$(PKGNAME).tar.gz
    
-PKGDATESTRING = `date -u '+%Y.%m.%d'`
+PKGDATESTRING = $(shell date -u +%Y.%m.%d)
 PKGARCH=sparc,i386
 
 ULFDIR = $(COMMONMISC)$/desktopshare
@@ -132,29 +131,11 @@ ULFDIR = $(COMMONMISC)$/desktopshare
 
 .IF "$(OS)"=="SOLARIS"
 
-ALLTAR : $(PKGFLAGFILE) 
-
-# --- launcher ------------------------------------------------------
-
-#
-# Copy/patch the .desktop files to the output tree and 
-# merge-in the translations. 
-#
-$(LAUNCHERFLAGFILES) : $(LAUNCHERDEPN) ../productversion.mk ../share/brand.pl ../share/translate.pl $(ULFDIR)/launcher_name.ulf $(ULFDIR)/launcher_comment.ulf
-    @$(MKDIRHIER) $(@:db)
-    @echo Creating desktop entries ..
-    @echo ---------------------------------
-    @$(PERL) ../share/brand.pl -p "$(LONGPRODUCTNAME)" -u $(UNIXFILENAME) --prefix "$(UNIXFILENAME)-" --iconprefix "$(UNIXFILENAME)-" $(LAUNCHERDEPN) $(@:db)
-    @$(PERL) ../share/translate.pl -p "$(LONGPRODUCTNAME)" -d $(@:db) --prefix "$(UNIXFILENAME)-" --ext "desktop" --key "Name" $(ULFDIR)/launcher_name.ulf
-    @$(PERL) ../share/translate.pl -p "$(LONGPRODUCTNAME)" -d $(@:db) --prefix "$(UNIXFILENAME)-" --ext "desktop" --key "Comment" $(ULFDIR)/launcher_comment.ulf
-.IF "$(WITH_LIBSN)"=="YES"
-    @$(foreach,i,$(LAUNCHERLIST) $(shell echo "StartupNotify=true" >> $(@:db)/$(UNIXFILENAME)-$i.desktop))
-.ENDIF
-    @touch $@
+ALLTAR : $(PKGFILE) 
 
 # --- mime types ---------------------------------------------------
 
-$(MISC)/$(TARGET)/usr/share/gnome/mime-info/$(UNIXFILENAME).keys : $(GNOMEMIMEDEPN) ../productversion.mk ../share/brand.pl ../share/translate.pl $(ULFDIR)/documents.ulf
+$(MISC)/$(TARGET)/openoffice.keys : $(GNOMEMIMEDEPN) ../productversion.mk ../share/brand.pl ../share/translate.pl $(ULFDIR)/documents.ulf
     @$(MKDIRHIER) $(@:d)
     @echo Creating GNOME .keys file ..
     @echo ---------------------------------
@@ -162,31 +143,51 @@ $(MISC)/$(TARGET)/usr/share/gnome/mime-info/$(UNIXFILENAME).keys : $(GNOMEMIMEDE
     @$(PERL) ../share/translate.pl -p $(PRODUCTNAME) -d $(MISC)/$(TARGET) --ext "keys" --key "description"  $(ULFDIR)/documents.ulf
     @cat $(MISC)/$(TARGET)/{$(MIMELIST)}.keys > $@
 
-$(MISC)/$(TARGET)/usr/share/gnome/mime-info/$(UNIXFILENAME).mime : ../mimetypes/openoffice.mime
+$(MISC)/$(TARGET)/openoffice.mime : ../mimetypes/openoffice.mime
     @$(MKDIRHIER) $(@:d)
     @echo Creating GNOME .mime file ..
     @echo ---------------------------------
     @cat $< | tr -d "\015" > $@
 
-$(MISC)/$(TARGET)/usr/share/gnome/application-registry/$(UNIXFILENAME).applications : ../productversion.mk ../mimetypes/openoffice.applications
+$(MISC)/$(TARGET)/openoffice.applications : ../productversion.mk ../mimetypes/openoffice.applications
     @$(MKDIRHIER) $(@:d)
     @echo Creating GNOME .applications file ..
     @echo ---------------------------------
     @cat ../mimetypes/openoffice.applications | tr -d "\015" | sed -e "s/openoffice/$(UNIXFILENAME)/" -e "s/%PRODUCTNAME/$(LONGPRODUCTNAME)/" > $@
 
-# --- pkginfo & prototype -----------------------------------------
+# --- pkginfo ----------------------------------------------------
 
-# Copy the pkginfo and prototype file to $(MISC) 
-$(MISC)/$(TARGET)/pkginfo $(MISC)/$(TARGET)/prototype : $$(@:f) ../productversion.mk
+# Copy the pkginfo file to $(MISC) 
+$(MISC)/$(TARGET)/pkginfo : $$(@:f) ../productversion.mk
     @$(MKDIRHIER) $(@:d)
-    @cat $(@:f) | tr -d "\015" | sed -e "s/%PREFIX/$(UNIXFILENAME)/g" -e "s/%PRODUCTNAME/$(LONGPRODUCTNAME)/g" -e "s_%SOURCE_$(MISC)/$(TARGET)_" > $@
+    @cat $(@:f) | tr -d "\015" | sed -e "s/%PRODUCTNAME/$(LONGPRODUCTNAME)/g" > $@
+
+# --- space, prototype, postinstall & mailcap --------------------
+
+# Copy the prototype file to $(MISC)
+$(MISC)/$(TARGET)/{space prototype postinstall mailcap} : $$(@:f) ../productversion.mk
+    @$(MKDIRHIER) $(@:d)
+    @cat $(@:f) | tr -d "\015" | sed -e "s/%PREFIX/$(UNIXFILENAME)/g" -e "s_%SOURCE_$(MISC)/$(TARGET)_g" > $@
+
+# --- checkinstall -----------------------------------------------
+
+# Copy the checkinstall file to $(MISC) 
+$(MISC)/$(TARGET)/checkinstall : $$(@:f)
+    @$(MKDIRHIER) $(@:d)
+    @cat $(@:f) | tr -d "\015" > $@
+
+# --- office launch scripts --------------------------------------
+
+# Copy the office launch scripts to $(MISC) 
+$(MISC)/$(TARGET)/{openoffice.sh printeradmin.sh} : ../share/$$(@:f)
+        @$(MKDIRHIER) $(@:d)
+        @cat $< | tr -d "\015" | sed -e "s/%PREFIX/$(UNIXFILENAME)/g" > $@
 
 # --- packaging ---------------------------------------------------
-    
-$(PKGFLAGFILE) : $(MISC)/$(TARGET)/prototype $(MISC)/$(TARGET)/pkginfo $(PKGDEPN) makefile.mk
-    @pkgmk -o -r . -f $(MISC)$/$(TARGET)/prototype ARCH=$(PKGARCH) VERSION=$(PKGVERSION),REV=$(PKGREV).$(PKGDATESTRING)
-    @tar -cf - -C /var/spool/pkg $(PKGNAME) | gzip > $(BIN)/$(PKGNAME).tar.gz
+
+$(PKGFILE) : $(PKGDEPN) makefile.mk
+    pkgmk -r . -f $(MISC)/$(TARGET)/prototype -o ARCH=$(PKGARCH) VERSION=$(PKGVERSION),REV=$(PKGREV).$(PKGDATESTRING)
+    @tar -cf - -C /var/spool/pkg $(PKGNAME) | gzip > $@
     @rm -rf /var/spool/pkg/$(PKGNAME)
-    @touch $@
-    
+
 .ENDIF
