@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabletree.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-09 12:35:33 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 17:19:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,9 @@ public:
     OTableTreeListBox( Window* pParent
                         ,const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& _rxORB
                         , const ResId& rResId,sal_Bool _bHiContrast,sal_Bool _bVirtualRoot=sal_True );
+
+    typedef ::std::pair< ::rtl::OUString,sal_Bool>  TTableViewName;
+    typedef ::std::vector< TTableViewName >         TNames;
     /** call when HiContrast change.
     */
     virtual void notifyHiContrastChanged();
@@ -120,16 +123,17 @@ public:
                 const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _xConnection
             )   throw(::com::sun::star::sdbc::SQLException);
 
-    /** fill the table list with the tables and views determined by the two given containers
+    /** fill the table list with the tables and views determined by the two given containers.
+        The views sequence is used to determine which table is of type view.
         @param      _rxConnMetaData meta data describing the connection where you got the object names from. Must not be NULL.
                                     Used to split the full qualified names into it's parts.
-        @param      _rxTables       table container. May be NULL.
-        @param      _rxView         view container. May be NULL.
+        @param      _rTables        table/view sequence
+        @param      _rViews         view sequence
     */
     void    UpdateTableList(
                 const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rxConnMetaData,
-                const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rTables,
-                const ::com::sun::star::uno::Sequence< ::rtl::OUString >& _rViews
+                const ::com::sun::star::uno::Sequence< ::rtl::OUString>& _rTables,
+                const ::com::sun::star::uno::Sequence< ::rtl::OUString>& _rViews
             );
 
     /** to be used if a foreign instance added a table
@@ -183,6 +187,17 @@ protected:
         );
 
     sal_Bool haveVirtualRoot() const { return m_bVirtualRoot; }
+
+    /** fill the table list with the tables and views determined by the two given containers
+        @param      _rxConnMetaData meta data describing the connection where you got the object names from. Must not be NULL.
+                                    Used to split the full qualified names into it's parts.
+        @param      _rTables        table/view sequence, the second argument is <TRUE/> if it is a table, otherwise it is a view.
+    */
+    void    UpdateTableList(
+                const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XDatabaseMetaData >& _rxConnMetaData,
+                const TNames& _rTables
+            );
+
 };
 
 //.........................................................................
