@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inetoptions.cxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-17 12:55:18 $
+ *  last change: $Author: obo $ $Date: 2004-11-15 17:20:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,8 @@
 #ifndef _SALHELPER_REFOBJ_HXX_
 #include <salhelper/refobj.hxx>
 #endif
+#include <rtl/logfile.hxx>
+#include "itemholder1.hxx"
 
 using namespace com::sun;
 
@@ -475,7 +477,13 @@ SvtInetOptions::SvtInetOptions()
 {
     osl::MutexGuard aGuard(osl::Mutex::getGlobalMutex());
     if (!m_pImpl)
+    {
+        RTL_LOGFILE_CONTEXT(aLog, "svtools (???) ::SvtInetOptions_Impl::ctor()");
         m_pImpl = new Impl;
+
+        ItemHolder1* pHolder = ItemHolder1::getGlobalItemHolder();
+        pHolder->holdConfigItem(E_INETOPTIONS);
+    }
     m_pImpl->acquire();
 }
 
