@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: rt $ $Date: 2004-03-04 14:08:38 $
+#   last change: $Author: hr $ $Date: 2004-12-20 09:36:00 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -76,11 +76,6 @@ SCP_PRODUCT_TYPE=osl
 
 PARFILES = \
     file_crashrep_dynamic.par
-
-.IF "$(GUI)"=="UNX"
-PARFILES += \
-    file_crashrep_static.par
-.ENDIF
 
 # --- File ---------------------------------------------------------
 .INCLUDE :  target.mk
