@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undobj1.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-04 13:25:17 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 14:08:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,7 @@
 #ifndef _DCONTACT_HXX
 #include <dcontact.hxx>
 #endif
+#include <svx/svdundo.hxx> // #111827#
 
 // Inline Methode vom UndoIter
 inline SwDoc& SwUndoIter::GetDoc() const { return *pAktPam->GetDoc(); }
@@ -388,6 +389,40 @@ void SwUndoInsLayFmt::Repeat( SwUndoIter& rUndoIter )
     rUndoIter.pSelFmt = pFlyFmt;
 
     rUndoIter.pLastUndoObj = this;
+}
+
+// #111827#
+String SwUndoInsLayFmt::GetComment() const
+{
+    /*
+      If frame format is present and has an SdrObject use the undo
+      comment of the SdrObject. Otherwise use the default comment.
+     */
+    String aResult;
+
+    bool bDone = false;
+    if (pFrmFmt)
+    {
+        const SdrObject * pSdrObj = pFrmFmt->FindSdrObject();
+
+        if (pSdrObj)
+        {
+            SdrObject * pSdrObjCopy = pSdrObj->Clone();
+            SdrUndoNewObj * pSdrUndo = new SdrUndoNewObj(*pSdrObjCopy);
+
+            aResult = pSdrUndo->GetComment();
+
+            delete pSdrUndo;
+            delete pSdrObjCopy;
+
+            bDone = true;
+        }
+    }
+
+    if (! bDone)
+        aResult = SwUndo::GetComment();
+
+    return aResult;
 }
 
 // ----- Undo-DeleteFly ------
