@@ -2,9 +2,9 @@
  *
  *  $RCSfile: WizardDialog.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2004-05-19 13:06:53 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-27 13:43:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,7 @@ import com.sun.star.lang.XSingleServiceFactory;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.wizards.common.Helper;
 import com.sun.star.wizards.common.Resource;
+import com.sun.star.wizards.common.SystemDialog;
 import com.sun.star.container.XIndexContainer;
 import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.beans.*;
@@ -399,7 +400,8 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
 
     public void setStepEnabled(int _nStep, boolean bEnabled) {
         XInterface xRoadmapItem = getRoadmapItemByID(_nStep);
-        Helper.setUnoPropertyValue(xRoadmapItem, "Enabled", new Boolean(bEnabled));
+        if (xRoadmapItem != null)
+            Helper.setUnoPropertyValue(xRoadmapItem, "Enabled", new Boolean(bEnabled));
     }
 
     public void enablefromStep(int _iStep, boolean _bDoEnable) {
@@ -407,7 +409,11 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
             for (int i = _iStep; i <= nMaxStep; i++)
                 setStepEnabled(i, _bDoEnable);
             enableFinishButton(_bDoEnable);
-            enableNextButton(_bDoEnable);
+            if (!_bDoEnable)
+                enableNextButton(_iStep > getCurrentStep() + 1);
+            else
+                enableNextButton(true);
+
         }
     }
 
@@ -474,6 +480,11 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
         }
     }
 
+    public void setCurrentStep(int _nNewstep){
+        nNewStep = _nNewstep;
+        changeToStep(nNewStep);
+    }
+
     public void setRightPaneHeaders(Resource _oResource, int StartResID, int _nMaxStep) {
         String[] sRightPaneHeaders = _oResource.getResArray(StartResID, _nMaxStep);
         setRightPaneHeaders(sRightPaneHeaders);
@@ -500,5 +511,4 @@ public abstract class WizardDialog extends UnoDialog2 implements VetoableChangeL
     public void callHelp() {
         //should be overwritten by extending class
     }
-
 }

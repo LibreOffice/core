@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UnoDialog2.java,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $  $Date: 2004-09-08 14:07:16 $
+ *  last change: $Author: pjunck $  $Date: 2004-10-27 13:42:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,7 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import com.sun.star.wizards.common.Helper;
+import com.sun.star.wizards.common.SystemDialog;
 import com.sun.star.wizards.ui.event.*;
 
 /**
@@ -198,6 +199,14 @@ public class UnoDialog2 extends UnoDialog implements EventNames {
         return (XControl) insertControlModel2("com.sun.star.awt.UnoControlImageControlModel", sName, sPropNames, oPropValues, XControl.class);
     }
 
+    public XControl insertInfoImage(int _posx, int _posy, int _iStep){
+        return insertImage("imgHint",
+                new String[] {"Border", "Height", "ImageURL", "PositionX", "PositionY", "ScaleImage", "Step","Width"},
+                new Object[] { new Short((short)0), new Integer(10), UIConsts.INFOIMAGEURL, new Integer(_posx), new Integer(_posy), Boolean.FALSE, new Integer(_iStep), new Integer(10)});
+    }
+
+
+
     /**
      * This method is used for creating Edit, Currency, Date, Formatted, Pattern, File
      * and Time edit components.
@@ -287,6 +296,9 @@ public class UnoDialog2 extends UnoDialog implements EventNames {
         return (XControl) UnoRuntime.queryInterface(XControl.class, oGroupBox);
     }
 
+
+
+
     public Object insertControlModel2(String serviceName, String componentName, String[] sPropNames, Object[] oPropValues) {
         try {
             //System.out.println("Inserting : " + componentName);
@@ -324,6 +336,10 @@ public class UnoDialog2 extends UnoDialog implements EventNames {
     public static Object getControlModel(Object unoControl) {
         Object obj = ((XControl) UnoRuntime.queryInterface(XControl.class, unoControl)).getModel();
         return obj;
+    }
+
+    public int showMessageBox(String windowServiceName, int windowAttribute, String MessageText) {
+        return SystemDialog.showMessageBox(xMSF, this.xControl.getPeer(), windowServiceName, windowAttribute, MessageText);
     }
 
 }
