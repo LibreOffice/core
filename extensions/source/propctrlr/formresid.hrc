@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formresid.hrc,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: tbe $ $Date: 2001-11-08 17:39:12 $
+ *  last change: $Author: obo $ $Date: 2003-10-21 09:06:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -250,6 +250,10 @@
 #define RID_STR_ENUM_PUSHBUTTONTYPE         ( RID_FORMBROWSER_START + 188 )
 #define RID_STR_UNABLETOCONNECT             ( RID_FORMBROWSER_START + 189 )
 #define RID_STR_TEXT                        ( RID_FORMBROWSER_START + 190 )
+#define RID_STR_BOUND_CELL                  ( RID_FORMBROWSER_START + 191 )
+#define RID_STR_LIST_CELL_RANGE             ( RID_FORMBROWSER_START + 192 )
+#define RID_STR_CELL_EXCHANGE_TYPE          ( RID_FORMBROWSER_START + 193 )
+#define RID_STR_ENUM_CELL_EXCHANGE_TYPE     ( RID_FORMBROWSER_START + 194 )
 
 
 // -----------------------------------------------------------------------
@@ -294,6 +298,24 @@
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.15.172.1  2003/10/01 09:17:55  fs
+ *  #i18994# merging the changes from the CWS fs002
+ *
+ *  Revision 1.15.162.4  2003/09/18 10:13:06  fs
+ *  #18997# small adjustments for the list box cell bindings
+ *
+ *  Revision 1.15.162.3  2003/09/17 15:02:57  fs
+ *  #18997# added support so that list and combo boxes are also allowed to transfer their selection index, instead of their selection text
+ *
+ *  Revision 1.15.162.2  2003/09/11 15:12:24  fs
+ *  #19371# user interface for binding list/combo controls to spreadsheet cell ranges
+ *
+ *  Revision 1.15.162.1  2003/09/03 13:32:30  fs
+ *  #i18996# UI for binding form controls to calc cells
+ *
+ *  Revision 1.15  2001/11/08 17:39:12  tbe
+ *  #92755# Assign Standard Values for Basic Controls in Designmode
+ *
  *  Revision 1.14  2001/11/08 11:43:54  fs
  *  #94300# removed ShowCentury property
  *
