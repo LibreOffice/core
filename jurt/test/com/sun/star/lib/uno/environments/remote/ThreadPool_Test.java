@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ThreadPool_Test.java,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-20 09:23:36 $
+ *  last change: $Author: kz $ $Date: 2005-01-18 13:36:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,8 +63,6 @@ package com.sun.star.lib.uno.environments.remote;
 
 import com.sun.star.lib.uno.typedesc.TypeDescription;
 import complexlib.ComplexTestCase;
-import java.util.Enumeration;
-import java.util.Hashtable;
 
 public class ThreadPool_Test extends ComplexTestCase {
     public String getTestObjectName() {
@@ -72,8 +70,7 @@ public class ThreadPool_Test extends ComplexTestCase {
     }
 
     public String[] getTestMethodNames() {
-        return new String[] { "testBrokenImplementation",
-                              "testDispose",
+        return new String[] { "testDispose",
                               "testThreadAsync",
                               "testDynamicThreadSync",
                               "testStaticThreadSync",
@@ -81,32 +78,6 @@ public class ThreadPool_Test extends ComplexTestCase {
                               "testStaticThreadAsyncSyncOrder",
                               "testStress",
                               "testAsyncSync" };
-    }
-
-    public void testBrokenImplementation() {
-        // The implementation of JavaThreadPoolFactory (rev. 1.2) and JobQueue
-        // (rev. 1.15) contains the following code as a race condition:
-        // 1  A call to JobQueue.acquire leads to
-        //    _javaThreadPoolFactory.addJobQueue(this), leads to a
-        //    _jobQueues.put call.
-        // 2  A call to JavaThreadPoolFactory.dispose creates an Enumeration;
-        //    assume that, between calls to Enumeration.hasMoreElements and
-        //    Enumeration.nextElement, JobQueue.release is called, leading to
-        //    _javaThreadPoolFactory.removeJobQueue(this), leading to a
-        //    _jobQueues.remove call; the use of the return value of the
-        //    following Enumeration.nextElement results in a
-        //    NullPointerException.
-        // (Detected once while running testStress.)
-        // The following code checks that Hashtable and Enumeration indeed
-        // interact in this way:
-        Hashtable ht = new Hashtable();
-        String key = "key";
-        Object entry = new Object();
-        ht.put(key, entry);
-        Enumeration e = ht.elements();
-        assure("", e.hasMoreElements());
-        ht.remove(key);
-        assure("", e.nextElement() == null);
     }
 
     public void testDispose() throws InterruptedException {
