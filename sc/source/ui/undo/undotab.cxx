@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undotab.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: nn $ $Date: 2001-12-05 22:03:35 $
+ *  last change: $Author: hr $ $Date: 2003-04-28 15:45:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -446,6 +446,9 @@ void __EXPORT ScUndoDeleteTab::Undo()
             }
             pDoc->SetVisible( theTabs[i], pRefUndoDoc->IsVisible( theTabs[i] ) );
 
+            if ( pRefUndoDoc->IsTabProtected( theTabs[i] ) )
+                pDoc->SetTabProtection( theTabs[i], TRUE, pRefUndoDoc->GetTabPassword( theTabs[i] ) );
+
             //  Drawing-Layer passiert beim MoveUndo::EndUndo
     //      pDoc->TransferDrawPage(pRefUndoDoc, nTab,nTab);
         }
@@ -767,19 +770,26 @@ void __EXPORT ScUndoCopyTab::Redo()
 
         pViewShell->GetViewData()->MoveTab( nOldTab, nNewTab );
 
-        if ( pDoc->IsScenario(nOldTab) )
+        USHORT nAdjSource = nOldTab;
+        if ( nNewTab <= nOldTab )
+            ++nAdjSource;               // new position of source table after CopyTab
+
+        if ( pDoc->IsScenario(nAdjSource) )
         {
             pDoc->SetScenario(nNewTab, TRUE );
             String aComment;
             Color  aColor;
             USHORT nScenFlags;
-            pDoc->GetScenarioData(nOldTab, aComment, aColor, nScenFlags );
+            pDoc->GetScenarioData(nAdjSource, aComment, aColor, nScenFlags );
             pDoc->SetScenarioData(nNewTab, aComment, aColor, nScenFlags );
-            BOOL bActive = pDoc->IsActiveScenario(nOldTab);
+            BOOL bActive = pDoc->IsActiveScenario(nAdjSource);
             pDoc->SetActiveScenario(nNewTab, bActive );
-            BOOL bVisible=pDoc->IsVisible(nOldTab);
+            BOOL bVisible=pDoc->IsVisible(nAdjSource);
             pDoc->SetVisible(nNewTab,bVisible );
         }
+
+        if ( pDoc->IsTabProtected( nAdjSource ) )
+            pDoc->SetTabProtection( nNewTab, TRUE, pDoc->GetTabPassword( nAdjSource ) );
     }
 
     if (pDrawUndo)
@@ -964,6 +974,9 @@ void __EXPORT ScUndoImportTab::Undo()
                 BOOL bVisible=pDoc->IsVisible(nTabPos);
                 pRedoDoc->SetVisible(nTabPos,bVisible );
             }
+
+            if ( pDoc->IsTabProtected( nTabPos ) )
+                pRedoDoc->SetTabProtection( nTabPos, TRUE, pDoc->GetTabPassword( nTabPos ) );
         }
 
     }
@@ -1016,6 +1029,9 @@ void __EXPORT ScUndoImportTab::Redo()
             BOOL bVisible=pRedoDoc->IsVisible(nTabPos);
             pDoc->SetVisible(nTabPos,bVisible );
         }
+
+        if ( pRedoDoc->IsTabProtected( nTabPos ) )
+            pDoc->SetTabProtection( nTabPos, TRUE, pRedoDoc->GetTabPassword( nTabPos ) );
     }
 
     if (pDrawUndo)
