@@ -2,9 +2,9 @@
 #
 #   $RCSfile: target.mk,v $
 #
-#   $Revision: 1.133 $
+#   $Revision: 1.134 $
 #
-#   last change: $Author: vg $ $Date: 2003-04-01 13:34:20 $
+#   last change: $Author: rt $ $Date: 2003-04-09 07:28:25 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -2029,13 +2029,7 @@ TARGETDEPS+=$(ADDOPTTARGET)
 .ENDIF
 
 # -Gc breaks the dependency chain and causes indefinite nummbers of $(CPPUMAKER)
-# calls...
-.IF "$(GUI)"=="WNT"
 CPPUMAKERFLAGS*=-L
-#CPPUMAKERFLAGS+=-Gc
-.ELSE			# "$(GUI)"=="WNT"
-#CPPUMAKERFLAGS+=-Gc
-.ENDIF			# "$(GUI)"=="WNT"
 
 .IF "$(UNOTYPES)" != ""
 .IF "$(SINGLE_SHOT)"==""
