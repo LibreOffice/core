@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wmadaptor.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: pl $ $Date: 2001-11-02 12:30:53 $
+ *  last change: $Author: pl $ $Date: 2001-11-15 11:22:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1379,12 +1379,10 @@ void WMAdaptor::maximizeFrame( SalFrame* pFrame, bool bHorizontal, bool bVertica
                 pFrame->maFrameData.aRestoreFullScreen_.IsEmpty() ?
                 rGeom.nY : pFrame->maFrameData.aRestoreFullScreen_.Top();
         }
-        if( pFrame->maFrameData.aRestoreFullScreen_.IsEmpty() )
-            pFrame->maFrameData.aRestoreFullScreen_ =
-                Rectangle( Point( rGeom.nX, rGeom.nY ), Size( rGeom.nWidth, rGeom.nHeight ) );
         delete pFrame->maFrameData.pFreeGraphics_;
         pFrame->maFrameData.pFreeGraphics_ = NULL;
 
+        Rectangle aRestore( Point( rGeom.nX, rGeom.nY ), Size( rGeom.nWidth, rGeom.nHeight ) );
         if( pFrame->maFrameData.bMapped_ )
         {
             XSetInputFocus( m_pDisplay,
@@ -1392,7 +1390,21 @@ void WMAdaptor::maximizeFrame( SalFrame* pFrame, bool bHorizontal, bool bVertica
                             RevertToNone,
                             CurrentTime
                             );
+            if( m_aWMName.EqualsAscii( "Dtwm" ) )
+            {
+                /*
+                 *  Dtwm will only position  correctly with center gravity
+                 *  and in this case the request actually changes the frame
+                 *  not the shell window
+                 */
+                aTarget = Rectangle( Point( 0, 0 ), aScreenSize );
+                aRestore.Move( -rGeom.nLeftDecoration, -rGeom.nTopDecoration );
+            }
         }
+
+        if( pFrame->maFrameData.aRestoreFullScreen_.IsEmpty() )
+            pFrame->maFrameData.aRestoreFullScreen_ = aRestore;
+
         pFrame->maFrameData.SetPosSize( aTarget );
         pFrame->maFrameData.nWidth_     = aTarget.GetWidth();
         pFrame->maFrameData.nHeight_    = aTarget.GetHeight();
