@@ -2,9 +2,9 @@
  *
  *  $RCSfile: obj3d.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:36:54 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 15:31:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -188,8 +188,8 @@
 #include "svdio.hxx"
 #endif
 
-#ifndef _SV_POLY_HXX
-#include <vcl/poly.hxx>
+#ifndef _TL_POLY_HXX
+#include <tools/poly.hxx>
 #endif
 
 #ifndef _B3D_B3DTRANS_HXX
