@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unofield.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: nn $ $Date: 2001-03-30 17:11:44 $
+ *  last change: $Author: cl $ $Date: 2001-04-03 15:06:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -451,7 +451,7 @@ SvxFieldData* SvxUnoTextField::CreateFieldData() const throw()
         {
             Time aTime;
 
-            if( mnServiceId != ID_TIMEFIELD )
+            if( mnServiceId != ID_TIMEFIELD && mnServiceId != ID_DATEFIELD )
             {
                 Time aTime( setTime( mpImpl->maDateTime ) );
                 pData = new SvxExtTimeField( aTime, mpImpl->mbBoolean1?SVXTIMETYPE_FIX:SVXTIMETYPE_VAR );
