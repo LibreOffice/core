@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xltools.hxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-21 13:47:48 $
+ *  last change: $Author: rt $ $Date: 2005-03-29 13:47:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -248,6 +248,11 @@ public:
     /** Returns true, if the passed string is a name of a conditional format style created by Excel import.
         @param pnNextChar  If not 0, the index of the char after the evaluated substring will be returned here. */
     static bool         IsCondFormatStyleName( const String& rStyleName, xub_StrLen* pnNextChar = 0 );
+
+    // stream handling --------------------------------------------------------
+
+    /** Skips a substream (BOF/EOF record block). Includes all embedded substreams. */
+    static void         SkipSubStream( XclImpStream& rStrm );
 
     // ------------------------------------------------------------------------
 private:
