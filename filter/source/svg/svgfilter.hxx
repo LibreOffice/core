@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svgfilter.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:51:53 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 15:25:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,7 +136,9 @@
 #ifndef _COM_SUN_STAR_TEXT_XTEXT_HPP_
 #include <com/sun/star/text/XText.hpp>
 #endif
-
+#ifndef _COM_SUN_STAR_FRAME_XDESKTOP_HPP_
+#include <com/sun/star/frame/XDesktop.hpp>
+#endif
 #include <com/sun/star/java/XJavaVM.hpp>
 #include <com/sun/star/java/XJavaThreadRegister_11.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -253,6 +255,7 @@ struct HashReferenceXInterface
 
 class SVGFontExport;
 class SVGActionWriter;
+class EditFieldInfo;
 
 #ifdef SOLAR_JAVA
 class SVGFilter : public cppu::WeakImplHelper5 < XFilter,
@@ -277,10 +280,14 @@ private:
 #ifdef SOLAR_JAVA
     Reference< XComponent >             mxDstDoc;
 #endif
+    Reference< XDrawPage >              mxDefaultPage;
     SvXMLElementExport*                 mpSVGDoc;
     SVGExport*                          mpSVGExport;
     SVGFontExport*                      mpSVGFontExport;
     SVGActionWriter*                    mpSVGWriter;
+    SdrModel*                           mpSdrModel;
+    SdrPage*                            mpDefaultSdrPage;
+    Link                                maOldFieldHdl;
     sal_Bool                            mbPresentation;
 
 #ifdef SOLAR_JAVA
@@ -309,12 +316,14 @@ private:
     sal_Bool                            implCreateObjects( const Reference< XDrawPages >& rxMasterPages,
                                                            const Reference< XDrawPages >& rxDrawPages,
                                                            sal_Int32 nPageToExport );
-
     sal_Bool                            implCreateObjectsFromShapes( const Reference< XShapes >& rxShapes );
     sal_Bool                            implCreateObjectsFromShape( const Reference< XShape >& rxShape );
     sal_Bool                            implCreateObjectsFromBackground( const Reference< XDrawPage >& rxMasterPage );
-    ::rtl::OUString                         implGetDescriptionFromShape( const Reference< XShape >& rxShape );
-    ::rtl::OUString                         implGetValidIDFromInterface( const Reference< XInterface >& rxIf );
+
+    ::rtl::OUString                     implGetDescriptionFromShape( const Reference< XShape >& rxShape );
+    ::rtl::OUString                     implGetValidIDFromInterface( const Reference< XInterface >& rxIf );
+
+                                        DECL_LINK( CalcFieldHdl, EditFieldInfo* );
 
 protected:
 
