@@ -44,7 +44,7 @@ $(DEF1TARGETN) .PHONY : \
 # don't forget to have the right DEFSTAG set!
 #
     +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl update $(DEFSTAG)
-    ok.bat && $(RM) ok.bat
+    +ok.bat && $(RM) ok.bat
 .ENDIF			# "$(shell +echo %_disk)"=="O"
 .ENDIF				# "$(DEFLIB1NAME)"!=""
 .ENDIF			# "$(UPDATER)"!=""
@@ -83,7 +83,7 @@ $(DEF1TARGETN) .PHONY : \
 # don't forget to have the right DEFSTAG set!
 #
     +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl commit
-    ok.bat && $(RM) ok.bat
+    +ok.bat && $(RM) ok.bat
 .ENDIF			# "$(shell +echo %_disk)"=="O"
 .ENDIF			# "$(UPDATER)"!=""
 .ENDIF			# "$(BUILD_SOSL)"==""
@@ -222,7 +222,7 @@ $(DEF2TARGETN) .PHONY : \
 # don't forget to have the right DEFSTAG set!
 #
     +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl update $(DEFSTAG)
-    ok.bat && $(RM) ok.bat
+    +ok.bat && $(RM) ok.bat
 .ENDIF			# "$(shell +echo %_disk)"=="O"
 .ENDIF				# "$(DEFLIB2NAME)"!=""
 .ENDIF			# "$(UPDATER)"!=""
@@ -261,7 +261,7 @@ $(DEF2TARGETN) .PHONY : \
 # don't forget to have the right DEFSTAG set!
 #
     +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl commit
-    ok.bat && $(RM) ok.bat
+    +ok.bat && $(RM) ok.bat
 .ENDIF			# "$(shell +echo %_disk)"=="O"
 .ENDIF			# "$(UPDATER)"!=""
 .ENDIF			# "$(BUILD_SOSL)"==""
@@ -400,7 +400,7 @@ $(DEF3TARGETN) .PHONY : \
 # don't forget to have the right DEFSTAG set!
 #
     +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl update $(DEFSTAG)
-    ok.bat && $(RM) ok.bat
+    +ok.bat && $(RM) ok.bat
 .ENDIF			# "$(shell +echo %_disk)"=="O"
 .ENDIF				# "$(DEFLIB3NAME)"!=""
 .ENDIF			# "$(UPDATER)"!=""
@@ -439,7 +439,7 @@ $(DEF3TARGETN) .PHONY : \
 # don't forget to have the right DEFSTAG set!
 #
     +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl commit
-    ok.bat && $(RM) ok.bat
+    +ok.bat && $(RM) ok.bat
 .ENDIF			# "$(shell +echo %_disk)"=="O"
 .ENDIF			# "$(UPDATER)"!=""
 .ENDIF			# "$(BUILD_SOSL)"==""
@@ -578,7 +578,7 @@ $(DEF4TARGETN) .PHONY : \
 # don't forget to have the right DEFSTAG set!
 #
     +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl update $(DEFSTAG)
-    ok.bat && $(RM) ok.bat
+    +ok.bat && $(RM) ok.bat
 .ENDIF			# "$(shell +echo %_disk)"=="O"
 .ENDIF				# "$(DEFLIB4NAME)"!=""
 .ENDIF			# "$(UPDATER)"!=""
@@ -617,7 +617,7 @@ $(DEF4TARGETN) .PHONY : \
 # don't forget to have the right DEFSTAG set!
 #
     +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl commit
-    ok.bat && $(RM) ok.bat
+    +ok.bat && $(RM) ok.bat
 .ENDIF			# "$(shell +echo %_disk)"=="O"
 .ENDIF			# "$(UPDATER)"!=""
 .ENDIF			# "$(BUILD_SOSL)"==""
@@ -756,7 +756,7 @@ $(DEF5TARGETN) .PHONY : \
 # don't forget to have the right DEFSTAG set!
 #
     +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl update $(DEFSTAG)
-    ok.bat && $(RM) ok.bat
+    +ok.bat && $(RM) ok.bat
 .ENDIF			# "$(shell +echo %_disk)"=="O"
 .ENDIF				# "$(DEFLIB5NAME)"!=""
 .ENDIF			# "$(UPDATER)"!=""
@@ -795,7 +795,7 @@ $(DEF5TARGETN) .PHONY : \
 # don't forget to have the right DEFSTAG set!
 #
     +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl commit
-    ok.bat && $(RM) ok.bat
+    +ok.bat && $(RM) ok.bat
 .ENDIF			# "$(shell +echo %_disk)"=="O"
 .ENDIF			# "$(UPDATER)"!=""
 .ENDIF			# "$(BUILD_SOSL)"==""
@@ -934,7 +934,7 @@ $(DEF6TARGETN) .PHONY : \
 # don't forget to have the right DEFSTAG set!
 #
     +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl update $(DEFSTAG)
-    ok.bat && $(RM) ok.bat
+    +ok.bat && $(RM) ok.bat
 .ENDIF			# "$(shell +echo %_disk)"=="O"
 .ENDIF				# "$(DEFLIB6NAME)"!=""
 .ENDIF			# "$(UPDATER)"!=""
@@ -973,7 +973,7 @@ $(DEF6TARGETN) .PHONY : \
 # don't forget to have the right DEFSTAG set!
 #
     +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl commit
-    ok.bat && $(RM) ok.bat
+    +ok.bat && $(RM) ok.bat
 .ENDIF			# "$(shell +echo %_disk)"=="O"
 .ENDIF			# "$(UPDATER)"!=""
 .ENDIF			# "$(BUILD_SOSL)"==""
@@ -1112,7 +1112,7 @@ $(DEF7TARGETN) .PHONY : \
 # don't forget to have the right DEFSTAG set!
 #
     +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl update $(DEFSTAG)
-    ok.bat && $(RM) ok.bat
+    +ok.bat && $(RM) ok.bat
 .ENDIF			# "$(shell +echo %_disk)"=="O"
 .ENDIF				# "$(DEFLIB7NAME)"!=""
 .ENDIF			# "$(UPDATER)"!=""
@@ -1151,7 +1151,7 @@ $(DEF7TARGETN) .PHONY : \
 # don't forget to have the right DEFSTAG set!
 #
     +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl commit
-    ok.bat && $(RM) ok.bat
+    +ok.bat && $(RM) ok.bat
 .ENDIF			# "$(shell +echo %_disk)"=="O"
 .ENDIF			# "$(UPDATER)"!=""
 .ENDIF			# "$(BUILD_SOSL)"==""
@@ -1290,7 +1290,7 @@ $(DEF8TARGETN) .PHONY : \
 # don't forget to have the right DEFSTAG set!
 #
     +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl update $(DEFSTAG)
-    ok.bat && $(RM) ok.bat
+    +ok.bat && $(RM) ok.bat
 .ENDIF			# "$(shell +echo %_disk)"=="O"
 .ENDIF				# "$(DEFLIB8NAME)"!=""
 .ENDIF			# "$(UPDATER)"!=""
@@ -1329,7 +1329,7 @@ $(DEF8TARGETN) .PHONY : \
 # don't forget to have the right DEFSTAG set!
 #
     +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl commit
-    ok.bat && $(RM) ok.bat
+    +ok.bat && $(RM) ok.bat
 .ENDIF			# "$(shell +echo %_disk)"=="O"
 .ENDIF			# "$(UPDATER)"!=""
 .ENDIF			# "$(BUILD_SOSL)"==""
@@ -1468,7 +1468,7 @@ $(DEF9TARGETN) .PHONY : \
 # don't forget to have the right DEFSTAG set!
 #
     +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl update $(DEFSTAG)
-    ok.bat && $(RM) ok.bat
+    +ok.bat && $(RM) ok.bat
 .ENDIF			# "$(shell +echo %_disk)"=="O"
 .ENDIF				# "$(DEFLIB9NAME)"!=""
 .ENDIF			# "$(UPDATER)"!=""
@@ -1507,7 +1507,7 @@ $(DEF9TARGETN) .PHONY : \
 # don't forget to have the right DEFSTAG set!
 #
     +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl commit
-    ok.bat && $(RM) ok.bat
+    +ok.bat && $(RM) ok.bat
 .ENDIF			# "$(shell +echo %_disk)"=="O"
 .ENDIF			# "$(UPDATER)"!=""
 .ENDIF			# "$(BUILD_SOSL)"==""
@@ -1646,7 +1646,7 @@ $(DEF10TARGETN) .PHONY : \
 # don't forget to have the right DEFSTAG set!
 #
     +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl update $(DEFSTAG)
-    ok.bat && $(RM) ok.bat
+    +ok.bat && $(RM) ok.bat
 .ENDIF			# "$(shell +echo %_disk)"=="O"
 .ENDIF				# "$(DEFLIB10NAME)"!=""
 .ENDIF			# "$(UPDATER)"!=""
@@ -1685,7 +1685,7 @@ $(DEF10TARGETN) .PHONY : \
 # don't forget to have the right DEFSTAG set!
 #
     +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl commit
-    ok.bat && $(RM) ok.bat
+    +ok.bat && $(RM) ok.bat
 .ENDIF			# "$(shell +echo %_disk)"=="O"
 .ENDIF			# "$(UPDATER)"!=""
 .ENDIF			# "$(BUILD_SOSL)"==""

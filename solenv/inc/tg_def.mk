@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_def.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: hjs $ $Date: 2002-04-08 17:06:40 $
+#   last change: $Author: hjs $ $Date: 2002-04-16 11:42:08 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -147,7 +147,7 @@ $(DEF$(TNR)TARGETN) .PHONY : \
 # don't forget to have the right DEFSTAG set!
 #
     +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl update $(DEFSTAG)
-    ok.bat && $(RM) ok.bat
+    +ok.bat && $(RM) ok.bat
 .ENDIF			# "$(shell +echo %_disk)"=="O"
 .ENDIF				# "$(DEFLIB$(TNR)NAME)"!=""
 .ENDIF			# "$(UPDATER)"!=""
@@ -186,7 +186,7 @@ $(DEF$(TNR)TARGETN) .PHONY : \
 # don't forget to have the right DEFSTAG set!
 #
     +$(PERL) $(COMMON_ENV_TOOLS)$/lockcidef.pl commit
-    ok.bat && $(RM) ok.bat
+    +ok.bat && $(RM) ok.bat
 .ENDIF			# "$(shell +echo %_disk)"=="O"
 .ENDIF			# "$(UPDATER)"!=""
 .ENDIF			# "$(BUILD_SOSL)"==""
