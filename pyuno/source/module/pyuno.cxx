@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pyuno.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 19:29:18 $
+ *  last change: $Author: hr $ $Date: 2005-02-11 16:39:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -586,7 +586,7 @@ int PyUNO_setattr (PyObject* self, char* name, PyObject* value)
     try
     {
         Runtime runtime;
-        Any val= runtime.pyObject2Any(value);
+        Any val= runtime.pyObject2Any(value, ACCEPT_UNO_ANY);
 
         OUString attrName( OUString::createFromAscii( name ) );
         {
