@@ -2,9 +2,9 @@
  *
  *  $RCSfile: InvalidValueException.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 17:36:42 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 16:16:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@
 /** signals that the value of the key is invalid or does not have the
     appropriate key type.
  */
-exception InvalidValueException: com::sun::star::uno::Exception
+published exception InvalidValueException: com::sun::star::uno::Exception
 {
 };
 
