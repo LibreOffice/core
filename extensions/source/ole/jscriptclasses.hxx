@@ -2,9 +2,9 @@
  *
  *  $RCSfile: jscriptclasses.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jl $ $Date: 2000-10-19 10:51:09 $
+ *  last change: $Author: obo $ $Date: 2003-03-31 17:22:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,7 +68,9 @@
 #ifdef _DEBUG
 //#define _ATL_DEBUG_INTERFACES
 #endif
-
+#if _MSC_VER >= 1300
+#undef _DEBUG
+#endif
 
 #include <atlbase.h>
 extern CComModule _Module;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: servprov.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: jl $ $Date: 2002-06-05 13:21:38 $
+ *  last change: $Author: obo $ $Date: 2003-03-31 17:22:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,10 @@
 
 #include <tools/presys.h>
 #define _WIN32_WINNT 0x0400
+
+#if defined(_MSC_VER) && (_MSC_VER >= 1300)
+#undef _DEBUG
+#endif
 #include <atlbase.h>
 extern CComModule _Module;
 #include <atlcom.h>
