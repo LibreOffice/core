@@ -2,9 +2,9 @@
  *
  *  $RCSfile: signal.c,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kr $ $Date: 2000-10-31 17:45:18 $
+ *  last change: $Author: kr $ $Date: 2000-11-21 10:07:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -140,6 +140,7 @@ static oslSignalHandlerImpl*  SignalList;
 static sal_Bool               bDoHardKill = sal_False;
 static sal_Bool               bSetSEGVHandler = sal_False;
 static sal_Bool               bSetWINCHHandler = sal_False;
+static sal_Bool               bSetILLHandler = sal_False;
 
 static void SignalHandlerFunction(int);
 extern oslProcessError SAL_CALL osl_psz_getExecutableFile(sal_Char* pszBuffer, sal_uInt32 Max);
@@ -174,6 +175,9 @@ static sal_Bool InitSignal()
 
         // WORKAROUND FOR WINCH HANDLER (SEE ABOVE)
         bSetWINCHHandler = sal_True;
+
+        // WORKAROUND FOR ILLEGAL INSTRUCTION HANDLER (SEE ABOVE)
+        bSetILLHandler = sal_True;
     }
 
     SignalListMutex = osl_createMutex();
@@ -188,7 +192,8 @@ static sal_Bool InitSignal()
     {
         /* hack: stomcatd is attaching JavaVM wich dont work with an sigaction(SEGV) */
         if ((bSetSEGVHandler || Signals[i].Signal != SIGSEGV)
-        && (bSetWINCHHandler || Signals[i].Signal != SIGWINCH))
+        && (bSetWINCHHandler || Signals[i].Signal != SIGWINCH)
+        && (bSetILLHandler   || Signals[i].Signal != SIGILL))
         {
             if (Signals[i].Action != ACT_SYSTEM)
             {
