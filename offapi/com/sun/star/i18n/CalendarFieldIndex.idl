@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CalendarFieldIndex.idl,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: er $ $Date: 2002-11-14 14:26:00 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 20:29:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@ module com { module sun { module star { module i18n {
     difference of GMT+2. The calculation is
     GMT = LocalTime - ZoneOffset - DstOffset </p>
  */
-constants CalendarFieldIndex
+published constants CalendarFieldIndex
 {
     /// Get     <type>AmPmValue</type>.
     const short AM_PM           = 0;
