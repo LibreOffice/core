@@ -2,9 +2,9 @@
  *
  *  $RCSfile: parawin.src,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: rt $ $Date: 2001-05-04 20:20:48 $
+ *  last change: $Author: rt $ $Date: 2001-05-10 06:12:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,8 +65,8 @@
  //
  // $Workfile:   parawin.src  $
  //   $Author: rt $
- //     $Date: 2001-05-04 20:20:48 $
- // $Revision: 1.4 $
+ //     $Date: 2001-05-10 06:12:52 $
+ // $Revision: 1.5 $
  //  $Logfile:   T:/sc/source/ui/formdlg/parawin.srv  $
  //----------------------------------------------------------------------------
 
@@ -130,7 +130,8 @@
     QuickHelpText[ korean ] = "√‡º“!";  \
     QuickHelpText[ language_user1 ] = " ";  \
     QuickHelpText[ turkish ] = "Verkleinern";   \
-    QuickHelpText[ catalan ] = "Reducir";
+    QuickHelpText[ catalan ] = "Reducir";   \
+    QuickHelpText[ finnish ] = "Pienenn‰!";
 
  //---------------------------------------------------------------------------
 
@@ -169,6 +170,7 @@ TabPage RID_SCTAB_PARAMETER
         Text[ arabic ] = "œ«·… €Ì— „⁄—Ê›…";
         Text[ turkish ] = "Bilinmeyen i˛lev";
         Text[ catalan ] = "FunciÛn desconocida";
+        Text[ finnish ] = "Tuntematon toiminto";
     };
 
     FixedText FT_PARNAME
