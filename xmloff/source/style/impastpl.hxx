@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impastpl.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mh $ $Date: 2001-02-01 18:12:00 $
+ *  last change: $Author: sab $ $Date: 2001-05-29 15:38:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,9 +234,13 @@ public:
         const ::rtl::OUString& rStrPrefix, sal_Bool bAsFamily = sal_True );
     void RegisterName( sal_Int32 nFamily, const ::rtl::OUString& rName );
 
-    ::rtl::OUString Add( sal_Int32 nFamily, const ::rtl::OUString& rParent,
-                         const ::std::vector< XMLPropertyState >& rProperties,
-                           sal_Bool bCache = sal_False );
+//  ::rtl::OUString Add( sal_Int32 nFamily, const ::rtl::OUString& rParent,
+//                       const ::std::vector< XMLPropertyState >& rProperties,
+//                       sal_Bool bCache = sal_False );
+    sal_Bool Add( ::rtl::OUString& rName, sal_Int32 nFamily,
+                const ::rtl::OUString& rParent,
+                const ::std::vector< XMLPropertyState >& rProperties,
+                sal_Bool bCache = sal_False );
     ::rtl::OUString AddToCache( sal_Int32 nFamily,
                                 const ::rtl::OUString& rParent );
     ::rtl::OUString Find( sal_Int32 nFamily, const ::rtl::OUString& rParent,

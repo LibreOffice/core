@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlaustp.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-28 15:05:34 $
+ *  last change: $Author: sab $ $Date: 2001-05-29 15:38:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -319,28 +319,47 @@ OUString SvXMLAutoStylePoolP::Add( sal_Int32 nFamily,
                                   const vector< XMLPropertyState >& rProperties )
 {
     OUString sEmpty;
-    return pImpl->Add( nFamily, sEmpty, rProperties );
+    OUString sName;
+    pImpl->Add(sName, nFamily, sEmpty, rProperties );
+    return sName;
 }
 
 OUString SvXMLAutoStylePoolP::Add( sal_Int32 nFamily,
                                   const OUString& rParent,
                                   const vector< XMLPropertyState >& rProperties )
 {
-    return pImpl->Add( nFamily, rParent, rProperties );
+    OUString sName;
+    pImpl->Add(sName, nFamily, rParent, rProperties );
+    return sName;
+}
+
+sal_Bool SvXMLAutoStylePoolP::Add(OUString& rName, sal_Int32 nFamily, const ::std::vector< XMLPropertyState >& rProperties )
+{
+    OUString sEmpty;
+    return pImpl->Add(rName, nFamily, sEmpty, rProperties);
+}
+
+sal_Bool SvXMLAutoStylePoolP::Add(OUString& rName, sal_Int32 nFamily, const OUString& rParent, const ::std::vector< XMLPropertyState >& rProperties )
+{
+    return pImpl->Add(rName, nFamily, rParent, rProperties);
 }
 
 OUString SvXMLAutoStylePoolP::AddAndCache( sal_Int32 nFamily,
                                   const vector< XMLPropertyState >& rProperties )
 {
     OUString sEmpty;
-    return pImpl->Add( nFamily, sEmpty, rProperties, sal_True );
+    OUString sName;
+    pImpl->Add(sName, nFamily, sEmpty, rProperties, sal_True );
+    return sName;
 }
 
 OUString SvXMLAutoStylePoolP::AddAndCache( sal_Int32 nFamily,
                                   const OUString& rParent,
                                   const vector< XMLPropertyState >& rProperties )
 {
-    return pImpl->Add( nFamily, rParent, rProperties, sal_True );
+    OUString sName;
+    pImpl->Add(sName, nFamily, rParent, rProperties, sal_True );
+    return sName;
 }
 
 OUString SvXMLAutoStylePoolP::AddAndCache( sal_Int32 nFamily,

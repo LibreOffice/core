@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impastp4.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: sab $ $Date: 2001-01-09 11:45:50 $
+ *  last change: $Author: sab $ $Date: 2001-05-29 15:38:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,12 +172,16 @@ void SvXMLAutoStylePoolP_Impl::RegisterName( sal_Int32 nFamily, const OUString& 
 // if not added, yet.
 //
 
-OUString SvXMLAutoStylePoolP_Impl::Add( sal_Int32 nFamily,
+/*OUString SvXMLAutoStylePoolP_Impl::Add( sal_Int32 nFamily,
                                          const OUString& rParent,
                                         const vector< XMLPropertyState >& rProperties,
-                                        sal_Bool bCache )
+                                        sal_Bool bCache )*/
+sal_Bool SvXMLAutoStylePoolP_Impl::Add(OUString& rName, sal_Int32 nFamily,
+                const OUString& rParent,
+                const ::std::vector< XMLPropertyState >& rProperties,
+                sal_Bool bCache)
 {
-    OUString sName;
+    sal_Bool bRet(sal_False);
     sal_uInt32 nPos;
 
     XMLFamilyData_Impl *pFamily = 0;
@@ -204,20 +208,23 @@ OUString SvXMLAutoStylePoolP_Impl::Add( sal_Int32 nFamily,
             pParents->Insert( pParent );
         }
 
-        if( pParent->Add( pFamily, rProperties, sName ) )
+        if( pParent->Add( pFamily, rProperties, rName ) )
+        {
             pFamily->mnCount++;
+            bRet = sal_True;
+        }
 
         if( bCache )
         {
             if( !pFamily->pCache )
                 pFamily->pCache = new SvXMLAutoStylePoolCache_Impl( 256, 256 );
             if( pFamily->pCache->Count() < MAX_CACHE_SIZE )
-                pFamily->pCache->Insert( new OUString( sName ),
+                pFamily->pCache->Insert( new OUString( rName ),
                                          pFamily->pCache->Count() );
         }
     }
 
-    return sName;
+    return bRet;
 }
 
 OUString SvXMLAutoStylePoolP_Impl::AddToCache( sal_Int32 nFamily,
