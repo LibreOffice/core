@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleComboBox.java,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Date: 2003-09-08 12:58:58 $
+ *  last change: $Date: 2004-01-05 20:32:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,18 +58,7 @@
  *
  *
  ************************************************************************/
-
 package mod._toolkit;
-
-import java.io.PrintWriter;
-
-import lib.StatusException;
-import lib.TestCase;
-import lib.TestEnvironment;
-import lib.TestParameters;
-import util.AccessibilityTools;
-import util.SOfficeFactory;
-import util.utils;
 
 import com.sun.star.accessibility.AccessibleRole;
 import com.sun.star.accessibility.XAccessible;
@@ -88,6 +77,18 @@ import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XInterface;
 import com.sun.star.util.URL;
 import com.sun.star.util.XURLTransformer;
+
+import java.io.PrintWriter;
+
+import lib.StatusException;
+import lib.TestCase;
+import lib.TestEnvironment;
+import lib.TestParameters;
+
+import util.AccessibilityTools;
+import util.SOfficeFactory;
+import util.utils;
+
 
 /**
  * Test for object which is represented by accessible component
@@ -111,7 +112,6 @@ import com.sun.star.util.XURLTransformer;
  * @see ifc.accessibility._XAccessibleContext
  */
 public class AccessibleComboBox extends TestCase {
-
     XTextDocument xTextDoc = null;
     XAccessibleAction action = null;
 
@@ -120,46 +120,49 @@ public class AccessibleComboBox extends TestCase {
      * finds AccessibleComboBox walking through the
      * accessible component tree.
      */
-    protected TestEnvironment createTestEnvironment(
-        TestParameters Param, PrintWriter log) {
-
+    protected TestEnvironment createTestEnvironment(TestParameters Param,
+                                                    PrintWriter log) {
         XInterface oObj = null;
 
         AccessibilityTools at = new AccessibilityTools();
 
         try {
-            oObj = (XInterface) ((XMultiServiceFactory)Param.getMSF()).createInstance
-                ("com.sun.star.awt.Toolkit") ;
+            oObj = (XInterface) ((XMultiServiceFactory) Param.getMSF()).createInstance(
+                           "com.sun.star.awt.Toolkit");
         } catch (com.sun.star.uno.Exception e) {
             log.println("Couldn't get toolkit");
             e.printStackTrace(log);
-            throw new StatusException("Couldn't get toolkit", e );
+            throw new StatusException("Couldn't get toolkit", e);
         }
 
-        XExtendedToolkit tk = (XExtendedToolkit)
-            UnoRuntime.queryInterface(XExtendedToolkit.class,oObj);
+        XExtendedToolkit tk = (XExtendedToolkit) UnoRuntime.queryInterface(
+                                      XExtendedToolkit.class, oObj);
 
-        DiagThread psDiag = new DiagThread(xTextDoc,(XMultiServiceFactory)Param.getMSF());
+        DiagThread psDiag = new DiagThread(xTextDoc,
+                                           (XMultiServiceFactory) Param.getMSF());
         psDiag.start();
 
         shortWait();
 
         Object atw = tk.getActiveTopWindow();
 
-        XWindow xWindow = (XWindow)
-                UnoRuntime.queryInterface(XWindow.class,atw);
+        XWindow xWindow = (XWindow) UnoRuntime.queryInterface(XWindow.class,
+                                                              atw);
 
         XAccessible xRoot = at.getAccessibleObject(xWindow);
 
-        oObj = at.getAccessibleObjectForRole
-            (xRoot, AccessibleRole.PUSH_BUTTON,"Cancel");
-        action = (XAccessibleAction)
-                    UnoRuntime.queryInterface(XAccessibleAction.class, oObj);
+        oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.PUSH_BUTTON,
+                                             "Cancel");
+        action = (XAccessibleAction) UnoRuntime.queryInterface(
+                         XAccessibleAction.class, oObj);
 
-        oObj = at.getAccessibleObjectForRole
-            (xRoot, AccessibleRole.PAGE_TAB_LIST);
-        XAccessibleSelection xAccSel = (XAccessibleSelection)
-            UnoRuntime.queryInterface(XAccessibleSelection.class, oObj);
+        oObj = at.getAccessibleObjectForRole(xRoot,
+                                             AccessibleRole.PAGE_TAB_LIST);
+
+        XAccessibleSelection xAccSel = (XAccessibleSelection) UnoRuntime.queryInterface(
+                                               XAccessibleSelection.class,
+                                               oObj);
+
         try {
             xAccSel.selectAccessibleChild(0);
         } catch (com.sun.star.lang.IndexOutOfBoundsException e) {
@@ -168,40 +171,43 @@ public class AccessibleComboBox extends TestCase {
 
         try {
             Thread.sleep(1000);
-        } catch (InterruptedException ex) {}
+        } catch (InterruptedException ex) {
+        }
+
 
         //at.printAccessibleTree(log, xRoot);
-
-        oObj = at.getAccessibleObjectForRole
-            (xRoot, AccessibleRole.PANEL, "", "AccessibleComboBox");
+        oObj = at.getAccessibleObjectForRole(xRoot, AccessibleRole.PANEL, "",
+                                             "AccessibleComboBox");
 
         log.println("ImplementationName " + utils.getImplName(oObj));
 
         TestEnvironment tEnv = new TestEnvironment(oObj);
 
-        final XAccessibleComponent acomp = (XAccessibleComponent)
-            UnoRuntime.queryInterface(XAccessibleComponent.class,oObj) ;
-        final XAccessibleComponent acomp1 = (XAccessibleComponent)
-            UnoRuntime.queryInterface(XAccessibleComponent.class,action) ;
+        final XAccessibleComponent acomp = (XAccessibleComponent) UnoRuntime.queryInterface(
+                                                   XAccessibleComponent.class,
+                                                   oObj);
+        final XAccessibleComponent acomp1 = (XAccessibleComponent) UnoRuntime.queryInterface(
+                                                    XAccessibleComponent.class,
+                                                    action);
 
         tEnv.addObjRelation("EventProducer",
-            new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer(){
-                public void fireEvent() {
-                    acomp1.grabFocus();
-                    acomp.grabFocus();
-                }
-            });
+                            new ifc.accessibility._XAccessibleEventBroadcaster.EventProducer() {
+            public void fireEvent() {
+                acomp1.grabFocus();
+                acomp.grabFocus();
+            }
+        });
 
         return tEnv;
-
     }
 
     /**
      * Closes the dialog using accessible button 'Cancel' found in
      * <code>createTestEnvironment()</code>.
      */
-    protected void cleanup( TestParameters Param, PrintWriter log) {
-        log.println( "    closing dialog " );
+    protected void cleanup(TestParameters Param, PrintWriter log) {
+        log.println("    closing dialog ");
+
         try {
             action.doAccessibleAction(0);
         } catch (com.sun.star.lang.IndexOutOfBoundsException ioe) {
@@ -209,7 +215,9 @@ public class AccessibleComboBox extends TestCase {
         } catch (com.sun.star.lang.DisposedException de) {
             log.println("Dialog already disposed");
         }
-        xTextDoc.dispose();
+
+        util.DesktopTools.closeDoc(xTextDoc);
+        ;
     }
 
     /**
@@ -217,13 +225,13 @@ public class AccessibleComboBox extends TestCase {
      */
     protected void initialize(TestParameters Param, PrintWriter log) {
         try {
-            SOfficeFactory SOF = SOfficeFactory.getFactory( (XMultiServiceFactory)Param.getMSF());
+            SOfficeFactory SOF = SOfficeFactory.getFactory(
+                                         (XMultiServiceFactory) Param.getMSF());
             xTextDoc = SOF.createTextDoc(null);
         } catch (com.sun.star.uno.Exception e) {
             throw new StatusException("Can't create document", e);
         }
     }
-
 
     /**
     * Sleeps for 0.5 sec. to allow StarOffice to react on <code>
@@ -231,51 +239,56 @@ public class AccessibleComboBox extends TestCase {
     */
     private void shortWait() {
         try {
-            Thread.sleep(2000) ;
+            Thread.sleep(2000);
         } catch (InterruptedException e) {
-            log.println("While waiting :" + e) ;
+            log.println("While waiting :" + e);
         }
     }
+
     /**
      * Thread for opening modal dialog 'Character style'.
      */
     public class DiagThread extends Thread {
-
         public XTextDocument xTextDoc = null;
         public XMultiServiceFactory msf = null;
 
         public DiagThread(XTextDocument xTextDoc, XMultiServiceFactory msf) {
-            this.xTextDoc = xTextDoc ;
+            this.xTextDoc = xTextDoc;
             this.msf = msf;
         }
 
         public void run() {
-        XModel aModel = (XModel)
-            UnoRuntime.queryInterface(XModel.class, xTextDoc);
+            XModel aModel = (XModel) UnoRuntime.queryInterface(XModel.class,
+                                                               xTextDoc);
 
-        XController xController = aModel.getCurrentController();
+            XController xController = aModel.getCurrentController();
 
-        //Opening PrinterSetupDialog
-        try {
-            String aSlotID = ".uno:FontDialog";
-            XDispatchProvider xDispProv = (XDispatchProvider)
-                UnoRuntime.queryInterface( XDispatchProvider.class, xController );
-            XURLTransformer xParser = (com.sun.star.util.XURLTransformer)
-                UnoRuntime.queryInterface(XURLTransformer.class,
-            msf.createInstance("com.sun.star.util.URLTransformer"));
-            // Because it's an in/out parameter we must use an array of URL objects.
-            URL[] aParseURL = new URL[1];
-            aParseURL[0] = new URL();
-            aParseURL[0].Complete = aSlotID;
-            xParser.parseStrict(aParseURL);
-            URL aURL = aParseURL[0];
-            XDispatch xDispatcher = xDispProv.queryDispatch( aURL,"",0);
-            if( xDispatcher != null )
-                    xDispatcher.dispatch( aURL, null );
-        } catch (com.sun.star.uno.Exception e) {
-            log.println("Couldn't open dialog");
-        }
+            //Opening PrinterSetupDialog
+            try {
+                String aSlotID = ".uno:FontDialog";
+                XDispatchProvider xDispProv = (XDispatchProvider) UnoRuntime.queryInterface(
+                                                      XDispatchProvider.class,
+                                                      xController);
+                XURLTransformer xParser = (com.sun.star.util.XURLTransformer) UnoRuntime.queryInterface(
+                                                  XURLTransformer.class,
+                                                  msf.createInstance(
+                                                          "com.sun.star.util.URLTransformer"));
+
+                // Because it's an in/out parameter we must use an array of URL objects.
+                URL[] aParseURL = new URL[1];
+                aParseURL[0] = new URL();
+                aParseURL[0].Complete = aSlotID;
+                xParser.parseStrict(aParseURL);
+
+                URL aURL = aParseURL[0];
+                XDispatch xDispatcher = xDispProv.queryDispatch(aURL, "", 0);
+
+                if (xDispatcher != null) {
+                    xDispatcher.dispatch(aURL, null);
+                }
+            } catch (com.sun.star.uno.Exception e) {
+                log.println("Couldn't open dialog");
+            }
         }
     }
-
 }
