@@ -2,9 +2,9 @@
  *
  *  $RCSfile: providerimpl.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: jb $ $Date: 2000-12-14 16:12:44 $
+ *  last change: $Author: jb $ $Date: 2000-12-19 11:12:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,10 +60,11 @@
  ************************************************************************/
 
 #include <stdio.h>
+#include "providerimpl.hxx"
+#include "options.hxx"
 #include "apifactoryimpl.hxx"
 #include "apitreeimplobj.hxx"
 #include "apitreeaccess.hxx"
-#include "providerimpl.hxx"
 #include "roottree.hxx"
 #include "noderef.hxx"
 #include "objectregistry.hxx"
@@ -84,6 +85,7 @@
 #ifndef _CONFIGMGR_TRACER_HXX_
 #include "tracer.hxx"
 #endif
+#include <osl/interlck.h>
 
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -434,6 +436,7 @@ namespace configmgr
     rtl::OUString OProviderImpl::FactoryArguments::sNodePath(ASCII("nodepath"));
     rtl::OUString OProviderImpl::FactoryArguments::sDepth(ASCII("depth"));
     rtl::OUString OProviderImpl::FactoryArguments::sLocale(ASCII("locale"));
+    rtl::OUString OProviderImpl::FactoryArguments::sNoCache(ASCII("nocache"));
 
 #ifdef DBG_UTIL
     //-----------------------------------------------------------------------------
@@ -447,6 +450,7 @@ namespace configmgr
             aArgs.insert(OProviderImpl::FactoryArguments::sNodePath);
             aArgs.insert(OProviderImpl::FactoryArguments::sDepth);
             aArgs.insert(OProviderImpl::FactoryArguments::sLocale);
+            aArgs.insert(OProviderImpl::FactoryArguments::sNoCache);
         }
 
         HashSet::const_iterator it = aArgs.find(rName);
@@ -492,7 +496,8 @@ namespace configmgr
                                                       OUString& /* [out] */ _rNodeAccessor,
                                                       OUString& /* [out] */ _rUser,
                                                       OUString& /* [out] */ _rLocale,
-                                                      sal_Int32& /* [out] */ _nLevels)
+                                                      sal_Int32& /* [out] */ _nLevels,
+                                                      bool& /* [out] */ _bNoCache)
         throw (lang::IllegalArgumentException)
     {
 
@@ -501,6 +506,7 @@ namespace configmgr
 #endif
         ::rtl::OUString sUser, sPath, sLocale;
         sal_Int32 nLevelDepth = ITreeProvider::ALL_LEVELS;
+        sal_Bool bNoCache = sal_False;
 
         // the args have to be a sequence of property values, currently three property names are recognized
         beans::PropertyValue aCurrent;
@@ -519,6 +525,8 @@ namespace configmgr
                     bExtractSuccess = (aCurrent.Value >>= nLevelDepth);
                 else if (aCurrent.Name.equalsIgnoreCase(OProviderImpl::FactoryArguments::sLocale))
                     bExtractSuccess = (aCurrent.Value >>= sLocale);
+                else if (aCurrent.Name.equalsIgnoreCase(OProviderImpl::FactoryArguments::sNoCache))
+                    bExtractSuccess = (aCurrent.Value >>= bNoCache);
 /*
 #ifdef DBG_UTIL
                 else
@@ -567,6 +575,35 @@ namespace configmgr
         _nLevels = nLevelDepth;
         _rLocale = sLocale;
         _rUser = sUser;
+        _bNoCache = (bNoCache != sal_False);
+    }
+// class OOptions
+    //..........................................................................
+    static sal_Int32 getNextCacheID()
+    {
+        static oslInterlockedCount nNextID = 0;
+
+        oslInterlockedCount nNewID = osl_incrementInterlockedCount(&nNextID);
+
+        if (nNewID == 0)
+        {
+            CFG_TRACE_WARNING("Cache ID overflow - restarting sequence !");
+            OSL_ENSURE(false, "Cache ID overflow - restarting sequence !");
+        }
+
+        return static_cast<sal_Int32>(nNewID);
+    }
+
+    void OOptions::setNoCache(bool _bNoCache)
+    {
+        if (_bNoCache)
+        {
+            m_nCacheID = getNextCacheID();
+        }
+        else
+        {
+            m_nCacheID = 0;
+        }
     }
 
 } // namespace configmgr

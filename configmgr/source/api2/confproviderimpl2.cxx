@@ -2,9 +2,9 @@
  *
  *  $RCSfile: confproviderimpl2.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: jb $ $Date: 2000-12-11 11:06:37 $
+ *  last change: $Author: jb $ $Date: 2000-12-19 11:14:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -115,11 +115,14 @@ namespace configmgr
         // extract the args
         ::rtl::OUString sUser, sPath, sLocale;
         sal_Int32 nLevels;
-        OProviderImpl::FactoryArguments::extractArgs(aArgs, sPath, sUser, sLocale, nLevels);
+        bool bNoCache;
+
+        OProviderImpl::FactoryArguments::extractArgs(aArgs, sPath, sUser, sLocale, nLevels, bNoCache);
 
         vos::ORef<OOptions> xOptions = new OOptions(getDefaultOptions());
         xOptions->setUser(sUser);
         xOptions->setLocale(sLocale);
+        xOptions->setNoCache(bNoCache);
 
         CFG_TRACE_INFO_NI("config provider: node accessor extracted from the args is %s", OUSTRING2ASCII(sPath));
         CFG_TRACE_INFO_NI("config provider: level depth extracted from the args is %i", nLevels);
@@ -159,11 +162,14 @@ namespace configmgr
         // extract the args
         ::rtl::OUString sUser, sPath, sLocale;
         sal_Int32 nLevels;
-        OProviderImpl::FactoryArguments::extractArgs(aArgs, sPath, sUser, sLocale, nLevels);
+        bool bNoCache;
+
+        OProviderImpl::FactoryArguments::extractArgs(aArgs, sPath, sUser, sLocale, nLevels, bNoCache);
 
         vos::ORef<OOptions> xOptions = new OOptions(getDefaultOptions());
         xOptions->setUser(sUser);
         xOptions->setLocale(sLocale);
+        xOptions->setNoCache(bNoCache);
 
         CFG_TRACE_INFO_NI("config provider: node accessor extracted from the args is %s", OUSTRING2ASCII(sPath));
         CFG_TRACE_INFO_NI("config provider: level depth extracted from the args is %i", nLevels);

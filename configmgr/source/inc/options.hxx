@@ -2,9 +2,9 @@
  *
  *  $RCSfile: options.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dg $ $Date: 2000-12-04 19:47:18 $
+ *  last change: $Author: jb $ $Date: 2000-12-19 11:14:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,19 +97,27 @@ namespace configmgr
         rtl::OUString   m_sDefaultLocale;                       // default locale set for a user
         rtl::OUString   m_sUser;                                // user key used (could be empty)
         rtl::OUString   m_sDefaultUser;                         // user key used (could be empty)
-
+        sal_Int32       m_nCacheID;                             // set if data should not be fetched from the cache, but reloaded
     public:
         OOptions(const uno::Reference< script::XTypeConverter >& _xConverter)
-            :m_xConverter(_xConverter) {}
+            :m_xConverter(_xConverter)
+            ,m_nCacheID(0)
+        {}
 
         OOptions(const OOptions& _rOptions)
             :m_xConverter(_rOptions.getTypeConverter())
             ,m_sDefaultLocale(_rOptions.getDefaultLocale())
             ,m_sDefaultUser(_rOptions.getDefaultUser())
             ,m_sLocale(_rOptions.m_sLocale)
-            ,m_sUser(_rOptions.m_sUser){}
+            ,m_sUser(_rOptions.m_sUser)
+            ,m_nCacheID(0) // cache identity is not copied
+        {
+            if (!_rOptions.canUseCache()) this->setNoCache();
+        }
 
         uno::Reference< script::XTypeConverter > getTypeConverter() const {return m_xConverter;}
+
+        bool canUseCache() const { return m_nCacheID != 0; }
 
         rtl::OUString getLocale() const {return m_sLocale.getLength() ? m_sLocale : m_sDefaultLocale;}
         const rtl::OUString& getDefaultLocale() const {return m_sDefaultLocale;}
@@ -119,10 +127,14 @@ namespace configmgr
         const rtl::OUString& getDefaultUser() const {return m_sDefaultUser;}
         sal_Bool hasDefaultUser() const {return !m_sUser.getLength() || m_sUser == m_sDefaultUser;}
 
+        void setNoCache(bool _bNoCache = true);
         void setUser(const rtl::OUString& _rUser) {m_sUser = _rUser;}
         void setDefaultUser(const rtl::OUString& _rUser) {m_sDefaultUser = _rUser;}
         void setLocale(const rtl::OUString& _rLocale) {m_sLocale = _rLocale;}
         void setDefaultLocale(const rtl::OUString& _rLocale) {m_sDefaultLocale = _rLocale;}
+
+        friend sal_Int32 compareCacheIdentity(OOptions const& lhs, OOptions const& rhs)
+        { return rhs.m_nCacheID - lhs.m_nCacheID; }
     };
 
     struct ltOptions
@@ -130,10 +142,13 @@ namespace configmgr
         bool operator()(const ::vos::ORef<OOptions> &o1, const ::vos::ORef<OOptions> &o2) const
         {
             sal_Int32 nLt = o1->getUser().compareTo(o2->getUser());
-            if (!nLt)
-                return o1->getLocale().compareTo(o2->getLocale()) < 0 ? true : false;
-            else
-                return nLt < 0 ? true : false;
+            if (nLt == 0)
+                nLt = o1->getLocale().compareTo(o2->getLocale());
+
+            if (nLt == 0)
+                nLt = compareCacheIdentity(*o1,*o2);
+
+            return nLt < 0 ? true : false;
         }
     };
 } // namespace
