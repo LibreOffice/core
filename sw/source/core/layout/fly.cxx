@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fly.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 10:56:46 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 15:45:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1830,7 +1830,19 @@ SwTwips SwFlyFrm::_Grow( SwTwips nDist, BOOL bTst )
             const BOOL bOldLock = bLocked;
             Unlock();
             if ( IsFlyFreeFrm() )
+            {
+                // --> OD 2004-10-29 #i36347# - no format of position here
+                // and prevent call of <CheckClip(..)>.
+                // This is needed to prevent layout loop caused by nested
+                // Writer fly frames - inner Writer fly frames format its
+                // anchor, which grows/shrinks the outer Writer fly frame.
+                // Note: position will be invalidated below.
+                bValidPos = TRUE;
+                static_cast<SwFlyFreeFrm*>(this)->SetNoCheckClip( true );
                 ((SwFlyFreeFrm*)this)->SwFlyFreeFrm::MakeAll();
+                static_cast<SwFlyFreeFrm*>(this)->SetNoCheckClip( false );
+                // <--
+            }
             else
                 MakeAll();
             _InvalidateSize();
@@ -1894,7 +1906,19 @@ SwTwips SwFlyFrm::_Shrink( SwTwips nDist, BOOL bTst )
             const BOOL bOldLocked = bLocked;
             Unlock();
             if ( IsFlyFreeFrm() )
+            {
+                // --> OD 2004-10-29 #i36347# - no format of position here
+                // and prevent call of <CheckClip(..)>
+                // This is needed to prevent layout loop caused by nested
+                // Writer fly frames - inner Writer fly frames format its
+                // anchor, which grows/shrinks the outer Writer fly frame.
+                // Note: position will be invalidated below.
+                bValidPos = TRUE;
+                static_cast<SwFlyFreeFrm*>(this)->SetNoCheckClip( true );
                 ((SwFlyFreeFrm*)this)->SwFlyFreeFrm::MakeAll();
+                static_cast<SwFlyFreeFrm*>(this)->SetNoCheckClip( false );
+                // <--
+            }
             else
                 MakeAll();
             _InvalidateSize();
@@ -2143,6 +2167,11 @@ void SwFrm::InvalidateObjs( const bool _bInvaPosOnly,
 {
     if ( GetDrawObjs() )
     {
+        // --> OD 2004-10-08 #i26945# - determine page the frame is on,
+        // in order to check, if anchored object is registered at the same
+        // page.
+        const SwPageFrm* pPageFrm = FindPageFrm();
+        // <--
         // --> OD 2004-07-01 #i28701# - re-factoring
         sal_uInt32 i = 0;
         for ( ; i < GetDrawObjs()->Count(); ++i )
@@ -2153,6 +2182,20 @@ void SwFrm::InvalidateObjs( const bool _bInvaPosOnly,
             {
                 continue;
             }
+            // --> OD 2004-10-08 #i26945# - no invalidation, if anchored object
+            // isn't registered at the same page and instead is registered at
+            // the page, where its anchor character text frame is on.
+            if ( pAnchoredObj->GetPageFrm() &&
+                 pAnchoredObj->GetPageFrm() != pPageFrm )
+            {
+                SwTxtFrm* pAnchorCharFrm = pAnchoredObj->FindAnchorCharFrm();
+                if ( pAnchorCharFrm &&
+                     pAnchoredObj->GetPageFrm() == pAnchorCharFrm->FindPageFrm() )
+                {
+                    continue;
+                }
+            }
+            // <--
             // distinguish between writer fly frames and drawing objects
             if ( pAnchoredObj->ISA(SwFlyFrm) )
             {
@@ -2180,6 +2223,9 @@ void SwFrm::InvalidateObjs( const bool _bInvaPosOnly,
 |*
 |*************************************************************************/
 // --> OD 2004-07-01 #i28701# - change purpose of method and its name
+// --> OD 2004-10-08 #i26945# - correct check, if anchored object is a lower
+// of the layout frame. E.g., anchor character text frame can be a follow text
+// frame.
 void SwLayoutFrm::NotifyLowerObjs()
 {
     // invalidate lower floating screen objects
@@ -2190,6 +2236,14 @@ void SwLayoutFrm::NotifyLowerObjs()
         for ( sal_uInt32 i = 0; i < rObjs.Count(); ++i )
         {
             SwAnchoredObject* pObj = rObjs[i];
+            // --> OD 2004-10-08 #i26945# - check, if anchored object is a lower
+            // of the layout frame is changed to check, if its anchor frame
+            // is a lower of the layout frame.
+            // determine the anchor frame - usually it's the anchor frame,
+            // for at-character/as-character anchored objects the anchor character
+            // text frame is taken.
+            const SwFrm* pAnchorFrm = pObj->GetAnchorFrmContainingAnchPos();
+            // <--
             if ( pObj->ISA(SwFlyFrm) )
             {
                 SwFlyFrm* pFly = static_cast<SwFlyFrm*>(pObj);
@@ -2200,8 +2254,12 @@ void SwLayoutFrm::NotifyLowerObjs()
                 if ( pFly->IsAnLower( this ) )
                     continue;
 
-                const bool bLow = pFly->IsLowerOf( this );
-                if ( bLow || pFly->GetAnchorFrm()->FindPageFrm() != pPageFrm )
+                // --> OD 2004-10-08 #i26945# - use <pAnchorFrm> to check, if
+                // fly frame is lower of layout frame resp. if fly frame is
+                // at a different page registered as its anchor frame is on.
+                const bool bLow = IsAnLower( pAnchorFrm );
+                if ( bLow || pAnchorFrm->FindPageFrm() != pPageFrm )
+                // <--
                 {
                     pFly->_Invalidate( pPageFrm );
                     if ( !bLow || pFly->IsFlyAtCntFrm() )
@@ -2216,7 +2274,12 @@ void SwLayoutFrm::NotifyLowerObjs()
             {
                 ASSERT( pObj->ISA(SwAnchoredDrawObject),
                         "<SwLayoutFrm::NotifyFlys() - anchored object of unexcepted type" );
-                if ( IsAnLower( pObj->GetAnchorFrm() ) )
+                // --> OD 2004-10-08 #i26945# - use <pAnchorFrm> to check, if
+                // fly frame is lower of layout frame resp. if fly frame is
+                // at a different page registered as its anchor frame is on.
+                if ( IsAnLower( pAnchorFrm ) ||
+                     pAnchorFrm->FindPageFrm() != pPageFrm )
+                // <--
                 {
                     pObj->InvalidateObjPos();
                 }
