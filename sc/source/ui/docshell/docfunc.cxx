@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfunc.cxx,v $
  *
- *  $Revision: 1.47 $
+ *  $Revision: 1.48 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-02 09:48:36 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 11:53:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -124,6 +124,7 @@
 #include "inputhdl.hxx"
 #include "inputwin.hxx"
 #include "editable.hxx"
+#include "compiler.hxx"
 
 using namespace com::sun::star;
 
