@@ -1,10 +1,10 @@
-C/*************************************************************************
+/*************************************************************************
  *
  *  $RCSfile: menudispatcher.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mba $ $Date: 2002-10-24 12:24:55 $
+ *  last change: $Author: mba $ $Date: 2002-10-28 12:40:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
