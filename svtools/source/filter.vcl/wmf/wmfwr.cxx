@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wmfwr.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: sj $ $Date: 2002-11-01 13:50:16 $
+ *  last change: $Author: sj $ $Date: 2002-11-12 11:22:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1082,16 +1082,19 @@ void WMFWriter::SetAllAttr()
         eDstTextAlign = eSrcTextAlign;
         WMFRecord_SetTextAlign( eDstTextAlign );
     }
-    if ( aDstFont.GetName() != aSrcFont.GetName() )
+    if ( aDstFont != aSrcFont )
     {
         pVirDev->SetFont(aSrcFont);
-        FontCharMap aFontCharMap;
-        if ( pVirDev->GetFontCharMap( aFontCharMap ) )
+        if ( aDstFont.GetName() != aSrcFont.GetName() )
         {
-            if ( ( aFontCharMap.GetFirstChar() & 0xff00 ) == 0xf000 )
-                aSrcFont.SetCharSet( RTL_TEXTENCODING_SYMBOL );
-            else if ( aSrcFont.GetCharSet() == RTL_TEXTENCODING_SYMBOL )
-                aSrcFont.SetCharSet( RTL_TEXTENCODING_MS_1252 );
+            FontCharMap aFontCharMap;
+            if ( pVirDev->GetFontCharMap( aFontCharMap ) )
+            {
+                if ( ( aFontCharMap.GetFirstChar() & 0xff00 ) == 0xf000 )
+                    aSrcFont.SetCharSet( RTL_TEXTENCODING_SYMBOL );
+                else if ( aSrcFont.GetCharSet() == RTL_TEXTENCODING_SYMBOL )
+                    aSrcFont.SetCharSet( RTL_TEXTENCODING_MS_1252 );
+            }
         }
         aDstFont = aSrcFont;
         CreateSelectDeleteFont(aDstFont);
