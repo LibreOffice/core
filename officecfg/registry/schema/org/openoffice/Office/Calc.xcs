@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Calc.xcs,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 17:32:48 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 13:06:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5761,7 +5761,7 @@
 				<prop oor:name="SearchCriteria" oor:type="xs:boolean">
 					<!-- OldPath: Calc/Calculate -->
 					<!-- OldLocation: Soffice.cfg -->
-					<!-- UIHints: Tools - Options  Spreadsheet  Calculate  [Check box] Search criteria = and &lt;&amp;gt; must apply to whole cells -->
+					<!-- UIHints: Tools - Options  Spreadsheet  Calculate  [Check box] Search criteria = and &lt;&gt; must apply to whole cells -->
 					<info>
 						<author>NN</author>
 						<desc xml:lang="en-US">Specifies whether search criteria in formulas must match the whole of the cell contents.</desc>
@@ -5789,31 +5789,31 @@
 							<desc xml:lang="th">Specifies whether search criteria in formulas must match the whole of the cell contents.</desc>
 							<desc xml:lang="hi-IN">Specifies whether search criteria in formulas must match the whole of the cell contents.</desc>
 							<desc xml:lang="x-comment">Specifies whether search criteria in formulas must match the whole of the cell contents.</desc>
-						<label xml:lang="en-US">Search criteria = and &lt;&amp;gt; must apply to whole cells</label>
-						<label xml:lang="el">Search criteria = and &lt;&amp;gt; must apply to whole cells</label>
-						<label xml:lang="nl">Search criteria = and &lt;&amp;gt; must apply to whole cells</label>
-						<label xml:lang="fr">Search criteria = and &lt;&amp;gt; must apply to whole cells</label>
-						<label xml:lang="fi">Search criteria = and &lt;&amp;gt; must apply to whole cells</label>
-						<label xml:lang="cs">Search criteria = and &lt;&amp;gt; must apply to whole cells</label>
-						<label xml:lang="da">Search criteria = and &lt;&amp;gt; must apply to whole cells</label>
+						<label xml:lang="en-US">Search criteria = and &lt;&gt; must apply to whole cells</label>
+						<label xml:lang="el">Search criteria = and &lt;&gt; must apply to whole cells</label>
+						<label xml:lang="nl">Search criteria = and &lt;&gt; must apply to whole cells</label>
+						<label xml:lang="fr">Search criteria = and &lt;&gt; must apply to whole cells</label>
+						<label xml:lang="fi">Search criteria = and &lt;&gt; must apply to whole cells</label>
+						<label xml:lang="cs">Search criteria = and &lt;&gt; must apply to whole cells</label>
+						<label xml:lang="da">Search criteria = and &lt;&gt; must apply to whole cells</label>
 						<label xml:lang="zh-CN">搜寻范围 = 和 &lt;&gt; 必须适用全部的单元格</label>
-						<label xml:lang="zh-TW">Search criteria = and &lt;&amp;gt; must apply to whole cells</label>
-						<label xml:lang="ar">Search criteria = and &lt;&amp;gt; must apply to whole cells</label>
-						<label xml:lang="he">Search criteria = and &lt;&amp;gt; must apply to whole cells</label>
-						<label xml:lang="ca">Search criteria = and &lt;&amp;gt; must apply to whole cells</label>
-						<label xml:lang="pt">Search criteria = and &lt;&amp;gt; must apply to whole cells</label>
-						<label xml:lang="ru">Search criteria = and &lt;&amp;gt; must apply to whole cells</label>
-						<label xml:lang="es">Search criteria = and &lt;&amp;gt; must apply to whole cells</label>
-						<label xml:lang="it">Search criteria = and &lt;&amp;gt; must apply to whole cells</label>
-						<label xml:lang="sv">Search criteria = and &lt;&amp;gt; must apply to whole cells</label>
-						<label xml:lang="pl">Search criteria = and &lt;&amp;gt; must apply to whole cells</label>
-						<label xml:lang="pt-BR">Search criteria = and &lt;&amp;gt; must apply to whole cells</label>
-						<label xml:lang="ja">検索条件=、&lt;、&amp;gt;をセル全体に適用する</label>
-						<label xml:lang="ko">Search criteria = and &lt;&amp;gt; must apply to whole cells</label>
-						<label xml:lang="tr">Search criteria = and &lt;&amp;gt; must apply to whole cells</label>
-						<label xml:lang="th">Search criteria = and &lt;&amp;gt; must apply to whole cells</label>
-						<label xml:lang="hi-IN">Search criteria = and &lt;&amp;gt; must apply to whole cells</label>
-						<label xml:lang="x-comment">Search criteria = and &lt;&amp;gt; must apply to whole cells</label>
+						<label xml:lang="zh-TW">Search criteria = and &lt;&gt; must apply to whole cells</label>
+						<label xml:lang="ar">Search criteria = and &lt;&gt; must apply to whole cells</label>
+						<label xml:lang="he">Search criteria = and &lt;&gt; must apply to whole cells</label>
+						<label xml:lang="ca">Search criteria = and &lt;&gt; must apply to whole cells</label>
+						<label xml:lang="pt">Search criteria = and &lt;&gt; must apply to whole cells</label>
+						<label xml:lang="ru">Search criteria = and &lt;&gt; must apply to whole cells</label>
+						<label xml:lang="es">Search criteria = and &lt;&gt; must apply to whole cells</label>
+						<label xml:lang="it">Search criteria = and &lt;&gt; must apply to whole cells</label>
+						<label xml:lang="sv">Search criteria = and &lt;&gt; must apply to whole cells</label>
+						<label xml:lang="pl">Search criteria = and &lt;&gt; must apply to whole cells</label>
+						<label xml:lang="pt-BR">Search criteria = and &lt;&gt; must apply to whole cells</label>
+						<label xml:lang="ja">検索条件=、&lt;、&gt;をセル全体に適用する</label>
+						<label xml:lang="ko">Search criteria = and &lt;&gt; must apply to whole cells</label>
+						<label xml:lang="tr">Search criteria = and &lt;&gt; must apply to whole cells</label>
+						<label xml:lang="th">Search criteria = and &lt;&gt; must apply to whole cells</label>
+						<label xml:lang="hi-IN">Search criteria = and &lt;&gt; must apply to whole cells</label>
+						<label xml:lang="x-comment">Search criteria = and &lt;&gt; must apply to whole cells</label>
 					</info>
 					<value>true</value>
 				</prop>
