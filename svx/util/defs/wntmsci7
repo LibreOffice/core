@@ -19730,3 +19730,4 @@ _TI2?AVWrappedTargetException@lang@star@sun@com@@
 ?SvxUnoCheckForConversion@@YAEABVSfxItemSet@@JABVAny@uno@star@sun@com@@@Z
 ??0ODataAccessCharsetHelper@svxform@@QAE@XZ
 ??1?$Reference@VIDataAccessCharSet@simple@connectivity@@@rtl@@QAE@XZ
+?FillFromDbTextEncodingMap@SvxTextEncodingBox@@QAEXKK@Z
