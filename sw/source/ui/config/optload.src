@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optload.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-09-27 21:13:25 $
+ *  last change: $Author: obo $ $Date: 2000-10-27 17:42:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,7 +132,7 @@ TabPage TP_OPTLOAD_PAGE
         Text[ portuguese ] = "~Sempre";
         Text[ danish ] = "Altid";
         Text[ french ] = "Toujours";
-        Text[ swedish ] = "~Alltid";
+        Text[ swedish ] = "Allt~id";
         Text[ dutch ] = "~Altijd";
         Text[ spanish ] = "~Siempre";
         Text[ english_us ] = "Always";
@@ -159,7 +159,7 @@ TabPage TP_OPTLOAD_PAGE
         Text[ portuguese ] = "A ~pedido";
         Text[ danish ] = "PÂ anmodning";
         Text[ french ] = "Sur demande";
-        Text[ swedish ] = "PÂ ~beg‰ran";
+        Text[ swedish ] = "~PÂ beg‰ran";
         Text[ dutch ] = "Op aan~vraag";
         Text[ spanish ] = "A ~peticiÛn";
         Text[ english_us ] = "On request";
@@ -186,7 +186,7 @@ TabPage TP_OPTLOAD_PAGE
         Text[ portuguese ] = "~Nunca";
         Text[ danish ] = "Aldrig";
         Text[ french ] = "Jamais";
-        Text[ swedish ] = "Al~drig";
+        Text[ swedish ] = "A~ldrig";
         Text[ dutch ] = "~Nooit";
         Text[ spanish ] = "~Nunca";
         Text[ english_us ] = "Never";
@@ -212,7 +212,7 @@ TabPage TP_OPTLOAD_PAGE
         Text [ italian ] = "Solo per il documento corrente" ;
         Text [ spanish ] = "Solo para el documento ~actual" ;
         Text [ french ] = "Uniquement pour le document actif" ;
-        Text [ swedish ] = "~Endast fˆr det aktuella dokumentet" ;
+        Text [ swedish ] = "Bara fˆr det aktuella ~dokumentet" ;
         Text [ danish ] = "Kun for det aktuelle dokument" ;
         Text [ portuguese ] = "~Apenas para documento activo" ;
         Text[ portuguese_brazilian ] = "~Nur f¸r das aktuelle Dokument";
@@ -293,7 +293,7 @@ TabPage TP_OPTLOAD_PAGE
         Text[ spanish ] = "Actualizar ~diagramas autom·ticamente";
         Text[ italian ] = "Aggiorna i diagrammi automaticamente";
         Text[ danish ] = "Opdater diagrammer automatisk";
-        Text[ swedish ] = "Uppdatera ~diagram automatiskt";
+        Text[ swedish ] = "Uppdatera dia~gram automatiskt";
         Text[ polish ] = "Aktualizuj wykresy automatycznie";
         Text[ portuguese_brazilian ] = "Update charts automatically";
         Text[ japanese ] = "∏ﬁ◊ÃÇé©ìÆìIÇ…çXêV(~C)";
@@ -316,7 +316,7 @@ TabPage TP_OPTLOAD_PAGE
         Text [ italian ] = "Solo per il documento corrente" ;
         Text [ spanish ] = "Solo para el documento ~actual" ;
         Text [ french ] = "Uniquement pour le document actif" ;
-        Text [ swedish ] = "~Endast fˆr det aktuella dokumentet" ;
+        Text [ swedish ] = "Bara fˆr det aktuella d~okumentet" ;
         Text [ danish ] = "Kun for det aktuelle dokument" ;
         Text [ portuguese ] = "~Apenas para documento actual" ;
         Text[ portuguese_brazilian ] = "~Nur f¸r das aktuelle Dokument";
@@ -398,7 +398,7 @@ TabPage TP_OPTLOAD_PAGE
     Text[ spanish ] = "Su~mar espacios de tablas y p·rrafos a los comienzos de p·gina";
     Text[ italian ] = "Aggiungi distanze paragrafi e tabelle a inizio pagina.";
     Text[ danish ] = "LÊg afsnits- og tabelafstande til ved sidebegyndelser";
-    Text[ swedish ] = "L‰gg till stycke- och tabellavstÂnd vid bˆrjan av sidor";
+    Text[ swedish ] = "L‰gg till stycke- och ta~bellavstÂnd i bˆrjan av sidor";
     Text[ polish ] = "Dodaj a~kapity i odstÍpy tabeli do poczπtkÛw stron";
     Text[ portuguese_brazilian ] = "Add distances at the beginning of pages";
     Text[ japanese ] = "íióéÇ®ÇÊÇ—ï\\ä‘äuÇÕﬂ∞ºﬁÇÃénÇﬂÇ…ïtâ¡Ç∑ÇÈ";
