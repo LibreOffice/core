@@ -2,9 +2,9 @@
  *
  *  $RCSfile: about.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: pb $ $Date: 2001-11-08 08:58:02 $
+ *  last change: $Author: mba $ $Date: 2002-01-17 09:16:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,13 +178,7 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId, const String& rVerS
 
     // ggf. Spezial Version
     String aStr = aVersionText.GetText();
-    String aMinor;
-    USHORT nProductVersion = (USHORT)ProductVersion::GetVersion().ToInt32();
-    String aVersion( String::CreateFromInt32( nProductVersion / 10 ) );
-    aVersion += 0x002E ; // 2Eh ^= '.'
-    aVersion += ( String::CreateFromInt32( nProductVersion % 10 ) );
-    String aOfficeVer = aVersion;
-    aStr.SearchAndReplaceAscii( "$(VER)", aOfficeVer );
+    aStr.SearchAndReplaceAscii( "$(VER)", Application::GetDisplayName() );
     aVersionText.SetText( aStr );
 
     // Initialisierung fuer Aufruf Entwickler
