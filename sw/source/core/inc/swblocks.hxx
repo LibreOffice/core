@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swblocks.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: dvo $ $Date: 2001-05-02 12:52:14 $
+ *  last change: $Author: mib $ $Date: 2001-08-01 14:04:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -269,10 +269,8 @@ public:
     virtual ULONG SetMacroTable( USHORT nIdx,
                                  const SvxMacroTableDtor& rMacroTbl,
                                  sal_Bool bFileAlreadyOpen = sal_False );
-    virtual BOOL PutMuchEntries( BOOL bOn );
 
     void ReadInfo();
-    void WriteInfo();
 };
 
 #endif
