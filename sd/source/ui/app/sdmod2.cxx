@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod2.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-24 07:41:21 $
+ *  last change: $Author: kz $ $Date: 2003-08-27 16:52:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -701,7 +701,8 @@ void SdModule::ApplyItemSet( USHORT nSlot, const SfxItemSet& rSet )
             }
 
             // Set printer independent layout mode.
-            pDoc->SetPrinterIndependentLayout (pMiscItem->GetPrinterIndependentLayout());
+            if( pDoc->GetPrinterIndependentLayout() != pMiscItem->GetPrinterIndependentLayout() )
+                pDoc->SetPrinterIndependentLayout (pMiscItem->GetPrinterIndependentLayout());
         }
     }
 
