@@ -274,11 +274,17 @@ public class XSLTransformer
                     TransformerFactory tfactory = TransformerFactory.newInstance();
                     Transformer transformer = tfactory.newTransformer(stylesource);
 
-                    transformer.setParameter("sourceURL", sourceurl);
-                    transformer.setParameter("targetURL", targeturl);
-                    transformer.setParameter("targetBaseURL", targetbaseurl);
-                    transformer.setParameter("publicType", pubtype);
-                    transformer.setParameter("systemType", systype);
+                    // invalid to set 'null' as parameter as 'null' is not a valid Java object
+                    if(sourceurl != null)
+                        transformer.setParameter("sourceURL", sourceurl);
+                    if(targeturl != null)
+                        transformer.setParameter("targetURL", targeturl);
+                    if(targetbaseurl != null)
+                        transformer.setParameter("targetBaseURL", targetbaseurl);
+                    if(pubtype != null)
+                        transformer.setParameter("publicType", pubtype);
+                    if(systype != null)
+                        transformer.setParameter("systemType", systype);
 
                     long tstart = System.currentTimeMillis();
                     transformer.transform(xmlsource, xmlresult);
