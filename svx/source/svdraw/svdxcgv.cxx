@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdxcgv.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: ka $ $Date: 2002-07-22 15:44:28 $
+ *  last change: $Author: aw $ $Date: 2002-10-10 17:21:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -386,7 +386,10 @@ BOOL SdrExchangeView::Paste(const SdrModel& rMod, const Point& rPos, SdrObjList*
     BegUndo(ImpGetResStr(STR_ExchangePaste));
     for (nPg=0; nPg<nPgAnz; nPg++) {
         const SdrPage* pSrcPg=pSrcMod->GetPage(nPg);
-        Rectangle aR=pSrcPg->GetAllObjBoundRect();
+
+        // #104148# Use SnapRect, not BoundRect here
+        Rectangle aR=pSrcPg->GetAllObjSnapRect();
+
         if (bResize) ResizeRect(aR,aPt0,xResize,yResize);
         Point aDist(aPos-aR.Center());
         Size  aSiz(aDist.X(),aDist.Y());
