@@ -2,9 +2,9 @@
  *
  *  $RCSfile: column.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-09-27 21:25:48 $
+ *  last change: $Author: kz $ $Date: 2000-11-09 13:00:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1111,7 +1111,7 @@ ModalDialog DLG_COLUMN
             < "ÇáÊÍÏíÏ" ;           LISTBOX_SELECTION; > ;
         < "ÇáäØÇÞ ÇáÍÇáí" ;     LISTBOX_SECTION     ; > ;
         < "ÇáäØÇÞÇÊ ÇáãÍÏÏÉ" ;  LISTBOX_SECTIONS    ; > ;
-        < "ÇáÅØÇÑ" ;                LISTBOX_FRAME       ; > ;
+        < "ßÇÏÑ" ;                  LISTBOX_FRAME       ; > ;
         < "ÞÇáÈ ÇáÕÝÍÉ: " ;         LISTBOX_PAGE        ; > ;
     };
     StringList [ turkish ] =
