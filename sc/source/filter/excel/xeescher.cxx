@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xeescher.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:34:25 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 16:47:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -656,11 +656,48 @@ XclExpNote::XclExpNote( const XclExpRoot& rRoot, const ScAddress& rScPos,
         break;
 
         case xlBiff8:
-            if( pScNote )
+            ::std::auto_ptr <EditTextObject> pObj; ;
+            const EditTextObject* pEditObj;
+            Rectangle aRect;
+            ::std::auto_ptr <SdrCaptionObj> pCaption;
+            ScDocument& rDoc = rRoot.GetDoc();
+
+            // read strings from note object, if present
+            if( pScNote && ((pEditObj = pScNote->GetEditTextObject()) != 0))
+            {
+                pObj.reset(pEditObj->Clone());
+                // append additional text if any
+                if(rAddText.Len())
+                {
+                    ScGlobal::AddToken( aNoteText, rAddText, '\n', 2 );
+                    EditEngine& rEE = rRoot.GetEditEngine();
+                    rEE.SetText( aNoteText);
+                    EditTextObject* pAddText = rEE.CreateTextObject();
+                    pObj->Insert(*pAddText, pEditObj->GetParagraphCount());
+                    delete pAddText;
+                }
                 maAuthor.Assign( pScNote->GetAuthor() );
-            SetRecSize( 9 + maAuthor.GetSize() );
+                aRect = pScNote->GetRectangle();
+                const SfxItemSet& rSet = pScNote->GetItemSet();
+                Point aDummyTailPos;
+
+                // In order to transform the SfxItemSet to an EscherPropertyContainer
+                // and export the properties, we need to recreate the drawing object and
+                // pass this to XclObjComment() for processing.
+                pCaption.reset(new SdrCaptionObj( aRect, aDummyTailPos ));
+                (pCaption.get())->SetMergedItemSet(rSet);
+
+                pScNote->InsertObject(pCaption.get(), rDoc, rPos.Tab());
+            }
+
             // create the Escher object
-            mnObjId = rRoot.mpRD->pObjRecs->Add( new XclObjComment( rRoot, maScPos, aNoteText, mbVisible ) );
+            if(pObj.get())
+                mnObjId = rRoot.mpRD->pObjRecs->Add( new XclObjComment( rRoot, aRect, *pObj, pCaption.get(), mbVisible ) );
+
+            if( pScNote )
+                pScNote->RemoveObject(pCaption.get(), rDoc, rPos.Tab());
+
+            SetRecSize( 9 + maAuthor.GetSize() );
         break;
 
         default:    DBG_ERROR_BIFF();
