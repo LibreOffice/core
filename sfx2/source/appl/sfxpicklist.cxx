@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxpicklist.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 15:11:57 $
+ *  last change: $Author: vg $ $Date: 2003-04-11 15:54:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -183,6 +183,7 @@ void SfxPickList::CreatePicklistMenuTitle( Menu* pMenu, USHORT nItemId, const St
 
     INetURLObject   aURL( aURLString );
     rtl::OUString   aTipHelpText;
+    rtl::OUString   aAccessibleName( aPickEntry );
 
     if ( aURL.GetProtocol() == INET_PROT_FILE )
     {
@@ -196,6 +197,7 @@ void SfxPickList::CreatePicklistMenuTitle( Menu* pMenu, USHORT nItemId, const St
         ::rtl::OUString aCompactedSystemPath;
 
         aTipHelpText = aSystemPath;
+        aAccessibleName += aSystemPath;
         oslFileError nError = osl_abbreviateSystemPath( aSystemPath.pData, &aCompactedSystemPath.pData, 46, NULL );
         if ( !nError )
             aPickEntry += String( aCompactedSystemPath );
@@ -215,11 +217,13 @@ void SfxPickList::CreatePicklistMenuTitle( Menu* pMenu, USHORT nItemId, const St
         aShortURL = aURL.getAbbreviated( m_xStringLength, 46, INetURLObject::DECODE_UNAMBIGUOUS );
         aPickEntry += aShortURL;
         aTipHelpText = aURLString;
+        aAccessibleName += aURLString;
     }
 
-    // Set menu item text and tip help
+    // Set menu item text, tip help and accessible name
     pMenu->SetItemText( nItemId, aPickEntry );
     pMenu->SetTipHelpText( nItemId, aTipHelpText );
+    pMenu->SetAccessibleName( nItemId, aAccessibleName );
 }
 
 void SfxPickList::RemovePickListEntries()
