@@ -2,9 +2,9 @@
  *
  *  $RCSfile: printerjob.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: cp $ $Date: 2001-11-14 13:40:17 $
+ *  last change: $Author: pl $ $Date: 2002-03-20 15:37:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,6 +82,9 @@
 #endif
 #ifndef _OSL_THREAD_H_
 #include <osl/thread.h>
+#endif
+#ifdef SOLARIS
+#include <alloca.h>
 #endif
 
 #include <stdio.h>

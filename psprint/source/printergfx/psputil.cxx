@@ -2,9 +2,9 @@
  *
  *  $RCSfile: psputil.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-08 11:46:04 $
+ *  last change: $Author: pl $ $Date: 2002-03-20 15:37:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -234,30 +234,30 @@ WritePS (osl::File* pFile, const rtl::OUString &rString)
 
 ConverterFactory::ConverterFactory()
 {
-    mpCvt = (rtl_UnicodeToTextConverter*)calloc (sizeof(rtl_UnicodeToTextConverter),
-                                                 RTL_TEXTENCODING_STD_COUNT);
 }
 
 ConverterFactory::~ConverterFactory ()
 {
-    for (int i = 0; i < RTL_TEXTENCODING_STD_COUNT; i++)
-    {
-        if (mpCvt[i] != NULL)
-            rtl_destroyUnicodeToTextConverter (mpCvt[i]);
-    }
-    free (mpCvt);
+    for( std::map< rtl_TextEncoding, rtl_UnicodeToTextConverter >::const_iterator it = m_aConverters.begin(); it != m_aConverters.end(); ++it )
+            rtl_destroyUnicodeToTextConverter (it->second);
 }
 
 rtl_UnicodeToTextConverter
 ConverterFactory::Get (rtl_TextEncoding nEncoding)
 {
-    if (nEncoding < RTL_TEXTENCODING_STD_COUNT)
+    if (rtl_isOctetTextEncoding( nEncoding ))
     {
-        if (mpCvt[nEncoding] == NULL)
+        std::map< rtl_TextEncoding, rtl_UnicodeToTextConverter >::const_iterator it =
+            m_aConverters.find( nEncoding );
+        rtl_UnicodeToTextConverter aConverter;
+        if (it == m_aConverters.end())
         {
-            mpCvt[nEncoding] = rtl_createUnicodeToTextConverter (nEncoding);
+            aConverter = rtl_createUnicodeToTextConverter (nEncoding);
+            m_aConverters[nEncoding] = aConverter;
         }
-        return mpCvt[nEncoding];
+        else
+            aConverter = it->second;
+        return aConverter;
     }
     return NULL;
 }

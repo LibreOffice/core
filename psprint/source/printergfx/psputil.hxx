@@ -2,9 +2,9 @@
  *
  *  $RCSfile: psputil.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: pl $ $Date: 2001-05-08 11:46:04 $
+ *  last change: $Author: pl $ $Date: 2002-03-20 15:37:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,9 +77,8 @@
 #ifndef _RTL_TEXTCVT_H
 #include <rtl/textcvt.h>
 #endif
-#ifdef SOLARIS
-#include <alloca.h>
-#endif
+
+#include <map>
 
 namespace psp {
 
@@ -111,7 +110,7 @@ public:
                                          rtl_TextEncoding nEncoding);
 private:
 
-    rtl_UnicodeToTextConverter* mpCvt;
+    std::map< rtl_TextEncoding, rtl_UnicodeToTextConverter >        m_aConverters;
 };
 
 ConverterFactory* GetConverterFactory ();
