@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.112 $
+#   $Revision: 1.113 $
 #
-#   last change: $Author: hjs $ $Date: 2002-06-10 08:48:19 $
+#   last change: $Author: hjs $ $Date: 2002-06-18 13:44:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -983,12 +983,12 @@ CPUNAME=CPUNAME_HAS_TO_BE_SET_IN_ENVIRONMENT
 .ENDIF
 
 #.IF "$(BUILD_SOSL)"!=""
-.IF "$(GUI)"=="UNX"
+.IF "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
 DATESTRING=$(shell date +%d%m%Y)
-.ELSE			# "$(GUI)"=="UNX"
+.ELSE			# "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
 #can't override 4nt internal date to use date.exe :-(
 DATESTRING=$(shell +echo %@IF[%@LEN[%_DAY%]==1,0%_DAY%,%_DAY%]%@IF[%@LEN[%_MONTH%]==1,0%_MONTH%,%_MONTH%]%_YEAR%)
-.ENDIF			# "$(GUI)"=="UNX"
+.ENDIF			# "$(GUI)"=="UNX" || "$(USE_SHELL)"!="4nt"
 SCPDEFS+=-DSCP_DATESTRING=$(DATESTRING)
 #.ENDIF			# "$(BUILD_SOSL)"!=""
 
@@ -1230,6 +1230,7 @@ CPPUMAKER*=cppumaker
 JAVAMAKER*=javamaker
 RDBMAKER*=rdbmaker
 JAVA*=java
+SCPCOMP*=scpcomp
 
 .IF "$(DISABLE_ENHANCED_COMID)"==""
 .INCLUDE : tg_compv.mk

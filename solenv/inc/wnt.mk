@@ -2,9 +2,9 @@
 #
 #   $RCSfile: wnt.mk,v $
 #
-#   $Revision: 1.32 $
+#   $Revision: 1.33 $
 #
-#   last change: $Author: hjs $ $Date: 2002-06-10 08:38:59 $
+#   last change: $Author: hjs $ $Date: 2002-06-18 13:44:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -540,6 +540,8 @@ RDBMAKER=guw.pl rdbmaker
 STARDEP=guw.pl javadep
 JAVAC=guw.pl javac
 JAVA=guw.pl java
+SCPCOMP=guw.pl scpcomp
+CPPLCC=guw.pl cpplcc
 .ENDIF			# "$(USE_SHELL)"=="4nt"
 .ENDIF
 .ENDIF              # "$(COM)"=="MSC"
