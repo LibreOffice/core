@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldlg.src,v $
  *
- *  $Revision: 1.41 $
+ *  $Revision: 1.42 $
  *
- *  last change: $Author: kz $ $Date: 2001-12-14 16:44:51 $
+ *  last change: $Author: tbe $ $Date: 2001-12-20 14:22:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,7 +169,7 @@ TabPage RID_TP_MODULS
      // HelpId = HID_BASICIDE_MODULS ;
     Hide = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 200 , 140 ) ;
+    Size = MAP_APPFONT ( 210 , 140 ) ;
     FixedText RID_STR_LIB
     {
         Pos = MAP_APPFONT ( 6 , 6 ) ;
@@ -229,7 +229,7 @@ TabPage RID_TP_MODULS
         Text[ english_us ] = "~Edit";
     Text[ chinese_simplified ] = "ç¼–è¾‘(~E)";
         Pos = MAP_APPFONT ( 144 , 6 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
     Text[ chinese_traditional ] = "ç·¨è¼¯(~E)";
         Text = "~Bearbeiten" ;
         Text [ ENGLISH ] = "~Edit" ;
@@ -270,7 +270,7 @@ TabPage RID_TP_MODULS
     Text[ chinese_simplified ] = "å…³é—­";
         Pos = MAP_APPFONT ( 144 , 23 ) ;
     Text[ chinese_traditional ] = "é—œé–‰";
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Schließen : Schlie˜en */
         Text = "Schließen" ;
         Text [ ENGLISH ] = "Close" ;
@@ -298,7 +298,7 @@ TabPage RID_TP_MODULS
     PushButton RID_PB_NEWMOD
     {
         Pos = MAP_APPFONT ( 144 , 86 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
         Text = "Neues ~Modul..." ;
         Text [ ENGLISH ] = "New ~module..." ;
         Text [ norwegian ] = "New ~module..." ;
@@ -327,7 +327,7 @@ TabPage RID_TP_MODULS
     PushButton RID_PB_NEWDLG
     {
         Pos = MAP_APPFONT ( 144 , 103 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
         Text = "Neuer Dialo~g..." ;
         Text [ ENGLISH ] = "New dialo~g..." ;
         Text [ norwegian ] = "New dialo~g..." ;
@@ -356,7 +356,7 @@ TabPage RID_TP_MODULS
     PushButton RID_PB_DELETE
     {
         Pos = MAP_APPFONT ( 144 , 120 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? ~Löschen... : ~L÷schen... */
         Text = "~Löschen" ;
         Text [ ENGLISH ] = "~Delete" ;
@@ -389,7 +389,7 @@ TabPage RID_TP_LIBS
      // HelpId = HID_BASICIDE_LIBS_TP ;
     Hide = TRUE ;
     SVLook = TRUE ;
-    Size = MAP_APPFONT ( 200 , 140 ) ;
+    Size = MAP_APPFONT ( 210 , 140 ) ;
     FixedText RID_STR_BASICS
     {
         Pos = MAP_APPFONT ( 6 , 6 ) ;
@@ -474,7 +474,7 @@ TabPage RID_TP_LIBS
         Text[ english_us ] = "~Edit";
     Text[ chinese_simplified ] = "ç¼–è¾‘(~E)";
         Pos = MAP_APPFONT ( 144 , 6 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
     Text[ chinese_traditional ] = "ç·¨è¼¯(~E)";
         Text = "~Bearbeiten" ;
         Text [ ENGLISH ] = "~Edit" ;
@@ -515,7 +515,7 @@ TabPage RID_TP_LIBS
     Text[ chinese_simplified ] = "å…³é—­";
         Pos = MAP_APPFONT ( 144 , 23 ) ;
     Text[ chinese_traditional ] = "é—œé–‰";
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Schließen : Schlie˜en */
         Text = "Schließen" ;
         Text [ ENGLISH ] = "Close" ;
@@ -543,7 +543,7 @@ TabPage RID_TP_LIBS
     PushButton RID_PB_PASSWORD
     {
         Pos = MAP_APPFONT ( 144 , 43 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
         Text = "K~ennwort..." ;
         Text [ ENGLISH ] = "~Password..." ;
         Text [ norwegian ] = "~Passord..." ;
@@ -572,7 +572,7 @@ TabPage RID_TP_LIBS
     PushButton RID_PB_NEWLIB
     {
         Pos = MAP_APPFONT ( 144 , 86 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
         Text = "~Neu..." ;
         Text [ ENGLISH ] = "~New..." ;
         Text [ norwegian ] = "~Ny..." ;
@@ -601,7 +601,7 @@ TabPage RID_TP_LIBS
     PushButton RID_PB_APPEND
     {
         Pos = MAP_APPFONT ( 144 , 103 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? Hin~zufügen... : Hin~zuf³gen... */
         Text = "Hin~zufügen..." ;
         Text [ ENGLISH ] = "A~ppend..." ;
@@ -629,7 +629,7 @@ TabPage RID_TP_LIBS
     PushButton RID_PB_DELETE
     {
         Pos = MAP_APPFONT ( 144 , 120 ) ;
-        Size = MAP_APPFONT ( 50 , 14 ) ;
+        Size = MAP_APPFONT ( 60 , 14 ) ;
         /* ### ACHTUNG: Neuer Text in Resource? ~Löschen... : ~L÷schen... */
         Text = "~Löschen" ;
         Text [ ENGLISH ] = "~Delete" ;
