@@ -10341,3 +10341,4 @@ lpfnGetWindowTextW
 lpfnInsertMenuItemW
 WideCharListGetMultiByteLength
 WideCharListToMultiByteList
+?realloc@?$Sequence@VAny@uno@star@sun@com@@@uno@star@sun@com@@QAAXJ@Z
