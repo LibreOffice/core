@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc2.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-13 17:25:27 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 09:04:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1370,13 +1370,17 @@ IMapObject* SdDrawDocument::GetHitIMapObject( SdrObject* pObj,
         }
         else if ( pObj->ISA( SdrOle2Obj ) ) // OLE-Objekt
         {
-            // TODO/LEAN: it looks strange to force object loading here
             ::uno::Reference < embed::XEmbeddedObject > xObj( ( (SdrOle2Obj*) pObj )->GetObjRef() );
-            svt::EmbeddedObjectRef::TryRunningState( xObj );
+            try
             {
+                // the object can switch itself to RUNNING state in the following statement
                 awt::Size aSize = xObj->getVisualAreaSize( ( (SdrOle2Obj*) pObj )->GetAspect() );
                 aGraphSize = Size( aSize.Width, aSize.Height );
                 bObjSupported = TRUE;
+            }
+            catch( uno::Exception& )
+            {
+                OSL_ASSERT( "Couldn't get visual area of the object!\n" );
             }
         }
 
