@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docdesc.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: os $ $Date: 2001-02-23 12:45:12 $
+ *  last change: $Author: mtg $ $Date: 2001-08-14 13:55:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -894,17 +894,18 @@ void SwDoc::PrtOLENotify( BOOL bAll )
     }
 }
 
-void SwDoc::SetPrt( SfxPrinter *pP )
+void SwDoc::SetPrt( SfxPrinter *pP, sal_Bool bCallPrtDataChanged )
 {
     ASSERT( pP, "Kein Drucker !" );
 
     const BOOL bInitPageDesc = pPrt == 0;
 
-    if ((ULONG) pP != (ULONG) pPrt)
+    if ( (ULONG) pP != (ULONG) pPrt)
     {
         delete pPrt;
         pPrt = pP;
-        PrtDataChanged();
+        if ( bCallPrtDataChanged )
+            PrtDataChanged();
     }
 
     if( bInitPageDesc )
