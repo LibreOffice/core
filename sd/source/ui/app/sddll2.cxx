@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sddll2.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: ka $ $Date: 2001-04-24 10:15:15 $
+ *  last change: $Author: aw $ $Date: 2001-04-27 11:34:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -129,6 +129,12 @@
 #ifndef _SVX_GRAFCTRL_HXX
 #include <svx/grafctrl.hxx>
 #endif
+
+// #UndoRedo#
+#ifndef _SVX_LBOXCTRL_HXX_
+#include <svx/lboxctrl.hxx>
+#endif
+
 #ifndef _SVX_CLIPBOARDCTL_HXX_
 #include <svx/clipboardctl.hxx>
 #endif
@@ -238,6 +244,10 @@ void SdDLL::RegisterControllers()
     SfxMenuControl::RegisterControl( SID_SET_SNAPITEM, pMod );
     SfxMenuControl::RegisterControl( SID_DELETE_SNAPITEM, pMod );
     SfxMenuControl::RegisterControl( SID_BEZIER_CLOSE, pMod );
+
+    // #UndoRedo#
+    SvxUndoControl::RegisterControl( SID_UNDO , pMod );
+    SvxRedoControl::RegisterControl( SID_REDO , pMod );
 
     SvxClipBoardControl::RegisterControl( SID_PASTE, pMod );
 }
