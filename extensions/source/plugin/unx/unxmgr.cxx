@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unxmgr.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-28 12:39:14 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 10:16:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,7 @@
 #include <sys/types.h>
 #include <dirent.h>
 #include <osl/thread.h>
+#include <rtl/strbuf.hxx>
 
 #include <vcl/svapp.hxx>
 #include <plugin/impl.hxx>
@@ -117,27 +118,57 @@ static bool CheckPlugin( const ByteString& rPath, list< PluginDescription* >& rD
     int nDescriptions = 0;
     if( pResult )
     {
-        ByteString aMIME;
+        OStringBuffer aMIME;
         char buf[256];
         while( fgets( buf, sizeof( buf ), pResult ) )
-            aMIME += buf;
-        pclose( pResult );
-        if( aMIME.Len() > 0 )
         {
-            if( aMIME.GetChar( aMIME.Len()-1 ) == '\n' )
-                aMIME.Erase( aMIME.Len()-1 );
-            xub_StrLen nIndex = 0;
-            while( nIndex != STRING_NOTFOUND )
+            for( int i = 0; i < sizeof(buf) && buf[i]; ++i )
             {
-                ByteString aType = aMIME.GetToken( 0, ';', nIndex );
+                if( buf[i] == '\n' )
+                    buf[i] = ';';
+            }
+            aMIME.append( buf );
+        }
+        pclose( pResult );
+
+        if( aMIME.getLength() > 0 )
+        {
+            OString aLine = aMIME.makeStringAndClear();
+
+            sal_Int32 nIndex = 0;
+            while( nIndex != -1 )
+            {
+                OString aType = aLine.getToken( 0, ';', nIndex );
+
+                sal_Int32 nTypeIndex = 0;
+                OString aMimetype   = aType.getToken( 0, ':', nTypeIndex );
+                OString aExtLine    = aType.getToken( 0, ':', nTypeIndex );
+                if( nTypeIndex < 0 ) // ensure at least three tokens
+                    continue;
+                OString aDesc       = aType.getToken( 0, ':', nTypeIndex );
+
+                // create extension list string
+                sal_Int32 nExtIndex = 0;
+                OStringBuffer aExtension;
+                while( nExtIndex != -1 )
+                {
+                    OString aExt = aExtLine.getToken( 0, ',', nExtIndex);
+                    if( aExt.indexOf( "*." ) != 0 )
+                        aExtension.append( "*." );
+                    aExtension.append( aExt );
+                    if( nExtIndex != -1 )
+                        aExtension.append( ';' );
+                }
 
                 PluginDescription* pNew = new PluginDescription;
-                pNew->PluginName    = String( rPath, aEncoding );
-                pNew->Mimetype  = String( aType.GetToken( 0, ':' ), aEncoding );
-                ByteString aExt( "*." );
-                aExt += aType.GetToken( 1, ':' ).EraseLeadingChars().EraseTrailingChars();
-                pNew->Extension = String( aExt, aEncoding );
-                pNew->Description= String( aType.GetToken( 2, ':' ), aEncoding );
+                // set plugin name (path to library)
+                pNew->PluginName    = OStringToOUString( rPath, aEncoding );
+                // set mimetype
+                pNew->Mimetype  = OStringToOUString( aMimetype, aEncoding );
+                // set extension line
+                pNew->Extension = OStringToOUString( aExtension.makeStringAndClear(), aEncoding );
+                // set description
+                pNew->Description= OStringToOUString( aDesc, aEncoding );
                 rDescriptions.push_back( pNew );
 #if OSL_DEBUG_LEVEL > 1
                 fprintf( stderr, "Mimetype: %s\nExtension: %s\n"
@@ -151,9 +182,8 @@ static bool CheckPlugin( const ByteString& rPath, list< PluginDescription* >& rD
         }
 #if OSL_DEBUG_LEVEL > 1
         else
-            fprintf( stderr, "result of \"%s\" contains no mimtype:\n%s\n",
-                     aCommand.GetBuffer(),
-                     aMIME.GetBuffer() );
+            fprintf( stderr, "result of \"%s\" contains no mimtype\n",
+                     aCommand.GetBuffer() );
 #endif
     }
 #if OSL_DEBUG_LEVEL > 1
