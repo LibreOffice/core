@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: os $ $Date: 2000-12-07 09:54:40 $
+ *  last change: $Author: fs $ $Date: 2000-12-18 10:12:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1491,7 +1491,7 @@ Reference< sdbc::XConnection> SwNewDBMgr::GetConnection(const String& rDataSourc
                 xConnection = xComplConnection->connectWithCompletion( xHandler );
             }
         }
-        catch(...) {}
+        catch(Exception&) {}
     }
     return xConnection;
 }
@@ -1516,7 +1516,7 @@ Reference< sdbcx::XColumnsSupplier> SwNewDBMgr::GetColumnSupplier(Reference<sdbc
                     Reference<XPropertySet> xPropSet = *(Reference<XPropertySet>*)aTable.getValue();
                     xRet = Reference<XColumnsSupplier>(xPropSet, UNO_QUERY);
                 }
-                catch(...){}
+                catch(Exception&){}
         }
     }
     if(!xRet.is() && SW_DB_SELECT_QUERY != SW_DB_SELECT_TABLE)
@@ -1532,7 +1532,7 @@ Reference< sdbcx::XColumnsSupplier> SwNewDBMgr::GetColumnSupplier(Reference<sdbc
                     Reference<XPropertySet> xPropSet = *(Reference<XPropertySet>*)aQuery.getValue();
                     xRet = Reference<XColumnsSupplier>(xPropSet, UNO_QUERY);
                 }
-                catch(...){}
+                catch(Exception&){}
         }
     }
     return xRet;
@@ -1815,7 +1815,7 @@ BOOL SwNewDBMgr::ToNextMergeRecord()
                     {
                         pMergeData->xResultSet = pMergeData->xStatement->executeQuery( pMergeData->sStatement );
                     }
-                    catch(...)
+                    catch(Exception&)
                     {
                         pMergeData->bEndOfDB = TRUE;
                     }
@@ -1995,7 +1995,7 @@ BOOL SwNewDBMgr::OpenDataSource(const String& rDataSource, const String& rTableO
                 ++pMergeData->nSelectionIndex;
             }
         }
-        catch(...)
+        catch (Exception&)
         {
             pFound->xResultSet = 0;
             pFound->xStatement = 0;
@@ -2027,7 +2027,7 @@ sal_uInt32      SwNewDBMgr::GetSelectedRecordId(const String& rDataSource, const
             {
                 nRet = pFound->xResultSet->getRow();
             }
-            catch(...){}
+            catch(Exception&){}
         }
     }
     return nRet;
