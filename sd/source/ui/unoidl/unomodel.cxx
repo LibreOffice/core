@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unomodel.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-28 13:32:49 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 15:13:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2194,6 +2194,14 @@ void SAL_CALL SdXImpressDocument::dispose() throw (::com::sun::star::uno::Runtim
 {
     if( !mbDisposed )
     {
+        // Call the base class dispose() before setting the mbDisposed flag
+        // to true.  The reason for this is that if close() has not yet been
+        // called this is done in SfxBaseModel::dispose().  At the end of
+        // that dispose() is called again.  It is important to forward this
+        // second dispose() to the base class, too.
+        // As a consequence the following code has to be able to be run twice.
+        SfxBaseModel::dispose();
+
         {
             OGuard aGuard( Application::GetSolarMutex() );
             mbDisposed = true;
@@ -2281,10 +2289,7 @@ void SAL_CALL SdXImpressDocument::dispose() throw (::com::sun::star::uno::Runtim
             mxTransGradientTable = 0;
             mxMarkerTable = 0;
             mxDrawingPool = 0;
-
         }
-
-        SfxBaseModel::dispose();
     }
 }
 
@@ -2301,16 +2306,19 @@ void SAL_CALL SdXImpressDocument::setPrinter( const uno::Sequence< beans::Proper
     SfxPrinter* pPrinter = NULL;
     sal_uInt16 nChangeFlags = 0;
     impl_setPrinter(rPrinter,pPrinter,nChangeFlags,pViewSh);
-    ::sd::ViewShell* pSdViewSh = PTR_CAST(::sd::ViewShell,pViewSh);
-    // set new printer
-    if ( pSdViewSh && pPrinter )
+
+    // Despite its name impl_setPrinter() does not set a printer but creates
+    // a new one.  Setting it as the current printer remains as our task.
+    ::sd::ViewShellBase* pBase = PTR_CAST(::sd::ViewShellBase, pViewSh);
+    if (pBase!=NULL && pPrinter!=NULL)
     {
         ::vos::OGuard aGuard( Application::GetSolarMutex() );
-        //do not show the dialog here
-        pSdViewSh->GetViewShellBase().SetPrinterOptDlg (
+
+        pBase->SetPrinterOptDlg (
             pPrinter,
             nChangeFlags,
-            FALSE );
+            FALSE //do not show the dialog here
+            );
     }
 }
 
