@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impdialog.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-28 09:39:52 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:04:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,15 +103,11 @@ ImpPDFDialog::ImpPDFDialog( Window* pParent, ResMgr& rResMgr, Sequence< Property
     maFtQuality( this, ResId( FT_QUALITY ) ),
     maNfQuality( this, ResId( NF_QUALITY ) ),
     maCbReduceImageResolution( this, ResId( CB_REDUCEIMAGERESOLUTION ) ),
-    maFtReduceImageResolution( this, ResId( FT_REDUCEIMAGERESOLUTION ) ),
     maCoReduceImageResolution( this, ResId( CO_REDUCEIMAGERESOLUTION ) ),
     maFlGeneral( this, ResId( FL_GENERAL ) ),
     maCbTaggedPDF( this, ResId( CB_TAGGEDPDF ) ),
-    maFtTaggedPDF( this, ResId( FT_TAGGEDPDF ) ),
     maCbExportNotes( this, ResId( CB_EXPORTNOTES ) ),
-    maFtExportNotes( this, ResId( FT_EXPORTNOTES ) ),
     maCbTransitionEffects( this, ResId( CB_TRANSITIONEFFECTS ) ),
-    maFtTransitionEffects( this, ResId( FT_TRANSITIONEFFECTS ) ),
     maFtFormsFormat( this, ResId( FT_FORMSFORMAT ) ),
     maLbFormsFormat( this, ResId( LB_FORMSFORMAT ) ),
     maConfigItem( String( RTL_CONSTASCII_USTRINGPARAM( "Office.Common/Filter/PDF/Export/" ) ), &rFilterData ),
