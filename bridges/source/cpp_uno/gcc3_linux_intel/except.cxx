@@ -2,9 +2,9 @@
  *
  *  $RCSfile: except.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 12:37:07 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 02:59:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,7 @@
 #include <osl/mutex.hxx>
 
 #include <com/sun/star/uno/genfunc.hxx>
+#include "com/sun/star/uno/RuntimeException.hpp"
 #include <typelib/typedescription.hxx>
 #include <uno/any2.h>
 
