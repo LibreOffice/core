@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regsingleton.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: dbo $ $Date: 2002-09-10 09:39:15 $
+ *  last change: $Author: dbo $ $Date: 2002-09-11 08:24:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,53 +75,123 @@ using namespace ::rtl;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
+static void print_options() SAL_THROW( () )
+{
+    printf(
+        "\nusage: regsingleton [-r|-ra] registry_file singleton_name[=service_name] ...\n\n"
+        "Inserts a singleton entry into rdb.\n"
+        "Option -r revokes given entries, -ra revokes all entries.\n" );
+}
 
 //==================================================================================================
 extern "C" int SAL_CALL main( int argc, char const * argv [] )
 {
     if (argc < 3)
     {
-        fprintf(
-            stderr, "\nusage: regsingleton registry_file singleton_name1=service_name1 ...\n" );
+        print_options();
         return 1;
     }
 
-    OUString sys_path( OUString::createFromAscii( argv[ 1 ] ) );
+    bool insert_entry = true;
+    bool remove_all = false;
+    int nPos = 1;
+    if ('-' == argv[ nPos ][ 0 ] && 'r' == argv[ nPos ][ 1 ])
+    {
+        if ('a' == argv[ nPos ][ 2 ] && '\0' == argv[ nPos ][ 3 ])
+        {
+            remove_all = true;
+        }
+        else if ('\0' != argv[ nPos ][ 2 ])
+        {
+            print_options();
+            return 1;
+        }
+        insert_entry = false;
+        ++nPos;
+    }
+
+    OUString sys_path( OUString::createFromAscii( argv[ nPos ] ) );
     OUString file_url;
     oslFileError rc = osl_getFileURLFromSystemPath( sys_path.pData, &file_url.pData );
     if (osl_File_E_None != rc)
     {
-        fprintf( stderr, "\nerror: cannot make file url out of %s\n", argv[ 1 ] );
+        fprintf( stderr, "\nerror: cannot make file url out of %s\n", argv[ nPos ] );
         return 1;
     }
+    ++nPos;
 
     try
     {
         Reference< registry::XSimpleRegistry > xSimReg( ::cppu::createSimpleRegistry() );
         xSimReg->open( file_url, sal_False, sal_True );
         Reference< registry::XRegistryKey > xRoot( xSimReg->getRootKey() );
-        Reference< registry::XRegistryKey > xKey( xRoot->openKey( OUSTR("SINGLETONS") ) );
-        if (! xKey.is())
-            xKey = xRoot->createKey( OUSTR("SINGLETONS") );
 
-        for ( int nPos = 2; nPos < argc; ++nPos )
+        if (remove_all)
         {
-            OUString singleton( OUString::createFromAscii( argv[ nPos ] ) );
-            sal_Int32 eq = singleton.indexOf( '=' );
-            if (eq < 0)
+            try
             {
-                OString entry( OUStringToOString( singleton, RTL_TEXTENCODING_ASCII_US ) );
-                fprintf( stderr, "skipping %s: no service name given!\n", entry.getStr() );
+                xRoot->deleteKey( OUSTR("SINGLETONS") );
             }
-            else
+            catch (registry::InvalidRegistryException & exc)
             {
-                OUString service( singleton.copy( eq +1 ) );
-                singleton = singleton.copy( 0, eq );
+                OString cstr_msg(
+                    OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
+                fprintf(
+                    stderr, "\nwarning: removing all singletons failed: %s\n",
+                    cstr_msg.getStr() );
+            }
+        }
+        else
+        {
+            Reference< registry::XRegistryKey > xKey( xRoot->openKey( OUSTR("SINGLETONS") ) );
+            if (! xKey.is())
+                xKey = xRoot->createKey( OUSTR("SINGLETONS") );
 
-                Reference< registry::XRegistryKey > xEntry( xKey->openKey( singleton ) );
-                if (! xEntry.is())
-                    xEntry = xKey->createKey( singleton );
-                xEntry->setStringValue( service );
+            for ( ; nPos < argc; ++nPos )
+            {
+                OUString singleton( OUString::createFromAscii( argv[ nPos ] ) );
+                OUString service;
+                sal_Int32 eq = singleton.indexOf( '=' );
+                if (eq >= 0)
+                {
+                    service = singleton.copy( eq +1 );
+                    singleton = singleton.copy( 0, eq );
+                }
+
+                if (insert_entry)
+                {
+                    if (service.getLength())
+                    {
+                        Reference< registry::XRegistryKey > xEntry( xKey->openKey( singleton ) );
+                        if (! xEntry.is())
+                            xEntry = xKey->createKey( singleton );
+                        xEntry->setStringValue( service );
+                    }
+                    else
+                    {
+                        OString entry( OUStringToOString( singleton, RTL_TEXTENCODING_ASCII_US ) );
+                        fprintf(
+                            stderr, "\nwarning: no service name given for singleton %s!\n",
+                            entry.getStr() );
+                    }
+                }
+                else
+                {
+                    try
+                    {
+                        xKey->deleteKey( singleton );
+                    }
+                    catch (registry::InvalidRegistryException & exc)
+                    {
+                        OString cstr_singleton(
+                            OUStringToOString( singleton, RTL_TEXTENCODING_ASCII_US ) );
+                        OString cstr_msg(
+                            OUStringToOString( exc.Message, RTL_TEXTENCODING_ASCII_US ) );
+                        fprintf(
+                            stderr, "\nwarning: singleton %s is not registered: %s\n",
+                            cstr_singleton.getStr(), cstr_msg.getStr() );
+                    }
+                }
             }
         }
 

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: dbo $ $Date: 2002-09-10 09:39:15 $
+#   last change: $Author: dbo $ $Date: 2002-09-11 08:24:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -109,6 +109,12 @@ APP1STDLIBS= \
     $(SALLIB)		\
     $(CPPULIB)		\
     $(CPPUHELPERLIB)
+
+.IF "$(debug)" != ""
+.IF "$(COM)" == "MSC"
+CFLAGS += -Ob0
+.ENDIF
+.ENDIF
 
 .INCLUDE :  target.mk
 
