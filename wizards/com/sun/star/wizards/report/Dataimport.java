@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Dataimport.java,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: bc $ $Date: 2002-10-31 15:27:23 $
+ *  last change: $Author: bc $ $Date: 2002-11-08 17:25:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -292,7 +292,7 @@ public class Dataimport extends ReportWizard{
     }}
 
 
-    public String getValueofHiddenControl(XMultiServiceFactory xMSF, XNameAccess xNamedForm, String ControlName, ReportDocument CurReportDocument, boolean[] bgoOn){
+    public String getValueofHiddenControl(XMultiServiceFactory xMSF, XNameAccess xNamedForm, String ControlName, boolean[] bgoOn){
     try{
     if (bgoOn[0] == true){
         String ControlValue = (String) tools.getUNOPropertyValue(xNamedForm.getByName(ControlName), "HiddenValue");
@@ -304,7 +304,7 @@ public class Dataimport extends ReportWizard{
     catch(com.sun.star.uno.Exception exception){
     sMsgHiddenControlMissing = tools.replaceSubString(sMsgHiddenControlMissing, SOREPORTFORMNAME, "<REPORTFORM>");
     sMsgHiddenControlMissing = tools.replaceSubString(sMsgHiddenControlMissing, ControlName, "<CONTROLNAME>");
-    UNODialogs.showMessageBox(xMSF, CurReportDocument.Frame, "ErrorBox", com.sun.star.awt.VclWindowPeerAttribute.OK, sMsgHiddenControlMissing + (char) 13 + sMsgEndAutopilot);
+    UNODialogs.showMessageBox(xMSF, "ErrorBox", com.sun.star.awt.VclWindowPeerAttribute.OK, sMsgHiddenControlMissing + (char) 13 + sMsgEndAutopilot);
     bgoOn[0] = false;
     return null;
     }}
@@ -319,12 +319,13 @@ public class Dataimport extends ReportWizard{
         boolean[] bgoOn = new boolean[1];
         bgoOn[0] = true;
         XNameAccess xNamedForm = (XNameAccess) UnoRuntime.queryInterface(XNameAccess.class, oDBForm);
-        CurReportDocument.CurDBMetaData.DataSourceName = (String) getValueofHiddenControl(xMSF, xNamedForm, "DataSourceName", CurReportDocument, bgoOn);
-        CurReportDocument.CurDBMetaData.Command = getValueofHiddenControl(xMSF, xNamedForm, "Command", CurReportDocument, bgoOn);
-        String sCommandType = getValueofHiddenControl(xMSF, xNamedForm, "CommandType", CurReportDocument, bgoOn);
-        String sGroupFieldNames = getValueofHiddenControl(xMSF, xNamedForm, "GroupFieldNames", CurReportDocument, bgoOn);
-        String sFieldNames = getValueofHiddenControl(xMSF, xNamedForm, "FieldNames", CurReportDocument, bgoOn);
-        String sRecordFieldNames = getValueofHiddenControl(xMSF, xNamedForm, "RecordFieldNames", CurReportDocument, bgoOn);
+        // Todo make up an exception class to catch that error
+        CurReportDocument.CurDBMetaData.DataSourceName = (String) getValueofHiddenControl(xMSF, xNamedForm, "DataSourceName", bgoOn);
+        CurReportDocument.CurDBMetaData.Command = getValueofHiddenControl(xMSF, xNamedForm, "Command", bgoOn);
+        String sCommandType = getValueofHiddenControl(xMSF, xNamedForm, "CommandType", bgoOn);
+        String sGroupFieldNames = getValueofHiddenControl(xMSF, xNamedForm, "GroupFieldNames", bgoOn);
+        String sFieldNames = getValueofHiddenControl(xMSF, xNamedForm, "FieldNames", bgoOn);
+        String sRecordFieldNames = getValueofHiddenControl(xMSF, xNamedForm, "RecordFieldNames", bgoOn);
         CurReportDocument.CurDBMetaData.FieldNames = tools.ArrayoutofString(sFieldNames,";");
         CurReportDocument.CurDBMetaData.RecordFieldNames = tools.ArrayoutofString(sRecordFieldNames,";");
         CurReportDocument.CurDBMetaData.GroupFieldNames = tools.ArrayoutofString(sGroupFieldNames,";");
@@ -342,7 +343,7 @@ public class Dataimport extends ReportWizard{
     }
     else{
         sReportFormNotExisting = tools.replaceSubString(sReportFormNotExisting, SOREPORTFORMNAME, "<REPORTFORM>");
-        UNODialogs.showMessageBox(xMSF, CurReportDocument.Frame, "ErrorBox", com.sun.star.awt.VclWindowPeerAttribute.OK, sReportFormNotExisting + (char) 13 + sMsgEndAutopilot);
+        UNODialogs.showMessageBox(xMSF, "ErrorBox", com.sun.star.awt.VclWindowPeerAttribute.OK, sReportFormNotExisting + (char) 13 + sMsgEndAutopilot);
         return false;
     }
     }
@@ -384,7 +385,6 @@ public class Dataimport extends ReportWizard{
     XNameAccess xTextTables = CurReportDocument.TextTablesSupplier.getTextTables();
     xTextDocument = CurReportDocument.ReportTextDocument;
         xTextCursor = CurReportDocument.createTextCursor(CurReportDocument.ReportTextDocument.getText());
-    XFrame xFrame = CurReportDocument.Frame;
     xTextDocument.lockControllers();
         if (CurDBMetaData.ResultSet.next() == true){
 

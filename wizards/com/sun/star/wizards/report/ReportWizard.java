@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ReportWizard.java,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: bc $ $Date: 2002-10-31 15:27:23 $
+ *  last change: $Author: bc $ $Date: 2002-11-08 17:25:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -142,6 +142,7 @@ import com.sun.star.frame.XModel;
 import com.sun.star.frame.XDispatch;
 import com.sun.star.frame.XDispatchProvider;
 import com.sun.star.util.XURLTransformer;
+
 
 import java.io.*;
 import java.util.*;
@@ -682,7 +683,7 @@ public class ReportWizard {
         bcreateTemplate = ((Short)  CurUNODialog.getPropertyOfDialogControl("optCreateReportTemplate", "State")).shortValue() == (short) 1;
         boolean bDocisStored;
         StorePath = getStorePath();
-        if (tools.PathisValid(xGlobalMSF, StorePath, CurReportDocument.xWindowPeer, sMsgFilePathInvalid, bfinalaskbeforeOverwrite)){
+        if (tools.PathisValid(xGlobalMSF, StorePath, sMsgFilePathInvalid, bfinalaskbeforeOverwrite)){
             if (bcreateTemplate == true){
             CurReportDocument.createDBForm(xMSF, SOREPORTFORMNAME);
             tools.attachEventCall(CurReportDocument.ReportTextDocument, "OnNew", "macro:///Tools.Debug.FillDocument()");      //"service:com.sun.star.wizards.report.CallReportWizard?fill"
@@ -878,8 +879,8 @@ public class ReportWizard {
     String sStorePath = "";
     boolean bStoreAsTemplate = ((Short) CurUNODialog.getPropertyOfDialogControl("optCreateReportTemplate", "State")).shortValue() == (short) 1;
     if (bStoreAsTemplate == true){
-        if (CurReportPaths.UserTemplatePath == null)
-        CurReportPaths.UserTemplatePath = tools.getOfficePath(xMSF, "Template","user");
+//      if (CurReportPaths.UserTemplatePath == null)
+//      CurReportPaths.UserTemplatePath = tools.getOfficePath(xMSF, "Template","user");
         sStorePath = tools.callStoreDialog(xMSF, CurReportPaths.UserTemplatePath, DefaultName + ".stw", "writer_StarOffice_XML_Writer_Template");
         CurUNODialog.assignPropertyToDialogControl("txtSavePath_1", "Text", sStorePath);
         if (sStorePath != ""){
@@ -893,8 +894,8 @@ public class ReportWizard {
 
     }
     else{
-        if (CurReportPaths.WorkPath == null)
-        CurReportPaths.WorkPath = tools.getOfficePath(xMSF, "Work","");
+//      if (CurReportPaths.WorkPath == null)
+//      CurReportPaths.WorkPath = tools.getOfficePath(xMSF, "Work","");
         sStorePath = tools.callStoreDialog(xMSF, CurReportPaths.WorkPath, DefaultName + ".sxw",  "writer_StarOffice_XML_Writer");
         CurUNODialog.assignPropertyToDialogControl("txtSavePath_2", "Text", sStorePath);
         if (sStorePath != ""){
@@ -967,14 +968,14 @@ public class ReportWizard {
     DefaultName = "Report_" + CurReportDocument.CurDBMetaData.DataSourceName + "_" + CurReportDocument.CurDBMetaData.MainCommandName;
     if (DefaultName.equals(OldDefaultName) == false){
         OldDefaultName = DefaultName;
-        CurReportPaths.UserTemplatePath = tools.getOfficePath(xMSF, "Template","user");
+//      CurReportPaths.UserTemplatePath = tools.getOfficePath(xMSF, "Template","user");
         DefaultPath = CurReportPaths.UserTemplatePath + "/" + DefaultName + ".stw";
         DefaultPath = tools.convertfromURLNotation(DefaultPath);
         CurUNODialog.assignPropertyToDialogControl("txtSavePath_1", "Text", DefaultPath);
         baskbeforeOverwrite[0] = true;
         bmodifiedbySaveAsDialog[0] = false;
 
-        CurReportPaths.WorkPath = tools.getOfficePath(xMSF, "Work","");
+//      CurReportPaths.WorkPath = tools.getOfficePath(xMSF, "Work","");
         DefaultPath = CurReportPaths.WorkPath + "/" + DefaultName + ".sxw";
         DefaultPath = tools.convertfromURLNotation(DefaultPath);
         CurUNODialog.assignPropertyToDialogControl("txtSavePath_2", "Text", DefaultPath);
@@ -1380,10 +1381,15 @@ public class ReportWizard {
     xGlobalMSF = xMSF;
     xDesktop = tools.getDesktop(xMSF);
     XFramesSupplier xFrameSuppl = (XFramesSupplier) UnoRuntime.queryInterface(XFramesSupplier.class, xDesktop);
+    CurReportPaths = new ReportPaths();
+    if (CurReportPaths.initialize(xMSF) == false)
+        return;
     CurReportDocument =  new ReportDocument(xMSF, true, false);
-    CurReportPaths = new ReportPaths(xMSF);
     CurReportDocument.changePageOrientation(CurReportPaths.BitmapPath, null, true);
-    getReportResources(xMSF, false);
+    if (getReportResources(xMSF, false) == false){
+        tools.disposeDocument(xMSF, CurReportDocument.Component);
+        return;
+    }
     DatabaseNames = CurReportDocument.CurDBMetaData.getDatabaseNames(CurReportDocument);
     if (DatabaseNames.length > 0){
         CurReportDocument.ProgressBar.setValue(20);
@@ -1410,7 +1416,7 @@ public class ReportWizard {
         case 0:             // via Cancelbutton or via sourceCode with "endExecute"
             if (bCloseDocument == true){
             CurUNODialog.xComponent.dispose();
-            CurReportDocument.Component.dispose();
+            tools.disposeDocument(xMSF, CurReportDocument.Component);
             CurReportDocument.CurDBMetaData.disposeDBMetaData();
             return;
             }
@@ -1439,8 +1445,8 @@ public class ReportWizard {
             CurReportDocument.ReportTextDocument.unlockControllers();
     }
     else{
-        int iMsg = UNODialogs.showMessageBox(xMSF, CurReportDocument.Frame, "ErrorBox", com.sun.star.awt.VclWindowPeerAttribute.OK, sMsgNoDatabaseAvailable);
-        CurReportDocument.Component.dispose();
+        int iMsg = UNODialogs.showMessageBox(xMSF, "ErrorBox", com.sun.star.awt.VclWindowPeerAttribute.OK, sMsgNoDatabaseAvailable);
+        tools.disposeDocument(xMSF, CurReportDocument.Component);
     }
     }
     catch(java.lang.Exception jexception ){
@@ -1475,8 +1481,9 @@ public class ReportWizard {
     }
 
 
-    public static void getReportResources(XMultiServiceFactory xMSF, boolean bgetProgressResourcesOnly){
-        final int RID_COMMON = 1000;
+    public static boolean getReportResources(XMultiServiceFactory xMSF, boolean bgetProgressResourcesOnly){
+    try{
+    final int RID_COMMON = 1000;
         final int RID_FORM = 2200;
         final int RID_REPORT = 2400;
         XInvocation xResInvoke = tools.initResources(xMSF, "ReportWizard","dbw");
@@ -1559,7 +1566,12 @@ public class ReportWizard {
     sMsgHiddenControlMissing = tools.getResText(xResInvoke, RID_REPORT + 66);
     sProgressDataImport = tools.getResText(xResInvoke, RID_REPORT + 67);
     sMsgNoConnection = tools.getResText(xResInvoke, RID_COMMON + 14);
+    return true;
     }
+    catch(com.sun.star.uno.Exception exception){
+    tools.showCommonResourceError(xMSF);
+    return false;
+    }}
 
 
     class ReportPaths{
@@ -1570,12 +1582,22 @@ public class ReportWizard {
     public String[][] ContentFiles;
     public String UserTemplatePath;
     public String WorkPath;
-    public ReportPaths(XMultiServiceFactory xMSF){
+    public ReportPaths(){
+    }
+
+    public boolean initialize(XMultiServiceFactory xMSF){
+    try{
         TemplatePath = tools.getOfficePath(xMSF, "Template","share");
-        BitmapPath = TemplatePath + "/wizard/bitmap";
-        ReportPath = TemplatePath +  "/wizard/report";
+        UserTemplatePath = tools.getOfficePath(xMSF, "Template","user");
+        BitmapPath = tools.combinePaths(xMSF, TemplatePath, "/wizard/bitmap");
+        ReportPath = tools.combinePaths(xMSF, TemplatePath, "/wizard/report");
+        WorkPath = tools.getOfficePath(xMSF, "Work","");
         ContentFiles = tools.getFolderTitles(xMSF, "cnt", ReportPath);
         LayoutFiles = tools.getFolderTitles(xMSF,"stl", ReportPath);
+        return true;
     }
+    catch (tools.NoValidPathException nopathexception){
+        return false;
+    }}
     }
 }
