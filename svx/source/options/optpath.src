@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optpath.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-27 15:04:01 $
+ *  last change: $Author: hr $ $Date: 2003-04-29 16:44:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,6 +122,9 @@ TabPage RID_SFXPAGE_PATH
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Tipus";
         Text[ thai ] = "ชนิด";
+        Text[ czech ] = "Typ";
+        Text[ hebrew ] = "‮סוג‬";
+        Text[ hindi ] = "वर्ग";
     };
     FixedText FT_PATH
     {
@@ -153,6 +156,9 @@ TabPage RID_SFXPAGE_PATH
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Cam�";
         Text[ thai ] = "เส้นทาง";
+        Text[ czech ] = "Cesta";
+        Text[ hebrew ] = "‮מסלול‬";
+        Text[ hindi ] = "मार्ग";
     };
     Control LB_PATH
     {
@@ -180,7 +186,7 @@ TabPage RID_SFXPAGE_PATH
         Text [ english_us ] = "~Edit..." ;
         Text[ chinese_simplified ] = "编辑(~E)...";
         Text[ russian ] = "������...";
-        Text[ polish ] = "Edytuj...";
+        Text[ polish ] = "~Edytuj...";
         Text[ japanese ] = "編集(~E)...";
         Text[ chinese_traditional ] = "編輯(~E)...";
         Text[ arabic ] = "�����...";
@@ -190,6 +196,9 @@ TabPage RID_SFXPAGE_PATH
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Edita...";
         Text[ thai ] = "แ~ก้ไข...";
+        Text[ czech ] = "Upravit...";
+        Text[ hebrew ] = "‮עריכה...‬";
+        Text[ hindi ] = "~संपादन...";
     };
     PushButton BTN_STANDARD
     {
@@ -204,11 +213,11 @@ TabPage RID_SFXPAGE_PATH
         Text [ dutch ] = "~Standaard" ;
         Text [ swedish ] = "~Standard" ;
         Text [ danish ] = "Standard" ;
-        Text [ portuguese_brazilian ] = "~Standard" ;
+        Text [ portuguese_brazilian ] = "~Padr�o" ;
         Text [ portuguese ] = "~Padr�o" ;
         Text[ chinese_simplified ] = "标准(~D)";
         Text[ russian ] = "~�� ���������";
-        Text[ polish ] = "Domy�lnie";
+        Text[ polish ] = "~Domy�lnie";
         Text[ japanese ] = "標準(~D)";
         Text[ chinese_traditional ] = "標準(~D)";
         Text[ arabic ] = "�������";
@@ -219,6 +228,9 @@ TabPage RID_SFXPAGE_PATH
         Text[ catalan ] = "~Per defecte";
         Text[ finnish ] = "Oletus";
         Text[ thai ] = "~ค่าเริ่มต้น";
+        Text[ czech ] = "Výchozí";
+        Text[ hebrew ] = "‮ברירת מחדל‬";
+        Text[ hindi ] = "~अनुपस्थिति";
     };
     FixedLine GB_STD
     {
@@ -228,7 +240,7 @@ TabPage RID_SFXPAGE_PATH
         Text [ English ] = "Standard" ;
         Text [ norwegian ] = "Standard" ;
         Text [ italian ] = "Standard" ;
-        Text [ portuguese_brazilian ] = "Padr?o" ;
+        Text [ portuguese_brazilian ] = "Padr�o" ;
         Text [ portuguese ] = "Padr�o" ;
         Text [ finnish ] = "Oletus" ;
         Text [ danish ] = "Standard" ;
@@ -245,10 +257,13 @@ TabPage RID_SFXPAGE_PATH
         Text[ arabic ] = "�������";
         Text[ greek ] = "����������";
         Text[ korean ] = "기본값";
-        Text[ turkish ] = "Standart";
+        Text[ turkish ] = "�ntan�ml�";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Per defecte";
         Text[ thai ] = "ค่าเริ่มต้น";
+        Text[ czech ] = "Výchozí";
+        Text[ hebrew ] = "‮ברירת מחדל‬";
+        Text[ hindi ] = "अनुपस्थिति";
     };
     Image IMG_LOCK
     {
@@ -268,6 +283,9 @@ TabPage RID_SFXPAGE_PATH
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Camins";
     Text[ thai ] = "เส้นทาง";
+    Text[ czech ] = "Cesty";
+    Text[ hebrew ] = "‮מסלולים‬";
+    Text[ hindi ] = "मार्ग";
 };
 ErrorBox RID_SVXERR_OPT_DOUBLEPATHS
 {
@@ -276,7 +294,7 @@ ErrorBox RID_SVXERR_OPT_DOUBLEPATHS
     Message = "Die Verzeichnisse f�r die Konfiguration und des Nachrichtenspeichers\nm�ssen verschieden sein.\nBitte w�hlen Sie einen neuen Pfad aus." ;
     Message [ English ] = "The paths of configuration and mail storages have to be different.\nPlease choose a new path." ;
     Message [ english_us ] = "The configuration and mail directories must be specified as separate directories.\nPlease choose a new path." ;
-    Message [ portuguese_brazilian ] = "Die Verzeichnisse f? die Konfiguration und des Nachrichtenspeichers\nm?sen verschieden sein.\nBitte w?hlen Sie einen neuen Pfad aus." ;
+    Message [ portuguese_brazilian ] = "Os diret�rios de configura��o e de correio devem ser especificados como diret�rios separados.\nEscolha um novo caminho." ;
     Message [ swedish ] = "Katalogerna f�r konfigurationen och meddelandelagret\nm�ste vara olika.\nV�lj en ny s�kv�g." ;
     Message [ danish ] = "Konfiguratationens og meddelelseslagerets biblioteker m� ikke v�re ens.\nV�lg venligst en ny sti." ;
     Message [ italian ] = "La cartella della configurazione deve essere diversa da quella per il salvataggio \ndei messaggi.\nScegliere un nuovo percorso." ;
@@ -286,7 +304,7 @@ ErrorBox RID_SVXERR_OPT_DOUBLEPATHS
     Message [ portuguese ] = "Especifique os direct�rios de configura��o e de correio como direct�rios separados.\nSeleccione um novo atalho." ;
     Message[ chinese_simplified ] = "配置和保存邮件的目录不能相同。\n请您选择一个新的目录。";
     Message[ russian ] = "������������ � �������� �������� ������ ����������\n� ������ ���������.\n�������� ����� ����.";
-    Message[ polish ] = "Katalogi dla konfiguracji i dla zapisu wiadomo�ci \nmusz� by� r�ne.\nProsz� wybra� now� �cie�k�.";
+    Message[ polish ] = "Katalogi konfiguracyjny i pocztowy \nmusz� by� katalogami osobnymi.\nWybierz now� �cie�k�.";
     Message[ japanese ] = "設定用とメール保存用のディレクトリは\n別々でなければなりません。\n新しいパスを選択してください。";
     Message[ chinese_traditional ] = "配置和儲存郵件的目錄不能相同。\n請您選擇一個新的目錄。";
     Message[ arabic ] = "��� �� ���� ����� ������� ������� ������.\n������ ������ ���� ����.";
@@ -297,8 +315,20 @@ ErrorBox RID_SVXERR_OPT_DOUBLEPATHS
     Message[ catalan ] = "La configuraci� i els directoris de correu electr�nic\ns'han d'especificar com a directoris separats.\nEscolliu un nou cam�.";
     Message[ finnish ] = "Kokoonpano- ja postihakemistot on m��ritett�v� eri hakemistoiksi.\nValitse uusi polku.";
     Message[ thai ] = "ต้องระบุการกำหนดค่าและไดเร็กทอรี่เมล์เป็นสารบบที่แยกออกมา\nกรุณาเลือกเส้นทางใหม่";
+    Message[ czech ] = "Konfigurace a adresář pro poštu musejí být určeny jako rozdílné adresáře.\nProsím zadejte novou cestu.";
+    Message[ hebrew ] = "‮ספרית התצורה וספרית הדואר חייבים להיות נפרדות.\nנא לבחור מסלול חדש.‬";
+    Message[ hindi ] = "रूपरेखा और मेइल् डैरक्टरियों को भिन्न डैरक्टरियों की तरह निर्दिष्ट करना चाहिए ।\nकृपया नया मार्ग को चुनिए ।";
 };
  // ******************************************************************* EOF
+
+
+
+
+
+
+
+
+
 
 
 
