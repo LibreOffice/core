@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pkguri.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kso $ $Date: 2001-07-06 08:11:17 $
+ *  last change: $Author: kso $ $Date: 2002-10-08 13:59:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,6 +117,21 @@ void PackageUri::init() const
 
         // URI must match at least: <sheme>://<non_empty_url_to_file>
         if ( ( m_aUri.getLength() < PACKAGE_URL_SCHEME_LENGTH + 4 ) )
+        {
+            // error, but remember that we did a init().
+            m_aPath = rtl::OUString::createFromAscii( "/" );
+            return;
+        }
+
+        // Scheme must be followed by '://'
+        if ( ( m_aUri.getStr()[ PACKAGE_URL_SCHEME_LENGTH ]
+                != sal_Unicode( ':' ) )
+             ||
+             ( m_aUri.getStr()[ PACKAGE_URL_SCHEME_LENGTH + 1 ]
+                != sal_Unicode( '/' ) )
+             ||
+             ( m_aUri.getStr()[ PACKAGE_URL_SCHEME_LENGTH + 2 ]
+                != sal_Unicode( '/' ) ) )
         {
             // error, but remember that we did a init().
             m_aPath = rtl::OUString::createFromAscii( "/" );
