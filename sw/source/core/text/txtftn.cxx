@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtftn.cxx,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 14:30:49 $
+ *  last change: $Author: vg $ $Date: 2003-04-17 16:09:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -216,19 +216,12 @@ sal_Bool SwTxtFrm::CalcPrepFtnAdjust()
         const SwFtnContFrm *pCont = pBoss->FindFtnCont();
         sal_Bool bReArrange = sal_True;
 
-#ifdef VERTICAL_LAYOUT
         SWRECTFN( this )
         if ( pCont && (*fnRect->fnYDiff)( (pCont->Frm().*fnRect->fnGetTop)(),
                                           (Frm().*fnRect->fnGetBottom)() ) > 0 )
         {
             pBoss->RearrangeFtns( (Frm().*fnRect->fnGetBottom)(), sal_False,
                                   pFtn->GetAttr() );
-#else
-        if ( pCont && pCont->Frm().Top() > Frm().Bottom() )
-        {
-            pBoss->RearrangeFtns( Frm().Height() + Frm().Top(), sal_False,
-                                  pFtn->GetAttr() );
-#endif
             ValidateBodyFrm();
             ValidateFrm();
             pFtn = pBoss->FindFirstFtn( this );
@@ -254,10 +247,8 @@ sal_Bool SwTxtFrm::CalcPrepFtnAdjust()
 
 SwTwips SwTxtFrm::GetFtnLine( const SwTxtFtn *pFtn, sal_Bool bLocked ) const
 {
-#ifdef VERTICAL_LAYOUT
     ASSERT( ! IsVertical() || ! IsSwapped(),
             "SwTxtFrm::GetFtnLine with swapped frame" )
-#endif
 
     SwTxtFrm *pThis = (SwTxtFrm*)this;
 
@@ -272,23 +263,16 @@ SwTwips SwTxtFrm::GetFtnLine( const SwTxtFtn *pFtn, sal_Bool bLocked ) const
         // Unterkante des Frames zurueck.
         if( !bLocked )
             pThis->Prepare( PREP_ADJUST_FRM );
-#ifdef VERTICAL_LAYOUT
         return IsVertical() ? Frm().Left() : Frm().Bottom();
-#else
-        return Frm().Bottom();
-#endif
     }
 
-#ifdef VERTICAL_LAYOUT
     SWAP_IF_NOT_SWAPPED( this )
-#endif
 
     SwTxtInfo aInf( pThis );
     SwTxtIter aLine( pThis, &aInf );
     const xub_StrLen nPos = *pFtn->GetStart();
     aLine.CharToLine( nPos );
 
-#ifdef VERTICAL_LAYOUT
     SwTwips nRet = aLine.Y() + SwTwips(aLine.GetLineHeight());
     if( IsVertical() )
         nRet = SwitchHorizontalToVertical( nRet );
@@ -296,9 +280,6 @@ SwTwips SwTxtFrm::GetFtnLine( const SwTxtFtn *pFtn, sal_Bool bLocked ) const
     UNDO_SWAP( this )
 
     return nRet;
-#else
-    return aLine.Y() + SwTwips(aLine.GetLineHeight());
-#endif
 }
 
 /*************************************************************************
@@ -320,9 +301,7 @@ SwTwips SwTxtFrm::_GetFtnFrmHeight() const
                                         GetFtn().IsEndNote() ) )
         return 0;
 
-#ifdef VERTICAL_LAYOUT
     SWAP_IF_SWAPPED( this )
-#endif
 
     SwTwips nHeight = pRef->IsInFtnConnect() ?
                             1 : pRef->GetFtnLine( pFtnFrm->GetAttr(), sal_False );
@@ -333,14 +312,9 @@ SwTwips SwTxtFrm::_GetFtnFrmHeight() const
         // eingeben.
         const SwFrm *pCont = pFtnFrm->GetUpper();
         //Hoehe innerhalb des Cont, die ich mir 'eh noch genehmigen darf.
-#ifdef VERTICAL_LAYOUT
         SWRECTFN( pCont )
         SwTwips nTmp = (*fnRect->fnYDiff)( (pCont->*fnRect->fnGetPrtBottom)(),
                                            (Frm().*fnRect->fnGetTop)() );
-#else
-        SwTwips nTmp = pCont->Frm().Top() + pCont->Prt().Top() +
-                       pCont->Prt().Height() - Frm().Top();
-#endif
 
 #ifndef PRODUCT
         if( nTmp < 0 )
@@ -359,28 +333,16 @@ SwTwips SwTxtFrm::_GetFtnFrmHeight() const
         }
 #endif
 
-#ifdef VERTICAL_LAYOUT
         if ( (*fnRect->fnYDiff)( (pCont->Frm().*fnRect->fnGetTop)(), nHeight) > 0 )
-#else
-        if( pCont->Frm().Top() > nHeight )
-#endif
         {
             //Wachstumspotential den Containers.
             if ( !pRef->IsInFtnConnect() )
             {
                 SwSaveFtnHeight aSave( (SwFtnBossFrm*)pBoss, nHeight  );
-#ifdef VERTICAL_LAYOUT
                 nHeight = ((SwFtnContFrm*)pCont)->Grow( LONG_MAX PHEIGHT, sal_True );
-#else
-                nHeight = ((SwFtnContFrm*)pCont)->Grow( LONG_MAX, pHeight, sal_True );
-#endif
             }
             else
-#ifdef VERTICAL_LAYOUT
                 nHeight = ((SwFtnContFrm*)pCont)->Grow( LONG_MAX PHEIGHT, sal_True );
-#else
-                nHeight = ((SwFtnContFrm*)pCont)->Grow( LONG_MAX, pHeight, sal_True );
-#endif
 
             nHeight += nTmp;
             if( nHeight < 0 )
@@ -388,11 +350,7 @@ SwTwips SwTxtFrm::_GetFtnFrmHeight() const
         }
         else
         {   // The container has to shrink
-#ifdef VERTICAL_LAYOUT
             nTmp += (*fnRect->fnYDiff)( (pCont->Frm().*fnRect->fnGetTop)(), nHeight);
-#else
-            nTmp += pCont->Frm().Top() - nHeight;
-#endif
             if( nTmp > 0 )
                 nHeight = nTmp;
             else
@@ -400,9 +358,7 @@ SwTwips SwTxtFrm::_GetFtnFrmHeight() const
         }
     }
 
-#ifdef VERTICAL_LAYOUT
     UNDO_SWAP( this )
-#endif
 
     return nHeight;
 }
@@ -662,10 +618,8 @@ void SwTxtFrm::RemoveFtn( const xub_StrLen nStart, const xub_StrLen nLen )
 
 void SwTxtFrm::ConnectFtn( SwTxtFtn *pFtn, const SwTwips nDeadLine )
 {
-#ifdef VERTICAL_LAYOUT
     ASSERT( ! IsVertical() || ! IsSwapped(),
             "SwTxtFrm::ConnectFtn with swapped frame" );
-#endif
 
     bFtn = sal_True;
     bInFtnConnect = sal_True;   //Bloss zuruecksetzen!
@@ -765,15 +719,11 @@ void SwTxtFrm::ConnectFtn( SwTxtFtn *pFtn, const SwTwips nDeadLine )
         {
             SwFrm *pCont = pFtnFrm->GetUpper();
 
-#ifdef VERTICAL_LAYOUT
             SWRECTFN ( pCont )
             long nDiff = (*fnRect->fnYDiff)( (pCont->Frm().*fnRect->fnGetTop)(),
                                              nDeadLine );
 
             if( nDiff >= 0 )
-#else
-            if( pCont->Frm().Top() >= nDeadLine )//Ref und Ftn passen auf die Seite
-#endif
             {
                 //Wenn die Fussnote bei einem Follow angemeldet ist, so ist
                 //es jetzt an der Zeit sie umzumelden.
@@ -781,26 +731,14 @@ void SwTxtFrm::ConnectFtn( SwTxtFtn *pFtn, const SwTwips nDeadLine )
                     pBoss->ChangeFtnRef( pSrcFrm, pFtn, this );
                 //Es steht Platz zur Verfuegung, also kann die Fussnote evtl.
                 //wachsen.
-#ifdef VERTICAL_LAYOUT
                 if ( pFtnFrm->GetFollow() && nDiff > 0 )
-#else
-                if ( pFtnFrm->GetFollow() && pCont->Frm().Top() > nDeadLine )
-#endif
                 {
-#ifdef VERTICAL_LAYOUT
                     SwTwips nHeight = (pCont->Frm().*fnRect->fnGetHeight)();
-#else
-                    SwTwips nHeight = pCont->Frm().Height();
-#endif
                     pBoss->RearrangeFtns( nDeadLine, sal_False, pFtn );
                     ValidateBodyFrm();
                     ValidateFrm();
                     ViewShell *pSh = GetShell();
-#ifdef VERTICAL_LAYOUT
                     if ( pSh && nHeight == (pCont->Frm().*fnRect->fnGetHeight)() )
-#else
-                    if ( pSh && nHeight == pCont->Frm().Height() )
-#endif
                         //Damit uns nix durch die Lappen geht.
                         pSh->InvalidateWindows( pCont->Frm() );
                 }
@@ -889,10 +827,8 @@ void SwTxtFrm::ConnectFtn( SwTxtFtn *pFtn, const SwTwips nDeadLine )
 SwFtnPortion *SwTxtFormatter::NewFtnPortion( SwTxtFormatInfo &rInf,
                                              SwTxtAttr *pHint )
 {
-#ifdef VERTICAL_LAYOUT
     ASSERT( ! pFrm->IsVertical() || pFrm->IsSwapped(),
             "NewFtnPortion with unswapped frame" );
-#endif
 
     if( !pFrm->IsFtnAllowed() )
         return 0;
@@ -904,9 +840,7 @@ SwFtnPortion *SwTxtFormatter::NewFtnPortion( SwTxtFormatInfo &rInf,
     if( rInf.IsTest() )
         return new SwFtnPortion( rFtn.GetViewNumStr( *pDoc ), pFrm, pFtn );
 
-#ifdef VERTICAL_LAYOUT
     SWAP_IF_SWAPPED( pFrm )
-#endif
 
     KSHORT nReal;
     {
@@ -924,16 +858,12 @@ SwFtnPortion *SwTxtFormatter::NewFtnPortion( SwTxtFormatInfo &rInf,
 
     SwTwips nLower = Y() + nReal;
 
-#ifdef VERTICAL_LAYOUT
     SWRECTFN( pFrm )
 
     if( bVert )
         nLower = pFrm->SwitchHorizontalToVertical( nLower );
 
     SwTwips nAdd;
-#else
-    SwFrm* pPrtFrm;
-#endif
 
     if( pFrm->IsInTab() && (!pFrm->IsInSct() || pFrm->FindSctFrm()->IsInTab()) )
     {
@@ -941,29 +871,16 @@ SwFtnPortion *SwTxtFormatter::NewFtnPortion( SwTxtFormatInfo &rInf,
         while( !pRow->IsRowFrm() || !pRow->GetUpper()->IsTabFrm() )
             pRow = pRow->GetUpper();
 
-#ifdef VERTICAL_LAYOUT
         const SwTwips nMin = (pRow->Frm().*fnRect->fnGetBottom)();
 
         if( ( ! bVert && nMin > nLower ) || ( bVert && nMin < nLower ) )
             nLower = nMin;
 
         nAdd = (pRow->GetUpper()->*fnRect->fnGetBottomMargin)();
-#else
-        SwTwips nMin = pRow->Frm().Top() + pRow->Frm().Height();
-        if( nMin > nLower )
-            nLower = nMin;
-
-        pPrtFrm = pRow->GetUpper();
-#endif
     }
     else
-#ifdef VERTICAL_LAYOUT
         nAdd = (pFrm->*fnRect->fnGetBottomMargin)();
-#else
-        pPrtFrm = pFrm;
-#endif
 
-#ifdef VERTICAL_LAYOUT
     if( nAdd > 0 )
     {
         if ( bVert )
@@ -971,13 +888,6 @@ SwFtnPortion *SwTxtFormatter::NewFtnPortion( SwTxtFormatInfo &rInf,
         else
             nLower += nAdd;
     }
-#else
-    SwTwips nAdd =
-        pPrtFrm->Frm().Height() -pPrtFrm->Prt().Height() -pPrtFrm->Prt().Top();
-
-    if( nAdd > 0 )
-        nLower += nAdd;
-#endif
 
     // #i10770#: If there are fly frames anchored at previous paragraphs,
     // the deadline should consider their lower borders.
@@ -1080,9 +990,7 @@ SwFtnPortion *SwTxtFormatter::NewFtnPortion( SwTxtFormatInfo &rInf,
                 if( !pFtnCont )
                 {
                     rInf.SetStop( sal_True );
-#ifdef VERTICAL_LAYOUT
                     UNDO_SWAP( pFrm )
-#endif
                     return 0;
                 }
                 else
@@ -1099,15 +1007,12 @@ SwFtnPortion *SwTxtFormatter::NewFtnPortion( SwTxtFormatInfo &rInf,
                             if( pTmp && *pTmp < pFtn )
                             {
                                 rInf.SetStop( sal_True );
-#ifdef VERTICAL_LAYOUT
                                 UNDO_SWAP( pFrm )
-#endif
                                 return 0;
                             }
                         }
                     }
                     // Ist dies die letzte passende Zeile?
-#ifdef VERTICAL_LAYOUT
                     SwTwips nTmpBot = Y() + nReal * 2;
 
                     if( bVert )
@@ -1120,9 +1025,6 @@ SwFtnPortion *SwTxtFormatter::NewFtnPortion( SwTxtFormatInfo &rInf,
                                       nTmpBot );
 
                     if( pScrFrm && nDiff < 0 )
-#else
-                    if( pScrFrm && Y() + nReal*2 > pFtnCont->Frm().Top() )
-#endif
                     {
                         if( pFtnFrm )
                         {
@@ -1133,9 +1035,7 @@ SwFtnPortion *SwTxtFormatter::NewFtnPortion( SwTxtFormatInfo &rInf,
                                 // ist auf eine andere Seite gewandert, dann wollen
                                 // wir mit ...
                                 rInf.SetStop( sal_True );
-#ifdef VERTICAL_LAYOUT
                                 UNDO_SWAP( pFrm )
-#endif
                                 return 0;
                             }
                         }
@@ -1149,9 +1049,7 @@ SwFtnPortion *SwTxtFormatter::NewFtnPortion( SwTxtFormatInfo &rInf,
                                             pFrm, pFtn, nReal );
     rInf.SetFtnInside( sal_True );
 
-#ifdef VERTICAL_LAYOUT
     UNDO_SWAP( pFrm )
-#endif
 
     return pRet;
  }
@@ -1210,9 +1108,7 @@ SwNumberPortion *SwTxtFormatter::NewFtnNumPortion( SwTxtFormatInfo &rInf ) const
         }
     }
 
-#ifdef VERTICAL_LAYOUT
     pFnt->SetVertical( pFnt->GetOrientation(), pFrm->IsVertical() );
-#endif
     return new SwFtnNumPortion( aFtnTxt, pFnt );
 }
 
@@ -1263,10 +1159,8 @@ SwErgoSumPortion *SwTxtFormatter::NewErgoSumPortion( SwTxtFormatInfo &rInf ) con
 
 xub_StrLen SwTxtFormatter::FormatQuoVadis( const xub_StrLen nOffset )
 {
-#ifdef VERTICAL_LAYOUT
     ASSERT( ! pFrm->IsVertical() || ! pFrm->IsSwapped(),
             "SwTxtFormatter::FormatQuoVadis with swapped frame" );
-#endif
 
     if( !pFrm->IsInFtn() || pFrm->ImplFindFtnFrm()->GetAttr()->GetFtn().IsEndNote() )
         return nOffset;
@@ -1353,15 +1247,11 @@ xub_StrLen SwTxtFormatter::FormatQuoVadis( const xub_StrLen nOffset )
     nLastLeft = nOldRealWidth - nQuoWidth;
     Right( Right() - nQuoWidth );
 
-#ifdef VERTICAL_LAYOUT
     SWAP_IF_NOT_SWAPPED( pFrm )
-#endif
 
     const xub_StrLen nRet = FormatLine( nStart );
 
-#ifdef VERTICAL_LAYOUT
     UNDO_SWAP( pFrm )
-#endif
 
     Right( rInf.Left() + nOldRealWidth - 1 );
 
