@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlstyli.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-03 11:02:32 $
+ *  last change: $Author: dr $ $Date: 2000-11-03 13:22:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -304,27 +304,15 @@ void XMLTableStyleContext::SetOperator(com::sun::star::uno::Sequence<beans::Prop
 void XMLTableStyleContext::SetBaseCellAddress(com::sun::star::uno::Sequence<beans::PropertyValue>& aProps,
     const rtl::OUString& sBaseCell) const
 {
-    ScModelObj* pDocObj = ScModelObj::getImplementation( GetImport().GetModel() );
-    if ( pDocObj )
-    {
-        ScDocument* pDoc = pDocObj->GetDocument();
-        if (pDoc)
-        {
-            aProps.realloc(aProps.getLength() + 1);
-            beans::PropertyValue aProp;
-            ScAddress aBase;
-            aBase.Parse(sBaseCell, pDoc);
-            table::CellAddress aBaseAddress;
-            aBaseAddress.Column = aBase.Col();
-            aBaseAddress.Row = aBase.Row();
-            aBaseAddress.Sheet = aBase.Tab();
-            uno::Any aAnyBase;
-            aAnyBase <<= aBaseAddress;
-            aProp.Value = aAnyBase;
-            aProp.Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_SOURCEPOS));
-            aProps[aProps.getLength() - 1] = aProp;
-        }
-    }
+    aProps.realloc(aProps.getLength() + 1);
+    beans::PropertyValue aProp;
+    table::CellAddress aBaseAddress;
+    ScXMLConverter::GetAddressFromString( aBaseAddress, sBaseCell, GetScImport().GetDocument() );
+    uno::Any aAnyBase;
+    aAnyBase <<= aBaseAddress;
+    aProp.Value = aAnyBase;
+    aProp.Name = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_SOURCEPOS));
+    aProps[aProps.getLength() - 1] = aProp;
 }
 
 void XMLTableStyleContext::SetStyle(com::sun::star::uno::Sequence<beans::PropertyValue>& aProps,
@@ -818,8 +806,10 @@ Reference < XNameContainer >
                     break;
                 case XML_STYLE_FAMILY_TABLE_COLUMN:
                     ((XMLTableStylesContext *)this)->xColumnStyles = xStyles;
+                    break;
                 case XML_STYLE_FAMILY_TABLE_ROW:
                     ((XMLTableStylesContext *)this)->xRowStyles = xStyles;
+                    break;
                 }
             }
         }
