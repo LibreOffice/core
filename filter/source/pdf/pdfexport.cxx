@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfexport.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: sj $ $Date: 2002-09-10 15:28:58 $
+ *  last change: $Author: sj $ $Date: 2002-09-12 12:08:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,7 @@
 #include <toolkit/awt/vclxdevice.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <svtools/FilterConfigItem.hxx>
+#include <svtools/filter.hxx>
 
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYSET_HPP_
 #include <com/sun/star/beans/XPropertySet.hpp>
@@ -727,9 +728,34 @@ void PDFExport::ImplWriteBitmapEx( PDFWriter& rWriter, VirtualDevice& rDummyVDev
 {
     if ( !rBitmapEx.IsEmpty() )
     {
-        BitmapEx aBitmapEx( rBitmapEx );
+        BitmapEx    aBitmapEx( rBitmapEx );
+        sal_Bool    bIsBW = aBitmapEx.GetBitmap().GetBitCount() == 1;
 
-        sal_Int32 nMaxBmpDPI = nCompressMode ? 300 : 72;
+        sal_Int32   nMaxBmpDPI = 300;
+        sal_Int32   nQuality   = 75;
+        sal_Int32   nColorMode = 0;
+
+        switch( nCompressMode )
+        {
+            case 0 :
+            {
+                nMaxBmpDPI = bIsBW ? 300 : 72;
+                nQuality = 65;
+            }
+            break;
+            case 1 :
+            {
+                nMaxBmpDPI = bIsBW ? 1200 : 300;
+                nQuality = 80;
+            }
+            break;
+            case 2 :
+            {
+                nMaxBmpDPI = bIsBW ? 1200 : 300;
+                nQuality = 95;
+            }
+            break;
+        }
 
         // do downsampling if neccessary
         const Size      aDstSizeTwip( rDummyVDev.PixelToLogic( rDummyVDev.LogicToPixel( rSize ), MAP_TWIP ) );
@@ -759,15 +785,45 @@ void PDFExport::ImplWriteBitmapEx( PDFWriter& rWriter, VirtualDevice& rDummyVDev
                 aNewBmpSize.Width() = FRound( fMaxPixelX );
                 aNewBmpSize.Height() = FRound( fMaxPixelX / fBmpWH);
             }
-
             if( aNewBmpSize.Width() && aNewBmpSize.Height() )
                 aBitmapEx.Scale( aNewBmpSize );
             else
                 aBitmapEx.SetEmpty();
         }
-        if ( aBitmapEx.IsTransparent() )
-            rWriter.DrawBitmapEx( rPoint, rSize, aBitmapEx );
-        else
-            rWriter.DrawBitmap( rPoint, rSize, aBitmapEx.GetBitmap() );
+        const Size aSizePixel( aBitmapEx.GetSizePixel() );
+        if ( aSizePixel.Width() && aSizePixel.Height() )
+        {
+            if ( aBitmapEx.GetBitCount() > 1 )
+            {
+                Bitmap aMask;
+                if ( aBitmapEx.IsTransparent() )
+                {
+                    if ( aBitmapEx.IsAlpha() )
+                        aMask = aBitmapEx.GetAlpha().GetBitmap();
+                    else
+                        aMask = aBitmapEx.GetMask();
+                }
+                SvMemoryStream  aStrm;
+                GraphicFilter   aGraphicFilter;
+                Graphic         aGraphic( aBitmapEx.GetBitmap() );
+                sal_uInt16      nFormatName = aGraphicFilter.GetExportFormatNumberForShortName( OUString( RTL_CONSTASCII_USTRINGPARAM( "JPG" ) ) );
+
+                Sequence< PropertyValue > aFilterData( 2 );
+                aFilterData[ 0 ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "Quality" ) );
+                aFilterData[ 0 ].Value <<= nQuality;
+                aFilterData[ 1 ].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "ColorMode" ) );
+                aFilterData[ 1 ].Value <<= nColorMode;
+
+                sal_uInt16 nError = aGraphicFilter.ExportGraphic( aGraphic, String(), aStrm, nFormatName, sal_True, &aFilterData );
+                rWriter.DrawJPGBitmap( aStrm, aSizePixel, Rectangle( rPoint, rSize ), aMask );
+            }
+            else
+            {
+                if ( aBitmapEx.IsTransparent() )
+                    rWriter.DrawBitmapEx( rPoint, rSize, aBitmapEx );
+                else
+                    rWriter.DrawBitmap( rPoint, rSize, aBitmapEx.GetBitmap() );
+            }
+        }
     }
 }
