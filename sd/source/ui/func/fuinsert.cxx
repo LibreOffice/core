@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fuinsert.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ka $ $Date: 2001-08-15 10:54:02 $
+ *  last change: $Author: ka $ $Date: 2001-08-16 10:50:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,6 +66,7 @@
 #endif
 
 #include <so3/plugin.hxx>
+#include <so3/pastedlg.hxx>
 #include <svx/pfiledlg.hxx>
 #include <svx/impgrf.hxx>
 #include <svx/dialogs.hrc>
@@ -76,9 +77,6 @@
 #endif
 #ifndef _SO_CLSIDS_HXX
 #include <so3/clsids.hxx>
-#endif
-#ifndef _PASTEDLG_HXX //autogen
-#include <so3/pastedlg.hxx>
 #endif
 #ifndef _SFXECODE_HXX //autogen
 #include <svtools/sfxecode.hxx>
@@ -256,19 +254,20 @@ FuInsertClipboard::FuInsertClipboard(SdViewShell* pViewSh, SdWindow* pWin, SdVie
 {
     TransferableDataHelper                      aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( pWin ) );
     SvPasteObjectDialog*                        pDlg = new SvPasteObjectDialog();
+    const String                                aEmptyString;
     ::com::sun::star::datatransfer::DataFlavor  aFlavor;
 
-    pDlg->Insert( SOT_FORMATSTR_ID_EMBED_SOURCE, String() );
-    pDlg->Insert( SOT_FORMATSTR_ID_LINK_SOURCE, String() );
-    pDlg->Insert( SOT_FORMATSTR_ID_DRAWING, SvPasteObjectDialog::GetSotFormatUIName( SOT_FORMATSTR_ID_DRAWING ) );
-    pDlg->Insert( SOT_FORMATSTR_ID_SVXB, SvPasteObjectDialog::GetSotFormatUIName( SOT_FORMATSTR_ID_SVXB ) );
-    pDlg->Insert( FORMAT_GDIMETAFILE, SvPasteObjectDialog::GetSotFormatUIName( FORMAT_GDIMETAFILE ) );
-    pDlg->Insert( FORMAT_BITMAP, SvPasteObjectDialog::GetSotFormatUIName( FORMAT_BITMAP ) );
-    pDlg->Insert( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, SvPasteObjectDialog::GetSotFormatUIName( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK ) );
-    pDlg->Insert( FORMAT_STRING, SvPasteObjectDialog::GetSotFormatUIName( FORMAT_STRING ) );
-    pDlg->Insert( SOT_FORMATSTR_ID_HTML, SvPasteObjectDialog::GetSotFormatUIName( SOT_FORMATSTR_ID_HTML ) );
-    pDlg->Insert( FORMAT_RTF, SvPasteObjectDialog::GetSotFormatUIName( FORMAT_RTF ) );
-    pDlg->Insert( SOT_FORMATSTR_ID_EDITENGINE, SvPasteObjectDialog::GetSotFormatUIName( SOT_FORMATSTR_ID_EDITENGINE ) );
+    pDlg->Insert( SOT_FORMATSTR_ID_EMBED_SOURCE, aEmptyString );
+    pDlg->Insert( SOT_FORMATSTR_ID_LINK_SOURCE, aEmptyString );
+    pDlg->Insert( SOT_FORMATSTR_ID_DRAWING, aEmptyString );
+    pDlg->Insert( SOT_FORMATSTR_ID_SVXB, aEmptyString );
+    pDlg->Insert( FORMAT_GDIMETAFILE, aEmptyString );
+    pDlg->Insert( FORMAT_BITMAP, aEmptyString );
+    pDlg->Insert( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, aEmptyString );
+    pDlg->Insert( FORMAT_STRING, aEmptyString );
+    pDlg->Insert( SOT_FORMATSTR_ID_HTML, aEmptyString );
+    pDlg->Insert( FORMAT_RTF, aEmptyString );
+    pDlg->Insert( SOT_FORMATSTR_ID_EDITENGINE, aEmptyString );
 
     const ULONG nFormatId = pDlg->Execute( pWindow, aDataHelper.GetTransferable() );
 

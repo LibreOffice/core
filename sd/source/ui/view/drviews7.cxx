@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews7.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: ka $ $Date: 2001-08-15 10:54:49 $
+ *  last change: $Author: ka $ $Date: 2001-08-16 10:49:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,9 +71,6 @@
 #endif
 #ifndef _COM_SUN_STAR_LINGUISTIC2_XLINGUSERVICEMANAGER_HPP_
 #include <com/sun/star/linguistic2/XLinguServiceManager.hpp>
-#endif
-#ifndef _PASTEDLG_HXX //autogen
-#include <so3/pastedlg.hxx>
 #endif
 #ifndef _SVX_FMGLOB_HXX
 #include <svx/fmglob.hxx>
@@ -603,8 +600,6 @@ void __EXPORT SdDrawViewShell::GetMenuState( SfxItemSet &rSet )
                             if( aDataHelper.GetTransferableObjectDescriptor( SOT_FORMATSTR_ID_OBJECTDESCRIPTOR, aDesc ) )
                                 aName = aDesc.maTypeName;
                         }
-                        else
-                            aName = SvPasteObjectDialog::GetSotFormatUIName( nTestFormat );
 
                         if( aName.Len() )
                             aItem.AddClipbrdFormat( nTestFormat, aName );
