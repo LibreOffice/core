@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layermerge.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: jb $ $Date: 2002-08-13 13:30:28 $
+ *  last change: $Author: jb $ $Date: 2002-08-20 10:21:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -453,9 +453,6 @@ void LayerMergeHandler::applyAttributes(INode * pNode, sal_Int16 aNodeAttributes
     }
     else if (aNodeAttributes & NodeAttribute::FINALIZED)
     {
-        OSL_ENSURE(!(aNodeAttributes & NodeAttribute::FINALIZED),
-                    "Layer merging: Warning: Node is both read-only and finalized");
-
         pNode->modifyAccess(true,true);
     }
 
