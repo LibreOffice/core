@@ -24,7 +24,8 @@
 
 /* external functions (C++ code, declared as extren "C" */
 extern WorkOnTokenSet( int, char* );
-extern InitExport( char * );
+extern InitExport( char * , char * );
+extern Parse( int nTyp, char *pTokenText );
 extern EndExport();
 extern SetError();
 extern GetError();
@@ -104,12 +105,12 @@ void YYWarning();
 	WorkOnTokenSet( SMALRESSOURCE, yytext );
 }
 
-[\t ]*[a-zA-Z0-9_]+[ \t]*("["[ \t]*[a-zA-Z0-9_]+[ \t]*"]"[ \t]*){0,1}=[ \t]*L{0,1}\".*\".*	{
+[\t ]*[a-zA-Z0-9_]+[ \t]*("["[ \t]*[a-zA-Z0-9_\-]+[ \t]*"]"[ \t]*){0,1}=[ \t]*L{0,1}\".*\".*\n{0,1}	{
 /* TEXTLINE // TextTyp = "A Text" */
 	WorkOnTokenSet( TEXTLINE, yytext );
 }
 
-[\t ]*[a-zA-Z0-9_]+[ \t]*("["[ \t]*[a-zA-Z0-9_]+[ \t]*"]"[ \t]*){0,1}(\n[ \t]*){0,1}=([ \t]*\n){0,1}(([a-zA-Z0-9_]+)|(\".*\")|([ \t\n]*))*\".*\"(([a-zA-Z0-9_]+)|(\".*\")|([ \t\n]*))*;	{
+[\t ]*[a-zA-Z0-9_]+[ \t]*("["[ \t]*[a-zA-Z0-9_\-]+[ \t]*"]"[ \t]*){0,1}(\n[ \t]*){0,1}=([ \t]*\n){0,1}(([a-zA-Z0-9_]+)|(\".*\")|([ \t\n]*))*\".*\"(([a-zA-Z0-9_]+)|(\".*\")|([ \t\n]*))*;	{
 /* LONGTEXTLINE // TextTyp = "A Text" HHH_XXX "A Text" ZZZ_TTT ... */
 	WorkOnTokenSet( LONGTEXTLINE, yytext );
 }
@@ -119,12 +120,12 @@ void YYWarning();
 	WorkOnTokenSet( TEXT, yytext );
 }
 
-"{"	{
+"{"[ \t]*\\{0,1}	{
 /* LEVELUP */
 	WorkOnTokenSet( LEVELUP, yytext );
 }
 
-"}"[ \t]*;	{
+"}"[ \t]*;([ \t]*\\){0,1}	{
 /* LEVELDOWN */
 	WorkOnTokenSet( LEVELDOWN, yytext );
 }
@@ -134,28 +135,30 @@ void YYWarning();
 	WorkOnTokenSet( APPFONTMAPPING, yytext );
 }
 
-[ \t]*[a-zA-Z0-9_]+[ \t]*=[ \t]*[0123456789]{1,5}[ \t]*";"{0,1} {
+[ \t]*[a-zA-Z0-9_]+[ \t]*=[ \t]*[0123456789]{1,5}[ \t]*";"{0,1}\\{0,1} {
 /* TEXTREFID // TextTyp = 12345 */
 	WorkOnTokenSet( TEXTREFID, yytext );
 }
 
-[a-zA-Z0-9_]+[ \t]*"="[\t ]*([ \t]*"//".*\n)*.*	|
-[a-zA-Z0-9_]+[ \t]*"=".*	{
-/* ASSIGNMENT  Typ = ... */
-	WorkOnTokenSet( ASSIGNMENT, yytext );
+[a-zA-Z0-9_]+[ \t]*"="[\t ]*([ \t]*"//".*\n)*.*	| 
+[a-zA-Z0-9_]+[ \t]*"=".*	{ 
+/* ASSIGNMENT  Typ = ...  */
+ WorkOnTokenSet( ASSIGNMENT, yytext );
 }
 
-[a-zA-Z0-9_]+[ \t]*("["[ \t]*[a-zA-Z0-9_]+[ \t]*"]"[ \t]*){0,1}"="[ \t]*(\\[ \t]*){0,1}\n{0,1}[ \t]*"{"[ \t]*(\\[ \t]*){0,1}\n{0,1}[ \t]*"<"	{
+
+
+[a-zA-Z0-9_]+[ \t]*("["[ \t]*[a-zA-Z0-9_\-]+[ \t]*"]"[ \t]*){0,1}"="[ \t]*(\\[ \t]*){0,1}\n{0,1}[ \t]*"{"[ \t]*(\\[ \t]*){0,1}\n{0,1}[ \t]*"<"	{
 /* LISTASSIGNMENT  Typ [ ... ] = ... */
 	WorkOnTokenSet( LISTASSIGNMENT, yytext );
 }
 
-"StringList"+[ \t]*("["[ \t]*[a-zA-Z0-9_]+[ \t]*"]"[ \t]*){0,1}"="[ \t]*(\\[ \t]*){0,1}\n{0,1}[ \t]*"{"[ \t]*(\\[ \t]*){0,1}\n{0,1}[ \t]*	{
+"StringList"+[ \t]*("["[ \t]*[a-zA-Z0-9_\-]+[ \t]*"]"[ \t]*){0,1}"="[ \t]*(\\[ \t]*){0,1}\n{0,1}[ \t]*"{"[ \t]*(\\[ \t]*){0,1}\n{0,1}[ \t]*	{
 /* LISTASSIGNMENT  Typ [ ... ] = ... */
 	WorkOnTokenSet( LISTASSIGNMENT, yytext );
 }
 
-"UIEntries"[ \t]*("["[ \t]*[a-zA-Z0-9_]+[ \t]*"]"[ \t]*){0,1}"="[ \t]*(\\[ \t]*){0,1}\n{0,1}[ \t]*"{"	{
+"UIEntries"[ \t]*("["[ \t]*[a-zA-Z0-9_\-]+[ \t]*"]"[ \t]*){0,1}"="[ \t]*(\\[ \t]*){0,1}\n{0,1}[ \t]*"{"	{
 /* UIENTRIES */
 	WorkOnTokenSet( UIENTRIES, yytext );
 }
@@ -269,14 +272,15 @@ main( int argc, char* argv[])
 	pFile = GetNextFile();
 	if ( !pFile )
 		return 1;
-
+    
    	yyin = pFile;
 
 	/* create global instance of class Export */
-	InitExport( pOutput );
+	InitExport( pOutput , pFile );
 
 	/* start parser */
    	yylex();
+   	Close();
 
 	/* get error info. and end export */
 	nRetValue = GetError();
