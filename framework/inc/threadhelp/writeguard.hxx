@@ -2,9 +2,9 @@
  *
  *  $RCSfile: writeguard.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: as $ $Date: 2001-05-02 13:00:41 $
+ *  last change: $Author: as $ $Date: 2001-06-11 10:25:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,10 @@
 #include <threadhelp/irwlock.h>
 #endif
 
+//#ifndef __FRAMEWORK_THREADHELP_THREADHELPBASE_HXX_
+//#include <threadhelp/threadhelpbase.hxx>
+//#endif
+
 //_________________________________________________________________________________________________________________
 //  interface includes
 //_________________________________________________________________________________________________________________
@@ -102,35 +106,166 @@ namespace framework{
                     We never need a own mutex to safe our internal member access - because
                     a guard is used as function-local member only. There exist no multithreaded access to it realy ...
 
-    @attention      To prevent us against wrong using, the default ctor, copy ctor and the =operator are maked private!
+    @attention      a) To prevent us against wrong using, the default ctor, copy ctor and the =operator are maked private!
+                    b) Use interface "IRWLock" of set LockHelper only - because we must support a finer granularity of locking.
+                       Interface "IMutex" should be used by easier guard implementations ... like "ResetableGuard"!
 
     @implements     -
-    @base           INonCopyAble
+    @base           INonCopyable
 
     @devstatus      ready to use
 *//*-*************************************************************************************************************/
-
-class WriteGuard : private INonCopyAble
+class WriteGuard : private INonCopyable
 {
     //-------------------------------------------------------------------------------------------------------------
     //  public methods
     //-------------------------------------------------------------------------------------------------------------
     public:
 
-        //---------------------------------------------------------------------------------------------------------
-        //  ctor/dtor
-        //---------------------------------------------------------------------------------------------------------
-         WriteGuard ( IRWLock* pLock );
-         WriteGuard ( IRWLock& rLock );
-        ~WriteGuard (                );
+        /*-****************************************************************************************************//**
+            @short      ctor
+            @descr      These ctors initialize the guard with a reference to used lock member of object to protect.
+                        Null isn't allowed as value!
 
-        //---------------------------------------------------------------------------------------------------------
-        //  interface
-        //---------------------------------------------------------------------------------------------------------
-        void      lock      ()      ;
-        void      unlock    ()      ;
-        void      downgrade ()      ;
-        ELockMode getMode   () const;
+            @seealso    -
+
+            @param      "pLock" ,reference to used lock member of object to protect
+            @param      "rLock" ,reference to used lock member of object to protect
+            @return     -
+
+            @onerror    -
+        *//*-*****************************************************************************************************/
+        inline WriteGuard( IRWLock* pLock )
+            :   m_pLock ( pLock     )
+            ,   m_eMode ( E_NOLOCK  )
+        {
+            lock();
+        }
+
+        //*********************************************************************************************************
+        inline WriteGuard( IRWLock& rLock )
+            :   m_pLock ( &rLock    )
+            ,   m_eMode ( E_NOLOCK  )
+        {
+            lock();
+        }
+
+        /*-****************************************************************************************************//**
+            @short      dtor
+            @descr      We unlock the used lock member automaticly if user forget it.
+
+            @seealso    -
+
+            @param      -
+            @return     -
+
+            @onerror    -
+        *//*-*****************************************************************************************************/
+        inline ~WriteGuard()
+        {
+            unlock();
+        }
+
+        /*-****************************************************************************************************//**
+            @short      set write lock
+            @descr      Call this method to set the write lock. The call will block till all current threads are synchronized!
+
+            @seealso    method unlock()
+
+            @param      -
+            @return     -
+
+            @onerror    -
+        *//*-*****************************************************************************************************/
+        inline void lock()
+        {
+            switch( m_eMode )
+            {
+                case E_NOLOCK       :   {
+                                            // Acquire write access and set return state.
+                                            // Mode is set later if it was successful!
+                                            m_pLock->acquireWriteAccess();
+                                            m_eMode = E_WRITELOCK;
+                                        }
+                                        break;
+                case E_READLOCK     :   {
+                                            // User has downgrade to read access before!
+                                            // We must release it before we can set a new write access!
+                                            m_pLock->releaseReadAccess();
+                                            m_pLock->acquireWriteAccess();
+                                            m_eMode = E_WRITELOCK;
+                                        }
+                                        break;
+            }
+        }
+
+        /*-****************************************************************************************************//**
+            @short      unset write lock
+            @descr      Call this method to unlock the rw-lock temp.!
+                        Normaly we do it at dtor automaticly for you ...
+
+            @seealso    method lock()
+
+            @param      -
+            @return     -
+
+            @onerror    -
+        *//*-*****************************************************************************************************/
+        inline void unlock()
+        {
+            switch( m_eMode )
+            {
+                case E_READLOCK     :   {
+                                            // User has downgraded to a read lock before!
+                                            // => There isn't realy a write lock ...
+                                            m_pLock->releaseReadAccess();
+                                            m_eMode = E_NOLOCK;
+                                        }
+                                        break;
+                case E_WRITELOCK    :   {
+                                            m_pLock->releaseWriteAccess();
+                                            m_eMode = E_NOLOCK;
+                                        }
+                                        break;
+            }
+        }
+
+        /*-****************************************************************************************************//**
+            @short      downgrade write access to read access without new blocking!
+            @descr      If this write lock is set you can change it to a "read lock".
+                        An "upgrade" is the same like new calling "lock()"!
+
+            @seealso    -
+
+            @param      -
+            @return     -
+
+            @onerror    -
+        *//*-*****************************************************************************************************/
+        inline void downgrade()
+        {
+            if( m_eMode == E_WRITELOCK )
+            {
+                m_pLock->downgradeWriteAccess();
+                m_eMode = E_READLOCK;
+            }
+        }
+
+        /*-****************************************************************************************************//**
+            @short      return internal states
+            @descr      For user they dont know what they are doing ...
+
+            @seealso    -
+
+            @param      -
+            @return     Current set lock mode.
+
+            @onerror    No error should occure.
+        *//*-*****************************************************************************************************/
+        inline ELockMode getMode() const
+        {
+            return m_eMode;
+        }
 
     //-------------------------------------------------------------------------------------------------------------
     //  private methods
@@ -156,7 +291,7 @@ class WriteGuard : private INonCopyAble
     //-------------------------------------------------------------------------------------------------------------
     private:
 
-        IRWLock*    m_pLock ;   /// refrence to lock-member of protected object
+        IRWLock*    m_pLock ;   /// reference to lock-member of protected object
         ELockMode   m_eMode ;   /// protection against multiple lock calls without unlock and difference between supported lock modi
 
 };      //  class WriteGuard

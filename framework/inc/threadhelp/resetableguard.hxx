@@ -2,9 +2,9 @@
  *
  *  $RCSfile: resetableguard.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2001-03-29 13:17:11 $
+ *  last change: $Author: as $ $Date: 2001-06-11 10:24:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,14 @@
 #include <threadhelp/inoncopyable.h>
 #endif
 
+#ifndef __FRAMEWORK_THREADHELP_IMUTEX_H_
+#include <threadhelp/imutex.h>
+#endif
+
+//#ifndef __FRAMEWORK_THREADHELP_THREADHELPBASE_HXX_
+//#include <threadhelp/threadhelpbase.hxx>
+//#endif
+
 //_________________________________________________________________________________________________________________
 //  interface includes
 //_________________________________________________________________________________________________________________
@@ -78,8 +86,8 @@
 //  other includes
 //_________________________________________________________________________________________________________________
 
-#ifndef _OSL_MUTEX_HXX_
-#include <osl/mutex.hxx>
+#ifndef _SAL_TYPES_H_
+#include <sal/types.h>
 #endif
 
 //_________________________________________________________________________________________________________________
@@ -103,15 +111,16 @@ namespace framework{
                     A set bool flag inside protect this implementation against multiple lock() calls
                     without any unlock()! So the increasing of guarded mutex couldn't be greater then 1 ...
 
-    @attention      To prevent us against wrong using, the default ctor, copy ctor and the =operator are maked private!
+    @attention      a) To prevent us against wrong using, the default ctor, copy ctor and the =operator are maked private!
+                    b) Use interface "IMutex" of set LockHelper only - because we must support an exclusiv locking.
+                       Interface "IRWLock" should be used by special guard implementations ... like "ReadGuard" or "WriteGuard"!
 
     @implements     -
-    @base           INonCopyAble
+    @base           INonCopyable
 
     @devstatus      ready to use
 *//*-*************************************************************************************************************/
-
-class ResetableGuard : private INonCopyAble
+class ResetableGuard : private INonCopyable
 {
     //-------------------------------------------------------------------------------------------------------------
     //  public methods
@@ -121,19 +130,30 @@ class ResetableGuard : private INonCopyAble
         /*-****************************************************************************************************//**
             @short      ctors
             @descr      Use these ctor methods to initialize the guard right.
-                        Given mutex reference must be valid - otherwise crashes could occure!
+                        Given lock reference must be valid - otherwise crashes could occure!
 
             @seealso    -
 
-            @param      "pMutex"    pointer to mutex for using as lock
-            @param      "rMutex"    reference to mutex for using as lock
+            @param      "pLock", pointer to lock helper of user
+            @param      "rLock", reference to lock helper of user
             @return     -
 
             @onerror    -
         *//*-*****************************************************************************************************/
+        inline ResetableGuard( IMutex* pLock )
+            :   m_pLock    ( pLock     )
+            ,   m_bLocked  ( sal_False )
+        {
+            lock();
+        }
 
-        ResetableGuard( ::osl::Mutex* pMutex );
-        ResetableGuard( ::osl::Mutex& rMutex );
+        //*********************************************************************************************************
+        inline ResetableGuard( IMutex& rLock )
+            :   m_pLock    ( &rLock    )
+            ,   m_bLocked  ( sal_False )
+        {
+            lock();
+        }
 
         /*-****************************************************************************************************//**
             @short      dtor
@@ -146,8 +166,10 @@ class ResetableGuard : private INonCopyAble
 
             @onerror    -
         *//*-*****************************************************************************************************/
-
-        ~ResetableGuard();
+        inline ~ResetableGuard()
+        {
+            unlock();
+        }
 
         /*-****************************************************************************************************//**
             @short      enable/disable the lock
@@ -167,39 +189,24 @@ class ResetableGuard : private INonCopyAble
 
             @onerror    -
         *//*-*****************************************************************************************************/
+        inline void lock()
+        {
+            if( m_bLocked == sal_False )
+            {
+                m_pLock->acquire();
+                m_bLocked = sal_True;
+            }
+        }
 
-        void lock();
-        void unlock();
-
-        /*-****************************************************************************************************//**
-            @short      try to lock the mutex
-            @descr      Try to acquire the mutex without blocking.
-
-            @seealso    -
-
-            @param      -
-            @return     true, if lock already set or could new acquired
-                        false, otherwise
-
-            @onerror    No error could occure.
-        *//*-*****************************************************************************************************/
-
-        sal_Bool tryToLock();
-
-        /*-****************************************************************************************************//**
-            @short      get information about current lock state
-            @descr      Use it if you not shure what going on ... but I think this never should realy neccessary!
-
-            @seealso    -
-
-            @param      -
-            @return     true, if lock is set
-                        false, otherwise
-
-            @onerror    No error could occure!
-        *//*-*****************************************************************************************************/
-
-        sal_Bool isLocked() const;
+        //*********************************************************************************************************
+        inline void unlock()
+        {
+            if( m_bLocked == sal_True )
+            {
+                m_pLock->release();
+                m_bLocked = sal_False;
+            }
+        }
 
     //-------------------------------------------------------------------------------------------------------------
     //  private methods
@@ -218,7 +225,6 @@ class ResetableGuard : private INonCopyAble
 
             @onerror    -
         *//*-*****************************************************************************************************/
-
         ResetableGuard();
 
     //-------------------------------------------------------------------------------------------------------------
@@ -226,7 +232,7 @@ class ResetableGuard : private INonCopyAble
     //-------------------------------------------------------------------------------------------------------------
     private:
 
-        ::osl::Mutex*   m_pMutex    ;   /// pointer to safed mutex
+        IMutex*         m_pLock     ;   /// pointer to safed lock member of user
         sal_Bool        m_bLocked   ;   /// protection against multiple lock() calls without unlock()
 
 };      //  class ResetableGuard

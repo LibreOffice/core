@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fairrwlock.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: as $ $Date: 2001-05-02 13:00:41 $
+ *  last change: $Author: as $ $Date: 2001-06-11 10:22:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,9 +74,21 @@
 #include <threadhelp/irwlock.h>
 #endif
 
+#ifndef __FRAMEWORK_MACROS_DEBUG_HXX_
+#include <macros/debug.hxx>
+#endif
+
 //_________________________________________________________________________________________________________________
 //  interface includes
 //_________________________________________________________________________________________________________________
+
+#ifndef _COM_SUN_STAR_UNO_XINTERFACE_HPP_
+#include <com/sun/star/uno/XInterface.hpp>
+#endif
+
+#ifndef _COM_SUN_STAR_LANG_DISPOSEDEXCEPTION_HPP_
+#include <com/sun/star/lang/DisposedException.hpp>
+#endif
 
 //_________________________________________________________________________________________________________________
 //  other includes
@@ -115,34 +127,198 @@ namespace framework{
                     => It's a multi-reader/single-writer lock, which no preferred accessor.
 
     @implements     IRWlock
-    @base           INonCopyAble
+    @base           INonCopyable
                     IRWLock
-
 
     @devstatus      ready to use
 *//*-*************************************************************************************************************/
-
-class FairRWLock    :   private INonCopyAble
-                    ,   public  IRWLock
+class FairRWLock : public  IRWLock
+                 , private INonCopyable
 {
     //-------------------------------------------------------------------------------------------------------------
     //  public methods
     //-------------------------------------------------------------------------------------------------------------
     public:
 
-        //---------------------------------------------------------------------------------------------------------
-        //  ctor/dtor
-        //---------------------------------------------------------------------------------------------------------
-        FairRWLock();
+        /*-****************************************************************************************************//**
+            @short      standard ctor
+            @descr      Initialize instance with right start values for correct working.
+                        no reader could exist               =>  m_nReadCount   = 0
+                        don't block first comming writer    =>  m_aWriteCondition.set()
 
-        //---------------------------------------------------------------------------------------------------------
-        //  IRWLock
-        //---------------------------------------------------------------------------------------------------------
-        virtual void SAL_CALL acquireReadAccess   ();
-        virtual void SAL_CALL releaseReadAccess   ();
-        virtual void SAL_CALL acquireWriteAccess  ();
-        virtual void SAL_CALL releaseWriteAccess  ();
-        virtual void SAL_CALL downgradeWriteAccess();
+            @seealso    -
+
+            @param      -
+            @return     -
+
+            @onerror    -
+        *//*-*****************************************************************************************************/
+        inline FairRWLock()
+            : m_nReadCount( 0 )
+        {
+            m_aWriteCondition.set();
+        }
+
+        /*-****************************************************************************************************//**
+            @interface  IRWLock
+            @short      set lock for reading
+            @descr      A guard should call this method to acquire read access on your member.
+                        Writing isn't allowed then - but nobody could check it for you!
+
+            @seealso    method releaseReadAccess()
+
+            @param      -
+            @return     -
+
+            @onerror    -
+        *//*-*****************************************************************************************************/
+        inline virtual void acquireReadAccess()
+        {
+            // Put call in "SERIALIZE"-queue!
+            // After successful acquiring this mutex we are alone ...
+            ::osl::MutexGuard aSerializeGuard( m_aSerializer );
+
+            // ... but we should synchronize us with other reader!
+            // May be - they will unregister himself by using releaseReadAccess()!
+            ::osl::MutexGuard aAccessGuard( m_aAccessLock );
+
+            // Now we must register us as reader by increasing counter.
+            // If this the first writer we must close door for possible writer.
+            // Other reader don't look for this barrier - they work parallel to us!
+            if( m_nReadCount == 0 )
+            {
+                m_aWriteCondition.reset();
+            }
+            ++m_nReadCount;
+        }
+
+        /*-****************************************************************************************************//**
+            @interface  IRWLock
+            @short      reset lock for reading
+            @descr      A guard should call this method to release read access on your member.
+
+            @seealso    method acquireReadAccess()
+
+            @param      -
+            @return     -
+
+            @onerror    -
+        *//*-*****************************************************************************************************/
+        inline virtual void releaseReadAccess()
+        {
+            // The access lock is enough at this point
+            // because it's not allowed to wait for all reader or writer here!
+            // That will cause a deadlock!
+            ::osl::MutexGuard aAccessGuard( m_aAccessLock );
+
+            // Unregister as reader first!
+            // Open writer barrier then if it was the last reader.
+            --m_nReadCount;
+            if( m_nReadCount == 0 )
+            {
+                m_aWriteCondition.set();
+            }
+        }
+
+        /*-****************************************************************************************************//**
+            @interface  IRWLock
+            @short      set lock for writing
+            @descr      A guard should call this method to acquire write access on your member.
+                        Reading is allowed too - of course.
+                        After successfully calling of this method you are the only writer.
+
+            @seealso    method releaseWriteAccess()
+
+            @param      -
+            @return     -
+
+            @onerror    -
+        *//*-*****************************************************************************************************/
+        inline virtual void acquireWriteAccess()
+        {
+            // You have to stand in our serialize-queue till all reader
+            // are registered (not for releasing them!) or writer finished their work!
+            // Don't use a guard to do so - because you must hold the mutex till
+            // you call releaseWriteAccess()!
+            // After succesfull acquire you have to wait for current working reader.
+            // Used condition will open by last gone reader object.
+            m_aSerializer.acquire();
+            m_aWriteCondition.wait();
+
+            #ifdef ENABLE_MUTEXDEBUG
+            // A writer is an exclusiv accessor!
+            LOG_ASSERT2( m_nReadCount!=0, "FairRWLock::acquireWriteAccess()", "No threadsafe code detected ... : Read count != 0!" )
+            #endif
+        }
+
+        /*-****************************************************************************************************//**
+            @interface  IRWLock
+            @short      reset lock for writing
+            @descr      A guard should call this method to release write access on your member.
+
+            @seealso    method acquireWriteAccess()
+
+            @param      -
+            @return     -
+
+            @onerror    -
+        *//*-*****************************************************************************************************/
+        inline virtual void releaseWriteAccess()
+        {
+            // The only one you have to do here is to release
+            // hold seriliaze-mutex. All other user of these instance are blocked
+            // by these mutex!
+            // You don't need any other mutex here - you are the only one in the moment!
+
+            #ifdef ENABLE_MUTEXDEBUG
+            // A writer is an exclusiv accessor!
+            LOG_ASSERT2( m_nReadCount!=0, "FairRWLock::releaseWriteAccess()", "No threadsafe code detected ... : Read count != 0!" )
+            #endif
+
+            m_aSerializer.release();
+        }
+
+        /*-****************************************************************************************************//**
+            @interface  IRWLock
+            @short      downgrade a write access to a read access
+            @descr      A guard should call this method to change a write to a read access.
+                        New readers can work too - new writer are blocked!
+
+            @attention  Don't call this method if you are not a writer!
+                        Results are not defined then ...
+                        An upgrade can't be implemented realy ... because acquiring new access
+                        will be the same - there no differences!
+
+            @seealso    -
+
+            @param      -
+            @return     -
+
+            @onerror    -
+        *//*-*****************************************************************************************************/
+        inline virtual void downgradeWriteAccess()
+        {
+            // You must be a writer to call this method!
+            // We can't check it - but otherwise it's your problem ...
+            // Thats why you don't need any mutex here.
+
+            #ifdef ENABLE_MUTEXDEBUG
+            // A writer is an exclusiv accessor!
+            LOG_ASSERT2( m_nReadCount!=0, "FairRWLock::downgradeWriteAccess()", "No threadsafe code detected ... : Read count != 0!" )
+            #endif
+
+            // Register himself as "new" reader.
+            // This value must be 0 before - because we support single writer access only!
+            ++m_nReadCount;
+            // Close barrier for other writer!
+            // Why?
+            // You hold the serializer mutex - next one can be a reader OR a writer.
+            // They must blocked then - because you will be a reader after this call
+            // and writer use this condition to wait for current reader!
+            m_aWriteCondition.reset();
+            // Open door for next waiting thread in serialize queue!
+            m_aSerializer.release();
+        }
 
     //-------------------------------------------------------------------------------------------------------------
     //  private member

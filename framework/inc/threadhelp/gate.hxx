@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gate.hxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: as $ $Date: 2001-03-29 13:17:11 $
+ *  last change: $Author: as $ $Date: 2001-06-11 10:23:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,10 @@
 #include <threadhelp/inoncopyable.h>
 #endif
 
+#ifndef __FRAMEWORK_THREADHELP_IGATE_H_
+#include <threadhelp/igate.h>
+#endif
+
 //_________________________________________________________________________________________________________________
 //  interface includes
 //_________________________________________________________________________________________________________________
@@ -109,13 +113,14 @@ namespace framework{
 
     @attention      To prevent us against wrong using, the default ctor, copy ctor and the =operator are maked private!
 
-    @implements     -
-    @base           -
+    @implements     IGate
+    @base           IGate
+                    INonCopyable
 
     @devstatus      ready to use
 *//*-*************************************************************************************************************/
-
-class Gate : private INonCopyAble
+class Gate : public  IGate
+           , private INonCopyable
 {
     //-------------------------------------------------------------------------------------------------------------
     //  public methods
@@ -133,8 +138,12 @@ class Gate : private INonCopyAble
 
             @onerror    -
         *//*-*****************************************************************************************************/
-
-        Gate();
+        inline Gate()
+            :   m_bClosed   ( sal_False )
+            ,   m_bGapOpen  ( sal_False )
+        {
+            open();
+        }
 
         /*-****************************************************************************************************//**
             @short      dtor
@@ -149,10 +158,13 @@ class Gate : private INonCopyAble
 
             @onerror    -
         *//*-*****************************************************************************************************/
-
-        ~Gate();
+        inline ~Gate()
+        {
+            open();
+        }
 
         /*-****************************************************************************************************//**
+            @interface  IGate
             @short      open the gate
             @descr      A wait() call will not block then.
 
@@ -163,10 +175,19 @@ class Gate : private INonCopyAble
 
             @onerror    -
         *//*-*****************************************************************************************************/
-
-        void open();
+        inline virtual void open()
+        {
+            // We must safe access to our internal member!
+            ::osl::MutexGuard aLock( m_aAccessLock );
+            // Set condition -> wait don't block any longer -> gate is open
+            m_aPassage.set();
+            // Check if operation was successful!
+            // Check returns false if condition isn't set => m_bClosed will be true then => we must return false; opening failed
+            m_bClosed = ( m_aPassage.check() == sal_False );
+        }
 
         /*-****************************************************************************************************//**
+            @interface  IGate
             @short      close the gate
             @descr      A wait() call will block then.
 
@@ -177,10 +198,19 @@ class Gate : private INonCopyAble
 
             @onerror    -
         *//*-*****************************************************************************************************/
-
-        void close();
+        inline virtual void close()
+        {
+            // We must safe access to our internal member!
+            ::osl::MutexGuard aLock( m_aAccessLock );
+            // Reset condition -> wait blocks now -> gate is closed
+            m_aPassage.reset();
+            // Check if operation was successful!
+            // Check returns false if condition was reseted => m_bClosed will be true then => we can return true; closing ok
+            m_bClosed = ( m_aPassage.check() == sal_False );
+        }
 
         /*-****************************************************************************************************//**
+            @interface  IGate
             @short      open gate for current waiting threads
             @descr      All current waiting threads stand in wait() at line "m_aPassage.wait()" ...
                         With this call you can open the passage for these waiting ones.
@@ -194,10 +224,19 @@ class Gate : private INonCopyAble
 
             @onerror    -
         *//*-*****************************************************************************************************/
-
-        void openGap();
+        inline virtual void openGap()
+        {
+            // We must safe access to our internal member!
+            ::osl::MutexGuard aLock( m_aAccessLock );
+            // Open passage for current waiting threads.
+            m_aPassage.set();
+            // Check state of condition.
+            // If condition is set check() returns true => m_bGapOpen will be true too => we can use it as return value.
+            m_bGapOpen = ( m_aPassage.check() == sal_True );
+        }
 
         /*-****************************************************************************************************//**
+            @interface  IGate
             @short      must be called to pass the gate
             @descr      If gate "open"   => wait() will not block.
                         If gate "closed" => wait() will block till somewhere open it again.
@@ -212,23 +251,30 @@ class Gate : private INonCopyAble
 
             @onerror    We return false.
         *//*-*****************************************************************************************************/
+        inline virtual sal_Bool wait( const TimeValue* pTimeOut = NULL )
+        {
+            // We must safe access to our internal member!
+            ::osl::ClearableMutexGuard aLock( m_aAccessLock );
+            // If gate not closed - caller can pass it.
+            sal_Bool bSuccessful = sal_True;
+            if( m_bClosed == sal_True )
+            {
+                // Otherwise first new thread must close an open gap!
+                if( m_bGapOpen == sal_True )
+                {
+                    m_bGapOpen = sal_False;
+                    m_aPassage.reset();
+                }
+                // Then we must release used access lock -
+                // because next call will block ...
+                // and if we hold the access lock nobody else can use this object without a dadlock!
+                aLock.clear();
+                // Wait for opening gate ...
+                bSuccessful = ( m_aPassage.wait( pTimeOut ) == osl_cond_result_ok );
+            }
 
-        sal_Bool wait( const TimeValue* pTimeOut = NULL );
-
-        /*-****************************************************************************************************//**
-            @short      get information about current opening state
-            @descr      Use it if you not shure what going on ... but I think this never should realy neccessary!
-
-            @seealso    -
-
-            @param      -
-            @return     true, if gate is open
-                        false, otherwise
-
-            @onerror    No error could occure!
-        *//*-*****************************************************************************************************/
-
-        sal_Bool isOpen() const;
+            return bSuccessful;
+        }
 
     //-------------------------------------------------------------------------------------------------------------
     //  private member
