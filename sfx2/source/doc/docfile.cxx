@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfile.cxx,v $
  *
- *  $Revision: 1.123 $
+ *  $Revision: 1.124 $
  *
- *  last change: $Author: mav $ $Date: 2002-10-16 12:34:08 $
+ *  last change: $Author: mav $ $Date: 2002-10-24 12:18:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -412,6 +412,7 @@ public:
     sal_Bool bIsStorage: 1;
     sal_Bool bUseInteractionHandler: 1;
     sal_Bool bIsDiskSpannedJAR: 1;
+    sal_Bool bIsCharsetInitialized: 1;
 
     sal_uInt16       nPrio;
 
@@ -444,6 +445,7 @@ public:
     ::utl::UcbLockBytesRef     xLockBytes;
 
     sal_uInt32                  nLastStorageError;
+    ::rtl::OUString             aCharset;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler > xInteraction;
 
@@ -506,7 +508,8 @@ SfxMedium_Impl::SfxMedium_Impl( SfxMedium* pAntiImplP )
     pLoadEnv( 0 ), pAntiImpl( pAntiImplP ),
     bDontCreateCancellable( sal_False ), pTempDir( NULL ), bIsDiskSpannedJAR( sal_False ),
     bDownloadDone( sal_True ), bDontCallDoneLinkOnSharingError( sal_False ),nFileVersion( 0 ), pEaMgr( NULL ), pTempFile( NULL ),
-    nLastStorageError( 0 )
+    nLastStorageError( 0 ),
+    bIsCharsetInitialized( sal_False )
 {
     aHandler = new SfxLockBytesHandler_Impl( pAntiImpl );
     aDoneLink.CreateMutex();
@@ -2623,6 +2626,43 @@ void SfxMedium::SetLoadEnvironment( SfxLoadEnvironment* pEnv )
 SfxLoadEnvironment* SfxMedium::GetLoadEnvironment() const
 {
     return (SfxLoadEnvironment*) &pImp->xLoadRef;
+}
+
+::rtl::OUString SfxMedium::GetCharset()
+{
+    if( !pImp->bIsCharsetInitialized )
+    {
+        // Set an error in case there is no content?
+        if ( GetContent().is() )
+        {
+            pImp->bIsCharsetInitialized = sal_True;
+
+            try
+            {
+                Any aAny = pImp->aContent.getPropertyValue( ::rtl::OUString::createFromAscii( "MediaType" ) );
+                ::rtl::OUString aField;
+                aAny >>= aField;
+
+                sal_Int32 nIndex = aField.indexOf( ::rtl::OUString::createFromAscii( "charset=" ) );
+                if( nIndex >= 0 )
+                {
+                    DBG_ASSERT( nIndex + 8 < aField.getLength(), "OUString ariphmetic problem" );
+                    pImp->aCharset = aField.copy( nIndex + 8 );
+                }
+            }
+            catch ( ::com::sun::star::uno::Exception& )
+            {
+            }
+        }
+    }
+
+    return pImp->aCharset;
+}
+
+void SfxMedium::SetCharset( ::rtl::OUString aChs )
+{
+    pImp->bIsCharsetInitialized = sal_True;
+    pImp->aCharset = aChs;
 }
 
 //----------------------------------------------------------------
