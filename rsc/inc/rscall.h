@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscall.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: pl $ $Date: 2001-10-10 11:51:12 $
+ *  last change: $Author: obo $ $Date: 2005-01-03 17:19:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,35 +73,38 @@
 #ifndef _RSCDEF_HXX
 #include <rscdef.hxx>
 #endif
+#ifndef _RSCHASH_HXX
+#include <rschash.hxx>
+#endif
+#include <rtl/alloc.h>
 
 /******************* T y p e s *******************************************/
 typedef char * CLASS_DATA;  // Zeiger auf die Daten einer Klasse
 
 /******************* C l a s s e s   F o r w a r d s *********************/
 class RscCompiler;
-class HashString;
 class RscTop;
 class RscTypCont;
 class RscIncList;
 
 /******************* G l o b a l   V a r i a b l e s *********************/
-extern HashString*  pHS;
 extern ByteString*  pStdParType;
 extern ByteString*  pStdPar1;
 extern ByteString*  pStdPar2;
 extern ByteString*  pWinParType;
 extern ByteString*  pWinPar1;
 extern ByteString*  pWinPar2;
-extern USHORT       nRefDeep;
-extern USHORT       nRsc_XYMAPMODEId;
-extern USHORT       nRsc_WHMAPMODEId;
-extern USHORT       nRsc_X;
-extern USHORT       nRsc_Y;
-extern USHORT       nRsc_WIDTH;
-extern USHORT       nRsc_HEIGHT;
-extern USHORT       nRsc_DELTALANG;
-extern USHORT       nRsc_DELTASYSTEM;
-extern USHORT       nRsc_EXTRADATA;
+extern sal_uInt32       nRefDeep;
+extern sal_uInt32       nRsc_XYMAPMODEId;
+extern sal_uInt32       nRsc_WHMAPMODEId;
+extern sal_uInt32       nRsc_X;
+extern sal_uInt32       nRsc_Y;
+extern sal_uInt32       nRsc_WIDTH;
+extern sal_uInt32       nRsc_HEIGHT;
+extern sal_uInt32       nRsc_DELTALANG;
+extern sal_uInt32       nRsc_DELTASYSTEM;
+extern sal_uInt32       nRsc_EXTRADATA;
+extern AtomContainer*   pHS;
 
 /******************* D e f i n e s ***************************************/
 
@@ -124,7 +127,7 @@ extern USHORT       nRsc_EXTRADATA;
 enum RSCCLASS_TYPE  { RSCCLASS_BOOL, RSCCLASS_STRING, RSCCLASS_NUMBER,
                         RSCCLASS_CONST, RSCCLASS_COMPLEX, RSCCLASS_ENUMARRAY };
 
-typedef void (* VarEnumCallbackProc)( void * pData, RSCCLASS_TYPE, HASHID );
+typedef void (* VarEnumCallbackProc)( void * pData, RSCCLASS_TYPE, Atom );
 
 /******************* S t r u c t s ***************************************/
 struct RSCINST {
@@ -142,13 +145,12 @@ struct RSCINST {
 /********************** S U B I N F O S T R U C T ************************/
 struct SUBINFO_STRUCT {
     SUBINFO_STRUCT(){ nPos = 0; pClass = NULL; };
-    RscId    aId;    // Identifier der Resource
-    USHORT   nPos;   // Position der Resource
-    RscTop * pClass; // Klasse des Eintrages
+    RscId        aId;    // Identifier der Resource
+    sal_uInt32   nPos;   // Position der Resource
+    RscTop *     pClass; // Klasse des Eintrages
 };
 
 /******************* F u n c t i o n *************************************/
-// Legt Hashtabelle an, legt Strings zur Initialisierung an
 void InitRscCompiler();
 
 #endif // _RSCALL_H
