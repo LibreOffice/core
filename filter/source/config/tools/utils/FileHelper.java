@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FileHelper.java,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 12:00:43 $
+ *  last change: $Author: kz $ $Date: 2004-06-10 15:56:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,7 +77,7 @@ import java.util.*;
  * And sometimes java had another notation then the office it has.
  * Further it provides functionality to work easiear with the java.io.File class of java.
  *
- * @author      Andreas Schlüns
+ *
  */
 public class FileHelper
 {
