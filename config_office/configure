@@ -6942,6 +6942,17 @@ echo "$as_me: error: Perl not found, install version 5 of Perl" >&2;}
 fi
 
 
+echo "$as_me:$LINENO: checking for required Perl modules" >&5
+echo $ECHO_N "checking for required Perl modules... $ECHO_C" >&6
+if `$PERL -e 'use Archive::Zip;'`; then
+	echo "$as_me:$LINENO: result: all modules found" >&5
+echo "${ECHO_T}all modules found" >&6
+else
+	{ { echo "$as_me:$LINENO: error: Failed to find some modules" >&5
+echo "$as_me: error: Failed to find some modules" >&2;}
+   { (exit 1); exit 1; }; }
+fi
+
 if test "$_os" != "WINNT" -o "$with_use_shell" != "4nt"; then
    # Extract the first word of "tcsh", so it can be a program name with args.
 set dummy tcsh; ac_word=$2
