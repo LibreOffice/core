@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: ssa $ $Date: 2002-09-12 08:35:13 $
+ *  last change: $Author: ssa $ $Date: 2002-09-13 16:01:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -889,7 +889,7 @@ void Edit::ImplAlign()
     }
     else if ( mnAlign == EDIT_ALIGN_RIGHT )
     {
-        long nMinXOffset = nOutWidth - nTextWidth;
+        long nMinXOffset = nOutWidth - nTextWidth - 1 - ImplGetExtraOffset();
         if ( mnXOffset < nMinXOffset )
             mnXOffset = nMinXOffset;
     }
@@ -927,7 +927,7 @@ void Edit::ImplAlignAndPaint( xub_StrLen nChangedFrom, long nOldWidth )
     else if ( mnAlign == EDIT_ALIGN_RIGHT )
     {
         nPaintStart = 0;
-        ImplClearBackground( GetOutputSizePixel().Width()-Max( nOldWidth, nNewWidth )-1+ImplGetExtraOffset(), mnXOffset+1+ImplGetExtraOffset() );
+        ImplClearBackground( GetOutputSizePixel().Width()-Max( nOldWidth, nNewWidth )-1-ImplGetExtraOffset(), mnXOffset+1+ImplGetExtraOffset() );
     }
     else // EDIT_ALIGN_CENTER
     {
