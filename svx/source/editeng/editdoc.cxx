@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editdoc.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: mt $ $Date: 2002-08-12 11:39:48 $
+ *  last change: $Author: mt $ $Date: 2002-08-21 15:05:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1594,7 +1594,6 @@ void EditDoc::InsertAttribInSelection( ContentNode* pNode, USHORT nStart, USHORT
 {
     DBG_ASSERT( pNode, "Wohin mit dem Attribut?" );
     DBG_ASSERT( nEnd <= pNode->Len(), "InsertAttrib: Attribut zu gross!" );
-    DBG_ASSERT( ( rPoolItem.Which() < EE_FEATURE_START ) || ( rPoolItem.Which() > EE_FEATURE_END ), "InsertAttribInSelection - don't use this method for features!" );
 
     // fuer Optimierung:
     // dieses endet am Anfang der Selektion => kann erweitert werden
