@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pszctrl.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-13 17:33:52 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 17:26:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -219,7 +219,7 @@ struct SvxPosSizeStatusBarControl_Impl
     Point   aPos;       // g"ultig, wenn eine Position angezeigt wird
     Size    aSize;      // g"ultig, wenn eine Gr"o/se angezeigt wird
     String  aStr;       // g"ultig, wenn ein Text angezeigt wird
-    BOOL    bTime;      // Zeit und Datum anzeigen? (nichts anzeigen (#65302#))
+    BOOL    bPos;       // show position
     BOOL    bSize;      // Gr"o/se anzeigen?
     BOOL    bTable;     // Tabellenindex anzeigen?
     BOOL    bHasMenu;   // StarCalc Popup-Menue anzeigen?
@@ -243,7 +243,7 @@ SvxPosSizeStatusBarControl::SvxPosSizeStatusBarControl( USHORT nSlotId,
     SfxStatusBarControl( nSlotId, nId, rStb ),
     pImp( new SvxPosSizeStatusBarControl_Impl )
 {
-    pImp->bTime = TRUE;
+    pImp->bPos = FALSE;
     pImp->bSize = FALSE;
     pImp->bTable = FALSE;
     pImp->bHasMenu = FALSE;
@@ -309,16 +309,25 @@ void SvxPosSizeStatusBarControl::StateChanged( USHORT nSID, SfxItemState eState,
     }
     else if ( SFX_ITEM_AVAILABLE != eState )
     {
-        // Datum und Zeit anzeigen
-        pImp->bTime = TRUE;
-        pImp->bSize = FALSE;
-        pImp->bTable = FALSE;
+        // #i34458# don't switch to empty display before an empty state was
+        // notified for all display types
+
+        if ( nSID == SID_TABLE_CELL )
+            pImp->bTable = FALSE;
+        else if ( nSID == SID_ATTR_POSITION )
+            pImp->bPos = FALSE;
+        else if ( nSID == GetSlotId() )     // controller is registered for SID_ATTR_SIZE
+            pImp->bSize = FALSE;
+        else
+        {
+            DBG_ERRORFILE("unknown slot id");
+        }
     }
     else if ( pState->ISA( SfxPointItem ) )
     {
         // Position anzeigen
         pImp->aPos = ( (SfxPointItem*)pState )->GetValue();
-        pImp->bTime = FALSE;
+        pImp->bPos = TRUE;
         pImp->bTable = FALSE;
     }
     else if ( pState->ISA( SvxSizeItem ) )
@@ -326,7 +335,6 @@ void SvxPosSizeStatusBarControl::StateChanged( USHORT nSID, SfxItemState eState,
         // Groesse anzeigen
         pImp->aSize = ( (SvxSizeItem*)pState )->GetSize();
         pImp->bSize = TRUE;
-        pImp->bTime = FALSE;
         pImp->bTable = FALSE;
     }
     else if ( pState->ISA( SfxStringItem ) )
@@ -334,14 +342,14 @@ void SvxPosSizeStatusBarControl::StateChanged( USHORT nSID, SfxItemState eState,
         // String anzeigen (Tabellen-Zelle oder anderes)
         pImp->aStr = ( (SfxStringItem*)pState )->GetValue();
         pImp->bTable = TRUE;
-        pImp->bTime = FALSE;
+        pImp->bPos = FALSE;
         pImp->bSize = FALSE;
     }
     else
     {
         DBG_ERRORFILE( "invalid item type" );
         // trotzdem Datum und Zeit anzeigen
-        pImp->bTime = TRUE;
+        pImp->bPos = FALSE;
         pImp->bSize = FALSE;
         pImp->bTable = FALSE;
     }
@@ -417,12 +425,7 @@ void SvxPosSizeStatusBarControl::Paint( const UserDrawEvent& rUsrEvt )
     pDev->SetLineColor();
     pDev->SetFillColor( pDev->GetBackground().GetColor() );
 
-    if ( pImp->bTime )
-    {
-        // PB: Datum und Uhrzeit nicht mehr ausgeben (#65302#)
-        pDev->DrawRect( rRect );
-    }
-    else if ( !pImp->bTable )
+    if ( pImp->bPos || pImp->bSize )
     {
         // Position fuer Size-Anzeige berechnen
         long nSizePosX =
@@ -471,6 +474,12 @@ void SvxPosSizeStatusBarControl::Paint( const UserDrawEvent& rUsrEvt )
         pDev->DrawText( Point(
             rRect.Left() + rRect.GetWidth() / 2 - pDev->GetTextWidth( pImp->aStr ) / 2,
             aItemPos.Y() ), pImp->aStr );
+    }
+    else
+    {
+        // Empty display if neither size nor table position are available.
+        // Date/Time are no longer used (#65302#).
+        pDev->DrawRect( rRect );
     }
 
     pDev->SetLineColor( aOldLineColor );
