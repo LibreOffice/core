@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GroupManager.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-19 11:52:16 $
+ *  last change: $Author: oj $ $Date: 2000-11-23 09:04:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,7 +66,9 @@
 #include "DatabaseForm.hxx"
 #endif
 
+#ifndef _COM_SUN_STAR_BEANS_XFASTPROPERTYSET_HPP_
 #include <com/sun/star/beans/XFastPropertySet.hpp>
+#endif
 
 #ifndef _COMPHELPER_PROPERTY_HXX_
 #include <comphelper/property.hxx>
@@ -87,11 +89,23 @@ namespace frm
 {
 //.........................................................................
 
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::sdb;
+using namespace ::com::sun::star::sdbc;
+using namespace ::com::sun::star::sdbcx;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::form;
+using namespace ::com::sun::star::awt;
+using namespace ::com::sun::star::io;
+using namespace ::com::sun::star::lang;
+using namespace ::com::sun::star::util;
+
 //========================================================================
 // class OGroupCompAcc
 //========================================================================
 //------------------------------------------------------------------
-OGroupCompAcc::OGroupCompAcc(const staruno::Reference<starbeans::XPropertySet>& rxElement, const OGroupComp& _rGroupComp )
+OGroupCompAcc::OGroupCompAcc(const Reference<XPropertySet>& rxElement, const OGroupComp& _rGroupComp )
                :m_xComponent( rxElement )
                ,m_aGroupComp( _rGroupComp )
 {
@@ -136,7 +150,7 @@ OGroupComp::OGroupComp(const OGroupComp& _rSource)
 }
 
 //------------------------------------------------------------------
-OGroupComp::OGroupComp(const staruno::Reference<starbeans::XPropertySet>& rxSet, sal_Int32 nInsertPos )
+OGroupComp::OGroupComp(const Reference<XPropertySet>& rxSet, sal_Int32 nInsertPos )
             :m_xComponent( rxSet )
             ,m_nTabIndex(0)
             ,m_nPos( nInsertPos )
@@ -195,7 +209,7 @@ OGroup::~OGroup()
 }
 
 //------------------------------------------------------------------
-void OGroup::InsertComponent( const staruno::Reference<starbeans::XPropertySet>& xSet )
+void OGroup::InsertComponent( const Reference<XPropertySet>& xSet )
 {
     OGroupComp aNewGroupComp( xSet, m_nInsertPos );
     sal_Int32 nPosInserted = insert_sorted(m_aCompArray, aNewGroupComp, OGroupCompLess());
@@ -206,7 +220,7 @@ void OGroup::InsertComponent( const staruno::Reference<starbeans::XPropertySet>&
 }
 
 //------------------------------------------------------------------
-void OGroup::RemoveComponent( const staruno::Reference<starbeans::XPropertySet>& rxElement )
+void OGroup::RemoveComponent( const Reference<XPropertySet>& rxElement )
 {
     sal_Int32 nGroupCompAccPos;
     OGroupCompAcc aSearchCompAcc( rxElement, OGroupComp() );
@@ -256,16 +270,16 @@ public:
 };
 
 //------------------------------------------------------------------
-staruno::Sequence< staruno::Reference<starawt::XControlModel>  > OGroup::GetControlModels() const
+Sequence< Reference<XControlModel>  > OGroup::GetControlModels() const
 {
     sal_Int32 nLen = m_aCompArray.size();
-    staruno::Sequence<staruno::Reference<starawt::XControlModel> > aControlModelSeq( nLen );
-    staruno::Reference<starawt::XControlModel>* pModels = aControlModelSeq.getArray();
+    Sequence<Reference<XControlModel> > aControlModelSeq( nLen );
+    Reference<XControlModel>* pModels = aControlModelSeq.getArray();
 
     ConstOGroupCompArrIterator aGroupComps = m_aCompArray.begin();
     for (sal_Int32 i = 0; i < nLen; ++i, ++pModels, ++aGroupComps)
     {
-        *pModels = staruno::Reference<starawt::XControlModel> ((*aGroupComps).GetComponent(), staruno::UNO_QUERY);
+        *pModels = Reference<XControlModel> ((*aGroupComps).GetComponent(), UNO_QUERY);
     }
     return aControlModelSeq;
 }
@@ -287,11 +301,11 @@ OGroupManager::~OGroupManager()
     delete m_pCompGroup;
 }
 
-// starbeans::XPropertyChangeListener
+// XPropertyChangeListener
 //------------------------------------------------------------------
-void OGroupManager::disposing(const starlang::EventObject& evt) throw( staruno::RuntimeException )
+void OGroupManager::disposing(const EventObject& evt) throw( RuntimeException )
 {
-    staruno::Reference<starcontainer::XContainer>  xContainer(evt.Source, staruno::UNO_QUERY);
+    Reference<XContainer>  xContainer(evt.Source, UNO_QUERY);
     if (xContainer.is())
     {
         DELETEZ(m_pCompGroup);
@@ -303,9 +317,9 @@ void OGroupManager::disposing(const starlang::EventObject& evt) throw( staruno::
 }
 
 //------------------------------------------------------------------
-void SAL_CALL OGroupManager::propertyChange(const starbeans::PropertyChangeEvent& evt)
+void SAL_CALL OGroupManager::propertyChange(const PropertyChangeEvent& evt)
 {
-    staruno::Reference<starbeans::XPropertySet>  xSet(evt.Source, staruno::UNO_QUERY);
+    Reference<XPropertySet>  xSet(evt.Source, UNO_QUERY);
 
     // Component aus CompGroup entfernen
     m_pCompGroup->RemoveComponent( xSet );
@@ -353,38 +367,38 @@ void SAL_CALL OGroupManager::propertyChange(const starbeans::PropertyChangeEvent
     InsertElement( xSet );
 }
 
-// starcontainer::XContainerListener
+// XContainerListener
 //------------------------------------------------------------------
-void SAL_CALL OGroupManager::elementInserted(const starcontainer::ContainerEvent& Event)
+void SAL_CALL OGroupManager::elementInserted(const ContainerEvent& Event)
 {
-    staruno::Reference<starbeans::XPropertySet>  xSet(*(InterfaceRef *)Event.Element.getValue(), staruno::UNO_QUERY);
+    Reference<XPropertySet>  xSet(*(InterfaceRef *)Event.Element.getValue(), UNO_QUERY);
     if (xSet.is())
         InsertElement( xSet );
 }
 
 //------------------------------------------------------------------
-void SAL_CALL OGroupManager::elementRemoved(const starcontainer::ContainerEvent& Event)
+void SAL_CALL OGroupManager::elementRemoved(const ContainerEvent& Event)
 {
-    staruno::Reference<starbeans::XPropertySet>  xSet(*(InterfaceRef *)Event.Element.getValue(), staruno::UNO_QUERY);
+    Reference<XPropertySet>  xSet(*(InterfaceRef *)Event.Element.getValue(), UNO_QUERY);
     if (xSet.is())
         RemoveElement( xSet );
 }
 
 //------------------------------------------------------------------
-void SAL_CALL OGroupManager::elementReplaced(const starcontainer::ContainerEvent& Event)
+void SAL_CALL OGroupManager::elementReplaced(const ContainerEvent& Event)
 {
-    staruno::Reference<starbeans::XPropertySet>  xSet(*(InterfaceRef *)Event.ReplacedElement.getValue(), staruno::UNO_QUERY);
+    Reference<XPropertySet>  xSet(*(InterfaceRef *)Event.ReplacedElement.getValue(), UNO_QUERY);
     if (xSet.is())
         RemoveElement( xSet );
 
-    xSet = staruno::Reference<starbeans::XPropertySet> (*(InterfaceRef *)Event.Element.getValue(), staruno::UNO_QUERY);
+    xSet = Reference<XPropertySet> (*(InterfaceRef *)Event.Element.getValue(), UNO_QUERY);
     if (xSet.is())
         InsertElement( xSet );
 }
 
 // Other functions
 //------------------------------------------------------------------
-staruno::Sequence<staruno::Reference<starawt::XControlModel> > OGroupManager::getControlModels()
+Sequence<Reference<XControlModel> > OGroupManager::getControlModels()
 {
     return m_pCompGroup->GetControlModels();
 }
@@ -396,7 +410,7 @@ sal_Int32 OGroupManager::getGroupCount()
 }
 
 //------------------------------------------------------------------
-void OGroupManager::getGroup(sal_Int32 nGroup, staruno::Sequence< staruno::Reference<starawt::XControlModel> >& _rGroup, ::rtl::OUString& _rName)
+void OGroupManager::getGroup(sal_Int32 nGroup, Sequence< Reference<XControlModel> >& _rGroup, ::rtl::OUString& _rName)
 {
     sal_uInt16 nGroupPos= m_aActiveGroupMap[nGroup];
     OGroup& rGroup      = m_aGroupArr[nGroupPos];
@@ -405,7 +419,7 @@ void OGroupManager::getGroup(sal_Int32 nGroup, staruno::Sequence< staruno::Refer
 }
 
 //------------------------------------------------------------------
-void OGroupManager::getGroupByName(const ::rtl::OUString& _rName, staruno::Sequence< staruno::Reference<starawt::XControlModel>  >& _rGroup)
+void OGroupManager::getGroupByName(const ::rtl::OUString& _rName, Sequence< Reference<XControlModel>  >& _rGroup)
 {
     sal_Int32 nGroupPos;
     OGroup aSearchGroup( _rName );
@@ -418,10 +432,10 @@ void OGroupManager::getGroupByName(const ::rtl::OUString& _rName, staruno::Seque
 }
 
 //------------------------------------------------------------------
-void OGroupManager::InsertElement( const staruno::Reference<starbeans::XPropertySet>& xSet )
+void OGroupManager::InsertElement( const Reference<XPropertySet>& xSet )
 {
     // Nur ControlModels
-    staruno::Reference<starawt::XControlModel>  xControl(xSet, staruno::UNO_QUERY);
+    Reference<XControlModel>  xControl(xSet, UNO_QUERY);
     if (!xControl.is() )
         return;
 
@@ -480,10 +494,10 @@ void OGroupManager::InsertElement( const staruno::Reference<starbeans::XProperty
 }
 
 //------------------------------------------------------------------
-void OGroupManager::RemoveElement( const staruno::Reference<starbeans::XPropertySet>& xSet )
+void OGroupManager::RemoveElement( const Reference<XPropertySet>& xSet )
 {
     // Nur ControlModels
-    staruno::Reference<starawt::XControlModel>  xControl(xSet, staruno::UNO_QUERY);
+    Reference<XControlModel>  xControl(xSet, UNO_QUERY);
     if (!xControl.is() )
         return;
 

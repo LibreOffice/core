@@ -2,9 +2,9 @@
  *
  *  $RCSfile: GroupManager.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-19 11:52:16 $
+ *  last change: $Author: oj $ $Date: 2000-11-23 09:04:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,9 +111,6 @@ namespace frm
 {
 //.........................................................................
 
-    namespace starbeans     = ::com::sun::star::beans;
-    namespace starcontainer = ::com::sun::star::container;
-
 //========================================================================
     template <class ELEMENT, class LESS_COMPARE>
     sal_Int32 insert_sorted(::std::vector<ELEMENT>& _rArray, const ELEMENT& _rNewElement, const LESS_COMPARE& _rCompareOp)
@@ -150,20 +147,20 @@ namespace frm
 class OGroupComp
 {
     ::rtl::OUString m_aName;
-    staruno::Reference<starbeans::XPropertySet>     m_xComponent;
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>    m_xComponent;
     sal_Int32   m_nPos;
     sal_Int16   m_nTabIndex;
 
     friend class OGroupCompLess;
 
 public:
-    OGroupComp(const staruno::Reference<starbeans::XPropertySet>& rxElement, sal_Int32 nInsertPos );
+    OGroupComp(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& rxElement, sal_Int32 nInsertPos );
     OGroupComp(const OGroupComp& _rSource);
     OGroupComp();
 
     sal_Bool operator==( const OGroupComp& rComp ) const;
 
-    const staruno::Reference<starbeans::XPropertySet>& GetComponent() const { return m_xComponent; }
+    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& GetComponent() const { return m_xComponent; }
     sal_Int32   GetPos() const { return m_nPos; }
     sal_Int16   GetTabIndex() const { return m_nTabIndex; }
     ::rtl::OUString GetName() const { return m_aName; }
@@ -175,17 +172,17 @@ DECLARE_STL_VECTOR(OGroupComp, OGroupCompArr);
 class OGroupComp;
 class OGroupCompAcc
 {
-    staruno::Reference<starbeans::XPropertySet>     m_xComponent;
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>    m_xComponent;
     OGroupComp                                      m_aGroupComp;
 
     friend class OGroupCompAccLess;
 
 public:
-    OGroupCompAcc(const staruno::Reference<starbeans::XPropertySet>& rxElement, const OGroupComp& _rGroupComp );
+    OGroupCompAcc(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& rxElement, const OGroupComp& _rGroupComp );
 
     sal_Bool operator==( const OGroupCompAcc& rCompAcc ) const;
 
-    const staruno::Reference<starbeans::XPropertySet>&  GetComponent() const { return m_xComponent; }
+    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& GetComponent() const { return m_xComponent; }
     const OGroupComp&   GetGroupComponent() const { return m_aGroupComp; }
 };
 
@@ -209,12 +206,12 @@ public:
     sal_Bool operator==( const OGroup& rGroup ) const;
 
     ::rtl::OUString GetGroupName() const { return m_aGroupName; }
-    staruno::Sequence< staruno::Reference<starawt::XControlModel>  > GetControlModels() const;
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel>  > GetControlModels() const;
 
-    void InsertComponent( const staruno::Reference<starbeans::XPropertySet>& rxElement );
-    void RemoveComponent( const staruno::Reference<starbeans::XPropertySet>& rxElement );
+    void InsertComponent( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& rxElement );
+    void RemoveComponent( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& rxElement );
     sal_uInt16 Count() const { return m_aCompArray.size(); }
-    const staruno::Reference<starbeans::XPropertySet>& GetObject( sal_uInt16 nP ) const
+    const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& GetObject( sal_uInt16 nP ) const
         { return m_aCompArray[nP].GetComponent(); }
 };
 
@@ -222,7 +219,7 @@ DECLARE_STL_VECTOR(OGroup, OGroupArr);
 DECLARE_STL_VECTOR(sal_uInt32, OUInt32Arr);
 
 //========================================================================
-class OGroupManager : public ::cppu::WeakImplHelper2<starbeans::XPropertyChangeListener, starcontainer::XContainerListener>
+class OGroupManager : public ::cppu::WeakImplHelper2< ::com::sun::star::beans::XPropertyChangeListener, ::com::sun::star::container::XContainerListener>
 {
     OGroup* m_pCompGroup;           // Alle Components nach TabIndizes sortiert
     OGroupArr   m_aGroupArr;            // Alle Components nach Gruppen sortiert
@@ -230,29 +227,29 @@ class OGroupManager : public ::cppu::WeakImplHelper2<starbeans::XPropertyChangeL
                                     // die mehr als 1 Element haben
 
     // Helper functions
-    void InsertElement( const staruno::Reference<starbeans::XPropertySet>& rxElement );
-    void RemoveElement( const staruno::Reference<starbeans::XPropertySet>& rxElement );
+    void InsertElement( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& rxElement );
+    void RemoveElement( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet>& rxElement );
 
 public:
     OGroupManager();
     virtual ~OGroupManager();
 
-// starlang::XEventListener
-    virtual void SAL_CALL disposing(const starlang::EventObject& _rSource) throw(staruno::RuntimeException);
+// ::com::sun::star::lang::XEventListener
+    virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& _rSource) throw(::com::sun::star::uno::RuntimeException);
 
-// starbeans::XPropertyChangeListener
-    virtual void SAL_CALL propertyChange(const starbeans::PropertyChangeEvent& evt);
+// ::com::sun::star::beans::XPropertyChangeListener
+    virtual void SAL_CALL propertyChange(const ::com::sun::star::beans::PropertyChangeEvent& evt);
 
-// starcontainer::XContainerListener
-    virtual void SAL_CALL elementInserted(const starcontainer::ContainerEvent& _rEvent);
-    virtual void SAL_CALL elementRemoved(const starcontainer::ContainerEvent& _rEvent);
-    virtual void SAL_CALL elementReplaced(const starcontainer::ContainerEvent& _rEvent);
+// ::com::sun::star::container::XContainerListener
+    virtual void SAL_CALL elementInserted(const ::com::sun::star::container::ContainerEvent& _rEvent);
+    virtual void SAL_CALL elementRemoved(const ::com::sun::star::container::ContainerEvent& _rEvent);
+    virtual void SAL_CALL elementReplaced(const ::com::sun::star::container::ContainerEvent& _rEvent);
 
 // Other functions
     sal_Int32 getGroupCount();
-    void getGroup(sal_Int32 nGroup, staruno::Sequence< staruno::Reference<starawt::XControlModel> >& _rGroup, ::rtl::OUString& Name);
-    void getGroupByName(const ::rtl::OUString& Name, staruno::Sequence< staruno::Reference<starawt::XControlModel> >& _rGroup);
-    staruno::Sequence< staruno::Reference<starawt::XControlModel> > getControlModels();
+    void getGroup(sal_Int32 nGroup, ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel> >& _rGroup, ::rtl::OUString& Name);
+    void getGroupByName(const ::rtl::OUString& Name, ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel> >& _rGroup);
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlModel> > getControlModels();
 };
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: InterfaceContainer.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: fs $ $Date: 2000-10-19 11:50:25 $
+ *  last change: $Author: oj $ $Date: 2000-11-23 09:05:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,6 +134,9 @@
 #ifndef _CPPUHELPER_COMPONENT_HXX_
 #include <cppuhelper/component.hxx>
 #endif
+#ifndef _CPPUHELPER_IMPLBASE7_HXX_
+#include <cppuhelper/implbase7.hxx>
+#endif
 
 using namespace comphelper;
 
@@ -141,13 +144,6 @@ using namespace comphelper;
 namespace frm
 {
 //.........................................................................
-
-    namespace starcontainer = ::com::sun::star::container;
-    namespace starscript    = ::com::sun::star::script;
-    namespace starbeans     = ::com::sun::star::beans;
-    namespace stario        = ::com::sun::star::io;
-    namespace starlang      = ::com::sun::star::lang;
-    namespace starform  = ::com::sun::star::form;
 
 
 typedef ::std::vector<InterfaceRef> OInterfaceArray;
@@ -160,103 +156,100 @@ typedef ::std::hash_multimap< ::rtl::OUString, InterfaceRef, ::comphelper::UStri
 // dieses Container kann selbst den Context fuer Formulare darstellen
 // oder außen einen Context uebergeben bekommen
 //==================================================================
-class OInterfaceContainer
-                        :public starcontainer::XNameContainer
-                        ,public starcontainer::XIndexContainer
-                        ,public starcontainer::XContainer
-                        ,public starcontainer::XEnumerationAccess
-                        ,public starscript::XEventAttacherManager
-                        ,public starbeans::XPropertyChangeListener
-                        ,public stario::XPersistObject
+typedef ::cppu::ImplHelper7<    ::com::sun::star::container::XNameContainer,
+                                ::com::sun::star::container::XIndexContainer,
+                                ::com::sun::star::container::XContainer,
+                                ::com::sun::star::container::XEnumerationAccess,
+                                ::com::sun::star::script::XEventAttacherManager,
+                                ::com::sun::star::beans::XPropertyChangeListener,
+                                ::com::sun::star::io::XPersistObject > OInterfaceContainer_BASE;
+
+class OInterfaceContainer : public OInterfaceContainer_BASE
 {
 protected:
     OInterfaceArray                         m_aItems;
     OInterfaceMap                           m_aMap;
     ::cppu::OInterfaceContainerHelper       m_aContainerListeners;
 
-    ::osl::Mutex&           m_rMutex;
-    staruno::Type           m_aElementType;
+    ::osl::Mutex&                           m_rMutex;
+    ::com::sun::star::uno::Type             m_aElementType;
 
-    staruno::Reference<starlang::XMultiServiceFactory>  m_xServiceFactory;
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>     m_xServiceFactory;
 
 
     // EventManager
-    staruno::Reference<starscript::XEventAttacherManager>   m_xEventAttacher;
+    ::com::sun::star::uno::Reference< ::com::sun::star::script::XEventAttacherManager>  m_xEventAttacher;
 
 public:
     OInterfaceContainer(
-        const staruno::Reference<starlang::XMultiServiceFactory>& _rxFactory,
+        const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory,
         ::osl::Mutex& _rMutex,
-        const staruno::Type& _rElementType);
+        const ::com::sun::star::uno::Type& _rElementType);
 
 public:
-    virtual staruno::Any SAL_CALL queryInterface(const staruno::Type& _rType) throw (staruno::RuntimeException);
+// ::com::sun::star::io::XPersistObject
+    virtual ::rtl::OUString SAL_CALL getServiceName(  ) throw(::com::sun::star::uno::RuntimeException) = 0;
+    virtual void SAL_CALL write( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream >& OutStream ) throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL read( const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream >& InStream ) throw(::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
 
-// stario::XPersistObject
-    virtual ::rtl::OUString SAL_CALL getServiceName(  ) throw(staruno::RuntimeException) = 0;
-    virtual void SAL_CALL write( const staruno::Reference< stario::XObjectOutputStream >& OutStream ) throw(stario::IOException, staruno::RuntimeException);
-    virtual void SAL_CALL read( const staruno::Reference< stario::XObjectInputStream >& InStream ) throw(stario::IOException, staruno::RuntimeException);
+// ::com::sun::star::lang::XEventListener
+    virtual void SAL_CALL disposing(const ::com::sun::star::lang::EventObject& _rSource) throw(::com::sun::star::uno::RuntimeException);
 
-// starlang::XEventListener
-    virtual void SAL_CALL disposing(const starlang::EventObject& _rSource) throw(staruno::RuntimeException);
+// ::com::sun::star::beans::XPropertyChangeListener
+    virtual void SAL_CALL propertyChange(const ::com::sun::star::beans::PropertyChangeEvent& evt);
 
-// starbeans::XPropertyChangeListener
-    virtual void SAL_CALL propertyChange(const starbeans::PropertyChangeEvent& evt);
+// ::com::sun::star::container::XElementAccess
+    virtual ::com::sun::star::uno::Type SAL_CALL getElementType() throw(::com::sun::star::uno::RuntimeException) ;
+    virtual sal_Bool SAL_CALL hasElements() throw(::com::sun::star::uno::RuntimeException);
 
-// starcontainer::XElementAccess
-    virtual staruno::Type SAL_CALL getElementType() throw(staruno::RuntimeException) ;
-    virtual sal_Bool SAL_CALL hasElements() throw(staruno::RuntimeException);
+// ::com::sun::star::container::XEnumerationAccess
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::container::XEnumeration> SAL_CALL createEnumeration() throw(::com::sun::star::uno::RuntimeException);
 
-// starcontainer::XEnumerationAccess
-    virtual staruno::Reference<starcontainer::XEnumeration> SAL_CALL createEnumeration() throw(staruno::RuntimeException);
+// ::com::sun::star::container::XNameAccess
+    virtual ::com::sun::star::uno::Any SAL_CALL getByName( const ::rtl::OUString& aName ) throw(::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+    virtual StringSequence SAL_CALL getElementNames(  ) throw(::com::sun::star::uno::RuntimeException);
+    virtual sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName ) throw(::com::sun::star::uno::RuntimeException);
 
-// starcontainer::XNameAccess
-    virtual staruno::Any SAL_CALL getByName( const ::rtl::OUString& aName ) throw(starcontainer::NoSuchElementException, starlang::WrappedTargetException, staruno::RuntimeException);
-    virtual StringSequence SAL_CALL getElementNames(  ) throw(staruno::RuntimeException);
-    virtual sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName ) throw(staruno::RuntimeException);
+// ::com::sun::star::container::XNameReplace
+    virtual void SAL_CALL replaceByName(const ::rtl::OUString& Name, const ::com::sun::star::uno::Any& _rElement) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
-// starcontainer::XNameReplace
-    virtual void SAL_CALL replaceByName(const ::rtl::OUString& Name, const staruno::Any& _rElement) throw(starlang::IllegalArgumentException, starcontainer::NoSuchElementException, starlang::WrappedTargetException, staruno::RuntimeException);
+// ::com::sun::star::container::XNameContainer
+    virtual void SAL_CALL insertByName(const ::rtl::OUString& Name, const ::com::sun::star::uno::Any& _rElement) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::container::ElementExistException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeByName(const ::rtl::OUString& Name) throw(::com::sun::star::container::NoSuchElementException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
-// starcontainer::XNameContainer
-    virtual void SAL_CALL insertByName(const ::rtl::OUString& Name, const staruno::Any& _rElement) throw(starlang::IllegalArgumentException, starcontainer::ElementExistException, starlang::WrappedTargetException, staruno::RuntimeException);
-    virtual void SAL_CALL removeByName(const ::rtl::OUString& Name) throw(starcontainer::NoSuchElementException, starlang::WrappedTargetException, staruno::RuntimeException);
+// ::com::sun::star::container::XIndexAccess
+    virtual sal_Int32 SAL_CALL getCount() throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Any SAL_CALL getByIndex(sal_Int32 _nIndex) throw(::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
-// starcontainer::XIndexAccess
-    virtual sal_Int32 SAL_CALL getCount() throw(staruno::RuntimeException);
-    virtual staruno::Any SAL_CALL getByIndex(sal_Int32 _nIndex) throw(starlang::IndexOutOfBoundsException, starlang::WrappedTargetException, staruno::RuntimeException);
+// ::com::sun::star::container::XIndexReplace
+    virtual void SAL_CALL replaceByIndex(sal_Int32 _nIndex, const ::com::sun::star::uno::Any& _rElement) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
-// starcontainer::XIndexReplace
-    virtual void SAL_CALL replaceByIndex(sal_Int32 _nIndex, const staruno::Any& _rElement) throw(starlang::IllegalArgumentException, starlang::IndexOutOfBoundsException, starlang::WrappedTargetException, staruno::RuntimeException);
+// ::com::sun::star::container::XIndexContainer
+    virtual void SAL_CALL insertByIndex(sal_Int32 _nIndex, const ::com::sun::star::uno::Any& Element) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeByIndex(sal_Int32 _nIndex) throw(::com::sun::star::lang::IndexOutOfBoundsException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException);
 
-// starcontainer::XIndexContainer
-    virtual void SAL_CALL insertByIndex(sal_Int32 _nIndex, const staruno::Any& Element) throw(starlang::IllegalArgumentException, starlang::IndexOutOfBoundsException, starlang::WrappedTargetException, staruno::RuntimeException);
-    virtual void SAL_CALL removeByIndex(sal_Int32 _nIndex) throw(starlang::IndexOutOfBoundsException, starlang::WrappedTargetException, staruno::RuntimeException);
+// ::com::sun::star::container::XContainer
+    virtual void SAL_CALL addContainerListener(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener>& _rxListener) throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeContainerListener(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainerListener>& _rxListener) throw(::com::sun::star::uno::RuntimeException);
 
-// starcontainer::XContainer
-    virtual void SAL_CALL addContainerListener(const staruno::Reference<starcontainer::XContainerListener>& _rxListener) throw(staruno::RuntimeException);
-    virtual void SAL_CALL removeContainerListener(const staruno::Reference<starcontainer::XContainerListener>& _rxListener) throw(staruno::RuntimeException);
-
-// starscript::XEventAttacherManager
-    virtual void SAL_CALL registerScriptEvent( sal_Int32 nIndex, const starscript::ScriptEventDescriptor& aScriptEvent ) throw(::com::sun::star::lang::IllegalArgumentException, staruno::RuntimeException);
-    virtual void SAL_CALL registerScriptEvents( sal_Int32 nIndex, const staruno::Sequence< starscript::ScriptEventDescriptor >& aScriptEvents ) throw(::com::sun::star::lang::IllegalArgumentException, staruno::RuntimeException);
-    virtual void SAL_CALL revokeScriptEvent( sal_Int32 nIndex, const ::rtl::OUString& aListenerType, const ::rtl::OUString& aEventMethod, const ::rtl::OUString& aRemoveListenerParam ) throw(::com::sun::star::lang::IllegalArgumentException, staruno::RuntimeException);
-    virtual void SAL_CALL revokeScriptEvents( sal_Int32 nIndex ) throw(::com::sun::star::lang::IllegalArgumentException, staruno::RuntimeException);
-    virtual void SAL_CALL insertEntry( sal_Int32 nIndex ) throw(::com::sun::star::lang::IllegalArgumentException, staruno::RuntimeException);
-    virtual void SAL_CALL removeEntry( sal_Int32 nIndex ) throw(::com::sun::star::lang::IllegalArgumentException, staruno::RuntimeException);
-    virtual staruno::Sequence< starscript::ScriptEventDescriptor > SAL_CALL getScriptEvents( sal_Int32 Index ) throw(::com::sun::star::lang::IllegalArgumentException, staruno::RuntimeException);
-    virtual void SAL_CALL attach( sal_Int32 nIndex, const staruno::Reference< staruno::XInterface >& xObject, const staruno::Any& aHelper ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::ServiceNotRegisteredException, staruno::RuntimeException);
-    virtual void SAL_CALL detach( sal_Int32 nIndex, const staruno::Reference< staruno::XInterface >& xObject ) throw(::com::sun::star::lang::IllegalArgumentException, staruno::RuntimeException);
-    virtual void SAL_CALL addScriptListener( const staruno::Reference< starscript::XScriptListener >& xListener ) throw(::com::sun::star::lang::IllegalArgumentException, staruno::RuntimeException);
-    virtual void SAL_CALL removeScriptListener( const staruno::Reference< starscript::XScriptListener >& Listener ) throw(::com::sun::star::lang::IllegalArgumentException, staruno::RuntimeException);
-
-    virtual staruno::Sequence< staruno::Type > SAL_CALL getTypes(  ) throw(staruno::RuntimeException);
+// ::com::sun::star::script::XEventAttacherManager
+    virtual void SAL_CALL registerScriptEvent( sal_Int32 nIndex, const ::com::sun::star::script::ScriptEventDescriptor& aScriptEvent ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL registerScriptEvents( sal_Int32 nIndex, const ::com::sun::star::uno::Sequence< ::com::sun::star::script::ScriptEventDescriptor >& aScriptEvents ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL revokeScriptEvent( sal_Int32 nIndex, const ::rtl::OUString& aListenerType, const ::rtl::OUString& aEventMethod, const ::rtl::OUString& aRemoveListenerParam ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL revokeScriptEvents( sal_Int32 nIndex ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL insertEntry( sal_Int32 nIndex ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeEntry( sal_Int32 nIndex ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::script::ScriptEventDescriptor > SAL_CALL getScriptEvents( sal_Int32 Index ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL attach( sal_Int32 nIndex, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xObject, const ::com::sun::star::uno::Any& aHelper ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::lang::ServiceNotRegisteredException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL detach( sal_Int32 nIndex, const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& xObject ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL addScriptListener( const ::com::sun::star::uno::Reference< ::com::sun::star::script::XScriptListener >& xListener ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL removeScriptListener( const ::com::sun::star::uno::Reference< ::com::sun::star::script::XScriptListener >& Listener ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
 
 protected:
     // helper
     virtual void SAL_CALL disposing();
     virtual void insert(sal_Int32 _nIndex, const InterfaceRef& _Object, sal_Bool bEvents = sal_True)
-                    throw(starlang::IllegalArgumentException);
+                    throw(::com::sun::star::lang::IllegalArgumentException);
     virtual void removeElementsNoEvents(sal_Int32 nIndex);
 
     // called after the object is inserted, but before the "real listeners" are notified
@@ -264,38 +257,39 @@ protected:
     // called after the object is removed, but before the "real listeners" are notified
     virtual void implRemoved(const InterfaceRef& _rxObject) { }
 
-    void SAL_CALL writeEvents(const staruno::Reference<stario::XObjectOutputStream>& _rxOutStream);
-    void SAL_CALL readEvents(const staruno::Reference<stario::XObjectInputStream>& _rxInStream, sal_Int32 nCount);
+    void SAL_CALL writeEvents(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectOutputStream>& _rxOutStream);
+    void SAL_CALL readEvents(const ::com::sun::star::uno::Reference< ::com::sun::star::io::XObjectInputStream>& _rxInStream, sal_Int32 nCount);
 };
 
 //==================================================================
 //= OFormComponents
 //==================================================================
+typedef ::cppu::ImplHelper1< ::com::sun::star::form::XFormComponent> OFormComponents_BASE;
 typedef ::cppu::OComponentHelper FormComponentsBase;
     // else MSVC kills itself on some statements
 class OFormComponents   : public FormComponentsBase,
                           public OInterfaceContainer,
-                          public starform::XFormComponent
+                          public OFormComponents_BASE
 {
 protected:
-    ::osl::Mutex            m_aMutex;
+    ::osl::Mutex                m_aMutex;
     ::comphelper::InterfaceRef  m_xParent;
 
 public:
-    OFormComponents(const staruno::Reference<starlang::XMultiServiceFactory>& _rxFactory);
+    OFormComponents(const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>& _rxFactory);
     virtual ~OFormComponents();
 
     DECLARE_UNO3_AGG_DEFAULTS(OFormComponents, FormComponentsBase);
 
-    virtual staruno::Any SAL_CALL queryAggregation(const staruno::Type& _rType) throw(staruno::RuntimeException);
-    virtual staruno::Sequence< staruno::Type > SAL_CALL getTypes(  ) throw(staruno::RuntimeException);
+    virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation(const ::com::sun::star::uno::Type& _rType) throw(::com::sun::star::uno::RuntimeException);
+    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException);
 
 // OComponentHelper
     virtual void SAL_CALL disposing();
 
-// starform::XFormComponent
-    virtual ::comphelper::InterfaceRef SAL_CALL getParent() throw(staruno::RuntimeException);
-    virtual void SAL_CALL setParent(const ::comphelper::InterfaceRef& Parent) throw(starlang::NoSupportException, staruno::RuntimeException);
+// ::com::sun::star::form::XFormComponent
+    virtual ::comphelper::InterfaceRef SAL_CALL getParent() throw(::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setParent(const ::comphelper::InterfaceRef& Parent) throw(::com::sun::star::lang::NoSupportException, ::com::sun::star::uno::RuntimeException);
 };
 //.........................................................................
 }   // namespace frm
