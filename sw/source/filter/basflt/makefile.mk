@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: jp $ $Date: 2001-02-08 12:48:20 $
+#   last change: $Author: vg $ $Date: 2003-04-17 14:49:34 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -64,9 +64,6 @@ PRJ=..$/..$/..
 
 PRJNAME=sw
 TARGET=basflt
-
-PROJECTPCH=filt_pch
-PROJECTPCHSOURCE=..$/filt_1st$/filt_pch
 
 # --- Settings -----------------------------------------------------
 
