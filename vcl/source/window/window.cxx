@@ -2,9 +2,9 @@
  *
  *  $RCSfile: window.cxx,v $
  *
- *  $Revision: 1.115 $
+ *  $Revision: 1.116 $
  *
- *  last change: $Author: ssa $ $Date: 2002-07-18 08:04:31 $
+ *  last change: $Author: vg $ $Date: 2002-07-18 15:08:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5740,7 +5740,7 @@ void Window::Show( BOOL bVisible, USHORT nFlags )
         else if ( mbFrame )
         {
             mbSuppressAccessibilityEvents = TRUE;
-            mpFrame->Show( FALSE );
+            mpFrame->Show( FALSE, nFlags );
         }
 
         StateChanged( STATE_CHANGE_VISIBLE );
