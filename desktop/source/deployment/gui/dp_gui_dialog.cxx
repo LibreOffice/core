@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dp_gui_dialog.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:04:24 $
+ *  last change: $Author: hr $ $Date: 2004-11-09 14:05:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,16 +63,20 @@
 #include "dp_gui.h"
 #include "rtl/uri.hxx"
 #include "cppuhelper/exc_hlp.hxx"
+#include "cppuhelper/implbase1.hxx"
 #include "ucbhelper/content.hxx"
 #include "unotools/configmgr.hxx"
 #include "comphelper/anytostring.hxx"
 #include "tools/isolang.hxx"
+#include "tools/resmgr.hxx"
 #include "toolkit/helper/vclunohelper.hxx"
 #include "vcl/wintypes.hxx"
 #include "vcl/msgbox.hxx"
+#include "svtools/svtools.hrc"
 #include "com/sun/star/lang/XUnoTunnel.hpp"
 #include "com/sun/star/container/XChild.hpp"
 #include "com/sun/star/ui/dialogs/XFilePicker.hpp"
+#include "com/sun/star/ui/dialogs/XFilterManager.hpp"
 #include "com/sun/star/ui/dialogs/XFolderPicker.hpp"
 #include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
 #include "com/sun/star/ui/dialogs/ExecutableDialogResults.hpp"
@@ -82,6 +86,7 @@
 #include "com/sun/star/ucb/ContentAction.hpp"
 #include "com/sun/star/sdbc/XResultSet.hpp"
 #include "com/sun/star/sdbc/XRow.hpp"
+#include <map>
 #include <vector>
 #include <algorithm>
 
@@ -92,16 +97,10 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::ucb;
 using ::rtl::OUString;
 
-namespace dp_gui
-{
+namespace dp_gui {
 
 const long ITEM_ID_PACKAGE = 1;
 const long ITEM_ID_STATUS = 2;
-
-//______________________________________________________________________________
-DialogImpl::~DialogImpl()
-{
-}
 
 //______________________________________________________________________________
 DialogImpl::DialogImpl(
@@ -121,6 +120,11 @@ DialogImpl::DialogImpl(
 {
 }
 
+//______________________________________________________________________________
+DialogImpl::~DialogImpl()
+{
+}
+
 //------------------------------------------------------------------------------
 ::rtl::Reference<DialogImpl> DialogImpl::s_dialog;
 
@@ -130,8 +134,10 @@ DialogImpl::DialogImpl(
     Reference<awt::XWindow> const & xParent,
     OUString const & defaultView )
 {
-    if (s_dialog.is())
+    if (s_dialog.is()) {
+        OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
         return s_dialog;
+    }
 
     Window * pParent = DIALOG_NO_PARENT;
     if (xParent.is())
@@ -139,6 +145,7 @@ DialogImpl::DialogImpl(
     ::rtl::Reference<DialogImpl> that( new DialogImpl( pParent, xContext ) );
 
     // XUnoTunnel: hack to set application solar mutex from within gui
+    // xxx todo: remove when PL has inserted res mgr mutex in tools:
     Reference<lang::XUnoTunnel> xUnoTunnel( that->m_xPkgMgrFac, UNO_QUERY );
     if (xUnoTunnel.is())
     {
@@ -192,6 +199,8 @@ DialogImpl::DialogImpl(
         new OKButton( that.get(), getResId(RID_BTN_CLOSE) ) );
     that->m_helpButton.reset(
         new HelpButton( that.get(), getResId(RID_BTN_HELP) ) );
+    if (! office_is_running())
+        that->m_helpButton->Disable();
 
     // free local resources (RID < 256):
     that->FreeResource();
@@ -274,14 +283,16 @@ DialogImpl::DialogImpl(
         OUString() /* no factory URL */,
         that->m_xPkgMgrFac->getPackageManager( OUSTR("user") ),
         Reference<deployment::XPackage>(),
-        false /* no sort */ );
+        Reference<XCommandEnvironment>(),
+        false /* no sort in */ );
     that->m_treelb->addNode(
         0 /* no parent */,
         getResourceString(RID_STR_SHARED_INSTALLATION),
         OUString() /* no factory URL */,
         that->m_xPkgMgrFac->getPackageManager( OUSTR("shared") ),
         Reference<deployment::XPackage>(),
-        false /* no sort */ );
+        Reference<XCommandEnvironment>(),
+        false /* no sort in */ );
 
     if (office_is_running())
     {
@@ -329,8 +340,11 @@ DialogImpl::DialogImpl(
     if (defEntry != 0)
         that->m_treelb->Select( defEntry );
 
-    OSL_ASSERT( ! s_dialog.is() );
-    s_dialog = that;
+    const ::vos::OGuard guard( Application::GetSolarMutex() );
+    if (! s_dialog.is()) {
+        OSL_DOUBLE_CHECKED_LOCKING_MEMORY_BARRIER();
+        s_dialog = that;
+    }
     return s_dialog;
 }
 
@@ -442,7 +456,8 @@ IMPL_LINK( DialogImpl, headbar_dragEnd, HeaderBar *, pBar )
 }
 
 //______________________________________________________________________________
-void DialogImpl::updateButtonStates()
+void DialogImpl::updateButtonStates(
+    Reference<XCommandEnvironment> const & xCmdEnv )
 {
     bool allowModification = true;
     bool bEnable = true;
@@ -467,7 +482,8 @@ void DialogImpl::updateButtonStates()
             ++nSelectedPackages;
             if (m_treelb->isFirstLevelChild( entry ))
             {
-                switch (getPackageState( xPackage )) {
+                switch (getPackageState( xPackage, xCmdEnv ))
+                {
                 case REGISTERED:
                     bEnable = false;
                     break;
@@ -527,6 +543,18 @@ DialogImpl::TreeListBoxImpl::getSelectedPackages( bool onlyFirstLevel )
     return Sequence< Reference<deployment::XPackage> >( &ret[ 0 ], ret.size() );
 }
 
+namespace {
+struct StrAllFiles : public ::rtl::StaticData<OUString, StrAllFiles> {
+    OUString operator () () {
+        const ::vos::OGuard guard( Application::GetSolarMutex() );
+        ::std::auto_ptr<ResMgr> svt(
+            ResMgr::CreateResMgr( "svt" LIBRARY_SOLARUPD() ) );
+        OSL_ASSERT( svt.get() != 0 );
+        String ret( ResId( STR_FILTERNAME_ALL, svt.get() ) );
+        return ret;
+    }
+};
+}
 //______________________________________________________________________________
 void DialogImpl::clickAdd( USHORT )
 {
@@ -542,15 +570,61 @@ void DialogImpl::clickAdd( USHORT )
     Any mode(
         makeAny( static_cast<sal_Int16>(
                      ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE ) ) );
-    Reference< ui::dialogs::XFilePicker > xFilePicker(
+    Reference<ui::dialogs::XFilePicker> xFilePicker(
         m_xComponentContext->getServiceManager()
         ->createInstanceWithArgumentsAndContext(
             OUSTR("com.sun.star.ui.dialogs.FilePicker"),
             Sequence<Any>(&mode, 1), m_xComponentContext ), UNO_QUERY_THROW );
     xFilePicker->setTitle( m_strAddPackages );
     xFilePicker->setMultiSelectionMode(true);
+
+    // collect and set filter list:
+    typedef /* sorted */ ::std::map<OUString, OUString> t_string2string;
+    t_string2string title2filter;
+    const Sequence< Reference<deployment::XPackageTypeInfo> > packageTypes(
+        xPackageManager->getSupportedPackageTypes() );
+    for ( sal_Int32 pos = 0; pos < packageTypes.getLength(); ++pos ) {
+        Reference<deployment::XPackageTypeInfo> const & xPackageType =
+            packageTypes[ pos ];
+        const OUString filter( xPackageType->getFileFilter() );
+        if (filter.getLength() > 0)
+        {
+            const OUString title( xPackageType->getShortDescription() );
+            const ::std::pair<t_string2string::iterator, bool> insertion(
+                title2filter.insert( t_string2string::value_type(
+                                         title, filter ) ) );
+            if (! insertion.second) { // already existing, append extensions:
+                ::rtl::OUStringBuffer buf;
+                buf.append( insertion.first->second );
+                buf.append( static_cast<sal_Unicode>(';') );
+                buf.append( filter );
+                insertion.first->second = buf.makeStringAndClear();
+            }
+        }
+    }
+
+    const Reference<ui::dialogs::XFilterManager> xFilterManager(
+        xFilePicker, UNO_QUERY_THROW );
+    // All files at top:
+    xFilterManager->appendFilter( StrAllFiles::get(), OUSTR("*.*") );
+    // then supported ones:
+    t_string2string::const_iterator iPos( title2filter.begin() );
+    const t_string2string::const_iterator iEnd( title2filter.end() );
+    for ( ; iPos != iEnd; ++iPos ) {
+        try {
+            xFilterManager->appendFilter( iPos->first, iPos->second );
+        }
+        catch (lang::IllegalArgumentException & exc) {
+            OSL_ENSURE( 0, ::rtl::OUStringToOString(
+                            exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
+            (void) exc;
+        }
+    }
+    xFilterManager->setCurrentFilter( StrAllFiles::get() );
+
     if (xFilePicker->execute() != ui::dialogs::ExecutableDialogResults::OK)
         return; // cancelled
+
     Sequence<OUString> files( xFilePicker->getFiles() );
     OSL_ASSERT( files.getLength() > 0 );
 
@@ -565,7 +639,7 @@ void DialogImpl::clickAdd( USHORT )
     {
         OUString file;
         if (files.getLength() > 1)
-            file = make_url( files[ 0 ], files[ pos ] );
+            file = makeURL( files[ 0 ], files[ pos ] );
         else
             file = files[ pos ];
         currentCmdEnv->progressSection(
@@ -573,7 +647,7 @@ void DialogImpl::clickAdd( USHORT )
                 ::ucb::Content( file, currentCmdEnv.get() ).getPropertyValue(
                     OUSTR("Title") ) ), xAbortChannel );
         try {
-            Reference< deployment::XPackage > xPackage(
+            Reference<deployment::XPackage> xPackage(
                 xPackageManager->addPackage(
                     file, OUString() /* detect media-type */,
                     xAbortChannel, currentCmdEnv.get() ) );
@@ -632,7 +706,7 @@ void DialogImpl::clickRemove( USHORT )
 //______________________________________________________________________________
 void DialogImpl::clickEnableDisable( USHORT id )
 {
-    Sequence<Reference<deployment::XPackage> > selection(
+    Sequence< Reference<deployment::XPackage> > selection(
         m_treelb->getSelectedPackages(true) );
     OSL_ASSERT( selection.getLength() > 0 );
 
@@ -706,6 +780,32 @@ void DialogImpl::clickExport( USHORT )
             new ProgressCommandEnv( this, m_strExportPackage ) );
         OSL_ASSERT( selection.getLength() == 1 );
         Reference<deployment::XPackage> const & xPackage = selection[ 0 ];
+
+        // set filter:
+        const Reference<deployment::XPackageTypeInfo> xPackageType(
+            xPackage->getPackageType() );
+        if (xPackageType.is()) {
+            const Reference<ui::dialogs::XFilterManager> xFilterManager(
+                xFilePicker, UNO_QUERY_THROW );
+            try {
+                // All files at top:
+                xFilterManager->appendFilter(
+                    StrAllFiles::get(), OUSTR("*.*") );
+                // then package filter:
+                xFilterManager->appendFilter(
+                    xPackageType->getShortDescription(),
+                    xPackageType->getFileFilter() );
+                xFilterManager->setCurrentFilter(
+                    xPackageType->getShortDescription() );
+            }
+            catch (lang::IllegalArgumentException & exc) {
+                OSL_ENSURE( 0, ::rtl::OUStringToOString(
+                                exc.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
+                (void) exc;
+            }
+        }
+
+        // set default selection:
         ::ucb::Content sourceContent( xPackage->getURL(), currentCmdEnv.get() );
         xFilePicker->setDefaultName(
             extract_throw<OUString>( sourceContent.getPropertyValue(
@@ -745,19 +845,9 @@ void DialogImpl::clickExport( USHORT )
 }
 
 //______________________________________________________________________________
-void DialogImpl::errbox( Any const & exc )
+void DialogImpl::errbox( OUString const & msg )
 {
-    OUString msg;
-    deployment::DeploymentException dpExc;
-    if ((exc >>= dpExc) &&
-        dpExc.Cause.getValueTypeClass() == TypeClass_EXCEPTION) {
-        msg = reinterpret_cast<Exception const *>(
-            dpExc.Cause.getValue() )->Message;
-    }
-    if (msg.getLength() == 0) // fallback for debugging purposes
-        msg = ::comphelper::anyToString(exc);
-
-    ::vos::OGuard guard( Application::GetSolarMutex() );
+    const ::vos::OGuard guard( Application::GetSolarMutex() );
     ::std::auto_ptr<ErrorBox> box( new ErrorBox( this, WB_OK, msg ) );
     box->SetText( GetText() );
     box->Execute();
@@ -772,24 +862,35 @@ void DialogImpl::SyncPushButton::Click()
         (m_dialog->*m_clickCallback)( m_id );
     }
     catch (CommandFailedException &) {
-        // already handled by UUI handler
+        // already handled by interaction handler
     }
     catch (Exception &) {
         Any exc( ::cppu::getCaughtException() );
-        m_dialog->errbox( exc );
+        OUString msg;
+        deployment::DeploymentException dpExc;
+        if ((exc >>= dpExc) &&
+            dpExc.Cause.getValueTypeClass() == TypeClass_EXCEPTION) {
+            // notify error cause only:
+            msg = reinterpret_cast<Exception const *>(
+                dpExc.Cause.getValue() )->Message;
+        }
+        if (msg.getLength() == 0) // fallback for debugging purposes
+            msg = ::comphelper::anyToString(exc);
+        m_dialog->errbox( msg );
     }
 }
 
 //------------------------------------------------------------------------------
-extern "C"
-{
-static void SAL_CALL ThreadedPushButton_callback( void * p )
+namespace {
+extern "C" {
+void SAL_CALL ThreadedPushButton_callback( void * p )
 {
     DialogImpl::ThreadedPushButton * that =
         static_cast<DialogImpl::ThreadedPushButton *>(p);
     that->DialogImpl::SyncPushButton::Click();
 }
-}
+} // extern "C"
+} //anon namespace
 
 //______________________________________________________________________________
 void DialogImpl::ThreadedPushButton::Click()
@@ -812,41 +913,40 @@ DialogImpl::ThreadedPushButton::~ThreadedPushButton()
     }
 }
 
-//==============================================================================
-static ResMgr * getResMgr()
-{
-    static ResMgr * s_pResMgr = 0;
-    if (s_pResMgr == 0) {
-        s_pResMgr = ResMgr::CreateResMgr( "deploymentgui" LIBRARY_SOLARUPD() );
-        OSL_ASSERT( s_pResMgr != 0 );
+namespace {
+struct DeploymentGuiResMgr : public ::rtl::StaticData< ResMgr *,
+                                                       DeploymentGuiResMgr > {
+    ResMgr * operator () () {
+        const ::vos::OGuard guard( Application::GetSolarMutex() );
+        return ResMgr::CreateResMgr( "deploymentgui" LIBRARY_SOLARUPD() );
     }
-    return s_pResMgr;
-}
+};
+
+struct BrandName : public ::rtl::StaticData<OUString, BrandName> {
+    OUString operator () () {
+        return extract_throw<OUString>(
+            ::utl::ConfigManager::GetDirectConfigProperty(
+                ::utl::ConfigManager::PRODUCTNAME ) );
+    }
+};
+} // anon namespace
 
 //==============================================================================
 ResId DialogImpl::getResId( USHORT id )
 {
-    ::vos::OGuard guard( Application::GetSolarMutex() );
-    return ResId( id, getResMgr() );
+    const ::vos::OGuard guard( Application::GetSolarMutex() );
+    return ResId( id, DeploymentGuiResMgr::get() );
 }
 
 //==============================================================================
 String DialogImpl::getResourceString( USHORT id )
 {
-    ::vos::OGuard guard( Application::GetSolarMutex() );
-    String ret( ResId( id, getResMgr() ) );
-    if (ret.SearchAscii( "%PRODUCTNAME" ) != STRING_NOTFOUND)
-    {
-        static String s_brandName;
-        if (s_brandName.Len() == 0)
-        {
-            OUString brandName(
-                extract_throw<OUString>(
-                    ::utl::ConfigManager::GetDirectConfigProperty(
-                        ::utl::ConfigManager::PRODUCTNAME ) ) );
-            s_brandName = brandName;
-        }
-        ret.SearchAndReplaceAllAscii( "%PRODUCTNAME", s_brandName );
+    // init with non-acquired solar mutex:
+    BrandName::get();
+    const ::vos::OGuard guard( Application::GetSolarMutex() );
+    String ret( ResId( id, DeploymentGuiResMgr::get() ) );
+    if (ret.SearchAscii( "%PRODUCTNAME" ) != STRING_NOTFOUND) {
+        ret.SearchAndReplaceAllAscii( "%PRODUCTNAME", BrandName::get() );
     }
     return ret;
 }
