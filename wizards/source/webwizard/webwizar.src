@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webwizar.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 17:36:21 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 14:06:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,6 +90,7 @@ String WEBDIALOG
     Text[ czech ] = "Nápověda";
     Text[ hebrew ] = "‮עזרה‬";
     Text[ hindi ] = "~सहायता";
+    Text[ slovak ] = "~Pomocník";
 };
 
 
@@ -121,6 +122,7 @@ String WEBDIALOG + 1
     Text[ czech ] = "WWW stránka průvodce";
     Text[ hebrew ] = "‮טייס אוטומטי דף אינטרנט‬";
     Text[ hindi ] = "ओटोपैलट् वेब पृष्ठ";
+    Text[ slovak ] = "Sprievodca webovou stránkou";
 };
 
 
@@ -155,6 +157,7 @@ String WEBDIALOG + 2
     Text[ czech ] = "Zrušit";
     Text[ hebrew ] = "‮ביטול‬";
     Text[ hindi ] = "~रद्द करो";
+    Text[ slovak ] = "~Zrušiť";
 };
 
 String WEBDIALOG + 3
@@ -185,6 +188,7 @@ String WEBDIALOG + 3
     Text[ czech ] = "Vytvořit";
     Text[ hebrew ] = "‮יצירה‬";
     Text[ hindi ] = "उ~त्पन्न करो";
+    Text[ slovak ] = "Vytvo~riť";
 };
 
 
@@ -218,6 +222,7 @@ String WEBDIALOG + 4
     Text[ czech ] = "Kterou šablonu chcete použít?";
     Text[ hebrew ] = "‮באיזו תבנית להשתמש?‬";
     Text[ hindi ] = "कौनसी नमूने को उपयोग करना है?";
+    Text[ slovak ] = "Ktorú šablónu chcete použiť?";
 };
 
 String WEBDIALOG + 5
@@ -249,6 +254,7 @@ String WEBDIALOG + 5
     Text[ czech ] = "Jaké rozvržení chcete použít?";
     Text[ hebrew ] = "‮באיזה פריסה להשתמש?‬";
     Text[ hindi ] = "कौनसी अभिन्यास को उपयोग करना है?";
+    Text[ slovak ] = "Aký vzhľad by mal byť použitý?";
 };
 
 
@@ -280,6 +286,7 @@ String WEBDIALOG + 6
     Text[ czech ] = "Obrázek na pozadí";
     Text[ hebrew ] = "‮צלם הרקע‬";
     Text[ hindi ] = "पृष्ठभाग चित्र";
+    Text[ slovak ] = "Pozadie";
 };
 
 
@@ -312,6 +319,7 @@ String WEBDIALOG + 7
     Text[ czech ] = "Vydláždit";
     Text[ hebrew ] = "‮פריסה ללא חפיפה‬";
     Text[ hindi ] = "~टइल किया हुआ";
+    Text[ slovak ] = "~Dláždený";
 };
 
 
@@ -343,6 +351,7 @@ String WEBDIALOG + 8
     Text[ czech ] = "Roztáhnout";
     Text[ hebrew ] = "‮התאמה לגודל‬";
     Text[ hindi ] = "~स्केल किया हुआ";
+    Text[ slovak ] = "~Roztiahnutý";
 };
 
 
@@ -374,6 +383,7 @@ String WEBDIALOG + 9
     Text[ czech ] = "Editovat dokument";
     Text[ hebrew ] = "‮עריכת מסמך‬";
     Text[ hindi ] = "लेखपत्र संपादन";
+    Text[ slovak ] = "Upraviť dokument";
 };
 
 String WEBDIALOG + 10
@@ -407,6 +417,7 @@ String WEBDIALOG + 10
     Text[ czech ] = "Vytvořit šablonu";
     Text[ hebrew ] = "‮יצירת תבנית‬";
     Text[ hindi ] = "नमूना उत्पन्न करो";
+    Text[ slovak ] = "Vytvoriť šablónu";
 };
 
 
@@ -438,6 +449,7 @@ String WEBERROR + 1
     Text[ czech ] = "Šablona pro tuto stránku nebyla nalezena.";
     Text[ hebrew ] = "‮אין תבנית למבנה דף זה.‬";
     Text[ hindi ] = "पृष्ठ सेटप् केलिए नमूना नहीं मिला ।";
+    Text[ slovak ] = "Šablóna pre túto stránku nebola nájdená.";
 };
 
 String WEBERROR + 2
@@ -469,6 +481,7 @@ String WEBERROR + 2
     Text[ czech ] = "Styl pro naformátování této stránky nebyl nalezen.";
     Text[ hebrew ] = "‮אין סגנון לסגנון דף זה.‬";
     Text[ hindi ] = "पृष्ठ शैली केलिए शैली नहीं मिला ।";
+    Text[ slovak ] = "Nemôžem nájsť štýlu pre stránku.";
 };
 
 String WEBERROR + 3
@@ -499,6 +512,7 @@ String WEBERROR + 3
     Text[ czech ] = "Při zpracování šablony došlo k chybě.";
     Text[ hebrew ] = "‮ארעה שגיאה בעת קליטת התבניות.‬";
     Text[ hindi ] = "नमूनों को रोकने के कारण गलती घटित हुआ ।";
+    Text[ slovak ] = "Pri spracovaní šablóny sa vyskytla chyba.";
 };
 
 String WEBERROR + 4
@@ -529,6 +543,7 @@ String WEBERROR + 4
     Text[ czech ] = "Při obnovení šablony došlo k chybě.";
     Text[ hebrew ] = "‮ארעה שגיאה בעת ריענון התבנית‬";
     Text[ hindi ] = "नमूनों को नवीकरण करने के कारण गलती घटित हुआ ।";
+    Text[ slovak ] = "Pri obnove šablóny sa vyskytla chyba.";
 };
 
 String WEBERROR + 5
@@ -560,6 +575,7 @@ String WEBERROR + 5
     Text[ czech ] = "Při aplikaci stylu došlo k chybě.";
     Text[ hebrew ] = "‮ארעה שגיאה בעת יישום הסגנונות.‬";
     Text[ hindi ] = "लेखपत्रों को परीक्षा करने के समय गलती घटित हुआ ।";
+    Text[ slovak ] = "Chyba sa vyskytla pri použití štýlov.";
 };
 
 String WEBERROR + 6
@@ -590,6 +606,7 @@ String WEBERROR + 6
     Text[ czech ] = "Při vyhodnocování dokumentu došlo k chybě.";
     Text[ hebrew ] = "‮ארעה שגיאה בעת הערכת המסמכים‬";
     Text[ hindi ] = "लेखपत्रों को परीक्षा करने के समय गलती घटित हुआ ।";
+    Text[ slovak ] = "Pri vyhodnocovaní dokumentu sa vyskytla chyba.";
 };
 
 String WEBERROR + 7
@@ -620,7 +637,10 @@ String WEBERROR + 7
     Text[ czech ] = "Při běhu průvodce došlo k chybě.";
     Text[ hebrew ] = "‮ארעה שגיאה בעת הפעלת הטייס האוטומטי.‬";
     Text[ hindi ] = "ओटोपैलट् को चलाने के समय गलती घटित हुआ ।";
+    Text[ slovak ] = "Počas behu Sprievodcu sa vyskytla chyba.";
 };
+
+
 
 
 
