@@ -2,9 +2,9 @@
  *
  *  $RCSfile: numrule.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:37:15 $
+ *  last change: $Author: rt $ $Date: 2004-10-22 08:09:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,9 @@
 #ifndef _SW_BIT_ARRAY_HXX
 #include <SwBitArray.hxx> // #i27615#
 #endif
+#ifndef _HINTS_HXX
+#include <hints.hxx>
+#endif
 
 class Font;
 class SvxBrushItem;
@@ -168,6 +171,11 @@ class SW_DLLPUBLIC SwNumRule
     SwNumFmt* aFmts[ MAXLEVEL ];
 
     /**
+       cache for associated text nodes
+    */
+    SwTxtNodeTable * pList;
+
+    /**
        marked levels
      */
     SwBitArray aMarkedLevels;
@@ -207,6 +215,20 @@ public:
     String MakeNumString( const SwNodeNum&, BOOL bInclStrings = TRUE,
                             BOOL bOnlyArabic = FALSE ) const;
 
+    /**
+       Returns list of associated text nodes.
+
+       @return list of associated text nodes, or NULL if none present
+    */
+    const SwTxtNodeTable * GetList() const { return pList; }
+
+    /**
+       Set list of associated text nodes.
+
+       @param _pList  the list of associated text nodes
+    */
+    void SetList(SwTxtNodeTable * _pList);
+
     static const Font& GetDefBulletFont();
 
     static char* GetOutlineRuleName() { return pDefOutlineName; }
@@ -239,7 +261,7 @@ public:
     void SetAutoRule( BOOL bFlag )      { bAutoRuleFlag = bFlag; }
 
     BOOL IsInvalidRule() const          { return bInvalidRuleFlag; }
-    void SetInvalidRule( BOOL bFlag )   { bInvalidRuleFlag = bFlag; }
+    void SetInvalidRule( BOOL bFlag );
 
     BOOL IsContinusNum() const          { return bContinusNum; }
     void SetContinusNum( BOOL bFlag )   { bContinusNum = bFlag; }
@@ -347,7 +369,5 @@ public:
     }
 
 };
-
-
 
 #endif  // _NUMRULE_HXX
