@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotxat.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: dl $ $Date: 2001-04-02 10:34:10 $
+ *  last change: $Author: dl $ $Date: 2001-05-10 16:10:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -321,6 +321,8 @@ void SdrTextObj::BurnInStyleSheetAttributes( BOOL bPseudoSheetsOnly )
         Outliner* pOutliner = SdrMakeOutliner( OUTLINERMODE_OUTLINEOBJECT, pModel );
         pOutliner->SetText( *pOutlinerParaObject );
 
+        SdrAttrObj::BurnInStyleSheetAttributes();
+
         USHORT nParaCount = (USHORT) pOutliner->GetParagraphCount();
         if ( nParaCount > 0 )
         {
@@ -329,8 +331,6 @@ void SdrTextObj::BurnInStyleSheetAttributes( BOOL bPseudoSheetsOnly )
             for ( USHORT nPara = 0; nPara < nParaCount; nPara++ )
             {
                 SfxStyleSheet* pSheet = pOutliner->GetStyleSheet( nPara );
-                SfxStyleFamily eFam = pSheet->GetFamily();
-
                 if( pSheet && ( !bPseudoSheetsOnly || pSheet->GetFamily() == SFX_STYLE_FAMILY_PSEUDO ) )
                 {
                     SfxItemSet aSet( pSheet->GetItemSet() );
