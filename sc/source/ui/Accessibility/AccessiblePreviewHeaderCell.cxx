@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessiblePreviewHeaderCell.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: thb $ $Date: 2002-06-26 11:13:42 $
+ *  last change: $Author: sab $ $Date: 2002-08-01 12:14:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,8 @@ ScAccessiblePreviewHeaderCell::ScAccessiblePreviewHeaderCell( const ::com::sun::
     mbColumnHeader( bIsColHdr ),
     mbRowHeader( bIsRowHdr ),
     mnIndex( nIndex ),
-    maPosition( rPosition )
+    maPosition( rPosition ),
+    mpTextHelper( NULL )
 {
     if (mpViewShell)
         mpViewShell->AddAccessibilityObject(*this);
