@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xestyle.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-27 15:08:05 $
+ *  last change: $Author: rt $ $Date: 2003-09-16 08:19:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,9 @@
 #ifndef INCLUDED_SVTOOLS_NFKEYTAB_HXX
 #include <svtools/nfkeytab.hxx>
 #endif
+#ifndef _SVX_SVXFONT_HXX
+#include <svx/svxfont.hxx>
+#endif
 
 #ifndef SC_XLSTYLE_HXX
 #include "xlstyle.hxx"
@@ -118,6 +121,85 @@ enum XclColorType
     return the real Excel palette index for all color identifiers. */
 class XclExpPalette : public XclExpRecord, public XclDefaultPalette, protected XclExpRoot
 {
+public:
+    explicit                    XclExpPalette( const XclExpRoot& rRoot );
+
+    /** Inserts the color into the list and updates weighting.
+        @param nAutoDefault  The Excel palette index for automatic color.
+        @return  A unique ID for this color. */
+    sal_uInt32                  InsertColor( const Color& rColor, XclColorType eType, sal_uInt16 nAutoDefault = 0 );
+    /** Returns the color ID representing a fixed Excel palette index (i.e. for auto colors). */
+    static sal_uInt32           GetColorIdFromIndex( sal_uInt16 nIndex );
+
+    /** Reduces the color list to the maximum count of the current BIFF version. */
+    void                        Reduce();
+
+    /** Returns the Excel palette index of the color with passed color ID. */
+    sal_uInt16                  GetColorIndex( sal_uInt32 nColorId ) const;
+    /** Returns the Excel palette index of the passed color (searches for nearest color).
+        @param nAutoDefault  The Excel palette index for automatic color. */
+    sal_uInt16                  GetColorIndex( const Color& rColor, sal_uInt16 nAutoDefault = 0 ) const;
+
+    /** Returns a foreground and background color for the two passed color IDs.
+        @descr  If rnXclPattern contains a solid pattern, this function tries to find
+        the two best fitting colors and a mix pattern (25%, 50% or 75%) for nForeColorId.
+        This will result in a better approximation to the passed foreground color. */
+    void                        GetMixedColors(
+                                    sal_uInt16& rnXclForeIx, sal_uInt16& rnXclBackIx, sal_uInt8& rnXclPattern,
+                                    sal_uInt32 nForeColorId, sal_uInt32 nBackColorId ) const;
+
+    /** Returns the RGB color data for a (non-zero-based) Excel palette entry.
+        @return  The color from current or default palette or COL_AUTO, if nothing else found. */
+    ColorData                   GetColorData( sal_uInt16 nXclIndex ) const;
+    /** Returns the color for a (non-zero-based) Excel palette entry.
+        @return  The color from current or default palette or COL_AUTO, if nothing else found. */
+    inline Color                GetColor( sal_uInt16 nXclIndex ) const
+                                    { return Color( GetColorData( nXclIndex ) ); }
+
+
+private:
+    class XclListColor;
+
+    /** Returns the Excel index of a 0-based color index. */
+    inline sal_uInt16           GetXclIndex( sal_uInt32 nIndex ) const;
+
+    /** Returns the original inserted color represented by the color ID nColorId. */
+    const Color&                GetOriginalColor( sal_uInt32 nColorId ) const;
+
+    /** Returns the ordered insertion index for rColor in rnIndex.
+        @param rbIsEqual  Returns true, if the color already exists. */
+    void                        SearchListEntry(
+                                    sal_uInt32& rnIndex, bool& rbIsEqual,
+                                    const Color& rColor ) const;
+    /** Creates and inserts a new color list entry at the specified list position. */
+    XclListColor*               CreateListEntry( const Color& rColor, sal_uInt32 nIndex );
+    /** Merges two colors and removes the color specified by nRemove. */
+    void                        MergeListColors( sal_uInt32 nKeep, sal_uInt32 nRemove );
+
+    /** Finds the least used color and returns its current list index. */
+    sal_uInt32                  GetLeastUsedListColor() const;
+    /** Returns the list index of the color nearest to rColor.
+        @param nIgnore  List index of a color which will be ignored.
+        @return  The list index of the found color. */
+    sal_uInt32                  GetNearestListColor( const Color& rColor, sal_uInt32 nIgnore ) const;
+    /** Returns the list index of the color nearest to the color with list index nIndex. */
+    sal_uInt32                  GetNearestListColor( sal_uInt32 nIndex ) const;
+
+    /** Returns in rnIndex the palette index of the color nearest to rColor.
+        @param bDefaultOnly  true = Searches for default colors only (colors never replaced).
+        @return  The distance from passed color to found color. */
+    sal_Int32                   GetNearestPaletteColor(
+                                    sal_uInt32& rnIndex,
+                                    const Color& rColor, bool bDefaultOnly ) const;
+    /** Returns in rnFirst and rnSecond the palette indexes of the two colors nearest to rColor.
+        @return  The minimum distance from passed color to found colors. */
+    sal_Int32                   GetNearPaletteColors(
+                                    sal_uInt32& rnFirst, sal_uInt32& rnSecond,
+                                    const Color& rColor ) const;
+
+    /** Writes the contents of the PALETTE record. */
+    virtual void                WriteBody( XclExpStream& rStrm );
+
 private:
     /** Represents an entry in a color list.
         @descr  the color stores a weighting value, which increases the more the color
@@ -181,101 +263,25 @@ private:
     XclColorIdDataVec           maColorIdDataVec;   /// Data of all CIDs.
     XclPaletteColorVec          maPalette;          /// Contains resulting colors to export.
     sal_uInt32                  mnLastIx;           /// Last insertion index for search opt.
-
-public:
-    explicit                    XclExpPalette( const XclExpRoot& rRoot );
-
-    /** Inserts the color into the list and updates weighting.
-        @param nAutoDefault  The Excel palette index for automatic color.
-        @return  A unique ID for this color. */
-    sal_uInt32                  InsertColor( const Color& rColor, XclColorType eType, sal_uInt16 nAutoDefault = 0 );
-    /** Returns the color ID representing a fixed Excel palette index (i.e. for auto colors). */
-    static sal_uInt32           GetColorIdFromIndex( sal_uInt16 nIndex );
-
-    /** Reduces the color list to the maximum count of the current BIFF version. */
-    void                        Reduce();
-
-    /** Returns the Excel palette index of the color with passed color ID. */
-    sal_uInt16                  GetColorIndex( sal_uInt32 nColorId ) const;
-    /** Returns the Excel palette index of the passed color (searches for nearest color).
-        @param nAutoDefault  The Excel palette index for automatic color. */
-    sal_uInt16                  GetColorIndex( const Color& rColor, sal_uInt16 nAutoDefault = 0 ) const;
-
-    /** Returns a foreground and background color for the two passed color IDs.
-        @descr  If rnXclPattern contains a solid pattern, this function tries to find
-        the two best fitting colors and a mix pattern (25%, 50% or 75%) for nForeColorId.
-        This will result in a better approximation to the passed foreground color. */
-    void                        GetMixedColors(
-                                    sal_uInt16& rnXclForeIx, sal_uInt16& rnXclBackIx, sal_uInt8& rnXclPattern,
-                                    sal_uInt32 nForeColorId, sal_uInt32 nBackColorId ) const;
-
-    /** Returns the RGB color data for a (non-zero-based) Excel palette entry.
-        @param nDefault  Is returned, if nothing else could be found. */
-    ColorData                   GetColorData( sal_uInt16 nXclIndex, ColorData nDefault = COL_AUTO ) const;
-    /** Returns the color for a (non-zero-based) Excel palette entry.
-        @param nDefault  Is returned, if nothing else could be found. */
-    inline Color                GetColor( sal_uInt16 nXclIndex, ColorData nDefault = COL_AUTO ) const;
-
-private:
-    /** Returns the original inserted color represented by the color ID nColorId. */
-    const Color&                GetOriginalColor( sal_uInt32 nColorId ) const;
-
-    /** Returns the ordered insertion index for rColor in rnIndex.
-        @param rbIsEqual  Returns true, if the color already exists. */
-    void                        SearchListEntry(
-                                    sal_uInt32& rnIndex, bool& rbIsEqual,
-                                    const Color& rColor ) const;
-    /** Creates and inserts a new color list entry at the specified list position. */
-    XclListColor*               CreateListEntry( const Color& rColor, sal_uInt32 nIndex );
-    /** Merges two colors and removes the color specified by nRemove. */
-    void                        MergeListColors( sal_uInt32 nKeep, sal_uInt32 nRemove );
-
-    /** Finds the least used color and returns its current list index. */
-    sal_uInt32                  GetLeastUsedListColor() const;
-    /** Returns the list index of the color nearest to rColor.
-        @param nIgnore  List index of a color which will be ignored.
-        @return  The list index of the found color. */
-    sal_uInt32                  GetNearestListColor( const Color& rColor, sal_uInt32 nIgnore ) const;
-    /** Returns the list index of the color nearest to the color with list index nIndex. */
-    sal_uInt32                  GetNearestListColor( sal_uInt32 nIndex ) const;
-
-    /** Returns in rnIndex the palette index of the color nearest to rColor.
-        @param bDefaultOnly  true = Searches for default colors only (colors never replaced).
-        @return  The distance from passed color to found color. */
-    sal_Int32                   GetNearestPaletteColor(
-                                    sal_uInt32& rnIndex,
-                                    const Color& rColor, bool bDefaultOnly ) const;
-    /** Returns in rnFirst and rnSecond the palette indexes of the two colors nearest to rColor.
-        @return  The minimum distance from passed color to found colors. */
-    sal_Int32                   GetNearPaletteColors(
-                                    sal_uInt32& rnFirst, sal_uInt32& rnSecond,
-                                    const Color& rColor ) const;
-
-    /** Writes the contents of the PALETTE record. */
-    virtual void                WriteBody( XclExpStream& rStrm );
 };
 
-inline Color XclExpPalette::GetColor( sal_uInt16 nXclIndex, ColorData nDefault ) const
+inline sal_uInt16 XclExpPalette::GetXclIndex( sal_uInt32 nIndex ) const
 {
-    return Color( GetColorData( nXclIndex, nDefault ) );
+    return static_cast< sal_uInt16 >( nIndex + EXC_COLOR_USEROFFSET );
 }
 
 
 // FONT record - font information =============================================
 
 class Font;
+class SvxFont;
 
 /** Stores all data of an Excel font and provides export of FONT records. */
 class XclExpFont : public XclExpRecord, protected XclExpRoot
 {
-private:
-    XclFontData                 maData;         /// All font attributes.
-    sal_uInt32                  mnColorId;      /// Unique color ID for text color.
-    sal_uInt32                  mnHash;         /// Hash value for fast comparison.
-    bool                        mbHasColor;     /// false = Font does not use a color (i.e. chart).
-
 public:
     explicit                    XclExpFont( const XclExpRoot& rRoot, const Font& rFont );
+    explicit                    XclExpFont( const XclExpRoot& rRoot, const SvxFont& rFont );
     explicit                    XclExpFont( const XclExpRoot& rRoot, const XclFontData& rFontData );
 
     /** Returns read-only access to font data. */
@@ -295,8 +301,17 @@ private:
     /** Calculates an internal hash value for faster comparison. */
     void                        CalcHash();
 
+    /** Sets the ColorId, internal hash value and the record size. */
+    void                        SetColorHashAndRecSize( const Font& rFont );
+
     /** Writes the contents of the FONT record. */
     virtual void                WriteBody( XclExpStream& rStrm );
+
+private:
+    XclFontData                 maData;         /// All font attributes.
+    sal_uInt32                  mnColorId;      /// Unique color ID for text color.
+    sal_uInt32                  mnHash;         /// Hash value for fast comparison.
+    bool                        mbHasColor;     /// false = Font does not use a color (i.e. chart).
 };
 
 
@@ -307,13 +322,6 @@ class ScPatternAttr;
 /** Stores the data of all fonts used in the document. */
 class XclExpFontBuffer : public XclExpRecordBase, protected XclExpRoot
 {
-private:
-    typedef XclExpRecordList< XclExpFont > XclExpFontList;
-
-    XclExpFontList              maFontList;     /// List of all FONT records.
-    XclFontData                 maAppFont;      /// Application font (for column width).
-    sal_uInt32                  mnXclMaxCount;  /// Maximum number of fonts.
-
 public:
     explicit                    XclExpFontBuffer( const XclExpRoot& rRoot );
 
@@ -333,6 +341,10 @@ public:
         @param bAppFont  true = Sets the application font; false = Inserts a new font.
         @return  The resulting Excel font index. */
     sal_uInt16                  Insert( const Font& rFont, bool bAppFont = false );
+    /** Inserts the SvxFont into the buffer if not present i.e. where escapements are used
+        @param bAppFont  true = Sets the application font; false = Inserts a new font.
+        @return  The resulting Excel font index. */
+    sal_uInt16                  Insert( const SvxFont& rFont, bool bAppFont = false );
     /** Inserts the font contained in the passed item set into the buffer, if not present.
         @param bAppFont  true = Sets the application font; false = Inserts a new font.
         @return  The resulting Excel font index. */
@@ -352,6 +364,13 @@ private:
     sal_uInt16                  GetXclIndex( sal_uInt32 nIndex ) const;
     /** Tries to find the passed font and returns the current list index. */
     sal_uInt32                  Find( const XclExpFont& rFont );
+
+private:
+    typedef XclExpRecordList< XclExpFont > XclExpFontList;
+
+    XclExpFontList              maFontList;     /// List of all FONT records.
+    XclFontData                 maAppFont;      /// Application font (for column width).
+    sal_uInt32                  mnXclMaxCount;  /// Maximum number of fonts.
 };
 
 
@@ -375,17 +394,6 @@ class SvNumberFormatter;
 /** Stores all number formats used in the document. */
 class XclExpNumFmtBuffer : public XclExpRecordBase, protected XclExpRoot
 {
-private:
-    typedef ::std::auto_ptr< SvNumberFormatter >    SvNumberFormatterPtr;
-    typedef NfKeywordTable*                         NfKeywordTablePtr;
-    typedef ::std::vector< XclExpNumFmt >           XclExpNumFmtVec;
-
-    SvNumberFormatterPtr        mpFormatter;    /// Special number formatter for conversion.
-    NfKeywordTablePtr           mpKeywordTable; /// Replacement table.
-    XclExpNumFmtVec             maFormatMap;    /// Maps core formats to Excel indexes.
-    sal_uInt32                  mnStdFmt;       /// Key for standard number format.
-    sal_uInt16                  mnXclOffset;    /// Offset to first user defined format.
-
 public:
     explicit                    XclExpNumFmtBuffer( const XclExpRoot& rRoot );
 
@@ -409,6 +417,17 @@ private:
     void                        WriteFormatRecord( XclExpStream& rStrm, const XclExpNumFmt& rFormat );
     /** Writes default formats occuring in each Excel file. */
     void                        WriteDefaultFormats( XclExpStream& rStrm );
+
+private:
+    typedef ::std::auto_ptr< SvNumberFormatter >    SvNumberFormatterPtr;
+    typedef NfKeywordTable*                         NfKeywordTablePtr;
+    typedef ::std::vector< XclExpNumFmt >           XclExpNumFmtVec;
+
+    SvNumberFormatterPtr        mpFormatter;    /// Special number formatter for conversion.
+    NfKeywordTablePtr           mpKeywordTable; /// Replacement table.
+    XclExpNumFmtVec             maFormatMap;    /// Maps core formats to Excel indexes.
+    sal_uInt32                  mnStdFmt;       /// Key for standard number format.
+    sal_uInt16                  mnXclOffset;    /// Offset to first user defined format.
 };
 
 
@@ -542,17 +561,6 @@ class SfxStyleSheetBase;
 /** Represents an XF record which contains all formatting data of a cell or cell style. */
 class XclExpXF : public XclXFBase, public XclExpRecord, protected XclExpRoot
 {
-protected:  // access for XclExpDefaultXF
-    const SfxItemSet*           mpItemSet;          /// Pointer to the item set (we do not own it).
-
-    XclExpCellProt              maProtection;       /// Cell protection flags.
-    XclExpCellAlign             maAlignment;        /// All alignment attributes.
-    XclExpCellBorder            maBorder;           /// Border line style.
-    XclExpCellArea              maArea;             /// Background area style.
-    sal_uInt32                  mnParentXFId;       /// XF ID of parent XF record.
-    sal_uInt16                  mnFont;             /// Excel font index.
-    sal_uInt16                  mnNumFmt;           /// Excel number format index.
-
 public:
     /** Constructs a cell XF record from the passed Calc cell formatting.
         @param nForcedNumFmt  If not set to NUMBERFORMAT_ENTRY_NOT_FOUND, it will overwrite
@@ -562,7 +570,8 @@ public:
                                     const XclExpRoot& rRoot,
                                     const ScPatternAttr& rPattern,
                                     sal_uInt32 nForcedNumFmt = NUMBERFORMAT_ENTRY_NOT_FOUND,
-                                    bool bForceWrapped = false );
+                                    bool bForceWrapped = false,
+                                    sal_uInt16 nFontIx = EXC_FONT_NOTFOUND);
     /** Constructs a style XF record from the passed cell style sheet. */
     explicit                    XclExpXF(
                                     const XclExpRoot& rRoot,
@@ -573,7 +582,9 @@ public:
     bool                        Equals(
                                     const ScPatternAttr& rPattern,
                                     sal_uInt32 nForcedNumFmt,
-                                    bool bForceWrapped ) const;
+                                    bool bForceWrapped,
+                    sal_uInt16 nFontIx ) const;
+
     /** Returns true, if this XF record represents the passed style.
         @descr  Searches for style XFs only. */
     bool                        Equals( const SfxStyleSheetBase& rStyleSheet ) const;
@@ -587,6 +598,17 @@ public:
 protected:
     explicit                    XclExpXF( const XclExpRoot& rRoot, bool bCellXF );
 
+protected:  // access for XclExpDefaultXF
+    const SfxItemSet*           mpItemSet;          /// Pointer to the item set (we do not own it).
+
+    XclExpCellProt              maProtection;       /// Cell protection flags.
+    XclExpCellAlign             maAlignment;        /// All alignment attributes.
+    XclExpCellBorder            maBorder;           /// Border line style.
+    XclExpCellArea              maArea;             /// Background area style.
+    sal_uInt32                  mnParentXFId;       /// XF ID of parent XF record.
+    sal_uInt16                  mnFont;             /// Excel font index.
+    sal_uInt16                  mnNumFmt;           /// Excel number format index.
+
 private:
     /** Initializes with default values. */
     void                        InitDefault();
@@ -596,7 +618,8 @@ private:
                                     const SfxItemSet& rItemSet,
                                     sal_uInt32 nForcedNumFmt = NUMBERFORMAT_ENTRY_NOT_FOUND,
                                     bool bForceWrapped = false,
-                                    bool bDefStyle = false );
+                                    sal_uInt16 nFontIx = EXC_FONT_NOTFOUND,
+                                    bool bDefStyle = false);
 
     /** Returns the bits specifying the used attributes.
         @descr  In cell XFs a set bit means a used attribute, in style XF a cleared
@@ -649,12 +672,6 @@ public:
     @descr  The calss is able to store built-in and user-defined styles. */
 class XclExpStyle : public XclExpRecord
 {
-private:
-    String                      maName;         /// Name of the cell style.
-    sal_uInt32                  mnXFId;         /// XF record ID with style formatting.
-    sal_uInt8                   mnStyleId;      /// Built-in style identifier.
-    sal_uInt8                   mnLevel;        /// Outline level for RowLevel and ColLevel styles.
-
 public:
     explicit                    XclExpStyle( sal_uInt32 nXFId, const String& rStyleName );
     explicit                    XclExpStyle( sal_uInt32 nXFId, sal_uInt8 nStyleId, sal_uInt8 nLevel = EXC_STYLE_NOLEVEL );
@@ -667,6 +684,12 @@ public:
 private:
     /** Writes the contents of the STYLE record. */
     virtual void                WriteBody( XclExpStream& rStrm );
+
+private:
+    String                      maName;         /// Name of the cell style.
+    sal_uInt32                  mnXFId;         /// XF record ID with style formatting.
+    sal_uInt8                   mnStyleId;      /// Built-in style identifier.
+    sal_uInt8                   mnLevel;        /// Outline level for RowLevel and ColLevel styles.
 };
 
 
@@ -683,19 +706,6 @@ private:
     for all XF identifiers. */
 class XclExpXFBuffer : public XclExpRecordBase, protected XclExpRoot
 {
-private:
-    typedef ScfDelList< XclExpXF >          XclExpXFList;
-    typedef XclExpRecordList< XclExpStyle > XclExpStyleList;
-    typedef ::std::vector< bool >           BoolVec;
-    typedef ::std::vector< sal_uInt16 >     XclExpXFIndexVec;
-    typedef ::std::vector< XclExpXF* >      XclExpXFPtrVec;
-
-    XclExpXFList                maXFList;       /// List of all XF records.
-    XclExpStyleList             maStyleList;    /// List of all STYLE records.
-    BoolVec                     maPredefined;   /// true = Corresponding XF still predefined.
-    XclExpXFIndexVec            maXFIndexVec;   /// Maps XF IDs to XF indexes.
-    XclExpXFPtrVec              maXFPtrVec;     /// Pointer to XF records in resulting export order.
-
 public:
     explicit                    XclExpXFBuffer( const XclExpRoot& rRoot );
 
@@ -706,7 +716,7 @@ public:
         @param bForceWrapped  true = cell contains hard newlines.
         In this case the text wrap flag must be set in the XF record.
         @return  A unique XF record ID. */
-    sal_uInt32                  Insert( const ScPatternAttr* pPattern, bool bForceWrapped = false );
+    sal_uInt32                  Insert( const ScPatternAttr* pPattern, bool bForceWrapped = false, sal_uInt16 nFontIx = EXC_FONT_NOTFOUND );
     /** Finds or creates a cell XF record for the passed item set, with custom number format.
         @param nForcedNumFmt  The number format to be exported, i.e. formula result type.
         This format will always overwrite the cell's number format.
@@ -731,7 +741,7 @@ private:
     /** Returns the XF ID of the cell XF containing the passed format. */
     sal_uInt32                  FindXF(
                                     const ScPatternAttr& rPattern,
-                                    sal_uInt32 nForcedNumFmt, bool bForceWrapped ) const;
+                                    sal_uInt32 nForcedNumFmt, bool bForceWrapped, sal_uInt16 nFontIx ) const;
     /** Returns the XF ID of the style XF containing the passed style. */
     sal_uInt32                  FindXF( const SfxStyleSheetBase& rStyleSheet ) const;
 
@@ -742,7 +752,7 @@ private:
         @return  The XF record ID. */
     sal_uInt32                  InsertCellXF(
                                     const ScPatternAttr* pPattern,
-                                    sal_uInt32 nForcedNumFmt, bool bForceWrapped );
+                                    sal_uInt32 nForcedNumFmt, bool bForceWrapped, sal_uInt16 nFontIx );
     /** Inserts the passed cell style. Creates a style XF record and a STYLE record.
         @return  The XF record ID. */
     sal_uInt32                  InsertStyleXF( const SfxStyleSheetBase& rStyleSheet );
@@ -757,6 +767,19 @@ private:
 
     /** Appends a XF index to the internal ID<->index maps. */
     void                        AppendXFIndex( sal_uInt32 nXFId );
+
+private:
+    typedef ScfDelList< XclExpXF >          XclExpXFList;
+    typedef XclExpRecordList< XclExpStyle > XclExpStyleList;
+    typedef ::std::vector< bool >           BoolVec;
+    typedef ::std::vector< sal_uInt16 >     XclExpXFIndexVec;
+    typedef ::std::vector< XclExpXF* >      XclExpXFPtrVec;
+
+    XclExpXFList                maXFList;       /// List of all XF records.
+    XclExpStyleList             maStyleList;    /// List of all STYLE records.
+    BoolVec                     maPredefined;   /// true = Corresponding XF still predefined.
+    XclExpXFIndexVec            maXFIndexVec;   /// Maps XF IDs to XF indexes.
+    XclExpXFPtrVec              maXFPtrVec;     /// Pointer to XF records in resulting export order.
 };
 
 
