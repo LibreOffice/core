@@ -1,4 +1,6 @@
+mkdir: %COMMON_DEST%\bin%_EXT%\hid
 mkdir: %_DEST%\pck%_EXT%
+..\%COMMON_OUTDIR%\misc\*.hid %COMMON_DEST%\bin%_EXT%\hid\*.hid
 ..\%__SRC%\bin\*.zip %_DEST%\pck%_EXT%\*.zip
 ..\%__SRC%\bin\iwz*.res %_DEST%\bin%_EXT%\iwz*.res
 ..\%__SRC%\bin\dbw*.res %_DEST%\bin%_EXT%\dbw*.res
@@ -10,9 +12,6 @@ mkdir: %_DEST%\pck%_EXT%
 ..\%__SRC%\bin\com*.res %_DEST%\bin%_EXT%\com*.res
 
 ..\%__SRC%\class\*.jar %_DEST%\bin%_EXT%\*.jar
-
-touch: ..\%__SRC%\misc\wizards.hid %_DEST%\bin%_EXT%\wizards.hid
-
 
 ..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib%_EXT%\lib*static*.dylib
 ..\%__SRC%\misc\*staticdatamembers.cxx %_DEST%\inc%_EXT%\*staticdatamembers.cxx
