@@ -3,9 +3,9 @@
  *
  *  $RCSfile: UI.xcu,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2002-09-05 10:59:22 $
+ *  last change: $Author: kz $ $Date: 2002-11-04 17:09:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,7 +81,7 @@
             <value xml:lang="da">Text documents</value>
             <value xml:lang="sv">Textdokument</value>
             <value xml:lang="pl">Dokumenty tekstowe</value>
-            <value xml:lang="pt-BR">Text documents</value>
+            <value xml:lang="pt-BR">Documentos de texto</value>
             <value xml:lang="ja">文書ドキュメント</value>
             <value xml:lang="ko">텍스트 문서</value>
             <value xml:lang="zh-CN">文本文档</value>
@@ -112,7 +112,7 @@
             <value xml:lang="da">Table documents</value>
             <value xml:lang="sv">Tabelldokument</value>
             <value xml:lang="pl">Arkusze kalkulacyjne</value>
-            <value xml:lang="pt-BR">Table documents</value>
+            <value xml:lang="pt-BR">Planilhas</value>
             <value xml:lang="ja">表計算ドキュメント</value>
             <value xml:lang="ko">스트레드시트 문서</value>
             <value xml:lang="zh-CN">工作表文档</value>
@@ -143,7 +143,7 @@
             <value xml:lang="da">Presentations</value>
             <value xml:lang="sv">Presentationer</value>
             <value xml:lang="pl">Prezentacje</value>
-            <value xml:lang="pt-BR">Presentations</value>
+            <value xml:lang="pt-BR">Apresentações</value>
             <value xml:lang="ja">プレゼンテーション</value>
             <value xml:lang="ko">프레젠테이션</value>
             <value xml:lang="zh-CN">演示文稿</value>
@@ -174,7 +174,7 @@
             <value xml:lang="da">Drawings</value>
             <value xml:lang="sv">Teckningar</value>
             <value xml:lang="pl">Rysunki</value>
-            <value xml:lang="pt-BR">Drawings</value>
+            <value xml:lang="pt-BR">Desenhos</value>
             <value xml:lang="ja">図形描画</value>
             <value xml:lang="ko">그리기</value>
             <value xml:lang="zh-CN">绘图</value>
@@ -205,7 +205,7 @@
             <value xml:lang="da">web pages</value>
             <value xml:lang="sv">Webbsidor</value>
             <value xml:lang="pl">Strony WWW</value>
-            <value xml:lang="pt-BR">web pages</value>
+            <value xml:lang="pt-BR">Páginas web</value>
             <value xml:lang="ja">Webページ</value>
             <value xml:lang="ko">웹페이지</value>
             <value xml:lang="zh-CN">网页</value>
@@ -236,7 +236,7 @@
             <value xml:lang="da">Master documents</value>
             <value xml:lang="sv">Samlingsdokument</value>
             <value xml:lang="pl">Dokumenty główne</value>
-            <value xml:lang="pt-BR">Master documents</value>
+            <value xml:lang="pt-BR">Documentos mestres</value>
             <value xml:lang="ja">マスタードキュメント</value>
             <value xml:lang="ko">마스터 문서</value>
             <value xml:lang="zh-CN">主控文档</value>
@@ -267,7 +267,7 @@
             <value xml:lang="da">Formulas</value>
             <value xml:lang="sv">Formler</value>
             <value xml:lang="pl">Formuły</value>
-            <value xml:lang="pt-BR">Formulas</value>
+            <value xml:lang="pt-BR">Fórmulas</value>
             <value xml:lang="ja">数式</value>
             <value xml:lang="ko">수식</value>
             <value xml:lang="zh-CN">公式</value>
@@ -364,7 +364,7 @@
             <value xml:lang="da">StarWriter 3.0 - 5.0 Templates</value>
             <value xml:lang="sv">StarWriter 3.0 - 5.0 mallar</value>
             <value xml:lang="pl">StarWriter 3.0 - 5.0 Szablony</value>
-            <value xml:lang="pt-BR">StarWriter 3.0 - 5.0 Templates</value>
+            <value xml:lang="pt-BR">Modelos StarWriter 3.0 - 5.0 </value>
             <value xml:lang="ja">StarWriter 3.0 - 5.0 テンプレート</value>
             <value xml:lang="ko">StarWriter 3.0 - 5.0 템플릿</value>
             <value xml:lang="zh-CN">StarWriter 3.0 - 5.0 样式</value>
