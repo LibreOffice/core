@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scriptdlg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-13 09:27:56 $
+ *  last change: $Author: obo $ $Date: 2004-08-13 10:30:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -112,15 +112,20 @@ void ShowErrorDialog( const Any& aException )
     delete pDlg;
 }
 
-SFTreeListBox::SFTreeListBox( Window* pParent, const ResId& rRes, ResMgr* pBasResMgr ) :
+SFTreeListBox::SFTreeListBox( Window* pParent, const ResId& rRes ) :
     SvTreeListBox( pParent, ResId( rRes.GetId() ) ),
-    m_aImagesNormal(ResId(RID_IMGLST_OBJECTS, pBasResMgr )),
-    m_aImagesHighContrast(ResId(RID_IMGLST_OBJECTS_HC, pBasResMgr )),
     m_hdImage(ResId(IMG_HARDDISK)),
     m_hdImage_hc(ResId(IMG_HARDDISK_HC)),
+    m_libImage(ResId(IMG_LIB)),
+    m_libImage_hc(ResId(IMG_LIB_HC)),
+    m_macImage(ResId(IMG_MACRO)),
+    m_macImage_hc(ResId(IMG_MACRO_HC)),
+    m_docImage(ResId(IMG_DOCUMENT)),
+    m_docImage_hc(ResId(IMG_DOCUMENT_HC)),
     m_sMyMacros(ResId(STR_MYMACROS)),
     m_sProdMacros(ResId(STR_PRODMACROS))
 {
+    FreeResource();
     SetSelectionMode( SINGLE_SELECTION );
     OSL_TRACE("setting default node images");
 
@@ -129,7 +134,6 @@ SFTreeListBox::SFTreeListBox( Window* pParent, const ResId& rRes, ResMgr* pBasRe
                    WB_HASLINES | WB_HASLINESATROOT );
     SetNodeDefaultImages();
 
-    FreeResource();
     nMode = 0xFF;   // Alles
 }
 
@@ -243,7 +247,7 @@ void SFTreeListBox::Init( const ::rtl::OUString& language  )
                 childList.push_back( children[ n ] );
             }
             ::std::sort( childList.begin(), childList.end(), dialogSort1 );
-            for ( n = 0; n < static_cast< sal_Int32 >( childList.size() ); n++ )
+            for ( n = 0; n < childList.size(); n++ )
             {
                 BOOL app = false;
                 ::rtl::OUString uiName = childList[ n ]->getName();
@@ -307,9 +311,10 @@ void SFTreeListBox::Init( const ::rtl::OUString& language  )
                     getLangNodeFromRootNode( childList[ n ], lang );
                 SvLBoxEntry* pBasicManagerRootEntry = insertEntry(
                                        uiName,
-                                        app == true ? IMGID_APPICON : IMGID_DOCUMENT,
+                                        app == true ? IMG_HARDDISK : IMG_DOCUMENT,
                                         0, true,
                                     std::auto_ptr< SFEntry >(new SFEntry( OBJTYPE_SFROOT, langEntries )), factoryURL );
+
             }
         }
 
@@ -318,7 +323,7 @@ void SFTreeListBox::Init( const ::rtl::OUString& language  )
     OSL_TRACE("Leaving Init()");
 }
 
-Reference< XInterface >
+Reference< XInterface  >
 SFTreeListBox::getDocumentModel( Reference< XComponentContext >& xCtx, ::rtl::OUString& docName )
 {
     Reference< XInterface > xModel;
@@ -464,13 +469,13 @@ void SFTreeListBox:: RequestSubEntries( SvLBoxEntry* pRootEntry, Reference< ::dr
     // sort the children
     // this may be fixed at the XBrowseNode impl at some stage
     ::std::sort( childList.begin(), childList.end(), dialogSort2 );
-    for ( n = 0; n < static_cast< sal_Int32 >( childList.size() ); n++ )
+    for ( n = 0; n < childList.size(); n++ )
     {
         if (  childList[ n ]->getType() !=  browse::BrowseNodeTypes::SCRIPT)
         {
             OSL_TRACE("******   Creating container entry for %s",
             ::rtl::OUStringToOString( childList[ n ]->getName() , RTL_TEXTENCODING_ASCII_US ).pData->buffer );
-                SvLBoxEntry* container = insertEntry( childList[ n ]->getName(), IMGID_LIB, pRootEntry, true, std::auto_ptr< SFEntry >(new SFEntry( OBJTYPE_SCRIPTCONTAINER, childList[ n ] )));
+                SvLBoxEntry* container = insertEntry( childList[ n ]->getName(), IMG_LIB, pRootEntry, true, std::auto_ptr< SFEntry >(new SFEntry( OBJTYPE_SCRIPTCONTAINER, childList[ n ] )));
         }
         else
         {
@@ -479,7 +484,7 @@ void SFTreeListBox:: RequestSubEntries( SvLBoxEntry* pRootEntry, Reference< ::dr
             {
                 OSL_TRACE("creating node for script %s",
                     ::rtl::OUStringToOString( childList[ n ]->getName() , RTL_TEXTENCODING_ASCII_US ).pData->buffer );
-                insertEntry( childList[ n ]->getName(), IMGID_MODULE, pRootEntry, false, std::auto_ptr< SFEntry >(new SFEntry( OBJTYPE_METHOD, childList[ n ] )));
+                insertEntry( childList[ n ]->getName(), IMG_MACRO, pRootEntry, false, std::auto_ptr< SFEntry >(new SFEntry( OBJTYPE_METHOD, childList[ n ] )));
 
             }
         }
@@ -516,7 +521,7 @@ SvLBoxEntry * SFTreeListBox::insertEntry(
     bool bChildrenOnDemand, std::auto_ptr< SFEntry > aUserData, ::rtl::OUString factoryURL )
 {
     SvLBoxEntry * p;
-    if( nBitmap == IMGID_DOCUMENT && factoryURL.getLength() > 0 )
+    if( nBitmap == IMG_DOCUMENT && factoryURL.getLength() > 0 )
     {
         OSL_TRACE("=================================> adding icons for document");
         Image aImage = SvFileInformationManager::GetFileImage(
@@ -543,15 +548,27 @@ SvLBoxEntry * SFTreeListBox::insertEntry(
     bool bChildrenOnDemand, std::auto_ptr< SFEntry > aUserData )
 {
     Image aHCImage, aImage;
-    if( nBitmap == IMGID_APPICON )
+    if( nBitmap == IMG_HARDDISK )
     {
         aImage = m_hdImage;
         aHCImage = m_hdImage_hc;
     }
-    else
+    else if( nBitmap == IMG_LIB )
     {
-        aImage = m_aImagesNormal.GetImage(nBitmap);
-        aHCImage = m_aImagesHighContrast.GetImage(nBitmap);
+        OSL_TRACE("setting image for library");
+        aImage = m_libImage;
+        aHCImage = m_libImage_hc;
+    }
+    else if( nBitmap == IMG_MACRO )
+    {
+        OSL_TRACE("setting image for macro");
+        aImage = m_macImage;
+        aHCImage = m_macImage_hc;
+    }
+    else if( nBitmap == IMG_DOCUMENT )
+    {
+        aImage = m_docImage;
+        aHCImage = m_docImage_hc;
     }
     SvLBoxEntry * p = InsertEntry(
         rText, aImage, aImage, pParent, bChildrenOnDemand, LIST_APPEND,
@@ -559,16 +576,6 @@ SvLBoxEntry * SFTreeListBox::insertEntry(
     SetExpandedEntryBmp(p, aHCImage, BMP_COLOR_HIGHCONTRAST);
     SetCollapsedEntryBmp(p, aHCImage, BMP_COLOR_HIGHCONTRAST);
     return p;
-}
-
-void SFTreeListBox::setEntryBitmap(SvLBoxEntry * pEntry, USHORT nBitmap)
-{
-    Image aImage(m_aImagesNormal.GetImage(nBitmap));
-    SetExpandedEntryBmp(pEntry, aImage, BMP_COLOR_NORMAL);
-    SetCollapsedEntryBmp(pEntry, aImage, BMP_COLOR_NORMAL);
-    aImage = m_aImagesHighContrast.GetImage(nBitmap);
-    SetExpandedEntryBmp(pEntry, aImage, BMP_COLOR_HIGHCONTRAST);
-    SetCollapsedEntryBmp(pEntry, aImage, BMP_COLOR_HIGHCONTRAST);
 }
 
 void __EXPORT SFTreeListBox::RequestingChilds( SvLBoxEntry* pEntry )
@@ -612,7 +619,7 @@ void __EXPORT SFTreeListBox::ExpandedHdl()
 // InputDialog ------------------------------------------------------------
 // ----------------------------------------------------------------------------
 InputDialog::InputDialog(Window * pParent, USHORT nMode )
-    : ModalDialog( pParent, SVX_RES( RID_SVX_MDLG_SCRIPTORG_NEWLIB ) ),
+    : ModalDialog( pParent, SVX_RES( RID_DLG_NEWLIB ) ),
         aText( this, ResId( FT_NEWLIB ) ),
         aEdit( this, ResId( ED_LIBNAME ) ),
         aOKButton( this, ResId( PB_OK ) ),
@@ -672,10 +679,10 @@ InputDialog::~InputDialog()
 // ----------------------------------------------------------------------------
 // ScriptOrgDialog ------------------------------------------------------------
 // ----------------------------------------------------------------------------
-SvxScriptOrgDialog::SvxScriptOrgDialog( Window* pParent, ResMgr* pBasResMgr, ::rtl::OUString language )
+SvxScriptOrgDialog::SvxScriptOrgDialog( Window* pParent, ::rtl::OUString language )
     :   SfxModalDialog( pParent, SVX_RES( RID_DLG_SCRIPTORGANIZER ) ),
         aScriptsTxt( this, ResId( SF_TXT_SCRIPTS ) ),
-        aScriptsBox( this, ResId( SF_CTRL_SCRIPTSBOX ), pBasResMgr ),
+        aScriptsBox( this, ResId( SF_CTRL_SCRIPTSBOX ) ),
         aRunButton( this, ResId( SF_PB_RUN ) ),
         aCloseButton( this, ResId( SF_PB_CLOSE ) ),
         aCreateButton( this, ResId( SF_PB_CREATE ) ),
@@ -683,24 +690,22 @@ SvxScriptOrgDialog::SvxScriptOrgDialog( Window* pParent, ResMgr* pBasResMgr, ::r
         aRenameButton(this, ResId( SF_PB_RENAME ) ),
         aDelButton( this, ResId( SF_PB_DEL ) ),
         aHelpButton( this, ResId( SF_PB_HELP ) ),
-        m_sLanguage( language ) /*,
-        m_delErrStr( ResId( STR_DELFAILED ) ),
-        m_delErrTitleStr( ResId( STR_DELFAILED_TITLE ) ),
-        m_delQueryStr( ResId( STR_DELQUERY ) ),
-        m_delQueryTitleStr( ResId( STR_DELQUERY_TITLE ) ) ,
-        m_createErrStr( ResId ( STR_CREATEFAILED ) ),
-        m_createDupStr( ResId ( STR_CREATEFAILEDDUP ) ),
-        m_createErrTitleStr( ResId( STR_CREATEFAILED_TITLE ) ),
-        m_renameErrStr( ResId ( STR_RENAMEFAILED ) ),
-        m_renameErrTitleStr( ResId( STR_RENAMEFAILED_TITLE ) )*/
+        m_sLanguage( language ),
+        m_delErrStr( ResId( RID_SVXSTR_DELFAILED ) ),
+        m_delErrTitleStr( ResId( RID_SVXSTR_DELFAILED_TITLE ) ),
+        m_delQueryStr( ResId( RID_SVXSTR_DELQUERY ) ),
+        m_delQueryTitleStr( ResId( RID_SVXSTR_DELQUERY_TITLE ) ) ,
+        m_createErrStr( ResId ( RID_SVXSTR_CREATEFAILED ) ),
+        m_createDupStr( ResId ( RID_SVXSTR_CREATEFAILEDDUP ) ),
+        m_createErrTitleStr( ResId( RID_SVXSTR_CREATEFAILED_TITLE ) ),
+        m_renameErrStr( ResId ( RID_SVXSTR_RENAMEFAILED ) ),
+        m_renameErrTitleStr( ResId( RID_SVXSTR_RENAMEFAILED_TITLE ) )
 {
     // must be a neater way to deal with the strings than as above
     // append the language to the dialog title
     String winTitle( GetText() );
     winTitle.SearchAndReplace( String::CreateFromAscii( "%MACROLANG" ), language.pData->buffer );
     SetText( winTitle );
-
-    FreeResource();
 
     aScriptsBox.SetSelectHdl( LINK( this, SvxScriptOrgDialog, ScriptSelectHdl ) );
     aRunButton.SetClickHdl( LINK( this, SvxScriptOrgDialog, ButtonHdl ) );
@@ -718,6 +723,7 @@ SvxScriptOrgDialog::SvxScriptOrgDialog( Window* pParent, ResMgr* pBasResMgr, ::r
 
     aScriptsBox.Init( m_sLanguage );
     RestorePreviousSelection();
+    FreeResource();
 }
 
 __EXPORT SvxScriptOrgDialog::~SvxScriptOrgDialog()
@@ -1142,10 +1148,10 @@ void SvxScriptOrgDialog::createEntry( SvLBoxEntry* pEntry )
                     if ( (aUserSuppliedName+extn).equals( childNodes[index]->getName() ) )
                     {
                         bValid = FALSE;
-                        String aError( SVX_RES( RID_SVXSTR_CREATEFAILED ) );
-                        aError.Append( SVX_RESSTR( RID_SVXSTR_CREATEFAILEDDUP ) );
+                        String aError( m_createErrStr );
+                        aError.Append( m_createDupStr );
                         ErrorBox aErrorBox( static_cast<Window*>(this), WB_OK | RET_OK, aError );
-                        aErrorBox.SetText( SVX_RESSTR( RID_SVXSTR_CREATEFAILED_TITLE ) );
+                        aErrorBox.SetText( m_createErrTitleStr );
                         aErrorBox.Execute();
                         xNewDlg->SetObjectName( aNewName );
                         break;
@@ -1202,13 +1208,13 @@ void SvxScriptOrgDialog::createEntry( SvLBoxEntry* pEntry )
         if ( aChildNode->getType() == browse::BrowseNodeTypes::SCRIPT )
         {
             pNewEntry = aScriptsBox.insertEntry( aChildName,
-                    IMGID_MODULE, pEntry, false, std::auto_ptr< SFEntry >(new SFEntry( OBJTYPE_METHOD, aChildNode ) ) );
+                    IMG_MACRO, pEntry, false, std::auto_ptr< SFEntry >(new SFEntry( OBJTYPE_METHOD, aChildNode ) ) );
 
         }
         else
         {
             pNewEntry = aScriptsBox.insertEntry( aChildName,
-                IMGID_LIB, pEntry, false, std::auto_ptr< SFEntry >(new SFEntry( OBJTYPE_SCRIPTCONTAINER, aChildNode ) ) );
+                IMG_LIB, pEntry, false, std::auto_ptr< SFEntry >(new SFEntry( OBJTYPE_SCRIPTCONTAINER, aChildNode ) ) );
                         // If the Parent is not loaded then set to
                         // loaded, this will prevent RequestingChilds ( called
                         // from vcl via RequestingChilds ) from
@@ -1227,9 +1233,9 @@ void SvxScriptOrgDialog::createEntry( SvLBoxEntry* pEntry )
     {
         OSL_TRACE("Create seemed to fail");
         //ISSUE L10N & message from exception?
-        String aError( SVX_RES( RID_SVXSTR_CREATEFAILED ) );
+        String aError( m_createErrStr );
         ErrorBox aErrorBox( static_cast<Window*>(this), WB_OK | RET_OK, aError );
-        aErrorBox.SetText( SVX_RESSTR( RID_SVXSTR_CREATEFAILED_TITLE ) );
+        aErrorBox.SetText( m_createErrTitleStr );
         aErrorBox.Execute();
     }
 }
@@ -1271,10 +1277,10 @@ void SvxScriptOrgDialog::renameEntry( SvLBoxEntry* pEntry )
                     if ( (aUserSuppliedName+extn).equals( childNodes[index]->getName() ) )
                     {
                         bValid = FALSE;
-                        String aError( SVX_RES( RID_SVXSTR_CREATEFAILED ) );
-                        aError.Append( SVX_RESSTR( RID_SVXSTR_CREATEFAILEDDUP ) );
+                        String aError( m_createErrStr );
+                        aError.Append( m_createDupStr );
                         ErrorBox aErrorBox( static_cast<Window*>(this), WB_OK | RET_OK, aError );
-                        aErrorBox.SetText( SVX_RESSTR( RID_SVXSTR_CREATEFAILED_TITLE ) );
+                        aErrorBox.SetText( m_createErrTitleStr );
                         aErrorBox.Execute();
                         xNewDlg->SetObjectName( aNewName );
                         break;
@@ -1323,9 +1329,9 @@ void SvxScriptOrgDialog::renameEntry( SvLBoxEntry* pEntry )
     {
         OSL_TRACE("Rename seemed to fail");
         //ISSUE L10N & message from exception?
-        String aError( SVX_RES( RID_SVXSTR_RENAMEFAILED ) );
+        String aError( m_renameErrStr );
         ErrorBox aErrorBox( static_cast<Window*>(this), WB_OK | RET_OK, aError );
-        aErrorBox.SetText( SVX_RESSTR( RID_SVXSTR_RENAMEFAILED_TITLE ) );
+        aErrorBox.SetText( m_renameErrTitleStr );
         aErrorBox.Execute();
     }
 }
@@ -1334,10 +1340,10 @@ void SvxScriptOrgDialog::deleteEntry( SvLBoxEntry* pEntry )
     sal_Bool result = sal_False;
     Reference< browse::XBrowseNode > node = getBrowseNode( pEntry );
     // ISSUE L10N string & can we centre list?
-    String aQuery( SVX_RES( RID_SVXSTR_DELQUERY ) );
+    String aQuery( m_delQueryStr );
     aQuery.Append( getListOfChildren( node, 0 ) );
     QueryBox aQueryBox( static_cast<Window*>(this), WB_YES_NO | WB_DEF_YES, aQuery );
-    aQueryBox.SetText( SVX_RESSTR( RID_SVXSTR_DELQUERY_TITLE ) );
+    aQueryBox.SetText( m_delQueryTitleStr );
     if ( aQueryBox.Execute() == RET_NO )
     {
         return;
@@ -1374,10 +1380,11 @@ void SvxScriptOrgDialog::deleteEntry( SvLBoxEntry* pEntry )
     {
         OSL_TRACE("Delete failed");
         //ISSUE L10N & message from exception?
-        ErrorBox aErrorBox( static_cast<Window*>(this), WB_OK | RET_OK, SVX_RESSTR( RID_SVXSTR_DELFAILED ) );
-        aErrorBox.SetText( SVX_RESSTR( RID_SVXSTR_DELFAILED_TITLE ) );
+        ErrorBox aErrorBox( static_cast<Window*>(this), WB_OK | RET_OK, m_delErrStr );
+        aErrorBox.SetText( m_delErrTitleStr );
         aErrorBox.Execute();
     }
+
 }
 
 BOOL SvxScriptOrgDialog::getBoolProperty( Reference< beans::XPropertySet >& xProps,
@@ -1391,7 +1398,7 @@ BOOL SvxScriptOrgDialog::getBoolProperty( Reference< beans::XPropertySet >& xPro
         xProps->getPropertyValue( propName ) >>= bTemp;
         result = ( bTemp == sal_True );
     }
-    catch ( Exception& )
+    catch ( Exception& e )
     {
         OSL_TRACE("caught exception getBoolProperty");
         return result;
