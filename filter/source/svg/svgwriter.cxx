@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svgwriter.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 16:49:42 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 15:26:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -727,8 +727,7 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const String& rText,
                                      const long* pDXArray, long nWidth,
                                      const NMSP_RTL::OUString* pStyle )
 {
-    String  aText( rText ); aText.EraseLeadingChars( ' ' );
-    UINT32  nLen = aText.Len(), i;
+    long nLen = rText.Len(), i;
 
     if( nLen )
     {
@@ -740,19 +739,19 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const String& rText,
         if( pDXArray )
         {
             pOwnArray = NULL;
-            aNormSize = Size( mpVDev->GetTextWidth( aText ), 0 );
+            aNormSize = Size( mpVDev->GetTextWidth( rText ), 0 );
             pDX = (long*) pDXArray;
         }
         else
         {
             pOwnArray = new long[ nLen ];
-            aNormSize = Size( mpVDev->GetTextArray( aText, pOwnArray ), 0 );
+            aNormSize = Size( mpVDev->GetTextArray( rText, pOwnArray ), 0 );
             pDX = pOwnArray;
         }
 
         if( nLen > 1 )
         {
-            aNormSize.Width() = pDX[ nLen - 2 ] + mpVDev->GetTextWidth( aText.GetChar(  (USHORT) nLen - 1 ) );
+            aNormSize.Width() = pDX[ nLen - 2 ] + mpVDev->GetTextWidth( rText.GetChar(  nLen - 1 ) );
 
             if( nWidth && aNormSize.Width() && ( nWidth != aNormSize.Width() ) )
             {
@@ -769,14 +768,7 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const String& rText,
         Point               aBaseLinePos( rPos );
         SvXMLElementExport* pTransform = NULL;
 
-        // leading whitespaces erased? => adjust position
-        if( nLen < rText.Len() )
-        {
-            aBaseLinePos.X() += mpVDev->GetTextWidth( ' ' ) * ( rText.Len() - nLen );
-        }
-
         // always adjust text position to match baseline alignment
-/*
         switch( rFont.GetAlign() )
         {
             case( ALIGN_TOP ):
@@ -790,7 +782,6 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const String& rText,
             default:
             break;
         }
-*/
 
         // get mapped text position
         const Point aPt( ImplMap( aBaseLinePos ) );
@@ -839,43 +830,50 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const String& rText,
             mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrStyle, *pStyle );
 
         // write text element
-#ifdef _SVG_USE_TSPANS
-        if( pDXArray )
         {
+#ifdef _SVG_USE_TSPANS
             SvXMLElementExport          aElem( mrExport, XML_NAMESPACE_NONE, aXMLElemText, TRUE, TRUE );
             FastString                  aTSpanX;
             const NMSP_RTL::OUString    aSpace( ' ' );
-            long                        i, nX, nCount;
+            String                      aOutputText( rText );
+            long                        nCurPos = 0;
+            bool                        bIgnoreWhitespace = true;
 
-            aTSpanX += GetValueString( aPt.X() );
-            aTSpanX += aSpace;
-
-            for( i = 0, nX = aPt.X(), nCount = ( nLen - 1 ); i < nCount;  )
+            for( long i = 0, nX = aPt.X(); i < nLen; ++i )
             {
-                aTSpanX += GetValueString( aPt.X() + pDX[ i++ ] );
-                aTSpanX += aSpace;
+                const sal_Unicode cCode = rText.GetChar( i );
+
+                // don't take more than one whitespace into account
+                if( !bIgnoreWhitespace || ( ' ' != cCode ) )
+                {
+                    aOutputText.SetChar( nCurPos++, cCode );
+                    ( aTSpanX += GetValueString( nX + ( ( i > 0 ) ? pDX[ i - 1 ] : 0 ) ) ) += aSpace;
+                    bIgnoreWhitespace = ( ' ' == cCode );
+                }
             }
+
+            if( nCurPos < nLen )
+                aOutputText.Erase( nCurPos );
 
             mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrX, aTSpanX.GetString() );
             mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrY, GetValueString( aPt.Y() ) );
 
             {
                 SvXMLElementExport aElem( mrExport, XML_NAMESPACE_NONE, aXMLElemTSpan, TRUE, TRUE );
-                mrExport.GetDocHandler()->characters( NMSP_RTL::OUString( UniString( aText ) ) );
+                mrExport.GetDocHandler()->characters( aOutputText );
             }
-        }
-        else
-#endif
-        {
+#else
             mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrX, GetValueString( aPt.X() ) );
             mrExport.AddAttribute( XML_NAMESPACE_NONE, aXMLAttrY, GetValueString( aPt.Y() ) );
 
-            SvXMLElementExport aElem( mrExport, XML_NAMESPACE_NONE, aXMLElemText, TRUE, TRUE );
-            mrExport.GetDocHandler()->characters( NMSP_RTL::OUString( UniString( aText ) ) );
+            {
+                SvXMLElementExport aElem( mrExport, XML_NAMESPACE_NONE, aXMLElemText, TRUE, TRUE );
+                mrExport.GetDocHandler()->characters( rText );
+            }
+#endif
         }
 
 #ifndef _SVG_USE_NATIVE_TEXTDECORATION
-
         // write strikeout if neccessary
         if( rFont.GetStrikeout() || rFont.GetUnderline() )
         {
@@ -906,7 +904,6 @@ void SVGActionWriter::ImplWriteText( const Point& rPos, const String& rText,
                 ImplWritePolyPolygon( aPoly, sal_False );
             }
         }
-
 #endif // _SVG_USE_NATIVE_TEXTDECORATION
 
         delete[] pOwnArray;
