@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLTableShapeResizer.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: sab $ $Date: 2002-11-01 14:01:29 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 12:30:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,20 +164,40 @@ void ScMyShapeResizer::GetNewShapeSizePos(ScDocument* pDoc, const Rectangle& rSt
                                           sal_Int32& rEndX, sal_Int32& rEndY) const
 {
     awt::Point aRefPoint;
-    aRefPoint.X = rStartRect.Left();
+    BOOL bNegativePage(pDoc->IsNegativePage(rEndCell.Sheet));
+    if (bNegativePage)
+        aRefPoint.X = rStartRect.Right();
+    else
+        aRefPoint.X = rStartRect.Left();
     aRefPoint.Y = rStartRect.Top();
     Rectangle* pRect = new Rectangle(pDoc->GetMMRect(
         static_cast<USHORT>(rEndCell.Column), static_cast<USHORT>(rEndCell.Row),
         static_cast<USHORT>(rEndCell.Column), static_cast<USHORT>(rEndCell.Row), rEndCell.Sheet ));
-    rEndX += pRect->Left();
+    if (bNegativePage)
+        rEndX = -rEndX + pRect->Right();
+    else
+        rEndX += pRect->Left();
     rEndY += pRect->Top();
     rPoint.X += aRefPoint.X;
-    if (rPoint.X > rStartRect.Right())
-        rPoint.X = rStartRect.Right() - 2; // decrement by 2 100th_mm because the cellheight is internal in twips
+    if (bNegativePage)
+    {
+        if (rPoint.X < rStartRect.Left())
+            rPoint.X = rStartRect.Left() + 2; // increment by 2 100th_mm because the cellwidth is internal in twips
+    }
+    else
+    {
+        if (rPoint.X > rStartRect.Right())
+            rPoint.X = rStartRect.Right() - 2; // decrement by 2 100th_mm because the cellwidth is internal in twips
+    }
     rPoint.Y += aRefPoint.Y;
     if (rPoint.Y > rStartRect.Bottom())
         rPoint.Y = rStartRect.Bottom() - 2; // decrement by 2 100th_mm because the cellheight is internal in twips
-    rSize.Width = rEndX - rPoint.X;
+    if (bNegativePage)
+    {
+        rSize.Width = -(rEndX - rPoint.X);
+    }
+    else
+        rSize.Width = rEndX - rPoint.X;
     rSize.Height = rEndY - rPoint.Y;
     delete pRect;
 }
@@ -244,6 +264,8 @@ void ScMyShapeResizer::ResizeShapes()
                                         static_cast<USHORT>(aItr->aStartCell.Column), static_cast<USHORT>(aItr->aStartCell.Row), aItr->aStartCell.Sheet);
                                     awt::Point aPoint(aItr->xShape->getPosition());
                                     awt::Size aSize(aItr->xShape->getSize());
+                                    if (pDoc->IsNegativePage(static_cast<USHORT>(nOldSheet)))
+                                        aPoint.X += aSize.Width;
                                     if (aItr->nEndY >= 0 && aItr->nEndX >= 0)
                                     {
                                         if (aItr->xShape->getShapeType().equals(sConnectorShape))
@@ -304,6 +326,8 @@ void ScMyShapeResizer::ResizeShapes()
                                         {
                                             awt::Size aOldSize(aSize);
                                             GetNewShapeSizePos(pDoc, aRec, aItr->aEndCell, aPoint, aSize, aItr->nEndX, aItr->nEndY);
+                                            if (pDoc->IsNegativePage(static_cast<USHORT>(nOldSheet)))
+                                                aPoint.X -= aSize.Width;
                                             aItr->xShape->setPosition(aPoint);
                                             if( (aSize.Width != aOldSize.Width) ||
                                                 (aSize.Height != aOldSize.Height) )
