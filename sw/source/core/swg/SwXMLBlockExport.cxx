@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SwXMLBlockExport.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mtg $ $Date: 2001-02-08 16:02:15 $
+ *  last change: $Author: mtg $ $Date: 2001-04-18 18:30:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,14 +99,11 @@ sal_uInt32 SwXMLBlockListExport::exportDoc(const sal_Char *pClass)
             AddAttribute( XML_NAMESPACE_BLOCKLIST,
                           sXML_name,
                           OUString(rBlockList.GetLongName(i)));
-            if (rBlockList.IsOnlyTextBlock(i))
-                AddAttribute( XML_NAMESPACE_BLOCKLIST,
-                              sXML_unformatted_text,
-                              OUString::createFromAscii(sXML_true));
-            else
-                AddAttribute( XML_NAMESPACE_BLOCKLIST,
-                              sXML_unformatted_text,
-                              OUString::createFromAscii(sXML_false));
+            AddAttribute( XML_NAMESPACE_BLOCKLIST,
+                          sXML_unformatted_text,
+                          rBlockList.IsOnlyTextBlock(i) ?
+                              OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_true ) ) :
+                            OUString( RTL_CONSTASCII_USTRINGPARAM( sXML_false ) ) );
 
             SvXMLElementExport aBlock( *this, XML_NAMESPACE_BLOCKLIST, sXML_block, sal_True, sal_True);
         }
