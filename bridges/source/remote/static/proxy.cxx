@@ -2,9 +2,9 @@
  *
  *  $RCSfile: proxy.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-18 19:07:07 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 16:28:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,6 +58,9 @@
  *
  *
  ************************************************************************/
+#if OSL_DEBUG_LEVEL == 0
+#define NDEBUG
+#endif
 #include <assert.h>
 #ifdef SOLARIS
 #include <alloca.h>
@@ -81,7 +84,7 @@
 
 #include "remote_types.hxx"
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
 #include <bridges/remote/counter.hxx>
 static MyCounter thisCounter( "DEBUG : Remote2UnoProxy");
 #endif
@@ -353,7 +356,7 @@ Remote2UnoProxy::Remote2UnoProxy( remote_Interface *pRemoteI,
         m_pType );
     m_pRemoteI->acquire( m_pRemoteI );
 
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     thisCounter.acquire();
 #endif
 }
@@ -367,7 +370,7 @@ Remote2UnoProxy::~Remote2UnoProxy()
     m_pRemoteI->release( m_pRemoteI );
     m_pEnvUno->release( m_pEnvUno );
     m_pEnvRemote->release( m_pEnvRemote );
-#ifdef DEBUG
+#if OSL_DEBUG_LEVEL > 1
     thisCounter.release();
 #endif
 }
