@@ -42,7 +42,7 @@ fi
 
 mkdir $UNPACKDIR
 
-diskSpace=`df -k $UNPACKDIR | tail -1 | awk '{if ( $4 ~ /%/) { print $3 } else { print $4 } }'`
+diskSpace=`df -k $UNPACKDIR | $tail_prog -1 | awk '{if ( $4 ~ /%/) { print $3 } else { print $4 } }'`
 if [ $diskSpace -lt $diskSpaceRequired ]; then
     printf "The selected drive does not have enough disk space available.\n"
     printf "PRODUCTNAMEPLACEHOLDER requires at least %s kByte.\n" $diskSpaceRequired
