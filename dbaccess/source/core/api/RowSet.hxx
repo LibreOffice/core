@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2000-10-30 09:24:02 $
+ *  last change: $Author: fs $ $Date: 2000-10-31 15:21:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,8 +95,14 @@
 #ifndef _COM_SUN_STAR_SDBCX_XDELETEROWS_HPP_
 #include <com/sun/star/sdbcx/XDeleteRows.hpp>
 #endif
-#ifndef _CPPUHELPER_COMPBASE8_HXX_
-#include <cppuhelper/compbase8.hxx>
+#ifndef _COM_SUN_STAR_SDB_XCOMPLETEDEXECUTION_HPP_
+#include <com/sun/star/sdb/XCompletedExecution.hpp>
+#endif
+#ifndef _COM_SUN_STAR_SDB_ROWSETVETOEXCEPTION_HPP_
+#include <com/sun/star/sdb/RowSetVetoException.hpp>
+#endif
+#ifndef _CPPUHELPER_COMPBASE9_HXX_
+#include <cppuhelper/compbase9.hxx>
 #endif
 #ifndef DBACCESS_CORE_API_ROWSETVALUE_HXX
 #include "RowSetValue.hxx"
@@ -108,15 +114,16 @@
 
 namespace dbaccess
 {
-    typedef ::cppu::WeakAggComponentImplHelper8<  ::com::sun::star::sdb::XResultSetAccess,
-                                                ::com::sun::star::sdb::XRowSetApproveBroadcaster,
-                                                ::com::sun::star::sdbcx::XDeleteRows,
-                                                ::com::sun::star::sdbc::XParameters,
-                                                ::com::sun::star::lang::XEventListener,
-                                                ::com::sun::star::sdbc::XResultSetUpdate,
-                                                ::com::sun::star::sdbc::XRowUpdate,
-                                                ::com::sun::star::util::XCancellable
-                                                > ORowSet_BASE1;
+    typedef ::cppu::WeakAggComponentImplHelper9 <   ::com::sun::star::sdb::XResultSetAccess
+                                                ,   ::com::sun::star::sdb::XRowSetApproveBroadcaster
+                                                ,   ::com::sun::star::sdbcx::XDeleteRows
+                                                ,   ::com::sun::star::sdbc::XParameters
+                                                ,   ::com::sun::star::lang::XEventListener
+                                                ,   ::com::sun::star::sdbc::XResultSetUpdate
+                                                ,   ::com::sun::star::sdbc::XRowUpdate
+                                                ,   ::com::sun::star::util::XCancellable
+                                                ,   ::com::sun::star::sdb::XCompletedExecution
+                                                >   ORowSet_BASE1;
 
     class ORowSet : public ORowSet_BASE1
                     , public ORowSetBase
@@ -248,6 +255,9 @@ namespace dbaccess
     // ::com::sun::star::sdbc::XResultSet
         virtual sal_Int32 SAL_CALL getRow(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
+    // XCompletedExecution
+        virtual void SAL_CALL executeWithCompletion( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& handler ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+
     // ::com::sun::star::sdbc::XRow
         virtual sal_Bool SAL_CALL wasNull(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         virtual ::rtl::OUString SAL_CALL getString( sal_Int32 columnIndex ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
@@ -342,7 +352,21 @@ namespace dbaccess
         virtual void SAL_CALL setClob( sal_Int32 parameterIndex, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XClob >& x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL setArray( sal_Int32 parameterIndex, const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XArray >& x ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
         virtual void SAL_CALL clearParameters(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+
+    protected:
+        /** implement the <method>execute</method>, without calling the approve listeners and without building a new
+            connection
+            @param      _rClearForNotification      mutex to clear before doing the final notifications
+        */
+        void    execute_NoApprove_NoNewConn(::osl::ClearableMutexGuard& _rClearForNotification);
+
+        /** call the RowSetApproveListeners<p/>
+            throws an RowSetVetoException if one of the listeners vetoed
+        */
+        void    approveExecution() throw (::com::sun::star::sdb::RowSetVetoException, ::com::sun::star::uno::RuntimeException);
     };
+
+
     //************************************************************
     //  ORowSetClone
     //************************************************************
@@ -410,6 +434,9 @@ namespace dbaccess
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.6  2000/10/30 09:24:02  oj
+    use tablecontainer if no tablesupplier is supported
+
     Revision 1.5  2000/10/17 12:24:43  oj
     remove some header
 
