@@ -2,9 +2,9 @@
  *
  *  $RCSfile: textdat2.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: mt $ $Date: 2002-08-12 15:36:20 $
+ *  last change: $Author: obo $ $Date: 2003-11-12 17:17:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,7 +226,7 @@ public:
 };
 
 typedef TextLine* TextLinePtr;
-SV_DECL_PTRARR_DEL( TextLines, TextLinePtr, 1, 4 );
+ SV_DECL_PTRARR_DEL( TextLines, TextLinePtr, 1, 4 );
 
 inline BOOL TextLine::operator == ( const TextLine& rLine ) const
 {
@@ -289,19 +289,12 @@ public:
 };
 
 
-
-
-DECLARE_LIST( DummyTEParaPortionList, TEParaPortion* );
-
-class TEParaPortions : public DummyTEParaPortionList
+class TEParaPortions : public ToolsList<TEParaPortion*>
 {
 public:
                     TEParaPortions();
                     ~TEParaPortions();
-
     void            Reset();
-//  long            GetYOffset( TEParaPortion* pPPortion );
-//  USHORT          FindParagraph( long nYOffset );
 };
 
 
@@ -337,9 +330,8 @@ public:
                 IdleFormatter();
                 ~IdleFormatter();
 
-    void        DoIdleFormat( TextView* pV );
+    void        DoIdleFormat( TextView* pV, USHORT nMaxRestarts );
     void        ForceTimeout();
-    void        ResetRestarts() { mnRestarts = 0; }
     TextView*   GetView()       { return mpView; }
 };
 
