@@ -2,9 +2,9 @@
  *
  *  $RCSfile: oledll.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:16:40 $
+ *  last change: $Author: jl $ $Date: 2000-10-19 10:57:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,9 +58,14 @@
  *
  *
  ************************************************************************/
-#include "stdafx.h"
 
+#define STRICT
+#define _WIN32_WINNT 0x0400
+#define _WIN32_DCOM
+
+#include <atlbase.h>
 CComModule _Module;
+#include <atlcom.h>
 
 BEGIN_OBJECT_MAP(ObjectMap)
 END_OBJECT_MAP()
