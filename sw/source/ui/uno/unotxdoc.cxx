@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.73 $
+ *  $Revision: 1.74 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-01 15:43:30 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 19:30:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -507,6 +507,7 @@ void SwXTextDocument::GetNumberFormatter()
     {
         if(!xNumFmtAgg.is())
         {
+            if ( pDocShell->GetDoc() )
             {
                 SvNumberFormatsSupplierObj* pNumFmt = new SvNumberFormatsSupplierObj(
                                     pDocShell->GetDoc()->GetNumberFormatter( sal_True ));
@@ -3296,3 +3297,4 @@ void SwXDocumentPropertyHelper::Invalidate()
     m_pDoc = 0;
     SvxUnoForbiddenCharsTable::mxForbiddenChars.unbind();
 }
+
