@@ -587,6 +587,14 @@ hedabu: ..\inc\xmlcnitm.hxx %_DEST%\inc%_EXT%\svx\xmlcnitm.hxx
 hedabu: ..\inc\UnoNamespaceMap.hxx %_DEST%\inc%_EXT%\svx\UnoNamespaceMap.hxx
 hedabu: ..\inc\unomaster.hxx %_DEST%\inc%_EXT%\svx\unomaster.hxx
 hedabu: ..\inc\frmdiritem.hxx %_DEST%\inc%_EXT%\svx\frmdiritem.hxx
+hedabu: ..\inc\AccessibleContextBase.hxx %_DEST%\inc%_EXT%\svx\AccessibleContextBase.hxx
+hedabu: ..\inc\AccessibleComponentBase.hxx %_DEST%\inc%_EXT%\svx\AccessibleComponentBase.hxx
+hedabu: ..\inc\AccessibleShape.hxx %_DEST%\inc%_EXT%\svx\AccessibleShape.hxx
+hedabu: ..\inc\AccessibleGraphicShape.hxx %_DEST%\inc%_EXT%\svx\AccessibleGraphicShape.hxx
+hedabu: ..\inc\AccessibleOLEShape.hxx %_DEST%\inc%_EXT%\svx\AccessibleOLEShape.hxx
+hedabu: ..\inc\ChildrenManager.hxx %_DEST%\inc%_EXT%\svx\ChildrenManager.hxx
+hedabu: ..\inc\ShapeTypeHandler.hxx %_DEST%\inc%_EXT%\svx\ShapeTypeHandler.hxx
+hedabu: ..\inc\SvxShapeTypes.hxx %_DEST%\inc%_EXT%\svx\SvxShapeTypes.hxx
 
 ..\xml\SvxDrawPage.xml %_DEST%\xml%_EXT%\SvxDrawPage.xml
 ..\xml\SvxGraphicObject.xml %_DEST%\xml%_EXT%\SvxGraphicObject.xml
