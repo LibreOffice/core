@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fontmanager.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-11 17:17:30 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 15:10:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,9 @@
 
 #ifndef __SGI_STL_HASH_MAP
 #include <hash_map>
+#endif
+#ifndef __SGI_STL_MAP
+#include <map>
 #endif
 #ifndef __SGI_STL_LIST
 #include <list>
@@ -180,8 +183,8 @@ struct FastPrintFontInfo
     fonttype::type                          m_eType;
 
     // font attributes
-    ::rtl::OUString                         m_aFamilyName;
-    ::std::list< ::rtl::OUString >          m_aAliases;
+    rtl::OUString                       m_aFamilyName;
+    std::list< rtl::OUString >          m_aAliases;
     family::type                            m_eFamilyStyle;
     italic::type                            m_eItalic;
     width::type                             m_eWidth;
@@ -237,7 +240,7 @@ class PrintFontManager
         // upper byte contains: 0 for horizontal metric
         //                      1 for vertical metric
         // highest byte: 0 for now
-        ::std::hash_map< int, CharacterMetric >     m_aMetrics;
+        std::hash_map< int, CharacterMetric >     m_aMetrics;
         // contains the unicode blocks for which metrics were queried
         // this implies that metrics should be queried in terms of
         // unicode blocks. here a unicode block is identified
@@ -250,9 +253,9 @@ class PrintFontManager
         char                                        m_aPages[32];
 
         bool                                        m_bKernPairsQueried;
-        ::std::list< KernPair >                     m_aXKernPairs;
-        ::std::list< KernPair >                     m_aYKernPairs;
-        ::std::hash_map< sal_Unicode, bool >        m_bVerticalSubstitutions;
+        std::list< KernPair >                     m_aXKernPairs;
+        std::list< KernPair >                     m_aYKernPairs;
+        std::hash_map< sal_Unicode, bool >      m_bVerticalSubstitutions;
 
         PrintFontMetrics() : m_bKernPairsQueried( false ) {}
     };
@@ -263,7 +266,7 @@ class PrintFontManager
 
         // font attributes
         int                                         m_nFamilyName;  // atom
-        ::std::list< int >                          m_aAliases;
+        std::list< int >                            m_aAliases;
         int                                         m_nPSName;      // atom
         italic::type                                m_eItalic;
         width::type                                 m_eWidth;
@@ -281,98 +284,100 @@ class PrintFontManager
         int                                         m_nXMax;
         int                                         m_nYMax;
         bool                                        m_bHaveVerticalSubstitutedGlyphs;
+        std::map< sal_Unicode, sal_Int32 >          m_aEncodingVector;
+        std::map< sal_Unicode, rtl::OString >       m_aNonEncoded;
 
         PrintFont( fonttype::type eType );
         virtual ~PrintFont();
-        virtual bool queryMetricPage( int nPage, ::utl::MultiAtomProvider* pProvider ) = 0;
+        virtual bool queryMetricPage( int nPage, utl::MultiAtomProvider* pProvider ) = 0;
 
-        bool readAfmMetrics( const ::rtl::OString& rFileName, ::utl::MultiAtomProvider* pProvider );
+        bool readAfmMetrics( const rtl::OString& rFileName, utl::MultiAtomProvider* pProvider, bool bFillEncodingvector = false );
     };
 
     struct Type1FontFile : public PrintFont
     {
         int                 m_nDirectory;       // atom containing system dependent path
-        ::rtl::OString      m_aFontFile;        // relative to directory
-        ::rtl::OString      m_aMetricFile;      // dito
-        ::rtl::OString      m_aXLFD;            // mainly for administration, contains the XLFD from fonts.dir
+        rtl::OString      m_aFontFile;        // relative to directory
+        rtl::OString      m_aMetricFile;      // dito
+        rtl::OString      m_aXLFD;            // mainly for administration, contains the XLFD from fonts.dir
 
         /* note: m_aFontFile and Metric file are not atoms
            because they should be fairly unique */
 
         Type1FontFile() : PrintFont( fonttype::Type1 ), m_nDirectory( 0 ) {}
         virtual ~Type1FontFile();
-        virtual bool queryMetricPage( int nPage, ::utl::MultiAtomProvider* pProvider );
+        virtual bool queryMetricPage( int nPage, utl::MultiAtomProvider* pProvider );
     };
 
     struct TrueTypeFontFile : public PrintFont
     {
         int                     m_nDirectory;       // atom containing system dependent path
-        ::rtl::OString          m_aFontFile;        // relative to directory
-        ::rtl::OString          m_aXLFD;            // mainly for administration, contains the XLFD from fonts.dir
+        rtl::OString          m_aFontFile;        // relative to directory
+        rtl::OString          m_aXLFD;            // mainly for administration, contains the XLFD from fonts.dir
         int                     m_nCollectionEntry; // -1 for regular fonts, 0 to ... for fonts stemming from collections
         unsigned int           m_nTypeFlags;        // from TrueType file; only known use is for copyright flags
 
         TrueTypeFontFile() : PrintFont( fonttype::TrueType ), m_nDirectory( 0 ), m_nCollectionEntry(-1), m_nTypeFlags( 0x80000000 ) {}
         virtual ~TrueTypeFontFile();
-        virtual bool queryMetricPage( int nPage, ::utl::MultiAtomProvider* pProvider );
+        virtual bool queryMetricPage( int nPage, utl::MultiAtomProvider* pProvider );
     };
 
     struct BuiltinFont : public PrintFont
     {
         int                 m_nDirectory;       // atom containing system dependent path
-        ::rtl::OString      m_aMetricFile;
+        rtl::OString      m_aMetricFile;
 
         BuiltinFont() : PrintFont( fonttype::Builtin ) {}
         virtual ~BuiltinFont();
-        virtual bool queryMetricPage( int nPage, ::utl::MultiAtomProvider* pProvider );
+        virtual bool queryMetricPage( int nPage, utl::MultiAtomProvider* pProvider );
     };
 
-    static ::rtl::OString s_aEmptyOString;
+    static rtl::OString s_aEmptyOString;
 
     fontID                                      m_nNextFontID;
-    ::std::hash_map< fontID, PrintFont* >       m_aFonts;
-    ::std::hash_map< int, family::type >        m_aFamilyTypes;
-    ::std::list< ::rtl::OUString >              m_aPrinterDrivers;
-    ::std::list< ::rtl::OString >               m_aFontDirectories;
-    ::std::list< int >                          m_aPrivateFontDirectories;
-    ::utl::MultiAtomProvider*                   m_pAtoms;
+    std::hash_map< fontID, PrintFont* >       m_aFonts;
+    std::hash_map< int, family::type >        m_aFamilyTypes;
+    std::list< rtl::OUString >              m_aPrinterDrivers;
+    std::list< rtl::OString >               m_aFontDirectories;
+    std::list< int >                            m_aPrivateFontDirectories;
+    utl::MultiAtomProvider*                   m_pAtoms;
     // for speeding up findFontFileID
-    ::std::hash_map< ::rtl::OString, ::std::set< fontID >, ::rtl::OStringHash >
+    std::hash_map< rtl::OString, std::set< fontID >, rtl::OStringHash >
                                                 m_aFontFileToFontID;
 
-    ::std::hash_map< ::rtl::OString, int, ::rtl::OStringHash >
+    std::hash_map< rtl::OString, int, rtl::OStringHash >
     m_aDirToAtom;
-    ::std::hash_map< int, ::rtl::OString >     m_aAtomToDir;
+    std::hash_map< int, rtl::OString >     m_aAtomToDir;
     int                                        m_nNextDirAtom;
 
-    ::std::hash_multimap< ::rtl::OString, sal_Unicode, ::rtl::OStringHash >
+    std::hash_multimap< rtl::OString, sal_Unicode, rtl::OStringHash >
         m_aAdobenameToUnicode;
-    ::std::hash_multimap< sal_Unicode, ::rtl::OString >
+    std::hash_multimap< sal_Unicode, rtl::OString >
         m_aUnicodeToAdobename;
-    ::std::hash_multimap< sal_Unicode, sal_uInt8 >  m_aUnicodeToAdobecode;
-    ::std::hash_multimap< sal_uInt8, sal_Unicode >  m_aAdobecodeToUnicode;
+    std::hash_multimap< sal_Unicode, sal_uInt8 >    m_aUnicodeToAdobecode;
+    std::hash_multimap< sal_uInt8, sal_Unicode >    m_aAdobecodeToUnicode;
 
     mutable FontCache*                          m_pFontCache;
 
-    ::rtl::OString getAfmFile( PrintFont* pFont ) const;
-    ::rtl::OString getFontFile( PrintFont* pFont ) const;
+    rtl::OString getAfmFile( PrintFont* pFont ) const;
+    rtl::OString getFontFile( PrintFont* pFont ) const;
 
     void getFontAttributesFromXLFD( PrintFont* pFont, const ByteString& rXLFD ) const;
 
-    bool analyzeFontFile( int nDirID, const ::rtl::OString& rFileName, bool bReadFile, const ::std::list< ::rtl::OString >& rXLFDs, ::std::list< PrintFont* >& rNewFonts ) const;
-    ::rtl::OUString convertTrueTypeName( void* pNameRecord ) const; // actually a NameRecord* formt font subsetting code
-    void analyzeTrueTypeFamilyName( void* pTTFont, ::std::list< ::rtl::OUString >& rnames ) const; // actually a TrueTypeFont* from font subsetting code
+    bool analyzeFontFile( int nDirID, const rtl::OString& rFileName, bool bReadFile, const std::list< rtl::OString >& rXLFDs, std::list< PrintFont* >& rNewFonts ) const;
+    rtl::OUString convertTrueTypeName( void* pNameRecord ) const; // actually a NameRecord* formt font subsetting code
+    void analyzeTrueTypeFamilyName( void* pTTFont, std::list< rtl::OUString >& rnames ) const; // actually a TrueTypeFont* from font subsetting code
     bool analyzeTrueTypeFile( PrintFont* pFont ) const;
     // finds the FIRST id for this font file; there may be more
     // for TrueType collections
-    fontID findFontFileID( int nDirID, const ::rtl::OString& rFile ) const;
+    fontID findFontFileID( int nDirID, const rtl::OString& rFile ) const;
     fontID findFontBuiltinID( int nPSNameAtom ) const;
 
-    family::type matchFamilyName( const ::rtl::OUString& rFamily ) const;
+    family::type matchFamilyName( const rtl::OUString& rFamily ) const;
 
     PrintFont* getFont( fontID nID ) const
     {
-        ::std::hash_map< int, PrintFont* >::const_iterator it;
+        std::hash_map< int, PrintFont* >::const_iterator it;
         it = m_aFonts.find( nID );
         return it == m_aFonts.end() ? NULL : it->second;
     }
@@ -380,8 +385,8 @@ class PrintFontManager
     void fillPrintFontInfo( PrintFont* pFont, FastPrintFontInfo& rInfo ) const;
     void fillPrintFontInfo( PrintFont* pFont, PrintFontInfo& rInfo ) const;
 
-    const ::rtl::OString& getDirectory( int nAtom ) const;
-    int getDirectoryAtom( const ::rtl::OString& rDirectory, bool bCreate = false );
+    const rtl::OString& getDirectory( int nAtom ) const;
+    int getDirectoryAtom( const rtl::OString& rDirectory, bool bCreate = false );
 
     void getServerDirectories(); // get font server directories on e.g. redhat
 
@@ -390,7 +395,7 @@ class PrintFontManager
 public:
     static PrintFontManager& get(); // one instance only
 
-    int addFontFile( const ::rtl::OString& rFileName, int nFaceNum );
+    int addFontFile( const rtl::OString& rFileName, int nFaceNum );
 
     // initialize takes an X Display*
     // if NULL then an XOpendDisplay( NULL ) is performed
@@ -402,11 +407,11 @@ public:
     // returns the ids of all managed fonts. on pParser != NULL
     // all fonttype::Builtin type fonts are not listed
     // which do not occur in the PPD of pParser
-    void getFontList( ::std::list< fontID >& rFontIDs, const PPDParser* pParser = NULL ) const;
+    void getFontList( std::list< fontID >& rFontIDs, const PPDParser* pParser = NULL ) const;
     // get the font list and detailed font info. see getFontList for pParser
-    void getFontListWithInfo( ::std::list< PrintFontInfo >& rFonts, const PPDParser* pParser = NULL ) const;
+    void getFontListWithInfo( std::list< PrintFontInfo >& rFonts, const PPDParser* pParser = NULL ) const;
     // get the font list and fast font info. see getFontList for pParser
-    void getFontListWithFastInfo( ::std::list< FastPrintFontInfo >& rFonts, const PPDParser* pParser = NULL ) const;
+    void getFontListWithFastInfo( std::list< FastPrintFontInfo >& rFonts, const PPDParser* pParser = NULL ) const;
 
     // get font info for a specific font
     bool getFontInfo( fontID nFontID, PrintFontInfo& rInfo ) const;
@@ -416,9 +421,9 @@ public:
     // routines to get font info in small pieces
 
     // get a specific fonts family name
-    const ::rtl::OUString& getFontFamily( fontID nFontID ) const;
+    const rtl::OUString& getFontFamily( fontID nFontID ) const;
     // get a specific fonts PSName name
-    const ::rtl::OUString& getPSName( fontID nFontID ) const;
+    const rtl::OUString& getPSName( fontID nFontID ) const;
 
     // get a specific fonts style family
     family::type PrintFontManager::getFontFamilyType( fontID nFontID ) const;
@@ -469,7 +474,7 @@ public:
     }
 
     // get a specific fonts system dependent filename
-    ::rtl::OString getFontFileSysPath( fontID nFontID ) const
+    rtl::OString getFontFileSysPath( fontID nFontID ) const
     {
         return getFontFile( getFont( nFontID ) );
     }
@@ -503,7 +508,7 @@ public:
     // note: this may not be the original line that was in the fonts.dir
     // returns a string for every font, but only TrueType and Type1
     // fonts originated from the X font path, so check for the font type
-    ::rtl::OUString getFontXLFD( fontID nFontID ) const;
+    rtl::OUString getFontXLFD( fontID nFontID ) const;
 
     // get a specific fonts metrics
 
@@ -514,9 +519,16 @@ public:
     // the user is responsible to allocate pArray large enough
     bool getMetrics( fontID nFontID, const sal_Unicode* pString, int nLen, CharacterMetric* pArray, bool bVertical = false ) const;
 
+    // get encoding vector of font, currently only for Type1 and Builtin fonts
+    // returns NULL if encoding vector is empty or font is neither type1 or
+    // builtin; if ppNonEncoded is set and non encoded type1 glyphs exist
+    // then *ppNonEncoded is set to the mapping for nonencoded glyphs.
+    // the encoding vector contains -1 for non encoded glyphs
+    const std::map< sal_Unicode, sal_Int32 >* getEncodingMap( fontID nFontID, const std::map< sal_Unicode, rtl::OString >** ppNonEncoded ) const;
+
     // to get font substitution transparently use the
     // getKernPairs method of PrinterGfx
-    const ::std::list< KernPair >& getKernPairs( fontID nFontID, bool bVertical = false ) const;
+    const std::list< KernPair >& getKernPairs( fontID nFontID, bool bVertical = false ) const;
 
     // evaluates copyright flags for TrueType fonts
     // type1 fonts do not have such a feature, so return for them is true
@@ -524,26 +536,26 @@ public:
     bool isFontDownloadingAllowed( fontID nFont ) const;
 
     // helper for type 1 fonts
-    ::std::pair< ::std::hash_multimap< sal_Unicode, ::rtl::OString >::const_iterator,
-                 ::std::hash_multimap< sal_Unicode, ::rtl::OString >::const_iterator >
+    std::pair< std::hash_multimap< sal_Unicode, rtl::OString >::const_iterator,
+                 std::hash_multimap< sal_Unicode, rtl::OString >::const_iterator >
     getAdobeNameFromUnicode( sal_Unicode aChar ) const
     {
         return m_aUnicodeToAdobename.equal_range( aChar );
     }
-    ::std::pair< ::std::hash_multimap< sal_Unicode, sal_uInt8 >::const_iterator,
-                 ::std::hash_multimap< sal_Unicode, sal_uInt8 >::const_iterator >
+    std::pair< std::hash_multimap< sal_Unicode, sal_uInt8 >::const_iterator,
+                 std::hash_multimap< sal_Unicode, sal_uInt8 >::const_iterator >
     getAdobeCodeFromUnicode( sal_Unicode aChar ) const
     {
         return m_aUnicodeToAdobecode.equal_range( aChar );
     }
-    ::std::pair< ::std::hash_multimap< rtl::OString, sal_Unicode, rtl::OStringHash >::const_iterator,
-                 ::std::hash_multimap< rtl::OString, sal_Unicode, rtl::OStringHash >::const_iterator >
-    getUnicodeFromAdobeName( const ::rtl::OString& rName ) const
+    std::pair< std::hash_multimap< rtl::OString, sal_Unicode, rtl::OStringHash >::const_iterator,
+                 std::hash_multimap< rtl::OString, sal_Unicode, rtl::OStringHash >::const_iterator >
+    getUnicodeFromAdobeName( const rtl::OString& rName ) const
     {
         return m_aAdobenameToUnicode.equal_range( rName );
     }
-    ::std::pair< ::std::hash_multimap< sal_uInt8, sal_Unicode >::const_iterator,
-                 ::std::hash_multimap< sal_uInt8, sal_Unicode >::const_iterator >
+    std::pair< std::hash_multimap< sal_uInt8, sal_Unicode >::const_iterator,
+                 std::hash_multimap< sal_uInt8, sal_Unicode >::const_iterator >
     getUnicodeFromAdobeCode( sal_uInt8 aChar ) const
     {
         return m_aAdobecodeToUnicode.equal_range( aChar );
@@ -561,7 +573,7 @@ public:
     // pCapHeight:: capital height of the produced font
     // pXMin, pYMin, pXMax, pYMax: outgoing font bounding box
     bool createFontSubset( fontID nFont,
-                           const ::rtl::OUString& rOutFile,
+                           const rtl::OUString& rOutFile,
                            long* pGlyphIDs,
                            sal_uInt8* pNewEncoding,
                            sal_Int32* pWidths,
@@ -577,9 +589,9 @@ public:
     public:
         enum FailCondition { NoWritableDirectory, NoAfmMetric, AfmCopyFailed, FontCopyFailed };
         virtual void importFontsFailed( FailCondition eReason ) = 0;
-        virtual void progress( const ::rtl::OUString& rFile ) = 0;
-        virtual bool queryOverwriteFile( const ::rtl::OUString& rFile ) = 0;
-        virtual void importFontFailed( const ::rtl::OUString& rFile, FailCondition ) = 0;
+        virtual void progress( const rtl::OUString& rFile ) = 0;
+        virtual bool queryOverwriteFile( const rtl::OUString& rFile ) = 0;
+        virtual void importFontFailed( const rtl::OUString& rFile, FailCondition ) = 0;
         virtual bool isCanceled() = 0;
     };
 
@@ -587,25 +599,25 @@ public:
     bool checkImportPossible() const;
     // expects system paths not UNC paths
     // returns the number of fonts successfully imported
-    int importFonts( const ::std::list< ::rtl::OString >& rFiles, bool bLinkOnly = false, ImportFontCallback* pCallback = NULL );
+    int importFonts( const std::list< rtl::OString >& rFiles, bool bLinkOnly = false, ImportFontCallback* pCallback = NULL );
 
     // check wether changeFontProperties would fail due to not writable fonts.dir
     bool checkChangeFontPropertiesPossible( fontID nFont ) const;
     // change fonts.dir entry for font
-    bool changeFontProperties( fontID nFont, const ::rtl::OUString& rXLFD );
+    bool changeFontProperties( fontID nFont, const rtl::OUString& rXLFD );
 
     // get properties of a not imported font file
-    bool getImportableFontProperties( const ::rtl::OString& rFile, ::std::list< FastPrintFontInfo >& rFontProps );
+    bool getImportableFontProperties( const rtl::OString& rFile, std::list< FastPrintFontInfo >& rFontProps );
 
     // get fonts that come from the same font file
-    bool getFileDuplicates( fontID nFont, ::std::list< fontID >& rFonts ) const;
+    bool getFileDuplicates( fontID nFont, std::list< fontID >& rFonts ) const;
     // remove font files
-    bool removeFonts( const ::std::list< fontID >& rFonts );
+    bool removeFonts( const std::list< fontID >& rFonts );
 
     bool isPrivateFontFile( fontID ) const;
 
     // returns false if there were not any
-    bool getAlternativeFamilyNames( fontID nFont, ::std::list< ::rtl::OUString >& rNames ) const;
+    bool getAlternativeFamilyNames( fontID nFont, std::list< rtl::OUString >& rNames ) const;
 };
 
 } // namespace
