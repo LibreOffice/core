@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bundles.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2002-05-29 13:11:35 $
+ *  last change: $Author: hr $ $Date: 2004-09-09 11:30:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -133,8 +133,8 @@ FillBundle& FillBundle::operator=( FillBundle& rSource )
 
 FontEntry::FontEntry() :
     pFontName       ( NULL ),
-    pCharSetValue   ( NULL ),
     eCharSetType    ( CST_CCOMPLETE ),
+    pCharSetValue   ( NULL ),
     nFontType       ( 0 )
 {
 }
