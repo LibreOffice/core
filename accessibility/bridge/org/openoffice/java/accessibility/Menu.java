@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Menu.java,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: obr $ $Date: 2002-12-06 11:25:37 $
+ *  last change: $Author: obr $ $Date: 2002-12-06 12:55:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,13 +87,16 @@ public class Menu extends AbstractButton implements javax.accessibility.Accessib
             children = new java.util.Vector(count);
             // Fill the vector with objects
             AccessibleObjectFactory factory = AccessibleObjectFactory.getDefault();
-            for (int i=0; i < children.size(); i++) {
+            for (int i=0; i < count; i++) {
                 java.awt.Component c = getComponent(unoAccessibleContext.getAccessibleChild(i));
                 if (c != null) {
                     children.add(c);
                 }
             }
         } catch (com.sun.star.uno.RuntimeException e) {
+            if (Build.DEBUG) {
+                System.err.println("RuntimeException caught during menu initialization: " + e.getMessage());
+            }
             if (children == null) {
                 children = new java.util.Vector(0);
             }
@@ -236,7 +239,15 @@ public class Menu extends AbstractButton implements javax.accessibility.Accessib
 
         /** Returns the specified Accessible child of the object */
         public synchronized javax.accessibility.Accessible getAccessibleChild(int i) {
-            return (javax.accessibility.Accessible) children.get(i);
+            try {
+                if (i < children.size()) {
+                    return (javax.accessibility.Accessible) children.get(i);
+                } else {
+                    return null;
+                }
+            } catch (ArrayIndexOutOfBoundsException e) {
+                return null;
+            }
         }
 
         /** Returns the AccessibleSelection interface for this object */
