@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtl_OString.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-11 12:34:22 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 14:57:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -232,7 +232,7 @@ static sal_Bool test_rtl_OString_ctor_006( hTestResult hRtlTestResult )
     {
         if ( AStringToUStringNCompare( aStr1, kTestStr1, kTestStr1Len ) == 0 )
         {
-            const sal_Char  *kTCMessage[2] = { "", "array." };
+            // const sal_Char  *kTCMessage[2] = { "", "array." };
 
             ::rtl::OString aStr2
             (
@@ -328,7 +328,7 @@ TestCase arrTestCase[]={
 
 
     sal_Bool res = sal_True;
-    sal_Int32 i;
+    sal_uInt32 i;
 
     for (i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
     {
@@ -392,7 +392,7 @@ TestCase arrTestCase[]={
     };
 
     sal_Bool res = sal_True;
-    sal_Int32 i;
+    sal_uInt32 i;
 
     for(i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
     {
@@ -452,7 +452,7 @@ TestCase arrTestCase[]={
     };
 
     sal_Bool res = sal_True;
-    sal_Int32 i;
+    sal_uInt32 i;
 
     for(i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
     {
@@ -523,7 +523,7 @@ TestCase arrTestCase[]={
     };
 
     sal_Bool res = sal_True;
-    sal_Int32 i;
+    sal_uInt32 i;
 
     for(i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
     {
@@ -587,7 +587,7 @@ static sal_Bool SAL_CALL test_rtl_OString_compareTo_002(
     };
 
     sal_Bool res = sal_True;
-    sal_Int32 i;
+    sal_uInt32 i;
 
     for(i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
     {
@@ -849,7 +849,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OString_op_g(
 };
 
     sal_Bool res = sal_True;
-    sal_Int32 i;
+    sal_uInt32 i;
 
     for(i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
     {
@@ -912,7 +912,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OString_op_l(
     };
 
     sal_Bool res = sal_True;
-    sal_Int32 i;
+    sal_uInt32 i;
 
     for(i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
     {
@@ -974,7 +974,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OString_op_ge(
     };
 
     sal_Bool res = sal_True;
-    sal_Int32 i;
+    sal_uInt32 i;
 
     for(i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
     {
@@ -1038,7 +1038,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OString_op_le(
     };
 
     sal_Bool res = sal_True;
-    sal_Int32 i;
+    sal_uInt32 i;
 
     for(i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
     {
@@ -1092,7 +1092,7 @@ static sal_Bool test_rtl_OString_op_eq_001( hTestResult hRtlTestResult )
     };
 
     sal_Bool res = sal_True;
-    sal_Int32 i;
+    sal_uInt32 i;
 
     for(i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
     {
@@ -1210,7 +1210,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OString_op_plus(
     };
 
     sal_Bool res = sal_True;
-    sal_Int32 i;
+    sal_uInt32 i;
     for(i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
     {
         OString str = (*arrTestCase[i].input1) + (*arrTestCase[i].input2);
@@ -1270,7 +1270,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OString_op_peq(
     };
 
     sal_Bool res = sal_True;
-    sal_Int32 i;
+    sal_uInt32 i;
     for(i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
     {   OString str;
         str += (*arrTestCase[i].input1); str += (*arrTestCase[i].input2);
@@ -1318,7 +1318,7 @@ typedef struct TestCase
     };
 
     sal_Bool res = sal_True;
-    sal_Int32 i;
+    sal_uInt32 i;
     for(i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
     {
         const sal_Char* pstr = (*arrTestCase[i].input1);
@@ -1365,7 +1365,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OString_getStr(
     };
 
     sal_Bool res = sal_True;
-    sal_Int32 i;
+    sal_uInt32 i;
     for(i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
     {
         const sal_Char* pstr = arrTestCase[i].input1->getStr();
@@ -1419,17 +1419,17 @@ static sal_Bool SAL_CALL test_rtl_OString_copy_001(
     };
 
     sal_Bool res = sal_True;
-    sal_Int32 i;
+    sal_uInt32 i;
 
     for(i = 0; i <(sizeof (arrTestCase))/(sizeof (TestCase)); i++)
     {
         OString src(arrTestCase[i].srcStr);
         OString dst;
-        rtl_String* pDataSrc = src.pData;
+        // rtl_String* pDataSrc = src.pData;
 
         dst = src.copy(arrTestCase[i].beginIndex);
 
-        rtl_String* pDataDst = dst.pData;
+        // rtl_String* pDataDst = dst.pData;
 
         sal_Bool lastRes;
 
@@ -1487,22 +1487,22 @@ static sal_Bool SAL_CALL test_rtl_OString_copy_002(
     };
     sal_Bool res = sal_True;
 
-    sal_Int32 i;
+    sal_uInt32 i;
     for(i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++) {
         OString src(kTestStr2);
         OString dst;
         dst = src.copy(arrTestCase[i].beginIndex, arrTestCase[i].count);
-        rtl_String* pDataSrc = src.pData;
-        rtl_String* pDataDst = dst.pData;
+        // rtl_String* pDataSrc = src.pData;
+        // rtl_String* pDataDst = dst.pData;
 
         sal_Bool lastRes=sal_True;
         // checks buffer and length
-        //printf("\n this is copy__002 #%d\n", i);
-        //printf("dst buffer =%s\n", pDataDst->buffer);
-        //printf("expStr =%s\n", arrTestCase[i].arrExpStr);
-        //printf("dst length =%d\n", pDataDst->length);
-        //printf("count =%d\n", arrTestCase[i].count);
-        //printf("expLen =%d\n", arrTestCase[i].expLen);
+        //t_print("this is copy__002 #%d\n", i);
+        //t_print("dst buffer =%s\n", pDataDst->buffer);
+        //t_print("expStr =%s\n", arrTestCase[i].arrExpStr);
+        //t_print("dst length =%d\n", pDataDst->length);
+        //t_print("count =%d\n", arrTestCase[i].count);
+        //t_print("expLen =%d\n", arrTestCase[i].expLen);
 
         lastRes = (dst.equals(arrTestCase[i].arrExpStr)) ? sal_True : sal_False;
 
@@ -1530,11 +1530,11 @@ static sal_Bool SAL_CALL test_rtl_OString_copy_003(
     char comment[] = "copy whole short string to long string";
 
     OString src(kTestStr1);
-    rtl_String* pDataSrc = src.pData;
+    // rtl_String* pDataSrc = src.pData;
     OString dst(kTestStr2);
 
     dst = src.copy(0);
-    rtl_String* pDataDst = dst.pData;
+    // rtl_String* pDataDst = dst.pData;
     //check buffer and length
     sal_Bool lastRes =(dst==src);
     c_rtl_tres_state
@@ -1557,11 +1557,11 @@ static sal_Bool SAL_CALL test_rtl_OString_copy_004(
     sal_Char comment[] = "copy whole long string to short string";
 
     OString src(kTestStr2);
-    rtl_String* pDataSrc = src.pData;
+    // rtl_String* pDataSrc = src.pData;
     OString dst(kTestStr1);
 
     dst = src.copy(0);
-    rtl_String* pDataDst = dst.pData;
+    // rtl_String* pDataDst = dst.pData;
     //check buffer and length
     sal_Bool lastRes =(dst==src);
     c_rtl_tres_state
@@ -1633,7 +1633,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OString_concat(
     };
 
     sal_Bool res = sal_True;
-    sal_Int32 i;
+    sal_uInt32 i;
     for(i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
     {
         OString str =
@@ -1688,7 +1688,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OString_toAsciiLowerCase(
     };
 
     sal_Bool res = sal_True;
-    sal_Int32 i;
+    sal_uInt32 i;
 
     for(i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
     {
@@ -1740,7 +1740,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OString_toAsciiUpperCase(
     };
 
     sal_Bool res = sal_True;
-    sal_Int32 i;
+    sal_uInt32 i;
 
     for(i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
     {
@@ -1808,7 +1808,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OString_trim(
     };
 
     sal_Bool res = sal_True;
-    sal_Int32 i;
+    sal_uInt32 i;
 
     for(i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
     {
@@ -1857,7 +1857,7 @@ sal_Bool SAL_CALL test_rtl_OString_valueOf_sal_Bool(
     };
 
     sal_Bool res = sal_True;
-    sal_Int32 i;
+    sal_uInt32 i;
 
     for(i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
     {
@@ -1911,7 +1911,7 @@ sal_Bool SAL_CALL test_rtl_OString_valueOf_sal_Char(
     };
 
     sal_Bool res = sal_True;
-    sal_Int32 i;
+    sal_uInt32 i;
 
     for(i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
     {
@@ -2794,8 +2794,8 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OString_toChar(
     };
 
 
-    sal_Bool res = sal_True;
-    sal_Int32 i;
+    // sal_Bool res = sal_True;
+    sal_uInt32 i;
 
     for(i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++ )
     {
@@ -2836,42 +2836,50 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OString_toFloat(
     c_rtl_tres_state_start(hRtlTestResult, "toFloat");
     typedef struct TestCase
     {
-    float                        expVal;
-    OString*                     input1;
-    ~TestCase() {delete input1;}
+        float                        expVal;
+        OString*                     input1;
+        float         m_nPrecision;
+        ~TestCase() {delete input1;}
     } TestCase;
 
 
     TestCase arrTestCase[] =
     {
-        {3.0f, new OString("3")},
-        {3.1f, new OString("3.1")},
-        {3.1415f, new OString("3.1415")},
-        {3.14159f, new OString("3.14159")},
-        {3.141592f, new OString("3.141592")},
-        {3.1415926f, new OString("3.1415926")},
-        {3.14159265f, new OString("3.14159265")},
+        {3.0f, new OString("3"), 3e-7f},
+        {3.1f, new OString("3.1"), 3e-7f},
+        {3.1415f, new OString("3.1415"), 3e-7f},
+        {3.14159f, new OString("3.14159"), 3e-7f},
+        {3.141592f, new OString("3.141592"), 3e-7f},
+        {3.1415926f, new OString("3.1415926"), 3e-7f},
+        {3.14159265f, new OString("3.14159265"), 3e-7f},
         {3.141592653589793238462643f,
-            new OString("3.141592653589793238462643")},
-        {6.5822e-16f, new OString("6.5822e-16")},
-        {9.1096e-31f, new OString("9.1096e-31")},
-        {2.997925e8f, new OString("2.997925e8")},
-        {6.241e18f, new OString("6.241e18")},
-        {3.1f, new OString("03.1")},
-        {3.1f, new OString(" 3.1")},
-        {-3.1f, new OString("-3.1")},
-        {3.1f, new OString("+3.1")},
-        {0.0f, new OString("-0.0")}
+            new OString("3.141592653589793238462643"), 3e-7f},
+        {6.5822e-16f, new OString("6.5822e-16"), 6e-16f * 1e-7f},
+        {9.1096e-31f, new OString("9.1096e-31"), 9e-31f * 1e-7f},
+        {2.997925e8f, new OString("2.997925e8"), 3e8f * 1e-7f},
+        {6.241e18f, new OString("6.241e18"), 6e18f * 1e-7f},
+        {3.1f, new OString("03.1"), 3e-7f},
+        {3.1f, new OString(" 3.1"), 3e-7f},
+        {-3.1f, new OString("-3.1"), 3e-7f},
+        {3.1f, new OString("+3.1"), 3e-7f},
+        {0.0f, new OString("-0.0"), 1e-7f}
     };
 
 
-    sal_Bool res = sal_True;
-    sal_Int32 i;
+    // sal_Bool res = sal_True;
+    sal_uInt32 i;
+
+    t_print("sizeof(float)=%d, sizeof(double)=%d\n", sizeof(float), sizeof(double));
 
     for(i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++ )
     {
-        float fRes = arrTestCase[i].input1->toFloat();
-        sal_Bool lastRes = ( fabs(fRes - arrTestCase[i].expVal) <= 1e-35 );
+        float fA = arrTestCase[i].input1->toFloat();
+        float fB = arrTestCase[i].expVal;
+        float fPrec = arrTestCase[i].m_nPrecision;
+        float fResult = (float) fabs(fA - fB);
+        // t_print("float result: A:(%.9f) B:(%.9f) fabs(A-B):%E\n", fA, fB, fResult);
+        t_print("float result: A:(%E) B:(%E) fabs(A-B):%E\n", fA, fB, (float) fResult);
+        sal_Bool lastRes = ( fResult <= fPrec );
 
         char com[MAXBUFLENGTH];
         com[0] = '\'';
@@ -3000,7 +3008,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OString_toBoolean(
 
 
     sal_Bool res = sal_True;
-    sal_Int32 i;
+    sal_uInt32 i;
 
     for (i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
     {
@@ -3435,7 +3443,7 @@ TestCase arrTestCase[]={
 
 
     sal_Bool res = sal_True;
-    sal_Int32 i;
+    sal_uInt32 i;
 
     for (i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
     {
@@ -3501,7 +3509,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OString_replaceAt(
     };
 
     sal_Bool res = sal_True;
-    sal_Int32 i;
+    sal_uInt32 i;
 
     for (i = 0; i < (sizeof (arrTestCase))/(sizeof (TestCase)); i++)
     {
