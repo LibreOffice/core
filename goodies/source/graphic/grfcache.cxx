@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfcache.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ka $ $Date: 2000-12-21 16:47:15 $
+ *  last change: $Author: ka $ $Date: 2001-01-30 11:19:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -607,7 +607,7 @@ void GraphicCache::AddGraphicObject( const GraphicObject& rObj, Graphic& rSubsti
 {
     BOOL bInserted = FALSE;
 
-    if( !rObj.IsSwappedOut() && ( rObj.GetType() != GRAPHIC_NONE ) )
+    if( !rObj.IsSwappedOut() && ( ( rObj.GetType() != GRAPHIC_NONE ) || pID ) )
     {
         GraphicCacheEntry*  pEntry = (GraphicCacheEntry*) maGraphicCache.First();
         const GraphicID     aID( rObj );
