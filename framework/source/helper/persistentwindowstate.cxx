@@ -2,9 +2,9 @@
  *
  *  $RCSfile: persistentwindowstate.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 12:52:54 $
+ *  last change: $Author: rt $ $Date: 2004-11-26 14:30:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,10 @@
 //_________________________________________________________________________________________________________________
 //  my own includes
 //_________________________________________________________________________________________________________________
+
+#ifndef __FRAMEWORK_PATTERN_WINDOW_HXX_
+#include <pattern/window.hxx>
+#endif
 
 #ifndef __FRAMEWORK_HELPER_PERSISTENTWINDOWSTATE_HXX_
 #include <helper/persistentwindowstate.hxx>
@@ -135,6 +139,8 @@
 //  namespace
 
 namespace framework{
+
+namespace fpw = ::framework::pattern::window;
 
 //_________________________________________________________________________________________________________________
 //  definitions
