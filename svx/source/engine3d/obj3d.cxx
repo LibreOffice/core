@@ -2,9 +2,9 @@
  *
  *  $RCSfile: obj3d.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: ka $ $Date: 2002-03-06 11:19:16 $
+ *  last change: $Author: ka $ $Date: 2002-03-08 15:25:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3729,6 +3729,7 @@ void E3dCompoundObject::ImpSet3DParForLine(ExtOutputDevice& rOut, Base3D* pBase3
     sal_uInt16 nLineTransparence = ((const XLineTransparenceItem&)(rSet.Get(XATTR_LINETRANSPARENCE))).GetValue();
     BOOL bLineTransparence = (nLineTransparence != 0);
     BOOL bDrawTransparence = ((nDrawFlags & E3D_DRAWFLAG_TRANSPARENT) != 0);
+
     if(bLineTransparence != bDrawTransparence)
     {
         bDrawOutline = FALSE;
@@ -3742,9 +3743,9 @@ void E3dCompoundObject::ImpSet3DParForLine(ExtOutputDevice& rOut, Base3D* pBase3
         bDrawOutline = (aLineStyle != XLINE_NONE);
     }
 
-    // special mode for black/white drawing
-    // Linecolor is set to boack before (Base3d::SetColor())
-    if((!bDrawOutline) && ((pBase3D->GetOutputDevice()->GetDrawMode() & (DRAWMODE_WHITEFILL|DRAWMODE_SETTINGSFILL)) != 0))
+    // special mode for black/white drawing or high contrast mode
+    // Linecolor is set to black before (Base3d::SetColor())
+    if((!bDrawOutline) && ((pBase3D->GetOutputDevice()->GetDrawMode() & (DRAWMODE_WHITEFILL|DRAWMODE_SETTINGSLINE)) != 0))
     {
         bDrawOutline = TRUE;
     }
@@ -3754,6 +3755,11 @@ void E3dCompoundObject::ImpSet3DParForLine(ExtOutputDevice& rOut, Base3D* pBase3
     {
         Color aColorLine = ((const XLineColorItem&)(rSet.Get(XATTR_LINECOLOR))).GetValue();
         sal_Int32 nLineWidth = ((const XLineWidthItem&)(rSet.Get(XATTR_LINEWIDTH))).GetValue();
+
+        if(pBase3D->GetOutputDevice()->GetDrawMode() & DRAWMODE_SETTINGSLINE)
+        {
+            aColorLine = Application::GetSettings().GetStyleSettings().GetWindowTextColor();
+        }
 
         if(nLineWidth && !bIsLineDraft)
         {
