@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xstorage.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2003-09-11 10:16:30 $
+ *  last change: $Author: rt $ $Date: 2003-10-30 09:48:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,11 @@
 #include <com/sun/star/util/XChangesBatch.hpp>
 #endif
 
+#ifndef _COM_SUN_STAR_UTIL_XCLONEABLE_HPP_
+#include <com/sun/star/util/XCloneable.hpp>
+#endif
+
+
 #ifndef _COM_SUN_STAR_LANG_XUNOTUNNEL_HPP_
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #endif
@@ -107,6 +112,12 @@
 
 #include "xstorage.hxx"
 #include "owriteablestream.hxx"
+
+#define STOR_MESS_PRECOMMIT 1
+#define STOR_MESS_COMMITED  2
+#define STOR_MESS_PREREVERT 3
+#define STOR_MESS_REVERTED  4
+
 
 using namespace ::com::sun::star;
 
@@ -157,7 +168,6 @@ uno::Reference< io::XInputStream > GetSeekableTempCopy( uno::Reference< io::XInp
     return xTempIn;
 }
 
-
 StorInternalData_Impl::~StorInternalData_Impl()
 {
     if ( m_pTypeCollection )
@@ -202,6 +212,7 @@ OStorage_Impl::OStorage_Impl(   uno::Reference< io::XInputStream > xInputStream,
 , m_xInputStream( xInputStream )
 , m_xProperties( xProperties )
 , m_pParent( NULL )
+, m_bControlMediaType( sal_False )
 {
     // all the checks done below by assertion statements must be done by factory
     OSL_ENSURE( xInputStream.is(), "No input stream is provided!\n" );
@@ -230,6 +241,7 @@ OStorage_Impl::OStorage_Impl(   uno::Reference< io::XStream > xStream,
 , m_xStream( xStream )
 , m_xProperties( xProperties )
 , m_pParent( NULL )
+, m_bControlMediaType( sal_False )
 {
     // all the checks done below by assertion statements must be done by factory
     OSL_ENSURE( xStream.is(), "No stream is provided!\n" );
@@ -256,13 +268,14 @@ OStorage_Impl::OStorage_Impl(   OStorage_Impl* pParent,
 , m_pAntiImpl( NULL )
 , m_nStorageMode( nMode )
 , m_bIsModified( sal_False )
-, m_bCommited( sal_True ) // substorages are allways used in direct mode
+, m_bCommited( sal_False )
 , m_bIsRoot( sal_False )
 , m_bListCreated( sal_False )
 , m_xPackageFolder( xPackageFolder )
 , m_xPackage( xPackage )
 , m_xFactory( xFactory )
 , m_pParent( pParent )
+, m_bControlMediaType( sal_False )
 {
     OSL_ENSURE( xPackageFolder.is(), "No package folder!\n" );
     OSL_ENSURE( pParent, "No parent is provided!\n" );
@@ -423,11 +436,15 @@ SotElementList_Impl& OStorage_Impl::GetChildrenList()
 //-----------------------------------------------
 void OStorage_Impl::GetStorageProperties()
 {
-    uno::Reference< beans::XPropertySet > xProps( m_xPackageFolder, uno::UNO_QUERY );
-    if ( !xProps.is() )
-        throw uno::RuntimeException(); // TODO:
+    if ( !m_bControlMediaType )
+    {
+        uno::Reference< beans::XPropertySet > xProps( m_xPackageFolder, uno::UNO_QUERY );
+        if ( !xProps.is() )
+            throw uno::RuntimeException(); // TODO:
 
-    xProps->getPropertyValue( ::rtl::OUString::createFromAscii( "MediaType" ) ) >>= m_aMediaType;
+        xProps->getPropertyValue( ::rtl::OUString::createFromAscii( "MediaType" ) ) >>= m_aMediaType;
+        m_bControlMediaType = sal_True;
+    }
 }
 
 //-----------------------------------------------
@@ -623,18 +640,66 @@ void OStorage_Impl::CopyStorageElement( SotElement_Impl* pElement,
 }
 
 //-----------------------------------------------
-void OStorage_Impl::Commit()
+void OStorage_Impl::InsertIntoPackageFolder( const ::rtl::OUString& aName,
+                                             const uno::Reference< container::XNameContainer >& xParentPackageFolder )
 {
     ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() );
 
-    if ( !m_bCommited )
-        return; // the storage is not commited explicitly
+    OSL_ENSURE( m_xPackageFolder.is(), "An inserted storage is incomplete!\n" );
+    uno::Reference< lang::XUnoTunnel > xTunnel( m_xPackageFolder, uno::UNO_QUERY );
+    if ( !xTunnel.is() )
+        throw uno::RuntimeException(); // TODO
+
+    xParentPackageFolder->insertByName( aName, uno::makeAny( xTunnel ) );
+
+    m_bCommited = sal_False;
+}
+
+//-----------------------------------------------
+void OStorage_Impl::Commit()
+{
+    ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() );
 
     // if storage is commited it should have a valid Package representation
     OSL_ENSURE( m_xPackageFolder.is(), "The package representation should exist!\n" );
     if ( !m_xPackageFolder.is() )
         throw embed::InvalidStorageException(); // TODO:
 
+    OSL_ENSURE( m_nStorageMode & embed::ElementModes::ELEMENT_WRITE,
+                "Commit of readonly storage, should be detected before!\n" );
+
+    uno::Reference< container::XNameContainer > xNewPackageFolder;
+
+    // here the storage will switch to the temporary package folder
+    // if the storage was already commited and the parent was not commited after that
+    // the switch should not be done since the package folder in use is a temporary one;
+    // it can be detected by m_bCommited flag ( root storage doesn't need temporary representation )
+    if ( !m_bCommited && !m_bIsRoot )
+    {
+        uno::Sequence< uno::Any > aSeq( 1 );
+        aSeq[0] <<= sal_True;
+
+        xNewPackageFolder = uno::Reference< container::XNameContainer >(
+                                                    m_xPackage->createInstanceWithArguments( aSeq ),
+                                                    uno::UNO_QUERY );
+    }
+    else
+        xNewPackageFolder = m_xPackageFolder;
+
+    // remove replaced removed elements
+    for ( SotElementList_Impl::iterator pDeletedIter = m_aDeletedList.begin();
+          pDeletedIter != m_aDeletedList.end();
+          pDeletedIter++ )
+    {
+        // the removed elements are not in new temporary storage
+        if ( m_bCommited || m_bIsRoot )
+            xNewPackageFolder->removeByName( (*pDeletedIter)->m_aOriginalName );
+        delete *pDeletedIter;
+        pDeletedIter = NULL;
+    }
+    m_aDeletedList.clear();
+
+    // remove removed elements
     SotElementList_Impl::iterator pElementIter = m_aChildrenList.begin();
     while (  pElementIter != m_aChildrenList.end() )
     {
@@ -643,7 +708,10 @@ void OStorage_Impl::Commit()
 
         if ( (*pElementIter)->m_bIsRemoved )
         {
-            m_xPackageFolder->removeByName( (*pElementIter)->m_aOriginalName );
+            // the removed elements are not in new temporary storage
+            if ( m_bCommited || m_bIsRoot )
+                xNewPackageFolder->removeByName( (*pElementIter)->m_aOriginalName );
+
             SotElement_Impl* pToDelete = *pElementIter;
 
             pElementIter++; // to let the iterator be valid it should be increased before removing
@@ -655,20 +723,45 @@ void OStorage_Impl::Commit()
             pElementIter++;
     }
 
+    // there should be no more deleted elements
     for ( pElementIter = m_aChildrenList.begin(); pElementIter != m_aChildrenList.end(); pElementIter++ )
     {
-        // there should be no more deleted elements
-
-        // inserted elements must be really inserted to package later
+        // if it is a 'duplicate commit' inserted elements must be really inserted to package later
         // since thay can conflict with renamed elements
 
         if ( !(*pElementIter)->m_bIsInserted )
         {
-            // inserted elements must be really inserted to package later
-            // since thay can conflict with removed or renamed elements
-            if ( (*pElementIter)->m_aName.compareTo( (*pElementIter)->m_aOriginalName ) )
+            // if the storage was not open, there is no need to commit it ???
+            // the storage should be checked that it is commited
+            if ( (*pElementIter)->m_bIsStorage && (*pElementIter)->m_pStorage && (*pElementIter)->m_pStorage->m_bCommited )
             {
-                // in case the name was changed rename the element
+                // it's temporary PackageFolder should be inserted instead of current one
+                // also the new copy of PackageFolder should be used by the children storages
+
+                xNewPackageFolder->removeByName( (*pElementIter)->m_aOriginalName );
+                (*pElementIter)->m_pStorage->InsertIntoPackageFolder( (*pElementIter)->m_aName, xNewPackageFolder );
+            }
+            else if ( !(*pElementIter)->m_bIsStorage && (*pElementIter)->m_pStream )
+            {
+                // for now stream is opened in direct mode that means that in case
+                // storage is commited all the streams from it are commited in current state.
+                // following two steps are separated to allow easily implement transacted mode
+                // for streams if we need it in future.
+
+                (*pElementIter)->m_pStream->Commit();
+
+                xNewPackageFolder->removeByName( (*pElementIter)->m_aOriginalName );
+                (*pElementIter)->m_pStream->InsertIntoPackageFolder( (*pElementIter)->m_aName, xNewPackageFolder );
+            }
+            else if ( !m_bCommited && !m_bIsRoot )
+            {
+                // the element must be just copied to the new temporary package folder
+                uno::Any aPackageElement = m_xPackageFolder->getByName( (*pElementIter)->m_aOriginalName );
+                xNewPackageFolder->insertByName( (*pElementIter)->m_aOriginalName, aPackageElement );
+            }
+            else if ( (*pElementIter)->m_aName.compareTo( (*pElementIter)->m_aOriginalName ) )
+            {
+                // in case the name was changed and it is not a changed storage - rename the element
                 uno::Reference< container::XNamed > xNamed;
                 uno::Any aPackageElement = m_xPackageFolder->getByName( (*pElementIter)->m_aOriginalName );
 
@@ -676,21 +769,9 @@ void OStorage_Impl::Commit()
                 OSL_ENSURE( xNamed.is(), "PackageFolder/PackageStream MUST support XNamed interface" );
 
                 xNamed->setName( (*pElementIter)->m_aName );
-                (*pElementIter)->m_aOriginalName = (*pElementIter)->m_aName;
             }
 
-            if ( (*pElementIter)->m_bIsStorage )
-            {
-                // if the storage was not open, there is no need to commit it ???
-                if ( (*pElementIter)->m_pStorage )
-                    (*pElementIter)->m_pStorage->Commit();
-            }
-            else
-            {
-                // if the stream was not open, there is no need to commit it ???
-                if ( (*pElementIter)->m_pStream )
-                    (*pElementIter)->m_pStream->Commit();
-            }
+            (*pElementIter)->m_aOriginalName = (*pElementIter)->m_aName;
         }
     }
 
@@ -704,48 +785,33 @@ void OStorage_Impl::Commit()
 
             if ( (*pElementIter)->m_bIsStorage )
             {
-                OSL_ENSURE( (*pElementIter)->m_pStorage && (*pElementIter)->m_pStorage->m_xPackageFolder.is(),
-                            "An inserted storage is incomplete!\n" );
-                if ( !(*pElementIter)->m_pStorage || !(*pElementIter)->m_pStorage->m_xPackageFolder.is() )
-                    throw uno::RuntimeException(); // TODO
+                if ( (*pElementIter)->m_pStorage->m_bCommited )
+                {
+                    OSL_ENSURE( (*pElementIter)->m_pStorage, "An inserted storage is incomplete!\n" );
+                    if ( !(*pElementIter)->m_pStorage )
+                        throw uno::RuntimeException(); // TODO
 
-                xNewElement = uno::Reference< lang::XUnoTunnel >( (*pElementIter)->m_pStorage->m_xPackageFolder,
-                                                                    uno::UNO_QUERY );
-                (*pElementIter)->m_pStorage->Commit();
+                    (*pElementIter)->m_pStorage->InsertIntoPackageFolder( (*pElementIter)->m_aName, xNewPackageFolder );
+
+                    (*pElementIter)->m_bIsInserted = sal_False;
+                }
             }
             else
             {
-                OSL_ENSURE( (*pElementIter)->m_pStream && (*pElementIter)->m_pStream->m_xPackageStream.is(),
-                            "An inserted stream is incomplete!\n" );
-                if ( !(*pElementIter)->m_pStream || !(*pElementIter)->m_pStream->m_xPackageStream.is() )
+                OSL_ENSURE( (*pElementIter)->m_pStream, "An inserted stream is incomplete!\n" );
+                if ( !(*pElementIter)->m_pStream )
                     throw uno::RuntimeException(); // TODO
 
-                xNewElement = uno::Reference< lang::XUnoTunnel >( (*pElementIter)->m_pStream->m_xPackageStream,
-                                                                    uno::UNO_QUERY );
-                (*pElementIter)->m_pStream->Commit();
+                (*pElementIter)->m_pStream->Commit(); // direct mode
+                (*pElementIter)->m_pStream->InsertIntoPackageFolder( (*pElementIter)->m_aName, xNewPackageFolder );
+
+                (*pElementIter)->m_bIsInserted = sal_False;
             }
-
-            if ( !xNewElement.is() )
-                throw uno::RuntimeException(); // TODO
-
-            m_xPackageFolder->insertByName( (*pElementIter)->m_aName, uno::makeAny( xNewElement ) );
-            (*pElementIter)->m_bIsInserted = sal_False;
         }
     }
 
-    // remove replaced removed elements
-    for ( SotElementList_Impl::iterator pDeletedIter = m_aDeletedList.begin();
-          pDeletedIter != m_aDeletedList.end();
-          pDeletedIter++ )
-    {
-            delete *pDeletedIter;
-            pDeletedIter = NULL;
-    }
-    m_aDeletedList.clear();
-
-
     // move properties to the destination package folder
-    uno::Reference< beans::XPropertySet > xProps( m_xPackageFolder, uno::UNO_QUERY );
+    uno::Reference< beans::XPropertySet > xProps( xNewPackageFolder, uno::UNO_QUERY );
     if ( !xProps.is() )
         throw uno::RuntimeException(); // TODO:
 
@@ -761,8 +827,17 @@ void OStorage_Impl::Commit()
 
         xChangesBatch->commitChanges();
     }
+    else if ( !m_bCommited )
+    {
+        m_xPackageFolder = xNewPackageFolder;
+        m_bCommited = sal_True;
+    }
 
     SetModifiedInternally( sal_False );
+
+    // when the storage is commited the parent is modified
+    if ( m_pParent )
+        m_pParent->SetModifiedInternally( sal_True );
 }
 
 //-----------------------------------------------
@@ -773,12 +848,14 @@ void OStorage_Impl::Revert()
     if ( !( m_nStorageMode & embed::ElementModes::ELEMENT_WRITE ) )
         return; // nothing to do
 
+    // all the children must be removed
+    // they will be created later on demand
+
     SotElementList_Impl::iterator pElementIter = m_aChildrenList.begin();
     while (  pElementIter != m_aChildrenList.end() )
     {
         if ( (*pElementIter)->m_bIsInserted )
         {
-            m_xPackageFolder->removeByName( (*pElementIter)->m_aOriginalName );
             SotElement_Impl* pToDelete = *pElementIter;
 
             pElementIter++; // to let the iterator be valid it should be increased before removing
@@ -788,14 +865,7 @@ void OStorage_Impl::Revert()
         }
         else
         {
-            if ( (*pElementIter)->m_pStream )
-            {
-                (*pElementIter)->m_pStream->Revert();
-            }
-            else if ( (*pElementIter)->m_pStorage )
-            {
-                (*pElementIter)->m_pStorage->Revert();
-            }
+            ClearElement( *pElementIter );
 
             (*pElementIter)->m_aName = (*pElementIter)->m_aOriginalName;
             (*pElementIter)->m_bIsRemoved = sal_False;
@@ -809,28 +879,9 @@ void OStorage_Impl::Revert()
           pDeletedIter != m_aDeletedList.end();
           pDeletedIter++ )
     {
-        if ( (*pDeletedIter)->m_bIsStorage )
-        {
-            OSL_ENSURE( (*pDeletedIter)->m_aOriginalName.getLength()
-                     && (*pDeletedIter)->m_pStorage
-                     && (*pDeletedIter)->m_pStorage->m_xPackageFolder.is(),
-                            "Deleted substorage information is corrupted!\n" );
-
-            m_xPackageFolder->insertByName( (*pDeletedIter)->m_aOriginalName,
-                                            uno::makeAny( (*pDeletedIter)->m_pStorage->m_xPackageFolder ) );
-        }
-        else
-        {
-            OSL_ENSURE( (*pDeletedIter)->m_aOriginalName.getLength()
-                     && (*pDeletedIter)->m_pStorage
-                     && (*pDeletedIter)->m_pStorage->m_xPackageFolder.is(),
-                            "Deleted substream information is corrupted!\n" );
-
-            m_xPackageFolder->insertByName( (*pDeletedIter)->m_aOriginalName,
-                                            uno::makeAny( (*pDeletedIter)->m_pStorage->m_xPackageFolder ) );
-        }
-
         m_aChildrenList.push_back( (*pDeletedIter) );
+
+        ClearElement( *pDeletedIter );
 
         (*pDeletedIter)->m_aName = (*pDeletedIter)->m_aOriginalName;
         (*pDeletedIter)->m_bIsRemoved = sal_False;
@@ -851,9 +902,6 @@ void OStorage_Impl::SetModifiedInternally( sal_Bool bModified )
         m_pAntiImpl->setModified( bModified );
     else
         m_bIsModified = bModified;
-
-    if ( bModified && m_pParent )
-        m_pParent->SetModifiedInternally( sal_True );
 }
 
 //-----------------------------------------------
@@ -908,6 +956,7 @@ SotElement_Impl* OStorage_Impl::InsertStream( ::rtl::OUString aName, sal_Bool bE
 //-----------------------------------------------
 SotElement_Impl* OStorage_Impl::InsertRawStream( ::rtl::OUString aName, const uno::Reference< io::XInputStream >& xInStream )
 {
+    // insert of raw stream means insert and commit
     OSL_ENSURE( m_xPackage.is(), "Not possible to refer to package as to factory!\n" );
     if ( !m_xPackage.is() )
         throw embed::InvalidStorageException(); // TODO
@@ -934,6 +983,8 @@ SotElement_Impl* OStorage_Impl::InsertRawStream( ::rtl::OUString aName, const un
     // the mode is not needed for storage stream internal implementation
     SotElement_Impl* pNewElement = InsertElement( aName, sal_False );
     pNewElement->m_pStream = new OWriteStream_Impl( this, xPackageSubStream, m_xPackage, m_xFactory, sal_True );
+    // the stream is inserted and must be treated as a commited one
+    pNewElement->m_pStream->SetToBeCommited();
 
     m_aChildrenList.push_back( pNewElement );
     SetModifiedInternally( sal_True );
@@ -1002,7 +1053,6 @@ SotElement_Impl* OStorage_Impl::InsertElement( ::rtl::OUString aName, sal_Bool b
         else
             OpenSubStream( pDeletedElm );
 
-        m_xPackageFolder->removeByName( pDeletedElm->m_aOriginalName );
         m_aChildrenList.remove( pDeletedElm );  // correct usage of list ???
         m_aDeletedList.push_back( pDeletedElm );
     }
@@ -1094,6 +1144,10 @@ void OStorage_Impl::RemoveElement( SotElement_Impl* pElement )
     if ( !pElement )
         return;
 
+    if ( pElement->m_pStorage && pElement->m_pStorage->m_pAntiImpl
+      || pElement->m_pStream && pElement->m_pStream->m_pAntiImpl )
+        throw io::IOException(); // TODO: Access denied
+
     if ( pElement->m_bIsInserted )
     {
         m_aChildrenList.remove( pElement );
@@ -1102,38 +1156,23 @@ void OStorage_Impl::RemoveElement( SotElement_Impl* pElement )
     else
     {
         pElement->m_bIsRemoved = sal_True;
-
-        if ( pElement->m_pStorage )
-        {
-            delete pElement->m_pStorage;
-            pElement->m_pStorage = NULL;
-        }
-
-        if ( pElement->m_pStream )
-        {
-            delete pElement->m_pStream;
-            pElement->m_pStream = NULL;
-        }
+        ClearElement( pElement );
     }
 }
 
 //-----------------------------------------------
-void OStorage_Impl::DisposeChildren()
+void OStorage_Impl::ClearElement( SotElement_Impl* pElement )
 {
-    for ( SotElementList_Impl::iterator pElementIter = m_aChildrenList.begin();
-          pElementIter != m_aChildrenList.end(); pElementIter++ )
+    if ( pElement->m_pStorage )
     {
-        OSL_ENSURE( !(*pElementIter)->m_bIsRemoved
-                  || ( (*pElementIter)->m_pStorage == NULL && (*pElementIter)->m_pStream == NULL ),
-                    "The removed element must not have contents!" );
+        delete pElement->m_pStorage;
+        pElement->m_pStorage = NULL;
+    }
 
-        if ( !(*pElementIter)->m_bIsRemoved )
-        {
-            if ( (*pElementIter)->m_bIsStorage && (*pElementIter)->m_pStorage && (*pElementIter)->m_pStorage->m_pAntiImpl )
-                (*pElementIter)->m_pStorage->m_pAntiImpl->dispose();
-            if ( !(*pElementIter)->m_bIsStorage && (*pElementIter)->m_pStream )
-                (*pElementIter)->m_pStream->DisposeWrappers();
-        }
+    if ( pElement->m_pStream )
+    {
+        delete pElement->m_pStream;
+        pElement->m_pStream = NULL;
     }
 }
 
@@ -1198,8 +1237,6 @@ OStorage::~OStorage()
 //-----------------------------------------------
 void OStorage::BroadcastModified()
 {
-    ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
-
     if ( !m_pImpl )
         throw lang::DisposedException();
 
@@ -1214,6 +1251,49 @@ void OStorage::BroadcastModified()
            while ( pIterator.hasMoreElements( ) )
            {
                ( ( util::XModifyListener* )pIterator.next( ) )->modified( aSource );
+           }
+    }
+}
+
+//-----------------------------------------------
+void OStorage::BroadcastTransaction( sal_Int8 nMessage )
+/*
+    1 - preCommit
+    2 - commited
+    3 - preRevert
+    4 - reverted
+*/
+{
+    if ( !m_pImpl )
+        throw lang::DisposedException();
+
+       lang::EventObject aSource( static_cast< ::cppu::OWeakObject* >(this) );
+
+       ::cppu::OInterfaceContainerHelper* pContainer =
+            m_pData->m_aListenersContainer.getContainer(
+                ::getCppuType( ( const uno::Reference< embed::XTransactionListener >*) NULL ) );
+       if ( pContainer )
+    {
+           ::cppu::OInterfaceIteratorHelper pIterator( *pContainer );
+           while ( pIterator.hasMoreElements( ) )
+           {
+            OSL_ENSURE( nMessage >= 1 && nMessage <= 4, "Wrong internal notification code is used!\n" );
+
+            switch( nMessage )
+            {
+                case STOR_MESS_PRECOMMIT:
+                       ( ( embed::XTransactionListener* )pIterator.next( ) )->preCommit( aSource );
+                    break;
+                case STOR_MESS_COMMITED:
+                       ( ( embed::XTransactionListener* )pIterator.next( ) )->commited( aSource );
+                    break;
+                case STOR_MESS_PREREVERT:
+                       ( ( embed::XTransactionListener* )pIterator.next( ) )->preRevert( aSource );
+                    break;
+                case STOR_MESS_REVERTED:
+                       ( ( embed::XTransactionListener* )pIterator.next( ) )->reverted( aSource );
+                    break;
+            }
            }
     }
 }
@@ -1268,6 +1348,7 @@ uno::Any SAL_CALL OStorage::queryInterface( const uno::Type& rType )
                     ,   static_cast<lang::XTypeProvider*> ( this )
                     ,   static_cast<embed::XStorage*> ( this )
                     ,   static_cast<embed::XTransactedObject*> ( this )
+                    ,   static_cast<embed::XTransactionBroadcaster*> ( this )
                     ,   static_cast<util::XModifiable*> ( this )
                     ,   static_cast<container::XNameAccess*> ( this )
                     ,   static_cast<lang::XComponent*> ( this )
@@ -1280,6 +1361,7 @@ uno::Any SAL_CALL OStorage::queryInterface( const uno::Type& rType )
                     (   rType
                     ,   static_cast<lang::XTypeProvider*> ( this )
                     ,   static_cast<embed::XStorage*> ( this )
+                    ,   static_cast<embed::XTransactedObject*> ( this )
                     ,   static_cast<util::XModifiable*> ( this )
                     ,   static_cast<container::XNameAccess*> ( this )
                     ,   static_cast<lang::XComponent*> ( this )
@@ -1324,6 +1406,7 @@ uno::Sequence< uno::Type > SAL_CALL OStorage::getTypes()
                                     (   ::getCppuType( ( const uno::Reference< lang::XTypeProvider >* )NULL )
                                     ,   ::getCppuType( ( const uno::Reference< embed::XStorage >* )NULL )
                                     ,   ::getCppuType( ( const uno::Reference< embed::XTransactedObject >* )NULL )
+                                    ,   ::getCppuType( ( const uno::Reference< embed::XTransactionBroadcaster >* )NULL )
                                     ,   ::getCppuType( ( const uno::Reference< util::XModifiable >* )NULL )
                                     ,   ::getCppuType( ( const uno::Reference< container::XNameAccess >* )NULL )
                                     ,   ::getCppuType( ( const uno::Reference< lang::XComponent >* )NULL )
@@ -1335,6 +1418,7 @@ uno::Sequence< uno::Type > SAL_CALL OStorage::getTypes()
                 m_pData->m_pTypeCollection = new ::cppu::OTypeCollection
                                     (   ::getCppuType( ( const uno::Reference< lang::XTypeProvider >* )NULL )
                                     ,   ::getCppuType( ( const uno::Reference< embed::XStorage >* )NULL )
+                                    ,   ::getCppuType( ( const uno::Reference< embed::XTransactedObject >* )NULL )
                                     ,   ::getCppuType( ( const uno::Reference< util::XModifiable >* )NULL )
                                     ,   ::getCppuType( ( const uno::Reference< container::XNameAccess >* )NULL )
                                     ,   ::getCppuType( ( const uno::Reference< lang::XComponent >* )NULL )
@@ -1754,43 +1838,36 @@ void SAL_CALL OStorage::commit()
     if ( !m_pImpl )
         throw lang::DisposedException();
 
-    OSL_ENSURE( m_pImpl->m_bIsRoot, "commit() method is not available for nonroot storages!\n" );
+    if ( !( m_pImpl->m_nStorageMode & embed::ElementModes::ELEMENT_WRITE ) )
+        throw io::IOException(); // TODO: access_denied
 
-    if ( m_pImpl->m_bIsRoot )
-    {
+    if ( !m_pImpl->m_bListCreated )
+        return; // nothing was changed
 
-        if ( !( m_pImpl->m_nStorageMode & embed::ElementModes::ELEMENT_WRITE ) )
-            throw io::IOException(); // TODO: access_denied
-
-        if ( !m_pImpl->m_bListCreated )
-            return; // nothing was changed
-
-        m_pImpl->m_bCommited = sal_True;
-        if ( m_pImpl->m_bIsRoot )
-        {
-            try {
-                m_pImpl->Commit(); // the root storage initiates the main commit
-            }
-            catch( io::IOException& )
-            {
-                throw;
-            }
-            catch( embed::StorageWTException& )
-            {
-                throw;
-            }
-            catch( uno::RuntimeException& )
-            {
-                throw;
-            }
-            catch( uno::Exception& e )
-            {
-                throw embed::StorageWTException( ::rtl::OUString::createFromAscii( "Problems on commit!" ),
-                                          uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >( this ) ),
-                                          uno::makeAny( e ) );
-            }
-        }
+    try {
+        BroadcastTransaction( STOR_MESS_PRECOMMIT );
+        m_pImpl->Commit(); // the root storage initiates the storing to source
     }
+    catch( io::IOException& )
+    {
+        throw;
+    }
+    catch( embed::StorageWTException& )
+    {
+        throw;
+    }
+    catch( uno::RuntimeException& )
+    {
+        throw;
+    }
+    catch( uno::Exception& e )
+    {
+        throw embed::StorageWTException( ::rtl::OUString::createFromAscii( "Problems on commit!" ),
+                                  uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >( this ) ),
+                                  uno::makeAny( e ) );
+    }
+
+    BroadcastTransaction( STOR_MESS_COMMITED );
 }
 
 //-----------------------------------------------
@@ -1799,48 +1876,83 @@ void SAL_CALL OStorage::revert()
                 embed::StorageWTException,
                 uno::RuntimeException )
 {
-    // the method is reload actually
-    // TODO: real revert should be implemented and used for substorages
-    // for now thay does not provide this method
+    // the method removes all the changes done after last commit
 
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
     if ( !m_pImpl )
         throw lang::DisposedException();
 
-    OSL_ENSURE( m_pImpl->m_bIsRoot, "revert() method is not available for nonroot storages!\n" );
+    for ( SotElementList_Impl::iterator pElementIter = m_pImpl->m_aChildrenList.begin();
+          pElementIter != m_pImpl->m_aChildrenList.end(); pElementIter++ )
+        if ( (*pElementIter)->m_pStorage && (*pElementIter)->m_pStorage->m_pAntiImpl
+          || (*pElementIter)->m_pStream && (*pElementIter)->m_pStream->m_pAntiImpl )
+            throw io::IOException(); // TODO: access denied
 
-    if ( m_pImpl->m_bIsRoot )
-    {
-        if ( !( m_pImpl->m_nStorageMode & embed::ElementModes::ELEMENT_WRITE ) || !m_pImpl->m_bListCreated )
-            return; // nothing to do
+    if ( !( m_pImpl->m_nStorageMode & embed::ElementModes::ELEMENT_WRITE ) || !m_pImpl->m_bListCreated )
+        return; // nothing to do
 
-        try {
-            m_pImpl->Revert();
-        }
-        catch( io::IOException& )
-        {
-            throw;
-        }
-        catch( embed::StorageWTException& )
-        {
-            throw;
-        }
-        catch( uno::RuntimeException& )
-        {
-            throw;
-        }
-        catch( uno::Exception& e )
-        {
-            throw embed::StorageWTException( ::rtl::OUString::createFromAscii( "Problems on revert!" ),
-                                      uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >( this ) ),
-                                      uno::makeAny( e ) );
-        }
+    try {
+        BroadcastTransaction( STOR_MESS_PREREVERT );
+        m_pImpl->Revert();
     }
+    catch( io::IOException& )
+    {
+        throw;
+    }
+    catch( embed::StorageWTException& )
+    {
+        throw;
+    }
+    catch( uno::RuntimeException& )
+    {
+        throw;
+    }
+    catch( uno::Exception& e )
+    {
+        throw embed::StorageWTException( ::rtl::OUString::createFromAscii( "Problems on revert!" ),
+                                  uno::Reference< uno::XInterface >( static_cast< ::cppu::OWeakObject* >( this ) ),
+                                  uno::makeAny( e ) );
+    }
+
+    BroadcastTransaction( STOR_MESS_REVERTED );
+}
+
+//____________________________________________________________________________________________________
+//  XTransactionBroadcaster
+//____________________________________________________________________________________________________
+
+//-----------------------------------------------
+void SAL_CALL OStorage::addTransactionListener( const uno::Reference< embed::XTransactionListener >& aListener )
+        throw ( uno::RuntimeException )
+{
+    ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+
+    if ( !m_pImpl )
+        throw lang::DisposedException();
+
+    m_pData->m_aListenersContainer.addInterface( ::getCppuType((const uno::Reference< embed::XTransactionListener >*)0),
+                                                aListener );
+}
+
+//-----------------------------------------------
+void SAL_CALL OStorage::removeTransactionListener( const uno::Reference< embed::XTransactionListener >& aListener )
+        throw ( uno::RuntimeException )
+{
+    ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
+
+    if ( !m_pImpl )
+        throw lang::DisposedException();
+
+    m_pData->m_aListenersContainer.removeInterface( ::getCppuType((const uno::Reference< embed::XTransactionListener >*)0),
+                                                    aListener );
 }
 
 //____________________________________________________________________________________________________
 //  XModifiable
+//  TODO: if there will be no demand on this interface it will be removed from implementation,
+//        I do not want to remove it now since it is still possible that it will be inserted
+//        to the service back.
 //____________________________________________________________________________________________________
 
 //-----------------------------------------------
@@ -2040,7 +2152,10 @@ void SAL_CALL OStorage::dispose()
     if ( m_pImpl->m_bIsRoot )
         delete m_pImpl;
     else
-        m_pImpl->DisposeChildren();
+    {
+        // the noncommited changes for the storage must be removed
+        m_pImpl->Revert();
+    }
 
     m_pImpl = NULL;
 }
@@ -2147,6 +2262,7 @@ void SAL_CALL OStorage::setPropertyValue( const ::rtl::OUString& aPropertyName, 
     if ( aPropertyName.equalsAscii( "MediaType" ) )
     {
         aValue >>= m_pImpl->m_aMediaType;
+        m_pImpl->m_bControlMediaType = sal_True;
     }
     else if ( m_pImpl->m_bIsRoot && ( aPropertyName.equalsAscii( "HasEncryptedEntries" )
                                     || aPropertyName.equalsAscii( "URL" )
