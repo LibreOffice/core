@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formevents.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-11 12:09:40 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 08:12:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,9 @@
 #ifndef _XMLOFF_FORMS_FORMEVENTS_HXX_
 #include "formevents.hxx"
 #endif
+#ifndef _XMLOFF_XMLNMSPE_HXX
+#include "xmlnmspe.hxx"
+#endif
 #ifndef _XMLOFF_XMLEVENT_HXX
 #include "xmlevent.hxx"
 #endif
@@ -76,39 +79,39 @@ namespace xmloff
     //=====================================================================
     static const XMLEventNameTranslation aEventTranslations[] =
     {
-        { "XApproveActionListener::approveAction",      "on-approveaction" },
-        { "XActionListener::actionPerformed",           "on-performaction" },
-        { "XChangeListener::changed",                   "on-change" },
-        { "XTextListener::textChanged",                 "on-textchange" },
-        { "XItemListener::itemStateChanged",            "on-itemstatechange" },
-        { "XFocusListener::focusGained",                "on-focus" },
-        { "XFocusListener::focusLost",                  "on-blur" },
-        { "XKeyListener::keyPressed",                   "on-keydown" },
-        { "XKeyListener::keyReleased",                  "on-keyup" },
-        { "XMouseListener::mouseEntered",               "on-mouseover" },
-        { "XMouseMotionListener::mouseDragged",         "on-mousedrag" },
-        { "XMouseMotionListener::mouseMoved",           "on-mousemove" },
-        { "XMouseListener::mousePressed",               "on-mousedown" },
-        { "XMouseListener::mouseReleased",              "on-mouseup" },
-        { "XMouseListener::mouseExited",                "on-mouseout" },
-        { "XResetListener::approveReset",               "on-approvereset" },
-        { "XResetListener::resetted",                   "on-reset" },
-        { "XSubmitListener::approveSubmit",             "on-submit" },
-        { "XUpdateListener::approveUpdate",             "on-approveupdate" },
-        { "XUpdateListener::updated",                   "on-update" },
-        { "XLoadListener::loaded",                      "on-load" },
-        { "XLoadListener::reloading",                   "on-startreload" },
-        { "XLoadListener::reloaded",                    "on-reload" },
-        { "XLoadListener::unloading",                   "on-startunload" },
-        { "XLoadListener::unloaded",                    "on-unload" },
-        { "XConfirmDeleteListener::confirmDelete",      "on-confirmdelete" },
-        { "XRowSetApproveListener::approveRowChange",   "on-approverowchange" },
-        { "XRowSetListener::rowChanged",                "on-rowchange" },
-        { "XRowSetApproveListener::approveCursorMove",  "on-approvecursormove" },
-        { "XRowSetListener::cursorMoved",               "on-cursormove" },
-        { "XDatabaseParameterListener::approveParameter","on-supplyparameter" },
-        { "XSQLErrorListener::errorOccured",            "on-error" },
-        { "XAdjustmentListener::adjustmentValueChanged","on-adjust" },
+        { "XApproveActionListener::approveAction",      XML_NAMESPACE_FORM, "approveaction" }, // "on-approveaction"
+        { "XActionListener::actionPerformed",           XML_NAMESPACE_FORM, "performaction" }, // "on-performaction"
+        { "XChangeListener::changed",                   XML_NAMESPACE_DOM, "change" }, // "on-change"
+        { "XTextListener::textChanged",                 XML_NAMESPACE_FORM, "textchange" }, // "on-textchange"
+        { "XItemListener::itemStateChanged",            XML_NAMESPACE_FORM, "itemstatechange" }, // "on-itemstatechange"
+        { "XFocusListener::focusGained",                XML_NAMESPACE_DOM, "DOMFocusIn" }, // "on-focus"
+        { "XFocusListener::focusLost",                  XML_NAMESPACE_DOM, "DOMFocusOut" }, // "on-blur"
+        { "XKeyListener::keyPressed",                   XML_NAMESPACE_DOM, "keydown" }, // "on-keydown"
+        { "XKeyListener::keyReleased",                  XML_NAMESPACE_DOM, "keyup" }, // "on-keyup"
+        { "XMouseListener::mouseEntered",               XML_NAMESPACE_DOM, "mouseover" }, // "on-mouseover"
+        { "XMouseMotionListener::mouseDragged",         XML_NAMESPACE_FORM, "mousedrag" }, // "on-mousedrag"
+        { "XMouseMotionListener::mouseMoved",           XML_NAMESPACE_DOM, "mousemove" }, // "on-mousemove"
+        { "XMouseListener::mousePressed",               XML_NAMESPACE_DOM, "mousedown" }, // "on-mousedown"
+        { "XMouseListener::mouseReleased",              XML_NAMESPACE_DOM, "mouseup" }, // "on-mouseup"
+        { "XMouseListener::mouseExited",                XML_NAMESPACE_DOM, "mouseout" }, // "on-mouseout"
+        { "XResetListener::approveReset",               XML_NAMESPACE_FORM, "approvereset" }, // "on-approvereset"
+        { "XResetListener::resetted",                   XML_NAMESPACE_DOM, "reset" }, // "on-reset"
+        { "XSubmitListener::approveSubmit",             XML_NAMESPACE_DOM, "submit" }, // "on-submit"
+        { "XUpdateListener::approveUpdate",             XML_NAMESPACE_FORM, "approveupdate" }, // "on-approveupdate"
+        { "XUpdateListener::updated",                   XML_NAMESPACE_FORM, "update" }, // "on-update"
+        { "XLoadListener::loaded",                      XML_NAMESPACE_DOM, "load" }, // "on-load"
+        { "XLoadListener::reloading",                   XML_NAMESPACE_FORM, "startreload" }, // "on-startreload"
+        { "XLoadListener::reloaded",                    XML_NAMESPACE_FORM, "reload" }, // "on-reload"
+        { "XLoadListener::unloading",                   XML_NAMESPACE_FORM, "startunload" }, // "on-startunload"
+        { "XLoadListener::unloaded",                    XML_NAMESPACE_DOM, "unload" }, // "on-unload"
+        { "XConfirmDeleteListener::confirmDelete",      XML_NAMESPACE_FORM, "confirmdelete" }, // "on-confirmdelete"
+        { "XRowSetApproveListener::approveRowChange",   XML_NAMESPACE_FORM, "approverowchange" }, // "on-approverowchange"
+        { "XRowSetListener::rowChanged",                XML_NAMESPACE_FORM, "rowchange" }, // "on-rowchange"
+        { "XRowSetApproveListener::approveCursorMove",  XML_NAMESPACE_FORM, "approvecursormove" }, // "on-approvecursormove"
+        { "XRowSetListener::cursorMoved",               XML_NAMESPACE_FORM, "cursormove" }, // "on-cursormove"
+        { "XDatabaseParameterListener::approveParameter",XML_NAMESPACE_FORM, "supplyparameter" }, // "on-supplyparameter"
+        { "XSQLErrorListener::errorOccured",            XML_NAMESPACE_DOM, "error" }, // "on-error"
+        { "XAdjustmentListener::adjustmentValueChanged",XML_NAMESPACE_FORM, "adjust" }, // "on-adjust"
         { 0, 0 }
     };
 
@@ -121,6 +124,16 @@ namespace xmloff
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.2.62.2  2004/06/02 10:53:57  mib
+ *  - #i20153#: continued events
+ *
+ *  Revision 1.2.62.1  2004/05/28 16:38:00  mib
+ *  - #i20153#: Events
+ *
+ *  Revision 1.2  2003/12/11 12:09:40  kz
+ *  INTEGRATION: CWS frmcontrols01 (1.1.212); FILE MERGED
+ *  2003/10/22 13:17:43 fs 1.1.212.1: #21277# new implementations for exporting/importing scrollbar controls as form:value-range elements
+ *
  *  Revision 1.1.212.1  2003/10/22 13:17:43  fs
  *  #21277# new implementations for exporting/importing scrollbar controls as form:value-range elements
  *
