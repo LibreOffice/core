@@ -2,9 +2,9 @@
  *
  *  $RCSfile: webdavcontent.cxx,v $
  *
- *  $Revision: 1.44 $
+ *  $Revision: 1.45 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-05 10:41:05 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 17:06:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1285,7 +1285,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                     try
                     {
                         m_xResAccess->PROPFIND(
-                            ZERO, aPropNames, resources, xEnv );
+                            DAVZERO, aPropNames, resources, xEnv );
                     }
                     catch ( DAVException const & e )
                     {
@@ -2879,7 +2879,7 @@ const Content::ResourceType & Content::getResourceType(
                             aPropNames.push_back( DAVProperties::RESOURCETYPE );
                             std::vector< DAVResource > resources;
                             m_xResAccess->PROPFIND(
-                                ZERO, aPropNames, resources, xEnv );
+                                DAVZERO, aPropNames, resources, xEnv );
 
                             m_eResourceType = DAV;
                         }
