@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldrani.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 16:31:04 $
+ *  last change: $Author: rt $ $Date: 2004-11-02 14:41:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,6 +116,12 @@ public:
     virtual void EndElement();
 };
 
+struct ScSubTotalRule
+{
+    sal_Int16 nSubTotalRuleGroupFieldNumber;
+    com::sun::star::uno::Sequence <com::sun::star::sheet::SubTotalColumn> aSubTotalColumns;
+};
+
 class ScXMLDatabaseRangeContext : public SvXMLImportContext
 {
     rtl::OUString   sDatabaseRangeName;
@@ -123,36 +129,35 @@ class ScXMLDatabaseRangeContext : public SvXMLImportContext
     rtl::OUString   sRangeAddress;
     rtl::OUString   sDatabaseName;
     rtl::OUString   sSourceObject;
-    com::sun::star::uno::Sequence <com::sun::star::sheet::SubTotalColumn> aSubTotalColumns;
     com::sun::star::uno::Sequence <com::sun::star::beans::PropertyValue> aSortSequence;
     com::sun::star::uno::Sequence <com::sun::star::sheet::TableFilterField> aFilterFields;
+    std::vector < ScSubTotalRule > aSubTotalRules;
     com::sun::star::table::CellAddress aFilterOutputPosition;
     com::sun::star::table::CellRangeAddress aFilterConditionSourceRangeAddress;
     com::sun::star::sheet::DataImportMode nSourceType;
     com::sun::star::table::TableOrientation eOrientation;
     sal_Int32       nRefresh;
     sal_Int16       nSubTotalsUserListIndex;
-    sal_Int16       nSubTotalRuleGroupFieldNumber;
-    sal_Bool        bContainsSort : 1;
-    sal_Bool        bContainsSubTotal : 1;
-    sal_Bool        bNative : 1;
-    sal_Bool        bIsSelection : 1;
-    sal_Bool        bKeepFormats : 1;
-    sal_Bool        bMoveCells : 1;
-    sal_Bool        bStripData : 1;
-    sal_Bool        bContainsHeader : 1;
-    sal_Bool        bAutoFilter : 1;
-    sal_Bool        bSubTotalsBindFormatsToContent : 1;
-    sal_Bool        bSubTotalsIsCaseSensitive : 1;
-    sal_Bool        bSubTotalsInsertPageBreaks : 1;
-    sal_Bool        bSubTotalsSortGroups : 1;
-    sal_Bool        bSubTotalsEnabledUserList : 1;
-    sal_Bool        bSubTotalsAscending : 1;
-    sal_Bool        bFilterCopyOutputData : 1;
-    sal_Bool        bFilterIsCaseSensitive : 1;
-    sal_Bool        bFilterSkipDuplicates : 1;
-    sal_Bool        bFilterUseRegularExpressions : 1;
-    sal_Bool        bFilterConditionSourceRange : 1;
+    sal_Bool        bContainsSort;
+    sal_Bool        bContainsSubTotal;
+    sal_Bool        bNative;
+    sal_Bool        bIsSelection;
+    sal_Bool        bKeepFormats;
+    sal_Bool        bMoveCells;
+    sal_Bool        bStripData;
+    sal_Bool        bContainsHeader;
+    sal_Bool        bAutoFilter;
+    sal_Bool        bSubTotalsBindFormatsToContent;
+    sal_Bool        bSubTotalsIsCaseSensitive;
+    sal_Bool        bSubTotalsInsertPageBreaks;
+    sal_Bool        bSubTotalsSortGroups;
+    sal_Bool        bSubTotalsEnabledUserList;
+    sal_Bool        bSubTotalsAscending;
+    sal_Bool        bFilterCopyOutputData;
+    sal_Bool        bFilterIsCaseSensitive;
+    sal_Bool        bFilterSkipDuplicates;
+    sal_Bool        bFilterUseRegularExpressions;
+    sal_Bool        bFilterConditionSourceRange;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
@@ -185,9 +190,7 @@ public:
     void SetSubTotalsUserListIndex(const sal_Int16 nTemp) { nSubTotalsUserListIndex = nTemp; }
     void SetSubTotalsAscending(const sal_Bool bTemp) { bSubTotalsAscending = bTemp; }
     void SetSubTotalsSortGroups(const sal_Bool bTemp) { bSubTotalsSortGroups = bTemp; }
-    void SetSubTotalRuleGroupFieldNumber(const sal_Int16 nTemp) { nSubTotalRuleGroupFieldNumber = nTemp; }
-    void AddSubTotalColumn(const com::sun::star::sheet::SubTotalColumn aSubTotalColumn)
-        { aSubTotalColumns.realloc(aSubTotalColumns.getLength() + 1); aSubTotalColumns[aSubTotalColumns.getLength() - 1] = aSubTotalColumn; }
+    void AddSubTotalRule(const ScSubTotalRule& rRule) { aSubTotalRules.push_back(rRule); }
     void SetSortSequence(const com::sun::star::uno::Sequence <com::sun::star::beans::PropertyValue>& aTempSortSequence) { aSortSequence = aTempSortSequence; }
     void SetFilterCopyOutputData(const sal_Bool bTemp) { bFilterCopyOutputData = bTemp; }
     void SetFilterIsCaseSensitive(const sal_Bool bTemp) { bFilterIsCaseSensitive = bTemp; }
@@ -354,7 +357,8 @@ public:
 
 class ScXMLSubTotalRuleContext : public SvXMLImportContext
 {
-    ScXMLDatabaseRangeContext* pDatabaseRangeContext;
+    ScXMLDatabaseRangeContext*  pDatabaseRangeContext;
+    ScSubTotalRule              aSubTotalRule;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
@@ -375,11 +379,15 @@ public:
                                           ::com::sun::star::xml::sax::XAttributeList>& xAttrList );
 
     virtual void EndElement();
+
+    void AddSubTotalColumn(const com::sun::star::sheet::SubTotalColumn aSubTotalColumn)
+    { aSubTotalRule.aSubTotalColumns.realloc(aSubTotalRule.aSubTotalColumns.getLength() + 1);
+    aSubTotalRule.aSubTotalColumns[aSubTotalRule.aSubTotalColumns.getLength() - 1] = aSubTotalColumn; }
 };
 
 class ScXMLSubTotalFieldContext : public SvXMLImportContext
 {
-    ScXMLDatabaseRangeContext* pDatabaseRangeContext;
+    ScXMLSubTotalRuleContext* pSubTotalRuleContext;
     rtl::OUString sFieldNumber;
     rtl::OUString sFunction;
 
@@ -392,7 +400,7 @@ public:
                         const ::rtl::OUString& rLName,
                         const ::com::sun::star::uno::Reference<
                                         ::com::sun::star::xml::sax::XAttributeList>& xAttrList,
-                                        ScXMLDatabaseRangeContext* pTempDatabaseRangeContext);
+                                        ScXMLSubTotalRuleContext* pSubTotalRuleContext);
 
     virtual ~ScXMLSubTotalFieldContext();
 
