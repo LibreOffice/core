@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DBTools.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change:$Date: 2003-11-18 16:17:33 $
+ *  last change:$Date: 2004-08-02 17:55:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,7 @@ import com.sun.star.io.XInputStream ;
 import com.sun.star.io.XTextInputStream ;
 import com.sun.star.io.XDataInputStream ;
 import com.sun.star.container.XNameAccess ;
+import com.sun.star.frame.XStorable;
 import com.sun.star.sdbc.XCloseable ;
 import java.sql.Statement;
 import java.sql.Connection;
@@ -371,6 +372,10 @@ public class DBTools {
         try {
             revokeDB(name) ;
         } catch (com.sun.star.uno.Exception e) {}
+
+        XStorable store = (XStorable) UnoRuntime.queryInterface(XStorable.class, dataSource);
+        String aFile = utils.getOfficeTemp (xMSF)+name+".odb";
+        store.storeAsURL(aFile,new PropertyValue[]{});
 
         registerDB(name, dataSource) ;
     }
