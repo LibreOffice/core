@@ -2,9 +2,9 @@
  *
  *  $RCSfile: process_impl.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-02 13:34:30 $
+ *  last change: $Author: hr $ $Date: 2004-02-03 13:22:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,7 +134,10 @@
         if (osl_Process_E_None == osl_getProcessWorkingDir(&cwd_url.pData))
         {
             rtl::OUString cwd;
-            osl::FileBase::RC rc = osl::FileBase::getSystemPathFromFileURL(cwd_url, cwd);
+#if OSL_DEBUG_LEVEL > 0
+            osl::FileBase::RC rc =
+#endif
+                osl::FileBase::getSystemPathFromFileURL(cwd_url, cwd);
             OSL_ASSERT(osl::FileBase::E_None == rc);
 
             osl::systemPathMakeAbsolutePath(cwd, relative_path, absolute_path);
@@ -193,7 +196,11 @@ oslProcessError SAL_CALL osl_getExecutableFile(rtl_uString** ppustrFile)
         if ((abs_path.getLength() > 0) && osl::realpath(abs_path, path_resolved))
         {
             rtl::OUString furl;
-            osl::FileBase::RC rc = osl::FileBase::getFileURLFromSystemPath(path_resolved.pData, furl);
+#if OSL_DEBUG_LEVEL > 0
+            osl::FileBase::RC rc =
+#endif
+                osl::FileBase::getFileURLFromSystemPath(path_resolved.pData, furl);
+
             OSL_ASSERT(osl::FileBase::E_None == rc);
 
             rtl_uString_assign(ppustrFile, furl.pData);
@@ -223,7 +230,7 @@ char* osl_impl_getExecutableName(char * buffer, size_t n)
 
         rtl::OString exename_a = rtl::OUStringToOString(exename_u, osl_getThreadTextEncoding());
 
-        if (exename_a.getLength() < n)
+        if (exename_a.getLength() < static_cast<int>(n))
         {
             strcpy(buffer, exename_a.getStr());
             pChrRet = buffer;
