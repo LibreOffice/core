@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:52:37 $
+ *  last change: $Author: pb $ $Date: 2000-09-22 09:21:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -61,7 +61,6 @@
 #include "../source/inc/helpid.hrc"         // HID_XXX
 #include "../inc/sfxsids.hrc"               // SID_XXX
 #include "../inc/sfx.hrc"
-#include "../source/expchaos/cntexp.hrc"
 
 hidspecial HID_APP_WIN                          { HelpID = HID_APP_WIN; };
 hidspecial HID_DESKTOP                          { HelpID = HID_DESKTOP; };
@@ -130,24 +129,6 @@ hidspecial HID_CHAOSDOC_WIN                     { HelpID = HID_CHAOSDOC_WIN; };
 hidspecial HID_CHAOSDOC_WIN_HEADER              { HelpID = HID_CHAOSDOC_WIN_HEADER; };
 hidspecial HID_CHAOSDOC_WIN_PARTS               { HelpID = HID_CHAOSDOC_WIN_PARTS; };
 hidspecial HID_CHAOSDOC_WIN_BODY                { HelpID = HID_CHAOSDOC_WIN_BODY; };
-hidspecial HID_CNT_PAGE_PRECV_1                 { HelpID = HID_CNT_PAGE_PRECV_1; };
-hidspecial HID_CNT_PAGE_PRECV_2                 { HelpID = HID_CNT_PAGE_PRECV_2; };
-hidspecial HID_CNT_PAGE_PRECV_3                 { HelpID = HID_CNT_PAGE_PRECV_3; };
-hidspecial HID_CNT_PAGE_PRECV_4                 { HelpID = HID_CNT_PAGE_PRECV_4; };
-hidspecial HID_CNT_PAGE_PRECV_5                 { HelpID = HID_CNT_PAGE_PRECV_5; };
-hidspecial HID_CNT_PAGE_PRECV_6                 { HelpID = HID_CNT_PAGE_PRECV_6; };
-hidspecial HID_CNT_PAGE_PRECV_7                 { HelpID = HID_CNT_PAGE_PRECV_7; };
-hidspecial HID_CNT_PAGE_PRECV_8                 { HelpID = HID_CNT_PAGE_PRECV_8; };
-hidspecial HID_CNT_PAGE_PRECV_9                 { HelpID = HID_CNT_PAGE_PRECV_9; };
-hidspecial HID_CNT_PAGE_PSEND_1                 { HelpID = HID_CNT_PAGE_PSEND_1; };
-hidspecial HID_CNT_PAGE_PSEND_2                 { HelpID = HID_CNT_PAGE_PSEND_2; };
-hidspecial HID_CNT_PAGE_PSEND_3                 { HelpID = HID_CNT_PAGE_PSEND_3; };
-hidspecial HID_CNT_PAGE_PSEND_4                 { HelpID = HID_CNT_PAGE_PSEND_4; };
-hidspecial HID_CNT_PAGE_PSEND_5                 { HelpID = HID_CNT_PAGE_PSEND_5; };
-hidspecial HID_CNT_PAGE_PSEND_6                 { HelpID = HID_CNT_PAGE_PSEND_6; };
-hidspecial HID_CNT_PAGE_PSEND_7                 { HelpID = HID_CNT_PAGE_PSEND_7; };
-hidspecial HID_CNT_PAGE_PSEND_8                 { HelpID = HID_CNT_PAGE_PSEND_8; };
-hidspecial HID_CNT_PAGE_PSEND_9                 { HelpID = HID_CNT_PAGE_PSEND_9; };
 hidspecial SID_CHAOSDOC_LAYOUT1                 { HelpID = SID_CHAOSDOC_LAYOUT1; };
 hidspecial SID_CHAOSDOC_LAYOUT2                 { HelpID = SID_CHAOSDOC_LAYOUT2; };
 hidspecial SID_CHAOSDOC_LAYOUT3                 { HelpID = SID_CHAOSDOC_LAYOUT3; };
@@ -202,7 +183,6 @@ hidspecial HID_FILEDLG_PATH_FILENAME            { HelpID = HID_FILEDLG_PATH_FILE
 hidspecial HID_FILEDLG_FOLDER_BTN               { HelpID = HID_FILEDLG_FOLDER_BTN; };
 hidspecial HID_FILEDLG_FOLDER_FILENAME          { HelpID = HID_FILEDLG_FOLDER_FILENAME; };
 hidspecial HID_FILEDLG_SRCHFOLDER_BTN           { HelpID = HID_FILEDLG_SRCHFOLDER_BTN; };
-hidspecial HID_CNT_PAGE_WEBVIEW                 { HelpID = HID_CNT_PAGE_WEBVIEW; };
 hidspecial HID_FILEDLG_EDIT_FAVORITES_LISTBOX   { HelpID = HID_FILEDLG_EDIT_FAVORITES_LISTBOX; };
 hidspecial HID_FILEDLG_EDIT_FAVORITES_HEADERBAR { HelpID = HID_FILEDLG_EDIT_FAVORITES_HEADERBAR; };
 hidspecial HID_BROWSERCONTROL                   { HelpID = HID_BROWSERCONTROL; };
