@@ -2,9 +2,9 @@
  *
  *  $RCSfile: filter.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: sj $ $Date: 2001-08-07 13:01:31 $
+ *  last change: $Author: sj $ $Date: 2001-08-13 13:45:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1326,7 +1326,7 @@ USHORT GraphicFilter::CanImportGraphic( const String& rMainUrl, SvStream& rIStre
 // ------------------------------------------------------------------------
 
 USHORT GraphicFilter::ImportGraphic( Graphic& rGraphic, const INetURLObject& rPath,
-                                     USHORT nFormat, USHORT * pDeterminedFormat )
+                                     USHORT nFormat, USHORT * pDeterminedFormat, sal_uInt32 nImportFlags )
 {
     sal_uInt16 nRetValue = GRFILTER_FORMATERROR;
     DBG_ASSERT( rPath.GetProtocol() != INET_PROT_NOT_VALID, "GraphicFilter::ImportGraphic() : ProtType == INET_PROT_NOT_VALID" );
@@ -1335,7 +1335,7 @@ USHORT GraphicFilter::ImportGraphic( Graphic& rGraphic, const INetURLObject& rPa
     SvStream*   pStream = ::utl::UcbStreamHelper::CreateStream( aMainUrl, STREAM_READ | STREAM_SHARE_DENYNONE );
     if ( pStream )
     {
-        nRetValue = ImportGraphic( rGraphic, aMainUrl, *pStream, nFormat, pDeterminedFormat );
+        nRetValue = ImportGraphic( rGraphic, aMainUrl, *pStream, nFormat, pDeterminedFormat, nImportFlags );
         delete pStream;
     }
     return nRetValue;
@@ -1344,7 +1344,7 @@ USHORT GraphicFilter::ImportGraphic( Graphic& rGraphic, const INetURLObject& rPa
 //-------------------------------------------------------------------------
 
 USHORT GraphicFilter::ImportGraphic( Graphic& rGraphic, const String& rPath, SvStream& rIStream,
-                                     USHORT nFormat, USHORT* pDeterminedFormat )
+                                     USHORT nFormat, USHORT* pDeterminedFormat, sal_uInt32 nImportFlags )
 {
     ImpFilterCallbackData   aCallbackData;
     String                  aFilterName;
