@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wizardmachine.src,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-29 20:08:52 $
+ *  last change: $Author: kz $ $Date: 2001-11-07 09:50:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,7 +107,7 @@ String STR_WIZDLG_NEXT
     Text[ swedish ] = "~N�sta >>";
     Text[ polish ] = "Dalej >>";
     Text[ portuguese_brazilian ] = "~Next >>";
-    Text[ japanese ] = "次へ  (~N) >>";
+    Text[ japanese ] = "次へ(~N) >>";
     Text[ korean ] = "다음 (~N) >>";
     Text[ chinese_simplified ] = "继续  (~N) >>";
     Text[ chinese_traditional ] = "繼續 (~N) >>";
@@ -147,6 +147,9 @@ String STR_WIZDLG_PREVIOUS
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.21  2001/08/29 20:08:52  kz
+ *  Merge SRC638: 08/29/01 - 22:08:32
+ *
  *  Revision 1.20  2001/08/24 13:31:01  rt
  *  Merge SRC638: 24.08.01 - 15:29:25
  *
@@ -210,6 +213,7 @@ String STR_WIZDLG_PREVIOUS
  *
  *  Revision 1.0 14.02.01 11:46:26  fs
  ************************************************************************/
+
 
 
 
