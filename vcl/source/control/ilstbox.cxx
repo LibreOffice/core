@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ilstbox.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: cp $ $Date: 2001-02-05 09:46:15 $
+ *  last change: $Author: pl $ $Date: 2001-02-06 15:33:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,7 +196,8 @@ uno::Reference< i18n::XCollator > ImplGetCollator (lang::Locale &rLocale)
     static uno::Reference< i18n::XCollator > xCollator;
     if ( !xCollator.is() )
         xCollator = vcl::unohelper::CreateCollator();
-    xCollator->loadDefaultCollator (rLocale, 0);
+    if( xCollator.is() )
+        xCollator->loadDefaultCollator (rLocale, 0);
 
     return xCollator;
 }
@@ -226,8 +227,9 @@ USHORT ImplEntryList::InsertEntry( USHORT nPos, ImplEntryType* pNewEntry, BOOL b
         {
             // XXX even though XCollator::compareString returns a sal_Int32 the only
             // defined values are {-1, 0, 1} which is compatible with StringCompare
-            StringCompare eComp =
-                    (StringCompare)xCollator->compareString (rStr, pTemp->maStr);
+            StringCompare eComp = xCollator.is() ?
+                (StringCompare)xCollator->compareString (rStr, pTemp->maStr)
+                : COMPARE_EQUAL;
 
             // Schnelles Einfuegen bei sortierten Daten
             if ( eComp != COMPARE_LESS )
