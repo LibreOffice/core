@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxhtml.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: as $ $Date: 2000-11-08 14:25:44 $
+ *  last change: $Author: mib $ $Date: 2001-03-06 13:06:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -597,6 +597,7 @@ BOOL SfxHTMLParser::FinishFileDownload( String& rStr )
 
         ByteString sBuffer;
         sal_Char* pBuffer = sBuffer.AllocBuffer(nLen);
+        aStream.Seek( 0 );
         aStream.Read((void*)pBuffer, nLen);
         rStr = String( S2U(pBuffer) );
     }
