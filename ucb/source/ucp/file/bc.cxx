@@ -2,9 +2,9 @@
  *
  *  $RCSfile: bc.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: kso $ $Date: 2001-07-27 13:28:35 $
+ *  last change: $Author: sb $ $Date: 2001-08-07 13:35:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1267,12 +1267,8 @@ void SAL_CALL BaseContent::insert( sal_Int32 nMyCommandIdentifier,
 
 void SAL_CALL BaseContent::endTask( sal_Int32 CommandId )
 {
-    rtl::OUString aRedirectedPath;
-    if ( !m_pMyShell->uncheckMountPoint( m_aUncPath, aRedirectedPath ) )
-        aRedirectedPath = m_aUncPath;
-
     // This is the only function allowed to throw an exception
-    m_pMyShell->endTask( CommandId,aRedirectedPath );
+    m_pMyShell->endTask( m_pMyShell,CommandId,m_aUncPath );
 }
 
 
