@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: pb $ $Date: 2001-06-27 07:57:02 $
+#   last change: $Author: dv $ $Date: 2001-06-28 11:55:45 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -79,8 +79,7 @@ SRCFILES=		filedlg2.src	\
                 colrdlg.src		\
                 logindlg.src	\
                 addresstemplate.src	\
-                wizardmachine.src \
-                filepicker.src
+                wizardmachine.src
 
 
 EXCEPTIONSFILES=	$(SLO)$/addresstemplate.obj	\
