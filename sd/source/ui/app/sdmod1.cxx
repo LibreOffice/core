@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdmod1.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ka $ $Date: 2000-11-10 16:45:32 $
+ *  last change: $Author: ka $ $Date: 2000-11-22 13:12:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 #endif
 #ifndef _SFXVIEWFRM_HXX //autogen
 #include <sfx2/viewfrm.hxx>
+#endif
+#ifndef INCLUDED_SVTOOLS_MODULEOPTIONS_HXX
+#include <svtools/moduleoptions.hxx>
 #endif
 
 #pragma hdrstop
@@ -245,7 +248,7 @@ void SdModule::Execute(SfxRequest& rReq)
 
         case SID_SD_AUTOPILOT:
         {
-            if (SFX_APP()->HasFeature(SFX_FEATURE_SIMPRESS))
+            if ( SvtModuleOptions().IsImpress() )
             {
                 SdOptions* pOpt = GetSdOptions(DOCUMENT_TYPE_IMPRESS);
                 BOOL bStartWithTemplate = pOpt->IsStartWithTemplate();
@@ -734,7 +737,7 @@ void SdModule::GetState(SfxItemSet& rItemSet)
     // Autopilot waehrend der Praesentation disablen
     if (rItemSet.GetItemState(SID_SD_AUTOPILOT) != SFX_ITEM_UNKNOWN)
     {
-        if (!SFX_APP()->HasFeature(SFX_FEATURE_SIMPRESS))
+        if (!SvtModuleOptions().IsImpress())
         {
             rItemSet.DisableItem(SID_SD_AUTOPILOT);
         }

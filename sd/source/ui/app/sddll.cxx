@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sddll.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:30 $
+ *  last change: $Author: ka $ $Date: 2000-11-22 13:12:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,6 +70,9 @@
 #ifndef _SFXAPP_HXX //autogen
 #include <sfx2/app.hxx>
 #endif
+#ifndef INCLUDED_SVTOOLS_MODULEOPTIONS_HXX
+#include <svtools/moduleoptions.hxx>
+#endif
 
 #pragma hdrstop
 
@@ -106,14 +109,14 @@ void SdDLL::Init()
     (*ppShlPtr)->pSdDrawDocShellFactory    = pDrawFact;
     (*ppShlPtr)->pSdGraphicDocShellFactory = pGraphicFact;
 
-    if (SFX_APP()->HasFeature(SFX_FEATURE_SIMPRESS))
+    if (SvtModuleOptions().IsImpress())
     {
         SdDrawDocShell::Factory().RegisterMenuBar( SdResId( RID_DRAW_DEFAULTMENU ) );
         SdDrawDocShell::Factory().RegisterPluginMenuBar( SdResId( RID_DRAW_PORTALMENU ) );
         SdDrawDocShell::Factory().RegisterAccel( SdResId( RID_DRAW_DEFAULTACCEL ) );
     }
 
-    if (SFX_APP()->HasFeature(SFX_FEATURE_SDRAW))
+    if (SvtModuleOptions().IsDraw())
     {
         SdGraphicDocShell::Factory().RegisterMenuBar( SdResId( RID_GRAPHIC_DEFAULTMENU ) );
         SdGraphicDocShell::Factory().RegisterPluginMenuBar( SdResId( RID_GRAPHIC_PORTALMENU ) );
