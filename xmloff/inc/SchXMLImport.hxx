@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SchXMLImport.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2004-05-03 13:31:04 $
+ *  last change: $Author: rt $ $Date: 2004-07-13 07:53:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,7 +117,6 @@ enum SchXMLPlotAreaElemTokenMap
 {
     XML_TOK_PA_AXIS,
     XML_TOK_PA_SERIES,
-    XML_TOK_PA_CATEGORIES,
     XML_TOK_PA_WALL,
     XML_TOK_PA_FLOOR,
     XML_TOK_PA_LIGHT_SOURCE,
@@ -133,6 +132,13 @@ enum SchXMLSeriesElemTokenMap
     XML_TOK_SERIES_MEAN_VALUE_LINE,
     XML_TOK_SERIES_REGRESSION_CURVE,
     XML_TOK_SERIES_ERROR_INDICATOR
+};
+
+enum SchXMLAxisElemTokenMap
+{
+    XML_TOK_AXIS_TITLE,
+    XML_TOK_AXIS_CATEGORIES,
+    XML_TOK_AXIS_GRID
 };
 
 // ----------------------------------------
