@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbwizsetup.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-22 09:02:35 $
+ *  last change: $Author: kz $ $Date: 2004-11-26 21:50:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -171,9 +171,27 @@
 #ifndef _COM_SUN_STAR_SDB_COMMANDTYPE_HPP_
 #include <com/sun/star/sdb/CommandType.hpp>
 #endif
+#ifndef _COM_SUN_STAR_UCB_INTERACTIVEIOEXCEPTION_HPP_
+#include <com/sun/star/ucb/InteractiveIOException.hpp>
+#endif
+#ifndef _COM_SUN_STAR_IO_IOEXCEPTION_HPP_
+#include <com/sun/star/io/IOException.hpp>
+#endif
 #ifndef SVTOOLS_FILENOTATION_HXX_
 #include <svtools/filenotation.hxx>
 #endif
+#ifndef _COMPHELPER_INTERACTION_HXX_
+#include <comphelper/interaction.hxx>
+#endif
+
+#ifndef _COM_SUN_STAR_UCB_IOERRORCODE_HPP_
+#include <com/sun/star/ucb/IOErrorCode.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
+#include <com/sun/star/task/XInteractionHandler.hpp>
+#endif
+
+
 
 
 
@@ -189,12 +207,14 @@ using namespace com::sun::star::sdbc;
 using namespace com::sun::star::sdbcx;
 using namespace com::sun::star::task;
 using namespace com::sun::star::lang;
+using namespace com::sun::star::io;
 using namespace com::sun::star::util;
 using namespace com::sun::star::beans;
 using namespace com::sun::star::container;
-using namespace ::com::sun::star::frame;
-namespace css = com::sun::star;
-namespace ucb = css::ucb;
+using namespace com::sun::star::frame;
+using namespace com::sun::star::ucb;
+using namespace ::comphelper;
+using namespace ::cppu;
 
 #define START_PAGE      0
 #define CONNECTION_PAGE 1
@@ -879,37 +899,89 @@ void ODbTypeWizDialogSetup::setTitle(const ::rtl::OUString& _sTitle)
 //-------------------------------------------------------------------------
 sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
 {
-    if (callSaveAsDialog() == sal_True)
+    Reference< XInteractionHandler > xHandler(getORB()->createInstance(SERVICE_TASK_INTERACTION_HANDLER), UNO_QUERY);
+    try
     {
-        m_pImpl->saveChanges(*m_pOutSet);
-        Reference< XPropertySet > xDatasource = m_pImpl->getCurrentDataSource();
-        SFX_ITEMSET_GET(*m_pOutSet, pDocUrl, SfxStringItem, DSID_DOCUMENT_URL, sal_True);
-        Reference<XStorable> xStore(xDatasource,UNO_QUERY);
-        Reference<XComponent> xComponent(xDatasource,UNO_QUERY);
-        ::rtl::OUString sPath = m_pImpl->getDocumentUrl(*m_pOutSet);
-        if ( xStore.is() )
+        if (callSaveAsDialog() == sal_True)
         {
-            if (m_pGeneralPage->IsDatabaseToBeCreated())
+            m_pImpl->saveChanges(*m_pOutSet);
+            Reference< XPropertySet > xDatasource = m_pImpl->getCurrentDataSource();
+            SFX_ITEMSET_GET(*m_pOutSet, pDocUrl, SfxStringItem, DSID_DOCUMENT_URL, sal_True);
+            Reference<XStorable> xStore(xDatasource,UNO_QUERY);
+            Reference<XComponent> xComponent(xDatasource,UNO_QUERY);
+            ::rtl::OUString sPath = m_pImpl->getDocumentUrl(*m_pOutSet);
+            if ( xStore.is() )
             {
-                CreateDatabase();
-            }
-            Reference< XModel > xModel(xStore, UNO_QUERY);
-            xStore->storeAsURL(sPath,xModel->getArgs());
-            xComponent->dispose();
-            if (pFinalPage != NULL)
-            {
-                if (pFinalPage->IsDatabaseDocumentToBeRegistered())
+                if (m_pGeneralPage->IsDatabaseToBeCreated())
+                {
+                    CreateDatabase();
+                }
+                Reference< XModel > xModel(xStore, UNO_QUERY);
+
+                Sequence<PropertyValue> aArgs = xModel->getArgs();
+
+                sal_Bool bOverwrite = sal_True;
+                sal_Bool bAddOverwrite = sal_True;
+                sal_Bool bAddInteractionHandler = sal_True;
+                PropertyValue* pIter = aArgs.getArray();
+                PropertyValue* pEnd  = pIter + aArgs.getLength();
+                for(;pIter != pEnd;++pIter)
+                {
+                    if ( pIter->Name.equalsAscii("Overwrite") )
+                    {
+                        pIter->Value <<= bOverwrite;
+                        bAddOverwrite = sal_False;
+                    }
+                    if ( pIter->Name.equalsAscii("InteractionHandler") )
+                    {
+                        pIter->Value <<= xHandler;
+                        bAddInteractionHandler = sal_False;
+                    }
+
+                }
+                if ( bAddOverwrite )
+                {
+                    sal_Int32 nLen = aArgs.getLength();
+                    aArgs.realloc(nLen+1);
+                    aArgs[nLen].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Overwrite"));
+                    aArgs[nLen].Value <<= bOverwrite;
+                }
+                if ( bAddInteractionHandler )
+                {
+                    sal_Int32 nLen = aArgs.getLength();
+                    aArgs.realloc(nLen+1);
+                    aArgs[nLen].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("InteractionHandler"));
+                    aArgs[nLen].Value <<= xHandler;
+                }
+                xStore->storeAsURL(sPath,aArgs);
+                xComponent->dispose();
+                if (pFinalPage != NULL)
+                {
+                    if (pFinalPage->IsDatabaseDocumentToBeRegistered())
+                        RegisterDataSourceByLocation(sPath);
+                    if (pFinalPage->IsDatabaseDocumentToBeOpened())
+                        OpenDatabaseDocument(sPath);
+                }
+                else
+                {
                     RegisterDataSourceByLocation(sPath);
-                if (pFinalPage->IsDatabaseDocumentToBeOpened())
                     OpenDatabaseDocument(sPath);
+                }
+                return sal_True;
             }
-            else
-            {
-                RegisterDataSourceByLocation(sPath);
-                OpenDatabaseDocument(sPath);
-            }
-            return sal_True;
         }
+    }
+    catch (Exception& e)
+    {
+        InteractiveIOException aRequest;
+        aRequest.Code = IOErrorCode_GENERAL;
+        OInteractionRequest * pRequest  = new OInteractionRequest (makeAny (aRequest));
+        Reference < XInteractionRequest > xRequest(pRequest );
+        OInteractionAbort* pAbort = new OInteractionAbort;
+        pRequest ->addContinuation (pAbort );
+        if ( xHandler.is() )
+            xHandler->handle( xRequest );
+        e;  // make compiler happy
     }
     return sal_False;
 }
@@ -944,7 +1016,8 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
         }
         m_pOutSet->Put(SfxStringItem(DSID_CONNECTURL, sUrl));
         m_pImpl->saveChanges(*m_pOutSet);
-    }
+
+   }
 
 //-------------------------------------------------------------------------
     void ODbTypeWizDialogSetup::RegisterDataSourceByLocation(::rtl::OUString sPath)
@@ -1040,7 +1113,7 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
 //-------------------------------------------------------------------------
     void ODbTypeWizDialogSetup::createUniqueFolderName(INetURLObject* pURL)
     {
-        Reference< ucb::XSimpleFileAccess > xSimpleFileAccess(getORB()->createInstance(::rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" )), UNO_QUERY);
+        Reference< XSimpleFileAccess > xSimpleFileAccess(getORB()->createInstance(::rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" )), UNO_QUERY);
         :: rtl::OUString sLastSegmentName = pURL->getName();
         sal_Bool bFolderExists = sal_True;
         sal_Int32 i = 1;
@@ -1060,7 +1133,7 @@ sal_Bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
 //-------------------------------------------------------------------------
     void ODbTypeWizDialogSetup::createUniqueFileName(INetURLObject* pURL)
     {
-        Reference< ucb::XSimpleFileAccess > xSimpleFileAccess(getORB()->createInstance(::rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" )), UNO_QUERY);
+        Reference< XSimpleFileAccess > xSimpleFileAccess(getORB()->createInstance(::rtl::OUString::createFromAscii( "com.sun.star.ucb.SimpleFileAccess" )), UNO_QUERY);
         :: rtl::OUString sFilename = pURL->getName();
         ::rtl::OUString BaseName = pURL->getBase();
         ::rtl::OUString sExtension = pURL->getExtension();
