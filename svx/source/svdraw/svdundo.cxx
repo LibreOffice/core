@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdundo.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 14:37:53 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 18:22:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,6 +169,11 @@ void SdrUndoGroup::Clear()
 void SdrUndoGroup::AddAction(SdrUndoAction* pAct)
 {
     aBuf.Insert(pAct,CONTAINER_APPEND);
+}
+
+void SdrUndoGroup::push_front( SdrUndoAction* pAct )
+{
+    aBuf.Insert(pAct, (ULONG)0 );
 }
 
 void SdrUndoGroup::Undo()
