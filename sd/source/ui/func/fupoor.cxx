@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fupoor.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: tbe $ $Date: 2000-11-10 16:26:52 $
+ *  last change: $Author: ka $ $Date: 2001-01-11 16:19:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,7 +100,6 @@
 #include "drviewsh.hxx"
 #include "sdwindow.hxx"
 #include "drawdoc.hxx"
-#include "dragserv.hxx"
 #include "docshell.hxx"
 #include "zoomlist.hxx"
 #include "fuslshow.hxx"

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdwindow.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 16:48:44 $
+ *  last change: $Author: ka $ $Date: 2001-01-11 16:20:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,6 @@
 #include "sdwindow.hxx"
 #include "viewshel.hxx"
 #include "drviewsh.hxx"
-#include "dragserv.hxx"
 #include "sdview.hxx"
 #include "outlnvsh.hxx"
 
