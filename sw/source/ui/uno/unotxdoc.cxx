@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unotxdoc.cxx,v $
  *
- *  $Revision: 1.81 $
+ *  $Revision: 1.82 $
  *
- *  last change: $Author: rt $ $Date: 2003-09-19 10:17:26 $
+ *  last change: $Author: hr $ $Date: 2003-09-29 15:06:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@
 #endif
 #ifndef _SV_SETTINGS_HXX
 #include <vcl/settings.hxx>
+#endif
+#ifndef _SFXVIEWFRM_HXX
+#include <sfx2/viewfrm.hxx>
 #endif
 #ifndef _TOOLKIT_UNOHLP_HXX
 #include <toolkit/helper/vclunohelper.hxx>
@@ -2506,8 +2509,22 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SwXTextDocument::getRenderer(
  ---------------------------------------------------------------------------*/
 SfxViewShell * SwXTextDocument::GuessViewShell()
 {
-    SfxViewShell* pCurrentShell = SfxViewShell::Current();
-    if(pCurrentShell->GetObjectShell() != pDocShell)
+    // check for view shell first...
+    const TypeId aTypeId = TYPE(SwView);
+    SfxViewShell* pView = SfxViewShell::GetFirst(&aTypeId);
+    while(pView && pView->GetObjectShell() != pDocShell)
+        pView = SfxViewShell::GetNext(*pView, &aTypeId);
+    // ...if that is not available check for page pre view shell
+    // in order to allow for PDF export of page preview
+    if(!pView)
+    {
+        const TypeId aPageViewTypeId = TYPE(SwPagePreView);
+        pView= SfxViewShell::GetFirst(&aPageViewTypeId);
+        while(pView && pView->GetObjectShell() != pDocShell)
+            pView = SfxViewShell::GetNext(*pView, &aPageViewTypeId);
+    }
+    DBG_ASSERT( pView, "view shell missing" );
+/*    if(pCurrentShell->GetObjectShell() != pDocShell)
         pCurrentShell = 0;
     SfxViewShell* pView = SfxViewShell::GetFirst();
     const TypeId aSwSrcViewTypeId = TYPE(SwSrcView);
@@ -2518,9 +2535,9 @@ SfxViewShell * SwXTextDocument::GuessViewShell()
             (pView->GetObjectShell() == pDocShell))
             break;
         pView = SfxViewShell::GetNext(*pView );
-    }
+    }*/
 
-    return pView;
+    return static_cast<SwView*>(pView);
 }
 /* -----------------------------23.08.02 16:00--------------------------------
 
@@ -2549,6 +2566,7 @@ void SAL_CALL SwXTextDocument::render(
 
     // the view shell should be SwView for documents PDF export
     // or SwPagePreView for PDF export of the page preview
+    //!! (check for SwView first as in GuessViewShell) !!
     const TypeId aSwViewTypeId = TYPE(SwView);
     const TypeId aSwPreViewTypeId = TYPE(SwPagePreView);
     ViewShell* pVwSh = pView->IsA(aSwViewTypeId) ?
