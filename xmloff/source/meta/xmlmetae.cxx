@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlmetae.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 08:15:46 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 18:11:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,7 +102,7 @@ using namespace ::xmloff::token;
 
 #define PROP_TITLE          "Title"
 #define PROP_DESCRIPTION    "Description"
-#define PROP_THEME          "Theme"
+#define PROP_SUBJECT          "Subject"
 #define PROP_KEYWORDS       "Keywords"
 #define PROP_AUTHOR         "Author"
 #define PROP_CREATIONDATE   "CreationDate"
@@ -371,7 +371,7 @@ void SfxXMLMetaExport::Export()
                          XML_NAMESPACE_DC, XML_DESCRIPTION );
 
     //  subject
-    SimpleStringElement( ::rtl::OUString::createFromAscii(PROP_THEME),
+    SimpleStringElement( ::rtl::OUString::createFromAscii(PROP_SUBJECT),
                          XML_NAMESPACE_DC, XML_SUBJECT );
 
     //  created...
