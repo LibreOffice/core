@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ScriptRuntimeManager.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: dfoster $ $Date: 2003-05-23 14:59:51 $
+ *  last change: $Author: npower $ $Date: 2003-07-07 14:25:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -138,7 +138,7 @@ throw( RuntimeException )
             Reference< storage::XScriptInfo >( scriptInfo, UNO_QUERY_THROW );
 
         OUStringBuffer *buf = new OUStringBuffer(80);
-        buf->appendAscii("/singletons/drafts.com.sun.star.script.framework.theScriptRuntimeFor");
+        buf->appendAscii("/singletons/drafts.com.sun.star.script.framework.runtime.theScriptRuntimeFor");
         buf->append(sinfo->getLanguage());
 
         Any a = m_xContext->getValueByName(buf->makeStringAndClear());
@@ -443,7 +443,33 @@ Sequence< OUString > scriptnri_getSupportedServiceNames() SAL_THROW( () );
 //*************************************************************************
 OUString scriptnri_getImplementationName() SAL_THROW( () );
 
+//******************** ScriptStorageMangaer defines ***********************
+Reference< XInterface > SAL_CALL ssm_create(
+    Reference< XComponentContext > const & xComponentContext )
+SAL_THROW( ( Exception ) );
 //*************************************************************************
+Sequence< OUString > ssm_getSupportedServiceNames() SAL_THROW( () );
+//*************************************************************************
+OUString ssm_getImplementationName() SAL_THROW( () );
+//*************************************************************************
+
+//************ Script Provider defines ************************************
+Reference< XInterface > SAL_CALL fp_create( const Reference< XComponentContext > & xCompC );
+//******************** FunctionProvider defines ***************************
+Sequence< OUString > fp_getSupportedServiceNames( ) SAL_THROW( () );
+//*************************************************************************
+OUString fp_getImplementationName( ) SAL_THROW( () );
+//*************************************************************************
+
+//************ ScriptStorage defines **************************************
+Reference< XInterface > SAL_CALL ss_create( const Reference< XComponentContext > & xCompC );
+//******************** FunctionProvider defines ***************************
+Sequence< OUString > ss_getSupportedServiceNames( ) SAL_THROW( () );
+//*************************************************************************
+OUString ss_getImplementationName( ) SAL_THROW( () );
+//*************************************************************************
+
+
 static struct cppu::ImplementationEntry s_entries [] =
     {
         {
@@ -455,6 +481,21 @@ static struct cppu::ImplementationEntry s_entries [] =
             scriptnri_create, scriptnri_getImplementationName,
             scriptnri_getSupportedServiceNames, cppu::createSingleComponentFactory,
             &s_moduleCount.modCnt, 0
+        },
+        {
+            ssm_create, ssm_getImplementationName,
+            ssm_getSupportedServiceNames, cppu::createSingleComponentFactory,
+            0, 0
+        },
+        {
+            ss_create, ss_getImplementationName,
+            ss_getSupportedServiceNames, cppu::createSingleComponentFactory,
+            0, 0
+        },
+        {
+            fp_create, fp_getImplementationName,
+            fp_getSupportedServiceNames, cppu::createSingleComponentFactory,
+            0, 0
         },
         { 0, 0, 0, 0, 0, 0 }
     };
@@ -490,15 +531,43 @@ extern "C"
         {
             try
             {
-                // register singleton
+                // register RuntimeManager singleton
+
                 registry::XRegistryKey * pKey =
                     reinterpret_cast< registry::XRegistryKey * >(pRegistryKey);
 
                 Reference< registry::XRegistryKey > xKey(
                     pKey->createKey(
 
-                    OUSTR("drafts.com.sun.star.script.framework.ScriptRuntimeManager/UNO/SINGLETONS/drafts.com.sun.star.script.framework.runtime.theScriptRuntimeManager")));
+                    OUSTR("drafts.com.sun.star.script.framework.runtime.ScriptRuntimeManager/UNO/SINGLETONS/drafts.com.sun.star.script.framework.runtime.theScriptRuntimeManager")));
                     xKey->setStringValue( OUSTR("drafts.com.sun.star.script.framework.runtime.ScriptRuntimeManager") );
+
+                // ScriptStorage Mangaer singleton
+
+                xKey = pKey->createKey(
+                    OUSTR("drafts.com.sun.star.script.framework.storage.ScriptStorageManager/UNO/SINGLETONS/drafts.com.sun.star.script.framework.storage.theScriptStorageManager"));
+                 xKey->setStringValue( OUSTR("drafts.com.sun.star.script.framework.storage.ScriptStorageManager") );
+                // Singleton entries are not handled by the setup process
+                // below is the only alternative at the momement which
+                // is to programmatically do this.
+
+                // "Java" Runtime singleton entry
+
+                xKey = pKey->createKey(
+                    OUSTR("com.sun.star.scripting.runtime.java.ScriptRuntimeForJava$_ScriptRuntimeForJava/UNO/SINGLETONS/drafts.com.sun.star.script.framework.runtime.theScriptRuntimeForJava"));
+                 xKey->setStringValue( OUSTR("drafts.com.sun.star.script.framework.runtime.ScriptRuntimeForJava") );
+
+                // "JavaScript" Runtime singleton entry
+
+                xKey = pKey->createKey(
+                    OUSTR("com.sun.star.scripting.runtime.javascript.ScriptRuntimeForJavaScript$_ScriptRuntimeForJavaScript/UNO/SINGLETONS/drafts.com.sun.star.script.framework.runtime.theScriptRuntimeForJavaScript"));
+                 xKey->setStringValue( OUSTR("drafts.com.sun.star.script.framework.runtime.ScriptRuntimeForJavaScript") );
+
+                // "BeanShell" Runtime singleton entry
+
+                xKey = pKey->createKey(
+                    OUSTR("com.sun.star.scripting.runtime.beanshell.ScriptRuntimeForBeanShell$_ScriptRuntimeForBeanShell/UNO/SINGLETONS/drafts.com.sun.star.script.framework.runtime.theScriptRuntimeForBeanShell"));
+                 xKey->setStringValue( OUSTR("drafts.com.sun.star.script.framework.runtime.ScriptRuntimeForBeanShell") );
 
                 return sal_True;
             }
