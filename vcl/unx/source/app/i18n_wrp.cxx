@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_wrp.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: svesik $ $Date: 2000-12-19 00:17:37 $
+ *  last change: $Author: svesik $ $Date: 2001-02-16 01:06:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,7 @@ struct XIMArg
     char *value;
 };
 
-#if !defined(LINUX) && !defined(FREEBSD)
+#if !defined(LINUX) && !defined(FREEBSD) && !defined(NETBSD)
 #include <varargs.h>
 #else
 #include <stdarg.h>
@@ -209,7 +209,7 @@ XvaOpenIM(Display *display, XrmDatabase rdb,
         * so count the stuff dangling here
      */
 
-#if defined(LINUX) || defined(FREEBSD)
+#if defined(LINUX) || defined(FREEBSD) || defined(NETBSD)
     va_start(variable, res_class);
 #else
       va_start(variable);
@@ -226,7 +226,8 @@ XvaOpenIM(Display *display, XrmDatabase rdb,
         /*
           * now package it up so we can set it along
           */
-#if defined(LINUX) || defined(FREEBSD)
+#if defined(LINUX) || defined(FREEBSD) || defined(NETBSD)
+
         va_start(variable, res_class);
 #else
         va_start(variable);
