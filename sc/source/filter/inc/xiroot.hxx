@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xiroot.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:47:41 $
+ *  last change: $Author: obo $ $Date: 2004-10-18 15:19:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -122,14 +122,11 @@ struct XclImpRootData : public XclRootData
     XclImpWebQueryBfrPtr mxWebQueryBfr;     /// All web queries.
     XclImpPTableMgrPtr  mxPTableMgr;        /// All pivot tables and pivot caches.
 
-    explicit            XclImpRootData(
-                            XclBiff eBiff,
-                            SfxMedium& rMedium,
-                            ScDocument& rDocument,
-                            CharSet eCharSet );
+    explicit            XclImpRootData( XclBiff eBiff, SfxMedium& rMedium,
+                            SotStorageRef xRootStrg, SvStream& rBookStrm,
+                            ScDocument& rDoc, CharSet eCharSet );
     virtual             ~XclImpRootData();
 };
-
 
 // ----------------------------------------------------------------------------
 
@@ -139,6 +136,8 @@ class ExcelToSc;
 class XclImpRoot : public XclRoot
 {
 public:
+    explicit            XclImpRoot( XclImpRootData& rImpRootData );
+
     /** Returns this root instance - for code readability in derived classes. */
     inline const XclImpRoot& GetRoot() const { return *this; }
 
@@ -197,13 +196,9 @@ public:
         @descr  See XclRoot::CheckCellRangeList for details. */
     void                CheckCellRangeList( ScRangeList& rRanges ) const;
 
-protected:
-    explicit            XclImpRoot( XclImpRootData& rImpRootData );
-
 private:
     mutable XclImpRootData& mrImpData;      /// Reference to the global import data struct.
 };
-
 
 // ============================================================================
 
