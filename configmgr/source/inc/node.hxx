@@ -2,9 +2,9 @@
  *
  *  $RCSfile: node.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2002-06-07 14:14:55 $
+ *  last change: $Author: vg $ $Date: 2003-04-01 13:33:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,7 @@ namespace configmgr
             Type ::Field    type;   // contains discriminator for union
 
             rtl::OUString       getName(memory::Accessor const & _aAccessor) const;
-            node::Attributes    getAttributes() const;
+            node::Attributes    getNodeInfoAttributes() const;
             bool isDefault() const;
             bool isLocalized() const;
 
@@ -218,6 +218,20 @@ namespace configmgr
         { return reinterpret_cast<Node const*>(pNode); }
         inline Node const * node(SetNode const* pNode)
         { return reinterpret_cast<Node const*>(pNode); }
+    //-----------------------------------------------------------------------------
+        inline Node & node(ValueNode & pNode)
+        { return reinterpret_cast<Node&>(pNode); }
+        inline Node & node(GroupNode & pNode)
+        { return reinterpret_cast<Node&>(pNode); }
+        inline Node & node(SetNode & pNode)
+        { return reinterpret_cast<Node&>(pNode); }
+
+        inline Node const & node(ValueNode const& pNode)
+        { return reinterpret_cast<Node const&>(pNode); }
+        inline Node const & node(GroupNode const& pNode)
+        { return reinterpret_cast<Node const&>(pNode); }
+        inline Node const & node(SetNode const& pNode)
+        { return reinterpret_cast<Node const&>(pNode); }
     //-----------------------------------------------------------------------------
     }
 //-----------------------------------------------------------------------------
