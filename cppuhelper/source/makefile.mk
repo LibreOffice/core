@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: dbo $ $Date: 2001-05-08 15:56:02 $
+#   last change: $Author: dbo $ $Date: 2001-05-30 09:02:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -61,24 +61,24 @@
 #*************************************************************************
 PRJ=..
 
-PRJNAME=	cppuhelper
-TARGET=		cppuhelper
-NO_BSYMBOLIC=	TRUE
+PRJNAME=cppuhelper
+TARGET=cppuhelper
+NO_BSYMBOLIC=TRUE
 ENABLE_EXCEPTIONS=TRUE
-
-USE_DEFFILE=	TRUE
+USE_DEFFILE=TRUE
 
 # --- Settings -----------------------------------------------------
+
 .INCLUDE :  settings.mk
 
 # --- Files --------------------------------------------------------
 
-UNOUCRDEP=	$(SOLARBINDIR)$/udkapi.rdb
-UNOUCRRDB=	$(SOLARBINDIR)$/udkapi.rdb
-UNOUCROUT=	$(OUT)$/inc
-INCPRE+=	$(OUT)$/inc
+UNOUCRDEP=$(SOLARBINDIR)$/udkapi.rdb
+UNOUCRRDB=$(SOLARBINDIR)$/udkapi.rdb
+UNOUCROUT=$(OUT)$/inc
+INCPRE+=$(OUT)$/inc
 
-CPPUMAKERFLAGS =
+CPPUMAKERFLAGS=
 
 UNOTYPES= \
         com.sun.star.registry.XSimpleRegistry		\
@@ -118,7 +118,7 @@ UNOTYPES= \
         com.sun.star.lang.XTypeProvider			\
         com.sun.star.lang.XComponent
 
-SLOFILES=	\
+SLOFILES= \
         $(SLO)$/typeprovider.obj 	\
         $(SLO)$/exc_thrower.obj 	\
         $(SLO)$/servicefactory.obj 	\
@@ -133,25 +133,30 @@ SLOFILES=	\
         $(SLO)$/shlib.obj		\
         $(SLO)$/tdmgr.obj
 
-SHL1TARGET=	$(TARGET)$(UDK_MAJOR)$(COM)
+SHL1TARGET=$(TARGET)$(UDK_MAJOR)$(COM)
 
 SHL1STDLIBS= \
         $(CPPULIB)		\
         $(SALLIB)
 
 SHL1DEPN=
-SHL1IMPLIB=	i$(TARGET)
-SHL1LIBS=	$(SLB)$/$(TARGET).lib
-SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
+SHL1IMPLIB=i$(TARGET)
+SHL1LIBS=$(SLB)$/$(TARGET).lib
+SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 
-DEF1NAME=	$(SHL1TARGET)
-DEF1DEPN=	$(MISC)$/$(SHL1TARGET).flt
-DEFLIB1NAME=	$(TARGET)
+DEF1NAME=$(SHL1TARGET)
+
+.IF "$(OS)$(CPU)"=="WNTI"
+SHL1VERSIONMAP=msci.map
+.ELIF "$(OS)$(CPU)"=="SOLARISS"
+SHL1VERSIONMAP=sols.map
+.ELIF "$(OS)$(CPU)"=="SOLARISI"
+SHL1VERSIONMAP=soli.map
+.ELIF "$(OS)$(CPU)"=="LINUXI"
+SHL1VERSIONMAP=lngi.map
+.ENDIF
 
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :	target.mk
 
-$(MISC)$/$(SHL1TARGET).flt : makefile.mk
-    +echo	_TI2	   >$@
-    +echo	_TI1	  >>$@
