@@ -2,9 +2,9 @@
  *
  *  $RCSfile: documen9.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: nn $ $Date: 2001-06-20 14:29:55 $
+ *  last change: $Author: nn $ $Date: 2001-06-25 20:37:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -288,6 +288,7 @@ void ScDocument::InitDrawLayer( SfxObjectShell* pDocShell )
             pDrawLayer->EnableAdjust(FALSE);
 
         pDrawLayer->SetForbiddenCharsTable( xForbiddenCharacters );
+        pDrawLayer->SetCharCompressType( GetAsianCompression() );
     }
 }
 
@@ -881,4 +882,25 @@ void ScDocument::SetForbiddenCharacters( const vos::ORef<SvxForbiddenCharactersT
         pDrawLayer->SetForbiddenCharsTable( xForbiddenCharacters );
 }
 
+BOOL ScDocument::IsValidAsianCompression() const
+{
+    return ( nAsianCompression != SC_ASIANCOMPRESSION_INVALID );
+}
+
+BYTE ScDocument::GetAsianCompression() const
+{
+    if ( nAsianCompression == SC_ASIANCOMPRESSION_INVALID )
+        return 0;
+    else
+        return nAsianCompression;
+}
+
+void ScDocument::SetAsianCompression(BYTE nNew)
+{
+    nAsianCompression = nNew;
+    if ( pEditEngine )
+        pEditEngine->SetAsianCompressionMode( nAsianCompression );
+    if ( pDrawLayer )
+        pDrawLayer->SetCharCompressType( nAsianCompression );
+}
 
