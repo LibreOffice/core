@@ -2,9 +2,9 @@
  *
  *  $RCSfile: grfmgr2.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: vg $ $Date: 2005-03-08 13:38:48 $
+ *  last change: $Author: rt $ $Date: 2005-03-30 07:47:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -945,7 +945,16 @@ BOOL GraphicManager::ImplCreateScaled( const BitmapEx& rBmpEx,
 
             if( pAcc )
             {
-                aOutMsk = Bitmap( Size( nDstW, nDstH ), 1 );
+                // #i40115# Use the same palette for destination
+                // bitmap. Otherwise, we'd have to color-map even the
+                // case below, when both masks are one bit deep.
+                if( pAcc->HasPalette() )
+                    aOutMsk = Bitmap( Size( nDstW, nDstH ),
+                                      1,
+                                      &pAcc->GetPalette() );
+                else
+                    aOutMsk = Bitmap( Size( nDstW, nDstH ), 1 );
+
                 pWAcc = aOutMsk.AcquireWriteAccess();
 
                 if( pWAcc )
