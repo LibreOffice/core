@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optdlg.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-29 10:50:01 $
+ *  last change: $Author: kz $ $Date: 2000-12-01 08:25:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -411,7 +411,7 @@ TabPage TP_CONTENT_OPT
         Text[ chinese_traditional ] = "±±¨ξ²Ε";
         Text[ arabic ] = "ΓΝΡέ αΗ ΚυΨΘΪ";
         Text[ greek ] = "Μη εκτυπώσιμοι χαρακτήρες";
-        Text[ korean ] = "ΐΞΌβΗÒΌφ Ύψ΄Β Ή®ΐΪ";
+        Text[ korean ] = "ΊρΐΞΌβ Ή®ΐΪ";
         Text[ turkish ] = "Yazdύrύlmayan karakterler";
         Text[ language_user1 ] = " ";
     };
@@ -1679,7 +1679,7 @@ TabPage TP_OPTPRINT_PAGE
         Text[ chinese_traditional ] = "¤Ο¦V(~V)";
         Text[ arabic ] = "ΘΚΡΚνΘ γΪίζΣ";
         Text[ greek ] = "Αντίστροφα";
-        Text[ korean ] = "°Ε²Ω·Ξ(~V)";
+        Text[ korean ] = "ΏªΐΈ·Ξ(~V)";
         Text[ turkish ] = "Ters sύra";
         Text[ language_user1 ] = " ";
     };
@@ -1897,11 +1897,11 @@ TabPage TP_OPTPRINT_PAGE
         Text[ chinese_simplified ] = "½¨ΑΆµ¥Έφ΄ςΣ΅ΘΞΞρ(~S)";
         Text[ russian ] = "Ρξηδΰςό ξςδελόνϋε ηΰδΰνθÿ οεχΰςθ";
         Text[ polish ] = "Utwσrz pojedyncze zadania wydruku";
-        Text[ japanese ] = "1‚Β‚Έ‚Βσό(~S)";
+        Text[ japanese ] = "Β•ΚσόΌή®Μή‚Μμ¬(~S)";
         Text[ chinese_traditional ] = "¥Ν¦¨³ζ­Σ¦C¦L¥τ°Θ(~S)";
         Text[ arabic ] = "ΕδΤΗΑ ζΩΗΖέ ΨΘΗΪΙ έΡΟνΙ";
         Text[ greek ] = "Δημιουργία μεμονωμένων εργασιών εκτύπωσης";
-        Text[ korean ] = "΄άΐΟ ΐΞΌβ ΐΫΎχΈΈµι±β(~S)";
+        Text[ korean ] = "°Ά°ΆΐΗ  ΐΞΌβ ΐΫΎχΈΈµι±β(~S)";
         Text[ turkish ] = "Bi~reysel yazdύrma iώleri oluώtur";
     };
 
