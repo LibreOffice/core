@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sbxmod.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-15 13:29:17 $
+ *  last change: $Author: rt $ $Date: 2004-11-15 16:34:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -163,12 +163,14 @@ static char* strListBasicKeyWords[] = {
     "else",
     "elseif",
     "end",
+    "end enum",
     "end function",
     "end if",
     "end select",
     "end sub",
     "end type",
     "endif",
+    "enum",
     "eqv",
     "erase",
     "error",
@@ -398,6 +400,41 @@ void SbModule::Clear()
     SbxObject::Clear();
 }
 
+
+SbxVariable* SbModule::Find( const XubString& rName, SbxClassType t )
+{
+    SbxVariable* pRes = SbxObject::Find( rName, t );
+    if( !pRes && pImage )
+    {
+        SbiInstance* pInst = pINST;
+        if( pInst && pInst->IsCompatibility() )
+        {
+            // Put enum types as objects into module,
+            // allows MyEnum.First notation
+            SbxArrayRef xArray = pImage->GetEnums();
+            if( xArray.Is() )
+            {
+                SbxVariable* pEnumVar = xArray->Find( rName, SbxCLASS_DONTCARE );
+                SbxObject* pEnumObject = PTR_CAST( SbxObject, pEnumVar );
+                if( pEnumObject )
+                {
+                    bool bPrivate = pEnumObject->IsSet( SBX_PRIVATE );
+                    String aEnumName = pEnumObject->GetName();
+
+                    pRes = new SbxVariable( SbxOBJECT );
+                    pRes->SetName( aEnumName );
+                    pRes->SetParent( this );
+                    pRes->SetFlag( SBX_READ );
+                    if( bPrivate )
+                        pRes->SetFlag( SBX_PRIVATE );
+                    pRes->PutObject( pEnumObject );
+                }
+            }
+        }
+    }
+    return pRes;
+}
+
 const ::rtl::OUString& SbModule::GetSource32() const
 {
     return aOUSource;
@@ -487,6 +524,12 @@ void SbModule::SetSource32( const ::rtl::OUString& r )
                 if( eCurTok == FUNCTION )
                 {
                     eEndTok = ENDFUNC; break;
+                }
+                if( eCurTok == OPTION )
+                {
+                    eCurTok = aTok.Next();
+                    if( eCurTok == COMPATIBLE )
+                        aTok.SetCompatible( true );
                 }
             }
             eLastTok = eCurTok;
@@ -1187,71 +1230,38 @@ BOOL SbModule::LoadCompleted()
 #define CHAR_EOF                0x00
 
 
-// Token-Typen TT_...
-
-//enum TokenType
-//{
-//  TT_UNKNOWN,
-//  TT_IDENTIFIER,
-//  TT_WHITESPACE,
-//  TT_NUMBER,
-//  TT_STRING,
-////    TT_HTMLSTRING,
-////    TT_LONG,
-////    TT_DOUBLE,
-////    TT_BOOLEAN,
-////    TT_NULLOBJECT,
-////    TT_CHAR,
-//  TT_EOL,
-////    TT_LONG2DOUBLE,
-//  TT_COMMENT,
-////    TT_SKIP,
-//  TT_ERROR,
-//  TT_OPERATOR,
-//  TT_KEYWORD
-//};
-
-
 class SimpleTokenizer_Impl
 {
     // Zeichen-Info-Tabelle
     USHORT aCharTypeTab[256];
 
-    const char* mpStringBegin;
-    const char* mpActualPos;
+    const sal_Unicode* mpStringBegin;
+    const sal_Unicode* mpActualPos;
 
     // Zeile und Spalte
     UINT32 nLine;
     UINT32 nCol;
 
-    char peekChar( void )   { return *mpActualPos; }
-    char getChar( void )    { nCol++; return *mpActualPos++; }
+    sal_Unicode peekChar( void )    { return *mpActualPos; }
+    sal_Unicode getChar( void )     { nCol++; return *mpActualPos++; }
 
     // Hilfsfunktion: Zeichen-Flag Testen
-    BOOL testCharFlags( unsigned char c, USHORT nTestFlags );
+    BOOL testCharFlags( sal_Unicode c, USHORT nTestFlags );
 
     // Neues Token holen, Leerstring == nix mehr da
     BOOL getNextToken( /*out*/TokenTypes& reType,
-        /*out*/const char*& rpStartPos, /*out*/const char*& rpEndPos );
+        /*out*/const sal_Unicode*& rpStartPos, /*out*/const sal_Unicode*& rpEndPos );
 
-    String getTokStr( /*out*/const char* pStartPos, /*out*/const char* pEndPos );
+    String getTokStr( /*out*/const sal_Unicode* pStartPos, /*out*/const sal_Unicode* pEndPos );
 
+#ifndef PRODUCT
     // TEST: Token ausgeben
     String getFullTokenStr( /*out*/TokenTypes eType,
-        /*out*/const char* pStartPos, /*out*/const char* pEndPos );
-
-    BOOL isBeginComment( UINT32 nLine );
-    void setCommentState(UINT32 nLine, BOOL bCommentBegin, BOOL bCommentEnd);
-
-    NAMESPACE_STD(list)<BOOL>* pCommentsBegin;
-    NAMESPACE_STD(list)<BOOL>* pCommentsEnd;
+        /*out*/const sal_Unicode* pStartPos, /*out*/const sal_Unicode* pEndPos );
+#endif
 
     char** ppListKeyWords;
     UINT16 nKeyWordCount;
-    BOOL bStarScriptMode;
-
-    BOOL bLineHasCommentBegin;
-    BOOL bLineHasCommentEnd;
 
 public:
     SimpleTokenizer_Impl( void );
@@ -1260,17 +1270,23 @@ public:
     UINT16 parseLine( UINT32 nLine, const String* aSource );
     void getHighlightPortions( UINT32 nParseLine, const String& rLine,
                                                     /*out*/HighlightPortions& portions );
-    void addLines(UINT32 nLine, INT32 nCount);
-    void outCommentList();
     void setKeyWords( char** ppKeyWords, UINT16 nCount );
 };
 
 // Hilfsfunktion: Zeichen-Flag Testen
-BOOL SimpleTokenizer_Impl::testCharFlags( unsigned char c, USHORT nTestFlags )
+BOOL SimpleTokenizer_Impl::testCharFlags( sal_Unicode c, USHORT nTestFlags )
 {
-    if( c != 0 )
-        return ( (aCharTypeTab[c] & nTestFlags) != 0 );
-    return FALSE;
+    bool bRet = false;
+    if( c != 0 && c <= 255 )
+    {
+        bRet = ( (aCharTypeTab[c] & nTestFlags) != 0 );
+    }
+    else if( c > 255 )
+    {
+        bRet = (( CHAR_START_IDENTIFIER | CHAR_IN_IDENTIFIER ) & nTestFlags) != 0
+            ? BasicSimpleCharClass::isAlpha( c, true ) : false;
+    }
+    return bRet;
 }
 
 void SimpleTokenizer_Impl::setKeyWords( char** ppKeyWords, UINT16 nCount )
@@ -1281,7 +1297,7 @@ void SimpleTokenizer_Impl::setKeyWords( char** ppKeyWords, UINT16 nCount )
 
 // Neues Token holen
 BOOL SimpleTokenizer_Impl::getNextToken( /*out*/TokenTypes& reType,
-    /*out*/const char*& rpStartPos, /*out*/const char*& rpEndPos )
+    /*out*/const sal_Unicode*& rpStartPos, /*out*/const sal_Unicode*& rpEndPos )
 {
     reType = TT_UNKNOWN;
 
@@ -1289,7 +1305,7 @@ BOOL SimpleTokenizer_Impl::getNextToken( /*out*/TokenTypes& reType,
     rpStartPos = mpActualPos;
 
     // Zeichen untersuchen
-    char c = peekChar();
+    sal_Unicode c = peekChar();
     if( c == CHAR_EOF )
         return FALSE;
 
@@ -1297,8 +1313,8 @@ BOOL SimpleTokenizer_Impl::getNextToken( /*out*/TokenTypes& reType,
     getChar();
 
     //*** Alle Moeglichkeiten durchgehen ***
-    // Spce?
-    if ( (testCharFlags( c, CHAR_SPACE ) == TRUE) && (!bLineHasCommentBegin) )
+    // Space?
+    if ( (testCharFlags( c, CHAR_SPACE ) == TRUE) )
     {
         while( testCharFlags( peekChar(), CHAR_SPACE ) == TRUE )
             getChar();
@@ -1307,7 +1323,7 @@ BOOL SimpleTokenizer_Impl::getNextToken( /*out*/TokenTypes& reType,
     }
 
     // Identifier?
-    else if ( (testCharFlags( c, CHAR_START_IDENTIFIER ) == TRUE) && (!bLineHasCommentBegin) )
+    else if ( (testCharFlags( c, CHAR_START_IDENTIFIER ) == TRUE) )
     {
         BOOL bIdentifierChar;
         int nPos = 0;
@@ -1326,141 +1342,33 @@ BOOL SimpleTokenizer_Impl::getNextToken( /*out*/TokenTypes& reType,
         // Schluesselwort-Tabelle
         if (ppListKeyWords != NULL)
         {
-            ByteString aByteStr(rpStartPos, mpActualPos-rpStartPos);
-            if ( !bStarScriptMode )
+            int nCount = mpActualPos - rpStartPos;
+
+            // No keyword if string contains char > 255
+            bool bCanBeKeyword = true;
+            for( int i = 0 ; i < nCount ; i++ )
+            {
+                if( rpStartPos[i] > 255 )
+                {
+                    bCanBeKeyword = false;
+                    break;
+                }
+            }
+
+            if( bCanBeKeyword )
+            {
+                String aKWString( rpStartPos, nCount );
+                ByteString aByteStr( aKWString, RTL_TEXTENCODING_ASCII_US );
                 aByteStr.ToLowerAscii();
-
-            if ( bsearch( aByteStr.GetBuffer(), ppListKeyWords, nKeyWordCount, sizeof( char* ),
-                                                                    compare_strings ) )
-            {
-                reType = TT_KEYWORD;
-
-                if ( (!bStarScriptMode) && (aByteStr.Equals( "rem" )) )
+                if ( bsearch( aByteStr.GetBuffer(), ppListKeyWords, nKeyWordCount, sizeof( char* ),
+                                                                        compare_strings ) )
                 {
-                    // Alle Zeichen bis Zeilen-Ende oder EOF entfernen
-                    char cPeek = peekChar();
-                    while( cPeek != CHAR_EOF && testCharFlags( cPeek, CHAR_EOL ) == FALSE )
+                    reType = TT_KEYWORD;
+
+                    if ( aByteStr.Equals( "rem" ) )
                     {
-                        c = getChar();
-                        cPeek = peekChar();
-                    }
-
-                    reType = TT_COMMENT;
-                }
-            }
-        }
-    }
-
-    // Operator?
-    else if ( (testCharFlags( c, CHAR_OPERATOR ) == TRUE) || bLineHasCommentBegin
-        || ((!bStarScriptMode) && (c == '\'')) )
-    {
-        // Kommentar ?
-        if ( (( c == '/' && bStarScriptMode ) || bLineHasCommentBegin) || ((!bStarScriptMode) && (c == '\'')) )
-        {
-            char cNext = peekChar();
-            if ( cNext == '/' || ( bStarScriptMode && (cNext == '*' || bLineHasCommentBegin))
-                || ((!bStarScriptMode) && (c == '\'')) )    // Kommentar
-            {
-                if ((c == '*') && (cNext == '/'))   // Kommentarende am Zeilenanfang
-                {
-                    getChar();                  // Zeichen entfernen
-
-                    bLineHasCommentEnd = TRUE;
-                    bLineHasCommentBegin = FALSE;
-
-                    reType = TT_COMMENT;
-                }
-                else if ( (cNext == '/' && (!bStarScriptMode || !bLineHasCommentBegin))
-                    || ((!bStarScriptMode) && (c == '\'')) )// C++ - Kommentar
-                {
-                    c = getChar();  // '/' entfernen
-
-                    // Alle Zeichen bis Zeilen-Ende oder EOF entfernen
-                    char cPeek = peekChar();
-                    while( cPeek != CHAR_EOF && testCharFlags( cPeek, CHAR_EOL ) == FALSE )
-                    {
-                        c = getChar();
-                        cPeek = peekChar();
-
-                        if (c == '*' && cPeek == '/')
-                        {
-                            bLineHasCommentEnd = TRUE;
-                        }
-                    }
-
-                    reType = TT_COMMENT;
-                }
-                else if (( cNext == '*' ) || bLineHasCommentBegin)      // C -Kommentar
-                {
-                    bLineHasCommentBegin = !bLineHasCommentBegin;
-
-                    // Alle Zeichen bis */ entfernen
-                    do
-                    {
-                        c = getChar();
-                        cNext = peekChar();
-
-                        // Zeilennummer auch im Kommentar pflegen
-                        if( testCharFlags( c, CHAR_EOL ) == TRUE )
-                        {
-                            // Doppelt-EOL rausschmeissen (CR/LF)
-                            if( cNext != c && testCharFlags( cNext, CHAR_EOL ) == TRUE )
-                            {
-                                c = getChar();
-                                cNext = peekChar();
-                            }
-
-                            setCommentState(nLine, bLineHasCommentBegin, bLineHasCommentEnd);
-                            bLineHasCommentBegin = FALSE;
-                            bLineHasCommentEnd = FALSE;
-
-                            // Positions-Daten auf Zeilen-Beginn setzen
-                            nCol = 0;
-                            nLine++;
-                        }
-                        else if (c == '*' && cNext == '/')  // am Kommentarende
-                        {
-                            if (bLineHasCommentBegin)   // das Ende ist in der gleichen Zeile
-                            {                           // wie der Anfang des Kommentars
-                                bLineHasCommentBegin = FALSE;   // also zurücksetzen
-                            }
-                            else
-                            {
-                                bLineHasCommentEnd = TRUE;
-                            }
-                        }
-                    }
-                    while( cNext != CHAR_EOF && ( c != '*' || cNext != '/' ) );
-
-                    // Alles ausser EOF lesen
-                    if( cNext != CHAR_EOF )
-                        getChar();
-
-                    reType = TT_COMMENT;
-                }
-            }
-        }
-        // HTML-Kommentar
-        else if( c == '<' && bStarScriptMode )
-        {
-            char cNext = peekChar();
-            if( cNext == '!' )
-            {
-                getChar();     // '!' ist verloren, wenn nicht wirklich Tag
-
-                cNext = peekChar();
-                if( cNext == '-' )
-                {
-                    getChar();     // '-' ist verloren, wenn nicht wirklich Tag
-
-                    cNext = peekChar();
-                    if( cNext == '-' )
-                    {
-                        getChar();
-
-                        // HTML-Kommentar: Alle Zeichen bis Zeilen-Ende oder EOF entfernen
-                        char cPeek = peekChar();
+                        // Alle Zeichen bis Zeilen-Ende oder EOF entfernen
+                        sal_Unicode cPeek = peekChar();
                         while( cPeek != CHAR_EOF && testCharFlags( cPeek, CHAR_EOL ) == FALSE )
                         {
                             c = getChar();
@@ -1469,18 +1377,28 @@ BOOL SimpleTokenizer_Impl::getNextToken( /*out*/TokenTypes& reType,
 
                         reType = TT_COMMENT;
                     }
-                    else
-                    {
-                        // Verlorene Zeichen nachliefern
-                        mpActualPos -= 2;
-                    }
-                }
-                else
-                {
-                    // Verlorenes Zeichen nachliefern
-                    mpActualPos--;
                 }
             }
+        }
+    }
+
+    // Operator?
+    else if ( testCharFlags( c, CHAR_OPERATOR ) == TRUE || c == '\'' )
+    {
+        // Kommentar ?
+        if ( c == '\'' )
+        {
+            c = getChar();  // '/' entfernen
+
+            // Alle Zeichen bis Zeilen-Ende oder EOF entfernen
+            sal_Unicode cPeek = peekChar();
+            while( cPeek != CHAR_EOF && testCharFlags( cPeek, CHAR_EOL ) == FALSE )
+            {
+                getChar();
+                cPeek = peekChar();
+            }
+
+            reType = TT_COMMENT;
         }
 
         // Echter Operator, kann hier einfach behandelt werden,
@@ -1559,7 +1477,7 @@ BOOL SimpleTokenizer_Impl::getNextToken( /*out*/TokenTypes& reType,
     else if( testCharFlags( c, CHAR_START_STRING ) == TRUE )
     {
         // Merken, welches Zeichen den String eroeffnet hat
-        char cEndString = c;
+        sal_Unicode cEndString = c;
 
         // Alle Ziffern einlesen und puffern
         while( peekChar() != cEndString )
@@ -1578,13 +1496,6 @@ BOOL SimpleTokenizer_Impl::getNextToken( /*out*/TokenTypes& reType,
                 reType = TT_ERROR;
                 break;
             }
-            // Escape-Character untersuchen
-            else if ( (c == '\\') && (bStarScriptMode) )
-            {
-                // Kann hier ganz einfach gehandelt werden:
-                // Einfach ein weiteres Zeichen lesen
-                char cNext = getChar();
-            }
         }
 
         //  Zeichen lesen
@@ -1599,13 +1510,9 @@ BOOL SimpleTokenizer_Impl::getNextToken( /*out*/TokenTypes& reType,
     else if( testCharFlags( c, CHAR_EOL ) == TRUE )
     {
         // Falls ein weiteres anderes EOL-Char folgt, weg damit
-        char cNext = peekChar();
+        sal_Unicode cNext = peekChar();
         if( cNext != c && testCharFlags( cNext, CHAR_EOL ) == TRUE )
             getChar();
-
-        setCommentState(nLine, bLineHasCommentBegin, bLineHasCommentEnd);
-        bLineHasCommentBegin = FALSE;
-        bLineHasCommentEnd = FALSE;
 
         // Positions-Daten auf Zeilen-Beginn setzen
         nCol = 0;
@@ -1622,86 +1529,16 @@ BOOL SimpleTokenizer_Impl::getNextToken( /*out*/TokenTypes& reType,
     return TRUE;
 }
 
-void SimpleTokenizer_Impl::setCommentState(UINT32 nLine, BOOL bCommentBegin, BOOL bCommentEnd)
-{
-    while (pCommentsBegin->size() <= nLine)
-        pCommentsBegin->push_back(FALSE);
-
-    while (pCommentsEnd->size() <= nLine)
-        pCommentsEnd->push_back(FALSE);
-
-    NAMESPACE_STD(list)<BOOL>::iterator posBegins, posEnds;
-    UINT32 nCounter = 0;
-
-    posBegins = pCommentsBegin->begin();
-    posEnds = pCommentsEnd->begin();
-
-    while (nCounter < nLine)
-    {
-        posBegins++;
-        posEnds++;
-        nCounter++;
-    }
-
-    *posBegins = bCommentBegin;
-    *posEnds = bCommentEnd;
-}
-
-void SimpleTokenizer_Impl::addLines(UINT32 nLine, INT32 nCount)
-{
-    NAMESPACE_STD(list)<BOOL>::iterator posBegins, posEnds;
-    UINT32 nCounter = 0;
-
-    if (!pCommentsBegin->empty())
-    {
-        posBegins = pCommentsBegin->begin();
-        posEnds = pCommentsEnd->begin();
-
-        while (nCounter < nLine)
-        {
-            posBegins++;
-            posEnds++;
-            nCounter++;
-        }
-
-        INT32 nDiff = nCount;
-        while (nDiff != 0)
-        {
-            if (nDiff > 0)
-            {
-                pCommentsBegin->insert(posBegins, FALSE);
-                pCommentsEnd->insert(posEnds, FALSE);
-                nDiff--;
-            }
-            else
-            {
-                posBegins = pCommentsBegin->erase( posBegins );
-                posEnds = pCommentsEnd->erase( posEnds );
-                nDiff++;
-            }
-        }
-    }
-    else if (nCount > 0)
-    {
-        INT32 nDiff = nCount;
-        while (nDiff != 0)
-        {
-            pCommentsBegin->push_back(FALSE);
-            pCommentsEnd->push_back(FALSE);
-            nDiff--;
-        }
-    }
-}
-
 String SimpleTokenizer_Impl::getTokStr
-    ( /*out*/const char* pStartPos, /*out*/const char* pEndPos )
+    ( /*out*/const sal_Unicode* pStartPos, /*out*/const sal_Unicode* pEndPos )
 {
     return String( pStartPos, (USHORT)( pEndPos - pStartPos ) );
 }
 
+#ifndef PRODUCT
 // TEST: Token ausgeben
 String SimpleTokenizer_Impl::getFullTokenStr( /*out*/TokenTypes eType,
-    /*out*/const char* pStartPos, /*out*/const char* pEndPos )
+    /*out*/const sal_Unicode* pStartPos, /*out*/const sal_Unicode* pEndPos )
 {
     String aOut;
     switch( eType )
@@ -1724,6 +1561,7 @@ String SimpleTokenizer_Impl::getFullTokenStr( /*out*/TokenTypes eType,
     aOut += String( RTL_CONSTASCII_USTRINGPARAM("\n") );
     return aOut;
 }
+#endif
 
 SimpleTokenizer_Impl::SimpleTokenizer_Impl( void )
 {
@@ -1801,18 +1639,11 @@ SimpleTokenizer_Impl::SimpleTokenizer_Impl( void )
     aCharTypeTab['\r'] |= CHAR_EOL;
     aCharTypeTab['\n'] |= CHAR_EOL;
 
-    // fuer Syntax Highlighting
-    pCommentsBegin = new NAMESPACE_STD(list)<BOOL>();
-    pCommentsEnd = new NAMESPACE_STD(list)<BOOL>();
-
-    bStarScriptMode = FALSE;
     ppListKeyWords = NULL;
 }
 
 SimpleTokenizer_Impl::~SimpleTokenizer_Impl( void )
 {
-    delete(pCommentsBegin);
-    delete(pCommentsEnd);
 }
 
 SimpleTokenizer_Impl* getSimpleTokenizer( void )
@@ -1826,12 +1657,8 @@ SimpleTokenizer_Impl* getSimpleTokenizer( void )
 // Heraussuchen der jeweils naechsten Funktion aus einem JavaScript-Modul
 UINT16 SimpleTokenizer_Impl::parseLine( UINT32 nParseLine, const String* aSource )
 {
-    ByteString aByteSource( *aSource, gsl_getSystemTextEncoding() );
-
     // Position auf den Anfang des Source-Strings setzen
-    mpStringBegin = mpActualPos = aByteSource.GetBuffer();
-    bLineHasCommentBegin = isBeginComment( nParseLine );
-    bLineHasCommentEnd = FALSE;
+    mpStringBegin = mpActualPos = aSource->GetBuffer();
 
     // Zeile und Spalte initialisieren
     nLine = nParseLine;
@@ -1839,16 +1666,13 @@ UINT16 SimpleTokenizer_Impl::parseLine( UINT32 nParseLine, const String* aSource
 
     // Variablen fuer die Out-Parameter
     TokenTypes eType;
-    const char* pStartPos;
-    const char* pEndPos;
+    const sal_Unicode* pStartPos;
+    const sal_Unicode* pEndPos;
 
     // Schleife ueber alle Tokens
     UINT16 nTokenCount = 0;
     while( getNextToken( eType, pStartPos, pEndPos ) )
         nTokenCount++;
-
-    // die Endzustaende der Zeilen in die Listen eintragen
-    setCommentState(nParseLine, bLineHasCommentBegin, bLineHasCommentEnd);
 
     return nTokenCount;
 }
@@ -1856,12 +1680,8 @@ UINT16 SimpleTokenizer_Impl::parseLine( UINT32 nParseLine, const String* aSource
 void SimpleTokenizer_Impl::getHighlightPortions( UINT32 nParseLine, const String& rLine,
                                                     /*out*/HighlightPortions& portions  )
 {
-    ByteString aByteLine( rLine, gsl_getSystemTextEncoding() );
-
     // Position auf den Anfang des Source-Strings setzen
-    mpStringBegin = mpActualPos = aByteLine.GetBuffer();
-    bLineHasCommentBegin = isBeginComment( nParseLine );
-    bLineHasCommentEnd = FALSE;
+    mpStringBegin = mpActualPos = rLine.GetBuffer();
 
     // Zeile und Spalte initialisieren
     nLine = nParseLine;
@@ -1869,8 +1689,8 @@ void SimpleTokenizer_Impl::getHighlightPortions( UINT32 nParseLine, const String
 
     // Variablen fuer die Out-Parameter
     TokenTypes eType;
-    const char* pStartPos;
-    const char* pEndPos;
+    const sal_Unicode* pStartPos;
+    const sal_Unicode* pEndPos;
 
     // Schleife ueber alle Tokens
     while( getNextToken( eType, pStartPos, pEndPos ) )
@@ -1885,50 +1705,6 @@ void SimpleTokenizer_Impl::getHighlightPortions( UINT32 nParseLine, const String
     }
 }
 
-BOOL SimpleTokenizer_Impl::isBeginComment( UINT32 nLine )
-{
-    NAMESPACE_STD(list)<BOOL>::const_iterator posBegin, posEnd;
-    BOOL bCommentStart = FALSE;
-
-    UINT32 i = 0;
-    posBegin=pCommentsBegin->begin();
-    posEnd=pCommentsEnd->begin();
-
-    while ((i < nLine) && (posBegin != pCommentsBegin->end()) && (posEnd != pCommentsEnd->end()))
-    {
-        if (bCommentStart && *posEnd)
-            bCommentStart = FALSE;
-        if ((!bCommentStart) && *posBegin)
-            bCommentStart = TRUE;
-
-        posBegin++;
-        posEnd++;
-        i++;
-    }
-
-    return bCommentStart;
-}
-
-void SimpleTokenizer_Impl::outCommentList()
-{
-    NAMESPACE_STD(list)<BOOL>::const_iterator posBegin, posEnd;
-    BOOL bCommentStart = FALSE;
-
-    UINT32 i = 0;
-    posBegin=pCommentsBegin->begin();
-    posEnd=pCommentsEnd->begin();
-
-    printf("\nComments:\n");
-    while (posBegin != pCommentsBegin->end())
-    {
-        printf("line: %2d   beginComment: %d   endComment: %d\n", i, *posBegin, *posEnd);
-
-        posBegin++;
-        posEnd++;
-        i++;
-    }
-
-}
 
 //////////////////////////////////////////////////////////////////////////
 // Implementierung des SyntaxHighlighter
@@ -1966,9 +1742,6 @@ void SyntaxHighlighter::initialize( HighlighterLanguage eLanguage_ )
 const Range SyntaxHighlighter::notifyChange( UINT32 nLine, INT32 nLineCountDifference,
                                 const String* pChangedLines, UINT32 nArrayLength)
 {
-    if (nLineCountDifference != 0)
-        m_pSimpleTokenizer->addLines(nLine, nLineCountDifference);
-
     for (INT32 i=0; i<nArrayLength; i++)
         m_pSimpleTokenizer->parseLine(nLine+i, &pChangedLines[i]);
 
