@@ -2,9 +2,9 @@
  *
  *  $RCSfile: oframes.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: as $ $Date: 2000-09-26 13:01:15 $
+ *  last change: $Author: as $ $Date: 2000-10-11 12:13:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -365,7 +365,9 @@ Any SAL_CALL OFrames::getByIndex( sal_Int32 nIndex ) throw( IndexOutOfBoundsExce
     {
         // Get element form container.
         // (If index not valid, FrameContainer return NULL!)
+        m_pFrameContainer->lock();
         aReturnValue <<= (*m_pFrameContainer)[nIndex];
+        m_pFrameContainer->unlock();
     }
 
     // Return result of this operation.
