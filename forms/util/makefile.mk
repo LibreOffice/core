@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: rt $ $Date: 2004-05-07 16:15:55 $
+#   last change: $Author: obo $ $Date: 2004-11-16 11:02:58 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -83,7 +83,10 @@ LIB1FILES=\
         $(SLB)$/helper.lib \
         $(SLB)$/solarcomponent.lib  \
         $(SLB)$/solarcontrol.lib \
-        $(SLB)$/richtext.lib
+        $(SLB)$/richtext.lib \
+        $(SLB)$/xforms.lib \
+        $(SLB)$/xformssubmit.lib \
+        $(SLB)$/xformsxpath.lib
 
 SHL1TARGET=$(TARGET)$(UPD)$(DLLPOSTFIX)
 
@@ -104,7 +107,11 @@ SHL1STDLIBS= \
         $(COMPHELPERLIB) \
         $(DBTOOLSLIB) \
         $(TKLIB) \
-        $(SVXLIB)
+        $(SVXLIB) \
+        $(UCBHELPERLIB) \
+        $(XML2LIB) \
+        $(ICUUCLIB) \
+        $(ICUINLIB)
 
 SHL1LIBS=$(LIB1TARGET)
 SHL1DEPN=$(LIB1TARGET)	\
