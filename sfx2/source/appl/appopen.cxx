@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appopen.cxx,v $
  *
- *  $Revision: 1.78 $
+ *  $Revision: 1.79 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 12:15:52 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 12:59:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1249,13 +1249,13 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
                         {
                             vos::OGuard aGuard( Application::GetSolarMutex() );
                             Window *pWindow = SFX_APP()->GetTopWindow();
-                            ErrorBox( pWindow, SfxResId( MSG_ERR_WEBBROWSER_NOT_STARTED )).Execute();
+                            ErrorBox( pWindow, SfxResId( MSG_ERR_NO_WEBBROWSER_FOUND )).Execute();
                         }
                         catch ( ::com::sun::star::system::SystemShellExecuteException& )
                         {
                             vos::OGuard aGuard( Application::GetSolarMutex() );
                             Window *pWindow = SFX_APP()->GetTopWindow();
-                            ErrorBox( pWindow, SfxResId( MSG_ERR_WEBBROWSER_NOT_STARTED )).Execute();
+                            ErrorBox( pWindow, SfxResId( MSG_ERR_NO_WEBBROWSER_FOUND )).Execute();
                         }
 
                         return;
@@ -1267,35 +1267,32 @@ void SfxApplication::OpenDocExec_Impl( SfxRequest& rReq )
                         // security reservation: => we have to check the referer before executing
                         if ( SFX_APP()->IsSecureURL( String(), &aReferer ) )
                         {
-                            ::rtl::OUString aSysPathFileName;
-                            ::osl::FileBase::RC nError = ::osl::FileBase::getSystemPathFromFileURL( aURL.Complete, aSysPathFileName );
-                            if ( nError == ::osl::FileBase::E_None )
+                            ::rtl::OUString aURLString( aURL.Complete );
+
+                            try
                             {
-                                try
-                                {
-                                    // give os this file
-                                    xSystemShellExecute->execute( aSysPathFileName, ::rtl::OUString(), SystemShellExecuteFlags::DEFAULTS );
-                                }
-                                catch ( ::com::sun::star::lang::IllegalArgumentException& )
+                                // give os this file
+                                xSystemShellExecute->execute( aURLString, ::rtl::OUString(), SystemShellExecuteFlags::DEFAULTS );
+                            }
+                            catch ( ::com::sun::star::lang::IllegalArgumentException& )
+                            {
+                                vos::OGuard aGuard( Application::GetSolarMutex() );
+                                Window *pWindow = SFX_APP()->GetTopWindow();
+                                ErrorBox( pWindow, SfxResId( MSG_ERR_NO_WEBBROWSER_FOUND )).Execute();
+                            }
+                            catch ( ::com::sun::star::system::SystemShellExecuteException& )
+                            {
+                                if ( !pFilter )
                                 {
                                     vos::OGuard aGuard( Application::GetSolarMutex() );
                                     Window *pWindow = SFX_APP()->GetTopWindow();
-                                    ErrorBox( pWindow, SfxResId( MSG_ERR_EXTERNAL_APP_NOT_FOUND )).Execute();
+                                    ErrorBox( pWindow, SfxResId( MSG_ERR_NO_WEBBROWSER_FOUND )).Execute();
                                 }
-                                catch ( ::com::sun::star::system::SystemShellExecuteException& )
+                                else
                                 {
-                                    if ( !pFilter )
-                                    {
-                                        vos::OGuard aGuard( Application::GetSolarMutex() );
-                                        Window *pWindow = SFX_APP()->GetTopWindow();
-                                        ErrorBox( pWindow, SfxResId( MSG_ERR_EXTERNAL_APP_NOT_FOUND )).Execute();
-                                    }
-                                    else
-                                    {
-                                        rReq.RemoveItem( SID_TARGETNAME );
-                                        rReq.AppendItem( SfxStringItem( SID_TARGETNAME, String::CreateFromAscii("_default") ) );
-                                        bLoadInternal = TRUE;
-                                    }
+                                    rReq.RemoveItem( SID_TARGETNAME );
+                                    rReq.AppendItem( SfxStringItem( SID_TARGETNAME, String::CreateFromAscii("_default") ) );
+                                    bLoadInternal = TRUE;
                                 }
                             }
                         }
