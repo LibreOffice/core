@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi3.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: pl $ $Date: 2001-04-24 15:10:19 $
+ *  last change: $Author: hdu $ $Date: 2001-04-24 17:47:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1747,11 +1747,11 @@ SalGraphics::GetDevFontList( ImplDevFontList *pList )
                 ImplFontData aFontData;
                 SetImplFontData( aInfo, aFontData );
                 aFontData.mnQuality += 4096;    // prefer to X11 fonts
-                ::rtl::OString aFontFileName( rMgr.getFontFileSysPath( aInfo.m_nID ) );
                 int nFaceNum = rMgr.getFontFaceNumber( aInfo.m_nID );
                 if( nFaceNum < 0 )
                     nFaceNum = 0;
-                rGC.AddFontFile( OStringToOUString( aFontFileName, osl_getThreadTextEncoding() ), nFaceNum, aInfo.m_nID, &aFontData );
+                rGC.AddFontFile( rMgr.getFontFileSysPath( aInfo.m_nID ), nFaceNum,
+                    aInfo.m_nID, &aFontData );
             }
         }
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: glyphcache.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: cp $ $Date: 2001-04-06 08:18:23 $
+ *  last change: $Author: hdu $ $Date: 2001-04-24 17:43:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,7 +182,7 @@ void GlyphCache::AddFontPath( const String& rFontPath )
 
 // -----------------------------------------------------------------------
 
-void GlyphCache::AddFontFile( const String& rNormalizedName, int nFaceNum,
+void GlyphCache::AddFontFile( const rtl::OString& rNormalizedName, int nFaceNum,
     int nFontId, const ImplFontData* pFontData )
 {
     if( pFtManager )

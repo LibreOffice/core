@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.28 $
- *  last change: $Author: cp $ $Date: 2001-04-10 10:19:43 $
+ *  $Revision: 1.29 $
+ *  last change: $Author: hdu $ $Date: 2001-04-24 17:43:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,16 +134,15 @@ FreetypeManager::GetFontHandle (int nFontId)
 
 // -----------------------------------------------------------------------
 
-void FreetypeManager::AddFontFile( const String& rNormalizedName,
+void FreetypeManager::AddFontFile( const rtl::OString& rNormalizedName,
     int nFaceNum, int nFontId, const ImplFontData* pData )
 {
-    if( !rNormalizedName.Len() )
+    if( !rNormalizedName.getLength() )
         return;
 
     FtFontInfo* const pFontInfo = new FtFontInfo;
 
-    pFontInfo->aNativeFileName  = ::rtl::OString( rNormalizedName.GetBuffer(),
-        rNormalizedName.Len(), RTL_TEXTENCODING_UNICODE );
+    pFontInfo->aNativeFileName = rNormalizedName;
     pFontInfo->nFaceNum = nFaceNum;
     pFontInfo->nFontId  = nFontId;
 
@@ -1168,6 +1167,7 @@ bool FreetypeServerFont::ApplyGSUB( const ImplFontSelectData& rFSD )
             aLookupIndexList.push_back( 0 );
     }
 
+
     // parse Lookup List
 #ifdef DEBUG
     fprintf(stderr,"*parsing Lookup Table ofs=%d\n", nOfsLookupList);
@@ -1204,6 +1204,7 @@ bool FreetypeServerFont::ApplyGSUB( const ImplFontSelectData& rFSD )
         {
             const USHORT nOfsSubLookupTable = NEXT_UShort( pLookupTable );
             const FT_Byte* pSubLookup = pGsubBase + nOfsLookupList + nOfsLookupTable + nOfsSubLookupTable;
+
 
             const USHORT nFmtSubstitution   = NEXT_UShort( pSubLookup );
             const USHORT nOfsCoverage       = NEXT_UShort( pSubLookup );
