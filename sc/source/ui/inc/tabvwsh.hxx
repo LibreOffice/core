@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 13:29:15 $
+ *  last change: $Author: rt $ $Date: 2004-05-07 15:57:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -196,6 +196,8 @@ private:
     BOOL                    bActiveGraphicSh;
     BOOL                    bActiveEditSh;
 
+    BOOL                    bFormShellAtTop;            // does the FormShell need to be on top?
+
 
     BOOL                    bDontSwitch;                // EditShell nicht abschalten
     BOOL                    bInFormatDialog;            // fuer GetSelectionText
@@ -228,6 +230,7 @@ private:
     DECL_LINK( SimpleRefDone, String* );
     DECL_LINK( SimpleRefAborted, String* );
     DECL_LINK( SimpleRefChange, String* );
+    DECL_LINK( FormControlActivated, FmFormShell* );
 
 protected:
     virtual void    Activate(BOOL bMDI);
@@ -360,6 +363,8 @@ public:
 
     void            SetDrawShellOrSub();
     void            SetCurSubShell( ObjectSelectionType eOST, BOOL bForce = FALSE );
+
+    void            SetFormShellAtTop( BOOL bSet );
 
     ObjectSelectionType GetCurObjectSelectionType();
 
