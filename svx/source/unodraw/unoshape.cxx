@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshape.cxx,v $
  *
- *  $Revision: 1.82 $
+ *  $Revision: 1.83 $
  *
- *  last change: $Author: cl $ $Date: 2001-12-06 17:42:19 $
+ *  last change: $Author: cl $ $Date: 2001-12-07 10:53:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -394,6 +394,8 @@ sal_Bool SvxShape::queryAggregation( const com::sun::star::uno::Type & rType, co
         aAny <<= uno::Reference< beans::XPropertySet >(this);
     else if( rType == ::getCppuType((const uno::Reference< drawing::XShape >*)0) )
         aAny <<= uno::Reference< drawing::XShape >(this);
+    else if( rType == ::getCppuType((const uno::Reference< lang::XTypeProvider >*)0) )
+        aAny <<= uno::Reference< lang::XTypeProvider >(this);
     else if( rType == ::getCppuType((const uno::Reference< uno::XAggregation >*)0) )
         aAny <<= uno::Reference< uno::XAggregation >(this);
     else if( rType == ::getCppuType((const uno::Reference< beans::XMultiPropertySet >*)0) )
