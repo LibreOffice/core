@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adc_cl.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: np $ $Date: 2002-11-14 18:02:04 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:37:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,9 @@ namespace autodoc
 namespace command
 {
     class Command;
+    class SinceTagTransformationData;
 }
+
 
 /** Reads and runs an Autodoc command line.
 */
@@ -89,9 +91,22 @@ class CommandLine : public csv::CommandLine_Ifc
     int                 Run() const;
 
     // INQUIRY
+        // debugging
     bool                DebugStyle_ShowText() const;
     bool                DebugStyle_ShowStoredObjects() const;
     bool                DebugStyle_ShowTokens() const;
+
+        // @since tags
+    bool                Display_SinceTag() const;
+
+    /// @see command::SinceTagTransformationData::StripSinceTagValue()
+    bool                Strip_SinceTagText(
+                            String &            io_sSinceTagValue ) const;
+
+    /// @see command::SinceTagTransformationData::DisplayOf()
+    const String &      DisplayOf_SinceTagValue(
+                            const String &      i_sVersionNumber ) const;
+
 
     // ACCESS
     static const CommandLine &
@@ -121,6 +136,9 @@ class CommandLine : public csv::CommandLine_Ifc
     void                do_clCreateHtml(
                             opt_iter &          it,
                             opt_iter            itEnd );
+    void                do_clSinceFile(
+                            opt_iter &          it,
+                            opt_iter            itEnd );
 
 //    void                do_clCreateXml(
 //                            opt_iter &          it,
@@ -136,6 +154,8 @@ class CommandLine : public csv::CommandLine_Ifc
 
     // DATA
     uintt               nDebugStyle;
+    Dyn<command::SinceTagTransformationData>
+                        pSinceTransformator;
 
     CommandList         aCommands;
     bool                bInitOk;
@@ -156,10 +176,8 @@ inline bool
 CommandLine::DebugStyle_ShowTokens() const
     { return (nDebugStyle & 1) != 0; }
 
-
-
-
 }   // namespace autodoc
+
 
 inline bool
 DEBUG_ShowText()
