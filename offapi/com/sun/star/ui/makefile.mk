@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: mi $ $Date: 2000-11-08 12:45:14 $
+#   last change: $Author: tra $ $Date: 2001-03-23 14:33:18 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -73,19 +73,24 @@ PACKAGE=com$/sun$/star$/ui
 # ------------------------------------------------------------------------
 
 IDLFILES=\
-    FileDialogResults.idl \
-    FilePickerElementID.idl \
-    XExecutableDialog.idl \
-    XFilePicker.idl \
-    XExtendedFilePicker.idl \
-    FilePickerEvent.idl \
-    XFPEventListenerManager.idl \
-    XFilePickerListener.idl \
-    XFilterManager.idl \
-    ExecutableDialogException.idl \
-    XFolderPicker.idl \
-    XFolderPickerListener.idl \
-    XFOPEventListenerManager.idl
+    FileDialogResults.idl\
+    FilePickerElementID.idl\
+    FileOpenReadonlyVersionBox.idl\
+    FileOpenLinkPreviewBox.idl\
+    FileOpenAutoextTemplateBox.idl\
+    FileSaveAutoextPasswordBox.idl\
+    FolderPicker.idl\
+    XExecutableDialog.idl\
+    XFilePicker.idl\
+    XExtendedFilePicker.idl\
+    FilePickerEvent.idl\
+    XFilePickerNotifier.idl\
+    XFilePickerListener.idl\
+    XFilterManager.idl\
+    ExecutableDialogException.idl\
+    XFolderPicker.idl\
+    XFolderPickerListener.idl\
+    XFolderPickerNotifier.idl
 
 # ------------------------------------------------------------------
 
