@@ -2,9 +2,9 @@
  *
  *  $RCSfile: crsrsh.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-07 12:42:52 $
+ *  last change: $Author: svesik $ $Date: 2004-04-21 09:54:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2839,8 +2839,6 @@ FASTBOOL SwCrsrShell::IsSelFullPara() const
     return bRet;
 }
 
-#ifdef BIDI
-
 short SwCrsrShell::GetTextDirection( const Point* pPt ) const
 {
     SwPosition aPos( *pCurCrsr->GetPoint() );
@@ -2869,24 +2867,6 @@ FASTBOOL SwCrsrShell::IsInRightToLeftText( const Point* pPt ) const
     // vertical environment
     return FRMDIR_VERT_TOP_LEFT == nDir || FRMDIR_HORI_RIGHT_TOP == nDir;
 }
-
-#else
-
-FASTBOOL SwCrsrShell::IsInVerticalText( const Point* pPt ) const
-{
-    SwPosition aPos( *pCurCrsr->GetPoint() );
-    Point aPt( pPt ? *pPt : pCurCrsr->GetPtPos() );
-    if( pPt )
-    {
-        SwCrsrMoveState aTmpState( MV_NONE );
-        aTmpState.bSetInReadOnly = IsReadOnlyAvailable();
-
-        GetLayout()->GetCrsrOfst( &aPos, aPt, &aTmpState );
-    }
-    return pDoc->IsInVerticalText( aPos, &aPt );
-}
-
-#endif
 
 //
 // If the current cursor position is inside a hidden range, the hidden range
@@ -2919,7 +2899,6 @@ bool SwCrsrShell::SelectHiddenRange()
 
     return bRet;
 }
-
 
 /*  */
 
