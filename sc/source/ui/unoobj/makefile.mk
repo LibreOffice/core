@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: hr $ $Date: 2003-04-04 19:19:42 $
+#   last change: $Author: rt $ $Date: 2003-09-19 08:25:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -69,7 +69,7 @@ PROJECTPCH4DLL=TRUE
 PROJECTPCH=ui_pch
 PDBTARGET=ui_pch
 PROJECTPCHSOURCE=..\pch\ui_pch
-
+LIBTARGET=NO
 ENABLE_EXCEPTIONS=TRUE
 
 AUTOSEG=true
@@ -82,43 +82,8 @@ AUTOSEG=true
 .INCLUDE :  $(PRJ)$/util$/makefile.pmk
 
 # --- Files --------------------------------------------------------
-CXXFILES = \
-        docuno.cxx \
-        servuno.cxx \
-        defltuno.cxx \
-        drdefuno.cxx \
-        cellsuno.cxx \
-        textuno.cxx \
-        notesuno.cxx \
-        cursuno.cxx \
-        srchuno.cxx \
-        fielduno.cxx \
-        miscuno.cxx \
-        optuno.cxx \
-        appluno.cxx \
-        funcuno.cxx \
-        nameuno.cxx \
-        viewuno.cxx \
-        dispuno.cxx \
-        datauno.cxx \
-        dapiuno.cxx \
-        chartuno.cxx \
-        shapeuno.cxx \
-        pageuno.cxx \
-        forbiuno.cxx \
-        styleuno.cxx \
-        afmtuno.cxx \
-        fmtuno.cxx \
-        linkuno.cxx \
-        targuno.cxx \
-        convuno.cxx \
-        editsrc.cxx \
-        unoguard.cxx \
-        confuno.cxx \
-        filtuno.cxx \
-        unodoc.cxx
 
-SLOFILES =  \
+SLO1FILES =  \
         $(SLO)$/docuno.obj \
         $(SLO)$/servuno.obj \
         $(SLO)$/defltuno.obj \
@@ -153,6 +118,20 @@ SLOFILES =  \
         $(SLO)$/confuno.obj \
         $(SLO)$/filtuno.obj \
         $(SLO)$/unodoc.obj
+
+SLO2FILES = \
+    $(SLO)$/scdetect.obj								\
+    $(SLO)$/detreg.obj
+
+SLOFILES = \
+    $(SLO1FILES) \
+    $(SLO2FILES)
+
+LIB1TARGET = \
+    $(SLB)$/$(TARGET).lib
+
+LIB1OBJFILES = \
+    $(SLO1FILES)
 
 # --- Tagets -------------------------------------------------------
 
