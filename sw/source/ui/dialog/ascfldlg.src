@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ascfldlg.src,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-26 22:34:04 $
+ *  last change: $Author: jp $ $Date: 2002-01-21 14:14:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,8 +68,8 @@ ModalDialog DLG_ASCII_FILTER
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 239 , 80 ) ;
-    Text = "ASCII Filter Optionen" ;
-    Text [ English ] = "ASCII filter options" ;
+    Text = "Encoded Text Filter Optionen" ;
+    Text [ English ] = "Encoded text filter options" ;
     Moveable = TRUE ;
     FixedLine FL_1
     {
