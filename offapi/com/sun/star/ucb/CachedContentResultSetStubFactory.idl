@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CachedContentResultSetStubFactory.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: iha $ $Date: 2001-04-27 14:57:26 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 00:57:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@ module com { module sun { module star { module ucb {
 //=============================================================================
 /** is a factory for <type>CachedContentResultSetStub</type> implementations.
 */
-service CachedContentResultSetStubFactory
+published service CachedContentResultSetStubFactory
 {
     //-------------------------------------------------------------------------
     /** a factory for implementations of service
