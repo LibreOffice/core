@@ -3,9 +3,9 @@
  *
  *  $RCSfile: split.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hjs $ $Date: 2004-06-25 17:09:38 $
+ *  last change: $Author: pjunck $ $Date: 2004-10-28 06:55:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,26 +95,18 @@
 
 namespace
 {
-    struct BlackInstance
-    {
-        Wallpaper * operator ()()
-        {
-            static Wallpaper instance(COL_BLACK);
-            return &instance;
+    struct ImplBlackWall
+        : public rtl::StaticWithInit<Wallpaper, ImplBlackWall> {
+        Wallpaper operator () () {
+            return Wallpaper(COL_BLACK);
         }
     };
-
-    struct WhiteInstance
-    {
-        Wallpaper * operator ()()
-        {
-            static Wallpaper instance(COL_LIGHTGRAY);
-            return &instance;
+    struct ImplWhiteWall
+        : public rtl::StaticWithInit<Wallpaper, ImplWhiteWall> {
+        Wallpaper operator () () {
+            return Wallpaper(COL_LIGHTGRAY);
         }
     };
-
-    struct ImplBlackWall : public rtl::Static< Wallpaper, ImplBlackWall, BlackInstance > {};
-    struct ImplWhiteWall : public rtl::Static< Wallpaper, ImplWhiteWall, WhiteInstance > {};
 }
 
 // =======================================================================
