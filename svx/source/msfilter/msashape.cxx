@@ -2,9 +2,9 @@
  *
  *  $RCSfile: msashape.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sj $ $Date: 2000-11-14 15:36:47 $
+ *  last change: $Author: sj $ $Date: 2000-11-16 13:06:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -182,6 +182,21 @@ static const sal_Int32 mso_sptDefault5400[] =
 static const sal_Int32 mso_sptDefault10800[] =
 {
     1, 10800
+};
+
+static const sal_Int32 mso_sptArcDefault[] =
+{
+    2, 270 << 16, 0
+};
+static const mso_AutoShape msoArc =
+{
+    NULL, 0,
+    NULL, 0,
+    NULL, 0,
+    (sal_Int32*)mso_sptArcDefault,
+    NULL,
+    NULL,
+    0x80000000, 0x80000000
 };
 
 static const mso_AutoShape msoRectangle =
@@ -3412,6 +3427,7 @@ SvxMSDffAutoShape::SvxMSDffAutoShape( const DffPropertyReader& rPropReader, SvSt
 
     switch( eSpType )
     {
+        case mso_sptArc :                   pDefAutoShape = &msoArc; break;
         case mso_sptRectangle :             pDefAutoShape = &msoRectangle; break;
         case mso_sptParallelogram :         pDefAutoShape = &msoParallelogram; break;
         case mso_sptTrapezoid :             pDefAutoShape = &msoTrapezoid; break;
@@ -3570,6 +3586,7 @@ SvxMSDffAutoShape::SvxMSDffAutoShape( const DffPropertyReader& rPropReader, SvSt
     }
     if ( pDefAutoShape )
     {
+        bIsEmpty = FALSE;
         nNumElemVert = pDefAutoShape->nVertices;
         pVertData = pDefAutoShape->pVertices;
         nNumElemSeg = pDefAutoShape->nElements;
@@ -3588,6 +3605,7 @@ SvxMSDffAutoShape::SvxMSDffAutoShape( const DffPropertyReader& rPropReader, SvSt
         rSt >> nTmp16 >> nNumElemMemVert >> nElemSizeVert;
         if ( nTmp16 )
         {
+            bIsEmpty = FALSE;
             nNumElemVert = nTmp16;
             sal_uInt32 i = nNumElemVert << 1;
             bVertAlloc = TRUE;
@@ -3611,9 +3629,8 @@ SvxMSDffAutoShape::SvxMSDffAutoShape( const DffPropertyReader& rPropReader, SvSt
             }
         }
     }
-    if ( pVertData || pDefAutoShape )
+    if ( !bIsEmpty )    // we can import an autoshape if either pVertData or pDefAutoShape is set
     {
-        bIsEmpty = FALSE;
         if ( rPropReader.SeekToContent( DFF_Prop_pSegmentInfo, rSt ) )
         {
             sal_uInt16 nTmp16, nNumElemMemSeg, nElemSizeSeg;
@@ -4074,24 +4091,113 @@ SdrObject* SvxMSDffAutoShape::GetObject( SdrModel* pSdrModel, SfxItemSet& rSet, 
         }
         else if ( eSpType == mso_sptEllipse )
             pRet = new SdrCircObj( OBJ_CIRC, aSnapRect );
+        else if ( eSpType == mso_sptArc )
+        {   // the arc is something special, because sometimes the snaprect does not match
+            Rectangle aPolyBoundRect;
+            if ( nNumElemVert )
+            {
+                XPolygon aXP( (sal_uInt16)nNumElemVert );
+                const sal_Int32* pTmp = pVertData;
+                sal_uInt32 nVal32, nPtNum, nPtCount = nNumElemVert << 1;
 
+                for ( nPtNum = 0; nPtNum < nPtCount; nPtNum++ )
+                {
+                    nVal32 = GetValue( *pTmp++, FALSE, ( nPtNum & 1 ) != 1 );
+                    if ( nPtNum & 1 )
+                        aXP[ (sal_uInt16)( nPtNum >> 1 ) ].Y() = nVal32;
+                    else
+                        aXP[ (sal_uInt16)( nPtNum >> 1 ) ].X() = nVal32;
+                }
+                aPolyBoundRect = Rectangle( aXP.GetBoundRect() );
+            }
+            else
+                aPolyBoundRect = aSnapRect;
+
+            sal_Int32   nEndAngle = Fix16ToAngle( GetAdjustValue( 0 ) );
+            sal_Int32   nStartAngle = Fix16ToAngle( GetAdjustValue( 1 ) );
+
+            if ( nStartAngle == nEndAngle )
+                return NULL;
+
+            if ( bFilled )      // ( filled ) ? we have to import an pie : we have to construct an arc
+                pRet = new SdrCircObj( OBJ_SECT, aPolyBoundRect, nStartAngle, nEndAngle );
+            else
+            {
+                Point aStart, aEnd, aCenter( aPolyBoundRect.Center() );
+                aStart.X() = (sal_Int32)( ( cos( ( (double)nStartAngle * F_PI18000 ) ) * 1000.0 ) );
+                aStart.Y() = - (sal_Int32)( ( sin( ( (double)nStartAngle * F_PI18000 ) ) * 1000.0 ) );
+                aEnd.X() = (sal_Int32)( ( cos( ( (double)nEndAngle * F_PI18000 ) ) * 1000.0 ) );
+                aEnd.Y() = - (sal_Int32)( ( sin( ( (double)nEndAngle * F_PI18000 ) ) * 1000.0 ) );
+                aStart.X() += aCenter.X();
+                aStart.Y() += aCenter.Y();
+                aEnd.X() += aCenter.X();
+                aEnd.Y() += aCenter.Y();
+
+                Polygon aPolygon( aPolyBoundRect, aStart, aEnd, POLY_PIE );
+                Rectangle aPolyPieRect( aPolygon.GetBoundRect() );
+
+                USHORT nPt = aPolygon.GetSize();
+
+                if ( nPt < 4 )
+                    return NULL;
+
+                aPolygon[ 0 ] = aPolygon[ 1 ];                              // try to get the arc boundrect
+                aPolygon[ nPt - 1 ] = aPolygon[ nPt - 2 ];
+                Rectangle aPolyArcRect( aPolygon.GetBoundRect() );
+
+                if ( aPolyArcRect != aPolyPieRect )
+                {
+                    double  fYScale, fXScale;
+                    double  fYOfs, fXOfs;
+                    int     nCond;
+
+                    fYOfs = fXOfs = 0.0;
+                    if ( aPolyPieRect.GetWidth() != aPolyArcRect.GetWidth() )
+                    {
+                        nCond = ( (sal_uInt32)( nStartAngle - 9000 ) > 18000 ) && ( (sal_uInt32)( nEndAngle - 9000 ) > 18000 ) ? 1 : 0;
+                        nCond ^= bFlipH ? 1 : 0;
+                        if ( nCond )
+                        {
+                            fXScale = (double)aSnapRect.GetWidth() / (double)aPolyPieRect.GetWidth();
+                            fXOfs = ( (double)aPolyPieRect.GetWidth() - (double)aPolyArcRect.GetWidth() ) * fXScale;
+                        }
+                    }
+                    if ( aPolyPieRect.GetHeight() != aPolyArcRect.GetHeight() )
+                    {
+                        nCond = ( ( nStartAngle > 18000 ) && ( nEndAngle > 18000 ) ) ? 1 : 0;
+                        nCond ^= bFlipV ? 1 : 0;
+                        if ( nCond )
+                        {
+                            fYScale = (double)aSnapRect.GetHeight() / (double)aPolyPieRect.GetHeight();
+                            fYOfs = ( (double)aPolyPieRect.GetHeight() - (double)aPolyArcRect.GetHeight() ) * fYScale;
+                        }
+                    }
+                    fXScale = (double)aPolyArcRect.GetWidth() / (double)aPolyPieRect.GetWidth();
+                    fYScale = (double)aPolyArcRect.GetHeight() / (double)aPolyPieRect.GetHeight();
+
+                    aSnapRect = Rectangle( Point( aSnapRect.Left() + fXOfs, aSnapRect.Top() + fYOfs ),
+                        Size( aSnapRect.GetWidth() * fXScale, aSnapRect.GetHeight() * fYScale ) );
+
+                }
+                pRet = new SdrCircObj( OBJ_CARC, aPolyBoundRect, nStartAngle, nEndAngle );
+            }
+            pRet->NbcSetSnapRect( aSnapRect );
+        }
         if ( pRet )
         {
             pRet->SetModel( pSdrModel );
             pRet->SetItemSet(rSet);
         }
-        else
+        else if ( nNumElemVert )
         {
             // Header auswerten
             XPolygon aXP( (sal_uInt16)nNumElemVert );
             const sal_Int32* pTmp = pVertData;
             sal_uInt32 nVal32, nPtNum, nPtCount = nNumElemVert << 1;
 
-            sal_Bool bScale = ( eSpType != mso_sptArc );
-
             for ( nPtNum = 0; nPtNum < nPtCount; nPtNum++ )
             {
-                nVal32 = GetValue( *pTmp++, bScale, ( nPtNum & 1 ) != 1 );
+                nVal32 = GetValue( *pTmp++, TRUE, ( nPtNum & 1 ) != 1 );
 
                 if ( nPtNum & 1 )
                     aXP[ (sal_uInt16)( nPtNum >> 1 ) ].Y() = nVal32;
@@ -4100,436 +4206,347 @@ SdrObject* SvxMSDffAutoShape::GetObject( SdrModel* pSdrModel, SfxItemSet& rSet, 
             }
             Rectangle   aPolyBoundRect( aXP.GetBoundRect() );
 
-            // the arc is something special, because sometimes the snaprect does not match
-            if ( eSpType == mso_sptArc )
+            if ( aPolyBoundRect.GetSize() != aSnapRect.GetSize() )
             {
-                // Groesse des Polygons mit allen Punkten korrigieren
-
-                sal_Int32   nEndAngle = Fix16ToAngle( GetAdjustValue( 0, 270 << 16 ) );
-                sal_Int32   nStartAngle = Fix16ToAngle( GetAdjustValue( 1, 0 ) );
-
-                if ( nStartAngle == nEndAngle )
-                    return NULL;
-
-                if ( bFilled )      // ( filled ) ? we have to import an pie : we have to construct an arc
-                    pRet = new SdrCircObj( OBJ_SECT, aPolyBoundRect, nStartAngle, nEndAngle );
-                else
-                {
-                    Point aStart, aEnd, aCenter( aPolyBoundRect.Center() );
-                    aStart.X() = (sal_Int32)( ( cos( ( (double)nStartAngle * F_PI18000 ) ) * 1000.0 ) );
-                    aStart.Y() = - (sal_Int32)( ( sin( ( (double)nStartAngle * F_PI18000 ) ) * 1000.0 ) );
-                    aEnd.X() = (sal_Int32)( ( cos( ( (double)nEndAngle * F_PI18000 ) ) * 1000.0 ) );
-                    aEnd.Y() = - (sal_Int32)( ( sin( ( (double)nEndAngle * F_PI18000 ) ) * 1000.0 ) );
-                    aStart.X() += aCenter.X();
-                    aStart.Y() += aCenter.Y();
-                    aEnd.X() += aCenter.X();
-                    aEnd.Y() += aCenter.Y();
-
-                    Polygon aPolygon( aPolyBoundRect, aStart, aEnd, POLY_PIE );
-                    Rectangle aPolyPieRect( aPolygon.GetBoundRect() );
-
-                    USHORT nPt = aPolygon.GetSize();
-
-                    if ( nPt < 4 )
-                        return NULL;
-
-                    aPolygon[ 0 ] = aPolygon[ 1 ];                              // try to get the arc boundrect
-                    aPolygon[ nPt - 1 ] = aPolygon[ nPt - 2 ];
-                    Rectangle aPolyArcRect( aPolygon.GetBoundRect() );
-
-                    if ( aPolyArcRect != aPolyPieRect )
-                    {
-                        double  fYScale, fXScale;
-                        double  fYOfs, fXOfs;
-                        int     nCond;
-
-                        fYOfs = fXOfs = 0.0;
-                        if ( aPolyPieRect.GetWidth() != aPolyArcRect.GetWidth() )
-                        {
-                            nCond = ( (sal_uInt32)( nStartAngle - 9000 ) > 18000 ) && ( (sal_uInt32)( nEndAngle - 9000 ) > 18000 ) ? 1 : 0;
-                            nCond ^= bFlipH ? 1 : 0;
-                            if ( nCond )
-                            {
-                                fXScale = (double)aSnapRect.GetWidth() / (double)aPolyPieRect.GetWidth();
-                                fXOfs = ( (double)aPolyPieRect.GetWidth() - (double)aPolyArcRect.GetWidth() ) * fXScale;
-                            }
-                        }
-                        if ( aPolyPieRect.GetHeight() != aPolyArcRect.GetHeight() )
-                        {
-                            nCond = ( ( nStartAngle > 18000 ) && ( nEndAngle > 18000 ) ) ? 1 : 0;
-                            nCond ^= bFlipV ? 1 : 0;
-                            if ( nCond )
-                            {
-                                fYScale = (double)aSnapRect.GetHeight() / (double)aPolyPieRect.GetHeight();
-                                fYOfs = ( (double)aPolyPieRect.GetHeight() - (double)aPolyArcRect.GetHeight() ) * fYScale;
-                            }
-                        }
-                        fXScale = (double)aPolyArcRect.GetWidth() / (double)aPolyPieRect.GetWidth();
-                        fYScale = (double)aPolyArcRect.GetHeight() / (double)aPolyPieRect.GetHeight();
-
-                        aSnapRect = Rectangle( Point( aSnapRect.Left() + fXOfs, aSnapRect.Top() + fYOfs ),
-                            Size( aSnapRect.GetWidth() * fXScale, aSnapRect.GetHeight() * fYScale ) );
-
-                    }
-                    pRet = new SdrCircObj( OBJ_CARC, aPolyBoundRect, nStartAngle, nEndAngle );
-
-                }
+                double      fXScale = (double)aSnapRect.GetWidth() / (double)aPolyBoundRect.GetWidth();
+                double      fYScale = (double)aSnapRect.GetHeight() / (double)aPolyBoundRect.GetHeight();
+                aXP.Scale( fXScale, fYScale );
+            }
+            if ( !pSegData )
+            {
+                FASTBOOL bClosed = aXP[ 0 ] == aXP[ (sal_uInt16)( aXP.GetPointCount() - 1 ) ];
+                pRet = new SdrPathObj( bClosed ? OBJ_POLY : OBJ_PLIN, aXP );
                 pRet->NbcSetSnapRect( aSnapRect );
                 pRet->SetModel( pSdrModel );
                 pRet->SetItemSet(rSet);
             }
-            if ( !pRet )
+            else
             {
-                if ( aPolyBoundRect.GetSize() != aSnapRect.GetSize() )
+                SdrObjGroup*    pGrp = NULL;
+                SdrObject*      pSdrPathObj = NULL;
+
+                XPolyPolygon    aPolyPoly;
+                XPolygon        aPoly;
+
+                XPolyPolygon    aEmptyPolyPoly;
+                XPolygon        aEmptyPoly;
+
+                BOOL            bClosed;
+                sal_uInt16      nPolyFlags;
+
+                Color           aFillColor( COL_WHITE );
+                sal_uInt32      nColorCount = nColorData >> 28;
+                sal_uInt32      nColorIndex = 0;
+                sal_uInt16      nSrcPt = 0;
+
+                Rectangle       aUnion;
+
+                const sal_uInt16* pTmp = pSegData;
+
+                if ( nColorCount )
                 {
-                    double      fXScale = (double)aSnapRect.GetWidth() / (double)aPolyBoundRect.GetWidth();
-                    double      fYScale = (double)aSnapRect.GetHeight() / (double)aPolyBoundRect.GetHeight();
-                    aXP.Scale( fXScale, fYScale );
-                }
-                if ( !pSegData )
-                {
-                    FASTBOOL bClosed = aXP[ 0 ] == aXP[ (sal_uInt16)( aXP.GetPointCount() - 1 ) ];
-                    pRet = new SdrPathObj( bClosed ? OBJ_POLY : OBJ_PLIN, aXP );
-                    pRet->NbcSetSnapRect( aSnapRect );
-                    pRet->SetModel( pSdrModel );
-                    pRet->SetItemSet(rSet);
-                }
-                else
-                {
-                    SdrObjGroup*    pGrp = NULL;
-                    SdrObject*      pSdrPathObj = NULL;
-
-                    XPolyPolygon    aPolyPoly;
-                    XPolygon        aPoly;
-
-                    XPolyPolygon    aEmptyPolyPoly;
-                    XPolygon        aEmptyPoly;
-
-                    BOOL            bClosed;
-                    sal_uInt16      nPolyFlags;
-
-                    Color           aFillColor( COL_WHITE );
-                    sal_uInt32      nColorCount = nColorData >> 28;
-                    sal_uInt32      nColorIndex = 0;
-                    sal_uInt16      nSrcPt = 0;
-
-                    Rectangle       aUnion;
-
-                    const sal_uInt16* pTmp = pSegData;
-
-                    if ( nColorCount )
+                    const SfxPoolItem* pPoolItem = NULL;
+                    SfxItemState eState = rSet.GetItemState( XATTR_FILLCOLOR, FALSE, &pPoolItem );
+                    if( SFX_ITEM_SET == eState )
                     {
-                        const SfxPoolItem* pPoolItem = NULL;
-                        SfxItemState eState = rSet.GetItemState( XATTR_FILLCOLOR, FALSE, &pPoolItem );
-                        if( SFX_ITEM_SET == eState )
-                        {
-                            if ( pPoolItem )
-                                aFillColor = ((XFillColorItem*)pPoolItem)->GetValue();
-                        }
+                        if ( pPoolItem )
+                            aFillColor = ((XFillColorItem*)pPoolItem)->GetValue();
                     }
-                    for ( sal_uInt16 i = 0; i < nNumElemSeg; i++ )
+                }
+                for ( sal_uInt16 i = 0; i < nNumElemSeg; i++ )
+                {
+                    nPolyFlags = *pTmp++;
+                    switch ( nPolyFlags >> 12 )
                     {
-                        nPolyFlags = *pTmp++;
-                        switch ( nPolyFlags >> 12 )
+                        case 0x4 :
                         {
-                            case 0x4 :
+                            if ( aPoly.GetPointCount() > 1 )
                             {
-                                if ( aPoly.GetPointCount() > 1 )
-                                {
-                                    if ( bClosed )
-                                        aPoly[ aPoly.GetPointCount() ] = aPoly[ 0 ];
-                                    aPolyPoly.Insert( aPoly );
-                                }
-                                bClosed = FALSE;
-                                aPoly = aEmptyPoly;
-                                aPoly[ 0 ] = aXP[ nSrcPt++ ];
+                                if ( bClosed )
+                                    aPoly[ aPoly.GetPointCount() ] = aPoly[ 0 ];
+                                aPolyPoly.Insert( aPoly );
                             }
-                            break;
-                            case 0x8 :
+                            bClosed = FALSE;
+                            aPoly = aEmptyPoly;
+                            aPoly[ 0 ] = aXP[ nSrcPt++ ];
+                        }
+                        break;
+                        case 0x8 :
+                        {
+                            if ( aPoly.GetPointCount() > 1 )
                             {
-                                if ( aPoly.GetPointCount() > 1 )
+                                if ( bClosed )
+                                    aPoly[ aPoly.GetPointCount() ] = aPoly[ 0 ];
+                                aPolyPoly.Insert( aPoly );
+                            }
+                            aPoly = aEmptyPoly;
+                            if ( aPolyPoly.Count() )
+                            {
+                                if ( pSdrPathObj )
                                 {
-                                    if ( bClosed )
-                                        aPoly[ aPoly.GetPointCount() ] = aPoly[ 0 ];
-                                    aPolyPoly.Insert( aPoly );
+                                    pGrp = new SdrObjGroup();
+                                    pGrp->SetModel( pSdrModel );
+                                    pGrp->NbcSetLogicRect( aSnapRect );
+                                    pGrp->GetSubList()->NbcInsertObject( pSdrPathObj );
                                 }
-                                aPoly = aEmptyPoly;
-                                if ( aPolyPoly.Count() )
+                                aUnion.Union( aPolyPoly.GetBoundRect() );
+                                pSdrPathObj = new SdrPathObj( bClosed ? OBJ_POLY : OBJ_PLIN, aPolyPoly );
+                                pSdrPathObj->SetModel( pSdrModel );
+                                if ( !bClosed )
+                                    rSet.Put( SdrShadowItem( FALSE ) );
+                                else
+                                {
+                                    if ( nColorIndex < nColorCount )
+                                    {
+                                        Color aColor( ImplGetColorData( aFillColor, nColorIndex++ ) );
+                                        rSet.Put( XFillColorItem( String(), aColor ) );
+                                    }
+                                }
+                                pSdrPathObj->SetItemSet(rSet);
+                                if ( pGrp )
                                 {
                                     if ( pSdrPathObj )
                                     {
-                                        pGrp = new SdrObjGroup();
-                                        pGrp->SetModel( pSdrModel );
-                                        pGrp->NbcSetLogicRect( aSnapRect );
                                         pGrp->GetSubList()->NbcInsertObject( pSdrPathObj );
-                                    }
-                                    aUnion.Union( aPolyPoly.GetBoundRect() );
-                                    pSdrPathObj = new SdrPathObj( bClosed ? OBJ_POLY : OBJ_PLIN, aPolyPoly );
-                                    pSdrPathObj->SetModel( pSdrModel );
-                                    if ( !bClosed )
-                                        rSet.Put( SdrShadowItem( FALSE ) );
-                                    else
-                                    {
-                                        if ( nColorIndex < nColorCount )
-                                        {
-                                            Color aColor( ImplGetColorData( aFillColor, nColorIndex++ ) );
-                                            rSet.Put( XFillColorItem( String(), aColor ) );
-                                        }
-                                    }
-                                    pSdrPathObj->SetItemSet(rSet);
-                                    if ( pGrp )
-                                    {
-                                        if ( pSdrPathObj )
-                                        {
-                                            pGrp->GetSubList()->NbcInsertObject( pSdrPathObj );
-                                            pSdrPathObj = NULL;
-                                        }
-                                    }
-                                    aPolyPoly = aEmptyPolyPoly;
-                                }
-                            }
-                            break;
-                            case 0x6 :
-                            {
-                                bClosed = TRUE;
-                            }
-                            break;
-                            case 0x2 :
-                            {
-                                sal_uInt16 nDstPt = aPoly.GetPointCount();
-                                for ( sal_uInt16 i = 0; i < ( nPolyFlags & 0xfff ); i++ )
-                                {
-                                    aPoly[ nDstPt ] = aXP[ nSrcPt++ ];
-                                    aPoly.SetFlags( nDstPt++, XPOLY_CONTROL );
-                                    aPoly[ nDstPt ] = aXP[ nSrcPt++ ];
-                                    aPoly.SetFlags( nDstPt++, XPOLY_CONTROL );
-                                    aPoly[ nDstPt++ ] = aXP[ nSrcPt++ ];
-                                }
-                            }
-                            break;
-                            case 0xa :
-                            case 0xb :
-                            {
-                                sal_uInt16 nPntCount = (BYTE)nPolyFlags;
-                                if ( nPntCount )
-                                {
-                                    sal_uInt32 nMod = ( nPolyFlags >> 8 ) & 0xf;
-                                    switch ( nMod )
-                                    {
-                                        case 3 :
-                                        case 4 :
-                                        case 5 :
-                                        {
-                                            sal_uInt16 nDstPt = aPoly.GetPointCount();
-//                                          if ( nDstPt > 1 )
-//                                          {
-//                                              if ( bClosed )
-//                                                  aPoly[ aPoly.GetPointCount() ] = aPoly[ 0 ];
-//                                              aPolyPoly.Insert( aPoly );
-//                                              aPoly = aEmptyPoly;
-//                                              nDstPt = 0;
-//                                          }
-                                            if ( nPntCount == 2 )
-                                            {   // create a circle
-                                                Rectangle aRect( aXP[ nSrcPt ], aXP[ nSrcPt + 1 ] );
-                                                sal_Int32 nXControl = (sal_Int32)((double)aRect.GetWidth() * 0.2835 );
-                                                sal_Int32 nYControl = (sal_Int32)((double)aRect.GetHeight() * 0.2835 );
-                                                Point     aCenter( aRect.Center() );
-                                                aPoly[ nDstPt++ ] = Point( aCenter.X(), aRect.Top() );
-                                                aPoly[ nDstPt ] = Point( aCenter.X() + nXControl, aRect.Top() );
-                                                aPoly.SetFlags( nDstPt++, XPOLY_CONTROL );
-                                                aPoly[ nDstPt ] = Point( aRect.Right(), aCenter.Y() - nYControl );
-                                                aPoly.SetFlags( nDstPt++, XPOLY_CONTROL );
-                                                aPoly[ nDstPt++ ] = Point( aRect.Right(), aCenter.Y() );
-                                                aPoly[ nDstPt ] = Point( aRect.Right(), aCenter.Y() + nYControl );
-                                                aPoly.SetFlags( nDstPt++, XPOLY_CONTROL );
-                                                aPoly[ nDstPt ] = Point( aCenter.X() + nXControl, aRect.Bottom() );
-                                                aPoly.SetFlags( nDstPt++, XPOLY_CONTROL );
-                                                aPoly[ nDstPt++ ] = Point( aCenter.X(), aRect.Bottom() );
-                                                aPoly[ nDstPt ] = Point( aCenter.X() - nXControl, aRect.Bottom() );
-                                                aPoly.SetFlags( nDstPt++, XPOLY_CONTROL );
-                                                aPoly[ nDstPt ] = Point( aRect.Left(), aCenter.Y() + nYControl );
-                                                aPoly.SetFlags( nDstPt++, XPOLY_CONTROL );
-                                                aPoly[ nDstPt++ ] = Point( aRect.Left(), aCenter.Y() );
-                                                aPoly[ nDstPt ] = Point( aRect.Left(), aCenter.Y() - nYControl );
-                                                aPoly.SetFlags( nDstPt++, XPOLY_CONTROL );
-                                                aPoly[ nDstPt ] = Point( aCenter.X() - nXControl, aRect.Top() );
-                                                aPoly.SetFlags( nDstPt++, XPOLY_CONTROL );
-                                                aPoly[ nDstPt++ ] = Point( aCenter.X(), aRect.Top() );
-                                                nSrcPt += 2;
-                                            }
-                                            else
-                                            {
-                                                sal_uInt32 nXor = ( nMod == 5 ) ? 3 : 2;
-                                                for ( sal_uInt32 i = 0; i < ( nPntCount >> 2 ); i++ )
-                                                {
-                                                    PolyStyle ePolyStyle = POLY_ARC;
-                                                    Rectangle aRect( aXP[ nSrcPt ], aXP[ nSrcPt + 1 ] );
-                                                    Point aCenter( aRect.Center() );
-                                                    Point aStart( aXP[ nSrcPt + nXor ] );
-                                                    Point aEnd( aXP[ nSrcPt + ( nXor ^ 1 ) ] );
-                                                    aStart.X() = ( (double)( aStart.X() - aCenter.X() ) / fXScale ) + aCenter.X();
-                                                    aStart.Y() = ( (double)( aStart.Y() - aCenter.Y() ) / fYScale ) + aCenter.Y();
-                                                    aEnd.X() = ( (double)( aEnd.X() - aCenter.X() ) / fXScale ) + aCenter.X();
-                                                    aEnd.Y() = ( (double)( aEnd.Y() - aCenter.Y() ) / fYScale ) + aCenter.Y();
-
-                                                    Polygon aTempPoly( aRect, aStart, aEnd, ePolyStyle );
-                                                    if ( nMod == 5 )
-                                                    {
-                                                        for ( sal_uInt16 j = aTempPoly.GetSize(); j--; )
-                                                            aPoly[ nDstPt++ ] = aTempPoly[ j ];
-                                                    }
-                                                    else
-                                                    {
-                                                        for ( sal_uInt16 j = 0; j < aTempPoly.GetSize(); j++ )
-                                                            aPoly[ nDstPt++ ] = aTempPoly[ j ];
-                                                    }
-                                                    nSrcPt += 4;
-                                                }
-                                            }
-                                        }
-                                        break;
-                                        case 0 :
-                                        case 1 :
-                                        case 2 :
-                                        case 6 :
-                                        case 9 :
-                                        case 0xa :
-                                        case 0xb :
-                                        case 0xc :
-                                        case 0xd :
-                                        case 0xe :
-                                        case 0xf :
-
-                                        case 7 :
-                                        case 8 :
-                                        {
-                                            BOOL    bFirstDirection;
-                                            sal_uInt16  nDstPt = aPoly.GetPointCount();
-                                            for ( sal_uInt16 i = 0; i < ( nPolyFlags & 0xff ); i++ )
-                                            {
-                                                sal_uInt32 nModT = ( nMod == 7 ) ? 1 : 0;
-                                                Point aCurrent( aXP[ nSrcPt ] );
-                                                if ( nSrcPt )   // we need a previous point
-                                                {
-                                                    Point aPrev( aXP[ nSrcPt - 1 ] );
-                                                    sal_Int32 nX, nY;
-                                                    nX = aCurrent.X() - aPrev.X();
-                                                    nY = aCurrent.Y() - aPrev.Y();
-                                                    if ( ( nY ^ nX ) & 0x80000000 )
-                                                    {
-                                                        if ( !i )
-                                                            bFirstDirection = TRUE;
-                                                        else if ( !bFirstDirection )
-                                                            nModT ^= 1;
-                                                    }
-                                                    else
-                                                    {
-                                                        if ( !i )
-                                                            bFirstDirection = FALSE;
-                                                        else if ( bFirstDirection )
-                                                            nModT ^= 1;
-                                                    }
-                                                    if ( nModT )            // get the right corner
-                                                    {
-                                                        nX = aCurrent.X();
-                                                        nY = aPrev.Y();
-                                                    }
-                                                    else
-                                                    {
-                                                        nX = aPrev.X();
-                                                        nY = aCurrent.Y();
-                                                    }
-                                                    sal_Int32 nXVec = ( nX - aPrev.X() ) >> 1;
-                                                    sal_Int32 nYVec = ( nY - aPrev.Y() ) >> 1;
-                                                    Point aControl1( aPrev.X() + nXVec, aPrev.Y() + nYVec );
-                                                    aPoly[ nDstPt ] = aControl1;
-                                                    aPoly.SetFlags( nDstPt++, XPOLY_CONTROL );
-                                                    nXVec = ( nX - aCurrent.X() ) >> 1;
-                                                    nYVec = ( nY - aCurrent.Y() ) >> 1;
-                                                    Point aControl2( aCurrent.X() + nXVec, aCurrent.Y() + nYVec );
-                                                    aPoly[ nDstPt ] = aControl2;
-                                                    aPoly.SetFlags( nDstPt++, XPOLY_CONTROL );
-                                                }
-                                                aPoly[ nDstPt ] = aCurrent;
-                                                nSrcPt++;
-                                                nDstPt++;
-                                            }
-                                        }
-                                        break;
+                                        pSdrPathObj = NULL;
                                     }
                                 }
+                                aPolyPoly = aEmptyPolyPoly;
                             }
-                            break;
-                            case 0x0 :
-                            {
-                                sal_uInt16 nDstPt = aPoly.GetPointCount();
-                                for ( sal_uInt16 i = 0; i < ( nPolyFlags & 0xfff ); i++ )
-                                    aPoly[ nDstPt++ ] = aXP[ nSrcPt++ ];
-                            }
-                            break;
-                            case 0xf :
-                            {
-                                sal_Bool bOwn = TRUE;
-                                switch ( nPolyFlags )
-                                {
-                                    case 0xf8ff :                                                   // This value is not ms specific and is used
-                                    {                                                               // to create a dummy object that is not visible.
-                                        SdrObject* pLast = pSdrPathObj;                             // This solves the problem of autoshapes that
-                                        if ( !pLast )                                               // did not use the whole space of the boundrect.
-                                        {                                                           // eg. the BlockArc
-                                            if ( pGrp )
-                                            {
-                                                SdrObjList* pList = pGrp->GetSubList();
-                                                if ( pList && pList->GetObjCount() )
-                                                    pLast = pList->GetObj( pList->GetObjCount() - 1 );
-                                            }
-                                        }
-                                        if ( pLast )
-                                        {
-                                            pLast->SetItem( XLineStyleItem( XLINE_NONE ) );
-                                            pLast->SetItem( XFillStyleItem( XFILL_NONE ) );
-                                        }
-                                    }
-                                    break;
-                                    case 0xf8fe :                                                   // nearly the same as 0x4000
-                                    {                                                               // but the first point is ignored
-                                        if ( aPoly.GetPointCount() > 1 )
-                                        {
-                                            if ( bClosed )
-                                                aPoly[ aPoly.GetPointCount() ] = aPoly[ 0 ];
-                                            aPolyPoly.Insert( aPoly );
-                                        }
-                                        aPoly = aEmptyPoly;
-                                    }
-                                    break;
-                                    default :
-                                        bOwn = FALSE;
-                                }
-                                if ( bOwn )
-                                    break;
-                            }
-#ifdef DBG_AUTOSHAPE
-                            default :
-                            {
-                                ByteString aString( "autoshapes::unknown PolyFlagValue :" );
-                                aString.Append( ByteString::CreateFromInt32( nPolyFlags ) );
-                                DBG_ERROR( aString.GetBuffer() );
-                            }
-                            break;
-#endif
                         }
+                        break;
+                        case 0x6 :
+                        {
+                            bClosed = TRUE;
+                        }
+                        break;
+                        case 0x2 :
+                        {
+                            sal_uInt16 nDstPt = aPoly.GetPointCount();
+                            for ( sal_uInt16 i = 0; i < ( nPolyFlags & 0xfff ); i++ )
+                            {
+                                aPoly[ nDstPt ] = aXP[ nSrcPt++ ];
+                                aPoly.SetFlags( nDstPt++, XPOLY_CONTROL );
+                                aPoly[ nDstPt ] = aXP[ nSrcPt++ ];
+                                aPoly.SetFlags( nDstPt++, XPOLY_CONTROL );
+                                aPoly[ nDstPt++ ] = aXP[ nSrcPt++ ];
+                            }
+                        }
+                        break;
+                        case 0xa :
+                        case 0xb :
+                        {
+                            sal_uInt16 nPntCount = (BYTE)nPolyFlags;
+                            if ( nPntCount )
+                            {
+                                sal_uInt32 nMod = ( nPolyFlags >> 8 ) & 0xf;
+                                switch ( nMod )
+                                {
+                                    case 3 :
+                                    case 4 :
+                                    case 5 :
+                                    {
+                                        sal_uInt16 nDstPt = aPoly.GetPointCount();
+                                        if ( nPntCount == 2 )
+                                        {   // create a circle
+                                            Rectangle aRect( aXP[ nSrcPt ], aXP[ nSrcPt + 1 ] );
+                                            sal_Int32 nXControl = (sal_Int32)((double)aRect.GetWidth() * 0.2835 );
+                                            sal_Int32 nYControl = (sal_Int32)((double)aRect.GetHeight() * 0.2835 );
+                                            Point     aCenter( aRect.Center() );
+                                            aPoly[ nDstPt++ ] = Point( aCenter.X(), aRect.Top() );
+                                            aPoly[ nDstPt ] = Point( aCenter.X() + nXControl, aRect.Top() );
+                                            aPoly.SetFlags( nDstPt++, XPOLY_CONTROL );
+                                            aPoly[ nDstPt ] = Point( aRect.Right(), aCenter.Y() - nYControl );
+                                            aPoly.SetFlags( nDstPt++, XPOLY_CONTROL );
+                                            aPoly[ nDstPt++ ] = Point( aRect.Right(), aCenter.Y() );
+                                            aPoly[ nDstPt ] = Point( aRect.Right(), aCenter.Y() + nYControl );
+                                            aPoly.SetFlags( nDstPt++, XPOLY_CONTROL );
+                                            aPoly[ nDstPt ] = Point( aCenter.X() + nXControl, aRect.Bottom() );
+                                            aPoly.SetFlags( nDstPt++, XPOLY_CONTROL );
+                                            aPoly[ nDstPt++ ] = Point( aCenter.X(), aRect.Bottom() );
+                                            aPoly[ nDstPt ] = Point( aCenter.X() - nXControl, aRect.Bottom() );
+                                            aPoly.SetFlags( nDstPt++, XPOLY_CONTROL );
+                                            aPoly[ nDstPt ] = Point( aRect.Left(), aCenter.Y() + nYControl );
+                                            aPoly.SetFlags( nDstPt++, XPOLY_CONTROL );
+                                            aPoly[ nDstPt++ ] = Point( aRect.Left(), aCenter.Y() );
+                                            aPoly[ nDstPt ] = Point( aRect.Left(), aCenter.Y() - nYControl );
+                                            aPoly.SetFlags( nDstPt++, XPOLY_CONTROL );
+                                            aPoly[ nDstPt ] = Point( aCenter.X() - nXControl, aRect.Top() );
+                                            aPoly.SetFlags( nDstPt++, XPOLY_CONTROL );
+                                            aPoly[ nDstPt++ ] = Point( aCenter.X(), aRect.Top() );
+                                            nSrcPt += 2;
+                                        }
+                                        else
+                                        {
+                                            sal_uInt32 nXor = ( nMod == 5 ) ? 3 : 2;
+                                            for ( sal_uInt32 i = 0; i < ( nPntCount >> 2 ); i++ )
+                                            {
+                                                PolyStyle ePolyStyle = POLY_ARC;
+                                                Rectangle aRect( aXP[ nSrcPt ], aXP[ nSrcPt + 1 ] );
+                                                Point aCenter( aRect.Center() );
+                                                Point aStart( aXP[ nSrcPt + nXor ] );
+                                                Point aEnd( aXP[ nSrcPt + ( nXor ^ 1 ) ] );
+                                                aStart.X() = ( (double)( aStart.X() - aCenter.X() ) / fXScale ) + aCenter.X();
+                                                aStart.Y() = ( (double)( aStart.Y() - aCenter.Y() ) / fYScale ) + aCenter.Y();
+                                                aEnd.X() = ( (double)( aEnd.X() - aCenter.X() ) / fXScale ) + aCenter.X();
+                                                aEnd.Y() = ( (double)( aEnd.Y() - aCenter.Y() ) / fYScale ) + aCenter.Y();
+
+                                                Polygon aTempPoly( aRect, aStart, aEnd, ePolyStyle );
+                                                if ( nMod == 5 )
+                                                {
+                                                    for ( sal_uInt16 j = aTempPoly.GetSize(); j--; )
+                                                        aPoly[ nDstPt++ ] = aTempPoly[ j ];
+                                                }
+                                                else
+                                                {
+                                                    for ( sal_uInt16 j = 0; j < aTempPoly.GetSize(); j++ )
+                                                        aPoly[ nDstPt++ ] = aTempPoly[ j ];
+                                                }
+                                                nSrcPt += 4;
+                                            }
+                                        }
+                                    }
+                                    break;
+                                    case 0 :
+                                    case 1 :
+                                    case 2 :
+                                    case 6 :
+                                    case 9 :
+                                    case 0xa :
+                                    case 0xb :
+                                    case 0xc :
+                                    case 0xd :
+                                    case 0xe :
+                                    case 0xf :
+
+                                    case 7 :
+                                    case 8 :
+                                    {
+                                        BOOL    bFirstDirection;
+                                        sal_uInt16  nDstPt = aPoly.GetPointCount();
+                                        for ( sal_uInt16 i = 0; i < ( nPolyFlags & 0xff ); i++ )
+                                        {
+                                            sal_uInt32 nModT = ( nMod == 7 ) ? 1 : 0;
+                                            Point aCurrent( aXP[ nSrcPt ] );
+                                            if ( nSrcPt )   // we need a previous point
+                                            {
+                                                Point aPrev( aXP[ nSrcPt - 1 ] );
+                                                sal_Int32 nX, nY;
+                                                nX = aCurrent.X() - aPrev.X();
+                                                nY = aCurrent.Y() - aPrev.Y();
+                                                if ( ( nY ^ nX ) & 0x80000000 )
+                                                {
+                                                    if ( !i )
+                                                        bFirstDirection = TRUE;
+                                                    else if ( !bFirstDirection )
+                                                        nModT ^= 1;
+                                                }
+                                                else
+                                                {
+                                                    if ( !i )
+                                                        bFirstDirection = FALSE;
+                                                    else if ( bFirstDirection )
+                                                        nModT ^= 1;
+                                                }
+                                                if ( nModT )            // get the right corner
+                                                {
+                                                    nX = aCurrent.X();
+                                                    nY = aPrev.Y();
+                                                }
+                                                else
+                                                {
+                                                    nX = aPrev.X();
+                                                    nY = aCurrent.Y();
+                                                }
+                                                sal_Int32 nXVec = ( nX - aPrev.X() ) >> 1;
+                                                sal_Int32 nYVec = ( nY - aPrev.Y() ) >> 1;
+                                                Point aControl1( aPrev.X() + nXVec, aPrev.Y() + nYVec );
+                                                aPoly[ nDstPt ] = aControl1;
+                                                aPoly.SetFlags( nDstPt++, XPOLY_CONTROL );
+                                                nXVec = ( nX - aCurrent.X() ) >> 1;
+                                                nYVec = ( nY - aCurrent.Y() ) >> 1;
+                                                Point aControl2( aCurrent.X() + nXVec, aCurrent.Y() + nYVec );
+                                                aPoly[ nDstPt ] = aControl2;
+                                                aPoly.SetFlags( nDstPt++, XPOLY_CONTROL );
+                                            }
+                                            aPoly[ nDstPt ] = aCurrent;
+                                            nSrcPt++;
+                                            nDstPt++;
+                                        }
+                                    }
+                                    break;
+                                }
+                            }
+                        }
+                        break;
+                        case 0x0 :
+                        {
+                            sal_uInt16 nDstPt = aPoly.GetPointCount();
+                            for ( sal_uInt16 i = 0; i < ( nPolyFlags & 0xfff ); i++ )
+                                aPoly[ nDstPt++ ] = aXP[ nSrcPt++ ];
+                        }
+                        break;
+                        case 0xf :
+                        {
+                            sal_Bool bOwn = TRUE;
+                            switch ( nPolyFlags )
+                            {
+                                case 0xf8ff :                                                   // This value is not ms specific and is used
+                                {                                                               // to create a dummy object that is not visible.
+                                    SdrObject* pLast = pSdrPathObj;                             // This solves the problem of autoshapes that
+                                    if ( !pLast )                                               // did not use the whole space of the boundrect.
+                                    {                                                           // eg. the BlockArc
+                                        if ( pGrp )
+                                        {
+                                            SdrObjList* pList = pGrp->GetSubList();
+                                            if ( pList && pList->GetObjCount() )
+                                                pLast = pList->GetObj( pList->GetObjCount() - 1 );
+                                        }
+                                    }
+                                    if ( pLast )
+                                    {
+                                        pLast->SetItem( XLineStyleItem( XLINE_NONE ) );
+                                        pLast->SetItem( XFillStyleItem( XFILL_NONE ) );
+                                    }
+                                }
+                                break;
+                                case 0xf8fe :                                                   // nearly the same as 0x4000
+                                {                                                               // but the first point is ignored
+                                    if ( aPoly.GetPointCount() > 1 )
+                                    {
+                                        if ( bClosed )
+                                            aPoly[ aPoly.GetPointCount() ] = aPoly[ 0 ];
+                                        aPolyPoly.Insert( aPoly );
+                                    }
+                                    aPoly = aEmptyPoly;
+                                }
+                                break;
+                                default :
+                                    bOwn = FALSE;
+                            }
+                            if ( bOwn )
+                                break;
+                        }
+#ifdef DBG_AUTOSHAPE
+                        default :
+                        {
+                            ByteString aString( "autoshapes::unknown PolyFlagValue :" );
+                            aString.Append( ByteString::CreateFromInt32( nPolyFlags ) );
+                            DBG_ERROR( aString.GetBuffer() );
+                        }
+                        break;
+#endif
                     }
-                    if ( pGrp )
-                        pRet = pGrp;
-                    else
-                        pRet = pSdrPathObj;
-                    if ( pRet )
-                    {
-                        pRet->NbcSetSnapRect( Rectangle( Point( aSnapRect.Left() + aUnion.Left(),
-                                                                 aSnapRect.Top() + aUnion.Top() ),
-                                                                    aUnion.GetSize() ) );
-                    }
+                }
+                if ( pGrp )
+                    pRet = pGrp;
+                else
+                    pRet = pSdrPathObj;
+                if ( pRet )
+                {
+                    pRet->NbcSetSnapRect( Rectangle( Point( aSnapRect.Left() + aUnion.Left(),
+                                                             aSnapRect.Top() + aUnion.Top() ),
+                                                                aUnion.GetSize() ) );
                 }
             }
         }
