@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.163 $
+ *  $Revision: 1.164 $
  *
- *  last change: $Author: kz $ $Date: 2005-01-21 17:35:22 $
+ *  last change: $Author: obo $ $Date: 2005-01-27 12:26:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -319,6 +319,8 @@
 #include <svtools/filter.hxx>
 
 #include "langselect.hxx"
+
+#include <stdio.h>
 
 #define DEFINE_CONST_UNICODE(CONSTASCII)        UniString(RTL_CONSTASCII_USTRINGPARAM(CONSTASCII))
 #define U2S(STRING)                                ::rtl::OUStringToOString(STRING, RTL_TEXTENCODING_UTF8)
@@ -1007,6 +1009,24 @@ void Desktop::HandleBootstrapErrors( BootstrapError aBootstrapError )
     {
         // Uno service manager is not available. VCL needs a uno service manager to display a message box!!!
         // Currently we are not able to display a message box with a service manager due to this limitations inside VCL.
+
+        // When UNO is not properly initialized, all kinds of things can fail
+        // and cause the process to crash (e.g., a call to GetMsgString may
+        // crash when somewhere deep within that call Any::operator <= is used
+        // with a PropertyValue, and no binary UNO type description for
+        // PropertyValue is available).  To give the user a hint even if
+        // generating and displaying a message box below crashes, print a
+        // hard-coded message on stderr first:
+        fputs(
+            aBootstrapError == BE_UNO_SERVICEMANAGER
+            ? ("The application cannot be started. " "\n"
+               "The component manager is not available." "\n")
+                // STR_BOOTSTRAP_ERR_CANNOT_START, STR_BOOTSTRAP_ERR_NO_SERVICE
+            : ("The application cannot be started. " "\n"
+               "The configuration service is not available." "\n"),
+                // STR_BOOTSTRAP_ERR_CANNOT_START,
+                // STR_BOOTSTRAP_ERR_NO_CFG_SERVICE
+            stderr);
 
         // First sentence. We cannot bootstrap office further!
         OUString            aMessage;
