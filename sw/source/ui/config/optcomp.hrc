@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optcomp.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $ $Date: 2003-10-15 10:00:36 $
+ *  last change: $Author: kz $ $Date: 2004-02-26 17:02:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,5 +80,6 @@
 #define STR_MERGE_PARA_DIST_PAGESTART   (STR_COMP_OPTIONS_START + 2)
 #define STR_TAB_ALIGNMENT               (STR_COMP_OPTIONS_START + 3)
 #define STR_EXTERNAL_LEADING            (STR_COMP_OPTIONS_START + 4)
-#define STR_COMP_OPTIONS_END            (STR_EXTERNAL_LEADING + 1)
+#define STR_LINE_SPACING                (STR_COMP_OPTIONS_START + 5)
+#define STR_COMP_OPTIONS_END            (STR_LINE_SPACING + 1)
 
