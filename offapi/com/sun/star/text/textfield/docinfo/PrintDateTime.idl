@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PrintDateTime.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:57:50 $
+ *  last change: $Author: rt $ $Date: 2003-04-17 10:17:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,8 @@ service PrintDateTime
      */
     /** If this flag is set to <FALSE/> the date or time
         is always displayed as the current date or time.
+
+    @since #107627#
      */
     [optional, property] boolean IsFixed;
     /** If this flag is set to <TRUE/> this field represents,
