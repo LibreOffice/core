@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdid.h,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: mba $ $Date: 2002-05-27 14:30:52 $
+ *  last change: $Author: mba $ $Date: 2002-06-10 16:59:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -704,6 +704,7 @@ Achtung: Ab sofort sind in diesem File keine C++-Kommentare (//) mehr
 #define FN_TABLE_SPLIT_TABLE                (FN_FORMAT2 + 142)
 #define FN_SYNC_LABELS                      (FN_FORMAT2 + 143)
 
+#define FN_FORMAT_LINENUMBER                (FN_FORMAT2 + 144)
 
 #define FN_TABLE_RELATIVE_WIDTH             (FN_FORMAT2 + 147)  /* Tabelle: relative Breite - UNO */
 #define FN_TABLE_WIDTH                      (FN_FORMAT2 + 148)  /* Tabelle: Breite - UNO */
