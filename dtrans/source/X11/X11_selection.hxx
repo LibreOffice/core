@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_selection.hxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mh $ $Date: 2001-01-31 15:37:28 $
+ *  last change: $Author: mh $ $Date: 2001-01-31 15:49:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,8 +66,8 @@
 #include <cppuhelper/compbase1.hxx>
 #endif
 
-#ifndef _CPPUHELPER_COMPBASE8_HXX_
-#include <cppuhelper/compbase8.hxx>
+#ifndef _CPPUHELPER_COMPBASE7_HXX_
+#include <cppuhelper/compbase7.hxx>
 #endif
 
 #ifndef _COM_SUN_STAR_DATATRANSFER_XTRANSFERABLE_HPP_
@@ -80,10 +80,6 @@
 
 #ifndef _COM_SUN_STAR_DATATRANSFER_DND_XDROPTARGETDROPCONTEXT_HPP_
 #include <com/sun/star/datatransfer/dnd/XDropTargetDropContext.hpp>
-#endif
-
-#ifndef _COM_SUN_STAR_DATATRANSFER_DND_XDROPTARGETDRAGCONTEXT_HPP_
-#include <com/sun/star/datatransfer/dnd/XDropTargetDragContext.hpp>
 #endif
 
 #ifndef _COM_SUN_STAR_DATATRANSFER_DND_XDROPTARGETFACTORY_HPP_
@@ -175,9 +171,8 @@ namespace x11 {
     };
 
     class SelectionManager :
-        public ::cppu::WeakComponentImplHelper8<
+        public ::cppu::WeakComponentImplHelper7<
             ::com::sun::star::datatransfer::dnd::XDropTargetDropContext,
-            ::com::sun::star::datatransfer::dnd::XDropTargetDragContext,
             ::com::sun::star::datatransfer::dnd::XDropTargetFactory,
             ::com::sun::star::datatransfer::dnd::XDragSource,
             ::com::sun::star::datatransfer::dnd::XDragSourceContext,
@@ -270,10 +265,10 @@ namespace x11 {
         Reference< ::com::sun::star::awt::XDisplayConnection >
                                     m_xDisplayConnection;
 
-        // None if no Dnd action is running with us as source
-        Window                      m_aDropWindow;
-        // either m_aDropWindow or its XdndProxy
-        Window                      m_aDropMessageWindow;
+
+        // members used for Xdnd
+
+        // drop only
 
         // contains the XdndEnterEvent of a drop action running
         // with one of our targets. The data.l[0] member
@@ -286,19 +281,43 @@ namespace x11 {
         Window                      m_aCurrentDropWindow;
         // time code of XdndDrop
         Time                        m_nDropTime;
-        int                         m_nLastX, m_nLastY;
-        int                         m_nCurrentProtocolVersion;
         sal_Int8                    m_nLastDropAction;
-
-        ::std::hash_map< Window, DropTargetEntry >
-                                    m_aDropTargets;
         // XTransferable for Xdnd with foreign drag source
         Reference< ::com::sun::star::datatransfer::XTransferable >
                                     m_xDropTransferable;
+        int                         m_nLastX, m_nLastY;
 
+
+        // drag only
+
+        // None if no Dnd action is running with us as source
+        Window                      m_aDropWindow;
+        // either m_aDropWindow or its XdndProxy
+        Window                      m_aDropProxy;
         // XTransferable for Xdnd when we are drag source
         Reference< ::com::sun::star::datatransfer::XTransferable >
                                     m_xDragSourceTransferable;
+        Reference< ::com::sun::star::datatransfer::dnd::XDragSourceListener >
+                                    m_xDragSourceListener;
+        // root coordinates
+        int                         m_nLastDragX, m_nLastDragY;
+        Sequence< ::com::sun::star::datatransfer::DataFlavor >
+                                    m_aDragFlavors;
+        // the rectangle the pointer must leave until a new XdndPosition should
+        // be sent. empty unless the drop target told to fill
+        int                         m_nNoPosX, m_nNoPosY, m_nNoPosWidth, m_nNoPosHeight;
+        sal_Int8                    m_nUserDragAction;
+        sal_Int8                    m_nSourceActions;
+        bool                        m_bDropSent;
+        time_t                      m_nDropTimeout;
+
+
+        // drag and drop
+
+        int                         m_nCurrentProtocolVersion;
+        ::std::hash_map< Window, DropTargetEntry >
+                                    m_aDropTargets;
+
 
         // some special atoms that are needed often
         Atom                        m_nCLIPBOARDAtom;
@@ -337,7 +356,7 @@ namespace x11 {
         // do not use X11 multithreading capabilities
         // since this leads to deadlocks in different Xlib implentations
         // (XFree as well as Xsun) use an own mutex instead
-        static ::osl::Mutex         m_Mutex;
+        ::osl::Mutex                m_aMutex;
         // currently this service supports only one display
         // this should be changed to a hash_map indexed by the
         // display name in the future
@@ -353,10 +372,14 @@ namespace x11 {
         void handleSendPropertyNotify( XPropertyEvent& rNotify );
         void handleReceivePropertyNotify( XPropertyEvent& rNotify );
         void handleSelectionNotify( XSelectionEvent& rNotify );
-        void handleDragEvent( XClientMessageEvent& rMessage );
+        void handleDragEvent( XEvent& rMessage );
         void handleDropEvent( XClientMessageEvent& rMessage );
 
+        // dnd helpers
         void sendDragStatus( Atom nDropAction );
+        int getXdndVersion( Window aWindow, Window& rProxy );
+        // coordinates on root window
+        void updateDragWindow( int nX, int nY, Window aRoot );
 
         bool getPasteData( Atom selection, Atom type, Sequence< sal_Int8 >& rData );
         // returns true if conversion was successful
@@ -366,6 +389,7 @@ namespace x11 {
 
         // thread dispatch loop
         static void run( void* );
+        void dispatchEvent( int millisec );
         void handleXEvent( XEvent& rEvent );
     public:
         static SelectionManager& get();
@@ -394,17 +418,15 @@ namespace x11 {
         bool getPasteDataTypes( Atom selection, Sequence< ::com::sun::star::datatransfer::DataFlavor >& rTypes );
         bool getPasteData( Atom selection, const ::rtl::OUString& rType, Sequence< sal_Int8 >& rData );
 
-        // XDropTargetDropContext
-        virtual void        SAL_CALL acceptDrop( sal_Int8 dropOperation );
-        virtual void        SAL_CALL rejectDrop();
-        virtual void        SAL_CALL dropComplete( sal_Bool success );
-
         // XDropTargetDragContext
-        virtual void        SAL_CALL acceptDrag( sal_Int8 dragOperation );
-        virtual void        SAL_CALL rejectDrag();
+        virtual void        SAL_CALL accept( sal_Int8 dragOperation );
+        virtual void        SAL_CALL reject();
         virtual Sequence< ::com::sun::star::datatransfer::DataFlavor >
                             SAL_CALL getCurrentDataFlavors();
         virtual sal_Bool    SAL_CALL isDataFlavorSupported( const ::com::sun::star::datatransfer::DataFlavor& df );
+
+        // XDropTargetDropContext
+        virtual void        SAL_CALL dropComplete( sal_Bool success );
 
         // XDropTargetFactory
         virtual Reference< ::com::sun::star::datatransfer::dnd::XDropTarget >

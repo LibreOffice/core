@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mcnttype.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mh $ $Date: 2001-01-31 15:36:57 $
+ *  last change: $Author: mh $ $Date: 2001-01-31 15:51:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -434,7 +434,7 @@ void SAL_CALL CMimeContentType::comment( void )
     {
         if ( isInRange( m_nxtSym, TOKEN + SPACE ) )
             getSym( );
-        else if ( m_nxtSym, OUString::createFromAscii( ")" ) )
+        else if ( m_nxtSym == OUString::createFromAscii( ")" ) )
             break;
         else
             throw IllegalArgumentException( );

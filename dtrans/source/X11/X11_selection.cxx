@@ -2,9 +2,9 @@
  *
  *  $RCSfile: X11_selection.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mh $ $Date: 2001-01-31 15:37:27 $
+ *  last change: $Author: mh $ $Date: 2001-01-31 15:49:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <X11/Xatom.h>
+#include <X11/keysym.h>
 #ifdef LINUX
 #include <sys/poll.h>
 #else
@@ -93,7 +94,6 @@ using namespace rtl;
 using namespace x11;
 
 // static members of SelectionManager
-Mutex SelectionManager::m_Mutex;
 SelectionManager* SelectionManager::m_pInstance = NULL;
 
 static const int nXdndProtocolRevision = 4;
@@ -203,21 +203,24 @@ SelectionManager::IncrementalTransfer::IncrementalTransfer(
 // ------------------------------------------------------------------------
 
 SelectionManager::SelectionManager() :
-        ::cppu::WeakComponentImplHelper8<
+        ::cppu::WeakComponentImplHelper7<
                 XDropTargetDropContext,
-                XDropTargetDragContext,
                 XDropTargetFactory,
                 XDragSource,
                 XDragSourceContext,
                 XInitialization,
                 XEventHandler,
-                XServiceInfo > (m_Mutex),
-        m_pDisplay( NULL ),
-        m_aWindow( None ),
-        m_aDropWindow( None ),
-        m_aDropMessageWindow( None ),
-        m_aThread( NULL ),
-        m_nCurrentProtocolVersion( nXdndProtocolRevision )
+                XServiceInfo > (m_aMutex),
+    m_pDisplay( NULL ),
+    m_aWindow( None ),
+    m_aDropWindow( None ),
+    m_aDropProxy( None ),
+    m_aThread( NULL ),
+    m_nCurrentProtocolVersion( nXdndProtocolRevision ),
+    m_nNoPosX( 0 ),
+    m_nNoPosY( 0 ),
+    m_nNoPosWidth( 0 ),
+    m_nNoPosHeight( 0 )
 {
     m_aDropEnterEvent.data.l[0] = None;
     m_bDropEnterSent            = true;
@@ -335,7 +338,7 @@ void SelectionManager::initialize( const Sequence< Any >& arguments )
 
 SelectionManager::~SelectionManager()
 {
-     MutexGuard aGuard(m_Mutex);
+     MutexGuard aGuard(m_aMutex);
 
     if( m_aThread )
     {
@@ -433,8 +436,6 @@ bool SelectionManager::convertData(
 
 SelectionManager& SelectionManager::get()
 {
-     MutexGuard aGuard(m_Mutex);
-
     if( m_pInstance == NULL )
         m_pInstance = new SelectionManager();
 
@@ -445,7 +446,7 @@ SelectionManager& SelectionManager::get()
 
 const OUString& SelectionManager::getString( Atom aAtom )
 {
-    MutexGuard aGuard(m_Mutex);
+    MutexGuard aGuard(m_aMutex);
 
     ::std::hash_map< Atom, OUString >::const_iterator it;
     if( ( it = m_aAtomToString.find( aAtom ) ) == m_aAtomToString.end() )
@@ -466,7 +467,7 @@ const OUString& SelectionManager::getString( Atom aAtom )
 
 Atom SelectionManager::getAtom( const OUString& rString )
 {
-    MutexGuard aGuard(m_Mutex);
+    MutexGuard aGuard(m_aMutex);
 
     ::std::hash_map< OUString, Atom, OUStringHash >::const_iterator it;
     if( ( it = m_aStringToAtom.find( rString ) ) == m_aStringToAtom.end() )
@@ -485,7 +486,7 @@ bool SelectionManager::requestOwnership( Atom selection )
     bool bSuccess = false;
     if( m_pDisplay && m_aWindow )
     {
-        MutexGuard aGuard(m_Mutex);
+        MutexGuard aGuard(m_aMutex);
 
         SelectionAdaptor* pAdaptor = getAdaptor( selection );
         if( pAdaptor )
@@ -559,7 +560,7 @@ bool SelectionManager::getPasteData( Atom selection, Atom type, Sequence< sal_In
     bool bSuccess = false;
 
     {
-        MutexGuard aGuard(m_Mutex);
+        MutexGuard aGuard(m_aMutex);
 
         it = m_aSelections.find( selection );
         if( it == m_aSelections.end() )
@@ -589,24 +590,9 @@ bool SelectionManager::getPasteData( Atom selection, Atom type, Sequence< sal_In
 
     // do a reschedule
     time_t nBegin = time( NULL );
-    pollfd aPollFD;
-    XEvent event;
-    // query socket handle to poll on
-    aPollFD.fd      = ConnectionNumber( m_pDisplay );
-    aPollFD.events  = POLLIN;
-    aPollFD.revents = 0;
-
     do
     {
-        if( poll( &aPollFD, 1, 2000 ) > 0 )
-        {
-            MutexGuard aGuard(m_Mutex);
-            while( XPending( m_pDisplay ) > 0 )
-            {
-                XNextEvent( m_pDisplay, &event );
-                handleXEvent( event );
-            }
-        }
+        dispatchEvent( 1500 );
         osl_yieldThread();
     } while( ! it->second->m_aDataArrived.check() && time(NULL)-nBegin < 3 );
 
@@ -631,7 +617,7 @@ bool SelectionManager::getPasteData( Atom selection, const ::rtl::OUString& rTyp
         // lets see if we have UTF16 else try to find something convertible
         ::std::hash_map< Atom, Selection* >::iterator it;
         {
-            MutexGuard aGuard(m_Mutex);
+            MutexGuard aGuard(m_aMutex);
 
             it = m_aSelections.find( selection );
             if( it == m_aSelections.end() )
@@ -689,7 +675,7 @@ bool SelectionManager::getPasteDataTypes( Atom selection, Sequence< DataFlavor >
 {
     ::std::hash_map< Atom, Selection* >::iterator it;
     {
-        MutexGuard aGuard(m_Mutex);
+        MutexGuard aGuard(m_aMutex);
 
         it = m_aSelections.find( selection );
         if( it != m_aSelections.end()                           &&
@@ -718,7 +704,7 @@ bool SelectionManager::getPasteDataTypes( Atom selection, Sequence< DataFlavor >
             {
                 const int atomcount = 256;
                 // more than three types; look in property
-                MutexGuard aGuard(m_Mutex);
+                MutexGuard aGuard(m_aMutex);
 
                 Atom nType;
                 int nFormat;
@@ -815,7 +801,7 @@ bool SelectionManager::getPasteDataTypes( Atom selection, Sequence< DataFlavor >
     }
 
     {
-        MutexGuard aGuard(m_Mutex);
+        MutexGuard aGuard(m_aMutex);
 
         it = m_aSelections.find( selection );
         if( it != m_aSelections.end() )
@@ -1240,27 +1226,11 @@ void SelectionManager::handleDropEvent( XClientMessageEvent& rMessage )
  *  XDropTargetDropContext
  */
 
-// ------------------------------------------------------------------------
-
-void SelectionManager::rejectDrop()
-{
-    rejectDrag();
-}
-
-// ------------------------------------------------------------------------
-
-void SelectionManager::acceptDrop( sal_Int8 dropOperation )
-{
-    acceptDrag( dropOperation );
-}
-
-// ------------------------------------------------------------------------
-
 void SelectionManager::dropComplete( sal_Bool bSuccess )
 {
     if( m_aDropEnterEvent.data.l[0] && m_aCurrentDropWindow )
     {
-        MutexGuard aGuard(m_Mutex);
+        MutexGuard aGuard(m_aMutex);
 
         XEvent aEvent;
         aEvent.xclient.type         = ClientMessage;
@@ -1296,7 +1266,7 @@ void SelectionManager::sendDragStatus( Atom nDropAction )
 {
     if( m_aDropEnterEvent.data.l[0] && m_aCurrentDropWindow )
     {
-        MutexGuard aGuard(m_Mutex);
+        MutexGuard aGuard(m_aMutex);
 
         XEvent aEvent;
         aEvent.xclient.type         = ClientMessage;
@@ -1328,14 +1298,158 @@ void SelectionManager::sendDragStatus( Atom nDropAction )
 
 // ------------------------------------------------------------------------
 
-void SelectionManager::handleDragEvent( XClientMessageEvent& rMessage )
+void SelectionManager::handleDragEvent( XEvent& rMessage )
 {
+    if( ! m_xDragSourceListener.is() )
+        return;
+
     // handle drag related events
+    if( rMessage.type == ClientMessage )
+    {
+        if( rMessage.xclient.message_type == m_nXdndStatus && rMessage.xclient.data.l[0] == m_aDropWindow )
+        {
+            DragSourceDragEvent dsde;
+            dsde.DragSourceContext      = static_cast< XDragSourceContext* >( this );
+            dsde.DragSource             = static_cast< XDragSource* >( this );
+            dsde.DropAction = dsde.UserAction = DNDConstants::ACTION_NONE;
+            if( rMessage.xclient.data.l[1] & 1 )
+            {
+                if( m_nCurrentProtocolVersion > 1 )
+                {
+                    if( rMessage.xclient.data.l[4] == m_nXdndActionCopy )
+                        dsde.DropAction = dsde.UserAction = DNDConstants::ACTION_COPY;
+                    else if( rMessage.xclient.data.l[4] == m_nXdndActionMove )
+                        dsde.DropAction = dsde.UserAction = DNDConstants::ACTION_MOVE;
+                    else if( rMessage.xclient.data.l[4] == m_nXdndActionLink )
+                        dsde.DropAction = dsde.UserAction = DNDConstants::ACTION_LINK;
+                }
+                else
+                    dsde.DropAction = dsde.UserAction = DNDConstants::ACTION_COPY;
+            }
+            if( ! ( rMessage.xclient.data.l[1] & 2 ) )
+            {
+                m_nNoPosX       = rMessage.xclient.data.l[2] >> 16;
+                m_nNoPosY       = rMessage.xclient.data.l[2] & 0xffff;
+                m_nNoPosWidth   = rMessage.xclient.data.l[3] >> 16;
+                m_nNoPosHeight  = rMessage.xclient.data.l[3] & 0xffff;
+            }
+            else
+                m_nNoPosX = m_nNoPosY = m_nNoPosWidth = m_nNoPosHeight = 0;
+
+            m_xDragSourceListener->dragOver( dsde );
+        }
+        else if( rMessage.xclient.message_type == m_nXdndFinished && m_aDropWindow == rMessage.xclient.data.l[0] )
+        {
+            // notify the listener
+            DragSourceDropEvent dsde;
+            dsde.DragSourceContext  = static_cast< XDragSourceContext* >(this);
+            dsde.DragSource         = static_cast< XDragSource* >(this);
+            dsde.DropAction         = m_nUserDragAction;
+            dsde.DropSuccess        = sal_True;
+            m_xDragSourceListener->dragDropEnd( dsde );
+            m_xDragSourceListener.clear();
+        }
+    }
+    else if( rMessage.type == MotionNotify )
+    {
+        m_nUserDragAction = DNDConstants::ACTION_MOVE;
+        if( ( rMessage.xmotion.state & ShiftMask ) && ! ( rMessage.xmotion.state & ControlMask ) )
+            m_nUserDragAction = DNDConstants::ACTION_MOVE;
+        else if( ( rMessage.xmotion.state & ControlMask ) && ! ( rMessage.xmotion.state & ShiftMask ) )
+            m_nUserDragAction = DNDConstants::ACTION_COPY;
+        else if( ( rMessage.xmotion.state & ShiftMask ) && ( rMessage.xmotion.state & ControlMask ) )
+            m_nUserDragAction == DNDConstants::ACTION_LINK;
+        m_nUserDragAction &= m_nSourceActions;
+
+        updateDragWindow( rMessage.xmotion.x_root, rMessage.xmotion.y_root, rMessage.xmotion.root );
+        if( m_nCurrentProtocolVersion >= 0 && m_aDropProxy != None )
+        {
+            if( m_nLastDragX >= m_nNoPosX && m_nLastDragX < m_nNoPosX+m_nNoPosWidth &&
+                m_nLastDragY >= m_nNoPosY && m_nLastDragY < m_nNoPosY+m_nNoPosHeight )
+            {
+                // send XdndPosition
+                XEvent aEvent;
+                aEvent.type = ClientMessage;
+                aEvent.xclient.display      = m_pDisplay;
+                aEvent.xclient.format       = 32;
+                aEvent.xclient.message_type = m_nXdndPosition;
+                aEvent.xclient.window       = m_aDropWindow;
+                aEvent.xclient.data.l[0]    = m_aWindow;
+                aEvent.xclient.data.l[1]    = 0;
+                aEvent.xclient.data.l[2]    = m_nLastDragX << 16 | (m_nLastDragY&0xffff);
+                aEvent.xclient.data.l[3]    = rMessage.xmotion.time;
+                if( m_nUserDragAction == DNDConstants::ACTION_MOVE )
+                    aEvent.xclient.data.l[4]=m_nXdndActionMove;
+                else if( m_nUserDragAction == DNDConstants::ACTION_COPY )
+                    aEvent.xclient.data.l[4]=m_nXdndActionCopy;
+                else if( m_nUserDragAction == DNDConstants::ACTION_LINK )
+                    aEvent.xclient.data.l[4]=m_nXdndActionLink;
+                else
+                    aEvent.xclient.data.l[4]=m_nXdndActionCopy;
+                XSendEvent( m_pDisplay, m_aDropProxy, False, NoEventMask, &aEvent );
+                m_nNoPosX = m_nNoPosY = m_nNoPosWidth = m_nNoPosHeight = 0;
+            }
+        }
+    }
+    else if( rMessage.type == KeyPress || rMessage.type == KeyRelease )
+    {
+        if( XKeycodeToKeysym( m_pDisplay, rMessage.xkey.keycode, 0 ) == XK_Escape )
+        {
+            // abort drag
+            if( m_aDropProxy != None && m_nCurrentProtocolVersion >= 0 )
+            {
+                // send XdndLeave
+                XEvent aEvent;
+                aEvent.type = ClientMessage;
+                aEvent.xclient.display      = m_pDisplay;
+                aEvent.xclient.format       = 32;
+                aEvent.xclient.message_type = m_nXdndLeave;
+                aEvent.xclient.window       = m_aDropWindow;
+                aEvent.xclient.data.l[0]    = m_aWindow;
+                memset( aEvent.xclient.data.l+1, 0, sizeof(long)*4);
+                m_aDropWindow = m_aDropProxy = None;
+                XSendEvent( m_pDisplay, m_aDropProxy, False, NoEventMask, &aEvent );
+
+            }
+            // notify the listener
+            DragSourceDropEvent dsde;
+            dsde.DragSourceContext  = static_cast< XDragSourceContext* >(this);
+            dsde.DragSource         = static_cast< XDragSource* >(this);
+            dsde.DropAction         = DNDConstants::ACTION_NONE;
+            dsde.DropSuccess        = sal_False;
+            m_xDragSourceListener->dragDropEnd( dsde );
+            m_xDragSourceListener.clear();
+        }
+        else
+        {
+            sal_Int8 nNewDropAction = DNDConstants::ACTION_MOVE;
+            if( ( rMessage.xmotion.state & ShiftMask ) && ! ( rMessage.xmotion.state & ControlMask ) )
+                nNewDropAction = DNDConstants::ACTION_MOVE;
+            else if( ( rMessage.xmotion.state & ControlMask ) && ! ( rMessage.xmotion.state & ShiftMask ) )
+                nNewDropAction = DNDConstants::ACTION_COPY;
+            else if( ( rMessage.xmotion.state & ShiftMask ) && ( rMessage.xmotion.state & ControlMask ) )
+                nNewDropAction == DNDConstants::ACTION_LINK;
+            if( m_nCurrentProtocolVersion < 0 && m_aDropWindow != None )
+                nNewDropAction = DNDConstants::ACTION_COPY;
+
+            if( nNewDropAction != m_nUserDragAction )
+            {
+                m_nUserDragAction = nNewDropAction & m_nSourceActions;
+
+                DragSourceDragEvent dsde;
+                dsde.DragSourceContext  = static_cast< XDragSourceContext* >(this);
+                dsde.DragSource         = static_cast< XDragSource* >(this);
+                dsde.DropAction         = m_nUserDragAction;
+                dsde.UserAction         = m_nUserDragAction;
+                m_xDragSourceListener->dropActionChanged( dsde );
+            }
+        }
+    }
 }
 
 // ------------------------------------------------------------------------
 
-void SelectionManager::acceptDrag( sal_Int8 dragOperation )
+void SelectionManager::accept( sal_Int8 dragOperation )
 {
     Atom nAction = None;
     switch( dragOperation )
@@ -1355,7 +1469,7 @@ void SelectionManager::acceptDrag( sal_Int8 dragOperation )
 
 // ------------------------------------------------------------------------
 
-void SelectionManager::rejectDrag()
+void SelectionManager::reject()
 {
     sendDragStatus( None );
 }
@@ -1365,7 +1479,8 @@ void SelectionManager::rejectDrag()
 Sequence< DataFlavor > SelectionManager::getCurrentDataFlavors()
 {
     Sequence< DataFlavor > aFlavors;
-    getPasteDataTypes( m_nXdndSelection, aFlavors );
+    if( m_aDropEnterEvent.data.l[0] != None )
+        getPasteDataTypes( m_nXdndSelection, aFlavors );
     return aFlavors;
 }
 
@@ -1373,7 +1488,8 @@ Sequence< DataFlavor > SelectionManager::getCurrentDataFlavors()
 
 sal_Bool SelectionManager::isDataFlavorSupported( const DataFlavor& flavor )
 {
-    return m_xDropTransferable->isDataFlavorSupported( flavor );
+    return m_aDropEnterEvent.data.l[0] != None ?
+        m_xDropTransferable->isDataFlavorSupported( flavor ) : false;
 }
 
 /*
@@ -1394,6 +1510,170 @@ sal_Int32 SelectionManager::getDefaultCursor( sal_Int8 dragAction )
 
 // ------------------------------------------------------------------------
 
+int SelectionManager::getXdndVersion( Window aWindow, Window& rProxy )
+{
+    Atom* pProperties = NULL;
+    int nProperties = 0;
+    Atom nType;
+    int nFormat;
+    unsigned long nItems, nBytes;
+    unsigned char* pBytes = NULL;
+
+    int nVersion = -1;
+    rProxy = None;
+
+    /*
+     *  XListProperties is used here to avoid unnecessary XGetWindowProperty calls
+     *  and therefore reducing latency penalty
+     */
+    pProperties = XListProperties( m_pDisplay, aWindow, &nProperties );
+    // first look for proxy
+    int i;
+    for( i = 0; i < nProperties; i++ )
+    {
+        if( pProperties[i] == m_nXdndProxy )
+        {
+            XGetWindowProperty( m_pDisplay, aWindow, m_nXdndProxy, 0, 1, False, XA_WINDOW,
+                                &nType, &nFormat, &nItems, &nBytes, &pBytes );
+            if( pBytes )
+            {
+                if( nType == XA_WINDOW )
+                    rProxy = *(Window*)pBytes;
+                XFree( pBytes );
+                pBytes = NULL;
+                if( rProxy != None )
+                {
+                    // now check proxy wether it points to itself
+                    XGetWindowProperty( m_pDisplay, rProxy, m_nXdndProxy, 0, 1, False, XA_WINDOW,
+                                        &nType, &nFormat, &nItems, &nBytes, &pBytes );
+                    if( pBytes )
+                    {
+                        if( nType == XA_WINDOW && *(Window*)pBytes != rProxy )
+                            rProxy = None;
+                        XFree( pBytes );
+                        pBytes = NULL;
+                    }
+                    else
+                        rProxy = None;
+                }
+            }
+            break;
+        }
+    }
+    Window aAwareWindow = rProxy != None ? rProxy : aWindow;
+
+    XGetWindowProperty( m_pDisplay, aAwareWindow, m_nXdndAware, 0, 1, False, XA_ATOM,
+                        &nType, &nFormat, &nItems, &nBytes, &pBytes );
+    if( pBytes )
+    {
+        if( nType == XA_ATOM )
+            nVersion = *(Atom*)pBytes;
+        XFree( pBytes );
+    }
+
+    nVersion = nVersion > nXdndProtocolRevision ? nXdndProtocolRevision : nVersion;
+
+    return nVersion;
+}
+
+// ------------------------------------------------------------------------
+
+void SelectionManager::updateDragWindow( int nX, int nY, Window aRoot )
+{
+    m_nLastDragX = nX;
+    m_nLastDragY = nY;
+
+    Window aParent = aRoot;
+    Window aChild;
+    Window aNewProxy = None, aNewCurrentWindow = None;
+    int nNewProtocolVersion = -1;
+    int nWinX, nWinY;
+
+    // find the first XdndAware window or check if root window is
+    // XdndAware or has XdndProxy
+    if( aRoot == m_aCurrentDropWindow )
+        return;
+    do
+    {
+        XTranslateCoordinates( m_pDisplay, aRoot, aParent, nX, nY, &nWinX, &nWinY, &aChild );
+        if( aChild != None )
+        {
+            if( aChild == m_aCurrentDropWindow )
+                return;
+            nNewProtocolVersion = getXdndVersion( aChild, aNewProxy );
+            aParent = aChild;
+        }
+    } while( aChild != None && nNewProtocolVersion < 0 );
+
+    aNewCurrentWindow = aParent;
+    if( aNewCurrentWindow == aRoot )
+    {
+        // no children, try root drop
+        nNewProtocolVersion = getXdndVersion( aNewCurrentWindow, aNewProxy );
+        if( nNewProtocolVersion < 3 )
+        {
+            aNewCurrentWindow = aNewProxy = None;
+            nNewProtocolVersion = nXdndProtocolRevision;
+        }
+    }
+
+
+    DragSourceDragEvent dsde;
+    dsde.DragSourceContext  = static_cast< XDragSourceContext* >(this);
+    dsde.DragSource         = static_cast< XDragSource* >(this);
+    dsde.DropAction         = nNewProtocolVersion >= 0 ? DNDConstants::ACTION_MOVE : DNDConstants::ACTION_COPY;
+    dsde.UserAction         = nNewProtocolVersion >= 0 ? m_nUserDragAction : DNDConstants::ACTION_COPY;
+
+    if( aNewCurrentWindow != m_aDropWindow )
+    {
+
+        XEvent aEvent;
+
+        aEvent.type = ClientMessage;
+        aEvent.xclient.display          = m_pDisplay;
+        aEvent.xclient.format           = 32;
+        // send old drop target a XdndLeave
+        aEvent.xclient.message_type     = m_nXdndLeave;
+        aEvent.xclient.window           = m_aDropWindow;
+        aEvent.xclient.data.l[0]        = m_aWindow;
+        aEvent.xclient.data.l[1]        = 0;
+        XSendEvent( m_pDisplay, m_aDropProxy, False, NoEventMask, &aEvent );
+
+        m_xDragSourceListener->dragExit( dsde );
+
+        m_nCurrentProtocolVersion   = nNewProtocolVersion;
+        m_aDropWindow               = aNewCurrentWindow;
+        m_aDropProxy                = aNewProxy;
+
+        if( m_aDropProxy != None )
+            m_xDragSourceListener->dragEnter( dsde );
+        // send XdndEnter
+        if( m_aDropProxy != None && m_nCurrentProtocolVersion >= 0 )
+        {
+            aEvent.xclient.message_type = m_nXdndEnter;
+            aEvent.xclient.window       = m_aDropWindow;
+            aEvent.xclient.data.l[0]    = m_aWindow;
+            aEvent.xclient.data.l[1]    = m_nCurrentProtocolVersion << 24;
+            memset( aEvent.xclient.data.l + 2, 0, sizeof( long )*3 );
+            // fill in data types
+            if( m_aDragFlavors.getLength() > 3 )
+                aEvent.xclient.data.l[1] |= 1;
+            int format;
+            for( int i = 0; i < m_aDragFlavors.getLength() && i < 3; i++ )
+            {
+                aEvent.xclient.data.l[i+2] = convertTypeToNative( m_aDragFlavors.getConstArray()[i].MimeType, m_nXdndSelection, format );
+            }
+            XSendEvent( m_pDisplay, m_aDropProxy, False, NoEventMask, &aEvent );
+        }
+        m_nNoPosX = m_nNoPosY = m_nNoPosWidth = m_nNoPosHeight = 0;
+    }
+    else if( m_aDropProxy != None && m_nCurrentProtocolVersion < 0 )
+        // drag over for XdndAware windows comes when receiving XdndStatus
+        m_xDragSourceListener->dragOver( dsde );
+}
+
+// ------------------------------------------------------------------------
+
 void SelectionManager::executeDrag(
     const DragGestureEvent& trigger,
     sal_Int8 sourceActions,
@@ -1403,6 +1683,88 @@ void SelectionManager::executeDrag(
     const Reference< XDragSourceListener >& listener
     )
 {
+    // first get the current pointer position and the window that
+    // the pointer is located in. since said window should be one
+    // of our DropTargets at the time of executeDrag we can use
+    // them for a start
+    Window aRoot, aSource;
+    int root_x, root_y, win_x, win_y;
+    unsigned int mask;
+
+    {
+        MutexGuard aGuard(m_aMutex);
+
+        ::std::hash_map< Window, DropTargetEntry >::const_iterator it;
+        it = m_aDropTargets.begin();
+        while( it != m_aDropTargets.end() )
+        {
+            aSource = it->first;
+            if( XQueryPointer( m_pDisplay, aSource,
+                               &aRoot, &aSource,
+                               &root_x, &root_y,
+                               &win_x, &win_y,
+                               &mask ) )
+            {
+                break;
+            }
+            ++it;
+        }
+        if( it == m_aDropTargets.end() )
+            throw
+                InvalidDNDOperationException(
+                    OUString::createFromAscii( "executeDrag without any DropTarget on the same root window" ),
+                    static_cast< OWeakObject* >(this)
+                    );
+        const int nPointerMask =
+            ButtonPressMask         |
+            ButtonReleaseMask       |
+            PointerMotionMask       |
+            KeyPressMask            |
+            KeyReleaseMask;
+
+        XSelectInput( m_pDisplay, aSource,
+                      nPointerMask | PropertyChangeMask );
+        if( XGrabPointer( m_pDisplay, aSource, False,
+                          nPointerMask,
+                          GrabModeSync, GrabModeSync,
+                          None, 0, CurrentTime ) != GrabSuccess )
+            throw
+                InvalidDNDOperationException(
+                    OUString::createFromAscii( "executeDrag could not grab pointer" ),
+                    static_cast< OWeakObject* >(this) );
+        m_xDragSourceTransferable   = transferable;
+        m_xDragSourceListener       = listener;
+        m_aDragFlavors              = transferable->getTransferDataFlavors();
+
+        Atom* pTypes = new Atom[m_aDragFlavors.getLength()];
+        int format;
+        for( int i = 0; i < m_aDragFlavors.getLength(); i++ )
+        {
+            pTypes[i] = convertTypeToNative( m_aDragFlavors.getConstArray()[i].MimeType, m_nXdndSelection, format );
+        }
+        XChangeProperty( m_pDisplay, m_aWindow, m_nXdndTypeList, XA_ATOM, 32, PropModeReplace, (unsigned char*)pTypes, m_aDragFlavors.getLength() );
+        delete pTypes;
+
+        m_nSourceActions    = sourceActions;
+        m_nUserDragAction   = DNDConstants::ACTION_MOVE & m_nSourceActions;
+        m_bDropSent         = false;
+
+        updateDragWindow( root_x, root_y, aRoot );
+    }
+
+    // do drag
+    // m_xDragSourceListener will be cleared on finished drop
+    while( m_xDragSourceListener.is() )
+        dispatchEvent( 200 );
+
+    // after drag
+    {
+        MutexGuard aGuard(m_aMutex);
+
+        m_nNoPosX = m_nNoPosY = m_nNoPosWidth = m_nNoPosHeight = 0;
+        XUngrabPointer( m_pDisplay, CurrentTime );
+        XSelectInput( m_pDisplay, aSource, PropertyChangeMask );
+    }
 }
 
 /*
@@ -1430,6 +1792,47 @@ void SelectionManager::setImage( sal_Int32 image )
 
 void SelectionManager::transferablesFlavorsChanged()
 {
+    MutexGuard aGuard(m_aMutex);
+
+    m_aDragFlavors = m_xDragSourceTransferable->getTransferDataFlavors();
+
+    Atom* pTypes = new Atom[m_aDragFlavors.getLength()];
+    int format;
+    for( int i = 0; i < m_aDragFlavors.getLength(); i++ )
+    {
+        pTypes[i] = convertTypeToNative( m_aDragFlavors.getConstArray()[i].MimeType, m_nXdndSelection, format );
+    }
+    XChangeProperty( m_pDisplay, m_aWindow, m_nXdndTypeList, XA_ATOM, 32, PropModeReplace, (unsigned char*)pTypes, m_aDragFlavors.getLength() );
+    delete pTypes;
+
+    if( m_aCurrentDropWindow != None && m_nCurrentProtocolVersion >= 0 )
+    {
+        // send synthetic leave and enter events
+
+        XEvent aEvent;
+
+        aEvent.type = ClientMessage;
+        aEvent.xclient.display          = m_pDisplay;
+        aEvent.xclient.format           = 32;
+        aEvent.xclient.window           = m_aDropWindow;
+        aEvent.xclient.data.l[0]        = m_aWindow;
+
+        aEvent.xclient.message_type     = m_nXdndLeave;
+        aEvent.xclient.data.l[1]        = 0;
+        XSendEvent( m_pDisplay, m_aDropProxy, False, NoEventMask, &aEvent );
+
+        aEvent.xclient.message_type = m_nXdndEnter;
+        aEvent.xclient.data.l[1]    = m_nCurrentProtocolVersion << 24;
+        memset( aEvent.xclient.data.l + 2, 0, sizeof( long )*3 );
+        // fill in data types
+        if( m_aDragFlavors.getLength() > 3 )
+            aEvent.xclient.data.l[1] |= 1;
+        for( int i = 0; i < m_aDragFlavors.getLength() && i < 3; i++ )
+        {
+            aEvent.xclient.data.l[i+2] = convertTypeToNative( m_aDragFlavors.getConstArray()[i].MimeType, m_nXdndSelection, format );
+        }
+        XSendEvent( m_pDisplay, m_aDropProxy, False, NoEventMask, &aEvent );
+    }
 }
 
 /*
@@ -1448,7 +1851,7 @@ void SelectionManager::handleXEvent( XEvent& rEvent )
     if( rEvent.xany.display != m_pDisplay && rEvent.type != ClientMessage )
         return;
 
-    MutexGuard aGuard(m_Mutex);
+    MutexGuard aGuard(m_aMutex);
     switch (rEvent.type)
     {
         case SelectionClear:
@@ -1482,7 +1885,7 @@ void SelectionManager::handleXEvent( XEvent& rEvent )
             // messages from drag target
             if( rEvent.xclient.message_type == m_nXdndStatus ||
                 rEvent.xclient.message_type == m_nXdndFinished )
-                handleDragEvent( rEvent.xclient );
+                handleDragEvent( rEvent );
             // messages from drag source
             else if(
                 rEvent.xclient.message_type == m_nXdndEnter     ||
@@ -1492,8 +1895,55 @@ void SelectionManager::handleXEvent( XEvent& rEvent )
                 )
                 handleDropEvent( rEvent.xclient );
             break;
+        case MotionNotify:
+        case ButtonPress:
+        case ButtonRelease:
+        case KeyPress:
+        case KeyRelease:
+            handleDragEvent( rEvent );
+            break;
         default:
             ;
+    }
+}
+
+// ------------------------------------------------------------------------
+
+void SelectionManager::dispatchEvent( int millisec )
+{
+    pollfd aPollFD;
+    XEvent event;
+
+    // query socket handle to poll on
+    aPollFD.fd      = ConnectionNumber( m_pDisplay );
+    aPollFD.events  = POLLIN;
+    aPollFD.revents = 0;
+
+    // wait for activity (outside the xlib)
+    if( poll( &aPollFD, 1, millisec ) > 0 )
+    {
+        // now acquire the mutex to prevent other threads
+        // from using the same X connection
+        MutexGuard aGuard(m_aMutex);
+
+        // prevent that another thread already ate the input
+        // this can happen if e.g. another thread does
+        // an X request getting a response. the response
+        // would be removed from the queue and we would end up
+        // with an empty socket here
+        if( poll( &aPollFD, 1, 0 ) > 0 )
+        {
+            while( XPending( m_pDisplay ) > 0 )
+            {
+                XNextEvent( m_pDisplay, &event );
+                handleXEvent( event );
+            }
+        }
+    }
+    else
+    {
+        MutexGuard aGuard(m_aMutex);
+        XSync( m_pDisplay, False );
     }
 }
 
@@ -1504,33 +1954,12 @@ void SelectionManager::run( void* pThis )
     // dispatch until the cows come home
 
     SelectionManager* This = (SelectionManager*)pThis;
-    pollfd aPollFD;
-    XEvent event;
-
-    // query socket handle to poll on
-    aPollFD.fd      = ConnectionNumber( This->m_pDisplay );
-    aPollFD.events  = POLLIN;
-    aPollFD.revents = 0;
 
     osl_yieldThread();
     while( osl_scheduleThread(This->m_aThread) )
     {
-        // wait for activity (outside the xlib)
-        if( poll( &aPollFD, 1, 200 ) > 0 )
-        {
-            // now acquire the mutex to prevent other threads
-            // from using the same X connection
-            MutexGuard aGuard(m_Mutex);
-
-            while( XPending( This->m_pDisplay ) > 0 )
-            {
-                XNextEvent( This->m_pDisplay, &event );
-                This->handleXEvent( event );
-            }
-        }
-        else
-            XSync( This->m_pDisplay, False );
         osl_yieldThread();
+        This->dispatchEvent( 200 );
     }
 }
 
@@ -1551,7 +1980,7 @@ sal_Bool SelectionManager::handleEvent( const Any& event )
 
 void SelectionManager::registerHandler( Atom selection, SelectionAdaptor& rAdaptor )
 {
-    MutexGuard aGuard(m_Mutex);
+    MutexGuard aGuard(m_aMutex);
 
     Selection* pNewSelection    = new Selection();
     pNewSelection->m_pAdaptor   = &rAdaptor;
@@ -1563,7 +1992,7 @@ void SelectionManager::registerHandler( Atom selection, SelectionAdaptor& rAdapt
 
 void SelectionManager::deregisterHandler( Atom selection )
 {
-    MutexGuard aGuard(m_Mutex);
+    MutexGuard aGuard(m_aMutex);
 
     ::std::hash_map< Atom, Selection* >::iterator it =
           m_aSelections.find( selection );
