@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbmgr.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: rt $ $Date: 2004-08-23 08:29:38 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:01:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,6 +134,7 @@ class SvNumberFormatter;
 //CHINA001 class SwMailMergeDlg;
 class SwDbtoolsClient;
 class SwXMailMerge;
+class SwMailMergeConfigItem;
 
 // -----------------------------------------------------------------------
 
@@ -143,7 +144,8 @@ enum DBMgrOptions
     DBMGR_INSERT,           // Datensaetze in Text
     DBMGR_MERGE_MAILMERGE,  // Serienbriefe drucken
     DBMGR_MERGE_MAILING,    // Serienbriefe als email versenden
-    DBMGR_MERGE_MAILFILES   // Serienbriefe als Datei(en) speichern
+    DBMGR_MERGE_MAILFILES,  // Serienbriefe als Datei(en) speichern
+    DBMGR_MERGE_DOCUMENTS   // Print merged documents
 };
 
 // -----------------------------------------------------------------------
@@ -269,6 +271,10 @@ public:
     // Mischen von Datensaetzen in Felder, dann drucken
     BOOL            MergePrint( SwView& rView,
                                 SwPrtOptions& rOpt, SfxProgress& rProgress );
+    // printing parts of a merge result document
+    BOOL            MergePrintDocuments( SwView& rView,
+                                SwPrtOptions& rOpt, SfxProgress& rProgress );
+
     // Datenbankfelder mit fehlendem Datenbankname initialisieren
     inline BOOL     IsInitDBFields() const  { return bInitDBFields; }
     inline void     SetInitDBFields(BOOL b) { bInitDBFields = b;    }
@@ -413,6 +419,8 @@ public:
                             sal_Int32 _nCommandType,
                             const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection>& _xConnection
                             );
+    //merge into one document - returns the number of merged docs
+    sal_Int32 MergeDocuments( SwMailMergeConfigItem& rMMConfig, SwView& rSourceView );
 };
 
 #endif
