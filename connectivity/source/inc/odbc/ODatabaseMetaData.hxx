@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ODatabaseMetaData.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-03 14:00:35 $
+ *  last change: $Author: oj $ $Date: 2001-04-20 13:31:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,7 @@ namespace connectivity
         {
             SQLHANDLE       m_aConnectionHandle;
             OConnection*    m_pConnection;
+            sal_Bool        m_bUseCatalog;
         public:
 
             ODatabaseMetaData(const SQLHANDLE _pHandle,OConnection* _pCon);

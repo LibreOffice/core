@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ODatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-03-28 11:31:45 $
+ *  last change: $Author: oj $ $Date: 2001-04-20 13:29:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,14 @@ ODatabaseMetaData::ODatabaseMetaData(const SQLHANDLE _pHandle,OConnection* _pCon
                         : ::connectivity::ODatabaseMetaDataBase(_pCon)
                         ,m_aConnectionHandle(_pHandle)
                         ,m_pConnection(_pCon)
+                        ,m_bUseCatalog(sal_True)
 {
+    if(!m_pConnection->isCatalogUsed())
+    {
+        osl_incrementInterlockedCount( &m_refCount );
+        m_bUseCatalog = !(usesLocalFiles() || usesLocalFilePerTable());
+        osl_decrementInterlockedCount( &m_refCount );
+    }
 }
 // -------------------------------------------------------------------------
 ODatabaseMetaData::~ODatabaseMetaData()
@@ -116,20 +123,31 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTypeInfo(  ) throw(SQLExc
 // -------------------------------------------------------------------------
 Reference< XResultSet > SAL_CALL ODatabaseMetaData::getCatalogs(  ) throw(SQLException, RuntimeException)
 {
-    SQLHANDLE hStmt;
-    SQLRETURN nRetcode = N3SQLAllocHandle(SQL_HANDLE_STMT,m_pConnection->getConnection(),&hStmt);
-    OTools::ThrowException(nRetcode,m_pConnection->getConnection(),SQL_HANDLE_DBC,*this);
+    Reference< XResultSet > xRef;
+    if(!m_bUseCatalog)
+    {
+        ::connectivity::ODatabaseMetaDataResultSet* pResult = new ::connectivity::ODatabaseMetaDataResultSet();
+        xRef = pResult;
+        pResult->setCatalogsMap();
+    }
+    else
+    {
+        SQLHANDLE hStmt;
+        SQLRETURN nRetcode = N3SQLAllocHandle(SQL_HANDLE_STMT,m_pConnection->getConnection(),&hStmt);
+        OTools::ThrowException(nRetcode,m_pConnection->getConnection(),SQL_HANDLE_DBC,*this);
 
-    ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(hStmt,m_pConnection->getTextEncoding());
-    Reference< XResultSet > xRef = pResult;
-    pResult->openCatalogs();
+        ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(hStmt,m_pConnection->getTextEncoding());
+        xRef = pResult;
+        pResult->openCatalogs();
+    }
     return xRef;
 }
 // -------------------------------------------------------------------------
 ::rtl::OUString SAL_CALL ODatabaseMetaData::getCatalogSeparator(  ) throw(SQLException, RuntimeException)
 {
     ::rtl::OUString aVal;
-    OTools::GetInfo(m_aConnectionHandle,SQL_CATALOG_NAME_SEPARATOR,aVal,*this,m_pConnection->getTextEncoding());
+    if(m_bUseCatalog)
+        OTools::GetInfo(m_aConnectionHandle,SQL_CATALOG_NAME_SEPARATOR,aVal,*this,m_pConnection->getTextEncoding());
 
     return aVal;
 }
@@ -156,7 +174,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumnPrivileges(
 
     ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(hStmt,m_pConnection->getTextEncoding());
     Reference< XResultSet > xRef = pResult;
-    pResult->openColumnPrivileges(catalog,schema,table,columnNamePattern);
+    pResult->openColumnPrivileges(m_bUseCatalog ? catalog : Any(),schema,table,columnNamePattern);
     return xRef;
 }
 // -------------------------------------------------------------------------
@@ -170,7 +188,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getColumns(
 
     ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(hStmt,m_pConnection->getTextEncoding());
     Reference< XResultSet > xRef = pResult;
-    pResult->openColumns(catalog,schemaPattern,tableNamePattern,columnNamePattern);
+    pResult->openColumns(m_bUseCatalog ? catalog : Any(),schemaPattern,tableNamePattern,columnNamePattern);
     return xRef;
 }
 // -------------------------------------------------------------------------
@@ -184,7 +202,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTables(
 
     ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(hStmt,m_pConnection->getTextEncoding());
     Reference< XResultSet > xRef = pResult;
-    pResult->openTables(catalog,schemaPattern,tableNamePattern,types);
+    pResult->openTables(m_bUseCatalog ? catalog : Any(),schemaPattern,tableNamePattern,types);
     return xRef;
 }
 // -------------------------------------------------------------------------
@@ -198,7 +216,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getProcedureColumns(
 
     ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(hStmt,m_pConnection->getTextEncoding());
     Reference< XResultSet > xRef = pResult;
-    pResult->openProcedureColumns(catalog,schemaPattern,procedureNamePattern,columnNamePattern);
+    pResult->openProcedureColumns(m_bUseCatalog ? catalog : Any(),schemaPattern,procedureNamePattern,columnNamePattern);
     return xRef;
 }
 // -------------------------------------------------------------------------
@@ -212,7 +230,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getProcedures(
 
     ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(hStmt,m_pConnection->getTextEncoding());
     Reference< XResultSet > xRef = pResult;
-    pResult->openProcedures(catalog,schemaPattern,procedureNamePattern);
+    pResult->openProcedures(m_bUseCatalog ? catalog : Any(),schemaPattern,procedureNamePattern);
     return xRef;
 }
 // -------------------------------------------------------------------------
@@ -225,7 +243,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getVersionColumns(
 
     ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(hStmt,m_pConnection->getTextEncoding());
     Reference< XResultSet > xRef = pResult;
-    pResult->openVersionColumns(catalog,schema,table);
+    pResult->openVersionColumns(m_bUseCatalog ? catalog : Any(),schema,table);
     return xRef;
 }
 // -------------------------------------------------------------------------
@@ -322,7 +340,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getExportedKeys(
 
     ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(hStmt,m_pConnection->getTextEncoding());
     Reference< XResultSet > xRef = pResult;
-    pResult->openExportedKeys(catalog,schema,table);
+    pResult->openExportedKeys(m_bUseCatalog ? catalog : Any(),schema,table);
     return xRef;
 }
 // -------------------------------------------------------------------------
@@ -335,7 +353,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getImportedKeys(
 
     ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(hStmt,m_pConnection->getTextEncoding());
     Reference< XResultSet > xRef = pResult;
-    pResult->openImportedKeys(catalog,schema,table);
+    pResult->openImportedKeys(m_bUseCatalog ? catalog : Any(),schema,table);
     return xRef;
 }
 // -------------------------------------------------------------------------
@@ -348,7 +366,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getPrimaryKeys(
 
     ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(hStmt,m_pConnection->getTextEncoding());
     Reference< XResultSet > xRef = pResult;
-    pResult->openPrimaryKeys(catalog,schema,table);
+    pResult->openPrimaryKeys(m_bUseCatalog ? catalog : Any(),schema,table);
     return xRef;
 }
 // -------------------------------------------------------------------------
@@ -362,7 +380,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getIndexInfo(
 
     ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(hStmt,m_pConnection->getTextEncoding());
     Reference< XResultSet > xRef = pResult;
-    pResult->openIndexInfo(catalog,schema,table,unique,approximate);
+    pResult->openIndexInfo(m_bUseCatalog ? catalog : Any(),schema,table,unique,approximate);
     return xRef;
 }
 // -------------------------------------------------------------------------
@@ -376,7 +394,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getBestRowIdentifier(
 
     ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(hStmt,m_pConnection->getTextEncoding());
     Reference< XResultSet > xRef = pResult;
-    pResult->openBestRowIdentifier(catalog,schema,table,scope,nullable);
+    pResult->openBestRowIdentifier(m_bUseCatalog ? catalog : Any(),schema,table,scope,nullable);
     return xRef;
 }
 // -------------------------------------------------------------------------
@@ -389,7 +407,7 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getTablePrivileges(
 
     ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(hStmt,m_pConnection->getTextEncoding());
     Reference< XResultSet > xRef = pResult;
-    pResult->openTablePrivileges(catalog,schemaPattern,tableNamePattern);
+    pResult->openTablePrivileges(m_bUseCatalog ? catalog : Any(),schemaPattern,tableNamePattern);
     return xRef;
 }
 // -------------------------------------------------------------------------
@@ -404,8 +422,8 @@ Reference< XResultSet > SAL_CALL ODatabaseMetaData::getCrossReference(
 
     ODatabaseMetaDataResultSet* pResult = new ODatabaseMetaDataResultSet(hStmt,m_pConnection->getTextEncoding());
     Reference< XResultSet > xRef = pResult;
-    pResult->openForeignKeys(primaryCatalog,primarySchema.toChar() == '%' ? &primarySchema : NULL,&primaryTable,
-        foreignCatalog, foreignSchema.toChar() == '%' ? &foreignSchema : NULL,&foreignTable);
+    pResult->openForeignKeys(m_bUseCatalog ? primaryCatalog : Any(),primarySchema.toChar() == '%' ? &primarySchema : NULL,&primaryTable,
+        m_bUseCatalog ? foreignCatalog : Any(), foreignSchema.toChar() == '%' ? &foreignSchema : NULL,&foreignTable);
     return xRef;
 }
 // -------------------------------------------------------------------------
@@ -489,7 +507,8 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsNonNullableColumns(  ) throw(SQLExc
 ::rtl::OUString SAL_CALL ODatabaseMetaData::getCatalogTerm(  ) throw(SQLException, RuntimeException)
 {
     ::rtl::OUString aVal;
-    OTools::GetInfo(m_aConnectionHandle,SQL_CATALOG_TERM,aVal,*this,m_pConnection->getTextEncoding());
+    if(m_bUseCatalog)
+        OTools::GetInfo(m_aConnectionHandle,SQL_CATALOG_TERM,aVal,*this,m_pConnection->getTextEncoding());
     return aVal;
 }
 // -------------------------------------------------------------------------
@@ -516,8 +535,9 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsDifferentTableCorrelationNames(  ) 
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaData::isCatalogAtStart(  ) throw(SQLException, RuntimeException)
 {
-    sal_Int32 nValue;
-    OTools::GetInfo(m_aConnectionHandle,SQL_CATALOG_LOCATION,nValue,*this);
+    sal_Int32 nValue=0;
+    if(m_bUseCatalog)
+        OTools::GetInfo(m_aConnectionHandle,SQL_CATALOG_LOCATION,nValue,*this);
     return nValue == SQL_CL_START;
 }
 // -------------------------------------------------------------------------
@@ -642,22 +662,25 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsSchemasInTableDefinitions(  ) throw
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaData::supportsCatalogsInTableDefinitions(  ) throw(SQLException, RuntimeException)
 {
-    sal_Int32 nValue;
-    OTools::GetInfo(m_aConnectionHandle,SQL_CATALOG_USAGE,nValue,*this);
+    sal_Int32 nValue=0;
+    if(m_bUseCatalog)
+        OTools::GetInfo(m_aConnectionHandle,SQL_CATALOG_USAGE,nValue,*this);
     return (nValue & SQL_CU_TABLE_DEFINITION) == SQL_CU_TABLE_DEFINITION;
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaData::supportsCatalogsInIndexDefinitions(  ) throw(SQLException, RuntimeException)
 {
-    sal_Int32 nValue;
-    OTools::GetInfo(m_aConnectionHandle,SQL_CATALOG_USAGE,nValue,*this);
+    sal_Int32 nValue=0;
+    if(m_bUseCatalog)
+        OTools::GetInfo(m_aConnectionHandle,SQL_CATALOG_USAGE,nValue,*this);
     return (nValue & SQL_CU_INDEX_DEFINITION) == SQL_CU_INDEX_DEFINITION;
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaData::supportsCatalogsInDataManipulation(  ) throw(SQLException, RuntimeException)
 {
-    sal_Int32 nValue;
-    OTools::GetInfo(m_aConnectionHandle,SQL_CATALOG_USAGE,nValue,*this);
+    sal_Int32 nValue=0;
+    if(m_bUseCatalog)
+        OTools::GetInfo(m_aConnectionHandle,SQL_CATALOG_USAGE,nValue,*this);
     return (nValue & SQL_CU_DML_STATEMENTS) == SQL_CU_DML_STATEMENTS;
 }
 // -------------------------------------------------------------------------
@@ -1098,15 +1121,17 @@ sal_Bool SAL_CALL ODatabaseMetaData::supportsSchemasInPrivilegeDefinitions(  ) t
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaData::supportsCatalogsInProcedureCalls(  ) throw(SQLException, RuntimeException)
 {
-    sal_Int32 nValue;
-    OTools::GetInfo(m_aConnectionHandle,SQL_CATALOG_USAGE,nValue,*this);
+    sal_Int32 nValue=0;
+    if(m_bUseCatalog)
+        OTools::GetInfo(m_aConnectionHandle,SQL_CATALOG_USAGE,nValue,*this);
     return (nValue & SQL_CU_PROCEDURE_INVOCATION) == SQL_CU_PROCEDURE_INVOCATION;
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ODatabaseMetaData::supportsCatalogsInPrivilegeDefinitions(  ) throw(SQLException, RuntimeException)
 {
-    sal_Int32 nValue;
-    OTools::GetInfo(m_aConnectionHandle,SQL_CATALOG_USAGE,nValue,*this);
+    sal_Int32 nValue=0;
+    if(m_bUseCatalog)
+        OTools::GetInfo(m_aConnectionHandle,SQL_CATALOG_USAGE,nValue,*this);
     return (nValue & SQL_CU_PRIVILEGE_DEFINITION) == SQL_CU_PRIVILEGE_DEFINITION;
 }
 // -------------------------------------------------------------------------

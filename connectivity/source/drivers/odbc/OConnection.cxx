@@ -2,9 +2,9 @@
  *
  *  $RCSfile: OConnection.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-12 15:09:20 $
+ *  last change: $Author: oj $ $Date: 2001-04-20 13:29:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -97,6 +97,9 @@
 #ifndef _DBHELPER_DBCHARSET_HXX_
 #include <connectivity/dbcharset.hxx>
 #endif
+#ifndef _COMPHELPER_EXTRACT_HXX_
+#include <comphelper/extract.hxx>
+#endif
 
 using namespace connectivity::odbc;
 using namespace connectivity::dbtools;
@@ -113,7 +116,8 @@ OConnection::OConnection(const SQLHANDLE _pDriverHandle,ODBCDriver* _pDriver)
                          m_pDriverHandleCopy(_pDriverHandle),
                          m_pDriver(_pDriver),
                          m_bClosed(sal_False),
-                         m_xMetaData(NULL)
+                         m_xMetaData(NULL),
+                         m_bUseCatalog(sal_False)
 {
     ModuleContext::AddRef();
 }
@@ -235,6 +239,10 @@ SQLRETURN OConnection::Construct(const ::rtl::OUString& url,const Sequence< Prop
         {
             pBegin->Value >>= aPWD;
             aDSN = aDSN + ::rtl::OUString::createFromAscii(";PWD=") + aPWD;
+        }
+        else if(!pBegin->Name.compareToAscii("UseCatalog"))
+        {
+            m_bUseCatalog = ::cppu::any2bool(pBegin->Value);
         }
         else if(!pBegin->Name.compareToAscii("SystemDriverSettings"))
         {
