@@ -2,9 +2,9 @@
  *
  *  $RCSfile: HashMaps.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mtg $ $Date: 2001-09-14 14:38:16 $
+ *  last change: $Author: mtg $ $Date: 2001-10-26 21:41:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,7 @@
 #include <ZipEntry.hxx>
 #endif
 #include <hash_map>
+#include <memory>
 
 struct eqFunc
 {
@@ -90,7 +91,7 @@ typedef std::hash_map < rtl::OUString,
                         eqFunc > FolderHash;
 
 typedef std::hash_map < rtl::OUString,
-                        ContentInfo *,
+                        std::auto_ptr < ContentInfo >,
                         ::rtl::OUStringHash,
                         eqFunc > ContentHash;
 
