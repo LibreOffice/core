@@ -2,9 +2,9 @@
  *
  *  $RCSfile: MasterPageObserver.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 13:56:23 $
+ *  last change: $Author: rt $ $Date: 2004-08-04 08:54:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,7 @@
 #ifndef SD_VIEW_MASTER_PAGE_OBSERVER_HXX
 #define SD_VIEW_MASTER_PAGE_OBSERVER_HXX
 
+#include "tools/SdGlobalResourceContainer.hxx"
 #include <osl/mutex.hxx>
 #include <tools/link.hxx>
 #include <memory>
@@ -78,6 +79,7 @@ namespace sd {
     shows the recently used master pages.
 */
 class MasterPageObserver
+    : public SdGlobalResource
 {
 public:
     typedef ::std::set<String> MasterPageNameSet;
@@ -121,15 +123,11 @@ public:
 private:
     static ::osl::Mutex maMutex;
 
-    /** The single instance of this class.  It is created on demand when
-        Instance() is called for the first time.
-    */
-    static MasterPageObserver* mpInstance;
-
     class Implementation;
     ::std::auto_ptr<Implementation> mpImpl;
 
     MasterPageObserver (void);
+    virtual ~MasterPageObserver (void);
 
     /// The copy constructor is not implemented.  Do not use!
     MasterPageObserver (const MasterPageObserver&);
