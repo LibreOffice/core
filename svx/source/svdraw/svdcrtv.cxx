@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdcrtv.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:52:30 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 14:32:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,6 +78,16 @@
 
 #ifndef _E3D_VIEW3D_HXX
 #include "view3d.hxx"
+#endif
+
+// #116425#
+#ifndef _SDR_CONTACT_OBJECTCONTACTOFOBJLISTPAINTER_HXX
+#include <svx/sdr/contact/objectcontactofobjlistpainter.hxx>
+#endif
+
+// #116425#
+#ifndef _SDR_CONTACT_DISPLAYINFO_HXX
+#include <svx/sdr/contact/displayinfo.hxx>
 #endif
 
 #define XOR_CREATE_PEN          PEN_SOLID
@@ -687,9 +697,13 @@ void SdrCreateView::MovCreateObj(const Point& rPnt)
                 pCreatePV->DragPoly()=aXPP2;
                 if (IsSolidDraggingNow()) {
                     aBound.Union(pAktCreate->GetCurrentBoundRect());
-                    SdrObjList* pOL=pCreatePV->GetObjList();
-                    SdrInsertReason aReason(SDRREASON_VIEWCALL);
-                    pOL->NbcInsertObject(pAktCreate,CONTAINER_APPEND,&aReason);
+                    // #116425#
+                    // Do not add the in-creation object, this would cause a RePaint
+                    //
+                    //SdrObjList* pOL=pCreatePV->GetObjList();
+                    //SdrInsertReason aReason(SDRREASON_VIEWCALL);
+                    //pOL->NbcInsertObject(pAktCreate,CONTAINER_APPEND,&aReason);
+
                     Point aPvOfs(pCreatePV->GetOffset());
                     USHORT nAnz=pDragWin==NULL ? GetWinCount() : 1;
                     for (USHORT i=0; i<nAnz; i++) {
@@ -701,36 +715,75 @@ void SdrCreateView::MovCreateObj(const Point& rPnt)
                         } else {
                             nWinNum=aWinList.Find(pOut);
                         }
-                        VirtualDevice aVDev(*pOut);
-                        Size a2Pix(pOut->PixelToLogic(Size(2,2)));
-                        MapMode aMap(pOut->GetMapMode());
-                        aVDev.SetMapMode(aMap);
 
+                        // #116425#
+                        // Do not do a complete RePaint into a VDev
+                        //
+                        //VirtualDevice aVDev(*pOut);
+                        //Size a2Pix(pOut->PixelToLogic(Size(2,2)));
+                        //MapMode aMap(pOut->GetMapMode());
+                        //aVDev.SetMapMode(aMap);
+                        //
                         // #109585#
-                        Color aMixedColor = pCreatePV->GetApplicationBackgroundColor();
-
-                        aVDev.SetBackground( Wallpaper( aMixedColor ) );
-                        aVDev.SetOutputSize(pOut->GetOutputSize());
+                        //Color aMixedColor = pCreatePV->GetApplicationBackgroundColor();
+                        //
+                        //aVDev.SetBackground( Wallpaper( aMixedColor ) );
+                        //aVDev.SetOutputSize(pOut->GetOutputSize());
                         Rectangle aDirtyArea(aBound);
                         aDirtyArea.Move(aPvOfs.X(),aPvOfs.Y());
-                        InitRedraw(&aVDev,aDirtyArea);
+                        //InitRedraw(&aVDev,aDirtyArea);
+
+                        // #116425#
+                        // Do direct paint of dirty area
+                        InitRedraw(pOut, aDirtyArea);
+
+                        // #116425#
+                        // paint in-creation object over it using a ObjectContactOfObjListPainter
+                        {
+                            sdr::contact::SdrObjectVector aObjectVector;
+                            aObjectVector.push_back(pAktCreate);
+
+                            sdr::contact::ObjectContactOfObjListPainter aPainter(aObjectVector);
+                            sdr::contact::DisplayInfo aDisplayInfo;
+                            ExtOutputDevice aExtOut(pOut);
+                            SdrPaintInfoRec aInfoRec;
+
+                            aDisplayInfo.SetExtendedOutputDevice(&aExtOut);
+                            aDisplayInfo.SetPaintInfoRec(&aInfoRec);
+                            aDisplayInfo.SetOutputDevice(pOut);
+
+                            // keep draw hierarchy up-to-date
+                            aPainter.PreProcessDisplay(aDisplayInfo);
+
+                            // do processing
+                            aPainter.ProcessDisplay(aDisplayInfo);
+
+                            // prepare delete
+                            aPainter.PrepareDelete();
+                        }
+
                         if (nWinNum!=SDRVIEWWIN_NOTFOUND) {
                             if (IsShownXorVisibleWinNum(nWinNum)) {
-                                ToggleShownXor(&aVDev,NULL);
+                                //ToggleShownXor(&aVDev,NULL);
+                                ToggleShownXor(pOut, 0L);
                             }
                         }
-                        Point aCopyOfs(aDirtyArea.TopLeft());
-                        aCopyOfs.X()-=a2Pix.Width();
-                        aCopyOfs.Y()-=a2Pix.Height();
-                        Size aCopySize(aBound.Right()-aBound.Left(),aBound.Bottom()-aBound.Top());
-                        aCopySize.Width()+=2*a2Pix.Width();
-                        aCopySize.Height()+=2*a2Pix.Height();
-                        pOut->DrawOutDev(aCopyOfs,aCopySize,aCopyOfs,aCopySize,aVDev);
+
+                        // #116425#
+                        // Do not remove the object and do not copy from some VDev
+                        //
+                        //Point aCopyOfs(aDirtyArea.TopLeft());
+                        //aCopyOfs.X()-=a2Pix.Width();
+                        //aCopyOfs.Y()-=a2Pix.Height();
+                        //Size aCopySize(aBound.Right()-aBound.Left(),aBound.Bottom()-aBound.Top());
+                        //aCopySize.Width()+=2*a2Pix.Width();
+                        //aCopySize.Height()+=2*a2Pix.Height();
+                        //pOut->DrawOutDev(aCopyOfs,aCopySize,aCopyOfs,aCopySize,aVDev);
                     }
-                    pOL->NbcRemoveObject(pOL->GetObjCount()-1);
+                    //pOL->NbcRemoveObject(pOL->GetObjCount()-1);
                     // Die Page brauchen die Objekte
                     // hier mal bitte eine Optimierung vornehmen
-                    pAktCreate->SetPage(pCreatePV->GetPage());
+                    //pAktCreate->SetPage(pCreatePV->GetPage());
                 }
             }
         } else {
