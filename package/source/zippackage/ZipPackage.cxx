@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ZipPackage.cxx,v $
  *
- *  $Revision: 1.94 $
+ *  $Revision: 1.95 $
  *
- *  last change: $Author: kz $ $Date: 2004-10-04 21:09:39 $
+ *  last change: $Author: rt $ $Date: 2004-12-07 11:00:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -181,6 +181,7 @@
 #ifndef _OSL_FILE_HXX_
 #include <osl/file.hxx>
 #endif
+#include "com/sun/star/task/XJob.hpp" //HACK see #i38298#
 
 #include <memory>
 #include <vector>
@@ -1215,6 +1216,13 @@ void SAL_CALL ZipPackage::commitChanges(  )
                 // then copy the contents of the tempfile to our output stream
                 copyInputToOutput_Impl( xContentStream, xOutputStream );
                 xOutputStream->flush();
+                //HACK see #i38298#:
+                uno::Reference< task::XJob > asyncOutStreamErrors(
+                    xOutputStream, uno::UNO_QUERY);
+                if (asyncOutStreamErrors.is()) {
+                    asyncOutStreamErrors->execute(
+                        uno::Sequence< beans::NamedValue >());
+                }
             }
             catch( uno::Exception& )
             {
