@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testtool.src,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: kz $ $Date: 2001-01-26 20:09:22 $
+ *  last change: $Author: kz $ $Date: 2001-02-02 15:29:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -274,11 +274,11 @@ WorkWindow TT_INLINE_TRANSLATION {
     Text[ FRENCH ] = "Relogement inline";
     Text[ ITALIAN ] = "Inplace Translation";
     Text[ JAPANESE ] = "ÇÕÇﬂçûÇ›ñ|ñÛ";
-    Text[ DUTCH ] = "Inplace translation";
+    Text[ DUTCH ] = "Nieuwe vertaling";
     Text[ POLISH ] = "Nowe t≥umaczenie";
     Text[ PORTUGUESE_BRAZILIAN ] = "Inplace Translation";
-    Text[ RUSSIAN ] = "ÕÓ‚˚È ÔÂÂ‚Ó‰";
-    Text[ SWEDISH ] = "÷vers‰ttning pÂ plats";
+    Text[ RUSSIAN ] = "Inplace Translation";
+    Text[ SWEDISH ] = "Ny ˆvers‰ttning";
     Text[ CHINESE_SIMPLIFIED ] = "∑≠“Îπ§æﬂ";
     Text[ PORTUGUESE ] = "Inplace Translation";
     Moveable = TRUE;
@@ -519,7 +519,7 @@ WorkWindow TT_INLINE_TRANSLATION {
         Text[ language_user1 ] = " ";
     };
     Text[ chinese_traditional ] = "¬Ωƒ∂§u®„";
-    Text[ arabic ] = " —Ã„… ›Ì «·„Êﬁ⁄";
+    Text[ arabic ] = " —Ã„… ÃœÌœ…";
     Text[ greek ] = "Õ›· ÏÂÙ‹ˆÒ·ÛÁ";
     Text[ korean ] = "≥ª∫Œ π¯ø™";
     Text[ turkish ] = "Inplace Translation";
