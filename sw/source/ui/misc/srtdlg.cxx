@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srtdlg.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: jp $ $Date: 2001-04-06 08:59:00 $
+ *  last change: $Author: jp $ $Date: 2001-04-24 18:11:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,6 +89,9 @@
 #ifndef _UNOTOOLS_COLLATORWRAPPER_HXX
 #include <unotools/collatorwrapper.hxx>
 #endif
+#ifndef SVTOOLS_COLLATORRESSOURCE_HXX
+#include <svtools/collatorres.hxx>
+#endif
 
 #ifndef _SWWAIT_HXX
 #include <swwait.hxx>
@@ -149,6 +152,16 @@ static sal_Unicode    cDeli  = '\t';
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::rtl;
+
+
+void lcl_ClearLstBoxAndDelUserData( ListBox& rLstBox )
+{
+    void* pDel;
+    for( USHORT n = 0, nEnd = rLstBox.GetEntryCount(); n < nEnd; ++n )
+        if( 0 != ( pDel = rLstBox.GetEntryData( n )) )
+            delete (String*)pDel;
+    rLstBox.Clear();
+}
 
 /*--------------------------------------------------------------------
      Beschreibung:  Fuer Tabellenselektion sel. Zeilen und Spalten
@@ -226,7 +239,8 @@ SwSortDlg::SwSortDlg(Window* pParent, SwWrtShell &rShell) :
     aColTxt(            SW_RES(STR_COL)),
     aRowTxt(            SW_RES(STR_ROW)),
     nX( 99 ),
-    nY( 99 )
+    nY( 99 ),
+    pColRes( 0 )
 {
     aDelimEdt.SetMaxTextLen( 1 );
     if(rSh.GetSelectionType() &
@@ -309,6 +323,10 @@ SwSortDlg::SwSortDlg(Window* pParent, SwWrtShell &rShell) :
 
 SwSortDlg::~SwSortDlg()
 {
+    ::lcl_ClearLstBoxAndDelUserData( aTypDLB1 );
+    ::lcl_ClearLstBoxAndDelUserData( aTypDLB2 );
+    ::lcl_ClearLstBoxAndDelUserData( aTypDLB3 );
+    delete pColRes;
 }
 
 sal_Unicode SwSortDlg::GetDelimChar() const
@@ -350,12 +368,17 @@ void SwSortDlg::Apply()
     cDeli = GetDelimChar();
     bCsSens = aCaseCB.IsChecked();
 
+    void* pUserData;
     SwSortOptions aOptions;
     if( bCheck1 )
     {
         String sEntry( aTypDLB1.GetSelectEntry() );
         if( sEntry == aNumericTxt )
             sEntry.Erase();
+        else if( 0 != (pUserData = aTypDLB1.GetEntryData(
+                                            aTypDLB1.GetSelectEntryPos())) )
+            sEntry = *(String*)pUserData;
+
         SwSortKey *pKey = new SwSortKey( nCol1, sEntry,
                                     bAsc1 ? SRT_ASCENDING : SRT_DESCENDING );
         aOptions.aKeys.C40_INSERT(SwSortKey, pKey, aOptions.aKeys.Count());
@@ -366,6 +389,10 @@ void SwSortDlg::Apply()
         String sEntry( aTypDLB2.GetSelectEntry() );
         if( sEntry == aNumericTxt )
             sEntry.Erase();
+        else if( 0 != (pUserData = aTypDLB2.GetEntryData(
+                                            aTypDLB2.GetSelectEntryPos())) )
+            sEntry = *(String*)pUserData;
+
         SwSortKey *pKey = new SwSortKey( nCol2, sEntry,
                                     bAsc2 ? SRT_ASCENDING : SRT_DESCENDING );
         aOptions.aKeys.C40_INSERT( SwSortKey, pKey, aOptions.aKeys.Count() );
@@ -376,6 +403,10 @@ void SwSortDlg::Apply()
         String sEntry( aTypDLB3.GetSelectEntry() );
         if( sEntry == aNumericTxt )
             sEntry.Erase();
+        else if( 0 != (pUserData = aTypDLB3.GetEntryData(
+                                            aTypDLB3.GetSelectEntryPos())) )
+            sEntry = *(String*)pUserData;
+
         SwSortKey *pKey = new SwSortKey( nCol3, sEntry,
                                     bAsc3 ? SRT_ASCENDING : SRT_DESCENDING );
         aOptions.aKeys.C40_INSERT( SwSortKey, pKey, aOptions.aKeys.Count() );
@@ -452,44 +483,50 @@ IMPL_LINK( SwSortDlg, LanguageHdl, ListBox*, pLBox )
     Sequence < OUString > aSeq(
                             GetAppCollator().listCollatorAlgorithms( aLcl ));
 
-    String  sOldSel1( aTypDLB1.GetSelectEntry() ),
-            sOldSel2( aTypDLB2.GetSelectEntry() ),
-            sOldSel3( aTypDLB3.GetSelectEntry() );
-    aTypDLB1.Clear();
-    aTypDLB2.Clear();
-    aTypDLB3.Clear();
+    if( !pColRes )
+        pColRes = new CollatorRessource();
 
-    for( long n = 0, nEnd = aSeq.getLength(); n < nEnd; ++n )
+    const USHORT nLstBoxCnt = 3;
+    ListBox* aLstArr[ nLstBoxCnt ] = { &aTypDLB1, &aTypDLB2, &aTypDLB3 };
+    USHORT* aTypeArr[ nLstBoxCnt ] = { &nType1, &nType2, &nType3 };
+    String aOldStrArr[ nLstBoxCnt ];
+    USHORT n;
+
+    void* pUserData;
+    for( n = 0; n < nLstBoxCnt; ++n )
     {
-        String sAlg( aSeq[n] );
-
-        aTypDLB1.InsertEntry( sAlg );
-        aTypDLB2.InsertEntry( sAlg );
-        aTypDLB3.InsertEntry( sAlg );
+        ListBox* pL = aLstArr[ n ];
+        if( 0 != (pUserData = pL->GetEntryData( pL->GetSelectEntryPos())) )
+            aOldStrArr[ n ] = *(String*)pUserData;
+        ::lcl_ClearLstBoxAndDelUserData( *pL );
     }
-    aTypDLB1.InsertEntry( aNumericTxt );
-    aTypDLB2.InsertEntry( aNumericTxt );
-    aTypDLB3.InsertEntry( aNumericTxt );
 
-    if( !pLBox )
+    USHORT nInsPos;
+    String sAlg, sUINm;
+    for( long nCnt = 0, nEnd = aSeq.getLength(); nCnt <= nEnd; ++nCnt )
     {
-        // set the init selected positions
-        aTypDLB1.SelectEntryPos( nType1 );
-        aTypDLB2.SelectEntryPos( nType2 );
-        aTypDLB3.SelectEntryPos( nType3 );
+        if( nCnt < nEnd )
+            sUINm = pColRes->GetTranslation( sAlg = aSeq[ nCnt ] );
+        else
+            sUINm = sAlg = aNumericTxt;
+
+        for( n = 0; n < nLstBoxCnt; ++n )
+        {
+            ListBox* pL = aLstArr[ n ];
+            nInsPos = pL->InsertEntry( sUINm );
+            pL->SetEntryData( nInsPos, new String( sAlg ));
+            if( pLBox && sAlg == aOldStrArr[ n ] )
+                pL->SelectEntryPos( nInsPos );
+        }
     }
-    else
+
+    for( n = 0; n < nLstBoxCnt; ++n )
     {
-        USHORT nFnd;
-        if( LISTBOX_ENTRY_NOTFOUND == ( nFnd = aTypDLB1.GetEntryPos( sOldSel1 ) ))
-            nFnd = 0;
-        aTypDLB1.SelectEntryPos( nFnd );
-        if( LISTBOX_ENTRY_NOTFOUND == ( nFnd = aTypDLB2.GetEntryPos( sOldSel2 ) ))
-            nFnd = 0;
-        aTypDLB2.SelectEntryPos( nFnd );
-        if( LISTBOX_ENTRY_NOTFOUND == ( nFnd = aTypDLB3.GetEntryPos( sOldSel3 ) ))
-            nFnd = 0;
-        aTypDLB3.SelectEntryPos( nFnd );
+        ListBox* pL = aLstArr[ n ];
+        if( !pLBox )
+            pL->SelectEntryPos( *aTypeArr[n] );
+        else if( LISTBOX_ENTRY_NOTFOUND == pL->GetSelectEntryPos() )
+            pL->SelectEntryPos( 0 );
     }
     return 0;
 }
@@ -499,6 +536,9 @@ IMPL_LINK( SwSortDlg, LanguageHdl, ListBox*, pLBox )
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.5  2001/04/06 08:59:00  jp
+    changes for international (CJK)-sorting
+
     Revision 1.4  2001/04/04 08:18:54  jp
     changes for CJK sorting
 

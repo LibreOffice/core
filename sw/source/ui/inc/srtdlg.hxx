@@ -2,9 +2,9 @@
  *
  *  $RCSfile: srtdlg.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2001-04-06 08:58:23 $
+ *  last change: $Author: jp $ $Date: 2001-04-24 18:09:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,7 @@
 #endif
 
 class SwWrtShell;
+class CollatorRessource;
 
 class SwSortDlg : public SvxStandardDialog
 {
@@ -131,10 +132,12 @@ class SwSortDlg : public SvxStandardDialog
     String aColTxt;
     String aRowTxt;
     String aNumericTxt;
-    USHORT nX;
-    USHORT nY;
 
     SwWrtShell          &rSh;
+    CollatorRessource* pColRes;
+
+    USHORT nX;
+    USHORT nY;
 
     virtual void        Apply();
     sal_Unicode         GetDelimChar() const;
