@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commonpagesdbp.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-19 11:40:39 $
+ *  last change: $Author: kz $ $Date: 2001-03-21 20:29:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,8 +117,8 @@ TabPage RID_PAGE_TABLESELECTION
         Text[ spanish ] = "De momento, el formulario al que pertenece el campo de control no está (quizás no totalmente) conectado a una fuente de datos.\n\nSeleccione una fuente de datos y una tabla.\n\n\nNo olvide que la configuración que realice en este registro tendrá validez inmediatamente después de que abandone el registro.";
         Text[ italian ] = "Il formulario a cui appartiene il cmapo di controllo non è ancora (oppure del tutto) collegato a una sorgente dati.\n\nSelezionate una sorgente dati e una tabella .\n\nVi prghiamo di osservare  che le impostazioni scelte per il formulario in questa pagina verranno applicate dopo aver chiuso la pagina stessa.";
         Text[ danish ] = "Currently, the form the control belongs to is not (or not completely) bound to a data source.\n\nPlease choose a data source and a table.\n\n\nPlease note that the settings made on this page will take effect immediately upon leaving the page.";
-        Text[ swedish ] = "Formuläret som kontrollfältet tillhör är för närvarande ännu inte (eller inte fullständigt) knutet till en datakälla.\n\nVälj ut en datakälla och en tabell.\n\n\nObservera att inställningarna som du gör på den här sidan för formuläret får effekt såfort du lämnar sidan.";
-        Text[ polish ] = "Formularz, który nale¿y do pola kontrolnego, nie jest na razie (lub nie jest ca³kowicie) pod³¹czony do Ÿród³a danych.\n\nNale¿y wybraæ Ÿród³o danych lub tabelê.\n\nNale¿y uwzglêdniæ, ¿e ustawienia formularza, dokonane na tej stronie, bêd¹ aktualne natychmiast po opuszczeniu strony.";
+        Text[ swedish ] = "Formuläret som kontrollfältet tillhör är för närvarande ännu inte (eller inte fullständigt) knutet till en datakälla.\n\nVälj ut en datakälla och en tabell.\n\n\nObservera att inställningarna som du gör på den här sidan för formuläret får effekt direkt när du lämnar sidan.";
+        Text[ polish ] = "Formularz, który nale¿y do pola kontrolnego, nie jest na razie (lub nie jest ca³kowicie) pod³¹czony do Ÿród³a danych.\n\nNale¿y wybraæ Ÿród³o danych oraz tabelê.\n\n\nNale¿y uwzglêdniæ, ¿e ustawienia formularza dokonane na tej stronie, bêd¹ aktywne natychmiast od momentu opuszczenia strony.";
         Text[ portuguese_brazilian ] = "Currently, the form the control belongs to is not (or not completely) bound to a data source.\n\nPlease choose a data source and a table.\n\n\nPlease note that the settings made on this page will take effect immediately upon leaving the page.";
         Text[ japanese ] = "ºİÄÛ°Ù‚É‚ ‚éÌ«°Ñ‚ÍAŒ»“_‚Å‚Ü‚¾ÃŞ°À¿°½‚ÉÚ‘±‚³‚ê‚Ä‚¢‚È‚¢‚©AŠ®‘S‚ÉI‚í‚Á‚Ä‚¢‚È‚¢‰Â”\\«‚ª‚ ‚è‚Ü‚·B\n\nÃŞ°À¿°½‚ÆÃ°ÌŞÙ‚ğ‘I‘ğ‚µ‚Ä‚­‚¾‚³‚¢B\n\n\n‚Ü‚½A‚±‚ÌÍß°¼Ş‚ÅÌ«°Ñ‚Ìİ’è‚ğs‚¤‚ÆAÍß°¼Ş‚ğ•Â‚¶‚é‚Æ‚·‚®—LŒø‚É‚È‚è‚Ü‚·‚Ì‚ÅA‚²’ˆÓ‚­‚¾‚³‚¢B";
         Text[ korean ] = "Currently, the form the control belongs to is not (or not completely) bound to a data source.\n\nPlease choose a data source and a table.\n\n\nPlease note that the settings made on this page will take effect immediately upon leaving the page.";
@@ -352,6 +352,9 @@ TabPage RID_PAGE_OPTION_DBFIELD
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.5  2001/03/19 11:40:39  kz
+ *  Merge SRC625: 19.03.01 - 12:40:34 (NoBranch)
+ *
  *  Revision 1.4  2001/03/09 20:46:34  kz
  *  Merge SRC624: 09.03.01 - 21:46:40 (NoBranch)
  *
