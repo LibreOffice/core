@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ww8par2.cxx,v $
  *
- *  $Revision: 1.92 $
+ *  $Revision: 1.93 $
  *
- *  last change: $Author: kz $ $Date: 2003-12-09 12:08:29 $
+ *  last change: $Author: vg $ $Date: 2004-01-06 18:23:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,8 +68,8 @@
 #include <tools/solar.h>
 #endif
 
-#ifndef _SV_FONTTYPE_HXX
-#include <vcl/fonttype.hxx>
+#ifndef _VCL_VCLENUM_HXX
+#include <vcl/vclenum.hxx>
 #endif
 #ifndef _SV_FONT_HXX
 #include <vcl/font.hxx>
