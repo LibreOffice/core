@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unx.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 18:33:46 $
+ *  last change: $Author: hjs $ $Date: 2004-06-25 17:11:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,6 +95,10 @@ struct mnttab
 #include <fsys.hxx>
 #include "comdep.hxx"
 
+#ifndef INCLUDED_RTL_INSTANCE_HXX
+#include <rtl/instance.hxx>
+#endif
+
 DECLARE_LIST( DirEntryList, DirEntry* )
 DECLARE_LIST( FSysSortList, FSysSort* )
 DECLARE_LIST( FileStatList, FileStat* )
@@ -114,7 +118,6 @@ DECLARE_LIST( FileStatList, FileStat* )
 #define MOUNTFS      mnt_type
 #endif
 
-static ByteString sLastCaseSensitiveDir = "";
 static BOOL   bLastCaseSensitive    = FALSE;
 
 struct mymnttab
@@ -358,8 +361,7 @@ BOOL DirEntry::ToAbs()
 |*
 *************************************************************************/
 
-static mymnttab mymnt;
-static String aEmptyString;
+namespace { struct mymnt : public rtl::Static< mymnttab, mymnt > {}; }
 
 String DirEntry::GetVolume() const
 {
@@ -372,12 +374,14 @@ String DirEntry::GetVolume() const
     while (stat (ByteString(aPath.GetFull(), osl_getThreadTextEncoding()).GetBuffer(), &buf))
     {
         if (aPath.Level() <= 1)
-            return aEmptyString;
+            return String();
         aPath = aPath [1];
     }
-
-    return ((buf.st_dev == mymnt.mountdevice ||
-                GetMountEntry(buf.st_dev, &mymnt)) ? String(mymnt.mountspecial, osl_getThreadTextEncoding()) : aEmptyString);
+    mymnttab &rMnt = mymnt::get();
+    return ((buf.st_dev == rMnt.mountdevice ||
+                GetMountEntry(buf.st_dev, &rMnt)) ?
+                    String(rMnt.mountspecial, osl_getThreadTextEncoding()) :
+                    String());
 }
 
 DirEntry DirEntry::GetDevice() const
@@ -391,11 +395,14 @@ DirEntry DirEntry::GetDevice() const
     while (stat (ByteString(aPath.GetFull(), osl_getThreadTextEncoding()).GetBuffer(), &buf))
     {
         if (aPath.Level() <= 1)
-            return aEmptyString;
+            return String();
         aPath = aPath [1];
     }
-    return ((buf.st_dev == mymnt.mountdevice ||
-                GetMountEntry(buf.st_dev, &mymnt)) ? String( mymnt.mountpoint, osl_getThreadTextEncoding()) : aEmptyString);
+    mymnttab &rMnt = mymnt::get();
+    return ((buf.st_dev == rMnt.mountdevice ||
+                GetMountEntry(buf.st_dev, &rMnt)) ?
+                    String( rMnt.mountpoint, osl_getThreadTextEncoding()) :
+                    String());
 }
 
 /*************************************************************************
