@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmltoken.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: dvo $ $Date: 2002-08-29 17:44:36 $
+ *  last change: $Author: dvo $ $Date: 2002-08-30 17:26:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2128,6 +2128,8 @@ namespace xmloff { namespace token {
 
         TOKEN( "background-transparency" ),    // XML_BACKGROUND_OPACITY
         TOKEN( "background-image-transparency" ), // XML_BACKGROUND_IMAGE_OPACITY
+
+        TOKEN( "dynamic-spacing" ),            // XML_DYNAMIC_SPACING
 
         { 0, NULL, NULL }                      // XML_TOKEN_END
     };
