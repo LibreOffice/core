@@ -66,7 +66,7 @@ $(DEF1TARGETN) .PHONY : \
     @$(LDUMP2) -E 20 -F $(MISC)\$(SHL1TARGET).flt $(SHL1TARGET).exp			   >>$@
 .ENDIF
 .ELSE				# "$(USE_LDUMP2)"=!""
-    @$(LDUMP) -E20 -F$(MISC)\$(SHL1TARGET).flt $(SHL1TARGET).exp			   >>$@
+    @$(LDUMP) -E 20 -F$(MISC)\$(SHL1TARGET).flt $(SHL1TARGET).exp			   >>$@
 .ENDIF				# "$(USE_LDUMP2)"=!""
     +-$(RM) $(SHL1TARGET).exp
 # now *\defs\$(OUTPATH)	exists, commit it
@@ -239,7 +239,7 @@ $(DEF2TARGETN) .PHONY : \
     @$(LDUMP2) -E 20 -F $(MISC)\$(SHL2TARGET).flt $(SHL2TARGET).exp			   >>$@
 .ENDIF
 .ELSE				# "$(USE_LDUMP2)"=!""
-    @$(LDUMP) -E20 -F$(MISC)\$(SHL2TARGET).flt $(SHL2TARGET).exp			   >>$@
+    @$(LDUMP) -E 20 -F$(MISC)\$(SHL2TARGET).flt $(SHL2TARGET).exp			   >>$@
 .ENDIF				# "$(USE_LDUMP2)"=!""
     +-$(RM) $(SHL2TARGET).exp
 # now *\defs\$(OUTPATH)	exists, commit it
@@ -412,7 +412,7 @@ $(DEF3TARGETN) .PHONY : \
     @$(LDUMP2) -E 20 -F $(MISC)\$(SHL3TARGET).flt $(SHL3TARGET).exp			   >>$@
 .ENDIF
 .ELSE				# "$(USE_LDUMP2)"=!""
-    @$(LDUMP) -E20 -F$(MISC)\$(SHL3TARGET).flt $(SHL3TARGET).exp			   >>$@
+    @$(LDUMP) -E 20 -F$(MISC)\$(SHL3TARGET).flt $(SHL3TARGET).exp			   >>$@
 .ENDIF				# "$(USE_LDUMP2)"=!""
     +-$(RM) $(SHL3TARGET).exp
 # now *\defs\$(OUTPATH)	exists, commit it
@@ -585,7 +585,7 @@ $(DEF4TARGETN) .PHONY : \
     @$(LDUMP2) -E 20 -F $(MISC)\$(SHL4TARGET).flt $(SHL4TARGET).exp			   >>$@
 .ENDIF
 .ELSE				# "$(USE_LDUMP2)"=!""
-    @$(LDUMP) -E20 -F$(MISC)\$(SHL4TARGET).flt $(SHL4TARGET).exp			   >>$@
+    @$(LDUMP) -E 20 -F$(MISC)\$(SHL4TARGET).flt $(SHL4TARGET).exp			   >>$@
 .ENDIF				# "$(USE_LDUMP2)"=!""
     +-$(RM) $(SHL4TARGET).exp
 # now *\defs\$(OUTPATH)	exists, commit it
@@ -758,7 +758,7 @@ $(DEF5TARGETN) .PHONY : \
     @$(LDUMP2) -E 20 -F $(MISC)\$(SHL5TARGET).flt $(SHL5TARGET).exp			   >>$@
 .ENDIF
 .ELSE				# "$(USE_LDUMP2)"=!""
-    @$(LDUMP) -E20 -F$(MISC)\$(SHL5TARGET).flt $(SHL5TARGET).exp			   >>$@
+    @$(LDUMP) -E 20 -F$(MISC)\$(SHL5TARGET).flt $(SHL5TARGET).exp			   >>$@
 .ENDIF				# "$(USE_LDUMP2)"=!""
     +-$(RM) $(SHL5TARGET).exp
 # now *\defs\$(OUTPATH)	exists, commit it
@@ -931,7 +931,7 @@ $(DEF6TARGETN) .PHONY : \
     @$(LDUMP2) -E 20 -F $(MISC)\$(SHL6TARGET).flt $(SHL6TARGET).exp			   >>$@
 .ENDIF
 .ELSE				# "$(USE_LDUMP2)"=!""
-    @$(LDUMP) -E20 -F$(MISC)\$(SHL6TARGET).flt $(SHL6TARGET).exp			   >>$@
+    @$(LDUMP) -E 20 -F$(MISC)\$(SHL6TARGET).flt $(SHL6TARGET).exp			   >>$@
 .ENDIF				# "$(USE_LDUMP2)"=!""
     +-$(RM) $(SHL6TARGET).exp
 # now *\defs\$(OUTPATH)	exists, commit it
@@ -1104,7 +1104,7 @@ $(DEF7TARGETN) .PHONY : \
     @$(LDUMP2) -E 20 -F $(MISC)\$(SHL7TARGET).flt $(SHL7TARGET).exp			   >>$@
 .ENDIF
 .ELSE				# "$(USE_LDUMP2)"=!""
-    @$(LDUMP) -E20 -F$(MISC)\$(SHL7TARGET).flt $(SHL7TARGET).exp			   >>$@
+    @$(LDUMP) -E 20 -F$(MISC)\$(SHL7TARGET).flt $(SHL7TARGET).exp			   >>$@
 .ENDIF				# "$(USE_LDUMP2)"=!""
     +-$(RM) $(SHL7TARGET).exp
 # now *\defs\$(OUTPATH)	exists, commit it
@@ -1277,7 +1277,7 @@ $(DEF8TARGETN) .PHONY : \
     @$(LDUMP2) -E 20 -F $(MISC)\$(SHL8TARGET).flt $(SHL8TARGET).exp			   >>$@
 .ENDIF
 .ELSE				# "$(USE_LDUMP2)"=!""
-    @$(LDUMP) -E20 -F$(MISC)\$(SHL8TARGET).flt $(SHL8TARGET).exp			   >>$@
+    @$(LDUMP) -E 20 -F$(MISC)\$(SHL8TARGET).flt $(SHL8TARGET).exp			   >>$@
 .ENDIF				# "$(USE_LDUMP2)"=!""
     +-$(RM) $(SHL8TARGET).exp
 # now *\defs\$(OUTPATH)	exists, commit it
@@ -1450,7 +1450,7 @@ $(DEF9TARGETN) .PHONY : \
     @$(LDUMP2) -E 20 -F $(MISC)\$(SHL9TARGET).flt $(SHL9TARGET).exp			   >>$@
 .ENDIF
 .ELSE				# "$(USE_LDUMP2)"=!""
-    @$(LDUMP) -E20 -F$(MISC)\$(SHL9TARGET).flt $(SHL9TARGET).exp			   >>$@
+    @$(LDUMP) -E 20 -F$(MISC)\$(SHL9TARGET).flt $(SHL9TARGET).exp			   >>$@
 .ENDIF				# "$(USE_LDUMP2)"=!""
     +-$(RM) $(SHL9TARGET).exp
 # now *\defs\$(OUTPATH)	exists, commit it
@@ -1623,7 +1623,7 @@ $(DEF10TARGETN) .PHONY : \
     @$(LDUMP2) -E 20 -F $(MISC)\$(SHL10TARGET).flt $(SHL10TARGET).exp			   >>$@
 .ENDIF
 .ELSE				# "$(USE_LDUMP2)"=!""
-    @$(LDUMP) -E20 -F$(MISC)\$(SHL10TARGET).flt $(SHL10TARGET).exp			   >>$@
+    @$(LDUMP) -E 20 -F$(MISC)\$(SHL10TARGET).flt $(SHL10TARGET).exp			   >>$@
 .ENDIF				# "$(USE_LDUMP2)"=!""
     +-$(RM) $(SHL10TARGET).exp
 # now *\defs\$(OUTPATH)	exists, commit it

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: tg_def.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: hjs $ $Date: 2001-05-04 15:21:59 $
+#   last change: $Author: hjs $ $Date: 2001-05-18 15:47:42 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -169,7 +169,7 @@ $(DEF$(TNR)TARGETN) .PHONY : \
     @$(LDUMP2) -E 20 -F $(MISC)\$(SHL$(TNR)TARGET).flt $(SHL$(TNR)TARGET).exp			   >>$@
 .ENDIF
 .ELSE				# "$(USE_LDUMP2)"=!""
-    @$(LDUMP) -E20 -F$(MISC)\$(SHL$(TNR)TARGET).flt $(SHL$(TNR)TARGET).exp			   >>$@
+    @$(LDUMP) -E 20 -F$(MISC)\$(SHL$(TNR)TARGET).flt $(SHL$(TNR)TARGET).exp			   >>$@
 .ENDIF				# "$(USE_LDUMP2)"=!""
     +-$(RM) $(SHL$(TNR)TARGET).exp
 # now *\defs\$(OUTPATH)	exists, commit it
