@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: rt $ $Date: 2004-07-13 08:57:01 $
+#   last change: $Author: obo $ $Date: 2004-10-18 14:05:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -60,17 +60,20 @@ ULFFILES = \
     ActionTe.ulf \
     Control.ulf  \
     Error.ulf    \
+    Langpack.ulf \
     Property.ulf \
     RadioBut.ulf \
     SIS.ulf      \
     UIText.ulf 
+    
+MLFFILES = $(foreach,i,$(ULFFILES) $(COMMONMISC)$/$(TARGET)$/$(i:b).mlf)
 
 # --- Targets ------------------------------------------------------
 
-.INCLUDE :	target.mk
+.INCLUDE :  target.mk
 
 .IF "$(GUI)"=="WNT"
 
-ALLTAR : $(foreach,i,$(ULFFILES) $(COMMONMISC)$/$(TARGET)$/$i)
+ALLTAR : $(MLFFILES)
 
 .ENDIF
