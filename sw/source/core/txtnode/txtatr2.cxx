@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtatr2.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ama $ $Date: 2000-09-25 12:05:12 $
+ *  last change: $Author: ama $ $Date: 2000-09-27 08:27:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -254,6 +254,8 @@ void SwTxtCharFmt::RstFnt(SwFont *pFont)
         pFont->SetNoHyph( bPrevNoHyph );
         pFont->SetURL( bPrevURL );
         pImpl->ResetFont( pFont, bColor );
+        delete pImpl;
+        pImpl = NULL;
     }
 }
 
@@ -381,6 +383,8 @@ void SwTxtINetFmt::RstFnt(SwFont *pFont)
         pFont->SetNoHyph( bPrevNoHyph );
         pFont->SetURL( bPrevURL );
         pImpl->ResetFont( pFont, bColor );
+        delete pImpl;
+        pImpl = NULL;
     }
 }
 
