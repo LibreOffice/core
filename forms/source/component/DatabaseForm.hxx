@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseForm.hxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-11 14:36:58 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 11:52:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,6 +157,12 @@
 #ifndef _FRM_IDS_HXX_
 #include "ids.hxx"
 #endif
+#ifndef FORMS_SOURCE_COMPONENT_FORMPARAMETERS_HXX
+#include "formparameters.hxx"
+#endif
+#ifndef FORMS_SOURCE_COMPONENT_FORMFILTERMANAGER_HXX
+#include "formfiltermanager.hxx"
+#endif
 
 #ifndef _COMPHELPER_PROPERTY_AGGREGATION_HXX_
 #include <comphelper/propagg.hxx>
@@ -233,7 +239,6 @@ DECLARE_STL_VECTOR(HtmlSuccessfulObj, HtmlSuccessfulObjList);
 //========================================================================
 class OGroupManager;
 class OFormSubmitResetThread;
-struct OParameterInfoImpl;
 typedef ::cppu::ImplHelper11<   ::com::sun::star::form::XForm,
                                 ::com::sun::star::awt::XTabControllerModel,
                                 ::com::sun::star::form::XLoadListener,
@@ -275,7 +280,6 @@ class ODatabaseForm :public OFormComponents
     ::cppu::OInterfaceContainerHelper   m_aLoadListeners;
     ::cppu::OInterfaceContainerHelper   m_aRowSetApproveListeners;
     ::cppu::OInterfaceContainerHelper   m_aRowSetListeners;
-    ::cppu::OInterfaceContainerHelper   m_aParameterListeners;
     ::cppu::OInterfaceContainerHelper   m_aResetListeners;
     ::cppu::OInterfaceContainerHelper   m_aSubmitListeners;
     ::cppu::OInterfaceContainerHelper   m_aErrorListeners;
@@ -284,7 +288,6 @@ class ODatabaseForm :public OFormComponents
     ::com::sun::star::uno::Any          m_aIgnoreResult; // set when we are a subform and our master form positioned on a new row
     ::com::sun::star::uno::Sequence< ::rtl::OUString >                      m_aMasterFields;
     ::com::sun::star::uno::Sequence< ::rtl::OUString >                      m_aDetailFields;
-    ::std::vector<bool>                 m_aParameterVisited;
 
     // the object doin' most of the work - an SDB-rowset
     ::com::sun::star::uno::Reference< ::com::sun::star::uno::XAggregation>      m_xAggregate;
@@ -294,7 +297,8 @@ class ODatabaseForm :public OFormComponents
     OPropertyChangeMultiplexer* m_pAggregatePropertyMultiplexer;
     // Verwaltung der ControlGruppen
     OGroupManager*              m_pGroupManager;
-    OParameterInfoImpl*         m_pParameterInfo;
+    FormParameterManager        m_aParameterManager;
+    FormFilterManager           m_aFilterManager;
     Timer*                      m_pLoadTimer;
 
     OFormSubmitResetThread*     m_pThread;
@@ -305,6 +309,7 @@ class ODatabaseForm :public OFormComponents
     INT32                       m_nResetsPending;
 //  <overwritten_properties>
     sal_Int32                   m_nPrivileges;
+    sal_Bool                    m_bInsertOnly;
 //  </overwritten_properties>
 
 //  <properties>
@@ -531,10 +536,8 @@ private:
                     const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& _rxCompletionHandler = ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >());
     bool    fillParameters(ReusableMutexGuard& _rClearForNotifies,
                     const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& _rxCompletionHandler = ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >());
-    void    createParameterInfo();
+    void    updateParameterInfo();
     bool    hasValidParent() const;
-    // if there are no parameter infos we now that we have a complete new statement to execute
-    bool    needStatementRebuild() const {return m_pParameterInfo == NULL;}
 
     // impl methods
     void    load_impl(sal_Bool bCausedByParentForm, sal_Bool bMoveToFirst = sal_True,
