@@ -2,9 +2,9 @@
  *
  *  $RCSfile: basesh.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: os $ $Date: 2002-08-13 13:19:11 $
+ *  last change: $Author: os $ $Date: 2002-08-28 14:55:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2011,6 +2011,25 @@ void SwBaseShell::GetTxtFontCtrlState( SfxItemSet& rSet )
                     rSet.Put( *pI, nWhich );
                 else
                     rSet.InvalidateItem( nWhich );
+                //set input context of the SwEditWin according to the selected font and script type
+                if(RES_CHRATR_FONT == nWhich)
+                {
+                    Font aFont;
+                    if(pI && pI->ISA(SvxFontItem))
+                    {
+                        aFont.SetName( ((const SvxFontItem*)pI)->GetFamilyName());
+                        aFont.SetStyleName(((const SvxFontItem*)pI)->GetStyleName());
+                        aFont.SetFamily(((const SvxFontItem*)pI)->GetFamily());
+                        aFont.SetPitch(((const SvxFontItem*)pI)->GetPitch());
+                        aFont.SetCharSet(((const SvxFontItem*)pI)->GetCharSet());
+                    }
+
+                    BOOL bVertical = rSh.IsInVerticalText();
+                    aFont.SetOrientation(bVertical ? 2700 : 0);
+                    aFont.SetVertical(bVertical);
+                    GetView().GetEditWin().SetInputContext( InputContext( aFont, INPUTCONTEXT_TEXT |
+                                                        INPUTCONTEXT_EXTTEXTINPUT ) );
+                }
             }
             break;
 
