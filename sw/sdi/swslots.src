@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swslots.src,v $
  *
- *  $Revision: 1.112 $
+ *  $Revision: 1.113 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 14:33:37 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 12:14:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -4535,41 +4535,6 @@ SfxSlotInfo FN_INSERT_FLD_TOPIC
     SlotName[ hungarian ] = "TÃ¡rgy beszÃºrÃ¡sa";
     SlotName[ slovenian ] = "Vstavi zadevo";
 };
-SfxSlotInfo FN_INSERT_FOOTER
-{
-    SlotName = "Fußzeile einfügen";
-    SlotName [ english ] =  "Fußzeile einfügen";
-    SlotName[ english_us ] = "Insert Footer";
-    SlotName[ portuguese ] = "Inserir rodapé";
-    SlotName[ russian ] = "Âñòàâèòü íèæíèé êîëîíòèòóë";
-    SlotName[ dutch ] = "Voettekst invoegen";
-    SlotName[ french ] = "Insérer un pied de page";
-    SlotName[ spanish ] = "Insertar pie de página";
-    SlotName[ italian ] = "Inserisci piè di pagina";
-    SlotName[ danish ] = "Indsæt sidefod";
-    SlotName[ swedish ] = "Infoga sidfot";
-    SlotName[ polish ] = "Wstaw stopkê";
-    SlotName[ portuguese_brazilian ] = "Inserir Rodapé";
-    SlotName[ japanese ] = "ãƒ•ãƒƒã‚¿ã®æŒ¿å…¥";
-    SlotName[ chinese_simplified ] = "æ’å…¥é¡µè„š";
-    SlotName[ chinese_traditional ] = "æ’å…¥é å°¾";
-    SlotName[ arabic ] = "ÅÏÑÇÌ ÊĞííá ÕİÍÉ";
-    SlotName[ dutch ] = "Voettekst invoegen";
-    SlotName[ chinese_simplified ] = "æ’å…¥é¡µè„š";
-    SlotName[ greek ] = "ÅéóáãùãŞ õğïóİëéäïõ";
-    SlotName[ korean ] = "ë°”ë‹¥ê¸€ ì‚½ì…";
-    SlotName[ turkish ] = "Altbilgi ekle";
-    SlotName[ language_user1 ] = " ";
-    SlotName[ catalan ] = "Insereix un peu de pàgina";
-    SlotName[ finnish ] = "Lisää alatunniste";
-    SlotName[ thai ] = "à¹à¸—à¸£à¸à¸ªà¹ˆà¸§à¸™à¸—à¹‰à¸²à¸¢";
-    SlotName[ czech ] = "VloÅ¾it zÃ¡patÃ­";
-    SlotName[ hebrew ] = "â€®×”×•×¡×¤×ª ×›×•×ª×¨×ª ×ª×—×ª×•× ×”â€¬";
-    SlotName[ hindi ] = "à¤ªà¥ƒà¤·à¥à¤  à¤•à¥‡ à¤…à¤§à¥‹à¤­à¤¾à¤— à¤•à¥€ à¤Ÿà¥€à¤•à¤¾ à¤•à¥‹ à¤œà¥‹à¤¡à¤¼à¥‹";
-    SlotName[ slovak ] = "VloÅ¾iÅ¥ zÃ¡pÃ¤tie";
-    SlotName[ hungarian ] = "Ã‰lÅ‘lÃ¡b beszÃºrÃ¡sa";
-    SlotName[ slovenian ] = "Vstavi nogo";
-};
 SfxSlotInfo FN_INSERT_FOOTNOTE
 {
     SlotName = "Fußnote direkt einfügen";
@@ -4811,41 +4776,6 @@ SfxSlotInfo FN_INSERT_HARDHYPHEN
     SlotName[ slovak ] = "VloÅ¾iÅ¥ nezalomiteÄ¾nÃ© rozdelenie";
     SlotName[ hungarian ] = "NemtÃ¶rÅ‘ kÃ¶tÅ‘jel beszÃºrÃ¡sa";
     SlotName[ slovenian ] = "Vstavi nedeljivi vezaj";
-};
-SfxSlotInfo FN_INSERT_HEADER
-{
-    SlotName = "Kopfzeile einfügen";
-    SlotName [ english ] =  "Kopfzeile einfügen";
-    SlotName[ english_us ] = "Insert Header";
-    SlotName[ portuguese ] = "Inserir cabeçalho";
-    SlotName[ russian ] = "Âñòàâèòü âåğõíèé êîëîíòèòóë";
-    SlotName[ dutch ] = "Koptekst invoegen";
-    SlotName[ french ] = "Insérer un en-tête";
-    SlotName[ spanish ] = "Insertar encabezamiento";
-    SlotName[ italian ] = "Inserisci riga d'intestazione ";
-    SlotName[ danish ] = "Indsæt sidehoved";
-    SlotName[ swedish ] = "Infoga sidhuvud";
-    SlotName[ polish ] = "Wstaw nag³ówek";
-    SlotName[ portuguese_brazilian ] = "Inserir Cabeçalho";
-    SlotName[ japanese ] = "ãƒ˜ãƒƒãƒ€ã®æŒ¿å…¥";
-    SlotName[ chinese_simplified ] = "æ’å…¥é¡µçœ‰";
-    SlotName[ chinese_traditional ] = "æ’å…¥é é¦–";
-    SlotName[ arabic ] = "ÅÏÑÇÌ ÑÃÓ ÕİÍÉ";
-    SlotName[ dutch ] = "Koptekst invoegen";
-    SlotName[ chinese_simplified ] = "æ’å…¥é¡µçœ‰";
-    SlotName[ greek ] = "ÅéóáãùãŞ êåöáëßäáò";
-    SlotName[ korean ] = "ë¨¸ë¦¬ê¸€ ì‚½ì…";
-    SlotName[ turkish ] = "Üstbilgi ekle";
-    SlotName[ language_user1 ] = " ";
-    SlotName[ catalan ] = "Insereix una capçalera";
-    SlotName[ finnish ] = "Lisää ylätunniste";
-    SlotName[ thai ] = "à¹à¸—à¸£à¸à¸ªà¹ˆà¸§à¸™à¸«à¸±à¸§";
-    SlotName[ czech ] = "VloÅ¾it zÃ¡hlavÃ­";
-    SlotName[ hebrew ] = "â€®×”×•×¡×¤×ª ×›×•×ª×¨×ª ×¢×œ×™× ×”â€¬";
-    SlotName[ hindi ] = "à¤ªà¥ƒà¤·à¥à¤  à¤•à¥‡ à¤Šà¤ªà¤° à¤•à¥€ à¤Ÿà¥€à¤•à¤¾ à¤•à¥‹ à¤œà¥‹à¤¡à¤¼à¥‹";
-    SlotName[ slovak ] = "VloÅ¾iÅ¥ zÃ¡hlavie";
-    SlotName[ hungarian ] = "Ã‰lÅ‘fej beszÃºrÃ¡sa";
-    SlotName[ slovenian ] = "Vstavi glavo";
 };
 SfxSlotInfo FN_INSERT_HRULER
 {
