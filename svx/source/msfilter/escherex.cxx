@@ -2,9 +2,9 @@
  *
  *  $RCSfile: escherex.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: sj $ $Date: 2002-05-31 11:04:19 $
+ *  last change: $Author: sj $ $Date: 2002-08-13 10:21:33 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -822,6 +822,7 @@ sal_Bool EscherPropertyContainer::CreateGraphicProperties(
     if ( pGraphicProvider && pPicOutStrm && pShapeBoundRect )
     {
         sal_Bool        bMirrored = sal_False;
+        sal_Bool        bRotate   = sal_True;
         GraphicAttr*    pGraphicAttr = NULL;
         GraphicObject   aGraphicObject;
         String          aGraphicUrl;
@@ -840,6 +841,9 @@ sal_Bool EscherPropertyContainer::CreateGraphicProperties(
                 ::com::sun::star::uno::Sequence<sal_uInt8> aSeq = *(::com::sun::star::uno::Sequence<sal_uInt8>*)aAny.getValue();
                 const sal_uInt8*    pAry = aSeq.getArray();
                 sal_uInt32          nAryLen = aSeq.getLength();
+
+                // the metafile is already rotated
+                bRotate = sal_False;
 
                 if ( pAry && nAryLen )
                 {
@@ -974,8 +978,8 @@ sal_Bool EscherPropertyContainer::CreateGraphicProperties(
                 }
                 else
                 {
-                    sal_uInt16 nAngle = ( EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet,
-                                            String( RTL_CONSTASCII_USTRINGPARAM( "RotateAngle" ) ), sal_True ) )
+                    sal_uInt16 nAngle = bRotate && EscherPropertyValueHelper::GetPropertyValue( aAny, rXPropSet,
+                                            String( RTL_CONSTASCII_USTRINGPARAM( "RotateAngle" ) ), sal_True )
                                         ? (sal_uInt16)( ( *((sal_Int32*)aAny.getValue() ) ) + 5 ) / 10
                                         : 0;
 
