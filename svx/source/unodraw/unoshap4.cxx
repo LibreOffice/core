@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshap4.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: cl $ $Date: 2002-01-18 16:35:19 $
+ *  last change: $Author: hr $ $Date: 2003-04-04 17:27:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,8 @@
 #ifndef _SVDOOLE2_HXX
 #include "svdoole2.hxx"
 #endif
+
+#include <so3/outplace.hxx>
 
 #ifndef SVX_LIGHT
 #ifndef _SOT_CLSIDS_HXX
@@ -264,8 +266,23 @@ sal_Bool SvxOle2Shape::createObject( const SvGlobalName &aClassName )
 
     // create storage and inplace object
     String              aEmptyStr;
-    SvStorageRef        aStor( new SvStorage( aEmptyStr, STREAM_STD_READWRITE ) );
-    SvInPlaceObjectRef  aIPObj( &((SvFactory*)SvInPlaceObject::ClassFactory())->CreateAndInit( aClassName, aStor) );
+    SvStorageRef        aStor;
+    const SotFactory* pFact = SvFactory::Find( aClassName );
+    SvInPlaceObjectRef aIPObj;
+    if ( pFact )
+    {
+        aStor = new SvStorage( aEmptyStr, STREAM_STD_READWRITE );
+        aIPObj = &((SvFactory*)SvInPlaceObject::ClassFactory())->CreateAndInit( aClassName,aStor );
+    }
+    else
+    {
+        aStor = new SvStorage( FALSE, aEmptyStr, STREAM_STD_READWRITE );
+        String aFileName;
+        BOOL bOk;
+        SvGlobalName aName( aClassName );
+        aIPObj = SvOutPlaceObject::InsertObject( NULL, &aStor, bOk, aName, aFileName );
+    }
+
     SvPersist*          pPersist = pModel->GetPersist();
     sal_Bool            bOk = sal_False;
     String              aPersistName;
@@ -317,7 +334,15 @@ sal_Bool SvxOle2Shape::createObject( const SvGlobalName &aClassName )
     }
 
     static_cast< SdrOle2Obj* >( pObj )->SetObjRef( aIPObj );
-    aIPObj->SetVisAreaSize( static_cast< SdrOle2Obj* >( pObj )->GetLogicRect().GetSize() );
+    Rectangle aRect = static_cast< SdrOle2Obj* >( pObj )->GetLogicRect();
+    if ( aRect.GetWidth() == 100 && aRect.GetHeight() == 100 )
+    {
+        // default size
+        aRect.SetSize( aIPObj->GetVisArea().GetSize() );
+        static_cast< SdrOle2Obj* >( pObj )->SetLogicRect( aRect );
+    }
+    else
+        aIPObj->SetVisAreaSize( static_cast< SdrOle2Obj* >( pObj )->GetLogicRect().GetSize() );
     return bOk;
 }
 
