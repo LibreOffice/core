@@ -2,9 +2,9 @@
  *
  *  $RCSfile: menu.src,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: fs $ $Date: 2002-08-12 14:16:16 $
+ *  last change: $Author: kz $ $Date: 2002-08-15 20:13:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,7 +137,14 @@ Menu RID_MAIN_MENU
                 Text = "S~enden" ;
                 Text [ english ] = "Send to" ;
                 Text [ english_us ] = "Sen~d" ;
-            };
+                Text[ french ] = "Envo~yer";
+                        Text[ italian ] = "~Invia";
+                        Text[ swedish ] = "Ski~cka";
+                        Text[ japanese ] = "送る";
+                        Text[ korean ] = "보내기(~D)";
+                        Text[ chinese_simplified ] = "发送(~D)";
+                        Text[ chinese_traditional ] = "傳送(~D)";
+                    };
             MenuItem
             {
                 Separator = TRUE ;      // -----------------------------
@@ -253,7 +260,12 @@ Menu RID_MAIN_MENU
                 Checkable=TRUE;
                 Text = "~Datenquelle ausw�hlen..." ;
                 Text[ english_us ] = "~Choose Data Source...";
-               };
+                   Text[ swedish ] = "Byt ut ~datak�lla...";
+                        Text[ japanese ] = "データソースの交換...";
+                        Text[ korean ] = "데이터 원본 교환(~D)...";
+                        Text[ chinese_simplified ] = "更换数据源(~D)...";
+                        Text[ chinese_traditional ] = "替換資料源(~D)...";
+                    };
             MenuItem
             {
                 HelpId = HID_BIB_DELETE_RECORD;
