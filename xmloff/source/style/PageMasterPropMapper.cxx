@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PageMasterPropMapper.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: sab $ $Date: 2000-10-25 15:00:52 $
+ *  last change: $Author: dr $ $Date: 2000-10-26 07:54:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -329,23 +329,17 @@ void XMLPageMasterPropSetMapper::ContextFilter(
     aHeaderBuffer.ContextFilter( rPropState );
     aFooterBuffer.ContextFilter( rPropState );
 
-    if( pPMHeaderHeight && pPMHeaderMinHeight )
-    {
-        if( pPMHeaderDynamic && getBOOL( pPMHeaderDynamic->maValue ) )
-            lcl_RemoveState( pPMHeaderHeight );
-        else
-            lcl_RemoveState( pPMHeaderMinHeight );
-    }
+    if( pPMHeaderHeight && (!pPMHeaderDynamic || (pPMHeaderDynamic && getBOOL( pPMHeaderDynamic->maValue ))) )
+        lcl_RemoveState( pPMHeaderHeight );
+    if( pPMHeaderMinHeight && pPMHeaderDynamic && !getBOOL( pPMHeaderDynamic->maValue ) )
+        lcl_RemoveState( pPMHeaderMinHeight );
     if( pPMHeaderDynamic )
         lcl_RemoveState( pPMHeaderDynamic );
 
-    if( pPMFooterHeight && pPMFooterMinHeight )
-    {
-        if( pPMFooterDynamic && getBOOL( pPMFooterDynamic->maValue ) )
-            lcl_RemoveState( pPMFooterHeight );
-        else
-            lcl_RemoveState( pPMFooterMinHeight );
-    }
+    if( pPMFooterHeight && (!pPMFooterDynamic || (pPMFooterDynamic && getBOOL( pPMFooterDynamic->maValue ))) )
+        lcl_RemoveState( pPMFooterHeight );
+    if( pPMFooterMinHeight && pPMFooterDynamic && !getBOOL( pPMFooterDynamic->maValue ) )
+        lcl_RemoveState( pPMFooterMinHeight );
     if( pPMFooterDynamic )
         lcl_RemoveState( pPMFooterDynamic );
 
