@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: hjs $ $Date: 2003-08-19 12:28:31 $
+ *  last change: $Author: hr $ $Date: 2004-04-07 12:46:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -454,6 +454,8 @@ typedef FASTBOOL (SwWrtShell:: *FNSimpleMove)();
                 SwRootFrm* pMaster = 0, const SwViewOption *pViewOpt = 0);
     virtual ~SwWrtShell();
 
+    BOOL TryRemoveIndent(); // #i23725#
+
 private:
 
     void    OpenMark();
@@ -584,6 +586,7 @@ private:
     FASTBOOL MoveBookMark(  BookMarkMove eFuncId,
                             USHORT nPos = 0,
                             BOOL bStart = TRUE );
+
 
 };
 
