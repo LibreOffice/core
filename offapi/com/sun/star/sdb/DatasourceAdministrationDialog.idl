@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatasourceAdministrationDialog.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tra $ $Date: 2001-07-03 09:00:57 $
+ *  last change: $Author: mi $ $Date: 2001-10-25 15:00:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -94,7 +94,7 @@ service DatasourceAdministrationDialog
     [property] string Title;
 
     /** parent window to use for the administration dialog
-        <p>This property can't be set while the dialog is beeing displayed.</p>
+        <p>This property can't be set while the dialog is being displayed.</p>
     */
     [property] com::sun::star::awt::XWindow ParentWindow;
 
@@ -102,21 +102,21 @@ service DatasourceAdministrationDialog
     */
     interface com::sun::star::beans::XPropertySet;
 
-    /** allows to start the execution of the administration dialog
+    /** allows starting execution of the administration dialog
     */
     interface com::sun::star::ui::dialogs::XExecutableDialog;
 
-    /** allows to initialize the dialog
+    /** allows initializing the dialog
         <p>You do not need to call the initialize method directly, instead you may use the createInstanceWithArguments
         method of your <type scope="com::sun::star::lang">XMultiServiceFactory</type>.</p>
 
         <p>You specify a parameter by passing one (or more) <type scope="com::sun::star::beans">PropertyValue</type>
         object(s) to the initialize method, where the <em>Name</em> field contains a string describing which aspect
         you want to affect, and the <em>Value</em> field containing a value.
-        <br/>
+        <br>
         Imagine the initialization values as if you use setPropertyValue of the <type scope="com::sun::star::beans">XPropertySet</type>
         interface ...
-        <br/>
+        <br>
         allowed parameters are
         <ul>
             <li><b>Title</b><br/>
@@ -142,6 +142,9 @@ service DatasourceAdministrationDialog
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.6  2001/07/03 09:00:57  tra
+ *  must change com/sun/star/ui -> com/sun/star/ui/dialogs/
+ *
  *  Revision 1.5  2001/03/16 16:41:32  jsc
  *  remove interfaceheader with uik and remove [const] in method definitions
  *

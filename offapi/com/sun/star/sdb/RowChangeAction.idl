@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowChangeAction.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:31 $
+ *  last change: $Author: mi $ $Date: 2001-10-25 15:00:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,19 +65,19 @@
 
 
 // DocMerge from idl: constants com::sun::star::sdb::RowChangeAction
-/** determines the type of the change which is going to be performed.
+/** determines the type of change which is going to be performed.
  */
 constants RowChangeAction
 {
 
     // DocMerge from idl: value com::sun::star::sdb::RowChangeAction::INSERT
-    /** indicates that a insert will be performed.
+    /** indicates that an insert will be performed.
      */
     const long INSERT   = 1;
     //-------------------------------------------------------------------------
 
     // DocMerge from idl: value com::sun::star::sdb::RowChangeAction::UPDATE
-    /** indicates that a update will be performed.
+    /** indicates that an update will be performed.
      */
     const long UPDATE   = 2;
     //-------------------------------------------------------------------------
@@ -94,6 +94,9 @@ constants RowChangeAction
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:43:31  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:37  hjs
     initial import
 

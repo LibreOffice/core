@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseContext.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:31 $
+ *  last change: $Author: mi $ $Date: 2001-10-25 15:00:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,8 +78,8 @@
 // DocMerge from xml: service com::sun::star::sdb::DatabaseContext
 /** is the context for accessing datasource.
 
-    <p>A datasource contains information how to create a connection to a database, like which databse driver
-    should be used, for which user should a connection be established. <br>
+    <p>A datasource contains information how to create a connection to a database, such as, which databse driver
+    should be used, for which user should a connection be established, etc. <br>
     The context stores datasources under a given name.
 
     </p>@see com::sun::star::sdb::DataSource
@@ -111,6 +111,9 @@ service DatabaseContext
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:43:31  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:36  hjs
     initial import
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XCompletedExecution.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:32 $
+ *  last change: $Author: mi $ $Date: 2001-10-25 15:00:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,7 +73,7 @@
 
 
 // DocMerge from xml: interface com::sun::star::sdb::XCompletedExecution
-/** is used for execution where informations for execution may be required from
+/** is used for execution where information for execution may be required from
     the user.
  */
 interface XCompletedExecution: com::sun::star::uno::XInterface
@@ -92,6 +92,9 @@ interface XCompletedExecution: com::sun::star::uno::XInterface
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.4  2001/03/16 16:41:32  jsc
+    remove interfaceheader with uik and remove [const] in method definitions
+
     Revision 1.3  2000/11/08 12:43:31  mi
     moved from api
 

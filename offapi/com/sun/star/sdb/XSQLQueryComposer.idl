@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XSQLQueryComposer.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:32 $
+ *  last change: $Author: mi $ $Date: 2001-10-25 15:00:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,8 +121,8 @@ interface XSQLQueryComposer: com::sun::star::uno::XInterface
 
     // DocMerge from idl: method com::sun::star::sdb::XSQLQueryComposer::getStructuredFilter
     /** returns the currently used filter.
-             <p>The filter criteria is splitted into levels. Each level represents the
-             OR criterias. Within each level the Filters are provided as AND criteria
+             <p>The filter criteria is split into levels. Each level represents the
+             OR criterias. Within each level, the Filters are provided as an AND criteria
              with the name of the column and the filter condition. The filter condition
              is of type string.
      */
@@ -178,6 +178,9 @@ interface XSQLQueryComposer: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2001/03/16 16:41:32  jsc
+    remove interfaceheader with uik and remove [const] in method definitions
+
     Revision 1.3  2000/11/08 12:43:31  mi
     moved from api
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XBookmarksSupplier.idl,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-26 09:10:51 $
+ *  last change: $Author: mi $ $Date: 2001-10-25 15:00:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,8 +82,7 @@ interface XBookmarksSupplier: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
-    /** @returns
-            the collection of all bookmarks associated with a data source
+    /** @returns    the collection of all bookmarks associated with a data source
             <p>A bookmark is simply a string specifying the location of the
             bookmarked document.</p>
      */
@@ -98,6 +97,9 @@ interface XBookmarksSupplier: com::sun::star::uno::XInterface
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.1  2001/04/26 09:10:51  fs
+    initial checkin - supply bookmarks associated with a DataSource
+
 
 =============================================================================*/
 #endif

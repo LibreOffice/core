@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ColumnSettings.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: fs $ $Date: 2001-09-24 11:21:17 $
+ *  last change: $Author: mi $ $Date: 2001-10-25 15:00:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,8 @@ service ColumnSettings
         <p>
         If the value is <void/>, a default numberformat should be used according
         to the datatype of the column.</p>
-     */
+
+<!-- JRH: orig: <type scope="com::sun::star::util">XNumberFormatter</type> -->*/
     [property] long FormatKey;
 
 
@@ -127,7 +128,8 @@ service ColumnSettings
      */
     [optional, property] com::sun::star::beans::XPropertySet ControlModel;
 
-    /** describes an optional help text which can be used by UI components when representing this column.
+    /** describes an optional help text which can be used by UI components
+ when representing this column.
     */
     [optional, property] string HelpText;
 };
@@ -138,6 +140,9 @@ service ColumnSettings
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.7  2001/09/24 11:21:17  fs
+    #65293#
+
     Revision 1.6  2001/09/19 12:04:14  fs
     #92159# +HelpText (optional)
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataSource.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-04-26 09:13:56 $
+ *  last change: $Author: mi $ $Date: 2001-10-25 15:00:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,7 +113,7 @@ service DataSource
      */
     interface XQueryDefinitionsSupplier;
 
-    /** provides the access to bookmarks to documents associated with the data source
+    /** provides access to bookmarks to documents associated with the data source
         <p>The object returned by the <method>XBookmarksSupplier::getBookmarks</method> supports the
         <service>DefinitionContainer</service> service.</p>
      */
@@ -153,13 +153,13 @@ service DataSource
     [property] boolean IsPasswordRequired;
 
 
-    /** indicates that components displaying data obtained from this data source should suppress columns used for versioning.
+    /** indicates that components displaying data obtained from this
+ data source should suppress columns used for versioning.
      */
     [property] boolean SuppressVersionColumns;
 
 
-    /** determines whether modifications on the data source are are allowed
-        or not.
+    /** determines whether modifications on the data source are allowed or not.
      */
     [readonly, property] boolean IsReadOnly;
 
@@ -172,13 +172,15 @@ service DataSource
 
     /** defines a list of tables, on which the DataSource should have it's focus.
              If empty, all the tables of the are used.
-     */
+
+<!-- JRH: the second line is incomplete --> */
     [property] sequence<string> TableFilter;
 
 
     /** defines a list of table types, on which the DataSource should have it's focus.
-             If empty, all the tables types of the are used.
-     */
+             If empty, all the table types of the are used.
+
+<!-- JRH: the second line is incomplete -->      */
     [property] sequence<string> TableTypeFilter;
 };
 
@@ -188,6 +190,9 @@ service DataSource
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.6  2001/04/26 09:13:56  fs
+    added (optional) interface XBookmarksSupplier
+
     Revision 1.5  2001/02/07 11:11:30  fs
     a new missing detail ...
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XDatabaseAccess.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:32 $
+ *  last change: $Author: mi $ $Date: 2001-10-25 15:00:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,8 +87,8 @@ interface XDatabaseAccessListener;
 
 // DocMerge from xml: interface com::sun::star::task::com::sun::star::sdb::XDatabaseAccess
 /** is used to connect to a data access bean. A data access bean represents a
-    database connection and provides additional informations related to the connection
-    like forms, reports, or queries.
+    database connection and provides additional information related to the connection
+    such as forms, reports, or queries.
  */
 interface XDatabaseAccess: com::sun::star::sdbc::XDataSource
 {
@@ -135,6 +135,9 @@ interface XDatabaseAccess: com::sun::star::sdbc::XDataSource
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.4  2001/03/16 16:41:32  jsc
+    remove interfaceheader with uik and remove [const] in method definitions
+
     Revision 1.3  2000/11/08 12:43:31  mi
     moved from api
 

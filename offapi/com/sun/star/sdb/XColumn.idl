@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XColumn.idl,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: jsc $ $Date: 2001-03-16 16:41:32 $
+ *  last change: $Author: mi $ $Date: 2001-10-25 15:00:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -166,11 +166,11 @@ interface XColumn: com::sun::star::uno::XInterface
     // DocMerge from idl: method com::sun::star::io::com::sun::star::container::com::sun::star::sdbc::com::sun::star::sdb::XColumn::getBytes
     /** gets the value of a column in the current row as a byte array.
              The bytes represent the raw values returned by the driver.
-             @returns
-                the column value; if the value is SQL NULL, the result is empty.
+             @returns  the column value;
+if the value is SQL NULL, the result is empty.
              @throws com::sun::star::sdbc::SQLException
                 if a database access error occurs.
-     */
+    */
     sequence<byte> getBytes() raises (com::sun::star::sdbc::SQLException);
     //-------------------------------------------------------------------------
 
@@ -221,14 +221,12 @@ interface XColumn: com::sun::star::uno::XInterface
         stream. This method is particularly suitable for retrieving large
         LONGVARCHAR values.
 
-
         <p>
         <b>Note:</b> All the data in the returned stream must be
         read prior to getting the value of any other column. The next
         call to a get method implicitly closes the stream. Also, a
         stream may return 0 when the method <code>available</code>
-        is called whether there is data
-        available or not.
+        is called whether there is data available or not.
         </p>
      */
     com::sun::star::io::XInputStream getCharacterStream()
@@ -236,7 +234,7 @@ interface XColumn: com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::io::com::sun::star::container::com::sun::star::sdbc::com::sun::star::sdb::XColumn::getObject
-    /** returns the value of a column in the current row as an object.
+    /** @returns the value of a column in the current row as an object.
         This method uses the given <code>Map</code> object
         for the custom mapping of the SQL structure or distinct type
         that is being retrieved.
@@ -246,8 +244,10 @@ interface XColumn: com::sun::star::uno::XInterface
     //-------------------------------------------------------------------------
 
     // DocMerge from xml: method com::sun::star::io::com::sun::star::container::com::sun::star::sdbc::com::sun::star::sdb::XColumn::getRef
-    /** gets a REF(&amp;lt;structured-type&amp;gt;) column value from the current row.
-     */
+    /** gets a REF(&lt;structured-type&gt) column value from the current row.
+
+<!-- JRH: html changed from "REF(&amp;lt;structured-type&amp;gt;)" -->
+*/
     com::sun::star::sdbc::XRef getRef() raises (com::sun::star::sdbc::SQLException);
     //-------------------------------------------------------------------------
 
@@ -275,6 +275,9 @@ interface XColumn: com::sun::star::uno::XInterface
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.4  2001/03/16 16:41:32  jsc
+    remove interfaceheader with uik and remove [const] in method definitions
+
     Revision 1.3  2000/11/08 12:43:31  mi
     moved from api
 

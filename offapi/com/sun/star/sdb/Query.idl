@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Query.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:31 $
+ *  last change: $Author: mi $ $Date: 2001-10-25 15:00:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,8 +85,7 @@ interface XRename;
 // DocMerge from xml: service com::sun::star::sdbcx::com::sun::star::sdb::Query
 /** is a stored definition of a SQL query.
 
-
-    <p>It can be used if there is a need to execute SQL statements more than once or
+    <p>It can be used if there is a need to execute SQL statements more than once, or
     if you want to format the query result fields differently from the
     underlying table definitions.</p>
  */
@@ -106,7 +105,7 @@ service Query
 
 
     // DocMerge from xml: service com::sun::star::sdbcx::com::sun::star::sdb::Query: interface com::sun::star::sdbcx::XDataDescriptorFactory
-    /** is provided for creation of a new query descriptor based on the current informations.
+    /** is provided for creation of a new query descriptor based on the current information.
      */
     interface com::sun::star::sdbcx::XDataDescriptorFactory;
 
@@ -126,6 +125,9 @@ service Query
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:43:31  mi
+    moved from api
+
     Revision 1.1.1.1  2000/09/18 23:35:36  hjs
     initial import
 

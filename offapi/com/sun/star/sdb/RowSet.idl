@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-01-24 09:56:11 $
+ *  last change: $Author: mi $ $Date: 2001-10-25 15:00:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -89,15 +89,19 @@ interface XResultSetAccess;
     a query or a SQL command or by a rowset reader, who mustn't support SQL.
     The connection of the rowset is typically a named DataSource or a DataAccess component
     or a previous instanciated connection.
+<!-- JRH: Trial text below, is this what is intended?  No changes to above text.
 
-
+ is a client side RowSet, use of which retrieves data, based on a database table,
+    a query or a SQL command or by a rowset reader, which must not support SQL.
+    The connection of the rowset is typically a named DataSource, a DataAccess component,
+    or a previous instanciated connection.
+  -->
     <p>Depending on the ResultSetConcurrency, the RowSet caches all data or uses
-    a optimized way for retrieving the data like refetching rows by their keys or
-    if provided by their bookmarks.
+    an optimized way for retrieving the data, such as, refetching rows by their keys or
+    if provided, by their bookmarks.
     </p>
     <p>In addition, it provides events for RowSet navigation and RowSet modifications
     to approve the actions and to react on them.
-
     </p>
  */
 service RowSet
@@ -110,17 +114,17 @@ service RowSet
 
 
     // DocMerge from xml: service com::sun::star::sdbc::com::sun::star::sdbcx::com::sun::star::sdb::RowSet: interface com::sun::star::sdbc::com::sun::star::sdbcx::com::sun::star::sdb::XRowSetApproveBroadcaster
-    /** proving of actions performed on the rowset.
+    /** approving of actions performed on the rowset.
      */
     interface XRowSetApproveBroadcaster;
 
 
     // DocMerge from xml: service com::sun::star::sdbc::com::sun::star::sdbcx::com::sun::star::sdb::RowSet: interface com::sun::star::sdbc::com::sun::star::sdbcx::com::sun::star::sdb::XResultSetAccess
     /** creates a second result set which is based on the same data.
-        <p>The new result set is interoperable with the row set which created it, e.g., you can exchange bookmarks between
-        both sets.</p>
-        <p>If the row set is not alive (i.e. it was not executed before), <NULL/> is returned.</p>
-     */
+        <p>The new result set is interoperable with the row set which created it,
+        e.g., you can exchange bookmarks between both sets.</p>
+        <p>If the row set is not alive (i.e., it was not executed before), <NULL/> is returned.</p>
+                                                            */
     interface XResultSetAccess;
 
 
@@ -183,7 +187,7 @@ service RowSet
 
 
     // DocMerge from xml: property com::sun::star::sdbc::com::sun::star::sdbcx::com::sun::star::sdb::RowSet::Privileges
-    /** indicates the privileges for insert, update and delete.@see com::sun::star::sdbcx::Privilege
+    /** indicates the privileges for insert, update, and delete.@see com::sun::star::sdbcx::Privilege
      */
     [readonly, property] long Privileges;
 
@@ -242,6 +246,9 @@ service RowSet
 
 /*===========================================================================
     $Log: not supported by cvs2svn $
+    Revision 1.6  2001/01/24 09:56:11  fs
+    #83074# extended the doc for the XResultSetAccess interface
+
     Revision 1.5  2001/01/23 10:08:26  mi
     optional interfaces now marked as [optional] instead of just a prosa description of this fact
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ParametersRequest.idl,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mi $ $Date: 2000-11-08 12:43:31 $
+ *  last change: $Author: mi $ $Date: 2001-10-25 15:00:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -78,22 +78,22 @@
 
 //=============================================================================
 
-/** an error specifying the lack of parameters values<p/>
+/** an error specifying the lack of parameters values</p>
     Usually thrown if someone tries to execute an SQL statement containing
     parameters which can't be filled by the executing instance.
 */
 exception ParametersRequest: com::sun::star::task::ClassifiedInteractionRequest
 {
-    /** is the list of parameters requested.<p/>
+    /** is the list of parameters requested.</p>
         The objects returned by the <type scope="com.sun.star.container">XIndexAccess</type> have to
         be property sets describing the respective parameter. For this, the objects have to support the
         service <service scope="com.sun.star.sdbcx">Column</service>.
     */
     com::sun::star::container::XIndexAccess Parameters;
 
-    /** specifies the connection on which the statement is to be executed.<p/>
+    /** specifies the connection on which the statement is to be executed.</p>
         Somebody handling the request could, e.g., use the connection for determining
-        the identifier quote string etc.
+        the identifier quote string, etc.
     */
     com::sun::star::sdbc::XConnection       Connection;
 };
@@ -105,6 +105,9 @@ exception ParametersRequest: com::sun::star::task::ClassifiedInteractionRequest
 /*=============================================================================
 
     $Log: not supported by cvs2svn $
+    Revision 1.3  2000/11/08 12:43:31  mi
+    moved from api
+
     Revision 1.2  2000/10/26 18:01:49  fs
     documentation changed / added the Connection member, as it's very necessary to fullfill such a request
 
