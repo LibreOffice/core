@@ -2,9 +2,9 @@
 *
 *  $RCSfile: FieldColumn.java,v $
 *
-*  $Revision: 1.6 $
+*  $Revision: 1.7 $
 *
-*  last change: $Author: vg $ $Date: 2005-03-08 15:35:21 $
+*  last change: $Author: kz $ $Date: 2005-03-18 16:15:17 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -59,11 +59,13 @@
 */
 package com.sun.star.wizards.db;
 
+import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XNameAccess;
 import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.sdbc.DataType;
 import com.sun.star.uno.AnyConverter;
 import com.sun.star.uno.Exception;
+import com.sun.star.uno.UnoRuntime;
 import com.sun.star.wizards.common.*;
 
 public class FieldColumn {
@@ -79,7 +81,7 @@ public class FieldColumn {
     public int FieldType;
     public int StandardFormatKey;
     public boolean bIsNumberFormat;
-    public Object oField;
+    public XPropertySet xColPropertySet;
     public int iType;
     protected int iDateFormatKey;
     protected int iDateTimeFormatKey;
@@ -104,11 +106,27 @@ public class FieldColumn {
         setFormatKeys(oCommandMetaData, oTable.xColumns);
     }
 
+    public FieldColumn(CommandMetaData oCommandMetaData, String _FieldName, String _CommandName) {
+        CommandName = _CommandName;
+        FieldName = _FieldName;
+        DisplayFieldName = FieldName;
+        AliasName = FieldName;
+        FieldTitle = FieldName;
+        //TODO check if the aliasname doesn't occur twice in query
+        AliasName = FieldName;
+        DBMetaData.CommandObject oTable = oCommandMetaData.getTableByName(CommandName);
+        setFormatKeys(oCommandMetaData, oTable.xColumns);
+    }
+
+
+
+
+
     private void setFormatKeys(CommandMetaData oCommandMetaData, XNameAccess _xColumns){
         try {
-            oField = _xColumns.getByName(FieldName);
+            xColPropertySet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, _xColumns.getByName(FieldName));
             ColIndex = JavaTools.FieldInList(_xColumns.getElementNames(), FieldName) + 1;
-            iType = AnyConverter.toInt(Helper.getUnoPropertyValue(oField, "Type"));
+            iType = AnyConverter.toInt(xColPropertySet.getPropertyValue("Type"));
             iDateFormatKey = oCommandMetaData.getNumberFormatter().getDateFormatKey();
             iDateTimeFormatKey = oCommandMetaData.getNumberFormatter().getDateTimeFormatKey();
             iNumberFormatKey = oCommandMetaData.getNumberFormatter().getNumberFormatKey();
@@ -173,7 +191,7 @@ public class FieldColumn {
     public int getFormatKey() {
         try {
             int iKey;
-            Object oKey = Helper.getUnoPropertyValue(oField, "FormatKey");
+            Object oKey = this.xColPropertySet.getPropertyValue( "FormatKey");
             if (AnyConverter.isVoid(oKey))
                 DBFormatKey = StandardFormatKey;
             else
@@ -187,7 +205,7 @@ public class FieldColumn {
 
     private Object getTyperelatedFieldData() {
         try {
-            FieldType = AnyConverter.toInt(Helper.getUnoPropertyValue(oField, "Type"));
+            FieldType = AnyConverter.toInt(xColPropertySet.getPropertyValue("Type"));
             switch (FieldType) {
                 case DataType.BIT : // ==  -7;
                     // Todo: Look if the defaultvalue has been set in the Datasource
@@ -246,25 +264,25 @@ public class FieldColumn {
 
                 case DataType.DECIMAL : // ==   3;  [mit Nachkommastellen]
                     StandardFormatKey = iNumberFormatKey;
-                    FieldWidth = 10 + AnyConverter.toInt(Helper.getUnoPropertyValue(oField, "Scale")) + 1;
+                    FieldWidth = 10 + AnyConverter.toInt(xColPropertySet.getPropertyValue("Scale")) + 1;
                     bIsNumberFormat = true;
                     break;
 
                 case DataType.FLOAT : // ==   6;
                     StandardFormatKey = iNumberFormatKey;
-                    FieldWidth = 10 + AnyConverter.toInt(Helper.getUnoPropertyValue(oField, "Scale")) + 1;
+                    FieldWidth = 10 + AnyConverter.toInt(xColPropertySet.getPropertyValue("Scale")) + 1;
                     bIsNumberFormat = true;
                     break;
 
                 case DataType.REAL : // ==   7;
                     StandardFormatKey = iNumberFormatKey;
-                    FieldWidth = 10 + AnyConverter.toInt(Helper.getUnoPropertyValue(oField, "Scale")) + 1;
+                    FieldWidth = 10 + AnyConverter.toInt(xColPropertySet.getPropertyValue("Scale")) + 1;
                     bIsNumberFormat = true;
                     break;
 
                 case DataType.DOUBLE : // ==   8;
                     StandardFormatKey = iNumberFormatKey;
-                    FieldWidth = 10 + AnyConverter.toInt(Helper.getUnoPropertyValue(oField, "Scale")) + 1;
+                    FieldWidth = 10 + AnyConverter.toInt(xColPropertySet.getPropertyValue("Scale")) + 1;
                     bIsNumberFormat = true;
                     break;
 
@@ -288,7 +306,7 @@ public class FieldColumn {
             }
             DBFormatKey = getFormatKey();
             return DefaultValue;
-        } catch (com.sun.star.lang.IllegalArgumentException exception) {
+        } catch (Exception exception) {
             exception.printStackTrace(System.out);
             return null;
         }
@@ -297,7 +315,7 @@ public class FieldColumn {
     private void getTextFieldWidth(int iWidth) {
         int iNewWidth = iWidth;
         try {
-            FieldWidth = AnyConverter.toInt(Helper.getUnoPropertyValue(oField, "Precision"));
+            FieldWidth = AnyConverter.toInt(xColPropertySet.getPropertyValue("Precision"));
             if (FieldWidth > 0) {
                 if (FieldWidth > (2 * iWidth))
                     FieldWidth = 2 * iWidth;
