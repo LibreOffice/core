@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cellsuno.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-10-18 18:26:04 $
+ *  last change: $Author: nn $ $Date: 2000-12-18 19:28:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -789,7 +789,6 @@ private:
     ScAddress               aCellPos;
 
 private:
-    SvxUnoText& GetUnoText();
     String      GetInputString_Impl(BOOL bEnglish) const;
     String      GetOutputString_Impl() const;
     void        SetString_Impl(const String& rString, BOOL bInterpret, BOOL bEnglish);
@@ -810,6 +809,8 @@ public:
     virtual void SAL_CALL   release() throw(::com::sun::star::uno::RuntimeException);
 
     virtual void            RefChanged();
+
+    SvxUnoText&             GetUnoText();
 
                             // XML import needs to set results at formula cells,
                             // not meant for any other purpose.
