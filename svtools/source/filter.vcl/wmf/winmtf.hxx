@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winmtf.hxx,v $
  *
- *  $Revision: 1.24 $
+ *  $Revision: 1.25 $
  *
- *  last change: $Author: vg $ $Date: 2004-01-06 19:29:37 $
+ *  last change: $Author: rt $ $Date: 2004-05-17 16:06:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,7 +206,7 @@ struct LOGFONTW
     BYTE        lfClipPrecision;
     BYTE        lfQuality;
     BYTE        lfPitchAndFamily;
-    BYTE        lfFaceName[ LF_FACESIZE ];
+    String      alfFaceName;
 };
 
 #define TA_NOUPDATECP           0x0000
