@@ -36,6 +36,7 @@ mkdir: %_DEST%\inc%_EXT%\svtools
 ..\%__SRC%\inc\svtools\proped.hxx %_DEST%\inc%_EXT%\svtools\proped.hxx
 
 hedabu: ..\inc\imagemgr.hxx %_DEST%\inc%_EXT%\svtools\imagemgr.hxx
+hedabu: ..\inc\imagemgr.hrc %_DEST%\inc%_EXT%\svtools\imagemgr.hrc
 hedabu: ..\inc\testtool.hxx %_DEST%\inc%_EXT%\svtools\testtool.hxx
 hedabu: ..\inc\flbytes.hxx %_DEST%\inc%_EXT%\svtools\flbytes.hxx
 hedabu: ..\inc\args.hxx %_DEST%\inc%_EXT%\svtools\args.hxx
