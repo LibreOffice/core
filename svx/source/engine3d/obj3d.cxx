@@ -2,9 +2,9 @@
  *
  *  $RCSfile: obj3d.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-22 10:27:01 $
+ *  last change: $Author: rt $ $Date: 2003-10-27 13:26:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3945,7 +3945,7 @@ void E3dCompoundObject::CenterObject(const Vector3D& rCenter)
     Matrix4D aTransMat;
 
     aTransMat.Translate(aMoveVector);
-    SetTransform(GetTransform() * aTransMat);
+    SetTransform(aTransMat * GetTransform()); // #112587#
 }
 
 /*************************************************************************
