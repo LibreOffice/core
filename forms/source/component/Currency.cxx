@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Currency.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2002-12-02 09:56:28 $
+ *  last change: $Author: vg $ $Date: 2003-05-19 13:07:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -249,13 +249,13 @@ void OCurrencyModel::fillProperties(
         // Value auf transient setzen
 //      ModifyPropertyAttributes(_rAggregateProps, PROPERTY_VALUE, PropertyAttribute::TRANSIENT, 0);
 
-        DECL_PROP2(CLASSID,     sal_Int16,          READONLY, TRANSIENT);
-        DECL_PROP3(DEFAULT_VALUE,       double,         BOUND, MAYBEDEFAULT, MAYBEVOID);
+        DECL_PROP2(CLASSID,     sal_Int16,                  READONLY, TRANSIENT);
+        DECL_PROP3(DEFAULT_VALUE,       double,             BOUND, MAYBEDEFAULT, MAYBEVOID);
         DECL_PROP1(NAME,        ::rtl::OUString,            BOUND);
-        DECL_PROP1(TAG,     ::rtl::OUString,            BOUND);
-        DECL_PROP1(TABINDEX,        sal_Int16,          BOUND);
-        DECL_PROP1(CONTROLSOURCE,       ::rtl::OUString,            BOUND);
-        DECL_IFACE_PROP2(BOUNDFIELD,        XPropertySet,   READONLY, TRANSIENT);
+        DECL_PROP1(TAG,     ::rtl::OUString,                BOUND);
+        DECL_PROP1(TABINDEX,        sal_Int16,              BOUND);
+        DECL_PROP1(CONTROLSOURCE,       ::rtl::OUString,    BOUND);
+        DECL_IFACE_PROP3(BOUNDFIELD,        XPropertySet,   BOUND,READONLY, TRANSIENT);
         DECL_IFACE_PROP2(CONTROLLABEL,      XPropertySet,   BOUND, MAYBEVOID);
         DECL_PROP2(CONTROLSOURCEPROPERTY,   rtl::OUString,  READONLY, TRANSIENT);
     FRM_END_PROP_HELPER();

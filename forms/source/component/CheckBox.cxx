@@ -2,9 +2,9 @@
  *
  *  $RCSfile: CheckBox.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2002-12-02 09:56:27 $
+ *  last change: $Author: vg $ $Date: 2003-05-19 13:07:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,7 +205,7 @@ void OCheckBoxModel::_propertyChanged(const PropertyChangeEvent& _rEvent) throw(
 {
     // as we aren't commitable we have to take care of the field we are bound to ourself
     osl::MutexGuard aGuard(m_aMutex);
-    if (m_xField.is() && !m_bInReset)
+    if (getField().is() && !m_bInReset)
     {
 
         sal_uInt16 nState;
@@ -324,7 +324,7 @@ void OCheckBoxModel::fillProperties(
         DECL_PROP1(TAG,             rtl::OUString,      BOUND);
         DECL_PROP1(TABINDEX,        sal_Int16,          BOUND);
         DECL_PROP1(CONTROLSOURCE,   rtl::OUString,      BOUND);
-        DECL_IFACE_PROP2(BOUNDFIELD,    XPropertySet,   READONLY, TRANSIENT);
+        DECL_IFACE_PROP3(BOUNDFIELD,    XPropertySet,   BOUND,READONLY, TRANSIENT);
         DECL_IFACE_PROP2(CONTROLLABEL,  XPropertySet,   BOUND, MAYBEVOID);
         DECL_PROP2(CONTROLSOURCEPROPERTY,   rtl::OUString,  READONLY, TRANSIENT);
     FRM_END_PROP_HELPER();
@@ -453,8 +453,8 @@ sal_Bool OCheckBoxModel::_commit()
 
     // we're in reset, so this commit means "put the value into the field you're bound to"
     // 72769 - 08.02.00 - FS
-    DBG_ASSERT(m_xField.is(), "OCheckBoxModel::_commit : committing while resetting, but not bound ?");
-    if (m_xField.is())
+    DBG_ASSERT(getField().is(), "OCheckBoxModel::_commit : committing while resetting, but not bound ?");
+    if (getField().is())
     {
         try
         {
