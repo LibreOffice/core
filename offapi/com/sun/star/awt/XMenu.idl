@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMenu.idl,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-27 09:02:32 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 17:38:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,14 +70,14 @@
 
  module com {  module sun {  module star {  module awt {
 
-interface XPopupMenu;
-interface XMenuListener;
+ published interface XPopupMenu;
+ published interface XMenuListener;
 
 //=============================================================================
 
 /** specifies a simple menu.
  */
-interface XMenu: com::sun::star::uno::XInterface
+published interface XMenu: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
