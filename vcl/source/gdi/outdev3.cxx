@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outdev3.cxx,v $
  *
- *  $Revision: 1.160 $
+ *  $Revision: 1.161 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 17:32:52 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:54:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -5016,10 +5016,8 @@ void OutputDevice::SetDigitLanguage( LanguageType eTextLanguage )
 {
     DBG_TRACE( "OutputDevice::SetTextLanguage()" );
 
-#if 0   // TODO: evaluate if we need to record it into a meta file
     if( mpMetaFile )
         mpMetaFile->AddAction( new MetaTextLanguageAction( eTextLanguage ) );
-#endif
 
     if( eTextLanguage == LANGUAGE_SYSTEM )
         eTextLanguage = GetSystemLanguage();
