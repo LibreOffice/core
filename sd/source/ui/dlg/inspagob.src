@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inspagob.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-29 16:59:43 $
+ *  last change: $Author: hr $ $Date: 2003-06-13 13:03:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,6 +146,7 @@ ModalDialog DLG_INSERT_PAGES_OBJS
         Text[ czech ] = "Odkaz";
         Text[ hebrew ] = "~Verknüpfung";
         Text[ hindi ] = "~कड़ी";
+        Text[ slovak ] = "~Odkaz";
     };
     CheckBox CBX_CHECK_MASTERS
     {
@@ -178,6 +179,7 @@ ModalDialog DLG_INSERT_PAGES_OBJS
         Text[ czech ] = "Smazat nepoužitá pozadí";
         Text[ hebrew ] = "~Nicht verwendete Hintergrundseiten löschen";
         Text[ hindi ] = "~अनुभ्यस्त पृष्ठभाग को मिटाओ";
+        Text[ slovak ] = "~Zmazať nepoužité pozadia";
     };
     Text[ greek ] = "�������� ������������/�������";
     Text[ korean ] = "슬라이드/개체 삽입";
@@ -189,7 +191,10 @@ ModalDialog DLG_INSERT_PAGES_OBJS
     Text[ czech ] = "Vložit snímky/objekty";
     Text[ hebrew ] = "Seiten/Objekte einfügen";
     Text[ hindi ] = "स्लइडों/वस्तुओं को जोड़ो";
+    Text[ slovak ] = "Vložiť snímky/objekty";
 };
+
+
 
 
 
