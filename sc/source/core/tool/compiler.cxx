@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compiler.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nn $ $Date: 2000-09-26 13:54:15 $
+ *  last change: $Author: nn $ $Date: 2000-10-06 13:46:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -3367,7 +3367,9 @@ ScToken* ScCompiler::CreateStringFromToken( String& rFormula, ScToken* pToken,
                     if (pData)
                     {
                         if (pData->HasType(RT_SHARED))
-                            pData->UpdateSymbol( aStr, aPos );
+                            pData->UpdateSymbol( aStr, aPos,
+                                        pSymbolTable == pSymbolTableEnglish,
+                                        bCompileXML );
                         else
                             pData->GetName(aStr);
                     }
