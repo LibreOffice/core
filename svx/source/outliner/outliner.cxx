@@ -2,9 +2,9 @@
  *
  *  $RCSfile: outliner.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: bm $ $Date: 2002-04-25 10:19:06 $
+ *  last change: $Author: thb $ $Date: 2002-04-26 10:31:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1888,6 +1888,9 @@ EBulletInfo Outliner::GetBulletInfo( USHORT nPara )
         if( pFmt->GetNumberingType() != SVX_NUM_BITMAP )
         {
             aInfo.aText = ImplGetBulletText( nPara );
+
+            if( pFmt->GetBulletFont() )
+                aInfo.aFont = *pFmt->GetBulletFont();
         }
         else if ( pFmt->GetBrush()->GetGraphicObject() )
         {
