@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formmetadata.cxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-10-22 12:26:12 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 12:06:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -70,7 +70,7 @@
 #ifndef _EXTENSIONS_FORMCTRLR_PROPRESID_HRC_
 #include "formresid.hrc"
 #endif
-#ifndef __EXTENSIONS_INC_EXTENSIO_HRC__
+#ifndef EXTENSIONS_INC_EXTENSIO_HRC
 #include "extensio.hrc"
 #endif
 #ifndef _SVTOOLS_LOCALRESACCESS_HXX_
@@ -132,7 +132,7 @@ namespace pcr
     }
 
     //========================================================================
-    //= OFormPropertyInfoService
+    //= OPropertyInfoService
     //========================================================================
 #define DEF_INFO( ident, uinameres, helpid, flags )   \
     OPropertyInfoImpl( PROPERTY_##ident, PROPERTY_ID_##ident, \
@@ -150,10 +150,13 @@ namespace pcr
 #define DEF_INFO_4( ident, uinameres, helpid, flag1, flag2, flag3, flag4 ) \
     DEF_INFO( ident, uinameres, helpid, PROP_FLAG_##flag1 | PROP_FLAG_##flag2 | PROP_FLAG_##flag3 | PROP_FLAG_##flag4 )
 
-    sal_uInt16              OFormPropertyInfoService::s_nCount = 0;
-    OPropertyInfoImpl*      OFormPropertyInfoService::s_pPropertyInfos = NULL;
+#define DEF_INFO_5( ident, uinameres, helpid, flag1, flag2, flag3, flag4, flag5 ) \
+    DEF_INFO( ident, uinameres, helpid, PROP_FLAG_##flag1 | PROP_FLAG_##flag2 | PROP_FLAG_##flag3 | PROP_FLAG_##flag4 | PROP_FLAG_##flag5 )
+
+    sal_uInt16              OPropertyInfoService::s_nCount = 0;
+    OPropertyInfoImpl*      OPropertyInfoService::s_pPropertyInfos = NULL;
     //------------------------------------------------------------------------
-    const OPropertyInfoImpl* OFormPropertyInfoService::getPropertyInfo()
+    const OPropertyInfoImpl* OPropertyInfoService::getPropertyInfo()
     {
         if ( s_pPropertyInfos )
             return s_pPropertyInfos;
@@ -168,161 +171,194 @@ namespace pcr
         /*
         DEF_INFO_?( propname and id,   resoure id,         help id,           flags ),
         */
-        DEF_INFO_2( NAME,              NAME,               NAME,              FORM_VISIBLE, DIALOG_VISIBLE ),
+        DEF_INFO_3( NAME,              NAME,               NAME,              FORM_VISIBLE, DIALOG_VISIBLE, COMPOSEABLE ),
         DEF_INFO_2( TITLE,             TITLE,              TITLE,             FORM_VISIBLE, DIALOG_VISIBLE ),
-        DEF_INFO_2( LABEL,             LABEL,              LABEL,             FORM_VISIBLE, DIALOG_VISIBLE ),
-        DEF_INFO_1( CONTROLLABEL,      LABELCONTROL,       CONTROLLABEL,      FORM_VISIBLE ),
-        DEF_INFO_1( TEXT,              TEXT,               TEXT,              DIALOG_VISIBLE ),
-        DEF_INFO_2( MAXTEXTLEN,        MAXTEXTLEN,         MAXTEXTLEN,        FORM_VISIBLE, DIALOG_VISIBLE ),
-        DEF_INFO_2( EDITMASK,          EDITMASK,           EDITMASK,          FORM_VISIBLE, DIALOG_VISIBLE ),
-        DEF_INFO_2( LITERALMASK,       LITERALMASK,        LITERALMASK,       FORM_VISIBLE, DIALOG_VISIBLE ),
-        DEF_INFO_2( STRICTFORMAT,      STRICTFORMAT,       STRICTFORMAT,      FORM_VISIBLE, DIALOG_VISIBLE ),
-        DEF_INFO_2( ENABLED,           ENABLED,            ENABLED,           FORM_VISIBLE, DIALOG_VISIBLE ),
-        DEF_INFO_2( READONLY,          READONLY,           READONLY,          FORM_VISIBLE, DIALOG_VISIBLE ),
+        DEF_INFO_3( LABEL,             LABEL,              LABEL,             FORM_VISIBLE, DIALOG_VISIBLE, COMPOSEABLE ),
+        DEF_INFO_2( CONTROLLABEL,      LABELCONTROL,       CONTROLLABEL,      FORM_VISIBLE, COMPOSEABLE ),
+        DEF_INFO_2( TEXT,              TEXT,               TEXT,              DIALOG_VISIBLE, COMPOSEABLE ),
+        DEF_INFO_3( MAXTEXTLEN,        MAXTEXTLEN,         MAXTEXTLEN,        FORM_VISIBLE, DIALOG_VISIBLE, COMPOSEABLE ),
+        DEF_INFO_3( EDITMASK,          EDITMASK,           EDITMASK,          FORM_VISIBLE, DIALOG_VISIBLE, COMPOSEABLE ),
+        DEF_INFO_3( LITERALMASK,       LITERALMASK,        LITERALMASK,       FORM_VISIBLE, DIALOG_VISIBLE, COMPOSEABLE ),
+        DEF_INFO_3( STRICTFORMAT,      STRICTFORMAT,       STRICTFORMAT,      FORM_VISIBLE, DIALOG_VISIBLE, COMPOSEABLE ),
+        DEF_INFO_3( ENABLED,           ENABLED,            ENABLED,           FORM_VISIBLE, DIALOG_VISIBLE, COMPOSEABLE ),
+        DEF_INFO_3( READONLY,          READONLY,           READONLY,          FORM_VISIBLE, DIALOG_VISIBLE, COMPOSEABLE ),
         DEF_INFO_2( PRINTABLE,         PRINTABLE,          PRINTABLE,         FORM_VISIBLE, DIALOG_VISIBLE ),
         DEF_INFO_2( STEP,              STEP,               STEP,              FORM_VISIBLE, DIALOG_VISIBLE ),
         DEF_INFO_3( TABSTOP,           TABSTOP,            TABSTOP,           FORM_VISIBLE, DIALOG_VISIBLE, ACTUATING ),
         DEF_INFO_2( TABINDEX,          TABINDEX,           TABINDEX,          FORM_VISIBLE, DIALOG_VISIBLE ),
 
-        DEF_INFO_4( BOUND_CELL,        BOUND_CELL,         BOUND_CELL,        FORM_VISIBLE, DATA_PROPERTY, VIRTUAL_PROP, ACTUATING ),
-        DEF_INFO_4( CELL_EXCHANGE_TYPE,CELL_EXCHANGE_TYPE, CELL_EXCHANGE_TYPE,FORM_VISIBLE, DATA_PROPERTY, VIRTUAL_PROP, ENUM ),
-        DEF_INFO_4( LIST_CELL_RANGE,   LIST_CELL_RANGE,    LIST_CELL_RANGE,   FORM_VISIBLE, DATA_PROPERTY, VIRTUAL_PROP, ACTUATING ),
-        DEF_INFO_3( CONTROLSOURCE,     CONTROLSOURCE,      CONTROLSOURCE,     FORM_VISIBLE, DATA_PROPERTY, ACTUATING ),
-        DEF_INFO_3( DATASOURCE,        DATASOURCE,         DATASOURCE,        FORM_VISIBLE, DATA_PROPERTY, ACTUATING ),
-        DEF_INFO_4( COMMANDTYPE,       CURSORSOURCETYPE,   CURSORSOURCETYPE,  FORM_VISIBLE, DATA_PROPERTY, ENUM, ACTUATING ),
-        DEF_INFO_3( COMMAND,           CURSORSOURCE,       CURSORSOURCE,      FORM_VISIBLE, DATA_PROPERTY, ACTUATING ),
-        DEF_INFO_3( ESCAPE_PROCESSING, ESCAPE_PROCESSING,  ESCAPE_PROCESSING, FORM_VISIBLE, DATA_PROPERTY, ACTUATING ),
-        DEF_INFO_2( FILTER,            FILTER,             FILTER,            FORM_VISIBLE, DATA_PROPERTY ),
-        DEF_INFO_2( SORT,              SORT_CRITERIA,      SORT_CRITERIA,     FORM_VISIBLE, DATA_PROPERTY ),
+        DEF_INFO_3( BOUND_CELL,        BOUND_CELL,         BOUND_CELL,        FORM_VISIBLE, DATA_PROPERTY, ACTUATING ),
+        DEF_INFO_3( CELL_EXCHANGE_TYPE,CELL_EXCHANGE_TYPE, CELL_EXCHANGE_TYPE,FORM_VISIBLE, DATA_PROPERTY, ENUM ),
+        DEF_INFO_3( LIST_CELL_RANGE,   LIST_CELL_RANGE,    LIST_CELL_RANGE,   FORM_VISIBLE, DATA_PROPERTY, ACTUATING ),
+        DEF_INFO_4( CONTROLSOURCE,     CONTROLSOURCE,      CONTROLSOURCE,     FORM_VISIBLE, DATA_PROPERTY, ACTUATING, COMPOSEABLE ),
+        DEF_INFO_3( REFVALUE,          REFVALUE,           REFVALUE,          FORM_VISIBLE, DATA_PROPERTY, COMPOSEABLE ),
+        DEF_INFO_2( UNCHECKEDREFVALUE, UNCHECKEDREFVALUE,  UNCHECKEDREFVALUE, FORM_VISIBLE, DATA_PROPERTY ),
+        DEF_INFO_4( DATASOURCE,        DATASOURCE,         DATASOURCE,        FORM_VISIBLE, DATA_PROPERTY, ACTUATING, COMPOSEABLE ),
+        DEF_INFO_5( COMMANDTYPE,       CURSORSOURCETYPE,   CURSORSOURCETYPE,  FORM_VISIBLE, DATA_PROPERTY, ENUM, ACTUATING, COMPOSEABLE ),
+        DEF_INFO_4( COMMAND,           CURSORSOURCE,       CURSORSOURCE,      FORM_VISIBLE, DATA_PROPERTY, ACTUATING, COMPOSEABLE ),
+        DEF_INFO_4( ESCAPE_PROCESSING, ESCAPE_PROCESSING,  ESCAPE_PROCESSING, FORM_VISIBLE, DATA_PROPERTY, ACTUATING, COMPOSEABLE ),
+        DEF_INFO_3( FILTER,            FILTER,             FILTER,            FORM_VISIBLE, DATA_PROPERTY, COMPOSEABLE ),
+        DEF_INFO_3( SORT,              SORT_CRITERIA,      SORT_CRITERIA,     FORM_VISIBLE, DATA_PROPERTY, COMPOSEABLE ),
         DEF_INFO_2( MASTERFIELDS,      MASTERFIELDS,       MASTERFIELDS,      FORM_VISIBLE, DATA_PROPERTY ),
         DEF_INFO_2( DETAILFIELDS,      SLAVEFIELDS,        SLAVEFIELDS,       FORM_VISIBLE, DATA_PROPERTY ),
         DEF_INFO_2( ALLOWADDITIONS,    ALLOW_ADDITIONS,    ALLOW_ADDITIONS,   FORM_VISIBLE, DATA_PROPERTY ),
         DEF_INFO_2( ALLOWEDITS,        ALLOW_EDITS,        ALLOW_EDITS,       FORM_VISIBLE, DATA_PROPERTY ),
         DEF_INFO_2( ALLOWDELETIONS,    ALLOW_DELETIONS,    ALLOW_DELETIONS,   FORM_VISIBLE, DATA_PROPERTY ),
-        DEF_INFO_2( INSERTONLY,        DATAENTRY,          DATAENTRY,         FORM_VISIBLE, DATA_PROPERTY ),
-        DEF_INFO_3( NAVIGATION,        NAVIGATION,         NAVIGATION,        FORM_VISIBLE, DATA_PROPERTY, ENUM ),
-        DEF_INFO_3( CYCLE,             CYCLE,              CYCLE,             FORM_VISIBLE, DATA_PROPERTY, ENUM ),
+        DEF_INFO_4( INSERTONLY,        DATAENTRY,          DATAENTRY,         FORM_VISIBLE, DATA_PROPERTY, COMPOSEABLE, COMPOSEABLE ),
+        DEF_INFO_4( NAVIGATION,        NAVIGATION,         NAVIGATION,        FORM_VISIBLE, DATA_PROPERTY, ENUM, COMPOSEABLE ),
+        DEF_INFO_4( CYCLE,             CYCLE,              CYCLE,             FORM_VISIBLE, DATA_PROPERTY, ENUM, COMPOSEABLE ),
         DEF_INFO_2( EMPTY_IS_NULL,     EMPTY_IS_NULL,      EMPTY_IS_NULL,     FORM_VISIBLE, DATA_PROPERTY ),
-        DEF_INFO_2( FILTERPROPOSAL,    FILTERPROPOSAL,     FILTERPROPOSAL,    FORM_VISIBLE, DATA_PROPERTY ),
-        DEF_INFO_4( LISTSOURCETYPE,    LISTSOURCETYPE,     LISTSOURCETYPE,    FORM_VISIBLE, DATA_PROPERTY, ACTUATING, ENUM ),
-        DEF_INFO_3( LISTSOURCE,        LISTSOURCE,         LISTSOURCE,        FORM_VISIBLE, DATA_PROPERTY, ACTUATING ),
-        DEF_INFO_2( BOUNDCOLUMN,       BOUNDCOLUMN,        BOUNDCOLUMN,       FORM_VISIBLE, DATA_PROPERTY ),
+        DEF_INFO_3( FILTERPROPOSAL,    FILTERPROPOSAL,     FILTERPROPOSAL,    FORM_VISIBLE, DATA_PROPERTY, COMPOSEABLE ),
+        DEF_INFO_5( LISTSOURCETYPE,    LISTSOURCETYPE,     LISTSOURCETYPE,    FORM_VISIBLE, DATA_PROPERTY, ACTUATING, ENUM, COMPOSEABLE ),
+        DEF_INFO_4( LISTSOURCE,        LISTSOURCE,         LISTSOURCE,        FORM_VISIBLE, DATA_PROPERTY, ACTUATING, COMPOSEABLE ),
+        DEF_INFO_3( BOUNDCOLUMN,       BOUNDCOLUMN,        BOUNDCOLUMN,       FORM_VISIBLE, DATA_PROPERTY, COMPOSEABLE ),
+
+        // <!----------------->
+        // XML node binding
+        DEF_INFO_2( LIST_BINDING,      LIST_BINDING,       LIST_BINDING,      FORM_VISIBLE, DATA_PROPERTY ),
+        DEF_INFO_3( XML_DATA_MODEL,    XML_DATA_MODEL,     XML_DATA_MODEL,    FORM_VISIBLE, DATA_PROPERTY, ACTUATING ),
+        DEF_INFO_2( BIND_EXPRESSION,   BIND_EXPRESSION,    BIND_EXPRESSION,   FORM_VISIBLE, DATA_PROPERTY ),
+        DEF_INFO_2( XSD_REQUIRED,      XSD_REQUIRED,       XSD_REQUIRED,      FORM_VISIBLE, DATA_PROPERTY ),
+        DEF_INFO_2( XSD_RELEVANT,      XSD_RELEVANT,       XSD_RELEVANT,      FORM_VISIBLE, DATA_PROPERTY ),
+        DEF_INFO_2( XSD_READONLY,      XSD_READONLY,       XSD_READONLY,      FORM_VISIBLE, DATA_PROPERTY ),
+        DEF_INFO_2( XSD_CONSTRAINT,    XSD_CONSTRAINT,     XSD_CONSTRAINT,    FORM_VISIBLE, DATA_PROPERTY ),
+        DEF_INFO_2( XSD_CALCULATION,   XSD_CALCULATION,    XSD_CALCULATION,   FORM_VISIBLE, DATA_PROPERTY ),
+
+        // data type
+        DEF_INFO_3( XSD_DATA_TYPE,     XSD_DATA_TYPE,      XSD_DATA_TYPE,     FORM_VISIBLE, DATA_PROPERTY, ACTUATING ),
+        // data types facets
+        //  common
+        DEF_INFO_3( XSD_WHITESPACES,   XSD_WHITESPACES,    XSD_WHITESPACES,   FORM_VISIBLE, DATA_PROPERTY, ENUM ),
+        DEF_INFO_2( XSD_PATTERN,       XSD_PATTERN,        XSD_PATTERN,       FORM_VISIBLE, DATA_PROPERTY ),
+        //  string
+        DEF_INFO_2( XSD_LENGTH,        XSD_LENGTH,         XSD_LENGTH,        FORM_VISIBLE, DATA_PROPERTY ),
+        DEF_INFO_2( XSD_MIN_LENGTH,    XSD_MIN_LENGTH,     XSD_MIN_LENGTH,    FORM_VISIBLE, DATA_PROPERTY ),
+        DEF_INFO_2( XSD_MAX_LENGTH,    XSD_MAX_LENGTH,     XSD_MAX_LENGTH,    FORM_VISIBLE, DATA_PROPERTY ),
+        //  decimal
+        DEF_INFO_2( XSD_TOTAL_DIGITS,   XSD_TOTAL_DIGITS,   XSD_TOTAL_DIGITS,   FORM_VISIBLE, DATA_PROPERTY ),
+        DEF_INFO_2( XSD_FRACTION_DIGITS,XSD_FRACTION_DIGITS,XSD_FRACTION_DIGITS,FORM_VISIBLE, DATA_PROPERTY ),
+        DEF_INFO_2( XSD_MAX_INCLUSIVE,  XSD_MAX_INCLUSIVE,  XSD_MAX_INCLUSIVE,  FORM_VISIBLE, DATA_PROPERTY ),
+        DEF_INFO_2( XSD_MAX_EXCLUSIVE,  XSD_MAX_EXCLUSIVE,  XSD_MAX_EXCLUSIVE,  FORM_VISIBLE, DATA_PROPERTY ),
+        DEF_INFO_2( XSD_MIN_INCLUSIVE,  XSD_MIN_INCLUSIVE,  XSD_MIN_INCLUSIVE,  FORM_VISIBLE, DATA_PROPERTY ),
+        DEF_INFO_2( XSD_MIN_EXCLUSIVE,  XSD_MIN_EXCLUSIVE,  XSD_MIN_EXCLUSIVE,  FORM_VISIBLE, DATA_PROPERTY ),
+        // <!----------------->
 
         DEF_INFO_1( HIDDEN_VALUE,      VALUE,              HIDDEN_VALUE,      FORM_VISIBLE ),
-        DEF_INFO_1( VALUE,             VALUE,              VALUE,             DIALOG_VISIBLE ),
-        DEF_INFO_2( VALUEMIN,          VALUEMIN,           VALUEMIN,          FORM_VISIBLE, DIALOG_VISIBLE ),
-        DEF_INFO_2( VALUEMAX,          VALUEMAX,           VALUEMAX,          FORM_VISIBLE, DIALOG_VISIBLE ),
-        DEF_INFO_2( VALUESTEP,         VALUESTEP,          VALUESTEP,         FORM_VISIBLE, DIALOG_VISIBLE ),
-        DEF_INFO_1( DEFAULT_VALUE,     DEFAULTVALUE,       DEFAULT_LONG_VALUE,FORM_VISIBLE ),
-        DEF_INFO_2( DECIMAL_ACCURACY,  DECIMAL_ACCURACY,   DECIMAL_ACCURACY,  FORM_VISIBLE, DIALOG_VISIBLE ),
-        DEF_INFO_2( SHOWTHOUSANDSEP,   SHOWTHOUSANDSEP,    SHOWTHOUSANDSEP,   FORM_VISIBLE, DIALOG_VISIBLE ),
+        DEF_INFO_2( VALUE,             VALUE,              VALUE,             DIALOG_VISIBLE, COMPOSEABLE ),
+        DEF_INFO_3( VALUEMIN,          VALUEMIN,           VALUEMIN,          FORM_VISIBLE, DIALOG_VISIBLE, COMPOSEABLE ),
+        DEF_INFO_3( VALUEMAX,          VALUEMAX,           VALUEMAX,          FORM_VISIBLE, DIALOG_VISIBLE, COMPOSEABLE ),
+        DEF_INFO_3( VALUESTEP,         VALUESTEP,          VALUESTEP,         FORM_VISIBLE, DIALOG_VISIBLE, COMPOSEABLE ),
+        DEF_INFO_2( DEFAULT_VALUE,     DEFAULTVALUE,       DEFAULT_LONG_VALUE,FORM_VISIBLE, COMPOSEABLE ),
+        DEF_INFO_3( DECIMAL_ACCURACY,  DECIMAL_ACCURACY,   DECIMAL_ACCURACY,  FORM_VISIBLE, DIALOG_VISIBLE, COMPOSEABLE ),
+        DEF_INFO_3( SHOWTHOUSANDSEP,   SHOWTHOUSANDSEP,    SHOWTHOUSANDSEP,   FORM_VISIBLE, DIALOG_VISIBLE, COMPOSEABLE ),
 
-        DEF_INFO_1( REFVALUE,          REFVALUE,           REFVALUE,          FORM_VISIBLE ),
-        DEF_INFO_2( CURRENCYSYMBOL,    CURRENCYSYMBOL,     CURRENCYSYMBOL,    FORM_VISIBLE, DIALOG_VISIBLE ),
+        DEF_INFO_3( CURRENCYSYMBOL,    CURRENCYSYMBOL,     CURRENCYSYMBOL,    FORM_VISIBLE, DIALOG_VISIBLE, COMPOSEABLE ),
         DEF_INFO_2( CURRSYM_POSITION,  CURRSYM_POSITION,   CURRSYM_POSITION,  FORM_VISIBLE, DIALOG_VISIBLE ),
 
-        DEF_INFO_1( DATE,              DATE,               DATE,              DIALOG_VISIBLE ),
-        DEF_INFO_2( DATEMIN,           DATEMIN,            DATEMIN,           FORM_VISIBLE, DIALOG_VISIBLE ),
-        DEF_INFO_2( DATEMAX,           DATEMAX,            DATEMAX,           FORM_VISIBLE, DIALOG_VISIBLE ),
-        DEF_INFO_3( DATEFORMAT,        DATEFORMAT,         DATEFORMAT,        FORM_VISIBLE, DIALOG_VISIBLE, ENUM ),
-        DEF_INFO_1( DEFAULT_DATE,      DEFAULTDATE,        DEFAULT_DATE,      FORM_VISIBLE ),
+        DEF_INFO_2( DATE,              DATE,               DATE,              DIALOG_VISIBLE, COMPOSEABLE ),
+        DEF_INFO_3( DATEMIN,           DATEMIN,            DATEMIN,           FORM_VISIBLE, DIALOG_VISIBLE, COMPOSEABLE ),
+        DEF_INFO_3( DATEMAX,           DATEMAX,            DATEMAX,           FORM_VISIBLE, DIALOG_VISIBLE, COMPOSEABLE ),
+        DEF_INFO_4( DATEFORMAT,        DATEFORMAT,         DATEFORMAT,        FORM_VISIBLE, DIALOG_VISIBLE, ENUM, COMPOSEABLE ),
+        DEF_INFO_2( DEFAULT_DATE,      DEFAULTDATE,        DEFAULT_DATE,      FORM_VISIBLE, COMPOSEABLE ),
 
-        DEF_INFO_1( TIME,              TIME,               TIME,              DIALOG_VISIBLE ),
-        DEF_INFO_2( TIMEMIN,           TIMEMIN,            TIMEMIN,           FORM_VISIBLE, DIALOG_VISIBLE ),
-        DEF_INFO_2( TIMEMAX,           TIMEMAX,            TIMEMAX,           FORM_VISIBLE, DIALOG_VISIBLE ),
-        DEF_INFO_3( TIMEFORMAT,        TIMEFORMAT,         TIMEFORMAT,        FORM_VISIBLE, DIALOG_VISIBLE, ENUM ),
-        DEF_INFO_1( DEFAULT_TIME,      DEFAULTTIME,        DEFAULT_TIME,      FORM_VISIBLE ),
+        DEF_INFO_2( TIME,              TIME,               TIME,              DIALOG_VISIBLE, COMPOSEABLE ),
+        DEF_INFO_3( TIMEMIN,           TIMEMIN,            TIMEMIN,           FORM_VISIBLE, DIALOG_VISIBLE, COMPOSEABLE ),
+        DEF_INFO_3( TIMEMAX,           TIMEMAX,            TIMEMAX,           FORM_VISIBLE, DIALOG_VISIBLE, COMPOSEABLE ),
+        DEF_INFO_4( TIMEFORMAT,        TIMEFORMAT,         TIMEFORMAT,        FORM_VISIBLE, DIALOG_VISIBLE, ENUM, COMPOSEABLE ),
+        DEF_INFO_2( DEFAULT_TIME,      DEFAULTTIME,        DEFAULT_TIME,      FORM_VISIBLE, COMPOSEABLE ),
 
         DEF_INFO_1( EFFECTIVE_VALUE,   VALUE,              VALUE,             DIALOG_VISIBLE ),
-        DEF_INFO_2( EFFECTIVE_MIN,     VALUEMIN,           EFFECTIVEMIN,      FORM_VISIBLE, DIALOG_VISIBLE ),
-        DEF_INFO_2( EFFECTIVE_MAX,     VALUEMAX,           EFFECTIVEMAX,      FORM_VISIBLE, DIALOG_VISIBLE ),
-        DEF_INFO_1( EFFECTIVE_DEFAULT, DEFAULTVALUE,       EFFECTIVEDEFAULT,  FORM_VISIBLE ),
-        DEF_INFO_2( FORMATKEY,         FORMATKEY,          FORMATKEY,         FORM_VISIBLE, DIALOG_VISIBLE ),
+        DEF_INFO_3( EFFECTIVE_MIN,     VALUEMIN,           EFFECTIVEMIN,      FORM_VISIBLE, DIALOG_VISIBLE, COMPOSEABLE ),
+        DEF_INFO_3( EFFECTIVE_MAX,     VALUEMAX,           EFFECTIVEMAX,      FORM_VISIBLE, DIALOG_VISIBLE, COMPOSEABLE ),
+        DEF_INFO_2( EFFECTIVE_DEFAULT, DEFAULTVALUE,       EFFECTIVEDEFAULT,  FORM_VISIBLE, COMPOSEABLE ),
+        DEF_INFO_3( FORMATKEY,         FORMATKEY,          FORMATKEY,         FORM_VISIBLE, DIALOG_VISIBLE, COMPOSEABLE ),
 
         DEF_INFO_2( PROGRESSVALUE,     PROGRESSVALUE,      PROGRESSVALUE,     FORM_VISIBLE, DIALOG_VISIBLE ),
         DEF_INFO_2( PROGRESSVALUE_MIN, PROGRESSVALUE_MIN,  PROGRESSVALUE_MIN, FORM_VISIBLE, DIALOG_VISIBLE ),
         DEF_INFO_2( PROGRESSVALUE_MAX, PROGRESSVALUE_MAX,  PROGRESSVALUE_MAX, FORM_VISIBLE, DIALOG_VISIBLE ),
 
         DEF_INFO_1( SCROLLVALUE,       SCROLLVALUE,        SCROLLVALUE,       DIALOG_VISIBLE ),
-        DEF_INFO_2( SCROLLVALUE_MIN,   SCROLLVALUE_MIN,    SCROLLVALUE_MIN,   FORM_VISIBLE, DIALOG_VISIBLE ),
-        DEF_INFO_2( SCROLLVALUE_MAX,   SCROLLVALUE_MAX,    SCROLLVALUE_MAX,   FORM_VISIBLE, DIALOG_VISIBLE ),
-        DEF_INFO_1( DEFAULT_SCROLLVALUE,DEFAULT_SCROLLVALUE,DEFAULT_SCROLLVALUE,FORM_VISIBLE ),
-        DEF_INFO_2( LINEINCREMENT,     LINEINCREMENT,      LINEINCREMENT,     FORM_VISIBLE, DIALOG_VISIBLE ),
-        DEF_INFO_2( BLOCKINCREMENT,    BLOCKINCREMENT,     BLOCKINCREMENT,    FORM_VISIBLE, DIALOG_VISIBLE ),
+        DEF_INFO_3( SCROLLVALUE_MIN,   SCROLLVALUE_MIN,    SCROLLVALUE_MIN,   FORM_VISIBLE, DIALOG_VISIBLE, COMPOSEABLE ),
+        DEF_INFO_3( SCROLLVALUE_MAX,   SCROLLVALUE_MAX,    SCROLLVALUE_MAX,   FORM_VISIBLE, DIALOG_VISIBLE, COMPOSEABLE ),
+        DEF_INFO_2( DEFAULT_SCROLLVALUE,DEFAULT_SCROLLVALUE,DEFAULT_SCROLLVALUE,FORM_VISIBLE, COMPOSEABLE ),
+        DEF_INFO_3( LINEINCREMENT,     LINEINCREMENT,      LINEINCREMENT,     FORM_VISIBLE, DIALOG_VISIBLE, COMPOSEABLE ),
+        DEF_INFO_3( BLOCKINCREMENT,    BLOCKINCREMENT,     BLOCKINCREMENT,    FORM_VISIBLE, DIALOG_VISIBLE, COMPOSEABLE ),
 
         DEF_INFO_1( SPINVALUE,        VALUE,               SPINVALUE,         DIALOG_VISIBLE ),
-        DEF_INFO_2( SPINVALUE_MIN,    VALUEMIN,            SPINVALUE_MIN,     FORM_VISIBLE, DIALOG_VISIBLE ),
-        DEF_INFO_2( SPINVALUE_MAX,    VALUEMAX,            SPINVALUE_MAX,     FORM_VISIBLE, DIALOG_VISIBLE ),
-        DEF_INFO_1( DEFAULT_SPINVALUE,DEFAULTVALUE,        DEFAULT_SPINVALUE, FORM_VISIBLE ),
-        DEF_INFO_2( SPININCREMENT,    VALUESTEP,           SPININCREMENT,     FORM_VISIBLE, DIALOG_VISIBLE ),
+        DEF_INFO_3( SPINVALUE_MIN,    VALUEMIN,            SPINVALUE_MIN,     FORM_VISIBLE, DIALOG_VISIBLE, COMPOSEABLE ),
+        DEF_INFO_3( SPINVALUE_MAX,    VALUEMAX,            SPINVALUE_MAX,     FORM_VISIBLE, DIALOG_VISIBLE, COMPOSEABLE ),
+        DEF_INFO_2( DEFAULT_SPINVALUE,DEFAULTVALUE,        DEFAULT_SPINVALUE, FORM_VISIBLE, COMPOSEABLE ),
+        DEF_INFO_3( SPININCREMENT,    VALUESTEP,           SPININCREMENT,     FORM_VISIBLE, DIALOG_VISIBLE, COMPOSEABLE ),
 
-        DEF_INFO_2( SPIN,              SPIN,               SPIN,              FORM_VISIBLE, DIALOG_VISIBLE ),
-        DEF_INFO_3( REPEAT,            REPEAT,             REPEAT,            FORM_VISIBLE, DIALOG_VISIBLE, ACTUATING ),
-        DEF_INFO_2( REPEAT_DELAY,      REPEAT_DELAY,       REPEAT_DELAY,      FORM_VISIBLE, DIALOG_VISIBLE ),
-        DEF_INFO_2( TOGGLE,            TOGGLE,             TOGGLE,            FORM_VISIBLE, DIALOG_VISIBLE ),
-        DEF_INFO_2( FOCUSONCLICK,      FOCUSONCLICK,       FOCUSONCLICK,      FORM_VISIBLE, DIALOG_VISIBLE ),
-        DEF_INFO_2( VISIBLESIZE,       VISIBLESIZE,        VISIBLESIZE,       FORM_VISIBLE, DIALOG_VISIBLE ),
-        DEF_INFO_3( ORIENTATION,       ORIENTATION,        ORIENTATION,       FORM_VISIBLE, DIALOG_VISIBLE, ENUM ),
+        DEF_INFO_3( SPIN,              SPIN,               SPIN,              FORM_VISIBLE, DIALOG_VISIBLE, COMPOSEABLE ),
+        DEF_INFO_4( REPEAT,            REPEAT,             REPEAT,            FORM_VISIBLE, DIALOG_VISIBLE, ACTUATING, COMPOSEABLE ),
+        DEF_INFO_3( REPEAT_DELAY,      REPEAT_DELAY,       REPEAT_DELAY,      FORM_VISIBLE, DIALOG_VISIBLE, COMPOSEABLE ),
+        DEF_INFO_3( TOGGLE,            TOGGLE,             TOGGLE,            FORM_VISIBLE, DIALOG_VISIBLE, COMPOSEABLE ),
+        DEF_INFO_3( FOCUSONCLICK,      FOCUSONCLICK,       FOCUSONCLICK,      FORM_VISIBLE, DIALOG_VISIBLE, COMPOSEABLE ),
+        DEF_INFO_3( VISIBLESIZE,       VISIBLESIZE,        VISIBLESIZE,       FORM_VISIBLE, DIALOG_VISIBLE, COMPOSEABLE ),
+        DEF_INFO_4( ORIENTATION,       ORIENTATION,        ORIENTATION,       FORM_VISIBLE, DIALOG_VISIBLE, ENUM, COMPOSEABLE ),
 
-        DEF_INFO_1( CLASSID,           CLASSID,            CLASSID,           FORM_VISIBLE ),
+        DEF_INFO_2( CLASSID,           CLASSID,            CLASSID,           FORM_VISIBLE, COMPOSEABLE ),
         DEF_INFO_2( HEIGHT,            HEIGHT,             HEIGHT,            FORM_VISIBLE, DIALOG_VISIBLE ),
-        DEF_INFO_2( WIDTH,             WIDTH,              WIDTH,             FORM_VISIBLE, DIALOG_VISIBLE ),
+        DEF_INFO_3( WIDTH,             WIDTH,              WIDTH,             FORM_VISIBLE, DIALOG_VISIBLE, COMPOSEABLE ),
         DEF_INFO_2( POSITIONX,         POSITIONX,          POSITIONX,         FORM_VISIBLE, DIALOG_VISIBLE ),
         DEF_INFO_2( POSITIONY,         POSITIONY,          POSITIONY,         FORM_VISIBLE, DIALOG_VISIBLE ),
 
         DEF_INFO_1( LISTINDEX,         LISTINDEX,          LISTINDEX,         FORM_VISIBLE ),
-        DEF_INFO_3( STRINGITEMLIST,    STRINGITEMLIST,     STRINGITEMLIST,    FORM_VISIBLE, DIALOG_VISIBLE, ACTUATING ),
-        DEF_INFO_1( DEFAULT_TEXT,      DEFAULTTEXT,        DEFAULTVALUE,      FORM_VISIBLE ),
+        DEF_INFO_4( STRINGITEMLIST,    STRINGITEMLIST,     STRINGITEMLIST,    FORM_VISIBLE, DIALOG_VISIBLE, ACTUATING, COMPOSEABLE ),
+        DEF_INFO_2( DEFAULT_TEXT,      DEFAULTTEXT,        DEFAULTVALUE,      FORM_VISIBLE, COMPOSEABLE ),
         DEF_INFO_2( FONT_NAME,         FONT,               FONT,              FORM_VISIBLE, DIALOG_VISIBLE ),
-        DEF_INFO_3( VISUALEFFECT,      VISUALEFFECT,       VISUALEFFECT,      FORM_VISIBLE, DIALOG_VISIBLE, ENUM_ONE ),
-        DEF_INFO_3( ALIGN,             ALIGN,              ALIGN,             FORM_VISIBLE, DIALOG_VISIBLE, ENUM ),
-        DEF_INFO_1( ROWHEIGHT,         ROWHEIGHT,          ROWHEIGHT,         FORM_VISIBLE ),
-        DEF_INFO_2( BACKGROUNDCOLOR,   BACKGROUNDCOLOR,    BACKGROUNDCOLOR,   FORM_VISIBLE, DIALOG_VISIBLE ),
-        DEF_INFO_2( SYMBOLCOLOR,       SYMBOLCOLOR,        SYMBOLCOLOR,       FORM_VISIBLE, DIALOG_VISIBLE ),
+        DEF_INFO_4( VISUALEFFECT,      VISUALEFFECT,       VISUALEFFECT,      FORM_VISIBLE, DIALOG_VISIBLE, ENUM_ONE, COMPOSEABLE ),
+        DEF_INFO_4( ALIGN,             ALIGN,              ALIGN,             FORM_VISIBLE, DIALOG_VISIBLE, ENUM, COMPOSEABLE ),
+        DEF_INFO_2( ROWHEIGHT,         ROWHEIGHT,          ROWHEIGHT,         FORM_VISIBLE, COMPOSEABLE ),
+        DEF_INFO_3( BACKGROUNDCOLOR,   BACKGROUNDCOLOR,    BACKGROUNDCOLOR,   FORM_VISIBLE, DIALOG_VISIBLE, COMPOSEABLE ),
+        DEF_INFO_3( SYMBOLCOLOR,       SYMBOLCOLOR,        SYMBOLCOLOR,       FORM_VISIBLE, DIALOG_VISIBLE, COMPOSEABLE ),
         DEF_INFO_2( FILLCOLOR,         FILLCOLOR,          FILLCOLOR,         FORM_VISIBLE, DIALOG_VISIBLE ),
         DEF_INFO_2( LINECOLOR,         LINECOLOR,          LINECOLOR,         FORM_VISIBLE, DIALOG_VISIBLE ),
-        DEF_INFO_4( BORDER,            BORDER,             BORDER,            FORM_VISIBLE, DIALOG_VISIBLE, ENUM, ACTUATING ),
-        DEF_INFO_2( BORDERCOLOR,       BORDERCOLOR,        BORDERCOLOR,       FORM_VISIBLE, DIALOG_VISIBLE ),
+        DEF_INFO_5( BORDER,            BORDER,             BORDER,            FORM_VISIBLE, DIALOG_VISIBLE, ENUM, ACTUATING, COMPOSEABLE ),
+        DEF_INFO_3( BORDERCOLOR,       BORDERCOLOR,        BORDERCOLOR,       FORM_VISIBLE, DIALOG_VISIBLE, COMPOSEABLE ),
         DEF_INFO_2( ICONSIZE,          ICONSIZE,           ICONSIZE,          FORM_VISIBLE, ENUM ),
         DEF_INFO_1( SHOW_POSITION,     SHOW_POSITION,      SHOW_POSITION,     FORM_VISIBLE ),
         DEF_INFO_1( SHOW_NAVIGATION,   SHOW_NAVIGATION,    SHOW_NAVIGATION,   FORM_VISIBLE ),
         DEF_INFO_1( SHOW_RECORDACTIONS,SHOW_RECORDACTIONS, SHOW_RECORDACTIONS,FORM_VISIBLE ),
         DEF_INFO_1( SHOW_FILTERSORT,   SHOW_FILTERSORT,    SHOW_FILTERSORT,   FORM_VISIBLE ),
 
-        DEF_INFO_3( DROPDOWN,          DROPDOWN,           DROPDOWN,          FORM_VISIBLE, DIALOG_VISIBLE, ACTUATING ),
-        DEF_INFO_2( LINECOUNT,         LINECOUNT,          LINECOUNT,         FORM_VISIBLE, DIALOG_VISIBLE ),
+        DEF_INFO_4( DROPDOWN,          DROPDOWN,           DROPDOWN,          FORM_VISIBLE, DIALOG_VISIBLE, ACTUATING, COMPOSEABLE ),
+        DEF_INFO_3( LINECOUNT,         LINECOUNT,          LINECOUNT,         FORM_VISIBLE, DIALOG_VISIBLE, COMPOSEABLE ),
         DEF_INFO_2( AUTOCOMPLETE,      AUTOCOMPLETE,       AUTOCOMPLETE,      FORM_VISIBLE, DIALOG_VISIBLE ),
-        DEF_INFO_3( MULTILINE,         MULTILINE,          MULTILINE,         FORM_VISIBLE, DIALOG_VISIBLE, ACTUATING ),
+        DEF_INFO_4( MULTILINE,         MULTILINE,          MULTILINE,         FORM_VISIBLE, DIALOG_VISIBLE, ACTUATING, COMPOSEABLE ),
         DEF_INFO_2( WORDBREAK,         WORDBREAK,          WORDBREAK,         FORM_VISIBLE, DIALOG_VISIBLE ),
-        DEF_INFO_4( TEXTTYPE,          TEXTTYPE,           TEXTTYPE,          FORM_VISIBLE, VIRTUAL_PROP, ENUM, ACTUATING ),
-        DEF_INFO_2( LINEEND_FORMAT,    LINEEND_FORMAT,     LINEEND_FORMAT,    FORM_VISIBLE, ENUM_ONE ),
+        DEF_INFO_3( TEXTTYPE,          TEXTTYPE,           TEXTTYPE,          FORM_VISIBLE, ENUM, ACTUATING ),
+        DEF_INFO_3( LINEEND_FORMAT,    LINEEND_FORMAT,     LINEEND_FORMAT,    FORM_VISIBLE, ENUM_ONE, COMPOSEABLE ),
         DEF_INFO_2( MULTISELECTION,    MULTISELECTION,     MULTISELECTION,    FORM_VISIBLE, DIALOG_VISIBLE ),
-        DEF_INFO_4( SHOW_SCROLLBARS,   SHOW_SCROLLBARS,    SHOW_SCROLLBARS,   FORM_VISIBLE, DIALOG_VISIBLE, VIRTUAL_PROP, ENUM ),
+        DEF_INFO_3( SHOW_SCROLLBARS,   SHOW_SCROLLBARS,    SHOW_SCROLLBARS,   FORM_VISIBLE, DIALOG_VISIBLE, ENUM ),
         DEF_INFO_2( HSCROLL,           HSCROLL,            HSCROLL,           FORM_VISIBLE, DIALOG_VISIBLE ),
         DEF_INFO_2( VSCROLL,           VSCROLL,            VSCROLL,           FORM_VISIBLE, DIALOG_VISIBLE ),
-        DEF_INFO_4( BUTTONTYPE,        BUTTONTYPE,         BUTTONTYPE,        FORM_VISIBLE, ACTUATING, ENUM, VIRTUAL_PROP ),
+        DEF_INFO_3( BUTTONTYPE,        BUTTONTYPE,         BUTTONTYPE,        FORM_VISIBLE, ACTUATING, ENUM ),
+        DEF_INFO_3( XFORMS_BUTTONTYPE, BUTTONTYPE,         BUTTONTYPE,        FORM_VISIBLE, ACTUATING, ENUM ),
+        DEF_INFO_1( SUBMISSION_ID,     SUBMISSION_ID,      SUBMISSION_ID,     FORM_VISIBLE ),
         DEF_INFO_2( PUSHBUTTONTYPE,    PUSHBUTTONTYPE,     PUSHBUTTONTYPE,    DIALOG_VISIBLE, ENUM ),
-        DEF_INFO_3( TARGET_URL,        TARGET_URL,         TARGET_URL,        FORM_VISIBLE, ACTUATING, VIRTUAL_PROP ),
+        DEF_INFO_3( TARGET_URL,        TARGET_URL,         TARGET_URL,        FORM_VISIBLE, ACTUATING, COMPOSEABLE ),
         DEF_INFO_1( TARGET_FRAME,      TARGET_FRAME,       TARGET_FRAME,      FORM_VISIBLE ),
         DEF_INFO_1( SUBMIT_ACTION,     SUBMIT_ACTION,      SUBMIT_ACTION,     FORM_VISIBLE ),
         DEF_INFO_1( SUBMIT_TARGET,     SUBMIT_TARGET,      SUBMIT_TARGET,     FORM_VISIBLE ),
         DEF_INFO_3( SUBMIT_ENCODING,   SUBMIT_ENCODING,    SUBMIT_ENCODING,   FORM_VISIBLE, ACTUATING, ENUM ),
         DEF_INFO_2( SUBMIT_METHOD,     SUBMIT_METHOD,      SUBMIT_METHOD,     FORM_VISIBLE, ENUM ),
-        DEF_INFO_2( STATE,             STATE,              STATE,             DIALOG_VISIBLE, ENUM ),
-        DEF_INFO_2( DEFAULTCHECKED,    DEFAULT_CHECKED,    DEFAULT_CHECKED,   FORM_VISIBLE, ENUM ),
-        DEF_INFO_2( DEFAULTBUTTON,     DEFAULT_BUTTON,     DEFAULT_BUTTON,    FORM_VISIBLE, DIALOG_VISIBLE ),
+        DEF_INFO_3( STATE,             STATE,              STATE,             DIALOG_VISIBLE, ENUM, COMPOSEABLE ),
+        DEF_INFO_3( DEFAULTCHECKED,    DEFAULT_CHECKED,    DEFAULT_CHECKED,   FORM_VISIBLE, ENUM, COMPOSEABLE ),
+        DEF_INFO_3( DEFAULTBUTTON,     DEFAULT_BUTTON,     DEFAULT_BUTTON,    FORM_VISIBLE, DIALOG_VISIBLE, COMPOSEABLE ),
         DEF_INFO_3( IMAGE_URL,         IMAGE_URL,          IMAGE_URL,         FORM_VISIBLE, DIALOG_VISIBLE, ACTUATING ),
-        DEF_INFO_3( IMAGEPOSITION,     IMAGEPOSITION,      IMAGEPOSITION,     FORM_VISIBLE, DIALOG_VISIBLE, ENUM ),
+        DEF_INFO_4( IMAGEPOSITION,     IMAGEPOSITION,      IMAGEPOSITION,     FORM_VISIBLE, DIALOG_VISIBLE, ENUM, COMPOSEABLE ),
         DEF_INFO_2( SCALEIMAGE,        SCALEIMAGE,         SCALEIMAGE,        FORM_VISIBLE, DIALOG_VISIBLE ),
-        DEF_INFO_1( DEFAULT_SELECT_SEQ,DEFAULT_SELECT_SEQ, DEFAULT_SELECT_SEQ,FORM_VISIBLE ),
-        DEF_INFO_1( SELECTEDITEMS,     SELECTEDITEMS,      SELECTEDITEMS,     DIALOG_VISIBLE ),
+        DEF_INFO_2( DEFAULT_SELECT_SEQ,DEFAULT_SELECT_SEQ, DEFAULT_SELECT_SEQ,FORM_VISIBLE, COMPOSEABLE ),
+        DEF_INFO_2( SELECTEDITEMS,     SELECTEDITEMS,      SELECTEDITEMS,     DIALOG_VISIBLE, COMPOSEABLE ),
         DEF_INFO_2( ECHO_CHAR,         ECHO_CHAR,          ECHO_CHAR,         FORM_VISIBLE, DIALOG_VISIBLE ),
-        DEF_INFO_2( HIDEINACTIVESELECTION, HIDEINACTIVESELECTION, HIDEINACTIVESELECTION, FORM_VISIBLE, DIALOG_VISIBLE  ),
-        DEF_INFO_2( TRISTATE,          TRISTATE,           TRISTATE,          FORM_VISIBLE, DIALOG_VISIBLE ),
-        DEF_INFO_1( HASNAVIGATION,     NAVIGATION,         NAVIGATIONBAR,     FORM_VISIBLE ),
-        DEF_INFO_1( RECORDMARKER,      RECORDMARKER,       RECORDMARKER,      FORM_VISIBLE ),
+        DEF_INFO_3( HIDEINACTIVESELECTION, HIDEINACTIVESELECTION, HIDEINACTIVESELECTION, FORM_VISIBLE, DIALOG_VISIBLE, COMPOSEABLE ),
+        DEF_INFO_3( TRISTATE,          TRISTATE,           TRISTATE,          FORM_VISIBLE, DIALOG_VISIBLE, COMPOSEABLE ),
+        DEF_INFO_2( HASNAVIGATION,     NAVIGATION,         NAVIGATIONBAR,     FORM_VISIBLE, COMPOSEABLE ),
+        DEF_INFO_2( RECORDMARKER,      RECORDMARKER,       RECORDMARKER,      FORM_VISIBLE, COMPOSEABLE ),
         DEF_INFO_2( TAG,               TAG,                TAG,               FORM_VISIBLE, DIALOG_VISIBLE ),
-        DEF_INFO_2( HELPTEXT,          HELPTEXT,           HELPTEXT,          FORM_VISIBLE, DIALOG_VISIBLE ),
+        DEF_INFO_3( HELPTEXT,          HELPTEXT,           HELPTEXT,          FORM_VISIBLE, DIALOG_VISIBLE, COMPOSEABLE ),
         DEF_INFO_2( HELPURL,           HELPURL,            HELPURL,           FORM_VISIBLE, DIALOG_VISIBLE )
         };
 
@@ -339,45 +375,45 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    sal_Int32 OFormPropertyInfoService::getPropertyId(const String& _rName) const
+    sal_Int32 OPropertyInfoService::getPropertyId(const String& _rName) const
     {
         const OPropertyInfoImpl* pInfo = getPropertyInfo(_rName);
         return pInfo ? pInfo->nId : -1;
     }
 
     //------------------------------------------------------------------------
-    String OFormPropertyInfoService::getPropertyTranslation(sal_Int32 _nId) const
+    String OPropertyInfoService::getPropertyTranslation(sal_Int32 _nId) const
     {
         const OPropertyInfoImpl* pInfo = getPropertyInfo(_nId);
         return (pInfo) ? pInfo->sTranslation : String();
     }
 
     //------------------------------------------------------------------------
-    sal_Int32 OFormPropertyInfoService::getPropertyHelpId(sal_Int32 _nId) const
+    sal_Int32 OPropertyInfoService::getPropertyHelpId(sal_Int32 _nId) const
     {
         const OPropertyInfoImpl* pInfo = getPropertyInfo(_nId);
         return (pInfo) ? pInfo->nHelpId : 0;
     }
 
     //------------------------------------------------------------------------
-    sal_Int16 OFormPropertyInfoService::getPropertyPos(sal_Int32 _nId) const
+    sal_Int16 OPropertyInfoService::getPropertyPos(sal_Int32 _nId) const
     {
         const OPropertyInfoImpl* pInfo = getPropertyInfo(_nId);
         return (pInfo) ? pInfo->nPos : 0xFFFF;
     }
 
     //------------------------------------------------------------------------
-    sal_uInt32 OFormPropertyInfoService::getPropertyUIFlags(sal_Int32 _nId) const
+    sal_uInt32 OPropertyInfoService::getPropertyUIFlags(sal_Int32 _nId) const
     {
         const OPropertyInfoImpl* pInfo = getPropertyInfo(_nId);
         return (pInfo) ? pInfo->nUIFlags : 0;
     }
 
     //------------------------------------------------------------------------
-    ::std::vector< String > OFormPropertyInfoService::getPropertyEnumRepresentations(sal_Int32 _nId) const
+    ::std::vector< String > OPropertyInfoService::getPropertyEnumRepresentations(sal_Int32 _nId) const
     {
         OSL_ENSURE( ( ( getPropertyUIFlags( _nId ) & PROP_FLAG_ENUM ) != 0 ) || ( _nId == PROPERTY_ID_TARGET_FRAME ),
-            "OFormPropertyInfoService::getPropertyEnumRepresentations: this is no enum property!" );
+            "OPropertyInfoService::getPropertyEnumRepresentations: this is no enum property!" );
 
         sal_Int16 nCommaSeparatedListResId = 0;
         sal_Int16 nStringItemsResId = 0;
@@ -450,8 +486,11 @@ namespace pcr
             case PROPERTY_ID_LINEEND_FORMAT:
                 nStringItemsResId = RID_RSC_ENUM_LINEEND_FORMAT;
                 break;
+            case PROPERTY_ID_XSD_WHITESPACES:
+                nStringItemsResId = RID_RSC_ENUM_WHITESPACE_HANDLING;
+                break;
             default:
-                OSL_ENSURE( sal_False, "OFormPropertyInfoService::getPropertyEnumRepresentations: unknown enum property!" );
+                OSL_ENSURE( sal_False, "OPropertyInfoService::getPropertyEnumRepresentations: unknown enum property!" );
         }
 
         ::std::vector< String > aReturn;
@@ -482,7 +521,18 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    const OPropertyInfoImpl* OFormPropertyInfoService::getPropertyInfo(const String& _rName)
+    sal_Bool OPropertyInfoService::isComposeable( const ::rtl::OUString& _rPropertyName ) const
+    {
+        sal_Int32 nId = getPropertyId( _rPropertyName );
+        if ( nId == -1 )
+            return sal_False;
+
+        sal_uInt32 nFlags = getPropertyUIFlags( nId );
+        return ( nFlags & PROP_FLAG_COMPOSEABLE ) != 0;
+    }
+
+    //------------------------------------------------------------------------
+    const OPropertyInfoImpl* OPropertyInfoService::getPropertyInfo(const String& _rName)
     {
         // intialisierung
         if(!s_pPropertyInfos)
@@ -500,7 +550,7 @@ namespace pcr
 
 
     //------------------------------------------------------------------------
-    const OPropertyInfoImpl* OFormPropertyInfoService::getPropertyInfo(sal_Int32 _nId)
+    const OPropertyInfoImpl* OPropertyInfoService::getPropertyInfo(sal_Int32 _nId)
     {
         // intialisierung
         if(!s_pPropertyInfos)
