@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoprnms.hxx,v $
  *
- *  $Revision: 1.72 $
+ *  $Revision: 1.73 $
  *
- *  last change: $Author: dvo $ $Date: 2002-04-04 13:36:52 $
+ *  last change: $Author: dvo $ $Date: 2002-04-05 09:24:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -703,8 +703,9 @@ enum SwPropNameIds
 /* 0623 */  UNO_NAME_GRID_PRINT,
 /* 0624 */  UNO_NAME_GRID_DISPLAY,
 /* 0625 */  UNO_NAME_SNAP_TO_GRID,
+/* 0626 */  UNO_NAME_DONT_BALANCE_TEXT_COLUMNS,
 
-/* 0626 */  SW_PROPNAME_END
+/* 0627 */  SW_PROPNAME_END
 };
 
 
