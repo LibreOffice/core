@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: thb $ $Date: 2001-04-26 17:11:07 $
+ *  last change: $Author: thb $ $Date: 2001-04-27 14:22:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -391,7 +391,7 @@ public:
 
     virtual void SetChanged(FASTBOOL bFlag = TRUE);
     void NbcSetChanged(FASTBOOL bFlag = TRUE) { bChanged = bFlag; }
-    virtual SvStream* GetDocumentStream(SdrDocumentStreamInfo& rStreamInfo);
+    virtual SvStream* GetDocumentStream(SdrDocumentStreamInfo& rStreamInfo) const;
     virtual void HandsOff();
 
     void SetTextDefaults() const;

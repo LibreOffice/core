@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc3.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: thb $ $Date: 2001-04-26 17:11:08 $
+ *  last change: $Author: thb $ $Date: 2001-04-27 14:24:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1260,7 +1260,7 @@ List* SdDrawDocument::GetCustomShowList(BOOL bCreate)
 |*
 \************************************************************************/
 
-SvStream* SdDrawDocument::GetDocumentStream(SdrDocumentStreamInfo& rStreamInfo)
+SvStream* SdDrawDocument::GetDocumentStream(SdrDocumentStreamInfo& rStreamInfo) const
 {
 #ifdef SVX_LIGHT
     SotStorage* pStor = pDocSh ? pDocSh->GetStorage() : NULL;
@@ -1289,7 +1289,8 @@ SvStream* SdDrawDocument::GetDocumentStream(SdrDocumentStreamInfo& rStreamInfo)
                     if( pStor->IsContained( aPictureStorageName ) &&
                         pStor->IsStorage( aPictureStorageName )  )
                     {
-                        xPictureStorage = pStor->OpenUCBStorage( aPictureStorageName, STREAM_READ );
+                        // cast away const
+                        ((SdDrawDocument*)this)->xPictureStorage = pStor->OpenUCBStorage( aPictureStorageName, STREAM_READ );
                     }
                 }
 
@@ -1320,10 +1321,13 @@ SvStream* SdDrawDocument::GetDocumentStream(SdrDocumentStreamInfo& rStreamInfo)
                     DBG_ASSERT(bOK, "Umbenennung des Streams gescheitert");
                 }
 
-                xDocStream =  pStor->OpenSotStream( pStarDrawDoc3, STREAM_READ );
-                xDocStream->SetVersion( pStor->GetVersion() );
-                xDocStream->SetKey( pStor->GetKey() );
-                pDocStor = pStor;
+                SotStorageStreamRef docStream = pStor->OpenSotStream( pStarDrawDoc3, STREAM_READ );
+                docStream->SetVersion( pStor->GetVersion() );
+                docStream->SetKey( pStor->GetKey() );
+
+                // cast away const (should be regarded logical constness)
+                ((SdDrawDocument*)this)->xDocStream = docStream;
+                ((SdDrawDocument*)this)->pDocStor = pStor;
             }
 
             pRet = xDocStream;
