@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasemodel.cxx,v $
  *
- *  $Revision: 1.66 $
+ *  $Revision: 1.67 $
  *
- *  last change: $Author: kz $ $Date: 2004-06-11 09:47:05 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 13:36:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -600,6 +600,7 @@ SEQUENCE< UNOTYPE > SAL_CALL SfxBaseModel::getTypes() throw( RUNTIMEEXCEPTION )
                                                          ::getCppuType(( const REFERENCE< XEVENTSSUPPLIER        >*)NULL ) ,
                                                          ::getCppuType(( const REFERENCE< XVISUALOBJECT          >*)NULL ) ,
                                                          ::getCppuType(( const REFERENCE< XUNOTUNNEL             >*)NULL ) ,
+                                                         ::getCppuType(( const REFERENCE< XUICONFIGURATIONMANAGERSUPPLIER >*)NULL ),
                                                          ::getCppuType(( const REFERENCE< XDOCUMENTSUBSTORAGESUPPLIER >*)NULL ) ,
                                                          ::getCppuType(( const REFERENCE< XSCRIPTPROVIDERSUPPLIER >*)NULL ) ,
                                                          ::getCppuType(( const REFERENCE< XCLOSEBROADCASTER      >*)NULL ) ,
@@ -1078,6 +1079,22 @@ SEQUENCE< PROPERTYVALUE > SAL_CALL SfxBaseModel::getArgs() throw(::com::sun::sta
 
             seqArgsNew.realloc( ++nNewLength );
             seqArgsNew[ nNewLength - 1 ].Name = ::rtl::OUString::createFromAscii( "WinExtent" );
+            seqArgsNew[ nNewLength - 1 ].Value <<= aSize;
+        }
+
+        SfxViewFrame* pFrame = SfxViewFrame::GetFirst( m_pData->m_pObjectShell );
+        if ( pFrame )
+        {
+            SvBorder aBorder = pFrame->GetBorderPixelImpl( pFrame->GetViewShell() );
+
+            Sequence< sal_Int32 > aSize(4);
+            aSize[0] = aBorder.Left();
+            aSize[1] = aBorder.Top();
+            aSize[2] = aBorder.Right();
+            aSize[3] = aBorder.Bottom();
+
+            seqArgsNew.realloc( ++nNewLength );
+            seqArgsNew[ nNewLength - 1 ].Name = ::rtl::OUString::createFromAscii( "DocumentBorder" );
             seqArgsNew[ nNewLength - 1 ].Value <<= aSize;
         }
 
