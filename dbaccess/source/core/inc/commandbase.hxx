@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commandbase.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-08-30 07:54:00 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 15:13:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,11 +65,9 @@
 #ifndef _COM_SUN_STAR_UNO_SEQUENCE_HXX_
 #include <com/sun/star/uno/Sequence.hxx>
 #endif
-
-namespace utl
-{
-    class OConfigurationNode;
-}
+#ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
+#include <com/sun/star/beans/PropertyValue.hpp>
+#endif
 
 //........................................................................
 namespace dbaccess
@@ -82,12 +80,12 @@ namespace dbaccess
 //==========================================================================
 class OCommandBase
 {
-protected:
+public: // need public access
 // <properties>
-    ::com::sun::star::uno::Sequence< sal_Int8>  m_aLayoutInformation;
-    ::rtl::OUString                             m_sElementName;
+    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue>
+                                                m_aLayoutInformation;
     ::rtl::OUString                             m_sCommand;
-    sal_Bool                                    m_bEscapeProcessing;        // no BitField ! so it can be used with a OPropertyContainer
+    sal_Bool                                    m_bEscapeProcessing;        // no BitField ! so it can be used with a OPropertyStateContainer
     ::rtl::OUString                             m_sUpdateTableName;
     ::rtl::OUString                             m_sUpdateSchemaName;
     ::rtl::OUString                             m_sUpdateCatalogName;
@@ -96,15 +94,6 @@ protected:
 protected:
     OCommandBase() : m_bEscapeProcessing(sal_True) { }
 
-    /** store all configuration relevant informations under the given configuration node
-        @param      _rConfigLocation        the configuration node. must not be readonly
-    */
-    void    storeTo(const ::utl::OConfigurationNode& _rConfigLocation);
-
-    /** initialize with the informations stored under the given configuration node
-        @param      _rConfigLocation        the configuration node.
-    */
-    void    loadFrom(const ::utl::OConfigurationNode& _rConfigLocation);
 };
 
 //........................................................................
