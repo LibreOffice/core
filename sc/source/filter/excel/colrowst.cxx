@@ -2,9 +2,9 @@
  *
  *  $RCSfile: colrowst.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: obo $ $Date: 2003-10-21 08:47:29 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 13:31:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,8 +87,6 @@
 ColRowSettings::ColRowSettings( RootData& rRootData ) :
     ExcRoot( &rRootData )
 {
-    pHorizPb = pVertPb = NULL;
-
     nDefWidth = nDefHeight = 0;
 
     pWidth = new INT32 [ MAXCOL + 1 ];
@@ -105,12 +103,6 @@ ColRowSettings::ColRowSettings( RootData& rRootData ) :
 
 ColRowSettings::~ColRowSettings()
 {
-    if( pHorizPb )
-        delete pHorizPb;
-
-    if( pVertPb )
-        delete pVertPb;
-
     delete[] pRowFlags;
     delete[] pHeight;
     delete[] pColHidden;
@@ -136,18 +128,6 @@ void ColRowSettings::Reset( void )
     {
         delete pExtTabOpt;
         pExtTabOpt = NULL;
-    }
-
-    if( pHorizPb )
-    {
-        delete pHorizPb;
-        pHorizPb = NULL;
-    }
-
-    if( pVertPb )
-    {
-        delete pVertPb;
-        pVertPb = NULL;
     }
 
     bDirty = TRUE;
@@ -268,28 +248,6 @@ void ColRowSettings::Apply( sal_uInt16 nScTab )
     if( pExtTabOpt )
         pExcRoot->pExtDocOpt->Add( *this );
 
-    if( pHorizPb )
-        {
-        UINT16  n = pHorizPb->First();
-
-        while( n && n <= MAXROW )
-        {
-            rD.SetRowFlags( n, nScTab, rD.GetRowFlags( n, nScTab ) | CR_MANUALBREAK );
-            n = pHorizPb->Next();
-        }
-    }
-
-    if( pVertPb )
-    {
-        UINT16  n = pVertPb->First();
-
-        while( n && n <= MAXCOL )
-        {
-            rD.SetColFlags( n, nScTab, rD.GetColFlags( n, nScTab ) | CR_MANUALBREAK );
-            n = pVertPb->Next();
-        }
-    }
-
     bDirty = FALSE; // jetzt stimmt Tabelle im ScDocument
 
     rD.DecSizeRecalcLevel( nScTab );
@@ -370,7 +328,11 @@ void ColRowSettings::SetDefaultXF( UINT16 nColFirst, UINT16 nColLast, UINT16 nXF
         nColLast = MAXCOL;
 
     const XclImpRoot& rRoot = *pExcRoot->pIR;
-    rRoot.GetXFBuffer().ApplyPattern( nColFirst, 0, nColLast, MAXROW, rRoot.GetScTab(), nXF );
+
+    // #109555# assign the default column formatting here to ensure
+    // that explicit cell formatting is not overwritten.
+    for( sal_uInt16 nCol = nColFirst; nCol <= nColLast; ++nCol )
+        rRoot.GetXFIndexBuffer().SetColumnDefXF(nCol,nXF);
 }
 
 
@@ -430,29 +392,6 @@ void ColRowSettings::SetFrozen( const BOOL bFrozen )
 {
     GetExtTabOpt().nTabNum = pExcRoot->pIR->GetScTab();
     GetExtTabOpt().bFrozen = bFrozen;
-}
-
-
-
-void ColRowSettings::SetHorizPagebreak( const UINT16 n )
-{
-    DBG_ASSERT( n, "+ColRowSettings::SetHorizPagebreak(): 0 ist hier nicht zulaessig!" );
-
-    if( !pHorizPb )
-        pHorizPb = new ScfUInt16List;
-
-    pHorizPb->Append( n );
-}
-
-
-void ColRowSettings::SetVertPagebreak( const UINT16 n )
-{
-    DBG_ASSERT( n, "+ColRowSettings::SetVertPagebreak(): 0 ist hier nicht zulaessig!" );
-
-    if( !pVertPb )
-        pVertPb = new ScfUInt16List;
-
-    pVertPb->Append( n );
 }
 
 
