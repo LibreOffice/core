@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndole.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2001-03-08 21:17:20 $
+ *  last change: $Author: hr $ $Date: 2002-08-23 14:04:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,7 +167,10 @@ public:
 #endif
 };
 
+
 // Inline Metoden aus Node.hxx - erst hier ist der TxtNode bekannt !!
+#ifndef MACOSX
+// GrP moved to gcc_outl.cxx; revisit with gcc3
 inline SwOLENode *SwNode::GetOLENode()
 {
      return ND_OLENODE == nNodeType ? (SwOLENode*)this : 0;
@@ -176,7 +179,7 @@ inline const SwOLENode *SwNode::GetOLENode() const
 {
      return ND_OLENODE == nNodeType ? (const SwOLENode*)this : 0;
 }
-
+#endif
 
 #endif  // _NDOLE_HXX
 
