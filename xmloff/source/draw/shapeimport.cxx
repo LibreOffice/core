@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shapeimport.cxx,v $
  *
- *  $Revision: 1.57 $
+ *  $Revision: 1.58 $
  *
- *  last change: $Author: rt $ $Date: 2004-11-26 19:33:38 $
+ *  last change: $Author: rt $ $Date: 2005-01-27 11:26:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -258,6 +258,7 @@ XMLShapeImportHelper::XMLShapeImportHelper(
 
     // chain text attributes
     mpPropertySetMapper->ChainImportMapper(XMLTextImportHelper::CreateParaExtPropMapper(rImporter));
+    mpPropertySetMapper->ChainImportMapper(XMLTextImportHelper::CreateParaDefaultExtPropMapper(rImporter));
 
 /*
     // chain form attributes
