@@ -1,6 +1,7 @@
 ..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%\*
 ..\%__SRC%\bin\*.rdb %_DEST%\rdb%_EXT%\*
 ..\%__SRC%\lib\*.so %_DEST%\lib%_EXT%\*
+..\%__SRC%\lib\*.dylib %_DEST%\lib%_EXT%\*
 ..\source\fileacc.xml %_DEST%\xml%_EXT%\fileacc.xml
 
 ..\%__SRC%\lib\lib*static*.dylib %_DEST%\lib%_EXT%\lib*static*.dylib
