@@ -3,9 +3,9 @@
  *
  *  $RCSfile: GenericCommands.xcu,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 14:26:58 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 13:58:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -245,8 +245,11 @@
             </node>
             <node oor:name=".uno:HelpIndex" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">I~nhalt</value>
-                    <value xml:lang="en-US">~Contents</value>
+                    <value xml:lang="de">%PRODUCTNAME ~Hilfe</value>
+                    <value xml:lang="en-US">%PRODUCTNAME ~Help</value>
+                </prop>
+                <prop oor:name="Properties" oor:type="xs:int">
+                    <value>1</value>
                 </prop>
             </node>
             <node oor:name=".uno:FontHeight" oor:op="replace">
@@ -260,8 +263,8 @@
             </node>
             <node oor:name=".uno:ExtendedHelp" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Erweiterte Hilfe</value>
-                    <value xml:lang="en-US">Extended Help</value>
+                    <value xml:lang="de">~Direkthilfe</value>
+                    <value xml:lang="en-US">What's ~This?</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
@@ -3866,8 +3869,8 @@
             </node>
             <node oor:name=".uno:About" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">~Info über %PRODUCTNAME...</value>
-                    <value xml:lang="en-US">A~bout %PRODUCTNAME...</value>
+                    <value xml:lang="de">~Info über %PRODUCTNAME</value>
+                    <value xml:lang="en-US">A~bout %PRODUCTNAME</value>
                 </prop>
             </node>
             <node oor:name=".uno:PrinterSetup" oor:op="replace">
