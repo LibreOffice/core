@@ -2,9 +2,9 @@
  *
  *  $RCSfile: spelleng.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: nn $ $Date: 2002-03-04 19:28:30 $
+ *  last change: $Author: obo $ $Date: 2004-04-27 16:13:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,7 +65,7 @@
 
 #pragma hdrstop
 
-// INCLUDE ---------------------------------------------------------------
+#include <memory>
 
 #include "scitems.hxx"
 #include <svx/eeitem.hxx>
@@ -87,280 +87,342 @@
 #include "waitoff.hxx"
 #include "globstr.hrc"
 
+// ============================================================================
 
-// -----------------------------------------------------------------------
+namespace {
 
-BOOL lcl_HasString( ScDocument* pDoc, USHORT nCol, USHORT nRow, USHORT nTab,
-                    const String& rString )
+bool lclHasString( ScDocument& rDoc, USHORT nCol, USHORT nRow, USHORT nTab, const String& rString )
 {
     String aCompStr;
-    pDoc->GetString( nCol, nRow, nTab, aCompStr );
-    return ( aCompStr == rString );     //! case-insensitive?
+    rDoc.GetString( nCol, nRow, nTab, aCompStr );
+    return aCompStr == rString;      //! case-insensitive?
 }
 
-BOOL __EXPORT ScSpellingEngine::SpellNextDocument()
+} // namespace
+
+// ----------------------------------------------------------------------------
+
+ScConversionEngineBase::ScConversionEngineBase(
+        SfxItemPool* pEnginePool, ScViewData& rViewData,
+        ScDocument* pUndoDoc, ScDocument* pRedoDoc,
+        ESelection* pEdSelection,
+        USHORT nCol, USHORT nRow, USHORT nTab,
+        bool bCellSelection ) :
+    ScEditEngineDefaulter( pEnginePool ),
+    mrViewData( rViewData ),
+    mrDocShell( *rViewData.GetDocShell() ),
+    mrDoc( *rViewData.GetDocShell()->GetDocument() ),
+    mpUndoDoc( pUndoDoc ),
+    mpRedoDoc( pRedoDoc ),
+    mpEditSel( pEdSelection ),
+    meCurrLang( LANGUAGE_ENGLISH_US ),
+    mnStartCol( nCol ),
+    mnStartRow( nRow ),
+    mnStartTab( nTab ),
+    mnCurrCol( nCol ),
+    mnCurrRow( nRow ),
+    mbCellSelect( bCellSelection ),
+    mbIsAnyModified( false ),
+    mbInitialState( true ),
+    mbWrappedInTable( false )
 {
-    ScDocShell* pDocSh = pViewData->GetDocShell();
-    ScDocument* pDoc = pDocSh->GetDocument();
-    ScMarkData& rMark = pViewData->GetMarkData();
-    ScTabViewShell* pViewShell = pViewData->GetViewShell();
-    ScSplitPos eWhich = pViewData->GetActivePart();
-    CellType eCellType;
+}
+
+ScConversionEngineBase::~ScConversionEngineBase()
+{
+}
+
+bool ScConversionEngineBase::FindNextConversionCell()
+{
+    ScMarkData& rMark = mrViewData.GetMarkData();
+    ScTabViewShell* pViewShell = mrViewData.GetViewShell();
+    ScSplitPos eWhich = mrViewData.GetActivePart();
     ScBaseCell* pCell = NULL;
-    LanguageType eLnge = LANGUAGE_NONE;
-    EditTextObject* pETObject = NULL;
-    const SfxPoolItem* pItem = NULL;
-    SvxLanguageItem* pLangIt = NULL;
     const ScPatternAttr* pPattern = NULL;
     const ScPatternAttr* pLastPattern = NULL;
-    SfxItemSet* pEditDefaults = new SfxItemSet( GetEmptyItemSet() );
+    ::std::auto_ptr< SfxItemSet > pEditDefaults( new SfxItemSet( GetEmptyItemSet() ) );
 
-    if (IsModified())
+    if( IsModified() )
     {
-        bIsModifiedAtAll = TRUE;
+        mbIsAnyModified = true;
 
         String aNewStr = GetText();
 
-        BOOL bMultiTab = ( rMark.GetSelectCount() > 1 );
+        BOOL bMultiTab = (rMark.GetSelectCount() > 1);
         String aVisibleStr;
-        if (bMultiTab)
-            pDoc->GetString( nOldCol, nOldRow, nOrgTab, aVisibleStr );
+        if( bMultiTab )
+            mrDoc.GetString( mnCurrCol, mnCurrRow, mnStartTab, aVisibleStr );
 
-        USHORT nTabCount = pDoc->GetTableCount();
-        for ( USHORT nTab=0; nTab<nTabCount; nTab++ )
+        for( USHORT nTab = 0, nTabCount = mrDoc.GetTableCount(); nTab < nTabCount; ++nTab )
         {
             //  #69965# always change the cell on the visible tab,
             //  on the other selected tabs only if they contain the same text
 
-            if ( nTab == nOrgTab || ( bMultiTab && rMark.GetTableSelect(nTab) &&
-                                    lcl_HasString( pDoc, nOldCol, nOldRow, nTab, aVisibleStr ) ) )
+            if( (nTab == mnStartTab) ||
+                (bMultiTab && rMark.GetTableSelect( nTab ) &&
+                 lclHasString( mrDoc, mnCurrCol, mnCurrRow, nTab, aVisibleStr )) )
             {
-                pDoc->GetCellType(nOldCol, nOldRow, nTab, eCellType);
-                pDoc->GetCell(nOldCol, nOldRow, nTab, pCell);
-                if (pUndoDoc && pCell)
+                CellType eCellType;
+                mrDoc.GetCellType( mnCurrCol, mnCurrRow, nTab, eCellType );
+                mrDoc.GetCell( mnCurrCol, mnCurrRow, nTab, pCell );
+
+                if( mpUndoDoc && pCell )
                 {
-                    ScBaseCell* pUndoCell = pCell->Clone(pUndoDoc);
-                    pUndoDoc->PutCell(nOldCol, nOldRow, nTab, pUndoCell);
+                    ScBaseCell* pUndoCell = pCell->Clone( mpUndoDoc );
+                    mpUndoDoc->PutCell( mnCurrCol, mnCurrRow, nTab, pUndoCell );
                 }
-                if (eCellType == CELLTYPE_EDIT)
+
+                if( eCellType == CELLTYPE_EDIT )
                 {
-                    if (pCell)
+                    if( pCell )
                     {
-                        pETObject = CreateTextObject();
-                        ((ScEditCell*) pCell)->SetData( pETObject, GetEditTextObjectPool() );
-                        delete pETObject;
+                        ScEditCell* pEditCell = static_cast< ScEditCell* >( pCell );
+                        ::std::auto_ptr< EditTextObject > pEditObj( CreateTextObject() );
+                        pEditCell->SetData( pEditObj.get(), GetEditTextObjectPool() );
                     }
                 }
                 else
                 {
-                    pDoc->SetString(nOldCol, nOldRow, nTab, aNewStr);
-                    pDoc->GetCell(nOldCol, nOldRow, nTab, pCell);
+                    mrDoc.SetString( mnCurrCol, mnCurrRow, nTab, aNewStr );
+                    mrDoc.GetCell( mnCurrCol, mnCurrRow, nTab, pCell );
                 }
-                if (pRedoDoc && pCell)
+
+                if( mpRedoDoc && pCell )
                 {
-                    ScBaseCell* pRedoCell = pCell->Clone(pRedoDoc);
-                    pRedoDoc->PutCell(nOldCol, nOldRow, nTab, pRedoCell);
+                    ScBaseCell* pRedoCell = pCell->Clone( mpRedoDoc );
+                    mpRedoDoc->PutCell( mnCurrCol, mnCurrRow, nTab, pRedoCell );
                 }
-                pDocSh->PostPaintCell(nOldCol, nOldRow, nTab);
+
+                mrDocShell.PostPaintCell( mnCurrCol, mnCurrRow, nTab );
             }
         }
     }
     pCell = NULL;
-    USHORT nCol, nRow;
-    BOOL bStop = FALSE;
-    BOOL bNext;
-    nCol = nOldCol;
-    if (bFirstTime)
+    USHORT nNewCol = mnCurrCol;
+    USHORT nNewRow = mnCurrRow;
+
+    if( mbInitialState )
     {
-        bFirstTime = FALSE;
-        if (nOldCol == nOrgCol && nOldRow == nOrgRow)   // das erste Mal
-            nRow = nOldRow-1;
-        else
-            nRow = nOldRow;
+        /*  On very first call, decrement row to let GetNextSpellingCell() find
+            the first cell of current range. */
+        mbInitialState = false;
+        --nNewRow;
     }
-    else
-        nRow = nOldRow;
-    while (!bStop)
+
+    bool bLoop = true;
+    bool bFound = false;
+    while( bLoop && !bFound )
     {
-        bNext = pDoc->GetNextSpellingCell(nCol, nRow, nOrgTab, bInSel, rMark);
-        if (bNext)
+        bLoop = mrDoc.GetNextSpellingCell( nNewCol, nNewRow, mnStartTab, mbCellSelect, rMark );
+        if( bLoop )
         {
-            if (!bFirstTable &&
-                 (nCol > nOrgCol || (nCol == nOrgCol && nRow >= nOrgRow)))
+            FillFromCell( mnCurrCol, mnCurrRow, mnStartTab );
+
+            if( mbWrappedInTable && ((nNewCol > mnStartCol) || ((nNewCol == mnStartCol) && (nNewRow >= mnStartRow))) )
             {
-                pDoc->GetCellType(nOldCol, nOldRow, nOrgTab, eCellType);
-                if (eCellType == CELLTYPE_STRING)
+                ShowFinishDialog();
+                bLoop = false;
+            }
+            else if( nNewCol > MAXCOL )
+            {
+                // no more cells in the sheet - try to restart at top of sheet
+
+                if( mbCellSelect || ((mnStartCol == 0) && (mnStartRow == 0)) )
                 {
-                    String sOldText;
-                    pDoc->GetString(nOldCol, nOldRow, nOrgTab, sOldText);
-                    SetText(sOldText);
+                    // conversion started at cell A1 or in selection, do not query to restart at top
+                    ShowFinishDialog();
+                    bLoop = false;
                 }
-                else if (eCellType == CELLTYPE_EDIT)
+                else if( ShowTableWrapDialog() )
                 {
-                    pDoc->GetCell(nOldCol, nOldRow, nOrgTab, pCell);
-                    if (pCell)
-                    {
-                        const EditTextObject* pNewTObj = NULL;
-                        ((ScEditCell*) pCell)->GetData(pNewTObj);
-                        if (pNewTObj)
-                            SetText(*pNewTObj);
-                    }
+                    // conversion started anywhere but in cell A1, user wants to restart
+                    nNewRow = MAXROW + 2;
+                    mbWrappedInTable = true;
                 }
                 else
-                    SetText(EMPTY_STRING);
-
-                {   // own scope for WaitCursorOff
-                    ScWaitCursorOff aWaitOff( pDocSh->GetDialogParent() );
-                    InfoBox aBox( pViewData->GetDialogParent(),
-                        ScGlobal::GetRscString(STR_SPELLING_STOP_OK));
-                    aBox.Execute();
-                }
-                return FALSE;
+                    bLoop = false;
             }
-            else if ( nCol == MAXCOL+1 )
+            else
             {
-                if ( nOrgCol == 0 && nOrgRow == 0 )
+                pPattern = mrDoc.GetPattern( nNewCol, nNewRow, mnStartTab );
+                if( pPattern && (pPattern != pLastPattern) )
                 {
-                    pDoc->GetCellType(nOldCol, nOldRow, nOrgTab, eCellType);
-                    if (eCellType == CELLTYPE_STRING)
-                    {
-                        String sOldText;
-                        pDoc->GetString(nOldCol, nOldRow, nOrgTab, sOldText);
-                        SetText(sOldText);
-                    }
-                    else if (eCellType == CELLTYPE_EDIT)
-                    {
-                        pDoc->GetCell(nOldCol, nOldRow, nOrgTab, pCell);
-                        if (pCell)
-                        {
-                            const EditTextObject* pNewTObj = NULL;
-                            ((ScEditCell*) pCell)->GetData(pNewTObj);
-                            if (pNewTObj)
-                                SetText(*pNewTObj);
-                        }
-                    }
-                    else
-                        SetText(EMPTY_STRING);
-
-                    {   // own scope for WaitCursorOff
-                        ScWaitCursorOff aWaitOff( pDocSh->GetDialogParent() );
-                        InfoBox aBox( pViewData->GetDialogParent(),
-                            ScGlobal::GetRscString(STR_SPELLING_STOP_OK));
-                        aBox.Execute();
-                    }
-
-                    return FALSE;
-                }
-                else
-                {
-                                        // zuerst auf letzte Zelle zuruecksetzen
-                                        // fuer Paint
-                    pDoc->GetCellType(nOldCol, nOldRow, nOrgTab, eCellType);
-                    if (eCellType == CELLTYPE_STRING)
-                    {
-                        String sOldText;
-                        pDoc->GetString(nOldCol, nOldRow, nOrgTab, sOldText);
-                        SetText(sOldText);
-                    }
-                    else if (eCellType == CELLTYPE_EDIT)
-                    {
-                        pDoc->GetCell(nOldCol, nOldRow, nOrgTab, pCell);
-                        if (pCell)
-                        {
-                            const EditTextObject* pNewTObj = NULL;
-                            ((ScEditCell*) pCell)->GetData(pNewTObj);
-                            if (pNewTObj)
-                                SetText(*pNewTObj);
-                        }
-                    }
-                    else
-                        SetText(EMPTY_STRING);
-
-                    short nRet;
-                    {   // own scope for WaitCursorOff
-                        ScWaitCursorOff aWaitOff( pDocSh->GetDialogParent() );
-                        nRet = MessBox( pViewData->GetDialogParent(),
-                            WinBits(WB_YES_NO | WB_DEF_YES),
-                            ScGlobal::GetRscString( STR_MSSG_DOSUBTOTALS_0 ),       // "StarCalc"
-                            ScGlobal::GetRscString( STR_SPELLING_BEGIN_TAB) )       // Fortsetzen?
-                                       .Execute();
-                    }
-                    if (nRet == RET_YES)
-                    {
-                        nRow = MAXROW+2;
-                        bFirstTable = FALSE;
-                    }
-                    else
-                        return FALSE;
-                }
-            }
-            else                    // Stringzelle mit Inhalt
-            {
-                pPattern = pDoc->GetPattern(nCol, nRow, nOrgTab);
-                if (pPattern && pPattern != pLastPattern)
-                {
-                    pPattern->FillEditItemSet( pEditDefaults );
+                    pPattern->FillEditItemSet( pEditDefaults.get() );
                     SetDefaults( *pEditDefaults );
                     pLastPattern = pPattern;
                 }
-                pItem = pDoc->GetAttr(nCol, nRow, nOrgTab, ATTR_FONT_LANGUAGE);
-                pLangIt = PTR_CAST( SvxLanguageItem, pItem );
-                if (pLangIt)
+
+                // language changed?
+                const SfxPoolItem* pItem = mrDoc.GetAttr( nNewCol, nNewRow, mnStartTab, ATTR_FONT_LANGUAGE );
+                if( const SvxLanguageItem* pLangItem = PTR_CAST( SvxLanguageItem, pItem ) )
                 {
-                    eLnge = (LanguageType) pLangIt->GetValue();
-                    if ( eLnge == LANGUAGE_SYSTEM )
-                        eLnge = Application::GetSettings().GetLanguage();   // never use SYSTEM for spelling
-                    if (eLnge != eOldLnge)
+                    LanguageType eLang = static_cast< LanguageType >( pLangItem->GetValue() );
+                    if( eLang == LANGUAGE_SYSTEM )
+                        eLang = Application::GetSettings().GetLanguage();   // never use SYSTEM for spelling
+                    if( eLang != meCurrLang )
                     {
-                        eOldLnge = eLnge;
-                        SetDefaultLanguage( eLnge );
+                        meCurrLang = eLang;
+                        SetDefaultLanguage( eLang );
                     }
                 }
-                pDoc->GetCellType(nCol, nRow, nOrgTab, eCellType);
-                if (eCellType == CELLTYPE_STRING)
-                {
-                    String sOldText;
-                    pDoc->GetString(nCol, nRow, nOrgTab, sOldText);
-                    SetText(sOldText);
-                }
-                else if (eCellType == CELLTYPE_EDIT)
-                {
-                    pDoc->GetCell(nCol, nRow, nOrgTab, pCell);
-                    if (pCell)
-                    {
-                        const EditTextObject* pNewTObj = NULL;
-                        ((ScEditCell*) pCell)->GetData(pNewTObj);
-                        if (pNewTObj)
-                            SetText(*pNewTObj);
-                    }
-                }
-                else
-                    SetText(EMPTY_STRING);
-                if (HasSpellErrors())
-                    bStop = TRUE;
+
+                FillFromCell( nNewCol, nNewRow, mnStartTab );
+
+                bFound = bLoop && NeedsConversion();
             }
         }
-        else
-            return FALSE;
     }
-    pViewShell->AlignToCursor( nCol, nRow, SC_FOLLOW_JUMP );
-    pViewShell->SetCursor( nCol, nRow, TRUE );
-    pViewData->GetView()->MakeEditView(this, nCol, nRow );
-    EditView* pEditView = pViewData->GetSpellingView();
-    if (pEditSel)                                   // hoechstens beim ersten Mal
+
+    if( bFound )
     {
-        pEditView->SetSelection(*pEditSel);
-        pEditSel = NULL;
+        pViewShell->AlignToCursor( nNewCol, nNewRow, SC_FOLLOW_JUMP );
+        pViewShell->SetCursor( nNewCol, nNewRow, TRUE );
+        mrViewData.GetView()->MakeEditView( this, nNewCol, nNewRow );
+        EditView* pEditView = mrViewData.GetSpellingView();
+        if( mpEditSel )
+        {
+            pEditView->SetSelection( *mpEditSel );
+            mpEditSel = NULL;
+        }
+        else
+        {
+            ESelection aSel;
+            pEditView->SetSelection( aSel );
+        }
+
+        ClearModifyFlag();
+        mnCurrCol = nNewCol;
+        mnCurrRow = nNewRow;
     }
-    else
-        pEditView->SetSelection(ESelection(0,0,0,0));
-    ClearModifyFlag();
-    nOldCol = nCol;
-    nOldRow = nRow;
-    delete pEditDefaults;
-    return TRUE;
+
+    return bFound;
 }
 
+bool ScConversionEngineBase::ShowTableWrapDialog()
+{
+    // default: no dialog, always restart at top
+    return true;
+}
 
+void ScConversionEngineBase::ShowFinishDialog()
+{
+    // default: no dialog
+}
 
+// private --------------------------------------------------------------------
+
+void ScConversionEngineBase::FillFromCell( USHORT nCol, USHORT nRow, USHORT nTab )
+{
+    CellType eCellType;
+    mrDoc.GetCellType( nCol, nRow, nTab, eCellType );
+
+    switch( eCellType )
+    {
+        case CELLTYPE_STRING:
+        {
+            String aText;
+            mrDoc.GetString( nCol, nRow, nTab, aText );
+            SetText( aText );
+        }
+        break;
+        case CELLTYPE_EDIT:
+        {
+            ScBaseCell* pCell = NULL;
+            mrDoc.GetCell( nCol, nRow, nTab, pCell );
+            if( pCell )
+            {
+                const EditTextObject* pNewEditObj = NULL;
+                static_cast< ScEditCell* >( pCell )->GetData( pNewEditObj );
+                if( pNewEditObj )
+                    SetText( *pNewEditObj );
+            }
+        }
+        break;
+        default:
+            SetText( EMPTY_STRING );
+    }
+}
+
+// ============================================================================
+
+ScSpellingEngine::ScSpellingEngine(
+        SfxItemPool* pEnginePool, ScViewData& rViewData,
+        ScDocument* pUndoDoc, ScDocument* pRedoDoc,
+        ESelection* pEdSelection,
+        USHORT nCol, USHORT nRow, USHORT nTab,
+        bool bCellSelection, XSpellCheckerRef xSpeller ) :
+    ScConversionEngineBase( pEnginePool, rViewData, pUndoDoc, pRedoDoc, pEdSelection, nCol, nRow, nTab, bCellSelection )
+{
+    SetSpeller( xSpeller );
+}
+
+void ScSpellingEngine::ConvertAll( EditView& rEditView )
+{
+    EESpellState eState = EE_SPELL_OK;
+    if( FindNextConversionCell() )
+        eState = rEditView.StartSpeller( static_cast< BOOL >( TRUE ) );
+
+    DBG_ASSERT( eState != EE_SPELL_NOSPELLER, "ScSpellingEngine::Convert - no spell checker" );
+    if( eState == EE_SPELL_NOLANGUAGE )
+    {
+        ScWaitCursorOff aWaitOff( mrDocShell.GetDialogParent() );
+        InfoBox( mrViewData.GetDialogParent(), ScGlobal::GetRscString( STR_NOLANGERR ) ).Execute();
+    }
+}
+
+BOOL ScSpellingEngine::SpellNextDocument()
+{
+    return FindNextConversionCell();
+}
+
+bool ScSpellingEngine::NeedsConversion()
+{
+    return HasSpellErrors() != EE_SPELL_OK;
+}
+
+bool ScSpellingEngine::ShowTableWrapDialog()
+{
+    ScWaitCursorOff aWaitOff( mrDocShell.GetDialogParent() );
+    MessBox aMsgBox( mrViewData.GetDialogParent(), WinBits( WB_YES_NO | WB_DEF_YES ),
+        ScGlobal::GetRscString( STR_MSSG_DOSUBTOTALS_0 ),
+        ScGlobal::GetRscString( STR_SPELLING_BEGIN_TAB) );
+    return aMsgBox.Execute() == RET_YES;
+}
+
+void ScSpellingEngine::ShowFinishDialog()
+{
+    ScWaitCursorOff aWaitOff( mrDocShell.GetDialogParent() );
+    InfoBox( mrViewData.GetDialogParent(), ScGlobal::GetRscString( STR_SPELLING_STOP_OK ) ).Execute();
+}
+
+// ============================================================================
+
+ScTextConversionEngine::ScTextConversionEngine(
+        SfxItemPool* pEnginePool, ScViewData& rViewData,
+        ScDocument* pUndoDoc, ScDocument* pRedoDoc,
+        ESelection* pEdSelection,
+        USHORT nCol, USHORT nRow, USHORT nTab,
+        bool bCellSelection, LanguageType eConvLanguage ) :
+    ScConversionEngineBase( pEnginePool, rViewData, pUndoDoc, pRedoDoc, pEdSelection, nCol, nRow, nTab, bCellSelection ),
+    meConvLang( eConvLanguage )
+{
+}
+
+void ScTextConversionEngine::ConvertAll( EditView& rEditView )
+{
+    if( FindNextConversionCell() )
+        rEditView.StartTextConversion( meConvLang, TRUE );
+}
+
+BOOL ScTextConversionEngine::ConvertNextDocument()
+{
+    return FindNextConversionCell();
+}
+
+bool ScTextConversionEngine::NeedsConversion()
+{
+    return HasConvertibleTextPortion( meConvLang );
+}
+
+// ============================================================================
 
