@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fusel2.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2000-12-20 18:43:53 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 11:27:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,23 +113,23 @@ BOOL FuSelection::TestDetective( SdrPageView* pPV, const Point& rPos )
                 Point aLineStart = pObject->GetPoint(0);
                 Point aLineEnd   = pObject->GetPoint(1);
                 Point aPixel = pWindow->LogicToPixel( aLineStart );
-                short nStartCol;
-                short nStartRow;
+                SCsCOL nStartCol;
+                SCsROW nStartRow;
                 pViewData->GetPosFromPixel( aPixel.X(), aPixel.Y(), ePos, nStartCol, nStartRow );
                 aPixel = pWindow->LogicToPixel( aLineEnd );
-                short nEndCol;
-                short nEndRow;
+                SCsCOL nEndCol;
+                SCsROW nEndRow;
                 pViewData->GetPosFromPixel( aPixel.X(), aPixel.Y(), ePos, nEndCol, nEndRow );
-                short nCurX = (short) pViewData->GetCurX();
-                short nCurY = (short) pViewData->GetCurY();
+                SCsCOL nCurX = (SCsCOL) pViewData->GetCurX();
+                SCsROW nCurY = (SCsROW) pViewData->GetCurY();
                 BOOL bStart = ( Diff( rPos,aLineStart ) > Diff( rPos,aLineEnd ) );
                 if ( nCurX == nStartCol && nCurY == nStartRow )
                     bStart = FALSE;
                 else if ( nCurX == nEndCol && nCurY == nEndRow )
                     bStart = TRUE;
 
-                short nDifX;
-                short nDifY;
+                SCsCOL nDifX;
+                SCsROW nDifY;
                 if ( bStart )
                 {
                     nDifX = nStartCol - nCurX;
