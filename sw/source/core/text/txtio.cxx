@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtio.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:10:21 $
+ *  last change: $Author: kz $ $Date: 2004-08-02 14:16:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,23 +207,26 @@ void lcl_OutFrame( SvFileStream& rStr, const SwFrm* pFrm, ByteString& rSp, sal_B
     if( pFrm->IsPageFrm() )
     {
         const SwPageFrm* pPg = (SwPageFrm*)pFrm;
-        const SwSortDrawObjs *pSorted = pPg->GetSortedObjs();
+        const SwSortedObjs *pSorted = pPg->GetSortedObjs();
         const MSHORT nCnt = pSorted ? pSorted->Count() : 0;
         if( nCnt )
         {
             for( MSHORT i=0; i < nCnt; ++i )
             {
-                SdrObject *pObj = (*pSorted)[ i ];
-                if( pObj->ISA(SwVirtFlyDrawObj) )
+                // --> OD 2004-07-07 #i28701# - consider changed type of
+                // <SwSortedObjs> entries
+                SwAnchoredObject* pAnchoredObj = (*pSorted)[ i ];
+                if( pAnchoredObj->ISA(SwFlyFrm) )
                 {
-                    SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm();
+                    SwFlyFrm* pFly = static_cast<SwFlyFrm*>(pAnchoredObj);
                     lcl_OutFrame( rStr, pFly, rSp, sal_False );
                 }
                 else
                 {
-                    aTmp = pObj->IsUnoObj() ? "UNO" : "Drw";
+                    aTmp = pAnchoredObj->GetDrawObj()->IsUnoObj() ? "UNO" : "Drw";
                     rStr << aTmp;
                 }
+                // <--
                 if( i < nCnt - 1 )
                     rStr << endl << rSp;
             }
@@ -236,15 +239,17 @@ void lcl_OutFrame( SvFileStream& rStr, const SwFrm* pFrm, ByteString& rSp, sal_B
         {
             for( MSHORT i=0; i < nCnt; ++i )
             {
-                SdrObject *pObj = (*pFrm->GetDrawObjs())[ i ];
-                if( pObj->ISA(SwVirtFlyDrawObj) )
+                // --> OD 2004-07-07 #i28701# - consider changed type of
+                // <SwSortedObjs> entries
+                SwAnchoredObject* pAnchoredObj = (*pFrm->GetDrawObjs())[ i ];
+                if( pAnchoredObj->ISA(SwFlyFrm) )
                 {
-                    SwFlyFrm *pFly = ((SwVirtFlyDrawObj*)pObj)->GetFlyFrm();
+                    SwFlyFrm* pFly = static_cast<SwFlyFrm*>(pAnchoredObj);
                     lcl_OutFrame( rStr, pFly, rSp, sal_False );
                 }
                 else
                 {
-                    aTmp = pObj->IsUnoObj() ? "UNO" : "Drw";
+                    aTmp = pAnchoredObj->GetDrawObj()->IsUnoObj() ? "UNO" : "Drw";
                     rStr << aTmp;
                 }
                 if( i < nCnt - 1 )
@@ -919,7 +924,7 @@ SvStream &SwGrfNumPortion::operator<<( SvStream &rOs ) const //$ ostream
 {
     CONSTCHAR( pTxt, " {GRFNUM:" );
     rOs << pTxt;
-    SwGrfNumPortion::operator<<( rOs );
+    SwNumberPortion::operator<<( rOs );
     rOs << pClose;
     return rOs;
 }
