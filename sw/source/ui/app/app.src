@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.src,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: os $ $Date: 2002-07-30 07:39:53 $
+ *  last change: $Author: cd $ $Date: 2002-07-31 07:44:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1591,6 +1591,7 @@ SfxStyleFamilies DLG_STYLE_DESIGNER
 BITMAP BMP_FEHLT { FILE = "x.bmp" ; };
  // Bitmap fuer die NumerierungsVorlagen im Organizer
 Bitmap BMP_STYLES_FAMILY_NUM { File = "styfamnu.bmp" ; };
+Bitmap BMP_STYLES_FAMILY_NUM_HC { File = "styfamnu_h.bmp" ; };
 
 String STR_ENV_TITLE
 {
