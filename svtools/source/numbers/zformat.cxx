@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zformat.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: er $ $Date: 2001-03-22 19:03:32 $
+ *  last change: $Author: er $ $Date: 2001-04-06 18:04:40 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1694,34 +1694,6 @@ BOOL SvNumberformat::GetOutputString(double fNumber,
             case NUMBERFORMAT_DATETIME:
                 bRes |= ImpGetDateTimeOutput(fNumber, 0, OutString);
                 bHadStandard = TRUE;
-            break;
-            case NUMBERFORMAT_PERCENT:
-            {
-                 if (fabs(fNumber) < _D_MAX_D_BY_100)
-                 {
-                    fNumber *= 100;
-                    SolarMath::DoubleToString(OutString, fNumber, 'F', 2,
-                                   rLoc().getNumDecimalSep().GetChar(0));
-                    if (OutString.GetChar(0) == '-' &&
-                        OutString.GetTokenCount('0') == OutString.Len())
-                        OutString.EraseLeadingChars('-');            // nicht -0
-                    OutString+= '%';
-                 }
-                 else
-                    OutString = rScan.GetErrorString();
-                bHadStandard = TRUE;
-            }
-            break;
-            case NUMBERFORMAT_SCIENTIFIC:
-            {
-                const ImpSvNumberformatInfo& rInfo = NumFor[0].Info();
-                SolarMath::DoubleToString( OutString, fNumber, 'E',
-                    rInfo.nCntPre + rInfo.nCntPost - 1,
-                    rLoc().getNumDecimalSep().GetChar(0) );
-                bHadStandard = TRUE;
-            }
-            break;
-            default:
             break;
         }
     }
