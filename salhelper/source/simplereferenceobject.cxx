@@ -2,9 +2,9 @@
  *
  *  $RCSfile: simplereferenceobject.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: sb $ $Date: 2001-06-05 15:21:32 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 18:12:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -106,7 +106,7 @@ void SimpleReferenceObject::operator delete(void * pPtr,
                                             std::nothrow_t const & rNothrow)
     SAL_THROW(())
 {
-#if defined WNT
+#if defined WNT || (defined IRIX && !defined GCC)
     ::operator delete(pPtr); // WNT lacks a global nothrow operator delete...
 #else // WNT
     ::operator delete(pPtr, rNothrow);
