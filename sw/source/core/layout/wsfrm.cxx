@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wsfrm.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: ama $ $Date: 2001-11-22 11:13:58 $
+ *  last change: $Author: ama $ $Date: 2001-12-12 14:39:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2018,8 +2018,8 @@ SwTwips SwCntntFrm::ShrinkFrm( SwTwips nDist, BOOL bTst, BOOL bInfo )
     {
         SwTwips nRstHeight;
         if( GetUpper() )
-            nRstHeight = - (Frm().*fnRect->fnCheckLimit)
-                         ( (GetUpper()->*fnRect->fnGetLimit)() );
+            nRstHeight = (Frm().*fnRect->fnBottomDist)
+                         ( (GetUpper()->*fnRect->fnGetPrtBottom)() );
         else
             nRstHeight = 0;
         if( nRstHeight < 0 )
@@ -3052,7 +3052,7 @@ void SwLayoutFrm::ChgLowersProp( const Size& rOldSize )
                 {
                     if( nType & nFixWidth )
                         pFrm->Frm().Width( Prt().Width() );
-                    else if( rOldSize.Width() )
+                    else if( rOldSize.Width() && !pFrm->IsFtnFrm() )
                         pFrm->Frm().Width( (pFrm->Frm().Width() * Prt().Width()) /
                                         rOldSize.Width() );
                 }
@@ -3060,7 +3060,7 @@ void SwLayoutFrm::ChgLowersProp( const Size& rOldSize )
                 {
                     if( nType & nFixHeight )
                         pFrm->Frm().Height( Prt().Height() );
-                    else if( rOldSize.Height() )
+                    else if( rOldSize.Height() && !pFrm->IsFtnFrm() )
                         pFrm->Frm().Height( (pFrm->Frm().Height() * Prt().Height()) /
                                             rOldSize.Height() );
                 }
@@ -3202,7 +3202,7 @@ void SwLayoutFrm::Format( const SwBorderAttrs *pAttrs )
                 //Unterkante des Uppers nicht ueberschreiten.
                 if ( GetUpper() && (Frm().*fnRect->fnGetHeight)() )
                 {
-                    const SwTwips nLimit = (GetUpper()->*fnRect->fnGetLimit)();
+                    const SwTwips nLimit = (GetUpper()->*fnRect->fnGetPrtBottom)();
                     if( (this->*fnRect->fnSetLimit)( nLimit ) &&
                         nOldLeft == (Frm().*fnRect->fnGetLeft)() &&
                         nOldTop  == (Frm().*fnRect->fnGetTop)() )
@@ -3539,9 +3539,9 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
         if( IsSctFrm() )
         {
 #ifdef VERTICAL_LAYOUT
-            nMaximum = (Frm().*fnRect->fnGetHeight)() - nBorder -
-                       (Frm().*fnRect->fnCheckLimit)(
-                                        (GetUpper()->*fnRect->fnGetLimit)() );
+            nMaximum = (Frm().*fnRect->fnGetHeight)() - nBorder +
+                       (Frm().*fnRect->fnBottomDist)(
+                                        (GetUpper()->*fnRect->fnGetPrtBottom)() );
 #else
             nMaximum = GetUpper()->Frm().Top() + GetUpper()->Prt().Top()
                        + GetUpper()->Prt().Height() - Frm().Top() - nBorder;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabfrm.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ama $ $Date: 2001-11-16 14:39:34 $
+ *  last change: $Author: ama $ $Date: 2001-12-12 14:42:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -240,7 +240,8 @@ SwTwips SwTabFrm::Split( const SwTwips nCutPos )
 {
 #ifdef VERTICAL_LAYOUT
     SWRECTFN( this )
-    ASSERT( bVert ? nCutPos >= Frm().Left() && nCutPos <= Frm().Right() :
+    ASSERT( bVert ? nCutPos >= Frm().Left()
+            && nCutPos <= Frm().Left() + Frm().Width() :
             nCutPos >= Frm().Top() && nCutPos <= Frm().Bottom(),
             "SplitLine out of table." );
 #else
@@ -583,7 +584,7 @@ void MA_FASTCALL lcl_FirstTabCalc( SwTabFrm *pTab )
         } while ( pRow );
     }
     SwFrm *pUp = pTab->GetUpper();
-    long nBottom = (pUp->*fnRect->fnGetLimit)();
+    long nBottom = (pUp->*fnRect->fnGetPrtBottom)();
     if ( pTab->GetFmt()->GetDoc()->IsBrowseMode() )
         nBottom += pUp->Grow( LONG_MAX, TRUE );
     lcl_CalcLowers( (SwLayoutFrm*)pTab->Lower(), nBottom );
@@ -1032,8 +1033,8 @@ void SwTabFrm::MakeAll()
 
         //Fertig?
 #ifdef VERTICAL_LAYOUT
-        if( (Frm().*fnRect->fnCheckLimit)( (GetUpper()->*fnRect->fnGetLimit)())
-             <= 0)
+        if( (Frm().*fnRect->fnBottomDist)( (GetUpper()->*fnRect->fnGetPrtBottom)())
+             >= 0)
 #else
         if ( GetUpper()->Prt().Bottom()+GetUpper()->Frm().Top() >=
              Frm().Bottom() )
@@ -1049,10 +1050,10 @@ void SwTabFrm::MakeAll()
                 {
                     SwFrm *pTmp = GetUpper();
 #ifdef VERTICAL_LAYOUT
-                    SwTwips nDeadLine = (pTmp->*fnRect->fnGetLimit)();
+                    SwTwips nDeadLine = (pTmp->*fnRect->fnGetPrtBottom)();
                     if ( GetFmt()->GetDoc()->IsBrowseMode() )
                         nDeadLine += pTmp->Grow( LONG_MAX, TRUE );
-                    if( (Frm().*fnRect->fnCheckLimit)( nDeadLine ) < 0 )
+                    if( (Frm().*fnRect->fnBottomDist)( nDeadLine ) > 0 )
                     {
                         SwFrm *pRow = GetFollow()->Lower();
                         if ( bRepeat )
@@ -1169,14 +1170,14 @@ void SwTabFrm::MakeAll()
             if ( !bRepeat || Lower()->GetNext()->GetNext() )
             {
 #ifdef VERTICAL_LAYOUT
-                SwTwips nDeadLine = (GetUpper()->*fnRect->fnGetLimit)();
+                SwTwips nDeadLine = (GetUpper()->*fnRect->fnGetPrtBottom)();
                 if( IsInSct() )
                     nDeadLine = (*fnRect->fnYInc)( nDeadLine,
                                         GetUpper()->Grow( LONG_MAX, TRUE ) );
                 ::lcl_CalcLayout( (SwLayoutFrm*)Lower(), nDeadLine );
                 bLowersFormatted = TRUE;
                 aNotify.SetLowersComplete( TRUE );
-                if( (Frm().*fnRect->fnCheckLimit)( nDeadLine ) < 0 )
+                if( (Frm().*fnRect->fnBottomDist)( nDeadLine ) > 0 )
                     continue;
 
                 SwTwips nBreakLine = (Frm().*fnRect->fnGetTop)();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sectfrm.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ama $ $Date: 2001-12-04 14:40:16 $
+ *  last change: $Author: ama $ $Date: 2001-12-12 14:43:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1014,8 +1014,8 @@ BOOL SwSectionFrm::CalcMinDiff( SwTwips& rMinDiff ) const
     {
 #ifdef VERTICAL_LAYOUT
         SWRECTFN( this )
-        rMinDiff = (GetUpper()->*fnRect->fnGetLimit)();
-        rMinDiff = -(Frm().*fnRect->fnCheckLimit)( rMinDiff );
+        rMinDiff = (GetUpper()->*fnRect->fnGetPrtBottom)();
+        rMinDiff = (Frm().*fnRect->fnBottomDist)( rMinDiff );
 #else
         rMinDiff = GetUpper()->Frm().Top() + GetUpper()->Prt().Top() +
                    GetUpper()->Prt().Height() - Frm().Top() - Frm().Height();
@@ -1144,11 +1144,11 @@ void SwSectionFrm::_CheckClipping( BOOL bGrow, BOOL bMaximize )
 #ifdef VERTICAL_LAYOUT
     SWRECTFN( this )
     long nDiff;
-    SwTwips nDeadLine = (GetUpper()->*fnRect->fnGetLimit)();
+    SwTwips nDeadLine = (GetUpper()->*fnRect->fnGetPrtBottom)();
     if( bGrow && ( !IsInFly() || !GetUpper()->IsColBodyFrm() ||
                    !FindFlyFrm()->IsLocked() ) )
     {
-        nDiff = (Frm().*fnRect->fnCheckLimit)( nDeadLine );
+        nDiff = -(Frm().*fnRect->fnBottomDist)( nDeadLine );
         if( !bMaximize )
             nDiff += Undersize();
         if( nDiff > 0 )
@@ -1160,7 +1160,7 @@ void SwSectionFrm::_CheckClipping( BOOL bGrow, BOOL bMaximize )
                 nDeadLine += nAdd;
         }
     }
-    nDiff = (Frm().*fnRect->fnCheckLimit)( nDeadLine );
+    nDiff = -(Frm().*fnRect->fnBottomDist)( nDeadLine );
     SetUndersized( !bMaximize && nDiff >= 0 );
     BOOL bCalc = ( IsUndersized() || bMaximize ) && ( nDiff ||
                  (Prt().*fnRect->fnGetTop)() > (Frm().*fnRect->fnGetHeight)() );
@@ -1274,8 +1274,8 @@ void SwSectionFrm::SimpleFormat()
         (this->*fnRect->fnMakePos)( GetUpper(), GetPrev(), FALSE );
         bValidPos = TRUE;
     }
-    SwTwips nDeadLine = (GetUpper()->*fnRect->fnGetLimit)();
-    if( (Frm().*fnRect->fnCheckLimit)( nDeadLine ) < 0 )
+    SwTwips nDeadLine = (GetUpper()->*fnRect->fnGetPrtBottom)();
+    if( (Frm().*fnRect->fnBottomDist)( nDeadLine ) > 0 )
     {
         const Size aOldSz( Prt().SSize() );
         (Frm().*fnRect->fnSetBottom)( nDeadLine );
@@ -1465,7 +1465,7 @@ void SwSectionFrm::Format( const SwBorderAttrs *pAttr )
             nDiff = (Frm().*fnRect->fnGetHeight)() - nRemaining;
             if( nDiff < 0)
             {
-                SwTwips nDeadLine = (GetUpper()->*fnRect->fnGetLimit)();
+                SwTwips nDeadLine = (GetUpper()->*fnRect->fnGetPrtBottom)();
                 {
                     long nBottom = (Frm().*fnRect->fnGetBottom)();
                     nBottom = (*fnRect->fnYInc)( nBottom, -nDiff );
@@ -2001,7 +2001,7 @@ SwTwips lcl_DeadLine( const SwFrm* pFrm )
     }
 #ifdef VERTICAL_LAYOUT
     SWRECTFN( pFrm )
-    return pUp ? (pUp->*fnRect->fnGetLimit)() :
+    return pUp ? (pUp->*fnRect->fnGetPrtBottom)() :
                  (pFrm->Frm().*fnRect->fnGetBottom)();
 #else
     return pUp ? pUp->Frm().Top() + pUp->Prt().Top() + pUp->Prt().Height() :

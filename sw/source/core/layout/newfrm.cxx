@@ -2,9 +2,9 @@
  *
  *  $RCSfile: newfrm.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ama $ $Date: 2001-11-29 15:48:08 $
+ *  last change: $Author: ama $ $Date: 2001-12-12 14:36:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -192,8 +192,11 @@ static SwRectFnCollection aHorizontal = {
     &SwFrm::GetPrtBottom,
     &SwFrm::GetPrtLeft,
     &SwFrm::GetPrtRight,
-    &SwFrm::SetMaxBottom,
+    &SwRect::GetTopDistance,
     &SwRect::GetBottomDistance,
+    &SwRect::GetLeftDistance,
+    &SwRect::GetRightDistance,
+    &SwFrm::SetMaxBottom,
     &SwRect::OverStepBottom,
 
     &SwFrm::MakeBelowPos,
@@ -243,8 +246,11 @@ static SwRectFnCollection aVertical = {
     &SwFrm::GetPrtLeft,
     &SwFrm::GetPrtTop,
     &SwFrm::GetPrtBottom,
-    &SwFrm::SetMinLeft,
+    &SwRect::GetRightDistance,
     &SwRect::GetLeftDistance,
+    &SwRect::GetTopDistance,
+    &SwRect::GetBottomDistance,
+    &SwFrm::SetMinLeft,
     &SwRect::OverStepLeft,
 
     &SwFrm::MakeLeftPos,
@@ -292,10 +298,13 @@ static SwRectFnCollection aBottomToTop = {
     &SwFrm::SetBottomTopMargins,
     &SwFrm::GetPrtBottom,
     &SwFrm::GetPrtTop,
-    &SwFrm::GetPrtRight,
     &SwFrm::GetPrtLeft,
-    &SwFrm::SetMinTop,
+    &SwFrm::GetPrtRight,
+    &SwRect::GetBottomDistance,
     &SwRect::GetTopDistance,
+    &SwRect::GetLeftDistance,
+    &SwRect::GetRightDistance,
+    &SwFrm::SetMinTop,
     &SwRect::OverStepTop,
 
     &SwFrm::MakeUpperPos,
@@ -345,8 +354,11 @@ static SwRectFnCollection aVerticalRightToLeft = {
     &SwFrm::GetPrtRight,
     &SwFrm::GetPrtBottom,
     &SwFrm::GetPrtTop,
-    &SwFrm::SetMaxRight,
+    &SwRect::GetLeftDistance,
     &SwRect::GetRightDistance,
+    &SwRect::GetBottomDistance,
+    &SwRect::GetTopDistance,
+    &SwFrm::SetMaxRight,
     &SwRect::OverStepRight,
 
     &SwFrm::MakeRightPos,

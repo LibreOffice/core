@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layact.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: ama $ $Date: 2001-11-29 15:49:12 $
+ *  last change: $Author: ama $ $Date: 2001-12-12 14:44:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -356,7 +356,7 @@ void SwLayAction::PaintCntnt( const SwCntntFrm *pCnt,
             SwRect aDrawRect( pCnt->UnionFrm( TRUE ) );
 #ifdef VERTICAL_LAYOUT
             if( nOldHeight > nNewHeight )
-                nOldBottom = (pCnt->*fnRect->fnGetLimit)();
+                nOldBottom = (pCnt->*fnRect->fnGetPrtBottom)();
             (aDrawRect.*fnRect->fnSetTop)( nOldBottom );
 #else
             if( rOldRect.Height() < pCnt->Frm().Height() )
@@ -380,7 +380,7 @@ void SwLayAction::PaintCntnt( const SwCntntFrm *pCnt,
         }
         SwRect aRect( pTmp->GetUpper()->PaintArea() );
 #ifdef VERTICAL_LAYOUT
-        (aRect.*fnRect->fnSetTop)( (pTmp->*fnRect->fnGetLimit)() );
+        (aRect.*fnRect->fnSetTop)( (pTmp->*fnRect->fnGetPrtBottom)() );
 #else
         aRect.Top( pTmp->Frm().Top() + pTmp->Prt().Bottom() + 1 );
 #endif
@@ -508,7 +508,7 @@ void SwLayAction::_AddScrollRect( const SwCntntFrm *pCntnt,
         {
             SwRect aRect( pCntnt->GetUpper()->PaintArea() );
 #ifdef VERTICAL_LAYOUT
-            (aRect.*fnRect->fnSetTop)( (pCntnt->*fnRect->fnGetLimit)() );
+            (aRect.*fnRect->fnSetTop)( (pCntnt->*fnRect->fnGetPrtBottom)() );
 #else
             aRect.Top( pCntnt->Frm().Top() + pCntnt->Prt().Bottom() + 1 );
 #endif
@@ -2142,7 +2142,7 @@ void SwLayAction::_FormatCntnt( const SwCntntFrm *pCntnt,
         const SwFrm *pOldUp = pCntnt->GetUpper();
         const SwRect aOldRect( pCntnt->UnionFrm() );
 #ifdef VERTICAL_LAYOUT
-        const long nOldBottom = (pCntnt->*fnRect->fnGetLimit)();
+        const long nOldBottom = (pCntnt->*fnRect->fnGetPrtBottom)();
 #else
         const long nOldBottom = pCntnt->Frm().Top() + pCntnt->Prt().Bottom();
 #endif

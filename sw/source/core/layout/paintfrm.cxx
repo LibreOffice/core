@@ -2,9 +2,9 @@
  *
  *  $RCSfile: paintfrm.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: ama $ $Date: 2001-12-07 13:08:26 $
+ *  last change: $Author: ama $ $Date: 2001-12-12 14:38:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1204,7 +1204,7 @@ void MA_FASTCALL lcl_ExtendLeftAndRight( SwRect &rRect, const SwFrm *pFrm,
     {
         const SwFrm *pPre = pFrm->GetPrev();
 #ifdef VERTICAL_LAYOUT
-        (rRect.*rRectFn->fnSetTop)( (pPre->*rRectFn->fnGetLimit)() );
+        (rRect.*rRectFn->fnSetTop)( (pPre->*rRectFn->fnGetPrtBottom)() );
 #else
         rRect.Top( pPre->Frm().Top() + pPre->Prt().Bottom() );
 #endif
@@ -1770,7 +1770,7 @@ class SwShortCut
 public:
     SwShortCut( const SwFrm& rFrm, const SwRect& rRect );
     BOOL Stop( const SwRect& rRect ) const
-        { return (rRect.*fnCheck)( nLimit ) < 0; }
+        { return (rRect.*fnCheck)( nLimit ) > 0; }
 };
 
 SwShortCut::SwShortCut( const SwFrm& rFrm, const SwRect& rRect )

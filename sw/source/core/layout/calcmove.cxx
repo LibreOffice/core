@@ -2,9 +2,9 @@
  *
  *  $RCSfile: calcmove.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: ama $ $Date: 2001-11-22 17:51:47 $
+ *  last change: $Author: ama $ $Date: 2001-12-12 14:39:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -842,11 +842,14 @@ void SwLayoutFrm::MakeAll()
                 bValidPrtArea = FALSE;
 #ifdef VERTICAL_LAYOUT
                 SwTwips nPrtWidth = (GetUpper()->Prt().*fnRect->fnGetWidth)();
-                if( IsBodyFrm() && bVert )
+                if( bVert && ( IsBodyFrm() || IsFtnContFrm() ) )
                 {
-                    if( GetPrev() )
-                        nPrtWidth -= GetPrev()->Frm().Height();
-                    SwFrm* pNxt = GetNext();
+                    SwFrm* pNxt = GetPrev();
+                    while( pNxt && !pNxt->IsHeaderFrm() )
+                        pNxt = pNxt->GetPrev();
+                    if( pNxt )
+                        nPrtWidth -= pNxt->Frm().Height();
+                    pNxt = GetNext();
                     while( pNxt && !pNxt->IsFooterFrm() )
                         pNxt = pNxt->GetNext();
                     if( pNxt )
@@ -856,7 +859,7 @@ void SwLayoutFrm::MakeAll()
             }
             else
             {   // Don't leave your upper
-                const SwTwips nDeadLine = (GetUpper()->*fnRect->fnGetLimit)();
+                const SwTwips nDeadLine = (GetUpper()->*fnRect->fnGetPrtBottom)();
                 if( (Frm().*fnRect->fnOverStep)( nDeadLine ) )
                     bValidSize = FALSE;
 #else
@@ -1304,7 +1307,7 @@ void SwCntntFrm::MakeAll()
         {
             BOOL bWidow = TRUE;
 #ifdef VERTICAL_LAYOUT
-            const SwTwips nDeadLine = (GetUpper()->*fnRect->fnGetLimit)();
+            const SwTwips nDeadLine = (GetUpper()->*fnRect->fnGetPrtBottom)();
             if ( bMoveable && !bFormatted && ( GetFollow() ||
                  ( (Frm().*fnRect->fnOverStep)( nDeadLine ) ) ) )
             {
@@ -1468,8 +1471,8 @@ void SwCntntFrm::MakeAll()
         // Achtung, wg. Hoehe==0, ist es besser statt Bottom() Top()+Height() zu nehmen
         // (kommt bei Undersized TxtFrms an der Unterkante eines spaltigen Bereichs vor)
 #ifdef VERTICAL_LAYOUT
-        if( (Frm().*fnRect->fnCheckLimit)( (GetUpper()->*fnRect->fnGetLimit)() )
-            <= 0 )
+        if( (Frm().*fnRect->fnBottomDist)( (GetUpper()->*fnRect->fnGetPrtBottom)() )
+            >= 0 )
 #else
         if ( GetUpper()->Prt().Top()+GetUpper()->Prt().Height()+GetUpper()->Frm().Top() >=
              Frm().Top()+Frm().Height() )
@@ -1529,8 +1532,8 @@ void SwCntntFrm::MakeAll()
             if( !bMoveable && IsInTab() )
             {
 #ifdef VERTICAL_LAYOUT
-                long nDiff = (Frm().*fnRect->fnCheckLimit)(
-                                        (GetUpper()->*fnRect->fnGetLimit)() );
+                long nDiff = -(Frm().*fnRect->fnBottomDist)(
+                                        (GetUpper()->*fnRect->fnGetPrtBottom)() );
 #else
                 long nDiff = Frm().Top()+Frm().Height() -GetUpper()->Prt().Top()
                         -GetUpper()->Prt().Height()-GetUpper()->Frm().Top();

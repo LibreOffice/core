@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ftnfrm.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: ama $ $Date: 2001-11-29 15:56:37 $
+ *  last change: $Author: ama $ $Date: 2001-12-12 14:40:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -399,8 +399,8 @@ void SwFtnContFrm::Format( const SwBorderAttrs * )
             if( IsInSct() )
             {
 #ifdef VERTICAL_LAYOUT
-                nDiff = (Frm().*fnRect->fnCheckLimit)(
-                                        (GetUpper()->*fnRect->fnGetLimit)() );
+                nDiff = -(Frm().*fnRect->fnBottomDist)(
+                                        (GetUpper()->*fnRect->fnGetPrtBottom)() );
                 if( nDiff > 0 )
                 {
                     if( nDiff > (Frm().*fnRect->fnGetHeight)() )
@@ -2593,7 +2593,14 @@ void SwFtnBossFrm::RearrangeFtns( const SwTwips nDeadLine, const BOOL bLock,
                     pTmp->Calc();
                     pCnt->Calc();
                     if( bUnlock )
+                    {
                         pTmp->UnlockBackMove();
+                        if( !pTmp->Lower() && !pTmp->IsColLocked() )
+                        {
+                            pTmp->Cut();
+                            delete pTmp;
+                        }
+                    }
                 }
                 else
                 {
@@ -2733,10 +2740,10 @@ void SwFtnBossFrm::SetFtnDeadLine( const SwTwips nDeadLine )
     {
         pCont->Calc();
 #ifdef VERTICAL_LAYOUT
-        nMaxFtnHeight = (pCont->Frm().*fnRect->fnCheckLimit)( nDeadLine );
+        nMaxFtnHeight = -(pCont->Frm().*fnRect->fnBottomDist)( nDeadLine );
     }
     else
-        nMaxFtnHeight = (pBody->Frm().*fnRect->fnCheckLimit)( nDeadLine );
+        nMaxFtnHeight = -(pBody->Frm().*fnRect->fnBottomDist)( nDeadLine );
 #else
         nMaxFtnHeight = pCont->Frm().Height() + pCont->Frm().Top() - nDeadLine;
     }

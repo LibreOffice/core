@@ -2,9 +2,9 @@
  *
  *  $RCSfile: trvlfrm.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: ama $ $Date: 2001-11-14 14:41:25 $
+ *  last change: $Author: ama $ $Date: 2001-12-12 14:42:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2005,12 +2005,12 @@ void SwRootFrm::CalcFrmRects( SwShellCrsr &rCrsr, BOOL bIsTblMode )
                 Sub( aRegion, aTmp );
                 SwTwips nTmp = (pSt2Pos->aLine.*fnRect->fnGetBottom)();
                 if( pSt2Pos->nMultiType &&
-                    (aStRect.*fnRect->fnCheckLimit)( nTmp ) < 0 )
+                    (aStRect.*fnRect->fnBottomDist)( nTmp ) > 0 )
                 {
                     (aTmp.*fnRect->fnSetTop)( (aTmp.*fnRect->fnGetBottom)() );
                     (aTmp.*fnRect->fnSetBottom)( nTmp );
-                    if( (aStRect.*fnRect->fnCheckLimit)(
-                        (pSt2Pos->aPortion.*fnRect->fnGetBottom)() ) < 0 )
+                    if( (aStRect.*fnRect->fnBottomDist)(
+                        (pSt2Pos->aPortion.*fnRect->fnGetBottom)() ) > 0 )
                         (aTmp.*fnRect->fnSetLeft)(
                             (pSt2Pos->aPortion.*fnRect->fnGetLeft)() );
                     aTmp.Intersection( aStFrm );

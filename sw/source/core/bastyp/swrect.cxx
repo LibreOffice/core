@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swrect.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: ama $ $Date: 2001-11-22 09:36:37 $
+ *  last change: $Author: ama $ $Date: 2001-12-12 14:36:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -320,10 +320,10 @@ const Point SwRect::TopRight() const { return Point( nX + nWidth, nY ); }
 const Point SwRect::BottomLeft() const { return Point( nX, nY + nHeight ); }
 const Point SwRect::BottomRight() const
     { return Point( nX + nWidth, nY + nHeight ); }
-long SwRect::GetLeftDistance( long nLimit ) const { return nLimit - nX; }
-long SwRect::GetBottomDistance( long nLim ) const { return nY + nHeight - nLim;}
-long SwRect::GetTopDistance( long nLimit ) const { return nLimit - nY; }
-long SwRect::GetRightDistance( long nLim ) const { return nX + nWidth - nLim; }
+long SwRect::GetLeftDistance( long nLimit ) const { return nX - nLimit; }
+long SwRect::GetBottomDistance( long nLim ) const { return nLim - nY - nHeight;}
+long SwRect::GetTopDistance( long nLimit ) const { return nY - nLimit; }
+long SwRect::GetRightDistance( long nLim ) const { return nLim - nX - nWidth; }
 BOOL SwRect::OverStepLeft( long nLimit ) const
     { return nLimit > nX && nX + nWidth > nLimit; }
 BOOL SwRect::OverStepBottom( long nLimit ) const

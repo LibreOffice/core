@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frame.hxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: ama $ $Date: 2001-11-29 15:42:49 $
+ *  last change: $Author: ama $ $Date: 2001-12-12 14:36:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -241,11 +241,14 @@ struct SwRectFnCollection
     SwFrmSet      fnSetXMargins;
     SwFrmSet      fnSetYMargins;
     SwFrmGet      fnGetPrtTop;
-    SwFrmGet      fnGetLimit;           // PrtBottom is limit for inner frames
+    SwFrmGet      fnGetPrtBottom;
     SwFrmGet      fnGetPrtLeft;
     SwFrmGet      fnGetPrtRight;
+    SwRectDist    fnTopDist;
+    SwRectDist    fnBottomDist;
+    SwRectDist    fnLeftDist;
+    SwRectDist    fnRightDist;
     SwFrmMax      fnSetLimit;
-    SwRectDist    fnCheckLimit;
     SwRectMax     fnOverStep;
 
     SwFrmMakePos  fnMakePos;
