@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbaccess_helpid.hrc,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-29 13:11:52 $
+ *  last change: $Author: fs $ $Date: 2001-06-13 16:29:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -268,12 +268,17 @@
 #define HID_DSADMIN_LDAP_BASEDN                     (HID_DBACCESS_START + 176)
 #define HID_DSADMIN_LDAP_PORTNUMBER                 (HID_DBACCESS_START + 177)
 
+#define HID_DSBROWSER_BOOKMARKSELECTED              (HID_DBACCESS_START + 178)
+
 // don't forget to update the file util/hidother.src
 #endif // _DBA_DBACCESS_HELPID_HRC_
 
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.32  2001/05/29 13:11:52  oj
+ *  #87149# addressbook ui impl
+ *
  *  Revision 1.31  2001/05/23 14:15:50  oj
  *  #87149# new helpids
  *
