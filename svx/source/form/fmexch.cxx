@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmexch.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:01:16 $
+ *  last change: $Author: oj $ $Date: 2000-12-07 14:47:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -202,21 +202,22 @@ SvxFmFieldExch::SvxFmFieldExch(const String& rFieldDesc)
 {
     if (!nFieldFormat)
         nFieldFormat = Exchange::RegisterFormatName(String::CreateFromAscii(SBA_FIELDEXCHANGE_FORMAT));
+    if(!nControlFormat)
+        nControlFormat = Exchange::RegisterSotFormatName(SOT_FORMATSTR_ID_SBA_CTRLDATAEXCHANGE);
 
-    SvDataType* pDataType = new SvDataType(nFieldFormat);
-    aDataTypeList.Insert( *pDataType );
+    aDataTypeList.Insert( *new SvDataType(nControlFormat) );
+    aDataTypeList.Insert( *new SvDataType(nFieldFormat) );
 }
 
 //------------------------------------------------------------------------
 sal_Bool SvxFmFieldExch::GetData( SvData* pData )
 {
-    if (pData->GetFormat() == nFieldFormat)
+    if (pData->GetFormat() == nFieldFormat || pData->GetFormat() == nControlFormat)
     {
         pData->SetData(aFieldDesc);
         return sal_True;
     }
-    else
-        return sal_False;
+    return sal_False;
 }
 
 

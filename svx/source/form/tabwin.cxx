@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabwin.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: oj $ $Date: 2000-11-16 11:33:15 $
+ *  last change: $Author: oj $ $Date: 2000-12-07 14:47:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,7 +229,9 @@ void FmFieldWinListBox::Command(const CommandEvent& rEvt)
                 aCopyData += UniString(GetEntryText( pFirstSelected ));
 
             SvxFmFieldExchRef xFieldExch = new SvxFmFieldExch(aCopyData);
-            DragManager::ExecuteDrag( xFieldExch, DRAG_LINKABLE | DRAG_COPYABLE );
+            // TODO make it linkable but when we have a new clipboard format
+            // where the connection can be transfered as well
+            DragManager::ExecuteDrag( xFieldExch, DRAG_COPYABLE  );
         }   break;
         default:
             Window::Command( rEvt );
