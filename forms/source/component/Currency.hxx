@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Currency.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: fs $ $Date: 2002-12-02 09:56:28 $
+ *  last change: $Author: obo $ $Date: 2003-10-21 08:56:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,17 +80,11 @@ class OCurrencyModel
 {
     ::com::sun::star::uno::Any          m_aSaveValue;
 
-    static sal_Int32    nValueHandle;
-
 protected:
-    virtual void _onValueChanged();
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> _getTypes();
 
 public:
     DECLARE_DEFAULT_LEAF_XTOR( OCurrencyModel );
-
-    // starform::XBoundComponent
-    virtual sal_Bool _commit();
 
     // ::com::sun::star::lang::XServiceInfo
     IMPLEMENTATION_NAME(OCurrencyModel);
@@ -103,15 +97,21 @@ public:
     // ::com::sun::star::io::XPersistObject
     virtual ::rtl::OUString SAL_CALL getServiceName() throw ( ::com::sun ::star::uno::RuntimeException);
 
-    // starform::XReset
-    virtual void _reset();
-
     // OAggregationArrayUsageHelper
     virtual void fillProperties(
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rProps,
         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rAggregateProps
         ) const;
     IMPLEMENT_INFO_SERVICE()
+
+protected:
+    // OBoundControlModel overridables
+    virtual ::com::sun::star::uno::Any
+                            translateDbColumnToControlValue( );
+    virtual sal_Bool        commitControlValueToDbColumn( bool _bPostReset );
+
+    virtual ::com::sun::star::uno::Any
+                            getDefaultForReset() const;
 
 protected:
     DECLARE_XCLONEABLE();
