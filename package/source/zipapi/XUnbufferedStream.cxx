@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XUnbufferedStream.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-31 09:16:41 $
+ *  last change: $Author: obo $ $Date: 2005-03-15 11:49:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -103,7 +103,8 @@ XUnbufferedStream::XUnbufferedStream( ZipEntry & rEntry,
                            const vos::ORef < EncryptionData > &rData,
                            sal_Int8 nStreamMode,
                            sal_Bool bIsEncrypted,
-                          const ::rtl::OUString& aMediaType )
+                          const ::rtl::OUString& aMediaType,
+                          sal_Bool bRecoveryMode )
 : maEntry ( rEntry )
 , mxData ( rData )
 , mbRawStream ( nStreamMode == UNBUFF_STREAM_RAW || nStreamMode == UNBUFF_STREAM_WRAPPEDRAW )
@@ -118,7 +119,7 @@ XUnbufferedStream::XUnbufferedStream( ZipEntry & rEntry,
 , mnZipSize ( 0 )
 , mnZipCurrent ( 0 )
 , mnHeaderToRead ( 0 )
-, mbCheckCRC( sal_True )
+, mbCheckCRC( !bRecoveryMode )
 {
     mnZipCurrent = maEntry.nOffset;
     if ( mbRawStream )
