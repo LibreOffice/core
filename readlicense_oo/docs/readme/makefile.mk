@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: vg $ $Date: 2003-12-17 17:46:34 $
+#   last change: $Author: kz $ $Date: 2005-01-21 09:48:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -61,7 +61,7 @@
 #*************************************************************************
 
 PRJ 	= ..$/..
-PRJNAME = readme
+PRJNAME = readlicense_oo
 TARGET  = ooo
     
 # --- Settings -----------------------------------------------------
