@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: nn $ $Date: 2001-01-31 16:44:35 $
+ *  last change: $Author: nn $ $Date: 2001-02-05 10:48:50 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1296,7 +1296,8 @@ void ScDocument::TransposeClip( ScDocument* pTransClip, USHORT nFlags, BOOL bAsL
 BOOL ScDocument::IsClipboardSource() const
 {
     ScDocument* pClipDoc = ScGlobal::GetClipDoc();
-    return xPoolHelper->GetDocPool() == pClipDoc->xPoolHelper->GetDocPool();
+    return pClipDoc->xPoolHelper.isValid() &&
+            xPoolHelper->GetDocPool() == pClipDoc->xPoolHelper->GetDocPool();
 }
 
 
