@@ -2,9 +2,9 @@
  *
  *  $RCSfile: logindlg.src,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-09 20:14:58 $
+ *  last change: $Author: kz $ $Date: 2001-03-28 12:03:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,13 +149,13 @@ ModalDialog DLG_LOGIN
         Text [ french ] = "~Chemin" ;
         Text [ dutch ] = "~Pad" ;
         Text [ portuguese ] = "~Atalho" ;
-        Text[ chinese_simplified ] = "Â·¾¶(~H)";
+        Text[ chinese_simplified ] = "Â·¾¶(~P)";
         Text[ russian ] = "Ïóòü";
         Text[ polish ] = "Œcie¿ka";
-        Text[ japanese ] = "Êß½(~H)";
-        Text[ chinese_traditional ] = "¸ô®|(~H)";
+        Text[ japanese ] = "Êß½(~P)";
+        Text[ chinese_traditional ] = "¸ô®|(~P)";
         Text[ greek ] = "ÄéáäñïìÞ";
-        Text[ korean ] = "°æ·Î(~H)";
+        Text[ korean ] = "°æ·Î(~P)";
         Text[ arabic ] = "ÇáãÓÇÑ";
         Text[ turkish ] = "Veri yolu";
     };
