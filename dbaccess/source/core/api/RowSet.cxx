@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.cxx,v $
  *
- *  $Revision: 1.103 $
+ *  $Revision: 1.104 $
  *
- *  last change: $Author: oj $ $Date: 2002-03-21 07:26:57 $
+ *  last change: $Author: oj $ $Date: 2002-07-11 07:02:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2206,6 +2206,16 @@ void ORowSet::checkUpdateConditions(sal_Int32 columnIndex)
 {
     if(!m_pCache || columnIndex <= 0 || m_aCurrentRow == NULL || m_aCurrentRow == m_pCache->getEnd() || m_nResultSetConcurrency == ResultSetConcurrency::READ_ONLY)
         throwFunctionSequenceException(*this);
+}
+// -----------------------------------------------------------------------------
+void SAL_CALL ORowSet::refreshRow(  ) throw(SQLException, RuntimeException)
+{
+    checkInsert();
+    if ( m_bModified && m_pCache )
+        cancelRowUpdates();
+
+
+    ORowSetBase::refreshRow();
 }
 // ***********************************************************
 //  ORowSetClone

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSetCache.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: fs $ $Date: 2002-04-16 07:48:57 $
+ *  last change: $Author: oj $ $Date: 2002-07-11 07:02:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1351,6 +1351,10 @@ void SAL_CALL ORowSetCache::refreshRow(  ) throw(SQLException, RuntimeException)
     OSL_ENSURE(m_aMatrixIter != m_pMatrix->end(),"refreshRow() called for invalid row!");
     m_pCacheSet->refreshRow();
     m_pCacheSet->fillValueRow(*m_aMatrixIter,m_nPosition);
+    if ( m_bInserted )
+    {
+        cancelInsert();
+    }
 }
 // -------------------------------------------------------------------------
 sal_Bool SAL_CALL ORowSetCache::rowUpdated(  ) throw(SQLException, RuntimeException)

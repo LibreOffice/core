@@ -2,9 +2,9 @@
  *
  *  $RCSfile: RowSet.hxx,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-15 10:42:42 $
+ *  last change: $Author: oj $ $Date: 2002-07-11 07:02:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -275,6 +275,7 @@ namespace dbaccess
 
     // ::com::sun::star::sdbc::XResultSet
         virtual sal_Int32 SAL_CALL getRow(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL refreshRow(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
 
     // XCompletedExecution
         virtual void SAL_CALL executeWithCompletion( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& handler ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);
@@ -464,6 +465,9 @@ namespace dbaccess
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.29  2001/11/15 10:42:42  oj
+    #94384# change &m_rMutex in m_pMutex to avoid illegal member access
+
     Revision 1.28  2001/11/01 15:27:20  hr
     #92924#: gcc-3.0.1 needs lvalue, exception specifications
 
