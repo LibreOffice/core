@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pivot.src,v $
  *
- *  $Revision: 1.43 $
+ *  $Revision: 1.44 $
  *
- *  last change: $Author: sab $ $Date: 2002-09-24 13:08:51 $
+ *  last change: $Author: vg $ $Date: 2002-11-04 17:33:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,6 +213,28 @@ ModelessDialog RID_SCDLG_PIVOT_LAYOUT
     {
         Text = "Auswahlbereich";
         Text [ english ] = "Selection area";
+        Text[ language_user1 ] = "EM Oct 2002: (not \"range\") In the datapilot dialog, object description of control that lists the fields that you can drag to one of the other three areas/controls.";
+        Text[ english_us ] = "Selection area";
+        Text[ portuguese ] = "Selection area";
+        Text[ russian ] = "Selection area";
+        Text[ greek ] = "Selection area";
+        Text[ dutch ] = "Selection area";
+        Text[ french ] = "Selection area";
+        Text[ spanish ] = "Selection area";
+        Text[ finnish ] = "Selection area";
+        Text[ italian ] = "Selection area";
+        Text[ danish ] = "Selection area";
+        Text[ swedish ] = "Selection area";
+        Text[ polish ] = "Selection area";
+        Text[ portuguese_brazilian ] = "Selection area";
+        Text[ japanese ] = "Selection area";
+        Text[ korean ] = "Selection area";
+        Text[ chinese_simplified ] = "Selection area";
+        Text[ chinese_traditional ] = "Selection area";
+        Text[ turkish ] = "Selection area";
+        Text[ arabic ] = "Selection area";
+        Text[ catalan ] = "Selection area";
+        Text[ thai ] = "Selection area";
     };
     ScrollBar WND_HSCROLL
     {
