@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gtkframe.hxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-22 10:13:44 $
+ *  last change: $Author: kz $ $Date: 2005-01-21 13:37:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,6 +154,7 @@ class GtkSalFrame : public SalFrame
     GdkNativeWindow                 m_aForeignParentWindow;
     GdkWindow*                      m_pForeignTopLevel;
     GdkNativeWindow                 m_aForeignTopLevelWindow;
+    Pixmap                          m_hBackgroundPixmap;
     ULONG                           m_nStyle;
     GtkFixed*                       m_pFixedContainer;
     GtkSalFrame*                    m_pParent;
@@ -328,6 +329,7 @@ public:
     // return false to indicate failure
     virtual bool                SetPluginParent( SystemParentData* pNewParent );
 
+    virtual void                SetBackgroundBitmap( SalBitmap* );
 };
 
 
