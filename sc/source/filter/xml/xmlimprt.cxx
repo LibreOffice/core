@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlimprt.cxx,v $
  *
- *  $Revision: 1.42 $
+ *  $Revision: 1.43 $
  *
- *  last change: $Author: sab $ $Date: 2001-03-02 17:28:42 $
+ *  last change: $Author: cl $ $Date: 2001-03-04 19:09:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1317,7 +1317,10 @@ SvXMLImportContext *ScXMLImport::CreateContext( USHORT nPrefix,
     SvXMLImportContext *pContext = 0;
 
     if( XML_NAMESPACE_OFFICE==nPrefix &&
-        0 == rLocalName.compareToAscii( sXML_document ) )
+        ( 0 == rLocalName.compareToAscii(sXML_document) ||
+          0 == rLocalName.compareToAscii(sXML_document_meta) ||
+          0 == rLocalName.compareToAscii(sXML_document_styles) ||
+          0 == rLocalName.compareToAscii(sXML_document_content) ))
         pContext = new ScXMLDocContext_Impl( *this, nPrefix, rLocalName,
                                              xAttrList );
     else
