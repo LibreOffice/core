@@ -2,9 +2,9 @@
  *
  *  $RCSfile: asciiopt.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2002-02-04 10:37:50 $
+ *  last change: $Author: kz $ $Date: 2002-02-05 21:13:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -428,7 +428,7 @@ ModalDialog RID_SCDLG_ASCII
         Text [ danish ] = "Tabulator" ;
         Text [ italian ] = "~Tabulazione" ;
         Text [ spanish ] = "~Tabulador" ;
-        Text [ french ] = "~Tabulation" ;
+        Text [ french ] = "Tabulation" ;
         Text [ dutch ] = "~Tabulator" ;
         Text [ portuguese ] = "~TabulaÁ„o" ;
         Text[ chinese_simplified ] = "Âà∂Ë°®Á¨¶(~T)";
@@ -459,7 +459,7 @@ ModalDialog RID_SCDLG_ASCII
         Text [ danish ] = "Semikolon" ;
         Text [ italian ] = "Punto e virgola" ;
         Text [ spanish ] = "~Punto y coma" ;
-        Text [ french ] = "~Point-virgule" ;
+        Text [ french ] = "Point-virgule" ;
         Text [ dutch ] = "~Puntkomma" ;
         Text [ portuguese ] = "~Ponto e vÌrgula" ;
         Text[ chinese_simplified ] = "ÂàÜÂè∑(~E)";
