@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optinet2.src,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: os $ $Date: 2001-12-19 08:43:05 $
+ *  last change: $Author: kz $ $Date: 2001-12-21 21:25:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1721,7 +1721,7 @@ TabPage RID_SVXPAGE_INET_SCRIPTING
         Text [ portuguese_brazilian ] = "S~tandard" ;
         Text [ swedish ] = "~Standard" ;
         Text [ danish ] = "Standard" ;
-        Text [ italian ] = "S~tandard" ;
+        Text [ italian ] = "~Standard" ;
         Text [ spanish ] = "~Predeterminado" ;
         Text [ french ] = "Par ~défaut" ;
         Text [ dutch ] = "~Standaard" ;
@@ -2300,6 +2300,7 @@ ModalDialog RID_SVXDLG_OPT_JAVASCRIPT_DISABLE
 };
 
  // ******************************************************************* EOF
+
 
 
 
