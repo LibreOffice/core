@@ -2,9 +2,9 @@
 *
 *  $RCSfile: file_library_ooo.scp,v $
 *
-*  $Revision: 1.52 $
+*  $Revision: 1.53 $
 *
-*  last change: $Author: kz $ $Date: 2004-10-04 18:08:55 $
+*  last change: $Author: kz $ $Date: 2004-10-07 08:23:28 $
 *
 *  The Contents of this file are made available subject to the terms of
 *  either of the following licenses
@@ -375,12 +375,14 @@ File gid_File_Lib_Cppuhelper
 End
 
 #ifdef UNX
+#ifdef ENABLE_GNOMEVFS
 File gid_File_Lib_Gnomevfs
     TXT_FILE_BODY;
     Styles = (PACKED);
     Dir = gid_Dir_Program;
     Name = STRING(CONCAT2(ucpgvfs1.uno,UNXSUFFIX));
 End
+#endif
 #endif
 
 STD_UNO_LIB_FILE( gid_File_Lib_Ctl , ctl)
