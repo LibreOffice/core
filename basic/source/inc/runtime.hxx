@@ -2,9 +2,9 @@
  *
  *  $RCSfile: runtime.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: pjunck $ $Date: 2004-11-02 11:56:18 $
+ *  last change: $Author: rt $ $Date: 2004-11-15 16:35:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,6 +139,12 @@ struct SbiForStack {                // for/next stack:
     SbxVariableRef refVar;          // loop variable
     SbxVariableRef refEnd;          // end expression
     SbxVariableRef refInc;          // increment expression
+};
+
+struct SbiGosubStack {              // GOSUB-Stack:
+    SbiGosubStack* pNext;           // Chain
+    const BYTE* pCode;              // Return-Pointer
+    USHORT nStartForLvl;            // #118235: For Level in moment of gosub
 };
 
 #define MAXRECURSION 500            // max. 500 Rekursionen
@@ -339,6 +345,7 @@ class SbiRuntime
     SbiForStack*   pForStk;         // FOR/NEXT-Stack
     USHORT        nExprLvl;         // Tiefe des Expr-Stacks
     USHORT        nGosubLvl;        // Zum Vermeiden von Tot-Rekursionen
+    USHORT        nForLvl;          // #118235: Maintain for level
     const BYTE*   pCode;            // aktueller Code-Pointer
     const BYTE*   pStmnt;           // Beginn des lezten Statements
     const BYTE*   pError;           // Adresse des aktuellen Error-Handlers
