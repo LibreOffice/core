@@ -2,9 +2,9 @@
  *
  *  $RCSfile: SlidesView.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 21:28:40 $
+ *  last change: $Author: obo $ $Date: 2004-09-09 16:21:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,7 +98,7 @@
     to the user as thumbnails and can be arranged and cut/copied to/from
     the clipboard.
 
-    @since #107627#
+    @since OOo 1.1.2
  */
 published service SlidesView
 {
