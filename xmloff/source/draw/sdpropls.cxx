@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sdpropls.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: rt $ $Date: 2004-04-02 13:52:49 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 15:04:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -280,7 +280,7 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
     MAP( "TextMaximumFrameHeight",          XML_NAMESPACE_FO,   XML_MAX_HEIGHT,             XML_TYPE_MEASURE, 0 ),
     MAP( "TextMaximumFrameWidth",           XML_NAMESPACE_FO,   XML_MAX_WIDTH,              XML_TYPE_MEASURE, 0 ),
     MAP( "TextMinimumFrameHeight",          XML_NAMESPACE_FO,   XML_MIN_HEIGHT,             XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, 0 ),  // exists in SW, too
-    MAP( "TextMinimumFrameWidth",           XML_NAMESPACE_FO,   XML_MIN_WIDTH,              XML_TYPE_MEASURE, 0 ),
+    MAP( "TextMinimumFrameWidth",           XML_NAMESPACE_FO,   XML_MIN_WIDTH,              XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, 0 ),  // exists in SW, too
     MAP( "TextUpperDistance",               XML_NAMESPACE_FO,   XML_PADDING_TOP,            XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, 0 ),  // exists in SW, too
     MAP( "TextLowerDistance",               XML_NAMESPACE_FO,   XML_PADDING_BOTTOM,         XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, 0 ),  // exists in SW, too
     MAP( "TextLeftDistance",                XML_NAMESPACE_FO,   XML_PADDING_LEFT,           XML_TYPE_MEASURE|MID_FLAG_MULTI_PROPERTY, 0 ),  // exists in SW, too
