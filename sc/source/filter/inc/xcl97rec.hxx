@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.hxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-19 16:09:39 $
+ *  last change: $Author: rt $ $Date: 2004-05-18 12:45:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -396,14 +396,25 @@ public:
 private:
     virtual void                WriteSubRecs( XclExpStream& rStrm );
 
+    /** Writes a sub structure containing a cell link, or nothing, if no link present. */
+    void                        WriteCellLinkFmla( XclExpStream& rStrm, sal_uInt16 nSubRecId );
+    /** Writes the ftSbs sub structure containing scrollbar data. */
+    void                        WriteSbs( XclExpStream& rStrm );
+
 private:
     ScfInt16Vec                 maMultiSel;     /// Indexes of all selected entries in a multi selection.
     sal_Int32                   mnHeight;       /// Height of the control.
     sal_uInt16                  mnState;        /// Checked/unchecked state.
     sal_Int16                   mnLineCount;    /// Combobox dropdown line count.
     sal_Int16                   mnSelEntry;     /// Selected entry in combobox (1-based).
+    sal_Int16                   mnScrollValue;  /// Scrollbar: Current value.
+    sal_Int16                   mnScrollMin;    /// Scrollbar: Minimum value.
+    sal_Int16                   mnScrollMax;    /// Scrollbar: Maximum value.
+    sal_Int16                   mnScrollStep;   /// Scrollbar: Single step.
+    sal_Int16                   mnScrollPage;   /// Scrollbar: Page step.
     bool                        mb3DStyle;      /// true = 3D style.
     bool                        mbMultiSel;     /// true = Multi selection in listbox.
+    bool                        mbScrollHor;    /// Scrollbar: true = horizontal.
 };
 
 #endif
