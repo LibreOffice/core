@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: sab $ $Date: 2002-02-05 16:38:10 $
+#   last change: $Author: sab $ $Date: 2002-02-14 13:54:20 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -63,7 +63,7 @@
 PRJ=..$/..
 PRJINC=..$/..$/inc
 PRJNAME=unotools
-TARGET=property
+TARGET=accessibility
 
 ENABLE_EXCEPTIONS=TRUE
 
