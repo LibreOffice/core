@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AccessibleShape.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: af $ $Date: 2002-10-23 09:45:47 $
+ *  last change: $Author: cl $ $Date: 2002-11-19 14:49:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -271,11 +271,14 @@ void AccessibleShape::UpdateStates (void)
         {
             Reference<container::XIndexAccess> xSelectedShapes (
                 xSelectionSupplier->getSelection(), uno::UNO_QUERY);
-            for (sal_Int32 i=0,nCount=xSelectedShapes->getCount();
-                 i<nCount && !bShapeIsSelected; i++)
+            if( xSelectedShapes.is() )
             {
-                if (xSelectedShapes->getByIndex(i) == mxShape)
-                    bShapeIsSelected = true;
+                for (sal_Int32 i=0,nCount=xSelectedShapes->getCount();
+                     i<nCount && !bShapeIsSelected; i++)
+                {
+                    if (xSelectedShapes->getByIndex(i) == mxShape)
+                        bShapeIsSelected = true;
+                }
             }
         }
     }
