@@ -2,9 +2,9 @@
  *
  *  $RCSfile: undobj.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2000-12-21 09:27:52 $
+ *  last change: $Author: jp $ $Date: 2001-03-02 14:35:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,6 +75,9 @@
 #ifndef _SFXITEMSET_HXX //autogen
 #include <svtools/itemset.hxx>
 #endif
+#ifndef _COM_SUN_STAR_UNO_SEQUENCE_H_
+#include <com/sun/star/uno/Sequence.h>
+#endif
 #ifndef _NUMRULE_HXX
 #include <numrule.hxx>
 #endif
@@ -84,7 +87,6 @@
 
 class SwUndoIter;
 class SwHistory;
-
 class SwIndex;
 class SwPaM;
 struct SwPosition;
@@ -116,7 +118,6 @@ class SwEndNoteInfo;
 class SwNodeIndex;
 class SwNodeRange;
 class SwFmtAnchor;
-
 struct SwUndoGroupObjImpl;
 class SdrMarkList;
 class SdrObject;
@@ -135,14 +136,11 @@ class SwTblToTxtSaves;
 class SwRedlineData;
 class SwRedlineSaveData;
 class SwRedline;
+class SwSectionNode;
 
 namespace utl {
     class TransliterationWrapper;
 };
-
-namespace com { namespace sun { namespace star { namespace uno {
-    template < class > class Sequence;
-}}}}
 
 #ifndef PRODUCT
 class Writer;
@@ -1187,9 +1185,12 @@ public:
 
 class SwUndoChgSectPsswd : public SwUndo
 {
-    String sPasswd;
+    ::com::sun::star::uno::Sequence <sal_Int8> aPasswd;
+    ULONG nSectNd;
 public:
-    SwUndoChgSectPsswd( const String& rOld );
+    SwUndoChgSectPsswd(
+                const ::com::sun::star::uno::Sequence <sal_Int8> & rOld,
+                const SwSectionNode* pSectNd = 0 );
     virtual void Undo( SwUndoIter& );
     virtual void Redo( SwUndoIter& );
     OUT_UNDOBJ( SwUndoChgSectPsswd )

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndsect.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2000-10-25 14:33:00 $
+ *  last change: $Author: jp $ $Date: 2001-03-02 14:35:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -717,15 +717,25 @@ void SwDoc::ChgSection( USHORT nPos, const SwSection& rSect,
     SetModified();
 }
 
-void SwDoc::ChgSectionPasswd( const String& sNew )
+void SwDoc::ChgSectionPasswd(
+        const ::com::sun::star::uno::Sequence <sal_Int8>& rNew,
+        const SwSection* pSection )
 {
+    SwSectionNode* pSectNd = 0;
+    if( pSection )
+        pSectNd = pSection->GetFmt()->GetSectionNode( TRUE );
+
     if( DoesUndo() )
     {
         ClearRedo();
-        AppendUndo( new SwUndoChgSectPsswd( sSectionPasswd ) );
+        AppendUndo( new SwUndoChgSectPsswd( aSectionPasswd , pSectNd ) );
     }
 
-    sSectionPasswd = sNew;
+    if( pSectNd )
+        pSectNd->GetSection().SetPasswd( rNew );
+    else
+        aSectionPasswd = rNew;
+
     SetModified();
 }
 

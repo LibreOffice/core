@@ -2,9 +2,9 @@
  *
  *  $RCSfile: section.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jp $ $Date: 2001-02-27 18:46:19 $
+ *  last change: $Author: jp $ $Date: 2001-03-02 14:35:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -128,7 +128,7 @@ class SwSection : public SwClient
     String sCondition;          // erstmal, vielleicht auch mal ein Feld ??
     String sLinkFileName,
            sLinkFilePassWd;     // JP 27.02.2001: must later changed to Sequence
-    ::com::sun::star::uno::Sequence< sal_uInt8 > aPasswd;
+    ::com::sun::star::uno::Sequence <sal_Int8> aPasswd;
 
     SwServerObjectRef refObj;   // falls DataServer -> Pointer gesetzt
     SvBaseLinkRef refLink;
@@ -204,9 +204,9 @@ public:
     void SetLinkFilePassWd( const String& rS )      { sLinkFilePassWd = rS; }
 
     // get / set password of this section
-    const ::com::sun::star::uno::Sequence <sal_uInt8>&
+    const ::com::sun::star::uno::Sequence <sal_Int8>&
             GetPasswd() const               { return aPasswd; }
-    void SetPasswd( const ::com::sun::star::uno::Sequence <sal_uInt8>& rNew )
+    void SetPasswd( const ::com::sun::star::uno::Sequence <sal_Int8>& rNew )
                                             { aPasswd = rNew; }
 
     // Daten Server-Methoden
@@ -324,6 +324,9 @@ inline SwSection* SwSectionFmt::GetParentSection() const
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.2  2001/02/27 18:46:19  jp
+      new: Password for single section
+
       Revision 1.1.1.1  2000/09/18 17:14:27  hr
       initial import
 

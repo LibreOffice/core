@@ -2,9 +2,9 @@
  *
  *  $RCSfile: doc.hxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: os $ $Date: 2001-02-21 12:13:10 $
+ *  last change: $Author: jp $ $Date: 2001-03-02 14:35:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -225,9 +225,14 @@ struct SwHash;
 struct SwSortOptions;
 struct SwDefTOXBase_Impl;
 
-namespace com { namespace sun { namespace star { namespace i18n {
+namespace com { namespace sun { namespace star {
+namespace i18n {
     struct ForbiddenCharacters;    // comes from the I18N UNO interface
-}}}};
+}
+namespace uno {
+    template < class > class Sequence;
+}
+}}};
 
 namespace utl {
     class TransliterationWrapper;
@@ -285,7 +290,7 @@ class SwDoc
     Timer       aChartTimer;            // der Timer fuers Update aller Charts
     Timer       aOLEModifiedTimer;      // Timer for update modified OLE-Objecs
     SwDBData    aDBData;                // database descriptor
-    String      sSectionPasswd;         // Passwort fuer geschuetzte Bereiche
+    ::com::sun::star::uno::Sequence <sal_Int8 > aSectionPasswd;
     String      sTOIAutoMarkURL;        // ::com::sun::star::util::URL of table of index AutoMark file
     SvStringsDtor aPatternNms;          // Array fuer die Namen der Dokument-Vorlagen
 
@@ -1532,8 +1537,11 @@ public:
     String GetUniqueSectionName( const String* pChkStr = 0 ) const;
 
         // Passwort fuer geschuetzte Bereiche erfragen/setzen
-    void ChgSectionPasswd( const String& sNew );
-    const String& GetSectionPasswd() const { return sSectionPasswd; }
+    const ::com::sun::star::uno::Sequence <sal_Int8>&
+            GetSectionPasswd() const            { return aSectionPasswd; }
+    void ChgSectionPasswd(
+            const ::com::sun::star::uno::Sequence <sal_Int8>& rNew,
+            const SwSection* pSection = 0 );
 
     // Pointer auf die SfxDocShell vom Doc, kann 0 sein !!!
           SwDocShell* GetDocShell()         { return pDocShell; }

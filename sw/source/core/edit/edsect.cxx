@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edsect.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:18 $
+ *  last change: $Author: jp $ $Date: 2001-03-02 14:35:59 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,16 +229,18 @@ void SwEditShell::ChgSection( USHORT nSect, const SwSection& rSect,
     EndAllAction();
 }
 
-const String& SwEditShell::GetSectionPasswd() const
+const ::com::sun::star::uno::Sequence <sal_Int8>&
+    SwEditShell::GetSectionPasswd() const
 {
     return GetDoc()->GetSectionPasswd();
-
 }
 
 
-void SwEditShell::ChgSectionPasswd( const String& sNew )
+void SwEditShell::ChgSectionPasswd(
+        const ::com::sun::star::uno::Sequence <sal_Int8>& rNew,
+        const SwSection* pSection )
 {
-    GetDoc()->ChgSectionPasswd( sNew );
+    GetDoc()->ChgSectionPasswd( rNew, pSection );
 }
 
 

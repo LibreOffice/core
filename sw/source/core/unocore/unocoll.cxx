@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocoll.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: dvo $ $Date: 2001-01-29 15:29:30 $
+ *  last change: $Author: jp $ $Date: 2001-03-02 14:36:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -136,6 +136,9 @@
 #endif
 #ifndef _COM_SUN_STAR_TEXT_XTEXTTABLE_HPP_
 #include <com/sun/star/text/XTextTable.hpp>
+#endif
+#ifndef _SVTOOLS_PASSWORDHELPER_HXX
+#include <svtools/PasswordHelper.hxx>
 #endif
 #ifndef _FRMFMT_HXX
 #include <frmfmt.hxx>
@@ -1248,7 +1251,7 @@ SwXTextSections::~SwXTextSections()
 sal_Int32 SwXTextSections::getCount(void) throw( uno::RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    if(!IsValid() || GetDoc()->GetSectionPasswd().Len())
+    if(!IsValid() || GetDoc()->GetSectionPasswd().getLength())
         throw uno::RuntimeException();
     const SwSectionFmts& rSectFmts = GetDoc()->GetSections();
     sal_uInt16 nCount = rSectFmts.Count();
@@ -1267,7 +1270,7 @@ uno::Any SwXTextSections::getByIndex(sal_Int32 nIndex)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     uno::Any aRet;
-    if(IsValid() && !GetDoc()->GetSectionPasswd().Len())
+    if(IsValid() && !GetDoc()->GetSectionPasswd().getLength())
     {
         SwSectionFmts& rFmts = GetDoc()->GetSections();
 
@@ -1303,7 +1306,7 @@ uno::Any SwXTextSections::getByName(const OUString& Name)
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     uno::Any aRet;
-    if(IsValid()&& !GetDoc()->GetSectionPasswd().Len())
+    if(IsValid()&& !GetDoc()->GetSectionPasswd().getLength())
     {
         String aName(Name);
         SwSectionFmts& rFmts = GetDoc()->GetSections();
@@ -1332,7 +1335,7 @@ uno::Sequence< OUString > SwXTextSections::getElementNames(void)
     throw( uno::RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
-    if(!IsValid() || GetDoc()->GetSectionPasswd().Len())
+    if(!IsValid() || GetDoc()->GetSectionPasswd().getLength())
         throw uno::RuntimeException();
     sal_uInt16 nCount = GetDoc()->GetSections().Count();
     SwSectionFmts& rSectFmts = GetDoc()->GetSections();
@@ -1369,7 +1372,7 @@ sal_Bool SwXTextSections::hasByName(const OUString& Name)
     vos::OGuard aGuard(Application::GetSolarMutex());
     sal_Bool bRet = sal_False;
     String aName(Name);
-    if(IsValid()&& !GetDoc()->GetSectionPasswd().Len())
+    if(IsValid()&& !GetDoc()->GetSectionPasswd().getLength())
     {
         SwSectionFmts& rFmts = GetDoc()->GetSections();
         for(sal_uInt16 i = 0; i < rFmts.Count(); i++)
@@ -1404,7 +1407,7 @@ sal_Bool SwXTextSections::hasElements(void) throw( uno::RuntimeException )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
     sal_uInt16 nCount = 0;
-    if(IsValid()&& !GetDoc()->GetSectionPasswd().Len())
+    if(IsValid()&& !GetDoc()->GetSectionPasswd().getLength())
     {
         SwSectionFmts& rFmts = GetDoc()->GetSections();
         nCount = rFmts.Count();
@@ -1421,11 +1424,11 @@ void SwXTextSections::protect(const OUString& rPassword)
 {
     if(IsValid())
     {
-        String sPasswdSect(GetDoc()->GetSectionPasswd());
-        if(sPasswdSect.Len())
+        if(GetDoc()->GetSectionPasswd().getLength())
             throw uno::RuntimeException();
-        String sNewPasswd(rPassword);
-        GetDoc()->ChgSectionPasswd( sNewPasswd );
+        ::com::sun::star::uno::Sequence <sal_Int8> aPWD;
+        SvPasswordHelper::GetHashPassword( aPWD, rPassword );
+        GetDoc()->ChgSectionPasswd( aPWD );
     }
     else
         throw uno::RuntimeException();
@@ -1438,9 +1441,10 @@ void SwXTextSections::unprotect(const OUString& rPassword)
 {
     if(aWrongPasswdTimer.IsActive() || !IsValid())
         throw uno::RuntimeException();
-    String sPasswdSect(GetDoc()->GetSectionPasswd());
-    String sNewPasswd(rPassword);
-    if(sPasswdSect != sNewPasswd)
+
+    ::com::sun::star::uno::Sequence <sal_Int8> aPWD, aEmptySeq;
+    SvPasswordHelper::GetHashPassword( aPWD, rPassword );
+    if( aPWD != GetDoc()->GetSectionPasswd() )
     {
         //hier sollen noch illegale Aufrufe abgefangen werden.
         //wird das Passwort zum vierten Mal falsch eingegeben, dann
@@ -1457,7 +1461,7 @@ void SwXTextSections::unprotect(const OUString& rPassword)
     }
     nWrongPasswd = 0;
     aWrongPasswdTimer.SetTimeout(PASSWORD_STD_TIMEOUT);
-    GetDoc()->ChgSectionPasswd( aEmptyStr );
+    GetDoc()->ChgSectionPasswd( aEmptySeq );
 }
 /* -----------------19.04.99 09:38-------------------
  *
@@ -1466,10 +1470,7 @@ sal_Bool SwXTextSections::isProtected(void) throw( uno::RuntimeException )
 {
     sal_Bool bRet = sal_False;
     if(IsValid())
-    {
-        String sPasswdSect(GetDoc()->GetSectionPasswd());
-        bRet = sPasswdSect.Len() > 0;
-    }
+        bRet = 0 != GetDoc()->GetSectionPasswd().getLength();
     else
         throw uno::RuntimeException();
     return bRet;

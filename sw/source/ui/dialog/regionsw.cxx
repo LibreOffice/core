@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regionsw.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: os $ $Date: 2001-03-02 14:07:11 $
+ *  last change: $Author: jp $ $Date: 2001-03-02 14:38:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,9 @@
 #endif
 #ifndef SVTOOLS_URIHELPER_HXX
 #include <svtools/urihelper.hxx>
+#endif
+#ifndef _SVTOOLS_PASSWORDHELPER_HXX
+#include <svtools/PasswordHelper.hxx>
 #endif
 #ifndef _MSGBOX_HXX //autogen
 #include <vcl/msgbox.hxx>
@@ -219,9 +222,8 @@ public:
         {
             SetHelpId(HID_DLG_PASSWD_SECTION);
         }
-
-
 };
+
 /*----------------------------------------------------------------------------
  Beschreibung: User Data Klasse fuer Bereichsinformationen
 ----------------------------------------------------------------------------*/
@@ -451,10 +453,11 @@ SwEditRegionDlg::SwEditRegionDlg( Window* pParent, SwWrtShell& rWrtSh )
 /*-----------------18.09.97 08:09-------------------
 
 --------------------------------------------------*/
-void SwEditRegionDlg::SetPassword(const String& rPassWd)
+void SwEditRegionDlg::SetPassword(
+    const ::com::sun::star::uno::Sequence <sal_Int8>& rPasswd )
 {
-    aNewPasswd = rPassWd;
-    aPasswdCB.Check(rPassWd.Len() > 0);
+    aNewPasswd = rPasswd;
+    aPasswdCB.Check( 0 != rPasswd.getLength() );
 }
 /*---------------------------------------------------------------------
     Beschreibung: Durchsuchen nach Child-Sections, rekursiv
@@ -1232,7 +1235,7 @@ IMPL_LINK( SwEditRegionDlg, ChangePasswdHdl, CheckBox *, pBox )
 {
     if (pBox->IsChecked())
     {
-        if(!bIsPasswd&&!aNewPasswd.Len())
+        if(!bIsPasswd&&!aNewPasswd.getLength())
         {
             bIsPasswd = FALSE;
             SwTestPasswdDlg aPasswdDlg(this);
@@ -1240,9 +1243,12 @@ IMPL_LINK( SwEditRegionDlg, ChangePasswdHdl, CheckBox *, pBox )
 //          aPasswdDlg.SetHelpId(HID_DLG_PASSWD_SECTION);
             if (aPasswdDlg.Execute())
             {
-                aNewPasswd = aPasswdDlg.GetPassword();
-                if(aPasswdDlg.GetConfirm() == aNewPasswd)
+                String sNewPasswd( aPasswdDlg.GetPassword() );
+                if( aPasswdDlg.GetConfirm() == sNewPasswd )
+                {
                     bIsPasswd = TRUE;
+                    SvPasswordHelper::GetHashPassword( aNewPasswd, sNewPasswd );
+                }
                 else
                     InfoBox(pBox, SW_RES(REG_WRONG_PASSWD_REPEAT)).Execute();
             }
@@ -1252,7 +1258,7 @@ IMPL_LINK( SwEditRegionDlg, ChangePasswdHdl, CheckBox *, pBox )
     }
     if( !pBox->IsChecked() )
     {
-        aNewPasswd = aEmptyStr;
+        aNewPasswd.realloc( 0 );
         bIsPasswd = FALSE;
     }
     return 0;
@@ -1406,23 +1412,26 @@ void SwBaseShell::EditRegionDialog(SfxRequest& rReq)
         {
             Window* pParentWin = &GetView().GetViewFrame()->GetWindow();
             BOOL bStart = TRUE;
-            String sPasswdSect =  rWrtShell.GetSectionPasswd();
-            if (sPasswdSect.Len())
+
+
+            const ::com::sun::star::uno::Sequence <sal_Int8>& rPWD =
+                                                rWrtShell.GetSectionPasswd();
+            if( rPWD.getLength() )
             {
-                SwTestPasswdDlg aPasswdDlg(pParentWin);
+                SwTestPasswdDlg aPasswdDlg( pParentWin );
 //                  aPasswdDlg.SetHelpId(HID_DLG_PASSWD_SECTION);
                 aPasswdDlg.Execute();
-                if ( aPasswdDlg.GetPassword() != sPasswdSect )
-                {
-                    bStart = FALSE;
-                }
+                ::com::sun::star::uno::Sequence <sal_Int8> aPWD;
+                SvPasswordHelper::GetHashPassword( aPWD,
+                                                aPasswdDlg.GetPassword() );
+                bStart = aPWD == rPWD;
             }
             if(bStart)
             {
                 SwEditRegionDlg* pEditRegionDlg = new SwEditRegionDlg(
                                         pParentWin, rWrtShell );
-                pEditRegionDlg->SetPassword(sPasswdSect);
-                    pEditRegionDlg->Execute();
+                pEditRegionDlg->SetPassword( rPWD );
+                pEditRegionDlg->Execute();
                 delete pEditRegionDlg;
             }
             else
@@ -2308,6 +2317,9 @@ void SwSectionPropertyTabDialog::PageCreated( USHORT nId, SfxTabPage &rPage )
 
 /*-------------------------------------------------------------------------
     $Log: not supported by cvs2svn $
+    Revision 1.5  2001/03/02 14:07:11  os
+    extended numbering types available
+
     Revision 1.4  2001/02/23 15:05:32  os
     Issue #413#: use unquoted URLs
 

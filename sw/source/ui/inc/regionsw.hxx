@@ -2,9 +2,9 @@
  *
  *  $RCSfile: regionsw.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: os $ $Date: 2001-03-02 14:08:37 $
+ *  last change: $Author: jp $ $Date: 2001-03-02 14:39:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -237,7 +237,7 @@ class SwEditRegionDlg : public SfxModalDialog
     Bitmap          aCollNode;
 
     Bitmap          aBmpArr[4];
-    String          aNewPasswd;
+    ::com::sun::star::uno::Sequence <sal_Int8 > aNewPasswd;
     SwWrtShell&     rSh;
     SectReprArr     aSectReprArr;
     SvLBoxEntry*    pAktEntry;
@@ -258,7 +258,7 @@ public:
     void    RecurseList( const SwSectionFmt* pFmt, SvLBoxEntry* pEntry);
     USHORT  FindArrPos(const SwSectionFmt* pFmt);
 
-    void    SetPassword(const String& rPassWd);
+    void    SetPassword( const ::com::sun::star::uno::Sequence <sal_Int8>& );
 
     DECL_LINK( GetFirstEntryHdl, SvTreeListBox * );
     DECL_LINK( DeselectHdl, SvTreeListBox * );

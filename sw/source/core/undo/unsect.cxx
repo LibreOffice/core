@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unsect.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:28 $
+ *  last change: $Author: jp $ $Date: 2001-03-02 14:36:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -69,7 +69,7 @@
 #include <svx/linkmgr.hxx>
 #endif
 
-#ifndef _FMTCNTNT_HXX //autogen
+#ifndef _FMTCNTNT_HXX
 #include <fmtcntnt.hxx>
 #endif
 #ifndef _DOC_HXX
@@ -489,18 +489,32 @@ void SwUndoChgSection::Redo( SwUndoIter& rUndoIter )
 
 
 
-SwUndoChgSectPsswd::SwUndoChgSectPsswd( const String& rOld )
-    : SwUndo( UNDO_CHGSECTIONPASSWD ), sPasswd( rOld )
+SwUndoChgSectPsswd::SwUndoChgSectPsswd(
+                    const ::com::sun::star::uno::Sequence <sal_Int8>& rOld,
+                    const SwSectionNode* pSectNd )
+    : SwUndo( UNDO_CHGSECTIONPASSWD ), aPasswd( rOld )
 {
+    nSectNd = pSectNd ? pSectNd->GetIndex() : 0;
 }
 
 
 void SwUndoChgSectPsswd::Undo( SwUndoIter& rIter )
 {
     SwDoc& rDoc = rIter.GetDoc();
-    String s( rDoc.GetSectionPasswd() );
-    rDoc.ChgSectionPasswd( sPasswd );
-    sPasswd = s;
+    ::com::sun::star::uno::Sequence <sal_Int8> aCurr;
+    const SwSection* pSect = 0;
+    if( nSectNd )
+    {
+        SwSectionNode* pNd = rDoc.GetNodes()[ nSectNd ]->GetSectionNode();
+        ASSERT( pNd, "where is the sectionnode?" );
+        pSect = &pNd->GetSection();
+        aCurr = pSect->GetPasswd();
+    }
+    else
+        aCurr = rDoc.GetSectionPasswd();
+
+    rDoc.ChgSectionPasswd( aPasswd, pSect );
+    aPasswd = aCurr;
 }
 
 
@@ -514,11 +528,14 @@ void SwUndoChgSectPsswd::Redo( SwUndoIter& rUndoIter )
 
       Source Code Control System - Header
 
-      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/core/undo/unsect.cxx,v 1.1.1.1 2000-09-19 00:08:28 hr Exp $
+      $Header: /zpool/svn/migration/cvs_rep_09_09_08/code/sw/source/core/undo/unsect.cxx,v 1.2 2001-03-02 14:36:12 jp Exp $
 
       Source Code Control System - Update
 
       $Log: not supported by cvs2svn $
+      Revision 1.1.1.1  2000/09/19 00:08:28  hr
+      initial import
+
       Revision 1.38  2000/09/18 16:04:29  willem.vandorp
       OpenOffice header added.
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: editsh.hxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: os $ $Date: 2001-02-21 12:13:10 $
+ *  last change: $Author: jp $ $Date: 2001-03-02 14:35:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,6 +156,11 @@ class SwEndNoteInfo;
 class SwLineNumberInfo;
 class SwAttrSet;
 class SwAuthEntry;
+
+namespace com { namespace sun { namespace star { namespace uno {
+    template < class > class Sequence;
+}}}};
+
 
 #define GETSELTXT_PARABRK_TO_BLANK      0
 #define GETSELTXT_PARABRK_KEEP          1
@@ -799,8 +804,11 @@ public:
                             BOOL bChkHidden = FALSE,
                             BOOL BChkTOX = FALSE ) const;
         // Passwort fuer geschuetzte Bereiche erfragen/setzen
-    void ChgSectionPasswd( const String& sNew );
-    const String& GetSectionPasswd() const;
+    void ChgSectionPasswd(
+                const ::com::sun::star::uno::Sequence <sal_Int8>& rNew,
+                const SwSection* pSect = 0 );
+    const ::com::sun::star::uno::Sequence <sal_Int8>& GetSectionPasswd() const;
+
     String GetUniqueSectionName( const String* pChkStr = 0 ) const;
 
     //Attribute setzen
