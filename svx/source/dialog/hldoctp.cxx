@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hldoctp.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sj $ $Date: 2001-06-29 12:34:01 $
+ *  last change: $Author: sj $ $Date: 2001-10-01 13:50:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -137,7 +137,7 @@ void SvxHyperlinkDocTp::FillDlgFields ( String& aStrURL )
     String aStrScheme;
 
     // set protocoll-radiobuttons
-    INetProtocol aProtocol = aURL.GetProtocol ();
+    INetProtocol aProtocol = aURL.GetProtocol();
     switch ( aProtocol )
     {
         case INET_PROT_FILE :
@@ -198,8 +198,11 @@ String SvxHyperlinkDocTp::GetCurrentURL ()
 
     if ( aStrPath != aEmptyStr )
     {
-        // create a real URL-String
-        utl::LocalFileHelper::ConvertSystemPathToURL( aStrPath, aBaseURL, aStrURL );
+        INetURLObject aURL( aStrPath );
+        if ( aURL.GetProtocol() != INET_PROT_NOT_VALID )    // maybe the path is already a valid
+            aStrURL = aStrPath;                             // hyperlink, then we can use this path directly
+        else
+            utl::LocalFileHelper::ConvertSystemPathToURL( aStrPath, aBaseURL, aStrURL );
 
         if ( aStrMark != aEmptyStr )
         {
