@@ -2,9 +2,9 @@
  *
  *  $RCSfile: edit.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: mt $ $Date: 2001-08-20 11:09:37 $
+ *  last change: $Author: hr $ $Date: 2001-09-27 18:05:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -184,8 +184,8 @@ public:
 
     // ::com::sun::star::uno::XInterface
     ::com::sun::star::uno::Any                  SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
-    void                                        SAL_CALL acquire() throw(::com::sun::star::uno::RuntimeException)   { OWeakObject::acquire(); }
-    void                                        SAL_CALL release() throw(::com::sun::star::uno::RuntimeException)   { OWeakObject::release(); }
+    void                                        SAL_CALL acquire() throw()  { OWeakObject::acquire(); }
+    void                                        SAL_CALL release() throw()  { OWeakObject::release(); }
 
     // ::com::sun::star::datatransfer::XTransferable
     ::com::sun::star::uno::Any SAL_CALL getTransferData( const ::com::sun::star::datatransfer::DataFlavor& aFlavor ) throw(::com::sun::star::datatransfer::UnsupportedFlavorException, ::com::sun::star::io::IOException, ::com::sun::star::uno::RuntimeException);
@@ -1084,7 +1084,8 @@ void Edit::MouseButtonUp( const MouseEvent& rMEvt )
     else if ( rMEvt.IsMiddle() && !mbReadOnly &&
               ( GetSettings().GetMouseSettings().GetMiddleButtonAction() == MOUSE_MIDDLE_PASTESELECTION ) )
     {
-        ImplPaste( Window::GetSelection() );
+        ::com::sun::star::uno::Reference<com::sun::star::datatransfer::clipboard::XClipboard> aSelection(Window::GetSelection());
+        ImplPaste( aSelection );
     }
 }
 
@@ -1102,7 +1103,8 @@ void Edit::Tracking( const TrackingEvent& rTEvt )
         }
         else if ( rTEvt.GetMouseEvent().IsLeft() && GetSelection().Len() )
         {
-            ImplCopy( Window::GetSelection() );
+            ::com::sun::star::uno::Reference<com::sun::star::datatransfer::clipboard::XClipboard> aSelection(Window::GetSelection());
+            ImplCopy( aSelection );
         }
     }
     else
@@ -1230,8 +1232,10 @@ BOOL Edit::ImplHandleKeyEvent( const KeyEvent& rKEvt )
                     if ( aSel != GetSelection() )
                     {
                         ImplSetSelection( aSel );
-                        if ( aSel.Len() )
-                            ImplCopy( Window::GetSelection() );
+                        if ( aSel.Len() ) {
+                            ::com::sun::star::uno::Reference<com::sun::star::datatransfer::clipboard::XClipboard> aSelection(Window::GetSelection());
+                            ImplCopy( aSelection );
+                        }
                     }
 
                     if ( (nCode == KEY_END) && maAutocompleteHdl.IsSet() && !rKEvt.GetKeyCode().GetModifier() )
@@ -2120,7 +2124,8 @@ void Edit::Copy()
 {
     if ( !(GetStyle() & WB_PASSWORD ) )
     {
-        ImplCopy( GetClipboard() );
+        ::com::sun::star::uno::Reference<com::sun::star::datatransfer::clipboard::XClipboard> aClipboard(GetClipboard());
+        ImplCopy( aClipboard );
     }
 }
 
@@ -2128,7 +2133,8 @@ void Edit::Copy()
 
 void Edit::Paste()
 {
-    ImplPaste( GetClipboard() );
+        ::com::sun::star::uno::Reference<com::sun::star::datatransfer::clipboard::XClipboard> aClipboard(GetClipboard());
+    ImplPaste( aClipboard );
 }
 
 // -----------------------------------------------------------------------
