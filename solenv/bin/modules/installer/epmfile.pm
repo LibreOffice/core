@@ -2,9 +2,9 @@
 #
 #   $RCSfile: epmfile.pm,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2004-07-06 14:56:51 $
+#   last change: $Author: rt $ $Date: 2004-07-13 09:13:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -526,24 +526,41 @@ sub call_epm
 
     my $packageformat = $installer::globals::packageformat;
 
-    my $systemcall = $epmname . " -f " . $packageformat . " " . $packagename . " " . $epmlistfilename;
+    # my $systemcall = $epmname . " -f " . $packageformat . " " . $packagename . " " . $epmlistfilename;
+    my $systemcall = $epmname . " -f " . $packageformat . " " . $packagename . " " . $epmlistfilename . " 2\>\&1 |";
 
     print "... $systemcall ...\n";
 
-    my $returnvalue = system($systemcall);
+    my $maxepmcalls = 3;
 
-    $infoline = "Systemcall: $systemcall\n";
-    push( @installer::globals::logfileinfo, $infoline);
+    for ( my $i = 1; $i <= $maxepmcalls; $i++ )
+    {
+        my @epmoutput = ();
 
-    if ($returnvalue)
-    {
-        $infoline = "ERROR: Could not execute epm!\n";
+        open (EPM, "$systemcall");
+        while (<EPM>) {push(@epmoutput, $_); }
+        close (EPM);
+
+        my $returnvalue = $?;   # $? contains the return value of the systemcall
+
+        my $infoline = "Systemcall  (Try $i): $systemcall\n";
         push( @installer::globals::logfileinfo, $infoline);
-    }
-    else
-    {
-        $infoline = "Success: Executed epm successfully!\n";
-        push( @installer::globals::logfileinfo, $infoline);
+
+        for ( my $j = 0; $j <= $#epmoutput; $j++ ) { push( @installer::globals::logfileinfo, "$epmoutput[$j]"); }
+
+        if ($returnvalue)
+        {
+            $infoline = "Try $i : Could not execute \"$systemcall\"!\n";
+            push( @installer::globals::logfileinfo, $infoline);
+            if ( $i == $maxepmcalls ) { installer::exiter::exit_program("ERROR: \"$systemcall\"!", "call_epm"); }
+            }
+        else
+        {
+            print "Success (Try $i): \"$systemcall\"\n";
+            $infoline = "Success: Executed \"$systemcall\" successfully!\n";
+            push( @installer::globals::logfileinfo, $infoline);
+            last;
+        }
     }
 }
 
@@ -915,23 +932,40 @@ sub create_packages_without_epm
         installer::pathanalyzer::get_path_from_fullqualifiedname(\$destinationdir);
         $destinationdir =~ s/\/\s*$//;  # removing ending slashes
 
-        my $systemcall = "pkgmk -o -f $prototypefile -d $destinationdir \> /dev/null 2\>\&1";
+        # my $systemcall = "pkgmk -o -f $prototypefile -d $destinationdir \> /dev/null 2\>\&1";
+        my $systemcall = "pkgmk -o -f $prototypefile -d $destinationdir 2\>\&1 |";
         print "... $systemcall ...\n";
 
-        my $returnvalue = system($systemcall);
+        my $maxpkgmkcalls = 3;
 
-        my $infoline = "Systemcall: $systemcall\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        for ( my $i = 1; $i <= $maxpkgmkcalls; $i++ )
+        {
+            my @pkgmkoutput = ();
 
-        if ($returnvalue)
-        {
-            $infoline = "ERROR: Could not execute \"$systemcall\"!\n";
+            open (PKGMK, "$systemcall");
+            while (<PKGMK>) {push(@pkgmkoutput, $_); }
+            close (PKGMK);
+
+            my $returnvalue = $?;   # $? contains the return value of the systemcall
+
+            my $infoline = "Systemcall (Try $i): $systemcall\n";
             push( @installer::globals::logfileinfo, $infoline);
-        }
-        else
-        {
-            $infoline = "Success: Executed \"$systemcall\" successfully!\n";
-            push( @installer::globals::logfileinfo, $infoline);
+
+            for ( my $j = 0; $j <= $#pkgmkoutput; $j++ ) { push( @installer::globals::logfileinfo, "$pkgmkoutput[$j]"); }
+
+            if ($returnvalue)
+            {
+                $infoline = "Try $i : Could not execute \"$systemcall\"!\n";
+                push( @installer::globals::logfileinfo, $infoline);
+                if ( $i == $maxpkgmkcalls ) { installer::exiter::exit_program("ERROR: \"$systemcall\"!", "create_packages_without_epm"); }
+            }
+            else
+            {
+                print "Success (Try $i): \"$systemcall\"\n";
+                $infoline = "Success: Executed \"$systemcall\" successfully!\n";
+                push( @installer::globals::logfileinfo, $infoline);
+                last;
+            }
         }
 
         # Setting unix rights to "775" for all created directories inside the package
@@ -1008,28 +1042,44 @@ sub create_packages_without_epm
         if (! -f $specfilename) { installer::exiter::exit_program("ERROR: Did not find file: $specfilename", "create_packages_without_epm"); }
 
         my $rpmcommand = "rpm";
-
         my $rpmversion = determine_rpm_version();
 
         if ( $rpmversion >= 4 ) { $rpmcommand = "rpmbuild"; }
 
-        my $systemcall = "$rpmcommand -bb $specfilename --target i586 \> /dev/null";
+        # my $systemcall = "$rpmcommand -bb $specfilename --target i586 \> /dev/null";
+        my $systemcall = "$rpmcommand -bb $specfilename --target i586 2\>\&1 |";
         print "... $systemcall ...\n";
 
-        my $returnvalue = system($systemcall);
+        my $maxrpmcalls = 3;
 
-        my $infoline = "Systemcall: $systemcall\n";
-        push( @installer::globals::logfileinfo, $infoline);
+        for ( my $i = 1; $i <= $maxrpmcalls; $i++ )
+        {
+            my @rpmoutput = ();
 
-        if ($returnvalue)
-        {
-            $infoline = "ERROR: Could not execute \"$systemcall\"!\n";
+            open (RPM, "$systemcall");
+            while (<RPM>) {push(@rpmoutput, $_); }
+            close (RPM);
+
+            my $returnvalue = $?;   # $? contains the return value of the systemcall
+
+            my $infoline = "Systemcall (Try $i): $systemcall\n";
             push( @installer::globals::logfileinfo, $infoline);
-        }
-        else
-        {
-            $infoline = "Success: Executed \"$systemcall\" successfully!\n";
-            push( @installer::globals::logfileinfo, $infoline);
+
+            for ( my $j = 0; $j <= $#rpmoutput; $j++ ) { push( @installer::globals::logfileinfo, "$rpmoutput[$j]"); }
+
+            if ($returnvalue)
+            {
+                $infoline = "Try $i : Could not execute \"$systemcall\"!\n";
+                push( @installer::globals::logfileinfo, $infoline);
+                if ( $i == $maxrpmcalls ) { installer::exiter::exit_program("ERROR: \"$systemcall\"!", "create_packages_without_epm"); }
+            }
+            else
+            {
+                print "Success (Try $i): \"$systemcall\"\n";
+                $infoline = "Success: Executed \"$systemcall\" successfully!\n";
+                push( @installer::globals::logfileinfo, $infoline);
+                last;
+            }
         }
     }
 }
