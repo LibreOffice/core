@@ -2,9 +2,9 @@
  *
  *  $RCSfile: commoncontrol.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 16:03:49 $
+ *  last change: $Author: obo $ $Date: 2004-11-16 12:03:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,31 +82,12 @@ namespace pcr
     //------------------------------------------------------------------
     OCommonBehaviourControl::OCommonBehaviourControl(Window* _pMeAsWin)
         :m_pListener(NULL)
-        ,m_pData(NULL)
-        ,m_bDir(sal_True)
-        ,m_bLocked(sal_False)
         ,m_bModified(sal_False)
         ,m_nLine(0)
         ,m_sStandardString(getStandardString())
         ,m_pMeAsWindow(_pMeAsWin)
     {
         DBG_ASSERT(m_pMeAsWindow != NULL, "OCommonBehaviourControl::OCommonBehaviourControl: invalid window!");
-    }
-
-    //------------------------------------------------------------------
-    void OCommonBehaviourControl::SetLocked(sal_Bool _bFlag)
-    {
-        m_bLocked = _bFlag;
-        Font aFont = m_pMeAsWindow->GetFont();
-        if (m_bLocked)
-        {
-            aFont.SetColor(Color(COL_GRAY));
-        }
-        else
-        {
-            aFont = m_pMeAsWindow->GetParent()->GetFont();
-        }
-        m_pMeAsWindow->SetFont(aFont);
     }
 
     //------------------------------------------------------------------
@@ -128,7 +109,6 @@ namespace pcr
             if (nKey == KEY_RETURN && !aKeyCode.IsShift())
             {
                 LoseFocusHdl(m_pMeAsWindow);
-                m_bDir = sal_True;
                 if (m_pListener != NULL)
                     m_pListener->TravelLine(this);
                 return sal_True;
@@ -163,9 +143,7 @@ namespace pcr
     //------------------------------------------------------------------
     void OCommonBehaviourControl::commitModified(Window* _pSource)
     {
-        if (m_pListener != NULL && m_bModified)
-            m_pListener->Commit(this);
-        m_bModified = sal_False;
+        CommitModified();
     }
 
     //------------------------------------------------------------------
