@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfnum.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-04-27 14:08:30 $
+ *  last change: $Author: rt $ $Date: 2005-01-31 13:56:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -194,6 +194,8 @@ void SwRTFParser::ReadListLevel( SwNumRule& rRule, BYTE nNumLvl )
     int nLvlTxtLevel = 0, nLvlNumberLevel = 0;
     String sLvlText, sLvlNumber;
     SwNumFmt* pCurNumFmt;
+    String aStringFollow = aEmptyStr;
+
     if( MAXLEVEL >= nNumLvl )
     {
         pCurNumFmt = (SwNumFmt*)rRule.GetNumFmt( nNumLvl );
@@ -302,12 +304,23 @@ void SwRTFParser::ReadListLevel( SwNumRule& rRule, BYTE nNumLvl )
                 sLvlNumber += aToken;
             break;
 
+        case RTF_LEVELFOLLOW:
+            switch (nTokenValue)
+            {
+            case 0:
+                aStringFollow=String('\t');
+                break;
+            case 1:
+                aStringFollow=String(' ');
+                break;
+            }
+            break;
+
         case RTF_LEVELOLD:
         case RTF_LEVELPREV:
         case RTF_LEVELPREVSPACE:
         case RTF_LEVELINDENT:
         case RTF_LEVELSPACE:
-        case RTF_LEVELFOLLOW:
         case RTF_LEVELLEGAL:
         case RTF_LEVELNORESTART:
             break;
@@ -385,6 +398,10 @@ void SwRTFParser::ReadListLevel( SwNumRule& rRule, BYTE nNumLvl )
             pCurNumFmt->SetNumberingType(SVX_NUM_NUMBER_NONE);
             pCurNumFmt->SetSuffix( sLvlText );
         }
+
+        String newSuffix=pCurNumFmt->GetSuffix();
+        newSuffix+=aStringFollow;
+        pCurNumFmt->SetSuffix(newSuffix);
     }
 
     SkipToken( -1 );
@@ -463,6 +480,7 @@ void SwRTFParser::ReadListTable()
         case RTF_LISTRESTARTHDN:
             break;
         case RTF_LISTNAME:
+            if (nNextCh=='}') break;  // #118989# empty listnames
             if( RTF_TEXTTOKEN == GetNextToken() )
             {
                 String sTmp( DelCharAtEnd( aToken, ';' ));
@@ -569,15 +587,32 @@ void SwRTFParser::ReadListOverrideTable()
                     }
 
                     if( aEntry.nListId && aEntry.nListNo )
+                    {
+                        int nMatch=-1;
                         for( USHORT n = aListArr.Count(); n; )
-                            if( aListArr[ --n ].nListId == aEntry.nListId &&
-                                !aListArr[ n ].nListNo )
+                        {
+                            if( aListArr[ --n ].nListId == aEntry.nListId)
                             {
-                                aListArr[ n ].nListNo = aEntry.nListNo;
-                                if( pOrigRule )
-                                    aListArr[ n ].nListDocPos = aEntry.nListDocPos;
+                                nMatch=n;
                                 break;
                             }
+                        }
+                        if(nMatch>=0)
+                        {
+                            if (!aListArr[nMatch].nListNo )
+                            {
+                                aListArr[nMatch].nListNo = aEntry.nListNo;
+                            }
+                            else
+                            {
+                                aEntry.nListDocPos=aListArr[nMatch].nListDocPos;
+                                aEntry.nListTemplateId=aListArr[nMatch].nListTemplateId;
+                                aListArr.Insert(aEntry, aListArr.Count());
+                            }
+                            if(pOrigRule)
+                                aListArr[nMatch].nListDocPos = aEntry.nListDocPos;
+                        }
+                    }
                     aEntry.Clear();
                     pOrigRule = 0;
                     pRule = 0;
@@ -762,15 +797,27 @@ void SwRTFParser::RemoveUnusedNumRules()
     SvPtrarr aDelArr;
     USHORT n;
     for( n = aListArr.Count(); n; )
+    {
         if( !( pEntry = &aListArr[ --n ])->bRuleUsed )
         {
-            void * p = pDoc->GetNumRuleTbl()[pEntry->nListDocPos];
-            // dont delete named char formats
-            if( USHRT_MAX == aDelArr.GetPos( p ) &&
-                ((SwNumRule*)p)->GetName().EqualsAscii( RTF_NUMRULE_NAME, 0,
-                                sizeof( RTF_NUMRULE_NAME )) )
-                aDelArr.Insert( p, aDelArr.Count() );
+            // really *NOT* used by anyone else?
+            BOOL unused=TRUE;
+            for(int j=0;j<aListArr.Count();j++)
+            {
+                if (aListArr[n].nListNo==aListArr[j].nListNo)
+                    unused&=!aListArr[j].bRuleUsed;
+            }
+            if (unused)
+            {
+                void * p = pDoc->GetNumRuleTbl()[pEntry->nListDocPos];
+                // dont delete named char formats
+                if( USHRT_MAX == aDelArr.GetPos( p ) &&
+                    ((SwNumRule*)p)->GetName().EqualsAscii( RTF_NUMRULE_NAME, 0,
+                                    sizeof( RTF_NUMRULE_NAME )) )
+                    aDelArr.Insert( p, aDelArr.Count() );
+            }
         }
+    }
 
     for( n = aDelArr.Count(); n; )
     {
