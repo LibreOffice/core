@@ -1,5 +1,5 @@
 <!--
-	$Id: dtypes.mod,v 1.15 2001-07-24 11:23:13 cl Exp $
+	$Id: dtypes.mod,v 1.16 2004-06-17 15:00:05 rt Exp $
 
    The Contents of this file are made available subject to the terms of
    either of the following licenses
@@ -163,7 +163,7 @@
 				   draw:text-box|draw:image|draw:object|draw:object-ole|
 				   draw:applet|draw:floating-frame|draw:plugin|
 				   draw:measure|draw:caption|draw:connector|chart:chart|
-				   dr3d:scene|draw:control" >
+				   dr3d:scene|draw:control|draw:custom-shape" >
 <!ENTITY % shapes "(%shape;)" >
 
 <!ENTITY % anchorType "(page|frame|paragraph|char|as-char)">
