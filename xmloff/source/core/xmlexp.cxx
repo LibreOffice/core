@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlexp.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: mib $ $Date: 2001-01-17 11:00:14 $
+ *  last change: $Author: mib $ $Date: 2001-01-17 13:42:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -203,9 +203,6 @@ void SvXMLExport::_InitCtor()
     sPicturesPath = OUString( RTL_CONSTASCII_USTRINGPARAM( "#Pictures/" ) );
     sObjectsPath = OUString( RTL_CONSTASCII_USTRINGPARAM( "#./" ) );
     sGraphicObjectProtocol = OUString( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.GraphicObject:" ) );
-
-    if (xNumberFormatsSupplier.is())
-        pNumExport = new SvXMLNumFmtExport(rHandler, xNumberFormatsSupplier);
 }
 
 SvXMLExport::SvXMLExport( MapUnit eDfltUnit, const sal_Char * pClass ) :
@@ -241,6 +238,9 @@ SvXMLExport::SvXMLExport(
     pEventExport( NULL )
 {
     _InitCtor();
+
+    if (xNumberFormatsSupplier.is())
+        pNumExport = new SvXMLNumFmtExport(rHandler, xNumberFormatsSupplier);
 }
 
 SvXMLExport::SvXMLExport(
@@ -265,6 +265,9 @@ SvXMLExport::SvXMLExport(
     pEventExport( NULL )
 {
     _InitCtor();
+
+    if (xNumberFormatsSupplier.is())
+        pNumExport = new SvXMLNumFmtExport(rHandler, xNumberFormatsSupplier);
 }
 
 SvXMLExport::SvXMLExport(
@@ -291,6 +294,9 @@ SvXMLExport::SvXMLExport(
     pEventExport( NULL )
 {
     _InitCtor();
+
+    if (xNumberFormatsSupplier.is())
+        pNumExport = new SvXMLNumFmtExport(rHandler, xNumberFormatsSupplier);
 }
 
 SvXMLExport::~SvXMLExport()
