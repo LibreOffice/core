@@ -200,6 +200,7 @@ hedabu: ..\inc\logindlg.hxx %_DEST%\inc%_EXT%\svtools\logindlg.hxx
 hedabu: ..\inc\httpcook.hxx %_DEST%\inc%_EXT%\svtools\httpcook.hxx
 hedabu: ..\source\uno\unoiface.hxx %_DEST%\inc%_EXT%\svtools\unoiface.hxx
 hedabu: ..\source\uno\imgprod.hxx %_DEST%\inc%_EXT%\svtools\imgprod.hxx
+hedabu: ..\inc\imageresourceaccess.hxx %_DEST%\inc%_EXT%\svtools\imageresourceaccess.hxx
 hedabu: ..\inc\itemprop.hxx %_DEST%\inc%_EXT%\svtools\itemprop.hxx
 hedabu: ..\inc\itempro3.hxx %_DEST%\inc%_EXT%\svtools\itempro3.hxx
 hedabu: ..\inc\strcrypt.hxx %_DEST%\inc%_EXT%\svtools\strcrypt.hxx
