@@ -918,30 +918,6 @@ sub remove_w4w_from_xmlfile
 }
 
 ###########################################################
-# Adding the lowercase variables into the variableshashref
-###########################################################
-
-sub add_lowercasevariables_to_allvariableshashref
-{
-    my ($variableshashref) = @_;
-
-    my $lcvariable = "";
-
-    $lcvariable = lc($variableshashref->{'PRODUCTNAME'});
-    $variableshashref->{'LCPRODUCTNAME'} = $lcvariable;
-
-    if ($variableshashref->{'SHORT_PRODUCTEXTENSION'})
-    {
-        $lcvariable = "\-" . lc($variableshashref->{'SHORT_PRODUCTEXTENSION'}); # including the "-" !
-        $variableshashref->{'LCPRODUCTEXTENSION'} = $lcvariable;
-    }
-    else
-    {
-        $variableshashref->{'LCPRODUCTEXTENSION'} = "";
-    }
-}
-
-###########################################################
 # Preparing the package subdirectory
 ###########################################################
 
@@ -1502,7 +1478,6 @@ sub create_java_installer
     my $xmlfile = installer::files::read_file($xmlfilename);
     remove_empty_packages_in_xmlfile($xmlfile);
     prepare_language_pack_in_xmlfile($xmlfile);
-    add_lowercasevariables_to_allvariableshashref($allvariableshashref);
     substitute_variables($xmlfile, $allvariableshashref);
     if (( $installer::globals::issolarisx86build ) || ( ! $allvariableshashref->{'ADAPRODUCT'} )) { remove_ada_from_xmlfile($xmlfile); }
     if ( $installer::globals::issolarisx86build || $installer::globals::islinuxbuild ) { remove_w4w_from_xmlfile($xmlfile); }
