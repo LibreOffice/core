@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: sch_ChXChartDocument.xba,v $ 
 '*
-'*  $Revision: 1.1 $ 
+'*  $Revision: 1.2 $ 
 '*
-'*  last change:$Date: 2003-01-27 18:01:16 $ 
+'*  last change:$Date: 2003-03-18 12:02:58 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -113,11 +113,11 @@ ErrHndl:
 End Sub
 
 Sub DisposeObj()
-    if NOT isNULL(oComponentInstance) then oComponentInstance.dispose()
+    utils.closeObject(oComponentInstance)
 
     Dim oControllerDoc As Object
     ' To successfully dispose oControllerDoc re-open it first.
     oControllerDoc = utils.loadTestDocument("emptyChart.sds", cObjectName &amp; "2")
-    oControllerDoc.dispose()
+    utils.closeObject(oControllerDoc)
 End Sub
 </script:module>

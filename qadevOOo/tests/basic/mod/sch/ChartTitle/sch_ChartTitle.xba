@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: sch_ChartTitle.xba,v $ 
 '*
-'*  $Revision: 1.1 $ 
+'*  $Revision: 1.2 $ 
 '*
-'*  last change:$Date: 2003-01-27 18:01:27 $ 
+'*  last change:$Date: 2003-03-18 12:02:05 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -121,6 +121,6 @@ Sub FillCells()
 End Sub
 
 Sub DisposeObj()
-    if NOT isNULL(oComponentDoc) then oComponentDoc.dispose()
+    utils.closeObject(oComponentDoc)
 End Sub
 </script:module>

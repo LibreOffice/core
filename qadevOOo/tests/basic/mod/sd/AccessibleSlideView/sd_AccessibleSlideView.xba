@@ -7,9 +7,9 @@
 '*
 '*  $RCSfile: sd_AccessibleSlideView.xba,v $ 
 '*
-'*  $Revision: 1.1 $ 
+'*  $Revision: 1.2 $ 
 '*
-'*  last change:$Date: 2003-01-27 18:01:30 $ 
+'*  last change:$Date: 2003-03-18 12:04:55 $ 
 '*
 '*  The Contents of this file are made available subject to the terms of
 '*  either of the following licenses
@@ -105,7 +105,7 @@ ErrHndl:
 End Sub
 
 Sub DisposeObj()
-    oDoc.dispose()
+    utils.closeObject(oDoc)
 End Sub
 
 ' This method is used for XAccessibleEventBroadcaster interface
