@@ -2,9 +2,9 @@
  *
  *  $RCSfile: namebuff.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:05:05 $
+ *  last change: $Author: hr $ $Date: 2003-11-05 13:39:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -207,47 +207,6 @@ inline UINT16 NameBuffer::GetLastIndex( void )
 inline void NameBuffer::SetBase( UINT16 nNewBase )
 {
     nBase = nNewBase;
-}
-
-
-
-
-class RangeNameBuffer : private List, public ExcRoot
-{
-protected:
-    static const UINT16     nError;             // Dummy, Null-Wert
-public:
-    inline                  RangeNameBuffer( RootData* p );
-                                            // Name, Definition
-    void                    Store( ByteString&, const ScTokenArray*,
-                                UINT16 nAltSheet = 0, const RangeType eNameType = RT_ABSAREA );
-    void                    Store( String&, const ScTokenArray*,
-                                UINT16 nAltSheet = 0, const RangeType eNameType = RT_ABSAREA );
-    inline UINT16           operator[]( UINT16 nExcInd ) const;
-    inline UINT16           GetPos( void ) const;
-};
-
-
-inline RangeNameBuffer::RangeNameBuffer( RootData* p ) : ExcRoot( p )
-{
-    // Ersten gibt's in Excel UND bei SC nicht!
-    Insert( ( void* ) FALSE, LIST_APPEND );
-}
-
-
-inline UINT16 RangeNameBuffer::operator[]( UINT16 nExcInd ) const
-{
-    DBG_ASSERT( nExcInd, "-RangeNameBuffer::operator[](): 0 nicht definiert!?" );
-
-    return nExcInd;
-}
-
-
-inline UINT16 RangeNameBuffer::GetPos( void ) const
-{
-    DBG_ASSERT( Count() <= 0xFFFF, "*RangeNameBuffer::GetPos(): zuviel in Liste!" );
-
-    return ( UINT16 ) Count();
 }
 
 
