@@ -2,9 +2,9 @@
  *
  *  $RCSfile: visobj.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: mav $ $Date: 2003-10-27 12:57:29 $
+ *  last change: $Author: hr $ $Date: 2004-05-10 17:51:36 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -84,17 +84,7 @@
 
 using namespace ::com::sun::star;
 
-void SAL_CALL OCommonEmbeddedObject::setContainerName( const ::rtl::OUString& sName )
-        throw ( uno::RuntimeException )
-{
-    ::osl::MutexGuard aGuard( m_aMutex );
-    if ( m_bDisposed )
-        throw lang::DisposedException(); // TODO
-
-    m_aContainerName = sName;
-}
-
-void SAL_CALL OCommonEmbeddedObject::setVisAreaSize( sal_Int64 nAspect, const awt::Size& aSize )
+void SAL_CALL OCommonEmbeddedObject::setVisualAreaSize( sal_Int64 nAspect, const awt::Size& aSize )
         throw ( lang::IllegalArgumentException,
                 embed::WrongStateException,
                 uno::Exception,
@@ -104,22 +94,15 @@ void SAL_CALL OCommonEmbeddedObject::setVisAreaSize( sal_Int64 nAspect, const aw
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
 
-    if ( m_nObjectState == -1 || m_nObjectState == embed::EmbedStates::EMBED_LOADED )
+    if ( m_nObjectState == -1 || m_nObjectState == embed::EmbedStates::LOADED )
         throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "The own object has no model!\n" ),
                                     uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
 
-    if ( nAspect == embed::Aspects::MSASPECT_CONTENT )
-    {
-        if ( !m_pDocHolder->SetExtent( aSize ) )
-            throw uno::Exception(); // TODO:
-    }
-    else
-    {
-        // TODO: do something for other aspects
-    }
+    if ( !m_pDocHolder->SetExtent( nAspect, aSize ) )
+        throw uno::Exception(); // TODO:
 }
 
-awt::Size SAL_CALL OCommonEmbeddedObject::getVisAreaSize( sal_Int64 nAspect )
+awt::Size SAL_CALL OCommonEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
         throw ( lang::IllegalArgumentException,
                 embed::WrongStateException,
                 uno::Exception,
@@ -129,23 +112,38 @@ awt::Size SAL_CALL OCommonEmbeddedObject::getVisAreaSize( sal_Int64 nAspect )
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
 
-    if ( m_nObjectState == -1 || m_nObjectState == embed::EmbedStates::EMBED_LOADED )
+    if ( m_nObjectState == -1 || m_nObjectState == embed::EmbedStates::LOADED )
         throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "The own object has no model!\n" ),
                                     uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
 
-    if ( nAspect == embed::Aspects::MSASPECT_CONTENT )
-    {
-        awt::Size aResult;
-        if ( !m_pDocHolder->GetExtent( &aResult ) )
-            throw uno::Exception(); // TODO:
-        return aResult;
-    }
-    else
-    {
-        // TODO: do something for other aspects
-    }
+    awt::Size aResult;
+    if ( !m_pDocHolder->GetExtent( nAspect, &aResult ) )
+        throw uno::Exception(); // TODO:
+    return aResult;
 }
 
+sal_Int32 SAL_CALL OCommonEmbeddedObject::getMapMode( sal_Int64 nAspect )
+        throw ( uno::Exception,
+                uno::RuntimeException)
+{
+    ::osl::MutexGuard aGuard( m_aMutex );
+    if ( m_bDisposed )
+        throw lang::DisposedException(); // TODO
+
+    if ( m_nObjectState == -1 || m_nObjectState == embed::EmbedStates::LOADED )
+        throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "The own object has no model!\n" ),
+                                    uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
+
+    sal_Int32 nResult = m_pDocHolder->GetMapMode( nAspect );
+    if ( !nResult )
+        throw uno::Exception(); // TODO:
+
+    return nResult;
+
+}
+
+
+#if 0
 // Probably will be removed!!!
 uno::Any SAL_CALL OCommonEmbeddedObject::getVisualCache( sal_Int64 nAspect )
         throw ( uno::Exception,
@@ -155,10 +153,9 @@ uno::Any SAL_CALL OCommonEmbeddedObject::getVisualCache( sal_Int64 nAspect )
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
 
-    if ( m_nObjectState == -1 || m_nObjectState == embed::EmbedStates::EMBED_LOADED )
+    if ( m_nObjectState == -1 || m_nObjectState == embed::EmbedStates::LOADED )
         throw embed::WrongStateException( ::rtl::OUString::createFromAscii( "The own object has no model!\n" ),
                                     uno::Reference< uno::XInterface >( reinterpret_cast< ::cppu::OWeakObject* >(this) ) );
-#if 0
     OSL_ENSURE( m_xDocument.is(), "Running or Active object has no model!\n" );
 
     if ( m_xDocument.is() )
@@ -175,9 +172,8 @@ uno::Any SAL_CALL OCommonEmbeddedObject::getVisualCache( sal_Int64 nAspect )
             return xTransferable->getTransferData( aDataFlavor );
         }
     }
-#endif
 
     return uno::makeAny( uno::Sequence< sal_Int8 >() );
 }
-
+#endif
 
