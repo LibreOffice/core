@@ -2,9 +2,9 @@
  *
  *  $RCSfile: shell.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: hro $ $Date: 2000-11-15 11:36:34 $
+ *  last change: $Author: kso $ $Date: 2000-11-16 16:31:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -643,10 +643,11 @@ void SAL_CALL shell::page( sal_Int32 CommandId,
     } while( nrc == bfz );
 
     aFile.close();
-    if( ! no_err )
-    {
+
+    if( no_err )
+        xOutputStream->closeOutput();
+    else
         throw CommandAbortedException();
-    }
 }
 
 
