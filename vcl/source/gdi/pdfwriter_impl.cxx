@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pdfwriter_impl.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: pl $ $Date: 2002-09-04 15:35:42 $
+ *  last change: $Author: hdu $ $Date: 2002-09-04 17:25:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -692,14 +692,37 @@ void PDFWriterImpl::getFontMetric( ImplFontSelectData* pSelect, ImplFontMetricDa
     }
 }
 
+// -----------------------------------------------------------------------
+
+class PDFSalLayout : public GenericSalLayout
+{
+    const String    aText;
+
+public:
+                    PDFSalLayout( ImplLayoutArgs& rArgs, const String& rStr )
+                    : GenericSalLayout( rArgs ), aText( rStr ) {}
+
+    virtual void    DrawText( SalGraphics& ) const;
+};
+
+// -----------------------------------------------------------------------
+
+void PDFSalLayout::DrawText( SalGraphics& rSalGraphics ) const
+{
+    // TODO
+    DBG_ASSERT( false, "PDFSalLayout::DrawText() not implemented yet" );
+}
+
+// -----------------------------------------------------------------------
+
 SalLayout* PDFWriterImpl::createSalLayout( ImplFontSelectData* pSelect, ImplLayoutArgs& rArgs ) const
 {
-    GenericSalLayout* pLayout = NULL;
+    PDFSalLayout* pLayout = NULL;
     for( unsigned int n = 0; n < sizeof(m_aBuiltinFonts)/sizeof(m_aBuiltinFonts[0]); n++ )
     {
         if( pSelect->mpFontData->mpSysData == (void*)&m_aBuiltinFonts[n] )
         {
-            int nGlyphCount = rArgs.mnEndCharIndex - rArgs.mnFirstCharIndex;
+            int nGlyphCount = rArgs.mnEndCharPos - rArgs.mnMinCharPos;
             GlyphItem* pGlyphBuffer = new GlyphItem[ nGlyphCount ];
 
             bool bRightToLeft = (0 != (rArgs.mnFlags & SAL_LAYOUT_BIDI_RTL));
@@ -709,7 +732,7 @@ SalLayout* PDFWriterImpl::createSalLayout( ImplFontSelectData* pSelect, ImplLayo
             Point aNewPos( 0, 0 );
             for( int i = 0; i < nGlyphCount; ++i )
             {
-                int nLogicalIndex = bRightToLeft ? (rArgs.mnEndCharIndex-1-i) : (rArgs.mnFirstCharIndex+i);
+                int nLogicalIndex = bRightToLeft ? (rArgs.mnEndCharPos-1-i) : (rArgs.mnMinCharPos+i);
                 sal_Unicode cChar = rArgs.mpStr[ nLogicalIndex ];
                 if( m_aBuiltinFonts[n].m_eCharSet == RTL_TEXTENCODING_SYMBOL && cChar >= 0xf000 )
                     cChar -= 0xf000;
@@ -718,13 +741,16 @@ SalLayout* PDFWriterImpl::createSalLayout( ImplFontSelectData* pSelect, ImplLayo
                     cChar = 0;
 
                 long nGlyphWidth = (long)m_aBuiltinFonts[n].m_aWidths[cChar] * nTextWidth;
-                long nGlyphFlags = (nGlyphWidth > 0) ? GlyphItem::CLUSTER_START : 0;
+                long nGlyphFlags = (nGlyphWidth > 0) ? 0 : GlyphItem::IS_IN_CLUSTER;
+                if( bRightToLeft )
+                    nGlyphFlags |= GlyphItem::IS_RTL_GLYPH;
                 pGlyphBuffer[i] = GlyphItem( nLogicalIndex, cChar, aNewPos,
                                              nGlyphFlags, nGlyphWidth );
 
                 aNewPos.X() += nGlyphWidth;
             }
-            pLayout = new GenericSalLayout( rArgs );
+            const String aText( rArgs.mpStr+rArgs.mnMinCharPos, rArgs.mnEndCharPos-rArgs.mnMinCharPos );
+            pLayout = new PDFSalLayout( rArgs, aText );
             pLayout->SetGlyphItems( pGlyphBuffer, nGlyphCount );
             pLayout->SetUnitsPerPixel( 1000 );
             pLayout->SetOrientation( pSelect->mnOrientation );
@@ -2170,12 +2196,12 @@ void PDFWriterImpl::drawLayout( const SalLayout& rLayout, const String& rText )
     sal_uInt8 pMappedGlyphs[nMaxGlyphs];
     sal_Int32 pMappedFontObjects[nMaxGlyphs];
     sal_Unicode pUnicodes[nMaxGlyphs];
-    int pCharIndices[nMaxGlyphs];
+    int pCharPosAry[nMaxGlyphs];
     int nGlyphs;
     int nIndex = 0;
     Point aPos;
     bool bFirst = true;
-    int nMinCharIndex = 0, nMaxCharIndex = rText.Len()-1;
+    int nMinCharPos = 0, nMaxCharPos = rText.Len()-1;
     double fXScale = 1.0;
     sal_Int32 nFontHeight = m_pReferenceDevice->mpFontEntry->maFontSelData.mnHeight;
     TextAlign eAlign = m_pReferenceDevice->GetTextAlign();
@@ -2199,7 +2225,7 @@ void PDFWriterImpl::drawLayout( const SalLayout& rLayout, const String& rText )
     double fSin = sin( fAngle );
     double fCos = cos( fAngle );
 
-    while( (nGlyphs = rLayout.GetNextGlyphs( nMaxGlyphs, pGlyphs, aPos, nIndex, NULL, pCharIndices )) )
+    while( (nGlyphs = rLayout.GetNextGlyphs( nMaxGlyphs, pGlyphs, aPos, nIndex, NULL, pCharPosAry )) )
     {
         // back transformation to current coordinate system
         aPos = m_pReferenceDevice->PixelToLogic( aPos );
@@ -2231,8 +2257,9 @@ void PDFWriterImpl::drawLayout( const SalLayout& rLayout, const String& rText )
         }
         for( int i = 0; i < nGlyphs; i++ )
         {
-            if( pCharIndices[i] >= nMinCharIndex && pCharIndices[i] <= nMaxCharIndex )
-                pUnicodes[i] = rText.GetChar( pCharIndices[i] );
+            pGlyphs[i] &= GF_IDXMASK;
+            if( pCharPosAry[i] >= nMinCharPos && pCharPosAry[i] <= nMaxCharPos )
+                pUnicodes[i] = rText.GetChar( pCharPosAry[i] );
             else
                 pUnicodes[i] = 0;
             // note: in case of ctl one character may result
