@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AdabasStat.src,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 20:46:43 $
+ *  last change: $Author: kz $ $Date: 2001-07-17 20:26:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -549,26 +549,27 @@ String STR_ADABAS_ERROR_SYSTEMTABLES
     Text = "Es kˆnnen keine Informationen angezeigt werden, da keine Zugriffsberechtigung auf die benˆtigten Systemtabellen besteht!" ;
     Text [ English ] = "Could no display the information. No access rights for system tables." ;
     Text[ english_us ] = "No information could be displayed because no access rights exist for the required system tables.";
-    Text[ portuguese ] = "Could no display the information. No access rights for system tables.";
+    Text[ portuguese ] = "… impossÌvel mostrar informaÁıes. Os direitos de acesso ‡s tabelas do sistema necess·rias n„o existem.";
     Text[ russian ] = "Could no display the information. No access rights for system tables.";
     Text[ greek ] = "Could no display the information. No access rights for system tables.";
-    Text[ dutch ] = "Could no display the information. No access rights for system tables.";
-    Text[ french ] = "Could no display the information. No access rights for system tables.";
-    Text[ spanish ] = "Could no display the information. No access rights for system tables.";
+    Text[ dutch ] = "Er konden geen gegevens worden weergegeven, daar er geen toegangsrecht bestaat voor de benodigde systeemtabellen.";
+    Text[ french ] = "Impossible d'afficher les informations : aucun droit d'accËs aux tables de systËme requises.";
+    Text[ spanish ] = "No se puede mostrar ninguna informaciÛn porque no existe el derecho de acceso a las tablas de sistema necesarias.";
     Text[ finnish ] = "Could no display the information. No access rights for system tables.";
     Text[ italian ] = "Could no display the information. No access rights for system tables.";
     Text[ danish ] = "Could no display the information. No access rights for system tables.";
     Text[ swedish ] = "Det gÂr inte att visa nÂgon information eftersom det saknas Âtkomstbehˆrighet till de nˆdv‰ndiga systemtabellerna.";
     Text[ polish ] = "Z powodu braku praw dostÍpu do wymaganych tabeli systemu wyúwietlenie informacji nie jest moøliwe.";
     Text[ portuguese_brazilian ] = "Could no display the information. No access rights for system tables.";
-    Text[ japanese ] = "Could no display the information. No access rights for system tables.";
+    Text[ japanese ] = "óvãÅÇµÇΩºΩ√—√∞ÃﬁŸÇ÷ÇÃ±∏æΩå†Ç™Ç»Ç¢ÇΩÇﬂÇ…ÅAèÓïÒÇÕï\\é¶Ç≥ÇÍÇ‹ÇπÇÒÇ≈ÇµÇΩÅB";
     Text[ korean ] = "Could no display the information. No access rights for system tables.";
-    Text[ chinese_simplified ] = "Could no display the information. No access rights for system tables.";
+    Text[ chinese_simplified ] = "“ÚŒ™√ª”–±ÿ“™µƒ∂¡»°œµÕ≥±Ì∏Òµƒ»®œﬁ∂¯Œﬁ∑®œ‘ æ»Œ∫Œ–≈œ¢°£";
     Text[ chinese_traditional ] = "Could no display the information. No access rights for system tables.";
     Text[ turkish ] = "Could no display the information. No access rights for system tables.";
     Text[ arabic ] = "Could no display the information. No access rights for system tables.";
     Text[ catalan ] = "Could no display the information. No access rights for system tables.";
 };
+
 
 
 
