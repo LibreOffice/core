@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appbas.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: ab $ $Date: 2001-10-23 13:13:43 $
+ *  last change: $Author: mba $ $Date: 2001-11-01 17:44:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,11 +111,6 @@
 #ifndef _SB_SBSTAR_HXX //autogen
 #include <basic/sbstar.hxx>
 #endif
-#if SUPD<613//MUSTINI
-#ifndef _SFXINIMGR_HXX //autogen
-#include <svtools/iniman.hxx>
-#endif
-#endif
 #ifndef _SVSTOR_HXX //autogen
 #include <so3/svstor.hxx>
 #endif
@@ -126,7 +121,6 @@
 #include <vcl/msgbox.hxx>
 #endif
 #ifndef _REGCODE_HXX
-//#include <tools/regcode.hxx>
 #endif
 #ifndef _SB_SBUNO_HXX
 #include <basic/sbuno.hxx>
@@ -945,17 +939,6 @@ void SfxApplication::PropExec_Impl( SfxRequest &rReq )
             break;
         }
 
-        case SID_DEFAULTFILEPATH:
-        {
-            SFX_REQUEST_ARG(rReq, pPathItem, SfxStringItem, nSID, sal_False);
-#if SUPD<613//MUSTINI
-            pIniMgr->Set(pPathItem->GetValue(), SFX_KEY_WORK_PATH );
-#else
-            SvtPathOptions().SetWorkPath( pPathItem->GetValue() );
-#endif
-            break;
-        }
-
         case SID_INTERACTIVEMODE:
         {
             break;
@@ -967,15 +950,6 @@ void SfxApplication::PropExec_Impl( SfxRequest &rReq )
             SvtUndoOptions().SetUndoCount( pCountItem->GetValue() );
             break;
         }
-
-#if 0
-        case SID_ATTR_METRIC:
-        {
-            SFX_REQUEST_ARG(rReq, pMetricItem, SfxUInt16Item, nSID, sal_False);
-            GetOptions().SetMetric( (FieldUnit) pMetricItem->GetValue() );
-            break;
-        }
-#endif
 
         case SID_WIN_VISIBLE:
         {
@@ -1018,45 +992,19 @@ void SfxApplication::PropExec_Impl( SfxRequest &rReq )
             PlayMacro_Impl( rReq, GetBasic() );
             break;
 
-#if SUPD<613//MUSTINI
-        case SID_OFFICE_PRIVATE_USE:
-        case SID_OFFICE_COMMERCIAL_USE:
-        {
-            SFX_REQUEST_ARG(rReq, pStringItem, SfxStringItem, nSID, sal_False);
-
-            if ( pStringItem )
-            {
-                String aValue = pIniMgr->Get( SFX_KEY_USINGOFFICE );
-
-                if ( !aValue.Len() || aValue.Len() != 2 )
-                    aValue = DEFINE_CONST_UNICODE("00");
-
-                sal_uInt16 nPos = SID_OFFICE_PRIVATE_USE == nSID ? 0 : 1;
-                String aNew = pStringItem->GetValue().Copy( 0, 1 );
-                aValue.Replace( nPos, aNew.Len(), aNew );
-                pIniMgr->Set( aValue, SFX_KEY_USINGOFFICE );
-            }
-            break;
-        }
-#else
         case SID_OFFICE_PRIVATE_USE:
         case SID_OFFICE_COMMERCIAL_USE:
         {
             DBG_ASSERT( sal_False, "SfxApplication::PropExec_Impl()\nSID_OFFICE_PRIVATE_USE & SID_OFFICE_COMMERCIAL_USE are obsolete!\n" );
             break;
         }
-#endif
+
         case SID_OFFICE_CUSTOMERNUMBER:
         {
             SFX_REQUEST_ARG(rReq, pStringItem, SfxStringItem, nSID, sal_False);
 
             if ( pStringItem )
-#if SUPD<613//MUSTINI
-                pIniMgr->Set( pStringItem->GetValue(),
-                              SFX_KEY_CUSTOMERNUMBER );
-#else
                 SvtUserOptions().SetCustomerNumber( pStringItem->GetValue() );
-#endif
             break;
         }
     }
@@ -1066,25 +1014,11 @@ void SfxApplication::PropExec_Impl( SfxRequest &rReq )
 void SfxApplication::PropState_Impl( SfxItemSet &rSet )
 {
     SfxViewFrame *pFrame = SfxViewFrame::Current();
-#if SUPD<613//MUSTINI
-    SfxIniManager *pIniMgr = GetIniManager();
-#endif
     SfxWhichIter aIter(rSet);
     for ( sal_uInt16 nSID = aIter.FirstWhich(); nSID; nSID = aIter.NextWhich() )
     {
         switch ( nSID )
         {
-            case SID_THISDOCUMENT:
-            {
-                rSet.Put( SfxObjectItem( SID_THISDOCUMENT, pAppData_Impl->pThisDocument ? pAppData_Impl->pThisDocument : SfxObjectShell::Current() ) );
-                break;
-            }
-
-            case SID_THISWINDOW:
-            {
-                rSet.Put( SfxObjectItem( SID_THISWINDOW, pAppData_Impl->pThisDocument ? SfxViewFrame::GetFirst( pAppData_Impl->pThisDocument ) : SfxViewFrame::Current() ) );
-                break;
-            }
             case SID_PROGNAME:
                 rSet.Put( SfxStringItem( SID_PROGNAME, GetName() ) );
                 break;
@@ -1148,24 +1082,8 @@ void SfxApplication::PropState_Impl( SfxItemSet &rSet )
             case SID_CAPTION:
                 break;
 
-            case SID_DEFAULTFILEPATH:
-#if SUPD<613//MUSTINI
-                rSet.Put( SfxStringItem( SID_DEFAULTFILEPATH, pIniMgr->Get(SFX_KEY_WORK_PATH) ) );
-#else
-                rSet.Put( SfxStringItem( SID_DEFAULTFILEPATH, SvtPathOptions().GetWorkPath() ) );
-#endif
-                break;
-
             case SID_PROGFILENAME:
                 rSet.Put( SfxStringItem( SID_PROGFILENAME, Application::GetAppFileName() ) );
-                break;
-
-            case SID_PROGPATH:
-#if SUPD<613//MUSTINI
-                rSet.Put( SfxStringItem( SID_PROGPATH, pIniMgr->GetProgramPath() ) );
-#else
-                rSet.Put( SfxStringItem( SID_PROGPATH, SvtPathOptions().SubstituteVariable( String::CreateFromAscii("$(prog)") ) ) );
-#endif
                 break;
 
             case SID_INTERACTIVEMODE:
@@ -1175,12 +1093,6 @@ void SfxApplication::PropState_Impl( SfxItemSet &rSet )
             case SID_ATTR_UNDO_COUNT:
                 rSet.Put( SfxUInt16Item( SID_ATTR_UNDO_COUNT, SvtUndoOptions().GetUndoCount() ) );
                 break;
-
-#if 0
-            case SID_ATTR_METRIC:
-                rSet.Put( SfxByteItem( SID_ATTR_METRIC, (sal_Int8) GetOptions().GetMetric() ) );
-                break;
-#endif
 
             case SID_WIN_VISIBLE:
                 break;
@@ -1272,37 +1184,16 @@ void SfxApplication::PropState_Impl( SfxItemSet &rSet )
             }
             break;
 
-#if SUPD<613//MUSTINI
-            case SID_OFFICE_PRIVATE_USE:
-            case SID_OFFICE_COMMERCIAL_USE:
-            {
-                String aUsing = pIniMgr->Get( SFX_KEY_USINGOFFICE );
-
-                if ( !aUsing.Len() || aUsing.Len() != 2 )
-                    aUsing = DEFINE_CONST_UNICODE("00");
-
-                sal_uInt16 nPos = SID_OFFICE_PRIVATE_USE == nSID ? 0 : 1;
-                String aRet = aUsing.Copy( nPos, 1 );
-                rSet.Put( SfxStringItem( nSID, aRet ) );
-                break;
-            }
-#else
             case SID_OFFICE_PRIVATE_USE:
             case SID_OFFICE_COMMERCIAL_USE:
             {
                 DBG_ASSERT( sal_False, "SfxApplication::PropState_Impl()\nSID_OFFICE_PRIVATE_USE & SID_OFFICE_COMMERCIAL_USE are obsolete!\n" );
                 break;
             }
-#endif
 
             case SID_OFFICE_CUSTOMERNUMBER:
             {
-#if SUPD<613//MUSTINI
-                String aCustomerNumber = pIniMgr->Get(SFX_KEY_CUSTOMERNUMBER);
-                rSet.Put( SfxStringItem( nSID, aCustomerNumber ) );
-#else
                 rSet.Put( SfxStringItem( nSID, SvtUserOptions().GetCustomerNumber() ) );
-#endif
                 break;
             }
         }

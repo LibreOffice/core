@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macrconf.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mba $ $Date: 2001-08-16 15:47:51 $
+ *  last change: $Author: mba $ $Date: 2001-11-01 17:49:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -772,37 +772,27 @@ sal_Bool SfxMacroConfig::ExecuteMacro( SfxObjectShell *pSh, const SvxMacro* pMac
 
             if ( pSh && pMgr && pMgr == pAppMgr )
             {
-/*
-                SfxViewFrame *pFrame = SfxViewFrame::GetFirst( pSh, 0, sal_False );
-                SbxVariable *pDocVar = pAppMgr->GetLib(0)->Find( "ThisDocument", SbxCLASS_PROPERTY );
-                if ( pDocVar )
-                    pDocVar->PutObject( pSh->GetSbxObject() );
-
-                SbxVariable *pWinVar = pAppMgr->GetLib(0)->Find( "ThisWindow", SbxCLASS_PROPERTY );
-                if ( pWinVar )
-                    pWinVar->PutObject( pFrame->GetSbxObject() );
-*/
-                SFX_APP()->Get_Impl()->pThisDocument = pSh;
+                SbxBaseRef xOldVar;
                 SbxVariable *pCompVar = pAppMgr->GetLib(0)->Find( DEFINE_CONST_UNICODE("ThisComponent"), SbxCLASS_PROPERTY );
+                ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  xInterface ( pSh->GetModel() , ::com::sun::star::uno::UNO_QUERY );
+                ::com::sun::star::uno::Any aAny;
+                aAny <<= xInterface;
                 if ( pCompVar )
                 {
-                    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >  xInterface ( pSh->GetModel() , ::com::sun::star::uno::UNO_QUERY );
-                    ::com::sun::star::uno::Any aAny;
-                    aAny <<= xInterface;
+                    xOldVar = pCompVar->GetObject();
                     pCompVar->PutObject( GetSbUnoObject( DEFINE_CONST_UNICODE("ThisComponent"), aAny ) );
+                }
+                else
+                {
+                    SbxObjectRef xUnoObj = GetSbUnoObject( DEFINE_CONST_UNICODE("ThisComponent"), aAny );
+                    xUnoObj->SetFlag( SBX_DONTSTORE );
+                    pAppMgr->GetLib(0)->Insert( xUnoObj );
+                    pCompVar = pAppMgr->GetLib(0)->Find( DEFINE_CONST_UNICODE("ThisComponent"), SbxCLASS_PROPERTY );
                 }
 
                 nErr = Call( 0, aCode, pMgr );
-
-                SFX_APP()->Get_Impl()->pThisDocument = NULL;
-/*
-                if ( pDocVar )
-                    pDocVar->PutObject( NULL );
-                if ( pWinVar )
-                    pWinVar->PutObject( NULL );
- */
                 if ( pCompVar )
-                    pCompVar->PutObject( NULL );
+                    pCompVar->PutObject( xOldVar );
             }
             else if ( pMgr )
                 nErr = Call( 0, aCode, pMgr );
