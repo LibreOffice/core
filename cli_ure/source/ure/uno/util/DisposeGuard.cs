@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DisposeGuard.cs,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: dbo $ $Date: 2003-07-02 14:17:31 $
+ *  last change: $Author: dbo $ $Date: 2003-07-15 15:42:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,17 +71,9 @@ namespace uno.util
 public struct DisposeGuard : IDisposable
 {
     private XComponent m_xComponent;
-
+    
     /** ctor.
-
-        @param obj target object
-    */
-    public DisposeGuard( Object obj )
-    {
-        m_xComponent = (XComponent) obj;
-    }
-    /** ctor.
-
+        
         @param obj target object
     */
     public DisposeGuard( XComponent obj )
