@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpage.src,v $
  *
- *  $Revision: 1.60 $
+ *  $Revision: 1.61 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 13:09:59 $
+ *  last change: $Author: rt $ $Date: 2005-01-28 15:31:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -808,43 +808,43 @@ TabPage TP_FRM_ADD
     FixedText FT_NAME
     {
         Pos = MAP_APPFONT ( 12 , 16 ) ;
-        Size = MAP_APPFONT ( 65 , 8 ) ;
+        Size = MAP_APPFONT ( 75 , 8 ) ;
         Text [ de ] = "~Name" ;
         Text [ en-US ] = "~Name" ;
     };
     Edit ED_NAME
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 81 , 14 ) ;
-        Size = MAP_APPFONT ( 167 , 12 ) ;
+        Pos = MAP_APPFONT ( 91 , 14 ) ;
+        Size = MAP_APPFONT ( 157 , 12 ) ;
         TabStop = TRUE ;
     };
     FixedText FT_ALT_NAME
     {
         Pos = MAP_APPFONT ( 12 , 32 ) ;
-        Size = MAP_APPFONT ( 65 , 8 ) ;
+        Size = MAP_APPFONT ( 75 , 8 ) ;
         Text [ de ] = "~Alternativtext" ;
         Text [ en-US ] = "~Alternative (Text only)" ;
     };
     Edit ED_ALT_NAME
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 81 , 30 ) ;
-        Size = MAP_APPFONT ( 167 , 12 ) ;
+        Pos = MAP_APPFONT ( 91 , 30 ) ;
+        Size = MAP_APPFONT ( 157 , 12 ) ;
         TabStop = TRUE ;
     };
     FixedText FT_PREV
     {
         Pos = MAP_APPFONT ( 12 , 48 ) ;
-        Size = MAP_APPFONT ( 65 , 8 ) ;
+        Size = MAP_APPFONT ( 75 , 8 ) ;
         Text [ de ] = "~Vorgänger" ;
         Text [ en-US ] = "~Previous link" ;
     };
     ListBox LB_PREV
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 81 , 46 ) ;
-        Size = MAP_APPFONT ( 167 , 50 ) ;
+        Pos = MAP_APPFONT ( 91 , 46 ) ;
+        Size = MAP_APPFONT ( 157 , 50 ) ;
         TabStop = TRUE ;
         DropDown = TRUE;
         StringList [ de ] =
@@ -863,15 +863,15 @@ TabPage TP_FRM_ADD
     FixedText FT_NEXT
     {
         Pos = MAP_APPFONT ( 12 , 64 ) ;
-        Size = MAP_APPFONT ( 65 , 8 ) ;
+        Size = MAP_APPFONT ( 75 , 8 ) ;
         Text [ de ] = "Nach~folger" ;
         Text [ en-US ] = "~Next link" ;
     };
     ListBox LB_NEXT
     {
         Border = TRUE ;
-        Pos = MAP_APPFONT ( 81 , 62 ) ;
-        Size = MAP_APPFONT ( 167 , 50 ) ;
+        Pos = MAP_APPFONT ( 91 , 62 ) ;
+        Size = MAP_APPFONT ( 157 , 50 ) ;
         Border = TRUE;
         DropDown = TRUE;
         StringList [ de ] =
