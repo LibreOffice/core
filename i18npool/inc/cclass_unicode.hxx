@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cclass_unicode.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: khong $ $Date: 2002-11-05 23:41:29 $
+ *  last change: $Author: vg $ $Date: 2003-04-15 14:24:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,7 +64,7 @@
 #include <drafts/com/sun/star/i18n/XNativeNumberSupplier.hpp>
 #include <com/sun/star/i18n/XCharacterClassification.hpp>
 #include <com/sun/star/i18n/XLocaleData.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hdl>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <cppuhelper/implbase1.hxx> // helper for implementations
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
