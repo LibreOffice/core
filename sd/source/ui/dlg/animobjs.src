@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animobjs.src,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2001-06-29 02:17:56 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 21:22:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -573,7 +573,7 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText [ danish ] = "Antal sløjfer" ;
         QuickHelpText [ italian ] = "Numero dei passaggi" ;
         QuickHelpText [ spanish ] = "Cantidad de secuencias" ;
-        QuickHelpText [ french ] = "Nombre de boucles" ;
+        QuickHelpText [ french ] = "Nombre de cycles" ;
         QuickHelpText [ dutch ] = "Aantal keren doorlopen" ;
         QuickHelpText [ portuguese ] = "Contagem de sequências" ;
     StringList [ chinese_simplified ] =
@@ -1389,7 +1389,7 @@ DockingWindow FLT_WIN_ANIMATION
         < "Z lewej" ; Default ; > ;
         < "Z lewej/Na dole" ; Default ; > ;
         < "W górze" ; Default ; > ;
-        < "Wyœrodkuj" ; Default ; > ;
+        < "Do œrodka" ; Default ; > ;
         < "W dole" ; Default ; > ;
         < "Z prawej/W górze" ; Default ; > ;
         < "Z prawej" ; Default ; > ;
@@ -1540,7 +1540,7 @@ DockingWindow FLT_WIN_ANIMATION
         Text [ english_us ] = "Animation group" ;
         Text[ chinese_simplified ] = "¶¯»­Ð¡×é";
         Text[ russian ] = "Ãðóïïà àíèìàöèè";
-        Text[ polish ] = "Grupa animacyjna";
+        Text[ polish ] = "Grupa animacji";
         Text[ japanese ] = "±ÆÒ°¼®Ý¸ÞÙ°Ìß";
         Text[ chinese_traditional ] = "°Êµe¸s²Õ";
         Text[ arabic ] = "ãÌãæÚÉ ÇáÍÑßÉ";
@@ -1562,4 +1562,5 @@ DockingWindow FLT_WIN_ANIMATION
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Animación";
 };
+
 
