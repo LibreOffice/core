@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ctredlin.src,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: kz $ $Date: 2002-11-04 17:20:03 $
+ *  last change: $Author: kz $ $Date: 2002-11-27 16:30:57 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@ TabPage SID_REDLIN_FILTER_PAGE
         Text[ turkish ] = "Filtre";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Filtre";
-        Text[ finnish ] = "Suodatin";
+        Text[ finnish ] = "Suodatus";
         Text[ thai ] = "‡∏ï‡∏±‡∏ß‡∏Å‡∏£‡∏≠‡∏á";
     };
     HelpId = HID_REDLINING_FILTER_PAGE ;
@@ -232,8 +232,8 @@ TabPage SID_REDLIN_FILTER_PAGE
         {
             < "voor de" ; Default ; > ;
             < "na de" ; Default ; > ;
-            < "dezelfde als" ; Default ; > ;
-            < "niet dezelfde als" ; Default ; > ;
+            < "gelijk aan" ; Default ; > ;
+            < "niet gelijk aan" ; Default ; > ;
             < "tussen de" ; Default ; > ;
             < "na het opslaan" ; Default ; > ;
         };
@@ -251,7 +251,7 @@ TabPage SID_REDLIN_FILTER_PAGE
             < "ÔÂÂ‰" ; Default ; > ;
         < "Ò ÏÓÏÂÌÚ‡" ; Default ; > ;
         < "‡‚ÌÓ" ; Default ; > ;
-        < "ÌÂ‡‚ÌÓ" ; Default ; > ;
+        < "ÌÂ ‡‚ÌÓ" ; Default ; > ;
         < "ÏÂÊ‰Û" ; Default ; > ;
         < "Ò ÏÓÏÂÌÚ‡ ÒÓı‡ÌÂÌËˇ" ; Default ; > ;
     };
@@ -341,8 +341,8 @@ TabPage SID_REDLIN_FILTER_PAGE
             < "ennen kuin" ; Default ; > ;
         < "alkaen" ; Default ; > ;
         < "yht‰ suuri kuin " ; Default ; > ;
-        < "ei yht‰ suuri kuin" ; Default ; > ;
-        < "V‰liss‰" ; Default ; > ;
+        < "eri suuri kuin" ; Default ; > ;
+        < "v‰lill‰" ; Default ; > ;
         < "tallennuksesta" ; Default ; > ;
     };
     StringList [ thai ] =
@@ -558,7 +558,7 @@ TabPage SID_REDLIN_FILTER_PAGE
         Text[ turkish ] = "~Yazan";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Autor";
-        Text[ finnish ] = "~Laatija";
+        Text[ finnish ] = "~Tekij‰";
         Text[ thai ] = "~‡∏ú‡∏π‡πâ‡πÄ‡∏Ç‡∏µ‡∏¢‡∏ô";
     };
     ListBox LB_AUTOR
@@ -635,7 +635,7 @@ TabPage SID_REDLIN_FILTER_PAGE
         Text[ turkish ] = "›~˛lem";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~AcciÛ";
-        Text[ finnish ] = "~Toiminto";
+        Text[ finnish ] = "Toiminto";
         Text[ thai ] = "‡∏Å‡∏≤‡∏£‡∏Å‡∏£‡∏∞~‡∏ó‡∏≥";
     };
     ListBox LB_ACTION
@@ -717,11 +717,11 @@ TabPage SID_REDLIN_FILTER_PAGE
         Text[ danish ] = "Beskrivelse";
         Text[ french ] = "Description";
         Text[ swedish ] = "Be~skrivning";
-        Text[ dutch ] = "~Commentaar";
+        Text[ dutch ] = "~Opmerkingen";
         Text[ spanish ] = "~DescripciÛn";
         Text[ english_us ] = "Comment";
         Text[ chinese_simplified ] = "ËØ¥Êòé";
-        Text[ russian ] = "ŒÔËÒ‡ÌËÂ";
+        Text[ russian ] = " ÓÏÏÂÌÚ‡ËÈ";
         Text[ polish ] = "Opis";
         Text[ japanese ] = "„Ç≥„É°„É≥„Éà";
         Text[ chinese_traditional ] = "ÊèèËø∞";
@@ -817,7 +817,7 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text[ turkish ] = "~Kabul et";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Accepto";
-        Text[ finnish ] = "~Hyv‰ksy";
+        Text[ finnish ] = "Hyv‰ksy";
         Text[ thai ] = "~‡∏¢‡∏≠‡∏°‡∏£‡∏±‡∏ö";
     };
     PushButton PB_REJECT
@@ -847,7 +847,7 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text[ turkish ] = "R~eddet";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~Rebutjo";
-        Text[ finnish ] = "~Hylk‰‰";
+        Text[ finnish ] = "Hylk‰‰";
         Text[ thai ] = "~‡∏õ‡∏è‡∏¥‡πÄ‡∏™‡∏ò";
     };
     PushButton PB_ACCEPTALL
@@ -877,7 +877,7 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text[ turkish ] = "~T¸m¸n¸ kabul et";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Ho a~ccepto tot";
-        Text[ finnish ] = "~Hyv‰ksy kaikki";
+        Text[ finnish ] = "Hyv‰ksy kaikki";
         Text[ thai ] = "‡∏¢~‡∏≠‡∏°‡∏£‡∏±‡∏ö‡∏ó‡∏±‡πâ‡∏á‡∏´‡∏°‡∏î";
     };
     PushButton PB_REJECTALL
@@ -907,7 +907,7 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text[ turkish ] = "T¸m¸n¸ ~reddet";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Ho r~ebutjo tot";
-        Text[ finnish ] = "~Hylk‰‰ kaikki";
+        Text[ finnish ] = "Hylk‰‰ kaikki";
         Text[ thai ] = "‡∏õ~‡∏è‡∏¥‡πÄ‡∏™‡∏ò‡∏ó‡∏±‡πâ‡∏á‡∏´‡∏°‡∏î";
     };
 
@@ -939,7 +939,7 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text[ turkish ] = "~Geri al";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "~DesfÈs";
-        Text[ finnish ] = "Peruuta";
+        Text[ finnish ] = "Kumoa";
         Text[ thai ] = "‡πÄ‡∏•‡∏¥‡∏Å‡∏ó‡∏≥";
     };
     String STR_TITLE1
@@ -1020,7 +1020,7 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text[ turkish ] = "Yazan";
         Text[ language_user1 ] = " ";
         Text[ catalan ] = "Autor";
-        Text[ finnish ] = "Laatija";
+        Text[ finnish ] = "Tekij‰";
         Text[ thai ] = "‡∏ú‡∏π‡πâ‡πÄ‡∏Ç‡∏µ‡∏¢‡∏ô";
     };
     String STR_TITLE4
@@ -1061,10 +1061,10 @@ TabPage SID_REDLIN_VIEW_PAGE
         Text [ italian ] = "Descrizione" ;
         Text [ spanish ] = "DescripciÛn" ;
         Text [ french ] = "Description" ;
-        Text [ dutch ] = "Omschrijviing" ;
+        Text [ dutch ] = "Omschrijving" ;
         Text [ portuguese ] = "DescriÁ„o" ;
         Text[ chinese_simplified ] = "ËØ¥Êòé";
-        Text[ russian ] = "ŒÔËÒ‡ÌËÂ";
+        Text[ russian ] = " ÓÏÏÂÌÚ‡ËÈ";
         Text[ polish ] = "Komentarz";
         Text[ japanese ] = "„Ç≥„É°„É≥„Éà";
         Text[ chinese_traditional ] = "ÊèèËø∞";
