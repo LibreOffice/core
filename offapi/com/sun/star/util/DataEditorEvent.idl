@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataEditorEvent.idl,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:58:08 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 01:52:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -75,7 +75,7 @@ module com {  module sun {  module star {  module util {
 
 /** specifies an event broadcasted by an <type>XDataEditor</type>.
  */
-struct DataEditorEvent: com::sun::star::lang::EventObject
+published struct DataEditorEvent: com::sun::star::lang::EventObject
 {
     /** specifies the type of the event.
      */
