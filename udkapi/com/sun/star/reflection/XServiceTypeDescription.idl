@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XServiceTypeDescription.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2003-04-17 09:31:46 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 16:56:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,10 @@
 
 /** Reflects a service.
 
+    <p>This type is superseded by <type>XServiceTypeDescription2</type>, which
+    supports single-interface&ndash;based services, in addition to the obsolete,
+    accumulation-based services.</p>
+
     <p>The type class of this type is
     <member scope="com::sun::star::uno">TypeClass::SERVICE</member>.
 
@@ -90,34 +94,44 @@ interface XServiceTypeDescription : com::sun::star::reflection::XTypeDescription
     /** Returns the type descriptions of the mandatory services
         defined for this service.
 
-        @return a sequence containing service type descriptions.
+        @return a sequence containing service type descriptions, for an
+            obsolete, accumulation-based service; for a
+            single-interface&ndash;based service, an empty sequence is returned
       */
     sequence< XServiceTypeDescription > getMandatoryServices();
 
     /** Returns the type descriptions of the optional services
         defined for this service.
 
-        @return a sequence containing service type descriptions.
+        @return a sequence containing service type descriptions, for an
+            obsolete, accumulation-based service; for a
+            single-interface&ndash;based service, an empty sequence is returned
       */
     sequence< XServiceTypeDescription > getOptionalServices();
 
     /** Returns the type descriptions of the mandatory interfaces
         defined for this service.
 
-        @return a sequence containing interface type descriptions.
+        @return a sequence containing interface type descriptions, for an
+            obsolete, accumulation-based service; for a
+            single-interface&ndash;based service, an empty sequence is returned
       */
     sequence< XInterfaceTypeDescription > getMandatoryInterfaces();
 
     /** Returns the type descriptions of the optional interface
         defined for this service.
 
-        @return a sequence containing interface type descriptions.
+        @return a sequence containing interface type descriptions, for an
+            obsolete, accumulation-based service; for a
+            single-interface&ndash;based service, an empty sequence is returned
       */
     sequence< XInterfaceTypeDescription > getOptionalInterfaces();
 
     /** Returns the properties defined for this service.
 
-        @return a sequence containing property descriptions.
+        @return a sequence containing property descriptions, for an obsolete,
+            accumulation-based service; for a single-interface&ndash;based
+            service, an empty sequence is returned
       */
     sequence< XPropertyTypeDescription > getProperties();
 };
