@@ -2,9 +2,9 @@
 #
 #   $RCSfile: libs.mk,v $
 #
-#   $Revision: 1.81 $
+#   $Revision: 1.82 $
 #
-#   last change: $Author: obo $ $Date: 2004-11-15 14:10:44 $
+#   last change: $Author: rt $ $Date: 2005-01-11 11:23:39 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -59,7 +59,7 @@
 #
 #
 #*************************************************************************
-LIBSMKREV!:="$$Revision: 1.81 $$"
+LIBSMKREV!:="$$Revision: 1.82 $$"
 
 .IF "$(COM)"=="WTC"
 LIBPRE=libr
@@ -134,7 +134,6 @@ UNOLIB=
 SVLIBDEPEND=$(L)$/libvcl$(OFFICEUPD)$(DLLPOSTFIX)$(DLLPOST)
 SVLIB=-lvcl$(OFFICEUPD)$(DLLPOSTFIX)
 ICOLIB=-lico$(OFFICEUPD)$(DLLPOSTFIX)
-BSTRPLIB=-lbtstrp
 VCLLIBST=-lvcl
 VCLLIB=$(SVLIB)
 BASEGFXLIB=-lbasegfx$(OFFICEUPD)$(DLLPOSTFIX)
@@ -168,7 +167,6 @@ SO2LIB=-lso$(OFFICEUPD)$(DLLPOSTFIX)
 TKTLIB=-ltkt$(OFFICEUPD)$(DLLPOSTFIX)
 SJLIB=-lj$(OFFICEUPD)$(DLLPOSTFIX)_g
 GOODIESLIB=-lgo$(OFFICEUPD)$(DLLPOSTFIX)
-GOODIESLLIB=-lgol$(OFFICEUPD)$(DLLPOSTFIX)
 CHANELLIB=-lcha$(OFFICEUPD)$(DLLPOSTFIX)
 MAILLIB=-lmail
 DOCMGRLIB=-ldmg$(OFFICEUPD)$(DLLPOSTFIX)
@@ -382,7 +380,6 @@ SVMEMLIB=$(LIBPRE) svmem.lib
 SVUNZIPLIB=$(LIBPRE) svunzip.lib
 SVUNZIPDLL=$(LIBPRE) unzipdll.lib
 GOODIESLIB=$(LIBPRE) igo.lib
-GOODIESLLIB=$(LIBPRE) igol.lib
 MAILLIB=$(LIBPRE) mail.lib
 DOCMGRLIB=$(LIBPRE) docmgr.lib
 .IF "$(BIG_GOODIES)"!=""
