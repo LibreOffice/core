@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svlbox.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: pb $ $Date: 2002-04-30 08:54:54 $
+ *  last change: $Author: pb $ $Date: 2002-07-04 11:57:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1743,12 +1743,14 @@ void SvLBox::DragFinished( sal_Int8 nAction )
 {
     EnableSelectionAsDropTarget( TRUE, TRUE );
 
+#ifndef UNX
     if( (nAction == DND_ACTION_MOVE) && ( (pDDTarget &&
         ((ULONG)(pDDTarget->GetModel())!=(ULONG)(this->GetModel()))) ||
         !pDDTarget ))
     {
         RemoveSelection();
     }
+#endif
 
     ImplShowTargetEmphasis( pTargetEntry, FALSE );
     pDDSource = 0;
