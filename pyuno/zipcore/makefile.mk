@@ -30,7 +30,7 @@ $(BIN)$/python.sh : python.sh
 $(BIN)$/python-core-$(PYVERSION).zip : $(FILES)
 .IF "$(GUI)" == "UNX"
 .IF "$(OS)" != "MACOSX"
-    cd $(BIN) && find . -name '*$(DLLPOST)' | xargs $(STRIP) 
+    cd $(BIN) && find . -name '*$(DLLPOST)' | xargs strip
 .ENDIF
 .ENDIF
     -rm -f $@
@@ -46,5 +46,8 @@ $(DESTROOT)$/bin$/python$(EXECPOST) : $(SOLARBINDIR)$/python$(EXECPOST)
     -rm -f $@
     cat $< > $@
 .IF "$(GUI)"== "UNX"
+.IF "$(OS)" != "MACOSX"
+    strip $@
+.ENDIF
     chmod +x $@
 .ENDIF
