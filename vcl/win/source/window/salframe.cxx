@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: pl $ $Date: 2002-07-30 17:33:35 $
+ *  last change: $Author: ssa $ $Date: 2002-08-12 15:34:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1067,7 +1067,7 @@ HWND ImplGetParentHwnd( HWND hWnd )
 {
 #ifndef REMOTE_APPSERVER
     SalFrame* pFrame = GetWindowPtr( hWnd );
-    if( !pFrame )
+    if( !pFrame || !pFrame->maFrameData.mpInst)
         return ::GetParent( hWnd );
     Window *pRealParent = ((Window*)pFrame->maFrameData.mpInst)->mpRealParent;
     if( pRealParent )
@@ -1247,7 +1247,7 @@ void SalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight,
     {
             // --- RTL --- (mirror window pos)
             RECT aParentRect;
-            GetClientRect( ::GetParent( maFrameData.mhWnd ), &aParentRect );
+            GetClientRect( ImplGetParentHwnd( maFrameData.mhWnd ), &aParentRect );
             if( maFrameData.mpGraphics && (maFrameData.mpGraphics->GetLayout() & SAL_LAYOUT_BIDI_RTL) )
                 nX = (aParentRect.right - aParentRect.left) - nWidth-1 - nX;
 
@@ -2987,6 +2987,10 @@ static long ImplHandleWheelMsg( HWND hWnd, WPARAM wParam, LPARAM lParam )
         if ( GetKeyState( VK_MENU ) & 0x8000 )
             aWheelEvt.mnCode |= KEY_MOD2;
 
+        // --- RTL --- (mirror mouse pos)
+        if( pFrame->maFrameData.mpGraphics && (pFrame->maFrameData.mpGraphics->GetLayout() & SAL_LAYOUT_BIDI_RTL) )
+            aWheelEvt.mnX = pFrame->maGeometry.nWidth-1-aWheelEvt.mnX;
+
         nRet = pFrame->maFrameData.mpProc( pFrame->maFrameData.mpInst, pFrame,
                                            SALEVENT_WHEELMOUSE, &aWheelEvt );
     }
@@ -3544,6 +3548,26 @@ static void UpdateFrameGeometry( HWND hWnd, SalFrame* pFrame )
     // clamp to zero
     pFrame->maGeometry.nHeight = nHeight < 0 ? 0 : nHeight;
     pFrame->maGeometry.nWidth = nWidth < 0 ? 0 : nWidth;
+
+    if( pFrame->maFrameData.mpGraphics && (pFrame->maFrameData.mpGraphics->GetLayout() & SAL_LAYOUT_BIDI_RTL) &&
+        ::GetParent( hWnd ) )
+    {
+            // --- RTL --- (mirror window pos)
+            POINT aPt;
+            aPt.x = pFrame->maGeometry.nX;
+            aPt.y = pFrame->maGeometry.nY;
+            ScreenToClient( ImplGetParentHwnd( hWnd ), &aPt );  // mirroring in SetPosSize() was performed in client coordinates
+
+            RECT aParentRect;
+            GetClientRect( ImplGetParentHwnd( hWnd ), &aParentRect );
+            int parentWidth = aParentRect.right - aParentRect.left;
+            int myWidth = aRect.right - aRect.left + 1;
+            if( pFrame->maFrameData.mpGraphics && (pFrame->maFrameData.mpGraphics->GetLayout() & SAL_LAYOUT_BIDI_RTL) )
+                aPt.x = parentWidth - myWidth - 1 - aPt.x;
+
+            ClientToScreen( ImplGetParentHwnd( hWnd ), &aPt );  // make screen coordinates again
+            pFrame->maGeometry.nX = aPt.x;
+    }
 }
 
 // -----------------------------------------------------------------------
