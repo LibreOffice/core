@@ -2,9 +2,9 @@
  *
  *  $RCSfile: myucp_content.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kso $ $Date: 2001-06-06 14:46:05 $
+ *  last change: $Author: kso $ $Date: 2001-07-05 15:04:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,6 +74,9 @@
 #endif
 #ifndef _COM_SUN_STAR_BEANS_XPROPERTYACCESS_HPP_
 #include <com/sun/star/beans/XPropertyAccess.hpp>
+#endif
+#ifndef _COM_SUN_STAR_LANG_ILLEGALACCESSEXCEPTION_HPP_
+#include <com/sun/star/lang/IllegalAccessException.hpp>
 #endif
 #ifndef _COM_SUN_STAR_SDBC_XROW_HPP_
 #include <com/sun/star/sdbc/XRow.hpp>
@@ -333,7 +336,7 @@ uno::Any SAL_CALL Content::execute(
             // Unreachable
         }
 
-        setPropertyValues( aProperties, Environment );
+        aRet <<= setPropertyValues( aProperties, Environment );
     }
     else if ( aCommand.Name.equalsAsciiL(
                 RTL_CONSTASCII_STRINGPARAM( "getPropertySetInfo" ) ) )
@@ -692,12 +695,13 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
 }
 
 //=========================================================================
-void Content::setPropertyValues(
+uno::Sequence< uno::Any > Content::setPropertyValues(
             const uno::Sequence< beans::PropertyValue >& rValues,
             const uno::Reference< star::ucb::XCommandEnvironment >& xEnv )
 {
     osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
 
+    uno::Sequence< uno::Any > aRet( rValues.getLength() );
     uno::Sequence< beans::PropertyChangeEvent > aChanges( rValues.getLength() );
     sal_Int32 nChanged = 0;
 
@@ -723,16 +727,28 @@ void Content::setPropertyValues(
                         RTL_CONSTASCII_STRINGPARAM( "ContentType" ) ) )
         {
             // Read-only property!
+            aRet[ n ] <<= lang::IllegalAccessException(
+                            rtl::OUString::createFromAscii(
+                                "Property is read-only!" ),
+                            static_cast< cppu::OWeakObject * >( this ) );
         }
         else if ( rValue.Name.equalsAsciiL(
                         RTL_CONSTASCII_STRINGPARAM( "IsDocument" ) ) )
         {
             // Read-only property!
+            aRet[ n ] <<= lang::IllegalAccessException(
+                            rtl::OUString::createFromAscii(
+                                "Property is read-only!" ),
+                            static_cast< cppu::OWeakObject * >( this ) );
         }
         else if ( rValue.Name.equalsAsciiL(
                         RTL_CONSTASCII_STRINGPARAM( "IsFolder" ) ) )
         {
             // Read-only property!
+            aRet[ n ] <<= lang::IllegalAccessException(
+                            rtl::OUString::createFromAscii(
+                                "Property is read-only!" ),
+                            static_cast< cppu::OWeakObject * >( this ) );
         }
         else if ( rValue.Name.equalsAsciiL(
                         RTL_CONSTASCII_STRINGPARAM( "Title" ) ) )
@@ -753,6 +769,17 @@ void Content::setPropertyValues(
                     m_aProps.aTitle = aNewValue;
                     nChanged++;
                 }
+                else
+                {
+                    // Old value equals new value. No error!
+                }
+            }
+            else
+            {
+                aRet[ n ] <<= beans::IllegalTypeException(
+                                rtl::OUString::createFromAscii(
+                                    "Property value has wrong type!" ),
+                                static_cast< cppu::OWeakObject * >( this ) );
             }
         }
 
@@ -798,19 +825,34 @@ void Content::setPropertyValues(
                         aChanges.getArray()[ nChanged ] = aEvent;
                         nChanged++;
                     }
+                    else
+                    {
+                        // Old value equals new value. No error!
+                    }
                 }
-                catch ( beans::UnknownPropertyException )
+                catch ( beans::UnknownPropertyException const & e )
                 {
+                    aRet[ n ] <<= e;
                 }
-                catch ( lang::WrappedTargetException )
+                catch ( lang::WrappedTargetException const & e )
                 {
+                    aRet[ n ] <<= e;
                 }
-                catch ( beans::PropertyVetoException )
+                catch ( beans::PropertyVetoException const & e )
                 {
+                    aRet[ n ] <<= e;
                 }
-                catch ( lang::IllegalArgumentException )
+                catch ( lang::IllegalArgumentException const & e )
                 {
+                    aRet[ n ] <<= e;
                 }
+            }
+            else
+            {
+                aRet[ n ] <<= uno::Exception(
+                                rtl::OUString::createFromAscii(
+                                    "No property set for storing the value!" ),
+                                static_cast< cppu::OWeakObject * >( this ) );
             }
         }
     }
@@ -824,6 +866,8 @@ void Content::setPropertyValues(
         aChanges.realloc( nChanged );
         notifyPropertiesChange( aChanges );
     }
+
+    return aRet;
 }
 
 #if 0

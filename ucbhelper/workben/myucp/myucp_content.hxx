@@ -2,9 +2,9 @@
  *
  *  $RCSfile: myucp_content.hxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kso $ $Date: 2001-06-06 14:46:05 $
+ *  last change: $Author: kso $ $Date: 2001-07-05 15:04:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -126,14 +126,14 @@ private:
 
     ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow >
     getPropertyValues( const ::com::sun::star::uno::Sequence<
-                            ::com::sun::star::beans::Property >& rProperties,
+                        ::com::sun::star::beans::Property >& rProperties,
                        const ::com::sun::star::uno::Reference<
                         ::com::sun::star::ucb::XCommandEnvironment >& xEnv );
-    void setPropertyValues(
-                    const ::com::sun::star::uno::Sequence<
+    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >
+    setPropertyValues( const ::com::sun::star::uno::Sequence<
                         ::com::sun::star::beans::PropertyValue >& rValues,
-                    const ::com::sun::star::uno::Reference<
-                            ::com::sun::star::ucb::XCommandEnvironment >& xEnv );
+                       const ::com::sun::star::uno::Reference<
+                        ::com::sun::star::ucb::XCommandEnvironment >& xEnv );
 
 //    typedef rtl::Reference< Content > ContentRef;
 //    typedef std::list< ContentRef > ContentRefList;
