@@ -2,9 +2,9 @@
  *
  *  $RCSfile: swdtflvr.cxx,v $
  *
- *  $Revision: 1.77 $
+ *  $Revision: 1.78 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-01 07:45:36 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 13:50:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,6 +65,9 @@
 
 #pragma hdrstop
 
+#ifndef _OSL_ENDIAN_H_
+#include <osl/endian.h>
+#endif
 #ifndef _SOT_FORMATS_HXX
 #include <sot/formats.hxx>
 #endif
@@ -1726,7 +1729,7 @@ int SwTransferable::_PasteFileContent( TransferableDataHelper& rData,
                 pStream = new SvMemoryStream( (void*)sData.getStr(),
                             sData.getLength() * sizeof( sal_Unicode ),
                             STREAM_READ );
-#ifdef __BIGENDIAN
+#ifdef OSL_BIGENDIAN
                 pStream->SetNumberFormatInt( NUMBERFORMAT_INT_BIGENDIAN );
 #else
                 pStream->SetNumberFormatInt( NUMBERFORMAT_INT_LITTLEENDIAN );
