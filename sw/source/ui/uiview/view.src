@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-03 16:53:12 $
+ *  last change: $Author: kz $ $Date: 2000-11-09 13:07:10 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -213,7 +213,7 @@ QueryBox DLG_THESAURUS
     MESSAGE [ spanish ] = "°Deberнa evitar esta palabra! њIniciar bъsqueda de sinуnimos?" ;
     MESSAGE [ english_us ] = "This word appears in the list of words you want to avoid! Start thesaurus?" ;
     MESSAGE[ chinese_simplified ] = "ƒъ”¶Є√±№√в є”√’вЄц„÷£°ƒъ“™∆фґѓі µд¬р£њ";
-    MESSAGE[ russian ] = "”потребление этого слова вы должны избегать! «апустить тезаурус?";
+    MESSAGE[ russian ] = "”потребление этого слова ¬ы должны избегать! «апустить тезаурус?";
     MESSAGE[ polish ] = "Unikaj tego s≥owa! W≥єczyж Tezaurus?";
     MESSAGE[ japanese ] = "В±ВкВЌФрВѓВйВ„ВЂМЊЧtВ≈ВЈБBЧёЛ`МкОЂУTВрЛNУЃВµВ№ВЈВ©БH";
     MESSAGE[ chinese_traditional ] = "±zј≥Є”Ѕ„ІK®ѕ•ќ≥o≠”¶r°T±z≠n±“∞ µь®еґ№°S";
@@ -397,7 +397,7 @@ InfoBox MSG_ERR_NO_FAX
     Message[ chinese_simplified ] = "‘Џє§Њя/—°ѕо/іт”°їъі¶√ї”–…иґ®іЂ’жіт”°їъ°£";
     Message[ russian ] = "¬ —ервис/ѕараметры/ѕечать факс-принтер не установлен.";
     Message[ polish ] = "Brak ustawienia dla faksu i drukarki pod has≥em Narzкdzia/Opcje/Drukuj.";
-    Message[ japanese ] = "ћІѓЄљЧpћяЎЁјВЌ¬∞ў/µћяЉЃЁ/ИуНьВ…РЁТиВ≥ВкВƒВҐВ№ВєВсБB";
+    Message[ japanese ] = "FaxЧpћяЎЁјВЌ¬∞ўБ®µћяЉЃЁБ®ИуНьВ≈РЁТиВ≥ВкВƒВҐВ№ВєВсБB";
     Message[ chinese_traditional ] = "¶b§u®г/њпґµ/Њч¶L™нЊч≥B®S¶≥≥]©w¶C¶Lґ«ѓu™Ї≈X∞ ≥n•у°C";
     Message[ arabic ] = "бн”  ед«я ≈Џѕ«ѕ«  Ў«»Џ… Ё«я”  Ќ  \"√ѕж« /ќн«—« /Ў»«Џ…\".";
     Message[ greek ] = "ƒен Ёчей псйуфея екфхрщфёт гйб fax уфп кбф№лпгп ≈сгблеяб/≈рйлпгЁт/≈кфэрщуз.";
