@@ -5,9 +5,9 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 #
 #   $RCSfile: bootstrap.pl,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: kr $ $Date: 2002-01-07 16:16:14 $
+#   last change: $Author: vg $ $Date: 2004-12-23 11:35:48 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -66,14 +66,23 @@ eval 'exec perl -wS $0 ${1+"$@"}'
 
 my $rc;
 my $state = 1;
-my $comment;
+my $comment = "";
 
 $ENV{MYBOOTSTRAPTESTVALUE}=0;
+
 $rc = system "./testbootstrap", 1, "-env:MYBOOTSTRAPTESTVALUE=1";
 if (!$rc) {
     $comment = $comment . "commandline over environment test not passed\n";
     $state = 0;
 }
+
+$rc = system "./testbootstrap", "0", "-env:INIFILENAME=";
+if (!$rc) {
+    $comment = $comment . "exe custom ini test not passed\n";
+    $state = 0;
+}
+
+delete $ENV{MYBOOTSTRAPTESTVALUE};
 
 $rc = system "./testbootstrap.bin", "file";
 if (!$rc) {
@@ -110,15 +119,8 @@ if (!$rc) {
     $state = 0;
 }
 
-$rc = system "./testbootstrap", "0", "-env:INIFILENAME=";
-if (!$rc) {
-    $comment = $comment . "exe custom ini test not passed\n";
-    $state = 0;
-}
-
 if ($ENV{GUI} eq "WNT") {
     $comment = $comment . '$SYSUSERHOME not testable under windows' . "\n";
-    $state = 0;
 }
 else {
     $rc = system "./testbootstrap", "file://$ENV{HOME}", '-env:MYBOOTSTRAPTESTVALUE=$SYSUSERHOME';
@@ -130,7 +132,6 @@ else {
 
 if ($ENV{GUI} eq "WNT") {
     $comment = $comment . '$SYSUSERCONFIG' . " not testable under windows\n";
-    $state = 0;
 }
 else {
     $rc = system "./testbootstrap", "file://$ENV{HOME}", '-env:MYBOOTSTRAPTESTVALUE=$SYSUSERCONFIG';
@@ -142,7 +143,6 @@ else {
 
 if ($ENV{GUI} eq "WNT") {
     $comment = $comment . '$SYSBINDIR' . " not testable under windows\n";
-    $state = 0;
 }
 else {
     $rc = system "./testbootstrap", "file://$ENV{PWD}", '-env:MYBOOTSTRAPTESTVALUE=$SYSBINDIR';
@@ -173,8 +173,6 @@ if (!$rc) {
     $comment = $comment . "inherited overwritten value not passed\n";
     $state = 0;
 }
-
-delete $ENV{MYBOOTSTRAPTESTVALUE};
 
 
 $rc = system "./testbootstrap", "defaultvalue", "-env:INIFILENAME=", "-env:Default=defaultvalue", "-env:USEDEFAULT=1";
