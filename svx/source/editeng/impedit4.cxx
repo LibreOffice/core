@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impedit4.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: mt $ $Date: 2001-07-20 14:25:08 $
+ *  last change: $Author: rt $ $Date: 2001-07-26 15:47:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -204,7 +204,9 @@ EditPaM ImpEditEngine::ReadXML( SvStream& rInput, EditSelection aSel )
 
     ESelection aESel = CreateESel( aSel );
 
+#ifndef SVX_LIGHT
     ::SvxReadXML( *GetEditEnginePtr(), rInput, aESel );
+#endif
 
     return aSel.Max();
 }
@@ -387,7 +389,9 @@ sal_uInt32 ImpEditEngine::WriteXML( SvStream& rOutput, EditSelection aSel )
 {
     ESelection aESel = CreateESel( aSel );
 
+#ifndef SVX_LIGHT
     SvxWriteXML( *GetEditEnginePtr(), rOutput, aESel );
+#endif
 
     return 0;
 }
