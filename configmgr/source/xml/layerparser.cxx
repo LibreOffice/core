@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layerparser.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: jb $ $Date: 2002-08-13 10:00:26 $
+ *  last change: $Author: jb $ $Date: 2002-08-13 10:30:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -258,31 +258,16 @@ void LayerParser::addOrReplaceCurrentProperty(const uno::Any& aValue)
     const ElementInfo& currentInfo = getActiveNodeInfo() ;
 
     OSL_ASSERT(currentInfo.op == Operation::replace) ;
-    try
+
+    if (aValue.hasValue())
     {
-        if (aValue.hasValue())
-        {
-            m_xHandler->addPropertyWithValue(currentInfo.name,
-                                             currentInfo.flags, aValue) ;
-        }
-        else
-        {
-            m_xHandler->addProperty(currentInfo.name, currentInfo.flags,
-                                    getActivePropertyType()) ;
-        }
+        m_xHandler->addPropertyWithValue(currentInfo.name,
+                                         currentInfo.flags, aValue) ;
     }
-    catch (com::sun::star::beans::PropertyExistException& exception)
+    else
     {
-        // If we're here, someone is trying to do a replace
-        // on an existing property. Now that doesn't make
-        // a lot of sense to be honest, but since that amounts
-        // to a modify anyway, let's humor that someone.
-        // Print a warning anyway.
-        OSL_ENSURE(false, "Found a replace operation on an existing property, use modify instead") ;
-        m_xHandler->overrideProperty(currentInfo.name, currentInfo.flags,
-                                     getActivePropertyType()) ;
-        // The value cannot be localised, this would have been trapped earlier
-        m_xHandler->setPropertyValue(aValue) ;
+        m_xHandler->addProperty(currentInfo.name, currentInfo.flags,
+                                getActivePropertyType()) ;
     }
 }
 // -----------------------------------------------------------------------------

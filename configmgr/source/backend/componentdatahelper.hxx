@@ -2,9 +2,9 @@
  *
  *  $RCSfile: componentdatahelper.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: jb $ $Date: 2002-07-11 16:58:27 $
+ *  last change: $Author: jb $ $Date: 2002-08-13 10:30:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -199,7 +199,7 @@ namespace configmgr
                 CFG_THROW3( MalformedDataException, container::ElementExistException, uno::RuntimeException );
             ISubtree  * addLocalizedToCurrent(std::auto_ptr<ISubtree>  _aNode)
                 CFG_THROW3( MalformedDataException, beans::PropertyExistException, uno::RuntimeException );
-            ValueNode * addPropertyToCurrent(std::auto_ptr<ValueNode> _aNode)
+            ValueNode * addPropertyToCurrent(std::auto_ptr<ValueNode> _aNode, bool _bMayReplace = false)
                 CFG_THROW3( MalformedDataException, beans::PropertyExistException, uno::RuntimeException );
 
             void raiseMalformedDataException    (sal_Char const * _pText) const

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: layermerge.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: cyrillem $ $Date: 2002-07-19 18:19:21 $
+ *  last change: $Author: jb $ $Date: 2002-08-13 10:30:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -741,7 +741,8 @@ void SAL_CALL LayerMergeHandler::addProperty( const OUString& aName, sal_Int16 a
 
     applyAttributes(aPropertyValue.get(),aAttributes & NodeAttribute::MASK);
 
-    m_aContext.addPropertyToCurrent(aPropertyValue);
+    // can be a replace for dynamic properties (current update limitation)
+    m_aContext.addPropertyToCurrent(aPropertyValue, true);
 }
 // -----------------------------------------------------------------------------
 
@@ -758,7 +759,8 @@ void SAL_CALL LayerMergeHandler::addPropertyWithValue( const OUString& aName, sa
 
     applyAttributes(aPropertyValue.get(),aAttributes & NodeAttribute::MASK);
 
-    m_aContext.addPropertyToCurrent(aPropertyValue);
+    // can be a replace for dynamic properties (current update limitation)
+    m_aContext.addPropertyToCurrent(aPropertyValue, true);
 }
 // -----------------------------------------------------------------------------
 

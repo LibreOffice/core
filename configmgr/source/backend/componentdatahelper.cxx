@@ -2,9 +2,9 @@
  *
  *  $RCSfile: componentdatahelper.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: jb $ $Date: 2002-07-04 08:18:41 $
+ *  last change: $Author: jb $ $Date: 2002-08-13 10:30:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -326,14 +326,20 @@ ISubtree  * DataBuilderContext::addLocalizedToCurrent(std::auto_ptr<ISubtree>  _
 }
 // -----------------------------------------------------------------------------
 
-ValueNode * DataBuilderContext::addPropertyToCurrent(std::auto_ptr<ValueNode> _aNode)
+ValueNode * DataBuilderContext::addPropertyToCurrent(std::auto_ptr<ValueNode> _aNode, bool _bMayReplace)
     CFG_THROW3( MalformedDataException, beans::PropertyExistException, uno::RuntimeException )
 {
     OSL_PRECOND(_aNode.get(), "ERROR: Adding a NULL node");
 
     if (this->findChild(_aNode->getName()))
-        raisePropertyExistException("Component Builder Context: The property to be added does already exist", _aNode->getName());
+    {
+        // We currently may get a 'replace', when overriding an added property
+        if (_bMayReplace && getCurrentParent().isSetNode())
+            getCurrentParent().removeChild(_aNode->getName());
+        else
 
+            raisePropertyExistException("Component Builder Context: The property to be added does already exist", _aNode->getName());
+    }
     return getCurrentParent().addChild( base_ptr(_aNode) )->asValueNode();
 }
 // -----------------------------------------------------------------------------
