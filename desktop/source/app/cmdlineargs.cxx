@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cmdlineargs.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-25 13:51:11 $
+ *  last change: $Author: rt $ $Date: 2003-04-24 13:35:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -154,6 +154,8 @@ void CommandLineArgs::ParseCommandLine_String( const ::rtl::OUString& aCmdLineSt
     sal_Bool    bPrinterName    = sal_False;
     sal_Bool    bForceOpenEvent = sal_False;
     sal_Bool    bForceNewEvent  = sal_False;
+
+    m_bEmpty = (aCmdLineString.getLength()<1);
 
     sal_Int32 nIndex = 0;
     do
@@ -431,6 +433,7 @@ void CommandLineArgs::ResetParamValues()
         m_aBoolParams[i] = sal_False;
     for ( i = 0; i < CMD_STRINGPARAM_COUNT; i++ )
         m_aStrSetParams[i] = sal_False;
+    m_bEmpty = sal_True;
 }
 
 sal_Bool CommandLineArgs::GetBoolParam( BoolParam eParam ) const
@@ -680,6 +683,19 @@ sal_Bool CommandLineArgs::GetPrinterName( ::rtl::OUString& rPara ) const
     osl::MutexGuard  aMutexGuard( m_aMutex );
     rPara = m_aStrParams[ CMD_STRINGPARAM_PRINTERNAME ];
     return m_aStrSetParams[ CMD_STRINGPARAM_PRINTERNAME ];
+}
+
+sal_Bool CommandLineArgs::IsPrinting() const
+{
+    osl::MutexGuard  aMutexGuard( m_aMutex );
+    return( m_aStrParams[ CMD_STRINGPARAM_PRINTLIST ].getLength() > 0 ||
+            m_aStrParams[ CMD_STRINGPARAM_PRINTTOLIST ].getLength() > 0 );
+}
+
+sal_Bool CommandLineArgs::IsEmpty() const
+{
+    osl::MutexGuard  aMutexGuard( m_aMutex );
+    return m_bEmpty;
 }
 
 } // namespace desktop
