@@ -2,9 +2,9 @@
 #
 #   $RCSfile: environment.pm,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2004-07-30 16:37:34 $
+#   last change: $Author: hr $ $Date: 2004-09-08 14:54:01 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -81,16 +81,14 @@ sub create_pathvariables
     my $solarpath = $environment->{'SOLARVERSION'} . $installer::globals::separator . $installer::globals::compiler . $installer::globals::productextension;
     $variables{'solarpath'} = $solarpath;
 
-    my $solarcommonpath = $environment->{'SOLARVERSION'} . $installer::globals::separator . $environment->{'COMMON_OUTDIR'} . $installer::globals::productextension;
+    my $solarcommonpath = $environment->{'SOLARVERSION'} . $installer::globals::separator . "common" . $installer::globals::productextension;
+    # my $solarcommonpath = $environment->{'SOLARVERSION'} . $installer::globals::separator . $environment->{'COMMON_OUTDIR'} . $installer::globals::productextension;
     $variables{'solarcommonpath'} = $solarcommonpath;
 
     my $osdef = lc($environment->{'GUI'});
     $variables{'osdef'} = $osdef;
 
     $variables{'os'} = $installer::globals::compiler;
-
-#   my $solarenvpath  = $environment->{'ENV_ROOT'} . $installer::globals::separator . "solenv" . $installer::globals::separator . "inst";
-#   $variables{'solarenvpath'} = $solarenvpath;
 
     my $solarenvpath = "";
 
