@@ -6,7 +6,7 @@
         <prop oor:name="Preferred"><value>false</value></prop>
         <prop oor:name="PreferredFilter"><value>calc_StarOffice_XML_Calc_Template</value></prop>
         <prop oor:name="UIName">
-            <value xml:lang="en-US">Calc 6.0 Template</value>
+            <value>Calc 6.0 Template</value>
         </prop>
         <prop oor:name="ClipboardFormat"><value>Calc 6.0</value></prop>
     </node>
