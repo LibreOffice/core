@@ -2,9 +2,9 @@
  *
  *  $RCSfile: compressedarray.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $  $Date: 2004-08-25 10:32:44 $
+ *  last change: $Author: rt $  $Date: 2004-10-22 07:57:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,12 +164,16 @@ size_t ScCompressedArray<A,D>::Search( A nAccess ) const
 template< typename A, typename D >
 void ScCompressedArray<A,D>::SetValue( A nStart, A nEnd, const D& rValue )
 {
-    if (0 <= nStart && nStart <= nMaxAccess && 0 <= nEnd && nEnd <= nMaxAccess)
+    if (0 <= nStart && nStart <= nMaxAccess && 0 <= nEnd && nEnd <= nMaxAccess
+            && nStart <= nEnd)
     {
         if ((nStart == 0) && (nEnd == nMaxAccess))
             Reset( rValue);
         else
         {
+            // Create a temporary copy in case we got a reference passed that
+            // points to a part of the array to be reallocated.
+            D aNewVal( rValue);
             size_t nNeeded = nCount + 2;
             if (nLimit < nNeeded)
             {
@@ -192,7 +196,7 @@ void ScCompressedArray<A,D>::SetValue( A nStart, A nEnd, const D& rValue )
                 ni = Search( nStart);
 
                 nInsert = nMaxAccess+1;
-                if (!(pData[ni].aValue == rValue))
+                if (!(pData[ni].aValue == aNewVal))
                 {
                     if (ni == 0 || (pData[ni-1].nEnd < nStart - 1))
                     {   // may be a split or a simple insert or just a shrink,
@@ -205,7 +209,7 @@ void ScCompressedArray<A,D>::SetValue( A nStart, A nEnd, const D& rValue )
                     else if (ni > 0 && pData[ni-1].nEnd == nStart - 1)
                         nInsert = ni;
                 }
-                if (ni > 0 && pData[ni-1].aValue == rValue)
+                if (ni > 0 && pData[ni-1].aValue == aNewVal)
                 {   // combine
                     pData[ni-1].nEnd = nEnd;
                     nInsert = nMaxAccess+1;
@@ -223,11 +227,11 @@ void ScCompressedArray<A,D>::SetValue( A nStart, A nEnd, const D& rValue )
                 nj++;
             if (!bSplit)
             {
-                if (nj < nCount && pData[nj].aValue == rValue)
+                if (nj < nCount && pData[nj].aValue == aNewVal)
                 {   // combine
                     if (ni > 0)
                     {
-                        if (pData[ni-1].aValue == rValue)
+                        if (pData[ni-1].aValue == aNewVal)
                         {   // adjacent entries
                             pData[ni-1].nEnd = pData[nj].nEnd;
                             nj++;
@@ -246,7 +250,7 @@ void ScCompressedArray<A,D>::SetValue( A nStart, A nEnd, const D& rValue )
                 if (!bCombined)
                 {   // replace one entry
                     pData[ni].nEnd = nEnd;
-                    pData[ni].aValue = rValue;
+                    pData[ni].aValue = aNewVal;
                     ni++;
                     nInsert = nMaxAccess+1;
                 }
@@ -276,7 +280,7 @@ void ScCompressedArray<A,D>::SetValue( A nStart, A nEnd, const D& rValue )
                 if (nInsert)
                     pData[nInsert-1].nEnd = nStart - 1;
                 pData[nInsert].nEnd = nEnd;
-                pData[nInsert].aValue = rValue;
+                pData[nInsert].aValue = aNewVal;
                 nCount++;
             }
         }
@@ -331,9 +335,18 @@ template< typename A, typename D >
 void ScCompressedArray<A,D>::Remove( A nStart, size_t nAccessCount )
 {
     A nEnd = nStart + nAccessCount - 1;
-    // equalize/combine/remove all entries in between
     size_t nIndex = Search( nStart);
-    SetValue( nStart, nEnd, pData[nIndex].aValue);
+    // equalize/combine/remove all entries in between
+    if (nEnd > pData[nIndex].nEnd)
+        SetValue( nStart, nEnd, pData[nIndex].aValue);
+    // remove an exactly matching entry by shifting up all following by one
+    if ((nStart == 0 || (nIndex > 0 && nStart == pData[nIndex-1].nEnd+1)) &&
+            pData[nIndex].nEnd == nEnd && nIndex < nCount-1)
+    {
+        memmove( pData + nIndex, pData + nIndex+1, (nCount - (nIndex+1)) *
+                sizeof(DataEntry));
+        --nCount;
+    }
     // adjust end rows, nIndex still being valid
     do
     {
@@ -456,6 +469,9 @@ template< typename A, typename D >
 void ScBitMaskCompressedArray<A,D>::AndValue( A nStart, A nEnd,
         const D& rValueToAnd )
 {
+    if (nStart > nEnd)
+        return;
+
     size_t nIndex = Search( nStart);
     do
     {
@@ -480,6 +496,9 @@ template< typename A, typename D >
 void ScBitMaskCompressedArray<A,D>::OrValue( A nStart, A nEnd,
         const D& rValueToOr )
 {
+    if (nStart > nEnd)
+        return;
+
     size_t nIndex = Search( nStart);
     do
     {
@@ -894,6 +913,8 @@ bool ScCoupledCompressedArrayIterator<A,D,S>::NextRange()
         {
             bAdv = aIter2.NextRange();
         } while (bAdv && aIter2.GetRangeEnd() < aIter1.GetRangeStart());
+        if (bAdv)
+            aIter1.Follow( aIter2);     // synchronize aIter1.nCurrent
     }
     return operator bool();
 }
