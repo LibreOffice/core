@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unoshtxt.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: cl $ $Date: 2001-12-07 15:26:09 $
+ *  last change: $Author: cl $ $Date: 2001-12-11 16:02:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,6 +134,7 @@ private:
     oslInterlockedCount maRefCount;
 
     SdrObject*              mpObject;
+    SdrModel*               mpModel;
     SdrOutliner*            mpOutliner;
     SvxOutlinerForwarder*   mpTextForwarder;
     BOOL                    mbDataValid;
@@ -165,6 +166,7 @@ public:
 
 SvxTextEditSourceImpl::SvxTextEditSourceImpl( SdrObject* pObject )
 :   mpObject        ( pObject ),
+    mpModel         ( pObject ? pObject->GetModel() : NULL ),
     mpOutliner      ( NULL ),
     mpTextForwarder ( NULL ),
     mbDataValid     ( FALSE ),
@@ -176,8 +178,8 @@ SvxTextEditSourceImpl::SvxTextEditSourceImpl( SdrObject* pObject )
 {
     DBG_ASSERT( mpObject, "invalid pObject!" );
 
-    if( mpObject && mpObject->GetModel() )
-        StartListening( *mpObject->GetModel() );
+    if( mpModel )
+        StartListening( *mpModel );
 }
 
 //------------------------------------------------------------------------
@@ -186,15 +188,15 @@ SvxTextEditSourceImpl::~SvxTextEditSourceImpl()
 {
     DBG_ASSERT( mbIsLocked == sal_False, "text edit source was not unlocked before dispose!" );
 
-    if( mpObject && mpObject->GetModel() )
-        EndListening( *mpObject->GetModel() );
+    if( mpModel )
+        EndListening( *mpModel );
 
     delete mpTextForwarder;
     if( mpOutliner )
     {
-        if( mpObject->GetModel() )
+        if( mpModel )
         {
-            mpObject->GetModel()->disposeOutliner( mpOutliner );
+            mpModel->disposeOutliner( mpOutliner );
         }
         else
         {
@@ -227,8 +229,10 @@ void SvxTextEditSourceImpl::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     if( pSdrHint )
     {
         if( pSdrHint->GetKind() == HINT_OBJCHG )
+        {
             mbDataValid = FALSE;                        // Text muss neu geholt werden
-        if( pSdrHint->GetKind() == HINT_OBJREMOVED )
+        }
+        else if( pSdrHint->GetKind() == HINT_OBJREMOVED )
         {
             if( mpObject == pSdrHint->GetObject() )
             {
@@ -237,8 +241,6 @@ void SvxTextEditSourceImpl::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
         }
         else if( pSdrHint->GetKind() == HINT_MODELCLEARED )
         {
-            if( mpObject )
-                EndListening( *mpObject->GetModel() );
             mbDestroyed = TRUE;
         }
         else if( pSdrHint->GetKind() == HINT_OBJLISTCLEAR )
@@ -249,8 +251,6 @@ void SvxTextEditSourceImpl::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 if( pSdrHint->GetObjList() == pObjList )
                 {
                     mbDestroyed = sal_True;
-                    if( mpObject )
-                        EndListening( *mpObject->GetModel() );
                     break;
                 }
 
@@ -269,9 +269,9 @@ void SvxTextEditSourceImpl::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 
         if( mpOutliner )
         {
-            if( mpObject->GetModel() )
+            if( mpModel )
             {
-                mpObject->GetModel()->disposeOutliner( mpOutliner );
+                mpModel->disposeOutliner( mpOutliner );
             }
             else
             {
@@ -279,6 +279,13 @@ void SvxTextEditSourceImpl::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             }
             mpOutliner = NULL;
         }
+
+        if( mpModel )
+        {
+            EndListening( *mpModel );
+            mpModel = NULL;
+        }
+
         mpObject = NULL;
     }
 }
@@ -297,6 +304,12 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetTextForwarder()
     if( mbDestroyed || mpObject == NULL )
         return NULL;
 
+    if( mpModel == NULL )
+        mpModel = mpObject->GetModel();
+
+    if( mpModel == NULL )
+        return NULL;
+
     if (!mpTextForwarder)
     {
         if( mpOutliner == NULL )
@@ -305,9 +318,8 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetTextForwarder()
             USHORT nOutlMode = OUTLINERMODE_TEXTOBJECT;
             if( pTextObj && pTextObj->IsTextFrame() && pTextObj->GetTextKind() == OBJ_OUTLINETEXT )
                 nOutlMode = OUTLINERMODE_OUTLINEOBJECT;
-            SdrModel* pModel = mpObject->GetModel();
 
-            mpOutliner = pModel->createOutliner( nOutlMode );
+            mpOutliner = mpModel->createOutliner( nOutlMode );
             mpOutliner->SetTextObjNoInit( pTextObj );
 /*
             mpOutliner = SdrMakeOutliner( nOutlMode, pModel );
