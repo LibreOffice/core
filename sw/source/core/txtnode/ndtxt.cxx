@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ndtxt.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: ama $ $Date: 2001-04-27 14:45:28 $
+ *  last change: $Author: ama $ $Date: 2001-06-28 15:20:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -496,8 +496,8 @@ SwCntntNode *SwTxtNode::SplitNode( const SwPosition &rPos )
                 SwTxtAttr* pHt;
                 xub_StrLen* pEnd;
                 for( register USHORT j = pSwpHints->Count(); j; )
-                    if( RES_TXTATR_FLYCNT == ( pHt = pSwpHints->GetHt( --j ) )->Which()
-                        && RES_DRAWFRMFMT != pHt->GetFlyCnt().GetFrmFmt()->Which() )
+                    if( RES_TXTATR_FLYCNT ==
+                        ( pHt = pSwpHints->GetHt( --j ) )->Which() )
                         pHt->GetFlyCnt().GetFrmFmt()->DelFrms();
                     else if( pHt->DontExpand() && 0 != ( pEnd = pHt->GetEnd() )
                             && *pHt->GetStart() == *pEnd )
