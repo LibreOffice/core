@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mkcreate.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: nf $ $Date: 2001-05-21 14:52:23 $
+ *  last change: $Author: svesik $ $Date: 2001-06-04 23:04:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,7 +130,7 @@ CodedDependency *SourceDirectory::AddCodedDependency(
     }
     else {
         ULONG nPos =
-            pCodedDependencies->IsString( & ( ByteString ) rCodedIdentifier );
+            pCodedDependencies->IsString( (ByteString *) (& rCodedIdentifier) );
         if ( nPos == NOT_THERE ) {
             pReturn =
                 new CodedDependency( rCodedIdentifier, nOperatingSystems );
@@ -159,7 +159,7 @@ CodedDependency *SourceDirectory::AddCodedIdentifier(
     }
     else {
         ULONG nPos =
-            pCodedIdentifier->IsString( & ( ByteString ) rCodedIdentifier );
+            pCodedIdentifier->IsString( ( ByteString *) (& rCodedIdentifier) );
         if ( nPos == NOT_THERE ) {
             pReturn =
                 new CodedDependency( rCodedIdentifier, nOperatingSystems );
@@ -625,11 +625,12 @@ SourceDirectory *SourceDirectory::CreateRootDirectory(
 
     ByteString sDefLst( GetDefStandList());
     ByteString sStandLst( aIniManager.ToLocal( sDefLst ));
+    String s = String( sStandLst, gsl_getSystemTextEncoding());
     InformationParser aParser;
     fprintf( stderr,
         "Reading database %s ...\n", sStandLst.GetBuffer());
     GenericInformationList *pVerList = aParser.Execute(
-        String( sStandLst, gsl_getSystemTextEncoding()));
+        s );
 
 /*
     ByteString sPath( rVersion );
@@ -800,9 +801,9 @@ BOOL SourceDirectory::CreateRecursiveMakefile( BOOL bAllChilds )
         "#\n"
         "#   $RCSfile: mkcreate.cxx,v $\n"
         "#\n"
-        "#   $Revision: 1.8 $\n"
+        "#   $Revision: 1.9 $\n"
         "#\n"
-        "#   last change: $Author: nf $ $Date: 2001-05-21 14:52:23 $\n"
+        "#   last change: $Author: svesik $ $Date: 2001-06-04 23:04:45 $\n"
         "#\n"
         "#   The Contents of this file are made available subject to the terms of\n"
         "#   either of the following licenses\n"
@@ -1060,7 +1061,7 @@ SourceDirectory *SourceDirectoryList::Search(
     const ByteString &rDirectoryName )
 /*****************************************************************************/
 {
-    ULONG nPos = IsString( & ( ByteString ) rDirectoryName );
+    ULONG nPos = IsString( ( ByteString * ) (&rDirectoryName) );
     if ( nPos != LIST_ENTRY_NOTFOUND )
         return ( SourceDirectory * ) GetObject( nPos );
 
