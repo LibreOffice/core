@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewoptions.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mh $ $Date: 2001-01-31 15:53:06 $
+ *  last change: $Author: as $ $Date: 2001-02-07 12:35:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -81,6 +81,10 @@
 
 #ifndef _COM_SUN_STAR_BEANS_PROPERTYVALUE_HPP_
 #include <com/sun/star/beans/PropertyValue.hpp>
+#endif
+
+#ifndef _RTL_USTRBUF_HXX_
+#include <rtl/ustrbuf.hxx>
 #endif
 
 #ifndef __SGI_STL_HASH_MAP
@@ -1663,17 +1667,17 @@ Sequence< OUString > SvtViewOptions::SeperateUserData( const OUString& sData, sa
 //*****************************************************************************************************************
 OUString SvtViewOptions::GenerateUserData( const Sequence< OUString >& seqData, sal_Unicode cSeperator )
 {
-    OUString sUserData;
+    OUStringBuffer sUserData( 1000 );
     sal_Int32 nCount = seqData.getLength();
     for( sal_Int32 nToken=0; nToken<nCount; ++nToken )
     {
-        sUserData += seqData[nToken];
+        sUserData.append( seqData[nToken] );
         if( nToken < nCount )
         {
-            sUserData += &cSeperator;
+            sUserData.append( cSeperator );
         }
     }
-    return sUserData;
+    return sUserData.makeStringAndClear();
 }
 
 //*****************************************************************************************************************
