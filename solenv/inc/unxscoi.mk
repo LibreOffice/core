@@ -2,9 +2,9 @@
 #
 #   $RCSfile: unxscoi.mk,v $
 #
-#   $Revision: 1.5 $
+#   $Revision: 1.6 $
 #
-#   last change: $Author: rt $ $Date: 2004-09-20 08:39:38 $
+#   last change: $Author: hr $ $Date: 2005-02-11 15:31:21 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -78,13 +78,13 @@ CFLAGSEXCEPTIONS=-fexceptions
 CFLAGS_NO_EXCEPTIONS=-fno-exceptions
 CFLAGSCXX=-mpentium -fguiding-decls -frtti
 CFLAGSCXX+= -Wno-ctor-dtor-privacy
-
-CFLAGSOBJGUIST=-fPIC
-CFLAGSOBJCUIST=-fPIC
-CFLAGSOBJGUIMT=-fPIC
-CFLAGSOBJCUIMT=-fPIC
-CFLAGSSLOGUIMT=-fPIC
-CFLAGSSLOCUIMT=-fPIC
+PICSWITCH:=-fPIC
+CFLAGSOBJGUIST=$(PICSWITCH)
+CFLAGSOBJCUIST=$(PICSWITCH)
+CFLAGSOBJGUIMT=$(PICSWITCH)
+CFLAGSOBJCUIMT=$(PICSWITCH)
+CFLAGSSLOGUIMT=$(PICSWITCH)
+CFLAGSSLOCUIMT=$(PICSWITCH)
 CFLAGSPROF=
 CFLAGSDEBUG=-g
 CFLAGSDBGUTIL=
