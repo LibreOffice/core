@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scanwin.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2002-07-04 15:20:51 $
+ *  last change: $Author: ka $ $Date: 2002-11-05 12:02:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -638,8 +638,11 @@ IMPL_LINK( Twain, ImpNotifyHdl, ImpTwain*, nEvent )
             if( meState != TWAIN_STATE_DONE )
                 meState = TWAIN_STATE_CANCELED;
 
-            mpImpTwain->Destroy();
-            mpImpTwain = NULL;
+            if( mpImpTwain )
+            {
+                mpImpTwain->Destroy();
+                mpImpTwain = NULL;
+            }
 
             if( mpMgr && mxListener.is() )
                 mxListener->disposing( com::sun::star::lang::EventObject( REF( XInterface )( static_cast< OWeakObject* >( mpMgr ) ) ) );
