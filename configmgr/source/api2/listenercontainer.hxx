@@ -2,9 +2,9 @@
  *
  *  $RCSfile: listenercontainer.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-04 14:47:44 $
+ *  last change: $Author: kz $ $Date: 2004-03-23 10:21:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -174,8 +174,8 @@ namespace configmgr
             SpecialListenerContainer(osl::Mutex& rMutex, Index nCount, KeyToIndex_ aMapper)
             : m_aSpecialHelper(rMutex)
             , m_aContainers(nCount)
-            , m_bDisposeLock(false)
             , m_aMapper(aMapper)
+            , m_bDisposeLock(false)
             {}
 
             ~SpecialListenerContainer()
