@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xltools.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2003-05-21 08:00:07 $
+ *  last change: $Author: vg $ $Date: 2003-06-25 10:47:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -306,6 +306,91 @@ sal_uInt16 XclTools::GetXclColumnWidth( sal_uInt16 nScWidth, long nScCharWidth )
     return static_cast< sal_uInt16 >( ::std::min( fXclWidth, 65535.0 ) );
 }
 
+// text encoding --------------------------------------------------------------
+
+const struct XclCodePageEntry
+{
+    sal_uInt16                  mnCodePage;
+    rtl_TextEncoding            meTextEnc;
+}
+pCodePageTable[] =
+{
+    {     437,  RTL_TEXTENCODING_IBM_437        },  // OEM US
+//  {     720,  RTL_TEXTENCODING_IBM_720        },  // OEM Arabic
+    {     737,  RTL_TEXTENCODING_IBM_737        },  // OEM Greek
+    {     775,  RTL_TEXTENCODING_IBM_775        },  // OEM Baltic
+    {     850,  RTL_TEXTENCODING_IBM_850        },  // OEM Latin I
+    {     852,  RTL_TEXTENCODING_IBM_852        },  // OEM Latin II (Central European)
+    {     855,  RTL_TEXTENCODING_IBM_855        },  // OEM Cyrillic
+    {     857,  RTL_TEXTENCODING_IBM_857        },  // OEM Turkish
+//  {     858,  RTL_TEXTENCODING_IBM_858        },  // OEM Multilingual Latin I with Euro
+    {     860,  RTL_TEXTENCODING_IBM_860        },  // OEM Portugese
+    {     861,  RTL_TEXTENCODING_IBM_861        },  // OEM Icelandic
+    {     862,  RTL_TEXTENCODING_IBM_862        },  // OEM Hebrew
+    {     863,  RTL_TEXTENCODING_IBM_863        },  // OEM Canadian (French)
+    {     864,  RTL_TEXTENCODING_IBM_864        },  // OEM Arabic
+    {     865,  RTL_TEXTENCODING_IBM_865        },  // OEM Nordic
+    {     866,  RTL_TEXTENCODING_IBM_866        },  // OEM Cyrillic (Russian)
+    {     869,  RTL_TEXTENCODING_IBM_869        },  // OEM Greek (Modern)
+    {     874,  RTL_TEXTENCODING_MS_874         },  // MS Windows Thai
+    {     932,  RTL_TEXTENCODING_MS_932         },  // MS Windows Japanese Shift-JIS
+    {     936,  RTL_TEXTENCODING_MS_936         },  // MS Windows Chinese Simplified GBK
+    {     949,  RTL_TEXTENCODING_MS_949         },  // MS Windows Korean (Wansung)
+    {     950,  RTL_TEXTENCODING_MS_950         },  // MS Windows Chinese Traditional BIG5
+    {    1200,  RTL_TEXTENCODING_DONTKNOW       },  // Unicode (BIFF8) - return *_DONTKNOW to preserve old code page
+    {    1250,  RTL_TEXTENCODING_MS_1250        },  // MS Windows Latin II (Central European)
+    {    1251,  RTL_TEXTENCODING_MS_1251        },  // MS Windows Cyrillic
+    {    1252,  RTL_TEXTENCODING_MS_1252        },  // MS Windows Latin I (BIFF4-BIFF8)
+    {    1253,  RTL_TEXTENCODING_MS_1253        },  // MS Windows Greek
+    {    1254,  RTL_TEXTENCODING_MS_1254        },  // MS Windows Turkish
+    {    1255,  RTL_TEXTENCODING_MS_1255        },  // MS Windows Hebrew
+    {    1256,  RTL_TEXTENCODING_MS_1256        },  // MS Windows Arabic
+    {    1257,  RTL_TEXTENCODING_MS_1257        },  // MS Windows Baltic
+    {    1258,  RTL_TEXTENCODING_MS_1258        },  // MS Windows Vietnamese
+    {    1361,  RTL_TEXTENCODING_MS_1361        },  // MS Windows Korean (Johab)
+    {   10000,  RTL_TEXTENCODING_APPLE_ROMAN    },  // Apple Roman
+    {   32768,  RTL_TEXTENCODING_APPLE_ROMAN    },  // Apple Roman
+    {   32769,  RTL_TEXTENCODING_MS_1252        }   // MS Windows Latin I (BIFF2-BIFF3)
+};
+const XclCodePageEntry* const pCodePageTableEnd = STATIC_TABLE_END( pCodePageTable );
+
+struct XclCodePageEntry_CPPred
+{
+    inline explicit             XclCodePageEntry_CPPred( sal_uInt16 nCodePage ) : mnCodePage( nCodePage ) {}
+    inline bool                 operator()( const XclCodePageEntry& rEntry ) const { return rEntry.mnCodePage == mnCodePage; }
+    sal_uInt16                  mnCodePage;
+};
+
+struct XclCodePageEntry_TEPred
+{
+    inline explicit             XclCodePageEntry_TEPred( rtl_TextEncoding eTextEnc ) : meTextEnc( eTextEnc ) {}
+    inline bool                 operator()( const XclCodePageEntry& rEntry ) const { return rEntry.meTextEnc == meTextEnc; }
+    rtl_TextEncoding            meTextEnc;
+};
+
+rtl_TextEncoding XclTools::GetTextEncoding( sal_uInt16 nCodePage )
+{
+    const XclCodePageEntry* pEntry = ::std::find_if( pCodePageTable, pCodePageTableEnd, XclCodePageEntry_CPPred( nCodePage ) );
+    if( pEntry == pCodePageTableEnd )
+    {
+        DBG_ERROR2( "XclTools::GetTextEncoding - unknown code page: 0x%04hX (%d)", nCodePage, nCodePage );
+        return RTL_TEXTENCODING_DONTKNOW;
+    }
+    return pEntry->meTextEnc;
+}
+
+sal_uInt16 XclTools::GetXclCodePage( rtl_TextEncoding eTextEnc )
+{
+    const XclCodePageEntry* pEntry = ::std::find_if( pCodePageTable, pCodePageTableEnd, XclCodePageEntry_TEPred( eTextEnc ) );
+    if( pEntry == pCodePageTableEnd )
+    {
+        DBG_ERROR1( "XclTools::GetXclCodePage - unsupported text encoding: %d", eTextEnc );
+        return 1252;
+    }
+    return pEntry->mnCodePage;
+}
+
+
 // font names -----------------------------------------------------------------
 
 String XclTools::GetXclFontName( const String& rFontName )
@@ -321,7 +406,7 @@ String XclTools::GetXclFontName( const String& rFontName )
 
 const String XclTools::maDefNamePrefix( RTL_CONSTASCII_USTRINGPARAM( "Excel_BuiltIn_" ) );
 
-static const sal_Char* ppcDefNames[] =
+static const sal_Char* const ppcDefNames[] =
 {
     "Consolidate_Area",
     "Auto_Open",
@@ -376,7 +461,7 @@ bool XclTools::IsBuiltInName( sal_uInt16& rnSheet, const String& rName, sal_Unic
 
 const String XclTools::maStyleNamePrefix( RTL_CONSTASCII_USTRINGPARAM( "Excel_BuiltIn_" ) );
 
-static const sal_Char* ppcStyleNames[] =
+static const sal_Char* const ppcStyleNames[] =
 {
     "",                 // "Normal" not used directly, but localized "Default"
     "RowLevel_",        // outline level will be appended
