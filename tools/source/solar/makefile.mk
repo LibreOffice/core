@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1.1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: hr $ $Date: 2000-09-18 17:03:09 $
+#   last change: $Author: hjs $ $Date: 2001-07-13 11:52:35 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,17 +84,12 @@ APP1STDLIBS=
 APP1DEPN=
 APP1DEF=
 
-.IF "$(depend)" == ""
-ALL:	\
-    $(INCCOM)$/svconf.h	\
-    ALLTAR
-
-$(INCCOM)$/svconf.h : $(BIN)$/$(TARGET)
-    $(BIN)$/$(TARGET) $@
-
-.ENDIF
-
 # --- Targets ------------------------------------------------------
 
 .INCLUDE :  target.mk
+
+ALLTAR : $(INCCOM)$/svconf.h
+
+$(INCCOM)$/svconf.h : $(BIN)$/$(TARGET)
+    $(BIN)$/$(TARGET) $@
 
