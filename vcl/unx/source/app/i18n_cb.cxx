@@ -2,9 +2,9 @@
  *
  *  $RCSfile: i18n_cb.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: sb $ $Date: 2002-11-19 10:39:48 $
+ *  last change: $Author: mhayes $ $Date: 2002-11-26 10:21:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -151,6 +151,14 @@ PreeditDoneCallback ( XIC ic, XPointer client_data, XPointer call_data )
 void
 Preedit_DeleteText(preedit_text_t *ptext, int from, int howmuch)
 {
+    // If we've been asked to delete no text then just set
+    // nLength correctly and return
+    if (ptext->nLength == 0)
+    {
+        ptext->nLength = from;
+        return;
+    }
+
     int to = from + howmuch;
 
       if (to == ptext->nLength)
