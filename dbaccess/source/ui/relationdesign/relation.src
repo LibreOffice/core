@@ -2,9 +2,9 @@
  *
  *  $RCSfile: relation.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2001-03-31 05:50:20 $
+ *  last change: $Author: kz $ $Date: 2001-04-03 19:19:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -350,22 +350,22 @@ String STR_RELATIONDESIGN_NOT_AVAILABLE
     Text [ English ] = "The database doesn't support any relations!" ;
     Text [ english_us ] = "The database does not support relations." ;
     Text[ portuguese ] = "A base de dados não tem suporte para relações. O esboço de relações será fechado.";
-    Text[ russian ] = "İòà áàçà äàííûõ íå ïîääåğæèâàåò ñâÿçåé. Ïğîåêò ñâÿçåé çàêğîåòñÿ.";
+    Text[ russian ] = "İòà áàçà äàííûõ íå ïîääåğæèâàåò ñâÿçåé.";
     Text[ greek ] = "Ç âÜóç äåäïìİíùí äåí õğïóôçñßæåé ó÷İóåéò. Ï ó÷åäéáóìüò ôùí ó÷İóåùí èá ôåñìáôéóôåß.";
     Text[ dutch ] = "De database ondersteunt geen relaties. Het relatie-ontwerp wordt weer gesloten!";
-    Text[ french ] = "La base de données ne supporte pas les relations. Fermeture de l'ébauche de relation !";
+    Text[ french ] = "La base de données ne supporte pas les relations !";
     Text[ spanish ] = "La base de datos no apoya ninguna relación. ¡El diseño de relación se cerrará!";
     Text[ italian ] = "Il database non supporta alcuna relazione.";
     Text[ danish ] = "The database doesn't support any relations. The relation design will be closed!";
     Text[ swedish ] = "Databasen understöder inte några relationer.";
-    Text[ polish ] = "Baza danych nie obs³uguje relacji. Projekt relacji zostanie zamkniêty!";
+    Text[ polish ] = "Baza danych nie obs³uguje relacji.";
     Text[ portuguese_brazilian ] = "The database doesn't support any relations. The relation design will be closed!";
     Text[ japanese ] = "ÃŞ°ÀÍŞ°½‚ÍØÚ°¼®İ‚ğx‰‡‚µ‚Ü‚¹‚ñB";
     Text[ korean ] = "The database doesn't support any relations. The relation design will be closed!";
-    Text[ chinese_simplified ] = "Õâ¸öÊı¾İ¿â²»Ö§³ÖÈÎºÎµÄ¹ØÏµ¡£ÏÖÔÚ¹Ø±Õ¹ØÏµÉè¼Æ¡£";
+    Text[ chinese_simplified ] = "Õâ¸öÊı¾İ¿â²»Ö§³Ö¹ØÏµ¹¦ÄÜ£¡";
     Text[ chinese_traditional ] = "³o­Ó¸ê®Æ®w¤£¤ä´©Ãö«Y¥\\¯à¡I";
     Text[ turkish ] = "The database doesn't support any relations. The relation design will be closed!";
-    Text[ arabic ] = "ŞÇÚÏÉ ÇáÈíÇäÇÊ áÇ ÊÏÚã ÃíÉ ÚáÇŞÇÊ. Óæİ íÊã ÅÛáÇŞ ÊÕãíã ÇáÚáÇŞÇÊ.";
+    Text[ arabic ] = "ŞÇÚÏÉ ÇáÈíÇäÇÊ áÇ ÊÏÚã ÃíÉ ÚáÇŞÇÊ.";
 };
 QueryBox RELATION_DESIGN_SAVEMODIFIED
 {
@@ -375,22 +375,22 @@ QueryBox RELATION_DESIGN_SAVEMODIFIED
     Message [ English ] = "The relation design has been modified.\nDo you want to save your changes?" ;
     Message [ english_us ] = "The relation design has been changed.\nDo you want to save the changes?" ;
     Message[ portuguese ] = "The relation design has been changed.\nDo you want to save the changes?";
-    Message[ russian ] = "The relation design has been changed.\nDo you want to save the changes?";
+    Message[ russian ] = "Ïğîåêò ñâÿçåé èçìåíåí.\nÑîõğàíèòü ıòè èçìåíåíèÿ?";
     Message[ greek ] = "The relation design has been changed.\nDo you want to save the changes?";
     Message[ dutch ] = "The relation design has been changed.\nDo you want to save the changes?";
-    Message[ french ] = "The relation design has been changed.\nDo you want to save the changes?";
+    Message[ french ] = "L'ébauche de relation a été modifiée.\nVoulez-vous enregistrer les modifications ?";
     Message[ spanish ] = "The relation design has been changed.\nDo you want to save the changes?";
     Message[ italian ] = "La struttura relazione è stata cambiata.\nVolete salvare le modifiche?";
     Message[ danish ] = "The relation design has been changed.\nDo you want to save the changes?";
     Message[ swedish ] = "Relationsutkastet har ändrats.\nSka ändringarna sparas?";
-    Message[ polish ] = "The relation design has been changed.\nDo you want to save the changes?";
+    Message[ polish ] = "Zmieniono projekt relacji.\nZapisaæ zmiany?";
     Message[ portuguese_brazilian ] = "The relation design has been changed.\nDo you want to save the changes?";
     Message[ japanese ] = "ØÚ°¼®İ‚ÌÃŞ»Ş²İ‚ª•ÏX‚³‚ê‚Ä‚¢‚Ü‚·B\n•ÏX‚ğ•Û‘¶‚µ‚Ü‚·‚©B";
     Message[ korean ] = "The relation design has been changed.\nDo you want to save the changes?";
-    Message[ chinese_simplified ] = "The relation design has been changed.\nDo you want to save the changes?";
+    Message[ chinese_simplified ] = "Õâ¸ö¹ØÏµÊı¾İÒÑ¾­¸ü¸Ä¡£\nÒª´æÅÌÕâĞ©¸ü¸ÄÄÚÈİ£¿";
     Message[ chinese_traditional ] = "³o­ÓÃö«Y³]­p¤w¸gÅÜ§ó¡C\n­nÀx¦sÅÜ§ó¤º®e¡H";
     Message[ turkish ] = "The relation design has been changed.\nDo you want to save the changes?";
-    Message[ arabic ] = "The relation design has been changed.\nDo you want to save the changes?";
+    Message[ arabic ] = "Êã ÊÛííÑ ÊÕãíã ÇáÚáÇŞÇÊ.\nåá ÊÑíÏ ÍİÙ ÇáÊÛííÑÇÊ¿";
 };
 
 
