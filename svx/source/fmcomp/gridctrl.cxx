@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gridctrl.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-14 12:06:53 $
+ *  last change: $Author: fs $ $Date: 2001-05-14 15:07:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2747,6 +2747,24 @@ void DbGridControl::StartDrag( sal_Int8 nAction, const Point& rPosPixel )
 }
 
 //------------------------------------------------------------------------------
+sal_Bool DbGridControl::canCopyCellText(sal_Int32 _nRow, sal_Int16 _nColId)
+{
+    return  (_nRow >= 0)
+        &&  (_nRow < GetRowCount())
+        &&  (_nColId > HANDLE_ID)
+        &&  (_nColId <= ColCount());
+}
+
+//------------------------------------------------------------------------------
+void DbGridControl::copyCellText(sal_Int32 _nRow, sal_Int16 _nColId)
+{
+    DBG_ASSERT(canCopyCellText(_nRow, _nColId), "DbGridControl::copyCellText: invalid call!");
+    DbGridColumn* pColumn = m_aColumns.GetObject(GetModelColumnPos(_nColId));
+    SeekRow(_nRow);
+    OStringTransfer::CopyString(GetCellText(pColumn));
+}
+
+//------------------------------------------------------------------------------
 void DbGridControl::Command(const CommandEvent& rEvt)
 {
     switch (rEvt.GetCommand())
@@ -2770,18 +2788,15 @@ void DbGridControl::Command(const CommandEvent& rEvt)
                 aContextMenu.RemoveDisabledEntries(sal_True, sal_True);
                 PostExecuteRowContextMenu(nRow, aContextMenu, aContextMenu.Execute(this, rEvt.GetMousePosPixel()));
             }
-            else if (nRow >= 0 && nRow < GetRowCount() && nColId > HANDLE_ID && nColId <= ColCount())
+            else if (canCopyCellText(nRow, nColId))
             {
                 PopupMenu aContextMenu(SVX_RES(RID_SVXMNU_CELL));
                 aContextMenu.RemoveDisabledEntries(sal_True, sal_True);
                 switch (aContextMenu.Execute(this, rEvt.GetMousePosPixel()))
                 {
                     case SID_COPY:
-                    {
-                        DbGridColumn* pColumn = m_aColumns.GetObject(GetModelColumnPos(nColId));
-                        OStringTransfer::CopyString(GetCellText(pColumn));
-                    }
-                    break;
+                        copyCellText(nRow, nColId);
+                        break;
                 }
             }
             else
