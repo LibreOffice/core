@@ -2,8 +2,8 @@
  *
  *  $RCSfile: dirent.cxx,v $
  *
- *  $Revision: 1.15 $
- *  last change: $Author: kz $ $Date: 2004-02-26 13:19:53 $
+ *  $Revision: 1.16 $
+ *  last change: $Author: kz $ $Date: 2004-06-11 12:20:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -936,7 +936,7 @@ DirEntry::DirEntry( const String& rInitName, FSysPathStyle eStyle )
     {
         ::rtl::OUString aTmp;
         ::rtl::OUString aOInitName;
-        if ( FileBase::getFileURLFromSystemPath( OUString( rInitName ), aTmp ) == osl_File_E_None )
+        if ( FileBase::getFileURLFromSystemPath( OUString( rInitName ), aTmp ) == FileBase::E_None )
         {
             aOInitName = OUString( rInitName );
             aTmpName = ByteString( String(aOInitName), osl_getThreadTextEncoding() );
