@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fefly1.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:03:11 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:17:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1693,8 +1693,8 @@ const SwFrmFmt* SwFEShell::IsURLGrfAtPos( const Point& rPt, String* pURL,
                         Point aPt( rPt );
                         aPt -= pFly->Frm().Pos();
                         // ohne MapMode-Offset, ohne Offset, o ... !!!!!
-                        aPt = (Point&)(Size&)GetOut()->LogicToPixel(
-                                (Size&)aPt, MapMode( MAP_TWIP ) );
+                        aPt = (Point&)(const Size&)GetOut()->LogicToPixel(
+                                (const Size&)aPt, MapMode( MAP_TWIP ) );
                         ((( *pURL += '?' ) += String::CreateFromInt32( aPt.X() ))
                                   += ',' ) += String::CreateFromInt32(aPt.Y() );
                     }
