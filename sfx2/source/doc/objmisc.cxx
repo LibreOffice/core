@@ -2,9 +2,9 @@
  *
  *  $RCSfile: objmisc.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mba $ $Date: 2001-12-17 14:24:05 $
+ *  last change: $Author: mba $ $Date: 2001-12-19 18:01:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1467,14 +1467,10 @@ sal_Bool SfxObjectShell::IsSecure()
         String aTempl( GetDocInfo().GetTemplateFileName() );
         if ( aTempl.Len() )
             aReferer = INetURLObject( aTempl ).GetMainURL();
-        else
-            // Da leider ein noch nicht gespeichertes Dokument zwar als "lokal"
-            // zu gelten hat, aber kein ::com::sun::star::util::URL hat:
-            aReferer = SvtPathOptions().GetWorkPath();
     }
 
     INetURLObject aURL( "macro:" );
-    if ( SvtSecurityOptions().IsSecureURL( aURL.GetMainURL(), aReferer ) )
+    if ( aReferer.Len() && SvtSecurityOptions().IsSecureURL( aURL.GetMainURL(), aReferer ) )
     {
         if ( GetMedium()->GetContent().is() )
         {
