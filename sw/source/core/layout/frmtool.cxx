@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmtool.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: ama $ $Date: 2001-11-07 14:07:12 $
+ *  last change: $Author: ama $ $Date: 2001-11-12 14:12:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1400,6 +1400,7 @@ void MA_FASTCALL _InsertCnt( SwLayoutFrm *pLay, SwDoc *pDoc,
     pDoc->GetRootFrm()->SetCallbackActionEnabled( bOldCallbackActionEnabled );
 }
 
+
 void MakeFrms( SwDoc *pDoc, const SwNodeIndex &rSttIdx,
                const SwNodeIndex &rEndIdx )
 {
@@ -1445,8 +1446,9 @@ void MakeFrms( SwDoc *pDoc, const SwNodeIndex &rSttIdx,
             // nicht ( in der 1. Spalte eines Rahmens waere pFrm Moveable()! )
             // Auch in spaltigen Bereichen in Tabellen waere pFrm Moveable.
             BOOL bMoveNext = nEndIdx - rSttIdx.GetIndex() > 120;
-            if ( bMoveNext && !pFrm->IsInFly() && pFrm->IsMoveable() &&
-                 (!pFrm->IsInTab() || pFrm->IsTabFrm() ) )
+            BOOL bAllowMove = !pFrm->IsInFly() && pFrm->IsMoveable() &&
+                 (!pFrm->IsInTab() || pFrm->IsTabFrm() );
+            if ( bMoveNext && bAllowMove )
             {
                 SwFrm *pMove = pFrm;
                 SwFrm *pPrev = pFrm->GetPrev();
@@ -1568,8 +1570,15 @@ void MakeFrms( SwDoc *pDoc, const SwNodeIndex &rSttIdx,
                 }
                 else
                     bSplit = FALSE;
-                ::_InsertCnt( pUpper, pDoc, rSttIdx.GetIndex(), FALSE, nEndIdx,
-                              pPrv );
+                ::_InsertCnt( pUpper, pDoc, rSttIdx.GetIndex(), FALSE,
+                              nEndIdx, pPrv );
+                if( bAllowMove && !bDontCreateObjects )
+                {
+                    const SwSpzFrmFmts *pTbl = pDoc->GetSpzFrmFmts();
+                    if( pTbl->Count() )
+                        AppendAllObjs( pTbl );
+                }
+
                 // Wenn nichts eingefuegt wurde, z.B. ein ausgeblendeter Bereich,
                 // muss das Splitten rueckgaengig gemacht werden
                 if( bSplit && pSct && pSct->GetNext()
@@ -1603,6 +1612,7 @@ void MakeFrms( SwDoc *pDoc, const SwNodeIndex &rSttIdx,
 
     bObjsDirect = TRUE;
 }
+
 
 /*************************************************************************
 |*
