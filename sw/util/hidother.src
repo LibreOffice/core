@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hidother.src,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 10:19:29 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:26:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -361,4 +361,11 @@ hidspecial HID_SEND_HTML_CTRL_LISTBOX_TEMPLATE             { HelpId = HID_SEND_H
 hidspecial HID_COLUMN_VALUESET                             { HelpId = HID_COLUMN_VALUESET                         ;};
 hidspecial HID_FORMAT_NAME_OBJECT_NAME                     { HelpId = HID_FORMAT_NAME_OBJECT_NAME    ;};
 hidspecial HID_INSERT_FILE                                 { HelpID = HID_INSERT_FILE; };
-
+hidspecial HID_MM_SELECTDBTABLEDDIALOG_LISTBOX             { HelpID = HID_MM_SELECTDBTABLEDDIALOG_LISTBOX; };
+hidspecial HID_MM_ADDRESSLIST_HB                           { HelpID = HID_MM_ADDRESSLIST_HB ; };
+hidspecial HID_MM_ADDRESSLIST_TLB                          { HelpID = HID_MM_ADDRESSLIST_TLB; };
+hidspecial HID_MM_TESTACCOUNTSETTINGS_TLB                  { HelpID = HID_MM_TESTACCOUNTSETTINGS_TLB;};
+hidspecial HID_MM_TESTACCOUNTSETTINGS_HB                   { HelpID = HID_MM_TESTACCOUNTSETTINGS_HB ;};
+hidspecial HID_MM_SENDMAILS_STATUSLB                       { HelpID = HID_MM_SENDMAILS_STATUSLB ;};
+hidspecial HID_MM_CUSTOMFIELDS                             { HelpID = HID_MM_CUSTOMFIELDS ;};
+hidspecial HID_MM_MAILSTATUS_TLB                           { HelpID = HID_MM_MAILSTATUS_TLB ;};
