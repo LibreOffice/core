@@ -2,9 +2,9 @@
  *
  *  $RCSfile: initui.src,v $
  *
- *  $Revision: 1.31 $
+ *  $Revision: 1.32 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-03 16:16:36 $
+ *  last change: $Author: hr $ $Date: 2003-07-17 12:05:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2983,6 +2983,42 @@ String STR_AUTH_FIELD_ISBN
     Text[ hindi ] = "ISBN";
     Text[ slovak ] = "ISBN";
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
