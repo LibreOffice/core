@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drviews5.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: hr $ $Date: 2003-04-28 17:43:07 $
+ *  last change: $Author: vg $ $Date: 2003-06-04 11:04:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -514,10 +514,13 @@ void SdDrawViewShell::WriteFrameViewData()
         pFrameView->SetSelectedPage(0);
     else
     {
-        if( pFuSlideShow && ( pFuSlideShow->GetAnimationMode() == ANIMATIONMODE_SHOW ) )
-            pFrameView->SetSelectedPage( pFuSlideShow->GetCurrentPage() );
-        else if( !ISA( SdPresViewShell ) )
-            pFrameView->SetSelectedPage( aTabControl.GetCurPageId() - 1 );
+        if( !ISA( SdPresViewShell ) )
+        {
+            if( pFuSlideShow && ( pFuSlideShow->GetAnimationMode() == ANIMATIONMODE_SHOW ) )
+                pFrameView->SetSelectedPage( pFuSlideShow->GetCurrentPage() );
+            else
+                pFrameView->SetSelectedPage( aTabControl.GetCurPageId() - 1 );
+        }
     }
 
     pFrameView->SetViewShEditMode(eEditMode, ePageKind);
