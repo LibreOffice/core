@@ -1,6 +1,9 @@
-#ifndef _SD_UNODRAWVIEW_HXX
-#define _SD_UNODRAWVIEW_HXX
+#ifndef SD_UNO_DRAW_VIEW_HXX
+#define SD_UNO_DRAW_VIEW_HXX
 
+#ifndef SD_DRAW_SUB_CONTROLLER_HXX
+#include "DrawSubController.hxx"
+#endif
 #ifndef _COM_SUN_STAR_DRAWING_XDRAWVIEW_HPP_
 #include <com/sun/star/drawing/XDrawView.hpp>
 #endif
@@ -34,52 +37,31 @@
 #include <svx/unoshape.hxx>
 #endif
 
-class SdView;
-class SdDrawViewShell;
 class SdXImpressDocument;
 class SdPage;
 
-struct SdUnoDrawViewBase
-{
-    osl::Mutex aMutex;
-};
+namespace sd {
+
+class View;
+class DrawViewShell;
+
 
 /**
  * This class implements the view component for a SdDrawViewShell
  */
-class SdUnoDrawView :   public SdUnoDrawViewBase,
-                        public ::cppu::OBroadcastHelper,
-                        public ::cppu::OPropertySetHelper,
-                        public ::com::sun::star::view::XSelectionSupplier,
-                        public ::com::sun::star::drawing::XDrawView,
-                        public ::com::sun::star::lang::XServiceInfo,
-                        public ::com::sun::star::awt::XWindow,
-                        public SfxBaseController
+class SdUnoDrawView
+    : public DrawSubController
 {
 public:
-    enum SdUnoDrawViewKind { unknown=-1,presentation = 0, drawing, slideshow, preview, notes, handout };
-
-    SdUnoDrawView(SdView* pSdView, SdDrawViewShell* pSdViewSh) throw();
+    SdUnoDrawView (View& rView, DrawViewShell& rViewShell) throw();
     virtual ~SdUnoDrawView() throw();
 
-    void fireSelectionChangeListener() throw();
-    void fireChangeEditMode( sal_Bool bMasterPageMode ) throw();
-    void fireChangeLayerMode( sal_Bool bLayerMode ) throw();
-    void fireVisAreaChanged( const Rectangle& rVisArea ) throw();
-    void fireSwitchCurrentPage( SdPage* pCurrentPage ) throw();
-
-    // XInterface
-    virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL acquire() throw();
-    virtual void SAL_CALL release() throw();
-
-    // XComponent
-    virtual void SAL_CALL dispose() throw( ::com::sun::star::uno::RuntimeException );
-    virtual void SAL_CALL addEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL removeEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XEventListener >& aListener ) throw (::com::sun::star::uno::RuntimeException);
+    virtual void FireChangeEditMode (bool bMasterPageMode) throw();
+    virtual void FireChangeLayerMode (bool bLayerMode) throw();
+    virtual void FireSwitchCurrentPage (SdPage* pCurrentPage) throw();
+    virtual void FireVisAreaChanged (const Rectangle& rVisArea) throw();
 
     // XTypeProvider
-    virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw(::com::sun::star::uno::RuntimeException);
 
     // XServiceInfo
@@ -90,8 +72,6 @@ public:
     // XSelectionSupplier
     virtual sal_Bool SAL_CALL select( const ::com::sun::star::uno::Any& aSelection ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException);
     virtual ::com::sun::star::uno::Any SAL_CALL getSelection(  ) throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL addSelectionChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::view::XSelectionChangeListener >& xListener ) throw(::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL removeSelectionChangeListener( const ::com::sun::star::uno::Reference< ::com::sun::star::view::XSelectionChangeListener >& xListener ) throw(::com::sun::star::uno::RuntimeException);
 
     // XDrawView
     virtual void SAL_CALL setCurrentPage( const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XDrawPage >& xPage ) throw(::com::sun::star::uno::RuntimeException);
@@ -99,25 +79,6 @@ public:
 
     // XPropertySet
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(::com::sun::star::uno::RuntimeException);
-
-    // XWindow
-    virtual void SAL_CALL setPosSize( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal_Int32 Height, sal_Int16 Flags ) throw (::com::sun::star::uno::RuntimeException);
-    virtual ::com::sun::star::awt::Rectangle SAL_CALL getPosSize(  ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setVisible( sal_Bool Visible ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setEnable( sal_Bool Enable ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL setFocus(  ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL addWindowListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL removeWindowListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XWindowListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL addFocusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFocusListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL removeFocusListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XFocusListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL addKeyListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XKeyListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL removeKeyListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XKeyListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL addMouseListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMouseListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL removeMouseListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMouseListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL addMouseMotionListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMouseMotionListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL removeMouseMotionListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XMouseMotionListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL addPaintListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPaintListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
-    virtual void SAL_CALL removePaintListener( const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XPaintListener >& xListener ) throw (::com::sun::star::uno::RuntimeException);
 
 protected:
     /**
@@ -160,8 +121,6 @@ protected:
         ::com::sun::star::uno::Any& rValue,
         sal_Int32 nHandle ) const;
 
-    SdXImpressDocument* getModel() const throw();
-
     sal_Bool getMasterPageMode(void) const throw();
     void setMasterPageMode(sal_Bool MasterPageMode_) throw();
     sal_Bool getLayerMode(void) const throw();
@@ -180,13 +139,6 @@ protected:
     */
     void setActiveLayer (const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XLayer>& rxLayer) throw ();
 
-    /** Return the current type of the view.
-        @return The returned value may be any of the enum values of
-            <type>SdUnoDrawViewKind</type> with the exception of
-            <const>unknown</const> which is used internally.
-    */
-    SdUnoDrawViewKind GetDrawViewKind (void) const;
-
     void SetZoom( sal_Int16 nZoom );
     sal_Int16 GetZoom(void) const;
 
@@ -196,19 +148,16 @@ protected:
     void SetZoomType( sal_Int16 nType );
 
 private:
-    com::sun::star::uno::Reference< ::com::sun::star::awt::XWindow > getWindow();
-
-    SdView*             mpView;
-    SdDrawViewShell*    mpViewSh;
-
-    sal_Bool            mbDisposing;
-
-    Rectangle           maLastVisArea;
-
-    sal_Bool mbOldMasterPageMode;
-    sal_Bool mbOldLayerMode;
+    bool mbOldMasterPageMode;
+    bool mbOldLayerMode;
     SdPage* mpCurrentPage;
-    mutable SdUnoDrawViewKind  meKind;
+
+    /** This is a shortcut for accessing the view shell data member of
+        the base class casted to the correct class.
+    */
+    DrawViewShell& GetDrawViewShell (void) const;
 };
+
+} // end of namespace sd
 
 #endif
