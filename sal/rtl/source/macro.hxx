@@ -2,9 +2,9 @@
  *
  *  $RCSfile: macro.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kr $ $Date: 2001-08-30 11:51:36 $
+ *  last change: $Author: kz $ $Date: 2004-06-11 11:56:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -64,6 +64,45 @@
 
 #include <rtl/bootstrap.h>
 #include <rtl/ustring.hxx>
+
+#if defined WIN32
+#define THIS_OS "Windows"
+#elif defined SOLARIS
+#define THIS_OS "Solaris"
+#elif defined LINUX
+#define THIS_OS "Linux"
+#elif defined MACOSX
+#define THIS_OS "MacOSX"
+#elif defined NETBSD
+#define THIS_OS "NetBSD"
+#elif defined FREEBSD
+#define THIS_OS "FreeBSD"
+#elif defined IRIX
+#define THIS_OS "Irix"
+#endif
+
+#if ! defined THIS_OS
+#error "unknown OS -- insert your OS identifier above"
+this is inserted for the case that the preprocessor ignores error
+#endif
+
+#if defined INTEL
+#define THIS_ARCH "x86"
+#elif defined POWERPC
+#define THIS_ARCH "PowerPC"
+#elif defined S390
+#define THIS_ARCH "S390"
+#elif defined SPARC
+#define THIS_ARCH "SPARC"
+#elif defined IRIX
+#define THIS_ARCH "MIPS"
+#endif
+
+#if ! defined THIS_ARCH
+#error "unknown ARCH -- insert your ARCH identifier above"
+this is inserted for the case that the preprocessor ignores error
+#endif
+
 
 /*
   Expand macros via rtl_bootstrap_get.
