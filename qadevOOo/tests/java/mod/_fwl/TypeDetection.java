@@ -2,9 +2,9 @@
  *
  *  $RCSfile: TypeDetection.java,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change:$Date: 2005-03-15 09:22:04 $
+ *  last change:$Date: 2005-03-29 11:59:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -191,7 +191,7 @@ public class TypeDetection extends TestCase {
             SOF.insertTextContent( xTextDoc, (XTextContent) xBookMark );
 
             fileURL = utils.getOfficeTemp((XMultiServiceFactory)Param.getMSF() );
-            fileURL = fileURL + "/bookmarks.oot";
+            fileURL = fileURL + "bookmarks.oot";
 
             XStorable store = (XStorable) UnoRuntime.queryInterface(XStorable.class, xTextDoc);
             System.out.println(fileURL);
