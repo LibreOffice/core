@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DataAwareFields.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $  $Date: 2004-05-19 13:08:30 $
+ *  last change: $Author: obo $  $Date: 2004-09-08 14:10:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,6 +62,8 @@ package com.sun.star.wizards.ui.event;
 
 import java.lang.reflect.Field;
 
+import com.sun.star.uno.Any;
+
 /**
  * @author rpiterman
  *
@@ -96,6 +98,9 @@ public class DataAwareFields {
                 return new IntFieldValue(f,c2);
             else if (c.equals(Double.TYPE))
                 return new DoubleFieldValue(f,c2);
+            else if (c.equals(String.class) && c2.equals(Integer.class)) {
+                    return new ConvertedStringValue(f,c2);
+                }
             else
                 return new SimpleFieldValue(f);
         }
@@ -236,6 +241,50 @@ public class DataAwareFields {
         }
     }
 
+    private static class ConvertedStringValue extends FieldValue {
+        private Class convertTo;
+
+        public ConvertedStringValue(Field f, Class convertTo_) {
+            super(f);
+            convertTo = convertTo_;
+        }
+
+        /* (non-Javadoc)
+         * @see com.sun.star.wizards.ui.event.DataAware.Value#get(java.lang.Object)
+         */
+        public Object get(Object target) {
+            try {
+                String s = (String)field.get(target);
+
+                if (convertTo.equals(Boolean.class))
+                    return ( s != null  && !s.equals("") && s.equals("true") ) ? Boolean.TRUE : Boolean.FALSE;
+                else if ( convertTo.equals(Integer.class) ) {
+                    if ( s == null || s.equals("") )
+                        return Any.VOID;
+                    else return new Integer(s);
+                }
+                else if (convertTo.equals(Double.class)) {
+                    if ( s == null || s.equals("") )
+                        return Any.VOID;
+                    else
+                        return new Double(s);
+                }
+                else
+                    throw new IllegalArgumentException("Cannot convert int value to given type (" + convertTo.getName() + ").");
+            } catch (IllegalAccessException ex) {
+                ex.printStackTrace();
+                return null;
+            }
+        }
+        public void set(Object value, Object target) {
+            try {
+                field.set(target, value==null || (value.equals(Any.VOID)) ? "" : value.toString());
+            } catch (IllegalAccessException ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+
     private static class SimpleFieldValue extends FieldValue {
 
         public SimpleFieldValue(Field f) {
@@ -246,7 +295,18 @@ public class DataAwareFields {
          */
         public Object get(Object target) {
             try {
-                return field.get(target);
+                if (target == null) {
+                    if (field.getType().equals(String.class))
+                        return "";
+                    if (field.getType().equals(Short.class))
+                        return new Short((short) 0);
+                    if (field.getType().equals(Integer.class))
+                        return new Integer(0);
+                    if (field.getType().equals(short[].class))
+                        return new short[0];
+                    else return null;
+                } else
+                    return field.get(target);
             } catch (IllegalAccessException ex) {
                 ex.printStackTrace();
                 return null;
