@@ -2,9 +2,9 @@
  *
  *  $RCSfile: treeopt.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-01 08:51:08 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 15:53:17 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -708,7 +708,6 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
             < "Arbeitsspeicher" ; OFA_TP_MEMORY; > ;
             < "Ansicht" ; OFA_TP_VIEW ; > ;
             < "Drucken" ; RID_SFXPAGE_PRINTOPTIONS; > ;
-            < "Hilfsprogramme" ; OFA_TP_HELPERPROG; > ;
             < "Pfade" ;  RID_SFXPAGE_PATH; > ;
             < "Farben" ;  RID_SVXPAGE_COLOR; > ;
             < "Schriftarten" ; RID_SVX_FONT_SUBSTITUTION ; > ;
@@ -726,7 +725,6 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
             < "Memory" ; OFA_TP_MEMORY; > ;
             < "View" ; OFA_TP_VIEW ; > ;
             < "Print" ; RID_SFXPAGE_PRINTOPTIONS; > ;
-            < "Helper programs" ; OFA_TP_HELPERPROG; > ;
             < "Paths" ;  RID_SFXPAGE_PATH; > ;
             < "Colors" ;  RID_SVXPAGE_COLOR; > ;
             < "Fonts" ; RID_SVX_FONT_SUBSTITUTION ; > ;
@@ -743,7 +741,6 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
             < "; Arbeitsspeicher" ; OFA_TP_MEMORY; > ;
             < "; Ansicht" ; OFA_TP_VIEW ; > ;
             < "; Drucken" ; RID_SFXPAGE_PRINTOPTIONS; > ;
-            < "; Hilfsprogramme" ; OFA_TP_HELPERPROG; > ;
             < "; Pfade" ;  RID_SFXPAGE_PATH; > ;
             < "; Farben" ;  RID_SVXPAGE_COLOR; > ;
             < "; Schriftersetzung" ; RID_SVX_FONT_SUBSTITUTION ; > ;
@@ -761,7 +758,6 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
             < "Memory" ; OFA_TP_MEMORY; > ;
             < "View" ; OFA_TP_VIEW ; > ;
             < "Print" ; RID_SFXPAGE_PRINTOPTIONS; > ;
-            < "External Programs" ; OFA_TP_HELPERPROG; > ;
             < "Paths" ;  RID_SFXPAGE_PATH; > ;
             < "Colors" ;  RID_SVXPAGE_COLOR; > ;
             < "Fonts" ; RID_SVX_FONT_SUBSTITUTION ; > ;
@@ -779,7 +775,6 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
             < "Ver" ; OFA_TP_MEMORY; > ;
             < "Imprimir" ; OFA_TP_VIEW ; > ;
             < "Programas auxiliares" ; RID_SFXPAGE_PRINTOPTIONS; > ;
-            < "Atalhos" ; OFA_TP_HELPERPROG; > ;
             < "Cores" ;  RID_SFXPAGE_PATH; > ;
             < "Substituição de caracteres" ;  RID_SVXPAGE_COLOR; > ;
             < "Segurança" ; RID_SVX_FONT_SUBSTITUTION ; > ;
@@ -797,7 +792,6 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
             < "Ïàìÿòü" ; OFA_TP_MEMORY; > ;
             < "Âèä" ; OFA_TP_VIEW ; > ;
             < "Ïå÷àòü" ; RID_SFXPAGE_PRINTOPTIONS; > ;
-            < "Âíåøíèå ïðîãðàììû" ; OFA_TP_HELPERPROG; > ;
             < "Ïóòè" ;  RID_SFXPAGE_PATH; > ;
             < "Öâåòà" ;  RID_SVXPAGE_COLOR; > ;
             < "Çàìåíà øðèôòà" ; RID_SVX_FONT_SUBSTITUTION ; > ;
@@ -815,7 +809,6 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
             < "ÌíÞìç" ; OFA_TP_MEMORY; > ;
             < "ÐñïâïëÞ" ; OFA_TP_VIEW ; > ;
             < "Åêôýðùóç" ; RID_SFXPAGE_PRINTOPTIONS; > ;
-            < "ÅîùôåñéêÜ ðñïãñÜììáôá" ; OFA_TP_HELPERPROG; > ;
             < "ÄéáäñïìÝò" ;  RID_SFXPAGE_PATH; > ;
             < "×ñþìáôá" ;  RID_SVXPAGE_COLOR; > ;
             < "ÁíôéêáôÜóôáóç ãñáììáôïóåéñÜò" ; RID_SVX_FONT_SUBSTITUTION ; > ;
@@ -833,7 +826,6 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
             < "Werkgeheugen" ; OFA_TP_MEMORY; > ;
             < "Weergave" ; OFA_TP_VIEW ; > ;
             < "Afdrukken" ; RID_SFXPAGE_PRINTOPTIONS; > ;
-            < "Hulpprogramma's" ; OFA_TP_HELPERPROG; > ;
             < "Paden" ;  RID_SFXPAGE_PATH; > ;
             < "Kleuren" ;  RID_SVXPAGE_COLOR; > ;
             < "Lettertypen" ; RID_SVX_FONT_SUBSTITUTION ; > ;
@@ -851,7 +843,6 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
             < "Mémoire vive" ; OFA_TP_MEMORY; > ;
             < "Affichage" ; OFA_TP_VIEW ; > ;
             < "Impression" ; RID_SFXPAGE_PRINTOPTIONS; > ;
-            < "Programmes auxiliaires" ; OFA_TP_HELPERPROG; > ;
             < "Chemins" ;  RID_SFXPAGE_PATH; > ;
             < "Couleurs" ;  RID_SVXPAGE_COLOR; > ;
             < "Polices" ; RID_SVX_FONT_SUBSTITUTION ; > ;
@@ -869,7 +860,6 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
             < "Memoria de trabajo" ; OFA_TP_MEMORY; > ;
             < "Ver" ; OFA_TP_VIEW ; > ;
             < "Imprimir" ; RID_SFXPAGE_PRINTOPTIONS; > ;
-            < "Programas auxiliares" ; OFA_TP_HELPERPROG; > ;
             < "Rutas" ;  RID_SFXPAGE_PATH; > ;
             < "Colores" ;  RID_SVXPAGE_COLOR; > ;
             < "Fuentes" ; RID_SVX_FONT_SUBSTITUTION ; > ;
@@ -887,7 +877,6 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
             < "Muisti" ; OFA_TP_MEMORY; > ;
             < "Näytä" ; OFA_TP_VIEW ; > ;
             < "Tulosta" ; RID_SFXPAGE_PRINTOPTIONS; > ;
-            < "Ulkoiset ohjelmat" ; OFA_TP_HELPERPROG; > ;
             < "Polut" ;  RID_SFXPAGE_PATH; > ;
             < "Värit" ;  RID_SVXPAGE_COLOR; > ;
             < "Fontin korvaus" ; RID_SVX_FONT_SUBSTITUTION ; > ;
@@ -905,7 +894,6 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
             < "Memoria principale" ; OFA_TP_MEMORY; > ;
             < "Vista" ; OFA_TP_VIEW ; > ;
             < "Stampa" ; RID_SFXPAGE_PRINTOPTIONS; > ;
-            < "Programmi ausiliari" ; OFA_TP_HELPERPROG; > ;
             < "Percorsi" ;  RID_SFXPAGE_PATH; > ;
             < "Colori" ;  RID_SVXPAGE_COLOR; > ;
             < "Tipi di carattere" ; RID_SVX_FONT_SUBSTITUTION ; > ;
@@ -923,7 +911,6 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
             < "Hukommelse" ; OFA_TP_MEMORY; > ;
             < "Visning" ; OFA_TP_VIEW ; > ;
             < "Udskriv" ; RID_SFXPAGE_PRINTOPTIONS; > ;
-            < "Eksterne programmer" ; OFA_TP_HELPERPROG; > ;
             < "Stier" ;  RID_SFXPAGE_PATH; > ;
             < "Farver" ;  RID_SVXPAGE_COLOR; > ;
             < "Skrifttyper" ; RID_SVX_FONT_SUBSTITUTION ; > ;
@@ -941,7 +928,6 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
             < "Arbetsminne" ; OFA_TP_MEMORY; > ;
             < "Vy" ; OFA_TP_VIEW ; > ;
             < "Skriv ut" ; RID_SFXPAGE_PRINTOPTIONS; > ;
-            < "Hjälpprogram" ; OFA_TP_HELPERPROG; > ;
             < "Sökvägar" ;  RID_SFXPAGE_PATH; > ;
             < "Färger" ;  RID_SVXPAGE_COLOR; > ;
             < "Teckensnitt" ; RID_SVX_FONT_SUBSTITUTION ; > ;
@@ -959,7 +945,6 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
             < "Pamiêæ" ; OFA_TP_MEMORY; > ;
             < "Widok" ; OFA_TP_VIEW ; > ;
             < "Drukuj" ; RID_SFXPAGE_PRINTOPTIONS; > ;
-            < "Zewnêtrzne programy" ; OFA_TP_HELPERPROG; > ;
             < "Œcie¿ki" ;  RID_SFXPAGE_PATH; > ;
             < "Kolory" ;  RID_SVXPAGE_COLOR; > ;
             < "Zamiana czcionek" ; RID_SVX_FONT_SUBSTITUTION ; > ;
@@ -977,7 +962,6 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
             < "Memória" ; OFA_TP_MEMORY; > ;
             < "Exibir" ; OFA_TP_VIEW ; > ;
             < "Imprimir" ; RID_SFXPAGE_PRINTOPTIONS; > ;
-            < "Programas auxiliares" ; OFA_TP_HELPERPROG; > ;
             < "Caminhos" ;  RID_SFXPAGE_PATH; > ;
             < "Cores" ;  RID_SVXPAGE_COLOR; > ;
             < "Substituição de Fontes" ; RID_SVX_FONT_SUBSTITUTION ; > ;
@@ -995,7 +979,6 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
             < "ãƒ¡ãƒ¢ãƒª" ; OFA_TP_MEMORY; > ;
             < "è¡¨ç¤º" ; OFA_TP_VIEW ; > ;
             < "å°åˆ·" ; RID_SFXPAGE_PRINTOPTIONS; > ;
-            < "ãƒ˜ãƒ«ãƒ—ãƒ—ãƒ­ã‚°ãƒ©ãƒ " ; OFA_TP_HELPERPROG; > ;
             < "ãƒ‘ã‚¹" ;  RID_SFXPAGE_PATH; > ;
             < "è‰²" ;  RID_SVXPAGE_COLOR; > ;
             < "ãƒ•ã‚©ãƒ³ãƒˆ" ; RID_SVX_FONT_SUBSTITUTION ; > ;
@@ -1013,7 +996,6 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
             < "ë©”ëª¨ë¦¬" ; OFA_TP_MEMORY; > ;
             < "ë³´ê¸°" ; OFA_TP_VIEW ; > ;
             < "ì¸ì‡„" ; RID_SFXPAGE_PRINTOPTIONS; > ;
-            < "ë³´ì¡° í”„ë¡œê·¸ëž¨" ; OFA_TP_HELPERPROG; > ;
             < "ê²½ë¡œ" ;  RID_SFXPAGE_PATH; > ;
             < "ìƒ‰ìƒ" ;  RID_SVXPAGE_COLOR; > ;
             < "ê¸€ê¼´" ; RID_SVX_FONT_SUBSTITUTION ; > ;
@@ -1031,7 +1013,6 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
             < "å†…å­˜" ; OFA_TP_MEMORY; > ;
             < "è§†å›¾" ; OFA_TP_VIEW ; > ;
             < "æ‰“å°" ; RID_SFXPAGE_PRINTOPTIONS; > ;
-            < "è¾…åŠ©ç¨‹åº" ; OFA_TP_HELPERPROG; > ;
             < "è·¯å¾„" ;  RID_SFXPAGE_PATH; > ;
             < "é¢œè‰²" ;  RID_SVXPAGE_COLOR; > ;
             < "å­—ä½“" ; RID_SVX_FONT_SUBSTITUTION ; > ;
@@ -1049,7 +1030,6 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
             < "è¨˜æ†¶é«”" ; OFA_TP_MEMORY; > ;
             < "æª¢è¦–" ; OFA_TP_VIEW ; > ;
             < "åˆ—å°" ; RID_SFXPAGE_PRINTOPTIONS; > ;
-            < "è¼”åŠ©ç¨‹å¼" ; OFA_TP_HELPERPROG; > ;
             < "è·¯å¾‘" ;  RID_SFXPAGE_PATH; > ;
             < "é¡è‰²" ;  RID_SVXPAGE_COLOR; > ;
             < "å­—åž‹" ; RID_SVX_FONT_SUBSTITUTION ; > ;
@@ -1067,7 +1047,6 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
             < "Hafiza" ; OFA_TP_MEMORY; > ;
             < "Görünüm" ; OFA_TP_VIEW ; > ;
             < "Yazdýr" ; RID_SFXPAGE_PRINTOPTIONS; > ;
-            < "Harici programlar" ; OFA_TP_HELPERPROG; > ;
             < "Veri yolu" ;  RID_SFXPAGE_PATH; > ;
             < "Renkler" ;  RID_SVXPAGE_COLOR; > ;
             < "Yazýtipi deðiþimi" ; RID_SVX_FONT_SUBSTITUTION ; > ;
@@ -1085,7 +1064,6 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
             < "ÚÑÖ" ; OFA_TP_MEMORY; > ;
             < "ÍÝÙ" ; OFA_TP_VIEW ; > ;
             < "ãÓÇÑÇÊ" ; RID_SFXPAGE_PRINTOPTIONS; > ;
-            < "ÃáæÇä" ; OFA_TP_HELPERPROG; > ;
             < "ÇÓÊÈÏÇá ÇáÎØ" ;  RID_SFXPAGE_PATH; > ;
             < "ÇáÃãÇä" ;  RID_SVXPAGE_COLOR; > ;
             < "ÇáÃãÇä" ; RID_SVX_FONT_SUBSTITUTION ; > ;
@@ -1103,7 +1081,6 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
             < "Desfer" ; OFA_TP_MEMORY; > ;
             < "Visualitza" ; OFA_TP_VIEW ; > ;
             < "Impressió" ; RID_SFXPAGE_PRINTOPTIONS; > ;
-            < "Programes d'ajuda" ; OFA_TP_HELPERPROG; > ;
             < "Camins" ;  RID_SFXPAGE_PATH; > ;
             < "Colors" ;  RID_SVXPAGE_COLOR; > ;
             < "Reemplaçament tipus de lletra" ; RID_SVX_FONT_SUBSTITUTION ; > ;
@@ -1121,7 +1098,6 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
             < "à¸«à¸™à¹ˆà¸§à¸¢à¸„à¸§à¸²à¸¡à¸ˆà¸³" ; OFA_TP_MEMORY; > ;
             < "à¸¡à¸¸à¸¡à¸¡à¸­à¸‡" ; OFA_TP_VIEW ; > ;
             < "à¸žà¸´à¸¡à¸žà¹Œ" ; RID_SFXPAGE_PRINTOPTIONS; > ;
-            < "à¹‚à¸›à¸£à¹à¸à¸£à¸¡à¸ à¸²à¸¢à¸™à¸­à¸" ; OFA_TP_HELPERPROG; > ;
             < "à¹€à¸ªà¹‰à¸™à¸—à¸²à¸‡" ;  RID_SFXPAGE_PATH; > ;
             < "à¸ªà¸µ" ;  RID_SVXPAGE_COLOR; > ;
             < "à¹à¸—à¸™à¸—à¸µà¹ˆà¸•à¸±à¸§à¸­à¸±à¸à¸©à¸£" ; RID_SVX_FONT_SUBSTITUTION ; > ;
@@ -1139,7 +1115,6 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
         < "PamÄ›Å¥" ; OFA_TP_MEMORY; > ;
         < "ZobrazenÃ­" ; OFA_TP_VIEW ; > ;
         < "Tisk" ; RID_SFXPAGE_PRINTOPTIONS; > ;
-        < "ExternÃ­ programy" ; OFA_TP_HELPERPROG; > ;
         < "Cesty" ;  RID_SFXPAGE_PATH; > ;
         < "Barvy" ;  RID_SVXPAGE_COLOR; > ;
         < "NÃ¡hrada pÃ­sem" ; RID_SVX_FONT_SUBSTITUTION ; > ;
@@ -1157,7 +1132,6 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
         < "Arbeitsspeicher" ; OFA_TP_MEMORY; > ;
         < "â€®×ª×¦×•×’×”â€¬" ; OFA_TP_VIEW ; > ;
         < "â€®×”×“×¤×¡×”â€¬" ; RID_SFXPAGE_PRINTOPTIONS; > ;
-        < "Hilfsprogramme" ; OFA_TP_HELPERPROG; > ;
         < "Pfade" ;  RID_SFXPAGE_PATH; > ;
         < "Farben" ;  RID_SVXPAGE_COLOR; > ;
         < "Schriftarten" ; RID_SVX_FONT_SUBSTITUTION ; > ;
@@ -1175,7 +1149,6 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
         < "à¤®à¥‡à¤®à¤°à¥€" ; OFA_TP_MEMORY; > ;
         < "à¤¦à¥ƒà¤¶à¥à¤¯" ; OFA_TP_VIEW ; > ;
         < "à¤›à¤ªà¤¾à¤ˆ" ; RID_SFXPAGE_PRINTOPTIONS; > ;
-        < "à¤¬à¤¾à¤¹à¤°à¥€ à¤ªà¥à¤°à¥‹à¤—à¥à¤°à¤¾à¤®à¥" ; OFA_TP_HELPERPROG; > ;
         < "à¤®à¤¾à¤°à¥à¤—" ;  RID_SFXPAGE_PATH; > ;
         < "à¤°à¤‚à¤—" ;  RID_SVXPAGE_COLOR; > ;
         < "à¤«à¤¼à¥‰à¤¨à¥à¤Ÿ à¤ªà¥à¤°à¤¤à¤¿à¤¸à¥à¤¥à¤¾à¤ªà¤¨à¤¾" ; RID_SVX_FONT_SUBSTITUTION ; > ;
@@ -1193,7 +1166,6 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
         < "PamÃ¤Å¥" ; OFA_TP_MEMORY; > ;
         < "ZobraziÅ¥" ; OFA_TP_VIEW ; > ;
         < "TlaÄ" ; RID_SFXPAGE_PRINTOPTIONS; > ;
-        < "ExternÃ© programy" ; OFA_TP_HELPERPROG; > ;
         < "Cesty" ;  RID_SFXPAGE_PATH; > ;
         < "Farby" ;  RID_SVXPAGE_COLOR; > ;
         < "NÃ¡hrada za pÃ­smo" ; RID_SVX_FONT_SUBSTITUTION ; > ;
@@ -1211,7 +1183,6 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
         < "MemÃ³ria" ; OFA_TP_MEMORY; > ;
         < "NÃ©zet" ; OFA_TP_VIEW ; > ;
         < "NyomtatÃ¡s" ; RID_SFXPAGE_PRINTOPTIONS; > ;
-        < "KÃ¼lsÅ‘ programok" ; OFA_TP_HELPERPROG; > ;
         < "Ãštvonalak" ;  RID_SFXPAGE_PATH; > ;
         < "SzÃ­nek" ;  RID_SVXPAGE_COLOR; > ;
         < "BetÅ±kÃ©szletek" ; RID_SVX_FONT_SUBSTITUTION ; > ;
@@ -1229,7 +1200,6 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
         < "Pomnilnik" ; OFA_TP_MEMORY; > ;
         < "Pogled" ; OFA_TP_VIEW ; > ;
         < "Tiskanje" ; RID_SFXPAGE_PRINTOPTIONS; > ;
-        < "Zunanji programi" ; OFA_TP_HELPERPROG; > ;
         < "Poti" ;  RID_SFXPAGE_PATH; > ;
         < "Barve" ;  RID_SVXPAGE_COLOR; > ;
         < "Pisave" ; RID_SVX_FONT_SUBSTITUTION ; > ;
@@ -1520,24 +1490,28 @@ Resource RID_OFADLG_OPTIONS_TREE_PAGES
             < "Internet" ; 0; > ;
             < "Proxy" ;  RID_SVXPAGE_INET_PROXY; > ;
             < "Suche" ;  RID_SVXPAGE_INET_SEARCH; > ;
+            < "E-Mail" ;  RID_SVXPAGE_INET_MAIL; > ;
         };
         ItemList [ENGLISH] =
         {
             < "Internet" ; 0; > ;
             < "Proxy" ;  RID_SVXPAGE_INET_PROXY; > ;
             < "Suche" ;  RID_SVXPAGE_INET_SEARCH; > ;
+            < "E-mail" ;  RID_SVXPAGE_INET_MAIL; > ;
         };
-        ItemList [ language_user1 ] =
+                ItemList [ language_user1 ] =
         {
             < "; Internet" ; 0; > ;
             < "; Proxy" ;  RID_SVXPAGE_INET_PROXY; > ;
             < "; Suche" ;  RID_SVXPAGE_INET_SEARCH; > ;
+            < "; E-Mail" ;  RID_SVXPAGE_INET_MAIL; > ;
         };
         ItemList [ english_us ] =
         {
             < "Internet" ; 0; > ;
             < "Proxy" ;  RID_SVXPAGE_INET_PROXY; > ;
             < "Search" ;  RID_SVXPAGE_INET_SEARCH; > ;
+            < "E-mail" ;  RID_SVXPAGE_INET_MAIL; > ;
         };
         ItemList [ portuguese ] =
         {
