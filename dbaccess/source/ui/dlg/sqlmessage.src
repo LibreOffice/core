@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sqlmessage.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-19 20:18:49 $
+ *  last change: $Author: fs $ $Date: 2001-08-02 06:18:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -95,7 +95,9 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 280 , 150 ) ;
-    Text = "StarBase" ;
+    Text = "%PRODUCTNAME Base" ;
+    Text [ english ] = "%PRODUCTNAME Base" ;
+    Text [ english_us ] = "%PRODUCTNAME Base" ;
 
     FixedLine FL_DETAILS
     {
@@ -361,6 +363,9 @@ ModalDialog DLG_SQLEXCEPTIONCHAIN
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.19  2001/07/19 20:18:49  kz
+ *  Merge SRC638: 19.07.01 - 22:17:38
+ *
  *  Revision 1.18  2001/07/13 21:44:56  kz
  *  Merge SRC638: 13.07.01 - 23:44:42
  *
