@@ -37,7 +37,7 @@ Sub Main()
 	FillStep_Welcome()
 	RepaintHeaderPreview()
 	SetStates()
-        ImportDialogArea.SetVisible(True) &apos;Execute()
+	ImportDialogArea.Execute()
 	ImportDialog.cbGoOn.DefaultButton = True
 	Exit Sub
 RTError:
