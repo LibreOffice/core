@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wizardmachine.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 14:37:20 $
+ *  last change: $Author: rt $ $Date: 2004-09-20 13:38:16 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -608,14 +608,15 @@ namespace svt
     //---------------------------------------------------------------------
     sal_Bool OWizardMachine::skipUntil( WizardState _nTargetState )
     {
+        WizardState nCurrentState = getCurrentState();
+
         // alowed to leave the current page?
-        if ( !prepareLeaveCurrentState( eTravelBackward ) )
+        if ( !prepareLeaveCurrentState( nCurrentState < _nTargetState ? eTravelForward : eTravelBackward ) )
             return sal_False;
 
         // don't travel directly on m_pImpl->aStateHistory, in case something goes wrong
         ::std::stack< WizardState > aTravelVirtually = m_pImpl->aStateHistory;
 
-        WizardState nCurrentState = getCurrentState();
         while ( nCurrentState != _nTargetState )
         {
             WizardState nNextState = determineNextState( nCurrentState );
@@ -733,6 +734,27 @@ namespace svt
 
         // all fine
         return sal_True;
+    }
+
+    //---------------------------------------------------------------------
+    void  OWizardMachine::removePageFromHistory( WizardState nToRemove )
+    {
+
+        ::std::stack< WizardState > aTemp;
+        while(!m_pImpl->aStateHistory.empty())
+        {
+            WizardState nPreviousState = m_pImpl->aStateHistory.top();
+            m_pImpl->aStateHistory.pop();
+            if(nPreviousState != nToRemove)
+                aTemp.push( nPreviousState );
+            else
+                break;
+        }
+        while(!aTemp.empty())
+        {
+            m_pImpl->aStateHistory.push( aTemp.top() );
+            aTemp.pop();
+        }
     }
 
     //---------------------------------------------------------------------
