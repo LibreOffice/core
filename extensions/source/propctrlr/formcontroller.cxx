@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formcontroller.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: fs $ $Date: 2001-06-08 07:49:01 $
+ *  last change: $Author: fs $ $Date: 2001-06-08 07:51:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1174,8 +1174,7 @@ namespace pcr
             // Setzen der UI-Daten
             OLineDescriptor aProperty;
             aProperty.eControlType = BCT_MEDIT;
-            String fPropName = PROPERTY_LISTSOURCE;
-            aProperty.sName = fPropName;
+            aProperty.sName = (const ::rtl::OUString&)PROPERTY_LISTSOURCE;
             aProperty.sTitle = m_pPropertyInfo->getPropertyTranslation(PROPERTY_ID_LISTSOURCE);
             aProperty.pControl = NULL;
             aProperty.bHasBrowseButton = sal_False;
@@ -2762,8 +2761,7 @@ namespace pcr
             if (nPropId==PROPERTY_ID_TRISTATE)
             {
                 OLineDescriptor aProperty;
-                String fPropName = PROPERTY_DEFAULTCHECKED;
-                aProperty.sName             = fPropName;
+                aProperty.sName             = (const ::rtl::OUString&)PROPERTY_DEFAULTCHECKED;
                 aProperty.sTitle            =   m_pPropertyInfo->getPropertyTranslation(PROPERTY_ID_DEFAULT_CHECKED);
                 aProperty.nHelpId           =   m_pPropertyInfo->getPropertyHelpId(PROPERTY_ID_DEFAULT_CHECKED);
                 aProperty.eControlType      =   BCT_LISTBOX;
@@ -2909,6 +2907,9 @@ namespace pcr
 /*************************************************************************
  * history:
  *  $Log: not supported by cvs2svn $
+ *  Revision 1.30  2001/06/08 07:49:01  fs
+ *  #65293# linux type conversion problem
+ *
  *  Revision 1.29  2001/06/06 10:38:55  fs
  *  #86837# +PROPERTY_IMAGEALIGN
  *
