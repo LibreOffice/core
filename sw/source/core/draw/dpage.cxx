@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dpage.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:02:16 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 17:02:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -341,8 +341,8 @@ BOOL SwDPage::RequestHelp( Window* pWindow, SdrView* pView,
                     aPt -= pFly->Frm().Pos();
                     // ohne MapMode-Offset !!!!!
                     // ohne MapMode-Offset, ohne Offset, o ... !!!!!
-                    aPt = (Point&)(Size&)pWindow->LogicToPixel(
-                            (Size&)aPt, MapMode( MAP_TWIP ) );
+                    aPt = (Point&)(const Size&)pWindow->LogicToPixel(
+                            (const Size&)aPt, MapMode( MAP_TWIP ) );
                     ((( sTxt += '?' ) += String::CreateFromInt32( aPt.X() ))
                              += ',' ) += String::CreateFromInt32( aPt.Y() );
                 }
