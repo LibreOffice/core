@@ -2,9 +2,9 @@
  *
  *  $RCSfile: FileAccess.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: kso $ $Date: 2001-12-07 16:04:55 $
+ *  last change: $Author: rt $ $Date: 2003-04-23 16:55:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -90,7 +90,7 @@
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/ucb/XContentAccess.hpp>
 #include <com/sun/star/ucb/XContentCreator.hpp>
-#include <com/sun/star/ucb/XSimpleFileAccess2.hpp>
+#include <com/sun/star/ucb/XSimpleFileAccess3.hpp>
 
 #define IMPLEMENTATION_NAME "com.sun.star.comp.ucb.SimpleFileAccess"
 #define SERVICE_NAME "com.sun.star.ucb.SimpleFileAccess"
@@ -112,7 +112,7 @@ namespace io_FileAccess
 //===========================================================================
 // Implementation XSimpleFileAccess
 
-typedef cppu::WeakImplHelper1< XSimpleFileAccess2 > FileAccessHelper;
+typedef cppu::WeakImplHelper1< XSimpleFileAccess3 > FileAccessHelper;
 class OCommandEnvironment;
 
 class OFileAccess : public FileAccessHelper
@@ -144,7 +144,8 @@ public:
     virtual ::com::sun::star::uno::Reference< ::com::sun::star::io::XStream > SAL_CALL openFileReadWrite( const ::rtl::OUString& FileURL ) throw(::com::sun::star::ucb::CommandAbortedException, ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL setInteractionHandler( const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& Handler ) throw(::com::sun::star::uno::RuntimeException);
     virtual void SAL_CALL writeFile( const ::rtl::OUString& FileURL, const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& data ) throw (::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
-
+    virtual sal_Bool SAL_CALL isHidden( const ::rtl::OUString& FileURL ) throw(::com::sun::star::ucb::CommandAbortedException, ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
+    virtual void SAL_CALL setHidden( const ::rtl::OUString& FileURL, sal_Bool bHidden ) throw(::com::sun::star::ucb::CommandAbortedException, ::com::sun::star::uno::Exception, ::com::sun::star::uno::RuntimeException);
 };
 
 
@@ -681,6 +682,27 @@ void SAL_CALL OFileAccess::writeFile( const rtl::OUString& FileURL,
     {
         // Interaction Handler already handled the error that has occured...
     }
+}
+
+sal_Bool OFileAccess::isHidden( const ::rtl::OUString& FileURL )
+    throw(CommandAbortedException, Exception, RuntimeException)
+{
+    INetURLObject aURLObj( FileURL, INET_PROT_FILE );
+    ucb::Content aCnt( aURLObj.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment );
+    Any aRetAny = aCnt.getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsHidden" ) ) );
+    sal_Bool bRet = sal_False;
+    aRetAny >>= bRet;
+    return bRet;
+}
+
+void OFileAccess::setHidden( const ::rtl::OUString& FileURL, sal_Bool bHidden )
+    throw(CommandAbortedException, Exception, RuntimeException)
+{
+    INetURLObject aURLObj( FileURL, INET_PROT_FILE );
+    ucb::Content aCnt( aURLObj.GetMainURL( INetURLObject::NO_DECODE ), mxEnvironment );
+    Any aAny;
+    aAny <<= bHidden;
+    aCnt.setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "IsHidden" ) ), aAny );
 }
 
 Reference< XInterface > SAL_CALL FileAccess_CreateInstance( const Reference< XMultiServiceFactory > &)
