@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fehelper.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:46:55 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 15:10:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,7 @@
 #ifndef _IDLC_ASTARRAY_HXX_
 #include <idlc/astarray.hxx>
 #endif
+#include "idlc/idlc.hxx"
 
 using namespace ::rtl;
 
@@ -99,6 +100,10 @@ AstType const * FeDeclarator::compose(AstDeclaration const * pDecl)
     AstArray*   pArray;
     AstType*    pType;
 
+    if ( pDecl == 0 )
+    {
+        return NULL;
+    }
     if ( !pDecl->isType() )
     {
         idlc()->error()->noTypeError(pDecl);
@@ -131,11 +136,16 @@ AstType const * FeDeclarator::compose(AstDeclaration const * pDecl)
     return NULL; // return through this statement should not happen
 }
 
-FeInheritanceHeader::FeInheritanceHeader(NodeType nodeType, ::rtl::OString* pName, ::rtl::OString* pInherits)
+FeInheritanceHeader::FeInheritanceHeader(
+    NodeType nodeType, ::rtl::OString* pName, ::rtl::OString* pInherits,
+    std::vector< rtl::OString > * typeParameters)
     : m_nodeType(nodeType)
     , m_pName(pName)
     , m_pInherits(NULL)
 {
+    if (typeParameters != 0) {
+        m_typeParameters = *typeParameters;
+    }
     initializeInherits(pInherits);
 }
 
@@ -147,11 +157,16 @@ void FeInheritanceHeader::initializeInherits(::rtl::OString* pInherits)
         AstDeclaration* pDecl = pScope->lookupByName(*pInherits);
         if ( pDecl )
         {
-            if ( pDecl->getNodeType() == getNodeType()
-                 && (pDecl->getNodeType() != NT_interface
-                     || static_cast< AstInterface* >(pDecl)->isDefined()) )
+            AstDeclaration const * resolved = resolveTypedefs(pDecl);
+            if ( resolved->getNodeType() == getNodeType()
+                 && (resolved->getNodeType() != NT_interface
+                     || static_cast< AstInterface const * >(
+                         resolved)->isDefined()) )
             {
-                m_pInherits = pDecl;
+                if ( idlc()->error()->checkPublished( pDecl ) )
+                {
+                    m_pInherits = pDecl;
+                }
             }
             else
             {
