@@ -1,4 +1,4 @@
-mkdir: %_DEST%\inc\xmlscript
+mkdir: %_DEST%\inc%_EXT%\xmlscript
 ..\%__SRC%\bin\*.dll %_DEST%\bin%_EXT%\*.dll
 ..\%__SRC%\lib\*.lib %_DEST%\lib%_EXT%\*.lib
 ..\%__SRC%\lib\*.so %_DEST%\lib%_EXT%\*.so

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: databases.cxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: abi $ $Date: 2002-05-31 10:46:12 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 18:07:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -60,7 +60,6 @@
  ************************************************************************/
 
 
-#include <string.h>
 #include <berkeleydb/db_cxx.h>
 #ifndef _VOS_DIAGNOSE_HXX_
 #include <vos/diagnose.hxx>
@@ -534,7 +533,6 @@ Databases::getCollator( const rtl::OUString& Language,
         rtl::OUString countryStr = country(Language);
         if( !countryStr.getLength() )
         {
-            // #97229# Workaround for wrong collatorfallback
             if( langStr.compareToAscii("de") == 0 )
                 countryStr = rtl::OUString::createFromAscii("DE");
             else if( langStr.compareToAscii("en") == 0 )

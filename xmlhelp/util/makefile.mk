@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.4 $
+#   $Revision: 1.5 $
 #
-#   last change: $Author: svesik $ $Date: 2002-03-11 15:11:43 $
+#   last change: $Author: hr $ $Date: 2003-03-27 18:07:36 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -77,7 +77,7 @@ NO_BSYMBOLIC=TRUE
 .INCLUDE: settings.mk
 
 .IF "$(GUI)"=="WNT"
-CFLAGS+=/GR
+CFLAGS+=-GR
 .ENDIF
 .IF "$(COM)"=="GCC"
 CFLAGSCXX+=-frtti
@@ -97,24 +97,9 @@ SABLOT3RDLIB=sablot.lib
 SHL1TARGET=$(TARGET)$(UCP_VERSION)
 SHL1DEF=$(MISC)$/$(SHL1TARGET).def
 SHL1IMPLIB=i$(TARGET)
-.IF "$(OS)"!="FREEBSD"
 SHL1VERSIONMAP=exports.map
-.ENDIF
 
 # Add additional libs here.
-.IF "$(OS)"=="FREEBSD" 
-SHL1STDLIBS=                     \
-      $(CPPUHELPERLIB)         \
-      $(CPPULIB)               \
-      $(SALLIB)                \
-      $(VOSLIB)                \
-      $(SABLOT3RDLIB)          \
-      $(EXPATASCII3RDLIB)      \
-      $(UCBHELPERLIB)          \
-      $(BERKELEYLIB)           \
-      $(BERKELEYCPPLIB)        \
-      -lcompat
-.ELSE
 SHL1STDLIBS=                     \
     $(CPPUHELPERLIB)         \
     $(CPPULIB)               \
@@ -125,7 +110,6 @@ SHL1STDLIBS=                     \
     $(UCBHELPERLIB)          \
     $(BERKELEYLIB)           \
     $(BERKELEYCPPLIB)
-.ENDIF
 
 SHL1LIBS =                       \
     $(SLB)$/jaqe.lib         \

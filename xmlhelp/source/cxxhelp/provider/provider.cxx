@@ -2,9 +2,9 @@
  *
  *  $RCSfile: provider.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: abi $ $Date: 2002-10-30 09:59:17 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 18:07:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -290,11 +290,13 @@ void ContentProvider::init()
     try {
         // now adding as configuration change listener for the stylesheet
         Reference<XNameAccess> xAccess(xHierAccess,UNO_QUERY);
-        Any aAny =
-            xAccess->getByName(rtl::OUString::createFromAscii("Help"));
-        aAny >>= m_xContainer;
-        if(m_xContainer.is())
-            m_xContainer->addContainerListener(this);
+        if(xAccess.is()) {
+            Any aAny =
+                xAccess->getByName(rtl::OUString::createFromAscii("Help"));
+            aAny >>= m_xContainer;
+            if(m_xContainer.is())
+                m_xContainer->addContainerListener(this);
+        }
     } catch(const com::sun::star::uno::Exception&) {
     }
 
@@ -338,12 +340,6 @@ void ContentProvider::init()
                                   stylesheet,
                                   m_xSMgr );
 
-//      rtl::OUString newVal = rtl::OUString::createFromAscii("high_contrast");
-//      Any bla;
-//      bla <<= newVal;
-//      Reference<XNameReplace> rep(m_xContainer,UNO_QUERY);
-//      rep->replaceByName(rtl::OUString::createFromAscii("HelpStyleSheet"),
-//                         bla);
 }
 
 

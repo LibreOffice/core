@@ -205,7 +205,6 @@ public class HelpIndexer {
                 {
                       DocInfo info = ( DocInfo ) enum.nextElement();
                      String url = info.getURL();
-
                     if( url == null )
                      {
                          System.out.println( "<----------------------------------->" );
@@ -262,21 +261,13 @@ public class HelpIndexer {
                             _hashHelptext.put( tag.get_id(),text );
                            }
                     }
+                     _urlHandler.setMode( embResolved );
 
                     int idx = url.indexOf( '?' );
                     if( idx != -1 )
-                        url = url.substring( 0,idx );
-
-                    if( indexable( docResolved ) )
-                    {
-                        System.out.println( url );
-                        _urlHandler.setMode( embResolved );
-                        builder.indexDocument( new URL( url ),"" );
-                    }
-                    else
-                    {
-                        System.out.println( "excluded from indexing: " + url );
-                    }
+                         url = url.substring( 0,idx );
+                    System.out.println( url );
+                      builder.indexDocument( new URL( url ),"" );
                 }
                 catch( Exception e )
                 {
@@ -576,26 +567,6 @@ public class HelpIndexer {
     }
 
 
-    boolean indexable( Node node )
-    {
-        Node test;
-        NodeIterator it = new NodeIterator( node );
-          while( ( test=it.next() ) != null )
-        {
-            if( test.getNodeName().equals( "meta:user-defined" ) &&
-                ((Element)test).getAttribute("meta:name").equals("Info 2" ) )
-                break;
-        }
-        if( test != null )
-        {
-            NodeList list = test.getChildNodes();
-            for( int i = 0; i < list.getLength(); ++ i )
-                if( list.item(i).getNodeType() == Node.TEXT_NODE )
-                    return ! "NOINDEX".equals(((Text)list.item(i)).toString());
-        }
-        return true;
-    }
-
 
     // This is a configurable class, which capsulates the parser initialization stuff and all this things
 
@@ -740,7 +711,6 @@ public class HelpIndexer {
              // Setting the parameters
              _stuff.setParameter( "Language", _language );
              _stuff.setParameter( "Database", _module );
-             _stuff.setParameter( "System", _system );
         }
 
         // and parse

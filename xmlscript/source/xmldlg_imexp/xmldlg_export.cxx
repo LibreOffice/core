@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmldlg_export.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: dbo $ $Date: 2002-03-25 12:03:20 $
+ *  last change: $Author: hr $ $Date: 2003-03-27 18:11:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1208,24 +1208,19 @@ void SAL_CALL exportDialogModel(
         if (! xProps.is())
             continue;
         Reference< beans::XPropertyState > xPropState( xProps, UNO_QUERY );
-        OSL_ASSERT( xPropState.is() );
+        OSL_ENSURE( xPropState.is(), "no XPropertyState!" );
         if (! xPropState.is())
             continue;
         Reference< lang::XServiceInfo > xServiceInfo( xProps, UNO_QUERY );
-        OSL_ASSERT( xServiceInfo.is() );
+        OSL_ENSURE( xServiceInfo.is(), "no XServiceInfo!" );
         if (! xServiceInfo.is())
             continue;
-        Sequence< OUString > aServiceNames( xServiceInfo->getSupportedServiceNames() );
-        OSL_ASSERT( aServiceNames.getLength() == 1 );
-        if (aServiceNames.getLength() != 1)
-            continue;
-        OUString const & rControlType = aServiceNames.getConstArray()[ 0 ];
 
         ElementDescriptor * pElem = 0;
         Reference< xml::sax::XAttributeList > xElem;
 
         // group up radio buttons
-        if (rControlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlRadioButtonModel") ))
+        if ( xServiceInfo->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlRadioButtonModel") ) ) )
         {
             if (! pRadioGroup) // open radiogroup
             {
@@ -1246,7 +1241,7 @@ void SAL_CALL exportDialogModel(
         {
             pRadioGroup = 0; // close radiogroup
 
-            if (rControlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlButtonModel") ))
+            if (xServiceInfo->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlButtonModel") ) ) )
             {
                 pElem = new ElementDescriptor(
                     xProps, xPropState,
@@ -1254,7 +1249,7 @@ void SAL_CALL exportDialogModel(
                 xElem = static_cast< xml::sax::XAttributeList * >( pElem );
                 pElem->readButtonModel( &all_styles );
             }
-            else if (rControlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlCheckBoxModel") ))
+            else if (xServiceInfo->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlCheckBoxModel") ) ) )
             {
                 pElem = new ElementDescriptor(
                     xProps, xPropState,
@@ -1262,7 +1257,7 @@ void SAL_CALL exportDialogModel(
                 xElem = static_cast< xml::sax::XAttributeList * >( pElem );
                 pElem->readCheckBoxModel( &all_styles );
             }
-            else if (rControlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlComboBoxModel") ))
+            else if (xServiceInfo->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlComboBoxModel") ) ) )
             {
                 pElem = new ElementDescriptor(
                     xProps, xPropState,
@@ -1270,7 +1265,7 @@ void SAL_CALL exportDialogModel(
                 xElem = static_cast< xml::sax::XAttributeList * >( pElem );
                 pElem->readComboBoxModel( &all_styles );
             }
-            else if (rControlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlListBoxModel") ))
+            else if (xServiceInfo->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlListBoxModel") ) ) )
             {
                 pElem = new ElementDescriptor(
                     xProps, xPropState,
@@ -1278,7 +1273,7 @@ void SAL_CALL exportDialogModel(
                 xElem = static_cast< xml::sax::XAttributeList * >( pElem );
                 pElem->readListBoxModel( &all_styles );
             }
-            else if (rControlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlGroupBoxModel") ))
+            else if (xServiceInfo->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlGroupBoxModel") ) ) )
             {
                 pElem = new ElementDescriptor(
                     xProps, xPropState,
@@ -1286,7 +1281,7 @@ void SAL_CALL exportDialogModel(
                 xElem = static_cast< xml::sax::XAttributeList * >( pElem );
                 pElem->readGroupBoxModel( &all_styles );
             }
-            else if (rControlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlFixedTextModel") ))
+            else if (xServiceInfo->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlFixedTextModel") ) ) )
             {
                 pElem = new ElementDescriptor(
                     xProps, xPropState,
@@ -1294,7 +1289,7 @@ void SAL_CALL exportDialogModel(
                 xElem = static_cast< xml::sax::XAttributeList * >( pElem );
                 pElem->readFixedTextModel( &all_styles );
             }
-            else if (rControlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlEditModel") ))
+            else if (xServiceInfo->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlEditModel") ) ) )
             {
                 pElem = new ElementDescriptor(
                     xProps, xPropState,
@@ -1302,7 +1297,7 @@ void SAL_CALL exportDialogModel(
                 xElem = static_cast< xml::sax::XAttributeList * >( pElem );
                 pElem->readEditModel( &all_styles );
             }
-            else if (rControlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlImageControlModel") ))
+            else if (xServiceInfo->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlImageControlModel") ) ) )
             {
                 pElem = new ElementDescriptor(
                     xProps, xPropState,
@@ -1310,7 +1305,7 @@ void SAL_CALL exportDialogModel(
                 xElem = static_cast< xml::sax::XAttributeList * >( pElem );
                 pElem->readImageControlModel( &all_styles );
             }
-            else if (rControlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlFileControlModel") ))
+            else if (xServiceInfo->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlFileControlModel") ) ) )
             {
                 pElem = new ElementDescriptor(
                     xProps, xPropState,
@@ -1318,7 +1313,7 @@ void SAL_CALL exportDialogModel(
                 xElem = static_cast< xml::sax::XAttributeList * >( pElem );
                 pElem->readFileControlModel( &all_styles );
             }
-            else if (rControlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlCurrencyFieldModel") ))
+            else if (xServiceInfo->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlCurrencyFieldModel") ) ) )
             {
                 pElem = new ElementDescriptor(
                     xProps, xPropState,
@@ -1326,7 +1321,7 @@ void SAL_CALL exportDialogModel(
                 xElem = static_cast< xml::sax::XAttributeList * >( pElem );
                 pElem->readCurrencyFieldModel( &all_styles );
             }
-            else if (rControlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlDateFieldModel") ))
+            else if (xServiceInfo->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlDateFieldModel") ) ) )
             {
                 pElem = new ElementDescriptor(
                     xProps, xPropState,
@@ -1334,7 +1329,7 @@ void SAL_CALL exportDialogModel(
                 xElem = static_cast< xml::sax::XAttributeList * >( pElem );
                 pElem->readDateFieldModel( &all_styles );
             }
-            else if (rControlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlNumericFieldModel") ))
+            else if (xServiceInfo->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlNumericFieldModel") ) ) )
             {
                 pElem = new ElementDescriptor(
                     xProps, xPropState,
@@ -1342,7 +1337,7 @@ void SAL_CALL exportDialogModel(
                 xElem = static_cast< xml::sax::XAttributeList * >( pElem );
                 pElem->readNumericFieldModel( &all_styles );
             }
-            else if (rControlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlTimeFieldModel") ))
+            else if (xServiceInfo->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlTimeFieldModel") ) ) )
             {
                 pElem = new ElementDescriptor(
                     xProps, xPropState,
@@ -1350,7 +1345,7 @@ void SAL_CALL exportDialogModel(
                 xElem = static_cast< xml::sax::XAttributeList * >( pElem );
                 pElem->readTimeFieldModel( &all_styles );
             }
-            else if (rControlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlPatternFieldModel") ))
+            else if (xServiceInfo->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlPatternFieldModel") ) ) )
             {
                 pElem = new ElementDescriptor(
                     xProps, xPropState,
@@ -1358,7 +1353,7 @@ void SAL_CALL exportDialogModel(
                 xElem = static_cast< xml::sax::XAttributeList * >( pElem );
                 pElem->readPatternFieldModel( &all_styles );
             }
-            else if (rControlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlFormattedFieldModel") ))
+            else if (xServiceInfo->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlFormattedFieldModel") ) ) )
             {
                 pElem = new ElementDescriptor(
                     xProps, xPropState,
@@ -1366,7 +1361,7 @@ void SAL_CALL exportDialogModel(
                 xElem = static_cast< xml::sax::XAttributeList * >( pElem );
                 pElem->readFormattedFieldModel( &all_styles );
             }
-            else if (rControlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlFixedLineModel") ))
+            else if (xServiceInfo->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlFixedLineModel") ) ) )
             {
                 pElem = new ElementDescriptor(
                     xProps, xPropState,
@@ -1374,7 +1369,7 @@ void SAL_CALL exportDialogModel(
                 xElem = static_cast< xml::sax::XAttributeList * >( pElem );
                 pElem->readFixedLineModel( &all_styles );
             }
-            else if (rControlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlScrollBarModel") ))
+            else if (xServiceInfo->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlScrollBarModel") ) ) )
             {
                 pElem = new ElementDescriptor(
                     xProps, xPropState,
@@ -1382,7 +1377,7 @@ void SAL_CALL exportDialogModel(
                 xElem = static_cast< xml::sax::XAttributeList * >( pElem );
                 pElem->readScrollBarModel( &all_styles );
             }
-            else if (rControlType.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("com.sun.star.awt.UnoControlProgressBarModel") ))
+            else if (xServiceInfo->supportsService( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.UnoControlProgressBarModel") ) ) )
             {
                 pElem = new ElementDescriptor(
                     xProps, xPropState,
@@ -1399,9 +1394,8 @@ void SAL_CALL exportDialogModel(
             }
             else
             {
-                throw RuntimeException(
-                    OUString( RTL_CONSTASCII_USTRINGPARAM("unknown control type: ") ) + rControlType,
-                    Reference< XInterface >() );
+                OSL_ENSURE( sal_False, "unknown control type!" );
+                continue;
             }
         }
     }
