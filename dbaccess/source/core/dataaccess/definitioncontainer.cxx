@@ -2,9 +2,9 @@
  *
  *  $RCSfile: definitioncontainer.cxx,v $
  *
- *  $Revision: 1.17 $
+ *  $Revision: 1.18 $
  *
- *  last change: $Author: hr $ $Date: 2004-08-02 15:09:49 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 09:46:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,6 +109,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::container;
+using namespace ::com::sun::star::sdbcx;
 using namespace ::osl;
 using namespace ::comphelper;
 using namespace ::cppu;
@@ -476,6 +477,51 @@ void ODefinitionContainer::implRemove(const ::rtl::OUString& _rName)
 }
 
 //--------------------------------------------------------------------------
+namespace
+{
+    bool    lcl_ensureName( const Reference< XContent >& _rxContent, const ::rtl::OUString& _rName )
+    {
+        if ( !_rxContent.is() )
+            return true;
+
+        // ..........................................................
+        // obtain the current name. If it's the same as the new one,
+        // don't do anything
+        try
+        {
+            Reference< XPropertySet > xProps( _rxContent, UNO_QUERY );
+            if ( xProps.is() )
+            {
+                ::rtl::OUString sCurrentName;
+                OSL_VERIFY( xProps->getPropertyValue( PROPERTY_NAME ) >>= sCurrentName );
+                if ( sCurrentName.equals( _rName ) )
+                    return true;
+            }
+        }
+        catch( const Exception& )
+        {
+            OSL_ENSURE( sal_False, "lcl_ensureName: caught an exception while obtaining the current name!" );
+        }
+
+        // ..........................................................
+        // set the new name
+        Reference< XRename > xRename( _rxContent, UNO_QUERY );
+        OSL_ENSURE( xRename.is(), "lcl_ensureName: invalid content (not renameable)!" );
+        if ( !xRename.is() )
+            return false;
+        try
+        {
+            xRename->rename( _rName );
+            return true;
+        }
+        catch( const Exception& )
+        {
+            OSL_ENSURE( sal_False, "lcl_ensureName: caught an exception!" );
+        }
+        return false;
+    }
+}
+//--------------------------------------------------------------------------
 void ODefinitionContainer::implAppend(const ::rtl::OUString& _rName, const Reference< XContent >& _rxNewObject)
 {
     MutexGuard aGuard(m_aMutex);
@@ -489,17 +535,28 @@ void ODefinitionContainer::implAppend(const ::rtl::OUString& _rName, const Refer
         ODefinitionContainer_Impl::Documents::iterator aFind = pItem->m_aDocumentMap.find(_rName);
         if ( aFind == pItem->m_aDocumentMap.end() )
         {
+            // ensure that the new object thas the proper name.
+            // Somebody could create an object with name "foo", and insert it as "bar"
+            // into a container. In this case, we need to ensure that the object name
+            // is also "bar"
+            // #i44786# / 2005-03-11 / frank.schoenheit@sun.com
+            lcl_ensureName( _rxNewObject, _rName );
+
             Reference<XUnoTunnel> xUnoTunnel(_rxNewObject,UNO_QUERY);
             ::rtl::Reference<OContentHelper> pContent = NULL;
             if ( xUnoTunnel.is() )
             {
                 pContent = reinterpret_cast<OContentHelper*>(xUnoTunnel->getSomething(OContentHelper::getUnoTunnelImplementationId()));
                 TContentPtr pImpl = pContent->getImpl();
-                ODefinitionContainer_Impl::Documents::iterator aIter = ::std::find_if(pItem->m_aDocumentMap.begin(),pItem->m_aDocumentMap.end(),
-                                                                    ::std::compose1(
-                                                                        ::std::bind2nd(::std::equal_to<TContentPtr>(), pImpl),
-                                                                        ::std::select2nd<ODefinitionContainer_Impl::Documents::value_type>())
-                                                                    );
+                ODefinitionContainer_Impl::Documents::iterator aIter =
+                    ::std::find_if(
+                        pItem->m_aDocumentMap.begin(),
+                        pItem->m_aDocumentMap.end(),
+                        ::std::compose1(
+                            ::std::bind2nd(::std::equal_to<TContentPtr>(), pImpl),
+                            ::std::select2nd<ODefinitionContainer_Impl::Documents::value_type>()
+                        )
+                    );
 
                 if ( aIter != pItem->m_aDocumentMap.end() )
                     pItem->m_aDocumentMap.erase(aIter);
@@ -518,7 +575,7 @@ void ODefinitionContainer::implAppend(const ::rtl::OUString& _rName, const Refer
     }
     catch(Exception&)
     {
-        DBG_ERROR("ODefinitionContainer::implAppend : catched something !");
+        DBG_ERROR("ODefinitionContainer::implAppend: caught something !");
     }
 }
 
