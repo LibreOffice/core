@@ -2,9 +2,9 @@
  *
  *  $RCSfile: StylePreview.java,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: kz $  $Date: 2004-05-19 13:14:15 $
+ *  last change: $Author: obo $  $Date: 2004-09-08 14:13:21 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,7 +71,7 @@ import com.sun.star.wizards.web.data.CGStyle;
  * This class copies the files needed for this
  * preview from the web wizard work directory
  * to a given temporary directory, and updates them
- * on request, according to the current selection
+ * on request, according to the current style/background selection
  * of the user.
  */
 public class StylePreview {
