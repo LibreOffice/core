@@ -2,9 +2,9 @@
  *
  *  $RCSfile: view.src,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-14 03:01:29 $
+ *  last change: $Author: os $ $Date: 2001-08-03 14:35:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1119,6 +1119,11 @@ ToolBox RID_TOOLS_TOOLBOX
         {
             Identifier = SID_SEARCH_DLG ;
             HelpID = SID_SEARCH_DLG ;
+        };
+        ToolBoxItem
+        {
+            Identifier = SID_VIEW_DATA_SOURCE_BROWSER ;
+            HelpID = SID_VIEW_DATA_SOURCE_BROWSER ;
         };
         ToolBoxItem
         {
