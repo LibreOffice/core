@@ -2,9 +2,9 @@
  *
  *  $RCSfile: imp_op.hxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: dr $ $Date: 2001-11-06 15:06:03 $
+ *  last change: $Author: dr $ $Date: 2001-11-28 16:41:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,7 +104,6 @@ class ScToken2;
 class ScExtDocOptions;
 class _ScRangeListTabs;
 
-class FontBuffer;
 class XF_Buffer;
 class ValueFormBuffer;
 class ExcelToSc;
@@ -224,7 +223,6 @@ protected:
     void                    Printheaders( void );           // 0x2A
     void                    Prntgrdlns( void );             // 0x2B
     BOOL                    Filepass( void );               // 0x2F
-    void                    Font25( void );                 // 0x31
 //      void                Window1( void );                // 0x3D
     void                    Pane( void );                   // 0x41
     void                    Codepage( void );               // 0x42
@@ -263,7 +261,6 @@ protected:
     void                    Array34( void );                // 0x0221
     void                    Externname34( void );           // 0x0223
     void                    Defrowheight345( void );        // 0x0225
-    void                    Font34( void );                 // 0x0231
     void                    TableOp( void );                // 0x0236
     void                    Window2_5( void );              // 0x023E
     //void                  Rk( void );                     // 0x027E -> 0x7E

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdefs.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: dr $ $Date: 2001-11-20 10:45:59 $
+ *  last change: $Author: dr $ $Date: 2001-11-28 16:41:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,16 +149,6 @@ enum XclTextWrap
 
 #define EXC_ROT_STACKED             0xFF
 
-/// Text underline mode.
-enum XclUnderline
-{
-    xlUnderlNone                    = 0x00,
-    xlUnderlSingle                  = 0x01,
-    xlUnderlDouble                  = 0x02,
-    xlUnderlSingleAcc               = 0x21,
-    xlUnderlDoubleAcc               = 0x22
-};
-
 
 //___________________________________________________________________
 // (0x0018, 0x0218) NAME
@@ -217,7 +207,9 @@ enum XclMarginType
 
 // attributes
 #define EXC_FONTATTR_NONE           0x0000
+#define EXC_FONTATTR_BOLD           0x0001
 #define EXC_FONTATTR_ITALIC         0x0002
+#define EXC_FONTATTR_UNDERLINE      0x0004
 #define EXC_FONTATTR_STRIKEOUT      0x0008
 #define EXC_FONTATTR_OUTLINE        0x0010
 #define EXC_FONTATTR_SHADOW         0x0020
@@ -241,11 +233,23 @@ enum XclMarginType
 // height
 #define EXC_FONTHGHT_COEFF          20.0
 
-// underline
-#define EXC_FONTUL_NONE             0x00
-#define EXC_FONTUL_SINGLE           0x01
-#define EXC_FONTUL_DOUBLE           0x02
-#define EXC_FONTUL_DOTTED           0x21
+/// Text underline style.
+enum XclUnderline
+{
+    xlUnderlNone                    = 0x00,
+    xlUnderlSingle                  = 0x01,
+    xlUnderlDouble                  = 0x02,
+    xlUnderlSingleAcc               = 0x21,
+    xlUnderlDoubleAcc               = 0x22
+};
+
+/// Super-/subscript type.
+enum XclEscapement
+{
+    xlEscNone                       = 0x00,
+    xlEscSuper                      = 0x01,
+    xlEscSub                        = 0x02
+};
 
 // families
 #define EXC_FONTFAM_DONTKNOW        0x00

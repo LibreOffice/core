@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excrecds.cxx,v $
  *
- *  $Revision: 1.34 $
+ *  $Revision: 1.35 $
  *
- *  last change: $Author: dr $ $Date: 2001-11-23 13:05:08 $
+ *  last change: $Author: dr $ $Date: 2001-11-28 16:38:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -749,11 +749,11 @@ UINT8 ExcFont::GetUnderline( const FontUnderline eUnder )
 {
     switch( eUnder )
     {
-        case UNDERLINE_SINGLE:  return EXC_FONTUL_SINGLE;
-        case UNDERLINE_DOUBLE:  return EXC_FONTUL_DOUBLE;
-        case UNDERLINE_DOTTED:  return EXC_FONTUL_DOTTED;
+        case UNDERLINE_SINGLE:  return static_cast< sal_uInt8 >( xlUnderlSingle );
+        case UNDERLINE_DOUBLE:  return static_cast< sal_uInt8 >( xlUnderlDouble );
+        case UNDERLINE_DOTTED:  return static_cast< sal_uInt8 >( xlUnderlSingleAcc );
     }
-    return EXC_FONTUL_NONE;
+    return static_cast< sal_uInt8 >( xlUnderlNone );
 }
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formel.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: dr $ $Date: 2001-02-06 16:19:42 $
+ *  last change: $Author: dr $ $Date: 2001-11-28 16:41:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -117,10 +117,6 @@ enum FORMULA_TYPE
     FT_RangeName,
     FT_SharedFormula
 };
-
-
-enum BoolError { BE_NULL, BE_DIV0, BE_VALUE, BE_REF, BE_NAME, BE_NUM,
-    BE_NA, BE_TRUE, BE_FALSE, BE_UNKNOWN };
 
 
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: root.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: dr $ $Date: 2001-11-09 09:55:38 $
+ *  last change: $Author: dr $ $Date: 2001-11-28 16:41:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,13 +93,14 @@ class RangeNameBufferWK3;
 class ShrfmlaBuffer;
 class ExtNameBuff;
 class ExtSheetBuffer;
-class FontBuffer;
+//class FontBuffer;
 class ExcExternDup;
 class ScExtDocOptions;
 class ScEditEngineDefaulter;
 class FilterProgressBar;
 class ValueFormBuffer;
 
+class XclImpFontBuffer;
 class XclImpXFBuffer;
 class XclImpExtsheetBuffer;
 class XclImpTabIdBuffer;
@@ -139,8 +140,8 @@ struct RootData     // -> Inkarnation jeweils im ImportExcel-Objekt!
     ScRangeName*        pScRangeName;
     ColorBuffer*        pColor;
     ValueFormBuffer*    pValueFormBuffer;       // ... Number-Formats
+    XclImpFontBuffer*   pFontBuffer;
     XclImpXFBuffer*     pXFBuffer;
-    FontBuffer*         pFontBuffer;
     LanguageType        eDefLanguage;
     String              aStandard;              // Schluessel fuer Exc-Standard-Format
     BiffTyp             eDateiTyp;              // feine Differenzierung
@@ -232,7 +233,8 @@ private:
 protected:
     RootData*       pExcRoot;
 //    inline          ExcRoot( void );              //#94039# prevent empty rootdata
-    inline          ExcRoot( RootData* pNexExcRoot );
+    inline          ExcRoot( RootData* pNexExcRoot ) : pExcRoot( pNexExcRoot ) {}
+    inline          ExcRoot( const ExcRoot& rCopy ) : pExcRoot( rCopy.pExcRoot ) {}
 public:
 //    inline void     Set( RootData* pExcRoot );    //#94039# prevent empty rootdata
 };
@@ -248,11 +250,6 @@ public:
 //#endif
 //}
 
-
-inline ExcRoot::ExcRoot( RootData* pNexExcRoot )
-{
-    pExcRoot = pNexExcRoot;
-}
 
 //#94039# prevent empty rootdata
 

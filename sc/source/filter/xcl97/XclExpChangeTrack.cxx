@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XclExpChangeTrack.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dr $ $Date: 2001-11-06 15:09:10 $
+ *  last change: $Author: dr $ $Date: 2001-11-28 16:42:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,6 +71,9 @@
 #include "XclExpChangeTrack.hxx"
 #endif
 
+#ifndef _SC_XCLTOOLS_HXX
+#include "XclTools.hxx"
+#endif
 #ifndef SC_CELL_HXX
 #include "cell.hxx"
 #endif
@@ -797,7 +800,7 @@ void XclExpChTrCellContent::GetCellData(
         case CELLTYPE_VALUE:
         {
             rpData->fValue = ((const ScValueCell*) pScCell)->GetValue();
-            if( XclExpHelper::GetRKFromDouble( rpData->fValue, rpData->nRKValue ) )
+            if( XclTools::GetRKFromDouble( rpData->nRKValue, rpData->fValue ) )
             {
                 rpData->nType = EXC_CHTR_TYPE_RK;
                 rpData->nSize = 4;

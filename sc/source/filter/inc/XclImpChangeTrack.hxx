@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XclImpChangeTrack.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: dr $ $Date: 2001-07-17 12:47:49 $
+ *  last change: $Author: dr $ $Date: 2001-11-28 16:41:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -66,11 +66,11 @@
 #include <tools/datetime.hxx>
 #endif
 
+#ifndef _SC_XCLTOOLS_HXX
+#include "XclTools.hxx"
+#endif
 #ifndef _SC_XCLIMPSTREAM_HXX
 #include "XclImpStream.hxx"
-#endif
-#ifndef _SC_XCLIMPHELPER_HXX
-#include "XclImpHelper.hxx"
 #endif
 #ifndef _EXCFORM_HXX
 #include "excform.hxx"
@@ -190,7 +190,7 @@ inline sal_uInt8 XclImpChangeTrack::LookAtuInt8()
 
 inline double XclImpChangeTrack::ReadRK()
 {
-    return XclImpHelper::GetDoubleFromRK( pStrm->ReaduInt32() );
+    return XclTools::GetDoubleFromRK( pStrm->ReaduInt32() );
 }
 
 inline sal_Bool XclImpChangeTrack::ReadBool()

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: exctools.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: dr $ $Date: 2001-11-09 09:51:39 $
+ *  last change: $Author: dr $ $Date: 2001-11-28 16:38:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -608,7 +608,7 @@ BOOL ShStrTabEntry::HasFormats( void ) const
 }
 
 
-EditTextObject* ShStrTabEntry::CreateEditTextObject( ScEditEngineDefaulter&, FontBuffer& ) const
+EditTextObject* ShStrTabEntry::CreateEditTextObject( ScEditEngineDefaulter&, XclImpFontBuffer& ) const
 {
     return NULL;
 }
@@ -694,7 +694,7 @@ BOOL ShStrTabFormEntry::HasFormats( void ) const
 #define READFORM()      nChar = *pRead; pRead++; nFont = *pRead; pRead++; nAnzFrms--;
 
 
-EditTextObject* ShStrTabFormEntry::CreateEditTextObject( ScEditEngineDefaulter& rEdEng, FontBuffer& rFB ) const
+EditTextObject* ShStrTabFormEntry::CreateEditTextObject( ScEditEngineDefaulter& rEdEng, XclImpFontBuffer& rFB ) const
 {
     if( !pData || !pData->pForms )
         return NULL;
@@ -724,7 +724,7 @@ EditTextObject* ShStrTabFormEntry::CreateEditTextObject( ScEditEngineDefaulter& 
 
                 aItemSet.ClearItem( 0 );
 
-                rFB.Fill( nFont, aItemSet, FALSE );
+                rFB.FillToItemSet( nFont, aItemSet, xlFontEEIDs );
                 if( nAnzFrms )
                 {
                     READFORM();

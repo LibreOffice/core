@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impop.cxx,v $
  *
- *  $Revision: 1.32 $
+ *  $Revision: 1.33 $
  *
- *  last change: $Author: dr $ $Date: 2001-11-09 09:51:39 $
+ *  last change: $Author: dr $ $Date: 2001-11-28 16:38:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,9 @@
 #ifndef _SC_FILTERTOOLS_HXX
 #include "FilterTools.hxx"
 #endif
+#ifndef _SC_XCLTOOLS_HXX
+#include "XclTools.hxx"
+#endif
 #ifndef _SC_XCLIMPHELPER_HXX
 #include "XclImpHelper.hxx"
 #endif
@@ -206,7 +209,7 @@ ImportExcel::ImportExcel( SvStream& aStream, ScDocument* pDoc ):
     pExcRoot->pFormTable = pDoc->GetFormatTable();
     pExcRoot->pScRangeName = pDoc->GetRangeName();
     pExcRoot->pColor = new ColorBuffer( pExcRoot );
-    pExcRoot->pFontBuffer = new FontBuffer( pExcRoot );
+    pExcRoot->pFontBuffer = new XclImpFontBuffer( *pExcRoot );
     pExcRoot->eDefLanguage = ScGlobal::eLnge;   //LANGUAGE_SYSTEM;
     pExcRoot->aStandard.AssignAscii( "General" );
     pExcRoot->eDateiTyp = pExcRoot->eHauptDateiTyp = BiffX;
@@ -569,7 +572,7 @@ void ImportExcel::Externsheet( void )
     String      aTabName;
     BOOL        bSameWorkBook = FALSE;
 
-    XclImpHelper::DecodeExternsheetByte( aIn, aFile, aTabName, bSameWorkBook );
+    XclImpURLDecoder::DecodeURLByte( aIn, aFile, aTabName, bSameWorkBook );
     ScfTools::ConvertName( aTabName );
     pExcRoot->pExtSheetBuff->Add( aFile, aTabName, bSameWorkBook );
 }
@@ -945,38 +948,6 @@ BOOL ImportExcel::Filepass( void )
 }
 
 
-void ImportExcel::Font25( void )
-{
-    UINT16      nHeight, nIndexCol;
-    BYTE        nAttr0;
-    String      aName;
-    FontBuffer* pFB = pExcRoot->pFontBuffer;
-
-    if( pExcRoot->eHauptDateiTyp == Biff2 )
-    {// Biff2
-        aIn >> nHeight >> nAttr0;
-        aIn.Ignore( 1 );
-        nIndexCol =  32767;
-
-        aIn.AppendByteString( aName, FALSE );
-        pFB->NewFont( nHeight, nAttr0, nIndexCol, aName );
-    }
-    else
-    {// Biff5
-        BYTE    nUnder, nFam, nChar;
-        UINT16  nWeight, nScript;
-
-        aIn >> nHeight >> nAttr0;
-        aIn.Ignore( 1 );
-        aIn >> nIndexCol >> nWeight >> nScript >> nUnder >> nFam >> nChar;
-        aIn.Ignore( 1 );    // Reserved
-
-        aIn.AppendByteString( aName, FALSE );
-        pFB->NewFont( nHeight, nAttr0, nScript, nUnder, nIndexCol, nWeight, nFam, nChar, aName );
-    }
-}
-
-
 void ImportExcel::Pane( void )
 {
     pColRowBuff->ReadSplit( aIn );
@@ -1062,7 +1033,7 @@ void ImportExcel::Rk( void )
 
     if( nRow <= MAXROW && nCol <= MAXCOL )
     {
-        ScValueCell*    pZelle = new ScValueCell( XclImpHelper::GetDoubleFromRK( nRkNum ) );
+        ScValueCell*    pZelle = new ScValueCell( XclTools::GetDoubleFromRK( nRkNum ) );
 
         pD->PutCell( nCol, nRow, nTab, pZelle, (BOOL)TRUE );
         pColRowBuff->Used( nCol, nRow );
@@ -1508,7 +1479,7 @@ void ImportExcel::Mulrk( void )
 
             if( nCol <= MAXCOL )
             {
-                ScValueCell* pZelle = new ScValueCell( XclImpHelper::GetDoubleFromRK( nRkNum ) );
+                ScValueCell* pZelle = new ScValueCell( XclTools::GetDoubleFromRK( nRkNum ) );
 
                 pD->PutCell( nCol, nRow, nTab, pZelle, (BOOL)TRUE );
                 pColRowBuff->Used( nCol, nRow );
@@ -1851,19 +1822,6 @@ void ImportExcel::Defrowheight345( void )
 }
 
 
-void ImportExcel::Font34( void )
-{
-    UINT16      nHeight, nIndexCol;
-    BYTE        nAttr0;
-
-    aIn >> nHeight >> nAttr0;
-    aIn.Ignore( 1 );
-    aIn >> nIndexCol;
-
-    pExcRoot->pFontBuffer->NewFont( nHeight, nAttr0, nIndexCol, aIn.ReadByteString( FALSE ) );
-}
-
-
 void ImportExcel::TableOp( void )
 {
     UINT16 nFirstRow, nLastRow;
@@ -2097,7 +2055,7 @@ void ImportExcel::NeueTabelle( void )
 
 const ScTokenArray* ImportExcel::ErrorToFormula( BYTE bErrOrVal, BYTE nError, double& rVal )
 {
-    return pFormConv->GetBoolErr( XclImpHelper::ErrorToEnum( bErrOrVal, nError, rVal ) );
+    return pFormConv->GetBoolErr( XclTools::ErrorToEnum( rVal, bErrOrVal, nError ) );
 }
 
 
@@ -2428,7 +2386,7 @@ EditTextObject* ImportExcel::CreateFormText( BYTE nAnzFrms, const String& rS, co
     rEdEng.SetText( rS );
 
     SfxItemSet      aItemSet( rEdEng.GetEmptyItemSet() );
-    pExcRoot->pFontBuffer->Fill( pExcRoot->pXFBuffer->GetFont( nXF ), aItemSet, FALSE );
+    pExcRoot->pFontBuffer->FillToItemSet( pExcRoot->pXFBuffer->GetFontIndex( nXF ), aItemSet, xlFontEEIDs );
 
     ESelection      aSel( 0, 0 );
 
@@ -2450,7 +2408,7 @@ EditTextObject* ImportExcel::CreateFormText( BYTE nAnzFrms, const String& rS, co
 
                 aItemSet.ClearItem( 0 );
 
-                pExcRoot->pFontBuffer->Fill( nFont, aItemSet, FALSE );
+                pExcRoot->pFontBuffer->FillToItemSet( nFont, aItemSet, xlFontEEIDs );
                 if( nAnzFrms )
                 {
                     aIn >> nChar >> nFont;
@@ -2623,7 +2581,7 @@ void ImportExcel::SetTextCell( const UINT16 nC, const UINT16 nR, String& r, cons
         {
             ScBaseCell*             pZelle;
 
-            if( pExcRoot->pXFBuffer->HasSuperOrSubscript( nXF ) )
+            if( pExcRoot->pXFBuffer->HasEscapement( nXF ) )
             {// jetzt kommt 'ne Edit-Engine in's Spiel!
                 EditTextObject*     pTObj = CreateFormText( 0, r, nXF );
 

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: biffdump.cxx,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: dr $ $Date: 2001-11-23 13:01:34 $
+ *  last change: $Author: dr $ $Date: 2001-11-28 16:38:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,8 +91,8 @@
 #ifndef SC_SCGLOB_HXX
 #include "global.hxx"
 #endif
-#ifndef _SC_XCLIMPHELPER_HXX
-#include "XclImpHelper.hxx"
+#ifndef _SC_XCLTOOLS_HXX
+#include "XclTools.hxx"
 #endif
 #ifndef _FLTTOOLS_HXX
 #include "flttools.hxx"
@@ -314,6 +314,12 @@ static void __AddDouble( ByteString& r, const double f )
     sal_Char    p[ 256 ];
     sprintf( p, "%.15G", f );
     r += p;
+}
+
+
+static inline void __AddRK( ByteString& rString, sal_uInt32 nRKValue )
+{
+    __AddDouble( rString, XclTools::GetDoubleFromRK( nRKValue ) );
 }
 
 
@@ -1248,7 +1254,7 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
 //              LINESTART();
                 ADDCELLHEAD();
                 ADDTEXT( "   val = " );
-                __AddDouble( t, XclImpHelper::GetDoubleFromRK( Read4( rIn ) ) );
+                __AddRK( t, Read4( rIn ) );
                 PRINT();
             }
             break;
@@ -1402,7 +1408,7 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                     switch( nType )
                     {
                         case 0x02:
-                            __AddDouble( sTemp[ nF ], XclImpHelper::GetDoubleFromRK( Read4( rIn ) ) );
+                            __AddRK( sTemp[ nF ], Read4( rIn ) );
                             IGNORE( 4 );
                             break;
                         case 0x04:
@@ -1796,7 +1802,7 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                     LINESTART();
                     __AddCellHead( t, nC, nR, nXF );
                     ADDTEXT( "   val = " );
-                    __AddDouble( t, XclImpHelper::GetDoubleFromRK( nRK ) );
+                    __AddRK( t, nRK );
                     PRINT();
                     nC++;
                     n--;
@@ -2331,7 +2337,7 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                     switch( nOldType )
                     {
                         case 0x0001:
-                            __AddDouble( t, XclImpHelper::GetDoubleFromRK( Read4( rIn ) ) );
+                            __AddRK( t, Read4( rIn ) );
                             PRINT();
                         break;
                         case 0x0002:
@@ -2367,7 +2373,7 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
                     switch( nNewType )
                     {
                         case 0x0001:
-                            __AddDouble( t, XclImpHelper::GetDoubleFromRK( Read4( rIn ) ) );
+                            __AddRK( t, Read4( rIn ) );
                             PRINT();
                         break;
                         case 0x0002:
@@ -3272,7 +3278,7 @@ void Biff8RecDumper::RecDump( BOOL bSubStream )
             {
                 ADDCELLHEAD();
                 ADDTEXT( "   val = " );
-                __AddDouble( t, XclImpHelper::GetDoubleFromRK( Read4( rIn ) ) );
+                __AddRK( t, Read4( rIn ) );
                 PRINT();
             }
             break;

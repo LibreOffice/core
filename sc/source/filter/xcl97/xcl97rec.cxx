@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xcl97rec.cxx,v $
  *
- *  $Revision: 1.38 $
+ *  $Revision: 1.39 $
  *
- *  last change: $Author: dr $ $Date: 2001-11-06 15:09:10 $
+ *  last change: $Author: dr $ $Date: 2001-11-28 16:42:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,9 @@
 
 #ifndef _SC_FILTERTOOLS_HXX
 #include "FilterTools.hxx"
+#endif
+#ifndef _SC_XCLTOOLS_HXX
+#include "XclTools.hxx"
 #endif
 #ifndef _SC_XCLEXPSTREAM_HXX
 #include "XclExpStream.hxx"
@@ -1240,7 +1243,7 @@ ExcXf8::ExcXf8( UINT16 nFont, UINT16 nForm, const ScPatternAttr* pPattAttr,
     if( eOri == xlTextOrientTopBottom )
         nTrot = 0x00FF;
     else if( pPattAttr )
-        nTrot = XclExpHelper::GetRotation( ((const SfxInt32Item&) pPattAttr->GetItem( ATTR_ROTATE_VALUE )).GetValue() );
+        nTrot = XclTools::GetExcRotation( ((const SfxInt32Item&) pPattAttr->GetItem( ATTR_ROTATE_VALUE )).GetValue() );
 }
 
 

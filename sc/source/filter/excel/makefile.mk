@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.11 $
+#   $Revision: 1.12 $
 #
-#   last change: $Author: dr $ $Date: 2001-11-13 12:13:02 $
+#   last change: $Author: dr $ $Date: 2001-11-28 16:38:09 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -84,6 +84,7 @@ SLOFILES =	\
         $(SLO)$/FilterTools.obj				\
         $(SLO)$/FilterProgressBar.obj		\
         $(SLO)$/FilterApiHelper.obj			\
+        $(SLO)$/XclTools.obj				\
         $(SLO)$/XclChartsApiHelper.obj		\
         $(SLO)$/XclImpStream.obj			\
         $(SLO)$/XclImpHelper.obj			\

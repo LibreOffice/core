@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excform.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: dr $ $Date: 2001-11-06 15:00:51 $
+ *  last change: $Author: dr $ $Date: 2001-11-28 16:38:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2379,7 +2379,7 @@ void ExcelToSc::ExcRelToScRel( UINT16 nRow, UINT8 nCol, SingleRefData &rSRD, con
 }
 
 
-const ScTokenArray* ExcelToSc::GetBoolErr( BoolError eType )
+const ScTokenArray* ExcelToSc::GetBoolErr( XclBoolError eType )
 {
     UINT16                  nError;
     aPool.Reset();
@@ -2389,18 +2389,18 @@ const ScTokenArray* ExcelToSc::GetBoolErr( BoolError eType )
 
     switch( eType )
     {
-        case BE_NULL:       eOc = ocStop; nError = errNoCode; break;
-        case BE_DIV0:       eOc = ocStop; nError = errIllegalFPOperation; break;
-        case BE_VALUE:      eOc = ocNoValue; nError = NOVALUE; break;
-        case BE_REF:        eOc = ocStop; nError = errNoRef; break;
-        case BE_NAME:       eOc = ocStop; nError = errNoName; break;
-        case BE_NUM:        eOc = ocStop; nError = errIllegalFPOperation; break;
-        case BE_NA:         eOc = ocNoValue; nError = NOVALUE; break;
-        case BE_TRUE:       eOc = ocTrue; nError = 0; break;
-        case BE_FALSE:      eOc = ocFalse; nError = 0; break;
-        case BE_UNKNOWN:    eOc = ocStop; nError = errUnknownState; break;
+        case xlErrNull:     eOc = ocStop;       nError = errNoCode;             break;
+        case xlErrDiv0:     eOc = ocStop;       nError = errIllegalFPOperation; break;
+        case xlErrValue:    eOc = ocNoValue;    nError = NOVALUE;               break;
+        case xlErrRef:      eOc = ocStop;       nError = errNoRef;              break;
+        case xlErrName:     eOc = ocStop;       nError = errNoName;             break;
+        case xlErrNum:      eOc = ocStop;       nError = errIllegalFPOperation; break;
+        case xlErrNA:       eOc = ocNoValue;    nError = NOVALUE;               break;
+        case xlErrTrue:     eOc = ocTrue;       nError = 0;                     break;
+        case xlErrFalse:    eOc = ocFalse;      nError = 0;                     break;
+        case xlErrUnknown:  eOc = ocStop;       nError = errUnknownState;       break;
         default:
-            DBG_ERROR( "*ExcelToSc::GetBoolErr(): fehlender enum!" );
+            DBG_ERROR( "ExcelToSc::GetBoolErr - wrong enum!" );
             eOc = ocNoName;
             nError = errUnknownState;
     }

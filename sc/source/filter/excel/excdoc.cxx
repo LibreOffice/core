@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excdoc.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: dr $ $Date: 2001-11-06 15:00:51 $
+ *  last change: $Author: dr $ $Date: 2001-11-28 16:38:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,6 +119,9 @@
 #include "xcl97rec.hxx"
 #include "xcl97esc.hxx"
 
+#ifndef _SC_XCLTOOLS_HXX
+#include "XclTools.hxx"
+#endif
 #ifndef _SC_XCLEXPEXTERNSHEET_HXX
 #include "XclExpExternsheet.hxx"
 #endif
@@ -833,7 +836,7 @@ void ExcTable::FillAsTable( void )
                         pLastRKMulRK = NULL;
                         pAktExcCell = new ExcBoolerr( aScPos, pPatt, rR, UINT8(fVal), FALSE );
                     }
-                    else if( XclExpHelper::GetRKFromDouble( fVal, nRKValue ) )
+                    else if( XclTools::GetRKFromDouble( nRKValue, fVal ) )
                     {
                         if( pLastRKMulRK )
                         {

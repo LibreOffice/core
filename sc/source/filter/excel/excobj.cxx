@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excobj.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: obo $ $Date: 2001-10-16 14:33:10 $
+ *  last change: $Author: dr $ $Date: 2001-11-28 16:38:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -130,8 +130,8 @@
 #include "fltprgrs.hxx"
 #include "scmsocximexp.hxx"
 
-#ifndef _SC_XCLIMPHELPER_HXX
-#include "XclImpHelper.hxx"
+#ifndef _SC_XCLTOOLS_HXX
+#include "XclTools.hxx"
 #endif
 #ifndef _SC_XCLIMPEXTERNSHEET_HXX
 #include "XclImpExternsheet.hxx"
@@ -171,11 +171,11 @@ void ImportExcel::Obj()
     short nReserved = bBiff5 ? 6 : 2;
     aIn.Ignore( nReserved );
 
-    Point aUL(  XclImpHelper::CalcX( nTab, nCol1, nColOff1, HMM_PER_TWIPS, pD ),
-                XclImpHelper::CalcY( nTab, nRow1, nRowOff1, HMM_PER_TWIPS, pD ) );
+    Point aUL(  XclTools::CalcX( nTab, nCol1, nColOff1, HMM_PER_TWIPS, pD ),
+                XclTools::CalcY( nTab, nRow1, nRowOff1, HMM_PER_TWIPS, pD ) );
 
-    Point aLR(  XclImpHelper::CalcX( nTab, nCol2, nColOff2, HMM_PER_TWIPS, pD ),
-                XclImpHelper::CalcY( nTab, nRow2, nRowOff2, HMM_PER_TWIPS, pD ) );
+    Point aLR(  XclTools::CalcX( nTab, nCol2, nColOff2, HMM_PER_TWIPS, pD ),
+                XclTools::CalcY( nTab, nRow2, nRowOff2, HMM_PER_TWIPS, pD ) );
 
     SfxItemSet aSet
         ( pD->GetDrawLayer()->GetItemPool(), SDRATTR_START, SDRATTR_END );

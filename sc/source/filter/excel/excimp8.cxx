@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.cxx,v $
  *
- *  $Revision: 1.63 $
+ *  $Revision: 1.64 $
  *
- *  last change: $Author: dr $ $Date: 2001-11-09 09:51:39 $
+ *  last change: $Author: dr $ $Date: 2001-11-28 16:38:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -134,6 +134,9 @@
 
 #ifndef _SC_FILTERTOOLS_HXX
 #include "FilterTools.hxx"
+#endif
+#ifndef _SC_XCLTOOLS_HXX
+#include "XclTools.hxx"
 #endif
 #ifndef _SC_XCLIMPSTREAM_HXX
 #include "XclImpStream.hxx"
@@ -321,7 +324,7 @@ void ExcCondForm::ReadCf( XclImpStream& rIn, ExcelToSc& rConv )
 
                 if( bHasBoldItalic )
                 {
-                    SvxWeightItem   aWeightItem( FontBuffer::GetWeight( nBold ) );
+                    SvxWeightItem   aWeightItem( XclImpFont::GetScFontWeight( nBold ) );
                     rStyleItemSet.Put( aWeightItem );
 
                     SvxPostureItem  aAttr( bItalic? ITALIC_NORMAL : ITALIC_NONE );
@@ -708,30 +711,6 @@ void ImportExcel8::Format( void )
 }
 
 
-void ImportExcel8::Font( void )
-{
-    UINT16  nHeight, nIndexCol, nScript;
-    UINT8   nAttr0;
-    BYTE    nUnderline, nFamily, nCharSet;
-    UINT8   nLen;
-    UINT16  nWeight;
-
-    aIn >> nHeight >> nAttr0;
-    aIn.Ignore( 1 );
-    aIn >> nIndexCol >> nWeight >> nScript >> nUnderline >> nFamily >> nCharSet;
-    aIn.Ignore( 1 );    // Reserved
-
-    aIn >> nLen;
-
-    String aName( aIn.ReadUniString( nLen ) );
-
-    // Font in Pool batschen
-    pExcRoot->pFontBuffer->NewFont(
-        nHeight, nAttr0, nScript, nUnderline, nIndexCol, nWeight,
-        nFamily, nCharSet, aName );
-}
-
-
 void ImportExcel8::Cont( void )
 {
     if( bObjSection )
@@ -751,7 +730,7 @@ void ImportExcel8::Dconref( void )
 
     aIn >> nR1 >> nR2 >> nC1 >> nC2;
 
-    XclImpHelper::DecodeExternsheetUni( aIn, aFileName, aTabName, bSelf );
+    XclImpURLDecoder::DecodeURL( aIn, aFileName, aTabName, bSelf );
 
     if( !aTabName.Len() )
     {
@@ -959,7 +938,7 @@ ScBaseCell* ImportExcel8::CreateCellFromShStrTabEntry( const ShStrTabEntry* p, c
 
                 delete pTextObj;
             }
-            else if( pExcRoot->pXFBuffer->HasSuperOrSubscript( nXF ) )
+            else if( pExcRoot->pXFBuffer->HasEscapement( nXF ) )
             {
                 EditTextObject*     pTObj = CreateFormText( 0, p->GetString(), nXF );
 
@@ -2176,7 +2155,7 @@ void XclImpAutoFilterData::ReadAutoFilter( XclImpStream& rStrm )
                     case EXC_AFTYPE_RK:
                         rStrm >> nRK;
                         rStrm.Ignore( 4 );
-                        CreateFromDouble( *aEntry.pStr, XclImpHelper::GetDoubleFromRK( nRK ) );
+                        CreateFromDouble( *aEntry.pStr, XclTools::GetDoubleFromRK( nRK ) );
                     break;
                     case EXC_AFTYPE_DOUBLE:
                         rStrm >> fVal;

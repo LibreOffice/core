@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excimp8.hxx,v $
  *
- *  $Revision: 1.35 $
+ *  $Revision: 1.36 $
  *
- *  last change: $Author: dr $ $Date: 2001-11-09 09:55:38 $
+ *  last change: $Author: dr $ $Date: 2001-11-28 16:41:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -206,7 +206,6 @@ class ImportExcel8 : public ImportExcel
         void                    Format( void );                 // 0x1E
         void                    Externsheet( void );            // 0x17
         void                    Externname( void );             // 0x23
-        void                    Font( void );                   // 0x31
         void                    Cont( void );                   // 0x3C
         void                    Dconref( void );                // 0x51
         void                    Xct( void );                    // 0x59

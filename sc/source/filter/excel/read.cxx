@@ -2,9 +2,9 @@
  *
  *  $RCSfile: read.cxx,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: dr $ $Date: 2001-11-09 09:51:39 $
+ *  last change: $Author: dr $ $Date: 2001-11-28 16:38:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -280,10 +280,10 @@ FltError ImportExcel::Read( void )
                             eAkt = Z_Ende;
                         }
                         break;
-                    case 0x31:  Font25(); break;        // FONT         [ 2  5]
+                    case 0x31:  pExcRoot->pFontBuffer->ReadFont( aIn, xlBiff2 );break;
                     case 0x41:  Pane(); break;          // PANE         [ 2345]
                     case 0x42:  Codepage(); break;      // CODEPAGE     [ 2345]
-                    case 0x43:  pExcRoot->pXFBuffer->ReadXF2( aIn ); break;
+                    case 0x43:  pExcRoot->pXFBuffer->ReadXF( aIn, xlBiff2 );    break;
                     case 0x44:  Ixfe(); break;          // IXFE         [ 2   ]
                     case 0x0200: Dimensions(); break;   // DIMENSIONS   [ 2345]
                 }
@@ -339,9 +339,9 @@ FltError ImportExcel::Read( void )
                     case 0x0221: Array34(); break;      // ARRAY        [  34 ]
                     case 0x0223: Externname34(); break; // EXTERNNAME   [  34 ]
                     case 0x0225: Defrowheight345();break;//DEFAULTROWHEI[  345]
-                    case 0x0231: Font34(); break;       // FONT         [  34 ]
+                    case 0x0231: pExcRoot->pFontBuffer->ReadFont( aIn, xlBiff3 );break;
                     case 0x023E: Window2_5(); break;    // WINDOW       [    5]
-                    case 0x0243: pExcRoot->pXFBuffer->ReadXF3( aIn ); break;
+                    case 0x0243: pExcRoot->pXFBuffer->ReadXF( aIn, xlBiff3 );   break;
                     case 0x027E: Rk(); break;           // RK           [  34 ]
                 }
             }
@@ -390,12 +390,12 @@ FltError ImportExcel::Read( void )
                     case 0x0221: Array34(); break;      // ARRAY        [  34 ]
                     case 0x0223: Externname34(); break; // EXTERNNAME   [  34 ]
                     case 0x0225: Defrowheight345();break;//DEFAULTROWHEI[  345]
-                    case 0x0231: Font34(); break;       // FONT         [  34 ]
+                    case 0x0231: pExcRoot->pFontBuffer->ReadFont( aIn, xlBiff4 );break;
                     case 0x023E: Window2_5(); break;    // WINDOW       [    5]
                     case 0x027E: Rk(); break;           // RK           [  34 ]
                     case 0x0406: Formula4(); break;     // FORMULA      [   4 ]
                     case 0x041E: Format4(); break;      // FORMAT       [   4 ]
-                    case 0x0443: pExcRoot->pXFBuffer->ReadXF4( aIn ); break;
+                    case 0x0443: pExcRoot->pXFBuffer->ReadXF( aIn, xlBiff4 );   break;
                 }
             }
                 break;
@@ -425,7 +425,7 @@ FltError ImportExcel::Read( void )
                     case 0x0218: Name34(); break;       // NAME         [  34 ]
                     case 0x0223: Externname34(); break; // EXTERNNAME   [  34 ]
                     case 0x0225: Defrowheight345();break;//DEFAULTROWHEI[  345]
-                    case 0x0231: Font34(); break;       // FONT         [  34 ]
+                    case 0x0231: pExcRoot->pFontBuffer->ReadFont( aIn, xlBiff4 );break;
                     case 0x0409:                        // BOF          [   4 ]
                         Bof4();
                         if( pExcRoot->eDateiTyp == Biff4 )
@@ -437,7 +437,7 @@ FltError ImportExcel::Read( void )
                             eAkt = Z_Ende;
                         break;
                     case 0x041E: Format4(); break;      // FORMAT       [   4 ]
-                    case 0x0443: pExcRoot->pXFBuffer->ReadXF4( aIn ); break;
+                    case 0x0443: pExcRoot->pXFBuffer->ReadXF( aIn, xlBiff4 );   break;
                 }
 
             }
@@ -502,7 +502,7 @@ FltError ImportExcel::Read( void )
                         eAkt = Z_Biff4T;
                         break;
                     case 0x0225: Defrowheight345();break;//DEFAULTROWHEI[  345]
-                    case 0x0231: Font34(); break;       // FONT         [  34 ]
+                    case 0x0231: pExcRoot->pFontBuffer->ReadFont( aIn, xlBiff4 );break;
                     case 0x027E:                        // RK           [  34 ]
                         Rk();
                         eAkt = Z_Biff4T;
@@ -511,7 +511,7 @@ FltError ImportExcel::Read( void )
                         Formula4();
                         eAkt = Z_Biff4T;
                     case 0x041E: Format4(); break;      // FORMAT       [   4 ]
-                    case 0x0443: pExcRoot->pXFBuffer->ReadXF4( aIn ); break;
+                    case 0x0443: pExcRoot->pXFBuffer->ReadXF( aIn, xlBiff4 );   break;
                         break;
                 }
 
@@ -609,7 +609,7 @@ FltError ImportExcel::Read( void )
                             eAkt = Z_Ende;
                         }
                         break;
-                    case 0x31:  Font25(); break;        // FONT         [ 2  5]
+                    case 0x31:  pExcRoot->pFontBuffer->ReadFont( aIn, xlBiff5 );break;
                     case 0x42:  Codepage(); break;      // CODEPAGE     [ 2345]
                     case 0x55:  DefColWidth(); break;
                     case 0x56:  Builtinfmtcnt(); break; // BUILTINFMTCNT[  34 ]
@@ -618,13 +618,13 @@ FltError ImportExcel::Read( void )
                     case 0x92:  Palette(); break;       // PALETTE      [  345]
                     case 0x99:  Standardwidth(); break; // STANDARDWIDTH[   45]
                     case 0xDE:  Olesize(); break;
-                    case 0xE0:  pExcRoot->pXFBuffer->ReadXF5( aIn ); break;
+                    case 0xE0:  pExcRoot->pXFBuffer->ReadXF( aIn, xlBiff5 );    break;
                     case 0x0218: Name34(); break;       // NAME         [  34 ]
                     case 0x0225: Defrowheight345();break;//DEFAULTROWHEI[  345]
-                    case 0x0231: Font34(); break;       // FONT         [  34 ]
-                    case 0x0243: pExcRoot->pXFBuffer->ReadXF3( aIn ); break;
+                    case 0x0231: pExcRoot->pFontBuffer->ReadFont( aIn, xlBiff4 );break;
+                    case 0x0243: pExcRoot->pXFBuffer->ReadXF( aIn, xlBiff3 );   break;
                     case 0x041E: Format4(); break;      // FORMAT       [   4 ]
-                    case 0x0443: pExcRoot->pXFBuffer->ReadXF4( aIn ); break;
+                    case 0x0443: pExcRoot->pXFBuffer->ReadXF( aIn, xlBiff4 );   break;
                 }
 
             }
@@ -1146,7 +1146,7 @@ FltError ImportExcel8::Read( void )
                     case 0x22:  Rec1904(); break;       // 1904         [ 2345   ]
                     case 0x23:  Externname(); break;    // EXTERNNAME   [      8 ]
                     case 0x25:  Defrowheight2(); break; // DEFAULTROWHEI[ 2      ]
-                    case 0x31:  Font(); break;          // FONT         [ 2  5   ]
+                    case 0x31:  pExcRoot->pFontBuffer->ReadFont( aIn, xlBiff8 );break;
                     case 0x42:  Codepage(); break;      // CODEPAGE     [ 2345   ]
                     case 0x51:  Dconref(); break;       // DCONREF                ##++##
                     case 0x55:  DefColWidth(); break;
@@ -1160,7 +1160,7 @@ FltError ImportExcel8::Read( void )
                     case 0xD3:  bHasBasic = TRUE; break;
                     case 0xD5:  SXIdStm(); break;       // SXIDSTM                ##++##
                     case 0xDE:  Olesize(); break;
-                    case 0xE0:  pExcRoot->pXFBuffer->ReadXF8( aIn ); break;
+                    case 0xE0:  pExcRoot->pXFBuffer->ReadXF( aIn, xlBiff8 );    break;
                     case 0xE3:  SXVs(); break;          // SXVS                   ##++##
                     case 0xEB:  Msodrawinggroup(); break;
                     case 0xFC:  Sst(); break;           // SST      [      8 ]
@@ -1169,8 +1169,8 @@ FltError ImportExcel8::Read( void )
                     case 0x01BA: Codename( TRUE ); break;
                     case 0x0218: Name(); break;         // NAME         [      8 ]
                     case 0x0225: Defrowheight345();break;//DEFAULTROWHEI[  345   ]
-                    case 0x0231: Font34(); break;       // FONT         [  34    ]
-                    case 0x0293: pExcRoot->pXFBuffer->ReadStyle8( aIn );break;
+                    case 0x0231: pExcRoot->pFontBuffer->ReadFont( aIn, xlBiff4 );break;
+                    case 0x0293: pExcRoot->pXFBuffer->ReadStyle( aIn, xlBiff8 );break;
                     case 0x041E: Format(); break;       // FORMAT       [   4    ]
                 }
 

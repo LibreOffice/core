@@ -2,9 +2,9 @@
  *
  *  $RCSfile: excform.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: dr $ $Date: 2001-11-06 15:06:03 $
+ *  last change: $Author: dr $ $Date: 2001-11-28 16:41:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -63,6 +63,10 @@
 #ifndef _EXCFORM_HXX
 #define _EXCFORM_HXX
 
+#ifndef _XCLTOOLS_HXX
+#include "XclTools.hxx"
+#endif
+
 #ifndef _FORMEL_HXX
 #include "formel.hxx"
 #endif
@@ -102,7 +106,7 @@ public:
     virtual ConvErr     Convert( _ScRangeListTabs&, UINT32 nFormulaLen, const FORMULA_TYPE eFT = FT_CellFormula );
 
     void                GetDummy( const ScTokenArray*& );
-    const ScTokenArray* GetBoolErr( BoolError );
+    const ScTokenArray* GetBoolErr( XclBoolError );
     BOOL                GetShrFmla( const ScTokenArray*&, UINT32 nFormulaLen );
 
     static BOOL         SetCurVal( ScFormulaCell& rCell, double& rCurVal );
