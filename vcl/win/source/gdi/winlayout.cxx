@@ -2,9 +2,9 @@
  *
  *  $RCSfile: winlayout.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hdu $ $Date: 2002-05-28 18:17:41 $
+ *  last change: $Author: hdu $ $Date: 2002-05-29 10:33:58 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,7 +229,11 @@ bool SimpleWinLayout::LayoutText( const ImplLayoutArgs& rArgs )
     {
         bool bVertical = false;
         const xub_Unicode* pStr = rArgs.mpStr + rArgs.mnFirstCharIndex;
-        for( int i = 1; i < mnGlyphCount; ++i )
+        // #99658# also do asian kerning one beyond substring
+        int nLen = mnGlyphCount;
+        if( rArgs.mnFirstCharIndex + nLen < rArgs.mnLength )
+            ++nLen;
+        for( int i = 1; i < nLen; ++i )
         {
             if( (0x3000 == (0xFF00 & pStr[i-1]))
             &&  (0x3000 == (0xFF00 & pStr[i])) )
