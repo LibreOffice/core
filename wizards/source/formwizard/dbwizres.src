@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbwizres.src,v $
  *
- *  $Revision: 1.22 $
+ *  $Revision: 1.23 $
  *
- *  last change: $Author: bc $ $Date: 2002-05-17 15:52:12 $
+ *  last change: $Author: kz $ $Date: 2002-05-22 20:18:07 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,7 +76,7 @@ String RID_DB_COMMON_START + 0
     Text[ portuguese ] = "~Criar";
     Text[ russian ] = "~������";
     Text[ dutch ] = "~Voltooien";
-    Text[ french ] = "~Cr�er";
+    Text[ french ] = "Cr�er";
     Text[ spanish ] = "~Crear";
     Text[ italian ] = "~Crea";
     Text[ danish ] = "~Udf�r";
@@ -94,6 +94,7 @@ String RID_DB_COMMON_START + 0
     Text[ turkish ] = "~Olu�tur";
     Text[ catalan ] = "C~reate";
     Text[ finnish ] = "~Luo";
+    Text[ thai ] = "ส~ร้าง";
 };
 String RID_DB_COMMON_START + 1
 {
@@ -102,14 +103,14 @@ String RID_DB_COMMON_START + 1
     Text[ portuguese ] = "Ca~ncelar";
     Text[ russian ] = "~������";
     Text[ dutch ] = "~Annuleren";
-    Text[ french ] = "~Annuler";
+    Text[ french ] = "Annuler";
     Text[ spanish ] = "~Cancelar";
     Text[ italian ] = "~Annulla";
     Text[ danish ] = "~Annuller";
     Text[ swedish ] = "Av~bryt";
     Text[ polish ] = "~Anuluj";
     Text[ portuguese_brazilian ] = "~Cancel";
-    Text[ japanese ] = "ｷｬﾝｾﾙ(~C)";
+    Text[ japanese ] = "キャンセル(~C)";
     Text[ chinese_simplified ] = "取消(~C)";
     Text[ chinese_traditional ] = "取消(~C)";
     Text[ arabic ] = "~����� �����";
@@ -120,6 +121,7 @@ String RID_DB_COMMON_START + 1
     Text[ turkish ] = "~�ptal";
     Text[ catalan ] = "~Cancel";
     Text[ finnish ] = "~Peruuta";
+    Text[ thai ] = "~ยกเลิก";
 };
 String RID_DB_COMMON_START + 2
 {
@@ -128,7 +130,7 @@ String RID_DB_COMMON_START + 2
     Text[ portuguese ] = "<< ~Anterior";
     Text[ russian ] = "<< ~�����";
     Text[ dutch ] = "<< ~Vorige";
-    Text[ french ] = "<< ~Pr�c�dent";
+    Text[ french ] = "<< Pr�c�dent";
     Text[ spanish ] = "<< ~Regresar";
     Text[ italian ] = "<< ~Indietro";
     Text[ danish ] = "<< ~Tilbage";
@@ -146,6 +148,7 @@ String RID_DB_COMMON_START + 2
     Text[ turkish ] = "<< Ge~ri";
     Text[ catalan ] = "<< ~Back";
     Text[ finnish ] = "<< Edellinen";
+    Text[ thai ] = "<< ~กลับไป";
 };
 String RID_DB_COMMON_START + 3
 {
@@ -154,7 +157,7 @@ String RID_DB_COMMON_START + 3
     Text[ portuguese ] = "Con~tinuar >>";
     Text[ russian ] = "~����� >>";
     Text[ dutch ] = "~Volgende >>";
-    Text[ french ] = "~Suivant >>";
+    Text[ french ] = "Suivant >>";
     Text[ spanish ] = "~Siguiente >>";
     Text[ italian ] = "~Avanti >>";
     Text[ danish ] = "~N�ste >>";
@@ -162,16 +165,17 @@ String RID_DB_COMMON_START + 3
     Text[ polish ] = "~Dalej >>";
     Text[ portuguese_brazilian ] = "~Next >>";
     Text[ japanese ] = "次へ(~N) >>";
-    Text[ chinese_simplified ] = "继续   (~N) >>";
-    Text[ chinese_traditional ] = "繼續   (~N) >>";
+    Text[ chinese_simplified ] = "继续(~N) >>";
+    Text[ chinese_traditional ] = "繼續(~N) >>";
     Text[ arabic ] = "~������ >>";
     Text[ dutch ] = "~Volgende >>";
-    Text[ chinese_simplified ] = "继续   (~N) >>";
+    Text[ chinese_simplified ] = "继续(~N) >>";
     Text[ greek ] = "�������� >>";
-    Text[ korean ] = "다음  (~N) >>";
+    Text[ korean ] = "다음(~N) >>";
     Text[ turkish ] = "~�leri >>";
     Text[ catalan ] = "~Next >>";
     Text[ finnish ] = "~Seuraava >>";
+    Text[ thai ] = "~ถัดไป >>";
 };
 String RID_DB_COMMON_START + 4
 {
@@ -187,7 +191,7 @@ String RID_DB_COMMON_START + 4
     Text[ swedish ] = "~Databas";
     Text[ polish ] = "~Baza danych";
     Text[ portuguese_brazilian ] = "~Database";
-    Text[ japanese ] = "ﾃﾞｰﾀﾍﾞｰｽ(~D)";
+    Text[ japanese ] = "データベース(~D)";
     Text[ chinese_simplified ] = "数据库(~D)";
     Text[ chinese_traditional ] = "資料庫(~D)";
     Text[ arabic ] = "~����� ��������";
@@ -198,6 +202,7 @@ String RID_DB_COMMON_START + 4
     Text[ turkish ] = "~Veritaban�";
     Text[ catalan ] = "~Database";
     Text[ finnish ] = "~Tietokanta";
+    Text[ thai ] = "~ฐานข้อมูล";
 };
 String RID_DB_COMMON_START + 5
 {
@@ -213,7 +218,7 @@ String RID_DB_COMMON_START + 5
     Text[ swedish ] = "~Tabellnamn";
     Text[ polish ] = "~Nazwa tabeli";
     Text[ portuguese_brazilian ] = "~Table name";
-    Text[ japanese ] = "ﾃｰﾌﾞﾙ名(~T)";
+    Text[ japanese ] = "テーブル名(~T)";
     Text[ chinese_simplified ] = "表格名称(~T)";
     Text[ chinese_traditional ] = "表格名稱(~T)";
     Text[ arabic ] = "~��� ������";
@@ -225,6 +230,7 @@ String RID_DB_COMMON_START + 5
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "~Table name";
     Text[ finnish ] = "T~aulukon nimi";
+    Text[ thai ] = "ชื่อ~ตาราง";
 };
 String RID_DB_COMMON_START + 6
 {
@@ -240,7 +246,7 @@ String RID_DB_COMMON_START + 6
     Text[ swedish ] = "Ett fel uppstod n�r AutoPiloten k�rdes. AutoPiloten kommer att avslutas.";
     Text[ polish ] = "Podczas uruchamiania AutoPilota wyst�pi� b��d. AutoPilot zostanie anulowany.";
     Text[ portuguese_brazilian ] = "An error has occurred. The Autopliot will be closed.";
-    Text[ japanese ] = "ｵｰﾄﾊﾟｲﾛｯﾄの実行中にｴﾗｰが発生しました。ｵｰﾄﾊﾟｲﾛｯﾄを終了します。";
+    Text[ japanese ] = "オートパイロットの実行中にエラーが発生しました。オートパイロットを終了します。";
     Text[ chinese_simplified ] = "执行自动文件助理时出现一个错误。现在结束自动文件助理。";
     Text[ chinese_traditional ] = "在執行自動檔案助理時發生一個錯誤。現在關閉自動檔案助理程式。";
     Text[ arabic ] = "��� ��� ����� ����� ������ �����. ��� ��� ����� ������ �����.";
@@ -251,6 +257,7 @@ String RID_DB_COMMON_START + 6
     Text[ turkish ] = "OtoPilot �al��t�r�l�rken bir hata olu�tu. Otopilot kapat�lacak.";
     Text[ catalan ] = "An error occurred while running the AutoPilot. The AutoPilot will be terminated.";
     Text[ finnish ] = "Automaattisen ohjauksen suorituksessa on ilmenny virhe. Automaattinen ohjaus lopetetaan.";
+    Text[ thai ] = "เกิดข้อผิดพลาดขณะใช้งานการนำร่องอัตโนมัติ  การนำร่องอัตโนมัติจะยุติ";
 };
 String RID_DB_COMMON_START + 7
 {
@@ -266,7 +273,7 @@ String RID_DB_COMMON_START + 7
     Text[ swedish ] = "Inga formul�r f�r vara �ppna n�r AutoPiloten k�rs. St�ng formul�ret.";
     Text[ polish ] = "Podczas uruchamiania AutoPilot�w wszystkie formularze musz� by� zamkni�te. Zamknij i ten formularz.";
     Text[ portuguese_brazilian ] = "W?hrend der Ausf?rung des Autopiloten darf kein Formular ge?fnet sein. Bitte schlie?en Sie das Formular.";
-    Text[ japanese ] = "ｵｰﾄﾊﾟｲﾛｯﾄの実行中に、ﾌｫｰﾑが開いてはいけません。ﾌｫｰﾑを閉じてください。";
+    Text[ japanese ] = "オートパイロットの実行中に、フォームが開いてはいけません。フォームを閉じてください。";
     Text[ chinese_simplified ] = "在执行自动文件助理时不可以有使用中的表单。请您关闭已经打开的表单。";
     Text[ chinese_traditional ] = "在使用自動助理程式時不能有開啟的表單。請您關閉開啟的表單。";
     Text[ arabic ] = "�� ��� �� ���� ���� ��� �������� ������ ����� ����� ������ �����. ������ ����� ���������.";
@@ -277,6 +284,7 @@ String RID_DB_COMMON_START + 7
     Text[ turkish ] = "OtoPilot �al���rken a��k form bulunmamal�d�r. L�tfen formu kapat�n.";
     Text[ catalan ] = "A form cannot be open while running the AutoPilots. Please close the form.";
     Text[ finnish ] = "Lomake ei voi olla avoin automaattista ohjausta suoritettaessa. Sulje lomake.";
+    Text[ thai ] = "ไม่สามารถเปิดแบบฟอร์มขณะกำลังใช้งานการนำร่องอัตโนมัติ  กรุณาปิดแบบฟอร์ม";
 };
 String RID_DB_COMMON_START + 8
 {
@@ -292,7 +300,7 @@ String RID_DB_COMMON_START + 8
     Text[ swedish ] = "Ingen databas �r installerad. Du beh�ver minst en databas f�r att kunna starta AutoPiloten f�r formul�r.";
     Text[ polish ] = "Nie zainstalowano �adnej bazy danych. Do uruchomienia AutoPilota forrmularzy wymagana jest co najmniej jedna baza danych.";
     Text[ portuguese_brazilian ] = "Es ist keine Datenbank installiert. Sie ben?igen mindestens eine Datenbank um den AutoPiloten f? Formulare starten zu k?nen.";
-    Text[ japanese ] = "ﾃﾞｰﾀﾍﾞｰｽがｲﾝｽﾄｰﾙされていません。ｵｰﾄﾊﾟｲﾛｯﾄ ﾌｫｰﾑを開始するには、ﾃﾞｰﾀﾍﾞｰｽが最低１つは必要です。";
+    Text[ japanese ] = "データベースがインストールされていません。オートパイロット フォームを開始するには、データベースが最低１つは必要です。";
     Text[ chinese_simplified ] = "没有安装数据库。您至少需要一个数据库来启动自动文件助理程序，制作表单。";
     Text[ chinese_traditional ] = "沒有安裝任何的資料庫。啟動自動表單助理程式至少您需要建立了一個資料庫。";
     Text[ arabic ] = "��� ���� ��� ����� ������ �����. ��� ����� ��� ����� ������ ����� ��� ����� ��� ����� �� ��� ������ ����� ����������.";
@@ -303,6 +311,7 @@ String RID_DB_COMMON_START + 8
     Text[ turkish ] = "Kurulmu� veritaban� yok. Form OtoPilot'unu ba�latabilmek i�in en az bir veritaban� mevcut olmal�d�r.";
     Text[ catalan ] = "A database has not been installed. At least one database is required before the AutoPilot for forms can be started.";
     Text[ finnish ] = "Tietokantoja ei ole asennettu. Lomakkeiden automaattisen ohjauksen k�ytt�minen edellytt��, ett� j�rjestelm��n on asennettu v�hint��n yksi tietokanta.";
+    Text[ thai ] = "ไม่ได้ติดตั้งฐานข้อมูล ต้องการอย่างน้อยที่สุดหนึ่งฐานข้อมูลก่อนเริ่มต้นการนำร่องแบบฟอร์มอัตโนมัติ";
 };
 String RID_DB_COMMON_START + 9
 {
@@ -318,7 +327,7 @@ String RID_DB_COMMON_START + 9
     Text[ swedish ] = "Databasen inneh�ller ingen tabell.";
     Text[ polish ] = "Baza danych nie zawiera tabel.";
     Text[ portuguese_brazilian ] = "The database does not have any table.";
-    Text[ japanese ] = "ﾃﾞｰﾀﾍﾞｰｽにはﾃｰﾌﾞﾙが含まれていません。";
+    Text[ japanese ] = "データベースにはテーブルが含まれていません。";
     Text[ chinese_simplified ] = "数据库没有任何表格。";
     Text[ chinese_traditional ] = "資料庫之中沒有任何表格。";
     Text[ arabic ] = "�� ����� ����� �������� ��� �� ����.";
@@ -330,6 +339,7 @@ String RID_DB_COMMON_START + 9
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "The database does not contain any tables.";
     Text[ finnish ] = "Tietokannassa ei ole taulukoita.";
+    Text[ thai ] = "ฐานข้อมูลไม่มีตารางใด ๆเลย";
 };
 String RID_DB_COMMON_START + 10
 {
@@ -345,7 +355,7 @@ String RID_DB_COMMON_START + 10
     Text[ swedish ] = "Namnet finns redan i databasen. V�lj ett annat namn.";
     Text[ polish ] = "Ten tytu� znajduje si� ju� w bazie danych. Prosz� wybra� inny tytu�.";
     Text[ portuguese_brazilian ] = "There already exists table with that name in the database. Plaese enter another name.";
-    Text[ japanese ] = "このﾀｲﾄﾙはすでにﾃﾞｰﾀﾍﾞｰｽにあります。別のﾀｲﾄﾙにしてください。";
+    Text[ japanese ] = "このタイトルはすでにデータベースにあります。別のタイトルにしてください。";
     Text[ chinese_simplified ] = "数据库中已经存在此标题。请您选择另一个标题。";
     Text[ chinese_traditional ] = "資料庫內已經有這個標題。請您輸入另外一個名稱。";
     Text[ arabic ] = "��� ������� ����� ������ �� ����� ��������. ������ ������ ��� ���.";
@@ -357,6 +367,7 @@ String RID_DB_COMMON_START + 10
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "This title already exists in the database. Please enter another name.";
     Text[ finnish ] = "Otsikko on jo tietokannassa. Anna toinen nimi.";
+    Text[ thai ] = "ชื่อเรื่องนี้มีอยู่ในฐานข้อมูลแล้ว กรุณาใส่ชื่ออื่น";
 };
 String RID_DB_COMMON_START + 11
 {
@@ -372,17 +383,18 @@ String RID_DB_COMMON_START + 11
     Text[ swedish ] = "Namnet f�r inte inneh�lla n�gra blanksteg eller specialtecken.";
     Text[ polish ] = "Nazwa nie mo�e zawiera� spacji ani znak�w specjalnych.";
     Text[ portuguese_brazilian ] = "The title must not contain any spaces or escape characters.";
-    Text[ japanese ] = "ﾀｲﾄﾙに空白、または記号と特殊文字が含まれていてはいけません。";
+    Text[ japanese ] = "タイトルに空白、または記号と特殊文字が含まれていてはいけません。";
     Text[ chinese_simplified ] = "标题不得含有空白字符或特殊字符。";
     Text[ chinese_traditional ] = "標題不得含有空格字元及特殊字元。";
     Text[ arabic ] = "�� ��� �� ����� ������� ��� ���� ����� �� ���� ����.";
     Text[ dutch ] = "De naam mag geen spaties of speciale tekens bevatten.";
     Text[ chinese_simplified ] = "标题不得含有空白字符或特殊字符。";
     Text[ greek ] = "� ������ ��� ����������� �� �������� ���� � �������� ����������.";
-    Text[ korean ] = "제목에 공백이나 특수기호가 들어가서는 안됩니다.";
+    Text[ korean ] = "제목에 공백이나 특수문자가 들어가서는 안됩니다.";
     Text[ turkish ] = "Ba�l�kta bo�luk ya da �zel karakterler bulunmamal�d�r.";
     Text[ catalan ] = "The title must not contain any spaces or special characters.";
     Text[ finnish ] = "Otsikossa ei saa olla v�lily�ntej� tai erikoismerkkej�.";
+    Text[ thai ] = "ชื่อเรื่องต้องไม่มีระยะห่างหรือตัวอักขระพิเศษใด ๆ";
 };
 
 String RID_DB_COMMON_START + 12
@@ -399,7 +411,7 @@ String RID_DB_COMMON_START + 12
     Text[ swedish ] = "Det gick inte att instantiera databasservicen (com.sun.data.DatabaseEngine).";
     Text[ polish ] = "Nie mo�na by�o udost�pni� serwisu bazy danych (com.sun.star.data.DatabaseEngine).";
     Text[ portuguese_brazilian ] = "The database service (stardiv.one.data.DatabaseEngine) could not be loaded.";
-    Text[ japanese ] = "ﾃﾞｰﾀﾍﾞｰｽのｻｰﾋﾞｽ (com.sun.star.data.DatabaseEngine)はｲﾝｽﾄｰﾙできませんでした。";
+    Text[ japanese ] = "データベースのサービス (com.sun.star.data.DatabaseEngine)はインストールできませんでした。";
     Text[ chinese_simplified ] = "无法实现数据库服务功能(com.sun.star.data.DatabaseEngine)。";
     Text[ chinese_traditional ] = "無法實現資料庫服務(stardiv.one.data.DatabaseEngine)。";
     Text[ arabic ] = "���� ����� ���� ����� �������� (com.sun.star.data.DatabaseEngine).";
@@ -411,6 +423,7 @@ String RID_DB_COMMON_START + 12
     Text[ turkish ] = "Veritaban� hizmeti (com.sun.star.data.DatabaseEngine) olu�turulamad�.";
     Text[ catalan ] = "The database service (com.sun.data.DatabaseEngine) could not be instantiated.";
     Text[ finnish ] = "Tietokantapalvelun (com.sun.data.DatabaseEngine) k�ytt� ei onnistunut.";
+    Text[ thai ] = "ไม่สามารถแสดงตัวอย่างให้เห็นการบริการฐานข้อมูล(com.sun.data.DatabaseEngine) ";
 };
 
 String RID_DB_COMMON_START + 13
@@ -429,7 +442,7 @@ String RID_DB_COMMON_START + 13
     Text[ danish ] = "Det var ikke muligt at �bne den valgte tabel eller foresp�rgsel.";
     Text[ polish ] = "Nie mo�na otworzy� ��danej tabeli lub kwerendy.";
     Text[ portuguese_brazilian ] = "The selected table or query could not be opened.";
-    Text[ japanese ] = "選択したﾃ-ﾌﾞﾙ、またはｸｴﾘｰは開けませんでした。";
+    Text[ japanese ] = "選択したテ-ブル、またはクエリーは開けませんでした。";
     Text[ korean ] = "선택된 표 또는 질의를 열지 못했습니다.";
     Text[ chinese_simplified ] = "无法打开选中的表格和查询。";
     Text[ chinese_traditional ] = "無法開啟已經選中的表格或查詢。";
@@ -438,6 +451,7 @@ String RID_DB_COMMON_START + 13
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "The selected table or query could not be opened.";
     Text[ finnish ] = "Valittua taulukkoa tai kysely� ei voitu avata.";
+    Text[ thai ] = "ไม่สามารถเปิดตารางหรือแบบสอบถามที่เลือกได้";
 };
 
 String RID_DB_COMMON_START + 14
@@ -457,13 +471,14 @@ String RID_DB_COMMON_START + 14
     Text[ swedish ] = "Det gick inte att uppr�tta en f�rbindelse till databasen!";
     Text[ polish ] = "Brak po��czenia z baz� danych!";
     Text[ portuguese_brazilian ] = "A Connection to the database could not be established";
-    Text[ japanese ] = "ﾃﾞｰﾀﾍﾞｰｽへの接続はできませんでした。";
+    Text[ japanese ] = "データベースへの接続はできませんでした。";
     Text[ korean ] = "데이터베이스로의 연결이 설정되지 못했습니다.";
     Text[ chinese_simplified ] = "无法和数据库建立连接！";
     Text[ chinese_traditional ] = "無法連線到資料庫！";
     Text[ turkish ] = "A Connection to the database could not be established";
     Text[ arabic ] = "A Connection to the database could not be established";
     Text[ catalan ] = "A Connection to the database could not be established";
+    Text[ thai ] = "ไม่สามารถสร้างการเชื่อมต่อกับฐานข้อมูลได้";
 };
 
 String RID_DB_COMMON_START + 20
@@ -483,13 +498,14 @@ String RID_DB_COMMON_START + 20
     Text[ swedish ] = "~Hj�lp";
     Text[ polish ] = "Po~moc";
     Text[ portuguese_brazilian ] = "~Help";
-    Text[ japanese ] = "ﾍﾙﾌﾟ(~H)";
+    Text[ japanese ] = "ヘルプ(~H)";
     Text[ korean ] = "도움말(~H)";
     Text[ chinese_simplified ] = "帮助(~H)";
     Text[ chinese_traditional ] = "說明(~H)";
     Text[ turkish ] = "~Help";
     Text[ arabic ] = "~Help";
     Text[ catalan ] = "~Help";
+    Text[ thai ] = "~ช่วยเหลือ";
 };
 
 // ============================================================================
@@ -508,7 +524,7 @@ String RID_DB_GROUP_WIZARD_START + 0
     Text[ swedish ] = "AutoPilot f�r gruppelement";
     Text[ polish ] = "AutoPilot: Element grupy";
     Text[ portuguese_brazilian ] = "AutoPilot Gruppenelement";
-    Text[ japanese ] = "ｵｰﾄﾊﾟｲﾛｯﾄ ｸﾞﾙｰﾌﾟ要素";
+    Text[ japanese ] = "オートパイロット グループ要素";
     Text[ chinese_simplified ] = "自动文件助理 小组单元";
     Text[ chinese_traditional ] = "自動檔案助理 群組單元";
     Text[ arabic ] = "���� ������ ������ �����";
@@ -520,6 +536,7 @@ String RID_DB_GROUP_WIZARD_START + 0
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "AutoPilot Group Element";
     Text[ finnish ] = "Automaattinen ryhm�elementtien ohjaus";
+    Text[ thai ] = "นำร่ององค์ประกอบของกลุ่มอัตโนมัติ ";
 };
 
 String RID_DB_GROUP_WIZARD_START + 1
@@ -536,7 +553,7 @@ String RID_DB_GROUP_WIZARD_START + 1
     Text[ swedish ] = "Databasen inneh�ller ingen tabell.";
     Text[ polish ] = "Baza danych nie zawiera tabel.";
     Text[ portuguese_brazilian ] = "Die Datenbank enth?lt keine Tabelle.";
-    Text[ japanese ] = "ﾃﾞｰﾀﾍﾞｰｽにはﾃｰﾌﾞﾙが含まれていません。";
+    Text[ japanese ] = "データベースにはテーブルが含まれていません。";
     Text[ chinese_simplified ] = "数据库中没有任何表格。";
     Text[ chinese_traditional ] = "資料庫之中沒有任何表格。";
     Text[ arabic ] = "�� ����� ����� �������� ��� �� ����.";
@@ -547,6 +564,7 @@ String RID_DB_GROUP_WIZARD_START + 1
     Text[ turkish ] = "Veritaban� tablo i�ermiyor.";
     Text[ catalan ] = "The database does not contain any tables.";
     Text[ finnish ] = "Tietokannassa ei ole taulukoita.";
+    Text[ thai ] = "ฐานข้อมูลไม่มีตารางใด ๆเลย";
 };
 
 String RID_DB_GROUP_WIZARD_START + 2
@@ -563,7 +581,7 @@ String RID_DB_GROUP_WIZARD_START + 2
     Text[ swedish ] = "Skapa grupp";
     Text[ polish ] = "Utw�rz grup�";
     Text[ portuguese_brazilian ] = "Gruppe erzeugen";
-    Text[ japanese ] = "ｸﾞﾙｰﾌﾟの作成";
+    Text[ japanese ] = "グループの作成";
     Text[ chinese_simplified ] = "生成小组";
     Text[ chinese_traditional ] = "製作群組";
     Text[ arabic ] = "����� ������";
@@ -574,6 +592,7 @@ String RID_DB_GROUP_WIZARD_START + 2
     Text[ turkish ] = "Grup olu�tur";
     Text[ catalan ] = "Create Group";
     Text[ finnish ] = "Luo ryhm�";
+    Text[ thai ] = "สร้างกลุ่ม";
 };
 
 String RID_DB_GROUP_WIZARD_START + 3
@@ -591,7 +610,7 @@ String RID_DB_GROUP_WIZARD_START + 3
     Text[ swedish ] = ": tabellurval";
     Text[ polish ] = ": Wyb�r tabel";
     Text[ portuguese_brazilian ] = ": Tabellenauswahl";
-    Text[ japanese ] = ": ﾃｰﾌﾞﾙの選択";
+    Text[ japanese ] = ": テーブルの選択";
     Text[ chinese_simplified ] = "：选择表格";
     Text[ chinese_traditional ] = "：選擇表格";
     Text[ arabic ] = ": ����� ������";
@@ -602,6 +621,7 @@ String RID_DB_GROUP_WIZARD_START + 3
     Text[ turkish ] = ": Tablo se�imi";
     Text[ catalan ] = ": Table Selection";
     Text[ finnish ] = ": Taulukon valinta";
+    Text[ thai ] = ": การเลือกตาราง";
 };
 
 String RID_DB_GROUP_WIZARD_START + 4
@@ -618,7 +638,7 @@ String RID_DB_GROUP_WIZARD_START + 4
     Text[ swedish ] = ": f�lturval";
     Text[ polish ] = ": Wyb�r pola";
     Text[ portuguese_brazilian ] = ": Feldauswahl";
-    Text[ japanese ] = ": ﾌｨｰﾙﾄﾞの選択";
+    Text[ japanese ] = ": フィールドの選択";
     Text[ chinese_simplified ] = "：选择字段";
     Text[ chinese_traditional ] = "：選擇欄位";
     Text[ arabic ] = ": ����� �����";
@@ -630,6 +650,7 @@ String RID_DB_GROUP_WIZARD_START + 4
     Text[ language_user1 ] = " ";
     Text[ catalan ] = ": Field Selection";
     Text[ finnish ] = ": Kent�n valinta";
+    Text[ thai ] = ": การเลือกเขตข้อมูล";
 };
 
 String RID_DB_GROUP_WIZARD_START + 5
@@ -646,7 +667,7 @@ String RID_DB_GROUP_WIZARD_START + 5
     Text[ swedish ] = ": standardf�lturval";
     Text[ polish ] = ": Wyb�r pola domy�lnego";
     Text[ portuguese_brazilian ] = ": Standardfeldauswahl";
-    Text[ japanese ] = ": 標準ﾌｨｰﾙﾄﾞの選択";
+    Text[ japanese ] = ": 標準フィールドの選択";
     Text[ chinese_simplified ] = "：选择标准字段";
     Text[ chinese_traditional ] = "：選擇標準欄位";
     Text[ arabic ] = ": ����� ��� �����";
@@ -658,6 +679,7 @@ String RID_DB_GROUP_WIZARD_START + 5
     Text[ language_user1 ] = " ";
     Text[ catalan ] = ": Default Field Selection";
     Text[ finnish ] = ": Kent�n oletusvalinta";
+    Text[ thai ] = ": การเลือกค่าเริ่มต้นของเขตข้อมูล";
 };
 
 String RID_DB_GROUP_WIZARD_START + 6
@@ -674,7 +696,7 @@ String RID_DB_GROUP_WIZARD_START + 6
     Text[ swedish ] = ": f�ltv�rden";
     Text[ polish ] = ": Warto�ci pola";
     Text[ portuguese_brazilian ] = ": Feldwerte";
-    Text[ japanese ] = ": ﾌｨｰﾙﾄﾞ値";
+    Text[ japanese ] = ": フィールド値";
     Text[ chinese_simplified ] = "：字段数值";
     Text[ chinese_traditional ] = "：欄位數值";
     Text[ arabic ] = ": ��� �����";
@@ -686,6 +708,7 @@ String RID_DB_GROUP_WIZARD_START + 6
     Text[ language_user1 ] = " ";
     Text[ catalan ] = ": Field Value";
     Text[ finnish ] = ": Kent�n arvo";
+    Text[ thai ] = ": ค่าของเขตข้อมูล";
 };
 
 String RID_DB_GROUP_WIZARD_START + 7
@@ -702,7 +725,7 @@ String RID_DB_GROUP_WIZARD_START + 7
     Text[ swedish ] = ": databasf�lt";
     Text[ polish ] = ": Pole bazy danych";
     Text[ portuguese_brazilian ] = ": Datenbankfeld";
-    Text[ japanese ] = ": ﾃﾞｰﾀﾍﾞｰｽﾌｨｰﾙﾄﾞ";
+    Text[ japanese ] = ": データベースフィールド";
     Text[ chinese_simplified ] = "：数据库字段";
     Text[ chinese_traditional ] = "：資料庫欄位";
     Text[ arabic ] = ": ��� ����� ��������";
@@ -714,6 +737,7 @@ String RID_DB_GROUP_WIZARD_START + 7
     Text[ language_user1 ] = " ";
     Text[ catalan ] = ": Database Field";
     Text[ finnish ] = ": Tietokannan kentt�";
+    Text[ thai ] = ": เขตข้อมูลของฐานข้อมูล";
 };
 
 String RID_DB_GROUP_WIZARD_START + 8
@@ -730,7 +754,7 @@ String RID_DB_GROUP_WIZARD_START + 8
     Text[ swedish ] = ": skapa alternativgrupp";
     Text[ polish ] = ": Utw�rz grup� opcji";
     Text[ portuguese_brazilian ] = ": Optionsgruppe erstellen";
-    Text[ japanese ] = ": ｵﾌﾟｼｮﾝｸﾞﾙｰﾌﾟの作成";
+    Text[ japanese ] = ": オプショングループの作成";
     Text[ chinese_simplified ] = "：制作选项小组";
     Text[ chinese_traditional ] = "：建立選項群組";
     Text[ arabic ] = ": ����� ������ ������";
@@ -741,6 +765,7 @@ String RID_DB_GROUP_WIZARD_START + 8
     Text[ turkish ] = ": Se�enek grubu olu�tur";
     Text[ catalan ] = ": Create Option Group";
     Text[ finnish ] = ": Luo valintaryhm�";
+    Text[ thai ] = ": สร้างกลุ่มตัวเลือก";
 };
 
 String RID_DB_GROUP_WIZARD_START + 9
@@ -757,7 +782,7 @@ String RID_DB_GROUP_WIZARD_START + 9
     Text[ swedish ] = "Ange alla alternativf�lt i den h�r dialogen.";
     Text[ polish ] = "Wprowad� w danym oknie dialogowym wszystkie pola opcji.";
     Text[ portuguese_brazilian ] = "Geben Sie in diesem Dialog bitte alle Optionsfelder ein.";
-    Text[ japanese ] = "このﾀﾞｲｱﾛｸﾞではすべてのｵﾌﾟｼｮﾝﾌｨｰﾙﾄﾞに入力します。";
+    Text[ japanese ] = "このダイアログではすべてのオプションフィールドに入力します。";
     Text[ chinese_simplified ] = "请在这个对话框内填入全部的选项字段。";
     Text[ chinese_traditional ] = "請在這個對話方塊內設定全部的選項欄位。";
     Text[ arabic ] = "������ ����� ���� ����� ������ �� ���� ������ ���.";
@@ -768,6 +793,7 @@ String RID_DB_GROUP_WIZARD_START + 9
     Text[ turkish ] = "Bu pencerede t�m se�enek alanlar�n� giriniz.";
     Text[ catalan ] = "Enter all Option Fields into this dialog.";
     Text[ finnish ] = "Sy�t� kaikki valintaikkunan valintakent�t.";
+    Text[ thai ] = "ใส่เขตข้อมูลตัวเลือกทั้งหมดในไดอะล็อกนี้";
 };
 
 String RID_DB_GROUP_WIZARD_START + 10
@@ -784,7 +810,7 @@ String RID_DB_GROUP_WIZARD_START + 10
     Text[ swedish ] = "Vilka beteckningar skall alternativf�lten f�?";
     Text[ polish ] = "Jakie nazwy maj� otrzyma� pola opcji?";
     Text[ portuguese_brazilian ] = "Welche Bezeichnungen sollen die Optionsfelder erhalten ?";
-    Text[ japanese ] = "ｵﾌﾟｼｮﾝﾌｨｰﾙﾄﾞにどの名前をつけますか。";
+    Text[ japanese ] = "オプションフィールドにどの名前をつけますか。";
     Text[ chinese_simplified ] = "选项字段的名称？";
     Text[ chinese_traditional ] = "選項欄位的名稱？";
     Text[ arabic ] = "��� ���� ����� ����� �����ѿ";
@@ -795,6 +821,7 @@ String RID_DB_GROUP_WIZARD_START + 10
     Text[ turkish ] = "Se�enek alanlar�na hangi adlar� vermek istiyorsunuz?";
     Text[ catalan ] = "Which names do you want to give the Option Fields?";
     Text[ finnish ] = "Miten haluat nimet� valintakent�t?";
+    Text[ thai ] = "ชื่อไหนที่คุณต้องการให้เป็นเขตข้อมูลทางเลือก?";
 };
 
 String RID_DB_GROUP_WIZARD_START + 11
@@ -811,7 +838,7 @@ String RID_DB_GROUP_WIZARD_START + 11
     Text[ swedish ] = "~Alternativf�lt";
     Text[ polish ] = "~Pola opcji";
     Text[ portuguese_brazilian ] = "~Optionsfelder";
-    Text[ japanese ] = "ｵﾌﾟｼｮﾝﾌｨｰﾙﾄﾞ(~O)";
+    Text[ japanese ] = "オプションフィールド(~O)";
     Text[ chinese_simplified ] = "选项字段(~O)";
     Text[ chinese_traditional ] = "選項欄位(~O)";
     Text[ arabic ] = "~����� ����";
@@ -822,6 +849,7 @@ String RID_DB_GROUP_WIZARD_START + 11
     Text[ turkish ] = "~Se�enek alanlar�";
     Text[ catalan ] = "~Option Fields";
     Text[ finnish ] = "~Valintakent�t";
+    Text[ thai ] = "เขตข้อมูล~ทางเลือก";
 };
 
 String RID_DB_GROUP_WIZARD_START + 12
@@ -838,7 +866,7 @@ String RID_DB_GROUP_WIZARD_START + 12
     Text[ swedish ] = "Skall ett alternativf�lt vara utvalt som standard?";
     Text[ polish ] = "Czy wybra� domy�lne pole opcji ?";
     Text[ portuguese_brazilian ] = "Soll ein Optionsfeld standardm??ig ausgew?hlt sein ?";
-    Text[ japanese ] = "標準でｵﾌﾟｼｮﾝﾌｨｰﾙﾄﾞ１つは選択しますか。";
+    Text[ japanese ] = "標準でオプションフィールド１つは選択しますか。";
     Text[ chinese_simplified ] = "要选择一个默认的选项字段？";
     Text[ chinese_traditional ] = "要選擇一個標準的選項欄位？";
     Text[ arabic ] = "�� ���� ������ ��� ����� �������� ��������";
@@ -849,6 +877,7 @@ String RID_DB_GROUP_WIZARD_START + 12
     Text[ turkish ] = "Bir se�enek alan� standart olarak se�ili olsun mu?";
     Text[ catalan ] = "Should one option field be selected as a default?";
     Text[ finnish ] = "Valitaanko yksi valintakentt� oletusarvoksi?";
+    Text[ thai ] = "จะเลือกเขตข้อมูลทางเลือกหนึ่งเป็นค่าเริ่มต้นหรือไม่?";
 };
 
 String RID_DB_GROUP_WIZARD_START + 13
@@ -877,6 +906,7 @@ String RID_DB_GROUP_WIZARD_START + 13
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Yes, the following:";
     Text[ finnish ] = "Kyll�, seuraavat:";
+    Text[ thai ] = "ใช่  ต่อไปนี้:";
 };
 
 String RID_DB_GROUP_WIZARD_START + 14
@@ -893,7 +923,7 @@ String RID_DB_GROUP_WIZARD_START + 14
     Text[ swedish ] = "Nej, inget f�lt skall vara utvalt.";
     Text[ polish ] = "Nie, nie wybieraj �adnego pola.";
     Text[ portuguese_brazilian ] = "Nein, kein Feld soll ausgew?hlt sein.";
-    Text[ japanese ] = "いいえ、ﾌｨｰﾙﾄﾞの選択なし。";
+    Text[ japanese ] = "いいえ、フィールドの選択なし。";
     Text[ chinese_simplified ] = "否，不要选择任字段。";
     Text[ chinese_traditional ] = "否，不要選擇任何欄位。";
     Text[ arabic ] = "��ǡ �� ���� ������ �� ���.";
@@ -904,6 +934,7 @@ String RID_DB_GROUP_WIZARD_START + 14
     Text[ turkish ] = "Hay�r, hi�bir alan se�ili olmamal�d�r.";
     Text[ catalan ] = "No, one particular field is not going to be selected.";
     Text[ finnish ] = "Ei, valittavia kentti� ei ole.";
+    Text[ thai ] = "ไม่ใช่  ไม่มีเขตข้อมูลที่จะเลือก";
 };
 
 String RID_DB_GROUP_WIZARD_START + 15
@@ -920,7 +951,7 @@ String RID_DB_GROUP_WIZARD_START + 15
     Text[ swedish ] = "Om du v�ljer ett alternativ tilldelas alternativgruppen ett visst v�rde.";
     Text[ polish ] = "Po wybraniu opcji grupie opcji zostanie przypisana okre�lona warto��.";
     Text[ portuguese_brazilian ] = "Wenn Sie eine Option ausw?hlen, wird der Optionsgruppe ein bestimmter Wert zugewiesen.";
-    Text[ japanese ] = "ｵﾌﾟｼｮﾝを１つ選択すると、ｵﾌﾟｼｮﾝｸﾞﾙｰﾌﾟに明瞭値が割り当てられます。";
+    Text[ japanese ] = "オプションを１つ選択すると、オプショングループに明瞭値が割り当てられます。";
     Text[ chinese_simplified ] = "如果选中了一个选项，这个选项小组就会获得一个数值。";
     Text[ chinese_traditional ] = "如果您選擇了一個選項，選項群組就會得到一個數值。";
     Text[ arabic ] = "��� ������� ���� �������ʡ ��� ��� ����� ���� ����� ������� ��������.";
@@ -932,6 +963,7 @@ String RID_DB_GROUP_WIZARD_START + 15
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "When you select an option, the option group is given a specific value.";
     Text[ finnish ] = "Kun valitset valinnan, valintaryhm�lle m��ritet��n tietty arvo.";
+    Text[ thai ] = "เมื่อคุณเลือกทางเลือกหนึ่ง กลุ่มของทางเลือกจะให้ค่าเฉพาะ";
 };
 
 String RID_DB_GROUP_WIZARD_START + 16
@@ -948,7 +980,7 @@ String RID_DB_GROUP_WIZARD_START + 16
     Text[ swedish ] = "Vilket v�rde vill du tilldela varje alternativ ?";
     Text[ polish ] = "Jak� warto�� przypisa� pojedynczym opcjom?";
     Text[ portuguese_brazilian ] = "Welchen Wert m?hten Sie jeder Option zuweisen ?";
-    Text[ japanese ] = "各ｵﾌﾟｼｮﾝにどの値を割り当てますか。";
+    Text[ japanese ] = "各オプションにどの値を割り当てますか。";
     Text[ chinese_simplified ] = "指定给每个选项的数值？";
     Text[ chinese_traditional ] = "要指定每個選項的數值？";
     Text[ arabic ] = "�� �� ������ ���� ���� ������� ��� ���ѿ";
@@ -959,6 +991,7 @@ String RID_DB_GROUP_WIZARD_START + 16
     Text[ turkish ] = "Her bir se�ene�e hangi de�eri atamak istiyorsunuz?";
     Text[ catalan ] = "Which value do you want to assign to each option?";
     Text[ finnish ] = "Mink� arvot haluat antaa valinnoille?";
+    Text[ thai ] = "ค่าไหนที่คุณต้องการกำหนดในแต่ละทางเลือก?";
 };
 
 String RID_DB_GROUP_WIZARD_START + 17
@@ -975,7 +1008,7 @@ String RID_DB_GROUP_WIZARD_START + 17
     Text[ swedish ] = "~Alternativf�lt";
     Text[ polish ] = "~Pola opcji";
     Text[ portuguese_brazilian ] = "~Optionsfelder";
-    Text[ japanese ] = "ｵﾌﾟｼｮﾝﾌｨｰﾙﾄﾞ(~O)";
+    Text[ japanese ] = "オプションフィールド(~O)";
     Text[ chinese_simplified ] = "选项字段(~O)";
     Text[ chinese_traditional ] = "選項欄位(~O)";
     Text[ arabic ] = "~����� ����";
@@ -986,6 +1019,7 @@ String RID_DB_GROUP_WIZARD_START + 17
     Text[ turkish ] = "~Se�enek alanlar�";
     Text[ catalan ] = "~Option Fields";
     Text[ finnish ] = "~Valintakent�t";
+    Text[ thai ] = "เขตข้อมูล~ทางเลือก";
 };
 
 String RID_DB_GROUP_WIZARD_START + 18
@@ -1002,7 +1036,7 @@ String RID_DB_GROUP_WIZARD_START + 18
     Text[ swedish ] = "Du kan antingen spara alternativgruppens v�rde i ett databasf�lt eller anv�nda det till en senare �tg�rd.";
     Text[ polish ] = "Warto�� grupy opcji mo�na zapisa� w polu bazy danych lub u�y� jej do p�niejszej operacji.";
     Text[ portuguese_brazilian ] = "Sie k?nen den Wert der Optionsgruppe entweder in einem Datenbankfeld speichern oder ihn f? eine sp?tere Aktion verwenden.";
-    Text[ japanese ] = "ｵﾌﾟｼｮﾝｸﾞﾙｰﾌﾟの値は、ﾃﾞｰﾀﾍﾞｰｽﾌｨｰﾙﾄﾞに保存するか、あるいは次のｱｸｼｮﾝで使用できます。";
+    Text[ japanese ] = "オプショングループの値は、データベースフィールドに保存するか、あるいは次のアクションで使用できます。";
     Text[ chinese_simplified ] = "您能够将选项小组的数值存入一个数据库字段或以备后用。";
     Text[ chinese_traditional ] = "您能夠在一個資料庫內儲存選項群組的數值，以備後用。";
     Text[ arabic ] = "����� ��� ���� ������ �������� �� ��� ����� ������ �� �������� �� ����� �����.";
@@ -1013,6 +1047,7 @@ String RID_DB_GROUP_WIZARD_START + 18
     Text[ turkish ] = "Se�enek alan�n�n de�erini bir veritaban� alan�nda kaydedebilir ya da bu de�eri daha sonra yap�lacak bir i�lemde kullanabilirsiniz.";
     Text[ catalan ] = "You can either save the value of the option group in a database field or use it for a subsequent action.";
     Text[ finnish ] = "Voit joko tallentaa valintaryhm�n arvon tietokannan kentt��n tai k�ytt�� sit� my�hemm�ss� toiminnossa.";
+    Text[ thai ] = "คุณสามารถบันทึกค่าของกลุ่มทางเลือกในเขตข้อมูลของฐานข้อมูลหรือไม่ก็ใช้มันสำหรับการกระทำต่อมา";
 };
 
 String RID_DB_GROUP_WIZARD_START + 19
@@ -1029,7 +1064,7 @@ String RID_DB_GROUP_WIZARD_START + 19
     Text[ swedish ] = "Vill du spara v�rdet i ett databasf�lt?";
     Text[ polish ] = "Czy zapisa� t� warto�� w polu bazy danych ?";
     Text[ portuguese_brazilian ] = "M?hten Sie den Wert in einem Datenbankfeld speichern ?";
-    Text[ japanese ] = "値をﾃﾞｰﾀﾍﾞｰｽﾌｨｰﾙﾄﾞに保存しますか。";
+    Text[ japanese ] = "値をデータベースフィールドに保存しますか。";
     Text[ chinese_simplified ] = "您要将这个数值存入一个数据库字段？";
     Text[ chinese_traditional ] = "您要在資料庫欄位內儲存這個數值？";
     Text[ arabic ] = "�� ���� ��� ������ �� ��� ����� �����ʿ";
@@ -1040,6 +1075,7 @@ String RID_DB_GROUP_WIZARD_START + 19
     Text[ turkish ] = "De�eri bir veritaban� alan�nda kaydetmek istiyor musunuz?";
     Text[ catalan ] = "Do you want to save the value in a database field?";
     Text[ finnish ] = "Haluatko tallentaa arvon tietokannan kentt��n?";
+    Text[ thai ] = "คุณต้องการบันทึกค่าในเขตข้อมูลของฐานข้อมูลหรือไม่?";
 };
 
 String RID_DB_GROUP_WIZARD_START + 20
@@ -1056,7 +1092,7 @@ String RID_DB_GROUP_WIZARD_START + 20
     Text[ swedish ] = "Ja, i f�ljande databasf�lt :";
     Text[ polish ] = "Tak, jest to mo�liwe w nast�puj�cym polu bazy danych :";
     Text[ portuguese_brazilian ] = "Ja, und zwar in folgendem Datenbankfeld :";
-    Text[ japanese ] = "はい、次のﾃﾞｰﾀﾍﾞｰｽﾌｨｰﾙﾄﾞに保存:";
+    Text[ japanese ] = "はい、次のデータベースフィールドに保存:";
     Text[ chinese_simplified ] = "是，在以下的数据库字段：";
     Text[ chinese_traditional ] = "是，以下的資料庫欄位：";
     Text[ arabic ] = "��� �� ��� ����� �������� ������:";
@@ -1067,6 +1103,7 @@ String RID_DB_GROUP_WIZARD_START + 20
     Text[ turkish ] = "Evet, a�a��daki veritaban� alan�nda kaydedebilirsiniz :";
     Text[ catalan ] = "Yes, save it in the following database field:";
     Text[ finnish ] = "Kyll�, tallenna arvo seuraavaan tietokannan kentt��n:";
+    Text[ thai ] = "ใช่  บันทึกมันในเขตข้อมูลของฐานข้อมูลต่อไปนี้:";
 };
 
 String RID_DB_GROUP_WIZARD_START + 21
@@ -1083,7 +1120,7 @@ String RID_DB_GROUP_WIZARD_START + 21
     Text[ swedish ] = "Nej, jag vill bara spara v�rdet i formul�ret.";
     Text[ polish ] = "Nie, zapisz t� warto�� tylko w formularzu.";
     Text[ portuguese_brazilian ] = "Nein, ich m?hte den Wert nur im Formular speichern.";
-    Text[ japanese ] = "いいえ、値はﾌｫｰﾑにしか保存しない。";
+    Text[ japanese ] = "いいえ、値はフォームにしか保存しない。";
     Text[ chinese_simplified ] = "否，我只想将这个数值存入表单。";
     Text[ chinese_traditional ] = "否，只存入一個表單內。";
     Text[ arabic ] = "��ǡ ���� ��� ������ �� ��������� ���.";
@@ -1094,6 +1131,7 @@ String RID_DB_GROUP_WIZARD_START + 21
     Text[ turkish ] = "Hay�r, de�eri yaln�zca form i�inde kaydetmek istiyorum.";
     Text[ catalan ] = "No, I only want to save the value in the form.";
     Text[ finnish ] = "Ei, haluan tallentaa vain lomakkeen arvon.";
+    Text[ thai ] = "ไม่ใช่  ฉันต้องการเพียงบันทึกค่าในแบบฟอร์มเท่านั้น";
 };
 
 String RID_DB_GROUP_WIZARD_START + 22
@@ -1110,7 +1148,7 @@ String RID_DB_GROUP_WIZARD_START + 22
     Text[ swedish ] = "Vilken beteckning skall din alternativgrupp ha?";
     Text[ polish ] = "Jakie etykiety powinna zawiera� Twoja grupa opcji ?";
     Text[ portuguese_brazilian ] = "Welche  Beschriftung soll Ihre Options- gruppe haben ?";
-    Text[ japanese ] = "ｵﾌﾟｼｮﾝｸﾞﾙｰﾌﾟにどの名前を付けますか。";
+    Text[ japanese ] = "オプショングループにどの名前を付けますか。";
     Text[ chinese_simplified ] = "选项小组的名称？";
     Text[ chinese_traditional ] = "選項群組的名稱？";
     Text[ arabic ] = "��� ���� ����� ������ �������� ������ �߿";
@@ -1121,6 +1159,7 @@ String RID_DB_GROUP_WIZARD_START + 22
     Text[ turkish ] = "Se�enek grubunuza hangi resim altyaz�s� verilsin?";
     Text[ catalan ] = "Which caption is to be given to your option group?";
     Text[ finnish ] = "Mik� on valintaryhm�n kuvaotsikko?";
+    Text[ thai ] = "คำบรรยายภาพไหนที่ให้เป็นกลุ่มทางเลือกของคุณ?";
 };
 
 String RID_DB_GROUP_WIZARD_START + 23
@@ -1137,7 +1176,7 @@ String RID_DB_GROUP_WIZARD_START + 23
     Text[ swedish ] = "Detta var alla uppgifter som beh�vdes f�r att alternativgruppen ska kunna skapas.";
     Text[ polish ] = "By�y to ju� wszystkie dane wymagane do utworzenia grupy opcji.";
     Text[ portuguese_brazilian ] = "Dies waren alle Angaben, die zur Erstellung der Optionsgruppe notwendig waren.";
-    Text[ japanese ] = "ｵﾌﾟｼｮﾝｸﾞﾙｰﾌﾟの作成に必要な項目は、これで全部です。";
+    Text[ japanese ] = "オプショングループの作成に必要な項目は、これで全部です。";
     Text[ chinese_simplified ] = "这些是制作选项小组所需的全部资料。";
     Text[ chinese_traditional ] = "這些是製作選項群組所必需要的全部資料。";
     Text[ arabic ] = "���� ��� �� ���� �������� ������� ������ ������ ��������.";
@@ -1148,6 +1187,7 @@ String RID_DB_GROUP_WIZARD_START + 23
     Text[ turkish ] = "Se�enek grubunun olu�turulmas� i�in gereken t�m bilgiler bunlard�r.";
     Text[ catalan ] = "These were all details needed to create the option group.";
     Text[ finnish ] = "Kaikki valintaryhm�n luontiin tarvittavat tiedot on nyt m��ritetty.";
+    Text[ thai ] = "เหล่านั่นคือรายละเอียดทั้งหมดที่จำเป็นในการสร้างกลุ่มทางเลือก";
 };
 
 // ============================================================================
@@ -1160,23 +1200,24 @@ String RID_DB_FORM_WIZARD_START + 0
     Text[ russian ] = "��������� ����������";
     Text[ dutch ] = "AutoPiloot Formulieren";
     Text[ french ] = "AutoPilote de formulaire";
-    Text[ spanish ] = "AutoPiloto - Formularios";
+    Text[ spanish ] = "AutoPiloto Formulario  ";
     Text[ italian ] = "Pilota automatico - Formulario";
     Text[ danish ] = "AutoPilot - formularer";
     Text[ swedish ] = "AutoPilot f�r formul�r";
     Text[ polish ] = "AutoPilot: Formularze";
     Text[ portuguese_brazilian ] = "AutoPilot Formulare";
-    Text[ japanese ] = "ｵｰﾄﾊﾟｲﾛｯﾄ ﾌｫｰﾑ";
+    Text[ japanese ] = "オートパイロット フォーム";
     Text[ chinese_simplified ] = "自动文件助理 表单";
     Text[ chinese_traditional ] = "自動檔案助理 表單";
     Text[ arabic ] = "�������� ������ �����";
     Text[ dutch ] = "AutoPiloot Formulieren";
     Text[ chinese_simplified ] = "自动文件助理 表单";
     Text[ greek ] = "������ AutoPilot";
-    Text[ korean ] = "자동 파일럿 용지";
+    Text[ korean ] = "자동 파일럿 서식 용지";
     Text[ turkish ] = "Form OtoPilotu";
     Text[ catalan ] = "AutoPilot Forms";
     Text[ finnish ] = "Automaattinen lomakkeiden ohjaus";
+    Text[ thai ] = "นำร่องแบบฟอร์มอัตโนมัติ ";
 };
 
 String RID_DB_FORM_WIZARD_START + 1
@@ -1193,7 +1234,7 @@ String RID_DB_FORM_WIZARD_START + 1
     Text[ swedish ] = "Namnet kan inte anv�ndas. V�lj ett annat namn.";
     Text[ polish ] = "Tego tytu�u nie mo�na u�y�. Wybierz inny.";
     Text[ portuguese_brazilian ] = "Der Titel kann nicht verwendet werden. Bitte w?hlen Sie einen anderen.";
-    Text[ japanese ] = "このﾀｲﾄﾙは使用できません。別のﾀｲﾄﾙにしてください。";
+    Text[ japanese ] = "このタイトルは使用できません。別のタイトルにしてください。";
     Text[ chinese_simplified ] = "无法使用这个标题。请您选择一个其他的标题。";
     Text[ chinese_traditional ] = "無法使用這個標題。請您選擇另外一個。";
     Text[ arabic ] = "�� ���� ������� ��� �������. ������ ������ ����� ���.";
@@ -1204,6 +1245,7 @@ String RID_DB_FORM_WIZARD_START + 1
     Text[ turkish ] = "Bu ba�l�k kullan�lam�yor. L�tfen ba�ka bir ba�l�k ad� se�iniz.";
     Text[ catalan ] = "This title can not be used. Please select a different one.";
     Text[ finnish ] = "T�t� otsikkoa ei voi k�ytt��. Valitse toinen otsikko.";
+    Text[ thai ] = "ไม่สามารถใช้ชื่อเรื่องนี้ได้ กรุณาเลือกชื่ออื่นที่ไม่เหมือนกัน";
 };
 
 String RID_DB_FORM_WIZARD_START + 2
@@ -1220,7 +1262,7 @@ String RID_DB_FORM_WIZARD_START + 2
     Text[ swedish ] = "Skapa formul�r";
     Text[ polish ] = "Utw�rz formularz";
     Text[ portuguese_brazilian ] = "Formular erzeugen";
-    Text[ japanese ] = "ﾌｫｰﾑの作成";
+    Text[ japanese ] = "フォームの作成";
     Text[ chinese_simplified ] = "生成表单";
     Text[ chinese_traditional ] = "製作表單";
     Text[ arabic ] = "����� �������";
@@ -1231,6 +1273,7 @@ String RID_DB_FORM_WIZARD_START + 2
     Text[ turkish ] = "Form olu�tur";
     Text[ catalan ] = "Create Form";
     Text[ finnish ] = "Luo lomake";
+    Text[ thai ] = "สร้างแบบฟอร์ม";
 };
 
 String RID_DB_FORM_WIZARD_START + 3
@@ -1247,7 +1290,7 @@ String RID_DB_FORM_WIZARD_START + 3
     Text[ swedish ] = "Formul�r_";
     Text[ polish ] = "Formularz_";
     Text[ portuguese_brazilian ] = "Formular_";
-    Text[ japanese ] = "ﾌｫｰﾑ_";
+    Text[ japanese ] = "フォーム_";
     Text[ chinese_simplified ] = "表单_";
     Text[ chinese_traditional ] = "表單_";
     Text[ arabic ] = "�������_";
@@ -1259,6 +1302,7 @@ String RID_DB_FORM_WIZARD_START + 3
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Form_";
     Text[ finnish ] = "Lomake_";
+    Text[ thai ] = "แบบฟอร์ม_";
 };
 
 String RID_DB_FORM_WIZARD_START + 4
@@ -1286,6 +1330,7 @@ String RID_DB_FORM_WIZARD_START + 4
     Text[ turkish ] = "(Tarih)";
     Text[ catalan ] = "(Date)";
     Text[ finnish ] = "(P�iv�m��r�)";
+    Text[ thai ] = "(วันที่)";
 };
 
 String RID_DB_FORM_WIZARD_START + 5
@@ -1313,6 +1358,7 @@ String RID_DB_FORM_WIZARD_START + 5
     Text[ turkish ] = "(Saat)";
     Text[ catalan ] = "(Time)";
     Text[ finnish ] = "(Aika)";
+    Text[ thai ] = "(เวลา)";
 };
 
 String RID_DB_FORM_WIZARD_START + 6
@@ -1329,7 +1375,7 @@ String RID_DB_FORM_WIZARD_START + 6
     Text[ swedish ] = "Tabeller eller s�kningar";
     Text[ polish ] = "Tabele i kwerendy";
     Text[ portuguese_brazilian ] = ": Tabellenauswahl";
-    Text[ japanese ] = "ﾃｰﾌﾞﾙまたはｸｴﾘｰ";
+    Text[ japanese ] = "テーブルまたはクエリー";
     Text[ chinese_simplified ] = "表格或查询";
     Text[ chinese_traditional ] = "表格或查詢";
     Text[ arabic ] = ": ����� ������";
@@ -1340,6 +1386,7 @@ String RID_DB_FORM_WIZARD_START + 6
     Text[ turkish ] = ": Tablo se�imi";
     Text[ catalan ] = ": Table Selection";
     Text[ finnish ] = ": Taulukon valinta";
+    Text[ thai ] = ": เลือกตาราง";
 };
 
 String RID_DB_FORM_WIZARD_START + 7
@@ -1356,7 +1403,7 @@ String RID_DB_FORM_WIZARD_START + 7
     Text[ swedish ] = ": f�lturval";
     Text[ polish ] = ": Wyb�r pola";
     Text[ portuguese_brazilian ] = ": Feldauswahl";
-    Text[ japanese ] = ": ﾌｨｰﾙﾄﾞの選択";
+    Text[ japanese ] = ": フィールドの選択";
     Text[ chinese_simplified ] = "：字段选择";
     Text[ chinese_traditional ] = "：選擇欄位";
     Text[ arabic ] = ": ����� �����";
@@ -1367,6 +1414,7 @@ String RID_DB_FORM_WIZARD_START + 7
     Text[ turkish ] = ": Alan se�imi";
     Text[ catalan ] = ": Field Selection";
     Text[ finnish ] = ": Kent�n valinta";
+    Text[ thai ] = ": เลือกเขตข้อมูล";
 };
 
 String RID_DB_FORM_WIZARD_START + 8
@@ -1383,7 +1431,7 @@ String RID_DB_FORM_WIZARD_START + 8
     Text[ swedish ] = ": f�ltjustering";
     Text[ polish ] = ": Wyr�wnanie pola";
     Text[ portuguese_brazilian ] = ": Feldausrichtung";
-    Text[ japanese ] = ": ﾌｨｰﾙﾄﾞの配置";
+    Text[ japanese ] = ": フィールドの配置";
     Text[ chinese_simplified ] = "：字段对齐";
     Text[ chinese_traditional ] = "：調整欄位";
     Text[ arabic ] = ": ������ �����";
@@ -1394,6 +1442,7 @@ String RID_DB_FORM_WIZARD_START + 8
     Text[ turkish ] = ": Alan hizalamas�";
     Text[ catalan ] = ": Field Alignment";
     Text[ finnish ] = ": Kent�n tasaus";
+    Text[ thai ] = ": จัดตำแหน่งเขตข้อมูล";
 };
 
 String RID_DB_FORM_WIZARD_START + 9
@@ -1410,7 +1459,7 @@ String RID_DB_FORM_WIZARD_START + 9
     Text[ swedish ] = ": mallar";
     Text[ polish ] = ": Style";
     Text[ portuguese_brazilian ] = ": Vorlagen";
-    Text[ japanese ] = ": ｽﾀｲﾙ";
+    Text[ japanese ] = ": スタイル";
     Text[ chinese_simplified ] = "：样式";
     Text[ chinese_traditional ] = "：樣式";
     Text[ arabic ] = ": �������";
@@ -1421,6 +1470,7 @@ String RID_DB_FORM_WIZARD_START + 9
     Text[ turkish ] = ": �ablonlar";
     Text[ catalan ] = ": Styles";
     Text[ finnish ] = ": Mallipohjat";
+    Text[ thai ] = ": แม่แบบ";
 };
 
 String RID_DB_FORM_WIZARD_START + 10
@@ -1437,7 +1487,7 @@ String RID_DB_FORM_WIZARD_START + 10
     Text[ swedish ] = ": skapa formul�r";
     Text[ polish ] = ": Utw�rz formularz";
     Text[ portuguese_brazilian ] = ": Formular erstellen";
-    Text[ japanese ] = ": ﾌｫｰﾑの作成";
+    Text[ japanese ] = ": フォームの作成";
     Text[ chinese_simplified ] = "：制作表单";
     Text[ chinese_traditional ] = "：製作表單";
     Text[ arabic ] = ": ����� �������";
@@ -1448,6 +1498,7 @@ String RID_DB_FORM_WIZARD_START + 10
     Text[ turkish ] = ": Form olu�tur";
     Text[ catalan ] = ": Create Form";
     Text[ finnish ] = ": Luo lomake";
+    Text[ thai ] = ": สร้างแบบฟอร์ม";
 };
 
 String RID_DB_FORM_WIZARD_START + 11
@@ -1464,18 +1515,19 @@ String RID_DB_FORM_WIZARD_START + 11
     Text[ swedish ] = "Data~k�lla";
     Text[ polish ] = "�r�d�o danych";
     Text[ portuguese_brazilian ] = "Datenq~uelle";
-    Text[ japanese ] = "ﾃﾞｰﾀｿｰｽ(~U)";
+    Text[ japanese ] = "データソース(~U)";
     Text[ chinese_simplified ] = "数据源(~U)";
     Text[ chinese_traditional ] = "資料源(~U)";
     Text[ arabic ] = "~����� ��������";
     Text[ dutch ] = "~Gegevensbron";
     Text[ chinese_simplified ] = "数据源(~U)";
     Text[ greek ] = "������~��� ���������";
-    Text[ korean ] = "데이터 소스(~U)";
+    Text[ korean ] = "데이터 관리(~U)";
     Text[ turkish ] = "Veri kayna��";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Data So~urce";
     Text[ finnish ] = "Tieto~l�hde";
+    Text[ thai ] = "แห~ล่งข้อมูล";
 };
 
 String RID_DB_FORM_WIZARD_START + 12
@@ -1492,7 +1544,7 @@ String RID_DB_FORM_WIZARD_START + 12
     Text[ swedish ] = "~Existerande f�lt";
     Text[ polish ] = "~Istniej�ce pola";
     Text[ portuguese_brazilian ] = "~Vorhandene Felder";
-    Text[ japanese ] = "既存ﾌｨｰﾙﾄﾞ(~I)";
+    Text[ japanese ] = "既存フィールド(~I)";
     Text[ chinese_simplified ] = "现有的字段(~I)";
     Text[ chinese_traditional ] = "現存的欄位(~I)";
     Text[ arabic ] = "~������ ��������";
@@ -1503,6 +1555,7 @@ String RID_DB_FORM_WIZARD_START + 12
     Text[ turkish ] = "~Mevcut alanlar";
     Text[ catalan ] = "Ex~isting Fields";
     Text[ finnish ] = "~Nykyiset kent�t";
+    Text[ thai ] = "เขตข้อมูลที่มี~อยู่";
 };
 
 String RID_DB_FORM_WIZARD_START + 13
@@ -1519,9 +1572,9 @@ String RID_DB_FORM_WIZARD_START + 13
     Text[ swedish ] = "F�lt i ~formul�r";
     Text[ polish ] = "Pola w formularzu";
     Text[ portuguese_brazilian ] = "Felder im ~Formular";
-    Text[ japanese ] = "ﾌｫｰﾑのﾌｨｰﾙﾄﾞ";
+    Text[ japanese ] = "フォームのフィールド";
     Text[ chinese_simplified ] = "表单内的字段";
-    Text[ chinese_traditional ] = "表單之中的欄位(~F)";
+    Text[ chinese_traditional ] = "表單之中的欄位";
     Text[ arabic ] = "���� ~���������";
     Text[ dutch ] = "Velden in ~formulier";
     Text[ chinese_simplified ] = "表单内的字段";
@@ -1530,6 +1583,7 @@ String RID_DB_FORM_WIZARD_START + 13
     Text[ turkish ] = "Form i�indeki alanlar";
     Text[ catalan ] = "Fields in Form";
     Text[ finnish ] = "Lomakkeen kent�t";
+    Text[ thai ] = "เขตข้อมูลในแบบฟอร์ม";
 };
 
 String RID_DB_FORM_WIZARD_START + 14
@@ -1539,14 +1593,14 @@ String RID_DB_FORM_WIZARD_START + 14
     Text[ portuguese ] = "~Estilo";
     Text[ russian ] = "~�����";
     Text[ dutch ] = "~Stijl";
-    Text[ french ] = "~Style";
+    Text[ french ] = "Style";
     Text[ spanish ] = "~Estilo";
     Text[ italian ] = "~Stile";
     Text[ danish ] = "T~ype";
     Text[ swedish ] = "~Stil";
     Text[ polish ] = "~Styl";
     Text[ portuguese_brazilian ] = "~Stil";
-    Text[ japanese ] = "ｽﾀｲﾙ(~L)";
+    Text[ japanese ] = "スタイル(~L)";
     Text[ chinese_simplified ] = "式样(~L)";
     Text[ chinese_traditional ] = "風格(~L)";
     Text[ arabic ] = "~�����";
@@ -1557,6 +1611,7 @@ String RID_DB_FORM_WIZARD_START + 14
     Text[ turkish ] = "~Bi�im";
     Text[ catalan ] = "~Style";
     Text[ finnish ] = "~Asettelu";
+    Text[ thai ] = "เ~ค้าโครง";
 };
 
 String RID_DB_FORM_WIZARD_START + 15
@@ -1575,7 +1630,7 @@ String RID_DB_FORM_WIZARD_START + 15
     Text[ portuguese_brazilian ] = "S~paltenorientiert";
     Text[ japanese ] = "列方向";
     Text[ chinese_simplified ] = "按照列";
-    Text[ chinese_traditional ] = "按照欄(~P)";
+    Text[ chinese_traditional ] = "按照欄";
     Text[ arabic ] = "��� ��� ~�����";
     Text[ dutch ] = "~Kolomge�ri�nteerd";
     Text[ chinese_simplified ] = "按照列";
@@ -1584,6 +1639,7 @@ String RID_DB_FORM_WIZARD_START + 15
     Text[ turkish ] = "S�tunlar halinde";
     Text[ catalan ] = "Column oriented";
     Text[ finnish ] = "Sarakesuunnattu";
+    Text[ thai ] = "วางแนวคอลัมน์";
 };
 
 String RID_DB_FORM_WIZARD_START + 16
@@ -1611,6 +1667,7 @@ String RID_DB_FORM_WIZARD_START + 16
     Text[ turkish ] = "~Optimum";
     Text[ catalan ] = "~Optimized";
     Text[ finnish ] = "~Optimoitu";
+    Text[ thai ] = "~ทำให้เหมาะที่สุด";
 };
 
 String RID_DB_FORM_WIZARD_START + 17
@@ -1638,6 +1695,7 @@ String RID_DB_FORM_WIZARD_START + 17
     Text[ turkish ] = "~Tablo halinde";
     Text[ catalan ] = "~Tabular";
     Text[ finnish ] = "~Taulukkomuotoinen";
+    Text[ thai ] = "แ~บบตาราง";
 };
 
 String RID_DB_FORM_WIZARD_START + 18
@@ -1654,7 +1712,7 @@ String RID_DB_FORM_WIZARD_START + 18
     Text[ swedish ] = "Titel/~data";
     Text[ polish ] = "Tytu� / ~Dane";
     Text[ portuguese_brazilian ] = "Titel / ~Daten";
-    Text[ japanese ] = "ﾀｲﾄﾙとﾃﾞｰﾀ(~D)";
+    Text[ japanese ] = "タイトルとデータ(~D)";
     Text[ chinese_simplified ] = "标题/数据(~D)";
     Text[ chinese_traditional ] = "標題和資料(~D)";
     Text[ arabic ] = "������� / ~��������";
@@ -1666,6 +1724,7 @@ String RID_DB_FORM_WIZARD_START + 18
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Title / ~Data";
     Text[ finnish ] = "Otsikko/~tiedot";
+    Text[ thai ] = "ชื่อเรื่อง / ~ข้อมูล";
 };
 
 String RID_DB_FORM_WIZARD_START + 19
@@ -1693,6 +1752,7 @@ String RID_DB_FORM_WIZARD_START + 19
     Text[ turkish ] = "~Yan yana";
     Text[ catalan ] = "~Tile";
     Text[ finnish ] = "~Vierekk�in";
+    Text[ thai ] = "~ซ้อนทับ";
 };
 
 String RID_DB_FORM_WIZARD_START + 20
@@ -1720,6 +1780,7 @@ String RID_DB_FORM_WIZARD_START + 20
     Text[ turkish ] = "~�st �ste";
     Text[ catalan ] = "~Stacked";
     Text[ finnish ] = "~Pinottu";
+    Text[ thai ] = "~กองซ้อน";
 };
 
 String RID_DB_FORM_WIZARD_START + 21
@@ -1736,18 +1797,19 @@ String RID_DB_FORM_WIZARD_START + 21
     Text[ swedish ] = "~Sidformatmallar";
     Text[ polish ] = "~Style strony";
     Text[ portuguese_brazilian ] = "~Seitenvorlagen";
-    Text[ japanese ] = "ﾍﾟｰｼﾞｽﾀｲﾙ(~P)";
+    Text[ japanese ] = "ページスタイル(~P)";
     Text[ chinese_simplified ] = "页面样式(~P)";
     Text[ chinese_traditional ] = "頁面樣式(~P)";
     Text[ arabic ] = "~����� ����";
     Text[ dutch ] = "~Pagina-opmaakprofielen";
     Text[ chinese_simplified ] = "页面样式(~P)";
     Text[ greek ] = "������� ~�������";
-    Text[ korean ] = "페이지 템플릿(~P)";
+    Text[ korean ] = "페이지 스타일(~P)";
     Text[ turkish ] = "~Sayfa bi�imleri";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "~Page Style";
     Text[ finnish ] = "~Sivutyylit";
+    Text[ thai ] = "ลักษณะ~หน้า";
 };
 
 String RID_DB_FORM_WIZARD_START + 22
@@ -1764,7 +1826,7 @@ String RID_DB_FORM_WIZARD_START + 22
     Text[ swedish ] = "Ange rubriken";
     Text[ polish ] = "Podaj tytu�";
     Text[ portuguese_brazilian ] = "~Dokumententitel";
-    Text[ japanese ] = "ﾀｲﾄﾙを入力してください";
+    Text[ japanese ] = "タイトルを入力してください";
     Text[ chinese_simplified ] = "请您输入一个标题";
     Text[ chinese_traditional ] = "請輸入一個文件標題";
     Text[ arabic ] = "~����� �������";
@@ -1775,6 +1837,7 @@ String RID_DB_FORM_WIZARD_START + 22
     Text[ turkish ] = "~Belge ba�l���";
     Text[ catalan ] = "~Document title";
     Text[ finnish ] = "Kirjoita otsikko";
+    Text[ thai ] = "ใส่ชื่อเรื่อง";
 };
 
 String RID_DB_FORM_WIZARD_START + 23
@@ -1802,6 +1865,7 @@ String RID_DB_FORM_WIZARD_START + 23
     Text[ turkish ] = "~Olu�turulduktan sonra...";
     Text[ catalan ] = "~After completion...";
     Text[ finnish ] = "~Valmistumisen j�lkeen";
+    Text[ thai ] = "~หลังจากเสร็จสมบูรณ์...";
 };
 
 String RID_DB_FORM_WIZARD_START + 24
@@ -1818,9 +1882,9 @@ String RID_DB_FORM_WIZARD_START + 24
     Text[ swedish ] = "Anv�nd d~okument direkt";
     Text[ polish ] = "Zastosuj dokument od razu";
     Text[ portuguese_brazilian ] = "Dokument ~sofort benutzen";
-    Text[ japanese ] = "ﾄﾞｷｭﾒﾝﾄをすぐに使用";
+    Text[ japanese ] = "ドキュメントをすぐに使用";
     Text[ chinese_simplified ] = "立刻使用文档";
-    Text[ chinese_traditional ] = "立刻使用文件(~S)";
+    Text[ chinese_traditional ] = "立刻使用文件";
     Text[ arabic ] = "~������� ������� �����";
     Text[ dutch ] = "Document ~meteen gebruiken";
     Text[ chinese_simplified ] = "立刻使用文档";
@@ -1829,6 +1893,7 @@ String RID_DB_FORM_WIZARD_START + 24
     Text[ turkish ] = "Belgeyi hemen kullan";
     Text[ catalan ] = "use document immediately";
     Text[ finnish ] = "k�yt� asiakirjaa heti";
+    Text[ thai ] = "ใช้เอกสารทันที";
 };
 
 String RID_DB_FORM_WIZARD_START + 25
@@ -1845,9 +1910,9 @@ String RID_DB_FORM_WIZARD_START + 25
     Text[ swedish ] = "~Arkivera dokument";
     Text[ polish ] = "Zapisz ~dokument";
     Text[ portuguese_brazilian ] = "Dokument ~ablegen";
-    Text[ japanese ] = "ﾄﾞｷｭﾒﾝﾄを格納";
+    Text[ japanese ] = "ドキュメントを格納";
     Text[ chinese_simplified ] = "存盘文档";
-    Text[ chinese_traditional ] = "儲存文件(~A)";
+    Text[ chinese_traditional ] = "儲存文件";
     Text[ arabic ] = "~��� �������";
     Text[ dutch ] = "document ~opslaan";
     Text[ chinese_simplified ] = "存盘文档";
@@ -1856,6 +1921,7 @@ String RID_DB_FORM_WIZARD_START + 25
     Text[ turkish ] = "Belgeyi kaydet";
     Text[ catalan ] = "save document";
     Text[ finnish ] = "Tallenna asiakirja";
+    Text[ thai ] = "บันทึกเอกสาร";
 };
 
 String RID_DB_FORM_WIZARD_START + 26
@@ -1873,7 +1939,7 @@ String RID_DB_FORM_WIZARD_START + 26
     Text[ danish ] = "Formularen er blevet oprettet og arkiveret i databesen.";
     Text[ polish ] = "Formularz zosta� utworzony i zapisany w bazie danych.";
     Text[ portuguese_brazilian ] = "The form was created and abgelegt in the database.";
-    Text[ japanese ] = "ﾌｫｰﾑは作成されﾃﾞｰﾀﾍﾞｰｽに格納されています。";
+    Text[ japanese ] = "フォームは作成されデータベースに格納されています。";
     Text[ korean ] = "양식은 작성되어 데이터베이스에 저장되었습니다.";
     Text[ chinese_simplified ] = "这个表单已经建立且存盘在数据库内。";
     Text[ chinese_traditional ] = "在資料庫內已經建立和儲存了這個表單。";
@@ -1882,6 +1948,7 @@ String RID_DB_FORM_WIZARD_START + 26
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "The form has been created and saved in the database.";
     Text[ finnish ] = "Lomake on luotu ja tallennettu tietokantaan.";
+    Text[ thai ] = "แบบฟอร์มถูกสร้างและบันทึกในฐานข้อมูลแล้ว";
 };
 
 String RID_DB_FORM_WIZARD_START + 27
@@ -1900,7 +1967,7 @@ String RID_DB_FORM_WIZARD_START + 27
     Text[ swedish ] = "Formul�rnamn f�r inte inneh�lla mer �n 32 tecken.";
     Text[ polish ] = "Nazwy formularzy mog� si� sk�ada� z maksymalnie 32 znak�w.";
     Text[ portuguese_brazilian ] = "Form names must not contain more than 32 characters.";
-    Text[ japanese ] = "ﾌｫｰﾑ名は最高32文字までです。";
+    Text[ japanese ] = "フォーム名は最高32文字までです。";
     Text[ korean ] = "수식 이름의 길이가 최대 32자를 초과해서는 안됩니다.";
     Text[ chinese_simplified ] = "表单名称最多只能由32个字符组成。";
     Text[ chinese_traditional ] = "報表名稱最長不得超過32個字元。";
@@ -1908,6 +1975,7 @@ String RID_DB_FORM_WIZARD_START + 27
     Text[ turkish ] = "Form adlar� en fazla 32 karakterden olu�abilir.";
     Text[ catalan ] = "Form names cannot be longer than 32 characters.";
     Text[ finnish ] = "Lomakkeiden nimet eiv�t saa olla yli 32 merkin pituisia.";
+    Text[ thai ] = "ชื่อแบบฟอร์มต้องยาวไม่เกิน 32 ตัวอักขระ";
 };
 
 String RID_DB_FORM_WIZARD_START + 28
@@ -1926,7 +1994,7 @@ String RID_DB_FORM_WIZARD_START + 28
     Text[ swedish ] = "F�ltinramning";
     Text[ polish ] = "Obramowanie p�l";
     Text[ portuguese_brazilian ] = "Controlframes";
-    Text[ japanese ] = "ﾌｨｰﾙﾄﾞ枠";
+    Text[ japanese ] = "フィールド枠";
     Text[ korean ] = "필드 테두리";
     Text[ chinese_simplified ] = "字段边框";
     Text[ chinese_traditional ] = "欄位邊框";
@@ -1934,6 +2002,7 @@ String RID_DB_FORM_WIZARD_START + 28
     Text[ arabic ] = "���� ����� �� ���� ����῿�� ���� ��� 47566";
     Text[ catalan ] = "Field border";
     Text[ finnish ] = "Kent�n reunat";
+    Text[ thai ] = "เส้นขอบของเขตข้อมูล";
 };
 
 String RID_DB_FORM_WIZARD_START + 29
@@ -1960,6 +2029,7 @@ String RID_DB_FORM_WIZARD_START + 29
     Text[ arabic ] = "���� ���ϡ �� ���� ���ѿ������� ���� ��� 47565";
     Text[ catalan ] = "No border";
     Text[ finnish ] = "Ei reunoja";
+    Text[ thai ] = "ไม่มีเส้นขอบ";
 };
 
 
@@ -1979,7 +2049,7 @@ String RID_DB_FORM_WIZARD_START + 30
     Text[ swedish ] = "3D-look";
     Text[ polish ] = "Tr�jwymiarowy";
     Text[ portuguese_brazilian ] = "3D Look";
-    Text[ japanese ] = "3D ﾙｯｸ";
+    Text[ japanese ] = "3D ルック";
     Text[ korean ] = "3D 보기";
     Text[ chinese_simplified ] = "3 维外观";
     Text[ chinese_traditional ] = "3D 外觀";
@@ -1987,6 +2057,7 @@ String RID_DB_FORM_WIZARD_START + 30
     Text[ arabic ] = "���� ����� �������";
     Text[ catalan ] = "3D Look";
     Text[ finnish ] = "Kolmiulotteinen n�kym�";
+    Text[ thai ] = "มองแบบ 3 มิติ";
 };
 
 String RID_DB_FORM_WIZARD_START + 31
@@ -2013,6 +2084,7 @@ String RID_DB_FORM_WIZARD_START + 31
     Text[ arabic ] = "�����";
     Text[ catalan ] = "Flat";
     Text[ finnish ] = "Litte�";
+    Text[ thai ] = "แบน";
 };
 
 String RID_DB_FORM_WIZARD_START + 32
@@ -2032,7 +2104,7 @@ String RID_DB_FORM_WIZARD_START + 32
     Text[ swedish ] = "Justering av etikettf�lt";
     Text[ polish ] = "Wyr�wnanie p�l etykiety";
     Text[ portuguese_brazilian ] = "Alignment";
-    Text[ japanese ] = "ﾗﾍﾞﾙﾌｨｰﾙﾄﾞの位置";
+    Text[ japanese ] = "ラベル書きフィールドの位置";
     Text[ korean ] = "라벨 필드 맞춤";
     Text[ chinese_simplified ] = "标签字段对齐";
     Text[ chinese_traditional ] = "標籤欄位對準";
@@ -2040,6 +2112,7 @@ String RID_DB_FORM_WIZARD_START + 32
     Text[ language_user1 ] = "�berschrift einer Option Button Gruppe ";
     Text[ arabic ] = "Alignment";
     Text[ catalan ] = "Alignment";
+    Text[ thai ] = "ป้ายชื่อ";
 };
 
 String RID_DB_FORM_WIZARD_START + 33
@@ -2067,6 +2140,7 @@ String RID_DB_FORM_WIZARD_START + 33
     Text[ language_user1 ] = "Label eines Option Buttons";
     Text[ arabic ] = "Align Labels on left Edge";
     Text[ catalan ] = "Align Labels on left Edge";
+    Text[ thai ] = "จัดป้ายชื่อชิดขอบซ้าย";
 };
 
 String RID_DB_FORM_WIZARD_START + 34
@@ -2094,6 +2168,7 @@ String RID_DB_FORM_WIZARD_START + 34
     Text[ language_user1 ] = "Label eines Option Buttons";
     Text[ arabic ] = "Align Labels on right Edge";
     Text[ catalan ] = "Align Labels on right Edge";
+    Text[ thai ] = "จัดป้ายชื่อชิดขอบขวา";
 };
 
 String RID_DB_FORM_WIZARD_START + 35
@@ -2113,13 +2188,14 @@ String RID_DB_FORM_WIZARD_START + 35
     Text[ swedish ] = "Placering av DB-f�lt";
     Text[ polish ] = "Rozmieszczenie p�l bazy danych";
     Text[ portuguese_brazilian ] = "Arrangement of DB Fields";
-    Text[ japanese ] = "ﾃﾞｰﾀﾍﾞｰｽﾌｨｰﾙﾄﾞの整列";
+    Text[ japanese ] = "データベースフィールドの整列";
     Text[ korean ] = "DB 필드의 맞춤";
     Text[ chinese_simplified ] = "对齐数据库字段";
     Text[ chinese_traditional ] = "對齊資料庫欄位";
     Text[ turkish ] = "Arrangement of DB Fields";
     Text[ arabic ] = "Arrangement of DB Fields";
     Text[ catalan ] = "Arrangement of DB Fields";
+    Text[ thai ] = "จัดเรียงเขตข้อมูล DB ";
 };
 
 String RID_DB_FORM_WIZARD_START + 36
@@ -2139,7 +2215,7 @@ String RID_DB_FORM_WIZARD_START + 36
     Text[ swedish ] = "I kolumner - etiketter till v�nster";
     Text[ polish ] = "Kolumny - etykiety po lewej";
     Text[ portuguese_brazilian ] = "Columnar - Labels left";
-    Text[ japanese ] = "欄で、ﾗﾍﾞﾙは左に";
+    Text[ japanese ] = "欄で、ラベル書きは左に";
     Text[ korean ] = "종란식 - 왼쪽에 라벨";
     Text[ chinese_simplified ] = "在列内 - 标签向左";
     Text[ chinese_traditional ] = "在欄位內 - 標籤向左";
@@ -2147,6 +2223,7 @@ String RID_DB_FORM_WIZARD_START + 36
     Text[ arabic ] = "Columnar - Labels left";
     Text[ catalan ] = "Columnar - Labels left";
     Text[ language_user1 ] = "Help tip";
+    Text[ thai ] = "แบบเรียงเป็นแนวตรง - ป้ายชื่อซ้าย";
 };
 
 String RID_DB_FORM_WIZARD_START + 37
@@ -2166,13 +2243,14 @@ String RID_DB_FORM_WIZARD_START + 37
     Text[ swedish ] = "I kolumner - etiketter uppe";
     Text[ polish ] = "Kolumny - etykiety u g�ry";
     Text[ portuguese_brazilian ] = "Columnar - Labels on Top";
-    Text[ japanese ] = "欄で、ﾗﾍﾞﾙは上に";
+    Text[ japanese ] = "欄で、ラベル書きは上に";
     Text[ korean ] = "종란식 - 위쪽에 라벨";
     Text[ chinese_simplified ] = "在列内 - 标签向上";
     Text[ chinese_traditional ] = "在欄位內 - 標籤向上";
     Text[ turkish ] = "Columnar - Labels on Top";
     Text[ arabic ] = "Columnar - Labels on Top";
     Text[ catalan ] = "Columnar - Labels on Top";
+    Text[ thai ] = "แบบเรียงเป็นแนวตรง - ป้ายชื่อด้านบน";
 };
 
 String RID_DB_FORM_WIZARD_START + 38
@@ -2192,7 +2270,7 @@ String RID_DB_FORM_WIZARD_START + 38
     Text[ swedish ] = "Marginaljusterat - etiketter till v�nster";
     Text[ polish ] = "Bloki - etykiety po lewej";
     Text[ portuguese_brazilian ] = "Inf Blocks - Labels left";
-    Text[ japanese ] = "ﾌﾞﾛｯｸで、ﾗﾍﾞﾙは左に";
+    Text[ japanese ] = "ブロックで、ラベル書きは左に";
     Text[ korean ] = "블록 내 - 왼쪽에 라벨 왼쪽";
     Text[ chinese_simplified ] = "在条块内 - 标签向左";
     Text[ chinese_traditional ] = "在條塊內 - 標籤向左";
@@ -2200,6 +2278,7 @@ String RID_DB_FORM_WIZARD_START + 38
     Text[ arabic ] = "Inf Blocks - Labels left";
     Text[ catalan ] = "Inf Blocks - Labels left";
     Text[ language_user1 ] = "Help tip";
+    Text[ thai ] = "ในบล็อค - ป้ายชื่อซ้าย";
 };
 
 String RID_DB_FORM_WIZARD_START + 39
@@ -2219,7 +2298,7 @@ String RID_DB_FORM_WIZARD_START + 39
     Text[ swedish ] = "Marginaljusterat - etiketter uppe";
     Text[ polish ] = "Bloki - etykiety u g�ry";
     Text[ portuguese_brazilian ] = "In Blocks - Labels oben";
-    Text[ japanese ] = "ﾌﾞﾛｯｸで、ﾗﾍﾞﾙは上に";
+    Text[ japanese ] = "ブロックで、ラベル書きは上に";
     Text[ korean ] = "블록 내 - 위쪽에 라벨";
     Text[ chinese_simplified ] = "在条块内 - 标签向上";
     Text[ chinese_traditional ] = "在條塊內 - 標籤向上";
@@ -2227,6 +2306,7 @@ String RID_DB_FORM_WIZARD_START + 39
     Text[ arabic ] = "In Blocks - Labels oben";
     Text[ catalan ] = "In Blocks - Labels oben";
     Text[ language_user1 ] = "Help tip";
+    Text[ thai ] = "ในบล็อค - ป้ายชื่อด้านบน";
 };
 
 String RID_DB_FORM_WIZARD_START + 40
@@ -2246,7 +2326,7 @@ String RID_DB_FORM_WIZARD_START + 40
     Text[ swedish ] = "Som tabell";
     Text[ polish ] = "Jako arkusz z danymi";
     Text[ portuguese_brazilian ] = "As Grid";
-    Text[ japanese ] = "ﾃﾞｰﾀ表として";
+    Text[ japanese ] = "データ表として";
     Text[ korean ] = "눈금대로";
     Text[ chinese_simplified ] = "当作数据表";
     Text[ chinese_traditional ] = "當作資料表";
@@ -2254,6 +2334,7 @@ String RID_DB_FORM_WIZARD_START + 40
     Text[ arabic ] = "As Grid";
     Text[ catalan ] = "As Grid";
     Text[ language_user1 ] = "Help tip";
+    Text[ thai ] = "เป็นเส้นตาราง";
 };
 
 
@@ -2276,13 +2357,14 @@ String RID_DB_FORM_WIZARD_START + 45
     Text[ swedish ] = "Databasurval";
     Text[ polish ] = "Wyb�r bazy danych";
     Text[ portuguese_brazilian ] = "Choose Database";
-    Text[ japanese ] = "ﾃﾞｰﾀﾍﾞｰｽの選択";
+    Text[ japanese ] = "データベースの選択";
     Text[ korean ] = "데이터베이스 선택";
     Text[ chinese_simplified ] = "选择数据库";
     Text[ chinese_traditional ] = "選擇資料庫";
     Text[ turkish ] = "Choose Database";
     Text[ arabic ] = "Choose Database";
     Text[ catalan ] = "Choose Database";
+    Text[ thai ] = "เลือกฐานข้อมูล";
 };
 
 String RID_DB_FORM_WIZARD_START + 46
@@ -2304,13 +2386,14 @@ String RID_DB_FORM_WIZARD_START + 46
     Text[ swedish ] = "Utformning";
     Text[ polish ] = "Uk�ad";
     Text[ portuguese_brazilian ] = "Layout";
-    Text[ japanese ] = "ﾚｲｱｳﾄ";
+    Text[ japanese ] = "レイアウト";
     Text[ korean ] = "배치";
     Text[ chinese_simplified ] = "版式";
     Text[ chinese_traditional ] = "版式";
     Text[ turkish ] = "Layout";
     Text[ arabic ] = "Layout";
     Text[ catalan ] = "Layout";
+    Text[ thai ] = "เลือกเค้าโครง";
 };
 
 String RID_DB_FORM_WIZARD_START + 47
@@ -2338,6 +2421,7 @@ String RID_DB_FORM_WIZARD_START + 47
     Text[ turkish ] = "Completion";
     Text[ arabic ] = "Completion";
     Text[ catalan ] = "Completion";
+    Text[ thai ] = "เสร็จสิ้น";
 };
 
 String RID_DB_FORM_WIZARD_START + 50
@@ -2345,7 +2429,7 @@ String RID_DB_FORM_WIZARD_START + 50
     Text = "Bin�rfeld-Darstellung";
     Text [ english ] = "Presentation of Binary Fields";
     Text [ english_us ] = "Display of binary fields";
-    Text[ language_user1 ] = "Groupbox";
+    Text[ language_user1 ] = "�berschrift einiger Dialog Controls";
     Text[ portuguese ] = "Representa��o de campos bin�rios";
     Text[ russian ] = "������������� ��������� ����";
     Text[ greek ] = "Presentation of Binary Fields";
@@ -2358,13 +2442,14 @@ String RID_DB_FORM_WIZARD_START + 50
     Text[ swedish ] = "Visning av bin�ra f�lt";
     Text[ polish ] = "Pola binarne";
     Text[ portuguese_brazilian ] = "Presentation of Binary Fields";
-    Text[ japanese ] = "2進法ﾌｨｰﾙﾄﾞの表示";
+    Text[ japanese ] = "2進法フィールドの表示";
     Text[ korean ] = "바이너리 필드 표시";
     Text[ chinese_simplified ] = "二进制字段显示";
     Text[ chinese_traditional ] = "二元欄位顯示";
     Text[ turkish ] = "Presentation of Binary Fields";
     Text[ arabic ] = "Presentation of Binary Fields";
     Text[ catalan ] = "Presentation of Binary Fields";
+    Text[ thai ] = "แสดงผลเขตข้อมูลไบนารี ";
 };
 
 String RID_DB_FORM_WIZARD_START + 51
@@ -2385,13 +2470,14 @@ String RID_DB_FORM_WIZARD_START + 51
     Text[ swedish ] = "Ignorera bin�ra f�lt";
     Text[ polish ] = "Ignoruj pola binarne";
     Text[ portuguese_brazilian ] = "Ignore Binary Fields";
-    Text[ japanese ] = "2進法ﾌｨｰﾙﾄﾞを無視する";
+    Text[ japanese ] = "2進法フィールドを無視する";
     Text[ korean ] = "이진 필드 무시";
     Text[ chinese_simplified ] = "忽略二进制字段";
     Text[ chinese_traditional ] = "忽略二元欄位";
     Text[ turkish ] = "Ignore Binary Fields";
     Text[ arabic ] = "Ignore Binary Fields";
     Text[ catalan ] = "Ignore Binary Fields";
+    Text[ thai ] = "เพิกเฉยเขตข้อมูลไบนารี ";
 };
 
 String RID_DB_FORM_WIZARD_START + 52
@@ -2412,13 +2498,14 @@ String RID_DB_FORM_WIZARD_START + 52
     Text[ swedish ] = "Bin�ra f�lt som grafik";
     Text[ polish ] = "Pola binarne jako grafiki";
     Text[ portuguese_brazilian ] = "Binary Fields as Images";
-    Text[ japanese ] = "2進法ﾌｨｰﾙﾄﾞを図で";
+    Text[ japanese ] = "2進法フィールドを図で";
     Text[ korean ] = "이미지 이진 필드";
     Text[ chinese_simplified ] = "二进制字段当作图形";
     Text[ chinese_traditional ] = "二元欄位當作圖形";
     Text[ turkish ] = "Binary Fields as Images";
     Text[ arabic ] = "Binary Fields as Images";
     Text[ catalan ] = "Binary Fields as Images";
+    Text[ thai ] = "เขตข้อมูลไบนารีเป็นรูปภาพ";
 };
 
 
@@ -2438,7 +2525,7 @@ String RID_DB_FORM_WIZARD_START + 55
     Text[ swedish ] = "Bakgrundsbild";
     Text[ polish ] = "Ilustracja t�a";
     Text[ portuguese_brazilian ] = "Background Picture";
-    Text[ japanese ] = "背景ﾃﾞｻﾞｲﾝ";
+    Text[ japanese ] = "背景デザイン";
     Text[ korean ] = "배경 그림";
     Text[ chinese_simplified ] = "背景颜色";
     Text[ chinese_traditional ] = "背景圖片";
@@ -2446,6 +2533,7 @@ String RID_DB_FORM_WIZARD_START + 55
     Text[ arabic ] = "���� �������";
     Text[ catalan ] = "Background Image";
     Text[ finnish ] = "Taustakuva";
+    Text[ thai ] = "ภาพพื้นหลัง";
 };
 
 
@@ -2474,6 +2562,7 @@ String RID_DB_FORM_WIZARD_START + 56
     Text[ arabic ] = "Tiling";
     Text[ catalan ] = "~Tiled";
     Text[ finnish ] = "~Vierekk�in";
+    Text[ thai ] = "~ซ้อนทับ";
 };
 
 
@@ -2501,6 +2590,7 @@ String RID_DB_FORM_WIZARD_START + 57
     Text[ arabic ] = "~Scaled";
     Text[ catalan ] = "~Scaled";
     Text[ finnish ] = "~Skaalattu";
+    Text[ thai ] = "~สเกล";
 };
 
 String RID_DB_FORM_WIZARD_START + 60
@@ -2520,13 +2610,14 @@ String RID_DB_FORM_WIZARD_START + 60
     Text[ swedish ] = "Katalogs�kv�g";
     Text[ polish ] = "�cie�ka katalogu";
     Text[ portuguese_brazilian ] = "Directory Path";
-    Text[ japanese ] = "ﾃﾞｨﾚｸﾄﾘﾊﾟｽ";
+    Text[ japanese ] = "ディレクトリパス";
     Text[ korean ] = "디렉토리 경로";
     Text[ chinese_simplified ] = "目录路径";
     Text[ chinese_traditional ] = "目錄路徑";
     Text[ turkish ] = "Directory Path";
     Text[ arabic ] = "Directory Path";
     Text[ catalan ] = "Directory Path";
+    Text[ thai ] = "เส้นทางไดเร็กทอรี่";
 };
 
 
@@ -2548,13 +2639,14 @@ String RID_DB_FORM_WIZARD_START + 65
     Text[ swedish ] = "Dialogruta reduceras";
     Text[ polish ] = "Zmniejszenie okna dialogowego";
     Text[ portuguese_brazilian ] = "Dialog will be reduced";
-    Text[ japanese ] = "ﾀﾞｲｱﾛｸﾞを縮小";
+    Text[ japanese ] = "ダイアログを縮小";
     Text[ korean ] = "대화상자가 축소됩니다";
     Text[ chinese_simplified ] = "对话框会缩小";
     Text[ chinese_traditional ] = "對話方塊會縮小。";
     Text[ turkish ] = "Dialog will be reduced";
     Text[ arabic ] = "Dialog will be reduced";
     Text[ catalan ] = "Dialog will be reduced";
+    Text[ thai ] = "ไดอะล็อกจะถูกลดลง";
 };
 
 String RID_DB_FORM_WIZARD_START + 66
@@ -2575,13 +2667,14 @@ String RID_DB_FORM_WIZARD_START + 66
     Text[ swedish ] = "Dialog f�rstoras";
     Text[ polish ] = "Powi�kszenie okna dialogowego";
     Text[ portuguese_brazilian ] = "Dialog will be enlarged";
-    Text[ japanese ] = "ﾀﾞｲｱﾛｸﾞを拡大";
+    Text[ japanese ] = "ダイアログを拡大";
     Text[ korean ] = "대화상자가 확대됩니다";
     Text[ chinese_simplified ] = "对话框会放大";
     Text[ chinese_traditional ] = "對話方塊會放大。";
     Text[ turkish ] = "Dialog will be enlarged";
     Text[ arabic ] = "Dialog will be enlarged";
     Text[ catalan ] = "Dialog will be enlarged";
+    Text[ thai ] = "ไดอะล็อกจะใหญ่ขึ้น";
 };
 
 
@@ -2610,6 +2703,7 @@ String RID_DB_FORM_WIZARD_START + 70
     Text[ turkish ] = "Writer 6.0";
     Text[ arabic ] = "Writer 6.0";
     Text[ catalan ] = "Writer 6.0";
+    Text[ thai ] = "Writer 6.0";
 };
 
 String RID_DB_FORM_WIZARD_START + 71
@@ -2630,13 +2724,14 @@ String RID_DB_FORM_WIZARD_START + 71
     Text[ swedish ] = "Writer 6.0 mall";
     Text[ polish ] = "Writer 6.0 - Szablon";
     Text[ portuguese_brazilian ] = "Writer 6.0 Template";
-    Text[ japanese ] = "Writer 6.0 ﾃﾝﾌﾟﾚｰﾄ";
+    Text[ japanese ] = "Writer 6.0 テンプレート";
     Text[ korean ] = "Writer 6.0 템플릿";
     Text[ chinese_simplified ] = "Writer 6.0 样式";
     Text[ chinese_traditional ] = "Writer 6.0 樣式";
     Text[ turkish ] = "Writer 6.0 Template";
     Text[ arabic ] = "Writer 6.0 Template";
     Text[ catalan ] = "Writer 6.0 Template";
+    Text[ thai ] = "แม่แบบ Writer 6.0 ";
 };
 
 
@@ -2657,7 +2752,7 @@ String RID_DB_QUERY_WIZARD_START + 0
     Text[ swedish ] = "AutoPilot f�r s�kning";
     Text[ polish ] = "AutoPilot: Kwerenda";
     Text[ portuguese_brazilian ] = "AutoPilot Abfrage";
-    Text[ japanese ] = "ｵｰﾄﾊﾟｲﾛｯﾄ ｸｴﾘｰ";
+    Text[ japanese ] = "オートパイロット クエリー";
     Text[ chinese_simplified ] = "自动文件助理 查询";
     Text[ chinese_traditional ] = "自動檔案助理  查詢";
     Text[ arabic ] = "������� ������ �����";
@@ -2668,6 +2763,7 @@ String RID_DB_QUERY_WIZARD_START + 0
     Text[ turkish ] = "Sorgu OtoPilotu";
     Text[ catalan ] = "AutoPilot Query";
     Text[ finnish ] = "Automaattinen kyselyn ohjaus";
+    Text[ thai ] = "นำร่องแบบสอบถามอัตโนมัติ ";
 };
 
 String RID_DB_QUERY_WIZARD_START + 1
@@ -2684,7 +2780,7 @@ String RID_DB_QUERY_WIZARD_START + 1
     Text[ swedish ] = "Ingen databas �r installerad. Du beh�ver minst en databas f�r att kunna starta AutoPiloten f�r s�kningar.";
     Text[ polish ] = "Nie zainstalowano bazy danych. Do uruchomienia AutoPilota kwerend potrzebna jest co najmniej jedna baza danych.";
     Text[ portuguese_brazilian ] = "Es ist keine Datenbank installiert. Sie ben?igen mindestens eine Datenbank um den AutoPiloten f? Abfragen starten zu k?nen.";
-    Text[ japanese ] = "ﾃﾞｰﾀﾍﾞｰｽがｲﾝｽﾄｰﾙされていません。ｵｰﾄﾊﾟｲﾛｯﾄ ｸｴﾘｰを開始するには、ﾃﾞｰﾀﾍﾞｰｽが最低一つは必要です。";
+    Text[ japanese ] = "データベースがインストールされていません。オートパイロット クエリーを開始するには、データベースが最低一つは必要です。";
     Text[ chinese_simplified ] = "没有安装任何数据库。执行自动文件助理的询问功能之前必须安装一个数据库。";
     Text[ chinese_traditional ] = "沒有安裝資料庫。因此無法執行查詢資料庫。您必須安裝一個資料庫。";
     Text[ arabic ] = "��� ���� ��� ����� ������ �����. ��� ����� ��� ����� ������ ����� ��� ����� ��� ����� �� ��� ������ ����� �����������.";
@@ -2695,6 +2791,7 @@ String RID_DB_QUERY_WIZARD_START + 1
     Text[ turkish ] = "Kurulmu� veritaban� yok. Sorgu OtoPilot'unu ba�latabilmek i�in en az bir veritaban� mevcut olmal�d�r.";
     Text[ catalan ] = "A database has not been installed.  There must be at least one database on the system before the AutoPilot Query can be started.";
     Text[ finnish ] = "Tietokantaa ei ole asennettu. Automaattista kyselyjen ohjausta varten j�rjestelm�ss� on oltava m��ritettyn� v�hint��n yksi tietokanta.";
+    Text[ thai ] = "ไม่มีฐานข้อมูลที่ติดตั้ง คุณต้องการอย่างน้อยที่สุดหนึ่งฐานข้อมูลเพื่อเริ่มการนำร่องแบบสอบถามอัตโนมัติ";
 };
 
 String RID_DB_QUERY_WIZARD_START + 2
@@ -2711,7 +2808,7 @@ String RID_DB_QUERY_WIZARD_START + 2
     Text[ swedish ] = "Det uppstod ett fel n�r s�kningen utf�rdes eller skapades.";
     Text[ polish ] = "W trakcie uruchamiania lub tworzenia kwerendy wyst�pi� b��d.";
     Text[ portuguese_brazilian ] = "In der Ausf?rung, oder beim Anlegen der Abfrage ist ein Fehler aufgetreten.";
-    Text[ japanese ] = "ｸｴﾘｰの実行中、またはｸｴﾘｰを格納するときにｴﾗｰが発生しました。";
+    Text[ japanese ] = "クエリーの実行中、またはクエリーを格納するときにエラーが発生しました。";
     Text[ chinese_simplified ] = "在执行或建立查询时发生一个错误。";
     Text[ chinese_traditional ] = "在執行或建立一個查詢時發生錯誤。";
     Text[ arabic ] = "��� ��� ����� ����� �� ��� ���������.";
@@ -2722,6 +2819,7 @@ String RID_DB_QUERY_WIZARD_START + 2
     Text[ turkish ] = "Y�r�tmede ya da sorgu olu�turmada bir hata olu�tu.";
     Text[ catalan ] = "An error occurred during the execution or defining of a query.";
     Text[ finnish ] = "Kyselyn suorituksen tai m��rityksen aikana on ilmennyt virhe.";
+    Text[ thai ] = "เกิดข้อผิดพลาดในระหว่างการกระทำการหรือการระบุแบบสอบถาม";
 };
 
 String RID_DB_QUERY_WIZARD_START + 3
@@ -2738,7 +2836,7 @@ String RID_DB_QUERY_WIZARD_START + 3
     Text[ swedish ] = "S�kningen har arkiverats i Explorer.";
     Text[ polish ] = "Kwerend� zapisano w Eksploratorze.";
     Text[ portuguese_brazilian ] = "Die Abfrage wurde im Explorer abgelegt.";
-    Text[ japanese ] = "ｸｴﾘｰはｴｸｽﾌﾟﾛｰﾗに格納されました。";
+    Text[ japanese ] = "クエリーはエクスプローラに格納されました。";
     Text[ chinese_simplified ] = "这个查询存盘在资源管理器内。";
     Text[ chinese_traditional ] = "已經在檔案總管內儲存了查詢。";
     Text[ arabic ] = "�� ��� ��������� �� ��������.";
@@ -2750,6 +2848,7 @@ String RID_DB_QUERY_WIZARD_START + 3
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "The query has been saved in the Explorer.";
     Text[ finnish ] = "Kysely on tallennettu resurssienhallintaan.";
+    Text[ thai ] = "บันทึกแบบสอบถามใน Explorer แล้ว";
 };
 
 String RID_DB_QUERY_WIZARD_START + 4
@@ -2766,7 +2865,7 @@ String RID_DB_QUERY_WIZARD_START + 4
     Text[ swedish ] = "Det uppstod ett fel. Det gick inte att arkivera s�kningen.";
     Text[ polish ] = "Wyst�pi� b��d. Zapisanie kwerendy nie powiod�o si�.";
     Text[ portuguese_brazilian ] = "Es ist ein Fehler aufgetreten. Die Abfrage konnte nicht abgelegt werden.";
-    Text[ japanese ] = "ｴﾗｰが発生しました。ｸｴﾘｰは格納できませんでした。";
+    Text[ japanese ] = "エラーが発生しました。クエリーは格納できませんでした。";
     Text[ chinese_simplified ] = "发生了一个错误。因此无法建立这个查询。";
     Text[ chinese_traditional ] = "發生一個錯誤，無法儲存查詢。";
     Text[ arabic ] = "��� ���. ���� ��� ���������.";
@@ -2777,6 +2876,7 @@ String RID_DB_QUERY_WIZARD_START + 4
     Text[ turkish ] = "Bir hata olu�tu. Sorgu kaydedilemedi.";
     Text[ catalan ] = "An error occurred. The query could not be saved.";
     Text[ finnish ] = "On ilmennyt virhe. Kysely� ei voitu tallentaa.";
+    Text[ thai ] = "เกิดข้อผิดพลาด ไม่สามารถบันทึกแบบสอบถามได้";
 };
 
 String RID_DB_QUERY_WIZARD_START + 5
@@ -2793,7 +2893,7 @@ String RID_DB_QUERY_WIZARD_START + 5
     Text[ swedish ] = "Dubbelt f�ltnamn. Det finns redan ett f�lt med beteckningen $1.";
     Text[ polish ] = "Podw�jna nazwa pola. Pole o nazwie $1 ju� istnieje.";
     Text[ portuguese_brazilian ] = "Doppelter Feldname. Es existiert bereits ein Feld mit der Bezeichnung $1.";
-    Text[ japanese ] = "ﾌｨｰﾙﾄﾞ名の重複。ﾌｨｰﾙﾄﾞ名 $1 はすでにあります。";
+    Text[ japanese ] = "フィールド名の重複。フィールド名 $1 はすでにあります。";
     Text[ chinese_simplified ] = "双重字段名称。已经存在一个字段名称 $1。";
     Text[ chinese_traditional ] = "雙重欄位名稱。已經有一個欄位名稱 $1 。";
     Text[ arabic ] = "��� ��� �����. ���� ������ ��� �� ��� ������� $1.";
@@ -2804,6 +2904,7 @@ String RID_DB_QUERY_WIZARD_START + 5
     Text[ turkish ] = "Alan ad� kullan�mda. $1 ad�nda ba�ka bir alan mevcut.";
     Text[ catalan ] = "Duplicate field name. A field named $1 already exists.";
     Text[ finnish ] = "Samat kenttien nimet. Kentt� $1 on jo olemassa.";
+    Text[ thai ] = "ทำชื่อเขตข้อมูลซ้ำ ชื่อเขตข้อมูล $1 มีอยู่แล้ว";
 };
 
 String RID_DB_QUERY_WIZARD_START + 6
@@ -2820,7 +2921,7 @@ String RID_DB_QUERY_WIZARD_START + 6
     Text[ swedish ] = "S�kning_";
     Text[ polish ] = "Kwerenda_";
     Text[ portuguese_brazilian ] = "Abfrage_";
-    Text[ japanese ] = "ｸｴﾘｰ_";
+    Text[ japanese ] = "クエリー_";
     Text[ chinese_simplified ] = "查询_";
     Text[ chinese_traditional ] = "查詢_";
     Text[ arabic ] = "�������_";
@@ -2831,6 +2932,7 @@ String RID_DB_QUERY_WIZARD_START + 6
     Text[ turkish ] = "Sorgu_";
     Text[ catalan ] = "Query_";
     Text[ finnish ] = "Kysely_";
+    Text[ thai ] = "แบบสอบถาม_";
 };
 
 String RID_DB_QUERY_WIZARD_START + 7
@@ -2858,6 +2960,7 @@ String RID_DB_QUERY_WIZARD_START + 7
     Text[ turkish ] = "(yok)";
     Text[ catalan ] = "(none)";
     Text[ finnish ] = "(ei mit��n)";
+    Text[ thai ] = "(ไม่มี)";
 };
 
 String RID_DB_QUERY_WIZARD_START + 8
@@ -2885,6 +2988,7 @@ String RID_DB_QUERY_WIZARD_START + 8
     Text[ turkish ] = "bo�";
     Text[ catalan ] = "empty";
     Text[ finnish ] = "tyhj�";
+    Text[ thai ] = "ว่าง";
 };
 
 String RID_DB_QUERY_WIZARD_START + 9
@@ -2912,6 +3016,7 @@ String RID_DB_QUERY_WIZARD_START + 9
     Text[ turkish ] = "bo� de�il";
     Text[ catalan ] = "not empty";
     Text[ finnish ] = "ei tyhj�";
+    Text[ thai ] = "ไม่ว่าง";
 };
 
 String RID_DB_QUERY_WIZARD_START + 10
@@ -2939,6 +3044,7 @@ String RID_DB_QUERY_WIZARD_START + 10
     Text[ turkish ] = "��yle";
     Text[ catalan ] = "like";
     Text[ finnish ] = "samanlainen kuin";
+    Text[ thai ] = "เหมือน";
 };
 
 String RID_DB_QUERY_WIZARD_START + 11
@@ -2962,10 +3068,11 @@ String RID_DB_QUERY_WIZARD_START + 11
     Text[ dutch ] = "niet als";
     Text[ chinese_simplified ] = "不同于";
     Text[ greek ] = "��� ����";
-    Text[ korean ] = "같지 않음";
+    Text[ korean ] = "지정한 조건과 다름";
     Text[ turkish ] = "��yle de�il";
     Text[ catalan ] = "not like";
     Text[ finnish ] = "ei samanlainen kuin";
+    Text[ thai ] = "ไม่เหมือน";
 };
 
 String RID_DB_QUERY_WIZARD_START + 12
@@ -2993,6 +3100,7 @@ String RID_DB_QUERY_WIZARD_START + 12
     Text[ turkish ] = "VE";
     Text[ catalan ] = "AND";
     Text[ finnish ] = "AND";
+    Text[ thai ] = "และ";
 };
 
 String RID_DB_QUERY_WIZARD_START + 13
@@ -3020,6 +3128,7 @@ String RID_DB_QUERY_WIZARD_START + 13
     Text[ turkish ] = "VEYA";
     Text[ catalan ] = "OR";
     Text[ finnish ] = "OR";
+    Text[ thai ] = "หรือ";
 };
 
 String RID_DB_QUERY_WIZARD_START + 14
@@ -3036,7 +3145,7 @@ String RID_DB_QUERY_WIZARD_START + 14
     Text[ swedish ] = ": tabellurval";
     Text[ polish ] = ": Wyb�r tabeli";
     Text[ portuguese_brazilian ] = ": Tabellenauswahl";
-    Text[ japanese ] = ": ﾃｰﾌﾞﾙの選択";
+    Text[ japanese ] = ": テーブルの選択";
     Text[ chinese_simplified ] = "：选择表格";
     Text[ chinese_traditional ] = "：選擇表格";
     Text[ arabic ] = ": ����� ������";
@@ -3047,6 +3156,7 @@ String RID_DB_QUERY_WIZARD_START + 14
     Text[ turkish ] = ": Tablo se�imi";
     Text[ catalan ] = ": Table Selection";
     Text[ finnish ] = ": Taulukon valinta";
+    Text[ thai ] = ": เลือกตาราง";
 };
 
 String RID_DB_QUERY_WIZARD_START + 15
@@ -3063,7 +3173,7 @@ String RID_DB_QUERY_WIZARD_START + 15
     Text[ swedish ] = ": f�lturval";
     Text[ polish ] = ": Wyb�r pola";
     Text[ portuguese_brazilian ] = ": Feldauswahl";
-    Text[ japanese ] = ": ﾌｨｰﾙﾄﾞの選択";
+    Text[ japanese ] = ": フィールドの選択";
     Text[ chinese_simplified ] = "：选择字段";
     Text[ chinese_traditional ] = "：選擇欄位";
     Text[ arabic ] = ": ����� �����";
@@ -3074,6 +3184,7 @@ String RID_DB_QUERY_WIZARD_START + 15
     Text[ turkish ] = ": Alan se�imi";
     Text[ catalan ] = ": Field Selection";
     Text[ finnish ] = ": Kent�n valinta";
+    Text[ thai ] = ":เลือกเขตข้อมูล";
 };
 
 String RID_DB_QUERY_WIZARD_START + 16
@@ -3090,7 +3201,7 @@ String RID_DB_QUERY_WIZARD_START + 16
     Text[ swedish ] = ": filtrering";
     Text[ polish ] = ": Filtrowanie";
     Text[ portuguese_brazilian ] = ": Filterung";
-    Text[ japanese ] = ": ﾌｨﾙﾀ";
+    Text[ japanese ] = ": フィルタ";
     Text[ chinese_simplified ] = "：筛选";
     Text[ chinese_traditional ] = "：篩選";
     Text[ arabic ] = ": �����";
@@ -3102,6 +3213,7 @@ String RID_DB_QUERY_WIZARD_START + 16
     Text[ language_user1 ] = " ";
     Text[ catalan ] = ": Filter";
     Text[ finnish ] = ": Suodatin";
+    Text[ thai ] = ": ตัวกรอง";
 };
 
 String RID_DB_QUERY_WIZARD_START + 17
@@ -3130,6 +3242,7 @@ String RID_DB_QUERY_WIZARD_START + 17
     Text[ language_user1 ] = " ";
     Text[ catalan ] = ": Sorting";
     Text[ finnish ] = ": Lajitellaan";
+    Text[ thai ] = ": เรียง";
 };
 
 String RID_DB_QUERY_WIZARD_START + 18
@@ -3158,6 +3271,7 @@ String RID_DB_QUERY_WIZARD_START + 18
     Text[ language_user1 ] = " ";
     Text[ catalan ] = ": Create";
     Text[ finnish ] = ": Luo";
+    Text[ thai ] = ": สร้าง";
 };
 
 String RID_DB_QUERY_WIZARD_START + 19
@@ -3167,14 +3281,14 @@ String RID_DB_QUERY_WIZARD_START + 19
     Text[ portuguese ] = "~Ver";
     Text[ russian ] = "~��������";
     Text[ dutch ] = "~Voorbeeld";
-    Text[ french ] = "~Aper�u";
+    Text[ french ] = "Aper�u";
     Text[ spanish ] = "~Previsualizaci�n";
     Text[ italian ] = "~Anteprima";
     Text[ danish ] = "~Eksempel";
     Text[ swedish ] = "F�rhands~visning";
     Text[ polish ] = "~Podgl�d";
     Text[ portuguese_brazilian ] = "~Vorschau";
-    Text[ japanese ] = "ﾌﾟﾚﾋﾞｭｰ(~P)";
+    Text[ japanese ] = "プレビュー(~P)";
     Text[ chinese_simplified ] = "预览(~P)";
     Text[ chinese_traditional ] = "預覽(~P)";
     Text[ arabic ] = "~������";
@@ -3185,6 +3299,7 @@ String RID_DB_QUERY_WIZARD_START + 19
     Text[ turkish ] = "~�nizleme";
     Text[ catalan ] = "~Preview";
     Text[ finnish ] = "~Esikatselu";
+    Text[ thai ] = "แ~สดงตัวอย่าง";
 };
 
 String RID_DB_QUERY_WIZARD_START + 20
@@ -3201,7 +3316,7 @@ String RID_DB_QUERY_WIZARD_START + 20
     Text[ swedish ] = "Data~k�lla";
     Text[ polish ] = "�r�d�o danych";
     Text[ portuguese_brazilian ] = "Datenq~uelle";
-    Text[ japanese ] = "ﾃﾞｰﾀｿｰｽ";
+    Text[ japanese ] = "データソース";
     Text[ chinese_simplified ] = "数据源";
     Text[ chinese_traditional ] = "資料源";
     Text[ arabic ] = "~���� ��������";
@@ -3213,6 +3328,7 @@ String RID_DB_QUERY_WIZARD_START + 20
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Data Source";
     Text[ finnish ] = "Tietol�hde";
+    Text[ thai ] = "แหล่งข้อมูล";
 };
 
 String RID_DB_QUERY_WIZARD_START + 21
@@ -3229,7 +3345,7 @@ String RID_DB_QUERY_WIZARD_START + 21
     Text[ swedish ] = "E~xisterande f�lt";
     Text[ polish ] = "~Istniej�ce pola";
     Text[ portuguese_brazilian ] = "~Vorhandene Felder";
-    Text[ japanese ] = "既存ﾌｨｰﾙﾄﾞ(~E)";
+    Text[ japanese ] = "既存フィールド(~E)";
     Text[ chinese_simplified ] = "现有的字段(~E)";
     Text[ chinese_traditional ] = "現存的欄位(~E)";
     Text[ arabic ] = "~������ ��������";
@@ -3241,6 +3357,7 @@ String RID_DB_QUERY_WIZARD_START + 21
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "~Existing Fields";
     Text[ finnish ] = "~Nykyiset kent�t";
+    Text[ thai ] = "เขตข้อมูลที่มี~อยู่แล้ว";
 };
 
 String RID_DB_QUERY_WIZARD_START + 22
@@ -3257,7 +3374,7 @@ String RID_DB_QUERY_WIZARD_START + 22
     Text[ swedish ] = "F�lt i s�k~ning";
     Text[ polish ] = "Pola w ~kwerendzie";
     Text[ portuguese_brazilian ] = "Felder in ~Abfrage";
-    Text[ japanese ] = "ｸｴﾘのﾌｨｰﾙﾄﾞ";
+    Text[ japanese ] = "クエリのフィールド";
     Text[ chinese_simplified ] = "查询之中的字段";
     Text[ chinese_traditional ] = "查詢之中的欄位";
     Text[ arabic ] = "���� ~���������";
@@ -3268,6 +3385,7 @@ String RID_DB_QUERY_WIZARD_START + 22
     Text[ turkish ] = "Sorgu i�indeki alanlar";
     Text[ catalan ] = "Fields in Query";
     Text[ finnish ] = "Kyselyn kent�t";
+    Text[ thai ] = "เขตข้อมูลในแบบสอบถาม";
 };
 
 String RID_DB_QUERY_WIZARD_START + 23
@@ -3284,7 +3402,7 @@ String RID_DB_QUERY_WIZARD_START + 23
     Text[ swedish ] = "Filtrering";
     Text[ polish ] = "Filtrowanie";
     Text[ portuguese_brazilian ] = "Filterung";
-    Text[ japanese ] = "ﾌｨﾙﾀ";
+    Text[ japanese ] = "フィルタ";
     Text[ chinese_simplified ] = "筛选";
     Text[ chinese_traditional ] = "篩選";
     Text[ arabic ] = "�������";
@@ -3296,6 +3414,7 @@ String RID_DB_QUERY_WIZARD_START + 23
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Filter";
     Text[ finnish ] = "Suodatin";
+    Text[ thai ] = "ตัวกรอง";
 };
 
 String RID_DB_QUERY_WIZARD_START + 24
@@ -3312,7 +3431,7 @@ String RID_DB_QUERY_WIZARD_START + 24
     Text[ swedish ] = "L�nk";
     Text[ polish ] = "Po��czenie";
     Text[ portuguese_brazilian ] = "Verkn?fung";
-    Text[ japanese ] = "ﾘﾝｸ";
+    Text[ japanese ] = "リンク";
     Text[ chinese_simplified ] = "链接";
     Text[ chinese_traditional ] = "捷徑";
     Text[ arabic ] = "������";
@@ -3323,6 +3442,7 @@ String RID_DB_QUERY_WIZARD_START + 24
     Text[ turkish ] = "Ba�lant�";
     Text[ catalan ] = "Link";
     Text[ finnish ] = "Linkki";
+    Text[ thai ] = "เชื่อมโยง";
 };
 
 String RID_DB_QUERY_WIZARD_START + 25
@@ -3339,7 +3459,7 @@ String RID_DB_QUERY_WIZARD_START + 25
     Text[ swedish ] = "F�ltnamn";
     Text[ polish ] = "Nazwa pola";
     Text[ portuguese_brazilian ] = "Feldname";
-    Text[ japanese ] = "ﾌｨｰﾙﾄﾞ名";
+    Text[ japanese ] = "フィールド名";
     Text[ chinese_simplified ] = "字段名称";
     Text[ chinese_traditional ] = "欄位名稱";
     Text[ arabic ] = "��� �����";
@@ -3351,6 +3471,7 @@ String RID_DB_QUERY_WIZARD_START + 25
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Field name";
     Text[ finnish ] = "Kent�n nimi";
+    Text[ thai ] = "ชื่อเขตข้อมูล";
 };
 
 String RID_DB_QUERY_WIZARD_START + 26
@@ -3378,6 +3499,7 @@ String RID_DB_QUERY_WIZARD_START + 26
     Text[ turkish ] = "Ko�ul";
     Text[ catalan ] = "Condition";
     Text[ finnish ] = "Ehto";
+    Text[ thai ] = "เงื่อนไข";
 };
 
 String RID_DB_QUERY_WIZARD_START + 27
@@ -3405,6 +3527,7 @@ String RID_DB_QUERY_WIZARD_START + 27
     Text[ turkish ] = "De�er";
     Text[ catalan ] = "Value";
     Text[ finnish ] = "Arvo";
+    Text[ thai ] = "ค่า";
 };
 
 String RID_DB_QUERY_WIZARD_START + 28
@@ -3433,6 +3556,7 @@ String RID_DB_QUERY_WIZARD_START + 28
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Sorting";
     Text[ finnish ] = "Lajitteluj�rjestys";
+    Text[ thai ] = "เรียงลำดับ";
 };
 
 String RID_DB_QUERY_WIZARD_START + 29
@@ -3449,7 +3573,7 @@ String RID_DB_QUERY_WIZARD_START + 29
     Text[ swedish ] = "~Namn p� s�kning";
     Text[ polish ] = "Tytu� kwerendy";
     Text[ portuguese_brazilian ] = "Abfrage~titel";
-    Text[ japanese ] = "ｸｴﾘｰのﾀｲﾄﾙ";
+    Text[ japanese ] = "クエリーのタイトル";
     Text[ chinese_simplified ] = "查询标题";
     Text[ chinese_traditional ] = "查詢的標題";
     Text[ arabic ] = "~����� ���������";
@@ -3460,6 +3584,7 @@ String RID_DB_QUERY_WIZARD_START + 29
     Text[ turkish ] = "Sorgu ba�l���";
     Text[ catalan ] = "Query title";
     Text[ finnish ] = "Kyselyn otsikko";
+    Text[ thai ] = "ชื่อแบบสอบถาม";
 };
 
 String RID_DB_QUERY_WIZARD_START + 30
@@ -3487,6 +3612,7 @@ String RID_DB_QUERY_WIZARD_START + 30
     Text[ turkish ] = "Olu�turulduktan sonra...";
     Text[ catalan ] = "After completion...";
     Text[ finnish ] = "Valmistumisen j�lkeen...";
+    Text[ thai ] = "หลังจากเสร็จสมบูรณ์...";
 };
 
 String RID_DB_QUERY_WIZARD_START + 31
@@ -3503,7 +3629,7 @@ String RID_DB_QUERY_WIZARD_START + 31
     Text[ swedish ] = "Utf�r s�kning ~direkt";
     Text[ polish ] = "Wykonaj ~kwerend� od razu";
     Text[ portuguese_brazilian ] = "Abfrage sofort ~durchf?ren";
-    Text[ japanese ] = "ｸｴﾘｰをすぐに実行";
+    Text[ japanese ] = "クエリーをすぐに実行";
     Text[ chinese_simplified ] = "立刻执行查询";
     Text[ chinese_traditional ] = "立刻執行查詢";
     Text[ arabic ] = "����� ��������� �����";
@@ -3514,6 +3640,7 @@ String RID_DB_QUERY_WIZARD_START + 31
     Text[ turkish ] = "Sorguyu hemen y�r�t";
     Text[ catalan ] = "Execute query immediately";
     Text[ finnish ] = "Suorita kysely heti";
+    Text[ thai ] = "กระทำแบบสอบถามทันที";
 };
 
 String RID_DB_QUERY_WIZARD_START + 32
@@ -3530,7 +3657,7 @@ String RID_DB_QUERY_WIZARD_START + 32
     Text[ swedish ] = "~Arkivera s�kning";
     Text[ polish ] = "Zapisz ~kwerend�";
     Text[ portuguese_brazilian ] = "Abfrage ~ablegen";
-    Text[ japanese ] = "ｸｴﾘｰの格納";
+    Text[ japanese ] = "クエリーの格納";
     Text[ chinese_simplified ] = "存盘查询";
     Text[ chinese_traditional ] = "儲存查詢";
     Text[ arabic ] = "~��� ���������";
@@ -3541,6 +3668,7 @@ String RID_DB_QUERY_WIZARD_START + 32
     Text[ turkish ] = "Sorguyu kaydet";
     Text[ catalan ] = "Save query";
     Text[ finnish ] = "Tallenna kysely";
+    Text[ thai ] = "บันทึกแบบสอบถาม";
 };
 
 // ============================================================================
@@ -3559,7 +3687,7 @@ String RID_DB_REPORT_WIZARD_START + 0
     Text[ swedish ] = "AutoPilot f�r rapporter";
     Text[ polish ] = "AutoPilot: Raporty";
     Text[ portuguese_brazilian ] = "AutoPilot Berichte";
-    Text[ japanese ] = "ｵｰﾄﾊﾟｲﾛｯﾄ ﾚﾎﾟｰﾄ";
+    Text[ japanese ] = "オートパイロット レポート";
     Text[ chinese_simplified ] = "自动文件助理 报表";
     Text[ chinese_traditional ] = "自動檔案助理 報表";
     Text[ arabic ] = "������ ������ �����";
@@ -3570,6 +3698,7 @@ String RID_DB_REPORT_WIZARD_START + 0
     Text[ turkish ] = "Rapor OtoPilotu";
     Text[ catalan ] = "AutoPilot Report";
     Text[ finnish ] = "Automaattinen raportin ohjaus";
+    Text[ thai ] = "นำร่องรายงานอัตโนมัติ ";
 };
 
 String RID_DB_REPORT_WIZARD_START + 1
@@ -3586,7 +3715,7 @@ String RID_DB_REPORT_WIZARD_START + 1
     Text[ swedish ] = "Det gick inte att arkivera rapporten i Explorer.";
     Text[ polish ] = "Zapisanie raportu w Eksploratorze nie powiod�o si�.";
     Text[ portuguese_brazilian ] = "Der Bericht konnte nicht im Explorer abgelegt werden.";
-    Text[ japanese ] = "ﾚﾎﾟｰﾄはｴｸｽﾌﾟﾛｰﾗに格納できませんでした。";
+    Text[ japanese ] = "レポートはエクスプローラに格納できませんでした。";
     Text[ chinese_simplified ] = "无法在资源管理器内创建报告。";
     Text[ chinese_traditional ] = "報表無法存入檔案總管。";
     Text[ arabic ] = "���� ��� ������� �� ��������.";
@@ -3598,6 +3727,7 @@ String RID_DB_REPORT_WIZARD_START + 1
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "The report could not be saved in the Explorer.";
     Text[ finnish ] = "Raporttia ei voitu tallentaa resurssienhallintaan.";
+    Text[ thai ] = "ไม่สามารถบันทึกรายงานใน Explorer ได้";
 };
 
 String RID_DB_REPORT_WIZARD_START + 2
@@ -3614,7 +3744,7 @@ String RID_DB_REPORT_WIZARD_START + 2
     Text[ swedish ] = "Ingen databas �r installerad. Du beh�ver minst en databas f�r att kunna starta AutoPiloten f�r rapporter.";
     Text[ polish ] = "Nie zainstalowana �adnej bazy danych. Wymagana jest co najmniej jedna baza danych, aby uruchomi� AutoPilota raport�w.";
     Text[ portuguese_brazilian ] = "Es ist keine Datenbank installiert. Sie ben?igen mindestens eine Datenbank um den AutoPiloten f? Berichte starten zu k?nen.";
-    Text[ japanese ] = "ﾃﾞｰﾀﾍﾞｰｽがｲﾝｽﾄｰﾙされていません。ｵｰﾄﾊﾟｲﾛｯﾄ ﾚﾎﾟｰﾄを開始するには、ﾃﾞｰﾀﾍﾞｰｽが最低１つは必要です。";
+    Text[ japanese ] = "データベースがインストールされていません。オートパイロット レポートを開始するには、データベースが最低１つは必要です。";
     Text[ chinese_simplified ] = "没有安装数据库。要执行自动文件助理的报告功能您必须安装一个数据库。";
     Text[ chinese_traditional ] = "沒有安裝任何一個資料庫。因此無法執行自動檔案助理報表。";
     Text[ arabic ] = "��� ���� ��� ����� ������ �����. ��� ����� ��� ����� ������ ����� ��� ����� ��� ����� �� ��� ������ ����� ��������.";
@@ -3625,6 +3755,7 @@ String RID_DB_REPORT_WIZARD_START + 2
     Text[ turkish ] = "Kurulmu� veritaban� yok. Rapor OtoPilot'unu ba�latabilmek i�in en az bir veritaban� mevcut olmal�d�r.";
     Text[ catalan ] = "No hay ninguna base de datos instalada. Necesita al menos una base de datos para poder iniciar el AutoPiloto para informes.";
     Text[ finnish ] = "Tietokantaa ei ole asennettu. J�rjestelm�ss� on oltava v�hint��n yksi tietokanta ennen kuin automaattista raportin ohjausta voi k�ytt��.";
+    Text[ thai ] = "ยังไม่ได้ติดตั้งฐานข้อมูล ต้องมีอย่างน้อยที่สุดหนึ่งฐานข้อมูลบนระบบเพื่อสามารถเริ่มต้นการนำร่องรายงานอัตโนมัติ ";
 };
 
 String RID_DB_REPORT_WIZARD_START + 3
@@ -3641,18 +3772,19 @@ String RID_DB_REPORT_WIZARD_START + 3
     Text[ swedish ] = "~Tabell";
     Text[ polish ] = "Tabela";
     Text[ portuguese_brazilian ] = "Tabelle";
-    Text[ japanese ] = "ﾃｰﾌﾞﾙ(~T)";
+    Text[ japanese ] = "テーブル(~T)";
     Text[ chinese_simplified ] = "表格(~T)";
     Text[ chinese_traditional ] = "表格(~T)";
     Text[ arabic ] = "������";
     Text[ dutch ] = "~Tabel";
     Text[ chinese_simplified ] = "表格(~T)";
     Text[ greek ] = "�������";
-    Text[ korean ] = "표(~T)";
+    Text[ korean ] = "시트(~T)";
     Text[ turkish ] = "~Tablo";
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "~Table";
     Text[ finnish ] = "~Taulukko";
+    Text[ thai ] = "~ตาราง";
 };
 
 String RID_DB_REPORT_WIZARD_START + 4
@@ -3681,6 +3813,7 @@ String RID_DB_REPORT_WIZARD_START + 4
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Colu~mns";
     Text[ finnish ] = "Sarak~keet";
+    Text[ thai ] = "คอลัม~น์";
 };
 
 String RID_DB_REPORT_WIZARD_START + 5
@@ -3697,17 +3830,18 @@ String RID_DB_REPORT_WIZARD_START + 5
     Text[ swedish ] = "~Disposition A";
     Text[ polish ] = "Konspekt A";
     Text[ portuguese_brazilian ] = "Gliederung A";
-    Text[ japanese ] = "ｱｳﾄﾗｲﾝ A";
+    Text[ japanese ] = "アウトライン A";
     Text[ chinese_simplified ] = "大纲 A";
     Text[ chinese_traditional ] = "大綱 A";
     Text[ arabic ] = "������� A";
     Text[ dutch ] = "~Overzicht A";
     Text[ chinese_simplified ] = "大纲 A";
     Text[ greek ] = "��������� A";
-    Text[ korean ] = "다단계 A";
+    Text[ korean ] = "아웃트라인 A";
     Text[ turkish ] = "~Anahat A";
     Text[ catalan ] = "Outline A";
     Text[ finnish ] = "J�sennys A";
+    Text[ thai ] = "เค้าร่าง A";
 };
 
 String RID_DB_REPORT_WIZARD_START + 6
@@ -3735,6 +3869,7 @@ String RID_DB_REPORT_WIZARD_START + 6
     Text[ turkish ] = "S~ol A";
     Text[ catalan ] = "Left A";
     Text[ finnish ] = "Vasen A";
+    Text[ thai ] = "ซ้าย A";
 };
 
 String RID_DB_REPORT_WIZARD_START + 7
@@ -3751,7 +3886,7 @@ String RID_DB_REPORT_WIZARD_START + 7
     Text[ swedish ] = "Rapport_";
     Text[ polish ] = "Raport_";
     Text[ portuguese_brazilian ] = "Bericht_";
-    Text[ japanese ] = "ﾚﾎﾟｰﾄ_";
+    Text[ japanese ] = "レポート_";
     Text[ chinese_simplified ] = "报表_";
     Text[ chinese_traditional ] = "報表_";
     Text[ arabic ] = "�����_";
@@ -3762,6 +3897,7 @@ String RID_DB_REPORT_WIZARD_START + 7
     Text[ turkish ] = "Rapor_";
     Text[ catalan ] = "Report_";
     Text[ finnish ] = "Raportti_";
+    Text[ thai ] = "รายงาน_";
 };
 
 String RID_DB_REPORT_WIZARD_START + 8
@@ -3789,13 +3925,14 @@ String RID_DB_REPORT_WIZARD_START + 8
     Text[ turkish ] = "(yok)";
     Text[ catalan ] = "(none)";
     Text[ finnish ] = "(ei mit��n)";
+    Text[ thai ] = "(ไม่มี)";
 };
 
 
 String RID_DB_REPORT_WIZARD_START + 11
 {
     Text = "Gliederung";
-    Text [ english_us ] = "Structure";
+    Text [ english_us ] = ": Structure";
     Text[ portuguese ] = ": Esquema";
     Text[ russian ] = ": ���������";
     Text[ dutch ] = ": overzicht";
@@ -3806,23 +3943,24 @@ String RID_DB_REPORT_WIZARD_START + 11
     Text[ swedish ] = ": disposition";
     Text[ polish ] = ": Konspekt";
     Text[ portuguese_brazilian ] = ": Gliederung";
-    Text[ japanese ] = ": ｱｳﾄﾗｲﾝ";
+    Text[ japanese ] = ": アウトライン";
     Text[ chinese_simplified ] = "：大纲编排";
     Text[ chinese_traditional ] = "：編排";
     Text[ arabic ] = ": �������";
     Text[ dutch ] = ": overzicht";
     Text[ chinese_simplified ] = "：大纲编排";
     Text[ greek ] = ": ���������";
-    Text[ korean ] = ": 다단계";
+    Text[ korean ] = ": 아웃트라인";
     Text[ turkish ] = ": Yap�";
     Text[ catalan ] = ": Structure";
     Text[ finnish ] = ": Rakenne";
+    Text[ thai ] = ": โครงสร้าง";
 };
 
 String RID_DB_REPORT_WIZARD_START + 12
 {
     Text = "Sortieroptionen";
-    Text [ english_us ] = "Sort Options";
+    Text [ english_us ] = ": Sort Options";
     Text[ portuguese ] = ": Op��es de ordem";
     Text[ russian ] = ": ��������� ����������";
     Text[ dutch ] = ": sorteeropties";
@@ -3833,7 +3971,7 @@ String RID_DB_REPORT_WIZARD_START + 12
     Text[ swedish ] = ": sorteringsalternativ";
     Text[ polish ] = ": Opcje sortowania";
     Text[ portuguese_brazilian ] = ": Sortieroptionen";
-    Text[ japanese ] = ": 並べ替えｵﾌﾟｼｮﾝ";
+    Text[ japanese ] = ": 並べ替えオプション";
     Text[ chinese_simplified ] = "：排序选项";
     Text[ chinese_traditional ] = "：排序選項";
     Text[ arabic ] = ": ������ �������";
@@ -3845,12 +3983,13 @@ String RID_DB_REPORT_WIZARD_START + 12
     Text[ language_user1 ] = " ";
     Text[ catalan ] = ": Sort Options";
     Text[ finnish ] = ": Lajitteluvalinnat";
+    Text[ thai ] = ": เรียงตัวเลือก";
 };
 
 String RID_DB_REPORT_WIZARD_START + 13
 {
     Text = "Stilauswahl";
-    Text [ english_us ] = "Style Selection";
+    Text [ english_us ] = ": Style Selection";
     Text[ portuguese ] = ": Selec��o de estilo";
     Text[ russian ] = ": ����� �����";
     Text[ dutch ] = ": stijl selecteren";
@@ -3861,7 +4000,7 @@ String RID_DB_REPORT_WIZARD_START + 13
     Text[ swedish ] = ": stilurval";
     Text[ polish ] = ": Wyb�r stylu";
     Text[ portuguese_brazilian ] = ": Stilauswahl";
-    Text[ japanese ] = ": ｽﾀｲﾙの選択";
+    Text[ japanese ] = ": スタイルの選択";
     Text[ chinese_simplified ] = "：选择式样";
     Text[ chinese_traditional ] = "：選擇風格";
     Text[ arabic ] = ": ����� �����";
@@ -3872,12 +4011,13 @@ String RID_DB_REPORT_WIZARD_START + 13
     Text[ turkish ] = ": Bi�im se�imi";
     Text[ catalan ] = ": Style Selection";
     Text[ finnish ] = ": Tyylin valinta";
+    Text[ thai ] = ": เลือกลักษณะ";
 };
 
 String RID_DB_REPORT_WIZARD_START + 14
 {
     Text = "Layout der Datenstruktur";
-    Text [ english_us ] = "Layout of the data structure";
+    Text [ english_us ] = ": Styles";
     Text[ portuguese ] = ": Estilos";
     Text[ russian ] = ":����� �������";
     Text[ dutch ] = ": opmaakprofielen";
@@ -3888,7 +4028,7 @@ String RID_DB_REPORT_WIZARD_START + 14
     Text[ swedish ] = ": formatmallar";
     Text[ polish ] = ": Style formatu";
     Text[ portuguese_brazilian ] = ": Formatvorlagen";
-    Text[ japanese ] = ": 書式ｽﾀｲﾙ";
+    Text[ japanese ] = ": 書式スタイル";
     Text[ chinese_simplified ] = "：格式样式";
     Text[ chinese_traditional ] = "：格式樣式";
     Text[ arabic ] = ": ����� �������";
@@ -3899,12 +4039,13 @@ String RID_DB_REPORT_WIZARD_START + 14
     Text[ turkish ] = ": Format �ablonlar�";
     Text[ catalan ] = ": Styles";
     Text[ finnish ] = ": Tyylit";
+    Text[ thai ] = ": ลักษณะ";
 };
 
 String RID_DB_REPORT_WIZARD_START + 15
 {
     Text = "Layout der Seitenk�pfe";
-    Text [ english_us ] = "Layout of the page headers";
+    Text [ english_us ] = ": Create";
     Text[ portuguese ] = ": Criar";
     Text[ russian ] = ": ������";
     Text[ dutch ] = ": voltooien";
@@ -3926,6 +4067,7 @@ String RID_DB_REPORT_WIZARD_START + 15
     Text[ turkish ] = ": Olu�tur";
     Text[ catalan ] = ": Create";
     Text[ finnish ] = ": Luo";
+    Text[ thai ] = ": สร้าง";
 };
 
 
@@ -3943,23 +4085,24 @@ String RID_DB_REPORT_WIZARD_START + 19
     Text[ swedish ] = "Disponera ~f�lt";
     Text[ polish ] = "Organizuj pola";
     Text[ portuguese_brazilian ] = "Felder ~Gliedern";
-    Text[ japanese ] = "ﾌｨｰﾙﾄﾞのｱｳﾄﾗｲﾝ";
+    Text[ japanese ] = "フィールドのアウトライン";
     Text[ chinese_simplified ] = "编排字段";
     Text[ chinese_traditional ] = "編排欄位";
     Text[ arabic ] = "~����� ������";
     Text[ dutch ] = "Velden ~indelen";
     Text[ chinese_simplified ] = "编排字段";
     Text[ greek ] = "������� ������";
-    Text[ korean ] = "필드 다단계";
+    Text[ korean ] = "필드 아웃트라인";
     Text[ turkish ] = "Alanlar� d�zenle";
     Text[ catalan ] = "Organize fields";
     Text[ finnish ] = "J�rjestele kent�t";
+    Text[ thai ] = "จัดการเขตข้อมูล";
 };
 
 String RID_DB_REPORT_WIZARD_START + 20
 {
     Text = "Zus�tzliche Sortierkriterien:";
-    Text [ english_us ] = "Additional ~Sorting Criterias";
+    Text [ english_us ] = "~Sort order";
     Text[ portuguese ] = "~Ordenar";
     Text[ russian ] = "~����������";
     Text[ dutch ] = "~Sortering";
@@ -3977,10 +4120,11 @@ String RID_DB_REPORT_WIZARD_START + 20
     Text[ dutch ] = "~Sortering";
     Text[ chinese_simplified ] = "排序(~S)";
     Text[ greek ] = "��������~��";
-    Text[ korean ] = "분류(~S)";
+    Text[ korean ] = "정렬(~S)";
     Text[ turkish ] = "~S�ralama";
     Text[ catalan ] = "~Sorting";
     Text[ finnish ] = "~Lajitellaan";
+    Text[ thai ] = "เ~รียง";
 };
 
 String RID_DB_REPORT_WIZARD_START + 21
@@ -3990,9 +4134,9 @@ String RID_DB_REPORT_WIZARD_START + 21
     Text[ portuguese ] = "~Alinhamento";
     Text[ russian ] = "~������������";
     Text[ dutch ] = "~Uitlijning";
-    Text[ french ] = "~Alignement";
+    Text[ french ] = "Alignement";
     Text[ spanish ] = "~Alineaci�n";
-    Text[ italian ] = "~Allineamento";
+    Text[ italian ] = "Allineamento";
     Text[ danish ] = "~Justering";
     Text[ swedish ] = "~Justering";
     Text[ polish ] = "~Wyr�wnanie";
@@ -4008,6 +4152,7 @@ String RID_DB_REPORT_WIZARD_START + 21
     Text[ turkish ] = "~Hizalama";
     Text[ catalan ] = "~Alignment";
     Text[ finnish ] = "~Tasaus";
+    Text[ thai ] = "~จัดตำแหน่ง";
 };
 
 String RID_DB_REPORT_WIZARD_START + 22
@@ -4017,9 +4162,9 @@ String RID_DB_REPORT_WIZARD_START + 22
     Text[ portuguese ] = "~Vertical";
     Text[ russian ] = "~������� ������";
     Text[ dutch ] = "~Staand";
-    Text[ french ] = "~Portrait";
+    Text[ french ] = "Portrait";
     Text[ spanish ] = "~Vertical";
-    Text[ italian ] = "~Verticale";
+    Text[ italian ] = "Verticale";
     Text[ danish ] = "~St�ende";
     Text[ swedish ] = "~St�ende";
     Text[ polish ] = "Orientacja pionowa";
@@ -4035,6 +4180,7 @@ String RID_DB_REPORT_WIZARD_START + 22
     Text[ turkish ] = "~Dikey";
     Text[ catalan ] = "~Portrait";
     Text[ finnish ] = "~Pystytaso";
+    Text[ thai ] = "แนว~ตั้ง";
 };
 
 String RID_DB_REPORT_WIZARD_START + 23
@@ -4044,7 +4190,7 @@ String RID_DB_REPORT_WIZARD_START + 23
     Text[ portuguese ] = "~Horizontal";
     Text[ russian ] = "~��������� ������";
     Text[ dutch ] = "~Liggend";
-    Text[ french ] = "Pa~ysage";
+    Text[ french ] = "Paysage";
     Text[ spanish ] = "~Horizontal";
     Text[ italian ] = "~Orizzontale";
     Text[ danish ] = "~Liggende";
@@ -4062,6 +4208,7 @@ String RID_DB_REPORT_WIZARD_START + 23
     Text[ turkish ] = "~Yatay";
     Text[ catalan ] = "~Landscape";
     Text[ finnish ] = "~Vaakataso";
+    Text[ thai ] = "แนว~นอน";
 };
 
 String RID_DB_REPORT_WIZARD_START + 24
@@ -4071,14 +4218,14 @@ String RID_DB_REPORT_WIZARD_START + 24
     Text[ portuguese ] = "~Estilo";
     Text[ russian ] = "~�����";
     Text[ dutch ] = "~Stijl";
-    Text[ french ] = "~Style";
+    Text[ french ] = "Style";
     Text[ spanish ] = "~Estilo";
     Text[ italian ] = "~Stile";
     Text[ danish ] = "T~ype";
     Text[ swedish ] = "~Stil";
     Text[ polish ] = "~Styl";
     Text[ portuguese_brazilian ] = "~Stil";
-    Text[ japanese ] = "ｽﾀｲﾙ(~S)";
+    Text[ japanese ] = "スタイル(~S)";
     Text[ chinese_simplified ] = "式样(~S)";
     Text[ chinese_traditional ] = "風格(~S)";
     Text[ arabic ] = "~�����";
@@ -4089,6 +4236,7 @@ String RID_DB_REPORT_WIZARD_START + 24
     Text[ turkish ] = "~Bi�im";
     Text[ catalan ] = "~Style";
     Text[ finnish ] = "~Tyyli";
+    Text[ thai ] = "~ลักษณะ";
 };
 
 
@@ -4106,7 +4254,7 @@ String RID_DB_REPORT_WIZARD_START + 31
     Text[ swedish ] = "Format~mallar";
     Text[ polish ] = "~Style formatu";
     Text[ portuguese_brazilian ] = "Format~vorlagen";
-    Text[ japanese ] = "書式ｽﾀｲﾙ";
+    Text[ japanese ] = "書式スタイル";
     Text[ chinese_simplified ] = "格式样式";
     Text[ chinese_traditional ] = "格式樣式";
     Text[ arabic ] = "~����� �������";
@@ -4117,6 +4265,7 @@ String RID_DB_REPORT_WIZARD_START + 31
     Text[ turkish ] = "Format �ablonlar�";
     Text[ catalan ] = "Styles";
     Text[ finnish ] = "Tyylit";
+    Text[ thai ] = "ลักษณะ";
 };
 
 String RID_DB_REPORT_WIZARD_START + 32
@@ -4133,7 +4282,7 @@ String RID_DB_REPORT_WIZARD_START + 32
     Text[ swedish ] = "~Namn p� rapport";
     Text[ polish ] = "~Nazwa raportu";
     Text[ portuguese_brazilian ] = "~Name des Berichts";
-    Text[ japanese ] = "ﾚﾎﾟｰﾄ名(~N)";
+    Text[ japanese ] = "レポート名(~N)";
     Text[ chinese_simplified ] = "报表名称(~N)";
     Text[ chinese_traditional ] = "報表名稱(~N)";
     Text[ arabic ] = "~��� �������";
@@ -4144,6 +4293,7 @@ String RID_DB_REPORT_WIZARD_START + 32
     Text[ turkish ] = "~Raporun ad�";
     Text[ catalan ] = "~Name of Report";
     Text[ finnish ] = "Raportin ~nimi";
+    Text[ thai ] = "~ชื่อรายงาน";
 };
 
 String RID_DB_REPORT_WIZARD_START + 33
@@ -4172,6 +4322,7 @@ String RID_DB_REPORT_WIZARD_START + 33
     Text[ language_user1 ] = "EM2.Mai.01: Die gleiche �bersetzung wie f�r \"Nach der Fertigstellung...\".";
     Text[ catalan ] = "After completion...";
     Text[ finnish ] = "Valmistumisen ~j�lkeen";
+    Text[ thai ] = "หลังจากเสร็จสม~บูรณ์...";
 };
 
 String RID_DB_REPORT_WIZARD_START + 34
@@ -4188,7 +4339,7 @@ String RID_DB_REPORT_WIZARD_START + 34
     Text[ swedish ] = "~Visa rapport";
     Text[ polish ] = "Poka� raport";
     Text[ portuguese_brazilian ] = "Bericht an~zeigen";
-    Text[ japanese ] = "ﾚﾎﾟｰﾄを表示する";
+    Text[ japanese ] = "レポートを表示する";
     Text[ chinese_simplified ] = "显示报表";
     Text[ chinese_traditional ] = "顯示報表";
     Text[ arabic ] = "~����� �������";
@@ -4199,6 +4350,7 @@ String RID_DB_REPORT_WIZARD_START + 34
     Text[ turkish ] = "Raporu g�r�nt�le";
     Text[ catalan ] = "display Report";
     Text[ finnish ] = "N�yt� raportti";
+    Text[ thai ] = "แสดงผลรายงาน";
 };
 
 String RID_DB_REPORT_WIZARD_START + 35
@@ -4215,7 +4367,7 @@ String RID_DB_REPORT_WIZARD_START + 35
     Text[ swedish ] = "~Arkivera rapport";
     Text[ polish ] = "Zapisz raport";
     Text[ portuguese_brazilian ] = "Bericht ab~legen";
-    Text[ japanese ] = "ﾚﾎﾟｰﾄを格納";
+    Text[ japanese ] = "レポートを格納";
     Text[ chinese_simplified ] = "存盘报表";
     Text[ chinese_traditional ] = "儲存報表";
     Text[ arabic ] = "��� ~�������";
@@ -4226,6 +4378,7 @@ String RID_DB_REPORT_WIZARD_START + 35
     Text[ turkish ] = "Raporu kaydet";
     Text[ catalan ] = "save Report";
     Text[ finnish ] = "Tallenna raportti";
+    Text[ thai ] = "บันทึกรายงาน";
 };
 
 String RID_DB_REPORT_WIZARD_START + 36
@@ -4251,31 +4404,33 @@ String RID_DB_REPORT_WIZARD_START + 36
     Text[ turkish ] = "A;Z";
     Text[ catalan ] = "A;Z";
     Text[ finnish ] = "A;Z";
+    Text[ thai ] = "A;Z";
 };
 
 String RID_DB_REPORT_WIZARD_START + 37
 {
     Text = "Z;A";
-    Text [ english_us ] = "Z;A";
-    Text[ portuguese ] = "Z;A";
-    Text[ greek ] = "�;A";
-    Text[ dutch ] = "Z;A";
-    Text[ french ] = "Z;A";
-    Text[ spanish ] = "Z;A";
-    Text[ swedish ] = "Z;A";
-    Text[ russian ] = "�;�";
-    Text[ italian ] = "Z;A";
-    Text[ danish ] = "Z;A";
-    Text[ polish ] = "Z;A";
-    Text[ portuguese_brazilian ] = "Z;A";
-    Text[ japanese ] = "Z;A";
-    Text[ korean ] = "Z;A";
-    Text[ chinese_simplified ] = "Z;A";
-    Text[ chinese_traditional ] = "Z;A";
-    Text[ arabic ] = "Z;A";
-    Text[ turkish ] = "Z;A";
-    Text[ catalan ] = "Z;A";
-    Text[ finnish ] = "Z;A";
+    Text [ english_us ] = "Report names cannot be longer than 32 characters.";
+    Text[ portuguese ] = "Os nomes de relat�rios s� podem ter um m�ximo de 32 caracteres.";
+    Text[ greek ] = "�� ����� ��� �������� ��� �������� ��� ������ �� ���������� ���� 32 ����������.";
+    Text[ dutch ] = "Namen van berichten mogen maximaal 32 tekens lang zijn.";
+    Text[ french ] = "Un nom d'�tat peut contenir au maximum 32 caract�res.";
+    Text[ spanish ] = "Los nombres de los informes no pueden exceder los 32 caracteres.";
+    Text[ swedish ] = "Rapportnamn f�r inte inneh�lla mer �n 32 tecken.";
+    Text[ russian ] = "����� ������� ����� ��������� �� ����� 32 ������.";
+    Text[ italian ] = "I nomi del rapporto possono avere una lunghezza massima di 32 caratteri.";
+    Text[ danish ] = "Rapport-navne m� h�jst indeholder 32 tegn.";
+    Text[ polish ] = "Nazwy raport�w mog� si� sk�ada� z maksymalnie 32 znak�w.";
+    Text[ portuguese_brazilian ] = "Report names must not contain more than 32 characters.";
+    Text[ japanese ] = "レポート名は最高32文字までです。";
+    Text[ korean ] = "리포트의 이름은 최대 32문자를 초과해서는 안됩니다.";
+    Text[ chinese_simplified ] = "报表名称最多只能由32个字符组成。";
+    Text[ chinese_traditional ] = "報告名稱最長不得超過32個字元。";
+    Text[ arabic ] = "��� ��� ���� ��� ����� ������� �� 32 �����.";
+    Text[ turkish ] = "Rapor adlar� en fazla 32 karakter olmal�d�r.";
+    Text[ catalan ] = "Report names cannot be longer than 32 characters.";
+    Text[ finnish ] = "Raporttien nimet eiv�t saa olla yli 32 merkin pituisia.";
+    Text[ thai ] = "ชื่อรายงานต้องยาวไม่เกิน 32 ตัวอักขระ";
 };
 
 // ============================================================================
@@ -4294,7 +4449,7 @@ String RID_DB_TABLE_WIZARD_START + 0
     Text[ swedish ] = "AutoPilot f�r tabeller";
     Text[ polish ] = "AutoPilot: Tabela";
     Text[ portuguese_brazilian ] = "AutoPilot Tabelle";
-    Text[ japanese ] = "ｵｰﾄﾊﾟｲﾛｯﾄ ﾃｰﾌﾞﾙ";
+    Text[ japanese ] = "オートパイロット テーブル";
     Text[ chinese_simplified ] = "自动文件助理 表格";
     Text[ chinese_traditional ] = "自動檔案助理 表格";
     Text[ arabic ] = "���� ������ �����";
@@ -4305,6 +4460,7 @@ String RID_DB_TABLE_WIZARD_START + 0
     Text[ turkish ] = "Tablo OtoPilotu";
     Text[ catalan ] = "AutoPilot Table";
     Text[ finnish ] = "Automaattinen taulukon ohjaus";
+    Text[ thai ] = "นำร่องตารางอัตโนมัติ";
 };
 
 String RID_DB_TABLE_WIZARD_START + 1
@@ -4321,7 +4477,7 @@ String RID_DB_TABLE_WIZARD_START + 1
     Text[ swedish ] = "Ingen databas �r installerad. Du beh�ver minst en databas f�r att kunna starta AutoPiloten f�r tabeller.";
     Text[ polish ] = "Nie zainstalowano �adnej bazy danych. Do uruchomienia AutoPilota tabeli potrzeba co najmniej jednej bazy danych.";
     Text[ portuguese_brazilian ] = "Es ist keine Datenbank installiert. Sie ben?igen mind. eine Datenbank um den AutoPiloten f? Tabellen starten zu k?nen.";
-    Text[ japanese ] = "ﾃﾞｰﾀﾍﾞｰｽはｲﾝｽﾄｰﾙされていません。ﾃｰﾌﾞﾙのｵｰﾄﾊﾟｲﾛｯﾄを開始するには、ﾃﾞｰﾀﾍﾞｰｽが最低１つは必要です。";
+    Text[ japanese ] = "データベースはインストールされていません。テーブルのオートパイロットを開始するには、データベースが最低１つは必要です。";
     Text[ chinese_simplified ] = "没有安装数据库。要执行自动文件助理的表格功能就须先建立一个数据库。";
     Text[ chinese_traditional ] = "沒有安裝資料庫。因此無法執行自動檔案助理的表格功能。";
     Text[ arabic ] = "��� ���� ��� ����� ������ �����. ��� ����� ��� ����� ������ ����� ��� ����� ��� ����� �� ��� ������ ����� �������.";
@@ -4332,6 +4488,7 @@ String RID_DB_TABLE_WIZARD_START + 1
     Text[ turkish ] = "Kurulmu� veritaban� yok. Tablo OtoPilot'unu ba�latabilmek i�in en az bir veritaban� mevcut olmal�d�r.";
     Text[ catalan ] = "A database has not been installed. There must be at least one database so that the AutoPilot Table can be started.";
     Text[ finnish ] = "Tietokantaa ei ole asennettu. Automaattista taulukoiden ohjausta varten j�rjestelm�ss� on oltava m��ritettyn� v�hint��n yksi tietokanta.";
+    Text[ thai ] = "ไม่ได้ติดตั้งฐานข้อมูล คุณต้องการอย่างน้อยที่สุดหนึ่งฐานข้อมูลเพื่อเริ่มต้นการนำร่องตารางอัตโนมัติ";
 };
 
 String RID_DB_TABLE_WIZARD_START + 2
@@ -4348,7 +4505,7 @@ String RID_DB_TABLE_WIZARD_START + 2
     Text[ swedish ] = "Identifikatorn $1 finns redan i listan.";
     Text[ polish ] = "Identyfikator $1 znajduje si� ju� na li�cie.";
     Text[ portuguese_brazilian ] = "Der Bezeichner $1 ist bereits in der Liste vorhanden.";
-    Text[ japanese ] = "ID $1 はすでにﾘｽﾄにあります。";
+    Text[ japanese ] = "ID $1 はすでにリストにあります。";
     Text[ chinese_simplified ] = "这个名称 $1 已经在列单之中。";
     Text[ chinese_traditional ] = "清單內已經存在一個名稱 $1。";
     Text[ arabic ] = "����� $1 ����� ������ �� �������.";
@@ -4359,6 +4516,7 @@ String RID_DB_TABLE_WIZARD_START + 2
     Text[ turkish ] = "Tan�t�c� $1 listede mevcut.";
     Text[ catalan ] = "This identifier $1 is already contained in the list.";
     Text[ finnish ] = "Tunnus $1 on jo luettelossa.";
+    Text[ thai ] = "ตัวระบุ $1 มีอยู่แล้วในรายการ";
 };
 
 String RID_DB_TABLE_WIZARD_START + 3
@@ -4375,7 +4533,7 @@ String RID_DB_TABLE_WIZARD_START + 3
     Text[ swedish ] = "Det gick inte att �ppna databasen $1.";
     Text[ polish ] = "Otwarcie bazy danych $1 nie powiod�o si�.";
     Text[ portuguese_brazilian ] = "Die Datenbank $1 konnte nicht ge?fnet werden.";
-    Text[ japanese ] = "ﾃﾞｰﾀﾍﾞｰｽ $1 を開けられませんでした。";
+    Text[ japanese ] = "データベース $1 を開けられませんでした。";
     Text[ chinese_simplified ] = "无法打开数据库 $1 。";
     Text[ chinese_traditional ] = "無法開啟資料庫 $1";
     Text[ arabic ] = "���� ��� ����� �������� $1.";
@@ -4386,6 +4544,7 @@ String RID_DB_TABLE_WIZARD_START + 3
     Text[ turkish ] = "$1 veritaban� a��lamad�.";
     Text[ catalan ] = "The database $1 could not be opened.";
     Text[ finnish ] = "Tietokantaa $1 ei voitu avata.";
+    Text[ thai ] = "ไม่สามารถเปิดฐานข้อมูล $1 ได้";
 };
 
 String RID_DB_TABLE_WIZARD_START + 4
@@ -4402,7 +4561,7 @@ String RID_DB_TABLE_WIZARD_START + 4
     Text[ swedish ] = "Tabellen har skapats.";
     Text[ polish ] = "Tabel� utworzono.";
     Text[ portuguese_brazilian ] = "Die Tabelle wurde erstellt.";
-    Text[ japanese ] = "ﾃｰﾌﾞﾙは作成されました。";
+    Text[ japanese ] = "テーブルは作成されました。";
     Text[ chinese_simplified ] = "已经创建这个表格。";
     Text[ chinese_traditional ] = "表格已經製作完畢。";
     Text[ arabic ] = "�� ����� ������.";
@@ -4413,6 +4572,7 @@ String RID_DB_TABLE_WIZARD_START + 4
     Text[ turkish ] = "Tablo olu�turuldu.";
     Text[ catalan ] = "The table has been created.";
     Text[ finnish ] = "Taulukko on luotu.";
+    Text[ thai ] = "ยังไม่ได้สร้างตาราง";
 };
 
 String RID_DB_TABLE_WIZARD_START + 5
@@ -4429,7 +4589,7 @@ String RID_DB_TABLE_WIZARD_START + 5
     Text[ swedish ] = "Det gick inte att skapa tabellen.";
     Text[ polish ] = "Utworzenie tabeli nie powiod�o si�.";
     Text[ portuguese_brazilian ] = "Die Tabelle konnte nicht erstellt werden.";
-    Text[ japanese ] = "ﾃｰﾌﾞﾙは作成できませんでした。";
+    Text[ japanese ] = "テーブルは作成できませんでした。";
     Text[ chinese_simplified ] = "无法创建这个表格。";
     Text[ chinese_traditional ] = "無法完成製作表格。";
     Text[ arabic ] = "���� ����� ������.";
@@ -4440,6 +4600,7 @@ String RID_DB_TABLE_WIZARD_START + 5
     Text[ turkish ] = "Tablo olu�turulamad�.";
     Text[ catalan ] = "The table could not be created.";
     Text[ finnish ] = "Taulukkoa ei voitu luoda.";
+    Text[ thai ] = "ไม่สามารถสร้างตารางได้";
 };
 
 String RID_DB_TABLE_WIZARD_START + 6
@@ -4456,7 +4617,7 @@ String RID_DB_TABLE_WIZARD_START + 6
     Text[ swedish ] = ": tabelltyp";
     Text[ polish ] = ": Typ tabeli";
     Text[ portuguese_brazilian ] = ": Tabellentyp";
-    Text[ japanese ] = ": ﾃｰﾌﾞﾙの種類";
+    Text[ japanese ] = ": テーブルの種類";
     Text[ chinese_simplified ] = "：表格类型";
     Text[ chinese_traditional ] = "：表格類型";
     Text[ arabic ] = ": ��� ������";
@@ -4467,6 +4628,7 @@ String RID_DB_TABLE_WIZARD_START + 6
     Text[ turkish ] = ": Tablo tipi";
     Text[ catalan ] = ": Table type";
     Text[ finnish ] = ": Taulukon tyyppi";
+    Text[ thai ] = ": ชนิดของตาราง";
 };
 
 String RID_DB_TABLE_WIZARD_START + 7
@@ -4483,7 +4645,7 @@ String RID_DB_TABLE_WIZARD_START + 7
     Text[ swedish ] = ": f�lturval";
     Text[ polish ] = ": Wyb�r pola";
     Text[ portuguese_brazilian ] = ": Feldauswahl";
-    Text[ japanese ] = ": ﾌｨｰﾙﾄﾞの選択";
+    Text[ japanese ] = ": フィールドの選択";
     Text[ chinese_simplified ] = "：选择字段";
     Text[ chinese_traditional ] = "：選擇欄位";
     Text[ arabic ] = ": ����� �����";
@@ -4494,6 +4656,7 @@ String RID_DB_TABLE_WIZARD_START + 7
     Text[ turkish ] = ": Alan se�imi";
     Text[ catalan ] = ": Field Selection";
     Text[ finnish ] = ": Kent�n valinta";
+    Text[ thai ] = ": เลือกเขตข้อมูล";
 };
 
 String RID_DB_TABLE_WIZARD_START + 8
@@ -4510,7 +4673,7 @@ String RID_DB_TABLE_WIZARD_START + 8
     Text[ swedish ] = ": individualisering";
     Text[ polish ] = ": W�asne ustawienia";
     Text[ portuguese_brazilian ] = ": Individualisierung";
-    Text[ japanese ] = ": ｶｽﾀﾏｲｽﾞ";
+    Text[ japanese ] = ": カスタマイズ";
     Text[ chinese_simplified ] = "：使用者自订";
     Text[ chinese_traditional ] = "：使用者自訂";
     Text[ arabic ] = ": �������";
@@ -4521,6 +4684,7 @@ String RID_DB_TABLE_WIZARD_START + 8
     Text[ turkish ] = ": �zelle�tirme";
     Text[ catalan ] = ": Customization";
     Text[ finnish ] = ": Mukautus";
+    Text[ thai ] = ": กำหนดเอง";
 };
 
 String RID_DB_TABLE_WIZARD_START + 9
@@ -4537,7 +4701,7 @@ String RID_DB_TABLE_WIZARD_START + 9
     Text[ swedish ] = ": skapa tabell";
     Text[ polish ] = ": Utw�rz tabel�";
     Text[ portuguese_brazilian ] = ": Tabelle Erstellen";
-    Text[ japanese ] = ": ﾃｰﾌﾞﾙの作成";
+    Text[ japanese ] = ": テーブルの作成";
     Text[ chinese_simplified ] = "：制作表格";
     Text[ chinese_traditional ] = "：製作表格";
     Text[ arabic ] = ": ����� ����";
@@ -4548,6 +4712,7 @@ String RID_DB_TABLE_WIZARD_START + 9
     Text[ turkish ] = ": Tablo olu�tur";
     Text[ catalan ] = ": Create Table";
     Text[ finnish ] = ": Luo taulukko";
+    Text[ thai ] = ": สร้างตาราง";
 };
 
 String RID_DB_TABLE_WIZARD_START + 10
@@ -4564,7 +4729,7 @@ String RID_DB_TABLE_WIZARD_START + 10
     Text[ swedish ] = "Databaser";
     Text[ polish ] = "Bazy danych";
     Text[ portuguese_brazilian ] = "Datenbanken";
-    Text[ japanese ] = "ﾃﾞｰﾀﾍﾞｰｽ";
+    Text[ japanese ] = "データベース";
     Text[ chinese_simplified ] = "数据库";
     Text[ chinese_traditional ] = "資料庫";
     Text[ arabic ] = "����� ��������";
@@ -4576,6 +4741,7 @@ String RID_DB_TABLE_WIZARD_START + 10
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Databases";
     Text[ finnish ] = "Tietokannat";
+    Text[ thai ] = "ฐานข้อมูล";
 };
 
 String RID_DB_TABLE_WIZARD_START + 11
@@ -4592,17 +4758,18 @@ String RID_DB_TABLE_WIZARD_START + 11
     Text[ swedish ] = "~Tabell";
     Text[ polish ] = "~Tabela";
     Text[ portuguese_brazilian ] = "~Tabelle";
-    Text[ japanese ] = "ﾃｰﾌﾞﾙ(~T)";
+    Text[ japanese ] = "テーブル(~T)";
     Text[ chinese_simplified ] = "表格(~T)";
     Text[ chinese_traditional ] = "表格(~T)";
     Text[ arabic ] = "~����";
     Text[ dutch ] = "~Tabel";
     Text[ chinese_simplified ] = "表格(~T)";
     Text[ greek ] = "�������";
-    Text[ korean ] = "표(~T)";
+    Text[ korean ] = "시트(~T)";
     Text[ turkish ] = "~Tablo";
     Text[ catalan ] = "~Table";
     Text[ finnish ] = "~Taulukko";
+    Text[ thai ] = "~ตาราง";
 };
 
 String RID_DB_TABLE_WIZARD_START + 12
@@ -4619,7 +4786,7 @@ String RID_DB_TABLE_WIZARD_START + 12
     Text[ swedish ] = "~F�ltf�rslag";
     Text[ polish ] = "~Proponowane pola";
     Text[ portuguese_brazilian ] = "~Feldvorschl?ge";
-    Text[ japanese ] = "ﾌｨｰﾙﾄﾞ候補(~P)";
+    Text[ japanese ] = "フィールド候補(~P)";
     Text[ chinese_simplified ] = "建议字段(~P)";
     Text[ chinese_traditional ] = "建議的欄位(~P)";
     Text[ arabic ] = "~�������� �����";
@@ -4630,6 +4797,7 @@ String RID_DB_TABLE_WIZARD_START + 12
     Text[ turkish ] = "~�nerilen alanlar";
     Text[ catalan ] = "~Proposed Fields";
     Text[ finnish ] = "~Ehdotetut kent�t";
+    Text[ thai ] = "เ~สนอเขตข้อมูล";
 };
 
 String RID_DB_TABLE_WIZARD_START + 13
@@ -4657,6 +4825,7 @@ String RID_DB_TABLE_WIZARD_START + 13
     Text[ turkish ] = "~Se�ilen";
     Text[ catalan ] = "~Applied";
     Text[ finnish ] = "~K�yt�ss�";
+    Text[ thai ] = "~ประยุกต์";
 };
 
 String RID_DB_TABLE_WIZARD_START + 14
@@ -4673,7 +4842,7 @@ String RID_DB_TABLE_WIZARD_START + 14
     Text[ swedish ] = "~F�ltnamn";
     Text[ polish ] = "~Nazwa pola";
     Text[ portuguese_brazilian ] = "~Feldname";
-    Text[ japanese ] = "ﾌｨｰﾙﾄﾞ名(~F)";
+    Text[ japanese ] = "フィールド名(~F)";
     Text[ chinese_simplified ] = "字段名称(~F)";
     Text[ chinese_traditional ] = "欄位名稱(~F)";
     Text[ arabic ] = "~��� �����";
@@ -4684,6 +4853,7 @@ String RID_DB_TABLE_WIZARD_START + 14
     Text[ turkish ] = "~Alan ad�";
     Text[ catalan ] = "~Field name";
     Text[ finnish ] = "~Kent�n nimi";
+    Text[ thai ] = "ชื่อเ~ขตข้อมูล";
 };
 
 String RID_DB_TABLE_WIZARD_START + 15
@@ -4693,7 +4863,7 @@ String RID_DB_TABLE_WIZARD_START + 15
     Text[ portuguese ] = "~Aplicar";
     Text[ russian ] = "~�������";
     Text[ dutch ] = "~Overnemen";
-    Text[ french ] = "~Appliquer";
+    Text[ french ] = "Appliquer";
     Text[ spanish ] = "~Aceptar";
     Text[ italian ] = "~Applica";
     Text[ danish ] = "An~vend";
@@ -4711,6 +4881,7 @@ String RID_DB_TABLE_WIZARD_START + 15
     Text[ turkish ] = "~Se�ilen";
     Text[ catalan ] = "~Apply";
     Text[ finnish ] = "~K�yt�";
+    Text[ thai ] = "ใ~ช้";
 };
 
 String RID_DB_TABLE_WIZARD_START + 16
@@ -4738,6 +4909,7 @@ String RID_DB_TABLE_WIZARD_START + 16
     Text[ turkish ] = "Olu�turulduktan sonra...";
     Text[ catalan ] = "After completion...";
     Text[ finnish ] = "Valmistumisen j�lkeen...";
+    Text[ thai ] = "หลังจากเสร็จสมบูรณ์...";
 };
 
 String RID_DB_TABLE_WIZARD_START + 17
@@ -4754,7 +4926,7 @@ String RID_DB_TABLE_WIZARD_START + 17
     Text[ swedish ] = "Mata in ~data i tabell";
     Text[ polish ] = "~Wprowad� dane do tabeli";
     Text[ portuguese_brazilian ] = "~Daten in Tabelle eingeben";
-    Text[ japanese ] = "ﾃｰﾌﾞﾙにﾃﾞｰﾀ入力";
+    Text[ japanese ] = "テーブルにデータ入力";
     Text[ chinese_simplified ] = "数据输入表格之中";
     Text[ chinese_traditional ] = "在表格內輸入數據";
     Text[ arabic ] = "~����� �������� �� ������";
@@ -4766,6 +4938,7 @@ String RID_DB_TABLE_WIZARD_START + 17
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Enter data into the table";
     Text[ finnish ] = "Sy�t� tiedot taulukkoon";
+    Text[ thai ] = "ใส่ข้อมูลในตาราง";
 };
 
 String RID_DB_TABLE_WIZARD_START + 18
@@ -4782,7 +4955,7 @@ String RID_DB_TABLE_WIZARD_START + 18
     Text[ swedish ] = "~Visa tabell";
     Text[ polish ] = "Poka� tabel�";
     Text[ portuguese_brazilian ] = "Tabelle ~anzeigen";
-    Text[ japanese ] = "ﾃｰﾌﾞﾙを表示する";
+    Text[ japanese ] = "テーブルを表示する";
     Text[ chinese_simplified ] = "显示表格";
     Text[ chinese_traditional ] = "顯示表格";
     Text[ arabic ] = "~����� ������";
@@ -4793,6 +4966,7 @@ String RID_DB_TABLE_WIZARD_START + 18
     Text[ turkish ] = "Tabloyu g�r�nt�le";
     Text[ catalan ] = "~Mostrar tabla";
     Text[ finnish ] = "N�yt� taulukko";
+    Text[ thai ] = "แสดงตาราง";
 };
 
 String RID_DB_TABLE_WIZARD_START + 19
@@ -4809,7 +4983,7 @@ String RID_DB_TABLE_WIZARD_START + 19
     Text[ swedish ] = "Visa i~nte tabell";
     Text[ polish ] = "Nie pokazuj tabeli";
     Text[ portuguese_brazilian ] = "Tabelle ~nicht anzeigen";
-    Text[ japanese ] = "ﾃｰﾌﾞﾙを表示しない";
+    Text[ japanese ] = "テーブルを表示しない";
     Text[ chinese_simplified ] = "不显示表格";
     Text[ chinese_traditional ] = "不顯示表格";
     Text[ arabic ] = "~��� ����� ������";
@@ -4820,6 +4994,7 @@ String RID_DB_TABLE_WIZARD_START + 19
     Text[ turkish ] = "Tabloyu g�r�nt�leme";
     Text[ catalan ] = "do not show table";
     Text[ finnish ] = "�l� n�yt� taulukkoa";
+    Text[ thai ] = "ไม่แสดงตาราง";
 };
 
 // ============================================================================
@@ -4838,7 +5013,7 @@ String RID_DB_GRID_WIZARD_START + 0
     Text[ swedish ] = "AutoPilot f�r tabellelement";
     Text[ polish ] = "AutoPilot: Element tabeli";
     Text[ portuguese_brazilian ] = "AutoPilot Tabellenelement";
-    Text[ japanese ] = "ｵｰﾄﾊﾟｲﾛｯﾄ ﾃｰﾌﾞﾙ構成要素";
+    Text[ japanese ] = "オートパイロット テーブル構成要素";
     Text[ chinese_simplified ] = "自动文件助理 表格单元";
     Text[ chinese_traditional ] = "自動檔案助理 表格單元";
     Text[ arabic ] = "���� ���� ������ �����";
@@ -4850,6 +5025,7 @@ String RID_DB_GRID_WIZARD_START + 0
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "AutoPilot Table Element";
     Text[ finnish ] = "Automaattinen taulukkoelementin ohjaus";
+    Text[ thai ] = "นำร่ององค์ประกอบตารางอัตโนมัติ ";
 };
 
 String RID_DB_GRID_WIZARD_START + 1
@@ -4866,7 +5042,7 @@ String RID_DB_GRID_WIZARD_START + 1
     Text[ swedish ] = "Skapa tabellelement";
     Text[ polish ] = "Utw�rz element tabeli";
     Text[ portuguese_brazilian ] = "Tabellenelement erzeugen";
-    Text[ japanese ] = "ﾃｰﾌﾞﾙ構成要素の作成";
+    Text[ japanese ] = "テーブル構成要素の作成";
     Text[ chinese_simplified ] = "生成表格元件";
     Text[ chinese_traditional ] = "製作表格元件";
     Text[ arabic ] = "����� ���� ����";
@@ -4878,6 +5054,7 @@ String RID_DB_GRID_WIZARD_START + 1
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Create table element";
     Text[ finnish ] = "Luo taulukkoelementti";
+    Text[ thai ] = "สร้างองค์ประกอบตาราง";
 };
 
 String RID_DB_GRID_WIZARD_START + 2
@@ -4905,6 +5082,7 @@ String RID_DB_GRID_WIZARD_START + 2
     Text[ turkish ] = "(Tarih)";
     Text[ catalan ] = "(Date)";
     Text[ finnish ] = "(P�iv�m��r�)";
+    Text[ thai ] = "(วันที่)";
 };
 
 String RID_DB_GRID_WIZARD_START + 3
@@ -4932,6 +5110,7 @@ String RID_DB_GRID_WIZARD_START + 3
     Text[ turkish ] = "(Saat)";
     Text[ catalan ] = "(time)";
     Text[ finnish ] = "(Aika)";
+    Text[ thai ] = "(เวลา)";
 };
 
 String RID_DB_GRID_WIZARD_START + 4
@@ -4948,7 +5127,7 @@ String RID_DB_GRID_WIZARD_START + 4
     Text[ swedish ] = "Tabellelement_";
     Text[ polish ] = "Element tabeli_";
     Text[ portuguese_brazilian ] = "Tabellenelement_";
-    Text[ japanese ] = "ﾃｰﾌﾞﾙ構成要素_";
+    Text[ japanese ] = "テーブル構成要素_";
     Text[ chinese_simplified ] = "表格元件_";
     Text[ chinese_traditional ] = "表格元件_";
     Text[ arabic ] = "���� ����_";
@@ -4960,6 +5139,7 @@ String RID_DB_GRID_WIZARD_START + 4
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Table Element_";
     Text[ finnish ] = "Taulukkoelementti_";
+    Text[ thai ] = "องค์ประกอบตาราง_";
 };
 
 String RID_DB_GRID_WIZARD_START + 5
@@ -4976,7 +5156,7 @@ String RID_DB_GRID_WIZARD_START + 5
     Text[ swedish ] = ": tabellurval";
     Text[ polish ] = ": Wyb�r tabeli";
     Text[ portuguese_brazilian ] = ": Tabellenauswahl";
-    Text[ japanese ] = ": ﾃｰﾌﾞﾙの選択";
+    Text[ japanese ] = ": テーブルの選択";
     Text[ chinese_simplified ] = "：选择表格";
     Text[ chinese_traditional ] = "：選擇表格";
     Text[ arabic ] = ": ����� ������";
@@ -4987,6 +5167,7 @@ String RID_DB_GRID_WIZARD_START + 5
     Text[ turkish ] = ": Tablo se�imi";
     Text[ catalan ] = ": Table Selection";
     Text[ finnish ] = ": Taulukon valinta";
+    Text[ thai ] = ": เลือกตาราง";
 };
 
 String RID_DB_GRID_WIZARD_START + 6
@@ -5003,7 +5184,7 @@ String RID_DB_GRID_WIZARD_START + 6
     Text[ swedish ] = ": f�lturval";
     Text[ polish ] = ": Wyb�r pola";
     Text[ portuguese_brazilian ] = ": Feldauswahl";
-    Text[ japanese ] = ": ﾌｨｰﾙﾄﾞの選択";
+    Text[ japanese ] = ": フィールドの選択";
     Text[ chinese_simplified ] = "：选择字段";
     Text[ chinese_traditional ] = "：選擇欄位";
     Text[ arabic ] = ": ����� �����";
@@ -5014,6 +5195,7 @@ String RID_DB_GRID_WIZARD_START + 6
     Text[ turkish ] = ": Alan se�imi";
     Text[ catalan ] = ": Field Selection";
     Text[ finnish ] = ": Kent�n valinta";
+    Text[ thai ] = ": เลือกเขตข้อมูล";
 };
 
 String RID_DB_GRID_WIZARD_START + 7
@@ -5030,7 +5212,7 @@ String RID_DB_GRID_WIZARD_START + 7
     Text[ swedish ] = ": f�ltjustering";
     Text[ polish ] = ": Wyr�wnanie pola";
     Text[ portuguese_brazilian ] = ": Feldausrichtung";
-    Text[ japanese ] = ": ﾌｨｰﾙﾄﾞの配置";
+    Text[ japanese ] = ": フィールドの配置";
     Text[ chinese_simplified ] = "：字段对齐";
     Text[ chinese_traditional ] = "：調整欄位";
     Text[ arabic ] = ": ������ �����";
@@ -5041,6 +5223,7 @@ String RID_DB_GRID_WIZARD_START + 7
     Text[ turkish ] = ": Alan hizalamas�";
     Text[ catalan ] = ": Field Alignment";
     Text[ finnish ] = ": Kent�n tasaus";
+    Text[ thai ] = ": จัดตำแหน่งเขตข้อมูล";
 };
 
 String RID_DB_GRID_WIZARD_START + 8
@@ -5057,7 +5240,7 @@ String RID_DB_GRID_WIZARD_START + 8
     Text[ swedish ] = ": mallar";
     Text[ polish ] = ": Style";
     Text[ portuguese_brazilian ] = ": Vorlagen";
-    Text[ japanese ] = ": ｽﾀｲﾙ";
+    Text[ japanese ] = ": スタイル";
     Text[ chinese_simplified ] = "：样式";
     Text[ chinese_traditional ] = "：樣式";
     Text[ arabic ] = ": �������";
@@ -5068,6 +5251,7 @@ String RID_DB_GRID_WIZARD_START + 8
     Text[ turkish ] = ": �ablonlar";
     Text[ catalan ] = ": Styles";
     Text[ finnish ] = ": Tyylit";
+    Text[ thai ] = ": ลักษณะ";
 };
 
 String RID_DB_GRID_WIZARD_START + 9
@@ -5084,7 +5268,7 @@ String RID_DB_GRID_WIZARD_START + 9
     Text[ swedish ] = ": skapa formul�r";
     Text[ polish ] = ": Utw�rz formularz";
     Text[ portuguese_brazilian ] = ": Formular erstellen";
-    Text[ japanese ] = ": ﾌｫｰﾑの作成";
+    Text[ japanese ] = ": フォームの作成";
     Text[ chinese_simplified ] = "：制作表单";
     Text[ chinese_traditional ] = "：製作表單";
     Text[ arabic ] = ": ����� �������";
@@ -5095,6 +5279,7 @@ String RID_DB_GRID_WIZARD_START + 9
     Text[ turkish ] = ": Form olu�tur";
     Text[ catalan ] = ": Create Form";
     Text[ finnish ] = ": Luo lomake";
+    Text[ thai ] = ": สร้างแบบฟอร์ม";
 };
 
 String RID_DB_GRID_WIZARD_START + 10
@@ -5111,7 +5296,7 @@ String RID_DB_GRID_WIZARD_START + 10
     Text[ swedish ] = "Databas";
     Text[ polish ] = "Baza danych";
     Text[ portuguese_brazilian ] = "Datenbank";
-    Text[ japanese ] = "ﾃﾞｰﾀﾍﾞｰｽ";
+    Text[ japanese ] = "データベース";
     Text[ chinese_simplified ] = "数据库";
     Text[ chinese_traditional ] = "資料庫";
     Text[ arabic ] = "����� ��������";
@@ -5123,6 +5308,7 @@ String RID_DB_GRID_WIZARD_START + 10
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Database";
     Text[ finnish ] = "Tietokanta";
+    Text[ thai ] = "ฐานข้อมูล";
 };
 
 String RID_DB_GRID_WIZARD_START + 11
@@ -5139,7 +5325,7 @@ String RID_DB_GRID_WIZARD_START + 11
     Text[ swedish ] = "~Existerande f�lt";
     Text[ polish ] = "~Istniej�ce pola";
     Text[ portuguese_brazilian ] = "~Vorhandene Felder";
-    Text[ japanese ] = "既存ﾌｨｰﾙﾄﾞ";
+    Text[ japanese ] = "既存フィールド";
     Text[ chinese_simplified ] = "现有的字段";
     Text[ chinese_traditional ] = "現有的欄位";
     Text[ arabic ] = "~������ ��������";
@@ -5150,6 +5336,7 @@ String RID_DB_GRID_WIZARD_START + 11
     Text[ turkish ] = "Mevcut alanlar";
     Text[ catalan ] = "Existing fields";
     Text[ finnish ] = "Nykyiset kent�t";
+    Text[ thai ] = "เขตข้อมูลที่มีอยู่แล้ว";
 };
 
 String RID_DB_GRID_WIZARD_START + 12
@@ -5166,7 +5353,7 @@ String RID_DB_GRID_WIZARD_START + 12
     Text[ swedish ] = "Utv~alda f�lt";
     Text[ polish ] = "~Wybrane pola";
     Text[ portuguese_brazilian ] = "~Ausgew?hlte Felder";
-    Text[ japanese ] = "選択したﾌｨｰﾙﾄﾞ";
+    Text[ japanese ] = "選択したフィールド";
     Text[ chinese_simplified ] = "已经选择的字段";
     Text[ chinese_traditional ] = "選中的欄位";
     Text[ arabic ] = "~������ ��������";
@@ -5177,6 +5364,7 @@ String RID_DB_GRID_WIZARD_START + 12
     Text[ turkish ] = "~Se�ilmi� alanlar";
     Text[ catalan ] = "Selected fields";
     Text[ finnish ] = "Valitut kent�t";
+    Text[ thai ] = "เลือกเขตข้อมูล";
 };
 
 // ============================================================================
@@ -5195,7 +5383,7 @@ String RID_DB_COMBO_WIZARD_START + 0
     Text[ swedish ] = "AutoPilot - kombinationsf�lt";
     Text[ polish ] = "AutoPilot: Pole kombi";
     Text[ portuguese_brazilian ] = "Option Group AutoPilot";
-    Text[ japanese ] = "ｵｰﾄﾊﾟｲﾛｯﾄ ｺﾝﾎﾞﾎﾞｯｸｽ";
+    Text[ japanese ] = "オートパイロット コンボボックス";
     Text[ chinese_simplified ] = "自动文件助理 组合栏";
     Text[ chinese_traditional ] = "自動檔案助理 組合欄位";
     Text[ arabic ] = "������ ����� � ���� ����� ����";
@@ -5207,6 +5395,7 @@ String RID_DB_COMBO_WIZARD_START + 0
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "AutoPilot - Combo Box";
     Text[ finnish ] = "Automaattinen ohjaus - yhdistelm�ruutu";
+    Text[ thai ] = "นำร่องอัตโนมัติ - กล่องคอมโบ้ ";
 };
 
 String RID_DB_COMBO_WIZARD_START + 1
@@ -5223,7 +5412,7 @@ String RID_DB_COMBO_WIZARD_START + 1
     Text[ swedish ] = "AutoPilot - listruta";
     Text[ polish ] = "AutoPilot: Pole listy";
     Text[ portuguese_brazilian ] = "Create group";
-    Text[ japanese ] = "ｵｰﾄﾊﾟｲﾛｯﾄ ﾘｽﾄﾎﾞｯｸｽ";
+    Text[ japanese ] = "オートパイロット リストボックス";
     Text[ chinese_simplified ] = "自动文档助理 列单栏";
     Text[ chinese_traditional ] = "自動檔案助理 清單方塊";
     Text[ arabic ] = "������ ����� � ���� �����";
@@ -5234,6 +5423,7 @@ String RID_DB_COMBO_WIZARD_START + 1
     Text[ turkish ] = "OtoPilot - Liste alan�";
     Text[ catalan ] = "Auto Pilot - List field";
     Text[ finnish ] = "Automaattinen ohjaus - luettelokent�t";
+    Text[ thai ] = "นำร่องอัตโนมัติ - กล่องรายการ";
 };
 
 String RID_DB_COMBO_WIZARD_START + 2
@@ -5250,9 +5440,9 @@ String RID_DB_COMBO_WIZARD_START + 2
     Text[ swedish ] = "Skapa kontrollf�lt";
     Text[ polish ] = ": Utw�rz pole kontrolne";
     Text[ portuguese_brazilian ] = ": Select Table";
-    Text[ japanese ] = "ｺﾝﾄﾛｰﾙの作成";
+    Text[ japanese ] = "コントロールの作成";
     Text[ chinese_simplified ] = "生成控制";
-    Text[ chinese_traditional ] = "建立控製項";
+    Text[ chinese_traditional ] = "建立控制項";
     Text[ arabic ] = "����� ���� ����";
     Text[ dutch ] = "Controleveld maken";
     Text[ chinese_simplified ] = "生成控制";
@@ -5262,6 +5452,7 @@ String RID_DB_COMBO_WIZARD_START + 2
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "Create Control";
     Text[ finnish ] = "Luo ohjain";
+    Text[ thai ] = "สร้างตัวควบคุม";
 };
 
 String RID_DB_COMBO_WIZARD_START + 3
@@ -5278,7 +5469,7 @@ String RID_DB_COMBO_WIZARD_START + 3
     Text[ swedish ] = "Kombinationslistruta_";
     Text[ polish ] = "Pole kombi_";
     Text[ portuguese_brazilian ] = ": Select Option";
-    Text[ japanese ] = "ｺﾝﾎﾞﾎﾞｯｸｽﾌｨｰﾙﾄﾞ_";
+    Text[ japanese ] = "コンボボックスフィールド_";
     Text[ chinese_simplified ] = "组合列单字段_";
     Text[ chinese_traditional ] = "：組合清單欄位_";
     Text[ arabic ] = "���� ����� ������� ������_";
@@ -5289,6 +5480,7 @@ String RID_DB_COMBO_WIZARD_START + 3
     Text[ turkish ] = "Kombinasyon alan�_";
     Text[ catalan ] = "Combo Box Field_";
     Text[ finnish ] = "Yhdistelm�ruudun kentt�_";
+    Text[ thai ] = "เขตข้อมูล กล่องคอมโบ้_";
 };
 
 String RID_DB_COMBO_WIZARD_START + 4
@@ -5305,7 +5497,7 @@ String RID_DB_COMBO_WIZARD_START + 4
     Text[ swedish ] = ": tabellurval";
     Text[ polish ] = ": Wyb�r tabeli";
     Text[ portuguese_brazilian ] = ": Select Default Option";
-    Text[ japanese ] = ": ﾃｰﾌﾞﾙの選択";
+    Text[ japanese ] = ": テーブルの選択";
     Text[ chinese_simplified ] = "：选择表格";
     Text[ chinese_traditional ] = "：選擇表格";
     Text[ arabic ] = ": ����� ������";
@@ -5317,6 +5509,7 @@ String RID_DB_COMBO_WIZARD_START + 4
     Text[ language_user1 ] = " ";
     Text[ catalan ] = ": Table Selection";
     Text[ finnish ] = ": Taulukon valinta";
+    Text[ thai ] = ": เลือกตาราง";
 };
 
 String RID_DB_COMBO_WIZARD_START + 5
@@ -5333,7 +5526,7 @@ String RID_DB_COMBO_WIZARD_START + 5
     Text[ swedish ] = ": f�lturval";
     Text[ polish ] = ": Wyb�r pola";
     Text[ portuguese_brazilian ] = ": Field Value";
-    Text[ japanese ] = ": ﾌｨｰﾙﾄﾞの選択";
+    Text[ japanese ] = ": フィールドの選択";
     Text[ chinese_simplified ] = "：选择字段";
     Text[ chinese_traditional ] = "：選擇欄位";
     Text[ arabic ] = ": ����� �����";
@@ -5344,6 +5537,7 @@ String RID_DB_COMBO_WIZARD_START + 5
     Text[ turkish ] = ": Alan se�imi";
     Text[ catalan ] = ": Field Selection";
     Text[ finnish ] = ": Kent�n valinta";
+    Text[ thai ] = ": เลือกเขตข้อมูล";
 };
 
 String RID_DB_COMBO_WIZARD_START + 6
@@ -5360,7 +5554,7 @@ String RID_DB_COMBO_WIZARD_START + 6
     Text[ swedish ] = ": f�ltl�nk";
     Text[ polish ] = ": Po��czenie p�l";
     Text[ portuguese_brazilian ] = ": Database Field";
-    Text[ japanese ] = ": ﾌｨｰﾙﾄﾞへのﾘﾝｸ";
+    Text[ japanese ] = ": フィールドへのリンク";
     Text[ chinese_simplified ] = "：字段链接";
     Text[ chinese_traditional ] = "：欄位捷徑";
     Text[ arabic ] = ": ������ �����";
@@ -5371,6 +5565,7 @@ String RID_DB_COMBO_WIZARD_START + 6
     Text[ turkish ] = ": Alan ba�lant�s�";
     Text[ catalan ] = ": Field Link";
     Text[ finnish ] = ": Kentt�linkki";
+    Text[ thai ] = ": ตัวเชื่อมโยงเขตข้อมูล";
 };
 
 String RID_DB_COMBO_WIZARD_START + 7
@@ -5387,7 +5582,7 @@ String RID_DB_COMBO_WIZARD_START + 7
     Text[ swedish ] = ": databearbetning";
     Text[ polish ] = ": Przetwarzanie danych";
     Text[ portuguese_brazilian ] = ": Create Option Group";
-    Text[ japanese ] = ": ﾃﾞｰﾀ処理";
+    Text[ japanese ] = ": データ処理";
     Text[ chinese_simplified ] = "：数据处理";
     Text[ chinese_traditional ] = "：處理資料";
     Text[ arabic ] = ": ������ ��������";
@@ -5398,6 +5593,7 @@ String RID_DB_COMBO_WIZARD_START + 7
     Text[ turkish ] = ": Veri i�lem";
     Text[ catalan ] = ": Data Processing";
     Text[ finnish ] = ": Tietojen k�sittely";
+    Text[ thai ] = ": กำลังประมวลผลข้อมูล";
 };
 
 String RID_DB_COMBO_WIZARD_START + 8
@@ -5414,7 +5610,7 @@ String RID_DB_COMBO_WIZARD_START + 8
     Text[ swedish ] = ": skapa formul�r";
     Text[ polish ] = ": Utw�rz formularz";
     Text[ portuguese_brazilian ] = "In this dialog, you can specify all label names for the options.";
-    Text[ japanese ] = ": ﾌｫｰﾑの作成";
+    Text[ japanese ] = ": フォームの作成";
     Text[ chinese_simplified ] = "：制作表单";
     Text[ chinese_traditional ] = "：製作表單";
     Text[ arabic ] = ": ����� �������";
@@ -5425,6 +5621,7 @@ String RID_DB_COMBO_WIZARD_START + 8
     Text[ turkish ] = ": Form olu�tur";
     Text[ catalan ] = ": Create Form";
     Text[ finnish ] = ": Luo lomake";
+    Text[ thai ] = ": สร้างแบบฟอร์ม";
 };
 
 String RID_DB_COMBO_WIZARD_START + 9
@@ -5441,7 +5638,7 @@ String RID_DB_COMBO_WIZARD_START + 9
     Text[ swedish ] = "~V�rdetabell";
     Text[ polish ] = "Tabela z warto�ciami";
     Text[ portuguese_brazilian ] = "Which label do you want for each option?";
-    Text[ japanese ] = "数値ﾃｰﾌﾞﾙ";
+    Text[ japanese ] = "数値テーブル";
     Text[ chinese_simplified ] = "数值表格";
     Text[ chinese_traditional ] = "數值表格";
     Text[ arabic ] = "���� �����";
@@ -5452,6 +5649,7 @@ String RID_DB_COMBO_WIZARD_START + 9
     Text[ turkish ] = "De�er tablosu";
     Text[ catalan ] = "Table of Values";
     Text[ finnish ] = "Arvoluettelo";
+    Text[ thai ] = "ตารางค่า";
 };
 
 String RID_DB_COMBO_WIZARD_START + 10
@@ -5468,7 +5666,7 @@ String RID_DB_COMBO_WIZARD_START + 10
     Text[ swedish ] = "Tabell f�r ~listinneh�ll";
     Text[ polish ] = "Tabela na zawarto�� listy";
     Text[ portuguese_brazilian ] = "~Option";
-    Text[ japanese ] = "ﾘｽﾄ内容の表";
+    Text[ japanese ] = "リスト内容の表";
     Text[ chinese_simplified ] = "列单内容的表格";
     Text[ chinese_traditional ] = "清單內容表格";
     Text[ arabic ] = "���� ~������� �������";
@@ -5479,6 +5677,7 @@ String RID_DB_COMBO_WIZARD_START + 10
     Text[ turkish ] = "Liste i�eri�i tablosu";
     Text[ catalan ] = "Table for List Content";
     Text[ finnish ] = "Luettelon sis�lt�taulukko";
+    Text[ thai ] = "ตารางรายการเนื้อหา";
 };
 
 String RID_DB_COMBO_WIZARD_START + 11
@@ -5495,7 +5694,7 @@ String RID_DB_COMBO_WIZARD_START + 11
     Text[ swedish ] = "~Existerande f�lt";
     Text[ polish ] = "Istniej�ce pola";
     Text[ portuguese_brazilian ] = "Should one option button be the default choice?";
-    Text[ japanese ] = "既存ﾌｨｰﾙﾄﾞ";
+    Text[ japanese ] = "既存フィールド";
     Text[ chinese_simplified ] = "现有的字段";
     Text[ chinese_traditional ] = "現存的欄位";
     Text[ arabic ] = "~������ ��������";
@@ -5506,6 +5705,7 @@ String RID_DB_COMBO_WIZARD_START + 11
     Text[ turkish ] = "~Mevcut alanlar";
     Text[ catalan ] = "Existing Fields";
     Text[ finnish ] = "Nykyiset kent�t";
+    Text[ thai ] = "เขตข้อมูลที่มีอยู่แล้ว";
 };
 
 String RID_DB_COMBO_WIZARD_START + 12
@@ -5522,7 +5722,7 @@ String RID_DB_COMBO_WIZARD_START + 12
     Text[ swedish ] = "~Visningsf�lt:";
     Text[ polish ] = "Pole wy�wietlania";
     Text[ portuguese_brazilian ] = "Yes, the default choice is:";
-    Text[ japanese ] = "表示ﾌｨｰﾙﾄﾞ";
+    Text[ japanese ] = "表示フィールド";
     Text[ chinese_simplified ] = "显示栏";
     Text[ chinese_traditional ] = "顯示欄位";
     Text[ arabic ] = "~��� �����";
@@ -5533,6 +5733,7 @@ String RID_DB_COMBO_WIZARD_START + 12
     Text[ turkish ] = "~G�r�nt� alan�";
     Text[ catalan ] = "Display Field";
     Text[ finnish ] = "N�yt� kentt�";
+    Text[ thai ] = "แสดงผลเขตข้อมูล";
 };
 
 String RID_DB_COMBO_WIZARD_START + 13
@@ -5549,7 +5750,7 @@ String RID_DB_COMBO_WIZARD_START + 13
     Text[ swedish ] = "Inneh�llet i det utvalda f�ltet visas i kombinationsf�ltets lista.";
     Text[ polish ] = "Zawarto�� wybranego pola wy�wietlona zostanie na li�cie pola kombi.";
     Text[ portuguese_brazilian ] = "No, no I don't want an option to be the default.";
-    Text[ japanese ] = "選択したﾌｨｰﾙﾄﾞの内容は、ｺﾝﾎﾞﾎﾞｯｸｽのﾘｽﾄに表示されます";
+    Text[ japanese ] = "選択したフィールドの内容は、コンボボックスのリストに表示されます";
     Text[ chinese_simplified ] = "选中的字段的内容会显示在组合栏的列单内。";
     Text[ chinese_traditional ] = "已經選中的欄位內容會顯示在組合欄位的清單方塊之中。";
     Text[ arabic ] = "��� ��� ����� ������� ����� ������� �� ����� ���� ������� ������.";
@@ -5560,6 +5761,7 @@ String RID_DB_COMBO_WIZARD_START + 13
     Text[ turkish ] = "Se�ilen alan�n i�eri�i, kombinasyon alan� listesinde g�r�nt�lenecek.";
     Text[ catalan ] = "The contents of the field selected will be shown in the combo box field list.";
     Text[ finnish ] = "Valitun kent�n sis�lt� n�ytet��n yhdistelm�ruudun luettelossa.";
+    Text[ thai ] = "เนื้อหาของเขตข้อมูลที่เลือกจะถูกแสดงในรายการของกล่องคอมโบ้  ";
 };
 
 String RID_DB_COMBO_WIZARD_START + 14
@@ -5576,7 +5778,7 @@ String RID_DB_COMBO_WIZARD_START + 14
     Text[ swedish ] = "Inneh�llet i det utvalda f�ltet visas i listrutan om de l�nkade f�lten st�mmer �verens.";
     Text[ polish ] = "Je�li po��czone pola si� zgadzaj�, zawarto�� wybranego pola wy�wietlona zostanie w polu listy.";
     Text[ portuguese_brazilian ] = "If an option has been selected, a specific value will be assigned to the option group.";
-    Text[ japanese ] = "選択したﾌｨｰﾙﾄﾞの内容は、ﾘﾝｸするﾌｨｰﾙﾄﾞと一致するときにﾘｽﾄﾎﾞｯｸｽに表示されます。";
+    Text[ japanese ] = "選択したフィールドの内容は、リンクするフィールドと一致するときにリストボックスに表示されます。";
     Text[ chinese_simplified ] = "如果链接的字段相一致，选中的字段内容就会显示在列单栏内。";
     Text[ chinese_traditional ] = "如果連結的欄位相一致，被選中的欄位內容會顯示在清單方塊內。";
     Text[ arabic ] = "��� ���� ������� ����� ������� �� ���� ������� �� ���� ����� ������ ��������";
@@ -5587,6 +5789,7 @@ String RID_DB_COMBO_WIZARD_START + 14
     Text[ turkish ] = "Se�ilen alan�n i�eri�i, ba�lant�l� alanlar�n e�le�mesi durumunda liste alan�nda g�r�nt�lenir";
     Text[ catalan ] = "The contents of the selected field will be shown if the linked fields are identical.";
     Text[ finnish ] = "Valitun kent�n sis�lt� n�ytet��n luetteloruudussa, jos linkitetyt kent�t ovat identtiset.";
+    Text[ thai ] = "เนื้อหาของเขตข้อมูลที่เลือกจะถูกแสดงในกล่องรายการถ้าเขตข้อมูลที่เชื่อมโยงเหมือนกัน";
 };
 
 String RID_DB_COMBO_WIZARD_START + 15
@@ -5614,6 +5817,7 @@ String RID_DB_COMBO_WIZARD_START + 15
     Text[ turkish ] = "Bilgi";
     Text[ catalan ] = "Information";
     Text[ finnish ] = "Tiedot";
+    Text[ thai ] = "ข้อมูล";
 };
 
 String RID_DB_COMBO_WIZARD_START + 16
@@ -5630,7 +5834,7 @@ String RID_DB_COMBO_WIZARD_START + 16
     Text[ swedish ] = "F�lt fr�n ~v�rdetabellen";
     Text[ polish ] = "Pole z tabeli warto�ci";
     Text[ portuguese_brazilian ] = "You can save the option group value in a database field or use it for a later action.";
-    Text[ japanese ] = "数値ﾃｰﾌﾞﾙからのﾌｨｰﾙﾄﾞ";
+    Text[ japanese ] = "数値テーブルからのフィールド";
     Text[ chinese_simplified ] = "从数值表格生成字段";
     Text[ chinese_traditional ] = "從數值表格產生欄位";
     Text[ arabic ] = "��� �� ���� ~�����";
@@ -5641,6 +5845,7 @@ String RID_DB_COMBO_WIZARD_START + 16
     Text[ turkish ] = "De�er tablosu alan�";
     Text[ catalan ] = "Field from the Value Table";
     Text[ finnish ] = "Arvotaulukon kentt�";
+    Text[ thai ] = "เขตข้อมูลจากตารางค่า";
 };
 
 String RID_DB_COMBO_WIZARD_START + 17
@@ -5657,7 +5862,7 @@ String RID_DB_COMBO_WIZARD_START + 17
     Text[ swedish ] = "F�lt fr�n ~listtabellen";
     Text[ polish ] = "Pole z tabeli listy";
     Text[ portuguese_brazilian ] = "Do you want to save the value in a database field?";
-    Text[ japanese ] = "ﾘｽﾄﾃｰﾌﾞﾙからのﾌｨｰﾙﾄﾞ";
+    Text[ japanese ] = "リストテーブルからのフィールド";
     Text[ chinese_simplified ] = "从列单表格生成字段";
     Text[ chinese_traditional ] = "從清單表格產生欄位";
     Text[ arabic ] = "��� �� ���� ~�������";
@@ -5668,6 +5873,7 @@ String RID_DB_COMBO_WIZARD_START + 17
     Text[ turkish ] = "Liste tablosu alan�";
     Text[ catalan ] = "Field from the List Table";
     Text[ finnish ] = "Luettelotaulukon kentt�";
+    Text[ thai ] = "เขตข้อมูลจากตารางรายการ";
 };
 
 String RID_DB_COMBO_WIZARD_START + 18
@@ -5684,7 +5890,7 @@ String RID_DB_COMBO_WIZARD_START + 18
     Text[ swedish ] = "Du kan antingen spara kombinationsf�ltets v�rde i ett databasf�lt eller bara anv�nda det f�r visning.";
     Text[ polish ] = "Warto�� pola kombi mo�na zapisa� w polu bazy danych lub u�y� jej tylko do wy�wietlenia.";
     Text[ portuguese_brazilian ] = "Yes, in the following database:";
-    Text[ japanese ] = "ｺﾝﾎﾞﾎﾞｯｸｽの値は、ﾃﾞｰﾀﾍﾞｰｽﾌｨｰﾙﾄﾞに保存するか、あるいは表示用でしか使用できません。";
+    Text[ japanese ] = "コンボボックスの値は、データベースフィールドに保存するか、あるいは表示用でしか使用できません。";
     Text[ chinese_simplified ] = "组合栏之中的数值可以存入数据库字段或者用于显示。";
     Text[ chinese_traditional ] = "您能夠將組合欄位的數值存入一個資料庫內或用於顯示這些數值。";
     Text[ arabic ] = "����� ��� ���� ���� ������� ������ �� ��� ����� �����ʡ �� ��������� ����� ���.";
@@ -5696,6 +5902,7 @@ String RID_DB_COMBO_WIZARD_START + 18
     Text[ language_user1 ] = " ";
     Text[ catalan ] = "You can either save the value of the combo box field in a database field or use it for display purposes.";
     Text[ finnish ] = "Voit joko tallentaa yhdistelm�ruudun kent�n arvon tietokannan kentt��n tai n�ytt�� sen.";
+    Text[ thai ] = "คุณสามารถบันทึกค่าของกล่องคอมโบ้  ในเขตข้อมูลของฐานข้อมูลหรือไม่ก็ใช้มันเพื่อแสดงวัตถุประสงค์";
 };
 
 String RID_DB_COMBO_WIZARD_START + 19
@@ -5712,7 +5919,7 @@ String RID_DB_COMBO_WIZARD_START + 19
     Text[ swedish ] = "Du kan antingen spara listrutans v�rde i ett databasf�lt eller bara anv�nda det f�r visning.";
     Text[ polish ] = "Warto�� pola listy mo�na zapisa� w polu bazy danych lub u�y� jej tylko do wy�wietlenia.";
     Text[ portuguese_brazilian ] = "No, I want to save the value only in the form.";
-    Text[ japanese ] = "ﾘｽﾄﾌｨｰﾙﾄﾞの値は、ﾃﾞｰﾀﾍﾞｰｽに保存するか、あるいは表示用でしか使用できません。";
+    Text[ japanese ] = "リストフィールドの値は、データベースに保存するか、あるいは表示用でしか使用できません。";
     Text[ chinese_simplified ] = "列单字段之中的数值可以存入数据库字段或者用于显示。";
     Text[ chinese_traditional ] = "您能夠在資料庫內儲存一個數值或僅於顯示這個資料。";
     Text[ arabic ] = "����� ��� ���� ���� ������� �� ��� ����� �����ʡ �� ��������� ����� ���.";
@@ -5723,6 +5930,7 @@ String RID_DB_COMBO_WIZARD_START + 19
     Text[ turkish ] = "Liste alan�n�n de�erini bir veritaban� alan�nda kaydedebilir ya da yaln�zca g�r�nt�leme i�in kullanabilirsiniz.";
     Text[ catalan ] = "You can either save the value of the list field in a database field or use it for display purposes.";
     Text[ finnish ] = "Voit joko tallentaa luettelokent�n arvon tietokannan kentt��n tai n�ytt�� sen.";
+    Text[ thai ] = "คุณสามารถบันทึกค่าของเขตข้อมูลรายการในเขตข้อมูลของฐานข้อมูลหรือไม่ก็ใช้มันเพื่อแสดงวัตถุประสงค์";
 };
 
 String RID_DB_COMBO_WIZARD_START + 20
@@ -5739,7 +5947,7 @@ String RID_DB_COMBO_WIZARD_START + 20
     Text[ swedish ] = "Vill du spara v�rdet i ett databasf�lt?";
     Text[ polish ] = "Czy zapisa� warto�� w polu bazy danych?";
     Text[ portuguese_brazilian ] = "What caption do you want for the option group ?";
-    Text[ japanese ] = "値をﾃﾞｰﾀﾍﾞｰｽﾌｨｰﾙﾄﾞに保存しますか。";
+    Text[ japanese ] = "値をデータベースフィールドに保存しますか。";
     Text[ chinese_simplified ] = "要将这个数值存入数据库字段？";
     Text[ chinese_traditional ] = "您要在一個資料庫內儲存這個數值？";
     Text[ arabic ] = "�� ���� ��� ������ �� ��� ����� �����ʿ";
@@ -5750,6 +5958,7 @@ String RID_DB_COMBO_WIZARD_START + 20
     Text[ turkish ] = "De�eri bir veritaban� alan�nda kaydetmek istiyor musunuz?";
     Text[ catalan ] = "Do you want to save the value in a database field?";
     Text[ finnish ] = "Haluatko tallentaa arvon tietokannan kentt��n?";
+    Text[ thai ] = "คุณต้องการบันทึกค่าในเขตข้อมูลของฐานข้อมูลหรือไม่?";
 };
 
 String RID_DB_COMBO_WIZARD_START + 21
@@ -5766,7 +5975,7 @@ String RID_DB_COMBO_WIZARD_START + 21
     Text[ swedish ] = "~Ja, i f�ljande databasf�lt :";
     Text[ polish ] = "Tak, w nast�puj�cym polu bazy danych :";
     Text[ portuguese_brazilian ] = "As all the information needed has been entered you can click the last button now.";
-    Text[ japanese ] = "はい、次のﾃﾞｰﾀﾍﾞｰｽﾌｨｰﾙﾄﾞに保存します。";
+    Text[ japanese ] = "はい、次のデータベースフィールドに保存します。";
     Text[ chinese_simplified ] = "是，在下列数据库字段：";
     Text[ chinese_traditional ] = "是，以下的資料庫欄位：";
     Text[ arabic ] = "~��� �� ��� ����� �������� ������:";
@@ -5777,6 +5986,7 @@ String RID_DB_COMBO_WIZARD_START + 21
     Text[ turkish ] = "~Evet, a�a��da belirtilen veritaban� alan�na kaydet :";
     Text[ catalan ] = "Yes, save in the following database field :";
     Text[ finnish ] = "Kyll�, tallenna arvo seuraavaan tietokannan kentt��n:";
+    Text[ thai ] = "ใช่  บันทึกในเขตข้อมูลของฐานข้อมูลต่อไปนี้:";
 };
 
 String RID_DB_COMBO_WIZARD_START + 22
@@ -5804,6 +6014,7 @@ String RID_DB_COMBO_WIZARD_START + 22
     Text[ turkish ] = "~Hay�r, de�eri yaln�zca g�r�nt�leme i�in kullanmak istiyorum.";
     Text[ catalan ] = "No, I only wish to use the value for display purposes";
     Text[ finnish ] = "Ei, haluan vain n�ytt�� arvon.";
+    Text[ thai ] = "ไม่ใช่  ฉันต้องการใช้ค่าเพื่อแสดงวัตถุประสงค์เท่านั้น";
 };
 
 
