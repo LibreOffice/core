@@ -2,9 +2,9 @@
  *
  *  $RCSfile: stlpool.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: dl $ $Date: 2001-06-26 06:37:18 $
+ *  last change: $Author: dl $ $Date: 2001-07-05 09:09:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1346,7 +1346,7 @@ void SdStyleSheetPool::PutNumBulletItem( SfxStyleSheetBase* pSheet,
             {
                 SvxNumberFormat aFrmt( aNumRule.GetLevel(i));
                 aFrmt.SetBulletRelSize(45);
-                aFrmt.SetBulletChar( 0xF000 + 114 );
+                aFrmt.SetBulletChar( 0xE011 );  // StarBats: 0xF000 + 114
                 aFrmt.SetBulletFont(&rBulletFont);
                 aFrmt.SetLSpace( i * 1000 );
                 aFrmt.SetAbsLSpace( i * 1000 );
