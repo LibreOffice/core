@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tbcontrl.src,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: kz $ $Date: 2002-08-05 20:33:13 $
+ *  last change: $Author: gt $ $Date: 2002-09-02 13:48:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,31 +67,31 @@
  * Bitmaps f"ur SvxFrameWindow
  */
 
-#define MASKCOLOR   MaskColor = Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; }
+#define MASKCOLOR   MaskColor = Color { Red = 0xFFFF ; Green = 0x0000 ; Blue = 0xFFFF ; };
 
 Image RID_SVX_RELOAD_NORMAL
 {
     ImageBitmap = Bitmap { File = "reload.bmp" ; };
-    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
+    MASKCOLOR
 };
 Image RID_SVX_RELOAD_SPECIAL
 {
     ImageBitmap = Bitmap { File = "reloads.bmp" ; };
-    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
+    MASKCOLOR
 };
 ImageList RID_SVXIL_FRAME
 {
     ImageBitmap = Bitmap { File = "fr_ames.bmp" ; };
     IdList = { 1 ; 2 ; 3 ; 4 ; 5 ; 6 ; 7 ; 8 ; 9 ; 10 ; 11 ; 12 ; };
     IdCount = { 12 ; };
-//  MASKCOLOR;
+    MASKCOLOR
 };
 ImageList RID_SVXIL_FRAME_HC
 {
     ImageBitmap = Bitmap { File = "frh_frames.bmp" ; };
     IdList = { 1 ; 2 ; 3 ; 4 ; 5 ; 6 ; 7 ; 8 ; 9 ; 10 ; 11 ; 12 ; };
     IdCount = { 12 ; };
-//  MASKCOLOR;
+    MASKCOLOR
 };
 String RID_SVXSTR_TRANSPARENT
 {
@@ -325,81 +325,72 @@ String RID_SVXSTR_AUTOMATIC
 Image RID_SVXIMG_GRAF_RED
 {
     ImageBitmap = Bitmap { File = "sc10865.bmp" ; };
-    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
+    MASKCOLOR
 };
 Image RID_SVXIMG_GRAF_GREEN
 {
     ImageBitmap = Bitmap { File = "sc10866.bmp" ; };
-    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
+    MASKCOLOR
 };
 Image RID_SVXIMG_GRAF_BLUE
 {
     ImageBitmap = Bitmap { File = "sc10867.bmp" ; };
-    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
+    MASKCOLOR
 };
 Image RID_SVXIMG_GRAF_LUMINANCE
 {
     ImageBitmap = Bitmap { File = "sc10863.bmp" ; };
-    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
+    MASKCOLOR
 };
 Image RID_SVXIMG_GRAF_CONTRAST
 {
     ImageBitmap = Bitmap { File = "sc10864.bmp" ; };
-    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
+    MASKCOLOR
 };
 Image RID_SVXIMG_GRAF_GAMMA
 {
     ImageBitmap = Bitmap { File = "sc10868.bmp" ; };
-    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
+    MASKCOLOR
 };
 Image RID_SVXIMG_GRAF_TRANSPARENCE
 {
     ImageBitmap = Bitmap { File = "sc10869.bmp" ; };
-    MaskColor = Color { Red = 0xC000 ; Green = 0xC000 ; Blue = 0xC000 ; };
+    MASKCOLOR
 };
 Image RID_SVXIMG_GRAF_RED_H
 {
     ImageBitmap = Bitmap { File = "sch10865.bmp" ; };
-    MaskColor = Color { Red = 0xff00 ; Green = 0x0000 ; Blue = 0xff00 ; };
+    MASKCOLOR
 };
 Image RID_SVXIMG_GRAF_GREEN_H
 {
     ImageBitmap = Bitmap { File = "sch10866.bmp" ; };
-    MaskColor = Color { Red = 0xff00 ; Green = 0x0000 ; Blue = 0xff00 ; };
+    MASKCOLOR
 };
 Image RID_SVXIMG_GRAF_BLUE_H
 {
     ImageBitmap = Bitmap { File = "sch10867.bmp" ; };
-    MaskColor = Color { Red = 0xff00 ; Green = 0x0000 ; Blue = 0xff00 ; };
+    MASKCOLOR
 };
 Image RID_SVXIMG_GRAF_LUMINANCE_H
 {
     ImageBitmap = Bitmap { File = "sch10863.bmp" ; };
-    MaskColor = Color { Red = 0xff00 ; Green = 0x0000 ; Blue = 0xff00 ; };
+    MASKCOLOR
 };
 Image RID_SVXIMG_GRAF_CONTRAST_H
 {
     ImageBitmap = Bitmap { File = "sch10864.bmp" ; };
-    MaskColor = Color { Red = 0xff00 ; Green = 0x0000 ; Blue = 0xff00 ; };
+    MASKCOLOR
 };
 Image RID_SVXIMG_GRAF_GAMMA_H
 {
     ImageBitmap = Bitmap { File = "sch10868.bmp" ; };
-    MaskColor = Color { Red = 0xff00 ; Green = 0x0000 ; Blue = 0xff00 ; };
+    MASKCOLOR
 };
 Image RID_SVXIMG_GRAF_TRANSPARENCE_H
 {
     ImageBitmap = Bitmap { File = "sch10869.bmp" ; };
-    MaskColor = Color { Red = 0xff00 ; Green = 0x0000 ; Blue = 0xff00 ; };
+    MASKCOLOR
 };
 
 // ********************************************************************** EOF
-
-
-
-
-
-
-
-
-
