@@ -2,9 +2,9 @@
  *
  *  $RCSfile: string.hxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2003-08-07 14:56:13 $
+ *  last change: $Author: obo $ $Date: 2004-03-19 13:23:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -252,20 +252,28 @@ public:
     sal_Int32 getLength() const SAL_THROW(()) { return pData->length; }
 
     /**
-      Returns a pointer to the character buffer from this string.
+      Returns a pointer to the characters of this string.
 
-      It isn't necessarily NULL terminated.
+      <p>The returned pointer is not guaranteed to point to a null-terminated
+      byte string.  Note that this string object may contain embedded null
+      characters, which will thus also be embedded in the returned byte
+      string.</p>
 
-      @return   a pointer to the characters buffer from this object.
+      @return a pointer to a (not necessarily null-terminated) byte string
+      representing the characters of this string object.
     */
     operator const sal_Char *() const SAL_THROW(()) { return pData->buffer; }
 
     /**
-      Returns a pointer to the character buffer from this string.
+      Returns a pointer to the characters of this string.
 
-      It isn't necessarily NULL terminated.
+      <p>The returned pointer is guaranteed to point to a null-terminated byte
+      string.  But note that this string object may contain embedded null
+      characters, which will thus also be embedded in the returned
+      null-terminated byte string.</p>
 
-      @return   a pointer to the characters buffer from this object.
+      @return a pointer to a null-terminated byte string representing the
+      characters of this string object.
     */
     const sal_Char * getStr() const SAL_THROW(()) { return pData->buffer; }
 
