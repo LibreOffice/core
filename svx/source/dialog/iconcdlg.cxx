@@ -2,9 +2,9 @@
  *
  *  $RCSfile: iconcdlg.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pb $ $Date: 2001-07-05 08:25:05 $
+ *  last change: $Author: thb $ $Date: 2001-07-26 10:54:04 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -271,34 +271,6 @@ void IconChoicePage::DataChanged( const DataChangedEvent& rDCEvt )
         Invalidate();
     }
 }
-
-#ifndef TF_SVDATA
-
-/**********************************************************************
-|
-| D & D
-|
-\**********************************************************************/
-
-BOOL IconChoicePage::QueryDrop( DropEvent& rDEvt )
-{
-    if( pDialog )
-        return pDialog->QueryDrop( rDEvt );
-    else
-        return FALSE;
-}
-
-// -----------------------------------------------------------------------
-
-BOOL IconChoicePage::Drop( const DropEvent& rDEvt )
-{
-    if( pDialog )
-        return pDialog->Drop( rDEvt );
-    else
-        return Window::Drop( rDEvt );
-}
-
-#endif // TF_SVDATA
 
 //#####################################################################
 //
@@ -1413,26 +1385,3 @@ void IconChoiceDialog::FocusOnIcon( USHORT nId )
             pEntry->SetFocus( FALSE );
     }
 }
-
-#ifndef TF_SVDATA
-
-/**********************************************************************
-|
-| D & D
-|
-\**********************************************************************/
-
-BOOL IconChoiceDialog::QueryDrop( DropEvent& rDEvt )
-{
-    return ModalDialog::QueryDrop( rDEvt );
-}
-
-// -----------------------------------------------------------------------
-
-BOOL IconChoiceDialog::Drop( const DropEvent& rDEvt )
-{
-    return ModalDialog::Drop( rDEvt );
-}
-
-#endif // TF_SVDATA
-
