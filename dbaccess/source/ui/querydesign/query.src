@@ -2,9 +2,9 @@
  *
  *  $RCSfile: query.src,v $
  *
- *  $Revision: 1.29 $
+ *  $Revision: 1.30 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-13 20:44:38 $
+ *  last change: $Author: kz $ $Date: 2001-07-17 20:26:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2281,7 +2281,7 @@ Menu RID_QUERY_DESIGN_MAIN_MENU
                     Text[ japanese ] = "Œ³‚É–ß‚·";
                     Text[ korean ] = "½ÇÇà Ãë¼Ò";
                     Text[ chinese_simplified ] = "³·ÏûÃüÁî";
-                    Text[ chinese_traditional ] = "ºM®ø©R¥O";
+                    Text[ chinese_traditional ] = "´_­ì";
                     Text[ turkish ] = "Undo";
                     Text[ arabic ] = "ÊÑÇÌÚ";
                     Text[ finnish ] = "Peruuta ";
@@ -2400,6 +2400,7 @@ Menu RID_QUERY_DESIGN_MAIN_MENU
     ITEM_HELP_MENU
     };
 };
+
 
 
 
