@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PrintManager.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-01-20 12:39:51 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 10:41:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@
 #include <sfx2/progress.hxx>
 #include <svtools/printdlg.hxx>
 #include <tools/multisel.hxx>
-#include <sfx2/misccfg.hxx>
+#include <svtools/misccfg.hxx>
 #include <unotools/localedatawrapper.hxx>
 #ifndef _SD_PRNTOPTS_HXX
 #include "prntopts.hxx"
