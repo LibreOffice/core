@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmsh.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: kz $ $Date: 2004-08-02 13:08:34 $
+ *  last change: $Author: obo $ $Date: 2004-08-12 13:11:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1132,22 +1132,6 @@ void SwFrameShell::GetLineStyleState(SfxItemSet &rSet)
     }
 }
 
-
-
-void  SwFrameShell::GetBckColState(SfxItemSet &rSet)
-{
-    SwBaseShell::GetBckColState( rSet );
-}
-
-
-
-void  SwFrameShell::ExecBckCol(SfxRequest& rReq)
-{
-    SwBaseShell::ExecBckCol( rReq );
-}
-
-
-
 void  SwFrameShell::StateInsert(SfxItemSet &rSet)
 {
     const int nSel = GetShell().GetSelectionType();
@@ -1155,6 +1139,3 @@ void  SwFrameShell::StateInsert(SfxItemSet &rSet)
     if ((nSel & SwWrtShell::SEL_GRF) || (nSel & SwWrtShell::SEL_OLE))
         rSet.DisableItem(FN_INSERT_FRAME);
 }
-
-
-
