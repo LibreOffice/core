@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_ftyp.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: hdu $ $Date: 2001-05-17 12:59:16 $
+ *  last change: $Author: hdu $ $Date: 2001-06-12 10:34:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -157,7 +157,7 @@ class FreetypeServerFont : public ServerFont
     virtual int                 GetFontFaceNum() const { return mpFontInfo->GetFaceNum(); }
     virtual int                 GetFontId() const { return mpFontInfo->GetFontId(); }
     virtual void                SetFontId( int nFontId ) { mpFontInfo->SetFontId( nFontId ); }
-    virtual bool                TestFont() { return (maFaceFT != NULL); }
+    virtual bool                TestFont() const;
 
     virtual void                FetchFontMetric( ImplFontMetricData&, long& rFactor ) const;
 

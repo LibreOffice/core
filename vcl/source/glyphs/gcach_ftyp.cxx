@@ -2,8 +2,8 @@
  *
  *  $RCSfile: gcach_ftyp.cxx,v $
  *
- *  $Revision: 1.45 $
- *  last change: $Author: hdu $ $Date: 2001-05-29 15:17:33 $
+ *  $Revision: 1.46 $
+ *  last change: $Author: hdu $ $Date: 2001-06-12 10:34:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -447,6 +447,13 @@ FreetypeServerFont::FreetypeServerFont( const ImplFontSelectData& rFSD, FtFontIn
 #if (FTVERSION < 203) && !defined(TT_CONFIG_OPTION_BYTECODE_INTERPRETER)
     mnLoadFlags |= FT_LOAD_NO_HINTING;  // TODO: enable when AH improves
 #endif
+}
+
+// -----------------------------------------------------------------------
+
+bool FreetypeServerFont::TestFont() const
+{
+    return (maFaceFT != NULL) && (maFaceFT->num_glyphs >= 0);
 }
 
 // -----------------------------------------------------------------------
