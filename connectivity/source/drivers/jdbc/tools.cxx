@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tools.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-14 07:21:03 $
+ *  last change: $Author: oj $ $Date: 2001-10-26 14:01:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -165,6 +165,7 @@ jstring connectivity::convertwchar_tToJavaString(JNIEnv *pEnv,const ::rtl::OUStr
     if (pEnv)
     {
         pStr = pEnv->NewString(_rTemp.getStr(), _rTemp.getLength());
+        pEnv->ExceptionClear();
         OSL_ENSURE(pStr,"Could not create a jsstring object!");
     }
     return pStr;
@@ -180,7 +181,8 @@ java_util_Properties* connectivity::createStringPropertyArray(JNIEnv *pEnv,const
     for(;pBegin != pEnd;++pBegin)
     {
         // this is a special property to find the jdbc driver
-        if(pBegin->Name.compareToAscii("JavaDriverClass"))
+        if( pBegin->Name.compareToAscii("JavaDriverClass") &&
+            pBegin->Name.compareToAscii("CharSet"))
         {
             ::rtl::OUString aStr;
             pBegin->Value >>= aStr;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: JDriver.cxx,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-29 12:21:08 $
+ *  last change: $Author: oj $ $Date: 2001-10-26 14:01:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,6 +201,13 @@ Reference< XConnection > SAL_CALL java_sql_Driver::connect( const ::rtl::OUStrin
                     if(pDrvClass)
                     {
                         saveRef(t.pEnv, pDrvClass->newInstanceObject());
+                        jclass tempClass = t.pEnv->GetObjectClass(object);
+                        if(object)
+                        {
+                            jclass globClass = (jclass)t.pEnv->NewGlobalRef( tempClass );
+                            t.pEnv->DeleteLocalRef( tempClass );
+                            saveClassRef( globClass );
+                        }
                         delete pDrvClass;
                     }
                     break;
@@ -246,6 +253,21 @@ Reference< XConnection > SAL_CALL java_sql_Driver::connect( const ::rtl::OUStrin
             args[1].l = pProps->getJavaObject();
 
             out = t.pEnv->CallObjectMethod( object, mID, args[0].l,args[1].l );
+            try
+            {
+                ThrowSQLException(t.pEnv,*this);
+            }
+            catch(const SQLException& )
+            {
+                t.pEnv->DeleteLocalRef((jstring)args[0].l);
+                delete pProps;
+                if( object )
+                {
+                    t.pEnv->DeleteGlobalRef( object );
+                    object = NULL;
+                }
+                throw;
+            }
             // und aufraeumen
             t.pEnv->DeleteLocalRef((jstring)args[0].l);
             delete pProps;
@@ -259,6 +281,8 @@ Reference< XConnection > SAL_CALL java_sql_Driver::connect( const ::rtl::OUStrin
         } //mID
         if( object )
         {
+            t.pEnv->DeleteGlobalRef( theClass );
+            theClass = NULL;
             t.pEnv->DeleteGlobalRef( object );
             object = NULL;
         }

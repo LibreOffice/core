@@ -2,9 +2,9 @@
  *
  *  $RCSfile: DatabaseMetaData.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-14 07:21:03 $
+ *  last change: $Author: oj $ $Date: 2001-10-26 14:01:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -301,6 +301,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getTables(
         char * cMethodName = "getTables";
         // Java-Call absetzen
         jmethodID mID = t.pEnv->GetMethodID( getMyClass(), cMethodName, cSignature );OSL_ENSURE(mID,"Unknown method id!");
+        t.pEnv->ExceptionClear();
         OSL_ENSURE(!t.pEnv->ExceptionOccurred(),"Exception occured!");
         if( mID )
         {
@@ -310,6 +311,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getTables(
             {
                 jobjectArray pObjArray = t.pEnv->NewObjectArray((jsize) len, java_lang_String::getMyClass(), 0);
                 OSL_ENSURE(!t.pEnv->ExceptionOccurred(),"Exception occured!");
+                t.pEnv->ExceptionClear();
                 const ::rtl::OUString* pBegin = types.getConstArray();
                 for(sal_Int32 i=0;i<len;i++,++pBegin)
                 {
@@ -317,6 +319,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getTables(
                     //jstring aT = t.pEnv->NewStringUTF(_par3.GetToken(i));
                     t.pEnv->SetObjectArrayElement(pObjArray,(jsize)i,aT);
                     OSL_ENSURE(!t.pEnv->ExceptionOccurred(),"Exception occured!");
+                    t.pEnv->ExceptionClear();
                 }
                 args[3].l = pObjArray;
             }else
@@ -327,6 +330,7 @@ Reference< XResultSet > SAL_CALL java_sql_DatabaseMetaData::getTables(
             args[2].l = convertwchar_tToJavaString(t.pEnv,tableNamePattern);
             out = t.pEnv->CallObjectMethod( object, mID, args[0].l, args[1].l,args[2].l,args[3].l);
             OSL_ENSURE(!t.pEnv->ExceptionOccurred(),"Exception occured!");
+            t.pEnv->ExceptionClear();
             if(catalog.hasValue())
             {
                 t.pEnv->DeleteLocalRef((jstring)args[0].l);
