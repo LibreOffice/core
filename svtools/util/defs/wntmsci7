@@ -10171,3 +10171,15 @@ lpfnDrawStateW
 ?SetFsysExtension_Impl@?%O:\SRC641\src\svtools\source\filepicker\iodlg.cxx1662822434@@YAXAAVString@@ABV2@@Z
 ?lcl_MoveControl@?%O:\SRC641\src\svtools\source\filepicker\iodlg.cxx1662822434@@YAXPAVControl@@JJAAJ@Z
 ?lcl_getHomeDirectory@?%O:\SRC641\src\svtools\source\filepicker\iodlg.cxx1662822434@@YAEABVString@@AAV2@@Z
+??0SvtScriptedTextHelper@@QAE@AAVOutputDevice@@@Z
+??0SvtScriptedTextHelper@@QAE@AAVOutputDevice@@PAVFont@@11@Z
+??0SvtScriptedTextHelper@@QAE@ABV0@@Z
+??1SvtScriptedTextHelper@@UAE@XZ
+?DrawText@SvtScriptedTextHelper@@QAEXABVPoint@@@Z
+?GetText@SvtScriptedTextHelper@@QBEABVOUString@rtl@@XZ
+?GetTextHeight@SvtScriptedTextHelper@@QBEJXZ
+?GetTextSize@SvtScriptedTextHelper@@QBEABVSize@@XZ
+?GetTextWidth@SvtScriptedTextHelper@@QBEJXZ
+?SetDefaultFont@SvtScriptedTextHelper@@QAEXXZ
+?SetFonts@SvtScriptedTextHelper@@QAEXPAVFont@@00@Z
+?SetText@SvtScriptedTextHelper@@QAEXABVOUString@rtl@@ABV?$Reference@VXBreakIterator@i18n@star@sun@com@@@uno@star@sun@com@@@Z
