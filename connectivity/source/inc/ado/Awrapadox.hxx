@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Awrapadox.hxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-15 10:51:03 $
+ *  last change: $Author: fs $ $Date: 2002-01-18 16:23:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,125 +113,17 @@ typedef struct _ADOTable Table;
 #ifndef _CONNECTIVITY_ADO_ADOIMP_HXX_
 #include "ado/adoimp.hxx"
 #endif
+#include "ado/Awrapado.hxx"
+#include "ado/WrapColumn.hxx"
+#include "ado/WrapIndex.hxx"
+#include "ado/WrapKey.hxx"
+#include "ado/WrapTable.hxx"
+#include "ado/WrapCatalog.hxx"
+
 namespace connectivity
 {
     namespace ado
     {
-        class WpADOColumn : public WpOLEBase<_ADOColumn>
-        {
-        public:
-            WpADOColumn(_ADOColumn* pInt=NULL)  :   WpOLEBase<_ADOColumn>(pInt){}
-            WpADOColumn(const WpADOColumn& rhs){operator=(rhs);}
-
-            void Create();
-
-            inline WpADOColumn& operator=(const WpADOColumn& rhs)
-                {WpOLEBase<_ADOColumn>::operator=(rhs); return *this;}
-
-            ::rtl::OUString get_Name() const;
-            ::rtl::OUString get_RelatedColumn() const;
-            void put_Name(const ::rtl::OUString& _rName);
-            void put_RelatedColumn(const ::rtl::OUString& _rName);
-            DataTypeEnum get_Type() const;
-            void put_Type(const DataTypeEnum& _eNum) ;
-            sal_Int32 get_Precision() const;
-            void put_Precision(sal_Int32 _nPre) ;
-            sal_Int32 get_NumericScale() const;
-            void put_NumericScale(sal_Int8 _nScale);
-            SortOrderEnum get_SortOrder() const;
-            void put_SortOrder(SortOrderEnum _nScale);
-            ColumnAttributesEnum get_Attributes() const;
-            sal_Bool put_Attributes(const ColumnAttributesEnum& _eNum);
-            ADOProperties* get_Properties() const;
-        };
-
-        class WpADOKey : public WpOLEBase<ADOKey>
-        {
-        public:
-            WpADOKey(ADOKey* pInt=NULL) :   WpOLEBase<ADOKey>(pInt){}
-            WpADOKey(const WpADOKey& rhs){operator=(rhs);}
-
-            inline WpADOKey& operator=(const WpADOKey& rhs)
-                {WpOLEBase<ADOKey>::operator=(rhs); return *this;}
-
-            void Create();
-
-            ::rtl::OUString get_Name() const;
-            void put_Name(const ::rtl::OUString& _rName);
-            KeyTypeEnum get_Type() const;
-            void put_Type(const KeyTypeEnum& _eNum) ;
-            ::rtl::OUString get_RelatedTable() const;
-            void put_RelatedTable(const ::rtl::OUString& _rName);
-            RuleEnum get_DeleteRule() const;
-            void put_DeleteRule(const RuleEnum& _eNum) ;
-            RuleEnum get_UpdateRule() const;
-            void put_UpdateRule(const RuleEnum& _eNum) ;
-            ADOColumns* get_Columns() const;
-        };
-
-        class WpADOIndex : public WpOLEBase<_ADOIndex>
-        {
-        public:
-            WpADOIndex(_ADOIndex* pInt=NULL)    :   WpOLEBase<_ADOIndex>(pInt){}
-            WpADOIndex(const WpADOIndex& rhs){operator=(rhs);}
-
-            inline WpADOIndex& operator=(const WpADOIndex& rhs)
-                {WpOLEBase<_ADOIndex>::operator=(rhs); return *this;}
-
-            void Create();
-
-            ::rtl::OUString get_Name() const;
-            void put_Name(const ::rtl::OUString& _rName);
-            sal_Bool get_Clustered() const;
-            void put_Clustered(sal_Bool _b);
-            sal_Bool get_Unique() const;
-            void put_Unique(sal_Bool _b);
-            sal_Bool get_PrimaryKey() const;
-            void put_PrimaryKey(sal_Bool _b);
-            ADOColumns* get_Columns() const;
-        };
-
-        class WpADOCatalog : public WpOLEBase<_ADOCatalog>
-        {
-        public:
-            WpADOCatalog(_ADOCatalog* pInt = NULL)  :   WpOLEBase<_ADOCatalog>(pInt){}
-            WpADOCatalog(const WpADOCatalog& rhs){operator=(rhs);}
-
-            inline WpADOCatalog& operator=(const WpADOCatalog& rhs)
-                {WpOLEBase<_ADOCatalog>::operator=(rhs); return *this;}
-
-            ::rtl::OUString GetObjectOwner(const ::rtl::OUString& _rName, ObjectTypeEnum _eNum);
-
-            void putref_ActiveConnection(IDispatch* pCon);
-            ADOTables* get_Tables();
-            ADOViews* get_Views();
-            ADOGroups* get_Groups();
-            ADOUsers* get_Users();
-            ADOProcedures* get_Procedures();
-            void Create();
-        };
-
-        class WpADOTable : public WpOLEBase<_ADOTable>
-        {
-        public:
-            WpADOTable(_ADOTable* pInt=NULL)    :   WpOLEBase<_ADOTable>(pInt){}
-            WpADOTable(const WpADOTable& rhs){operator=(rhs);}
-
-            inline WpADOTable& operator=(const WpADOTable& rhs)
-                {WpOLEBase<_ADOTable>::operator=(rhs); return *this;}
-
-            void Create();
-
-            ::rtl::OUString get_Name() const;
-            void put_Name(const ::rtl::OUString& _rName);
-            ::rtl::OUString get_Type() const;
-            ADOColumns* get_Columns() const;
-            ADOIndexes* get_Indexes() const;
-            ADOKeys* get_Keys() const;
-            WpADOCatalog get_ParentCatalog() const;
-            ADOProperties* get_Properties() const;
-        };
-
         class WpADOView : public WpOLEBase<ADOView>
         {
         public:
@@ -267,7 +159,7 @@ namespace connectivity
                 /* [in] */ ObjectTypeEnum ObjectType,
                 /* [in] */ ActionEnum Action,
                 /* [in] */ RightsEnum Rights);
-            ADOUsers* get_Users( );
+            WpADOUsers get_Users( );
         };
 
         class WpADOUser : public WpOLEBase<_ADOUser>
@@ -284,7 +176,7 @@ namespace connectivity
             ::rtl::OUString get_Name() const;
             void put_Name(const ::rtl::OUString& _rName);
             sal_Bool ChangePassword(const ::rtl::OUString& _rPwd,const ::rtl::OUString& _rNewPwd);
-            ADOGroups* get_Groups();
+            WpADOGroups get_Groups();
             RightsEnum GetPermissions(
                 /* [in] */ const OLEVariant& Name,
                 /* [in] */ ObjectTypeEnum ObjectType);
@@ -294,14 +186,6 @@ namespace connectivity
                 /* [in] */ ActionEnum Action,
                 /* [in] */ RightsEnum Rights);
         };
-
-        typedef WpOLEAppendCollection<ADOGroups,    ADOGroup,   WpADOGroup>     WpADOGroups;
-        typedef WpOLEAppendCollection<ADOViews,     ADOView,    WpADOView>      WpADOViews;
-        typedef WpOLEAppendCollection<ADOTables,    _ADOTable,  WpADOTable>     WpADOTables;
-        typedef WpOLEAppendCollection<ADOIndexes,   _ADOIndex,  WpADOIndex>     WpADOIndexes;
-        typedef WpOLEAppendCollection<ADOKeys,      ADOKey,     WpADOKey>       WpADOKeys;
-        typedef WpOLEAppendCollection<ADOColumns,   _ADOColumn, WpADOColumn>    WpADOColumns;
-        typedef WpOLEAppendCollection<ADOUsers,     _ADOUser,   WpADOUser>      WpADOUsers;
     }
 }
 #endif // _CONNECTIVITY_ADO_AWRAPADOX_HXX_

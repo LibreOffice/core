@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Aolevariant.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-18 08:31:17 $
+ *  last change: $Author: fs $ $Date: 2002-01-18 16:23:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,9 +98,14 @@ namespace connectivity
             OLEString();
             OLEString(const BSTR& _sBStr);
             OLEString(const ::rtl::OUString& _sBStr);
+            OLEString(const OLEString& _rRh)
+            {
+                OLEString::operator=(_rRh);
+            }
             ~OLEString();
             OLEString& operator=(const ::rtl::OUString& _rSrc);
             OLEString& operator=(const BSTR& _rSrc);
+            OLEString& operator=(const OLEString& _rSrc);
             operator ::rtl::OUString() const;
             operator BSTR() const;
             BSTR* operator &();

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ACatalog.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-15 10:50:24 $
+ *  last change: $Author: fs $ $Date: 2002-01-18 16:23:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,7 @@ namespace connectivity
 
         public:
             OCatalog(_ADOCatalog* _pCatalog,OConnection* _pCon);
+            ~OCatalog();
 
             OConnection*        getConnection()     const { return m_pConnection; }
             sdbcx::OCollection* getPrivateTables()  const { return m_pTables;}

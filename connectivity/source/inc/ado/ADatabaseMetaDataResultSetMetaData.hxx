@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ADatabaseMetaDataResultSetMetaData.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-17 06:46:50 $
+ *  last change: $Author: fs $ $Date: 2002-01-18 16:23:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,10 @@ namespace connectivity
             ADORecordset*   m_pRecordSet;
             sal_Int32       m_nColCount;
 
+        private:
+            ODatabaseMetaDataResultSetMetaData( const ODatabaseMetaDataResultSetMetaData& );            // never implemented
+            ODatabaseMetaDataResultSetMetaData& operator=( const ODatabaseMetaDataResultSetMetaData& ); // never implemented
+
         protected:
             void setColumnPrivilegesMap();
             void setColumnsMap();
@@ -122,8 +126,6 @@ namespace connectivity
                 if(m_pRecordSet)
                     m_pRecordSet->AddRef();
             }
-//          ODatabaseMetaDataResultSetMetaData( ADORecordset* _pRecordSet,::std::vector<sal_Int32> _vMapping)
-//                  :   m_pRecordSet(_pRecordSet),m_vMapping(_vMapping){m_pRecordSet->AddRef();}
             ~ODatabaseMetaDataResultSetMetaData();
 
             /// Avoid ambigous cast error from the compiler.

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Aolewrap.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: oj $ $Date: 2001-11-09 06:59:00 $
+ *  last change: $Author: fs $ $Date: 2002-01-18 16:23:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,10 +82,13 @@ namespace connectivity
 {
     namespace ado
     {
+        class OLEVariant;
         class WpBase
         {
         protected:
             IDispatch* pIUnknown;
+
+            void setIDispatch(IDispatch* _pIUnknown);
         public:
             WpBase();
             WpBase(IDispatch* pInt);
@@ -99,6 +102,7 @@ namespace connectivity
 
             sal_Bool IsValid() const;
             operator IDispatch*();
+
         };
         //////////////////////////////////////////////////////////////////////////
         //
@@ -150,6 +154,11 @@ namespace connectivity
             }
 
             operator T*() const { return static_cast<T*>(pInterface); }
+            void setWithOutAddRef(T* _pInterface)
+            {
+                pInterface = _pInterface;
+                WpBase::setIDispatch(_pInterface);
+            }
         };
 
 
@@ -188,27 +197,43 @@ namespace connectivity
             inline sal_Int32 GetItemCount() const
             {
                 sal_Int32 nCount = 0;
-                return SUCCEEDED(pInterface->get_Count(&nCount)) ? nCount : sal_Int32(0);
+                return pInterface ? (SUCCEEDED(pInterface->get_Count(&nCount)) ? nCount : sal_Int32(0)) : sal_Int32(0);
             }
 
             inline WrapT GetItem(sal_Int32 index) const
             {
                 OSL_ENSURE(index >= 0 && index<GetItemCount(),"Wrong index for field!");
-                T* pT;
-                return FAILED(pInterface->get_Item(OLEVariant(index), &pT)) ? WrapT(NULL) : WrapT(pT);
+                T* pT = NULL;
+                WrapT aRet(NULL);
+                if(SUCCEEDED(pInterface->get_Item(OLEVariant(index), &pT)))
+                    aRet.setWithOutAddRef(pT);
+                return aRet;
+            }
+
+            inline WrapT GetItem(const OLEVariant& index) const
+            {
+                T* pT = NULL;
+                WrapT aRet(NULL);
+                if(SUCCEEDED(pInterface->get_Item(index, &pT)))
+                    aRet.setWithOutAddRef(pT);
+                return aRet;
             }
 
             inline WrapT GetItem(const ::rtl::OUString& sStr) const
             {
-                T* pT;
+                WrapT aRet(NULL);
+                T* pT = NULL;
                 if (FAILED(pInterface->get_Item(OLEVariant(sStr), &pT)))
                 {
+#ifdef _DEBUG
                     ::rtl::OString sTemp("Unknown Item: ");
                     sTemp += ::rtl::OString(sStr.getStr(),sStr.getLength(),osl_getThreadTextEncoding());
                     OSL_ENSURE(0,sTemp);
-                    return WrapT(NULL);
+#endif
                 }
-                return WrapT(pT);
+                else
+                    aRet.setWithOutAddRef(pT);
+                return aRet;
             }
             inline void fillElementNames(TStringVector& _rVector)
             {

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AResultSetMetaData.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-30 10:09:04 $
+ *  last change: $Author: fs $ $Date: 2002-01-18 16:23:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,6 +100,10 @@ namespace connectivity
             sal_Int32       m_nColCount;
 
             sal_Int32 MapADOType2Jdbc(DataTypeEnum eType);
+        private:
+            OResultSetMetaData( const OResultSetMetaData& );            // never implemented
+            OResultSetMetaData& operator=( const OResultSetMetaData& ); // never implemented
+
         public:
             // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
             OResultSetMetaData( ADORecordset* _pRecordSet)

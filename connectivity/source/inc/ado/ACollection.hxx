@@ -2,9 +2,9 @@
  *
  *  $RCSfile: ACollection.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-17 18:13:30 $
+ *  last change: $Author: fs $ $Date: 2002-01-18 16:23:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,10 @@ namespace connectivity
         //************************************************************
         template <class T,class SimT,class OCl> class OCollection : public OCollectionBase
         {
+        private:
+            OCollection( const OCollection& );              // never implemented
+            OCollection& operator=( const OCollection& );   // never implemented
+
         protected:
             vector<OCl*>                            m_aElements;
             ::cppu::OWeakObject&                    m_rParent;

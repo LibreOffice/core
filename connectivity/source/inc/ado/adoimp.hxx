@@ -2,9 +2,9 @@
  *
  *  $RCSfile: adoimp.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-08-30 13:20:58 $
+ *  last change: $Author: fs $ $Date: 2002-01-18 16:23:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -77,14 +77,12 @@ namespace connectivity
     {
 
         class WpADOField;
+        class OLEString;
         class ADOS
         {
         public:
             // Auch hier: BSTR mit SysFreeString() freigeben!
-            inline static BSTR GetKeyStr()
-            {
-                return (BSTR)::rtl::OUString::createFromAscii("gxwaezucfyqpwjgqbcmtsncuhwsnyhiohwxz").getStr();
-            }
+            static OLEString& GetKeyStr();
 
             static const CLSID  CLSID_ADOCATALOG_25;
             static const IID    IID_ADOCATALOG_25;

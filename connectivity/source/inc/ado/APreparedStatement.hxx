@@ -2,9 +2,9 @@
  *
  *  $RCSfile: APreparedStatement.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2001-10-17 18:13:31 $
+ *  last change: $Author: fs $ $Date: 2002-01-18 16:23:14 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -113,6 +113,8 @@ namespace connectivity
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData >  m_xMetaData;
             const OTypeInfoMap& m_aTypeInfo;
             ADOParameters*      m_pParameters;
+
+            ~OPreparedStatement();
 
         public:
             DECLARE_SERVICE_INFO();

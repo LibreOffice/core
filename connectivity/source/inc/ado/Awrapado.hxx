@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Awrapado.hxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: fs $ $Date: 2002-01-16 08:48:38 $
+ *  last change: $Author: fs $ $Date: 2002-01-18 16:25:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -119,7 +119,8 @@ namespace connectivity
         class WpADOError;
         class WpADOProperty;
 
-        typedef WpOLEAppendCollection<ADOFields, ADOField, WpADOField> WpADOFields;
+        typedef WpOLEAppendCollection<  ADOFields,      ADOField,       WpADOField>         WpADOFields;
+        typedef WpOLECollection<        ADOProperties,  ADOProperty,    WpADOProperty>      WpADOProperties;
 
         //------------------------------------------------------------------------
         class WpADOConnection : public OBJECT_BASE<ADOConnection>
@@ -136,7 +137,7 @@ namespace connectivity
 
             //////////////////////////////////////////////////////////////////////
 
-            ADOProperties* get_Properties() const;
+            WpADOProperties get_Properties() const;
 
              rtl::OUString GetConnectionString() const;
 
@@ -312,7 +313,7 @@ namespace connectivity
                 {OBJECT_BASE<ADOField>::operator=(rhs); return *this;}
             //////////////////////////////////////////////////////////////////////
 
-             ADOProperties* get_Properties();
+             WpADOProperties get_Properties();
              sal_Int32 GetActualSize() const ;
              sal_Int32 GetAttributes() const ;
              sal_Int32 GetStatus() const      ;
@@ -350,12 +351,10 @@ namespace connectivity
         //------------------------------------------------------------------------
         class WpADOProperty: public OBJECT_BASE<ADOProperty>
         {
-            friend class WpADOProperties;
-
         public:
             // Konstruktoren, operator=
             // diese rufen nur die Oberklasse
-            WpADOProperty(ADOProperty* pInt):OBJECT_BASE<ADOProperty>(pInt){}
+            WpADOProperty(ADOProperty* pInt = NULL):OBJECT_BASE<ADOProperty>(pInt){}
             WpADOProperty(const WpADOProperty& rhs){operator=(rhs);}
              WpADOProperty& operator=(const WpADOProperty& rhs)
                 {OBJECT_BASE<ADOProperty>::operator=(rhs); return *this;}
@@ -409,7 +408,7 @@ namespace connectivity
              OLEVariant GetBookmark();
             CompareEnum CompareBookmarks(const OLEVariant& left,const OLEVariant& right);
              sal_Bool SetBookmark(const OLEVariant &pSafeAr);
-             ADOFields* GetFields() const;
+             WpADOFields GetFields() const;
              sal_Bool Move(sal_Int32 nRows, VARIANT aBmk);
              sal_Bool MoveNext();
              sal_Bool MovePrevious();
@@ -422,7 +421,7 @@ namespace connectivity
              sal_Bool AddNew(const OLEVariant &FieldList,const OLEVariant &Values);
              sal_Bool Update(const OLEVariant &FieldList,const OLEVariant &Values);
              sal_Bool CancelUpdate();
-             ADOProperties* get_Properties() const;
+             WpADOProperties get_Properties() const;
              sal_Bool NextRecordset(OLEVariant& RecordsAffected,ADORecordset** ppiRset);
              sal_Bool get_RecordCount(sal_Int32 &_nRet) const;
              sal_Bool get_MaxRecords(sal_Int32 &_nRet) const;
@@ -457,6 +456,25 @@ namespace connectivity
              void GetValue(OLEVariant& aValVar) const ;
              OLEVariant GetValue() const;
              sal_Bool PutValue(const OLEVariant& aVariant);
+        };
+
+        class OTools
+        {
+        public:
+            /** putValue set the property value at the ado column
+                @param  _rProps     the properties where to set
+                @param  _aPosition  which property to set
+                @param  _aValVar    the value to set
+            */
+            static void             putValue(const WpADOProperties& _rProps,const OLEVariant &_aPosition,const OLEVariant &_aValVar);
+
+            /** getValue returns a specific property value
+                @param  _rProps     the properties where to set
+                @param  _aPosition  the property
+
+                @return the property value
+            */
+            static OLEVariant       getValue(const WpADOProperties& _rProps,const OLEVariant &_aPosition);
         };
     }
 }
