@@ -2,9 +2,9 @@
  *
  *  $RCSfile: noderef.hxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: mh $ $Date: 2001-02-02 18:09:11 $
+ *  last change: $Author: jb $ $Date: 2001-02-13 16:13:26 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,6 +159,16 @@ namespace configmgr
                     if <var>aName</var> is not a valid child name for this node
             */
             NodeRef getChild(Name const& aName, Tree& aTree) const;
+
+            /** gets the owned child node named <var>aName</var> of this node, if it is available.
+                <p>Also sets <var>aTree<var/> to point to the tree containing that node.</p>
+                <p>If there is no such node, returns an empty node.</p>
+                <p>Caution: May miss existing children unless hasChild/getChild has been called before.</p>
+
+                @throws InvalidName
+                    if <var>aName</var> is not a valid child name for this node
+            */
+            NodeRef getAvailableChild(Name const& aName, Tree& aTree) const;
 
             /// return a <type>NodeInfo</type> showing the attributes of this
             NodeInfo        getInfo()   const;
@@ -326,6 +336,10 @@ namespace configmgr
             { return lhs.m_pTree == rhs.m_pTree && lhs.m_nNode == rhs.m_nNode; }
             // ordering
             friend bool operator < (NodeID const& lhs, NodeID const& rhs);
+            // checking
+            bool isEmpty() const;
+            // checking
+            bool isValidNode() const;
             // hashing
             size_t hashCode() const;
             // use as index - returns a value in the range 0..rTree.getContainedNodes() for the tree used to construct this
@@ -390,10 +404,26 @@ namespace configmgr
 
             @return
                 <TRUE/> if the child node exists
-                (so <var>aNode</var> and <var>aTree</var> refer to the desired node and <var>aPath</var> is empty),
+                (so <var>aNode</var> and <var>aTree</var> refer to the desired node),
                 <FALSE/> otherwise
         */
         bool findChildNode(Tree& aTree, NodeRef& aNode, Name const& aName);
+
+        /** tries to find the immediate child of <var>aNode</var> (which is in <var>aTree</var>)
+            specified by <var>aName</var>
+            <p> On return <var>aNode</var> is modified to refer to the node found and
+                <var>aTree</var> will then refer to the tree that node is in.
+            <p/>
+            <p>Caution: May miss an existing child unless the child has been accessed before.</p>
+
+            @return
+                <TRUE/> if the child node exists and is available
+                (so <var>aNode</var> and <var>aTree</var> refer to the desired node),
+                <FALSE/> otherwise
+
+            @see NodeRef::getAvailableChild
+        */
+        bool findAvailableChildNode(Tree& aTree, NodeRef& aNode, Name const& aName);
 
         /** tries to find the descendant of <var>aNode</var> (which is in <var>aTree</var>) specified by <var>aPath</var>
             <p> This function follows the given path stepwise, until a requested node is missing in the tree.</p>
@@ -410,6 +440,25 @@ namespace configmgr
                 <FALSE/> otherwise
         */
         bool findDescendantNode(Tree& aTree, NodeRef& aNode, RelativePath& aPath);
+
+        /** tries to find the descendant of <var>aNode</var> (which is in <var>aTree</var>) specified by <var>aPath</var>
+            <p> This function follows the given path stepwise, until a requested node is miss in the tree,
+                or is not availbale in a set node.
+            </p>
+            <p> On return <var>aNode</var> is modified to refer to the last node found and
+                <var>aTree</var> will then refer to the tree that node is in.
+            <p/>
+            <p> Also, <var>aPath</var> is modified to contain the unresolved part of the original path.
+            </p>
+            <p>Caution: May miss existing descendants unless the node has been accessed before.</p>
+
+            @return
+                <TRUE/> if the path could be resolved completely
+                (so <var>aNode</var> and <var>aTree</var> refer to the desired node,
+                <var>aPath</var> is empty)<BR/>
+                <FALSE/> otherwise
+        */
+        bool findDescendantAvailable(Tree& aTree, NodeRef& aNode, RelativePath& aPath);
 
         /// test whether the given node is a plain value
         bool isSimpleValue(Tree const& aTree, NodeRef const& aNode);

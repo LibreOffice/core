@@ -2,9 +2,9 @@
  *
  *  $RCSfile: noderef.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: jb $ $Date: 2000-12-06 12:15:45 $
+ *  last change: $Author: jb $ $Date: 2001-02-13 16:13:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -96,6 +96,17 @@ NodeRef TreeImplHelper::makeNode(TreeImpl& rTree, NodeOffset nOffset)
 
         TreeDepth nDepth = remainingDepth(rTree.getAvailableDepth(), rTree.depthTo(nOffset));
         return NodeRef(rTree.node(nOffset),nOffset,nDepth);
+    }
+    else
+        return NodeRef();
+}
+//-----------------------------------------------------------------------------
+
+NodeRef TreeImplHelper::makeNode(NodeID const& aNodeID)
+{
+    if (TreeImpl* pTree = aNodeID.m_pTree)
+    {
+        return makeNode(*pTree,aNodeID.m_nNode);
     }
     else
         return NodeRef();
@@ -287,8 +298,30 @@ NodeRef NodeRef::getChild(Name const& aName, Tree& rTree) const
     }
     return NodeRef(); // nothing found
 }
+//-----------------------------------------------------------------------------
 
+// a version of NodeRef::getChild that retrieves only loaded nodes
+NodeRef NodeRef::getAvailableChild(Name const& aName, Tree& rTree) const
+{
+    OSL_PRECOND( isValid(), "ERROR: Configuration: NodeRef operation requires valid node" );
 
+    if (m_pImpl && m_pImpl->isSetNode())
+    {
+        SetEntry aChildEntry = m_pImpl->setImpl().findAvailableElement(aName);
+        if (TreeImpl* pTree = aChildEntry.tree())
+        {
+            NodeOffset  nFoundOffset = pTree->root();
+            TreeDepth   nChildDepth  = pTree->getAvailableDepth();
+
+            Node* pNode = pTree->node(nFoundOffset);
+            // all fine ? now adjust the tree
+            rTree = Tree(pTree);
+
+            return NodeRef(pNode,nFoundOffset,nChildDepth);
+        }
+    }
+    return NodeRef(); // nothing found
+}
 //-----------------------------------------------------------------------------
 
 NodeInfo NodeRef::getInfo() const
@@ -727,6 +760,19 @@ size_t hash64(sal_uInt64 n)
 }
 //-----------------------------------------------------------------------------
 
+bool NodeID::isEmpty() const
+{
+    OSL_ENSURE( m_pTree == NULL || m_pTree->isValidNode(m_nNode), "Node does not match tree in NodeID");
+    return m_pTree == NULL;
+}
+//-----------------------------------------------------------------------------
+
+bool NodeID::isValidNode() const
+{
+    return m_pTree != NULL && m_pTree->isValidNode(m_nNode);
+}
+//-----------------------------------------------------------------------------
+
 static // for now
 // should move this to a more public place sometime
 inline
@@ -869,6 +915,17 @@ bool findChildNode(Tree& aTree, NodeRef& aNode, Name const& aName)
 }
 //-----------------------------------------------------------------------------
 
+bool findAvailableChildNode(Tree& aTree, NodeRef& aNode, Name const& aName)
+{
+    NodeRef aChild = TreeImplHelper::isSet(aNode) ? aNode.getAvailableChild(aName,aTree) : aTree.getChild(aNode,aName);
+
+    if ( aChild.isValid() )
+        aNode = aChild;
+
+    return aChild.isValid();
+}
+//-----------------------------------------------------------------------------
+
 bool findDescendantNode(Tree& aTree, NodeRef& aNode, RelativePath& aPath)
 {
     // requires: findChildNode leaves node and tree unchanged when returning false
@@ -879,9 +936,30 @@ bool findDescendantNode(Tree& aTree, NodeRef& aNode, RelativePath& aPath)
 
     for ( ; itPath != itPathEnd; ++itPath)
         if (!findChildNode(aTree,aNode,*itPath))
-            return false;
+            break;
 
-    return true;
+    aPath = RelativePath(Path::Components(itPath, itPathEnd));
+    return itPath == itPathEnd;
+}
+//-----------------------------------------------------------------------------
+
+// NOT exported through noderef.hxx, but through treeimpl.hxx
+bool findDescendantAvailable(Tree& aTree, NodeRef& aNode, RelativePath& aPath)
+{
+    // requires: findChildNode leaves node and tree unchanged when returning false
+    typedef Path::Iterator Iter;
+
+    Iter        itPath      = aPath.begin();
+    Iter const  itPathEnd   = aPath.end();
+
+    for ( ; itPath != itPathEnd; ++itPath)
+    {
+        if (!findAvailableChildNode(aTree,aNode,*itPath))
+            break;
+    }
+
+    aPath = RelativePath(Path::Components(itPath, itPathEnd));
+    return itPath == itPathEnd;
 }
 //-----------------------------------------------------------------------------
 
