@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optcolor.src,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: os $ $Date: 2002-08-13 15:21:21 $
+ *  last change: $Author: kz $ $Date: 2002-08-15 20:33:25 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -396,9 +396,9 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ polish ] = "General";
                 Text[ portuguese_brazilian ] = "General";
                 Text[ japanese ] = "General";
-                Text[ korean ] = "General";
+                Text[ korean ] = "일반";
                 Text[ chinese_simplified ] = "General";
-                Text[ chinese_traditional ] = "General";
+                Text[ chinese_traditional ] = "一般";
                 Text[ turkish ] = "General";
                 Text[ arabic ] = "General";
                 Text[ catalan ] = "General";
@@ -424,9 +424,9 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ polish ] = "Document color";
                 Text[ portuguese_brazilian ] = "Document color";
                 Text[ japanese ] = "Document color";
-                Text[ korean ] = "Document color";
+                Text[ korean ] = "문서 배경";
                 Text[ chinese_simplified ] = "Document color";
-                Text[ chinese_traditional ] = "Document color";
+                Text[ chinese_traditional ] = "文件的背景";
                 Text[ turkish ] = "Document color";
                 Text[ arabic ] = "Document color";
                 Text[ catalan ] = "Document color";
@@ -453,9 +453,9 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ polish ] = "Document boundaries";
                 Text[ portuguese_brazilian ] = "Document boundaries";
                 Text[ japanese ] = "Document boundaries";
-                Text[ korean ] = "Document boundaries";
+                Text[ korean ] = "문서 테두리";
                 Text[ chinese_simplified ] = "Document boundaries";
-                Text[ chinese_traditional ] = "Document boundaries";
+                Text[ chinese_traditional ] = "文件的邊框";
                 Text[ turkish ] = "Document boundaries";
                 Text[ arabic ] = "Document boundaries";
                 Text[ catalan ] = "Document boundaries";
@@ -482,9 +482,9 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ polish ] = "Application background";
                 Text[ portuguese_brazilian ] = "Application background";
                 Text[ japanese ] = "Application background";
-                Text[ korean ] = "Application background";
+                Text[ korean ] = "응용 프로그램 배경";
                 Text[ chinese_simplified ] = "Application background";
-                Text[ chinese_traditional ] = "Application background";
+                Text[ chinese_traditional ] = "應用程式的背景";
                 Text[ turkish ] = "Application background";
                 Text[ arabic ] = "Application background";
                 Text[ catalan ] = "Application background";
@@ -511,9 +511,9 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ polish ] = "Object boundaries";
                 Text[ portuguese_brazilian ] = "Object boundaries";
                 Text[ japanese ] = "Object boundaries";
-                Text[ korean ] = "Object boundaries";
+                Text[ korean ] = "개체 테두리";
                 Text[ chinese_simplified ] = "Object boundaries";
-                Text[ chinese_traditional ] = "Object boundaries";
+                Text[ chinese_traditional ] = "物件的邊框";
                 Text[ turkish ] = "Object boundaries";
                 Text[ arabic ] = "Object boundaries";
                 Text[ catalan ] = "Object boundaries";
@@ -540,9 +540,9 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ polish ] = "Table boundaries";
                 Text[ portuguese_brazilian ] = "Table boundaries";
                 Text[ japanese ] = "Table boundaries";
-                Text[ korean ] = "Table boundaries";
+                Text[ korean ] = "표 테두리";
                 Text[ chinese_simplified ] = "Table boundaries";
-                Text[ chinese_traditional ] = "Table boundaries";
+                Text[ chinese_traditional ] = "表格的邊框";
                 Text[ turkish ] = "Table boundaries";
                 Text[ arabic ] = "Table boundaries";
                 Text[ catalan ] = "Table boundaries";
@@ -569,9 +569,9 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ polish ] = "Unvisited Links (new documents only)";
                 Text[ portuguese_brazilian ] = "Unvisited Links (new documents only)";
                 Text[ japanese ] = "Unvisited Links (new documents only)";
-                Text[ korean ] = "Unvisited Links (new documents only)";
+                Text[ korean ] = "방문하지 않은 링크 (새 문서 전용)";
                 Text[ chinese_simplified ] = "Unvisited Links (new documents only)";
-                Text[ chinese_traditional ] = "Unvisited Links (new documents only)";
+                Text[ chinese_traditional ] = "尚未訪問過的捷徑(僅僅是文件)";
                 Text[ turkish ] = "Unvisited Links (new documents only)";
                 Text[ arabic ] = "Unvisited Links (new documents only)";
                 Text[ catalan ] = "Unvisited Links (new documents only)";
@@ -598,9 +598,9 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ polish ] = "Visited Links (new documents only)";
                 Text[ portuguese_brazilian ] = "Visited Links (new documents only)";
                 Text[ japanese ] = "Visited Links (new documents only)";
-                Text[ korean ] = "Visited Links (new documents only)";
+                Text[ korean ] = "방문한 링크 (새 문서 전용)";
                 Text[ chinese_simplified ] = "Visited Links (new documents only)";
-                Text[ chinese_traditional ] = "Visited Links (new documents only)";
+                Text[ chinese_traditional ] = "訪問過的捷徑(僅僅是新文件)";
                 Text[ turkish ] = "Visited Links (new documents only)";
                 Text[ arabic ] = "Visited Links (new documents only)";
                 Text[ catalan ] = "Visited Links (new documents only)";
@@ -627,9 +627,9 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ polish ] = "AutoSpellcheck";
                 Text[ portuguese_brazilian ] = "AutoSpellcheck";
                 Text[ japanese ] = "AutoSpellcheck";
-                Text[ korean ] = "AutoSpellcheck";
+                Text[ korean ] = "자동 맞춤법 검사";
                 Text[ chinese_simplified ] = "AutoSpellcheck";
-                Text[ chinese_traditional ] = "AutoSpellcheck";
+                Text[ chinese_traditional ] = "自動校正";
                 Text[ turkish ] = "AutoSpellcheck";
                 Text[ arabic ] = "AutoSpellcheck";
                 Text[ catalan ] = "AutoSpellcheck";
@@ -656,9 +656,9 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ polish ] = "Text Document";
                 Text[ portuguese_brazilian ] = "Text Document";
                 Text[ japanese ] = "Text Document";
-                Text[ korean ] = "Text Document";
+                Text[ korean ] = "텍스트 문서";
                 Text[ chinese_simplified ] = "Text Document";
-                Text[ chinese_traditional ] = "Text Document";
+                Text[ chinese_traditional ] = "文字文件";
                 Text[ turkish ] = "Text Document";
                 Text[ arabic ] = "Text Document";
                 Text[ catalan ] = "Text Document";
@@ -684,9 +684,9 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ polish ] = "Grid";
                 Text[ portuguese_brazilian ] = "Grid";
                 Text[ japanese ] = "Grid";
-                Text[ korean ] = "Grid";
+                Text[ korean ] = "그리드";
                 Text[ chinese_simplified ] = "Grid";
-                Text[ chinese_traditional ] = "Grid";
+                Text[ chinese_traditional ] = "格子線";
                 Text[ turkish ] = "Grid";
                 Text[ arabic ] = "Grid";
                 Text[ catalan ] = "Grid";
@@ -713,9 +713,9 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ polish ] = "Field shadings";
                 Text[ portuguese_brazilian ] = "Field shadings";
                 Text[ japanese ] = "Field shadings";
-                Text[ korean ] = "Field shadings";
+                Text[ korean ] = "필드 음영";
                 Text[ chinese_simplified ] = "Field shadings";
-                Text[ chinese_traditional ] = "Field shadings";
+                Text[ chinese_traditional ] = "欄位背景顔色";
                 Text[ turkish ] = "Field shadings";
                 Text[ arabic ] = "Field shadings";
                 Text[ catalan ] = "Field shadings";
@@ -742,9 +742,9 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ polish ] = "Index and table shadings";
                 Text[ portuguese_brazilian ] = "Index and table shadings";
                 Text[ japanese ] = "Index and table shadings";
-                Text[ korean ] = "Index and table shadings";
+                Text[ korean ] = "색인과 테이블 음영";
                 Text[ chinese_simplified ] = "Index and table shadings";
-                Text[ chinese_traditional ] = "Index and table shadings";
+                Text[ chinese_traditional ] = "目錄背景顔色";
                 Text[ turkish ] = "Index and table shadings";
                 Text[ arabic ] = "Index and table shadings";
                 Text[ catalan ] = "Index and table shadings";
@@ -771,9 +771,9 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ polish ] = "Note indicator";
                 Text[ portuguese_brazilian ] = "Note indicator";
                 Text[ japanese ] = "Note indicator";
-                Text[ korean ] = "Note indicator";
+                Text[ korean ] = "메모 표시기";
                 Text[ chinese_simplified ] = "Note indicator";
-                Text[ chinese_traditional ] = "Note indicator";
+                Text[ chinese_traditional ] = "備註標記";
                 Text[ turkish ] = "Note indicator";
                 Text[ arabic ] = "Note indicator";
                 Text[ catalan ] = "Note indicator";
@@ -800,9 +800,9 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ polish ] = "Script indicator";
                 Text[ portuguese_brazilian ] = "Script indicator";
                 Text[ japanese ] = "Script indicator";
-                Text[ korean ] = "Script indicator";
+                Text[ korean ] = "스크립트 표시기";
                 Text[ chinese_simplified ] = "Script indicator";
-                Text[ chinese_traditional ] = "Script indicator";
+                Text[ chinese_traditional ] = "程式檔標記";
                 Text[ turkish ] = "Script indicator";
                 Text[ arabic ] = "Script indicator";
                 Text[ catalan ] = "Script indicator";
@@ -829,9 +829,9 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ polish ] = "Section boundaries";
                 Text[ portuguese_brazilian ] = "Section boundaries";
                 Text[ japanese ] = "Section boundaries";
-                Text[ korean ] = "Section boundaries";
+                Text[ korean ] = "영역 테두리";
                 Text[ chinese_simplified ] = "Section boundaries";
-                Text[ chinese_traditional ] = "Section boundaries";
+                Text[ chinese_traditional ] = "區域的邊框";
                 Text[ turkish ] = "Section boundaries";
                 Text[ arabic ] = "Section boundaries";
                 Text[ catalan ] = "Section boundaries";
@@ -844,6 +844,27 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 FT_POS_SIZE( 16 );
                 Text = "Seitenumbr�che" ;
                 Text [ ENGLISH ] = "Page breaks" ;
+                Text[ english_us ] = "Page breaks";
+                Text[ portuguese ] = "Page breaks";
+                Text[ russian ] = "Page breaks";
+                Text[ greek ] = "Page breaks";
+                Text[ dutch ] = "Page breaks";
+                Text[ french ] = "Page breaks";
+                Text[ spanish ] = "Page breaks";
+                Text[ finnish ] = "Page breaks";
+                Text[ italian ] = "Page breaks";
+                Text[ danish ] = "Page breaks";
+                Text[ swedish ] = "Page breaks";
+                Text[ polish ] = "Page breaks";
+                Text[ portuguese_brazilian ] = "Page breaks";
+                Text[ japanese ] = "Page breaks";
+                Text[ korean ] = "페이지 나누기";
+                Text[ chinese_simplified ] = "Page breaks";
+                Text[ chinese_traditional ] = "換頁";
+                Text[ turkish ] = "Page breaks";
+                Text[ arabic ] = "Page breaks";
+                Text[ catalan ] = "Page breaks";
+                Text[ thai ] = "Page breaks";
             };
             LB_WN( WRITERPAGEBREAKS, 16 )
 
@@ -866,9 +887,9 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ polish ] = "Direct Cursor";
                 Text[ portuguese_brazilian ] = "Direct Cursor";
                 Text[ japanese ] = "Direct Cursor";
-                Text[ korean ] = "Direct Cursor";
+                Text[ korean ] = "다이렉트 커서";
                 Text[ chinese_simplified ] = "Direct Cursor";
-                Text[ chinese_traditional ] = "Direct Cursor";
+                Text[ chinese_traditional ] = "直接定位游標";
                 Text[ turkish ] = "Direct Cursor";
                 Text[ arabic ] = "Direct Cursor";
                 Text[ catalan ] = "Direct Cursor";
@@ -895,9 +916,9 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ polish ] = "HTML document";
                 Text[ portuguese_brazilian ] = "HTML document";
                 Text[ japanese ] = "HTML document";
-                Text[ korean ] = "HTML document";
+                Text[ korean ] = "HTML 문서";
                 Text[ chinese_simplified ] = "HTML document";
-                Text[ chinese_traditional ] = "HTML document";
+                Text[ chinese_traditional ] = "HTML 文件";
                 Text[ turkish ] = "HTML document";
                 Text[ arabic ] = "HTML document";
                 Text[ catalan ] = "HTML document";
@@ -923,9 +944,9 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ polish ] = "SGML syntax highlighting";
                 Text[ portuguese_brazilian ] = "SGML syntax highlighting";
                 Text[ japanese ] = "SGML syntax highlighting";
-                Text[ korean ] = "SGML syntax highlighting";
+                Text[ korean ] = "SGML 구문 강조 표시";
                 Text[ chinese_simplified ] = "SGML syntax highlighting";
-                Text[ chinese_traditional ] = "SGML syntax highlighting";
+                Text[ chinese_traditional ] = "突出顯示 SGML 語法";
                 Text[ turkish ] = "SGML syntax highlighting";
                 Text[ arabic ] = "SGML syntax highlighting";
                 Text[ catalan ] = "SGML syntax highlighting";
@@ -952,9 +973,9 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ polish ] = "Comment highlighting";
                 Text[ portuguese_brazilian ] = "Comment highlighting";
                 Text[ japanese ] = "Comment highlighting";
-                Text[ korean ] = "Comment highlighting";
+                Text[ korean ] = "주석 강조 표시";
                 Text[ chinese_simplified ] = "Comment highlighting";
-                Text[ chinese_traditional ] = "Comment highlighting";
+                Text[ chinese_traditional ] = "突出顯示備註";
                 Text[ turkish ] = "Comment highlighting";
                 Text[ arabic ] = "Comment highlighting";
                 Text[ catalan ] = "Comment highlighting";
@@ -981,9 +1002,9 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ polish ] = "Keyword highlighting";
                 Text[ portuguese_brazilian ] = "Keyword highlighting";
                 Text[ japanese ] = "Keyword highlighting";
-                Text[ korean ] = "Keyword highlighting";
+                Text[ korean ] = "핵심어 강조 표시";
                 Text[ chinese_simplified ] = "Keyword highlighting";
-                Text[ chinese_traditional ] = "Keyword highlighting";
+                Text[ chinese_traditional ] = "突出顯示關鍵字";
                 Text[ turkish ] = "Keyword highlighting";
                 Text[ arabic ] = "Keyword highlighting";
                 Text[ catalan ] = "Keyword highlighting";
@@ -997,7 +1018,7 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text = "Text" ;
                 Text [ ENGLISH ] = "Text" ;
                 Text[ english_us ] = "Text";
-                Text[ portuguese ] = "Text";
+                Text[ portuguese ] = "Texto";
                 Text[ russian ] = "�����";
                 Text[ greek ] = "�������";
                 Text[ dutch ] = "Tekst";
@@ -1039,9 +1060,9 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ polish ] = "Spreadsheet";
                 Text[ portuguese_brazilian ] = "Spreadsheet";
                 Text[ japanese ] = "Spreadsheet";
-                Text[ korean ] = "Spreadsheet";
+                Text[ korean ] = "스프레드시트";
                 Text[ chinese_simplified ] = "Spreadsheet";
-                Text[ chinese_traditional ] = "Spreadsheet";
+                Text[ chinese_traditional ] = "工作表文件";
                 Text[ turkish ] = "Spreadsheet";
                 Text[ arabic ] = "Spreadsheet";
                 Text[ catalan ] = "Spreadsheet";
@@ -1067,9 +1088,9 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ polish ] = "Grid lines";
                 Text[ portuguese_brazilian ] = "Grid lines";
                 Text[ japanese ] = "Grid lines";
-                Text[ korean ] = "Grid lines";
+                Text[ korean ] = "그리드선";
                 Text[ chinese_simplified ] = "Grid lines";
-                Text[ chinese_traditional ] = "Grid lines";
+                Text[ chinese_traditional ] = "格子線條";
                 Text[ turkish ] = "Grid lines";
                 Text[ arabic ] = "Grid lines";
                 Text[ catalan ] = "Grid lines";
@@ -1096,9 +1117,9 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ polish ] = "Page breaks";
                 Text[ portuguese_brazilian ] = "Page breaks";
                 Text[ japanese ] = "Page breaks";
-                Text[ korean ] = "Page breaks";
+                Text[ korean ] = "페이지 나누기";
                 Text[ chinese_simplified ] = "Page breaks";
-                Text[ chinese_traditional ] = "Page breaks";
+                Text[ chinese_traditional ] = "換頁";
                 Text[ turkish ] = "Page breaks";
                 Text[ arabic ] = "Page breaks";
                 Text[ catalan ] = "Page breaks";
@@ -1125,9 +1146,9 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ polish ] = "Manual page breaks";
                 Text[ portuguese_brazilian ] = "Manual page breaks";
                 Text[ japanese ] = "Manual page breaks";
-                Text[ korean ] = "Manual page breaks";
+                Text[ korean ] = "수동 나누기";
                 Text[ chinese_simplified ] = "Manual page breaks";
-                Text[ chinese_traditional ] = "Manual page breaks";
+                Text[ chinese_traditional ] = "手動換頁";
                 Text[ turkish ] = "Manual page breaks";
                 Text[ arabic ] = "Manual page breaks";
                 Text[ catalan ] = "Manual page breaks";
@@ -1154,9 +1175,9 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ polish ] = "Automatic page breaks";
                 Text[ portuguese_brazilian ] = "Automatic page breaks";
                 Text[ japanese ] = "Automatic page breaks";
-                Text[ korean ] = "Automatic page breaks";
+                Text[ korean ] = "자동 페이지 나누기";
                 Text[ chinese_simplified ] = "Automatic page breaks";
-                Text[ chinese_traditional ] = "Automatic page breaks";
+                Text[ chinese_traditional ] = "自動換頁";
                 Text[ turkish ] = "Automatic page breaks";
                 Text[ arabic ] = "Automatic page breaks";
                 Text[ catalan ] = "Automatic page breaks";
@@ -1183,9 +1204,9 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ polish ] = "Detective";
                 Text[ portuguese_brazilian ] = "Detective";
                 Text[ japanese ] = "Detective";
-                Text[ korean ] = "Detective";
+                Text[ korean ] = "추적";
                 Text[ chinese_simplified ] = "Detective";
-                Text[ chinese_traditional ] = "Detective";
+                Text[ chinese_traditional ] = "偵探";
                 Text[ turkish ] = "Detective";
                 Text[ arabic ] = "Detective";
                 Text[ catalan ] = "Detective";
@@ -1212,9 +1233,9 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ polish ] = "Detective error";
                 Text[ portuguese_brazilian ] = "Detective error";
                 Text[ japanese ] = "Detective error";
-                Text[ korean ] = "Detective error";
+                Text[ korean ] = "추적 오류";
                 Text[ chinese_simplified ] = "Detective error";
-                Text[ chinese_traditional ] = "Detective error";
+                Text[ chinese_traditional ] = "偵探錯誤";
                 Text[ turkish ] = "Detective error";
                 Text[ arabic ] = "Detective error";
                 Text[ catalan ] = "Detective error";
@@ -1241,9 +1262,9 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ polish ] = "References";
                 Text[ portuguese_brazilian ] = "References";
                 Text[ japanese ] = "References";
-                Text[ korean ] = "References";
+                Text[ korean ] = "참조";
                 Text[ chinese_simplified ] = "References";
-                Text[ chinese_traditional ] = "References";
+                Text[ chinese_traditional ] = "參照";
                 Text[ turkish ] = "References";
                 Text[ arabic ] = "References";
                 Text[ catalan ] = "References";
@@ -1270,9 +1291,9 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ polish ] = "Notes background";
                 Text[ portuguese_brazilian ] = "Notes background";
                 Text[ japanese ] = "Notes background";
-                Text[ korean ] = "Notes background";
+                Text[ korean ] = "메모 배경";
                 Text[ chinese_simplified ] = "Notes background";
-                Text[ chinese_traditional ] = "Notes background";
+                Text[ chinese_traditional ] = "備註的背景";
                 Text[ turkish ] = "Notes background";
                 Text[ arabic ] = "Notes background";
                 Text[ catalan ] = "Notes background";
@@ -1299,9 +1320,9 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ polish ] = "Drawing / Presentation";
                 Text[ portuguese_brazilian ] = "Drawing / Presentation";
                 Text[ japanese ] = "Drawing / Presentation";
-                Text[ korean ] = "Drawing / Presentation";
+                Text[ korean ] = "그리기 / 프레젠테이션";
                 Text[ chinese_simplified ] = "Drawing / Presentation";
-                Text[ chinese_traditional ] = "Drawing / Presentation";
+                Text[ chinese_traditional ] = "繪圖/簡報";
                 Text[ turkish ] = "Drawing / Presentation";
                 Text[ arabic ] = "Drawing / Presentation";
                 Text[ catalan ] = "Drawing / Presentation";
@@ -1327,9 +1348,9 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ polish ] = "Grid";
                 Text[ portuguese_brazilian ] = "Grid";
                 Text[ japanese ] = "Grid";
-                Text[ korean ] = "Grid";
+                Text[ korean ] = "그리드";
                 Text[ chinese_simplified ] = "Grid";
-                Text[ chinese_traditional ] = "Grid";
+                Text[ chinese_traditional ] = "格子線";
                 Text[ turkish ] = "Grid";
                 Text[ arabic ] = "Grid";
                 Text[ catalan ] = "Grid";
@@ -1357,9 +1378,9 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ polish ] = "Basic Syntax Highlighting";
                 Text[ portuguese_brazilian ] = "Basic Syntax Highlighting";
                 Text[ japanese ] = "Basic Syntax Highlighting";
-                Text[ korean ] = "Basic Syntax Highlighting";
+                Text[ korean ] = "Basic 구문 강조 표시";
                 Text[ chinese_simplified ] = "Basic Syntax Highlighting";
-                Text[ chinese_traditional ] = "Basic Syntax Highlighting";
+                Text[ chinese_traditional ] = "突出顯示 Basic 語法";
                 Text[ turkish ] = "Basic Syntax Highlighting";
                 Text[ arabic ] = "Basic Syntax Highlighting";
                 Text[ catalan ] = "Basic Syntax Highlighting";
@@ -1385,9 +1406,9 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ polish ] = "Identifier";
                 Text[ portuguese_brazilian ] = "Identifier";
                 Text[ japanese ] = "Identifier";
-                Text[ korean ] = "Identifier";
+                Text[ korean ] = "확인자";
                 Text[ chinese_simplified ] = "Identifier";
-                Text[ chinese_traditional ] = "Identifier";
+                Text[ chinese_traditional ] = "標誌";
                 Text[ turkish ] = "Identifier";
                 Text[ arabic ] = "Identifier";
                 Text[ catalan ] = "Identifier";
@@ -1414,9 +1435,9 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ polish ] = "Comment";
                 Text[ portuguese_brazilian ] = "Comment";
                 Text[ japanese ] = "Comment";
-                Text[ korean ] = "Comment";
+                Text[ korean ] = "설명";
                 Text[ chinese_simplified ] = "Comment";
-                Text[ chinese_traditional ] = "Comment";
+                Text[ chinese_traditional ] = "備註";
                 Text[ turkish ] = "Comment";
                 Text[ arabic ] = "Comment";
                 Text[ catalan ] = "Comment";
@@ -1443,9 +1464,9 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ polish ] = "Number";
                 Text[ portuguese_brazilian ] = "Number";
                 Text[ japanese ] = "Number";
-                Text[ korean ] = "Number";
+                Text[ korean ] = "수";
                 Text[ chinese_simplified ] = "Number";
-                Text[ chinese_traditional ] = "Number";
+                Text[ chinese_traditional ] = "數字";
                 Text[ turkish ] = "Number";
                 Text[ arabic ] = "Number";
                 Text[ catalan ] = "Number";
@@ -1472,9 +1493,9 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ polish ] = "String";
                 Text[ portuguese_brazilian ] = "String";
                 Text[ japanese ] = "String";
-                Text[ korean ] = "String";
+                Text[ korean ] = "문자열";
                 Text[ chinese_simplified ] = "String";
-                Text[ chinese_traditional ] = "String";
+                Text[ chinese_traditional ] = "字串";
                 Text[ turkish ] = "String";
                 Text[ arabic ] = "String";
                 Text[ catalan ] = "String";
@@ -1501,9 +1522,9 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ polish ] = "Operator";
                 Text[ portuguese_brazilian ] = "Operator";
                 Text[ japanese ] = "Operator";
-                Text[ korean ] = "Operator";
+                Text[ korean ] = "연산자";
                 Text[ chinese_simplified ] = "Operator";
-                Text[ chinese_traditional ] = "Operator";
+                Text[ chinese_traditional ] = "運算符";
                 Text[ turkish ] = "Operator";
                 Text[ arabic ] = "Operator";
                 Text[ catalan ] = "Operator";
@@ -1530,9 +1551,9 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ polish ] = "Reserved expression";
                 Text[ portuguese_brazilian ] = "Reserved expression";
                 Text[ japanese ] = "Reserved expression";
-                Text[ korean ] = "Reserved expression";
+                Text[ korean ] = "조심스러운 표현";
                 Text[ chinese_simplified ] = "Reserved expression";
-                Text[ chinese_traditional ] = "Reserved expression";
+                Text[ chinese_traditional ] = "保留的表達式";
                 Text[ turkish ] = "Reserved expression";
                 Text[ arabic ] = "Reserved expression";
                 Text[ catalan ] = "Reserved expression";
@@ -1559,9 +1580,9 @@ TabPage RID_SVXPAGE_COLORCONFIG
                 Text[ polish ] = "Error";
                 Text[ portuguese_brazilian ] = "Error";
                 Text[ japanese ] = "Error";
-                Text[ korean ] = "Error";
+                Text[ korean ] = "오류";
                 Text[ chinese_simplified ] = "Error";
-                Text[ chinese_traditional ] = "Error";
+                Text[ chinese_traditional ] = "錯誤";
                 Text[ turkish ] = "Error";
                 Text[ arabic ] = "Error";
                 Text[ catalan ] = "Error";
