@@ -2,9 +2,9 @@
 #
 #   $RCSfile: files.pm,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: obo $ $Date: 2004-11-18 08:34:33 $
+#   last change: $Author: hr $ $Date: 2004-12-15 09:54:41 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -87,7 +87,7 @@ sub read_file
 
     if ( $installer::globals::debug ) { installer::logger::debuginfo("installer::files::read_file : $localfile"); }
 
-    open( IN, $localfile ) || installer::exiter::exit_program("ERROR: Cannot open file $localfile for reading", "read_file");
+    open( IN, "<$localfile" ) || installer::exiter::exit_program("ERROR: Cannot open file $localfile for reading", "read_file");
     my @localfile = <IN>;
     close( IN );
 
