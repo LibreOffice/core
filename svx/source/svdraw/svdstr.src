@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdstr.src,v $
  *
- *  $Revision: 1.48 $
+ *  $Revision: 1.49 $
  *
- *  last change: $Author: kz $ $Date: 2001-08-16 20:14:38 $
+ *  last change: $Author: rt $ $Date: 2001-08-24 20:20:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2749,11 +2749,11 @@ String STR_ObjNameSingulGRAFBMPTRANS
     Text[ finnish ] = "Bitmap with transparency";
     Text[ italian ] = "Bitmap con trasparenza";
     Text[ danish ] = "Bitmap with transparency";
-    Text[ swedish ] = "Bitmap with transparency";
+    Text[ swedish ] = "Bitmap med transparens";
     Text[ polish ] = "Bitmap with transparency";
     Text[ portuguese_brazilian ] = "Bitmap with transparency";
     Text[ japanese ] = "透過性のあるﾋﾞｯﾄﾏｯﾌﾟ";
-    Text[ korean ] = "Bitmap with transparency";
+    Text[ korean ] = "투명 비트맵";
     Text[ chinese_simplified ] = "透明位图";
     Text[ chinese_traditional ] = "帶透明色的點陣圖";
     Text[ turkish ] = "Bitmap with transparency";
@@ -2793,7 +2793,7 @@ String STR_ObjNameSingulGRAFBMPTRANSLNK
     Text = "verkn�pfte Bitmap mit Transparenz" ;
     Text [ ENGLISH ] = "linked bitmap with transparency" ;
     Text [ english_us ] = "Linked bitmap with transparency" ;
-    Text[ portuguese ] = "Liga��o do Bitmap transparente";
+    Text[ portuguese ] = "Liga��o de bitmap com transpar�ncia";
     Text[ russian ] = "��������� ������� Bitmap � �������������";
     Text[ greek ] = "Linked Bitmap with transparency";
     Text[ dutch ] = "Linked Bitmap with transparency";
@@ -2802,11 +2802,11 @@ String STR_ObjNameSingulGRAFBMPTRANSLNK
     Text[ finnish ] = "Linked Bitmap with transparency";
     Text[ italian ] = "Bitmap con trasparenza collegato";
     Text[ danish ] = "Linked Bitmap with transparency";
-    Text[ swedish ] = "Linked Bitmap with transparency";
+    Text[ swedish ] = "L�nkad bitmap med transparens";
     Text[ polish ] = "Linked Bitmap with transparency";
     Text[ portuguese_brazilian ] = "Linked Bitmap with transparency";
     Text[ japanese ] = "ﾘﾝｸした透過性のあるﾋﾞｯﾄﾏｯﾌﾟ";
-    Text[ korean ] = "Linked Bitmap with transparency";
+    Text[ korean ] = "연결된 투명 비트맵";
     Text[ chinese_simplified ] = "透明的链接位图";
     Text[ chinese_traditional ] = "連結的帶透明色的點陣圖";
     Text[ turkish ] = "Linked Bitmap with transparency";
@@ -2856,11 +2856,11 @@ String STR_ObjNamePluralGRAFBMPTRANS
     Text[ finnish ] = "Bitmaps with transparency";
     Text[ italian ] = "Bitmap con trasparenza";
     Text[ danish ] = "Bitmaps with transparency";
-    Text[ swedish ] = "Bitmaps with transparency";
+    Text[ swedish ] = "Bitmaps med transparens";
     Text[ polish ] = "Bitmaps with transparency";
     Text[ portuguese_brazilian ] = "Bitmaps with transparency";
     Text[ japanese ] = "透過性のあるﾋﾞｯﾄﾏｯﾌﾟ";
-    Text[ korean ] = "Bitmaps with transparency";
+    Text[ korean ] = "투명 비트맵";
     Text[ chinese_simplified ] = "透明位图";
     Text[ chinese_traditional ] = "帶透明色的點陣圖";
     Text[ turkish ] = "Bitmaps with transparency";
@@ -2900,7 +2900,7 @@ String STR_ObjNamePluralGRAFBMPTRANSLNK
     Text = "verkn�pfte Bitmaps mit Transparenz" ;
     Text [ ENGLISH ] = "linked bitmaps with transparency" ;
     Text [ english_us ] = "Linked bitmaps with transparency" ;
-    Text[ portuguese ] = "Linked Bitmaps with transparency";
+    Text[ portuguese ] = "Liga��o de bitmaps com transpar�ncia";
     Text[ russian ] = "��������� ������� Bitmap � �������������";
     Text[ greek ] = "Linked Bitmaps with transparency";
     Text[ dutch ] = "Linked Bitmaps with transparency";
@@ -2909,11 +2909,11 @@ String STR_ObjNamePluralGRAFBMPTRANSLNK
     Text[ finnish ] = "Linked Bitmaps with transparency";
     Text[ italian ] = "Bitmap con trasparenza collegato";
     Text[ danish ] = "Linked Bitmaps with transparency";
-    Text[ swedish ] = "Linked Bitmaps with transparency";
+    Text[ swedish ] = "L�nkade bitmaps med transparens";
     Text[ polish ] = "Linked Bitmaps with transparency";
     Text[ portuguese_brazilian ] = "Linked Bitmaps with transparency";
     Text[ japanese ] = "ﾘﾝｸした透過性のあるﾋﾞｯﾄﾏｯﾌﾟ";
-    Text[ korean ] = "Linked Bitmaps with transparency";
+    Text[ korean ] = "연결된 투명 비트맵";
     Text[ chinese_simplified ] = "透明的链接位图";
     Text[ chinese_traditional ] = "連結的帶透明色的點陣圖";
     Text[ turkish ] = "Linked Bitmaps with transparency";
@@ -3798,7 +3798,7 @@ String STR_ObjNameSingulLabel3d
     Text[ danish ] = "3D tekst";
     Text[ polish ] = "tekst 3-W";
     Text[ portuguese_brazilian ] = "3D text";
-    Text[ japanese ] = "3D 体文字列";
+    Text[ japanese ] = "3D 体ﾃｷｽﾄ";
     Text[ korean ] = "3Ｄ 텍스트";
     Text[ chinese_simplified ] = "3 维文字";
     Text[ chinese_traditional ] = "3D 文字";
@@ -3825,7 +3825,7 @@ String STR_ObjNamePluralLabel3d
     Text[ danish ] = "3D tekster";
     Text[ polish ] = "tekst 3-W";
     Text[ portuguese_brazilian ] = "3D texts";
-    Text[ japanese ] = "3D 体文字列";
+    Text[ japanese ] = "3D 体ﾃｷｽﾄ";
     Text[ korean ] = "3Ｄ 텍스트";
     Text[ chinese_simplified ] = "3 维文字";
     Text[ chinese_traditional ] = "3D 文字";
@@ -17732,6 +17732,7 @@ Bitmap SIP_SA_FINE_MARKERS
 };
 
 // ******************************************************************* EOF
+
 
 
 
