@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tokstack.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: mh $ $Date: 2001-10-23 09:37:15 $
+ *  last change: $Author: hr $ $Date: 2004-02-04 14:24:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -132,11 +132,11 @@ TokenPool::TokenPool( void )
 
     nP_Ext = 32;
     ppP_Ext = new EXTCONT*[ nP_Ext ];
-    memset( ppP_Ext, NULL, sizeof( EXTCONT* ) * nP_Ext );
+    memset( ppP_Ext, '\0', sizeof( EXTCONT* ) * nP_Ext );
 
     nP_Nlf = 16;
     ppP_Nlf = new NLFCONT*[ nP_Nlf ];
-    memset( ppP_Nlf, NULL, sizeof( NLFCONT* ) * nP_Nlf );
+    memset( ppP_Nlf, '\0', sizeof( NLFCONT* ) * nP_Nlf );
 
     pScToken = new ScTokenArray;
 
