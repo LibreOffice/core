@@ -2,9 +2,9 @@
  *
  *  $RCSfile: scerrors.src,v $
  *
- *  $Revision: 1.19 $
+ *  $Revision: 1.20 $
  *
- *  last change: $Author: kz $ $Date: 2001-07-04 14:47:58 $
+ *  last change: $Author: kz $ $Date: 2001-07-13 21:54:01 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -711,6 +711,7 @@ Resource RID_ERRHDLSC
         Text[ finnish ] = "Kaikkia solujen sisältöjä ei voitu tallentaa määritetyssä muodossa.";
     };
 };
+
 
 
 
