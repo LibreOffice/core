@@ -1,0 +1,171 @@
+/*************************************************************************
+ *
+ *  $RCSfile: AccessibleCellView.idl,v $
+ *
+ *  $Revision: 1.2 $
+ *
+ *  last change: $Author: vg $ $Date: 2003-04-24 17:46:33 $
+ *
+ *  The Contents of this file are made available subject to the terms of
+ *  either of the following licenses
+ *
+ *         - GNU Lesser General Public License Version 2.1
+ *         - Sun Industry Standards Source License Version 1.1
+ *
+ *  Sun Microsystems Inc., October, 2000
+ *
+ *  GNU Lesser General Public License Version 2.1
+ *  =============================================
+ *  Copyright 2000 by Sun Microsystems, Inc.
+ *  901 San Antonio Road, Palo Alto, CA 94303, USA
+ *
+ *  This library is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU Lesser General Public
+ *  License version 2.1, as published by the Free Software Foundation.
+ *
+ *  This library is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *  Lesser General Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser General Public
+ *  License along with this library; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place, Suite 330, Boston,
+ *  MA  02111-1307  USA
+ *
+ *
+ *  Sun Industry Standards Source License Version 1.1
+ *  =================================================
+ *  The contents of this file are subject to the Sun Industry Standards
+ *  Source License Version 1.1 (the "License"); You may not use this file
+ *  except in compliance with the License. You may obtain a copy of the
+ *  License at http://www.openoffice.org/license.html.
+ *
+ *  Software provided under this License is provided on an "AS IS" basis,
+ *  WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING,
+ *  WITHOUT LIMITATION, WARRANTIES THAT THE SOFTWARE IS FREE OF DEFECTS,
+ *  MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE, OR NON-INFRINGING.
+ *  See the License for the specific provisions governing your rights and
+ *  obligations concerning the Software.
+ *
+ *  The Initial Developer of the Original Code is: Sun Microsystems, Inc.
+ *
+ *  Copyright: 2000 by Sun Microsystems, Inc.
+ *
+ *  All Rights Reserved.
+ *
+ *  Contributor(s): _______________________________________
+ *
+ *
+ ************************************************************************/
+#ifndef __com_sun_star_sheet_AccessibleSpreadsheetDocumentView_idl__
+#define __com_sun_star_sheet_AccessibleSpreadsheetDocumentView_idl__
+
+#ifndef __com_sun_star_accessibility_XAccessibleContext_idl__
+#include <com/sun/star/accessibility/XAccessibleContext.idl>
+#endif
+
+#ifndef __com_sun_star_accessibility_XAccessibleComponent_idl__
+#include <com/sun/star/accessibility/XAccessibleComponent.idl>
+#endif
+
+#ifndef __com_sun_star_accessibility_XAccessibleValue_idl__
+#include <com/sun/star/accessibility/XAccessibleValue.idl>
+#endif
+
+#ifndef __com_sun_star_accessibility_XAccessibleText_idl__
+#include <com/sun/star/accessibility/XAccessibleText.idl>
+#endif
+
+#ifndef __com_sun_star_accessibility_XAccessibleSelection_idl__
+#include <com/sun/star/accessibility/XAccessibleSelection.idl>
+#endif
+
+#ifndef __com_sun_star_accessibility_XAccessibleEventBroadcaster_idl__
+#include <com/sun/star/accessibility/XAccessibleEventBroadcaster.idl>
+#endif
+
+
+//=============================================================================
+
+module com {  module sun {  module star {  module table {
+
+//=============================================================================
+
+/** The accessible view of a cell in a text document or in the page preview
+      of a spreadsheet document. See
+    <type>com.sun.star.sheet.AccessibleCell</type> for cells in the
+    edit view of a spreadsheet.
+ */
+service AccessibleCellView
+{
+    /** This interface gives access to the visible content of a cell in a
+        accessible spreadsheet page preview or accessible text document view.
+    <ul>
+        <li>The parent returned by <type>getAccessibleParent</type>
+            is the accessible table view.</li>
+        <li>The children returned by <type>getAccessibleChild</type> all
+            support the interface XAccessible. Calling
+            <type>getAccessibleContext</type> for these children returns
+            an object that supports the service
+            <type>com.sun.star.text.AccessibleParagraphView</type>:
+            A child of this kind is returned for every paragraph
+            fragment that is contained in the cell and
+            is at least partially visible. A paragraph fragment is
+            the part of a paragraph that is displayed on a
+            certain page.
+        <li>The name is something like A10 or B23 or so on.</li>
+        <li>The description is the name or the content of the given note.</li>
+        <li>The role is <type>TABLE_CELL</type></li>
+        <li>For spreadsheets, there are relations between the cell and the
+            shapes with an anchor on this cell.</li>
+        <li>The following states are supported:
+            <ul>
+                <li><type>DEFUNC</type> is always false if the cell is showed,
+                    otherwise it is true.</li>
+                <li><type>EDITABLE</type> is false if the cell is showed in a
+                    page preview or the cell or the table is protected,
+                    otherwise it is true.</li>
+                <li><type>ENABLED</type> is always true.</li>
+                <li><type>MULTILINE</type> is always true in spreadsheets and
+                    false otherwise.</li>
+                <li><type>OPAQUE</type> is false if the cell has no background
+                    color or graphic, otherwise it is true.</li>
+                <li><type>SELECTABLE</type> is true if the cell is not showed in
+                    a page preview, otherwise is it false.</li>
+                <li><type>SELECTED</type> is true, if the cell is selected. This
+                    is not possible in the page preview.</li>
+                <li><type>SHOWING</type>Is true if the Bounding Box lies in
+                    the Bounding Box of the parent. Otherwise it is false.</li>
+                <li><type>TRANSIENT</type>Is true if the cell is showed in a
+                    spreadsheet page preview. Otherwise it is false.</li>
+                <li><type>VISIBLE</type>Is always true.</li>
+            </ul>
+        </li>
+    </ul>
+     */
+    interface ::com::sun::star::accessibility::XAccessibleContext;
+
+    /** This interface gives access to the visibility of the cell.
+    */
+    interface ::com::sun::star::accessibility::XAccessibleComponent;
+
+    /** This interface gives access to the value of the cell.
+        Only a readonly access is possible.
+     */
+    interface ::com::sun::star::accessibility::XAccessibleValue;
+
+    /** This interface is for selecting the text, value or parts of this in the
+        cell. This interface is optional.
+     */
+    [optional] interface ::com::sun::star::accessibility::XAccessibleSelection;
+
+    /** This is the interface for listeners */
+    [optional] interface ::com::sun::star::accessibility::XAccessibleEventBroadcaster;
+};
+
+//=============================================================================
+
+}; }; }; };
+
+#endif
