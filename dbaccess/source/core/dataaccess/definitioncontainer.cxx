@@ -2,9 +2,9 @@
  *
  *  $RCSfile: definitioncontainer.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-15 08:19:47 $
+ *  last change: $Author: fs $ $Date: 2001-04-25 12:43:09 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -740,6 +740,18 @@ Reference< XInterface > SAL_CALL ODefinitionContainer::createInstanceWithArgumen
 sal_Bool ODefinitionContainer::approveNewObject(const Reference< XPropertySet >& _rxObject) const
 {
     return _rxObject.is();
+}
+
+//--------------------------------------------------------------------------
+Reference< XInterface > SAL_CALL ODefinitionContainer::getParent(  ) throw (RuntimeException)
+{
+    return m_rParent;
+}
+
+//--------------------------------------------------------------------------
+void SAL_CALL ODefinitionContainer::setParent( const Reference< XInterface >& Parent ) throw (NoSupportException, RuntimeException)
+{
+    throw NoSupportException();
 }
 
 //........................................................................
