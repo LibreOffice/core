@@ -2,9 +2,9 @@
  *
  *  $RCSfile: transfer.cxx,v $
  *
- *  $Revision: 1.55 $
+ *  $Revision: 1.56 $
  *
- *  last change: $Author: fs $ $Date: 2002-05-16 15:21:00 $
+ *  last change: $Author: fs $ $Date: 2002-05-23 11:30:51 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1120,8 +1120,15 @@ TransferableDataHelper::TransferableDataHelper( const TransferableDataHelper& rD
 
 TransferableDataHelper& TransferableDataHelper::operator=( const TransferableDataHelper& rDataHelper )
 {
-    mxTransfer = rDataHelper.mxTransfer;
-    delete mpFormats, mpFormats = new DataFlavorExVector( *rDataHelper.mpFormats );
+    if ( this != &rDataHelper )
+    {
+        mxTransfer = rDataHelper.mxTransfer;
+        delete mpFormats, mpFormats = new DataFlavorExVector( *rDataHelper.mpFormats );
+
+        mxClipboard = rDataHelper.mxClipboard;
+        if( mpClipboardListener )
+            StopClipboardListening();
+    }
 
     return *this;
 }
@@ -1896,7 +1903,11 @@ TransferableDataHelper TransferableDataHelper::CreateFromSystemClipboard( Window
             Reference< XTransferable > xTransferable( xClipboard->getContents() );
 
             if( xTransferable.is() )
+            {
                 aRet = TransferableDataHelper( xTransferable );
+                   aRet.mxClipboard = xClipboard;
+                    // also copy the clipboard - 99030 - 23.05.2002 - fs@openoffice.org
+            }
            }
         catch( const ::com::sun::star::uno::Exception& )
         {
