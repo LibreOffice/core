@@ -2,9 +2,9 @@
  *
  *  $RCSfile: about.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: pb $ $Date: 2002-06-04 10:47:07 $
+ *  last change: $Author: pb $ $Date: 2002-08-29 06:02:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -156,12 +156,8 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId, const String& rVerS
     bNormal ( TRUE )
 
 {
-    // load image depends on productname ("StarOffice", "StarSuite",...)
-    ::com::sun::star::uno::Any aRet = ::utl::ConfigManager::GetDirectConfigProperty( ::utl::ConfigManager::PRODUCTNAME );
-    rtl::OUString aTmp;
-    aRet >>= aTmp;
-    String aBmpFileName = aTmp;
-    aBmpFileName += String( DEFINE_CONST_UNICODE("_about.bmp") );
+    // load image from module path
+    String aBmpFileName( DEFINE_CONST_UNICODE("about.bmp") );
     INetURLObject aObj( SvtPathOptions().GetModulePath(), INET_PROT_FILE );
     aObj.insertName( aBmpFileName );
     SvFileStream aStrm( aObj.PathToFileName(), STREAM_STD_READ );
