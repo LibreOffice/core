@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optjava.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-01 08:50:09 $
+ *  last change: $Author: obo $ $Date: 2004-08-11 13:08:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -91,7 +91,8 @@
 
 #define FT_ASSIGNED         20
 #define LB_ASSIGNED         21
-#define PB_REMOVE           22
+#define FT_EXAMPLE          22
+#define PB_REMOVE           23
 
 #define FL_BUTTONS          30
 #define PB_PARAMETER_OK     31
