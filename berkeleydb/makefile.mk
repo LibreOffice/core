@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.7 $
+#   $Revision: 1.8 $
 #
-#   last change: $Author: hjs $ $Date: 2002-03-22 10:59:20 $
+#   last change: $Author: mh $ $Date: 2002-11-20 10:35:32 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -124,7 +124,7 @@ OUT2CLASS=java$/classes$/db.jar
 TG_DELIVER : $(INPATH)$/misc$/build$/so_predeliver
         $(DELIVER)
 
-.IF "$(BUILD_SOSL)"!=""
+.IF "$(BUILD_PREDELIVER)"!=""
 ALLTAR : TG_DELIVER
-.ENDIF			# "$(BUILD_SOSL)"!=""
+.ENDIF			# "$(BUILD_PREDELIVER)"!=""
 
