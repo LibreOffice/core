@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmgridif.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-15 08:58:26 $
+ *  last change: $Author: fs $ $Date: 2001-04-19 10:50:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -149,6 +149,7 @@
 #endif
 
 using namespace ::svxform;
+using namespace ::com::sun::star::uno;
 
 //------------------------------------------------------------------
 ::com::sun::star::awt::FontDescriptor ImplCreateFontDescriptor( const Font& rFont )
@@ -402,9 +403,10 @@ sal_Bool SAL_CALL FmXGridControl::supportsService(const ::rtl::OUString& Service
 //------------------------------------------------------------------------------
 ::comphelper::StringSequence SAL_CALL FmXGridControl::getSupportedServiceNames() throw()
 {
-    static ::rtl::OUString aServName = FM_SUN_CONTROL_GRIDCONTROL;
-//  static ::rtl::OUString aServName(FM_SUN_CONTROL_GRIDCONTROL);
-    return ::comphelper::StringSequence(&aServName, 1);
+    Sequence< ::rtl::OUString > aServiceNames(2);
+    aServiceNames[0] = FM_SUN_CONTROL_GRIDCONTROL;
+    aServiceNames[1] = ::rtl::OUString::createFromAscii("com.sun.star.awt.UnoControl");
+    return aServiceNames;
 }
 
 //------------------------------------------------------------------------------
