@@ -2,9 +2,9 @@
  *
  *  $RCSfile: pamain.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: obo $ $Date: 2004-03-17 10:45:21 $
+ *  last change: $Author: obo $ $Date: 2004-03-18 12:13:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -167,11 +167,13 @@ void MyApp::Main()
 #endif
         ::ucb::ContentBroker::initialize( xFactory, aArgs );
 
+#if OSL_DEBUG_LEVEL > 1
     if ( !bSuccess )
     {
         fprintf( stderr, "Error creating UCB, installation must be in disorder. Exiting.\n" );
         exit( 1 );
     }
+#endif
 
 
     pPADialog = PADialog::Create( NULL , FALSE );
