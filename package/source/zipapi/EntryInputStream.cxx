@@ -2,9 +2,9 @@
  *
  *  $RCSfile: EntryInputStream.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: mtg $ $Date: 2000-12-04 11:30:08 $
+ *  last change: $Author: obo $ $Date: 2000-12-08 12:28:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -116,7 +116,7 @@ void EntryInputStream::fill(void)
     if (xSeek.is())
         xSeek->seek( nCompCurrent );
     else
-        throw (io::IOException());
+        throw io::IOException();
     nLength = xStream->readBytes(aSequence, static_cast < sal_Int32> (nBytesToRead));
     aInflater.setInputSegment(aSequence, 0, static_cast < sal_Int32> (nLength));
 }
