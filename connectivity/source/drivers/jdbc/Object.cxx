@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Object.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oj $ $Date: 2001-05-31 08:29:15 $
+ *  last change: $Author: oj $ $Date: 2001-07-06 08:37:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -382,6 +382,7 @@ void java_lang_Object::ThrowSQLException(JNIEnv * pEnv,const Reference< XInterfa
     jthrowable jThrow = NULL;
     if(pEnv && (jThrow = pEnv->ExceptionOccurred()))
     {
+        pEnv->ExceptionClear();// we have to clear the exception here because we want to handle it itself
         if(pEnv->IsInstanceOf(jThrow,java_sql_SQLException_BASE::getMyClass()))
         {
             java_sql_SQLException_BASE* pException = new java_sql_SQLException_BASE(pEnv,jThrow);
@@ -405,7 +406,6 @@ void java_lang_Object::ThrowSQLException(JNIEnv * pEnv,const Reference< XInterfa
             delete pThrow;
             throw SQLException(aMsg,_rContext,::rtl::OUString(),-1,Any());
         }
-        pEnv->ExceptionClear();
     }
 }
 
