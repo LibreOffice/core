@@ -2,9 +2,9 @@
  *
  *  $RCSfile: accdoc.cxx,v $
  *
- *  $Revision: 1.13 $
+ *  $Revision: 1.14 $
  *
- *  last change: $Author: mib $ $Date: 2002-06-07 07:32:53 $
+ *  last change: $Author: mib $ $Date: 2002-06-14 11:15:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -193,8 +193,8 @@ void SwAccessibleDocumentBase::RemoveChild( Window *pWin )
 {
     vos::OGuard aGuard(Application::GetSolarMutex());
 
-    ASSERT( pWin == pChildWin, "invalid child window to remove" );
-    if( pWin == pChildWin )
+    ASSERT( !pChildWin || pWin == pChildWin, "invalid child window to remove" );
+    if( pChildWin && pWin == pChildWin )
     {
         AccessibleEventObject aEvent;
         aEvent.EventId = AccessibleEventId::ACCESSIBLE_CHILD_EVENT;
@@ -412,7 +412,7 @@ IMPL_LINK( SwAccessibleDocument, WindowChildEventListener, VclSimpleEvent*, pEve
         {
         case VCLEVENT_WINDOW_SHOW:  // send create on show for direct accessible children
             {
-                Window* pChildWin = static_cast < Window * >( pVclEvent->GetData() );
+                Window* pChildWin = pVclEvent->GetWindow();
                 if( pChildWin && AccessibleRole::EMBEDDED_OBJECT == pChildWin->GetAccessibleRole() )
                 {
                     AddChild( pChildWin );
@@ -420,8 +420,9 @@ IMPL_LINK( SwAccessibleDocument, WindowChildEventListener, VclSimpleEvent*, pEve
             }
             break;
         case VCLEVENT_WINDOW_HIDE:  // send destroy on hide for direct accessible children
+        case VCLEVENT_OBJECT_DYING:  // send destroy on hide for direct accessible children
             {
-                Window* pChildWin = static_cast < Window * >( pVclEvent->GetData() );
+                Window* pChildWin = pVclEvent->GetWindow();
                 if( pChildWin && AccessibleRole::EMBEDDED_OBJECT == pChildWin->GetAccessibleRole() )
                 {
                     RemoveChild( pChildWin );
