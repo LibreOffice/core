@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtfield.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: fs $ $Date: 2001-07-20 12:34:11 $
+ *  last change: $Author: fs $ $Date: 2001-08-22 10:29:00 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -955,7 +955,7 @@ DoubleCurrencyField::DoubleCurrencyField(Window* pParent, WinBits nStyle)
     m_bPrependCurrSym = FALSE;
 
     // initialize with a system currency format
-    m_sCurrencySymbol = SvNumberFormatter::GetCurrencyEntry(LANGUAGE_SYSTEM).GetSymbol();
+    m_sCurrencySymbol = SvtSysLocale().GetLocaleData().getCurrSymbol();
     UpdateCurrencyFormat();
 }
 
@@ -967,7 +967,7 @@ DoubleCurrencyField::DoubleCurrencyField(Window* pParent, const ResId& rResId)
     m_bPrependCurrSym = FALSE;
 
     // initialize with a system currency format
-    m_sCurrencySymbol = SvNumberFormatter::GetCurrencyEntry(LANGUAGE_SYSTEM).GetSymbol();
+    m_sCurrencySymbol = SvtSysLocale().GetLocaleData().getCurrSymbol();
     UpdateCurrencyFormat();
 }
 
