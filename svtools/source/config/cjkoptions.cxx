@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cjkoptions.cxx,v $
  *
- *  $Revision: 1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: os $ $Date: 2001-04-10 11:42:52 $
+ *  last change: $Author: os $ $Date: 2001-04-18 06:32:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -233,6 +233,60 @@ SvtCJKOptions::~SvtCJKOptions()
     ::osl::MutexGuard aGuard( aCJKMutex );
     if ( !--nCJKRefCount )
         DELETEZ( pCJKOptions );
+}
+// -----------------------------------------------------------------------
+sal_Bool SvtCJKOptions::IsCJKFontEnabled() const
+{
+    DBG_ASSERT(pCJKOptions->IsLoaded(), "CJL options not loaded")
+    return pCJKOptions->IsCJKFontEnabled();
+}
+// -----------------------------------------------------------------------
+sal_Bool SvtCJKOptions::IsVerticalTextEnabled() const
+{
+    DBG_ASSERT(pCJKOptions->IsLoaded(), "CJL options not loaded")
+    return pCJKOptions->IsVerticalTextEnabled();
+}
+// -----------------------------------------------------------------------
+sal_Bool SvtCJKOptions::IsAsianTypographyEnabled() const
+{
+    DBG_ASSERT(pCJKOptions->IsLoaded(), "CJL options not loaded")
+    return pCJKOptions->IsAsianTypographyEnabled();
+}
+// -----------------------------------------------------------------------
+sal_Bool SvtCJKOptions::IsJapaneseFindEnabled() const
+{
+    DBG_ASSERT(pCJKOptions->IsLoaded(), "CJL options not loaded")
+    return pCJKOptions->IsJapaneseFindEnabled();
+}
+// -----------------------------------------------------------------------
+sal_Bool SvtCJKOptions::IsRubyEnabled() const
+{
+    DBG_ASSERT(pCJKOptions->IsLoaded(), "CJL options not loaded")
+    return pCJKOptions->IsRubyEnabled();
+}
+// -----------------------------------------------------------------------
+sal_Bool SvtCJKOptions::IsChangeCaseMapEnabled() const
+{
+    DBG_ASSERT(pCJKOptions->IsLoaded(), "CJL options not loaded")
+    return pCJKOptions->IsChangeCaseMapEnabled();
+}
+// -----------------------------------------------------------------------
+sal_Bool SvtCJKOptions::IsDoubleLinesEnabled() const
+{
+    DBG_ASSERT(pCJKOptions->IsLoaded(), "CJL options not loaded")
+    return pCJKOptions->IsDoubleLinesEnabled();
+}
+// -----------------------------------------------------------------------
+sal_Bool SvtCJKOptions::IsEmphasisMarksEnabled() const
+{
+    DBG_ASSERT(pCJKOptions->IsLoaded(), "CJL options not loaded")
+    return pCJKOptions->IsEmphasisMarksEnabled();
+}
+// -----------------------------------------------------------------------
+sal_Bool SvtCJKOptions::IsVerticalCallOutEnabled() const
+{
+    DBG_ASSERT(pCJKOptions->IsLoaded(), "CJL options not loaded")
+    return pCJKOptions->IsVerticalCallOutEnabled();
 }
 
 
