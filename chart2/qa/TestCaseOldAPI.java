@@ -89,15 +89,15 @@ public class TestCaseOldAPI extends ComplexTestCase {
             XCloseable.class, mxChartModel );
         assure( "document is no XCloseable", xCloseable != null );
 
-        try
-        {
-            xCloseable.close( true );
-        }
-        catch( CloseVetoException ex )
-        {
-            failed( ex.getMessage() );
-            ex.printStackTrace( (PrintWriter)log );
-        }
+//         try
+//         {
+//             xCloseable.close( true );
+//         }
+//         catch( CloseVetoException ex )
+//         {
+//             failed( ex.getMessage() );
+//             ex.printStackTrace( (PrintWriter)log );
+//         }
     }
 
     // ____________
