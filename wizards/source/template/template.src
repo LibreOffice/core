@@ -2,9 +2,9 @@
  *
  *  $RCSfile: template.src,v $
  *
- *  $Revision: 1.33 $
+ *  $Revision: 1.34 $
  *
- *  last change: $Author: kz $ $Date: 2002-09-09 21:04:55 $
+ *  last change: $Author: kz $ $Date: 2002-09-13 08:32:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -284,7 +284,7 @@ String AgendaDlgNoCancel
     Text[ danish ] = "Du skal bekr�fte en indstilling.";
     Text[ polish ] = "Nale�y potwierdzi� jak�� opcj�.";
     Text[ portuguese_brazilian ] = "An option must be selected.";
-    Text[ japanese ] = "オプションの1つは選択してください。";
+    Text[ japanese ] = "オプションの１つは選択してください。";
     Text[ korean ] = "옵션을 확인해야 합니다.";
     Text[ chinese_simplified ] = "必须选择一个选项。";
     Text[ chinese_traditional ] = "必須確定一個選項。";
@@ -438,18 +438,18 @@ String CorrespondenceMsgError
     Text[ portuguese ] = "Erro";
     Text[ dutch ] = "Fout";
     Text[ french ] = "Erreur";
-    Text[ spanish ] = "Error";
+    Text[ spanish ] = "Ha ocurrido un error.";
     Text[ italian ] = "Errore";
-    Text[ swedish ] = "Fel";
+    Text[ swedish ] = "Det har uppst�tt ett fel!";
     Text[ russian ] = "������";
     Text[ greek ] = "������";
     Text[ danish ] = "Fejl";
     Text[ polish ] = "B��d";
     Text[ portuguese_brazilian ] = "Error";
-    Text[ japanese ] = "エラー";
-    Text[ korean ] = "오류";
+    Text[ japanese ] = "エラーが発生しました。";
+    Text[ korean ] = "오류가 발생했습니다.";
     Text[ chinese_simplified ] = "已经发生一个错误！";
-    Text[ chinese_traditional ] = "錯誤";
+    Text[ chinese_traditional ] = "已經發生一個錯誤！";
     Text[ arabic ] = "���";
     Text[ turkish ] = "Hata";
     Text[ catalan ] = "Error";
