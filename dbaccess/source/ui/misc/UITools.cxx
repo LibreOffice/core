@@ -2,9 +2,9 @@
  *
  *  $RCSfile: UITools.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: fs $ $Date: 2001-03-15 08:23:44 $
+ *  last change: $Author: oj $ $Date: 2001-03-22 08:04:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -229,27 +229,7 @@ SQLExceptionInfo createConnection(  const ::rtl::OUString& _rsDataSourceName,
 // -----------------------------------------------------------------------------
 void showError(const SQLExceptionInfo& _rInfo,Window* _pParent,const Reference< XMultiServiceFactory >& _xFactory)
 {
-    if (_rInfo.isValid())
-    {
-        try
-        {
-            Sequence< Any > aArgs(2);
-            aArgs[0] <<= PropertyValue(PROPERTY_SQLEXCEPTION, 0, _rInfo.get(), PropertyState_DIRECT_VALUE);
-            aArgs[1] <<= PropertyValue(PROPERTY_PARENTWINDOW, 0, makeAny(VCLUnoHelper::GetInterface(_pParent)), PropertyState_DIRECT_VALUE);
-
-            static ::rtl::OUString s_sDialogServiceName = ::rtl::OUString::createFromAscii("com.sun.star.sdb.ErrorMessageDialog");
-            Reference< XExecutableDialog > xErrorDialog(
-                _xFactory->createInstanceWithArguments(s_sDialogServiceName, aArgs), UNO_QUERY);
-            if (xErrorDialog.is())
-                xErrorDialog->execute();
-            else
-                ShowServiceNotAvailableError(_pParent, s_sDialogServiceName, sal_True);
-        }
-        catch(Exception&)
-        {
-            OSL_ENSURE(0,"showError: could not display the error message!");
-        }
-    }
+    ::dbtools::showError(_rInfo,VCLUnoHelper::GetInterface(_pParent),_xFactory);
 }
 // -----------------------------------------------------------------------------
 ::std::vector< Reference<XNameAccess> > getKeyColumns(const Reference<XPropertySet >& _rxTable,
