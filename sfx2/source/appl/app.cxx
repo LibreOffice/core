@@ -2,9 +2,9 @@
  *
  *  $RCSfile: app.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: hr $ $Date: 2000-10-26 15:28:41 $
+ *  last change: $Author: mba $ $Date: 2000-10-26 16:01:05 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -659,49 +659,6 @@ void SfxApplication::FocusChanged()
 {
     static AsynchronLink *pFocusCallback = new AsynchronLink( Link( 0, SfxAppFocusChanged_Impl ) );
     pFocusCallback->Call( this, sal_True );
-}
-
-//--------------------------------------------------------------------
-
-FASTBOOL SfxApplication::KeyInput( const KeyEvent &rKeyEvent )
-
-/*  [Beschreibung]
-
-    Diese Methode fuehrt das ::com::sun::star::awt::KeyEvent 'rKeyEvent' ueber die an der
-    Applikation konfigurieren Tasten (Applikations-Accelerator) aus.
-
-    In der Regel sollten konfigurierbare Tasten ueber die Methode
-    <SfxViewShell::KeyInput(const ::com::sun::star::awt::KeyEvent&)> der aktiven SfxViewShell
-    ausgefuehrt werden.
-
-
-    [Rueckgabewert]
-
-    FASTBOOL                sal_True
-                            die Taste ist konfiguriert, der betreffende
-                            Handler wurde gerufen
-
-                            sal_False
-                            die Taste ist nicht konfiguriert, es konnte
-                            also kein Handler gerufen werden */
-
-{
-    const KeyCode& rKeyCode = rKeyEvent.GetKeyCode();
-    if ( rKeyCode.IsMod2() && rKeyCode.IsMod1() )
-    {
-        switch ( rKeyCode.GetCode() )
-        {
-            case KEY_D :
-            {
-                // ehemals ChaosDump
-                break;
-            }
-        }
-    }
-
-    if ( pViewFrame && pAcceleratorMgr->Call(rKeyEvent, pViewFrame->GetBindings() ) )
-        return sal_True;
-    return sal_False;
 }
 
 //--------------------------------------------------------------------
