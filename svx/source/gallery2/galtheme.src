@@ -2,9 +2,9 @@
  *
  *  $RCSfile: galtheme.src,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-09 12:24:28 $
+ *  last change: $Author: rt $ $Date: 2000-11-15 21:00:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -125,7 +125,7 @@ String RID_GALLERYSTR_THEME_BULLETS
     Text[ portuguese ] = "Marcas";
     Text[ russian ] = "Ìàğêåğû";
     Text[ dutch ] = "Opsommingstekens";
-    Text[ french ] = "Bullets";
+    Text[ french ] = "Puces";
     Text[ spanish ] = "Viñetas";
     Text[ italian ] = "Bullets";
     Text[ danish ] = "Punkttegn";
@@ -202,9 +202,9 @@ String RID_GALLERYSTR_THEME_FLOWCHARTS
 {
     Text = "Flußdiagramme";
     Text[ENGLISH] = "Flowcharts";
-    Text[english_us] = "Flow charts";
+    Text[english_us] = "Flow Charts";
     Text[ portuguese ] = "Fluxogramas";
-    Text[ russian ] = "Áëîê-ñõåìà";
+    Text[ russian ] = "Áëîê-ñõåìû";
     Text[ dutch ] = "Stroomdiagrammen";
     Text[ french ] = "Diagrammes de flux";
     Text[ spanish ] = "Diagramas de flujo";
@@ -324,7 +324,7 @@ String RID_GALLERYSTR_THEME_HOMEPAGE
     Text[ japanese ] = "Î°ÑÍß°¼Ş";
     Text[ chinese_simplified ] = "Ö÷Ò³";
     Text[ chinese_traditional ] = "ºô¸ô¥D­¶";
-    Text[ arabic ] = "ãİÇÊíÍ";
+    Text[ arabic ] = "ãæŞÚ ÅäÊÑäÊ";
     Text[ greek ] = "Áñ÷éêŞ óåëßäá";
     Text[ korean ] = "È¨ÆäÀÌÁö";
     Text[ turkish ] = "Web sayfası";
@@ -470,7 +470,7 @@ String RID_GALLERYSTR_THEME_RULERS
     Text[ italian ] = "Limiti";
     Text[ danish ] = "Linealer";
     Text[ swedish ] = "Linjaler";
-    Text[ polish ] = "Ograniczenia";
+    Text[ polish ] = "Granice";
     Text[ portuguese_brazilian ] = "Rulers";
     Text[ japanese ] = "Ù°×°";
     Text[ chinese_simplified ] = "²ÊÉ«ÏßÌõ";
@@ -520,7 +520,7 @@ String RID_GALLERYSTR_THEME_SYMBOLS
     Text[ russian ] = "Ñèìâîëû";
     Text[ dutch ] = "Symbolen";
     Text[ french ] = "Symboles";
-    Text[ spanish ] = "Iconos";
+    Text[ spanish ] = "Símbolos";
     Text[ italian ] = "Simboli";
     Text[ danish ] = "Symboler";
     Text[ swedish ] = "Symboler";
@@ -559,7 +559,7 @@ String RID_GALLERYSTR_THEME_MYTHEME
     Text[ chinese_simplified ] = "×Ô¼ºµÄÖ÷Ìâ";
     Text[ chinese_traditional ] = "¦Û­q¥DÃD";
     Text[ turkish ] = "Kullanıcı konusu";
-    Text[ arabic ] = "ãæÖæÚ ÎÇÕ";
+    Text[ arabic ] = "ãæÖæÚ ãÎÕÕ";
 };
 
 // -----------------------------------------------------------------------------
