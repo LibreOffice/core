@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawdoc.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: dl $ $Date: 2001-06-25 13:08:18 $
+ *  last change: $Author: dl $ $Date: 2001-06-28 08:11:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -666,7 +666,8 @@ SdrModel* __EXPORT SdDrawDocument::AllocModel() const
         for (USHORT i = 0; i < GetMasterSdPageCount(PK_STANDARD); i++)
         {
             // Alle Layouts der MasterPage mitnehmen
-            String aOldLayoutName(((SdDrawDocument*) this)->GetMasterSdPage(i, PK_STANDARD)->GetName());
+            String aOldLayoutName(((SdDrawDocument*) this)->GetMasterSdPage(i, PK_STANDARD)->GetLayoutName());
+            aOldLayoutName.Erase( aOldLayoutName.SearchAscii( SD_LT_SEPARATOR ) );
             pNewStylePool->CopyLayoutSheets(aOldLayoutName, *pOldStylePool);
         }
 
