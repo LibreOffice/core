@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PreparedStatement.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: oj $ $Date: 2001-04-30 09:59:55 $
+ *  last change: $Author: hr $ $Date: 2001-10-17 13:09:23 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -107,8 +107,8 @@ namespace connectivity
         java_sql_PreparedStatement( JNIEnv * pEnv, jobject myObj,java_sql_Connection* _pCon ) : OStatement_BASE2( pEnv, myObj, _pCon ){}
 
         virtual ::com::sun::star::uno::Any SAL_CALL queryInterface( const ::com::sun::star::uno::Type & rType ) throw(::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL acquire() throw(::com::sun::star::uno::RuntimeException);
-        virtual void SAL_CALL release() throw(::com::sun::star::uno::RuntimeException);
+        virtual void SAL_CALL acquire() throw();
+        virtual void SAL_CALL release() throw();
         //XTypeProvider
         virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type > SAL_CALL getTypes(  ) throw(::com::sun::star::uno::RuntimeException);
 
