@@ -2,9 +2,9 @@
  *
  *  $RCSfile: dbtree.cxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: rt $ $Date: 2003-06-12 07:41:18 $
+ *  last change: $Author: rt $ $Date: 2003-12-01 09:44:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -173,11 +173,11 @@ class SwDBTreeList_Impl : public cppu::WeakImplHelper1 < XContainerListener >
 {
     Reference< XNameAccess > xDBContext;
     SwConnectionArr aConnections;
-    SwWrtShell& rWrtSh;
+    SwWrtShell* pWrtSh;
 
     public:
-        SwDBTreeList_Impl(SwWrtShell& rShell) :
-            rWrtSh(rShell) {}
+        SwDBTreeList_Impl(SwWrtShell* pShell) :
+            pWrtSh(pShell) {}
         ~SwDBTreeList_Impl();
 
     virtual void SAL_CALL elementInserted( const ContainerEvent& Event ) throw (RuntimeException);
@@ -186,6 +186,8 @@ class SwDBTreeList_Impl : public cppu::WeakImplHelper1 < XContainerListener >
     virtual void SAL_CALL disposing( const EventObject& Source ) throw (RuntimeException);
 
     BOOL                        HasContext();
+    SwWrtShell*                 GetWrtShell() { return pWrtSh;}
+    void                        SetWrtShell(SwWrtShell& rSh) { pWrtSh = &rSh;}
     Reference< XNameAccess >    GetContext() {return xDBContext;}
     Reference<XConnection>      GetConnection(const rtl::OUString& rSourceName);
 };
@@ -285,11 +287,11 @@ Reference<XConnection>  SwDBTreeList_Impl::GetConnection(const rtl::OUString& rS
             break;
         }
     }
-    if(!xRet.is() && xDBContext.is())
+    if(!xRet.is() && xDBContext.is() && pWrtSh)
     {
         SwConnectionDataPtr pPtr = new SwConnectionData();
         pPtr->sSourceName = rSourceName;
-        xRet = rWrtSh.GetNewDBMgr()->RegisterConnection(pPtr->sSourceName);
+        xRet = pWrtSh->GetNewDBMgr()->RegisterConnection(pPtr->sSourceName);
         aConnections.Insert(pPtr, aConnections.Count());
     }
     return xRet;
@@ -298,7 +300,7 @@ Reference<XConnection>  SwDBTreeList_Impl::GetConnection(const rtl::OUString& rS
  Beschreibung:
 ------------------------------------------------------------------------*/
 SwDBTreeList::SwDBTreeList(Window *pParent, const ResId& rResId,
-                        SwWrtShell& rSh,
+                        SwWrtShell* pSh,
                         const String& rDefDBName, const BOOL bShowCol):
 
     SvTreeListBox   (pParent, rResId),
@@ -306,7 +308,7 @@ SwDBTreeList::SwDBTreeList(Window *pParent, const ResId& rResId,
     aImageListHC    (SW_RES(ILIST_DB_DLG_HC )),
     sDefDBName      (rDefDBName),
     bShowColumns    (bShowCol),
-    pImpl(new SwDBTreeList_Impl(rSh)),
+    pImpl(new SwDBTreeList_Impl(pSh)),
     bInitialized    (FALSE)
 {
     SetHelpId(HID_DB_SELECTION_TLB);
@@ -330,7 +332,7 @@ SwDBTreeList::~SwDBTreeList()
 
 void SwDBTreeList::InitTreeList()
 {
-    if(!pImpl->HasContext())
+    if(!pImpl->HasContext() && pImpl->GetWrtShell())
         return;
     SetSelectionMode(SINGLE_SELECTION);
     SetWindowBits(WB_HASLINES|WB_CLIPCHILDREN|WB_SORT|WB_HASBUTTONS|WB_HASBUTTONSATROOT|WB_HSCROLL);
@@ -681,5 +683,14 @@ void SwDBTreeList::StartDrag( sal_Int8 nAction, const Point& rPosPixel )
 sal_Int8 SwDBTreeList::AcceptDrop( const AcceptDropEvent& rEvt )
 {
     return DND_ACTION_NONE;
+}
+/*-- 07.10.2003 13:28:22---------------------------------------------------
+
+  -----------------------------------------------------------------------*/
+void    SwDBTreeList::SetWrtShell(SwWrtShell& rSh)
+{
+    pImpl->SetWrtShell(rSh);
+    if (IsVisible() && !bInitialized)
+        InitTreeList();
 }
 
