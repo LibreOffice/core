@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xestyle.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: vg $ $Date: 2003-05-27 15:07:44 $
+ *  last change: $Author: rt $ $Date: 2003-09-16 08:16:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -76,6 +76,9 @@
 #ifndef _ZFORMAT_HXX
 #include <svtools/zformat.hxx>
 #endif
+#ifndef _SVTOOLS_LANGUAGEOPTIONS_HXX
+#include <svtools/languageoptions.hxx>
+#endif
 #ifndef _SFX_PRINTER_HXX
 #include <sfx2/printer.hxx>
 #endif
@@ -101,6 +104,12 @@
 #ifndef _SVX_FRMDIRITEM_HXX
 #include <svx/frmdiritem.hxx>
 #endif
+#ifndef _EEITEM_HXX
+#include <svx/eeitem.hxx>
+#endif
+#ifndef _SVX_ESCPITEM_HXX
+#include <svx/escpitem.hxx>
+#endif
 
 #ifndef SC_DOCUMENT_HXX
 #include "document.hxx"
@@ -124,16 +133,6 @@
 #ifndef SC_XEHELPER_HXX
 #include "xehelper.hxx"
 #endif
-
-
-// helpers ====================================================================
-
-/** Returns true, if the passed itemset contains the item.
-    @param bDeep  true = Searches in parent item sets too. */
-inline bool lcl_xestyle_CheckItem( const SfxItemSet& rItemSet, sal_uInt16 nWhichId, bool bDeep )
-{
-    return rItemSet.GetItemState( nWhichId, bDeep ) == SFX_ITEM_SET;
-}
 
 
 // PALETTE record - color information =========================================
@@ -363,10 +362,10 @@ void XclExpPalette::GetMixedColors(
 {
     rnXclForeIx = GetColorIndex( nForeColorId );
     rnXclBackIx = GetColorIndex( nBackColorId );
-    if( (rnXclPattern != EXC_PATT_SOLID) || (nForeColorId >= maColorIdDataVec.size()) || (rnXclBackIx != EXC_XF_AUTOCOLOR) )
+    if( (rnXclPattern != EXC_PATT_SOLID) || (nForeColorId >= maColorIdDataVec.size()) )
         return;
 
-    // now we have solid pattern, a defined foreground, and auto background
+    // now we have solid pattern, and a defined foreground (background doesn't care for solid pattern)
 
     sal_uInt32 nIndex1, nIndex2;
     Color aForeColor( GetOriginalColor( nForeColorId ) );
@@ -405,11 +404,15 @@ void XclExpPalette::GetMixedColors(
     }
 }
 
-ColorData XclExpPalette::GetColorData( sal_uInt16 nXclIndex, ColorData nDefault ) const
+ColorData XclExpPalette::GetColorData( sal_uInt16 nXclIndex ) const
 {
-    if( (nXclIndex >= GetIndexOffset()) && (nXclIndex - GetIndexOffset() < maPalette.size()) )
-        return maPalette[ nXclIndex - GetIndexOffset() ].maColor.GetColor();
-    return GetDefColorData( nXclIndex, nDefault );
+    if( nXclIndex >= EXC_COLOR_USEROFFSET )
+    {
+        sal_uInt32 nIx = nXclIndex - EXC_COLOR_USEROFFSET;
+        if( nIx < maPalette.size() )
+            return maPalette[ nIx ].maColor.GetColor();
+    }
+    return GetDefColorData( nXclIndex );
 }
 
 const Color& XclExpPalette::GetOriginalColor( sal_uInt32 nColorId ) const
@@ -601,39 +604,27 @@ void XclExpPalette::WriteBody( XclExpStream& rStrm )
 
 // FONT record - font information =============================================
 
-inline XclExpStream& operator<<( XclExpStream& rStrm, XclUnderline eUnderl )
-{
-    return rStrm << static_cast< sal_uInt8 >( eUnderl );
-}
-
-inline XclExpStream& operator<<( XclExpStream& rStrm, XclEscapement eEscapem )
-{
-    return rStrm << static_cast< sal_uInt16 >( eEscapem );
-};
-
-
-// ----------------------------------------------------------------------------
-
 XclExpFont::XclExpFont( const XclExpRoot& rRoot, const Font& rFont ) :
     XclExpRecord( EXC_ID_FONT ),
     XclExpRoot( rRoot ),
     maData( rFont )
 {
-    SetColorId( GetPalette().InsertColor( rFont.GetColor(), xlColorCellText, EXC_FONT_AUTOCOLOR ) );
-    CalcHash();
+    SetColorHashAndRecSize(rFont);
+}
 
-    sal_uInt32 nRecSize = maData.maName.Len();
-    if( GetBiff() >= xlBiff8 )
-        (nRecSize *= 2) += 1;
-    nRecSize += 15;
-    SetRecSize( nRecSize );
+XclExpFont::XclExpFont( const XclExpRoot& rRoot, const SvxFont& rFont ) :
+    XclExpRecord( EXC_ID_FONT ),
+    XclExpRoot( rRoot ),
+    maData( rFont )
+{
+    SetColorHashAndRecSize(rFont);
 }
 
 XclExpFont::XclExpFont( const XclExpRoot& rRoot, const XclFontData& rFontData ) :
     XclExpRecord( EXC_ID_FONT, 14 ),
     XclExpRoot( rRoot ),
     maData( rFontData ),
-    mnColorId( XclExpPalette::GetColorIdFromIndex( EXC_FONT_AUTOCOLOR ) ),
+    mnColorId( XclExpPalette::GetColorIdFromIndex( EXC_COLOR_FONTAUTO ) ),
     mbHasColor( false )
 {
     CalcHash();
@@ -660,12 +651,24 @@ void XclExpFont::CalcHash()
     mnHash += maData.mnCharSet * 5;
     mnHash += maData.mnFamily * 7;
     mnHash += maData.mnHeight * 11;
-    mnHash += static_cast< sal_uInt32 >( maData.meUnderline ) * 13;
-    mnHash += static_cast< sal_uInt32 >( maData.meEscapem ) * 17;
+    mnHash += maData.mnUnderline * 13;
+    mnHash += maData.mnEscapem * 17;
     if( maData.mbItalic ) mnHash += 19;
     if( maData.mbStrikeout ) mnHash += 23;
     if( maData.mbOutline ) mnHash += 29;
     if( maData.mbShadow ) mnHash += 31;
+}
+
+void XclExpFont::SetColorHashAndRecSize( const Font& rFont )
+{
+    SetColorId( GetPalette().InsertColor( rFont.GetColor(), xlColorCellText, EXC_COLOR_FONTAUTO ) );
+    CalcHash();
+
+    sal_uInt32 nRecSize = maData.maName.Len();
+    if( GetBiff() >= xlBiff8 )
+        (nRecSize *= 2) += 1;
+    nRecSize += 15;
+    SetRecSize( nRecSize );
 }
 
 void XclExpFont::WriteBody( XclExpStream& rStrm )
@@ -687,8 +690,8 @@ void XclExpFont::WriteBody( XclExpStream& rStrm )
             << nAttr
             << GetPalette().GetColorIndex( mnColorId )
             << maData.mnWeight
-            << maData.meEscapem
-            << maData.meUnderline
+            << maData.mnEscapem
+            << maData.mnUnderline
             << maData.mnFamily
             << maData.mnCharSet
             << sal_uInt8( 0 )
@@ -766,14 +769,28 @@ sal_uInt16 XclExpFontBuffer::Insert( XclExpFont*& rpFont, bool bAppFont )
 
 sal_uInt16 XclExpFontBuffer::Insert( const Font& rFont, bool bAppFont )
 {
+    SvxFont aSvxFont(rFont);
+    return Insert( aSvxFont, bAppFont );
+}
+
+sal_uInt16 XclExpFontBuffer::Insert( const SvxFont& rFont, bool bAppFont )
+{
     XclExpFont* pNewFont = new XclExpFont( GetRoot(), rFont );
     return Insert( pNewFont, bAppFont );
 }
 
 sal_uInt16 XclExpFontBuffer::Insert( const SfxItemSet& rItemSet, bool bAppFont )
 {
+    /** We need to determine if a CJK or CTL fontitem is set in the itemset.
+    This is discussed in #i17050#. It is possible that both may be present.
+    In this case, we will choose CJK. Either option is equally correct. */
+    bool bCjk   = ScfTools::CheckItem( rItemSet, ATTR_CJK_FONT, true );
+    bool bCtl   = ScfTools::CheckItem( rItemSet, ATTR_CTL_FONT, true );
+    BYTE nScript = SCRIPTTYPE_LATIN;
+    if( bCjk || bCtl )
+        nScript =  bCjk ? SCRIPTTYPE_ASIAN : SCRIPTTYPE_COMPLEX ;
     Font aFont;
-    ScPatternAttr::GetFont( aFont, rItemSet, SC_AUTOCOL_RAW );
+    ScPatternAttr::GetFont( aFont, rItemSet, SC_AUTOCOL_RAW, NULL, NULL, NULL, nScript );
     return Insert( aFont, bAppFont );
 }
 
@@ -1021,15 +1038,6 @@ void XclExpNumFmtBuffer::WriteDefaultFormats( XclExpStream& rStrm )
 
 // XF, STYLE record - Cell formatting =========================================
 
-// Expands to the item (with type 'itemtype') with Which-ID 'which'.
-#define GETITEM( itemset, itemtype, which ) \
-    static_cast< const itemtype & >( (itemset).Get( which ) )
-
-// Expands to the value (with type 'valuetype') of the item with Which-ID 'which'.
-#define GETITEMVALUE( itemset, itemtype, which, valuetype ) \
-    static_cast< valuetype >( GETITEM( itemset, itemtype, which ).GetValue() )
-
-
 // ----------------------------------------------------------------------------
 
 bool XclExpCellProt::FillFromItemSet( const SfxItemSet& rItemSet, XclBiff eBiff, bool bStyle )
@@ -1037,7 +1045,7 @@ bool XclExpCellProt::FillFromItemSet( const SfxItemSet& rItemSet, XclBiff eBiff,
     const ScProtectionAttr& rProtItem = GETITEM( rItemSet, ScProtectionAttr, ATTR_PROTECTION );
     mbLocked = rProtItem.GetProtection();
     mbHidden = rProtItem.GetHideFormula() || rProtItem.GetHideCell();
-    return lcl_xestyle_CheckItem( rItemSet, ATTR_PROTECTION, bStyle );
+    return ScfTools::CheckItem( rItemSet, ATTR_PROTECTION, bStyle );
 }
 
 #if 0
@@ -1071,12 +1079,12 @@ bool XclExpCellAlign::FillFromItemSet( const SfxItemSet& rItemSet, XclBiff eBiff
             sal_Int32 nTmpIndent = GETITEMVALUE( rItemSet, SfxUInt16Item, ATTR_INDENT, sal_Int32 );
             (nTmpIndent += 100) /= 200; // 1 Excel unit == 10 pt == 200 twips
             mnIndent = static_cast< sal_uInt8 >( ::std::max( ::std::min( nTmpIndent, 0x0FL ), 0L ) );
-            bUsed |= lcl_xestyle_CheckItem( rItemSet, ATTR_INDENT, bStyle );
+            bUsed |= ScfTools::CheckItem( rItemSet, ATTR_INDENT, bStyle );
 
             // rotation
             sal_Int32 nScRot = GETITEMVALUE( rItemSet, SfxInt32Item, ATTR_ROTATE_VALUE, sal_Int32 );
             mnRotation = XclTools::GetXclRotation( nScRot );
-            bUsed |= lcl_xestyle_CheckItem( rItemSet, ATTR_ROTATE_VALUE, bStyle );
+            bUsed |= ScfTools::CheckItem( rItemSet, ATTR_ROTATE_VALUE, bStyle );
 
             // CTL text direction
             switch( GETITEMVALUE( rItemSet, SvxFrameDirectionItem, ATTR_WRITINGDIR, SvxFrameDirection ) )
@@ -1086,7 +1094,7 @@ bool XclExpCellAlign::FillFromItemSet( const SfxItemSet& rItemSet, XclBiff eBiff
                 case FRMDIR_HORI_RIGHT_TOP: meTextDir = xlTextDirRTL;       break;
                 default:    DBG_ERRORFILE( "XclExpCellAlign::FillFromItemSet - unknown CTL text direction" );
             }
-            bUsed |= lcl_xestyle_CheckItem( rItemSet, ATTR_WRITINGDIR, bStyle );
+            bUsed |= ScfTools::CheckItem( rItemSet, ATTR_WRITINGDIR, bStyle );
         }
 
         case xlBiff7:   // attributes new in BIFF7
@@ -1102,7 +1110,7 @@ bool XclExpCellAlign::FillFromItemSet( const SfxItemSet& rItemSet, XclBiff eBiff
                 case SVX_VER_JUSTIFY_BOTTOM:    meVerAlign = xlVAlignBottom;    break;
                 default:    DBG_ERROR( "XclExpCellAlign::FillFromItemSet - unknown vertical alignment" );
             }
-            bUsed |= lcl_xestyle_CheckItem( rItemSet, ATTR_VER_JUSTIFY, bStyle );
+            bUsed |= ScfTools::CheckItem( rItemSet, ATTR_VER_JUSTIFY, bStyle );
 
             // orientation
             switch( GETITEMVALUE( rItemSet, SvxOrientationItem, ATTR_ORIENTATION, SvxCellOrientation ) )
@@ -1113,14 +1121,14 @@ bool XclExpCellAlign::FillFromItemSet( const SfxItemSet& rItemSet, XclBiff eBiff
                 case SVX_ORIENTATION_STACKED:   meOrient = xlTextOrientTopBottom;   break;
                 default:    DBG_ERROR( "XclExpCellAlign::FillFromItemSet - unknown text orientation" );
             }
-            bUsed |= lcl_xestyle_CheckItem( rItemSet, ATTR_ORIENTATION, bStyle );
+            bUsed |= ScfTools::CheckItem( rItemSet, ATTR_ORIENTATION, bStyle );
         }
 
         case xlBiff3:   // attributes new in BIFF3
         {
             // text wrap
             mbWrapped = bForceWrapped || GETITEMVALUE( rItemSet, SfxBoolItem, ATTR_LINEBREAK, BOOL );
-            bUsed |= bForceWrapped | lcl_xestyle_CheckItem( rItemSet, ATTR_LINEBREAK, bStyle );
+            bUsed |= bForceWrapped | ScfTools::CheckItem( rItemSet, ATTR_LINEBREAK, bStyle );
         }
 
         case xlBiff2:   // attributes new in BIFF2
@@ -1136,7 +1144,7 @@ bool XclExpCellAlign::FillFromItemSet( const SfxItemSet& rItemSet, XclBiff eBiff
                 case SVX_HOR_JUSTIFY_REPEAT:    meHorAlign = xlHAlignFill;      break;
                 default:    DBG_ERROR( "XclExpCellAlign::FillFromItemSet - unknown horizontal alignment" );
             }
-            bUsed |= lcl_xestyle_CheckItem( rItemSet, ATTR_HOR_JUSTIFY, bStyle );
+            bUsed |= ScfTools::CheckItem( rItemSet, ATTR_HOR_JUSTIFY, bStyle );
         }
 
         break;
@@ -1203,10 +1211,12 @@ void XclExpCellAlign::FillToXF8( sal_uInt16& rnAlign, sal_uInt16& rnMiscAttrib )
 
 // ----------------------------------------------------------------------------
 
-XclExpCellBorder::XclExpCellBorder()
+XclExpCellBorder::XclExpCellBorder() :
+    mnLeftColorId(   XclExpPalette::GetColorIdFromIndex( mnLeftColor ) ),
+    mnRightColorId(  XclExpPalette::GetColorIdFromIndex( mnRightColor ) ),
+    mnTopColorId(    XclExpPalette::GetColorIdFromIndex( mnTopColor ) ),
+    mnBottomColorId( XclExpPalette::GetColorIdFromIndex( mnBottomColor ) )
 {
-    mnLeftColorId = mnRightColorId = mnTopColorId = mnBottomColorId =
-        XclExpPalette::GetColorIdFromIndex( EXC_XF_NOCOLOR );
 }
 
 
@@ -1237,7 +1247,7 @@ void lcl_xestyle_GetBorderLine(
 
     rnColorId = (pLine && (rnXclLine != EXC_LINE_NONE)) ?
         rPalette.InsertColor( pLine->GetColor(), xlColorCellBorder ) :
-        XclExpPalette::GetColorIdFromIndex( EXC_XF_NOCOLOR );
+        XclExpPalette::GetColorIdFromIndex( 0 );
 }
 
 
@@ -1248,7 +1258,7 @@ bool XclExpCellBorder::FillFromItemSet( const SfxItemSet& rItemSet, XclExpPalett
     lcl_xestyle_GetBorderLine( mnRightLine,  mnRightColorId,  rBoxItem.GetRight(),  rPalette, eBiff );
     lcl_xestyle_GetBorderLine( mnTopLine,    mnTopColorId,    rBoxItem.GetTop(),    rPalette, eBiff );
     lcl_xestyle_GetBorderLine( mnBottomLine, mnBottomColorId, rBoxItem.GetBottom(), rPalette, eBiff );
-    return lcl_xestyle_CheckItem( rItemSet, ATTR_BORDER, bStyle );
+    return ScfTools::CheckItem( rItemSet, ATTR_BORDER, bStyle );
 }
 
 void XclExpCellBorder::SetFinalColors( const XclExpPalette& rPalette )
@@ -1321,8 +1331,8 @@ void XclExpCellBorder::FillToCF8( sal_uInt16& rnLine, sal_uInt32& rnColor ) cons
 // ----------------------------------------------------------------------------
 
 XclExpCellArea::XclExpCellArea() :
-    mnForeColorId( XclExpPalette::GetColorIdFromIndex( EXC_XF_AUTOCOLOR ) ),
-    mnBackColorId( XclExpPalette::GetColorIdFromIndex( EXC_XF_TRANSPCOLOR ) )
+    mnForeColorId( XclExpPalette::GetColorIdFromIndex( mnForeColor ) ),
+    mnBackColorId( XclExpPalette::GetColorIdFromIndex( mnBackColor ) )
 {
 }
 
@@ -1332,16 +1342,16 @@ bool XclExpCellArea::FillFromItemSet( const SfxItemSet& rItemSet, XclExpPalette&
     if( rBrushItem.GetColor().GetTransparency() )
     {
         mnPattern = EXC_PATT_NONE;
-        mnForeColorId = XclExpPalette::GetColorIdFromIndex( EXC_XF_AUTOCOLOR );
-        mnBackColorId = XclExpPalette::GetColorIdFromIndex( EXC_XF_TRANSPCOLOR );
+        mnForeColorId = XclExpPalette::GetColorIdFromIndex( EXC_COLOR_WINDOWTEXT );
+        mnBackColorId = XclExpPalette::GetColorIdFromIndex( EXC_COLOR_WINDOWBACK );
     }
     else
     {
         mnPattern = EXC_PATT_SOLID;
         mnForeColorId = rPalette.InsertColor( rBrushItem.GetColor(), xlColorCellArea );
-        mnBackColorId = XclExpPalette::GetColorIdFromIndex( EXC_XF_AUTOCOLOR );
+        mnBackColorId = XclExpPalette::GetColorIdFromIndex( EXC_COLOR_WINDOWTEXT );
     }
-    return lcl_xestyle_CheckItem( rItemSet, ATTR_BACKGROUND, bStyle );
+    return ScfTools::CheckItem( rItemSet, ATTR_BACKGROUND, bStyle );
 }
 
 void XclExpCellArea::SetFinalColors( const XclExpPalette& rPalette )
@@ -1380,8 +1390,8 @@ void XclExpCellArea::FillToXF8( sal_uInt32& rnBorder2, sal_uInt16& rnArea ) cons
 void XclExpCellArea::FillToCF8( sal_uInt16& rnPattern, sal_uInt16& rnColor ) const
 {
     XclCellArea aTmp( *this );
-    if( !aTmp.IsTransparent() && (aTmp.mnBackColor == EXC_XF_AUTOCOLOR) )
-        aTmp.mnBackColor = EXC_XF_NOCOLOR;
+    if( !aTmp.IsTransparent() && (aTmp.mnBackColor == EXC_COLOR_WINDOWTEXT) )
+        aTmp.mnBackColor = 0;
     if( aTmp.mnPattern == EXC_PATT_SOLID )
         ::std::swap( aTmp.mnForeColor, aTmp.mnBackColor );
     ::insert_value( rnColor,   aTmp.mnForeColor,  0, 7 );
@@ -1394,12 +1404,12 @@ void XclExpCellArea::FillToCF8( sal_uInt16& rnPattern, sal_uInt16& rnColor ) con
 
 XclExpXF::XclExpXF(
         const XclExpRoot& rRoot, const ScPatternAttr& rPattern,
-        sal_uInt32 nForcedNumFmt, bool bForceWrapped ) :
+        sal_uInt32 nForcedNumFmt, bool bForceWrapped, sal_uInt16 nFontIx) :
     XclXFBase( true ),
     XclExpRoot( rRoot )
 {
     mnParentXFId = GetXFBuffer().InsertStyle( rPattern.GetStyleSheet() );
-    Init( rPattern.GetItemSet(), nForcedNumFmt, bForceWrapped );
+    Init( rPattern.GetItemSet(), nForcedNumFmt, bForceWrapped, nFontIx, false  );
 }
 
 XclExpXF::XclExpXF( const XclExpRoot& rRoot, const SfxStyleSheetBase& rStyleSheet ) :
@@ -1408,7 +1418,7 @@ XclExpXF::XclExpXF( const XclExpRoot& rRoot, const SfxStyleSheetBase& rStyleShee
     mnParentXFId( XclExpXFBuffer::GetXFIdFromIndex( EXC_XF_STYLEPARENT ) )
 {
     bool bDefStyle = (rStyleSheet.GetName() == ScGlobal::GetRscString( STR_STYLENAME_STANDARD ));
-    Init( const_cast< SfxStyleSheetBase& >( rStyleSheet ).GetItemSet(), NUMBERFORMAT_ENTRY_NOT_FOUND, false, bDefStyle );
+    Init( const_cast< SfxStyleSheetBase& >( rStyleSheet ).GetItemSet(), NUMBERFORMAT_ENTRY_NOT_FOUND, false, EXC_FONT_NOTFOUND, bDefStyle );
 }
 
 XclExpXF::XclExpXF( const XclExpRoot& rRoot, bool bCellXF ) :
@@ -1419,11 +1429,12 @@ XclExpXF::XclExpXF( const XclExpRoot& rRoot, bool bCellXF ) :
     InitDefault();
 }
 
-bool XclExpXF::Equals( const ScPatternAttr& rPattern, sal_uInt32 nForcedNumFmt, bool bForceWrapped ) const
+bool XclExpXF::Equals( const ScPatternAttr& rPattern, sal_uInt32 nForcedNumFmt, bool bForceWrapped, sal_uInt16 nFontIx) const
 {
     return IsCellXF() && (mpItemSet == &rPattern.GetItemSet()) &&
         ((nForcedNumFmt == NUMBERFORMAT_ENTRY_NOT_FOUND) || (mnNumFmt == nForcedNumFmt)) &&
-        (!bForceWrapped || maAlignment.mbWrapped);
+        (!bForceWrapped || maAlignment.mbWrapped) &&
+        ((nFontIx == EXC_FONT_NOTFOUND) || (mnFont == nFontIx)) ;
 }
 
 bool XclExpXF::Equals( const SfxStyleSheetBase& rStyleSheet ) const
@@ -1453,7 +1464,7 @@ void XclExpXF::InitDefault()
     mnFont = mnNumFmt = 0;
 }
 
-void XclExpXF::Init( const SfxItemSet& rItemSet, sal_uInt32 nForcedNumFmt, bool bForceWrapped, bool bDefStyle )
+void XclExpXF::Init( const SfxItemSet& rItemSet, sal_uInt32 nForcedNumFmt, bool bForceWrapped, sal_uInt16 nFontIx, bool bDefStyle )
 {
     InitDefault();
     mpItemSet = &rItemSet;
@@ -1462,23 +1473,31 @@ void XclExpXF::Init( const SfxItemSet& rItemSet, sal_uInt32 nForcedNumFmt, bool 
     mbProtUsed = maProtection.FillFromItemSet( rItemSet, GetBiff(), IsStyleXF() );
 
     // font
-    mnFont = GetFontBuffer().Insert( rItemSet, bDefStyle );
-    mbFontUsed =
-        lcl_xestyle_CheckItem( rItemSet, ATTR_FONT_HEIGHT,     IsStyleXF() ) ||
-        lcl_xestyle_CheckItem( rItemSet, ATTR_FONT_WEIGHT,     IsStyleXF() ) ||
-        lcl_xestyle_CheckItem( rItemSet, ATTR_FONT_POSTURE,    IsStyleXF() ) ||
-        lcl_xestyle_CheckItem( rItemSet, ATTR_FONT_UNDERLINE,  IsStyleXF() ) ||
-        lcl_xestyle_CheckItem( rItemSet, ATTR_FONT_CROSSEDOUT, IsStyleXF() ) ||
-        lcl_xestyle_CheckItem( rItemSet, ATTR_FONT_CONTOUR,    IsStyleXF() ) ||
-        lcl_xestyle_CheckItem( rItemSet, ATTR_FONT_SHADOWED,   IsStyleXF() ) ||
-        lcl_xestyle_CheckItem( rItemSet, ATTR_FONT_COLOR,      IsStyleXF() ) ||
-        lcl_xestyle_CheckItem( rItemSet, ATTR_FONT_LANGUAGE,   IsStyleXF() );
+    if(nFontIx == EXC_FONT_NOTFOUND)
+    {
+        mnFont = GetFontBuffer().Insert( rItemSet, bDefStyle );
+        mbFontUsed =
+            ScfTools::CheckItem( rItemSet, ATTR_FONT_HEIGHT,     IsStyleXF() ) ||
+            ScfTools::CheckItem( rItemSet, ATTR_FONT_WEIGHT,     IsStyleXF() ) ||
+            ScfTools::CheckItem( rItemSet, ATTR_FONT_POSTURE,    IsStyleXF() ) ||
+            ScfTools::CheckItem( rItemSet, ATTR_FONT_UNDERLINE,  IsStyleXF() ) ||
+            ScfTools::CheckItem( rItemSet, ATTR_FONT_CROSSEDOUT, IsStyleXF() ) ||
+            ScfTools::CheckItem( rItemSet, ATTR_FONT_CONTOUR,    IsStyleXF() ) ||
+            ScfTools::CheckItem( rItemSet, ATTR_FONT_SHADOWED,   IsStyleXF() ) ||
+            ScfTools::CheckItem( rItemSet, ATTR_FONT_COLOR,      IsStyleXF() ) ||
+            ScfTools::CheckItem( rItemSet, ATTR_FONT_LANGUAGE,   IsStyleXF() );
+    }
+    else
+    {
+        mnFont = nFontIx;
+        mbFontUsed = true;
+    }
 
     // number format
     sal_uInt32 nScFmt = (nForcedNumFmt == NUMBERFORMAT_ENTRY_NOT_FOUND) ?
         GETITEMVALUE( rItemSet, SfxUInt32Item, ATTR_VALUE_FORMAT, sal_uInt32 ) : nForcedNumFmt;
     mnNumFmt = GetNumFmtBuffer().Insert( nScFmt );
-    mbFmtUsed = lcl_xestyle_CheckItem( rItemSet, ATTR_VALUE_FORMAT, IsStyleXF() );
+    mbFmtUsed = ScfTools::CheckItem( rItemSet, ATTR_VALUE_FORMAT, IsStyleXF() );
 
     // alignment
     mbAlignUsed = maAlignment.FillFromItemSet( rItemSet, GetBiff(), bForceWrapped, IsStyleXF() );
@@ -1692,14 +1711,14 @@ void XclExpXFBuffer::InitDefaults()
     InsertUserStyles();
 }
 
-sal_uInt32 XclExpXFBuffer::Insert( const ScPatternAttr* pPattern, bool bForceWrapped )
+sal_uInt32 XclExpXFBuffer::Insert( const ScPatternAttr* pPattern, bool bForceWrapped, sal_uInt16 nFontIx )
 {
-    return InsertCellXF( pPattern, NUMBERFORMAT_ENTRY_NOT_FOUND, bForceWrapped );
+    return InsertCellXF( pPattern, NUMBERFORMAT_ENTRY_NOT_FOUND, bForceWrapped, nFontIx );
 }
 
 sal_uInt32 XclExpXFBuffer::Insert( const ScPatternAttr* pPattern, sal_uInt32 nForcedNumFmt )
 {
-    return InsertCellXF( pPattern, nForcedNumFmt, false );
+    return InsertCellXF( pPattern, nForcedNumFmt, false, EXC_FONT_NOTFOUND );
 }
 
 sal_uInt32 XclExpXFBuffer::InsertStyle( const SfxStyleSheetBase* pStyleSheet )
@@ -1800,10 +1819,10 @@ void XclExpXFBuffer::Save( XclExpStream& rStrm )
     maStyleList.Save( rStrm );
 }
 
-sal_uInt32 XclExpXFBuffer::FindXF( const ScPatternAttr& rPattern, sal_uInt32 nForcedNumFmt, bool bForceWrapped ) const
+sal_uInt32 XclExpXFBuffer::FindXF( const ScPatternAttr& rPattern, sal_uInt32 nForcedNumFmt, bool bForceWrapped, sal_uInt16 nFontIx ) const
 {
     for( const XclExpXF* pXF = maXFList.First(); pXF; pXF = maXFList.Next() )
-        if( pXF->Equals( rPattern, nForcedNumFmt, bForceWrapped ) )
+        if( pXF->Equals( rPattern, nForcedNumFmt, bForceWrapped, nFontIx ) )
             return maXFList.GetCurPos();
     return EXC_XFLIST_NOTFOUND;
 }
@@ -1825,7 +1844,7 @@ sal_uInt32 XclExpXFBuffer::FindStyle( sal_uInt32 nXFId ) const
 }
 
 sal_uInt32 XclExpXFBuffer::InsertCellXF(
-        const ScPatternAttr* pPattern, sal_uInt32 nForcedNumFmt, bool bForceWrapped )
+        const ScPatternAttr* pPattern, sal_uInt32 nForcedNumFmt, bool bForceWrapped, sal_uInt16 nFontIx )
 {
     const ScPatternAttr* pDefPattern = GetDoc().GetDefPattern();
 
@@ -1841,13 +1860,13 @@ sal_uInt32 XclExpXFBuffer::InsertCellXF(
         return GetXFIdFromIndex( EXC_XF_DEFAULTCELL );
     }
 
-    sal_uInt32 nXFId = FindXF( *pPattern, nForcedNumFmt, bForceWrapped );
+    sal_uInt32 nXFId = FindXF( *pPattern, nForcedNumFmt, bForceWrapped, nFontIx);
     if( nXFId == EXC_XFLIST_NOTFOUND )
     {
         // not found - insert new cell XF
         if( maXFList.Count() < EXC_XFLIST_HARDLIMIT )
         {
-            maXFList.Append( new XclExpXF( GetRoot(), *pPattern, nForcedNumFmt, bForceWrapped ) );
+            maXFList.Append( new XclExpXF( GetRoot(), *pPattern, nForcedNumFmt, bForceWrapped, nFontIx) );
             // do not set nIndex before the Append() command - it may insert 2 XFs (style+cell)
             nXFId = maXFList.Count() - 1;
         }
@@ -1875,7 +1894,7 @@ sal_uInt32 XclExpXFBuffer::InsertStyleXF( const SfxStyleSheetBase& rStyleSheet )
 
         sal_uInt32 nXFId = GetXFIdFromIndex( nXFIndex );
 
-        // STYLE already inserted? (not inserted i.e. for RowLevel/ColLevel styles)
+        // STYLE already inserted? (No: i.e. for RowLevel/ColLevel styles or Hyperlink/Followed_Hyperlink)
         if( FindStyle( nXFId ) == LIST_ENTRY_NOTFOUND )
             maStyleList.Append( new XclExpStyle( nXFId, nStyleId, nLevel ) );
 
@@ -1963,6 +1982,12 @@ void XclExpXFBuffer::InsertDefaultRecords()
     aFormatStyle.SetNumFmt( 9 );
     InsertDefaultStyle( new XclExpDefaultXF( aFormatStyle ), EXC_STYLE_PERCENT );
 
+    // Create two placeholders for possible Hyperlink/Followed_Hyperlink styles
+    aFormatStyle.SetNumFmt( 0 );
+    aFormatStyle.SetAllUsedFlags( false );
+    maXFList.Append( new XclExpDefaultXF( aFormatStyle ) );
+    maXFList.Append( new XclExpDefaultXF( aFormatStyle ) );
+
     // default hard cell format -> NULL is document default pattern
     // do it here to really have all built-in styles
     Insert( NULL );
@@ -1975,7 +2000,6 @@ void XclExpXFBuffer::AppendXFIndex( sal_uInt32 nXFId )
     maXFPtrVec.push_back( maXFList.GetObject( nXFId ) );
     DBG_ASSERT( maXFPtrVec.back(), "XclExpXFBuffer::AppendXFIndex - XF not found" );
 }
-
 
 // ============================================================================
 
