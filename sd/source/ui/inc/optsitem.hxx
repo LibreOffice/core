@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optsitem.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: ka $ $Date: 2000-09-28 18:03:08 $
+ *  last change: $Author: ka $ $Date: 2000-09-29 15:39:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -178,13 +178,11 @@ class SdOptionsLayout : public SdOptionsGeneric
 {
 private:
 
-                                        // missing: Guide; Contour;
-
     BOOL    bRuler              : 1;    // Layout/Display/Ruler
-    BOOL    bMoveOutline        : 1;    // ???
-    BOOL    bDragStripes        : 1;    // ???
+    BOOL    bMoveOutline        : 1;    // Layout/Display/Contur
+    BOOL    bDragStripes        : 1;    // Layout/Display/Guide
     BOOL    bHandlesBezier      : 1;    // Layout/Display/Bezier
-    BOOL    bHelplines          : 1;    // ???
+    BOOL    bHelplines          : 1;    // Layout/Display/Helpline
     UINT16  nMetric;                    // Layout/Other/MeasureUnit
     UINT16  nDefTab;                    // Layout/Other/TabStop
 
@@ -303,7 +301,7 @@ private:
 
                                             // missing: // Misc/TextObject/Selectable; /Misc/ObjectMoveable; /Misc/SimpleHandles
 
-    BOOL    bStartWithTemplate      : 1;
+    BOOL    bStartWithTemplate      : 1;    // Misc/NewDoc/AutoPilot
     BOOL    bMarkedHitMovesAlways   : 1;
     BOOL    bMoveOnlyDragging       : 1;
     BOOL    bCrookNoContortion      : 1;    // Misc/NoDistort
@@ -527,18 +525,14 @@ public:
 
 // -----------------------------------------------
 
-class SdOptionsGridItem : public SfxPoolItem, public SdOptionsGrid
+class SdOptionsGridItem : public SvxGridItem
 {
-public:
 
-                            SdOptionsGridItem( USHORT nWhich);
+public:
+                            SdOptionsGridItem( USHORT nWhich );
                             SdOptionsGridItem( USHORT nWhich, SdOptions* pOpts, FrameView* pView = NULL );
 
-    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = 0 ) const;
-    virtual int             operator==( const SfxPoolItem& ) const;
-
     void                    SetOptions( SdOptions* pOpts ) const;
-
 };
 
 // ------------------

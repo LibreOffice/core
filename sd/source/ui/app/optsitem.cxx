@@ -2,9 +2,9 @@
  *
  *  $RCSfile: optsitem.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: ka $ $Date: 2000-09-28 17:58:43 $
+ *  last change: $Author: ka $ $Date: 2000-09-29 15:39:42 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -264,16 +264,15 @@ void SdOptionsLayout::GetPropNameArray( const char**& ppNames, ULONG& rCount ) c
     static const char* aPropNames[] =
     {
         "Display/Ruler",
-        // ??? MoveOutline
-        // ??? DragStripes
         "Display/Bezier",
-        // ??? Helplines
+        "Display/Contour",
+        "Display/Guide",
+        "Display/Helpline",
         "Other/MeasureUnit",
         "Other/TabStop"
     };
 
-    // rCount = 7;
-    rCount = 4;
+    rCount = 7;
     ppNames = aPropNames;
 }
 
@@ -282,9 +281,12 @@ void SdOptionsLayout::GetPropNameArray( const char**& ppNames, ULONG& rCount ) c
 BOOL SdOptionsLayout::ReadData( const Any* pValues )
 {
     SetRulerVisible( *(sal_Bool*) pValues[ 0 ].getValue() );
-    SetHandlesBezier( *(sal_Bool*)pValues[ 1 ].getValue() );
-    SetMetric( *(sal_Int32*) pValues[ 2 ].getValue() );
-    SetDefTab( *(sal_Int32*) pValues[ 3 ].getValue() );
+    SetHandlesBezier( *(sal_Bool*) pValues[ 1 ].getValue() );
+    SetMoveOutline( *(sal_Bool*) pValues[ 2 ].getValue() );
+    SetDragStripes( *(sal_Bool*) pValues[ 3 ].getValue() );
+    SetHelplines( *(sal_Bool*) pValues[ 4 ].getValue() );
+    SetMetric( *(sal_Int32*) pValues[ 5 ].getValue() );
+    SetDefTab( *(sal_Int32*) pValues[ 6 ].getValue() );
 
     return TRUE;
 }
@@ -295,8 +297,11 @@ BOOL SdOptionsLayout::WriteData( Any* pValues ) const
 {
     pValues[ 0 ] <<= IsRulerVisible();
     pValues[ 1 ] <<= IsHandlesBezier();
-    pValues[ 2 ] <<= (sal_Int32) GetMetric();
-    pValues[ 3 ] <<= (sal_Int32) GetDefTab();
+    pValues[ 2 ] <<= IsMoveOutline();
+    pValues[ 3 ] <<= IsDragStripes();
+    pValues[ 4 ] <<= IsHelplines();
+    pValues[ 5 ] <<= (sal_Int32) GetMetric();
+    pValues[ 6 ] <<= (sal_Int32) GetDefTab();
 
     return TRUE;
 }
@@ -928,11 +933,9 @@ void SdOptionsSnapItem::SetOptions( SdOptions* pOpts ) const
 \************************************************************************/
 
 SdOptionsZoom::SdOptionsZoom( USHORT nConfigId, BOOL bUseConfig ) :
-    SdOptionsGeneric( nConfigId, bUseConfig ?
-                      ( ( SDCFG_DRAW == nConfigId ) ?
-                        B2U( "Office.Draw/Zoom" ) :
-                        B2U( "Office.Impress/Zoom" ) ) :
-                      OUString() )
+    SdOptionsGeneric( nConfigId, ( bUseConfig &&  ( SDCFG_DRAW == nConfigId ) ) ?
+                                 B2U( "Office.Draw/Zoom" ) :
+                                 OUString() )
 {
     EnableModify( FALSE );
     SetDefaults();
@@ -1179,16 +1182,14 @@ BOOL SdOptionsGrid::WriteData( Any* pValues ) const
 \************************************************************************/
 
 SdOptionsGridItem::SdOptionsGridItem( USHORT nWhich ) :
-    SfxPoolItem     ( nWhich ),
-    SdOptionsGrid   ( 0, FALSE )
+    SvxGridItem( nWhich )
 {
 }
 
 // -----------------------------------------------------------------------------
 
 SdOptionsGridItem::SdOptionsGridItem( USHORT nWhich, SdOptions* pOpts, FrameView* pView ) :
-    SfxPoolItem     ( nWhich ),
-    SdOptionsGrid   ( 0, FALSE )
+    SvxGridItem( nWhich )
 {
     SetSynchronize( pOpts->IsSynchronize() );
     SetEqualGrid( pOpts->IsEqualGrid() );
@@ -1217,22 +1218,6 @@ SdOptionsGridItem::SdOptionsGridItem( USHORT nWhich, SdOptions* pOpts, FrameView
     }
 }
 
-// ----------------------------------------------------------------------
-
-SfxPoolItem* SdOptionsGridItem::Clone( SfxItemPool* ) const
-{
-    return new SdOptionsGridItem( *this );
-}
-
-
-// ----------------------------------------------------------------------
-
-int SdOptionsGridItem::operator==( const SfxPoolItem& rAttr ) const
-{
-    DBG_ASSERT( SfxPoolItem::operator==(rAttr), "unterschiedliche Typen" );
-    return( (SdOptionsGrid&) *this == (const SdOptionsGrid&)(const SdOptionsGridItem&) rAttr );
-}
-
 // -----------------------------------------------------------------------
 
 void SdOptionsGridItem::SetOptions( SdOptions* pOpts ) const
@@ -1243,10 +1228,10 @@ void SdOptionsGridItem::SetOptions( SdOptions* pOpts ) const
     pOpts->SetFldDivisionY( GetFldDivisionY() );
     pOpts->SetFldSnapX( GetFldSnapX() );
     pOpts->SetFldSnapY( GetFldSnapY() );
-    pOpts->SetUseGridSnap( IsUseGridSnap() );
-    pOpts->SetSynchronize( IsSynchronize() );
-    pOpts->SetGridVisible( IsGridVisible() );
-    pOpts->SetEqualGrid( IsEqualGrid() );
+    pOpts->SetUseGridSnap( GetUseGridSnap() );
+    pOpts->SetSynchronize( GetSynchronize() );
+    pOpts->SetGridVisible( GetGridVisible() );
+    pOpts->SetEqualGrid( GetEqualGrid() );
 }
 
 /*************************************************************************
