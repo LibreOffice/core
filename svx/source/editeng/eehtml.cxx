@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eehtml.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mt $ $Date: 2002-07-12 13:31:14 $
+ *  last change: $Author: pb $ $Date: 2002-12-03 08:05:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -823,7 +823,7 @@ void EditHTMLParser::AnchorStart()
                 INetURLObject aTargetURL;
                 INetURLObject aRootURL( INetURLObject::GetBaseURL() );
                 aRootURL.GetNewAbsURL( aRef, &aTargetURL );
-                aURL = aTargetURL.GetMainURL();
+                aURL = aTargetURL.GetMainURL( INetURLObject::DECODE_TO_IURI );
             }
             pCurAnchor = new AnchorInfo;
             pCurAnchor->aHRef = aURL;

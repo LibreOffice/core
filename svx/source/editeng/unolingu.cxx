@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unolingu.cxx,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: rt $ $Date: 2002-09-26 09:28:54 $
+ *  last change: $Author: pb $ $Date: 2002-12-03 08:05:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -927,8 +927,8 @@ SvxAlternativeSpelling SvxGetAltSpelling(
                  aAltWord( rHyphWord->getHyphenatedWord() );
         INT16   nHyphenationPos     = rHyphWord->getHyphenationPos(),
                 nHyphenPos          = rHyphWord->getHyphenPos();
-        INT16   nLen    = aWord.getLength();
-        INT16   nAltLen = aAltWord.getLength();
+        INT16   nLen    = (INT16)aWord.getLength();
+        INT16   nAltLen = (INT16)aAltWord.getLength();
         const sal_Unicode *pWord    = aWord.getStr(),
                           *pAltWord = aAltWord.getStr();
 
@@ -993,7 +993,7 @@ String SvxGetDictionaryURL(const String &rDicName, sal_Bool bIsUserDic)
     aURLObj.Append( rDicName );
     DBG_ASSERT(!aURLObj.HasError(), "lng : invalid URL");
 
-    return aURLObj.GetMainURL();
+    return aURLObj.GetMainURL( INetURLObject::DECODE_TO_IURI );
 }
 
 //TL:TODO: soll mal den rictigen Rückgabetyp bekommen!
@@ -1034,7 +1034,7 @@ sal_Bool SvxAddEntryToDic(
         }
     }
 
-    return nRes;
+    return (sal_Bool)nRes;
 }
 
 short SvxDicError( Window *pParent, sal_Int16 nError )

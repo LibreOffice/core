@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svxacorr.cxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: thb $ $Date: 2002-09-17 12:28:37 $
+ *  last change: $Author: pb $ $Date: 2002-12-03 08:05:55 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -2715,7 +2715,7 @@ void SvxAutoCorrectLanguageLists::MakeUserStorage_Impl()
     {
         try
         {
-            String sMain(aDest.GetMainURL());
+            String sMain(aDest.GetMainURL( INetURLObject::DECODE_TO_IURI ));
             sal_Unicode cSlash = '/';
             xub_StrLen nSlashPos = sMain.SearchBackward(cSlash);
             sMain.Erase(nSlashPos);
@@ -2724,7 +2724,7 @@ void SvxAutoCorrectLanguageLists::MakeUserStorage_Impl()
             TransferInfo aInfo;
             aInfo.NameClash = NameClash::OVERWRITE;
             aInfo.NewTitle  = aDest.GetName();
-            aInfo.SourceURL = aSource.GetMainURL();
+            aInfo.SourceURL = aSource.GetMainURL( INetURLObject::DECODE_TO_IURI );
             aInfo.MoveData  = FALSE;
             aAny <<= aInfo;
             aNewContent.executeCommand( OUString ( RTL_CONSTASCII_USTRINGPARAM( "transfer" ) ), aAny);
@@ -2736,7 +2736,7 @@ void SvxAutoCorrectLanguageLists::MakeUserStorage_Impl()
     }
     if (bConvert && !bError)
     {
-        SfxMedium aSrcMedium( aDest.GetMainURL(), STREAM_STD_READ, TRUE );
+        SfxMedium aSrcMedium( aDest.GetMainURL( INetURLObject::DECODE_TO_IURI ), STREAM_STD_READ, TRUE );
         SvStorageRef xSrcStg = aSrcMedium.GetStorage();
         SfxMedium aDstMedium( sUserAutoCorrFile, STREAM_STD_WRITE, TRUE );
         // Copy it to a UCBStorage
@@ -2783,7 +2783,7 @@ void SvxAutoCorrectLanguageLists::MakeUserStorage_Impl()
             aDstMedium.Commit();
             try
             {
-                ::ucb::Content aContent ( aDest.GetMainURL(), Reference < XCommandEnvironment > ());
+                ::ucb::Content aContent ( aDest.GetMainURL( INetURLObject::DECODE_TO_IURI ), Reference < XCommandEnvironment > ());
                 aContent.executeCommand ( OUString ( RTL_CONSTASCII_USTRINGPARAM ( "delete" ) ), makeAny ( sal_Bool (sal_True ) ) );
             }
             catch (...)
