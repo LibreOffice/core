@@ -50,7 +50,6 @@ Sub Main
 	oUcb = createUnoService(&quot;com.sun.star.ucb.SimpleFileAccess&quot;)
 	oBaseDocument = StarDesktop.LoadComponentFromURL(&quot;private:factory/swriter/web&quot;, &quot;_blank&quot;, 0, NoArgs())
 	oViewSettings = oBaseDocument.CurrentController.ViewSettings
-
 	oViewCursor = oBaseDocument.GetCurrentController.ViewCursor
 	ProgressBar = oBaseDocument.GetCurrentController.GetFrame.CreateStatusIndicator
 	ProgressBar.Start(&quot;&quot;, 100)
@@ -80,6 +79,7 @@ Sub Main
 	sBitmapPath = SOBitmapPath &amp; &quot;webwizard.bmp&quot;
 	DialogModel.ImagePreview.ImageURL = sBitmapPath
 	ToggleOptionButtons(DialogModel, bWithBackGraphic)
+	DialogModel.cbGoOn.DefaultButton = True
 	MainDialog.Execute
 
 GLOBALERRORHANDLER:

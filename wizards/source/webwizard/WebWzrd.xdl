@@ -8,7 +8,7 @@
   <dlg:button dlg:id="cbHelp" dlg:tab-index="1" dlg:left="66" dlg:top="190" dlg:width="50" dlg:height="14" dlg:tag="34200" dlg:help-url="HID:34200" dlg:value="cbHelp">
    <script:event script:event-name="on-performaction" script:location="application" script:macro-name="Tools.Recursive.ShowHelperDialog" script:language="StarBasic"/>
   </dlg:button>
-  <dlg:button dlg:id="cbGoOn" dlg:tab-index="2" dlg:left="214" dlg:top="190" dlg:width="50" dlg:height="14" dlg:help-url="HID:34205" dlg:value="cbGoOn">
+  <dlg:button dlg:id="cbGoOn" dlg:tab-index="2" dlg:left="214" dlg:top="190" dlg:width="50" dlg:height="14" dlg:help-url="HID:34205" dlg:default="true" dlg:value="cbGoOn">
    <script:event script:event-name="on-performaction" script:location="application" script:macro-name="WebWizard.HtmlAutoPilotBasic.EndDialog" script:language="StarBasic"/>
   </dlg:button>
   <dlg:img dlg:id="ImagePreview" dlg:tab-index="3" dlg:left="6" dlg:top="6" dlg:width="258" dlg:height="26"/>
