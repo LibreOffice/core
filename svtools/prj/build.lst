@@ -1,4 +1,4 @@
-st	svtools	:	toolkit ucbhelper unotools NULL
+st	svtools	:	toolkit ucbhelper unotools jpeg NULL
 st	svtools						usr1	-	all	st_mkout NULL
 st	svtools\inc					get	-	all	st_inc NULL
 st	svtools\inc\sane				get	-	all	st_incsa NULL
