@@ -2,9 +2,9 @@
  *
  *  $RCSfile: PropertyMaps.cxx,v $
  *
- *  $Revision: 1.39 $
+ *  $Revision: 1.40 $
  *
- *  last change: $Author: rt $ $Date: 2004-07-13 08:02:29 $
+ *  last change: $Author: rt $ $Date: 2004-08-20 08:12:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -102,6 +102,9 @@
 #endif
 #ifndef _XMLTEXTORIENTATIONHDL_HXX_
 #include "XMLTextOrientationHdl.hxx"
+#endif
+#ifndef _XMLSYMBOLTYPEPROPERTYHDL_HXX_
+#include "XMLSymbolTypePropertyHdl.hxx"
 #endif
 
 #ifndef _COM_SUN_STAR_CHART_CHARTAXISMARKS_HPP_
@@ -203,6 +206,14 @@ const XMLPropertyHandler* XMLChartPropHdlFactory::GetPropertyHandler( sal_Int32 
             case XML_SCH_TYPE_INTERPOLATION:
                 pHdl = new XMLEnumPropertyHdl( aXMLChartInterpolationTypeEnumMap,
                                                ::getCppuType((const sal_Int32*)0) );
+                break;
+            case XML_SCH_TYPE_SYMBOL_TYPE:
+                pHdl = new XMLSymbolTypePropertyHdl( false );
+                break;
+
+            case XML_SCH_TYPE_NAMED_SYMBOL:
+                pHdl = new XMLSymbolTypePropertyHdl( true );
+                break;
         }
         if( pHdl )
             PutHdlCache( nType, pHdl );
