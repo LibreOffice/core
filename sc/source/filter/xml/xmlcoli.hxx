@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xmlcoli.hxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-11 07:43:39 $
+ *  last change: $Author: vg $ $Date: 2005-03-23 12:56:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -104,9 +104,9 @@ class ScXMLTableColsContext : public SvXMLImportContext
     sal_Int32   nHeaderEndCol;
     sal_Int32   nGroupStartCol;
     sal_Int32   nGroupEndCol;
-    sal_Bool    bHeader : 1;
-    sal_Bool    bGroup : 1;
-    sal_Bool    bGroupDisplay : 1;
+    sal_Bool    bHeader;
+    sal_Bool    bGroup;
+    sal_Bool    bGroupDisplay;
 
     const ScXMLImport& GetScImport() const { return (const ScXMLImport&)GetImport(); }
     ScXMLImport& GetScImport() { return (ScXMLImport&)GetImport(); }
