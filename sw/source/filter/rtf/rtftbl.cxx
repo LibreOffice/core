@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtftbl.cxx,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2002-06-03 17:29:46 $
+ *  last change: $Author: cmc $ $Date: 2002-07-31 13:51:32 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -80,6 +80,9 @@
 #endif
 #ifndef _SVX_BOXITEM_HXX
 #include <svx/boxitem.hxx>
+#endif
+#ifndef _SVX_FRMDIRITEM_HXX
+#include <svx/frmdiritem.hxx>
 #endif
 #ifndef _RTFTOKEN_H
 #include <svtools/rtftoken.h>
@@ -194,6 +197,7 @@ void SwRTFParser::ReadTable( int nToken )
     SwBoxFrmFmts aBoxFmts;
     SwTableBoxFmt* pBoxFmt = pDoc->MakeTableBoxFmt();
     BOOL bHeadlineRepeat = FALSE;
+    SvxFrameDirection eDir = FRMDIR_HORI_LEFT_TOP;
 
 #ifdef SET_TRGAPH
     SvxLRSpaceItem aLR;
@@ -289,8 +293,13 @@ void SwRTFParser::ReadTable( int nToken )
         case RTF_CLMGF:
         case RTF_CLVMGF:
         case RTF_CLVMRG:
+            break;
         case RTF_LTRROW:
+            eDir = FRMDIR_HORI_LEFT_TOP;
+            break;
         case RTF_RTLROW:
+            eDir = FRMDIR_HORI_RIGHT_TOP;
+            break;
         case RTF_TRBRDRB:
         case RTF_TRBRDRH:
         case RTF_TRBRDRL:
@@ -537,6 +546,7 @@ void SwRTFParser::ReadTable( int nToken )
             SwFmtFrmSize aSz( pFmt->GetFrmSize() );
             aSz.SetWidth( nTblSz );
             ((SfxItemSet&)pFmt->GetAttrSet()).Put( aSz );
+            ((SfxItemSet&)pFmt->GetAttrSet()).Put(SvxFrameDirectionItem(eDir));
 
             if( HORI_LEFT_AND_WIDTH == eAdjust && nLSpace )
             {
@@ -774,6 +784,11 @@ void SwRTFParser::CheckInsNewTblLine()
 /*************************************************************************
 
       $Log: not supported by cvs2svn $
+      Revision 1.6  2002/06/03 17:29:46  hr
+      #65293#: std::map<>::insert(std::pair<>) relies on member templates
+      which are currently switched off for the STLport-4.5.3/Forte 6 update 1
+      combintion. Use std::map<>::value_type() instead.
+
       Revision 1.5  2002/05/29 10:56:09  cmc
       #99290# I hate sunpro
 

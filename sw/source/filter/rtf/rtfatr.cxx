@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rtfatr.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: cmc $ $Date: 2002-07-31 10:18:46 $
+ *  last change: $Author: cmc $ $Date: 2002-07-31 13:51:31 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -533,6 +533,11 @@ void OutRTF_SfxItemSet( SwRTFWriter& rWrt, const SfxItemSet& rSet,
     {
         if (pOut = aRTFAttrFnTab[RES_PARATR_ADJUST - RES_CHRATR_BEGIN])
             (*pOut)(rWrt, rSet.Get(RES_PARATR_ADJUST));
+    }
+    if (rWrt.pFlyFmt && !rWrt.bOutPageDesc && !bFrameDirOut)
+    {
+        if (pOut = aRTFAttrFnTab[RES_FRAMEDIR - RES_CHRATR_BEGIN])
+            (*pOut)(rWrt, rSet.Get(RES_FRAMEDIR));
     }
 
     if( aAsian.Count() || aCmplx.Count() ||aLatin.Count() )
@@ -1670,9 +1675,11 @@ Writer& OutRTF_SwTblNode( Writer& rWrt, SwTableNode & rNode )
     }
 */
 
+    const SwFrmFmt *pFmt = rTbl.GetFrmFmt();
+    ASSERT(pFmt, "Impossible");
     {
         Point aPt;
-        SwRect aRect( rTbl.GetFrmFmt()->FindLayoutRect( FALSE, &aPt ));
+        SwRect aRect( pFmt->FindLayoutRect( FALSE, &aPt ));
         if( aRect.IsEmpty() )
         {
             // dann besorge mal die Seitenbreite ohne Raender !!
@@ -1691,17 +1698,17 @@ Writer& OutRTF_SwTblNode( Writer& rWrt, SwTableNode & rNode )
             nPageSize = aRect.Width();
     }
 
-    SwTwips nTblSz = rTbl.GetFrmFmt()->GetFrmSize().GetWidth();
+    SwTwips nTblSz = pFmt->GetFrmSize().GetWidth();
 
     ByteString aTblAdjust( sRTF_TRQL );
-    switch( rTbl.GetFrmFmt()->GetHoriOrient().GetHoriOrient() )
+    switch( pFmt->GetHoriOrient().GetHoriOrient() )
     {
     case HORI_CENTER:   aTblAdjust = sRTF_TRQC; break;
     case HORI_RIGHT:    aTblAdjust = sRTF_TRQR; break;
     case HORI_NONE:
     case HORI_LEFT_AND_WIDTH:
             {
-                const SvxLRSpaceItem& rLRSp = rTbl.GetFrmFmt()->GetLRSpace();
+                const SvxLRSpaceItem& rLRSp = pFmt->GetLRSpace();
                 nTblOffset = rLRSp.GetLeft();
                 nPageSize -= (nTblOffset + rLRSp.GetRight());
                 aTblAdjust += sRTF_TRLEFT;
@@ -1710,6 +1717,9 @@ Writer& OutRTF_SwTblNode( Writer& rWrt, SwTableNode & rNode )
             break;
 //  case case FLY_HORI_FULL:
     }
+
+    if (rRTFWrt.TrueFrameDirection(*pFmt) == FRMDIR_HORI_RIGHT_TOP)
+        aTblAdjust += sRTF_RTLROW;
 
     // ist die Tabelle wesentlich (PageSize + 10%) groesser als die Seite,
     // dann sind die Box-Breiten relative Angaben.
@@ -3570,13 +3580,19 @@ static Writer& OutRTF_SvxFrmDir( Writer& rWrt, const SfxPoolItem& rHt )
 {
     // write it only for pasgedesc's - not for frames
     SwRTFWriter& rRTFWrt = ((SwRTFWriter&)rWrt);
-    const SvxFrameDirectionItem& rItem = (const SvxFrameDirectionItem&)rHt;
+    SvxFrameDirectionItem aItem((const SvxFrameDirectionItem&)rHt);
     USHORT nVal = 0;
     const sal_Char* pStr = 0;
     bool bRTL = false;
 
-    switch( rItem.GetValue() )
+    if (rRTFWrt.pFlyFmt)
+        aItem.SetValue(rRTFWrt.TrueFrameDirection(*rRTFWrt.pFlyFmt));
+
+    switch (aItem.GetValue())
     {
+        case FRMDIR_ENVIRONMENT:
+            ASSERT(0, "Not expected to see FRMDIR_ENVIRONMENT here");
+            break;
         case FRMDIR_VERT_TOP_RIGHT:
             nVal = 1;
             pStr = sRTF_FRMTXTBRLV;
@@ -3585,8 +3601,9 @@ static Writer& OutRTF_SvxFrmDir( Writer& rWrt, const SfxPoolItem& rHt )
             bRTL = true;
 //          nVal = 3;
 //          A val of three isn't working as expected in word :-( so leave it
-//          as normal ltr 0 textflow with rtl sect property
-            pStr = sRTF_FRMTXTBRL;
+//          as normal ltr 0 textflow with rtl sect property, neither does
+//          the frame textflow
+//          pStr = sRTF_FRMTXTBRL;
             break;
         case FRMDIR_VERT_TOP_LEFT:
             nVal = 4;
