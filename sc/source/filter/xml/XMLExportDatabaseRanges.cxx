@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportDatabaseRanges.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hr $ $Date: 2004-04-13 12:28:49 $
+ *  last change: $Author: hr $ $Date: 2004-08-02 16:30:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -226,6 +226,7 @@ void ScXMLExportDatabaseRanges::WriteImportDescriptor(const uno::Sequence <beans
 {
     sal_Int32 nProperties = aImportDescriptor.getLength();
     rtl::OUString sDatabaseName;
+    rtl::OUString sConRes;
     rtl::OUString sSourceObject;
     sheet::DataImportMode nSourceType;
     sal_Bool bNative;
@@ -235,6 +236,11 @@ void ScXMLExportDatabaseRanges::WriteImportDescriptor(const uno::Sequence <beans
         {
             uno::Any aDatabaseName = aImportDescriptor[i].Value;
             aDatabaseName >>= sDatabaseName;
+        }
+        else if (aImportDescriptor[i].Name == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_CONRES)))
+        {
+            uno::Any aDatabaseName = aImportDescriptor[i].Value;
+            aDatabaseName >>= sConRes;
         }
         else if (aImportDescriptor[i].Name == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNONAME_SRCOBJ)))
         {
@@ -257,27 +263,45 @@ void ScXMLExportDatabaseRanges::WriteImportDescriptor(const uno::Sequence <beans
         case sheet::DataImportMode_NONE : break;
         case sheet::DataImportMode_QUERY :
         {
-            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DATABASE_NAME, sDatabaseName);
+            if (sDatabaseName.getLength())
+                rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DATABASE_NAME, sDatabaseName);
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_QUERY_NAME, sSourceObject);
             SvXMLElementExport aElemID(rExport, XML_NAMESPACE_TABLE, XML_DATABASE_SOURCE_QUERY, sal_True, sal_True);
+            if (sConRes.getLength())
+            {
+                rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, sConRes );
+                SvXMLElementExport aElemCR(rExport, XML_NAMESPACE_FORM, XML_CONNECTION_RESOURCE, sal_True, sal_True);
+            }
             rExport.CheckAttrList();
         }
         break;
         case sheet::DataImportMode_TABLE :
         {
-            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DATABASE_NAME, sDatabaseName);
+            if (sDatabaseName.getLength())
+                rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DATABASE_NAME, sDatabaseName);
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_TABLE_NAME, sSourceObject);
             SvXMLElementExport aElemID(rExport, XML_NAMESPACE_TABLE, XML_DATABASE_SOURCE_TABLE, sal_True, sal_True);
+            if (sConRes.getLength())
+            {
+                rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, sConRes );
+                SvXMLElementExport aElemCR(rExport, XML_NAMESPACE_FORM, XML_CONNECTION_RESOURCE, sal_True, sal_True);
+            }
             rExport.CheckAttrList();
         }
         break;
         case sheet::DataImportMode_SQL :
         {
-            rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DATABASE_NAME, sDatabaseName);
+            if (sDatabaseName.getLength())
+                rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_DATABASE_NAME, sDatabaseName);
             rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_SQL_STATEMENT, sSourceObject);
             if (!bNative)
                 rExport.AddAttribute(XML_NAMESPACE_TABLE, XML_PARSE_SQL_STATEMENT, XML_TRUE);
             SvXMLElementExport aElemID(rExport, XML_NAMESPACE_TABLE, XML_DATABASE_SOURCE_SQL, sal_True, sal_True);
+            if (sConRes.getLength())
+            {
+                rExport.AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, sConRes );
+                SvXMLElementExport aElemCR(rExport, XML_NAMESPACE_FORM, XML_CONNECTION_RESOURCE, sal_True, sal_True);
+            }
             rExport.CheckAttrList();
         }
         break;
