@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.64 $
+ *  $Revision: 1.65 $
  *
- *  last change: $Author: ssa $ $Date: 2002-09-25 14:06:10 $
+ *  last change: $Author: ssa $ $Date: 2002-10-08 13:24:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1919,6 +1919,7 @@ void SalFrame::SetPointer( PointerStyle ePointerStyle )
     { 0, 0, SAL_RESID_POINTER_PIVOT_COL },          // POINTER_PIVOT_COL
     { 0, 0, SAL_RESID_POINTER_PIVOT_ROW },          // POINTER_PIVOT_ROW
     { 0, 0, SAL_RESID_POINTER_PIVOT_FIELD },        // POINTER_PIVOT_FIELD
+    { 0, 0, SAL_RESID_POINTER_PIVOT_DELETE },       // POINTER_PIVOT_DELETE
     { 0, 0, SAL_RESID_POINTER_CHAIN },              // POINTER_CHAIN
     { 0, 0, SAL_RESID_POINTER_CHAIN_NOTALLOWED },   // POINTER_CHAIN_NOTALLOWED
     { 0, 0, SAL_RESID_POINTER_TIMEEVENT_MOVE },     // POINTER_TIMEEVENT_MOVE
@@ -1938,7 +1939,7 @@ void SalFrame::SetPointer( PointerStyle ePointerStyle )
     { 0, 0, SAL_RESID_POINTER_TEXT_VERTICAL }       // POINTER_TEXT_VERTICAL
     };
 
-#if POINTER_COUNT != 87
+#if POINTER_COUNT != 88
 #error New Pointer must be defined!
 #endif
 

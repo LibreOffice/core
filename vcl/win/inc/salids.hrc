@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salids.hrc,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: th $ $Date: 2000-11-15 20:52:59 $
+ *  last change: $Author: ssa $ $Date: 2002-10-08 13:23:41 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -139,6 +139,7 @@
 #define SAL_RESID_POINTER_AUTOSCROLL_NSWE           10069
 #define SAL_RESID_POINTER_AIRBRUSH                  10070
 #define SAL_RESID_POINTER_TEXT_VERTICAL             10071
+#define SAL_RESID_POINTER_PIVOT_DELETE              10072
 
 #define SAL_RESID_BITMAP_50                         11000
 

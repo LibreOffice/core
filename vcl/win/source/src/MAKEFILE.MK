@@ -3,8 +3,8 @@
 #*	  $Workfile:   makefile.  $
 #*
 #*	  Ersterstellung	TH 01.04.97
-#*	  Letzte Aenderung	$Author: th $ $Date: 2000-11-15 20:44:59 $
-#*	  $Revision: 1.2 $
+#*	  Letzte Aenderung	$Author: ssa $ $Date: 2002-10-08 13:24:18 $
+#*	  $Revision: 1.3 $
 #*
 #*	  $Logfile:   T:/vcl/win/source/src/makefile.__v  $
 #*
@@ -80,6 +80,7 @@ RCDEPN= 	nullptr.cur 		\
             pivotcol.cur		\
             pivotrow.cur		\
             pivotfld.cur		\
+            pivotdel.cur		\
             chain.cur			\
             chainnot.cur		\
             timemove.cur		\
