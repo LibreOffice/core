@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.43 $
+#   $Revision: 1.44 $
 #
-#   last change: $Author: hjs $ $Date: 2001-05-07 12:00:27 $
+#   last change: $Author: hjs $ $Date: 2001-05-09 09:06:10 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -990,6 +990,16 @@ LIB:=$(LB);$(SLB);$(ILIB)
 .IF "$(CPUNAME)" == ""
 CPUNAME=CPUNAME_HAS_TO_BE_SET_IN_ENVIRONMENT
 .ENDIF
+
+.IF "$(UDK_MAJOR)"!=""
+SCPDEFS+=-DUDK_MAJOR=$(UDK_MAJOR)
+.ENDIF			# "$(UDK_MAJOR)"!=""
+.IF "$(UDK_MINOR)"!=""
+SCPDEFS+=-DUDK_MINOR=$(UDK_MINOR)
+.ENDIF			# "$(UDK_MINOR)"!=""
+.IF "$(UDK_MICRO)"!=""
+SCPDEFS+=-DUDK_MICRO=$(UDK_MICRO)
+.ENDIF			# "$(UDK_MICRO)"!=""
 
 UNOIDLDEFS+=-DSUPD=$(UPD) -DUPD=$(UPD)
 
