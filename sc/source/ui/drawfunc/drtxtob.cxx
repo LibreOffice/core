@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drtxtob.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-21 11:11:10 $
+ *  last change: $Author: nn $ $Date: 2001-05-21 18:18:24 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -65,107 +65,6 @@
 
 #pragma hdrstop
 
-//------------------------------------------------------------------------
-
-// T
-#define _BIGINT_HXX
-#define _SFXMULTISEL_HXX
-#define _STACK_HXX
-#define _QUEUE_HXX
-#define _DYNARR_HXX
-#define _TREELIST_HXX
-#define _CACHESTR_HXX
-
-//SV
-//#define _CLIP_HXX
-#define _CONFIG_HXX
-#define _CURSOR_HXX
-#define _FONTDLG_HXX
-#define _PRVWIN_HXX
-
-#if defined  WIN
-#define _MENUBTN_HXX
-#endif
-
-
-//svtools
-#define _SCRWIN_HXX
-#define _RULER_HXX
-#define _TABBAR_HXX
-#define _VALUESET_HXX
-#define _STDMENU_HXX
-#define _STDCTRL_HXX
-// #define _CTRLBOX_HXX
-#define _CTRLTOOL_HXX
-#define _EXTATTR_HXX
-#define _FRM3D_HXX
-
-//SVTOOLS
-#define _SVTREELIST_HXX
-#define _FILTER_HXX
-#define _SVLBOXITM_HXX
-#define _SVTREEBOX_HXX
-#define _SVICNVW_HXX
-#define _SVTABBX_HXX
-
-// SFX
-#define _SFXAPPWIN_HXX
-#define _SFX_SAVEOPT_HXX
-//#define _SFX_CHILDWIN_HXX
-//#define _SFXCTRLITEM_HXX
-#define _SFXPRNMON_HXX
-#define _INTRO_HXX
-#define _SFXMSGDESCR_HXX
-#define _SFXMSGPOOL_HXX
-#define _SFXFILEDLG_HXX
-#define _PASSWD_HXX
-#define _SFXTBXCTRL_HXX
-#define _SFXSTBITEM_HXX
-#define _SFXMNUITEM_HXX
-#define _SFXIMGMGR_HXX
-#define _SFXTBXMGR_HXX
-#define _SFXSTBMGR_HXX
-#define _SFX_MINFITEM_HXX
-#define _SFXEVENT_HXX
-
-
-
-//svdraw.hxx
-#define _SDR_NOTRANSFORM        // Transformationen, selten verwendet
-#define _SDR_NOTOUCH            // Hit-Tests, selten verwendet
-
-#define _SDR_NOEXTDEV           // ExtOutputDevice
-//#define   _SDR_NOUNDO             // Undo-Objekte
-#define _SDR_NOSURROGATEOBJ     // SdrObjSurrogate
-#define _SDR_NOPAGEOBJ          // SdrPageObj
-#define _SDR_NOVIRTOBJ          // SdrVirtObj
-#define _SDR_NOGROUPOBJ         // SdrGroupObj
-//#define _SDR_NOTEXTOBJ          // SdrTextObj
-#define _SDR_NOPATHOBJ          // SdrPathObj
-#define _SDR_NOEDGEOBJ          // SdrEdgeObj
-//#define _SDR_NORECTOBJ          // SdrRectObj
-#define _SDR_NOCAPTIONOBJ       // SdrCaptionObj
-#define _SDR_NOCIRCLEOBJ        // SdrCircleObj
-#define _SDR_NOGRAFOBJ          // SdrGrafObj
-//#define _SDR_NOOLE2OBJ          // SdrOle2Obj
-
-
-// si.hxx:
-//#define _SI_HXX
-#define _SIDLL_HXX
-
-#define SI_NOITEMS
-//#define SI_NODRW
-#define SI_NOOTHERFORMS
-#define SI_NOSBXCONTROLS
-#define SI_NOCONTROL
-#define _VCATTR_HXX
-#define _VCONT_HXX
-#define _VCTRLS_HXX
-//#define _VCSBX_HXX
-//#define _VCDRWOBJ_HXX
-#define _VCBRW_HXX
-
 //-------------------------------------------------------------------------
 
 #include "scitems.hxx"
@@ -192,6 +91,7 @@
 #include <svx/udlnitem.hxx>
 #include <svx/wghtitem.hxx>
 #include <sfx2/app.hxx>
+#include <sfx2/dispatch.hxx>
 #include <sfx2/objface.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/request.hxx>
@@ -206,7 +106,6 @@
 #include "drtxtob.hxx"
 #include "viewdata.hxx"
 #include "document.hxx"
-#include "drwlayer.hxx"
 #include "drawview.hxx"
 #include "viewutil.hxx"
 #include "scresid.hxx"
@@ -407,15 +306,24 @@ void __EXPORT ScDrawTextObjectBar::Execute( SfxRequest &rReq )
             }
             break;
 
+        case SID_ENABLE_HYPHENATION:
         case SID_TEXTDIRECTION_LEFT_TO_RIGHT:
         case SID_TEXTDIRECTION_TOP_TO_BOTTOM:
             pView->ScEndTextEdit();                 // end text edit before switching direction
             ExecuteGlobal( rReq );
+            // restore consistent state between shells and functions:
+            pViewData->GetDispatcher().Execute(SID_OBJECT_SELECT, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
             break;
 
+#if 0
+        // Hyphenation is handled above - text edit is ended
         case SID_ENABLE_HYPHENATION:
+            // force loading of hyphenator (object is skipped in repaint)
+            ((ScDrawLayer*)pView->GetModel())->UseHyphenator();
+            pOutliner->SetHyphenator( LinguMgr::GetHyphenator() );
             ExecuteGlobal( rReq );
             break;
+#endif
     }
 }
 

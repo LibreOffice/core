@@ -2,9 +2,9 @@
  *
  *  $RCSfile: document.hxx,v $
  *
- *  $Revision: 1.36 $
+ *  $Revision: 1.37 $
  *
- *  last change: $Author: sab $ $Date: 2001-05-11 18:59:52 $
+ *  last change: $Author: nn $ $Date: 2001-05-21 18:15:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1516,6 +1516,7 @@ private: // CLOOK-Impl-Methoden
     void    DrawCopyPage( USHORT nOldPos, USHORT nNewPos );
 
     void    UpdateDrawPrinter();
+    void    UpdateDrawLanguages();
     void    InitClipPtrs( ScDocument* pSourceDoc );
 
     void    LoadDdeLinks(SvStream& rStream);

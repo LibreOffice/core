@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drawview.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-11 08:37:53 $
+ *  last change: $Author: nn $ $Date: 2001-05-21 18:17:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -284,6 +284,8 @@ void ScDrawView::InvalidateAttribs()
     rBindings.Invalidate( SID_GRFFILTER_POPART );
     rBindings.Invalidate( SID_GRFFILTER_SEPIA );
     rBindings.Invalidate( SID_GRFFILTER_SOLARIZE );
+
+    rBindings.Invalidate( SID_ENABLE_HYPHENATION );
 }
 
 void ScDrawView::InvalidateDrawTextAttrs()

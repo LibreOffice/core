@@ -2,9 +2,9 @@
  *
  *  $RCSfile: drwlayer.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2001-04-18 15:04:25 $
+ *  last change: $Author: nn $ $Date: 2001-05-21 18:15:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -121,6 +121,7 @@ private:
     SdrUndoGroup*   pUndoGroup;
     BOOL            bRecording;
     BOOL            bAdjustEnabled;
+    BOOL            bHyphenatorSet;
 
 private:
     void            MoveAreaTwips( USHORT nTab, const Rectangle& rArea, const Point& rMove,
@@ -156,6 +157,7 @@ public:
     ScDocument*     GetDocument() const { return pDoc; }
 
     void            UpdateBasic();              // DocShell-Basic in DrawPages setzen
+    void            UseHyphenator();
 
     void            Load( SvStream& rStream );
     void            Store( SvStream& rStream ) const;

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: output3.cxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-14 08:43:38 $
+ *  last change: $Author: nn $ $Date: 2001-05-21 18:17:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,7 @@
 
 // INCLUDE ---------------------------------------------------------------
 
+#include <svx/eeitem.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdoole2.hxx>
 #include <svx/svdpage.hxx>
@@ -292,6 +293,10 @@ void ScOutputData::DrawSelectiveObjects( USHORT nLayer, const Rectangle& rRect,
 
                     if (bDraw)
                     {
+                        //  set model's hyphenator on demand
+                        if ( ((const SfxBoolItem&)pObject->GetItemSet().Get(EE_PARA_HYPHENATE)).GetValue() )
+                            pModel->UseHyphenator();
+
                         if (pObject == pEditObj)
                         {
                             aInfoRec.nPaintMode|=SDRPAINTMODE_TEXTEDIT;

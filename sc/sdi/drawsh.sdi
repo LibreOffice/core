@@ -132,6 +132,7 @@ interface TableDraw : Selection
     SID_ORIGINALSIZE        [ ExecMethod = ExecDrawFunc; StateMethod = GetDrawFuncState; Export = FALSE; ]
     SID_HYPERLINK_SETLINK   [ ExecMethod = ExecuteHLink; Export = FALSE; ]
     SID_HYPERLINK_GETLINK   [ StateMethod = GetHLinkState; Export = FALSE; ]
+    SID_ENABLE_HYPHENATION  [ ExecMethod = ExecDrawFunc; StateMethod = GetDrawFuncState; Export = FALSE; ]
 }
 
 
