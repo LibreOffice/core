@@ -2,9 +2,9 @@
  *
  *  $RCSfile: inettbc.cxx,v $
  *
- *  $Revision: 1.25 $
+ *  $Revision: 1.26 $
  *
- *  last change: $Author: svesik $ $Date: 2004-04-21 13:17:37 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 13:37:46 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -68,6 +68,13 @@
 #ifndef _COM_SUN_STAR_UNO_ANY_H_
 #include <com/sun/star/uno/Any.h>
 #endif
+#ifndef _COM_SUN_STAR_FRAME_XFRAMESSUPLLIER_HPP_
+#include <com/sun/star/frame/XFramesSupplier.hpp>
+#endif
+#ifndef _COM_SUN_STAR_TASK_XINTERACTIONHANDLER_HPP_
+#include <com/sun/star/task/XInteractionHandler.hpp>
+#endif
+
 #ifndef _SFXENUMITEM_HXX //autogen
 #include <svtools/eitem.hxx>
 #endif
@@ -84,12 +91,16 @@
 #include <svtools/folderrestriction.hxx>
 #endif
 #include <vcl/toolbox.hxx>
+#ifndef _TOOLKIT_HELPER_VCLUNOHELPER_HXX_
+#include <toolkit/unohlp.hxx>
+#endif
 #ifndef _VOS_THREAD_HXX //autogen
 #include <vos/thread.hxx>
 #endif
 #ifndef _VOS_MUTEX_HXX //autogen
 #include <vos/mutex.hxx>
 #endif
+#include <rtl/ustring.hxx>
 
 #include <svtools/itemset.hxx>
 #include <svtools/urihelper.hxx>
@@ -107,23 +118,28 @@
 #include "sfxtypes.hxx"
 #include "helper.hxx"
 
+using namespace ::rtl;
+using namespace ::com::sun::star::uno;
+using namespace ::com::sun::star::beans;
+using namespace ::com::sun::star::util;
+using namespace ::com::sun::star::frame;
+using namespace ::com::sun::star::task;
+
 //***************************************************************************
 // SfxURLToolBoxControl_Impl
 //***************************************************************************
 
 SFX_IMPL_TOOLBOX_CONTROL(SfxURLToolBoxControl_Impl,SfxStringItem)
 
-SfxURLToolBoxControl_Impl::SfxURLToolBoxControl_Impl( USHORT nId ,
-                                                ToolBox& rBox ,
-                                                SfxBindings& rBindings )
-        : SfxToolBoxControl( nId , rBox , rBindings )
-        , aURLForwarder( SID_CURRENT_URL, *this )
+SfxURLToolBoxControl_Impl::SfxURLToolBoxControl_Impl( USHORT nSlotId, USHORT nId, ToolBox& rBox )
+    : SfxToolBoxControl( nSlotId, nId, rBox )
 {
+    addStatusListener( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:CurrentURL" )));
 }
 
 SvtURLBox* SfxURLToolBoxControl_Impl::GetURLBox() const
 {
-    return (SvtURLBox*) GetToolBox().GetItemWindow(GetId());
+    return (SvtURLBox*)GetToolBox().GetItemWindow( GetId() );
 }
 
 //***************************************************************************
@@ -146,24 +162,38 @@ void SfxURLToolBoxControl_Impl::OpenURL( const String& rName, BOOL bNew ) const
     if ( !aName.Len() )
         return;
 
-    SfxViewFrame *pViewFrame = SfxViewFrame::Current();
-    DBG_ASSERT( pViewFrame, "No ViewFrame ?!" );
-    if ( pViewFrame )
+    Reference< XDispatchProvider > xDispatchProvider( m_xFrame, UNO_QUERY );
+    if ( xDispatchProvider.is() && m_xServiceManager.is() )
     {
-        pViewFrame = pViewFrame->GetTopViewFrame();
-        SfxAllItemSet aSet( pViewFrame->GetPool() );
-        aSet.Put( SfxStringItem( SID_FILE_NAME, aName ) );
-        aSet.Put( SfxFrameItem( SID_DOCFRAME , pViewFrame ? pViewFrame->GetFrame() : 0 ) );
-        aSet.Put( SfxStringItem( SID_REFERER, DEFINE_CONST_UNICODE(SFX_REFERER_USER) ) );
-        aSet.Put( SfxStringItem( SID_TARGETNAME, String::CreateFromAscii("_default") ) );
+        URL             aTargetURL;
+        ::rtl::OUString aTarget( ::rtl::OUString::createFromAscii( "_default" ));
 
-        if ( aFilter.Len() )
+        aTargetURL.Complete = aName;
+
+        Reference < XURLTransformer > xTrans( m_xServiceManager->createInstance(
+                                                OUString::createFromAscii( "com.sun.star.util.URLTransformer" )),
+                                            UNO_QUERY );
+        xTrans->parseStrict( aTargetURL );
+        Reference< XDispatch > xDispatch = xDispatchProvider->queryDispatch( aTargetURL, aTarget, 0 );
+        if ( xDispatch.is() )
         {
-            aSet.Put( SfxStringItem( SID_FILTER_NAME, aFilter ) );
-            aSet.Put( SfxStringItem( SID_FILE_FILTEROPTIONS, aOptions ) );
-        }
+            Sequence< PropertyValue > aArgs( 2 );
+            aArgs[0].Name = OUString::createFromAscii( "Referer" );
+            aArgs[0].Value = makeAny( ::rtl::OUString::createFromAscii( SFX_REFERER_USER ));
+            aArgs[1].Name = OUString( RTL_CONSTASCII_USTRINGPARAM( "FileName" ));
+            aArgs[1].Value = makeAny( OUString( aName ));
 
-        SFX_APP()->GetAppDispatcher_Impl()->Execute( SID_OPENURL, SFX_CALLMODE_RECORD, aSet );
+            if ( aFilter.Len() )
+            {
+                aArgs.realloc( 4 );
+                aArgs[2].Name = OUString::createFromAscii( "FilterOptions" );
+                aArgs[2].Value = makeAny( OUString( aOptions ));
+                aArgs[3].Name = OUString::createFromAscii( "FilterName" );
+                aArgs[3].Value = makeAny( OUString( aFilter ));
+            }
+
+            xDispatch->dispatch( aTargetURL, aArgs );
+        }
     }
 }
 
@@ -181,16 +211,7 @@ IMPL_LINK( SfxURLToolBoxControl_Impl, SelectHdl, void*, pVoid )
     String aName( pURLBox->GetURL() );
 
     if ( !pURLBox->IsTravelSelect() && aName.Len() )
-    {
-/*
-        aName = URIHelper::SmartRelToAbs( aName );
-        SfxPickList_Impl*  pPickList = SfxPickList_Impl::Get();
-        SfxPickEntry_Impl* pEntry = pPickList->GetHistoryPickEntryFromTitle( aName );
-        if ( !pEntry )
-            pPickList->SetCurHistoryPos( pURLBox->GetEntryPos( aName ) );
- */
         OpenURL( aName, FALSE );
-    }
 
     return 1L;
 }
@@ -199,9 +220,24 @@ IMPL_LINK( SfxURLToolBoxControl_Impl, OpenHdl, void*, pVoid )
 {
     SvtURLBox* pURLBox = GetURLBox();
     OpenURL( pURLBox->GetURL(), pURLBox->IsCtrlOpen() );
-    SfxViewFrame* pFrm = SfxViewFrame::Current();
-    if( pFrm )
-        pFrm->GetFrame()->GrabFocusOnComponent_Impl();
+
+    if ( m_xServiceManager.is() )
+    {
+        Reference< XFramesSupplier > xDesktop( m_xServiceManager->createInstance(
+                                                OUString::createFromAscii( "com.sun.star.frame.Desktop" )),
+                                             UNO_QUERY );
+        Reference< XFrame > xFrame( xDesktop->getActiveFrame(), UNO_QUERY );
+        if ( xFrame.is() )
+        {
+            Window* pWin = VCLUnoHelper::GetWindow( xFrame->getContainerWindow() );
+            if ( pWin )
+            {
+                pWin->GrabFocus();
+                pWin->ToTop( TOTOP_RESTOREWHENMIN );
+            }
+        }
+    }
+
     return 1L;
 }
 
@@ -278,13 +314,8 @@ SFX_IMPL_TOOLBOX_CONTROL(SfxCancelToolBoxControl_Impl,SfxBoolItem)
 
 //***************************************************************************
 
-SfxCancelToolBoxControl_Impl::SfxCancelToolBoxControl_Impl
-(
-    USHORT nId,
-    ToolBox& rBox,
-    SfxBindings& rBindings
-)
-:   SfxToolBoxControl( nId, rBox, rBindings )
+SfxCancelToolBoxControl_Impl::SfxCancelToolBoxControl_Impl( USHORT nSlotId, USHORT nId, ToolBox& rBox ) :
+    SfxToolBoxControl( nSlotId, nId, rBox )
 {
 }
 
@@ -328,8 +359,8 @@ SfxPopupWindow* SfxCancelToolBoxControl_Impl::CreatePopupWindow()
     ToolBox& rToolBox = GetToolBox();
     USHORT nId = bExecute ? nId = aMenu.Execute( &rToolBox, rToolBox.GetPointerPosPixel() ) : 0;
     GetToolBox().EndSelection();
-    ClearCache();
-    UpdateSlot();
+//  ClearCache();
+//  UpdateSlot();
     if ( nId )
     {
         String aSearchText = aMenu.GetItemText(nId);
