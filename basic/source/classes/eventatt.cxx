@@ -2,9 +2,9 @@
  *
  *  $RCSfile: eventatt.cxx,v $
  *
- *  $Revision: 1.16 $
+ *  $Revision: 1.17 $
  *
- *  last change: $Author: hjs $ $Date: 2002-04-16 15:30:44 $
+ *  last change: $Author: hr $ $Date: 2003-03-19 10:20:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -111,7 +111,7 @@
 
 //==================================================================================================
 
-#include <xmlscript/xmldlg_imexp.hxx>
+#include <xmlscript/dynload.hxx>
 #include <svtools/sbx.hxx>
 #include <sbunoobj.hxx>
 #include <sbstar.hxx>
@@ -585,10 +585,12 @@ void SAL_CALL DialogEventAttacher::attachEvents
 
 }
 
-
 void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite )
 {
-#ifndef NO_XMLSCRIPT
+    static ::xmlscript::XML_script * s_xmlscript = 0;
+    if (0 == s_xmlscript)
+        s_xmlscript = ::xmlscript::getXmlScript();
+
     Reference< XMultiServiceFactory > xMSF( comphelper::getProcessServiceFactory() );
     if( !xMSF.is() )
         return;
@@ -635,7 +637,7 @@ void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite )
 
     // Import the DialogModel
     Reference< XInputStream > xInput( xISP->createInputStream() );
-    ::xmlscript::importDialogModel( xInput, xDialogModel, xContext );
+    s_xmlscript->importDialogModel( xInput, xDialogModel, xContext );
 
     // Add dialog model to dispose vector
     Reference< XComponent > xDlgComponent( xDialogModel, UNO_QUERY );
@@ -658,7 +660,6 @@ void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, BOOL bWrite )
     aRetVal <<= xDlg;
     SbxVariableRef refVar = rPar.Get(0);
     unoToSbxValue( (SbxVariable*)refVar, aRetVal );
-#endif
 }
 
 
