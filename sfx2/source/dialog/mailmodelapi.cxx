@@ -2,9 +2,9 @@
  *
  *  $RCSfile: mailmodelapi.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: vg $ $Date: 2005-02-24 14:48:43 $
+ *  last change: $Author: kz $ $Date: 2005-03-01 19:59:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,8 +105,8 @@
 #ifndef _COM_SUN_STAR_SYSTEM_SIMPLEMAILCLIENTFLAGS_HPP_
 #include <com/sun/star/system/SimpleMailClientFlags.hpp>
 #endif
-#ifndef _DRAFTS_COM_SUN_STAR_FRAME_XMODULEMANAGER_HPP_
-#include <drafts/com/sun/star/frame/XModuleManager.hpp>
+#ifndef _COM_SUN_STAR_FRAME_XMODULEMANAGER_HPP_
+#include <com/sun/star/frame/XModuleManager.hpp>
 #endif
 #ifndef _RTL_TEXTENC_H
 #include <rtl/textench.h>
@@ -166,7 +166,7 @@ extern sal_Bool GetPasswd_Impl( const SfxItemSet* pSet, String& rPasswd );
 // --------------------------------------------------------------
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;
-using namespace ::drafts::com::sun::star::frame;
+using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::mozilla;
@@ -335,7 +335,7 @@ namespace
         rtl::OUString sModuleIdentifier;
         rtl::OUString sFactoryShortName;
         Reference < XModuleManager > xModuleManager( ::comphelper::getProcessServiceFactory()->createInstance(
-            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("drafts.com.sun.star.frame.ModuleManager")) ), UNO_QUERY );
+            ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.frame.ModuleManager")) ), UNO_QUERY );
 
         if ( _xModel.is() )
         {
@@ -343,7 +343,7 @@ namespace
             {
                 sModuleIdentifier = xModuleManager->identify( _xModel );
             }
-            catch ( ::drafts::com::sun::star::frame::UnknownModuleException& )
+            catch ( ::com::sun::star::frame::UnknownModuleException& )
             {
                 DBG_WARNING( "SfxHelp::GetHelpModuleName_Impl(): unknown module (help in help?)" );
             }
