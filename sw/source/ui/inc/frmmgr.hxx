@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmmgr.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-02 18:41:43 $
+ *  last change: $Author: hr $ $Date: 2004-03-08 14:08:06 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -205,6 +205,7 @@ public:
  --------------------------------------------------------------------*/
 
 // OD 18.09.2003 #i18732# - extend by new member <bFollowTextFlow>
+// OD 12.11.2003 #i22341# - extend by new member <pToCharCntntPos>
 struct SwFrmValid
 {
     RndStdIds           eArea;
@@ -216,6 +217,10 @@ struct SwFrmValid
     BOOL                bMirror;
     // OD 18.09.2003 #i18732#
     bool                bFollowTextFlow;
+    // OD 12.11.2003 #i22341# - proposed content position of character for
+    // to character anchored objects horizontal/vertical aligned at character
+    // respectively vertical aligned at top of line
+    const SwPosition* pToCharCntntPos;
 
     SwTwips nHPos;
     SwTwips nMaxHPos;
