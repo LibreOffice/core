@@ -2,9 +2,9 @@
  *
  *  $RCSfile: AnimationEffect.idl,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 13:54:45 $
+ *  last change: $Author: obo $ $Date: 2004-06-03 21:22:45 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -72,7 +72,7 @@
 /** specifies the animation effects for animating
     text or objects.
  */
-enum AnimationEffect
+published enum AnimationEffect
 {
     //-------------------------------------------------------------------------
     // DOCUMENTATION OMITTED FOR AnimationEffect::  NONE,
