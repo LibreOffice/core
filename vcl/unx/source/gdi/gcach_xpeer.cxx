@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_xpeer.cxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: hdu $ $Date: 2001-12-13 11:11:18 $
+ *  last change: $Author: hdu $ $Date: 2001-12-13 12:39:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -67,6 +67,8 @@
 
 // ---------------------------------------------------------------------------
 
+static int nRenderVersion = 0x00;
+
 X11GlyphPeer::X11GlyphPeer()
 :   mpDisplay(NULL)
 ,   mbForcedAA(false)
@@ -119,6 +121,7 @@ void X11GlyphPeer::SetDisplay( Display* _pDisplay, Visual* _pVisual )
 
     // #93033# disable XRENDER for now if XINERAMA is present
     // TODO: enable it once an XRENDER version is happy with xinerama
+    // on all chipsets
     if( XQueryExtension( mpDisplay, "XINERAMA", &nDummy, &nDummy, &nDummy ) )
         return;
 
@@ -155,6 +158,9 @@ void X11GlyphPeer::SetDisplay( Display* _pDisplay, Visual* _pVisual )
     pFunc = dlsym( pRenderLib, "XRenderAddGlyphs" );
     if( !pFunc ) return;
     pXRenderAddGlyphs               = (void(*)(Display*,GlyphSet,Glyph*,XGlyphInfo*,int,char*,int))pFunc;
+    pFunc = dlsym( pRenderLib, "XRenderFreeGlyphs" );
+    if( !pFunc ) return;
+    pXRenderFreeGlyphs               = (void(*)(Display*,GlyphSet,Glyph*,int))pFunc;
     pFunc = dlsym( pRenderLib, "XRenderCompositeString16" );
     if( !pFunc ) return;
     pXRenderCompositeString16       = (void(*)(Display*,int,Picture,Picture,XRenderPictFormat*,GlyphSet,int,int,int,int,unsigned short*,int))pFunc;
@@ -173,6 +179,7 @@ void X11GlyphPeer::SetDisplay( Display* _pDisplay, Visual* _pVisual )
 
     int nMajor, nMinor;
     (*pXRenderQueryVersion)( mpDisplay, &nMajor, &nMinor );
+    nRenderVersion = 16*nMajor + nMinor;
     // TODO: enable/disable things depending on version
 
     // the 8bit alpha mask format must be there
@@ -247,8 +254,8 @@ void X11GlyphPeer::RemovingGlyph( ServerFont& rServerFont, GlyphData& rGlyphData
             {
                 GlyphSet aGlyphSet = GetGlyphSet( rServerFont );
                 Glyph nGlyphId = GetGlyphId( rServerFont, nGlyphIndex );
-                // TODO: current version of XRENDER does not implement XRenderFreeGlyphs()
-                // (*pXRenderFreeGlyphs)( mpDisplay, aGlyphSet, &nGlyphId, 1 );
+                if( nRenderVersion >= 0x02 )
+                    (*pXRenderFreeGlyphs)( mpDisplay, aGlyphSet, &nGlyphId, 1 );
                 mnBytesUsed -= nHeight * ((nWidth + 3) & ~3);
             }
             break;

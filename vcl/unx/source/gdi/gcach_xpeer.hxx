@@ -2,9 +2,9 @@
  *
  *  $RCSfile: gcach_xpeer.hxx,v $
  *
- *  $Revision: 1.4 $
+ *  $Revision: 1.5 $
  *
- *  last change: $Author: pl $ $Date: 2001-08-27 09:42:34 $
+ *  last change: $Author: hdu $ $Date: 2001-12-13 12:40:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,7 @@ public:
     GlyphSet    (*pXRenderCreateGlyphSet)(Display*,XRenderPictFormat*);
     void        (*pXRenderFreeGlyphSet)(Display*,GlyphSet);
     void        (*pXRenderAddGlyphs)(Display*,GlyphSet,Glyph*,XGlyphInfo*,int,char*,int);
+    void        (*pXRenderFreeGlyphs)(Display*,GlyphSet,Glyph*,int);
     void        (*pXRenderCompositeString16)(Display*,int,Picture,Picture,XRenderPictFormat*,GlyphSet,int,int,int,int,unsigned short*,int);
     Picture     (*pXRenderCreatePicture)(Display*,Drawable,XRenderPictFormat*,unsigned long,XRenderPictureAttributes*);
     void        (*pXRenderSetPictureClipRegion)(Display*,Picture,XLIB_Region);
