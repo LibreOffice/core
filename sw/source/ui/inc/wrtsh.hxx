@@ -2,9 +2,9 @@
  *
  *  $RCSfile: wrtsh.hxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2004-09-09 10:16:42 $
+ *  last change: $Author: rt $ $Date: 2004-09-27 13:43:08 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -535,7 +535,7 @@ private:
     SW_DLLPRIVATE FASTBOOL _PrvWrd();
     SW_DLLPRIVATE FASTBOOL _FwdSentence();
     SW_DLLPRIVATE FASTBOOL _BwdSentence();
-    SW_DLLPRIVATE FASTBOOL _FwdPara();
+    FASTBOOL _FwdPara();
     SW_DLLPRIVATE FASTBOOL _BwdPara();
 
         //  Selektionen
