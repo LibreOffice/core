@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Common.xcs,v $
  *
- *  $Revision: 1.58 $
+ *  $Revision: 1.59 $
  *
- *  last change: $Author: jb $ $Date: 2002-11-20 17:03:38 $
+ *  last change: $Author: tpf $ $Date: 2002-11-21 16:15:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -619,6 +619,7 @@
 		</group>
 		<group oor:name="ObjectNames">
 			<info>
+				<author>MAV</author>
 				<desc xml:lang="en-US">Specifies the object names for the different Office modules.  Each module is assigned to a worldwide unique key. The different object names are filled by the setup.</desc>
 			</info>
 			<prop oor:name="Name" oor:type="xs:string" oor:localized="true">
@@ -798,6 +799,9 @@
 			</set>
 		</group>
 		<group oor:name="_3D_Engine">
+			<info>
+				<author>AW</author>
+			</info>
 			<prop oor:name="Dithering" oor:type="xs:boolean">
 				<!-- OldPath: 3D-Engine/Dithering -->
 				<!-- OldLocation: soffice.ini -->
@@ -2452,7 +2456,7 @@
 			<prop oor:name="PrintingModifiesDocument" oor:type="xs:boolean">
 				<!-- UIHints: Tools  Options - General  Print  [Section] PrinterOptions-->
 				<info>
-					<author>(MBA)</author>
+					<author>MBA</author>
 					<desc xml:lang="en-US">Specifies if printing a document can modify a document due to reformating.</desc>
 					<label xml:lang="en-US">(PrinterOptions) PrintingModifiesDocument</label>
 				</info>
@@ -2460,7 +2464,7 @@
 			</prop>
 			<group oor:name="Warning">
 				<info>
-					<author>(OS)</author>
+					<author>OS</author>
 					<desc xml:lang="en-US">Contains settings for print specific warnings.</desc>
 				</info>
 				<prop oor:name="PaperSize" oor:type="xs:boolean">
@@ -2468,7 +2472,7 @@
 					<!-- OldLocation: soffice.cfg -->
 					<!-- UIHints: Tools  Options - General  Print  [Section] Warnings -->
 					<info>
-						<author>(OS)</author>
+						<author>OS</author>
 						<desc xml:lang="en-US">Specifies if a warning should be displayed in case the printout requires a specific paper size</desc>
 						<label xml:lang="en-US">(Warnings) Paper size</label>
 					</info>
@@ -2479,7 +2483,7 @@
 					<!-- OldLocation: soffice.cfg -->
 					<!-- UIHints: Tools  Options - General  Print  [Section] Warnings -->
 					<info>
-						<author>(OS)</author>
+						<author>OS</author>
 						<desc xml:lang="en-US">Specifies if a warning should be displayed in case the printout requires a specific paper orientation</desc>
 						<label xml:lang="en-US">(Warnings) Paper orientation</label>
 					</info>
@@ -2490,7 +2494,7 @@
 					<!-- OldLocation: soffice.cfg -->
 					<!-- UIHints: Tools  Options - General  Print  [Section] Warnings -->
 					<info>
-						<author>(OS)</author>
+						<author>OS</author>
 						<desc xml:lang="en-US">Specifies if a warning should be displayed in case the printer defined in the document was not found</desc>
 						<label xml:lang="en-US">(Warnings) Not found</label>
 					</info>
@@ -3249,6 +3253,9 @@
 			</group>
 		</group>
 		<group oor:name="DateFormat">
+			<info>
+				<author>NN</author>
+			</info>
 			<prop oor:name="TwoDigitYear" oor:type="xs:int">
 				<!-- OldPath: General/Other -->
 				<!-- OldLocation: Soffice.cfg -->
@@ -4627,6 +4634,9 @@
 			</group>
 		</group>
 		<group oor:name="Accessibility">
+			<info>
+				<author>OS</author>
+			</info>
 			<prop oor:name="IsForDrawings" oor:type="xs:boolean">
 				<info>
 					<author>AF</author>
@@ -4717,7 +4727,11 @@
 				<value>false</value>
 			</prop>
 		</group>
-		<set oor:name="OfficeObjects" oor:node-type="ObjectNames"/>
+		<set oor:name="OfficeObjects" oor:node-type="ObjectNames">
+			<info>
+				<author>MAV</author>
+			</info>
+		</set>
 		<group oor:name="ExternalApps" oor:extensible="true">
 			<info>
 				<author>OBR</author>

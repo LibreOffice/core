@@ -3,9 +3,9 @@
  *
  *  $RCSfile: VCL.xcs,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: tpf $ $Date: 2002-10-25 17:15:48 $
+ *  last change: $Author: tpf $ $Date: 2002-11-21 16:15:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -143,6 +143,7 @@
 		</group>
 		<group oor:name="LocalizedDefaultFonts" oor:extensible="true">
 			<info>
+				<author>PL</author>
 				<desc xml:lang="en-US">Contains a localized table of default font lists organized as a set of sets ofkey/value pairs. The outer set denotes the language (e.g. "en-US") so that default fonts can be declared for different language contexts. Each value is a font list separated by ';' that will be searched in ascending order to find the specified default font. The following default fonts are defined:
 										CJK_DISPLAY, CJK_HEADING, CJK_PRESENTATION, CJK_SPREADSHEET, CJK_TEXT, CTL_DISPLAY, CTL_HEADING, CTL_PRESENTATION, CTL_SPREADSHEET, CTL_TEXT, FIXED, LATIN_DISPLAY, LATIN_FIXED, LATIN_HEADING, LATIN_PRESENTATION, LATIN_SPREADSHEET, LATIN_TEXT, SANS, SANS_UNICODE, SERIF, SYMBOL, UI_FIXED, UI_SANS
 										The corresponding font lists are used for:
