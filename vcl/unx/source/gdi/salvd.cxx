@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salvd.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:43 $
+ *  last change: $Author: pl $ $Date: 2001-03-02 14:23:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -100,12 +100,12 @@ SalVirtualDevice* SalInstance::CreateVirtualDevice( SalGraphics* pGraphics,
     return pVDev;
 }
 
-final void SalInstance::DestroyVirtualDevice( SalVirtualDevice* pDevice )
+void SalInstance::DestroyVirtualDevice( SalVirtualDevice* pDevice )
 { delete pDevice; }
 
 // -=-= SalGraphicsData =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-final void SalGraphicsData::Init( SalVirtualDevice *pDevice,
+void SalGraphicsData::Init( SalVirtualDevice *pDevice,
                                   SalGraphics      *pGraphics )
 {
     SalDisplay *pDisplay  = pDevice->maVirDevData.GetDisplay();
@@ -131,7 +131,7 @@ final void SalGraphicsData::Init( SalVirtualDevice *pDevice,
 
 // -=-= SalVirDevData / SalVirtualDevice -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-final BOOL SalVirDevData::Init( SalDisplay *pDisplay,
+BOOL SalVirDevData::Init( SalDisplay *pDisplay,
                                 long nDX, long nDY,
                                 USHORT nBitCount )
 {
@@ -150,7 +150,7 @@ final BOOL SalVirDevData::Init( SalDisplay *pDisplay,
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-final inline SalVirDevData::SalVirDevData()
+inline SalVirDevData::SalVirDevData()
 {
     pDisplay_               = (SalDisplay*)ILLEGAL_POINTER;
     pGraphics_              = NULL;
@@ -161,10 +161,10 @@ final inline SalVirDevData::SalVirDevData()
     bGraphics_              = FALSE;
 }
 
-final SalVirtualDevice::SalVirtualDevice() {}
+SalVirtualDevice::SalVirtualDevice() {}
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-beta  inline SalVirDevData::~SalVirDevData()
+inline SalVirDevData::~SalVirDevData()
 {
     if( pGraphics_ )
     {
@@ -176,7 +176,7 @@ beta  inline SalVirDevData::~SalVirDevData()
         XFreePixmap( GetXDisplay(), GetDrawable() );
 }
 
-final SalVirtualDevice::~SalVirtualDevice()
+SalVirtualDevice::~SalVirtualDevice()
 {}
 
 // -=-= #defines -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -188,7 +188,7 @@ final SalVirtualDevice::~SalVirtualDevice()
 
 // -=-= SalVirtualDevice -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-final SalGraphics* SalVirtualDevice::GetGraphics()
+SalGraphics* SalVirtualDevice::GetGraphics()
 {
     if( maVirDevData.bGraphics_ )
         return NULL;
@@ -199,10 +199,10 @@ final SalGraphics* SalVirtualDevice::GetGraphics()
     return maVirDevData.pGraphics_;
 }
 
-final void SalVirtualDevice::ReleaseGraphics( SalGraphics* )
+void SalVirtualDevice::ReleaseGraphics( SalGraphics* )
 { maVirDevData.bGraphics_ = FALSE; }
 
-final BOOL SalVirtualDevice::SetSize( long nDX, long nDY )
+BOOL SalVirtualDevice::SetSize( long nDX, long nDY )
 {
     if( !nDX ) nDX = 1;
     if( !nDY ) nDY = 1;

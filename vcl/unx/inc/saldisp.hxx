@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldisp.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: cp $ $Date: 2001-03-02 07:51:41 $
+ *  last change: $Author: pl $ $Date: 2001-03-02 14:23:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -164,7 +164,7 @@ enum SalWM { olwm,      // Open Look
 // -=-= SalICCCM =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 class SalICCCM
 {
-    unknown                 STDAPI( SalICCCM )
+    STDAPI( SalICCCM )
 
 public:
             Atom            aWM_Protocols_;     // Window manager
@@ -215,7 +215,7 @@ enum SalRGB { RGB,  RBG,
 // -=-= SalVisual =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class SalVisual : public XVisualInfo
 {
-    unknown                 STDAPI( SalVisual )
+    STDAPI( SalVisual )
 
             SalRGB          eRGBMode_;
             int             nRedShift_;
@@ -240,7 +240,7 @@ public:
 // -=-= SalColormap/SalColormapRef=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 class SalColormap : public SvRefBase
 {
-    unknown                 STDAPI( SalColormap )
+    STDAPI( SalColormap )
 
             SalDisplay     *pDisplay_;
             Colormap        hColormap_;
@@ -292,7 +292,7 @@ struct YieldEntry;
 
 class SalXLib
 {
-    unknown                 STDAPI( SalXLib )
+    STDAPI( SalXLib )
 
             XtAppContext    pApplicationContext_;
             timeval         Timeout_;
@@ -352,7 +352,7 @@ DECLARE_LIST( SalFontCache, ExtendedFontStruct* )
 
 class SalDisplay
 {
-    unknown                 STDAPI( SalDisplay )
+    STDAPI( SalDisplay )
 
             SalXLib        *pXLib_;
             SalI18N_InputMethod         *mpInputMethod;

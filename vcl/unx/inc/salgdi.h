@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.h,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: pl $ $Date: 2001-02-16 12:12:23 $
+ *  last change: $Author: pl $ $Date: 2001-03-02 14:23:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 //                                                                            //
 // (C) 1997 Star Division GmbH, Hamburg, Germany                              //
 //                                                                            //
-// $Revision: 1.6 $  $Author: pl $  $Date: 2001-02-16 12:12:23 $   //
+// $Revision: 1.7 $  $Author: pl $  $Date: 2001-03-02 14:23:27 $   //
 //                                                                            //
 // $Workfile:   salgdi.h  $                                                   //
 //  $Modtime:   10 Sep 1997 11:55:36  $                                       //
@@ -328,11 +328,11 @@ inline Pixel SalGraphicsData::GetPixel( SalColor nSalColor ) const
                                                     #b, __FILE__, __LINE__ ) \
                                         : 0 )
 #else
-#define stderr0( s )            nop
-#define stderr1( s, a )         nop
-#define stderr2( s, a, b )      nop
-#define stderr3( s, a, b, c )   nop
-#define stdass0( b )            nop
+#define stderr0( s )            ;
+#define stderr1( s, a )     ;
+#define stderr2( s, a, b )  ;
+#define stderr3( s, a, b, c )   ;
+#define stdass0( b )            ;
 #endif
 #endif // _SV_SALGDI_H
 

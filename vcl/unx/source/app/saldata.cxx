@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldata.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: obr $ $Date: 2001-02-09 14:48:32 $
+ *  last change: $Author: pl $ $Date: 2001-03-02 14:23:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -296,13 +296,13 @@ static oslSignalAction SalSignalHdl (void* pData, oslSignalInfo* pInfo)
 }
 
 
-final static int sal_XErrorHdl( Display *pDisplay, XErrorEvent *pEvent )
+static int sal_XErrorHdl( Display *pDisplay, XErrorEvent *pEvent )
 {
     GetSalData()->XError( pDisplay, pEvent );
     return 0;
 }
 
-final static int sal_XIOErrorHdl( Display *pDisplay )
+static int sal_XIOErrorHdl( Display *pDisplay )
 {
     SalData    *pSalData    = GetSalData();
     SalDisplay *pSalDisplay = pSalData->GetDisplay( pDisplay );
@@ -320,7 +320,7 @@ final static int sal_XIOErrorHdl( Display *pDisplay )
     return 0;
 }
 
-final static void sal_XtErrorHdl( XLIB_String sMsg )
+static void sal_XtErrorHdl( XLIB_String sMsg )
 {
 #ifdef DBG_UTIL
     fprintf( stderr, "X Toolkit Error: %s\n", sMsg );
@@ -330,7 +330,7 @@ final static void sal_XtErrorHdl( XLIB_String sMsg )
     abort();
 }
 
-final static void sal_XtWarningHdl( XLIB_String sMsg )
+static void sal_XtWarningHdl( XLIB_String sMsg )
 {
 #ifdef DBG_UTIL
     fprintf( stderr, "X Toolkit Warning: %s\n", sMsg );
@@ -345,7 +345,7 @@ END_C
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 #include <pthread.h>
 
-final SalData::SalData()
+SalData::SalData()
 {
     argv_           = 0;
     argc_           = 0;
@@ -365,12 +365,12 @@ final SalData::SalData()
     pFirstFrame_    = NULL;
 }
 
-final SalData::~SalData()
+SalData::~SalData()
 {
     delete pXLib_;
 }
 
-final long SalData::Close() const
+long SalData::Close() const
 {
     signal( SIGTERM, sig_[SIGTERM] );
     if( !pFirstFrame_ )
@@ -386,7 +386,7 @@ final long SalData::Close() const
     return 1;
 }
 
-final long SalData::ShutDown() const
+long SalData::ShutDown() const
 {
     if( !pFirstFrame_ )
         return 1;
@@ -401,14 +401,14 @@ final long SalData::ShutDown() const
     return 1;
 }
 
-final XubString SalData::GetCommandLineParam( USHORT nParam ) const
+XubString SalData::GetCommandLineParam( USHORT nParam ) const
 {
     if( !nParam ) { return aBinaryPath_; }
     if( nParam >= argc_ ) return String();
     return String( argv_[nParam], gsl_getSystemTextEncoding() );
 }
 
-final SalDisplay *SalData::GetDisplay( Display *pDisplay )
+SalDisplay *SalData::GetDisplay( Display *pDisplay )
 {
     SalDisplay *pSalDisplay = SalDisplays_.First();
     while( pSalDisplay && pSalDisplay->GetDisplay() != pDisplay )
@@ -434,7 +434,7 @@ void SalData::Init( int *pArgc, char *ppArgv[] )
 
 // -=-= SalXLib =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-final SalXLib::SalXLib()
+SalXLib::SalXLib()
 {
     pApplicationContext_    = NULL;
     Timeout_.tv_sec         = 0;
@@ -450,7 +450,7 @@ final SalXLib::SalXLib()
     FD_ZERO( pExceptionFDS_ );
 }
 
-final SalXLib::~SalXLib()
+SalXLib::~SalXLib()
 {
     delete pReadFDS_;
     delete pExceptionFDS_;
@@ -462,7 +462,7 @@ final SalXLib::~SalXLib()
 }
 
 static char sDISPLAY___[30];
-final void SalXLib::Init( int *pArgc, char *ppArgv[] )
+void SalXLib::Init( int *pArgc, char *ppArgv[] )
 {
     SalData *pSalData = GetSalData();
     SalI18N_InputMethod* pInputMethod = new SalI18N_InputMethod;
@@ -578,7 +578,7 @@ void EmitFontpathWarning( void )
 
 } /* extern "C" */
 
-final void SalXLib::XError( Display *pDisplay, XErrorEvent *pEvent )
+void SalXLib::XError( Display *pDisplay, XErrorEvent *pEvent )
 {
     char msg[ 120 ];
 
@@ -735,7 +735,7 @@ YieldMutexReleaser::~YieldMutexReleaser()
 }
 #endif
 
-final void SalXLib::Yield( BOOL bWait )
+void SalXLib::Yield( BOOL bWait )
 {
     fd_set   ReadFDS;
     fd_set   ExceptionFDS;

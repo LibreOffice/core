@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hdu $ $Date: 2001-02-15 15:31:22 $
+ *  last change: $Author: pl $ $Date: 2001-03-02 14:23:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -135,7 +135,7 @@ inline SalPolyLine::~SalPolyLine()
 #undef STATIC_POINTS
 // -=-= SalGraphicsData =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-final SalGraphicsData::SalGraphicsData()
+SalGraphicsData::SalGraphicsData()
 {
 #if defined(USE_PSPRINT)
     m_pJobData          = NULL;
@@ -188,7 +188,7 @@ final SalGraphicsData::SalGraphicsData()
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-final SalGraphicsData::~SalGraphicsData()
+SalGraphicsData::~SalGraphicsData()
 {
 #ifdef USE_PSPRINT
     if( ! ( m_pJobData || m_pPrinterGfx ) )
@@ -214,7 +214,7 @@ final SalGraphicsData::~SalGraphicsData()
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-beta  void SalGraphicsData::DeInit()
+void SalGraphicsData::DeInit()
 {
 }
 
@@ -250,7 +250,7 @@ void SalGraphicsData::SetClipRegion( GC pGC, XLIB_Region pXReg ) const
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-final GC SalGraphicsData::SelectPen()
+GC SalGraphicsData::SelectPen()
 {
     Display *pDisplay = GetXDisplay();
 
@@ -280,7 +280,7 @@ final GC SalGraphicsData::SelectPen()
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-final GC SalGraphicsData::SelectBrush()
+GC SalGraphicsData::SelectBrush()
 {
     Display *pDisplay = GetXDisplay();
 
@@ -332,7 +332,7 @@ final GC SalGraphicsData::SelectBrush()
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-final GC SalGraphicsData::GetTrackingGC()
+GC SalGraphicsData::GetTrackingGC()
 {
     const char    dash_list[2] = {2, 2};
 
@@ -364,7 +364,7 @@ final GC SalGraphicsData::GetTrackingGC()
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-final void SalGraphicsData::DrawLines( ULONG              nPoints,
+void SalGraphicsData::DrawLines( ULONG              nPoints,
                                        const SalPolyLine &rPoints,
                                        GC                 pGC )
 {
@@ -397,7 +397,7 @@ final void SalGraphicsData::DrawLines( ULONG              nPoints,
 #define P_DELTA         51
 #define DMAP( v, m )    ((v % P_DELTA) > m ? (v / P_DELTA) + 1 : (v / P_DELTA))
 
-final BOOL SalGraphicsData::GetDitherPixmap( SalColor nSalColor )
+BOOL SalGraphicsData::GetDitherPixmap( SalColor nSalColor )
 {
     static const short nOrdDither8Bit[ 8 ][ 8 ] =
     {
@@ -475,15 +475,15 @@ final BOOL SalGraphicsData::GetDitherPixmap( SalColor nSalColor )
 
 // -=-= SalGraphics =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-final SalGraphics::SalGraphics()
+SalGraphics::SalGraphics()
 { }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-final SalGraphics::~SalGraphics()
+SalGraphics::~SalGraphics()
 { }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-final void SalGraphics::GetResolution( long &rDPIX, long &rDPIY ) // const
+void SalGraphics::GetResolution( long &rDPIX, long &rDPIY ) // const
 {
     #if defined(USE_PSPRINT)
     if (maGraphicsData.m_pJobData != NULL)
@@ -513,7 +513,7 @@ final void SalGraphics::GetResolution( long &rDPIX, long &rDPIY ) // const
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-final void SalGraphics::GetScreenFontResolution( long &rDPIX, long &rDPIY ) // const
+void SalGraphics::GetScreenFontResolution( long &rDPIX, long &rDPIY ) // const
 {
     #if defined(USE_PSPRINT)
     if (maGraphicsData.m_pPrinterGfx != NULL)
@@ -536,7 +536,7 @@ final void SalGraphics::GetScreenFontResolution( long &rDPIX, long &rDPIY ) // c
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-final USHORT SalGraphics::GetBitCount() // const
+USHORT SalGraphics::GetBitCount() // const
 {
     #if defined(USE_PSPRINT)
     if (maGraphicsData.m_pPrinterGfx != NULL)
@@ -553,7 +553,7 @@ final USHORT SalGraphics::GetBitCount() // const
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-final void SalGraphics::ResetClipRegion()
+void SalGraphics::ResetClipRegion()
 {
     #if defined(USE_PSPRINT)
     if (maGraphicsData.m_pPrinterGfx != NULL)
@@ -584,7 +584,7 @@ final void SalGraphics::ResetClipRegion()
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-final void SalGraphics::BeginSetClipRegion( ULONG n )
+void SalGraphics::BeginSetClipRegion( ULONG n )
 {
     #if defined(USE_PSPRINT)
     if (maGraphicsData.m_pPrinterGfx != NULL)
@@ -631,7 +631,7 @@ BOOL SalGraphics::UnionClipRegion( long nX, long nY, long nDX, long nDY )
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-final void SalGraphics::EndSetClipRegion()
+void SalGraphics::EndSetClipRegion()
 {
     #if defined(USE_PSPRINT)
     if (maGraphicsData.m_pPrinterGfx != NULL)
@@ -662,7 +662,7 @@ final void SalGraphics::EndSetClipRegion()
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-final void SalGraphics::SetLineColor()
+void SalGraphics::SetLineColor()
 {
     #if defined(USE_PSPRINT)
     if (maGraphicsData.m_pPrinterGfx != NULL)
@@ -683,7 +683,7 @@ final void SalGraphics::SetLineColor()
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-final void SalGraphics::SetLineColor( SalColor nSalColor )
+void SalGraphics::SetLineColor( SalColor nSalColor )
 {
     #if defined(USE_PSPRINT)
     if (maGraphicsData.m_pPrinterGfx != NULL)
@@ -710,7 +710,7 @@ final void SalGraphics::SetLineColor( SalColor nSalColor )
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-final void SalGraphics::SetFillColor()
+void SalGraphics::SetFillColor()
 {
     #if defined(USE_PSPRINT)
     if (maGraphicsData.m_pPrinterGfx != NULL)
@@ -732,7 +732,7 @@ final void SalGraphics::SetFillColor()
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-final void SalGraphics::SetFillColor( SalColor nSalColor )
+void SalGraphics::SetFillColor( SalColor nSalColor )
 {
     #if defined(USE_PSPRINT)
     if (maGraphicsData.m_pPrinterGfx != NULL)
@@ -779,7 +779,7 @@ final void SalGraphics::SetFillColor( SalColor nSalColor )
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-final void SalGraphics::SetROPLineColor( SalROPColor nROPColor )
+void SalGraphics::SetROPLineColor( SalROPColor nROPColor )
 {
     #if defined(USE_PSPRINT)
     if (maGraphicsData.m_pPrinterGfx != NULL)
@@ -811,7 +811,7 @@ final void SalGraphics::SetROPLineColor( SalROPColor nROPColor )
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-final void SalGraphics::SetROPFillColor( SalROPColor nROPColor )
+void SalGraphics::SetROPFillColor( SalROPColor nROPColor )
 {
     #if defined(USE_PSPRINT)
     if (maGraphicsData.m_pPrinterGfx != NULL)
@@ -844,7 +844,7 @@ final void SalGraphics::SetROPFillColor( SalROPColor nROPColor )
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-final void SalGraphics::SetXORMode( BOOL bSet )
+void SalGraphics::SetXORMode( BOOL bSet )
 {
     #if defined(USE_PSPRINT)
     if (maGraphicsData.m_pPrinterGfx != NULL)
@@ -874,7 +874,7 @@ final void SalGraphics::SetXORMode( BOOL bSet )
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-final void SalGraphics::DrawPixel( long nX, long nY )
+void SalGraphics::DrawPixel( long nX, long nY )
 {
     #if defined(USE_PSPRINT)
     if (maGraphicsData.m_pPrinterGfx != NULL)
@@ -891,7 +891,7 @@ final void SalGraphics::DrawPixel( long nX, long nY )
     #endif
 }
 
-final void SalGraphics::DrawPixel( long nX, long nY, SalColor nSalColor )
+void SalGraphics::DrawPixel( long nX, long nY, SalColor nSalColor )
 {
     #if defined(USE_PSPRINT)
     if (maGraphicsData.m_pPrinterGfx != NULL)
@@ -936,7 +936,7 @@ final void SalGraphics::DrawPixel( long nX, long nY, SalColor nSalColor )
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-final void SalGraphics::DrawLine( long nX1, long nY1, long nX2, long nY2 )
+void SalGraphics::DrawLine( long nX1, long nY1, long nX2, long nY2 )
 {
     #if defined(USE_PSPRINT)
     if (maGraphicsData.m_pPrinterGfx != NULL)
@@ -994,7 +994,7 @@ void SalGraphics::DrawRect( long nX, long nY, long nDX, long nDY )
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-final void SalGraphics::DrawPolyLine( ULONG nPoints, const SalPoint *pPtAry )
+void SalGraphics::DrawPolyLine( ULONG nPoints, const SalPoint *pPtAry )
 {
     #if defined(USE_PSPRINT)
     if (maGraphicsData.m_pPrinterGfx != NULL)
@@ -1016,7 +1016,7 @@ final void SalGraphics::DrawPolyLine( ULONG nPoints, const SalPoint *pPtAry )
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-final void SalGraphics::DrawPolygon( ULONG nPoints, const SalPoint* pPtAry )
+void SalGraphics::DrawPolygon( ULONG nPoints, const SalPoint* pPtAry )
 {
     #if defined(USE_PSPRINT)
     // Point must be equal to SalPoint! see vcl/inc/salgtype.hxx
@@ -1144,9 +1144,9 @@ void SalGraphics::DrawPolyPolygon( ULONG            nPoly,
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-beta void SalGraphics::Invert( ULONG nPoints,
-                                const SalPoint* pPtAry,
-                                SalInvert nFlags )
+void SalGraphics::Invert( ULONG nPoints,
+                          const SalPoint* pPtAry,
+                          SalInvert nFlags )
 {
     #if defined(USE_PSPRINT)
     if (maGraphicsData.m_pPrinterGfx != NULL)

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salframe.cxx,v $
  *
- *  $Revision: 1.23 $
+ *  $Revision: 1.24 $
  *
- *  last change: $Author: cp $ $Date: 2001-03-02 07:50:06 $
+ *  last change: $Author: pl $ $Date: 2001-03-02 14:23:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -797,7 +797,7 @@ void SalFrame::Show( BOOL bVisible )
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-beta  void SalFrame::ToTop( USHORT nFlags )
+void SalFrame::ToTop( USHORT nFlags )
 {
     int i;
     // if one of our children is in fullscreen mode, ignore the to top
@@ -2530,7 +2530,7 @@ long SalFrameData::HandleReparentEvent( XReparentEvent *pEvent )
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-alpha long SalFrameData::HandleColormapEvent( XColormapEvent *pEvent )
+long SalFrameData::HandleColormapEvent( XColormapEvent *pEvent )
 {
     return 0;
 }

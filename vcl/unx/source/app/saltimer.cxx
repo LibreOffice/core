@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saltimer.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 17:05:42 $
+ *  last change: $Author: pl $ $Date: 2001-03-02 14:23:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -82,7 +82,7 @@
 
 // -=-= SalData =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-final void SalData::Timeout() const
+void SalData::Timeout() const
 {
     if( pTimerProc_ )
         pTimerProc_();
@@ -90,14 +90,14 @@ final void SalData::Timeout() const
 
 // -=-= SalXLib =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-final inline void SalXLib::StopTimer()
+inline void SalXLib::StopTimer()
 {
     Timeout_.tv_sec     = 0;
     Timeout_.tv_usec    = 0;
     nTimeoutMS_         = 0;
 }
 
-final inline void SalXLib::StartTimer( ULONG nMS )
+inline void SalXLib::StartTimer( ULONG nMS )
 {
     gettimeofday( &Timeout_, NULL );
 
@@ -113,16 +113,16 @@ final inline void SalXLib::StartTimer( ULONG nMS )
 
 // -=-= SalTimer -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-/* static */ final void SalTimer::SetCallback( SALTIMERPROC pProc )
+/* static */ void SalTimer::SetCallback( SALTIMERPROC pProc )
 { GetSalData()->SetCallback( pProc ); }
 
 
-/* static */ final void SalTimer::Stop()
+/* static */ void SalTimer::Stop()
 {
     GetSalData()->GetLib()->StopTimer();
 }
 
-/* static */ final void SalTimer::Start( ULONG nMS )
+/* static */ void SalTimer::Start( ULONG nMS )
 {
     GetSalData()->GetLib()->StartTimer( nMS );
 }

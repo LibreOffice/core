@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salgdi2.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: oisin $ $Date: 2001-01-31 15:01:50 $
+ *  last change: $Author: pl $ $Date: 2001-03-02 14:23:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,7 +131,7 @@ static void sal_PrintImage( char *s, XImage*p )
 
 // -=-= SalGraphicsData =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-final GC SalGraphicsData::CreateGC( Drawable hDrawable, unsigned long nMask )
+GC SalGraphicsData::CreateGC( Drawable hDrawable, unsigned long nMask )
 {
     XGCValues values;
 
@@ -147,7 +147,7 @@ final GC SalGraphicsData::CreateGC( Drawable hDrawable, unsigned long nMask )
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-final inline GC SalGraphicsData::GetMonoGC( Pixmap hPixmap )
+inline GC SalGraphicsData::GetMonoGC( Pixmap hPixmap )
 {
     if( !pMonoGC_ )
         pMonoGC_ = CreateGC( hPixmap );
@@ -162,7 +162,7 @@ final inline GC SalGraphicsData::GetMonoGC( Pixmap hPixmap )
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-final inline GC SalGraphicsData::GetCopyGC()
+inline GC SalGraphicsData::GetCopyGC()
 {
     if( bXORMode_ ) return GetInvertGC();
 
@@ -178,7 +178,7 @@ final inline GC SalGraphicsData::GetCopyGC()
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-final GC SalGraphicsData::GetInvertGC()
+GC SalGraphicsData::GetInvertGC()
 {
     if( !pInvertGC_ )
         pInvertGC_ = CreateGC( GetDrawable(),
@@ -196,7 +196,7 @@ final GC SalGraphicsData::GetInvertGC()
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-final GC SalGraphicsData::GetInvert50GC()
+GC SalGraphicsData::GetInvert50GC()
 {
     if( !pInvert50GC_ )
     {
@@ -244,7 +244,7 @@ final GC SalGraphicsData::GetInvert50GC()
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-final inline GC SalGraphicsData::GetStippleGC()
+inline GC SalGraphicsData::GetStippleGC()
 {
     if( !pStippleGC_ )
         pStippleGC_ = CreateGC( GetDrawable(),
@@ -263,7 +263,7 @@ final inline GC SalGraphicsData::GetStippleGC()
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-final int SalGraphicsData::Clip( XLIB_Region   pRegion,
+int SalGraphicsData::Clip( XLIB_Region   pRegion,
                                  int          &nX,
                                  int          &nY,
                                  unsigned int &nDX,
@@ -301,7 +301,7 @@ final int SalGraphicsData::Clip( XLIB_Region   pRegion,
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-final int SalGraphicsData::Clip( int          &nX,
+int SalGraphicsData::Clip( int          &nX,
                                  int          &nY,
                                  unsigned int &nDX,
                                  unsigned int &nDY,
@@ -343,7 +343,7 @@ final int SalGraphicsData::Clip( int          &nX,
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-final GC SalGraphicsData::SetMask( int           &nX,
+GC SalGraphicsData::SetMask( int           &nX,
                                    int           &nY,
                                    unsigned int &nDX,
                                    unsigned int &nDY,
@@ -603,7 +603,7 @@ SalPrinterBmp::GetPixelIdx (sal_uInt32 nRow, sal_uInt32 nColumn) const
 
 // -=-= SalGraphics =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-final void SalGraphics::CopyBits( const SalTwoRect *pPosAry,
+void SalGraphics::CopyBits( const SalTwoRect *pPosAry,
                                   SalGraphics      *pSrcGraphics )
 {
     #if defined(USE_PSPRINT)
@@ -711,7 +711,7 @@ final void SalGraphics::CopyBits( const SalTwoRect *pPosAry,
 
 // --------------------------------------------------------------------------
 
-final void SalGraphics::CopyArea ( long nDestX,    long nDestY,
+void SalGraphics::CopyArea ( long nDestX,    long nDestY,
                                    long nSrcX,     long nSrcY,
                                    long nSrcWidth, long nSrcHeight,
                                    USHORT nFlags )
@@ -745,7 +745,7 @@ final void SalGraphics::CopyArea ( long nDestX,    long nDestY,
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-final void SalGraphics::DrawBitmap( const SalTwoRect* pPosAry, const SalBitmap& rSalBitmap )
+void SalGraphics::DrawBitmap( const SalTwoRect* pPosAry, const SalBitmap& rSalBitmap )
 {
     #if defined(USE_PSPRINT)
     if (maGraphicsData.m_pPrinterGfx != NULL)
@@ -815,7 +815,7 @@ final void SalGraphics::DrawBitmap( const SalTwoRect* pPosAry, const SalBitmap& 
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-final void SalGraphics::DrawBitmap( const SalTwoRect* pPosAry, const SalBitmap& rSalBitmap,
+void SalGraphics::DrawBitmap( const SalTwoRect* pPosAry, const SalBitmap& rSalBitmap,
                                     const SalBitmap& rTransBitmap )
 {
     #if defined(USE_PSPRINT)
@@ -940,7 +940,7 @@ void SalGraphics::DrawBitmap( const SalTwoRect* pPosAry, const SalBitmap& rSalBi
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-final void SalGraphics::DrawMask( const SalTwoRect* pPosAry, const SalBitmap &rSalBitmap,
+void SalGraphics::DrawMask( const SalTwoRect* pPosAry, const SalBitmap &rSalBitmap,
                                   SalColor nMaskColor )
 {
     #if defined(USE_PSPRINT)
@@ -999,7 +999,7 @@ final void SalGraphics::DrawMask( const SalTwoRect* pPosAry, const SalBitmap &rS
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-final SalBitmap *SalGraphics::GetBitmap( long nX, long nY, long nDX, long nDY )
+SalBitmap *SalGraphics::GetBitmap( long nX, long nY, long nDX, long nDY )
 {
     #if defined(USE_PSPRINT)
     if (maGraphicsData.m_pPrinterGfx != NULL)
@@ -1083,7 +1083,7 @@ final SalBitmap *SalGraphics::GetBitmap( long nX, long nY, long nDX, long nDY )
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-final SalColor SalGraphics::GetPixel( long nX, long nY )
+SalColor SalGraphics::GetPixel( long nX, long nY )
 {
     #if defined(USE_PSPRINT)
     if (maGraphicsData.m_pPrinterGfx != NULL)
@@ -1132,7 +1132,7 @@ final SalColor SalGraphics::GetPixel( long nX, long nY )
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-final void SalGraphics::Invert( long        nX,
+void SalGraphics::Invert( long      nX,
                                 long        nY,
                                 long        nDX,
                                 long        nDY,

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salinst.cxx,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: mm $ $Date: 2001-02-22 15:40:32 $
+ *  last change: $Author: pl $ $Date: 2001-03-02 14:23:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,13 +159,13 @@ sal_Bool SalYieldMutex::tryToAcquire()
 
 //----------------------------------------------------------------------------
 
-final void InitSalData()
+void InitSalData()
 {
     SalData *pSalData = new SalData;
     SetSalData( pSalData );
 }
 
-final void DeInitSalData()
+void DeInitSalData()
 {
     SalData *pSalData = GetSalData();
     delete pSalData;
@@ -185,7 +185,7 @@ void DeInitSalMain()
 {
 }
 
-final void SetFilterCallback( void* pCallback, void* pInst )
+void SetFilterCallback( void* pCallback, void* pInst )
 {
     SalData* pSalData = GetSalData();
 
@@ -193,7 +193,7 @@ final void SetFilterCallback( void* pCallback, void* pInst )
     pSalData->pFirstInstance_->maInstData.mpFilterInst = pInst;
 }
 
-final SalInstance *CreateSalInstance()
+SalInstance *CreateSalInstance()
 {
     SalData     *pSalData = GetSalData();
     SalInstance *pInst    = new SalInstance;
@@ -208,7 +208,7 @@ final SalInstance *CreateSalInstance()
     return pInst;
 }
 
-final void DestroySalInstance( SalInstance *pInst )
+void DestroySalInstance( SalInstance *pInst )
 {
     SalData *pSalData = GetSalData();
 
@@ -229,7 +229,7 @@ final void DestroySalInstance( SalInstance *pInst )
 
 // -=-= SalInstance =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-final SalInstance::SalInstance()
+SalInstance::SalInstance()
 {
     maInstData.mpFilterCallback     = NULL;
     maInstData.mpFilterInst         = NULL;
@@ -241,7 +241,7 @@ final SalInstance::SalInstance()
     maInstData.mpSalYieldMutex->acquire();
 }
 
-final SalInstance::~SalInstance()
+SalInstance::~SalInstance()
 {
 // #75711# - java is running
       maInstData.mpSalYieldMutex->release();
@@ -297,7 +297,7 @@ Bool ImplPredicateEvent( Display *, XEvent *pEvent, char *pData )
 }
 
 
-alpha BOOL SalInstance::AnyInput(USHORT nType)
+BOOL SalInstance::AnyInput(USHORT nType)
 {
     SalData *pSalData = GetSalData();
     Display *pDisplay  = pSalData->GetDefDisp()->GetDisplay();
@@ -368,7 +368,7 @@ void SalInstance::AcquireYieldMutex( ULONG nCount )
     }
 }
 
-final void SalInstance::Yield( BOOL bWait )
+void SalInstance::Yield( BOOL bWait )
 { GetSalData()->GetLib()->Yield( bWait ); }
 
 void SalInstance::SetEventCallback( void* pInstance, bool(*pCallback)(void*,void*,int) )

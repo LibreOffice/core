@@ -2,9 +2,9 @@
  *
  *  $RCSfile: salunx.h,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: svesik $ $Date: 2001-02-16 01:01:48 $
+ *  last change: $Author: pl $ $Date: 2001-03-02 14:23:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -62,7 +62,7 @@
 //                                                                            //
 // (C) 1997 Star Division GmbH, Hamburg, Germany                              //
 //                                                                            //
-// $Revision: 1.2 $  $Author: svesik $  $Date: 2001-02-16 01:01:48 $    //
+// $Revision: 1.3 $  $Author: pl $  $Date: 2001-03-02 14:23:27 $    //
 //                                                                            //
 // $Workfile:   salunx.h  $                                                   //
 //  $Modtime:   14 Aug 1997 13:51:48  $                                       //
@@ -92,14 +92,6 @@
 #endif
 
 // -=-= #defines -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-#define persist
-#define final
-#define beta
-#define alpha
-#define unknown
-#define nop             ((void*)0)
-#define nobreak         ((void*)0)
-
 #define capacityof(a)   (sizeof(a)/sizeof(*a))
 
 // -=-= inlines =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

@@ -2,9 +2,9 @@
  *
  *  $RCSfile: saldisp.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: pl $ $Date: 2001-03-02 09:53:11 $
+ *  last change: $Author: pl $ $Date: 2001-03-02 14:23:27 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -370,20 +370,20 @@ inline const char *GetEnv( const char *p ) { return Null( getenv( p ) ); }
 inline const char *KeyStr( KeySym n ) { return Null( XKeysymToString( n ) ); }
 
 #ifdef USE_XMU
-final inline const char *GetAtomName( Display *d, Atom a )
+inline const char *GetAtomName( Display *d, Atom a )
 { return Null( XmuGetAtomName( d, a ) ); }
 #else
-final inline const char *GetAtomName( Display *d, Atom a )
+inline const char *GetAtomName( Display *d, Atom a )
 { return Null( XGetAtomName( d, a ) ); }
 #endif
 
-final inline double Hypothenuse( long w, long h )
+inline double Hypothenuse( long w, long h )
 { return sqrt( (w*w)+(h*h) ); }
 
-final inline int ColorDiff( int r, int g, int b )
+inline int ColorDiff( int r, int g, int b )
 { return (r*r)+(g*g)+(b*b); }
 
-final inline int ColorDiff( SalColor c1, int r, int g, int b )
+inline int ColorDiff( SalColor c1, int r, int g, int b )
 { return ColorDiff( (int)SALCOLOR_RED  (c1)-r,
                     (int)SALCOLOR_GREEN(c1)-g,
                     (int)SALCOLOR_BLUE (c1)-b ); }
@@ -582,7 +582,7 @@ sal_GetServerVendor( Display *p_display )
 
 // -=-= SalDisplay -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-final BOOL SalDisplay::BestVisual( Display     *pDisplay,
+BOOL SalDisplay::BestVisual( Display     *pDisplay,
                                    int          nScreen,
                                    XVisualInfo &rVI )
 {
@@ -678,7 +678,7 @@ final BOOL SalDisplay::BestVisual( Display     *pDisplay,
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-final SalDisplay::SalDisplay( Widget w )
+SalDisplay::SalDisplay( Widget w )
 {
     SalData *pSalData = GetSalData();
 
@@ -718,7 +718,7 @@ final SalDisplay::SalDisplay( Widget w )
     Init( hColMap, &aXVI );
 }
 
-final SalDisplay::SalDisplay( Display *display, Visual *pVisual,
+SalDisplay::SalDisplay( Display *display, Visual *pVisual,
                               Colormap aColMap ) : pDisp_( display )
 {
     SalData *pSalData  = GetSalData();
@@ -748,7 +748,7 @@ final SalDisplay::SalDisplay( Display *display, Visual *pVisual,
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-final SalDisplay::~SalDisplay( )
+SalDisplay::~SalDisplay( )
 {
     SalData *pSalData = GetSalData();
 
@@ -844,7 +844,7 @@ static int DisplayYield( int fd, SalDisplay *pDisplay )
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-final void SalDisplay::Init( Colormap hXColmap, const XVisualInfo* pXVI )
+void SalDisplay::Init( Colormap hXColmap, const XVisualInfo* pXVI )
 {
     GetSalData()->Insert( this );
 
@@ -1368,7 +1368,7 @@ WindowNeedGoodPosition( unsigned int nWindow )
 
 // Sound
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-beta  void SalDisplay::Beep() const
+void SalDisplay::Beep() const
 {
     XBell( pDisp_, nBeepVolume_ );
 }
@@ -1405,7 +1405,7 @@ inline KeySym sal_XModifier2Keysym( Display         *pDisplay,
                              0 );
 }
 
-final void SalDisplay::ModifierMapping()
+void SalDisplay::ModifierMapping()
 {
     XModifierKeymap *pXModMap = XGetModifierMapping( pDisp_ );
 
@@ -1437,7 +1437,7 @@ final void SalDisplay::ModifierMapping()
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-final XubString SalDisplay::GetKeyName( USHORT nKeyCode ) const
+XubString SalDisplay::GetKeyName( USHORT nKeyCode ) const
 {
     String aStrMap;
 
@@ -1594,7 +1594,7 @@ final XubString SalDisplay::GetKeyName( USHORT nKeyCode ) const
 #define IsISOKey( n ) (0x0000FE00==((n)&0xFFFFFF00))
 #endif
 
-final USHORT SalDisplay::GetKeyCode( KeySym keysym, char*pcPrintable ) const
+USHORT SalDisplay::GetKeyCode( KeySym keysym, char*pcPrintable ) const
 {
     USHORT nKey = 0;
 
@@ -1605,7 +1605,7 @@ final USHORT SalDisplay::GetKeyCode( KeySym keysym, char*pcPrintable ) const
     else if( XK_0 <= keysym && XK_9 >= keysym )
         nKey = (USHORT)(KEY_0 + (keysym - XK_0));
     else if( IsModifierKey( keysym ) )
-        nop;
+        ;
     else if( IsKeypadKey( keysym ) )
     {
         if( (keysym >= XK_KP_0) && (keysym <= XK_KP_9) )
@@ -1989,7 +1989,7 @@ final USHORT SalDisplay::GetKeyCode( KeySym keysym, char*pcPrintable ) const
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-final KeySym SalDisplay::GetKeySym( XKeyEvent        *pEvent,
+KeySym SalDisplay::GetKeySym( XKeyEvent        *pEvent,
                                     unsigned char    *pPrintable,
                                     int              *pLen,
                                     Status           *pStatusReturn,
@@ -2088,7 +2088,7 @@ final KeySym SalDisplay::GetKeySym( XKeyEvent        *pEvent,
     nXHot = name##curs_x_hot; \
     nYHot = name##curs_y_hot
 
-final XLIB_Cursor SalDisplay::GetPointer( int ePointerStyle )
+XLIB_Cursor SalDisplay::GetPointer( int ePointerStyle )
 {
     if( ePointerStyle > POINTER_COUNT )
         return NULL;
@@ -2445,7 +2445,7 @@ sal_IsValidFontpath( const ByteString &rFontPath,
     return TRUE;
 }
 
-final void SalDisplay::AddFontPath( const ByteString &rPath ) const
+void SalDisplay::AddFontPath( const ByteString &rPath ) const
 {
 #ifndef USE_BUILTIN_RASTERIZER
     const char cSeparator = ';' ;
@@ -2504,11 +2504,11 @@ final void SalDisplay::AddFontPath( const ByteString &rPath ) const
 
 // Events
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-final void SalDisplay::Remove( XEvent *pEvent )
+void SalDisplay::Remove( XEvent *pEvent )
 {
 }
 
-final void SalDisplay::SendEvent( Atom          aEvent,
+void SalDisplay::SendEvent( Atom          aEvent,
                                   void         *pData,
                                   XLIB_Window   hReceiver ) const
 {
@@ -2528,7 +2528,7 @@ final void SalDisplay::SendEvent( Atom          aEvent,
     SendEvent( aEvent, aData, hReceiver );
 }
 
-final void SalDisplay::SendEvent( Atom          aEvent,
+void SalDisplay::SendEvent( Atom          aEvent,
                                   UINT32       *Data,
                                   XLIB_Window   hReceiver ) const
 {
@@ -2574,7 +2574,7 @@ final void SalDisplay::SendEvent( Atom          aEvent,
 #undef pClient
 }
 
-final BOOL SalDisplay::IsEvent()
+BOOL SalDisplay::IsEvent()
 {
     if( pEventQueue_ )
         return TRUE;
@@ -2588,7 +2588,7 @@ final BOOL SalDisplay::IsEvent()
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-final void SalDisplay::Yield( BOOL bWait )
+void SalDisplay::Yield( BOOL bWait )
 {
     SalXEvent aEvent;
     while( !nStateOfYield_ )
@@ -2653,7 +2653,7 @@ final void SalDisplay::Yield( BOOL bWait )
     pXLib_->SetIgnoreXErrors( bIgnoreXErrors );
 }
 
-final long SalDisplay::Dispatch( XEvent *pEvent )
+long SalDisplay::Dispatch( XEvent *pEvent )
 {
     if( pEvent->type == XLIB_KeyPress || pEvent->type == KeyRelease )
       {
@@ -2689,7 +2689,7 @@ final long SalDisplay::Dispatch( XEvent *pEvent )
                                       pEvent->xany.window,
                                       ButtonMotionMask,
                                       pEvent ) )
-                nop;
+                ;
             break;
 
         case MappingNotify:
@@ -2757,7 +2757,7 @@ final long SalDisplay::Dispatch( XEvent *pEvent )
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-final void SalDisplay::PrintEvent( const ByteString &rComment,
+void SalDisplay::PrintEvent( const ByteString &rComment,
                                    XEvent       *pEvent ) const
 {
     if( pEvent->type <= MappingNotify )
@@ -3013,7 +3013,7 @@ void SalDisplay::PrintInfo() const
 
 // -=-= SalICCCM -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-final
+
 SalICCCM::SalICCCM( SalDisplay *pDisplay )
 {
     Display *display = pDisplay->GetDisplay();
@@ -3179,7 +3179,7 @@ BOOL SalVisual::Convert( int &n0, int &n1, int &n2 )
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-final SalColor SalVisual::GetTCColor( Pixel nPixel ) const
+SalColor SalVisual::GetTCColor( Pixel nPixel ) const
 {
     if( SALCOLOR == eRGBMode_ )
         return (SalColor)nPixel;
@@ -3205,7 +3205,7 @@ final SalColor SalVisual::GetTCColor( Pixel nPixel ) const
     return MAKE_SALCOLOR( r, g, b );
 }
 
-final Pixel SalVisual::GetTCPixel( SalColor nSalColor ) const
+Pixel SalVisual::GetTCPixel( SalColor nSalColor ) const
 {
     if( SALCOLOR == eRGBMode_ )
         return (Pixel)nSalColor;
@@ -3229,7 +3229,7 @@ final Pixel SalVisual::GetTCPixel( SalColor nSalColor ) const
 
 // -=-= SalColormap -=--=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-final SalColormap::SalColormap( SalDisplay *pDisplay, Colormap hColormap )
+SalColormap::SalColormap( SalDisplay *pDisplay, Colormap hColormap )
     : pDisplay_( pDisplay ),
       hColormap_( hColormap ),
       pPalette_( NULL ),
@@ -3311,7 +3311,7 @@ final SalColormap::SalColormap( SalDisplay *pDisplay, Colormap hColormap )
 }
 
 // PseudoColor
-final SalColormap::SalColormap( const BitmapPalette &rPalette )
+SalColormap::SalColormap( const BitmapPalette &rPalette )
     : pDisplay_( GetSalData()->GetCurDisp() ),
       hColormap_( None ),
       pVisual_( NULL ),
@@ -3336,7 +3336,7 @@ final SalColormap::SalColormap( const BitmapPalette &rPalette )
 }
 
 // MonoChrome
-final SalColormap::SalColormap()
+SalColormap::SalColormap()
     : pDisplay_( GetSalData()->GetCurDisp() ),
       hColormap_( None ),
       pVisual_( NULL ),
@@ -3352,7 +3352,7 @@ final SalColormap::SalColormap()
 }
 
 // TrueColor
-final SalColormap::SalColormap( USHORT nDepth )
+SalColormap::SalColormap( USHORT nDepth )
     : pDisplay_( GetSalData()->GetCurDisp() ),
       hColormap_( None ),
       pPalette_( NULL ),
@@ -3434,7 +3434,7 @@ final SalColormap::SalColormap( USHORT nDepth )
     }
 }
 
-final SalColormap::~SalColormap()
+SalColormap::~SalColormap()
 {
     if( hColormap_
         && pDisplay_->IsDisplay()
@@ -3455,7 +3455,7 @@ final SalColormap::~SalColormap()
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-final void SalColormap::SetPalette( const BitmapPalette &rPalette )
+void SalColormap::SetPalette( const BitmapPalette &rPalette )
 {
     if( this != &GetSalData()->GetCurDisp()->GetColormap() )
     {
@@ -3485,7 +3485,7 @@ final void SalColormap::SetPalette( const BitmapPalette &rPalette )
     }
 }
 
-final void SalColormap::GetPalette()
+void SalColormap::GetPalette()
 {
     Pixel i;
 
@@ -3512,7 +3512,7 @@ final void SalColormap::GetPalette()
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-final static USHORT sal_Lookup( SalColor *pPalette,
+static USHORT sal_Lookup( SalColor *pPalette,
                                 int r, int g, int b,
                                 Pixel nUsed )
 {
@@ -3535,7 +3535,7 @@ final static USHORT sal_Lookup( SalColor *pPalette,
     return nPixel;
 }
 
-final void SalColormap::GetLookupTable()
+void SalColormap::GetLookupTable()
 {
     USHORT *p = pLookupTable_ = new USHORT[16*16*16];
 
@@ -3546,7 +3546,7 @@ final void SalColormap::GetLookupTable()
 }
 
 // -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-final SalColor SalColormap::GetColor( Pixel nPixel ) const
+SalColor SalColormap::GetColor( Pixel nPixel ) const
 {
     if( nBlackPixel_ == nPixel ) return SALCOLOR_BLACK;
     if( nWhitePixel_ == nPixel ) return SALCOLOR_WHITE;
@@ -3594,7 +3594,7 @@ final SalColor SalColormap::GetColor( Pixel nPixel ) const
     return MAKE_SALCOLOR( aColor.red>>8, aColor.green>>8, aColor.blue>>8 );
 }
 
-final inline BOOL SalColormap::GetXPixel( XColor &rColor,
+inline BOOL SalColormap::GetXPixel( XColor &rColor,
                                           int     r,
                                           int     g,
                                           int     b ) const
@@ -3605,7 +3605,7 @@ final inline BOOL SalColormap::GetXPixel( XColor &rColor,
     return XAllocColor( GetXDisplay(), hColormap_, &rColor );
 }
 
-final BOOL SalColormap::GetXPixels( XColor &rColor,
+BOOL SalColormap::GetXPixels( XColor &rColor,
                                     int     r,
                                     int     g,
                                     int     b ) const
@@ -3617,7 +3617,7 @@ final BOOL SalColormap::GetXPixels( XColor &rColor,
     return GetXPixel( rColor, r^0xFF, g^0xFF, b^0xFF );
 }
 
-final Pixel SalColormap::GetPixel( SalColor nSalColor ) const
+Pixel SalColormap::GetPixel( SalColor nSalColor ) const
 {
     if( 0xFFFFFFFF == nSalColor )     return 0;
     if( SALCOLOR_BLACK == nSalColor ) return nBlackPixel_;
