@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.3 $
+#   $Revision: 1.4 $
 #
-#   last change: $Author: rt $ $Date: 2003-04-23 17:04:10 $
+#   last change: $Author: kz $ $Date: 2004-03-25 11:03:59 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -72,6 +72,7 @@ TARGET  = com_sun_star_lib_uno_bridges_java_remote
 # --- Files --------------------------------------------------------
 
 JAVACLASSFILES= 													\
+    $(CLASSDIR)$/$(PACKAGE)$/BridgedObject.class \
     $(CLASSDIR)$/$(PACKAGE)$/ProxyFactory.class \
     $(CLASSDIR)$/$(PACKAGE)$/RequestHandler.class \
     $(CLASSDIR)$/$(PACKAGE)$/XConnectionInputStream_Adapter.class	\
