@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabledlg.cxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hjs $ $Date: 2000-11-07 12:48:38 $
+ *  last change: $Author: hr $ $Date: 2000-11-09 15:22:28 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -58,9 +58,6 @@
  *
  *
  ************************************************************************/
-
-#include <string>
-#include <algorithm>
 
 #ifdef PRECOMPILED
 #include "ui_pch.hxx"
@@ -169,6 +166,7 @@
 #ifndef _TABLE_HRC
 #include <table.hrc>
 #endif
+#include <algorithm>
 
 
 #ifdef DEBUG_TBLDLG
@@ -840,7 +838,7 @@ int  SwFormatTablePage::DeactivatePage( SfxItemSet* pSet )
             }
             if(nColSum != pTblData->GetWidth())
             {
-                SwTwips nMinWidth = std::min(MINLAY, pTblData->GetWidth() / pTblData->GetColCount() - 1);
+                SwTwips nMinWidth = std::min((long)MINLAY, pTblData->GetWidth() / pTblData->GetColCount() - 1);
                 SwTwips nDiff = nColSum - pTblData->GetWidth();
                 while ( Abs(nDiff) > pTblData->GetColCount() + 1 )
                 {
@@ -2111,6 +2109,9 @@ void SwTextFlowPage::DisablePageBreak()
 /*------------------------------------------------------------------------
 
     $Log: not supported by cvs2svn $
+    Revision 1.2  2000/11/07 12:48:38  hjs
+    use min/max from stl
+
     Revision 1.1.1.1  2000/09/18 17:14:48  hr
     initial import
 
