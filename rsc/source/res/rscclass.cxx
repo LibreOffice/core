@@ -2,9 +2,9 @@
  *
  *  $RCSfile: rscclass.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: rt $ $Date: 2004-06-17 11:52:18 $
+ *  last change: $Author: rt $ $Date: 2004-09-08 17:08:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -935,7 +935,7 @@ ERRTYPE RscClass::WriteInstRc
     USHORT i;
     ERRTYPE aError;
     RSCINST aTmpI;
-    USHORT  nMaskOff;// Offset um Maskenfeld zu addressieren
+    USHORT  nMaskOff = 0;// Offset um Maskenfeld zu addressieren
 
     // Wenn eine Variable Maskierung hat, dann Maskenfeld
     for( i = 0; i < nEntries; i++ )
