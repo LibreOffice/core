@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmvwimp.hxx,v $
  *
- *  $Revision: 1.20 $
+ *  $Revision: 1.21 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:41:05 $
+ *  last change: $Author: rt $ $Date: 2004-05-07 15:50:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -277,7 +277,10 @@ private:
     void Activate(sal_Bool bSync = sal_False);
     void Deactivate(BOOL bDeactivateController = TRUE);
 
-    SdrObject* implCreateFieldControl( const ::svx::ODataAccessDescriptor& _rColumnDescriptor );
+    SdrObject*  implCreateFieldControl( const ::svx::ODataAccessDescriptor& _rColumnDescriptor );
+
+    /// does some initializations to the newly created control model, returns the ClassId
+    sal_Int16   implInitializeNewControlModel( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxModel, const SdrObject* _pObject ) const;
 
     void createControlLabelPair(
         OutputDevice* _pOutDev,
