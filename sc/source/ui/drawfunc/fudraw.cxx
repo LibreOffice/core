@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fudraw.cxx,v $
  *
- *  $Revision: 1.9 $
+ *  $Revision: 1.10 $
  *
- *  last change: $Author: hr $ $Date: 2003-03-26 18:06:02 $
+ *  last change: $Author: rt $ $Date: 2004-07-12 15:28:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -307,7 +307,7 @@ BOOL __EXPORT FuDraw::KeyInput(const KeyEvent& rKEvt)
                     Execute(SID_OBJECT_SELECT, SFX_CALLMODE_SLOT | SFX_CALLMODE_RECORD);
                 bReturn = TRUE;
             }
-            else if ( pView->HasMarkedObj() )
+            else if ( pView->AreObjectsMarked() )
             {
                 // #97016# III
                 const SdrHdlList& rHdlList = pView->GetHdlList();
@@ -323,7 +323,7 @@ BOOL __EXPORT FuDraw::KeyInput(const KeyEvent& rKEvt)
                 }
 
                 //  Beim Bezier-Editieren ist jetzt wieder das Objekt selektiert
-                if (!pView->HasMarkedObj())
+                if (!pView->AreObjectsMarked())
                     pViewShell->SetDrawShell( FALSE );
 
                 bReturn = TRUE;
@@ -341,7 +341,7 @@ BOOL __EXPORT FuDraw::KeyInput(const KeyEvent& rKEvt)
             {
                 // #98256# activate OLE object on RETURN for selected object
                 // #98198# put selected text object in edit mode
-                const SdrMarkList& rMarkList = pView->GetMarkList();
+                const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
                 if( !pView->IsTextEdit() && 1 == rMarkList.GetMarkCount() )
                 {
                     BOOL bOle = pViewShell->GetViewFrame()->ISA(SfxInPlaceFrame);
@@ -367,7 +367,7 @@ BOOL __EXPORT FuDraw::KeyInput(const KeyEvent& rKEvt)
             {
                 // #98198# put selected text object in edit mode
                 // (this is not SID_SETINPUTMODE, but F2 hardcoded, like in Writer)
-                const SdrMarkList& rMarkList = pView->GetMarkList();
+                const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
                 if( !pView->IsTextEdit() && 1 == rMarkList.GetMarkCount() )
                 {
                     SdrObject* pObj = rMarkList.GetMark( 0 )->GetObj();
@@ -383,7 +383,7 @@ BOOL __EXPORT FuDraw::KeyInput(const KeyEvent& rKEvt)
         {
             // in calc do NOT start draw object selection using TAB/SHIFT-TAB when
             // there is not yet a object selected
-            if(pView->HasMarkedObj())
+            if(pView->AreObjectsMarked())
             {
                 KeyCode aCode = rKEvt.GetKeyCode();
 
@@ -399,7 +399,7 @@ BOOL __EXPORT FuDraw::KeyInput(const KeyEvent& rKEvt)
                     }
 
                     // #97016# II
-                    if(pView->HasMarkedObj())
+                    if(pView->AreObjectsMarked())
                         pView->MakeVisible(pView->GetAllMarkedRect(), *pWindow);
 
                     bReturn = TRUE;
@@ -436,7 +436,7 @@ BOOL __EXPORT FuDraw::KeyInput(const KeyEvent& rKEvt)
         {
             // in calc do NOT select the last draw object when
             // there is not yet a object selected
-            if(pView->HasMarkedObj())
+            if(pView->AreObjectsMarked())
             {
                 KeyCode aCode = rKEvt.GetKeyCode();
 
@@ -447,7 +447,7 @@ BOOL __EXPORT FuDraw::KeyInput(const KeyEvent& rKEvt)
                     pView->MarkNextObj(FALSE);
 
                     // #97016# II
-                    if(pView->HasMarkedObj())
+                    if(pView->AreObjectsMarked())
                         pView->MakeVisible(pView->GetAllMarkedRect(), *pWindow);
 
                     bReturn = TRUE;
@@ -461,7 +461,7 @@ BOOL __EXPORT FuDraw::KeyInput(const KeyEvent& rKEvt)
         {
             // in calc do NOT select the first draw object when
             // there is not yet a object selected
-            if(pView->HasMarkedObj())
+            if(pView->AreObjectsMarked())
             {
                 KeyCode aCode = rKEvt.GetKeyCode();
 
@@ -472,7 +472,7 @@ BOOL __EXPORT FuDraw::KeyInput(const KeyEvent& rKEvt)
                     pView->MarkNextObj(TRUE);
 
                     // #97016# II
-                    if(pView->HasMarkedObj())
+                    if(pView->AreObjectsMarked())
                         pView->MakeVisible(pView->GetAllMarkedRect(), *pWindow);
 
                     bReturn = TRUE;
@@ -489,7 +489,7 @@ BOOL __EXPORT FuDraw::KeyInput(const KeyEvent& rKEvt)
         {
             // in calc do cursor travelling of draw objects only when
             // there is a object selected yet
-            if(pView->HasMarkedObj())
+            if(pView->AreObjectsMarked())
             {
                 long nX = 0;
                 long nY = 0;
@@ -643,7 +643,7 @@ BOOL __EXPORT FuDraw::KeyInput(const KeyEvent& rKEvt)
         case KEY_SPACE:
         {
             // in calc do only something when draw objects are selected
-            if(pView->HasMarkedObj())
+            if(pView->AreObjectsMarked())
             {
                 const SdrHdlList& rHdlList = pView->GetHdlList();
                 SdrHdl* pHdl = rHdlList.GetFocusHdl();
@@ -714,7 +714,7 @@ BOOL __EXPORT FuDraw::KeyInput(const KeyEvent& rKEvt)
     {
         // #98198# allow direct typing into a selected text object
 
-        const SdrMarkList& rMarkList = pView->GetMarkList();
+        const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
         if( !pView->IsTextEdit() && 1 == rMarkList.GetMarkCount() && EditEngine::IsSimpleCharInput(rKEvt) )
         {
             SdrObject* pObj = rMarkList.GetMark( 0 )->GetObj();
