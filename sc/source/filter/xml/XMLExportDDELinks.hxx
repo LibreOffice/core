@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XMLExportDDELinks.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-17 16:38:33 $
+ *  last change: $Author: obo $ $Date: 2000-11-22 11:29:03 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@ class ScXMLExportDDELinks
 public:
     ScXMLExportDDELinks(ScXMLExport& rExport);
     ~ScXMLExportDDELinks();
-    void WriteDDELinks(::com::sun::star::uno::Reference <::com::sun::star::sheet::XSpreadsheetDocument>& xSpreadDoc);
+    void WriteDDELinks(::com::sun::star::uno::Reference < ::com::sun::star::sheet::XSpreadsheetDocument >& xSpreadDoc);
 };
 
 #endif
