@@ -7826,3 +7826,5 @@ _TI4?AVout_of_range@_STL@@
 ?SetNoName@SfxObjectShell@@QAEXXZ
 ?lcl_translateBasic2Uno@?%O:\SRC641\src\sfx2\source\doc\objmisc.cxx1835818273@@YAXABVSbxVariableRef@@PAX@Z
 ?deallocate@?$_STL_alloc_proxy@PAU?$_List_node@V?$list@UStringPair@beans@star@sun@com@@V?$allocator@UStringPair@beans@star@sun@com@@@_STL@@@_STL@@@_STL@@U12@V?$allocator@V?$list@UStringPair@beans@star@sun@com@@V?$allocator@UStringPair@beans@star@sun@com@@@_STL@@@_STL@@@2@@_STL@@QAEXPAU?$_List_node@V?$list@UStringPair@beans@star@sun@com@@V?$allocator@UStringPair@beans@star@sun@com@@@_STL@@@_STL@@@2@I@Z
+?lcl_translateBasic2Uno@?%O:\SRC641\src\sfx2\source\doc\objmisc.cxx96126173@@YAXABVSbxVariableRef@@PAX@Z
+??4StringPair@beans@star@sun@com@@QAEAAU01234@ABU01234@@Z
