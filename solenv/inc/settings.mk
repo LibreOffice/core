@@ -2,9 +2,9 @@
 #
 #   $RCSfile: settings.mk,v $
 #
-#   $Revision: 1.95 $
+#   $Revision: 1.96 $
 #
-#   last change: $Author: hjs $ $Date: 2002-01-30 14:09:22 $
+#   last change: $Author: hjs $ $Date: 2002-02-04 17:04:56 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -992,7 +992,7 @@ SCPDEFS+=-DOFFICEUPD=$(OFFICEUPD)
 SCPDEFS+=-DISO_CODE=$(L10N_framework)
 .ENDIF			# "$(L10N_framework)"!=""
 
-SCPDEFS+=-U$(COMID) -DCOMID=$(COMID) -DCOMNAME=$(COMNAME)
+SCPDEFS+=-U$(COMID) -DCOMID=$(COMID) -DCOMNAME=$(COMNAME) -D_$(COMID)
 
 UNOIDLDEFS+=-DSUPD=$(UPD) -DUPD=$(UPD)
 
