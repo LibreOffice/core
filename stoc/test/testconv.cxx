@@ -2,9 +2,9 @@
  *
  *  $RCSfile: testconv.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-18 15:29:35 $
+ *  last change: $Author: dbo $ $Date: 2000-11-17 12:09:18 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -109,7 +109,7 @@ static void printValue( const Any & rVal )
     case TypeClass_CHAR:
     {
         char ar[2];
-        ar[0] = (char)(sal_Unicode)rVal.getValue();
+        ar[0] = (char)*(sal_Unicode *)rVal.getValue();
         ar[1] = 0;
         printf( ar );
         break;
