@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fmtfield.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: fs $ $Date: 2001-05-17 11:14:15 $
+ *  last change: $Author: er $ $Date: 2001-06-10 21:19:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -965,15 +965,7 @@ DoubleCurrencyField::DoubleCurrencyField(Window* pParent, WinBits nStyle)
     m_bPrependCurrSym = FALSE;
 
     // initialize with a system currency format
-    SvNumberFormatter* pFormatter = StandardFormatter();
-    const NfCurrencyEntry* pSystemCurrency = pFormatter->MatchSystemCurrency();
-    if (!pSystemCurrency)
-        pSystemCurrency = &pFormatter->GetCurrencyEntry(LANGUAGE_SYSTEM);
-    if (pSystemCurrency)
-        m_sCurrencySymbol = pSystemCurrency->GetSymbol();
-    else
-        // no more options ...
-        m_sCurrencySymbol.AssignAscii("DM");
+    m_sCurrencySymbol = SvNumberFormatter::GetCurrencyEntry(LANGUAGE_SYSTEM).GetSymbol();
     UpdateCurrencyFormat();
 }
 
@@ -985,15 +977,7 @@ DoubleCurrencyField::DoubleCurrencyField(Window* pParent, const ResId& rResId)
     m_bPrependCurrSym = FALSE;
 
     // initialize with a system currency format
-    SvNumberFormatter* pFormatter = StandardFormatter();
-    const NfCurrencyEntry* pSystemCurrency = pFormatter->MatchSystemCurrency();
-    if (!pSystemCurrency)
-        pSystemCurrency = &pFormatter->GetCurrencyEntry(LANGUAGE_SYSTEM);
-    if (pSystemCurrency)
-        m_sCurrencySymbol = pSystemCurrency->GetSymbol();
-    else
-        // no more options ...
-        m_sCurrencySymbol.AssignAscii("DM");
+    m_sCurrencySymbol = SvNumberFormatter::GetCurrencyEntry(LANGUAGE_SYSTEM).GetSymbol();
     UpdateCurrencyFormat();
 }
 

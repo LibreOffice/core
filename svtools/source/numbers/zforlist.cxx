@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforlist.cxx,v $
  *
- *  $Revision: 1.30 $
+ *  $Revision: 1.31 $
  *
- *  last change: $Author: er $ $Date: 2001-05-31 16:51:28 $
+ *  last change: $Author: er $ $Date: 2001-06-10 21:20:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -99,6 +99,9 @@
 #ifndef _COM_SUN_STAR_I18N_KNUMBERFORMATUSAGE_HPP_
 #include <com/sun/star/i18n/KNumberFormatUsage.hpp>
 #endif
+#ifndef _COMPHELPER_PROCESSFACTORY_HXX_
+#include <comphelper/processfactory.hxx>
+#endif
 
 #define _SVSTDARR_USHORTS
 #include "svstdarr.hxx"
@@ -111,6 +114,8 @@
 #include "zforfind.hxx"
 #include "zformat.hxx"
 #include "numhead.hxx"
+
+#include "currencyconfigitem.hxx"
 
 
 using namespace ::com::sun::star;
@@ -146,11 +151,11 @@ BOOL SvNumberFormatter::bCurrencyTableInitialized = FALSE;
 NfCurrencyTable SvNumberFormatter::theCurrencyTable;
 USHORT SvNumberFormatter::nSystemCurrencyPosition = 0;
 SV_IMPL_PTRARR( NfCurrencyTable, NfCurrencyEntry* );
-const USHORT nCurrencyTableEuroPosition = 1;
 SV_IMPL_PTRARR( NfWSStringsDtor, String* );
 
 // ob das BankSymbol immer am Ende ist (1 $;-1 $) oder sprachabhaengig
 #define NF_BANKSYMBOL_FIX_POSITION 1
+
 
 /***********************Funktionen SvNumberFormatter**************************/
 
@@ -1931,33 +1936,6 @@ void SvNumberFormatter::ImpGenerateFormats( ULONG CLOffset, BOOL bLoadingSO5 )
         SV_NUMBERFORMATTER_VERSION_NEWSTANDARD );
     aFormatSeq[nIdx].Default = bDefault;
 
-#if 0   // erDEBUG
-    {   // ab SV_NUMBERFORMATTER_VERSION_NEW_CURR EURo und letztes Format testen
-        NfWSStringsDtor aArr;
-        USHORT j, nDefault;
-        const NfCurrencyTable& rTable = GetTheCurrencyTable();
-        const NfCurrencyEntry* pCurr = rTable.GetObject( nCurrencyTableEuroPosition );
-        GetCurrencyFormatStrings( aArr, *pCurr, FALSE );
-        GetCurrencyFormatStrings( aArr, *pCurr, TRUE );
-        for ( j=0; j<aArr.Count(); j++ )
-        {
-            ULONG nCheck, nKey;
-            short nType;
-            PutEntry( *aArr.GetObject(j), nCheck, nType, nKey, ActLnge );
-        }
-        aArr.Remove( 0, aArr.Count() );
-        pCurr = rTable.GetObject( rTable.Count()-1 );
-//      GetCurrencyFormatStrings( aArr, *pCurr, FALSE );
-        GetCurrencyFormatStrings( aArr, *pCurr, TRUE );
-        for ( j=0; j<aArr.Count(); j++ )
-        {
-            ULONG nCheck, nKey;
-            short nType;
-            PutEntry( *aArr.GetObject(j), nCheck, nType, nKey, ActLnge );
-        }
-    }
-#endif
-
 
 
     // Date
@@ -2263,16 +2241,16 @@ void SvNumberFormatter::ImpGenerateAdditionalFormats( ULONG CLOffset,
 }
 
 
-void SvNumberFormatter::ImpGetPosCurrFormat(String& sPosStr)
+void SvNumberFormatter::ImpGetPosCurrFormat( String& sPosStr, const String& rCurrSymbol )
 {
     NfCurrencyEntry::CompletePositiveFormatString( sPosStr,
-        pLocaleData->getCurrSymbol(), pLocaleData->getCurrPositiveFormat() );
+        rCurrSymbol, pLocaleData->getCurrPositiveFormat() );
 }
 
-void SvNumberFormatter::ImpGetNegCurrFormat(String& sNegStr)
+void SvNumberFormatter::ImpGetNegCurrFormat( String& sNegStr, const String& rCurrSymbol )
 {
     NfCurrencyEntry::CompleteNegativeFormatString( sNegStr,
-        pLocaleData->getCurrSymbol(), pLocaleData->getCurrNegativeFormat() );
+        rCurrSymbol, pLocaleData->getCurrNegativeFormat() );
 }
 
 void SvNumberFormatter::GenerateFormat(String& sString,
@@ -2350,7 +2328,7 @@ void SvNumberFormatter::GenerateFormat(String& sString,
                     nNegaForm );
             }
             else
-            {   // wir gehen von einem Banksymbol aus
+            {   // assume currency abbreviation (AKA banking symbol), not symbol
                 USHORT nPosiForm = NfCurrencyEntry::GetEffectivePositiveFormat(
                     pLocaleData->getCurrPositiveFormat(),
                     pLocaleData->getCurrPositiveFormat(), TRUE );
@@ -2364,9 +2342,11 @@ void SvNumberFormatter::GenerateFormat(String& sString,
             }
         }
         else
-        {
-            ImpGetPosCurrFormat(sString);
-            ImpGetNegCurrFormat(sNegStr);
+        {   // "automatic" old style
+            String aSymbol, aAbbrev;
+            GetCompatibilityCurrency( aSymbol, aAbbrev );
+            ImpGetPosCurrFormat( sString, aSymbol );
+            ImpGetNegCurrFormat( sNegStr, aSymbol );
         }
         if (IsRed)
         {
@@ -2593,7 +2573,8 @@ USHORT SvNumberFormatter::GetYear2000Default()
 }
 
 
-const NfCurrencyTable& SvNumberFormatter::GetTheCurrencyTable() const
+// static
+const NfCurrencyTable& SvNumberFormatter::GetTheCurrencyTable()
 {
     while ( !bCurrencyTableInitialized )
         ImpInitCurrencyTable();
@@ -2601,17 +2582,18 @@ const NfCurrencyTable& SvNumberFormatter::GetTheCurrencyTable() const
 }
 
 
-const NfCurrencyEntry* SvNumberFormatter::MatchSystemCurrency() const
+// static
+const NfCurrencyEntry* SvNumberFormatter::MatchSystemCurrency()
 {
+    // MUST call GetTheCurrencyTable() before accessing nSystemCurrencyPosition
     const NfCurrencyTable& rTable = GetTheCurrencyTable();
     return nSystemCurrencyPosition ? rTable[nSystemCurrencyPosition] : NULL;
 }
 
 
-const NfCurrencyEntry& SvNumberFormatter::GetCurrencyEntry( LanguageType eLang ) const
+// static
+const NfCurrencyEntry& SvNumberFormatter::GetCurrencyEntry( LanguageType eLang )
 {
-    if ( eLang == LANGUAGE_DONTKNOW )
-        eLang = SysLnge;
     if ( eLang == LANGUAGE_SYSTEM )
     {
         const NfCurrencyEntry* pCurr = MatchSystemCurrency();
@@ -2619,6 +2601,7 @@ const NfCurrencyEntry& SvNumberFormatter::GetCurrencyEntry( LanguageType eLang )
     }
     else
     {
+        eLang = GetProperLanguage( eLang );
         const NfCurrencyTable& rTable = GetTheCurrencyTable();
         USHORT nCount = rTable.Count();
         const NfCurrencyEntryPtr* ppData = rTable.GetData();
@@ -2628,6 +2611,46 @@ const NfCurrencyEntry& SvNumberFormatter::GetCurrencyEntry( LanguageType eLang )
                 return **ppData;
         }
         return *(rTable[0]);
+    }
+}
+
+
+// static
+const NfCurrencyEntry* SvNumberFormatter::GetCurrencyEntry(
+        const String& rAbbrev, LanguageType eLang )
+{
+    eLang = GetProperLanguage( eLang );
+    const NfCurrencyTable& rTable = GetTheCurrencyTable();
+    USHORT nCount = rTable.Count();
+    const NfCurrencyEntryPtr* ppData = rTable.GetData();
+    for ( USHORT j = 0; j < nCount; j++, ppData++ )
+    {
+        if ( (*ppData)->GetLanguage() == eLang &&
+                (*ppData)->GetBankSymbol() == rAbbrev )
+            return *ppData;
+    }
+    return NULL;
+}
+
+
+// static
+void SvNumberFormatter::SetDefaultCurrency( const NfCurrencyEntry* pCurr )
+{
+    const NfCurrencyTable& rTable = GetTheCurrencyTable();
+    if ( !pCurr )
+    {   // SYSTEM
+        nSystemCurrencyPosition = 0;
+        return ;
+    }
+    USHORT nCount = rTable.Count();
+    const NfCurrencyEntryPtr* ppData = rTable.GetData();
+    for ( USHORT j = 0; j < nCount; j++, ppData++ )
+    {
+        if ( *ppData == pCurr )
+        {
+            nSystemCurrencyPosition = j;
+            break;  // for
+        }
     }
 }
 
@@ -2714,6 +2737,7 @@ ULONG SvNumberFormatter::ImpGetDefaultCurrencyFormat()
 }
 
 
+// static
 // try to make it inline if possible since this a loop body
 // TRUE: continue; FALSE: break loop, if pFoundEntry==NULL dupe found
 #ifdef PRODUCT
@@ -2721,7 +2745,7 @@ inline
 #endif
     BOOL SvNumberFormatter::ImpLookupCurrencyEntryLoopBody(
         const NfCurrencyEntry*& pFoundEntry, BOOL& bFoundBank,
-        const NfCurrencyEntry* pData, USHORT nPos, const String& rSymbol ) const
+        const NfCurrencyEntry* pData, USHORT nPos, const String& rSymbol )
 {
     BOOL bFound;
     if ( pData->GetSymbol() == rSymbol )
@@ -2814,9 +2838,10 @@ BOOL SvNumberFormatter::GetNewCurrencySymbolString( ULONG nFormat,
 }
 
 
+// static
 const NfCurrencyEntry* SvNumberFormatter::GetCurrencyEntry( BOOL & bFoundBank,
             const String& rSymbol, const String& rExtension,
-            LanguageType eFormatLanguage, BOOL bOnlyStringLanguage ) const
+            LanguageType eFormatLanguage, BOOL bOnlyStringLanguage )
 {
     xub_StrLen nExtLen = rExtension.Len();
     LanguageType eExtLang;
@@ -2891,6 +2916,29 @@ const NfCurrencyEntry* SvNumberFormatter::GetCurrencyEntry( BOOL & bFoundBank,
     }
 
     return pFoundEntry;
+}
+
+
+void SvNumberFormatter::GetCompatibilityCurrency( String& rSymbol, String& rAbbrev ) const
+{
+    ::com::sun::star::uno::Sequence< ::com::sun::star::i18n::Currency >
+        xCurrencies = pLocaleData->getAllCurrencies();
+    sal_Int32 nCurrencies = xCurrencies.getLength();
+    for ( sal_Int32 j=0; j < nCurrencies; ++j )
+    {
+        if ( xCurrencies[j].UsedInCompatibleFormatCodes )
+        {
+            rSymbol = xCurrencies[j].Symbol;
+            rAbbrev = xCurrencies[j].BankSymbol;
+            break;
+        }
+    }
+    if ( j >= nCurrencies )
+    {
+        DBG_ERRORFILE( "GetCompatibilityCurrency: none?" );
+        rSymbol = pLocaleData->getCurrSymbol();
+        rAbbrev = pLocaleData->getCurrBankSymbol();
+    }
 }
 
 
@@ -2992,7 +3040,8 @@ void lcl_CheckCurrencySymbolPosition( const NfCurrencyEntry& rCurr )
 #endif
 
 
-void SvNumberFormatter::ImpInitCurrencyTable() const
+// static
+void SvNumberFormatter::ImpInitCurrencyTable()
 {
     // racing condition possible:
     // while ( !bCurrencyTableInitialized )
@@ -3002,19 +3051,22 @@ void SvNumberFormatter::ImpInitCurrencyTable() const
         return ;
     bInitializing = TRUE;
 
-    Locale aSaveLocale( pLocaleData->getLocale() );
     LanguageType eSysLang = System::GetLanguage();
+    LocaleDataWrapper* pLocaleData = new LocaleDataWrapper(
+        ::comphelper::getProcessServiceFactory(),
+        ConvertLanguageToLocale( eSysLang ) );
+    // get user configured currency
+    String aConfiguredCurrencyAbbrev;
+    LanguageType eConfiguredCurrencyLanguage = LANGUAGE_SYSTEM;
+    SvtCurrencyConfigItem().GetAbbrevAndLanguage(
+        aConfiguredCurrencyAbbrev, eConfiguredCurrencyLanguage );
+    USHORT nSecondarySystemCurrencyPosition = 0;
     NfCurrencyEntryPtr pEntry;
 
     // first entry is SYSTEM
-    pLocaleData->setLocale( ConvertLanguageToLocale( eSysLang ) );
     pEntry = new NfCurrencyEntry( *pLocaleData, LANGUAGE_SYSTEM );
     theCurrencyTable.Insert( pEntry, 0 );
-    // insert country independent EURo at second position
-    pEntry = new NfCurrencyEntry;
-    pEntry->SetEuro();
-    theCurrencyTable.Insert( pEntry, nCurrencyTableEuroPosition );
-    USHORT nCurrencyPos = nCurrencyTableEuroPosition + 1;
+    USHORT nCurrencyPos = 1;
 
     ::com::sun::star::uno::Sequence< ::com::sun::star::lang::Locale > xLoc =
         LocaleDataWrapper::getInstalledLocaleNames();
@@ -3032,21 +3084,16 @@ void SvNumberFormatter::ImpInitCurrencyTable() const
             BOOL bBreak = TRUE;
 #endif
         pLocaleData->setLocale( xLoc[nLocale] );
-        // one default currency for each locale
+        // one default currency for each locale, insert first so it is found first
         pEntry = new NfCurrencyEntry( *pLocaleData, eLang );
-        // but don't insert multiple EURo entries
-        BOOL bInsert = !pEntry->IsEuro();
-        if ( !bInsert )
-            delete pEntry;
-        else
-        {
 #ifndef PRODUCT
-            lcl_CheckCurrencySymbolPosition( *pEntry );
+        lcl_CheckCurrencySymbolPosition( *pEntry );
 #endif
-            theCurrencyTable.Insert( pEntry, nCurrencyPos++ );
-            if ( !nSystemCurrencyPosition && pEntry->GetLanguage() == eSysLang )
-                nSystemCurrencyPosition = nCurrencyPos-1;
-        }
+        theCurrencyTable.Insert( pEntry, nCurrencyPos++ );
+        if ( !nSystemCurrencyPosition && (aConfiguredCurrencyAbbrev.Len() ?
+                pEntry->GetBankSymbol() == aConfiguredCurrencyAbbrev :
+                pEntry->GetLanguage() == eConfiguredCurrencyLanguage) )
+            nSystemCurrencyPosition = nCurrencyPos-1;
 
         // all available currencies for each locale
         Sequence< Currency > aCurrSeq = pLocaleData->getAllCurrencies();
@@ -3057,20 +3104,17 @@ void SvNumberFormatter::ImpInitCurrencyTable() const
             for ( nCurrency = 0; nCurrency < nCurrencyCount; nCurrency++ )
             {
                 pEntry = new NfCurrencyEntry( aCurrSeq[nCurrency], *pLocaleData, eLang );
-                // no dupes, and don't insert multiple EURo entries
-                BOOL bInsert = !pEntry->IsEuro();
-                if ( bInsert )
+                // no dupes
+                BOOL bInsert = TRUE;
+                NfCurrencyEntry const * const * pData = theCurrencyTable.GetData();
+                USHORT n = theCurrencyTable.Count();
+                pData++;        // skip first SYSTEM entry
+                for ( USHORT j=1; j<n; j++ )
                 {
-                    NfCurrencyEntry const * const * pData = theCurrencyTable.GetData();
-                    USHORT n = theCurrencyTable.Count();
-                    pData++;        // skip first SYSTEM entry
-                    for ( USHORT j=1; j<n; j++ )
+                    if ( *(*pData++) == *pEntry )
                     {
-                        if ( *(*pData++) == *pEntry )
-                        {
-                            bInsert = FALSE;
-                            break;  // for
-                        }
+                        bInsert = FALSE;
+                        break;  // for
                     }
                 }
                 if ( !bInsert )
@@ -3078,28 +3122,21 @@ void SvNumberFormatter::ImpInitCurrencyTable() const
                 else
                 {
                     theCurrencyTable.Insert( pEntry, nCurrencyPos++ );
-                    if ( !nSystemCurrencyPosition && pEntry->GetLanguage() == eSysLang )
-                        nSystemCurrencyPosition = nCurrencyPos-1;
+                    if ( !nSecondarySystemCurrencyPosition &&
+                            (aConfiguredCurrencyAbbrev.Len() ?
+                            pEntry->GetBankSymbol() == aConfiguredCurrencyAbbrev :
+                            pEntry->GetLanguage() == eConfiguredCurrencyLanguage) )
+                        nSecondarySystemCurrencyPosition = nCurrencyPos-1;
                 }
             }
         }
     }
-    pLocaleData->setLocale( aSaveLocale );
+    if ( !nSystemCurrencyPosition )
+        nSystemCurrencyPosition = nSecondarySystemCurrencyPosition;
     // first entry is System
-    DBG_ASSERT( nSystemCurrencyPosition, "system language_country locale not in I18N format tables" );
-    if ( nSystemCurrencyPosition )
-    {
-        if ( theCurrencyTable[nSystemCurrencyPosition]->GetSymbol() !=
-                theCurrencyTable[0]->GetSymbol() )
-        {
-            if ( theCurrencyTable[0]->IsEuro() )
-                nSystemCurrencyPosition = nCurrencyTableEuroPosition;
-            else
-                nSystemCurrencyPosition = 0;
-        }
-        theCurrencyTable[nSystemCurrencyPosition]->ApplyVariableInformation(
-            *theCurrencyTable[0] );
-    }
+    DBG_ASSERT( !aConfiguredCurrencyAbbrev.Len() || nSystemCurrencyPosition,
+        "configured currency not in I18N locale data" );
+    delete pLocaleData;
     bCurrencyTableInitialized = TRUE;
     bInitializing = FALSE;
 }
@@ -3267,7 +3304,6 @@ void NfCurrencyEntry::ApplyVariableInformation( const NfCurrencyEntry& r )
 {
     nPositiveFormat = r.nPositiveFormat;
     nNegativeFormat = r.nNegativeFormat;
-    nDigits         = r.nDigits;
     cZeroChar       = r.cZeroChar;
 }
 

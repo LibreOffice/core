@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforscan.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: er $ $Date: 2001-05-31 16:51:28 $
+ *  last change: $Author: er $ $Date: 2001-06-10 21:20:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -381,23 +381,7 @@ void ImpSvNumberformatScan::SetDependentKeywords()
     }
 
     // currency symbol for old style ("automatic") compatibility format codes
-    Sequence< i18n::Currency > xCurrencies = pLocaleData->getAllCurrencies();
-    sal_Int32 nCurrencies = xCurrencies.getLength();
-    for ( sal_Int32 j=0; j < nCurrencies; ++j )
-    {
-        if ( xCurrencies[j].UsedInCompatibleFormatCodes )
-        {
-            sCurSymbol = xCurrencies[j].Symbol;
-            sCurAbbrev = xCurrencies[j].BankSymbol;
-            break;
-        }
-    }
-    if ( j >= nCurrencies )
-    {
-        DBG_ERRORFILE( "SetDependentKeywords: compatibility currency symbol?" );
-        sCurSymbol = pLocaleData->getCurrSymbol();
-        sCurAbbrev = pLocaleData->getCurrBankSymbol();
-    }
+    pFormatter->GetCompatibilityCurrency( sCurSymbol, sCurAbbrev );
     // currency symbol upper case
     sCurString = pCharClass->upper( sCurSymbol );
 }

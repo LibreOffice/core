@@ -2,9 +2,9 @@
  *
  *  $RCSfile: zforfind.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: er $ $Date: 2001-05-08 09:50:00 $
+ *  last change: $Author: er $ $Date: 2001-06-10 21:20:49 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -618,8 +618,13 @@ BOOL ImpSvNumberInputScan::GetCurrency( const String& rString, xub_StrLen& nPos,
 {
     if ( rString.Len() > nPos )
     {
-        if ( !bTextInitialized )
-            InitText();
+        if ( !aUpperCurrSymbol.Len() )
+        {   // if no format specified the currency of the initialized formatter
+            LanguageType eLang = (pFormat ? pFormat->GetLanguage() :
+                pFormatter->GetLanguage());
+            aUpperCurrSymbol = pFormatter->GetCharClass()->upper(
+                SvNumberFormatter::GetCurrencyEntry( eLang ).GetSymbol() );
+        }
         if ( StringContains( aUpperCurrSymbol, rString, nPos ) )
         {
             nPos += aUpperCurrSymbol.Len();
@@ -1934,7 +1939,7 @@ BOOL ImpSvNumberInputScan::IsNumberFormatMain(
 
 
 //---------------------------------------------------------------------------
-// Initialize uppercase months, weekdays and currency
+// Initialize uppercase months and weekdays
 
 void ImpSvNumberInputScan::InitText()
 {
@@ -1965,7 +1970,6 @@ void ImpSvNumberInputScan::InitText()
         pUpperDayText[j] = pChrCls->upper( xElems[j].FullName );
         pUpperAbbrevDayText[j] = pChrCls->upper( xElems[j].AbbrevName );
     }
-    aUpperCurrSymbol = pChrCls->upper( pLoc->getCurrSymbol() );
     bTextInitialized = TRUE;
 }
 
@@ -1986,6 +1990,7 @@ void ImpSvNumberInputScan::ChangeIntl()
                           cDecSep == '.' ||
                           cDecSep == pFormatter->GetLocaleData()->getDateSep().GetChar(0) );
     bTextInitialized = FALSE;
+    aUpperCurrSymbol.Erase();
 }
 
 
