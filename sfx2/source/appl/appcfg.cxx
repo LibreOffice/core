@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appcfg.cxx,v $
  *
- *  $Revision: 1.54 $
+ *  $Revision: 1.55 $
  *
- *  last change: $Author: obo $ $Date: 2004-11-17 15:32:10 $
+ *  last change: $Author: obo $ $Date: 2004-11-19 11:30:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -313,10 +313,22 @@ BOOL SfxApplication::GetOptions( SfxItemSet& rSet )
                         bRet = TRUE;
                     break;
                 case SID_ATTR_BUTTON_BIGSIZE :
-                    if(rSet.Put( SfxBoolItem( rPool.GetWhich( SID_ATTR_BUTTON_BIGSIZE ),
-                              SfxImageManager::GetCurrentSymbolSet() == SFX_SYMBOLS_LARGE)))
+                {
+                    sal_Int16 eOptSymbolSet = aMiscOptions.GetSymbolSet();
+                    if ( eOptSymbolSet == SFX_SYMBOLS_AUTO )
+                    {
+                        // Use system settings, we have to retrieve the toolbar icon size from the
+                        // Application class
+                        ULONG nStyleIconSize = Application::GetSettings().GetStyleSettings().GetToolbarIconSize();
+                        if ( nStyleIconSize == STYLE_TOOLBAR_ICONSIZE_LARGE )
+                            eOptSymbolSet = SFX_SYMBOLS_LARGE;
+                        else
+                            eOptSymbolSet = SFX_SYMBOLS_SMALL;
+                    }
+                    if(rSet.Put( SfxBoolItem( rPool.GetWhich( SID_ATTR_BUTTON_BIGSIZE ), eOptSymbolSet == SFX_SYMBOLS_LARGE)))
                         bRet = TRUE;
                     break;
+                }
                 case SID_ATTR_BACKUP :
                     {
                         bRet = TRUE;
