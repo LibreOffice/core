@@ -2,9 +2,9 @@
  *
  *  $RCSfile: frmpaint.cxx,v $
  *
- *  $Revision: 1.40 $
+ *  $Revision: 1.41 $
  *
- *  last change: $Author: rt $ $Date: 2003-10-30 10:18:55 $
+ *  last change: $Author: rt $ $Date: 2003-11-25 10:45:52 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -159,8 +159,6 @@
 
 // steht im number.cxx
 extern const sal_Char __FAR_DATA sBulletFntName[];
-
-extern FASTBOOL bOneBeepOnly;
 
 sal_Bool bInitFont = sal_True;
 
