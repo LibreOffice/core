@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docfmt.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: obo $ $Date: 2004-08-12 12:16:28 $
+ *  last change: $Author: hr $ $Date: 2004-09-08 14:53:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -201,6 +201,8 @@ SO2_DECL_REF(SvLinkName)
 #ifndef _SWSTYLENAMEMAPPER_HXX
 #include <SwStyleNameMapper.hxx>
 #endif
+
+#include <SwUndoFmt.hxx>
 
 using namespace ::com::sun::star::i18n;
 using namespace ::com::sun::star::lang;
@@ -1285,20 +1287,36 @@ const SfxPoolItem& SwDoc::GetDefault( USHORT nFmtHint ) const
 /*
  * Loeschen der Formate
  */
-void SwDoc::DelCharFmt(USHORT nFmt)
+void SwDoc::DelCharFmt(USHORT nFmt, BOOL bBroadcast)
 {
+    SwCharFmt * pDel = (*pCharFmtTbl)[nFmt];
+
+    if (bBroadcast)
+        BroadcastStyleOperation(pDel->GetName(), SFX_STYLE_FAMILY_CHAR,
+                                SFX_STYLESHEET_ERASED);
+
+    if (DoesUndo())
+    {
+        SwUndo * pUndo =
+            new SwUndoCharFmtDelete(pDel, this);
+
+        AppendUndo(pUndo);
+    }
+
     pCharFmtTbl->DeleteAndDestroy(nFmt);
+
     SetModified();
 }
 
-void SwDoc::DelCharFmt( SwCharFmt *pFmt )
+void SwDoc::DelCharFmt( SwCharFmt *pFmt, BOOL bBroadcast )
 {
     USHORT nFmt = pCharFmtTbl->GetPos( pFmt );
     ASSERT( USHRT_MAX != nFmt, "Fmt not found," );
-    DelCharFmt( nFmt );
+
+    DelCharFmt( nFmt, bBroadcast );
 }
 
-void SwDoc::DelFrmFmt( SwFrmFmt *pFmt )
+void SwDoc::DelFrmFmt( SwFrmFmt *pFmt, BOOL bBroadcast )
 {
     if( pFmt->ISA( SwTableBoxFmt ) || pFmt->ISA( SwTableLineFmt ))
     {
@@ -1308,11 +1326,26 @@ void SwDoc::DelFrmFmt( SwFrmFmt *pFmt )
     }
     else
     {
+
         //Das Format muss in einem der beiden Arrays stehen, in welchem
         //werden wir schon merken.
         USHORT nPos;
         if ( USHRT_MAX != ( nPos = pFrmFmtTbl->GetPos( pFmt )) )
+        {
+            if (bBroadcast)
+                BroadcastStyleOperation(pFmt->GetName(),
+                                        SFX_STYLE_FAMILY_FRAME,
+                                        SFX_STYLESHEET_ERASED);
+
+            if (DoesUndo())
+            {
+                SwUndo * pUndo = new SwUndoFrmFmtDelete(pFmt, this);
+
+                AppendUndo(pUndo);
+            }
+
             pFrmFmtTbl->DeleteAndDestroy( nPos );
+        }
         else
         {
             nPos = GetSpzFrmFmts()->GetPos( pFmt );
@@ -1361,9 +1394,11 @@ USHORT SwDoc::GetTblFrmFmtCount(BOOL bUsed) const
         for ( USHORT i = nCount; i; )
         {
             if((*pTblFrmFmtTbl)[--i]->GetInfo( aGetHt ))
+
                 --nCount;
         }
     }
+
     return nCount;
 }
 
@@ -1374,6 +1409,7 @@ SwFrmFmt& SwDoc::GetTblFrmFmt(USHORT nFmt, BOOL bUsed ) const
     if(bUsed)
     {
         SwAutoFmtGetDocNode aGetHt( &aNodes );
+
         for ( USHORT i = 0; i <= nFmt; i++ )
         {
             while ( (*pTblFrmFmtTbl)[ i + nRemoved]->GetInfo( aGetHt ))
@@ -1391,25 +1427,56 @@ SwTableFmt* SwDoc::MakeTblFrmFmt( const String &rFmtName,
     SwTableFmt* pFmt = new SwTableFmt( GetAttrPool(), rFmtName, pDerivedFrom );
     pTblFrmFmtTbl->Insert( pFmt, pTblFrmFmtTbl->Count() );
     SetModified();
+
     return pFmt;
 }
 
 SwFrmFmt *SwDoc::MakeFrmFmt(const String &rFmtName,
-                            SwFrmFmt *pDerivedFrom)
+                            SwFrmFmt *pDerivedFrom,
+                            BOOL bBroadcast)
 {
+
     SwFrmFmt *pFmt = new SwFrmFmt( GetAttrPool(), rFmtName, pDerivedFrom );
     pFrmFmtTbl->Insert( pFmt, pFrmFmtTbl->Count());
     SetModified();
+
+
+    if (bBroadcast)
+        BroadcastStyleOperation(rFmtName, SFX_STYLE_FAMILY_PARA,
+                                SFX_STYLESHEET_CREATED);
+
+    if (DoesUndo())
+    {
+        SwUndo * pUndo = new SwUndoFrmFmtCreate(pFmt, pDerivedFrom, this);
+
+        AppendUndo(pUndo);
+    }
+
     return pFmt;
 }
 
 SwCharFmt *SwDoc::MakeCharFmt( const String &rFmtName,
-                                SwCharFmt *pDerivedFrom)
+                               SwCharFmt *pDerivedFrom,
+                               BOOL bBroadcast)
 {
     SwCharFmt *pFmt = new SwCharFmt( GetAttrPool(), rFmtName, pDerivedFrom );
     pCharFmtTbl->Insert( pFmt, pCharFmtTbl->Count() );
     pFmt->SetAuto( FALSE );
     SetModified();
+
+    if (DoesUndo())
+    {
+        SwUndo * pUndo = new SwUndoCharFmtCreate(pFmt, pDerivedFrom, this);
+
+        AppendUndo(pUndo);
+    }
+
+    if (bBroadcast)
+    {
+        BroadcastStyleOperation(rFmtName, SFX_STYLE_FAMILY_CHAR,
+                                SFX_STYLESHEET_CREATED);
+    }
+
     return pFmt;
 }
 
@@ -1420,25 +1487,44 @@ SwCharFmt *SwDoc::MakeCharFmt( const String &rFmtName,
 // TXT
 
 SwTxtFmtColl* SwDoc::MakeTxtFmtColl( const String &rFmtName,
-                                     SwTxtFmtColl *pDerivedFrom)
+                                     SwTxtFmtColl *pDerivedFrom,
+                                     BOOL bBroadcast)
 {
     SwTxtFmtColl *pFmtColl = new SwTxtFmtColl( GetAttrPool(), rFmtName,
                                                 pDerivedFrom );
     pTxtFmtCollTbl->Insert(pFmtColl, pTxtFmtCollTbl->Count());
     pFmtColl->SetAuto( FALSE );
     SetModified();
+
+    if (DoesUndo())
+    {
+        SwUndo * pUndo = new SwUndoTxtFmtCollCreate(pFmtColl, pDerivedFrom,
+                                                    this);
+        AppendUndo(pUndo);
+    }
+
+    if (bBroadcast)
+        BroadcastStyleOperation(rFmtName, SFX_STYLE_FAMILY_PARA,
+                                SFX_STYLESHEET_CREATED);
+
     return pFmtColl;
 }
 
 //FEATURE::CONDCOLL
 SwConditionTxtFmtColl* SwDoc::MakeCondTxtFmtColl( const String &rFmtName,
-                                                SwTxtFmtColl *pDerivedFrom )
+                                                  SwTxtFmtColl *pDerivedFrom,
+                                                  BOOL bBroadcast)
 {
     SwConditionTxtFmtColl*pFmtColl = new SwConditionTxtFmtColl( GetAttrPool(),
                                                     rFmtName, pDerivedFrom );
     pTxtFmtCollTbl->Insert(pFmtColl, pTxtFmtCollTbl->Count());
     pFmtColl->SetAuto( FALSE );
     SetModified();
+
+    if (bBroadcast)
+        BroadcastStyleOperation(rFmtName, SFX_STYLE_FAMILY_PARA,
+                                SFX_STYLESHEET_CREATED);
+
     return pFmtColl;
 }
 //FEATURE::CONDCOLL
@@ -1456,7 +1542,7 @@ SwGrfFmtColl* SwDoc::MakeGrfFmtColl( const String &rFmtName,
     return pFmtColl;
 }
 
-void SwDoc::DelTxtFmtColl(USHORT nFmtColl)
+void SwDoc::DelTxtFmtColl(USHORT nFmtColl, BOOL bBroadcast)
 {
     ASSERT( nFmtColl, "Remove fuer Coll 0." );
 
@@ -1464,6 +1550,19 @@ void SwDoc::DelTxtFmtColl(USHORT nFmtColl)
     SwTxtFmtColl *pDel = (*pTxtFmtCollTbl)[nFmtColl];
     if( pDfltTxtFmtColl == pDel )
         return;     // default nie loeschen !!
+
+    if (bBroadcast)
+        BroadcastStyleOperation(pDel->GetName(), SFX_STYLE_FAMILY_PARA,
+                                SFX_STYLESHEET_ERASED);
+
+    if (DoesUndo())
+    {
+        SwUndoTxtFmtCollDelete * pUndo =
+            new SwUndoTxtFmtCollDelete(pDel, this);
+
+        AppendUndo(pUndo);
+    }
+
     // Die FmtColl austragen
     pTxtFmtCollTbl->Remove(nFmtColl);
     // Next korrigieren
@@ -1473,11 +1572,11 @@ void SwDoc::DelTxtFmtColl(USHORT nFmtColl)
     SetModified();
 }
 
-void SwDoc::DelTxtFmtColl( SwTxtFmtColl *pColl )
+void SwDoc::DelTxtFmtColl( SwTxtFmtColl *pColl, BOOL bBroadcast )
 {
     USHORT nFmt = pTxtFmtCollTbl->GetPos( pColl );
     ASSERT( USHRT_MAX != nFmt, "Collection not found," );
-    DelTxtFmtColl( nFmt );
+    DelTxtFmtColl( nFmt, bBroadcast );
 }
 
 BOOL lcl_SetTxtFmtColl( const SwNodePtr& rpNode, void* pArgs )
