@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Impress.xcs,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: hr $ $Date: 2003-07-24 13:12:11 $
+ *  last change: $Author: vg $ $Date: 2003-12-17 17:53:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -93,6 +93,9 @@
 				<desc xml:lang="th">Contains general properties of the graphical object representation.</desc>
 				<desc xml:lang="hi-IN">Contains general properties of the graphical object representation.</desc>
 				<desc xml:lang="x-comment">Contains general properties of the graphical object representation.</desc>
+				<desc xml:lang="hu">Contains general properties of the graphical object representation.</desc>
+				<desc xml:lang="sk">Contains general properties of the graphical object representation.</desc>
+				<desc xml:lang="sl">Contains general properties of the graphical object representation.</desc>
 			</info>
 			<group oor:name="Display">
 				<info>
@@ -121,6 +124,9 @@
 					<desc xml:lang="th">Contains general properties of the graphical object representation of screen displays.</desc>
 					<desc xml:lang="hi-IN">Contains general properties of the graphical object representation of screen displays.</desc>
 					<desc xml:lang="x-comment">Contains general properties of the graphical object representation of screen displays.</desc>
+					<desc xml:lang="hu">Contains general properties of the graphical object representation of screen displays.</desc>
+					<desc xml:lang="sk">Contains general properties of the graphical object representation of screen displays.</desc>
+					<desc xml:lang="sl">Contains general properties of the graphical object representation of screen displays.</desc>
 				</info>
 				<prop oor:name="Ruler" oor:type="xs:boolean">
 					<!-- OldPath: Impress/Layout/Display -->
@@ -152,9 +158,12 @@
 							<desc xml:lang="th">Indicates whether to show the rulers at the left and at the top of the working area.</desc>
 							<desc xml:lang="hi-IN">Indicates whether to show the rulers at the left and at the top of the working area.</desc>
 							<desc xml:lang="x-comment">Indicates whether to show the rulers at the left and at the top of the working area.</desc>
+							<desc xml:lang="hu">Indicates whether to show the rulers at the left and at the top of the working area.</desc>
+							<desc xml:lang="sk">Indicates whether to show the rulers at the left and at the top of the working area.</desc>
+							<desc xml:lang="sl">Indicates whether to show the rulers at the left and at the top of the working area.</desc>
 						<label xml:lang="en-US">Rulers visible</label>
 						<label xml:lang="el">Rulers visible</label>
-						<label xml:lang="nl">Rulers visible</label>
+						<label xml:lang="nl">Linialen zichtbaar</label>
 						<label xml:lang="fr">Rulers visible</label>
 						<label xml:lang="fi">Rulers visible</label>
 						<label xml:lang="cs">Rulers visible</label>
@@ -177,6 +186,9 @@
 						<label xml:lang="th">Rulers visible</label>
 						<label xml:lang="hi-IN">Rulers visible</label>
 						<label xml:lang="x-comment">Rulers visible</label>
+						<label xml:lang="hu">Rulers visible</label>
+						<label xml:lang="sk">Rulers visible</label>
+						<label xml:lang="sl">Rulers visible</label>
 					</info>
 					<value>true</value>
 				</prop>
@@ -210,9 +222,12 @@
 							<desc xml:lang="th">Indicates whether to show help-lines that can be created by dragging them from the rulers.</desc>
 							<desc xml:lang="hi-IN">Indicates whether to show help-lines that can be created by dragging them from the rulers.</desc>
 							<desc xml:lang="x-comment">Indicates whether to show help-lines that can be created by dragging them from the rulers.</desc>
+							<desc xml:lang="hu">Indicates whether to show help-lines that can be created by dragging them from the rulers.</desc>
+							<desc xml:lang="sk">Indicates whether to show help-lines that can be created by dragging them from the rulers.</desc>
+							<desc xml:lang="sl">Indicates whether to show help-lines that can be created by dragging them from the rulers.</desc>
 						<label xml:lang="en-US">Helplines visible</label>
 						<label xml:lang="el">Helplines visible</label>
-						<label xml:lang="nl">Helplines visible</label>
+						<label xml:lang="nl">Hulplijnen zichtbaar</label>
 						<label xml:lang="fr">Helplines visible</label>
 						<label xml:lang="fi">Helplines visible</label>
 						<label xml:lang="cs">Helplines visible</label>
@@ -235,6 +250,9 @@
 						<label xml:lang="th">Helplines visible</label>
 						<label xml:lang="hi-IN">Helplines visible</label>
 						<label xml:lang="x-comment">Helplines visible</label>
+						<label xml:lang="hu">Helplines visible</label>
+						<label xml:lang="sk">Helplines visible</label>
+						<label xml:lang="sl">Helplines visible</label>
 					</info>
 					<value>true</value>
 				</prop>
@@ -268,6 +286,9 @@
 							<desc xml:lang="th">Indicates whether to show help-lines when moving an object.</desc>
 							<desc xml:lang="hi-IN">Indicates whether to show help-lines when moving an object.</desc>
 							<desc xml:lang="x-comment">Indicates whether to show help-lines when moving an object.</desc>
+							<desc xml:lang="hu">Indicates whether to show help-lines when moving an object.</desc>
+							<desc xml:lang="sk">Indicates whether to show help-lines when moving an object.</desc>
+							<desc xml:lang="sl">Indicates whether to show help-lines when moving an object.</desc>
 						<label xml:lang="en-US">Guides when moving</label>
 						<label xml:lang="el">Βοηθητικές γραμμές κατά την μετακίνηση</label>
 						<label xml:lang="nl">Hulplijnen bij verplaatsen</label>
@@ -294,6 +315,8 @@
 						<label xml:lang="hi-IN">स्थान परिवर्तन के समय सलाह देना</label>
 						<label xml:lang="x-comment">Guides when moving</label>
 						<label xml:lang="sk">Vodiace čiary</label>
+						<label xml:lang="hu">Guides when moving</label>
+						<label xml:lang="sl">Guides when moving</label>
 					</info>
 					<value>false</value>
 				</prop>
@@ -327,9 +350,12 @@
 							<desc xml:lang="th">Indicates whether to show all control points in the Bezier curve editor.</desc>
 							<desc xml:lang="hi-IN">Indicates whether to show all control points in the Bezier curve editor.</desc>
 							<desc xml:lang="x-comment">Indicates whether to show all control points in the Bezier curve editor.</desc>
+							<desc xml:lang="hu">Indicates whether to show all control points in the Bezier curve editor.</desc>
+							<desc xml:lang="sk">Indicates whether to show all control points in the Bezier curve editor.</desc>
+							<desc xml:lang="sl">Indicates whether to show all control points in the Bezier curve editor.</desc>
 						<label xml:lang="en-US">All control points in Bezier editor</label>
 						<label xml:lang="el">All control points in Bezier editor</label>
-						<label xml:lang="nl">All control points in Bezier editor</label>
+						<label xml:lang="nl">Alle besturingspunten in de Bézier editor</label>
 						<label xml:lang="fr">All control points in Bezier editor</label>
 						<label xml:lang="fi">All control points in Bezier editor</label>
 						<label xml:lang="cs">All control points in Bezier editor</label>
@@ -352,6 +378,9 @@
 						<label xml:lang="th">All control points in Bezier editor</label>
 						<label xml:lang="hi-IN">All control points in Bezier editor</label>
 						<label xml:lang="x-comment">All control points in Bezier editor</label>
+						<label xml:lang="hu">All control points in Bezier editor</label>
+						<label xml:lang="sk">All control points in Bezier editor</label>
+						<label xml:lang="sl">All control points in Bezier editor</label>
 					</info>
 					<value>false</value>
 				</prop>
@@ -385,9 +414,12 @@
 							<desc xml:lang="th">Indicates whether to show the outline of all moved objects when moving more then one object at the same time.</desc>
 							<desc xml:lang="hi-IN">Indicates whether to show the outline of all moved objects when moving more then one object at the same time.</desc>
 							<desc xml:lang="x-comment">Indicates whether to show the outline of all moved objects when moving more then one object at the same time.</desc>
+							<desc xml:lang="hu">Indicates whether to show the outline of all moved objects when moving more then one object at the same time.</desc>
+							<desc xml:lang="sk">Indicates whether to show the outline of all moved objects when moving more then one object at the same time.</desc>
+							<desc xml:lang="sl">Indicates whether to show the outline of all moved objects when moving more then one object at the same time.</desc>
 						<label xml:lang="en-US">Contour of each individual object</label>
 						<label xml:lang="el">Contour of each individual object</label>
-						<label xml:lang="nl">Contour of each individual object</label>
+						<label xml:lang="nl">Contour van ieder individueel object</label>
 						<label xml:lang="fr">Contour of each individual object</label>
 						<label xml:lang="fi">Contour of each individual object</label>
 						<label xml:lang="cs">Contour of each individual object</label>
@@ -410,6 +442,9 @@
 						<label xml:lang="th">Contour of each individual object</label>
 						<label xml:lang="hi-IN">Contour of each individual object</label>
 						<label xml:lang="x-comment">Contour of each individual object</label>
+						<label xml:lang="hu">Contour of each individual object</label>
+						<label xml:lang="sk">Contour of each individual object</label>
+						<label xml:lang="sl">Contour of each individual object</label>
 					</info>
 					<value>true</value>
 				</prop>
@@ -441,9 +476,12 @@
 						<desc xml:lang="th">Specifies other layout options that do not fit into any other group.</desc>
 						<desc xml:lang="hi-IN">Specifies other layout options that do not fit into any other group.</desc>
 						<desc xml:lang="x-comment">Specifies other layout options that do not fit into any other group.</desc>
+						<desc xml:lang="hu">Specifies other layout options that do not fit into any other group.</desc>
+						<desc xml:lang="sk">Specifies other layout options that do not fit into any other group.</desc>
+						<desc xml:lang="sl">Specifies other layout options that do not fit into any other group.</desc>
 					<label xml:lang="en-US">Other Layout Options</label>
 					<label xml:lang="el">Other Layout Options</label>
-					<label xml:lang="nl">Other Layout Options</label>
+					<label xml:lang="nl">Andere lay-out opties</label>
 					<label xml:lang="fr">Other Layout Options</label>
 					<label xml:lang="fi">Other Layout Options</label>
 					<label xml:lang="cs">Other Layout Options</label>
@@ -466,6 +504,9 @@
 					<label xml:lang="th">Other Layout Options</label>
 					<label xml:lang="hi-IN">Other Layout Options</label>
 					<label xml:lang="x-comment">Other Layout Options</label>
+					<label xml:lang="hu">Other Layout Options</label>
+					<label xml:lang="sk">Other Layout Options</label>
+					<label xml:lang="sl">Other Layout Options</label>
 				</info>
 				<group oor:name="TabStop">
 					<!-- OldPath: Impress/Layout -->
@@ -498,9 +539,12 @@
 							<desc xml:lang="th">Specifies the distance between adjacent tab stops with regard to whether the metric or the non-metric system is currently selected.</desc>
 							<desc xml:lang="hi-IN">Specifies the distance between adjacent tab stops with regard to whether the metric or the non-metric system is currently selected.</desc>
 							<desc xml:lang="x-comment">Specifies the distance between adjacent tab stops with regard to whether the metric or the non-metric system is currently selected.</desc>
+							<desc xml:lang="hu">Specifies the distance between adjacent tab stops with regard to whether the metric or the non-metric system is currently selected.</desc>
+							<desc xml:lang="sk">Specifies the distance between adjacent tab stops with regard to whether the metric or the non-metric system is currently selected.</desc>
+							<desc xml:lang="sl">Specifies the distance between adjacent tab stops with regard to whether the metric or the non-metric system is currently selected.</desc>
 						<label xml:lang="en-US">Tab stops</label>
 						<label xml:lang="el">Στηλοθέτες</label>
-						<label xml:lang="nl">Tabstops</label>
+						<label xml:lang="nl">Tabposities</label>
 						<label xml:lang="fr">Tabulations</label>
 						<label xml:lang="fi">Sarkaimet</label>
 						<label xml:lang="cs">Kroky tabulátoru</label>
@@ -524,6 +568,8 @@
 						<label xml:lang="hi-IN">टॉब रुकावट</label>
 						<label xml:lang="x-comment">Tab stops</label>
 						<label xml:lang="sk">Kroky tabulátora</label>
+						<label xml:lang="hu">Tab stops</label>
+						<label xml:lang="sl">Tab stops</label>
 					</info>
 					<prop oor:name="Metric" oor:type="xs:int">
 						<info>
@@ -552,6 +598,9 @@
 								<desc xml:lang="th">Specifies the distance between adjacent tab stops in 1/100 mm when the metric system is selected.</desc>
 								<desc xml:lang="hi-IN">Specifies the distance between adjacent tab stops in 1/100 mm when the metric system is selected.</desc>
 								<desc xml:lang="x-comment">Specifies the distance between adjacent tab stops in 1/100 mm when the metric system is selected.</desc>
+								<desc xml:lang="hu">Specifies the distance between adjacent tab stops in 1/100 mm when the metric system is selected.</desc>
+								<desc xml:lang="sk">Specifies the distance between adjacent tab stops in 1/100 mm when the metric system is selected.</desc>
+								<desc xml:lang="sl">Specifies the distance between adjacent tab stops in 1/100 mm when the metric system is selected.</desc>
 							<label xml:lang="en-US"/>
 						</info>
 						<value>1250</value>
@@ -583,6 +632,9 @@
 								<desc xml:lang="th">Specifies the distance between adjacent tab stops in 1/100 mm when the non-metric system is selected.</desc>
 								<desc xml:lang="hi-IN">Specifies the distance between adjacent tab stops in 1/100 mm when the non-metric system is selected.</desc>
 								<desc xml:lang="x-comment">Specifies the distance between adjacent tab stops in 1/100 mm when the non-metric system is selected.</desc>
+								<desc xml:lang="hu">Specifies the distance between adjacent tab stops in 1/100 mm when the non-metric system is selected.</desc>
+								<desc xml:lang="sk">Specifies the distance between adjacent tab stops in 1/100 mm when the non-metric system is selected.</desc>
+								<desc xml:lang="sl">Specifies the distance between adjacent tab stops in 1/100 mm when the non-metric system is selected.</desc>
 							<label xml:lang="en-US"/>
 						</info>
 						<value>1270</value>
@@ -618,6 +670,9 @@
 							<desc xml:lang="th">Specifies the measurement unit to be used with respect to whether the metric or the non-metric system is selected.</desc>
 							<desc xml:lang="hi-IN">Specifies the measurement unit to be used with respect to whether the metric or the non-metric system is selected.</desc>
 							<desc xml:lang="x-comment">Specifies the measurement unit to be used with respect to whether the metric or the non-metric system is selected.</desc>
+							<desc xml:lang="hu">Specifies the measurement unit to be used with respect to whether the metric or the non-metric system is selected.</desc>
+							<desc xml:lang="sk">Specifies the measurement unit to be used with respect to whether the metric or the non-metric system is selected.</desc>
+							<desc xml:lang="sl">Specifies the measurement unit to be used with respect to whether the metric or the non-metric system is selected.</desc>
 						<label xml:lang="en-US">Measurement unit</label>
 						<label xml:lang="el">~Μονάδα μέτρησης</label>
 						<label xml:lang="nl">~Maateenheid</label>
@@ -644,6 +699,8 @@
 						<label xml:lang="hi-IN">नाप यूनिट्</label>
 						<label xml:lang="x-comment">Measurement unit</label>
 						<label xml:lang="sk">Jednotka miery</label>
+						<label xml:lang="hu">Measurement unit</label>
+						<label xml:lang="sl">Measurement unit</label>
 					</info>
 					<prop oor:name="Metric" oor:type="xs:int">
 						<info>
@@ -672,6 +729,9 @@
 								<desc xml:lang="th">Specifies the measurement unit to be used when the metric system is selected.</desc>
 								<desc xml:lang="hi-IN">Specifies the measurement unit to be used when the metric system is selected.</desc>
 								<desc xml:lang="x-comment">Specifies the measurement unit to be used when the metric system is selected.</desc>
+								<desc xml:lang="hu">Specifies the measurement unit to be used when the metric system is selected.</desc>
+								<desc xml:lang="sk">Specifies the measurement unit to be used when the metric system is selected.</desc>
+								<desc xml:lang="sl">Specifies the measurement unit to be used when the metric system is selected.</desc>
 							<label xml:lang="en-US">Measurement unit</label>
 							<label xml:lang="el">~Μονάδα μέτρησης</label>
 							<label xml:lang="nl">~Maateenheid</label>
@@ -698,6 +758,8 @@
 							<label xml:lang="hi-IN">नाप यूनिट्</label>
 							<label xml:lang="x-comment">Measurement unit</label>
 							<label xml:lang="sk">Jednotka miery</label>
+							<label xml:lang="hu">Measurement unit</label>
+							<label xml:lang="sl">Measurement unit</label>
 						</info>
 						<constraints>
 							<enumeration oor:value="1">
@@ -728,6 +790,8 @@
 									<desc xml:lang="hi-IN">मिल्लिमीटर</desc>
 									<desc xml:lang="x-comment">Millimeter</desc>
 									<desc xml:lang="sk">Milimeter</desc>
+									<desc xml:lang="hu">Millimeter</desc>
+									<desc xml:lang="sl">Millimeter</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="2">
@@ -758,6 +822,8 @@
 									<desc xml:lang="hi-IN">सेंटिमीटर</desc>
 									<desc xml:lang="x-comment">Centimeter</desc>
 									<desc xml:lang="sk">Centimeter</desc>
+									<desc xml:lang="hu">Centimeter</desc>
+									<desc xml:lang="sl">Centimeter</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="6">
@@ -788,6 +854,8 @@
 									<desc xml:lang="hi-IN">बिन्दु</desc>
 									<desc xml:lang="x-comment">Point</desc>
 									<desc xml:lang="sk">Bod</desc>
+									<desc xml:lang="hu">Point</desc>
+									<desc xml:lang="sl">Point</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="7">
@@ -818,6 +886,8 @@
 									<desc xml:lang="hi-IN">पिका</desc>
 									<desc xml:lang="x-comment">Pica</desc>
 									<desc xml:lang="sk">Pika</desc>
+									<desc xml:lang="hu">Pica</desc>
+									<desc xml:lang="sl">Pica</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="8">
@@ -848,6 +918,8 @@
 									<desc xml:lang="hi-IN">इंच</desc>
 									<desc xml:lang="x-comment">Inch</desc>
 									<desc xml:lang="sk">Palec</desc>
+									<desc xml:lang="hu">Inch</desc>
+									<desc xml:lang="sl">Inch</desc>
 								</info>
 							</enumeration>
 						</constraints>
@@ -880,6 +952,9 @@
 								<desc xml:lang="th">Specifies the measurement unit to be used when the non-metric system is selected.</desc>
 								<desc xml:lang="hi-IN">Specifies the measurement unit to be used when the non-metric system is selected.</desc>
 								<desc xml:lang="x-comment">Specifies the measurement unit to be used when the non-metric system is selected.</desc>
+								<desc xml:lang="hu">Specifies the measurement unit to be used when the non-metric system is selected.</desc>
+								<desc xml:lang="sk">Specifies the measurement unit to be used when the non-metric system is selected.</desc>
+								<desc xml:lang="sl">Specifies the measurement unit to be used when the non-metric system is selected.</desc>
 							<label xml:lang="en-US">Measurement unit</label>
 							<label xml:lang="el">~Μονάδα μέτρησης</label>
 							<label xml:lang="nl">~Maateenheid</label>
@@ -906,6 +981,8 @@
 							<label xml:lang="hi-IN">नाप यूनिट्</label>
 							<label xml:lang="x-comment">Measurement unit</label>
 							<label xml:lang="sk">Jednotka miery</label>
+							<label xml:lang="hu">Measurement unit</label>
+							<label xml:lang="sl">Measurement unit</label>
 						</info>
 						<constraints>
 							<enumeration oor:value="1">
@@ -936,6 +1013,8 @@
 									<desc xml:lang="hi-IN">मिल्लिमीटर</desc>
 									<desc xml:lang="x-comment">Millimeter</desc>
 									<desc xml:lang="sk">Milimeter</desc>
+									<desc xml:lang="hu">Millimeter</desc>
+									<desc xml:lang="sl">Millimeter</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="2">
@@ -966,6 +1045,8 @@
 									<desc xml:lang="hi-IN">सेंटिमीटर</desc>
 									<desc xml:lang="x-comment">Centimeter</desc>
 									<desc xml:lang="sk">Centimeter</desc>
+									<desc xml:lang="hu">Centimeter</desc>
+									<desc xml:lang="sl">Centimeter</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="6">
@@ -996,6 +1077,8 @@
 									<desc xml:lang="hi-IN">बिन्दु</desc>
 									<desc xml:lang="x-comment">Point</desc>
 									<desc xml:lang="sk">Bod</desc>
+									<desc xml:lang="hu">Point</desc>
+									<desc xml:lang="sl">Point</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="7">
@@ -1026,6 +1109,8 @@
 									<desc xml:lang="hi-IN">पिका</desc>
 									<desc xml:lang="x-comment">Pica</desc>
 									<desc xml:lang="sk">Pika</desc>
+									<desc xml:lang="hu">Pica</desc>
+									<desc xml:lang="sl">Pica</desc>
 								</info>
 							</enumeration>
 							<enumeration oor:value="8">
@@ -1056,6 +1141,8 @@
 									<desc xml:lang="hi-IN">इंच</desc>
 									<desc xml:lang="x-comment">Inch</desc>
 									<desc xml:lang="sk">Palec</desc>
+									<desc xml:lang="hu">Inch</desc>
+									<desc xml:lang="sl">Inch</desc>
 								</info>
 							</enumeration>
 						</constraints>
@@ -1067,7 +1154,7 @@
 		<group oor:name="Content">
 			<info>
 				<desc xml:lang="en-US">Contains content related configuration items.</desc>
-				<desc xml:lang="el">Contains content related configuration items.</desc>
+				<desc xml:lang="el">Περιέχει σημεία ρυθμίσεων σχετικά με το περιεχόμενο.</desc>
 				<desc xml:lang="nl">Contains content related configuration items.</desc>
 				<desc xml:lang="fr">Contains content related configuration items.</desc>
 				<desc xml:lang="fi">Contains content related configuration items.</desc>
@@ -1091,11 +1178,14 @@
 				<desc xml:lang="th">Contains content related configuration items.</desc>
 				<desc xml:lang="hi-IN">Contains content related configuration items.</desc>
 				<desc xml:lang="x-comment">Contains content related configuration items.</desc>
+				<desc xml:lang="hu">Contains content related configuration items.</desc>
+				<desc xml:lang="sk">Contains content related configuration items.</desc>
+				<desc xml:lang="sl">Contains content related configuration items.</desc>
 			</info>
 			<group oor:name="Display">
 				<info>
 					<desc xml:lang="en-US">Contains configuration items related to the display of Impress documents.</desc>
-					<desc xml:lang="el">Contains configuration items related to the display of Impress documents.</desc>
+					<desc xml:lang="el">Περιέχει σημεία ρυθμίσεων σχετικά με την εμφάνιση των εγγράφων Impress.</desc>
 					<desc xml:lang="nl">Contains configuration items related to the display of Impress documents.</desc>
 					<desc xml:lang="fr">Contains configuration items related to the display of Impress documents.</desc>
 					<desc xml:lang="fi">Contains configuration items related to the display of Impress documents.</desc>
@@ -1119,6 +1209,9 @@
 					<desc xml:lang="th">Contains configuration items related to the display of Impress documents.</desc>
 					<desc xml:lang="hi-IN">Contains configuration items related to the display of Impress documents.</desc>
 					<desc xml:lang="x-comment">Contains configuration items related to the display of Impress documents.</desc>
+					<desc xml:lang="hu">Contains configuration items related to the display of Impress documents.</desc>
+					<desc xml:lang="sk">Contains configuration items related to the display of Impress documents.</desc>
+					<desc xml:lang="sl">Contains configuration items related to the display of Impress documents.</desc>
 				</info>
 				<prop oor:name="PicturePlaceholder" oor:type="xs:boolean">
 					<!-- OldPath: Impress/Contents/Display -->
@@ -1126,7 +1219,7 @@
 					<!-- UIHints: Tools - Options - Presentation - Contents - [Section] Alternative display -->
 					<info>
 						<desc xml:lang="en-US">Indicates whether to show only the bounding box of graphic-objects like bitmaps and drawings.</desc>
-							<desc xml:lang="el">Indicates whether to show only the bounding box of graphic-objects like bitmaps and drawings.</desc>
+							<desc xml:lang="el">Υποδηλώνει αν θα εμφανίζεται μόνο το περίγραμμα των γραφικών αντικειμένων όπως χαρτογραφικά γραφικά και σχέδια.</desc>
 							<desc xml:lang="nl">Indicates whether to show only the bounding box of graphic-objects like bitmaps and drawings.</desc>
 							<desc xml:lang="fr">Indicates whether to show only the bounding box of graphic-objects like bitmaps and drawings.</desc>
 							<desc xml:lang="fi">Indicates whether to show only the bounding box of graphic-objects like bitmaps and drawings.</desc>
@@ -1150,6 +1243,9 @@
 							<desc xml:lang="th">Indicates whether to show only the bounding box of graphic-objects like bitmaps and drawings.</desc>
 							<desc xml:lang="hi-IN">Indicates whether to show only the bounding box of graphic-objects like bitmaps and drawings.</desc>
 							<desc xml:lang="x-comment">Indicates whether to show only the bounding box of graphic-objects like bitmaps and drawings.</desc>
+							<desc xml:lang="hu">Indicates whether to show only the bounding box of graphic-objects like bitmaps and drawings.</desc>
+							<desc xml:lang="sk">Indicates whether to show only the bounding box of graphic-objects like bitmaps and drawings.</desc>
+							<desc xml:lang="sl">Indicates whether to show only the bounding box of graphic-objects like bitmaps and drawings.</desc>
 						<label xml:lang="en-US">Picture placeholders</label>
 						<label xml:lang="el">Υποδήλωση εξωτερικών γραφικών</label>
 						<label xml:lang="nl">Externe afbeeldingen aanduiden</label>
@@ -1176,6 +1272,8 @@
 						<label xml:lang="hi-IN">चित्र स्थानधारक</label>
 						<label xml:lang="x-comment">Picture placeholders</label>
 						<label xml:lang="sk">Zástupca za obrázok</label>
+						<label xml:lang="hu">Picture placeholders</label>
+						<label xml:lang="sl">Picture placeholders</label>
 					</info>
 					<value>false</value>
 				</prop>
@@ -1185,7 +1283,7 @@
 					<!-- UIHints: Tools - Options - Presentation - Contents - [Section] Alternative display -->
 					<info>
 						<desc xml:lang="en-US">Indicates whether to show only outlines of objects such as filled rectangles and filled ellipses.</desc>
-							<desc xml:lang="el">Indicates whether to show only outlines of objects such as filled rectangles and filled ellipses.</desc>
+							<desc xml:lang="el">Υποδηλώνει αν θα εμφανίζεται μόνο το περίγραμμα αντικειμένων όπως γεμισμένα παραλληλόγραμμα και γεμάτες ελλείψεις.</desc>
 							<desc xml:lang="nl">Indicates whether to show only outlines of objects such as filled rectangles and filled ellipses.</desc>
 							<desc xml:lang="fr">Indicates whether to show only outlines of objects such as filled rectangles and filled ellipses.</desc>
 							<desc xml:lang="fi">Indicates whether to show only outlines of objects such as filled rectangles and filled ellipses.</desc>
@@ -1209,9 +1307,12 @@
 							<desc xml:lang="th">Indicates whether to show only outlines of objects such as filled rectangles and filled ellipses.</desc>
 							<desc xml:lang="hi-IN">Indicates whether to show only outlines of objects such as filled rectangles and filled ellipses.</desc>
 							<desc xml:lang="x-comment">Indicates whether to show only outlines of objects such as filled rectangles and filled ellipses.</desc>
+							<desc xml:lang="hu">Indicates whether to show only outlines of objects such as filled rectangles and filled ellipses.</desc>
+							<desc xml:lang="sk">Indicates whether to show only outlines of objects such as filled rectangles and filled ellipses.</desc>
+							<desc xml:lang="sl">Indicates whether to show only outlines of objects such as filled rectangles and filled ellipses.</desc>
 						<label xml:lang="en-US">Contour mode</label>
 						<label xml:lang="el">Κατάσταση περιγράμματος</label>
-						<label xml:lang="nl">Contour mode</label>
+						<label xml:lang="nl">Contourmodus</label>
 						<label xml:lang="fr">Mode Contour</label>
 						<label xml:lang="fi">Ääriviivatila</label>
 						<label xml:lang="cs">Obrysový režim</label>
@@ -1235,6 +1336,8 @@
 						<label xml:lang="hi-IN">परिवेश प्रकार</label>
 						<label xml:lang="x-comment">Contour mode</label>
 						<label xml:lang="sk">Obrysový režim</label>
+						<label xml:lang="hu">Contour mode</label>
+						<label xml:lang="sl">Contour mode</label>
 					</info>
 					<value>false</value>
 				</prop>
@@ -1244,7 +1347,7 @@
 					<!-- UIHints: Tools - Options - Presentation - Contents - [Section] Alternative display -->
 					<info>
 						<desc xml:lang="en-US">Indicates whether to show only a placeholder for text in graphical objects.</desc>
-							<desc xml:lang="el">Indicates whether to show only a placeholder for text in graphical objects.</desc>
+							<desc xml:lang="el">Υποδηλώνει αν θα εμφανίζεται μόνο ένα σύμβολο θέσης για το κείμενο σε γραφικά αντικείμενα.</desc>
 							<desc xml:lang="nl">Indicates whether to show only a placeholder for text in graphical objects.</desc>
 							<desc xml:lang="fr">Indicates whether to show only a placeholder for text in graphical objects.</desc>
 							<desc xml:lang="fi">Indicates whether to show only a placeholder for text in graphical objects.</desc>
@@ -1268,8 +1371,11 @@
 							<desc xml:lang="th">Indicates whether to show only a placeholder for text in graphical objects.</desc>
 							<desc xml:lang="hi-IN">Indicates whether to show only a placeholder for text in graphical objects.</desc>
 							<desc xml:lang="x-comment">Indicates whether to show only a placeholder for text in graphical objects.</desc>
+							<desc xml:lang="hu">Indicates whether to show only a placeholder for text in graphical objects.</desc>
+							<desc xml:lang="sk">Indicates whether to show only a placeholder for text in graphical objects.</desc>
+							<desc xml:lang="sl">Indicates whether to show only a placeholder for text in graphical objects.</desc>
 						<label xml:lang="en-US">Text placeholders</label>
-						<label xml:lang="el">Υποδήλωση κειμένου</label>
+						<label xml:lang="el">Σύμβολα θέσης κειμένου</label>
 						<label xml:lang="nl">Tekst aanduiden</label>
 						<label xml:lang="fr">Ébaucher le texte</label>
 						<label xml:lang="fi">Tekstin paikkamerkit</label>
@@ -1294,6 +1400,8 @@
 						<label xml:lang="hi-IN">टेक्स्ट् स्थानधारक</label>
 						<label xml:lang="x-comment">Text placeholders</label>
 						<label xml:lang="sk">Zástupné znaky v texte</label>
+						<label xml:lang="hu">Text placeholders</label>
+						<label xml:lang="sl">Text placeholders</label>
 					</info>
 					<value>false</value>
 				</prop>
@@ -1327,6 +1435,9 @@
 							<desc xml:lang="th">Indicates whether to show only hairlines instead of the true line styles.</desc>
 							<desc xml:lang="hi-IN">Indicates whether to show only hairlines instead of the true line styles.</desc>
 							<desc xml:lang="x-comment">Indicates whether to show only hairlines instead of the true line styles.</desc>
+							<desc xml:lang="hu">Indicates whether to show only hairlines instead of the true line styles.</desc>
+							<desc xml:lang="sk">Indicates whether to show only hairlines instead of the true line styles.</desc>
+							<desc xml:lang="sl">Indicates whether to show only hairlines instead of the true line styles.</desc>
 						<label xml:lang="en-US">Line contour only</label>
 						<label xml:lang="el">Εμφάνιση μόνο πολύ λεπτών γραμμών</label>
 						<label xml:lang="nl">Alleen contourlijnen weergeven</label>
@@ -1353,6 +1464,8 @@
 						<label xml:lang="hi-IN">केवल रेखा परिवेश</label>
 						<label xml:lang="x-comment">Line contour only</label>
 						<label xml:lang="sk">Iba čiarové obrysy</label>
+						<label xml:lang="hu">Line contour only</label>
+						<label xml:lang="sl">Line contour only</label>
 					</info>
 					<value>false</value>
 				</prop>
@@ -1385,6 +1498,9 @@
 				<desc xml:lang="th">Contains a collection of configuration items for the Impress application that do not fit into another category.</desc>
 				<desc xml:lang="hi-IN">Contains a collection of configuration items for the Impress application that do not fit into another category.</desc>
 				<desc xml:lang="x-comment">Contains a collection of configuration items for the Impress application that do not fit into another category.</desc>
+				<desc xml:lang="hu">Contains a collection of configuration items for the Impress application that do not fit into another category.</desc>
+				<desc xml:lang="sk">Contains a collection of configuration items for the Impress application that do not fit into another category.</desc>
+				<desc xml:lang="sl">Contains a collection of configuration items for the Impress application that do not fit into another category.</desc>
 			</info>
 			<prop oor:name="BackgroundCache" oor:type="xs:boolean">
 				<!-- OldPath: Impress/Other -->
@@ -1416,6 +1532,9 @@
 						<desc xml:lang="th">Indicates whether to store master pages in a cache to speed up drawing.</desc>
 						<desc xml:lang="hi-IN">Indicates whether to store master pages in a cache to speed up drawing.</desc>
 						<desc xml:lang="x-comment">Indicates whether to store master pages in a cache to speed up drawing.</desc>
+						<desc xml:lang="hu">Indicates whether to store master pages in a cache to speed up drawing.</desc>
+						<desc xml:lang="sk">Indicates whether to store master pages in a cache to speed up drawing.</desc>
+						<desc xml:lang="sl">Indicates whether to store master pages in a cache to speed up drawing.</desc>
 					<label xml:lang="en-US">Use background cache</label>
 					<label xml:lang="el">Χρήση κρυφής μνήμης φόντου</label>
 					<label xml:lang="nl">~Cache voor achtergrond gebruiken</label>
@@ -1442,6 +1561,8 @@
 					<label xml:lang="hi-IN">पृष्टभूमि कॉश का उपयोग करो</label>
 					<label xml:lang="x-comment">Use background cache</label>
 					<label xml:lang="sk">Použiť background cache</label>
+					<label xml:lang="hu">Use background cache</label>
+					<label xml:lang="sl">Use background cache</label>
 				</info>
 				<value>true</value>
 			</prop>
@@ -1475,9 +1596,12 @@
 						<desc xml:lang="th">Indicates whether moving while holding the Control key makes a copy of the moved object.</desc>
 						<desc xml:lang="hi-IN">Indicates whether moving while holding the Control key makes a copy of the moved object.</desc>
 						<desc xml:lang="x-comment">Indicates whether moving while holding the Control key makes a copy of the moved object.</desc>
+						<desc xml:lang="hu">Indicates whether moving while holding the Control key makes a copy of the moved object.</desc>
+						<desc xml:lang="sk">Indicates whether moving while holding the Control key makes a copy of the moved object.</desc>
+						<desc xml:lang="sl">Indicates whether moving while holding the Control key makes a copy of the moved object.</desc>
 					<label xml:lang="en-US">Copy while moving</label>
-					<label xml:lang="el">Copy while moving</label>
-					<label xml:lang="nl">Copy while moving</label>
+					<label xml:lang="el">Αντιγραφή κατά τη μετακίνηση</label>
+					<label xml:lang="nl">Kopiëren bij verplaatsen</label>
 					<label xml:lang="fr">Copy while moving</label>
 					<label xml:lang="fi">Copy while moving</label>
 					<label xml:lang="cs">Copy while moving</label>
@@ -1500,6 +1624,9 @@
 					<label xml:lang="th">Copy while moving</label>
 					<label xml:lang="hi-IN">Copy while moving</label>
 					<label xml:lang="x-comment">Copy while moving</label>
+					<label xml:lang="hu">Copy while moving</label>
+					<label xml:lang="sk">Copy while moving</label>
+					<label xml:lang="sl">Copy while moving</label>
 				</info>
 				<value>false</value>
 			</prop>
@@ -1533,6 +1660,9 @@
 						<desc xml:lang="th">Indicates whether objects can still be moved while in rotating mode.</desc>
 						<desc xml:lang="hi-IN">Indicates whether objects can still be moved while in rotating mode.</desc>
 						<desc xml:lang="x-comment">Indicates whether objects can still be moved while in rotating mode.</desc>
+						<desc xml:lang="hu">Indicates whether objects can still be moved while in rotating mode.</desc>
+						<desc xml:lang="sk">Indicates whether objects can still be moved while in rotating mode.</desc>
+						<desc xml:lang="sl">Indicates whether objects can still be moved while in rotating mode.</desc>
 					<label xml:lang="en-US">Objects always moveable</label>
 					<label xml:lang="el">~Πάντα δυνατότητα μετακίνησης αντικειμένων</label>
 					<label xml:lang="nl">~Objecten altijd verschuifbaar</label>
@@ -1559,6 +1689,8 @@
 					<label xml:lang="hi-IN">वस्तु हमेशा स्थान परिवर्तन करने योग्य</label>
 					<label xml:lang="x-comment">Objects always moveable</label>
 					<label xml:lang="sk">Vždy presúvateľné objekty</label>
+					<label xml:lang="hu">Objects always moveable</label>
+					<label xml:lang="sl">Objects always moveable</label>
 				</info>
 				<value>true</value>
 			</prop>
@@ -1592,9 +1724,12 @@
 						<desc xml:lang="th">Indicates whether objects that are placed on a circle keep their original form, i.e. may be moved and rotated but not resized or otherwise distorted.</desc>
 						<desc xml:lang="hi-IN">Indicates whether objects that are placed on a circle keep their original form, i.e. may be moved and rotated but not resized or otherwise distorted.</desc>
 						<desc xml:lang="x-comment">Indicates whether objects that are placed on a circle keep their original form, i.e. may be moved and rotated but not resized or otherwise distorted.</desc>
+						<desc xml:lang="hu">Indicates whether objects that are placed on a circle keep their original form, i.e. may be moved and rotated but not resized or otherwise distorted.</desc>
+						<desc xml:lang="sk">Indicates whether objects that are placed on a circle keep their original form, i.e. may be moved and rotated but not resized or otherwise distorted.</desc>
+						<desc xml:lang="sl">Indicates whether objects that are placed on a circle keep their original form, i.e. may be moved and rotated but not resized or otherwise distorted.</desc>
 					<label xml:lang="en-US">Don&apos;t distort objects in curve</label>
 					<label xml:lang="el">Don&apos;t distort objects in curve</label>
-					<label xml:lang="nl">Don&apos;t distort objects in curve</label>
+					<label xml:lang="nl">Objecten in curve niet vervormen</label>
 					<label xml:lang="fr">Don&apos;t distort objects in curve</label>
 					<label xml:lang="fi">Don&apos;t distort objects in curve</label>
 					<label xml:lang="cs">Don&apos;t distort objects in curve</label>
@@ -1617,6 +1752,9 @@
 					<label xml:lang="th">Don&apos;t distort objects in curve</label>
 					<label xml:lang="hi-IN">Don&apos;t distort objects in curve</label>
 					<label xml:lang="x-comment">Don&apos;t distort objects in curve</label>
+					<label xml:lang="hu">Don&apos;t distort objects in curve</label>
+					<label xml:lang="sk">Don&apos;t distort objects in curve</label>
+					<label xml:lang="sl">Don&apos;t distort objects in curve</label>
 				</info>
 				<value>false</value>
 			</prop>
@@ -1626,7 +1764,7 @@
 				<!-- UIHints: Option Bar -->
 				<info>
 					<desc xml:lang="en-US">Indicates whether a double-click on a text object activates the edit mode.</desc>
-						<desc xml:lang="el">Indicates whether a double-click on a text object activates the edit mode.</desc>
+						<desc xml:lang="el">Υποδηλώνει αν ένα διπλό πάτημα σε ένα αντικείμενο κειμένου ενεργοποιεί την κατάσταση επεξεργασίας.</desc>
 						<desc xml:lang="nl">Indicates whether a double-click on a text object activates the edit mode.</desc>
 						<desc xml:lang="fr">Indicates whether a double-click on a text object activates the edit mode.</desc>
 						<desc xml:lang="fi">Indicates whether a double-click on a text object activates the edit mode.</desc>
@@ -1650,9 +1788,12 @@
 						<desc xml:lang="th">Indicates whether a double-click on a text object activates the edit mode.</desc>
 						<desc xml:lang="hi-IN">Indicates whether a double-click on a text object activates the edit mode.</desc>
 						<desc xml:lang="x-comment">Indicates whether a double-click on a text object activates the edit mode.</desc>
+						<desc xml:lang="hu">Indicates whether a double-click on a text object activates the edit mode.</desc>
+						<desc xml:lang="sk">Indicates whether a double-click on a text object activates the edit mode.</desc>
+						<desc xml:lang="sl">Indicates whether a double-click on a text object activates the edit mode.</desc>
 					<label xml:lang="en-US">Double-Click Text to Edit</label>
 					<label xml:lang="el">Double-Click Text to Edit</label>
-					<label xml:lang="nl">Double-Click Text to Edit</label>
+					<label xml:lang="nl">Op tekst dubbelklikken om te bewerken</label>
 					<label xml:lang="fr">Double-Click Text to Edit</label>
 					<label xml:lang="fi">Double-Click Text to Edit</label>
 					<label xml:lang="cs">Double-Click Text to Edit</label>
@@ -1675,6 +1816,9 @@
 					<label xml:lang="th">Double-Click Text to Edit</label>
 					<label xml:lang="hi-IN">Double-Click Text to Edit</label>
 					<label xml:lang="x-comment">Double-Click Text to Edit</label>
+					<label xml:lang="hu">Double-Click Text to Edit</label>
+					<label xml:lang="sk">Double-Click Text to Edit</label>
+					<label xml:lang="sl">Double-Click Text to Edit</label>
 				</info>
 				<value>true</value>
 			</prop>
@@ -1684,7 +1828,7 @@
 				<!-- UIHints: Option Bar -->
 				<info>
 					<desc xml:lang="en-US">Indicates whether a double-click on an object activates the rotation mode.</desc>
-						<desc xml:lang="el">Indicates whether a double-click on an object activates the rotation mode.</desc>
+						<desc xml:lang="el">Υποδηλώνει αν ένα διπλό πάτημα σε ένα αντικείμενο ενεργοποιεί την κατάσταση περιστροφής.</desc>
 						<desc xml:lang="nl">Indicates whether a double-click on an object activates the rotation mode.</desc>
 						<desc xml:lang="fr">Indicates whether a double-click on an object activates the rotation mode.</desc>
 						<desc xml:lang="fi">Indicates whether a double-click on an object activates the rotation mode.</desc>
@@ -1708,6 +1852,9 @@
 						<desc xml:lang="th">Indicates whether a double-click on an object activates the rotation mode.</desc>
 						<desc xml:lang="hi-IN">Indicates whether a double-click on an object activates the rotation mode.</desc>
 						<desc xml:lang="x-comment">Indicates whether a double-click on an object activates the rotation mode.</desc>
+						<desc xml:lang="hu">Indicates whether a double-click on an object activates the rotation mode.</desc>
+						<desc xml:lang="sk">Indicates whether a double-click on an object activates the rotation mode.</desc>
+						<desc xml:lang="sl">Indicates whether a double-click on an object activates the rotation mode.</desc>
 					<label xml:lang="en-US">Rotation Mode after clicking object</label>
 					<label xml:lang="el">Κατάσταση περιστροφής μετά από κλικ στο αντικείμενο</label>
 					<label xml:lang="nl">Draaimodus na klikken op object</label>
@@ -1734,6 +1881,8 @@
 					<label xml:lang="hi-IN">वस्तु को क्लिक करने के पश्चात् का घुमाव प्रकार</label>
 					<label xml:lang="x-comment">Rotation Mode after clicking object</label>
 					<label xml:lang="sk">Kliknutím vstúpite do rotačného režimu</label>
+					<label xml:lang="hu">Rotation Mode after clicking object</label>
+					<label xml:lang="sl">Rotation Mode after clicking object</label>
 				</info>
 				<value>false</value>
 			</prop>
@@ -1743,7 +1892,7 @@
 				<!-- UIHints: Menu: view - preview mode -->
 				<info>
 					<desc xml:lang="en-US">Specifies the color quality of the preview: 0 - Color, 868 - Grayscale, 5381 - Black/White.</desc>
-						<desc xml:lang="el">Specifies the color quality of the preview: 0 - Color, 868 - Grayscale, 5381 - Black/White.</desc>
+						<desc xml:lang="el">Ορίζει την ποιότητα χρώματος της προεπισκόπησης: 0 - Χρώμα, 868 - Γκρι, 5381 - Ασπρόμαυρο.</desc>
 						<desc xml:lang="nl">Specifies the color quality of the preview: 0 - Color, 868 - Grayscale, 5381 - Black/White.</desc>
 						<desc xml:lang="fr">Specifies the color quality of the preview: 0 - Color, 868 - Grayscale, 5381 - Black/White.</desc>
 						<desc xml:lang="fi">Specifies the color quality of the preview: 0 - Color, 868 - Grayscale, 5381 - Black/White.</desc>
@@ -1767,9 +1916,12 @@
 						<desc xml:lang="th">Specifies the color quality of the preview: 0 - Color, 868 - Grayscale, 5381 - Black/White.</desc>
 						<desc xml:lang="hi-IN">Specifies the color quality of the preview: 0 - Color, 868 - Grayscale, 5381 - Black/White.</desc>
 						<desc xml:lang="x-comment">Specifies the color quality of the preview: 0 - Color, 868 - Grayscale, 5381 - Black/White.</desc>
+						<desc xml:lang="hu">Specifies the color quality of the preview: 0 - Color, 868 - Grayscale, 5381 - Black/White.</desc>
+						<desc xml:lang="sk">Specifies the color quality of the preview: 0 - Color, 868 - Grayscale, 5381 - Black/White.</desc>
+						<desc xml:lang="sl">Specifies the color quality of the preview: 0 - Color, 868 - Grayscale, 5381 - Black/White.</desc>
 					<label xml:lang="en-US">Preview-Mode</label>
-					<label xml:lang="el">Preview-Mode</label>
-					<label xml:lang="nl">Preview-Mode</label>
+					<label xml:lang="el">Κατάσταση προεπισκόπησης</label>
+					<label xml:lang="nl">Voorbeeldweergavemodus</label>
 					<label xml:lang="fr">Preview-Mode</label>
 					<label xml:lang="fi">Preview-Mode</label>
 					<label xml:lang="cs">Preview-Mode</label>
@@ -1792,6 +1944,9 @@
 					<label xml:lang="th">Preview-Mode</label>
 					<label xml:lang="hi-IN">Preview-Mode</label>
 					<label xml:lang="x-comment">Preview-Mode</label>
+					<label xml:lang="hu">Preview-Mode</label>
+					<label xml:lang="sk">Preview-Mode</label>
+					<label xml:lang="sl">Preview-Mode</label>
 				</info>
 				<constraints>
 					<enumeration oor:value="0">
@@ -1822,6 +1977,8 @@
 							<desc xml:lang="hi-IN">रंग</desc>
 							<desc xml:lang="x-comment">Color</desc>
 							<desc xml:lang="sk">Farba</desc>
+							<desc xml:lang="hu">Color</desc>
+							<desc xml:lang="sl">Color</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="868">
@@ -1852,6 +2009,8 @@
 							<desc xml:lang="hi-IN">ग्रेस्केल</desc>
 							<desc xml:lang="x-comment">Grayscale</desc>
 							<desc xml:lang="sk">Stupne šedej</desc>
+							<desc xml:lang="hu">Grayscale</desc>
+							<desc xml:lang="sl">Grayscale</desc>
 						</info>
 					</enumeration>
 					<enumeration oor:value="5381">
@@ -1882,6 +2041,8 @@
 							<desc xml:lang="hi-IN">काला/सफेद</desc>
 							<desc xml:lang="x-comment">Black/White</desc>
 							<desc xml:lang="sk">Čiernobiela</desc>
+							<desc xml:lang="hu">Black/White</desc>
+							<desc xml:lang="sl">Black/White</desc>
 						</info>
 					</enumeration>
 				</constraints>
@@ -1893,7 +2054,7 @@
 				<!-- UIHints: Optionbar -->
 				<info>
 					<desc xml:lang="en-US">Indicates whether to show simple (true) or 3D-handles (false).</desc>
-						<desc xml:lang="el">Indicates whether to show simple (true) or 3D-handles (false).</desc>
+						<desc xml:lang="el">Υποδηλώνει αν θα εμφανίζονται απλές (αληθής) ή τρισδιάστατες λαβές (ψευδής).</desc>
 						<desc xml:lang="nl">Indicates whether to show simple (true) or 3D-handles (false).</desc>
 						<desc xml:lang="fr">Indicates whether to show simple (true) or 3D-handles (false).</desc>
 						<desc xml:lang="fi">Indicates whether to show simple (true) or 3D-handles (false).</desc>
@@ -1917,6 +2078,9 @@
 						<desc xml:lang="th">Indicates whether to show simple (true) or 3D-handles (false).</desc>
 						<desc xml:lang="hi-IN">Indicates whether to show simple (true) or 3D-handles (false).</desc>
 						<desc xml:lang="x-comment">Indicates whether to show simple (true) or 3D-handles (false).</desc>
+						<desc xml:lang="hu">Indicates whether to show simple (true) or 3D-handles (false).</desc>
+						<desc xml:lang="sk">Indicates whether to show simple (true) or 3D-handles (false).</desc>
+						<desc xml:lang="sl">Indicates whether to show simple (true) or 3D-handles (false).</desc>
 					<label xml:lang="en-US">Simple Handles</label>
 					<label xml:lang="el">Απλές λαβές</label>
 					<label xml:lang="nl">Eenvoudige handvatten</label>
@@ -1943,6 +2107,8 @@
 					<label xml:lang="hi-IN">सामान्य हान्डलें</label>
 					<label xml:lang="x-comment">Simple Handles</label>
 					<label xml:lang="sk">Jednoduché úchytky</label>
+					<label xml:lang="hu">Simple Handles</label>
+					<label xml:lang="sl">Simple Handles</label>
 				</info>
 				<value>false</value>
 			</prop>
@@ -1952,7 +2118,7 @@
 				<!-- UIHints: Optionbar -->
 				<info>
 					<desc xml:lang="en-US">Indicates whether to show big (true) or small (false) handles.</desc>
-						<desc xml:lang="el">Indicates whether to show big (true) or small (false) handles.</desc>
+						<desc xml:lang="el">Υποδηλώνει αν θα εμφανίζονται μεγάλες (αληθές) ή μικρές (ψευδές) λαβές.</desc>
 						<desc xml:lang="nl">Indicates whether to show big (true) or small (false) handles.</desc>
 						<desc xml:lang="fr">Indicates whether to show big (true) or small (false) handles.</desc>
 						<desc xml:lang="fi">Indicates whether to show big (true) or small (false) handles.</desc>
@@ -1976,9 +2142,12 @@
 						<desc xml:lang="th">Indicates whether to show big (true) or small (false) handles.</desc>
 						<desc xml:lang="hi-IN">Indicates whether to show big (true) or small (false) handles.</desc>
 						<desc xml:lang="x-comment">Indicates whether to show big (true) or small (false) handles.</desc>
+						<desc xml:lang="hu">Indicates whether to show big (true) or small (false) handles.</desc>
+						<desc xml:lang="sk">Indicates whether to show big (true) or small (false) handles.</desc>
+						<desc xml:lang="sl">Indicates whether to show big (true) or small (false) handles.</desc>
 					<label xml:lang="en-US">Big Handles</label>
 					<label xml:lang="el">Big Handles</label>
-					<label xml:lang="nl">Big Handles</label>
+					<label xml:lang="nl">Grote handvatten</label>
 					<label xml:lang="fr">Big Handles</label>
 					<label xml:lang="fi">Big Handles</label>
 					<label xml:lang="cs">Big Handles</label>
@@ -2001,6 +2170,9 @@
 					<label xml:lang="th">Big Handles</label>
 					<label xml:lang="hi-IN">Big Handles</label>
 					<label xml:lang="x-comment">Big Handles</label>
+					<label xml:lang="hu">Big Handles</label>
+					<label xml:lang="sk">Big Handles</label>
+					<label xml:lang="sl">Big Handles</label>
 				</info>
 				<value>false</value>
 			</prop>
@@ -2034,9 +2206,12 @@
 						<desc xml:lang="th">Indicates whether the current attributes will be assigned to newly created objects.</desc>
 						<desc xml:lang="hi-IN">Indicates whether the current attributes will be assigned to newly created objects.</desc>
 						<desc xml:lang="x-comment">Indicates whether the current attributes will be assigned to newly created objects.</desc>
+						<desc xml:lang="hu">Indicates whether the current attributes will be assigned to newly created objects.</desc>
+						<desc xml:lang="sk">Indicates whether the current attributes will be assigned to newly created objects.</desc>
+						<desc xml:lang="sl">Indicates whether the current attributes will be assigned to newly created objects.</desc>
 					<label xml:lang="en-US">Create with attributes</label>
 					<label xml:lang="el">Create with attributes</label>
-					<label xml:lang="nl">Create with attributes</label>
+					<label xml:lang="nl">Aanmaken met attributen</label>
 					<label xml:lang="fr">Create with attributes</label>
 					<label xml:lang="fi">Create with attributes</label>
 					<label xml:lang="cs">Create with attributes</label>
@@ -2059,6 +2234,9 @@
 					<label xml:lang="th">Create with attributes</label>
 					<label xml:lang="hi-IN">Create with attributes</label>
 					<label xml:lang="x-comment">Create with attributes</label>
+					<label xml:lang="hu">Create with attributes</label>
+					<label xml:lang="sk">Create with attributes</label>
+					<label xml:lang="sl">Create with attributes</label>
 				</info>
 				<value>false</value>
 			</prop>
@@ -2093,9 +2271,12 @@
 						<desc xml:lang="th">Indicates whether the warning dialog appears when setting a new standard page layout.</desc>
 						<desc xml:lang="hi-IN">Indicates whether the warning dialog appears when setting a new standard page layout.</desc>
 						<desc xml:lang="x-comment">Indicates whether the warning dialog appears when setting a new standard page layout.</desc>
+						<desc xml:lang="hu">Indicates whether the warning dialog appears when setting a new standard page layout.</desc>
+						<desc xml:lang="sk">Indicates whether the warning dialog appears when setting a new standard page layout.</desc>
+						<desc xml:lang="sl">Indicates whether the warning dialog appears when setting a new standard page layout.</desc>
 					<label xml:lang="en-US">Show Undo-Stack Delete Warning</label>
 					<label xml:lang="el">Show Undo-Stack Delete Warning</label>
-					<label xml:lang="nl">Show Undo-Stack Delete Warning</label>
+					<label xml:lang="nl">Toon waarschuwing bij wissen van de &quot;ongedaan maken&quot; stapel</label>
 					<label xml:lang="fr">Show Undo-Stack Delete Warning</label>
 					<label xml:lang="fi">Show Undo-Stack Delete Warning</label>
 					<label xml:lang="cs">Show Undo-Stack Delete Warning</label>
@@ -2118,6 +2299,9 @@
 					<label xml:lang="th">Show Undo-Stack Delete Warning</label>
 					<label xml:lang="hi-IN">Show Undo-Stack Delete Warning</label>
 					<label xml:lang="x-comment">Show Undo-Stack Delete Warning</label>
+					<label xml:lang="hu">Show Undo-Stack Delete Warning</label>
+					<label xml:lang="sk">Show Undo-Stack Delete Warning</label>
+					<label xml:lang="sl">Show Undo-Stack Delete Warning</label>
 				</info>
 				<value>true</value>
 			</prop>
@@ -2148,6 +2332,9 @@
 					<desc xml:lang="th">Contains text editing related configuration items.</desc>
 					<desc xml:lang="hi-IN">Contains text editing related configuration items.</desc>
 					<desc xml:lang="x-comment">Contains text editing related configuration items.</desc>
+					<desc xml:lang="hu">Contains text editing related configuration items.</desc>
+					<desc xml:lang="sk">Contains text editing related configuration items.</desc>
+					<desc xml:lang="sl">Contains text editing related configuration items.</desc>
 				</info>
 				<prop oor:name="QuickEditing" oor:type="xs:boolean">
 					<!-- OldPath: Impress/Other/Text_Objects -->
@@ -2179,6 +2366,9 @@
 							<desc xml:lang="th">Indicates whether a simple click on a text object changes it to edit mode.</desc>
 							<desc xml:lang="hi-IN">Indicates whether a simple click on a text object changes it to edit mode.</desc>
 							<desc xml:lang="x-comment">Indicates whether a simple click on a text object changes it to edit mode.</desc>
+							<desc xml:lang="hu">Indicates whether a simple click on a text object changes it to edit mode.</desc>
+							<desc xml:lang="sk">Indicates whether a simple click on a text object changes it to edit mode.</desc>
+							<desc xml:lang="sl">Indicates whether a simple click on a text object changes it to edit mode.</desc>
 						<label xml:lang="en-US">Allow quick editing</label>
 						<label xml:lang="el">Με γρήγορη επεξεργασία</label>
 						<label xml:lang="nl">Snelbewerking toestaan</label>
@@ -2205,6 +2395,8 @@
 						<label xml:lang="hi-IN">शीघ्र संपादन स्वीकृत</label>
 						<label xml:lang="x-comment">Allow quick editing</label>
 						<label xml:lang="sk">Povoliť rýchlu editáciu</label>
+						<label xml:lang="hu">Allow quick editing</label>
+						<label xml:lang="sl">Allow quick editing</label>
 					</info>
 					<value>true</value>
 				</prop>
@@ -2238,6 +2430,9 @@
 							<desc xml:lang="th">Indicates whether a text frame can only be selected by clicking on the text or by clicking somewhere in the frame.</desc>
 							<desc xml:lang="hi-IN">Indicates whether a text frame can only be selected by clicking on the text or by clicking somewhere in the frame.</desc>
 							<desc xml:lang="x-comment">Indicates whether a text frame can only be selected by clicking on the text or by clicking somewhere in the frame.</desc>
+							<desc xml:lang="hu">Indicates whether a text frame can only be selected by clicking on the text or by clicking somewhere in the frame.</desc>
+							<desc xml:lang="sk">Indicates whether a text frame can only be selected by clicking on the text or by clicking somewhere in the frame.</desc>
+							<desc xml:lang="sl">Indicates whether a text frame can only be selected by clicking on the text or by clicking somewhere in the frame.</desc>
 						<label xml:lang="en-US">Only text area selectable</label>
 						<label xml:lang="el">Επιλογή μό~νο περιοχής κειμένου</label>
 						<label xml:lang="nl">~Alleen tekstbereik selecteerbaar</label>
@@ -2256,7 +2451,7 @@
 						<label xml:lang="it">Seleziona solo area testo</label>
 						<label xml:lang="sv">Bara textområde ka~n markeras</label>
 						<label xml:lang="pl">Selekcja możliwa tylko w obszarze tekstu</label>
-						<label xml:lang="pt-BR">Somente a  área do texto é selecionável</label>
+						<label xml:lang="pt-BR">Somente a área do texto é selecionável</label>
 						<label xml:lang="ja">テキスト領域だけ選択可能</label>
 						<label xml:lang="ko">텍스트 영역만 선택 가능</label>
 						<label xml:lang="tr">Yalnızca metin bölümü seçilebilir</label>
@@ -2264,6 +2459,8 @@
 						<label xml:lang="hi-IN">केवल टेक्स्ट् विस्तीर्ण चुनने योग्य है</label>
 						<label xml:lang="x-comment">Only text area selectable</label>
 						<label xml:lang="sk">Možné vybrať iba textovú oblasť</label>
+						<label xml:lang="hu">Only text area selectable</label>
+						<label xml:lang="sl">Only text area selectable</label>
 					</info>
 					<value>true</value>
 				</prop>
@@ -2295,9 +2492,12 @@
 						<desc xml:lang="th">Specifies configuration items governing the behavior when creating a new document or a new page.</desc>
 						<desc xml:lang="hi-IN">Specifies configuration items governing the behavior when creating a new document or a new page.</desc>
 						<desc xml:lang="x-comment">Specifies configuration items governing the behavior when creating a new document or a new page.</desc>
+						<desc xml:lang="hu">Specifies configuration items governing the behavior when creating a new document or a new page.</desc>
+						<desc xml:lang="sk">Specifies configuration items governing the behavior when creating a new document or a new page.</desc>
+						<desc xml:lang="sl">Specifies configuration items governing the behavior when creating a new document or a new page.</desc>
 					<label xml:lang="en-US">Start with AutoPilots</label>
 					<label xml:lang="el">Start with AutoPilots</label>
-					<label xml:lang="nl">Start with AutoPilots</label>
+					<label xml:lang="nl">Starten met AutoPiloten</label>
 					<label xml:lang="fr">Start with AutoPilots</label>
 					<label xml:lang="fi">Start with AutoPilots</label>
 					<label xml:lang="cs">Start with AutoPilots</label>
@@ -2320,6 +2520,9 @@
 					<label xml:lang="th">Start with AutoPilots</label>
 					<label xml:lang="hi-IN">Start with AutoPilots</label>
 					<label xml:lang="x-comment">Start with AutoPilots</label>
+					<label xml:lang="hu">Start with AutoPilots</label>
+					<label xml:lang="sk">Start with AutoPilots</label>
+					<label xml:lang="sl">Start with AutoPilots</label>
 				</info>
 				<prop oor:name="AutoPilot" oor:type="xs:boolean">
 					<!-- OldPath: Impress/Other/New_Doc -->
@@ -2351,9 +2554,12 @@
 							<desc xml:lang="th">Indicates whether to show the autopilot when creating a new presentation.</desc>
 							<desc xml:lang="hi-IN">Indicates whether to show the autopilot when creating a new presentation.</desc>
 							<desc xml:lang="x-comment">Indicates whether to show the autopilot when creating a new presentation.</desc>
+							<desc xml:lang="hu">Indicates whether to show the autopilot when creating a new presentation.</desc>
+							<desc xml:lang="sk">Indicates whether to show the autopilot when creating a new presentation.</desc>
+							<desc xml:lang="sl">Indicates whether to show the autopilot when creating a new presentation.</desc>
 						<label xml:lang="en-US">Start with AutoPilots</label>
 						<label xml:lang="el">Start with AutoPilots</label>
-						<label xml:lang="nl">Start with AutoPilots</label>
+						<label xml:lang="nl">Starten met AutoPiloten</label>
 						<label xml:lang="fr">Start with AutoPilots</label>
 						<label xml:lang="fi">Start with AutoPilots</label>
 						<label xml:lang="cs">Start with AutoPilots</label>
@@ -2376,6 +2582,9 @@
 						<label xml:lang="th">Start with AutoPilots</label>
 						<label xml:lang="hi-IN">Start with AutoPilots</label>
 						<label xml:lang="x-comment">Start with AutoPilots</label>
+						<label xml:lang="hu">Start with AutoPilots</label>
+						<label xml:lang="sk">Start with AutoPilots</label>
+						<label xml:lang="sl">Start with AutoPilots</label>
 					</info>
 					<value>true</value>
 				</prop>
@@ -2409,9 +2618,12 @@
 							<desc xml:lang="th">Indicates whether to show the layout dialog when creating a new page.</desc>
 							<desc xml:lang="hi-IN">Indicates whether to show the layout dialog when creating a new page.</desc>
 							<desc xml:lang="x-comment">Indicates whether to show the layout dialog when creating a new page.</desc>
+							<desc xml:lang="hu">Indicates whether to show the layout dialog when creating a new page.</desc>
+							<desc xml:lang="sk">Indicates whether to show the layout dialog when creating a new page.</desc>
+							<desc xml:lang="sl">Indicates whether to show the layout dialog when creating a new page.</desc>
 						<label xml:lang="en-US">Start with AutoPilots</label>
 						<label xml:lang="el">Start with AutoPilots</label>
-						<label xml:lang="nl">Start with AutoPilots</label>
+						<label xml:lang="nl">Starten met AutoPiloten</label>
 						<label xml:lang="fr">Start with AutoPilots</label>
 						<label xml:lang="fi">Start with AutoPilots</label>
 						<label xml:lang="cs">Start with AutoPilots</label>
@@ -2434,6 +2646,9 @@
 						<label xml:lang="th">Start with AutoPilots</label>
 						<label xml:lang="hi-IN">Start with AutoPilots</label>
 						<label xml:lang="x-comment">Start with AutoPilots</label>
+						<label xml:lang="hu">Start with AutoPilots</label>
+						<label xml:lang="sk">Start with AutoPilots</label>
+						<label xml:lang="sl">Start with AutoPilots</label>
 					</info>
 					<value>true</value>
 				</prop>
@@ -2465,6 +2680,9 @@
 					<desc xml:lang="th">Specifies configuration items governing behavior when starting a presentation.</desc>
 					<desc xml:lang="hi-IN">Specifies configuration items governing behavior when starting a presentation.</desc>
 					<desc xml:lang="x-comment">Specifies configuration items governing behavior when starting a presentation.</desc>
+					<desc xml:lang="hu">Specifies configuration items governing behavior when starting a presentation.</desc>
+					<desc xml:lang="sk">Specifies configuration items governing behavior when starting a presentation.</desc>
+					<desc xml:lang="sl">Specifies configuration items governing behavior when starting a presentation.</desc>
 				</info>
 				<prop oor:name="CurrentPage" oor:type="xs:boolean">
 					<!-- OldPath: Impress/Other/Start -->
@@ -2496,6 +2714,9 @@
 							<desc xml:lang="th">Indicates whether to start the presentation with the current (true) or the first (false) page.</desc>
 							<desc xml:lang="hi-IN">Indicates whether to start the presentation with the current (true) or the first (false) page.</desc>
 							<desc xml:lang="x-comment">Indicates whether to start the presentation with the current (true) or the first (false) page.</desc>
+							<desc xml:lang="hu">Indicates whether to start the presentation with the current (true) or the first (false) page.</desc>
+							<desc xml:lang="sk">Indicates whether to start the presentation with the current (true) or the first (false) page.</desc>
+							<desc xml:lang="sl">Indicates whether to start the presentation with the current (true) or the first (false) page.</desc>
 						<label xml:lang="en-US">Always with current page</label>
 						<label xml:lang="el">Πάντα με την τρέχουσα σελίδα</label>
 						<label xml:lang="nl">~Steeds met actuele pagina</label>
@@ -2522,6 +2743,8 @@
 						<label xml:lang="hi-IN">हमेशा वर्तमान पृष्ठ के सहित</label>
 						<label xml:lang="x-comment">Always with current page</label>
 						<label xml:lang="sk">Vždy s aktuálnou stránkou</label>
+						<label xml:lang="hu">Always with current page</label>
+						<label xml:lang="sl">Always with current page</label>
 					</info>
 					<value>true</value>
 				</prop>
@@ -2553,9 +2776,12 @@
 						<desc xml:lang="th">Contains the group of options that control the compatibility to other applications.</desc>
 						<desc xml:lang="hi-IN">Contains the group of options that control the compatibility to other applications.</desc>
 						<desc xml:lang="x-comment">Contains the group of options that control the compatibility to other applications.</desc>
+						<desc xml:lang="hu">Contains the group of options that control the compatibility to other applications.</desc>
+						<desc xml:lang="sk">Contains the group of options that control the compatibility to other applications.</desc>
+						<desc xml:lang="sl">Contains the group of options that control the compatibility to other applications.</desc>
 					<label xml:lang="en-US">Compatibility options.</label>
 					<label xml:lang="el">Compatibility options.</label>
-					<label xml:lang="nl">Compatibility options.</label>
+					<label xml:lang="nl">Compatibiliteitsopties.</label>
 					<label xml:lang="fr">Compatibility options.</label>
 					<label xml:lang="fi">Compatibility options.</label>
 					<label xml:lang="cs">Compatibility options.</label>
@@ -2578,6 +2804,9 @@
 					<label xml:lang="th">Compatibility options.</label>
 					<label xml:lang="hi-IN">Compatibility options.</label>
 					<label xml:lang="x-comment">Compatibility options.</label>
+					<label xml:lang="hu">Compatibility options.</label>
+					<label xml:lang="sk">Compatibility options.</label>
+					<label xml:lang="sl">Compatibility options.</label>
 				</info>
 				<prop oor:name="AddBetween" oor:type="xs:boolean">
 					<!-- OldPath: Writer/Other/Compatibility -->
@@ -2609,9 +2838,12 @@
 							<desc xml:lang="th">Specifies if spacing between paragraphs should be added to ensure compatibility to MS Word documents</desc>
 							<desc xml:lang="hi-IN">Specifies if spacing between paragraphs should be added to ensure compatibility to MS Word documents</desc>
 							<desc xml:lang="x-comment">Specifies if spacing between paragraphs should be added to ensure compatibility to MS Word documents</desc>
+							<desc xml:lang="hu">Specifies if spacing between paragraphs should be added to ensure compatibility to MS Word documents</desc>
+							<desc xml:lang="sk">Specifies if spacing between paragraphs should be added to ensure compatibility to MS Word documents</desc>
+							<desc xml:lang="sl">Specifies if spacing between paragraphs should be added to ensure compatibility to MS Word documents</desc>
 						<label xml:lang="en-US">Add spacing between paragraphs</label>
 						<label xml:lang="el">Add spacing between paragraphs</label>
-						<label xml:lang="nl">Add spacing between paragraphs</label>
+						<label xml:lang="nl">Spatiëring tussen alinea&apos;s toevoegen</label>
 						<label xml:lang="fr">Add spacing between paragraphs</label>
 						<label xml:lang="fi">Add spacing between paragraphs</label>
 						<label xml:lang="cs">Add spacing between paragraphs</label>
@@ -2634,6 +2866,9 @@
 						<label xml:lang="th">Add spacing between paragraphs</label>
 						<label xml:lang="hi-IN">Add spacing between paragraphs</label>
 						<label xml:lang="x-comment">Add spacing between paragraphs</label>
+						<label xml:lang="hu">Add spacing between paragraphs</label>
+						<label xml:lang="sk">Add spacing between paragraphs</label>
+						<label xml:lang="sl">Add spacing between paragraphs</label>
 					</info>
 					<value>false</value>
 				</prop>
@@ -2665,11 +2900,13 @@
 							<desc xml:lang="he">Indicates whether to use printer independent metrics for document formatting (2) or to use metrics derived from the current printer (1). Refer to com::sun::star::document::PrinterIndependentLayout for valid values.</desc>
 							<desc xml:lang="ca">Indicates whether to use printer independent metrics for document formatting (2) or to use metrics derived from the current printer (1). Refer to com::sun::star::document::PrinterIndependentLayout for valid values.</desc>
 							<desc xml:lang="th">Indicates whether to use printer independent metrics for document formatting (2) or to use metrics derived from the current printer (1). Refer to com::sun::star::document::PrinterIndependentLayout for valid values.</desc>
+							<desc xml:lang="hu">Indicates whether to use printer independent metrics for document formatting (2) or to use metrics derived from the current printer (1). Refer to com::sun::star::document::PrinterIndependentLayout for valid values.</desc>
+							<desc xml:lang="sl">Indicates whether to use printer independent metrics for document formatting (2) or to use metrics derived from the current printer (1). Refer to com::sun::star::document::PrinterIndependentLayout for valid values.</desc>
 						<label xml:lang="en-US">Use printer independent metrics for document formatting</label>
 						<label xml:lang="pt">Use printer independent metrics for document formatting</label>
 						<label xml:lang="ru">Use printer independent metrics for document formatting</label>
 						<label xml:lang="el">Use printer independent metrics for document formatting</label>
-						<label xml:lang="nl">Use printer independent metrics for document formatting</label>
+						<label xml:lang="nl">Gebruik printeronafhankelijke metrieken voor de opmaak van documenten</label>
 						<label xml:lang="fr">Use printer independent metrics for document formatting</label>
 						<label xml:lang="es">Use printer independent metrics for document formatting</label>
 						<label xml:lang="fi">Use printer independent metrics for document formatting</label>
@@ -2689,6 +2926,8 @@
 						<label xml:lang="he">Use printer independent metrics for document formatting</label>
 						<label xml:lang="ca">Use printer independent metrics for document formatting</label>
 						<label xml:lang="th">Use printer independent metrics for document formatting</label>
+						<label xml:lang="hu">Use printer independent metrics for document formatting</label>
+						<label xml:lang="sl">Use printer independent metrics for document formatting</label>
 					</info>
 					<value>2</value>
 				</prop>
@@ -2701,7 +2940,7 @@
 					<author>AW</author>
 					<desc xml:lang="en-US">Defines the default size of newly created objects using CTRL-Return or CTRL-Click at a object creating Button.</desc>
 						<desc xml:lang="el">Defines the default size of newly created objects using CTRL-Return or CTRL-Click at a object creating Button.</desc>
-						<desc xml:lang="nl">Defines the default size of newly created objects using CTRL-Return or CTRL-Click at a object creating Button.</desc>
+						<desc xml:lang="nl">Bepaalt de standaardgroote van nieuw aangemaakte objecten door middel van CTRL-Return of CTRL-klikken op een objectcreatie knop.</desc>
 						<desc xml:lang="fr">Defines the default size of newly created objects using CTRL-Return or CTRL-Click at a object creating Button.</desc>
 						<desc xml:lang="fi">Defines the default size of newly created objects using CTRL-Return or CTRL-Click at a object creating Button.</desc>
 						<desc xml:lang="cs">Defines the default size of newly created objects using CTRL-Return or CTRL-Click at a object creating Button.</desc>
@@ -2723,9 +2962,12 @@
 						<desc xml:lang="tr">Defines the default size of newly created objects using CTRL-Return or CTRL-Click at a object creating Button.</desc>
 						<desc xml:lang="th">Defines the default size of newly created objects using CTRL-Return or CTRL-Click at a object creating Button.</desc>
 						<desc xml:lang="hi-IN">Defines the default size of newly created objects using CTRL-Return or CTRL-Click at a object creating Button.</desc>
+						<desc xml:lang="hu">Defines the default size of newly created objects using CTRL-Return or CTRL-Click at a object creating Button.</desc>
+						<desc xml:lang="sk">Defines the default size of newly created objects using CTRL-Return or CTRL-Click at a object creating Button.</desc>
+						<desc xml:lang="sl">Defines the default size of newly created objects using CTRL-Return or CTRL-Click at a object creating Button.</desc>
 					<label xml:lang="en-US">Default Object Size</label>
 					<label xml:lang="el">Default Object Size</label>
-					<label xml:lang="nl">Default Object Size</label>
+					<label xml:lang="nl">Standaard Objectgrootte</label>
 					<label xml:lang="fr">Default Object Size</label>
 					<label xml:lang="fi">Default Object Size</label>
 					<label xml:lang="cs">Default Object Size</label>
@@ -2747,6 +2989,9 @@
 					<label xml:lang="tr">Default Object Size</label>
 					<label xml:lang="th">Default Object Size</label>
 					<label xml:lang="hi-IN">Default Object Size</label>
+					<label xml:lang="hu">Default Object Size</label>
+					<label xml:lang="sk">Default Object Size</label>
+					<label xml:lang="sl">Default Object Size</label>
 				</info>
 				<prop oor:name="Width" oor:type="xs:int">
 					<info>
@@ -2774,6 +3019,9 @@
 							<desc xml:lang="tr">[UNIT=1/100 mm]</desc>
 							<desc xml:lang="th">[UNIT=1/100 mm]</desc>
 							<desc xml:lang="hi-IN">[UNIT=1/100 mm]</desc>
+							<desc xml:lang="hu">[UNIT=1/100 mm]</desc>
+							<desc xml:lang="sk">[UNIT=1/100 mm]</desc>
+							<desc xml:lang="sl">[UNIT=1/100 mm]</desc>
 						<label xml:lang="en-US"/>
 					</info>
 					<value>8000</value>
@@ -2804,6 +3052,9 @@
 							<desc xml:lang="tr">[UNIT=1/100 mm]</desc>
 							<desc xml:lang="th">[UNIT=1/100 mm]</desc>
 							<desc xml:lang="hi-IN">[UNIT=1/100 mm]</desc>
+							<desc xml:lang="hu">[UNIT=1/100 mm]</desc>
+							<desc xml:lang="sk">[UNIT=1/100 mm]</desc>
+							<desc xml:lang="sl">[UNIT=1/100 mm]</desc>
 						<label xml:lang="en-US"/>
 					</info>
 					<value>5000</value>
@@ -2836,6 +3087,9 @@
 				<desc xml:lang="tr">Specifies how to force object positions and sizes to the snap grid or to align with other objects.</desc>
 				<desc xml:lang="th">Specifies how to force object positions and sizes to the snap grid or to align with other objects.</desc>
 				<desc xml:lang="hi-IN">Specifies how to force object positions and sizes to the snap grid or to align with other objects.</desc>
+				<desc xml:lang="hu">Specifies how to force object positions and sizes to the snap grid or to align with other objects.</desc>
+				<desc xml:lang="sk">Specifies how to force object positions and sizes to the snap grid or to align with other objects.</desc>
+				<desc xml:lang="sl">Specifies how to force object positions and sizes to the snap grid or to align with other objects.</desc>
 			</info>
 			<group oor:name="Object">
 				<info>
@@ -2863,6 +3117,9 @@
 					<desc xml:lang="tr">Specifies how to force object positions and sizes to predefined locations in relation to other objects.</desc>
 					<desc xml:lang="th">Specifies how to force object positions and sizes to predefined locations in relation to other objects.</desc>
 					<desc xml:lang="hi-IN">Specifies how to force object positions and sizes to predefined locations in relation to other objects.</desc>
+					<desc xml:lang="hu">Specifies how to force object positions and sizes to predefined locations in relation to other objects.</desc>
+					<desc xml:lang="sk">Specifies how to force object positions and sizes to predefined locations in relation to other objects.</desc>
+					<desc xml:lang="sl">Specifies how to force object positions and sizes to predefined locations in relation to other objects.</desc>
 				</info>
 				<prop oor:name="Grid" oor:type="xs:boolean">
 					<!-- OldPath: Impress/Snap/Objects -->
@@ -2893,6 +3150,9 @@
 							<desc xml:lang="tr">Indicates whether to snap an object when moved to the next grid point.</desc>
 							<desc xml:lang="th">Indicates whether to snap an object when moved to the next grid point.</desc>
 							<desc xml:lang="hi-IN">Indicates whether to snap an object when moved to the next grid point.</desc>
+							<desc xml:lang="hu">Indicates whether to snap an object when moved to the next grid point.</desc>
+							<desc xml:lang="sk">Indicates whether to snap an object when moved to the next grid point.</desc>
+							<desc xml:lang="sl">Indicates whether to snap an object when moved to the next grid point.</desc>
 						<label xml:lang="en-US">Grid lines</label>
 						<label xml:lang="el">Γραμμές πλέγματος</label>
 						<label xml:lang="nl">Rasterlijnen</label>
@@ -2918,6 +3178,8 @@
 						<label xml:lang="th">เส้นตาราง</label>
 						<label xml:lang="hi-IN">जाल रेखाएँ</label>
 						<label xml:lang="sk">Čiary mriežky</label>
+						<label xml:lang="hu">Grid lines</label>
+						<label xml:lang="sl">Grid lines</label>
 					</info>
 					<value>false</value>
 				</prop>
@@ -2950,9 +3212,12 @@
 							<desc xml:lang="tr">Indicates whether to snap at snap lines.</desc>
 							<desc xml:lang="th">Indicates whether to snap at snap lines.</desc>
 							<desc xml:lang="hi-IN">Indicates whether to snap at snap lines.</desc>
+							<desc xml:lang="hu">Indicates whether to snap at snap lines.</desc>
+							<desc xml:lang="sk">Indicates whether to snap at snap lines.</desc>
+							<desc xml:lang="sl">Indicates whether to snap at snap lines.</desc>
 						<label xml:lang="en-US">Snap lines</label>
 						<label xml:lang="el">Snap lines</label>
-						<label xml:lang="nl">Snap lines</label>
+						<label xml:lang="nl">Vanglijnen</label>
 						<label xml:lang="fr">Snap lines</label>
 						<label xml:lang="fi">Snap lines</label>
 						<label xml:lang="cs">Snap lines</label>
@@ -2974,6 +3239,9 @@
 						<label xml:lang="tr">Snap lines</label>
 						<label xml:lang="th">Snap lines</label>
 						<label xml:lang="hi-IN">Snap lines</label>
+						<label xml:lang="hu">Snap lines</label>
+						<label xml:lang="sk">Snap lines</label>
+						<label xml:lang="sl">Snap lines</label>
 					</info>
 					<value>true</value>
 				</prop>
@@ -3006,9 +3274,12 @@
 							<desc xml:lang="tr">Indicates whether the outline of an object is justified with adjacent page margins.</desc>
 							<desc xml:lang="th">Indicates whether the outline of an object is justified with adjacent page margins.</desc>
 							<desc xml:lang="hi-IN">Indicates whether the outline of an object is justified with adjacent page margins.</desc>
+							<desc xml:lang="hu">Indicates whether the outline of an object is justified with adjacent page margins.</desc>
+							<desc xml:lang="sk">Indicates whether the outline of an object is justified with adjacent page margins.</desc>
+							<desc xml:lang="sl">Indicates whether the outline of an object is justified with adjacent page margins.</desc>
 						<label xml:lang="en-US">Page margins</label>
 						<label xml:lang="el">Page margins</label>
-						<label xml:lang="nl">Page margins</label>
+						<label xml:lang="nl">Paginamarges</label>
 						<label xml:lang="fr">Page margins</label>
 						<label xml:lang="fi">Page margins</label>
 						<label xml:lang="cs">Page margins</label>
@@ -3030,6 +3301,9 @@
 						<label xml:lang="tr">Page margins</label>
 						<label xml:lang="th">Page margins</label>
 						<label xml:lang="hi-IN">Page margins</label>
+						<label xml:lang="hu">Page margins</label>
+						<label xml:lang="sk">Page margins</label>
+						<label xml:lang="sl">Page margins</label>
 					</info>
 					<value>true</value>
 				</prop>
@@ -3062,9 +3336,12 @@
 							<desc xml:lang="tr">Indicates whether to justify the outline of an object to that of an adjacent object.</desc>
 							<desc xml:lang="th">Indicates whether to justify the outline of an object to that of an adjacent object.</desc>
 							<desc xml:lang="hi-IN">Indicates whether to justify the outline of an object to that of an adjacent object.</desc>
+							<desc xml:lang="hu">Indicates whether to justify the outline of an object to that of an adjacent object.</desc>
+							<desc xml:lang="sk">Indicates whether to justify the outline of an object to that of an adjacent object.</desc>
+							<desc xml:lang="sl">Indicates whether to justify the outline of an object to that of an adjacent object.</desc>
 						<label xml:lang="en-US">Object frame</label>
 						<label xml:lang="el">Object frame</label>
-						<label xml:lang="nl">Object frame</label>
+						<label xml:lang="nl">Objectkader</label>
 						<label xml:lang="fr">Object frame</label>
 						<label xml:lang="fi">Object frame</label>
 						<label xml:lang="cs">Object frame</label>
@@ -3086,6 +3363,9 @@
 						<label xml:lang="tr">Object frame</label>
 						<label xml:lang="th">Object frame</label>
 						<label xml:lang="hi-IN">Object frame</label>
+						<label xml:lang="hu">Object frame</label>
+						<label xml:lang="sk">Object frame</label>
+						<label xml:lang="sl">Object frame</label>
 					</info>
 					<value>false</value>
 				</prop>
@@ -3118,9 +3398,12 @@
 							<desc xml:lang="tr">Indicates whether to snap corner points of adjacent objects.</desc>
 							<desc xml:lang="th">Indicates whether to snap corner points of adjacent objects.</desc>
 							<desc xml:lang="hi-IN">Indicates whether to snap corner points of adjacent objects.</desc>
+							<desc xml:lang="hu">Indicates whether to snap corner points of adjacent objects.</desc>
+							<desc xml:lang="sk">Indicates whether to snap corner points of adjacent objects.</desc>
+							<desc xml:lang="sl">Indicates whether to snap corner points of adjacent objects.</desc>
 						<label xml:lang="en-US">Object points</label>
 						<label xml:lang="el">Object points</label>
-						<label xml:lang="nl">Object points</label>
+						<label xml:lang="nl">Objectpunten</label>
 						<label xml:lang="fr">Object points</label>
 						<label xml:lang="fi">Object points</label>
 						<label xml:lang="cs">Object points</label>
@@ -3142,6 +3425,9 @@
 						<label xml:lang="tr">Object points</label>
 						<label xml:lang="th">Object points</label>
 						<label xml:lang="hi-IN">Object points</label>
+						<label xml:lang="hu">Object points</label>
+						<label xml:lang="sk">Object points</label>
+						<label xml:lang="sl">Object points</label>
 					</info>
 					<value>false</value>
 				</prop>
@@ -3174,9 +3460,12 @@
 							<desc xml:lang="tr">Specifies the maximal range in pixels along the coordinate axes at which snapping becomes active.</desc>
 							<desc xml:lang="th">Specifies the maximal range in pixels along the coordinate axes at which snapping becomes active.</desc>
 							<desc xml:lang="hi-IN">Specifies the maximal range in pixels along the coordinate axes at which snapping becomes active.</desc>
+							<desc xml:lang="hu">Specifies the maximal range in pixels along the coordinate axes at which snapping becomes active.</desc>
+							<desc xml:lang="sk">Specifies the maximal range in pixels along the coordinate axes at which snapping becomes active.</desc>
+							<desc xml:lang="sl">Specifies the maximal range in pixels along the coordinate axes at which snapping becomes active.</desc>
 						<label xml:lang="en-US">Snap range</label>
 						<label xml:lang="el">Snap range</label>
-						<label xml:lang="nl">Snap range</label>
+						<label xml:lang="nl">Vangbereik</label>
 						<label xml:lang="fr">Snap range</label>
 						<label xml:lang="fi">Snap range</label>
 						<label xml:lang="cs">Snap range</label>
@@ -3198,6 +3487,9 @@
 						<label xml:lang="tr">Snap range</label>
 						<label xml:lang="th">Snap range</label>
 						<label xml:lang="hi-IN">Snap range</label>
+						<label xml:lang="hu">Snap range</label>
+						<label xml:lang="sk">Snap range</label>
+						<label xml:lang="sl">Snap range</label>
 					</info>
 					<constraints>
 						<minInclusive oor:value="1">
@@ -3227,6 +3519,8 @@
 								<desc xml:lang="th">Specifies that the minimum snap range is 1.</desc>
 								<desc xml:lang="hi-IN">Specifies that the minimum snap range is 1.</desc>
 								<desc xml:lang="sk">Specifies that the minimum snap range is 1.</desc>
+								<desc xml:lang="hu">Specifies that the minimum snap range is 1.</desc>
+								<desc xml:lang="sl">Specifies that the minimum snap range is 1.</desc>
 							</info>
 						</minInclusive>
 						<maxInclusive oor:value="50">
@@ -3256,6 +3550,8 @@
 								<desc xml:lang="th">Specifies that the maximal snap range is 50.</desc>
 								<desc xml:lang="hi-IN">Specifies that the maximal snap range is 50.</desc>
 								<desc xml:lang="sk">Specifies that the maximal snap range is 50.</desc>
+								<desc xml:lang="hu">Specifies that the maximal snap range is 50.</desc>
+								<desc xml:lang="sl">Specifies that the maximal snap range is 50.</desc>
 							</info>
 						</maxInclusive>
 					</constraints>
@@ -3288,6 +3584,9 @@
 					<desc xml:lang="tr">Specifies constraints regarding the creation and modification of graphical objects.</desc>
 					<desc xml:lang="th">Specifies constraints regarding the creation and modification of graphical objects.</desc>
 					<desc xml:lang="hi-IN">Specifies constraints regarding the creation and modification of graphical objects.</desc>
+					<desc xml:lang="hu">Specifies constraints regarding the creation and modification of graphical objects.</desc>
+					<desc xml:lang="sk">Specifies constraints regarding the creation and modification of graphical objects.</desc>
+					<desc xml:lang="sl">Specifies constraints regarding the creation and modification of graphical objects.</desc>
 				</info>
 				<prop oor:name="CreatingMoving" oor:type="xs:boolean">
 					<!-- OldPath: Impress/Snap/Position -->
@@ -3318,9 +3617,12 @@
 							<desc xml:lang="tr">Indicates whether to restrict the creation of objects to squares, circles, etc. and to retain the x/y ratio when resizing.</desc>
 							<desc xml:lang="th">Indicates whether to restrict the creation of objects to squares, circles, etc. and to retain the x/y ratio when resizing.</desc>
 							<desc xml:lang="hi-IN">Indicates whether to restrict the creation of objects to squares, circles, etc. and to retain the x/y ratio when resizing.</desc>
+							<desc xml:lang="hu">Indicates whether to restrict the creation of objects to squares, circles, etc. and to retain the x/y ratio when resizing.</desc>
+							<desc xml:lang="sk">Indicates whether to restrict the creation of objects to squares, circles, etc. and to retain the x/y ratio when resizing.</desc>
+							<desc xml:lang="sl">Indicates whether to restrict the creation of objects to squares, circles, etc. and to retain the x/y ratio when resizing.</desc>
 						<label xml:lang="en-US">When creating or moving objects</label>
 						<label xml:lang="el">When creating or moving objects</label>
-						<label xml:lang="nl">When creating or moving objects</label>
+						<label xml:lang="nl">Bij creëren of verplaatsen van objecten</label>
 						<label xml:lang="fr">When creating or moving objects</label>
 						<label xml:lang="fi">When creating or moving objects</label>
 						<label xml:lang="cs">When creating or moving objects</label>
@@ -3342,6 +3644,9 @@
 						<label xml:lang="tr">When creating or moving objects</label>
 						<label xml:lang="th">When creating or moving objects</label>
 						<label xml:lang="hi-IN">When creating or moving objects</label>
+						<label xml:lang="hu">When creating or moving objects</label>
+						<label xml:lang="sk">When creating or moving objects</label>
+						<label xml:lang="sl">When creating or moving objects</label>
 					</info>
 					<value>false</value>
 				</prop>
@@ -3374,9 +3679,12 @@
 							<desc xml:lang="tr">Indicates whether to use the longer (true) or the shorter (false) of the two distances along the coordinates axes from the initial to the current position to determine a new square&apos;s edge length or a new circle&apos;s diameter.</desc>
 							<desc xml:lang="th">Indicates whether to use the longer (true) or the shorter (false) of the two distances along the coordinates axes from the initial to the current position to determine a new square&apos;s edge length or a new circle&apos;s diameter.</desc>
 							<desc xml:lang="hi-IN">Indicates whether to use the longer (true) or the shorter (false) of the two distances along the coordinates axes from the initial to the current position to determine a new square&apos;s edge length or a new circle&apos;s diameter.</desc>
+							<desc xml:lang="hu">Indicates whether to use the longer (true) or the shorter (false) of the two distances along the coordinates axes from the initial to the current position to determine a new square&apos;s edge length or a new circle&apos;s diameter.</desc>
+							<desc xml:lang="sk">Indicates whether to use the longer (true) or the shorter (false) of the two distances along the coordinates axes from the initial to the current position to determine a new square&apos;s edge length or a new circle&apos;s diameter.</desc>
+							<desc xml:lang="sl">Indicates whether to use the longer (true) or the shorter (false) of the two distances along the coordinates axes from the initial to the current position to determine a new square&apos;s edge length or a new circle&apos;s diameter.</desc>
 						<label xml:lang="en-US">Extend edges</label>
 						<label xml:lang="el">Extend edges</label>
-						<label xml:lang="nl">Extend edges</label>
+						<label xml:lang="nl">Randen verlengen</label>
 						<label xml:lang="fr">Extend edges</label>
 						<label xml:lang="fi">Extend edges</label>
 						<label xml:lang="cs">Extend edges</label>
@@ -3398,6 +3706,9 @@
 						<label xml:lang="tr">Extend edges</label>
 						<label xml:lang="th">Extend edges</label>
 						<label xml:lang="hi-IN">Extend edges</label>
+						<label xml:lang="hu">Extend edges</label>
+						<label xml:lang="sk">Extend edges</label>
+						<label xml:lang="sl">Extend edges</label>
 					</info>
 					<value>true</value>
 				</prop>
@@ -3430,9 +3741,12 @@
 							<desc xml:lang="tr">Indicates whether to use snapping while rotating an object.</desc>
 							<desc xml:lang="th">Indicates whether to use snapping while rotating an object.</desc>
 							<desc xml:lang="hi-IN">Indicates whether to use snapping while rotating an object.</desc>
+							<desc xml:lang="hu">Indicates whether to use snapping while rotating an object.</desc>
+							<desc xml:lang="sk">Indicates whether to use snapping while rotating an object.</desc>
+							<desc xml:lang="sl">Indicates whether to use snapping while rotating an object.</desc>
 						<label xml:lang="en-US">When rotating</label>
 						<label xml:lang="el">When rotating</label>
-						<label xml:lang="nl">When rotating</label>
+						<label xml:lang="nl">Bij roteren</label>
 						<label xml:lang="fr">When rotating</label>
 						<label xml:lang="fi">When rotating</label>
 						<label xml:lang="cs">When rotating</label>
@@ -3454,6 +3768,9 @@
 						<label xml:lang="tr">When rotating</label>
 						<label xml:lang="th">When rotating</label>
 						<label xml:lang="hi-IN">When rotating</label>
+						<label xml:lang="hu">When rotating</label>
+						<label xml:lang="sk">When rotating</label>
+						<label xml:lang="sl">When rotating</label>
 					</info>
 					<value>false</value>
 				</prop>
@@ -3486,9 +3803,12 @@
 							<desc xml:lang="tr">Specifies the rotation angle when snapping for rotation is enabled. [UNIT=Degree/100]</desc>
 							<desc xml:lang="th">Specifies the rotation angle when snapping for rotation is enabled. [UNIT=Degree/100]</desc>
 							<desc xml:lang="hi-IN">Specifies the rotation angle when snapping for rotation is enabled. [UNIT=Degree/100]</desc>
+							<desc xml:lang="hu">Specifies the rotation angle when snapping for rotation is enabled. [UNIT=Degree/100]</desc>
+							<desc xml:lang="sk">Specifies the rotation angle when snapping for rotation is enabled. [UNIT=Degree/100]</desc>
+							<desc xml:lang="sl">Specifies the rotation angle when snapping for rotation is enabled. [UNIT=Degree/100]</desc>
 						<label xml:lang="en-US">When rotating</label>
 						<label xml:lang="el">When rotating</label>
-						<label xml:lang="nl">When rotating</label>
+						<label xml:lang="nl">Bij roteren</label>
 						<label xml:lang="fr">When rotating</label>
 						<label xml:lang="fi">When rotating</label>
 						<label xml:lang="cs">When rotating</label>
@@ -3510,6 +3830,9 @@
 						<label xml:lang="tr">When rotating</label>
 						<label xml:lang="th">When rotating</label>
 						<label xml:lang="hi-IN">When rotating</label>
+						<label xml:lang="hu">When rotating</label>
+						<label xml:lang="sk">When rotating</label>
+						<label xml:lang="sl">When rotating</label>
 					</info>
 					<constraints>
 						<minInclusive oor:value="0">
@@ -3539,6 +3862,8 @@
 								<desc xml:lang="th">Specifies that the minimum rotation angle is 0/100 degrees.</desc>
 								<desc xml:lang="hi-IN">Specifies that the minimum rotation angle is 0/100 degrees.</desc>
 								<desc xml:lang="sk">Specifies that the minimum rotation angle is 0/100 degrees.</desc>
+								<desc xml:lang="hu">Specifies that the minimum rotation angle is 0/100 degrees.</desc>
+								<desc xml:lang="sl">Specifies that the minimum rotation angle is 0/100 degrees.</desc>
 							</info>
 						</minInclusive>
 						<maxInclusive oor:value="18000">
@@ -3568,6 +3893,8 @@
 								<desc xml:lang="th">Specifies that the maximum rotation angle is 18000/100 degrees.</desc>
 								<desc xml:lang="hi-IN">Specifies that the maximum rotation angle is 18000/100 degrees.</desc>
 								<desc xml:lang="sk">Specifies that the maximum rotation angle is 18000/100 degrees.</desc>
+								<desc xml:lang="hu">Specifies that the maximum rotation angle is 18000/100 degrees.</desc>
+								<desc xml:lang="sl">Specifies that the maximum rotation angle is 18000/100 degrees.</desc>
 							</info>
 						</maxInclusive>
 					</constraints>
@@ -3602,9 +3929,12 @@
 							<desc xml:lang="tr">Specifies the maximum angle that you can move a line before it snaps into place in the point editor that connects two points [UNIT=Degree/100].</desc>
 							<desc xml:lang="th">Specifies the maximum angle that you can move a line before it snaps into place in the point editor that connects two points [UNIT=Degree/100].</desc>
 							<desc xml:lang="hi-IN">Specifies the maximum angle that you can move a line before it snaps into place in the point editor that connects two points [UNIT=Degree/100].</desc>
+							<desc xml:lang="hu">Specifies the maximum angle that you can move a line before it snaps into place in the point editor that connects two points [UNIT=Degree/100].</desc>
+							<desc xml:lang="sk">Specifies the maximum angle that you can move a line before it snaps into place in the point editor that connects two points [UNIT=Degree/100].</desc>
+							<desc xml:lang="sl">Specifies the maximum angle that you can move a line before it snaps into place in the point editor that connects two points [UNIT=Degree/100].</desc>
 						<label xml:lang="en-US">Point reduction</label>
 						<label xml:lang="el">Point reduction</label>
-						<label xml:lang="nl">Point reduction</label>
+						<label xml:lang="nl">Aantal punten terugbrengen</label>
 						<label xml:lang="fr">Point reduction</label>
 						<label xml:lang="fi">Point reduction</label>
 						<label xml:lang="cs">Point reduction</label>
@@ -3626,6 +3956,9 @@
 						<label xml:lang="tr">Point reduction</label>
 						<label xml:lang="th">Point reduction</label>
 						<label xml:lang="hi-IN">Point reduction</label>
+						<label xml:lang="hu">Point reduction</label>
+						<label xml:lang="sk">Point reduction</label>
+						<label xml:lang="sl">Point reduction</label>
 					</info>
 					<constraints>
 						<minInclusive oor:value="100">
@@ -3655,6 +3988,8 @@
 								<desc xml:lang="th">Specifies that the minimum angle is 100/100 degrees.</desc>
 								<desc xml:lang="hi-IN">Specifies that the minimum angle is 100/100 degrees.</desc>
 								<desc xml:lang="sk">Specifies that the minimum angle is 100/100 degrees.</desc>
+								<desc xml:lang="hu">Specifies that the minimum angle is 100/100 degrees.</desc>
+								<desc xml:lang="sl">Specifies that the minimum angle is 100/100 degrees.</desc>
 							</info>
 						</minInclusive>
 						<maxInclusive oor:value="9000">
@@ -3684,6 +4019,8 @@
 								<desc xml:lang="th">Specifies that the maximum angle is 9000/100 degrees.</desc>
 								<desc xml:lang="hi-IN">Specifies that the maximum angle is 9000/100 degrees.</desc>
 								<desc xml:lang="sk">Specifies that the maximum angle is 9000/100 degrees.</desc>
+								<desc xml:lang="hu">Specifies that the maximum angle is 9000/100 degrees.</desc>
+								<desc xml:lang="sl">Specifies that the maximum angle is 9000/100 degrees.</desc>
 							</info>
 						</maxInclusive>
 					</constraints>
@@ -3717,6 +4054,9 @@
 				<desc xml:lang="tr">Defines the handling and display of the snap grid.</desc>
 				<desc xml:lang="th">Defines the handling and display of the snap grid.</desc>
 				<desc xml:lang="hi-IN">Defines the handling and display of the snap grid.</desc>
+				<desc xml:lang="hu">Defines the handling and display of the snap grid.</desc>
+				<desc xml:lang="sk">Defines the handling and display of the snap grid.</desc>
+				<desc xml:lang="sl">Defines the handling and display of the snap grid.</desc>
 			</info>
 			<group oor:name="Option">
 				<info>
@@ -3744,6 +4084,9 @@
 					<desc xml:lang="tr">Specifies switches regarding use and display of the snap grid.</desc>
 					<desc xml:lang="th">Specifies switches regarding use and display of the snap grid.</desc>
 					<desc xml:lang="hi-IN">Specifies switches regarding use and display of the snap grid.</desc>
+					<desc xml:lang="hu">Specifies switches regarding use and display of the snap grid.</desc>
+					<desc xml:lang="sk">Specifies switches regarding use and display of the snap grid.</desc>
+					<desc xml:lang="sl">Specifies switches regarding use and display of the snap grid.</desc>
 				</info>
 				<prop oor:name="SnapToGrid" oor:type="xs:boolean">
 					<!-- OldPath: Impress/Grid/Options -->
@@ -3774,6 +4117,9 @@
 							<desc xml:lang="tr">Indicates whether to force frames and drawing elements on grid points.</desc>
 							<desc xml:lang="th">Indicates whether to force frames and drawing elements on grid points.</desc>
 							<desc xml:lang="hi-IN">Indicates whether to force frames and drawing elements on grid points.</desc>
+							<desc xml:lang="hu">Indicates whether to force frames and drawing elements on grid points.</desc>
+							<desc xml:lang="sk">Indicates whether to force frames and drawing elements on grid points.</desc>
+							<desc xml:lang="sl">Indicates whether to force frames and drawing elements on grid points.</desc>
 						<label xml:lang="en-US">Snap to grid</label>
 						<label xml:lang="el">Προσκόλληση στο πλέγμα</label>
 						<label xml:lang="nl">Vangen aan raster</label>
@@ -3799,6 +4145,8 @@
 						<label xml:lang="th">จัดชิดกับเส้นตาราง</label>
 						<label xml:lang="hi-IN">जाल में स्नॉप</label>
 						<label xml:lang="sk">Zachytiť na mriežku</label>
+						<label xml:lang="hu">Snap to grid</label>
+						<label xml:lang="sl">Snap to grid</label>
 					</info>
 					<value>false</value>
 				</prop>
@@ -3831,9 +4179,12 @@
 							<desc xml:lang="tr">Indicates whether to show the grid.</desc>
 							<desc xml:lang="th">Indicates whether to show the grid.</desc>
 							<desc xml:lang="hi-IN">Indicates whether to show the grid.</desc>
+							<desc xml:lang="hu">Indicates whether to show the grid.</desc>
+							<desc xml:lang="sk">Indicates whether to show the grid.</desc>
+							<desc xml:lang="sl">Indicates whether to show the grid.</desc>
 						<label xml:lang="en-US">Visible grid</label>
 						<label xml:lang="el">Visible grid</label>
-						<label xml:lang="nl">Visible grid</label>
+						<label xml:lang="nl">Zichtbaar raster</label>
 						<label xml:lang="fr">Visible grid</label>
 						<label xml:lang="fi">Visible grid</label>
 						<label xml:lang="cs">Visible grid</label>
@@ -3855,6 +4206,9 @@
 						<label xml:lang="tr">Visible grid</label>
 						<label xml:lang="th">Visible grid</label>
 						<label xml:lang="hi-IN">Visible grid</label>
+						<label xml:lang="hu">Visible grid</label>
+						<label xml:lang="sk">Visible grid</label>
+						<label xml:lang="sl">Visible grid</label>
 					</info>
 					<value>false</value>
 				</prop>
@@ -3887,9 +4241,12 @@
 							<desc xml:lang="tr">Indicates whether to synchronize the resolutions of x- and y-grids.</desc>
 							<desc xml:lang="th">Indicates whether to synchronize the resolutions of x- and y-grids.</desc>
 							<desc xml:lang="hi-IN">Indicates whether to synchronize the resolutions of x- and y-grids.</desc>
+							<desc xml:lang="hu">Indicates whether to synchronize the resolutions of x- and y-grids.</desc>
+							<desc xml:lang="sk">Indicates whether to synchronize the resolutions of x- and y-grids.</desc>
+							<desc xml:lang="sl">Indicates whether to synchronize the resolutions of x- and y-grids.</desc>
 						<label xml:lang="en-US">Synchronize axes</label>
 						<label xml:lang="el">Synchronize axes</label>
-						<label xml:lang="nl">Synchronize axes</label>
+						<label xml:lang="nl">Assen synchroniseren</label>
 						<label xml:lang="fr">Synchronize axes</label>
 						<label xml:lang="fi">Synchronize axes</label>
 						<label xml:lang="cs">Synchronize axes</label>
@@ -3911,6 +4268,9 @@
 						<label xml:lang="tr">Synchronize axes</label>
 						<label xml:lang="th">Synchronize axes</label>
 						<label xml:lang="hi-IN">Synchronize axes</label>
+						<label xml:lang="hu">Synchronize axes</label>
+						<label xml:lang="sk">Synchronize axes</label>
+						<label xml:lang="sl">Synchronize axes</label>
 					</info>
 					<value>false</value>
 				</prop>
@@ -3941,6 +4301,9 @@
 					<desc xml:lang="tr">Specifies grid resolution.</desc>
 					<desc xml:lang="th">Specifies grid resolution.</desc>
 					<desc xml:lang="hi-IN">Specifies grid resolution.</desc>
+					<desc xml:lang="hu">Specifies grid resolution.</desc>
+					<desc xml:lang="sk">Specifies grid resolution.</desc>
+					<desc xml:lang="sl">Specifies grid resolution.</desc>
 				</info>
 				<group oor:name="XAxis">
 					<!-- OldPath: Impress/Grid/Resolution -->
@@ -3972,9 +4335,12 @@
 							<desc xml:lang="tr">Defines the horizontal distance between adjacent grid points.</desc>
 							<desc xml:lang="th">Defines the horizontal distance between adjacent grid points.</desc>
 							<desc xml:lang="hi-IN">Defines the horizontal distance between adjacent grid points.</desc>
+							<desc xml:lang="hu">Defines the horizontal distance between adjacent grid points.</desc>
+							<desc xml:lang="sk">Defines the horizontal distance between adjacent grid points.</desc>
+							<desc xml:lang="sl">Defines the horizontal distance between adjacent grid points.</desc>
 						<label xml:lang="en-US">X Axis Resolution</label>
 						<label xml:lang="el">X Axis Resolution</label>
-						<label xml:lang="nl">X Axis Resolution</label>
+						<label xml:lang="nl">Resolutie X-as</label>
 						<label xml:lang="fr">X Axis Resolution</label>
 						<label xml:lang="fi">X Axis Resolution</label>
 						<label xml:lang="cs">X Axis Resolution</label>
@@ -3996,6 +4362,9 @@
 						<label xml:lang="tr">X Axis Resolution</label>
 						<label xml:lang="th">X Axis Resolution</label>
 						<label xml:lang="hi-IN">X Axis Resolution</label>
+						<label xml:lang="hu">X Axis Resolution</label>
+						<label xml:lang="sk">X Axis Resolution</label>
+						<label xml:lang="sl">X Axis Resolution</label>
 					</info>
 					<prop oor:name="Metric" oor:type="xs:int">
 						<info>
@@ -4023,6 +4392,9 @@
 								<desc xml:lang="tr">Defines the horizontal distance between adjacent grid points in 1/100 mm, used when the metric system is active.</desc>
 								<desc xml:lang="th">Defines the horizontal distance between adjacent grid points in 1/100 mm, used when the metric system is active.</desc>
 								<desc xml:lang="hi-IN">Defines the horizontal distance between adjacent grid points in 1/100 mm, used when the metric system is active.</desc>
+								<desc xml:lang="hu">Defines the horizontal distance between adjacent grid points in 1/100 mm, used when the metric system is active.</desc>
+								<desc xml:lang="sk">Defines the horizontal distance between adjacent grid points in 1/100 mm, used when the metric system is active.</desc>
+								<desc xml:lang="sl">Defines the horizontal distance between adjacent grid points in 1/100 mm, used when the metric system is active.</desc>
 							<label xml:lang="en-US"/>
 						</info>
 						<value>1000</value>
@@ -4053,6 +4425,9 @@
 								<desc xml:lang="tr">Defines the horizontal distance between adjacent grid points in 1/100 mm, used when the non-metric system is active.</desc>
 								<desc xml:lang="th">Defines the horizontal distance between adjacent grid points in 1/100 mm, used when the non-metric system is active.</desc>
 								<desc xml:lang="hi-IN">Defines the horizontal distance between adjacent grid points in 1/100 mm, used when the non-metric system is active.</desc>
+								<desc xml:lang="hu">Defines the horizontal distance between adjacent grid points in 1/100 mm, used when the non-metric system is active.</desc>
+								<desc xml:lang="sk">Defines the horizontal distance between adjacent grid points in 1/100 mm, used when the non-metric system is active.</desc>
+								<desc xml:lang="sl">Defines the horizontal distance between adjacent grid points in 1/100 mm, used when the non-metric system is active.</desc>
 							<label xml:lang="en-US"/>
 						</info>
 						<value>1270</value>
@@ -4088,9 +4463,12 @@
 							<desc xml:lang="tr">Defines the vertical distance between adjacent grid points.</desc>
 							<desc xml:lang="th">Defines the vertical distance between adjacent grid points.</desc>
 							<desc xml:lang="hi-IN">Defines the vertical distance between adjacent grid points.</desc>
+							<desc xml:lang="hu">Defines the vertical distance between adjacent grid points.</desc>
+							<desc xml:lang="sk">Defines the vertical distance between adjacent grid points.</desc>
+							<desc xml:lang="sl">Defines the vertical distance between adjacent grid points.</desc>
 						<label xml:lang="en-US">Y Axis Resolution</label>
 						<label xml:lang="el">Y Axis Resolution</label>
-						<label xml:lang="nl">Y Axis Resolution</label>
+						<label xml:lang="nl">Resolutie Y-as</label>
 						<label xml:lang="fr">Y Axis Resolution</label>
 						<label xml:lang="fi">Y Axis Resolution</label>
 						<label xml:lang="cs">Y Axis Resolution</label>
@@ -4112,6 +4490,9 @@
 						<label xml:lang="tr">Y Axis Resolution</label>
 						<label xml:lang="th">Y Axis Resolution</label>
 						<label xml:lang="hi-IN">Y Axis Resolution</label>
+						<label xml:lang="hu">Y Axis Resolution</label>
+						<label xml:lang="sk">Y Axis Resolution</label>
+						<label xml:lang="sl">Y Axis Resolution</label>
 					</info>
 					<prop oor:name="Metric" oor:type="xs:int">
 						<info>
@@ -4139,6 +4520,9 @@
 								<desc xml:lang="tr">Defines the vertical distance between adjacent grid points in 1/100 mm, used when the metric system is active.</desc>
 								<desc xml:lang="th">Defines the vertical distance between adjacent grid points in 1/100 mm, used when the metric system is active.</desc>
 								<desc xml:lang="hi-IN">Defines the vertical distance between adjacent grid points in 1/100 mm, used when the metric system is active.</desc>
+								<desc xml:lang="hu">Defines the vertical distance between adjacent grid points in 1/100 mm, used when the metric system is active.</desc>
+								<desc xml:lang="sk">Defines the vertical distance between adjacent grid points in 1/100 mm, used when the metric system is active.</desc>
+								<desc xml:lang="sl">Defines the vertical distance between adjacent grid points in 1/100 mm, used when the metric system is active.</desc>
 							<label xml:lang="en-US"/>
 						</info>
 						<value>1000</value>
@@ -4169,6 +4553,9 @@
 								<desc xml:lang="tr">Defines the vertical distance between adjacent grid points in 1/100 mm, used when the non-metric system is active.</desc>
 								<desc xml:lang="th">Defines the vertical distance between adjacent grid points in 1/100 mm, used when the non-metric system is active.</desc>
 								<desc xml:lang="hi-IN">Defines the vertical distance between adjacent grid points in 1/100 mm, used when the non-metric system is active.</desc>
+								<desc xml:lang="hu">Defines the vertical distance between adjacent grid points in 1/100 mm, used when the non-metric system is active.</desc>
+								<desc xml:lang="sk">Defines the vertical distance between adjacent grid points in 1/100 mm, used when the non-metric system is active.</desc>
+								<desc xml:lang="sl">Defines the vertical distance between adjacent grid points in 1/100 mm, used when the non-metric system is active.</desc>
 							<label xml:lang="en-US"/>
 						</info>
 						<value>1270</value>
@@ -4201,6 +4588,9 @@
 					<desc xml:lang="tr">Specifies the subdivision of the grid.</desc>
 					<desc xml:lang="th">Specifies the subdivision of the grid.</desc>
 					<desc xml:lang="hi-IN">Specifies the subdivision of the grid.</desc>
+					<desc xml:lang="hu">Specifies the subdivision of the grid.</desc>
+					<desc xml:lang="sk">Specifies the subdivision of the grid.</desc>
+					<desc xml:lang="sl">Specifies the subdivision of the grid.</desc>
 				</info>
 				<prop oor:name="XAxis" oor:type="xs:double">
 					<!-- OldPath: Impress/Grid/Subdivision -->
@@ -4232,9 +4622,12 @@
 							<desc xml:lang="tr">Specifies the number of points between two adjacent grid points on the X axis.</desc>
 							<desc xml:lang="th">Specifies the number of points between two adjacent grid points on the X axis.</desc>
 							<desc xml:lang="hi-IN">Specifies the number of points between two adjacent grid points on the X axis.</desc>
+							<desc xml:lang="hu">Specifies the number of points between two adjacent grid points on the X axis.</desc>
+							<desc xml:lang="sk">Specifies the number of points between two adjacent grid points on the X axis.</desc>
+							<desc xml:lang="sl">Specifies the number of points between two adjacent grid points on the X axis.</desc>
 						<label xml:lang="en-US">X Axis Subdivision</label>
 						<label xml:lang="el">X Axis Subdivision</label>
-						<label xml:lang="nl">X Axis Subdivision</label>
+						<label xml:lang="nl">Onderverdeling X-as</label>
 						<label xml:lang="fr">X Axis Subdivision</label>
 						<label xml:lang="fi">X Axis Subdivision</label>
 						<label xml:lang="cs">X Axis Subdivision</label>
@@ -4256,6 +4649,9 @@
 						<label xml:lang="tr">X Axis Subdivision</label>
 						<label xml:lang="th">X Axis Subdivision</label>
 						<label xml:lang="hi-IN">X Axis Subdivision</label>
+						<label xml:lang="hu">X Axis Subdivision</label>
+						<label xml:lang="sk">X Axis Subdivision</label>
+						<label xml:lang="sl">X Axis Subdivision</label>
 					</info>
 					<value>1</value>
 				</prop>
@@ -4289,9 +4685,12 @@
 							<desc xml:lang="tr">Specifies the number of intervals between two adjacent grid points on the Y axis</desc>
 							<desc xml:lang="th">Specifies the number of intervals between two adjacent grid points on the Y axis</desc>
 							<desc xml:lang="hi-IN">Specifies the number of intervals between two adjacent grid points on the Y axis</desc>
+							<desc xml:lang="hu">Specifies the number of intervals between two adjacent grid points on the Y axis</desc>
+							<desc xml:lang="sk">Specifies the number of intervals between two adjacent grid points on the Y axis</desc>
+							<desc xml:lang="sl">Specifies the number of intervals between two adjacent grid points on the Y axis</desc>
 						<label xml:lang="en-US">Y Axis Subdivision</label>
 						<label xml:lang="el">Y Axis Subdivision</label>
-						<label xml:lang="nl">Y Axis Subdivision</label>
+						<label xml:lang="nl">Onderverdeling Y-as</label>
 						<label xml:lang="fr">Y Axis Subdivision</label>
 						<label xml:lang="fi">Y Axis Subdivision</label>
 						<label xml:lang="cs">Y Axis Subdivision</label>
@@ -4313,6 +4712,9 @@
 						<label xml:lang="tr">Y Axis Subdivision</label>
 						<label xml:lang="th">Y Axis Subdivision</label>
 						<label xml:lang="hi-IN">Y Axis Subdivision</label>
+						<label xml:lang="hu">Y Axis Subdivision</label>
+						<label xml:lang="sk">Y Axis Subdivision</label>
+						<label xml:lang="sl">Y Axis Subdivision</label>
 					</info>
 					<value>1</value>
 				</prop>
@@ -4343,6 +4745,9 @@
 					<desc xml:lang="tr">Contains the specifications of the snap grid.</desc>
 					<desc xml:lang="th">Contains the specifications of the snap grid.</desc>
 					<desc xml:lang="hi-IN">Contains the specifications of the snap grid.</desc>
+					<desc xml:lang="hu">Contains the specifications of the snap grid.</desc>
+					<desc xml:lang="sk">Contains the specifications of the snap grid.</desc>
+					<desc xml:lang="sl">Contains the specifications of the snap grid.</desc>
 				</info>
 				<prop oor:name="Size" oor:type="xs:boolean">
 					<!-- OldPath: Impress/Grid/Snap_Grid -->
@@ -4373,9 +4778,12 @@
 							<desc xml:lang="tr">Indicates whether to synchronize grid and snap-grid.</desc>
 							<desc xml:lang="th">Indicates whether to synchronize grid and snap-grid.</desc>
 							<desc xml:lang="hi-IN">Indicates whether to synchronize grid and snap-grid.</desc>
+							<desc xml:lang="hu">Indicates whether to synchronize grid and snap-grid.</desc>
+							<desc xml:lang="sk">Indicates whether to synchronize grid and snap-grid.</desc>
+							<desc xml:lang="sl">Indicates whether to synchronize grid and snap-grid.</desc>
 						<label xml:lang="en-US">Size to grid</label>
 						<label xml:lang="el">Size to grid</label>
-						<label xml:lang="nl">Size to grid</label>
+						<label xml:lang="nl">Grootte aanpassen aan raster</label>
 						<label xml:lang="fr">Size to grid</label>
 						<label xml:lang="fi">Size to grid</label>
 						<label xml:lang="cs">Size to grid</label>
@@ -4397,6 +4805,9 @@
 						<label xml:lang="tr">Size to grid</label>
 						<label xml:lang="th">Size to grid</label>
 						<label xml:lang="hi-IN">Size to grid</label>
+						<label xml:lang="hu">Size to grid</label>
+						<label xml:lang="sk">Size to grid</label>
+						<label xml:lang="sl">Size to grid</label>
 					</info>
 					<value>true</value>
 				</prop>
@@ -4430,6 +4841,9 @@
 							<desc xml:lang="tr">Defines the horizontal distance between adjacent points of the snap grid.</desc>
 							<desc xml:lang="th">Defines the horizontal distance between adjacent points of the snap grid.</desc>
 							<desc xml:lang="hi-IN">Defines the horizontal distance between adjacent points of the snap grid.</desc>
+							<desc xml:lang="hu">Defines the horizontal distance between adjacent points of the snap grid.</desc>
+							<desc xml:lang="sk">Defines the horizontal distance between adjacent points of the snap grid.</desc>
+							<desc xml:lang="sl">Defines the horizontal distance between adjacent points of the snap grid.</desc>
 						<label xml:lang="en-US">X axis</label>
 						<label xml:lang="el">Άξονας X</label>
 						<label xml:lang="nl">X-as</label>
@@ -4455,6 +4869,8 @@
 						<label xml:lang="th">แกนX </label>
 						<label xml:lang="hi-IN">X अक्ष</label>
 						<label xml:lang="sk">Os X</label>
+						<label xml:lang="hu">X axis</label>
+						<label xml:lang="sl">X axis</label>
 					</info>
 					<prop oor:name="Metric" oor:type="xs:int">
 						<info>
@@ -4482,6 +4898,9 @@
 								<desc xml:lang="tr">Defines the horizontal distance between adjacent points of the snap grid in 1/100 mm, used when the metric system is selected.</desc>
 								<desc xml:lang="th">Defines the horizontal distance between adjacent points of the snap grid in 1/100 mm, used when the metric system is selected.</desc>
 								<desc xml:lang="hi-IN">Defines the horizontal distance between adjacent points of the snap grid in 1/100 mm, used when the metric system is selected.</desc>
+								<desc xml:lang="hu">Defines the horizontal distance between adjacent points of the snap grid in 1/100 mm, used when the metric system is selected.</desc>
+								<desc xml:lang="sk">Defines the horizontal distance between adjacent points of the snap grid in 1/100 mm, used when the metric system is selected.</desc>
+								<desc xml:lang="sl">Defines the horizontal distance between adjacent points of the snap grid in 1/100 mm, used when the metric system is selected.</desc>
 							<label xml:lang="en-US"/>
 						</info>
 						<value>1000</value>
@@ -4512,6 +4931,9 @@
 								<desc xml:lang="tr">Defines the horizontal distance between adjacent points of the snap grid in 1/100 mm, used when the non-metric system is selected.</desc>
 								<desc xml:lang="th">Defines the horizontal distance between adjacent points of the snap grid in 1/100 mm, used when the non-metric system is selected.</desc>
 								<desc xml:lang="hi-IN">Defines the horizontal distance between adjacent points of the snap grid in 1/100 mm, used when the non-metric system is selected.</desc>
+								<desc xml:lang="hu">Defines the horizontal distance between adjacent points of the snap grid in 1/100 mm, used when the non-metric system is selected.</desc>
+								<desc xml:lang="sk">Defines the horizontal distance between adjacent points of the snap grid in 1/100 mm, used when the non-metric system is selected.</desc>
+								<desc xml:lang="sl">Defines the horizontal distance between adjacent points of the snap grid in 1/100 mm, used when the non-metric system is selected.</desc>
 							<label xml:lang="en-US"/>
 						</info>
 						<value>1270</value>
@@ -4547,6 +4969,9 @@
 							<desc xml:lang="tr">Defines the vertical distance between adjacent points of the snap grid.</desc>
 							<desc xml:lang="th">Defines the vertical distance between adjacent points of the snap grid.</desc>
 							<desc xml:lang="hi-IN">Defines the vertical distance between adjacent points of the snap grid.</desc>
+							<desc xml:lang="hu">Defines the vertical distance between adjacent points of the snap grid.</desc>
+							<desc xml:lang="sk">Defines the vertical distance between adjacent points of the snap grid.</desc>
+							<desc xml:lang="sl">Defines the vertical distance between adjacent points of the snap grid.</desc>
 						<label xml:lang="en-US">Y axis</label>
 						<label xml:lang="el">Άξονας Y</label>
 						<label xml:lang="nl">Y-as</label>
@@ -4572,6 +4997,8 @@
 						<label xml:lang="th">แกนY </label>
 						<label xml:lang="hi-IN">Y अक्ष</label>
 						<label xml:lang="sk">Os Y</label>
+						<label xml:lang="hu">Y axis</label>
+						<label xml:lang="sl">Y axis</label>
 					</info>
 					<prop oor:name="Metric" oor:type="xs:int">
 						<info>
@@ -4599,6 +5026,9 @@
 								<desc xml:lang="tr">Defines the vertical distance between adjacent points of the snap grid in 1/100 mm, used when the metric system is selected.</desc>
 								<desc xml:lang="th">Defines the vertical distance between adjacent points of the snap grid in 1/100 mm, used when the metric system is selected.</desc>
 								<desc xml:lang="hi-IN">Defines the vertical distance between adjacent points of the snap grid in 1/100 mm, used when the metric system is selected.</desc>
+								<desc xml:lang="hu">Defines the vertical distance between adjacent points of the snap grid in 1/100 mm, used when the metric system is selected.</desc>
+								<desc xml:lang="sk">Defines the vertical distance between adjacent points of the snap grid in 1/100 mm, used when the metric system is selected.</desc>
+								<desc xml:lang="sl">Defines the vertical distance between adjacent points of the snap grid in 1/100 mm, used when the metric system is selected.</desc>
 							<label xml:lang="en-US"/>
 						</info>
 						<value>1000</value>
@@ -4629,6 +5059,9 @@
 								<desc xml:lang="tr">Defines the vertical distance between adjacent points of the snap grid in 1/100 mm, used when the non-metric system is selected.</desc>
 								<desc xml:lang="th">Defines the vertical distance between adjacent points of the snap grid in 1/100 mm, used when the non-metric system is selected.</desc>
 								<desc xml:lang="hi-IN">Defines the vertical distance between adjacent points of the snap grid in 1/100 mm, used when the non-metric system is selected.</desc>
+								<desc xml:lang="hu">Defines the vertical distance between adjacent points of the snap grid in 1/100 mm, used when the non-metric system is selected.</desc>
+								<desc xml:lang="sk">Defines the vertical distance between adjacent points of the snap grid in 1/100 mm, used when the non-metric system is selected.</desc>
+								<desc xml:lang="sl">Defines the vertical distance between adjacent points of the snap grid in 1/100 mm, used when the non-metric system is selected.</desc>
 							<label xml:lang="en-US"/>
 						</info>
 						<value>1270</value>
@@ -4662,6 +5095,9 @@
 				<desc xml:lang="tr">Defines options regarding the printing of Impress documents.</desc>
 				<desc xml:lang="th">Defines options regarding the printing of Impress documents.</desc>
 				<desc xml:lang="hi-IN">Defines options regarding the printing of Impress documents.</desc>
+				<desc xml:lang="hu">Defines options regarding the printing of Impress documents.</desc>
+				<desc xml:lang="sk">Defines options regarding the printing of Impress documents.</desc>
+				<desc xml:lang="sl">Defines options regarding the printing of Impress documents.</desc>
 			</info>
 			<group oor:name="Content">
 				<info>
@@ -4689,6 +5125,9 @@
 					<desc xml:lang="tr">Defines options regarding the printing of document content.</desc>
 					<desc xml:lang="th">Defines options regarding the printing of document content.</desc>
 					<desc xml:lang="hi-IN">Defines options regarding the printing of document content.</desc>
+					<desc xml:lang="hu">Defines options regarding the printing of document content.</desc>
+					<desc xml:lang="sk">Defines options regarding the printing of document content.</desc>
+					<desc xml:lang="sl">Defines options regarding the printing of document content.</desc>
 				</info>
 				<prop oor:name="Presentation" oor:type="xs:boolean">
 					<!-- OldPath: Impress/Print/Contents -->
@@ -4719,9 +5158,12 @@
 							<desc xml:lang="tr">Indicates whether the presentation will be printed.</desc>
 							<desc xml:lang="th">Indicates whether the presentation will be printed.</desc>
 							<desc xml:lang="hi-IN">Indicates whether the presentation will be printed.</desc>
+							<desc xml:lang="hu">Indicates whether the presentation will be printed.</desc>
+							<desc xml:lang="sk">Indicates whether the presentation will be printed.</desc>
+							<desc xml:lang="sl">Indicates whether the presentation will be printed.</desc>
 						<label xml:lang="en-US">Presentation</label>
 						<label xml:lang="el">Παρουσίαση</label>
-						<label xml:lang="nl">Presentation</label>
+						<label xml:lang="nl">Presentatie</label>
 						<label xml:lang="fr">Présentation</label>
 						<label xml:lang="fi">Esitys</label>
 						<label xml:lang="cs">Prezentace</label>
@@ -4744,6 +5186,8 @@
 						<label xml:lang="th">การนำเสนอ</label>
 						<label xml:lang="hi-IN">प्रस्तुति</label>
 						<label xml:lang="sk">Prezentácia</label>
+						<label xml:lang="hu">Presentation</label>
+						<label xml:lang="sl">Presentation</label>
 					</info>
 					<value>true</value>
 				</prop>
@@ -4776,6 +5220,9 @@
 							<desc xml:lang="tr">Indicates whether the notes will be printed.</desc>
 							<desc xml:lang="th">Indicates whether the notes will be printed.</desc>
 							<desc xml:lang="hi-IN">Indicates whether the notes will be printed.</desc>
+							<desc xml:lang="hu">Indicates whether the notes will be printed.</desc>
+							<desc xml:lang="sk">Indicates whether the notes will be printed.</desc>
+							<desc xml:lang="sl">Indicates whether the notes will be printed.</desc>
 						<label xml:lang="en-US">Notes</label>
 						<label xml:lang="el">Σημειώσεις</label>
 						<label xml:lang="nl">Aantekeningen</label>
@@ -4801,6 +5248,8 @@
 						<label xml:lang="th">หมายเหตุ</label>
 						<label xml:lang="hi-IN">टिप्पणी</label>
 						<label xml:lang="sk">Poznámky</label>
+						<label xml:lang="hu">Notes</label>
+						<label xml:lang="sl">Notes</label>
 					</info>
 					<value>false</value>
 				</prop>
@@ -4833,9 +5282,12 @@
 							<desc xml:lang="tr">Indicates whether the handouts will be printed.</desc>
 							<desc xml:lang="th">Indicates whether the handouts will be printed.</desc>
 							<desc xml:lang="hi-IN">Indicates whether the handouts will be printed.</desc>
+							<desc xml:lang="hu">Indicates whether the handouts will be printed.</desc>
+							<desc xml:lang="sk">Indicates whether the handouts will be printed.</desc>
+							<desc xml:lang="sl">Indicates whether the handouts will be printed.</desc>
 						<label xml:lang="en-US">Handouts</label>
 						<label xml:lang="el">Σημείωμα</label>
-						<label xml:lang="nl">Folder</label>
+						<label xml:lang="nl">Hand-outs</label>
 						<label xml:lang="fr">Prospectus</label>
 						<label xml:lang="fi">Esitteet</label>
 						<label xml:lang="cs">Teze</label>
@@ -4858,6 +5310,8 @@
 						<label xml:lang="th">เอกสารประกอบคำบรรยาย</label>
 						<label xml:lang="hi-IN">हान्डौट्स</label>
 						<label xml:lang="sk">Tézy</label>
+						<label xml:lang="hu">Handouts</label>
+						<label xml:lang="sl">Handouts</label>
 					</info>
 					<value>false</value>
 				</prop>
@@ -4890,6 +5344,9 @@
 							<desc xml:lang="tr">Indicates whether the outlines will be printed.</desc>
 							<desc xml:lang="th">Indicates whether the outlines will be printed.</desc>
 							<desc xml:lang="hi-IN">Indicates whether the outlines will be printed.</desc>
+							<desc xml:lang="hu">Indicates whether the outlines will be printed.</desc>
+							<desc xml:lang="sk">Indicates whether the outlines will be printed.</desc>
+							<desc xml:lang="sl">Indicates whether the outlines will be printed.</desc>
 						<label xml:lang="en-US">Outline</label>
 						<label xml:lang="el">Γραμματοσειρά περιγράμματος</label>
 						<label xml:lang="nl">Contour</label>
@@ -4915,6 +5372,8 @@
 						<label xml:lang="th">เค้าร่าง</label>
 						<label xml:lang="hi-IN">बाहरी रूपरेखा</label>
 						<label xml:lang="sk">Osnova</label>
+						<label xml:lang="hu">Outline</label>
+						<label xml:lang="sl">Outline</label>
 					</info>
 					<value>false</value>
 				</prop>
@@ -4945,6 +5404,9 @@
 					<desc xml:lang="tr">Specifies how and which pages will be printed.</desc>
 					<desc xml:lang="th">Specifies how and which pages will be printed.</desc>
 					<desc xml:lang="hi-IN">Specifies how and which pages will be printed.</desc>
+					<desc xml:lang="hu">Specifies how and which pages will be printed.</desc>
+					<desc xml:lang="sk">Specifies how and which pages will be printed.</desc>
+					<desc xml:lang="sl">Specifies how and which pages will be printed.</desc>
 				</info>
 				<prop oor:name="PageSize" oor:type="xs:boolean">
 					<!-- OldPath: Impress/Print/Page -->
@@ -4975,9 +5437,12 @@
 							<desc xml:lang="tr">Indicates whether to enlarge or shrink a document&apos;s page size while printing to fit the physical paper size.</desc>
 							<desc xml:lang="th">Indicates whether to enlarge or shrink a document&apos;s page size while printing to fit the physical paper size.</desc>
 							<desc xml:lang="hi-IN">Indicates whether to enlarge or shrink a document&apos;s page size while printing to fit the physical paper size.</desc>
+							<desc xml:lang="hu">Indicates whether to enlarge or shrink a document&apos;s page size while printing to fit the physical paper size.</desc>
+							<desc xml:lang="sk">Indicates whether to enlarge or shrink a document&apos;s page size while printing to fit the physical paper size.</desc>
+							<desc xml:lang="sl">Indicates whether to enlarge or shrink a document&apos;s page size while printing to fit the physical paper size.</desc>
 						<label xml:lang="en-US">Fit to page</label>
 						<label xml:lang="el">Fit to page</label>
-						<label xml:lang="nl">Fit to page</label>
+						<label xml:lang="nl">Aan paginagrootte aanpassen</label>
 						<label xml:lang="fr">Fit to page</label>
 						<label xml:lang="fi">Fit to page</label>
 						<label xml:lang="cs">Fit to page</label>
@@ -4999,6 +5464,9 @@
 						<label xml:lang="tr">Fit to page</label>
 						<label xml:lang="th">Fit to page</label>
 						<label xml:lang="hi-IN">Fit to page</label>
+						<label xml:lang="hu">Fit to page</label>
+						<label xml:lang="sk">Fit to page</label>
+						<label xml:lang="sl">Fit to page</label>
 					</info>
 					<value>false</value>
 				</prop>
@@ -5031,9 +5499,12 @@
 							<desc xml:lang="tr">Indicates whether to print the pages&apos; titles at the top of every page.</desc>
 							<desc xml:lang="th">Indicates whether to print the pages&apos; titles at the top of every page.</desc>
 							<desc xml:lang="hi-IN">Indicates whether to print the pages&apos; titles at the top of every page.</desc>
+							<desc xml:lang="hu">Indicates whether to print the pages&apos; titles at the top of every page.</desc>
+							<desc xml:lang="sk">Indicates whether to print the pages&apos; titles at the top of every page.</desc>
+							<desc xml:lang="sl">Indicates whether to print the pages&apos; titles at the top of every page.</desc>
 						<label xml:lang="en-US">Tile pages</label>
 						<label xml:lang="el">Tile pages</label>
-						<label xml:lang="nl">Tile pages</label>
+						<label xml:lang="nl">Titels op de pagina&apos;s </label>
 						<label xml:lang="fr">Tile pages</label>
 						<label xml:lang="fi">Tile pages</label>
 						<label xml:lang="cs">Tile pages</label>
@@ -5055,6 +5526,9 @@
 						<label xml:lang="tr">Tile pages</label>
 						<label xml:lang="th">Tile pages</label>
 						<label xml:lang="hi-IN">Tile pages</label>
+						<label xml:lang="hu">Tile pages</label>
+						<label xml:lang="sk">Tile pages</label>
+						<label xml:lang="sl">Tile pages</label>
 					</info>
 					<value>false</value>
 				</prop>
@@ -5087,6 +5561,9 @@
 							<desc xml:lang="tr">Indicates whether to print a document in the form of a brochure.</desc>
 							<desc xml:lang="th">Indicates whether to print a document in the form of a brochure.</desc>
 							<desc xml:lang="hi-IN">Indicates whether to print a document in the form of a brochure.</desc>
+							<desc xml:lang="hu">Indicates whether to print a document in the form of a brochure.</desc>
+							<desc xml:lang="sk">Indicates whether to print a document in the form of a brochure.</desc>
+							<desc xml:lang="sl">Indicates whether to print a document in the form of a brochure.</desc>
 						<label xml:lang="en-US">Brochure</label>
 						<label xml:lang="el">Brochure</label>
 						<label xml:lang="nl">Brochure</label>
@@ -5111,6 +5588,9 @@
 						<label xml:lang="tr">Brochure</label>
 						<label xml:lang="th">Brochure</label>
 						<label xml:lang="hi-IN">Brochure</label>
+						<label xml:lang="hu">Brochure</label>
+						<label xml:lang="sk">Brochure</label>
+						<label xml:lang="sl">Brochure</label>
 					</info>
 					<value>false</value>
 				</prop>
@@ -5143,9 +5623,12 @@
 							<desc xml:lang="tr">Indicates whether to print the front side pages of a brochure.</desc>
 							<desc xml:lang="th">Indicates whether to print the front side pages of a brochure.</desc>
 							<desc xml:lang="hi-IN">Indicates whether to print the front side pages of a brochure.</desc>
+							<desc xml:lang="hu">Indicates whether to print the front side pages of a brochure.</desc>
+							<desc xml:lang="sk">Indicates whether to print the front side pages of a brochure.</desc>
+							<desc xml:lang="sl">Indicates whether to print the front side pages of a brochure.</desc>
 						<label xml:lang="en-US">Front side</label>
 						<label xml:lang="el">Front side</label>
-						<label xml:lang="nl">Front side</label>
+						<label xml:lang="nl">Voorkant</label>
 						<label xml:lang="fr">Front side</label>
 						<label xml:lang="fi">Front side</label>
 						<label xml:lang="cs">Front side</label>
@@ -5167,6 +5650,9 @@
 						<label xml:lang="tr">Front side</label>
 						<label xml:lang="th">Front side</label>
 						<label xml:lang="hi-IN">Front side</label>
+						<label xml:lang="hu">Front side</label>
+						<label xml:lang="sk">Front side</label>
+						<label xml:lang="sl">Front side</label>
 					</info>
 					<value>true</value>
 				</prop>
@@ -5199,9 +5685,12 @@
 							<desc xml:lang="tr">Indicates whether to print the back side pages of a brochure.</desc>
 							<desc xml:lang="th">Indicates whether to print the back side pages of a brochure.</desc>
 							<desc xml:lang="hi-IN">Indicates whether to print the back side pages of a brochure.</desc>
+							<desc xml:lang="hu">Indicates whether to print the back side pages of a brochure.</desc>
+							<desc xml:lang="sk">Indicates whether to print the back side pages of a brochure.</desc>
+							<desc xml:lang="sl">Indicates whether to print the back side pages of a brochure.</desc>
 						<label xml:lang="en-US">Back side</label>
 						<label xml:lang="el">Back side</label>
-						<label xml:lang="nl">Back side</label>
+						<label xml:lang="nl">Achterkant</label>
 						<label xml:lang="fr">Back side</label>
 						<label xml:lang="fi">Back side</label>
 						<label xml:lang="cs">Back side</label>
@@ -5223,6 +5712,9 @@
 						<label xml:lang="tr">Back side</label>
 						<label xml:lang="th">Back side</label>
 						<label xml:lang="hi-IN">Back side</label>
+						<label xml:lang="hu">Back side</label>
+						<label xml:lang="sk">Back side</label>
+						<label xml:lang="sl">Back side</label>
 					</info>
 					<value>true</value>
 				</prop>
@@ -5253,6 +5745,9 @@
 					<desc xml:lang="tr">Specifies general printing related issues.</desc>
 					<desc xml:lang="th">Specifies general printing related issues.</desc>
 					<desc xml:lang="hi-IN">Specifies general printing related issues.</desc>
+					<desc xml:lang="hu">Specifies general printing related issues.</desc>
+					<desc xml:lang="sk">Specifies general printing related issues.</desc>
+					<desc xml:lang="sl">Specifies general printing related issues.</desc>
 				</info>
 				<prop oor:name="PageName" oor:type="xs:boolean">
 					<!-- OldPath: Impress/Print -->
@@ -5283,9 +5778,12 @@
 							<desc xml:lang="tr">Indicates whether to print page names.</desc>
 							<desc xml:lang="th">Indicates whether to print page names.</desc>
 							<desc xml:lang="hi-IN">Indicates whether to print page names.</desc>
+							<desc xml:lang="hu">Indicates whether to print page names.</desc>
+							<desc xml:lang="sk">Indicates whether to print page names.</desc>
+							<desc xml:lang="sl">Indicates whether to print page names.</desc>
 						<label xml:lang="en-US">Page name</label>
 						<label xml:lang="el">Page name</label>
-						<label xml:lang="nl">Page name</label>
+						<label xml:lang="nl">Naam van de pagina</label>
 						<label xml:lang="fr">Page name</label>
 						<label xml:lang="fi">Page name</label>
 						<label xml:lang="cs">Page name</label>
@@ -5307,6 +5805,9 @@
 						<label xml:lang="tr">Page name</label>
 						<label xml:lang="th">Page name</label>
 						<label xml:lang="hi-IN">Page name</label>
+						<label xml:lang="hu">Page name</label>
+						<label xml:lang="sk">Page name</label>
+						<label xml:lang="sl">Page name</label>
 					</info>
 					<value>false</value>
 				</prop>
@@ -5339,6 +5840,9 @@
 							<desc xml:lang="tr">Indicates whether to print the current date at the top of every page.</desc>
 							<desc xml:lang="th">Indicates whether to print the current date at the top of every page.</desc>
 							<desc xml:lang="hi-IN">Indicates whether to print the current date at the top of every page.</desc>
+							<desc xml:lang="hu">Indicates whether to print the current date at the top of every page.</desc>
+							<desc xml:lang="sk">Indicates whether to print the current date at the top of every page.</desc>
+							<desc xml:lang="sl">Indicates whether to print the current date at the top of every page.</desc>
 						<label xml:lang="en-US">Date</label>
 						<label xml:lang="el">Ημερομηνία</label>
 						<label xml:lang="nl">Datum</label>
@@ -5364,6 +5868,8 @@
 						<label xml:lang="th">วันที่</label>
 						<label xml:lang="hi-IN">दिनांक</label>
 						<label xml:lang="sk">Dátum</label>
+						<label xml:lang="hu">Date</label>
+						<label xml:lang="sl">Date</label>
 					</info>
 					<value>false</value>
 				</prop>
@@ -5396,6 +5902,9 @@
 							<desc xml:lang="tr">Indicates whether to print the current time at the top of every page.</desc>
 							<desc xml:lang="th">Indicates whether to print the current time at the top of every page.</desc>
 							<desc xml:lang="hi-IN">Indicates whether to print the current time at the top of every page.</desc>
+							<desc xml:lang="hu">Indicates whether to print the current time at the top of every page.</desc>
+							<desc xml:lang="sk">Indicates whether to print the current time at the top of every page.</desc>
+							<desc xml:lang="sl">Indicates whether to print the current time at the top of every page.</desc>
 						<label xml:lang="en-US">Time</label>
 						<label xml:lang="el">Ώρα</label>
 						<label xml:lang="nl">Tijd</label>
@@ -5421,6 +5930,8 @@
 						<label xml:lang="th">เวลา</label>
 						<label xml:lang="hi-IN">समय</label>
 						<label xml:lang="sk">Čas</label>
+						<label xml:lang="hu">Time</label>
+						<label xml:lang="sl">Time</label>
 					</info>
 					<value>false</value>
 				</prop>
@@ -5453,9 +5964,12 @@
 							<desc xml:lang="tr">Indicates whether to print hidden pages.</desc>
 							<desc xml:lang="th">Indicates whether to print hidden pages.</desc>
 							<desc xml:lang="hi-IN">Indicates whether to print hidden pages.</desc>
+							<desc xml:lang="hu">Indicates whether to print hidden pages.</desc>
+							<desc xml:lang="sk">Indicates whether to print hidden pages.</desc>
+							<desc xml:lang="sl">Indicates whether to print hidden pages.</desc>
 						<label xml:lang="en-US">Hidden pages</label>
 						<label xml:lang="el">Hidden pages</label>
-						<label xml:lang="nl">Hidden pages</label>
+						<label xml:lang="nl">Verborgen pagina&apos;s</label>
 						<label xml:lang="fr">Hidden pages</label>
 						<label xml:lang="fi">Hidden pages</label>
 						<label xml:lang="cs">Hidden pages</label>
@@ -5477,6 +5991,9 @@
 						<label xml:lang="tr">Hidden pages</label>
 						<label xml:lang="th">Hidden pages</label>
 						<label xml:lang="hi-IN">Hidden pages</label>
+						<label xml:lang="hu">Hidden pages</label>
+						<label xml:lang="sk">Hidden pages</label>
+						<label xml:lang="sl">Hidden pages</label>
 					</info>
 					<value>true</value>
 				</prop>
@@ -5509,13 +6026,16 @@
 						<desc xml:lang="tr">Specifies the quality of the printed colors.</desc>
 						<desc xml:lang="th">Specifies the quality of the printed colors.</desc>
 						<desc xml:lang="hi-IN">Specifies the quality of the printed colors.</desc>
+						<desc xml:lang="hu">Specifies the quality of the printed colors.</desc>
+						<desc xml:lang="sk">Specifies the quality of the printed colors.</desc>
+						<desc xml:lang="sl">Specifies the quality of the printed colors.</desc>
 					</info>
 					<constraints>
 						<enumeration oor:value="0">
 							<info>
 								<desc xml:lang="en-US">Color</desc>
 								<desc xml:lang="el">Χρώμα</desc>
-								<desc xml:lang="nl">Kleur</desc>
+								<desc xml:lang="nl">Color</desc>
 								<desc xml:lang="fr">Couleur</desc>
 								<desc xml:lang="fi">Väri</desc>
 								<desc xml:lang="cs">Barva</desc>
@@ -5538,13 +6058,15 @@
 								<desc xml:lang="th">สี</desc>
 								<desc xml:lang="hi-IN">रंग</desc>
 								<desc xml:lang="sk">Farba</desc>
+								<desc xml:lang="hu">Color</desc>
+								<desc xml:lang="sl">Color</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="1">
 							<info>
 								<desc xml:lang="en-US">Grayscale</desc>
 								<desc xml:lang="el">Διαβαθμίσεις του γκρι</desc>
-								<desc xml:lang="nl">Grijswaarden</desc>
+								<desc xml:lang="nl">Grayscale</desc>
 								<desc xml:lang="fr">Niveaux de gris</desc>
 								<desc xml:lang="fi">Harmaasävy</desc>
 								<desc xml:lang="cs">Stupně šedi</desc>
@@ -5567,13 +6089,15 @@
 								<desc xml:lang="th">สเกลสีเทา</desc>
 								<desc xml:lang="hi-IN">ग्रेस्केल</desc>
 								<desc xml:lang="sk">Stupne šedej</desc>
+								<desc xml:lang="hu">Grayscale</desc>
+								<desc xml:lang="sl">Grayscale</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="2">
 							<info>
 								<desc xml:lang="en-US">Black/White</desc>
 								<desc xml:lang="el">Μαύρο/Λευκό</desc>
-								<desc xml:lang="nl">Zwart-wit</desc>
+								<desc xml:lang="nl">Zwart/Wit</desc>
 								<desc xml:lang="fr">Noir/Blanc</desc>
 								<desc xml:lang="fi">Mustavalkoinen</desc>
 								<desc xml:lang="cs">Černobílá</desc>
@@ -5596,6 +6120,8 @@
 								<desc xml:lang="th">ดำ/ขาว</desc>
 								<desc xml:lang="hi-IN">काला/सफेद</desc>
 								<desc xml:lang="sk">Čiernobiela</desc>
+								<desc xml:lang="hu">Black/White</desc>
+								<desc xml:lang="sl">Black/White</desc>
 							</info>
 						</enumeration>
 					</constraints>
@@ -5630,9 +6156,12 @@
 							<desc xml:lang="tr">Indicates whether to use the system settings of the printer to choose the paper tray.</desc>
 							<desc xml:lang="th">Indicates whether to use the system settings of the printer to choose the paper tray.</desc>
 							<desc xml:lang="hi-IN">Indicates whether to use the system settings of the printer to choose the paper tray.</desc>
+							<desc xml:lang="hu">Indicates whether to use the system settings of the printer to choose the paper tray.</desc>
+							<desc xml:lang="sk">Indicates whether to use the system settings of the printer to choose the paper tray.</desc>
+							<desc xml:lang="sl">Indicates whether to use the system settings of the printer to choose the paper tray.</desc>
 						<label xml:lang="en-US">From printer setup</label>
 						<label xml:lang="el">From printer setup</label>
-						<label xml:lang="nl">From printer setup</label>
+						<label xml:lang="nl">Uit printerinstellingen</label>
 						<label xml:lang="fr">From printer setup</label>
 						<label xml:lang="fi">From printer setup</label>
 						<label xml:lang="cs">From printer setup</label>
@@ -5654,6 +6183,9 @@
 						<label xml:lang="tr">From printer setup</label>
 						<label xml:lang="th">From printer setup</label>
 						<label xml:lang="hi-IN">From printer setup</label>
+						<label xml:lang="hu">From printer setup</label>
+						<label xml:lang="sk">From printer setup</label>
+						<label xml:lang="sl">From printer setup</label>
 					</info>
 					<value>false</value>
 				</prop>
@@ -5685,9 +6217,12 @@
 					<desc xml:lang="tr">Contains the group of options that control the behavior of filters.</desc>
 					<desc xml:lang="th">Contains the group of options that control the behavior of filters.</desc>
 					<desc xml:lang="hi-IN">Contains the group of options that control the behavior of filters.</desc>
+					<desc xml:lang="hu">Contains the group of options that control the behavior of filters.</desc>
+					<desc xml:lang="sk">Contains the group of options that control the behavior of filters.</desc>
+					<desc xml:lang="sl">Contains the group of options that control the behavior of filters.</desc>
 				<label xml:lang="en-US">Filter Options</label>
 				<label xml:lang="el">Επιλογές φίλτρου</label>
-				<label xml:lang="nl">Filter Options</label>
+				<label xml:lang="nl">Filteropties</label>
 				<label xml:lang="fr">Options de filtres</label>
 				<label xml:lang="fi">Suodatinasetukset</label>
 				<label xml:lang="cs">Filter Options</label>
@@ -5709,6 +6244,9 @@
 				<label xml:lang="tr">Filter Options</label>
 				<label xml:lang="th">Filter Options</label>
 				<label xml:lang="hi-IN">Filter Options</label>
+				<label xml:lang="hu">Filter Options</label>
+				<label xml:lang="sk">Filter Options</label>
+				<label xml:lang="sl">Filter Options</label>
 			</info>
 			<group oor:name="Import">
 				<info>
@@ -5736,9 +6274,12 @@
 						<desc xml:lang="tr">Contains the group of options that control the behavior of the import filters.</desc>
 						<desc xml:lang="th">Contains the group of options that control the behavior of the import filters.</desc>
 						<desc xml:lang="hi-IN">Contains the group of options that control the behavior of the import filters.</desc>
+						<desc xml:lang="hu">Contains the group of options that control the behavior of the import filters.</desc>
+						<desc xml:lang="sk">Contains the group of options that control the behavior of the import filters.</desc>
+						<desc xml:lang="sl">Contains the group of options that control the behavior of the import filters.</desc>
 					<label xml:lang="en-US">Import Filter</label>
 					<label xml:lang="el">Import Filter</label>
-					<label xml:lang="nl">Import Filter</label>
+					<label xml:lang="nl">Importfilter</label>
 					<label xml:lang="fr">Filtre d&apos;import</label>
 					<label xml:lang="fi">Import Filter</label>
 					<label xml:lang="cs">Import Filter</label>
@@ -5760,6 +6301,9 @@
 					<label xml:lang="tr">Import Filter</label>
 					<label xml:lang="th">Import Filter</label>
 					<label xml:lang="hi-IN">Import Filter</label>
+					<label xml:lang="hu">Import Filter</label>
+					<label xml:lang="sk">Import Filter</label>
+					<label xml:lang="sl">Import Filter</label>
 				</info>
 				<group oor:name="VBA">
 					<info>
@@ -5787,9 +6331,12 @@
 							<desc xml:lang="tr">Contains the group of options that control the behavior of the VBA filter.</desc>
 							<desc xml:lang="th">Contains the group of options that control the behavior of the VBA filter.</desc>
 							<desc xml:lang="hi-IN">Contains the group of options that control the behavior of the VBA filter.</desc>
+							<desc xml:lang="hu">Contains the group of options that control the behavior of the VBA filter.</desc>
+							<desc xml:lang="sk">Contains the group of options that control the behavior of the VBA filter.</desc>
+							<desc xml:lang="sl">Contains the group of options that control the behavior of the VBA filter.</desc>
 						<label xml:lang="en-US">VBA Filter</label>
 						<label xml:lang="el">VBA Filter</label>
-						<label xml:lang="nl">VBA Filter</label>
+						<label xml:lang="nl">VBA filter</label>
 						<label xml:lang="fr">VBA Filter</label>
 						<label xml:lang="fi">VBA Filter</label>
 						<label xml:lang="cs">VBA Filter</label>
@@ -5811,6 +6358,9 @@
 						<label xml:lang="tr">VBA Filter</label>
 						<label xml:lang="th">VBA Filter</label>
 						<label xml:lang="hi-IN">VBA Filter</label>
+						<label xml:lang="hu">VBA Filter</label>
+						<label xml:lang="sk">VBA Filter</label>
+						<label xml:lang="sl">VBA Filter</label>
 					</info>
 					<prop oor:name="Load" oor:type="xs:boolean">
 						<!-- OldPath: Filter/MS_Office/Basic/PowerPoint -->
@@ -5842,9 +6392,12 @@
 								<desc xml:lang="tr">Converts VBA Basic into Office Basic as commands (True).</desc>
 								<desc xml:lang="th">Converts VBA Basic into Office Basic as commands (True).</desc>
 								<desc xml:lang="hi-IN">Converts VBA Basic into Office Basic as commands (True).</desc>
+								<desc xml:lang="hu">Converts VBA Basic into Office Basic as commands (True).</desc>
+								<desc xml:lang="sk">Converts VBA Basic into Office Basic as commands (True).</desc>
+								<desc xml:lang="sl">Converts VBA Basic into Office Basic as commands (True).</desc>
 							<label xml:lang="en-US">Load Basic Code to edit</label>
 							<label xml:lang="el">Load Basic Code to edit</label>
-							<label xml:lang="nl">Load Basic Code to edit</label>
+							<label xml:lang="nl">Basic Code laden om te bewerken</label>
 							<label xml:lang="fr">Load Basic Code to edit</label>
 							<label xml:lang="fi">Load Basic Code to edit</label>
 							<label xml:lang="cs">Load Basic Code to edit</label>
@@ -5866,6 +6419,9 @@
 							<label xml:lang="tr">Load Basic Code to edit</label>
 							<label xml:lang="th">Load Basic Code to edit</label>
 							<label xml:lang="hi-IN">Load Basic Code to edit</label>
+							<label xml:lang="hu">Load Basic Code to edit</label>
+							<label xml:lang="sk">Load Basic Code to edit</label>
+							<label xml:lang="sl">Load Basic Code to edit</label>
 						</info>
 						<value>true</value>
 					</prop>
@@ -5899,9 +6455,12 @@
 								<desc xml:lang="tr">Holds original VBA storage for saving in the memory (True).</desc>
 								<desc xml:lang="th">Holds original VBA storage for saving in the memory (True).</desc>
 								<desc xml:lang="hi-IN">Holds original VBA storage for saving in the memory (True).</desc>
+								<desc xml:lang="hu">Holds original VBA storage for saving in the memory (True).</desc>
+								<desc xml:lang="sk">Holds original VBA storage for saving in the memory (True).</desc>
+								<desc xml:lang="sl">Holds original VBA storage for saving in the memory (True).</desc>
 							<label xml:lang="en-US">Save Original Basic Code again</label>
 							<label xml:lang="el">Save Original Basic Code again</label>
-							<label xml:lang="nl">Save Original Basic Code again</label>
+							<label xml:lang="nl">Originele Basic code weer opslaan</label>
 							<label xml:lang="fr">Save Original Basic Code again</label>
 							<label xml:lang="fi">Save Original Basic Code again</label>
 							<label xml:lang="cs">Save Original Basic Code again</label>
@@ -5923,6 +6482,9 @@
 							<label xml:lang="tr">Save Original Basic Code again</label>
 							<label xml:lang="th">Save Original Basic Code again</label>
 							<label xml:lang="hi-IN">Save Original Basic Code again</label>
+							<label xml:lang="hu">Save Original Basic Code again</label>
+							<label xml:lang="sk">Save Original Basic Code again</label>
+							<label xml:lang="sl">Save Original Basic Code again</label>
 						</info>
 						<value>true</value>
 					</prop>
@@ -5954,6 +6516,9 @@
 					<desc xml:lang="tr">Exports related configuration items.</desc>
 					<desc xml:lang="th">Exports related configuration items.</desc>
 					<desc xml:lang="hi-IN">Exports related configuration items.</desc>
+					<desc xml:lang="hu">Exports related configuration items.</desc>
+					<desc xml:lang="sk">Exports related configuration items.</desc>
+					<desc xml:lang="sl">Exports related configuration items.</desc>
 				</info>
 				<prop oor:name="LastUsed" oor:type="xs:string">
 					<!-- OldPath: STARIMPRESS -->
@@ -5984,6 +6549,9 @@
 						<desc xml:lang="tr">Specifies the filter last used to export an Impress document.</desc>
 						<desc xml:lang="th">Specifies the filter last used to export an Impress document.</desc>
 						<desc xml:lang="hi-IN">Specifies the filter last used to export an Impress document.</desc>
+						<desc xml:lang="hu">Specifies the filter last used to export an Impress document.</desc>
+						<desc xml:lang="sk">Specifies the filter last used to export an Impress document.</desc>
+						<desc xml:lang="sl">Specifies the filter last used to export an Impress document.</desc>
 					</info>
 					<constraints>
 						<enumeration oor:value="HTML">
@@ -6013,6 +6581,8 @@
 								<desc xml:lang="th">HTML</desc>
 								<desc xml:lang="hi-IN">HTML</desc>
 								<desc xml:lang="sk">HTML</desc>
+								<desc xml:lang="hu">HTML</desc>
+								<desc xml:lang="sl">HTML</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="BMP - MS Windows">
@@ -6042,6 +6612,8 @@
 								<desc xml:lang="th">MS Windows bitmap</desc>
 								<desc xml:lang="hi-IN">MS Windows bitmap</desc>
 								<desc xml:lang="sk">MS Windows bitmap</desc>
+								<desc xml:lang="hu">MS Windows bitmap</desc>
+								<desc xml:lang="sl">MS Windows bitmap</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="PNG - Portable Network Graphic">
@@ -6071,6 +6643,8 @@
 								<desc xml:lang="th">Portable Network Graphic</desc>
 								<desc xml:lang="hi-IN">Portable Network Graphic</desc>
 								<desc xml:lang="sk">Portable Network Graphic</desc>
+								<desc xml:lang="hu">Portable Network Graphic</desc>
+								<desc xml:lang="sl">Portable Network Graphic</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="EPS - Encapsulated PostScript">
@@ -6100,6 +6674,8 @@
 								<desc xml:lang="th">Encapsulated PostScript</desc>
 								<desc xml:lang="hi-IN">Encapsulated PostScript</desc>
 								<desc xml:lang="sk">Encapsulated PostScript</desc>
+								<desc xml:lang="hu">Encapsulated PostScript</desc>
+								<desc xml:lang="sl">Encapsulated PostScript</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="GIF - Graphic Interchange">
@@ -6129,6 +6705,8 @@
 								<desc xml:lang="th">Graphic Interchange Format</desc>
 								<desc xml:lang="hi-IN">Graphic Interchange Format</desc>
 								<desc xml:lang="sk">Graphic Interchange Format</desc>
+								<desc xml:lang="hu">Graphic Interchange Format</desc>
+								<desc xml:lang="sl">Graphic Interchange Format</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="JPG - JPEG">
@@ -6158,13 +6736,15 @@
 								<desc xml:lang="th">JPEG</desc>
 								<desc xml:lang="hi-IN">JPEG</desc>
 								<desc xml:lang="sk">JPEG</desc>
+								<desc xml:lang="hu">JPEG</desc>
+								<desc xml:lang="sl">JPEG</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="MET - OS/2 Metafile">
 							<info>
 								<desc xml:lang="en-US">OS/2 Metafile</desc>
 								<desc xml:lang="el">Metafile OS/2</desc>
-								<desc xml:lang="nl">OS/2-Metabestand</desc>
+								<desc xml:lang="nl">OS/2 Metafile</desc>
 								<desc xml:lang="fr">Métafichier-OS/2</desc>
 								<desc xml:lang="fi">OS/2-metatiedosto</desc>
 								<desc xml:lang="cs">OS/2 Metafile</desc>
@@ -6187,6 +6767,8 @@
 								<desc xml:lang="th">OS/2 เมตาไฟล์</desc>
 								<desc xml:lang="hi-IN">OS/2 Metafile</desc>
 								<desc xml:lang="sk">OS/2 metasúbor</desc>
+								<desc xml:lang="hu">OS/2 Metafile</desc>
+								<desc xml:lang="sl">OS/2 Metafile</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="PCT - Mac Pict">
@@ -6216,6 +6798,8 @@
 								<desc xml:lang="th">Mac Pict</desc>
 								<desc xml:lang="hi-IN">Mac Pict</desc>
 								<desc xml:lang="sk">Mac Pict</desc>
+								<desc xml:lang="hu">Mac Pict</desc>
+								<desc xml:lang="sl">Mac Pict</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="PBM - Portable Bitmap">
@@ -6245,6 +6829,8 @@
 								<desc xml:lang="th">Portable Bitmap</desc>
 								<desc xml:lang="hi-IN">Portable Bitmap</desc>
 								<desc xml:lang="sk">Portable Bitmap</desc>
+								<desc xml:lang="hu">Portable Bitmap</desc>
+								<desc xml:lang="sl">Portable Bitmap</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="PGM - Portable Graymap">
@@ -6274,6 +6860,8 @@
 								<desc xml:lang="th">Portable Graymap</desc>
 								<desc xml:lang="hi-IN">Portable Graymap</desc>
 								<desc xml:lang="sk">Portable Graymap</desc>
+								<desc xml:lang="hu">Portable Graymap</desc>
+								<desc xml:lang="sl">Portable Graymap</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="PPM - Portable Pixelmap">
@@ -6303,6 +6891,8 @@
 								<desc xml:lang="th">Portable Pixelmap</desc>
 								<desc xml:lang="hi-IN">Portable Pixelmap</desc>
 								<desc xml:lang="sk">Portable Pixelmap</desc>
+								<desc xml:lang="hu">Portable Pixelmap</desc>
+								<desc xml:lang="sl">Portable Pixelmap</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="RAS - Sun Rasterfile">
@@ -6332,6 +6922,8 @@
 								<desc xml:lang="th">Sun Rasterfile</desc>
 								<desc xml:lang="hi-IN">Sun Rasterfile</desc>
 								<desc xml:lang="sk">Sun Rasterfile</desc>
+								<desc xml:lang="hu">Sun Rasterfile</desc>
+								<desc xml:lang="sl">Sun Rasterfile</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="SVM - StarView Metafile">
@@ -6361,6 +6953,8 @@
 								<desc xml:lang="th">StarView Metafile</desc>
 								<desc xml:lang="hi-IN">StarView Metafile</desc>
 								<desc xml:lang="sk">StarView Metafile</desc>
+								<desc xml:lang="hu">StarView Metafile</desc>
+								<desc xml:lang="sl">StarView Metafile</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="WMF - MS Windows Metafile">
@@ -6390,6 +6984,8 @@
 								<desc xml:lang="th">MS Windows Metafile</desc>
 								<desc xml:lang="hi-IN">MS Windows Metafile</desc>
 								<desc xml:lang="sk">MS Windows Metafile</desc>
+								<desc xml:lang="hu">MS Windows Metafile</desc>
+								<desc xml:lang="sl">MS Windows Metafile</desc>
 							</info>
 						</enumeration>
 						<enumeration oor:value="XPM">
@@ -6419,6 +7015,8 @@
 								<desc xml:lang="th">XPM</desc>
 								<desc xml:lang="hi-IN">XPM</desc>
 								<desc xml:lang="sk">XPM</desc>
+								<desc xml:lang="hu">XPM</desc>
+								<desc xml:lang="sl">XPM</desc>
 							</info>
 						</enumeration>
 					</constraints>
@@ -6427,6 +7025,8 @@
 		</group>
 	</component>
 </oor:component-schema>
+
+
 
 
 
