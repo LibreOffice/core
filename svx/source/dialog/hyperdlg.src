@@ -2,9 +2,9 @@
  *
  *  $RCSfile: hyperdlg.src,v $
  *
- *  $Revision: 1.6 $
+ *  $Revision: 1.7 $
  *
- *  last change: $Author: kz $ $Date: 2000-11-15 21:11:41 $
+ *  last change: $Author: kz $ $Date: 2000-11-29 10:06:13 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -601,7 +601,7 @@ TabPage RID_SVXPAGE_HYPERLINK_INTERNET
         Text[ polish ] = "Tekst";
         Text[ portuguese_brazilian ] = "In~dication";
         Text[ japanese ] = "•¶Žš—ñ(~K)";
-        Text[ korean ] = "Âü°í(~N)";
+        Text[ korean ] = "ÅØ½ºÆ®(~N)";
         Text[ chinese_simplified ] = "ÌáÊ¾ÎÄ×Ö(~N)";
         Text[ chinese_traditional ] = "¤å¦r(~K)";
         Text[ arabic ] = "ÇáäÕ";
@@ -1078,7 +1078,7 @@ TabPage RID_SVXPAGE_HYPERLINK_MAIL
         Text[ polish ] = "Tekst";
         Text[ portuguese_brazilian ] = "In~dication";
         Text[ japanese ] = "•¶Žš—ñ(~K)";
-        Text[ korean ] = "Âü°í(~N)";
+        Text[ korean ] = "ÅØ½ºÆ®(~N)";
         Text[ chinese_simplified ] = "ÌáÊ¾ÎÄ×Ö(~N)";
         Text[ chinese_traditional ] = "¤å¦r(~K)";
         Text[ arabic ] = "ÇáäÕ";
@@ -1631,7 +1631,7 @@ TabPage RID_SVXPAGE_HYPERLINK_DOCUMENT
         Text[ polish ] = "Tekst";
         Text[ portuguese_brazilian ] = "In~dication";
         Text[ japanese ] = "•¶Žš—ñ(~K)";
-        Text[ korean ] = "Âü°í(~N)";
+        Text[ korean ] = "ÅØ½ºÆ®(~N)";
         Text[ chinese_simplified ] = "ÌáÊ¾ÎÄ×Ö(~N)";
         Text[ chinese_traditional ] = "¤å¦r(~K)";
         Text[ arabic ] = "ÇáäÕ";
@@ -2134,7 +2134,7 @@ TabPage RID_SVXPAGE_HYPERLINK_NEWDOCUMENT
         Text[ polish ] = "Tekst";
         Text[ portuguese_brazilian ] = "In~dication";
         Text[ japanese ] = "•¶Žš—ñ(~K)";
-        Text[ korean ] = "Âü°í(~N)";
+        Text[ korean ] = "ÅØ½ºÆ®(~N)";
         Text[ chinese_simplified ] = "ÌáÊ¾ÎÄ×Ö(~N)";
         Text[ chinese_traditional ] = "¤å¦r(~K)";
         Text[ arabic ] = "ÇáäÕ";
