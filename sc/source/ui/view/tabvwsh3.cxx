@@ -2,9 +2,9 @@
  *
  *  $RCSfile: tabvwsh3.cxx,v $
  *
- *  $Revision: 1.11 $
+ *  $Revision: 1.12 $
  *
- *  last change: $Author: mba $ $Date: 2002-07-12 16:43:31 $
+ *  last change: $Author: mba $ $Date: 2002-07-18 11:04:11 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -915,6 +915,17 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 ScDocument*         pDoc = GetViewData()->GetDocument();
                 SfxPasswordDialog*  pDlg;
 
+                if( pReqArgs )
+                {
+                    const SfxPoolItem* pItem;
+                    if( IS_AVAILABLE( FID_PROTECT_DOC, &pItem ) &&
+                        ((const SfxBoolItem*)pItem)->GetValue() == pDoc->IsDocProtected() )
+                    {
+                        rReq.Ignore();
+                        break;
+                    }
+                }
+
                 if (pDoc->IsDocProtected())
                 {
                     BOOL    bCancel = FALSE;
@@ -939,6 +950,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     if (!bCancel)
                     {
                         Unprotect( TABLEID_DOC, aPassword );
+                        rReq.AppendItem( SfxBoolItem( FID_PROTECT_DOC, FALSE ) );
                         rReq.Done();
                     }
                 }
@@ -957,6 +969,7 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                     {
                         String aPassword = pDlg->GetPassword();
                         Protect( TABLEID_DOC, aPassword );
+                        rReq.AppendItem( SfxBoolItem( FID_PROTECT_DOC, TRUE ) );
                         rReq.Done();
                     }
 
@@ -980,15 +993,16 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
                 if( pReqArgs )
                 {
                     const SfxPoolItem* pItem;
-                    if( IS_AVAILABLE( FN_PARAM_1, &pItem ) )
-                        aPassword = ((const SfxStringItem*)pItem)->GetValue();
                     if( IS_AVAILABLE( FID_PROTECT_TABLE, &pItem ) )
                         bNewProtection = ((const SfxBoolItem*)pItem)->GetValue();
+                    if( bNewProtection == bOldProtection )
+                    {
+                        rReq.Ignore();
+                        break;
+                    }
                 }
 
-                if( ! rReq.IsAPI() )
-                {
-                    if (bOldProtection)
+                    if ( bOldProtection)
                     {
                         if (pDoc->GetTabPassword(nTab).getLength())
                         {
@@ -1026,19 +1040,17 @@ void ScTabViewShell::Execute( SfxRequest& rReq )
 
                         delete pDlg;
                     }
-                }
 
-                if( ! bCancel && bNewProtection!=bOldProtection )
+                if( !bCancel )
                 {
                     if ( bOldProtection )
                         Unprotect( nTab, aPassword );
                     else
                         Protect( nTab, aPassword );
 
-                    if( ! rReq.IsAPI() )
+                    if( !pReqArgs )
                     {
                         rReq.AppendItem( SfxBoolItem( FID_PROTECT_TABLE, bNewProtection ) );
-                        rReq.AppendItem( SfxStringItem( FN_PARAM_1, aPassword ) );
                         rReq.Done();
                     }
                 }
