@@ -2,9 +2,9 @@
  *
  *  $RCSfile: displayinfo.hxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: kz $ $Date: 2004-02-26 17:44:41 $
+ *  last change: $Author: rt $ $Date: 2004-03-30 15:36:30 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -87,6 +87,7 @@ class SdrPageView;
 class ExtOutputDevice;
 class SdrPaintInfoRec;
 class OutputDevice;
+class SdrPage;
 
 namespace sdr
 {
@@ -112,7 +113,17 @@ namespace sdr
         protected:
             // the owner of this DisplayInfo. Set from constructor and not
             // to be changed in any way. May be empty, too.
-            const SdrPageView*                              mpPageView;
+            SdrPageView*                                    mpPageView;
+
+            // For being able to detect the processed page, allow setting
+            // it at DisplayInfo. To allow access from old stuff, register
+            // the DisplayInfo at given SdrPageView, too. Init value is 0L.
+            SdrPage*                                        mpProcessedPage;
+
+            // To temporarily remember internally the current DispolayInfo
+            // which is set at the PaintView. This will be removes ASA CL
+            // will use the DrawXXX overlay mechanism (not yet available)
+            const DisplayInfo*                              mpLastDisplayInfo;
 
             // The Layers which shall be processed (visible)
             SetOfByte                                       maProcessLayers;
@@ -181,16 +192,25 @@ namespace sdr
 
         public:
             // access to SdrPageView
-            const SdrPageView* GetPageView() const
+            SdrPageView* GetPageView() const
             {
                 return mpPageView;
             }
 
             // basic constructor.
-            DisplayInfo(const SdrPageView* pView = 0L);
+            DisplayInfo(SdrPageView* pView = 0L);
 
             // destructor
             virtual ~DisplayInfo();
+
+            // access to ProcessedPage, write is for internal use only.
+            // read is used from SdrPageView eventually, to identify the
+            // currently painting page. This is needed for things like
+            // PageNumber fields. For that purpose all page painting parts
+            // should use SetProcessedPage to se the currently rendered page,
+            // and also to reset that pointer again.
+            void SetProcessedPage(SdrPage* pNew);
+            const SdrPage* GetProcessedPage() const;
 
             // access to ProcessLayers
             void SetProcessLayers(const SetOfByte& rSet);
