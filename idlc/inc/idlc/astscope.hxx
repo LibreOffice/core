@@ -2,9 +2,9 @@
  *
  *  $RCSfile: astscope.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: rt $ $Date: 2004-03-30 16:41:38 $
+ *  last change: $Author: rt $ $Date: 2004-06-17 13:53:22 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -85,7 +85,7 @@ public:
     virtual AstDeclaration* addDeclaration(AstDeclaration* pDecl);
 
     sal_uInt32 nMembers()
-        { return m_declarations.size(); }
+        { return (sal_uInt32)(m_declarations.size()); }
     DeclList::const_iterator getIteratorBegin() const
         { return m_declarations.begin(); }
     DeclList::const_iterator getIteratorEnd() const
