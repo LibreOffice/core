@@ -2,9 +2,9 @@
  *
  *  $RCSfile: fldpage.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: vg $ $Date: 2003-04-17 15:27:58 $
+ *  last change: $Author: kz $ $Date: 2004-05-18 14:10:48 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -268,10 +268,11 @@ BOOL SwFldPage::InsertFld(USHORT nTypeId, USHORT nSubType, const String& rPar1,
     }
     else    // Feld aendern
     {
+        SwField * pTmpFld = pCurFld->Copy();
+
         String sPar1(rPar1);
         String sPar2(rPar2);
         BOOL bDBChanged = FALSE;
-
         switch( nTypeId )
         {
         case TYP_DATEFLD:
@@ -293,7 +294,7 @@ BOOL SwFldPage::InsertFld(USHORT nTypeId, USHORT nSubType, const String& rPar1,
                 aData.nCommandType = rPar1.GetToken(0, DB_DELIM, nPos).ToInt32();
                 sPar1 = rPar1.Copy(nPos);
 
-                ((SwDBNameInfField*)pCurFld)->SetDBData(aData);
+                ((SwDBNameInfField*)pTmpFld)->SetDBData(aData);
                 bDBChanged = TRUE;
             }
             break;
@@ -306,7 +307,7 @@ BOOL SwFldPage::InsertFld(USHORT nTypeId, USHORT nSubType, const String& rPar1,
                 aData.nCommandType = rPar1.GetToken(2, DB_DELIM).ToInt32();
                 String sColumn = rPar1.GetToken(3, DB_DELIM);
 
-                SwDBFieldType* pOldTyp = (SwDBFieldType*)pCurFld->GetTyp();
+                SwDBFieldType* pOldTyp = (SwDBFieldType*)pTmpFld->GetTyp();
                 SwDBFieldType* pTyp = (SwDBFieldType*)pSh->InsertFldType(
                         SwDBFieldType(pSh->GetDoc(), sColumn, aData));
 
@@ -318,7 +319,7 @@ BOOL SwFldPage::InsertFld(USHORT nTypeId, USHORT nSubType, const String& rPar1,
                     if( pFmtFld->GetFld() == pCurFld)
                     {
                         pTyp->Add(pFmtFld); // Feld auf neuen Typ umhaengen
-                        pCurFld->ChgTyp(pTyp);
+                        pTmpFld->ChgTyp(pTyp);
                         break;
                     }
                 }
@@ -328,7 +329,7 @@ BOOL SwFldPage::InsertFld(USHORT nTypeId, USHORT nSubType, const String& rPar1,
 
         case TYP_SEQFLD:
             {
-                SwSetExpFieldType* pTyp = (SwSetExpFieldType*)pCurFld->GetTyp();
+                SwSetExpFieldType* pTyp = (SwSetExpFieldType*)pTmpFld->GetTyp();
                 pTyp->SetOutlineLvl(nSubType & 0xff);
                 pTyp->SetDelimiter(cSeparator);
 
@@ -340,9 +341,9 @@ BOOL SwFldPage::InsertFld(USHORT nTypeId, USHORT nSubType, const String& rPar1,
             {
                 // User- oder SetField ?
                 if (aMgr.GetFldType(RES_USERFLD, sPar1) == 0 &&
-                !(pCurFld->GetSubType() & INP_TXT)) // SETEXPFLD
+                !(pTmpFld->GetSubType() & INP_TXT)) // SETEXPFLD
                 {
-                    SwSetExpField* pFld = (SwSetExpField*)pCurFld;
+                    SwSetExpField* pFld = (SwSetExpField*)pTmpFld;
                     pFld->SetPromptText(sPar2);
                     sPar2 = pFld->GetPar2();
                 }
@@ -352,10 +353,12 @@ BOOL SwFldPage::InsertFld(USHORT nTypeId, USHORT nSubType, const String& rPar1,
 
         pSh->StartAllAction();
 
-        pCurFld->SetSubType(nSubType);
-        pCurFld->SetAutomaticLanguage(bIsAutomaticLanguage);
+        pTmpFld->SetSubType(nSubType);
+        pTmpFld->SetAutomaticLanguage(bIsAutomaticLanguage);
 
-        aMgr.UpdateCurFld( nFormatId, sPar1, sPar2 );
+        aMgr.UpdateCurFld( nFormatId, sPar1, sPar2, pTmpFld );
+
+        pCurFld = aMgr.GetCurFld();
 
         switch (nTypeId)
         {
@@ -365,6 +368,7 @@ BOOL SwFldPage::InsertFld(USHORT nTypeId, USHORT nSubType, const String& rPar1,
                 break;
         }
 
+#if 0
         if (bDBChanged) // Datenbank geaendert
         {
             switch(nTypeId)
@@ -380,6 +384,7 @@ BOOL SwFldPage::InsertFld(USHORT nTypeId, USHORT nSubType, const String& rPar1,
                     break;
             }
         }
+#endif
 
         pSh->SetUndoNoResetModified();
         pSh->EndAllAction();
