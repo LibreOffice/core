@@ -2,9 +2,9 @@
  *
  *  $RCSfile: Reference.h,v $
  *
- *  $Revision: 1.14 $
+ *  $Revision: 1.15 $
  *
- *  last change: $Author: hr $ $Date: 2004-02-03 12:15:03 $
+ *  last change: $Author: hr $ $Date: 2004-04-14 11:53:56 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -176,11 +176,12 @@ public:
     */
     inline sal_Bool SAL_CALL operator != ( const BaseReference & rRef ) const SAL_THROW( () );
 
-    /** needed for some stl container operations, though this makes no sense on pointers
-        @internal
+    /** Needed by some STL containers.
+
+        @param rRef another reference
+        @return true, if this reference is less than rRef
     */
-    inline sal_Bool SAL_CALL operator < ( const BaseReference & rRef ) const SAL_THROW( () )
-        { return (_pInterface < rRef._pInterface); }
+    inline sal_Bool SAL_CALL operator < ( const BaseReference & rRef ) const SAL_THROW( () );
 };
 
 /** Enum defining UNO_QUERY and UNO_REF_QUERY for implicit interface query.
