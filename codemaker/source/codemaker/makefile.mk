@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.2 $
+#   $Revision: 1.3 $
 #
-#   last change: $Author: rt $ $Date: 2004-03-30 16:52:20 $
+#   last change: $Author: obo $ $Date: 2004-06-04 03:10:53 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -68,11 +68,11 @@ ENABLE_EXCEPTIONS := TRUE
 .INCLUDE: settings.mk
 
 OBJFILES = \
-    $(OBJ)$/dependency.obj \
+    $(OBJ)$/dependencies.obj \
     $(OBJ)$/exceptiontree.obj \
     $(OBJ)$/global.obj \
     $(OBJ)$/options.obj \
     $(OBJ)$/typemanager.obj \
-    $(OBJ)$/unotypesort.obj
+    $(OBJ)$/unotype.obj
 
 .INCLUDE: target.mk
