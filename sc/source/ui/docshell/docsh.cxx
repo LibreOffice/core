@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: nn $ $Date: 2002-03-04 19:37:54 $
+ *  last change: $Author: nn $ $Date: 2002-05-29 13:36:53 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -842,7 +842,6 @@ BOOL __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
 //          SvStream* pStream = rMedium.GetInStream();
 //          if (pStream)
             {
-                FltError eError;
                 String sItStr;
                 SfxItemSet*  pSet = rMedium.GetItemSet();
                 const SfxPoolItem* pItem;
@@ -854,63 +853,27 @@ BOOL __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
 
                 if (sItStr.Len() == 0)
                 {
-                    String aTitle = ScGlobal::GetRscString( STR_IMPORT_LOTUS );
-                    ScImportOptions aOptions(59, 34, RTL_TEXTENCODING_IBM_437);
-                    ScImportOptionsDlg* pDlg = new ScImportOptionsDlg( NULL,
-                        FALSE, &aOptions, &aTitle, TRUE, FALSE );
-                    int nDlgRet;
-                    {   // WarteCursor aus und wieder einschalten
-                        ScWaitCursorOff aWait( GetDialogParent() );
-                        nDlgRet = pDlg->Execute();
-                    }
-                    if ( RET_OK == nDlgRet )
-                    {
-                        pDlg->GetImportOptions( aOptions );
-                        SfxItemSet* pItemSet = rMedium.GetItemSet();
-                        if (pItemSet)
-                            pItemSet->Put(SfxStringItem(SID_FILE_FILTEROPTIONS,
-                                aOptions.aStrFont));
-                        ScColumn::bDoubleAlloc = TRUE;
-                        eError = ScImportLotus123( rMedium, &aDocument,
-                            aOptions.eCharSet );
-                        ScColumn::bDoubleAlloc = FALSE;
-                        if (eError != eERR_OK)
-                        {
-                            if (!GetError())
-                                SetError(eError);
+                    //  default for lotus import (from API without options):
+                    //  IBM_437 encoding
 
-                            if( ( eError & ERRCODE_WARNING_MASK ) == ERRCODE_WARNING_MASK )
-                                bRet = TRUE;
-                        }
-                        else
-                            bRet = TRUE;
-                    }
-                    else
-                    {
-                        // ConvertFrom lautlos abbrechen
-                        SetError( ERRCODE_IO_ABORT );
-                        bRet = FALSE;
-                    }
-
-                    delete pDlg;
+                    sItStr = ScGlobal::GetCharsetString( RTL_TEXTENCODING_IBM_437 );
                 }
-                else
-                {
-                    ScColumn::bDoubleAlloc = TRUE;
-                    eError = ScImportLotus123( rMedium, &aDocument,
-                                        ScGlobal::GetCharsetValue(sItStr));
-                    ScColumn::bDoubleAlloc = FALSE;
-                    if (eError != eERR_OK)
-                    {
-                        if (!GetError())
-                            SetError(eError);
 
-                        if( ( eError & ERRCODE_WARNING_MASK ) == ERRCODE_WARNING_MASK )
-                            bRet = TRUE;
-                    }
-                    else
+                ScColumn::bDoubleAlloc = TRUE;
+                FltError eError = ScImportLotus123( rMedium, &aDocument,
+                                    ScGlobal::GetCharsetValue(sItStr));
+                ScColumn::bDoubleAlloc = FALSE;
+                if (eError != eERR_OK)
+                {
+                    if (!GetError())
+                        SetError(eError);
+
+                    if( ( eError & ERRCODE_WARNING_MASK ) == ERRCODE_WARNING_MASK )
                         bRet = TRUE;
                 }
+                else
+                    bRet = TRUE;
+
 //              rMedium.CloseInStream();
             }
         }
@@ -973,86 +936,49 @@ BOOL __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
 
             if ( !bOptInit )
             {
-                String aExt = rMedium.GetURLObject().getExtension();
-                String aPrivDatName = rMedium.GetURLObject().getName();
-                sal_Unicode cAsciiDel;
-                if (aExt.EqualsIgnoreCaseAscii("CSV"))
-                    cAsciiDel = ',';
-                else
-                    cAsciiDel = '\t';
+                //  default for ascii import (from API without options):
+                //  ISO8859-1/MS_1252 encoding, comma, double quotes
+
+                aOptions.SetCharSet( RTL_TEXTENCODING_MS_1252 );
+                aOptions.SetFieldSeps( (sal_Unicode) ',' );
+                aOptions.SetTextSep( (sal_Unicode) '"' );
+            }
+
+            FltError eError = eERR_OK;
+            BOOL bOverflow = FALSE;
+
+            if( ! rMedium.IsStorage() )
+            {
+                ScImportExport  aImpEx( &aDocument );
+                aImpEx.SetExtOptions( aOptions );
 
                 SvStream* pInStream = rMedium.GetInStream();
                 if (pInStream)
                 {
-                    ScImportAsciiDlg* pDlg = new ScImportAsciiDlg(
-                                                    NULL,aPrivDatName,
-                                                    pInStream, cAsciiDel );
-                    int nDlgRet;
-                    {   // WarteCursor aus und wieder einschalten
-                        ScWaitCursorOff aWait( GetDialogParent() );
-                        nDlgRet = pDlg->Execute();
-                    }
-                    if ( nDlgRet == RET_OK )
-                    {
-                        pDlg->GetOptions( aOptions );
-
-                        SfxItemSet* pItemSet = rMedium.GetItemSet();
-                        if (pItemSet)
-                            pItemSet->Put(SfxStringItem(SID_FILE_FILTEROPTIONS, aOptions.WriteToString() ));
-
-                        bOptInit = TRUE;
-                    }
-                    else
-                    {
-                        // ConvertFrom lautlos abbrechen
-                        SetError( ERRCODE_IO_ABORT );
-                        bRet = FALSE;
-                    }
-
-                    delete pDlg;
+                    pInStream->SetStreamCharSet( aOptions.GetCharSet() );
+                    pInStream->Seek( 0 );
+                    bRet = aImpEx.ImportStream( *pInStream );
+                    eError = bRet ? eERR_OK : SCERR_IMPORT_CONNECT;
+                    aDocument.StartAllListeners();
+                    aDocument.SetDirty();
+                    bOverflow = aImpEx.IsOverflow();
                 }
                 else
                     DBG_ERROR( "No Stream" );
             }
 
-            if( bOptInit ) // Jetzt gesetzt ?
+            if (eError != eERR_OK)
             {
-                FltError eError = eERR_OK;
-                BOOL bOverflow = FALSE;
-
-                if( ! rMedium.IsStorage() )
-                {
-                    ScImportExport  aImpEx( &aDocument );
-                    aImpEx.SetExtOptions( aOptions );
-
-                    SvStream* pInStream = rMedium.GetInStream();
-                    if (pInStream)
-                    {
-                        pInStream->SetStreamCharSet( aOptions.GetCharSet() );
-                        pInStream->Seek( 0 );
-                        bRet = aImpEx.ImportStream( *pInStream );
-                        eError = bRet ? eERR_OK : SCERR_IMPORT_CONNECT;
-                        aDocument.StartAllListeners();
-                        aDocument.SetDirty();
-                        bOverflow = aImpEx.IsOverflow();
-                    }
-                    else
-                        DBG_ERROR( "No Stream" );
-                }
-
-                if (eError != eERR_OK)
-                {
-                    if (!GetError())
-                        SetError(eError);
-                }
-                else if ( bOverflow )
-                {
-                    if (!GetError())
-                        SetError(SCWARN_IMPORT_RANGE_OVERFLOW);
-                }
-                bSetColWidths = TRUE;
-                bSetSimpleTextColWidths = TRUE;
+                if (!GetError())
+                    SetError(eError);
             }
+            else if ( bOverflow )
+            {
+                if (!GetError())
+                    SetError(SCWARN_IMPORT_RANGE_OVERFLOW);
+            }
+            bSetColWidths = TRUE;
+            bSetSimpleTextColWidths = TRUE;
         }
         else if (aFltName.EqualsAscii(pFilterDBase))
         {
@@ -1064,61 +990,27 @@ BOOL __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
             {
                 sItStr = ((const SfxStringItem*)pItem)->GetValue();
             }
+
             if (sItStr.Len() == 0)
             {
-                String aTitle = ScGlobal::GetRscString(STR_IMPORT_DBF);
-                ScImportOptions aOptions;
-                aOptions.SetTextEncoding( RTL_TEXTENCODING_IBM_850 );
-                ScImportOptionsDlg* pDlg = new ScImportOptionsDlg( NULL,
-                    FALSE, &aOptions, &aTitle, FALSE, TRUE );
-                int nDlgRet;
-                {   // WarteCursor aus und wieder einschalten
-                    ScWaitCursorOff aWait( GetDialogParent() );
-                    nDlgRet = pDlg->Execute();
-                }
-                if ( nDlgRet == RET_OK )
-                {
-                    pDlg->GetImportOptions( aOptions );
-                    SfxItemSet* pItemSet = rMedium.GetItemSet();
-                    if (pItemSet)
-                        pItemSet->Put(SfxStringItem(SID_FILE_FILTEROPTIONS,
-                            aOptions.aStrFont));
+                //  default for dBase import (from API without options):
+                //  IBM_850 encoding
 
-                    ULONG eError = DBaseImport( rMedium.GetPhysicalName(),
-                                        aOptions.eCharSet, bSimpleColWidth );
+                sItStr = ScGlobal::GetCharsetString( RTL_TEXTENCODING_IBM_850 );
+            }
 
-                    if (eError != eERR_OK)
-                    {
-                        if (!GetError())
-                            SetError(eError);
-                        bRet = ( eError == SCWARN_IMPORT_RANGE_OVERFLOW );
-                    }
-                    else
-                        bRet = TRUE;
-                }
-                else
-                {
-                    // ConvertFrom lautlos abbrechen
-                    SetError( ERRCODE_IO_ABORT );
-                    bRet = FALSE;
-                }
+            ULONG eError = DBaseImport( rMedium.GetPhysicalName(),
+                    ScGlobal::GetCharsetValue(sItStr), bSimpleColWidth );
 
-                delete pDlg;
+            if (eError != eERR_OK)
+            {
+                if (!GetError())
+                    SetError(eError);
+                bRet = ( eError == SCWARN_IMPORT_RANGE_OVERFLOW );
             }
             else
-            {
-                ULONG eError = DBaseImport( rMedium.GetPhysicalName(),
-                        ScGlobal::GetCharsetValue(sItStr), bSimpleColWidth );
+                bRet = TRUE;
 
-                if (eError != eERR_OK)
-                {
-                    if (!GetError())
-                        SetError(eError);
-                    bRet = ( eError == SCWARN_IMPORT_RANGE_OVERFLOW );
-                }
-                else
-                    bRet = TRUE;
-            }
             aColWidthRange.aStart.SetRow( 1 );  // Spaltenheader nicht
             bSetColWidths = TRUE;
             bSetSimpleTextColWidths = TRUE;
@@ -1146,59 +1038,25 @@ BOOL __EXPORT ScDocShell::ConvertFrom( SfxMedium& rMedium )
 
                 if (sItStr.Len() == 0)
                 {
-                    String aTitle = ScGlobal::GetRscString( STR_IMPORT_DIF );
-                    ScImportOptions aOptions(59, 34, RTL_TEXTENCODING_MS_1252);
-                    ScImportOptionsDlg* pDlg = new ScImportOptionsDlg( NULL,
-                        FALSE, &aOptions, &aTitle, TRUE, FALSE );
-                    int nDlgRet;
-                    {   // WarteCursor aus und wieder einschalten
-                        ScWaitCursorOff aWait( GetDialogParent() );
-                        nDlgRet = pDlg->Execute();
-                    }
-                    if ( RET_OK == nDlgRet )
-                    {
-                        pDlg->GetImportOptions( aOptions );
-                        SfxItemSet* pItemSet = rMedium.GetItemSet();
-                        if (pItemSet)
-                            pItemSet->Put(SfxStringItem(SID_FILE_FILTEROPTIONS,
-                                aOptions.aStrFont));
-                        eError = ScImportDif( *pStream, &aDocument, ScAddress(0,0,0),
-                                                aOptions.eCharSet);
-                        if (eError != eERR_OK)
-                        {
-                            if (!GetError())
-                                SetError(eError);
+                    //  default for DIF import (from API without options):
+                    //  ISO8859-1/MS_1252 encoding
 
-                            if( ( eError & ERRCODE_WARNING_MASK ) == ERRCODE_WARNING_MASK )
-                                bRet = TRUE;
-                        }
-                        else
-                            bRet = TRUE;
-                    }
-                    else
-                    {
-                        // ConvertFrom lautlos abbrechen
-                        SetError( ERRCODE_IO_ABORT );
-                        bRet = FALSE;
-                    }
-
-                    delete pDlg;
+                    sItStr = ScGlobal::GetCharsetString( RTL_TEXTENCODING_MS_1252 );
                 }
-                else
-                {
-                    eError = ScImportDif( *pStream, &aDocument, ScAddress(0,0,0),
-                                        ScGlobal::GetCharsetValue(sItStr));
-                    if (eError != eERR_OK)
-                    {
-                        if (!GetError())
-                            SetError(eError);
 
-                        if( ( eError & ERRCODE_WARNING_MASK ) == ERRCODE_WARNING_MASK )
-                            bRet = TRUE;
-                    }
-                    else
+                eError = ScImportDif( *pStream, &aDocument, ScAddress(0,0,0),
+                                    ScGlobal::GetCharsetValue(sItStr));
+                if (eError != eERR_OK)
+                {
+                    if (!GetError())
+                        SetError(eError);
+
+                    if( ( eError & ERRCODE_WARNING_MASK ) == ERRCODE_WARNING_MASK )
                         bRet = TRUE;
                 }
+                else
+                    bRet = TRUE;
+
                 rMedium.CloseInStream();
             }
             bSetColWidths = TRUE;
@@ -1768,75 +1626,38 @@ BOOL __EXPORT ScDocShell::ConvertTo( SfxMedium &rMed )
         SvStream* pStream = rMed.GetOutStream();
         if (pStream)
         {
-            sal_Unicode cAsciiDel;
-            sal_Unicode cStrDel;
             String sItStr;
             SfxItemSet*  pSet = rMed.GetItemSet();
-
-            BOOL bShowDlg=FALSE;
-            BOOL bCancel=FALSE;
-
-            const SfxPoolItem* pDlgItem;
-            if (pSet&& SFX_ITEM_SET ==
-                 pSet->GetItemState( SID_USE_FILTEROPTIONS, TRUE, &pDlgItem ) )
-            {
-                bShowDlg=((const SfxBoolItem*)pDlgItem)->GetValue();
-            }
-
             const SfxPoolItem* pItem;
             if ( pSet && SFX_ITEM_SET ==
                  pSet->GetItemState( SID_FILE_FILTEROPTIONS, TRUE, &pItem ) )
             {
                 sItStr = ((const SfxStringItem*)pItem)->GetValue();
             }
-            if (sItStr.Len() == 0 || bShowDlg)
+
+            if ( sItStr.Len() == 0 )
             {
-                if (aDocument.GetTableCount() > 1)
-                    if (!rMed.GetError())
-                        rMed.SetError(SCWARN_EXPORT_ASCII);
-                cStrDel = '"';
-                String aExt = rMed.GetName().Copy(rMed.GetName().Len()-3, 3);
-                if (aExt.EqualsIgnoreCaseAscii("CSV"))
-                    cAsciiDel = ',';
-                else
-                    cAsciiDel = '\t';
-                ScImportOptions aOptions((USHORT)cAsciiDel, (USHORT)cStrDel, RTL_TEXTENCODING_DONTKNOW);
-                String aTitle = ScGlobal::GetRscString( STR_EXPORT_ASCII );
-                ScImportOptionsDlg* pDlg = new ScImportOptionsDlg( NULL,
-                    TRUE, &aOptions, &aTitle, TRUE, FALSE );
-                if ( pDlg->Execute() == RET_OK )
-                {
-                    WaitObject aWait( GetDialogParent() );
-                    pDlg->GetImportOptions( aOptions );
-                    cAsciiDel = (sal_Unicode) aOptions.nFieldSepCode;
-                    cStrDel   = (sal_Unicode) aOptions.nTextSepCode;
-                    sItStr    = aOptions.BuildString();
-                    SfxItemSet* pItemSet = rMed.GetItemSet();
-                    if (pItemSet)
-                        pItemSet->Put(SfxStringItem(SID_FILE_FILTEROPTIONS, sItStr));
-                    AsciiSave( *pStream, cAsciiDel, cStrDel, aOptions.eCharSet );
-                }
-                else
-                {
-                    bCancel = TRUE;
-                    SetError( ERRCODE_IO_ABORT );
-                }
-                delete pDlg;
+                //  default for ascii export (from API without options):
+                //  ISO8859-1/MS_1252 encoding, comma, double quotes
+
+                ScImportOptions aDefOptions( ',', '"', RTL_TEXTENCODING_MS_1252 );
+                sItStr = aDefOptions.BuildString();
             }
-            else
-            {
-                WaitObject aWait( GetDialogParent() );
-                ScImportOptions aOptions( sItStr );
-                cAsciiDel = (sal_Unicode)aOptions.nFieldSepCode;
-                cStrDel   = (sal_Unicode)aOptions.nTextSepCode;
-                AsciiSave( *pStream, cAsciiDel, cStrDel, aOptions.eCharSet );
-            }
-            bRet = !bCancel;
+
+            WaitObject aWait( GetDialogParent() );
+            ScImportOptions aOptions( sItStr );
+            sal_Unicode cAsciiDel = (sal_Unicode)aOptions.nFieldSepCode;
+            sal_Unicode cStrDel   = (sal_Unicode)aOptions.nTextSepCode;
+            AsciiSave( *pStream, cAsciiDel, cStrDel, aOptions.eCharSet );
+            bRet = TRUE;
+
+            if (aDocument.GetTableCount() > 1)
+                if (!rMed.GetError())
+                    rMed.SetError(SCWARN_EXPORT_ASCII);
         }
     }
     else if (aFltName.EqualsAscii(pFilterDBase))
     {
-        BOOL bCancel = FALSE;
         String sCharSet;
         SfxItemSet* pSet = rMed.GetItemSet();
         const SfxPoolItem* pItem;
@@ -1844,84 +1665,61 @@ BOOL __EXPORT ScDocShell::ConvertTo( SfxMedium &rMed )
              pSet->GetItemState( SID_FILE_FILTEROPTIONS, TRUE, &pItem ) )
         {
             sCharSet = ((const SfxStringItem*)pItem)->GetValue();
-
-            if ( pSet->GetItemState( SID_USE_FILTEROPTIONS, TRUE, &pItem ) == SFX_ITEM_SET &&
-                 ((const SfxBoolItem*)pItem)->GetValue() )
-            {
-                sCharSet.Erase();       // "edit options" - forget old
-            }
         }
+
         if (sCharSet.Len() == 0)
         {
-            ScImportOptions aOptions(59, 34, RTL_TEXTENCODING_IBM_850);
-            String aTitle = ScGlobal::GetRscString( STR_EXPORT_DBF );
-            ScImportOptionsDlg* pDlg = new ScImportOptionsDlg( NULL,
-                FALSE, &aOptions, &aTitle, FALSE, TRUE );
-            if ( pDlg->Execute() == RET_OK )
-            {
-                pDlg->GetImportOptions( aOptions );
-                sCharSet = aOptions.aStrFont;
-                SfxItemSet* pItemSet = rMed.GetItemSet();
-                if (pItemSet)
-                    pItemSet->Put(SfxStringItem(SID_FILE_FILTEROPTIONS, sCharSet));
-            }
-            else
-                bCancel = TRUE;
-            delete pDlg;
+            //  default for dBase export (from API without options):
+            //  IBM_850 encoding
+
+            sCharSet = ScGlobal::GetCharsetString( RTL_TEXTENCODING_IBM_850 );
         }
 
-        if ( bCancel )
+        WaitObject aWait( GetDialogParent() );
+// HACK damit Sba geoffnetes TempFile ueberschreiben kann
+        rMed.CloseOutStream();
+        BOOL bHasMemo = FALSE;
+
+        ULONG eError = DBaseExport( rMed.GetPhysicalName(),
+                        ScGlobal::GetCharsetValue(sCharSet), bHasMemo );
+
+        if ( eError != eERR_OK && (eError & ERRCODE_WARNING_MASK) )
         {
-            SetError( ERRCODE_IO_ABORT );
+//!         if ( !rMed.GetError() )
+//!             rMed.SetError( eError );
+            eError = eERR_OK;
+        }
+//!     else if ( aDocument.GetTableCount() > 1 && !rMed.GetError() )
+//!         rMed.SetError( SCWARN_EXPORT_ASCII );
+
+        INetURLObject aTmpFile( rMed.GetPhysicalName(), INET_PROT_FILE );
+        if ( bHasMemo )
+            aTmpFile.setExtension( String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("dbt")) );
+        if ( eError != eERR_OK )
+        {
+            if (!GetError())
+                SetError(eError);
+            if ( bHasMemo && IsDocument( aTmpFile ) )
+                KillFile( aTmpFile );
         }
         else
         {
-            WaitObject aWait( GetDialogParent() );
-// HACK damit Sba geoffnetes TempFile ueberschreiben kann
-            rMed.CloseOutStream();
-            BOOL bHasMemo = FALSE;
-
-            ULONG eError = DBaseExport( rMed.GetPhysicalName(),
-                            ScGlobal::GetCharsetValue(sCharSet), bHasMemo );
-
-            if ( eError != eERR_OK && (eError & ERRCODE_WARNING_MASK) )
-            {
-//!             if ( !rMed.GetError() )
-//!                 rMed.SetError( eError );
-                eError = eERR_OK;
-            }
-//!         else if ( aDocument.GetTableCount() > 1 && !rMed.GetError() )
-//!             rMed.SetError( SCWARN_EXPORT_ASCII );
-
-            INetURLObject aTmpFile( rMed.GetPhysicalName(), INET_PROT_FILE );
+            bRet = TRUE;
             if ( bHasMemo )
-                aTmpFile.setExtension( String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("dbt")) );
-            if ( eError != eERR_OK )
             {
-                if (!GetError())
-                    SetError(eError);
-                if ( bHasMemo && IsDocument( aTmpFile ) )
-                    KillFile( aTmpFile );
-            }
-            else
-            {
-                bRet = TRUE;
-                if ( bHasMemo )
+                SfxStringItem* pNameItem =
+                    (SfxStringItem*) rMed.GetItemSet()->GetItem( SID_FILE_NAME );
+                INetURLObject aDbtFile( pNameItem->GetValue(), INET_PROT_FILE );
+                aDbtFile.setExtension( String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("dbt")) );
+                if ( IsDocument( aDbtFile ) && !KillFile( aDbtFile ) )
+                    bRet = FALSE;
+                if ( bRet && !MoveFile( aTmpFile, aDbtFile ) )
+                    bRet = FALSE;
+                if ( !bRet )
                 {
-                    SfxStringItem* pNameItem =
-                        (SfxStringItem*) rMed.GetItemSet()->GetItem( SID_FILE_NAME );
-                    INetURLObject aDbtFile( pNameItem->GetValue(), INET_PROT_FILE );
-                    aDbtFile.setExtension( String::CreateFromAscii(RTL_CONSTASCII_STRINGPARAM("dbt")) );
-                    if ( IsDocument( aDbtFile ) && !KillFile( aDbtFile ) )
-                        bRet = FALSE;
-                    if ( bRet && !MoveFile( aTmpFile, aDbtFile ) )
-                        bRet = FALSE;
-                    if ( !bRet )
-                    {
-                        KillFile( aTmpFile );
-                        if ( !GetError() )
-                            SetError( SCERR_EXPORT_DATA );
-                    }
+                    KillFile( aTmpFile );
+                    if ( !GetError() )
+                        SetError( SCERR_EXPORT_DATA );
                 }
             }
         }
@@ -1931,7 +1729,6 @@ BOOL __EXPORT ScDocShell::ConvertTo( SfxMedium &rMed )
         SvStream* pStream = rMed.GetOutStream();
         if (pStream)
         {
-            BOOL bCancel = FALSE;
             String sItStr;
             SfxItemSet*  pSet = rMed.GetItemSet();
             const SfxPoolItem* pItem;
@@ -1940,42 +1737,23 @@ BOOL __EXPORT ScDocShell::ConvertTo( SfxMedium &rMed )
             {
                 sItStr = ((const SfxStringItem*)pItem)->GetValue();
             }
+
             if (sItStr.Len() == 0)
             {
-                if (aDocument.GetTableCount() > 1)
-                    if (!rMed.GetError())
-                        rMed.SetError(SCWARN_EXPORT_ASCII);
+                //  default for DIF export (from API without options):
+                //  ISO8859-1/MS_1252 encoding
 
-                ScImportOptions aOptions(59, 34, RTL_TEXTENCODING_MS_1252);
-                String aTitle = ScGlobal::GetRscString( STR_EXPORT_DIF );
-                ScImportOptionsDlg* pDlg = new ScImportOptionsDlg( NULL,
-                    FALSE, &aOptions, &aTitle, TRUE, FALSE );
-                if ( pDlg->Execute() == RET_OK )
-                {
-                    WaitObject aWait( GetDialogParent() );
-                    pDlg->GetImportOptions( aOptions );
-                    SfxItemSet* pItemSet = rMed.GetItemSet();
-                    if (pItemSet)
-                        pItemSet->Put(SfxStringItem(SID_FILE_FILTEROPTIONS,
-                            aOptions.aStrFont));
-                    USHORT nTab = GetSaveTab();
-                    ScExportDif( *pStream, &aDocument, ScAddress(0,0,nTab),
-                        aOptions.eCharSet );
-                }
-                else
-                {
-                    bCancel = TRUE;
-                    SetError( ERRCODE_IO_ABORT );
-                }
-                delete pDlg;
+                sItStr = ScGlobal::GetCharsetString( RTL_TEXTENCODING_MS_1252 );
             }
-            else
-            {
-                WaitObject aWait( GetDialogParent() );
-                ScExportDif( *pStream, &aDocument, ScAddress(0,0,0),
-                    ScGlobal::GetCharsetValue(sItStr) );
-            }
-            bRet = !bCancel;
+
+            WaitObject aWait( GetDialogParent() );
+            ScExportDif( *pStream, &aDocument, ScAddress(0,0,0),
+                ScGlobal::GetCharsetValue(sItStr) );
+            bRet = TRUE;
+
+            if (aDocument.GetTableCount() > 1)
+                if (!rMed.GetError())
+                    rMed.SetError(SCWARN_EXPORT_ASCII);
         }
     }
     else if (aFltName.EqualsAscii(pFilterSylk))
@@ -2090,6 +1868,26 @@ String ScDocShell::GetOwnFilterName()           // static
 String ScDocShell::GetWebQueryFilterName()      // static
 {
     return String::CreateFromAscii(pFilterHtmlWebQ);
+}
+
+String ScDocShell::GetAsciiFilterName()         // static
+{
+    return String::CreateFromAscii(pFilterAscii);
+}
+
+String ScDocShell::GetLotusFilterName()         // static
+{
+    return String::CreateFromAscii(pFilterLotus);
+}
+
+String ScDocShell::GetDBaseFilterName()         // static
+{
+    return String::CreateFromAscii(pFilterDBase);
+}
+
+String ScDocShell::GetDifFilterName()           // static
+{
+    return String::CreateFromAscii(pFilterDif);
 }
 
 BOOL ScDocShell::HasAutomaticTableName( const String& rFilter )     // static

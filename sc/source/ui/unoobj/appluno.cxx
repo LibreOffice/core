@@ -2,9 +2,9 @@
  *
  *  $RCSfile: appluno.cxx,v $
  *
- *  $Revision: 1.10 $
+ *  $Revision: 1.11 $
  *
- *  last change: $Author: nn $ $Date: 2001-05-30 10:11:00 $
+ *  last change: $Author: nn $ $Date: 2002-05-29 13:34:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -73,6 +73,7 @@
 #include "appluno.hxx"
 #include "afmtuno.hxx"
 #include "funcuno.hxx"
+#include "filtuno.hxx"
 #include "miscuno.hxx"
 #include "scmod.hxx"
 #include "appoptio.hxx"
@@ -241,6 +242,10 @@ sal_Bool SAL_CALL component_writeInfo(
                             ScFunctionAccess::getSupportedServiceNames_Static() );
 
             lcl_WriteInfo( pRegistryKey,
+                            ScFilterOptionsObj::getImplementationName_Static(),
+                            ScFilterOptionsObj::getSupportedServiceNames_Static() );
+
+            lcl_WriteInfo( pRegistryKey,
                             ScXMLImport_getImplementationName(),
                             ScXMLImport_getSupportedServiceNames() );
 
@@ -333,6 +338,13 @@ void * SAL_CALL component_getFactory(
                 ScFunctionAccess::getImplementationName_Static(),
                 ScFunctionAccess_CreateInstance,
                 ScFunctionAccess::getSupportedServiceNames_Static() );
+
+    if ( aImpl == ScFilterOptionsObj::getImplementationName_Static() )
+        xFactory = cppu::createSingleFactory(
+                reinterpret_cast<lang::XMultiServiceFactory*>(pServiceManager),
+                ScFilterOptionsObj::getImplementationName_Static(),
+                ScFilterOptionsObj_CreateInstance,
+                ScFilterOptionsObj::getSupportedServiceNames_Static() );
 
     if ( aImpl == ScXMLImport_getImplementationName() )
         xFactory = cppu::createSingleFactory(

@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.9 $
+#   $Revision: 1.10 $
 #
-#   last change: $Author: nn $ $Date: 2001-04-06 14:36:18 $
+#   last change: $Author: nn $ $Date: 2002-05-29 13:34:44 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -114,7 +114,8 @@ CXXFILES = \
         convuno.cxx \
         editsrc.cxx \
         unoguard.cxx \
-        confuno.cxx
+        confuno.cxx \
+        filtuno.cxx
 
 SLOFILES =  \
         $(SLO)$/docuno.obj \
@@ -148,7 +149,8 @@ SLOFILES =  \
         $(SLO)$/convuno.obj \
         $(SLO)$/editsrc.obj \
         $(SLO)$/unoguard.obj \
-        $(SLO)$/confuno.obj
+        $(SLO)$/confuno.obj \
+        $(SLO)$/filtuno.obj
 
 # --- Tagets -------------------------------------------------------
 

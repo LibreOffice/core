@@ -2,9 +2,9 @@
  *
  *  $RCSfile: docsh.hxx,v $
  *
- *  $Revision: 1.18 $
+ *  $Revision: 1.19 $
  *
- *  last change: $Author: sab $ $Date: 2001-10-15 11:29:21 $
+ *  last change: $Author: nn $ $Date: 2002-05-29 13:35:44 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -394,6 +394,10 @@ public:
     static ScDocShell* GetShellByNum( USHORT nDocNo );
     static String   GetOwnFilterName();
     static String   GetWebQueryFilterName();
+    static String   GetAsciiFilterName();
+    static String   GetLotusFilterName();
+    static String   GetDBaseFilterName();
+    static String   GetDifFilterName();
     static BOOL     HasAutomaticTableName( const String& rFilter );
 
     DECL_LINK( RefreshDBDataHdl, ScDBData* );
