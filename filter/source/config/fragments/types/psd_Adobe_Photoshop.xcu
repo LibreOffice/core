@@ -6,7 +6,7 @@
         <prop oor:name="Preferred"><value>false</value></prop>
         <prop oor:name="PreferredFilter"><value>PSD - Adobe Photoshop</value></prop>
         <prop oor:name="UIName">
-            <value xml:lang="en-US">PSD - Adobe Photoshop</value>
+            <value>PSD - Adobe Photoshop</value>
         </prop>
         <prop oor:name="ClipboardFormat"/>
     </node>

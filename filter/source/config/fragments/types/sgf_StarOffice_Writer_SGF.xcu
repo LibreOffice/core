@@ -6,7 +6,7 @@
         <prop oor:name="Preferred"><value>false</value></prop>
         <prop oor:name="PreferredFilter"><value>SGF - StarOffice Writer SGF</value></prop>
         <prop oor:name="UIName">
-            <value xml:lang="en-US">SGF - StarWriter SGF</value>
+            <value>SGF - StarWriter SGF</value>
         </prop>
         <prop oor:name="ClipboardFormat"/>
     </node>
