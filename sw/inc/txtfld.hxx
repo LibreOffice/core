@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtfld.hxx,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: hr $ $Date: 2003-06-30 14:58:46 $
+ *  last change: $Author: obo $ $Date: 2004-03-17 12:13:20 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -74,14 +74,14 @@ class SwTxtNode;
 
 class SwTxtFld : public SwTxtAttr
 {
-    String     aExpand;
-    SwTxtNode  *pMyTxtNd;
+    mutable     String     aExpand;
+    SwTxtNode              *pMyTxtNd;
 public:
     SwTxtFld( const SwFmtFld& rAttr, xub_StrLen nStart );
     ~SwTxtFld();
 
     void CopyFld( SwTxtFld *pDest ) const;
-    void Expand();
+    void Expand() const;
     inline void ExpandAlways();
 
     // erfrage und setze den TxtNode Pointer
