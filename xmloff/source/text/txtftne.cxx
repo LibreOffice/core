@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtftne.cxx,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: dvo $ $Date: 2000-11-17 18:54:34 $
+ *  last change: $Author: mib $ $Date: 2000-11-21 14:25:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -152,7 +152,7 @@ using namespace ::com::sun::star::text;
 void XMLTextParagraphExport::exportTextFootnote(
     const Reference<XPropertySet> & rPropSet,
     const OUString& sText,
-    sal_Bool bAutoStyles)
+    sal_Bool bAutoStyles, sal_Bool bProgress )
 {
     // get footnote and associated text
     Any aAny;
@@ -172,7 +172,7 @@ void XMLTextParagraphExport::exportTextFootnote(
 
         // handle formatting within footnote
         exportTextFootnoteHelper(xFootnote, xText, sText,
-                                 bAutoStyles, bIsEndnote);
+                                 bAutoStyles, bIsEndnote, bProgress );
     }
     else
     {
@@ -186,12 +186,12 @@ void XMLTextParagraphExport::exportTextFootnote(
             SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_TEXT,
                                       sXML_span, sal_False, sal_False );
             exportTextFootnoteHelper(xFootnote, xText, sText,
-                                     bAutoStyles, bIsEndnote);
+                                     bAutoStyles, bIsEndnote, bProgress );
         }
         else
         {
             exportTextFootnoteHelper(xFootnote, xText, sText,
-                                     bAutoStyles, bIsEndnote);
+                                     bAutoStyles, bIsEndnote, bProgress );
         }
     }
 }
@@ -202,11 +202,12 @@ void XMLTextParagraphExport::exportTextFootnoteHelper(
     const Reference<XText> & rText,
     const OUString& sText,
     sal_Bool bAutoStyles,
-    sal_Bool bIsEndnote)
+    sal_Bool bIsEndnote,
+    sal_Bool bProgress )
 {
     if (bAutoStyles)
     {
-        exportText(rText, bAutoStyles);
+        exportText(rText, bAutoStyles, bProgress );
     }
     else
     {
@@ -246,7 +247,7 @@ void XMLTextParagraphExport::exportTextFootnoteHelper(
                                      (bIsEndnote ? sXML_endnote_body :
                                                    sXML_footnote_body),
                                      sal_False, sal_False);
-            exportText(rText, bAutoStyles);
+            exportText(rText, bAutoStyles, bProgress );
         }
     }
 }

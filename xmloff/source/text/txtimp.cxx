@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtimp.cxx,v $
  *
- *  $Revision: 1.26 $
+ *  $Revision: 1.27 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-20 16:51:29 $
+ *  last change: $Author: mib $ $Date: 2000-11-21 14:25:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -172,6 +172,9 @@
 #endif
 #ifndef _XMLOFF_XMLFONTSTYLESCONTEXT_HXX
 #include "XMLFontStylesContext.hxx"
+#endif
+#ifndef _XMLOFF_PROGRESSBARHELPER_HXX
+#include "ProgressBarHelper.hxx"
 #endif
 
 
@@ -423,7 +426,8 @@ static __FAR_DATA SvXMLTokenMapEntry aTextMasterPageElemTokenMap[] =
 
 XMLTextImportHelper::XMLTextImportHelper(
         const Reference < XModel >& rModel,
-        sal_Bool bInsertM, sal_Bool bStylesOnlyM ) :
+        sal_Bool bInsertM, sal_Bool bStylesOnlyM,
+        sal_Bool bPrg ) :
     pTextElemTokenMap( 0 ),
     pTextPElemTokenMap( 0 ),
     pTextPAttrTokenMap( 0 ),
@@ -439,6 +443,7 @@ XMLTextImportHelper::XMLTextImportHelper(
     pOutlineStyles( 0 ),
     bInsertMode( bInsertM ),
     bStylesOnlyMode( bStylesOnlyM ),
+    bProgress( bPrg ),
     pFootnoteBackpatcher(NULL),
     pSequenceIdBackpatcher(NULL),
     pSequenceNameBackpatcher(NULL),
@@ -961,6 +966,12 @@ SvXMLImportContext *XMLTextImportHelper::CreateTextChildContext(
         pContext = new XMLParaContext( rImport,
                                        nPrefix, rLocalName,
                                        xAttrList, bHeading );
+        if( bProgress && XML_TEXT_TYPE_SHAPE != eType )
+        {
+            ProgressBarHelper *pProgress = rImport.GetProgressBarHelper();
+            if( pProgress )
+                pProgress->SetValue( ++nProgress );
+        }
         break;
     case XML_TOK_TEXT_ORDERED_LIST:
         bOrdered = sal_True;

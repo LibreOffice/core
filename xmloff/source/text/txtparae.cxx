@@ -2,9 +2,9 @@
  *
  *  $RCSfile: txtparae.cxx,v $
  *
- *  $Revision: 1.28 $
+ *  $Revision: 1.29 $
  *
- *  last change: $Author: sab $ $Date: 2000-11-20 16:51:30 $
+ *  last change: $Author: mib $ $Date: 2000-11-21 14:25:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -189,6 +189,9 @@
 #endif
 #ifndef _XEXPTRANSFORM_HXX
 #include "xexptran.hxx"
+#endif
+#ifndef _XMLOFF_PROGRESSBARHELPER_HXX
+#include "ProgressBarHelper.hxx"
 #endif
 
 #ifndef _XMLOFF_NMSPMAP_HXX
@@ -583,7 +586,8 @@ void XMLTextParagraphExport::exportListChange(
 
 XMLTextParagraphExport::XMLTextParagraphExport(
         SvXMLExport& rExp,
-        SvXMLAutoStylePoolP & rASP ) :
+        SvXMLAutoStylePoolP & rASP,
+        sal_Int32 nProg ) :
     XMLStyleExport( rExp, OUString(), &rASP ),
 //  rExport( rExp ),
     rAutoStylePool( rASP ),
@@ -665,7 +669,8 @@ XMLTextParagraphExport::XMLTextParagraphExport(
     sActualSize(RTL_CONSTASCII_USTRINGPARAM("ActualSize")),
     sContourPolyPolygon(RTL_CONSTASCII_USTRINGPARAM("ContourPolyPolygon")),
     sAnchorCharStyleName(RTL_CONSTASCII_USTRINGPARAM("AnchorCharStyleName")),
-    sServerMap(RTL_CONSTASCII_USTRINGPARAM("ServerMap"))
+    sServerMap(RTL_CONSTASCII_USTRINGPARAM("ServerMap")),
+    nProgress( nProg )
 {
     UniReference < XMLPropertySetMapper > xPropMapper =
         new XMLTextPropertySetMapper( TEXT_PROP_MAP_PARA );
@@ -864,7 +869,8 @@ void XMLTextParagraphExport::collectFrames()
     }
 }
 
-void XMLTextParagraphExport::exportPageFrames( sal_Bool bAutoStyles )
+void XMLTextParagraphExport::exportPageFrames( sal_Bool bAutoStyles,
+                                               sal_Bool bProgress )
 {
     if( pPageTextFrameIdxs )
     {
@@ -874,7 +880,7 @@ void XMLTextParagraphExport::exportPageFrames( sal_Bool bAutoStyles )
             Reference < XTextFrame > xTxtFrame;
             aAny >>= xTxtFrame;
             Reference < XTextContent > xTxtCntnt( xTxtFrame, UNO_QUERY );
-            exportTextFrame( xTxtCntnt, bAutoStyles );
+            exportTextFrame( xTxtCntnt, bAutoStyles, bProgress );
         }
     }
     if( pPageGraphicIdxs )
@@ -902,7 +908,8 @@ void XMLTextParagraphExport::exportPageFrames( sal_Bool bAutoStyles )
 
 void XMLTextParagraphExport::exportText(
         const Reference < XText > & rText,
-        sal_Bool bAutoStyles )
+        sal_Bool bAutoStyles,
+        sal_Bool bProgress )
 {
     Reference < XEnumerationAccess > xEA( rText, UNO_QUERY );
     Reference < XEnumeration > xParaEnum = xEA->createEnumeration();
@@ -917,13 +924,15 @@ void XMLTextParagraphExport::exportText(
             aAny >>= xBaseSection;
         }
     }
-    exportTextContentEnumeration( xParaEnum, bAutoStyles, xBaseSection );
+    exportTextContentEnumeration( xParaEnum, bAutoStyles, xBaseSection,
+                                  bProgress );
 }
 
 void XMLTextParagraphExport::exportTextContentEnumeration(
         const Reference < XEnumeration > & rContEnum,
         sal_Bool bAutoStyles,
-        const Reference < XTextSection > & rBaseSection)
+        const Reference < XTextSection > & rBaseSection,
+        sal_Bool bProgress)
 {
     XMLTextNumRuleInfo aPrevNumInfo;
     XMLTextNumRuleInfo aNextNumInfo;
@@ -949,7 +958,7 @@ void XMLTextParagraphExport::exportTextContentEnumeration(
                                         aPrevNumInfo, aNextNumInfo,
                                         bAutoStyles );
 
-            exportParagraph( xTxtCntnt, bAutoStyles );
+            exportParagraph( xTxtCntnt, bAutoStyles, bProgress );
             bHasContent = sal_True;
         }
         else if( xServiceInfo->supportsService( sTableService ) )
@@ -963,12 +972,12 @@ void XMLTextParagraphExport::exportTextContentEnumeration(
                                         aPrevNumInfo, aNextNumInfo,
                                         bAutoStyles );
 
-            exportTable( xTxtCntnt, bAutoStyles );
+            exportTable( xTxtCntnt, bAutoStyles, bProgress  );
             bHasContent = sal_True;
         }
         else if( xServiceInfo->supportsService( sTextFrameService ) )
         {
-            exportTextFrame( xTxtCntnt, bAutoStyles );
+            exportTextFrame( xTxtCntnt, bAutoStyles, bProgress );
         }
         else if( xServiceInfo->supportsService( sTextGraphicService ) )
         {
@@ -1006,9 +1015,15 @@ void XMLTextParagraphExport::exportTextContentEnumeration(
 
 void XMLTextParagraphExport::exportParagraph(
         const Reference < XTextContent > & rTextContent,
-        sal_Bool bAutoStyles )
+        sal_Bool bAutoStyles, sal_Bool bProgress )
 {
     sal_Int8 nOutlineLevel = -1;
+
+    if( bProgress )
+    {
+        ProgressBarHelper *pProgress = GetExport().GetProgressBarHelper();
+            pProgress->SetValue( ++nProgress );
+    }
 
     Reference < XPropertySet > xPropSet( rTextContent, UNO_QUERY );
     Reference< XPropertySetInfo > xPropSetInfo =
@@ -1082,8 +1097,9 @@ void XMLTextParagraphExport::exportParagraph(
     if( bAutoStyles )
     {
         if( xContentEnum.is() )
-            exportTextContentEnumeration( xContentEnum, bAutoStyles, xSection);
-        exportTextRangeEnumeration( xTextEnum, bAutoStyles );
+            exportTextContentEnumeration( xContentEnum, bAutoStyles, xSection,
+                                          bProgress );
+        exportTextRangeEnumeration( xTextEnum, bAutoStyles, bProgress );
     }
     else
     {
@@ -1092,8 +1108,9 @@ void XMLTextParagraphExport::exportParagraph(
         SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_TEXT, pElem,
                                   sal_True, sal_False );
         if( xContentEnum.is() )
-            exportTextContentEnumeration( xContentEnum, bAutoStyles, xSection);
-        exportTextRangeEnumeration( xTextEnum, bAutoStyles );
+            exportTextContentEnumeration( xContentEnum, bAutoStyles, xSection,
+                                          bProgress );
+        exportTextRangeEnumeration( xTextEnum, bAutoStyles, bProgress );
     }
 }
 
@@ -1108,7 +1125,7 @@ static const sal_Char* lcl_XmlBookmarkElements[] = {
 
 void XMLTextParagraphExport::exportTextRangeEnumeration(
         const Reference < XEnumeration > & rTextEnum,
-        sal_Bool bAutoStyles )
+        sal_Bool bAutoStyles, sal_Bool bProgress )
 {
     sal_Bool bPrevCharIsSpace = sal_True;
 
@@ -1151,14 +1168,14 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
                 Reference<XTextSection> xSection;
                 if( xContentEnum.is() )
                     exportTextContentEnumeration( xContentEnum, bAutoStyles,
-                                                  xSection );
+                                                  xSection, bProgress );
                 bPrevCharIsSpace = sal_False;
             }
             else if (sType.equals(sFootnote))
             {
                 exportTextFootnote(xPropSet,
                                    xTxtRange->getString(),
-                                   bAutoStyles);
+                                   bAutoStyles, bProgress );
                 bPrevCharIsSpace = sal_False;
             }
             else if (sType.equals(sBookmark))
@@ -1202,7 +1219,7 @@ void XMLTextParagraphExport::exportTextRangeEnumeration(
 
 void XMLTextParagraphExport::exportTable(
         const Reference < XTextContent > & rTextContent,
-        sal_Bool bAutoStyles )
+        sal_Bool bAutoStyles, sal_Bool bProgress )
 {
 }
 
@@ -1470,7 +1487,8 @@ sal_Int32 XMLTextParagraphExport::addTextFrameAttributes(
 
 void XMLTextParagraphExport::_exportTextFrame(
         const Reference < XPropertySet > & rPropSet,
-        const Reference < XPropertySetInfo > & rPropSetInfo )
+        const Reference < XPropertySetInfo > & rPropSetInfo,
+        sal_Bool bProgress )
 {
     Reference < XTextFrame > xTxtFrame( rPropSet, UNO_QUERY );
     Reference < XText > xTxt = xTxtFrame->getText();
@@ -1503,12 +1521,13 @@ void XMLTextParagraphExport::_exportTextFrame(
 
     SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_DRAW,
                               sXML_text_box, sal_False, sal_True );
-    exportText( xTxt, sal_False );
+    exportText( xTxt, sal_False, bProgress );
 }
 
 void XMLTextParagraphExport::exportTextFrame(
         const Reference < XTextContent > & rTxtCntnt,
-        sal_Bool bAutoStyles )
+        sal_Bool bAutoStyles,
+        sal_Bool bProgress )
 {
     Reference < XPropertySet > xPropSet( rTxtCntnt, UNO_QUERY );
 
@@ -1517,7 +1536,7 @@ void XMLTextParagraphExport::exportTextFrame(
         Reference < XTextFrame > xTxtFrame( rTxtCntnt, UNO_QUERY );
         Reference < XText > xTxt = xTxtFrame->getText();
         Add( XML_STYLE_FAMILY_TEXT_FRAME, xPropSet );
-        exportText( xTxt, bAutoStyles );
+        exportText( xTxt, bAutoStyles, bProgress );
     }
     else
     {
@@ -1532,11 +1551,11 @@ void XMLTextParagraphExport::exportTextFrame(
             addHyperlinkAttributes( xPropSet, xPropState, xPropSetInfo );
             SvXMLElementExport aElem( GetExport(), XML_NAMESPACE_DRAW,
                                       sXML_a, sal_False, sal_False );
-            _exportTextFrame( xPropSet, xPropSetInfo );
+            _exportTextFrame( xPropSet, xPropSetInfo, bProgress );
         }
         else
         {
-            _exportTextFrame( xPropSet, xPropSetInfo );
+            _exportTextFrame( xPropSet, xPropSetInfo, bProgress );
         }
     }
 }
