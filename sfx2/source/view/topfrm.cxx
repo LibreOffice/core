@@ -2,9 +2,9 @@
  *
  *  $RCSfile: topfrm.cxx,v $
  *
- *  $Revision: 1.15 $
+ *  $Revision: 1.16 $
  *
- *  last change: $Author: mba $ $Date: 2001-08-15 15:16:26 $
+ *  last change: $Author: mba $ $Date: 2001-08-17 15:50:34 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1104,6 +1104,7 @@ void SfxTopViewFrame::GetState_Impl( SfxItemSet &rSet )
                 break;
 
             case SID_CLOSEWIN:
+            case SID_SHOWPOPUPS :
                 break;
 
             case SID_RESTOREWIN:
