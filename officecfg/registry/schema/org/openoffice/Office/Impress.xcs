@@ -3,9 +3,9 @@
  *
  *  $RCSfile: Impress.xcs,v $
  *
- *  $Revision: 1.8 $
+ *  $Revision: 1.9 $
  *
- *  last change: $Author: tpf $ $Date: 2002-11-21 14:40:47 $
+ *  last change: $Author: af $ $Date: 2002-12-03 16:41:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -127,6 +127,10 @@
 				</prop>
 			</group>
 			<group oor:name="Other">
+				<info>
+					<desc xml:lang="en-US">Other layout options that do not fit into any other group.</desc>
+					<label xml:lang="en-US">Other Layout Options</label>
+				</info>
 				<group oor:name="TabStop">
 					<!-- OldPath: Impress/Layout -->
 					<!-- OldLocation: Soffice.cfg -->
@@ -479,6 +483,10 @@
 				</prop>
 			</group>
 			<group oor:name="Compatibility">
+				<info>
+					<desc xml:lang="en-US">Group of options that control the compatibility to other applications.</desc>
+					<label xml:lang="en-US">Compatibility options.</label>
+				</info>
 				<prop oor:name="AddBetween" oor:type="xs:boolean">
 					<!-- OldPath: Writer/Other/Compatibility -->
 					<!-- UIHints: Tools - Options - Presentation - Other - [Section] Compatibility -->
@@ -582,8 +590,16 @@
 						<label xml:lang="en-US">Snap range</label>
 					</info>
 					<constraints>
-						<minInclusive oor:value="1"/>
-						<maxInclusive oor:value="50"/>
+						<minInclusive oor:value="1">
+							<info>
+								<desc xml:lang="en-US">Minimal snap range is 1.</desc>
+							</info>
+						</minInclusive>
+						<maxInclusive oor:value="50">
+							<info>
+								<desc xml:lang="en-US">Maximal snap range is 50.</desc>
+							</info>
+						</maxInclusive>
 					</constraints>
 					<value>5</value>
 				</prop>
@@ -631,8 +647,16 @@
 						<label xml:lang="en-US">When rotating</label>
 					</info>
 					<constraints>
-						<minInclusive oor:value="0"/>
-						<maxInclusive oor:value="18000"/>
+						<minInclusive oor:value="0">
+							<info>
+								<desc xml:lang="en-US">Minimal rotation angle is 0/100 degree.</desc>
+							</info>
+						</minInclusive>
+						<maxInclusive oor:value="18000">
+							<info>
+								<desc xml:lang="en-US">Maximal rotation angle is 18000/100 degree.</desc>
+							</info>
+						</maxInclusive>
 					</constraints>
 					<value>1500</value>
 				</prop>
@@ -645,8 +669,16 @@
 						<label xml:lang="en-US">Point reduction</label>
 					</info>
 					<constraints>
-						<minInclusive oor:value="100"/>
-						<maxInclusive oor:value="9000"/>
+						<minInclusive oor:value="100">
+							<info>
+								<desc xml:lang="en-US">Minimal angle is 100/100 degree.</desc>
+							</info>
+						</minInclusive>
+						<maxInclusive oor:value="9000">
+							<info>
+								<desc xml:lang="en-US">Maximal angle is 9000/100 degree.</desc>
+							</info>
+						</maxInclusive>
 					</constraints>
 					<value>1500</value>
 				</prop>
@@ -1022,8 +1054,20 @@
 			</group>
 		</group>
 		<group oor:name="Filter">
+			<info>
+				<desc xml:lang="en-US">Group of options that control the behaviour of filters.</desc>
+				<label xml:lang="en-US">Filter Options</label>
+			</info>
 			<group oor:name="Import">
+					<info>
+						<desc xml:lang="en-US">Group of options that control the behaviour of the import filters.</desc>
+						<label xml:lang="en-US">Import Filter</label>
+					</info>
 				<group oor:name="VBA">
+						<info>
+							<desc xml:lang="en-US">Group of options that control the behaviour of the VBA filter.</desc>
+							<label xml:lang="en-US">VBA Filter</label>
+						</info>
 					<prop oor:name="Load" oor:type="xs:boolean">
 						<!-- OldPath: Filter/MS_Office/Basic/PowerPoint -->
 						<!-- OldLocation: soffice.cfg -->
@@ -1060,21 +1104,81 @@
 						<desc xml:lang="en-US">Specifies the filter last used to export an Impress document.</desc>
 					</info>
 					<constraints>
-						<enumeration oor:value="HTML"/>
-						<enumeration oor:value="BMP - MS Windows"/>
-						<enumeration oor:value="PNG - Portable Network Graphic"/>
-						<enumeration oor:value="EPS - Encapsulated PostScript"/>
-						<enumeration oor:value="GIF - Graphic Interchange"/>
-						<enumeration oor:value="JPG - JPEG"/>
-						<enumeration oor:value="MET - OS/2 Metafile"/>
-						<enumeration oor:value="PCT - Mac Pict"/>
-						<enumeration oor:value="PBM - Portable Bitmap"/>
-						<enumeration oor:value="PGM - Portable Graymap"/>
-						<enumeration oor:value="PPM - Portable Pixelmap"/>
-						<enumeration oor:value="RAS - Sun Rasterfile"/>
-						<enumeration oor:value="SVM - StarView Metafile"/>
-						<enumeration oor:value="WMF - MS Windows Metafile"/>
-						<enumeration oor:value="XPM"/>
+						<enumeration oor:value="HTML">
+						<info>
+							<desc xml:lang="en-US">HTML filter.</desc>
+						</info>
+						</enumeration>
+						<enumeration oor:value="BMP - MS Windows">
+						<info>
+							<desc xml:lang="en-US">MS Windows bitmap filter.</desc>
+						</info>
+						</enumeration>
+						<enumeration oor:value="PNG - Portable Network Graphic">
+						<info>
+							<desc xml:lang="en-US">Portable Network Graphic filter.</desc>
+						</info>
+						</enumeration>
+						<enumeration oor:value="EPS - Encapsulated PostScript">
+						<info>
+							<desc xml:lang="en-US">Encapsulated PostScript filter.</desc>
+						</info>
+						</enumeration>
+						<enumeration oor:value="GIF - Graphic Interchange">
+						<info>
+							<desc xml:lang="en-US">Graphic Interchange Format filter.</desc>
+						</info>
+						</enumeration>
+						<enumeration oor:value="JPG - JPEG">
+						<info>
+							<desc xml:lang="en-US">JPEG filter.</desc>
+						</info>
+						</enumeration>
+						<enumeration oor:value="MET - OS/2 Metafile">
+						<info>
+							<desc xml:lang="en-US">OS/2 Metafile filter.</desc>
+						</info>
+						</enumeration>
+						<enumeration oor:value="PCT - Mac Pict">
+						<info>
+							<desc xml:lang="en-US">Mac Pict filter.</desc>
+						</info>
+						</enumeration>
+						<enumeration oor:value="PBM - Portable Bitmap">
+						<info>
+							<desc xml:lang="en-US">Portable Bitmap filter.</desc>
+						</info>
+						</enumeration>
+						<enumeration oor:value="PGM - Portable Graymap">
+						<info>
+							<desc xml:lang="en-US">Portable Graymap filter.</desc>
+						</info>
+						</enumeration>
+						<enumeration oor:value="PPM - Portable Pixelmap">
+						<info>
+							<desc xml:lang="en-US">Portable Pixelmap filter.</desc>
+						</info>
+						</enumeration>
+						<enumeration oor:value="RAS - Sun Rasterfile">
+						<info>
+							<desc xml:lang="en-US">Sun Rasterfile filter.</desc>
+						</info>
+						</enumeration>
+						<enumeration oor:value="SVM - StarView Metafile">
+						<info>
+							<desc xml:lang="en-US">StarView Metafile filter.</desc>
+						</info>
+						</enumeration>
+						<enumeration oor:value="WMF - MS Windows Metafile">
+						<info>
+							<desc xml:lang="en-US">MS Windows Metafile filter.</desc>
+						</info>
+						</enumeration>
+						<enumeration oor:value="XPM">
+						<info>
+							<desc xml:lang="en-US">XPM filter.</desc>
+						</info>
+						</enumeration>
 					</constraints>
 				</prop>
 			</group>
