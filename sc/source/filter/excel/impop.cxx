@@ -2,9 +2,9 @@
  *
  *  $RCSfile: impop.cxx,v $
  *
- *  $Revision: 1.65 $
+ *  $Revision: 1.66 $
  *
- *  last change: $Author: hr $ $Date: 2004-09-08 15:33:29 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:07:19 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -88,7 +88,6 @@
 #include <sfx2/printer.hxx>
 #include <svtools/zforlist.hxx>
 
-#include <so3/embobj.hxx>
 #include <sfx2/objsh.hxx>
 #include "docuno.hxx"
 
@@ -1682,7 +1681,7 @@ void ImportExcel::PostDocLoad( void )
     if( pDocObj )
     {
         ScExtDocOptions& rExtDocOpt = GetExtDocOptions();
-        SvEmbeddedObject* pEmbObj = pDocObj->GetEmbeddedObject();
+        SfxObjectShell* pEmbObj = pDocObj->GetEmbeddedObject();
         const ScRange* pOleSize = rExtDocOpt.GetOleSize();
         if( pEmbObj && pOleSize )
         {
