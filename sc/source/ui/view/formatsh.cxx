@@ -2,9 +2,9 @@
  *
  *  $RCSfile: formatsh.cxx,v $
  *
- *  $Revision: 1.27 $
+ *  $Revision: 1.28 $
  *
- *  last change: $Author: rt $ $Date: 2004-09-20 13:48:30 $
+ *  last change: $Author: kz $ $Date: 2004-10-04 20:23:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -98,6 +98,8 @@
 #include <svx/eeitem.hxx>
 #define ITEMID_FIELD EE_FEATURE_FIELD
 
+#include <sfx2/viewfrm.hxx>
+#include <sfx2/objface.hxx>
 #include <sfx2/request.hxx>
 #include <svtools/whiter.hxx>
 #include <vcl/msgbox.hxx>
@@ -2023,7 +2025,7 @@ void ScFormatShell::GetBckColState( SfxItemSet& rSet )
 void ScFormatShell::GetNumFormatState( SfxItemSet& rSet )
 {
     ScTabViewShell* pTabViewShell   = GetViewData()->GetViewShell();
-    BOOL bOle = pTabViewShell->GetViewFrame()->ISA(SfxInPlaceFrame);
+    BOOL bOle = pTabViewShell->GetViewFrame()->GetFrame()->IsInPlace();
     BOOL bTabProt = GetViewData()->GetDocument()->IsTabProtected(GetViewData()->GetTabNo());
     SfxApplication* pSfxApp = SFX_APP();
 
