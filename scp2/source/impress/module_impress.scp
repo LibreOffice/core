@@ -2,9 +2,9 @@
  *
  *  $RCSfile: module_impress.scp,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: hr $ $Date: 2004-11-26 21:48:26 $
+ *  last change: $Author: rt $ $Date: 2004-12-16 10:51:43 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -71,8 +71,7 @@ Module gid_Module_Prg_Impress_Bin
     ParentID = gid_Module_Prg_Impress;
     Minimal = YES;
     Default = YES;
-    Files = (gid_File_Extra_Cdeimpress,gid_File_Exe_Simpress,gid_File_Extra_Urldesktop_Impress,gid_File_Extra_Urlnew_Impress,gid_File_Extra_Urlstart_Impress,gid_File_Extra_Urltasks_Impress,gid_File_Lib_Placeware,
-    gid_File_Oo_Office_Ui_Drawimpresscommands_Xcs,gid_File_Oo_Office_Ui_Drawimpresscommands_Xcu,
+    Files = (gid_File_Exe_Simpress,gid_File_Extra_Urldesktop_Impress,gid_File_Extra_Urlnew_Impress,gid_File_Extra_Urlstart_Impress,gid_File_Extra_Urltasks_Impress,gid_File_Lib_Placeware,
     gid_File_Registry_Spool_Oo_Common_Impress_Xcu,gid_File_Registry_Spool_Oo_Setup_Impress_Xcu,
     gid_File_Oo_Office_Ui_Impresswindowstate_Xcs,gid_File_Oo_Office_Ui_Impresswindowstate_Xcu,
 	gid_File_Lib_Animcore,gid_File_Share_Config_Sofficecfg_Impress_Effects_Xml, gid_File_Share_Config_Sofficecfg_Impress_Transitions_Xml,
