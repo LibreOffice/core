@@ -2,9 +2,9 @@
  *
  *  $RCSfile: svdotxed.cxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: rt $ $Date: 2003-11-24 16:59:17 $
+ *  last change: $Author: rt $ $Date: 2004-04-02 14:13:54 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -169,8 +169,9 @@ FASTBOOL SdrTextObj::BegTextEdit(SdrOutliner& rOutl)
         if(aGeo.nDrehWink || IsFontwork() /*|| bIsAnimated*/)
         {
             // only repaint here, no real objectchange
-            ActionChanged();
-            // BroadcastObjectChange();
+
+//          ActionChanged();
+            BroadcastObjectChange();
         }
     }
 
