@@ -2,9 +2,9 @@
  *
  *  $RCSfile: sfxbasecontroller.cxx,v $
  *
- *  $Revision: 1.51 $
+ *  $Revision: 1.52 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-03 11:50:10 $
+ *  last change: $Author: obo $ $Date: 2004-07-06 13:40:29 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -846,7 +846,6 @@ REFERENCE< XDISPATCH > SAL_CALL SfxBaseController::queryDispatch(   const   UNOU
         SfxViewFrame*           pAct    = m_pData->m_pViewShell->GetViewFrame() ;
         if ( !m_pData->m_bDisposing )
         {
-            sal_uInt16 nId = 0;
             if ( sTargetFrameName.compareToAscii( "_beamer" ) == COMPARE_EQUAL )
             {
                 SfxViewFrame *pFrame = m_pData->m_pViewShell->GetViewFrame();
@@ -873,51 +872,44 @@ REFERENCE< XDISPATCH > SAL_CALL SfxBaseController::queryDispatch(   const   UNOU
                 if ( pIPFrame )
                 {
                     pAct = (SfxViewFrame *)pIPFrame;
-                    for (nIdx=0; (pShell=pAct->GetDispatcher()->GetShell(nIdx)); nIdx++)
-                    {
-                        const SfxInterface *pIFace = pShell->GetInterface();
-                        const SfxSlot* pSlot = pIFace->GetSlot( aURL.Path );
-                        if ( pSlot )
-                        {
-                            nId = pSlot->GetSlotId();
-                            if ( nId && pAct->GetDispatcher()->HasSlot_Impl( nId ) )
-                                return REFERENCE< XDISPATCH >( new SfxOfficeDispatch( pAct->GetBindings(), pAct->GetDispatcher(), nId, aURL) );
-                            break;
-                        }
-                    }
-                }
-
-                nId = 0;
-                pAct = m_pData->m_pViewShell->GetViewFrame() ;
-                for (nIdx=0; (pShell=pAct->GetDispatcher()->GetShell(nIdx)); nIdx++)
-                {
-                    const SfxInterface *pIFace = pShell->GetInterface();
-                    const SfxSlot* pSlot = pIFace->GetSlot( aURL.Path );
+                    SfxSlotPool& rSlotPool = SFX_APP()->GetSlotPool( pAct );
+                    const SfxSlot* pSlot = rSlotPool.GetUnoSlot( aURL.Path );
                     if ( pSlot )
                     {
-                        nId = pSlot->GetSlotId();
-                        break;
+                        FASTBOOL bIsContainerSlot = pSlot->IsMode(SFX_SLOT_CONTAINER);
+                        if ( !bIsContainerSlot )
+                            return REFERENCE< XDISPATCH >( new SfxOfficeDispatch( pAct->GetBindings(), pAct->GetDispatcher(), pSlot->GetSlotId(), aURL) );
                     }
                 }
 
-                if ( nId && pAct->GetDispatcher()->HasSlot_Impl( nId ) )
-                    return REFERENCE< XDISPATCH >( new SfxOfficeDispatch( pAct->GetBindings(), pAct->GetDispatcher(), nId, aURL) );
+                pAct = m_pData->m_pViewShell->GetViewFrame() ;
+                SfxSlotPool& rSlotPool = SFX_APP()->GetSlotPool( pAct );
+                const SfxSlot* pSlot = rSlotPool.GetUnoSlot( aURL.Path );
+                if ( pSlot )
+                    return REFERENCE< XDISPATCH >( new SfxOfficeDispatch( pAct->GetBindings(), pAct->GetDispatcher(), pSlot->GetSlotId(), aURL) );
             }
             else if ( aURL.Protocol.compareToAscii( "slot:" ) == COMPARE_EQUAL )
             {
-                nId = (USHORT) aURL.Path.toInt32();
-
+                USHORT nId = (USHORT) aURL.Path.toInt32();
                 SfxInPlaceFrame* pIPFrame = pAct->GetIPFrame_Impl();
                 if ( pIPFrame )
                 {
                     pAct = (SfxViewFrame *)pIPFrame;
-                    if ( pAct->GetDispatcher()->HasSlot_Impl( nId ))
-                        return REFERENCE< XDISPATCH >( new SfxOfficeDispatch( pAct->GetBindings(), pAct->GetDispatcher(), nId, aURL ));
+                    SfxSlotPool& rSlotPool = SFX_APP()->GetSlotPool( pAct );
+                    const SfxSlot* pSlot = rSlotPool.GetSlot( nId );
+                    if ( pSlot )
+                    {
+                        FASTBOOL bIsContainerSlot = pSlot->IsMode(SFX_SLOT_CONTAINER);
+                        if ( !bIsContainerSlot )
+                            return REFERENCE< XDISPATCH >( new SfxOfficeDispatch( pAct->GetBindings(), pAct->GetDispatcher(), nId, aURL) );
+                    }
                 }
 
                 pAct = m_pData->m_pViewShell->GetViewFrame() ;
-                if ( pAct->GetDispatcher()->HasSlot_Impl( nId ))
-                    return REFERENCE< XDISPATCH >( new SfxOfficeDispatch( pAct->GetBindings(), pAct->GetDispatcher(), nId, aURL ));
+                SfxSlotPool& rSlotPool = SFX_APP()->GetSlotPool( pAct );
+                const SfxSlot* pSlot = rSlotPool.GetSlot( nId );
+                if ( pSlot )
+                    return REFERENCE< XDISPATCH >( new SfxOfficeDispatch( pAct->GetBindings(), pAct->GetDispatcher(), pSlot->GetSlotId(), aURL) );
             }
             else if( sTargetFrameName.compareToAscii( "_self" )==COMPARE_EQUAL || sTargetFrameName.getLength()==0 )
             {
@@ -926,12 +918,9 @@ REFERENCE< XDISPATCH > SAL_CALL SfxBaseController::queryDispatch(   const   UNOU
                 if( xModel.is() && aURL.Mark.getLength() )
                 {
                     if( aURL.Main.getLength() && aURL.Main == xModel->getURL() )
-                        nId = SID_JUMPTOMARK;
+                        return REFERENCE< XDISPATCH >( new SfxOfficeDispatch( pAct->GetBindings(), pAct->GetDispatcher(), SID_JUMPTOMARK, aURL) );
                 }
             }
-
-            if ( nId && pAct->GetDispatcher()->HasSlot_Impl( nId ) )
-                xDisp = new SfxOfficeDispatch( pAct->GetBindings(), pAct->GetDispatcher(), nId, aURL) ;
         }
     }
 
