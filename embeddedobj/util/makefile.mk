@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.1 $
+#   $Revision: 1.2 $
 #
-#   last change: $Author: mav $ $Date: 2003-10-27 13:04:03 $
+#   last change: $Author: mav $ $Date: 2003-10-29 08:32:00 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -90,13 +90,13 @@ SHL1OBJS= \
 
 
 SHL1STDLIBS=\
-    $(SALLIB) 	\
-    $(CPPULIB)	\
-    $(CPPUHELPERLIB)	\
+    $(SALLIB)\
+    $(CPPULIB)\
+    $(CPPUHELPERLIB)
 
-SHL1DEF=		$(MISC)$/$(SHL1TARGET).def
+SHL1DEF= $(MISC)$/$(SHL1TARGET).def
 
-DEF1NAME=		$(SHL1TARGET)
+DEF1NAME= $(SHL1TARGET)
 DEF1EXPORTFILE=	exports.dxp
 
 # --- Targets -------------------------------------------------------------
