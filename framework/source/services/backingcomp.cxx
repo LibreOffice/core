@@ -2,9 +2,9 @@
  *
  *  $RCSfile: backingcomp.cxx,v $
  *
- *  $Revision: 1.7 $
+ *  $Revision: 1.8 $
  *
- *  last change: $Author: vg $ $Date: 2003-06-10 09:10:27 $
+ *  last change: $Author: kz $ $Date: 2004-02-25 17:48:37 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -131,6 +131,10 @@
 #include <com/sun/star/awt/KeyModifier.hpp>
 #endif
 
+#ifndef _DRAFTS_COM_SUN_STAR_FRAME_XLAYOUTMANAGER_HPP_
+#include <drafts/com/sun/star/frame/XLayoutManager.hpp>
+#endif
+
 //_______________________________________________
 // other includes
 
@@ -186,9 +190,6 @@ namespace framework
 {
 
 //_______________________________________________
-
-const sal_Char* BackingComp::IMPLEMENTATIONNAME = "com.sun.star.comp.sfx2.view.BackingComp";
-const sal_Char* BackingComp::SERVICENAME        = "com.sun.star.comp.sfx2.view.BackingComp";
 
 //_______________________________________________
 
@@ -397,11 +398,10 @@ css::uno::Sequence< sal_Int8 > SAL_CALL BackingComp::getImplementationId()
 sal_Bool SAL_CALL BackingComp::supportsService( /*IN*/ const ::rtl::OUString& sServiceName )
     throw(css::uno::RuntimeException)
 {
-    css::uno::Sequence< ::rtl::OUString > lNames = impl_getStaticSupportedServiceNames();
-    for (int i=0; i<lNames.getLength(); ++i)
-        if (lNames[i].equals(sServiceName))
-            return sal_True;
-    return sal_False;
+    return (
+            sServiceName.equals(SERVICENAME_STARTMODULE    ) ||
+            sServiceName.equals(SERVICENAME_FRAMECONTROLLER)
+           );
 }
 
 //_______________________________________________
@@ -438,7 +438,7 @@ css::uno::Sequence< ::rtl::OUString > SAL_CALL BackingComp::getSupportedServiceN
 
 ::rtl::OUString BackingComp::impl_getStaticImplementationName()
 {
-    return ::rtl::OUString::createFromAscii(IMPLEMENTATIONNAME);
+    return IMPLEMENTATIONNAME_STARTMODULE;
 }
 
 //_______________________________________________
@@ -457,7 +457,7 @@ css::uno::Sequence< ::rtl::OUString > SAL_CALL BackingComp::getSupportedServiceN
 css::uno::Sequence< ::rtl::OUString > BackingComp::impl_getStaticSupportedServiceNames()
 {
     css::uno::Sequence< ::rtl::OUString > lNames(1);
-    lNames[0] = ::rtl::OUString::createFromAscii(SERVICENAME);
+    lNames[0] = SERVICENAME_STARTMODULE;
     return lNames;
 }
 
@@ -528,7 +528,7 @@ css::uno::Reference< css::lang::XSingleServiceFactory > BackingComp::impl_create
     <listing>
         XController xBackingComp = (XController)UnoRuntime.queryInterface(
             XController.class,
-            xSMGR.createInstance("com.sun.star.comp.sfx2.view.BackingComp"));
+            xSMGR.createInstance(SERVICENAME_STARTMODULE));
 
         // at this time XWindow isn't present at this instance!
         XWindow xBackingComp = (XWindow)UnoRuntime.queryInterface(
@@ -636,6 +636,18 @@ void SAL_CALL BackingComp::attachFrame( /*IN*/ const css::uno::Reference< css::f
     StatusIndicatorFactory* pIndicatorFactoryHelper = new StatusIndicatorFactory(m_xSMGR, m_xWindow, sal_True);
     m_xStatus = css::uno::Reference< css::task::XStatusIndicatorFactory >(static_cast< ::cppu::OWeakObject* >(pIndicatorFactoryHelper), css::uno::UNO_QUERY);
 
+    // create the menu bar for the backing component
+    if ( xPropSet.is() )
+    {
+        css::uno::Any a;
+        css::uno::Reference< drafts::com::sun::star::frame::XLayoutManager > xLayoutManager;
+        a = xPropSet->getPropertyValue( DECLARE_ASCII( "LayoutManager" ));
+        a >>= xLayoutManager;
+        if ( xLayoutManager.is() )
+            xLayoutManager->createElement( DECLARE_ASCII( "private:resource/menubar/menubar" ));
+    }
+
+/*
     // load the default menu from the ofa resource
     ResMgr* pOfaResMgr = CREATERESMGR(ofa);
     if (pOfaResMgr)
@@ -674,15 +686,12 @@ void SAL_CALL BackingComp::attachFrame( /*IN*/ const css::uno::Reference< css::f
             }
         }
     }
-
+*/
     // establish listening for key accelerators
     m_xWindow->addKeyListener(css::uno::Reference< css::awt::XKeyListener >(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY));
 
     // set help ID for our canvas
     pWindow->SetHelpId(HID_BACKINGWINDOW);
-
-    // mark our frame as "in backing mode"!
-    xPropSet->setPropertyValue(DECLARE_ASCII("IsBackingMode"), css::uno::makeAny(sal_True));
 
     aWriteLock.unlock();
     /* } SAFE */
