@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.16 $
+#   $Revision: 1.17 $
 #
-#   last change: $Author: kz $ $Date: 2001-05-16 11:11:41 $
+#   last change: $Author: hjs $ $Date: 2001-05-16 16:10:00 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -65,20 +65,14 @@ PRJ=..
 PRJNAME=VCL
 TARGET=vcl
 VERSION=$(UPD)
-USE_LDUMP2=TRUE
 
 # --- Settings -----------------------------------------------------------
 
-.INCLUDE :	svpre.mk
 .INCLUDE :	settings.mk
-.INCLUDE :	sv.mk
 .INCLUDE :	makefile.pmk
 
-LDUMP=ldump4.exe
 
 # --- Allgemein ----------------------------------------------------------
-
-.IF "$(depend)" == ""
 
 HXXDEPNLST= $(INC)$/accel.hxx		\
             $(INC)$/animate.hxx 	\
@@ -194,12 +188,12 @@ LIB1FILES+= $(SLB)$/ex.lib
 .IF "$(COM)"=="GCC"
 LIB1OBJFILES=$(SLO)$/salmain.obj
 .ENDIF
-.ELSE
+.ELSE			# "$(remote)" != ""
 LIB1FILES+= \
             $(SLB)$/salwin.lib	\
             $(SLB)$/salgdi.lib	\
             $(SLB)$/salapp.lib
-.ENDIF
+.ENDIF			# "$(remote)" != ""
 
 .IF "$(GUI)" == "UNX"
 .IF "$(PSPRINT)" != ""
@@ -246,195 +240,12 @@ SHL1RES=	$(RES)$/salsrc.res
 .ENDIF
 SHL1DEF=	$(MISC)$/$(SHL1TARGET).def
 
-ALLTAR+=	$(LIB1TARGET)
-
-# --- VCL-Light ----------------------------------------------------------
-
-.IF "$(VCL_LIGHT)" != ""
-LIB2TARGET= $(SLB)$/vll.lib
-LIB2FILES=	$(SLO)$/access.obj		\
-            $(SLO)$/config.obj		\
-            $(SLO)$/dbggui.obj		\
-            $(SLO)$/system.obj		\
-            $(SLO)$/oldsv.obj		\
-            $(SLO)$/help.obj		\
-            $(SLO)$/idlemgr.obj 	\
-            $(SLO)$/resmgr.obj		\
-            $(SLO)$/settings.obj	\
-            $(SLO)$/sound.obj		\
-            $(SLO)$/stdtext.obj 	\
-            $(SLO)$/svapp.obj		\
-            $(SLO)$/svdata.obj		\
-            $(SLO)$/svmain.obj		\
-            $(SLO)$/timer.obj		\
-            $(SLO)$/animate.obj 	\
-            $(SLO)$/salmisc.obj 	\
-            $(SLO)$/impanmvw.obj	\
-            $(SLO)$/bitmap.obj		\
-            $(SLO)$/bitmap2.obj 	\
-            $(SLO)$/bitmap3.obj 	\
-            $(SLO)$/bitmap4.obj 	\
-            $(SLO)$/alpha.obj		\
-            $(SLO)$/bitmapex.obj	\
-            $(SLO)$/imgcons.obj 	\
-            $(SLO)$/bmpacc.obj		\
-            $(SLO)$/bmpacc2.obj 	\
-            $(SLO)$/bmpacc3.obj 	\
-            $(SLO)$/color.obj		\
-            $(SLO)$/cvtsvm.obj		\
-            $(SLO)$/cvtgrf.obj		\
-            $(SLO)$/font.obj		\
-            $(SLO)$/gdimtf.obj		\
-            $(SLO)$/gfxlink.obj 	\
-            $(SLO)$/graph.obj		\
-            $(SLO)$/impgraph.obj	\
-            $(SLO)$/gradient.obj	\
-            $(SLO)$/hatch.obj		\
-            $(SLO)$/image.obj		\
-            $(SLO)$/impbmp.obj		\
-            $(SLO)$/impimage.obj	\
-            $(SLO)$/impprn.obj		\
-            $(SLO)$/impvect.obj 	\
-            $(SLO)$/implncvt.obj	\
-            $(SLO)$/jobset.obj		\
-            $(SLO)$/line.obj		\
-            $(SLO)$/lineinfo.obj	\
-            $(SLO)$/mapmod.obj		\
-            $(SLO)$/metaact.obj 	\
-            $(SLO)$/metric.obj		\
-            $(SLO)$/octree.obj		\
-            $(SLO)$/outmap.obj		\
-            $(SLO)$/outdev.obj		\
-            $(SLO)$/outdev2.obj 	\
-            $(SLO)$/outdev3.obj 	\
-            $(SLO)$/outdev4.obj 	\
-            $(SLO)$/outdev5.obj 	\
-            $(SLO)$/outdev6.obj 	\
-            $(SLO)$/opengl.obj		\
-            $(SLO)$/poly.obj		\
-            $(SLO)$/poly2.obj		\
-            $(SLO)$/print.obj		\
-            $(SLO)$/print2.obj		\
-            $(SLO)$/regband.obj 	\
-            $(SLO)$/region.obj		\
-            $(SLO)$/virdev.obj		\
-            $(SLO)$/wall.obj		\
-            $(SLO)$/accel.obj		\
-            $(SLO)$/accmgr.obj		\
-            $(SLO)$/brdwin.obj		\
-            $(SLO)$/btndlg.obj		\
-            $(SLO)$/cursor.obj		\
-            $(SLO)$/dockwin.obj 	\
-            $(SLO)$/decoview.obj	\
-            $(SLO)$/dialog.obj		\
-            $(SLO)$/dlgctrl.obj 	\
-            $(SLO)$/floatwin.obj	\
-            $(SLO)$/keycod.obj		\
-            $(SLO)$/menu.obj		\
-            $(SLO)$/mnemonic.obj	\
-            $(SLO)$/msgbox.obj		\
-            $(SLO)$/syschild.obj	\
-            $(SLO)$/syswin.obj		\
-            $(SLO)$/toolbox.obj 	\
-            $(SLO)$/toolbox2.obj	\
-            $(SLO)$/window.obj		\
-            $(SLO)$/window2.obj 	\
-            $(SLO)$/winproc.obj 	\
-            $(SLO)$/wrkwin.obj		\
-            $(SLO)$/scrwnd.obj		\
-            $(SLO)$/button.obj		\
-            $(SLO)$/ctrl.obj		\
-            $(SLO)$/combobox.obj	\
-            $(SLO)$/edit.obj		\
-            $(SLO)$/field.obj		\
-            $(SLO)$/fixed.obj		\
-            $(SLO)$/group.obj		\
-            $(SLO)$/ilstbox.obj 	\
-            $(SLO)$/lstbox.obj		\
-            $(SLO)$/morebtn.obj 	\
-            $(SLO)$/spinfld.obj 	\
-            $(SLO)$/scrbar.obj		\
-            $(SLO)$/tabctrl.obj 	\
-            $(SLB)$/ex.lib			\
-            $(SLB)$/helper.lib		\
-            $(SLB)$/salwin.lib		\
-            $(SLB)$/salgdi.lib		\
-            $(SLB)$/salapp.lib
-
-#			 $(SLO)$/resary.obj 	 \
-#			 $(SLO)$/filedlg.obj	 \
-#			 $(SLO)$/seleng.obj 	 \
-#			 $(SLO)$/split.obj		 \
-#			 $(SLO)$/splitwin.obj	 \
-#			 $(SLO)$/status.obj 	 \
-#			 $(SLO)$/tabdlg.obj 	 \
-#			 $(SLO)$/tabpage.obj	 \
-#			 $(SLO)$/field2.obj 	 \
-#			 $(SLO)$/imgctrl.obj	 \
-#			 $(SLO)$/longcurr.obj	 \
-#			 $(SLO)$/fixbrd.obj 	 \
-#			 $(SLO)$/menubtn.obj	 \
-#			 $(SLO)$/slider.obj 	 \
-#			 $(SLO)$/spinbtn.obj	 \
-
-SHL2TARGET= vll$(VERSION)$(DLLPOSTFIX)
-SHL2IMPLIB= ivll
-SHL2STDLIBS=$(TOOLSLIB) 		\
-            $(SOTLIB)			\
-            $(VOSLIB)			\
-            $(SALLIB)			\
-            $(CPPUHELPERLIB)	\
-            $(CPPULIB)		\
-            $(UNOTOOLSLIB)
-.IF "$(GUI)"!="MAC"
-SHL2DEPN=	$(L)$/itools.lib $(L)$/sot.lib
-.ENDIF
-SHL2LIBS=	$(LIB2TARGET)
-
-.IF "$(GUI)"!="UNX"
-SHL2OBJS=	$(SLO)$/salshl.obj
-.ENDIF
-
-.IF "$(GUI)" != "MAC"
-.IF "$(GUI)" != "UNX"
-SHL2RES=	$(RES)$/salsrc.res
-.ENDIF
-.ENDIF
-SHL2DEF=	$(MISC)$/$(SHL2TARGET).def
-
-ALLTAR+=	$(LIB2TARGET)
-
-.ENDIF
-
-# --- All ----------------------------------------------------------------
-
-ALL:		ALLTAR
-
-# ---MAC----------------------------------------------------------------
-
-.IF "$(GUI)" == "MAC"
-
-$(MISC)$/$(SHL1TARGET).def:  makefile.mk
-        delete -i $@
-        $(LINK)  $(LINKFLAGS) $(LINKFLAGSSHL) $(SHL$(TNR)OBJS) $(SHL$(TNR)LIBS) -f $@.exp · dev:null
-        duplicate -y $@.exp $@
-        delete -i $@.exp
-.IF "$(RUECKWAERTS)" != "" || "$(rueckwaerts)" != ""
-        filter_import "$(SOLARINCDIR)"$/GLOBAL.IMP $@
-.ENDIF
-
-.IF "$(VCL_LIGHT)" != ""
-$(MISC)$/$(SHL2TARGET).def:  makefile.mk
-        delete -i $@
-        $(LINK)  $(LINKFLAGS) $(LINKFLAGSSHL) $(SHL$(TNR)OBJS) $(SHL$(TNR)LIBS) -f $@.exp · dev:null
-        duplicate -y $@.exp $@
-        delete -i $@.exp
-.IF "$(RUECKWAERTS)" != "" || "$(rueckwaerts)" != ""
-        filter_import "$(SOLARINCDIR)"$/GLOBAL.IMP $@
-.ENDIF
-.ENDIF
-
-.ENDIF
+DEF1NAME	=$(SHL1TARGET)
+DEF1DEPN	=	$(MISC)$/$(SHL1TARGET).flt \
+                $(HXXDEPNLST) \
+                $(LIB1TARGET)
+DEF1DES		=VCL
+DEFLIB1NAME	=vcl
 
 # --- W32 ----------------------------------------------------------------
 
@@ -447,114 +258,8 @@ SHL1STDLIBS += gdi32.lib		\
                advapi32.lib 	\
                imm32.lib
 
-#.IF ("$(COM)" == "MSC") && ("$(GUI)" == "WNT") && (("$(CPU)" == "A") || ("$(CPU)"=="P") || ("$(CPU)" == "M"))
-.IF "$(COM)$(GUI)" == "MSCWNT"
-.IF $(CPU)" == "A" || "$(CPU)"=="P" || "$(CPU)" == "M"
-LINKFLAGSSHL +=  /ENTRY:LibMain
-.ENDIF
-.ENDIF
-
-#.IF ("$(COM)" == "MSC") && ("$(GUI)" == "WNT") && ("$(CPU)" == "I")
 .IF "$(GUI)$(COM)$(CPU)" == "WNTMSCI"
 LINKFLAGSSHL += /ENTRY:LibMain@12
-.ENDIF
-
-# --- Def-File ---
-
-$(MISC)$/$(SHL1TARGET).def: $(MISC)$/$(SHL1TARGET).flt				\
-                            $(HXXDEPNLST)							\
-                            makefile.mk
-    @echo ------------------------------
-    @echo Making: $@
-    @+-attrib -r defs
-    @echo LIBRARY	  $(SHL1TARGET) 								 >$@
-    @echo DESCRIPTION 'VCL'                                         >>$@
-    @echo DATA		  READWRITE NONSHARED							>>$@
-    @echo EXPORTS													>>$@
-    @echo GetVersionInfo											>>$@
-    $(LIBMGR) -EXTRACT:/ /OUT:$(TARGET).exp $(LIB1TARGET)
-    @$(LDUMP) -E20 -F$(MISC)$/$(SHL1TARGET).flt $(TARGET).exp		>>$@
-    +-del $(TARGET).exp
-
-# --- VCL-Light ---
-
-.IF "$(VCL_LIGHT)" != ""
-
-SHL2STDLIBS += gdi32.lib		\
-               winspool.lib 	\
-               ole32.lib		\
-               shell32.lib		\
-               advapi32.lib 	\
-               imm32.lib
-
-#.IF ("$(COM)" == "MSC") && ("$(GUI)" == "WNT") && (("$(CPU)" == "A") || ("$(CPU)"=="P") || ("$(CPU)" == "M"))
-.IF "$(COM)$(GUI)" == "MSCWNT"
-.IF $(CPU)" == "A" || "$(CPU)"=="P" || "$(CPU)" == "M"
-LINKFLAGSSHL +=  /ENTRY:LibMain
-.ENDIF
-.ENDIF
-
-#.IF ("$(COM)" == "MSC") && ("$(GUI)" == "WNT") && ("$(CPU)" == "I")
-.IF "$(GUI)$(COM)$(CPU)" == "WNTMSCI"
-LINKFLAGSSHL += /ENTRY:LibMain@12
-.ENDIF
-
-# --- Def-File ---
-
-$(MISC)$/$(SHL2TARGET).def: $(MISC)$/$(SHL1TARGET).flt				\
-                            $(HXXDEPNLST)							\
-                            makefile.mk
-    @echo ------------------------------
-    @echo Making: $@
-    @echo LIBRARY	  $(SHL2TARGET) 								 >$@
-    @echo DESCRIPTION 'VCL'                                         >>$@
-    @echo DATA		  READWRITE NONSHARED							>>$@
-    @echo EXPORTS													>>$@
-    @echo GetVersionInfo											>>$@
-    $(LIBMGR) -EXTRACT:/ /OUT:vll.exp $(LIB2TARGET)
-    @$(LDUMP) -E20 -F$(MISC)$/$(SHL1TARGET).flt vll.exp 			>>$@
-    +-del vll.exp
-
-.ENDIF
-
-.ENDIF
-
-# --- OS2 ----------------------------------------------------------------
-
-.IF "$(GUI)" == "OS2"
-
-# --- Def-File ---
-
-$(MISC)$/$(SHL1TARGET).def: $(MISC)$/$(SHL1TARGET).flt				\
-                            $(HXXDEPNLST)							\
-                            makefile.mk
-    @echo ------------------------------
-    @echo Making: $@
-    @echo LIBRARY	  $(SHL1TARGET) INITINSTANCE TERMINSTANCE		 >$@
-    @echo DESCRIPTION 'VCL'                                        >>$@
-    @echo PROTMODE													>>$@
-    @echo CODE		  LOADONCALL									>>$@
-    @echo DATA		  PRELOAD MULTIPLE NONSHARED					>>$@
-    @echo EXPORTS													>>$@
-    @$(LDUMP) -E1 -A -F$(MISC)$/$(SHL1TARGET).flt $(LIB1TARGET) 	>>$@
-
-# --- VCL-Light ---
-
-.IF "$(VCL_LIGHT)" != ""
-
-$(MISC)$/$(SHL2TARGET).def: $(MISC)$/$(SHL1TARGET).flt				\
-                            $(HXXDEPNLST)							\
-                            makefile.mk
-    @echo ------------------------------
-    @echo Making: $@
-    @echo LIBRARY	  $(SHL2TARGET) INITINSTANCE TERMINSTANCE		 >$@
-    @echo DESCRIPTION 'VCL'                                        >>$@
-    @echo PROTMODE													>>$@
-    @echo CODE		  LOADONCALL									>>$@
-    @echo DATA		  PRELOAD MULTIPLE NONSHARED					>>$@
-    @echo EXPORTS													>>$@
-    @$(LDUMP) -E1 -A -F$(MISC)$/$(SHL1TARGET).flt $(LIB2TARGET) 	>>$@
-
 .ENDIF
 
 .ENDIF
@@ -563,62 +268,50 @@ $(MISC)$/$(SHL2TARGET).def: $(MISC)$/$(SHL1TARGET).flt				\
 
 .IF "$(GUI)"=="UNX"
 
-.IF "$(USE_XPRINT)"!="TRUE"
-.ELSE
-CFLAGS+=-D_USE_PRINT_EXTENSION_=1
-.ENDIF
-
 # Solaris
 .IF "$(OS)"=="SOLARIS"
 
 .IF "$(USE_XPRINT)" == "TRUE"
 SHL1STDLIBS += -lXp -lXm -lXt -lX11
-.ELIF "$(PSPRINT)"!="" 
+.ELSE
+.IF "$(PSPRINT)"!="" 
 SHL1STDLIBS += -lXm -lXt -lX11
 .ELSE
 SHL1STDLIBS += -lxp$(UPD)$(DLLPOSTFIX) -lXm -lXt -lX11
 .ENDIF
+.ENDIF			# "$(USE_XPRINT)" == "TRUE"
 
 # MacOSX
-.ELIF "$(OS)"=="MACOSX"
+.ELSE			# "$(OS)"=="SOLARIS"
+.IF "$(OS)"=="MACOSX"
 SHL1STDLIBS += -framework Cocoa
 
 # Others
-.ELSE
+.ELSE			# "$(OS)"=="MACOSX"
 
 .IF "$(USE_XPRINT)" == "TRUE"
 SHL1STDLIBS += -lXp -lXaw -lXt -lX11
-.ELIF "$(PSPRINT)"!=""
+.ELSE
+.IF "$(PSPRINT)"!=""
 SHL1STDLIBS += -lXaw -lXt -lX11
 .ELSE
 SHL1STDLIBS += -lxp$(UPD)$(DLLPOSTFIX) -lXaw -lXt -lX11
 .ENDIF
-
-.ENDIF
+.ENDIF			# "$(USE_XPRINT)" == "TRUE"
+.ENDIF			# "$(OS)"=="MACOSX"
+.ENDIF			# "$(OS)"=="SOLARIS"
 
 .IF "$(OS)"=="LINUX" || "$(OS)"=="SOLARIS"
 SHL1STDLIBS += -laudio
-.ENDIF
+.ENDIF			# "$(OS)"=="LINUX" || "$(OS)"=="SOLARIS"
 
-# --- VCL-Light ---
-
-.IF "$(VCL_LIGHT)" != ""
-
-.IF "$(OS)"=="SOLARIS"
-SHL2STDLIBS += -lxp$(UPD)$(DLLPOSTFIX) -lXm -lXt -lX11
-.ELSE
-SHL2STDLIBS += -lxp$(UPD)$(DLLPOSTFIX) -lXaw -lXt -lX11
-.ENDIF
-
-.IF "$(OS)"=="LINUX" || "$(OS)"=="SOLARIS"
-SHL2STDLIBS += -laudio
-.ENDIF
-
-.ENDIF
-
-.ENDIF
+.ENDIF			# "$(GUI)"=="UNX"
 
 # --- Allgemein ----------------------------------------------------------
+
+.INCLUDE :	target.mk
+
+# --- Targets ------------------------------------------------------------
 
 # --- VCL-Filter-Datei ---
 
@@ -645,8 +338,4 @@ $(MISC)$/$(SHL1TARGET).flt: makefile.mk
     @echo DNDEventDispatcher>> $@
     @echo DNDListenerContainer>> $@
 
-# --- Targets ------------------------------------------------------------
 
-.ENDIF
-
-.INCLUDE :	target.mk
