@@ -2,9 +2,9 @@
  *
  *  $RCSfile: cbuttonw.cxx,v $
  *
- *  $Revision: 1.3 $
+ *  $Revision: 1.4 $
  *
- *  last change: $Author: dr $ $Date: 2002-08-01 14:36:42 $
+ *  last change: $Author: vg $ $Date: 2005-03-08 15:43:38 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -105,6 +105,9 @@ void ScDDComboBoxButton::Draw( const Point& rAt,
                                BOOL         bState,
                                BOOL         bBtnIn  /* = FALSE */ )
 {
+    if ( rSize.Width() == 0 || rSize.Height() == 0 )
+        return;     // #i43092# rectangle with size 0 would have RECT_EMPTY as end position
+
     // save old state
     BOOL        bHadFill   = pOut->IsFillColor();
     Color       aOldFill   = pOut->GetFillColor();
