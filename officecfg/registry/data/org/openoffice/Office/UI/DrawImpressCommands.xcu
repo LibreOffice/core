@@ -829,6 +829,31 @@
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">S~eitenlayout ändern...</value>
                     <value xml:lang="en-US">Modify ~Layout...</value>
+                    <value xml:lang="ar">...تعديل تخطيط الصفحة</value>
+                    <value xml:lang="no">Modify ~Layout...</value>
+                    <value xml:lang="ca">Modifica el ~format...</value>
+                    <value xml:lang="zh-TW">變更頁面版式(~L)...</value>
+                    <value xml:lang="cs">Upravit rozvržení...</value>
+                    <value xml:lang="da">Modificer ~layout...</value>
+                    <value xml:lang="el">Τροποποίηση διάταξης σ~ελίδας...</value>
+                    <value xml:lang="es">Modificar ~diseño de página...</value>
+                    <value xml:lang="fi">~Dian rakenne...</value>
+                    <value xml:lang="fr">Modifier la mise en page...</value>
+                    <value xml:lang="he">S~eitenlayout ändern...</value>
+                    <value xml:lang="it">Cambia layout di pagina...</value>
+                    <value xml:lang="ja">ページレイアウトの変更(~L)...</value>
+                    <value xml:lang="ko">레이아웃 수정(~L)...</value>
+                    <value xml:lang="nl">Paginalay-out wij~zigen...</value>
+                    <value xml:lang="pl">Modyfikuj ~układ...</value>
+                    <value xml:lang="pt-BR">Modificar ~Layout...</value>
+                    <value xml:lang="ru">Изменить разметку...</value>
+                    <value xml:lang="sk">~Upraviť formát...</value>
+                    <value xml:lang="sv">Ändra sidlayout...</value>
+                    <value xml:lang="th">ดัดแปลงแก้ไข~ระดับ...</value>
+                    <value xml:lang="tr">Sayfa ~düzeni...</value>
+                    <value xml:lang="hi">~अभिन्यास सुधारो...</value>
+                    <value xml:lang="zh-CN">更改版式...</value>
+                    <value xml:lang="pt">Modificar ~configuração de página...</value>
                 </prop>
                 <prop oor:name="Properties" oor:type="xs:int">
                     <value>1</value>
@@ -838,6 +863,31 @@
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">~Ändern</value>
                     <value xml:lang="en-US">~Modify</value>
+                    <value xml:lang="ar">Modify</value>
+                    <value xml:lang="no">~Modify</value>
+                    <value xml:lang="ca">M~odifica</value>
+                    <value xml:lang="zh-TW">修改(~M)</value>
+                    <value xml:lang="cs">Upravit</value>
+                    <value xml:lang="da">~Modificer</value>
+                    <value xml:lang="el">~Τροποποίηση</value>
+                    <value xml:lang="es">~Modificar</value>
+                    <value xml:lang="fi">Modify</value>
+                    <value xml:lang="fr">~Modifier</value>
+                    <value xml:lang="he">‮שינוי‬</value>
+                    <value xml:lang="it">~Cambia</value>
+                    <value xml:lang="ja">変更(~M)</value>
+                    <value xml:lang="ko">수정(~M)</value>
+                    <value xml:lang="nl">Wijzigen</value>
+                    <value xml:lang="pl">Modify</value>
+                    <value xml:lang="pt-BR">~Modificar</value>
+                    <value xml:lang="ru">Modify</value>
+                    <value xml:lang="sk">~Upraviť</value>
+                    <value xml:lang="sv">~Ändra</value>
+                    <value xml:lang="th">~ดัดแปลงแก้ไข</value>
+                    <value xml:lang="tr">~Değiştir</value>
+                    <value xml:lang="hi">~Modify</value>
+                    <value xml:lang="zh-CN">更改(~M)</value>
+                    <value xml:lang="pt">Modify</value>
                 </prop>
             </node>
             <node oor:name=".uno:PageMode" oor:op="replace">
@@ -1709,13 +1759,6 @@
                     <value xml:lang="en-US">~Master</value>
                 </prop>
             </node>
-            <node oor:name=".uno:TransliterateMenu" oor:op="replace">
-                <prop oor:name="Label" oor:type="xs:string">
-                    <value xml:lang="de">Gr~oß-/Kleinschreibung</value>
-                    <value xml:lang="en-US">Case/Characters</value>
-                </prop>
-            </node>
-
             <node oor:name=".uno:MasterLayoutsMenu" oor:op="replace">
                 <prop oor:name="Label" oor:type="xs:string">
                     <value xml:lang="de">Masterlayouts</value>
