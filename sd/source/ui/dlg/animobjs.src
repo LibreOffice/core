@@ -2,9 +2,9 @@
  *
  *  $RCSfile: animobjs.src,v $
  *
- *  $Revision: 1.2 $
+ *  $Revision: 1.3 $
  *
- *  last change: $Author: nf $ $Date: 2000-09-27 20:56:03 $
+ *  last change: $Author: kz $ $Date: 2000-10-27 16:19:15 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -168,7 +168,7 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText [ ENGLISH ] = "Stop" ;
         QuickHelpText [ dutch ] = "Stop" ;
         QuickHelpText [ english_us ] = "Stop" ;
-        QuickHelpText [ spanish ] = "Fianlizar" ;
+        QuickHelpText [ spanish ] = "Finalizar" ;
         QuickHelpText [ french ] = "Stop" ;
         QuickHelpText [ italian ] = "Stop" ;
         QuickHelpText [ danish ] = "Stop" ;
@@ -203,7 +203,7 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText [ french ] = "Reproduire" ;
         QuickHelpText [ swedish ] = "Spela upp" ;
         QuickHelpText [ dutch ] = "Afspelen" ;
-        QuickHelpText [ spanish ] = "Mostrar" ;
+        QuickHelpText [ spanish ] = "Reproducir" ;
         QuickHelpText [ english_us ] = "Play" ;
         QuickHelpText[ russian ] = "Âîñïðîèçâåñòè";
         QuickHelpText[ polish ] = "Odtwórz";
@@ -268,7 +268,7 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText [ french ] = "Numéro de l'image" ;
         QuickHelpText [ swedish ] = "Bildnummer" ;
         QuickHelpText [ dutch ] = "Afbeeldingsnummer" ;
-        QuickHelpText [ spanish ] = "Número de la imagen" ;
+        QuickHelpText [ spanish ] = "Número de imagen" ;
         QuickHelpText [ english_us ] = "Image Number" ;
         QuickHelpText [ french ] = "Numéro de l'image" ;
         QuickHelpText[ russian ] = "Íîìåð êàðòèíû";
@@ -845,7 +845,7 @@ DockingWindow FLT_WIN_ANIMATION
         QuickHelpText [ dutch ] = "Objecten afzonderlijk overnemen" ;
         QuickHelpText [ english_us ] = "Apply Objects Individually" ;
         QuickHelpText [ italian ] = "Accetta gli oggetti singolarmente" ;
-        QuickHelpText [ spanish ] = "Aceptar objetos de a uno" ;
+        QuickHelpText [ spanish ] = "Aceptar objetos uno a uno" ;
         QuickHelpText [ french ] = "Appliquer les objets un par un" ;
         QuickHelpText [ danish ] = "Overtag objekter enkeltvis" ;
         QuickHelpText [ portuguese ] = "Aplicar objectos um por um" ;
