@@ -2,9 +2,9 @@
  *
  *  $RCSfile: xlroot.hxx,v $
  *
- *  $Revision: 1.12 $
+ *  $Revision: 1.13 $
  *
- *  last change: $Author: obo $ $Date: 2004-06-04 11:01:34 $
+ *  last change: $Author: kz $ $Date: 2004-07-30 16:24:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -228,8 +228,6 @@ public:
 protected:
     explicit                    XclRoot( XclRootData& rRootData );
 
-    /** Sets the BIFF version. */
-    void                        SetBiff( XclBiff eBiff );
     /** Sets the document language. */
     inline void                 SetDocLanguage( LanguageType eLang ) { mrData.meDocLang = eLang; }
     /** Sets the UI language, i.e. if it has been read from a file. */
@@ -241,8 +239,6 @@ protected:
     void                        SetCharWidth( const XclFontData& rFontData );
     /** Increases the current Calc sheet index by 1. */
     inline void                 IncCurrScTab() { ++mrData.mnScTab; }
-    /** Sets the maximum possible cell address according to the current BIFF version. */
-    void                        SetMaxPos();
 
     /** Checks if the passed cell address is valid.
         @descr  Sets the internal flag that produces a warning box, if the cell is
