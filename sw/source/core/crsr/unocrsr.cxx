@@ -2,9 +2,9 @@
  *
  *  $RCSfile: unocrsr.cxx,v $
  *
- *  $Revision: 1.1.1.1 $
+ *  $Revision: 1.2 $
  *
- *  last change: $Author: hr $ $Date: 2000-09-19 00:08:17 $
+ *  last change: $Author: jp $ $Date: 2000-10-24 17:21:47 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -146,51 +146,59 @@ FASTBOOL SwUnoCrsr::IsSelOvr( int eFlags )
         {
             BOOL bMoveDown = GetSavePos()->nNode < rPtIdx.GetIndex();
             BOOL bValidPos = FALSE;
-            if( bMoveDown )
+
+            // search the correct surrounded start node - which the index
+            // can't leave.
+            while( pOldSttNd->IsSectionNode() )
+                pOldSttNd = pOldSttNd->StartOfSectionNode();
+
+            // is the new index inside this surrounded section?
+            if( rPtIdx > *pOldSttNd &&
+                rPtIdx < pOldSttNd->EndOfSectionIndex() )
             {
-                // ist das Ende noch nicht erreicht worden?
-                while( pOldSttNd->EndOfSectionIndex() > rPtIdx.GetIndex() )
-                {
-                    // dann versuche auf die "Ebene" zurueck zukommen
-                    rPtIdx.Assign( *pNewSttNd->EndOfSectionNode(), 1 );
-                    while( pOldSttNd != rPtIdx.GetNode().FindStartNode() )
-                        rPtIdx.Assign( *rPtIdx.GetNode().EndOfSectionNode(), 1 );
+                // check if it a valid move inside this section
+                // (only over SwSection's !)
+                const SwStartNode* pInvalidNode;
+                do {
+                    pInvalidNode = 0;
+                    pNewSttNd = rPtIdx.GetNode().FindStartNode();
 
-                    if( !rPtIdx.GetNode().IsCntntNode() &&
-                        !pDoc->GetNodes().GoNextSection( &rPtIdx ))
-                        break;
-
-                    if( pOldSttNd ==
-                        ( pNewSttNd = rPtIdx.GetNode().FindStartNode() ))
+                    const SwStartNode *pSttNd = pNewSttNd, *pEndNd = pOldSttNd;
+                    if( pSttNd->EndOfSectionIndex() >
+                        pEndNd->EndOfSectionIndex() )
                     {
-                        // das ist die gesuchte Position
-                        bValidPos = TRUE;
-                        break;
+                        pEndNd = pNewSttNd;
+                        pSttNd = pOldSttNd;
                     }
-                }
-            }
-            else
-            {
-                // ist der Start noch nicht erreicht worden?
-                while( pOldSttNd->GetIndex() < rPtIdx.GetIndex() )
-                {
-                    // dann versuche auf die "Ebene" zurueck zukommen
-                    rPtIdx.Assign( *pNewSttNd, -1 );
-                    while( pOldSttNd != rPtIdx.GetNode().FindStartNode() )
-                        rPtIdx.Assign( *rPtIdx.GetNode().FindStartNode(), -1 );
 
-                    if( !rPtIdx.GetNode().IsCntntNode() &&
-                        !pDoc->GetNodes().GoPrevSection( &rPtIdx ))
-                        break;
-
-                    if( pOldSttNd ==
-                        ( pNewSttNd = rPtIdx.GetNode().FindStartNode() ))
+                    while( pSttNd->GetIndex() > pEndNd->GetIndex() )
                     {
-                        // das ist die gesuchte Position
-                        bValidPos = TRUE;
-                        break;
+                        if( !pSttNd->IsSectionNode() )
+                            pInvalidNode = pSttNd;
+                        pSttNd = pSttNd->StartOfSectionNode();
                     }
-                }
+                    if( pInvalidNode )
+                    {
+                        if( bMoveDown )
+                        {
+                            rPtIdx.Assign( *pInvalidNode->EndOfSectionNode(), 1 );
+
+                            if( !rPtIdx.GetNode().IsCntntNode() &&
+                                !pDoc->GetNodes().GoNextSection( &rPtIdx ))
+                                break;
+                        }
+                        else
+                        {
+                            rPtIdx.Assign( *pInvalidNode, -1 );
+
+                            if( !rPtIdx.GetNode().IsCntntNode() &&
+                                !pDoc->GetNodes().GoPrevSection( &rPtIdx ))
+                                break;
+                        }
+                    }
+                    else
+                        bValidPos = TRUE;
+                } while ( pInvalidNode );
             }
 
             if( bValidPos )
