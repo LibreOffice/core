@@ -2,9 +2,9 @@
  *
  *  $RCSfile: viewdraw.cxx,v $
  *
- *  $Revision: 1.21 $
+ *  $Revision: 1.22 $
  *
- *  last change: $Author: vg $ $Date: 2003-07-04 13:27:40 $
+ *  last change: $Author: rt $ $Date: 2003-11-24 16:13:12 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -258,7 +258,7 @@ void SwView::ExecDraw(SfxRequest& rReq)
                     //determine the size of the object
                     if(pObj->IsGroupObject())
                     {
-                        const Rectangle& rBoundRect = ((SdrObjGroup*)pObj)->GetBoundRect();
+                        const Rectangle& rBoundRect = ((SdrObjGroup*)pObj)->GetCurrentBoundRect();
                         aStartPos.X() -= rBoundRect.GetWidth()/2;
                         aStartPos.Y() -= rBoundRect.GetHeight()/2;
                     }
