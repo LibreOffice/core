@@ -2,9 +2,9 @@
  *
  *  $RCSfile: XPrintSettingsSupplier.idl,v $
  *
- *  $Revision: 1.5 $
+ *  $Revision: 1.6 $
  *
- *  last change: $Author: mi $ $Date: 2002-10-03 13:11:12 $
+ *  last change: $Author: obo $ $Date: 2004-06-04 02:19:39 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -79,7 +79,7 @@ module com {  module sun {  module star {  module view {
 /** offers printing related settings, which affect document rendering,
     but are not related to the printer itself.
  */
-interface XPrintSettingsSupplier: com::sun::star::uno::XInterface
+published interface XPrintSettingsSupplier: com::sun::star::uno::XInterface
 {
     //-------------------------------------------------------------------------
 
