@@ -2,9 +2,9 @@
 #
 #   $RCSfile: makefile.mk,v $
 #
-#   $Revision: 1.17 $
+#   $Revision: 1.18 $
 #
-#   last change: $Author: hjs $ $Date: 2005-01-20 12:43:24 $
+#   last change: $Author: hjs $ $Date: 2005-01-20 14:00:42 $
 #
 #   The Contents of this file are made available subject to the terms of
 #   either of the following licenses
@@ -82,6 +82,7 @@ SCPDEFS+=-DENABLE_CRASHDUMP
 SCPDEFS+=-DINCLUDE_JAVA_ACCESSBRIDGE
 .ENDIF
 
+.IF "$(GUI)"=="UNX"
 .IF "$(ENABLE_GTK)" != ""
 SCPDEFS+=-DENABLE_GTK
 PKGCONFIG_MODULES=gtk+-2.0
@@ -91,6 +92,7 @@ GTK_TWO_FOUR=$(shell +-$(PKGCONFIG) --exists 'gtk+-2.0 >= 2.4.0' && echo YES)
 SCPDEFS+=-DGTK_TWO_FOUR
 .ENDIF
 .ENDIF
+.ENDIF			# "$(GUI)"=="UNX"
 
 .IF "$(ENABLE_PASF)" != ""
 SCPDEFS+=-DUSE_PASF
