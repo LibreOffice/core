@@ -2,9 +2,9 @@
  *
  *  $RCSfile: moduldl2.cxx,v $
  *
- *  $Revision: 1.50 $
+ *  $Revision: 1.51 $
  *
- *  last change: $Author: rt $ $Date: 2005-01-27 14:25:38 $
+ *  last change: $Author: vg $ $Date: 2005-02-24 16:59:35 $
  *
  *  The Contents of this file are made available subject to the terms of
  *  either of the following licenses
@@ -1259,7 +1259,7 @@ void LibPage::FillListBox()
 
 void LibPage::InsertListBoxEntry( SfxObjectShell* pShell, LibraryLocation eLocation )
 {
-    String aEntryText( BasicIDE::GetTitle( pShell, eLocation, SFX_TITLE_FILENAME ) );
+    String aEntryText( BasicIDE::GetTitle( pShell, eLocation, SFX_TITLE_CAPTION ) );
     USHORT nPos = aBasicsBox.InsertEntry( aEntryText, LISTBOX_APPEND );
     aBasicsBox.SetEntryData( nPos, new BasicShellEntry( pShell, eLocation ) );
 }
